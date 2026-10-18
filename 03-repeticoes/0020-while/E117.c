@@ -7,8 +7,9 @@
 //
 //   Dá para 6 dias. Sobram -80 litros.
 //
-// Faça o teste de mesa (colunas litros e dias), ache o erro e conserte. O
-// código com o erro está logo abaixo; ele roda, mas dá a resposta errada.
+// O código com o erro está logo abaixo; ele roda, mas dá a resposta errada.
+// Conserte e rode de novo até aparecer a resposta certa. Se ajudar, ponha um
+// printf dentro do laço mostrando litros e dias a cada volta.
 //
 // Dicas:
 // 1. No 6º dia, quanta água havia antes de gastar? Dava para o dia inteiro?

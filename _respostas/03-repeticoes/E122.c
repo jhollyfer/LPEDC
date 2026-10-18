@@ -1,9 +1,5 @@
 // 0021 · Do-while
 // Exercício E122 · ★☆☆
-//
-// Resposta: A mostra "| A terminou com n = 10" (zero voltas); B mostra
-// "10 | B terminou com m = 11" (uma volta, mesmo com a condição falsa). Para
-// o while imitar o do-while, é preciso copiar o corpo uma vez antes do laço.
 
 #include <stdio.h>
 
@@ -23,5 +19,15 @@ int main(void) {
         m++;
     } while (m < 5);
     printf("| B terminou com m = %d\n", m);
+
+    // trecho C: o corpo uma vez antes, depois o while
+    int k = 10;
+    printf("%d ", k);
+    k++;
+    while (k < 5) {
+        printf("%d ", k);
+        k++;
+    }
+    printf("| C terminou com k = %d\n", k);
     return 0;
 }

@@ -1,33 +1,38 @@
 // 0020 · While
 // Exercício E120 · ★★★
-//
-// Resposta: A mostra "1 2 3 4 5 | 6" (a pergunta falsa, 5 < 5, ainda soma 1);
-// B mostra "1 4" (100, 33, 11, 3, 1); C mostra "10": o corpo roda zero vezes,
-// porque o while pergunta antes.
 
 #include <stdio.h>
 
 int main(void) {
     // trecho A
     int i = 0;
+    int voltas_a = 0;
+    printf("A: ");
     while (i++ < 5) {
         printf("%d ", i);
+        voltas_a++;
     }
-    printf("| %d\n", i);
+    printf("| voltas %d, i final %d\n", voltas_a, i);
 
     // trecho B
-    int n = 100, voltas = 0;
+    int n = 100;
+    int voltas_b = 0;
+    printf("B: ");
     while (n > 1) {
         n = n / 3;
-        voltas++;
+        printf("%d ", n);
+        voltas_b++;
     }
-    printf("%d %d\n", n, voltas);
+    printf("| voltas %d, n final %d\n", voltas_b, n);
 
     // trecho C
     int k = 10;
+    int voltas_c = 0;
+    printf("C: ");
     while (k < 10) {
         k++;
+        voltas_c++;
     }
-    printf("%d\n", k);
+    printf("| voltas %d, k final %d\n", voltas_c, k);
     return 0;
 }

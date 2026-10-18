@@ -6,8 +6,8 @@
 //
 //   Série 6
 //
-// O código com o erro está logo abaixo. Rode, leia o aviso do gcc, explique
-// por que aparece 6 (e só uma vez) e conserte.
+// O código com o erro está logo abaixo. Rode, leia o aviso do gcc e conserte:
+// o programa tem que compilar sem aviso e mostrar Série 1 até Série 5.
 //
 // Dicas:
 // 1. O aviso fala em "misleading indentation": a indentação engana.

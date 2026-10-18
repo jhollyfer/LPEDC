@@ -3,7 +3,8 @@
 //
 // O programa abaixo deveria sortear 10 lançamentos de um dado. Rode e repare:
 // sai o mesmo número 10 vezes, e às vezes esse número é 0. São DOIS erros.
-// O código com os erros está logo abaixo. Ache, explique e conserte.
+// O código com os erros está logo abaixo. Conserte os dois e rode algumas
+// vezes: os 10 números têm que variar e ficar sempre entre 1 e 6.
 //
 // Dicas:
 // 1. Quantas vezes o srand roda? E quanto vale time(NULL) nas 10 voltas, que

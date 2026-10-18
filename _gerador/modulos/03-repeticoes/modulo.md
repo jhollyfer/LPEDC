@@ -159,8 +159,8 @@ meio tem 9 asteriscos.
 
 </details>
 
-**7. O craps tem truque?** Jogue 100 000 rodadas de craps (o algoritmo do
-A053, sem os `printf`, dentro de um `for`) e calcule a porcentagem de
+**7. O craps tem truque?** Jogue 100 000 rodadas de craps (o algoritmo da
+rodada do assunto 0027, sem os `printf`, dentro de um `for`) e calcule a porcentagem de
 vitórias e a média de lançamentos por rodada.
 
 <details><summary>Resposta</summary>

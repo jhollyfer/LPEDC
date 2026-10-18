@@ -6,8 +6,9 @@
 //
 //   printf '7\n2\n' | ~/LPEDC/rodar 03-repeticoes/0021-do-while/E124.c
 //
-// ele aceita o 7 de primeira. O código com o erro está logo abaixo. Ache o
-// erro, explique por que ele nunca repete e conserte.
+// ele aceita o 7 de primeira. O código com o erro está logo abaixo.
+// Conserte a condição e rode de novo com a mesma entrada: agora o 7 tem que
+// ser recusado e o 2 aceito.
 //
 // Dicas:
 // 1. Existe algum número que é, ao mesmo tempo, menor que 1 e maior que 3?

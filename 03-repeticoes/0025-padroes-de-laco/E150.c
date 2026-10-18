@@ -2,7 +2,7 @@
 // Exercício E150 · ★★★
 //
 // O app de corrida registra a distância de 6 treinos, em km inteiros. Leia os
-// 6 valores (inteiros) e responda duas perguntas:
+// 6 valores (inteiros) e faça o programa mostrar a resposta de duas perguntas:
 //
 // a) Os treinos estão em ordem crescente (cada um MAIOR que o anterior)?
 // b) Qual foi a maior sequência de treinos seguidos em alta?

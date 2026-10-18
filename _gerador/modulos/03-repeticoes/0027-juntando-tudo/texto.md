@@ -120,8 +120,8 @@ volta sai do Não de "soma == 7?". As duas saídas do laço vão para os mesmos
 > [!NOTE]
 > **Pergunta para você:** qual é a chance de ganhar no craps? Antes de chutar,
 > pense: no primeiro lançamento, o 7 e o 11 juntos saem em 8 de 36
-> combinações. Depois, rode uma versão do A053 que joga 100 000 rodadas sem os
-> `printf` e conta as vitórias (é o desafio 7 do módulo). A resposta é um
+> combinações (o A053 conta todas elas). Depois, rode uma versão do código
+> acima que joga 100 000 rodadas sem os `printf` e conta as vitórias (é o desafio 7 do módulo). A resposta é um
 > pouco menos de 50%, e é daí que o cassino tira o lucro.
 
 {{pratique}}

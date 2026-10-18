@@ -1,55 +1,51 @@
-// A053 · Uma rodada de craps
+// A053 · As 36 jogadas do primeiro lançamento, sem sortear
 
 #include <stdio.h>
-#include <stdlib.h>
 
 int main(void) {
-    srand(21); // semente fixa: a rodada abaixo se repete (glibc)
+    int natural = 0, craps = 0, ponto = 0;
 
-    int d1 = 1 + rand() % 6;
-    int d2 = 1 + rand() % 6;
-    int soma = d1 + d2;
-    int lancamentos = 1;
-    int ponto = 0;
-    int situacao; // 1 = ganhou, -1 = perdeu, 0 = continua
-
-    printf("Lançamento %d: %d + %d = %d\n", lancamentos, d1, d2, soma);
-    switch (soma) {
-    case 7:
-    case 11:
-        situacao = 1;          // natural: ganha de cara
-        break;
-    case 2:
-    case 3:
-    case 12:
-        situacao = -1;         // craps: perde de cara
-        break;
-    default:
-        situacao = 0;          // virou o ponto
-        ponto = soma;
-        printf("Ponto: %d. Agora precisa repetir o %d antes de um 7.\n", ponto, ponto);
-    }
-
-    while (situacao == 0) {
-        d1 = 1 + rand() % 6;
-        d2 = 1 + rand() % 6;
-        soma = d1 + d2;
-        lancamentos++;
-        printf("Lançamento %d: %d + %d = %d\n", lancamentos, d1, d2, soma);
-        if (soma == ponto) {
-            situacao = 1;
-        } else if (soma == 7) {
-            situacao = -1;
+    // em vez de sortear, passa por TODAS as combinações dos dois dados
+    printf("d1\\d2  1  2  3  4  5  6\n");
+    for (int d1 = 1; d1 <= 6; d1++) {
+        printf("%5d", d1);
+        for (int d2 = 1; d2 <= 6; d2++) {
+            int soma = d1 + d2;
+            printf("%3d", soma);
+            switch (soma) {
+            case 7:
+            case 11:
+                natural++;  // ganha de cara
+                break;
+            case 2:
+            case 3:
+            case 12:
+                craps++;    // perde de cara
+                break;
+            default:
+                ponto++;    // o jogo continua
+            }
         }
+        printf("\n");
     }
 
-    printf("%s em %d lançamentos.\n", situacao == 1 ? "Ganhou" : "Perdeu", lancamentos);
+    int total = natural + craps + ponto;
+    printf("Ganha de cara (7 ou 11):    %2d de %d (%.1f%%)\n",
+           natural, total, 100.0 * natural / total);
+    printf("Perde de cara (2, 3 ou 12): %2d de %d (%.1f%%)\n",
+           craps, total, 100.0 * craps / total);
+    printf("Vira ponto:                 %2d de %d (%.1f%%)\n",
+           ponto, total, 100.0 * ponto / total);
     return 0;
 }
-// Saída (glibc, Linux):
-// Lançamento 1: 3 + 6 = 9
-// Ponto: 9. Agora precisa repetir o 9 antes de um 7.
-// Lançamento 2: 3 + 5 = 8
-// Lançamento 3: 1 + 4 = 5
-// Lançamento 4: 4 + 5 = 9
-// Ganhou em 4 lançamentos.
+// Saída:
+// d1\d2  1  2  3  4  5  6
+//     1  2  3  4  5  6  7
+//     2  3  4  5  6  7  8
+//     3  4  5  6  7  8  9
+//     4  5  6  7  8  9 10
+//     5  6  7  8  9 10 11
+//     6  7  8  9 10 11 12
+// Ganha de cara (7 ou 11):     8 de 36 (22.2%)
+// Perde de cara (2, 3 ou 12):  4 de 36 (11.1%)
+// Vira ponto:                 24 de 36 (66.7%)

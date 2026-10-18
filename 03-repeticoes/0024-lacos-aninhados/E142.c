@@ -3,8 +3,8 @@
 //
 // A escola quer a lista de chamada de 3 turmas com 4 alunos cada, uma turma
 // por linha (T1-A1 T1-A2 ...). O programa abaixo mostra só a primeira turma e
-// depois duas linhas vazias. O código com o erro está logo abaixo. Faça o
-// teste de mesa, ache o erro e conserte (continue usando while).
+// depois duas linhas vazias. O código com o erro está logo abaixo. Conserte
+// (continue usando while) e rode até aparecer a saída esperada.
 //
 //   Saída esperada depois do conserto:
 //   T1-A1 T1-A2 T1-A3 T1-A4

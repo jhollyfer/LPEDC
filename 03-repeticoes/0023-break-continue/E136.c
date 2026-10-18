@@ -7,7 +7,7 @@
 //   printf '1\n2\n9\n1\n2\n' | ~/LPEDC/rodar 03-repeticoes/0023-break-continue/E136.c
 //
 // ele continua lendo depois do 9. O código com o erro está logo abaixo.
-// Explique por que o break não para o laço e conserte.
+// Conserte para o laço parar no 9 e rode de novo com a mesma entrada.
 //
 // Dicas:
 // 1. Dentro de um switch, de quem o break está saindo?

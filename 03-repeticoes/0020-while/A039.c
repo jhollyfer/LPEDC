@@ -1,28 +1,35 @@
-// A039 · O cofrinho do celular
+// A039 · Dividindo pizzas sem usar a divisão
 
 #include <stdio.h>
 
 int main(void) {
-    double meta = 1000.0;    // o celular custa R$ 1000
-    double deposito = 150.0; // quanto você guarda por mês
-    double saldo = 0.0;
-    int meses = 0;
+    // 47 fatias para 5 amigos: quantas cada um come e quantas sobram?
+    int fatias = 47;
+    int amigos = 5;
+    int sobra = fatias;
+    int rodadas = 0;          // cada rodada dá 1 fatia para cada amigo
 
-    while (saldo < meta) {   // pergunta ANTES de cada volta
-        saldo = saldo + deposito;
-        meses++;
-        printf("Mês %d: R$ %.2f\n", meses, saldo);
+    while (sobra >= amigos) { // ainda dá uma rodada completa?
+        sobra = sobra - amigos;
+        rodadas++;
     }
+    printf("%d fatias para %d amigos: %d para cada, sobram %d\n",
+           fatias, amigos, rodadas, sobra);
+    printf("Conferindo com / e %%: %d e %d\n", fatias / amigos, fatias % amigos);
 
-    printf("Meta batida em %d meses. Sobra R$ %.2f\n", meses, saldo - meta);
+    // caso de borda: menos fatias que amigos. A pergunta já começa falsa
+    fatias = 3;
+    sobra = fatias;
+    rodadas = 0;
+    while (sobra >= amigos) { // 3 >= 5? Não: o corpo roda ZERO vezes
+        sobra = sobra - amigos;
+        rodadas++;
+    }
+    printf("%d fatias para %d amigos: %d para cada, sobram %d\n",
+           fatias, amigos, rodadas, sobra);
     return 0;
 }
 // Saída:
-// Mês 1: R$ 150.00
-// Mês 2: R$ 300.00
-// Mês 3: R$ 450.00
-// Mês 4: R$ 600.00
-// Mês 5: R$ 750.00
-// Mês 6: R$ 900.00
-// Mês 7: R$ 1050.00
-// Meta batida em 7 meses. Sobra R$ 50.00
+// 47 fatias para 5 amigos: 9 para cada, sobram 2
+// Conferindo com / e %: 9 e 2
+// 3 fatias para 5 amigos: 0 para cada, sobram 3

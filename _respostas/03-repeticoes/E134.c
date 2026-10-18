@@ -1,15 +1,13 @@
 // 0023 · Break e continue
 // Exercício E134 · ★☆☆
-//
-// Resposta: "1 2 3 5 6". Trocar a ordem dos if não muda nada aqui (7 não é
-// múltiplo de 4). Com i == 8, o break nunca acontece, porque o continue pega
-// o 8 antes: a saída vira "1 2 3 5 6 7 9 10".
 
 #include <stdio.h>
 
 int main(void) {
+    int pulos = 0;
     for (int i = 1; i <= 10; i++) {
         if (i % 4 == 0) {
+            pulos++;
             continue;
         }
         if (i == 7) {
@@ -17,17 +15,19 @@ int main(void) {
         }
         printf("%d ", i);
     }
-    printf("\n");
+    printf("(continue: %d vez)\n", pulos);
 
+    pulos = 0;
     for (int i = 1; i <= 10; i++) {
         if (i % 4 == 0) {
-            continue;
+            pulos++;
+            continue; // pega o 8 antes do break
         }
         if (i == 8) {
             break;
         }
         printf("%d ", i);
     }
-    printf("\n");
+    printf("(continue: %d vezes)\n", pulos);
     return 0;
 }

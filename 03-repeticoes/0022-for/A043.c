@@ -1,26 +1,32 @@
-// A043 · O carnê da TV em 6 parcelas
+// A043 · Postes e vãos: o erro por um na cerca
 
 #include <stdio.h>
 
 int main(void) {
-    double preco = 1800.0;
-    int total_parcelas = 6;
-    double valor = preco / total_parcelas;
-    double falta = preco;
+    int comprimento = 30; // a cerca tem 30 metros
+    int espaco = 5;       // um poste a cada 5 metros
+    int postes = 0;
+    int vaos = 0;
 
-    for (int parcela = 1; parcela <= total_parcelas; parcela++) {
-        falta = falta - valor;
-        printf("Parcela %d/%d: R$ %.2f (falta R$ %.2f)\n",
-               parcela, total_parcelas, valor, falta);
+    // postes: do metro 0 ATÉ o metro 30, inclusive (<=)
+    printf("Postes nos metros:");
+    for (int metro = 0; metro <= comprimento; metro += espaco) {
+        printf(" %d", metro);
+        postes++;
     }
-    printf("Carnê quitado!\n");
+    printf("\n");
+
+    // vãos: cada vão começa num poste, menos no último (<)
+    for (int metro = 0; metro < comprimento; metro += espaco) {
+        vaos++;
+    }
+
+    printf("Postes: %d | Vãos: %d\n", postes, vaos);
+    printf("Pela conta: %d vãos, %d postes\n",
+           comprimento / espaco, comprimento / espaco + 1);
     return 0;
 }
 // Saída:
-// Parcela 1/6: R$ 300.00 (falta R$ 1500.00)
-// Parcela 2/6: R$ 300.00 (falta R$ 1200.00)
-// Parcela 3/6: R$ 300.00 (falta R$ 900.00)
-// Parcela 4/6: R$ 300.00 (falta R$ 600.00)
-// Parcela 5/6: R$ 300.00 (falta R$ 300.00)
-// Parcela 6/6: R$ 300.00 (falta R$ 0.00)
-// Carnê quitado!
+// Postes nos metros: 0 5 10 15 20 25 30
+// Postes: 7 | Vãos: 6
+// Pela conta: 6 vãos, 7 postes
