@@ -1,0 +1,93 @@
+// a rede de canos do poço: verde = canos do Prim; número em cima = ordem de
+// entrada; à direita, o heap de mínimo logo depois que a Ana entra
+export const ideia = {
+  caixas: [
+    {
+      id: 'g',
+      forma: 'grafo',
+      x: 110,
+      y: 90,
+      raio: 58,
+      vertices: [
+        ['Poço', 70, 250],
+        ['Ana', 290, 70],
+        ['Beto', 470, 440],
+        ['Cida', 640, 230],
+        ['Davi', 950, 440],
+        ['Elza', 760, 50],
+      ],
+      arestas: [
+        ['Poço', 'Ana', 4],
+        ['Poço', 'Beto', 6],
+        ['Ana', 'Beto', 3],
+        ['Ana', 'Cida', 8],
+        ['Beto', 'Cida', 5],
+        ['Beto', 'Davi', 8],
+        ['Cida', 'Davi', 2],
+        ['Cida', 'Elza', 9],
+        ['Davi', 'Elza', 4],
+      ],
+      estados: { Poço: 'roxo', Ana: 'verde', Beto: 'verde', Cida: 'verde', Davi: 'verde', Elza: 'verde' },
+      marcadas: [
+        ['Poço', 'Ana'],
+        ['Ana', 'Beto'],
+        ['Beto', 'Cida'],
+        ['Cida', 'Davi'],
+        ['Davi', 'Elza'],
+      ],
+      notas: { Poço: '1', Ana: '2', Beto: '3', Cida: '4', Davi: '5', Elza: '6' },
+    },
+    {
+      id: 'heap',
+      forma: 'array',
+      x: 1080,
+      y: 150,
+      nome: 'heap depois da Ana',
+      itens: ['Beto 3', 'Beto 6', 'Cida 8'],
+      celula: 130,
+      estados: { 0: 'verde' },
+    },
+    {
+      id: 'cmp',
+      x: 110,
+      y: 700,
+      w: 1380,
+      h: 190,
+      cor: 'cinza',
+      rotulo: 'a mesma rede, duas perguntas',
+      texto: ['Prim: soma dos canos = 4 + 3 + 5 + 2 + 4 = 18 m', 'Dijkstra a partir do Poço: Beto direto (6), soma = 21 m'],
+    },
+  ],
+  notas: [
+    { x: 1080, y: 370, texto: 'sai o menor: Beto 3', cor: 'verde' },
+    { x: 1080, y: 410, texto: 'Beto 6 vira item velho:', cor: 'cinza' },
+    { x: 1080, y: 448, texto: 'descartado no fim', cor: 'cinza' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'Início'],
+    ['B', 'proc', 'Heap recebe (0, Poço)'],
+    ['C', 'dec', 'Heap tem item?'],
+    ['D', 'proc', 'Tira o de menor chave: (chave, v, de)'],
+    ['E', 'dec', 'v já está na rede?'],
+    ['F', 'proc', 'v entra; total += chave'],
+    ['G', 'proc', 'Heap recebe (cano[v][w], w, v) para w fora da rede'],
+    ['H', 'io', 'Mostrar o total'],
+    ['I', 'inicio', 'Fim'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'D', 'Sim'],
+    ['D', 'E'],
+    ['E', 'C', 'Sim'],
+    ['E', 'F', 'Não'],
+    ['F', 'G'],
+    ['G', 'C'],
+    ['C', 'H', 'Não'],
+    ['H', 'I'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'C', 'D', 'E', 'C', 'H', 'I'],
+}
