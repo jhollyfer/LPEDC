@@ -35,7 +35,7 @@ encadeia com outras em scripts.
 3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
 4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -339,15 +339,12 @@ Saída esperada:
 7 x 10 = 70
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um for de 1 a 10 com fprintf(arq, "7 x %d = %d\n", i, 7 * i).
 2. Para ler: while (fgets(linha, sizeof linha, arq) != NULL) printf("%s", linha);
 3. Resposta esperada: as 10 linhas da tabuada, de "7 x 1 = 7" até
    "7 x 10 = 70". O arquivo fica em /tmp: confira com cat /tmp/tabuada7.txt.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E427.c
@@ -359,15 +356,12 @@ Preveja a saída antes de rodar. O programa abre o MESMO arquivo quatro
 vezes, alternando os modos "w" e "a", e grava um nome em cada vez. No fim,
 mostra o que sobrou no arquivo. Abra o E428.c para ler o código.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. "w" cria o arquivo vazio, apagando o que já existia.
 2. "a" abre e escreve depois do último byte, sem apagar nada.
 3. Resposta esperada: duas linhas, "Caio" e "Duda". Ana e Bia sumiram
    quando o terceiro fopen abriu com "w".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E428.c
@@ -396,8 +390,7 @@ Palavras: 10
 Caracteres: 53
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A variável que recebe o fgetc precisa ser int, não char: o EOF não é um
    caractere, é um valor fora da faixa de 0 a 255.
@@ -406,8 +399,6 @@ Caracteres: 53
    <ctype.h> e uma flag dentro_palavra).
 3. Resposta esperada: Linhas: 3, Palavras: 10, Caracteres: 53 (16 + 12 + 22
    letras e espaços, mais os 3 '\n'). Confira com: wc /tmp/recado.txt
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E429.c
@@ -430,16 +421,13 @@ Lia      média 7.00  aprovada(o)
 Média da turma: 6.92
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. fscanf(arq, "%19s %lf %lf", nome, &n1, &n2) devolve 3 quando leu a
    linha inteira. Use "== 3" como condição do while.
 2. Para a média da turma, acumule as médias e conte os alunos.
 3. Resposta esperada: Bruna 8.25, Diego 5.50, Lia 7.00, turma 6.92
    (20.75 / 3 = 6.9166...).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E430.c
@@ -464,8 +452,7 @@ Total: 120.00
 a) Por que o último Pix aparece duas vezes?
 b) Conserte o laço para mostrar três Pix e Total: 100.00.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O feof só fica verdadeiro DEPOIS que uma leitura tenta passar do fim e
    falha. Ele não "olha adiante".
@@ -475,8 +462,6 @@ b) Conserte o laço para mostrar três Pix e Total: 100.00.
 3. Resposta esperada: troque o while (!feof(arq)) por
    while (fscanf(arq, "%lf", &valor) == 1) { ... } e tire o fscanf de
    dentro do laço. Saída: os três Pix e Total: 100.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E431.c
@@ -515,16 +500,13 @@ Comprar:
 
 Se o segundo fopen falhar, feche o primeiro arquivo antes de sair.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Abra entrada em "r" e saída em "w". Leia com
    while (fscanf(ent, "%29s %d", nome, &qtd) == 2).
 2. if (qtd < 5) fprintf(sai, "%s %d\n", nome, 5 - qtd);
 3. Na hora de mostrar, leia comprar.txt também com fscanf e conte os itens.
 4. Resposta esperada: arroz 2, cafe 5, ovos 3 e "3 itens na lista".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E432.c
@@ -813,14 +795,11 @@ Lidos: 5 valores
 Média: 31.6 graus
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. fwrite(maximas, sizeof(int), 5, arq): o vetor já é um endereço, sem &.
 2. fread devolve quantos itens leu. Se for menor que 5, algo deu errado.
 3. Resposta esperada: Lidos: 5 valores e Média: 31.6 graus (158 / 5).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E433.c
@@ -832,8 +811,7 @@ Preveja a saída antes de rodar. O arquivo tem 4 ints, gravados em
 binário: 10, 20, 30 e 40. Cada int ocupa 4 bytes. Siga as chamadas de
 fseek, fread e ftell no E434.c e escreva o que cada printf mostra.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. SEEK_SET conta do começo, SEEK_CUR da posição atual e SEEK_END do fim.
    O deslocamento pode ser negativo.
@@ -841,8 +819,6 @@ fseek, fread e ftell no E434.c e escreva o que cada printf mostra.
 3. Resposta esperada: a) 30 (byte 8); b) posição 12; c) 20 (voltou 8
    bytes: de 12 para 4); d) 40 (último int: 4 bytes antes do fim);
    e) posição 16.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E434.c
@@ -871,8 +847,7 @@ Depois:
 1003  R$  1200.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Posição do registro i: i * sizeof(Conta). Use fseek com SEEK_SET.
 2. Depois do fread, o arquivo está no FIM do registro. Para gravar por cima,
@@ -880,8 +855,6 @@ Depois:
 3. Entre uma leitura e uma escrita no mesmo FILE, o C exige um fseek (ou
    fflush). A volta da dica 2 já resolve isso.
 4. Resposta esperada: só a conta 1002 muda, de 80.50 para 180.50.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E435.c
@@ -911,16 +884,13 @@ Registros em /tmp/notas.bin: 7
 Registros em /tmp/nao-existe.bin: -1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. fseek(arq, 0, SEEK_END) e depois ftell(arq) dão o tamanho em bytes.
 2. Registros = tamanho / tamanho_registro.
 3. sizeof de int + float = 4 + 4 = 8 bytes, sem sobra de alinhamento.
 4. Resposta esperada: 8 bytes, 7 registros (56 / 8) e -1 para o arquivo
    que não existe.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E436.c
@@ -944,8 +914,7 @@ b) um que esconde o problema em vez de avisar.
 
 Ache e conserte os dois.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro de salvar, v é um int *, não um vetor. Quanto vale sizeof(v)?
 2. Quantos bytes o arquivo tem depois de salvar? E quantos itens o fread
@@ -955,8 +924,6 @@ Ache e conserte os dois.
    sizeof *v). b) O main ignora o retorno do fread, que foi 2, e mostra os
    zeros da inicialização como se fossem leituras. Confira se fread
    devolveu 5 e avise se não.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E437.c
@@ -992,8 +959,7 @@ Pix da Ana        +45.00
 Saldo: R$ 1876.20
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O registro k contado do fim (k = 1 é o último) começa em
    -k * sizeof(registro) a partir de SEEK_END. Cuidado: sizeof é unsigned;
@@ -1002,8 +968,6 @@ Saldo: R$ 1876.20
 3. printf("%+.2f", x) mostra o sinal + nos positivos. Acentos ocupam mais de
    um byte e bagunçam o alinhamento do %-15s; não se preocupe com isso.
 4. Resposta esperada: Padaria, Farmácia, Pix da Ana, e Saldo: R$ 1876.20.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E438.c
@@ -1229,15 +1193,12 @@ bom dia Brasil
 3 argumentos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Os seus argumentos vão de argv[1] até argv[argc - 1].
 2. Imprima o espaço ANTES de cada argumento, menos do primeiro.
 3. Resposta esperada: "bom dia Brasil" e "3 argumentos" (argc vale 4,
    porque argv[0] também conta).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0074-argumentos/E439.c
@@ -1252,8 +1213,7 @@ Leia o código do E440.c e preveja a saída antes de rodar, para este comando:
 $ rodar E440.c 7 + 3a
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Tudo no argv é string. argv[1][0] é o primeiro CARACTERE do primeiro
    argumento.
@@ -1263,8 +1223,6 @@ $ rodar E440.c 7 + 3a
    avisa nada.
 4. Resposta esperada: "argc = 4"; "argv[2] = +"; "tamanho de argv[3] = 2";
    "7 + 3 = 10"; "atoi("3a") = 3"; "atoi("+") = 0".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0074-argumentos/E440.c
@@ -1288,16 +1246,13 @@ Maior: 9.25
 Menor: 6.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use strtod(argv[i], &fim) e confira *fim == '\0' (e que fim andou: um
    argumento vazio "" também deixa *fim == '\0').
 2. Comece maior e menor com a primeira nota válida, não com 0.
 3. Resposta esperada: 4 notas, média 7.69 (30.75 / 4 = 7.6875), maior 9.25
    e menor 6.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0074-argumentos/E441.c
@@ -1326,8 +1281,7 @@ Explique cada um e conserte. Sem argumentos (ou com um número de vezes que
 não é inteiro positivo), o programa deve mostrar uma mensagem de uso em
 stderr e devolver 1.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quem é argv[0]? O que atoi("Ana") devolve?
 2. Sem argumentos, argc vale 1 e argv[1] é NULL. O que atoi(NULL) faz?
@@ -1336,8 +1290,6 @@ stderr e devolver 1.
    atoi vira 0, então o laço não roda); b) falta conferir argc != 3 antes
    de tocar no argv. Consertado, "rodar E442.c Ana 3" mostra Olá, Ana! três
    vezes.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0074-argumentos/E442.c
@@ -1367,8 +1319,7 @@ $ rodar E443.c /tmp/nao-existe.txt
 /tmp/nao-existe.txt: No such file or directory
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Aproveite a lógica do E429: fgetc com int, uma flag dentro_palavra e
    isspace.
@@ -1376,8 +1327,6 @@ $ rodar E443.c /tmp/nao-existe.txt
    dá 34, e não 32. Confira com: wc /tmp/recado.txt
 3. Resposta esperada: "4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt"
    (a linha vazia conta como linha).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0074-argumentos/E443.c
@@ -1408,15 +1357,12 @@ Por que "x" e não "*"? Teste "rodar E444.c 9 * 3" sem aspas e descubra:
 o shell troca o * pelos nomes dos arquivos da pasta ANTES de o programa
 rodar. Com aspas ('*') funciona.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O operador é argv[2]. Confira strlen(argv[2]) == 1 e use argv[2][0] no
    switch.
 2. Aceite também '*' no case do 'x' (para quem usar aspas).
 3. Resposta esperada: as quatro saídas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0074-argumentos/E444.c
@@ -1903,14 +1849,11 @@ $ rodar E445.c /tmp/bolao.txt Caio 0x0
 2. Caio 0x0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O modo que cria se não existe e escreve no fim é o "a".
 2. Feche o arquivo depois de gravar e abra de novo com "r" para mostrar.
 3. Resposta esperada: na segunda execução, "1. Rita 2x1" e "2. Caio 0x0".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E445.c
@@ -1927,8 +1870,7 @@ um. Leia o código do E446.c, preveja e depois rode com:
 $ rodar E446.c medidas
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. No texto, cada número vira um caractere por dígito, mais o '\n'.
 2. No binário, cada int ocupa sizeof(int) bytes, seja 7 ou 4000000.
@@ -1936,8 +1878,6 @@ $ rodar E446.c medidas
 4. Resposta esperada: "2 argumentos"; "/tmp/medidas.txt: 20 bytes";
    "/tmp/medidas.bin: 16 bytes" (texto: 2 + 4 + 6 + 8 = 20; binário: 4 ints
    de 4 bytes = 16).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E446.c
@@ -1969,15 +1909,12 @@ Saída esperada:
 2. Iara        (31) 96666-0000
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O contato i começa em sizeof(int) + i * sizeof(Contato).
 2. Para regravar o cabeçalho: rewind(arq) e fwrite(&quantidade, ...).
 3. sizeof(Contato) = 16 + 8 = 24 bytes; 4 + 3 * 24 = 76.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E447.c
@@ -2006,16 +1943,13 @@ queijo;4;140.00
 Total geral: R$ 662.50 (gravado em /tmp/vendas.csv)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. const char *destino = argc >= 2 ? argv[1] : "/tmp/vendas.csv";
 2. Leia o binário com while (fread(&v, sizeof v, 1, ent) == 1) e vá
    escrevendo no CSV com fprintf(sai, "%s;%d;%.2f\n", ...).
 3. "caldo de cana" tem espaços: por isso o separador é ';' e não espaço.
 4. Resposta esperada: as 5 linhas do CSV e Total geral: R$ 662.50.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E448.c
@@ -2043,8 +1977,7 @@ vezes o arquivo só tem "pagar a luz" (confira com cat /tmp/diario.txt).
 E "rodar E449.c anota", sem o texto, tem comportamento indefinido. Ache os
 TRÊS erros e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Qual modo de abertura apaga o que já existia?
 2. O fprintf grava direto no disco? Quando o buffer é descarregado? O
@@ -2055,8 +1988,6 @@ TRÊS erros e conserte.
    está no buffer, então a leitura acha o arquivo vazio. (3) A conferência
    deve ser argc != 3; com argc < 2, argv[2] pode ser NULL. Consertado, a
    saída fica igual à do enunciado (apague /tmp/diario.txt antes de testar).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E449.c
@@ -2094,8 +2025,7 @@ $ rodar E450.c leite /tmp/lista.txt; echo "código: $?"
 código: 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Com 3 argumentos (argc == 4), o primeiro precisa ser "-c". Com 2
    (argc == 3), não tem opção. Calcule os índices da palavra e do arquivo
@@ -2105,8 +2035,6 @@ código: 1
 3. Leia com fgets numa linha de 256 caracteres. A linha já vem com '\n',
    então imprima com "%d: %s".
 4. Resposta esperada: as saídas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E450.c

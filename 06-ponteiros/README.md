@@ -39,7 +39,7 @@ desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
 3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
 4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -271,15 +271,12 @@ tarifa = 4.40, endereço 0x7f..., tamanho 4
 setor = X, endereço 0x7f..., tamanho 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O endereço sai com &nome; o tamanho, com sizeof nome.
 2. Mostre o endereço com %p e o cast (void *); o tamanho, com %zu.
 3. Resposta esperada: os valores e os tamanhos acima (4, 4 e 1); os
    endereços aparecem em hexadecimal e mudam a cada vez que você roda.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-memoria/E289.c
@@ -313,16 +310,13 @@ e) Rodando o programa de novo, &gols continua 0x2000?
 Depois, escreva o programa com as três variáveis e mostre os endereços
 reais com %p.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O endereço de uma variável é o da primeira gaveta dela.
 2. Do 0x2008 andando 8 gavetas, a última é 0x2008 + 7.
 3. Resposta esperada: a) 3 e 0x2000; b) 0x2008; c) 0x200F;
    d) 0x2000, 0x2001, 0x2002 e 0x2003; e) não: o sistema sorteia os
    endereços a cada execução (ASLR).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-memoria/E290.c
@@ -352,16 +346,13 @@ precos[0][1] = 7.50 em 0x7f...38
 precos[1][2] = 12.50 em 0x7f...58
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. &precos[i][j] dá o endereço de uma posição.
 2. Olhe só os dois últimos dígitos hexa: 0x30, 0x38, 0x40...
 3. Resposta esperada: sobem de 8 em 8 (sizeof(double)); precos[1][0]
    fica logo depois de precos[0][2], sem buraco: a matriz é uma fila só
    de 6 doubles, linha após linha (assunto 0044).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-memoria/E291.c
@@ -374,8 +365,7 @@ três jeitos, e os três estão errados DE PROPÓSITO. Rode com o rodar, leia
 os avisos do compilador e responda: o que cada linha mostra e por que está
 errada? Depois conserte para as três linhas mostrarem o endereço certo.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Leia o aviso inteiro: ele diz o tipo que o formato espera e o tipo que
    recebeu.
@@ -384,8 +374,6 @@ errada? Depois conserte para as três linhas mostrarem o endereço certo.
    mostra só a metade de baixo do endereço; %p sem cast funciona na
    prática, mas o padrão pede void *. As três viram
    printf("Endereço: %p\n", (void *)&pedidos);
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-memoria/E292.c
@@ -414,8 +402,7 @@ gcc -std=c17 E293.c -o e293 && ./e293
 Responda: (a) os elementos do vetor ficam colados e em ordem? (b) e a, b
 e c? (c) o que você pode concluir para escrever programas?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Compare os últimos dígitos hexa de cada endereço.
 2. O AddressSanitizer coloca "zonas proibidas" entre as variáveis para
@@ -425,8 +412,6 @@ e c? (c) o que você pode concluir para escrever programas?
    distantes; sem o sanitizer costumam ficar a 4 bytes, mas a ordem e
    a distância são escolha do compilador e podem mudar; (c) só o vetor tem ordem garantida. Nunca suponha que
    b mora "logo depois" de a.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-memoria/E293.c
@@ -452,8 +437,7 @@ Chame registra(10) e registra(20) e mostre todos os endereços. Agrupe
 os endereços pelo começo (0x55... ou 0x7f...) e responda: quem mora
 "perto" de quem? Qual endereço se repete nas duas chamadas de registra?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Olhe só os 4 primeiros dígitos hexa de cada endereço.
 2. Globais, static e textos fixos vivem enquanto o programa vive; locais
@@ -463,8 +447,6 @@ os endereços pelo começo (0x55... ou 0x7f...) e responda: quem mora
    ficam em outra, bem mais alta (0x7f...), a pilha. O endereço de
    chamadas é o mesmo nas duas chamadas; o de valor pode mudar. O mapa
    completo (pilha, heap, dados e código) é o assunto 0058.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-memoria/E294.c
@@ -669,14 +651,11 @@ Pelo ponteiro: 24.0
 Pela variável: 24.0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Declare: double *pt = &temperatura;
 2. Para mudar: *pt = *pt + 1.5; (ou *pt += 1.5;)
 3. Resposta esperada: 22.5, 24.0 e 24.0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E295.c
@@ -712,15 +691,12 @@ Depois escreva o programa e mostre cada expressão com printf (use %d
 para as que são int e %p com (void *) para as que são endereço). Os
 endereços reais vão ser outros; confira só quais são iguais entre si.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. & dá o endereço; * vai até o endereço e pega o que tem lá.
 2. *&vagas: primeiro pega o endereço de vagas, depois vai até ele.
 3. Resposta esperada: vagas = 7; &vagas = 0x3000; p = 0x3000; *p = 7;
    &p = 0x3008; *&vagas = 7. No programa, &vagas e p saem iguais.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E296.c
@@ -742,8 +718,7 @@ Rode com o rodar e conserte um erro de cada vez: primeiro o compilador
 recusa o código; depois avisa; por fim o AddressSanitizer reclama quando
 roda. Ache os três erros e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em int *peso_ptr, meta_ptr; quantos ponteiros foram declarados?
 2. Um ponteiro precisa apontar para algum lugar antes de receber *p = ...
@@ -753,8 +728,6 @@ roda. Ache os três erros e conserte.
    78 como endereço (aviso "makes pointer from integer"): o certo é
    meta_ptr = &meta;. (3) peso_ptr nunca recebeu um endereço: falta
    peso_ptr = &peso; antes de *peso_ptr = 82;.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E297.c
@@ -775,15 +748,12 @@ Mais pesada: 26 kg
 Depois de tirar 4 kg: azul 19 kg, preta 22 kg
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use um if para escolher: pesada = &mala_azul ou pesada = &mala_preta.
 2. Para tirar 4 kg pelo ponteiro: *pesada -= 4;
 3. Resposta esperada: a preta é a mais pesada (26); vira 22 e a azul
    continua 19.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E298.c
@@ -816,15 +786,12 @@ q = &a;
 printf("a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Linha a linha: quem é mudado é a variável apontada, não o ponteiro
    (exceto em p = q e q = &a, que só trocam o alvo).
 2. Depois de p = q, p aponta para b.
 3. Resposta esperada: a = 5, b = 16, *p = 16, *q = 5.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E299.c
@@ -856,16 +823,13 @@ Cobri R$ 50.25
 A: 0.00  B: 300.00  C: 12.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com menor = &conta_a e compare *menor com as outras.
 2. Para saber quanto pôr antes de zerar: -(*negativa).
 3. Resposta esperada: a conta A é a menor e negativa; cobre R$ 50.25 e
    ela vira 0.00. Com 50.25, a menor é C (12.00) e aparece
    "Nenhuma conta negativa".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E300.c
@@ -1090,14 +1054,11 @@ Antes: 3 ingressos
 Depois: 6 ingressos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro da função, *quantidade é a variável do main.
 2. Na chamada, passe o endereço: dobra(&ingressos);
 3. Resposta esperada: 3 e depois 6.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E301.c
@@ -1123,14 +1084,11 @@ Saída esperada:
 47 min = 0 h 47 min
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Horas: divisão inteira por 60. Minutos: o resto (%).
 2. Declare int h, m; no main e chame converte(135, &h, &m);
 3. Resposta esperada: 2 h 15 min e 0 h 47 min.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E302.c
@@ -1156,14 +1114,11 @@ Saída esperada:
 Menor: 31  Maior: 39  Amplitude: 8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com *menor = *maior = v[0] e percorra do índice 1 em diante.
 2. O const no vetor garante que a função só lê as temperaturas.
 3. Resposta esperada: menor 31, maior 39, amplitude 8.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E303.c
@@ -1185,8 +1140,7 @@ mas mostra outra coisa. Rode, leia o aviso do compilador e descubra os
 dois erros. Conserte sem mudar o main (exceto se precisar acrescentar um
 & numa chamada).
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em *contador++, o ++ age antes do *: ele anda com o ponteiro, não
    soma no valor.
@@ -1195,8 +1149,6 @@ dois erros. Conserte sem mudar o main (exceto se precisar acrescentar um
    *contador += 1); o aviso era "value computed is not used";
    (2) zera recebe uma cópia: mude para void zera(int *valor) com
    *valor = 0 e chame zera(&avulsos).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E304.c
@@ -1225,16 +1177,13 @@ x² + 1 = 0        ->  nenhuma raiz real
 0x² + 3x + 1 = 0  ->  não é do 2º grau
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. delta = b*b - 4*a*c; x = (-b ± sqrt(delta)) / (2*a). Inclua math.h.
 2. O valor de retorno diz quantas gavetas a função preencheu; quem chama
    só lê *x1 e *x2 se o retorno permitir.
 3. Resposta esperada: 2 raízes (3.00 e 2.00), 1 raiz (-1.00), nenhuma e
    "não é do 2º grau".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E305.c
@@ -1268,8 +1217,7 @@ printf("x = %d\n", x);
 Depois explique: por que a segunda chamada dá um resultado estranho? A
 troca com tmp do A101 tem o mesmo problema?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Na segunda chamada, a e b apontam para a MESMA gaveta: escrever em *a
    é escrever em *b.
@@ -1279,8 +1227,6 @@ troca com tmp do A101 tem o mesmo problema?
    Quando dois ponteiros apontam para o mesmo lugar (aliasing), cada
    escrita muda os dois. A troca com tmp não sofre disso: x continua
    igual.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E306.c
@@ -1504,14 +1450,11 @@ Saída esperada:
 Média: 7.75
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. const float *p = notas; e o laço enquanto p < notas + 4.
 2. *p dá a nota da vez; p++ vai para a próxima.
 3. Resposta esperada: as quatro notas e média 7.75.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E307.c
@@ -1546,15 +1489,12 @@ g) *p          h) p[-1]         i) p - v
 Escreva o programa e mostre cada item para conferir (o endereço do item
 f vai sair diferente; confira só que fica 12 bytes depois de p).
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. p começa em v[1]. p[k] é *(p + k), contado a partir de onde p está.
 2. Em *p + 3, o * vem primeiro.
 3. Resposta esperada: a) 20; b) 50; c) 23; d) 40; e) 60; f) 0x2010;
    g) 40; h) 30; i) 3.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E308.c
@@ -1582,15 +1522,12 @@ Saída esperada:
 74 68 52 47 35 23 11
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. int *ini = v; int *fim = v + n - 1;
 2. while (ini < fim) { troca(ini, fim); ini++; fim--; }
 3. Resposta esperada: 74 68 52 47 35 23 11. Com n ímpar, o do meio (47)
    fica no lugar.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E309.c
@@ -1611,8 +1548,7 @@ Saída esperada:
 Rode com o rodar: um erro só aparece no resultado, o outro o
 AddressSanitizer denuncia. Explique cada um e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Depois de p += 1, para onde p aponta? E p[3], então, é qual elemento?
 2. Um vetor de 5 tem endereços válidos para leitura de estoque até
@@ -1621,8 +1557,6 @@ AddressSanitizer denuncia. Explique cada um e conserte.
    índice é relativo a p), e o 9 virou 20: o certo é p[2] = 20 (ou
    estoque[3] = 20); (2) o laço vai até q <= estoque + 5 e lê uma gaveta
    depois do fim (stack-buffer-overflow): o certo é q < estoque + 5.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E310.c
@@ -1657,16 +1591,13 @@ Filial 2: 53
 Campeã: filial 0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. int *inicio = &vendas[0][0]; o laço vai de p = inicio até
    p < inicio + 12.
 2. Guarde os totais num vetor int filial[3] = {0}; e some *p em
    filial[(p - inicio) / 4].
 3. Resposta esperada: total 151; filiais 56, 42 e 53; campeã filial 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E311.c
@@ -1699,8 +1630,7 @@ Novo tamanho: 5
 3 5 2 8 3
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O primeiro sempre fica: escreve começa em v + 1, le também.
 2. Para cada le, se *le for diferente de *(escreve - 1), copie:
@@ -1708,8 +1638,6 @@ Novo tamanho: 5
 3. O novo tamanho é escreve - v.
 4. Resposta esperada: tamanho 5 e 3 5 2 8 3 (o último 3 fica: não é
    vizinho do primeiro).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E312.c
@@ -1917,15 +1845,12 @@ Saída esperada:
 Vogais: 15
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. while (*s != '\0') { ...; s++; } (s é uma cópia do endereço: pode
    andar à vontade).
 2. Para testar a vogal, um switch com os cinco case serve bem.
 3. Resposta esperada: 15.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E313.c
@@ -1964,8 +1889,7 @@ c) Quais destas linhas compilam e funcionam? Para as outras, diga se o
 Responda em comentário. Depois teste: escreva o programa com as linhas que
 funcionam e mostre os sizeof e strlen com printf.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Vetor: o tamanho inclui o '\0'. Ponteiro: o tamanho de um endereço.
 2. Vetor não recebe outro endereço; const char * não deixa escrever.
@@ -1973,8 +1897,6 @@ funcionam e mostre os sizeof e strlen com printf.
    3 não compila (vetor não pode ser atribuído); 4 não compila por
    causa do const (sem o const, compilaria e cairia na execução);
    5 funciona (cabe: 5 letras + '\0' em 6 bytes).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E314.c
@@ -2012,8 +1934,7 @@ while ((*destino++ = *origem++) != '\0') {
 
 Explique em comentário por que ela funciona.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Versão simples: enquanto *origem != '\0', copie e avance os dois; no
    fim, *destino = '\0'.
@@ -2021,8 +1942,6 @@ Explique em comentário por que ela funciona.
    copiado e o ++ avança os dois ponteiros depois.
 3. Resposta esperada: "Porto Alegre", 12 letras. O laço clássico para
    logo depois de copiar o '\0', porque o valor copiado é 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E315.c
@@ -2042,8 +1961,7 @@ Mesmo morador
 
 Rode com o rodar, leia o relatório e conserte. Explique cada erro.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Onde mora o texto "ola, visitante!"? Dá para escrever lá?
 2. Um ponteiro que nunca recebeu endereço não é lugar para strcpy.
@@ -2052,8 +1970,6 @@ Rode com o rodar, leia o relatório e conserte. Explique cada erro.
    declare char saudacao[] = "ola, visitante!"; (2) bloco é um ponteiro
    sem alvo: use char bloco[2]; (3) morador == "ana" compara endereços:
    use strcmp(morador, "ana") == 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E316.c
@@ -2075,15 +1991,12 @@ socorram me subi no onibus em marrocos: sim
 pix caiu: não
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. fim = s + strlen(s) - 1. Cuidado com a string vazia.
 2. while (ini < fim): se *ini é espaço, ini++ e continue; se *fim é
    espaço, fim-- e continue; se forem diferentes, não é palíndromo.
 3. Resposta esperada: sim, sim, não.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E317.c
@@ -2117,8 +2030,7 @@ Saída esperada:
 "" na posição 0: o pix caiu na conta
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para cada posição t do texto, compare t[k] com trecho[k] enquanto o
    trecho não acabar e os dois forem iguais.
@@ -2126,8 +2038,6 @@ Saída esperada:
    na posição 0.
 3. Resposta esperada: posição 6 ("caiu na conta"); "boleto" não aparece;
    o trecho vazio dá posição 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E318.c
@@ -2340,14 +2250,11 @@ k k k
 Agora: K
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Pela variável: turma; por p: *p; por pp: **pp.
 2. Para escrever: **pp = 'K';
 3. Resposta esperada: "k k k" e "Agora: K".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E319.c
@@ -2379,15 +2286,12 @@ pp          ?
 &*pp        ?
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Cada * dá um salto: vai até o endereço e pega o que tem lá.
 2. & e * se anulam: &*pp é o mesmo que pp.
 3. Resposta esperada: x = 5; p = 0x4000; *p = 5; pp = 0x4010;
    *pp = 0x4000; **pp = 5; &pp = 0x4020; &*pp = 0x4010.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E320.c
@@ -2423,16 +2327,13 @@ Saída esperada:
 
 Teste também com "Sem numero": deve sair uma linha vazia.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro da função, *s é o ponteiro do main e **s é o caractere para
    onde ele aponta.
 2. while (**s != '\0' && !isdigit((unsigned char)**s)) { (*s)++; }
    Os parênteses em (*s)++ são obrigatórios.
 3. Resposta esperada: "4521 confirmado" e uma linha vazia.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E321.c
@@ -2452,8 +2353,7 @@ Saída esperada:
 Maior lance: R$ 870
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A função recebe int *res: uma CÓPIA do ponteiro do main.
 2. Para mudar um int * de quem chamou, a função precisa de um int **.
@@ -2461,8 +2361,6 @@ Maior lance: R$ 870
    main continua NULL e *vencedor desreferencia NULL (SEGV). Conserto:
    void aponta_maior(int *a, int *b, int **res) com *res = ...; e a
    chamada aponta_maior(&lance1, &lance2, &vencedor).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E322.c
@@ -2498,16 +2396,13 @@ Em ordem: 7 8 9 10
 Originais: j1=9 j2=7 j3=10 j4=8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para ordenar, use dois for (i e j > i): se *ordem[j] < *ordem[i],
    troca_ptr(&ordem[i], &ordem[j]).
 2. Dentro de troca_ptr, o temporário é um int *: int *tmp = *a;
 3. Resposta esperada: 7 8 9 10, e as variáveis continuam 9, 7, 10, 8.
    Só os endereços mudaram de lugar no vetor.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E323.c
@@ -2543,15 +2438,12 @@ pp = &q;
 printf("x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. *pp = algo muda o ponteiro para onde pp aponta (p no começo, q
    depois de pp = &q).
 2. Depois de *pp = q, p aponta para y.
 3. Resposta esperada: x=10 y=3 *p=3 *q=10 **pp=10.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E324.c
@@ -2778,14 +2670,11 @@ Saída esperada:
 86.0 -> 30.0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. conv = c_para_f; (sem & e sem parênteses).
 2. Chame como se fosse a função: conv(30).
 3. Resposta esperada: 86.0 e 30.0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E325.c
@@ -2813,14 +2702,11 @@ Saída esperada:
 2 4 6 8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro de para_cada: for (...) acao(&v[i]); (ou acao(v + i)).
 2. A ação recebe int * porque dobra precisa mudar o elemento.
 3. Resposta esperada: "1 2 3 4" e "2 4 6 8".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E326.c
@@ -2849,15 +2735,12 @@ Digite a conta: 12 * 4
 Resultado: 48
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para achar o índice: percorra "+-*/" com um for até achar o char.
 2. Confira o retorno do scanf (tem que ser 3).
 3. Resposta esperada: 12 * 4 dá 48; 20 / 3 dá 6 (divisão inteira);
    7 % 2 dá "Operador inválido".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E327.c
@@ -2884,15 +2767,12 @@ O detalhe: cada elemento do vetor é um const char *. O qsort entrega à
 comparação o ENDEREÇO de um elemento, ou seja, o endereço de um
 const char * (um ponteiro para ponteiro, assunto 0054).
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro da comparação: const char *x = *(const char * const *)a;
 2. Depois é só return strcmp(x, y);
 3. O tamanho de cada elemento é sizeof frutas[0] (8 bytes: um ponteiro).
 4. Resposta esperada: abacaxi acerola banana caju manga.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E328.c
@@ -2911,8 +2791,7 @@ Saída esperada:
 -2000000000 5 2000000000
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quanto dá 2000000000 - (-2000000000)? Cabe num int (assunto 0008)?
 2. A comparação só precisa devolver o SINAL certo, não a diferença.
@@ -2920,8 +2799,6 @@ Saída esperada:
    overflow): o resultado "dá a volta" e fica negativo, dizendo que
    2000000000 vem antes de -2000000000. Conserto:
    return (x > y) - (x < y);
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E329.c
@@ -2949,15 +2826,12 @@ Saída esperada:
 Desafio extra: guarde o alvo (50) numa variável global static e mude
 para 60 antes de ordenar de novo. Qual sai a ordem?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Calcule as distâncias de x e y com abs() (stdlib.h).
 2. Compare primeiro as distâncias; se forem iguais, compare os preços.
 3. Resposta esperada: 50 47 53 44 58 39 61. Com alvo 60:
    61 58 53 50 47 44 39.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E330.c
@@ -3172,14 +3046,11 @@ idade: 41
 altura: 1.83
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. p = &idade; não precisa de cast (qualquer ponteiro vira void *).
 2. Para ler, converta: *(int *)p e *(double *)p.
 3. Resposta esperada: 41 e 1.83.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0056-void-generico/E331.c
@@ -3191,8 +3062,7 @@ O programa abaixo tem quatro linhas comentadas, marcadas de L1 a L4.
 ANTES de testar, diga para cada uma: compila? Se compila, funciona? Depois
 descomente UMA linha de cada vez, rode com o rodar e leia a mensagem.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. void * não diz quantos bytes ler nem quantos bytes andar.
 2. Em C, void * vira int * sem cast.
@@ -3203,8 +3073,6 @@ descomente UMA linha de cada vez, rode com o rodar e leia a mensagem.
    o printf final passa a ler um int fora do lugar ("load of misaligned
    address"); L4 compila, mas lê 8 bytes onde só há um int de 4: lixo e
    erro do AddressSanitizer (stack-buffer-overflow).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0056-void-generico/E332.c
@@ -3231,16 +3099,13 @@ antes: 2 1 3 0 4 | 99.90
 depois: 0 0 0 0 0 | 0.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro, unsigned char *b = p; e um for de 0 a tam.
 2. Para o vetor inteiro, o tamanho é sizeof gols (20 bytes); para o
    double, sizeof saldo.
 3. Resposta esperada: tudo vira 0 (todos os bytes 0 dão 0 tanto no int
    quanto no double).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0056-void-generico/E333.c
@@ -3275,15 +3140,12 @@ Saída esperada:
 7.50 9.25 6.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Converta o início para const unsigned char * e some i * tam: isso anda
    byte a byte.
 2. mostra_int faz printf("%d ", *(const int *)p);
 3. Resposta esperada: as duas linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0056-void-generico/E334.c
@@ -3320,15 +3182,12 @@ caio no índice 2
 bruno no índice -1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O endereço do i-ésimo: (const unsigned char *)v + i * tam.
 2. Para as strings, cada elemento é um const char *: a função igual
    recebe endereços de const char * e usa strcmp.
 3. Resposta esperada: índices 1, 2, 2 e -1 (bruno não está).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0056-void-generico/E335.c
@@ -3350,8 +3209,7 @@ char sigla[] = "BR";
 
 Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Escreva cada número em hexa com todos os bytes (short tem 2, int 4) e
    inverta a ordem dos bytes.
@@ -3361,8 +3219,6 @@ Depois rode e confira.
    cor: 0d 0c 0b 0a
    negativo: fe ff ff ff
    sigla: 42 52 00
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0056-void-generico/E336.c
@@ -3643,16 +3499,13 @@ R$ 0.99 = 0 reais e 99 centavos
 R$ 19.99 = 19 reais e 99 centavos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Converta tudo para centavos primeiro: long total = lround(valor * 100);
    (math.h). Por que lround e não um cast direto? Teste (int)(19.99 * 100).
 2. Depois, *reais = total / 100 e *centavos = total % 100.
 3. Resposta esperada: as três linhas acima. Com cast direto, 19.99 * 100
    vira 1998.9999... e o cast corta para 98 centavos.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E337.c
@@ -3685,14 +3538,11 @@ p--;
 printf("%d %d %d %d | %s | %c\n", v[0], v[1], v[2], v[3], s, *(c + 2));
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. p começa em v[3]; troca(&v[0], p) troca o primeiro com o último.
 2. c aponta para s[1]; c + 2 é s[3].
 3. Resposta esperada: 20 10 25 5 | fEira | r
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E338.c
@@ -3719,15 +3569,12 @@ Saída esperada:
 7 19 31
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Compare a com b, depois a com c (agora a é o menor), depois b com c.
 2. Cada comparação que achar a ordem errada chama troca com os
    ponteiros que você já recebeu (sem &: eles já são endereços).
 3. Resposta esperada: 7 19 31, para qualquer ordem de entrada.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E339.c
@@ -3752,8 +3599,7 @@ Saída esperada:
 Natal Maceio Palmas Recife Aracaju Salvador Teresina Rio Branco
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A comparação recebe endereços de const char *: pegue as strings com
    *(const char * const *)a.
@@ -3761,8 +3607,6 @@ Natal Maceio Palmas Recife Aracaju Salvador Teresina Rio Branco
 3. Cuidado: strlen devolve size_t (sem sinal). Não subtraia: compare com
    < e >.
 4. Resposta esperada: a linha acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E340.c
@@ -3782,8 +3626,7 @@ Mercadinho: total 125, desconto 15%
 Rode com o rodar, leia os avisos e os relatórios (conserte um erro, rode
 de novo) e explique cada um.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma variável local some quando a função termina. O endereço dela
    vale alguma coisa depois disso?
@@ -3795,8 +3638,6 @@ de novo) e explique cada um.
    p <= precos + 3 e lê depois do fim: use p < precos + 3; (3) loja
    aponta para um literal (só leitura): declare char loja[] =
    "mercadinho".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E341.c
@@ -3836,8 +3677,7 @@ nome mais comprido: laranja (índice 2)
 depois de zerar: 12 0 33 47 5
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Ande pelo vetor com const unsigned char *: o i-ésimo está em
    base + i * tam. Guarde o endereço do maior até agora.
@@ -3845,8 +3685,6 @@ depois de zerar: 12 0 33 47 5
    maximo é, na verdade, um const char ** (converta para usar).
 3. Para o índice: (const int *)m - pontos.
 4. Resposta esperada: as quatro linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E342.c

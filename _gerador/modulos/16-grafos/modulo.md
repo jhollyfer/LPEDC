@@ -39,7 +39,7 @@ pilhas, recursão, structs e heap.
 4. Rode os exemplos. Apague uma aresta, mude um peso, troque a origem, rode
    de novo e veja a ordem mudar.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 

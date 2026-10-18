@@ -31,7 +31,7 @@ jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
 3. Siga o **fluxograma** com o dedo: é o caminho de uma operação.
 4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 

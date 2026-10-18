@@ -38,7 +38,7 @@ simulações.
    uma seta que **volta** para trás. Conte quantas vezes você passa por ela.
 4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -285,15 +285,12 @@ laço, mostra o apito:
 Pi! Pi! Pi!
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A pergunta do while é "ainda tem tempo?": tempo > 0.
 2. Dentro do laço: mostre o tempo e depois diminua (tempo-- ou tempo = tempo - 1).
 3. Resposta esperada: a saída acima. O laço roda 5 vezes; quando tempo vira 0,
    a pergunta dá falso e o programa segue para o apito.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0025-while/E145.c
@@ -321,15 +318,12 @@ Saída esperada:
 7 14 21 28 35 42 49
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Lacuna 1: o primeiro múltiplo positivo de 7.
 2. Lacuna 3 é o passo: o próximo múltiplo está 7 à frente.
 3. Resposta esperada: multiplo = 7; multiplo < 50; multiplo = multiplo + 7
    (ou multiplo += 7). São 7 números; quando multiplo vira 56, o laço para.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0025-while/E146.c
@@ -350,15 +344,12 @@ Dá para 6 dias. Sobram -80 litros.
 Faça o teste de mesa (colunas litros e dias), ache o erro e conserte. O
 código com o erro está logo abaixo; ele roda, mas dá a resposta errada.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. No 6º dia, quanta água havia antes de gastar? Dava para o dia inteiro?
 2. A pergunta do while precisa ser "tem água para MAIS UM dia inteiro?".
 3. Resposta esperada: troque "litros > 0" por "litros >= consumo". Saída:
    "Dá para 5 dias. Sobram 100 litros."
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0025-while/E147.c
@@ -377,15 +368,12 @@ Passou de R$ 1500.00 em 41 meses.
 Saldo: R$ 1503.75
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Você não sabe quantas voltas o laço vai dar: é trabalho para o while.
 2. Condição: saldo <= 1500. Corpo: saldo = saldo * 1.01; meses++.
 3. Resposta esperada: 41 meses e R$ 1503.75. (No mês 40 o saldo ainda é
    R$ 1488.86.)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0025-while/E148.c
@@ -408,16 +396,13 @@ Passos: 8
 Maior valor: 16
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O laço é "while (n != 1)". Dentro dele, um if/else (ou o ternário).
 2. Guarde o maior numa variável que começa com o próprio n e compare a cada
    passo. Use long para não estourar com números grandes.
 3. Resposta esperada: 6 → 8 passos, maior 16. Teste também com 27: são 111
    passos e o maior valor é 9232. Com 1, são 0 passos.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0025-while/E149.c
@@ -461,8 +446,7 @@ while (k < 10) {
 printf("%d\n", k);
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Trecho A: i++ compara o valor ANTIGO e só depois soma 1 (assunto 0014).
    Isso vale também na última pergunta, a que dá falso.
@@ -470,8 +454,6 @@ printf("%d\n", k);
 3. Resposta esperada: A mostra "1 2 3 4 5 | 6" (a pergunta falsa, 5 < 5,
    ainda soma 1); B mostra "1 4" (100, 33, 11, 3, 1); C mostra "10": o
    corpo roda zero vezes, porque o while pergunta antes.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0025-while/E150.c
@@ -685,15 +667,12 @@ Nota (0 a 10): 8.5
 Nota aceita: 8.5
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A pergunta e a leitura ficam DENTRO do do { }.
 2. A condição do while descreve a nota inválida: nota < 0 || nota > 10.
 3. Resposta esperada: com -1, 11 e 8.5, a pergunta aparece 3 vezes e o
    programa mostra "Nota aceita: 8.5". Notas 0 e 10 são aceitas de primeira.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0026-do-while/E151.c
@@ -731,8 +710,7 @@ printf("| B terminou com m = %d\n", m);
 Depois responda: para o trecho A se comportar como o B, o que você teria
 que acrescentar antes do while?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O while pergunta antes de entrar; o do-while entra e pergunta depois.
 2. 10 < 5 é falso logo na primeira pergunta.
@@ -740,8 +718,6 @@ que acrescentar antes do while?
    B mostra "10 | B terminou com m = 11" (uma volta, mesmo com a condição
    falsa). Para o while imitar o do-while, é preciso copiar o corpo uma vez
    antes do laço.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0026-do-while/E152.c
@@ -766,16 +742,13 @@ Itens: 3
 Total: R$ 22.75
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Sempre tem pelo menos um item: é a cara do do-while.
 2. Para ler um caractere pulando o Enter que sobrou no buffer, use
    scanf(" %c", &resposta) com um espaço antes do %c (assunto 0011).
 3. Resposta esperada: com 12.50, 7.00 e 3.25, mostra "Itens: 3" e
    "Total: R$ 22.75". A condição é resposta == 's' || resposta == 'S'.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0026-do-while/E153.c
@@ -795,8 +768,7 @@ printf '7\n2\n' | ~/LPEDC/rodar 03-repeticoes/0026-do-while/E154.c
 ele aceita o 7 de primeira. O código com o erro está logo abaixo. Ache o
 erro, explique por que ele nunca repete e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Existe algum número que é, ao mesmo tempo, menor que 1 e maior que 3?
 2. Releia a lei de De Morgan (assunto 0018): o contrário de
@@ -804,8 +776,6 @@ erro, explique por que ele nunca repete e conserte.
 3. Resposta esperada: a condição "opcao < 1 && opcao > 3" é sempre falsa,
    então o laço nunca repete. O certo é "opcao < 1 || opcao > 3". Com 7 e
    2, o totem pergunta duas vezes e mostra "Sessão 2 escolhida.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0026-do-while/E154.c
@@ -828,8 +798,7 @@ Senha correta na tentativa 3.
 
 Com 1111, 2222 e 3333, a saída termina com "Cartão bloqueado.".
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A condição de repetir tem duas partes: errou E ainda tem tentativa.
 2. Depois do laço, você não sabe por qual motivo ele parou. Pergunte de
@@ -837,8 +806,6 @@ Com 1111, 2222 e 3333, a saída termina com "Cartão bloqueado.".
 3. Resposta esperada: "} while (senha != 4321 && tentativas < 3);" e,
    depois, um if (senha == 4321). Acertando de primeira, mostra
    "Senha correta na tentativa 1.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0026-do-while/E155.c
@@ -860,8 +827,7 @@ Dia (1 a 28): 28
 Consulta em 28/02/2026
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. São dois do-while, um depois do outro. Entre eles, descubra quantos dias
    tem o mês (um switch com fall-through resolve: assunto 0023).
@@ -869,8 +835,6 @@ Consulta em 28/02/2026
 3. Resposta esperada: com 13, 2, 30, 29, 28 mostra "Consulta em
    28/02/2026". Use %02d para o zero na frente. Com mês 4, o dia 31 é
    recusado.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0026-do-while/E156.c
@@ -1087,14 +1051,11 @@ Escreva a tabuada do 8 com um for, alinhando os números com %2d:
 8 x 10 = 80
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O contador vai de 1 a 10: for (int i = 1; i <= 10; i++).
 2. printf("8 x %2d = %2d\n", i, 8 * i);
 3. Resposta esperada: 10 linhas, da "8 x  1 =  8" até a "8 x 10 = 80".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0027-for/E157.c
@@ -1113,15 +1074,12 @@ c) for (int x = 1; x >= 10; x++)
 d) for (int x = 1; x < 100; x *= 3)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Faça a ordem do for no papel: inicializa, pergunta, corpo, passo, pergunta...
 2. O laço c pergunta "1 >= 10?" logo de cara.
 3. Resposta esperada: a) 3 7 11 15 19; b) 50 44 38 32; c) nada (zero
    voltas); d) 1 3 9 27 81 (o passo pode ser qualquer conta, não só +1).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0027-for/E158.c
@@ -1143,15 +1101,12 @@ Mês 12: R$ 2200.68
 Pela fórmula: R$ 2200.68
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Aqui você sabe quantas voltas são (12): é trabalho para o for.
 2. Inclua <math.h>; o rodar já liga com -lm.
 3. Resposta esperada: R$ 2200.68 nos dois cálculos. O laço é a fórmula
    "desenrolada": multiplicar 12 vezes por 1.008 é elevar a 12.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0027-for/E159.c
@@ -1171,16 +1126,13 @@ Série 6
 O código com o erro está logo abaixo. Rode, leia o aviso do gcc, explique
 por que aparece 6 (e só uma vez) e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O aviso fala em "misleading indentation": a indentação engana.
 2. Olhe o fim da linha do for. Um ; sozinho é um comando vazio.
 3. Resposta esperada: o ";" logo depois do for vira o corpo do laço (vazio).
    O laço gira 5 vezes sem fazer nada, i termina em 6 e o bloco { } roda
    uma vez só, depois. Tirando o ";", mostra Série 1 a Série 5.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0027-for/E160.c
@@ -1206,16 +1158,13 @@ Saída esperada (1000 termos):
 pi ~ 3.140593
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O termo k (começando em 0) tem denominador 2 * k + 1.
 2. O sinal alterna: k par soma, k ímpar subtrai. O ternário ajuda:
    (k % 2 == 0) ? 4.0 : -4.0. Use 4.0, não 4: divisão inteira estraga tudo.
 3. Resposta esperada: 1000 termos → 3.140593; 10 termos → 3.041840;
    100000 termos → 3.141583.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0027-for/E161.c
@@ -1237,16 +1186,13 @@ printf("Fim: i = %d, j = %d\n", i, j);
 
 Depois reescreva o mesmo laço com while, sem mudar a saída.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A vírgula separa duas inicializações e dois passos; a condição é uma só.
 2. Monte a tabela: (0, 20), (3, 18)... até a pergunta i < j dar falso.
 3. Resposta esperada: 4 linhas: (0, 20), (3, 18), (6, 16), (9, 14); depois
    "Fim: i = 12, j = 12". Com while: "i = 0; j = 20; while (i < j) {
    printf(...); i += 3; j -= 2; }".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0027-for/E162.c
@@ -1464,14 +1410,11 @@ continue:
 1 2 3 4 5 6 7 8 9 10 11 12 14 15 16 17 18 19 20
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um for de 1 a 20. Dentro, antes do printf, um if que testa o 13.
 2. O continue pula o printf, mas o andar++ do for ainda acontece.
 3. Resposta esperada: a linha acima, com 19 números.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0028-break-continue/E163.c
@@ -1499,16 +1442,13 @@ printf("\n");
 E se você trocar a ordem dos dois if, muda alguma coisa? E se o break
 testasse i == 8?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. continue pula só esta volta; break acaba com o laço.
 2. O 4 é pulado. Quem chega primeiro no 7: o continue ou o break?
 3. Resposta esperada: "1 2 3 5 6". Trocar a ordem dos if não muda nada
    aqui (7 não é múltiplo de 4). Com i == 8, o break nunca acontece, porque
    o continue pega o 8 antes: a saída vira "1 2 3 5 6 7 9 10".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0028-break-continue/E164.c
@@ -1533,15 +1473,12 @@ A pessoa 7 (60 kg) espera o próximo.
 Entraram 6 pessoas, 565 kg.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um for de 1 a 8 cuida do limite de pessoas; o break cuida do peso.
 2. Teste ANTES de somar: if (total + peso > 600) { avisa; break; }
 3. Resposta esperada: com os pesos acima, entram 6 pessoas e 565 kg. Com
    oito pessoas de 50 kg, entram as 8 (400 kg) e ninguém espera.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0028-break-continue/E165.c
@@ -1561,8 +1498,7 @@ printf '1\n2\n9\n1\n2\n' | ~/LPEDC/rodar 03-repeticoes/0028-break-continue/E166.
 ele continua lendo depois do 9. O código com o erro está logo abaixo.
 Explique por que o break não para o laço e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro de um switch, de quem o break está saindo?
 2. Depois do switch, ainda dentro do for, você pode testar o código de novo.
@@ -1570,8 +1506,6 @@ Explique por que o break não para o laço e conserte.
    não do for. Conserto: depois do switch, "if (codigo == 9) break;" (ou
    trocar o switch por if/else if). Corrigido, mostra normal, alerta,
    "sensor desligou" e "Leituras: 3".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0028-break-continue/E166.c
@@ -1590,16 +1524,13 @@ Achei: 1379 (1 + 3 + 7 + 9 = 20)
 Múltiplos de 7 testados: 55
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Os dígitos de um número de 4 dígitos: n / 1000, n / 100 % 10,
    n / 10 % 10 e n % 10.
 2. Conte os testados DEPOIS do continue: só quem passou pelo filtro.
 3. Resposta esperada: 1379 = 7 x 197, e foram testados 55 múltiplos de 7
    (1001, 1008, ..., 1379).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0028-break-continue/E167.c
@@ -1635,15 +1566,12 @@ if (contadas > 0) {
 
 Teste com 8, 12, 6.5, 9 e -1.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. bool continuar = true; while (continuar) { ... }
 2. Onde havia break, faça continuar = false. Onde havia continue, use um
    else para que a soma não aconteça.
 3. Resposta esperada: "  nota 12.0 ignorada" e "Média de 3 notas: 7.83".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0028-break-continue/E168.c
@@ -1839,14 +1767,11 @@ Desenhe com dois for aninhados, usando printf("#") uma vez só no código:
 ########
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O laço de fora conta as fileiras (3); o de dentro, os ladrilhos (8).
 2. O printf("\n") fica DEPOIS do laço de dentro, ainda dentro do de fora.
 3. Resposta esperada: o desenho acima. O printf("#") roda 3 x 8 = 24 vezes.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0029-lacos-aninhados/E169.c
@@ -1866,15 +1791,12 @@ for (int i = 1; i <= 3; i++) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para cada i, o laço de dentro roda i vezes: 1, depois 2, depois 3.
 2. Monte uma tabela com i, j e i * j.
 3. Resposta esperada: três linhas, "1", "2 4" e "3 6 9". O printf de
    dentro roda 1 + 2 + 3 = 6 vezes.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0029-lacos-aninhados/E170.c
@@ -1895,8 +1817,7 @@ margem. Cada número ocupa 4 posições (%4d):
   9 |   9  18  27  36  45  54  63  72  81
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O cabeçalho é um laço sozinho, antes dos aninhados. A linha de traços
    também pode ser um laço (4 traços por coluna).
@@ -1904,8 +1825,6 @@ margem. Cada número ocupa 4 posições (%4d):
    de dentro com printf("%4d", linha * coluna).
 3. Resposta esperada: a tabela acima; a última linha termina em 81 e a
    diagonal tem os quadrados 1, 4, 9, 16, 25, 36, 49, 64, 81.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0029-lacos-aninhados/E171.c
@@ -1926,8 +1845,7 @@ T2-A1 T2-A2 T2-A3 T2-A4
 T3-A1 T3-A2 T3-A3 T3-A4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quanto vale aluno quando a turma 2 começa?
 2. Com for, o "aluno = 1" fica no cabeçalho do laço de dentro e roda toda
@@ -1935,8 +1853,6 @@ T3-A1 T3-A2 T3-A3 T3-A4
 3. Resposta esperada: aluno nunca volta para 1. Depois da turma 1 ele vale
    5, e o while de dentro não roda mais. Conserto: "aluno = 1;" dentro do
    while de fora, logo antes do while de dentro.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0029-lacos-aninhados/E172.c
@@ -1957,15 +1873,12 @@ Altura: 5
 *********
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em cada linha, dois laços seguidos: um de espaços e um de asteriscos.
 2. Na linha L (de 1 a altura): altura - L espaços e 2 * L - 1 asteriscos.
 3. Resposta esperada: o desenho acima; a base tem 9 asteriscos
    (2 x 5 - 1). Com altura 1, só um "*".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0029-lacos-aninhados/E173.c
@@ -1987,16 +1900,13 @@ uma e o total:
 Formas: 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Notas de 50: de 0 a 2. De 20: de 0 a 5. De 10: de 0 a 10.
 2. No laço mais de dentro: if (50 * n50 + 20 * n20 + 10 * n10 == 100).
 3. Resposta esperada: 10 formas. Desafio extra: o laço das notas de 10 é
    desnecessário. Com n50 e n20 fixos, quantas notas de 10 faltam? (Só
    vale se o que falta for >= 0.)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0029-lacos-aninhados/E174.c
@@ -2261,15 +2171,12 @@ Média: 7.0
 Provas com 6 ou mais: 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Antes do laço: soma = 0 (acumulador) e acima = 0 (contador).
 2. Dentro: soma += nota; if (nota >= 6) acima++;
 3. Resposta esperada: soma 35.0, média 7.0 e 4 provas com 6 ou mais (o 6
    conta, porque é ">=").
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-laco/E175.c
@@ -2307,8 +2214,7 @@ Total: R$ 199.00 em 3 gastos
 Média: R$ 66.33
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Contador e acumulador começam em 0.
 2. A segunda leitura fica no FIM do corpo: é ela que traz o próximo valor
@@ -2316,8 +2222,6 @@ Média: R$ 66.33
 3. Resposta esperada: 0.0; 0; gasto != 0; total + gasto;
    scanf("%lf", &gasto); total / quantos. Saída: R$ 199.00 em 3 gastos,
    média R$ 66.33.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-laco/E176.c
@@ -2342,15 +2246,12 @@ Mais caro: posto 5 (R$ 6.19)
 Diferença: R$ 0.40 por litro
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Além do menor e do maior, guarde a posição de cada um (posto_menor,
    posto_maior). Quando o menor muda, a posição muda junto.
 2. Comece menor e maior com o PRIMEIRO preço lido, não com 0.
 3. Resposta esperada: posto 3 (5.79), posto 5 (6.19), diferença 0.40.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-laco/E177.c
@@ -2381,8 +2282,7 @@ printf -- '-30\n-10\n-45\n9999\n' | ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-
 
 ache os três e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O contador conta antes ou depois de saber se é a sentinela?
 2. Se todos os dias foram negativos, quem ganha de um "maior" que começa
@@ -2391,8 +2291,6 @@ ache os três e conserte.
    9999; (2) maior = 0 vence todos os negativos: comece com o primeiro dia;
    (3) soma / dias é divisão inteira: use (double) soma / dias e %.2f.
    Corrigido: "Dias: 3", "Média: -28.33", "Melhor dia: -10".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-laco/E178.c
@@ -2418,8 +2316,7 @@ Nota 8: 70
 2º lugar: 95
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Duas variáveis: primeiro e segundo. Como as notas vão de 0 a 100, dá
    para começar as duas com -1 (um valor impossível).
@@ -2428,8 +2325,6 @@ Nota 8: 70
 3. Resposta esperada: 99 e 95. Com 50 90 90 10 20 30 40 60, a resposta é
    90 e 90 (empate). Faça o teste de mesa da ordem: se você atualizar o
    primeiro antes de salvar o antigo no segundo, perde o 95.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-laco/E179.c
@@ -2455,8 +2350,7 @@ Em ordem crescente? não
 Maior sequência em alta: 3 treinos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Guarde o valor anterior numa variável. A partir do 2º treino, compare
    o atual com o anterior. No fim de cada volta, anterior = atual.
@@ -2466,8 +2360,6 @@ Maior sequência em alta: 3 treinos
    recorde.
 3. Resposta esperada: com 3 5 8 2 4 9, "não" e 3 treinos (3 5 8 ou 2 4 9).
    Com 1 2 3 4 5 6: "sim" e 6. Com 5 5 5 5 5 5: "não" e 1.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-laco/E180.c
@@ -2685,16 +2577,13 @@ d) uma variação de temperatura de -5 a 5
 e) só os pares de 2 a 20
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. rand() % n dá de 0 a n - 1. Somando a, a faixa começa em a.
 2. Para a faixa de a até b: a + rand() % (b - a + 1).
 3. Resposta esperada: a) 1 + rand() % 6; b) rand() % 10;
    c) 10 + rand() % 11; d) -5 + rand() % 11; e) 2 + 2 * (rand() % 10)
    (sorteia de 0 a 9 e transforma em 2, 4, ..., 20).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0031-aleatorios/E181.c
@@ -2713,15 +2602,12 @@ C K K C C K C K K K C C K C K K C C K C
 Caras: 10 | Coroas: 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. rand() % 2 dá 0 ou 1. Combine: 0 é cara, 1 é coroa.
 2. Um contador basta: coroas = 20 - caras.
 3. Resposta esperada: 20 letras e duas contagens que somam 20. Rode
    várias vezes: dá perto de 10 a 10, mas raramente exato.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0031-aleatorios/E182.c
@@ -2746,8 +2632,7 @@ Palpite: 37
 Acertou em 3 tentativas!
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Sorteie uma vez só, antes do laço. O laço repete enquanto o palpite for
    diferente do segredo (do-while combina bem).
@@ -2756,8 +2641,6 @@ Acertou em 3 tentativas!
 3. Resposta esperada: o jogo funciona para qualquer sorteio. Chutando
    sempre o meio do intervalo que sobrou, você acerta em no máximo 7
    tentativas, porque 2 elevado a 7 = 128 >= 100.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0031-aleatorios/E183.c
@@ -2769,8 +2652,7 @@ O programa abaixo deveria sortear 10 lançamentos de um dado. Rode e repare:
 sai o mesmo número 10 vezes, e às vezes esse número é 0. São DOIS erros.
 O código com os erros está logo abaixo. Ache, explique e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quantas vezes o srand roda? E quanto vale time(NULL) nas 10 voltas, que
    acontecem dentro do mesmo segundo?
@@ -2779,8 +2661,6 @@ O código com os erros está logo abaixo. Ache, explique e conserte.
    volta a sequência recomeça com a mesma semente (o segundo atual) e o
    rand devolve o mesmo primeiro número. O srand vai uma vez só, antes do
    laço. (2) rand() % 6 vai de 0 a 5; o dado é 1 + rand() % 6.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0031-aleatorios/E184.c
@@ -2801,8 +2681,7 @@ pi ~ 4 x (pontos dentro do círculo) / (total de pontos)
 Sorteie 1 000 000 de pontos (com srand(42)) e mostre a estimativa com 4
 casas. Um ponto está dentro se x * x + y * y <= 1.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um double entre 0 e 1: (double) rand() / RAND_MAX. Sem o cast, a divisão
    é inteira e dá quase sempre 0.
@@ -2810,8 +2689,6 @@ casas. Um ponto está dentro se x * x + y * y <= 1.
 3. Resposta esperada: algo perto de 3.14. Na glibc (Linux) com semente
    42: "Dentro do círculo: 784696 de 1000000" e "pi ~ 3.1388". Com 100
    pontos, o erro é bem maior: teste.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0031-aleatorios/E185.c
@@ -2830,8 +2707,7 @@ Média: 257.2 lançamentos
 Pior caso: 2860 lançamentos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Laço de fora: os 10 000 experimentos. Laço de dentro: lança enquanto
    seguidos < 3.
@@ -2839,8 +2715,6 @@ Pior caso: 2860 lançamentos
    do experimento (seguidos e lancamentos) recomeçam a cada volta de fora.
 3. Resposta esperada: média perto de 258 (na glibc com semente 2026,
    257.2, e pior caso 2860). Use long para a soma de todos os lançamentos.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0031-aleatorios/E186.c
@@ -3145,16 +3019,13 @@ Soma 7: 6043 (16.8%)
 Soma 2: 1012 (2.8%)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Some dois sorteios separados: (1 + rand() % 6) + (1 + rand() % 6). Não
    use 2 + rand() % 11: isso daria a mesma chance para todas as somas.
 2. Porcentagem: 100.0 * contagem / 36000.
 3. Resposta esperada: o 7 sai perto de 6000 vezes (1/6, 16.7%), porque 6 das
    36 combinações dão 7. O 2 sai perto de 1000 (1/36, 2.8%): só 1 + 1.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0032-juntando-tudo/E187.c
@@ -3175,8 +3046,7 @@ e) 4, 4
 f) 10, 2, 3, 12, 7
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Primeiro lançamento: 7 ou 11 ganha; 2, 3 ou 12 perde; o resto vira o
    ponto.
@@ -3185,8 +3055,6 @@ f) 10, 2, 3, 12, 7
 3. Resposta esperada: a) ganha no 5º (ponto 5); b) perde no 3º; c) perde
    no 1º; d) ganha no 1º; e) ganha no 2º; f) perde no 5º (o 2, o 3 e o 12
    depois do ponto não contam).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0032-juntando-tudo/E188.c
@@ -3204,15 +3072,12 @@ Armstrong de 100 a 999 e quantos são:
 Encontrados: 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um for de 100 a 999. Dentro, separe os dígitos: n / 100, n / 10 % 10 e
    n % 10 (ou um while que tira um dígito por volta, como no A050).
 2. Cubo: d * d * d. Não precisa de pow, que trabalha com double.
 3. Resposta esperada: 153 370 371 407, e 4 encontrados.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0032-juntando-tudo/E189.c
@@ -3242,8 +3107,7 @@ printf '1\n5\n1\n3\n0\n' | ~/LPEDC/rodar 03-repeticoes/0032-juntando-tudo/E190.c
 
 leia o aviso, ache os dois erros e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O aviso fala em "fall through": o que acontece no fim do case 1?
 2. Em qual linha o total vendido volta para zero? Quantas vezes ela roda?
@@ -3251,8 +3115,6 @@ leia o aviso, ache os dois erros e conserte.
    também repõe 10 (assunto 0023); (2) "vendidos = 0;" está dentro do laço
    e zera o acumulador a cada volta, inclusive na volta do 0. Ele vai para
    antes do do-while. Corrigido: "Estoque: 12 | Vendidos: 8".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0032-juntando-tudo/E190.c
@@ -3289,8 +3151,7 @@ Você tira: 1
 Sobram 0. Você tirou o último palito. Perdeu!
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um laço principal enquanto houver palitos. Dentro: sua vez; se zerou,
    você perdeu (break); senão, a vez do computador; se zerou, ele perdeu.
@@ -3299,8 +3160,6 @@ Sobram 0. Você tirou o último palito. Perdeu!
 3. Resposta esperada: começando com 21 e você jogando primeiro, o
    computador sempre vence. Com as jogadas 3, 3, 3, 3, 3 e 1, a mesa fica
    18/17, 14/13, 10/9, 6/5, 2/1 e 0, e você perde.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0032-juntando-tudo/E191.c
@@ -3326,8 +3185,7 @@ numa quinta-feira. A semana começa no domingo, e cada dia ocupa 3 posições
 Depois mude para fevereiro de 2026 (28 dias, começa num domingo) mexendo só
 em duas variáveis.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Duas variáveis bastam: dias_no_mes = 31 e primeiro = 4 (domingo = 0,
    segunda = 1, ..., quinta = 4).
@@ -3336,8 +3194,6 @@ em duas variáveis.
    (primeiro + dia) % 7 == 0.
 3. Resposta esperada: o desenho acima, 5 semanas, terminando no sábado 31.
    Fevereiro de 2026 (primeiro = 0, 28 dias) fica com 4 linhas cheias.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0032-juntando-tudo/E192.c

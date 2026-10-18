@@ -37,7 +37,7 @@ de decisões que parecem certas. Os avisos do compilador viram aliados: o
 4. Rode os exemplos. Mude um valor para cair no outro ramo, quebre de
    propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 

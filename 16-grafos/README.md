@@ -41,7 +41,7 @@ pilhas, recursão, structs e heap.
 4. Rode os exemplos. Apague uma aresta, mude um peso, troque a origem, rode
    de novo e veja a ordem mudar.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -336,15 +336,12 @@ Saída esperada:
 Voos diretos: 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. int adj[4][4] = {0}; e, para cada voo, marque adj[a][b] e adj[b][a].
 2. Cada voo aparece duas vezes na matriz. Some só a parte de cima da
    diagonal (j > i) ou some tudo e divida por 2.
 3. Resposta esperada: a matriz acima e "Voos diretos: 4".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0114-grafos/E679.c
@@ -356,8 +353,7 @@ Depois do churrasco, a turma anotou quem ficou devendo Pix para quem num
 grafo DIRIGIDO: deve[i][j] == 1 quer dizer que i deve para j. Sem rodar,
 preveja o que o programa abaixo mostra. Só depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Somar a LINHA i conta as setas que saem de i: para quantos i deve.
 2. Somar a COLUNA i conta as setas que chegam em i: de quantos i recebe.
@@ -367,8 +363,6 @@ preveja o que o programa abaixo mostra. Só depois rode e confira.
    Rui deve para 0 e recebe de 3
    Sol deve para 3 e recebe de 0
    Sem dívidas: Rui
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0114-grafos/E680.c
@@ -398,16 +392,13 @@ C-D: mão única (C -> D)
 Mão única: 3, mão dupla: 2
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para cada struct do vetor, adj[r.de][r.para] = 1 (só nesse sentido).
 2. Olhe cada par uma vez só: i de 0 a 3 e j de i + 1 a 3. Se
    adj[i][j] e adj[j][i] valem 1, é mão dupla; se só um vale 1, mão única.
 3. A letra da esquina i é 'A' + i (char é número, assunto 0045).
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0114-grafos/E681.c
@@ -430,8 +421,7 @@ Davi estuda com 1 pessoa(s)
 Soma dos graus: 8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Leia a mensagem do sanitizer: ela diz o índice e o tamanho do vetor.
 2. Com 4 duplas de estudo, a soma dos graus deveria ser 2 x 4 = 8. Um
@@ -439,8 +429,6 @@ Soma dos graus: 8
 3. Resposta esperada: o laço interno usa j <= V (lê adj[i][4], fora da
    linha; o certo é j < V) e a aresta só é marcada em adj[a][b] (falta
    adj[b][a] = 1). Consertado, mostra a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0114-grafos/E682.c
@@ -469,8 +457,7 @@ Estadio -> Parque
 Nós alocados: 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. typedef struct No { int destino; struct No *prox; } No; e
    No *lista[V] = {NULL};
@@ -480,8 +467,6 @@ Nós alocados: 10
 3. Para liberar, guarde p->prox numa variável antes do free(p).
 4. Resposta esperada: a saída acima; 10 nós porque são 5 arestas, cada uma
    guardada nos dois sentidos.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0114-grafos/E683.c
@@ -511,8 +496,7 @@ Caio e Fabi: 2 amigos em comum
 Duda e Edu: 2 amigos em comum
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Amigo em comum de i e j é um k com adj[i][k] e adj[k][j] valendo 1.
    Isso é um caminho de comprimento 2 entre i e j.
@@ -521,8 +505,6 @@ Duda e Edu: 2 amigos em comum
 3. Curiosidade: a contagem é exatamente a casa [i][j] do produto da matriz
    por ela mesma (adj x adj).
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0114-grafos/E684.c
@@ -822,16 +804,13 @@ dirigido). O programa roda uma BFS a partir da Penha. Sem rodar, preveja a
 ordem em que os bairros são visitados e a distância de cada um. Faça a
 tabela da fila no papel. Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Os vizinhos são examinados em ordem de índice (v de 0 a 5).
 2. A Penha (3) é vizinha de Lapa (1), Moema (2) e Tatuape (5): os três
    entram na fila nessa ordem, todos com distância 1.
 3. Resposta esperada:
    Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0115-bfs/E685.c
@@ -860,15 +839,12 @@ Eu: rodada 3
 Rodadas até todos ouvirem: 3
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. São duas linhas: rodada[v] = rodada[u] + 1; e fila[fim++] = v;
 2. Por que dá para marcar a rodada já aqui, antes de o vizinho sair da
    fila? Porque é isso que impede que ele entre duas vezes.
 3. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0115-bfs/E686.c
@@ -898,8 +874,7 @@ Lapa -> Centro -> Moema -> Saude
 Existe outro caminho com 3 ônibus (Lapa, Penha, Tatuape, Saude). Explique,
 num comentário, por que a sua BFS escolheu o que passa pelo Centro.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. pai[origem] = -1. Na função: se pai[v] != -1, imprima primeiro o
    caminho até pai[v] (chamada recursiva) e depois " -> " e o nome de v.
@@ -908,8 +883,6 @@ num comentário, por que a sua BFS escolheu o que passa pelo Centro.
 3. Resposta esperada: a saída acima. O Centro (índice 0) é examinado antes
    da Penha (3) como vizinho da Lapa; por isso Moema é descoberta pelo
    Centro, e a Saude por Moema, antes que o ramo da Penha chegue lá.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0115-bfs/E687.c
@@ -940,8 +913,7 @@ Grupo 3: F G H
 Total de grupos: 3
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma BFS a partir de A visita só o grupo de A. Quem sobrar sem visita
    está em outro grupo.
@@ -949,8 +921,6 @@ Total de grupos: 3
    nova a partir de v e some 1 nos grupos.
 3. Um vetor visitado[] só, compartilhado por todas as BFS.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0115-bfs/E688.c
@@ -987,8 +957,7 @@ Saída esperada:
 Pior distância: 6
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Rodar uma BFS por posto e tirar o mínimo funciona, mas dá para fazer
    uma BFS só: coloque TODOS os postos na fila no começo, com distância 0.
@@ -997,8 +966,6 @@ Pior distância: 6
 3. A distância cabe num dígito aqui: imprima com '0' + dist.
 4. Resposta esperada: a saída acima. A pior casa é a da linha 4, coluna 2
    (contando do 0): 6 quarteirões até o posto da esquerda.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0115-bfs/E689.c
@@ -1019,8 +986,7 @@ Saída esperada depois do conserto:
 Ana Bia Cadu Dani
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Simule a fila no papel. Quando Bia sai, Dani entra. Quando Cadu sai,
    Dani já foi marcada?
@@ -1030,8 +996,6 @@ Ana Bia Cadu Dani
    fila precisaria de 5 posições e tem 4. O conserto é marcar visitado[v]
    no momento em que v entra na fila (e marcar a origem antes do laço).
    Assim cada pessoa entra uma vez só e a saída é "Ana Bia Cadu Dani".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0115-bfs/E690.c
@@ -1268,8 +1232,7 @@ b) Faça à mão a ordem da BFS a partir do Hall (vizinhos em ordem de
  índice) e compare.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Desenhe o grafo. Hall (0) liga em Praça (2) e Banco (4); a DFS desce
    pela Praça primeiro, porque 2 < 4.
@@ -1279,8 +1242,6 @@ b) Faça à mão a ordem da BFS a partir do Hall (vizinhos em ordem de
    a) Hall / Praça (2 espaços) / Cinema (4) / Loja (4) / Banco (6) /
       Saída (8), uma por linha.
    b) BFS: Hall, Praça, Banco, Cinema, Loja, Saída.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0116-dfs/E691.c
@@ -1311,16 +1272,13 @@ De Hospital: Hospital Mercado Escola Casa Praça
 Casa chega no Hospital? não
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em grafo dirigido, adj[u][v] = 1 só no sentido da seta.
 2. A função é a mesma do A231, sem o recuo. Para zerar entre as buscas,
    um laço com visitado[v] = false.
 3. Resposta esperada: a saída acima. O Hospital alcança todo mundo, mas
    ninguém chega nele: nenhuma seta entra no Hospital.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0116-dfs/E692.c
@@ -1355,8 +1313,7 @@ Ilha 4: 3 casa(s)
 Total: 4 ilhas, a maior tem 5 casas
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A grade é um grafo implícito: cada casa é um vértice e os vizinhos são
    as 4 casas ao redor (como no A230, só que com DFS).
@@ -1365,8 +1322,6 @@ Total: 4 ilhas, a maior tem 5 casas
 3. Dá para marcar trocando o '#' por outro caractere, sem vetor extra.
 4. Resposta esperada: a saída acima (ilhas numeradas na ordem em que a
    varredura linha por linha encontra cada uma).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0116-dfs/E693.c
@@ -1398,8 +1353,7 @@ Ordem de término: Grafos Estruturas Ponteiros C Discreta Lógica
 Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A anotação vai DEPOIS do laço dos vizinhos (pós-ordem, como no percurso
    de árvore do assunto 0103).
@@ -1407,8 +1361,6 @@ Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
    ordem de término é a ordem de estudo invertida.
 3. Resposta esperada: a saída acima. Outras ordens também seriam válidas
    (Lógica, C, Discreta...), mas esta é a que a DFS em ordem de índice dá.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0116-dfs/E694.c
@@ -1444,8 +1396,7 @@ Com log -> auth: ciclo db -> utils -> log -> auth -> db
 Sem log -> auth: sem ciclo
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use enum { BRANCO, CINZA, PRETO } (assunto 0068).
 2. Por que não basta "visitado"? Sem log -> auth, a DFS termina db pelo
@@ -1456,8 +1407,6 @@ Sem log -> auth: sem ciclo
    u até v, guardando num vetor, e imprima de trás para frente.
 4. Resposta esperada: a saída acima (a DFS começa no app e visita os
    vizinhos em ordem de índice).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0116-dfs/E695.c
@@ -1479,8 +1428,7 @@ Sala 3 -> Sala 4: sim
 Sala 4 -> Sala 0: não
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quando a chamada recursiva acha o destino, ela devolve true. Quem
    recebe esse true?
@@ -1490,8 +1438,6 @@ Sala 4 -> Sala 0: não
    certo é "if (existe_caminho(v, destino)) return true;". (2) visitado[]
    não é zerado entre as perguntas; zere antes de cada consulta. Consertado,
    mostra a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0116-dfs/E696.c
@@ -1807,8 +1753,7 @@ tabela como a do texto: uma linha por vértice fixado, mostrando o vetor
 dist depois de relaxar os vizinhos. Diga a distância final de cada bairro e
 o caminho até D.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com CD = 0 e o resto ∞. Fixar o CD deixa A = 7 e B = 2.
 2. O próximo a fixar é sempre o de menor dist entre os não fixos: o B.
@@ -1816,8 +1761,6 @@ o caminho até D.
 3. Resposta esperada: ordem de fixação CD (0), B (2), A (5), C (6), D (8).
    Finais: A = 5, B = 2, C = 6, D = 8. Caminho até D: CD -> B -> A -> C -> D
    (2 + 3 + 1 + 2 = 8 km).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0117-dijkstra/E697.c
@@ -1848,16 +1791,13 @@ Paulista: 10 min
 Pinheiros: 17 min
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A pergunta é: existe trilho de u para v, v não está fixo, e
    dist[u] + tempo[u][v] < dist[v]?
 2. Se sim, dist[v] recebe a soma. (Aqui não precisa do anterior.)
 3. Resposta esperada: a saída acima. Repare na Paulista: o trilho direto
    da Sé leva 11, mas Sé -> República -> Paulista leva 10.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0117-dijkstra/E698.c
@@ -1890,8 +1830,7 @@ Eva: 11 km  R -> Ana -> Beto -> Caio -> Dani -> Eva
 Mais longe: Eva (11 km)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Índices: R 0, Ana 1, Beto 2, Caio 3, Dani 4, Eva 5. Matriz de pesos com
    0 para "sem rua".
@@ -1899,8 +1838,6 @@ Mais longe: Eva (11 km)
    depois " -> " e o nome de v.
 3. Resposta esperada: a saída acima. Repare que todas as rotas formam uma
    linha só: a árvore de caminhos mínimos deste mapa é um caminho.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0117-dijkstra/E699.c
@@ -1935,16 +1872,13 @@ Leste: 4 min
 Oeste: 5 min
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Transpor a matriz é trocar linha por coluna: inv[j][i] = rua[i][j].
 2. Cuidado com a armadilha: Dijkstra no grafo ORIGINAL a partir do Hospital
    responde outra pergunta (do Hospital até os bairros) e dá outros números.
 3. Resposta esperada: a saída acima. Norte vai por Leste (2 + 4 = 6, e não
    9 direto); Sul vai por Norte (1 + 6 = 7, e não 3 + 5 = 8 por Oeste).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0117-dijkstra/E700.c
@@ -1967,8 +1901,7 @@ Manaus: sem voo
 Belém: sem voo
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Depois de fixar SP, Rio e BH, quem o laço escolhe como u? Qual é o
    dist[u] dele?
@@ -1978,8 +1911,6 @@ Belém: sem voo
    ao escolher Manaus, a conta dist[u] + preco[u][v] faz INT_MAX + 300. O
    conserto: só escolher u com dist[u] != INFINITO e sair do laço (break)
    quando não houver nenhum. Consertado, mostra a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0117-dijkstra/E701.c
@@ -2005,8 +1936,7 @@ c) Explique por que o Dijkstra erra aqui. Qual hipótese do algoritmo foi
  quebrada?
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Simule: fixa Base; A = 5, B = 6. O menor é A, que é FIXADO com 5.
 2. Quando B é fixado e olha para A, A já está fixo: o código nem tenta.
@@ -2019,8 +1949,6 @@ c) Explique por que o Dijkstra erra aqui. Qual hipótese do algoritmo foi
       pesos só aumenta. Com peso negativo, um caminho mais longo pode
       ficar mais barato depois. (Para isso existe o algoritmo de
       Bellman-Ford.)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0117-dijkstra/E702.c
@@ -2443,15 +2371,12 @@ Aresta inválida: 1 7
 2: (grau 0)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Declare int adj[20][20] = {0}; e use só as n primeiras linhas e colunas.
 2. scanf("%d %d", &a, &b) != 2 quer dizer que a entrada acabou ou veio
    lixo: pare com uma mensagem.
 3. Resposta esperada: as saídas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E703.c
@@ -2470,8 +2395,7 @@ A-B 1, A-C 4, A-E 9, B-D 2, C-D 1, D-E 3
 
 Sem rodar, preveja as três linhas da saída. Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. BFS e DFS ignoram os pesos: olham só se a aresta existe.
 2. Na DFS, de B você desce para D antes de voltar para C.
@@ -2480,8 +2404,6 @@ Sem rodar, preveja as três linhas da saída. Depois rode e confira.
    BFS: A B C E D
    DFS: A B D C E
    Dijkstra: A=0 B=1 C=4 D=3 E=6
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E704.c
@@ -2515,8 +2437,7 @@ Vila   pior caso: 10 km (até CD)
 Melhor lugar para o hospital: Morro (ninguém a mais de 5 km)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Ponha o Dijkstra numa função void dijkstra(int origem, int dist[]) e
    chame uma vez por lugar (índices: CD 0, Centro 1, Feira 2, Porto 3,
@@ -2526,8 +2447,6 @@ Melhor lugar para o hospital: Morro (ninguém a mais de 5 km)
 3. Formato: printf("%-6s pior caso: %2d km (até %s)\n", ...).
 4. Resposta esperada: a saída acima. Em empate de maior distância, fica o
    primeiro destino encontrado (o Morro está a 5 km do CD e da Vila).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E705.c
@@ -2559,8 +2478,7 @@ Time 2: Bruno Diego Fábio
 Impossível: Bruno e Carla ficariam no mesmo time
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Vetor time[] com -1 (sem time), 0 ou 1. O time do rival é 1 - time[u].
 2. Faça o laço externo das componentes (assunto 0115, E688): pode haver
@@ -2569,8 +2487,6 @@ Impossível: Bruno e Carla ficariam no mesmo time
    ser bipartido quando aparece um ciclo de tamanho ímpar: Ana, Bruno,
    Carla, Ana.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E706.c
@@ -2596,8 +2512,7 @@ MOTO -> CAMA em 5 passo(s): MOTO MATO MATA LATA LAMA CAMA
 GATO -> PEIXE: impossível
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. bool vizinhas(const char *a, const char *b): strlen igual e um só
    a[i] != b[i]. int indice(const char *p) acha a posição com strcmp.
@@ -2606,8 +2521,6 @@ GATO -> PEIXE: impossível
 3. Empates: GATO -> MATO -> MATA também leva a BOLA em 5 passos; a BFS
    fica com GATA porque ela vem antes na lista.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E707.c
@@ -2646,8 +2559,7 @@ Pelotas       260 km
 Itens tirados do heap: 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Truque que dispensa "diminuir chave": sempre que dist[v] melhorar,
    empurre (dist nova, v) no heap. Ao tirar um item com dist maior que
@@ -2658,8 +2570,6 @@ Itens tirados do heap: 10
 4. Resposta esperada: a saída acima. Saem 10 itens: os 8 vértices e 2
    velhos (Gramado com 115 e Caxias com 135), que foram superados antes
    de sair.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E708.c

@@ -33,7 +33,7 @@ jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
 3. Siga o **fluxograma** com o dedo: é o caminho de uma operação.
 4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -308,15 +308,12 @@ Depois responda: se o laço final terminasse e você chamasse
 pilha_desempilha(p, &x) mais uma vez, o que a função devolveria? E quanto
 ficaria valendo x?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Desenhe a pilha de lado, com o topo à direita, e atualize a cada linha.
 2. pilha_topo só olha: a pilha não muda.
 3. Resposta esperada: "7", "9", "2 1", "4 " e "vazia? 1". Mais um
    desempilha devolve false e não mexe em x, que continua 4.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E517.c
@@ -334,14 +331,11 @@ Digite uma palavra: ROMA
 Ao contrário: AMOR
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Tire o '\n' que o fgets deixa no fim antes de empilhar (assunto 0047).
 2. Empilhe com pilha_empilha(p, palavra[i]) e mostre com printf("%c", c).
 3. Resposta esperada: com ROMA, "Ao contrário: AMOR". Com OVO, "OVO".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E518.c
@@ -361,8 +355,7 @@ Total: R$ 45,90
 Topo continua: R$ 12,00 (3 itens)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Você não enxerga o vetor lá dentro: para ver um item, precisa
    desempilhar.
@@ -372,8 +365,6 @@ Topo continua: R$ 12,00 (3 itens)
 3. Não esqueça de liberar a pilha auxiliar.
 4. Resposta esperada: Total: R$ 45,90 e o topo continua R$ 12,00, com 3
    itens.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E519.c
@@ -398,8 +389,7 @@ Balcão cheio: a bandeja 5 ficou de fora
 No topo: bandeja 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Com topo = -1 para vazia, o topo aponta para o último item, não para a
    próxima vaga.
@@ -409,8 +399,6 @@ No topo: bandeja 4
    jeito que está, a quinta bandeja é escrita em itens[4], fora do vetor
    (cai em cima do campo topo, que vira 5). Conserto:
    if (b->topo == CAPACIDADE - 1).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E520.c
@@ -438,8 +426,7 @@ EDDE: 1 erro: pilha vazia
 
 Depois responda sem programar: dá para sair 3 1 2 4? Por quê?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Guarde num int o próximo número a chegar (começa em 1).
 2. pilha_desempilha devolve false com a pilha vazia: é o seu teste de
@@ -448,8 +435,6 @@ Depois responda sem programar: dá para sair 3 1 2 4? Por quê?
 4. Resposta esperada: as três linhas acima. 3 1 2 4 é impossível: para o
    3 sair primeiro, o 1 e o 2 precisam estar empilhados com o 2 por cima
    do 1. Então o 2 sai antes do 1, sempre.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E521.c
@@ -480,16 +465,13 @@ Limpos: 4 3 2 1
 Sujos: 20 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use n_limpos (próxima vaga da esquerda, começa em 0) e topo_sujos
    (começa em 6 e diminui antes de cada empilhamento sujo).
 2. A bancada está cheia quando n_limpos == topo_sujos.
 3. Desempilhar limpo: n_limpos > 0. Desempilhar sujo: topo_sujos < 6.
 4. Resposta esperada: as cinco linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E522.c
@@ -732,8 +714,7 @@ Sem rodar, desenhe a lista encadeada da pilha depois de cada linha do main
 fim do programa, quantas vezes o malloc foi chamado? E o free? Lembre que
 pilha_cria também faz um malloc.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Empilhar insere no início: o novo nó vira o primeiro da lista.
 2. Cada empilha faz um malloc; cada desempilha faz um free; pilha_libera
@@ -741,8 +722,6 @@ pilha_cria também faz um malloc.
 3. Resposta esperada: mostra "8", "9" e "2 itens, topo 5". A lista final
    é topo -> 5 -> 3 -> NULL. São 5 mallocs (1 da pilha + 4 nós) e 5 frees
    (2 nos desempilhas + 2 nós no pilha_libera + 1 da struct).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E523.c
@@ -762,15 +741,12 @@ Digite os valores (0 para terminar): 120 45 300 0
 Lidas 3 notas. Da última para a primeira: 300 45 120
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. while (scanf("%d", &valor) == 1 && valor != 0) { ... }
 2. pilha_tamanho dá a contagem sem você precisar de outro contador.
 3. Resposta esperada: com 120 45 300 0, "Lidas 3 notas. Da última para a
    primeira: 300 45 120".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E524.c
@@ -798,16 +774,13 @@ Voltar -> g1.globo.com
 Não dá para voltar de g1.globo.com
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em visita, faça como no pilha_empilha: malloc, copie a url com strcpy,
    ligue novo->ant ao topo antigo e só então troque o topo.
 2. A página é a única quando h->topo->ant == NULL.
 3. Em voltar, guarde o nó velho, avance o topo e só depois dê free.
 4. Resposta esperada: as seis linhas acima, sem vazamento no sanitizer.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E525.c
@@ -832,8 +805,7 @@ Tirou o prato 20
 Tirou o prato 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Procure "heap-use-after-free" e o número da linha no relatório.
 2. Depois do free, o nó não é mais seu, mesmo que os bytes ainda estejam
@@ -843,8 +815,6 @@ Tirou o prato 10
    a memória como livre: até alguém reaproveitá-la, os bytes antigos
    continuam lá, então ler parece funcionar por sorte; c) ler o valor
    antes do free (passe a linha do *numero para antes do free).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E526.c
@@ -863,8 +833,7 @@ Saída esperada:
 1 3 4 5 8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A auxiliar fica sempre ordenada, com o MAIOR no topo dela.
 2. Tire um valor x da original. Enquanto o topo da auxiliar for maior que
@@ -873,8 +842,6 @@ Saída esperada:
    vai para o fundo, e o menor fica no topo.
 4. Resposta esperada: 1 3 4 5 8. No pior caso são O(n²) movimentos, como
    na ordenação por inserção (assunto 0098).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E527.c
@@ -906,8 +873,7 @@ desempilha 25 -> mínimo 19
 desempilha 19 -> mínimo 22
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A pilha dos mínimos anda junto com a dos valores: a cada empilhamento,
    empilhe nela o menor entre o valor novo e o mínimo atual.
@@ -915,8 +881,6 @@ desempilha 19 -> mínimo 22
 3. min_atual é só um pilha_topo na pilha dos mínimos.
 4. Resposta esperada: as nove linhas acima. Custa o dobro de memória em
    troca de O(1) na consulta.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E528.c
@@ -1220,8 +1184,7 @@ c) 100 / (2 + 3) - 4
 d) 6 2 / 3 1 - *        (já em pós-fixa)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Os números aparecem na mesma ordem nas duas notações; só os
    operadores mudam de lugar.
@@ -1229,8 +1192,6 @@ d) 6 2 / 3 1 - *        (já em pós-fixa)
 3. Resposta esperada: a) 7 3 + 2 * = 20; b) 7 3 2 * + = 13;
    c) 100 2 3 + / 4 - = 16; d) pilha 6 | 6 2 | 3 | 3 3 | 3 3 1 | 3 2 | 6,
    então vale 6 (a infixa é (6 / 2) * (3 - 1)).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E529.c
@@ -1252,8 +1213,7 @@ Saída esperada:
 ((x)       erro
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Se o contador ficar negativo no meio do caminho, já é erro: fechou
    sem abrir. É o que pega o ")(".
@@ -1261,8 +1221,6 @@ Saída esperada:
 3. Use printf("%-10s %s\n", s, ...) para alinhar.
 4. Resposta esperada: as quatro linhas acima. Com tipos diferentes, o
    contador só sabe QUANTOS estão abertos, não QUAL foi o último a abrir.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E530.c
@@ -1274,8 +1232,7 @@ Este verificador é mais educado que o do A177: além de dizer que deu
 errado, diz onde e por quê. Sem rodar, preveja as quatro linhas que ele
 mostra. Atenção às posições: a primeira posição da string é 0.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Faça uma tabela com a posição, o caractere e a pilha depois dele.
 2. O laço para no primeiro erro; "faltou fechar" só aparece quando a
@@ -1285,8 +1242,6 @@ mostra. Atenção às posições: a primeira posição da string é 0.
    {a: [1, 2}]: esperava ] e veio } na posição 9
    f(x)): fecha sem abrir na posição 4
    if (a[0] {: faltou fechar 2
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E531.c
@@ -1307,8 +1262,7 @@ Saída esperada depois do conserto:
 9 5 2 - * = 27
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Rode: a soma está certa, a subtração dá -5 e a divisão dá 0. O que a
    soma tem que a subtração e a divisão não têm?
@@ -1318,8 +1272,6 @@ Saída esperada depois do conserto:
    Trocando a ordem (desempilha em b, depois em a), as quatro contas
    ficam certas. A soma e a multiplicação escondiam o erro porque
    a + b == b + a.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E532.c
@@ -1349,8 +1301,7 @@ Saída esperada:
 9-4-2 -> 9 4 - 2 -
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma função int precedencia(int op): 2 para * e /, 1 para + e -, 0 para
    "(" (assim o "(" nunca sai por causa de um operador).
@@ -1359,8 +1310,6 @@ Saída esperada:
 3. O "maior ou igual" é o que faz 9-4-2 virar (9-4)-2, e não 9-(4-2).
 4. Resposta esperada: as quatro linhas acima. Confira a segunda no A178
    (troque os números): o valor de (6+2)*5-8/4 é 38.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E533.c
@@ -1389,16 +1338,13 @@ erro: sobrou número na pilha
 erro: símbolo inválido 'x'
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma função int avalia(const char *linha, int *resultado) que devolve um
    código (0 = ok, 1, 2, 3, 4 para cada erro) deixa o main simples.
 2. Crie a pilha dentro de avalia e libere em TODOS os caminhos de saída.
 3. Junte os dígitos como no A178. O '\n' do fgets conta como espaço.
 4. Resposta esperada: as cinco linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E534.c
@@ -1682,8 +1628,7 @@ insere 5, insere 6, retira, retira
 No fim: quem sobrou na fila, na ordem de saída? Em que gaveta entraria o
 próximo?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A posição de inserção é (inicio + n) % 4; retirar faz
    inicio = (inicio + 1) % 4.
@@ -1692,8 +1637,6 @@ próximo?
    [5, 2, 3, 4] com inicio 1 e n 4; o 6 é recusado (n == 4, cheia). As
    retiradas finais devolvem 2 e 3. Sobram 4 e 5, com inicio 3 e n 2; o
    próximo entraria na gaveta (3 + 2) % 4 = 1.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E535.c
@@ -1716,14 +1659,11 @@ Trabalho 4: 5 páginas
 Total: 20 páginas em 4 trabalhos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Guarde as páginas num vetor e insira com um for.
 2. Antes de esvaziar a fila, guarde fila_tamanho num int: depois ela vale 0.
 3. Resposta esperada: as cinco linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E536.c
@@ -1749,8 +1689,7 @@ saiu 2
 Na fila: 3 4 6 7
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. fc_vazia e fc_cheia são uma linha cada, com as fórmulas do enunciado.
 2. fc_insere grava em itens[fim] e avança fim com % TAM.
@@ -1758,8 +1697,6 @@ Na fila: 3 4 6 7
 4. Resposta esperada: as cinco linhas acima. O 6 entra na gaveta 4 e fim
    dá a volta para 0; o 7 entra na 0 e fim vira 1. Aí (1 + 1) % 5 == 2,
    que é o inicio: cheia, e o 8 é recusado.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E537.c
@@ -1781,8 +1718,7 @@ Carros na fila: 1
 Carros na fila: 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Desenhe o vetor de 6 gavetas e acompanhe inicio e fim em cada etapa.
 2. Na terceira linha, inicio = 4 e fim = 2. Quantos carros há de verdade?
@@ -1790,8 +1726,6 @@ Carros na fila: 4
    fila não deu a volta no vetor. Depois que fim volta para o começo,
    fim < inicio e a conta fica negativa. Conserto:
    return (f->fim - f->inicio + TAM) % TAM;
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E538.c
@@ -1815,16 +1749,13 @@ Saíram: 3 6 2 7 5 1
 Sobrou: 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Insira 1 a 7. Enquanto fila_tamanho > 1: faça 2 vezes "retira e
    insere de novo"; na 3ª, retire e mostre.
 2. A capacidade do fila.c é 8, então 7 pessoas cabem.
 3. Cada eliminação custa m operações de fila: no total, O(n · m).
 4. Resposta esperada: Saíram: 3 6 2 7 5 1 e Sobrou: 4.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E539.c
@@ -1850,16 +1781,13 @@ Leitura 5: média 64.7 km/h
 Leitura 6: média 62.0 km/h
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A fila é a escolha certa porque o primeiro a sair da janela é o
    primeiro que entrou.
 2. Faça a divisão em double: soma / 3.0.
 3. Resposta esperada: as quatro linhas acima (194/3, 200/3, 194/3,
    186/3).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E540.c
@@ -2113,8 +2041,7 @@ Sem rodar, desenhe a lista da fila depois de cada operação do main, no
 formato inicio -> ... -> NULL, marcando onde está o fim. Preveja a saída.
 Depois responda: em quais momentos inicio e fim apontam para o MESMO nó?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Insere pendura no fim; retira tira do início.
 2. inicio == fim (sem ser NULL) quer dizer fila com um só nó.
@@ -2122,8 +2049,6 @@ Depois responda: em quais momentos inicio e fim apontam para o MESMO nó?
    A sequência é [7], [7, 4], [4], [4, 9], [9], [9, 1], [1]. inicio e
    fim apontam para o mesmo nó quando a fila tem um nó só: depois de
    inserir o 7 e depois de cada retirada.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E541.c
@@ -2144,15 +2069,12 @@ Chamando senha 15
 Chamando senha 18
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. while (scanf("%d", &s) == 1 && s != 0) fila_insere(...).
 2. Use fila_vazia antes de começar a chamar.
 3. Resposta esperada: as três chamadas acima; com só "0", "Ninguém na
    fila".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E542.c
@@ -2177,15 +2099,12 @@ Atendendo Davi
 Fila vazia
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Copie o nome com strcpy (os nomes do teste cabem em 30 bytes).
 2. Em entra: se f->fim == NULL, o novo também vira f->inicio.
 3. Em sai: se f->inicio virou NULL, f->fim também precisa virar NULL.
 4. Resposta esperada: as cinco linhas acima, sem erro do sanitizer.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E543.c
@@ -2207,8 +2126,7 @@ Pronto: 13
 Pronto: 14
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em que linha o relatório aponta? Que ponteiro está sendo usado ali?
 2. Depois de cozinha_sai tirar o último pedido, para onde aponta f->fim?
@@ -2216,8 +2134,6 @@ Pronto: 14
    O fim continua apontando para o nó liberado, e o próximo cozinha_entra
    vê fim != NULL e escreve f->fim->prox nesse nó morto. Conserto: depois
    de avançar o início, if (f->inicio == NULL) f->fim = NULL;
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E544.c
@@ -2239,8 +2155,7 @@ Saída esperada:
 Chamando: P101 P102 C1 P103 C2 C3 C4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um contador de preferenciais chamadas seguidas decide de qual fila
    tirar: se for menor que 2 e a preferencial não estiver vazia, tire
@@ -2249,8 +2164,6 @@ Chamando: P101 P102 C1 P103 C2 C3 C4
    a preferencial continua.
 3. O laço roda enquanto alguma das duas filas tiver gente.
 4. Resposta esperada: Chamando: P101 P102 C1 P103 C2 C3 C4.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E545.c
@@ -2279,8 +2192,7 @@ Preparando: 501
 Depois: 502 503 504
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Fila vazia: ultimo == NULL. Com um nó só, ele aponta para ele mesmo.
 2. Inserir: o novo aponta para o primeiro (ultimo->prox), o antigo
@@ -2288,8 +2200,6 @@ Depois: 502 503 504
 3. Retirar: o primeiro é ultimo->prox. Se ele for o próprio último (um
    nó só), a fila fica vazia; senão, ultimo->prox pula para o seguinte.
 4. Resposta esperada: as duas linhas acima, sem vazamento.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E546.c
@@ -2533,16 +2443,13 @@ int main(void) {
 Sem rodar, preveja a saída. Desenhe o deque como uma fileira, com a
 frente à esquerda, e atualize a cada operação.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. insere_inicio põe à esquerda; insere_fim, à direita.
 2. primeiro e ultimo só olham.
 3. Resposta esperada: a ordem depois das quatro inserções é 4 2 1 3. A
    saída é "saiu do fim: 3", "saiu da frente: 4" e "frente 2, fundo 1,
    tamanho 2".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E547.c
@@ -2566,16 +2473,13 @@ volta(3, 5, 8) = 6
 volta(2, 18, 8) = 0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. (i - passos) pode ser bem negativo. Primeiro reduza passos com
    passos % cap, aí i - passos fica maior que -cap.
 2. Depois some cap e tire o resto: (i - passos % cap + cap) % cap.
 3. Para mostrar o %, escreva %% dentro do printf.
 4. Resposta esperada: as cinco linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E548.c
@@ -2601,8 +2505,7 @@ Esquerda 2: 3 4 5 6 1 2
 Direita 3: 6 1 2 3 4 5
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. mostra pode girar o deque uma volta completa: tira da frente, mostra e
    põe no fundo, deque_tamanho vezes.
@@ -2610,8 +2513,6 @@ Direita 3: 6 1 2 3 4 5
 3. Cada giro custa O(1). Num vetor comum, girar uma posição custaria
    O(n), porque todo mundo anda uma casa.
 4. Resposta esperada: as três linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E549.c
@@ -2630,16 +2531,13 @@ Saída esperada depois do conserto:
 Embarcando: 40 10 20 30
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Com inicio = 0, quanto vale (inicio - 1) % TAM em C?
 2. Releia a pegadinha do resto negativo no texto do assunto.
 3. Resposta esperada: em entra_na_frente, (e->inicio - 1) % TAM dá -1
    quando inicio é 0, porque em C o resto acompanha o sinal do dividendo.
    Conserto: e->inicio = (e->inicio - 1 + TAM) % TAM;
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E550.c
@@ -2660,8 +2558,7 @@ Removida a faixa 3
 Ainda na fila: 5 8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Deque vazio: inicio == fim == NULL. Inserir no vazio faz os dois
    apontarem para o novo nó.
@@ -2671,8 +2568,6 @@ Ainda na fila: 5 8
    esvaziou e inicio também vira NULL; senão, o novo fim fica com
    prox = NULL.
 4. Resposta esperada: as três linhas acima, sem erro do sanitizer.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E551.c
@@ -2706,16 +2601,13 @@ Dias 5-7: máxima 30
 Dias 6-8: máxima 23
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use deque_ultimo e deque_primeiro para olhar as pontas sem tirar.
 2. O deque nunca guarda mais que 3 índices, então a capacidade 8 do
    deque.c sobra.
 3. Cada índice entra uma vez e sai no máximo uma vez: O(n) no total.
 4. Resposta esperada: as seis linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E552.c
@@ -3101,8 +2993,7 @@ Faça à mão a conversão de 2 * (3 + 4) com as regras do texto. Para cada
 símbolo, anote o que está na pilha de operadores e o que já está na fila
 de saída. Depois avalie a fila com a pilha de valores.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com a pilha e a fila vazias. O 2 vai direto para a fila.
 2. O "(" sempre empilha; o "+" que vem depois não tira o "*" de lá,
@@ -3110,8 +3001,6 @@ de saída. Depois avalie a fila com a pilha de valores.
 3. Resposta esperada: depois do "4", a pilha é * ( + e a fila é 2 3 4.
    O ")" manda o + para a fila e descarta o "(". No fim, o * sai. Pós-fixa:
    2 3 4 + *. Avaliação: 2 | 2 3 | 2 3 4 | 2 7 | 14. Resultado: 14.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E553.c
@@ -3131,15 +3020,12 @@ Antes: 10 20 30 40
 Depois: 40 30 20 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Esvazie a fila na pilha; depois esvazie a pilha na fila.
 2. Para mostrar a fila sem perder ninguém, retire, mostre e insira de
    novo, fila_tamanho vezes.
 3. Resposta esperada: as duas linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E554.c
@@ -3164,8 +3050,7 @@ Saiu: 1
 Depois: 2 3 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Só despeje quando a saida estiver VAZIA. Despejar com a saida ainda
    cheia mistura a ordem.
@@ -3173,8 +3058,6 @@ Depois: 2 3 4
    na média, cada operação custa O(1) (custo amortizado), mesmo que um
    despejo isolado custe O(n).
 3. Resposta esperada: as duas linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E555.c
@@ -3195,8 +3078,7 @@ Saída esperada depois do conserto:
 9/3/3 -> 9 3 / 3 / = 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Compare "8 3 2 - -" com "8 3 - 2 -". Qual conta cada uma faz?
 2. Quando chega um operador com a MESMA precedência do topo, quem deve
@@ -3204,8 +3086,6 @@ Saída esperada depois do conserto:
 3. Resposta esperada: o while da conversão usa ">" e deveria usar ">=".
    Com ">", operadores iguais ficam empilhados e a conta associa à
    direita: 8 - (3 - 2) = 7 e 9 / (3 / 3) = 9.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E556.c
@@ -3236,8 +3116,7 @@ Carro 3 saiu; manobras: 2
 Carro 5 saiu; manobras: 3
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Guarde as manobras num vetor int manobras[6], indexado pelo número do
    carro.
@@ -3249,8 +3128,6 @@ Carro 5 saiu; manobras: 3
 4. Represente os eventos com dois vetores: char tipo[] = "EEEEESSSSS" e
    int carro[] = {1, 2, 3, 4, 5, 2, 1, 4, 3, 5}.
 5. Resposta esperada: as sete linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E557.c
@@ -3278,15 +3155,12 @@ t = 13 ms: P1 terminou
 Tempo médio de término: 10.0 ms
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A cada volta: retire um processo, rode min(2, restante) ms somando no
    relógio, desconte do restante e, se ainda sobrar, insira de novo.
 2. Faça o teste de mesa da fila antes: [1 2 3 4], [2 3 4 1], [3 4 1 2]...
 3. Resposta esperada: as cinco linhas acima ((13 + 10 + 5 + 12) / 4).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E558.c

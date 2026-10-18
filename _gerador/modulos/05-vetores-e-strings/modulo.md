@@ -34,7 +34,7 @@ entende o que o C faz.
    propósito e veja o que o AddressSanitizer diz.
 3. Siga o **fluxograma** com o dedo: quase todo assunto aqui é um laço.
 4. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é
-   desafio. As dicas ficam escondidas: abra só se travar.
+   desafio. As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 

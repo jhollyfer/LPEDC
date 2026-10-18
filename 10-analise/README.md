@@ -36,7 +36,7 @@ mostrando o custo de cada escolha.
 4. Rode os exemplos. Mude o n, troque os dados, quebre um invariante de
    propósito e veja o `assert` disparar.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -304,16 +304,13 @@ c) for (i = 1; i < 100; i = i * 2)  passos++;
 d) for (i = 0; i < 10; i++)  if (i % 3 == 0) passos++;
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em a), o laço de dentro roda inteiro a cada volta do de fora.
 2. Em b), o laço de dentro encolhe: começa em i. Faça a lista 6 + 5 + ...
 3. Em c), escreva os valores de i: 1, 2, 4, ... até passar de 99.
 4. Resposta esperada: a) 24; b) 21 (6 + 5 + 4 + 3 + 2 + 1); c) 7
    (i = 1, 2, 4, 8, 16, 32, 64); d) 4 (i = 0, 3, 6, 9).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0076-eficiencia/E451.c
@@ -334,8 +331,7 @@ Comparações: 9
 Trocas: 3
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O maior começa como t[0]. A primeira comparação é com t[1].
 2. Some 1 em comparacoes antes do if; some 1 em trocas dentro dele.
@@ -343,8 +339,6 @@ Trocas: 3
    a ordem. Já o número de trocas depende da ordem dos dados.
 4. Resposta esperada: Maior: 36, Comparações: 9, Trocas: 3 (o maior muda
    para 31, depois 35, depois 36).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0076-eficiencia/E452.c
@@ -369,8 +363,7 @@ n =  100: total   5050, média  50.5
 n = 1000: total 500500, média 500.5
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use um vetor de 1000 posições e só as n primeiras em cada rodada.
 2. Reaproveite a busca do A151 com o contador global; zere-o uma vez por n,
@@ -378,8 +371,6 @@ n = 1000: total 500500, média 500.5
 3. Achar o código da posição i custa i + 1 passos. Somando de 1 até n dá
    n(n + 1) / 2; dividindo por n, (n + 1) / 2.
 4. Resposta esperada: médias 5.5, 50.5 e 500.5.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0076-eficiencia/E453.c
@@ -409,8 +400,7 @@ Saída esperada:
  9973     9971       98
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Primo é o pior caso dos dois: nenhuma divisão dá resto 0, então o laço
    vai até o fim.
@@ -418,8 +408,6 @@ Saída esperada:
 3. Repare: n cresceu 100 vezes; o ingênuo cresceu 100 vezes, o esperto
    só uns 12. A raiz de 100 é 10.
 4. Resposta esperada: a tabela acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0076-eficiencia/E454.c
@@ -439,8 +427,7 @@ senha 8: passos 4
 senha 40: passos 6
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Faça o teste de mesa da senha 12, que está na posição 0. Quando o
    passos++ roda?
@@ -449,8 +436,6 @@ senha 40: passos 6
    a comparação que acerta nunca é contada: ele tem de vir antes do if;
    (2) o contador é zerado uma vez só, antes do for do main: tem de ser
    zerado dentro do for, antes de cada busca.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0076-eficiencia/E455.c
@@ -480,8 +465,7 @@ Saída esperada:
 Depois responda: quando n aumenta 1, as chamadas da recursiva se
 multiplicam por quanto, mais ou menos?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Zere os contadores antes de cada n.
 2. A versão com laço guarda os dois últimos valores e anda n - 1 vezes.
@@ -491,8 +475,6 @@ multiplicam por quanto, mais ou menos?
    multiplicam por cerca de 1,618 (a razão áurea): de n = 10 para 20 elas
    crescem 21891 / 177 ≈ 124 vezes, e 1,618 elevado a 10 ≈ 123. Isso é
    crescimento exponencial.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0076-eficiencia/E456.c
@@ -794,16 +776,13 @@ e) for (i = 0; i < n; i++)  x++;
 f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um laço de dentro com tamanho fixo (10) é constante: não depende de n.
 2. Laços em sequência somam; laços aninhados multiplicam.
 3. Em c), o de dentro roda 0 + 1 + 2 + ... + (n - 1) = n(n - 1)/2 vezes.
 4. Resposta esperada: a) O(n) (10n); b) O(log n); c) O(n²); d) O(1);
    e) O(n) (2n); f) O(n log n).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0077-big-o/E457.c
@@ -826,8 +805,7 @@ e) n³ / 1000 + n²
 f) n(n + 1) / 2
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para achar o termo que domina, troque n por 1.000.000 e veja qual parte
    fica enorme.
@@ -835,8 +813,6 @@ f) n(n + 1) / 2
 3. Em f), abra a conta: n²/2 + n/2.
 4. Resposta esperada: a) O(n²); b) O(1); c) O(n); d) O(n log n); e) O(n³);
    f) O(n²).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0077-big-o/E458.c
@@ -862,8 +838,7 @@ n =  100: pares   4950 passos, marcas  100 passos
 n = 1000: pares 499500 passos, marcas 1000 passos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em repetido_marcas, o passo é cada consulta a visto[v[i]].
 2. Para zerar o vetor de marcas: bool visto[1000] = {false};
@@ -871,8 +846,6 @@ n = 1000: pares 499500 passos, marcas 1000 passos
    porque os códigos são pequenos; com CPFs, precisaria de outra ideia
    (a tabela hash do módulo 15).
 4. Resposta esperada: a saída acima; as duas respondem "sem repetidos".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0077-big-o/E459.c
@@ -894,16 +867,13 @@ c:  500000 -> 2000000  razão 4.00
 d:      32 ->      45  razão 1.41
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use (double)p2 / p1 para a razão não virar divisão inteira.
 2. A d) não é nenhuma das cinco classes do texto. Que número elevado ao
    quadrado dá 2? Pense em d * d < n.
 3. Resposta esperada: a) O(n) (n/3 passos); b) O(log n); c) O(n²) (n²/2);
    d) O(√n), raiz de n: dobrar n multiplica por √2 ≈ 1,41.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0077-big-o/E460.c
@@ -936,8 +906,7 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
  10000   200000000    6643856
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. log2() está em <math.h> (o rodar já liga com -lm). Faça as contas em
    double.
@@ -946,8 +915,6 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
 3. Mostre os doubles com %.0f para arredondar.
 4. Resposta esperada: n = 190. Para listas com menos de 190 entregas, o
    "pior" algoritmo é o mais rápido. Com 10000, B é 30 vezes mais rápido.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0077-big-o/E461.c
@@ -972,8 +939,7 @@ b) Onde está o desperdício?
 c) Refatore para ficar O(n), sem mudar a função tamanho(), e mostre a nova
 contagem de passos.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quantas vezes a condição do for é avaliada? E o que ela chama?
 2. O texto não muda dentro do laço. Precisa medir o tamanho dele toda vez?
@@ -982,8 +948,6 @@ contagem de passos.
    chamada custa n passos: n(n + 1); c) guarde o tamanho numa variável
    antes do laço (int n = tamanho(texto);) e use i < n. Os passos caem para
    1000, 2000 e 4000.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0077-big-o/E462.c
@@ -1268,8 +1232,7 @@ d) k = n - 1;
    while (k >= 0 && v[k] != x)  k--;
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Pergunte: "o que o laço já sabe sobre a parte que ele já viu?".
 2. Confira o início: com i = 0, o pedaço v[0..-1] está vazio. A soma de
@@ -1279,8 +1242,6 @@ d) k = n - 1;
 4. Resposta esperada: a) s é a soma de gastos[0..i-1]; b) c é o número de
    notas >= 6 em notas[0..i-1]; c) p == 2 elevado a k; d) x não está em
    v[k+1..n-1].
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0078-invariantes/E463.c
@@ -1302,15 +1263,12 @@ Saída esperada:
 Total: R$ 132
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com s = 0 e i = 0. O assert vai logo no começo do corpo do laço.
 2. assert(s == soma_ate(v, i));
 3. Depois do laço, um último assert(s == soma_ate(v, n)) fecha o término.
 4. Resposta esperada: Total: R$ 132. Invariante: s é a soma de v[0..i-1].
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0078-invariantes/E464.c
@@ -1333,8 +1291,7 @@ com os quatro passos, usando o invariante "x não está em v[k+1..n-1]":
 
 Escreva a prova como comentário.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. No começo, k = n - 1. Quem é v[n..n-1]?
 2. Uma volta só acontece se v[k] != x. Depois do k--, o pedaço já visto
@@ -1347,8 +1304,6 @@ Escreva a prova como comentário.
    x: é a última ocorrência; se parou com k == -1, x não está em v[0..n-1]
    e devolver -1 é o certo; 4) k diminui 1 por volta e não passa de -1. O
    k >= 0 vem primeiro no && para nunca ler v[-1] (curto-circuito).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0078-invariantes/E465.c
@@ -1372,8 +1327,7 @@ falha? Mostre o momento exato.
 b) Conserte sem tratar "todos negativos" como caso especial.
 c) O que a função deveria exigir de n? Escreva o contrato correto.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Invariante pretendido: maior é um máximo de v[0..i-1]. Ele vale antes
    da primeira volta?
@@ -1383,8 +1337,6 @@ c) O que a função deveria exigir de n? Escreva o contrato correto.
    está no vetor; o invariante "maior é um elemento máximo" nunca valeu;
    b) int maior = v[0]; e o laço começa em i = 1; c) "recebe n >= 1 e v;
    devolve o valor de um elemento máximo de v[0..n-1]".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0078-invariantes/E466.c
@@ -1411,8 +1363,7 @@ lg(100000) = 16
 divergências de 1 a 100000: 0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use uma cópia m de n e um contador i: i = 0, m = n; enquanto m > 1,
    m = m / 2 e i++.
@@ -1421,8 +1372,6 @@ divergências de 1 a 100000: 0
 3. No término, m == 1: o invariante vira 2^i <= n < 2^(i+1).
 4. Resposta esperada: a saída acima. Parada: m cai pelo menos pela metade
    a cada volta e o laço para quando chega a 1.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0078-invariantes/E467.c
@@ -1444,8 +1393,7 @@ Saída esperada:
 Sobraram 4: 25 40 15 30
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use dois índices: j lê todos os elementos; i marca onde escrever o
    próximo que não é zero.
@@ -1454,8 +1402,6 @@ Sobraram 4: 25 40 15 30
 3. Se v[j] != 0, copie para v[i] e avance i. Avance j sempre.
 4. Resposta esperada: Sobraram 4: 25 40 15 30. Uma versão que "puxa" todo
    mundo uma casa para a esquerda a cada zero também funciona, mas é O(n²).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0078-invariantes/E468.c
@@ -1759,8 +1705,7 @@ Depois de descerem 3: 1 a bordo
 Na garagem: 0 a bordo
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. #include "contador.h", com aspas: o arquivo está na pasta, não no
    sistema. O rodar compila o contador.c junto.
@@ -1768,8 +1713,6 @@ Na garagem: 0 a bordo
    para contar quem ficou no ponto.
 3. Resposta esperada: a saída acima. Repare que você não precisou saber
    como o contador guarda o valor.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0079-tad/E469.c
@@ -1793,8 +1736,7 @@ Na fila: 2
 Na fila: 0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O contador.h só diz que existe uma struct contador, sem os campos.
 2. Procure no contador.h uma função que zera e outra que lê o valor.
@@ -1803,8 +1745,6 @@ Na fila: 0
    b) para proteger o invariante 0 <= valor <= limite: só o contador.c
    mexe nos campos. Conserto: contador_valor(fila) para ler e
    contador_zera(fila) para zerar.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0079-tad/E470.c
@@ -1838,16 +1778,13 @@ Loja (0.0, 0.0) -> cliente (3.0, 4.0): 5.00 km
 A -> B: 10.00 km
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Distância: sqrt(dx * dx + dy * dy), com sqrt de <math.h>.
 2. typedef struct ponto Ponto; em cima, a struct ponto { double x, y; }
    só na parte "ponto.c".
 3. São 4 pontos criados: 4 ponto_libera no fim (o rodar acusa vazamento).
 4. Resposta esperada: a saída acima (os triângulos 3-4-5 e 6-8-10).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0079-tad/E471.c
@@ -1876,8 +1813,7 @@ Pix de R$ 35,50: ok
 Bia: R$ 44,50 | Caio: R$ 45,50
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Saque primeiro. Só deposite se o saque deu certo; assim ninguém ganha
    dinheiro do nada.
@@ -1886,8 +1822,6 @@ Bia: R$ 44,50 | Caio: R$ 45,50
 4. Resposta esperada: a saída acima. Repare que a nova operação respeita o
    invariante (saldo >= 0) de graça, porque só usa operações que já o
    respeitam.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0079-tad/E472.c
@@ -1923,8 +1857,7 @@ Saída esperada:
 1/0: não existe
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Toda criação passa por racional_cria, que simplifica e acerta o sinal.
    Assim soma e multiplica só fazem a conta e chamam racional_cria.
@@ -1933,8 +1866,6 @@ Saída esperada:
 3. Denominador negativo: troque o sinal dos dois.
 4. Cada Racional devolvido é um malloc: libere todos.
 5. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0079-tad/E473.c
@@ -1959,8 +1890,7 @@ Do embarque até 06:00: 430 min
 Depois responda: qual das duas versões deixou horario_minutos_ate mais
 simples? E o que isso mostra sobre esconder a struct?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. h:m vira h * 60 + m. De volta: hora = total / 60, minuto = total % 60.
 2. Avançar com a volta do dia: total = (total + minutos) % 1440.
@@ -1969,8 +1899,6 @@ simples? E o que isso mostra sobre esconder a struct?
    avanca e minutos_ate com uma linha cada; hora e minuto viram contas.
    Como o cliente só usa as funções, a troca não o afeta: é a promessa do
    TAD.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 10-analise/0079-tad/E474.c

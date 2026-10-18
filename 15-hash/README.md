@@ -35,7 +35,7 @@ de verdade, que junta tabela, strings, `qsort` e memória dinâmica.
 3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
 4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -302,15 +302,12 @@ pedido 2210 -> nicho 10
 ...
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A função hash de inteiros é só "return pedido % 11;".
 2. Guarde os 5 números num vetor e percorra com um for.
 3. Resposta esperada: 1043 -> 9, 2210 -> 10, 3876 -> 4, 5521 -> 10 e
    7019 -> 1. Os pedidos 2210 e 5521 colidem no nicho 10.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0110-hashing/E655.c
@@ -345,16 +342,13 @@ int main(void) {
 
 Quais palavras colidem, e por que cada colisão acontece?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Some os três códigos de cada palavra e tire o resto por 5.
 2. Maiúscula e minúscula têm códigos diferentes: 'S' não é 's'.
 3. Resposta esperada: sol=4, los=4, Sol=2, lua=2. "sol" e "los" colidem
    porque são anagramas (soma 334); "Sol" (302) e "lua" (322) colidem
    por acaso: só o resto por 5 é igual.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0110-hashing/E656.c
@@ -376,15 +370,12 @@ doc    -> 8
 boleto -> 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O laço é o mesmo da soma; só muda a conta de dentro.
 2. Não se preocupe se h estourar: em unsigned a conta dá a volta, e isso
    é bem definido em C.
 3. Resposta esperada: a saída acima ("ted" e "doc" colidem com M = 13).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0110-hashing/E657.c
@@ -409,8 +400,7 @@ m = 10
 
 Por que m = 10 é uma péssima escolha aqui?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um vetor "int conta[11] = {0};" e "conta[codigo % m]++" para cada código.
 2. Faça uma função "void distribui(const int codigos[], int n, int m)"
@@ -419,8 +409,6 @@ Por que m = 10 é uma péssima escolha aqui?
    m = 11: um código em cada balde, menos o 4 e o 6 (vazios) e o 10, com
    dois (120 e 230). Com m = 10, o resto só olha o último dígito, que
    é sempre 0. Um m primo usa o número inteiro e espalha melhor.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0110-hashing/E658.c
@@ -436,8 +424,7 @@ relatório e responda:
 a) Qual índice a função indice() devolve para "maçã"? Por quê?
 b) Conserte a função para que funcione com qualquer texto em UTF-8.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em UTF-8, "ç" é 0xC3 0xA7 e "ã" é 0xC3 0xA3. Quanto vale 0xC3 num
    char com sinal?
@@ -447,8 +434,6 @@ b) Conserte a função para que funcione com qualquer texto em UTF-8.
    contagem[-2] fica fora do vetor. b) acumule num unsigned e converta
    cada byte para unsigned char. Consertado, "maçã" cai no balde 6 e a
    saída mostra 1 no balde 1 (banana), 1 no 4 (uva) e 1 no 6.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0110-hashing/E659.c
@@ -478,8 +463,7 @@ int -> ...
 char -> ...
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Calcule o hash polinomial completo uma vez (sem o resto) e guarde num
    vetor de unsigned; o resto por m muda a cada tentativa.
@@ -488,8 +472,6 @@ char -> ...
 3. Resposta esperada: m = 14, com int -> 5, char -> 10, if -> 11,
    else -> 1, for -> 7, while -> 13, return -> 4, void -> 8. (Com a soma
    dos códigos, o menor m seria 18.)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0110-hashing/E660.c
@@ -760,15 +742,12 @@ na ordem em que aparecem na corrente:
 
 Quantos baldes ficaram vazios? Qual a corrente mais comprida?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Calcule os restos primeiro: 12 % 5 = 2, 7 % 5 = 2, e assim por diante.
 2. Inserir no início inverte a ordem: o último a chegar fica na frente.
 3. Resposta esperada: [0] 25 20; [1] vazio; [2] 17 7 12; [3] 3;
    [4] vazio. Dois baldes vazios; a corrente do balde 2, com 3 nós.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0111-encadeamento/E661.c
@@ -788,15 +767,12 @@ Saída esperada:
 4000: não achou (0 comparações)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O balde é matricula % M; a corrente começa em baldes[matricula % M].
 2. Use "(*comparacoes)++" a cada nó visitado, antes de comparar.
 3. Resposta esperada: a saída acima. 5005, 7210 e 2016 caem no balde 0, e
    a corrente ficou 2016 -> 7210 -> 5005. O balde 3, do 4000, está vazio.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0111-encadeamento/E662.c
@@ -827,8 +803,7 @@ pedido 999 não existe
 [3] 315
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. É a remoção de lista encadeada do módulo 11, aplicada só à corrente
    de baldes[pedido % 4]. Guarde o anterior enquanto anda.
@@ -836,8 +811,6 @@ pedido 999 não existe
    quem muda é a própria cabeça, baldes[1].
 3. Resposta esperada: a saída acima, e o AddressSanitizer quieto (todo nó
    removido leva free, e o libera solta o resto).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0111-encadeamento/E663.c
@@ -866,8 +839,7 @@ tamanho  : 0 0 0 0 0 2 8 0 | maior: 8 | média: 3.9
 polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Não precisa montar as listas: para medir, basta contar quantas chaves
    caem em cada balde.
@@ -877,8 +849,6 @@ polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
 3. Resposta esperada: a saída acima. Com o tamanho, só existem nomes de 5
    e 6 letras, então 8 cidades amontoam num balde: a tabela vira quase uma
    lista.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0111-encadeamento/E664.c
@@ -896,8 +866,7 @@ b) Por que o programa às vezes "funciona" sem o AddressSanitizer?
 
 Depois conserte a função libera.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O relatório mostra duas pilhas: onde o nó foi liberado e onde ele foi
    usado depois. Compare as duas linhas.
@@ -907,8 +876,6 @@ Depois conserte a função libera.
    bytes na hora, então o prox antigo ainda está lá por sorte; um malloc no
    meio pode reaproveitar a memória. Conserto: guardar o próximo antes:
    "No *prox = p->prox; free(p); p = prox;".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0111-encadeamento/E665.c
@@ -939,8 +906,7 @@ n = 10, m = 11
 [10] 21
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O balde de cada nó muda com o m (k % 5 não é k % 11): por isso não dá
    para copiar o vetor velho, tem que redistribuir nó por nó.
@@ -950,8 +916,6 @@ n = 10, m = 11
    (m vira 11). No fim: [1] 12 23, [2] 2, [3] 14, [5] 5, [7] 40,
    [8] 19 8, [9] 31, [10] 21 e os outros vazios. A ordem dentro de uma
    corrente pode mudar conforme a sua implementação; o conteúdo, não.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0111-encadeamento/E666.c
@@ -1238,15 +1202,12 @@ Saída esperada:
 [6] 17
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um while que anda enquanto tab[i] != -1, com i = (i + 1) % 7.
 2. Faça à mão antes: 10, 24, 17 e 31 têm hash 3; o 5 tem hash 5.
 3. Resposta esperada: a saída acima. O 31 tenta 3, 4, 5 e 6, todas
    ocupadas, dá a volta e para na 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E667.c
@@ -1278,15 +1239,12 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Calcule os restos por 8: 16 -> 0, 8 -> 0, 3 -> 3, 24 -> 0, 11 -> 3.
 2. O 24 chega quando as vagas 0 e 1 já estão ocupadas.
 3. Resposta esperada: 16: vaga 0 (1); 8: vaga 1 (2); 3: vaga 3 (1);
    24: vaga 2 (3); 11: vaga 4 (2).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E668.c
@@ -1308,16 +1266,13 @@ Saída esperada:
 35: não está, sondagens: 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use um for de M passos e, dentro, "(*sondagens)++" logo no começo.
 2. A ordem dos testes importa: primeiro "é LIVRE?" (para), depois
    "OCUPADA e chave igual?" (achou); senão, i = (i + 1) % M.
 3. Resposta esperada: a saída acima. O 35 olha 0, 1 (removida, segue),
    2 e para na 3, livre. Se a busca parasse na REMOVIDA, não acharia o 28.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E669.c
@@ -1342,16 +1297,13 @@ Saída esperada:
 20: tabela cheia!
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um "while (tab[i] != -1)" sozinho roda para sempre numa tabela cheia.
 2. Limite as tentativas: um for de no máximo 5 passos. Se nenhum passo
    achou vaga livre, devolva -1.
 3. Resposta esperada: a saída acima. Repare que o 9 e o 15 só entram
    dando a volta no fim do vetor.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E670.c
@@ -1381,16 +1333,13 @@ Saída esperada depois do conserto:
 [6] 13
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. 20 % 7 = 6. Quem está na vaga 6? Qual é a "próxima" depois da 6?
 2. Num vetor de 7 posições, o maior índice é 6.
 3. Resposta esperada: a) no "while (tab[i] != 0)", com i = 7; b) o 20 cai
    na última vaga (6), que já tem o 13, e "i = i + 1" passa do fim. O
    conserto é "i = (i + 1) % M", que volta para a vaga 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E671.c
@@ -1423,8 +1372,7 @@ linear: 1 2 3 1 5 3 4 1 | total: 20
 duplo : 1 2 2 1 2 2 2 4 | total: 16
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. "int passo_linear(int k)" devolve 1 (use (void)k para calar o aviso
    de parâmetro não usado) e "int passo_duplo(int k)" devolve 1 + k % 10.
@@ -1434,8 +1382,6 @@ duplo : 1 2 2 1 2 2 2 4 | total: 16
    formam um bloco 5-6-7 que engole o 8 e cresce até a 9; o 38 paga 5
    sondagens. No duplo, cada um salta com o seu passo e o bloco não se
    forma.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E672.c
@@ -1799,16 +1745,13 @@ paulo
 7 palavras
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dois laços dentro de um: o primeiro pula o que não é letra, o segundo
    mostra as letras com putchar(tolower(...)).
 2. Sempre converta para unsigned char antes de chamar isalpha e tolower.
 3. Resposta esperada: a saída acima. O "São" sai como "são": o tolower
    muda o 'S' e deixa os bytes do "ã" como estão.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0113-juntando-tudo/E673.c
@@ -1829,16 +1772,13 @@ ovo  sal  mel  las  sal
 
 O programa mostra cada balde assim: [0] palavra:vezes palavra:vezes ...
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. ovo = 340, sal = 320, mel = 318, las = 320. Agora tire o resto por 4.
 2. O segundo "sal" não cria nó: acha o que existe e soma 1.
 3. Resposta esperada: [0] las:1 sal:2 ovo:1; [1] vazio; [2] mel:1;
    [3] vazio. "las" e "sal" são anagramas e a soma junta os dois no mesmo
    balde; o strcmp é que separa as contagens.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0113-juntando-tudo/E674.c
@@ -1865,8 +1805,7 @@ Saída esperada:
 primeira repetida: parte (palavra 9)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Escreva "bool viu_antes(No *baldes[], const char *w)": procura a
    palavra no seu balde; se achar, devolve true; senão guarda uma cópia e
@@ -1875,8 +1814,6 @@ primeira repetida: parte (palavra 9)
    strcmp. Não esqueça de liberar os nós antes de sair.
 3. Resposta esperada: a saída acima. Custo: O(n) em média, contra O(n²)
    de comparar cada palavra com todas as anteriores.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0113-juntando-tudo/E675.c
@@ -1899,15 +1836,12 @@ feira 3
 queijo 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. compara recebe dois const void *: converta para const Contagem *.
 2. Devolva um número negativo se a deve vir antes de b. Para "mais vezes
    primeiro", a conta é y->vezes - x->vezes; no empate, use strcmp.
 3. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0113-juntando-tudo/E676.c
@@ -1935,8 +1869,7 @@ a) Rode e anote o que sai. Por que todas as palavras aparecem iguais?
 b) Por que "pera" sumiu e alguém ficou com uma contagem a mais?
 c) Conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Olhe o campo palavra do nó: ele guarda as letras ou um endereço?
 2. Depois de "novo->palavra = atual", para onde aponta cada nó quando a
@@ -1949,8 +1882,6 @@ c) Conserte.
    "char palavra[16];" e snprintf(novo->palavra, sizeof novo->palavra,
    "%s", atual). Consertado: mar: 1, e: 4, lua: 1, pera: 1 e sol: 2,
    nessa ordem (a dos baldes).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0113-juntando-tudo/E677.c
@@ -1981,8 +1912,7 @@ pato topa
 sala alas
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Assinatura: copie a palavra e ordene as letras com qsort (cada
    elemento tem 1 byte; a comparação é a diferença entre os dois char).
@@ -1991,8 +1921,6 @@ sala alas
    também um vetor com os ponteiros dos grupos na ordem em que nasceram.
 3. Resposta esperada: a saída acima. "lata" e "cafe" ficam sozinhas e não
    aparecem. É o mesmo truque do contador: muda só o que vira chave.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 15-hash/0113-juntando-tudo/E678.c
