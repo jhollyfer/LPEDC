@@ -2,8 +2,9 @@
 // Exercício E675 · ★★☆
 //
 // A prefeitura vai construir um pronto-socorro num dos seis lugares do mapa
-// do A225 (sem a Ilha). O critério: o lugar onde a PIOR distância até
-// qualquer outro é a menor possível. As estradas, em km (mão dupla):
+// do texto do assunto (sem a Ilha). O critério: o lugar onde a PIOR
+// distância até qualquer outro é a menor possível. As estradas, em km
+// (mão dupla):
 //
 //   CD-Centro 4, CD-Feira 2, Feira-Centro 1, Centro-Porto 7, Feira-Morro 3,
 //   Morro-Porto 2, Porto-Vila 3, Centro-Vila 12

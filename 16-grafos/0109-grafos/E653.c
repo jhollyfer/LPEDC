@@ -1,7 +1,7 @@
 // 0109 · Grafos
 // Exercício E653 · ★★★
 //
-// Pegue a matriz das ciclovias do exemplo A217 (já está no esqueleto) e
+// Pegue a matriz das ciclovias do texto do assunto (já está no esqueleto) e
 // converta para LISTA de adjacência alocada com malloc: um vetor de 5
 // ponteiros, cada um apontando para a lista encadeada dos vizinhos daquele
 // ponto. Regras:

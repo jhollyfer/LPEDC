@@ -1,12 +1,7 @@
 // 0110 · BFS: busca em largura
 // Exercício E657 · ★★☆
-//
-// Por que passa pelo Centro: como vizinhos da Lapa, Centro (0) é examinado
-// antes de Penha (3) e entra antes na fila. Ao sair, o Centro descobre Moema
-// (dist 2); quando a Penha sai, Moema já tem dono. Moema sai antes de
-// Tatuape e descobre a Saude. Os dois caminhos têm 3 ônibus; a ordem dos
-// índices decide o empate.
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #define V 6
@@ -29,9 +24,9 @@ void imprimir_caminho(const int pai[], int v) {
     printf("%s", nomes[v]);
 }
 
-int main(void) {
-    int origem = 1, destino = 4; // Lapa -> Saude
-    int dist[V], pai[V], fila[V], inicio = 0, fim = 0;
+// BFS que examina os vizinhos em ordem crescente ou decrescente de índice
+void bfs(int origem, int dist[], int pai[], bool crescente) {
+    int fila[V], inicio = 0, fim = 0;
     for (int v = 0; v < V; v++) {
         dist[v] = -1;
         pai[v] = -1;
@@ -40,7 +35,8 @@ int main(void) {
     fila[fim++] = origem;
     while (inicio < fim) {
         int u = fila[inicio++];
-        for (int v = 0; v < V; v++) {
+        for (int k = 0; k < V; k++) {
+            int v = crescente ? k : V - 1 - k;
             if (adj[u][v] && dist[v] == -1) {
                 dist[v] = dist[u] + 1;
                 pai[v] = u;
@@ -48,7 +44,18 @@ int main(void) {
             }
         }
     }
+}
 
+int main(void) {
+    int origem = 1, destino = 4; // Lapa -> Saude
+    int dist[V], pai[V];
+
+    bfs(origem, dist, pai, true);
+    imprimir_caminho(pai, destino);
+    printf("\nÔnibus: %d\n", dist[destino]);
+
+    bfs(origem, dist, pai, false);
+    printf("Ao contrário: ");
     imprimir_caminho(pai, destino);
     printf("\nÔnibus: %d\n", dist[destino]);
     return 0;

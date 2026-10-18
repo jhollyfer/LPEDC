@@ -8,24 +8,29 @@
 //
 //   void imprimir_caminho(const int pai[], int v);
 //
+// Existe outro caminho com 3 ônibus (Lapa, Penha, Tatuape, Saude). Para ver
+// quem decide o empate, rode a BFS uma segunda vez examinando os vizinhos
+// de trás para frente (v de V-1 até 0) e mostre o caminho que ela acha.
+//
 //   Saída esperada:
 //   Lapa -> Centro -> Moema -> Saude
 //   Ônibus: 3
-//
-// Existe outro caminho com 3 ônibus (Lapa, Penha, Tatuape, Saude). Explique,
-// num comentário, por que a sua BFS escolheu o que passa pelo Centro.
+//   Ao contrário: Lapa -> Penha -> Tatuape -> Saude
+//   Ônibus: 3
 //
 // Dicas:
 // 1. pai[origem] = -1. Na função: se pai[v] != -1, imprima primeiro o
 //    caminho até pai[v] (chamada recursiva) e depois " -> " e o nome de v.
 // 2. A recursão desfaz a inversão: o pai é impresso antes do filho, igual a
 //    uma pilha (assunto 0084).
-// 3. Resposta esperada: a saída acima. O Centro (índice 0) é examinado antes
-//    da Penha (3) como vizinho da Lapa; por isso Moema é descoberta pelo
-//    Centro, e a Saude por Moema, antes que o ramo da Penha chegue lá.
+// 3. Para não escrever a BFS duas vezes, ponha-a numa função com um
+//    parâmetro bool crescente e use v = crescente ? k : V - 1 - k.
+// 4. Resposta esperada: a saída acima. Os dois caminhos são mínimos; quem
+//    entra primeiro na fila descobre os vizinhos primeiro.
 //
 // Escreva sua resposta abaixo:
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #define V 6

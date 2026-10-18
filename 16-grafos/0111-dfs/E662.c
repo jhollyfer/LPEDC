@@ -19,7 +19,7 @@
 //
 // Dicas:
 // 1. Em grafo dirigido, adj[u][v] = 1 só no sentido da seta.
-// 2. A função é a mesma do A221, sem o recuo. Para zerar entre as buscas,
+// 2. A função é a mesma do texto, sem o recuo. Para zerar entre as buscas,
 //    um laço com visitado[v] = false.
 // 3. Resposta esperada: a saída acima. O Hospital alcança todo mundo, mas
 //    ninguém chega nele: nenhuma seta entra no Hospital.

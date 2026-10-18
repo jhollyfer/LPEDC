@@ -125,7 +125,8 @@ todos os de 2. Por isso o primeiro caminho que alcança Rita é o mais curto.
 Isso vale porque toda aresta "custa" 1. Com pesos diferentes (minutos, reais)
 a BFS erra, e é aí que entra Dijkstra (assunto 0112).
 
-O exemplo A220 usa a mesma BFS numa grade: cada casa de um galpão é um
+O exemplo A219 agrupa as pessoas por onda e mostra quem a BFS nunca alcança
+(um grafo com uma parte solta). O A220 usa a mesma BFS numa grade: cada casa de um galpão é um
 vértice e os vizinhos são as casas de cima, de baixo, da esquerda e da direita.
 Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 
@@ -147,6 +148,6 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 > [!NOTE]
 > **Pergunta para você:** se a conexão entre Max e Otto sumir, qual passa a ser
 > o caminho até Rita, e quem descobre Otto? Preveja a nova tabela antes de
-> apagar o par `{1, 3}` no A219.
+> apagar o par `{1, 3}` no programa acima.
 
 {{pratique}}

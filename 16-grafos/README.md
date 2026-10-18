@@ -189,8 +189,10 @@ soma 1 no grau de cada um, então a soma dos graus é sempre o dobro do número
 de arestas. Isso serve de teste rápido: se a soma der ímpar, você esqueceu um
 dos sentidos em algum lugar.
 
-O exemplo A218 mostra a outra representação, a lista de adjacência, como um
-TAD (`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
+O exemplo A217 guarda na matriz o tamanho de cada estrada em vez do 1 (um
+grafo ponderado) e mostra um vértice isolado, de linha toda zerada. O A218
+mostra a outra representação, a lista de adjacência, como um TAD
+(`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
 
 > [!WARNING]
 > Em grafo não dirigido, a aresta entra **nos dois sentidos**: `adj[a][b] = 1`
@@ -210,57 +212,75 @@ TAD (`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
 > [!NOTE]
 > **Pergunta para você:** se a prefeitura abrir uma ciclovia entre Praia e
 > Estádio, quais números da saída mudam? Preveja a nova matriz e a soma dos
-> graus antes de mudar o A217.
+> graus antes de mudar o programa acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0109-grafos/`](0109-grafos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A217 · A ciclovia na matriz**
+**Exemplo A217 · Quilômetros na matriz e a vila isolada**
 
 ```c
 #include <stdio.h>
 
-#define V 5 // número de vértices (pontos da cidade)
+#define V 5
 
 int main(void) {
-    const char *nomes[V] = {"Centro", "Praia", "Feira", "Parque", "Estadio"};
-    int adj[V][V] = {0}; // adj[i][j] == 1: existe ciclovia entre i e j
+    const char *nomes[V] = {"Sede", "Vila", "Sitio", "Porto", "Ilha"};
+    int km[V][V] = {0}; // grafo ponderado: km[i][j] é o tamanho da estrada; 0 = sem estrada
 
-    // as ciclovias, como pares de vértices
-    int ciclovias[][2] = {{0, 1}, {0, 2}, {1, 2}, {2, 3}, {3, 4}};
-    int total = (int)(sizeof ciclovias / sizeof ciclovias[0]);
-
+    int estradas[][3] = {{0, 1, 12}, {0, 3, 30}, {1, 2, 8}, {2, 3, 15}}; // {a, b, km}
+    int total = (int)(sizeof estradas / sizeof estradas[0]);
     for (int k = 0; k < total; k++) {
-        int a = ciclovias[k][0];
-        int b = ciclovias[k][1];
-        adj[a][b] = 1;
-        adj[b][a] = 1; // não dirigido: vale nos dois sentidos
+        int a = estradas[k][0], b = estradas[k][1];
+        km[a][b] = estradas[k][2];
+        km[b][a] = estradas[k][2]; // mão dupla: o mesmo peso nos dois sentidos
     }
 
-    printf("     0 1 2 3 4\n");
-    int soma_graus = 0;
+    // "i e j são vizinhos?" é olhar uma casa só: O(1)
+    int perguntas[][2] = {{0, 1}, {0, 2}, {3, 2}};
+    for (int k = 0; k < 3; k++) {
+        int a = perguntas[k][0], b = perguntas[k][1];
+        if (km[a][b]) printf("%s-%s: estrada de %d km\n", nomes[a], nomes[b], km[a][b]);
+        else printf("%s-%s: sem estrada direta\n", nomes[a], nomes[b]);
+    }
+
+    // listar os vizinhos é varrer a linha inteira: O(V)
+    int isolados = 0;
     for (int i = 0; i < V; i++) {
         int grau = 0;
-        printf("  %d ", i);
+        printf("%-5s:", nomes[i]);
         for (int j = 0; j < V; j++) {
-            printf(" %d", adj[i][j]);
-            grau += adj[i][j]; // o grau é a soma da linha
+            if (km[i][j]) {
+                printf(" %s(%d)", nomes[j], km[i][j]);
+                grau++;
+            }
         }
-        printf("  %-8s grau %d\n", nomes[i], grau);
-        soma_graus += grau;
+        if (grau == 0) {
+            printf(" ninguém, grau 0"); // vértice isolado: a linha inteira é zero
+            isolados++;
+        }
+        printf("\n");
     }
-    printf("Soma dos graus: %d = 2 x %d ciclovias\n", soma_graus, total);
+
+    int soma_km = 0;
+    for (int i = 0; i < V; i++)
+        for (int j = i + 1; j < V; j++) soma_km += km[i][j]; // acima da diagonal: cada estrada uma vez
+    printf("Rede: %d estradas, %d km\n", total, soma_km);
+    if (isolados > 0) printf("Vértices isolados: %d, então o grafo não é conexo\n", isolados);
     return 0;
 }
 // Saída:
-//      0 1 2 3 4
-//   0  0 1 1 0 0  Centro   grau 2
-//   1  1 0 1 0 0  Praia    grau 2
-//   2  1 1 0 1 0  Feira    grau 3
-//   3  0 0 1 0 1  Parque   grau 2
-//   4  0 0 0 1 0  Estadio  grau 1
-// Soma dos graus: 10 = 2 x 5 ciclovias
+// Sede-Vila: estrada de 12 km
+// Sede-Sitio: sem estrada direta
+// Porto-Sitio: estrada de 15 km
+// Sede : Vila(12) Porto(30)
+// Vila : Sede(12) Sitio(8)
+// Sitio: Vila(8) Porto(15)
+// Porto: Sede(30) Sitio(15)
+// Ilha : ninguém, grau 0
+// Rede: 4 estradas, 65 km
+// Vértices isolados: 1, então o grafo não é conexo
 ```
 
 ```bash
@@ -349,19 +369,29 @@ Voos diretos: 4
 **Exercício E650** · ★☆☆
 
 Depois do churrasco, a turma anotou quem ficou devendo Pix para quem num
-grafo DIRIGIDO: deve[i][j] == 1 quer dizer que i deve para j. Sem rodar,
-preveja o que o programa abaixo mostra. Só depois rode e confira.
+grafo DIRIGIDO: deve[i][j] == 1 quer dizer que i deve para j. A matriz já
+está no esqueleto. Complete o programa: para cada pessoa, mostre para
+quantos ela deve (setas que saem) e de quantos ela recebe (setas que
+chegam). No fim, mostre quem não deve para ninguém e quem não recebe de
+ninguém.
+
+
+```text
+Saída esperada:
+Leo deve para 2 e recebe de 1
+Mia deve para 1 e recebe de 2
+Rui deve para 0 e recebe de 3
+Sol deve para 3 e recebe de 0
+Sem dívidas: Rui
+Ninguém deve para: Sol
+```
 
 **Dicas:**
 
 1. Somar a LINHA i conta as setas que saem de i: para quantos i deve.
-2. Somar a COLUNA i conta as setas que chegam em i: de quantos i recebe.
-3. Resposta esperada:
-   Leo deve para 2 e recebe de 1
-   Mia deve para 1 e recebe de 2
-   Rui deve para 0 e recebe de 3
-   Sol deve para 3 e recebe de 0
-   Sem dívidas: Rui
+2. Somar a COLUNA i (deve[j][i], com j variando) conta as setas que
+   chegam em i: de quantos i recebe.
+3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0109-grafos/E650.c
@@ -408,7 +438,8 @@ Mão única: 3, mão dupla: 2
 Este programa tem DOIS erros de propósito. Ele monta o grafo NÃO dirigido
 do grupo de estudos (quem estuda com quem) e mostra o grau de cada pessoa.
 Rode com o rodar: o sanitizer acusa um dos erros. O outro é silencioso e só
-aparece nos números. Ache os dois e conserte.
+aparece nos números. Ache os dois, conserte e rode de novo até a saída
+bater com a esperada.
 
 
 ```text
@@ -435,7 +466,7 @@ Soma dos graus: 8
 
 **Exercício E653** · ★★★
 
-Pegue a matriz das ciclovias do exemplo A217 (já está no esqueleto) e
+Pegue a matriz das ciclovias do texto do assunto (já está no esqueleto) e
 converta para LISTA de adjacência alocada com malloc: um vetor de 5
 ponteiros, cada um apontando para a lista encadeada dos vizinhos daquele
 ponto. Regras:
@@ -638,7 +669,8 @@ todos os de 2. Por isso o primeiro caminho que alcança Rita é o mais curto.
 Isso vale porque toda aresta "custa" 1. Com pesos diferentes (minutos, reais)
 a BFS erra, e é aí que entra Dijkstra (assunto 0112).
 
-O exemplo A220 usa a mesma BFS numa grade: cada casa de um galpão é um
+O exemplo A219 agrupa as pessoas por onda e mostra quem a BFS nunca alcança
+(um grafo com uma parte solta). O A220 usa a mesma BFS numa grade: cada casa de um galpão é um
 vértice e os vizinhos são as casas de cima, de baixo, da esquerda e da direita.
 Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 
@@ -660,71 +692,68 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 > [!NOTE]
 > **Pergunta para você:** se a conexão entre Max e Otto sumir, qual passa a ser
 > o caminho até Rita, e quem descobre Otto? Preveja a nova tabela antes de
-> apagar o par `{1, 3}` no A219.
+> apagar o par `{1, 3}` no programa acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0110-bfs/`](0110-bfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A219 · A recrutadora a três conexões**
+**Exemplo A219 · As ondas da BFS e quem fica de fora**
 
 ```c
 #include <stdio.h>
 
-#define V 6
+#define V 8
 
 int main(void) {
-    const char *nomes[V] = {"Lia", "Max", "Nina", "Otto", "Pedro", "Rita"};
+    const char *nomes[V] = {"Bruna", "Caio", "Davi", "Eva", "Fred", "Gil", "Hugo", "Iara"};
     int adj[V][V] = {0};
-    int conexoes[][2] = {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 5}, {4, 5}};
-    for (int k = 0; k < 7; k++) {
-        adj[conexoes[k][0]][conexoes[k][1]] = 1;
-        adj[conexoes[k][1]][conexoes[k][0]] = 1;
+    // Gil e Hugo só conhecem um ao outro: formam uma parte solta do grafo
+    int conhece[][2] = {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {3, 4}, {4, 7}, {5, 6}};
+    int total = (int)(sizeof conhece / sizeof conhece[0]);
+    for (int k = 0; k < total; k++) {
+        adj[conhece[k][0]][conhece[k][1]] = 1;
+        adj[conhece[k][1]][conhece[k][0]] = 1;
     }
 
-    int dist[V], pai[V];
-    for (int v = 0; v < V; v++) {
-        dist[v] = -1; // -1: ainda não descoberto
-        pai[v] = -1;
-    }
-
-    int fila[V]; // cada vértice entra uma vez só: V posições bastam
-    int inicio = 0, fim = 0;
-    int origem = 0; // Lia
-    dist[origem] = 0;
-    fila[fim++] = origem;
-
-    printf("Ordem da visita:\n");
+    int dist[V], fila[V], inicio = 0, fim = 0;
+    for (int v = 0; v < V; v++) dist[v] = -1;
+    dist[0] = 0; // a fofoca começa com a Bruna
+    fila[fim++] = 0;
+    int maior = 0;
     while (inicio < fim) {
-        int u = fila[inicio++]; // tira da frente
-        printf("  %-5s distância %d\n", nomes[u], dist[u]);
-        for (int v = 0; v < V; v++) {
+        int u = fila[inicio++];
+        if (dist[u] > maior) maior = dist[u];
+        for (int v = 0; v < V; v++)
             if (adj[u][v] && dist[v] == -1) {
-                dist[v] = dist[u] + 1; // marca ao ENTRAR na fila
-                pai[v] = u;
+                dist[v] = dist[u] + 1;
                 fila[fim++] = v;
             }
-        }
     }
 
-    // o caminho sai de trás para frente, seguindo pai[]
-    int destino = 5; // Rita
-    int caminho[V], n = 0;
-    for (int v = destino; v != -1; v = pai[v]) caminho[n++] = v;
-    printf("Caminho até %s:", nomes[destino]);
-    for (int i = n - 1; i >= 0; i--) printf(" %s%s", nomes[caminho[i]], i > 0 ? " ->" : "");
-    printf(" (distância %d)\n", dist[destino]);
+    // agrupa por distância: cada linha é uma onda
+    for (int d = 0; d <= maior; d++) {
+        printf("Onda %d:", d);
+        for (int v = 0; v < V; v++)
+            if (dist[v] == d) printf(" %s", nomes[v]);
+        printf("\n");
+    }
+
+    // quem a fila nunca recebeu continua com -1
+    printf("Nunca ficam sabendo:");
+    for (int v = 0; v < V; v++)
+        if (dist[v] == -1) printf(" %s", nomes[v]);
+    printf("\nA fila recebeu %d de %d pessoas\n", fim, V);
     return 0;
 }
 // Saída:
-// Ordem da visita:
-//   Lia   distância 0
-//   Max   distância 1
-//   Nina  distância 1
-//   Otto  distância 2
-//   Pedro distância 2
-//   Rita  distância 3
-// Caminho até Rita: Lia -> Max -> Otto -> Rita (distância 3)
+// Onda 0: Bruna
+// Onda 1: Caio Davi
+// Onda 2: Eva
+// Onda 3: Fred
+// Onda 4: Iara
+// Nunca ficam sabendo: Gil Hugo
+// A fila recebeu 6 de 8 pessoas
 ```
 
 ```bash
@@ -799,17 +828,30 @@ int main(void) {
 **Exercício E655** · ★☆☆
 
 O mapa abaixo liga seis bairros por linhas de ônibus diretas (grafo não
-dirigido). O programa roda uma BFS a partir da Penha. Sem rodar, preveja a
-ordem em que os bairros são visitados e a distância de cada um. Faça a
-tabela da fila no papel. Depois rode e confira.
+dirigido). O programa já roda uma BFS a partir da Penha e mostra a ordem
+da visita com a distância de cada bairro. Estenda o programa: acrescente
+o vetor pai[] (quem descobriu cada bairro) e, depois da linha da ordem,
+mostre uma linha por bairro, em ordem de índice, dizendo quem o descobriu.
+
+
+```text
+Saída esperada:
+Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
+Centro: descoberto por Lapa
+Lapa: descoberto por Penha
+Moema: descoberto por Penha
+Penha: origem
+Saude: descoberto por Moema
+Tatuape: descoberto por Penha
+```
 
 **Dicas:**
 
-1. Os vizinhos são examinados em ordem de índice (v de 0 a 5).
-2. A Penha (3) é vizinha de Lapa (1), Moema (2) e Tatuape (5): os três
-   entram na fila nessa ordem, todos com distância 1.
-3. Resposta esperada:
-   Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
+1. int pai[V], todos começando com -1 (a origem continua com -1).
+2. Anote pai[v] = u no mesmo lugar em que o código anota dist[v].
+3. Repare na Saude: ela é vizinha de Moema e de Tatuape, mas quem a
+   descobre é quem sai primeiro da fila.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0110-bfs/E655.c
@@ -862,16 +904,18 @@ void imprimir_caminho(const int pai[], int v);
 ```
 
 
+Existe outro caminho com 3 ônibus (Lapa, Penha, Tatuape, Saude). Para ver
+quem decide o empate, rode a BFS uma segunda vez examinando os vizinhos
+de trás para frente (v de V-1 até 0) e mostre o caminho que ela acha.
+
 
 ```text
 Saída esperada:
 Lapa -> Centro -> Moema -> Saude
 Ônibus: 3
+Ao contrário: Lapa -> Penha -> Tatuape -> Saude
+Ônibus: 3
 ```
-
-
-Existe outro caminho com 3 ônibus (Lapa, Penha, Tatuape, Saude). Explique,
-num comentário, por que a sua BFS escolheu o que passa pelo Centro.
 
 **Dicas:**
 
@@ -879,9 +923,10 @@ num comentário, por que a sua BFS escolheu o que passa pelo Centro.
    caminho até pai[v] (chamada recursiva) e depois " -> " e o nome de v.
 2. A recursão desfaz a inversão: o pai é impresso antes do filho, igual a
    uma pilha (assunto 0084).
-3. Resposta esperada: a saída acima. O Centro (índice 0) é examinado antes
-   da Penha (3) como vizinho da Lapa; por isso Moema é descoberta pelo
-   Centro, e a Saude por Moema, antes que o ramo da Penha chegue lá.
+3. Para não escrever a BFS duas vezes, ponha-a numa função com um
+   parâmetro bool crescente e use v = crescente ? k : V - 1 - k.
+4. Resposta esperada: a saída acima. Os dois caminhos são mínimos; quem
+   entra primeiro na fila descobre os vizinhos primeiro.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0110-bfs/E657.c
@@ -974,15 +1019,16 @@ Pior distância: 6
 
 Este programa tem um erro de propósito. Ele deveria mostrar a ordem em que
 uma corrente de WhatsApp chega em cada pessoa, a partir da Ana. Rode com o
-rodar: o AddressSanitizer acusa um estouro do vetor fila. Responda num
-comentário: por que a fila de V posições, que deveria bastar, estourou?
-Quem entrou nela duas vezes? Depois conserte mexendo no MOMENTO em que o
-vértice é marcado.
+rodar: o AddressSanitizer acusa um estouro do vetor fila. Conserte mexendo
+no MOMENTO em que o vértice é marcado (não vale aumentar a fila). Para
+provar que ninguém entra duas vezes, acrescente um contador que soma 1 a
+cada fila[fim++] e mostre o total no fim. Rode de novo e confira.
 
 
 ```text
 Saída esperada depois do conserto:
 Ana Bia Cadu Dani
+Entradas na fila: 4
 ```
 
 **Dicas:**
@@ -990,11 +1036,11 @@ Ana Bia Cadu Dani
 1. Simule a fila no papel. Quando Bia sai, Dani entra. Quando Cadu sai,
    Dani já foi marcada?
 2. A marcação só acontece quando o vértice SAI da fila. Entre entrar e
-   sair, ele pode ser colocado de novo por outro vizinho.
-3. Resposta esperada: Dani entra duas vezes (por Bia e por Cadu), então a
-   fila precisaria de 5 posições e tem 4. O conserto é marcar visitado[v]
-   no momento em que v entra na fila (e marcar a origem antes do laço).
-   Assim cada pessoa entra uma vez só e a saída é "Ana Bia Cadu Dani".
+   sair, ele pode ser colocado de novo por outro vizinho: Dani entraria
+   duas vezes, e a fila de 4 posições precisaria de 5.
+3. Resposta esperada: marque visitado[v] no momento em que v entra na
+   fila (e marque a origem antes do laço). Assim cada pessoa entra uma vez
+   só: "Ana Bia Cadu Dani" e "Entradas na fila: 4".
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0110-bfs/E660.c
@@ -1091,7 +1137,8 @@ Sede, Lago, Ponte, Gruta, Topo, Bica. Nenhuma está errada; servem a perguntas
 diferentes. A DFS **não** dá o caminho mais curto: ela chegou ao Topo pela
 Gruta (três trilhas), mas o Lago liga direto no Topo (duas).
 
-O exemplo A222 faz a mesma DFS sem recursão, com uma pilha explícita, e
+O exemplo A221 usa a DFS para separar as arestas de árvore das de retorno e
+contar os ciclos de uma rede de cabos. O A222 faz a mesma DFS sem recursão, com uma pilha explícita, e
 mostra a pilha a cada passo.
 
 > [!WARNING]
@@ -1114,48 +1161,65 @@ mostra a pilha a cada passo.
 > [!NOTE]
 > **Pergunta para você:** se a trilha Lago–Gruta for interditada, qual passa a
 > ser a ordem da DFS a partir da Sede, e qual o recuo de cada linha? Preveja
-> antes de apagar o par `{1, 2}` no A221.
+> antes de apagar o par `{1, 2}` no programa acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0111-dfs/`](0111-dfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A221 · Trilhas do parque: DFS recursiva**
+**Exemplo A221 · Cabos do escritório: arestas de árvore e de retorno**
 
 ```c
-#include <stdbool.h>
 #include <stdio.h>
 
 #define V 6
 
-const char *nomes[V] = {"Sede", "Lago", "Gruta", "Ponte", "Topo", "Bica"};
+const char *nomes[V] = {"Servidor", "Recepcao", "RH", "Financeiro", "Diretoria", "Copa"};
 int adj[V][V];
-bool visitado[V];
+int ordem[V]; // em que momento cada sala foi descoberta; 0 = ainda não
+int relogio = 0;
+int de_arvore = 0, de_retorno = 0;
 
-void dfs(int u, int nivel) {
-    visitado[u] = true;
-    printf("%*s%s\n", 2 * nivel, "", nomes[u]); // recuo = profundidade
-    for (int v = 0; v < V; v++)
-        if (adj[u][v] && !visitado[v]) dfs(v, nivel + 1); // desce antes de olhar o próximo
+void dfs(int u, int pai) {
+    ordem[u] = ++relogio;
+    for (int v = 0; v < V; v++) {
+        if (!adj[u][v]) continue;
+        if (ordem[v] == 0) { // sala nova: a DFS desce por este cabo
+            printf("desce   %s -> %s\n", nomes[u], nomes[v]);
+            de_arvore++;
+            dfs(v, u);
+        } else if (v != pai && ordem[v] < ordem[u]) {
+            // v já está na pilha, acima de u: este cabo fecha um ciclo
+            printf("retorno %s -> %s (ciclo)\n", nomes[u], nomes[v]);
+            de_retorno++;
+        }
+        // v == pai: é o cabo por onde u chegou; não conta como ciclo
+    }
 }
 
 int main(void) {
-    int trilhas[][2] = {{0, 1}, {0, 3}, {1, 2}, {1, 4}, {2, 4}, {4, 5}};
-    for (int k = 0; k < 6; k++) {
-        adj[trilhas[k][0]][trilhas[k][1]] = 1;
-        adj[trilhas[k][1]][trilhas[k][0]] = 1;
+    int cabos[][2] = {{0, 1}, {0, 2}, {1, 2}, {2, 3}, {3, 4}, {0, 4}, {4, 5}};
+    int total = (int)(sizeof cabos / sizeof cabos[0]);
+    for (int k = 0; k < total; k++) {
+        adj[cabos[k][0]][cabos[k][1]] = 1;
+        adj[cabos[k][1]][cabos[k][0]] = 1;
     }
 
-    dfs(0, 0); // começa na Sede
+    dfs(0, -1); // o Servidor não tem pai
+    printf("Cabos: %d = %d de árvore + %d de retorno\n", total, de_arvore, de_retorno);
+    printf("Para não ter ciclo nenhum, bastariam %d cabos (V - 1)\n", V - 1);
     return 0;
 }
 // Saída:
-// Sede
-//   Lago
-//     Gruta
-//       Topo
-//         Bica
-//   Ponte
+// desce   Servidor -> Recepcao
+// desce   Recepcao -> RH
+// retorno RH -> Servidor (ciclo)
+// desce   RH -> Financeiro
+// desce   Financeiro -> Diretoria
+// retorno Diretoria -> Servidor (ciclo)
+// desce   Diretoria -> Copa
+// Cabos: 7 = 5 de árvore + 2 de retorno
+// Para não ter ciclo nenhum, bastariam 5 cabos (V - 1)
 ```
 
 ```bash
@@ -1222,25 +1286,31 @@ int main(void) {
 
 O mapa de um shopping liga seis áreas por corredores (grafo não dirigido).
 O programa abaixo faz uma DFS a partir do Hall e imprime cada área com um
-recuo de 2 espaços por nível de profundidade.
+recuo de 2 espaços por nível de profundidade. Estenda o programa: na
+frente de cada nome, mostre o número da visita (1 para a primeira área
+visitada, 2 para a segunda...) e, no fim, mostre qual área ficou mais
+funda na árvore da DFS e em que nível.
 
-a) Sem rodar, preveja a saída, com os recuos.
-b) Faça à mão a ordem da BFS a partir do Hall (vizinhos em ordem de
 
 ```text
- índice) e compare.
+Saída esperada:
+1 Hall
+  2 Praça
+    3 Cinema
+    4 Loja
+      5 Banco
+        6 Saída
+Mais fundo: Saída (nível 4)
 ```
 
 **Dicas:**
 
-1. Desenhe o grafo. Hall (0) liga em Praça (2) e Banco (4); a DFS desce
-   pela Praça primeiro, porque 2 < 4.
-2. O Banco é vizinho direto do Hall, mas a DFS chega nele por outro
-   caminho, bem mais fundo.
-3. Resposta esperada:
-   a) Hall / Praça (2 espaços) / Cinema (4) / Loja (4) / Banco (6) /
-      Saída (8), uma por linha.
-   b) BFS: Hall, Praça, Banco, Cinema, Loja, Saída.
+1. Um contador global, somado no começo de dfs, dá o número da visita.
+2. Duas globais guardam o maior nível visto e quem estava nele; atualize
+   dentro de dfs, comparando com o parâmetro nivel.
+3. Repare no Banco: ele é vizinho direto do Hall, mas a DFS chega nele
+   pela Praça e pela Loja, no nível 3.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0111-dfs/E661.c
@@ -1274,7 +1344,7 @@ Casa chega no Hospital? não
 **Dicas:**
 
 1. Em grafo dirigido, adj[u][v] = 1 só no sentido da seta.
-2. A função é a mesma do A221, sem o recuo. Para zerar entre as buscas,
+2. A função é a mesma do texto, sem o recuo. Para zerar entre as buscas,
    um laço com visitado[v] = false.
 3. Resposta esperada: a saída acima. O Hospital alcança todo mundo, mas
    ninguém chega nele: nenhuma seta entra no Hospital.
@@ -1416,8 +1486,9 @@ Sem log -> auth: sem ciclo
 Num escape room, as portas só abrem num sentido (grafo dirigido). A função
 existe_caminho deveria dizer se dá para sair de uma sala e chegar em outra.
 O programa tem DOIS erros de propósito e responde "não" para tudo. Rode,
-ache os dois e conserte. Atenção: depois de consertar o primeiro, a
-resposta do meio continua errada.
+ache os dois, conserte e rode de novo até a saída bater com a esperada.
+Atenção: depois de consertar o primeiro, a resposta do meio continua
+errada.
 
 
 ```text
@@ -1565,7 +1636,8 @@ começa com 4 (rua direta) e cai para 3, e no Mercado, que cai de 9 para 8:
 | Mercado (8) | | | | **8** | 11 |
 | Praia (11) | | | | | **11** |
 
-O exemplo A224 usa Dijkstra num grafo dirigido (passagens de ônibus em
+O exemplo A223 para o Dijkstra assim que o destino é fixado, sem calcular o
+mapa inteiro. O A224 usa Dijkstra num grafo dirigido (passagens de ônibus em
 reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 
 > [!WARNING]
@@ -1589,73 +1661,78 @@ reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 > [!NOTE]
 > **Pergunta para você:** se a rua Padaria–Praia passar a levar 7 minutos em
 > vez de 10, qual é a nova rota e o novo tempo até a Praia? Refaça a tabela
-> antes de trocar o `10` no A223.
+> antes de trocar o `10` no programa acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0112-dijkstra/`](0112-dijkstra/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A223 · O caminho mais rápido até a praia**
+**Exemplo A223 · O entregador que para quando chega**
 
 ```c
 #include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 
-#define V 5
-#define INFINITO INT_MAX // "ainda não sei chegar"
+#define V 7
+#define INFINITO INT_MAX
 
 int main(void) {
-    const char *nomes[V] = {"Casa", "Escola", "Padaria", "Mercado", "Praia"};
-    int peso[V][V] = {0}; // minutos; 0 = sem rua direta
-    int ruas[][3] = {{0, 2, 4}, {0, 1, 1}, {1, 2, 2}, {2, 3, 5}, {1, 3, 8}, {3, 4, 3}, {2, 4, 10}};
-    for (int k = 0; k < 7; k++) {
-        peso[ruas[k][0]][ruas[k][1]] = ruas[k][2];
-        peso[ruas[k][1]][ruas[k][0]] = ruas[k][2]; // mão dupla
+    const char *nomes[V] = {"Loja", "Banco", "Igreja", "Museu", "Teatro", "Estadio", "Aeroporto"};
+    int minutos[V][V] = {0}; // de bicicleta; 0 = sem rua direta
+    int ruas[][3] = {{0, 1, 2}, {0, 2, 5}, {1, 2, 1}, {1, 3, 7}, {2, 3, 3},
+                     {3, 4, 4}, {4, 5, 6}, {2, 6, 20}, {5, 6, 2}};
+    int total = (int)(sizeof ruas / sizeof ruas[0]);
+    for (int k = 0; k < total; k++) {
+        minutos[ruas[k][0]][ruas[k][1]] = ruas[k][2];
+        minutos[ruas[k][1]][ruas[k][0]] = ruas[k][2];
     }
 
+    int origem = 0, destino = 3; // da Loja até o Museu
     int dist[V], anterior[V];
-    bool fixo[V]; // distância definitiva?
+    bool fixo[V] = {false};
     for (int v = 0; v < V; v++) {
         dist[v] = INFINITO;
         anterior[v] = -1;
-        fixo[v] = false;
     }
-    dist[0] = 0; // saindo de Casa
+    dist[origem] = 0;
 
+    int fixados = 0;
     for (int passo = 0; passo < V; passo++) {
-        // escolhe o vértice não fixo com a menor distância conhecida
         int u = -1;
         for (int v = 0; v < V; v++)
             if (!fixo[v] && dist[v] != INFINITO && (u == -1 || dist[v] < dist[u])) u = v;
-        if (u == -1) break; // o que sobrou é inalcançável
+        if (u == -1) break;
         fixo[u] = true;
-
-        // relaxa: passar por u encurta o caminho até v?
-        for (int v = 0; v < V; v++) {
-            if (peso[u][v] && !fixo[v] && dist[u] + peso[u][v] < dist[v]) {
-                dist[v] = dist[u] + peso[u][v];
+        fixados++;
+        printf("fixa %-6s %2d min\n", nomes[u], dist[u]);
+        // fixado é definitivo: nada que venha depois melhora o Museu
+        if (u == destino) break;
+        for (int v = 0; v < V; v++)
+            if (minutos[u][v] && !fixo[v] && dist[u] + minutos[u][v] < dist[v]) {
+                dist[v] = dist[u] + minutos[u][v];
                 anterior[v] = u;
             }
-        }
     }
 
-    for (int v = 0; v < V; v++) printf("%s: %d min\n", nomes[v], dist[v]);
-
     int rota[V], n = 0;
-    for (int v = 4; v != -1; v = anterior[v]) rota[n++] = v;
-    printf("Rota até a Praia:");
+    for (int v = destino; v != -1; v = anterior[v]) rota[n++] = v;
+    printf("Rota:");
     for (int i = n - 1; i >= 0; i--) printf(" %s%s", nomes[rota[i]], i > 0 ? " ->" : "");
-    printf("\n");
+    printf(" (%d min)\n", dist[destino]);
+    // rodando até o fim, o Aeroporto cairia para 18 (Museu, Teatro, Estadio)
+    printf("Fixou %d de %d lugares; o Aeroporto ficou com dist ", fixados, V);
+    if (dist[6] == INFINITO) printf("INFINITO\n");
+    else printf("%d, que não é a resposta final\n", dist[6]);
     return 0;
 }
 // Saída:
-// Casa: 0 min
-// Escola: 1 min
-// Padaria: 3 min
-// Mercado: 8 min
-// Praia: 11 min
-// Rota até a Praia: Casa -> Escola -> Padaria -> Mercado -> Praia
+// fixa Loja    0 min
+// fixa Banco   2 min
+// fixa Igreja  3 min
+// fixa Museu   6 min
+// Rota: Loja -> Banco -> Igreja -> Museu (6 min)
+// Fixou 4 de 7 lugares; o Aeroporto ficou com dist 23, que não é a resposta final
 ```
 
 ```bash
@@ -1747,19 +1824,31 @@ CD-A 7, CD-B 2, B-A 3, B-C 8, A-C 1, A-D 6, C-D 2
 ```
 
 
-Sem escrever código, faça o teste de mesa do Dijkstra a partir do CD numa
-tabela como a do texto: uma linha por vértice fixado, mostrando o vetor
-dist depois de relaxar os vizinhos. Diga a distância final de cada bairro e
-o caminho até D.
+O esqueleto já monta o grafo e roda o Dijkstra a partir do CD, mas não
+mostra nada. Faça o programa imprimir o próprio teste de mesa: depois de
+relaxar os vizinhos de cada vértice fixado, mostre quem foi fixado e o
+vetor dist inteiro (use - para INFINITO). No fim, mostre o caminho até D
+seguindo anterior[] e a distância.
+
+
+```text
+Saída esperada:
+Fixa CD: dist = 0 7 2 - -
+Fixa B: dist = 0 5 2 10 -
+Fixa A: dist = 0 5 2 6 11
+Fixa C: dist = 0 5 2 6 8
+Fixa D: dist = 0 5 2 6 8
+Caminho até D: CD -> B -> A -> C -> D (8 km)
+```
 
 **Dicas:**
 
-1. Comece com CD = 0 e o resto ∞. Fixar o CD deixa A = 7 e B = 2.
-2. O próximo a fixar é sempre o de menor dist entre os não fixos: o B.
-   Passando por B, A cai de 7 para 5.
-3. Resposta esperada: ordem de fixação CD (0), B (2), A (5), C (6), D (8).
-   Finais: A = 5, B = 2, C = 6, D = 8. Caminho até D: CD -> B -> A -> C -> D
-   (2 + 3 + 1 + 2 = 8 km).
+1. O printf da linha vai no fim do corpo do for (passo), depois do laço
+   que relaxa. Um laço interno imprime dist[v] ou "-".
+2. O caminho sai de trás para frente: guarde num vetor seguindo
+   anterior[] a partir de D e imprima do fim para o começo.
+3. Resposta esperada: a saída acima. Repare no A, que cai de 7 para 5
+   quando o B é fixado, e no D, que cai de 11 para 8.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0112-dijkstra/E667.c
@@ -1888,8 +1977,9 @@ Oeste: 5 min
 Este programa tem um erro de propósito. Ele calcula o voo mais barato
 saindo de São Paulo. Manaus e Belém têm voo entre si, mas nenhum voo liga
 as duas ao resto do mapa. Rode com o rodar: o UndefinedBehaviorSanitizer
-acusa "signed integer overflow". Explique num comentário em que linha e por
-que a conta estoura, e conserte sem trocar o valor de INFINITO.
+acusa "signed integer overflow" e aponta a linha da conta que estoura.
+Conserte sem trocar o valor de INFINITO e rode de novo até a saída bater
+com a esperada, sem nenhum aviso do sanitizer.
 
 
 ```text
@@ -1927,27 +2017,41 @@ Base -> A 5, Base -> B 6, B -> A -3, A -> C 1
 ```
 
 
-a) Sem rodar, preveja o que o Dijkstra abaixo mostra.
-b) Calcule à mão o custo mínimo de verdade até A e até C.
-c) Explique por que o Dijkstra erra aqui. Qual hipótese do algoritmo foi
+O Dijkstra do esqueleto roda sem erro, mas dá a resposta errada. Estenda o
+programa em duas partes, depois das linhas que ele já imprime:
+
+Primeiro, a CONFERÊNCIA: percorra todas as arestas u -> v e mostre cada
+uma que ainda consegue encurtar dist[v] (dist[u] + custo < dist[v]). Num
+resultado certo, nenhuma aparece.
+
+Depois, o CERTO: calcule as distâncias de novo num vetor separado com o
+algoritmo de Bellman-Ford: comece com 0 na Base e INFINITO no resto e
+relaxe TODAS as arestas, repetindo isso V - 1 vezes, sem fixar ninguém.
+
 
 ```text
- quebrada?
+Saída esperada:
+A: R$ 5
+B: R$ 6
+C: R$ 6
+Ainda encurta: B -> A (6 + -3 = 3 < 5)
+Com Bellman-Ford:
+A: R$ 3
+B: R$ 6
+C: R$ 4
 ```
 
 **Dicas:**
 
-1. Simule: fixa Base; A = 5, B = 6. O menor é A, que é FIXADO com 5.
-2. Quando B é fixado e olha para A, A já está fixo: o código nem tenta.
-   E mesmo se tentasse, C já teria sido calculado com o A antigo.
-3. Resposta esperada:
-   a) A: R$ 5 / B: R$ 6 / C: R$ 6
-   b) A = 3 (Base -> B -> A: 6 - 3) e C = 4 (Base -> B -> A -> C).
-   c) Dijkstra supõe pesos NÃO negativos: ao fixar o menor dist, assume que
-      nenhum caminho por outro vértice pode ficar mais barato, porque somar
-      pesos só aumenta. Com peso negativo, um caminho mais longo pode
-      ficar mais barato depois. (Para isso existe o algoritmo de
-      Bellman-Ford.)
+1. Simule o Dijkstra: fixa Base; A = 5, B = 6. O menor é A, que é FIXADO
+   com 5. Quando B é fixado e olha para A, A já está fixo: o código nem
+   tenta. Dijkstra supõe pesos NÃO negativos.
+2. Na conferência e no Bellman-Ford, pule u com dist INFINITO antes de
+   somar (INT_MAX + peso estoura).
+3. Bellman-Ford: três laços, volta de 0 a V-2, u e v. Um caminho mínimo
+   tem no máximo V - 1 arestas, e cada volta acerta pelo menos mais uma.
+4. Resposta esperada: a saída acima. A = 3 (Base -> B -> A: 6 - 3) e
+   C = 4 (Base -> B -> A -> C).
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0112-dijkstra/E672.c
@@ -2121,7 +2225,9 @@ existe sozinho: menor em quê? Se toda aresta custa o mesmo, a BFS resolve em
 O(V + E) e é mais simples. Se os pesos variam, a BFS dá uma resposta errada
 com toda a confiança, como os 16 km acima.
 
-O exemplo A226 traz um quarto problema: ligar cinco cidades com fibra óptica
+O exemplo A225 compara BFS e Dijkstra destino por destino num mapa com duas
+partes soltas, e usa a DFS para contar as partes. O A226 traz um quarto
+problema: ligar cinco cidades com fibra óptica
 gastando o mínimo. Não é caminho de A até B, é uma **árvore geradora
 mínima**: um conjunto de cabos que conecta todo mundo com a menor soma. O
 algoritmo de **Prim** faz isso com o código do Dijkstra trocando uma linha: em
@@ -2147,13 +2253,13 @@ vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 > [!NOTE]
 > **Pergunta para você:** se a estrada Centro–Vila cair de 12 para 5 km, as
 > duas rotas viram a mesma? Quantos km e quantos trechos? Preveja antes de
-> mudar o A225.
+> mudar o programa acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0113-juntando-tudo/`](0113-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A225 · A central de entregas: DFS, BFS e Dijkstra juntos**
+**Exemplo A225 · Mudanças: BFS ou Dijkstra, destino por destino**
 
 ```c
 #include <limits.h>
@@ -2174,14 +2280,14 @@ void ligar(Grafo *g, int a, int b, int km) {
     g->km[b][a] = km;
 }
 
-// DFS: marca tudo que dá para alcançar a partir de u
-void dfs(const Grafo *g, int u, bool visitado[]) {
-    visitado[u] = true;
+// DFS: pinta com o número do grupo tudo que se alcança a partir de u
+void dfs(const Grafo *g, int u, int grupo[], int cor) {
+    grupo[u] = cor;
     for (int v = 0; v < g->n; v++)
-        if (g->km[u][v] && !visitado[v]) dfs(g, v, visitado);
+        if (g->km[u][v] && grupo[v] == 0) dfs(g, v, grupo, cor);
 }
 
-// BFS: menor número de trechos
+// BFS: pai[] da rota com menos trechos
 void bfs(const Grafo *g, int origem, int pai[]) {
     int fila[MAX], inicio = 0, fim = 0;
     bool visto[MAX] = {false};
@@ -2199,7 +2305,7 @@ void bfs(const Grafo *g, int origem, int pai[]) {
     }
 }
 
-// Dijkstra: menor soma de km
+// Dijkstra: pai[] da rota com menos km
 void dijkstra(const Grafo *g, int origem, int pai[]) {
     int dist[MAX];
     bool fixo[MAX] = {false};
@@ -2222,56 +2328,63 @@ void dijkstra(const Grafo *g, int origem, int pai[]) {
     }
 }
 
-// mostra o caminho guardado em pai[] e soma trechos e km
-void mostrar_rota(const Grafo *g, const int pai[], int destino) {
-    int rota[MAX], n = 0, total = 0;
-    for (int v = destino; v != -1; v = pai[v]) rota[n++] = v;
-    for (int i = n - 1; i >= 0; i--) {
-        printf("%s%s", g->nomes[rota[i]], i > 0 ? " -> " : "");
-        if (i > 0) total += g->km[rota[i]][rota[i - 1]];
+// soma os km da rota guardada em pai[] e conta os trechos
+int km_da_rota(const Grafo *g, const int pai[], int destino, int *trechos) {
+    int total = 0;
+    *trechos = 0;
+    for (int v = destino; pai[v] != -1; v = pai[v]) {
+        total += g->km[pai[v]][v];
+        (*trechos)++;
     }
-    printf(" (%d trechos, %d km)\n", n - 1, total);
+    return total;
 }
 
 int main(void) {
-    Grafo g = {.n = 7, .nomes = {"CD", "Centro", "Feira", "Porto", "Morro", "Vila", "Ilha"}};
-    ligar(&g, 0, 1, 4);
+    Grafo g = {.n = 8, .nomes = {"Base", "Alto", "Baixo", "Rio", "Serra", "Mar", "Lagoa", "Dunas"}};
+    ligar(&g, 0, 1, 5);
     ligar(&g, 0, 2, 2);
-    ligar(&g, 2, 1, 1);
-    ligar(&g, 1, 3, 7);
-    ligar(&g, 2, 4, 3);
-    ligar(&g, 4, 3, 2);
-    ligar(&g, 3, 5, 3);
-    ligar(&g, 1, 5, 12);
-    // a Ilha (6) só tem balsa: nenhuma estrada
+    ligar(&g, 2, 1, 2);
+    ligar(&g, 1, 4, 9);
+    ligar(&g, 2, 3, 3);
+    ligar(&g, 3, 4, 3);
+    ligar(&g, 4, 5, 2);
+    ligar(&g, 3, 5, 8);
+    ligar(&g, 6, 7, 4); // Lagoa e Dunas: estrada só entre elas
 
-    int cd = 0, vila = 5;
-    bool visitado[MAX] = {false};
-    dfs(&g, cd, visitado);
-    int alcancaveis = 0;
-    for (int v = 0; v < g.n; v++) alcancaveis += visitado[v];
-    printf("Alcançáveis a partir do CD: %d de %d (fora:", alcancaveis, g.n);
+    int grupo[MAX] = {0}, grupos = 0;
     for (int v = 0; v < g.n; v++)
-        if (!visitado[v]) printf(" %s", g.nomes[v]);
-    printf(")\n");
+        if (grupo[v] == 0) dfs(&g, v, grupo, ++grupos);
+    printf("Grupos ligados por estrada: %d\n\n", grupos);
 
-    if (!visitado[vila]) {
-        printf("Sem rota até %s\n", g.nomes[vila]);
-        return 0;
+    int base = 0, pai_bfs[MAX], pai_dij[MAX];
+    bfs(&g, base, pai_bfs);
+    dijkstra(&g, base, pai_dij);
+
+    printf("Destino   %-19s%s\n", "BFS", "Dijkstra");
+    for (int v = 1; v < g.n; v++) {
+        if (grupo[v] != grupo[base]) { // a DFS já respondeu: nem adianta procurar
+            printf("%-8s  sem estrada a partir da Base\n", g.nomes[v]);
+            continue;
+        }
+        int t_bfs, t_dij;
+        int km_bfs = km_da_rota(&g, pai_bfs, v, &t_bfs);
+        int km_dij = km_da_rota(&g, pai_dij, v, &t_dij);
+        printf("%-8s  %d trecho(s) %2d km  %d trecho(s) %2d km%s\n", g.nomes[v], t_bfs, km_bfs, t_dij,
+               km_dij, km_bfs > km_dij ? "  <- a BFS roda mais" : "");
     }
-    int pai[MAX];
-    bfs(&g, cd, pai);
-    printf("Menos trechos: ");
-    mostrar_rota(&g, pai, vila);
-    dijkstra(&g, cd, pai);
-    printf("Menos km:      ");
-    mostrar_rota(&g, pai, vila);
     return 0;
 }
 // Saída:
-// Alcançáveis a partir do CD: 6 de 7 (fora: Ilha)
-// Menos trechos: CD -> Centro -> Vila (2 trechos, 16 km)
-// Menos km:      CD -> Feira -> Morro -> Porto -> Vila (4 trechos, 10 km)
+// Grupos ligados por estrada: 2
+//
+// Destino   BFS                Dijkstra
+// Alto      1 trecho(s)  5 km  2 trecho(s)  4 km  <- a BFS roda mais
+// Baixo     1 trecho(s)  2 km  1 trecho(s)  2 km
+// Rio       2 trecho(s)  5 km  2 trecho(s)  5 km
+// Serra     2 trecho(s) 14 km  3 trecho(s)  8 km  <- a BFS roda mais
+// Mar       3 trecho(s) 16 km  4 trecho(s) 10 km  <- a BFS roda mais
+// Lagoa     sem estrada a partir da Base
+// Dunas     sem estrada a partir da Base
 ```
 
 ```bash
@@ -2384,7 +2497,8 @@ Aresta inválida: 1 7
 **Exercício E674** · ★☆☆
 
 O programa abaixo roda os três algoritmos do módulo no mesmo grafo
-ponderado não dirigido, sempre a partir de A:
+ponderado não dirigido, sempre a partir de A, e mostra a ordem da BFS, a
+da DFS e as distâncias do Dijkstra:
 
 
 ```text
@@ -2392,17 +2506,28 @@ A-B 1, A-C 4, A-E 9, B-D 2, C-D 1, D-E 3
 ```
 
 
-Sem rodar, preveja as três linhas da saída. Depois rode e confira.
+Estenda o programa: guarde um pai[] na BFS e outro no Dijkstra e, no fim,
+mostre as duas rotas até E com a soma dos pesos de cada uma.
+
+
+```text
+Saída esperada:
+BFS: A B C E D
+DFS: A B D C E
+Dijkstra: A=0 B=1 C=4 D=3 E=6
+Menos arestas até E: A -> E (9)
+Menos peso até E: A -> B -> D -> E (6)
+```
 
 **Dicas:**
 
-1. BFS e DFS ignoram os pesos: olham só se a aresta existe.
-2. Na DFS, de B você desce para D antes de voltar para C.
-3. Dijkstra: E tem aresta direta de 9, mas A -> B -> D -> E custa 6.
-4. Resposta esperada:
-   BFS: A B C E D
-   DFS: A B D C E
-   Dijkstra: A=0 B=1 C=4 D=3 E=6
+1. Anote pai[v] = u onde a BFS marca visto[v] e onde o Dijkstra melhora
+   dist[v]. Comece os dois vetores com -1.
+2. Uma função void mostrar_rota(const int pai[], int destino) serve para
+   os dois: guarda a rota num vetor seguindo pai[], imprime de trás para
+   frente e soma peso[rota[i]][rota[i - 1]].
+3. Resposta esperada: a saída acima. A BFS ignora os pesos e fica com a
+   aresta direta de 9.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E674.c
@@ -2411,8 +2536,9 @@ Sem rodar, preveja as três linhas da saída. Depois rode e confira.
 **Exercício E675** · ★★☆
 
 A prefeitura vai construir um pronto-socorro num dos seis lugares do mapa
-do A225 (sem a Ilha). O critério: o lugar onde a PIOR distância até
-qualquer outro é a menor possível. As estradas, em km (mão dupla):
+do texto do assunto (sem a Ilha). O critério: o lugar onde a PIOR
+distância até qualquer outro é a menor possível. As estradas, em km
+(mão dupla):
 
 
 ```text
@@ -2515,7 +2641,7 @@ GATO -> PEIXE: impossível
 
 1. bool vizinhas(const char *a, const char *b): strlen igual e um só
    a[i] != b[i]. int indice(const char *p) acha a posição com strcmp.
-2. A BFS é a do A219, trocando "adj[u][v]" por "vizinhas(palavras[u],
+2. A BFS é a do texto do assunto 0110, trocando "adj[u][v]" por "vizinhas(palavras[u],
    palavras[v])".
 3. Empates: GATO -> MATO -> MATA também leva a BOLA em 5 passos; a BFS
    fica com GATA porque ela vem antes na lista.
@@ -2659,7 +2785,7 @@ Na BFS, guarde `cont[origem] = 1` e, ao examinar a aresta u-v: se v é novo,
 
 </details>
 
-**7. Estrada crítica.** No mapa da transportadora do A225 (sem a Ilha), existe
+**7. Estrada crítica.** No mapa da transportadora do assunto 0113 (sem a Ilha), existe
 alguma estrada que, se cair, deixa algum lugar sem acesso ao CD? Como
 descobrir com o que você já sabe?
 

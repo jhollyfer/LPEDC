@@ -3,23 +3,29 @@
 //
 // O mapa de um shopping liga seis áreas por corredores (grafo não dirigido).
 // O programa abaixo faz uma DFS a partir do Hall e imprime cada área com um
-// recuo de 2 espaços por nível de profundidade.
+// recuo de 2 espaços por nível de profundidade. Estenda o programa: na
+// frente de cada nome, mostre o número da visita (1 para a primeira área
+// visitada, 2 para a segunda...) e, no fim, mostre qual área ficou mais
+// funda na árvore da DFS e em que nível.
 //
-// a) Sem rodar, preveja a saída, com os recuos.
-// b) Faça à mão a ordem da BFS a partir do Hall (vizinhos em ordem de
-//    índice) e compare.
+//   Saída esperada:
+//   1 Hall
+//     2 Praça
+//       3 Cinema
+//       4 Loja
+//         5 Banco
+//           6 Saída
+//   Mais fundo: Saída (nível 4)
 //
 // Dicas:
-// 1. Desenhe o grafo. Hall (0) liga em Praça (2) e Banco (4); a DFS desce
-//    pela Praça primeiro, porque 2 < 4.
-// 2. O Banco é vizinho direto do Hall, mas a DFS chega nele por outro
-//    caminho, bem mais fundo.
-// 3. Resposta esperada:
-//    a) Hall / Praça (2 espaços) / Cinema (4) / Loja (4) / Banco (6) /
-//       Saída (8), uma por linha.
-//    b) BFS: Hall, Praça, Banco, Cinema, Loja, Saída.
+// 1. Um contador global, somado no começo de dfs, dá o número da visita.
+// 2. Duas globais guardam o maior nível visto e quem estava nele; atualize
+//    dentro de dfs, comparando com o parâmetro nivel.
+// 3. Repare no Banco: ele é vizinho direto do Hall, mas a DFS chega nele
+//    pela Praça e pela Loja, no nível 3.
+// 4. Resposta esperada: a saída acima.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (estenda o código):
 
 #include <stdbool.h>
 #include <stdio.h>

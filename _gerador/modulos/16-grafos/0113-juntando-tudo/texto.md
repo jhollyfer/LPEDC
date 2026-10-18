@@ -164,7 +164,9 @@ existe sozinho: menor em quê? Se toda aresta custa o mesmo, a BFS resolve em
 O(V + E) e é mais simples. Se os pesos variam, a BFS dá uma resposta errada
 com toda a confiança, como os 16 km acima.
 
-O exemplo A226 traz um quarto problema: ligar cinco cidades com fibra óptica
+O exemplo A225 compara BFS e Dijkstra destino por destino num mapa com duas
+partes soltas, e usa a DFS para contar as partes. O A226 traz um quarto
+problema: ligar cinco cidades com fibra óptica
 gastando o mínimo. Não é caminho de A até B, é uma **árvore geradora
 mínima**: um conjunto de cabos que conecta todo mundo com a menor soma. O
 algoritmo de **Prim** faz isso com o código do Dijkstra trocando uma linha: em
@@ -190,6 +192,6 @@ vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 > [!NOTE]
 > **Pergunta para você:** se a estrada Centro–Vila cair de 12 para 5 km, as
 > duas rotas viram a mesma? Quantos km e quantos trechos? Preveja antes de
-> mudar o A225.
+> mudar o programa acima.
 
 {{pratique}}

@@ -1,58 +1,55 @@
-// A219 · A recrutadora a três conexões
+// A219 · As ondas da BFS e quem fica de fora
 
 #include <stdio.h>
 
-#define V 6
+#define V 8
 
 int main(void) {
-    const char *nomes[V] = {"Lia", "Max", "Nina", "Otto", "Pedro", "Rita"};
+    const char *nomes[V] = {"Bruna", "Caio", "Davi", "Eva", "Fred", "Gil", "Hugo", "Iara"};
     int adj[V][V] = {0};
-    int conexoes[][2] = {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {2, 4}, {3, 5}, {4, 5}};
-    for (int k = 0; k < 7; k++) {
-        adj[conexoes[k][0]][conexoes[k][1]] = 1;
-        adj[conexoes[k][1]][conexoes[k][0]] = 1;
+    // Gil e Hugo só conhecem um ao outro: formam uma parte solta do grafo
+    int conhece[][2] = {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {3, 4}, {4, 7}, {5, 6}};
+    int total = (int)(sizeof conhece / sizeof conhece[0]);
+    for (int k = 0; k < total; k++) {
+        adj[conhece[k][0]][conhece[k][1]] = 1;
+        adj[conhece[k][1]][conhece[k][0]] = 1;
     }
 
-    int dist[V], pai[V];
-    for (int v = 0; v < V; v++) {
-        dist[v] = -1; // -1: ainda não descoberto
-        pai[v] = -1;
-    }
-
-    int fila[V]; // cada vértice entra uma vez só: V posições bastam
-    int inicio = 0, fim = 0;
-    int origem = 0; // Lia
-    dist[origem] = 0;
-    fila[fim++] = origem;
-
-    printf("Ordem da visita:\n");
+    int dist[V], fila[V], inicio = 0, fim = 0;
+    for (int v = 0; v < V; v++) dist[v] = -1;
+    dist[0] = 0; // a fofoca começa com a Bruna
+    fila[fim++] = 0;
+    int maior = 0;
     while (inicio < fim) {
-        int u = fila[inicio++]; // tira da frente
-        printf("  %-5s distância %d\n", nomes[u], dist[u]);
-        for (int v = 0; v < V; v++) {
+        int u = fila[inicio++];
+        if (dist[u] > maior) maior = dist[u];
+        for (int v = 0; v < V; v++)
             if (adj[u][v] && dist[v] == -1) {
-                dist[v] = dist[u] + 1; // marca ao ENTRAR na fila
-                pai[v] = u;
+                dist[v] = dist[u] + 1;
                 fila[fim++] = v;
             }
-        }
     }
 
-    // o caminho sai de trás para frente, seguindo pai[]
-    int destino = 5; // Rita
-    int caminho[V], n = 0;
-    for (int v = destino; v != -1; v = pai[v]) caminho[n++] = v;
-    printf("Caminho até %s:", nomes[destino]);
-    for (int i = n - 1; i >= 0; i--) printf(" %s%s", nomes[caminho[i]], i > 0 ? " ->" : "");
-    printf(" (distância %d)\n", dist[destino]);
+    // agrupa por distância: cada linha é uma onda
+    for (int d = 0; d <= maior; d++) {
+        printf("Onda %d:", d);
+        for (int v = 0; v < V; v++)
+            if (dist[v] == d) printf(" %s", nomes[v]);
+        printf("\n");
+    }
+
+    // quem a fila nunca recebeu continua com -1
+    printf("Nunca ficam sabendo:");
+    for (int v = 0; v < V; v++)
+        if (dist[v] == -1) printf(" %s", nomes[v]);
+    printf("\nA fila recebeu %d de %d pessoas\n", fim, V);
     return 0;
 }
 // Saída:
-// Ordem da visita:
-//   Lia   distância 0
-//   Max   distância 1
-//   Nina  distância 1
-//   Otto  distância 2
-//   Pedro distância 2
-//   Rita  distância 3
-// Caminho até Rita: Lia -> Max -> Otto -> Rita (distância 3)
+// Onda 0: Bruna
+// Onda 1: Caio Davi
+// Onda 2: Eva
+// Onda 3: Fred
+// Onda 4: Iara
+// Nunca ficam sabendo: Gil Hugo
+// A fila recebeu 6 de 8 pessoas

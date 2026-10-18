@@ -2,18 +2,28 @@
 // Exercício E655 · ★☆☆
 //
 // O mapa abaixo liga seis bairros por linhas de ônibus diretas (grafo não
-// dirigido). O programa roda uma BFS a partir da Penha. Sem rodar, preveja a
-// ordem em que os bairros são visitados e a distância de cada um. Faça a
-// tabela da fila no papel. Depois rode e confira.
+// dirigido). O programa já roda uma BFS a partir da Penha e mostra a ordem
+// da visita com a distância de cada bairro. Estenda o programa: acrescente
+// o vetor pai[] (quem descobriu cada bairro) e, depois da linha da ordem,
+// mostre uma linha por bairro, em ordem de índice, dizendo quem o descobriu.
+//
+//   Saída esperada:
+//   Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
+//   Centro: descoberto por Lapa
+//   Lapa: descoberto por Penha
+//   Moema: descoberto por Penha
+//   Penha: origem
+//   Saude: descoberto por Moema
+//   Tatuape: descoberto por Penha
 //
 // Dicas:
-// 1. Os vizinhos são examinados em ordem de índice (v de 0 a 5).
-// 2. A Penha (3) é vizinha de Lapa (1), Moema (2) e Tatuape (5): os três
-//    entram na fila nessa ordem, todos com distância 1.
-// 3. Resposta esperada:
-//    Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
+// 1. int pai[V], todos começando com -1 (a origem continua com -1).
+// 2. Anote pai[v] = u no mesmo lugar em que o código anota dist[v].
+// 3. Repare na Saude: ela é vizinha de Moema e de Tatuape, mas quem a
+//    descobre é quem sai primeiro da fila.
+// 4. Resposta esperada: a saída acima.
 //
-// Escreva sua resposta abaixo (a saída prevista, como comentário):
+// Escreva sua resposta abaixo (estenda o código):
 
 #include <stdio.h>
 

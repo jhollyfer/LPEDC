@@ -2,22 +2,31 @@
 // Exercício E674 · ★☆☆
 //
 // O programa abaixo roda os três algoritmos do módulo no mesmo grafo
-// ponderado não dirigido, sempre a partir de A:
+// ponderado não dirigido, sempre a partir de A, e mostra a ordem da BFS, a
+// da DFS e as distâncias do Dijkstra:
 //
 //   A-B 1, A-C 4, A-E 9, B-D 2, C-D 1, D-E 3
 //
-// Sem rodar, preveja as três linhas da saída. Depois rode e confira.
+// Estenda o programa: guarde um pai[] na BFS e outro no Dijkstra e, no fim,
+// mostre as duas rotas até E com a soma dos pesos de cada uma.
+//
+//   Saída esperada:
+//   BFS: A B C E D
+//   DFS: A B D C E
+//   Dijkstra: A=0 B=1 C=4 D=3 E=6
+//   Menos arestas até E: A -> E (9)
+//   Menos peso até E: A -> B -> D -> E (6)
 //
 // Dicas:
-// 1. BFS e DFS ignoram os pesos: olham só se a aresta existe.
-// 2. Na DFS, de B você desce para D antes de voltar para C.
-// 3. Dijkstra: E tem aresta direta de 9, mas A -> B -> D -> E custa 6.
-// 4. Resposta esperada:
-//    BFS: A B C E D
-//    DFS: A B D C E
-//    Dijkstra: A=0 B=1 C=4 D=3 E=6
+// 1. Anote pai[v] = u onde a BFS marca visto[v] e onde o Dijkstra melhora
+//    dist[v]. Comece os dois vetores com -1.
+// 2. Uma função void mostrar_rota(const int pai[], int destino) serve para
+//    os dois: guarda a rota num vetor seguindo pai[], imprime de trás para
+//    frente e soma peso[rota[i]][rota[i - 1]].
+// 3. Resposta esperada: a saída acima. A BFS ignora os pesos e fica com a
+//    aresta direta de 9.
 //
-// Escreva sua resposta abaixo (a saída prevista, como comentário):
+// Escreva sua resposta abaixo (estenda o código):
 
 #include <limits.h>
 #include <stdbool.h>

@@ -1,44 +1,62 @@
-// A217 · A ciclovia na matriz
+// A217 · Quilômetros na matriz e a vila isolada
 
 #include <stdio.h>
 
-#define V 5 // número de vértices (pontos da cidade)
+#define V 5
 
 int main(void) {
-    const char *nomes[V] = {"Centro", "Praia", "Feira", "Parque", "Estadio"};
-    int adj[V][V] = {0}; // adj[i][j] == 1: existe ciclovia entre i e j
+    const char *nomes[V] = {"Sede", "Vila", "Sitio", "Porto", "Ilha"};
+    int km[V][V] = {0}; // grafo ponderado: km[i][j] é o tamanho da estrada; 0 = sem estrada
 
-    // as ciclovias, como pares de vértices
-    int ciclovias[][2] = {{0, 1}, {0, 2}, {1, 2}, {2, 3}, {3, 4}};
-    int total = (int)(sizeof ciclovias / sizeof ciclovias[0]);
-
+    int estradas[][3] = {{0, 1, 12}, {0, 3, 30}, {1, 2, 8}, {2, 3, 15}}; // {a, b, km}
+    int total = (int)(sizeof estradas / sizeof estradas[0]);
     for (int k = 0; k < total; k++) {
-        int a = ciclovias[k][0];
-        int b = ciclovias[k][1];
-        adj[a][b] = 1;
-        adj[b][a] = 1; // não dirigido: vale nos dois sentidos
+        int a = estradas[k][0], b = estradas[k][1];
+        km[a][b] = estradas[k][2];
+        km[b][a] = estradas[k][2]; // mão dupla: o mesmo peso nos dois sentidos
     }
 
-    printf("     0 1 2 3 4\n");
-    int soma_graus = 0;
+    // "i e j são vizinhos?" é olhar uma casa só: O(1)
+    int perguntas[][2] = {{0, 1}, {0, 2}, {3, 2}};
+    for (int k = 0; k < 3; k++) {
+        int a = perguntas[k][0], b = perguntas[k][1];
+        if (km[a][b]) printf("%s-%s: estrada de %d km\n", nomes[a], nomes[b], km[a][b]);
+        else printf("%s-%s: sem estrada direta\n", nomes[a], nomes[b]);
+    }
+
+    // listar os vizinhos é varrer a linha inteira: O(V)
+    int isolados = 0;
     for (int i = 0; i < V; i++) {
         int grau = 0;
-        printf("  %d ", i);
+        printf("%-5s:", nomes[i]);
         for (int j = 0; j < V; j++) {
-            printf(" %d", adj[i][j]);
-            grau += adj[i][j]; // o grau é a soma da linha
+            if (km[i][j]) {
+                printf(" %s(%d)", nomes[j], km[i][j]);
+                grau++;
+            }
         }
-        printf("  %-8s grau %d\n", nomes[i], grau);
-        soma_graus += grau;
+        if (grau == 0) {
+            printf(" ninguém, grau 0"); // vértice isolado: a linha inteira é zero
+            isolados++;
+        }
+        printf("\n");
     }
-    printf("Soma dos graus: %d = 2 x %d ciclovias\n", soma_graus, total);
+
+    int soma_km = 0;
+    for (int i = 0; i < V; i++)
+        for (int j = i + 1; j < V; j++) soma_km += km[i][j]; // acima da diagonal: cada estrada uma vez
+    printf("Rede: %d estradas, %d km\n", total, soma_km);
+    if (isolados > 0) printf("Vértices isolados: %d, então o grafo não é conexo\n", isolados);
     return 0;
 }
 // Saída:
-//      0 1 2 3 4
-//   0  0 1 1 0 0  Centro   grau 2
-//   1  1 0 1 0 0  Praia    grau 2
-//   2  1 1 0 1 0  Feira    grau 3
-//   3  0 0 1 0 1  Parque   grau 2
-//   4  0 0 0 1 0  Estadio  grau 1
-// Soma dos graus: 10 = 2 x 5 ciclovias
+// Sede-Vila: estrada de 12 km
+// Sede-Sitio: sem estrada direta
+// Porto-Sitio: estrada de 15 km
+// Sede : Vila(12) Porto(30)
+// Vila : Sede(12) Sitio(8)
+// Sitio: Vila(8) Porto(15)
+// Porto: Sede(30) Sitio(15)
+// Ilha : ninguém, grau 0
+// Rede: 4 estradas, 65 km
+// Vértices isolados: 1, então o grafo não é conexo

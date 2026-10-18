@@ -1,10 +1,44 @@
 // 0110 · BFS: busca em largura
 // Exercício E655 · ★☆☆
-//
-// Resposta (saída do programa):
-//   Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
-//
-// Fila: [Penha] -> tira Penha, entram Lapa, Moema, Tatuape (dist 1)
-//       -> tira Lapa, entra Centro (dist 2)
-//       -> tira Moema, entra Saude (dist 2; Centro já tem dist)
-//       -> tira Tatuape (Saude já tem dist) -> tira Centro -> tira Saude.
+
+#include <stdio.h>
+
+#define V 6
+
+int main(void) {
+    const char *nomes[V] = {"Centro", "Lapa", "Moema", "Penha", "Saude", "Tatuape"};
+    int adj[V][V] = {
+        {0, 1, 1, 0, 0, 0},
+        {1, 0, 0, 1, 0, 0},
+        {1, 0, 0, 1, 1, 0},
+        {0, 1, 1, 0, 0, 1},
+        {0, 0, 1, 0, 0, 1},
+        {0, 0, 0, 1, 1, 0},
+    };
+    int dist[V], pai[V], fila[V], inicio = 0, fim = 0;
+    for (int v = 0; v < V; v++) {
+        dist[v] = -1;
+        pai[v] = -1;
+    }
+
+    dist[3] = 0;
+    fila[fim++] = 3;
+    while (inicio < fim) {
+        int u = fila[inicio++];
+        printf("%s(%d) ", nomes[u], dist[u]);
+        for (int v = 0; v < V; v++) {
+            if (adj[u][v] && dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                pai[v] = u; // quem descobriu v
+                fila[fim++] = v;
+            }
+        }
+    }
+    printf("\n");
+
+    for (int v = 0; v < V; v++) {
+        if (pai[v] == -1) printf("%s: origem\n", nomes[v]);
+        else printf("%s: descoberto por %s\n", nomes[v], nomes[pai[v]]);
+    }
+    return 0;
+}

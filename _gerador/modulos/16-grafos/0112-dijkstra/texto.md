@@ -119,7 +119,8 @@ começa com 4 (rua direta) e cai para 3, e no Mercado, que cai de 9 para 8:
 | Mercado (8) | | | | **8** | 11 |
 | Praia (11) | | | | | **11** |
 
-O exemplo A224 usa Dijkstra num grafo dirigido (passagens de ônibus em
+O exemplo A223 para o Dijkstra assim que o destino é fixado, sem calcular o
+mapa inteiro. O A224 usa Dijkstra num grafo dirigido (passagens de ônibus em
 reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 
 > [!WARNING]
@@ -143,6 +144,6 @@ reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 > [!NOTE]
 > **Pergunta para você:** se a rua Padaria–Praia passar a levar 7 minutos em
 > vez de 10, qual é a nova rota e o novo tempo até a Praia? Refaça a tabela
-> antes de trocar o `10` no A223.
+> antes de trocar o `10` no programa acima.
 
 {{pratique}}

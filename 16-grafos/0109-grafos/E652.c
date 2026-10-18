@@ -4,7 +4,8 @@
 // Este programa tem DOIS erros de propósito. Ele monta o grafo NÃO dirigido
 // do grupo de estudos (quem estuda com quem) e mostra o grau de cada pessoa.
 // Rode com o rodar: o sanitizer acusa um dos erros. O outro é silencioso e só
-// aparece nos números. Ache os dois e conserte.
+// aparece nos números. Ache os dois, conserte e rode de novo até a saída
+// bater com a esperada.
 //
 //   Saída esperada depois do conserto:
 //   Ana estuda com 2 pessoa(s)
