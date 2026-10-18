@@ -1,22 +1,24 @@
 // 0003 · Tipos e limites
 // Exercício E015 · ★★☆
-//
-// Resposta: 4 (250 + 10 = 260, menos 256), 4294967295 (0 - 1 dá a volta
-// para o maior unsigned int) e 464 (65000 + 1000 = 66000, menos 65536).
 
 #include <stdio.h>
+#include <limits.h>
 
 int main(void) {
-    unsigned char brilho = 250;
-    brilho = brilho + 10;
-    printf("%d\n", brilho);
+    unsigned char brilho = 250;      // LED, de 0 a 255: some 10
+    unsigned int estoque = 0;        // vendeu um que não tinha: tire 1
+    unsigned short odometro = 65000; // painel de 16 bits: some 1000
 
-    unsigned int estoque = 0;
-    estoque = estoque - 1;
-    printf("%u\n", estoque);
+    int antes = brilho;
+    brilho = brilho + 10;            // 260 não cabe: 260 - 256 = 4
+    printf("brilho: %d + 10 = %d (máximo %d)\n", antes, brilho, UCHAR_MAX);
 
-    unsigned short odometro = 65000;
-    odometro = odometro + 1000;
-    printf("%d\n", odometro);
+    antes = estoque;
+    estoque = estoque - 1;           // abaixo de zero: vai para o máximo
+    printf("estoque: %d - 1 = %u (máximo %u)\n", antes, estoque, UINT_MAX);
+
+    antes = odometro;
+    odometro = odometro + 1000;      // 66000 - 65536 = 464
+    printf("odômetro: %d + 1000 = %d (máximo %d)\n", antes, odometro, USHRT_MAX);
     return 0;
 }

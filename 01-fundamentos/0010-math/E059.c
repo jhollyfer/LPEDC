@@ -2,7 +2,8 @@
 // Exercício E059 · ★★★
 //
 // Três contas, três erros. O programa compila com um aviso e mostra três
-// valores errados. Explique cada erro e conserte.
+// valores errados. Conserte o código e rode de novo até sair a saída
+// esperada, sem aviso.
 //
 // - A caixa d'água em forma de cubo tem 27 m³. Qual a aresta? (3 m)
 // - O termômetro marcou -2.75 °C. Quanto falta para chegar a 0? (2.75)

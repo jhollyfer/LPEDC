@@ -1,9 +1,5 @@
 // 0002 · Variáveis
 // Exercício E009 · ★★☆
-//
-// Resposta: juntas, as cinco variáveis guardam 4 + 8 + 8 + 1 + 4 = 25 bytes
-// de dados. Com float nas notas seriam 4 + 4 + 4 + 1 + 4 = 17 bytes: 8 a
-// menos.
 
 #include <stdio.h>
 
@@ -19,5 +15,10 @@ int main(void) {
     printf("pratica: %.1f (%zu bytes)\n", pratica, sizeof pratica);
     printf("categoria: %c (%zu byte)\n", categoria, sizeof categoria);
     printf("aulas: %d (%zu bytes)\n", aulas, sizeof aulas);
+
+    printf("total: %zu bytes\n",
+           sizeof idade + sizeof teorica + sizeof pratica + sizeof categoria + sizeof aulas);
+    printf("com float nas notas: %zu bytes\n",
+           sizeof idade + sizeof(float) + sizeof(float) + sizeof categoria + sizeof aulas);
     return 0;
 }

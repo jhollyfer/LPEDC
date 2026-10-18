@@ -1,25 +1,29 @@
-// A015 · O consumo do carro
+// A015 · O cast que corta de propósito
 
 #include <stdio.h>
 
 int main(void) {
-    int km = 523;     // rodados desde o último tanque
-    int litros = 41;  // para encher de novo
+    // quantos pacotes cheios de 2.5 kg saem de 18 kg de café?
+    double estoque = 18.0, pacote = 2.5;
+    int cheios = (int) (estoque / pacote);   // 7.2 vira 7: aqui cortar é o certo
+    double sobra = estoque - cheios * pacote; // int * double: a conta é real
+    printf("Pacotes cheios: %d\n", cheios);
+    printf("Sobram %.1f kg\n", sobra);
 
-    double errado = km / litros;            // int / int = 12; depois vira 12.0
-    double certo = (double) km / litros;    // 523.0 / 41 = 12.756...
-    double tarde = (double) (km / litros);  // o cast chegou depois da divisão
+    // horas decimais do ponto eletrônico para horas e minutos
+    double trabalhadas = 2.75;
+    int horas = (int) trabalhadas;                    // 2
+    int minutos = (int) ((trabalhadas - horas) * 60); // 0.75 * 60 = 45
+    printf("%.2f h = %d h %d min\n", trabalhadas, horas, minutos);
 
-    printf("Sem cast:      %.2f km/l\n", errado);
-    printf("Com cast:      %.2f km/l\n", certo);
-    printf("Cast atrasado: %.2f km/l\n", tarde);
-
-    int inteiro = certo;                    // double -> int: corta, não arredonda
-    printf("Num int:       %d km/l\n", inteiro);
+    // o cast pega só o valor logo à direita dele
+    printf("(int) 2.75 * 60 = %d\n", (int) 2.75 * 60);     // 2 * 60
+    printf("(int) (2.75 * 60) = %d\n", (int) (2.75 * 60)); // 165.0 vira 165
     return 0;
 }
 // Saída:
-// Sem cast:      12.00 km/l
-// Com cast:      12.76 km/l
-// Cast atrasado: 12.00 km/l
-// Num int:       12 km/l
+// Pacotes cheios: 7
+// Sobram 0.5 kg
+// 2.75 h = 2 h 45 min
+// (int) 2.75 * 60 = 120
+// (int) (2.75 * 60) = 165

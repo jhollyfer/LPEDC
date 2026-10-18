@@ -1,22 +1,26 @@
 // 0003 · Tipos e limites
 // Exercício E018 · ★★★
-//
-// Resposta: 127, -128, 255, -32768, 4294967295, "8 8" e 128 (0x7F é 127).
-// a) Em complemento de dois, o zero usa uma combinação do lado "positivo"
-// (bit de cima 0) e não existe -0. Com 256 combinações: 128 negativas, o
-// zero e 127 positivas. b) Não: no Windows o long tem 4 bytes. Para
-// exatamente 64 bits em qualquer sistema, use int64_t (do stdint.h).
 
 #include <stdio.h>
-#include <limits.h>
+#include <stdint.h>
 
 int main(void) {
-    printf("%d\n", SCHAR_MAX);
-    printf("%d\n", SCHAR_MIN);
-    printf("%d\n", UCHAR_MAX);
-    printf("%d\n", SHRT_MIN);
-    printf("%u\n", UINT_MAX);
-    printf("%zu %zu\n", sizeof(long), sizeof(long long));
-    printf("%d\n", 0x7F + 0x01);
+    int8_t com_sinal = -1;
+    uint8_t sem_sinal = com_sinal;   // mesmos bits: 1111 1111
+    printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
+
+    com_sinal = -128;
+    sem_sinal = com_sinal;           // 1000 0000
+    printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
+
+    com_sinal = 127;
+    sem_sinal = com_sinal;           // 0111 1111
+    printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
+
+    com_sinal = 0;
+    sem_sinal = com_sinal;
+    printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
+
+    printf("int8_t: %d a %d\n", INT8_MIN, INT8_MAX);
     return 0;
 }

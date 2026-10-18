@@ -1,13 +1,15 @@
 // 0001 · O primeiro programa
 // Exercício E006 · ★★★
 //
-// Resposta:
-// a) pré-processador: "fatal error: stdoi.h: No such file or directory";
-// b) compilador: "expected ';' before ...";
-// c) ligador: o código compila, mas não existe nenhuma função chamada main
-//    (o C diferencia maiúsculas): "undefined reference to `main'";
-// d) ligador: o compilador só avisa "implicit declaration of function
-//    'prinft'" e o ligador para com "undefined reference to `prinft'";
-// e) ninguém: compila e roda, mas mostra a tarifa errada. É um erro de
-//    execução (de lógica): o compilador não tem como saber o valor certo;
-// f) compilador: "expected declaration or statement at end of input".
+// Consertos: stdoi.h -> stdio.h (pré-processador); o ; que faltava no
+// primeiro printf (compilador); Main -> main (ligador); 9,40 -> 4,90 (erro
+// de execução, que só aparece comparando a saída).
+
+#include <stdio.h>
+
+int main(void) {
+    printf("Linha 077 - Terminal Centro\n");
+    printf("Via Av. Brasil\n");
+    printf("Tarifa: R$ 4,90\n");
+    return 0;
+}

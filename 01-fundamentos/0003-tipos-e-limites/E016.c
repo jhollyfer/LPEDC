@@ -4,7 +4,8 @@
 // De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
 // 13! (13 fatorial = 1 * 2 * ... * 13). O programa abaixo parte de 12! e
 // multiplica por 13. Ele compila sem aviso, mas está errado: rode e leia a
-// mensagem "runtime error" que aparece. Explique o problema e conserte.
+// mensagem "runtime error" que aparece. Conserte o código e rode de novo
+// até sair a saída esperada, sem nenhum runtime error.
 //
 //   Saída esperada (depois de consertar):
 //   13! = 6227020800 maneiras

@@ -3,8 +3,9 @@
 //
 // A lanchonete pergunta quantos lanches e se é para viagem (V) ou para comer
 // aqui (A). Este programa compila sem aviso, mas não funciona: rode com
-// printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia. Explique
-// o que aconteceu e conserte mudando UM caractere.
+// printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia.
+// Conserte o código mudando UM caractere e rode de novo com a mesma
+// entrada.
 //
 //   Saída esperada (depois de consertar), com 3 e V:
 //   Quantidade: Opção (V/A): 3 lanche(s), opção V (código 86)

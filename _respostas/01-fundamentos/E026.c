@@ -1,11 +1,5 @@
 // 0005 · printf
 // Exercício E026 · ★☆☆
-//
-// Resposta:
-//   [   42][42   ][00042][+42]
-//   [3.1][3.142][    3.14]
-//   [R][Rio][   Rio][Rio   ]
-//   [1a][1A][32]
 
 #include <stdio.h>
 

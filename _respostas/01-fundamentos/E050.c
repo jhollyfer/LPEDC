@@ -1,21 +1,15 @@
 // 0009 · Atribuição, ++ e --
 // Exercício E050 · ★☆☆
-//
-// Resposta (teste de mesa):
-//   instrução      x   y   z   w
-//   int x = 5;     5
-//   int y = x++;   6   5
-//   int z = ++x;   7   5   7
-//   int w = x--;   6   5   7   7
-// Final: x = 6, y = 5, z = 7, w = 7.
 
 #include <stdio.h>
 
 int main(void) {
     int x = 5;
-    int y = x++;
-    int z = ++x;
-    int w = x--;
-    printf("x = %d, y = %d, z = %d, w = %d\n", x, y, z, w);
+    int y = x++;   // entrega 5, depois x vira 6
+    printf("y = x++ -> x = %d, y = %d\n", x, y);
+    int z = ++x;   // x vira 7, depois entrega 7
+    printf("z = ++x -> x = %d, z = %d\n", x, z);
+    int w = x--;   // entrega 7, depois x vira 6
+    printf("w = x-- -> x = %d, w = %d\n", x, w);
     return 0;
 }

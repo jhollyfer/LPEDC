@@ -1,12 +1,24 @@
 // 0002 · Variáveis
 // Exercício E008 · ★☆☆
 //
-// Resposta:
-// válidos: preco_kg, _total, Preco, nota1.
-// inválidos: 2via (começa com dígito); valor-final (o - é o operador de
-// subtração: o C lê "valor menos final"); float (palavra reservada); média
-// (acento não vale em nome); qtd$ (o $ não é do padrão; o gcc aceita como
-// extensão, mas o código deixa de ser portável); dia util (espaço).
-// preco e Preco podem existir juntas e são variáveis diferentes: o C
-// diferencia maiúsculas de minúsculas. _total é válido, mas nomes que começam
-// com _ são usados pelo compilador e pela biblioteca: evite.
+// 2via começava com dígito, valor-final tinha o sinal de menos, float é
+// palavra reservada e "dia util" tinha espaço. preco e Preco são variáveis
+// diferentes: o C diferencia maiúsculas de minúsculas.
+
+#include <stdio.h>
+
+int main(void) {
+    int via = 2;
+    double valor_final = 89.90;
+    int parcelas = 3;
+    char dia_util = 'S';
+    int preco = 10;
+    int Preco = 20;
+
+    printf("Via: %d\n", via);
+    printf("Valor final: R$ %.2f\n", valor_final);
+    printf("Parcelas: %d\n", parcelas);
+    printf("Dia útil: %c\n", dia_util);
+    printf("preco: %d, Preco: %d\n", preco, Preco);
+    return 0;
+}

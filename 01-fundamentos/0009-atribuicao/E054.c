@@ -8,16 +8,14 @@
 //   Saída esperada:
 //   Casa 5 x 2 Visitante
 //
-// Depois responda: por que este truque é perigoso com valores muito
-// grandes, perto de INT_MAX?
-//
 // Dicas:
 // 1. Guarde a soma dos dois numa das variáveis: casa += visitante (casa = 7).
 // 2. Da soma, dá para recuperar cada um tirando o outro.
-// 3. Resposta esperada: casa += visitante; visitante = casa - visitante;
-//    casa -= visitante; e a saída "Casa 5 x 2 Visitante". Com valores
-//    grandes, a soma pode passar de INT_MAX: estouro de int, comportamento
-//    indefinido. A versão com variável auxiliar é mais segura e mais clara.
+// 3. Cuidado na vida real: com valores perto de INT_MAX, a soma estoura o
+//    int (comportamento indefinido). A versão com variável auxiliar é mais
+//    segura e mais clara; este truque é só para treinar os compostos.
+// 4. Resposta esperada: casa += visitante; visitante = casa - visitante;
+//    casa -= visitante; e a saída "Casa 5 x 2 Visitante".
 //
 // Escreva sua resposta abaixo:
 

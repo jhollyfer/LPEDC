@@ -1,31 +1,31 @@
-// A019 · Uma pizza grande ou duas médias?
+// A019 · A escada no muro e o posto na estrada
 
 #include <stdio.h>
 #include <math.h>
 
-#define PI 3.14159265358979 // o C padrão não define o pi
+#define PI 3.14159265358979
 
 int main(void) {
-    double diametro_grande = 35.0, diametro_media = 25.0; // cm
-    double preco_grande = 59.90, preco_medias = 2 * 39.90;
+    // sin e cos trabalham em radianos: converta com graus * PI / 180
+    double escada = 5.0;            // metros
+    double graus = 60.0;            // ângulo da escada com o chão
+    double radianos = graus * PI / 180;
+    printf("Altura no muro: %.2f m\n", escada * sin(radianos));
+    printf("Pé da escada a %.2f m do muro\n", escada * cos(radianos));
 
-    double area_grande = PI * pow(diametro_grande / 2, 2);     // pi * r²
-    double area_medias = 2 * PI * pow(diametro_media / 2, 2);
+    // fmod: o resto de uma divisão entre reais (o % só aceita inteiros)
+    double km = 31.0, entre_postos = 7.5;
+    double desde_ultimo = fmod(km, entre_postos);   // 31 - 4 * 7.5 = 1.0
+    printf("Último posto há %.1f km; próximo em %.1f km\n",
+           desde_ultimo, entre_postos - desde_ultimo);
 
-    printf("Grande: %.0f cm² por R$ %.2f\n", round(area_grande), preco_grande);
-    printf("Duas médias: %.0f cm² por R$ %.2f\n", round(area_medias), preco_medias);
-    printf("Diferença: %.1f cm²\n", fabs(area_grande - area_medias));
-    printf("R$ por 100 cm²: grande %.2f, médias %.2f\n",
-           preco_grande / area_grande * 100, preco_medias / area_medias * 100);
-
-    // a pizza única com a mesma área das duas médias: r = raiz(área / pi)
-    double diametro_igual = 2 * sqrt(area_medias / PI);
-    printf("Duas médias = uma pizza de %.1f cm\n", diametro_igual);
+    // fabs: a distância entre dois valores, não importa a ordem da conta
+    double tarde = 14.5, madrugada = -3.0;
+    printf("Variação no dia: %.1f graus\n", fabs(madrugada - tarde));
     return 0;
 }
 // Saída:
-// Grande: 962 cm² por R$ 59.90
-// Duas médias: 982 cm² por R$ 79.80
-// Diferença: 19.6 cm²
-// R$ por 100 cm²: grande 6.23, médias 8.13
-// Duas médias = uma pizza de 35.4 cm
+// Altura no muro: 4.33 m
+// Pé da escada a 2.50 m do muro
+// Último posto há 1.0 km; próximo em 6.5 km
+// Variação no dia: 17.5 graus

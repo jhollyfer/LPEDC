@@ -1,18 +1,27 @@
-// A009 · O cupom alinhado do mercado
+// A009 · O extrato que corta o nome comprido
 
 #include <stdio.h>
 
 int main(void) {
-    printf("%-10s %3s %9s\n", "Item", "Qtd", "Total");
-    printf("%-10s %3d %9.2f\n", "Arroz 5kg", 2, 51.80);
-    printf("%-10s %3d %9.2f\n", "Leite", 12, 71.88);
-    printf("%-10s %3d %9.2f\n", "Banana", 1, 7.49);
-    printf("%-10s %13.2f\n", "TOTAL", 131.17);
+    // zeros à esquerda: o número da conta tem sempre 6 dígitos
+    printf("Conta %06d-%d\n", 4521, 7);
+
+    // %-14.14s: coluna de 14 casas e, se o texto for maior, corta em 14
+    // %+9.2f: sinal sempre, para entrada e saída ficarem claras
+    printf("%-14.14s %+9.2f\n", "Pix recebido de Mariana", 250.00);
+    printf("%-14.14s %+9.2f\n", "Mercado", -87.35);
+    printf("%-14.14s %+9.2f\n", "Conta de luz da casa", -142.10);
+    printf("%-14s %9.2f\n", "Saldo", 20.55);
+
+    // o mesmo valor com precisões diferentes: só a tela muda
+    double juros = 0.0875;
+    printf("Juros: %.1f%% ou %.3f%%\n", juros * 100, juros * 100);
     return 0;
 }
 // Saída:
-// Item       Qtd     Total
-// Arroz 5kg    2     51.80
-// Leite       12     71.88
-// Banana       1      7.49
-// TOTAL             131.17
+// Conta 004521-7
+// Pix recebido d   +250.00
+// Mercado           -87.35
+// Conta de luz d   -142.10
+// Saldo              20.55
+// Juros: 8.8% ou 8.750%

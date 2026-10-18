@@ -3,7 +3,8 @@
 //
 // Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
 // UM scanf("%d %d", &a, &b), guarde o retorno e mostre "lidos=? a=? b=?".
-// Antes de testar, preveja o resultado para cada entrada:
+// Rode com cada uma das entradas abaixo e confira a saída de cada uma com a
+// resposta esperada (a última dica):
 //
 //   printf '7 9\n'   | ~/LPEDC/rodar E035.c
 //   printf '7 x\n'   | ~/LPEDC/rodar E035.c

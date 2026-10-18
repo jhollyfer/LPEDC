@@ -3,10 +3,11 @@
 //
 // Sistemas de pagamento guardam dinheiro em centavos inteiros, para fugir
 // dos erros dos números reais. Este programa converte R$ 19.99 para
-// centavos. Sem rodar, quanto você espera? Rode. Explique o que aconteceu e
-// conserte para mostrar 1999.
+// centavos, mas mostra 1998. Rode, acrescente um printf que mostre
+// valor * 100 com %.15f para ver o número de verdade, e conserte a conta
+// para mostrar 1999 (sem trocar o tipo das variáveis).
 //
-//   Saída esperada (depois de consertar):
+//   Saída esperada (depois de consertar), na última linha:
 //   R$ 19.99 = 1999 centavos
 //
 // Dicas:

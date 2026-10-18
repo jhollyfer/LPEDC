@@ -1,8 +1,5 @@
 // 0007 · Aritmética
 // Exercício E042 · ★★★
-//
-// Resposta: 472 vira 274. Com 120, o invertido vale 21: um int não guarda
-// zero à esquerda. Para mostrar 021, use %03d.
 
 #include <stdio.h>
 
@@ -11,12 +8,11 @@ int main(void) {
     printf("Número: ");
     scanf("%d", &n);
 
-    int unidade = n % 10;       // 2
-    int dezena = n / 10 % 10;   // 7
-    int centena = n / 100;      // 4
+    int unidade = n % 10;       // 472 -> 2
+    int dezena = n / 10 % 10;   // 472 -> 7
+    int centena = n / 100;      // 472 -> 4
     int invertido = unidade * 100 + dezena * 10 + centena;
 
-    printf("Ao contrário: %d\n", invertido);
-    printf("Com 3 dígitos: %03d\n", invertido);
+    printf("Ao contrário: %03d\n", invertido); // 120 -> 21, mostrado como 021
     return 0;
 }

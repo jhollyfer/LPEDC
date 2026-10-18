@@ -1,24 +1,32 @@
-// A007 · A tarifa num lugar só
+// A007 · Uma constante feita de outras
 
 #include <stdio.h>
 
-#define TARIFA 4.90          // muda aqui, muda no programa todo
-#define EMPRESA "Viação Sol"
+#define TARIFA_CHEIA 4.90
+#define DESCONTO_ESTUDANTE 0.5                          // estudante paga meia
+#define TARIFA_MEIA (TARIFA_CHEIA * DESCONTO_ESTUDANTE) // um #define usando outros
+#define CIDADE "Belo Horizonte"
 
 int main(void) {
-    const int linha = 101;   // variável só de leitura
+    const double recarga = 50.00; // const: tem tipo, tamanho e endereço
 
-    printf("%s\n", EMPRESA);
-    printf("Linha %d \"Centro - Bairro\"\n", linha);
-    printf("Tarifa: R$ %.2f\n", TARIFA);
-    printf("Ida e volta: R$ %.2f\n", 2 * TARIFA); // o compilador vê 2 * 4.90
+    printf("Ônibus de " CIDADE "\n"); // textos lado a lado viram um só
+    printf("Inteira: R$ %.2f\n", TARIFA_CHEIA);
+    printf("Meia:    R$ %.2f\n", TARIFA_MEIA);
+    printf("Recarga: R$ %.2f\n", recarga);
+
+    // o literal tem tamanho, decidido pelo jeito de escrever
+    printf("recarga: %zu bytes; 4.90: %zu; 4.90f: %zu\n",
+           sizeof recarga, sizeof 4.90, sizeof 4.90f);
     return 0;
 }
 // Saída:
-// Viação Sol
-// Linha 101 "Centro - Bairro"
-// Tarifa: R$ 4.90
-// Ida e volta: R$ 9.80
+// Ônibus de Belo Horizonte
+// Inteira: R$ 4.90
+// Meia:    R$ 2.45
+// Recarga: R$ 50.00
+// recarga: 8 bytes; 4.90: 8; 4.90f: 4
 //
-// Veja a troca acontecendo: gcc -E A007.c | tail -12
-// Tente escrever linha = 102; dentro da main e leia o erro do gcc.
+// Veja o que o compilador recebe: gcc -E A007.c | tail -14
+// A linha do printf vira "Ônibus de " "Belo Horizonte" "\n" e a meia vira
+// (4.90 * 0.5): os parênteses do #define TARIFA_MEIA vão junto.

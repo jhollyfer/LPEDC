@@ -1,34 +1,34 @@
 // 0003 · Tipos e limites
 // Exercício E018 · ★★★
 //
-// Sem rodar, preveja a saída num PC Linux de 64 bits. Depois copie para a
-// main (com os #include) e confira.
+// Complemento de dois na prática. O painel de um freezer recebe a
+// temperatura num byte. Para cada temperatura (-1, -128, 127 e 0), guarde o
+// valor num int8_t, copie para um uint8_t e mostre: o valor com sinal, o
+// valor sem sinal e o byte em hexa. Reaproveite as mesmas duas variáveis
+// (declare uma vez e troque os valores). Por fim, mostre a faixa do int8_t
+// com as constantes do stdint.h.
 //
-//   printf("%d\n", SCHAR_MAX);
-//   printf("%d\n", SCHAR_MIN);
-//   printf("%d\n", UCHAR_MAX);
-//   printf("%d\n", SHRT_MIN);
-//   printf("%u\n", UINT_MAX);
-//   printf("%zu %zu\n", sizeof(long), sizeof(long long));
-//   printf("%d\n", 0x7F + 0x01);
-//
-// Responda também:
-// a) Por que o menor valor tem um número a mais que o maior (-128 e 127)?
-// b) Num PC com Windows, o sizeof(long) daria o mesmo? Que tipo você usa
-//    quando precisa de exatamente 64 bits em qualquer sistema?
+//   Saída esperada:
+//   -1 -> 255 (0xFF)
+//   -128 -> 128 (0x80)
+//   127 -> 127 (0x7F)
+//   0 -> 0 (0x0)
+//   int8_t: -128 a 127
 //
 // Dicas:
-// 1. SCHAR é signed char (1 byte com sinal); UCHAR, unsigned char.
-// 2. Complemento de dois: o bit de cima pesa negativo (-128 num byte).
-// 3. Resposta esperada: 127, -128, 255, -32768, 4294967295, "8 8" e 128.
-//    a) o zero ocupa uma das combinações do lado positivo, e não existe -0:
-//    sobram 128 negativos e 127 positivos. b) não: no Windows o long tem 4
-//    bytes; use int64_t (ou long long, que tem pelo menos 64 bits).
+// 1. int8_t com_sinal = -1; uint8_t sem_sinal = com_sinal; e depois
+//    com_sinal = -128; sem_sinal = com_sinal; e assim por diante.
+// 2. printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
+// 3. Os bits não mudam na cópia: o tipo só decide se o bit de cima vale
+//    -128 ou +128. Para os negativos, sem sinal = com sinal + 256.
+// 4. Resposta esperada: as cinco linhas acima. A faixa é assimétrica
+//    porque o zero ocupa uma das combinações sem o bit de cima, e não
+//    existe -0.
 //
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>
-#include <limits.h>
+#include <stdint.h>
 
 int main(void) {
 

@@ -71,9 +71,9 @@ int main(void) {
 // O último scanf leu 1 item
 ```
 
-Para testar sem digitar, mande a entrada por um cano:
-`printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c`. O
-que vem antes do `|` vira o teclado do programa.
+Para testar sem digitar, salve o programa como `pix.c` e mande a entrada
+por um cano: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`. O que vem antes
+do `|` vira o teclado do programa.
 
 Repara no fluxograma: as duas leituras são paralelogramos de entrada, cada
 uma guardando o valor numa caixinha, e só depois vem a saída:

@@ -23,7 +23,7 @@ muda nunca mais. Os quatro tipos básicos:
 primeiro valor junto: `int idade = 25;`. Para mostrar o valor, o `printf` usa
 um código para cada tipo: `%d` para `int`, `%f` para `float` e `double`, `%c`
 para `char`. O `%.1f` limita a uma casa decimal (o `printf` completo vem no
-0010).
+0005).
 
 Guardar um valor novo **apaga** o antigo: depois de `peso = 71.8;`, o 72,5
 sumiu para sempre. Ler a variável, ao contrário, não muda nada. E o operador
@@ -98,6 +98,6 @@ um passo depois do outro:
 
 > [!NOTE]
 > **Pergunta para você:** o `char` guarda um número pequeno. O que você acha
-> que `printf("%d\n", plano);` mostra? Teste no A003.
+> que `printf("%d\n", plano);` mostra? Teste no programa acima.
 
 {{pratique}}

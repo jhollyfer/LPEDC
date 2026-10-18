@@ -1,9 +1,8 @@
 // 0007 · Aritmética
 // Exercício E041 · ★★★
 //
-// Resposta: o original mostra "3 kits: R$ 65". O pré-processador cola o
-// texto, e 3 * KIT vira 3 * 20 + 5; pela precedência, 60 + 5 = 65. Com os
-// parênteses no #define, vira 3 * (20 + 5) = 75.
+// Sem parênteses, 3 * KIT virava 3 * 20 + 5 = 65 e KIT / 5 virava
+// 20 + 5 / 5 = 21. Com eles, 3 * (20 + 5) = 75 e (20 + 5) / 5 = 5.
 
 #include <stdio.h>
 
@@ -11,5 +10,6 @@
 
 int main(void) {
     printf("3 kits: R$ %d\n", 3 * KIT);
+    printf("Kit em 5x: R$ %d\n", KIT / 5);
     return 0;
 }

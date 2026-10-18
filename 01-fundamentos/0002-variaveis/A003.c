@@ -1,28 +1,30 @@
-// A003 · A ficha da academia
+// A003 · A cópia que não acompanha e o float que arredonda
 
 #include <stdio.h>
 
 int main(void) {
-    int idade = 25;       // inteiro
-    float altura = 1.75;  // real com uns 7 dígitos
-    double peso = 72.5;   // real com uns 15 dígitos
-    char plano = 'B';     // um caractere, entre aspas simples
+    // = copia o VALOR: depois disso, as duas variáveis seguem separadas
+    int pao_manha = 40;
+    int pao_tarde = pao_manha;  // a tarde começa com uma cópia: 40
+    pao_manha = 25;             // mudar uma não mexe na outra
+    printf("Pães de manhã: %d, de tarde: %d\n", pao_manha, pao_tarde);
 
-    printf("Idade: %d anos\n", idade);
-    printf("Altura: %.2f m\n", altura);
-    printf("Peso: %.1f kg\n", peso);
-    printf("Plano: %c\n", plano);
+    // várias variáveis do mesmo tipo numa linha, separadas por vírgula
+    char fila = 'C', caixa = '3';
+    printf("Fila %c, caixa %c\n", fila, caixa);
 
-    peso = 71.8; // um mês depois: o 72.5 some
-    printf("Peso novo: %.1f kg\n", peso);
-    printf("Bytes: %zu, %zu, %zu, %zu\n",
-           sizeof idade, sizeof altura, sizeof peso, sizeof plano);
+    // o float guarda uns 7 dígitos; o double, uns 15
+    float premio_float = 12345678.9;
+    double premio_double = 12345678.9;
+    printf("Prêmio no float:  %.1f\n", premio_float);
+    printf("Prêmio no double: %.1f\n", premio_double);
     return 0;
 }
 // Saída:
-// Idade: 25 anos
-// Altura: 1.75 m
-// Peso: 72.5 kg
-// Plano: B
-// Peso novo: 71.8 kg
-// Bytes: 4, 4, 8, 1
+// Pães de manhã: 25, de tarde: 40
+// Fila C, caixa 3
+// Prêmio no float:  12345679.0
+// Prêmio no double: 12345678.9
+//
+// O 12345678.9 tem 9 dígitos: o float não dá conta e guarda o valor mais
+// perto que ele consegue representar. Dinheiro e medidas: use double.

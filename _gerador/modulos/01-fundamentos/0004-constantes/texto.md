@@ -78,8 +78,9 @@ os números:
 > linha onde o nome é **usado**, não na linha do `#define`, o que confunde.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A007.c | tail -12` e veja: não sobrou
-> nenhum `TARIFA`, só `4.90`. Por isso um `#define` não ocupa memória, não tem
+> **Por dentro do C:** salve o programa acima como `tarifa.c`, rode
+> `gcc -E tarifa.c | tail -12` e veja: não sobrou nenhum `TARIFA`, só
+> `4.90`. Por isso um `#define` não ocupa memória, não tem
 > tipo e não aparece no depurador. Já a `const int linha` mora na memória:
 > `&linha` tem endereço e `sizeof linha` vale 4. E os literais têm tamanho:
 > `sizeof(4.90)` é 8 (`double`), `sizeof(4.90f)` é 4 e `sizeof('A')` é 4,
@@ -88,6 +89,6 @@ os números:
 
 > [!NOTE]
 > **Pergunta para você:** o pré-processador troca `TARIFA` dentro das aspas?
-> O que `printf("TARIFA\n");` mostra? Teste no A007.
+> O que `printf("TARIFA\n");` mostra? Teste no programa acima.
 
 {{pratique}}

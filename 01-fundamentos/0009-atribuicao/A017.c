@@ -1,24 +1,40 @@
-// A017 · O bilhete único
+// A017 · Vagas que descem, senhas que sobem (até de letra)
 
 #include <stdio.h>
 
 int main(void) {
-    double saldo = 20.00;
-    int viagens = 0;
+    // -- conta para baixo: cada carro que entra ocupa uma vaga
+    int vagas = 3;
+    vagas--;                 // 2
+    vagas--;                 // 1
+    printf("Vagas livres: %d\n", vagas);
 
-    saldo += 30.00;   // recarga: saldo = saldo + 30.00
-    saldo -= 4.40;    // 1ª viagem
-    viagens++;        // viagens = viagens + 1
-    saldo -= 4.40;    // 2ª viagem
-    viagens++;
+    // ++ num char: o char é número, então ++ vai para a próxima letra
+    char fila = 'A';
+    int senha = 41;
+    printf("Chamando %c%02d\n", fila, senha);
+    senha++;
+    printf("Chamando %c%02d\n", fila, senha);
+    fila++;                  // 'A' (65) vira 'B' (66)
+    senha = 1;               // a fila nova recomeça do 1
+    printf("Chamando %c%02d\n", fila, senha);
 
-    printf("Saldo: R$ %.2f depois de %d viagens\n", saldo, viagens);
+    // /= com int faz divisão inteira: a moeda ímpar some
+    int moedas = 25;
+    moedas /= 2;
+    printf("Cada irmão fica com %d moedas\n", moedas);
 
-    int antes = viagens++;   // pós: usa o 2, depois soma (viagens vira 3)
-    int depois = ++viagens;  // pré: soma primeiro (vira 4), depois usa o 4
-    printf("antes = %d, depois = %d, viagens = %d\n", antes, depois, viagens);
+    // -= com double: o desconto sai do valor que já está lá
+    double conta = 120.00;
+    conta -= 15.50;          // cupom
+    conta -= conta * 0.10;   // mais 10% sobre o que sobrou
+    printf("Conta final: R$ %.2f\n", conta);
     return 0;
 }
 // Saída:
-// Saldo: R$ 41.20 depois de 2 viagens
-// antes = 2, depois = 4, viagens = 4
+// Vagas livres: 1
+// Chamando A41
+// Chamando A42
+// Chamando B01
+// Cada irmão fica com 12 moedas
+// Conta final: R$ 94.05
