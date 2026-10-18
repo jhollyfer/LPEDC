@@ -1,165 +1,141 @@
-// 0080 · Vetor dinâmico
+// 0080 · Lista circular
 // Exercício E475 · ★☆☆
 
 #include <stdio.h>
 
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
-// lista.h · TAD lista sequencial (vetor que cresce)
+// lista.h · lista circular simplesmente encadeada
 //
-// Interface: o que a lista faz. A struct fica escondida em lista.c (tipo
-// opaco): quem usa a lista só conversa com ela por estas funções.
+// O último nó aponta de volta para o primeiro: nenhum prox é NULL. A lista é
+// guardada pelo ponteiro para o ÚLTIMO nó, porque dele se chega às duas
+// pontas: o primeiro é ultimo->prox. Lista vazia: No *ultimo = NULL;
 
 #ifndef LISTA_H
 #define LISTA_H
 
 #include <stdbool.h>
 
-typedef struct lista Lista;
+typedef struct no {
+    int valor;
+    struct no *prox; // nunca NULL: o último aponta para o primeiro
+} No;
 
-// cria uma lista vazia com espaço para "capacidade" itens (NULL se faltar memória)
-Lista *lista_cria(int capacidade);
+// põe "valor" depois do último e devolve o NOVO último: O(1)
+No *lista_insere_fim(No *ultimo, int valor);
 
-// devolve a memória da lista e dos itens
-void lista_libera(Lista *l);
+// põe "valor" antes do primeiro e devolve o último (que só muda se a lista
+// estava vazia): O(1)
+No *lista_insere_inicio(No *ultimo, int valor);
 
-// põe "valor" no fim; dobra a capacidade quando enche (false se faltar memória)
-bool lista_insere_fim(Lista *l, int valor);
+// tira o primeiro nó com "valor"; false se não estava
+bool lista_remove(No **ultimo, int valor);
 
-// põe "valor" na posição "pos" (0 a tamanho), empurrando os outros para a direita
-bool lista_insere_em(Lista *l, int pos, int valor);
+// mostra uma volta, do primeiro ao último: 3 -> 7 -> (volta ao 3)
+void lista_imprime(const No *ultimo);
 
-// tira o item da posição "pos", puxando os outros para a esquerda;
-// guarda o valor tirado em *removido (se removido não for NULL)
-bool lista_remove_em(Lista *l, int pos, int *removido);
+// quantos nós a lista tem
+int lista_tamanho(const No *ultimo);
 
-// copia o item da posição "pos" para *valor (false se a posição não existe)
-bool lista_pega(const Lista *l, int pos, int *valor);
-
-// quantos itens a lista tem / quantos cabem sem crescer
-int lista_tamanho(const Lista *l);
-int lista_capacidade(const Lista *l);
-
-// mostra a lista assim: [12, 35, 8]
-void lista_imprime(const Lista *l);
+// devolve a memória de todos os nós
+void lista_libera(No *ultimo);
 
 #endif
 
-// lista.c · implementação da lista sequencial (vetor que cresce)
+// lista.c · lista circular simplesmente encadeada
 
 #include <stdio.h>
 #include <stdlib.h>
 
-struct lista {
-    int *itens; // vetor no heap
-    int tam;    // quantos itens estão em uso
-    int cap;    // quantos itens cabem no vetor
-};
-
-Lista *lista_cria(int capacidade) {
-    if (capacidade < 1) capacidade = 1;
-    Lista *l = malloc(sizeof(Lista));
-    if (l == NULL) return NULL;
-    l->itens = malloc(capacidade * sizeof(int));
-    if (l->itens == NULL) {
-        free(l);
-        return NULL;
+static No *cria_no(int valor) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        fprintf(stderr, "sem memória\n");
+        exit(1);
     }
-    l->tam = 0;
-    l->cap = capacidade;
-    return l;
+    novo->valor = valor;
+    novo->prox = novo; // sozinho, ele é o próprio círculo
+    return novo;
 }
 
-void lista_libera(Lista *l) {
-    if (l == NULL) return;
-    free(l->itens); // primeiro o vetor...
-    free(l);        // ...depois a struct que apontava para ele
+No *lista_insere_inicio(No *ultimo, int valor) {
+    No *novo = cria_no(valor);
+    if (ultimo == NULL) return novo; // único nó: primeiro e último
+    novo->prox = ultimo->prox;       // o novo aponta para o antigo primeiro
+    ultimo->prox = novo;             // o último fecha o círculo no novo
+    return ultimo;
 }
 
-// garante espaço para mais um item: se encheu, dobra
-static bool garante_espaco(Lista *l) {
-    if (l->tam < l->cap) return true;
-    int nova_cap = l->cap * 2;
-    int *novo = realloc(l->itens, nova_cap * sizeof(int));
-    if (novo == NULL) return false; // l->itens continua valendo
-    l->itens = novo;
-    l->cap = nova_cap;
-    return true;
+No *lista_insere_fim(No *ultimo, int valor) {
+    // inserir no fim = inserir no início e dizer que o novo é o último
+    ultimo = lista_insere_inicio(ultimo, valor);
+    return ultimo->prox;
 }
 
-bool lista_insere_fim(Lista *l, int valor) {
-    if (!garante_espaco(l)) return false;
-    l->itens[l->tam] = valor;
-    l->tam++;
-    return true;
-}
-
-bool lista_insere_em(Lista *l, int pos, int valor) {
-    if (pos < 0 || pos > l->tam) return false;
-    if (!garante_espaco(l)) return false;
-    for (int i = l->tam; i > pos; i--) { // abre o buraco, de trás para frente
-        l->itens[i] = l->itens[i - 1];
+bool lista_remove(No **ultimo, int valor) {
+    if (*ultimo == NULL) return false;
+    No *ant = *ultimo;
+    No *p = (*ultimo)->prox;      // começa no primeiro
+    while (p->valor != valor) {
+        if (p == *ultimo) return false; // deu a volta inteira
+        ant = p;
+        p = p->prox;
     }
-    l->itens[pos] = valor;
-    l->tam++;
-    return true;
-}
-
-bool lista_remove_em(Lista *l, int pos, int *removido) {
-    if (pos < 0 || pos >= l->tam) return false;
-    if (removido != NULL) *removido = l->itens[pos];
-    for (int i = pos; i < l->tam - 1; i++) { // fecha o buraco
-        l->itens[i] = l->itens[i + 1];
+    if (p == ant) {
+        *ultimo = NULL;           // era o único nó
+    } else {
+        ant->prox = p->prox;
+        if (p == *ultimo) *ultimo = ant; // tirou o último: o anterior assume
     }
-    l->tam--;
+    free(p);
     return true;
 }
 
-bool lista_pega(const Lista *l, int pos, int *valor) {
-    if (pos < 0 || pos >= l->tam) return false;
-    *valor = l->itens[pos];
-    return true;
-}
-
-int lista_tamanho(const Lista *l) {
-    return l->tam;
-}
-
-int lista_capacidade(const Lista *l) {
-    return l->cap;
-}
-
-void lista_imprime(const Lista *l) {
-    printf("[");
-    for (int i = 0; i < l->tam; i++) {
-        if (i > 0) printf(", ");
-        printf("%d", l->itens[i]);
+void lista_imprime(const No *ultimo) {
+    if (ultimo == NULL) {
+        printf("(vazia)\n");
+        return;
     }
-    printf("]\n");
+    const No *p = ultimo->prox;
+    do {                          // do-while: o primeiro passo é de graça
+        printf("%d -> ", p->valor);
+        p = p->prox;
+    } while (p != ultimo->prox);  // parou quando voltou ao primeiro
+    printf("(volta ao %d)\n", ultimo->prox->valor);
+}
+
+int lista_tamanho(const No *ultimo) {
+    if (ultimo == NULL) return 0;
+    int n = 0;
+    const No *p = ultimo;
+    do {
+        n++;
+        p = p->prox;
+    } while (p != ultimo);
+    return n;
+}
+
+void lista_libera(No *ultimo) {
+    if (ultimo == NULL) return;
+    No *p = ultimo->prox;
+    ultimo->prox = NULL;          // corta o círculo: vira uma lista comum
+    while (p != NULL) {
+        No *seguinte = p->prox;
+        free(p);
+        p = seguinte;
+    }
 }
 // ---- fim de lista.h e lista.c ----
 
 int main(void) {
-    int leituras[] = {98, 110, 87, 132, 105, 91};
-    Lista *l = lista_cria(4);
-    if (l == NULL) return 1;
+    No *roda = NULL;
+    for (int i = 1; i <= 5; i++) roda = lista_insere_fim(roda, i);
+    lista_imprime(roda);
 
-    for (int i = 0; i < 6; i++) {
-        lista_insere_fim(l, leituras[i]);
-    }
-    lista_imprime(l);
-    printf("tamanho %d, capacidade %d\n", lista_tamanho(l), lista_capacidade(l));
+    const No *cuia = roda->prox; // começa na pessoa 1
+    for (int k = 0; k < 12; k++) cuia = cuia->prox;
+    printf("depois de 12 passadas, a cuia está com a pessoa %d\n", cuia->valor);
+    printf("conferindo com %%: pessoa %d\n", 12 % 5 + 1);
 
-    int soma = 0;
-    int maior = 0;
-    for (int i = 0; i < lista_tamanho(l); i++) {
-        int v;
-        lista_pega(l, i, &v);
-        soma += v;
-        if (i == 0 || v > maior) maior = v;
-    }
-    printf("média: %.1f\n", soma / (double)lista_tamanho(l));
-    printf("maior: %d\n", maior);
-
-    lista_libera(l);
+    lista_libera(roda);
     return 0;
 }

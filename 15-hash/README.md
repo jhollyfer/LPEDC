@@ -60,7 +60,7 @@ As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
 (o contador) ficam na pasta de cada assunto, e o `rodar` compila tudo junto:
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/A221.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/A211.c
 ```
 
 Os exercícios trazem a própria implementação dentro do arquivo, para você
@@ -68,14 +68,14 @@ escrever cada pedaço com as mãos.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0110](#0110--a-ideia-e-a-função-hash) | A ideia e a função hash | [`0110-hashing/`](0110-hashing/) |
-| [0111](#0111--encadeamento) | Encadeamento | [`0111-encadeamento/`](0111-encadeamento/) |
-| [0112](#0112--endereçamento-aberto) | Endereçamento aberto | [`0112-enderecamento-aberto/`](0112-enderecamento-aberto/) |
-| [0113](#0113--juntando-tudo-o-contador-de-palavras) | Juntando tudo: o contador de palavras | [`0113-juntando-tudo/`](0113-juntando-tudo/) |
+| [0105](#0105--a-ideia-e-a-função-hash) | A ideia e a função hash | [`0105-hashing/`](0105-hashing/) |
+| [0106](#0106--encadeamento) | Encadeamento | [`0106-encadeamento/`](0106-encadeamento/) |
+| [0107](#0107--endereçamento-aberto) | Endereçamento aberto | [`0107-enderecamento-aberto/`](0107-enderecamento-aberto/) |
+| [0108](#0108--juntando-tudo-o-contador-de-palavras) | Juntando tudo: o contador de palavras | [`0108-juntando-tudo/`](0108-juntando-tudo/) |
 
 ---
 
-## 0110 · A ideia e a função hash
+## 0105 · A ideia e a função hash
 
 Na academia, o guarda-volumes tem 7 armários. A recepcionista não procura um
 armário vago de porta em porta, nem anota numa lista quem ficou onde. Ela
@@ -120,7 +120,7 @@ A regra é "soma dos códigos das letras, resto por 7". Para "caio": 99 + 97 +
 105 + 111 = 412, e 412 % 7 = 6. Só que "bia" (98 + 105 + 97 = 300) também deu
 6, e chegou antes. Os outros três caem em armários livres:
 
-<p align="center"><img src="0110-hashing/ideia.svg" alt="Diagrama da ideia: A ideia e a função hash" width="858"></p>
+<p align="center"><img src="0105-hashing/ideia.svg" alt="Diagrama da ideia: A ideia e a função hash" width="858"></p>
 
 O mesmo guarda-volumes em C. O vetor `dono` é a tabela: `NULL` quer dizer
 armário vazio. O programa só **detecta** a colisão; resolver fica para o
@@ -167,14 +167,14 @@ Repara no fluxograma: a função hash é só um laço que acumula a soma, letra 
 letra, e um resto no final. O caminho mostrado é o do "caio": quatro voltas no
 laço, índice 6, armário ocupado, colisão:
 
-<p align="center"><img src="0110-hashing/fluxograma.svg" alt="Fluxograma: A ideia e a função hash" width="533"></p>
+<p align="center"><img src="0105-hashing/fluxograma.svg" alt="Fluxograma: A ideia e a função hash" width="533"></p>
 
 > [!WARNING]
 > Somar os códigos é fácil, mas a soma **não vê a ordem das letras**. "amor",
 > "roma", "mora" e "ramo" têm as mesmas letras, então dão a mesma soma (431) e
 > caem todos no mesmo balde. Anagramas são comuns em nomes e códigos ("AB12" e
 > "BA21"). Use o **polinômio**: `h = h * 31 + letra`. Cada letra é
-> multiplicada pela sua posição, e a ordem passa a contar (exemplo A220).
+> multiplicada pela sua posição, e a ordem passa a contar (exemplo A210).
 
 > [!TIP]
 > **Por dentro do C:** o C não tem "letra"; tem bytes. Em UTF-8, o "ã" ocupa
@@ -189,13 +189,13 @@ laço, índice 6, armário ocupado, colisão:
 > [!NOTE]
 > **Pergunta para você:** se a tabela tivesse 10 armários em vez de 7, quais
 > alunos colidiriam? Faça as contas com as somas (ana 304, davi 420, lia 310,
-> bia 300, caio 412) antes de trocar `7` por `10` no exemplo A219 e rodar.
+> bia 300, caio 412) antes de trocar `7` por `10` no exemplo A209 e rodar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0110-hashing/`](0110-hashing/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0105-hashing/`](0105-hashing/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A219 · O armário pelo nome**
+**Exemplo A209 · O armário pelo nome**
 
 ```c
 #include <stdio.h>
@@ -235,10 +235,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/A219.c
+~/LPEDC/rodar 15-hash/0105-hashing/A209.c
 ```
 
-**Exemplo A220 · Anagramas: soma contra polinômio**
+**Exemplo A210 · Anagramas: soma contra polinômio**
 
 ```c
 #include <stdio.h>
@@ -281,12 +281,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/A220.c
+~/LPEDC/rodar 15-hash/0105-hashing/A210.c
 ```
 
 #### Exercícios
 
-**Exercício E655** · ★☆☆
+**Exercício E625** · ★☆☆
 
 A lanchonete guarda os pedidos do dia numa prateleira com 11 nichos. O
 nicho de cada pedido é o resto da divisão do número do pedido por 11.
@@ -310,10 +310,10 @@ pedido 2210 -> nicho 10
    7019 -> 1. Os pedidos 2210 e 5521 colidem no nicho 10.
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/E655.c
+~/LPEDC/rodar 15-hash/0105-hashing/E625.c
 ```
 
-**Exercício E656** · ★☆☆
+**Exercício E626** · ★☆☆
 
 Sem rodar, preveja a saída. Os códigos que você vai precisar: 's' = 115,
 'o' = 111, 'l' = 108, 'S' = 83, 'u' = 117, 'a' = 97.
@@ -351,10 +351,10 @@ Quais palavras colidem, e por que cada colisão acontece?
    por acaso: só o resto por 5 é igual.
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/E656.c
+~/LPEDC/rodar 15-hash/0105-hashing/E626.c
 ```
 
-**Exercício E657** · ★★☆
+**Exercício E627** · ★★☆
 
 Complete a função hash_pol, que calcula o hash polinomial de base 31 de uma
 string e devolve o resto por M (13). A regra: começa com h = 0 e, para cada
@@ -378,10 +378,10 @@ boleto -> 1
 3. Resposta esperada: a saída acima ("ted" e "doc" colidem com M = 13).
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/E657.c
+~/LPEDC/rodar 15-hash/0105-hashing/E627.c
 ```
 
-**Exercício E658** · ★★☆
+**Exercício E628** · ★★☆
 
 Na loja de material de construção, todo código de produto termina em 0:
 120, 350, 470, 590, 610, 230, 740, 860, 980 e 440. Escreva um programa que
@@ -411,10 +411,10 @@ Por que m = 10 é uma péssima escolha aqui?
    é sempre 0. Um m primo usa o número inteiro e espalha melhor.
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/E658.c
+~/LPEDC/rodar 15-hash/0105-hashing/E628.c
 ```
 
-**Exercício E659** · ★★★
+**Exercício E629** · ★★★
 
 O hortifrúti conta quantas frutas caem em cada um dos 8 baldes. O
 programa abaixo funciona com "banana" e "uva", mas o AddressSanitizer
@@ -436,10 +436,10 @@ b) Conserte a função para que funcione com qualquer texto em UTF-8.
    saída mostra 1 no balde 1 (banana), 1 no 4 (uva) e 1 no 6.
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/E659.c
+~/LPEDC/rodar 15-hash/0105-hashing/E629.c
 ```
 
-**Exercício E660** · ★★★
+**Exercício E630** · ★★★
 
 O compilador precisa reconhecer as palavras reservadas o tempo todo. Para
 um conjunto fixo de chaves, dá para achar uma tabela sem nenhuma colisão:
@@ -474,12 +474,12 @@ char -> ...
    dos códigos, o menor m seria 18.)
 
 ```bash
-~/LPEDC/rodar 15-hash/0110-hashing/E660.c
+~/LPEDC/rodar 15-hash/0105-hashing/E630.c
 ```
 
 ---
 
-## 0111 · Encadeamento
+## 0106 · Encadeamento
 
 No hortifrúti, o estoque fica em 5 prateleiras numeradas. A regra da casa diz
 em qual prateleira vai cada fruta. Quando duas frutas caem na mesma
@@ -517,7 +517,7 @@ termina com caju, pera, banana. Para buscar "kiwi", a busca vai ao balde 1,
 compara com "manga" (não é), depois com "kiwi" (é): 2 comparações, sem olhar
 nenhum outro balde:
 
-<p align="center"><img src="0111-encadeamento/ideia.svg" alt="Diagrama da ideia: Encadeamento" width="858"></p>
+<p align="center"><img src="0106-encadeamento/ideia.svg" alt="Diagrama da ideia: Encadeamento" width="858"></p>
 
 A estrutura segue o padrão TAD: `tabela.h` com a interface e o tipo opaco,
 `tabela.c` com o nó, os baldes e as operações. O coração da implementação:
@@ -555,7 +555,7 @@ bool tabela_busca(const Tabela *t, const char *chave, int *valor, int *comparaco
 }
 ```
 
-E o cliente, que só conhece o `tabela.h` (exemplo A221):
+E o cliente, que só conhece o `tabela.h` (exemplo A211):
 
 ```c
 #include <stdio.h>
@@ -598,7 +598,7 @@ o laço de sempre de lista encadeada. O "kiwi" dá uma volta no laço (passa pel
 manga) e para no Sim. O "limao" cai no balde 0, que está vazio, e sai pelo Não
 logo na primeira pergunta:
 
-<p align="center"><img src="0111-encadeamento/fluxograma.svg" alt="Fluxograma: Encadeamento" width="755"></p>
+<p align="center"><img src="0106-encadeamento/fluxograma.svg" alt="Fluxograma: Encadeamento" width="755"></p>
 
 > [!WARNING]
 > Chave de texto se compara com `strcmp`, nunca com `==`. `p->chave == chave`
@@ -623,13 +623,13 @@ logo na primeira pergunta:
 > **Pergunta para você:** o "limao" cai no balde 0. Se você inserir "limao"
 > com 9 caixas e depois buscar "coco" (que também cai no balde 0), quantas
 > comparações a busca faz? E se a inserção fosse no fim da corrente, mudaria
-> alguma coisa? Teste no A221.
+> alguma coisa? Teste no A211.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0111-encadeamento/`](0111-encadeamento/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0106-encadeamento/`](0106-encadeamento/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A221 · O estoque do hortifrúti em 5 baldes**
+**Exemplo A211 · O estoque do hortifrúti em 5 baldes**
 
 ```c
 #include <stdio.h>
@@ -668,10 +668,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/A221.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/A211.c
 ```
 
-**Exemplo A222 · Fim de feira: atualizar, remover e o fator de carga**
+**Exemplo A212 · Fim de feira: atualizar, remover e o fator de carga**
 
 ```c
 #include <stdio.h>
@@ -713,12 +713,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/A222.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/A212.c
 ```
 
 #### Exercícios
 
-**Exercício E661** · ★☆☆
+**Exercício E631** · ★☆☆
 
 Uma tabela com encadeamento tem 5 baldes e usa h(k) = k % 5. Cada número
 novo entra no INÍCIO da corrente do seu balde. Sem rodar, desenhe a tabela
@@ -750,10 +750,10 @@ Quantos baldes ficaram vazios? Qual a corrente mais comprida?
    [4] vazio. Dois baldes vazios; a corrente do balde 2, com 3 nós.
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/E661.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/E631.c
 ```
 
-**Exercício E662** · ★☆☆
+**Exercício E632** · ★☆☆
 
 A academia guarda as matrículas numa tabela com 7 baldes e encadeamento
 (h = matricula % 7). A inserção e a liberação já estão prontas. Complete a
@@ -775,10 +775,10 @@ Saída esperada:
    a corrente ficou 2016 -> 7210 -> 5005. O balde 3, do 4000, está vazio.
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/E662.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/E632.c
 ```
 
-**Exercício E663** · ★★☆
+**Exercício E633** · ★★☆
 
 No balcão da pizzaria, os pedidos prontos ficam numa tabela com 4 baldes e
 encadeamento (h = pedido % 4, inserção no início da corrente). Quando o
@@ -813,10 +813,10 @@ pedido 999 não existe
    removido leva free, e o libera solta o resto).
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/E663.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/E633.c
 ```
 
-**Exercício E664** · ★★☆
+**Exercício E634** · ★★☆
 
 Um colega sugeriu usar o tamanho do nome como função hash ("é rápido!").
 Compare as duas funções numa tabela com 8 baldes e estas 10 cidades:
@@ -851,10 +851,10 @@ polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
    lista.
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/E664.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/E634.c
 ```
 
-**Exercício E665** · ★★★
+**Exercício E635** · ★★★
 
 A lista de convidados do aniversário fica numa tabela com encadeamento. O
 programa mostra a tabela certinho, mas o gcc dá um aviso e o
@@ -878,10 +878,10 @@ Depois conserte a função libera.
    "No *prox = p->prox; free(p); p = prox;".
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/E665.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/E635.c
 ```
 
-**Exercício E666** · ★★★
+**Exercício E636** · ★★★
 
 No encadeamento a tabela nunca enche, mas as correntes crescem. A solução
 das bibliotecas é o rehash: quando o fator de carga passa de 1 (n > m), a
@@ -918,12 +918,12 @@ n = 10, m = 11
    corrente pode mudar conforme a sua implementação; o conteúdo, não.
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/E666.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/E636.c
 ```
 
 ---
 
-## 0112 · Endereçamento aberto
+## 0107 · Endereçamento aberto
 
 O estacionamento de visitantes do condomínio tem 11 vagas, numeradas de 0 a
 10. A regra da portaria: a vaga do carro é o número do apartamento com resto
@@ -957,7 +957,7 @@ e 504. O 101 vai para a vaga 2 e o 202 para a 4. O 301 também dá 4 (301 % 11
 e para na 6. O 504 vai direto para a 9. Na busca pelo 1104, o porteiro refaz
 o mesmo caminho: 3 sondagens:
 
-<p align="center"><img src="0112-enderecamento-aberto/ideia.svg" alt="Diagrama da ideia: Endereçamento aberto" width="858"></p>
+<p align="center"><img src="0107-enderecamento-aberto/ideia.svg" alt="Diagrama da ideia: Endereçamento aberto" width="858"></p>
 
 O TAD segue o padrão de sempre: `aberta.h` com a interface, `aberta.c` com o
 vetor de vagas, cada uma com um **estado**: `LIVRE`, `OCUPADA` ou `REMOVIDA`.
@@ -989,7 +989,7 @@ static int procura(const Aberta *t, int chave, int *sondagens) {
 }
 ```
 
-E o programa do condomínio (exemplo A223):
+E o programa do condomínio (exemplo A213):
 
 ```c
 #include <stdio.h>
@@ -1045,7 +1045,7 @@ encerra a busca sem sucesso; "é o carro?" encerra com sucesso. Se nenhuma das
 duas, anda uma vaga. O 1104 passa duas vezes pelo laço (vagas 4 e 5) e é
 achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 
-<p align="center"><img src="0112-enderecamento-aberto/fluxograma.svg" alt="Fluxograma: Endereçamento aberto" width="719"></p>
+<p align="center"><img src="0107-enderecamento-aberto/fluxograma.svg" alt="Fluxograma: Endereçamento aberto" width="719"></p>
 
 > [!WARNING]
 > Remover **não** é marcar a posição como livre. Se o carro do 301 sai e a
@@ -1053,7 +1053,7 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 > conclui "não está", embora ele esteja na 6. A vaga livre corta o caminho de
 > quem tinha pulado por ela. A solução é uma terceira marca, **removida**
 > (lápide, *tombstone*): a busca passa reto por ela, e a inserção pode
-> reaproveitá-la. O exemplo A224 mostra isso. O custo: com muitas remoções, as
+> reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
 > lápides acumulam e as buscas sem sucesso ficam longas, até você reconstruir
 > a tabela.
 
@@ -1075,9 +1075,9 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0112-enderecamento-aberto/`](0112-enderecamento-aberto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0107-enderecamento-aberto/`](0107-enderecamento-aberto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A223 · O estacionamento do condomínio: a próxima vaga livre**
+**Exemplo A213 · O estacionamento do condomínio: a próxima vaga livre**
 
 ```c
 #include <stdio.h>
@@ -1129,10 +1129,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/A223.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/A213.c
 ```
 
-**Exemplo A224 · O carro do 301 saiu: a marca de removida**
+**Exemplo A214 · O carro do 301 saiu: a marca de removida**
 
 ```c
 #include <stdio.h>
@@ -1179,12 +1179,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/A224.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/A214.c
 ```
 
 #### Exercícios
 
-**Exercício E667** · ★☆☆
+**Exercício E637** · ★☆☆
 
 Escreva um programa com uma tabela de 7 inteiros, todos começando com -1
 (livre), que insere 10, 24, 5, 17 e 31 com sondagem linear (h = k % 7; se
@@ -1210,10 +1210,10 @@ Saída esperada:
    ocupadas, dá a volta e para na 0.
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E667.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E637.c
 ```
 
-**Exercício E668** · ★☆☆
+**Exercício E638** · ★☆☆
 
 Sem rodar, preveja a saída. O número entre parênteses é a quantidade de
 sondagens de cada inserção:
@@ -1247,10 +1247,10 @@ int main(void) {
    24: vaga 2 (3); 11: vaga 4 (2).
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E668.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E638.c
 ```
 
-**Exercício E669** · ★★☆
+**Exercício E639** · ★★☆
 
 Os armários da escola usam endereçamento aberto com 7 posições e marca de
 removido. Guardaram 14, 21 e 28 (todos com hash 0: vão para 0, 1 e 2), e
@@ -1275,10 +1275,10 @@ Saída esperada:
    2 e para na 3, livre. Se a busca parasse na REMOVIDA, não acharia o 28.
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E669.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E639.c
 ```
 
-**Exercício E670** · ★★☆
+**Exercício E640** · ★★☆
 
 Uma tabela com endereçamento aberto enche. Escreva "int insere(int tab[],
 int chave)" para uma tabela de 5 posições (-1 = livre, h = k % 5,
@@ -1306,10 +1306,10 @@ Saída esperada:
    dando a volta no fim do vetor.
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E670.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E640.c
 ```
 
-**Exercício E671** · ★★★
+**Exercício E641** · ★★★
 
 No clube, os armários usam sondagem linear com 7 posições. O programa
 abaixo guarda 9, 13, 20 e 4, mas o AddressSanitizer acusa
@@ -1342,10 +1342,10 @@ Saída esperada depois do conserto:
    conserto é "i = (i + 1) % M", que volta para a vaga 0.
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E671.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E641.c
 ```
 
-**Exercício E672** · ★★★
+**Exercício E642** · ★★★
 
 A sondagem linear sofre com o agrupamento: chaves com o mesmo hash formam
 um bloco que cresce. O hash duplo resolve com um passo que depende da
@@ -1384,12 +1384,12 @@ duplo : 1 2 2 1 2 2 2 4 | total: 16
    forma.
 
 ```bash
-~/LPEDC/rodar 15-hash/0112-enderecamento-aberto/E672.c
+~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E642.c
 ```
 
 ---
 
-## 0113 · Juntando tudo: o contador de palavras
+## 0108 · Juntando tudo: o contador de palavras
 
 A padaria do bairro recebeu dezenas de comentários no app de entrega e quer
 saber do que os clientes mais falam. Um programa lê o texto, conta cada
@@ -1401,10 +1401,10 @@ junta peças de vários módulos:
 
 - **strings e `ctype.h`**: quebrar o texto em palavras e passar para
   minúsculas, para "Pão" e "pão" contarem juntas;
-- **a tabela com encadeamento** (assunto 0111), agora como o TAD
+- **a tabela com encadeamento** (assunto 0106), agora como o TAD
   `palavras.h`: `contador_soma` procura a palavra no seu balde e soma 1, ou
   cria o nó com a palavra **copiada**;
-- **vetor + `qsort`** (assuntos 0055 e 0101): a tabela não tem ordem nenhuma,
+- **vetor + `qsort`** (assuntos 0050 e 0096): a tabela não tem ordem nenhuma,
   então, para o ranking, as contagens vão para um vetor, que é ordenado por
   número de vezes e, no empate, em ordem alfabética.
 
@@ -1418,9 +1418,9 @@ Vamos ver na prática. O texto tem 31 palavras, 17 diferentes. A tabela tem
 "café", no balde 3, chega a 3; "estava" e "queijo" dividem o balde 4. No
 fim, a lista vai para o vetor, o `qsort` ordena e o ranking sai:
 
-<p align="center"><img src="0113-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o contador de palavras" width="858"></p>
+<p align="center"><img src="0108-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o contador de palavras" width="858"></p>
 
-O programa completo (exemplo A225). O TAD `palavras.h` fica na pasta, e o
+O programa completo (exemplo A215). O TAD `palavras.h` fica na pasta, e o
 `main` só conhece as funções dele:
 
 ```c
@@ -1510,7 +1510,7 @@ Não, 17, uma para cada palavra diferente, e cria o nó com 0. Os dois caminhos
 se juntam no `vezes++`, como no `contador_soma`. Quando o texto acaba, sai o
 ranking:
 
-<p align="center"><img src="0113-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o contador de palavras" width="662"></p>
+<p align="center"><img src="0108-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o contador de palavras" width="662"></p>
 
 > [!WARNING]
 > `isalpha`, `tolower` e companhia recebem um `int` que precisa ser um valor
@@ -1542,9 +1542,9 @@ ranking:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0113-juntando-tudo/`](0113-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0108-juntando-tudo/`](0108-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A225 · O que os clientes mais falam da padaria**
+**Exemplo A215 · O que os clientes mais falam da padaria**
 
 ```c
 #include <stdio.h>
@@ -1628,10 +1628,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/A225.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/A215.c
 ```
 
-**Exemplo A226 · Contando as palavras de qualquer texto (entrada padrão)**
+**Exemplo A216 · Contando as palavras de qualquer texto (entrada padrão)**
 
 ```c
 #include <stdio.h>
@@ -1708,9 +1708,9 @@ int main(void) {
     contador_libera(c);
     return 0;
 }
-// Para testar com um arquivo: ~/LPEDC/rodar A226.c < texto.txt
+// Para testar com um arquivo: ~/LPEDC/rodar A216.c < texto.txt
 // Exemplo:
-// $ printf 'Quem casa quer casa.\nQuem não casa, quer casar!\n' | ~/LPEDC/rodar A226.c
+// $ printf 'Quem casa quer casa.\nQuem não casa, quer casar!\n' | ~/LPEDC/rodar A216.c
 // 9 palavras, 5 diferentes, 2 aparecem uma vez só
 // 1. casa: 3
 // 2. quem: 2
@@ -1719,12 +1719,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/A226.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/A216.c
 ```
 
 #### Exercícios
 
-**Exercício E673** · ★☆☆
+**Exercício E643** · ★☆☆
 
 O primeiro passo do contador é quebrar o texto em palavras. Escreva um
 programa que percorre a frase "Bom dia, Brasil! Bom dia, São Paulo.",
@@ -1754,10 +1754,10 @@ paulo
    muda o 'S' e deixa os bytes do "ã" como estão.
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/E673.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/E643.c
 ```
 
-**Exercício E674** · ★☆☆
+**Exercício E644** · ★☆☆
 
 Um contador de palavras usa 4 baldes, encadeamento com inserção no início
 e a função hash "soma dos códigos % 4". Os códigos: 'o' = 111, 'v' = 118,
@@ -1781,10 +1781,10 @@ O programa mostra cada balde assim: [0] palavra:vezes palavra:vezes ...
    balde; o strcmp é que separa as contagens.
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/E674.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/E644.c
 ```
 
-**Exercício E675** · ★★☆
+**Exercício E645** · ★★☆
 
 Às vezes você não quer contar tudo, só saber se algo já apareceu. Use uma
 tabela hash como CONJUNTO (só chaves, sem contagem) para achar a primeira
@@ -1816,10 +1816,10 @@ primeira repetida: parte (palavra 9)
    de comparar cada palavra com todas as anteriores.
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/E675.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/E645.c
 ```
 
-**Exercício E676** · ★★☆
+**Exercício E646** · ★★☆
 
 A tabela já contou as palavras da lista da feira e entregou o vetor
 abaixo, fora de ordem. Complete a função compara para o qsort deixar o
@@ -1844,10 +1844,10 @@ queijo 1
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/E676.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/E646.c
 ```
 
-**Exercício E677** · ★★★
+**Exercício E647** · ★★★
 
 Este contador lê as palavras de uma frase, uma por vez, no mesmo vetor
 "atual", e conta numa tabela com encadeamento. Ele compila sem aviso e o
@@ -1884,12 +1884,12 @@ c) Conserte.
    nessa ordem (a dos baldes).
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/E677.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/E647.c
 ```
 
-**Exercício E678** · ★★★
+**Exercício E648** · ★★★
 
-No assunto 0110 a soma dos códigos juntava os anagramas por acidente.
+No assunto 0105 a soma dos códigos juntava os anagramas por acidente.
 Agora junte de propósito. A "assinatura" de uma palavra são as suas
 letras em ordem: "roma", "mora" e "amor" têm a mesma assinatura, "amor".
 Use uma tabela hash cuja chave é a assinatura e cujo valor é o grupo de
@@ -1923,7 +1923,7 @@ sala alas
    aparecem. É o mesmo truque do contador: muda só o que vira chave.
 
 ```bash
-~/LPEDC/rodar 15-hash/0113-juntando-tudo/E678.c
+~/LPEDC/rodar 15-hash/0108-juntando-tudo/E648.c
 ```
 
 ---

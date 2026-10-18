@@ -49,8 +49,8 @@ usa.
 
 ## Antes de começar
 
-Você vai usar `scanf` com o retorno conferido (assunto 0011), `if`, `switch`
-e o ternário (módulo 02) e `bool` de `<stdbool.h>` (assunto 0017). Os
+Você vai usar `scanf` com o retorno conferido (assunto 0006), `if`, `switch`
+e o ternário (módulo 02) e `bool` de `<stdbool.h>` (assunto 0012). Os
 exercícios só usam o que já foi visto: ainda não há funções (módulo 04) nem
 vetores (módulo 05), então tudo cabe no `main`.
 
@@ -58,7 +58,7 @@ Vários exemplos leem do teclado. Para não digitar tudo de novo a cada teste,
 mande a entrada pelo `printf` do terminal, um valor por linha:
 
 ```bash
-printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/rodar 03-repeticoes/0030-padroes-de-laco/A059.c
+printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/rodar 03-repeticoes/0025-padroes-de-laco/A049.c
 ```
 
 E se um programa travar num laço infinito, `Ctrl+C` encerra.
@@ -153,14 +153,14 @@ Compare com `sqrt(2)`.
 <details><summary>Resposta</summary>
 
 São duas pirâmides: a de cima com `(n + 1) / 2` linhas, crescendo (como no
-exercício E173), e a de baixo com as linhas restantes, encolhendo. Em cada
+exercício E143), e a de baixo com as linhas restantes, encolhendo. Em cada
 linha, primeiro os espaços, depois os asteriscos. Para `n = 9`, a linha do
 meio tem 9 asteriscos.
 
 </details>
 
 **7. O craps tem truque?** Jogue 100 000 rodadas de craps (o algoritmo do
-A063, sem os `printf`, dentro de um `for`) e calcule a porcentagem de
+A053, sem os `printf`, dentro de um `for`) e calcule a porcentagem de
 vitórias e a média de lançamentos por rodada.
 
 <details><summary>Resposta</summary>
@@ -193,13 +193,13 @@ você escreve o dígito 7?
 <details><summary>Resposta</summary>
 
 **300** vezes. Um laço de 1 a 1000 e, dentro, um `while` que desmonta o número
-com `% 10` e `/ 10` (como o A050), contando os dígitos 7. Conferindo de
+com `% 10` e `/ 10` (como o A040), contando os dígitos 7. Conferindo de
 cabeça: o 7 aparece 100 vezes na casa das unidades, 100 na das dezenas e 100
 na das centenas.
 
 </details>
 
-**10. O computador adivinha.** Inverta o jogo do E183: você pensa num número
+**10. O computador adivinha.** Inverta o jogo do E153: você pensa num número
 de 1 a 1000, e o computador chuta. A cada chute você responde 1 (mais alto),
 2 (mais baixo) ou 0 (acertou). Quantos chutes ele precisa, no pior caso?
 
@@ -208,7 +208,7 @@ de 1 a 1000, e o computador chuta. A cada chute você responde 1 (mais alto),
 Com a estratégia certa, no máximo **10**, porque 2¹⁰ = 1024 ≥ 1000. O
 computador guarda o intervalo possível (`menor = 1`, `maior = 1000`), chuta
 sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta. É a
-**busca binária**, que volta no assunto 0095.
+**busca binária**, que volta no assunto 0090.
 
 </details>
 

@@ -1,45 +1,43 @@
-// 0035 · Escopo e tempo de vida
+// 0035 · Pré-processador: macros e #ifdef
 // Exercício E209 · ★★★
 //
-// Resposta:
-// main: 20 / bloco: 30 / a: 1 -> 2 / b: 5 -> 10 / c: 10 -> 20 /
-// a: 1 -> 2 / b: 10 -> 15 / c: 20 -> 40 / main: 20.
-// A local de a recomeça em 1; a static de b guarda o valor; c dobra a global
-// (10, depois 20); o x do main nunca é tocado por ninguém.
+// Resposta: m = 6, x = 7 / m = 5, x = 6 / m = 40, chamadas = 3 /
+// m = 40, chamadas = 2.
+// MAIOR(x++, y) vira ((x++) > (y) ? (x++) : (y)): o primeiro x++ compara 5 > 3
+// e x vira 6; o segundo x++ devolve 6 e x vira 7. Na função, x++ roda uma vez
+// só, antes da chamada: a recebe 5. Com pontos, a macro chama pontos(40) duas
+// vezes (na comparação e no resultado) e pontos(25) uma: 3 chamadas.
 
 #include <stdio.h>
 
-int x = 10;
+#define MAIOR(a, b) ((a) > (b) ? (a) : (b))
 
-void a(void) {
-    int x = 1;
-    printf("a: %d", x);
-    x++;
-    printf(" -> %d\n", x);
+int chamadas = 0;
+
+int pontos(int p) {
+    chamadas++;
+    return p;
 }
 
-void b(void) {
-    static int x = 5;
-    printf("b: %d", x);
-    x += 5;
-    printf(" -> %d\n", x);
-}
-
-void c(void) {
-    printf("c: %d", x);
-    x *= 2;
-    printf(" -> %d\n", x);
+int maior(int a, int b) {
+    return a > b ? a : b;
 }
 
 int main(void) {
-    int x = 20;
-    printf("main: %d\n", x);
-    {
-        int x = 30;
-        printf("bloco: %d\n", x);
-    }
-    a(); b(); c();
-    a(); b(); c();
-    printf("main: %d\n", x);
+    int x = 5;
+    int y = 3;
+    int m = MAIOR(x++, y);
+    printf("m = %d, x = %d\n", m, x);
+
+    x = 5;
+    m = maior(x++, y);
+    printf("m = %d, x = %d\n", m, x);
+
+    m = MAIOR(pontos(40), pontos(25));
+    printf("m = %d, chamadas = %d\n", m, chamadas);
+
+    chamadas = 0;
+    m = maior(pontos(40), pontos(25));
+    printf("m = %d, chamadas = %d\n", m, chamadas);
     return 0;
 }

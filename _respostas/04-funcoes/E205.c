@@ -1,27 +1,22 @@
-// 0035 · Escopo e tempo de vida
+// 0035 · Pré-processador: macros e #ifdef
 // Exercício E205 · ★☆☆
 //
-// Resposta: 10, 25, 40, 25, 10. mostrar só enxerga a global (10). No main, o
-// volume local (25) esconde a global; dentro do bloco, o 40 esconde o 25 até o
-// "}".
+// Resposta:
+//   DOBRO(4)        -> 4 + 4               = 8
+//   3 * DOBRO(4)    -> 3 * 4 + 4           = 16 (e não 24)
+//   METADE(10 + 4)  -> ((10 + 4) / 2)      = 7
+//   100 + TAXA * 2  -> 100 + 10 * 2        = 120
 
 #include <stdio.h>
 
-int volume = 10;
-
-void mostrar(void) {
-    printf("%d\n", volume);
-}
+#define DOBRO(x) x + x
+#define METADE(x) ((x) / 2)
+#define TAXA 10
 
 int main(void) {
-    mostrar();
-    int volume = 25;
-    printf("%d\n", volume);
-    {
-        int volume = 40;
-        printf("%d\n", volume);
-    }
-    printf("%d\n", volume);
-    mostrar();
+    printf("%d\n", DOBRO(4));
+    printf("%d\n", 3 * DOBRO(4));
+    printf("%d\n", METADE(10 + 4));
+    printf("%d\n", 100 + TAXA * 2);
     return 0;
 }

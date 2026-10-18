@@ -1,18 +1,40 @@
-// 0018 · Lógicos: E, OU, NÃO
+// 0018 · switch, case, break e fall-through
 // Exercício E104 · ★☆☆
 
-#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    double temp;
-    printf("Temperatura: ");
-    scanf("%lf", &temp);
+    double salario;
+    char classe;
+    printf("Salário: ");
+    if (scanf("%lf", &salario) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
+    printf("Classe (A, B ou C): ");
+    if (scanf(" %c", &classe) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
-    bool dentro = temp >= 2 && temp <= 8;
-    bool alarme = !dentro;
-
-    printf("Dentro da faixa? %d\n", dentro);
-    printf("Alarme? %d\n", alarme);
+    double aumento;
+    switch (classe) {
+    case 'A':
+    case 'a':
+        aumento = 0.10;
+        break;
+    case 'B':
+    case 'b':
+        aumento = 0.15;
+        break;
+    case 'C':
+    case 'c':
+        aumento = 0.20;
+        break;
+    default:
+        printf("Classe inválida.\n");
+        return 1;
+    }
+    printf("Novo salário: R$ %.2f\n", salario * (1 + aumento));
     return 0;
 }

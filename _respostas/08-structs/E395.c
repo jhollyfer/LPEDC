@@ -1,37 +1,66 @@
-// 0066 · Vetor de structs
+// 0066 · Juntando tudo: o cardápio
 // Exercício E395 · ★★★
-//
-// Resposta: a troca movia só o nome; pontos e nível ficavam no lugar. Trocar
-// a struct inteira resolve e ainda dispensa o strcpy.
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef enum { BAIXA, MEDIA, ALTA } Prioridade;
+
+#define TRABALHO (1u << 0)
+#define CASA     (1u << 1)
+#define URGENTE  (1u << 2)
 
 typedef struct {
-    char nome[20];
-    int pontos;
-    int nivel;
-} Jogador;
+    char titulo[24];
+    Prioridade prioridade;
+    int prazo;
+    unsigned tags;
+} Tarefa;
+
+int comparar(const void *a, const void *b) {
+    const Tarefa *x = a;
+    const Tarefa *y = b;
+    if (x->prioridade != y->prioridade) return (int)y->prioridade - (int)x->prioridade;
+    if (x->prazo != y->prazo) return x->prazo - y->prazo;
+    return strcmp(x->titulo, y->titulo);
+}
+
+void mostrar(const Tarefa *t) {
+    const char *nomes[] = {"baixa", "média", "alta"};
+    printf("[%s] dia %d: %s\n", nomes[t->prioridade], t->prazo, t->titulo);
+}
 
 int main(void) {
-    Jogador v[] = {
-        {"Teo", 410, 5},
-        {"Lia", 950, 12},
-        {"Bento", 720, 9},
+    const Tarefa modelo[] = {
+        {"Pagar aluguel", ALTA, 5, CASA | URGENTE},
+        {"Revisar PR", MEDIA, 3, TRABALHO},
+        {"Comprar ração", BAIXA, 8, CASA},
+        {"Deploy da API", ALTA, 2, TRABALHO | URGENTE},
+        {"Reunião 1:1", MEDIA, 3, TRABALHO},
+        {"Lavar o carro", BAIXA, 12, CASA},
     };
-    int n = sizeof v / sizeof v[0];
+    int n = sizeof modelo / sizeof modelo[0];
 
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - 1 - i; j++) {
-            if (v[j].pontos < v[j + 1].pontos) {
-                Jogador tmp = v[j];
-                v[j] = v[j + 1];
-                v[j + 1] = tmp;
-            }
+    Tarefa *agenda = malloc(n * sizeof *agenda);
+    if (agenda == NULL) {
+        return 1;
+    }
+    for (int i = 0; i < n; i++) {
+        agenda[i] = modelo[i];
+    }
+
+    qsort(agenda, n, sizeof *agenda, comparar);
+    for (int i = 0; i < n; i++) {
+        mostrar(&agenda[i]);
+    }
+    printf("Trabalho:\n");
+    for (int i = 0; i < n; i++) {
+        if ((agenda[i].tags & TRABALHO) != 0) {
+            mostrar(&agenda[i]);
         }
     }
 
-    for (int i = 0; i < n; i++) {
-        printf("%d. %s - %d pontos, nível %d\n", i + 1, v[i].nome, v[i].pontos, v[i].nivel);
-    }
+    free(agenda);
     return 0;
 }

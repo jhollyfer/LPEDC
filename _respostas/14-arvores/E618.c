@@ -1,30 +1,47 @@
-// 0103 · Árvore binária e percursos
+// 0103 · Heapsort
 // Exercício E618 · ★★★
 
 #include <stdio.h>
-#include "arvore.h"
+#include <string.h>
 
-No *constroi(const char *s, int *pos) {
-    char c = s[(*pos)++];
-    if (c == '.') {
-        return NULL; // subárvore vazia
+// troca só os ponteiros: as letras ficam onde estão
+void troca(const char **a, const char **b) {
+    const char *t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void desce(const char *v[], int n, int i) {
+    while (2 * i + 1 < n) {
+        int f = 2 * i + 1;
+        if (f + 1 < n && strcmp(v[f + 1], v[f]) > 0) {
+            f++;
+        }
+        if (strcmp(v[i], v[f]) >= 0) {
+            break;
+        }
+        troca(&v[i], &v[f]);
+        i = f;
     }
-    No *esq = constroi(s, pos); // primeiro a esquerda...
-    No *dir = constroi(s, pos); // ...depois a direita
-    return arv_cria(c, esq, dir);
+}
+
+void heapsort(const char *v[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        desce(v, n, i);
+    }
+    for (int fim = n - 1; fim > 0; fim--) {
+        troca(&v[0], &v[fim]);
+        desce(v, fim, 0);
+    }
 }
 
 int main(void) {
-    const char *testes[] = {"*-8..3..+4..2..", "MGC..J..T.X.."};
-    for (int i = 0; i < 2; i++) {
-        int pos = 0;
-        No *raiz = constroi(testes[i], &pos);
-        printf("%s\n  em ordem: ", testes[i]);
-        arv_em_ordem(raiz);
-        printf("\n  pós-ordem:");
-        arv_pos_ordem(raiz);
-        printf("\n  nós: %d, altura: %d\n", arv_conta(raiz), arv_altura(raiz));
-        raiz = arv_libera(raiz);
+    const char *nomes[] = {"Paula", "Bruno", "Zeca", "Ana", "Marcos", "Carla", "Igor", "Beatriz"};
+    int n = sizeof(nomes) / sizeof(nomes[0]);
+
+    heapsort(nomes, n);
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", nomes[i]);
     }
     return 0;
 }

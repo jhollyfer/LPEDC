@@ -1,33 +1,25 @@
-// 0025 · While
+// 0025 · Padrões de laço
 // Exercício E149 · ★★★
 
 #include <stdio.h>
 
 int main(void) {
-    long n;
+    int nota;
+    int primeiro = -1, segundo = -1;
 
-    printf("Digite n: ");
-    if (scanf("%ld", &n) != 1 || n < 1) {
-        printf("Preciso de um inteiro positivo.\n");
-        return 1;
-    }
-
-    long maior = n;
-    int passos = 0;
-    printf("%ld", n);
-    while (n != 1) {
-        if (n % 2 == 0) {
-            n = n / 2;
-        } else {
-            n = 3 * n + 1;
+    for (int i = 1; i <= 8; i++) {
+        printf("Nota %d: ", i);
+        if (scanf("%d", &nota) != 1) {
+            return 1;
         }
-        passos++;
-        if (n > maior) {
-            maior = n;
+        if (nota > primeiro) {
+            segundo = primeiro; // o campeão antigo desce um lugar
+            primeiro = nota;
+        } else if (nota > segundo) {
+            segundo = nota;
         }
-        printf(" %ld", n);
     }
-    printf("\nPassos: %d\n", passos);
-    printf("Maior valor: %ld\n", maior);
+    printf("1º lugar: %d\n", primeiro);
+    printf("2º lugar: %d\n", segundo);
     return 0;
 }

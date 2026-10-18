@@ -1,49 +1,56 @@
-// 0088 · Pilha encadeada
+// 0088 · Juntando tudo: a calculadora de expressões
 // Exercício E527 · ★★★
 
 #include <stdio.h>
-// Na pasta do assunto basta #include "pilha.h" (o rodar compila o pilha.c
-// junto). Aqui a resolução inclui a implementação para compilar sozinha.
-#include "../../12-pilhas-e-filas/0088-pilha-encadeada/pilha.c"
+// Na pasta do assunto basta incluir os .h (o rodar compila o pilha.c e o
+// fila.c junto). Aqui a resolução inclui as implementações para compilar
+// sozinha.
+#include "../../12-pilhas-e-filas/0088-juntando-tudo/fila.c"
+#include "../../12-pilhas-e-filas/0088-juntando-tudo/pilha.c"
 
-void ordena(Pilha *p) {
-    Pilha *aux = pilha_cria(); // sempre ordenada, com o maior no topo
-    if (aux == NULL) {
-        return;
-    }
-    int x;
-    while (pilha_desempilha(p, &x)) {
-        int topo;
-        // abre espaço: o que for maior que x volta para a original
-        while (pilha_topo(aux, &topo) && topo > x) {
-            pilha_desempilha(aux, &topo);
-            pilha_empilha(p, topo);
-        }
-        pilha_empilha(aux, x);
-    }
-    while (pilha_desempilha(aux, &x)) { // o maior vai para o fundo
-        pilha_empilha(p, x);
-    }
-    pilha_libera(aux);
-}
+#define VAGAS 4
 
 int main(void) {
-    Pilha *p = pilha_cria();
-    if (p == NULL) {
-        return 1;
-    }
-    int pedidos[] = {5, 3, 8, 1, 4};
-    for (int i = 0; i < 5; i++) {
-        pilha_empilha(p, pedidos[i]);
+    char tipo[] = "EEEEESSSSS";
+    int carro[] = {1, 2, 3, 4, 5, 2, 1, 4, 3, 5};
+    int manobras[6] = {0};
+
+    Pilha *beco = pilha_cria();
+    Pilha *rua = pilha_cria();
+    Fila *espera = fila_cria();
+    if (beco == NULL || rua == NULL || espera == NULL) {
+        return 1; // (num programa maior, libere o que foi criado)
     }
 
-    ordena(p);
-
-    int x;
-    while (pilha_desempilha(p, &x)) {
-        printf("%d ", x);
+    for (int i = 0; tipo[i] != '\0'; i++) {
+        int c = carro[i];
+        if (tipo[i] == 'E') {
+            if (pilha_tamanho(beco) < VAGAS) {
+                pilha_empilha(beco, c);
+            } else {
+                fila_insere(espera, c);
+                printf("Carro %d espera na rua\n", c);
+            }
+            continue;
+        }
+        // saída: tira da frente quem estiver bloqueando
+        int x;
+        while (pilha_desempilha(beco, &x) && x != c) {
+            manobras[x]++;
+            pilha_empilha(rua, x);
+        }
+        printf("Carro %d saiu; manobras: %d\n", c, manobras[c]);
+        while (pilha_desempilha(rua, &x)) { // voltam na mesma ordem
+            pilha_empilha(beco, x);
+        }
+        if (fila_retira(espera, &x)) { // abriu vaga: entra o primeiro da fila
+            pilha_empilha(beco, x);
+            printf("Carro %d entrou (vinha da fila)\n", x);
+        }
     }
-    printf("\n");
-    pilha_libera(p);
+
+    pilha_libera(beco);
+    pilha_libera(rua);
+    fila_libera(espera);
     return 0;
 }

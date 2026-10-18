@@ -1,18 +1,22 @@
-// 0049 · Memória e endereços
+// 0049 · Ponteiro para ponteiro
 // Exercício E291 · ★★☆
-//
-// Resposta: os endereços sobem de 8 em 8 (um double tem 8 bytes) e
-// precos[1][0] começa logo depois de precos[0][2]: a matriz é contígua.
 
 #include <stdio.h>
+#include <ctype.h>
+
+void pula_ate_digito(const char **s) {
+    while (**s != '\0' && !isdigit((unsigned char)**s)) {
+        (*s)++;
+    }
+}
 
 int main(void) {
-    double precos[2][3] = {{6.0, 7.5, 8.0}, {9.0, 11.0, 12.5}};
+    const char *msg = "Pedido numero 4521 confirmado";
+    const char *outra = "Sem numero";
 
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 3; j++) {
-            printf("precos[%d][%d] = %.2f em %p\n", i, j, precos[i][j], (void *)&precos[i][j]);
-        }
-    }
+    pula_ate_digito(&msg);
+    printf("%s\n", msg);
+    pula_ate_digito(&outra);
+    printf("%s\n", outra);
     return 0;
 }

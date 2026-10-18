@@ -1,21 +1,34 @@
-// 0018 · Lógicos: E, OU, NÃO
+// 0018 · switch, case, break e fall-through
 // Exercício E108 · ★★★
-//
-// Resposta: n & 1 == 0 é lido como n & (1 == 0), ou seja n & 0, que é
-// sempre 0. 10 < n < 20 é (10 < n) < 20: 0 ou 1 comparado com 20, sempre 1.
 
-#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int n;
-    printf("Número: ");
-    scanf("%d", &n);
+    int pacote;
+    printf("Pacote (1 a 3): ");
+    if (scanf("%d", &pacote) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
-    bool par = (n & 1) == 0;
-    bool na_faixa = n > 10 && n < 20;
-
-    printf("Par? %d\n", par);
-    printf("Entre 10 e 20? %d\n", na_faixa);
+    double total = 0;
+    switch (pacote) {
+    case 3:
+        printf("Cera: R$ 25.00\n");
+        total += 25;
+        // fall through
+    case 2:
+        printf("Aspiração: R$ 15.00\n");
+        total += 15;
+        // fall through
+    case 1:
+        printf("Lavagem: R$ 30.00\n");
+        total += 30;
+        break;
+    default:
+        printf("Pacote inválido.\n");
+        return 1;
+    }
+    printf("Total: R$ %.2f\n", total);
     return 0;
 }

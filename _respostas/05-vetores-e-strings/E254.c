@@ -1,33 +1,36 @@
-// 0043 · Vetores e funções
+// 0043 · Juntando tudo
 // Exercício E254 · ★☆☆
 
 #include <stdio.h>
 
-#define VAGAS 10
+#define JOGADORES 4
+#define TAM 12
 
-void preencher(int v[], int n, int valor) {
+void mostrar_tabela(char nomes[][TAM], const int gols[], int n) {
+    int total = 0;
+    printf("%-10s%6s\n", "Nome", "Gols");
     for (int i = 0; i < n; i++) {
-        v[i] = valor;
+        printf("%-10s%6d\n", nomes[i], gols[i]);
+        total += gols[i];
     }
+    printf("%-10s%6d\n", "Total:", total);
 }
 
-void mostrar(const int v[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf(i == 0 ? "%d" : " %d", v[i]);
+int indice_artilheiro(const int gols[], int n) {
+    int pos = 0;
+    for (int i = 1; i < n; i++) {
+        if (gols[i] > gols[pos]) {
+            pos = i;
+        }
     }
-    printf("\n");
+    return pos;
 }
 
 int main(void) {
-    int vagas[VAGAS];
+    char nomes[JOGADORES][TAM] = {"Tiago", "Duda", "Kauã", "Lia"};
+    int gols[JOGADORES] = {7, 12, 5, 9};
 
-    preencher(vagas, VAGAS, 0);
-    mostrar(vagas, VAGAS);
-
-    vagas[0] = 1;
-    vagas[3] = 1;
-    vagas[7] = 1;
-    vagas[8] = 1;
-    mostrar(vagas, VAGAS);
+    mostrar_tabela(nomes, gols, JOGADORES);
+    printf("Artilheiro: %s\n", nomes[indice_artilheiro(gols, JOGADORES)]);
     return 0;
 }

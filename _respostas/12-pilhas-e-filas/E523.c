@@ -1,13 +1,14 @@
-// 0088 · Pilha encadeada
+// 0088 · Juntando tudo: a calculadora de expressões
 // Exercício E523 · ★☆☆
 //
-// Resposta:
-//   empilha 3      topo -> 3 -> NULL
-//   empilha 8      topo -> 8 -> 3 -> NULL
-//   desempilha     topo -> 3 -> NULL            mostra "8"
-//   empilha 5      topo -> 5 -> 3 -> NULL
-//   empilha 9      topo -> 9 -> 5 -> 3 -> NULL
-//   desempilha     topo -> 5 -> 3 -> NULL       mostra "9"
-//   topo           (não muda)                   mostra "2 itens, topo 5"
-// mallocs: 5 (1 da struct da pilha + 4 nós).
-// frees: 5 (2 nos desempilhas + 2 nós no pilha_libera + 1 da struct).
+// Resposta: conversão de 2 * (3 + 4)
+//   lê   pilha de operadores   fila de saída
+//   2    (vazia)               2
+//   *    *                     2
+//   (    * (                   2
+//   3    * (                   2 3
+//   +    * ( +                 2 3            (o "(" protege o *)
+//   4    * ( +                 2 3 4
+//   )    *                     2 3 4 +        (o "(" é descartado)
+//   fim  (vazia)               2 3 4 + *
+// Avaliação: 2 | 2 3 | 2 3 4 | 2 7 | 14. Resultado: 14.

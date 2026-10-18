@@ -1,38 +1,65 @@
-// 0095 · Busca binária
+// 0095 · Quick sort
 // Exercício E569 · ★★★
-//
-// Resposta: com size_t (sem sinal), quando meio vale 0 e a chave é menor que
-// v[0], fim = meio - 1 não vira -1: dá a volta para SIZE_MAX (um número
-// enorme). A condição ini <= fim continua verdadeira, o próximo meio é
-// gigante e v[meio] lê longe do vetor (o ASan acusa). O mesmo acontece com
-// n = 0, em fim = n - 1. Conserto: intervalo semiaberto [ini, fim), que
-// nunca subtrai 1 de um size_t (ou usar int com sinal).
 
 #include <stdio.h>
-#include <stddef.h>
 
-int busca(const int v[], size_t n, int x) {
-    size_t ini = 0, fim = n;          // semiaberto: fim fica uma depois
-    while (ini < fim) {
-        size_t meio = ini + (fim - ini) / 2;
-        if (v[meio] == x) {
-            return (int) meio;
-        }
-        if (v[meio] < x) {
-            ini = meio + 1;
-        } else {
-            fim = meio;               // sem "- 1": nunca dá a volta
+static int comparacoes = 0;
+
+void troca(int *a, int *b) {
+    int aux = *a;
+    *a = *b;
+    *b = aux;
+}
+
+int separa(int v[], int p, int r) {
+    int pivo = v[r], j = p;
+    for (int k = p; k < r; k++) {
+        comparacoes++;
+        if (v[k] <= pivo) {
+            troca(&v[j], &v[k]);
+            j++;
         }
     }
-    return -1;
+    troca(&v[j], &v[r]);
+    return j;
+}
+
+// devolve o valor que ficaria na posição k se v fosse ordenado
+int quickselect(int v[], int n, int k) {
+    int p = 0, r = n - 1;
+    while (p < r) {
+        int j = separa(v, p, r);
+        if (j == k) {
+            return v[j];
+        }
+        if (k < j) {
+            r = j - 1;          // só o lado que contém k interessa
+        } else {
+            p = j + 1;
+        }
+    }
+    return v[p];
+}
+
+void quick_sort(int v[], int p, int r) {
+    if (p >= r) {
+        return;
+    }
+    int j = separa(v, p, r);
+    quick_sort(v, p, j - 1);
+    quick_sort(v, j + 1, r);
 }
 
 int main(void) {
-    int tempos[] = {10, 20, 28, 35, 41, 57, 63};
-    size_t n = sizeof tempos / sizeof tempos[0];
+    int a[] = {45, 22, 38, 31, 50, 27, 24, 41, 29, 35, 33};
+    int b[] = {45, 22, 38, 31, 50, 27, 24, 41, 29, 35, 33};
+    int n = 11;
 
-    printf("35: posição %d\n", busca(tempos, n, 35));
-    printf("3: posição %d\n", busca(tempos, n, 3));
-    printf("vazio: posição %d\n", busca(tempos, 0, 35));
+    int mediana = quickselect(a, n, n / 2);
+    int c1 = comparacoes;
+    comparacoes = 0;
+    quick_sort(b, 0, n - 1);
+    printf("mediana: %d min (quickselect: %d comparações)\n", mediana, c1);
+    printf("ordenando tudo: %d min (%d comparações)\n", b[n / 2], comparacoes);
     return 0;
 }

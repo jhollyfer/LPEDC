@@ -1,21 +1,23 @@
-// 0009 · Constantes
+// 0009 · Atribuição, ++ e --
 // Exercício E053 · ★★★
 //
-// Resposta: o original mostra "Comprimento: 60 m". O const não muda o tipo:
-// pi é int, e guardar 3.14159 num int joga fora a parte fracionária sem
-// aviso. Fica 2 * 3 * 10 = 60. O certo é um tipo real.
+// Resposta: em senha = senha++, a variável recebe duas escritas na mesma
+// expressão (a do = e a do ++), sem ordem definida. No printf, fila++ e fila
+// são avaliados numa ordem que o padrão não fixa: o segundo argumento pode
+// ver 7 ou 8. As duas linhas são comportamento indefinido, e o gcc avisa
+// "operation on ... may be undefined" [-Wsequence-point]. Separando em
+// passos, a intenção fica clara e o resultado é o mesmo em qualquer
+// compilador.
 
 #include <stdio.h>
 
-#define PI 3.14159
-
 int main(void) {
-    // jeito 1: const com o tipo certo
-    const double pi = 3.14159;
-    int raio = 10;
-    printf("Comprimento: %.2f m\n", 2 * pi * raio);
+    int senha = 1234;
+    senha++;
+    printf("senha %d\n", senha);
 
-    // jeito 2: #define (o compilador vê 2 * 3.14159 * raio)
-    printf("Comprimento: %.2f m\n", 2 * PI * raio);
+    int fila = 7;
+    printf("fila: atendendo %d, próximo %d\n", fila, fila + 1);
+    fila++;
     return 0;
 }

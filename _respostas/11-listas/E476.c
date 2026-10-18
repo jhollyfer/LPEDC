@@ -1,178 +1,160 @@
-// 0080 · Vetor dinâmico
+// 0080 · Lista circular
 // Exercício E476 · ★☆☆
 //
 // Resposta:
-//   A: tam 2, cap 2        itens [5, 9]: a 2ª inserção dobrou de 1 para 2
-//   B: tam 4, cap 4        o 3 entrou na frente (dobrou para 4) e o 7 no fim
-//   [3, 5, 9, 7]
-//   C: x = 5, tam 4, cap 4 tirou o 5 (posição 1); x * 2 = 10 entrou na
-//                          posição 3, que era igual ao tamanho: foi para o fim
-//   [3, 9, 7, 10]
-//   D: falhou, x continua 5 a posição 4 não existe (vai de 0 a 3)
-//   E: tam 5, cap 8        o 5º item encontrou o vetor cheio: dobrou para 8
+//   5 -> 10 -> 20 -> 30 -> (volta ao 5)   o 5 entrou na frente; u está no 30
+//   30 5                                  o último e o primeiro (u->prox)
+//   10 20 30 5 10 20                      depois do 30 vem o 5 de novo
+//   20 -> 30 -> 5 -> 10 -> (volta ao 20)  u andou dois: agora o último é o 10
+//   20 -> 30 -> 5 -> (volta ao 20)        tirou o último; o 5 assume
+//   3
 
 #include <stdio.h>
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
-// lista.h · TAD lista sequencial (vetor que cresce)
+// lista.h · lista circular simplesmente encadeada
 //
-// Interface: o que a lista faz. A struct fica escondida em lista.c (tipo
-// opaco): quem usa a lista só conversa com ela por estas funções.
+// O último nó aponta de volta para o primeiro: nenhum prox é NULL. A lista é
+// guardada pelo ponteiro para o ÚLTIMO nó, porque dele se chega às duas
+// pontas: o primeiro é ultimo->prox. Lista vazia: No *ultimo = NULL;
 
 #ifndef LISTA_H
 #define LISTA_H
 
 #include <stdbool.h>
 
-typedef struct lista Lista;
+typedef struct no {
+    int valor;
+    struct no *prox; // nunca NULL: o último aponta para o primeiro
+} No;
 
-// cria uma lista vazia com espaço para "capacidade" itens (NULL se faltar memória)
-Lista *lista_cria(int capacidade);
+// põe "valor" depois do último e devolve o NOVO último: O(1)
+No *lista_insere_fim(No *ultimo, int valor);
 
-// devolve a memória da lista e dos itens
-void lista_libera(Lista *l);
+// põe "valor" antes do primeiro e devolve o último (que só muda se a lista
+// estava vazia): O(1)
+No *lista_insere_inicio(No *ultimo, int valor);
 
-// põe "valor" no fim; dobra a capacidade quando enche (false se faltar memória)
-bool lista_insere_fim(Lista *l, int valor);
+// tira o primeiro nó com "valor"; false se não estava
+bool lista_remove(No **ultimo, int valor);
 
-// põe "valor" na posição "pos" (0 a tamanho), empurrando os outros para a direita
-bool lista_insere_em(Lista *l, int pos, int valor);
+// mostra uma volta, do primeiro ao último: 3 -> 7 -> (volta ao 3)
+void lista_imprime(const No *ultimo);
 
-// tira o item da posição "pos", puxando os outros para a esquerda;
-// guarda o valor tirado em *removido (se removido não for NULL)
-bool lista_remove_em(Lista *l, int pos, int *removido);
+// quantos nós a lista tem
+int lista_tamanho(const No *ultimo);
 
-// copia o item da posição "pos" para *valor (false se a posição não existe)
-bool lista_pega(const Lista *l, int pos, int *valor);
-
-// quantos itens a lista tem / quantos cabem sem crescer
-int lista_tamanho(const Lista *l);
-int lista_capacidade(const Lista *l);
-
-// mostra a lista assim: [12, 35, 8]
-void lista_imprime(const Lista *l);
+// devolve a memória de todos os nós
+void lista_libera(No *ultimo);
 
 #endif
 
-// lista.c · implementação da lista sequencial (vetor que cresce)
+// lista.c · lista circular simplesmente encadeada
 
 #include <stdio.h>
 #include <stdlib.h>
 
-struct lista {
-    int *itens; // vetor no heap
-    int tam;    // quantos itens estão em uso
-    int cap;    // quantos itens cabem no vetor
-};
-
-Lista *lista_cria(int capacidade) {
-    if (capacidade < 1) capacidade = 1;
-    Lista *l = malloc(sizeof(Lista));
-    if (l == NULL) return NULL;
-    l->itens = malloc(capacidade * sizeof(int));
-    if (l->itens == NULL) {
-        free(l);
-        return NULL;
+static No *cria_no(int valor) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) {
+        fprintf(stderr, "sem memória\n");
+        exit(1);
     }
-    l->tam = 0;
-    l->cap = capacidade;
-    return l;
+    novo->valor = valor;
+    novo->prox = novo; // sozinho, ele é o próprio círculo
+    return novo;
 }
 
-void lista_libera(Lista *l) {
-    if (l == NULL) return;
-    free(l->itens); // primeiro o vetor...
-    free(l);        // ...depois a struct que apontava para ele
+No *lista_insere_inicio(No *ultimo, int valor) {
+    No *novo = cria_no(valor);
+    if (ultimo == NULL) return novo; // único nó: primeiro e último
+    novo->prox = ultimo->prox;       // o novo aponta para o antigo primeiro
+    ultimo->prox = novo;             // o último fecha o círculo no novo
+    return ultimo;
 }
 
-// garante espaço para mais um item: se encheu, dobra
-static bool garante_espaco(Lista *l) {
-    if (l->tam < l->cap) return true;
-    int nova_cap = l->cap * 2;
-    int *novo = realloc(l->itens, nova_cap * sizeof(int));
-    if (novo == NULL) return false; // l->itens continua valendo
-    l->itens = novo;
-    l->cap = nova_cap;
-    return true;
+No *lista_insere_fim(No *ultimo, int valor) {
+    // inserir no fim = inserir no início e dizer que o novo é o último
+    ultimo = lista_insere_inicio(ultimo, valor);
+    return ultimo->prox;
 }
 
-bool lista_insere_fim(Lista *l, int valor) {
-    if (!garante_espaco(l)) return false;
-    l->itens[l->tam] = valor;
-    l->tam++;
-    return true;
-}
-
-bool lista_insere_em(Lista *l, int pos, int valor) {
-    if (pos < 0 || pos > l->tam) return false;
-    if (!garante_espaco(l)) return false;
-    for (int i = l->tam; i > pos; i--) { // abre o buraco, de trás para frente
-        l->itens[i] = l->itens[i - 1];
+bool lista_remove(No **ultimo, int valor) {
+    if (*ultimo == NULL) return false;
+    No *ant = *ultimo;
+    No *p = (*ultimo)->prox;      // começa no primeiro
+    while (p->valor != valor) {
+        if (p == *ultimo) return false; // deu a volta inteira
+        ant = p;
+        p = p->prox;
     }
-    l->itens[pos] = valor;
-    l->tam++;
-    return true;
-}
-
-bool lista_remove_em(Lista *l, int pos, int *removido) {
-    if (pos < 0 || pos >= l->tam) return false;
-    if (removido != NULL) *removido = l->itens[pos];
-    for (int i = pos; i < l->tam - 1; i++) { // fecha o buraco
-        l->itens[i] = l->itens[i + 1];
+    if (p == ant) {
+        *ultimo = NULL;           // era o único nó
+    } else {
+        ant->prox = p->prox;
+        if (p == *ultimo) *ultimo = ant; // tirou o último: o anterior assume
     }
-    l->tam--;
+    free(p);
     return true;
 }
 
-bool lista_pega(const Lista *l, int pos, int *valor) {
-    if (pos < 0 || pos >= l->tam) return false;
-    *valor = l->itens[pos];
-    return true;
-}
-
-int lista_tamanho(const Lista *l) {
-    return l->tam;
-}
-
-int lista_capacidade(const Lista *l) {
-    return l->cap;
-}
-
-void lista_imprime(const Lista *l) {
-    printf("[");
-    for (int i = 0; i < l->tam; i++) {
-        if (i > 0) printf(", ");
-        printf("%d", l->itens[i]);
+void lista_imprime(const No *ultimo) {
+    if (ultimo == NULL) {
+        printf("(vazia)\n");
+        return;
     }
-    printf("]\n");
+    const No *p = ultimo->prox;
+    do {                          // do-while: o primeiro passo é de graça
+        printf("%d -> ", p->valor);
+        p = p->prox;
+    } while (p != ultimo->prox);  // parou quando voltou ao primeiro
+    printf("(volta ao %d)\n", ultimo->prox->valor);
+}
+
+int lista_tamanho(const No *ultimo) {
+    if (ultimo == NULL) return 0;
+    int n = 0;
+    const No *p = ultimo;
+    do {
+        n++;
+        p = p->prox;
+    } while (p != ultimo);
+    return n;
+}
+
+void lista_libera(No *ultimo) {
+    if (ultimo == NULL) return;
+    No *p = ultimo->prox;
+    ultimo->prox = NULL;          // corta o círculo: vira uma lista comum
+    while (p != NULL) {
+        No *seguinte = p->prox;
+        free(p);
+        p = seguinte;
+    }
 }
 // ---- fim de lista.h e lista.c ----
 
 int main(void) {
-    Lista *l = lista_cria(1);
-    if (l == NULL) return 1;
+    No *u = NULL;
+    u = lista_insere_fim(u, 10);
+    u = lista_insere_fim(u, 20);
+    u = lista_insere_inicio(u, 5);
+    u = lista_insere_fim(u, 30);
+    lista_imprime(u);
+    printf("%d %d\n", u->valor, u->prox->valor);
 
-    lista_insere_fim(l, 5);
-    lista_insere_fim(l, 9);
-    printf("A: tam %d, cap %d\n", lista_tamanho(l), lista_capacidade(l));
-
-    lista_insere_em(l, 0, 3);
-    lista_insere_fim(l, 7);
-    printf("B: tam %d, cap %d\n", lista_tamanho(l), lista_capacidade(l));
-    lista_imprime(l);
-
-    int x = 0;
-    lista_remove_em(l, 1, &x);
-    lista_insere_em(l, 3, x * 2);
-    printf("C: x = %d, tam %d, cap %d\n", x, lista_tamanho(l), lista_capacidade(l));
-    lista_imprime(l);
-
-    if (!lista_remove_em(l, 4, &x)) {
-        printf("D: falhou, x continua %d\n", x);
+    const No *p = u->prox->prox;
+    for (int i = 0; i < 6; i++) {
+        printf(i == 0 ? "%d" : " %d", p->valor);
+        p = p->prox;
     }
+    printf("\n");
 
-    lista_insere_fim(l, 1);
-    printf("E: tam %d, cap %d\n", lista_tamanho(l), lista_capacidade(l));
+    u = u->prox->prox;
+    lista_imprime(u);
+    lista_remove(&u, 10);
+    lista_imprime(u);
+    printf("%d\n", lista_tamanho(u));
 
-    lista_libera(l);
+    lista_libera(u);
     return 0;
 }

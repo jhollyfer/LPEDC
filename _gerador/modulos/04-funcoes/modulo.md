@@ -61,7 +61,7 @@ sudo pacman -S gdb          # Arch Linux
 sudo apt install gdb        # Debian / Ubuntu
 ```
 
-Nos assuntos 0039 e 0041, a pasta tem arquivos de apoio (`conversao.h` e
+Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
 `conversao.c`, `cardapio.h` e `cardapio.c`). O `rodar` compila esses `.c`
 junto com o exemplo, sozinho. O texto mostra também o comando `gcc` para fazer
 isso à mão.
@@ -129,7 +129,7 @@ Um `static int` em cada função resolve a contagem, mas `relatorio` não enxerg
 o `static` de outra função. Saída: cada função aceita um parâmetro "só
 consultar" (`int contar(bool so_ler)`) que devolve o contador sem somar, ou o
 trio vai para um módulo com contadores `static` de arquivo e funções de
-consulta, como o `conversoes_feitas` do assunto 0039.
+consulta, como o `conversoes_feitas` do assunto 0034.
 
 </details>
 

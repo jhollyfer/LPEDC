@@ -34,7 +34,7 @@ de ela fazer sentido.
 
 1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
    mesmas chaves do código.
-2. Leia o código. A partir do 0103, cada assunto tem um **TAD** na pasta
+2. Leia o código. A partir do 0098, cada assunto tem um **TAD** na pasta
    (`arvore.h`, `bst.h`, `avl.h`, `heap.h`, `cadastro.h`) e o exemplo só usa a
    interface. Abra o `.c` do TAD também: é lá que mora o algoritmo.
 3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
@@ -57,16 +57,16 @@ o nó vermelho é o que vai sair ou o que está desequilibrado.
 
 ## Antes de começar
 
-Você precisa estar à vontade com **recursão** (assuntos 0037 e 0038),
-**ponteiros para struct** e `->` (0067), `malloc` e `free` (0059) e a ideia de
-**TAD** com `.h` e `.c` (0079). A fila do assunto 0090 aparece no percurso por
-nível, e o assunto 0095 (busca binária) é o primo da BST.
+Você precisa estar à vontade com **recursão** (assuntos 0032 e 0033),
+**ponteiros para struct** e `->` (0062), `malloc` e `free` (0054) e a ideia de
+**TAD** com `.h` e `.c` (0074). A fila do assunto 0085 aparece no percurso por
+nível, e o assunto 0090 (busca binária) é o primo da BST.
 
 O `rodar` compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
 comandos dos exemplos e exercícios são os de sempre:
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/A207.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A197.c
 ```
 
 Uma convenção vale para o módulo todo: **altura conta arestas**. Uma folha tem
@@ -75,18 +75,18 @@ altura 1). Quando for consultar outro material, confira qual é a convenção.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0102](#0102--árvores) | Árvores | [`0102-arvores/`](0102-arvores/) |
-| [0103](#0103--árvore-binária-e-percursos) | Árvore binária e percursos | [`0103-arvore-binaria/`](0103-arvore-binaria/) |
-| [0104](#0104--bst-busca-e-inserção) | BST: busca e inserção | [`0104-bst-busca-insercao/`](0104-bst-busca-insercao/) |
-| [0105](#0105--bst-remoção) | BST: remoção | [`0105-bst-remocao/`](0105-bst-remocao/) |
-| [0106](#0106--avl-balanceamento-e-rotações) | AVL: balanceamento e rotações | [`0106-avl/`](0106-avl/) |
-| [0107](#0107--heap-e-fila-de-prioridade) | Heap e fila de prioridade | [`0107-heap/`](0107-heap/) |
-| [0108](#0108--heapsort) | Heapsort | [`0108-heapsort/`](0108-heapsort/) |
-| [0109](#0109--juntando-tudo) | Juntando tudo | [`0109-juntando-tudo/`](0109-juntando-tudo/) |
+| [0097](#0097--árvores) | Árvores | [`0097-arvores/`](0097-arvores/) |
+| [0098](#0098--árvore-binária-e-percursos) | Árvore binária e percursos | [`0098-arvore-binaria/`](0098-arvore-binaria/) |
+| [0099](#0099--bst-busca-e-inserção) | BST: busca e inserção | [`0099-bst-busca-insercao/`](0099-bst-busca-insercao/) |
+| [0100](#0100--bst-remoção) | BST: remoção | [`0100-bst-remocao/`](0100-bst-remocao/) |
+| [0101](#0101--avl-balanceamento-e-rotações) | AVL: balanceamento e rotações | [`0101-avl/`](0101-avl/) |
+| [0102](#0102--heap-e-fila-de-prioridade) | Heap e fila de prioridade | [`0102-heap/`](0102-heap/) |
+| [0103](#0103--heapsort) | Heapsort | [`0103-heapsort/`](0103-heapsort/) |
+| [0104](#0104--juntando-tudo) | Juntando tudo | [`0104-juntando-tudo/`](0104-juntando-tudo/) |
 
 ---
 
-## 0102 · Árvores
+## 0097 · Árvores
 
 Abra o gerenciador de arquivos. Dentro de `casa` tem `fotos`, `contas` e
 `musica`. Dentro de `fotos` tem `praia` e `natal`. Dentro de `contas` tem `agua`
@@ -129,7 +129,7 @@ Vamos ver na prática. A árvore das pastas tem 9 nós, 5 folhas (em verde) e
 altura 3: o caminho mais longo vai de `casa` até `2025`, passando por `contas` e
 `luz`:
 
-<p align="center"><img src="0102-arvores/ideia.svg" alt="Diagrama da ideia: Árvores" width="858"></p>
+<p align="center"><img src="0097-arvores/ideia.svg" alt="Diagrama da ideia: Árvores" width="858"></p>
 
 Em C, cada pasta vira um nó com um nome e um vetor de ponteiros para os filhos.
 Cada nó é criado com `malloc`, igual aos nós da lista encadeada:
@@ -236,7 +236,7 @@ não entra no laço, `maior` fica em -1 e a função devolve 0. Cada pasta pergu
 a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 (`fotos`), 2 (`contas`) e 0 (`musica`), e ela devolve 2 + 1 = 3:
 
-<p align="center"><img src="0102-arvores/fluxograma.svg" alt="Fluxograma: Árvores" width="545"></p>
+<p align="center"><img src="0097-arvores/fluxograma.svg" alt="Fluxograma: Árvores" width="545"></p>
 
 > [!WARNING]
 > A ordem do `free` importa. Se `libera` fizer `free(n)` **antes** de visitar os
@@ -248,7 +248,7 @@ a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 > **Por dentro do C:** este nó ocupa 56 bytes: 16 do nome, 4 ponteiros de 8
 > bytes (32), 4 do `int` e mais 4 de enchimento (*padding*) para o tamanho ficar
 > múltiplo de 8. Uma folha gasta os mesmos 56 bytes, com 4 ponteiros sem uso. O
-> exemplo A204 mostra a saída clássica: **primeiro filho / próximo irmão**. Cada
+> exemplo A194 mostra a saída clássica: **primeiro filho / próximo irmão**. Cada
 > nó guarda só dois ponteiros, um para o primeiro filho e outro para o próximo
 > irmão, e aceita qualquer número de filhos. Repare que isso é, na prática, uma
 > árvore binária, o assunto seguinte.
@@ -256,13 +256,13 @@ a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 > [!NOTE]
 > **Pergunta para você:** se você criar a pasta `2026` dentro de `2025`, o que
 > muda na saída? Quantas folhas e qual altura? E se criar `2026` dentro de
-> `musica`? Responda antes de mudar o A203.
+> `musica`? Responda antes de mudar o A193.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0102-arvores/`](0102-arvores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0097-arvores/`](0097-arvores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A203 · As pastas do computador**
+**Exemplo A193 · As pastas do computador**
 
 ```c
 #include <stdio.h>
@@ -366,10 +366,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/A203.c
+~/LPEDC/rodar 14-arvores/0097-arvores/A193.c
 ```
 
-**Exemplo A204 · O organograma com dois ponteiros**
+**Exemplo A194 · O organograma com dois ponteiros**
 
 ```c
 #include <stdio.h>
@@ -462,12 +462,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/A204.c
+~/LPEDC/rodar 14-arvores/0097-arvores/A194.c
 ```
 
 #### Exercícios
 
-**Exercício E607** · ★☆☆
+**Exercício E577** · ★☆☆
 
 O site de uma loja organiza os produtos em categorias:
 
@@ -502,10 +502,10 @@ e) Qual é a altura de "eletronicos" e a altura da árvore?
    e) eletronicos: 2; árvore: 3.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/E607.c
+~/LPEDC/rodar 14-arvores/0097-arvores/E577.c
 ```
 
-**Exercício E608** · ★☆☆
+**Exercício E578** · ★☆☆
 
 Complete a função conta_nos, que devolve quantos nós a árvore tem (a raiz
 conta). O main monta o organograma de uma escola:
@@ -533,10 +533,10 @@ Pessoas na escola: 5
 3. Resposta esperada: Pessoas na escola: 5
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/E608.c
+~/LPEDC/rodar 14-arvores/0097-arvores/E578.c
 ```
 
-**Exercício E609** · ★★☆
+**Exercício E579** · ★★☆
 
 Escreva a função profundidade_de(raiz, nome), que procura uma pasta pelo
 nome e devolve a profundidade dela (a raiz tem profundidade 0). Se a pasta
@@ -562,10 +562,10 @@ videos: -1
 3. Resposta esperada: luz: 2, casa: 0, 2025: 3, videos: -1.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/E609.c
+~/LPEDC/rodar 14-arvores/0097-arvores/E579.c
 ```
 
-**Exercício E610** · ★★☆
+**Exercício E580** · ★★☆
 
 Cada pasta guarda alguns arquivos (o campo mb, em megabytes). A função
 tamanho soma a pasta com tudo que está dentro dela e imprime uma linha
@@ -589,10 +589,10 @@ em que momento cada printf acontece? Depois rode e confira.
    450 MB  casa
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/E610.c
+~/LPEDC/rodar 14-arvores/0097-arvores/E580.c
 ```
 
-**Exercício E611** · ★★★
+**Exercício E581** · ★★★
 
 Ache o bug. Este programa monta a árvore da família e deveria mostrar:
 
@@ -629,10 +629,10 @@ vovo
    família: 2", sem erro.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/E611.c
+~/LPEDC/rodar 14-arvores/0097-arvores/E581.c
 ```
 
-**Exercício E612** · ★★★
+**Exercício E582** · ★★★
 
 O menu do app de delivery é uma árvore:
 
@@ -676,12 +676,12 @@ Total de caminhos: 5
    tudo: o rodar não pode acusar vazamento.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-arvores/E612.c
+~/LPEDC/rodar 14-arvores/0097-arvores/E582.c
 ```
 
 ---
 
-## 0103 · Árvore binária e percursos
+## 0098 · Árvore binária e percursos
 
 Churrasco no sábado: vão 8 pessoas, 3 não bebem, e quem bebe paga R$ 4 de
 cerveja mais R$ 2 de gelo. Na planilha você digita `=(8-3)*(4+2)` e ela
@@ -710,7 +710,7 @@ typedef struct No {
 ```
 
 O resto vira um **TAD**: `arvore.h` com os protótipos, `arvore.c` com a
-implementação, como no assunto 0079. Diferente da pilha e da fila, a struct fica
+implementação, como no assunto 0074. Diferente da pilha e da fila, a struct fica
 à mostra no `.h`, porque os exercícios precisam andar pelos nós. A função
 `arv_cria(info, esq, dir)` monta um nó com as duas subárvores prontas, então
 dá para construir a árvore de baixo para cima.
@@ -727,17 +727,17 @@ Montada a árvore, como visitar todos os nós? Existem quatro ordens clássicas,
 
 Os três primeiros são recursivos e mudam só a posição do `printf` em relação às
 duas chamadas. O por nível não desce por um lado e depois pelo outro: ele usa
-uma **fila** (assunto 0090). Tira um nó da frente, mostra, põe os filhos dele no
+uma **fila** (assunto 0085). Tira um nó da frente, mostra, põe os filhos dele no
 fim, e repete até a fila esvaziar.
 
 A pós-ordem é a ordem natural para **calcular**: você só aplica o `*` depois de
 saber quanto valem as duas subárvores. É o mesmo algoritmo da pilha com notação
-pós-fixa do assunto 0089, só que agora a árvore está desenhada.
+pós-fixa do assunto 0084, só que agora a árvore está desenhada.
 
 Vamos ver na prática. Os operadores ficam nos nós internos (roxo) e os números
 nas folhas (azul). Cada percurso lê a mesma árvore numa ordem diferente:
 
-<p align="center"><img src="0103-arvore-binaria/ideia.svg" alt="Diagrama da ideia: Árvore binária e percursos" width="858"></p>
+<p align="center"><img src="0098-arvore-binaria/ideia.svg" alt="Diagrama da ideia: Árvore binária e percursos" width="858"></p>
 
 O cliente do TAD monta a árvore de baixo para cima e chama os percursos:
 
@@ -789,7 +789,7 @@ Repara no fluxograma: o caso base é a árvore vazia. Num nó de verdade, a fun�
 resolve a esquerda inteira, mostra a raiz e só então resolve a direita. Troque a
 caixa azul de lugar e você tem a pré-ordem (antes) ou a pós-ordem (depois):
 
-<p align="center"><img src="0103-arvore-binaria/fluxograma.svg" alt="Fluxograma: Árvore binária e percursos" width="346"></p>
+<p align="center"><img src="0098-arvore-binaria/fluxograma.svg" alt="Fluxograma: Árvore binária e percursos" width="346"></p>
 
 ### Passo a passo
 
@@ -811,7 +811,7 @@ que um `printf` acontece:
 > pelo C), dá `8 - 12 + 2 = -2`, e não 30. A árvore não precisa de parênteses
 > porque a forma dela já diz o que vem primeiro. Para mostrar a fórmula certa,
 > a em ordem precisa abrir um `(` antes de cada subárvore e fechar depois. O
-> exemplo A206 faz isso e calcula o valor em pós-ordem.
+> exemplo A196 faz isso e calcula o valor em pós-ordem.
 
 > [!TIP]
 > **Por dentro do C:** cada nó ocupa 24 bytes: 1 do `char`, 7 de enchimento para
@@ -828,9 +828,9 @@ que um `printf` acontece:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0103-arvore-binaria/`](0103-arvore-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0098-arvore-binaria/`](0098-arvore-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A205 · A conta do churrasco em árvore**
+**Exemplo A195 · A conta do churrasco em árvore**
 
 ```c
 #include <stdio.h>
@@ -864,10 +864,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/A205.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/A195.c
 ```
 
-**Exemplo A206 · Calculando a árvore de expressão**
+**Exemplo A196 · Calculando a árvore de expressão**
 
 ```c
 #include <stdio.h>
@@ -924,12 +924,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/A206.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/A196.c
 ```
 
 #### Exercícios
 
-**Exercício E613** · ★☆☆
+**Exercício E583** · ★☆☆
 
 No papel, escreva os quatro percursos desta árvore (pré-ordem, em ordem,
 pós-ordem e por nível):
@@ -957,10 +957,10 @@ de escrever as suas respostas, para conferir.
    por nível M G T C J X.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/E613.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E583.c
 ```
 
-**Exercício E614** · ★☆☆
+**Exercício E584** · ★☆☆
 
 Complete as funções conta_folhas e conta_internos. Na árvore da conta do
 churrasco, (8 - 3) * (4 + 2), as folhas são os números e os nós internos
@@ -981,10 +981,10 @@ Operadores: 3
 3. Resposta esperada: Números: 4 e Operadores: 3.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/E614.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E584.c
 ```
 
-**Exercício E615** · ★★☆
+**Exercício E585** · ★★☆
 
 Escreva a função espelha(r), que transforma a árvore na sua imagem no
 espelho: em todo nó, a subárvore da esquerda troca de lugar com a da
@@ -1007,10 +1007,10 @@ Depois: 2 + 4 * 3 - 8
    que a em ordem do espelho é a em ordem original de trás para frente.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/E615.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E585.c
 ```
 
-**Exercício E616** · ★★☆
+**Exercício E586** · ★★☆
 
 Escreva a função deitada(r, nivel), que desenha a árvore deitada no
 terminal: a raiz fica na coluna 0, e cada nível desce 4 espaços para a
@@ -1038,10 +1038,10 @@ Saída esperada:
    com 4 espaços, os números com 8).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/E616.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E586.c
 ```
 
-**Exercício E617** · ★★★
+**Exercício E587** · ★★★
 
 Ache o bug. A função por_nivel deveria mostrar a árvore do churrasco nível
 por nível, mas mostra outra ordem:
@@ -1075,14 +1075,14 @@ a função está usando sem querer? E que percurso é esse que aparece?
    entra por último e sai primeiro. Consertado: * - + 8 3 4 2.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/E617.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E587.c
 ```
 
-**Exercício E618** · ★★★
+**Exercício E588** · ★★★
 
 Dá para guardar uma árvore binária numa string: escreva a pré-ordem e
 marque cada subárvore vazia com um ponto. A árvore do churrasco vira
-"*-8..3..+4..2.." e a árvore M, G, T, C, J, X do E613 vira "MGC..J..T.X..".
+"*-8..3..+4..2.." e a árvore M, G, T, C, J, X do E583 vira "MGC..J..T.X..".
 
 Escreva a função constroi(s, &pos), que lê a string a partir de s[pos] e
 devolve a árvore montada com arv_cria. O main testa as duas strings:
@@ -1111,16 +1111,16 @@ MGC..J..T.X..
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-arvore-binaria/E618.c
+~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E588.c
 ```
 
 ---
 
-## 0104 · BST: busca e inserção
+## 0099 · BST: busca e inserção
 
 A academia do bairro guarda os alunos pela matrícula. Na catraca, o sistema
 precisa achar a matrícula na hora. Num vetor ordenado, a busca binária
-(assunto 0095) acha rápido, mas cada aluno novo obriga a empurrar metade do
+(assunto 0090) acha rápido, mas cada aluno novo obriga a empurrar metade do
 vetor para abrir espaço. Numa lista encadeada, inserir é barato, mas a busca
 passa por um nó de cada vez. Dá para ter as duas coisas?
 
@@ -1152,7 +1152,7 @@ e 80. A busca pelo 60 compara com 50 (vai para a direita), com 70 (vai para a
 esquerda) e acha. A busca pelo 45 desce 50, 30, 40 e cai no `NULL` à direita do
 40: é ali que o 45 entraria se fosse inserido:
 
-<p align="center"><img src="0104-bst-busca-insercao/ideia.svg" alt="Diagrama da ideia: BST: busca e inserção" width="858"></p>
+<p align="center"><img src="0099-bst-busca-insercao/ideia.svg" alt="Diagrama da ideia: BST: busca e inserção" width="858"></p>
 
 O TAD fica em `bst.h` e `bst.c`. As duas funções principais:
 
@@ -1225,21 +1225,21 @@ Repara no fluxograma: cada volta do laço faz no máximo duas perguntas sobre o
 nó atual e desce um nível. O caminho verde é a busca do 60: direita no 50,
 esquerda no 70, achou:
 
-<p align="center"><img src="0104-bst-busca-insercao/fluxograma.svg" alt="Fluxograma: BST: busca e inserção" width="941"></p>
+<p align="center"><img src="0099-bst-busca-insercao/fluxograma.svg" alt="Fluxograma: BST: busca e inserção" width="941"></p>
 
 > [!WARNING]
 > A forma da BST depende da **ordem de chegada**. As mesmas sete matrículas
 > inseridas em ordem crescente (20, 30, ..., 80) formam uma "árvore" em que todo
 > nó só tem filho direito: uma lista encadeada disfarçada, com altura 6. A busca
-> pelo 80 passa pelos 7 nós, e a promessa do log₂ n vai embora. O exemplo A208
-> mostra isso, e o assunto 0106 resolve.
+> pelo 80 passa pelos 7 nós, e a promessa do log₂ n vai embora. O exemplo A198
+> mostra isso, e o assunto 0101 resolve.
 
 > [!TIP]
 > **Por dentro do C:** repare no `raiz = bst_insere(raiz, ...)`. A árvore começa
 > como `NULL` e só o primeiro `insere` muda a raiz. Se você esquecer a
 > atribuição, o nó criado se perde: a variável `raiz` continua `NULL` e o
 > AddressSanitizer acusa vazamento no fim. Outra saída é passar o endereço da
-> raiz (`No **`), como no `scanf`. O exercício E622 faz assim. Cada nó ocupa 24
+> raiz (`No **`), como no `scanf`. O exercício E592 faz assim. Cada nó ocupa 24
 > bytes (4 do `int`, 4 de enchimento, 16 dos ponteiros), contra 4 bytes por
 > chave num vetor: a BST troca memória por inserção barata.
 
@@ -1249,9 +1249,9 @@ esquerda no 70, achou:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0104-bst-busca-insercao/`](0104-bst-busca-insercao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0099-bst-busca-insercao/`](0099-bst-busca-insercao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A207 · As matrículas da academia**
+**Exemplo A197 · As matrículas da academia**
 
 ```c
 #include <stdio.h>
@@ -1296,10 +1296,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/A207.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A197.c
 ```
 
-**Exemplo A208 · A ordem de chegada muda a árvore**
+**Exemplo A198 · A ordem de chegada muda a árvore**
 
 ```c
 #include <stdio.h>
@@ -1345,12 +1345,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/A208.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A198.c
 ```
 
 #### Exercícios
 
-**Exercício E619** · ★☆☆
+**Exercício E589** · ★☆☆
 
 No papel, insira estas senhas de atendimento numa BST vazia, nesta ordem:
 
@@ -1374,10 +1374,10 @@ busca pelo 25? (c) e a busca pelo 65, que não existe, termina à direita ou
    (b) 45, 20, 30, 25; (c) 45, 70, 60 e cai à direita do 60.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/E619.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E589.c
 ```
 
-**Exercício E620** · ★☆☆
+**Exercício E590** · ★☆☆
 
 Complete menor_chave e maior_chave, que devolvem a menor e a maior
 matrícula da academia. Use um laço (sem recursão) e não visite a árvore
@@ -1398,10 +1398,10 @@ Matrícula mais nova: 80
 3. Resposta esperada: 20 e 80.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/E620.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E590.c
 ```
 
-**Exercício E621** · ★★☆
+**Exercício E591** · ★★☆
 
 A loja guarda os preços dos produtos (em reais, inteiros) numa BST. O
 cliente quer ver só o que custa entre R$ 35 e R$ 65. Escreva
@@ -1427,10 +1427,10 @@ Nós visitados: 5 de 9
    Os nós 20, 80, 10 e 90 nunca são tocados.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/E621.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E591.c
 ```
 
-**Exercício E622** · ★★☆
+**Exercício E592** · ★★☆
 
 Escreva insere_sem_recursao(No **raiz, int chave): a inserção na BST com um
 laço, recebendo o ENDEREÇO da raiz. Assim a função não devolve nada e o
@@ -1455,10 +1455,10 @@ Altura: 2
 3. Resposta esperada: a saída acima (o 30 repetido não entra).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/E622.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E592.c
 ```
 
-**Exercício E623** · ★★★
+**Exercício E593** · ★★★
 
 Ache o bug. A função eh_bst deveria dizer se uma árvore respeita a regra da
 BST. As duas árvores abaixo foram montadas à mão (sem bst_insere):
@@ -1502,10 +1502,10 @@ busca não acha. Explique por que eh_bst erra e reescreva a função para dar
    a culpa é da árvore, não da busca.)
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/E623.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E593.c
 ```
 
-**Exercício E624** · ★★★
+**Exercício E594** · ★★★
 
 Na rifa da festa junina, cada bilhete vendido foi anotado num caderno, mas
 alguns números foram vendidos duas (ou três!) vezes. Os números anotados,
@@ -1541,12 +1541,12 @@ Altura: 3
    só uma descida pela árvore, e não uma varredura do caderno inteiro.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/E624.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E594.c
 ```
 
 ---
 
-## 0105 · BST: remoção
+## 0100 · BST: remoção
 
 Fim do mês na academia: três alunos cancelaram o plano, e as matrículas 30, 40
 e 20 precisam sair da árvore. Inserir era fácil porque todo nó novo entra como
@@ -1583,7 +1583,7 @@ Vamos ver na prática. O 30 tem dois filhos. A partir dele, a busca do sucessor
 vai para a direita (40) e depois para a esquerda até o fim (35). O 35 vai para o
 lugar do 30, e o 35 de baixo, que era folha, sai:
 
-<p align="center"><img src="0105-bst-remocao/ideia.svg" alt="Diagrama da ideia: BST: remoção" width="858"></p>
+<p align="center"><img src="0100-bst-remocao/ideia.svg" alt="Diagrama da ideia: BST: remoção" width="858"></p>
 
 A função completa, no `bst.c`:
 
@@ -1669,7 +1669,7 @@ Repara no fluxograma: o caminho verde é a chamada que encontra o 30. Ela cai no
 caso de dois filhos, copia o 35 e faz uma **segunda remoção**, dessa vez do 35,
 que vai terminar no caso fácil (o 35 é folha):
 
-<p align="center"><img src="0105-bst-remocao/fluxograma.svg" alt="Fluxograma: BST: remoção" width="769"></p>
+<p align="center"><img src="0100-bst-remocao/fluxograma.svg" alt="Fluxograma: BST: remoção" width="769"></p>
 
 > [!WARNING]
 > Esquecer de atribuir o retorno é o erro clássico. Com `bst_remove(raiz->esq,
@@ -1691,13 +1691,13 @@ que vai terminar no caso fácil (o 35 é folha):
 > [!NOTE]
 > **Pergunta para você:** na árvore do início, se você remover o **50** (a raiz),
 > quem assume o lugar? E se depois remover a nova raiz, quem assume? Confira
-> com o exemplo A210.
+> com o exemplo A200.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0105-bst-remocao/`](0105-bst-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0100-bst-remocao/`](0100-bst-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A209 · Cancelando matrículas**
+**Exemplo A199 · Cancelando matrículas**
 
 ```c
 #include <stdio.h>
@@ -1748,10 +1748,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/A209.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/A199.c
 ```
 
-**Exemplo A210 · Até a raiz vai embora**
+**Exemplo A200 · Até a raiz vai embora**
 
 ```c
 #include <stdio.h>
@@ -1790,12 +1790,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/A210.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/A200.c
 ```
 
 #### Exercícios
 
-**Exercício E625** · ★☆☆
+**Exercício E595** · ★☆☆
 
 No papel, monte a BST inserindo nesta ordem:
 
@@ -1819,10 +1819,10 @@ conferir.
    pré 60 40 35 50 90 70.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/E625.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/E595.c
 ```
 
-**Exercício E626** · ★☆☆
+**Exercício E596** · ★☆☆
 
 No banco, as senhas de espera ficam numa BST e a menor senha é sempre a
 próxima a ser chamada. Complete remove_menor(r, &senha): ela tira o nó com
@@ -1848,10 +1848,10 @@ Chamando 40, restam: 50 70
    a raiz 30 já saiu: quem é a raiz depois?
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/E626.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/E596.c
 ```
 
-**Exercício E627** · ★★☆
+**Exercício E597** · ★★☆
 
 O bst_remove do TAD usa o sucessor. Escreva remove_antecessor(r, chave),
 a mesma remoção, mas que no caso de dois filhos usa o ANTECESSOR: a maior
@@ -1876,10 +1876,10 @@ Sem o 50:  pré 45 20 40 35 70 60 80
    Sem o 50, o 45 vira a raiz.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/E627.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/E597.c
 ```
 
-**Exercício E628** · ★★☆
+**Exercício E598** · ★★☆
 
 Ache o bug. Esta é uma cópia da remoção do TAD com UMA linha diferente.
 Ela deveria remover o 30 da árvore das matrículas, mas depois da remoção
@@ -1915,10 +1915,10 @@ programa não deu erro de memória nem vazamento?
    do fim libera todos. Consertado: 20 35 40 45 50 60 70 80.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/E628.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/E598.c
 ```
 
-**Exercício E629** · ★★★
+**Exercício E599** · ★★★
 
 A academia vai encerrar a turma das matrículas de 35 a 65. Escreva
 remove_faixa(r, a, b), que remove da BST todas as chaves no intervalo
@@ -1939,15 +1939,15 @@ Raiz: 70, altura: 2
    decida o que fazer com o próprio r.
 2. Se a chave de r estiver na faixa, use r = bst_remove(r, r->chave).
    Como as subárvores já foram limpas, nenhuma chave da faixa sobra lá.
-   (Bônus: dá para pular subárvores inteiras, como no E621.)
+   (Bônus: dá para pular subárvores inteiras, como no E591.)
 3. Resposta esperada: a saída acima. A raiz 50 sai; o sucessor dela, já
    sem o 60, é o 70.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/E629.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/E599.c
 ```
 
-**Exercício E630** · ★★★
+**Exercício E600** · ★★★
 
 Ache o bug (este programa quebra de propósito). A recepção guarda um
 ponteiro para a ficha do aluno 35, porque vai precisar dela depois. Em
@@ -1977,12 +1977,12 @@ que aconteceu. Conserte sem mexer no bst.c.
    um nó só vale até a próxima mudança na árvore.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0105-bst-remocao/E630.c
+~/LPEDC/rodar 14-arvores/0100-bst-remocao/E600.c
 ```
 
 ---
 
-## 0106 · AVL: balanceamento e rotações
+## 0101 · AVL: balanceamento e rotações
 
 A lanchonete numera os pedidos: 10, 20, 30, 40... Eles chegam **sempre em ordem
 crescente**. Se você guardar os pedidos numa BST comum, cada pedido novo vira
@@ -2031,7 +2031,7 @@ Vamos ver na prática. Inserir 10, 20 e 30 deixa o 10 com fator -2 e o filho com
 com a árvore 20 (10, 40 (30, 50)), inserir o 25 deixa o 20 com -2 e o filho 40
 com +1: zigue-zague, rotação dupla. O 30 acaba na raiz:
 
-<p align="center"><img src="0106-avl/ideia.svg" alt="Diagrama da ideia: AVL: balanceamento e rotações" width="860"></p>
+<p align="center"><img src="0101-avl/ideia.svg" alt="Diagrama da ideia: AVL: balanceamento e rotações" width="860"></p>
 
 As rotações e o rebalanceamento, no `avl.c`:
 
@@ -2099,7 +2099,7 @@ Repara no fluxograma: é o que cada ancestral faz na volta. O caminho verde é o
 do nó 20 quando o 25 chega: fator -2, filho direito com fator +1, então duas
 rotações:
 
-<p align="center"><img src="0106-avl/fluxograma.svg" alt="Fluxograma: AVL: balanceamento e rotações" width="684"></p>
+<p align="center"><img src="0101-avl/fluxograma.svg" alt="Fluxograma: AVL: balanceamento e rotações" width="684"></p>
 
 ### Passo a passo
 
@@ -2128,19 +2128,19 @@ fila, com o 25 pendurado no 30).
 > desperdiçava entre o `int chave` e os ponteiros agora guardam a altura. Uma
 > rotação mexe em 3 ponteiros e 2 alturas, custo O(1). Cada inserção faz no
 > máximo uma rotação (simples ou dupla) e sobe O(log n) níveis atualizando
-> alturas. O exemplo A212 insere mil pedidos em ordem: a BST comum fica com
+> alturas. O exemplo A202 insere mil pedidos em ordem: a BST comum fica com
 > altura 999, a AVL com 9.
 
 > [!NOTE]
 > **Pergunta para você:** insira 1, 2, 3, 4, 5, 6 e 7, nesta ordem, numa AVL
 > vazia. Quantas rotações acontecem e qual é a árvore final? Desenhe antes de
-> conferir no exercício E632.
+> conferir no exercício E602.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0106-avl/`](0106-avl/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0101-avl/`](0101-avl/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A211 · Os pedidos que chegam em ordem**
+**Exemplo A201 · Os pedidos que chegam em ordem**
 
 ```c
 #include <stdio.h>
@@ -2171,10 +2171,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/A211.c
+~/LPEDC/rodar 14-arvores/0101-avl/A201.c
 ```
 
-**Exemplo A212 · Mil pedidos: BST comum contra AVL**
+**Exemplo A202 · Mil pedidos: BST comum contra AVL**
 
 ```c
 #include <stdio.h>
@@ -2247,12 +2247,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/A212.c
+~/LPEDC/rodar 14-arvores/0101-avl/A202.c
 ```
 
 #### Exercícios
 
-**Exercício E631** · ★☆☆
+**Exercício E601** · ★☆☆
 
 Calcule, no papel, a altura e o fator de balanceamento (altura da esquerda
 menos altura da direita) de cada nó desta BST:
@@ -2284,10 +2284,10 @@ em qual dos quatro casos ele cai? (c) que rotação conserta, e como fica a
    fica 50 (30 (20 (10), 40), 80 (70, 90)).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/E631.c
+~/LPEDC/rodar 14-arvores/0101-avl/E601.c
 ```
 
-**Exercício E632** · ★☆☆
+**Exercício E602** · ★☆☆
 
 SEM RODAR, preveja o que o programa mostra. Ele insere duas sequências em
 duas AVL diferentes e mostra a pré-ordem, a altura e o total de rotações
@@ -2304,17 +2304,17 @@ simples feitas até ali (a dupla conta 2). Desenhe cada inserção no papel.
    um só para o programa todo). A árvore de 1 a 7 fica perfeita.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/E632.c
+~/LPEDC/rodar 14-arvores/0101-avl/E602.c
 ```
 
-**Exercício E633** · ★★☆
+**Exercício E603** · ★★☆
 
 Escreva altura_se_avl(r): ela devolve a altura da árvore se ela respeitar a
 regra da AVL em todos os nós, ou -2 se algum nó tiver fator fora de
 -1..1. A árvore aqui é uma árvore binária simples, sem campo de altura (o
 struct Arv do próprio arquivo). Regra extra: visite cada nó UMA vez só.
 
-O main testa a árvore do E631 e a versão consertada dela:
+O main testa a árvore do E601 e a versão consertada dela:
 
 
 ```text
@@ -2334,10 +2334,10 @@ Saída esperada:
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/E633.c
+~/LPEDC/rodar 14-arvores/0101-avl/E603.c
 ```
 
-**Exercício E634** · ★★☆
+**Exercício E604** · ★★☆
 
 A rotação à direita está pronta. Complete gira_esquerda(r), o espelho
 dela: o filho direito sobe, r desce para a esquerda, a subárvore do meio
@@ -2360,10 +2360,10 @@ Teste 2: pré 60 40 20 50 70 | altura da raiz 2
    do 60 e passa a ser filho direito do 40.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/E634.c
+~/LPEDC/rodar 14-arvores/0101-avl/E604.c
 ```
 
-**Exercício E635** · ★★★
+**Exercício E605** · ★★★
 
 Ache o bug. Esta é uma AVL escrita do zero (sem o avl.h), com UM erro
 numa das rotações. Ela insere os pedidos de 1 a 15, em ordem. Uma AVL
@@ -2393,10 +2393,10 @@ conserte e explique por que a ordem dessas duas linhas importa.
    linhas, a saída fica igual à esperada.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/E635.c
+~/LPEDC/rodar 14-arvores/0101-avl/E605.c
 ```
 
-**Exercício E636** · ★★★
+**Exercício E606** · ★★★
 
 Escreva do zero (sem o avl.h) uma AVL que, a cada rotação, conta qual dos
 quatro casos aconteceu e em qual nó. Insira estes pedidos, nesta ordem:
@@ -2431,12 +2431,12 @@ Pré-ordem: 30 20 15 25 45 35 60
 3. Resposta esperada: a saída acima. Libere tudo no fim.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0106-avl/E636.c
+~/LPEDC/rodar 14-arvores/0101-avl/E606.c
 ```
 
 ---
 
-## 0107 · Heap e fila de prioridade
+## 0102 · Heap e fila de prioridade
 
 No pronto-socorro, ninguém é atendido por ordem de chegada. A triagem dá uma
 nota de gravidade a cada paciente, e o próximo a entrar é sempre o **mais
@@ -2484,7 +2484,7 @@ Vamos ver na prática. Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30.
 Depois das seis chegadas, o heap é `[90 70 30 40 50 20]`. A árvore e o vetor são
 a mesma coisa: o 70 está no índice 1, e os filhos dele ficam nos índices 3 e 4:
 
-<p align="center"><img src="0107-heap/ideia.svg" alt="Diagrama da ideia: Heap e fila de prioridade" width="858"></p>
+<p align="center"><img src="0102-heap/ideia.svg" alt="Diagrama da ideia: Heap e fila de prioridade" width="858"></p>
 
 O TAD guarda o vetor, quantos elementos tem e quantos cabem. As duas peças do
 `heap.c` que fazem o trabalho:
@@ -2556,7 +2556,7 @@ Repara no fluxograma: é a subida do 30, o último a chegar. Ele entra no índic
 5, o pai dele (índice 2) é o 20, menor: troca. Agora o 30 está no índice 2 e o
 pai é o 90: para. Uma troca só:
 
-<p align="center"><img src="0107-heap/fluxograma.svg" alt="Fluxograma: Heap e fila de prioridade" width="443"></p>
+<p align="center"><img src="0102-heap/fluxograma.svg" alt="Fluxograma: Heap e fila de prioridade" width="443"></p>
 
 ### Passo a passo
 
@@ -2578,7 +2578,7 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 
 > [!TIP]
 > **Por dentro do C:** a palavra **heap** tem dois sentidos em C, e eles não
-> têm nada a ver um com o outro. O heap do `malloc` (assunto 0058) é a região
+> têm nada a ver um com o outro. O heap do `malloc` (assunto 0053) é a região
 > da memória para alocação dinâmica; o heap deste assunto é uma estrutura de
 > dados. Aqui o heap de dados até mora no heap de memória (o `heap_cria` faz
 > `malloc` do vetor), mas é coincidência. E por morar num vetor contíguo, o
@@ -2592,9 +2592,9 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0107-heap/`](0107-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0102-heap/`](0102-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A213 · A triagem do pronto-socorro**
+**Exemplo A203 · A triagem do pronto-socorro**
 
 ```c
 #include <stdio.h>
@@ -2633,10 +2633,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/A213.c
+~/LPEDC/rodar 14-arvores/0102-heap/A203.c
 ```
 
-**Exemplo A214 · Fila de prioridade com nome**
+**Exemplo A204 · Fila de prioridade com nome**
 
 ```c
 #include <stdio.h>
@@ -2710,12 +2710,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/A214.c
+~/LPEDC/rodar 14-arvores/0102-heap/A204.c
 ```
 
 #### Exercícios
 
-**Exercício E637** · ★☆☆
+**Exercício E607** · ★☆☆
 
 No papel, diga quais destes vetores são heaps de máximo. Para cada um que
 não for, aponte um pai menor que um filho (com os índices).
@@ -2739,13 +2739,13 @@ e) [9 8 7 6 5 4 3 2 1]
    é heap.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/E637.c
+~/LPEDC/rodar 14-arvores/0102-heap/E607.c
 ```
 
-**Exercício E638** · ★☆☆
+**Exercício E608** · ★☆☆
 
 Complete eh_heap(v, n): devolve true se o vetor v[0..n-1] for um heap de
-máximo. O main testa os vetores do E637:
+máximo. O main testa os vetores do E607:
 
 
 ```text
@@ -2765,10 +2765,10 @@ e) heap
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/E638.c
+~/LPEDC/rodar 14-arvores/0102-heap/E608.c
 ```
 
-**Exercício E639** · ★★☆
+**Exercício E609** · ★★☆
 
 SEM RODAR, escreva a saída do programa. Desenhe a árvore a cada passo
 (comece com o heap vazio). Depois rode e confira.
@@ -2785,10 +2785,10 @@ SEM RODAR, escreva a saída do programa. Desenhe a árvore a cada passo
    saiu 35: [25 15 5]
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/E639.c
+~/LPEDC/rodar 14-arvores/0102-heap/E609.c
 ```
 
-**Exercício E640** · ★★☆
+**Exercício E610** · ★★☆
 
 No banco, a fila é por senha: a MENOR senha é chamada primeiro. Você só
 tem o TAD heap.h, que é um heap de MÁXIMO, e não pode mexer nele. As
@@ -2813,10 +2813,10 @@ Chamando senha 9
    heap_remove, heap_vazio e heap_libera.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/E640.c
+~/LPEDC/rodar 14-arvores/0102-heap/E610.c
 ```
 
-**Exercício E641** · ★★★
+**Exercício E611** · ★★★
 
 O professor quer o pódio: as 3 maiores notas da turma (de 0 a 100). Em vez
 de ordenar o vetor inteiro, use um heap de MÍNIMO com espaço para 3: ele
@@ -2849,10 +2849,10 @@ Pódio: 98 95 91
    O(n log k), e não O(n log n).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/E641.c
+~/LPEDC/rodar 14-arvores/0102-heap/E611.c
 ```
 
-**Exercício E642** · ★★★
+**Exercício E612** · ★★★
 
 Ache o bug. Este heap de máximo foi escrito sem o TAD. Chegam pacientes
 com gravidade 40, 70, 20, 90, 30 e 50, e todos são atendidos. A ordem
@@ -2888,12 +2888,12 @@ conserte e mostre, com o vetor, o momento exato em que o heap quebrou.
    90 70 50 40 30 20.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0107-heap/E642.c
+~/LPEDC/rodar 14-arvores/0102-heap/E612.c
 ```
 
 ---
 
-## 0108 · Heapsort
+## 0103 · Heapsort
 
 Fim da corrida de rua do bairro. Os tempos dos corredores, em minutos, foram
 anotados na ordem de chegada ao posto de controle: 52, 18, 73, 40, 91, 25 e 66.
@@ -2921,8 +2921,8 @@ anda uma casa para a esquerda por volta.
 
 O custo: a fase 1 é O(n) e a fase 2 faz n - 1 descidas de no máximo log₂ n
 níveis. Total O(n log n), e isso vale **sempre**, até no pior caso. O quick sort
-(assunto 0100) costuma ser mais rápido na média, mas pode cair em O(n²); o
-merge sort (0099) garante n log n, mas precisa de um vetor extra. O heapsort
+(assunto 0095) costuma ser mais rápido na média, mas pode cair em O(n²); o
+merge sort (0094) garante n log n, mas precisa de um vetor extra. O heapsort
 garante n log n sem memória extra.
 
 Vamos ver na prática. Depois da fase 1, o vetor dos tempos é o heap
@@ -2930,7 +2930,7 @@ Vamos ver na prática. Depois da fase 1, o vetor dos tempos é o heap
 fica no fim, verde. O 66 vai para a raiz e desce pelo maior filho (73). O heap
 agora tem 6 elementos:
 
-<p align="center"><img src="0108-heapsort/ideia.svg" alt="Diagrama da ideia: Heapsort" width="860"></p>
+<p align="center"><img src="0103-heapsort/ideia.svg" alt="Diagrama da ideia: Heapsort" width="860"></p>
 
 O `desce` é o mesmo do heap, só que recebe o vetor e o tamanho atual do heap.
 A função `mostra` imprime a parte do heap e a parte ordenada, separadas por `|`:
@@ -3004,7 +3004,7 @@ int main(void) {
 Repara no fluxograma: a fase 1 é uma caixa só, e o laço da fase 2 faz sempre o
 mesmo par de coisas, trocar e descer, até `fim` chegar a 0:
 
-<p align="center"><img src="0108-heapsort/fluxograma.svg" alt="Fluxograma: Heapsort" width="593"></p>
+<p align="center"><img src="0103-heapsort/fluxograma.svg" alt="Fluxograma: Heapsort" width="593"></p>
 
 ### Passo a passo
 
@@ -3034,16 +3034,16 @@ A fase 1 nos tempos da corrida. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 
 > iguais podem trocar de ordem.
 
 > [!NOTE]
-> **Pergunta para você:** o exemplo A216 ordena mil números em ordem
+> **Pergunta para você:** o exemplo A206 ordena mil números em ordem
 > decrescente com insertion sort e com heapsort. Quantas comparações você acha
 > que cada um faz? Chute antes de rodar. E se o vetor já estivesse em ordem
 > crescente, qual dos dois ganharia?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0108-heapsort/`](0108-heapsort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0103-heapsort/`](0103-heapsort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A215 · Ordenando os tempos da corrida**
+**Exemplo A205 · Ordenando os tempos da corrida**
 
 ```c
 #include <stdio.h>
@@ -3112,10 +3112,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/A215.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/A205.c
 ```
 
-**Exemplo A216 · Heapsort não tem dia ruim**
+**Exemplo A206 · Heapsort não tem dia ruim**
 
 ```c
 #include <stdio.h>
@@ -3204,12 +3204,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/A216.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/A206.c
 ```
 
 #### Exercícios
 
-**Exercício E643** · ★☆☆
+**Exercício E613** · ★☆☆
 
 No papel, faça a fase 1 do heapsort (descer cada pai, do último até a
 raiz) no vetor:
@@ -3232,10 +3232,10 @@ passos da fase 2. O programa mostra tudo: rode só para conferir.
    [7 5 2 3 | 8 9].
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/E643.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/E613.c
 ```
 
-**Exercício E644** · ★☆☆
+**Exercício E614** · ★☆☆
 
 A tabela do campeonato precisa dos pontos em ordem DECRESCENTE (o líder
 primeiro). Troque o heap de máximo por um heap de mínimo e o mesmo
@@ -3261,10 +3261,10 @@ Tabela: 70 66 62 51 45 38 29
 3. Resposta esperada: Tabela: 70 66 62 51 45 38 29
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/E644.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/E614.c
 ```
 
-**Exercício E645** · ★★☆
+**Exercício E615** · ★★☆
 
 Existem dois jeitos de montar o heap da fase 1: inserir os elementos um a
 um (cada um SOBE, como no heap_insere) ou descer cada pai, do último até a
@@ -3292,10 +3292,10 @@ Os dois vetores são heaps? Por que deram diferentes?
    folhas) nem se mexe; em geral ele é O(n) e o das inserções, O(n log n).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/E645.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/E615.c
 ```
 
-**Exercício E646** · ★★☆
+**Exercício E616** · ★★☆
 
 SEM RODAR, preveja a saída. O heapsort recebe um vetor que JÁ está em
 ordem crescente. A fase 1 mexe nele? O programa mostra o vetor depois da
@@ -3314,10 +3314,10 @@ fase 1 e quantas trocas cada fase fez.
    ordenado: 1 2 3 4 5 6 7
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/E646.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/E616.c
 ```
 
-**Exercício E647** · ★★★
+**Exercício E617** · ★★★
 
 Ache o bug. Este heapsort ordena os tempos de uma corrida infantil:
 
@@ -3344,10 +3344,10 @@ ordem em que os pais descem importa.
    desce sobre subárvores que já são heaps. Consertado: 1 2 3 4 5 6 7.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/E647.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/E617.c
 ```
 
-**Exercício E648** · ★★★
+**Exercício E618** · ★★★
 
 A organização da corrida quer a lista dos inscritos em ordem alfabética.
 Escreva do zero um heapsort para um vetor de strings (const char *),
@@ -3381,12 +3381,12 @@ Zeca
 3. Resposta esperada: a lista acima, um nome por linha.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0108-heapsort/E648.c
+~/LPEDC/rodar 14-arvores/0103-heapsort/E618.c
 ```
 
 ---
 
-## 0109 · Juntando tudo
+## 0104 · Juntando tudo
 
 A academia do bairro quer largar a planilha. O sistema novo precisa de três
 coisas: achar um aluno pela matrícula na hora em que ele passa na catraca,
@@ -3438,7 +3438,7 @@ descendo 50, 70, 60 e soma um treino. O 30 (Bruno) cancela. No fim, os treinos
 dos seis que sobraram vão para o vetor, em ordem de matrícula, e o heap entrega o
 pódio:
 
-<p align="center"><img src="0109-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0104-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa usa o TAD para o cadastro e escreve o heap do ranking direto sobre um
 vetor de `Aluno`:
@@ -3528,9 +3528,9 @@ int main(void) {
 Repara no fluxograma: o programa é uma sequência de operações na BST e, no fim,
 um laço curto sobre o heap. Cada estrutura faz o que sabe fazer bem:
 
-<p align="center"><img src="0109-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="378"></p>
+<p align="center"><img src="0104-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="378"></p>
 
-O exemplo A218 é o mesmo cadastro, agora comandado pelo teclado: a recepção
+O exemplo A208 é o mesmo cadastro, agora comandado pelo teclado: a recepção
 digita `i 50 Ana 12` para inserir, `b 50` para buscar, `r 50` para remover e `l`
 para listar.
 
@@ -3548,7 +3548,7 @@ para listar.
 > o compilador gera a cópia dos bytes por você, sem `memcpy` à mão. Com structs
 > grandes, copiar a cada troca do heap pesa. Aí o normal é montar o heap com um
 > vetor de **ponteiros** para os alunos (`Aluno *v[]`) e trocar só os ponteiros, 8
-> bytes cada, como no exercício E648 com as strings.
+> bytes cada, como no exercício E618 com as strings.
 
 > [!NOTE]
 > **Pergunta para você:** se Gil (80) treinar mais 5 vezes antes do ranking, o
@@ -3557,9 +3557,9 @@ para listar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0109-juntando-tudo/`](0109-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0104-juntando-tudo/`](0104-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A217 · O cadastro da academia**
+**Exemplo A207 · O cadastro da academia**
 
 ```c
 #include <stdio.h>
@@ -3644,10 +3644,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/A217.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/A207.c
 ```
 
-**Exemplo A218 · A recepção digitando comandos**
+**Exemplo A208 · A recepção digitando comandos**
 
 ```c
 #include <stdio.h>
@@ -3688,7 +3688,7 @@ int main(void) {
     cad = cad_libera(cad);
     return 0;
 }
-// Teste: printf 'i 50 Ana 12\ni 30 Bruno 8\ni 70 Carla 15\nb 30\nr 50\nb 50\nl\nq\n' | ~/LPEDC/rodar 14-arvores/0109-juntando-tudo/A218.c
+// Teste: printf 'i 50 Ana 12\ni 30 Bruno 8\ni 70 Carla 15\nb 30\nr 50\nb 50\nl\nq\n' | ~/LPEDC/rodar 14-arvores/0104-juntando-tudo/A208.c
 // Saída:
 // ok: Ana entrou
 // ok: Bruno entrou
@@ -3702,12 +3702,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/A218.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/A208.c
 ```
 
 #### Exercícios
 
-**Exercício E649** · ★☆☆
+**Exercício E619** · ★☆☆
 
 A academia dá um brinde para quem treinou pelo menos 10 vezes no mês.
 Complete conta_brinde(r), que percorre o cadastro e conta esses alunos, e
@@ -3728,10 +3728,10 @@ Total: 4
 3. Resposta esperada: Eva (20), Ana (12), Carla (15) e Gil (11). Total: 4.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/E649.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E619.c
 ```
 
-**Exercício E650** · ★☆☆
+**Exercício E620** · ★☆☆
 
 SEM RODAR, preveja a saída. Desenhe a BST de matrículas a cada operação.
 
@@ -3749,10 +3749,10 @@ SEM RODAR, preveja a saída. Desenhe a BST de matrículas a cada operação.
    30 Lia (9), 50 Joana (5) e 60 Caio (6).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/E650.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E620.c
 ```
 
-**Exercício E651** · ★★☆
+**Exercício E621** · ★★☆
 
 A academia importou os alunos de uma planilha em ordem crescente de
 matrícula, e a BST virou uma fila indiana (altura 6 com 7 alunos). Escreva
@@ -3779,10 +3779,10 @@ Alunos em ordem: 20 30 40 50 60 70 80
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/E651.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E621.c
 ```
 
-**Exercício E652** · ★★☆
+**Exercício E622** · ★★☆
 
 Matrícula nova precisa de um número livre, e a recepção quer saber qual é
 a próxima matrícula ocupada depois de um número qualquer. Escreva
@@ -3808,10 +3808,10 @@ depois de 80: -1
    70 (candidata), 60 (candidata melhor), NULL.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/E652.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E622.c
 ```
 
-**Exercício E653** · ★★★
+**Exercício E623** · ★★★
 
 Ache o bug. Esta função copia faz o mesmo que cad_para_vetor: deveria
 colocar os alunos no vetor em ordem de matrícula. Mas a lista sai errada:
@@ -3849,10 +3849,10 @@ pos em cada chamada.
    Consertado, os 7 aparecem em ordem.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/E653.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E623.c
 ```
 
-**Exercício E654** · ★★★
+**Exercício E624** · ★★★
 
 Lista de espera do posto de saúde. Cada linha da entrada traz um nome e
 uma prioridade (maior = mais urgente). Um nome que já está na lista é
@@ -3864,7 +3864,7 @@ menos urgente. Escreva do zero, usando:
 Teste com:
 
 ```text
-printf 'Ana 3\nBeto 5\nCaio 1\nAna 4\nDani 4\nEdu 2\n' | ~/LPEDC/rodar 14-arvores/0109-juntando-tudo/E654.c
+printf 'Ana 3\nBeto 5\nCaio 1\nAna 4\nDani 4\nEdu 2\n' | ~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E624.c
 ```
 
 
@@ -3890,7 +3890,7 @@ Chamando: Caio (1)
    recusado e a Ana fica com a prioridade 3. Libere a BST no fim.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0109-juntando-tudo/E654.c
+~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E624.c
 ```
 
 ---
@@ -4023,7 +4023,7 @@ Ordenar: O(n log n), cerca de 20 milhões de comparações, e guarda tudo. Heap 
 máximo com todos: montar O(n) e tirar 10 vezes O(10 log n), mas também guarda
 tudo. **Heap de mínimo com 10**: cada número compara com a raiz e, se for maior,
 entra no lugar dela, O(n log 10), uns 3 milhões de passos no pior caso, e
-guarda só 10 números. É o exercício E641 em escala.
+guarda só 10 números. É o exercício E611 em escala.
 
 </details>
 

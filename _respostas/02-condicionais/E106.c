@@ -1,21 +1,36 @@
-// 0018 · Lógicos: E, OU, NÃO
+// 0018 · switch, case, break e fall-through
 // Exercício E106 · ★★☆
 
-#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int idade, resposta;
-    printf("Idade: ");
-    scanf("%d", &idade);
-    printf("Tem ingresso (1 = sim, 0 = não): ");
-    scanf("%d", &resposta);
-    bool tem_ingresso = resposta;
+    double a, b;
+    char op;
+    printf("Conta: ");
+    if (scanf("%lf %c %lf", &a, &op, &b) != 3) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
-    bool barrado = !(idade >= 18 && tem_ingresso);
-    bool barrado2 = idade < 18 || !tem_ingresso; // De Morgan
-
-    printf("barrado (original):  %d\n", barrado);
-    printf("barrado (De Morgan): %d\n", barrado2);
+    switch (op) {
+    case '+':
+        printf("= %.2f\n", a + b);
+        break;
+    case '-':
+        printf("= %.2f\n", a - b);
+        break;
+    case '*':
+        printf("= %.2f\n", a * b);
+        break;
+    case '/':
+        if (b == 0) {
+            printf("Divisão por zero.\n");
+        } else {
+            printf("= %.2f\n", a / b);
+        }
+        break;
+    default:
+        printf("Operador inválido.\n");
+    }
     return 0;
 }

@@ -127,7 +127,7 @@ quantos há de cada.
 
 <details><summary>Resposta</summary>
 
-É a partição de três vias do exercício E600 com pivô 1 (a "bandeira holandesa"
+É a partição de três vias do exercício E570 com pivô 1 (a "bandeira holandesa"
 de Dijkstra): `lt`, `i` e `gt`. 0 vai para a frente (`troca(v[lt], v[i])`,
 `lt++`, `i++`), 2 vai para o fim (`troca(v[i], v[gt])`, `gt--`), 1 fica
 (`i++`). Resultado: `0 0 0 1 1 1 2 2 2`, com n comparações.
@@ -149,7 +149,7 @@ limite de O(n log n) vale para algoritmos que **comparam**.
 
 **6. O merge sort de baixo para cima.** Escreva o merge sort sem recursão:
 intercale pedaços de tamanho 1, depois 2, 4, 8... até cobrir o vetor. Teste
-com as notas do assunto 0099, `52 18 33 7 41 26 60 12`, e com um vetor de 7
+com as notas do assunto 0094, `52 18 33 7 41 26 60 12`, e com um vetor de 7
 elementos.
 
 <details><summary>Resposta</summary>
@@ -162,7 +162,7 @@ Laço de fora: `for (int b = 1; b < n; b *= 2)`. Laço de dentro:
 
 </details>
 
-**7. Quick sort que não estoura a pilha.** Mude o quick sort do A199 para
+**7. Quick sort que não estoura a pilha.** Mude o quick sort do A189 para
 fazer a recursão só no lado **menor** e tratar o maior com um `while`. Meça a
 maior profundidade de recursão num vetor já ordenado de 10.000 elementos,
 antes e depois.
@@ -178,7 +178,7 @@ mediana de três).
 </details>
 
 **8. Quick sort híbrido.** Faça o quick sort chamar o insertion sort quando o
-pedaço tiver menos de `L` elementos. Com o contador de comparações do A202,
+pedaço tiver menos de `L` elementos. Com o contador de comparações do A192,
 teste `L = 1, 8, 16, 32` num vetor aleatório de 10.000.
 
 <details><summary>Resposta</summary>

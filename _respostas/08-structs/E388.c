@@ -1,31 +1,28 @@
-// 0065 · Typedef
+// 0065 · Bits, máscaras e flags
 // Exercício E388 · ★★☆
 //
-// Resposta: (1) a ordem do typedef é "tipo existente, apelido":
-// typedef double Reais; (2) a struct não tem nome, então "struct Cartao" não
-// existe: use só Cartao; (3) o protótipo de pagar usava Cartao antes do
-// typedef: ele precisa vir depois.
+// Resposta: (1) f & EMAIL == 0 era lido como f & (EMAIL == 0), sempre 0:
+// faltavam parênteses; (2) f && SMS só pergunta se os dois são diferentes de
+// zero (sempre verdade aqui): o teste de bit é f & SMS; (3) f &= PUSH
+// apagava todos os bits MENOS o push: para desligar, f &= ~PUSH.
 
 #include <stdio.h>
 
-typedef double Reais;
+#define EMAIL 1u
+#define SMS   2u
+#define PUSH  4u
 
-typedef struct {
-    char titular[20];
-    Reais saldo;
-} Cartao;
-
-Cartao pagar(Cartao c, Reais valor);
-
-int main(void) {
-    Cartao c = {"Ana", 600.00};
-    Cartao depois = pagar(c, 36.50);
-
-    printf("%s: R$ %.2f -> R$ %.2f\n", c.titular, c.saldo, depois.saldo);
-    return 0;
+void mostrar(unsigned f) {
+    printf("email: %s | ", (f & EMAIL) == 0 ? "desligado" : "ligado");
+    printf("sms: %s | ", (f & SMS) ? "ligado" : "desligado");
+    printf("push: %s\n", (f & PUSH) ? "ligado" : "desligado");
 }
 
-Cartao pagar(Cartao c, Reais valor) {
-    c.saldo = c.saldo - valor;
-    return c;
+int main(void) {
+    unsigned f = EMAIL | PUSH;
+    mostrar(f);
+
+    f &= ~PUSH; // desliga o push
+    mostrar(f);
+    return 0;
 }

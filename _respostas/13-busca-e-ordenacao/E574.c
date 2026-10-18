@@ -1,51 +1,30 @@
-// 0096 · Bubble sort
+// 0096 · Comparando: estabilidade, custo e qsort
 // Exercício E574 · ★★☆
+//
+// Resposta: x - y estoura o int quando os dois têm sinais opostos e são
+// grandes. 2000000000 - (-1500000000) = 3500000000, que não cabe em int (o
+// máximo é 2147483647): é overflow de inteiro com sinal, comportamento
+// indefinido, e o UBSan acusa "signed integer overflow". Na prática o
+// resultado "dá a volta" e vira negativo, então a compara responde que
+// 2000000000 vem ANTES de -1500000000, e a ordem sai errada. Conserto: comparar
+// sem fazer conta, com (x > y) - (x < y).
 
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
 
-typedef struct {
-    char nome[16];
-    int pontos;
-    int vitorias;
-} Time;
-
-// a vem DEPOIS de b na tabela?
-bool vem_depois(const Time *a, const Time *b) {
-    if (a->pontos != b->pontos) {
-        return a->pontos < b->pontos;   // menos pontos: mais para baixo
-    }
-    return a->vitorias < b->vitorias;   // empate: menos vitórias desce
+int compara(const void *a, const void *b) {
+    int x = *(const int *) a;
+    int y = *(const int *) b;
+    return (x > y) - (x < y);
 }
 
 int main(void) {
-    Time tabela[] = {
-        {"Fortaleza", 68, 19},
-        {"Flamengo", 70, 20},
-        {"Botafogo", 79, 23},
-        {"Palmeiras", 70, 21},
-        {"Inter", 65, 18},
-    };
-    int n = 5;
+    int saldos[] = {2000000000, -1500000000, 15, -7, 1000000000};
+    size_t n = sizeof saldos / sizeof saldos[0];
 
-    for (int passada = 1; passada < n; passada++) {
-        bool trocou = false;
-        for (int j = 0; j < n - passada; j++) {
-            if (vem_depois(&tabela[j], &tabela[j + 1])) {
-                Time aux = tabela[j];           // struct se copia inteira com =
-                tabela[j] = tabela[j + 1];
-                tabela[j + 1] = aux;
-                trocou = true;
-            }
-        }
-        if (!trocou) {
-            break;
-        }
-    }
-
-    for (int i = 0; i < n; i++) {
-        printf("%dº %-10s %2d pts %2d vit\n", i + 1, tabela[i].nome,
-               tabela[i].pontos, tabela[i].vitorias);
+    qsort(saldos, n, sizeof saldos[0], compara);
+    for (size_t i = 0; i < n; i++) {
+        printf("%d\n", saldos[i]);
     }
     return 0;
 }

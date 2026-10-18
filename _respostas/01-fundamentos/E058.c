@@ -1,22 +1,21 @@
-// 0010 · printf
+// 0010 · math.h
 // Exercício E058 · ★★☆
 //
-// Resposta: (1) "format '%f' expects argument of type 'double', but argument
-// 2 has type 'int'": quantidade é int, use %d; (2) "format '%d' expects
-// argument of type 'int', but argument 2 has type 'double'": preco é double,
-// use %.2f; (3) "format '%f' expects a matching 'double' argument": faltou
-// passar total. Sem conserto, o printf lê bytes que não são os seus e mostra
-// lixo.
+// Resposta: com juros simples, seriam 1000 + 24 * 10 = R$ 1240.00. Nos
+// compostos, cada mês rende 1% do montante, que inclui o que já rendeu; essa
+// "renda da renda" fica maior a cada mês, e a diferença cresce.
 
 #include <stdio.h>
+#include <math.h>
 
 int main(void) {
-    int quantidade = 3;
-    double preco = 45.90;
-    double total = 137.70;
+    double capital = 1000.00;
+    double taxa = 0.01;
 
-    printf("Pizzas: %d\n", quantidade);
-    printf("Preço: R$ %.2f\n", preco);
-    printf("Total: R$ %.2f\n", total);
+    double m12 = capital * pow(1 + taxa, 12);
+    double m24 = capital * pow(1 + taxa, 24);
+
+    printf("12 meses: R$ %.2f (rendeu R$ %.2f)\n", m12, m12 - capital);
+    printf("24 meses: R$ %.2f (rendeu R$ %.2f)\n", m24, m24 - capital);
     return 0;
 }

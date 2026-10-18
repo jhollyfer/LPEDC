@@ -23,7 +23,7 @@ abaixo, as respostas foram calculadas por mim.
 
 ---
 
-### 0001-algoritmo
+### logica1-algoritmo
 
 **Conceitos-chave**
 - Lógica como "arte de pensar corretamente", colocar ordem no pensamento. Começa com
@@ -75,7 +75,7 @@ abaixo, as respostas foram calculadas por mim.
   C=canibal, → ida, ← volta): →CC, ←C, →CC, ←C, →MM, ←MC, →MM, ←C, →CC, ←C, →CC.
   Desafio opcional ótimo para mostrar que algoritmo também é "planejar estados".
 
-### 0002-pseudocodigo
+### logica2-pseudocodigo
 
 **Conceitos-chave**
 - Computador não entende linguagem natural: precisamos de uma linguagem formal. O Portugol
@@ -129,7 +129,7 @@ abaixo, as respostas foram calculadas por mim.
   algoritmo de multiplicação é exatamente isso): pedir a tabela de valores das variáveis
   linha a linha para num1=3, num2=4.
 
-### 0005-compilacao
+### logica5-compilacao
 
 **Conceitos-chave**
 - Linguagem de programação = forma padronizada de dar instruções ao computador.
@@ -146,7 +146,7 @@ abaixo, as respostas foram calculadas por mim.
 **Ideias de exercícios**
 - Dar o programa com `Mult` e pedir para interpretar a mensagem do gcc e corrigir.
 
-### 0006-primeiro-programa
+### 0001-primeiro-programa
 
 **Conceitos-chave**
 - Explicação linha a linha do programa de multiplicação: `#include`, `int main()`, chaves
@@ -160,7 +160,7 @@ abaixo, as respostas foram calculadas por mim.
   diretivas e blocos); (b) C não diferencia maiúsculas → F; (c) todo programa tem `main`,
   a primeira função executada → V.
 
-### 0007-variaveis
+### 0002-variaveis
 
 **Conceitos-chave**
 - Em C escreve-se o tipo antes do nome; não há a palavra `var`.
@@ -175,7 +175,7 @@ abaixo, as respostas foram calculadas por mim.
   brasileiro).
 - `char` usa aspas simples.
 
-### 0010-printf / 0011-scanf
+### 0005-printf / 0006-scanf
 
 **Conceitos-chave**
 - `printf` ≈ `escreva`; `scanf` ≈ `leia`. Códigos `%c %f %s %d` em ambos.
@@ -186,7 +186,7 @@ abaixo, as respostas foram calculadas por mim.
 - Esquecer `\n` junta as mensagens numa linha.
 - Para string o livro manda usar `gets` — substituir por `fgets` no LPEDC.
 
-### 0012-aritmetica / 0014-atribuicao
+### 0007-aritmetica / 0009-atribuicao
 
 **Conceitos-chave**
 - Mesmos operadores do Portugol mais `++` e `--`; precedência igual à da matemática.
@@ -194,7 +194,7 @@ abaixo, as respostas foram calculadas por mim.
 - Conselho do autor: usar `++`/`--` só sozinhos numa linha, nunca no meio de expressões,
   porque prejudica a leitura. Boa regra de estilo para iniciantes.
 
-### 0017-relacionais
+### 0012-relacionais
 
 **Conceitos-chave**
 - Relação = comparação com operador relacional; o resultado é sempre V ou F.
@@ -207,7 +207,7 @@ abaixo, as respostas foram calculadas por mim.
 - Ativ. 3.1: a) 10>2 **V**; b) 10<200 **V**; c) 10<200 **V**; d) 200=200 **V**.
 - Ativ. 3.2: a) 12>200 **F**; b) 20<200 **V**; c) 0≠200 **V**; d) 200/10=20<200 **V**.
 
-### 0018-logicos
+### 0013-logicos
 
 **Conceitos-chave**
 - Operadores lógicos E, OU, NÃO ("conectivos": juntam proposições). Em C: `&&`, `||`, `!`.
@@ -234,7 +234,7 @@ abaixo, as respostas foram calculadas por mim.
   c) F ou (F e F) → **F**; d) V ou (...) → **V**.
 - Sexo válido se 'M' ou 'F' (Ativ. 6.2); número na faixa de 20 a 90 (Ativ. 6.3).
 
-### 0019-if / 0020-if-else
+### 0014-if / 0015-if-else
 
 **Conceitos-chave**
 - Portugol: `SE <expressão lógica> ENTÃO ... SENÃO ... FIM SE`; o SENÃO é opcional.
@@ -255,7 +255,7 @@ abaixo, as respostas foram calculadas por mim.
   3,4,5 → sim; 1,2,3 → não (1+2 não é maior que 3); 2,2,3 → sim.
 - Par/ímpar e positivo/negativo/nulo (Ativ. 3 aula 3).
 
-### 0021-else-if
+### 0016-else-if
 
 **Conceitos-chave**
 - `if...else` aninhados: um if dentro do bloco de outro.
@@ -270,7 +270,7 @@ abaixo, as respostas foram calculadas por mim.
   17, 18, 30, 31.
 - Menor de três valores distintos (Ativ. 6.10): 7, 3, 9 → 3.
 
-### 0023-switch
+### 0018-switch
 
 **Conceitos-chave**
 - `switch` escolhe entre vários valores de uma expressão; `break` sai; `default` quando
@@ -284,7 +284,7 @@ abaixo, as respostas foram calculadas por mim.
   livro A qualquer um loca, livro B só professor. Aluno+B → não pode; professor+B → pode;
   aluno+A → pode. Bom para combinar switch com &&.
 
-### 0025-while
+### 0020-while
 
 **Conceitos-chave**
 - Portugol `enquanto <condição> faca ... fim enquanto`; C `while (cond) { }`.
@@ -310,7 +310,7 @@ abaixo, as respostas foram calculadas por mim.
   média de idade por estado civil (Ativ. 3) — condição de parada composta.
 - Fatorial com while (Ativ. 7.12).
 
-### 0026-do-while
+### 0021-do-while
 
 **Conceitos-chave**
 - Executa o bloco antes de testar: garante pelo menos uma execução. Por isso, no exemplo
@@ -321,7 +321,7 @@ abaixo, as respostas foram calculadas por mim.
 - Refazer o reajuste salarial com do-while (Ativ. 2 aula 7).
 - Ler números até aparecer um entre 1 e 5; mostrar quantidade, soma e média (Ativ. 1).
 
-### 0027-for
+### 0022-for
 
 **Conceitos-chave**
 - Portugol `para <var> de <ini> ate <fim> passo <inc> faca ... fim para`: a variável de
@@ -350,7 +350,7 @@ abaixo, as respostas foram calculadas por mim.
 - Quadrado de 5 reais e somatório; média de 5 inteiros; pares de 1 a 100; fatorial
   (5! = 120).
 
-### 0030-padroes-de-laco
+### 0025-padroes-de-laco
 
 **Conceitos-chave** (aparecem nos exemplos)
 - **Acumulador** zerado antes (`soma = 0`) e o porquê (lixo na memória).
@@ -362,7 +362,7 @@ abaixo, as respostas foram calculadas por mim.
 - Ler números até 0; mostrar quantidade, pares, ímpares e média (Ativ. 7.11).
 - Média de 20 alunos → só contar aprovados e reprovados (Ativ. 4.6).
 
-### 0042-vetores / 0046-strings (resumo)
+### 0037-vetores / 0041-strings (resumo)
 
 **Conceitos-chave**
 - Motivação excelente: no programa da média, cada nota nova apaga a anterior; para

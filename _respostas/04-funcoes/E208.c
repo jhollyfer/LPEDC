@@ -1,21 +1,22 @@
-// 0035 · Escopo e tempo de vida
+// 0035 · Pré-processador: macros e #ifdef
 // Exercício E208 · ★★☆
-//
-// Previsão: Saldo: R$ 220.50 (300 - 45 - 1 - 32.50 - 1). A taxa escondida
-// em preco_com_taxa mexe na global sem ninguém perceber pelo nome da função.
 
 #include <stdio.h>
 
-double gastar(double saldo, double valor) {
-    double taxa = 1.00;
-    return saldo - valor - taxa;
-}
+#define MODO_TESTE // apague para ver só o total
 
 int main(void) {
-    double saldo = 300.00;
+    double valor = 1000.00;
+    int vezes = 4;
+    double total = 0;
 
-    saldo = gastar(saldo, 45.00);
-    saldo = gastar(saldo, 32.50);
-    printf("Saldo: R$ %.2f\n", saldo);
+    for (int k = 1; k <= vezes; k++) {
+        double parcela = valor / vezes * (1 + 0.02 * k);
+        total += parcela;
+#ifdef MODO_TESTE
+        printf("[teste] parcela %d: %.2f\n", k, parcela);
+#endif
+    }
+    printf("Total: R$ %.2f\n", total);
     return 0;
 }

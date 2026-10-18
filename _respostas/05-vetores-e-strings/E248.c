@@ -1,25 +1,24 @@
-// 0042 · Vetores
+// 0042 · Lendo strings
 // Exercício E248 · ★☆☆
 //
-// Resposta:
-//   2 0   a[1] é 2; a[3] não foi informado, então vale 0
-//   3     b tem 3 itens (12 bytes / 4 bytes)
-//   8     i % 3 = 1, e b[1] = 8
-//   9     a[4] = 0 (não informado) + b[2] = 9
-//   15    b[0] = 7 + 8
+// Resposta: [Maria] [Clar] [a Souza]. O 1º %s lê "Maria" e para no espaço.
+// O %4s pula o espaço e lê só 4 caracteres: "Clar". O fgets pega o resto da
+// linha a partir dali, "a Souza\n", e o strcspn tira o '\n'.
 
 #include <stdio.h>
+#include <string.h>
 
 int main(void) {
-    int a[5] = {4, 2};
-    int b[] = {7, 8, 9};
-    int i = 4;
+    char a[20], b[20], resto[20];
 
-    printf("%d %d\n", a[1], a[3]);
-    printf("%zu\n", sizeof(b) / sizeof(b[0]));
-    printf("%d\n", b[i % 3]);
-    printf("%d\n", a[i] + b[2]);
-    b[0] = b[0] + b[1];
-    printf("%d\n", b[0]);
+    if (scanf("%19s", a) != 1 || scanf("%4s", b) != 1) {
+        return 1;
+    }
+    if (fgets(resto, sizeof(resto), stdin) == NULL) {
+        return 1;
+    }
+    resto[strcspn(resto, "\n")] = '\0';
+
+    printf("[%s] [%s] [%s]\n", a, b, resto);
     return 0;
 }

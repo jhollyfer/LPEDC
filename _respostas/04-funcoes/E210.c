@@ -1,26 +1,33 @@
-// 0035 · Escopo e tempo de vida
+// 0035 · Pré-processador: macros e #ifdef
 // Exercício E210 · ★★★
 
 #include <stdio.h>
 
-static unsigned int estado = 1; // só este arquivo enxerga
+int falhas = 0;
 
-void semear(unsigned int semente) {
-    estado = semente;
-}
+#define CONFERIR(cond)                                                \
+    do {                                                              \
+        if (cond) {                                                   \
+            printf("ok: %s\n", #cond);                                \
+        } else {                                                      \
+            printf("FALHOU: %s (linha %d)\n", #cond, __LINE__);       \
+            falhas++;                                                 \
+        }                                                             \
+    } while (0)
 
-int jogar_dado(void) {
-    estado = (estado * 1103515245u + 12345u) % 2147483648u;
-    return (int)(estado / 65536 % 6) + 1;
+double com_desconto(double preco) {
+    if (preco >= 100) {
+        return preco - preco * 10 / 100;
+    }
+    return preco;
 }
 
 int main(void) {
-    for (int rodada = 0; rodada < 2; rodada++) {
-        semear(2026);
-        for (int i = 0; i < 10; i++) {
-            printf(i == 0 ? "%d" : " %d", jogar_dado());
-        }
-        printf("\n");
-    }
+    CONFERIR(com_desconto(50) == 50);
+    CONFERIR(com_desconto(100) == 90);
+    CONFERIR(com_desconto(200) == 180);
+    CONFERIR(com_desconto(0) == 0);
+    CONFERIR(com_desconto(150) == 150); // errado de propósito: o certo é 135
+    printf("Falhas: %d\n", falhas);
     return 0;
 }

@@ -1,24 +1,24 @@
-// 0064 · Struct
+// 0064 · Union
 // Exercício E380 · ★☆☆
-//
-// Resposta: mostra "a: 5 x 1" e "b: 2 x 3". b = a copia os campos; depois
-// b.fora = 3 só muda b, e a.casa vira 2 + 3 = 5. Com struct placar *b = &a,
-// b apontaria para o MESMO placar: b->fora = 3 mudaria a.fora também, e os
-// dois mostrariam 5 x 3.
 
+#include <stdint.h>
 #include <stdio.h>
 
-struct placar {
-    int casa;
-    int fora;
-};
+typedef union {
+    float f;
+    uint32_t bits;
+} Espiao;
+
+void mostrar(const char *texto, float valor) {
+    Espiao e;
+    e.f = valor;
+    printf("%s -> 0x%08X\n", texto, (unsigned)e.bits);
+}
 
 int main(void) {
-    struct placar a = {2, 1};
-    struct placar b = a;
-    b.fora = 3;
-    a.casa = a.casa + b.fora;
-    printf("a: %d x %d\n", a.casa, a.fora);
-    printf("b: %d x %d\n", b.casa, b.fora);
+    mostrar("1.0", 1.0f);
+    mostrar("-2.0", -2.0f);
+    mostrar("0.5", 0.5f);
+    mostrar("0.1", 0.1f);
     return 0;
 }

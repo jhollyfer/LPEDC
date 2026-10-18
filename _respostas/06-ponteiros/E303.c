@@ -1,25 +1,31 @@
-// 0051 · Passagem por referência
+// 0051 · void * e cast
 // Exercício E303 · ★★☆
 
 #include <stdio.h>
 
-void extremos(const int v[], int n, int *menor, int *maior) {
-    *menor = *maior = v[0];
-    for (int i = 1; i < n; i++) {
-        if (v[i] < *menor) {
-            *menor = v[i];
-        }
-        if (v[i] > *maior) {
-            *maior = v[i];
-        }
+void zera(void *p, size_t tam) {
+    unsigned char *b = p;
+    for (size_t i = 0; i < tam; i++) {
+        b[i] = 0;
     }
 }
 
-int main(void) {
-    int temps[7] = {34, 37, 31, 39, 36, 33, 38};
-    int menor, maior;
+void mostra(const int *gols, int n, double saldo) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", gols[i]);
+    }
+    printf("| %.2f\n", saldo);
+}
 
-    extremos(temps, 7, &menor, &maior);
-    printf("Menor: %d  Maior: %d  Amplitude: %d\n", menor, maior, maior - menor);
+int main(void) {
+    int gols[5] = {2, 1, 3, 0, 4};
+    double saldo = 99.90;
+
+    printf("antes: ");
+    mostra(gols, 5, saldo);
+    zera(gols, sizeof gols);
+    zera(&saldo, sizeof saldo);
+    printf("depois: ");
+    mostra(gols, 5, saldo);
     return 0;
 }

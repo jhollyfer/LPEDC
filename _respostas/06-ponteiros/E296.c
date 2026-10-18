@@ -1,20 +1,24 @@
-// 0050 · Ponteiros
+// 0050 · Ponteiro para função
 // Exercício E296 · ★☆☆
-//
-// Resposta: vagas = 7; &vagas = 0x3000; p = 0x3000; *p = 7; &p = 0x3008;
-// *&vagas = 7. No programa, &vagas e p saem iguais; &p sai diferente.
 
 #include <stdio.h>
 
-int main(void) {
-    int vagas = 7;
-    int *p = &vagas;
+void para_cada(int *v, int n, void (*acao)(int *)) {
+    for (int i = 0; i < n; i++) {
+        acao(&v[i]);
+    }
+}
 
-    printf("vagas   = %d\n", vagas);
-    printf("&vagas  = %p\n", (void *)&vagas);
-    printf("p       = %p\n", (void *)p);
-    printf("*p      = %d\n", *p);
-    printf("&p      = %p\n", (void *)&p);
-    printf("*&vagas = %d\n", *&vagas);
+void dobra(int *x) { *x *= 2; }
+void mostra(int *x) { printf("%d ", *x); }
+
+int main(void) {
+    int brindes[4] = {1, 2, 3, 4};
+
+    para_cada(brindes, 4, mostra);
+    printf("\n");
+    para_cada(brindes, 4, dobra);
+    para_cada(brindes, 4, mostra);
+    printf("\n");
     return 0;
 }

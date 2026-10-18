@@ -1,30 +1,31 @@
-// 0042 · Vetores
+// 0042 · Lendo strings
 // Exercício E249 · ★★☆
+//
+// Resposta: o scanf("%d") lê o 2 e deixa o '\n' na entrada; o fgets acha esse
+// '\n' na hora e devolve uma linha vazia. Conserto: descartar o resto da
+// linha logo depois do scanf.
 
 #include <stdio.h>
-
-#define ALUNOS 5
+#include <string.h>
 
 int main(void) {
-    double notas[ALUNOS];
-    double soma = 0.0;
+    int quantidade;
+    char nome[40];
 
-    for (int i = 0; i < ALUNOS; i++) {
-        printf("Nota do aluno %d: ", i + 1);
-        if (scanf("%lf", &notas[i]) != 1) {
-            printf("Entrada inválida.\n");
-            return 1;
-        }
-        soma += notas[i];
+    printf("Quantidade de ingressos: ");
+    if (scanf("%d", &quantidade) != 1) {
+        return 1;
+    }
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
     }
 
-    double media = soma / ALUNOS;
-    printf("Média da turma: %.2f\n", media);
-    printf("Acima da média:\n");
-    for (int i = 0; i < ALUNOS; i++) {
-        if (notas[i] > media) {
-            printf("Aluno %d: %.1f\n", i + 1, notas[i]);
-        }
+    printf("Nome do comprador: ");
+    if (fgets(nome, sizeof(nome), stdin) == NULL) {
+        return 1;
     }
+    nome[strcspn(nome, "\n")] = '\0';
+
+    printf("%d ingresso(s) para %s\n", quantidade, nome);
     return 0;
 }

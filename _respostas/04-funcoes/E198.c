@@ -1,31 +1,28 @@
-// 0033 · Funções
+// 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 // Exercício E198 · ★★★
+//
+// Resposta: a primeira chamada recursiva repetia a ordem das estacas
+// (origem, destino, auxiliar) e mandava os n - 1 discos para o destino, onde o
+// maior vai cair. Já no movimento 2 o disco 2 caía sobre o disco 1 (ilegal), e
+// no 3 o programa tirava um disco de B, que estava vazia. Os n - 1 discos têm
+// que ir para a AUXILIAR: hanoi(n - 1, origem, auxiliar, destino).
 
-#include <stdbool.h>
 #include <stdio.h>
 
-int soma_divisores(int n);
-bool eh_perfeito(int n);
+int movimentos = 0;
+
+void hanoi(int n, char origem, char destino, char auxiliar) {
+    if (n == 0) {
+        return;
+    }
+    hanoi(n - 1, origem, auxiliar, destino);
+    movimentos++;
+    printf("%d. disco %d: %c -> %c\n", movimentos, n, origem, destino);
+    hanoi(n - 1, auxiliar, destino, origem);
+}
 
 int main(void) {
-    for (int n = 2; n <= 10000; n++) {
-        if (eh_perfeito(n)) {
-            printf("%d = soma dos divisores %d\n", n, soma_divisores(n));
-        }
-    }
+    hanoi(3, 'A', 'C', 'B');
+    printf("Total: %d movimentos\n", movimentos);
     return 0;
-}
-
-int soma_divisores(int n) {
-    int soma = 0;
-    for (int d = 1; d <= n / 2; d++) {
-        if (n % d == 0) {
-            soma += d;
-        }
-    }
-    return soma;
-}
-
-bool eh_perfeito(int n) {
-    return soma_divisores(n) == n;
 }

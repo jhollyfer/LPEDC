@@ -1,45 +1,83 @@
-// 0066 · Vetor de structs
+// 0066 · Juntando tudo: o cardápio
 // Exercício E393 · ★★☆
 
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef struct {
-    char nome[40];
-    double altura;
-    int idade;
-} Atleta;
+    char nome[20];
+    int qtd;
+} Produto;
 
-#define N 3
+typedef struct {
+    Produto *v;
+    int n;
+    int cap;
+} Estoque;
+
+bool estoque_adicionar(Estoque *e, const char *nome, int qtd) {
+    if (e->n == e->cap) {
+        int nova = e->cap == 0 ? 2 : 2 * e->cap;
+        Produto *novo = realloc(e->v, nova * sizeof *novo);
+        if (novo == NULL) {
+            return false;
+        }
+        e->v = novo;
+        e->cap = nova;
+    }
+    Produto *p = &e->v[e->n++];
+    strncpy(p->nome, nome, sizeof p->nome - 1);
+    p->nome[sizeof p->nome - 1] = '\0';
+    p->qtd = qtd;
+    return true;
+}
+
+bool estoque_remover(Estoque *e, const char *nome) {
+    for (int i = 0; i < e->n; i++) {
+        if (strcmp(e->v[i].nome, nome) == 0) {
+            for (int j = i; j < e->n - 1; j++) {
+                e->v[j] = e->v[j + 1];
+            }
+            e->n--;
+            return true;
+        }
+    }
+    return false;
+}
+
+void estoque_listar(const Estoque *e) {
+    printf("%d produtos (capacidade %d):\n", e->n, e->cap);
+    for (int i = 0; i < e->n; i++) {
+        printf("  %s: %d\n", e->v[i].nome, e->v[i].qtd);
+    }
+}
+
+void estoque_liberar(Estoque *e) {
+    free(e->v);
+    e->v = NULL;
+    e->n = e->cap = 0;
+}
+
+void tentar_remover(Estoque *e, const char *nome) {
+    printf("remover %s: %s\n", nome, estoque_remover(e, nome) ? "ok" : "não encontrado");
+}
 
 int main(void) {
-    Atleta v[N];
+    Estoque e = {NULL, 0, 0};
+    const char *nomes[] = {"Arroz", "Feijão", "Café", "Açúcar", "Leite"};
+    int qtds[] = {12, 30, 8, 15, 24};
 
-    for (int i = 0; i < N; i++) {
-        printf("Nome: ");
-        if (fgets(v[i].nome, sizeof v[i].nome, stdin) == NULL) {
+    for (int i = 0; i < 5; i++) {
+        if (!estoque_adicionar(&e, nomes[i], qtds[i])) {
+            estoque_liberar(&e);
             return 1;
         }
-        v[i].nome[strcspn(v[i].nome, "\n")] = '\0';
-
-        printf("Altura e idade: ");
-        if (scanf("%lf %d", &v[i].altura, &v[i].idade) != 2) {
-            printf("Entrada inválida\n");
-            return 1;
-        }
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF) {
-            // descarta o resto da linha
-        }
     }
-    printf("\n");
-
-    int alto = 0, velho = 0;
-    for (int i = 1; i < N; i++) {
-        if (v[i].altura > v[alto].altura) alto = i;
-        if (v[i].idade > v[velho].idade) velho = i;
-    }
-    printf("Mais alto: %s (%.2f m)\n", v[alto].nome, v[alto].altura);
-    printf("Mais velho: %s (%d anos)\n", v[velho].nome, v[velho].idade);
+    tentar_remover(&e, "Feijão");
+    tentar_remover(&e, "Macarrão");
+    estoque_listar(&e);
+    estoque_liberar(&e);
     return 0;
 }

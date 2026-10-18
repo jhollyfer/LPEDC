@@ -1,15 +1,15 @@
-// 0049 · Memória e endereços
+// 0049 · Ponteiro para ponteiro
 // Exercício E289 · ★☆☆
 
 #include <stdio.h>
 
 int main(void) {
-    int passageiros = 42;
-    float tarifa = 4.40f;
-    char setor = 'X';
+    char turma = 'k';
+    char *p = &turma;
+    char **pp = &p;
 
-    printf("passageiros = %d, endereço %p, tamanho %zu\n", passageiros, (void *)&passageiros, sizeof passageiros);
-    printf("tarifa = %.2f, endereço %p, tamanho %zu\n", tarifa, (void *)&tarifa, sizeof tarifa);
-    printf("setor = %c, endereço %p, tamanho %zu\n", setor, (void *)&setor, sizeof setor);
+    printf("%c %c %c\n", turma, *p, **pp);
+    **pp = 'K';
+    printf("Agora: %c\n", turma);
     return 0;
 }

@@ -1,21 +1,21 @@
-// 0017 · Relacionais e a verdade em C
+// 0017 · Ternário: condição ? a : b
 // Exercício E101 · ★★★
 //
-// Resposta: 0, 1, 1, 0, 0.
-// 5 > 4 > 3   → (5 > 4) > 3   → 1 > 3  → 0
-// 3 < 2 < 1   → (3 < 2) < 1   → 0 < 1  → 1
-// 1 == 1 == 1 → (1 == 1) == 1 → 1 == 1 → 1
-// 2 == 2 == 2 → (2 == 2) == 2 → 1 == 2 → 0
-// -1 < 0 < 1  → (-1 < 0) < 1  → 1 < 1  → 0
-// Os parênteses abaixo deixam explícito o que o C faz (e calam o aviso).
+// Resposta: o ?: tem precedência menor que o + e o >=. O C lê
+// (subtotal + subtotal >= 199) ? 0.0 : 19.90; com 150, 300 >= 199 é verdade
+// e o total vira 0.0. O ternário inteiro precisa de parênteses.
 
 #include <stdio.h>
 
 int main(void) {
-    printf("%d\n", (5 > 4) > 3);
-    printf("%d\n", (3 < 2) < 1);
-    printf("%d\n", (1 == 1) == 1);
-    printf("%d\n", (2 == 2) == 2);
-    printf("%d\n", (-1 < 0) < 1);
+    double subtotal;
+    printf("Subtotal: ");
+    if (scanf("%lf", &subtotal) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
+
+    double total = subtotal + (subtotal >= 199 ? 0.0 : 19.90);
+    printf("Total: R$ %.2f\n", total);
     return 0;
 }

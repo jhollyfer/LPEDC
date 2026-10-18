@@ -1,15 +1,17 @@
-// 0050 · Ponteiros
+// 0050 · Ponteiro para função
 // Exercício E295 · ★☆☆
 
 #include <stdio.h>
 
-int main(void) {
-    double temperatura = 22.5;
-    double *pt = &temperatura;
+double c_para_f(double c) { return c * 9 / 5 + 32; }
+double f_para_c(double f) { return (f - 32) * 5 / 9; }
 
-    printf("Pelo ponteiro: %.1f\n", *pt);
-    *pt += 1.5;
-    printf("Pelo ponteiro: %.1f\n", *pt);
-    printf("Pela variável: %.1f\n", temperatura);
+int main(void) {
+    double (*conv)(double);
+
+    conv = c_para_f;
+    printf("30.0 -> %.1f\n", conv(30));
+    conv = f_para_c;
+    printf("86.0 -> %.1f\n", conv(86));
     return 0;
 }

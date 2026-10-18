@@ -53,15 +53,15 @@ usa; vermelho, o nó que vai embora.
 ## Antes de começar
 
 Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`
-(módulo 07), structs e `->` (módulo 08) e no padrão TAD (assunto 0079). Se
-`No **inicio` ainda assusta, releia o assunto 0054 antes do 0082.
+(módulo 07), structs e `->` (módulo 08) e no padrão TAD (assunto 0074). Se
+`No **inicio` ainda assusta, releia o assunto 0049 antes do 0077.
 
 Cada pasta de assunto traz um `lista.h` (a interface) e um `lista.c` (a
 implementação). O `rodar` compila o `lista.c` junto com o exemplo ou o
 exercício automaticamente, porque ele está na mesma pasta:
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/A161.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
 ```
 
 Por isso, nos exercícios, não dê às suas funções o mesmo nome de uma função
@@ -122,7 +122,7 @@ Para `1 3 4 7 9` e `2 3 7 8 9`, o resultado é `3 7 9`.
 
 <details><summary>Resposta</summary>
 
-Um ponteiro em cada lista, como na intercalação do E496: se os valores são
+Um ponteiro em cada lista, como na intercalação do E466: se os valores são
 iguais, copie para a resposta e ande os dois; senão ande só o do menor.
 O(n + m), sem nenhum laço aninhado. Inserir no fim com um ponteiro para o
 último mantém a ordem.
@@ -138,7 +138,7 @@ lista com **um dígito por nó, do menos significativo para o mais**.
 **111111111011111111100**. Com os dígitos de trás para frente, a soma anda
 nas duas listas do começo, igual à conta armada: dígito = (a + b + vai_um) %
 10, vai_um = (a + b + vai_um) / 10. No fim, se sobrar vai-um, crie mais um
-nó. Para imprimir, use recursão (como no E484) ou uma lista dupla e ande do
+nó. Para imprimir, use recursão (como no E454) ou uma lista dupla e ande do
 fim para o começo.
 
 </details>
@@ -173,7 +173,7 @@ funcionam.
 
 </details>
 
-**7. Sem casos especiais.** Reescreva a lista dupla do assunto 0084 com um
+**7. Sem casos especiais.** Reescreva a lista dupla do assunto 0079 com um
 **nó sentinela** circular: um nó de mentira cujo `prox` é o primeiro e cujo
 `ant` é o último. Lista vazia é a sentinela apontando para si mesma nos dois
 sentidos. Quantos `if` sobram na inserção e na remoção?
@@ -194,7 +194,7 @@ bloco incompleto também é invertido).
 
 <details><summary>Resposta</summary>
 
-Aplique a inversão do E486 em pedaços: inverta 3 nós, guardando o primeiro
+Aplique a inversão do E456 em pedaços: inverta 3 nós, guardando o primeiro
 do bloco (que vira o último) e o início do resto. Ligue o fim do bloco
 invertido ao resultado da inversão do resto. Fica elegante com recursão:
 `inverte_k(inicio)` inverte os 3 primeiros e faz
@@ -202,30 +202,30 @@ invertido ao resultado da inversão do resto. Fica elegante com recursão:
 
 </details>
 
-**9. Ordenar uma lista em O(n log n).** O E498 ordena por inserção em
+**9. Ordenar uma lista em O(n log n).** O E468 ordena por inserção em
 O(n²). Escreva o **merge sort** de lista: divida a lista ao meio, ordene cada
 metade recursivamente e intercale. Teste com `5 1 4 2 8 3 7 6`.
 
 <details><summary>Resposta</summary>
 
-Para dividir, use a lebre e a tartaruga (E492): quando a lebre chega ao fim,
+Para dividir, use a lebre e a tartaruga (E462): quando a lebre chega ao fim,
 corte depois da tartaruga (`meio = tartaruga->prox; tartaruga->prox =
-NULL`). Caso base: lista com 0 ou 1 nó. Junte com a intercalação do E496.
+NULL`). Caso base: lista com 0 ou 1 nó. Junte com a intercalação do E466.
 Resultado `1 2 3 4 5 6 7 8`. Na lista, o merge sort não precisa de vetor
-auxiliar: só religa nós. É o assunto 0099, um módulo adiantado.
+auxiliar: só religa nós. É o assunto 0094, um módulo adiantado.
 
 </details>
 
 **10. Josephus de cabeça.** Com n pessoas em roda e eliminando de k em k, a
 posição do sobrevivente (contando de 0) obedece a J(1) = 0 e
 J(n) = (J(n − 1) + k) % n. Use a fórmula para n = 8, k = 3 e confira com a
-batata quente do A170. Depois responda: quando vale a pena simular com a
+batata quente do A160. Depois responda: quando vale a pena simular com a
 lista e quando a fórmula basta?
 
 <details><summary>Resposta</summary>
 
 J(1)=0, J(2)=1, J(3)=1, J(4)=0, J(5)=3, J(6)=0, J(7)=3, J(8)=6. Posição 6
-contando de 0 é a pessoa **7**, igual ao A170. A fórmula é O(n) e não usa
+contando de 0 é a pessoa **7**, igual ao A160. A fórmula é O(n) e não usa
 memória, mas só diz quem sobra. A lista dá a **ordem** de eliminação e
 aguenta variações que a fórmula não cobre (passo diferente para cada pessoa,
 alguém entrando no meio).

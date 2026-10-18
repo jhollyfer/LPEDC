@@ -1,16 +1,17 @@
-// 0008 · Tipos e limites
+// 0008 · Conversão e cast
 // Exercício E046 · ★★☆
 //
-// Resposta: 13! = 6227020800 não cabe num int (máximo 2147483647). Estourar
-// um tipo com sinal é comportamento indefinido, e o detector do rodar acusa
-// "signed integer overflow". Sem ele, o programa mostraria 1932053504, um
-// número errado. Com long long (8 bytes) cabe com folga.
+// Resposta: gramas / 1000 é 600 / 1000 entre dois int: dá 0, e 0 * 45.90 é
+// 0. Com 1000.0, a divisão vira real: 0.6 * 45.90 = 27.54.
 
 #include <stdio.h>
 
 int main(void) {
-    long long fatorial = 479001600; // 12!
-    fatorial = fatorial * 13;
-    printf("13! = %lld maneiras\n", fatorial);
+    int gramas = 600;
+    double preco_kg = 45.90;
+
+    double preco = gramas / 1000.0 * preco_kg;
+
+    printf("%d g: R$ %.2f\n", gramas, preco);
     return 0;
 }

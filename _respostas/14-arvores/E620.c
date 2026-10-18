@@ -1,33 +1,19 @@
-// 0104 · BST: busca e inserção
+// 0104 · Juntando tudo
 // Exercício E620 · ★☆☆
-
-#include <stdio.h>
-#include "bst.h"
-
-int menor_chave(const No *r) {
-    while (r->esq != NULL) {
-        r = r->esq; // nada à esquerda: é a menor
-    }
-    return r->chave;
-}
-
-int maior_chave(const No *r) {
-    while (r->dir != NULL) {
-        r = r->dir;
-    }
-    return r->chave;
-}
-
-int main(void) {
-    int matriculas[] = {50, 30, 70, 20, 40, 60, 80};
-    No *raiz = NULL;
-    for (int i = 0; i < 7; i++) {
-        raiz = bst_insere(raiz, matriculas[i]);
-    }
-
-    printf("Matrícula mais antiga: %d\n", menor_chave(raiz));
-    printf("Matrícula mais nova: %d\n", maior_chave(raiz));
-
-    raiz = bst_libera(raiz);
-    return 0;
-}
+//
+// Resposta: a saída é
+//
+//   altura 2, 6 alunos
+//   40 saiu; nova raiz: 50 (Joana)
+//   busca 40: não achou
+//   altura 2, 5 alunos
+//      10  Rita      3 treinos
+//      20  Paulo     7 treinos
+//      30  Lia       9 treinos
+//      50  Joana     5 treinos
+//      60  Caio      6 treinos
+//
+// A árvore começa com 40 na raiz, 20 (10, 30) à esquerda e 60 (50) à direita:
+// altura 2. O 40 tem dois filhos; o sucessor é o 50 (o menor da direita), que
+// é copiado inteiro (matrícula, nome e treinos) para a raiz. O 50 de baixo era
+// folha e sai. A altura continua 2 por causa do 10 e do 30.

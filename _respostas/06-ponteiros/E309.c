@@ -1,4 +1,4 @@
-// 0052 · Ponteiros e vetores
+// 0052 · Juntando tudo: o ranking da feira
 // Exercício E309 · ★★☆
 
 #include <stdio.h>
@@ -9,23 +9,26 @@ void troca(int *a, int *b) {
     *b = tmp;
 }
 
-void inverte(int *v, int n) {
-    int *ini = v;
-    int *fim = v + n - 1;
-    while (ini < fim) {
-        troca(ini, fim);
-        ini++;
-        fim--;
+void ordena3(int *a, int *b, int *c) {
+    if (*a > *b) {
+        troca(a, b);
+    }
+    if (*a > *c) {
+        troca(a, c);
+    }
+    if (*b > *c) {
+        troca(b, c);
     }
 }
 
 int main(void) {
-    int faixas[7] = {11, 23, 35, 47, 52, 68, 74};
+    int ana = 31, bia = 7, caio = 19;
 
-    inverte(faixas, 7);
-    for (int i = 0; i < 7; i++) {
-        printf("%d ", faixas[i]);
-    }
-    printf("\n");
+    ordena3(&ana, &bia, &caio);
+    printf("%d %d %d\n", ana, bia, caio);
+
+    int x = 3, y = 2, z = 1;
+    ordena3(&x, &y, &z);
+    printf("%d %d %d\n", x, y, z);
     return 0;
 }

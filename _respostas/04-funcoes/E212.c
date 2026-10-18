@@ -1,30 +1,27 @@
-// 0036 · A pilha de chamadas
+// 0036 · Juntando tudo: o caixa da lanchonete
 // Exercício E212 · ★☆☆
-//
-// Resposta: a começa / b começa / c / b termina / c / a termina / c.
-// No máximo 4 quadros ao mesmo tempo: main -> a -> b -> c.
 
 #include <stdio.h>
 
-void c(void) {
-    printf("c\n");
+double imc(double peso, double altura) {
+    return peso / (altura * altura);
 }
 
-void b(void) {
-    printf("b começa\n");
-    c();
-    printf("b termina\n");
-}
-
-void a(void) {
-    printf("a começa\n");
-    b();
-    c();
-    printf("a termina\n");
+void mostrar_imc(int pessoa, double peso, double altura) {
+    double valor = imc(peso, altura);
+    printf("Pessoa %d: IMC %.1f ", pessoa, valor);
+    if (valor < 18.5) {
+        printf("(abaixo)\n");
+    } else if (valor < 25) {
+        printf("(normal)\n");
+    } else {
+        printf("(acima)\n");
+    }
 }
 
 int main(void) {
-    a();
-    c();
+    mostrar_imc(1, 70.0, 1.75);
+    mostrar_imc(2, 85.0, 1.75);
+    mostrar_imc(3, 52.0, 1.72);
     return 0;
 }

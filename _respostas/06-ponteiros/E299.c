@@ -1,28 +1,27 @@
-// 0050 · Ponteiros
+// 0050 · Ponteiro para função
 // Exercício E299 · ★★★
 //
-// Resposta: a = 5, b = 16, *p = 16, *q = 5.
-//
-//   linha              a    b    p    q
-//   início             3    8    &a   &b
-//   *p = *q + 1        9    8    &a   &b
-//   p = q              9    8    &b   &b
-//   *p = *p * 2        9    16   &b   &b
-//   q = &a             9    16   &b   &a
-//   *q -= 4            5    16   &b   &a
+// Resposta: x - y estoura o int quando x = 2000000000 e y = -2000000000
+// (o resultado, 4000000000, não cabe). O valor "dá a volta", fica negativo
+// e o qsort entende que 2000000000 vem antes. A comparação só precisa do
+// sinal: (x > y) - (x < y) devolve -1, 0 ou 1 sem fazer conta.
 
 #include <stdio.h>
+#include <stdlib.h>
+
+int compara(const void *a, const void *b) {
+    int x = *(const int *)a;
+    int y = *(const int *)b;
+    return (x > y) - (x < y);
+}
 
 int main(void) {
-    int a = 3, b = 8;
-    int *p = &a, *q = &b;
+    int saldos[3] = {2000000000, -2000000000, 5};
 
-    *p = *q + 1;
-    p = q;
-    *p = *p * 2;
-    q = &a;
-    *q -= 4;
-
-    printf("a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
+    qsort(saldos, 3, sizeof saldos[0], compara);
+    for (int i = 0; i < 3; i++) {
+        printf("%d ", saldos[i]);
+    }
+    printf("\n");
     return 0;
 }

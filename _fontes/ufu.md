@@ -14,7 +14,7 @@
 
 ---
 
-### 0005-compilacao
+### logica5-compilacao
 - **Conceitos-chave:** fonte (.c) → pré-processamento (inclui arquivos, expande macros) → compilação de
   CADA arquivo separadamente → objeto (.obj/.o) → linkedição junta objetos + bibliotecas → executável.
   Objeto contém código de máquina, mas ainda não roda sozinho.
@@ -22,12 +22,12 @@
   conjunto de objetos + bibliotecas → executável". Usar como base do diagrama do 0005 (trocando .obj/.exe
   por .o/a.out e mostrando `gcc -E`, `gcc -c`, `gcc x.o y.o -o prog`).
 - **Pegadinha:** o erro "rótulo duplicado"/"multiple definition" só aparece na LIGAÇÃO, porque cada arquivo
-  compila isolado (ver `extern` em 0039).
+  compila isolado (ver `extern` em 0034).
 - **Exercício:** dado um projeto com `main.c` e `util.c`, quantos arquivos objeto são gerados? (2) Em
   qual etapa um protótipo faltando é detectado? (compilação) E uma função declarada mas nunca definida?
   (ligação).
 
-### 0006-primeiro-programa
+### 0001-primeiro-programa
 - **Conceitos-chave:** execução começa em `main`; chaves agrupam blocos; `;` encerra comandos; C diferencia
   maiúsculas de minúsculas e todas as palavras-chave são minúsculas; comentários são descartados pelo
   compilador. Esqueleto: diretivas → globais → protótipos → main → demais funções.
@@ -35,7 +35,7 @@
   exemplos — não compila. Bom exercício: "por que este código não compila?".
 - `main` retorna `int` ao sistema: 0 = término normal, ≠ 0 = erro (explicação boa).
 
-### 0007-variaveis
+### 0002-variaveis
 - **Conceitos-chave:** variável = posição de memória com nome e tipo; declarar antes de usar; três lugares
   de declaração: dentro de função (local), na lista de parâmetros (formal), fora de tudo (global).
   Inicialização na declaração. `void` como 5º tipo básico (sem valor).
@@ -44,7 +44,7 @@
 - **Desatualizado:** "declarações só no início do bloco, antes de qualquer comando" — regra do C89; desde
   C99 pode-se declarar no meio do bloco (inclusive no `for`).
 
-### 0008-tipos-e-limites
+### 0003-tipos-e-limites
 - **Conceitos-chave:** o padrão fixa FAIXAS MÍNIMAS, não tamanhos: `short` e `int` ≥ 16 bits, `long` ≥ 32
   bits, `short ≤ int ≤ long`; `int` costuma ser o tamanho natural da palavra da máquina. `unsigned` só
   positivos; `signed int` é redundante; `long double`. Tabela com faixa e o especificador de `scanf` de
@@ -55,7 +55,7 @@
   reais são `double` por padrão; sufixos `L` e `F` (`-15L`, `3.141F`).
 - **Exercício:** qual o tipo de `10`, `3.0`, `3.0f`, `100000L`? (int, double, float, long).
 
-### 0009-constantes
+### 0004-constantes
 - **Conceitos-chave:** `'a'` (char) × `"a"` (string = `'a'` + `'\0'`, ocupa 1 byte a mais); octal começa com
   `0` (015 ≠ 15), hexa com `0x`. Tabela completa de escapes, incluindo `\N` (octal) e `\xN` (hexa).
   `const` = não pode ser modificada após a inicialização; `volatile` = pode mudar "por fora" do programa
@@ -66,20 +66,20 @@
   continuação de linha com `\`. Exercício: com `#define NOME "Fulano"`, o que imprime
   `printf("NOME: %s", NOME)`? (`NOME: Fulano`).
 
-### 0010-printf
+### 0005-printf
 - **Conceitos-chave:** string de controle tem 3 tipos de caractere: texto literal, escapes e
   especificadores. Tabela completa (`%d %i %o %x %X %u %c %s %f %e %E %g %G %%`); modificadores: `-`
   (esquerda), largura mínima, `.precisão` (casas decimais em real, máximo de caracteres em string, mínimo de
   dígitos em inteiro), `h`/`l`.
 - **Exemplo pronto (com saída):** `%-10.2f` de 8.0, 15.253, 584.13 → "8.00      15.25     584.13";
-  `%04d` de 21 → `0021`; `%6d` → `    21`; `%10.3f` de 3456.78 → `  3456.780`; `%3.1f` → `3456.8` (largura é
+  `%04d` de 21 → `0016`; `%6d` → `    21`; `%10.3f` de 3456.78 → `  3456.780`; `%3.1f` → `3456.8` (largura é
   mínima: não corta); `%c` de 47 → `/`.
 - **Pegadinha:** largura menor que o número não trunca (`%3.1f` de 3456.78 imprime 6 caracteres).
 - **Pegadinha de segurança:** a apostila sugere `printf(string)` para imprimir uma string — se a string
   contiver `%`, dá problema. Usar `printf("%s", string)` ou `puts`.
 - Bug no exemplo: `printf("%hd %c \n", CH)` passa um argumento para dois especificadores.
 
-### 0011-scanf
+### 0006-scanf
 - **Conceitos-chave:** `scanf` recebe a lista de ENDEREÇOS (`&var`); `%i` aceita decimal, octal (`0..`)
   ou hexa (`0x..`); `%f` lê `float` e `%lf` lê `double` (no `printf` ambos usam `%f`). `scanf` devolve
   quantos itens leu: `while (scanf("%f", &n) == 1)` soma até o fim da entrada (Ctrl-Z/Ctrl-D) — padrão
@@ -91,7 +91,7 @@
 - **Exercício:** somar números até o fim da entrada, imprimindo subtotal a cada 10 (exemplo do livro).
   Entrada 1..25 → subtotais 55 e 210, total 325.
 
-### 0012-aritmetica / 0013-conversao
+### 0007-aritmetica / 0008-conversao
 - **Conceitos-chave:** resultado tem o tipo "maior" da expressão; inteiro/inteiro = divisão inteira; `%` só
   inteiros; `-` unário troca sinal. Regras de promoção: `char`/`short` → `int`; operandos diferentes →
   converte para o de maior capacidade. Cast: `(float) NRO / 2`.
@@ -100,43 +100,43 @@
   já fez divisão inteira. Exercício: NRO = 7 → 3.5 × 3.0.
 - Protótipos evitam promoções antigas (sem protótipo, `char`→`int` e `float`→`double` nos argumentos).
 
-### 0014-atribuicao
+### 0009-atribuicao
 - `Y = X++` (Y=10, X=11) × `Y = ++X` (ambos 11). Expressões reduzidas `+= -= *= /= %=` para contadores e
   acumuladores. Tabela de precedência completa (inclui `( ) [ ]`, unários, cast, ternário, atribuição).
 - **Exercício:** `int X = 10, Y; Y = X++ + 1;` → Y = 11, X = 11.
 
-### 0015-math
+### 0010-math
 - `ceil(3.4)=4`, `floor(3.4)=3` (aqui corretos), `exp`, `fabs`, `log`, `log10`, `pow`, `sqrt`, trig em
   radianos. Boa observação: `pow` também faz radiciação com expoente fracionário (`pow(27, 1.0/3)` = 3).
   Pegadinha associada: `pow(27, 1/3)` = 1 (divisão inteira!).
 - `ctype.h`: `tolower`, `toupper` (não-letras voltam inalteradas).
 
-### 0017-relacionais / 0018-logicos
+### 0012-relacionais / 0013-logicos
 - Resultado de comparação é 0 ou ≠ 0. Exemplo: pares de 1 a 100 com `if (!(NRO % 2))` — bom para
   discutir legibilidade (`NRO % 2 == 0` é mais claro).
 
-### 0019-if / 0020-if-else / 0021-else-if
+### 0014-if / 0015-if-else / 0016-else-if
 - **Conceitos-chave:** chaves opcionais com um comando só; endentação não muda a semântica; `else if`
   avaliado em ordem e para no primeiro verdadeiro.
 - **Pegadinha EXCELENTE (else pendurado):** termostato — objetivo: "agradável" entre 20 e 30, "muito
   quente" acima de 30. Código sem chaves `if (T<30) if (T>20) ...; else "muito quente";` — o `else` gruda
-  no `if` mais próximo, então "muito quente" sai quando T ≤ 20! Correção com chaves. Usar no 0021.
+  no `if` mais próximo, então "muito quente" sai quando T ≤ 20! Correção com chaves. Usar no 0016.
 - **Exemplo:** faixas de temperatura com `if` aninhado (<10 muito fria, <20 fria, <30 agradável, senão
   quente) e reescrito com `else if` — mostra que a cadeia é mais legível.
-- **Pegadinha `=` × `==` (0020):** o exemplo de contar letras usa `If (FRASE[I] = LETRA)` — atribui em vez
+- **Pegadinha `=` × `==` (0015):** o exemplo de contar letras usa `If (FRASE[I] = LETRA)` — atribui em vez
   de comparar e conta TODAS as posições. Usar como "ache o erro".
 
-### 0022-ternario
+### 0017-ternario
 - `Z = (A > B) ? A : B;` equivalente ao if/else de máximo.
 
-### 0023-switch
+### 0018-switch
 - **Conceitos-chave:** compara uma variável contra constantes; só testa igualdade (diferença para o if);
   `break` opcional (sem ele, cai no próximo case); `default` opcional.
 - **Ideia de exemplo:** calculadora com menu (1 soma, 2 subtração, 3 multiplicação, 4 divisão com teste de
-  divisor zero, 5 sair) dentro de um `while (op != '5')`. Bom modelo para 0024 (trocar `getche` por
+  divisor zero, 5 sair) dentro de um `while (op != '5')`. Bom modelo para 0019 (trocar `getche` por
   `scanf(" %c")`).
 
-### 0025-while / 0026-do-while / 0027-for
+### 0020-while / 0021-do-while / 0022-for
 - Mesma tarefa (soma 1..10 = 55) com `while`, `do-while` e `for` — ótimo exemplo comparativo.
 - `for`: qualquer das três partes pode ser omitida (os `;` ficam); `for(;;)` infinito com `break`;
   incremento dentro do corpo (`for (x=0; x != 123;) scanf(...)`); múltiplas expressões com vírgula
@@ -144,7 +144,7 @@
 - **Pegadinha:** no exemplo do `do-while` falta `;` depois de `while (i <= 10)` — erro de sintaxe clássico.
 - **Exercício:** quantas linhas imprime `for (x=0, y=100; x<y; x++, --y)`? (50).
 
-### 0028-break-continue
+### 0023-break-continue
 - `break` sai só do laço MAIS INTERNO; `continue` vai para a próxima iteração; `return` sai do laço e da
   função; `goto` (mesma função; único uso defensável: sair de laços muito aninhados); `exit` encerra o
   programa.
@@ -154,7 +154,7 @@
   (usar `strcpy` ou `const char *`); `exit;` sem parênteses/argumento — compila como expressão sem efeito e
   NÃO sai do programa (pegadinha ótima).
 
-### 0034-parametros / 0033-funcoes
+### 0029-parametros / 0028-funcoes
 - **Conceitos-chave:** forma geral; tipo de cada parâmetro deve ser escrito individualmente
   (`int a, int b`, não `int a, b`); parâmetros são locais; vários `return` possíveis, só um executa;
   tipo omitido = `int` (C antigo); valor de retorno pode ser ignorado (ex.: o de `printf`).
@@ -164,7 +164,7 @@
   referência.
 - **Exercício:** o que imprime `nro` depois de `sq = sqr(nro)` na versão por valor? (o valor original).
 
-### 0035-escopo
+### 0030-escopo
 - **Conceitos-chave:** local = automática (`auto`), criada na entrada do bloco e destruída na saída;
   mesmo nome em funções diferentes não conflita; global em área fixa, vive o programa todo; evitar
   globais (efeitos colaterais, reuso). **`static` local** mantém valor entre chamadas.
@@ -174,13 +174,13 @@
 - `static` em global = visível só no arquivo; `register` = pedido de acesso rápido, proíbe `&`;
   `auto` é o padrão (inútil escrever).
 
-### 0037-recursao
+### 0032-recursao
 - Primeiro passo é definir o critério de parada; fatorial `n > 1 ? n*fat(n-1) : 1`. Recursão costuma
   gastar mais memória e tempo (cada chamada fica pendente), mas é mais compacta; estruturas recursivas
   (árvores) combinam com ela.
 - **Pegadinha:** o exemplo de protótipo escreve `if NRO < 2 return (1);` sem parênteses na condição.
 
-### 0039-modulos
+### 0034-modulos
 - **Conceitos-chave:** `extern` resolve a duplicação de globais entre arquivos: define em UM arquivo
   (`int x, y;`) e declara nos outros (`extern int x, y;`); sem isso, cada arquivo compila, mas a ligação
   acusa símbolo duplicado. `static` global esconde a variável dos outros arquivos.
@@ -189,7 +189,7 @@
 - **Exercício:** dois arquivos com `int contador;` cada — compila? liga? (compila cada um; na ligação, erro
   ou comportamento dependente do compilador; corrigir com `extern`).
 
-### 0040-preprocessador
+### 0035-preprocessador
 - **Conceitos-chave:** diretivas começam com `#`, não levam `;`; `#define` cria constantes e macros com
   argumentos; substituição é textual, a verificação de sintaxe só ocorre depois.
 - **Pegadinha CLÁSSICA (bem explicada):** `#define CUBO(X) ((X)*(X)*(X))`; sem parênteses, `CUBO(A+B)` viraria
@@ -198,7 +198,7 @@
   Dados"`) e `##` (cola tokens).
 - Não cobre `#ifdef`/`#ifndef` (diz que foge ao escopo).
 
-### 0042-vetores / 0044-matrizes
+### 0037-vetores / 0039-matrizes
 - **Conceitos-chave:** vetor = matriz de 1 dimensão; elementos do mesmo tipo, contíguos; índice começa em
   0; C não confere limites (risco de sobrescrever outras variáveis ou travar); inicialização com `{}`;
   tamanho da 1ª dimensão pode ser omitido se houver inicialização (`int V[] = {5,10,15,20,25}`;
@@ -209,12 +209,12 @@
 - **Pegadinha:** no contador de letras, `while (FRASE[I] != '\0' && I <= 100)` com vetor de 100 → índice
   100 já está fora (off-by-one).
 
-### 0043-vetores-e-funcoes
+### 0038-vetores-e-funcoes
 - Ao passar matriz, passa-se o endereço do 1º elemento (exceção à "passagem por valor"); 3 formas
   equivalentes de declarar o parâmetro: `int v[50]`, `int v[]`, `int *v` — dentro da função é sempre um
   ponteiro (por isso o 50 é ignorado e `sizeof` não dá o tamanho do vetor).
 
-### 0046-strings
+### 0041-strings
 - **Conceitos-chave:** string = vetor de char terminado em `'\0'`; espaço = caracteres + 1; não se copia
   string com `=` (copiar caractere a caractere ou `strcpy`); `for (i = 0; s[i]; i++)` aproveita o `\0`
   como falso. `strcpy(dest, orig)`, `strcat(dest, orig)`, `strlen` (não conta o `\0`), `strcmp` (0 se
@@ -225,13 +225,13 @@
   Exercício: qual o tamanho mínimo? (3).
 - **Exemplo:** `atoi("12") + atof("2.14")` = 14.14.
 
-### 0047-lendo-strings
+### 0042-lendo-strings
 - **Explicação boa:** `gets` não sabe o tamanho do destino → estouro de buffer; `fgets(str, tam, stdin)`
   lê no máximo tam-1 caracteres, sempre põe `'\0'` e GUARDA o `'\n'` (diferente de `gets`). Usar como base
   para "por que nunca gets" e "tirar o \n".
 - A apostila ainda usa `gets` em quase todos os exemplos.
 
-### 0049-memoria / 0050-ponteiros
+### 0044-memoria / 0045-ponteiros
 - **Analogia excelente:** ponteiro = papel onde você anota o endereço de um colega; agenda = vetor de
   ponteiros; ponteiro tem tipo como "endereço de amigo" × "endereço de firma" (mesmo formato, conteúdo
   diferente). `&` = ligar para a firma e pedir o endereço; `*` = ir até a firma e mexer lá dentro.
@@ -245,7 +245,7 @@
   `scanf("%d", num + count)` sem alocar memória — exatamente o erro que ela mesma condena depois.
   Ótimo "ache o erro".
 
-### 0052-ponteiros-e-vetores
+### 0047-ponteiros-e-vetores
 - **Conceitos-chave:** `p+1` avança um elemento (2 bytes num int de 16 bits, 8 num double); `p++` × `(*p)++`
   (mover o ponteiro × incrementar o valor apontado); permitido: atribuir, somar/subtrair inteiro, comparar;
   proibido: multiplicar, dividir, somar dois ponteiros, somar float. `v[i] ≡ *(v+i)` explica por que o
@@ -256,15 +256,15 @@
   é mais rápido; hoje o compilador otimiza ambos — vale discutir).
 - Erro de digitação na apostila: "v+1 aponta para o 1º elemento; v+2 aponta para o 1º elemento".
 
-### 0053-ponteiros-e-strings
+### 0048-ponteiros-e-strings
 - Literais ficam num "banco de strings" do compilador; no código fica o endereço. `char *str1 = "String
   constante.";` — se alterar o ponteiro perde a string; se escrever através dele corrompe o banco
   (hoje: literal é só leitura, escrever é comportamento indefinido).
 
-### 0054-ponteiro-para-ponteiro
+### 0049-ponteiro-para-ponteiro
 - `float fpi = 3.1415, *pf, **ppf; pf = &fpi; ppf = &pf;` → `**ppf` e `*pf` imprimem 3.1415.
 
-### 0059-malloc-free / 0060-calloc-realloc
+### 0054-malloc-free / 0055-calloc-realloc
 - **Conceitos-chave:** ANSI define 4 funções em `stdlib.h`: `malloc(bytes)` devolve `void *` (NULL se
   falhar); `calloc(num, tam)` (aloca num × tam — e zera, o que a apostila não diz); `realloc(p, novo)` pode
   mover o bloco e copia o conteúdo; NULL em `realloc` aloca; tamanho 0 libera; se faltar memória devolve
@@ -274,7 +274,7 @@
 - **Pegadinha:** `if (!p) { printf(...); exit; }` — `exit;` não chama nada; o programa segue e usa NULL.
 - **Exemplo:** vetor de 30 quadrados realocado para 80.
 
-### 0064-struct / 0065-typedef / 0066-vetor-de-structs
+### 0059-struct / 0060-typedef / 0061-vetor-de-structs
 - **Conceitos-chave:** registro = estrutura heterogênea; `struct` + tag opcional + membros; variáveis podem
   vir após a `}`; declaração sem variáveis só descreve o formato, não aloca; inicialização com chaves na
   ordem dos membros (inclusive aninhada); acesso com `.` (encadeado para struct aninhada:
@@ -286,7 +286,7 @@
 - **Exercício:** struct com dois registros: `a = b;` funciona? E `a == b`? (sim; não — comparar campo a
   campo).
 
-### 0072-arquivos-texto
+### 0067-arquivos-texto
 - **Conceitos-chave:** `FILE *fp` aponta para uma estrutura com buffer, posição, modo e indicadores de erro/
   fim; arquivos pré-abertos `stdin`, `stdout`, `stderr` (`stdaux`, `stdprn` são DOS). Tabela de modos
   `r w a r+ w+ a+` (+ `b`): `r` exige que exista; `w` apaga o conteúdo; `a` acrescenta no fim.
@@ -304,14 +304,14 @@
 - `ferror`, `clearerr`, `perror("Erro na gravacao")` (mensagem vai para `stderr` com a descrição do
   `errno`).
 
-### 0073-arquivos-binarios
+### 0068-arquivos-binarios
 - **Conceitos-chave:** `fwrite(buf, tam, qtd, fp)` / `fread(...)` devolvem nº de ELEMENTOS transferidos
   (testar `!= 1`); `rewind`; `fseek(fp, deslocamento, SEEK_SET|SEEK_CUR|SEEK_END)` para acesso aleatório.
   Gravar struct inteira: `fwrite(&folha, sizeof(struct f), 1, fp)`.
 - **Exemplo:** gravar e reler um `double` 12.23, um `int` 101 e um `long` 1230232; mostrar o N-ésimo
   caractere de um arquivo com `fseek` + `getc` (nome e N vêm de `argv`).
 
-### 0074-argumentos
+### 0069-argumentos
 - **Conceitos-chave:** `int main(int argc, char *argv[])`; `argc` ≥ 1 (conta o nome do programa);
   `argv[0]` é o nome; argumentos separados por espaço chegam como strings (converter com `atoi`/`atol`).
 - **Ideia de exemplo:** `data 19 04 1999` → "19 de abril de 1999" com vetor de nomes de meses e validação de

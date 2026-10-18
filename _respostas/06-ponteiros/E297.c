@@ -1,21 +1,38 @@
-// 0050 · Ponteiros
+// 0050 · Ponteiro para função
 // Exercício E297 · ★★☆
-//
-// Resposta: (1) faltava o * em meta_ptr na declaração; (2) meta_ptr = meta
-// guardava o valor, o certo é &meta; (3) peso_ptr não apontava para nada
-// antes de *peso_ptr = 82.
 
 #include <stdio.h>
 
+int soma(int a, int b) { return a + b; }
+int subtrai(int a, int b) { return a - b; }
+int multiplica(int a, int b) { return a * b; }
+int divide(int a, int b) { return a / b; }
+
 int main(void) {
-    int peso = 0, meta = 78;
-    int *peso_ptr, *meta_ptr;
+    int (*ops[4])(int, int) = {soma, subtrai, multiplica, divide};
+    const char *simbolos = "+-*/";
+    int a, b;
+    char op;
 
-    peso_ptr = &peso;
-    *peso_ptr = 82;
-    meta_ptr = &meta;
+    printf("Digite a conta: ");
+    if (scanf("%d %c %d", &a, &op, &b) != 3) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
-    printf("Peso: %d\n", peso);
-    printf("Meta: %d\n", *meta_ptr);
+    int indice = -1;
+    for (int i = 0; simbolos[i] != '\0'; i++) {
+        if (simbolos[i] == op) {
+            indice = i;
+        }
+    }
+
+    if (indice < 0) {
+        printf("Operador inválido\n");
+    } else if (op == '/' && b == 0) {
+        printf("Divisão por zero\n");
+    } else {
+        printf("Resultado: %d\n", ops[indice](a, b));
+    }
     return 0;
 }

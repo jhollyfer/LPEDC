@@ -1,19 +1,22 @@
-// 0007 · Variáveis
+// 0007 · Aritmética
 // Exercício E042 · ★★★
 //
-// Resposta: "A 65", "B", "7 55" e "[ ] 32". '7' é o caractere sete, que
-// tem o código 55 na tabela ASCII; 7 é o número sete. São coisas diferentes.
+// Resposta: 472 vira 274. Com 120, o invertido vale 21: um int não guarda
+// zero à esquerda. Para mostrar 021, use %03d.
 
 #include <stdio.h>
 
 int main(void) {
-    char letra = 'A';
-    printf("%c %d\n", letra, letra);
-    letra = 66;
-    printf("%c\n", letra);
-    char digito = '7';
-    printf("%c %d\n", digito, digito);
-    char espaco = ' ';
-    printf("[%c] %d\n", espaco, espaco);
+    int n;
+    printf("Número: ");
+    scanf("%d", &n);
+
+    int unidade = n % 10;       // 2
+    int dezena = n / 10 % 10;   // 7
+    int centena = n / 100;      // 4
+    int invertido = unidade * 100 + dezena * 10 + centena;
+
+    printf("Ao contrário: %d\n", invertido);
+    printf("Com 3 dígitos: %03d\n", invertido);
     return 0;
 }

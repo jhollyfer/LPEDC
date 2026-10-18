@@ -32,7 +32,7 @@ de ela fazer sentido.
 
 1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
    mesmas chaves do código.
-2. Leia o código. A partir do 0103, cada assunto tem um **TAD** na pasta
+2. Leia o código. A partir do 0098, cada assunto tem um **TAD** na pasta
    (`arvore.h`, `bst.h`, `avl.h`, `heap.h`, `cadastro.h`) e o exemplo só usa a
    interface. Abra o `.c` do TAD também: é lá que mora o algoritmo.
 3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
@@ -55,16 +55,16 @@ o nó vermelho é o que vai sair ou o que está desequilibrado.
 
 ## Antes de começar
 
-Você precisa estar à vontade com **recursão** (assuntos 0037 e 0038),
-**ponteiros para struct** e `->` (0067), `malloc` e `free` (0059) e a ideia de
-**TAD** com `.h` e `.c` (0079). A fila do assunto 0090 aparece no percurso por
-nível, e o assunto 0095 (busca binária) é o primo da BST.
+Você precisa estar à vontade com **recursão** (assuntos 0032 e 0033),
+**ponteiros para struct** e `->` (0062), `malloc` e `free` (0054) e a ideia de
+**TAD** com `.h` e `.c` (0074). A fila do assunto 0085 aparece no percurso por
+nível, e o assunto 0090 (busca binária) é o primo da BST.
 
 O `rodar` compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
 comandos dos exemplos e exercícios são os de sempre:
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-bst-busca-insercao/A207.c
+~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A197.c
 ```
 
 Uma convenção vale para o módulo todo: **altura conta arestas**. Uma folha tem
@@ -207,7 +207,7 @@ Ordenar: O(n log n), cerca de 20 milhões de comparações, e guarda tudo. Heap 
 máximo com todos: montar O(n) e tirar 10 vezes O(10 log n), mas também guarda
 tudo. **Heap de mínimo com 10**: cada número compara com a raiz e, se for maior,
 entra no lugar dela, O(n log 10), uns 3 milhões de passos no pior caso, e
-guarda só 10 números. É o exercício E641 em escala.
+guarda só 10 números. É o exercício E611 em escala.
 
 </details>
 

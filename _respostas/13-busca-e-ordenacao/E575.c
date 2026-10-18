@@ -1,80 +1,49 @@
-// 0096 · Bubble sort
+// 0096 · Comparando: estabilidade, custo e qsort
 // Exercício E575 · ★★★
 
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 
-void troca(int *a, int *b) {
-    int aux = *a;
-    *a = *b;
-    *b = aux;
+typedef struct {
+    char nome[16];
+    char telefone[16];
+} Contato;
+
+// para o qsort: os dois argumentos são Contato *
+int compara_contatos(const void *a, const void *b) {
+    const Contato *x = a;
+    const Contato *y = b;
+    return strcmp(x->nome, y->nome);
 }
 
-int bubble(int v[], int n, int *comparacoes) {
-    int passadas = 0;
-    *comparacoes = 0;
-    bool trocou = true;
-    for (int p = 1; p < n && trocou; p++) {
-        trocou = false;
-        passadas++;
-        for (int j = 0; j < n - p; j++) {
-            (*comparacoes)++;
-            if (v[j] > v[j + 1]) {
-                troca(&v[j], &v[j + 1]);
-                trocou = true;
-            }
-        }
-    }
-    return passadas;
-}
-
-// coqueteleira: ida leva o maior para o fim, volta traz o menor para a frente
-int shaker(int v[], int n, int *comparacoes) {
-    int passadas = 0;
-    int ini = 0, fim = n - 1;     // a parte ainda bagunçada é v[ini..fim]
-    *comparacoes = 0;
-    bool trocou = true;
-    while (trocou && ini < fim) {
-        trocou = false;
-        passadas++;                               // ida
-        for (int j = ini; j < fim; j++) {
-            (*comparacoes)++;
-            if (v[j] > v[j + 1]) {
-                troca(&v[j], &v[j + 1]);
-                trocou = true;
-            }
-        }
-        fim--;                                    // o maior foi para v[fim]
-        if (!trocou) {
-            break;
-        }
-        trocou = false;
-        passadas++;                               // volta
-        for (int j = fim; j > ini; j--) {
-            (*comparacoes)++;
-            if (v[j - 1] > v[j]) {
-                troca(&v[j - 1], &v[j]);
-                trocou = true;
-            }
-        }
-        ini++;                                    // o menor foi para v[ini]
-    }
-    return passadas;
+// para o bsearch: o 1º argumento é a CHAVE (aqui, um char *), o 2º é um
+// elemento do vetor (Contato *). Tipos diferentes, mesmo critério.
+int compara_nome(const void *chave, const void *elemento) {
+    const char *nome = chave;
+    const Contato *c = elemento;
+    return strcmp(nome, c->nome);
 }
 
 int main(void) {
-    int a[] = {2, 3, 4, 5, 6, 7, 8, 1};
-    int b[] = {2, 3, 4, 5, 6, 7, 8, 1};
-    int ca, cb;
+    Contato agenda[] = {
+        {"Rafael", "81 99876-1234"},
+        {"Carla", "11 98765-4321"},
+        {"Bruno", "21 97654-3210"},
+        {"Marina", "31 96543-2109"},
+        {"Diego", "85 95432-1098"},
+    };
+    size_t n = sizeof agenda / sizeof agenda[0];
+    const char *procurados[] = {"Carla", "Zeca"};
 
-    int pa = bubble(a, 8, &ca);
-    int pb = shaker(b, 8, &cb);
-    printf("bubble: %d passadas, %d comparações\n", pa, ca);
-    printf("shaker: %d passadas, %d comparações\n", pb, cb);
-    printf("resultado:");
-    for (int i = 0; i < 8; i++) {
-        printf(" %d", b[i]);
+    qsort(agenda, n, sizeof agenda[0], compara_contatos);
+    for (int k = 0; k < 2; k++) {
+        Contato *c = bsearch(procurados[k], agenda, n, sizeof agenda[0], compara_nome);
+        if (c != NULL) {
+            printf("%s: %s (posição %td)\n", c->nome, c->telefone, c - agenda);
+        } else {
+            printf("%s: não está na agenda\n", procurados[k]);
+        }
     }
-    printf("\n");
     return 0;
 }

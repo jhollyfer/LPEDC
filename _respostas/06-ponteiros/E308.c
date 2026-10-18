@@ -1,24 +1,29 @@
-// 0052 · Ponteiros e vetores
+// 0052 · Juntando tudo: o ranking da feira
 // Exercício E308 · ★☆☆
 //
-// Resposta: a) 20; b) 50; c) 23; d) 40; e) 60; f) 0x2010 (0x2004 + 3 * 4);
-// g) 40; h) 30; i) 3.
+// Resposta: 20 10 25 5 | fEira | r
+// troca(&v[0], p) deixa v = 20 10 15 5; *c = 'E' muda s[1]; p-- vai para
+// v[2]; *p += *(v + 1) faz 15 + 10 = 25; *(c + 2) é s[3] = 'r'.
 
 #include <stdio.h>
 
-int main(void) {
-    int v[6] = {10, 20, 30, 40, 50, 60};
-    int *p = v + 1;
+void troca(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
 
-    printf("a) %d\n", *p);
-    printf("b) %d\n", *(p + 3));
-    printf("c) %d\n", *p + 3);
-    printf("d) %d\n", p[2]);
-    printf("e) %d\n", *(v + 5));
-    printf("f) p = %p, p + 3 = %p\n", (void *)p, (void *)(p + 3));
-    p += 2;
-    printf("g) %d\n", *p);
-    printf("h) %d\n", p[-1]);
-    printf("i) %td\n", p - v);
+int main(void) {
+    int v[4] = {5, 10, 15, 20};
+    int *p = v + 3;
+    char s[] = "feira";
+    char *c = s + 1;
+
+    troca(&v[0], p);
+    *c = 'E';
+    p--;
+    *p += *(v + 1);
+
+    printf("%d %d %d %d | %s | %c\n", v[0], v[1], v[2], v[3], s, *(c + 2));
     return 0;
 }

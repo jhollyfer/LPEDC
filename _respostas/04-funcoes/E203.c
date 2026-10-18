@@ -1,29 +1,15 @@
-// 0034 · Parâmetros e passagem por valor
+// 0034 · Módulos: .h, .c e compilação separada
 // Exercício E203 · ★★★
 //
-// Resposta: 3, 7.0, 7.5 e 8. O 7.9 vira 7 ao entrar no parâmetro int, e 7 / 2
-// é 3. Em media, (7 + 8) / 2 é divisão inteira: 7; só depois vira 7.0. Em
-// media_certa, 7 e 8 viram 7.0 e 8.0 ao entrar, e a conta dá 7.5.
-// metade(31) = 15, 15 + 1 = 16, metade(16) = 8.
-
-#include <stdio.h>
-
-int metade(int x) {
-    return x / 2;
-}
-
-double media(int a, int b) {
-    return (a + b) / 2;
-}
-
-double media_certa(double a, double b) {
-    return (a + b) / 2;
-}
-
-int main(void) {
-    printf("%d\n", metade(7.9));
-    printf("%.1f\n", media(7, 8));
-    printf("%.1f\n", media_certa(7, 8));
-    printf("%d\n", metade(metade(31) + 1));
-    return 0;
-}
+// Resposta:
+// a) "2 gols em 1 partida".
+// b) O main.c compila (o extern promete que gols existe), mas o ligador dá
+//    "undefined reference to gols": a gols de placar.c é static, o nome não
+//    sai daquele arquivo.
+// c) O mesmo: compila, e o ligador não acha anotar, que é static.
+// d) Agora partidas é definida duas vezes (uma em cada .c): o ligador dá
+//    "multiple definition of partidas". A definição fica num lugar só; nos
+//    outros, extern.
+// e) Encapsulamento: ninguém fora de placar.c altera gols direto. Só dá para
+//    mudar o placar por marcar_gol, e o módulo pode trocar a forma de guardar
+//    os gols sem quebrar quem usa.

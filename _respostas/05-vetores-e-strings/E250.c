@@ -1,23 +1,52 @@
-// 0042 · Vetores
+// 0042 · Lendo strings
 // Exercício E250 · ★★☆
 
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 
 int main(void) {
-    int avaliacoes[] = {5, 4, 5, 3, 5, 1, 4, 5, 2, 4, 5, 3, 4, 5, 5};
-    int n = sizeof(avaliacoes) / sizeof(avaliacoes[0]);
-    int contagem[6] = {0}; // contagem[0] fica sem uso
+    char senha[100];
 
-    for (int i = 0; i < n; i++) {
-        contagem[avaliacoes[i]]++;
+    printf("Senha: ");
+    if (fgets(senha, sizeof(senha), stdin) == NULL) {
+        return 1;
+    }
+    senha[strcspn(senha, "\n")] = '\0';
+
+    bool tem_maiuscula = false, tem_minuscula = false, tem_digito = false;
+    for (int i = 0; senha[i] != '\0'; i++) {
+        unsigned char c = (unsigned char) senha[i];
+        if (isupper(c)) {
+            tem_maiuscula = true;
+        } else if (islower(c)) {
+            tem_minuscula = true;
+        } else if (isdigit(c)) {
+            tem_digito = true;
+        }
     }
 
-    for (int nota = 5; nota >= 1; nota--) {
-        printf("Nota %d: ", nota);
-        for (int k = 0; k < contagem[nota]; k++) {
-            printf("*");
-        }
-        printf(" (%d)\n", contagem[nota]);
+    bool falhou = false;
+    size_t tamanho = strlen(senha);
+    if (tamanho < 8) {
+        printf("Falta: 8 caracteres (tem %zu)\n", tamanho);
+        falhou = true;
+    }
+    if (!tem_maiuscula) {
+        printf("Falta: letra maiúscula\n");
+        falhou = true;
+    }
+    if (!tem_minuscula) {
+        printf("Falta: letra minúscula\n");
+        falhou = true;
+    }
+    if (!tem_digito) {
+        printf("Falta: dígito\n");
+        falhou = true;
+    }
+    if (!falhou) {
+        printf("Senha forte.\n");
     }
     return 0;
 }

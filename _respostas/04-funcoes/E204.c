@@ -1,33 +1,62 @@
-// 0034 · Parâmetros e passagem por valor
+// 0034 · Módulos: .h, .c e compilação separada
 // Exercício E204 · ★★★
+//
+// No cofrinho.h de verdade iria:
+//   #ifndef COFRINHO_H
+//   #define COFRINHO_H
+//   #include <stdbool.h>
+//   void depositar(double valor);
+//   bool sacar(double valor);
+//   double saldo(void);
+//   int operacoes(void);
+//   #endif
+// No cofrinho.c: #include "cofrinho.h", as duas variáveis static e os corpos.
 
 #include <stdbool.h>
 #include <stdio.h>
 
-int inverter(int n) {
-    int invertido = 0;
-    while (n > 0) {
-        invertido = invertido * 10 + n % 10;
-        n = n / 10;
-    }
-    return invertido;
-}
-
-bool eh_capicua(int n) {
-    return inverter(n) == n;
-}
+// cofrinho.h
+void depositar(double valor);
+bool sacar(double valor);
+double saldo(void);
+int operacoes(void);
 
 int main(void) {
-    int numero = 12345;
-    int capicuas = 0;
-
-    printf("inverter(%d) = %d\n", numero, inverter(numero));
-    printf("No main, numero continua %d\n", numero);
-    for (int n = 100; n <= 999; n++) {
-        if (eh_capicua(n)) {
-            capicuas++;
-        }
-    }
-    printf("Capicuas de 100 a 999: %d\n", capicuas);
+    depositar(50);
+    depositar(-10);
+    printf("Saque de 30.00: %s\n", sacar(30) ? "ok" : "sem saldo");
+    printf("Saque de 100.00: %s\n", sacar(100) ? "ok" : "sem saldo");
+    depositar(25);
+    printf("Saldo: R$ %.2f\n", saldo());
+    printf("Operações: %d\n", operacoes());
     return 0;
+}
+
+// cofrinho.c
+static double saldo_atual = 0;
+static int contador = 0;
+
+void depositar(double valor) {
+    if (valor <= 0) {
+        return;
+    }
+    saldo_atual += valor;
+    contador++;
+}
+
+bool sacar(double valor) {
+    if (valor <= 0 || valor > saldo_atual) {
+        return false;
+    }
+    saldo_atual -= valor;
+    contador++;
+    return true;
+}
+
+double saldo(void) {
+    return saldo_atual;
+}
+
+int operacoes(void) {
+    return contador;
 }

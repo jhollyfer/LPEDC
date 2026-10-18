@@ -1,39 +1,32 @@
-// 0026 · Do-while
+// 0026 · Aleatórios
 // Exercício E156 · ★★★
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void) {
-    int mes, dia, dias_no_mes;
+    const int experimentos = 10000;
+    long total_lancamentos = 0;
+    int recorde = 0;
 
-    do {
-        printf("Mês: ");
-        if (scanf("%d", &mes) != 1) {
-            return 1;
+    srand(2026);
+    for (int e = 1; e <= experimentos; e++) {
+        int seguidos = 0;
+        int lancamentos = 0;
+        while (seguidos < 3) {
+            lancamentos++;
+            if (1 + rand() % 6 == 6) {
+                seguidos++;
+            } else {
+                seguidos = 0;
+            }
         }
-    } while (mes < 1 || mes > 12);
-
-    switch (mes) {
-    case 2:
-        dias_no_mes = 28;
-        break;
-    case 4:
-    case 6:
-    case 9:
-    case 11:
-        dias_no_mes = 30;
-        break;
-    default:
-        dias_no_mes = 31;
+        total_lancamentos += lancamentos;
+        if (lancamentos > recorde) {
+            recorde = lancamentos;
+        }
     }
-
-    do {
-        printf("Dia (1 a %d): ", dias_no_mes);
-        if (scanf("%d", &dia) != 1) {
-            return 1;
-        }
-    } while (dia < 1 || dia > dias_no_mes);
-
-    printf("Consulta em %02d/%02d/2026\n", dia, mes);
+    printf("Média: %.1f lançamentos\n", (double) total_lancamentos / experimentos);
+    printf("Pior caso: %d lançamentos\n", recorde);
     return 0;
 }

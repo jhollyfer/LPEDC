@@ -1,27 +1,57 @@
-// 0094 · Busca sequencial
+// 0094 · Merge sort
 // Exercício E563 · ★★★
 //
-// Resposta: (1) o laço vai até i <= n e lê v[n], uma gaveta depois do fim (o
-// AddressSanitizer acusa stack-buffer-overflow); (2) sem parar no primeiro
-// encontro, pos é sobrescrita e a função devolve a ÚLTIMA ocorrência. Conserto:
-// i < n e return i assim que achar.
+// Resposta: na cópia de volta, o rascunho w[0..r-p-1] vai para v[k], ou seja,
+// para o COMEÇO do vetor, e não para v[p + k], o lugar do pedaço. Só as
+// intercalações com p = 0 caem no lugar certo. Já a primeira de todas,
+// [1, 2) com [2, 3), escreve 5 e 42 em v[0] e v[1]: o 21 some e o 42 fica
+// duplicado. Conserto: v[p + k] = w[k].
 
 #include <stdio.h>
+#include <stdlib.h>
 
-int primeira(const int v[], int n, int x) {
-    for (int i = 0; i < n; i++) {
-        if (v[i] == x) {
-            return i;
+void intercala(int v[], int w[], int p, int q, int r) {
+    int i = p, j = q, k = 0;
+    while (i < q && j < r) {
+        if (v[i] <= v[j]) {
+            w[k++] = v[i++];
+        } else {
+            w[k++] = v[j++];
         }
     }
-    return -1;
+    while (i < q) {
+        w[k++] = v[i++];
+    }
+    while (j < r) {
+        w[k++] = v[j++];
+    }
+    for (k = 0; k < r - p; k++) {
+        v[p + k] = w[k];
+    }
+}
+
+void merge_sort(int v[], int w[], int p, int r) {
+    if (r - p < 2) {
+        return;
+    }
+    int q = p + (r - p) / 2;
+    merge_sort(v, w, p, q);
+    merge_sort(v, w, q, r);
+    intercala(v, w, p, q, r);
 }
 
 int main(void) {
-    int senhas[] = {12, 7, 30, 7, 18, 7};
+    int km[] = {21, 5, 42, 10, 15, 3};
     int n = 6;
-
-    printf("Primeira senha 7: posição %d\n", primeira(senhas, n, 7));
-    printf("Primeira senha 99: posição %d\n", primeira(senhas, n, 99));
+    int *w = malloc(n * sizeof *w);
+    if (w == NULL) {
+        return 1;
+    }
+    merge_sort(km, w, 0, n);
+    for (int i = 0; i < n; i++) {
+        printf("%d ", km[i]);
+    }
+    printf("\n");
+    free(w);
     return 0;
 }

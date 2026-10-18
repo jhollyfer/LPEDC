@@ -1,46 +1,44 @@
-// 0094 · Busca sequencial
+// 0094 · Merge sort
 // Exercício E561 · ★★☆
 
 #include <stdio.h>
 
-// busca comum: olha até achar ou acabar
-int busca(const int v[], int n, int x, int *olhados) {
-    *olhados = 0;
-    for (int i = 0; i < n; i++) {
-        (*olhados)++;
-        if (v[i] == x) {
-            return i;
+// união sem repetidos de a e b (ordenados, sem repetidos dentro de cada um)
+int uniao(const int a[], int na, const int b[], int nb, int c[], int *nos_dois) {
+    int i = 0, j = 0, k = 0;
+    *nos_dois = 0;
+    while (i < na && j < nb) {
+        if (a[i] < b[j]) {
+            c[k++] = a[i++];
+        } else if (a[i] > b[j]) {
+            c[k++] = b[j++];
+        } else {                 // igual: entra uma vez e as duas andam
+            c[k++] = a[i];
+            i++;
+            j++;
+            (*nos_dois)++;
         }
     }
-    return -1;
-}
-
-// vetor crescente: se v[i] já passou de x, x não pode estar mais à frente
-int busca_ordenada(const int v[], int n, int x, int *olhados) {
-    *olhados = 0;
-    for (int i = 0; i < n; i++) {
-        (*olhados)++;
-        if (v[i] == x) {
-            return i;
-        }
-        if (v[i] > x) {
-            return -1; // passou do lugar onde x estaria
-        }
+    while (i < na) {
+        c[k++] = a[i++];
     }
-    return -1;
+    while (j < nb) {
+        c[k++] = b[j++];
+    }
+    return k;
 }
 
 int main(void) {
-    int precos[] = {12, 19, 25, 31, 38, 44, 52, 60, 73, 89};
-    int n = 10;
-    int chaves[] = {47, 60};
-    int a, b;
+    int manha[] = {1021, 1034, 1050, 1077, 1090};
+    int tarde[] = {1010, 1034, 1066, 1077, 1095, 1102};
+    int todos[11];
+    int nos_dois;
 
-    for (int k = 0; k < 2; k++) {
-        int p1 = busca(precos, n, chaves[k], &a);
-        int p2 = busca_ordenada(precos, n, chaves[k], &b);
-        printf("R$ %d: comum %d (%d olhados), ordenada %d (%d olhados)\n",
-               chaves[k], p1, a, p2, b);
+    int n = uniao(manha, 5, tarde, 6, todos, &nos_dois);
+    printf("%d alunos diferentes:", n);
+    for (int k = 0; k < n; k++) {
+        printf(" %d", todos[k]);
     }
+    printf("\nforam nos dois turnos: %d\n", nos_dois);
     return 0;
 }

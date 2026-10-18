@@ -1,17 +1,19 @@
-// 0033 · Funções
+// 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 // Exercício E194 · ★☆☆
 
 #include <stdio.h>
 
-int total_segundos(int h, int m, int s);
-
-int main(void) {
-    printf("Ana: %d s\n", total_segundos(1, 30, 15));
-    printf("Bia: %d s\n", total_segundos(1, 0, 0));
-    printf("Caio: %d s\n", total_segundos(1, 23, 19));
-    return 0;
+unsigned long long movimentos(int n) {
+    if (n == 0) {
+        return 0;
+    }
+    return 2 * movimentos(n - 1) + 1;
 }
 
-int total_segundos(int h, int m, int s) {
-    return h * 3600 + m * 60 + s;
+int main(void) {
+    printf("3 discos: %llu\n", movimentos(3));
+    printf("10 discos: %llu\n", movimentos(10));
+    printf("20 discos: %llu\n", movimentos(20));
+    printf("64 discos: %llu\n", movimentos(64));
+    return 0;
 }

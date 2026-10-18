@@ -1,16 +1,15 @@
-// 0010 · printf
+// 0010 · math.h
 // Exercício E055 · ★☆☆
 
 #include <stdio.h>
+#include <math.h>
 
 int main(void) {
-    double nota = 8.75;
-    int faltas = 3;
-    char conceito = 'B';
+    double largura = 121.8, altura = 68.5; // cm
 
-    printf("Aluna: %s\n", "Júlia");
-    printf("Nota: %.1f\n", nota);
-    printf("Faltas: %02d\n", faltas);
-    printf("Conceito: %c\n", conceito);
+    double diagonal = sqrt(pow(largura, 2) + pow(altura, 2));
+
+    printf("Diagonal: %.2f cm\n", diagonal);
+    printf("TV de %.0f polegadas\n", diagonal / 2.54);
     return 0;
 }

@@ -27,15 +27,15 @@ LPEDC/
 ├── legenda.svg                formas e cores (gerado)
 ├── 01-fundamentos/            SAÍDA: o que a pessoa estuda
 │   ├── README.md              gerado: o módulo inteiro
-│   └── 0007-variaveis/
+│   └── 0002-variaveis/
 │       ├── ideia.svg          gerado
 │       ├── fluxograma.svg     gerado
-│       ├── A013.c  A014.c     exemplos resolvidos
-│       └── E037.c ... E042.c  exercícios (a resposta vai dentro do arquivo)
-├── _respostas/01-fundamentos/E037.c ...   uma resolução de cada exercício
+│       ├── A003.c  A004.c     exemplos resolvidos
+│       └── E007.c ... E012.c  exercícios (a resposta vai dentro do arquivo)
+├── _respostas/01-fundamentos/E007.c ...   uma resolução de cada exercício
 ├── _gerador/modulos/01-fundamentos/       FONTE do README e dos desenhos
 │   ├── modulo.md              começo e fim do README ({{indice}}, {{assuntos}})
-│   └── 0007-variaveis/
+│   └── 0002-variaveis/
 │       ├── texto.md           o texto do assunto ({{ideia}}, {{fluxograma}}, {{pratique}})
 │       └── desenhos.mjs       export const ideia e fluxograma
 └── _fontes/                   sumário e fichamentos dos livros
@@ -46,10 +46,10 @@ Gerar: `cd _gerador && npm run gerar -- 01-` (só o módulo 01). Nunca edite o
 
 ## Numeração (fixa, não mude)
 
-Assunto `N` (ex.: 0007 → N = 7):
+Assunto `N` (ex.: 0002 → N = 2):
 
-- exemplos: `A(2N-1)` e `A(2N)` → 0007 tem `A013.c` e `A014.c`
-- exercícios: `E(6N-5)` até `E(6N)` → 0007 tem `E037.c` até `E042.c`
+- exemplos: `A(2N-1)` e `A(2N)` → 0002 tem `A003.c` e `A004.c`
+- exercícios: `E(6N-5)` até `E(6N)` → 0002 tem `E007.c` até `E012.c`
 
 Sempre 3 dígitos. Sempre 2 exemplos e 6 exercícios por assunto.
 
@@ -59,7 +59,7 @@ Um assunto conta **um exemplo só**, em quatro partes que batem entre si: texto,
 diagrama da ideia, código e fluxograma, com o **mesmo cenário e os mesmos
 valores**. Roteiro:
 
-1. `## 0007 · Variáveis` (título curto).
+1. `## 0002 · Variáveis` (título curto).
 2. **Gancho**: uma situação do dia a dia (feira, ônibus, conta de luz,
    mercado, Pix, academia, futebol...). Cenários brasileiros, valores em R$.
 3. O conceito em parágrafos curtos (2 a 4 linhas cada). Termos novos em
@@ -112,14 +112,14 @@ export const fluxograma = { nos: [[id, tipo, texto]], setas: [[de, para, rotulo?
   - caixas comuns `{ id, x, y, w?, h?, cor, rotulo?, texto: [linhas] }` e `forma: 'losango'`
 - Coordenadas: o quadro tem ~1600 px de largura útil (x de 100 a 1500).
 - Depois de gerar, **olhe o desenho**: `cd _gerador && node ver.mjs
-  ../01-fundamentos/0007-variaveis/ideia.svg` gera um PNG em `/tmp/lpedc-ver/`;
+  ../01-fundamentos/0002-variaveis/ideia.svg` gera um PNG em `/tmp/lpedc-ver/`;
   abra o PNG com a ferramenta Read e confira sobreposição, texto cortado e
   setas. Ajuste as coordenadas até ficar limpo.
 
-## Exemplos (A013.c)
+## Exemplos (A003.c)
 
 ```c
-// A013 · A idade na caixinha
+// A003 · A idade na caixinha
 
 #include <stdio.h>
 
@@ -131,7 +131,7 @@ int main(void) {
 }
 ```
 
-- 1ª linha: `// A013 · título curto` (o gerador exige esse formato).
+- 1ª linha: `// A003 · título curto` (o gerador exige esse formato).
 - C17 padrão, `int main(void)`, `return 0;`, 4 espaços de recuo, nomes em
   português sem acento em `snake_case`, comentários curtos em português.
 - Prefira valores fixos (saída previsível). Quando ler do teclado, mostre no
@@ -141,14 +141,16 @@ int main(void) {
   erro do sanitizer (sem vazamento). A saída nos comentários tem que ser a
   saída real: rode e confira. Para ler entrada no teste, use
   `printf '25\n' | ./rodar caminho.c`.
-- Os dois exemplos do assunto: o primeiro é o exemplo do texto (ou bem
-  próximo); o segundo mostra outra faceta do mesmo conceito.
+- Os dois exemplos **não repetem o código que já aparece no texto**. O texto
+  mostra o exemplo principal; os arquivos A trazem cenários novos que mostram
+  outras facetas do mesmo conceito (um caso de borda, uma variação, um uso
+  real). Quem leu o texto e roda os exemplos tem que aprender algo a mais.
 
-## Exercícios (E037.c)
+## Exercícios (E007.c)
 
 ```c
-// 0007 · Variáveis
-// Exercício E037 · ★☆☆
+// 0002 · Variáveis
+// Exercício E007 · ★☆☆
 //
 // Enunciado claro, com cenário e valores concretos. Linhas com 2 espaços de
 // recuo viram bloco de código/saída no README:
@@ -173,20 +175,27 @@ int main(void) {
 ```
 
 - O bloco de comentários do topo é lido pelo gerador até a primeira linha que
-  não começa com `//`. Respeite as linhas `Exercício E037 · ★☆☆`, `Dicas:` e
+  não começa com `//`. Respeite as linhas `Exercício E007 · ★☆☆`, `Dicas:` e
   `Escreva sua resposta abaixo:`.
+- **Todo exercício é para codificar**: a pessoa escreve, completa ou conserta
+  código C que compila, roda e mostra um resultado conferível. Nada de
+  "preveja a saída", "explique", "responda" ou pseudocódigo como resposta.
+  Quer treinar leitura de código? Peça para modificar o programa e mostrar o
+  resultado ("acrescente um printf que mostre o valor de x em cada volta").
 - Dificuldade dos 6: **E1 e E2 ★☆☆** (aplicar direto), **E3 e E4 ★★☆**
   (combinar com assuntos anteriores, pensar), **E5 e E6 ★★★** (desafio de
-  verdade: um probleminha completo, um "descubra o bug", um "preveja a saída"
-  ou uma variação esperta). Varie os tipos: escrever do zero, completar código,
-  achar o erro, prever a saída, refatorar.
+  verdade: um probleminha completo, um "conserte o bug" ou uma variação
+  esperta). Varie os tipos: escrever do zero, completar código, consertar o
+  erro, estender um programa pronto, refatorar.
 - Exercício só usa o que já foi ensinado até aquele assunto (siga o sumário).
 - Sempre termine as dicas com a resposta esperada (valor final ou saída).
 - O esqueleto (includes + main vazio) **compila** com `./rodar`. Inclua os
   `#include` que a solução vai precisar.
 - Escreva uma resolução de cada exercício em
-  `_respostas/<modulo>/E037.c` (mesmo cabeçalho de 2 linhas + código
-  resolvido), compile, rode e confira com a resposta esperada.
+  `_respostas/<modulo>/E007.c` (mesmo cabeçalho de 2 linhas + código
+  resolvido), compile, rode e confira com a resposta esperada. Toda resolução
+  é código que roda (se precisar de um TAD, traga uma cópia do `.h`/`.c` na
+  pasta `_respostas/<modulo>/`).
 
 ## modulo.md
 
@@ -232,13 +241,13 @@ módulo + K&R, cppreference, man pages quando couber)
   usar, o texto pode citar como "você vai ver isso em material antigo; não use"
   e mostrar a alternativa.
 - Até 0011: `scanf` simples. A partir de 0011, confira o retorno do `scanf`
-  quando fizer sentido. A partir de 0047, strings com `fgets`.
-- `bool` de `<stdbool.h>` a partir de 0017.
+  quando fizer sentido. A partir de 0042, strings com `fgets`.
+- `bool` de `<stdbool.h>` a partir de 0012.
 - Memória: todo `malloc` tem `free`; confira `NULL`. Os exemplos rodam limpos
   no AddressSanitizer.
 - Estruturas de dados a partir do módulo 10 seguem o padrão **TAD**: `pilha.h`
   (interface) + `pilha.c` (implementação) na pasta do assunto + o exemplo
-  `A175.c` com `#include "pilha.h"`. O `rodar` compila junto os `.c` de apoio
+  `A165.c` com `#include "pilha.h"`. O `rodar` compila junto os `.c` de apoio
   da pasta (todo `.c` cujo nome não é `A000.c`/`E000.c`). Exercícios que
   precisam de uma implementação diferente trazem tudo no próprio arquivo.
 

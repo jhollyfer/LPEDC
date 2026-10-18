@@ -1,49 +1,49 @@
-// 0095 · Busca binária
+// 0095 · Quick sort
 // Exercício E567 · ★★☆
 
 #include <stdio.h>
+#include <string.h>
 
-// primeira posição com v[i] >= x (semiaberto [ini, fim))
-int primeira_maior_igual(const int v[], int n, int x) {
-    int ini = 0, fim = n;
-    while (ini < fim) {
-        int meio = ini + (fim - ini) / 2;
-        if (v[meio] < x) {
-            ini = meio + 1;
-        } else {
-            fim = meio;
-        }
-    }
-    return ini;
+static int comparacoes = 0;
+
+void troca(const char **a, const char **b) {
+    const char *aux = *a;
+    *a = *b;
+    *b = aux;
 }
 
-// primeira posição com v[i] > x
-int primeira_maior(const int v[], int n, int x) {
-    int ini = 0, fim = n;
-    while (ini < fim) {
-        int meio = ini + (fim - ini) / 2;
-        if (v[meio] <= x) {
-            ini = meio + 1;
-        } else {
-            fim = meio;
+int separa(const char *v[], int p, int r) {
+    const char *pivo = v[r];
+    int j = p;
+    for (int k = p; k < r; k++) {
+        comparacoes++;
+        if (strcmp(v[k], pivo) <= 0) {
+            troca(&v[j], &v[k]);
+            j++;
         }
     }
-    return ini;
+    troca(&v[j], &v[r]);
+    return j;
+}
+
+void quick_sort(const char *v[], int p, int r) {
+    if (p >= r) {
+        return;
+    }
+    int j = separa(v, p, r);
+    quick_sort(v, p, j - 1);
+    quick_sort(v, j + 1, r);
 }
 
 int main(void) {
-    int notas[] = {1, 1, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5};
-    int n = 12;
+    const char *compras[] = {"leite", "arroz", "tomate", "café", "pão",
+                             "banana", "ovos", "feijão"};
+    int n = 8;
 
-    for (int nota = 1; nota <= 5; nota++) {
-        int a = primeira_maior_igual(notas, n, nota);
-        int b = primeira_maior(notas, n, nota);
-        if (a == b) {
-            printf("Nota %d: nenhuma\n", nota);
-        } else {
-            printf("Nota %d: posições %d a %d, %d %s\n", nota, a, b - 1, b - a,
-                   b - a == 1 ? "avaliação" : "avaliações");
-        }
+    quick_sort(compras, 0, n - 1);
+    for (int i = 0; i < n; i++) {
+        printf("%s%s", compras[i], i < n - 1 ? ", " : "\n");
     }
+    printf("%d comparações\n", comparacoes);
     return 0;
 }

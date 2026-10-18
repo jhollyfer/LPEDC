@@ -59,10 +59,10 @@ costuma ser o bloco que mora no heap.
 
 Você precisa estar à vontade com ponteiros (módulo 06): `&`, `*`, `NULL`,
 `a[i] == *(a + i)`, `char *` e `**`. Se `int **m` ainda assusta, releia os
-assuntos 0052 e 0054 antes.
+assuntos 0047 e 0049 antes.
 
 O `rodar` já compila com o **AddressSanitizer**, que vigia a memória enquanto
-o programa roda e avisa de vazamentos no fim. Para o assunto 0062, instale
+o programa roda e avisa de vazamentos no fim. Para o assunto 0057, instale
 também o **valgrind**:
 
 ```bash
@@ -74,7 +74,7 @@ E rode qualquer arquivo com ele assim (sem AddressSanitizer, dentro do
 valgrind):
 
 ```bash
-~/LPEDC/rodar --valgrind 07-memoria-dinamica/0062-erros-de-memoria/A124.c
+~/LPEDC/rodar --valgrind 07-memoria-dinamica/0057-erros-de-memoria/A114.c
 ```
 
 A regra do módulo inteiro cabe numa linha: **todo `malloc` tem um `free`, e
@@ -82,16 +82,16 @@ nenhum ponteiro é usado depois dele**.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0058](#0058--pilha-e-heap) | Pilha e heap | [`0058-pilha-e-heap/`](0058-pilha-e-heap/) |
-| [0059](#0059--malloc-e-free) | malloc e free | [`0059-malloc-free/`](0059-malloc-free/) |
-| [0060](#0060--calloc-e-realloc) | calloc e realloc | [`0060-calloc-realloc/`](0060-calloc-realloc/) |
-| [0061](#0061--matriz-dinâmica) | Matriz dinâmica | [`0061-matriz-dinamica/`](0061-matriz-dinamica/) |
-| [0062](#0062--erros-de-memória) | Erros de memória | [`0062-erros-de-memoria/`](0062-erros-de-memoria/) |
-| [0063](#0063--juntando-tudo) | Juntando tudo | [`0063-juntando-tudo/`](0063-juntando-tudo/) |
+| [0053](#0053--pilha-e-heap) | Pilha e heap | [`0053-pilha-e-heap/`](0053-pilha-e-heap/) |
+| [0054](#0054--malloc-e-free) | malloc e free | [`0054-malloc-free/`](0054-malloc-free/) |
+| [0055](#0055--calloc-e-realloc) | calloc e realloc | [`0055-calloc-realloc/`](0055-calloc-realloc/) |
+| [0056](#0056--matriz-dinâmica) | Matriz dinâmica | [`0056-matriz-dinamica/`](0056-matriz-dinamica/) |
+| [0057](#0057--erros-de-memória) | Erros de memória | [`0057-erros-de-memoria/`](0057-erros-de-memoria/) |
+| [0058](#0058--juntando-tudo) | Juntando tudo | [`0058-juntando-tudo/`](0058-juntando-tudo/) |
 
 ---
 
-## 0058 · Pilha e heap
+## 0053 · Pilha e heap
 
 Sexta à noite, restaurante cheio. O garçom anota o pedido da mesa 4 num
 bloquinho, arranca a folha e prende a comanda no balcão da cozinha. O
@@ -112,7 +112,7 @@ endereços dividida em quatro regiões:
 | **heap** | blocos pedidos com `malloc` | **você** pede e **você** devolve | até o `free` |
 | **pilha** | locais e parâmetros (os frames) | a chamada e o `return` | enquanto a função roda |
 
-A **pilha** (*stack*) você já conhece do assunto 0036: cada chamada empilha um
+A **pilha** (*stack*) você já conhece do assunto 0031: cada chamada empilha um
 **frame** com as locais, cada `return` desempilha. É automática e rapidíssima,
 mas tem duas limitações. A primeira: o frame some no `return`, então nada que
 mora nele sobrevive à função. A segunda: ela é pequena. No Linux, o padrão é
@@ -132,9 +132,9 @@ pilha. Os três valores vão para um bloco no heap. O contador `pedidos_do_dia`
 mora nos dados. Quando a função retorna, o frame dela some, mas o bloco
 continua lá, e `main` guarda o endereço dele:
 
-<p align="center"><img src="0058-pilha-e-heap/ideia.svg" alt="Diagrama da ideia: Pilha e heap" width="998"></p>
+<p align="center"><img src="0053-pilha-e-heap/ideia.svg" alt="Diagrama da ideia: Pilha e heap" width="998"></p>
 
-O `malloc` e o `free` ganham um assunto só deles (0059). Aqui, repare só em
+O `malloc` e o `free` ganham um assunto só deles (0054). Aqui, repare só em
 onde cada coisa mora e em quanto tempo ela vive:
 
 ```c
@@ -179,7 +179,7 @@ Repara no fluxograma: o frame de `abrir_comanda` nasce e morre no meio do
 caminho, mas o bloco do heap atravessa o `return` e só termina no `free`, lá
 no fim de `main`:
 
-<p align="center"><img src="0058-pilha-e-heap/fluxograma.svg" alt="Fluxograma: Pilha e heap" width="429"></p>
+<p align="center"><img src="0053-pilha-e-heap/fluxograma.svg" alt="Fluxograma: Pilha e heap" width="429"></p>
 
 > [!WARNING]
 > Nunca devolva o endereço de uma variável local. `char senha[8]; ... return
@@ -195,7 +195,7 @@ no fim de `main`:
 > isso locais são de graça. O `malloc` precisa procurar um pedaço livre do
 > tamanho certo numa lista de blocos e anotar o tamanho num cabeçalho
 > escondido logo antes do endereço que ele te entrega. É bem mais caro. Rode
-> `size` no executável (`gcc A115.c -o comanda && size comanda`) e veja as
+> `size` no executável (`gcc A105.c -o comanda && size comanda`) e veja as
 > colunas `text` (código), `data` (globais com valor) e `bss` (globais
 > zeradas). Heap e pilha não aparecem: eles só existem quando o programa roda.
 
@@ -206,9 +206,9 @@ no fim de `main`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0058-pilha-e-heap/`](0058-pilha-e-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0053-pilha-e-heap/`](0053-pilha-e-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A115 · A comanda em três regiões**
+**Exemplo A105 · A comanda em três regiões**
 
 ```c
 #include <stdio.h>
@@ -250,10 +250,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/A115.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/A105.c
 ```
 
-**Exemplo A116 · O mapa da memória**
+**Exemplo A106 · O mapa da memória**
 
 ```c
 #include <stdio.h>
@@ -285,7 +285,7 @@ int main(void) {
     free(bloco);
     return 0;
 }
-// Saída com gcc puro (gcc A116.c -o mapa && ./mapa). Os endereços mudam a
+// Saída com gcc puro (gcc A106.c -o mapa && ./mapa). Os endereços mudam a
 // cada execução; repare na ordem:
 // literal:        0x563b12ef101a   <- perto do código, endereços baixos
 // global:         0x563b12ef3010
@@ -299,12 +299,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/A116.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/A106.c
 ```
 
 #### Exercícios
 
-**Exercício E343** · ★☆☆
+**Exercício E313** · ★☆☆
 
 Leia o trecho abaixo (não precisa rodar) e diga em que região da memória
 mora cada item: código, dados, heap ou pilha.
@@ -342,10 +342,10 @@ retorna?
    placar somem com o frame; por isso o endereço precisa voltar no return.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/E343.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E313.c
 ```
 
-**Exercício E344** · ★☆☆
+**Exercício E314** · ★☆☆
 
 A catraca da academia chama a função registrar_entrada() a cada aluno que
 passa. Escreva essa função com dois contadores: um local comum (int hoje)
@@ -369,10 +369,10 @@ local: 1 | static: 3
    return; a static mora nos dados e vive o programa todo.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/E344.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E314.c
 ```
 
-**Exercício E345** · ★★☆
+**Exercício E315** · ★★☆
 
 No Linux, "ulimit -s" mostra o tamanho da pilha em KiB (em geral, 8192,
 ou seja, 8 MiB). Uma função recursiva guarda o histórico de preços de uma
@@ -402,10 +402,10 @@ Responda também: por que o número real de chamadas é um pouco menor?
    ambiente. Passou do limite, o programa morre com stack overflow.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/E345.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E315.c
 ```
 
-**Exercício E346** · ★★☆
+**Exercício E316** · ★★☆
 
 Um sensor de vibração de uma ponte grava 5.000.000 de leituras por dia.
 Simule as leituras com leitura[i] = i % 7 e mostre a soma de todas.
@@ -435,14 +435,14 @@ Responda: quantos bytes o vetor ocupa? Por que o passo 1 quebra?
 3. Resposta esperada: 14999995. O vetor tem 20 MB e a pilha só tem 8 MiB:
    no passo 1 o AddressSanitizer acusa stack-overflow (sem ele, o programa
    morre com Segmentation fault). Nos dados, o espaço é reservado quando o
-   programa carrega e não depende do tamanho da pilha. No assunto 0059 você
+   programa carrega e não depende do tamanho da pilha. No assunto 0054 você
    vai fazer o mesmo com malloc, escolhendo o tamanho na hora de rodar.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/E346.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E316.c
 ```
 
-**Exercício E347** · ★★★
+**Exercício E317** · ★★★
 
 Preveja a saída SEM rodar. Depois rode e confira.
 
@@ -483,10 +483,10 @@ Explique cada número pensando em onde mora cada variável.
    41. passo(0) é a 5ª chamada: 51. contador foi decrementado 5 vezes: 95.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/E347.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E317.c
 ```
 
-**Exercício E348** · ★★★
+**Exercício E318** · ★★★
 
 Este programa compila com um AVISO (warning) de propósito e mostra lixo ou
 quebra. Rode, leia o aviso e responda: qual é o problema? Depois conserte
@@ -495,8 +495,8 @@ sem usar static nem malloc: quem chama empresta o vetor.
 
 ```text
 Saída esperada depois do conserto:
-Senha: A042
-Senha: A107
+Senha: A032
+Senha: A097
 ```
 
 **Dicas:**
@@ -510,12 +510,12 @@ Senha: A107
    char senha[8]; montar_senha(42, senha);
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-pilha-e-heap/E348.c
+~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E318.c
 ```
 
 ---
 
-## 0059 · malloc e free
+## 0054 · malloc e free
 
 Fim do mês, hora de somar as corridas de aplicativo. Teve mês com 4 corridas,
 teve mês com 60. Se você declarar `double corridas[100];`, desperdiça espaço
@@ -525,7 +525,7 @@ aparece quando o programa já está rodando.
 Para isso existe o `malloc` (*memory allocation*), de `<stdlib.h>`. Você diz
 **quantos bytes** quer e ele devolve o **endereço** de um bloco desse tamanho
 no heap. Esse endereço vai para um ponteiro, e o ponteiro passa a se comportar
-como um vetor: `corridas[i]` funciona igualzinho (assunto 0052).
+como um vetor: `corridas[i]` funciona igualzinho (assunto 0047).
 
 ```c
 double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
@@ -535,7 +535,7 @@ Três detalhes nessa linha:
 
 - o `malloc` conta em **bytes**, não em elementos. `malloc(4)` não é espaço
   para 4 `double`, é espaço para 4 bytes. Por isso sempre `n * sizeof(tipo)`;
-- ele devolve `void *` (assunto 0056), que vira `double *` sozinho. Em C não
+- ele devolve `void *` (assunto 0051), que vira `double *` sozinho. Em C não
   precisa de cast; o `(double *)` que você vê em livro antigo é dispensável;
 - se não houver memória, ele devolve **`NULL`**. Sempre confira antes de usar.
 
@@ -550,13 +550,13 @@ aponta para um bloco que não é mais seu. Por isso o hábito: `corridas = NULL;
 
 A regra de ouro é simples de dizer: **todo `malloc` tem um `free`**. Nada some
 sozinho: o bloco que você esquece de liberar fica ocupado até o programa acabar. Isso é
-um **vazamento** (*memory leak*), tema do assunto 0062.
+um **vazamento** (*memory leak*), tema do assunto 0057.
 
 Vamos ver na prática. O programa pergunta quantas corridas foram (4), pede ao
 heap `4 * 8 = 32` bytes, guarda os valores (R$ 12,50, R$ 18,00, R$ 25,90 e
 R$ 9,60), soma tudo e devolve o bloco:
 
-<p align="center"><img src="0059-malloc-free/ideia.svg" alt="Diagrama da ideia: malloc e free" width="870"></p>
+<p align="center"><img src="0054-malloc-free/ideia.svg" alt="Diagrama da ideia: malloc e free" width="870"></p>
 
 O código completo. Para testar sem digitar, use o comando que está no fim do
 arquivo:
@@ -614,7 +614,7 @@ Repara no fluxograma: toda saída do programa depois do `malloc` passa por um
 `free`, até a saída de erro no meio da leitura. É fácil esquecer justamente
 esse caminho:
 
-<p align="center"><img src="0059-malloc-free/fluxograma.svg" alt="Fluxograma: malloc e free" width="472"></p>
+<p align="center"><img src="0054-malloc-free/fluxograma.svg" alt="Fluxograma: malloc e free" width="472"></p>
 
 > [!WARNING]
 > O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
@@ -639,9 +639,9 @@ esse caminho:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0059-malloc-free/`](0059-malloc-free/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0054-malloc-free/`](0054-malloc-free/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A117 · As corridas do mês**
+**Exemplo A107 · As corridas do mês**
 
 ```c
 #include <stdio.h>
@@ -691,14 +691,14 @@ int main(void) {
 // Total: R$ 66.00
 // Média: R$ 16.50
 //
-// Para testar sem digitar: printf '4\n12.50 18 25.90 9.60\n' | ~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/A117.c
+// Para testar sem digitar: printf '4\n12.50 18 25.90 9.60\n' | ~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/A107.c
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/A117.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/A107.c
 ```
 
-**Exemplo A118 · Quem cria e quem libera**
+**Exemplo A108 · Quem cria e quem libera**
 
 ```c
 #include <stdio.h>
@@ -746,12 +746,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/A118.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/A108.c
 ```
 
 #### Exercícios
 
-**Exercício E349** · ★☆☆
+**Exercício E319** · ★☆☆
 
 Escreva um programa que pergunte quantos dias de medição houve, aloque com
 malloc um vetor de int desse tamanho, leia as temperaturas e mostre a maior
@@ -776,15 +776,15 @@ Para testar: printf '5\n31 28 33 29 30\n' | ~/LPEDC/rodar <este arquivo>
 **Dicas:**
 
 1. int *temps = malloc(dias * sizeof(int)); e depois if (temps == NULL).
-2. Comece maior e menor com temps[0] (padrão do assunto 0030).
+2. Comece maior e menor com temps[0] (padrão do assunto 0025).
 3. Resposta esperada: Máxima: 33 e Mínima: 28, e nenhum aviso do
    AddressSanitizer no fim (sinal de que o free está lá).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/E349.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E319.c
 ```
 
-**Exercício E350** · ★☆☆
+**Exercício E320** · ★☆☆
 
 Complete a função duplicar: ela recebe uma string e devolve uma CÓPIA dela
 num bloco novo do heap, do tamanho exato. O main já está pronto: ele
@@ -806,10 +806,10 @@ Cópia: COXINHA
    heap-buffer-overflow.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/E350.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E320.c
 ```
 
-**Exercício E351** · ★★☆
+**Exercício E321** · ★★☆
 
 Escreva a função
 
@@ -833,16 +833,16 @@ Saída esperada:
 
 1. Duas passadas: a primeira só conta os pares; com a contagem, faça o
    malloc; a segunda copia.
-2. *qtd = contagem; é o "devolver mais de um valor" do assunto 0051.
+2. *qtd = contagem; é o "devolver mais de um valor" do assunto 0046.
 3. Resposta esperada: "4 pares: 4 10 8 6". Quem chama faz o free. Se não
    houver pares, malloc(0) pode devolver NULL ou um endereço válido; trate
    esse caso antes (devolva NULL com *qtd = 0).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/E351.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E321.c
 ```
 
-**Exercício E352** · ★★☆
+**Exercício E322** · ★★☆
 
 Quantos bytes cada chamada pede? Responda antes de rodar, supondo um PC de
 64 bits. Depois escreva um programa que mostre os cinco números com sizeof
@@ -869,10 +869,10 @@ Em e), quantos int cabem de verdade? O que acontece em e[1] = 9; ?
    o AddressSanitizer acusa heap-buffer-overflow.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/E352.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E322.c
 ```
 
-**Exercício E353** · ★★★
+**Exercício E323** · ★★★
 
 O app de caminhada calcula a média de passos dos últimos 4 dias. A conta
 sai certa, mas o programa termina com um relatório do AddressSanitizer.
@@ -895,10 +895,10 @@ Média: 9000 passos
    cópia do ponteiro: int *p = passos;).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/E353.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E323.c
 ```
 
-**Exercício E354** · ★★★
+**Exercício E324** · ★★★
 
 Escreva a função
 
@@ -928,12 +928,12 @@ Crachá: Maria Clara Fonseca (19 caracteres)
    segundo juntar. São dois malloc, então dois free.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0059-malloc-free/E354.c
+~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E324.c
 ```
 
 ---
 
-## 0060 · calloc e realloc
+## 0055 · calloc e realloc
 
 Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
 R$ 120, R$ 35... Você não sabe quantos vão ser. No C, o vetor
@@ -973,10 +973,10 @@ Vamos ver na prática. Chegam 5 Pix (R$ 50, 120, 35, 80 e 15). O vetor nasce
 com capacidade 2, dobra para 4 no terceiro Pix e para 8 no quinto. No fim, 5
 posições usadas e 3 livres:
 
-<p align="center"><img src="0060-calloc-realloc/ideia.svg" alt="Diagrama da ideia: calloc e realloc" width="870"></p>
+<p align="center"><img src="0055-calloc-realloc/ideia.svg" alt="Diagrama da ideia: calloc e realloc" width="870"></p>
 
 O mesmo "vetor que cresce" em C. É a semente da lista sequencial que você vai
-transformar num TAD no assunto 0080:
+transformar num TAD no assunto 0075:
 
 ```c
 #include <stdio.h>
@@ -1027,7 +1027,7 @@ Repara no fluxograma: a pergunta "encheu?" é feita a cada Pix, mas o desvio
 para o `realloc` só acontece duas vezes. Na maior parte das voltas, guardar
 custa só uma atribuição:
 
-<p align="center"><img src="0060-calloc-realloc/fluxograma.svg" alt="Fluxograma: calloc e realloc" width="641"></p>
+<p align="center"><img src="0055-calloc-realloc/fluxograma.svg" alt="Fluxograma: calloc e realloc" width="641"></p>
 
 > [!WARNING]
 > `v = realloc(v, n)` é o erro clássico, e muito livro ensina assim. Se o
@@ -1053,9 +1053,9 @@ custa só uma atribuição:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0060-calloc-realloc/`](0060-calloc-realloc/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0055-calloc-realloc/`](0055-calloc-realloc/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A119 · O vetor que cresce**
+**Exemplo A109 · O vetor que cresce**
 
 ```c
 #include <stdio.h>
@@ -1103,10 +1103,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/A119.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/A109.c
 ```
 
-**Exemplo A120 · A enquete com calloc**
+**Exemplo A110 · A enquete com calloc**
 
 ```c
 #include <stdio.h>
@@ -1147,12 +1147,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/A120.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/A110.c
 ```
 
 #### Exercícios
 
-**Exercício E355** · ★☆☆
+**Exercício E325** · ★☆☆
 
 Num jogo de tabuleiro, o dado saiu assim em 12 jogadas:
 3, 6, 1, 6, 2, 5, 6, 3, 4, 6, 1, 2. Use calloc para criar os contadores
@@ -1179,10 +1179,10 @@ Saída esperada:
    começam com lixo.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/E355.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E325.c
 ```
 
-**Exercício E356** · ★☆☆
+**Exercício E326** · ★☆☆
 
 O programa abaixo funciona e mostra as notas do boletim. Mesmo assim, a
 linha do realloc tem um problema que só aparece quando falta memória.
@@ -1206,10 +1206,10 @@ Notas: 7 8 10
    notas = maior;
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/E356.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E326.c
 ```
 
-**Exercício E357** · ★★☆
+**Exercício E327** · ★★☆
 
 Leia números inteiros do teclado até aparecer 0 (o 0 não entra). Guarde
 num vetor que começa com capacidade 2 e dobra quando enche. No fim,
@@ -1230,16 +1230,16 @@ Para testar: printf '5 8 2 9 4 0\n' | ~/LPEDC/rodar <este arquivo>
 
 1. Duas variáveis de controle: quantidade e capacidade. Encheu quando
    quantidade == capacidade.
-2. Use o realloc com ponteiro temporário, como no A119.
+2. Use o realloc com ponteiro temporário, como no A109.
 3. Resposta esperada: "Ao contrário: 4 9 2 8 5" e "Capacidade final: 8"
    (a capacidade foi 2, 4 e 8). Também trate o fim da entrada: se o scanf
    não devolver 1, pare como se fosse o 0.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/E357.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E327.c
 ```
 
-**Exercício E358** · ★★☆
+**Exercício E328** · ★★☆
 
 Um sensor de umidade mandou 10 leituras, mas -1 significa "falha na
 leitura": 12, -1, 15, 14, -1, -1, 13, 16, -1, 11. Copie as leituras para
@@ -1262,10 +1262,10 @@ Bloco encolheu de 40 para 24 bytes
    posições, exatamente as válidas.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/E358.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E328.c
 ```
 
-**Exercício E359** · ★★★
+**Exercício E329** · ★★★
 
 Compare duas estratégias de crescimento para guardar 1000 números, com
 capacidade inicial 1:
@@ -1299,10 +1299,10 @@ dobrar: 10 realocações, 1023 cópias
    1023: em média, nem uma cópia por elemento.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/E359.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E329.c
 ```
 
-**Exercício E360** · ★★★
+**Exercício E330** · ★★★
 
 A fila do banco guarda as senhas num vetor que cresce. O programa guarda o
 endereço da primeira senha para mostrar no painel depois. Ele está ERRADO
@@ -1329,12 +1329,12 @@ Senhas na fila: 4
    depois do último realloc.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0060-calloc-realloc/E360.c
+~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E330.c
 ```
 
 ---
 
-## 0061 · Matriz dinâmica
+## 0056 · Matriz dinâmica
 
 Uma rede de lojas quer a planilha de vendas: uma linha por loja, uma coluna
 por semana. Este mês são 3 lojas e 4 semanas. Mês que vem abre a quarta loja,
@@ -1346,13 +1346,13 @@ uma matriz, você monta uma com vetores. Tem dois jeitos clássicos.
 
 **1. Um bloco só.** Aloque `linhas * colunas` elementos e calcule a posição na
 mão: o elemento `(i, j)` fica em `v[i * colunas + j]`. É a mesma conta que o
-compilador faz por baixo numa matriz fixa (assunto 0044). Um `malloc`, um
+compilador faz por baixo numa matriz fixa (assunto 0039). Um `malloc`, um
 `free`, tudo contíguo. O preço: a notação `v[i][j]` não funciona.
 
 **2. Vetor de ponteiros.** Primeiro um vetor de `linhas` ponteiros
 (`int **m`), um para cada linha. Depois, um `malloc` por linha, cada uma com
 `colunas` inteiros. Agora `m[i][j]` funciona: `m[i]` é o endereço da linha i,
-e `[j]` anda dentro dela (é o `**` do assunto 0054 em ação).
+e `[j]` anda dentro dela (é o `**` do assunto 0049 em ação).
 
 Uma regra ajuda a não errar o `sizeof`: **o que você aloca tem um `*` a menos
 que o ponteiro que recebe**. `int **m` recebe um vetor de `int *`; `m[i]`, que
@@ -1372,7 +1372,7 @@ Vamos ver na prática. A matriz de 3 lojas por 4 semanas é um vetor de 3
 ponteiros, cada um apontando para uma linha de 4 inteiros. As linhas podem
 estar em qualquer lugar do heap, nem precisam ficar juntas:
 
-<p align="center"><img src="0061-matriz-dinamica/ideia.svg" alt="Diagrama da ideia: Matriz dinâmica" width="858"></p>
+<p align="center"><img src="0056-matriz-dinamica/ideia.svg" alt="Diagrama da ideia: Matriz dinâmica" width="858"></p>
 
 O código separa criar e liberar em funções, como você faria num projeto. As
 vendas estão em R$ mil:
@@ -1442,7 +1442,7 @@ int main(void) {
 Repara no fluxograma da criação: é um laço com uma saída de emergência. Se
 uma linha falhar, o caminho de erro passa pela liberação do que já existe:
 
-<p align="center"><img src="0061-matriz-dinamica/fluxograma.svg" alt="Fluxograma: Matriz dinâmica" width="623"></p>
+<p align="center"><img src="0056-matriz-dinamica/fluxograma.svg" alt="Fluxograma: Matriz dinâmica" width="623"></p>
 
 > [!WARNING]
 > O `sizeof` errado no vetor de ponteiros é um bug que muitos livros trazem:
@@ -1462,14 +1462,14 @@ uma linha falhar, o caminho de erro passa pela liberação do que já existe:
 > dois `malloc`, os dados ficam contíguos e `m[i][j]` continua valendo.
 
 > [!NOTE]
-> **Pergunta para você:** quantos `malloc` e quantos `free` o A121 faz para 3
-> lojas? E para 100 lojas? Quantos faria a versão de bloco único (A122)?
+> **Pergunta para você:** quantos `malloc` e quantos `free` o A111 faz para 3
+> lojas? E para 100 lojas? Quantos faria a versão de bloco único (A112)?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0061-matriz-dinamica/`](0061-matriz-dinamica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0056-matriz-dinamica/`](0056-matriz-dinamica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A121 · Vendas por loja e semana**
+**Exemplo A111 · Vendas por loja e semana**
 
 ```c
 #include <stdio.h>
@@ -1534,10 +1534,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/A121.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/A111.c
 ```
 
-**Exemplo A122 · O mapa do cinema num bloco só**
+**Exemplo A112 · O mapa do cinema num bloco só**
 
 ```c
 #include <stdio.h>
@@ -1583,12 +1583,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/A122.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/A112.c
 ```
 
 #### Exercícios
 
-**Exercício E361** · ★☆☆
+**Exercício E331** · ★☆☆
 
 Leia n e monte, com int ** (vetor de ponteiros), a tabuada n x n: a
 posição [i][j] guarda (i + 1) * (j + 1). Mostre a matriz com %4d e libere
@@ -1615,10 +1615,10 @@ Para testar: printf '4\n' | ~/LPEDC/rodar <este arquivo>
 3. Resposta esperada: a tabela acima, sem relatório do AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/E361.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E331.c
 ```
 
-**Exercício E362** · ★☆☆
+**Exercício E332** · ★☆☆
 
 Uma matriz de 5 linhas e 8 colunas está guardada num bloco único:
 int *v = malloc(5 * 8 * sizeof *v); e o elemento (i, j) fica em
@@ -1642,10 +1642,10 @@ d) O índice 26 é qual (i, j)?
    e 26 % 8 = 2.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/E362.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E332.c
 ```
 
-**Exercício E363** · ★★☆
+**Exercício E333** · ★★☆
 
 Escreva a função
 
@@ -1676,16 +1676,16 @@ Saída esperada (a transposta, 3 x 2):
 
 **Dicas:**
 
-1. Escreva antes criar_matriz e liberar_matriz como no A121; transpor usa
+1. Escreva antes criar_matriz e liberar_matriz como no A111; transpor usa
    criar_matriz(colunas, linhas).
 2. Cuidado ao liberar: a original tem 2 linhas, a transposta tem 3.
 3. Resposta esperada: a saída acima, e as duas matrizes liberadas.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/E363.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E333.c
 ```
 
-**Exercício E364** · ★★☆
+**Exercício E334** · ★★☆
 
 Monte o triângulo de Pascal com 6 linhas usando um vetor de ponteiros em
 que a linha i tem exatamente i + 1 elementos (nada de matriz quadrada com
@@ -1713,10 +1713,10 @@ Elementos guardados: 21
    p[i] e depois p.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/E364.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E334.c
 ```
 
-**Exercício E365** · ★★★
+**Exercício E335** · ★★★
 
 Este programa monta a grade de 3 turnos x 5 dias de uma clínica, com o
 número de consultas, e mostra o total. Ele tem DOIS erros de memória, de
@@ -1742,10 +1742,10 @@ Total de consultas: 105
    ordem: primeiro as linhas, depois grade. Total: 3 * 5 * 7 = 105.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/E365.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E335.c
 ```
 
-**Exercício E366** · ★★★
+**Exercício E336** · ★★★
 
 Escreva a função
 
@@ -1780,18 +1780,18 @@ A * A: dimensões incompatíveis
 **Dicas:**
 
 1. c[i][j] é a soma de a[i][k] * b[k][j] para k de 0 a ca - 1.
-2. Reaproveite criar_matriz e liberar_matriz do A121. Para preencher A e
+2. Reaproveite criar_matriz e liberar_matriz do A111. Para preencher A e
    B, copie de matrizes fixas int [2][3] e int [3][2].
 3. Resposta esperada: a saída acima. Libere A, B e o produto; o NULL de
    A * A não precisa de free (free(NULL) também não faria mal).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0061-matriz-dinamica/E366.c
+~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E336.c
 ```
 
 ---
 
-## 0062 · Erros de memória
+## 0057 · Erros de memória
 
 O sistema do caixa da padaria funciona perfeitamente de manhã. Às seis da
 tarde está lento, e no sábado trava. Ninguém mexeu no código. O que aconteceu
@@ -1817,7 +1817,7 @@ o valor antigo, porque ninguém apagou os bytes. Funciona por sorte, até o
 `malloc` entregar aquele pedaço para outra parte do programa.
 
 O **estouro** no heap é ainda mais traiçoeiro: logo depois do seu bloco mora
-o cabeçalho do bloco vizinho (lembra do 0059?). Escrever um byte a mais pode
+o cabeçalho do bloco vizinho (lembra do 0054?). Escrever um byte a mais pode
 estragar a contabilidade do `malloc`, e o programa quebra muito depois, num
 `free` que não tem culpa nenhuma.
 
@@ -1840,7 +1840,7 @@ Na primeira versão, ela esquecia o `free`. Cada um dos 3 pedidos deixava 16
 bytes perdidos: o endereço morria com o frame, mas o bloco ficava. O ASan
 mostra isso no fim da execução:
 
-<p align="center"><img src="0062-erros-de-memoria/ideia.svg" alt="Diagrama da ideia: Erros de memória" width="858"></p>
+<p align="center"><img src="0057-erros-de-memoria/ideia.svg" alt="Diagrama da ideia: Erros de memória" width="858"></p>
 
 O relatório da versão quebrada, sem o `free`. Leia de cima para baixo: o tipo
 do erro, quanto vazou e a pilha de chamadas que fez o `malloc`:
@@ -1850,8 +1850,8 @@ do erro, quanto vazou e a pilha de chamadas que fez o `malloc`:
 
 Direct leak of 48 byte(s) in 3 object(s) allocated from:
     #0 0x7f1503afd9c7 in malloc
-    #1 0x55bff3c602ef in total_do_pedido A123.c:8
-    #2 0x55bff3c6071c in main A123.c:23
+    #1 0x55bff3c602ef in total_do_pedido A113.c:8
+    #2 0x55bff3c6071c in main A113.c:23
 
 SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
 ```
@@ -1892,7 +1892,7 @@ int main(void) {
 Repara no fluxograma: o `free` precisa estar no caminho antes do `return`,
 porque o `return` destrói a única variável que sabia onde o bloco estava:
 
-<p align="center"><img src="0062-erros-de-memoria/fluxograma.svg" alt="Fluxograma: Erros de memória" width="610"></p>
+<p align="center"><img src="0057-erros-de-memoria/fluxograma.svg" alt="Fluxograma: Erros de memória" width="610"></p>
 
 > [!WARNING]
 > "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
@@ -1917,9 +1917,9 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0062-erros-de-memoria/`](0062-erros-de-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0057-erros-de-memoria/`](0057-erros-de-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A123 · O carrinho que não vaza**
+**Exemplo A113 · O carrinho que não vaza**
 
 ```c
 #include <stdio.h>
@@ -1956,14 +1956,14 @@ int main(void) {
 // LeakSanitizer (parte do AddressSanitizer) avisa:
 //   ERROR: LeakSanitizer: detected memory leaks
 //   Direct leak of 48 byte(s) in 3 object(s) allocated from:
-//       #1 ... in total_do_pedido A123.c:8
+//       #1 ... in total_do_pedido A113.c:8
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/A123.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/A113.c
 ```
 
-**Exemplo A124 · Free, NULL e valgrind**
+**Exemplo A114 · Free, NULL e valgrind**
 
 ```c
 #include <stdio.h>
@@ -1999,7 +1999,7 @@ int main(void) {
 // Reserva: 3 noites, R$ 750
 // Reserva cancelada: nada a mostrar
 //
-// Rode também com o valgrind: ~/LPEDC/rodar --valgrind 07-memoria-dinamica/0062-erros-de-memoria/A124.c
+// Rode também com o valgrind: ~/LPEDC/rodar --valgrind 07-memoria-dinamica/0057-erros-de-memoria/A114.c
 // O fim da saída mostra o balanço do heap (o número entre == muda):
 //   ==4242== HEAP SUMMARY:
 //   ==4242==     in use at exit: 0 bytes in 0 blocks
@@ -2010,12 +2010,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/A124.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/A114.c
 ```
 
 #### Exercícios
 
-**Exercício E367** · ★☆☆
+**Exercício E337** · ★☆☆
 
 O painel da rodoviária monta 4 avisos, um de cada vez. A saída está certa,
 mas o programa vaza memória. O erro está de propósito. Rode, leia o
@@ -2042,10 +2042,10 @@ Aviso: Ônibus para Manaus às 14h
    de fora.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/E367.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E337.c
 ```
 
-**Exercício E368** · ★☆☆
+**Exercício E338** · ★☆☆
 
 Cada trecho abaixo é a primeira linha de um relatório do
 AddressSanitizer. Para cada um, diga qual erro aconteceu e dê um exemplo
@@ -2076,10 +2076,10 @@ Em a), quantos ints tinha o bloco e qual índice foi usado?
    conferiu, ou int *p = NULL; *p = 1;
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/E368.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E338.c
 ```
 
-**Exercício E369** · ★★☆
+**Exercício E339** · ★★☆
 
 O placar do campeonato de futsal da firma guarda os gols dos 3 times. O
 programa tem um erro de propósito (o gcc até avisa). Rode e leia o aviso e
@@ -2104,10 +2104,10 @@ Placar encerrado
    os 3 números.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/E369.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E339.c
 ```
 
-**Exercício E370** · ★★☆
+**Exercício E340** · ★★☆
 
 O sistema do estacionamento guarda a placa do carro e os km rodados nos
 últimos 5 dias. O programa tem DOIS estouros de memória, de propósito. O
@@ -2131,10 +2131,10 @@ Km da semana: 238
    4 bytes depois do fim do bloco. Use i < dias. Total: 238.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/E370.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E340.c
 ```
 
-**Exercício E371** · ★★★
+**Exercício E341** · ★★★
 
 A lista de presença de uma aula de yoga começa com 2 vagas e a função
 adicionar faz o vetor crescer. Com o rodar, o programa quebra com um
@@ -2152,9 +2152,9 @@ Presentes: 11 27 35 48
 **Dicas:**
 
 1. O parâmetro v é uma cópia do ponteiro do main (passagem por valor,
-   assunto 0034). O realloc muda a cópia, não o original.
+   assunto 0029). O realloc muda a cópia, não o original.
 2. Duas saídas: devolver o ponteiro novo (int *adicionar(...)) ou
-   receber o endereço do ponteiro (int **v, assunto 0054).
+   receber o endereço do ponteiro (int **v, assunto 0049).
 3. Resposta esperada: na 3ª chegada o realloc mudou o bloco de lugar e
    liberou o antigo, mas só a cópia local v recebeu o endereço novo; o
    alunos do main continua apontando para o bloco antigo, de 2 vagas e já
@@ -2166,10 +2166,10 @@ Presentes: 11 27 35 48
    "Presentes: 11 27 35 48".
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/E371.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E341.c
 ```
 
-**Exercício E372** · ★★★
+**Exercício E342** · ★★★
 
 O artilheiro do bairro jogou 4 das 5 rodadas; a 5ª ainda não aconteceu e
 deveria contar 0 gols. Este programa tem um erro de propósito que o
@@ -2202,12 +2202,12 @@ Por que o ASan não pegou e o valgrind pegou?
    sizeof *gols) por calloc(5, sizeof *gols).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0062-erros-de-memoria/E372.c
+~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E342.c
 ```
 
 ---
 
-## 0063 · Juntando tudo
+## 0058 · Juntando tudo
 
 O mercadinho da esquina ainda anota o fiado num caderno: nome do cliente e
 quanto ele deve. Cliente novo ganha uma linha; cliente antigo soma na conta
@@ -2216,20 +2216,20 @@ nome tem um tamanho. É um ótimo programa para juntar o módulo inteiro.
 
 O programa usa tudo o que você viu:
 
-- **heap** (0058): o caderno precisa durar o programa todo e crescer, então
+- **heap** (0053): o caderno precisa durar o programa todo e crescer, então
   mora no heap, não na pilha;
-- **malloc e free** (0059): cada nome é copiado para um bloco do tamanho
+- **malloc e free** (0054): cada nome é copiado para um bloco do tamanho
   exato com `duplicar`, o `strlen + 1` de sempre;
-- **realloc** (0060): dois vetores paralelos (`nomes` e `centavos`) dobram de
+- **realloc** (0055): dois vetores paralelos (`nomes` e `centavos`) dobram de
   capacidade juntos quando enchem, sempre com ponteiro temporário;
-- **vetor de ponteiros** (0061): `char **nomes` é um vetor de `char *`, cada
+- **vetor de ponteiros** (0056): `char **nomes` é um vetor de `char *`, cada
   um apontando para o seu bloco, como as linhas de uma matriz dinâmica com
   tamanhos diferentes;
-- **erros de memória** (0062): para liberar, primeiro cada nome, depois os
+- **erros de memória** (0057): para liberar, primeiro cada nome, depois os
   dois vetores. Nada sobra no heap.
 
 Uma novidade: `crescer` recebe `char ***nomes`. Parece assustador, mas é a
-mesma regra do E371 do assunto anterior. A função precisa **mudar** o
+mesma regra do E341 do assunto anterior. A função precisa **mudar** o
 ponteiro `nomes` do `main` (o `realloc` pode trocar o endereço), então recebe
 o endereço dele. `nomes` é `char **`; o endereço de `nomes` é `char ***`. O
 mesmo vale para `int **centavos`.
@@ -2242,7 +2242,7 @@ Vamos ver na prática. Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge
 Rosa (R$ 5,60). São 5 clientes diferentes, então o caderno cresce de 2 para
 4 e de 4 para 8. Depois Seu Jorge paga tudo:
 
-<p align="center"><img src="0063-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0058-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa completo. Leia função por função: cada uma cuida de uma coisa e
 nenhuma esquece um `free`:
@@ -2367,7 +2367,7 @@ Repara no fluxograma: cada anotação passa por uma busca. Achou, soma; não
 achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 `liberar`:
 
-<p align="center"><img src="0063-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="861"></p>
+<p align="center"><img src="0058-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="861"></p>
 
 > [!WARNING]
 > Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` é um bloco
@@ -2391,9 +2391,9 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0063-juntando-tudo/`](0063-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0058-juntando-tudo/`](0058-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A125 · O caderninho de fiado**
+**Exemplo A115 · O caderninho de fiado**
 
 ```c
 #include <stdio.h>
@@ -2512,10 +2512,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/A125.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/A115.c
 ```
 
-**Exemplo A126 · Uma linha de qualquer tamanho**
+**Exemplo A116 · Uma linha de qualquer tamanho**
 
 ```c
 #include <stdio.h>
@@ -2571,17 +2571,17 @@ int main(void) {
 // Maria Eduarda dos Santos
 // Nome 2 (24 bytes): Maria Eduarda dos Santos
 //
-// Para testar: printf 'Ana\nMaria Eduarda dos Santos\n' | ~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/A126.c
+// Para testar: printf 'Ana\nMaria Eduarda dos Santos\n' | ~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/A116.c
 // Nenhum fgets com tamanho fixo: o bloco cresce 4 -> 8 -> 16 -> 32.
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/A126.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/A116.c
 ```
 
 #### Exercícios
 
-**Exercício E373** · ★☆☆
+**Exercício E343** · ★☆☆
 
 Leia 3 nomes com fgets num buffer de 100 chars. Para cada um, tire o '\n'
 e guarde uma CÓPIA de tamanho exato no heap, num vetor char *nomes[3].
@@ -2606,17 +2606,17 @@ Para testar: printf 'Ana\nJoao Pedro\nLu\n' | ~/LPEDC/rodar <este arquivo>
 
 1. O buffer de 100 é só a área de leitura, reaproveitada a cada nome. Os
    nomes de verdade vão para blocos de strlen + 1.
-2. buffer[strcspn(buffer, "\n")] = '\0'; tira o '\n' (assunto 0047).
+2. buffer[strcspn(buffer, "\n")] = '\0'; tira o '\n' (assunto 0042).
 3. Resposta esperada: a saída acima: o bloco de cada nome tem strlen + 1
    bytes. 3 malloc, 3 free. Se guardasse o próprio buffer em nomes[i], os
    três ponteiros apontariam para o mesmo lugar e mostrariam "Lu" três
    vezes.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/E373.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E343.c
 ```
 
-**Exercício E374** · ★☆☆
+**Exercício E344** · ★☆☆
 
 Escreva duas funções para a lista de compras:
 
@@ -2651,10 +2651,10 @@ Saída esperada:
    liberar_lista faz 5 free: cada item e depois o vetor.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/E374.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E344.c
 ```
 
-**Exercício E375** · ★★☆
+**Exercício E345** · ★★☆
 
 Leia frutas, uma por linha, até aparecer a palavra fim. Guarde cada uma
 num vetor de strings (char **) que começa com capacidade 1 e dobra quando
@@ -2686,10 +2686,10 @@ Para testar: printf 'uva\nmanga\ncaju\nacerola\nfim\n' | ~/LPEDC/rodar <este arq
    (1 -> 2 -> 4). No fim, um free por fruta e um para o vetor.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/E375.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E345.c
 ```
 
-**Exercício E376** · ★★☆
+**Exercício E346** · ★★☆
 
 Leia a quantidade de alunos e de provas e depois as notas, linha por
 linha. Guarde numa matriz dinâmica de double (vetor de ponteiros) e
@@ -2721,10 +2721,10 @@ Para testar: printf '3 2\n7 8\n5 6\n9 10\n' | ~/LPEDC/rodar <este arquivo>
    vetor de linhas e as médias) e o mesmo número de free.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/E376.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E346.c
 ```
 
-**Exercício E377** · ★★★
+**Exercício E347** · ★★★
 
 Uma versão apressada do caderninho de fiado. Ela tem TRÊS problemas de
 memória, de propósito. O AddressSanitizer acha dois (um durante a
@@ -2750,10 +2750,10 @@ Bia: R$ 20
    falhar: use um ponteiro temporário.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/E377.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E347.c
 ```
 
-**Exercício E378** · ★★★
+**Exercício E348** · ★★★
 
 Escreva a função
 
@@ -2786,7 +2786,7 @@ Saída esperada:
    que já foi feito e devolva NULL.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0063-juntando-tudo/E378.c
+~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E348.c
 ```
 
 ---
@@ -2797,7 +2797,7 @@ Problemas para resolver num arquivo seu, rodando com o `rodar` (e com
 `rodar --valgrind` quando quiser a segunda opinião). Todos precisam terminar
 sem nenhum relatório de erro.
 
-**1. Apagar do caderno.** No caderninho de fiado do A125, escreva
+**1. Apagar do caderno.** No caderninho de fiado do A115, escreva
 `int remover(char **nomes, int *centavos, int *qtd, const char *nome)`, que
 apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
 "Seu Jorge" e mostre o caderno.
@@ -2930,7 +2930,7 @@ servidor que roda essa função 1 milhão de vezes por dia, são 12 MB por dia:
 
 </details>
 
-**10. Frase ao contrário.** Use o `dividir` do E378 e uma função de juntar
+**10. Frase ao contrário.** Use o `dividir` do E348 e uma função de juntar
 para inverter a ordem das palavras: "o rato roeu a roupa" vira
 "roupa a roeu rato o". A frase resultante deve ser um bloco novo, do tamanho
 exato.

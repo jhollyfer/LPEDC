@@ -1,73 +1,60 @@
-// 0102 · Árvores
+// 0102 · Heap e fila de prioridade
 // Exercício E612 · ★★★
+//
+// Resposta: a descida trocava com o primeiro filho maior que o pai, e não
+// com o maior dos dois. Na segunda remoção o vetor era [30 40 50 20]: o 30
+// trocou com o 40, e o 40 foi para a raiz acima do 50. Daí em diante o
+// atendimento sai fora de ordem.
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#define MAX_FILHOS 4
-#define MAX_PROF 10
+#define CAP 10
 
-typedef struct No {
-    char nome[16];
-    struct No *filhos[MAX_FILHOS];
-    int qtd;
-} No;
+int v[CAP];
+int n = 0;
 
-No *novo(const char *nome) {
-    No *n = malloc(sizeof(No));
-    if (n == NULL) {
-        exit(1);
+void troca(int a, int b) {
+    int t = v[a];
+    v[a] = v[b];
+    v[b] = t;
+}
+
+void chega(int x) {
+    int i = n++;
+    v[i] = x;
+    while (i > 0 && v[(i - 1) / 2] < v[i]) {
+        troca((i - 1) / 2, i);
+        i = (i - 1) / 2;
     }
-    strcpy(n->nome, nome);
-    n->qtd = 0;
-    return n;
 }
 
-No *adiciona(No *pai, const char *nome) {
-    No *filho = novo(nome);
-    pai->filhos[pai->qtd++] = filho;
-    return filho;
-}
-
-void libera(No *n) {
-    for (int i = 0; i < n->qtd; i++) {
-        libera(n->filhos[i]);
-    }
-    free(n);
-}
-
-// trilha[0..prof-1] já tem o caminho da raiz até o pai de n
-int caminhos(const No *n, const char *trilha[], int prof) {
-    trilha[prof] = n->nome;
-    if (n->qtd == 0) {
-        for (int i = 0; i <= prof; i++) {
-            printf("%s%s", trilha[i], i < prof ? "/" : "\n");
+int atende(void) {
+    int max = v[0];
+    v[0] = v[--n];
+    int i = 0;
+    while (2 * i + 1 < n) {
+        int f = 2 * i + 1;
+        if (f + 1 < n && v[f + 1] > v[f]) {
+            f++; // escolhe o MAIOR dos dois filhos
         }
-        return 1;
+        if (v[i] >= v[f]) {
+            break;
+        }
+        troca(i, f);
+        i = f;
     }
-    int total = 0;
-    for (int i = 0; i < n->qtd; i++) {
-        total += caminhos(n->filhos[i], trilha, prof + 1);
-    }
-    return total;
+    return max;
 }
 
 int main(void) {
-    No *app = novo("app");
-    No *lanches = adiciona(app, "lanches");
-    No *bebidas = adiciona(app, "bebidas");
-    adiciona(lanches, "x-salada");
-    adiciona(lanches, "x-bacon");
-    adiciona(bebidas, "suco");
-    No *refri = adiciona(bebidas, "refri");
-    adiciona(refri, "lata");
-    adiciona(refri, "2 litros");
-
-    const char *trilha[MAX_PROF];
-    int total = caminhos(app, trilha, 0);
-    printf("Total de caminhos: %d\n", total);
-
-    libera(app);
+    int chegada[] = {40, 70, 20, 90, 30, 50};
+    for (int k = 0; k < 6; k++) {
+        chega(chegada[k]);
+    }
+    printf("Atendimento:");
+    while (n > 0) {
+        printf(" %d", atende());
+    }
+    printf("\n");
     return 0;
 }

@@ -77,19 +77,19 @@ sudo apt install gdb        # Debian / Ubuntu
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0049](#0049--memória-e-endereços) | Memória e endereços | [`0049-memoria/`](0049-memoria/) |
-| [0050](#0050--ponteiros) | Ponteiros | [`0050-ponteiros/`](0050-ponteiros/) |
-| [0051](#0051--passagem-por-referência) | Passagem por referência | [`0051-passagem-por-referencia/`](0051-passagem-por-referencia/) |
-| [0052](#0052--ponteiros-e-vetores) | Ponteiros e vetores | [`0052-ponteiros-e-vetores/`](0052-ponteiros-e-vetores/) |
-| [0053](#0053--ponteiros-e-strings) | Ponteiros e strings | [`0053-ponteiros-e-strings/`](0053-ponteiros-e-strings/) |
-| [0054](#0054--ponteiro-para-ponteiro) | Ponteiro para ponteiro | [`0054-ponteiro-para-ponteiro/`](0054-ponteiro-para-ponteiro/) |
-| [0055](#0055--ponteiro-para-função) | Ponteiro para função | [`0055-ponteiro-para-funcao/`](0055-ponteiro-para-funcao/) |
-| [0056](#0056--void--e-cast) | void * e cast | [`0056-void-generico/`](0056-void-generico/) |
-| [0057](#0057--juntando-tudo-o-ranking-da-feira) | Juntando tudo: o ranking da feira | [`0057-juntando-tudo/`](0057-juntando-tudo/) |
+| [0044](#0044--memória-e-endereços) | Memória e endereços | [`0044-memoria/`](0044-memoria/) |
+| [0045](#0045--ponteiros) | Ponteiros | [`0045-ponteiros/`](0045-ponteiros/) |
+| [0046](#0046--passagem-por-referência) | Passagem por referência | [`0046-passagem-por-referencia/`](0046-passagem-por-referencia/) |
+| [0047](#0047--ponteiros-e-vetores) | Ponteiros e vetores | [`0047-ponteiros-e-vetores/`](0047-ponteiros-e-vetores/) |
+| [0048](#0048--ponteiros-e-strings) | Ponteiros e strings | [`0048-ponteiros-e-strings/`](0048-ponteiros-e-strings/) |
+| [0049](#0049--ponteiro-para-ponteiro) | Ponteiro para ponteiro | [`0049-ponteiro-para-ponteiro/`](0049-ponteiro-para-ponteiro/) |
+| [0050](#0050--ponteiro-para-função) | Ponteiro para função | [`0050-ponteiro-para-funcao/`](0050-ponteiro-para-funcao/) |
+| [0051](#0051--void--e-cast) | void * e cast | [`0051-void-generico/`](0051-void-generico/) |
+| [0052](#0052--juntando-tudo-o-ranking-da-feira) | Juntando tudo: o ranking da feira | [`0052-juntando-tudo/`](0052-juntando-tudo/) |
 
 ---
 
-## 0049 · Memória e endereços
+## 0044 · Memória e endereços
 
 No guarda-volumes do mercado, você entrega a mochila e recebe uma ficha com o
 número 47. Você não precisa saber em que prateleira ela foi parar: com o
@@ -106,28 +106,28 @@ compilador faz a ponte: troca cada nome pelo endereço da gaveta. Até agora
 isso ficou escondido; neste módulo você vai mexer direto nos números.
 
 Para perguntar "em que gaveta você mora?", use o operador **`&`** (endereço
-de): `&idade`. É o mesmo `&` que você coloca no `scanf` desde o assunto 0011.
+de): `&idade`. É o mesmo `&` que você coloca no `scanf` desde o assunto 0006.
 O `scanf` precisa saber **onde** guardar o que leu, e o `&` entrega a ficha
-do guarda-volumes. O assunto 0051 conta essa história inteira.
+do guarda-volumes. O assunto 0046 conta essa história inteira.
 
 Para mostrar um endereço, o `printf` tem o **`%p`**, que imprime em
 hexadecimal. O `%p` espera um "endereço genérico", do tipo
 `void *`, então escreva `(void *)&idade`. Esse `(void *)` é um cast, e o
-assunto 0056 explica o tipo `void *` com calma.
+assunto 0051 explica o tipo `void *` com calma.
 
 Dois detalhes que surpreendem no começo:
 
 - **o endereço muda a cada execução.** O sistema sorteia onde o programa
   vai morar, por segurança. Não decore endereço nenhum;
 - **cada tipo ocupa um número de gavetas**: `char` 1, `int` 4, `double` 8 (o
-  `sizeof` do assunto 0007 diz quantas). O endereço é sempre o da primeira.
+  `sizeof` do assunto 0002 diz quantas). O endereço é sempre o da primeira.
 
 Vamos ver na prática. No cadastro da academia, a idade (30, um `int`), a
 mensalidade (R$ 119,90, um `double`) e o plano (`'B'`, um `char`) ganham
 gavetas. Os endereços do desenho são **fictícios** e curtos, para caber na
 cabeça; os de verdade têm 12 dígitos hexa:
 
-<p align="center"><img src="0049-memoria/ideia.svg" alt="Diagrama da ideia: Memória e endereços" width="858"></p>
+<p align="center"><img src="0044-memoria/ideia.svg" alt="Diagrama da ideia: Memória e endereços" width="858"></p>
 
 O programa mostra, para cada variável, o valor, o endereço e o tamanho:
 
@@ -162,7 +162,7 @@ Repara no fluxograma: não tem decisão nenhuma. Para cada variável, o
 programa faz as mesmas três perguntas: o que tem dentro, onde mora e quanto
 ocupa:
 
-<p align="center"><img src="0049-memoria/fluxograma.svg" alt="Fluxograma: Memória e endereços" width="1566"></p>
+<p align="center"><img src="0044-memoria/fluxograma.svg" alt="Fluxograma: Memória e endereços" width="1566"></p>
 
 > [!WARNING]
 > Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes num
@@ -180,20 +180,20 @@ ocupa:
 > endereço a cada execução se chama **ASLR** (*Address Space Layout
 > Randomization*): se o atacante não sabe onde as coisas moram, fica bem
 > mais difícil explorar uma falha. E as variáveis locais moram numa região
-> chamada **pilha**, a mesma pilha de chamadas do assunto 0036; o módulo 07
+> chamada **pilha**, a mesma pilha de chamadas do assunto 0031; o módulo 07
 > mostra o mapa completo.
 
 > [!NOTE]
 > **Pergunta para você:** se `idade` começa na gaveta `0x1000` e ocupa 4
 > bytes, qual é o endereço do **último** byte dela? E onde poderia começar a
-> próxima variável `int`, sem sobrepor? Depois rode o A098 e veja os
+> próxima variável `int`, sem sobrepor? Depois rode o A088 e veja os
 > endereços de um vetor subindo de 4 em 4.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0049-memoria/`](0049-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0044-memoria/`](0044-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A097 · Três variáveis, três gavetas**
+**Exemplo A087 · Três variáveis, três gavetas**
 
 ```c
 #include <stdio.h>
@@ -219,10 +219,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/A097.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/A087.c
 ```
 
-**Exemplo A098 · As gavetas de um vetor**
+**Exemplo A088 · As gavetas de um vetor**
 
 ```c
 #include <stdio.h>
@@ -250,12 +250,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/A098.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/A088.c
 ```
 
 #### Exercícios
 
-**Exercício E289** · ★☆☆
+**Exercício E259** · ★☆☆
 
 No ônibus da linha 0.420, o painel guarda três dados: a quantidade de
 passageiros (int, 42), a tarifa (float, 4.40) e a letra do setor
@@ -278,10 +278,10 @@ setor = X, endereço 0x7f..., tamanho 1
    endereços aparecem em hexadecimal e mudam a cada vez que você roda.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/E289.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/E259.c
 ```
 
-**Exercício E290** · ★☆☆
+**Exercício E260** · ★☆☆
 
 Olhe este gaveteiro (endereços fictícios) de um programa de futebol e
 responda sem rodar nada:
@@ -318,10 +318,10 @@ reais com %p.
    endereços a cada execução (ASLR).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/E290.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/E260.c
 ```
 
-**Exercício E291** · ★★☆
+**Exercício E261** · ★★☆
 
 A lanchonete guarda o preço de 2 tamanhos (linhas) de 3 sucos (colunas)
 numa matriz double precos[2][3]:
@@ -351,13 +351,13 @@ precos[1][2] = 12.50 em 0x7f...58
 2. Olhe só os dois últimos dígitos hexa: 0x30, 0x38, 0x40...
 3. Resposta esperada: sobem de 8 em 8 (sizeof(double)); precos[1][0]
    fica logo depois de precos[0][2], sem buraco: a matriz é uma fila só
-   de 6 doubles, linha após linha (assunto 0044).
+   de 6 doubles, linha após linha (assunto 0039).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/E291.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/E261.c
 ```
 
-**Exercício E292** · ★★☆
+**Exercício E262** · ★★☆
 
 Este programa da pizzaria tenta mostrar o endereço da variável pedidos de
 três jeitos, e os três estão errados DE PROPÓSITO. Rode com o rodar, leia
@@ -375,10 +375,10 @@ errada? Depois conserte para as três linhas mostrarem o endereço certo.
    printf("Endereço: %p\n", (void *)&pedidos);
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/E292.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/E262.c
 ```
 
-**Exercício E293** · ★★★
+**Exercício E263** · ★★★
 
 Investigue: variáveis declaradas juntas ficam juntas na memória? Declare
 
@@ -394,7 +394,7 @@ Depois compile SEM o sanitizer e rode de novo:
 
 
 ```text
-gcc -std=c17 E293.c -o e293 && ./e293
+gcc -std=c17 E263.c -o e293 && ./e293
 ```
 
 
@@ -413,12 +413,12 @@ e c? (c) o que você pode concluir para escrever programas?
    b mora "logo depois" de a.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/E293.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/E263.c
 ```
 
-**Exercício E294** · ★★★
+**Exercício E264** · ★★★
 
-Um programa tem variáveis de "espécies" diferentes (assunto 0035).
+Um programa tem variáveis de "espécies" diferentes (assunto 0030).
 Escreva um programa com:
 
 
@@ -445,15 +445,15 @@ os endereços pelo começo (0x55... ou 0x7f...) e responda: quem mora
    juntos numa região (começando com 0x55... ou 0x56...); caixa e valor
    ficam em outra, bem mais alta (0x7f...), a pilha. O endereço de
    chamadas é o mesmo nas duas chamadas; o de valor pode mudar. O mapa
-   completo (pilha, heap, dados e código) é o assunto 0058.
+   completo (pilha, heap, dados e código) é o assunto 0053.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-memoria/E294.c
+~/LPEDC/rodar 06-ponteiros/0044-memoria/E264.c
 ```
 
 ---
 
-## 0050 · Ponteiros
+## 0045 · Ponteiros
 
 Quando você pede comida pelo app, o entregador não leva a sua casa no
 celular: leva o **endereço** dela. Com o endereço, ele chega na porta e
@@ -470,7 +470,7 @@ e portanto quantos bytes ler lá (4 para `int`, 8 para `double`).
 
 Dois operadores fazem todo o serviço:
 
-- **`&x`** dá o endereço de `x` (assunto 0049). É o que você guarda no
+- **`&x`** dá o endereço de `x` (assunto 0044). É o que você guarda no
   ponteiro: `cartao = &pontos;`;
 - **`*cartao`** vai até o endereço guardado e mexe no que está lá. Isso se
   chama **desreferenciar**. Ler `*cartao` dá o valor de `pontos`; escrever
@@ -488,7 +488,7 @@ cartão fidelidade. O ponteiro `cartao` começa em `NULL` (nenhum cartão).
 Quando o cliente passa o cartão, `cartao` recebe `&pontos`. A compra de
 R$ 30 soma 30 pontos **através do ponteiro**, e `pontos` vira 150:
 
-<p align="center"><img src="0050-ponteiros/ideia.svg" alt="Diagrama da ideia: Ponteiros" width="858"></p>
+<p align="center"><img src="0045-ponteiros/ideia.svg" alt="Diagrama da ideia: Ponteiros" width="858"></p>
 
 No código, repare que a linha que muda `pontos` nem cita o nome `pontos`:
 
@@ -530,7 +530,7 @@ Repara no fluxograma: antes de desreferenciar, o programa pergunta se o
 ponteiro aponta para algum lugar. Esse teste contra `NULL` é um hábito que
 você vai repetir o curso inteiro:
 
-<p align="center"><img src="0050-ponteiros/fluxograma.svg" alt="Fluxograma: Ponteiros" width="522"></p>
+<p align="center"><img src="0045-ponteiros/fluxograma.svg" alt="Fluxograma: Ponteiros" width="522"></p>
 
 > [!WARNING]
 > Ponteiro declarado e não inicializado (`int *p;`) guarda **lixo**: um
@@ -557,9 +557,9 @@ você vai repetir o curso inteiro:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0050-ponteiros/`](0050-ponteiros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0045-ponteiros/`](0045-ponteiros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A099 · O cartão fidelidade**
+**Exemplo A089 · O cartão fidelidade**
 
 ```c
 #include <stdio.h>
@@ -592,10 +592,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/A099.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/A089.c
 ```
 
-**Exemplo A100 · Gasolina ou etanol?**
+**Exemplo A090 · Gasolina ou etanol?**
 
 ```c
 #include <stdio.h>
@@ -629,12 +629,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/A100.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/A090.c
 ```
 
 #### Exercícios
 
-**Exercício E295** · ★☆☆
+**Exercício E265** · ★☆☆
 
 O ar-condicionado da sala marca 22.5 graus. Declare double temperatura =
 22.5 e um ponteiro pt que aponte para ela. Usando SÓ o ponteiro (sem
@@ -657,10 +657,10 @@ Pela variável: 24.0
 3. Resposta esperada: 22.5, 24.0 e 24.0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E295.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E265.c
 ```
 
-**Exercício E296** · ★☆☆
+**Exercício E266** · ★☆☆
 
 Depois de executar
 
@@ -698,10 +698,10 @@ endereços reais vão ser outros; confira só quais são iguais entre si.
    &p = 0x3008; *&vagas = 7. No programa, &vagas e p saem iguais.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E296.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E266.c
 ```
 
-**Exercício E297** · ★★☆
+**Exercício E267** · ★★☆
 
 Este programa da academia tem TRÊS erros com ponteiros, de propósito.
 Ele deveria mostrar:
@@ -729,10 +729,10 @@ roda. Ache os três erros e conserte.
    peso_ptr = &peso; antes de *peso_ptr = 82;.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E297.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E267.c
 ```
 
-**Exercício E298** · ★★☆
+**Exercício E268** · ★★☆
 
 No check-in do aeroporto, a companhia aceita uma mala de até 23 kg sem
 cobrar. Você tem duas malas: mala_azul com 19 kg e mala_preta com 26 kg.
@@ -755,10 +755,10 @@ Depois de tirar 4 kg: azul 19 kg, preta 22 kg
    continua 19.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E298.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E268.c
 ```
 
-**Exercício E299** · ★★★
+**Exercício E269** · ★★★
 
 Preveja a saída SEM rodar. Faça um teste de mesa com uma coluna para a,
 b e para onde p e q apontam. Só depois rode para conferir.
@@ -793,10 +793,10 @@ printf("a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
 3. Resposta esperada: a = 5, b = 16, *p = 16, *q = 5.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E299.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E269.c
 ```
 
-**Exercício E300** · ★★★
+**Exercício E270** · ★★★
 
 Você tem três contas: conta_a com R$ -50.25 (no cheque especial),
 conta_b com R$ 300.00 e conta_c com R$ 12.00. Escreva um programa que:
@@ -831,22 +831,22 @@ A: 0.00  B: 300.00  C: 12.00
    "Nenhuma conta negativa".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiros/E300.c
+~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E270.c
 ```
 
 ---
 
-## 0051 · Passagem por referência
+## 0046 · Passagem por referência
 
 No mercadinho, alguém digitou as etiquetas trocadas: o arroz saiu por
 R$ 8 e o feijão por R$ 25. Você quer uma função `troca` que conserte isso.
 Parece fácil, mas a versão óbvia não funciona, e entender por que é entender
 como o C chama funções.
 
-No C, **todo argumento é passado por valor** (assunto 0034): a função recebe
+No C, **todo argumento é passado por valor** (assunto 0029): a função recebe
 uma **cópia**. `troca_copias(arroz, feijao)` cria duas variáveis novas, `a`
 e `b`, com 8 e 25 dentro. A função troca as cópias, termina, e as cópias
-somem junto com o frame dela (assunto 0036). O `arroz` do `main` nem ficou
+somem junto com o frame dela (assunto 0031). O `arroz` do `main` nem ficou
 sabendo.
 
 A saída é mudar o que se entrega: em vez do valor, passe o **endereço**.
@@ -861,19 +861,19 @@ Agora o mistério do `scanf` está resolvido. `scanf("%d", &total)` precisa
 **escrever** na sua variável, então pede o endereço dela. Sem o `&`, ele
 receberia uma cópia do lixo que está em `total` e tentaria escrever num
 endereço inventado. E por que `scanf("%s", nome)` vai sem `&`? Porque o nome
-de um vetor já vira o endereço do primeiro elemento (assunto 0043; o 0052
+de um vetor já vira o endereço do primeiro elemento (assunto 0038; o 0047
 mostra os detalhes).
 
 O mesmo truque resolve outro problema: o `return` devolve **um** valor só.
 Quando a função precisa entregar dois ou mais resultados, ela recebe
-ponteiros e escreve neles (o A102 racha a conta e devolve o valor de cada
+ponteiros e escreve neles (o A092 racha a conta e devolve o valor de cada
 um e a sobra).
 
 Vamos ver na prática. A função `troca` recebe os endereços `0x1000` e
 `0x1004`, guarda o 8 numa variável `tmp` e mexe direto nas gavetas do
 `main`:
 
-<p align="center"><img src="0051-passagem-por-referencia/ideia.svg" alt="Diagrama da ideia: Passagem por referência" width="858"></p>
+<p align="center"><img src="0046-passagem-por-referencia/ideia.svg" alt="Diagrama da ideia: Passagem por referência" width="858"></p>
 
 No código, as duas versões lado a lado. Repare que só a segunda conserta as
 etiquetas:
@@ -930,7 +930,7 @@ apontam.
 Repara no fluxograma: o `main` só chama a troca se os preços estão fora de
 ordem. A troca em si são três passos, sempre com a variável auxiliar:
 
-<p align="center"><img src="0051-passagem-por-referencia/fluxograma.svg" alt="Fluxograma: Passagem por referência" width="370"></p>
+<p align="center"><img src="0046-passagem-por-referencia/fluxograma.svg" alt="Fluxograma: Passagem por referência" width="370"></p>
 
 > [!WARNING]
 > Dois erros clássicos. Esquecer o `&` na chamada: `troca(arroz, feijao)`
@@ -955,9 +955,9 @@ ordem. A troca em si são três passos, sempre com a variável auxiliar:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0051-passagem-por-referencia/`](0051-passagem-por-referencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0046-passagem-por-referencia/`](0046-passagem-por-referencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A101 · Os preços trocados**
+**Exemplo A091 · Os preços trocados**
 
 ```c
 #include <stdio.h>
@@ -994,10 +994,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/A101.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/A091.c
 ```
 
-**Exemplo A102 · Rachando a conta do bar**
+**Exemplo A092 · Rachando a conta do bar**
 
 ```c
 #include <stdio.h>
@@ -1032,12 +1032,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/A102.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/A092.c
 ```
 
 #### Exercícios
 
-**Exercício E301** · ★☆☆
+**Exercício E271** · ★☆☆
 
 Promoção do cinema: quem compra pelo app ganha o dobro de ingressos.
 Escreva a função void dobra(int *quantidade), que dobra o valor da
@@ -1058,10 +1058,10 @@ Depois: 6 ingressos
 3. Resposta esperada: 3 e depois 6.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E301.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E271.c
 ```
 
-**Exercício E302** · ★☆☆
+**Exercício E272** · ★☆☆
 
 O app de streaming mostra a duração dos filmes em minutos, mas você quer
 ver em horas e minutos. Escreva
@@ -1088,10 +1088,10 @@ Saída esperada:
 3. Resposta esperada: 2 h 15 min e 0 h 47 min.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E302.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E272.c
 ```
 
-**Exercício E303** · ★★☆
+**Exercício E273** · ★★☆
 
 As temperaturas máximas da semana em Cuiabá foram
 
@@ -1118,10 +1118,10 @@ Menor: 31  Maior: 39  Amplitude: 8
 3. Resposta esperada: menor 31, maior 39, amplitude 8.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E303.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E273.c
 ```
 
-**Exercício E304** · ★★☆
+**Exercício E274** · ★★☆
 
 A catraca do metrô conta passageiros, e este programa tem DOIS erros de
 propósito. Ele deveria mostrar:
@@ -1148,10 +1148,10 @@ dois erros. Conserte sem mudar o main (exceto se precisar acrescentar um
    *valor = 0 e chame zera(&avulsos).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E304.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E274.c
 ```
 
-**Exercício E305** · ★★★
+**Exercício E275** · ★★★
 
 Escreva
 
@@ -1183,10 +1183,10 @@ x² + 1 = 0        ->  nenhuma raiz real
    "não é do 2º grau".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E305.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E275.c
 ```
 
-**Exercício E306** · ★★★
+**Exercício E276** · ★★★
 
 Esta função troca dois valores sem usar variável auxiliar. Preveja a
 saída SEM rodar, fazendo o teste de mesa das duas chamadas:
@@ -1212,7 +1212,7 @@ printf("x = %d\n", x);
 
 
 Depois explique: por que a segunda chamada dá um resultado estranho? A
-troca com tmp do A101 tem o mesmo problema?
+troca com tmp do A091 tem o mesmo problema?
 
 **Dicas:**
 
@@ -1226,21 +1226,21 @@ troca com tmp do A101 tem o mesmo problema?
    igual.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-passagem-por-referencia/E306.c
+~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E276.c
 ```
 
 ---
 
-## 0052 · Ponteiros e vetores
+## 0047 · Ponteiros e vetores
 
 Numa rua de loteamento, os números das casas sobem de 4 em 4: 1000, 1004,
 1008. Se alguém diz "três casas depois da 1000", você não anda 3 números:
 anda 3 casas e chega na 1012. Os ponteiros fazem essa conta por você.
 
-Num vetor, as gavetas ficam coladas (assunto 0049). E quase sempre que o
+Num vetor, as gavetas ficam coladas (assunto 0044). E quase sempre que o
 nome do vetor aparece numa expressão, ele **vira** o endereço do primeiro
 elemento: `kwh` vale o mesmo que `&kwh[0]`. É por isso que você passa um
-vetor para uma função sem `&` e ela altera o original (assunto 0043): ela
+vetor para uma função sem `&` e ela altera o original (assunto 0038): ela
 recebe esse endereço.
 
 Com um ponteiro para dentro de um vetor, vale a **aritmética de ponteiros**:
@@ -1268,7 +1268,7 @@ Vamos ver na prática. O consumo de luz de 5 meses está em `kwh`. O ponteiro
 somando o que encontra. Quando `p` chega em `kwh + 5`, a gaveta "um depois
 do último", o laço para:
 
-<p align="center"><img src="0052-ponteiros-e-vetores/ideia.svg" alt="Diagrama da ideia: Ponteiros e vetores" width="858"></p>
+<p align="center"><img src="0047-ponteiros-e-vetores/ideia.svg" alt="Diagrama da ideia: Ponteiros e vetores" width="858"></p>
 
 O mesmo percurso no código, mostrando o endereço a cada passo:
 
@@ -1318,10 +1318,10 @@ Com os endereços fictícios do desenho (`kwh` em `0x1000`):
 
 `kwh + 5` é `0x1014`: pode ser calculado e comparado, mas nunca lido.
 
-Repara no fluxograma: é o laço de acumulador do assunto 0030, só que quem
+Repara no fluxograma: é o laço de acumulador do assunto 0025, só que quem
 anda é o ponteiro, não um índice:
 
-<p align="center"><img src="0052-ponteiros-e-vetores/fluxograma.svg" alt="Fluxograma: Ponteiros e vetores" width="532"></p>
+<p align="center"><img src="0047-ponteiros-e-vetores/fluxograma.svg" alt="Fluxograma: Ponteiros e vetores" width="532"></p>
 
 > [!WARNING]
 > `*p + 1` e `*(p + 1)` são coisas diferentes. O `*` vem antes do `+`, então
@@ -1346,9 +1346,9 @@ anda é o ponteiro, não um índice:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0052-ponteiros-e-vetores/`](0052-ponteiros-e-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0047-ponteiros-e-vetores/`](0047-ponteiros-e-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A103 · A conta de luz com ponteiro**
+**Exemplo A093 · A conta de luz com ponteiro**
 
 ```c
 #include <stdio.h>
@@ -1379,10 +1379,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/A103.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/A093.c
 ```
 
-**Exemplo A104 · O primeiro dia da meta**
+**Exemplo A094 · O primeiro dia da meta**
 
 ```c
 #include <stdio.h>
@@ -1422,12 +1422,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/A104.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/A094.c
 ```
 
 #### Exercícios
 
-**Exercício E307** · ★☆☆
+**Exercício E277** · ★☆☆
 
 As notas de uma aluna no bimestre estão em
 
@@ -1454,10 +1454,10 @@ Média: 7.75
 3. Resposta esperada: as quatro notas e média 7.75.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E307.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E277.c
 ```
 
-**Exercício E308** · ★☆☆
+**Exercício E278** · ★☆☆
 
 Preveja cada valor SEM rodar. O vetor v começa no endereço (fictício)
 0x2000 e cada int tem 4 bytes.
@@ -1494,10 +1494,10 @@ f vai sair diferente; confira só que fica 12 bytes depois de p).
    g) 40; h) 30; i) 3.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E308.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E278.c
 ```
 
-**Exercício E309** · ★★☆
+**Exercício E279** · ★★☆
 
 Você quer ouvir a playlist de trás para frente. As faixas estão
 numeradas num vetor:
@@ -1511,7 +1511,7 @@ int faixas[7] = {11, 23, 35, 47, 52, 68, 74};
 Escreva void inverte(int *v, int n), que inverte o vetor no lugar usando
 DOIS ponteiros: ini (no começo) e fim (no último). Troque o que eles
 apontam, aproxime um do outro e pare quando se cruzarem. Use a função
-troca do assunto 0051.
+troca do assunto 0046.
 
 
 ```text
@@ -1527,10 +1527,10 @@ Saída esperada:
    fica no lugar.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E309.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E279.c
 ```
 
-**Exercício E310** · ★★☆
+**Exercício E280** · ★★☆
 
 O programa da sorveteria tem DOIS erros de propósito. A ideia era mudar o
 estoque do sabor de índice 3 para 20 e depois mostrar os 5 sabores:
@@ -1556,10 +1556,10 @@ AddressSanitizer denuncia. Explique cada um e conserte.
    depois do fim (stack-buffer-overflow): o certo é q < estoque + 5.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E310.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E280.c
 ```
 
-**Exercício E311** · ★★★
+**Exercício E281** · ★★★
 
 A loja tem 3 filiais e anotou as vendas de 4 semanas numa matriz
 
@@ -1573,7 +1573,7 @@ int vendas[3][4] = {
 ```
 
 
-Como a matriz é uma fila só de 12 ints na memória (assunto 0044), dá para
+Como a matriz é uma fila só de 12 ints na memória (assunto 0039), dá para
 percorrê-la com UM ponteiro e UM laço. Faça isso: some tudo e descubra
 qual filial vendeu mais, calculando a linha de cada elemento pela
 distância (p - inicio) / 4.
@@ -1597,10 +1597,10 @@ Campeã: filial 0
 3. Resposta esperada: total 151; filiais 56, 42 e 53; campeã filial 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E311.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E281.c
 ```
 
-**Exercício E312** · ★★★
+**Exercício E282** · ★★★
 
 O sensor de presença manda leituras repetidas em sequência. Escreva
 
@@ -1637,12 +1637,12 @@ Novo tamanho: 5
    vizinho do primeiro).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-ponteiros-e-vetores/E312.c
+~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E282.c
 ```
 
 ---
 
-## 0053 · Ponteiros e strings
+## 0048 · Ponteiros e strings
 
 Na recepção do evento, a moça imprime os crachás. O seu nome ela digita
 numa ficha que é sua: dá para corrigir, passar para maiúsculas, riscar.
@@ -1651,8 +1651,8 @@ escrever no cartaz. Em C, essas duas situações têm sintaxes quase iguais e
 comportamentos bem diferentes.
 
 Você já sabe que string é um vetor de `char` terminado em `'\0'` (assunto
-0046). E já sabe que o nome de um vetor vira o endereço do primeiro
-elemento (assunto 0052). Junte as duas coisas: toda função de string recebe
+0041). E já sabe que o nome de um vetor vira o endereço do primeiro
+elemento (assunto 0047). Junte as duas coisas: toda função de string recebe
 um **`char *`**, o endereço do primeiro caractere, e anda até achar o
 `'\0'`.
 
@@ -1678,7 +1678,7 @@ Vamos ver na prática. No desenho, `nome` é uma cópia na pilha, onde o laço
 passa cada letra para maiúscula. `apelido` é só uma seta para o literal
 `"bia"`, que fica na área só de leitura:
 
-<p align="center"><img src="0053-ponteiros-e-strings/ideia.svg" alt="Diagrama da ideia: Ponteiros e strings" width="858"></p>
+<p align="center"><img src="0048-ponteiros-e-strings/ideia.svg" alt="Diagrama da ideia: Ponteiros e strings" width="858"></p>
 
 No código, o ponteiro `p` percorre `nome` até o `'\0'`, trocando cada letra:
 
@@ -1710,13 +1710,13 @@ int main(void) {
 ```
 
 O `(unsigned char)` antes do `toupper` evita um problema com letras
-acentuadas: os bytes delas podem ser negativos num `char` (assunto 0045). O `(char)` na
+acentuadas: os bytes delas podem ser negativos num `char` (assunto 0040). O `(char)` na
 frente só deixa explícito que o resultado volta a caber num `char`.
 
 Repara no fluxograma: é o laço clássico de string. A pergunta não é "já
 andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
 
-<p align="center"><img src="0053-ponteiros-e-strings/fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
+<p align="center"><img src="0048-ponteiros-e-strings/fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
 
 > [!WARNING]
 > `char *s = "ola"; s[0] = 'O';` compila **sem aviso** no C,
@@ -1733,7 +1733,7 @@ andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
 > essas páginas da memória como só leitura, e o processador barra qualquer
 > escrita. Como o literal não muda, o compilador pode guardar **uma cópia
 > só** para literais iguais: dois `"bia"` no programa podem ter o mesmo
-> endereço. E o vetor de ponteiros do A106 (`const char *dias[]`) gasta 8
+> endereço. E o vetor de ponteiros do A096 (`const char *dias[]`) gasta 8
 > bytes por nome mais o texto de cada um, enquanto a matriz `char[4][10]`
 > reserva 10 bytes por linha mesmo para "sexta".
 
@@ -1744,9 +1744,9 @@ andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0053-ponteiros-e-strings/`](0053-ponteiros-e-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0048-ponteiros-e-strings/`](0048-ponteiros-e-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A105 · O crachá do evento**
+**Exemplo A095 · O crachá do evento**
 
 ```c
 #include <stdio.h>
@@ -1776,10 +1776,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/A105.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/A095.c
 ```
 
-**Exemplo A106 · Os dias da feira**
+**Exemplo A096 · Os dias da feira**
 
 ```c
 #include <stdio.h>
@@ -1818,12 +1818,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/A106.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/A096.c
 ```
 
 #### Exercícios
 
-**Exercício E313** · ★☆☆
+**Exercício E283** · ★☆☆
 
 Escreva int conta_vogais(const char *s), que conta as vogais (minúsculas
 a, e, i, o, u) de uma frase andando com um ponteiro até o '\0', sem usar
@@ -1849,10 +1849,10 @@ Vogais: 15
 3. Resposta esperada: 15.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E313.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E283.c
 ```
 
-**Exercício E314** · ★☆☆
+**Exercício E284** · ★☆☆
 
 Considere as declarações
 
@@ -1895,10 +1895,10 @@ funcionam e mostre os sizeof e strlen com printf.
    5 funciona (cabe: 5 letras + '\0' em 6 bytes).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E314.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E284.c
 ```
 
-**Exercício E315** · ★★☆
+**Exercício E285** · ★★☆
 
 Escreva sua própria versão do strcpy com ponteiros:
 
@@ -1940,10 +1940,10 @@ Explique em comentário por que ela funciona.
    logo depois de copiar o '\0', porque o valor copiado é 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E315.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E285.c
 ```
 
-**Exercício E316** · ★★☆
+**Exercício E286** · ★★☆
 
 O programa da portaria tem TRÊS erros de propósito. Ele deveria mostrar:
 
@@ -1968,10 +1968,10 @@ Rode com o rodar, leia o relatório e conserte. Explique cada erro.
    use strcmp(morador, "ana") == 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E316.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E286.c
 ```
 
-**Exercício E317** · ★★★
+**Exercício E287** · ★★★
 
 Escreva bool palindromo(const char *s), que diz se uma frase é um
 palíndromo IGNORANDO os espaços. Use dois ponteiros: um no começo e outro
@@ -1995,10 +1995,10 @@ pix caiu: não
 3. Resposta esperada: sim, sim, não.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E317.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E287.c
 ```
 
-**Exercício E318** · ★★★
+**Exercício E288** · ★★★
 
 Escreva sua versão do strstr:
 
@@ -2036,12 +2036,12 @@ Saída esperada:
    o trecho vazio dá posição 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0053-ponteiros-e-strings/E318.c
+~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E288.c
 ```
 
 ---
 
-## 0054 · Ponteiro para ponteiro
+## 0049 · Ponteiro para ponteiro
 
 Você pergunta ao porteiro onde fica o salão de festas. Ele não sabe, mas
 aponta para um quadro de avisos: "o mapa do condomínio está no quadro". No
@@ -2049,7 +2049,7 @@ quadro, o mapa mostra o salão. Você chegou lá em **dois saltos**: porteiro �
 quadro → salão.
 
 Um ponteiro é uma variável como outra qualquer: mora numa gaveta e tem
-endereço (assunto 0050). Então dá para guardar **o endereço de um
+endereço (assunto 0045). Então dá para guardar **o endereço de um
 ponteiro** em outra variável. Ela é um **ponteiro para ponteiro**, declarado
 com dois asteriscos: `int **pp;` se lê "pp aponta para um `int *`".
 
@@ -2067,20 +2067,20 @@ Para que serve, além de quebra-cabeça? Dois usos que você vai ver o curso
 todo:
 
 - **mudar o ponteiro de quem chamou.** Se uma função precisa mudar um `int`
-  do `main`, ela recebe `int *` (assunto 0051). Se precisa mudar um `int *`
+  do `main`, ela recebe `int *` (assunto 0046). Se precisa mudar um `int *`
   do `main`, fazer ele apontar para outro lugar, recebe `int **`. É a mesma
-  regra, um nível acima. O A108 escolhe o posto mais barato assim, e as
+  regra, um nível acima. O A098 escolhe o posto mais barato assim, e as
   listas encadeadas do módulo 11 usam isso para mudar o início da lista;
-- **vetor de ponteiros.** `const char *dias[]` (assunto 0053) é um vetor
+- **vetor de ponteiros.** `const char *dias[]` (assunto 0048) é um vetor
   cujos elementos são `const char *`. O nome dele decai para o endereço do
   primeiro elemento: um `const char **`. É o tipo do famoso `char **argv`
-  (assunto 0074) e da matriz alocada no módulo 07.
+  (assunto 0069) e da matriz alocada no módulo 07.
 
 Vamos ver na prática. No estacionamento do shopping há 40 vagas. `p` aponta
 para `vagas` e `pp` aponta para `p`. Quando entram 2 carros, o programa
 atualiza `vagas` sem citar o nome dela, em dois saltos:
 
-<p align="center"><img src="0054-ponteiro-para-ponteiro/ideia.svg" alt="Diagrama da ideia: Ponteiro para ponteiro" width="858"></p>
+<p align="center"><img src="0049-ponteiro-para-ponteiro/ideia.svg" alt="Diagrama da ideia: Ponteiro para ponteiro" width="858"></p>
 
 O programa mostra cada nível e confere quem é igual a quem:
 
@@ -2120,7 +2120,7 @@ Repara no fluxograma: não há decisão. Primeiro a corrente é montada, elo
 por elo (`vagas`, depois `p`, depois `pp`); depois o `**pp` percorre a
 corrente de volta até chegar em `vagas`:
 
-<p align="center"><img src="0054-ponteiro-para-ponteiro/fluxograma.svg" alt="Fluxograma: Ponteiro para ponteiro" width="1235"></p>
+<p align="center"><img src="0049-ponteiro-para-ponteiro/fluxograma.svg" alt="Fluxograma: Ponteiro para ponteiro" width="1235"></p>
 
 > [!WARNING]
 > Estrela a menos é o erro clássico. `*pp = 38;` não muda `vagas`: tenta
@@ -2129,7 +2129,7 @@ corrente de volta até chegar em `vagas`:
 > Depois disso, `p` aponta para a "gaveta 38" e o próximo `*p` derruba o
 > programa. E na função: se ela precisa mudar o seu ponteiro, passe `&posto`
 > (um `double **`). Passar `posto` entrega uma cópia, e a função muda só a
-> cópia, como o `troca_copias` do assunto 0051.
+> cópia, como o `troca_copias` do assunto 0046.
 
 > [!TIP]
 > **Por dentro do C:** cada nível é uma variável de 8 bytes de verdade. Ler
@@ -2146,9 +2146,9 @@ corrente de volta até chegar em `vagas`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0054-ponteiro-para-ponteiro/`](0054-ponteiro-para-ponteiro/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0049-ponteiro-para-ponteiro/`](0049-ponteiro-para-ponteiro/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A107 · As vagas do estacionamento**
+**Exemplo A097 · As vagas do estacionamento**
 
 ```c
 #include <stdio.h>
@@ -2180,10 +2180,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/A107.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/A097.c
 ```
 
-**Exemplo A108 · O posto mais barato**
+**Exemplo A098 · O posto mais barato**
 
 ```c
 #include <stdio.h>
@@ -2219,12 +2219,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/A108.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/A098.c
 ```
 
 #### Exercícios
 
-**Exercício E319** · ★☆☆
+**Exercício E289** · ★☆☆
 
 A turma do cursinho é identificada por uma letra. Declare
 
@@ -2253,10 +2253,10 @@ Agora: K
 3. Resposta esperada: "k k k" e "Agora: K".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E319.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E289.c
 ```
 
-**Exercício E320** · ★☆☆
+**Exercício E290** · ★☆☆
 
 Olhe o gaveteiro (endereços fictícios) e preencha a tabela sem rodar:
 
@@ -2290,10 +2290,10 @@ pp          ?
    *pp = 0x4000; **pp = 5; &pp = 0x4020; &*pp = 0x4010.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E320.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E290.c
 ```
 
-**Exercício E321** · ★★☆
+**Exercício E291** · ★★☆
 
 A loja recebe mensagens como "Pedido numero 4521 confirmado". Escreva
 
@@ -2332,10 +2332,10 @@ Teste também com "Sem numero": deve sair uma linha vazia.
 3. Resposta esperada: "4521 confirmado" e uma linha vazia.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E321.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E291.c
 ```
 
-**Exercício E322** · ★★☆
+**Exercício E292** · ★★☆
 
 A função aponta_maior deveria fazer o ponteiro do main apontar para o
 maior lance do leilão. Mas o programa tem um erro de propósito: o
@@ -2359,10 +2359,10 @@ Maior lance: R$ 870
    chamada aponta_maior(&lance1, &lance2, &vencedor).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E322.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E292.c
 ```
 
-**Exercício E323** · ★★★
+**Exercício E293** · ★★★
 
 Quatro jurados deram notas a uma escola de samba, cada uma numa variável:
 
@@ -2401,10 +2401,10 @@ Originais: j1=9 j2=7 j3=10 j4=8
    Só os endereços mudaram de lugar no vetor.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E323.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E293.c
 ```
 
-**Exercício E324** · ★★★
+**Exercício E294** · ★★★
 
 Preveja a saída SEM rodar. Monte um teste de mesa com x, y e para onde
 p, q e pp apontam a cada linha.
@@ -2442,12 +2442,12 @@ printf("x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
 3. Resposta esperada: x=10 y=3 *p=3 *q=10 **pp=10.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0054-ponteiro-para-ponteiro/E324.c
+~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E294.c
 ```
 
 ---
 
-## 0055 · Ponteiro para função
+## 0050 · Ponteiro para função
 
 Às vezes uma função precisa receber **outra função**. Uma rotina que filtra
 temperaturas não sabe qual teste você quer (acima de 30? abaixo de 0?); uma
@@ -2479,14 +2479,14 @@ A graça está em passar o ponteiro como **parâmetro**. A função que recebe
 fica genérica, e quem chama decide o comportamento. A função passada se
 chama **callback**. A biblioteca padrão usa isso no **`qsort`**
 (`stdlib.h`), que ordena qualquer vetor desde que você entregue a função
-que compara dois elementos (o A110 ordena a tabela do campeonato com ele).
+que compara dois elementos (o A100 ordena a tabela do campeonato com ele).
 
 Vamos ver na prática. As máximas da semana estão num vetor. A função
 `conta_se` percorre o vetor e conta quantos dias passam num critério que
 ela não conhece: recebe o endereço da função `eh_calor` (ou `eh_frio`) e
 chama por ele:
 
-<p align="center"><img src="0055-ponteiro-para-funcao/ideia.svg" alt="Diagrama da ideia: Ponteiro para função" width="858"></p>
+<p align="center"><img src="0050-ponteiro-para-funcao/ideia.svg" alt="Diagrama da ideia: Ponteiro para função" width="858"></p>
 
 No código, a mesma `conta_se` responde duas perguntas diferentes:
 
@@ -2520,23 +2520,23 @@ int main(void) {
 // Dias de frio:  2
 ```
 
-Repara no fluxograma: é o laço contador do assunto 0030. A única novidade
+Repara no fluxograma: é o laço contador do assunto 0025. A única novidade
 está no losango: a pergunta não é fixa, ela é a função que chegou pelo
 parâmetro:
 
-<p align="center"><img src="0055-ponteiro-para-funcao/fluxograma.svg" alt="Fluxograma: Ponteiro para função" width="543"></p>
+<p align="center"><img src="0050-ponteiro-para-funcao/fluxograma.svg" alt="Fluxograma: Ponteiro para função" width="543"></p>
 
 O `qsort` segue a mesma ideia, com uma diferença: como ele ordena vetores
 de qualquer tipo, a função de comparação recebe os endereços de dois
 elementos como `const void *` ("endereço de qualquer coisa"). Você converte
 para o tipo certo e devolve um número negativo (a vem antes), zero (tanto
-faz) ou positivo (b vem antes). O `void *` é o assunto 0056; por enquanto,
-copie o molde do A110.
+faz) ou positivo (b vem antes). O `void *` é o assunto 0051; por enquanto,
+copie o molde do A100.
 
 > [!WARNING]
 > A comparação "esperta" `return *(const int *)a - *(const int *)b;`
 > aparece em todo canto e tem um bug: com números grandes de sinais
-> opostos, a subtração estoura o `int` (assunto 0008), o sinal vira e a
+> opostos, a subtração estoura o `int` (assunto 0003), o sinal vira e a
 > ordem sai errada. O `rodar` acusa `signed integer overflow`. Use
 > `return (x > y) - (x < y);`, que só compara e nunca estoura. E não
 > esqueça os parênteses da declaração: `int *f(int)` é uma função, não um
@@ -2559,9 +2559,9 @@ copie o molde do A110.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0055-ponteiro-para-funcao/`](0055-ponteiro-para-funcao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0050-ponteiro-para-funcao/`](0050-ponteiro-para-funcao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A109 · Quantos dias de calor?**
+**Exemplo A099 · Quantos dias de calor?**
 
 ```c
 #include <stdio.h>
@@ -2594,10 +2594,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/A109.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/A099.c
 ```
 
-**Exemplo A110 · A tabela do campeonato com qsort**
+**Exemplo A100 · A tabela do campeonato com qsort**
 
 ```c
 #include <stdio.h>
@@ -2639,12 +2639,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/A110.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/A100.c
 ```
 
 #### Exercícios
 
-**Exercício E325** · ★☆☆
+**Exercício E295** · ★☆☆
 
 O app de clima converte temperaturas nos dois sentidos. Escreva
 
@@ -2672,10 +2672,10 @@ Saída esperada:
 3. Resposta esperada: 86.0 e 30.0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E325.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E295.c
 ```
 
-**Exercício E326** · ★☆☆
+**Exercício E296** · ★☆☆
 
 Escreva o "forEach" do C:
 
@@ -2704,10 +2704,10 @@ Saída esperada:
 3. Resposta esperada: "1 2 3 4" e "2 4 6 8".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E326.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E296.c
 ```
 
-**Exercício E327** · ★★☆
+**Exercício E297** · ★★☆
 
 Faça uma calculadora SEM switch. Escreva soma, subtrai, multiplica e
 divide, todas com a assinatura int f(int, int), e guarde-as num vetor de
@@ -2738,10 +2738,10 @@ Resultado: 48
    7 % 2 dá "Operador inválido".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E327.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E297.c
 ```
 
-**Exercício E328** · ★★☆
+**Exercício E298** · ★★☆
 
 Ordene as frutas da barraca em ordem alfabética com qsort:
 
@@ -2760,7 +2760,7 @@ abacaxi acerola banana caju manga
 
 O detalhe: cada elemento do vetor é um const char *. O qsort entrega à
 comparação o ENDEREÇO de um elemento, ou seja, o endereço de um
-const char * (um ponteiro para ponteiro, assunto 0054).
+const char * (um ponteiro para ponteiro, assunto 0049).
 
 **Dicas:**
 
@@ -2770,10 +2770,10 @@ const char * (um ponteiro para ponteiro, assunto 0054).
 4. Resposta esperada: abacaxi acerola banana caju manga.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E328.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E298.c
 ```
 
-**Exercício E329** · ★★★
+**Exercício E299** · ★★★
 
 Este programa ordena os saldos de uma corretora (em centavos) e tem um
 bug de propósito na função de comparação. Ele compila sem aviso, mas o
@@ -2788,7 +2788,7 @@ Saída esperada:
 
 **Dicas:**
 
-1. Quanto dá 2000000000 - (-2000000000)? Cabe num int (assunto 0008)?
+1. Quanto dá 2000000000 - (-2000000000)? Cabe num int (assunto 0003)?
 2. A comparação só precisa devolver o SINAL certo, não a diferença.
 3. Resposta esperada: a subtração estoura o int (signed integer
    overflow): o resultado "dá a volta" e fica negativo, dizendo que
@@ -2796,10 +2796,10 @@ Saída esperada:
    return (x > y) - (x < y);
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E329.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E299.c
 ```
 
-**Exercício E330** · ★★★
+**Exercício E300** · ★★★
 
 Você tem R$ 50 no bolso e quer ver os produtos da lojinha do mais perto
 desse valor ao mais longe. Ordene com qsort pela distância até 50
@@ -2829,12 +2829,12 @@ para 60 antes de ordenar de novo. Qual sai a ordem?
    61 58 53 50 47 44 39.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0055-ponteiro-para-funcao/E330.c
+~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E300.c
 ```
 
 ---
 
-## 0056 · void * e cast
+## 0051 · void * e cast
 
 Nos Correios, o funcionário carimba e despacha qualquer caixa sem abrir:
 para ele, uma caixa tem um endereço de entrega e um peso, e só. Quem
@@ -2864,15 +2864,15 @@ Para que serve uma caixa fechada? Para escrever funções que trabalham com
 dado, recebem também o tamanho em bytes. Lá dentro, tratam a memória como
 uma fileira de bytes, com um `unsigned char *`, o único tipo que o C deixa
 olhar byte a byte qualquer objeto. É assim que funcionam `memcpy`,
-`memset`, o `qsort` (assunto 0055) e o `malloc` do módulo 07, que devolve
+`memset`, o `qsort` (assunto 0050) e o `malloc` do módulo 07, que devolve
 `void *` porque não sabe o que você vai guardar.
 
-Vamos ver na prática. A `troca` do assunto 0051 só troca `int`. A
+Vamos ver na prática. A `troca` do assunto 0046 só troca `int`. A
 `troca_generica` recebe dois endereços sem tipo e o tamanho: com 4, troca
 duas senhas `int`; com 8, troca dois preços `double`. Byte a byte, ela nem
 sabe o que está trocando:
 
-<p align="center"><img src="0056-void-generico/ideia.svg" alt="Diagrama da ideia: void * e cast" width="858"></p>
+<p align="center"><img src="0051-void-generico/ideia.svg" alt="Diagrama da ideia: void * e cast" width="858"></p>
 
 O código chama a mesma função para os dois tipos:
 
@@ -2914,7 +2914,7 @@ dado.
 Repara no fluxograma: a função não pergunta "que tipo é?", porque não tem
 como saber. Ela só pergunta "ainda tem byte para trocar?":
 
-<p align="center"><img src="0056-void-generico/fluxograma.svg" alt="Fluxograma: void * e cast" width="560"></p>
+<p align="center"><img src="0051-void-generico/fluxograma.svg" alt="Fluxograma: void * e cast" width="560"></p>
 
 > [!WARNING]
 > O `void *` desliga a conferência de tipos. `troca_generica(&senha_a,
@@ -2926,7 +2926,7 @@ como saber. Ela só pergunta "ainda tem byte para trocar?":
 > própria variável, nunca um número digitado à mão.
 
 > [!TIP]
-> **Por dentro do C:** o A112 usa um `const unsigned char *` para espiar os
+> **Por dentro do C:** o A102 usa um `const unsigned char *` para espiar os
 > bytes de qualquer variável. O `int` 1000 (`0x000003E8`) aparece como `e8 03
 > 00 00`: o byte menos significativo vem primeiro, no endereço menor. É o
 > **little-endian** dos processadores Intel, AMD e ARM. O `-1` vira `ff ff ff
@@ -2938,14 +2938,14 @@ como saber. Ela só pergunta "ainda tem byte para trocar?":
 
 > [!NOTE]
 > **Pergunta para você:** por que `troca_generica` precisa do parâmetro
-> `tam` e a `troca` do assunto 0051 não precisa? O que aconteceria se você
+> `tam` e a `troca` do assunto 0046 não precisa? O que aconteceria se você
 > passasse `sizeof(int)` para trocar dois `double`?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0056-void-generico/`](0056-void-generico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0051-void-generico/`](0051-void-generico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A111 · Uma troca para qualquer tipo**
+**Exemplo A101 · Uma troca para qualquer tipo**
 
 ```c
 #include <stdio.h>
@@ -2979,10 +2979,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/A111.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/A101.c
 ```
 
-**Exemplo A112 · Os bytes de verdade**
+**Exemplo A102 · Os bytes de verdade**
 
 ```c
 #include <stdio.h>
@@ -3021,12 +3021,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/A112.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/A102.c
 ```
 
 #### Exercícios
 
-**Exercício E331** · ★☆☆
+**Exercício E301** · ★☆☆
 
 No cadastro do plano de saúde, declare int idade = 41 e double altura =
 1.83. Use UM único ponteiro void *p: primeiro aponte para idade e mostre
@@ -3046,10 +3046,10 @@ altura: 1.83
 3. Resposta esperada: 41 e 1.83.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/E331.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/E301.c
 ```
 
-**Exercício E332** · ★☆☆
+**Exercício E302** · ★☆☆
 
 O programa abaixo tem quatro linhas comentadas, marcadas de L1 a L4.
 ANTES de testar, diga para cada uma: compila? Se compila, funciona? Depois
@@ -3068,10 +3068,10 @@ descomente UMA linha de cada vez, rode com o rodar e leia a mensagem.
    erro do AddressSanitizer (stack-buffer-overflow).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/E332.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/E302.c
 ```
 
-**Exercício E333** · ★★☆
+**Exercício E303** · ★★☆
 
 Escreva sua versão do memset para zerar qualquer coisa:
 
@@ -3101,10 +3101,10 @@ depois: 0 0 0 0 0 | 0.00
    quanto no double).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/E333.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/E303.c
 ```
 
-**Exercício E334** · ★★☆
+**Exercício E304** · ★★☆
 
 Escreva uma função que mostra vetores de QUALQUER tipo:
 
@@ -3141,10 +3141,10 @@ Saída esperada:
 3. Resposta esperada: as duas linhas acima.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/E334.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/E304.c
 ```
 
-**Exercício E335** · ★★★
+**Exercício E305** · ★★★
 
 Escreva uma busca linear genérica:
 
@@ -3183,12 +3183,12 @@ bruno no índice -1
 3. Resposta esperada: índices 1, 2, 2 e -1 (bruno não está).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/E335.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/E305.c
 ```
 
-**Exercício E336** · ★★★
+**Exercício E306** · ★★★
 
-Usando a função mostra_bytes do A112, preveja SEM rodar o que aparece
+Usando a função mostra_bytes do A102, preveja SEM rodar o que aparece
 para cada variável, num PC little-endian:
 
 
@@ -3214,12 +3214,12 @@ Depois rode e confira.
    sigla: 42 52 00
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0056-void-generico/E336.c
+~/LPEDC/rodar 06-ponteiros/0051-void-generico/E306.c
 ```
 
 ---
 
-## 0057 · Juntando tudo: o ranking da feira
+## 0052 · Juntando tudo: o ranking da feira
 
 Sábado, fim de feira. A associação dos feirantes quer o ranking das
 barracas pelo faturamento do dia e o nome da campeã. Mas tem uma condição:
@@ -3231,17 +3231,17 @@ O problema junta tudo o que o módulo ensinou:
 - **vetores paralelos** com o nome, a quantidade e o preço de cada barraca,
   e o faturamento calculado (`fat[i] = qtd[i] * preco[i]`);
 - um **vetor de ponteiros** `const double *ordem[N]`, em que cada posição
-  aponta para um elemento de `fat` (assunto 0054). É ele que vai ser
+  aponta para um elemento de `fat` (assunto 0049). É ele que vai ser
   ordenado, não `fat`. Como num índice de livro: as páginas não mudam de
   lugar, só a lista que aponta para elas;
-- o **`qsort`** com uma função de comparação (assunto 0055). Cada elemento
+- o **`qsort`** com uma função de comparação (assunto 0050). Cada elemento
   de `ordem` é um `const double *`, então o `qsort` entrega o endereço de um
-  ponteiro, que chega como `const void *` (assunto 0056). Dois saltos
+  ponteiro, que chega como `const void *` (assunto 0051). Dois saltos
   depois, `**`, chega-se ao faturamento;
-- **subtração de ponteiros** (assunto 0052): `ordem[i] - fat` diz em que
+- **subtração de ponteiros** (assunto 0047): `ordem[i] - fat` diz em que
   posição de `fat` aquele ponteiro aponta, e a mesma posição dá o nome em
   `produtos`;
-- **passagem por referência** (assunto 0051): a função `resumo` devolve
+- **passagem por referência** (assunto 0046): a função `resumo` devolve
   duas respostas, o total (num `double *`) e **onde** está o maior (num
   `const double **`, porque ela precisa mudar um ponteiro do `main`).
 
@@ -3250,7 +3250,7 @@ R$ 3,00), queijo (8 × R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`,
 `ordem[0]` aponta para o pastel e `ordem[3]` para a alface, enquanto `fat`
 continua na ordem de sempre:
 
-<p align="center"><img src="0057-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o ranking da feira" width="858"></p>
+<p align="center"><img src="0052-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o ranking da feira" width="858"></p>
 
 O programa completo:
 
@@ -3319,7 +3319,7 @@ vetor, nem o faturamento.
 Repara no fluxograma: três fases. Calcula e aponta, ordena os ponteiros,
 percorre a ordem nova traduzindo cada ponteiro para um índice:
 
-<p align="center"><img src="0057-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o ranking da feira" width="548"></p>
+<p align="center"><img src="0052-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o ranking da feira" width="548"></p>
 
 > [!WARNING]
 > Ordenar `ordem` com `sizeof(double)` no terceiro argumento do `qsort`
@@ -3344,9 +3344,9 @@ percorre a ordem nova traduzindo cada ponteiro para um índice:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0057-juntando-tudo/`](0057-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0052-juntando-tudo/`](0052-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A113 · O ranking da feira**
+**Exemplo A103 · O ranking da feira**
 
 ```c
 #include <stdio.h>
@@ -3406,10 +3406,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/A113.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/A103.c
 ```
 
-**Exemplo A114 · O caixa eletrônico de comandos**
+**Exemplo A104 · O caixa eletrônico de comandos**
 
 ```c
 #include <stdio.h>
@@ -3466,12 +3466,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/A114.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/A104.c
 ```
 
 #### Exercícios
 
-**Exercício E337** · ★☆☆
+**Exercício E307** · ★☆☆
 
 O caixa da padaria precisa separar reais e centavos para imprimir o
 cupom. Escreva
@@ -3501,12 +3501,12 @@ R$ 19.99 = 19 reais e 99 centavos
    vira 1998.9999... e o cast corta para 98 centavos.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E337.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E307.c
 ```
 
-**Exercício E338** · ★☆☆
+**Exercício E308** · ★☆☆
 
-Preveja a saída SEM rodar. A função troca é a do assunto 0051.
+Preveja a saída SEM rodar. A função troca é a do assunto 0046.
 
 
 ```text
@@ -3538,10 +3538,10 @@ printf("%d %d %d %d | %s | %c\n", v[0], v[1], v[2], v[3], s, *(c + 2));
 3. Resposta esperada: 20 10 25 5 | fEira | r
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E338.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E308.c
 ```
 
-**Exercício E339** · ★★☆
+**Exercício E309** · ★★☆
 
 Três corredores terminaram a prova com os tempos (em minutos) guardados
 em variáveis soltas: ana = 31, bia = 7, caio = 19. Escreva
@@ -3553,7 +3553,7 @@ void ordena3(int *a, int *b, int *c)
 
 
 que deixa os três valores em ordem crescente (a o menor, c o maior)
-usando só a função troca do assunto 0051, chamada no máximo 3 vezes.
+usando só a função troca do assunto 0046, chamada no máximo 3 vezes.
 Teste com várias ordens.
 
 
@@ -3570,10 +3570,10 @@ Saída esperada:
 3. Resposta esperada: 7 19 31, para qualquer ordem de entrada.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E339.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E309.c
 ```
 
-**Exercício E340** · ★★☆
+**Exercício E310** · ★★☆
 
 O mapa do jogo de viagem lista as capitais pelo tamanho do nome (do mais
 curto ao mais comprido); empates ficam em ordem alfabética. Ordene com
@@ -3602,10 +3602,10 @@ Natal Maceio Palmas Recife Aracaju Salvador Teresina Rio Branco
 4. Resposta esperada: a linha acima.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E340.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E310.c
 ```
 
-**Exercício E341** · ★★★
+**Exercício E311** · ★★★
 
 O programa do mercadinho tem TRÊS erros de memória de propósito, um de
 cada assunto do módulo. Ele deveria mostrar:
@@ -3633,10 +3633,10 @@ de novo) e explique cada um.
    "mercadinho".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E341.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E311.c
 ```
 
-**Exercício E342** · ★★★
+**Exercício E312** · ★★★
 
 Escreva um "máximo" genérico, que serve para vetores de qualquer tipo:
 
@@ -3680,7 +3680,7 @@ depois de zerar: 12 0 33 47 5
 4. Resposta esperada: as quatro linhas acima.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0057-juntando-tudo/E342.c
+~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E312.c
 ```
 
 ---
@@ -3804,7 +3804,7 @@ Ordem: mesa 1 (min 20), mesa 2 (min 5), mesa 2 (min 9), mesa 4 (min 1),
 mesa 4 (min 12), mesa 7 (min 3). Caminho: um vetor de índices `int
 ordem[6] = {0, ..., 5}` e uma comparação que lê os vetores paralelos (que
 podem ser `static` globais), ou um vetor de `const int *` para `mesa`, como
-no assunto 0057, usando `p - mesa` para achar o minuto.
+no assunto 0052, usando `p - mesa` para achar o minuto.
 
 </details>
 
@@ -3812,7 +3812,7 @@ no assunto 0057, usando `p - mesa` para achar o minuto.
 descobre a ordem dos bytes da máquina olhando o primeiro byte de um `int`
 que vale 1 (através de um `unsigned char *`). Depois escreva
 `unsigned int inverte_bytes(unsigned int x)` que troca a ordem dos 4 bytes
-usando `troca_generica` do A111 nos bytes certos.
+usando `troca_generica` do A101 nos bytes certos.
 
 <details><summary>Resposta</summary>
 
@@ -3836,7 +3836,7 @@ exatamente essa assinatura.
 42 está no **índice 5** (subtraia o ponteiro devolvido de `cods`); 10 dá
 **NULL**. O meio fica em `(unsigned char *)v + meio * tam`. Compare
 `cmp(chave, meio)`: negativo, procure à esquerda; positivo, à direita; zero,
-achou. A busca binária em si é o assunto 0095.
+achou. A busca binária em si é o assunto 0090.
 
 </details>
 

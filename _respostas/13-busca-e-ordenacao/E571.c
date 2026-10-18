@@ -1,32 +1,23 @@
-// 0096 · Bubble sort
+// 0096 · Comparando: estabilidade, custo e qsort
 // Exercício E571 · ★☆☆
 
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
+
+// decrescente: o MAIOR vem antes
+int compara_desc(const void *a, const void *b) {
+    double x = *(const double *) a;
+    double y = *(const double *) b;
+    return (x < y) - (x > y);
+}
 
 int main(void) {
-    int pontos[] = {18, 31, 7, 25, 31, 12};
-    int n = 6;
+    double gasolina[] = {5.89, 6.19, 5.79, 6.05, 5.99, 6.29};
+    size_t n = sizeof gasolina / sizeof gasolina[0];
 
-    for (int passada = 1; passada < n; passada++) {
-        bool trocou = false;
-        for (int j = 0; j < n - passada; j++) {
-            if (pontos[j] < pontos[j + 1]) { // só muda o sinal: < em vez de >
-                int aux = pontos[j];
-                pontos[j] = pontos[j + 1];
-                pontos[j + 1] = aux;
-                trocou = true;
-            }
-        }
-        if (!trocou) {
-            break;
-        }
+    qsort(gasolina, n, sizeof gasolina[0], compara_desc);
+    for (size_t i = 0; i < n; i++) {
+        printf("R$ %.2f\n", gasolina[i]);
     }
-
-    printf("Ranking:");
-    for (int i = 0; i < n; i++) {
-        printf(" %d", pontos[i]);
-    }
-    printf("\n");
     return 0;
 }

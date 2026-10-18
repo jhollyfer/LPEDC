@@ -1,20 +1,40 @@
-// 0018 · Lógicos: E, OU, NÃO
+// 0018 · switch, case, break e fall-through
 // Exercício E103 · ★☆☆
-//
-// Resposta: 0 1 0 1 1 0
-// a && b = 1 && 0 = 0; a || b = 1; !a = 0; !b && c = 1 && 1 = 1;
-// (a && b) || c = 0 || 1 = 1; a && (b || !c) = 1 && (0 || 0) = 0.
 
-#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    bool a = true, b = false, c = true;
-    printf("%d ", a && b);
-    printf("%d ", a || b);
-    printf("%d ", !a);
-    printf("%d ", !b && c);
-    printf("%d ", (a && b) || c);
-    printf("%d\n", a && (b || !c));
+    int dia;
+    printf("Dia (1 a 7): ");
+    if (scanf("%d", &dia) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
+
+    switch (dia) {
+    case 1:
+        printf("Domingo\n");
+        break;
+    case 2:
+        printf("Segunda-feira\n");
+        break;
+    case 3:
+        printf("Terça-feira\n");
+        break;
+    case 4:
+        printf("Quarta-feira\n");
+        break;
+    case 5:
+        printf("Quinta-feira\n");
+        break;
+    case 6:
+        printf("Sexta-feira\n");
+        break;
+    case 7:
+        printf("Sábado\n");
+        break;
+    default:
+        printf("Dia inválido.\n");
+    }
     return 0;
 }

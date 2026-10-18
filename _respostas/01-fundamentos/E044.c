@@ -1,24 +1,25 @@
-// 0008 · Tipos e limites
+// 0008 · Conversão e cast
 // Exercício E044 · ★☆☆
 //
-// Resposta: idade e temperatura cabem em int8_t (signed char, -128 a 127);
-// população cabe em int (até 2147483647); o arquivo de 5 GB passa de 4,2
-// bilhões e precisa de long long (ou int64_t); o ano cabe em short.
+// Resposta: a = 7; b = 3.0; c = 3.5; d = -7; e = 'B'; f = 3.0; g = 3.
 
 #include <stdio.h>
-#include <stdint.h>
 
 int main(void) {
-    int8_t idade = 34;
-    int8_t temperatura = -8;
-    int populacao = 203080756;
-    long long arquivo = 5368709120;
-    short ano = 1991;
+    int a = 7.9;
+    double b = 7 / 2;
+    double c = 7 / 2.0;
+    int d = -7.9;
+    char e = 66;
+    double f = (double) (7 / 2);
+    int g = (int) 3.999;
 
-    printf("idade: %d\n", idade);
-    printf("temperatura: %d\n", temperatura);
-    printf("população: %d\n", populacao);
-    printf("arquivo: %lld bytes\n", arquivo);
-    printf("ano: %d\n", ano);
+    printf("a = %d\n", a);
+    printf("b = %.1f\n", b);
+    printf("c = %.1f\n", c);
+    printf("d = %d\n", d);
+    printf("e = %c\n", e);
+    printf("f = %.1f\n", f);
+    printf("g = %d\n", g);
     return 0;
 }

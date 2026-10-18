@@ -23,7 +23,7 @@ Use os enunciados; **nunca copie o código**.
 
 ---
 
-### 0001-algoritmo
+### logica1-algoritmo
 
 **Conceitos-chave**
 - O livro já parte da disciplina anterior (Algoritmos I) e trata algoritmo como a
@@ -40,7 +40,7 @@ Use os enunciados; **nunca copie o código**.
 **Ideias de exercícios**
 - Para cada enunciado do módulo, pedir só a tabela E/P/S (sem código). Bom aquecimento.
 
-### 0005-compilacao
+### logica5-compilacao
 
 **Conceitos-chave**
 - Fluxo descrito: código-fonte (editor) → **compilador** gera código-objeto (linguagem de
@@ -52,7 +52,7 @@ Use os enunciados; **nunca copie o código**.
   do arquivo stdio.h"). No LPEDC, explicitar as 4 etapas com `gcc -E`, `-c`, ligação.
 - Atalhos de IDE (Alt+F9, Ctrl+F9 do Turbo C) são obsoletos; ensinar `gcc arquivo.c -o prog`.
 
-### 0006-primeiro-programa
+### 0001-primeiro-programa
 
 **Conceitos-chave**
 - Todo programa tem uma função principal; o conteúdo entre chaves é executado em
@@ -76,7 +76,7 @@ Use os enunciados; **nunca copie o código**.
   sem `&`; (4) falta `;` depois de `total = num1 + num2`; (5) `printf` usa a variável
   `soma`, que não existe (deveria ser `total`). Excelente exercício de compilação guiada.
 
-### 0007-variaveis
+### 0002-variaveis
 
 **Conceitos-chave**
 - Variável = espaço na memória principal que guarda valores diferentes ao longo do tempo;
@@ -99,7 +99,7 @@ Use os enunciados; **nunca copie o código**.
 - Tabela "válido/inválido" própria: `A`, `a`, `media`, `altura2`, `media_idade`, `x36`
   (válidos) vs `2a`, `b@`, `media idade`, `x*y`, `#media`, `idade!` (inválidos).
 
-### 0008-tipos-e-limites
+### 0003-tipos-e-limites
 
 **Conceitos-chave**
 - Modificadores `unsigned` (sem sinal: dobra a faixa positiva), `short` (reduz),
@@ -113,7 +113,7 @@ Use os enunciados; **nunca copie o código**.
 - Lista "sete tipos básicos" incluindo `enum` e `pointer` como se fossem tipos básicos —
   não seguir essa classificação.
 
-### 0009-constantes
+### 0004-constantes
 
 **Conceitos-chave**
 - `#define NOME valor`, sem `;` no final.
@@ -124,7 +124,7 @@ Use os enunciados; **nunca copie o código**.
 - `#define pi 3.141593` em minúsculas no gabarito: convenção é maiúsculas.
 - Pôr `;` no `#define` faz o `;` ser colado onde a constante for usada.
 
-### 0010-printf
+### 0005-printf
 
 **Conceitos-chave**
 - `printf("controle", argumentos)`: o texto de controle mistura mensagem e
@@ -135,7 +135,7 @@ Use os enunciados; **nunca copie o código**.
 - Mesmo programa impresso duas vezes: com `%f` (1.750000) e com `%.2f` (1.75).
 - Três `printf` sem `\n` saindo numa linha só, depois com `\n`.
 
-### 0011-scanf
+### 0006-scanf
 
 **Conceitos-chave**
 - `scanf("%d", &idade)`: as variáveis vão precedidas de `&` (o endereço); para string não
@@ -151,7 +151,7 @@ Use os enunciados; **nunca copie o código**.
 - Ler `%c` depois de um `%d` pega o `\n` que sobrou no buffer (o exercício do peso ideal
   lê o sexo primeiro justamente por isso, sem explicar). Bom caso para "sobra no buffer".
 
-### 0012-aritmetica
+### 0007-aritmetica
 
 **Conceitos-chave**
 - Operadores `+ - * / %`; expressão aritmética como fórmula matemática.
@@ -172,7 +172,7 @@ Use os enunciados; **nunca copie o código**.
   (fórmula `deposito * taxa/100`).
 - Área do trapézio: bases 10 e 6, altura 4 → 32.00.
 
-### 0014-atribuicao
+### 0009-atribuicao
 
 **Conceitos-chave**
 - `=` atribui: o lado esquerdo é a variável, o direito uma expressão (`x = x + 5`).
@@ -186,7 +186,7 @@ Use os enunciados; **nunca copie o código**.
 **Ideias de exercícios**
 - Tabela de rastreio: x=5; y=x++; z=++x; → y=5, x=7, z=7.
 
-### 0015-math
+### 0010-math
 
 **Conceitos-chave**
 - Funções prontas: `ceil` (arredonda para cima, 2.3→3), `floor` (para baixo, 2.3→2),
@@ -205,7 +205,7 @@ Use os enunciados; **nunca copie o código**.
   curioso: para r=2 os dois valores coincidem).
 - `pow(num1, num2)`: 2 e 10 → 1024.00.
 
-### 0016-juntando-tudo
+### 0011-juntando-tudo
 
 - Programa-modelo do livro: ler nome, idade e altura; calcular ano de nascimento
   (ano atual − idade); imprimir tudo com altura em `%.2f`. Atualizar o ano (o livro usa
@@ -213,13 +213,13 @@ Use os enunciados; **nunca copie o código**.
 
 ---
 
-### 0017-relacionais
+### 0012-relacionais
 
 **Conceitos-chave**
 - Operadores `== != > < >= <=`; condição é comparação com só dois resultados possíveis.
 - Em C não há booleano: zero é falso, qualquer outro valor é verdadeiro.
 
-### 0018-logicos
+### 0013-logicos
 
 **Conceitos-chave**
 - `&&` só é verdadeiro se ambos forem; `||` se pelo menos um for; `!` inverte.
@@ -232,7 +232,7 @@ Use os enunciados; **nunca copie o código**.
   separadamente (imprime "divisível por 3" e/ou "por 7"). Reescrever pedindo o "e" de
   verdade: 21 → sim; 9 → não; 14 → não; 42 → sim.
 
-### 0019-if
+### 0014-if
 
 **Conceitos-chave**
 - Se a condição é verdadeira, executa o bloco entre chaves; senão pula para depois dele.
@@ -241,7 +241,7 @@ Use os enunciados; **nunca copie o código**.
 **Ideias de exemplos**
 - Ler inteiro; se for par, mostrar a raiz com 3 casas: 18 → 4.243; 15 → nada.
 
-### 0020-if-else
+### 0015-if-else
 
 **Conceitos-chave**
 - Uma única expressão, dois caminhos mutuamente exclusivos.
@@ -255,7 +255,7 @@ Use os enunciados; **nunca copie o código**.
 **Pegadinhas e erros comuns**
 - `if (op = 1)` no lugar de `==` (o livro não destaca; acrescentar).
 
-### 0021-else-if
+### 0016-else-if
 
 **Conceitos-chave**
 - Ifs aninhados ("se não, se...") para várias faixas. Um mesmo problema pode ser resolvido
@@ -272,7 +272,7 @@ Use os enunciados; **nunca copie o código**.
 - Maior e menor de 5 números (atividade 1): o gabarito usa vetor e laço antes de esses
   conteúdos aparecerem. Reescrever só com ifs (ou adiar para o módulo de laços).
 
-### 0023-switch
+### 0018-switch
 
 **Conceitos-chave**
 - Compara uma variável inteira/caractere com constantes; `break` impede de cair nos casos
@@ -290,7 +290,7 @@ Use os enunciados; **nunca copie o código**.
   (chá 30, suco 80, refrigerante 90) com dois switches acumulando num total. Italiano +
   suco → 830.
 
-### 0024-juntando-tudo
+### 0019-juntando-tudo
 
 - **Carga de caminhão** (atividade 5): código do estado → % de imposto (1:20, 2:15, 3:10,
   4:5); código da carga → preço/kg (10–20: 180; 21–30: 120; 31–40: 230); peso em
@@ -301,7 +301,7 @@ Use os enunciados; **nunca copie o código**.
 
 ---
 
-### 0025-while
+### 0020-while
 
 **Conceitos-chave**
 - Laço condicional com teste **no início**: pode não executar nenhuma vez.
@@ -314,7 +314,7 @@ Use os enunciados; **nunca copie o código**.
 - **Leitura antes e dentro do laço** (padrão "leitura-prévia"): se esquecer a leitura de
   dentro, a condição nunca muda → laço infinito.
 
-### 0026-do-while
+### 0021-do-while
 
 **Conceitos-chave**
 - Teste no fim: o corpo roda pelo menos uma vez.
@@ -330,7 +330,7 @@ Use os enunciados; **nunca copie o código**.
 - **Validação de entrada** (fixação 6): repetir a leitura da opinião enquanto não for 1, 2
   ou 3 (`while (op != 1 && op != 2 && op != 3)`). Uso canônico do do-while.
 
-### 0027-for
+### 0022-for
 
 **Conceitos-chave**
 - Laço contado: inicialização (uma vez), condição (antes de cada volta), atualização (fim
@@ -351,11 +351,11 @@ Use os enunciados; **nunca copie o código**.
 - Números < 30 divisíveis por 3 e por 7 (atividade 5): com "e" verdadeiro → só 21.
 - **Série harmônica** (atividade 2): S = 1 + 1/2 + ... + 1/n; n=4 → 2.083333.
 
-### 0028-break-continue
+### 0023-break-continue
 
 - Não aborda break/continue em laços (só o break do switch). Sem material aqui.
 
-### 0029-lacos-aninhados
+### 0024-lacos-aninhados
 
 **Conceitos-chave**
 - "Encadeamento" de laços: a estrutura interna tem de estar inteira dentro da externa.
@@ -367,7 +367,7 @@ Use os enunciados; **nunca copie o código**.
   aprovados (média ≥ 6) e reprovados. Ex.: 2 notas; aluno 1: 7 e 8 (aprova); aluno 2: 4 e
   5 (reprova); código 0 → 1 aprovado, 1 reprovado. Feito com do-while+for e while+for.
 
-### 0030-padroes-de-laco
+### 0025-padroes-de-laco
 
 **Conceitos-chave** (o livro usa todos, sem nomeá-los — nomear no LPEDC)
 - **Contador** (`par++`), **acumulador** (`soma = soma + nota`), **sentinela** (0 ou −1
@@ -401,7 +401,7 @@ Use os enunciados; **nunca copie o código**.
 
 ---
 
-### 0033-funcoes / 0034-parametros / 0035-escopo / 0037-recursao (resumo)
+### 0028-funcoes / 0029-parametros / 0030-escopo / 0032-recursao (resumo)
 
 **Conceitos-chave**
 - Função = sub-rotina para uma tarefa específica; `tipo nome(parâmetros) { corpo }`;
@@ -418,14 +418,14 @@ Use os enunciados; **nunca copie o código**.
 - Gabaritos declaram funções **dentro** do `main` (extensão do GCC, não é C padrão).
 - Conversão kg → libras com fator 2.68 (o certo é ≈ 2,2046).
 - Enunciado pede "1 se consoante, 0 se vogal" e o gabarito devolve o contrário.
-- Fibonacci recursivo apresentado sem falar do custo exponencial (gancho para 0038).
+- Fibonacci recursivo apresentado sem falar do custo exponencial (gancho para 0033).
 
 **Ideias de exercícios**
 - Celsius → Fahrenheit (`c*1.8 + 32`): 100 → 212.00. Positivo/negativo/zero. Soma dos
   inteiros entre dois números. Somatório dos N primeiros pares (N=4 → 2+4+6+8 = 20).
   Contar vogais/consoantes de um nome. Reais → dólares dada a cotação.
 
-### 0042-vetores / 0044-matrizes / 0046-strings / 0064-struct (resumo)
+### 0037-vetores / 0039-matrizes / 0041-strings / 0059-struct (resumo)
 
 **Conceitos-chave**
 - Vetor: elementos do mesmo tipo em sequência, índice de 0 a tamanho−1; **o compilador
@@ -444,14 +444,14 @@ Use os enunciados; **nunca copie o código**.
 - Ler 30 números e imprimir na ordem inversa; soma de dois vetores; tabela de notas 20×4
   com média por aluno e da turma; cadastro de livros/funcionários com busca por código.
 
-### 0072-arquivos-texto (resumo)
+### 0067-arquivos-texto (resumo)
 
 - `FILE *`, `fopen` (modos r, w, a, r+, w+, a+), checar `NULL`, `fputc/fgetc`,
   `fputs/fgets`, `fclose`, `feof`, `rewind`, `remove`, `rename`.
 - Pegadinha: laço `while (!feof(arq))` lê uma vez a mais; o gabarito do exercício 7 usa o
   padrão certo `while (fgets(...) != NULL)` — contrastar os dois.
 
-### 0094-busca-sequencial / 0096-bubble-sort (resumo)
+### 0089-busca-sequencial / 0091-bubble-sort (resumo)
 
 - Busca sequencial com flag `acha` e `while (acha == 0 && i < 10)`.
 - O "método da bolha" apresentado compara `v[i]` com todos os `v[j]` seguintes — isso é
@@ -475,7 +475,7 @@ Use os enunciados; **nunca copie o código**.
 ## Extras que não cabem no sumário
 
 - Comparação de eficiência entre if solto × if/else × switch contando comparações — pode
-  virar um "box" em 0023 ou preparar 0076 (contar passos).
+  virar um "box" em 0018 ou preparar 0071 (contar passos).
 - Problema do cadastro de 20 livros com menu (cadastrar, listar, buscar, ordenar por ano):
   bom "juntando tudo" para o módulo 08 (vetor de structs) ou 13.
 - `setlocale(LC_ALL, "Portuguese")` aparece nos gabaritos para acentuação no Windows —

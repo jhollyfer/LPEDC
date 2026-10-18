@@ -56,13 +56,13 @@ ponteiros, `malloc`/`free` e `struct`. Duas novidades pequenas:
 
 - `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
   falsa. É o jeito de transformar um invariante em código.
-- **arquivos de apoio**: no assunto 0079, a pasta tem `contador.h`,
+- **arquivos de apoio**: no assunto 0074, a pasta tem `contador.h`,
   `contador.c`, `conta.h` e `conta.c` além dos exemplos. O `rodar` compila
   junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então é só
   rodar o exemplo, como sempre:
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/A157.c
+~/LPEDC/rodar 10-analise/0074-tad/A147.c
 ```
 
 Os contadores de passos dos exemplos não medem segundos: medem trabalho. Rode
@@ -70,14 +70,14 @@ na sua máquina e os números saem iguais aos do texto.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0076](#0076--eficiência-contar-passos) | Eficiência: contar passos | [`0076-eficiencia/`](0076-eficiencia/) |
-| [0077](#0077--notação-o-como-o-custo-cresce) | Notação O: como o custo cresce | [`0077-big-o/`](0077-big-o/) |
-| [0078](#0078--invariantes-de-laço-e-corretude) | Invariantes de laço e corretude | [`0078-invariantes/`](0078-invariantes/) |
-| [0079](#0079--tad-interface-h-e-implementação-c) | TAD: interface (.h) e implementação (.c) | [`0079-tad/`](0079-tad/) |
+| [0071](#0071--eficiência-contar-passos) | Eficiência: contar passos | [`0071-eficiencia/`](0071-eficiencia/) |
+| [0072](#0072--notação-o-como-o-custo-cresce) | Notação O: como o custo cresce | [`0072-big-o/`](0072-big-o/) |
+| [0073](#0073--invariantes-de-laço-e-corretude) | Invariantes de laço e corretude | [`0073-invariantes/`](0073-invariantes/) |
+| [0074](#0074--tad-interface-h-e-implementação-c) | TAD: interface (.h) e implementação (.c) | [`0074-tad/`](0074-tad/) |
 
 ---
 
-## 0076 · Eficiência: contar passos
+## 0071 · Eficiência: contar passos
 
 Sexta à noite, padaria cheia. Você entrega a comanda 70 no caixa e a moça
 procura no bolo de comandas, uma por uma. Se a sua for a primeira, você sai
@@ -110,7 +110,7 @@ Vamos ver na prática. A comanda 70 está na posição 6. A busca compara com as
 primeiras, erra todas, e acerta na 7ª comparação. A 41 sai em 1 passo; a 99,
 que não está no bolo, custa as 8:
 
-<p align="center"><img src="0076-eficiencia/ideia.svg" alt="Diagrama da ideia: Eficiência: contar passos" width="858"></p>
+<p align="center"><img src="0071-eficiencia/ideia.svg" alt="Diagrama da ideia: Eficiência: contar passos" width="858"></p>
 
 O contador é uma variável global que a função soma a cada comparação. É
 instrumentação: um "medidor" que você acopla ao código só para estudar o
@@ -165,7 +165,7 @@ Repara no fluxograma: o laço só tem duas saídas. Ou a pergunta "achou?"
 responde Sim, ou as comandas acabam. Cada volta pelo losango de baixo é um
 passo a mais no contador:
 
-<p align="center"><img src="0076-eficiencia/fluxograma.svg" alt="Fluxograma: Eficiência: contar passos" width="869"></p>
+<p align="center"><img src="0071-eficiencia/fluxograma.svg" alt="Fluxograma: Eficiência: contar passos" width="869"></p>
 
 > [!WARNING]
 > Contar a coisa errada engana. Se você puser o `passos++` **depois** do `if`
@@ -191,9 +191,9 @@ passo a mais no contador:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0076-eficiencia/`](0076-eficiencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0071-eficiencia/`](0071-eficiencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A151 · Quantas comparações para achar a comanda**
+**Exemplo A141 · Quantas comparações para achar a comanda**
 
 ```c
 #include <stdio.h>
@@ -229,10 +229,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/A151.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/A141.c
 ```
 
-**Exemplo A152 · Três tarefas, três ritmos**
+**Exemplo A142 · Três tarefas, três ritmos**
 
 ```c
 #include <stdio.h>
@@ -286,12 +286,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/A152.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/A142.c
 ```
 
 #### Exercícios
 
-**Exercício E451** · ★☆☆
+**Exercício E421** · ★☆☆
 
 Antes de rodar, preveja quantos passos cada trecho conta. Anote os quatro
 números, depois rode e confira.
@@ -313,10 +313,10 @@ d) for (i = 0; i < 10; i++)  if (i % 3 == 0) passos++;
    (i = 1, 2, 4, 8, 16, 32, 64); d) 4 (i = 0, 3, 6, 9).
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/E451.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/E421.c
 ```
 
-**Exercício E452** · ★☆☆
+**Exercício E422** · ★☆☆
 
 A função abaixo acha a maior temperatura de uma semana e meia (10 dias).
 Complete o código com dois contadores globais: "comparacoes" (quantas vezes
@@ -341,10 +341,10 @@ Trocas: 3
    para 31, depois 35, depois 36).
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/E452.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/E422.c
 ```
 
-**Exercício E453** · ★★☆
+**Exercício E423** · ★★☆
 
 O texto disse que, em média, a busca sequencial custa (n + 1) / 2
 comparações. Não acredite: meça. Escreva um programa que, para n = 10, 100
@@ -366,17 +366,17 @@ n = 1000: total 500500, média 500.5
 **Dicas:**
 
 1. Use um vetor de 1000 posições e só as n primeiras em cada rodada.
-2. Reaproveite a busca do A151 com o contador global; zere-o uma vez por n,
+2. Reaproveite a busca do A141 com o contador global; zere-o uma vez por n,
    não a cada busca, para acumular o total.
 3. Achar o código da posição i custa i + 1 passos. Somando de 1 até n dá
    n(n + 1) / 2; dividindo por n, (n + 1) / 2.
 4. Resposta esperada: médias 5.5, 50.5 e 500.5.
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/E453.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/E423.c
 ```
 
-**Exercício E454** · ★★☆
+**Exercício E424** · ★★☆
 
 Dois jeitos de saber se n é primo, contando as divisões (n % d) como passo:
 
@@ -410,10 +410,10 @@ Saída esperada:
 4. Resposta esperada: a tabela acima.
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/E454.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/E424.c
 ```
 
-**Exercício E455** · ★★★
+**Exercício E425** · ★★★
 
 Este programa busca três senhas de atendimento do banco e deveria mostrar
 os passos 1, 4 e 6. Ele compila sem aviso, mas mostra 0, 3 e 9. Há DOIS
@@ -438,12 +438,12 @@ senha 40: passos 6
    zerado dentro do for, antes de cada busca.
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/E455.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/E425.c
 ```
 
-**Exercício E456** · ★★★
+**Exercício E426** · ★★★
 
-No assunto 0038 você viu que o Fibonacci recursivo é lento. Agora meça o
+No assunto 0033 você viu que o Fibonacci recursivo é lento. Agora meça o
 quanto. Escreva:
 
 - fib_rec(n): a versão recursiva (fib(0) = 0, fib(1) = 1), somando 1 num
@@ -477,12 +477,12 @@ multiplicam por quanto, mais ou menos?
    crescimento exponencial.
 
 ```bash
-~/LPEDC/rodar 10-analise/0076-eficiencia/E456.c
+~/LPEDC/rodar 10-analise/0071-eficiencia/E426.c
 ```
 
 ---
 
-## 0077 · Notação O: como o custo cresce
+## 0072 · Notação O: como o custo cresce
 
 Você fez o app da hamburgueria. Testou com 8 pedidos: voou. Uma semana depois,
 64 pedidos por noite: tudo bem. Aí veio a Black Friday com 1024 pedidos e uma
@@ -519,7 +519,7 @@ base do log não importa: trocar log₂ por log₁₀ só muda uma constante.
 Vamos ver na prática. Cinco perguntas sobre os mesmos pedidos, cada uma com o
 seu ritmo. Em verde, o que continua leve em 1024; em vermelho, o que explodiu:
 
-<p align="center"><img src="0077-big-o/ideia.svg" alt="Diagrama da ideia: Notação O: como o custo cresce" width="858"></p>
+<p align="center"><img src="0072-big-o/ideia.svg" alt="Diagrama da ideia: Notação O: como o custo cresce" width="858"></p>
 
 Cada função conta os passos de uma pergunta. Rode e veja a tabela se formar:
 
@@ -597,12 +597,12 @@ ganhou 4 passos.
 Repara no fluxograma: é o laço do O(log n) com n = 1024. A pergunta "n > 1?"
 responde Sim só 10 vezes, porque cada volta joga metade fora:
 
-<p align="center"><img src="0077-big-o/fluxograma.svg" alt="Fluxograma: Notação O: como o custo cresce" width="531"></p>
+<p align="center"><img src="0072-big-o/fluxograma.svg" alt="Fluxograma: Notação O: como o custo cresce" width="531"></p>
 
 > [!WARNING]
 > O(n) não é "sempre mais rápido" que O(n²). A notação fala do **crescimento**,
 > não do tempo para um n específico. Um algoritmo de 100n passos perde de um de
-> n² até n = 100 (o exemplo A154 mostra a virada). Para 10 itens, o simples
+> n² até n = 100 (o exemplo A144 mostra a virada). Para 10 itens, o simples
 > costuma ganhar. A segunda pegadinha é a inversa: um laço O(n) que chama, a
 > cada volta, uma função O(n) dá **O(n²)**, mesmo parecendo um laço só. O
 > exemplo clássico no C é o `strlen(s)` na condição do `for`.
@@ -623,9 +623,9 @@ responde Sim só 10 vezes, porque cada volta joga metade fora:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0077-big-o/`](0077-big-o/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0072-big-o/`](0072-big-o/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A153 · Cinco perguntas sobre os pedidos**
+**Exemplo A143 · Cinco perguntas sobre os pedidos**
 
 ```c
 #include <stdio.h>
@@ -640,7 +640,7 @@ long passos_constante(int n) {
 }
 
 // O(log n): cortar a lista ordenada ao meio até sobrar 1 pedido
-// (é o que a busca binária faz, no assunto 0095).
+// (é o que a busca binária faz, no assunto 0090).
 long passos_log(int n) {
     long passos = 0;
     while (n > 1) {
@@ -698,10 +698,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/A153.c
+~/LPEDC/rodar 10-analise/0072-big-o/A143.c
 ```
 
-**Exemplo A154 · A constante grande perde no fim**
+**Exemplo A144 · A constante grande perde no fim**
 
 ```c
 #include <stdio.h>
@@ -754,12 +754,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/A154.c
+~/LPEDC/rodar 10-analise/0072-big-o/A144.c
 ```
 
 #### Exercícios
 
-**Exercício E457** · ★☆☆
+**Exercício E427** · ★☆☆
 
 Dê a classe O de cada trecho, em função de n. Escreva a resposta como
 comentário e justifique em uma linha (quantas vezes o corpo roda?).
@@ -784,10 +784,10 @@ f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
    e) O(n) (2n); f) O(n log n).
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/E457.c
+~/LPEDC/rodar 10-analise/0072-big-o/E427.c
 ```
 
-**Exercício E458** · ★☆☆
+**Exercício E428** · ★☆☆
 
 Seis colegas contaram os passos dos seus algoritmos e chegaram nestas
 fórmulas. Simplifique cada uma para a notação O mais justa (a menor classe
@@ -814,10 +814,10 @@ f) n(n + 1) / 2
    f) O(n²).
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/E458.c
+~/LPEDC/rodar 10-analise/0072-big-o/E428.c
 ```
 
-**Exercício E459** · ★★☆
+**Exercício E429** · ★★☆
 
 O cupom fiscal tem códigos de produto de 0 a 999. Você quer saber se algum
 código aparece repetido. Escreva duas funções que devolvem bool e contam
@@ -847,10 +847,10 @@ n = 1000: pares 499500 passos, marcas 1000 passos
 4. Resposta esperada: a saída acima; as duas respondem "sem repetidos".
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/E459.c
+~/LPEDC/rodar 10-analise/0072-big-o/E429.c
 ```
 
-**Exercício E460** · ★★☆
+**Exercício E430** · ★★☆
 
 A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
 Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
@@ -875,10 +875,10 @@ d:      32 ->      45  razão 1.41
    d) O(√n), raiz de n: dobrar n multiplica por √2 ≈ 1,41.
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/E460.c
+~/LPEDC/rodar 10-analise/0072-big-o/E430.c
 ```
 
-**Exercício E461** · ★★★
+**Exercício E431** · ★★★
 
 Você precisa ordenar a lista de entregas e tem duas opções:
 
@@ -916,10 +916,10 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
    "pior" algoritmo é o mais rápido. Com 10000, B é 30 vezes mais rápido.
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/E461.c
+~/LPEDC/rodar 10-analise/0072-big-o/E431.c
 ```
 
-**Exercício E462** · ★★★
+**Exercício E432** · ★★★
 
 Este programa conta as vogais de um texto de n letras. A função tamanho()
 faz o mesmo que o strlen (anda até o '\0') e conta cada letra visitada como
@@ -949,12 +949,12 @@ contagem de passos.
    1000, 2000 e 4000.
 
 ```bash
-~/LPEDC/rodar 10-analise/0077-big-o/E462.c
+~/LPEDC/rodar 10-analise/0072-big-o/E432.c
 ```
 
 ---
 
-## 0078 · Invariantes de laço e corretude
+## 0073 · Invariantes de laço e corretude
 
 Fim do expediente na lanchonete. Você confere o caixa: troco inicial mais as
 vendas do dia tem que bater com o que está na gaveta. E essa conta não vale
@@ -993,7 +993,7 @@ Vamos ver na prática. Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No
 começo da volta com i = 4, a parte verde já foi vista e o invariante garante
 que `maior` (300) é o maior dela. A parte cinza ainda não importa:
 
-<p align="center"><img src="0078-invariantes/ideia.svg" alt="Diagrama da ideia: Invariantes de laço e corretude" width="893"></p>
+<p align="center"><img src="0073-invariantes/ideia.svg" alt="Diagrama da ideia: Invariantes de laço e corretude" width="893"></p>
 
 O `assert` de `<assert.h>` transforma o invariante em código: se a condição
 for falsa, o programa para na hora e diz a linha. A função `eh_maximo` é lenta
@@ -1073,7 +1073,7 @@ n − i diminui 1 por volta e o laço acaba quando chega a 0.
 Repara no fluxograma: o invariante mora na seta que volta para o losango
 "i < 6?". Toda vez que o caminho passa por ali, a frase é verdadeira:
 
-<p align="center"><img src="0078-invariantes/fluxograma.svg" alt="Fluxograma: Invariantes de laço e corretude" width="593"></p>
+<p align="center"><img src="0073-invariantes/fluxograma.svg" alt="Fluxograma: Invariantes de laço e corretude" width="593"></p>
 
 > [!WARNING]
 > O erro clássico é o **início**: `int maior = 0;` parece inofensivo e passa
@@ -1092,15 +1092,15 @@ Repara no fluxograma: o invariante mora na seta que volta para o losango
 > fazer, como `assert(fp = fopen(...))`. Com `NDEBUG`, o arquivo nem abre.
 
 > [!NOTE]
-> **Pergunta para você:** no exemplo A156 (fichas de R$ 5 com R$ 47), o
+> **Pergunta para você:** no exemplo A146 (fichas de R$ 5 com R$ 47), o
 > invariante é `valor == q * ficha + r` e `r >= 0`. O que garante que o laço
 > termina? E se a ficha custasse R$ 0, qual dos quatro passos falharia?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0078-invariantes/`](0078-invariantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0073-invariantes/`](0073-invariantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A155 · O maior Pix do dia, com invariante**
+**Exemplo A145 · O maior Pix do dia, com invariante**
 
 ```c
 #include <assert.h>
@@ -1155,10 +1155,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/A155.c
+~/LPEDC/rodar 10-analise/0073-invariantes/A145.c
 ```
 
-**Exemplo A156 · Fichas e troco: o invariante da divisão**
+**Exemplo A146 · Fichas e troco: o invariante da divisão**
 
 ```c
 #include <assert.h>
@@ -1194,12 +1194,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/A156.c
+~/LPEDC/rodar 10-analise/0073-invariantes/A146.c
 ```
 
 #### Exercícios
 
-**Exercício E463** · ★☆☆
+**Exercício E433** · ★☆☆
 
 Escreva o invariante de cada laço: a frase que vale no começo de cada volta,
 logo antes do teste. Use a notação v[0..i-1].
@@ -1243,10 +1243,10 @@ d) k = n - 1;
    v[k+1..n-1].
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/E463.c
+~/LPEDC/rodar 10-analise/0073-invariantes/E433.c
 ```
 
-**Exercício E464** · ★☆☆
+**Exercício E434** · ★☆☆
 
 As vendas da barraca na feira foram R$ 35, 12, 50, 8 e 27. Complete a
 função soma():
@@ -1270,10 +1270,10 @@ Total: R$ 132
 4. Resposta esperada: Total: R$ 132. Invariante: s é a soma de v[0..i-1].
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/E464.c
+~/LPEDC/rodar 10-analise/0073-invariantes/E434.c
 ```
 
-**Exercício E465** · ★★☆
+**Exercício E435** · ★★☆
 
 A função ultima() procura a ÚLTIMA vez que um aluno tirou certa nota,
 andando do fim para o começo. Ela já funciona (rode). Prove que está certa
@@ -1305,10 +1305,10 @@ Escreva a prova como comentário.
    k >= 0 vem primeiro no && para nunca ler v[-1] (curto-circuito).
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/E465.c
+~/LPEDC/rodar 10-analise/0073-invariantes/E435.c
 ```
 
-**Exercício E466** · ★★☆
+**Exercício E436** · ★★☆
 
 O banco quer saber qual cliente está "menos no vermelho": o maior saldo
 entre contas todas negativas. O programa compila sem aviso, passou em todos
@@ -1338,10 +1338,10 @@ c) O que a função deveria exigir de n? Escreva o contrato correto.
    devolve o valor de um elemento máximo de v[0..n-1]".
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/E466.c
+~/LPEDC/rodar 10-analise/0073-invariantes/E436.c
 ```
 
-**Exercício E467** · ★★★
+**Exercício E437** · ★★★
 
 Escreva int lg(int n), que devolve o piso de log₂ n (o maior i com
 2 elevado a i <= n), para n >= 1, SEM math.h: divida n por 2 até chegar a
@@ -1373,10 +1373,10 @@ divergências de 1 a 100000: 0
    a cada volta e o laço para quando chega a 1.
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/E467.c
+~/LPEDC/rodar 10-analise/0073-invariantes/E437.c
 ```
 
-**Exercício E468** · ★★★
+**Exercício E438** · ★★★
 
 O vetor de pedidos do dia tem valores em reais, e os cancelados aparecem
 como 0. Escreva int remove_zeros(int v[], int n), que tira os zeros do
@@ -1403,12 +1403,12 @@ Sobraram 4: 25 40 15 30
    mundo uma casa para a esquerda a cada zero também funciona, mas é O(n²).
 
 ```bash
-~/LPEDC/rodar 10-analise/0078-invariantes/E468.c
+~/LPEDC/rodar 10-analise/0073-invariantes/E438.c
 ```
 
 ---
 
-## 0079 · TAD: interface (.h) e implementação (.c)
+## 0074 · TAD: interface (.h) e implementação (.c)
 
 Na entrada do estacionamento do shopping tem um painel: "VAGAS LIVRES: 3". A
 cancela só abre se houver vaga. Você não sabe se o sistema conta com sensor no
@@ -1441,11 +1441,11 @@ Fechar a porta não é burocracia: é o que permite ao TAD garantir um
 `0 <= valor <= limite`. Se o cliente pudesse escrever `vagas->valor = 99`, a
 promessa não valeria nada.
 
-Vamos ver na prática. O cliente `A157.c` inclui só o contrato. O `contador.c`
+Vamos ver na prática. O cliente `A147.c` inclui só o contrato. O `contador.c`
 também inclui o contrato e guarda a `struct` escondida. Na memória, o cliente
 tem só um ponteiro para um bloco no heap que ele não consegue abrir:
 
-<p align="center"><img src="0079-tad/ideia.svg" alt="Diagrama da ideia: TAD: interface (.h) e implementação (.c)" width="870"></p>
+<p align="center"><img src="0074-tad/ideia.svg" alt="Diagrama da ideia: TAD: interface (.h) e implementação (.c)" width="870"></p>
 
 O contrato, completo, está em `contador.h` na pasta do assunto. O cliente
 estaciona 4 carros num lugar com 3 vagas:
@@ -1533,7 +1533,7 @@ Repara no fluxograma: o cliente só conversa com o TAD pelas funções. Quem
 decide "lotado" é o `contador_incrementa`, que devolve `false`. O cliente só
 reage à resposta:
 
-<p align="center"><img src="0079-tad/fluxograma.svg" alt="Fluxograma: TAD: interface (.h) e implementação (.c)" width="679"></p>
+<p align="center"><img src="0074-tad/fluxograma.svg" alt="Fluxograma: TAD: interface (.h) e implementação (.c)" width="679"></p>
 
 ### O padrão dos próximos módulos
 
@@ -1542,7 +1542,7 @@ grafo) segue este molde. Para um TAD `x`:
 
 1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O `rodar`
    compila junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`. À mão:
-   `gcc A157.c contador.c -o a157`.
+   `gcc A147.c contador.c -o a157`.
 2. **`x.h`**: comentário dizendo o que o TAD é; *include guard*
    (`#ifndef X_H`); só os `#include` de que a interface precisa (em geral
    `<stdbool.h>`); `typedef struct x X;`; protótipos com prefixo `x_`, cada um
@@ -1571,7 +1571,7 @@ grafo) segue este molde. Para um TAD `x`:
 > [!TIP]
 > **Por dentro do C:** o `#include "contador.h"` é só colar texto. Depois do
 > pré-processador, o cliente tem os protótipos e a frase "existe uma
-> `struct contador`", mais nada. O compilador gera `A157.o` sem saber o
+> `struct contador`", mais nada. O compilador gera `A147.o` sem saber o
 > tamanho da struct (nem precisa: ponteiro tem sempre 8 bytes numa máquina de
 > 64 bits). O `contador.o` sabe o tamanho e os deslocamentos dos campos
 > (`valor` no byte 0, `limite` no byte 4). O ligador junta os dois. Por isso
@@ -1579,16 +1579,16 @@ grafo) segue este molde. Para um TAD `x`:
 > muda.
 
 > [!NOTE]
-> **Pergunta para você:** no exemplo A158, a conta guarda o saldo em
+> **Pergunta para você:** no exemplo A148, a conta guarda o saldo em
 > centavos (`int`), e não em reais (`double`). Por quê? E se o banco quisesse
 > trocar para `long long` amanhã, quais arquivos mudariam: `conta.h`,
 > `conta.c` ou o cliente?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0079-tad/`](0079-tad/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0074-tad/`](0074-tad/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A157 · A cancela do estacionamento**
+**Exemplo A147 · A cancela do estacionamento**
 
 ```c
 #include <stdio.h>
@@ -1630,14 +1630,14 @@ int main(void) {
 // Um carro saiu (2/3)
 // CWB1D77 entrou (3/3)
 //
-// Compilando à mão, sem o rodar: gcc A157.c contador.c -o a157
+// Compilando à mão, sem o rodar: gcc A147.c contador.c -o a157
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/A157.c
+~/LPEDC/rodar 10-analise/0074-tad/A147.c
 ```
 
-**Exemplo A158 · A conta que nunca fica negativa**
+**Exemplo A148 · A conta que nunca fica negativa**
 
 ```c
 #include <stdbool.h>
@@ -1680,12 +1680,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/A158.c
+~/LPEDC/rodar 10-analise/0074-tad/A148.c
 ```
 
 #### Exercícios
 
-**Exercício E469** · ★☆☆
+**Exercício E439** · ★☆☆
 
 Use o TAD Contador desta pasta (leia o contador.h; não abra o contador.c)
 para controlar a lotação de uma van escolar de 4 lugares:
@@ -1713,10 +1713,10 @@ Na garagem: 0 a bordo
    como o contador guarda o valor.
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/E469.c
+~/LPEDC/rodar 10-analise/0074-tad/E439.c
 ```
 
-**Exercício E470** · ★☆☆
+**Exercício E440** · ★☆☆
 
 Este cliente NÃO COMPILA, de propósito. Ele controla as senhas da fila da
 lotérica e tenta mexer direto nos campos do contador. Rode, leia o erro do
@@ -1745,10 +1745,10 @@ Na fila: 0
    contador_zera(fila) para zerar.
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/E470.c
+~/LPEDC/rodar 10-analise/0074-tad/E440.c
 ```
 
-**Exercício E471** · ★★☆
+**Exercício E441** · ★★☆
 
 Escreva um TAD Ponto para o app de entregas, com estas operações:
 
@@ -1785,10 +1785,10 @@ A -> B: 10.00 km
 4. Resposta esperada: a saída acima (os triângulos 3-4-5 e 6-8-10).
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/E471.c
+~/LPEDC/rodar 10-analise/0074-tad/E441.c
 ```
 
-**Exercício E472** · ★★☆
+**Exercício E442** · ★★☆
 
 O TAD Conta desta pasta (conta.h) não tem transferência. Você não pode
 mexer no conta.c nem no conta.h. Escreva, no cliente, a função
@@ -1822,10 +1822,10 @@ Bia: R$ 44,50 | Caio: R$ 45,50
    respeitam.
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/E472.c
+~/LPEDC/rodar 10-analise/0074-tad/E442.c
 ```
 
-**Exercício E473** · ★★★
+**Exercício E443** · ★★★
 
 A receita pede 1/2 xícara de leite e depois mais 1/3. Escreva um TAD
 Racional (fração), num arquivo só, separado em "racional.h", "racional.c" e
@@ -1859,17 +1859,17 @@ Saída esperada:
 
 1. Toda criação passa por racional_cria, que simplifica e acerta o sinal.
    Assim soma e multiplica só fazem a conta e chamam racional_cria.
-2. a/b + c/d = (a*d + c*b) / (b*d). O mdc vem de Euclides (assunto 0038)
+2. a/b + c/d = (a*d + c*b) / (b*d). O mdc vem de Euclides (assunto 0033)
    e pode ser uma função static.
 3. Denominador negativo: troque o sinal dos dois.
 4. Cada Racional devolvido é um malloc: libere todos.
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/E473.c
+~/LPEDC/rodar 10-analise/0074-tad/E443.c
 ```
 
-**Exercício E474** · ★★★
+**Exercício E444** · ★★★
 
 O TAD Horario abaixo guarda a hora e o minuto em dois campos. Reescreva SÓ
 a parte "horario.c" para guardar um campo único: os minutos desde a
@@ -1899,7 +1899,7 @@ simples? E o que isso mostra sobre esconder a struct?
    TAD.
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/E474.c
+~/LPEDC/rodar 10-analise/0074-tad/E444.c
 ```
 
 ---
@@ -1930,7 +1930,7 @@ milhões?
 <details><summary>Resposta</summary>
 
 Dobrou n, o tempo multiplicou por 4: **O(n²)**. Com 4 milhões, mais um
-dobro: 8 × 4 = **32 s**. É a regra do dobro do E460 aplicada a tempo em vez de
+dobro: 8 × 4 = **32 s**. É a regra do dobro do E430 aplicada a tempo em vez de
 passos.
 
 </details>
@@ -1943,11 +1943,11 @@ comparações a busca binária faz no pior caso? E a sequencial?
 A binária corta pela metade a cada comparação: 2²⁰ = 1.048.576 ≥ 1.000.000,
 então **20 comparações** (mais ou menos uma, conforme o detalhe da
 implementação). A sequencial, no pior caso, **1.000.000**. É a tabela de
-O(log n) contra O(n) do assunto 0077, com números de verdade.
+O(log n) contra O(n) do assunto 0072, com números de verdade.
 
 </details>
 
-**4. A conta da pergunta.** No assunto 0077: um algoritmo O(n²) leva 1 s com
+**4. A conta da pergunta.** No assunto 0072: um algoritmo O(n²) leva 1 s com
 10.000 pedidos. Quanto leva com 100.000? E um O(n log n) que também leva 1 s
 com 10.000?
 
@@ -1989,7 +1989,7 @@ O(log e), contra O(e) do jeito ingênuo.
 
 **7. Projete antes de codar.** Escreva só o `fila_senhas.h` de um TAD para as
 senhas de atendimento do banco: tirar senha, chamar a próxima, ver quantas
-pessoas esperam. Siga o padrão do assunto 0079, com o contrato de cada função.
+pessoas esperam. Siga o padrão do assunto 0074, com o contrato de cada função.
 
 <details><summary>Resposta</summary>
 
@@ -2041,7 +2041,7 @@ Implemente com contador e confira para n = 10.
 Para n = 10: o jeito separado faz **18** comparações; o de pares, **13**
 (1 para o primeiro par e 3 para cada um dos outros 4 pares: 3n/2 − 2). As duas
 são O(n): a notação O não enxerga a diferença, mas o contador enxerga. É o
-lembrete do assunto 0076: a constante importa quando n é fixo.
+lembrete do assunto 0071: a constante importa quando n é fixo.
 
 </details>
 

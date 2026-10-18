@@ -1,18 +1,20 @@
-// 0027 · For
+// 0027 · Juntando tudo
 // Exercício E159 · ★★☆
 
-#include <math.h>
 #include <stdio.h>
 
 int main(void) {
-    double inicial = 2000.0;
-    double taxa = 0.008;
-    double saldo = inicial;
+    int encontrados = 0;
 
-    for (int mes = 1; mes <= 12; mes++) {
-        saldo = saldo * (1 + taxa);
-        printf("Mês %2d: R$ %.2f\n", mes, saldo);
+    for (int n = 100; n <= 999; n++) {
+        int a = n / 100;
+        int b = n / 10 % 10;
+        int c = n % 10;
+        if (a * a * a + b * b * b + c * c * c == n) {
+            printf("%d ", n);
+            encontrados++;
+        }
     }
-    printf("Pela fórmula: R$ %.2f\n", inicial * pow(1 + taxa, 12));
+    printf("\nEncontrados: %d\n", encontrados);
     return 0;
 }

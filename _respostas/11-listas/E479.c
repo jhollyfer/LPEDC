@@ -1,51 +1,52 @@
-// 0080 · Vetor dinâmico
+// 0080 · Lista circular
 // Exercício E479 · ★★★
-//
-// Os três problemas: (1) realloc recebia v->cap (bytes) em vez de
-// v->cap * sizeof(int); (2) "primeiro" guardava o endereço de um item, que
-// fica solto quando o realloc muda o vetor de lugar: guarde o índice;
-// (3) "v->itens = realloc(v->itens, ...)" perde o bloco antigo se o realloc
-// falhar: use uma variável temporária.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-typedef struct {
-    int *itens;
-    int tam;
-    int cap;
-} Vetor;
+typedef struct processo {
+    int id;
+    int falta;
+    struct processo *prox;
+} Processo;
 
-static bool vetor_insere(Vetor *v, int valor) {
-    if (v->tam == v->cap) {
-        int nova_cap = v->cap * 2;
-        int *novo = realloc(v->itens, nova_cap * sizeof(int));
-        if (novo == NULL) return false; // v->itens continua valendo
-        v->itens = novo;
-        v->cap = nova_cap;
+static Processo *chega(Processo *ultimo, int id, int tempo) {
+    Processo *novo = malloc(sizeof(Processo));
+    if (novo == NULL) exit(1);
+    novo->id = id;
+    novo->falta = tempo;
+    if (ultimo == NULL) {
+        novo->prox = novo;
+    } else {
+        novo->prox = ultimo->prox;
+        ultimo->prox = novo;
     }
-    v->itens[v->tam] = valor;
-    v->tam++;
-    return true;
+    return novo;
 }
 
 int main(void) {
-    Vetor v = {malloc(2 * sizeof(int)), 0, 2};
-    if (v.itens == NULL) return 1;
+    const int quantum = 2;
+    Processo *ultimo = NULL;
+    ultimo = chega(ultimo, 1, 5);
+    ultimo = chega(ultimo, 2, 2);
+    ultimo = chega(ultimo, 3, 4);
 
-    vetor_insere(&v, 40);
-    int primeiro = 0; // a posição continua valendo; o endereço, não
-    for (int vel = 50; vel <= 90; vel += 10) {
-        vetor_insere(&v, vel);
+    int relogio = 0;
+    while (ultimo != NULL) {
+        Processo *p = ultimo->prox; // quem está na frente roda
+        int fatia = p->falta < quantum ? p->falta : quantum;
+        printf("t=%d..%d: P%d ", relogio, relogio + fatia, p->id);
+        relogio += fatia;
+        p->falta -= fatia;
+        if (p->falta == 0) {
+            printf("(terminou)\n");
+            if (p == ultimo) ultimo = NULL;   // era o único
+            else ultimo->prox = p->prox;      // sai da roda
+            free(p);
+        } else {
+            printf("(falta %d)\n", p->falta);
+            ultimo = p;                       // vai para o fim: gira a roda
+        }
     }
-
-    printf("primeiro: %d\n", v.itens[primeiro]);
-    for (int i = 0; i < v.tam; i++) {
-        printf("%d ", v.itens[i]);
-    }
-    printf("\n");
-
-    free(v.itens);
     return 0;
 }

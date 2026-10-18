@@ -1,17 +1,19 @@
-// 0006 · O primeiro programa
+// 0006 · scanf
 // Exercício E033 · ★★☆
 //
-// Resposta: (1) o /* da primeira linha nunca fechava ("unterminated
-// comment"); (2) Int com maiúscula não é tipo ("unknown type name 'Int'");
-// (3) faltava ; depois do primeiro printf ("expected ';' before 'print'").
-// Esses três são do compilador. (4) print não existe ("implicit declaration of function 'print'" no
-// compilador e "undefined reference to `print'" no ligador).
+// Resposta: com "6 05", o scanf lê o 6 e espera um ":"; acha um espaço,
+// para ali e devolve 1. Os minutos continuam 0 (o valor inicial).
 
-/* Aviso da farmácia */
 #include <stdio.h>
 
 int main(void) {
-    printf("Farmácia aberta 24h\n");
-    printf("Plantão: (11) 5555-0199\n");
+    int hora = 0, minuto = 0;
+
+    printf("Alarme (hh:mm): ");
+    int lidos = scanf("%d:%d", &hora, &minuto);
+
+    printf("Itens lidos: %d\n", lidos);
+    printf("Alarme para %dh%02d\n", hora, minuto);
+    printf("Alarme para %02d:%02d\n", hora, minuto);
     return 0;
 }

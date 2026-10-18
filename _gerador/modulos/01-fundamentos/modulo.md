@@ -87,7 +87,7 @@ Para rodar qualquer arquivo do curso, use o **`rodar`**, que está na raiz do
 projeto:
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/A011.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
 ```
 
 Ele compila e já executa. O caminho pode ser relativo à pasta onde você está,
@@ -102,7 +102,7 @@ Programas que leem do teclado esperam você digitar. Para testar sem digitar,
 mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
-printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0011-scanf/A021.c
+printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
 ```
 
 > [!NOTE]
@@ -132,7 +132,7 @@ moedas de cada valor entregar, sempre da maior para a menor. Teste com 3.85.
 
 3 de R$ 1, 1 de R$ 0,50, 1 de R$ 0,25, 1 de R$ 0,10 e nenhuma de R$ 0,05: **6
 moedas**. O caminho: converta para centavos inteiros **arredondando**
-(`(int) round(troco * 100)`, lembre do 19.99 do E077) e, para cada moeda,
+(`(int) round(troco * 100)`, lembre do 19.99 do E047) e, para cada moeda,
 `quantidade = centavos / moeda` e `centavos %= moeda`.
 
 </details>
@@ -157,7 +157,7 @@ o programa que desfaz. Teste com 2026.
 
 2, 0, 2, 6 viram 9, 7, 9, 3 e, com as trocas, **9397**. Para desfazer, troque
 as posições de volta e some 3 em cada dígito, com `% 10` (somar 7 e depois 3
-dá 10, que o `% 10` zera). Separe os dígitos com `/` e `%` como no E072.
+dá 10, que o `% 10` zera). Separe os dígitos com `/` e `%` como no E042.
 
 </details>
 
@@ -194,7 +194,7 @@ São Paulo, ele pousa?
 
 Em minutos: 22·60 + 40 = 1360; mais 230 de voo e 60 de fuso = 1650;
 `1650 % 1440` = 210 minutos = **03:30**, no dia seguinte (`1650 / 1440` = 1).
-É a mesma técnica do E096.
+É a mesma técnica do E066.
 
 </details>
 

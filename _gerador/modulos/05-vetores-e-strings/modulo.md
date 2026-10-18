@@ -106,7 +106,7 @@ Monte `c` com os 7 valores em ordem, sem ordenar `c` depois.
 
 `1 2 3 4 9 10 12`. Um índice em cada vetor: compare `a[i]` com `b[j]`, copie
 o menor para `c[k]` e avance quem foi copiado. Quando um acabar, copie o
-resto do outro. É o coração do *merge sort* (assunto 0099).
+resto do outro. É o coração do *merge sort* (assunto 0094).
 
 </details>
 
@@ -198,7 +198,7 @@ vizinhas nasce; o resto morre ou fica morto. Calcule a próxima geração de um
 Ela vira uma **coluna** de três: `[1][2]`, `[2][2]`, `[3][2]`. Na geração
 seguinte, volta a ser linha. O cuidado: calcule tudo numa **segunda matriz**.
 Se você atualizar a original enquanto conta, as células já mudadas atrapalham
-a contagem das vizinhas. A contagem de vizinhas é a do campo minado (E264).
+a contagem das vizinhas. A contagem de vizinhas é a do campo minado (E234).
 
 </details>
 

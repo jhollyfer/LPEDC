@@ -1,54 +1,40 @@
-// 0104 · BST: busca e inserção
+// 0104 · Juntando tudo
 // Exercício E623 · ★★★
 //
-// Resposta: a versão original só compara cada nó com os filhos diretos. O 60
-// é maior que o pai (30), mas está na subárvore esquerda do 50 e deveria ser
-// menor que 50. A regra vale para a subárvore inteira: cada nó herda uma
-// faixa (min, max) dos ancestrais.
+// Resposta: pos é passado por valor. A chamada da esquerda enchia o vetor e
+// devolvia a próxima posição livre, mas o valor era jogado fora: cada nó
+// escrevia por cima do que a esquerda tinha escrito.
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <limits.h>
-#include "bst.h"
+#include "cadastro.h"
 
-No *no(int chave, No *esq, No *dir) {
-    No *n = malloc(sizeof(No));
-    if (n == NULL) {
-        exit(1);
-    }
-    n->chave = chave;
-    n->esq = esq;
-    n->dir = dir;
-    return n;
-}
-
-// toda chave da subárvore r precisa estar entre min e max
-bool entre(const No *r, int min, int max) {
+int copia(const NoAluno *r, Aluno v[], int pos) {
     if (r == NULL) {
-        return true;
+        return pos;
     }
-    if (r->chave <= min || r->chave >= max) {
-        return false;
-    }
-    return entre(r->esq, min, r->chave) && entre(r->dir, r->chave, max);
-}
-
-bool eh_bst(const No *r) {
-    return entre(r, INT_MIN, INT_MAX);
+    pos = copia(r->esq, v, pos); // a esquerda diz onde parou
+    v[pos++] = r->a;
+    return copia(r->dir, v, pos);
 }
 
 int main(void) {
-    No *a1 = no(50, no(30, no(20, NULL, NULL), no(60, NULL, NULL)),
-                no(80, no(70, NULL, NULL), no(90, NULL, NULL)));
-    No *a2 = no(50, no(30, no(20, NULL, NULL), no(40, NULL, NULL)),
-                no(80, no(70, NULL, NULL), no(90, NULL, NULL)));
+    Aluno turma[] = {
+        {50, "Ana", 12}, {30, "Bruno", 8}, {70, "Carla", 15}, {20, "Davi", 4},
+        {40, "Eva", 20}, {60, "Fabio", 9}, {80, "Gil", 11},
+    };
+    NoAluno *cad = NULL;
+    for (int i = 0; i < 7; i++) {
+        cad = cad_insere(cad, turma[i]);
+    }
 
-    printf("Árvore 1: %s\n", eh_bst(a1) ? "é BST" : "não é BST");
-    printf("Árvore 2: %s\n", eh_bst(a2) ? "é BST" : "não é BST");
-    printf("Busca 60 na árvore 1: %s\n", bst_busca(a1, 60) ? "achou" : "não achou");
+    Aluno v[16];
+    int n = copia(cad, v, 0);
+    printf("copiados: %d\n", n);
+    for (int i = 0; i < n; i++) {
+        printf("%s%d %s", i > 0 ? ", " : "", v[i].matricula, v[i].nome);
+    }
+    printf("\n");
 
-    a1 = bst_libera(a1);
-    a2 = bst_libera(a2);
+    cad = cad_libera(cad);
     return 0;
 }

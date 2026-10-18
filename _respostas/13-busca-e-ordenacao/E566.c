@@ -1,32 +1,34 @@
-// 0095 · Busca binária
+// 0095 · Quick sort
 // Exercício E566 · ★☆☆
 
 #include <stdio.h>
 
-// procura x em v[ini..fim] (fechado); devolve o índice ou -1
-int busca_rec(const int v[], int ini, int fim, int x) {
-    if (ini > fim) {
-        return -1;                              // caso base: intervalo vazio
+void troca(int *a, int *b) {
+    int aux = *a;
+    *a = *b;
+    *b = aux;
+}
+
+// mesma ideia do separa: v[0..j-1] guarda os negativos
+int separa_negativos(int v[], int n) {
+    int j = 0;
+    for (int k = 0; k < n; k++) {
+        if (v[k] < 0) {
+            troca(&v[j], &v[k]);
+            j++;
+        }
     }
-    int meio = ini + (fim - ini) / 2;
-    if (v[meio] == x) {
-        return meio;                            // caso base: achou
-    }
-    if (v[meio] < x) {
-        return busca_rec(v, meio + 1, fim, x);  // o return é obrigatório
-    }
-    return busca_rec(v, ini, meio - 1, x);
+    return j;
 }
 
 int main(void) {
-    int ceps[] = {1310100, 4538132, 20040002, 30130010, 40020000,
-                  50030230, 60060440, 70040010, 80010000, 90010150};
-    int n = 10;
-    int procurados[] = {40020000, 22222222};
+    int saldos[] = {120, -45, 300, -10, 0, -80, 55};
+    int n = 7;
 
-    for (int k = 0; k < 2; k++) {
-        printf("CEP %08d: posição %d\n", procurados[k],
-               busca_rec(ceps, 0, n - 1, procurados[k]));
+    int neg = separa_negativos(saldos, n);
+    for (int i = 0; i < n; i++) {
+        printf("%s%d", i > 0 ? " " : "", saldos[i]);
     }
+    printf("\n%d contas no vermelho\n", neg);
     return 0;
 }

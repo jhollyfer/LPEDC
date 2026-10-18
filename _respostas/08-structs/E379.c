@@ -1,22 +1,19 @@
-// 0064 · Struct
+// 0064 · Union
 // Exercício E379 · ★☆☆
+//
+// Resposta: union Caixa = 8 (o double); struct Ficha = 16 (c em 0, 3 de
+// sobra, i em 4, d em 8); union Nome = 12 (10 bytes arredondados para
+// múltiplo de 4, por causa do int).
 
 #include <stdio.h>
 
-struct livro {
-    char titulo[40];
-    char autor[30];
-    int ano;
-    double preco;
-};
+union Caixa { char c; int i; double d; };
+struct Ficha { char c; int i; double d; };
+union Nome { char texto[10]; int codigo; };
 
 int main(void) {
-    struct livro l = {"Dom Casmurro", "Machado de Assis", 1899, 34.90};
-
-    printf("Livro: %s\n", l.titulo);
-    printf("Autor: %s\n", l.autor);
-    printf("Ano: %d\n", l.ano);
-    printf("Preço: R$ %.2f\n", l.preco);
-    printf("Na promoção: R$ %.2f\n", l.preco * 0.9);
+    printf("union Caixa: %zu\n", sizeof(union Caixa));
+    printf("struct Ficha: %zu\n", sizeof(struct Ficha));
+    printf("union Nome: %zu\n", sizeof(union Nome));
     return 0;
 }

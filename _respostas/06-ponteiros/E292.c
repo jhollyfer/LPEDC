@@ -1,17 +1,25 @@
-// 0049 · Memória e endereços
+// 0049 · Ponteiro para ponteiro
 // Exercício E292 · ★★☆
 //
-// Resposta: %d interpreta parte do endereço como int (número cortado, às
-// vezes negativo); %x mostra só os 4 bytes de baixo; %p sem cast recebe um
-// int *, mas o padrão pede void *. O certo é %p com (void *).
+// Resposta: res era uma cópia do ponteiro do main; mudar res não muda
+// vencedor, que continuava NULL (e *vencedor derrubava o programa). A
+// função precisa receber o endereço do ponteiro: int **res.
 
 #include <stdio.h>
 
-int main(void) {
-    int pedidos = 15;
+void aponta_maior(int *a, int *b, int **res) {
+    if (*a > *b) {
+        *res = a;
+    } else {
+        *res = b;
+    }
+}
 
-    printf("Endereço: %p\n", (void *)&pedidos);
-    printf("Endereço: %p\n", (void *)&pedidos);
-    printf("Endereço: %p\n", (void *)&pedidos);
+int main(void) {
+    int lance1 = 870, lance2 = 640;
+    int *vencedor = NULL;
+
+    aponta_maior(&lance1, &lance2, &vencedor);
+    printf("Maior lance: R$ %d\n", *vencedor);
     return 0;
 }

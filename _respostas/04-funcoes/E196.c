@@ -1,27 +1,29 @@
-// 0033 · Funções
+// 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 // Exercício E196 · ★★☆
+//
+// Resposta: a) fib(6) = 8. b) 25 chamadas: Chamadas(4) = 1 + 5 + 3 = 9 e
+// Chamadas(6) = 1 + 15 + 9 = 25. c) fib(2) é calculado 5 vezes (3 dentro de
+// fib(5) e 2 dentro de fib(4)). d) 6 quadros de fib: fib(6) até fib(1).
 
-#include <math.h>
 #include <stdio.h>
 
-double tarifa(double horas);
+long chamadas = 0;
+long chamadas_fib2 = 0;
 
-int main(void) {
-    double c1 = tarifa(1.5);
-    double c2 = tarifa(3.2);
-    double c3 = tarifa(12.0);
-
-    printf("Carro 1 (1.5 h): R$ %.2f\n", c1);
-    printf("Carro 2 (3.2 h): R$ %.2f\n", c2);
-    printf("Carro 3 (12.0 h): R$ %.2f\n", c3);
-    printf("Total do dia: R$ %.2f\n", c1 + c2 + c3);
-    return 0;
+int fib(int n) {
+    chamadas++;
+    if (n == 2) {
+        chamadas_fib2++;
+    }
+    if (n < 2) {
+        return n;
+    }
+    return fib(n - 1) + fib(n - 2);
 }
 
-double tarifa(double horas) {
-    if (horas <= 2) {
-        return 5.00;
-    }
-    double valor = 5.00 + 2.00 * ceil(horas - 2);
-    return valor > 20.00 ? 20.00 : valor;
+int main(void) {
+    int resultado = fib(6);
+    printf("fib(6) = %d, %ld chamadas, fib(2) calculado %ld vezes\n",
+           resultado, chamadas, chamadas_fib2);
+    return 0;
 }

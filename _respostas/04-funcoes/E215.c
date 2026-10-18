@@ -1,33 +1,40 @@
-// 0036 · A pilha de chamadas
+// 0036 · Juntando tudo: o caixa da lanchonete
 // Exercício E215 · ★★★
-//
-// Resposta:
-// a) dividir (o quadro #0 é o topo).
-// b) relatorio chamou media; main chamou relatorio.
-// c) media voltaria a rodar primeiro; main seria a última a terminar.
-// d) Antes de dividir: media recebeu quantidade 0 e passou adiante sem
-//    conferir. dividir só fez a conta que pediram.
-// e) Abaixo.
 
 #include <stdio.h>
 
-double dividir(double a, double b) {
-    return a / b;
-}
-
-double media(double soma, int quantidade) {
-    if (quantidade == 0) {
-        return 0;
+char digito(int valor) {
+    if (valor < 10) {
+        return (char)('0' + valor);
     }
-    return dividir(soma, quantidade);
+    return (char)('A' + (valor - 10));
 }
 
-void relatorio(int turma, double soma, int quantidade) {
-    printf("Turma %d: média %.1f\n", turma, media(soma, quantidade));
+void em_base(int n, int base) {
+    if (n < base) {
+        printf("%c", digito(n));
+        return;
+    }
+    em_base(n / base, base);
+    printf("%c", digito(n % base));
+}
+
+void mostrar(int n, int base) {
+    printf("%d na base %d: ", n, base);
+    if (base < 2 || base > 16) {
+        printf("base inválida\n");
+        return;
+    }
+    em_base(n, base);
+    printf("\n");
 }
 
 int main(void) {
-    relatorio(3, 27, 3);
-    relatorio(3, 27, 0);
+    mostrar(255, 16);
+    mostrar(255, 2);
+    mostrar(2026, 8);
+    mostrar(2026, 16);
+    mostrar(46655, 6);
+    mostrar(10, 20);
     return 0;
 }

@@ -1,29 +1,37 @@
-// 0050 · Ponteiros
+// 0050 · Ponteiro para função
 // Exercício E300 · ★★★
 
 #include <stdio.h>
+#include <stdlib.h>
+
+static int alvo = 50;
+
+int por_distancia(const void *a, const void *b) {
+    int x = *(const int *)a;
+    int y = *(const int *)b;
+    int dx = abs(x - alvo);
+    int dy = abs(y - alvo);
+    if (dx != dy) {
+        return (dx > dy) - (dx < dy);
+    }
+    return (x > y) - (x < y);
+}
+
+void mostra(const int *v, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", v[i]);
+    }
+    printf("\n");
+}
 
 int main(void) {
-    double conta_a = -50.25, conta_b = 300.00, conta_c = 12.00;
-    double *menor = &conta_a;
-    double *negativa = NULL;
+    int precos[7] = {47, 58, 50, 39, 53, 61, 44};
 
-    if (conta_b < *menor) {
-        menor = &conta_b;
-    }
-    if (conta_c < *menor) {
-        menor = &conta_c;
-    }
-    if (*menor < 0) {
-        negativa = menor;
-    }
+    qsort(precos, 7, sizeof precos[0], por_distancia);
+    mostra(precos, 7);
 
-    if (negativa != NULL) {
-        printf("Cobri R$ %.2f\n", -(*negativa));
-        *negativa = 0;
-    } else {
-        printf("Nenhuma conta negativa\n");
-    }
-    printf("A: %.2f  B: %.2f  C: %.2f\n", conta_a, conta_b, conta_c);
+    alvo = 60;
+    qsort(precos, 7, sizeof precos[0], por_distancia);
+    mostra(precos, 7);
     return 0;
 }

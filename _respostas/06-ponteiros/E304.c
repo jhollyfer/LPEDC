@@ -1,29 +1,24 @@
-// 0051 · Passagem por referência
+// 0051 · void * e cast
 // Exercício E304 · ★★☆
-//
-// Resposta: *contador++ andava com o ponteiro em vez de somar no valor:
-// o certo é (*contador)++. E zera recebia uma cópia: precisa receber int *
-// e ser chamada com &avulsos.
 
 #include <stdio.h>
 
-void passa(int *contador) {
-    (*contador)++;
+void mostra_vetor(const void *v, size_t n, size_t tam, void (*mostra)(const void *)) {
+    const unsigned char *inicio = v;
+    for (size_t i = 0; i < n; i++) {
+        mostra(inicio + i * tam);
+    }
+    printf("\n");
 }
 
-void zera(int *valor) {
-    *valor = 0;
-}
+void mostra_int(const void *p) { printf("%d ", *(const int *)p); }
+void mostra_double(const void *p) { printf("%.2f ", *(const double *)p); }
 
 int main(void) {
-    int passageiros = 0, avulsos = 5;
+    int senhas[4] = {101, 102, 103, 104};
+    double notas[3] = {7.5, 9.25, 6.0};
 
-    passa(&passageiros);
-    passa(&passageiros);
-    passa(&passageiros);
-    zera(&avulsos);
-
-    printf("Passageiros: %d\n", passageiros);
-    printf("Bilhetes avulsos: %d\n", avulsos);
+    mostra_vetor(senhas, 4, sizeof senhas[0], mostra_int);
+    mostra_vetor(notas, 3, sizeof notas[0], mostra_double);
     return 0;
 }

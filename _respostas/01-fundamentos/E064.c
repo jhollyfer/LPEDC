@@ -1,21 +1,20 @@
-// 0011 · scanf
+// 0011 · Juntando tudo
 // Exercício E064 · ★★☆
-//
-// Resposta: o %d leu o 3 e deixou na fila o '\n' do Enter. O %c não pula
-// espaços nem Enters: leu o '\n' (código 10) e o V ficou sobrando. Com um
-// espaço antes do %c, o scanf pula os espaços e Enters e pega o V.
 
 #include <stdio.h>
+#include <math.h>
 
 int main(void) {
-    int quantidade = 0;
-    char opcao = '?';
+    double valor = 1299.00;
+    double taxa = 0.0199;
+    int n = 12;
 
-    printf("Quantidade: ");
-    scanf("%d", &quantidade);
-    printf("Opção (V/A): ");
-    scanf(" %c", &opcao);
+    double parcela = valor * taxa / (1 - pow(1 + taxa, -n)); // 122.7577...
+    parcela = round(parcela * 100) / 100;                     // 122.76
 
-    printf("%d lanche(s), opção %c (código %d)\n", quantidade, opcao, opcao);
+    double total = parcela * n;
+    printf("%dx de R$ %.2f\n", n, parcela);
+    printf("Total: R$ %.2f\n", total);
+    printf("Juros: R$ %.2f\n", total - valor);
     return 0;
 }

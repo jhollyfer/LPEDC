@@ -54,12 +54,12 @@
 
 ---
 
-### 0001-algoritmo
+### logica1-algoritmo
 - **Conceitos-chave:** programa = implementação concreta de um algoritmo; "instância" = um
   exemplo concreto do problema (um conjunto de dados). Tamanho da instância (ex.: n).
 - **Ideia de exemplo:** mostrar a mesma tarefa (máximo de um vetor) com documentação boa e ruim.
 
-### 0006-primeiro-programa (leiaute — Apêndice A)
+### 0001-primeiro-programa (leiaute — Apêndice A)
 - **Conceitos-chave:** leiaute é para humanos; dois pilares: **espaços** na linha e **indentação**.
   Regras tipográficas de livro: espaço entre palavras (`while`, `=`, `<=` contam como palavras);
   espaço depois (não antes) de pontuação; espaço antes de abrir parêntese e depois de fechá-lo.
@@ -71,7 +71,7 @@
   e pedir para reescrever com bom leiaute; comparar pares de linhas e dizer qual tem melhor leiaute.
   Ferramenta: `indent` (hoje também `clang-format`).
 
-### 0004-binario e 0008-tipos-e-limites (Apêndice C)
+### logica4-binario e 0003-tipos-e-limites (Apêndice C)
 - **Conceitos-chave:** byte = 8 bits = 256 valores. `unsigned int` com s bytes cobre 0..2^(8s)−1 e
   "dá a volta" (módulo 2^(8s)). `int` usa **complemento de dois**: sequência que começa com 1
   representa k − 2^(8s).
@@ -88,23 +88,23 @@
 - **Representação texto vs binária:** −123 como caracteres '-','1','2','3' (4 bytes 45 49 50 51) vs
   complemento de dois em 2 bytes. Daí arquivo-texto × arquivo binário; `atoi` converte.
 
-### 0012-aritmetica (C.3)
+### 0007-aritmetica (C.3)
 - Divisão inteira trunca; com negativos, `-9/2` dá −4 (truncamento para zero), que **não** é o piso
   matemático (−5). Ótima pegadinha para quem usa `/2` em índices.
 
-### 0017-relacionais / 0018-logicos (J.2)
+### 0012-relacionais / 0013-logicos (J.2)
 - Expressão booleana vale 0 ou 1; avaliação da esquerda para a direita com **curto-circuito**.
 - **Pegadinha clássica (usar em vários módulos):** `if (j <= 99 && v[j] < x)` está certo;
   `if (v[j] < x && j <= 99)` pode ler fora do vetor. Aparece de novo na busca em vetor
   (`k >= 0 && v[k] != x`) e na busca em lista (`p != NULL && p->conteudo != x`).
 
-### 0014-atribuicao (J.1)
+### 0009-atribuicao (J.1)
 - Toda expressão tem valor; `y = 3*x + 4` vale 301 e tem o efeito colateral de mudar y.
   `x++` vale o valor antigo, `++x` o novo. Operador vírgula: `t = a, a = b, b = t` faz a troca.
 - **Uso idiomático explicado pelo livro:** `x = f[s++]` (remove da fila), `p[t++] = y` (empilha),
   `x = p[--t]` (desempilha). Bom para mostrar ++/-- "a serviço" de uma estrutura.
 
-### 0031-aleatorios (Apêndice I)
+### 0026-aleatorios (Apêndice I)
 - `rand()` dá 0..RAND_MAX; semente com `srand(time(NULL))`; sem semente o sistema usa uma fixa.
 - **Inteiro aleatório em a..b** (método do livro, parafraseado): converter `rand()` em real
   x em [0,1) dividindo por (RAND_MAX + 1.0); multiplicar por (b − a + 1) e truncar; somar a.
@@ -112,7 +112,7 @@
   geradores antigos alternam par/ímpar); por que `RAND_MAX * 5 / 6` pode estourar int; o que muda
   se dividir por `RAND_MAX` em vez de `RAND_MAX + 1` (o valor b fica raríssimo / pode passar de b).
 
-### 0036-pilha-de-chamadas (6.5)
+### 0031-pilha-de-chamadas (6.5)
 - **Explicação boa:** cada chamada cria um "espaço de trabalho" (parâmetros + locais) que é
   empilhado; ao terminar é descartado e o de baixo é reativado no ponto exato onde parou. Recursão
   é só o caso em que F e G são a mesma função.
@@ -122,7 +122,7 @@
 - **Exercício:** simular com pilha explícita uma função recursiva simples (soma dos positivos de
   x[1..n]).
 
-### 0037-recursao
+### 0032-recursao
 - **Método (parafraseado):** se a instância é pequena, resolva direto; senão, reduza a uma instância
   menor do **mesmo** problema, resolva-a recursivamente e volte à original.
 - **Roteiro de verificação de função recursiva (excelente, usar como "checklist"):** (1) escreva o
@@ -145,7 +145,7 @@
   - soma recursiva dos positivos de v[0..n-1]; faz sentido n = 0? (sim, soma 0).
   - soma dos dígitos (132 → 6); piso de log2 n recursivo; max − min recursivo.
 
-### 0038-recursao-na-pratica
+### 0033-recursao-na-pratica
 - **Fibonacci:** a versão recursiva ingênua recalcula F(2) várias vezes para F(4); pedir a árvore de
   chamadas indentada de F(5) (o livro dá a de F(3): F(3) → F(2) → F(1), F(0); depois F(1)).
 - **Euclides recursivo:** mdc(m, n) = m se n = 0; senão mdc(n, m % n).
@@ -154,14 +154,14 @@
 - **Exercício de rastreio:** função ff que imprime sua chamada com recuo proporcional à
   profundidade — rodar com (7, 0). (Usar com o `=`/`==` corrigido ou como pegadinha.)
 
-### 0039-modulos / 0079-tad (visão do Feofiloff)
+### 0034-modulos / 0074-tad (visão do Feofiloff)
 - O livro não monta TADs completos, mas dá o fundamento: **documentação = interface (.h)**,
   **código = implementação (.c)**. O Apêndice K mostra amostras comentadas de `stdlib.h`,
   `stdio.h`, `string.h`, `limits.h`, `time.h` — bom material para mostrar "um .h é um contrato".
 - Exercício útil: "uma fila é um pacote com três objetos (vetor e dois índices); escreva as funções
   sem variáveis globais" — prepara a passagem para struct + TAD.
 
-### 0042-vetores / 0043-vetores-e-funcoes (Capítulo 3)
+### 0037-vetores / 0038-vetores-e-funcoes (Capítulo 3)
 - **Vetor** = sequência de objetos do mesmo tipo em posições consecutivas. Espaço `v[N]`, conteúdo
   `v[0..n-1]`, com 0 ≤ n ≤ N; vazio se n = 0, cheio se n = N.
 - **Busca** (decisão: devolver −1 se não achar): varrer **do fim para o começo**, `k = n-1` e
@@ -189,9 +189,9 @@
   (quadrático); versão com `v[i-z] = v[i]` que acessa v[−1].
 - **Ideias de exemplos:** vetor 111, 222, 0, 0, 333, 0, 444, 0 → 111, 222, 333, 444 (n passa de 8 a 4).
   Remoção do índice 3 em 000..555 → 000, 111, 222, 444, 555.
-- **Versões recursivas** de busca, remoção, inserção e remove-zeros: bons exercícios de 0037.
+- **Versões recursivas** de busca, remoção, inserção e remove-zeros: bons exercícios de 0032.
 
-### 0045-caracteres (Apêndice B)
+### 0040-caracteres (Apêndice B)
 - `char` e `unsigned char` são duas leituras dos mesmos 8 bits (−128..127 e 0..255). Tabela ASCII
   para 0..127; acima disso depende (ISO 8859-1 no livro). Em ISO-Latin1, char negativo c tem o mesmo
   símbolo que unsigned char c+256 → acentuadas ficam "antes" das sem acento em `char`.
@@ -201,7 +201,7 @@
 - Exercícios: diferença entre 'O', '0' e '\0'; decodificar 70 65 67 73 76 32 ... como texto;
   `isspace` recebe valor de unsigned char ou EOF.
 
-### 0046-strings (Apêndice G)
+### 0041-strings (Apêndice G)
 - String = segmento do vetor de char até o **primeiro** '\0'; comprimento não conta o '\0';
   endereço da string = endereço do 1º caractere.
 - Implementações simples de `strlen`, `strcpy` (inclui o '\0') e `strcmp` (compara como unsigned
@@ -213,7 +213,7 @@
 - Exercícios: contar vogais; colapsar espaços repetidos; converter string binária em número; imitar
   `atoi`; extrair s[i..j] sem alocar.
 
-### 0049..0052 ponteiros (Apêndice D)
+### 0044..0052 ponteiros (Apêndice D)
 - Memória = sequência de bytes numerados; `&i` é o endereço; ponteiro guarda endereço; `NULL` é
   inválido; `*p` é o objeto apontado.
 - **Troca:** versão errada com `int i, int j` (recebe cópias) e certa com `int *p, int *q` +
@@ -223,13 +223,13 @@
 - Exercícios: `hm(t, &h, &m)` minutos → horas e minutos; `mm(v, n, &min, &max)`; se int tem 8 bytes
   e v[0] está em 55000, quanto vale v+3? (55024); sentido de `*&i` e `&&i`.
 
-### 0054-ponteiro-para-ponteiro (soluções 4.4.2, 4.5.3, 15.3.1)
+### 0049-ponteiro-para-ponteiro (soluções 4.4.2, 4.5.3, 15.3.1)
 - **Achado valioso:** remover/inserir em lista **sem cabeça** com um parâmetro `célula **pp`:
   a mesma função remove a primeira célula (`Remv(&lst)`) ou a sucessora de p (`Remv(&p->seg)`).
   Idem inserir. E inserir em BST com `árvore *eer` evita o `if` da árvore vazia.
 - Precedência: `&p->seg` é `&(p->seg)`.
 
-### 0058..0062 memória dinâmica (Apêndice F)
+### 0053..0062 memória dinâmica (Apêndice F)
 - `malloc` devolve `void *`; usar `sizeof`; **verificar NULL** (o livro omite por brevidade, mas
   manda o aluno verificar sempre). `free` só no bloco inteiro alocado por malloc. Depois de `free`,
   atribuir NULL ao ponteiro (proteção contra **ponteiro solto**, explorável por hackers).
@@ -239,22 +239,22 @@
   elemento A[i][j].
 - Exercício: ler n e depois n inteiros e imprimi-los ao contrário, sem limite para n.
 
-### 0064 / 0067 structs (Apêndice E)
+### 0059 / 0062 structs (Apêndice E)
 - Registro com nome (`struct dma {int dia, mes, ano;}`), operador `.`; ponteiro para struct e
   `p->mes` ≡ `(*p).mes`; `*p.dia` é outra coisa (`*(p.dia)`).
 - Exercícios: dias entre duas datas; FimEvento(data, duração); **TAD racional** com p/q, q > 0 e
-  mdc(p, q) = 1: criar, negar, somar, multiplicar, dividir (ótimo para 0079).
+  mdc(p, q) = 1: criar, negar, somar, multiplicar, dividir (ótimo para 0074).
 
-### 0065-typedef (J.3)
+### 0060-typedef (J.3)
 - **Truque para ler typedef:** escreva a declaração de uma variável do tipo desejado e ponha
   `typedef` na frente — o nome da variável vira nome de tipo.
 - Tipo de dado = conjunto de valores + operações (definição que conecta com TAD).
 
-### 0040-preprocessador (J.4)
+### 0035-preprocessador (J.4)
 - `#include` copia o arquivo; `#define` substitui texto. Exemplo do pré-processamento de um
   programa com `MAX` e `EXIT_SUCCESS`.
 
-### 0072 / 0074 arquivos e argumentos (Apêndice H)
+### 0067 / 0069 arquivos e argumentos (Apêndice H)
 - `fopen` devolve `FILE *` ou NULL; `fscanf` devolve quantos itens leu (usar para detectar fim);
   `stdin`/`stdout` são arquivos já abertos.
 - **Lição de projeto (getc):** `getc` devolve **int**, não char, porque precisa de um valor fora
@@ -266,7 +266,7 @@
 - Exercícios: copiar arquivo; remover comentários de um .c; contar ocorrências de cada caractere
   (inspirado no `wc`).
 
-### 0076-eficiencia / 0077-big-o
+### 0071-eficiencia / 0072-big-o
 - **Conceito do livro:** "consumo de tempo proporcional a f(n) no pior caso", com unidade de tempo
   que depende da máquina, não de n. Conta-se a operação dominante (comparações).
 - **Explicação boa com números (reaproveitar em tabela):**
@@ -282,7 +282,7 @@
 - Exercícios: tabela de ⌊log2 n⌋ para n = 10..10^5; se a busca binária leva t em n elementos, quanto
   leva em n²? (≈ 2t).
 
-### 0078-invariantes ⭐ (o grande diferencial do livro)
+### 0073-invariantes ⭐ (o grande diferencial do livro)
 - **Definição:** relação entre os valores das variáveis que vale **no início de cada iteração**
   (imediatamente antes do teste do laço). Serve para explicar e para provar por indução.
 - **Roteiro de prova (usar como molde de exercício):** (1) vale antes da 1ª iteração; (2) se vale no
@@ -307,12 +307,12 @@
 - **Exercício projeto:** função lg(n) = ⌊log2 n⌋ iterativa, com invariante enunciado, testada
   contra `log` da math.h.
 
-### 0080-vetor-dinamico
+### 0075-vetor-dinamico
 - O livro **não** trata realloc/vetor que cresce; contribui com inserção/remoção em vetor
   (Cap. 3) e com a ideia de pacote (vetor + n). Usar o Cap. 3 como as operações do TAD lista
   sequencial; a parte de crescer vem da PUC.
 
-### 0081-lista-encadeada ⭐
+### 0076-lista-encadeada ⭐
 - **Conceitos-chave:** lista = sequência de registros (células), cada um com um conteúdo e o
   endereço da seguinte (NULL na última). Células consecutivas **não** ficam em posições
   consecutivas da memória. O endereço da lista é o endereço da 1ª célula; "p é uma lista" é atalho
@@ -334,7 +334,7 @@
   1, outro anda 2 — técnica "lebre e tartaruga"); remover a k-ésima; inserir após a k-ésima;
   **inverter só mexendo nos ponteiros**; projeto: contar ocorrências de cada palavra de um texto.
 
-### 0082-lista-busca-remocao
+### 0077-lista-busca-remocao
 - **Busca** (com cabeça): p = lst->seg; avança enquanto `p != NULL && p->conteudo != x`; devolve
   p (NULL se não achou). Correta com lista vazia. Versão recursiva olha lst->seg.
 - **Remoção — decisão de projeto importante:** em vez de receber a célula a remover, receber a
@@ -349,7 +349,7 @@
 - **Exercícios:** remover todas as ocorrências de x (iterativo e recursivo); remover a célula de
   conteúdo mínimo; versão sem cabeça (resposta do livro: devolver o novo início, ou usar `**`).
 
-### 0083-lista-ordenada
+### 0078-lista-ordenada
 - **Inserção:** nova célula **depois** de p (aloca, nova->seg = p->seg, p->seg = nova). Funciona no
   fim da lista; com cabeça, inserir após a cabeça = inserir no início. Inserir *antes* de p numa lista
   simples: "não há como" (resposta do livro ao 4.5.2) — bom exercício de reflexão.
@@ -364,7 +364,7 @@
 - **Intercalar duas listas crescentes sem alocar** (9.1.10) e **mergesort de lista** (9.4.3) —
   exercícios de "juntando tudo".
 
-### 0084-lista-dupla / 0085-lista-circular
+### 0079-lista-dupla / 0080-lista-circular
 - Só em 4.8: circular (última aponta para a primeira, com ou sem cabeça; sem cabeça "primeira" e
   "última" perdem o sentido); dupla (cada célula com anterior e seguinte).
 - **Checklist de perguntas para qualquer variante de lista (ótimo como roteiro de exercício):**
@@ -375,7 +375,7 @@
 - Fila em lista circular com cabeça (5.4.2): basta o endereço da cabeça; 1º elemento na 2ª célula,
   último na célula anterior à cabeça.
 
-### 0087-pilha
+### 0082-pilha
 - **Definição:** sequência dinâmica em que se remove sempre o **último** inserido (LIFO). Vetor
   p[0..N-1], ocupado p[0..t-1], topo em t−1; vazia t = 0, cheia t = N.
 - Idiomas: desempilhar `x = p[--t]`; consultar `p[t-1]`; empilhar `p[t++] = y`.
@@ -386,13 +386,13 @@
   2,3,1,4). Quais das 24 são possíveis? (14; as impossíveis contêm o padrão "3..1..2", ex.: 3,1,2,4
   ou 4,1,2,3).
 
-### 0088-pilha-encadeada
+### 0083-pilha-encadeada
 - Lista **com cabeça**, topo na **2ª célula** (logo após a cabeça), não no fim. Empilhar = inserir
   após a cabeça; desempilhar = remover após a cabeça. Vazia se cabeça->seg == NULL.
 - Exercícios: versão sem cabeça (pilha = endereço da 1ª célula); refazer BemFormada e infixa →
   posfixa com pilha encadeada.
 
-### 0089-pilha-aplicacoes ⭐
+### 0084-pilha-aplicacoes ⭐
 - **Parênteses e chaves bem-formados:** percorrer a string; abre → empilha; `)` exige topo `(`,
   `}` exige topo `{`, senão malformada; no fim, bem-formada sse pilha vazia. A pilha nunca passa de
   strlen(s). Exemplo: `( { ) }` é malformada.
@@ -409,7 +409,7 @@
 - Exercícios: aplicar a (A+B)*D+E/(F+A*D)+C (resposta: A B + D * E F A D * + / + C +); altura
   máxima da pilha; versão sem o parêntese externo; versão que detecta expressão incorreta.
 
-### 0090-fila
+### 0085-fila
 - **Definição:** remove-se sempre o que está há **mais** tempo (FIFO). Vetor f[0..N-1], ocupado
   f[s..t-1]; vazia s == t; cheia t == N (versão não circular). Remover `x = f[s++]`; inserir
   `f[t++] = y`. Inserir em fila cheia = **transbordamento**.
@@ -419,7 +419,7 @@
 - Exercício: com a convenção f[s..t] (fechada), escrever remover/inserir; funções tamanho,
   remove e insere da fila circular sem globais.
 
-### 0091-fila-encadeada
+### 0086-fila-encadeada
 - Lista **sem cabeça**, 1º da fila na 1ª célula, último na última; dois ponteiros s e t; vazia
   s = t = NULL (um é NULL sse o outro é).
 - Remover recebe `**es, **et` porque pode ter de mudar ambos (se a fila esvaziar, t vira NULL).
@@ -427,7 +427,7 @@
 - Exercícios: fila em lista com cabeça; em lista circular com cabeça (só o ponteiro da cabeça);
   em lista dupla sem cabeça.
 
-### 0115-bfs (5.2 — "distâncias em uma rede") ⭐
+### 0110-bfs (5.2 — "distâncias em uma rede") ⭐
 - **Cenário:** n cidades, estradas de mão única em matriz A (A[x][y] = 1 se há estrada x→y).
   Distância de o a x = menor nº de estradas. d[x] = −1 representa ∞.
 - **Algoritmo (descrever passo a passo):** d[] = −1; d[o] = 0; fila f com o; enquanto a fila não
@@ -437,9 +437,9 @@
   máximo de 1; toda estrada que sai de f[0..s-1] chega em f[0..t-1].
 - **Exercício:** formiga num tabuleiro 10×10 com casas bloqueadas (−1) indo de (1,1) a (10,10),
   movendo-se para cima/baixo/esquerda/direita — labirinto via BFS.
-- (Para 0114: a matriz de adjacência aparece aqui naturalmente.)
+- (Para 0109: a matriz de adjacência aparece aqui naturalmente.)
 
-### 0094-busca-sequencial / 0095-busca-binaria ⭐
+### 0089-busca-sequencial / 0090-busca-binaria ⭐
 - **Reformulação inteligente:** em vez de "onde x está", perguntar **"onde x deveria estar"**:
   achar j em 0..n com v[j-1] < x ≤ v[j] (com v[−1] = −∞ e v[n] = +∞ imaginários). Daí resolver o
   problema original é comparar x com v[j].
@@ -467,7 +467,7 @@
 - Citação de Manber usada pelo livro: busca binária está para os algoritmos como a roda para a
   mecânica (simples, elegante, imensamente importante).
 
-### 0097-selection-sort
+### 0092-selection-sort
 - **Ideia:** escolher o menor, depois o segundo menor... Para i de 0 a n−2: achar o índice min do
   menor de v[i..n-1] e trocar com v[i].
 - **Invariantes:** permutação; v[0..i-1] crescente; v[i-1] ≤ todos de v[i..n-1] → os i primeiros já
@@ -476,7 +476,7 @@
   `<=` no lugar de `<` na escolha do min mantém a ordenação mas afeta estabilidade.
 - **Estável?** Não (a troca de longa distância pula elementos iguais). Ex.: 2a 2b 1 → 1 2b 2a.
 
-### 0098-insertion-sort
+### 0093-insertion-sort
 - **Ideia (baralho):** para j de 1 a n−1: guardar x = v[j]; deslocar para a direita os elementos
   de v[0..j-1] maiores que x; pôr x no buraco.
 - **Invariantes:** permutação do original; v[0..j-1] crescente. Pior caso ≈ n²/2 comparações
@@ -490,7 +490,7 @@
   estritamente crescente (impossível com repetidos — resposta do livro); versão recursiva;
   ordenar strings, structs, linhas de um arquivo; ordenar lista encadeada.
 
-### 0099-merge-sort ⭐
+### 0094-merge-sort ⭐
 - **Intercalação:** dados v[p..q-1] e v[q..r-1] crescentes, deixar v[p..r-1] crescente usando
   vetor auxiliar w de r−p posições: enquanto as duas metades têm elementos, copia o menor
   (com `<=` para estabilidade); depois copia a sobra; depois copia w de volta. Tempo ∝ r − p.
@@ -509,7 +509,7 @@
   maximais, ex.: 1 2 3 | 0 2 4 6 | 4 5 6 7 8 9); mergesort de lista encadeada sem alocar células;
   comparar experimentalmente com inserção e seleção em vetores aleatórios.
 
-### 0100-quick-sort ⭐
+### 0095-quick-sort ⭐
 - **Problema da separação** (formulado de propósito de forma vaga): pequenos à esquerda, grandes
   à direita, sem vetor auxiliar e sem lado vazio. Formulação usada: achar j com
   v[p..j-1] ≤ v[j] < v[j+1..r].
@@ -534,7 +534,7 @@
   55 44 22 11 66 33; versão iterativa com pilhas de (p, r); rearranjar negativos/nulos à esquerda e
   positivos à direita (aquecimento de separação); quicksort de lista.
 
-### 0101-comparando (estabilidade, qsort)
+### 0096-comparando (estabilidade, qsort)
 - **Estabilidade:** não altera a ordem relativa de iguais. **Exemplo do livro (excelente):** datas
   (dia, mês) já ordenadas por dia; ordenar por mês com algoritmo estável dá ordem cronológica; com
   instável, não necessariamente. Isso motiva "ordenar por chave secundária e depois pela primária".
@@ -544,7 +544,7 @@
 - `qsort` da stdlib: vetor, nº de elementos, tamanho, função de comparação (o livro só pede para
   "se familiarizar").
 
-### 0102-arvores / 0103-arvore-binaria
+### 0097-arvores / 0098-arvore-binaria
 - **Nó** com conteúdo, esq e dir; filho, pai, folha (sem filhos). Definição formal de árvore
   binária como conjunto de nós sem ciclos, cada nó com no máximo um pai, exatamente uma raiz e
   filhos esquerdo/direito distintos ("o programador raramente pensa nisso porque constrói nó a nó").
@@ -567,7 +567,7 @@
   posfixa; relação entre árvores e sequências bem-formadas de parênteses; desenhar árvore de 17 nós
   com altura mínima (altura 4).
 
-### 0104-bst-busca-insercao
+### 0099-bst-busca-insercao
 - **Definição:** para todo nó X, chaves da subárvore esquerda ≤ X.chave ≤ chaves da direita;
   equivalente: a varredura e-r-d dá chaves em ordem crescente. "BST generaliza lista crescente assim
   como árvore binária generaliza lista."
@@ -581,7 +581,7 @@
 - Exercícios: mínimo e máximo; chave seguinte; **vetor crescente → BST balanceada** (raiz = meio,
   recursão nas metades); BST → vetor crescente; relação BST × busca binária.
 
-### 0105-bst-remocao
+### 0100-bst-remocao
 - **Remover a raiz:** se não tem filho esquerdo, a nova raiz é o direito; senão, achar q = nó
   **anterior** em e-r-d (mais à direita da subárvore esquerda) e seu pai p; se p ≠ r, p->dir recebe
   q->esq e q->esq recebe r->esq; q->dir recebe r->dir; liberar r; devolver q.
@@ -590,19 +590,19 @@
 - Exercício ótimo: inserir 50, 30, 70, 20, 40, 60, 80, 15, 25, 35, 45, 36 numa BST vazia, desenhar e
   remover 30 (o anterior de 30 é 25, que sobe; 20 continua filho esquerdo).
 
-### 0106-avl
+### 0101-avl
 - Só a definição: balanceada no sentido AVL se, em cada nó, as alturas das subárvores diferem de no
   máximo 1. Exercício: decidir se uma árvore é AVL **visitando cada nó uma vez** (calcular altura e
   balanceamento juntos, devolvendo −2/ou flag quando falha). Rotações não aparecem (remete a
   Sedgewick e CLRS). Observação útil: inserções/remoções simples desbalanceiam.
 
-### 0107-heap ⭐
+### 0102-heap ⭐
 - **Max-heap** em v[1..m] (índices a partir de 1!): v[⌊f/2⌋] ≥ v[f] para f = 2..m. Visão de árvore:
   raiz 1, pai de f é f/2, filhos de p são 2p e 2p+1. Todo pai é pelo menos tão valioso quanto os
   filhos; v[1] é um máximo. Nº de camadas = 1 + ⌊log2 m⌋; mais da metade dos elementos fica na
   última camada.
 - Observação do livro: a palavra **heap** também nomeia a área de alocação dinâmica — **não tem
-  relação** (pegadinha de vocabulário para 0058).
+  relação** (pegadinha de vocabulário para 0053).
 - **Inserção (sobe):** pôr o novo em v[m+1]; enquanto f > 1 e pai < filho, troca e sobe. ≤ log2(m+1).
 - **Sacode (desce) em quase-heap** (só a raiz pode estar fora do lugar): f = 2; enquanto f ≤ m: se
   f < m e v[f] < v[f+1], f++ (escolhe o **filho mais valioso**); se pai ≥ v[f], para; senão troca e
@@ -614,7 +614,7 @@
   por que "ordenar decrescente para fazer heap" é ineficiente; heap representado por árvore
   encadeada; trocar dois elementos mantém heap?
 
-### 0108-heapsort
+### 0103-heapsort
 - **Duas fases:** (1) transformar v[1..n] em max-heap (inserindo v[2], v[3], ...); (2) para m de n
   até 2: trocar v[1] com v[m] e sacudir v[1..m-1]. Não usa vetor auxiliar.
 - **Invariantes da 2ª fase:** permutação; v[1..m] heap; v[1..m] ≤ v[m+1..n]; v[m+1..n] crescente.

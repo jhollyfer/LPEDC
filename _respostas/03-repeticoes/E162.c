@@ -1,26 +1,24 @@
-// 0027 · For
+// 0027 · Juntando tudo
 // Exercício E162 · ★★★
-//
-// Resposta: 4 linhas: (0, 20), (3, 18), (6, 16), (9, 14); depois
-// "Fim: i = 12, j = 12". A versão com while vem logo depois e mostra o mesmo.
 
 #include <stdio.h>
 
 int main(void) {
-    int i, j;
-    for (i = 0, j = 20; i < j; i += 3, j -= 2) {
-        printf("i = %2d, j = %2d\n", i, j);
-    }
-    printf("Fim: i = %d, j = %d\n", i, j);
+    int dias_no_mes = 31;
+    int primeiro = 4; // 0 = domingo, ..., 4 = quinta
 
-    // a mesma coisa com while
-    i = 0;
-    j = 20;
-    while (i < j) {
-        printf("i = %2d, j = %2d\n", i, j);
-        i += 3;
-        j -= 2;
+    printf("  D  S  T  Q  Q  S  S\n");
+    for (int i = 0; i < primeiro; i++) {
+        printf("   ");
     }
-    printf("Fim: i = %d, j = %d\n", i, j);
+    for (int dia = 1; dia <= dias_no_mes; dia++) {
+        printf("%3d", dia);
+        if ((primeiro + dia) % 7 == 0) {
+            printf("\n"); // chegou no sábado
+        }
+    }
+    if ((primeiro + dias_no_mes) % 7 != 0) {
+        printf("\n"); // fecha a última linha se ela não acabou no sábado
+    }
     return 0;
 }

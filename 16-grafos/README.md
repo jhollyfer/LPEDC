@@ -56,9 +56,9 @@ verdes são as que a busca usou (a árvore da busca ou a rota final).
 
 ## Antes de começar
 
-Você vai usar sem cerimônia: matrizes (0044), structs e `typedef` (0064 e
-0065), `malloc` e `free` (0059), lista encadeada (0081), pilha (0087), fila
-(0090), recursão (0037) e, no último assunto, heap (0107). Se algum desses
+Você vai usar sem cerimônia: matrizes (0039), structs e `typedef` (0059 e
+0060), `malloc` e `free` (0054), lista encadeada (0076), pilha (0082), fila
+(0085), recursão (0032) e, no último assunto, heap (0102). Se algum desses
 estiver enferrujado, dê uma revisada antes.
 
 Os vértices são sempre números de 0 a V-1, e o nome de cada um fica num
@@ -66,22 +66,22 @@ vetor de strings à parte. Nos exemplos, os vizinhos são examinados em ordem
 crescente de índice. Isso decide empates e a ordem da visita: se você mudar a
 numeração, a saída muda, e não está errada.
 
-O assunto 0114 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
+O assunto 0109 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
 `rodar` compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
 assuntos, cada arquivo traz tudo dentro dele, com matriz de adjacência, para
 o algoritmo ficar inteiro na tela.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0114](#0114--grafos) | Grafos | [`0114-grafos/`](0114-grafos/) |
-| [0115](#0115--bfs-busca-em-largura) | BFS: busca em largura | [`0115-bfs/`](0115-bfs/) |
-| [0116](#0116--dfs-busca-em-profundidade) | DFS: busca em profundidade | [`0116-dfs/`](0116-dfs/) |
-| [0117](#0117--dijkstra-caminho-mínimo) | Dijkstra: caminho mínimo | [`0117-dijkstra/`](0117-dijkstra/) |
-| [0118](#0118--juntando-tudo-a-central-de-entregas) | Juntando tudo: a central de entregas | [`0118-juntando-tudo/`](0118-juntando-tudo/) |
+| [0109](#0109--grafos) | Grafos | [`0109-grafos/`](0109-grafos/) |
+| [0110](#0110--bfs-busca-em-largura) | BFS: busca em largura | [`0110-bfs/`](0110-bfs/) |
+| [0111](#0111--dfs-busca-em-profundidade) | DFS: busca em profundidade | [`0111-dfs/`](0111-dfs/) |
+| [0112](#0112--dijkstra-caminho-mínimo) | Dijkstra: caminho mínimo | [`0112-dijkstra/`](0112-dijkstra/) |
+| [0113](#0113--juntando-tudo-a-central-de-entregas) | Juntando tudo: a central de entregas | [`0113-juntando-tudo/`](0113-juntando-tudo/) |
 
 ---
 
-## 0114 · Grafos
+## 0109 · Grafos
 
 A prefeitura inaugurou cinco ciclovias ligando Centro, Praia, Feira, Parque e
 Estádio. Você quer um app que responda: de onde dá para ir direto para onde?
@@ -129,7 +129,7 @@ Vamos ver na prática. Cada ciclovia liga um 1 em **duas** casas da matriz,
 `adj[a][b]` e `adj[b][a]`, por isso a matriz de um grafo não dirigido é
 espelhada na diagonal. A Feira tem três vizinhos, e a linha 2 tem três 1:
 
-<p align="center"><img src="0114-grafos/ideia.svg" alt="Diagrama da ideia: Grafos" width="858"></p>
+<p align="center"><img src="0109-grafos/ideia.svg" alt="Diagrama da ideia: Grafos" width="858"></p>
 
 No código, as arestas entram como pares e o grau sai somando cada linha:
 
@@ -182,14 +182,14 @@ Repara no fluxograma: primeiro o programa monta a estrutura (uma volta por
 aresta, marcando os dois sentidos) e só depois responde perguntas sobre ela.
 Todo algoritmo de grafo deste módulo segue essa ordem:
 
-<p align="center"><img src="0114-grafos/fluxograma.svg" alt="Fluxograma: Grafos" width="441"></p>
+<p align="center"><img src="0109-grafos/fluxograma.svg" alt="Fluxograma: Grafos" width="441"></p>
 
 A última linha não é coincidência. Cada aresta encosta em dois vértices e
 soma 1 no grau de cada um, então a soma dos graus é sempre o dobro do número
 de arestas. Isso serve de teste rápido: se a soma der ímpar, você esqueceu um
 dos sentidos em algum lugar.
 
-O exemplo A228 mostra a outra representação, a lista de adjacência, como um
+O exemplo A218 mostra a outra representação, a lista de adjacência, como um
 TAD (`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
 
 > [!WARNING]
@@ -210,13 +210,13 @@ TAD (`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
 > [!NOTE]
 > **Pergunta para você:** se a prefeitura abrir uma ciclovia entre Praia e
 > Estádio, quais números da saída mudam? Preveja a nova matriz e a soma dos
-> graus antes de mudar o A227.
+> graus antes de mudar o A217.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0114-grafos/`](0114-grafos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0109-grafos/`](0109-grafos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A227 · A ciclovia na matriz**
+**Exemplo A217 · A ciclovia na matriz**
 
 ```c
 #include <stdio.h>
@@ -264,10 +264,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/A227.c
+~/LPEDC/rodar 16-grafos/0109-grafos/A217.c
 ```
 
-**Exemplo A228 · Quem segue quem: lista de adjacência**
+**Exemplo A218 · Quem segue quem: lista de adjacência**
 
 ```c
 #include <stdio.h>
@@ -308,12 +308,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/A228.c
+~/LPEDC/rodar 16-grafos/0109-grafos/A218.c
 ```
 
 #### Exercícios
 
-**Exercício E679** · ★☆☆
+**Exercício E649** · ★☆☆
 
 Uma companhia aérea regional tem voos diretos, de ida e volta, entre
 quatro capitais: Recife (0), Salvador (1), Fortaleza (2) e Natal (3). Os
@@ -343,10 +343,10 @@ Voos diretos: 4
 3. Resposta esperada: a matriz acima e "Voos diretos: 4".
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/E679.c
+~/LPEDC/rodar 16-grafos/0109-grafos/E649.c
 ```
 
-**Exercício E680** · ★☆☆
+**Exercício E650** · ★☆☆
 
 Depois do churrasco, a turma anotou quem ficou devendo Pix para quem num
 grafo DIRIGIDO: deve[i][j] == 1 quer dizer que i deve para j. Sem rodar,
@@ -364,10 +364,10 @@ preveja o que o programa abaixo mostra. Só depois rode e confira.
    Sem dívidas: Rui
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/E680.c
+~/LPEDC/rodar 16-grafos/0109-grafos/E650.c
 ```
 
-**Exercício E681** · ★★☆
+**Exercício E651** · ★★☆
 
 O bairro tem quatro esquinas, A (0), B (1), C (2) e D (3). A prefeitura
 mandou a lista de ruas como um vetor de struct, uma entrada por SENTIDO
@@ -396,14 +396,14 @@ Mão única: 3, mão dupla: 2
 1. Para cada struct do vetor, adj[r.de][r.para] = 1 (só nesse sentido).
 2. Olhe cada par uma vez só: i de 0 a 3 e j de i + 1 a 3. Se
    adj[i][j] e adj[j][i] valem 1, é mão dupla; se só um vale 1, mão única.
-3. A letra da esquina i é 'A' + i (char é número, assunto 0045).
+3. A letra da esquina i é 'A' + i (char é número, assunto 0040).
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/E681.c
+~/LPEDC/rodar 16-grafos/0109-grafos/E651.c
 ```
 
-**Exercício E682** · ★★☆
+**Exercício E652** · ★★☆
 
 Este programa tem DOIS erros de propósito. Ele monta o grafo NÃO dirigido
 do grupo de estudos (quem estuda com quem) e mostra o grau de cada pessoa.
@@ -430,12 +430,12 @@ Soma dos graus: 8
    adj[b][a] = 1). Consertado, mostra a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/E682.c
+~/LPEDC/rodar 16-grafos/0109-grafos/E652.c
 ```
 
-**Exercício E683** · ★★★
+**Exercício E653** · ★★★
 
-Pegue a matriz das ciclovias do exemplo A227 (já está no esqueleto) e
+Pegue a matriz das ciclovias do exemplo A217 (já está no esqueleto) e
 converta para LISTA de adjacência alocada com malloc: um vetor de 5
 ponteiros, cada um apontando para a lista encadeada dos vizinhos daquele
 ponto. Regras:
@@ -468,10 +468,10 @@ Nós alocados: 10
    guardada nos dois sentidos.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/E683.c
+~/LPEDC/rodar 16-grafos/0109-grafos/E653.c
 ```
 
-**Exercício E684** · ★★★
+**Exercício E654** · ★★★
 
 Você está montando a "sugestão de amizade" de uma rede social. A amizade é
 recíproca (grafo não dirigido) e as pessoas são Ana (0), Bia (1), Caio (2),
@@ -506,12 +506,12 @@ Duda e Edu: 2 amigos em comum
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0114-grafos/E684.c
+~/LPEDC/rodar 16-grafos/0109-grafos/E654.c
 ```
 
 ---
 
-## 0115 · BFS: busca em largura
+## 0110 · BFS: busca em largura
 
 Você quer uma indicação para a vaga que a Rita, recrutadora, está anunciando
 no LinkedIn. Você não conhece a Rita. Conhece o Max e a Nina; eles conhecem
@@ -531,7 +531,7 @@ explorando o grafo em ondas, como uma pedra jogada no lago:
 - onda 2: os vizinhos deles que ninguém viu ainda (Otto e Pedro);
 - onda 3: Rita.
 
-Para visitar na ordem das ondas, a BFS usa uma **fila** (assunto 0090): quem
+Para visitar na ordem das ondas, a BFS usa uma **fila** (assunto 0085): quem
 foi descoberto primeiro é processado primeiro. O laço é sempre o mesmo: tira
 `u` da frente da fila e, para cada vizinho `v` ainda não descoberto, anota
 `dist[v] = dist[u] + 1`, guarda `pai[v] = u` e põe `v` no fim da fila.
@@ -549,7 +549,7 @@ Vamos ver na prática. As setas verdes são as arestas da árvore da BFS (cada
 uma liga um vértice a quem o descobriu); o número em cima de cada pessoa é a
 distância; embaixo, a fila na ordem em que cada um entrou:
 
-<p align="center"><img src="0115-bfs/ideia.svg" alt="Diagrama da ideia: BFS: busca em largura" width="858"></p>
+<p align="center"><img src="0110-bfs/ideia.svg" alt="Diagrama da ideia: BFS: busca em largura" width="858"></p>
 
 O código monta a matriz, roda a BFS a partir de Lia e reconstrói o caminho:
 
@@ -616,7 +616,7 @@ Repara no fluxograma: a pergunta "a fila esvaziou?" controla tudo. Cada volta
 tira um vértice e pode colocar vários; quando ninguém novo aparece, a fila
 seca e a busca termina:
 
-<p align="center"><img src="0115-bfs/fluxograma.svg" alt="Fluxograma: BFS: busca em largura" width="578"></p>
+<p align="center"><img src="0110-bfs/fluxograma.svg" alt="Fluxograma: BFS: busca em largura" width="578"></p>
 
 ### Passo a passo
 
@@ -636,9 +636,9 @@ quando Nina olha para ele, nada acontece:
 A distância só cresce na fila: primeiro saem todos os de distância 1, depois
 todos os de 2. Por isso o primeiro caminho que alcança Rita é o mais curto.
 Isso vale porque toda aresta "custa" 1. Com pesos diferentes (minutos, reais)
-a BFS erra, e é aí que entra Dijkstra (assunto 0117).
+a BFS erra, e é aí que entra Dijkstra (assunto 0112).
 
-O exemplo A230 usa a mesma BFS numa grade: cada casa de um galpão é um
+O exemplo A220 usa a mesma BFS numa grade: cada casa de um galpão é um
 vértice e os vizinhos são as casas de cima, de baixo, da esquerda e da direita.
 Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 
@@ -660,13 +660,13 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 > [!NOTE]
 > **Pergunta para você:** se a conexão entre Max e Otto sumir, qual passa a ser
 > o caminho até Rita, e quem descobre Otto? Preveja a nova tabela antes de
-> apagar o par `{1, 3}` no A229.
+> apagar o par `{1, 3}` no A219.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0115-bfs/`](0115-bfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0110-bfs/`](0110-bfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A229 · A recrutadora a três conexões**
+**Exemplo A219 · A recrutadora a três conexões**
 
 ```c
 #include <stdio.h>
@@ -728,10 +728,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/A229.c
+~/LPEDC/rodar 16-grafos/0110-bfs/A219.c
 ```
 
-**Exemplo A230 · O robô no galpão: BFS numa grade**
+**Exemplo A220 · O robô no galpão: BFS numa grade**
 
 ```c
 #include <stdio.h>
@@ -791,12 +791,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/A230.c
+~/LPEDC/rodar 16-grafos/0110-bfs/A220.c
 ```
 
 #### Exercícios
 
-**Exercício E685** · ★☆☆
+**Exercício E655** · ★☆☆
 
 O mapa abaixo liga seis bairros por linhas de ônibus diretas (grafo não
 dirigido). O programa roda uma BFS a partir da Penha. Sem rodar, preveja a
@@ -812,10 +812,10 @@ tabela da fila no papel. Depois rode e confira.
    Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/E685.c
+~/LPEDC/rodar 16-grafos/0110-bfs/E655.c
 ```
 
-**Exercício E686** · ★☆☆
+**Exercício E656** · ★☆☆
 
 A Vó mandou um áudio no grupo da família, e cada pessoa só encaminha para
 quem tem contato direto (grafo não dirigido). Em que "rodada" o áudio chega
@@ -846,12 +846,12 @@ Rodadas até todos ouvirem: 3
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/E686.c
+~/LPEDC/rodar 16-grafos/0110-bfs/E656.c
 ```
 
-**Exercício E687** · ★★☆
+**Exercício E657** · ★★☆
 
-Mesmo mapa de ônibus do E685 (já está no esqueleto). Você mora na Lapa e
+Mesmo mapa de ônibus do E655 (já está no esqueleto). Você mora na Lapa e
 precisa ir à Saude pegando o menor número de ônibus. Rode uma BFS a partir
 da Lapa guardando pai[] e escreva uma função RECURSIVA que imprime o
 caminho na ordem certa, da origem ao destino:
@@ -878,16 +878,16 @@ num comentário, por que a sua BFS escolheu o que passa pelo Centro.
 1. pai[origem] = -1. Na função: se pai[v] != -1, imprima primeiro o
    caminho até pai[v] (chamada recursiva) e depois " -> " e o nome de v.
 2. A recursão desfaz a inversão: o pai é impresso antes do filho, igual a
-   uma pilha (assunto 0089).
+   uma pilha (assunto 0084).
 3. Resposta esperada: a saída acima. O Centro (índice 0) é examinado antes
    da Penha (3) como vizinho da Lapa; por isso Moema é descoberta pelo
    Centro, e a Saude por Moema, antes que o ramo da Penha chegue lá.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/E687.c
+~/LPEDC/rodar 16-grafos/0110-bfs/E657.c
 ```
 
-**Exercício E688** · ★★☆
+**Exercício E658** · ★★☆
 
 Depois do temporal, a companhia de energia sabe quais cabos entre os oito
 bairros (A a H) continuam inteiros. Bairros ligados, direta ou
@@ -922,10 +922,10 @@ Total de grupos: 3
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/E688.c
+~/LPEDC/rodar 16-grafos/0110-bfs/E658.c
 ```
 
-**Exercício E689** · ★★★
+**Exercício E659** · ★★★
 
 A prefeitura quer saber, para cada quarteirão do bairro, a quantos
 quarteirões de distância fica o posto de saúde MAIS PRÓXIMO. No mapa, P é
@@ -967,10 +967,10 @@ Pior distância: 6
    (contando do 0): 6 quarteirões até o posto da esquerda.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/E689.c
+~/LPEDC/rodar 16-grafos/0110-bfs/E659.c
 ```
 
-**Exercício E690** · ★★★
+**Exercício E660** · ★★★
 
 Este programa tem um erro de propósito. Ele deveria mostrar a ordem em que
 uma corrente de WhatsApp chega em cada pessoa, a partir da Ana. Rode com o
@@ -997,12 +997,12 @@ Ana Bia Cadu Dani
    Assim cada pessoa entra uma vez só e a saída é "Ana Bia Cadu Dani".
 
 ```bash
-~/LPEDC/rodar 16-grafos/0115-bfs/E690.c
+~/LPEDC/rodar 16-grafos/0110-bfs/E660.c
 ```
 
 ---
 
-## 0116 · DFS: busca em profundidade
+## 0111 · DFS: busca em profundidade
 
 Sábado no parque estadual. Da Sede saem duas trilhas, uma para o Lago e outra
 para a Ponte. Você escolhe o Lago e vai em frente: Gruta, Topo, Bica. Na Bica
@@ -1016,7 +1016,7 @@ novo, **voltar** até a última escolha que ficou pendente. A volta tem nome:
 
 A BFS do assunto anterior explora em ondas, usando uma fila. A DFS explora em
 mergulhos, usando uma **pilha**. E você já tem uma pilha de graça: a pilha de
-chamadas (assunto 0036). Por isso a DFS cabe numa função recursiva de quatro
+chamadas (assunto 0031). Por isso a DFS cabe numa função recursiva de quatro
 linhas: marca o vértice, e para cada vizinho não visitado, chama a si mesma.
 
 Quando a chamada de `dfs(Bica)` termina, o C volta sozinho para `dfs(Topo)`,
@@ -1037,7 +1037,7 @@ Vamos ver na prática. Os números mostram a ordem da visita; as arestas verdes
 são as da árvore. À direita, a pilha de chamadas no momento mais fundo, quando
 a Bica é visitada:
 
-<p align="center"><img src="0116-dfs/ideia.svg" alt="Diagrama da ideia: DFS: busca em profundidade" width="858"></p>
+<p align="center"><img src="0111-dfs/ideia.svg" alt="Diagrama da ideia: DFS: busca em profundidade" width="858"></p>
 
 O código imprime cada vértice com um recuo proporcional à profundidade da
 chamada. Dá para ver a árvore na saída:
@@ -1083,7 +1083,7 @@ Cada chamada pergunta só "tenho vizinho novo?". Se tem, desce; se não tem,
 volta para quem chamou. O programa termina quando a primeira chamada, a da
 Sede, não tem mais para onde descer:
 
-<p align="center"><img src="0116-dfs/fluxograma.svg" alt="Fluxograma: DFS: busca em profundidade" width="602"></p>
+<p align="center"><img src="0111-dfs/fluxograma.svg" alt="Fluxograma: DFS: busca em profundidade" width="602"></p>
 
 Compare as ordens a partir da Sede. A DFS visita Sede, Lago, Gruta, Topo,
 Bica, Ponte: a Ponte, vizinha direta da Sede, fica para o fim. A BFS visitaria
@@ -1091,7 +1091,7 @@ Sede, Lago, Ponte, Gruta, Topo, Bica. Nenhuma está errada; servem a perguntas
 diferentes. A DFS **não** dá o caminho mais curto: ela chegou ao Topo pela
 Gruta (três trilhas), mas o Lago liga direto no Topo (duas).
 
-O exemplo A232 faz a mesma DFS sem recursão, com uma pilha explícita, e
+O exemplo A222 faz a mesma DFS sem recursão, com uma pilha explícita, e
 mostra a pilha a cada passo.
 
 > [!WARNING]
@@ -1099,7 +1099,7 @@ mostra a pilha a cada passo.
 > programa tem poucos megabytes (8 MB é o comum no Linux). Uma DFS recursiva
 > num labirinto de 1000 × 1000 casas pode empilhar um milhão de chamadas e
 > morrer com *stack overflow*. Para grafos grandes, use a versão com pilha
-> explícita alocada com `malloc`, como no A232.
+> explícita alocada com `malloc`, como no A222.
 
 > [!TIP]
 > **Por dentro do C:** cada `dfs(u, nivel)` empilha um frame com o endereço
@@ -1114,13 +1114,13 @@ mostra a pilha a cada passo.
 > [!NOTE]
 > **Pergunta para você:** se a trilha Lago–Gruta for interditada, qual passa a
 > ser a ordem da DFS a partir da Sede, e qual o recuo de cada linha? Preveja
-> antes de apagar o par `{1, 2}` no A231.
+> antes de apagar o par `{1, 2}` no A221.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0116-dfs/`](0116-dfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0111-dfs/`](0111-dfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A231 · Trilhas do parque: DFS recursiva**
+**Exemplo A221 · Trilhas do parque: DFS recursiva**
 
 ```c
 #include <stdbool.h>
@@ -1159,10 +1159,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/A231.c
+~/LPEDC/rodar 16-grafos/0111-dfs/A221.c
 ```
 
-**Exemplo A232 · A pilha que a recursão escondia**
+**Exemplo A222 · A pilha que a recursão escondia**
 
 ```c
 #include <stdbool.h>
@@ -1213,12 +1213,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/A232.c
+~/LPEDC/rodar 16-grafos/0111-dfs/A222.c
 ```
 
 #### Exercícios
 
-**Exercício E691** · ★☆☆
+**Exercício E661** · ★☆☆
 
 O mapa de um shopping liga seis áreas por corredores (grafo não dirigido).
 O programa abaixo faz uma DFS a partir do Hall e imprime cada área com um
@@ -1243,10 +1243,10 @@ b) Faça à mão a ordem da BFS a partir do Hall (vizinhos em ordem de
    b) BFS: Hall, Praça, Banco, Cinema, Loja, Saída.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/E691.c
+~/LPEDC/rodar 16-grafos/0111-dfs/E661.c
 ```
 
-**Exercício E692** · ★☆☆
+**Exercício E662** · ★☆☆
 
 No centro da cidade todas as ruas são de mão única (grafo DIRIGIDO). As
 ligações diretas são:
@@ -1274,16 +1274,16 @@ Casa chega no Hospital? não
 **Dicas:**
 
 1. Em grafo dirigido, adj[u][v] = 1 só no sentido da seta.
-2. A função é a mesma do A231, sem o recuo. Para zerar entre as buscas,
+2. A função é a mesma do A221, sem o recuo. Para zerar entre as buscas,
    um laço com visitado[v] = false.
 3. Resposta esperada: a saída acima. O Hospital alcança todo mundo, mas
    ninguém chega nele: nenhuma seta entra no Hospital.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/E692.c
+~/LPEDC/rodar 16-grafos/0111-dfs/E662.c
 ```
 
-**Exercício E693** · ★★☆
+**Exercício E663** · ★★☆
 
 Uma foto de satélite do litoral virou uma grade: # é terra e ~ é água.
 Terras vizinhas na horizontal ou na vertical (diagonal não conta) formam
@@ -1315,7 +1315,7 @@ Total: 4 ilhas, a maior tem 5 casas
 **Dicas:**
 
 1. A grade é um grafo implícito: cada casa é um vértice e os vizinhos são
-   as 4 casas ao redor (como no A230, só que com DFS).
+   as 4 casas ao redor (como no A220, só que com DFS).
 2. int pintar(int l, int c): se (l, c) está fora da grade, é água ou já
    foi visitada, devolve 0; senão marca e devolve 1 + pintar das 4 vizinhas.
 3. Dá para marcar trocando o '#' por outro caractere, sem vetor extra.
@@ -1323,10 +1323,10 @@ Total: 4 ilhas, a maior tem 5 casas
    varredura linha por linha encontra cada uma).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/E693.c
+~/LPEDC/rodar 16-grafos/0111-dfs/E663.c
 ```
 
-**Exercício E694** · ★★☆
+**Exercício E664** · ★★☆
 
 Você vai montar a ordem das disciplinas de um curso. Uma seta A -> B quer
 dizer "A é pré-requisito de B" (grafo dirigido, sem ciclo):
@@ -1355,17 +1355,17 @@ Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
 **Dicas:**
 
 1. A anotação vai DEPOIS do laço dos vizinhos (pós-ordem, como no percurso
-   de árvore do assunto 0103).
+   de árvore do assunto 0098).
 2. Uma disciplina só termina depois de todas que dependem dela; por isso a
    ordem de término é a ordem de estudo invertida.
 3. Resposta esperada: a saída acima. Outras ordens também seriam válidas
    (Lógica, C, Discreta...), mas esta é a que a DFS em ordem de índice dá.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/E694.c
+~/LPEDC/rodar 16-grafos/0111-dfs/E664.c
 ```
 
-**Exercício E695** · ★★★
+**Exercício E665** · ★★★
 
 O gerenciador de pacotes reclamou de dependência circular no seu projeto. Os pacotes são
 app 0, api 1, auth 2, db 3, log 4 e utils 5, e uma seta A -> B quer dizer
@@ -1397,7 +1397,7 @@ Sem log -> auth: sem ciclo
 
 **Dicas:**
 
-1. Use enum { BRANCO, CINZA, PRETO } (assunto 0068).
+1. Use enum { BRANCO, CINZA, PRETO } (assunto 0063).
 2. Por que não basta "visitado"? Sem log -> auth, a DFS termina db pelo
    caminho app -> api -> db; depois, vindo de app -> auth, a seta
    auth -> db encontra db já visitado. Isso não é ciclo: db está PRETO,
@@ -1408,10 +1408,10 @@ Sem log -> auth: sem ciclo
    vizinhos em ordem de índice).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/E695.c
+~/LPEDC/rodar 16-grafos/0111-dfs/E665.c
 ```
 
-**Exercício E696** · ★★★
+**Exercício E666** · ★★★
 
 Num escape room, as portas só abrem num sentido (grafo dirigido). A função
 existe_caminho deveria dizer se dá para sair de uma sala e chegar em outra.
@@ -1439,12 +1439,12 @@ Sala 4 -> Sala 0: não
    mostra a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0116-dfs/E696.c
+~/LPEDC/rodar 16-grafos/0111-dfs/E666.c
 ```
 
 ---
 
-## 0117 · Dijkstra: caminho mínimo
+## 0112 · Dijkstra: caminho mínimo
 
 Domingo de sol, e você quer sair de casa e chegar à praia o mais rápido
 possível. O Waze conhece o tempo de cada rua: Casa até a Padaria são 4 minutos,
@@ -1479,7 +1479,7 @@ Vamos ver na prática. Os números nas arestas são minutos; o número em cima d
 cada lugar é a `dist` final; as arestas verdes formam a rota até a Praia, e
 embaixo está o vetor `dist` no fim:
 
-<p align="center"><img src="0117-dijkstra/ideia.svg" alt="Diagrama da ideia: Dijkstra: caminho mínimo" width="858"></p>
+<p align="center"><img src="0112-dijkstra/ideia.svg" alt="Diagrama da ideia: Dijkstra: caminho mínimo" width="858"></p>
 
 O código usa matriz de pesos (0 quer dizer "sem rua direta") e reconstrói a
 rota pelo `anterior[]`, igual à BFS:
@@ -1549,7 +1549,7 @@ Repara no fluxograma: é a mesma estrutura da BFS, com a fila trocada por
 "escolher o menor `dist` não fixo". O laço termina quando todos estão fixos
 ou quando o menor que sobrou é INFINITO:
 
-<p align="center"><img src="0117-dijkstra/fluxograma.svg" alt="Fluxograma: Dijkstra: caminho mínimo" width="643"></p>
+<p align="center"><img src="0112-dijkstra/fluxograma.svg" alt="Fluxograma: Dijkstra: caminho mínimo" width="643"></p>
 
 ### Passo a passo
 
@@ -1565,7 +1565,7 @@ começa com 4 (rua direta) e cai para 3, e no Mercado, que cai de 9 para 8:
 | Mercado (8) | | | | **8** | 11 |
 | Praia (11) | | | | | **11** |
 
-O exemplo A234 usa Dijkstra num grafo dirigido (passagens de ônibus em
+O exemplo A224 usa Dijkstra num grafo dirigido (passagens de ônibus em
 reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 
 > [!WARNING]
@@ -1581,7 +1581,7 @@ reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 > **Por dentro do C:** com matriz, cada um dos V passos varre V vértices para
 > achar o menor e mais V para relaxar: O(V²). Para um mapa de 5 lugares, nada.
 > Para as 100 mil esquinas de uma cidade, 10¹⁰ operações. O Waze de verdade usa
-> lista de adjacência e um **heap** (a fila de prioridade do assunto 0107) para
+> lista de adjacência e um **heap** (a fila de prioridade do assunto 0102) para
 > achar o menor em O(log V): O((V + E) log V). Os três vetores ocupam
 > 4 + 4 + 1 bytes por vértice (`int`, `int`, `bool`); a matriz, 4 × V² bytes,
 > e é ela que limita o tamanho do grafo.
@@ -1589,13 +1589,13 @@ reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 > [!NOTE]
 > **Pergunta para você:** se a rua Padaria–Praia passar a levar 7 minutos em
 > vez de 10, qual é a nova rota e o novo tempo até a Praia? Refaça a tabela
-> antes de trocar o `10` no A233.
+> antes de trocar o `10` no A223.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0117-dijkstra/`](0117-dijkstra/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0112-dijkstra/`](0112-dijkstra/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A233 · O caminho mais rápido até a praia**
+**Exemplo A223 · O caminho mais rápido até a praia**
 
 ```c
 #include <limits.h>
@@ -1659,10 +1659,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/A233.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/A223.c
 ```
 
-**Exemplo A234 · Passagens de ônibus e a cidade sem rota**
+**Exemplo A224 · Passagens de ônibus e a cidade sem rota**
 
 ```c
 #include <limits.h>
@@ -1731,12 +1731,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/A234.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/A224.c
 ```
 
 #### Exercícios
 
-**Exercício E697** · ★☆☆
+**Exercício E667** · ★☆☆
 
 Um centro de distribuição (CD) entrega em quatro bairros, A, B, C e D. As
 ruas são de mão dupla e os pesos são km:
@@ -1762,10 +1762,10 @@ o caminho até D.
    (2 + 3 + 1 + 2 = 8 km).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/E697.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/E667.c
 ```
 
-**Exercício E698** · ★☆☆
+**Exercício E668** · ★☆☆
 
 O programa calcula o menor tempo, em minutos, saindo da estação Sé até as
 outras estações do metrô. Os trilhos (mão dupla) são:
@@ -1799,10 +1799,10 @@ Pinheiros: 17 min
    da Sé leva 11, mas Sé -> República -> Paulista leva 10.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/E698.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/E668.c
 ```
 
-**Exercício E699** · ★★☆
+**Exercício E669** · ★★☆
 
 Um motoboy sai do restaurante (R) para entregar em cinco clientes. As
 ruas são de mão dupla e os pesos são km:
@@ -1833,16 +1833,16 @@ Mais longe: Eva (11 km)
 
 1. Índices: R 0, Ana 1, Beto 2, Caio 3, Dani 4, Eva 5. Matriz de pesos com
    0 para "sem rua".
-2. A rota recursiva é a do A234: imprime primeiro a rota até anterior[v],
+2. A rota recursiva é a do A224: imprime primeiro a rota até anterior[v],
    depois " -> " e o nome de v.
 3. Resposta esperada: a saída acima. Repare que todas as rotas formam uma
    linha só: a árvore de caminhos mínimos deste mapa é um caminho.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/E699.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/E669.c
 ```
 
-**Exercício E700** · ★★☆
+**Exercício E670** · ★★☆
 
 A cidade quer saber quanto tempo uma ambulância leva de cada bairro ATÉ o
 Hospital. As ruas são de mão única (grafo dirigido), em minutos:
@@ -1880,10 +1880,10 @@ Oeste: 5 min
    9 direto); Sul vai por Norte (1 + 6 = 7, e não 3 + 5 = 8 por Oeste).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/E700.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/E670.c
 ```
 
-**Exercício E701** · ★★★
+**Exercício E671** · ★★★
 
 Este programa tem um erro de propósito. Ele calcula o voo mais barato
 saindo de São Paulo. Manaus e Belém têm voo entre si, mas nenhum voo liga
@@ -1912,10 +1912,10 @@ Belém: sem voo
    quando não houver nenhum. Consertado, mostra a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/E701.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/E671.c
 ```
 
-**Exercício E702** · ★★★
+**Exercício E672** · ★★★
 
 Um app de entregas calcula o custo de cada trecho em reais (grafo
 dirigido). Um parceiro oferece cashback: o trecho B -> A DEVOLVE R$ 3, e o
@@ -1950,12 +1950,12 @@ c) Explique por que o Dijkstra erra aqui. Qual hipótese do algoritmo foi
       Bellman-Ford.)
 
 ```bash
-~/LPEDC/rodar 16-grafos/0117-dijkstra/E702.c
+~/LPEDC/rodar 16-grafos/0112-dijkstra/E672.c
 ```
 
 ---
 
-## 0118 · Juntando tudo: a central de entregas
+## 0113 · Juntando tudo: a central de entregas
 
 Você está escrevendo o backend de uma transportadora pequena. O centro de
 distribuição (CD) atende seis lugares, e o gerente faz três perguntas: dá para
@@ -1987,7 +1987,7 @@ Vamos ver na prática. A Ilha só tem balsa, então a DFS a deixa de fora. A BFS
 acha a rota de 2 trechos pelo Centro, com a estrada longa de 12 km. Dijkstra
 acha a de 4 trechos, em verde, com 10 km:
 
-<p align="center"><img src="0118-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a central de entregas" width="858"></p>
+<p align="center"><img src="0113-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a central de entregas" width="858"></p>
 
 O código completo. Repare como `bfs` e `dijkstra` preenchem o mesmo tipo de
 vetor `pai[]`, e por isso uma única `mostrar_rota` serve para os dois:
@@ -2114,14 +2114,14 @@ int main(void) {
 Repara no fluxograma: a DFS vem primeiro, como um porteiro. Se a Vila
 estivesse fora da rede, não faria sentido procurar rota nenhuma:
 
-<p align="center"><img src="0118-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a central de entregas" width="569"></p>
+<p align="center"><img src="0113-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a central de entregas" width="569"></p>
 
 A diferença entre as duas rotas é a lição do módulo. "Menor caminho" não
 existe sozinho: menor em quê? Se toda aresta custa o mesmo, a BFS resolve em
 O(V + E) e é mais simples. Se os pesos variam, a BFS dá uma resposta errada
 com toda a confiança, como os 16 km acima.
 
-O exemplo A236 traz um quarto problema: ligar cinco cidades com fibra óptica
+O exemplo A226 traz um quarto problema: ligar cinco cidades com fibra óptica
 gastando o mínimo. Não é caminho de A até B, é uma **árvore geradora
 mínima**: um conjunto de cabos que conecta todo mundo com a menor soma. O
 algoritmo de **Prim** faz isso com o código do Dijkstra trocando uma linha: em
@@ -2147,13 +2147,13 @@ vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 > [!NOTE]
 > **Pergunta para você:** se a estrada Centro–Vila cair de 12 para 5 km, as
 > duas rotas viram a mesma? Quantos km e quantos trechos? Preveja antes de
-> mudar o A235.
+> mudar o A225.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0118-juntando-tudo/`](0118-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0113-juntando-tudo/`](0113-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A235 · A central de entregas: DFS, BFS e Dijkstra juntos**
+**Exemplo A225 · A central de entregas: DFS, BFS e Dijkstra juntos**
 
 ```c
 #include <limits.h>
@@ -2275,10 +2275,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/A235.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/A225.c
 ```
 
-**Exemplo A236 · Fibra óptica pelo menor custo: o algoritmo de Prim**
+**Exemplo A226 · Fibra óptica pelo menor custo: o algoritmo de Prim**
 
 ```c
 #include <limits.h>
@@ -2336,12 +2336,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/A236.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/A226.c
 ```
 
 #### Exercícios
 
-**Exercício E703** · ★☆☆
+**Exercício E673** · ★☆☆
 
 Até aqui os grafos vinham escritos no código. Escreva um programa que LÊ
 o grafo do teclado (não dirigido): primeiro o número de vértices n (até
@@ -2378,10 +2378,10 @@ Aresta inválida: 1 7
 3. Resposta esperada: as saídas acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E703.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E673.c
 ```
 
-**Exercício E704** · ★☆☆
+**Exercício E674** · ★☆☆
 
 O programa abaixo roda os três algoritmos do módulo no mesmo grafo
 ponderado não dirigido, sempre a partir de A:
@@ -2405,13 +2405,13 @@ Sem rodar, preveja as três linhas da saída. Depois rode e confira.
    Dijkstra: A=0 B=1 C=4 D=3 E=6
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E704.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E674.c
 ```
 
-**Exercício E705** · ★★☆
+**Exercício E675** · ★★☆
 
 A prefeitura vai construir um pronto-socorro num dos seis lugares do mapa
-do A235 (sem a Ilha). O critério: o lugar onde a PIOR distância até
+do A225 (sem a Ilha). O critério: o lugar onde a PIOR distância até
 qualquer outro é a menor possível. As estradas, em km (mão dupla):
 
 
@@ -2448,10 +2448,10 @@ Melhor lugar para o hospital: Morro (ninguém a mais de 5 km)
    primeiro destino encontrado (o Morro está a 5 km do CD e da Vila).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E705.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E675.c
 ```
 
-**Exercício E706** · ★★☆
+**Exercício E676** · ★★☆
 
 No futebol da firma, algumas duplas não podem jogar no mesmo time (são
 rivais). Você precisa dividir as seis pessoas em DOIS times sem nenhuma
@@ -2480,7 +2480,7 @@ Impossível: Bruno e Carla ficariam no mesmo time
 **Dicas:**
 
 1. Vetor time[] com -1 (sem time), 0 ou 1. O time do rival é 1 - time[u].
-2. Faça o laço externo das componentes (assunto 0115, E688): pode haver
+2. Faça o laço externo das componentes (assunto 0110, E658): pode haver
    gente sem rival nenhum ou grupos soltos.
 3. Um grafo que dá para dividir assim se chama BIPARTIDO. Ele deixa de
    ser bipartido quando aparece um ciclo de tamanho ímpar: Ana, Bruno,
@@ -2488,10 +2488,10 @@ Impossível: Bruno e Carla ficariam no mesmo time
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E706.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E676.c
 ```
 
-**Exercício E707** · ★★★
+**Exercício E677** · ★★★
 
 Escada de palavras: transformar uma palavra em outra trocando UMA letra
 por vez, e cada passo tem de ser uma palavra da lista. Ex.: GATO, GATA,
@@ -2499,7 +2499,7 @@ MATA... Ache a escada mais curta. A lista já está no esqueleto.
 
 Ninguém monta a matriz: duas palavras são vizinhas quando têm o mesmo
 tamanho e diferem em exatamente uma posição. A aresta sai de uma conta,
-como as casas do galpão do A230. Rode uma BFS e reconstrua a escada com
+como as casas do galpão do A220. Rode uma BFS e reconstrua a escada com
 pai[]. Teste com GATO -> BOLA, CASA -> ROSA, MOTO -> CAMA e GATO -> PEIXE.
 
 
@@ -2515,21 +2515,21 @@ GATO -> PEIXE: impossível
 
 1. bool vizinhas(const char *a, const char *b): strlen igual e um só
    a[i] != b[i]. int indice(const char *p) acha a posição com strcmp.
-2. A BFS é a do A229, trocando "adj[u][v]" por "vizinhas(palavras[u],
+2. A BFS é a do A219, trocando "adj[u][v]" por "vizinhas(palavras[u],
    palavras[v])".
 3. Empates: GATO -> MATO -> MATA também leva a BOLA em 5 passos; a BFS
    fica com GATA porque ela vem antes na lista.
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E707.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E677.c
 ```
 
-**Exercício E708** · ★★★
+**Exercício E678** · ★★★
 
 O Dijkstra do módulo custa O(V²): para achar o menor dist ele varre o
 vetor todo. Escreva a versão "de verdade", com LISTA de adjacência
-(malloc) e um HEAP mínimo de pares (dist, vértice) (assunto 0107), para o
+(malloc) e um HEAP mínimo de pares (dist, vértice) (assunto 0102), para o
 mapa rodoviário abaixo (km, mão dupla), saindo de Porto Alegre:
 
 
@@ -2571,7 +2571,7 @@ Itens tirados do heap: 10
    de sair.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0118-juntando-tudo/E708.c
+~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E678.c
 ```
 
 ---
@@ -2659,7 +2659,7 @@ Na BFS, guarde `cont[origem] = 1` e, ao examinar a aresta u-v: se v é novo,
 
 </details>
 
-**7. Estrada crítica.** No mapa da transportadora do A235 (sem a Ilha), existe
+**7. Estrada crítica.** No mapa da transportadora do A225 (sem a Ilha), existe
 alguma estrada que, se cair, deixa algum lugar sem acesso ao CD? Como
 descobrir com o que você já sabe?
 
@@ -2673,7 +2673,7 @@ um algoritmo com uma DFS só (Tarjan) para achar todas.
 
 </details>
 
-**8. Kruskal contra Prim.** Refaça a fibra óptica do A236 com o algoritmo de
+**8. Kruskal contra Prim.** Refaça a fibra óptica do A226 com o algoritmo de
 **Kruskal**: ordene todos os trechos do mais barato ao mais caro e aceite cada
 um que não feche ciclo. Em que ordem os trechos entram? O total muda?
 
@@ -2695,13 +2695,13 @@ d[i][k] + d[k][j])`. Qual o custo? Qual cuidado com o INFINITO?
 <details><summary>Resposta</summary>
 
 **O(V³)**: igual a V execuções do Dijkstra com matriz, mas com código bem
-menor. O cuidado é o mesmo do assunto 0117: `d[i][k] + d[k][j]` estoura se um
+menor. O cuidado é o mesmo do assunto 0112: `d[i][k] + d[k][j]` estoura se um
 dos dois for `INT_MAX`. Teste antes de somar, ou use um INFINITO folgado,
 como `1000000000`, que somado duas vezes ainda cabe em `int`.
 
 </details>
 
-**10. Labirinto com lama.** No galpão do A230, algumas casas têm lama: entrar
+**10. Labirinto com lama.** No galpão do A220, algumas casas têm lama: entrar
 nelas custa 5 passos em vez de 1. A BFS ainda acha o caminho mais rápido? O
 que você usaria?
 

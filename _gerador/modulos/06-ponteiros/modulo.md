@@ -200,7 +200,7 @@ Ordem: mesa 1 (min 20), mesa 2 (min 5), mesa 2 (min 9), mesa 4 (min 1),
 mesa 4 (min 12), mesa 7 (min 3). Caminho: um vetor de índices `int
 ordem[6] = {0, ..., 5}` e uma comparação que lê os vetores paralelos (que
 podem ser `static` globais), ou um vetor de `const int *` para `mesa`, como
-no assunto 0057, usando `p - mesa` para achar o minuto.
+no assunto 0052, usando `p - mesa` para achar o minuto.
 
 </details>
 
@@ -208,7 +208,7 @@ no assunto 0057, usando `p - mesa` para achar o minuto.
 descobre a ordem dos bytes da máquina olhando o primeiro byte de um `int`
 que vale 1 (através de um `unsigned char *`). Depois escreva
 `unsigned int inverte_bytes(unsigned int x)` que troca a ordem dos 4 bytes
-usando `troca_generica` do A111 nos bytes certos.
+usando `troca_generica` do A101 nos bytes certos.
 
 <details><summary>Resposta</summary>
 
@@ -232,7 +232,7 @@ exatamente essa assinatura.
 42 está no **índice 5** (subtraia o ponteiro devolvido de `cods`); 10 dá
 **NULL**. O meio fica em `(unsigned char *)v + meio * tam`. Compare
 `cmp(chave, meio)`: negativo, procure à esquerda; positivo, à direita; zero,
-achou. A busca binária em si é o assunto 0095.
+achou. A busca binária em si é o assunto 0090.
 
 </details>
 

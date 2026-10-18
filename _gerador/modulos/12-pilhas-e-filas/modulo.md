@@ -48,7 +48,7 @@ já virou vaga.
 
 Você precisa estar à vontade com ponteiros, `malloc`/`free`, `struct` com
 `->` e listas encadeadas (módulos 06, 07, 08 e 11), além da ideia de TAD do
-assunto 0079.
+assunto 0074.
 
 Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
 `pilha.h` e `pilha.c`, `fila.h` e `fila.c` ou `deque.h` e `deque.c`. O
@@ -56,7 +56,7 @@ Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
 da pasta, então basta:
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/A173.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A163.c
 ```
 
 Por isso, num exercício, **não** crie funções com os nomes do TAD
@@ -86,7 +86,7 @@ são possíveis: (a) 3 2 1 5 4; (b) 4 5 3 1 2; (c) 1 2 3 4 5; (d) 5 4 3 2 1?
 (a), (c) e (d) são possíveis. (b) não: quando o 3 sai, o 1 e o 2 estão na
 pilha com o 2 por cima, então o 2 tem que sair antes do 1. A regra geral:
 uma saída é impossível se tiver o padrão "c ... a ... b" com a < b < c.
-Simule com o `simula` do E521.
+Simule com o `simula` do E491.
 
 </details>
 
@@ -96,14 +96,14 @@ também com `<ul><li>a</li><li>b</li></ul>`.
 
 <details><summary>Resposta</summary>
 
-Primeiro, segundo e terceiro: certo, errado, certo. É o A177 com palavras no
+Primeiro, segundo e terceiro: certo, errado, certo. É o A167 com palavras no
 lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
-encadeada, como a do E525); ao ler `</nome>`, desempilhe e compare com
+encadeada, como a do E495); ao ler `</nome>`, desempilhe e compare com
 `strcmp`. No fim, a pilha precisa estar vazia.
 
 </details>
 
-**3. Duas pilhas, uma fila e o custo.** Na fila com duas pilhas do E555,
+**3. Duas pilhas, uma fila e o custo.** Na fila com duas pilhas do E525,
 faça 1000 inserções seguidas e depois 1000 retiradas. Quantos `pilha_empilha`
 acontecem no total? E se você alternar uma inserção e uma retirada?
 
@@ -116,7 +116,7 @@ uma retirada pode custar O(n), mas a média por operação é O(1).
 
 </details>
 
-**4. Fila circular que cresce.** Mude o `fila.c` do 0090 para começar com 4
+**4. Fila circular que cresce.** Mude o `fila.c` do 0085 para começar com 4
 gavetas alocadas com `malloc` e dobrar com `realloc` quando encher, sem mudar
 o `fila.h`. Teste inserindo 1 a 10 depois de ter retirado dois itens (para a
 fila já ter dado a volta).
@@ -131,7 +131,7 @@ gaveta 0 e zerar o `inicio`. A ordem de saída tem que continuar 3 4 5 ... 10.
 
 </details>
 
-**5. O caixa com dois atendentes.** Refaça o A182 com dois caixas e uma fila
+**5. O caixa com dois atendentes.** Refaça o A172 com dois caixas e uma fila
 única (como no banco). Com os mesmos clientes (chegadas 0, 1, 2, 5, 6 e
 durações 3, 2, 4, 1, 2), qual é a espera média?
 
@@ -197,7 +197,7 @@ o malloc e o free de cada volta. Remover do meio não é o forte da fila.
 
 </details>
 
-**10. Avaliar com variáveis.** Estenda o A185 para aceitar letras como
+**10. Avaliar com variáveis.** Estenda o A175 para aceitar letras como
 variáveis, com os valores num vetor `int val[26]`: com A = 3, B = 4 e C = 5,
 calcule `A + B * C` e `(A + B) * C`.
 

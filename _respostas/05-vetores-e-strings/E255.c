@@ -1,27 +1,59 @@
-// 0043 · Vetores e funções
+// 0043 · Juntando tudo
 // Exercício E255 · ★★☆
-//
-// Resposta: "10 50 3 5" e "100 30 3".
-// 1ª chamada: v é o próprio a, então a[0] vira 10; x é cópia de b (5), vira
-// 50 e vai para a[1]. b continua 5.
-// 2ª chamada: x é cópia de a[2] (3). a[0] vira 100, x vira 30 e vai para a[1].
-// a[2] continua 3.
 
 #include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
 
-void mexer(int v[], int x) {
-    v[0] = v[0] * 10;
-    x = x * 10;
-    v[1] = x;
+#define MAX 20
+
+bool completa(const bool revelada[], int n) {
+    for (int i = 0; i < n; i++) {
+        if (!revelada[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void mostrar(const char secreta[], const bool revelada[], int n) {
+    for (int i = 0; i < n; i++) {
+        if (i > 0) {
+            putchar(' ');
+        }
+        putchar(revelada[i] ? secreta[i] : '_');
+    }
 }
 
 int main(void) {
-    int a[3] = {1, 2, 3};
-    int b = 5;
+    char secreta[] = "BANANA";
+    char chutes[] = {'A', 'E', 'N', 'B', 'O'};
+    int n = (int) strlen(secreta);
+    int total_chutes = sizeof(chutes);
+    bool revelada[MAX] = {false};
+    int erros = 0;
 
-    mexer(a, b);
-    printf("%d %d %d %d\n", a[0], a[1], a[2], b);
-    mexer(a, a[2]);
-    printf("%d %d %d\n", a[0], a[1], a[2]);
+    for (int k = 0; k < total_chutes && !completa(revelada, n); k++) {
+        bool acertou = false;
+        for (int i = 0; i < n; i++) {
+            if (secreta[i] == chutes[k]) {
+                revelada[i] = true;
+                acertou = true;
+            }
+        }
+        printf("Chute %c: ", chutes[k]);
+        mostrar(secreta, revelada, n);
+        if (!acertou) {
+            erros++;
+            printf(" (erro %d)", erros);
+        }
+        printf("\n");
+    }
+
+    if (completa(revelada, n)) {
+        printf("Venceu com %d erro(s)!\n", erros);
+    } else {
+        printf("Os chutes acabaram.\n");
+    }
     return 0;
 }

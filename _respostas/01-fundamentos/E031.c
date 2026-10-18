@@ -1,14 +1,17 @@
-// 0006 · O primeiro programa
+// 0006 · scanf
 // Exercício E031 · ★☆☆
-//
-// Resposta: na mão, gcc E031.c -o letreiro e depois ./letreiro mostram as
-// mesmas três linhas que o rodar.
 
 #include <stdio.h>
 
 int main(void) {
-    printf("Linha 077 - Terminal Centro\n");
-    printf("Via Av. Brasil\n");
-    printf("Tarifa: R$ 4,90\n");
+    int idade;
+    double altura;
+
+    printf("Idade: ");
+    scanf("%d", &idade);
+    printf("Altura (m): ");
+    scanf("%lf", &altura);
+
+    printf("Você tem %d anos e %.2f m de altura.\n", idade, altura);
     return 0;
 }

@@ -1,23 +1,30 @@
-// 0049 · Memória e endereços
+// 0049 · Ponteiro para ponteiro
 // Exercício E293 · ★★★
-//
-// Resposta: (a) os elementos do vetor sempre ficam colados, de 4 em 4 e em
-// ordem; (b) a, b e c ficam onde o compilador quiser (com o rodar, 16 bytes
-// distantes; sem sanitizer, em geral 4 bytes, na ordem que o compilador escolher);
-// (c) só o vetor tem ordem garantida; nunca suponha vizinhança entre
-// variáveis soltas.
 
 #include <stdio.h>
 
-int main(void) {
-    int a = 1, b = 2, c = 3;
-    int v[3] = {1, 2, 3};
+void troca_ptr(int **a, int **b) {
+    int *tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
 
-    printf("a em %p (%d)\n", (void *)&a, a);
-    printf("b em %p (%d)\n", (void *)&b, b);
-    printf("c em %p (%d)\n", (void *)&c, c);
-    for (int i = 0; i < 3; i++) {
-        printf("v[%d] em %p (%d)\n", i, (void *)&v[i], v[i]);
+int main(void) {
+    int j1 = 9, j2 = 7, j3 = 10, j4 = 8;
+    int *ordem[4] = {&j1, &j2, &j3, &j4};
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = i + 1; j < 4; j++) {
+            if (*ordem[j] < *ordem[i]) {
+                troca_ptr(&ordem[i], &ordem[j]);
+            }
+        }
     }
+
+    printf("Em ordem:");
+    for (int i = 0; i < 4; i++) {
+        printf(" %d", *ordem[i]);
+    }
+    printf("\nOriginais: j1=%d j2=%d j3=%d j4=%d\n", j1, j2, j3, j4);
     return 0;
 }

@@ -89,7 +89,7 @@ Para rodar qualquer arquivo do curso, use o **`rodar`**, que está na raiz do
 projeto:
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/A011.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
 ```
 
 Ele compila e já executa. O caminho pode ser relativo à pasta onde você está,
@@ -104,7 +104,7 @@ Programas que leem do teclado esperam você digitar. Para testar sem digitar,
 mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
-printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0011-scanf/A021.c
+printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
 ```
 
 > [!NOTE]
@@ -114,21 +114,21 @@ printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0011-scanf/A021.c
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0006](#0006--o-primeiro-programa) | O primeiro programa | [`0006-primeiro-programa/`](0006-primeiro-programa/) |
-| [0007](#0007--variáveis) | Variáveis | [`0007-variaveis/`](0007-variaveis/) |
-| [0008](#0008--tipos-e-limites) | Tipos e limites | [`0008-tipos-e-limites/`](0008-tipos-e-limites/) |
-| [0009](#0009--constantes) | Constantes | [`0009-constantes/`](0009-constantes/) |
-| [0010](#0010--printf) | printf | [`0010-printf/`](0010-printf/) |
-| [0011](#0011--scanf) | scanf | [`0011-scanf/`](0011-scanf/) |
-| [0012](#0012--aritmética) | Aritmética | [`0012-aritmetica/`](0012-aritmetica/) |
-| [0013](#0013--conversão-e-cast) | Conversão e cast | [`0013-conversao/`](0013-conversao/) |
-| [0014](#0014--atribuição--e---) | Atribuição, ++ e -- | [`0014-atribuicao/`](0014-atribuicao/) |
-| [0015](#0015--mathh) | math.h | [`0015-math/`](0015-math/) |
-| [0016](#0016--juntando-tudo) | Juntando tudo | [`0016-juntando-tudo/`](0016-juntando-tudo/) |
+| [0001](#0001--o-primeiro-programa) | O primeiro programa | [`0001-primeiro-programa/`](0001-primeiro-programa/) |
+| [0002](#0002--variáveis) | Variáveis | [`0002-variaveis/`](0002-variaveis/) |
+| [0003](#0003--tipos-e-limites) | Tipos e limites | [`0003-tipos-e-limites/`](0003-tipos-e-limites/) |
+| [0004](#0004--constantes) | Constantes | [`0004-constantes/`](0004-constantes/) |
+| [0005](#0005--printf) | printf | [`0005-printf/`](0005-printf/) |
+| [0006](#0006--scanf) | scanf | [`0006-scanf/`](0006-scanf/) |
+| [0007](#0007--aritmética) | Aritmética | [`0007-aritmetica/`](0007-aritmetica/) |
+| [0008](#0008--conversão-e-cast) | Conversão e cast | [`0008-conversao/`](0008-conversao/) |
+| [0009](#0009--atribuição--e---) | Atribuição, ++ e -- | [`0009-atribuicao/`](0009-atribuicao/) |
+| [0010](#0010--mathh) | math.h | [`0010-math/`](0010-math/) |
+| [0011](#0011--juntando-tudo) | Juntando tudo | [`0011-juntando-tudo/`](0011-juntando-tudo/) |
 
 ---
 
-## 0006 · O primeiro programa
+## 0001 · O primeiro programa
 
 A padaria do bairro comprou um painel de LED e pediu um aviso de três linhas:
 o nome da padaria, o horário da fornada e o preço do pão. São três linhas
@@ -180,7 +180,7 @@ Vamos ver na prática. O `padaria.c` entra na linha de montagem, ganha o
 `stdio.h` colado, vira assembly, vira `padaria.o`, é ligado ao `printf` e sai
 como o executável `padaria`, que mostra as três linhas no terminal:
 
-<p align="center"><img src="0006-primeiro-programa/ideia.svg" alt="Diagrama da ideia: O primeiro programa" width="866"></p>
+<p align="center"><img src="0001-primeiro-programa/ideia.svg" alt="Diagrama da ideia: O primeiro programa" width="866"></p>
 
 O programa completo:
 
@@ -204,7 +204,7 @@ Repara no fluxograma: cada estação pode parar a linha de montagem, e cada
 uma reclama de um jeito. O caminho do exemplo passa por todas sem erro e
 termina com o programa rodando:
 
-<p align="center"><img src="0006-primeiro-programa/fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
+<p align="center"><img src="0001-primeiro-programa/fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
 
 Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 
@@ -226,9 +226,9 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 > **seguinte**, porque só lá ele percebe que faltou alguma coisa.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A011.c | wc -l` e veja o seu programa de
-> poucas linhas virar centenas: é o `stdio.h` colado. Rode `gcc -S A011.c`, abra o
-> `A011.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
+> **Por dentro do C:** rode `gcc -E A001.c | wc -l` e veja o seu programa de
+> poucas linhas virar centenas: é o `stdio.h` colado. Rode `gcc -S A001.c`, abra o
+> `A001.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
 > que era só texto fixo com `\n` e trocou por uma função mais simples. Dentro
 > do executável, cada texto entre aspas fica guardado byte a byte, seguido de
 > um byte zero que marca o fim. Acento custa mais: no UTF-8, `ã` ocupa 2
@@ -238,13 +238,13 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `\n` do segundo `printf`, quantas
 > linhas aparecem e como fica cada uma? E se escrever `Printf` com P
-> maiúsculo, qual estação reclama? Responda e teste no A011.
+> maiúsculo, qual estação reclama? Responda e teste no A001.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0006-primeiro-programa/`](0006-primeiro-programa/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0001-primeiro-programa/`](0001-primeiro-programa/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A011 · O aviso da padaria**
+**Exemplo A001 · O aviso da padaria**
 
 ```c
 // Aviso do painel da padaria
@@ -262,19 +262,19 @@ int main(void) {
 // R$ 0,90 a unidade
 //
 // Experimente no terminal, dentro desta pasta:
-//   gcc -E A011.c | wc -l     quantas linhas depois do pré-processador
-//   gcc -S A011.c             gera A011.s (assembly): procure "call"
-//   gcc -c A011.c             gera A011.o (código objeto)
-//   gcc A011.o -o padaria     liga e gera o executável
+//   gcc -E A001.c | wc -l     quantas linhas depois do pré-processador
+//   gcc -S A001.c             gera A001.s (assembly): procure "call"
+//   gcc -c A001.c             gera A001.o (código objeto)
+//   gcc A001.o -o padaria     liga e gera o executável
 //   ./padaria
 //   echo $?                   mostra o 0 do return
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/A011.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
 ```
 
-**Exemplo A012 · Um printf, várias linhas (e vários printf, uma linha)**
+**Exemplo A002 · Um printf, várias linhas (e vários printf, uma linha)**
 
 ```c
 #include <stdio.h>
@@ -310,12 +310,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/A012.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A002.c
 ```
 
 #### Exercícios
 
-**Exercício E031** · ★☆☆
+**Exercício E001** · ★☆☆
 
 Escreva um programa que mostre o letreiro do ônibus, exatamente assim.
 Rode de dois jeitos: com o rodar e na mão, com gcc, gerando um executável
@@ -331,17 +331,17 @@ Tarifa: R$ 4,90
 
 **Dicas:**
 
-1. Comece pelo esqueleto do A011: o #include, a main com as chaves e o
+1. Comece pelo esqueleto do A001: o #include, a main com as chaves e o
    return 0;.
 2. Um printf por linha, cada um terminando com \n.
-3. Na mão, dentro desta pasta: gcc E031.c -o letreiro e depois ./letreiro.
+3. Na mão, dentro desta pasta: gcc E001.c -o letreiro e depois ./letreiro.
 4. Resposta esperada: as três linhas acima, iguais nos dois jeitos.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/E031.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E001.c
 ```
 
-**Exercício E032** · ★☆☆
+**Exercício E002** · ★☆☆
 
 Sem rodar, escreva (como comentário) exatamente o que este trecho mostra
 na tela. Atenção às linhas em branco. Depois copie o trecho para a main,
@@ -364,10 +364,10 @@ printf("Café\nPão\n\nManteiga\n");
    "Manteiga" (5 linhas no total, contando a vazia).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/E032.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E002.c
 ```
 
-**Exercício E033** · ★★☆
+**Exercício E003** · ★★☆
 
 Este programa tem QUATRO erros e não compila de propósito. Rode com o
 rodar, leia a primeira mensagem, conserte, rode de novo e repita até
@@ -394,20 +394,20 @@ Plantão: (11) 5555-0199
    to 'print'": use printf.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/E033.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E003.c
 ```
 
-**Exercício E034** · ★★☆
+**Exercício E004** · ★★☆
 
 Escreva um programa que mostre só "Bom dia" (com \n). Depois, dentro
 desta pasta, rode cada estação separada e responda como comentário:
 
 
 ```text
-gcc -E E034.c | wc -l
-gcc -S E034.c
-gcc -c E034.c
-gcc E034.o -o bomdia && ./bomdia
+gcc -E E004.c | wc -l
+gcc -S E004.c
+gcc -c E004.c
+gcc E004.o -o bomdia && ./bomdia
 ```
 
 
@@ -417,7 +417,7 @@ a) Quantas linhas o arquivo tem depois do pré-processador? De onde veio
  tanta linha? O que aconteceu com os comentários?
 ```
 
-b) Abra o E034.s. Que função aparece depois de "call": printf ou puts?
+b) Abra o E004.s. Que função aparece depois de "call": printf ou puts?
 c) Troque o texto por printf("Bom dia %d\n", 7); e gere o .s de novo.
 
 ```text
@@ -434,14 +434,14 @@ d) Que arquivos novos apareceram na pasta, e qual deles roda?
    sistema): é o stdio.h colado no lugar do #include; os comentários
    somem; b) puts: o texto é fixo e termina em \n, então o compilador troca
    por uma função mais simples; c) com o %d ele precisa formatar e volta a
-   chamar printf; d) E034.s (assembly, texto), E034.o (objeto, binário) e
+   chamar printf; d) E004.s (assembly, texto), E004.o (objeto, binário) e
    bomdia (o executável, o único que roda).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/E034.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E004.c
 ```
 
-**Exercício E035** · ★★★
+**Exercício E005** · ★★★
 
 O número do return chega ao sistema e é assim que scripts e ferramentas
 de CI sabem se um programa deu certo.
@@ -450,8 +450,8 @@ Rode assim, de dentro desta pasta:
 
 
 ```text
-~/LPEDC/rodar E035.c; echo $?
-~/LPEDC/rodar E035.c && echo "pode seguir"
+~/LPEDC/rodar E005.c; echo $?
+~/LPEDC/rodar E005.c && echo "pode seguir"
 ```
 
 
@@ -467,20 +467,20 @@ c) Por que 256 dá esse resultado?
 1. O $? guarda o código de saída do último comando.
 2. O && do terminal só roda o segundo comando se o primeiro devolveu 0.
 3. O sistema guarda só 1 byte (8 bits) do código de saída, e um byte vai
-   de 0 a 255 (você vai ver o porquê no assunto 0008).
+   de 0 a 255 (você vai ver o porquê no assunto 0003).
 4. Resposta esperada: a) 0, 3 e 0; b) não: 3 significa erro, e o && para;
    c) só os 8 bits de baixo chegam ao sistema: 256 é 1 0000 0000 em
    binário, e os 8 bits de baixo são todos zero.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/E035.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E005.c
 ```
 
-**Exercício E036** · ★★★
+**Exercício E006** · ★★★
 
 Para cada situação, diga quem reclama: o pré-processador, o compilador, o
 ligador, ou ninguém (o erro só aparece quando o programa roda). Depois
-provoque cada uma no seu E031 e confira a mensagem.
+provoque cada uma no seu E001 e confira a mensagem.
 
 
 ```text
@@ -506,12 +506,12 @@ f) o } final apagado
    declaration or statement at end of input").
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-primeiro-programa/E036.c
+~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E006.c
 ```
 
 ---
 
-## 0007 · Variáveis
+## 0002 · Variáveis
 
 Na matrícula da academia, a recepcionista preenche uma ficha: idade 25,
 altura 1,75 m, peso 72,5 kg, plano B. Um mês depois, ela apaga o peso e
@@ -552,7 +552,7 @@ Vamos ver na prática. A ficha vira quatro caixinhas, cada uma com seu tipo,
 seu tamanho e seu endereço. Depois, o peso recebe um valor novo e o antigo
 desaparece:
 
-<p align="center"><img src="0007-variaveis/ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
+<p align="center"><img src="0002-variaveis/ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -589,7 +589,7 @@ Repara no fluxograma: criar as variáveis é um passo de processamento (o
 programa reserva memória), e a troca do peso é outro. Ainda é sequência pura,
 um passo depois do outro:
 
-<p align="center"><img src="0007-variaveis/fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
+<p align="center"><img src="0002-variaveis/fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
 
 > [!WARNING]
 > Variável criada sem valor não vale zero: vale **lixo**, o que já estava
@@ -601,8 +601,8 @@ um passo depois do outro:
 > [!TIP]
 > **Por dentro do C:** `&peso` é o endereço da variável, e o `printf` mostra
 > endereços com `%p` (o `(void *)` na frente é exigência do `%p`; você entende
-> no módulo de ponteiros). Rode o A014 sem o AddressSanitizer
-> (`gcc A014.c -o a && ./a`) e repare: as variáveis ficam **coladas** na
+> no módulo de ponteiros). Rode o A004 sem o AddressSanitizer
+> (`gcc A004.c -o a && ./a`) e repare: as variáveis ficam **coladas** na
 > memória, e a distância entre um endereço e o próximo é o tamanho da
 > variável. O `sizeof` não roda nada: o compilador já sabe o tamanho de cada
 > tipo e escreve o número direto no executável. Os tamanhos da tabela são os
@@ -611,13 +611,13 @@ um passo depois do outro:
 
 > [!NOTE]
 > **Pergunta para você:** o `char` guarda um número pequeno. O que você acha
-> que `printf("%d\n", plano);` mostra? Teste no A013.
+> que `printf("%d\n", plano);` mostra? Teste no A003.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0007-variaveis/`](0007-variaveis/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0002-variaveis/`](0002-variaveis/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A013 · A ficha da academia**
+**Exemplo A003 · A ficha da academia**
 
 ```c
 #include <stdio.h>
@@ -649,10 +649,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/A013.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/A003.c
 ```
 
-**Exemplo A014 · Onde moram as variáveis**
+**Exemplo A004 · Onde moram as variáveis**
 
 ```c
 #include <stdio.h>
@@ -680,19 +680,19 @@ int main(void) {
 //
 // Com o rodar, o AddressSanitizer deixa uma folga entre as variáveis para
 // flagrar quem escreve fora do lugar. Sem ele, elas ficam coladas:
-//   gcc A014.c -o a && ./a
+//   gcc A004.c -o a && ./a
 //   plano: 1 byte  em 0x7ffccb532f1b
 //   idade: 4 bytes em 0x7ffccb532f1c     (logo depois do plano)
 //   peso:  8 bytes em 0x7ffccb532f20     (4 bytes depois da idade)
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/A014.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/A004.c
 ```
 
 #### Exercícios
 
-**Exercício E037** · ★☆☆
+**Exercício E007** · ★☆☆
 
 No mercado, a etiqueta de um produto tem: código 1042, preço R$ 8.99,
 peso 0.5 kg e setor 'H' (hortifrúti). Crie uma variável para cada dado,
@@ -714,10 +714,10 @@ Setor: H
 3. Resposta esperada: as quatro linhas acima.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/E037.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/E007.c
 ```
 
-**Exercício E038** · ★☆☆
+**Exercício E008** · ★☆☆
 
 Quais destes nomes de variável o C aceita? Para cada inválido, diga o
 motivo. Depois tente declarar alguns (int nome = 0;) e veja o erro do gcc.
@@ -744,10 +744,10 @@ variável?
    é válido, mas o compilador e a biblioteca usam esses nomes.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/E038.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/E008.c
 ```
 
-**Exercício E039** · ★★☆
+**Exercício E009** · ★★☆
 
 O cadastro de um aluno da autoescola guarda: idade (int, 19), nota da
 prova teórica (double, 8.5), nota da prova prática (double, 9.0),
@@ -777,10 +777,10 @@ juntas? Se você trocasse as duas notas para float, quanto economizaria?
    folgas entre as variáveis, mas o total de dados é esse.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/E039.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/E009.c
 ```
 
-**Exercício E040** · ★★☆
+**Exercício E010** · ★★☆
 
 O operador do placar eletrônico digitou invertido: o programa abaixo
 mostra Casa 1 x 3 Visitante, mas o certo é Casa 3 x 1 Visitante. Sem
@@ -802,10 +802,10 @@ Casa 3 x 1 Visitante
    e a saída "Casa 3 x 1 Visitante".
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/E040.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/E010.c
 ```
 
-**Exercício E041** · ★★★
+**Exercício E011** · ★★★
 
 Este programa tem TRÊS erros e o gcc mostra um aviso para cada um (numa
 versão mais nova do gcc, um deles já vira erro). Rode, leia os avisos, diga
@@ -832,10 +832,10 @@ Público: 45000
    %.0f).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/E041.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/E011.c
 ```
 
-**Exercício E042** · ★★★
+**Exercício E012** · ★★★
 
 Para o C, um char é só um número pequeno, e o %c mostra o símbolo que
 tem aquele código. Sem rodar, escreva o que cada printf mostra:
@@ -864,12 +864,12 @@ mesma coisa?
    sete, de código 55; 7 é o número sete. São diferentes.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-variaveis/E042.c
+~/LPEDC/rodar 01-fundamentos/0002-variaveis/E012.c
 ```
 
 ---
 
-## 0008 · Tipos e limites
+## 0003 · Tipos e limites
 
 A catraca do estádio conta os torcedores num contador de 16 bits. No clássico
 de domingo, o Maracanã recebeu 78.838 pessoas. Quando o torcedor número 65.536
@@ -921,7 +921,7 @@ para 00000. Vamos ver na prática. A catraca é um `unsigned short` com 65.535,
 os 16 bits ligados. Somar 1 dá 65.536, que precisa de 17 bits; o bit de cima
 não cabe e some:
 
-<p align="center"><img src="0008-tipos-e-limites/ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
+<p align="center"><img src="0003-tipos-e-limites/ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -952,7 +952,7 @@ Repara no fluxograma: a pergunta "cabe em 16 bits?" quem faz não é o seu
 programa, é o próprio hardware. Quando não cabe, ele guarda só os 16 bits de
 baixo, sem avisar ninguém:
 
-<p align="center"><img src="0008-tipos-e-limites/fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
+<p align="center"><img src="0003-tipos-e-limites/fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
 
 > [!WARNING]
 > Com `unsigned`, o estouro dá a volta. Com tipos **com sinal** (`int`,
@@ -973,13 +973,13 @@ baixo, sem avisar ninguém:
 
 > [!NOTE]
 > **Pergunta para você:** se a catraca começasse em 65.530 e passassem 10
-> torcedores, o que o painel mostraria? Mude o A015 e confira.
+> torcedores, o que o painel mostraria? Mude o A005 e confira.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0008-tipos-e-limites/`](0008-tipos-e-limites/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0003-tipos-e-limites/`](0003-tipos-e-limites/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A015 · A catraca que voltou a zero**
+**Exemplo A005 · A catraca que voltou a zero**
 
 ```c
 #include <stdio.h>
@@ -1005,10 +1005,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/A015.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/A005.c
 ```
 
-**Exemplo A016 · A tabela de tamanhos e limites desta máquina**
+**Exemplo A006 · A tabela de tamanhos e limites desta máquina**
 
 ```c
 #include <stdio.h>
@@ -1049,12 +1049,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/A016.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/A006.c
 ```
 
 #### Exercícios
 
-**Exercício E043** · ★☆☆
+**Exercício E013** · ★☆☆
 
 Sem calculadora, responda como comentário:
 
@@ -1080,10 +1080,10 @@ o rodar, que segue o C17, avisa se você usar.)
    d) 16, 256 e 65.536.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/E043.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E013.c
 ```
 
-**Exercício E044** · ★☆☆
+**Exercício E014** · ★☆☆
 
 Escolha o MENOR tipo inteiro que guarda cada dado com folga e declare uma
 variável para cada um, com o valor indicado. Mostre todas com printf.
@@ -1110,7 +1110,7 @@ ano: 1991
 
 **Dicas:**
 
-1. Confira os limites na tabela do texto ou rodando o A016.
+1. Confira os limites na tabela do texto ou rodando o A006.
 2. short vai até 32767; int até uns 2,1 bilhões; acima disso, long long.
 3. Resposta esperada: a) signed char ou int8_t (até 127) serve; short
    também; b) signed char/int8_t (aceita negativo); c) int (cabe com folga
@@ -1119,10 +1119,10 @@ ano: 1991
    inteiros pequenos: economize só quando tiver milhões deles.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/E044.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E014.c
 ```
 
-**Exercício E045** · ★★☆
+**Exercício E015** · ★★☆
 
 Os três contadores abaixo são unsigned, então o estouro dá a volta.
 Sem rodar, escreva o que cada printf mostra:
@@ -1162,10 +1162,10 @@ Depois copie para a main, rode e confira.
    464 (66000 - 65536).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/E045.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E015.c
 ```
 
-**Exercício E046** · ★★☆
+**Exercício E016** · ★★☆
 
 De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
 13! (13 fatorial = 1 * 2 * ... * 13). O programa abaixo parte de 12! e
@@ -1188,10 +1188,10 @@ Saída esperada (depois de consertar):
    errado (1932053504). Conserto: long long fatorial e %lld (ou int64_t).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/E046.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E016.c
 ```
 
-**Exercício E047** · ★★★
+**Exercício E017** · ★★★
 
 Dois estouros que viraram notícia:
 
@@ -1232,10 +1232,10 @@ int64_t vai até 9223372036854775807
    c) some na prática: 2^63 segundos são uns 292 bilhões de anos.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/E047.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E017.c
 ```
 
-**Exercício E048** · ★★★
+**Exercício E018** · ★★★
 
 Sem rodar, preveja a saída num PC Linux de 64 bits. Depois copie para a
 main (com os #include) e confira.
@@ -1270,12 +1270,12 @@ b) Num PC com Windows, o sizeof(long) daria o mesmo? Que tipo você usa
    bytes; use int64_t (ou long long, que tem pelo menos 64 bits).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-tipos-e-limites/E048.c
+~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E018.c
 ```
 
 ---
 
-## 0009 · Constantes
+## 0004 · Constantes
 
 A tarifa do ônibus aparece em dez lugares do sistema da empresa: no letreiro,
 no cálculo da ida e volta, no recibo, no relatório... Em janeiro ela sobe de
@@ -1315,7 +1315,7 @@ Vamos ver na prática. O pré-processador troca `TARIFA` por `4.90` e `EMPRESA`
 pelo nome da viação. A `linha` é uma caixinha com cadeado: tem endereço, mas
 ninguém escreve nela:
 
-<p align="center"><img src="0009-constantes/ideia.svg" alt="Diagrama da ideia: Constantes" width="858"></p>
+<p align="center"><img src="0004-constantes/ideia.svg" alt="Diagrama da ideia: Constantes" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -1345,7 +1345,7 @@ Repara no fluxograma: o primeiro passo acontece antes de o programa existir.
 A troca de texto é feita na compilação; quando o executável roda, ele só tem
 os números:
 
-<p align="center"><img src="0009-constantes/fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
+<p align="center"><img src="0004-constantes/fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
 
 > [!WARNING]
 > O `#define` cola **exatamente** o texto que vem depois do nome. Com
@@ -1355,7 +1355,7 @@ os números:
 > linha onde o nome é **usado**, não na linha do `#define`, o que confunde.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A017.c | tail -12` e veja: não sobrou
+> **Por dentro do C:** rode `gcc -E A007.c | tail -12` e veja: não sobrou
 > nenhum `TARIFA`, só `4.90`. Por isso um `#define` não ocupa memória, não tem
 > tipo e não aparece no depurador. Já a `const int linha` mora na memória:
 > `&linha` tem endereço e `sizeof linha` vale 4. E os literais têm tamanho:
@@ -1365,13 +1365,13 @@ os números:
 
 > [!NOTE]
 > **Pergunta para você:** o pré-processador troca `TARIFA` dentro das aspas?
-> O que `printf("TARIFA\n");` mostra? Teste no A017.
+> O que `printf("TARIFA\n");` mostra? Teste no A007.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0009-constantes/`](0009-constantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0004-constantes/`](0004-constantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A017 · A tarifa num lugar só**
+**Exemplo A007 · A tarifa num lugar só**
 
 ```c
 #include <stdio.h>
@@ -1394,15 +1394,15 @@ int main(void) {
 // Tarifa: R$ 4.90
 // Ida e volta: R$ 9.80
 //
-// Veja a troca acontecendo: gcc -E A017.c | tail -12
+// Veja a troca acontecendo: gcc -E A007.c | tail -12
 // Tente escrever linha = 102; dentro da main e leia o erro do gcc.
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/A017.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/A007.c
 ```
 
-**Exemplo A018 · Escapes e literais em várias bases**
+**Exemplo A008 · Escapes e literais em várias bases**
 
 ```c
 #include <stdio.h>
@@ -1441,12 +1441,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/A018.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/A008.c
 ```
 
 #### Exercícios
 
-**Exercício E049** · ★☆☆
+**Exercício E019** · ★☆☆
 
 Mostre exatamente estas linhas, usando sequências de escape. A segunda
 linha tem um \t entre "Saldo:" e o valor.
@@ -1468,10 +1468,10 @@ Rendimento: 100% do CDI
    mostra a tabulação como espaços até a coluna 9).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/E049.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/E019.c
 ```
 
-**Exercício E050** · ★☆☆
+**Exercício E020** · ★☆☆
 
 O letreiro do posto mostra o nome e o preço de dois combustíveis. Crie um
 #define para o nome do posto e um para cada preço, e mostre o letreiro.
@@ -1493,10 +1493,10 @@ Etanol:   R$ 4.19
    vira "Gasolina: R$ 6.49" e só a linha do #define mudou.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/E050.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/E020.c
 ```
 
-**Exercício E051** · ★★☆
+**Exercício E021** · ★★☆
 
 Este programa não compila de propósito: tem TRÊS erros com constantes.
 Rode, leia as mensagens (repare em QUAL linha o gcc aponta) e conserte.
@@ -1520,10 +1520,10 @@ Vencimento: dia 10
    variable 'dia'").
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/E051.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/E021.c
 ```
 
-**Exercício E052** · ★★☆
+**Exercício E022** · ★★☆
 
 Para cada literal, diga o tipo e o valor. Depois escreva um programa que
 mostre o sizeof de cada um (com %zu) para confirmar os tipos.
@@ -1557,10 +1557,10 @@ Saída esperada:
    zero); "0" texto de 2 bytes ('0' e '\0'); 1e3 double (1000).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/E052.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/E022.c
 ```
 
-**Exercício E053** · ★★★
+**Exercício E023** · ★★★
 
 Alguém quis guardar o pi numa constante e calcular o comprimento de uma
 pista circular de raio 10 m. O programa compila sem aviso nenhum. Sem
@@ -1590,10 +1590,10 @@ Comprimento: 62.83 m
    const double pi = 3.14159; ou #define PI 3.14159, com %.2f no printf.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/E053.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/E023.c
 ```
 
-**Exercício E054** · ★★★
+**Exercício E024** · ★★★
 
 Sem rodar, preveja cada linha da saída. Depois copie para um programa e
 confira.
@@ -1624,12 +1624,12 @@ printf("a\\n b\n");
    "50% off" e "a\n b" (com a barra e o n de verdade, numa linha só).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-constantes/E054.c
+~/LPEDC/rodar 01-fundamentos/0004-constantes/E024.c
 ```
 
 ---
 
-## 0010 · printf
+## 0005 · printf
 
 O cupom do mercado sai da impressora com as colunas certinhas: o nome do
 produto encostado à esquerda, a quantidade e o preço encostados à direita,
@@ -1670,7 +1670,7 @@ Vamos ver na prática. A linha do arroz tem três buracos: `%-10s` reserva 10
 casas para o nome, encostado à esquerda; `%3d` reserva 3 casas para a
 quantidade; `%9.2f` reserva 9 casas para o total, com 2 decimais:
 
-<p align="center"><img src="0010-printf/ideia.svg" alt="Diagrama da ideia: printf" width="858"></p>
+<p align="center"><img src="0005-printf/ideia.svg" alt="Diagrama da ideia: printf" width="858"></p>
 
 O cupom inteiro em C:
 
@@ -1696,7 +1696,7 @@ int main(void) {
 Repara no fluxograma: cada `printf` é uma saída, e todas usam o mesmo
 formato. Mudar a largura de uma coluna é mudar um número só, em cada linha:
 
-<p align="center"><img src="0010-printf/fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
+<p align="center"><img src="0005-printf/fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
 
 > [!WARNING]
 > O `printf` **confia** em você: se o especificador não combina com o tipo do
@@ -1713,7 +1713,7 @@ formato. Mudar a largura de uma coluna é mudar um número só, em cada linha:
 > A largura conta **bytes**, não letras: `"Feijão"` tem 6 letras e 7 bytes
 > (o `ã` ocupa 2 no UTF-8), então `%-10s` deixa a coluna dele uma casa mais
 > curta. E o `printf` devolve quantos bytes escreveu: `printf("Olá\n")` devolve
-> 5. O A020 mostra isso.
+> 5. O A010 mostra isso.
 
 > [!NOTE]
 > **Pergunta para você:** o que `printf("[%5.1f]\n", 3456.78);` mostra? A
@@ -1721,9 +1721,9 @@ formato. Mudar a largura de uma coluna é mudar um número só, em cada linha:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0010-printf/`](0010-printf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0005-printf/`](0005-printf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A019 · O cupom alinhado do mercado**
+**Exemplo A009 · O cupom alinhado do mercado**
 
 ```c
 #include <stdio.h>
@@ -1745,10 +1745,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/A019.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/A009.c
 ```
 
-**Exemplo A020 · O mesmo valor em vários formatos**
+**Exemplo A010 · O mesmo valor em vários formatos**
 
 ```c
 #include <stdio.h>
@@ -1787,12 +1787,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/A020.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/A010.c
 ```
 
 #### Exercícios
 
-**Exercício E055** · ★☆☆
+**Exercício E025** · ★☆☆
 
 Mostre o boletim da Júlia com um printf por linha, usando variáveis:
 nota 8.75 (mostrada com uma casa), 3 faltas e conceito 'B'.
@@ -1813,10 +1813,10 @@ Conceito: B
 3. Resposta esperada: as quatro linhas acima (8.75 vira 8.8 só na tela).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/E055.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/E025.c
 ```
 
-**Exercício E056** · ★☆☆
+**Exercício E026** · ★☆☆
 
 Sem rodar, escreva exatamente o que cada linha mostra (os colchetes ajudam
 a ver os espaços). Depois copie para a main e confira.
@@ -1840,10 +1840,10 @@ printf("[%x][%X][%o]\n", 26, 26, 26);
    [1a][1A][32]
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/E056.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/E026.c
 ```
 
-**Exercício E057** · ★★☆
+**Exercício E027** · ★★☆
 
 Monte o painel de preços do posto, com as colunas alinhadas. Guarde cada
 preço numa variável double e use largura no formato (nada de contar
@@ -1869,10 +1869,10 @@ GNV           R$ 4.99
 3. Resposta esperada: as seis linhas acima, com "R$" sempre na coluna 15.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/E057.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/E027.c
 ```
 
-**Exercício E058** · ★★☆
+**Exercício E028** · ★★☆
 
 Este programa compila, mas o gcc mostra TRÊS avisos, e a saída sai
 errada (números sem sentido). Rode, leia cada aviso e conserte. O pedido
@@ -1895,10 +1895,10 @@ Total: R$ 137.70
    argumento total.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/E058.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/E028.c
 ```
 
-**Exercício E059** · ★★★
+**Exercício E029** · ★★★
 
 No CSS, uma cor é escrita como #RRGGBB: três bytes em hexadecimal, sempre
 com dois dígitos cada. O azul do botão do seu app tem vermelho 30, verde
@@ -1925,10 +1925,10 @@ Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
    e, com 0, 8 e 15, #00080F.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/E059.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/E029.c
 ```
 
-**Exercício E060** · ★★★
+**Exercício E030** · ★★★
 
 Seis linhas, seis pegadinhas. Sem rodar, preveja a saída de cada uma e
 explique. Depois rode e confira.
@@ -1955,12 +1955,12 @@ printf("[%d]\n", n);
    [0.0001] [1e-05]; "Pão" e depois [5] (P, ã com 2 bytes, o e o \n).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-printf/E060.c
+~/LPEDC/rodar 01-fundamentos/0005-printf/E030.c
 ```
 
 ---
 
-## 0011 · scanf
+## 0006 · scanf
 
 No app do banco, você agenda um Pix: digita o valor, R$ 150,75, e o dia do
 mês, 12. O app lê o que você digitou, guarda e confirma. Até aqui os
@@ -2006,7 +2006,7 @@ Vamos ver na prática. Você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
 `150.75` da fila e escreve no endereço de `valor`. O `%d` pula o `'\n'` que
 sobrou, tira o `12` e escreve em `dia`. O último `'\n'` continua na fila:
 
-<p align="center"><img src="0011-scanf/ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
+<p align="center"><img src="0006-scanf/ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -2034,13 +2034,13 @@ int main(void) {
 ```
 
 Para testar sem digitar, mande a entrada por um cano:
-`printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0011-scanf/A021.c`. O
+`printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c`. O
 que vem antes do `|` vira o teclado do programa.
 
 Repara no fluxograma: as duas leituras são paralelogramos de entrada, cada
 uma guardando o valor numa caixinha, e só depois vem a saída:
 
-<p align="center"><img src="0011-scanf/fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
+<p align="center"><img src="0006-scanf/fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
 
 > [!WARNING]
 > Esquecer o `&` é o erro clássico: `scanf("%d", dia)` entrega ao `scanf` o
@@ -2066,9 +2066,9 @@ uma guardando o valor numa caixinha, e só depois vem a saída:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0011-scanf/`](0011-scanf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0006-scanf/`](0006-scanf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A021 · O Pix agendado**
+**Exemplo A011 · O Pix agendado**
 
 ```c
 #include <stdio.h>
@@ -2096,10 +2096,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/A021.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
 ```
 
-**Exemplo A022 · A data da entrega e o tamanho da camiseta**
+**Exemplo A012 · A data da entrega e o tamanho da camiseta**
 
 ```c
 #include <stdio.h>
@@ -2134,12 +2134,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/A022.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/A012.c
 ```
 
 #### Exercícios
 
-**Exercício E061** · ★☆☆
+**Exercício E031** · ★☆☆
 
 Escreva um programa que pergunte a idade (inteiro) e a altura em metros
 (real) e responda numa frase só, com a altura em duas casas.
@@ -2153,7 +2153,7 @@ Você tem 30 anos e 1.75 m de altura.
 ```
 
 
-Teste sem digitar: printf '30\n1.75\n' | ~/LPEDC/rodar E061.c
+Teste sem digitar: printf '30\n1.75\n' | ~/LPEDC/rodar E031.c
 
 **Dicas:**
 
@@ -2163,13 +2163,13 @@ Teste sem digitar: printf '30\n1.75\n' | ~/LPEDC/rodar E061.c
    altura."
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/E061.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/E031.c
 ```
 
-**Exercício E062** · ★☆☆
+**Exercício E032** · ★☆☆
 
 Este programa compila com DOIS avisos e, quando roda, quebra ou mostra
-lixo. Rode com printf '42\n80.5\n' | ~/LPEDC/rodar E062.c, leia os avisos
+lixo. Rode com printf '42\n80.5\n' | ~/LPEDC/rodar E032.c, leia os avisos
 e o relatório do AddressSanitizer, e conserte.
 
 
@@ -2191,10 +2191,10 @@ Calçado 42, peso 80.5 kg
    scanf usa %lf, não %f.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/E062.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/E032.c
 ```
 
-**Exercício E063** · ★★☆
+**Exercício E033** · ★★☆
 
 O alarme do celular pede a hora no formato hh:mm. Leia a hora e os
 minutos com UM scanf só e mostre de dois jeitos. Mostre também quantos
@@ -2222,14 +2222,14 @@ acontece com os itens lidos e com os minutos? Por quê?
    um espaço: para ali, lê só 1 item, e os minutos ficam 0.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/E063.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/E033.c
 ```
 
-**Exercício E064** · ★★☆
+**Exercício E034** · ★★☆
 
 A lanchonete pergunta quantos lanches e se é para viagem (V) ou para comer
 aqui (A). Este programa compila sem aviso, mas não funciona: rode com
-printf '3\nV\n' | ~/LPEDC/rodar E064.c e veja a opção sair vazia. Explique
+printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia. Explique
 o que aconteceu e conserte mudando UM caractere.
 
 
@@ -2247,10 +2247,10 @@ Quantidade: Opção (V/A): 3 lanche(s), opção V (código 86)
    um espaço antes do %c, que manda pular espaços e Enters.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/E064.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/E034.c
 ```
 
-**Exercício E065** · ★★★
+**Exercício E035** · ★★★
 
 Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
 UM scanf("%d %d", &a, &b), guarde o retorno e mostre "lidos=? a=? b=?".
@@ -2258,11 +2258,11 @@ Antes de testar, preveja o resultado para cada entrada:
 
 
 ```text
-printf '7 9\n'   | ~/LPEDC/rodar E065.c
-printf '7 x\n'   | ~/LPEDC/rodar E065.c
-printf 'x 7\n'   | ~/LPEDC/rodar E065.c
-printf '7\n\n9\n' | ~/LPEDC/rodar E065.c
-printf ''        | ~/LPEDC/rodar E065.c
+printf '7 9\n'   | ~/LPEDC/rodar E035.c
+printf '7 x\n'   | ~/LPEDC/rodar E035.c
+printf 'x 7\n'   | ~/LPEDC/rodar E035.c
+printf '7\n\n9\n' | ~/LPEDC/rodar E035.c
+printf ''        | ~/LPEDC/rodar E035.c
 ```
 
 **Dicas:**
@@ -2276,10 +2276,10 @@ printf ''        | ~/LPEDC/rodar E065.c
    "lidos=-1 a=0 b=0".
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/E065.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/E035.c
 ```
 
-**Exercício E066** · ★★★
+**Exercício E036** · ★★★
 
 Bancos de dados e APIs usam a data no formato ISO: aaaa-mm-dd. Leia uma
 data no formato brasileiro e mostre no ISO, sempre com mês e dia de dois
@@ -2302,12 +2302,12 @@ ISO: 2026-09-07
    "ISO: 2026-09-07" para as três entradas.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-scanf/E066.c
+~/LPEDC/rodar 01-fundamentos/0006-scanf/E036.c
 ```
 
 ---
 
-## 0012 · Aritmética
+## 0007 · Aritmética
 
 Sexta à noite, cinco amigos pedem três pizzas de 8 fatias. São 24 fatias:
 quantas cada um come, e quantas sobram para a disputa no par ou ímpar? E a
@@ -2339,14 +2339,14 @@ A **precedência** é a da matemática da escola: `*`, `/` e `%` antes de `+` e
 `-`. Empate se resolve da esquerda para a direita: `100 / 10 / 2` é
 `(100 / 10) / 2`, que dá 5. Parênteses mandam em tudo, e sobrar parêntese não
 é defeito: deixa a intenção clara. O C não tem operador de potência; `^` é
-outra coisa (assunto 0070). Para potência, use `pow` (assunto 0015) ou
+outra coisa (assunto 0065). Para potência, use `pow` (assunto 0010) ou
 multiplique: `x * x`.
 
 Vamos ver na prática. As 24 fatias são divididas entre os cinco, quatro para
 cada um. O `/` conta as rodadas completas e o `%` conta as fatias que não
 fecham mais uma rodada:
 
-<p align="center"><img src="0012-aritmetica/ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
+<p align="center"><img src="0007-aritmetica/ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -2380,7 +2380,7 @@ Repara no fluxograma: cada conta é um retângulo de processamento, um depois
 do outro. A ordem importa: `cada` e `sobra` só podem ser calculados depois
 que `fatias` tem valor:
 
-<p align="center"><img src="0012-aritmetica/fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
+<p align="center"><img src="0007-aritmetica/fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
 
 > [!WARNING]
 > A média que dá errado: com `int a = 7, b = 8;`, a linha
@@ -2406,9 +2406,9 @@ que `fatias` tem valor:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0012-aritmetica/`](0012-aritmetica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0007-aritmetica/`](0007-aritmetica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A023 · Rachando a pizza**
+**Exemplo A013 · Rachando a pizza**
 
 ```c
 #include <stdio.h>
@@ -2437,10 +2437,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/A023.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/A013.c
 ```
 
-**Exemplo A024 · Quanto dura o podcast**
+**Exemplo A014 · Quanto dura o podcast**
 
 ```c
 #include <stdio.h>
@@ -2472,12 +2472,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/A024.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/A014.c
 ```
 
 #### Exercícios
 
-**Exercício E067** · ★☆☆
+**Exercício E037** · ★☆☆
 
 Para a festa, você fez 50 brigadeiros e vai embalar em caixas de 12.
 Quantas caixas ficam cheias e quantos brigadeiros sobram? E os 7 ingressos
@@ -2499,10 +2499,10 @@ Ingressos: R$ 245
 3. Resposta esperada: 50 / 12 = 4, 50 % 12 = 2 e 7 * 35 = 245.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/E067.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E037.c
 ```
 
-**Exercício E068** · ★☆☆
+**Exercício E038** · ★☆☆
 
 Sem rodar, calcule cada expressão. Depois confira com um printf para cada
 uma (%d para as inteiras e %.1f para a real).
@@ -2524,10 +2524,10 @@ d) 17 % 5             h) 17.0 / 5
    (6 % 4); h) 3.4.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/E068.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E038.c
 ```
 
-**Exercício E069** · ★★☆
+**Exercício E039** · ★★☆
 
 Escreva o programa que racha a conta do restaurante: lê o valor da conta
 e o número de pessoas, soma 10% de serviço e mostra o serviço, o total e
@@ -2544,7 +2544,7 @@ Cada um: R$ 65.31
 ```
 
 
-Teste: printf '237.50\n4\n' | ~/LPEDC/rodar E069.c
+Teste: printf '237.50\n4\n' | ~/LPEDC/rodar E039.c
 
 **Dicas:**
 
@@ -2554,10 +2554,10 @@ Teste: printf '237.50\n4\n' | ~/LPEDC/rodar E069.c
    (261.25 / 4 = 65.3125, e o %.2f mostra 65.31).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/E069.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E039.c
 ```
 
-**Exercício E070** · ★★☆
+**Exercício E040** · ★★☆
 
 Este programa compila e roda sem aviso nenhum, mas as duas médias estão
 erradas. As notas são 8, 7 e 8; a média certa é 7.67. Descubra os DOIS
@@ -2581,10 +2581,10 @@ Média 2: 7.67
    parênteses em volta da soma.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/E070.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E040.c
 ```
 
-**Exercício E071** · ★★★
+**Exercício E041** · ★★★
 
 O kit escolar custa R$ 20 de material mais R$ 5 de frete. Alguém criou um
 #define para o preço do kit e calculou o preço de 3 kits. Sem rodar, diga
@@ -2605,10 +2605,10 @@ Saída esperada (depois de consertar):
    3 * 20 + 5 = 65. Conserto: #define KIT (20 + 5).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/E071.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E041.c
 ```
 
-**Exercício E072** · ★★★
+**Exercício E042** · ★★★
 
 Leia um número de 3 dígitos e mostre ao contrário, usando só / e %
 (nada de texto). Depois teste com 120: o que aparece? Como mostrar 021?
@@ -2621,7 +2621,7 @@ Ao contrário: 274
 ```
 
 
-Teste: printf '472\n' | ~/LPEDC/rodar E072.c
+Teste: printf '472\n' | ~/LPEDC/rodar E042.c
 
 **Dicas:**
 
@@ -2632,12 +2632,12 @@ Teste: printf '472\n' | ~/LPEDC/rodar E072.c
    (zero à esquerda não existe num int); para mostrar 021, use %03d.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0012-aritmetica/E072.c
+~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E042.c
 ```
 
 ---
 
-## 0013 · Conversão e cast
+## 0008 · Conversão e cast
 
 Você zerou o hodômetro parcial no último tanque. Agora rodou 523 km e
 precisou de 41 litros para encher de novo. Quantos km por litro o carro faz?
@@ -2669,7 +2669,7 @@ Vamos ver na prática. Pelo caminho de cima, os dois `int` se dividem, sai 12,
 e só então ele vira 12.0, tarde demais. Pelo caminho de baixo, o cast
 transforma o 523 em 523.0 antes da divisão, e o resultado é real:
 
-<p align="center"><img src="0013-conversao/ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
+<p align="center"><img src="0008-conversao/ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -2703,7 +2703,7 @@ Repara no fluxograma: a pergunta que decide o resultado é "tem um real na
 divisão?". Ela é respondida pelo compilador, olhando os tipos, antes de o
 programa rodar. O exemplo segue pelo Sim, graças ao cast:
 
-<p align="center"><img src="0013-conversao/fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
+<p align="center"><img src="0008-conversao/fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
 
 > [!WARNING]
 > O cast precisa chegar **antes** da divisão. `(double) (km / litros)` parece
@@ -2728,9 +2728,9 @@ programa rodar. O exemplo segue pelo Sim, graças ao cast:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0013-conversao/`](0013-conversao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0008-conversao/`](0008-conversao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A025 · O consumo do carro**
+**Exemplo A015 · O consumo do carro**
 
 ```c
 #include <stdio.h>
@@ -2759,10 +2759,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/A025.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/A015.c
 ```
 
-**Exemplo A026 · Conversões que acontecem sozinhas**
+**Exemplo A016 · Conversões que acontecem sozinhas**
 
 ```c
 #include <stdio.h>
@@ -2802,12 +2802,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/A026.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/A016.c
 ```
 
 #### Exercícios
 
-**Exercício E073** · ★☆☆
+**Exercício E043** · ★☆☆
 
 As notas do simulado são inteiras: 7, 8 e 10. Guarde em três int e mostre
 a média com duas casas, usando um cast (sem trocar o tipo das variáveis
@@ -2826,10 +2826,10 @@ Média: 8.33
 3. Resposta esperada: "Média: 8.33" (25 / 3 = 8.333...).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/E073.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/E043.c
 ```
 
-**Exercício E074** · ★☆☆
+**Exercício E044** · ★☆☆
 
 Sem rodar, diga o valor guardado em cada variável. Depois mostre todas
 com printf (%d para int, %.1f para double, %c para char) e confira.
@@ -2854,10 +2854,10 @@ int g = (int) 3.999;
    f = 3.0; g = 3.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/E074.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/E044.c
 ```
 
-**Exercício E075** · ★★☆
+**Exercício E045** · ★★☆
 
 Na eleição para síndico, a candidata Marta teve 47 dos 130 votos. Mostre
 o percentual dela com duas casas. Depois responda: por que a fórmula
@@ -2879,10 +2879,10 @@ Marta: 36.15% dos votos
    na parte inteira, mas os decimais somem.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/E075.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/E045.c
 ```
 
-**Exercício E076** · ★★☆
+**Exercício E046** · ★★☆
 
 Na balança do açougue, a picanha custa R$ 45.90 o quilo. O programa
 calcula o preço de 600 gramas, mas mostra R$ 0.00. Ele compila sem aviso.
@@ -2903,10 +2903,10 @@ Saída esperada (depois de consertar):
    gramas * preco_kg / 1000). Resultado: R$ 27.54.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/E076.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/E046.c
 ```
 
-**Exercício E077** · ★★★
+**Exercício E047** · ★★★
 
 Sistemas de pagamento guardam dinheiro em centavos inteiros, para fugir
 dos erros dos números reais. Este programa converte R$ 19.99 para
@@ -2926,14 +2926,14 @@ R$ 19.99 = 1999 centavos
 3. Somar 0.5 antes de cortar arredonda para o inteiro mais próximo.
 4. Resposta esperada: mostra 1998, porque 19.99 não existe exato em
    binário e 19.99 * 100 dá 1998.99999999999977..., que o int corta.
-   Conserto: int centavos = valor * 100 + 0.5; (no assunto 0015, a função
+   Conserto: int centavos = valor * 100 + 0.5; (no assunto 0010, a função
    round faz isso).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/E077.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/E047.c
 ```
 
-**Exercício E078** · ★★★
+**Exercício E048** · ★★★
 
 Sem rodar, preveja cada linha. Pense no tipo de cada pedaço da conta.
 
@@ -2960,12 +2960,12 @@ printf("%d\n", (int) 3.7 + (int) 3.7);
 4. Resposta esperada: "A 65"; 25; 4; 4.0; 5.0; 7 (7.4 cortado); 6 (3 + 3).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0013-conversao/E078.c
+~/LPEDC/rodar 01-fundamentos/0008-conversao/E048.c
 ```
 
 ---
 
-## 0014 · Atribuição, ++ e --
+## 0009 · Atribuição, ++ e --
 
 O bilhete único tem R$ 20,00. Você recarrega R$ 30,00, pega dois ônibus de
 R$ 4,40 e o validador conta as viagens. O saldo não é recalculado do zero a
@@ -3006,7 +3006,7 @@ que vale 7, depois `b = 7` e por fim `a = 7`.
 Vamos ver na prática. O saldo passa por quatro valores, cada um calculado a
 partir do anterior, na mesma caixinha. As viagens sobem de um em um:
 
-<p align="center"><img src="0014-atribuicao/ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
+<p align="center"><img src="0009-atribuicao/ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -3039,7 +3039,7 @@ Repara no fluxograma: cada atualização é um retângulo, e todos mexem nas
 mesmas duas variáveis. No módulo 03 esses passos repetidos vão virar uma
 repetição; o `+=` e o `++` são o coração de todo contador e acumulador:
 
-<p align="center"><img src="0014-atribuicao/fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
+<p align="center"><img src="0009-atribuicao/fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
 
 > [!WARNING]
 > Nunca altere a mesma variável duas vezes na mesma expressão, nem altere e
@@ -3064,9 +3064,9 @@ repetição; o `+=` e o `++` são o coração de todo contador e acumulador:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0014-atribuicao/`](0014-atribuicao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0009-atribuicao/`](0009-atribuicao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A027 · O bilhete único**
+**Exemplo A017 · O bilhete único**
 
 ```c
 #include <stdio.h>
@@ -3094,10 +3094,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/A027.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/A017.c
 ```
 
-**Exemplo A028 · Pré, pós e o operador que vale para a conta inteira**
+**Exemplo A018 · Pré, pós e o operador que vale para a conta inteira**
 
 ```c
 #include <stdio.h>
@@ -3140,12 +3140,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/A028.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/A018.c
 ```
 
 #### Exercícios
 
-**Exercício E079** · ★☆☆
+**Exercício E049** · ★☆☆
 
 Refatore: reescreva as cinco linhas marcadas usando os operadores
 compostos e o ++, sem mudar o que o programa mostra.
@@ -3164,10 +3164,10 @@ pontos 110, vidas 2, moedas 40, tempo 45, fase 4
    fase++; e a mesma saída.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/E079.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E049.c
 ```
 
-**Exercício E080** · ★☆☆
+**Exercício E050** · ★☆☆
 
 Sem rodar, faça o teste de mesa: uma tabela com uma coluna para cada
 variável e uma linha para cada instrução. Qual o valor final de x, y, z
@@ -3189,10 +3189,10 @@ int w = x--;
    (x vira 6 depois). Final: x = 6, y = 5, z = 7, w = 7.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/E080.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E050.c
 ```
 
-**Exercício E081** · ★★☆
+**Exercício E051** · ★★☆
 
 O cofrinho digital começa vazio. Use uma variável saldo e os operadores
 compostos para registrar o mês, mostrando o saldo depois de cada passo:
@@ -3219,10 +3219,10 @@ Rendimento: R$ 17.68
    %.2f mostra como 17.68).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/E081.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E051.c
 ```
 
-**Exercício E082** · ★★☆
+**Exercício E052** · ★★☆
 
 Sem rodar, diga o valor de x depois de cada linha (as linhas rodam em
 sequência, uma depois da outra). Depois confira com um printf após cada
@@ -3250,10 +3250,10 @@ quê?
    Não: x *= 2 + y é x = x * (2 + y), outra conta.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/E082.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E052.c
 ```
 
-**Exercício E083** · ★★★
+**Exercício E053** · ★★★
 
 Este programa compila, mas o gcc mostra avisos. Pior: cada compilador
 pode mostrar uma saída diferente. Rode, leia os avisos e explique por que
@@ -3278,10 +3278,10 @@ fila: atendendo 7, próximo 8
    faça fila++.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/E083.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E053.c
 ```
 
-**Exercício E084** · ★★★
+**Exercício E054** · ★★★
 
 O placar está invertido de novo: casa = 2 e visitante = 5, e o certo é o
 contrário. Desta vez, troque os valores SEM usar uma terceira variável,
@@ -3307,12 +3307,12 @@ grandes, perto de INT_MAX?
    indefinido. A versão com variável auxiliar é mais segura e mais clara.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0014-atribuicao/E084.c
+~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E054.c
 ```
 
 ---
 
-## 0015 · math.h
+## 0010 · math.h
 
 Na pizzaria, a grande de 35 cm custa R$ 59,90 e a média de 25 cm, R$ 39,90.
 Duas médias dão mais pizza que uma grande? A intuição diz que não ("35 é bem
@@ -3348,7 +3348,7 @@ Vamos ver na prática. O diâmetro de 35 vira raio 17,5; `pow` eleva ao
 quadrado; vezes pi, dá a área da grande. A mesma conta para as médias, vezes
 dois, dá 981,75 cm², um pouco mais que a grande:
 
-<p align="center"><img src="0015-math/ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
+<p align="center"><img src="0010-math/ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -3391,7 +3391,7 @@ Repara no fluxograma: as funções entram no meio das contas como qualquer
 valor. `pow(...)` e `sqrt(...)` são calculados e o resultado segue na
 expressão, como num processamento comum:
 
-<p align="center"><img src="0015-math/fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
+<p align="center"><img src="0010-math/fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
 
 > [!WARNING]
 > `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e
@@ -3412,13 +3412,13 @@ expressão, como num processamento comum:
 
 > [!NOTE]
 > **Pergunta para você:** quanto dão `round(-2.5)`, `floor(-0.5)` e
-> `ceil(-0.5)`? O A030 tem uma tabela parecida para conferir.
+> `ceil(-0.5)`? O A020 tem uma tabela parecida para conferir.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0015-math/`](0015-math/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0010-math/`](0010-math/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A029 · Uma pizza grande ou duas médias?**
+**Exemplo A019 · Uma pizza grande ou duas médias?**
 
 ```c
 #include <stdio.h>
@@ -3453,10 +3453,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/A029.c
+~/LPEDC/rodar 01-fundamentos/0010-math/A019.c
 ```
 
-**Exemplo A030 · Arredondar para cima, para baixo e para o mais perto**
+**Exemplo A020 · Arredondar para cima, para baixo e para o mais perto**
 
 ```c
 #include <stdio.h>
@@ -3495,12 +3495,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/A030.c
+~/LPEDC/rodar 01-fundamentos/0010-math/A020.c
 ```
 
 #### Exercícios
 
-**Exercício E085** · ★☆☆
+**Exercício E055** · ★☆☆
 
 A loja anuncia uma TV com a tela de 121.8 cm de largura e 68.5 cm de
 altura. TVs são vendidas pela diagonal, em polegadas (1 polegada = 2.54
@@ -3520,10 +3520,10 @@ TV de 55 polegadas
 3. Resposta esperada: 139.74 cm e 55 polegadas (55.02, arredondado).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/E085.c
+~/LPEDC/rodar 01-fundamentos/0010-math/E055.c
 ```
 
-**Exercício E086** · ★☆☆
+**Exercício E056** · ★☆☆
 
 Sem rodar, diga o resultado de cada chamada. Depois mostre todas com
 %.2f e confira. Atenção especial aos negativos.
@@ -3544,10 +3544,10 @@ pow(2, 10)   pow(9, 0.5)  fmod(10, 3)
    1024.00, 3.00 (raiz de 9) e 1.00.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/E086.c
+~/LPEDC/rodar 01-fundamentos/0010-math/E056.c
 ```
 
-**Exercício E087** · ★★☆
+**Exercício E057** · ★★☆
 
 Você vai pintar 3 paredes de 4.0 m por 2.7 m, com 2 demãos. Uma lata de
 tinta cobre 25 m² e custa R$ 89.90. Lata não se vende pela metade.
@@ -3569,10 +3569,10 @@ Total: R$ 269.70
    3 * 89.90 = R$ 269.70.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/E087.c
+~/LPEDC/rodar 01-fundamentos/0010-math/E057.c
 ```
 
-**Exercício E088** · ★★☆
+**Exercício E058** · ★★☆
 
 Você aplica R$ 1000.00 num investimento que rende 1% ao mês, com juros
 compostos (juros sobre juros). O montante depois de n meses é
@@ -3600,10 +3600,10 @@ tempo?
    parte cresce a cada mês.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/E088.c
+~/LPEDC/rodar 01-fundamentos/0010-math/E058.c
 ```
 
-**Exercício E089** · ★★★
+**Exercício E059** · ★★★
 
 Três contas, três erros. O programa compila com um aviso e mostra três
 valores errados. Explique cada erro e conserte.
@@ -3629,10 +3629,10 @@ Mesas: 4
    ceil(7 / 2) recebe 3, já cortado: use ceil(7 / 2.0), que dá 4.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/E089.c
+~/LPEDC/rodar 01-fundamentos/0010-math/E059.c
 ```
 
-**Exercício E090** · ★★★
+**Exercício E060** · ★★★
 
 Do alto de uma laje de 1.5 m, você joga uma bola para cima a 20 m/s.
 Desprezando o ar, a altura depois de t segundos é
@@ -3663,12 +3663,12 @@ Altura máxima: 21.50 m, em 2.00 s
    4.07 s; altura máxima em t = 2 s, h(2) = -20 + 40 + 1.5 = 21.50 m.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0015-math/E090.c
+~/LPEDC/rodar 01-fundamentos/0010-math/E060.c
 ```
 
 ---
 
-## 0016 · Juntando tudo
+## 0011 · Juntando tudo
 
 Chegou a conta de luz da república. São três moradores, e todo mês alguém
 pega o papel, faz a conta no celular e manda no grupo quanto cada um deve.
@@ -3699,7 +3699,7 @@ Vamos ver na prática. As três leituras entram, o consumo vira 257 kWh, a
 conta vira R$ 229,24, e a divisão por três, com o centavo arredondado para
 cima, dá R$ 76,42 para cada um:
 
-<p align="center"><img src="0016-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0011-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa completo:
 
@@ -3769,7 +3769,7 @@ dois centavos, mas a conta fica paga.
 Repara no fluxograma: uma leitura, quatro contas e uma saída, sem nenhum
 losango. É o retrato de todo programa deste módulo:
 
-<p align="center"><img src="0016-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
+<p align="center"><img src="0011-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
 
 > [!WARNING]
 > Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8, e
@@ -3794,9 +3794,9 @@ losango. É o retrato de todo programa deste módulo:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0016-juntando-tudo/`](0016-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0011-juntando-tudo/`](0011-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A031 · A conta de luz da república**
+**Exemplo A021 · A conta de luz da república**
 
 ```c
 #include <stdio.h>
@@ -3847,10 +3847,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/A031.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/A021.c
 ```
 
-**Exemplo A032 · Rachando a gasolina da viagem**
+**Exemplo A022 · Rachando a gasolina da viagem**
 
 ```c
 #include <stdio.h>
@@ -3900,12 +3900,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/A032.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/A022.c
 ```
 
 #### Exercícios
 
-**Exercício E091** · ★☆☆
+**Exercício E061** · ★☆☆
 
 Escreva a calculadora de IMC (índice de massa corporal): lê o peso em kg
 e a altura em metros e mostra o IMC com uma casa. A fórmula é
@@ -3920,7 +3920,7 @@ IMC: 23.7
 ```
 
 
-Teste: printf '72.5\n1.75\n' | ~/LPEDC/rodar E091.c
+Teste: printf '72.5\n1.75\n' | ~/LPEDC/rodar E061.c
 
 **Dicas:**
 
@@ -3930,10 +3930,10 @@ Teste: printf '72.5\n1.75\n' | ~/LPEDC/rodar E091.c
    Cuidado: peso / altura * altura (sem parênteses) dá 72.5.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/E091.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E061.c
 ```
 
-**Exercício E092** · ★☆☆
+**Exercício E062** · ★☆☆
 
 O termômetro marcou 36.5 °C. Seu amigo americano quer em Fahrenheit, e a
 professora de física quer em Kelvin. Leia a temperatura em Celsius e
@@ -3948,7 +3948,7 @@ Celsius: 36.5
 ```
 
 
-Teste: printf '36.5\n' | ~/LPEDC/rodar E092.c
+Teste: printf '36.5\n' | ~/LPEDC/rodar E062.c
 
 **Dicas:**
 
@@ -3958,10 +3958,10 @@ Teste: printf '36.5\n' | ~/LPEDC/rodar E092.c
 3. Resposta esperada: "36.5 °C = 97.7 °F = 309.65 K".
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/E092.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E062.c
 ```
 
-**Exercício E093** · ★★☆
+**Exercício E063** · ★★☆
 
 Quanto tempo leva para baixar um jogo? Leia o tamanho em GB e a
 velocidade da internet em Mbps (megabits por segundo) e mostre o tempo em
@@ -3976,7 +3976,7 @@ Tempo: 376 s = 6 min 16 s
 ```
 
 
-Teste: printf '4.7\n100\n' | ~/LPEDC/rodar E093.c
+Teste: printf '4.7\n100\n' | ~/LPEDC/rodar E063.c
 
 **Dicas:**
 
@@ -3986,10 +3986,10 @@ Teste: printf '4.7\n100\n' | ~/LPEDC/rodar E093.c
    376 / 60 = 6 min, 376 % 60 = 16 s.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/E093.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E063.c
 ```
 
-**Exercício E094** · ★★☆
+**Exercício E064** · ★★☆
 
 O celular custa R$ 1299.00 e a loja parcela em 12 vezes com juros de
 1.99% ao mês. A parcela fixa (tabela Price) é
@@ -4019,10 +4019,10 @@ Juros: R$ 174.12
    = 1473.12; juros 1473.12 - 1299.00 = 174.12.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/E094.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E064.c
 ```
 
-**Exercício E095** · ★★★
+**Exercício E065** · ★★★
 
 Este programa calcula a média da turma no simulado, mas tem CINCO erros
 de propósito, de assuntos diferentes do módulo. Ele compila, com uma
@@ -4039,7 +4039,7 @@ Acima da meta em 0.90 ponto
 ```
 
 
-Teste: printf '172.5\n25\n' | ~/LPEDC/rodar E095.c
+Teste: printf '172.5\n25\n' | ~/LPEDC/rodar E065.c
 
 **Dicas:**
 
@@ -4056,10 +4056,10 @@ Teste: printf '172.5\n25\n' | ~/LPEDC/rodar E095.c
    -0.90: a diferença acima da meta é media - META.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/E095.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E065.c
 ```
 
-**Exercício E096** · ★★★
+**Exercício E066** · ★★★
 
 O app de entregas diz "chega em 135 minutos". Leia a hora atual (hh:mm) e
 os minutos de espera e mostre a hora da chegada, no formato hh:mm, e
@@ -4087,7 +4087,7 @@ minutos (00:00, 3 dias).
    1440 = 1 dia; 1500 % 1440 = 60 minutos = 01:00.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0016-juntando-tudo/E096.c
+~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E066.c
 ```
 
 ---
@@ -4106,7 +4106,7 @@ moedas de cada valor entregar, sempre da maior para a menor. Teste com 3.85.
 
 3 de R$ 1, 1 de R$ 0,50, 1 de R$ 0,25, 1 de R$ 0,10 e nenhuma de R$ 0,05: **6
 moedas**. O caminho: converta para centavos inteiros **arredondando**
-(`(int) round(troco * 100)`, lembre do 19.99 do E077) e, para cada moeda,
+(`(int) round(troco * 100)`, lembre do 19.99 do E047) e, para cada moeda,
 `quantidade = centavos / moeda` e `centavos %= moeda`.
 
 </details>
@@ -4131,7 +4131,7 @@ o programa que desfaz. Teste com 2026.
 
 2, 0, 2, 6 viram 9, 7, 9, 3 e, com as trocas, **9397**. Para desfazer, troque
 as posições de volta e some 3 em cada dígito, com `% 10` (somar 7 e depois 3
-dá 10, que o `% 10` zera). Separe os dígitos com `/` e `%` como no E072.
+dá 10, que o `% 10` zera). Separe os dígitos com `/` e `%` como no E042.
 
 </details>
 
@@ -4168,7 +4168,7 @@ São Paulo, ele pousa?
 
 Em minutos: 22·60 + 40 = 1360; mais 230 de voo e 60 de fuso = 1650;
 `1650 % 1440` = 210 minutos = **03:30**, no dia seguinte (`1650 / 1440` = 1).
-É a mesma técnica do E096.
+É a mesma técnica do E066.
 
 </details>
 

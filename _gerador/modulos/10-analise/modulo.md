@@ -54,13 +54,13 @@ ponteiros, `malloc`/`free` e `struct`. Duas novidades pequenas:
 
 - `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
   falsa. É o jeito de transformar um invariante em código.
-- **arquivos de apoio**: no assunto 0079, a pasta tem `contador.h`,
+- **arquivos de apoio**: no assunto 0074, a pasta tem `contador.h`,
   `contador.c`, `conta.h` e `conta.c` além dos exemplos. O `rodar` compila
   junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então é só
   rodar o exemplo, como sempre:
 
 ```bash
-~/LPEDC/rodar 10-analise/0079-tad/A157.c
+~/LPEDC/rodar 10-analise/0074-tad/A147.c
 ```
 
 Os contadores de passos dos exemplos não medem segundos: medem trabalho. Rode
@@ -100,7 +100,7 @@ milhões?
 <details><summary>Resposta</summary>
 
 Dobrou n, o tempo multiplicou por 4: **O(n²)**. Com 4 milhões, mais um
-dobro: 8 × 4 = **32 s**. É a regra do dobro do E460 aplicada a tempo em vez de
+dobro: 8 × 4 = **32 s**. É a regra do dobro do E430 aplicada a tempo em vez de
 passos.
 
 </details>
@@ -113,11 +113,11 @@ comparações a busca binária faz no pior caso? E a sequencial?
 A binária corta pela metade a cada comparação: 2²⁰ = 1.048.576 ≥ 1.000.000,
 então **20 comparações** (mais ou menos uma, conforme o detalhe da
 implementação). A sequencial, no pior caso, **1.000.000**. É a tabela de
-O(log n) contra O(n) do assunto 0077, com números de verdade.
+O(log n) contra O(n) do assunto 0072, com números de verdade.
 
 </details>
 
-**4. A conta da pergunta.** No assunto 0077: um algoritmo O(n²) leva 1 s com
+**4. A conta da pergunta.** No assunto 0072: um algoritmo O(n²) leva 1 s com
 10.000 pedidos. Quanto leva com 100.000? E um O(n log n) que também leva 1 s
 com 10.000?
 
@@ -159,7 +159,7 @@ O(log e), contra O(e) do jeito ingênuo.
 
 **7. Projete antes de codar.** Escreva só o `fila_senhas.h` de um TAD para as
 senhas de atendimento do banco: tirar senha, chamar a próxima, ver quantas
-pessoas esperam. Siga o padrão do assunto 0079, com o contrato de cada função.
+pessoas esperam. Siga o padrão do assunto 0074, com o contrato de cada função.
 
 <details><summary>Resposta</summary>
 
@@ -211,7 +211,7 @@ Implemente com contador e confira para n = 10.
 Para n = 10: o jeito separado faz **18** comparações; o de pares, **13**
 (1 para o primeiro par e 3 para cada um dos outros 4 pares: 3n/2 − 2). As duas
 são O(n): a notação O não enxerga a diferença, mas o contador enxerga. É o
-lembrete do assunto 0076: a constante importa quando n é fixo.
+lembrete do assunto 0071: a constante importa quando n é fixo.
 
 </details>
 

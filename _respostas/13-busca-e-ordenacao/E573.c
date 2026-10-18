@@ -1,29 +1,41 @@
-// 0096 · Bubble sort
+// 0096 · Comparando: estabilidade, custo e qsort
 // Exercício E573 · ★★☆
-//
-// Resposta: (1) o laço interno vai até j < n - passada + 1; na passada 1 isso
-// é j < n, e v[j + 1] lê v[n], fora do vetor (o ASan acusa). O certo é
-// j < n - passada. (2) A troca sem auxiliar copia v[j + 1] por cima de v[j] e
-// depois copia o mesmo valor de volta: os dois ficam iguais e um número some.
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// cada elemento do vetor é um const char *; o qsort passa o ENDEREÇO dele
+int alfabetica(const void *a, const void *b) {
+    const char *x = *(const char *const *) a;
+    const char *y = *(const char *const *) b;
+    return strcmp(x, y);
+}
+
+// mais curto primeiro; empatou no tamanho, ordem alfabética
+int por_tamanho(const void *a, const void *b) {
+    const char *x = *(const char *const *) a;
+    const char *y = *(const char *const *) b;
+    size_t tx = strlen(x), ty = strlen(y);
+    if (tx != ty) {
+        return (tx > ty) - (tx < ty);
+    }
+    return strcmp(x, y);
+}
+
+void mostra(const char *v[], size_t n) {
+    for (size_t i = 0; i < n; i++) {
+        printf("%s%s", v[i], i < n - 1 ? " " : "\n");
+    }
+}
 
 int main(void) {
-    int idades[] = {34, 19, 27, 45, 22};
-    int n = 5;
+    const char *bandas[] = {"Skank", "Titas", "Legiao", "Raimundos", "Pitty", "Cazuza"};
+    size_t n = sizeof bandas / sizeof bandas[0];
 
-    for (int passada = 1; passada < n; passada++) {
-        for (int j = 0; j < n - passada; j++) {
-            if (idades[j] > idades[j + 1]) {
-                int aux = idades[j];
-                idades[j] = idades[j + 1];
-                idades[j + 1] = aux;
-            }
-        }
-    }
-    for (int i = 0; i < n; i++) {
-        printf("%d ", idades[i]);
-    }
-    printf("\n");
+    qsort(bandas, n, sizeof bandas[0], alfabetica);
+    mostra(bandas, n);
+    qsort(bandas, n, sizeof bandas[0], por_tamanho);
+    mostra(bandas, n);
     return 0;
 }

@@ -1,16 +1,22 @@
-// 0052 · Ponteiros e vetores
+// 0052 · Juntando tudo: o ranking da feira
 // Exercício E307 · ★☆☆
 
 #include <stdio.h>
+#include <math.h>
+
+void separa(double valor, int *reais, int *centavos) {
+    long total = lround(valor * 100); // 19.99 * 100 = 1998.999... vira 1999
+    *reais = (int)(total / 100);
+    *centavos = (int)(total % 100);
+}
 
 int main(void) {
-    float notas[4] = {7.5f, 8.0f, 6.5f, 9.0f};
-    float soma = 0;
+    double valores[3] = {37.85, 0.99, 19.99};
+    int r, c;
 
-    for (const float *p = notas; p < notas + 4; p++) {
-        printf("%.1f ", *p);
-        soma += *p;
+    for (int i = 0; i < 3; i++) {
+        separa(valores[i], &r, &c);
+        printf("R$ %.2f = %d reais e %d centavos\n", valores[i], r, c);
     }
-    printf("\nMédia: %.2f\n", soma / 4);
     return 0;
 }

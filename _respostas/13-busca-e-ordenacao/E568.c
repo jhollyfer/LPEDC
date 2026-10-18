@@ -1,40 +1,48 @@
-// 0095 · Busca binária
+// 0095 · Quick sort
 // Exercício E568 · ★★☆
+//
+// Resposta: a chamada da esquerda é quick_sort(v, p, j), que inclui o pivô.
+// Na primeira separação, [4 9 2 7] vira [4 2 7 9] com j = 2, e a chamada
+// quick_sort(v, 0, 2) recebe [4 2 7], onde o 7 é o pivô e o maior. A
+// separação devolve j = 2 = r, e quick_sort(v, 0, 2) chama quick_sort(v, 0, 2)
+// de novo, para sempre: estouro de pilha (stack-overflow). Conserto:
+// quick_sort(v, p, j - 1), deixando o pivô de fora.
 
 #include <stdio.h>
-#include <string.h>
 
-int busca_nome(const char *v[], int n, const char *nome, int *voltas) {
-    int ini = 0, fim = n - 1;
-    *voltas = 0;
-    while (ini <= fim) {
-        int meio = ini + (fim - ini) / 2;
-        (*voltas)++;
-        int c = strcmp(v[meio], nome);  // chama uma vez e guarda
-        if (c == 0) {
-            return meio;
-        }
-        if (c < 0) {
-            ini = meio + 1;
-        } else {
-            fim = meio - 1;
+void troca(int *a, int *b) {
+    int aux = *a;
+    *a = *b;
+    *b = aux;
+}
+
+int separa(int v[], int p, int r) {
+    int pivo = v[r], j = p;
+    for (int k = p; k < r; k++) {
+        if (v[k] <= pivo) {
+            troca(&v[j], &v[k]);
+            j++;
         }
     }
-    return -1;
+    troca(&v[j], &v[r]);
+    return j;
+}
+
+void quick_sort(int v[], int p, int r) {
+    if (p >= r) {
+        return;
+    }
+    int j = separa(v, p, r);
+    quick_sort(v, p, j - 1);
+    quick_sort(v, j + 1, r);
 }
 
 int main(void) {
-    const char *capitais[] = {"Aracaju", "Belém", "Boa Vista", "Cuiabá",
-                              "Curitiba", "Florianópolis", "Fortaleza", "Goiânia",
-                              "Maceió", "Manaus", "Natal", "Recife",
-                              "Salvador", "São Paulo", "Teresina", "Vitória"};
-    int n = 16;
-    const char *procuradas[] = {"Natal", "Palmas"};
-    int voltas;
-
-    for (int k = 0; k < 2; k++) {
-        int pos = busca_nome(capitais, n, procuradas[k], &voltas);
-        printf("%s: posição %d (%d voltas)\n", procuradas[k], pos, voltas);
+    int andares[] = {4, 9, 2, 7};
+    quick_sort(andares, 0, 3);
+    for (int i = 0; i < 4; i++) {
+        printf("%d ", andares[i]);
     }
+    printf("\n");
     return 0;
 }

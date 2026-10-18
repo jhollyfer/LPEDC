@@ -1,28 +1,47 @@
-// 0064 · Struct
+// 0064 · Union
 // Exercício E382 · ★★☆
-//
-// Resposta: (1) faltava ; depois da } da struct; (2) a.nome = "Marta" não
-// compila porque nome é vetor: use strcpy; (3) a == b não existe para
-// struct: compare campo a campo.
 
 #include <stdio.h>
-#include <string.h>
 
-struct jogadora {
-    char nome[20];
-    int gols;
-};
+#define PI 3.14159265358979
+
+typedef enum { CIRCULO, RETANGULO, TRIANGULO } TipoForma;
+
+typedef struct {
+    TipoForma tipo;
+    union {
+        double raio;
+        struct { double largura, altura; } ret;
+        struct { double base, altura; } tri;
+    } medida;
+} Forma;
+
+double area(const Forma *f) {
+    switch (f->tipo) {
+    case CIRCULO:
+        return PI * f->medida.raio * f->medida.raio;
+    case RETANGULO:
+        return f->medida.ret.largura * f->medida.ret.altura;
+    case TRIANGULO:
+        return f->medida.tri.base * f->medida.tri.altura / 2;
+    }
+    return 0;
+}
 
 int main(void) {
-    struct jogadora a, b;
+    const char *nomes[] = {"círculo", "retângulo", "triângulo"};
+    Forma pecas[] = {
+        {CIRCULO, .medida.raio = 2},
+        {RETANGULO, .medida.ret = {3, 4}},
+        {TRIANGULO, .medida.tri = {6, 5}},
+    };
+    double total = 0;
 
-    strcpy(a.nome, "Marta");
-    a.gols = 17;
-    b = a;
-
-    printf("%s: %d gols\n", b.nome, b.gols);
-    if (strcmp(a.nome, b.nome) == 0 && a.gols == b.gols) {
-        printf("a e b são iguais\n");
+    for (int i = 0; i < 3; i++) {
+        double a = area(&pecas[i]);
+        printf("%s: %.2f m2\n", nomes[pecas[i].tipo], a);
+        total += a;
     }
+    printf("Total: %.2f m2\n", total);
     return 0;
 }

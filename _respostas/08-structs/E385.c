@@ -1,28 +1,27 @@
-// 0065 · Typedef
+// 0065 · Bits, máscaras e flags
 // Exercício E385 · ★☆☆
 
 #include <stdio.h>
 
-typedef struct {
-    char nome[20];
-    int quantidade;
-    double preco;
-} Produto;
-
-double subtotal(Produto p) {
-    return p.quantidade * p.preco;
-}
-
-void mostrar(Produto p) {
-    printf("%s: %d x R$ %.2f = R$ %.2f\n", p.nome, p.quantidade, p.preco, subtotal(p));
+void mostrar(const char *nome, unsigned char r) {
+    printf("%-7s ", nome);
+    for (int b = 7; b >= 0; b--) {
+        printf("%u%s", (r >> b) & 1u, b == 4 ? " " : "");
+    }
+    printf(" = 0x%02X = %u\n", r, r);
 }
 
 int main(void) {
-    Produto cafe = {"Café", 3, 12.50};
-    Produto leite = {"Leite", 6, 4.99};
+    unsigned char a = 0xCA;
+    unsigned char b = 0x5C;
 
-    mostrar(cafe);
-    mostrar(leite);
-    printf("Total: R$ %.2f\n", subtotal(cafe) + subtotal(leite));
+    mostrar("a", a);
+    mostrar("b", b);
+    mostrar("a & b", a & b);
+    mostrar("a | b", a | b);
+    mostrar("a ^ b", a ^ b);
+    mostrar("~a", (unsigned char)~a);
+    mostrar("a << 1", (unsigned char)(a << 1));
+    mostrar("a >> 3", a >> 3);
     return 0;
 }

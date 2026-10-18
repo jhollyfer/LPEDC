@@ -1,27 +1,57 @@
-// 0042 · Vetores
+// 0042 · Lendo strings
 // Exercício E251 · ★★★
-//
-// Resposta: o laço usa i <= 6 e lê temps[6], que não existe (troque por
-// i < 6); e maior começa em 0, que nenhuma temperatura supera, então a máxima
-// sairia 0 (comece maior e menor com temps[0]).
 
 #include <stdio.h>
+#include <string.h>
+
+#define MAX_ITENS 5
+#define TAM_ITEM 16
+
+// joga fora o resto da linha e devolve quantos caracteres havia
+int descartar_linha(void) {
+    int c;
+    int jogados = 0;
+    while ((c = getchar()) != '\n' && c != EOF) {
+        jogados++;
+    }
+    return jogados;
+}
 
 int main(void) {
-    int temps[6] = {-2, -6, -1, -4, -3, -5};
-    int maior = temps[0];
-    int menor = temps[0];
+    char itens[MAX_ITENS][TAM_ITEM];
+    int n = 0;
 
-    for (int i = 0; i < 6; i++) {
-        if (temps[i] > maior) {
-            maior = temps[i];
+    while (n < MAX_ITENS) {
+        printf("Item: ");
+        if (fgets(itens[n], sizeof(itens[n]), stdin) == NULL) {
+            break;
         }
-        if (temps[i] < menor) {
-            menor = temps[i];
+        size_t pos = strcspn(itens[n], "\n");
+        if (itens[n][pos] == '\n') {
+            itens[n][pos] = '\0';
+        } else if (descartar_linha() > 0) {
+            // se a linha tinha exatamente 15 caracteres, só o '\n' sobrou
+            printf("(cortado)\n");
         }
+        if (strlen(itens[n]) == 0) {
+            break;
+        }
+        n++;
     }
 
-    printf("Máxima: %d graus\n", maior);
-    printf("Mínima: %d graus\n", menor);
+    printf("Lista com %d itens:\n", n);
+    for (int i = 0; i < n; i++) {
+        printf("%d. %s\n", i + 1, itens[i]);
+    }
+
+    if (n > 0) {
+        int menor = 0;
+        for (int i = 1; i < n; i++) {
+            if (strcmp(itens[i], itens[menor]) < 0) {
+                menor = i;
+            }
+        }
+        printf("Primeiro em ordem alfabética: %s\n", itens[menor]);
+    }
     return 0;
 }

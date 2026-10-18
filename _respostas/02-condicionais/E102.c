@@ -1,18 +1,17 @@
-// 0017 · Relacionais e a verdade em C
+// 0017 · Ternário: condição ? a : b
 // Exercício E102 · ★★★
 
 #include <stdio.h>
 
 int main(void) {
-    double total;
-    printf("Total: R$ ");
-    scanf("%lf", &total);
+    int hora;
+    printf("Hora (0 a 23): ");
+    if (scanf("%d", &hora) != 1 || hora < 0 || hora > 23) {
+        printf("Hora inválida.\n");
+        return 1;
+    }
 
-    int desconto = 5 * (total >= 100) + 5 * (total >= 300);
-    double a_pagar = total * (100 - desconto) / 100;
-
-    printf("Total: R$ %.2f\n", total);
-    printf("Desconto: %d%%\n", desconto);
-    printf("A pagar: R$ %.2f\n", a_pagar);
+    int h12 = hora % 12 == 0 ? 12 : hora % 12;
+    printf("%d %s\n", h12, hora < 12 ? "AM" : "PM");
     return 0;
 }

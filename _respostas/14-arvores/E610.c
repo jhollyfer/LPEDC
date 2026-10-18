@@ -1,18 +1,18 @@
-// 0102 · Árvores
+// 0102 · Heap e fila de prioridade
 // Exercício E610 · ★★☆
-//
-// Resposta: a saída é
-//
-//   300 MB  praia
-//   120 MB  natal
-//   430 MB  fotos
-//   5 MB  agua
-//   8 MB  luz
-//   15 MB  contas
-//   450 MB  casa
-//
-// O printf vem depois do laço dos filhos: cada pasta só é impressa quando
-// todas as subpastas já foram somadas (e impressas). É a ordem "filhos
-// primeiro, depois o pai", que o próximo assunto chama de pós-ordem.
-// fotos = 10 + 300 + 120 = 430; contas = 2 + 5 + 8 = 15;
-// casa = 5 + 430 + 15 = 450.
+
+#include <stdio.h>
+#include "heap.h"
+
+int main(void) {
+    int senhas[] = {7, 3, 9, 1, 5};
+    Heap *fila = heap_cria(5);
+    for (int i = 0; i < 5; i++) {
+        heap_insere(fila, -senhas[i]); // a menor senha vira o maior número
+    }
+    while (!heap_vazio(fila)) {
+        printf("Chamando senha %d\n", -heap_remove(fila));
+    }
+    heap_libera(fila);
+    return 0;
+}

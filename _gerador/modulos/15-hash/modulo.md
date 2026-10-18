@@ -58,7 +58,7 @@ As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
 (o contador) ficam na pasta de cada assunto, e o `rodar` compila tudo junto:
 
 ```bash
-~/LPEDC/rodar 15-hash/0111-encadeamento/A221.c
+~/LPEDC/rodar 15-hash/0106-encadeamento/A211.c
 ```
 
 Os exercícios trazem a própria implementação dentro do arquivo, para você
