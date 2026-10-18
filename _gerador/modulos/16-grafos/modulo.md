@@ -7,8 +7,8 @@ reciprocidade, pacotes dependem uns dos outros. Para tudo isso existe o
 **grafo**: pontos e ligações, sem regra de forma.
 
 Grafo é a estrutura que mais aparece fora da sala de aula. O GPS que acha a
-rota, a rede social que sugere amigos, o `npm` que descobre a ordem de
-instalar dependências e reclama de import circular, o roteador que escolhe
+rota, a rede social que sugere amigos, o gerenciador de pacotes que descobre a ordem
+de instalar dependências e reclama de dependência circular, o roteador que escolhe
 por onde mandar o pacote: todos rodam alguma variação dos algoritmos deste
 módulo.
 

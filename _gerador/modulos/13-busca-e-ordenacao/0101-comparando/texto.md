@@ -46,8 +46,7 @@ void qsort(void *base, size_t n, size_t tamanho,
 Ele não sabe o tipo dos elementos (por isso o `void *` e o `tamanho`). Quem
 sabe é a sua função `compara`, que recebe dois ponteiros e devolve
 **negativo** se o primeiro vem antes, **zero** se empatam e **positivo** se
-vem depois. É o mesmo contrato do `strcmp` e do `Array.prototype.sort((a, b)
-=> ...)` do JS.
+vem depois. É o mesmo contrato do `strcmp`.
 
 Vamos ver na prática. Os pedidos chegam por horário. Ordenando por cidade, um
 algoritmo estável (insertion, merge) mantém R1, R3, R6. O selection sort, com

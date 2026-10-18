@@ -14,9 +14,8 @@ principais:
 
 O deque generaliza as duas estruturas que você já viu. Usando só uma ponta
 (insere e retira no fim), ele é uma **pilha**. Inserindo no fim e retirando
-no início, é uma **fila**. No JS, o array tem as quatro operações (`push`,
-`pop`, `unshift`, `shift`), mas `unshift` e `shift` custam O(n), porque
-deslocam todo mundo. Aqui as quatro custam **O(1)**.
+no início, é uma **fila**. Num vetor comum, inserir ou retirar no início custa O(n),
+porque desloca todo mundo. Aqui as quatro operações custam **O(1)**.
 
 A implementação do [`deque.c`](0092-deque/deque.c) é a fila circular do 0090
 com uma novidade: o `inicio` agora também anda para **trás**. Para inserir na
@@ -114,14 +113,14 @@ o índice não ficar negativo:
 > e o resto acompanha o sinal do dividendo.) Então `(inicio - 1) %
 > CAPACIDADE`, com `inicio = 0`, dá `-1`, e `itens[-1]` escreve **fora** do
 > vetor. Some a capacidade antes do `%`: `(inicio - 1 + CAPACIDADE) %
-> CAPACIDADE`. O JS tem a mesma pegadinha: `-1 % 8` também dá `-1` lá.
+> CAPACIDADE`.
 
 > [!TIP]
 > **Por dentro do C:** a palavra `static` numa função fora de qualquer bloco
 > não tem nada a ver com variável estática: ela tira a função da **ligação
 > externa**. O ligador nem fica sabendo que `anterior` existe, então outro
 > arquivo pode ter a sua própria `anterior` sem conflito. É o jeito do C de
-> fazer uma função **privada** do módulo, como um método `private` no TS. O
+> fazer uma função **privada** do módulo. O
 > deque com lista encadeada também é possível, mas precisa de lista **dupla**
 > (assunto 0084): para retirar do fim, o último nó tem que saber quem é o
 > penúltimo.

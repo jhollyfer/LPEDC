@@ -16,11 +16,11 @@ int zeros[100] = {0};          // a 1ª vira 0 e as outras também
 int dias[] = {31, 28, 31};     // sem tamanho: o compilador conta (3)
 ```
 
-Três regras que pegam quem vem do JS:
+Três regras que pegam todo iniciante:
 
 - **O índice começa em 0** e vai até `tamanho - 1`. Num vetor de 7, o último é
   `passos[6]`. O "sétimo elemento" é `passos[6]`; `passos[7]` não existe.
-- **O tamanho é fixo.** No JS o array cresce com `push`. No C, o tamanho é
+- **O tamanho é fixo.** Ele é
   decidido na declaração e nunca muda. Use um `#define` para ele: muda num
   lugar só e o laço acompanha.
 - **Vetor não tem `.length`.** Quem sabe o tamanho é você. Dentro do bloco onde
@@ -88,8 +88,8 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > `v[-1]` compila sem erro e mexe na memória vizinha, que pode ser outra
 > variável sua. É **comportamento indefinido**: às vezes nada acontece, às
 > vezes outro valor muda "sozinho", às vezes o programa cai. O erro clássico é o
-> `<=` no laço: `for (i = 0; i <= 7; i++)` passa uma vez a mais. No JS,
-> `arr[99]` devolve `undefined`; no C, devolve o que estiver lá. O `rodar` usa
+> `<=` no laço: `for (i = 0; i <= 7; i++)` passa uma vez a mais. Ler
+> `v[99]` não dá erro nenhum: devolve o que estiver lá. O `rodar` usa
 > o AddressSanitizer, que pega esse erro e mostra `stack-buffer-overflow`.
 
 > [!TIP]

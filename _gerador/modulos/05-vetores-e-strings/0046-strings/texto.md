@@ -2,8 +2,8 @@
 
 Na entrada de um evento de tecnologia, a recepção imprime o crachá juntando o
 nome e o sobrenome da inscrição: "Bruna" + " " + "Matos". Depois confere se o
-crachá bate com o nome cadastrado. No TS seria `nome + " " + sobrenome` e
-`===`. No C, nenhum dos dois funciona com texto. Para entender por quê, você
+crachá bate com o nome cadastrado. No C, nem `+` junta textos nem `==`
+compara textos. Para entender por quê, você
 precisa saber o que é uma string no C.
 
 No C, **string é um vetor de `char` terminado pelo caractere `'\0'`** (o
@@ -27,12 +27,12 @@ Como string é vetor, valem as regras do assunto 0042: não dá para atribuir
 com `=` depois da declaração, nem comparar com `==`. As operações de texto
 são funções do **`<string.h>`**:
 
-| função | faz | no TS |
-| --- | --- | --- |
-| `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) | `s.length` |
-| `strcpy(dest, orig)` | copia `orig` para dentro de `dest` | `dest = orig` |
-| `strcat(dest, orig)` | cola `orig` no fim de `dest` | `dest += orig` |
-| `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois | `a === b`, `localeCompare` |
+| função | faz |
+| --- | --- |
+| `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) |
+| `strcpy(dest, orig)` | copia `orig` para dentro de `dest` |
+| `strcat(dest, orig)` | cola `orig` no fim de `dest` |
+| `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
 
 O `strlen` devolve um `size_t` (inteiro sem sinal para tamanhos), que se
 mostra com `%zu`. E repare na ordem dos argumentos de `strcpy` e `strcat`: o
@@ -98,8 +98,7 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 > [!TIP]
 > **Por dentro do C:** a string do C não guarda o próprio tamanho. Para saber
 > quantos caracteres "Bruna Matos" tem, o `strlen` anda byte a byte até o
-> `'\0'`: custa proporcional ao tamanho, toda vez. A string do JS guarda o
-> `length` pronto. Por isso, num laço, nunca escreva
+> `'\0'`: custa proporcional ao tamanho, toda vez. Por isso, num laço, nunca escreva
 > `for (i = 0; i < strlen(s); i++)`: o `strlen` roda a cada volta. Calcule uma
 > vez antes. E cuidado com acento: o `strlen("Belém")` é **6**, porque o "é"
 > em UTF-8 ocupa 2 bytes. O C conta bytes, não letras.

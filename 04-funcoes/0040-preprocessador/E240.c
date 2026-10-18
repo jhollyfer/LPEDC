@@ -1,7 +1,7 @@
 // 0040 · Pré-processador: macros e #ifdef
 // Exercício E240 · ★★★
 //
-// Monte um mini-Jest em C. Escreva a macro CONFERIR(cond), que mostra
+// Monte um mini-framework de testes em C. Escreva a macro CONFERIR(cond), que mostra
 // "ok: <cond>" se a condição for verdadeira e "FALHOU: <cond> (linha N)" se
 // for falsa, contando as falhas numa global. Use #cond para virar texto e
 // __LINE__ para a linha. Teste a função "double com_desconto(double preco)",

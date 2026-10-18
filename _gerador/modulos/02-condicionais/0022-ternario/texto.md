@@ -11,7 +11,7 @@ Para isso existe o **operador ternário** (o único do C com três partes):
 condição ? valor_se_verdade : valor_se_falso
 ```
 
-Você já usa no TypeScript, e no C ele funciona igual. A diferença para o
+A diferença para o
 `if` é que o ternário é uma **expressão**: ele **devolve um valor**. Por isso
 cabe onde um `if` não cabe: do lado direito de uma atribuição, dentro de um
 `printf`, no meio de uma conta.

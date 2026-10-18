@@ -7,9 +7,9 @@ n) na busca binária e na árvore equilibrada. A tabela hash troca a procura
 por uma **conta**: uma função transforma a chave num índice de vetor, e o
 acesso ao vetor custa O(1). É a estrutura de dados mais usada na prática.
 
-Você usa tabela hash todo dia no TypeScript sem pensar: `Map`, `Set` e os
-objetos `{}` usados como dicionário são tabelas hash por baixo. No C não tem
-nada disso pronto, e é aí que você entende o que o motor do JS faz: a função
+Dicionários, conjuntos e caches de quase todo software são tabelas hash por
+baixo. No C não tem nada disso pronto, e é aí que você entende como elas
+funcionam: a função
 hash que mistura os bytes da chave, o que acontece quando duas chaves caem no
 mesmo lugar, por que a tabela cresce quando enche e por que ela não guarda
 ordem nenhuma.
@@ -507,8 +507,8 @@ fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
 só, a tabela vira uma lista única e a busca volta a ser O(n).
 
 No encadeamento a tabela **nunca enche**: α pode passar de 1, as listas só
-ficam mais compridas. É o modelo do `Map` do JS e do `HashMap` do Java (que,
-quando uma corrente fica comprida demais, até troca a lista por uma árvore).
+ficam mais compridas. Algumas implementações, quando uma corrente fica
+comprida demais, até trocam a lista por uma árvore.
 
 Vamos ver na prática. Seis frutas entram na ordem banana, uva, pera, kiwi,
 manga e caju, com o hash polinomial do assunto anterior e `m = 5`. Os índices
@@ -1063,9 +1063,9 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 > item, sem ponteiro `prox`, sem nó espalhado pelo heap. Andar para a próxima
 > vaga é andar 12 bytes na memória, e o processador já trouxe as vizinhas para
 > a cache junto com a primeira. Por isso o endereçamento aberto costuma ganhar
-> do encadeamento na prática, mesmo fazendo mais sondagens. O `dict` do Python
-> e o `HashMap` do Rust usam endereçamento aberto (com sondagens mais
-> espertas que a linear).
+> do encadeamento na prática, mesmo fazendo mais sondagens. Muitas tabelas
+> hash de bibliotecas usam endereçamento aberto (com sondagens mais espertas
+> que a linear).
 
 > [!NOTE]
 > **Pergunta para você:** depois dos 5 carros, chega o do apartamento 1203

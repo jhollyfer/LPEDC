@@ -8,8 +8,7 @@ de variáveis. Este módulo traz a primeira **estrutura de dados** do curso: o
 **vetor**, várias variáveis do mesmo tipo com um nome só, lado a lado na
 memória.
 
-No TypeScript, o array é um objeto esperto: cresce com `push`, sabe o próprio
-`length`, devolve `undefined` fora dos limites. No C, o vetor é só um bloco de
+No C, o vetor é só um bloco de
 bytes. Tamanho fixo, nenhum `length`, nenhuma conferência de índice. Parece
 pouco, e é justamente por isso que é rápido: acessar a posição 999 custa o
 mesmo que acessar a 0.
@@ -92,11 +91,11 @@ int zeros[100] = {0};          // a 1ª vira 0 e as outras também
 int dias[] = {31, 28, 31};     // sem tamanho: o compilador conta (3)
 ```
 
-Três regras que pegam quem vem do JS:
+Três regras que pegam todo iniciante:
 
 - **O índice começa em 0** e vai até `tamanho - 1`. Num vetor de 7, o último é
   `passos[6]`. O "sétimo elemento" é `passos[6]`; `passos[7]` não existe.
-- **O tamanho é fixo.** No JS o array cresce com `push`. No C, o tamanho é
+- **O tamanho é fixo.** Ele é
   decidido na declaração e nunca muda. Use um `#define` para ele: muda num
   lugar só e o laço acompanha.
 - **Vetor não tem `.length`.** Quem sabe o tamanho é você. Dentro do bloco onde
@@ -164,8 +163,8 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > `v[-1]` compila sem erro e mexe na memória vizinha, que pode ser outra
 > variável sua. É **comportamento indefinido**: às vezes nada acontece, às
 > vezes outro valor muda "sozinho", às vezes o programa cai. O erro clássico é o
-> `<=` no laço: `for (i = 0; i <= 7; i++)` passa uma vez a mais. No JS,
-> `arr[99]` devolve `undefined`; no C, devolve o que estiver lá. O `rodar` usa
+> `<=` no laço: `for (i = 0; i <= 7; i++)` passa uma vez a mais. Ler
+> `v[99]` não dá erro nenhum: devolve o que estiver lá. O `rodar` usa
 > o AddressSanitizer, que pega esse erro e mostra `stack-buffer-overflow`.
 
 > [!TIP]
@@ -490,8 +489,7 @@ reajustar(cardapio, 4, 10);                                // chamada
 Repare no `int n`. Como só o endereço do começo chega à função, **o tamanho
 não vai junto**. A função não tem como descobrir quantos itens existem: você
 passa o tamanho num parâmetro separado. É o par que você vai ver o curso
-inteiro: vetor + tamanho. No TS seria `function reajustar(precos: number[])` e
-`precos.length` resolveria; no C, não existe `.length`.
+inteiro: vetor + tamanho. No C, não existe `.length`.
 
 Um número dentro dos colchetes do parâmetro é ignorado: `double precos[4]`,
 `double precos[100]` e `double precos[]` são a mesma coisa para o compilador.
@@ -937,9 +935,8 @@ Para somar por coluna, você inverte: a coluna fica por fora e a linha por
 dentro. Os laços são os mesmos; muda só quem é o "relógio das horas" e quem é
 o "dos minutos".
 
-No JS, uma "matriz" é um array de arrays: cada linha é um objeto separado,
-pode ter tamanho diferente e mora em qualquer lugar da memória. No C, não. A
-matriz é **um bloco só, contínuo**, com todas as linhas do mesmo tamanho,
+No C, a matriz não é um punhado de linhas soltas, cada uma num canto da
+memória. Ela é **um bloco só, contínuo**, com todas as linhas do mesmo tamanho,
 uma colada na outra.
 
 Vamos ver na prática. A planilha tem 3 linhas e 4 colunas. Na memória, as 12
@@ -1385,8 +1382,8 @@ mesmo valor.
 O que decide se você vê a letra ou o número é o `printf`: `%c` mostra o
 símbolo, `%d` mostra o código. Como é número, dá para fazer conta e comparar:
 `'a' + 1` é `'b'`, `c >= 'A' && c <= 'Z'` pergunta se é maiúscula, e
-`c - '0'` transforma o dígito `'7'` no número 7. No JS você precisaria de
-`charCodeAt` e `String.fromCharCode`; no C, não há conversão nenhuma.
+`c - '0'` transforma o dígito `'7'` no número 7. Não há função de conversão
+nenhuma: o caractere já é o número.
 
 Para não decorar a tabela, o `<ctype.h>` traz funções prontas:
 
@@ -1803,8 +1800,8 @@ Diferenças em 128 códigos: 0
 
 Na entrada de um evento de tecnologia, a recepção imprime o crachá juntando o
 nome e o sobrenome da inscrição: "Bruna" + " " + "Matos". Depois confere se o
-crachá bate com o nome cadastrado. No TS seria `nome + " " + sobrenome` e
-`===`. No C, nenhum dos dois funciona com texto. Para entender por quê, você
+crachá bate com o nome cadastrado. No C, nem `+` junta textos nem `==`
+compara textos. Para entender por quê, você
 precisa saber o que é uma string no C.
 
 No C, **string é um vetor de `char` terminado pelo caractere `'\0'`** (o
@@ -1828,12 +1825,12 @@ Como string é vetor, valem as regras do assunto 0042: não dá para atribuir
 com `=` depois da declaração, nem comparar com `==`. As operações de texto
 são funções do **`<string.h>`**:
 
-| função | faz | no TS |
-| --- | --- | --- |
-| `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) | `s.length` |
-| `strcpy(dest, orig)` | copia `orig` para dentro de `dest` | `dest = orig` |
-| `strcat(dest, orig)` | cola `orig` no fim de `dest` | `dest += orig` |
-| `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois | `a === b`, `localeCompare` |
+| função | faz |
+| --- | --- |
+| `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) |
+| `strcpy(dest, orig)` | copia `orig` para dentro de `dest` |
+| `strcat(dest, orig)` | cola `orig` no fim de `dest` |
+| `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
 
 O `strlen` devolve um `size_t` (inteiro sem sinal para tamanhos), que se
 mostra com `%zu`. E repare na ordem dos argumentos de `strcpy` e `strcat`: o
@@ -1899,8 +1896,7 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 > [!TIP]
 > **Por dentro do C:** a string do C não guarda o próprio tamanho. Para saber
 > quantos caracteres "Bruna Matos" tem, o `strlen` anda byte a byte até o
-> `'\0'`: custa proporcional ao tamanho, toda vez. A string do JS guarda o
-> `length` pronto. Por isso, num laço, nunca escreva
+> `'\0'`: custa proporcional ao tamanho, toda vez. Por isso, num laço, nunca escreva
 > `for (i = 0; i < strlen(s); i++)`: o `strlen` roda a cada volta. Calcule uma
 > vez antes. E cuidado com acento: o `strlen("Belém")` é **6**, porque o "é"
 > em UTF-8 ocupa 2 bytes. O C conta bytes, não letras.
@@ -2255,8 +2251,8 @@ nome[strcspn(nome, "\n")] = '\0';
 ```
 
 Uma linha só, que funciona nos dois casos: com `'\n'` ele é trocado; sem
-`'\n'` o `'\0'` é trocado por ele mesmo. No Node, o `readline` já entrega a
-linha sem o `\n`; no C, essa limpeza é sua.
+`'\n'` o `'\0'` é trocado por ele mesmo. O `fgets` não tira o `\n`
+sozinho: essa limpeza é sua.
 
 Vamos ver na prática. O vetor `nome` tem 40 bytes. O `fgets` copia os 11
 caracteres, depois o `'\n'`, depois o `'\0'`. O `strcspn` acha o `'\n'` na

@@ -5,8 +5,7 @@ vetor de coisas iguais. Só que os dados do mundo real vêm em pacotes. Um
 pedido tem tamanho, quantidade e preço; um time tem nome, vitórias e empates.
 Este módulo ensina o C a guardar pacotes.
 
-No TypeScript você descreve um pacote com `type` ou `interface` e cria objetos
-à vontade, e o motor do JS cuida do resto. No C, você desenha o pacote byte a
+No C, você desenha o pacote byte a
 byte: decide a ordem dos campos (e paga pelas sobras de alinhamento), decide se
 ele anda por cópia ou por ponteiro (e paga pela cópia), decide se dois campos
 dividem a mesma memória. Nada é escondido, e por isso você passa a entender o

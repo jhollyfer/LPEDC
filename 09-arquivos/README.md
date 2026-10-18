@@ -7,10 +7,9 @@ junto. As variáveis moram na RAM, e a RAM é esvaziada quando o processo
 termina. Para um programa **lembrar** de alguma coisa (um cadastro, uma
 configuração, o placar de ontem), ele precisa gravar em **arquivo**.
 
-No Node, `fs.readFileSync` devolve o arquivo inteiro numa string e você nem
-pensa no resto. No C você vê as engrenagens: o `FILE *` que representa o
+No C você vê as engrenagens: o `FILE *` que representa o
 arquivo aberto, o buffer que junta os bytes antes de ir para o disco, a
-posição que anda a cada leitura. E aparece uma escolha que o JSON esconde:
+posição que anda a cada leitura. E aparece uma escolha importante:
 gravar **texto**, legível e portável, ou **binário**, a cópia exata dos bytes
 da memória, compacta e com acesso direto a qualquer registro.
 
@@ -88,8 +87,7 @@ programa tem o mesmo problema: as variáveis moram na RAM e **somem quando ele
 termina**. Para lembrar de alguma coisa na próxima execução, ele precisa
 escrever num **arquivo**, que fica no disco.
 
-No Node você faz `fs.writeFileSync('despesas.txt', texto)` e pronto. No C o
-trabalho é igual, só que em passos que você enxerga: **abrir**, **ler ou
+No C, esse trabalho acontece em passos que você enxerga: **abrir**, **ler ou
 escrever** e **fechar**. Tudo vem do `<stdio.h>`, o mesmo do `printf`.
 
 Para o C, um arquivo é só uma **sequência de bytes** no disco. Num **arquivo
@@ -528,8 +526,7 @@ ele grava os bytes **exatamente como estão na memória**. Um `int` sempre ocupa
 **registros de tamanho fixo**, a posição de qualquer um vira conta: o
 registro `i` começa no byte `i * sizeof(registro)`.
 
-No JS, a comparação é `JSON.stringify` (texto, legível, maior) contra um
-`Buffer` ou `ArrayBuffer` (bytes crus, compacto, ilegível). Mesma troca.
+Em resumo: texto é legível e maior; binário é compacto e ilegível.
 
 | | texto (`fprintf`) | binário (`fwrite`) |
 | --- | --- | --- |
@@ -980,12 +977,11 @@ Saldo: R$ 1876.20
 Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Você poderia
 fazer um programa que pergunta "qual o total?" e "quantas pessoas?" com
 `scanf`. Mas os programas de terminal que você usa todo dia não perguntam
-nada: `git commit -m "msg"`, `cp origem destino`, `npm run dev`. Os dados vão
+nada: `git commit -m "msg"`, `cp origem destino`, `gcc -o prog prog.c`. Os dados vão
 **junto do comando**, na mesma linha. São os **argumentos da linha de
 comando**.
 
-No Node eles chegam em `process.argv`, um array de strings. No C chegam como
-parâmetros do `main`, que até agora você escrevia com `void`:
+No C, eles chegam como parâmetros do `main`, que até agora você escrevia com `void`:
 
 ```c
 int main(int argc, char *argv[])

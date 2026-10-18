@@ -21,8 +21,8 @@
 //    "Turma 3: média 9.0"; com quantidade 0, "Turma 3: média 0.0".
 //
 // Dicas:
-// 1. O bt lista do topo (#0) para a base (main). É o stack trace do Node, com
-//    a mesma ordem.
+// 1. O bt lista do topo (#0) para a base (main): a função que estava rodando
+//    quando o programa parou aparece primeiro.
 // 2. dividir só fez a conta que pediram. Quem deveria ter conferido o zero?
 // 3. Resposta esperada: a) dividir; b) relatorio chamou media, main chamou
 //    relatorio; c) media volta primeiro, main termina por último; d) antes:

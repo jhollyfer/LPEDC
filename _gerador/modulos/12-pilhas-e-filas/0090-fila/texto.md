@@ -7,8 +7,8 @@ esperar todo mundo da frente.
 Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
 primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*). É o
 contrário da pilha. Na computação, fila aparece onde existe ordem de chegada:
-a fila de impressão, as requisições esperando o servidor Fastify, os eventos
-esperando o *event loop* do Node, as mensagens de um RabbitMQ.
+a fila de impressão, as requisições esperando um servidor web, os processos
+esperando a vez na CPU, as mensagens de um RabbitMQ.
 
 O TAD tem a mesma cara da pilha, no [`fila.h`](0090-fila/fila.h):
 
@@ -26,8 +26,8 @@ bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem 
 
 Guardar uma fila num vetor tem um problema que a pilha não tinha. A pilha
 mexe numa ponta só. A fila mexe nas duas: entra à direita e sai à esquerda.
-Se, a cada atendimento, você empurrar todo mundo uma casa para a esquerda
-(como o `shift()` do JS faz), cada retirada custa **O(n)**. Se não empurrar,
+Se, a cada atendimento, você empurrar todo mundo uma casa para a esquerda,
+cada retirada custa **O(n)**. Se não empurrar,
 a fila vai "andando" para a direita e bate no fim do vetor com as primeiras
 gavetas vazias.
 

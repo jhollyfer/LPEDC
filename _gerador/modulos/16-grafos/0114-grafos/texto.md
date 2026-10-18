@@ -38,10 +38,9 @@ clássicas:
   guarda só os vizinhos de `i`. Ocupa O(V + E) (E é o número de arestas) e
   listar os vizinhos custa só o grau.
 
-No TypeScript você já usou lista de adjacência sem dar esse nome: um
-`Map<string, string[]>` que diz, para cada usuário, quem ele segue. No C não
-tem `Map` nem array que cresce: ou você aloca a matriz, ou monta as listas com
-`malloc`.
+Uma rede social guarda, para cada usuário, a lista de quem ele segue: é uma
+lista de adjacência. No C não tem dicionário nem vetor que cresce prontos: ou
+você aloca a matriz, ou monta as listas com `malloc`.
 
 Vamos ver na prática. Cada ciclovia liga um 1 em **duas** casas da matriz,
 `adj[a][b]` e `adj[b][a]`, por isso a matriz de um grafo não dirigido é

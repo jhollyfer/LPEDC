@@ -138,8 +138,8 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 > [!TIP]
 > **Por dentro do C:** a fila da BFS é só `int fila[V]` com dois índices,
 > `inicio` e `fim`. Como cada vértice entra uma vez só, `fim` nunca passa de V e
-> não precisa nem da fila circular. Compare com o JS: `fila.shift()` num array
-> anda com todos os elementos uma casa para trás, O(n) a cada saída; aqui,
+> não precisa nem da fila circular. Tirar do início deslocando todos os
+> elementos uma casa para trás custaria O(n) a cada saída; aqui,
 > `fila[inicio++]` é O(1). O custo total da BFS é O(V²) com matriz (para cada
 > vértice, varre a linha inteira) e O(V + E) com lista de adjacência. Os três
 > vetores (`dist`, `pai`, `fila`) somam 3 × 6 × 4 = 72 bytes na pilha.

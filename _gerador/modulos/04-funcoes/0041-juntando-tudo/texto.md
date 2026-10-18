@@ -152,8 +152,8 @@ laço, é a recursão de `dar_troco`:
 
 O exemplo A082 mostra o outro lado de dividir em funções: dá para **testar
 cada peça sozinha**. Com a macro `CONFERIR` (a do exercício E240), ele confere
-o preço, o contador `static` e a contagem de notas sem digitar nada. No TS
-você faria isso com Jest; aqui, uma macro de dez linhas resolve.
+o preço, o contador `static` e a contagem de notas sem digitar nada. Não
+precisa de biblioteca de testes: uma macro de dez linhas resolve.
 
 > [!WARNING]
 > Efeito colateral escondido. `preco_centavos` parece só consultar um preço,

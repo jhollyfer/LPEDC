@@ -1,7 +1,7 @@
 // 0071 · Juntando tudo: o cardápio
 // Exercício E426 · ★★★
 //
-// No TypeScript, um valor JSON pode ser número, texto, booleano ou null.
+// Um valor JSON pode ser número, texto, booleano ou null.
 // Represente isso em C com uma union etiquetada:
 //
 //   typedef enum { J_NULO, J_NUMERO, J_TEXTO, J_BOOL } TipoJson;

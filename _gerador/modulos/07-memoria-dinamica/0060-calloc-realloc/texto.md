@@ -1,9 +1,8 @@
 ## 0060 · calloc e realloc
 
 Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
-R$ 120, R$ 35... Você não sabe quantos vão ser. No TypeScript, seria um
-`pix.push(valor)` e pronto: o array cresce sozinho. No C, quem faz o array
-crescer é você, com o `realloc`.
+R$ 120, R$ 35... Você não sabe quantos vão ser. No C, o vetor
+não cresce sozinho: quem faz ele crescer é você, com o `realloc`.
 
 Antes dele, um primo do `malloc`: o **`calloc`**. Ele recebe a quantidade e o
 tamanho separados e entrega o bloco **zerado**:
@@ -107,7 +106,7 @@ custa só uma atribuição:
 > constante. Para chegar a 1024 elementos, o `realloc` copia no pior caso
 > 1 + 2 + 4 + ... + 512 = 1023 elementos: menos de uma cópia por push. Se
 > crescesse de 1 em 1, seriam 1 + 2 + ... + 1023, mais de 500 mil cópias. É
-> exatamente o que o `Array` do V8 e o `std::vector` do C++ fazem por baixo.
+> a estratégia padrão de todo vetor que cresce sob demanda.
 > Com o rodar, o AddressSanitizer **sempre** muda o bloco de lugar no
 > `realloc`, de propósito: assim o erro de usar o endereço antigo aparece logo,
 > em vez de só às vezes.

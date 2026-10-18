@@ -32,7 +32,7 @@ igualdade (`==` `!=`), o `&&` e por último o `||`. Por isso
 o E vem antes do OU. Na dúvida, ponha parênteses. Eles não custam nada e
 contam a sua intenção.
 
-E tem o **curto-circuito**, que o JS também tem. O C avalia da esquerda para a
+E tem o **curto-circuito**. O C avalia da esquerda para a
 direita e **para assim que sabe a resposta**. Em `a && b`, se `a` é falso, o
 `b` nem é calculado: falso E qualquer coisa é falso. Em `a || b`, se `a` é
 verdade, o `b` é pulado. Isso protege contas perigosas:

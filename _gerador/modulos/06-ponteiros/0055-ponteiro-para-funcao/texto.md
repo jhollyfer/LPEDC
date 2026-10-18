@@ -1,10 +1,9 @@
 ## 0055 · Ponteiro para função
 
-No TypeScript, você passa função para função o tempo todo:
-`temps.filter((t) => t >= 30)`, `botao.addEventListener('click', salvar)`,
-`lista.sort((a, b) => a - b)`. Quem escreveu o `filter` não sabe qual teste
-você quer; você entrega o teste pronto. Em C dá para fazer o mesmo, e o
-mecanismo é um ponteiro.
+Às vezes uma função precisa receber **outra função**. Uma rotina que filtra
+temperaturas não sabe qual teste você quer (acima de 30? abaixo de 0?); uma
+rotina que ordena não sabe em que ordem você quer os itens. Você entrega o
+teste pronto, e a rotina só o chama. Em C, o mecanismo para isso é um ponteiro.
 
 O código de uma função também mora na memória: numa região própria, a área
 de **código**. Então a função tem endereço, e o nome dela, sozinho, sem os

@@ -21,9 +21,7 @@ O primeiro nome vale 0, e cada um vale o anterior mais 1: `RECEBIDO` é 0,
 e quem vem depois de um valor escolhido continua contando a partir dele. Os
 nomes ficam em MAIÚSCULAS por convenção, como as constantes do `#define`.
 
-Se você usa `enum` no TypeScript, é quase a mesma coisa: `enum Status {
-Recebido, Preparando }` também numera a partir de 0. A diferença é que no C o
-enum é **só um inteiro com apelido**: o compilador deixa somar, comparar com
+Mas atenção: no C o enum é **só um inteiro com apelido**: o compilador deixa somar, comparar com
 `<` e até guardar 42 numa variável `Status`.
 
 Vamos ver na prática. A variável `s` começa em `RECEBIDO` e anda uma etapa

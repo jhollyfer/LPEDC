@@ -16,8 +16,8 @@ Toda decisão de um programa começa assim: uma **comparação**. O C tem seis
 | `==` | igual? (dois sinais!) | `2 == 1` vale 0 |
 | `!=` | diferente? | `2 != 1` vale 1 |
 
-Repare na última coluna. No TypeScript, `2 > 1` dá `true`, um valor de outro
-tipo. No C, uma comparação dá um **`int`**: **1** quando é verdade e **0**
+Repare na última coluna. No C, uma comparação não dá um valor de tipo
+especial: dá um **`int`**: **1** quando é verdade e **0**
 quando é mentira. Dá para imprimir com `%d`, somar, multiplicar.
 
 E o caminho de volta é ainda mais solto: para o C, **0 é falso e qualquer
@@ -78,8 +78,7 @@ escolhe um caminho é o `if`, que vem daqui a dois assuntos:
 
 > [!WARNING]
 > **Não compare `float` ou `double` com `==`.** Rode `printf("%d", 0.1 + 0.2
-> == 0.3);` e veja um **0**. Você já viu isso no JS: `0.1 + 0.2 === 0.3` é
-> `false` lá também. O motivo é o mesmo: 0,1 não tem representação exata em
+> == 0.3);` e veja um **0**. O motivo: 0,1 não tem representação exata em
 > binário, e a soma fica em 0.30000000000000004. Para números
 > com vírgula, pergunte se estão **perto o bastante**:
 > `fabs(a - b) < 1e-9`. Para dinheiro, a saída mais segura é guardar

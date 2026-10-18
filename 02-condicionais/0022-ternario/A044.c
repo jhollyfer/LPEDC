@@ -14,7 +14,7 @@ int main(void) {
 
     printf("Maior preço: R$ %d\n", maior);
     printf("Distância do zero: %d graus\n", distancia);
-    printf("Vai chover? %s\n", chuva ? "true" : "false"); // como no JS
+    printf("Vai chover? %s\n", chuva ? "true" : "false"); // texto no lugar de 1 ou 0
 
     // ternário dentro de ternário: funciona, mas já começa a pesar
     printf("Temperatura %s\n",

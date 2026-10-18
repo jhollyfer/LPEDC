@@ -9,8 +9,8 @@ reciprocidade, pacotes dependem uns dos outros. Para tudo isso existe o
 **grafo**: pontos e ligações, sem regra de forma.
 
 Grafo é a estrutura que mais aparece fora da sala de aula. O GPS que acha a
-rota, a rede social que sugere amigos, o `npm` que descobre a ordem de
-instalar dependências e reclama de import circular, o roteador que escolhe
+rota, a rede social que sugere amigos, o gerenciador de pacotes que descobre a ordem
+de instalar dependências e reclama de dependência circular, o roteador que escolhe
 por onde mandar o pacote: todos rodam alguma variação dos algoritmos deste
 módulo.
 
@@ -121,10 +121,9 @@ clássicas:
   guarda só os vizinhos de `i`. Ocupa O(V + E) (E é o número de arestas) e
   listar os vizinhos custa só o grau.
 
-No TypeScript você já usou lista de adjacência sem dar esse nome: um
-`Map<string, string[]>` que diz, para cada usuário, quem ele segue. No C não
-tem `Map` nem array que cresce: ou você aloca a matriz, ou monta as listas com
-`malloc`.
+Uma rede social guarda, para cada usuário, a lista de quem ele segue: é uma
+lista de adjacência. No C não tem dicionário nem vetor que cresce prontos: ou
+você aloca a matriz, ou monta as listas com `malloc`.
 
 Vamos ver na prática. Cada ciclovia liga um 1 em **duas** casas da matriz,
 `adj[a][b]` e `adj[b][a]`, por isso a matriz de um grafo não dirigido é
@@ -652,8 +651,8 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 > [!TIP]
 > **Por dentro do C:** a fila da BFS é só `int fila[V]` com dois índices,
 > `inicio` e `fim`. Como cada vértice entra uma vez só, `fim` nunca passa de V e
-> não precisa nem da fila circular. Compare com o JS: `fila.shift()` num array
-> anda com todos os elementos uma casa para trás, O(n) a cada saída; aqui,
+> não precisa nem da fila circular. Tirar do início deslocando todos os
+> elementos uma casa para trás custaria O(n) a cada saída; aqui,
 > `fila[inicio++]` é O(1). O custo total da BFS é O(V²) com matriz (para cada
 > vértice, varre a linha inteira) e O(V + E) com lista de adjacência. Os três
 > vetores (`dist`, `pai`, `fila`) somam 3 × 6 × 4 = 72 bytes na pilha.
@@ -1368,7 +1367,7 @@ Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
 
 **Exercício E695** · ★★★
 
-O npm reclamou de dependência circular no seu projeto. Os pacotes são
+O gerenciador de pacotes reclamou de dependência circular no seu projeto. Os pacotes são
 app 0, api 1, auth 2, db 3, log 4 e utils 5, e uma seta A -> B quer dizer
 "A importa B":
 

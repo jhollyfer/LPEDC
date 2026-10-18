@@ -7,9 +7,9 @@ restrição que dá a garantia: o desfazer sempre desfaz o último passo, e quem
 chegou primeiro sempre é atendido primeiro.
 
 Você usa essas estruturas o dia inteiro sem ver. A pilha de chamadas do seu
-programa, o Ctrl+Z, o botão Voltar e o *parser* do TypeScript são pilhas. O
-*event loop* do Node, a fila de jobs do seu backend e a impressora do
-escritório são filas. Aqui você constrói as duas do zero, cada uma de dois
+programa, o Ctrl+Z, o botão Voltar e o *parser* de um compilador são pilhas. A
+fila de processos do sistema operacional, a fila de jobs do seu backend e a
+impressora do escritório são filas. Aqui você constrói as duas do zero, cada uma de dois
 jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
 `.c` trocado por baixo, e o programa cliente nem percebe.
 

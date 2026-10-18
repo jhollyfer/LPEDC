@@ -7,12 +7,11 @@ contatos do celular, o extrato do banco, o resultado de uma busca na loja
 virtual, o índice de um banco de dados: tudo isso é dado sendo ordenado para
 depois ser achado rápido.
 
-No TypeScript você escreve `lista.sort((a, b) => a - b)` e
-`lista.indexOf(x)` e segue a vida. Aqui você vai abrir essas caixas pretas.
-Vai ver por que uma busca num vetor ordenado acha qualquer coisa entre um
-milhão de elementos em 20 passos, por que uma ordenação "óbvia" leva horas
-onde outra leva um segundo, e por que o próprio `a - b` daquele `sort` pode
-dar errado no C.
+Aqui você vai abrir as caixas pretas de buscar e ordenar. Vai ver por que uma
+busca num vetor ordenado acha qualquer coisa entre um milhão de elementos em
+20 passos, por que uma ordenação "óbvia" leva horas onde outra leva um
+segundo, e por que a comparação `a - b`, tão comum numa função de comparar,
+pode dar errado no C.
 
 O módulo junta as ferramentas dos anteriores: vetores e ponteiros, recursão,
 `malloc`, structs e, principalmente, o jeito de contar passos e pensar em
@@ -96,9 +95,8 @@ do vetor: pode estar em qualquer ordem.
 
 O contrato é o de sempre no C: a função recebe o vetor, o tamanho e o valor
 procurado (a **chave**), e devolve o **índice** onde achou. Se não achou,
-devolve `-1`, que nunca é um índice válido. É exatamente o que o
-`Array.prototype.indexOf` faz no JS. A diferença é que aqui você escreve o
-laço e passa o tamanho, porque o vetor do C não sabe quantos elementos tem.
+devolve `-1`, que nunca é um índice válido. Você escreve o laço e passa o
+tamanho, porque o vetor do C não sabe quantos elementos tem.
 
 Quanto custa? Conte as **comparações** com a chave, que é o trabalho de
 verdade:
@@ -623,8 +621,8 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > **Por dentro do C:** por que `ini + (fim - ini) / 2` e não
 > `(ini + fim) / 2`? Num vetor com mais de 1 bilhão de elementos, `ini + fim`
 > passa de `INT_MAX` (2.147.483.647) e dá **overflow**, que no C é
-> comportamento indefinido. Esse bug ficou escondido por anos na busca binária
-> da biblioteca do Java e só apareceu em 2006, quando os vetores ficaram
+> comportamento indefinido. Esse bug ficou escondido por anos em
+> implementações famosas da busca binária e só apareceu em 2006, quando os vetores ficaram
 > grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
 > 11, depois 9), então não aproveita a linha de cache como a sequencial. Por
 > isso, para vetores bem pequenos, a sequencial pode ganhar. A `stdlib.h` traz
@@ -3232,8 +3230,7 @@ void qsort(void *base, size_t n, size_t tamanho,
 Ele não sabe o tipo dos elementos (por isso o `void *` e o `tamanho`). Quem
 sabe é a sua função `compara`, que recebe dois ponteiros e devolve
 **negativo** se o primeiro vem antes, **zero** se empatam e **positivo** se
-vem depois. É o mesmo contrato do `strcmp` e do `Array.prototype.sort((a, b)
-=> ...)` do JS.
+vem depois. É o mesmo contrato do `strcmp`.
 
 Vamos ver na prática. Os pedidos chegam por horário. Ordenando por cidade, um
 algoritmo estável (insertion, merge) mantém R1, R3, R6. O selection sort, com

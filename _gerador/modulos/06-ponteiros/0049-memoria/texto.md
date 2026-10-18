@@ -24,7 +24,7 @@ hexadecimal. O `%p` espera um "endereço genérico", do tipo
 `void *`, então escreva `(void *)&idade`. Esse `(void *)` é um cast, e o
 assunto 0056 explica o tipo `void *` com calma.
 
-Dois detalhes que surpreendem quem vem do JS:
+Dois detalhes que surpreendem no começo:
 
 - **o endereço muda a cada execução.** O sistema sorteia onde o programa
   vai morar, por segurança. Não decore endereço nenhum;

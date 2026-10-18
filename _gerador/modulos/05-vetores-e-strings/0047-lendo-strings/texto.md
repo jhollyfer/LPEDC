@@ -36,8 +36,8 @@ nome[strcspn(nome, "\n")] = '\0';
 ```
 
 Uma linha só, que funciona nos dois casos: com `'\n'` ele é trocado; sem
-`'\n'` o `'\0'` é trocado por ele mesmo. No Node, o `readline` já entrega a
-linha sem o `\n`; no C, essa limpeza é sua.
+`'\n'` o `'\0'` é trocado por ele mesmo. O `fgets` não tira o `\n`
+sozinho: essa limpeza é sua.
 
 Vamos ver na prática. O vetor `nome` tem 40 bytes. O `fgets` copia os 11
 caracteres, depois o `'\n'`, depois o `'\0'`. O `strcspn` acha o `'\n'` na

@@ -12,8 +12,7 @@ ele grava os bytes **exatamente como estão na memória**. Um `int` sempre ocupa
 **registros de tamanho fixo**, a posição de qualquer um vira conta: o
 registro `i` começa no byte `i * sizeof(registro)`.
 
-No JS, a comparação é `JSON.stringify` (texto, legível, maior) contra um
-`Buffer` ou `ArrayBuffer` (bytes crus, compacto, ilegível). Mesma troca.
+Em resumo: texto é legível e maior; binário é compacto e ilegível.
 
 | | texto (`fprintf`) | binário (`fwrite`) |
 | --- | --- | --- |

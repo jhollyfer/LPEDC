@@ -6,7 +6,7 @@
 //   char **dividir(const char *texto, char separador, int *qtd);
 //
 // que quebra o texto em pedaços pelo separador e devolve um vetor NOVO de
-// strings NOVAS, cada uma do tamanho exato (como o split do JavaScript).
+// strings NOVAS, cada uma do tamanho exato.
 // A quantidade volta por *qtd. Teste com a lista do mercado
 // "arroz;feijao;cafe;oleo de soja" e com ";;", que tem 3 pedaços vazios.
 //

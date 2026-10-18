@@ -82,7 +82,7 @@ Recursão e laço resolvem os mesmos problemas: todo `for` vira recursão e toda
 recursão vira laço (às vezes com bastante trabalho). O fatorial com `for` é
 até mais simples e mais barato. A recursão brilha quando o problema **é**
 recursivo por natureza: pastas dentro de pastas, árvores, "divide ao meio e
-resolve cada metade". No TS você já fez isso ao percorrer um JSON aninhado.
+resolve cada metade".
 
 > [!WARNING]
 > Caso base que nunca chega. Com `if (n == 1)` no lugar de `if (n <= 1)`,

@@ -30,9 +30,8 @@ pede um bloco de N bytes, recebe o **endereço** dele e usa como vetor. O bloco
 não pertence a função nenhuma: fica vivo até você devolvê-lo com `free`. Por
 isso dá para criar numa função e usar em outra.
 
-No TypeScript, todo objeto e todo array moram no heap, e o coletor de lixo
-(*garbage collector*) apaga o que ninguém mais usa. No C não tem coletor. Você
-é o coletor: tudo o que pegou do heap, devolve.
+No C não existe coletor de lixo (*garbage collector*), um mecanismo que apaga
+sozinho o que ninguém mais usa. Você é o coletor: tudo o que pegou do heap, devolve.
 
 Vamos ver na prática. A função `abrir_comanda` monta a comanda da mesa 4 com
 três itens (R$ 18, R$ 25 e R$ 7). A variável `itens` mora no frame dela, na

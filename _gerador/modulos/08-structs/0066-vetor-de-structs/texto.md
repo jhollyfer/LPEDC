@@ -6,10 +6,9 @@ Uma linha é uma struct. A tabela inteira é um **vetor de structs**.
 
 Você já conhece as duas peças. Um vetor guarda vários valores do mesmo tipo,
 lado a lado. Uma struct é um tipo. Junte as duas: `Time tabela[4];` são quatro
-`Time` seguidos na memória. É o equivalente ao `Time[]` do TypeScript, um
-array de objetos, com uma diferença importante: no JS o array guarda
-**referências** para objetos espalhados pela memória; no C, os bytes das
-structs ficam **dentro** do vetor, um time colado no outro.
+`Time` seguidos na memória. O vetor não guarda **referências** para structs
+espalhadas pela memória: os bytes das structs ficam **dentro** do vetor, um
+time colado no outro.
 
 Para chegar num campo, você primeiro escolhe a linha e depois a coluna:
 `tabela[2].nome`. O índice vem **antes** do ponto, porque `tabela[2]` é um
@@ -104,8 +103,8 @@ a comparação olha um campo calculado de cada struct:
 > `tabela[2].vitorias`, o compilador faz uma conta só: início do vetor
 > + 2 × 32 (pula dois times) + 20 (pula o nome). Por isso percorrer um vetor de
 > structs é rápido: os dados estão em sequência, e o processador traz vários
-> de uma vez para o cache. Um `Time[]` no JS, com objetos espalhados pela
-> memória, não tem essa vantagem.
+> de uma vez para o cache. Dados espalhados pela memória não têm essa
+> vantagem.
 
 > [!NOTE]
 > **Pergunta para você:** se o Vasco tivesse 9 vitórias, 7 empates e 0

@@ -6,9 +6,8 @@ até acertar, desenhar uma tabela, sortear dados até sair dupla. Sem laço,
 você copiaria o mesmo código dez, cem, mil vezes. Com laço, escreve uma vez e
 diz **quando parar**.
 
-A sintaxe vai parecer familiar: `while`, `do...while`, `for`, `break` e
-`continue` têm no C a mesma cara que no TypeScript. O C não tem `for...of`,
-`forEach` nem `map`: aqui todo laço é "na mão", com contador e condição. Isso
+O C tem cinco palavras para repetir: `while`, `do...while`, `for`, `break` e
+`continue`. Nenhuma percorre uma coleção sozinha: aqui todo laço é "na mão", com contador e condição. Isso
 obriga a pensar no que importa: onde o laço começa, o que muda a cada volta e
 qual pergunta faz ele terminar. Errar qualquer uma das três dá o laço
 infinito ou a volta a mais, os dois bugs mais comuns da programação.

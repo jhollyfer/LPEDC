@@ -27,8 +27,8 @@ o `case` com o mesmo valor. O **`default`** pega o que não casou com nenhum
 As regras são mais rígidas que as do `if`, e é bom saber por quê:
 
 - a expressão tem que ser **inteira**: `int`, `char` (que é número) ou
-  parecido. Nada de `double`, e nada de string. No JS você faz
-  `switch (nome)` com textos; no C, não;
+  parecido. Nada de `double`, e nada de string: `switch (nome)`
+  com um texto não compila;
 - cada `case` leva uma **constante** conhecida na compilação (`case 2:`,
   `case 'S':`). Não dá para escrever `case x:` nem `case > 10:`;
 - dois `case` não podem ter o mesmo valor.

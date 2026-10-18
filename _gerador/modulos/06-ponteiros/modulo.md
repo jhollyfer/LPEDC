@@ -7,8 +7,7 @@ numerada da memória, que dá para guardar o número dessa gaveta numa outra
 variável e que, com esse número na mão, dá para ler e mudar o dado de
 qualquer lugar do programa.
 
-No TypeScript, objetos e arrays já são passados "por referência" e você
-nunca pensa nisso. No C, nada acontece por baixo dos panos: se uma função
+No C, nada acontece por baixo dos panos: se uma função
 precisa mudar uma variável sua, você entrega o endereço dela. Parece
 trabalho a mais, e é. Em troca, você entende exatamente o que cada linha
 custa e por que o `scanf` pedia aquele `&` desde o módulo 01.

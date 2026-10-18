@@ -9,8 +9,7 @@ numerada da memória, que dá para guardar o número dessa gaveta numa outra
 variável e que, com esse número na mão, dá para ler e mudar o dado de
 qualquer lugar do programa.
 
-No TypeScript, objetos e arrays já são passados "por referência" e você
-nunca pensa nisso. No C, nada acontece por baixo dos panos: se uma função
+No C, nada acontece por baixo dos panos: se uma função
 precisa mudar uma variável sua, você entrega o endereço dela. Parece
 trabalho a mais, e é. Em troca, você entende exatamente o que cada linha
 custa e por que o `scanf` pedia aquele `&` desde o módulo 01.
@@ -116,7 +115,7 @@ hexadecimal. O `%p` espera um "endereço genérico", do tipo
 `void *`, então escreva `(void *)&idade`. Esse `(void *)` é um cast, e o
 assunto 0056 explica o tipo `void *` com calma.
 
-Dois detalhes que surpreendem quem vem do JS:
+Dois detalhes que surpreendem no começo:
 
 - **o endereço muda a cada execução.** O sistema sorteia onde o programa
   vai morar, por segurança. Não decore endereço nenhum;
@@ -482,7 +481,7 @@ declaração (`int *p`) e desreferência (`*p = 5`). Leia devagar no começo.
 
 E se o ponteiro ainda não aponta para nada? Use **`NULL`**: um endereço
 especial que significa "lugar nenhum". Dá para testar (`if (cartao != NULL)`)
-antes de usar. No TypeScript, é o papel do `null` num campo opcional.
+antes de usar.
 
 Vamos ver na prática. No caixa da farmácia, o cliente tem 120 pontos no
 cartão fidelidade. O ponteiro `cartao` começa em `NULL` (nenhum cartão).
@@ -850,9 +849,7 @@ e `b`, com 8 e 25 dentro. A função troca as cópias, termina, e as cópias
 somem junto com o frame dela (assunto 0036). O `arroz` do `main` nem ficou
 sabendo.
 
-No JS é igual para números: `function troca(a, b)` também não troca dois
-`number` de quem chamou. A diferença é que no C existe a saída: em vez do
-valor, passe o **endereço**.
+A saída é mudar o que se entrega: em vez do valor, passe o **endereço**.
 
 A função passa a receber ponteiros, `void troca(int *a, int *b)`, e quem
 chama entrega os endereços: `troca(&arroz, &feijao)`. O endereço também é
@@ -1670,8 +1667,7 @@ compilador guarda esse texto **uma vez só**, numa região da memória
   região só de leitura e o programa cai.
 
 Por isso, quando o ponteiro aponta para literal, declare **`const char
-*`**. Aí o compilador recusa `apelido[0] = 'B'` antes de rodar, como um
-`readonly` do TypeScript.
+*`**. Aí o compilador recusa `apelido[0] = 'B'` antes de rodar.
 
 As diferenças continuam. O ponteiro pode mudar de alvo: `apelido =
 "bibi";` vale. O vetor não: `nome = "joana";` nem compila (para trocar o
@@ -1723,7 +1719,7 @@ andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
 <p align="center"><img src="0053-ponteiros-e-strings/fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
 
 > [!WARNING]
-> `char *s = "ola"; s[0] = 'O';` compila **sem aviso** no C (no C++ é erro),
+> `char *s = "ola"; s[0] = 'O';` compila **sem aviso** no C,
 > e derruba o programa quando roda: `segmentation fault`, porque a página do
 > literal é só de leitura. Você vai ver muito `char *p = "..."` em material
 > antigo. Escreva `const char *` sempre que apontar para literal, ou use
@@ -2453,11 +2449,10 @@ printf("x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
 
 ## 0055 · Ponteiro para função
 
-No TypeScript, você passa função para função o tempo todo:
-`temps.filter((t) => t >= 30)`, `botao.addEventListener('click', salvar)`,
-`lista.sort((a, b) => a - b)`. Quem escreveu o `filter` não sabe qual teste
-você quer; você entrega o teste pronto. Em C dá para fazer o mesmo, e o
-mecanismo é um ponteiro.
+Às vezes uma função precisa receber **outra função**. Uma rotina que filtra
+temperaturas não sabe qual teste você quer (acima de 30? abaixo de 0?); uma
+rotina que ordena não sabe em que ordem você quer os itens. Você entrega o
+teste pronto, e a rotina só o chama. Em C, o mecanismo para isso é um ponteiro.
 
 O código de uma função também mora na memória: numa região própria, a área
 de **código**. Então a função tem endereço, e o nome dela, sozinho, sem os
@@ -2847,22 +2842,20 @@ recebe é que abre e sabe se dentro tem um livro ou um tênis. O **`void *`**
 é essa caixa fechada.
 
 Um `void *` é um **ponteiro genérico**: guarda o endereço de qualquer dado
-(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. No TS,
-o parente mais próximo é o `unknown`: aceita qualquer coisa, e você precisa
-dizer o tipo antes de usar.
+(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. Antes
+de usar o dado, você precisa dizer o tipo.
 
 Duas regras saem disso:
 
 - **conversão livre.** Em C, qualquer ponteiro de dado vira `void *` e
-  volta sem cast: `void *p = &senha;` e `int *q = p;` compilam limpo (no C++
-  não, por isso você vê casts desnecessários em código copiado de lá);
+  volta sem cast: `void *p = &senha;` e `int *q = p;` compilam limpo;
 - **não dá para desreferenciar.** `*p` com `p` do tipo `void *` não
   compila: o compilador não sabe quantos bytes ler nem como interpretar.
   Converta antes, com um **cast**: `*(int *)p`. Pelo mesmo motivo, `p + 1`
   não existe no C padrão (o `gcc` aceita como extensão, e o `-pedantic`
   avisa).
 
-O cast é uma promessa sua, igual ao `as` do TS: o compilador acredita. Se
+O cast é uma promessa sua: o compilador acredita. Se
 você disser `(double *)` para um endereço onde mora um `int`, ele lê 8
 bytes onde só tinha 4 e mostra lixo. Ninguém confere por você.
 

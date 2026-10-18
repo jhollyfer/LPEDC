@@ -103,8 +103,8 @@ do laço enxerga o saldo que a anterior deixou:
 > [!WARNING]
 > O erro mais comum é esquecer que struct vai por valor. Uma função
 > `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
-> faz nada: recarrega uma cópia que morre no fim da função. Quem vem do JS
-> estranha, porque lá objeto passado para função é alterado. O segundo erro é
+> faz nada: recarrega uma cópia que morre no fim da função. Para a função
+> alterar a struct de quem chamou, passe o endereço: `Cartao *c`. O segundo erro é
 > a precedência: `*c.saldo` não compila. Escreva `c->saldo` ou `(*c).saldo`.
 > E nunca devolva o endereço de uma struct local (`return &cartao;`): ela morre
 > quando a função termina. Para criar uma struct dentro de uma função e

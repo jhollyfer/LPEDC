@@ -6,9 +6,8 @@ um conserto esquece uma das cópias e ninguém mais acha nada. Este módulo é
 sobre **dividir**: dar nome a cada tarefa, escrever uma vez e chamar quantas
 vezes precisar.
 
-Você já faz isso no TypeScript o tempo todo, com funções e com `import` e
-`export`. A ideia é a mesma. A diferença é que no C dá para ver **o que
-acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
+No C, isso se faz com funções e com módulos (`.h` e `.c`). E dá para ver **o
+que acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
 nasce na pilha, o endereço de volta, a variável que some no `return`. Com essa
 imagem na cabeça, a **recursão** deixa de ser mágica e vira só mais uma
 chamada.

@@ -85,7 +85,7 @@ Ferramentas que o exemplo A080 usa:
 - `__LINE__` vira o número da linha, e `__func__` o nome da função atual. Os
   dois são ótimos em mensagens de depuração.
 - `#x` dentro de uma macro transforma o argumento em texto: `MOSTRAR(7 * 6)`
-  mostra `7 * 6 = 42`. É o `console.log({ x })` do C.
+  mostra `7 * 6 = 42`: a expressão e o valor numa linha só, sem repetir nada.
 
 > [!WARNING]
 > A macro avalia o argumento **cada vez que ele aparece**. Com

@@ -6,9 +6,8 @@ diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
 
 Até aqui, você teria três variáveis soltas: `char tamanho`, `int quantidade`,
 `double preco`. Com dez pedidos, seriam trinta variáveis, e nada no código diz
-que `tamanho3` e `preco3` são do mesmo pedido. No TypeScript você resolveria
-com um objeto `{ tamanho: 'M', quantidade: 2, preco: 18.5 }`. No C, com uma
-**struct**.
+que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso
+com uma **struct**.
 
 Uma struct **agrupa variáveis de tipos diferentes sob um nome só**. Cada
 variável de dentro é um **campo** (ou membro). Você primeiro descreve o molde:
@@ -89,8 +88,8 @@ passos são os de sempre; a diferença é que os dados viajam num pacote só:
 {{fluxograma}}
 
 > [!WARNING]
-> Quem vem do JS espera que `b = a` faça `b` **apontar** para o mesmo objeto.
-> No C, não: `struct pedido p2 = p1;` cria uma **cópia independente**. Mudar
+> Atribuir uma struct não faz as duas variáveis **apontarem** para o mesmo
+> lugar: `struct pedido p2 = p1;` cria uma **cópia independente**. Mudar
 > `p2.quantidade` não mexe em `p1`. Duas outras coisas também não funcionam:
 > `p1 == p2` nem compila (compare campo a campo), e um campo vetor não recebe
 > texto com `=`: `cliente.nome = "Ana";` é erro; use `strcpy(cliente.nome, "Ana")`.

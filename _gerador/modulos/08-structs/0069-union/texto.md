@@ -91,16 +91,15 @@ outro lado:
 > union usada para economizar espaço, ler um campo diferente do último que
 > você gravou dá lixo, e o C não avisa: ele não sabe qual campo está valendo.
 > Por isso a union quase sempre vem acompanhada de um **enum** que diz qual
-> campo vale agora (a union "etiquetada" do A138). É exatamente a *discriminated
-> union* do TypeScript (`{ tipo: 'pix', chave } | { tipo: 'cartao', final }`),
-> só que no C quem confere a etiqueta é você, não o compilador. E lembre: o
+> campo vale agora (a union "etiquetada" do A138). Quem confere a etiqueta é você, não
+> o compilador. E lembre: o
 > resultado de ler os bytes depende da endianness, então esse código não dá a
 > mesma saída em todas as máquinas.
 
 > [!TIP]
 > **Por dentro do C:** uma union não gera código nenhum. `ip.numero` e
 > `ip.bytes[0]` são o mesmo endereço; muda só o tipo com que o compilador lê o
-> que está lá. Em C (diferente do C++), ler um campo diferente do último
+> que está lá. Em C, ler um campo diferente do último
 > gravado é permitido: os bytes são reinterpretados no tipo novo. É assim que
 > se inspeciona um `float` bit a bit, por exemplo. Na rede, a convenção é
 > big-endian (a "ordem de rede"); por isso programas de rede usam `htonl` e

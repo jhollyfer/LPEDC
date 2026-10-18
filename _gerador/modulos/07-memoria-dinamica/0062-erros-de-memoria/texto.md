@@ -3,8 +3,8 @@
 O sistema do caixa da padaria funciona perfeitamente de manhã. Às seis da
 tarde está lento, e no sábado trava. Ninguém mexeu no código. O que aconteceu
 foi um **vazamento**: a cada venda, um pedacinho de memória ficava para trás,
-e depois de milhares de vendas o heap acabou. Se você já caçou um *memory
-leak* num servidor Node, é a mesma doença, só que no C você mesmo cria.
+e depois de milhares de vendas o heap acabou. Em inglês, *memory
+leak*. No C, quem cria essa doença é você mesmo, e quem cura também.
 
 O pior desses erros é que o programa costuma **funcionar**: mostra a saída
 certa, termina sem reclamar e quebra só na máquina do cliente, dias depois.

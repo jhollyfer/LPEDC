@@ -8,8 +8,8 @@ desperdiça; se tiver 51, estoura. Programas de verdade não sabem quantos dados
 vão chegar. Este módulo ensina a pedir memória **enquanto o programa roda**, do
 tamanho exato, e a devolvê-la quando acabar.
 
-No TypeScript você nunca pensou nisso: `[]` cresce sozinho e o coletor de lixo
-apaga o que ninguém usa. No C, quem faz as duas coisas é você. Isso dá poder
+No C, nenhum vetor cresce sozinho e nenhum coletor de lixo apaga o que
+ninguém usa. Quem faz as duas coisas é você. Isso dá poder
 (você decide quanto, quando e por quanto tempo) e dá responsabilidade: memória
 esquecida vaza, memória devolvida e usada de novo corrompe o programa.
 
@@ -23,7 +23,7 @@ estruturas sem medo.
 
 - as quatro regiões da memória de um programa: **código, dados, heap e pilha**, e quanto tempo vive cada coisa
 - pedir e devolver memória com **`malloc`** e **`free`**, sempre conferindo o `NULL`
-- **`calloc`** (memória zerada) e **`realloc`**, para fazer um vetor crescer como o `push` do JavaScript
+- **`calloc`** (memória zerada) e **`realloc`**, para fazer um vetor crescer conforme os dados chegam
 - montar **matrizes dinâmicas**: bloco único com `i * colunas + j` ou vetor de ponteiros com `m[i][j]`
 - reconhecer **vazamento, ponteiro solto, free duplo e estouro**, e caçá-los com o **AddressSanitizer** e o **valgrind**
 - juntar tudo num programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás
@@ -123,9 +123,8 @@ pede um bloco de N bytes, recebe o **endereço** dele e usa como vetor. O bloco
 não pertence a função nenhuma: fica vivo até você devolvê-lo com `free`. Por
 isso dá para criar numa função e usar em outra.
 
-No TypeScript, todo objeto e todo array moram no heap, e o coletor de lixo
-(*garbage collector*) apaga o que ninguém mais usa. No C não tem coletor. Você
-é o coletor: tudo o que pegou do heap, devolve.
+No C não existe coletor de lixo (*garbage collector*), um mecanismo que apaga
+sozinho o que ninguém mais usa. Você é o coletor: tudo o que pegou do heap, devolve.
 
 Vamos ver na prática. A função `abrir_comanda` monta a comanda da mesa 4 com
 três itens (R$ 18, R$ 25 e R$ 7). A variável `itens` mora no frame dela, na
@@ -537,7 +536,7 @@ Três detalhes nessa linha:
 - o `malloc` conta em **bytes**, não em elementos. `malloc(4)` não é espaço
   para 4 `double`, é espaço para 4 bytes. Por isso sempre `n * sizeof(tipo)`;
 - ele devolve `void *` (assunto 0056), que vira `double *` sozinho. Em C não
-  precisa de cast; o `(double *)` que você vê em livro antigo é herança do C++;
+  precisa de cast; o `(double *)` que você vê em livro antigo é dispensável;
 - se não houver memória, ele devolve **`NULL`**. Sempre confira antes de usar.
 
 O bloco vem com **lixo**: o que estava naqueles bytes antes. O `malloc` não
@@ -549,9 +548,8 @@ o próprio `malloc` anotou isso num cabeçalho escondido antes do bloco. Depois
 do `free`, o ponteiro continua guardando o endereço antigo, só que agora ele
 aponta para um bloco que não é mais seu. Por isso o hábito: `corridas = NULL;`.
 
-A regra de ouro é simples de dizer: **todo `malloc` tem um `free`**. No
-TypeScript, `new Array(n)` some sozinho quando ninguém mais o referencia. Aqui,
-o bloco que você esquece de liberar fica ocupado até o programa acabar. Isso é
+A regra de ouro é simples de dizer: **todo `malloc` tem um `free`**. Nada some
+sozinho: o bloco que você esquece de liberar fica ocupado até o programa acabar. Isso é
 um **vazamento** (*memory leak*), tema do assunto 0062.
 
 Vamos ver na prática. O programa pergunta quantas corridas foram (4), pede ao
@@ -938,9 +936,8 @@ Crachá: Maria Clara Fonseca (19 caracteres)
 ## 0060 · calloc e realloc
 
 Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
-R$ 120, R$ 35... Você não sabe quantos vão ser. No TypeScript, seria um
-`pix.push(valor)` e pronto: o array cresce sozinho. No C, quem faz o array
-crescer é você, com o `realloc`.
+R$ 120, R$ 35... Você não sabe quantos vão ser. No C, o vetor
+não cresce sozinho: quem faz ele crescer é você, com o `realloc`.
 
 Antes dele, um primo do `malloc`: o **`calloc`**. Ele recebe a quantidade e o
 tamanho separados e entrega o bloco **zerado**:
@@ -1044,7 +1041,7 @@ custa só uma atribuição:
 > constante. Para chegar a 1024 elementos, o `realloc` copia no pior caso
 > 1 + 2 + 4 + ... + 512 = 1023 elementos: menos de uma cópia por push. Se
 > crescesse de 1 em 1, seriam 1 + 2 + ... + 1023, mais de 500 mil cópias. É
-> exatamente o que o `Array` do V8 e o `std::vector` do C++ fazem por baixo.
+> a estratégia padrão de todo vetor que cresce sob demanda.
 > Com o rodar, o AddressSanitizer **sempre** muda o bloco de lugar no
 > `realloc`, de propósito: assim o erro de usar o endereço antigo aparece logo,
 > em vez de só às vezes.
@@ -1799,8 +1796,8 @@ A * A: dimensões incompatíveis
 O sistema do caixa da padaria funciona perfeitamente de manhã. Às seis da
 tarde está lento, e no sábado trava. Ninguém mexeu no código. O que aconteceu
 foi um **vazamento**: a cada venda, um pedacinho de memória ficava para trás,
-e depois de milhares de vendas o heap acabou. Se você já caçou um *memory
-leak* num servidor Node, é a mesma doença, só que no C você mesmo cria.
+e depois de milhares de vendas o heap acabou. Em inglês, *memory
+leak*. No C, quem cria essa doença é você mesmo, e quem cura também.
 
 O pior desses erros é que o programa costuma **funcionar**: mostra a saída
 certa, termina sem reclamar e quebra só na máquina do cliente, dias depois.
@@ -2385,8 +2382,7 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 > `struct` resolve no módulo 08: um vetor de `struct cliente` com um `realloc`
 > só. Mesmo assim, o desenho na memória continua parecido: o nome é um
 > `char *` que aponta para um bloco do heap, e a struct guarda só os 8 bytes
-> do ponteiro. No TypeScript, um `{ nome: string, centavos: number }[]` faz o
-> mesmo por baixo, com o coletor de lixo no papel do `liberar`.
+> do ponteiro.
 
 > [!NOTE]
 > **Pergunta para você:** se Dona Cida pagar e você quiser **apagar** a linha
@@ -2768,7 +2764,7 @@ char **dividir(const char *texto, char separador, int *qtd);
 
 
 que quebra o texto em pedaços pelo separador e devolve um vetor NOVO de
-strings NOVAS, cada uma do tamanho exato (como o split do JavaScript).
+strings NOVAS, cada uma do tamanho exato.
 A quantidade volta por *qtd. Teste com a lista do mercado
 "arroz;feijao;cafe;oleo de soja" e com ";;", que tem 3 pedaços vazios.
 

@@ -6,8 +6,8 @@ desperdiça; se tiver 51, estoura. Programas de verdade não sabem quantos dados
 vão chegar. Este módulo ensina a pedir memória **enquanto o programa roda**, do
 tamanho exato, e a devolvê-la quando acabar.
 
-No TypeScript você nunca pensou nisso: `[]` cresce sozinho e o coletor de lixo
-apaga o que ninguém usa. No C, quem faz as duas coisas é você. Isso dá poder
+No C, nenhum vetor cresce sozinho e nenhum coletor de lixo apaga o que
+ninguém usa. Quem faz as duas coisas é você. Isso dá poder
 (você decide quanto, quando e por quanto tempo) e dá responsabilidade: memória
 esquecida vaza, memória devolvida e usada de novo corrompe o programa.
 
@@ -21,7 +21,7 @@ estruturas sem medo.
 
 - as quatro regiões da memória de um programa: **código, dados, heap e pilha**, e quanto tempo vive cada coisa
 - pedir e devolver memória com **`malloc`** e **`free`**, sempre conferindo o `NULL`
-- **`calloc`** (memória zerada) e **`realloc`**, para fazer um vetor crescer como o `push` do JavaScript
+- **`calloc`** (memória zerada) e **`realloc`**, para fazer um vetor crescer conforme os dados chegam
 - montar **matrizes dinâmicas**: bloco único com `i * colunas + j` ou vetor de ponteiros com `m[i][j]`
 - reconhecer **vazamento, ponteiro solto, free duplo e estouro**, e caçá-los com o **AddressSanitizer** e o **valgrind**
 - juntar tudo num programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás
