@@ -1,0 +1,75 @@
+export const ideia = {
+  caixas: [
+    {
+      id: 'm',
+      forma: 'memoria',
+      x: 300,
+      y: 80,
+      celula: 90,
+      titulo: 'memória (endereços fictícios)',
+      celulas: [
+        { end: '0x1000', nome: 'pontos', valor: '120 → 150', tipo: 'int', cor: 'verde' },
+        { end: '0x1004', valor: '', cor: 'apagado' },
+        { end: '0x1008', nome: 'cartao', valor: '0x1000', tipo: 'int *', cor: 'roxo' },
+      ],
+      ponteiros: [[2, 0]],
+    },
+    {
+      id: 'antes',
+      x: 900,
+      y: 0,
+      w: 480,
+      cor: 'cinza',
+      rotulo: 'antes de passar o cartão',
+      texto: ['cartao = NULL'],
+    },
+    {
+      id: 'lê',
+      x: 900,
+      y: 220,
+      w: 480,
+      h: 230,
+      cor: 'azul',
+      rotulo: 'depois de cartao = &pontos',
+      texto: ['cartao  vale 0x1000', '*cartao vale 120', '&cartao vale 0x1008'],
+    },
+    {
+      id: 'muda',
+      x: 900,
+      y: 530,
+      w: 480,
+      cor: 'verde',
+      rotulo: '*cartao = *cartao + 30',
+      texto: ['pontos vira 150'],
+    },
+  ],
+  setas: [
+    { de: 'antes', para: 'lê' },
+    { de: 'lê', para: 'muda' },
+  ],
+  notas: [{ x: 120, y: 230, texto: ['cartao', 'aponta'], cor: 'roxo', tam: 24 }],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'Início'],
+    ['B', 'proc', 'pontos = 120; cartao = NULL'],
+    ['C', 'proc', 'cartao = &pontos'],
+    ['D', 'dec', 'cartao != NULL?'],
+    ['E', 'proc', '*cartao = *cartao + 30'],
+    ['F', 'io', 'Mostrar "Compra sem cartão"'],
+    ['G', 'io', 'Mostrar pontos (150)'],
+    ['H', 'inicio', 'Fim'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'D'],
+    ['D', 'E', 'Sim'],
+    ['D', 'F', 'Não'],
+    ['E', 'G'],
+    ['F', 'G'],
+    ['G', 'H'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'E', 'G', 'H'],
+}
