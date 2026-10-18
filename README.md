@@ -12,12 +12,14 @@ rodar e os exercícios.
 ## Como preparar o computador
 
 ```bash
-sudo apt install build-essential gdb valgrind git    # Ubuntu / Debian
+sudo pacman -S --needed base-devel gdb valgrind git     # Arch Linux
+sudo apt install build-essential gdb valgrind git       # Debian / Ubuntu
 git clone https://github.com/jhollyfer/LPEDC ~/LPEDC
 ```
 
-No macOS, `xcode-select --install` instala o compilador (`clang`, que aceita
-os mesmos comandos). No Windows, use o WSL com Ubuntu.
+No Windows, use o WSL com Ubuntu (`wsl --install` no PowerShell) e siga a
+linha do Debian/Ubuntu dentro dele. No macOS, `xcode-select --install` instala
+o compilador (`clang`, que aceita os mesmos comandos).
 
 ## Como rodar um arquivo
 
