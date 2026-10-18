@@ -1,10 +1,5 @@
 // 0062 · Ponteiro para struct
 // Exercício E372 · ★★★
-//
-// Resposta: Caio (o amigo de Ana); Bia (o amigo do amigo de Ana); 25 (p + 1
-// é g[1], a Bia); "Bia 30" (depois de p++, p é a Bia, e o amigo dela é a
-// Ana); A (primeira letra do nome da amiga da Bia); 24 (o tamanho de uma
-// Pessoa: 10 + 2 de sobra + 4 + 8).
 
 #include <stdio.h>
 
@@ -14,19 +9,46 @@ typedef struct Pessoa {
     struct Pessoa *amigo;
 } Pessoa;
 
+// segue as setas a partir de p, mostrando passos + 1 nomes
+void seguir(const Pessoa *p, int passos) {
+    printf("%s", p->nome);
+    for (int i = 0; i < passos; i++) {
+        p = p->amigo;
+        printf(" -> %s", p->nome);
+    }
+    printf("\n");
+}
+
+// conta quantas pessoas há na roda até voltar para quem começou
+int tamanho_da_roda(const Pessoa *inicio) {
+    int n = 1;
+    for (const Pessoa *p = inicio->amigo; p != inicio; p = p->amigo) {
+        n++;
+    }
+    return n;
+}
+
+// anda pela roda procurando a pessoa mais velha
+const Pessoa *mais_velha(const Pessoa *inicio) {
+    const Pessoa *m = inicio;
+    for (const Pessoa *p = inicio->amigo; p != inicio; p = p->amigo) {
+        if (p->idade > m->idade) {
+            m = p;
+        }
+    }
+    return m;
+}
+
 int main(void) {
     Pessoa g[3] = {{"Ana", 30, NULL}, {"Bia", 25, NULL}, {"Caio", 41, NULL}};
     g[0].amigo = &g[2];
     g[1].amigo = &g[0];
     g[2].amigo = &g[1];
 
-    Pessoa *p = g;
-    printf("%s\n", p->amigo->nome);
-    printf("%s\n", p->amigo->amigo->nome);
-    printf("%d\n", (p + 1)->idade);
-    p++;
-    printf("%s %d\n", p->nome, p->amigo->idade);
-    printf("%c\n", (*p->amigo).nome[0]);
-    printf("%td\n", (char *)(p + 1) - (char *)p);
+    seguir(&g[0], 4);
+    printf("Roda da Ana: %d pessoas\n", tamanho_da_roda(&g[0]));
+    const Pessoa *m = mais_velha(&g[1]);
+    printf("Maior idade: %s (%d)\n", m->nome, m->idade);
+    printf("sizeof(Pessoa) = %zu\n", sizeof(Pessoa));
     return 0;
 }

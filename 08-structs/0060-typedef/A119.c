@@ -1,34 +1,44 @@
-// A119 · O Pix da madrugada
+// A119 · A frota de ônibus
 
-#include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
-typedef double Reais; // Reais é só outro nome para double
+typedef char Placa[8];      // apelido para um vetor: Placa é "char[8]"
+typedef unsigned Minutos;   // apelido para um tipo simples
 
-typedef struct {      // struct sem nome, batizada de Pix pelo typedef
-    char chave[40];
-    Reais valor;
-    int hora;         // 0 a 23
-} Pix;
+typedef struct onibus Onibus; // apelido antes da struct existir
 
-#define LIMITE_NOTURNO 1000.0
+struct onibus {             // a struct com nome: dá para usar os dois nomes
+    Placa placa;
+    int linha;
+    Minutos atraso;
+};
 
-bool pix_permitido(Pix p) {
-    bool noturno = p.hora >= 20 || p.hora < 6;
-    return !(noturno && p.valor > LIMITE_NOTURNO);
+void mostrar(Onibus o) {
+    printf("Linha %d (%s): %u min de atraso\n", o.linha, o.placa, o.atraso);
 }
 
 int main(void) {
-    Pix p = {"ana@email.com", 1500.00, 22}; // sem a palavra struct
+    Onibus a = {"QWE1R23", 512, 0};
+    struct onibus b = {"RTY4U56", 307, 15}; // o nome completo também vale
+    Minutos tolerancia = 10;
 
-    printf("Pix de R$ %.2f para %s às %dh\n", p.valor, p.chave, p.hora);
-    if (pix_permitido(p)) {
-        printf("Enviado!\n");
-    } else {
-        printf("Bloqueado: o limite noturno é R$ %.2f\n", LIMITE_NOTURNO);
+    mostrar(a);
+    mostrar(b);
+    if (b.atraso > tolerancia) {
+        printf("Linha %d passou da tolerância de %u min\n", b.linha, tolerancia);
     }
+
+    Placa nova;              // é um vetor de 8 char, como qualquer outro
+    strcpy(nova, "ZXC7V89"); // vetor: strcpy, não =
+    printf("Placa nova: %s, %zu bytes\n", nova, sizeof nova);
+    printf("Onibus ocupa %zu bytes, igual a struct onibus: %zu\n",
+           sizeof(Onibus), sizeof(struct onibus));
     return 0;
 }
 // Saída:
-// Pix de R$ 1500.00 para ana@email.com às 22h
-// Bloqueado: o limite noturno é R$ 1000.00
+// Linha 512 (QWE1R23): 0 min de atraso
+// Linha 307 (RTY4U56): 15 min de atraso
+// Linha 307 passou da tolerância de 10 min
+// Placa nova: ZXC7V89, 8 bytes
+// Onibus ocupa 16 bytes, igual a struct onibus: 16

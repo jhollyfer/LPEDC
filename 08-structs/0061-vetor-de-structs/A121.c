@@ -1,42 +1,63 @@
-// A121 · A tabela do campeonato
+// A121 · O estoque da farmácia
 
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
     char nome[20];
-    int vitorias;
-    int empates;
-    int derrotas;
-} Time;
+    int estoque;
+    int minimo; // abaixo disso, precisa repor
+} Remedio;
 
-int pontos(Time t) {
-    return 3 * t.vitorias + t.empates;
+// devolve o índice do remédio com esse nome, ou -1 se não achar
+int buscar(const Remedio v[], int n, const char *nome) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(v[i].nome, nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void vender(Remedio v[], int n, const char *nome, int qtd) {
+    int i = buscar(v, n, nome);
+    if (i == -1) {
+        printf("%s: não temos\n", nome);
+    } else if (v[i].estoque < qtd) {
+        printf("%s: só restam %d\n", nome, v[i].estoque);
+    } else {
+        v[i].estoque -= qtd; // mexe direto no elemento do vetor
+        printf("%s: vendidas %d, restam %d\n", nome, qtd, v[i].estoque);
+    }
 }
 
 int main(void) {
-    Time tabela[] = {
-        {"Bahia", 8, 5, 3},
-        {"Flamengo", 9, 6, 1},
-        {"Palmeiras", 10, 4, 2},
-        {"Vasco", 7, 7, 2},
+    Remedio farmacia[] = {
+        {"Dipirona", 40, 10},
+        {"Paracetamol", 12, 10},
+        {"Ibuprofeno", 5, 8},
     };
-    int n = sizeof tabela / sizeof tabela[0]; // 4 times
+    int n = sizeof farmacia / sizeof farmacia[0];
 
-    int lider = 0; // índice do melhor até agora
+    vender(farmacia, n, "Paracetamol", 3);
+    vender(farmacia, n, "Ibuprofeno", 6);
+    vender(farmacia, n, "Amoxicilina", 1);
+    vender(farmacia, n, "Dipirona", 30);
+
+    printf("Repor:\n");
     for (int i = 0; i < n; i++) {
-        printf("%d. %-10s %2d pts\n", i, tabela[i].nome, pontos(tabela[i]));
-        if (pontos(tabela[i]) > pontos(tabela[lider])) {
-            lider = i;
+        if (farmacia[i].estoque < farmacia[i].minimo) { // 10 de 10 ainda não
+            printf("  %s (%d de %d)\n", farmacia[i].nome, farmacia[i].estoque,
+                   farmacia[i].minimo);
         }
     }
-    printf("Líder: %s, com %d pontos\n", tabela[lider].nome, pontos(tabela[lider]));
-    printf("A tabela ocupa %zu bytes (%d x %zu)\n", sizeof tabela, n, sizeof(Time));
     return 0;
 }
 // Saída:
-// 0. Bahia      29 pts
-// 1. Flamengo   33 pts
-// 2. Palmeiras  34 pts
-// 3. Vasco      28 pts
-// Líder: Palmeiras, com 34 pontos
-// A tabela ocupa 128 bytes (4 x 32)
+// Paracetamol: vendidas 3, restam 9
+// Ibuprofeno: só restam 5
+// Amoxicilina: não temos
+// Dipirona: vendidas 30, restam 10
+// Repor:
+//   Paracetamol (9 de 10)
+//   Ibuprofeno (5 de 8)

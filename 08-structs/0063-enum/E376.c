@@ -2,9 +2,10 @@
 // Exercício E376 · ★★☆
 //
 // Este programa compila sem nenhum aviso, mas uma das cartas sai como "???".
-// Ache o problema, conserte e responda: por que o gcc, que avisa quando um
-// switch de enum esquece um caso, desta vez ficou quieto? Mude o código para
-// que, se alguém acrescentar um naipe novo no futuro, o gcc avise.
+// Rode, ache o problema e conserte. O gcc avisa quando um switch de enum
+// esquece um caso, mas desta vez ficou quieto: mude o código para que ele
+// avise. Para testar, acrescente um quinto naipe CORINGA no fim do enum e
+// rode: tem que aparecer o aviso. Depois tire o CORINGA e rode de novo.
 //
 //   Saída esperada (depois de consertado):
 //   7 de ouros
