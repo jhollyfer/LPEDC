@@ -17,8 +17,8 @@
 //
 // Dicas:
 // 1. Use um vetor de 1000 posições e só as n primeiras em cada rodada.
-// 2. Reaproveite a busca do A141 com o contador global; zere-o uma vez por n,
-//    não a cada busca, para acumular o total.
+// 2. Reaproveite a busca do texto com o contador global; zere-o uma vez por
+//    n, não a cada busca, para acumular o total.
 // 3. Achar o código da posição i custa i + 1 passos. Somando de 1 até n dá
 //    n(n + 1) / 2; dividindo por n, (n + 1) / 2.
 // 4. Resposta esperada: médias 5.5, 50.5 e 500.5.

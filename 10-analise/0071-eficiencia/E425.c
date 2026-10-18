@@ -3,7 +3,8 @@
 //
 // Este programa busca três senhas de atendimento do banco e deveria mostrar
 // os passos 1, 4 e 6. Ele compila sem aviso, mas mostra 0, 3 e 9. Há DOIS
-// erros na instrumentação (a busca em si está certa). Ache e conserte os dois.
+// erros na instrumentação (a busca em si está certa). Conserte os dois e rode
+// para conferir a saída.
 //
 //   Saída esperada:
 //   senha 12: passos 1
@@ -11,8 +12,8 @@
 //   senha 40: passos 6
 //
 // Dicas:
-// 1. Faça o teste de mesa da senha 12, que está na posição 0. Quando o
-//    passos++ roda?
+// 1. Ponha um printf dentro do laço e rode a senha 12, que está na posição
+//    0. O passos++ chega a rodar?
 // 2. Depois olhe a senha 8: o 3 que apareceu é dela ou é acumulado?
 // 3. Resposta esperada: (1) o passos++ está depois do if que dá return, então
 //    a comparação que acerta nunca é contada: ele tem de vir antes do if;

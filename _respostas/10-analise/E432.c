@@ -1,9 +1,5 @@
 // 0072 · Notação O: como o custo cresce
 // Exercício E432 · ★★★
-//
-// Resposta: a) O(n²): n dobra, os passos multiplicam por 4; b) tamanho(texto)
-// fica na condição do for, avaliada n + 1 vezes, e cada chamada custa n
-// passos; c) medir uma vez só antes do laço. Passos: 1000, 2000 e 4000.
 
 #include <stdio.h>
 
@@ -33,6 +29,7 @@ int conta_vogais(const char *texto) {
 int main(void) {
     static char texto[4001];
     int tamanhos[3] = {1000, 2000, 4000};
+    long anterior = 0;
 
     for (int k = 0; k < 3; k++) {
         int n = tamanhos[k];
@@ -42,7 +39,12 @@ int main(void) {
         texto[n] = '\0';
         passos = 0;
         int v = conta_vogais(texto);
-        printf("n = %d: %d vogais, %ld passos\n", n, v, passos);
+        printf("n = %d: %d vogais, %ld passos", n, v, passos);
+        if (k > 0) {
+            printf(", razão %.2f", (double)passos / anterior);
+        }
+        printf("\n");
+        anterior = passos;
     }
     return 0;
 }

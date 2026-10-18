@@ -1,9 +1,7 @@
 // 0073 · Invariantes de laço e corretude
 // Exercício E437 · ★★★
-//
-// Resposta: lg(1) = 0, lg(10) = 3, lg(1000) = 9, lg(1024) = 10,
-// lg(100000) = 16 e nenhuma divergência.
 
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -11,12 +9,16 @@
 int lg(int n) {
     int i = 0;
     int m = n;
+    long p = 1; // p == 2 elevado a i
     while (m > 1) {
-        // invariante: (2^i) * m <= n < (2^i) * (m + 1)
+        // invariante: p * m <= n < p * (m + 1)
+        assert(p * m <= n && n < p * (m + 1));
         m = m / 2;
         i++;
+        p = p * 2;
     }
-    // m == 1: 2^i <= n < 2^(i+1). Parada: m cai pela metade a cada volta.
+    // término: m == 1, então 2^i <= n < 2^(i+1)
+    assert(m == 1 && p <= n && n < 2 * p);
     return i;
 }
 

@@ -1,8 +1,5 @@
 // 0071 · Eficiência: contar passos
 // Exercício E426 · ★★★
-//
-// Resposta: chamadas 177, 21891 e 2692537; somas 9, 19 e 29. A cada +1 no n,
-// as chamadas multiplicam por cerca de 1,618: crescimento exponencial.
 
 #include <stdio.h>
 
@@ -45,6 +42,18 @@ int main(void) {
             printf("as duas versões discordam!\n");
         }
         printf("%2d %7ld %9ld %6ld\n", n, a, chamadas, somas);
+    }
+
+    printf("\n");
+    chamadas = 0;
+    fib_rec(19);
+    long anterior = chamadas;
+    for (int n = 20; n <= 25; n++) {
+        chamadas = 0;
+        fib_rec(n);
+        printf("n = %d: %6ld chamadas, razão %.3f\n", n, chamadas,
+               (double)chamadas / anterior);
+        anterior = chamadas;
     }
     return 0;
 }

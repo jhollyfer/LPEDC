@@ -1,6 +1,41 @@
 // 0071 · Eficiência: contar passos
 // Exercício E421 · ★☆☆
-//
-// Resposta: a) 24 (6 * 4); b) 21 (6 + 5 + 4 + 3 + 2 + 1); c) 7 (i = 1, 2, 4,
-// 8, 16, 32, 64); d) 4 (i = 0, 3, 6, 9). O laço do d) dá 10 voltas, mas só 4
-// passam no if: o que você conta muda o número.
+
+#include <stdio.h>
+
+int main(void) {
+    int passos;
+
+    passos = 0;
+    for (int i = 0; i < 6; i++) {
+        for (int j = 0; j < 4; j++) {
+            passos++;
+        }
+    }
+    printf("a) %d\n", passos);
+
+    passos = 0;
+    for (int i = 0; i < 6; i++) {
+        for (int j = i; j < 6; j++) {
+            passos++;
+        }
+    }
+    printf("b) %d\n", passos);
+
+    passos = 0;
+    for (int i = 1; i < 100; i = i * 2) {
+        passos++;
+    }
+    printf("c) %d\n", passos);
+
+    passos = 0;
+    int voltas = 0;
+    for (int i = 0; i < 10; i++) {
+        voltas++;
+        if (i % 3 == 0) {
+            passos++;
+        }
+    }
+    printf("d) %d passos em %d voltas\n", passos, voltas);
+    return 0;
+}

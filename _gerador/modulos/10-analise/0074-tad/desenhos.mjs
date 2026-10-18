@@ -3,7 +3,7 @@
 // num bloco do heap que só o contador.c sabe abrir.
 export const ideia = {
   caixas: [
-    { id: 'cli', forma: 'arquivo', x: 100, y: 40, w: 360, cor: 'azul', nome: 'A147.c · cliente', texto: ['contador_cria(3)', 'contador_incrementa', 'contador_libera'] },
+    { id: 'cli', forma: 'arquivo', x: 100, y: 40, w: 360, cor: 'azul', nome: 'cliente (main)', texto: ['contador_cria(3)', 'contador_incrementa', 'contador_libera'] },
     { id: 'h', forma: 'arquivo', x: 620, y: 40, w: 380, cor: 'verde', nome: 'contador.h · contrato', texto: ['typedef struct', '  contador Contador;', '+ 7 protótipos'] },
     { id: 'c', forma: 'arquivo', x: 1160, y: 40, w: 340, cor: 'roxo', nome: 'contador.c · oculto', texto: ['struct contador {', '  int valor;', '  int limite;', '};'] },
     { id: 'p', forma: 'caixinha', x: 100, y: 400, nome: 'vagas', valor: '0x5a10', tipo: 'Contador *', w: 300 },

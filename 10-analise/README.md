@@ -193,39 +193,73 @@ passo a mais no contador:
 
 Os arquivos ficam em [`0071-eficiencia/`](0071-eficiencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A141 · Quantas comparações para achar a comanda**
+**Exemplo A141 · Contar tudo: a busca com sentinela**
 
 ```c
 #include <stdio.h>
 
-int passos = 0; // conta as comparações: a operação que domina o custo
+// Na catraca da academia, a busca compara duas coisas a cada volta: "acabou
+// a lista?" (i < n) e "é esta matrícula?". Contando as DUAS, dá para ver o
+// truque da sentinela: pôr a própria matrícula procurada no fim da lista
+// garante que a busca sempre acha, e o teste i < n some do laço.
 
-// Devolve o índice de alvo em v[0..n-1], ou -1 se ele não estiver lá.
-int busca(const int v[], int n, int alvo) {
-    for (int i = 0; i < n; i++) {
-        passos++; // vai comparar v[i] com o alvo
+int comparacoes = 0; // conta toda comparação, de qualquer tipo
+
+int busca_comum(const int v[], int n, int alvo) {
+    int i = 0;
+    while (1) {
+        comparacoes++; // i < n
+        if (!(i < n)) {
+            return -1;
+        }
+        comparacoes++; // v[i] == alvo
         if (v[i] == alvo) {
             return i;
         }
+        i++;
     }
-    return -1;
+}
+
+// v precisa ter uma posição livre em v[n] para a sentinela.
+int busca_sentinela(int v[], int n, int alvo) {
+    v[n] = alvo; // a sentinela: a busca vai parar aqui, no pior caso
+    int i = 0;
+    while (1) {
+        comparacoes++; // v[i] == alvo (o único teste do laço)
+        if (v[i] == alvo) {
+            break;
+        }
+        i++;
+    }
+    return i < n ? i : -1; // um teste só, fora do laço
 }
 
 int main(void) {
-    int comandas[8] = {41, 17, 88, 23, 56, 9, 70, 35};
-    int alvos[3] = {41, 70, 99};
+    int matriculas[9] = {3021, 1187, 4410, 2595, 3978, 1203, 4862, 2240}; // 8 + 1 livre
+    int alvos[3] = {3021, 4862, 9999};
 
+    printf("%8s %6s %7s %10s\n", "alvo", "pos", "comum", "sentinela");
     for (int k = 0; k < 3; k++) {
-        passos = 0; // zera antes de cada busca
-        int pos = busca(comandas, 8, alvos[k]);
-        printf("comanda %d: posição %2d, passos: %d\n", alvos[k], pos, passos);
+        comparacoes = 0;
+        int pos = busca_comum(matriculas, 8, alvos[k]);
+        int c1 = comparacoes;
+
+        comparacoes = 0;
+        busca_sentinela(matriculas, 8, alvos[k]);
+        int c2 = comparacoes + 1; // + o teste i < n do return
+
+        printf("%8d %6d %7d %10d\n", alvos[k], pos, c1, c2);
     }
     return 0;
 }
 // Saída:
-// comanda 41: posição  0, passos: 1
-// comanda 70: posição  6, passos: 7
-// comanda 99: posição -1, passos: 8
+//     alvo    pos   comum  sentinela
+//     3021      0       2          2
+//     4862      6      14          8
+//     9999     -1      17         10
+//
+// Pior caso: 2n + 1 contra n + 2. As duas continuam crescendo junto com n,
+// mas a sentinela corta quase metade das comparações.
 ```
 
 ```bash
@@ -293,8 +327,9 @@ int main(void) {
 
 **Exercício E421** · ★☆☆
 
-Antes de rodar, preveja quantos passos cada trecho conta. Anote os quatro
-números, depois rode e confira.
+Escreva um programa que monta cada trecho abaixo, conta com uma variável
+"passos" quantas vezes o passos++ roda e mostra o resultado. Zere o
+contador antes de cada trecho.
 
 
 ```text
@@ -304,13 +339,26 @@ c) for (i = 1; i < 100; i = i * 2)  passos++;
 d) for (i = 0; i < 10; i++)  if (i % 3 == 0) passos++;
 ```
 
+
+No d), conte também as voltas do laço numa segunda variável, "voltas", e
+mostre as duas.
+
+
+```text
+Saída esperada:
+a) 24
+b) 21
+c) 7
+d) 4 passos em 10 voltas
+```
+
 **Dicas:**
 
-1. Em a), o laço de dentro roda inteiro a cada volta do de fora.
-2. Em b), o laço de dentro encolhe: começa em i. Faça a lista 6 + 5 + ...
-3. Em c), escreva os valores de i: 1, 2, 4, ... até passar de 99.
-4. Resposta esperada: a) 24; b) 21 (6 + 5 + 4 + 3 + 2 + 1); c) 7
-   (i = 1, 2, 4, 8, 16, 32, 64); d) 4 (i = 0, 3, 6, 9).
+1. Em a), o laço de dentro roda inteiro a cada volta do de fora: 6 * 4.
+2. Em b), o laço de dentro encolhe porque começa em i: 6 + 5 + ... + 1.
+3. Em c), os valores de i são 1, 2, 4, 8, 16, 32, 64.
+4. Resposta esperada: a saída acima. O d) mostra que o número depende do
+   que você escolhe contar: 10 voltas, mas só 4 passam no if.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0071-eficiencia/E421.c
@@ -366,8 +414,8 @@ n = 1000: total 500500, média 500.5
 **Dicas:**
 
 1. Use um vetor de 1000 posições e só as n primeiras em cada rodada.
-2. Reaproveite a busca do A141 com o contador global; zere-o uma vez por n,
-   não a cada busca, para acumular o total.
+2. Reaproveite a busca do texto com o contador global; zere-o uma vez por
+   n, não a cada busca, para acumular o total.
 3. Achar o código da posição i custa i + 1 passos. Somando de 1 até n dá
    n(n + 1) / 2; dividindo por n, (n + 1) / 2.
 4. Resposta esperada: médias 5.5, 50.5 e 500.5.
@@ -417,7 +465,8 @@ Saída esperada:
 
 Este programa busca três senhas de atendimento do banco e deveria mostrar
 os passos 1, 4 e 6. Ele compila sem aviso, mas mostra 0, 3 e 9. Há DOIS
-erros na instrumentação (a busca em si está certa). Ache e conserte os dois.
+erros na instrumentação (a busca em si está certa). Conserte os dois e rode
+para conferir a saída.
 
 
 ```text
@@ -429,8 +478,8 @@ senha 40: passos 6
 
 **Dicas:**
 
-1. Faça o teste de mesa da senha 12, que está na posição 0. Quando o
-   passos++ roda?
+1. Ponha um printf dentro do laço e rode a senha 12, que está na posição
+   0. O passos++ chega a rodar?
 2. Depois olhe a senha 8: o 3 que apareceu é dela ou é acumulado?
 3. Resposta esperada: (1) o passos++ está depois do if que dá return, então
    a comparação que acerta nunca é contada: ele tem de vir antes do if;
@@ -462,8 +511,18 @@ Saída esperada:
 ```
 
 
-Depois responda: quando n aumenta 1, as chamadas da recursiva se
-multiplicam por quanto, mais ou menos?
+Depois acrescente uma segunda tabela: para n de 20 a 25, as chamadas da
+recursiva e a razão entre as chamadas de n e as de n - 1.
+
+
+```text
+n = 20:  21891 chamadas, razão 1.618
+n = 21:  35421 chamadas, razão 1.618
+n = 22:  57313 chamadas, razão 1.618
+n = 23:  92735 chamadas, razão 1.618
+n = 24: 150049 chamadas, razão 1.618
+n = 25: 242785 chamadas, razão 1.618
+```
 
 **Dicas:**
 
@@ -471,10 +530,11 @@ multiplicam por quanto, mais ou menos?
 2. A versão com laço guarda os dois últimos valores e anda n - 1 vezes.
 3. fib_rec(n) chama fib_rec(n - 1) e fib_rec(n - 2): o fib(28) é calculado
    do zero 2 vezes, o fib(27) 3 vezes, o fib(26) 5 vezes...
-4. Resposta esperada: a tabela acima. A cada +1 no n, as chamadas
-   multiplicam por cerca de 1,618 (a razão áurea): de n = 10 para 20 elas
-   crescem 21891 / 177 ≈ 124 vezes, e 1,618 elevado a 10 ≈ 123. Isso é
-   crescimento exponencial.
+4. Na segunda tabela, comece medindo n = 19 e guarde as chamadas numa
+   variável "anterior"; a razão é (double)chamadas / anterior.
+5. Resposta esperada: as duas tabelas acima. A cada +1 no n, as chamadas
+   multiplicam por cerca de 1,618 (a razão áurea): crescimento
+   exponencial.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0071-eficiencia/E426.c
@@ -625,76 +685,48 @@ responde Sim só 10 vezes, porque cada volta joga metade fora:
 
 Os arquivos ficam em [`0072-big-o/`](0072-big-o/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A143 · Cinco perguntas sobre os pedidos**
+**Exemplo A143 · A base do log não importa**
 
 ```c
 #include <stdio.h>
 
-// O app da hamburgueria tem n pedidos. Cada função conta os passos de uma
-// pergunta diferente sobre eles.
+// Dois jeitos de "encolher" n até sobrar 1:
+//   torneio mata-mata: metade dos times cai a cada rodada  -> divide por 2
+//   apagar dígitos:    o número perde um dígito por vez     -> divide por 10
+// Os dois são O(log n). A conta de baixo mostra por quê: a razão entre eles
+// não cresce com n, fica perto de uma constante (log₂ 10 ≈ 3,32).
 
-// O(1): qual é o primeiro pedido da fila? Basta olhar a posição 0.
-long passos_constante(int n) {
-    (void)n;
-    return 1;
-}
-
-// O(log n): cortar a lista ordenada ao meio até sobrar 1 pedido
-// (é o que a busca binária faz, no assunto 0090).
-long passos_log(int n) {
-    long passos = 0;
+int cortes(long long n, int divisor) {
+    int passos = 0;
     while (n > 1) {
-        n = n / 2;
+        n = n / divisor;
         passos++;
-    }
-    return passos;
-}
-
-// O(n): somar o faturamento, olhando cada pedido uma vez.
-long passos_linear(int n) {
-    long passos = 0;
-    for (int i = 0; i < n; i++) {
-        passos++;
-    }
-    return passos;
-}
-
-// O(n log n): para cada pedido de hoje, uma busca binária na lista de ontem.
-long passos_n_log_n(int n) {
-    long passos = 0;
-    for (int i = 0; i < n; i++) {
-        passos += passos_log(n);
-    }
-    return passos;
-}
-
-// O(n²): comparar cada pedido com todos os outros, atrás de duplicados.
-long passos_quadratico(int n) {
-    long passos = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            passos++;
-        }
     }
     return passos;
 }
 
 int main(void) {
-    int tamanhos[3] = {8, 64, 1024};
+    long long tamanhos[4] = {1000, 1000000, 1000000000, 1000000000000};
 
-    printf("%6s %5s %6s %6s %8s %8s\n", "n", "O(1)", "log n", "n", "n log n", "n^2");
-    for (int k = 0; k < 3; k++) {
-        int n = tamanhos[k];
-        printf("%6d %5ld %6ld %6ld %8ld %8ld\n", n, passos_constante(n), passos_log(n),
-               passos_linear(n), passos_n_log_n(n), passos_quadratico(n));
+    printf("%14s %8s %9s %7s\n", "n", "por 2", "por 10", "razão");
+    for (int k = 0; k < 4; k++) {
+        long long n = tamanhos[k];
+        int c2 = cortes(n, 2);
+        int c10 = cortes(n, 10);
+        printf("%14lld %8d %9d %7.2f\n", n, c2, c10, (double)c2 / c10);
     }
     return 0;
 }
 // Saída:
-//      n  O(1)  log n      n  n log n      n^2
-//      8     1      3      8       24       28
-//     64     1      6     64      384     2016
-//   1024     1     10   1024    10240   523776
+//              n    por 2    por 10  razão
+//           1000        9         3    3.00
+//        1000000       19         6    3.17
+//     1000000000       29         9    3.22
+//  1000000000000       39        12    3.25
+//
+// n cresceu um bilhão de vezes e as duas colunas só ganharam uns poucos
+// passos. A razão se aproxima de 3,32: trocar a base só multiplica por uma
+// constante, e a notação O ignora constantes. Por isso se escreve só O(log n).
 ```
 
 ```bash
@@ -761,8 +793,11 @@ int main(void) {
 
 **Exercício E427** · ★☆☆
 
-Dê a classe O de cada trecho, em função de n. Escreva a resposta como
-comentário e justifique em uma linha (quantas vezes o corpo roda?).
+Transforme cada trecho abaixo numa função long trecho_a(int n), ...,
+trecho_f(int n), que roda o trecho e devolve quantas vezes o x++ (ou a
+conta do d) aconteceu. No main, mostre uma tabela com a contagem para
+n = 16 e n = 1024. No rótulo de cada linha, escreva a classe O que a
+contagem indica.
 
 
 ```text
@@ -775,13 +810,29 @@ e) for (i = 0; i < n; i++)  x++;
 f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
 ```
 
+
+
+```text
+Saída esperada:
+trecho           n=16   n=1024
+a) O(n)           160    10240
+b) O(log n)         4       10
+c) O(n^2)         120   523776
+d) O(1)             1        1
+e) O(n)            32     2048
+f) O(n log n)      64    10240
+```
+
 **Dicas:**
 
-1. Um laço de dentro com tamanho fixo (10) é constante: não depende de n.
-2. Laços em sequência somam; laços aninhados multiplicam.
-3. Em c), o de dentro roda 0 + 1 + 2 + ... + (n - 1) = n(n - 1)/2 vezes.
-4. Resposta esperada: a) O(n) (10n); b) O(log n); c) O(n²); d) O(1);
-   e) O(n) (2n); f) O(n log n).
+1. No d) não há laço: a função só devolve 1 (use (void)n; para o gcc não
+   reclamar do parâmetro sem uso).
+2. Um laço de dentro com tamanho fixo (10) não depende de n. Laços em
+   sequência somam; laços aninhados multiplicam.
+3. Formato da linha: printf("%-14s %6ld %8ld\n", "a) O(n)", ...).
+4. Resposta esperada: a tabela acima. Repare que a) e f) dão 10240 com
+   n = 1024, mas por motivos diferentes: 10 é constante, log₂ 1024 = 10
+   cresce com n.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0072-big-o/E427.c
@@ -790,28 +841,41 @@ f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
 **Exercício E428** · ★☆☆
 
 Seis colegas contaram os passos dos seus algoritmos e chegaram nestas
-fórmulas. Simplifique cada uma para a notação O mais justa (a menor classe
-que serve), usando as duas regras: descartar constantes e ficar com o termo
-que domina.
+fórmulas. Para cada uma, aposte numa classe O (descarte constantes e fique
+com o termo que domina) e confira a aposta com um programa: escreva a
+fórmula como função double f(double n), a aposta como double g(double n),
+e mostre f(n) / g(n) para n = 10, 1000 e 1000000. Aposta certa: a razão não
+cresce sem parar; ela se acomoda perto de uma constante.
 
 
 ```text
-a) 3n² + 10n + 7
-b) 500
-c) n + log n
-d) 2n log n + 50n
-e) n³ / 1000 + n²
-f) n(n + 1) / 2
+a) 3n² + 10n + 7      b) 500               c) n + log₂ n
+d) 2n log₂ n + 50n    e) n³ / 1000 + n²    f) n(n + 1) / 2
+```
+
+
+
+```text
+Saída esperada:
+fórmula             n=10     n=1000     n=10^6
+a) O(n^2)          4.0700     3.0100     3.0000
+b) O(1)          500.0000   500.0000   500.0000
+c) O(n)            1.3322     1.0100     1.0000
+d) O(n log n)     17.0515     7.0172     4.5086
+e) O(n^3)          0.1010     0.0020     0.0010
+f) O(n^2)          0.5500     0.5005     0.5000
 ```
 
 **Dicas:**
 
-1. Para achar o termo que domina, troque n por 1.000.000 e veja qual parte
-   fica enorme.
-2. Em e), o 1/1000 é só uma constante: n³ ainda ganha de n² para n grande.
-3. Em f), abra a conta: n²/2 + n/2.
-4. Resposta esperada: a) O(n²); b) O(1); c) O(n); d) O(n log n); e) O(n³);
-   f) O(n²).
+1. log2() está em <math.h> (o rodar já liga com -lm).
+2. Para não repetir 18 printf, escreva uma função que recebe o rótulo, a
+   fórmula e a aposta como ponteiros para função (assunto 0050):
+   void linha(const char *rotulo, double (*f)(double), double (*g)(double)).
+3. Formato: "%-14s" no rótulo e " %10.4f" em cada razão.
+4. Resposta esperada: a tabela acima. No d), a razão cai devagar até 2
+   (o 50n perde força quando n cresce); se você apostasse O(n), ela
+   cresceria sem parar. Para ver isso, troque uma aposta e rode de novo.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0072-big-o/E428.c
@@ -854,25 +918,32 @@ n = 1000: pares 499500 passos, marcas 1000 passos
 
 A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
 Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
-O(n²). Complete o main para mostrar, para cada função misteriosa, os passos
-com n = 1000 e n = 2000 e a razão entre eles. Depois dê a classe de cada uma.
+O(n²). Complete o programa:
+
+1. escreva const char *classe(double razao), que devolve "O(log n)" se a
+razão for menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for
+menor que 3 e "O(n^2)" nos outros casos;
+2. no main, mostre, para cada função misteriosa, os passos com n = 1000 e
+n = 2000, a razão entre eles e a classe que a razão indica.
 
 
 ```text
 Saída esperada:
-a:     334 ->     667  razão 2.00
-b:      10 ->      11  razão 1.10
-c:  500000 -> 2000000  razão 4.00
-d:      32 ->      45  razão 1.41
+a:     334 ->     667  razão 2.00  O(n)
+b:      10 ->      11  razão 1.10  O(log n)
+c:  500000 -> 2000000  razão 4.00  O(n^2)
+d:      32 ->      45  razão 1.41  O(raiz n)
 ```
 
 **Dicas:**
 
 1. Use (double)p2 / p1 para a razão não virar divisão inteira.
-2. A d) não é nenhuma das cinco classes do texto. Que número elevado ao
-   quadrado dá 2? Pense em d * d < n.
-3. Resposta esperada: a) O(n) (n/3 passos); b) O(log n); c) O(n²) (n²/2);
-   d) O(√n), raiz de n: dobrar n multiplica por √2 ≈ 1,41.
+2. Uma função void mostra(char nome, long p1, long p2) evita repetir o
+   printf quatro vezes.
+3. A d) não é nenhuma das cinco classes do texto. Que número elevado ao
+   quadrado dá 2? Olhe a condição d * d < n.
+4. Resposta esperada: a saída acima. a) n/3 passos; c) n²/2 passos;
+   d) raiz de n: dobrar n multiplica por √2 ≈ 1,41.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0072-big-o/E430.c
@@ -933,20 +1004,29 @@ n = 4000: 1600 vogais, 16004000 passos
 ```
 
 
-a) Pela regra do dobro, qual é a classe O desse código?
-b) Onde está o desperdício?
-c) Refatore para ficar O(n), sem mudar a função tamanho(), e mostre a nova
-contagem de passos.
+1. Acrescente ao main a regra do dobro: a partir do segundo n, mostre na
+mesma linha a razão entre os passos deste n e os do anterior. Rode: a razão
+denuncia a classe do código.
+2. Refatore conta_vogais para ficar O(n), sem mudar a função tamanho(), e
+rode de novo.
+
+
+```text
+Saída esperada (depois do conserto):
+n = 1000: 400 vogais, 1000 passos
+n = 2000: 800 vogais, 2000 passos, razão 2.00
+n = 4000: 1600 vogais, 4000 passos, razão 2.00
+```
 
 **Dicas:**
 
-1. Quantas vezes a condição do for é avaliada? E o que ela chama?
-2. O texto não muda dentro do laço. Precisa medir o tamanho dele toda vez?
-3. Resposta esperada: a) O(n²): n dobra, os passos multiplicam por 4;
-   b) tamanho(texto) está na condição do for, que roda n + 1 vezes, e cada
-   chamada custa n passos: n(n + 1); c) guarde o tamanho numa variável
-   antes do laço (int n = tamanho(texto);) e use i < n. Os passos caem para
-   1000, 2000 e 4000.
+1. Guarde os passos do n anterior numa variável e use (double) na divisão.
+2. Antes do conserto a razão sai 4.00: O(n²). Quantas vezes a condição do
+   for é avaliada? E o que ela chama?
+3. O texto não muda dentro do laço. Precisa medir o tamanho dele toda vez?
+4. Resposta esperada: guarde o tamanho numa variável antes do laço
+   (int n = tamanho(texto);) e use i < n. Os passos caem para 1000, 2000 e
+   4000, e a razão vira 2.00: O(n).
 
 ```bash
 ~/LPEDC/rodar 10-analise/0072-big-o/E432.c
@@ -1100,58 +1180,76 @@ Repara no fluxograma: o invariante mora na seta que volta para o losango
 
 Os arquivos ficam em [`0073-invariantes/`](0073-invariantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A145 · O maior Pix do dia, com invariante**
+**Exemplo A145 · Dois invariantes no mesmo extrato**
 
 ```c
 #include <assert.h>
-#include <stdbool.h>
 #include <stdio.h>
 
-// Devolve true se x é um máximo de v[0..i-1]: x está lá e ninguém passa dele.
-bool eh_maximo(const int v[], int i, int x) {
-    bool esta = false;
+// O extrato do mês: saldo inicial e os movimentos (+ entrada, - saída).
+// O laço mantém DUAS frases verdadeiras ao mesmo tempo, no começo de cada
+// volta:
+//   saldo  == inicial + soma de mov[0..i-1]
+//   minimo == o menor saldo visto até agora (o inicial e os saldos depois
+//             de cada movimento de mov[0..i-1])
+// As funções abaixo recalculam tudo do zero, só para conferir.
+
+int soma_ate(const int v[], int i) {
+    int s = 0;
     for (int k = 0; k < i; k++) {
-        if (v[k] > x) {
-            return false;
-        }
-        if (v[k] == x) {
-            esta = true;
-        }
+        s += v[k];
     }
-    return esta;
+    return s;
 }
 
-// Recebe n >= 1 e v; devolve o valor de um elemento máximo de v[0..n-1].
-int maximo(const int v[], int n) {
-    int maior = v[0];
-    int i = 1;
-    while (i < n) {
-        // invariante: maior é um máximo de v[0..i-1]
-        assert(eh_maximo(v, i, maior));
-        printf("i = %d: maior = %d\n", i, maior);
-        if (v[i] > maior) {
-            maior = v[i];
+int menor_saldo_ate(int inicial, const int v[], int i) {
+    int saldo = inicial, menor = inicial;
+    for (int k = 0; k < i; k++) {
+        saldo += v[k];
+        if (saldo < menor) {
+            menor = saldo;
         }
-        i++;
     }
-    // na saída, i == n: o invariante diz que maior é um máximo de v[0..n-1]
-    assert(eh_maximo(v, n, maior));
-    return maior;
+    return menor;
 }
 
 int main(void) {
-    int pix[6] = {120, 45, 300, 80, 210, 95};
+    int inicial = 200;
+    int mov[5] = {150, -320, -80, 500, -60};
+    int n = 5;
 
-    printf("Maior Pix: R$ %d\n", maximo(pix, 6));
+    int saldo = inicial;
+    int minimo = inicial; // i = 0: só o saldo inicial foi visto
+    for (int i = 0; i < n; i++) {
+        assert(saldo == inicial + soma_ate(mov, i));
+        assert(minimo == menor_saldo_ate(inicial, mov, i));
+        printf("antes do movimento %d: saldo %4d, mínimo %4d\n", i, saldo, minimo);
+
+        saldo += mov[i];
+        if (saldo < minimo) {
+            minimo = saldo;
+        }
+    }
+    // término: i == n, as duas frases falam do extrato inteiro
+    assert(saldo == inicial + soma_ate(mov, n));
+    assert(minimo == menor_saldo_ate(inicial, mov, n));
+
+    printf("Saldo final: R$ %d\n", saldo);
+    printf("Pior momento do mês: R$ %d\n", minimo);
     return 0;
 }
 // Saída:
-// i = 1: maior = 120
-// i = 2: maior = 120
-// i = 3: maior = 300
-// i = 4: maior = 300
-// i = 5: maior = 300
-// Maior Pix: R$ 300
+// antes do movimento 0: saldo  200, mínimo  200
+// antes do movimento 1: saldo  350, mínimo  200
+// antes do movimento 2: saldo   30, mínimo   30
+// antes do movimento 3: saldo  -50, mínimo  -50
+// antes do movimento 4: saldo  450, mínimo  -50
+// Saldo final: R$ 390
+// Pior momento do mês: R$ -50
+//
+// Repare no início: com i = 0 o pedaço mov[0..-1] está vazio, então o saldo
+// é o inicial e o mínimo também. Começar com minimo = 0 quebraria a segunda
+// frase logo antes da primeira volta.
 ```
 
 ```bash
@@ -1201,46 +1299,40 @@ int main(void) {
 
 **Exercício E433** · ★☆☆
 
-Escreva o invariante de cada laço: a frase que vale no começo de cada volta,
-logo antes do teste. Use a notação v[0..i-1].
+Complete o main com os quatro laços abaixo. Em cada um, ponha um assert
+com o invariante logo no começo do corpo e outro depois do laço (o
+término). As funções que conferem os invariantes já estão prontas. Use os
+dados do main.
 
 
 ```text
-a) s = 0;
-   for (i = 0; i < n; i++)  s = s + gastos[i];
+a) s = 0;  for (i = 0; i < n; i++)  s = s + gastos[i];
+b) c = 0;  for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
+c) p = 1;  for (k = 0; k < e; k++)  p = p * 2;
+d) k = n - 1;  while (k >= 0 && v[k] != x)  k--;
 ```
 
 
 
 ```text
-b) c = 0;
-   for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
-```
-
-
-
-```text
-c) p = 1;
-   for (k = 0; k < e; k++)  p = p * 2;
-```
-
-
-
-```text
-d) k = n - 1;
-   while (k >= 0 && v[k] != x)  k--;
+Saída esperada:
+a) gastos: R$ 120
+b) aprovados: 3
+c) 2 elevado a 10: 1024
+d) último 8 na posição 3
 ```
 
 **Dicas:**
 
-1. Pergunte: "o que o laço já sabe sobre a parte que ele já viu?".
-2. Confira o início: com i = 0, o pedaço v[0..-1] está vazio. A soma de
-   nada é 0; a contagem de nada é 0.
-3. Em d), o laço anda de trás para frente: a parte já vista fica à direita
-   de k.
-4. Resposta esperada: a) s é a soma de gastos[0..i-1]; b) c é o número de
-   notas >= 6 em notas[0..i-1]; c) p == 2 elevado a k; d) x não está em
-   v[k+1..n-1].
+1. Pergunte: "o que o laço já sabe sobre a parte que ele já viu?". Com
+   i = 0, o pedaço v[0..-1] está vazio: a soma de nada é 0.
+2. a) assert(s == soma_ate(gastos, i)); depois do laço, troque i por n.
+3. d) anda de trás para frente: a parte já vista fica à direita de k.
+   assert(nao_esta(v, k + 1, n, x)); depois do laço,
+   assert(k == -1 || v[k] == x).
+4. Resposta esperada: a saída acima. Invariantes: a) s é a soma de
+   gastos[0..i-1]; b) c conta as notas >= 6 de notas[0..i-1]; c) p é 2
+   elevado a k; d) x não está em v[k+1..n-1].
 
 ```bash
 ~/LPEDC/rodar 10-analise/0073-invariantes/E433.c
@@ -1276,33 +1368,34 @@ Total: R$ 132
 **Exercício E435** · ★★☆
 
 A função ultima() procura a ÚLTIMA vez que um aluno tirou certa nota,
-andando do fim para o começo. Ela já funciona (rode). Prove que está certa
-com os quatro passos, usando o invariante "x não está em v[k+1..n-1]":
+andando do fim para o começo. Ela já funciona. Transforme a prova de que
+ela está certa em código:
+
+1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não
+aparece em v[ini..fim-1] (pedaço vazio: true);
+2. dentro do laço, confira com assert o invariante "x não está em
+v[k+1..n-1]";
+3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x
+e o invariante ainda vale;
+4. teste também a nota 7 (que está na posição 0) e um vetor vazio (n = 0).
 
 
 ```text
-1. início: vale antes da primeira volta?
-2. manutenção: se vale no começo de uma volta, vale no começo da próxima?
-3. término: o laço para por um de dois motivos. O que cada um garante?
-4. parada: que quantidade diminui?
+Saída esperada:
+última nota 9: posição 3
+última nota 5: posição -1
+última nota 7: posição 0
+vetor vazio: posição -1
 ```
-
-
-Escreva a prova como comentário.
 
 **Dicas:**
 
-1. No começo, k = n - 1. Quem é v[n..n-1]?
-2. Uma volta só acontece se v[k] != x. Depois do k--, o pedaço já visto
-   ganhou exatamente esse v[k].
-3. Atenção à ordem do && no while: o que aconteceria se fosse
-   v[k] != x && k >= 0?
-4. Resposta esperada: 1) k = n - 1 e v[n..n-1] é vazio: x não está nele;
-   2) a volta só roda se v[k] != x, então depois do k-- o x continua fora
-   de v[k+1..n-1]; 3) se parou com k >= 0, v[k] == x e ninguém à direita é
-   x: é a última ocorrência; se parou com k == -1, x não está em v[0..n-1]
-   e devolver -1 é o certo; 4) k diminui 1 por volta e não passa de -1. O
-   k >= 0 vem primeiro no && para nunca ler v[-1] (curto-circuito).
+1. No começo, k = n - 1: o pedaço v[n..n-1] é vazio, e nao_esta tem de
+   devolver true para ele.
+2. Para o vetor vazio, basta chamar ultima(notas, 0, 9): o laço nem roda.
+3. Não inverta a ordem do && no while: com v[k] != x && k >= 0, o k == -1
+   leria v[-1] antes de testar k (o sanitizer acusa).
+4. Resposta esperada: a saída acima, sem nenhum assert disparando.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0073-invariantes/E435.c
@@ -1314,28 +1407,30 @@ O banco quer saber qual cliente está "menos no vermelho": o maior saldo
 entre contas todas negativas. O programa compila sem aviso, passou em todos
 os testes com saldos positivos, mas aqui mostra 0.
 
+1. Conserte maximo() sem tratar "todos negativos" como caso especial, e
+escreva em cima dela o contrato certo (o que ela exige de n).
+2. Escreva bool eh_maximo(v, i, x) (x está em v[0..i-1] e ninguém passa
+dele) e confira o invariante com assert no começo de cada volta.
+3. Acrescente ao main um teste com um saldo só (-7) e um com saldos
+positivos (10, 3, 25), e rode.
+
 
 ```text
 Saída esperada:
 Maior saldo: R$ -45
+Um saldo só: R$ -7
+Positivos: R$ 25
 ```
-
-
-a) Qual dos quatro passos da prova (início, manutenção, término, parada)
-falha? Mostre o momento exato.
-b) Conserte sem tratar "todos negativos" como caso especial.
-c) O que a função deveria exigir de n? Escreva o contrato correto.
 
 **Dicas:**
 
-1. Invariante pretendido: maior é um máximo de v[0..i-1]. Ele vale antes
-   da primeira volta?
+1. Invariante pretendido: maior é um máximo de v[0..i-1]. Com maior = 0,
+   ele já é falso antes da primeira volta: 0 nem está no vetor. Ponha o
+   assert no código quebrado e veja ele disparar.
 2. Um máximo de um pedaço tem que ser um elemento desse pedaço.
-3. Resposta esperada: a) o início: antes da primeira volta (i = 0, pedaço
-   vazio) maior vale 0, e depois de olhar o -120 ele continua 0, que nem
-   está no vetor; o invariante "maior é um elemento máximo" nunca valeu;
-   b) int maior = v[0]; e o laço começa em i = 1; c) "recebe n >= 1 e v;
-   devolve o valor de um elemento máximo de v[0..n-1]".
+3. Resposta esperada: int maior = v[0]; e o laço começa em i = 1.
+   Contrato: "recebe n >= 1 e v; devolve o valor de um elemento máximo de
+   v[0..n-1]".
 
 ```bash
 ~/LPEDC/rodar 10-analise/0073-invariantes/E436.c
@@ -1347,9 +1442,10 @@ Escreva int lg(int n), que devolve o piso de log₂ n (o maior i com
 2 elevado a i <= n), para n >= 1, SEM math.h: divida n por 2 até chegar a
 1, contando as divisões.
 
-Escreva o invariante como comentário e prove o término. Depois teste: mostre
-lg de 1, 10, 1000, 1024 e 100000, e compare lg(n) com floor(log2(n)) de
-math.h para todo n de 1 a 100000, contando as divergências.
+Confira o invariante com assert no começo de cada volta e o término com
+outro assert depois do laço. Depois teste: mostre lg de 1, 10, 1000, 1024
+e 100000, e compare lg(n) com floor(log2(n)) de math.h para todo n de 1 a
+100000, contando as divergências.
 
 
 ```text
@@ -1366,11 +1462,12 @@ divergências de 1 a 100000: 0
 
 1. Use uma cópia m de n e um contador i: i = 0, m = n; enquanto m > 1,
    m = m / 2 e i++.
-2. Invariante: (2 elevado a i) * m <= n < (2 elevado a i) * (m + 1). Teste
-   com n = 10: (i, m) passa por (0, 10), (1, 5), (2, 2), (3, 1).
-3. No término, m == 1: o invariante vira 2^i <= n < 2^(i+1).
-4. Resposta esperada: a saída acima. Parada: m cai pelo menos pela metade
-   a cada volta e o laço para quando chega a 1.
+2. Invariante: p * m <= n < p * (m + 1), com p = 2 elevado a i. Guarde p
+   numa variável long que dobra junto com o i++. Teste com n = 10: (i, m)
+   passa por (0, 10), (1, 5), (2, 2), (3, 1).
+3. No término, m == 1: o assert fica p <= n && n < 2 * p.
+4. Resposta esperada: a saída acima, sem nenhum assert disparando. O laço
+   termina porque m cai pelo menos pela metade a cada volta.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0073-invariantes/E437.c
@@ -1441,9 +1538,10 @@ Fechar a porta não é burocracia: é o que permite ao TAD garantir um
 `0 <= valor <= limite`. Se o cliente pudesse escrever `vagas->valor = 99`, a
 promessa não valeria nada.
 
-Vamos ver na prática. O cliente `A147.c` inclui só o contrato. O `contador.c`
-também inclui o contrato e guarda a `struct` escondida. Na memória, o cliente
-tem só um ponteiro para um bloco no heap que ele não consegue abrir:
+Vamos ver na prática. O cliente (o arquivo com o `main`) inclui só o
+contrato. O `contador.c` também inclui o contrato e guarda a `struct`
+escondida. Na memória, o cliente tem só um ponteiro para um bloco no heap que
+ele não consegue abrir:
 
 <p align="center"><img src="0074-tad/ideia.svg" alt="Diagrama da ideia: TAD: interface (.h) e implementação (.c)" width="870"></p>
 
@@ -1542,7 +1640,7 @@ grafo) segue este molde. Para um TAD `x`:
 
 1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O `rodar`
    compila junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`. À mão:
-   `gcc A147.c contador.c -o a157`.
+   `gcc A147.c contador.c -o a147`.
 2. **`x.h`**: comentário dizendo o que o TAD é; *include guard*
    (`#ifndef X_H`); só os `#include` de que a interface precisa (em geral
    `<stdbool.h>`); `typedef struct x X;`; protótipos com prefixo `x_`, cada um
@@ -1588,49 +1686,58 @@ grafo) segue este molde. Para um TAD `x`:
 
 Os arquivos ficam em [`0074-tad/`](0074-tad/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A147 · A cancela do estacionamento**
+**Exemplo A147 · Duas salas, dois contadores**
 
 ```c
 #include <stdio.h>
 
 #include "contador.h" // só a interface: a struct está escondida em contador.c
 
+// Na academia, a sala de spinning e a piscina têm lotações diferentes. Cada
+// contador_cria devolve um objeto separado no heap: mexer num não muda o
+// outro. E o TAD recusa o que quebraria a promessa 0 <= valor <= limite.
 int main(void) {
-    Contador *vagas = contador_cria(3); // estacionamento com 3 vagas
-    if (vagas == NULL) {
+    Contador *invalido = contador_cria(0); // limite 0: o contrato pede >= 1
+    printf("Sala com 0 lugares: %s\n", invalido == NULL ? "recusada (NULL)" : "criada");
+
+    Contador *spinning = contador_cria(3);
+    Contador *piscina = contador_cria(2);
+    if (spinning == NULL || piscina == NULL) {
         printf("Sem memória\n");
+        contador_libera(spinning); // aceita NULL
+        contador_libera(piscina);
         return 1;
     }
 
-    const char *placas[4] = {"RIO2A18", "SPX3B45", "BHZ7C09", "CWB1D77"};
+    // 4 alunos para o spinning, 1 para a piscina
     for (int i = 0; i < 4; i++) {
-        if (contador_incrementa(vagas)) {
-            printf("%s entrou (%d/%d)\n", placas[i], contador_valor(vagas),
-                   contador_limite(vagas));
-        } else {
-            printf("%s: lotado, espere\n", placas[i]);
-        }
+        contador_incrementa(spinning);
     }
+    contador_incrementa(piscina);
+    printf("Spinning %d/%d | Piscina %d/%d\n", contador_valor(spinning),
+           contador_limite(spinning), contador_valor(piscina), contador_limite(piscina));
 
-    contador_decrementa(vagas); // um carro sai
-    printf("Um carro saiu (%d/%d)\n", contador_valor(vagas), contador_limite(vagas));
-
-    if (contador_incrementa(vagas)) {
-        printf("CWB1D77 entrou (%d/%d)\n", contador_valor(vagas), contador_limite(vagas));
+    // fim da aula: todo mundo sai do spinning, e um a mais tenta sair
+    int saidas = 0;
+    while (contador_decrementa(spinning)) {
+        saidas++;
     }
+    printf("Saíram %d do spinning; sair da sala vazia: %s\n", saidas,
+           contador_decrementa(spinning) ? "ok" : "negado");
+    printf("Spinning %d/%d | Piscina %d/%d\n", contador_valor(spinning),
+           contador_limite(spinning), contador_valor(piscina), contador_limite(piscina));
 
-    contador_libera(vagas);
+    contador_libera(spinning);
+    contador_libera(piscina);
     return 0;
 }
 // Saída:
-// RIO2A18 entrou (1/3)
-// SPX3B45 entrou (2/3)
-// BHZ7C09 entrou (3/3)
-// CWB1D77: lotado, espere
-// Um carro saiu (2/3)
-// CWB1D77 entrou (3/3)
+// Sala com 0 lugares: recusada (NULL)
+// Spinning 3/3 | Piscina 1/2
+// Saíram 3 do spinning; sair da sala vazia: negado
+// Spinning 0/3 | Piscina 1/2
 //
-// Compilando à mão, sem o rodar: gcc A147.c contador.c -o a157
+// Compilando à mão, sem o rodar: gcc A147.c contador.c -o a147
 ```
 
 ```bash
@@ -1720,29 +1827,28 @@ Na garagem: 0 a bordo
 
 Este cliente NÃO COMPILA, de propósito. Ele controla as senhas da fila da
 lotérica e tenta mexer direto nos campos do contador. Rode, leia o erro do
-gcc e responda:
-
-a) O que quer dizer "invalid use of incomplete typedef"?
-b) Por que o autor do TAD quis que isso desse erro?
-
-Depois conserte usando só as funções do contador.h.
+gcc e conserte usando só as funções do contador.h. Depois acrescente, antes
+do contador_libera, uma tentativa de tirar uma senha da fila vazia, e
+mostre se o TAD deixou.
 
 
 ```text
 Saída esperada:
 Na fila: 2
 Na fila: 0
+Tirar da fila vazia: negado
 ```
 
 **Dicas:**
 
-1. O contador.h só diz que existe uma struct contador, sem os campos.
-2. Procure no contador.h uma função que zera e outra que lê o valor.
-3. Resposta esperada: a) no cliente, struct contador é um tipo incompleto:
-   o compilador não sabe os campos nem o tamanho, então não deixa usar ->;
-   b) para proteger o invariante 0 <= valor <= limite: só o contador.c
-   mexe nos campos. Conserto: contador_valor(fila) para ler e
-   contador_zera(fila) para zerar.
+1. "invalid use of incomplete typedef": o contador.h só diz que existe uma
+   struct contador, sem os campos. O cliente não pode usar ->.
+2. Procure no contador.h uma função que zera, outra que lê o valor e outra
+   que tira 1 (ela devolve bool).
+3. Resposta esperada: a saída acima, com contador_valor(fila) para ler,
+   contador_zera(fila) para zerar e contador_decrementa(fila), que devolve
+   false com a fila em 0. É o invariante 0 <= valor <= limite protegido:
+   só o contador.c mexe nos campos.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0074-tad/E440.c
@@ -1885,15 +1991,18 @@ Do embarque até 06:00: 430 min
 ```
 
 
-Depois responda: qual das duas versões deixou horario_minutos_ate mais
-simples? E o que isso mostra sobre esconder a struct?
+Escreva o invariante da nova struct como comentário em cima dela
+(0 <= total < 1440) e confira com assert no fim de cada função que mexe no
+campo (horario_cria e horario_avanca).
 
 **Dicas:**
 
 1. h:m vira h * 60 + m. De volta: hora = total / 60, minuto = total % 60.
 2. Avançar com a volta do dia: total = (total + minutos) % 1440.
 3. Diferença para a frente: (b - a + 1440) % 1440.
-4. Resposta esperada: a mesma saída. A versão com minutos totais deixa
+4. assert(h->total >= 0 && h->total < 1440); antes de cada return da
+   cria e no fim da avanca.
+5. Resposta esperada: a mesma saída. A versão com minutos totais deixa
    avanca e minutos_ate com uma linha cada; hora e minuto viram contas.
    Como o cliente só usa as funções, a troca não o afeta: é a promessa do
    TAD.

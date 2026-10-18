@@ -1,10 +1,7 @@
 // 0074 · TAD: interface (.h) e implementação (.c)
 // Exercício E444 · ★★★
-//
-// Resposta: a mesma saída (22:50, 00:15, 430 min). Com minutos totais,
-// avanca e minutos_ate viram uma linha cada; hora e minuto viram contas. O
-// cliente não muda porque só conhece as funções: é a promessa do TAD.
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,6 +27,7 @@ Horario *horario_cria(int hora, int minuto) {
         return NULL;
     }
     h->total = hora * 60 + minuto;
+    assert(h->total >= 0 && h->total < 1440);
     return h;
 }
 
@@ -39,6 +37,7 @@ void horario_libera(Horario *h) {
 
 void horario_avanca(Horario *h, int minutos) {
     h->total = (h->total + minutos) % 1440;
+    assert(h->total >= 0 && h->total < 1440);
 }
 
 int horario_hora(const Horario *h) {
