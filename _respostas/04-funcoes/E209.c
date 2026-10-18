@@ -1,12 +1,5 @@
 // 0035 · Pré-processador: macros e #ifdef
 // Exercício E209 · ★★★
-//
-// Resposta: m = 6, x = 7 / m = 5, x = 6 / m = 40, chamadas = 3 /
-// m = 40, chamadas = 2.
-// MAIOR(x++, y) vira ((x++) > (y) ? (x++) : (y)): o primeiro x++ compara 5 > 3
-// e x vira 6; o segundo x++ devolve 6 e x vira 7. Na função, x++ roda uma vez
-// só, antes da chamada: a recebe 5. Com pontos, a macro chama pontos(40) duas
-// vezes (na comparação e no resultado) e pontos(25) uma: 3 chamadas.
 
 #include <stdio.h>
 
@@ -23,21 +16,37 @@ int maior(int a, int b) {
     return a > b ? a : b;
 }
 
+int maior3(int a, int b, int c) {
+    return maior(maior(a, b), c);
+}
+
 int main(void) {
     int x = 5;
     int y = 3;
-    int m = MAIOR(x++, y);
-    printf("m = %d, x = %d\n", m, x);
+    int a = x++; // o x++ roda uma vez só, aqui
+    int m = MAIOR(a, y);
+    printf("macro:  m = %d, x = %d\n", m, x);
 
     x = 5;
     m = maior(x++, y);
-    printf("m = %d, x = %d\n", m, x);
+    printf("função: m = %d, x = %d\n", m, x);
 
-    m = MAIOR(pontos(40), pontos(25));
-    printf("m = %d, chamadas = %d\n", m, chamadas);
+    chamadas = 0;
+    int p1 = pontos(40);
+    int p2 = pontos(25);
+    m = MAIOR(p1, p2);
+    printf("macro:  m = %d, chamadas = %d\n", m, chamadas);
 
     chamadas = 0;
     m = maior(pontos(40), pontos(25));
-    printf("m = %d, chamadas = %d\n", m, chamadas);
+    printf("função: m = %d, chamadas = %d\n", m, chamadas);
+
+    chamadas = 0;
+    m = MAIOR(MAIOR(pontos(7), pontos(19)), pontos(12));
+    printf("macro aninhada: m = %d, chamadas = %d\n", m, chamadas);
+
+    chamadas = 0;
+    m = maior3(pontos(7), pontos(19), pontos(12));
+    printf("maior3: m = %d, chamadas = %d\n", m, chamadas);
     return 0;
 }

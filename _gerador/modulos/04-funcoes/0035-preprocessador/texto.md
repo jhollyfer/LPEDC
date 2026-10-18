@@ -96,8 +96,9 @@ Ferramentas que o exemplo A070 usa:
 > linha que parece perfeita.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A069.c | tail -12` e veja o que o
-> compilador recebe de verdade: `printf(..., lado + 3 * lado + 3)`, sem
+> **Por dentro do C:** salve o código acima como `terreno.c`, rode
+> `gcc -E terreno.c | tail -12` e veja o que o compilador recebe de verdade:
+> `printf(..., lado + 3 * lado + 3)`, sem
 > nenhuma macro. Por isso macro não aparece no depurador e não tem endereço.
 > Para cálculos, o C moderno prefere funções pequenas: com `gcc -O2`, o
 > compilador costuma copiar o corpo de uma função curta direto no lugar da

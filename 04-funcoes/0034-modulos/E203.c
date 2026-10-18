@@ -1,49 +1,41 @@
 // 0034 · Módulos: .h, .c e compilação separada
 // Exercício E203 · ★★★
 //
-// Um projeto de placar tem dois arquivos, compilados juntos com
-// "gcc placar.c main.c -o placar":
+// Escreva o módulo "placar" de um campeonato entre dois times, num arquivo
+// só, com os blocos "// placar.h", "// main.c" e "// placar.c". Os dados
+// moram em globais static no bloco do placar.c: os gols da partida atual de
+// cada time e os pontos e gols de cada um no campeonato. Ninguém de fora mexe
+// neles sem passar pelas funções:
 //
-//   // placar.c
-//   static int gols = 0;
-//   int partidas = 0;
-//   static void anotar(void) { gols++; }
-//   void marcar_gol(void) { anotar(); }
-//   int total_gols(void) { return gols; }
+//   void marcar_gol(int time)      time 1 (casa) ou 2 (visitante)
+//   void encerrar_partida(void)    mostra "Partida N: X x Y", dá 3 pontos
+//                                  para quem venceu (1 para cada no empate),
+//                                  soma os gols no campeonato e zera o placar
+//   int pontos(int time)
+//   int gols(int time)             gols no campeonato
 //
-//   // main.c
-//   #include <stdio.h>
-//   void marcar_gol(void);
-//   int total_gols(void);
-//   extern int partidas;
-//   int main(void) {
-//       marcar_gol();
-//       marcar_gol();
-//       partidas = partidas + 1;
-//       printf("%d gols em %d partida\n", total_gols(), partidas);
-//       return 0;
-//   }
+// Uma função static do placar.c, "void anotar(int time)", é a única que mexe
+// nos gols da partida; marcar_gol só a chama. O main simula: 2 x 1, 0 x 0 e
+// 1 x 3, e mostra a tabela.
 //
-// Responda:
-// a) O que o programa mostra?
-// b) Se o main.c tivesse "extern int gols;" e usasse gols, o que aconteceria?
-// c) E se o main.c chamasse anotar() (com o protótipo "void anotar(void);")?
-// d) Se o main.c tivesse "int partidas = 0;" em vez de "extern int partidas;",
-//    o que aconteceria?
-// e) Qual a vantagem de gols ser static e ter a função total_gols?
+//   Saída esperada:
+//   Partida 1: 2 x 1
+//   Partida 2: 0 x 0
+//   Partida 3: 1 x 3
+//   Casa: 4 pontos, 3 gols
+//   Visitante: 4 pontos, 4 gols
 //
 // Dicas:
-// 1. static fora de função: o nome não sai do arquivo. extern: "está definida
-//    em outro arquivo".
-// 2. Erros com nomes que não existem ou existem duas vezes aparecem no
-//    ligador, não no compilador.
-// 3. Resposta esperada: a) "2 gols em 1 partida". b) e c) compila, mas o
-//    ligador dá "undefined reference": gols e anotar são static em placar.c.
-//    d) duas definições de partidas: o ligador dá "multiple definition of
-//    partidas". e) ninguém de fora consegue mudar o placar sem passar por
-//    marcar_gol: o módulo controla o próprio dado.
+// 1. Quatro globais static para o campeonato (pontos_casa, pontos_visitante,
+//    gols_casa, gols_visitante), duas para a partida atual e uma para o
+//    número da partida. Todas começam em 0.
+// 2. O bloco do placar.h tem o include guard e os quatro protótipos públicos;
+//    o protótipo de anotar NÃO vai lá. Como o main vem antes do placar.c, os
+//    protótipos do bloco de cima bastam para ele.
+// 3. Resposta esperada: a saída acima. Casa: vitória (3) + empate (1);
+//    visitante: empate (1) + vitória (3).
 //
-// Escreva sua resposta abaixo (em comentário):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

@@ -1,30 +1,44 @@
-// A057 · A mensalidade que a função não consegue mudar
+// A057 · O parâmetro casa pela posição, não pelo nome
 
 #include <stdio.h>
 
-double reajustar(double mensalidade, double percentual);
+double com_desconto(double preco, double percentual);
+void contagem(int segundos);
 
 int main(void) {
-    double mensalidade = 120.00;
+    double preco = 80.00;
+    double percentual = 25;
 
-    printf("Antes: %.2f\n", mensalidade);
-    reajustar(mensalidade, 10); // o resultado é jogado fora
-    printf("Depois: %.2f\n", mensalidade); // continua 120.00
+    // certo: o 1º argumento vai para o 1º parâmetro, o 2º para o 2º
+    printf("Certo: R$ %.2f\n", com_desconto(preco, percentual));
 
-    mensalidade = reajustar(mensalidade, 10); // agora guarda o retorno
-    printf("Guardando o retorno: %.2f\n", mensalidade);
+    // trocado: os nomes iguais não ajudam, o C só olha a ordem
+    printf("Trocado: R$ %.2f\n", com_desconto(percentual, preco));
+
+    // literal e expressão também servem: a função recebe só o valor
+    printf("Literal: R$ %.2f\n", com_desconto(200, 10 + 5));
+
+    int tempo = 3;
+    contagem(tempo);
+    printf("No main, tempo continua %d\n", tempo);
     return 0;
 }
 
-// mensalidade aqui é uma CÓPIA: outra variável, com o mesmo nome
-double reajustar(double mensalidade, double percentual) {
-    mensalidade = mensalidade * (1 + percentual / 100);
-    printf("Dentro: %.2f\n", mensalidade);
-    return mensalidade;
+double com_desconto(double preco, double percentual) {
+    return preco - preco * percentual / 100;
+}
+
+// o parâmetro é uma variável de trabalho: pode diminuir até zero
+void contagem(int segundos) {
+    while (segundos > 0) {
+        printf("%d... ", segundos);
+        segundos--;
+    }
+    printf("já!\n");
 }
 // Saída:
-// Antes: 120.00
-// Dentro: 132.00
-// Depois: 120.00
-// Dentro: 132.00
-// Guardando o retorno: 132.00
+// Certo: R$ 60.00
+// Trocado: R$ 5.00
+// Literal: R$ 170.00
+// 3... 2... 1... já!
+// No main, tempo continua 3

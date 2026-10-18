@@ -3,7 +3,8 @@
 //
 // O sistema da lanchonete tem dois erros, os dois nos #define. Um deles impede
 // a compilação; o outro compila e dá a conta errada. Rode, leia o erro (que
-// aponta para uma linha que parece certa), explique e conserte os dois.
+// aponta para uma linha que parece certa), conserte os dois e rode até a
+// saída ficar certa.
 //
 //   Saída certa:
 //   Desconto: R$ 3.50

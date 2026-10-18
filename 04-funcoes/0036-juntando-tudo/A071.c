@@ -1,104 +1,80 @@
-// A071 · O caixa da lanchonete
+// A071 · Rachando a conta da mesa sem perder centavo
 
-#include <math.h>
 #include <stdio.h>
 
 #include "cardapio.h"
 
 #define TAXA_SERVICO 10 // por cento
 
-// lê um código de 0 a 4; insiste até vir um válido
-int ler_codigo(void) {
-    int codigo;
-    int lidos;
-    do {
-        printf("Código (0 fecha): ");
-        lidos = scanf("%d", &codigo);
-        if (lidos != 1) {
-            return 0; // entrada acabou ou não é número: fecha a conta
-        }
-    } while (codigo < 0 || codigo > 4);
-    return codigo;
+void mostrar_reais(int centavos) {
+    printf("R$ %d.%02d", centavos / 100, centavos % 100);
 }
 
-// a nota seguinte, da maior para a menor (em centavos)
-int proxima_nota(int nota) {
-    switch (nota) {
-    case 10000: return 5000;
-    case 5000: return 2000;
-    case 2000: return 1000;
-    case 1000: return 500;
-    case 500: return 200;
-    case 200: return 100;
-    case 100: return 50;
-    case 50: return 25;
-    case 25: return 10;
-    case 10: return 5;
-    default: return 1;
+// lança um item e devolve o preço (0 se o código não existe)
+int pedir(int codigo) {
+    int preco = preco_centavos(codigo);
+    if (preco == 0) {
+        printf("código %d não existe\n", codigo);
+        return 0;
     }
+    mostrar_item(codigo);
+    printf(": ");
+    mostrar_reais(preco);
+    printf("\n");
+    return preco;
 }
 
-// recursão: dá uma nota e resolve o troco que sobrou
-void dar_troco(int centavos, int nota) {
-    if (centavos == 0) {
-        return; // caso base: troco completo
+// quanto a pessoa número "pessoa" (1, 2, ...) paga:
+// a divisão inteira deixa uma sobra, e as primeiras pagam 1 centavo a mais
+int parte(int conta, int pessoas, int pessoa) {
+    int base = conta / pessoas;
+    int sobra = conta % pessoas;
+    if (pessoa <= sobra) {
+        return base + 1;
     }
-    if (centavos >= nota) {
-        printf("  %d.%02d\n", nota / 100, nota % 100);
-        dar_troco(centavos - nota, nota);
-    } else {
-        dar_troco(centavos, proxima_nota(nota));
+    return base;
+}
+
+// recursiva: soma as partes da pessoa "de" até a última, para conferir
+int soma_partes(int conta, int pessoas, int de) {
+    if (de > pessoas) {
+        return 0; // caso base: não sobrou ninguém
     }
+    return parte(conta, pessoas, de) + soma_partes(conta, pessoas, de + 1);
 }
 
 int main(void) {
     int total = 0;
+    total += pedir(1); // uma linha por pedido: assim a ordem na tela é garantida
+    total += pedir(1);
+    total += pedir(2);
+    total += pedir(7);
+    total += pedir(4);
+    int conta = total + total * TAXA_SERVICO / 100;
 
-    mostrar_cardapio();
-    for (int codigo = ler_codigo(); codigo != 0; codigo = ler_codigo()) {
-        total += preco_centavos(codigo);
-        mostrar_item(codigo);
-        printf(" adicionado\n");
-    }
+    printf("%d itens, com serviço: ", itens_vendidos());
+    mostrar_reais(conta);
+    printf("\n");
 
-    int servico = total * TAXA_SERVICO / 100;
-    int conta = total + servico;
-    printf("%d itens, conta com serviço: R$ %d.%02d\n",
-           itens_vendidos(), conta / 100, conta % 100);
-
-    double pago;
-    printf("Valor pago: ");
-    if (scanf("%lf", &pago) != 1) {
-        return 0;
+    int pessoas = 3;
+    for (int p = 1; p <= pessoas; p++) {
+        printf("Pessoa %d paga ", p);
+        mostrar_reais(parte(conta, pessoas, p));
+        printf("\n");
     }
-    int troco = (int)lround(pago * 100) - conta;
-    if (troco < 0) {
-        printf("Faltam R$ %d.%02d\n", -troco / 100, -troco % 100);
-        return 0;
-    }
-    printf("Troco: R$ %d.%02d\n", troco / 100, troco % 100);
-    dar_troco(troco, 10000);
+    printf("Conferindo: ");
+    mostrar_reais(soma_partes(conta, pessoas, 1));
+    printf("\n");
     return 0;
 }
-// Exemplo de uso (o que você digita vem depois dos dois-pontos):
-// 1 X-salada   R$ 18.50
-// 2 Batata     R$ 12.00
-// 3 Suco       R$  7.90
-// 4 Açaí       R$ 15.00
-// Código (0 fecha): 1
-// X-salada adicionado
-// Código (0 fecha): 2
-// Batata adicionado
-// Código (0 fecha): 3
-// Suco adicionado
-// Código (0 fecha): 9
-// Código (0 fecha): 0
-// 3 itens, conta com serviço: R$ 42.24
-// Valor pago: 50
-// Troco: R$ 7.76
-//   5.00
-//   2.00
-//   0.50
-//   0.25
-//   0.01
-// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
+// Saída:
+// X-salada: R$ 18.50
+// X-salada: R$ 18.50
+// Batata: R$ 12.00
+// código 7 não existe
+// Açaí: R$ 15.00
+// 4 itens, com serviço: R$ 70.40
+// Pessoa 1 paga R$ 23.47
+// Pessoa 2 paga R$ 23.47
+// Pessoa 3 paga R$ 23.46
+// Conferindo: R$ 70.40

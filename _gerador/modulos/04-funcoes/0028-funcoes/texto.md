@@ -100,8 +100,8 @@ função que só calcula serve para a tela, para um arquivo ou para outra conta.
 > `call` do processador, que guarda o endereço de volta e pula para a função;
 > o `return` vira `ret`, que pula de volta. No Linux de 64 bits, o argumento
 > `double` vai num registrador do processador (`xmm0`) e o resultado volta
-> pelo mesmo registrador. Rode `gcc -S A055.c` e procure `call preco_corrida`
-> no arquivo `A055.s`.
+> pelo mesmo registrador. Salve o código acima como `corrida.c`, rode
+> `gcc -S corrida.c` e procure `call preco_corrida` no arquivo `corrida.s`.
 
 > [!NOTE]
 > **Pergunta para você:** o que mostra

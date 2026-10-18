@@ -3,8 +3,9 @@
 //
 // Este programa deveria somar os quatro itens da compra (R$ 12.50, R$ 8.00,
 // R$ 30.00 e R$ 4.75) e mostrar "Total: R$ 55.25". Ele compila sem aviso, mas
-// mostra "Total: R$ 4.75". Explique o erro usando as palavras escopo e tempo
-// de vida, e conserte.
+// mostra "Total: R$ 4.75". O erro é de escopo e tempo de vida: descubra
+// qual variável nasce no lugar errado, conserte e rode até aparecer o total
+// certo.
 //
 // Dicas:
 // 1. Em que momento a variável total nasce? Quantas vezes?

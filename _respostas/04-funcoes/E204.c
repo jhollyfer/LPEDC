@@ -1,25 +1,19 @@
 // 0034 · Módulos: .h, .c e compilação separada
 // Exercício E204 · ★★★
-//
-// No cofrinho.h de verdade iria:
-//   #ifndef COFRINHO_H
-//   #define COFRINHO_H
-//   #include <stdbool.h>
-//   void depositar(double valor);
-//   bool sacar(double valor);
-//   double saldo(void);
-//   int operacoes(void);
-//   #endif
-// No cofrinho.c: #include "cofrinho.h", as duas variáveis static e os corpos.
 
 #include <stdbool.h>
 #include <stdio.h>
 
 // cofrinho.h
+#ifndef COFRINHO_H
+#define COFRINHO_H
+
 void depositar(double valor);
 bool sacar(double valor);
 double saldo(void);
 int operacoes(void);
+
+#endif
 
 int main(void) {
     depositar(50);

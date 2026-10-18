@@ -18,16 +18,16 @@ na pasta do seu `.c`; com `< >`, só nas pastas do sistema.
 
 Cada `.c` é compilado **sozinho**, sem saber que os outros existem. O
 compilador transforma cada um num **arquivo objeto** (`.o`). Quando ele vê a
-chamada `km_para_milhas(100)` em `A067.c`, só sabe que a função existe (o
+chamada `km_para_milhas(100)` em `viagem.c`, só sabe que a função existe (o
 protótipo prometeu), e deixa um buraco com o nome dela. Quem tapa o buraco é o
 **ligador** (*linker*), que junta os `.o` e procura cada nome. Isso é a
 **compilação separada**:
 
 ```bash
 gcc -std=c17 -Wall -Wextra -c conversao.c       # gera conversao.o
-gcc -std=c17 -Wall -Wextra -c A067.c            # gera A067.o
-gcc A067.o conversao.o -o viagem                # o ligador junta
-gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem   # ou tudo de uma vez
+gcc -std=c17 -Wall -Wextra -c viagem.c            # gera viagem.o
+gcc viagem.o conversao.o -o viagem                # o ligador junta
+gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
 ```
 
 Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
@@ -56,7 +56,7 @@ int conversoes_feitas(void);
 
 O `conversao.c` tem o corpo das quatro funções, um contador `static` e uma
 função auxiliar `static` (abra o arquivo na pasta). E o programa que usa só
-precisa do `.h`:
+precisa do `.h` (chame este arquivo de `viagem.c`):
 
 ```c
 #include <stdio.h>
@@ -70,7 +70,7 @@ int main(void) {
     return 0;
 }
 // Compilando à mão (o rodar faz isso sozinho):
-//   gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem
+//   gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem
 // Saída:
 // 30 °C = 86.0 °F
 // 100 km = 62.1 milhas
@@ -110,13 +110,13 @@ Três peças fecham o assunto:
 > **Por dentro do C:** rode `gcc -c conversao.c` e depois `nm conversao.o`. As
 > funções públicas aparecem com `T` (maiúsculo: visível para os outros); a
 > `contar`, com `t`, e o `contador`, com `b` (minúsculos: `static`, só deste
-> arquivo). Agora `gcc -c A067.c` e `nm A067.o`: as três conversões aparecem
+> arquivo). Agora `gcc -c viagem.c` e `nm viagem.o`: as três conversões aparecem
 > com `U`, de *undefined*. São os buracos que o ligador tapa. O `.h` não gera
 > nada sozinho: ele só existe para o compilador.
 
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `#include "conversao.h"` do
-> `A067.c`, o programa compila? O que o gcc avisa? E se você apagar só o
+> `viagem.c`, o programa compila? O que o gcc avisa? E se você apagar só o
 > `conversao.c` da linha do `gcc`?
 
 {{pratique}}

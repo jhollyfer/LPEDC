@@ -3,9 +3,9 @@
 //
 // Este programa NÃO gera o executável, de propósito. Ele imita um módulo num
 // arquivo só: o protótipo em cima (como se viesse de um desconto.h) e a
-// definição embaixo (como se estivesse no desconto.c). Rode e leia a mensagem.
-// Responda: quem reclamou, o compilador ou o ligador? Por que o compilador
-// deixou passar? Conserte.
+// definição embaixo (como se estivesse no desconto.c). Rode e leia a
+// mensagem: quem reclama aqui é o ligador, não o compilador. Conserte e rode
+// até aparecer "Tênis: R$ 239.92".
 //
 // Dicas:
 // 1. Procure "undefined reference" na mensagem.

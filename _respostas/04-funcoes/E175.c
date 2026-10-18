@@ -1,27 +1,24 @@
 // 0030 · Escopo e tempo de vida
 // Exercício E175 · ★☆☆
-//
-// Resposta: 10, 25, 40, 25, 10. mostrar só enxerga a global (10). No main, o
-// volume local (25) esconde a global; dentro do bloco, o 40 esconde o 25 até o
-// "}".
 
 #include <stdio.h>
 
-int volume = 10;
+int pontos = 100; // global: o saldo do cartão
 
-void mostrar(void) {
-    printf("%d\n", volume);
+void extrato(void) {
+    printf("extrato: %d\n", pontos); // só enxerga a global
+}
+
+void somar_na_global(int valor) {
+    pontos += valor;
 }
 
 int main(void) {
-    mostrar();
-    int volume = 25;
-    printf("%d\n", volume);
-    {
-        int volume = 40;
-        printf("%d\n", volume);
-    }
-    printf("%d\n", volume);
-    mostrar();
+    extrato();
+    int pontos = 30; // local: esconde a global daqui para baixo
+    printf("compra de hoje: %d\n", pontos);
+    somar_na_global(pontos);
+    extrato();
+    printf("compra de hoje: %d\n", pontos);
     return 0;
 }

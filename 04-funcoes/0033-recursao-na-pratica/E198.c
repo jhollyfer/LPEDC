@@ -3,8 +3,8 @@
 //
 // Esta Torre de Hanói compila sem aviso e faz 7 movimentos, mas está errada.
 // Siga os movimentos com três pilhas de moedas (ou no papel) e ache o primeiro
-// movimento ilegal (disco maior sobre um menor) ou o problema no final.
-// Explique o erro e conserte. A saída certa é a do A066.
+// movimento ilegal (disco maior sobre um menor). Conserte e rode até a saída
+// ficar igual à do A066.
 //
 // Dicas:
 // 1. No passo 1 da receita, os n - 1 discos vão para a estaca AUXILIAR.

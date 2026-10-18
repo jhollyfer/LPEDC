@@ -17,7 +17,7 @@ export const ideia = {
 
 export const fluxograma = {
   nos: [
-    ['A', 'inicio', 'Início: A069.c'],
+    ['A', 'inicio', 'Início: terreno.c'],
     ['B', 'proc', 'Pré-processador lê a linha'],
     ['C', 'dec', 'Tem nome de macro?'],
     ['D', 'proc', 'Troca pelo texto, x = lado + 3'],

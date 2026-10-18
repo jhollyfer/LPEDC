@@ -20,8 +20,9 @@
 // 1. soma_divisores testa d de 1 até n / 2: se n % d == 0, soma d.
 // 2. eh_perfeito cabe numa linha: return soma_divisores(n) == n;
 // 3. Resposta esperada: 6, 28, 496 e 8128. São tão raros que o próximo é
-//    33550336. Desafio extra: testar d só até a raiz de n (d * d <= n),
-//    somando d e n / d de uma vez. Por que isso é muito mais rápido?
+//    33550336. Desafio extra: teste d só até a raiz de n (d * d <= n),
+//    somando d e n / d de uma vez, e conte numa variável quantas vezes o %
+//    roda em cada versão para n = 8128 (4064 contra 90).
 //
 // Escreva sua resposta abaixo:
 

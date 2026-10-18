@@ -14,10 +14,10 @@ que ela faz:
 | --- | --- | --- |
 | `mostrar_cardapio`, `preco_centavos`, `mostrar_item` | `cardapio.c` | módulo `.h`/`.c`, `switch` |
 | `itens_vendidos` | `cardapio.c` | global `static`: só o módulo mexe |
-| `ler_codigo` | `A071.c` | validação com `do...while` e retorno do `scanf` |
-| `proxima_nota` | `A071.c` | função pura: entra uma nota, sai a seguinte |
-| `dar_troco` | `A071.c` | recursão: caso base "troco zerado" |
-| `TAXA_SERVICO` | `A071.c` | `#define` |
+| `ler_codigo` | `caixa.c` | validação com `do...while` e retorno do `scanf` |
+| `proxima_nota` | `caixa.c` | função pura: entra uma nota, sai a seguinte |
+| `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
+| `TAXA_SERVICO` | `caixa.c` | `#define` |
 
 Uma decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira
 `790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3`, e o troco de
@@ -36,8 +36,8 @@ a conta é R$ 42,24. Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 
 {{ideia}}
 
-O programa principal. O `cardapio.h` e o `cardapio.c` estão na pasta do
-assunto, e o `rodar` compila o módulo junto:
+O programa principal, `caixa.c`, usa o módulo do cardápio. O `cardapio.h` e o
+`cardapio.c` estão na pasta do assunto (abra os dois):
 
 ```c
 #include <math.h>
@@ -141,7 +141,8 @@ int main(void) {
 //   0.50
 //   0.25
 //   0.01
-// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
+// Para testar sem digitar, salve como caixa.c numa pasta sua, com cópias do
+// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar caixa.c
 ```
 
 Repara no fluxograma: o laço dos pedidos termina com o código 0; depois vêm a

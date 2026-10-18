@@ -1,24 +1,36 @@
-// A069 · A macro que esqueceu os parênteses
+// A069 · A macro não tem tipo nem é função
 
 #include <stdio.h>
 
-#define QUAD_RUIM(x) x * x       // sem parênteses: perigo
-#define QUAD(x) ((x) * (x))      // parênteses no parâmetro E em volta de tudo
+#define DIAS_UTEIS 22
+#define HORAS_POR_DIA 8
+#define HORAS_NO_MES (DIAS_UTEIS * HORAS_POR_DIA) // macro feita de macros
+
+#define MAIOR(a, b) ((a) > (b) ? (a) : (b)) // serve para int, double...
+
+int maior_int(int a, int b) { // a função tem tipo: só int
+    return a > b ? a : b;
+}
 
 int main(void) {
-    int lado = 2;
+    double salario = 3520.00;
 
-    // terreno quadrado de lado (2 + 3) metros
-    printf("QUAD_RUIM(lado + 3) = %d\n", QUAD_RUIM(lado + 3)); // 2 + 3 * 2 + 3
-    printf("QUAD(lado + 3)      = %d\n", QUAD(lado + 3));      // ((2 + 3) * (2 + 3))
+    printf("Horas no mês: %d\n", HORAS_NO_MES);
+    printf("Valor da hora: R$ %.2f\n", salario / HORAS_NO_MES);
 
-    // quantos lotes de 5 x 5 cabem em 100 m2?
-    printf("100 / QUAD_RUIM(5)  = %d\n", 100 / QUAD_RUIM(5));  // 100 / 5 * 5
-    printf("100 / QUAD(5)       = %d\n", 100 / QUAD(5));       // 100 / ((5) * (5))
+    // a macro só cola texto: com double, a comparação é feita em double
+    printf("MAIOR(4.75, 4.70)     = %.2f\n", MAIOR(4.75, 4.70));
+    // a função converte os argumentos para int antes: 4 e 4
+    printf("maior_int(4.75, 4.70) = %d\n", maior_int(4.75, 4.70));
+
+    // com int, as duas concordam
+    printf("MAIOR(12, 30) = %d, maior_int(12, 30) = %d\n",
+           MAIOR(12, 30), maior_int(12, 30));
     return 0;
 }
 // Saída:
-// QUAD_RUIM(lado + 3) = 11
-// QUAD(lado + 3)      = 25
-// 100 / QUAD_RUIM(5)  = 100
-// 100 / QUAD(5)       = 4
+// Horas no mês: 176
+// Valor da hora: R$ 20.00
+// MAIOR(4.75, 4.70)     = 4.75
+// maior_int(4.75, 4.70) = 4
+// MAIOR(12, 30) = 30, maior_int(12, 30) = 30

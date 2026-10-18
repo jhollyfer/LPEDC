@@ -1,29 +1,36 @@
-// A065 · Fibonacci: bonito e caro
+// A065 · Fibonacci sem recalcular: a recursão que carrega o par
 
 #include <stdio.h>
 
-long chamadas = 0; // conta quantas vezes fib foi chamada
+long chamadas = 0;
 
-int fib(int n) {
+// a e b são dois vizinhos da sequência; a cada chamada o par anda uma casa
+long long fib_par(int n, long long a, long long b) {
     chamadas++;
-    if (n < 2) {
-        return n; // fib(0) = 0 e fib(1) = 1
+    if (n == 0) {
+        return a; // caso base: andou tudo, a é a resposta
     }
-    return fib(n - 1) + fib(n - 2); // duas chamadas por vez
+    return fib_par(n - 1, b, a + b); // UMA chamada só, não duas
+}
+
+long long fib(int n) {
+    return fib_par(n, 0, 1); // começa no par (fib(0), fib(1))
 }
 
 int main(void) {
-    for (int n = 5; n <= 30; n += 5) {
+    for (int n = 10; n <= 30; n += 10) {
         chamadas = 0;
-        int resultado = fib(n);
-        printf("fib(%d) = %d, com %ld chamadas\n", n, resultado, chamadas);
+        long long resultado = fib(n);
+        printf("fib(%d) = %lld, com %ld chamadas\n", n, resultado, chamadas);
     }
+
+    chamadas = 0;
+    long long grande = fib(90); // com duas chamadas por vez, não terminaria hoje
+    printf("fib(90) = %lld, com %ld chamadas\n", grande, chamadas);
     return 0;
 }
 // Saída:
-// fib(5) = 5, com 15 chamadas
-// fib(10) = 55, com 177 chamadas
-// fib(15) = 610, com 1973 chamadas
-// fib(20) = 6765, com 21891 chamadas
-// fib(25) = 75025, com 242785 chamadas
-// fib(30) = 832040, com 2692537 chamadas
+// fib(10) = 55, com 11 chamadas
+// fib(20) = 6765, com 21 chamadas
+// fib(30) = 832040, com 31 chamadas
+// fib(90) = 2880067194370816120, com 91 chamadas
