@@ -99,7 +99,8 @@ A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 
 > [!NOTE]
 > **Pergunta para você:** se o primeiro preço digitado for 0, o que aparece na
-> tela? E se o primeiro for uma letra? Siga o código com o dedo e depois teste
-> no A045 com `printf '0\n' | ~/LPEDC/rodar ...`.
+> tela? E se o primeiro for uma letra? Siga o código com o dedo e depois
+> teste: salve o código acima como `caixa.c` e rode
+> `printf '0\n' | ~/LPEDC/rodar caixa.c`.
 
 {{pratique}}

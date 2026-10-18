@@ -15,9 +15,9 @@
 // Dicas:
 // 1. Notas de 50: de 0 a 2. De 20: de 0 a 5. De 10: de 0 a 10.
 // 2. No laço mais de dentro: if (50 * n50 + 20 * n20 + 10 * n10 == 100).
-// 3. Resposta esperada: 10 formas. Desafio extra: o laço das notas de 10 é
-//    desnecessário. Com n50 e n20 fixos, quantas notas de 10 faltam? (Só
-//    vale se o que falta for >= 0.)
+// 3. Resposta esperada: 10 formas. Desafio extra: reescreva sem o laço das
+//    notas de 10. Com n50 e n20 fixos, calcule quantas notas de 10 faltam
+//    (só vale se o que falta for >= 0) e confira se continuam 10 formas.
 //
 // Escreva sua resposta abaixo:
 

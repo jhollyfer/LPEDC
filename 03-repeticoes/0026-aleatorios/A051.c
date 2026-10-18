@@ -1,27 +1,36 @@
-// A051 · Sair da prisão: dados até tirar dupla
+// A051 · Mesma semente, mesmo sorteio
 
 #include <stdio.h>
-#include <stdlib.h> // rand e srand
+#include <stdlib.h>
 
 int main(void) {
-    srand(2022); // semente fixa: a mesma sequência a cada execução
+    // bingo da quermesse: 5 bolas de 1 a 75 (a + rand() % (b - a + 1))
+    srand(2026);
+    printf("Semente 2026:        ");
+    for (int i = 0; i < 5; i++) {
+        printf("%3d", 1 + rand() % 75);
+    }
+    printf("\n");
 
-    int dado1, dado2;
-    int jogadas = 0;
+    // a mesma semente de novo: a sequência recomeça do mesmo ponto
+    srand(2026);
+    printf("Semente 2026 de novo:");
+    for (int i = 0; i < 5; i++) {
+        printf("%3d", 1 + rand() % 75);
+    }
+    printf("\n");
 
-    do {
-        dado1 = 1 + rand() % 6; // rand() % 6 vai de 0 a 5; + 1 vira 1 a 6
-        dado2 = 1 + rand() % 6;
-        jogadas++;
-        printf("Jogada %d: %d e %d\n", jogadas, dado1, dado2);
-    } while (dado1 != dado2);
-
-    printf("Dupla de %d na jogada %d. Saiu da prisão!\n", dado1, jogadas);
+    // outra semente: outra sequência
+    srand(2027);
+    printf("Semente 2027:        ");
+    for (int i = 0; i < 5; i++) {
+        printf("%3d", 1 + rand() % 75);
+    }
+    printf("\n");
     return 0;
 }
-// Saída (glibc, Linux; em outro sistema a sequência pode ser outra):
-// Jogada 1: 1 e 5
-// Jogada 2: 5 e 1
-// Jogada 3: 1 e 6
-// Jogada 4: 4 e 4
-// Dupla de 4 na jogada 4. Saiu da prisão!
+// Saída (glibc, Linux; em outro sistema os números podem ser outros,
+// mas as duas primeiras linhas continuam iguais entre si):
+// Semente 2026:         38 73 74 70 62
+// Semente 2026 de novo: 38 73 74 70 62
+// Semente 2027:         54 29  7  5 53

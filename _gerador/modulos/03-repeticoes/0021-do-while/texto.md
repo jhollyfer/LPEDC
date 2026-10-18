@@ -92,6 +92,6 @@ Não:
 > **Pergunta para você:** e se você apagar o `if` em volta do `scanf` e digitar
 > `x`? O `scanf` não consegue ler um número, devolve 0, deixa o `x` no buffer e
 > não muda `parcelas`. O que acontece na próxima volta? Preveja e depois teste
-> no A041 (se travar, `Ctrl+C`).
+> no código acima (se travar, `Ctrl+C`).
 
 {{pratique}}

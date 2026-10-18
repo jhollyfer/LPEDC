@@ -190,41 +190,48 @@ pelo Sim várias vezes e só uma vez pelo Não:
 > [!NOTE]
 > **Pergunta para você:** se o depósito fosse R$ 200, quantas voltas o laço
 > daria e quanto sobraria? E se o saldo começasse em R$ 1.000? Responda pelo
-> teste de mesa e depois mude os valores no exemplo A039.
+> teste de mesa e depois mude os valores no código acima e rode.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0020-while/`](0020-while/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A039 · O cofrinho do celular**
+**Exemplo A039 · Dividindo pizzas sem usar a divisão**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    double meta = 1000.0;    // o celular custa R$ 1000
-    double deposito = 150.0; // quanto você guarda por mês
-    double saldo = 0.0;
-    int meses = 0;
+    // 47 fatias para 5 amigos: quantas cada um come e quantas sobram?
+    int fatias = 47;
+    int amigos = 5;
+    int sobra = fatias;
+    int rodadas = 0;          // cada rodada dá 1 fatia para cada amigo
 
-    while (saldo < meta) {   // pergunta ANTES de cada volta
-        saldo = saldo + deposito;
-        meses++;
-        printf("Mês %d: R$ %.2f\n", meses, saldo);
+    while (sobra >= amigos) { // ainda dá uma rodada completa?
+        sobra = sobra - amigos;
+        rodadas++;
     }
+    printf("%d fatias para %d amigos: %d para cada, sobram %d\n",
+           fatias, amigos, rodadas, sobra);
+    printf("Conferindo com / e %%: %d e %d\n", fatias / amigos, fatias % amigos);
 
-    printf("Meta batida em %d meses. Sobra R$ %.2f\n", meses, saldo - meta);
+    // caso de borda: menos fatias que amigos. A pergunta já começa falsa
+    fatias = 3;
+    sobra = fatias;
+    rodadas = 0;
+    while (sobra >= amigos) { // 3 >= 5? Não: o corpo roda ZERO vezes
+        sobra = sobra - amigos;
+        rodadas++;
+    }
+    printf("%d fatias para %d amigos: %d para cada, sobram %d\n",
+           fatias, amigos, rodadas, sobra);
     return 0;
 }
 // Saída:
-// Mês 1: R$ 150.00
-// Mês 2: R$ 300.00
-// Mês 3: R$ 450.00
-// Mês 4: R$ 600.00
-// Mês 5: R$ 750.00
-// Mês 6: R$ 900.00
-// Mês 7: R$ 1050.00
-// Meta batida em 7 meses. Sobra R$ 50.00
+// 47 fatias para 5 amigos: 9 para cada, sobram 2
+// Conferindo com / e %: 9 e 2
+// 3 fatias para 5 amigos: 0 para cada, sobram 3
 ```
 
 ```bash
@@ -340,8 +347,9 @@ Dá para 6 dias. Sobram -80 litros.
 ```
 
 
-Faça o teste de mesa (colunas litros e dias), ache o erro e conserte. O
-código com o erro está logo abaixo; ele roda, mas dá a resposta errada.
+O código com o erro está logo abaixo; ele roda, mas dá a resposta errada.
+Conserte e rode de novo até aparecer a resposta certa. Se ajudar, ponha um
+printf dentro do laço mostrando litros e dias a cada volta.
 
 **Dicas:**
 
@@ -409,50 +417,42 @@ Maior valor: 16
 
 **Exercício E120** · ★★★
 
-Preveja o que cada trecho mostra ANTES de rodar. Depois cole cada um no main
-e confira.
+Os três laços abaixo já estão no main do arquivo (cada um entre um printf
+com a letra do trecho e um printf("|\n")):
 
 
 ```text
-// trecho A
-int i = 0;
-while (i++ < 5) {
-    printf("%d ", i);
-}
-printf("| %d\n", i);
+// trecho A               // trecho B             // trecho C
+int i = 0;                int n = 100;            int k = 10;
+while (i++ < 5) {         while (n > 1) {         while (k < 10) {
+    printf("%d ", i);         n = n / 3;              k++;
+}                         }                       }
 ```
 
 
-
-```text
-// trecho B
-int n = 100, voltas = 0;
-while (n > 1) {
-    n = n / 3;
-    voltas++;
-}
-printf("%d %d\n", n, voltas);
-```
-
+Estenda o programa para ele contar e mostrar o que cada laço fez: crie um
+contador de voltas para cada trecho (voltas_a, voltas_b e voltas_c,
+começando em 0, somando 1 dentro do corpo) e, no fim de cada trecho, mostre
+o contador e o valor final da variável da pergunta. No trecho B, mostre
+também o valor de n depois de cada divisão. Rode e confira:
 
 
 ```text
-// trecho C
-int k = 10;
-while (k < 10) {
-    k++;
-}
-printf("%d\n", k);
+Saída esperada:
+A: 1 2 3 4 5 | voltas 5, i final 6
+B: 33 11 3 1 | voltas 4, n final 1
+C: | voltas 0, k final 10
 ```
 
 **Dicas:**
 
 1. Trecho A: i++ compara o valor ANTIGO e só depois soma 1 (assunto 0009).
-   Isso vale também na última pergunta, a que dá falso.
-2. Trecho B: divisão inteira. 100 / 3 = 33.
-3. Resposta esperada: A mostra "1 2 3 4 5 | 6" (a pergunta falsa, 5 < 5,
-   ainda soma 1); B mostra "1 4" (100, 33, 11, 3, 1); C mostra "10": o
-   corpo roda zero vezes, porque o while pergunta antes.
+   Isso vale também na última pergunta, a que dá falso: por isso i termina
+   em 6, com 5 voltas.
+2. Trecho B: divisão inteira. 100 / 3 = 33. O printf de n vai logo depois
+   da linha n = n / 3.
+3. Resposta esperada: a saída acima. No trecho C o corpo roda zero vezes,
+   porque o while pergunta antes: 10 < 10 já é falso.
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0020-while/E120.c
@@ -554,36 +554,54 @@ Não:
 > **Pergunta para você:** e se você apagar o `if` em volta do `scanf` e digitar
 > `x`? O `scanf` não consegue ler um número, devolve 0, deixa o `x` no buffer e
 > não muda `parcelas`. O que acontece na próxima volta? Preveja e depois teste
-> no A041 (se travar, `Ctrl+C`).
+> no código acima (se travar, `Ctrl+C`).
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0021-do-while/`](0021-do-while/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A041 · Quantas parcelas? Só de 1 a 12**
+**Exemplo A041 · Quantos dígitos tem o zero?**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    double preco = 1200.0; // a geladeira
-    int parcelas;
+    int numero = 0;
+    int resto, digitos;
 
+    // com while: pergunta antes, e 0 > 0 já é falso
+    resto = numero;
+    digitos = 0;
+    while (resto > 0) {
+        resto = resto / 10;
+        digitos++;
+    }
+    printf("while:    %d tem %d dígitos\n", numero, digitos);
+
+    // com do-while: conta o primeiro dígito antes de perguntar
+    resto = numero;
+    digitos = 0;
     do {
-        printf("Em quantas parcelas (1 a 12)? ");
-        if (scanf("%d", &parcelas) != 1) { // letra no lugar de número
-            printf("\nIsso não é um número.\n");
-            return 1;
-        }
-    } while (parcelas < 1 || parcelas > 12); // repete ENQUANTO for inválido
+        resto = resto / 10;
+        digitos++;
+    } while (resto > 0);
+    printf("do-while: %d tem %d dígito\n", numero, digitos);
 
-    printf("%dx de R$ %.2f\n", parcelas, preco / parcelas);
+    // para números maiores que zero, os dois concordam
+    numero = 2026;
+    resto = numero;
+    digitos = 0;
+    do {
+        resto = resto / 10;
+        digitos++;
+    } while (resto > 0);
+    printf("do-while: %d tem %d dígitos\n", numero, digitos);
     return 0;
 }
-// Em quantas parcelas (1 a 12)? 0
-// Em quantas parcelas (1 a 12)? 15
-// Em quantas parcelas (1 a 12)? 4
-// 4x de R$ 300.00
+// Saída:
+// while:    0 tem 0 dígitos
+// do-while: 0 tem 1 dígito
+// do-while: 2026 tem 4 dígitos
 ```
 
 ```bash
@@ -678,44 +696,40 @@ Nota aceita: 8.5
 
 **Exercício E122** · ★☆☆
 
-Os dois trechos são quase iguais. Preveja o que cada um mostra e depois
-rode para conferir.
+Os trechos A e B abaixo já estão no main do arquivo e são quase iguais:
 
 
 ```text
-// trecho A
-int n = 10;
-while (n < 5) {
-    printf("%d ", n);
-    n++;
-}
-printf("| A terminou com n = %d\n", n);
+// trecho A                     // trecho B
+int n = 10;                     int m = 10;
+while (n < 5) {                 do {
+    printf("%d ", n);               printf("%d ", m);
+    n++;                            m++;
+}                               } while (m < 5);
+printf("| A terminou com n = %d\n", n);   (e o mesmo para m no B)
 ```
 
+
+Acrescente um trecho C, com a variável k começando em 10, que mostre
+exatamente o mesmo que o B, mas usando while (sem do-while). Rode e confira:
 
 
 ```text
-// trecho B
-int m = 10;
-do {
-    printf("%d ", m);
-    m++;
-} while (m < 5);
-printf("| B terminou com m = %d\n", m);
+Saída esperada:
+| A terminou com n = 10
+10 | B terminou com m = 11
+10 | C terminou com k = 11
 ```
-
-
-Depois responda: para o trecho A se comportar como o B, o que você teria
-que acrescentar antes do while?
 
 **Dicas:**
 
 1. O while pergunta antes de entrar; o do-while entra e pergunta depois.
-2. 10 < 5 é falso logo na primeira pergunta.
-3. Resposta esperada: A mostra "| A terminou com n = 10" (zero voltas);
-   B mostra "10 | B terminou com m = 11" (uma volta, mesmo com a condição
-   falsa). Para o while imitar o do-while, é preciso copiar o corpo uma vez
-   antes do laço.
+   10 < 5 é falso logo na primeira pergunta.
+2. Para o while rodar o corpo pelo menos uma vez, escreva uma cópia do
+   corpo ANTES do laço.
+3. Resposta esperada: a saída acima. O trecho C fica: int k = 10;
+   printf("%d ", k); k++; while (k < 5) { printf("%d ", k); k++; } e o
+   printf final.
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0021-do-while/E122.c
@@ -763,8 +777,9 @@ printf '7\n2\n' | ~/LPEDC/rodar 03-repeticoes/0021-do-while/E124.c
 ```
 
 
-ele aceita o 7 de primeira. O código com o erro está logo abaixo. Ache o
-erro, explique por que ele nunca repete e conserte.
+ele aceita o 7 de primeira. O código com o erro está logo abaixo.
+Conserte a condição e rode de novo com a mesma entrada: agora o 7 tem que
+ser recusado e o 2 aceito.
 
 **Dicas:**
 
@@ -956,33 +971,39 @@ seta sai dele e volta para o losango:
 
 Os arquivos ficam em [`0022-for/`](0022-for/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A043 · O carnê da TV em 6 parcelas**
+**Exemplo A043 · Postes e vãos: o erro por um na cerca**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    double preco = 1800.0;
-    int total_parcelas = 6;
-    double valor = preco / total_parcelas;
-    double falta = preco;
+    int comprimento = 30; // a cerca tem 30 metros
+    int espaco = 5;       // um poste a cada 5 metros
+    int postes = 0;
+    int vaos = 0;
 
-    for (int parcela = 1; parcela <= total_parcelas; parcela++) {
-        falta = falta - valor;
-        printf("Parcela %d/%d: R$ %.2f (falta R$ %.2f)\n",
-               parcela, total_parcelas, valor, falta);
+    // postes: do metro 0 ATÉ o metro 30, inclusive (<=)
+    printf("Postes nos metros:");
+    for (int metro = 0; metro <= comprimento; metro += espaco) {
+        printf(" %d", metro);
+        postes++;
     }
-    printf("Carnê quitado!\n");
+    printf("\n");
+
+    // vãos: cada vão começa num poste, menos no último (<)
+    for (int metro = 0; metro < comprimento; metro += espaco) {
+        vaos++;
+    }
+
+    printf("Postes: %d | Vãos: %d\n", postes, vaos);
+    printf("Pela conta: %d vãos, %d postes\n",
+           comprimento / espaco, comprimento / espaco + 1);
     return 0;
 }
 // Saída:
-// Parcela 1/6: R$ 300.00 (falta R$ 1500.00)
-// Parcela 2/6: R$ 300.00 (falta R$ 1200.00)
-// Parcela 3/6: R$ 300.00 (falta R$ 900.00)
-// Parcela 4/6: R$ 300.00 (falta R$ 600.00)
-// Parcela 5/6: R$ 300.00 (falta R$ 300.00)
-// Parcela 6/6: R$ 300.00 (falta R$ 0.00)
-// Carnê quitado!
+// Postes nos metros: 0 5 10 15 20 25 30
+// Postes: 7 | Vãos: 6
+// Pela conta: 6 vãos, 7 postes
 ```
 
 ```bash
@@ -1061,8 +1082,9 @@ Escreva a tabuada do 8 com um for, alinhando os números com %2d:
 
 **Exercício E128** · ★☆☆
 
-Sem rodar, escreva o que cada laço mostra (cada um faz printf("%d ", x) no
-corpo). Depois cole no main e confira.
+Escreva um programa com os quatro laços abaixo, um depois do outro. Cada
+um mostra os valores de x numa linha que começa com a letra do laço e, no
+fim da linha, quantas voltas ele deu (use um contador para cada laço):
 
 
 ```text
@@ -1072,12 +1094,23 @@ c) for (int x = 1; x >= 10; x++)
 d) for (int x = 1; x < 100; x *= 3)
 ```
 
+
+
+```text
+Saída esperada:
+a) 3 7 11 15 19 (5 voltas)
+b) 50 44 38 32 (4 voltas)
+c) (0 voltas)
+d) 1 3 9 27 81 (5 voltas)
+```
+
 **Dicas:**
 
-1. Faça a ordem do for no papel: inicializa, pergunta, corpo, passo, pergunta...
-2. O laço c pergunta "1 >= 10?" logo de cara.
-3. Resposta esperada: a) 3 7 11 15 19; b) 50 44 38 32; c) nada (zero
-   voltas); d) 1 3 9 27 81 (o passo pode ser qualquer conta, não só +1).
+1. Antes de cada laço: printf("a) ") e voltas = 0. No corpo:
+   printf("%d ", x) e voltas++. Depois: printf("(%d voltas)\n", voltas).
+2. O laço c pergunta "1 >= 10?" logo de cara: o corpo nunca roda.
+3. Resposta esperada: a saída acima. O passo pode ser qualquer conta, não
+   só +1: no d, x é multiplicado por 3 a cada volta.
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0022-for/E128.c
@@ -1121,8 +1154,8 @@ Série 6
 ```
 
 
-O código com o erro está logo abaixo. Rode, leia o aviso do gcc, explique
-por que aparece 6 (e só uma vez) e conserte.
+O código com o erro está logo abaixo. Rode, leia o aviso do gcc e conserte:
+o programa tem que compilar sem aviso e mostrar Série 1 até Série 5.
 
 **Dicas:**
 
@@ -1170,7 +1203,10 @@ pi ~ 3.140593
 
 **Exercício E132** · ★★★
 
-Preveja a saída. Quantas linhas aparecem, e com que valores i e j terminam?
+O laço abaixo usa a vírgula para controlar duas variáveis. Escreva um
+programa que roda esse laço e, logo depois, o MESMO laço reescrito com
+while, com a mesma saída. Nos dois, acrescente um contador de voltas e
+mostre-o na linha do "Fim":
 
 
 ```text
@@ -1182,15 +1218,24 @@ printf("Fim: i = %d, j = %d\n", i, j);
 ```
 
 
-Depois reescreva o mesmo laço com while, sem mudar a saída.
+
+```text
+Saída esperada (a do for; a do while vem logo depois, igual):
+i =  0, j = 20
+i =  3, j = 18
+i =  6, j = 16
+i =  9, j = 14
+Fim: i = 12, j = 12, voltas = 4
+```
 
 **Dicas:**
 
 1. A vírgula separa duas inicializações e dois passos; a condição é uma só.
-2. Monte a tabela: (0, 20), (3, 18)... até a pergunta i < j dar falso.
-3. Resposta esperada: 4 linhas: (0, 20), (3, 18), (6, 16), (9, 14); depois
-   "Fim: i = 12, j = 12". Com while: "i = 0; j = 20; while (i < j) {
-   printf(...); i += 3; j -= 2; }".
+2. No while, as inicializações vão antes do laço e os dois passos vão no
+   FIM do corpo, depois do printf. Zere o contador antes de cada laço.
+3. Resposta esperada: 4 linhas e "Fim: i = 12, j = 12, voltas = 4", duas
+   vezes. Com while: i = 0; j = 20; while (i < j) { printf(...);
+   voltas++; i += 3; j -= 2; }.
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0022-for/E132.c
@@ -1299,53 +1344,45 @@ A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 
 > [!NOTE]
 > **Pergunta para você:** se o primeiro preço digitado for 0, o que aparece na
-> tela? E se o primeiro for uma letra? Siga o código com o dedo e depois teste
-> no A045 com `printf '0\n' | ~/LPEDC/rodar ...`.
+> tela? E se o primeiro for uma letra? Siga o código com o dedo e depois
+> teste: salve o código acima como `caixa.c` e rode
+> `printf '0\n' | ~/LPEDC/rodar caixa.c`.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0023-break-continue/`](0023-break-continue/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A045 · O caixa do mercado: pula o erro, para no zero**
+**Exemplo A045 · Poltronas da excursão: continue com o passo no topo**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    double preco;
-    double total = 0.0;
-    int itens = 0;
-    int ignorados = 0;
+    int alunos = 10;    // a excursão leva 10 alunos
+    int poltrona = 0;   // última poltrona olhada
+    int reservadas = 0;
 
-    while (1) { // "para sempre": quem decide a saída é o break
-        printf("Preço (0 encerra): ");
-        if (scanf("%lf", &preco) != 1) {
-            break;          // entrada acabou ou não é número
+    // a sala tem 20 poltronas; as de número múltiplo de 5 estão quebradas
+    printf("Poltronas reservadas:");
+    while (poltrona < 20) {
+        poltrona++;               // o passo vem PRIMEIRO: o continue não o pula
+        if (poltrona % 5 == 0) {
+            continue;             // quebrada: volta para a pergunta do while
         }
-        if (preco == 0) {
-            break;          // fim da compra: sai do laço
+        printf(" %d", poltrona);
+        reservadas++;
+        if (reservadas == alunos) {
+            break;                // todo mundo sentado: para de procurar
         }
-        if (preco < 0) {
-            printf("  leitura inválida, passe de novo\n");
-            ignorados++;
-            continue;       // pula o resto e volta para o while
-        }
-        total = total + preco;
-        itens++;
     }
+    printf("\n");
 
-    printf("Itens: %d | Ignorados: %d\n", itens, ignorados);
-    printf("Total: R$ %.2f\n", total);
+    printf("Reservadas: %d | Última poltrona olhada: %d\n", reservadas, poltrona);
     return 0;
 }
-// Preço (0 encerra): 12.90
-// Preço (0 encerra): -1
-//   leitura inválida, passe de novo
-// Preço (0 encerra): 8.50
-// Preço (0 encerra): 4.00
-// Preço (0 encerra): 0
-// Itens: 3 | Ignorados: 1
-// Total: R$ 25.40
+// Saída:
+// Poltronas reservadas: 1 2 3 4 6 7 8 9 11 12
+// Reservadas: 10 | Última poltrona olhada: 12
 ```
 
 ```bash
@@ -1420,7 +1457,7 @@ continue:
 
 **Exercício E134** · ★☆☆
 
-Preveja a saída antes de rodar:
+O laço abaixo já está no main do arquivo:
 
 
 ```text
@@ -1437,16 +1474,36 @@ printf("\n");
 ```
 
 
-E se você trocar a ordem dos dois if, muda alguma coisa? E se o break
-testasse i == 8?
+Estenda o programa:
+
+1. acrescente um contador de quantas vezes o continue aconteceu e mostre-o
+
+```text
+ no fim da linha;
+```
+
+2. logo depois, escreva uma cópia do laço (com o seu contador) em que o
+
+```text
+ break testa i == 8 em vez de i == 7.
+```
+
+
+
+```text
+Saída esperada:
+1 2 3 5 6 (continue: 1 vez)
+1 2 3 5 6 7 9 10 (continue: 2 vezes)
+```
 
 **Dicas:**
 
-1. continue pula só esta volta; break acaba com o laço.
-2. O 4 é pulado. Quem chega primeiro no 7: o continue ou o break?
-3. Resposta esperada: "1 2 3 5 6". Trocar a ordem dos if não muda nada
-   aqui (7 não é múltiplo de 4). Com i == 8, o break nunca acontece, porque
-   o continue pega o 8 antes: a saída vira "1 2 3 5 6 7 9 10".
+1. continue pula só esta volta; break acaba com o laço. O contador soma 1
+   logo antes do continue, dentro do mesmo if.
+2. Na cópia, o 8 é múltiplo de 4: quem chega primeiro nele, o continue ou
+   o break?
+3. Resposta esperada: a saída acima. Com i == 8, o break nunca acontece,
+   porque o continue pega o 8 antes; o laço vai até o 10 e pula o 4 e o 8.
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0023-break-continue/E134.c
@@ -1494,7 +1551,7 @@ printf '1\n2\n9\n1\n2\n' | ~/LPEDC/rodar 03-repeticoes/0023-break-continue/E136.
 
 
 ele continua lendo depois do 9. O código com o erro está logo abaixo.
-Explique por que o break não para o laço e conserte.
+Conserte para o laço parar no 9 e rode de novo com a mesma entrada.
 
 **Dicas:**
 
@@ -1667,36 +1724,46 @@ fora vem `poltrona = 1`: é ali que o laço de dentro recomeça:
 > **Pergunta para você:** se o laço de dentro fosse
 > `for (int poltrona = 1; poltrona <= fileira - 'A' + 1; poltrona++)`, quantas
 > poltronas teria cada fileira e quantos lugares no total? Lembre que `char` é
-> número: `'C' - 'A'` vale 2. Desenhe o mapa no papel e depois teste no A047.
+> número: `'C' - 'A'` vale 2. Desenhe o mapa no papel e depois troque o laço
+> de dentro no código acima e rode.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0024-lacos-aninhados/`](0024-lacos-aninhados/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A047 · O mapa de poltronas do cinema**
+**Exemplo A047 · As horas capicua do relógio digital**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    int lugares = 0;
+    int voltas = 0;
+    int capicuas = 0;
 
-    for (char fileira = 'A'; fileira <= 'D'; fileira++) {    // laço de fora
-        for (int poltrona = 1; poltrona <= 5; poltrona++) {  // laço de dentro
-            printf("%c%d ", fileira, poltrona);
-            lugares++;
+    // de 00:00 a 23:59: o minuto dá a volta inteira a cada hora
+    for (int hora = 0; hora <= 23; hora++) {           // laço de fora
+        for (int minuto = 0; minuto <= 59; minuto++) { // laço de dentro
+            voltas++;
+            // hh:mm se lê igual de trás para frente: 12:21, 05:50...
+            if (hora / 10 == minuto % 10 && hora % 10 == minuto / 10) {
+                printf("%02d:%02d ", hora, minuto);
+                capicuas++;
+                if (capicuas % 8 == 0) {
+                    printf("\n");
+                }
+            }
         }
-        printf("\n"); // acabou a fileira: pula linha
     }
-    printf("Total: %d lugares\n", lugares);
+
+    printf("Horários testados: %d (24 x 60)\n", voltas);
+    printf("Capicuas: %d\n", capicuas);
     return 0;
 }
 // Saída:
-// A1 A2 A3 A4 A5 
-// B1 B2 B3 B4 B5 
-// C1 C2 C3 C4 C5 
-// D1 D2 D3 D4 D5 
-// Total: 20 lugares
+// 00:00 01:10 02:20 03:30 04:40 05:50 10:01 11:11 
+// 12:21 13:31 14:41 15:51 20:02 21:12 22:22 23:32 
+// Horários testados: 1440 (24 x 60)
+// Capicuas: 16
 ```
 
 ```bash
@@ -1777,7 +1844,7 @@ Desenhe com dois for aninhados, usando printf("#") uma vez só no código:
 
 **Exercício E140** · ★☆☆
 
-Preveja a saída e diga quantas vezes o printf("%d ", ...) roda:
+O par de laços abaixo já está no main do arquivo:
 
 
 ```text
@@ -1789,12 +1856,29 @@ for (int i = 1; i <= 3; i++) {
 }
 ```
 
+
+Estenda o programa: acrescente um contador que soma 1 cada vez que o printf
+de dentro roda e, depois dos dois laços, mostre quantas vezes foi:
+
+
+```text
+Saída esperada:
+1
+2 4
+3 6 9
+printf de dentro: 6 vezes
+```
+
+
+Depois troque o limite do laço de fora para 4 e rode de novo.
+
 **Dicas:**
 
-1. Para cada i, o laço de dentro roda i vezes: 1, depois 2, depois 3.
-2. Monte uma tabela com i, j e i * j.
-3. Resposta esperada: três linhas, "1", "2 4" e "3 6 9". O printf de
-   dentro roda 1 + 2 + 3 = 6 vezes.
+1. O contador começa em 0 antes dos laços e soma 1 logo depois do printf
+   de dentro, no mesmo nível dele.
+2. Para cada i, o laço de dentro roda i vezes: 1, depois 2, depois 3.
+3. Resposta esperada: a saída acima (1 + 2 + 3 = 6). Com i até 4, aparece a
+   linha "4 8 12 16" e o contador vai a 10.
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0024-lacos-aninhados/E140.c
@@ -1832,8 +1916,8 @@ margem. Cada número ocupa 4 posições (%4d):
 
 A escola quer a lista de chamada de 3 turmas com 4 alunos cada, uma turma
 por linha (T1-A1 T1-A2 ...). O programa abaixo mostra só a primeira turma e
-depois duas linhas vazias. O código com o erro está logo abaixo. Faça o
-teste de mesa, ache o erro e conserte (continue usando while).
+depois duas linhas vazias. O código com o erro está logo abaixo. Conserte
+(continue usando while) e rode até aparecer a saída esperada.
 
 
 ```text
@@ -1902,9 +1986,9 @@ Formas: 10
 
 1. Notas de 50: de 0 a 2. De 20: de 0 a 5. De 10: de 0 a 10.
 2. No laço mais de dentro: if (50 * n50 + 20 * n20 + 10 * n10 == 100).
-3. Resposta esperada: 10 formas. Desafio extra: o laço das notas de 10 é
-   desnecessário. Com n50 e n20 fixos, quantas notas de 10 faltam? (Só
-   vale se o que falta for >= 0.)
+3. Resposta esperada: 10 formas. Desafio extra: reescreva sem o laço das
+   notas de 10. Com n50 e n20 fixos, calcule quantas notas de 10 faltam
+   (só vale se o que falta for >= 0) e confira se continuam 10 formas.
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0024-lacos-aninhados/E144.c
@@ -2044,62 +2128,60 @@ olha para o valor que acabou de chegar:
 
 Os arquivos ficam em [`0025-padroes-de-laco/`](0025-padroes-de-laco/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A049 · As máximas da semana: cinco padrões num laço só**
+**Exemplo A049 · Inverno na serra: maior e menor com INT_MIN e INT_MAX**
 
 ```c
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    const int FIM = 999;          // sentinela: nenhuma temperatura real vale 999
+    const int FIM = 999;      // sentinela
     int temp;
-    int dias = 0;                 // contador
-    int soma = 0;                 // acumulador
-    int maior = 0, menor = 0;     // só valem depois do 1º dia
-    bool calorao = false;         // flag: algum dia passou de 35?
+    int dias = 0;             // contador
+    int soma = 0;             // acumulador
+    int geada = 0;            // contador com condição: dias com máxima <= 0
+    int maior = INT_MIN;      // qualquer temperatura ganha do menor int
+    int menor = INT_MAX;      // qualquer temperatura perde do maior int
+    bool esquentou = false;   // flag: algum dia passou de 0 °C?
 
+    // ler e testar a sentinela na própria pergunta do while
     printf("Máxima do dia (999 encerra): ");
-    if (scanf("%d", &temp) != 1) {
-        temp = FIM;
-    }
-    while (temp != FIM) {
+    while (scanf("%d", &temp) == 1 && temp != FIM) {
         dias++;
         soma += temp;
-        if (dias == 1 || temp > maior) {
-            maior = temp;
+        if (temp > maior) {
+            maior = temp;     // sem o "dias == 1 ||": INT_MIN cuida disso
         }
-        if (dias == 1 || temp < menor) {
+        if (temp < menor) {
             menor = temp;
         }
-        if (temp >= 35) {
-            calorao = true;       // levanta a flag e não abaixa mais
+        if (temp <= 0) {
+            geada++;
+        } else {
+            esquentou = true;
         }
         printf("Máxima do dia (999 encerra): ");
-        if (scanf("%d", &temp) != 1) {
-            temp = FIM;
-        }
     }
 
     if (dias == 0) {
         printf("Nenhum dia lido.\n");
         return 0;
     }
-    printf("Dias: %d\n", dias);
+    printf("Dias: %d | Com máxima até 0 °C: %d\n", dias, geada);
     printf("Média: %.1f °C\n", (double) soma / dias);
     printf("Maior: %d °C | Menor: %d °C\n", maior, menor);
-    printf("Teve dia de 35 °C ou mais? %s\n", calorao ? "sim" : "não");
+    printf("Algum dia acima de 0 °C? %s\n", esquentou ? "sim" : "não");
     return 0;
 }
-// Máxima do dia (999 encerra): 28
-// Máxima do dia (999 encerra): 31
-// Máxima do dia (999 encerra): 36
-// Máxima do dia (999 encerra): 25
-// Máxima do dia (999 encerra): 30
+// Máxima do dia (999 encerra): -3
+// Máxima do dia (999 encerra): -1
+// Máxima do dia (999 encerra): -4
 // Máxima do dia (999 encerra): 999
-// Dias: 5
-// Média: 30.0 °C
-// Maior: 36 °C | Menor: 25 °C
-// Teve dia de 35 °C ou mais? sim
+// Dias: 3 | Com máxima até 0 °C: 3
+// Média: -2.7 °C
+// Maior: -1 °C | Menor: -4 °C
+// Algum dia acima de 0 °C? não
 ```
 
 ```bash
@@ -2331,7 +2413,7 @@ Nota 8: 70
 **Exercício E150** · ★★★
 
 O app de corrida registra a distância de 6 treinos, em km inteiros. Leia os
-6 valores (inteiros) e responda duas perguntas:
+6 valores (inteiros) e faça o programa mostrar a resposta de duas perguntas:
 
 a) Os treinos estão em ordem crescente (cada um MAIOR que o anterior)?
 b) Qual foi a maior sequência de treinos seguidos em alta?
@@ -2471,41 +2553,51 @@ No exemplo, o caminho passa três vezes pelo Sim e, na quarta jogada, pelo Não:
 
 > [!NOTE]
 > **Pergunta para você:** rode o A051 duas vezes. A saída muda? Agora troque
-> `srand(2022)` por `srand(time(NULL))` (e inclua `<time.h>`). O que muda, e o
-> que acontece se você rodar duas vezes dentro do mesmo segundo?
+> o primeiro `srand(2026)` por `srand(time(NULL))` (e inclua `<time.h>`). O
+> que muda na primeira linha, o que continua igual nas outras duas, e o que
+> acontece se você rodar duas vezes dentro do mesmo segundo?
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0026-aleatorios/`](0026-aleatorios/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A051 · Sair da prisão: dados até tirar dupla**
+**Exemplo A051 · Mesma semente, mesmo sorteio**
 
 ```c
 #include <stdio.h>
-#include <stdlib.h> // rand e srand
+#include <stdlib.h>
 
 int main(void) {
-    srand(2022); // semente fixa: a mesma sequência a cada execução
+    // bingo da quermesse: 5 bolas de 1 a 75 (a + rand() % (b - a + 1))
+    srand(2026);
+    printf("Semente 2026:        ");
+    for (int i = 0; i < 5; i++) {
+        printf("%3d", 1 + rand() % 75);
+    }
+    printf("\n");
 
-    int dado1, dado2;
-    int jogadas = 0;
+    // a mesma semente de novo: a sequência recomeça do mesmo ponto
+    srand(2026);
+    printf("Semente 2026 de novo:");
+    for (int i = 0; i < 5; i++) {
+        printf("%3d", 1 + rand() % 75);
+    }
+    printf("\n");
 
-    do {
-        dado1 = 1 + rand() % 6; // rand() % 6 vai de 0 a 5; + 1 vira 1 a 6
-        dado2 = 1 + rand() % 6;
-        jogadas++;
-        printf("Jogada %d: %d e %d\n", jogadas, dado1, dado2);
-    } while (dado1 != dado2);
-
-    printf("Dupla de %d na jogada %d. Saiu da prisão!\n", dado1, jogadas);
+    // outra semente: outra sequência
+    srand(2027);
+    printf("Semente 2027:        ");
+    for (int i = 0; i < 5; i++) {
+        printf("%3d", 1 + rand() % 75);
+    }
+    printf("\n");
     return 0;
 }
-// Saída (glibc, Linux; em outro sistema a sequência pode ser outra):
-// Jogada 1: 1 e 5
-// Jogada 2: 5 e 1
-// Jogada 3: 1 e 6
-// Jogada 4: 4 e 4
-// Dupla de 4 na jogada 4. Saiu da prisão!
+// Saída (glibc, Linux; em outro sistema os números podem ser outros,
+// mas as duas primeiras linhas continuam iguais entre si):
+// Semente 2026:         38 73 74 70 62
+// Semente 2026 de novo: 38 73 74 70 62
+// Semente 2027:         54 29  7  5 53
 ```
 
 ```bash
@@ -2648,7 +2740,8 @@ Acertou em 3 tentativas!
 
 O programa abaixo deveria sortear 10 lançamentos de um dado. Rode e repare:
 sai o mesmo número 10 vezes, e às vezes esse número é 0. São DOIS erros.
-O código com os erros está logo abaixo. Ache, explique e conserte.
+O código com os erros está logo abaixo. Conserte os dois e rode algumas
+vezes: os 10 números têm que variar e ficar sempre entre 1 e 6.
 
 **Dicas:**
 
@@ -2842,70 +2935,66 @@ volta sai do Não de "soma == 7?". As duas saídas do laço vão para os mesmos
 > [!NOTE]
 > **Pergunta para você:** qual é a chance de ganhar no craps? Antes de chutar,
 > pense: no primeiro lançamento, o 7 e o 11 juntos saem em 8 de 36
-> combinações. Depois, rode uma versão do A053 que joga 100 000 rodadas sem os
-> `printf` e conta as vitórias (é o desafio 7 do módulo). A resposta é um
+> combinações (o A053 conta todas elas). Depois, rode uma versão do código
+> acima que joga 100 000 rodadas sem os `printf` e conta as vitórias (é o desafio 7 do módulo). A resposta é um
 > pouco menos de 50%, e é daí que o cassino tira o lucro.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0027-juntando-tudo/`](0027-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A053 · Uma rodada de craps**
+**Exemplo A053 · As 36 jogadas do primeiro lançamento, sem sortear**
 
 ```c
 #include <stdio.h>
-#include <stdlib.h>
 
 int main(void) {
-    srand(21); // semente fixa: a rodada abaixo se repete (glibc)
+    int natural = 0, craps = 0, ponto = 0;
 
-    int d1 = 1 + rand() % 6;
-    int d2 = 1 + rand() % 6;
-    int soma = d1 + d2;
-    int lancamentos = 1;
-    int ponto = 0;
-    int situacao; // 1 = ganhou, -1 = perdeu, 0 = continua
-
-    printf("Lançamento %d: %d + %d = %d\n", lancamentos, d1, d2, soma);
-    switch (soma) {
-    case 7:
-    case 11:
-        situacao = 1;          // natural: ganha de cara
-        break;
-    case 2:
-    case 3:
-    case 12:
-        situacao = -1;         // craps: perde de cara
-        break;
-    default:
-        situacao = 0;          // virou o ponto
-        ponto = soma;
-        printf("Ponto: %d. Agora precisa repetir o %d antes de um 7.\n", ponto, ponto);
-    }
-
-    while (situacao == 0) {
-        d1 = 1 + rand() % 6;
-        d2 = 1 + rand() % 6;
-        soma = d1 + d2;
-        lancamentos++;
-        printf("Lançamento %d: %d + %d = %d\n", lancamentos, d1, d2, soma);
-        if (soma == ponto) {
-            situacao = 1;
-        } else if (soma == 7) {
-            situacao = -1;
+    // em vez de sortear, passa por TODAS as combinações dos dois dados
+    printf("d1\\d2  1  2  3  4  5  6\n");
+    for (int d1 = 1; d1 <= 6; d1++) {
+        printf("%5d", d1);
+        for (int d2 = 1; d2 <= 6; d2++) {
+            int soma = d1 + d2;
+            printf("%3d", soma);
+            switch (soma) {
+            case 7:
+            case 11:
+                natural++;  // ganha de cara
+                break;
+            case 2:
+            case 3:
+            case 12:
+                craps++;    // perde de cara
+                break;
+            default:
+                ponto++;    // o jogo continua
+            }
         }
+        printf("\n");
     }
 
-    printf("%s em %d lançamentos.\n", situacao == 1 ? "Ganhou" : "Perdeu", lancamentos);
+    int total = natural + craps + ponto;
+    printf("Ganha de cara (7 ou 11):    %2d de %d (%.1f%%)\n",
+           natural, total, 100.0 * natural / total);
+    printf("Perde de cara (2, 3 ou 12): %2d de %d (%.1f%%)\n",
+           craps, total, 100.0 * craps / total);
+    printf("Vira ponto:                 %2d de %d (%.1f%%)\n",
+           ponto, total, 100.0 * ponto / total);
     return 0;
 }
-// Saída (glibc, Linux):
-// Lançamento 1: 3 + 6 = 9
-// Ponto: 9. Agora precisa repetir o 9 antes de um 7.
-// Lançamento 2: 3 + 5 = 8
-// Lançamento 3: 1 + 4 = 5
-// Lançamento 4: 4 + 5 = 9
-// Ganhou em 4 lançamentos.
+// Saída:
+// d1\d2  1  2  3  4  5  6
+//     1  2  3  4  5  6  7
+//     2  3  4  5  6  7  8
+//     3  4  5  6  7  8  9
+//     4  5  6  7  8  9 10
+//     5  6  7  8  9 10 11
+//     6  7  8  9 10 11 12
+// Ganha de cara (7 ou 11):     8 de 36 (22.2%)
+// Perde de cara (2, 3 ou 12):  4 de 36 (11.1%)
+// Vira ponto:                 24 de 36 (66.7%)
 ```
 
 ```bash
@@ -2942,7 +3031,7 @@ int main(void) {
             }
         } while (aposta < 1 || aposta > banca);
 
-        // a rodada: o mesmo algoritmo do A053, sem os printf de cada lance
+        // a rodada: o mesmo algoritmo do texto, sem os printf de cada lance
         int soma = (1 + rand() % 6) + (1 + rand() % 6);
         int lancamentos = 1;
         int ponto = soma;
@@ -3031,8 +3120,17 @@ Soma 2: 1012 (2.8%)
 
 **Exercício E158** · ★☆☆
 
-Siga o algoritmo do A053 com o dedo, sem rodar. Para cada sequência de
-somas, diga se o jogador ganha ou perde, e em qual lançamento:
+Um juiz de craps sem dados: em vez de sortear, o programa lê a soma de cada
+lançamento do teclado. O começo (o primeiro lançamento e o switch, igual ao
+do texto, com scanf no lugar do sorteio) já está pronto no arquivo. Complete o while dos relançamentos: ele lê a próxima soma,
+conta o lançamento e decide (o ponto ganha, o 7 perde, o resto não faz
+nada). Depois teste com as seis sequências:
+
+
+```text
+printf '5\n8\n4\n6\n5\n' | ~/LPEDC/rodar 03-repeticoes/0027-juntando-tudo/E158.c
+```
+
 
 
 ```text
@@ -3044,15 +3142,22 @@ e) 4, 4
 f) 10, 2, 3, 12, 7
 ```
 
+
+
+```text
+Saída esperada para a sequência a:
+Soma: Soma: Soma: Soma: Soma: Ganhou no 5º lançamento (ponto 5).
+```
+
 **Dicas:**
 
-1. Primeiro lançamento: 7 ou 11 ganha; 2, 3 ou 12 perde; o resto vira o
-   ponto.
-2. Do segundo em diante, só duas somas importam: o ponto (ganha) e o 7
-   (perde). 2, 3 e 12 não fazem mais nada.
-3. Resposta esperada: a) ganha no 5º (ponto 5); b) perde no 3º; c) perde
-   no 1º; d) ganha no 1º; e) ganha no 2º; f) perde no 5º (o 2, o 3 e o 12
-   depois do ponto não contam).
+1. O while repete enquanto situacao == 0. Dentro: printf("Soma: "), scanf
+   (se falhar, return 1), lancamentos++ e um if/else if.
+2. Do segundo lançamento em diante, só duas somas importam: o ponto
+   (situacao = 1) e o 7 (situacao = -1). 2, 3 e 12 não fazem mais nada.
+3. Resposta esperada: a) ganha no 5º (ponto 5); b) perde no 3º (ponto 6);
+   c) perde no 1º; d) ganha no 1º; e) ganha no 2º (ponto 4); f) perde no
+   5º (ponto 10; o 2, o 3 e o 12 depois do ponto não contam).
 
 ```bash
 ~/LPEDC/rodar 03-repeticoes/0027-juntando-tudo/E158.c
@@ -3287,8 +3392,8 @@ meio tem 9 asteriscos.
 
 </details>
 
-**7. O craps tem truque?** Jogue 100 000 rodadas de craps (o algoritmo do
-A053, sem os `printf`, dentro de um `for`) e calcule a porcentagem de
+**7. O craps tem truque?** Jogue 100 000 rodadas de craps (o algoritmo da
+rodada do assunto 0027, sem os `printf`, dentro de um `for`) e calcule a porcentagem de
 vitórias e a média de lançamentos por rodada.
 
 <details><summary>Resposta</summary>

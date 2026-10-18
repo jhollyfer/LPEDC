@@ -1,39 +1,30 @@
-// A045 · O caixa do mercado: pula o erro, para no zero
+// A045 · Poltronas da excursão: continue com o passo no topo
 
 #include <stdio.h>
 
 int main(void) {
-    double preco;
-    double total = 0.0;
-    int itens = 0;
-    int ignorados = 0;
+    int alunos = 10;    // a excursão leva 10 alunos
+    int poltrona = 0;   // última poltrona olhada
+    int reservadas = 0;
 
-    while (1) { // "para sempre": quem decide a saída é o break
-        printf("Preço (0 encerra): ");
-        if (scanf("%lf", &preco) != 1) {
-            break;          // entrada acabou ou não é número
+    // a sala tem 20 poltronas; as de número múltiplo de 5 estão quebradas
+    printf("Poltronas reservadas:");
+    while (poltrona < 20) {
+        poltrona++;               // o passo vem PRIMEIRO: o continue não o pula
+        if (poltrona % 5 == 0) {
+            continue;             // quebrada: volta para a pergunta do while
         }
-        if (preco == 0) {
-            break;          // fim da compra: sai do laço
+        printf(" %d", poltrona);
+        reservadas++;
+        if (reservadas == alunos) {
+            break;                // todo mundo sentado: para de procurar
         }
-        if (preco < 0) {
-            printf("  leitura inválida, passe de novo\n");
-            ignorados++;
-            continue;       // pula o resto e volta para o while
-        }
-        total = total + preco;
-        itens++;
     }
+    printf("\n");
 
-    printf("Itens: %d | Ignorados: %d\n", itens, ignorados);
-    printf("Total: R$ %.2f\n", total);
+    printf("Reservadas: %d | Última poltrona olhada: %d\n", reservadas, poltrona);
     return 0;
 }
-// Preço (0 encerra): 12.90
-// Preço (0 encerra): -1
-//   leitura inválida, passe de novo
-// Preço (0 encerra): 8.50
-// Preço (0 encerra): 4.00
-// Preço (0 encerra): 0
-// Itens: 3 | Ignorados: 1
-// Total: R$ 25.40
+// Saída:
+// Poltronas reservadas: 1 2 3 4 6 7 8 9 11 12
+// Reservadas: 10 | Última poltrona olhada: 12

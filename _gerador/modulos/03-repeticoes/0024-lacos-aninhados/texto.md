@@ -88,6 +88,7 @@ fora vem `poltrona = 1`: é ali que o laço de dentro recomeça:
 > **Pergunta para você:** se o laço de dentro fosse
 > `for (int poltrona = 1; poltrona <= fileira - 'A' + 1; poltrona++)`, quantas
 > poltronas teria cada fileira e quantos lugares no total? Lembre que `char` é
-> número: `'C' - 'A'` vale 2. Desenhe o mapa no papel e depois teste no A047.
+> número: `'C' - 'A'` vale 2. Desenhe o mapa no papel e depois troque o laço
+> de dentro no código acima e rode.
 
 {{pratique}}

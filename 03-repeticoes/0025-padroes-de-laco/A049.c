@@ -1,55 +1,53 @@
-// A049 · As máximas da semana: cinco padrões num laço só
+// A049 · Inverno na serra: maior e menor com INT_MIN e INT_MAX
 
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    const int FIM = 999;          // sentinela: nenhuma temperatura real vale 999
+    const int FIM = 999;      // sentinela
     int temp;
-    int dias = 0;                 // contador
-    int soma = 0;                 // acumulador
-    int maior = 0, menor = 0;     // só valem depois do 1º dia
-    bool calorao = false;         // flag: algum dia passou de 35?
+    int dias = 0;             // contador
+    int soma = 0;             // acumulador
+    int geada = 0;            // contador com condição: dias com máxima <= 0
+    int maior = INT_MIN;      // qualquer temperatura ganha do menor int
+    int menor = INT_MAX;      // qualquer temperatura perde do maior int
+    bool esquentou = false;   // flag: algum dia passou de 0 °C?
 
+    // ler e testar a sentinela na própria pergunta do while
     printf("Máxima do dia (999 encerra): ");
-    if (scanf("%d", &temp) != 1) {
-        temp = FIM;
-    }
-    while (temp != FIM) {
+    while (scanf("%d", &temp) == 1 && temp != FIM) {
         dias++;
         soma += temp;
-        if (dias == 1 || temp > maior) {
-            maior = temp;
+        if (temp > maior) {
+            maior = temp;     // sem o "dias == 1 ||": INT_MIN cuida disso
         }
-        if (dias == 1 || temp < menor) {
+        if (temp < menor) {
             menor = temp;
         }
-        if (temp >= 35) {
-            calorao = true;       // levanta a flag e não abaixa mais
+        if (temp <= 0) {
+            geada++;
+        } else {
+            esquentou = true;
         }
         printf("Máxima do dia (999 encerra): ");
-        if (scanf("%d", &temp) != 1) {
-            temp = FIM;
-        }
     }
 
     if (dias == 0) {
         printf("Nenhum dia lido.\n");
         return 0;
     }
-    printf("Dias: %d\n", dias);
+    printf("Dias: %d | Com máxima até 0 °C: %d\n", dias, geada);
     printf("Média: %.1f °C\n", (double) soma / dias);
     printf("Maior: %d °C | Menor: %d °C\n", maior, menor);
-    printf("Teve dia de 35 °C ou mais? %s\n", calorao ? "sim" : "não");
+    printf("Algum dia acima de 0 °C? %s\n", esquentou ? "sim" : "não");
     return 0;
 }
-// Máxima do dia (999 encerra): 28
-// Máxima do dia (999 encerra): 31
-// Máxima do dia (999 encerra): 36
-// Máxima do dia (999 encerra): 25
-// Máxima do dia (999 encerra): 30
+// Máxima do dia (999 encerra): -3
+// Máxima do dia (999 encerra): -1
+// Máxima do dia (999 encerra): -4
 // Máxima do dia (999 encerra): 999
-// Dias: 5
-// Média: 30.0 °C
-// Maior: 36 °C | Menor: 25 °C
-// Teve dia de 35 °C ou mais? sim
+// Dias: 3 | Com máxima até 0 °C: 3
+// Média: -2.7 °C
+// Maior: -1 °C | Menor: -4 °C
+// Algum dia acima de 0 °C? não

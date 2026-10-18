@@ -110,6 +110,6 @@ pelo Sim várias vezes e só uma vez pelo Não:
 > [!NOTE]
 > **Pergunta para você:** se o depósito fosse R$ 200, quantas voltas o laço
 > daria e quanto sobraria? E se o saldo começasse em R$ 1.000? Responda pelo
-> teste de mesa e depois mude os valores no exemplo A039.
+> teste de mesa e depois mude os valores no código acima e rode.
 
 {{pratique}}

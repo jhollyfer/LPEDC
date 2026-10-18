@@ -104,7 +104,8 @@ No exemplo, o caminho passa três vezes pelo Sim e, na quarta jogada, pelo Não:
 
 > [!NOTE]
 > **Pergunta para você:** rode o A051 duas vezes. A saída muda? Agora troque
-> `srand(2022)` por `srand(time(NULL))` (e inclua `<time.h>`). O que muda, e o
-> que acontece se você rodar duas vezes dentro do mesmo segundo?
+> o primeiro `srand(2026)` por `srand(time(NULL))` (e inclua `<time.h>`). O
+> que muda na primeira linha, o que continua igual nas outras duas, e o que
+> acontece se você rodar duas vezes dentro do mesmo segundo?
 
 {{pratique}}

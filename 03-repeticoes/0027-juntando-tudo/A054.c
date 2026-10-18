@@ -27,7 +27,7 @@ int main(void) {
             }
         } while (aposta < 1 || aposta > banca);
 
-        // a rodada: o mesmo algoritmo do A053, sem os printf de cada lance
+        // a rodada: o mesmo algoritmo do texto, sem os printf de cada lance
         int soma = (1 + rand() % 6) + (1 + rand() % 6);
         int lancamentos = 1;
         int ponto = soma;
