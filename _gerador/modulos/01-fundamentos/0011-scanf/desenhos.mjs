@@ -1,0 +1,70 @@
+export const ideia = {
+  caixas: [
+    {
+      id: 'buf',
+      forma: 'array',
+      x: 100,
+      y: 40,
+      nome: 'buffer do teclado',
+      itens: ['1', '5', '0', '.', '7', '5', '\\n', '1', '2', '\\n'],
+      indices: false,
+      celula: 86,
+      estados: { 0: 'verde', 1: 'verde', 2: 'verde', 3: 'verde', 4: 'verde', 5: 'verde', 6: 'apagado', 7: 'roxo', 8: 'roxo', 9: 'amarelo' },
+    },
+    {
+      id: 'v',
+      forma: 'caixinha',
+      x: 100,
+      y: 380,
+      w: 320,
+      nome: 'valor',
+      valor: '150.75',
+      tipo: 'double · %lf',
+      end: '&valor = 0x7ffe...050',
+      cor: 'verde',
+    },
+    {
+      id: 'd',
+      forma: 'caixinha',
+      x: 620,
+      y: 380,
+      w: 300,
+      nome: 'dia',
+      valor: '12',
+      tipo: 'int · %d',
+      end: '&dia = 0x7ffe...04c',
+      cor: 'roxo',
+    },
+    { id: 't', forma: 'terminal', x: 1060, y: 400, texto: ['Pix de R$ 150.75', 'agendado para', 'o dia 12'] },
+  ],
+  setas: [
+    { de: 'buf:2', para: 'v', rotulo: '%lf' },
+    { de: 'buf:7', para: 'd', rotulo: '%d' },
+    { de: 'd', para: 't', rotulo: 'printf' },
+  ],
+  notas: [
+    { x: 1000, y: 70, texto: 'verde: o %lf leu', cor: 'verde' },
+    { x: 1000, y: 108, texto: 'cinza: o %d pulou', cor: 'cinza' },
+    { x: 1000, y: 146, texto: 'roxo: o %d leu', cor: 'roxo' },
+    { x: 1000, y: 184, texto: 'amarelo: sobrou na fila', cor: 'amarelo' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'Início'],
+    ['B', 'io', 'Ler valor (%lf)'],
+    ['C', 'io', 'Ler dia (%d)'],
+    ['D', 'proc', 'lidos = itens lidos'],
+    ['E', 'io', 'Mostrar o agendamento'],
+    ['F', 'inicio', 'Fim'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'D'],
+    ['D', 'E'],
+    ['E', 'F'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'E', 'F'],
+}
