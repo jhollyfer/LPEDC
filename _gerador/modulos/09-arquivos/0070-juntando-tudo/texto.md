@@ -43,7 +43,7 @@ em texto:
 
 O programa é longo, mas cada função cabe na cabeça:
 `novo`, `lista` e `exporta` são os exemplos dos três assuntos anteriores, e o
-`main` é só o despachante.
+`main` é só o despachante. Para rodar, salve como `gastos.c`.
 
 ```c
 #include <stdio.h>
@@ -157,20 +157,20 @@ int main(int argc, char *argv[]) {
     uso(argv[0]);
     return 1;
 }
-// $ rodar A139.c limpa
+// $ rodar gastos.c limpa
 // Caderneta apagada.
-// $ rodar A139.c novo mercado 152.40
+// $ rodar gastos.c novo mercado 152.40
 // Gravado: mercado R$ 152.40 (registro 0)
-// $ rodar A139.c novo luz 98.75
+// $ rodar gastos.c novo luz 98.75
 // Gravado: luz R$ 98.75 (registro 1)
-// $ rodar A139.c novo farmacia 45.30
+// $ rodar gastos.c novo farmacia 45.30
 // Gravado: farmacia R$ 45.30 (registro 2)
-// $ rodar A139.c lista
+// $ rodar gastos.c lista
 // 0  mercado      R$   152.40
 // 1  luz          R$    98.75
 // 2  farmacia     R$    45.30
 // Total: R$ 296.45 em 3 gastos
-// $ rodar A139.c exporta /tmp/gastos.csv
+// $ rodar gastos.c exporta /tmp/gastos.csv
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
@@ -193,7 +193,7 @@ de menos, cai no mesmo lugar: a mensagem de uso:
 > sistema o modo `O_APPEND`, e o próprio núcleo posiciona no fim a cada
 > `write`. Por isso dois programas anotando gastos ao mesmo tempo não
 > sobrescrevem um ao outro (desde que cada registro saia num `write` só). Já o
-> `return` do `main` vira o código de saída: rode `rodar A139.c novo x abc;
+> `return` do `main` vira o código de saída: rode `rodar gastos.c novo x abc;
 > echo $?` e veja o 1. É assim que scripts encadeiam comandos com `&&`.
 
 > [!NOTE]

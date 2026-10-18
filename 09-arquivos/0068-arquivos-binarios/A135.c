@@ -1,52 +1,58 @@
-// A135 · Pular direto para o registro
+// A135 · Ler em lotes: o retorno do fread
 
 #include <stdio.h>
 
-typedef struct {
-    char nome[20];
-    int qtd;
-    double preco;
-} Produto;
-
+// O fread devolve quantos itens leu de verdade. Pedindo 3 de cada vez num
+// arquivo com 7, vêm 3, 3, 1 e depois 0. O último lote vem incompleto, e é o
+// retorno (não o tamanho do vetor) que diz quantos valem.
 int main(void) {
-    const char *caminho = "/tmp/estoque.bin";
-    Produto estoque[3] = {
-        {"Arroz", 12, 25.90},
-        {"Feijão", 7, 8.75},
-        {"Café", 4, 18.50},
-    };
+    const char *caminho = "/tmp/passos.bin";
+    int passos[7] = {8200, 10450, 6300, 12010, 9800, 4100, 11500}; // da semana
 
-    // Gravar: os 3 registros de uma vez, byte a byte como estão na memória
     FILE *arq = fopen(caminho, "wb");
     if (arq == NULL) {
         perror(caminho);
         return 1;
     }
-    size_t gravados = fwrite(estoque, sizeof(Produto), 3, arq);
+    fwrite(passos, sizeof(int), 7, arq);
     fclose(arq);
-    printf("Cada registro: %zu bytes\n", sizeof(Produto));
-    printf("Gravados: %zu registros\n", gravados);
 
-    // Ler só o registro 2, sem passar pelos outros
     arq = fopen(caminho, "rb");
     if (arq == NULL) {
         perror(caminho);
         return 1;
     }
-    fseek(arq, 0, SEEK_END);              // vai para o fim...
-    printf("Arquivo: %ld bytes\n", ftell(arq)); // ...e pergunta a posição
-
-    Produto p;
-    fseek(arq, 2 * sizeof(Produto), SEEK_SET); // byte 64: começo do registro 2
-    if (fread(&p, sizeof(Produto), 1, arq) == 1) {
-        printf("Registro 2: %s, %d un., R$ %.2f\n", p.nome, p.qtd, p.preco);
+    int lote[3];
+    size_t lidos;
+    long total = 0;
+    int dia = 1;
+    while ((lidos = fread(lote, sizeof(int), 3, arq)) > 0) {
+        printf("Pedi 3, vieram %zu:", lidos);
+        for (size_t i = 0; i < lidos; i++) { // só os que vieram
+            printf(" dia %d=%d", dia, lote[i]);
+            total += lote[i];
+            dia++;
+        }
+        printf("\n");
     }
+    printf("Pedi 3, vieram 0: fim (feof = %d)\n", feof(arq) != 0);
+
+    // fseek para depois do fim não dá erro, mas o fread não acha nada
+    fseek(arq, 100 * (long) sizeof(int), SEEK_SET);
+    long posicao = ftell(arq);
+    int x = -1;
+    size_t r = fread(&x, sizeof x, 1, arq);
+    printf("No byte %ld: fread devolveu %zu, x continua %d\n", posicao, r, x);
     fclose(arq);
     remove(caminho);
+
+    printf("Total da semana: %ld passos\n", total);
     return 0;
 }
 // Saída:
-// Cada registro: 32 bytes
-// Gravados: 3 registros
-// Arquivo: 96 bytes
-// Registro 2: Café, 4 un., R$ 18.50
+// Pedi 3, vieram 3: dia 1=8200 dia 2=10450 dia 3=6300
+// Pedi 3, vieram 3: dia 4=12010 dia 5=9800 dia 6=4100
+// Pedi 3, vieram 1: dia 7=11500
+// Pedi 3, vieram 0: fim (feof = 1)
+// No byte 400: fread devolveu 0, x continua -1
+// Total da semana: 62360 passos

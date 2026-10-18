@@ -54,7 +54,7 @@ Para passar argumentos a um programa, escreva-os depois do caminho, no
 `rodar`: ele repassa tudo para o programa.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4
+~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c -r 7 -a 4
 ```
 
 Duas ferramentas ajudam a enxergar o que os programas gravam: `od -A d -t x1
@@ -200,63 +200,75 @@ uma pergunta feita antes dela:
 > indicadores de erro e de fim e um **buffer** de alguns KB (no Linux, em
 > geral 4096 bytes). Cada `fprintf` só copia bytes para esse buffer, na RAM. A
 > entrega ao sistema operacional, uma chamada `write`, só acontece quando o
-> buffer enche, quando você chama `fflush(arq)` ou no `fclose`. Compile sem o
-> sanitizer (`gcc A133.c -o /tmp/a143`, porque o ASan não gosta do `strace`) e
-> rode `strace -e trace=write /tmp/a143`: as três despesas saem num único
+> buffer enche, quando você chama `fflush(arq)` ou no `fclose`. Salve o código
+> acima como `despesas.c`, compile sem o sanitizer (`gcc despesas.c -o
+> /tmp/despesas`, porque o ASan não gosta do `strace`) e rode
+> `strace -e trace=write /tmp/despesas`: as três despesas saem num único
 > `write` de 40 bytes (15 + 10 + 15). Se o programa cair antes do `fclose`, o
 > que estava no buffer se perde.
 
 > [!NOTE]
-> **Pergunta para você:** rode o A133 duas vezes seguidas. O arquivo fica com
+> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O arquivo fica com
 > 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em vez de `"w"`?
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0067-arquivos-texto/`](0067-arquivos-texto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A133 · O caderno de despesas**
+**Exemplo A133 · A linha maior que o buffer**
 
 ```c
 #include <stdio.h>
+#include <string.h>
 
+// O fgets nunca passa do tamanho que você dá: se a linha não cabe, ela chega
+// em pedaços. Quem diz se a linha acabou é o '\n' no fim do pedaço.
 int main(void) {
-    const char *caminho = "/tmp/despesas.txt";
+    const char *caminho = "/tmp/recados.txt";
 
-    // 1. Gravar: "w" cria o arquivo (ou apaga o que tinha)
     FILE *arq = fopen(caminho, "w");
     if (arq == NULL) {
-        perror("Erro ao criar o arquivo");
+        perror(caminho);
         return 1;
     }
-    fprintf(arq, "Mercado %.2f\n", 152.40);  // igual ao printf, mas vai pro arquivo
-    fprintf(arq, "Luz %.2f\n", 98.75);
-    fprintf(arq, "Internet %.2f\n", 99.90);
-    fclose(arq); // descarrega o buffer no disco e libera o FILE
-
-    // 2. Ler de volta, linha por linha
-    arq = fopen(caminho, "r");
-    if (arq == NULL) {
-        perror("Erro ao abrir o arquivo");
-        return 1;
-    }
-    char linha[100];
-    int n = 0;
-    while (fgets(linha, sizeof linha, arq) != NULL) { // NULL = acabou o arquivo
-        n++;
-        printf("%d: %s", n, linha); // a linha já traz o '\n'
-    }
+    fputs("Pagar luz\n", arq);                         // 9 letras + '\n'
+    fputs("Levar o carro na revisao de sabado\n", arq); // não cabe em 12
+    fputs("Pix\n", arq);
     fclose(arq);
 
-    printf("%d linhas em %s\n", n, caminho);
+    arq = fopen(caminho, "r");
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    char pedaco[12]; // cabem 11 caracteres + o '\0'
+    int chamadas = 0;
+    int linhas = 0;
+    while (fgets(pedaco, sizeof pedaco, arq) != NULL) {
+        chamadas++;
+        size_t n = strlen(pedaco);
+        int fim_da_linha = n > 0 && pedaco[n - 1] == '\n';
+        if (fim_da_linha) {
+            pedaco[n - 1] = '\0'; // tira o '\n' só para mostrar
+            linhas++;
+        }
+        printf("fgets %d: [%s]%s\n", chamadas, pedaco,
+               fim_da_linha ? " <- fim da linha" : "");
+    }
+    fclose(arq);
+    remove(caminho);
+
+    printf("%d chamadas do fgets, %d linhas\n", chamadas, linhas);
     return 0;
 }
 // Saída:
-// 1: Mercado 152.40
-// 2: Luz 98.75
-// 3: Internet 99.90
-// 3 linhas em /tmp/despesas.txt
-//
-// O arquivo continua lá: confira com  cat /tmp/despesas.txt
+// fgets 1: [Pagar luz] <- fim da linha
+// fgets 2: [Levar o car]
+// fgets 3: [ro na revis]
+// fgets 4: [ao de sabad]
+// fgets 5: [o] <- fim da linha
+// fgets 6: [Pix] <- fim da linha
+// 6 chamadas do fgets, 3 linhas
 ```
 
 ```bash
@@ -350,16 +362,30 @@ Saída esperada:
 
 **Exercício E398** · ★☆☆
 
-Preveja a saída antes de rodar. O programa abre o MESMO arquivo quatro
-vezes, alternando os modos "w" e "a", e grava um nome em cada vez. No fim,
-mostra o que sobrou no arquivo. Abra o E398.c para ler o código.
+O programa abre o MESMO arquivo quatro vezes, alternando os modos "w" e
+"a", e grava um nome em cada vez. A função grava já está pronta. Escreva a
+função mostra, que abre o arquivo para leitura, lê linha por linha com
+fgets e imprime todos os nomes na mesma linha, separados por espaço.
+Depois chame mostra logo após cada grava no main, para enxergar o que cada
+modo fez com o arquivo:
+
+
+```text
+Saída esperada:
+w Ana  -> Ana
+a Bia  -> Ana Bia
+w Caio -> Caio
+a Duda -> Caio Duda
+```
 
 **Dicas:**
 
-1. "w" cria o arquivo vazio, apagando o que já existia.
-2. "a" abre e escreve depois do último byte, sem apagar nada.
-3. Resposta esperada: duas linhas, "Caio" e "Duda". Ana e Bia sumiram
-   quando o terceiro fopen abriu com "w".
+1. "w" cria o arquivo vazio, apagando o que já existia; "a" escreve depois
+   do último byte, sem apagar nada.
+2. Para imprimir o nome sem o '\n' que o fgets traz, troque o '\n' por
+   '\0': linha[strcspn(linha, "\n")] = '\0'; (strcspn é de <string.h>).
+3. Resposta esperada: as quatro linhas acima. Ana e Bia somem quando o
+   terceiro fopen abre com "w".
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E398.c
@@ -447,8 +473,8 @@ Total: 120.00
 ```
 
 
-a) Por que o último Pix aparece duas vezes?
-b) Conserte o laço para mostrar três Pix e Total: 100.00.
+O último Pix aparece duas vezes. Conserte o laço e rode de novo: a saída
+tem que mostrar só os três Pix e Total: 100.00.
 
 **Dicas:**
 
@@ -630,7 +656,7 @@ chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
 > mudar. Para trocar dados entre máquinas, prefira texto (CSV, JSON).
 
 > [!TIP]
-> **Por dentro do C:** tire o `remove` do A135, rode e depois
+> **Por dentro do C:** salve o código acima como `estoque.c`, tire o `remove`, rode e depois
 > `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada linha mostra 16
 > bytes, então cada produto ocupa duas linhas.
 > Você vai ver `Arroz` seguido de zeros: o `fwrite` grava os 20 bytes do vetor
@@ -650,59 +676,65 @@ chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
 
 Os arquivos ficam em [`0068-arquivos-binarios/`](0068-arquivos-binarios/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A135 · Pular direto para o registro**
+**Exemplo A135 · Ler em lotes: o retorno do fread**
 
 ```c
 #include <stdio.h>
 
-typedef struct {
-    char nome[20];
-    int qtd;
-    double preco;
-} Produto;
-
+// O fread devolve quantos itens leu de verdade. Pedindo 3 de cada vez num
+// arquivo com 7, vêm 3, 3, 1 e depois 0. O último lote vem incompleto, e é o
+// retorno (não o tamanho do vetor) que diz quantos valem.
 int main(void) {
-    const char *caminho = "/tmp/estoque.bin";
-    Produto estoque[3] = {
-        {"Arroz", 12, 25.90},
-        {"Feijão", 7, 8.75},
-        {"Café", 4, 18.50},
-    };
+    const char *caminho = "/tmp/passos.bin";
+    int passos[7] = {8200, 10450, 6300, 12010, 9800, 4100, 11500}; // da semana
 
-    // Gravar: os 3 registros de uma vez, byte a byte como estão na memória
     FILE *arq = fopen(caminho, "wb");
     if (arq == NULL) {
         perror(caminho);
         return 1;
     }
-    size_t gravados = fwrite(estoque, sizeof(Produto), 3, arq);
+    fwrite(passos, sizeof(int), 7, arq);
     fclose(arq);
-    printf("Cada registro: %zu bytes\n", sizeof(Produto));
-    printf("Gravados: %zu registros\n", gravados);
 
-    // Ler só o registro 2, sem passar pelos outros
     arq = fopen(caminho, "rb");
     if (arq == NULL) {
         perror(caminho);
         return 1;
     }
-    fseek(arq, 0, SEEK_END);              // vai para o fim...
-    printf("Arquivo: %ld bytes\n", ftell(arq)); // ...e pergunta a posição
-
-    Produto p;
-    fseek(arq, 2 * sizeof(Produto), SEEK_SET); // byte 64: começo do registro 2
-    if (fread(&p, sizeof(Produto), 1, arq) == 1) {
-        printf("Registro 2: %s, %d un., R$ %.2f\n", p.nome, p.qtd, p.preco);
+    int lote[3];
+    size_t lidos;
+    long total = 0;
+    int dia = 1;
+    while ((lidos = fread(lote, sizeof(int), 3, arq)) > 0) {
+        printf("Pedi 3, vieram %zu:", lidos);
+        for (size_t i = 0; i < lidos; i++) { // só os que vieram
+            printf(" dia %d=%d", dia, lote[i]);
+            total += lote[i];
+            dia++;
+        }
+        printf("\n");
     }
+    printf("Pedi 3, vieram 0: fim (feof = %d)\n", feof(arq) != 0);
+
+    // fseek para depois do fim não dá erro, mas o fread não acha nada
+    fseek(arq, 100 * (long) sizeof(int), SEEK_SET);
+    long posicao = ftell(arq);
+    int x = -1;
+    size_t r = fread(&x, sizeof x, 1, arq);
+    printf("No byte %ld: fread devolveu %zu, x continua %d\n", posicao, r, x);
     fclose(arq);
     remove(caminho);
+
+    printf("Total da semana: %ld passos\n", total);
     return 0;
 }
 // Saída:
-// Cada registro: 32 bytes
-// Gravados: 3 registros
-// Arquivo: 96 bytes
-// Registro 2: Café, 4 un., R$ 18.50
+// Pedi 3, vieram 3: dia 1=8200 dia 2=10450 dia 3=6300
+// Pedi 3, vieram 3: dia 4=12010 dia 5=9800 dia 6=4100
+// Pedi 3, vieram 1: dia 7=11500
+// Pedi 3, vieram 0: fim (feof = 1)
+// No byte 400: fread devolveu 0, x continua -1
+// Total da semana: 62360 passos
 ```
 
 ```bash
@@ -804,18 +836,33 @@ Média: 31.6 graus
 
 **Exercício E404** · ★☆☆
 
-Preveja a saída antes de rodar. O arquivo tem 4 ints, gravados em
-binário: 10, 20, 30 e 40. Cada int ocupa 4 bytes. Siga as chamadas de
-fseek, fread e ftell no E404.c e escreva o que cada printf mostra.
+O arquivo /tmp/quatro.bin já está gravado com 4 ints em binário: 10, 20,
+30 e 40 (cada int ocupa 4 bytes). Complete o programa: antes de cada
+fread, escreva UM fseek que leve o arquivo até o int certo, para a saída
+ficar exatamente assim:
+
+
+```text
+Saída esperada:
+a) 30, agora na posição 12
+b) 20, agora na posição 8
+c) 40, agora na posição 16
+d) 10, agora na posição 4
+```
+
+
+Use uma origem diferente em cada um: SEEK_SET em a), SEEK_CUR em b),
+SEEK_END em c) e d) com rewind(arq) no lugar do fseek.
 
 **Dicas:**
 
 1. SEEK_SET conta do começo, SEEK_CUR da posição atual e SEEK_END do fim.
    O deslocamento pode ser negativo.
-2. Cada fread de um int anda 4 bytes para a frente.
-3. Resposta esperada: a) 30 (byte 8); b) posição 12; c) 20 (voltou 8
-   bytes: de 12 para 4); d) 40 (último int: 4 bytes antes do fim);
-   e) posição 16.
+2. Cada fread de um int anda 4 bytes para a frente: depois de a) você está
+   no byte 12. Para chegar ao 20 (byte 4), volte 8.
+3. Resposta esperada: a) fseek(arq, 8, SEEK_SET); b) fseek(arq, -8,
+   SEEK_CUR); c) fseek(arq, -4, SEEK_END); d) rewind(arq). A saída fica
+   igual à de cima.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E404.c
@@ -909,7 +956,7 @@ em vez de "Leituras: 112 98 105 120 101". Tem DOIS problemas:
 a) um que faz o arquivo ficar com menos bytes do que devia;
 b) um que esconde o problema em vez de avisar.
 
-Ache e conserte os dois.
+Conserte os dois e rode de novo: a saída tem que mostrar as 5 leituras.
 
 **Dicas:**
 
@@ -1022,8 +1069,8 @@ quantidade, converte `argv[1]` e `argv[2]` em números e divide:
 
 <p align="center"><img src="0069-argumentos/ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
 
-Para passar argumentos com o `rodar`, escreva depois do nome do arquivo:
-`~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4`.
+Salve o código como `racha.c`. Para passar argumentos com o `rodar`, escreva
+depois do nome do arquivo: `~/LPEDC/rodar racha.c 187.40 4`.
 
 ```c
 #include <stdio.h>
@@ -1052,12 +1099,12 @@ int main(int argc, char *argv[]) {
     printf("Cada um: R$ %.2f\n", total / pessoas);
     return 0;
 }
-// $ rodar A137.c 187.40 4
+// $ rodar racha.c 187.40 4
 // Conta: R$ 187.40
 // Pessoas: 4
 // Cada um: R$ 46.85
 //
-// $ rodar A137.c 187.40 quatro
+// $ rodar racha.c 187.40 quatro
 // Número de pessoas inválido: quatro
 ```
 
@@ -1094,46 +1141,87 @@ verdade? Só no caminho verde o programa trabalha:
 
 Os arquivos ficam em [`0069-argumentos/`](0069-argumentos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A137 · Rachar a conta pela linha de comando**
+**Exemplo A137 · Opções com hífen**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4
-int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        fprintf(stderr, "Uso: %s <total> <pessoas>\n", argv[0]);
-        return 1; // diferente de 0: deu errado
-    }
+// Uma tabuada com opções, no estilo dos programas de terminal:
+//   tabuada [-a ate] [-r] <numero>
+// -a muda até onde vai (padrão 10) e precisa de um valor logo depois;
+// -r mostra de trás para frente. As opções podem vir em qualquer ordem.
+//
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c -r 7 -a 4
 
+// converte texto em inteiro positivo; devolve 0 se não for
+long positivo(const char *texto) {
     char *fim;
-    double total = strtod(argv[1], &fim); // texto -> double
-    if (*fim != '\0' || total <= 0) {
-        fprintf(stderr, "Total inválido: %s\n", argv[1]);
-        return 1;
+    long n = strtol(texto, &fim, 10);
+    if (fim == texto || *fim != '\0' || n <= 0) {
+        return 0;
     }
-    long pessoas = strtol(argv[2], &fim, 10); // texto -> inteiro, base 10
-    if (*fim != '\0' || pessoas <= 0) {
-        fprintf(stderr, "Número de pessoas inválido: %s\n", argv[2]);
+    return n;
+}
+
+int main(int argc, char *argv[]) {
+    long numero = 0;
+    long ate = 10;
+    bool inverso = false;
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-r") == 0) {
+            inverso = true;
+        } else if (strcmp(argv[i], "-a") == 0) {
+            if (i + 1 >= argc) { // -a era o último: falta o valor
+                fprintf(stderr, "A opção -a precisa de um valor\n");
+                return 1;
+            }
+            i++; // o valor é consumido aqui; o laço não olha para ele de novo
+            ate = positivo(argv[i]);
+            if (ate == 0) {
+                fprintf(stderr, "Valor inválido para -a: %s\n", argv[i]);
+                return 1;
+            }
+        } else if (argv[i][0] == '-') {
+            fprintf(stderr, "Opção desconhecida: %s\n", argv[i]);
+            return 1;
+        } else {
+            numero = positivo(argv[i]);
+            if (numero == 0) {
+                fprintf(stderr, "Número inválido: %s\n", argv[i]);
+                return 1;
+            }
+        }
+    }
+    if (numero == 0) {
+        fprintf(stderr, "Uso: %s [-a ate] [-r] <numero>\n", argv[0]);
         return 1;
     }
 
-    printf("Conta: R$ %.2f\n", total);
-    printf("Pessoas: %ld\n", pessoas);
-    printf("Cada um: R$ %.2f\n", total / pessoas);
+    for (long k = 1; k <= ate; k++) {
+        long m = inverso ? ate - k + 1 : k;
+        printf("%ld x %ld = %ld\n", numero, m, numero * m);
+    }
     return 0;
 }
-// $ rodar A137.c 187.40 4
-// Conta: R$ 187.40
-// Pessoas: 4
-// Cada um: R$ 46.85
+// $ rodar A137.c -r 7 -a 4
+// 7 x 4 = 28
+// 7 x 3 = 21
+// 7 x 2 = 14
+// 7 x 1 = 7
 //
-// $ rodar A137.c 187.40 quatro
-// Número de pessoas inválido: quatro
+// $ rodar A137.c 3 -a 2
+// 3 x 1 = 3
+// 3 x 2 = 6
 //
-// $ rodar A137.c
-// Uso: /tmp/lpedc/A137 <total> <pessoas>
+// $ rodar A137.c 7 -a
+// A opção -a precisa de um valor
+//
+// $ rodar A137.c 7 -x
+// Opção desconhecida: -x
 ```
 
 ```bash
@@ -1202,23 +1290,28 @@ bom dia Brasil
 
 **Exercício E410** · ★☆☆
 
-Leia o código do E410.c e preveja a saída antes de rodar, para este comando:
+Escreva um programa que mostre, para cada argumento recebido, o texto, o
+tamanho, o primeiro caractere e o que o atoi faz com ele. No começo,
+mostre o argc; no fim, a soma de todos os atoi. Teste com:
 
 
 ```text
 $ rodar E410.c 7 + 3a
+argc = 4
+argv[1] = "7": 1 caractere(s), começa com '7', atoi = 7
+argv[2] = "+": 1 caractere(s), começa com '+', atoi = 0
+argv[3] = "3a": 2 caractere(s), começa com '3', atoi = 3
+Soma dos atoi: 10
 ```
 
 **Dicas:**
 
-1. Tudo no argv é string. argv[1][0] é o primeiro CARACTERE do primeiro
-   argumento.
-2. '7' - '0' vale 7: é o truque do assunto 0040 para transformar um dígito
-   em número.
-3. atoi lê enquanto encontra dígitos e para no primeiro que não é: não
-   avisa nada.
-4. Resposta esperada: "argc = 4"; "argv[2] = +"; "tamanho de argv[3] = 2";
-   "7 + 3 = 10"; "atoi("3a") = 3"; "atoi("+") = 0".
+1. Tudo no argv é string. argv[i][0] é o primeiro CARACTERE do argumento
+   i, e strlen(argv[i]) dá o tamanho.
+2. atoi lê enquanto encontra dígitos e para no primeiro que não é. Sem
+   nenhum dígito, devolve 0. Ele não avisa nada em nenhum dos casos.
+3. Resposta esperada: a saída acima. Repare que "+" e "3a" passaram sem
+   nenhum aviso: é por isso que entrada de usuário pede strtol.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0069-argumentos/E410.c
@@ -1273,9 +1366,9 @@ Mas, rodando assim, ele não mostra nada. E rodando sem argumentos
 a) um índice errado no argv;
 b) uma conferência que falta antes de usar o argv.
 
-Explique cada um e conserte. Sem argumentos (ou com um número de vezes que
-não é inteiro positivo), o programa deve mostrar uma mensagem de uso em
-stderr e devolver 1.
+Conserte os dois e rode de novo com "Ana 3" e sem argumentos. Sem
+argumentos (ou com um número de vezes que não é inteiro positivo), o
+programa deve mostrar uma mensagem de uso em stderr e devolver 1.
 
 **Dicas:**
 
@@ -1411,7 +1504,7 @@ em texto:
 
 O programa é longo, mas cada função cabe na cabeça:
 `novo`, `lista` e `exporta` são os exemplos dos três assuntos anteriores, e o
-`main` é só o despachante.
+`main` é só o despachante. Para rodar, salve como `gastos.c`.
 
 ```c
 #include <stdio.h>
@@ -1525,20 +1618,20 @@ int main(int argc, char *argv[]) {
     uso(argv[0]);
     return 1;
 }
-// $ rodar A139.c limpa
+// $ rodar gastos.c limpa
 // Caderneta apagada.
-// $ rodar A139.c novo mercado 152.40
+// $ rodar gastos.c novo mercado 152.40
 // Gravado: mercado R$ 152.40 (registro 0)
-// $ rodar A139.c novo luz 98.75
+// $ rodar gastos.c novo luz 98.75
 // Gravado: luz R$ 98.75 (registro 1)
-// $ rodar A139.c novo farmacia 45.30
+// $ rodar gastos.c novo farmacia 45.30
 // Gravado: farmacia R$ 45.30 (registro 2)
-// $ rodar A139.c lista
+// $ rodar gastos.c lista
 // 0  mercado      R$   152.40
 // 1  luz          R$    98.75
 // 2  farmacia     R$    45.30
 // Total: R$ 296.45 em 3 gastos
-// $ rodar A139.c exporta /tmp/gastos.csv
+// $ rodar gastos.c exporta /tmp/gastos.csv
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
@@ -1561,7 +1654,7 @@ de menos, cai no mesmo lugar: a mensagem de uso:
 > sistema o modo `O_APPEND`, e o próprio núcleo posiciona no fim a cada
 > `write`. Por isso dois programas anotando gastos ao mesmo tempo não
 > sobrescrevem um ao outro (desde que cada registro saia num `write` só). Já o
-> `return` do `main` vira o código de saída: rode `rodar A139.c novo x abc;
+> `return` do `main` vira o código de saída: rode `rodar gastos.c novo x abc;
 > echo $?` e veja o 1. É assim que scripts encadeiam comandos com `&&`.
 
 > [!NOTE]
@@ -1573,141 +1666,124 @@ de menos, cai no mesmo lugar: a mensagem de uso:
 
 Os arquivos ficam em [`0070-juntando-tudo/`](0070-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A139 · Caderneta de gastos no terminal**
+**Exemplo A139 · Apagar um registro do meio**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-// Uma caderneta de gastos que sobrevive entre execuções: cada "novo" grava um
-// registro binário no fim de /tmp/gastos.dat; "lista" lê tudo de volta;
-// "exporta" gera um CSV de texto; "limpa" apaga o arquivo.
+// Arquivo binário não tem "apagar a linha 2". O jeito clássico: copiar todos
+// os registros, menos o que sai, para um arquivo temporário e depois trocar
+// um pelo outro com rename. O número do registro vem pela linha de comando.
 //
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A139.c lista
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A139.c 1
 
-#define ARQUIVO "/tmp/gastos.dat"
+#define ARQUIVO "/tmp/caderneta.dat"
+#define TEMPORARIO "/tmp/caderneta.tmp"
 
 typedef struct {
     char categoria[20];
     double valor;
 } Gasto;
 
-void uso(const char *programa) {
-    fprintf(stderr, "Uso: %s novo <categoria> <valor>\n", programa);
-    fprintf(stderr, "     %s lista | exporta <arquivo.csv> | limpa\n", programa);
-}
-
-int novo(const char *categoria, const char *texto_valor) {
-    Gasto g;
-    char *fim;
-    g.valor = strtod(texto_valor, &fim);
-    if (*fim != '\0' || g.valor <= 0) {
-        fprintf(stderr, "Valor inválido: %s\n", texto_valor);
-        return 1;
-    }
-    memset(g.categoria, 0, sizeof g.categoria);          // sem lixo no arquivo
-    strncpy(g.categoria, categoria, sizeof g.categoria - 1);
-
-    FILE *arq = fopen(ARQUIVO, "ab"); // binário, sempre no fim
-    if (arq == NULL) {
-        perror(ARQUIVO);
-        return 1;
-    }
-    if (fwrite(&g, sizeof g, 1, arq) != 1) {
-        perror(ARQUIVO);
-        fclose(arq);
-        return 1;
-    }
-    long registro = ftell(arq) / (long) sizeof(Gasto) - 1;
-    fclose(arq);
-    printf("Gravado: %s R$ %.2f (registro %ld)\n", g.categoria, g.valor, registro);
-    return 0;
-}
-
-int lista(void) {
+void listar(const char *titulo) {
     FILE *arq = fopen(ARQUIVO, "rb");
     if (arq == NULL) {
-        printf("Nenhum gasto ainda.\n");
-        return 0;
+        perror(ARQUIVO);
+        return;
     }
+    printf("%s\n", titulo);
     Gasto g;
-    int n = 0;
-    double total = 0.0;
+    int i = 0;
     while (fread(&g, sizeof g, 1, arq) == 1) {
-        printf("%d  %-12s R$ %8.2f\n", n, g.categoria, g.valor);
-        total += g.valor;
-        n++;
+        printf("  %d  %-10s R$ %7.2f\n", i, g.categoria, g.valor);
+        i++;
     }
     fclose(arq);
-    printf("Total: R$ %.2f em %d gastos\n", total, n);
-    return 0;
 }
 
-int exporta(const char *destino) {
+// copia tudo menos o registro "alvo"; devolve quantos copiou (-1 = erro)
+int apagar(long alvo) {
     FILE *ent = fopen(ARQUIVO, "rb");
     if (ent == NULL) {
         perror(ARQUIVO);
-        return 1;
+        return -1;
     }
-    FILE *sai = fopen(destino, "w"); // texto, para abrir na planilha
+    FILE *sai = fopen(TEMPORARIO, "wb");
     if (sai == NULL) {
-        perror(destino);
+        perror(TEMPORARIO);
         fclose(ent);
-        return 1;
+        return -1;
     }
-    fprintf(sai, "categoria;valor\n");
     Gasto g;
-    int n = 0;
+    long i = 0;
+    int copiados = 0;
     while (fread(&g, sizeof g, 1, ent) == 1) {
-        fprintf(sai, "%s;%.2f\n", g.categoria, g.valor);
-        n++;
+        if (i != alvo) {
+            fwrite(&g, sizeof g, 1, sai);
+            copiados++;
+        }
+        i++;
     }
     fclose(ent);
-    fclose(sai);
-    printf("%d gastos exportados para %s\n", n, destino);
-    return 0;
+    fclose(sai);                           // tudo no disco antes de trocar
+    if (rename(TEMPORARIO, ARQUIVO) != 0) { // o temporário vira a caderneta
+        perror("rename");
+        return -1;
+    }
+    return copiados;
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        uso(argv[0]);
+    if (argc != 2) {
+        fprintf(stderr, "Uso: %s <registro>\n", argv[0]);
         return 1;
     }
-    const char *comando = argv[1];
+    // uma caderneta de exemplo, recriada a cada execução
+    Gasto gastos[4] = {
+        {"mercado", 152.40}, {"luz", 98.75}, {"farmacia", 45.30}, {"gas", 120.00},
+    };
+    FILE *arq = fopen(ARQUIVO, "wb");
+    if (arq == NULL) {
+        perror(ARQUIVO);
+        return 1;
+    }
+    fwrite(gastos, sizeof(Gasto), 4, arq);
+    fclose(arq);
 
-    if (strcmp(comando, "novo") == 0 && argc == 4) {
-        return novo(argv[2], argv[3]);
-    }
-    if (strcmp(comando, "lista") == 0 && argc == 2) {
-        return lista();
-    }
-    if (strcmp(comando, "exporta") == 0 && argc == 3) {
-        return exporta(argv[2]);
-    }
-    if (strcmp(comando, "limpa") == 0 && argc == 2) {
+    char *fim;
+    long alvo = strtol(argv[1], &fim, 10);
+    if (fim == argv[1] || *fim != '\0' || alvo < 0 || alvo >= 4) {
+        fprintf(stderr, "Registro inválido: %s (use 0 a 3)\n", argv[1]);
         remove(ARQUIVO);
-        printf("Caderneta apagada.\n");
-        return 0;
+        return 1;
     }
-    uso(argv[0]);
-    return 1;
+
+    listar("Antes:");
+    int restantes = apagar(alvo);
+    if (restantes < 0) {
+        remove(ARQUIVO);
+        return 1;
+    }
+    listar("Depois:");
+    printf("Registro %ld apagado, sobraram %d\n", alvo, restantes);
+    remove(ARQUIVO);
+    return 0;
 }
-// $ rodar A139.c limpa
-// Caderneta apagada.
-// $ rodar A139.c novo mercado 152.40
-// Gravado: mercado R$ 152.40 (registro 0)
-// $ rodar A139.c novo luz 98.75
-// Gravado: luz R$ 98.75 (registro 1)
-// $ rodar A139.c novo farmacia 45.30
-// Gravado: farmacia R$ 45.30 (registro 2)
-// $ rodar A139.c lista
-// 0  mercado      R$   152.40
-// 1  luz          R$    98.75
-// 2  farmacia     R$    45.30
-// Total: R$ 296.45 em 3 gastos
-// $ rodar A139.c exporta /tmp/gastos.csv
-// 3 gastos exportados para /tmp/gastos.csv
+// $ rodar A139.c 1
+// Antes:
+//   0  mercado    R$  152.40
+//   1  luz        R$   98.75
+//   2  farmacia   R$   45.30
+//   3  gas        R$  120.00
+// Depois:
+//   0  mercado    R$  152.40
+//   1  farmacia   R$   45.30
+//   2  gas        R$  120.00
+// Registro 1 apagado, sobraram 3
+//
+// $ rodar A139.c 9
+// Registro inválido: 9 (use 0 a 3)
 ```
 
 ```bash
@@ -1857,23 +1933,39 @@ $ rodar E415.c /tmp/bolao.txt Caio 0x0
 
 **Exercício E416** · ★☆☆
 
-Preveja a saída antes de rodar. O programa grava os mesmos quatro números
-num arquivo texto (um por linha) e num binário, e mostra o tamanho de cada
-um. Leia o código do E416.c, preveja e depois rode com:
+Texto ou binário: quem ocupa mais? O programa recebe um nome pela linha de
+comando e monta dois caminhos, /tmp/<nome>.txt e /tmp/<nome>.bin. Complete
+as duas partes marcadas com TODO:
+
+a) a função tamanho, que devolve o tamanho do arquivo em bytes (ou -1 se
+
+```text
+ não abrir);
+```
+
+b) a gravação dos quatro números de v: no texto, um por linha com
+
+```text
+ fprintf; no binário, todos de uma vez com UM fwrite.
+```
+
 
 
 ```text
 $ rodar E416.c medidas
+2 argumentos
+/tmp/medidas.txt: 20 bytes
+/tmp/medidas.bin: 16 bytes
 ```
 
 **Dicas:**
 
-1. No texto, cada número vira um caractere por dígito, mais o '\n'.
-2. No binário, cada int ocupa sizeof(int) bytes, seja 7 ou 4000000.
-3. argc conta o nome do programa.
-4. Resposta esperada: "2 argumentos"; "/tmp/medidas.txt: 20 bytes";
-   "/tmp/medidas.bin: 16 bytes" (texto: 2 + 4 + 6 + 8 = 20; binário: 4 ints
-   de 4 bytes = 16).
+1. Tamanho: abra com "rb", fseek(arq, 0, SEEK_END), guarde o ftell e
+   feche o arquivo antes de devolver.
+2. No texto, cada número vira um caractere por dígito, mais o '\n'. No
+   binário, cada int ocupa sizeof(int) bytes, seja 7 ou 4000000.
+3. Resposta esperada: a saída acima (texto: 2 + 4 + 6 + 8 = 20; binário:
+   4 ints de 4 bytes = 16).
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E416.c
@@ -1971,7 +2063,7 @@ pagar a luz
 Mas o programa mostra "0 anotações:" toda vez, e depois de rodar as duas
 vezes o arquivo só tem "pagar a luz" (confira com cat /tmp/diario.txt).
 E "rodar E419.c anota", sem o texto, tem comportamento indefinido. Ache os
-TRÊS erros e conserte.
+TRÊS erros, conserte e rode as duas execuções de novo.
 
 **Dicas:**
 

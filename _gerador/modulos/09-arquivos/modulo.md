@@ -52,7 +52,7 @@ Para passar argumentos a um programa, escreva-os depois do caminho, no
 `rodar`: ele repassa tudo para o programa.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4
+~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c -r 7 -a 4
 ```
 
 Duas ferramentas ajudam a enxergar o que os programas gravam: `od -A d -t x1

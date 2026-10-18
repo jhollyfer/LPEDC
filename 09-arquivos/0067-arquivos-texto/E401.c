@@ -11,8 +11,8 @@
 //   Pix: 20.00
 //   Total: 120.00
 //
-// a) Por que o último Pix aparece duas vezes?
-// b) Conserte o laço para mostrar três Pix e Total: 100.00.
+// O último Pix aparece duas vezes. Conserte o laço e rode de novo: a saída
+// tem que mostrar só os três Pix e Total: 100.00.
 //
 // Dicas:
 // 1. O feof só fica verdadeiro DEPOIS que uma leitura tenta passar do fim e
