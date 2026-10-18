@@ -1,45 +1,47 @@
-// A077 · As vendas das três lojas
+// A077 · O primeiro horário livre da agenda
 
 #include <stdio.h>
+#include <stdbool.h>
 
-#define LOJAS 3
-#define SEMANAS 4
+#define DIAS 5
+#define HORARIOS 4
 
 int main(void) {
-    // 3 linhas (lojas) x 4 colunas (semanas): caixas de açaí vendidas
-    int vendas[LOJAS][SEMANAS] = {
-        {12, 15, 9, 20},
-        {8, 11, 14, 10},
-        {17, 13, 16, 19},
+    // linhas: segunda a sexta; colunas: 8h, 10h, 14h, 16h (1 = marcado)
+    int agenda[DIAS][HORARIOS] = {
+        {1, 1, 1, 1},
+        {1, 1, 1, 1},
+        {1, 1, 1, 1},
+        {1, 0, 1, 0},
+        {0, 0, 1, 1},
     };
+    int horas[HORARIOS] = {8, 10, 14, 16};
 
-    printf("        S1  S2  S3  S4  Total\n");
-    for (int l = 0; l < LOJAS; l++) {         // uma volta por linha
-        int total_loja = 0;
-        printf("Loja %d", l + 1);
-        for (int s = 0; s < SEMANAS; s++) {   // uma volta por coluna
-            printf("%4d", vendas[l][s]);
-            total_loja += vendas[l][s];
+    // busca em duas dimensões: o laço de fora para assim que achar
+    bool achou = false;
+    int dia = 0, hora = 0;
+    for (int l = 0; l < DIAS && !achou; l++) {
+        for (int c = 0; c < HORARIOS && !achou; c++) {
+            if (agenda[l][c] == 0) {
+                achou = true;
+                dia = l;
+                hora = c;
+            }
         }
-        printf("%7d\n", total_loja);
     }
 
-    int geral = 0;
-    printf("Semana");
-    for (int s = 0; s < SEMANAS; s++) {       // agora a coluna fica por fora
-        int total_semana = 0;
-        for (int l = 0; l < LOJAS; l++) {
-            total_semana += vendas[l][s];
-        }
-        printf("%4d", total_semana);
-        geral += total_semana;
+    if (achou) {
+        printf("Primeiro livre: dia %d às %dh\n", dia + 1, horas[hora]);
+        // na memória, as linhas vêm uma atrás da outra:
+        // a casa [l][c] é a de número l * HORARIOS + c, contando do 0
+        printf("É a casa %d das %d da matriz\n", dia * HORARIOS + hora, DIAS * HORARIOS);
+    } else {
+        printf("Agenda lotada.\n");
     }
-    printf("%7d\n", geral);
+    printf("A matriz ocupa %zu bytes: %d int seguidos\n", sizeof(agenda), DIAS * HORARIOS);
     return 0;
 }
 // Saída:
-//         S1  S2  S3  S4  Total
-// Loja 1  12  15   9  20     56
-// Loja 2   8  11  14  10     43
-// Loja 3  17  13  16  19     65
-// Semana  37  39  39  49    164
+// Primeiro livre: dia 4 às 10h
+// É a casa 13 das 20 da matriz
+// A matriz ocupa 80 bytes: 20 int seguidos

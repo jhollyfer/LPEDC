@@ -4,7 +4,8 @@
 // O programa abaixo monta o endereço "Rio de Janeiro - RJ" e confere a
 // cidade. Ele tem TRÊS erros de propósito. Dois o compilador avisa (leia os
 // warnings!). O terceiro não gera aviso nenhum: só o sanitizer pega, e só
-// depois que você conserta os outros dois. Ache, explique e conserte.
+// depois que você conserta os outros dois. Conserte os três no código
+// abaixo e rode de novo até a saída bater com a esperada.
 //
 //   Saída esperada depois do conserto:
 //   Rio de Janeiro - RJ

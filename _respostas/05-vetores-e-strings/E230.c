@@ -1,21 +1,26 @@
 // 0039 · Matrizes
 // Exercício E230 · ★☆☆
-//
-// Resposta:
-//   1 0 5    a = {{1, 0, 0}, {4, 5, 0}}
-//   3        b tem 3 linhas (3 chaves internas)
-//   3 0      b = {{1, 2}, {3, 4}, {5, 0}}
-//   24 12    a tem 6 int (24 bytes); uma linha tem 3 int (12 bytes)
 
 #include <stdio.h>
 
 int main(void) {
     int a[2][3] = {{1}, {4, 5}};
     int b[][2] = {{1, 2}, {3, 4}, {5}};
+    int linhas_b = (int) (sizeof(b) / sizeof(b[0]));
 
-    printf("%d %d %d\n", a[0][0], a[0][2], a[1][1]);
-    printf("%zu\n", sizeof(b) / sizeof(b[0]));
-    printf("%d %d\n", b[1][0], b[2][1]);
-    printf("%zu %zu\n", sizeof(a), sizeof(a[1]));
+    printf("a (2x3):\n");
+    for (int l = 0; l < 2; l++) {
+        for (int c = 0; c < 3; c++) {
+            printf(c == 0 ? "%d" : " %d", a[l][c]);
+        }
+        printf("\n");
+    }
+
+    printf("b (%d linhas):\n", linhas_b);
+    for (int l = 0; l < linhas_b; l++) {
+        printf("%d %d\n", b[l][0], b[l][1]);
+    }
+
+    printf("a: %zu bytes, uma linha: %zu bytes\n", sizeof(a), sizeof(a[0]));
     return 0;
 }

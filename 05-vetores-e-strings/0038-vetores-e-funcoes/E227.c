@@ -6,8 +6,9 @@
 // tem UM erro de propósito, e o gcc até avisa: rode com o rodar e leia o
 // aviso (warning) com calma.
 //
-//   1. Que valor ele mostra no seu PC, e por quê?
-//   2. Conserte sem mudar o main mais do que o necessário.
+//   1. Rode e veja o total errado que ele mostra.
+//   2. Conserte o código, sem mudar o main mais do que o necessário, e rode
+//      de novo até a saída bater com a esperada.
 //
 //   Saída esperada depois do conserto:
 //   Total arrecadado: R$ 300

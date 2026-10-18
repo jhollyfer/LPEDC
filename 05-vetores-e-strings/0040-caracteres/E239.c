@@ -6,19 +6,27 @@
 // código compila sem aviso e roda sem erro do sanitizer: o erro é de lógica,
 // de propósito.
 //
-//   1. Sem rodar: que número ele mostra?
-//   2. Por quê? Quais caracteres foram contados como letra sem ser?
-//   3. Conserte de dois jeitos: com isalpha e sem o ctype.h.
+//   1. Dentro do if, acrescente um printf que mostre cada caractere contado e
+//      o código dele ("contou: _ (95)"). Rode e veja quem entrou sem ser
+//      letra.
+//   2. Conserte o teste com isalpha e rode.
+//   3. Troque por uma versão sem o ctype.h (só comparações com a tabela
+//      ASCII), rode de novo e confira que dá o mesmo resultado.
 //
-//   Saída esperada depois do conserto:
+//   Saída esperada depois do conserto (com o printf do passo 1):
+//   contou: a (97)
+//   contou: B (66)
+//   contou: z (122)
+//   contou: Q (81)
 //   Letras na senha: 4
 //
 // Dicas:
 // 1. Olhe a tabela ASCII entre o 'Z' (90) e o 'a' (97).
 // 2. Quais caracteres da senha estão nesse buraco?
-// 3. Resposta esperada: mostra 7. O teste c >= 'A' && c <= 'z' aceita '_'
-//    (95), '[' (91) e '^' (94), que ficam entre 'Z' e 'a'. Conserto:
-//    isalpha(senha[i]) ou (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z').
+// 3. Resposta esperada: antes do conserto, mostra 7. O teste
+//    c >= 'A' && c <= 'z' aceita '_' (95), '[' (91) e '^' (94), que ficam
+//    entre 'Z' e 'a'. Conserto: isalpha(c) ou
+//    (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'), e a saída acima.
 //
 // Escreva sua resposta abaixo (conserte o código):
 

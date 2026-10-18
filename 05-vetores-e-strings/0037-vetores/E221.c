@@ -4,7 +4,8 @@
 // Este programa deveria mostrar a máxima e a mínima de uma madrugada fria em
 // São Joaquim (SC), medidas em 6 horários. Ele tem DOIS erros de propósito.
 // Rode com o rodar: o AddressSanitizer vai acusar um deles. O outro não dá
-// erro nenhum, só resultado errado. Ache os dois, explique e conserte.
+// erro nenhum, só resultado errado. Conserte os dois no código abaixo e rode
+// de novo até a saída bater com a esperada.
 //
 //   Saída esperada depois do conserto:
 //   Máxima: -1 graus
