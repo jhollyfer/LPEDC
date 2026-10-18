@@ -1,11 +1,5 @@
 // 0105 · A ideia e a função hash
 // Exercício E629 · ★★★
-//
-// Resposta: a) -2. Num char com sinal, os bytes de "ç" (0xC3 0xA7) e de "ã"
-// (0xC3 0xA3) valem -61, -89, -61 e -93. A soma de "maçã" dá
-// 109 + 97 - 61 - 89 - 61 - 93 = -98, e -98 % 8 = -2: contagem[-2] está
-// fora do vetor. b) acumular num unsigned e converter cada byte para
-// unsigned char (0 a 255).
 
 #include <stdio.h>
 
@@ -24,6 +18,7 @@ int main(void) {
     const char *frutas[] = {"banana", "uva", "maçã"};
 
     for (int i = 0; i < 3; i++) {
+        printf("%s -> %d\n", frutas[i], indice(frutas[i]));
         contagem[indice(frutas[i])]++;
     }
     for (int b = 0; b < M; b++) {

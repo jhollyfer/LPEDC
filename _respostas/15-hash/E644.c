@@ -1,14 +1,5 @@
 // 0108 · Juntando tudo: o contador de palavras
 // Exercício E644 · ★☆☆
-//
-// Resposta:
-// [0] las:1 sal:2 ovo:1
-// [1]
-// [2] mel:1
-// [3]
-// ovo, sal e las somam 340, 320 e 320, todos com resto 0; mel soma 318,
-// resto 2. O segundo "sal" acha o nó que já existe e só soma 1. O "las"
-// entrou por último no balde 0, por isso aparece na frente.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,7 +21,7 @@ unsigned h(const char *s) {
     return soma % M;
 }
 
-void soma(No *baldes[], const char *w) {
+void conta(No *baldes[], const char *w) {
     unsigned b = h(w);
     for (No *p = baldes[b]; p != NULL; p = p->prox) {
         if (strcmp(p->palavra, w) == 0) {
@@ -52,7 +43,7 @@ int main(void) {
     No *baldes[M] = {NULL};
     const char *texto[] = {"ovo", "sal", "mel", "las", "sal"};
     for (int i = 0; i < 5; i++) {
-        soma(baldes, texto[i]);
+        conta(baldes, texto[i]);
     }
     for (int b = 0; b < M; b++) {
         printf("[%d]", b);

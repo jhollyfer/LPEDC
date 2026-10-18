@@ -16,12 +16,18 @@ void distribui(const int codigos[], int n, int m) {
         }
         printf("\n");
     }
+    int vazios = 0;
+    for (int b = 0; b < m; b++) {
+        if (conta[b] == 0) {
+            vazios++;
+        }
+    }
+    printf("vazios: %d\n", vazios);
 }
 
 int main(void) {
     int codigos[] = {120, 350, 470, 590, 610, 230, 740, 860, 980, 440};
     distribui(codigos, 10, 10);
     distribui(codigos, 10, 11);
-    // com m = 10 o resto é o último dígito, sempre 0: tudo no balde 0
     return 0;
 }

@@ -1,11 +1,5 @@
 // 0108 · Juntando tudo: o contador de palavras
 // Exercício E647 · ★★★
-//
-// Resposta: a) todos os nós guardam o mesmo endereço, o do vetor "atual",
-// que no fim contém "lua"; cada nó mostra o que está lá agora. b) "pera"
-// cai no mesmo balde de "sol" (4); na busca, o strcmp compara "atual" com
-// ele mesmo (o nó do sol aponta para "atual") e dá igual: o sol ganha 1 e a
-// pera nunca vira nó. c) o nó precisa da sua cópia da palavra.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,14 +61,17 @@ int main(void) {
             p++;
         }
     }
+    int diferentes = 0;
     for (int b = 0; b < M; b++) {
         No *q = baldes[b];
         while (q != NULL) {
             printf("%s: %d\n", q->palavra, q->vezes);
+            diferentes++;
             No *prox = q->prox;
             free(q);
             q = prox;
         }
     }
+    printf("diferentes: %d\n", diferentes);
     return 0;
 }

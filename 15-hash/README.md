@@ -89,7 +89,7 @@ melhor, que você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
 
 Quando a chave já é um número pequeno, dá para usá-la direto como índice. Os
 DDDs vão de 11 a 99, então `const char *estado[100]` resolve: `estado[61]` é
-"DF", em um passo. Isso é **endereçamento direto**. O problema aparece quando
+"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O problema aparece quando
 a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
 bilhões de posições para guardar 50 alunos?) e um nome nem é número.
 
@@ -189,49 +189,57 @@ laço, índice 6, armário ocupado, colisão:
 > [!NOTE]
 > **Pergunta para você:** se a tabela tivesse 10 armários em vez de 7, quais
 > alunos colidiriam? Faça as contas com as somas (ana 304, davi 420, lia 310,
-> bia 300, caio 412) antes de trocar `7` por `10` no exemplo A209 e rodar.
+> bia 300, caio 412) antes de trocar `7` por `10` no código acima e rodar.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0105-hashing/`](0105-hashing/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A209 · O armário pelo nome**
+**Exemplo A209 · DDD direto no vetor**
 
 ```c
 #include <stdio.h>
 
-#define ARMARIOS 7
-
-// função hash: soma os códigos das letras e reduz para 0..6
-int armario(const char *nome) {
-    unsigned soma = 0;
-    for (int i = 0; nome[i] != '\0'; i++) {
-        soma += (unsigned char)nome[i]; // o byte da letra, sempre >= 0
-    }
-    return (int)(soma % ARMARIOS);
-}
+#define FAIXA 100 // DDDs vão de 11 a 99: cabem num vetor de 100
 
 int main(void) {
-    const char *dono[ARMARIOS] = {NULL}; // NULL = armário vazio
-    const char *alunos[] = {"ana", "davi", "lia", "bia", "caio"};
+    // endereçamento direto: a própria chave é o índice (o "hash" é k)
+    const char *estado[FAIXA] = {NULL}; // NULL = DDD sem dono
+    estado[11] = "SP";
+    estado[21] = "RJ";
+    estado[31] = "MG";
+    estado[61] = "DF";
+    estado[71] = "BA";
+    estado[91] = "PA";
 
+    int consultas[] = {61, 11, 10, 91, 120};
     for (int i = 0; i < 5; i++) {
-        int a = armario(alunos[i]);
-        if (dono[a] == NULL) {
-            dono[a] = alunos[i];
-            printf("%-4s -> armário %d\n", alunos[i], a);
+        int ddd = consultas[i];
+        if (ddd < 0 || ddd >= FAIXA) {
+            printf("DDD %3d -> fora da faixa\n", ddd); // nunca indexe sem conferir
+        } else if (estado[ddd] == NULL) {
+            printf("DDD %3d -> não existe\n", ddd);
         } else {
-            printf("%-4s -> armário %d (colisão com %s!)\n", alunos[i], a, dono[a]);
+            printf("DDD %3d -> %s\n", ddd, estado[ddd]); // um passo: O(1)
         }
     }
+
+    int usadas = 0;
+    for (int i = 0; i < FAIXA; i++) {
+        if (estado[i] != NULL) {
+            usadas++;
+        }
+    }
+    printf("posições usadas: %d de %d\n", usadas, FAIXA); // o resto é desperdício
     return 0;
 }
 // Saída:
-// ana  -> armário 3
-// davi -> armário 0
-// lia  -> armário 2
-// bia  -> armário 6
-// caio -> armário 6 (colisão com bia!)
+// DDD  61 -> DF
+// DDD  11 -> SP
+// DDD  10 -> não existe
+// DDD  91 -> PA
+// DDD 120 -> fora da faixa
+// posições usadas: 6 de 100
 ```
 
 ```bash
@@ -291,8 +299,9 @@ int main(void) {
 A lanchonete guarda os pedidos do dia numa prateleira com 11 nichos. O
 nicho de cada pedido é o resto da divisão do número do pedido por 11.
 Escreva a função "int nicho(int pedido)" e mostre o nicho dos pedidos
-1043, 2210, 3876, 5521 e 7019, um por linha, no formato abaixo. Algum par
-colide?
+1043, 2210, 3876, 5521 e 7019, um por linha, no formato abaixo. Quando o
+nicho já estiver ocupado por um pedido anterior, acrescente na linha
+"(colide com NNNN)".
 
 
 ```text
@@ -305,9 +314,10 @@ pedido 2210 -> nicho 10
 **Dicas:**
 
 1. A função hash de inteiros é só "return pedido % 11;".
-2. Guarde os 5 números num vetor e percorra com um for.
-3. Resposta esperada: 1043 -> 9, 2210 -> 10, 3876 -> 4, 5521 -> 10 e
-   7019 -> 1. Os pedidos 2210 e 5521 colidem no nicho 10.
+2. Guarde os 5 números num vetor e percorra com um for. Um vetor
+   "int dono[11] = {0};" lembra qual pedido ocupou cada nicho (0 = vazio).
+3. Resposta esperada: 1043 -> 9, 2210 -> 10, 3876 -> 4,
+   5521 -> 10 (colide com 2210) e 7019 -> 1.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0105-hashing/E625.c
@@ -315,40 +325,30 @@ pedido 2210 -> nicho 10
 
 **Exercício E626** · ★☆☆
 
-Sem rodar, preveja a saída. Os códigos que você vai precisar: 's' = 115,
-'o' = 111, 'l' = 108, 'S' = 83, 'u' = 117, 'a' = 97.
+O programa abaixo mostra o balde de 4 palavras com a soma dos códigos e
+M = 5. Estenda o programa: escreva a função "unsigned soma(const char *s)",
+que devolve a soma dos códigos SEM o resto, e, depois da lista, compare
+todos os pares de palavras. Para cada par que cai no mesmo balde, mostre
+os dois nomes e as duas somas completas. Assim você vê qual colisão vem
+de anagrama (somas iguais) e qual é só acaso do resto (somas diferentes).
 
 
 ```text
-#define M 5
-
-unsigned h(const char *s) {
-    unsigned soma = 0;
-    for (int i = 0; s[i] != '\0'; i++) {
-        soma += (unsigned char)s[i];
-    }
-    return soma % M;
-}
-
-int main(void) {
-    const char *p[] = {"sol", "los", "Sol", "lua"};
-    for (int i = 0; i < 4; i++) {
-        printf("%s=%u\n", p[i], h(p[i]));
-    }
-    return 0;
-}
+Saída esperada:
+sol=4
+los=4
+Sol=2
+lua=2
+sol e los colidem (somas 334 e 334)
+Sol e lua colidem (somas 302 e 322)
 ```
-
-
-Quais palavras colidem, e por que cada colisão acontece?
 
 **Dicas:**
 
-1. Some os três códigos de cada palavra e tire o resto por 5.
-2. Maiúscula e minúscula têm códigos diferentes: 'S' não é 's'.
-3. Resposta esperada: sol=4, los=4, Sol=2, lua=2. "sol" e "los" colidem
-   porque são anagramas (soma 334); "Sol" (302) e "lua" (322) colidem
-   por acaso: só o resto por 5 é igual.
+1. h() pode chamar soma() e só tirar o resto: "return soma(s) % M;".
+2. Pares sem repetir: "for (i = 0; i < 4; i++) for (j = i + 1; j < 4; j++)".
+3. Resposta esperada: a saída acima. "sol" e "los" são anagramas;
+   "Sol" e "lua" só têm o mesmo resto por 5 ('S' = 83 não é 's' = 115).
 
 ```bash
 ~/LPEDC/rodar 15-hash/0105-hashing/E626.c
@@ -386,7 +386,8 @@ boleto -> 1
 Na loja de material de construção, todo código de produto termina em 0:
 120, 350, 470, 590, 610, 230, 740, 860, 980 e 440. Escreva um programa que
 espalha esses 10 códigos com "codigo % m" e mostra quantos caíram em cada
-balde, com uma estrela por código. Faça para m = 10 e para m = 11.
+balde, com uma estrela por código. No fim de cada tabela, mostre quantos
+baldes ficaram vazios. Faça para m = 10 e para m = 11.
 
 
 ```text
@@ -395,20 +396,18 @@ m = 10
  0: **********
  1:
 ...
+vazios: 9
 ```
-
-
-Por que m = 10 é uma péssima escolha aqui?
 
 **Dicas:**
 
 1. Um vetor "int conta[11] = {0};" e "conta[codigo % m]++" para cada código.
 2. Faça uma função "void distribui(const int codigos[], int n, int m)"
    e chame duas vezes.
-3. Resposta esperada: com m = 10, os 10 códigos caem no balde 0. Com
-   m = 11: um código em cada balde, menos o 4 e o 6 (vazios) e o 10, com
-   dois (120 e 230). Com m = 10, o resto só olha o último dígito, que
-   é sempre 0. Um m primo usa o número inteiro e espalha melhor.
+3. Resposta esperada: com m = 10, os 10 códigos caem no balde 0
+   (vazios: 9). Com m = 11: um código em cada balde, menos o 4 e o 6
+   (vazios: 2) e o 10, com dois (120 e 230). Com m = 10, o resto só olha
+   o último dígito, que é sempre 0; um m primo usa o número inteiro.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0105-hashing/E628.c
@@ -418,22 +417,42 @@ Por que m = 10 é uma péssima escolha aqui?
 
 O hortifrúti conta quantas frutas caem em cada um dos 8 baldes. O
 programa abaixo funciona com "banana" e "uva", mas o AddressSanitizer
-reclama quando entra "maçã". O erro está aí de propósito: rode, leia o
-relatório e responda:
+reclama quando entra "maçã". O erro está aí de propósito. Faça assim:
 
-a) Qual índice a função indice() devolve para "maçã"? Por quê?
-b) Conserte a função para que funcione com qualquer texto em UTF-8.
+1. No primeiro for do main, antes de contar, acrescente um printf que
+
+```text
+ mostre o índice de cada fruta ("banana -> 1"). Rode e veja o índice
+ que sai para "maçã" logo antes do erro.
+```
+
+2. Conserte a função indice() para que funcione com qualquer texto em
+
+```text
+ UTF-8. Rode de novo: o sanitizer não pode reclamar.
+```
+
+
+
+```text
+Saída esperada (depois do conserto):
+banana -> 1
+uva -> 4
+maçã -> 6
+balde 0: 0
+balde 1: 1
+...
+```
 
 **Dicas:**
 
 1. Em UTF-8, "ç" é 0xC3 0xA7 e "ã" é 0xC3 0xA3. Quanto vale 0xC3 num
    char com sinal?
 2. Em C, o resto de um número negativo é negativo: -98 % 8 dá -2.
-3. Resposta esperada: a) -2, porque os bytes de "ç" e "ã" viram -61, -89,
-   -61 e -93 num char com sinal, a soma dá -98 e -98 % 8 = -2;
-   contagem[-2] fica fora do vetor. b) acumule num unsigned e converta
-   cada byte para unsigned char. Consertado, "maçã" cai no balde 6 e a
-   saída mostra 1 no balde 1 (banana), 1 no 4 (uva) e 1 no 6.
+3. Resposta esperada: antes do conserto, "maçã -> -2" (os bytes viram
+   -61, -89, -61 e -93 e a soma dá -98). Acumulando num unsigned e
+   convertendo cada byte para unsigned char, "maçã" cai no balde 6 e a
+   contagem fica 1 no balde 1, 1 no 4 e 1 no 6.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0105-hashing/E629.c
@@ -507,7 +526,7 @@ fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
 só, a tabela vira uma lista única e a busca volta a ser O(n).
 
 No encadeamento a tabela **nunca enche**: α pode passar de 1, as listas só
-ficam mais compridas. Algumas implementações, quando uma corrente fica
+ficam mais compridas (o exemplo A211 põe 8 itens em 2 baldes). Algumas implementações, quando uma corrente fica
 comprida demais, até trocam a lista por uma árvore.
 
 Vamos ver na prática. Seis frutas entram na ordem banana, uva, pera, kiwi,
@@ -555,7 +574,7 @@ bool tabela_busca(const Tabela *t, const char *chave, int *valor, int *comparaco
 }
 ```
 
-E o cliente, que só conhece o `tabela.h` (exemplo A211):
+E o cliente, que só conhece o `tabela.h`:
 
 ```c
 #include <stdio.h>
@@ -623,48 +642,72 @@ logo na primeira pergunta:
 > **Pergunta para você:** o "limao" cai no balde 0. Se você inserir "limao"
 > com 9 caixas e depois buscar "coco" (que também cai no balde 0), quantas
 > comparações a busca faz? E se a inserção fosse no fim da corrente, mudaria
-> alguma coisa? Teste no A211.
+> alguma coisa? Teste mudando o `main` acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0106-encadeamento/`](0106-encadeamento/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A211 · O estoque do hortifrúti em 5 baldes**
+**Exemplo A211 · Poucos baldes: a tabela não enche**
 
 ```c
 #include <stdio.h>
 #include "tabela.h"
 
-int main(void) {
-    Tabela *estoque = tabela_cria(5);
-    if (estoque == NULL) {
-        return 1;
-    }
-    const char *frutas[] = {"banana", "uva", "pera", "kiwi", "manga", "caju"};
-    int caixas[] = {12, 30, 8, 5, 20, 14};
-    for (int i = 0; i < 6; i++) {
-        tabela_insere(estoque, frutas[i], caixas[i]);
-    }
-    tabela_mostra(estoque);
+#define N 8
 
-    int qtd, olhados;
-    if (tabela_busca(estoque, "kiwi", &qtd, &olhados)) {
-        printf("kiwi: %d caixas (%d comparações)\n", qtd, olhados);
+// insere as verduras numa tabela de m baldes e mede o custo de achar cada uma
+void testa(int m, const char *nomes[], const int qtd[]) {
+    Tabela *t = tabela_cria(m);
+    if (t == NULL) {
+        return;
     }
-    if (!tabela_busca(estoque, "limao", &qtd, &olhados)) {
-        printf("limao: não tem (%d comparações)\n", olhados);
+    for (int i = 0; i < N; i++) {
+        tabela_insere(t, nomes[i], qtd[i]);
     }
-    tabela_libera(estoque);
+    printf("m = %d, n = %d, fator de carga = %.2f\n", m, tabela_tamanho(t),
+           (double)tabela_tamanho(t) / m);
+    tabela_mostra(t);
+
+    int total = 0;
+    for (int i = 0; i < N; i++) {
+        int valor, comp;
+        if (tabela_busca(t, nomes[i], &valor, &comp)) {
+            total += comp; // soma o custo de achar cada uma
+        }
+    }
+    printf("média para achar: %.2f comparações\n\n", (double)total / N);
+    tabela_libera(t);
+}
+
+int main(void) {
+    const char *verduras[N] = {"alface", "couve", "rucula", "agriao",
+                               "salsa", "cebolinha", "coentro", "espinafre"};
+    int macos[N] = {40, 25, 18, 12, 30, 35, 22, 10};
+
+    testa(2, verduras, macos);  // α = 4: correntes longas, mas cabe tudo
+    testa(11, verduras, macos); // α < 1: quase um passo por busca
     return 0;
 }
 // Saída:
-// [0]
-// [1] -> manga:20 -> kiwi:5
-// [2] -> uva:30
-// [3]
-// [4] -> caju:14 -> pera:8 -> banana:12
-// kiwi: 5 caixas (2 comparações)
-// limao: não tem (0 comparações)
+// m = 2, n = 8, fator de carga = 4.00
+// [0] -> coentro:22 -> salsa:30 -> rucula:18 -> couve:25 -> alface:40
+// [1] -> espinafre:10 -> cebolinha:35 -> agriao:12
+// média para achar: 2.62 comparações
+//
+// m = 11, n = 8, fator de carga = 0.73
+// [0] -> cebolinha:35
+// [1]
+// [2] -> alface:40
+// [3] -> rucula:18
+// [4] -> agriao:12
+// [5]
+// [6] -> couve:25
+// [7]
+// [8] -> espinafre:10
+// [9]
+// [10] -> coentro:22 -> salsa:30
+// média para achar: 1.12 comparações
 ```
 
 ```bash
@@ -721,33 +764,30 @@ int main(void) {
 **Exercício E631** · ★☆☆
 
 Uma tabela com encadeamento tem 5 baldes e usa h(k) = k % 5. Cada número
-novo entra no INÍCIO da corrente do seu balde. Sem rodar, desenhe a tabela
-depois de inserir, nesta ordem:
+novo entra no INÍCIO da corrente do seu balde. O programa abaixo já insere
+12, 7, 20, 17, 3 e 25, nessa ordem, e já libera a memória. Escreva a
+função mostra: ela imprime um balde por linha, com os números na ordem em
+que aparecem na corrente, e no fim mostra quantos baldes ficaram vazios e
+o tamanho da corrente mais comprida.
 
 
 ```text
-12  7  20  17  3  25
+Saída esperada:
+[0] 25 20
+[1]
+[2] 17 7 12
+[3] 3
+[4]
+vazios: 2, maior corrente: 3
 ```
-
-
-Escreva o resultado no formato abaixo, um balde por linha, com os números
-na ordem em que aparecem na corrente:
-
-
-```text
-[0] ...
-[1] ...
-```
-
-
-Quantos baldes ficaram vazios? Qual a corrente mais comprida?
 
 **Dicas:**
 
-1. Calcule os restos primeiro: 12 % 5 = 2, 7 % 5 = 2, e assim por diante.
-2. Inserir no início inverte a ordem: o último a chegar fica na frente.
-3. Resposta esperada: [0] 25 20; [1] vazio; [2] 17 7 12; [3] 3;
-   [4] vazio. Dois baldes vazios; a corrente do balde 2, com 3 nós.
+1. Para cada balde, ande com "for (No *p = baldes[b]; p != NULL;
+   p = p->prox)" contando os nós.
+2. Corrente com 0 nós soma um vazio; guarde a maior contagem vista.
+3. Resposta esperada: a saída acima. Inserir no início inverte a ordem:
+   o último a chegar fica na frente.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0106-encadeamento/E631.c
@@ -859,23 +899,29 @@ polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
 A lista de convidados do aniversário fica numa tabela com encadeamento. O
 programa mostra a tabela certinho, mas o gcc dá um aviso e o
 AddressSanitizer acusa "heap-use-after-free" no fim. O erro está aí de
-propósito. Rode, leia o aviso e o relatório e responda:
+propósito. Rode, leia o aviso e o relatório e conserte a função libera.
+Aproveite e faça libera devolver quantos nós soltou ("int libera(...)"),
+e mostre esse número no fim do main. Rode de novo: nenhum aviso do gcc e
+nenhuma reclamação do sanitizer.
 
-a) Em que linha está o erro e o que ela faz de errado?
-b) Por que o programa às vezes "funciona" sem o AddressSanitizer?
 
-Depois conserte a função libera.
+```text
+Saída esperada:
+[0] rita
+[1] tiago
+[2] lara joao
+liberados: 4
+```
 
 **Dicas:**
 
 1. O relatório mostra duas pilhas: onde o nó foi liberado e onde ele foi
    usado depois. Compare as duas linhas.
 2. Depois do free(p), a memória de *p não é mais sua, nem para ler p->prox.
-3. Resposta esperada: a) a linha "p = p->prox;" logo depois do free(p): lê
-   o campo prox de um nó já liberado. b) o free normalmente não apaga os
-   bytes na hora, então o prox antigo ainda está lá por sorte; um malloc no
-   meio pode reaproveitar a memória. Conserto: guardar o próximo antes:
-   "No *prox = p->prox; free(p); p = prox;".
+   Às vezes "funciona" sem o sanitizer só porque o free não apaga os bytes
+   na hora.
+3. Resposta esperada: a saída acima. O conserto é guardar o próximo antes:
+   "No *prox = p->prox; free(p); p = prox;", contando cada free.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0106-encadeamento/E635.c
@@ -949,7 +995,8 @@ seguidos, e qualquer chave que cai num bloco vai parar no fim dele, deixando o
 bloco ainda maior. Isso é o **agrupamento primário**. Com α = 0,5 uma busca
 sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. A regra
 prática: não passe de 70% a 75% de ocupação. Passou, crie uma tabela maior e
-reinsira tudo.
+reinsira tudo (o exemplo A213 lota uma tabela
+de 7 vagas e mostra as sondagens crescendo).
 
 Vamos ver na prática. Entram os carros dos apartamentos 101, 202, 301, 1104
 e 504. O 101 vai para a vaga 2 e o 202 para a 4. O 301 também dá 4 (301 % 11
@@ -989,7 +1036,7 @@ static int procura(const Aberta *t, int chave, int *sondagens) {
 }
 ```
 
-E o programa do condomínio (exemplo A213):
+E o programa do condomínio:
 
 ```c
 #include <stdio.h>
@@ -1077,55 +1124,53 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 
 Os arquivos ficam em [`0107-enderecamento-aberto/`](0107-enderecamento-aberto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A213 · O estacionamento do condomínio: a próxima vaga livre**
+**Exemplo A213 · Garagem lotando: a volta no fim e a tabela cheia**
 
 ```c
 #include <stdio.h>
 #include "aberta.h"
 
+#define VAGAS 7
+
 int main(void) {
-    Aberta *vagas = aberta_cria(11);
-    if (vagas == NULL) {
+    Aberta *garagem = aberta_cria(VAGAS);
+    if (garagem == NULL) {
         return 1;
     }
-    int aptos[] = {101, 202, 301, 1104, 504};
-    int horas[] = {7, 8, 8, 9, 10};
-    for (int i = 0; i < 5; i++) {
+    // vários apartamentos caem no fim do vetor (hash 5 e 6)
+    int aptos[] = {13, 20, 5, 27, 12, 3, 8, 41};
+    int ocupadas = 0;
+    for (int i = 0; i < 8; i++) {
         int s;
-        int vaga = aberta_insere(vagas, aptos[i], horas[i], &s);
-        printf("apto %4d: hash %d -> vaga %d, sondagens: %d\n", aptos[i], aptos[i] % 11, vaga, s);
+        int vaga = aberta_insere(garagem, aptos[i], 18, &s);
+        if (vaga < 0) {
+            printf("apto %2d: hash %d -> garagem cheia! (%d sondagens)\n", aptos[i], aptos[i] % VAGAS, s);
+        } else {
+            ocupadas++;
+            printf("apto %2d: hash %d -> vaga %d, sondagens: %d, carga %.2f\n",
+                   aptos[i], aptos[i] % VAGAS, vaga, s, (double)ocupadas / VAGAS);
+        }
     }
-    aberta_mostra(vagas);
-
-    int hora, s;
-    if (aberta_busca(vagas, 1104, &hora, &s)) {
-        printf("1104 entrou às %dh, sondagens: %d\n", hora, s);
-    }
-    if (!aberta_busca(vagas, 303, &hora, &s)) {
-        printf("303 não está, sondagens: %d\n", s);
-    }
-    aberta_libera(vagas);
+    aberta_mostra(garagem); // um bloco só: quem cai nele anda até o fim
+    aberta_libera(garagem);
     return 0;
 }
 // Saída:
-// apto  101: hash 2 -> vaga 2, sondagens: 1
-// apto  202: hash 4 -> vaga 4, sondagens: 1
-// apto  301: hash 4 -> vaga 5, sondagens: 2
-// apto 1104: hash 4 -> vaga 6, sondagens: 3
-// apto  504: hash 9 -> vaga 9, sondagens: 1
-// [ 0] -
-// [ 1] -
-// [ 2] 101
-// [ 3] -
-// [ 4] 202
-// [ 5] 301
-// [ 6] 1104
-// [ 7] -
-// [ 8] -
-// [ 9] 504
-// [10] -
-// 1104 entrou às 9h, sondagens: 3
-// 303 não está, sondagens: 2
+// apto 13: hash 6 -> vaga 6, sondagens: 1, carga 0.14
+// apto 20: hash 6 -> vaga 0, sondagens: 2, carga 0.29
+// apto  5: hash 5 -> vaga 5, sondagens: 1, carga 0.43
+// apto 27: hash 6 -> vaga 1, sondagens: 3, carga 0.57
+// apto 12: hash 5 -> vaga 2, sondagens: 5, carga 0.71
+// apto  3: hash 3 -> vaga 3, sondagens: 1, carga 0.86
+// apto  8: hash 1 -> vaga 4, sondagens: 4, carga 1.00
+// apto 41: hash 6 -> garagem cheia! (7 sondagens)
+// [ 0] 20
+// [ 1] 27
+// [ 2] 12
+// [ 3] 3
+// [ 4] 8
+// [ 5] 5
+// [ 6] 13
 ```
 
 ```bash
@@ -1215,36 +1260,31 @@ Saída esperada:
 
 **Exercício E638** · ★☆☆
 
-Sem rodar, preveja a saída. O número entre parênteses é a quantidade de
-sondagens de cada inserção:
+O programa abaixo insere 16, 8, 3, 24 e 11 numa tabela de 8 posições com
+sondagem linear e mostra a vaga e as sondagens de cada inserção. Estenda o
+programa: depois das inserções, busque as chaves 24 e 19 com a mesma
+sondagem (começa em k % 8, anda uma casa por vez, para ao achar a chave
+ou uma vaga livre) e mostre o resultado de cada busca.
 
 
 ```text
-#define M 8
-
-int main(void) {
-    int tab[M] = {0}; // 0 = livre (nenhuma chave é 0)
-    int chaves[] = {16, 8, 3, 24, 11};
-    for (int k = 0; k < 5; k++) {
-        int i = chaves[k] % M;
-        int s = 1;
-        while (tab[i] != 0) {
-            i = (i + 1) % M;
-            s++;
-        }
-        tab[i] = chaves[k];
-        printf("%d: vaga %d (%d)\n", chaves[k], i, s);
-    }
-    return 0;
-}
+Saída esperada (as 5 primeiras linhas já saem hoje):
+16: vaga 0 (1)
+8: vaga 1 (2)
+3: vaga 3 (1)
+24: vaga 2 (3)
+11: vaga 4 (2)
+busca 24: vaga 2 (3 sondagens)
+busca 19: não está (3 sondagens)
 ```
 
 **Dicas:**
 
-1. Calcule os restos por 8: 16 -> 0, 8 -> 0, 3 -> 3, 24 -> 0, 11 -> 3.
-2. O 24 chega quando as vagas 0 e 1 já estão ocupadas.
-3. Resposta esperada: 16: vaga 0 (1); 8: vaga 1 (2); 3: vaga 3 (1);
-   24: vaga 2 (3); 11: vaga 4 (2).
+1. A busca é o mesmo while da inserção, com uma condição a mais: pare
+   quando tab[i] == 0 (livre) ou tab[i] == chave.
+2. Conte as sondagens do mesmo jeito: s começa em 1 e soma a cada passo.
+3. Resposta esperada: a saída acima. O 19 tem hash 3: olha a 3 (o 3), a
+   4 (o 11) e para na 5, livre.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E638.c
@@ -1314,16 +1354,17 @@ Saída esperada:
 No clube, os armários usam sondagem linear com 7 posições. O programa
 abaixo guarda 9, 13, 20 e 4, mas o AddressSanitizer acusa
 "stack-buffer-overflow" ao guardar o 20. O erro está aí de propósito.
-Rode e responda:
-
-a) Em que linha o programa sai do vetor, e com qual valor de i?
-b) Por que só o 20 provoca o erro?
-
-Depois conserte.
+Rode, leia o relatório e conserte a função insere. Depois faça insere
+devolver quantas sondagens usou ("int insere(...)") e mostre esse número
+para cada chave, antes da tabela.
 
 
 ```text
 Saída esperada depois do conserto:
+9: 1 sondagem(ns)
+13: 1 sondagem(ns)
+20: 2 sondagem(ns)
+4: 1 sondagem(ns)
 [0] 20
 [1] 0
 [2] 9
@@ -1336,10 +1377,10 @@ Saída esperada depois do conserto:
 **Dicas:**
 
 1. 20 % 7 = 6. Quem está na vaga 6? Qual é a "próxima" depois da 6?
-2. Num vetor de 7 posições, o maior índice é 6.
-3. Resposta esperada: a) no "while (tab[i] != 0)", com i = 7; b) o 20 cai
-   na última vaga (6), que já tem o 13, e "i = i + 1" passa do fim. O
-   conserto é "i = (i + 1) % M", que volta para a vaga 0.
+2. Num vetor de 7 posições, o maior índice é 6: "i = i + 1" chega a 7.
+3. Resposta esperada: a saída acima. O conserto é "i = (i + 1) % M", que
+   volta para a vaga 0; conte as sondagens com uma variável que começa
+   em 1 e soma a cada passo do while.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E641.c
@@ -1420,7 +1461,7 @@ fim, a lista vai para o vetor, o `qsort` ordena e o ranking sai:
 
 <p align="center"><img src="0108-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o contador de palavras" width="858"></p>
 
-O programa completo (exemplo A215). O TAD `palavras.h` fica na pasta, e o
+O programa completo. O TAD `palavras.h` fica na pasta, e o
 `main` só conhece as funções dele:
 
 ```c
@@ -1544,87 +1585,67 @@ ranking:
 
 Os arquivos ficam em [`0108-juntando-tudo/`](0108-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A215 · O que os clientes mais falam da padaria**
+**Exemplo A215 · Enquete da pizzaria: contar e consultar**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 #include "palavras.h"
 
-// letra = letra ASCII ou qualquer byte de um caractere UTF-8 (>= 128)
-int eh_letra(char c) {
-    unsigned char u = (unsigned char)c;
-    return isalpha(u) || u >= 128;
-}
-
-// copia a próxima palavra de *p para buf, em minúsculas, e avança *p.
-// devolve 0 quando o texto acaba
-int proxima_palavra(const char **p, char *buf, size_t tam) {
-    while (**p != '\0' && !eh_letra(**p)) {
-        (*p)++; // pula espaço, pontuação, número
-    }
-    if (**p == '\0') {
-        return 0;
-    }
+// copia o voto para buf em minúsculas: "CALABRESA" e "calabresa" são um só
+void normaliza(const char *voto, char *buf, size_t tam) {
     size_t n = 0;
-    while (eh_letra(**p)) {
-        if (n < tam - 1) {
-            buf[n++] = (char)tolower((unsigned char)**p);
-        }
-        (*p)++;
+    for (; voto[n] != '\0' && n < tam - 1; n++) {
+        buf[n] = (char)tolower((unsigned char)voto[n]);
     }
     buf[n] = '\0';
-    return 1;
-}
-
-// mais vezes primeiro; no empate, ordem alfabética
-int compara(const void *a, const void *b) {
-    const Contagem *x = a;
-    const Contagem *y = b;
-    if (x->vezes != y->vezes) {
-        return y->vezes - x->vezes;
-    }
-    return strcmp(x->palavra, y->palavra);
 }
 
 int main(void) {
-    const char *texto =
-        "O pão de queijo estava quente e o café estava frio. "
-        "Pão bom, café ruim: o pão de queijo salva a padaria. "
-        "O café da tarde? Pão, pão e mais pão!";
+    const char *votos[] = {"Calabresa", "mussarela", "CALABRESA", "portuguesa",
+                           "frango", "Mussarela", "calabresa", "Frango",
+                           "calabresa", "marguerita"};
+    int n_votos = (int)(sizeof votos / sizeof votos[0]);
 
-    Contador *c = contador_cria(17);
+    Contador *c = contador_cria(7);
     if (c == NULL) {
         return 1;
     }
-    char palavra[TAM_PALAVRA];
-    const char *p = texto;
-    while (proxima_palavra(&p, palavra, sizeof palavra)) {
-        contador_soma(c, palavra);
+    char sabor[TAM_PALAVRA];
+    for (int i = 0; i < n_votos; i++) {
+        normaliza(votos[i], sabor, sizeof sabor);
+        contador_soma(c, sabor);
+    }
+    printf("%d votos, %d sabores\n", contador_total(c), contador_distintas(c));
+
+    // consulta direta: um balde, sem percorrer os votos de novo
+    const char *perguntas[] = {"frango", "calabresa", "atum"};
+    for (int i = 0; i < 3; i++) {
+        printf("%-9s: %d voto(s)\n", perguntas[i], contador_vezes(c, perguntas[i]));
     }
 
-    int n = contador_distintas(c);
-    printf("%d palavras, %d diferentes\n", contador_total(c), n);
+    // o vencedor: basta uma passada no vetor, sem qsort
     Contagem *lista = contador_lista(c);
     if (lista != NULL) {
-        qsort(lista, (size_t)n, sizeof lista[0], compara);
-        for (int i = 0; i < 5 && i < n; i++) {
-            printf("%d. %s: %d\n", i + 1, lista[i].palavra, lista[i].vezes);
+        int melhor = 0;
+        for (int i = 1; i < contador_distintas(c); i++) {
+            if (lista[i].vezes > lista[melhor].vezes) {
+                melhor = i;
+            }
         }
-        free(lista);
+        printf("vencedor: %s\n", lista[melhor].palavra);
+        free(lista); // antes de liberar a tabela: a lista aponta para ela
     }
     contador_libera(c);
     return 0;
 }
 // Saída:
-// 31 palavras, 17 diferentes
-// 1. pão: 6
-// 2. o: 4
-// 3. café: 3
-// 4. de: 2
-// 5. e: 2
+// 10 votos, 5 sabores
+// frango   : 2 voto(s)
+// calabresa: 4 voto(s)
+// atum     : 0 voto(s)
+// vencedor: calabresa
 ```
 
 ```bash
@@ -1760,25 +1781,28 @@ paulo
 **Exercício E644** · ★☆☆
 
 Um contador de palavras usa 4 baldes, encadeamento com inserção no início
-e a função hash "soma dos códigos % 4". Os códigos: 'o' = 111, 'v' = 118,
-'s' = 115, 'a' = 97, 'l' = 108, 'm' = 109, 'e' = 101. Sem rodar, diga o
-que ele mostra depois de contar, nesta ordem:
+e a função hash "soma dos códigos % 4". O programa abaixo já tem o nó, a
+função hash e o main, que conta "ovo sal mel las sal" e mostra cada balde.
+Complete a função conta: ela procura a palavra na corrente do seu balde;
+se achar, soma 1; se não, cria um nó com uma CÓPIA da palavra e vezes = 1,
+no início da corrente.
 
 
 ```text
-ovo  sal  mel  las  sal
+Saída esperada:
+[0] las:1 sal:2 ovo:1
+[1]
+[2] mel:1
+[3]
 ```
-
-
-O programa mostra cada balde assim: [0] palavra:vezes palavra:vezes ...
 
 **Dicas:**
 
-1. ovo = 340, sal = 320, mel = 318, las = 320. Agora tire o resto por 4.
-2. O segundo "sal" não cria nó: acha o que existe e soma 1.
-3. Resposta esperada: [0] las:1 sal:2 ovo:1; [1] vazio; [2] mel:1;
-   [3] vazio. "las" e "sal" são anagramas e a soma junta os dois no mesmo
-   balde; o strcmp é que separa as contagens.
+1. ovo = 340, sal = 320, mel = 318, las = 320: ovo, sal e las caem no 0.
+2. Compare com strcmp; copie com snprintf(novo->palavra,
+   sizeof novo->palavra, "%s", w). O segundo "sal" não cria nó.
+3. Resposta esperada: a saída acima. "las" e "sal" são anagramas e a soma
+   junta os dois no mesmo balde; o strcmp é que separa as contagens.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0108-juntando-tudo/E644.c
@@ -1852,36 +1876,30 @@ queijo 1
 Este contador lê as palavras de uma frase, uma por vez, no mesmo vetor
 "atual", e conta numa tabela com encadeamento. Ele compila sem aviso e o
 AddressSanitizer fica quieto, mas o resultado está errado. O erro está aí
-de propósito. Para a frase "sol e mar e sol e pera e lua" a saída
-deveria ter (em alguma ordem):
+de propósito. Rode, veja o que sai e conserte para que, com a frase
+"sol e mar e sol e pera e lua", cada palavra tenha a sua contagem certa.
+Acrescente no fim uma linha com o número de palavras diferentes.
 
 
 ```text
+Saída esperada depois do conserto (a ordem é a dos baldes):
+mar: 1
 e: 4
 lua: 1
-mar: 1
 pera: 1
 sol: 2
+diferentes: 5
 ```
-
-
-a) Rode e anote o que sai. Por que todas as palavras aparecem iguais?
-b) Por que "pera" sumiu e alguém ficou com uma contagem a mais?
-c) Conserte.
 
 **Dicas:**
 
-1. Olhe o campo palavra do nó: ele guarda as letras ou um endereço?
-2. Depois de "novo->palavra = atual", para onde aponta cada nó quando a
-   próxima palavra é lida em "atual"?
-3. Resposta esperada: a) todos os nós apontam para o mesmo vetor
-   "atual", que no fim contém "lua"; cada nó mostra o que está lá agora.
-   b) "pera" cai no mesmo balde de "sol" (4). Na busca, o strcmp compara
-   "atual" com ele mesmo (o nó do sol aponta para "atual") e dá igual: o
-   sol ganha 1 e a pera nunca vira nó. c) o nó precisa da sua cópia:
+1. Olhe o campo palavra do nó: ele guarda as letras ou um endereço? Para
+   onde aponta cada nó quando a próxima palavra é lida em "atual"?
+2. "pera" cai no mesmo balde de "sol": na busca, o strcmp compara "atual"
+   com ele mesmo e dá igual, por isso a pera some e o sol ganha 1 a mais.
+3. Resposta esperada: a saída acima. O nó precisa da sua cópia:
    "char palavra[16];" e snprintf(novo->palavra, sizeof novo->palavra,
-   "%s", atual). Consertado: mar: 1, e: 4, lua: 1, pera: 1 e sol: 2,
-   nessa ordem (a dos baldes).
+   "%s", atual). Para o total, conte os nós ao imprimir.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0108-juntando-tudo/E647.c
