@@ -11,20 +11,24 @@
 //   Viagem de 85 min: chega às 00:15
 //   Do embarque até 06:00: 430 min
 //
-// Depois responda: qual das duas versões deixou horario_minutos_ate mais
-// simples? E o que isso mostra sobre esconder a struct?
+// Escreva o invariante da nova struct como comentário em cima dela
+// (0 <= total < 1440) e confira com assert no fim de cada função que mexe no
+// campo (horario_cria e horario_avanca).
 //
 // Dicas:
 // 1. h:m vira h * 60 + m. De volta: hora = total / 60, minuto = total % 60.
 // 2. Avançar com a volta do dia: total = (total + minutos) % 1440.
 // 3. Diferença para a frente: (b - a + 1440) % 1440.
-// 4. Resposta esperada: a mesma saída. A versão com minutos totais deixa
+// 4. assert(h->total >= 0 && h->total < 1440); antes de cada return da
+//    cria e no fim da avanca.
+// 5. Resposta esperada: a mesma saída. A versão com minutos totais deixa
 //    avanca e minutos_ate com uma linha cada; hora e minuto viram contas.
 //    Como o cliente só usa as funções, a troca não o afeta: é a promessa do
 //    TAD.
 //
 // Escreva sua resposta abaixo (reescreva a parte horario.c):
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 

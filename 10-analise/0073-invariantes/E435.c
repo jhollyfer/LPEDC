@@ -2,31 +2,35 @@
 // Exercício E435 · ★★☆
 //
 // A função ultima() procura a ÚLTIMA vez que um aluno tirou certa nota,
-// andando do fim para o começo. Ela já funciona (rode). Prove que está certa
-// com os quatro passos, usando o invariante "x não está em v[k+1..n-1]":
+// andando do fim para o começo. Ela já funciona. Transforme a prova de que
+// ela está certa em código:
 //
-//   1. início: vale antes da primeira volta?
-//   2. manutenção: se vale no começo de uma volta, vale no começo da próxima?
-//   3. término: o laço para por um de dois motivos. O que cada um garante?
-//   4. parada: que quantidade diminui?
+// 1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não
+// aparece em v[ini..fim-1] (pedaço vazio: true);
+// 2. dentro do laço, confira com assert o invariante "x não está em
+// v[k+1..n-1]";
+// 3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x
+// e o invariante ainda vale;
+// 4. teste também a nota 7 (que está na posição 0) e um vetor vazio (n = 0).
 //
-// Escreva a prova como comentário.
+//   Saída esperada:
+//   última nota 9: posição 3
+//   última nota 5: posição -1
+//   última nota 7: posição 0
+//   vetor vazio: posição -1
 //
 // Dicas:
-// 1. No começo, k = n - 1. Quem é v[n..n-1]?
-// 2. Uma volta só acontece se v[k] != x. Depois do k--, o pedaço já visto
-//    ganhou exatamente esse v[k].
-// 3. Atenção à ordem do && no while: o que aconteceria se fosse
-//    v[k] != x && k >= 0?
-// 4. Resposta esperada: 1) k = n - 1 e v[n..n-1] é vazio: x não está nele;
-//    2) a volta só roda se v[k] != x, então depois do k-- o x continua fora
-//    de v[k+1..n-1]; 3) se parou com k >= 0, v[k] == x e ninguém à direita é
-//    x: é a última ocorrência; se parou com k == -1, x não está em v[0..n-1]
-//    e devolver -1 é o certo; 4) k diminui 1 por volta e não passa de -1. O
-//    k >= 0 vem primeiro no && para nunca ler v[-1] (curto-circuito).
+// 1. No começo, k = n - 1: o pedaço v[n..n-1] é vazio, e nao_esta tem de
+//    devolver true para ele.
+// 2. Para o vetor vazio, basta chamar ultima(notas, 0, 9): o laço nem roda.
+// 3. Não inverta a ordem do && no while: com v[k] != x && k >= 0, o k == -1
+//    leria v[-1] antes de testar k (o sanitizer acusa).
+// 4. Resposta esperada: a saída acima, sem nenhum assert disparando.
 //
-// Escreva sua resposta abaixo:
+// Escreva sua resposta abaixo (complete o código):
 
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 // Recebe n >= 0, v e x; devolve o maior k tal que v[k] == x, ou -1 se não há.

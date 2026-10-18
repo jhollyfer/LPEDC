@@ -5,9 +5,10 @@
 // 2 elevado a i <= n), para n >= 1, SEM math.h: divida n por 2 até chegar a
 // 1, contando as divisões.
 //
-// Escreva o invariante como comentário e prove o término. Depois teste: mostre
-// lg de 1, 10, 1000, 1024 e 100000, e compare lg(n) com floor(log2(n)) de
-// math.h para todo n de 1 a 100000, contando as divergências.
+// Confira o invariante com assert no começo de cada volta e o término com
+// outro assert depois do laço. Depois teste: mostre lg de 1, 10, 1000, 1024
+// e 100000, e compare lg(n) com floor(log2(n)) de math.h para todo n de 1 a
+// 100000, contando as divergências.
 //
 //   Saída esperada:
 //   lg(1) = 0
@@ -20,14 +21,16 @@
 // Dicas:
 // 1. Use uma cópia m de n e um contador i: i = 0, m = n; enquanto m > 1,
 //    m = m / 2 e i++.
-// 2. Invariante: (2 elevado a i) * m <= n < (2 elevado a i) * (m + 1). Teste
-//    com n = 10: (i, m) passa por (0, 10), (1, 5), (2, 2), (3, 1).
-// 3. No término, m == 1: o invariante vira 2^i <= n < 2^(i+1).
-// 4. Resposta esperada: a saída acima. Parada: m cai pelo menos pela metade
-//    a cada volta e o laço para quando chega a 1.
+// 2. Invariante: p * m <= n < p * (m + 1), com p = 2 elevado a i. Guarde p
+//    numa variável long que dobra junto com o i++. Teste com n = 10: (i, m)
+//    passa por (0, 10), (1, 5), (2, 2), (3, 1).
+// 3. No término, m == 1: o assert fica p <= n && n < 2 * p.
+// 4. Resposta esperada: a saída acima, sem nenhum assert disparando. O laço
+//    termina porque m cai pelo menos pela metade a cada volta.
 //
 // Escreva sua resposta abaixo:
 
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
 

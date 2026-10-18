@@ -3,21 +3,28 @@
 //
 // A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
 // Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
-// O(n²). Complete o main para mostrar, para cada função misteriosa, os passos
-// com n = 1000 e n = 2000 e a razão entre eles. Depois dê a classe de cada uma.
+// O(n²). Complete o programa:
+//
+// 1. escreva const char *classe(double razao), que devolve "O(log n)" se a
+// razão for menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for
+// menor que 3 e "O(n^2)" nos outros casos;
+// 2. no main, mostre, para cada função misteriosa, os passos com n = 1000 e
+// n = 2000, a razão entre eles e a classe que a razão indica.
 //
 //   Saída esperada:
-//   a:     334 ->     667  razão 2.00
-//   b:      10 ->      11  razão 1.10
-//   c:  500000 -> 2000000  razão 4.00
-//   d:      32 ->      45  razão 1.41
+//   a:     334 ->     667  razão 2.00  O(n)
+//   b:      10 ->      11  razão 1.10  O(log n)
+//   c:  500000 -> 2000000  razão 4.00  O(n^2)
+//   d:      32 ->      45  razão 1.41  O(raiz n)
 //
 // Dicas:
 // 1. Use (double)p2 / p1 para a razão não virar divisão inteira.
-// 2. A d) não é nenhuma das cinco classes do texto. Que número elevado ao
-//    quadrado dá 2? Pense em d * d < n.
-// 3. Resposta esperada: a) O(n) (n/3 passos); b) O(log n); c) O(n²) (n²/2);
-//    d) O(√n), raiz de n: dobrar n multiplica por √2 ≈ 1,41.
+// 2. Uma função void mostra(char nome, long p1, long p2) evita repetir o
+//    printf quatro vezes.
+// 3. A d) não é nenhuma das cinco classes do texto. Que número elevado ao
+//    quadrado dá 2? Olhe a condição d * d < n.
+// 4. Resposta esperada: a saída acima. a) n/3 passos; c) n²/2 passos;
+//    d) raiz de n: dobrar n multiplica por √2 ≈ 1,41.
 //
 // Escreva sua resposta abaixo (complete o main):
 

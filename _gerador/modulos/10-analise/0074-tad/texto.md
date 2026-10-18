@@ -31,9 +31,10 @@ Fechar a porta não é burocracia: é o que permite ao TAD garantir um
 `0 <= valor <= limite`. Se o cliente pudesse escrever `vagas->valor = 99`, a
 promessa não valeria nada.
 
-Vamos ver na prática. O cliente `A147.c` inclui só o contrato. O `contador.c`
-também inclui o contrato e guarda a `struct` escondida. Na memória, o cliente
-tem só um ponteiro para um bloco no heap que ele não consegue abrir:
+Vamos ver na prática. O cliente (o arquivo com o `main`) inclui só o
+contrato. O `contador.c` também inclui o contrato e guarda a `struct`
+escondida. Na memória, o cliente tem só um ponteiro para um bloco no heap que
+ele não consegue abrir:
 
 {{ideia}}
 
@@ -132,7 +133,7 @@ grafo) segue este molde. Para um TAD `x`:
 
 1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O `rodar`
    compila junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`. À mão:
-   `gcc A147.c contador.c -o a157`.
+   `gcc A147.c contador.c -o a147`.
 2. **`x.h`**: comentário dizendo o que o TAD é; *include guard*
    (`#ifndef X_H`); só os `#include` de que a interface precisa (em geral
    `<stdbool.h>`); `typedef struct x X;`; protótipos com prefixo `x_`, cada um

@@ -1,5 +1,5 @@
 // Tabela de calor: cada linha é uma classe, cada coluna um tamanho de n.
-// Verde ainda é leve, amarelo pesa, vermelho explodiu. Valores do A143.
+// Verde ainda é leve, amarelo pesa, vermelho explodiu. Valores do texto.
 const linhas = [
   ['O(1)', 'primeiro da fila', ['1', '1', '1'], ['verde', 'verde', 'verde']],
   ['O(log n)', 'cortar ao meio', ['3', '6', '10'], ['verde', 'verde', 'verde']],

@@ -1,8 +1,5 @@
 // 0072 · Notação O: como o custo cresce
 // Exercício E430 · ★★☆
-//
-// Resposta: a) O(n), razão 2; b) O(log n), ganha 1 passo; c) O(n²), razão 4;
-// d) O(√n), razão √2 ≈ 1,41.
 
 #include <stdio.h>
 
@@ -40,8 +37,22 @@ long misterio_d(int n) {
     return passos;
 }
 
+const char *classe(double razao) {
+    if (razao < 1.2) {
+        return "O(log n)";
+    }
+    if (razao < 1.7) {
+        return "O(raiz n)";
+    }
+    if (razao < 3) {
+        return "O(n)";
+    }
+    return "O(n^2)";
+}
+
 void mostra(char nome, long p1, long p2) {
-    printf("%c: %7ld -> %7ld  razão %.2f\n", nome, p1, p2, (double)p2 / p1);
+    double razao = (double)p2 / p1;
+    printf("%c: %7ld -> %7ld  razão %.2f  %s\n", nome, p1, p2, razao, classe(razao));
 }
 
 int main(void) {
