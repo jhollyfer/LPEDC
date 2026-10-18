@@ -1,11 +1,52 @@
 // 0103 · Heapsort
 // Exercício E613 · ★☆☆
-//
-// Resposta:
-// Fase 1 (pais 2, 1 e 0):
-//   pai 2 (o 2): filho único 8, troca          → [3 9 8 7 5 2]
-//   pai 1 (o 9): filhos 7 e 5, 9 é maior: fica → [3 9 8 7 5 2]
-//   pai 0 (o 3): troca com o 9 e depois com o 7 → [9 7 8 3 5 2]
-// Fase 2:
-//   troca 9 com 2, o 2 desce pelo 8            → [8 7 2 3 5 | 9]
-//   troca 8 com 5, o 5 desce pelo 7            → [7 5 2 3 | 8 9]
+
+#include <stdio.h>
+
+void troca(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+// mostra v[0..n-1]; a barra aparece antes da posição fim (se fim < n)
+void mostra(const int v[], int n, int fim) {
+    printf("[");
+    for (int i = 0; i < n; i++) {
+        printf(i == 0 ? "%d" : (i == fim ? " | %d" : " %d"), v[i]);
+    }
+    printf("]\n");
+}
+
+void desce(int v[], int n, int i) {
+    while (2 * i + 1 < n) {
+        int f = 2 * i + 1;
+        if (f + 1 < n && v[f + 1] > v[f]) {
+            f++;
+        }
+        if (v[i] >= v[f]) {
+            break;
+        }
+        troca(&v[i], &v[f]);
+        i = f;
+    }
+}
+
+int main(void) {
+    int v[] = {3, 9, 2, 7, 5, 8};
+    int n = 6;
+    // fase 1: do último pai até a raiz
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        desce(v, n, i);
+        printf("pai %d desceu: ", i);
+        mostra(v, n, n);
+    }
+    // fase 2: só os dois primeiros passos
+    for (int fim = n - 1; fim >= n - 2; fim--) {
+        troca(&v[0], &v[fim]);
+        desce(v, fim, 0);
+        printf("fase 2:       ");
+        mostra(v, n, fim);
+    }
+    return 0;
+}

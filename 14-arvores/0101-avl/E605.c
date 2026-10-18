@@ -11,7 +11,7 @@
 //   altura guardada na raiz: 3, altura real: 3
 //
 // Rode e compare. O programa não quebra; o erro é de lógica. Ache a linha,
-// conserte e explique por que a ordem dessas duas linhas importa.
+// conserte e rode até a saída ficar igual à esperada.
 //
 // Dicas:
 // 1. A altura de um nó é calculada a partir das alturas dos filhos. Depois

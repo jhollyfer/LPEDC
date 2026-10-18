@@ -168,6 +168,6 @@ a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 > [!NOTE]
 > **Pergunta para você:** se você criar a pasta `2026` dentro de `2025`, o que
 > muda na saída? Quantas folhas e qual altura? E se criar `2026` dentro de
-> `musica`? Responda antes de mudar o A193.
+> `musica`? Responda antes de mudar o código e rodar.
 
 {{pratique}}

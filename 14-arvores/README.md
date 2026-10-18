@@ -43,8 +43,8 @@ de ela fazer sentido.
    As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 Em árvore, **papel e lápis** são obrigatórios. Desenhe a árvore antes de rodar,
-a cada inserção e a cada remoção. Os exercícios de "preveja a saída" existem
-para isso.
+a cada inserção e a cada remoção, e só depois rode o programa para conferir o
+desenho com a saída.
 
 ## As cores e as formas
 
@@ -256,13 +256,13 @@ a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 > [!NOTE]
 > **Pergunta para você:** se você criar a pasta `2026` dentro de `2025`, o que
 > muda na saída? Quantas folhas e qual altura? E se criar `2026` dentro de
-> `musica`? Responda antes de mudar o A193.
+> `musica`? Responda antes de mudar o código e rodar.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0097-arvores/`](0097-arvores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A193 · As pastas do computador**
+**Exemplo A193 · Os mesmos nós, alturas diferentes**
 
 ```c
 #include <stdio.h>
@@ -273,8 +273,8 @@ Os arquivos ficam em [`0097-arvores/`](0097-arvores/). Os comandos funcionam de 
 
 typedef struct No {
     char nome[16];
-    struct No *filhos[MAX_FILHOS]; // ponteiros para as subpastas
-    int qtd;                       // quantas subpastas tem
+    struct No *filhos[MAX_FILHOS];
+    int qtd;
 } No;
 
 No *novo(const char *nome) {
@@ -287,24 +287,15 @@ No *novo(const char *nome) {
     return n;
 }
 
-// pendura o filho no pai e devolve o filho (para encadear)
 No *adiciona(No *pai, const char *nome) {
     No *filho = novo(nome);
     pai->filhos[pai->qtd++] = filho;
     return filho;
 }
 
-// mostra cada pasta recuada conforme a profundidade
-void mostra(const No *n, int profundidade) {
-    printf("%*s%s (%d)\n", 2 * profundidade, "", n->nome, profundidade);
-    for (int i = 0; i < n->qtd; i++) {
-        mostra(n->filhos[i], profundidade + 1);
-    }
-}
-
 int conta_folhas(const No *n) {
     if (n->qtd == 0) {
-        return 1; // sem filhos: é folha
+        return 1;
     }
     int total = 0;
     for (int i = 0; i < n->qtd; i++) {
@@ -313,7 +304,6 @@ int conta_folhas(const No *n) {
     return total;
 }
 
-// altura = maior altura entre os filhos + 1; folha dá -1 + 1 = 0
 int altura(const No *n) {
     int maior = -1;
     for (int i = 0; i < n->qtd; i++) {
@@ -325,7 +315,18 @@ int altura(const No *n) {
     return maior + 1;
 }
 
-// libera os filhos antes do pai (senão perde o caminho até eles)
+// o maior grau da árvore: compara o nó com o maior grau de cada filho
+int maior_grau(const No *n) {
+    int maior = n->qtd;
+    for (int i = 0; i < n->qtd; i++) {
+        int g = maior_grau(n->filhos[i]);
+        if (g > maior) {
+            maior = g;
+        }
+    }
+    return maior;
+}
+
 void libera(No *n) {
     for (int i = 0; i < n->qtd; i++) {
         libera(n->filhos[i]);
@@ -333,36 +334,42 @@ void libera(No *n) {
     free(n);
 }
 
+void resumo(const char *titulo, const No *raiz) {
+    printf("%-10s folhas %d, altura %d, maior grau %d\n", titulo,
+           conta_folhas(raiz), altura(raiz), maior_grau(raiz));
+}
+
 int main(void) {
-    No *casa = novo("casa");
-    No *fotos = adiciona(casa, "fotos");
-    No *contas = adiciona(casa, "contas");
-    adiciona(casa, "musica");
-    adiciona(fotos, "praia");
-    adiciona(fotos, "natal");
-    adiciona(contas, "agua");
-    No *luz = adiciona(contas, "luz");
-    adiciona(luz, "2025");
+    // larga: o grupo da família, todo mundo direto embaixo do admin
+    No *grupo = novo("admin");
+    adiciona(grupo, "mae");
+    adiciona(grupo, "pai");
+    adiciona(grupo, "tia");
+    adiciona(grupo, "primo");
 
-    mostra(casa, 0);
-    printf("Folhas: %d\n", conta_folhas(casa));
-    printf("Altura: %d\n", altura(casa));
+    // funda: o sumário de um livro, cada item dentro do anterior
+    No *livro = novo("livro");
+    No *p = adiciona(livro, "cap 1");
+    p = adiciona(p, "secao 1.1");
+    p = adiciona(p, "item 1.1.1");
+    adiciona(p, "nota");
 
-    libera(casa);
+    // caso de borda: um nó sozinho já é uma árvore (e é raiz e folha)
+    No *sozinho = novo("rascunho");
+
+    resumo("larga:", grupo);     // 5 nós
+    resumo("funda:", livro);     // 5 nós
+    resumo("sozinho:", sozinho); // 1 nó
+
+    libera(grupo);
+    libera(livro);
+    libera(sozinho);
     return 0;
 }
 // Saída:
-// casa (0)
-//   fotos (1)
-//     praia (2)
-//     natal (2)
-//   contas (1)
-//     agua (2)
-//     luz (2)
-//       2025 (3)
-//   musica (1)
-// Folhas: 5
-// Altura: 3
+// larga:     folhas 4, altura 1, maior grau 4
+// funda:     folhas 1, altura 4, maior grau 1
+// sozinho:   folhas 1, altura 0, maior grau 0
 ```
 
 ```bash
@@ -469,7 +476,8 @@ int main(void) {
 
 **Exercício E577** · ★☆☆
 
-O site de uma loja organiza os produtos em categorias:
+O site de uma loja organiza os produtos em categorias, e o main já monta
+esta árvore:
 
 
 ```text
@@ -485,21 +493,32 @@ loja
 ```
 
 
-Responda, como comentário:
-a) Qual é a raiz? Quais são as folhas?
-b) Quem é o pai de "tvs"? Quem são os irmãos de "casa"?
-c) Qual é o grau de "loja" e o de "casa"?
-d) Qual é a profundidade de "oled" e a de "moda"?
-e) Qual é a altura de "eletronicos" e a altura da árvore?
+Complete a função ficha, que imprime uma linha por categoria, recuada 2
+espaços por nível, com a profundidade, o grau e a palavra "folha" quando o
+nó não tem filhos. Depois o main imprime a altura da árvore (a função
+altura já está pronta):
+
+
+```text
+Saída esperada:
+loja: prof 0, grau 3
+  eletronicos: prof 1, grau 2
+    celulares: prof 2, grau 0, folha
+    tvs: prof 2, grau 2
+      oled: prof 3, grau 0, folha
+      led: prof 3, grau 0, folha
+  casa: prof 1, grau 1
+    cozinha: prof 2, grau 0, folha
+  moda: prof 1, grau 0, folha
+Altura: 3
+```
 
 **Dicas:**
 
-1. Folha é nó sem filhos. Profundidade conta arestas até a raiz.
-2. Altura conta arestas do caminho mais longo até uma folha (folha = 0).
-3. Resposta esperada: a) raiz "loja"; folhas celulares, oled, led, cozinha
-   e moda. b) pai de tvs é eletronicos; irmãos de casa: eletronicos e
-   moda. c) loja tem grau 3, casa tem grau 1. d) oled: 3; moda: 1.
-   e) eletronicos: 2; árvore: 3.
+1. O grau de um nó é o próprio n->qtd. Folha é quem tem qtd == 0.
+2. Imprima o nó e depois chame ficha para cada filho com prof + 1. O recuo
+   sai com printf("%*s", 2 * prof, "").
+3. Resposta esperada: as 9 linhas acima e "Altura: 3".
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0097-arvores/E577.c
@@ -567,26 +586,53 @@ videos: -1
 
 **Exercício E580** · ★★☆
 
-Cada pasta guarda alguns arquivos (o campo mb, em megabytes). A função
-tamanho soma a pasta com tudo que está dentro dela e imprime uma linha
-para cada pasta, como o comando "du" do Linux.
+Cada pasta guarda alguns arquivos soltos (o campo mb, em megabytes). A
+função tamanho, já pronta, soma a pasta com tudo que está dentro dela, sem
+imprimir nada. Escreva duas funções que mostram as pastas com o tamanho
+total de cada uma, em ordens diferentes:
 
-SEM RODAR, escreva a saída exata do programa. Atenção à ORDEM das linhas:
-em que momento cada printf acontece? Depois rode e confira.
+- du(n): imprime "<total> MB  <nome>" como o comando du do Linux, com cada
+
+```text
+pasta aparecendo DEPOIS de todas as subpastas dela (a raiz por último);
+```
+
+- arvore(n, prof): imprime como o gerenciador de arquivos, a pasta ANTES
+
+```text
+das subpastas, recuada 2 espaços por nível.
+```
+
+
+
+```text
+Saída esperada:
+-- du --
+300 MB  praia
+120 MB  natal
+430 MB  fotos
+5 MB  agua
+8 MB  luz
+15 MB  contas
+450 MB  casa
+-- arvore --
+casa (450 MB)
+  fotos (430 MB)
+    praia (300 MB)
+    natal (120 MB)
+  contas (15 MB)
+    agua (5 MB)
+    luz (8 MB)
+```
 
 **Dicas:**
 
-1. O printf vem DEPOIS do laço que visita os filhos. Uma pasta só aparece
-   quando todas as subpastas dela já apareceram.
-2. fotos = 10 + 300 + 120 = 430; a raiz aparece por último.
-3. Resposta esperada:
-   300 MB  praia
-   120 MB  natal
-   430 MB  fotos
-   5 MB  agua
-   8 MB  luz
-   15 MB  contas
-   450 MB  casa
+1. As duas funções têm o mesmo laço pelos filhos. O que muda é onde fica o
+   printf: depois do laço (du) ou antes dele (arvore).
+2. Em du, faça a função devolver o total: some n->mb com o que cada filho
+   devolve e imprima no fim. Assim cada pasta é somada uma vez só.
+3. Resposta esperada: as duas listas acima; fotos = 10 + 300 + 120 = 430 e
+   casa = 5 + 430 + 15 = 450.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0097-arvores/E580.c
@@ -830,37 +876,58 @@ que um `printf` acontece:
 
 Os arquivos ficam em [`0098-arvore-binaria/`](0098-arvore-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A195 · A conta do churrasco em árvore**
+**Exemplo A195 · Duas árvores com a mesma em ordem**
 
 ```c
 #include <stdio.h>
 #include "arvore.h"
 
+void percursos(const char *titulo, const No *r) {
+    printf("%s\n  pré:", titulo);
+    arv_pre_ordem(r);
+    printf("\n  em:");
+    arv_em_ordem(r);
+    printf("\n  pós:");
+    arv_pos_ordem(r);
+    printf("\n  altura %d\n", arv_altura(r));
+}
+
 int main(void) {
-    // (8 - 3) * (4 + 2): 8 pessoas, 3 não bebem; cerveja R$ 4 + gelo R$ 2
-    No *menos = arv_cria('-', arv_cria('8', NULL, NULL), arv_cria('3', NULL, NULL));
-    No *mais = arv_cria('+', arv_cria('4', NULL, NULL), arv_cria('2', NULL, NULL));
-    No *raiz = arv_cria('*', menos, mais);
+    // equilibrada: B na raiz, A à esquerda, C à direita
+    No *cheia = arv_cria('B', arv_cria('A', NULL, NULL), arv_cria('C', NULL, NULL));
 
-    printf("Pré-ordem:");
-    arv_pre_ordem(raiz);
-    printf("\nEm ordem: ");
-    arv_em_ordem(raiz);
-    printf("\nPós-ordem:");
-    arv_pos_ordem(raiz);
-    printf("\nPor nível:");
-    arv_por_nivel(raiz);
-    printf("\nNós: %d, altura: %d\n", arv_conta(raiz), arv_altura(raiz));
+    // torta: cada nó só tem filho à direita (parece uma lista)
+    No *torta = arv_cria('A', NULL, arv_cria('B', NULL, arv_cria('C', NULL, NULL)));
 
-    raiz = arv_libera(raiz);
+    // caso de borda: árvore vazia (os percursos não mostram nada)
+    No *vazia = NULL;
+
+    percursos("cheia:", cheia);
+    percursos("torta:", torta);
+    percursos("vazia:", vazia);
+
+    // a em ordem é igual nas duas primeiras: sozinha ela não diz a forma;
+    // a pré-ordem (ou a pós) junto com ela já diz
+    cheia = arv_libera(cheia);
+    torta = arv_libera(torta);
     return 0;
 }
 // Saída:
-// Pré-ordem: * - 8 3 + 4 2
-// Em ordem:  8 - 3 * 4 + 2
-// Pós-ordem: 8 3 - 4 2 + *
-// Por nível: * - + 8 3 4 2
-// Nós: 7, altura: 2
+// cheia:
+//   pré: B A C
+//   em: A B C
+//   pós: A C B
+//   altura 1
+// torta:
+//   pré: A B C
+//   em: A B C
+//   pós: C B A
+//   altura 2
+// vazia:
+//   pré:
+//   em:
+//   pós:
+//   altura -1
 ```
 
 ```bash
@@ -931,8 +998,9 @@ int main(void) {
 
 **Exercício E583** · ★☆☆
 
-No papel, escreva os quatro percursos desta árvore (pré-ordem, em ordem,
-pós-ordem e por nível):
+Monte esta árvore com arv_cria, do TAD arvore.h, e imprima os quatro
+percursos (pré-ordem, em ordem, pós-ordem e por nível), a quantidade de
+nós e a altura. Depois libere a árvore com arv_libera.
 
 
 ```text
@@ -945,16 +1013,23 @@ M
 ```
 
 
-O programa abaixo monta essa árvore e imprime os percursos. Só rode DEPOIS
-de escrever as suas respostas, para conferir.
+
+```text
+Saída esperada:
+Pré-ordem: M G C J T X
+Em ordem:  C G J M T X
+Pós-ordem: C J G X T M
+Por nível: M G T C J X
+Nós: 6, altura: 2
+```
 
 **Dicas:**
 
-1. Pré-ordem: anote a raiz ao chegar nela. Pós-ordem: ao sair dela.
-2. Em ordem: tudo da esquerda, a raiz, tudo da direita. T não tem filho
-   esquerdo, então T vem antes de X.
-3. Resposta esperada: pré M G C J T X; em C G J M T X; pós C J G X T M;
-   por nível M G T C J X.
+1. Monte de baixo para cima: as folhas são arv_cria('C', NULL, NULL) e
+   companhia. T não tem filho esquerdo: o 2º argumento dele é NULL.
+2. Cada função de percurso imprime um espaço antes de cada letra; use
+   printf("Pré-ordem:") e chame arv_pre_ordem(raiz) logo depois.
+3. Resposta esperada: as 5 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E583.c
@@ -1061,8 +1136,8 @@ Saída que aparece:
 
 
 O programa não quebra e o AddressSanitizer não reclama: o erro é de
-lógica. Ache a linha errada, conserte, e responda: que estrutura de dados
-a função está usando sem querer? E que percurso é esse que aparece?
+lógica. Ache a linha errada, conserte e rode até aparecer a saída
+esperada.
 
 **Dicas:**
 
@@ -1251,48 +1326,62 @@ esquerda no 70, achou:
 
 Os arquivos ficam em [`0099-bst-busca-insercao/`](0099-bst-busca-insercao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A197 · As matrículas da academia**
+**Exemplo A197 · Onde cada pedido vai morar**
 
 ```c
 #include <stdio.h>
 #include "bst.h"
 
-// busca mostrando o caminho: em cada nó, uma comparação decide o lado
-void procura(const No *r, int chave) {
-    printf("Busca %d:", chave);
-    while (r != NULL) {
+// antes de inserir, refaz a descida que o insere vai fazer e conta onde a
+// chave vai virar folha (ou se já existe)
+void anuncia(const No *r, int chave) {
+    printf("%2d:", chave);
+    if (r == NULL) {
+        printf(" árvore vazia, vira a raiz\n");
+        return;
+    }
+    while (1) {
         printf(" %d", r->chave);
         if (chave == r->chave) {
-            printf(" -> achou\n");
+            printf(" -> já existe, ignorado\n");
             return;
         }
-        r = chave < r->chave ? r->esq : r->dir;
+        const No *prox = chave < r->chave ? r->esq : r->dir;
+        if (prox == NULL) {
+            printf(" -> filho %s do %d\n", chave < r->chave ? "esquerdo" : "direito", r->chave);
+            return;
+        }
+        r = prox;
     }
-    printf(" -> NULL, não existe\n");
 }
 
 int main(void) {
-    int matriculas[] = {50, 30, 70, 20, 40, 60, 80};
+    // números dos pedidos da lanchonete, na ordem em que chegaram
+    int pedidos[] = {42, 17, 63, 8, 25, 50, 25, 30};
     No *raiz = NULL;
-    for (int i = 0; i < 7; i++) {
-        raiz = bst_insere(raiz, matriculas[i]);
+    for (int i = 0; i < 8; i++) {
+        anuncia(raiz, pedidos[i]);
+        raiz = bst_insere(raiz, pedidos[i]);
     }
 
-    printf("Em ordem:");
-    bst_em_ordem(raiz);
-    printf("\n");
-    procura(raiz, 60);
-    procura(raiz, 45);
+    // o primeiro que chegou continua na raiz: inserir nunca mexe no que já está
+    printf("Raiz: %d\n", raiz->chave);
     printf("Altura: %d\n", bst_altura(raiz));
 
     raiz = bst_libera(raiz);
     return 0;
 }
 // Saída:
-// Em ordem: 20 30 40 50 60 70 80
-// Busca 60: 50 70 60 -> achou
-// Busca 45: 50 30 40 -> NULL, não existe
-// Altura: 2
+// 42: árvore vazia, vira a raiz
+// 17: 42 -> filho esquerdo do 42
+// 63: 42 -> filho direito do 42
+//  8: 42 17 -> filho esquerdo do 17
+// 25: 42 17 -> filho direito do 17
+// 50: 42 63 -> filho esquerdo do 63
+// 25: 42 17 25 -> já existe, ignorado
+// 30: 42 17 25 -> filho direito do 25
+// Raiz: 42
+// Altura: 3
 ```
 
 ```bash
@@ -1352,7 +1441,8 @@ int main(void) {
 
 **Exercício E589** · ★☆☆
 
-No papel, insira estas senhas de atendimento numa BST vazia, nesta ordem:
+O posto de saúde guarda as senhas de atendimento numa BST. O main insere,
+nesta ordem:
 
 
 ```text
@@ -1360,18 +1450,28 @@ No papel, insira estas senhas de atendimento numa BST vazia, nesta ordem:
 ```
 
 
-Desenhe a árvore e responda: (a) qual é a altura? (b) por quais nós passa a
-busca pelo 25? (c) e a busca pelo 65, que não existe, termina à direita ou
-à esquerda de quem? Depois rode o programa e confira a em ordem e a altura.
+Complete a função nivel_de(r, chave), que desce pela árvore como a busca e
+devolve a profundidade da chave (a raiz tem nível 0), ou -1 se a chave não
+estiver lá. O main mostra a em ordem, a altura e o nível de algumas senhas:
+
+
+```text
+Saída esperada:
+Em ordem: 10 20 25 30 45 60 70 90
+Altura: 3
+Senha 45: nível 0
+Senha 70: nível 1
+Senha 30: nível 2
+Senha 25: nível 3
+Senha 65: nível -1
+```
 
 **Dicas:**
 
-1. Cada chave desce da raiz comparando: menor vai para a esquerda, maior
-   para a direita, até achar um NULL.
-2. O 25 é menor que 45, maior que 20 e menor que 30.
-3. Resposta esperada: 45 na raiz; 20 (filhos 10 e 30) à esquerda; 70
-   (filhos 60 e 90) à direita; 25 é filho esquerdo do 30. (a) altura 3;
-   (b) 45, 20, 30, 25; (c) 45, 70, 60 e cai à direita do 60.
+1. Use um laço igual ao de bst_busca e um contador que começa em 0 e sobe
+   1 a cada vez que você desce um nível.
+2. Se o laço terminar com r == NULL, a chave não existe: devolva -1.
+3. Resposta esperada: a saída acima. O 25 fica embaixo de 45, 20 e 30.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E589.c
@@ -1486,8 +1586,8 @@ Busca 60 na árvore 1: não achou
 
 
 A árvore 1 NÃO é BST, e a prova é a terceira linha: o 60 está lá, mas a
-busca não acha. Explique por que eh_bst erra e reescreva a função para dar
-"não é BST" na árvore 1 e "é BST" na árvore 2.
+busca não acha. Conserte eh_bst para dar "não é BST" na árvore 1 e "é BST"
+na árvore 2, e rode para conferir.
 
 **Dicas:**
 
@@ -1697,13 +1797,12 @@ que vai terminar no caso fácil (o 35 é folha):
 
 Os arquivos ficam em [`0100-bst-remocao/`](0100-bst-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A199 · Cancelando matrículas**
+**Exemplo A199 · Quando o sucessor também tem filho**
 
 ```c
 #include <stdio.h>
 #include "bst.h"
 
-// pré-ordem: mostra a forma da árvore (a raiz vem primeiro)
 void pre(const No *r) {
     if (r == NULL) {
         return;
@@ -1714,37 +1813,41 @@ void pre(const No *r) {
 }
 
 void mostra(const char *rotulo, const No *r) {
-    printf("%-11s pré:", rotulo);
+    printf("%-14s pré:", rotulo);
     pre(r);
-    printf("\n");
+    printf(" (raiz %d)\n", r->chave);
 }
 
 int main(void) {
-    int matriculas[] = {50, 30, 70, 20, 40, 60, 80, 35, 45};
+    // códigos dos produtos do estoque do mercadinho
+    int codigos[] = {40, 20, 60, 50, 70, 55, 52};
     No *raiz = NULL;
-    for (int i = 0; i < 9; i++) {
-        raiz = bst_insere(raiz, matriculas[i]);
+    for (int i = 0; i < 7; i++) {
+        raiz = bst_insere(raiz, codigos[i]);
     }
     mostra("Antes", raiz);
 
-    raiz = bst_remove(raiz, 30); // dois filhos: o sucessor 35 assume
-    mostra("Remove 30", raiz);
-    raiz = bst_remove(raiz, 40); // um filho: o 45 sobe
+    // a raiz tem dois filhos; o sucessor (50) não é folha: tem o 55 à direita.
+    // o 50 sobe para a raiz e o 55 (com o 52) sobe para o lugar dele
+    raiz = bst_remove(raiz, 40);
     mostra("Remove 40", raiz);
-    raiz = bst_remove(raiz, 20); // folha: só sai
+
+    // o 20 era o único à esquerda: agora a raiz só tem filho direito
+    raiz = bst_remove(raiz, 20);
     mostra("Remove 20", raiz);
-    raiz = bst_remove(raiz, 99); // não existe: nada muda
-    mostra("Remove 99", raiz);
+
+    // raiz com UM filho: nada de sucessor, o filho direito vira a raiz
+    raiz = bst_remove(raiz, 50);
+    mostra("Remove 50", raiz);
 
     raiz = bst_libera(raiz);
     return 0;
 }
 // Saída:
-// Antes       pré: 50 30 20 40 35 45 70 60 80
-// Remove 30   pré: 50 35 20 40 45 70 60 80
-// Remove 40   pré: 50 35 20 45 70 60 80
-// Remove 20   pré: 50 35 45 70 60 80
-// Remove 99   pré: 50 35 45 70 60 80
+// Antes          pré: 40 20 60 50 55 52 70 (raiz 40)
+// Remove 40      pré: 50 20 60 55 52 70 (raiz 50)
+// Remove 20      pré: 50 60 55 52 70 (raiz 50)
+// Remove 50      pré: 60 55 52 70 (raiz 60)
 ```
 
 ```bash
@@ -1797,7 +1900,7 @@ int main(void) {
 
 **Exercício E595** · ★☆☆
 
-No papel, monte a BST inserindo nesta ordem:
+O main monta a BST inserindo nesta ordem:
 
 
 ```text
@@ -1805,18 +1908,26 @@ No papel, monte a BST inserindo nesta ordem:
 ```
 
 
-Depois remova, um de cada vez, o 10, o 80 e o 25. Para cada remoção diga
-qual dos três casos aconteceu (folha, um filho, dois filhos) e desenhe a
-árvore. O programa mostra a pré-ordem depois de cada passo: rode só para
-conferir.
+e depois remove, um de cada vez, o 10, o 80 e o 25. Complete a função
+caso(r, chave), que acha o nó da chave e devolve qual dos três casos da
+remoção ele é: "folha", "um filho" ou "dois filhos" (ou "não existe"). O
+main chama caso ANTES de cada bst_remove e mostra a pré-ordem depois:
+
+
+```text
+Saída esperada:
+Antes:                  pré 60 25 10 40 35 50 80 70 90
+Sem o 10 (folha):       pré 60 25 40 35 50 80 70 90
+Sem o 80 (dois filhos): pré 60 25 40 35 50 90 70
+Sem o 25 (um filho):    pré 60 40 35 50 90 70
+```
 
 **Dicas:**
 
-1. O 10 não tem filhos. O 80 tem 70 e 90.
-2. Depois que o 10 sai, quantos filhos sobram para o 25?
-3. Resposta esperada: 10 é folha; 80 tem dois filhos e o sucessor 90
-   assume; 25 ficou com um filho só (o 40), que sobe. No fim:
-   pré 60 40 35 50 90 70.
+1. Ache o nó com bst_busca. Se vier NULL, devolva "não existe".
+2. Conte quantos dos dois ponteiros (esq e dir) não são NULL: 0, 1 ou 2.
+3. Resposta esperada: a saída acima. O 25 tinha dois filhos no começo, mas
+   depois que o 10 saiu ficou só com o 40.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0100-bst-remocao/E595.c
@@ -1899,8 +2010,7 @@ Em ordem: 20 35 35 40 45 50 60 70 80
 ```
 
 
-Ache a linha, conserte e explique o que a versão errada fazia. Por que o
-programa não deu erro de memória nem vazamento?
+Ache a linha, conserte e rode até aparecer a saída esperada.
 
 **Dicas:**
 
@@ -1962,8 +2072,8 @@ Ficha depois de remover o 30: 35
 
 
 Mas o AddressSanitizer para o programa com "heap-use-after-free". O 35
-nem foi removido! Rode, leia o relatório (procure "freed by") e explique o
-que aconteceu. Conserte sem mexer no bst.c.
+nem foi removido! Rode, leia o relatório (procure "freed by"), conserte
+sem mexer no bst.c e rode de novo até sair a saída esperada, sem erro.
 
 **Dicas:**
 
@@ -2140,34 +2250,42 @@ fila, com o 25 pendurado no 30).
 
 Os arquivos ficam em [`0101-avl/`](0101-avl/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A201 · Os pedidos que chegam em ordem**
+**Exemplo A201 · Os quatro casos, três chaves cada**
 
 ```c
 #include <stdio.h>
 #include "avl.h"
 
+// insere as três chaves numa AVL nova e mostra quantas rotações custou
+void testa(const char *caso, int a, int b, int c) {
+    int antes = avl_rotacoes(); // o contador é um só para o programa todo
+    No *r = NULL;
+    r = avl_insere(r, a);
+    r = avl_insere(r, b);
+    r = avl_insere(r, c);
+    printf("%-18s %d %d %d -> pré", caso, a, b, c);
+    avl_pre_ordem(r);
+    printf(" | rotações %d\n", avl_rotacoes() - antes);
+    r = avl_libera(r);
+}
+
 int main(void) {
-    // números de pedido quase sempre chegam crescentes: o pior caso da BST
-    int pedidos[] = {10, 20, 30, 40, 50, 25};
-    No *raiz = NULL;
-
-    for (int i = 0; i < 6; i++) {
-        raiz = avl_insere(raiz, pedidos[i]);
-        printf("Insere %d: pré", pedidos[i]);
-        avl_pre_ordem(raiz);
-        printf(" | altura %d | rotações %d\n", avl_altura(raiz), avl_rotacoes());
-    }
-
-    raiz = avl_libera(raiz);
+    // em linha reta: uma rotação simples resolve
+    testa("esquerda-esquerda", 30, 20, 10);
+    testa("direita-direita", 10, 20, 30);
+    // em zigue-zague: primeiro endireita o filho, depois gira o avô
+    testa("esquerda-direita", 30, 10, 20);
+    testa("direita-esquerda", 10, 30, 20);
+    // nenhum desequilíbrio: o do meio chegou primeiro
+    testa("nenhum caso", 20, 10, 30);
     return 0;
 }
 // Saída:
-// Insere 10: pré 10 | altura 0 | rotações 0
-// Insere 20: pré 10 20 | altura 1 | rotações 0
-// Insere 30: pré 20 10 30 | altura 1 | rotações 1
-// Insere 40: pré 20 10 30 40 | altura 2 | rotações 1
-// Insere 50: pré 20 10 40 30 50 | altura 2 | rotações 2
-// Insere 25: pré 30 20 10 25 40 50 | altura 2 | rotações 4
+// esquerda-esquerda  30 20 10 -> pré 20 10 30 | rotações 1
+// direita-direita    10 20 30 -> pré 20 10 30 | rotações 1
+// esquerda-direita   30 10 20 -> pré 20 10 30 | rotações 2
+// direita-esquerda   10 30 20 -> pré 20 10 30 | rotações 2
+// nenhum caso        20 10 30 -> pré 20 10 30 | rotações 0
 ```
 
 ```bash
@@ -2254,8 +2372,8 @@ int main(void) {
 
 **Exercício E601** · ★☆☆
 
-Calcule, no papel, a altura e o fator de balanceamento (altura da esquerda
-menos altura da direita) de cada nó desta BST:
+O main monta à mão esta BST (sem campo de altura, com o struct Arv do
+próprio arquivo):
 
 
 ```text
@@ -2270,18 +2388,31 @@ menos altura da direita) de cada nó desta BST:
 ```
 
 
-Responda: (a) ela é uma AVL? (b) se não for, qual nó está desequilibrado e
-em qual dos quatro casos ele cai? (c) que rotação conserta, e como fica a
-árvore depois?
+Complete altura(r) e relatorio(r). A relatorio mostra, em pré-ordem, a
+altura e o fator de balanceamento (altura da esquerda menos altura da
+direita) de cada nó, e marca com "<- desequilibrado" quem tem fator fora
+de -1..1. No fim, o main diz se a árvore é AVL.
+
+
+```text
+Saída esperada:
+50: altura 3, fator 0
+30: altura 2, fator 1
+20: altura 1, fator 1
+10: altura 0, fator 0
+40: altura 0, fator 0
+70: altura 2, fator -2 <- desequilibrado
+80: altura 1, fator -1
+90: altura 0, fator 0
+É AVL? não
+```
 
 **Dicas:**
 
-1. Comece pelas folhas (altura 0) e suba. NULL tem altura -1.
-2. O 70 não tem filho esquerdo: altura(esq) = -1.
-3. Resposta esperada: fatores 50: 0, 30: +1, 20: +1, 10: 0, 40: 0,
-   70: -2, 80: -1, 90: 0. (a) não é AVL; (b) o 70, caso direita-direita;
-   (c) rotação à esquerda no 70: o 80 sobe com filhos 70 e 90, e a árvore
-   fica 50 (30 (20 (10), 40), 80 (70, 90)).
+1. altura: vazia devolve -1; senão, 1 + a maior altura entre os filhos.
+2. relatorio devolve quantos nós desequilibrados achou (o do nó mais os
+   das duas subárvores); a árvore é AVL quando o total é 0.
+3. Resposta esperada: a saída acima. O 70 cai no caso direita-direita.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0101-avl/E601.c
@@ -2289,19 +2420,27 @@ em qual dos quatro casos ele cai? (c) que rotação conserta, e como fica a
 
 **Exercício E602** · ★☆☆
 
-SEM RODAR, preveja o que o programa mostra. Ele insere duas sequências em
-duas AVL diferentes e mostra a pré-ordem, a altura e o total de rotações
-simples feitas até ali (a dupla conta 2). Desenhe cada inserção no papel.
+O main insere os pedidos de 1 a 7, em ordem, numa AVL do TAD avl.h. Com 5
+e com 7 chaves ele mostra a pré-ordem e chama fatores(r), que você vai
+escrever: ela percorre a árvore em ordem e mostra cada chave com o fator
+de balanceamento dela entre parênteses (use avl_fator).
+
+
+```text
+Saída esperada:
+Com 5 chaves: pré 2 1 4 3 5
+  fatores: 1(0) 2(-1) 3(0) 4(0) 5(0)
+Com 7 chaves: pré 4 2 1 3 6 5 7
+  fatores: 1(0) 2(0) 3(0) 4(0) 5(0) 6(0) 7(0)
+Rotações: 4
+```
 
 **Dicas:**
 
-1. 30, 10, 20: o 30 fica com fator +2 e o filho 10 com -1. Que caso é?
-2. De 1 a 7: as rotações acontecem ao inserir o 3, o 5, o 6 e o 7.
-3. Resposta esperada:
-   30 10 20 -> pré 20 10 30 | altura 1 | rotações 2
-   1 a 7    -> pré 4 2 1 3 6 5 7 | altura 2 | rotações 6
-   (a primeira árvore usou 2 rotações; a segunda, mais 4, e o contador é
-   um só para o programa todo). A árvore de 1 a 7 fica perfeita.
+1. É uma em ordem: esquerda, o nó, direita. Árvore vazia não imprime nada.
+2. Cada chave sai como printf(" %d(%d)", r->chave, avl_fator(r)).
+3. Resposta esperada: a saída acima. Com 5 chaves a raiz 2 pende para a
+   direita (fator -1) e mesmo assim é AVL; com 7 a árvore fica perfeita.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0101-avl/E602.c
@@ -2379,7 +2518,7 @@ altura guardada na raiz: 3, altura real: 3
 
 
 Rode e compare. O programa não quebra; o erro é de lógica. Ache a linha,
-conserte e explique por que a ordem dessas duas linhas importa.
+conserte e rode até a saída ficar igual à esperada.
 
 **Dicas:**
 
@@ -2594,42 +2733,53 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 
 Os arquivos ficam em [`0102-heap/`](0102-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A203 · A triagem do pronto-socorro**
+**Exemplo A203 · O leilão com vagas contadas**
 
 ```c
 #include <stdio.h>
 #include "heap.h"
 
 int main(void) {
-    // gravidade de cada paciente, na ordem em que chegaram (maior = mais urgente)
-    int chegada[] = {40, 70, 20, 90, 50, 30};
-    Heap *fila = heap_cria(10);
+    // lances (em R$) por uma bicicleta usada; o leiloeiro só anota 4
+    int lances[] = {300, 450, 450, 200, 500};
+    Heap *mesa = heap_cria(4);
 
-    for (int i = 0; i < 6; i++) {
-        heap_insere(fila, chegada[i]);
-        printf("Chega %d: ", chegada[i]);
-        heap_mostra(fila);
+    for (int i = 0; i < 5; i++) {
+        // heap_insere avisa quando não cabe: o vetor tem tamanho fixo, e o
+        // heap recusa até o maior lance de todos
+        if (heap_insere(mesa, lances[i])) {
+            printf("Lance R$ %d anotado: ", lances[i]);
+        } else {
+            printf("Lance R$ %d recusado, mesa cheia: ", lances[i]);
+        }
+        heap_mostra(mesa);
         printf("\n");
     }
-    for (int i = 0; i < 2; i++) {
-        int atendido = heap_remove(fila);
-        printf("Atende %d: ", atendido);
-        heap_mostra(fila);
-        printf("\n");
+
+    // olhar o topo não tira ninguém
+    printf("Maior lance agora: R$ %d\n", heap_topo(mesa));
+    printf("Olhei de novo: R$ %d\n", heap_topo(mesa));
+
+    // empate: os dois 450 continuam lá, um depois do outro
+    while (!heap_vazio(mesa)) {
+        printf("Sai R$ %d\n", heap_remove(mesa));
     }
 
-    heap_libera(fila);
+    heap_libera(mesa);
     return 0;
 }
 // Saída:
-// Chega 40: [40]
-// Chega 70: [70 40]
-// Chega 20: [70 40 20]
-// Chega 90: [90 70 20 40]
-// Chega 50: [90 70 20 40 50]
-// Chega 30: [90 70 30 40 50 20]
-// Atende 90: [70 50 30 40 20]
-// Atende 70: [50 40 30 20]
+// Lance R$ 300 anotado: [300]
+// Lance R$ 450 anotado: [450 300]
+// Lance R$ 450 anotado: [450 300 450]
+// Lance R$ 200 anotado: [450 300 450 200]
+// Lance R$ 500 recusado, mesa cheia: [450 300 450 200]
+// Maior lance agora: R$ 450
+// Olhei de novo: R$ 450
+// Sai R$ 450
+// Sai R$ 450
+// Sai R$ 300
+// Sai R$ 200
 ```
 
 ```bash
@@ -2717,26 +2867,29 @@ int main(void) {
 
 **Exercício E607** · ★☆☆
 
-No papel, diga quais destes vetores são heaps de máximo. Para cada um que
-não for, aponte um pai menor que um filho (com os índices).
+No heap, a árvore mora no vetor e ninguém guarda ponteiro: os filhos de i
+estão em 2i + 1 e 2i + 2. Complete a função mostra_filhos(v, n), que, para
+cada posição do vetor, mostra o valor e quem são os filhos dele (só os que
+existem, isto é, com índice menor que n). Teste com o heap da triagem
+depois das seis chegadas:
 
 
 ```text
-a) [95 60 80 20 60 75 10]
-b) [50 40 45 42 10 30 44]
-c) [7]
-d) [10 20]
-e) [9 8 7 6 5 4 3 2 1]
+Saída esperada:
+v[0] = 90: filhos 70 e 30
+v[1] = 70: filhos 40 e 50
+v[2] = 30: filho 20
+v[3] = 40: folha
+v[4] = 50: folha
+v[5] = 20: folha
 ```
 
 **Dicas:**
 
-1. Para cada i a partir de 1, compare v[i] com o pai v[(i - 1) / 2].
-2. Desenhar a árvore ajuda: os índices vão nível por nível.
-3. Resposta esperada: a) sim (o 60 repetido não atrapalha: pai >= filho);
-   b) não: v[3] = 42 é filho de v[1] = 40; c) sim (um elemento só);
-   d) não: v[1] = 20 é filho de v[0] = 10; e) sim: todo vetor decrescente
-   é heap.
+1. Calcule esq = 2 * i + 1 e dir = 2 * i + 2.
+2. Se esq >= n, é folha. Se só esq < n, tem um filho. Senão, tem os dois.
+3. Resposta esperada: a saída acima. Só o v[2] tem um filho só: num heap,
+   no máximo um nó fica nessa situação.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0102-heap/E607.c
@@ -2745,7 +2898,7 @@ e) [9 8 7 6 5 4 3 2 1]
 **Exercício E608** · ★☆☆
 
 Complete eh_heap(v, n): devolve true se o vetor v[0..n-1] for um heap de
-máximo. O main testa os vetores do E607:
+máximo. O main testa cinco vetores:
 
 
 ```text
@@ -2770,19 +2923,30 @@ e) heap
 
 **Exercício E609** · ★★☆
 
-SEM RODAR, escreva a saída do programa. Desenhe a árvore a cada passo
-(comece com o heap vazio). Depois rode e confira.
+Na fila de prioridade, é comum tirar o máximo e logo em seguida colocar um
+valor novo. Fazer heap_remove e depois heap_insere dá duas descidas/subidas.
+Escreva troca_topo(h, x), que faz isso numa operação só: guarda o máximo,
+põe x na raiz (v[0]), faz x descer até o lugar certo e devolve o máximo
+antigo. Pode supor o heap não vazio. A struct Heap do heap.h tem os campos
+v e n à mostra, mas a função desce do heap.c é static: escreva a sua.
+
+O main insere 15, 35, 25, 45 e 5 e depois troca o topo duas vezes:
+
+
+```text
+Saída esperada:
+depois das 5 inserções: [45 35 25 15 5]
+saiu 45, entrou 40: [40 35 25 15 5]
+saiu 40, entrou 10: [35 15 25 10 5]
+```
 
 **Dicas:**
 
-1. Inserir: entra no fim e sobe enquanto for maior que o pai.
-2. Remover: o último vai para a raiz e desce pelo filho MAIOR.
-3. Resposta esperada:
-   depois das 5 inserções: [45 35 25 15 5]
-   saiu 45: [35 15 25 5]
-   entrou 40: [40 35 25 5 15]
-   saiu 40: [35 15 25 5]
-   saiu 35: [25 15 5]
+1. A descida: enquanto 2i + 1 < n, escolha o MAIOR filho f; se v[i] já é
+   >= v[f], pare; senão troque v[i] com v[f] e siga com i = f.
+2. Na segunda troca, o 10 desce duas vezes: primeiro troca com o 35 e
+   depois com o 15.
+3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0102-heap/E609.c
@@ -2873,7 +3037,7 @@ Atendimento: 90 70 40 30 50 20
 
 
 O programa não quebra; o erro é de lógica, numa linha da descida. Ache,
-conserte e mostre, com o vetor, o momento exato em que o heap quebrou.
+conserte e rode até a ordem de atendimento ficar igual à esperada.
 
 **Dicas:**
 
@@ -3043,34 +3207,30 @@ A fase 1 nos tempos da corrida. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 
 
 Os arquivos ficam em [`0103-heapsort/`](0103-heapsort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A205 · Ordenando os tempos da corrida**
+**Exemplo A205 · Empate na chegada: o heapsort não é estável**
 
 ```c
 #include <stdio.h>
 
-void troca(int *a, int *b) {
-    int t = *a;
+typedef struct {
+    const char *nome;
+    int tempo; // minutos
+} Corredor;
+
+void troca(Corredor *a, Corredor *b) {
+    Corredor t = *a;
     *a = *b;
     *b = t;
 }
 
-// mostra o heap (v[0..fim-1]) e a parte já ordenada, separados por |
-void mostra(const char *rotulo, const int v[], int n, int fim) {
-    printf("%-12s", rotulo);
-    for (int i = 0; i < n; i++) {
-        printf(i == fim ? " | %d" : " %d", v[i]);
-    }
-    printf("\n");
-}
-
-// desce v[i] dentro do heap v[0..n-1], trocando com o maior filho
-void desce(int v[], int n, int i) {
+// o mesmo desce do texto, comparando só o campo tempo
+void desce(Corredor v[], int n, int i) {
     while (2 * i + 1 < n) {
         int f = 2 * i + 1;
-        if (f + 1 < n && v[f + 1] > v[f]) {
+        if (f + 1 < n && v[f + 1].tempo > v[f].tempo) {
             f++;
         }
-        if (v[i] >= v[f]) {
+        if (v[i].tempo >= v[f].tempo) {
             break;
         }
         troca(&v[i], &v[f]);
@@ -3078,37 +3238,39 @@ void desce(int v[], int n, int i) {
     }
 }
 
-void heapsort(int v[], int n) {
-    // fase 1: transforma o vetor em heap, do último pai até a raiz
+void heapsort(Corredor v[], int n) {
     for (int i = n / 2 - 1; i >= 0; i--) {
         desce(v, n, i);
     }
-    mostra("heap:", v, n, n);
-    // fase 2: o máximo vai para o fim; o heap encolhe uma casa
     for (int fim = n - 1; fim > 0; fim--) {
         troca(&v[0], &v[fim]);
         desce(v, fim, 0);
-        mostra("", v, n, fim);
+    }
+}
+
+void mostra(const char *rotulo, const Corredor v[], int n) {
+    printf("%s", rotulo);
+    for (int i = 0; i < n; i++) {
+        printf(" %s %d", v[i].nome, v[i].tempo);
+        printf(i < n - 1 ? "," : "\n");
     }
 }
 
 int main(void) {
-    int tempos[] = {52, 18, 73, 40, 91, 25, 66}; // minutos de cada corredor
-    int n = 7;
+    // na ordem de chegada: Ana chegou antes de Caio, Bia antes de Duda
+    Corredor v[] = {{"Ana", 40}, {"Bia", 25}, {"Caio", 40}, {"Duda", 25}, {"Edu", 30}};
+    int n = 5;
 
-    mostra("antes:", tempos, n, n);
-    heapsort(tempos, n);
+    mostra("Chegada:", v, n);
+    heapsort(v, n);
+    mostra("Ordem:  ", v, n);
+    // os tempos estão em ordem, mas os empatados trocaram de lugar:
+    // Duda passou na frente de Bia e Caio na frente de Ana
     return 0;
 }
 // Saída:
-// antes:       52 18 73 40 91 25 66
-// heap:        91 52 73 40 18 25 66
-//              73 52 66 40 18 25 | 91
-//              66 52 25 40 18 | 73 91
-//              52 40 25 18 | 66 73 91
-//              40 18 25 | 52 66 73 91
-//              25 18 | 40 52 66 73 91
-//              18 | 25 40 52 66 73 91
+// Chegada: Ana 40, Bia 25, Caio 40, Duda 25, Edu 30
+// Ordem:   Duda 25, Bia 25, Edu 30, Caio 40, Ana 40
 ```
 
 ```bash
@@ -3211,25 +3373,31 @@ int main(void) {
 
 **Exercício E613** · ★☆☆
 
-No papel, faça a fase 1 do heapsort (descer cada pai, do último até a
-raiz) no vetor:
+As funções troca, mostra e desce já estão prontas. Complete o main para
+rodar a fase 1 do heapsort no vetor [3 9 2 7 5 8] (descer cada pai, do
+último até a raiz), mostrando o vetor depois de cada pai descer, e depois
+só os DOIS primeiros passos da fase 2 (o máximo vai para o fim e o heap
+encolhe uma casa), mostrando o vetor com a barra separando a parte já
+ordenada:
 
 
 ```text
-[3 9 2 7 5 8]
+Saída esperada:
+pai 2 desceu: [3 9 8 7 5 2]
+pai 1 desceu: [3 9 8 7 5 2]
+pai 0 desceu: [9 7 8 3 5 2]
+fase 2:       [8 7 2 3 5 | 9]
+fase 2:       [7 5 2 3 | 8 9]
 ```
-
-
-Escreva o vetor depois de cada pai descer. Depois faça os dois primeiros
-passos da fase 2. O programa mostra tudo: rode só para conferir.
 
 **Dicas:**
 
-1. Com n = 6, o último pai é o índice n / 2 - 1 = 2. Os pais são 2, 1 e 0.
-2. Quando o 3 desce da raiz, ele pode descer mais de um nível.
-3. Resposta esperada: pai 2 → [3 9 8 7 5 2]; pai 1 → igual (9 é maior que
-   7 e 5); pai 0 → [9 7 8 3 5 2]. Fase 2: [8 7 2 3 5 | 9] e
-   [7 5 2 3 | 8 9].
+1. Com n = 6, o último pai é o índice n / 2 - 1 = 2. O laço vai de 2 até
+   0, chamando desce(v, n, i) e depois mostra(v, n, n).
+2. Na fase 2, troque v[0] com v[fim], chame desce(v, fim, 0) e mostre com
+   mostra(v, n, fim). Faça só para fim = 5 e fim = 4.
+3. Resposta esperada: a saída acima. O pai 1 não se mexe: 9 já é maior
+   que 7 e 5. Quando o 3 desce da raiz, ele desce dois níveis.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0103-heapsort/E613.c
@@ -3269,23 +3437,24 @@ Tabela: 70 66 62 51 45 38 29
 Existem dois jeitos de montar o heap da fase 1: inserir os elementos um a
 um (cada um SOBE, como no heap_insere) ou descer cada pai, do último até a
 raiz (o jeito do texto). Escreva as duas funções, contando as trocas, e
-rode nos tempos da corrida:
+rode nos tempos da corrida (52 18 73 40 91 25 66), cada uma numa cópia do
+vetor. No fim, escreva também eh_heap(v, n) e confira se os dois
+resultados são heaps de máximo, mesmo sendo diferentes:
 
 
 ```text
 Saída esperada:
 Por inserções:    [91 73 66 18 40 25 52], 5 trocas
 Descendo os pais: [91 52 73 40 18 25 66], 2 trocas
+Os dois são heaps? sim
 ```
-
-
-Os dois vetores são heaps? Por que deram diferentes?
 
 **Dicas:**
 
 1. Por inserções: para k de 1 até n - 1, faça v[k] subir enquanto for
    maior que v[(k - 1) / 2]. A parte v[0..k-1] já é heap.
-2. Some 1 no contador a cada troca (passe um int * para as funções).
+2. Some 1 no contador a cada troca (passe um int * para as funções). Em
+   eh_heap, basta conferir v[i] <= v[(i - 1) / 2] para todo i >= 1.
 3. Resposta esperada: a saída acima. Os dois são heaps válidos: a regra
    só exige pai >= filhos, e existem vários vetores que a respeitam. O
    método dos pais faz menos trabalho porque metade dos elementos (as
@@ -3297,21 +3466,30 @@ Os dois vetores são heaps? Por que deram diferentes?
 
 **Exercício E616** · ★★☆
 
-SEM RODAR, preveja a saída. O heapsort recebe um vetor que JÁ está em
-ordem crescente. A fase 1 mexe nele? O programa mostra o vetor depois da
-fase 1 e quantas trocas cada fase fez.
+O heapsort percebe quando o vetor já vem arrumado? Meça. Modifique desce
+para devolver quantas trocas fez e complete testa(nome, v, n): ela roda o
+heapsort somando as trocas do desce em cada fase (a troca do v[0] com o
+v[fim] da fase 2 não entra na conta) e mostra os totais e o vetor final.
+O main testa um vetor crescente, um decrescente e um com tudo igual:
+
+
+```text
+Saída esperada:
+crescente:   fase 1: 4 trocas, fase 2: 6 trocas -> 1 2 3 4 5 6 7
+decrescente: fase 1: 0 trocas, fase 2: 5 trocas -> 1 2 3 4 5 6 7
+iguais:      fase 1: 0 trocas, fase 2: 0 trocas -> 5 5 5 5 5 5 5
+```
 
 **Dicas:**
 
-1. Pais: índices 2, 1 e 0. O 3 (índice 2) tem filhos 6 e 7.
-2. Um vetor crescente é o "contrário" de um heap: a fase 1 trabalha muito.
-   E a fase 2 não tem moleza: o heapsort não percebe que o vetor estava
-   em ordem.
-3. Resposta esperada:
-   depois da fase 1: 7 5 6 4 2 1 3
-   trocas na fase 1: 4
-   trocas na fase 2: 6
-   ordenado: 1 2 3 4 5 6 7
+1. Em desce, crie int trocas = 0, some 1 a cada troca e devolva no fim
+   (troque o void por int).
+2. Em testa, faça fase1 += desce(v, n, i) no laço dos pais e
+   fase2 += desce(v, fim, 0) no laço da fase 2. Para o rótulo alinhado,
+   use printf("%-12s ...", nome).
+3. Resposta esperada: a saída acima. Vetor crescente é o "contrário" de um
+   heap: a fase 1 trabalha. O decrescente já é heap, mas a fase 2 trabalha
+   do mesmo jeito: o heapsort não aproveita a ordem que o vetor já tinha.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0103-heapsort/E616.c
@@ -3329,8 +3507,8 @@ Saída esperada:
 
 
 Mas a saída sai fora de ordem. A fase 2 está certa e o desce também. O
-erro está numa linha só da fase 1. Ache, conserte e explique por que a
-ordem em que os pais descem importa.
+erro está numa linha só da fase 1. Ache, conserte e rode até sair a
+saída esperada.
 
 **Dicas:**
 
@@ -3559,88 +3737,63 @@ para listar.
 
 Os arquivos ficam em [`0104-juntando-tudo/`](0104-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A207 · O cadastro da academia**
+**Exemplo A207 · Trocar a matrícula não é editar o campo**
 
 ```c
 #include <stdio.h>
 #include "cadastro.h"
 
-#define MAX 16
-
-// heap de máximo pelos treinos, para o ranking
-void desce(Aluno v[], int n, int i) {
-    while (2 * i + 1 < n) {
-        int f = 2 * i + 1;
-        if (f + 1 < n && v[f + 1].treinos > v[f].treinos) {
-            f++;
-        }
-        if (v[i].treinos >= v[f].treinos) {
-            break;
-        }
-        Aluno t = v[i];
-        v[i] = v[f];
-        v[f] = t;
-        i = f;
-    }
-}
-
-// mostra os k que mais treinaram: monta o heap e tira o máximo k vezes
-void ranking(const NoAluno *r, int k) {
-    Aluno v[MAX];
-    int n = cad_para_vetor(r, v, 0); // cópia: a árvore não muda
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        desce(v, n, i);
-    }
-    for (int pos = 1; pos <= k && n > 0; pos++) {
-        printf("  %dº %s (%d)\n", pos, v[0].nome, v[0].treinos);
-        v[0] = v[--n];
-        desce(v, n, 0);
-    }
+void confere(NoAluno *cad, int matricula) {
+    Aluno *a = cad_busca(cad, matricula);
+    printf("  busca %d: %s\n", matricula, a != NULL ? a->nome : "não achou");
 }
 
 int main(void) {
     Aluno turma[] = {
-        {50, "Ana", 12}, {30, "Bruno", 8}, {70, "Carla", 15}, {20, "Davi", 4},
-        {40, "Eva", 20}, {60, "Fabio", 9}, {80, "Gil", 11},
+        {45, "Lia", 10}, {25, "Rui", 6}, {65, "Teo", 14}, {15, "Ivo", 3}, {35, "Mel", 8},
     };
     NoAluno *cad = NULL;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 5; i++) {
         cad = cad_insere(cad, turma[i]);
     }
 
-    printf("Alunos (%d, altura %d):\n", cad_conta(cad), cad_altura(cad));
+    // Ivo ganhou a matrícula 90. Jeito ERRADO: mudar o campo pelo ponteiro
+    Aluno *ivo = cad_busca(cad, 15);
+    ivo->matricula = 90;
+    printf("Editando o campo:\n");
+    cad_lista(cad);   // o 90 aparece no começo: está no lugar do 15
+    confere(cad, 90); // a busca vai para a direita e nunca o encontra
+    ivo->matricula = 15; // desfaz, para seguir com a árvore certa
+
+    // jeito CERTO: copia o aluno, remove pela chave velha, insere com a nova
+    Aluno copia = *cad_busca(cad, 15); // copia antes: o remove dá free no nó
+    cad = cad_remove(cad, 15);
+    copia.matricula = 90;
+    cad = cad_insere(cad, copia);
+    printf("Removendo e inserindo:\n");
     cad_lista(cad);
-
-    Aluno *a = cad_busca(cad, 60); // a catraca registra mais um treino
-    if (a != NULL) {
-        a->treinos++;
-        printf("Catraca: %s agora tem %d treinos\n", a->nome, a->treinos);
-    }
-
-    cad = cad_remove(cad, 30); // Bruno cancelou
-    printf("Sem o 30: %d alunos\n", cad_conta(cad));
-
-    printf("Ranking do mês:\n");
-    ranking(cad, 3);
+    confere(cad, 90);
+    confere(cad, 15);
 
     cad = cad_libera(cad);
     return 0;
 }
 // Saída:
-// Alunos (7, altura 2):
-//    20  Davi      4 treinos
-//    30  Bruno     8 treinos
-//    40  Eva      20 treinos
-//    50  Ana      12 treinos
-//    60  Fabio     9 treinos
-//    70  Carla    15 treinos
-//    80  Gil      11 treinos
-// Catraca: Fabio agora tem 10 treinos
-// Sem o 30: 6 alunos
-// Ranking do mês:
-//   1º Eva (20)
-//   2º Carla (15)
-//   3º Ana (12)
+// Editando o campo:
+//    90  Ivo       3 treinos
+//    25  Rui       6 treinos
+//    35  Mel       8 treinos
+//    45  Lia      10 treinos
+//    65  Teo      14 treinos
+//   busca 90: não achou
+// Removendo e inserindo:
+//    25  Rui       6 treinos
+//    35  Mel       8 treinos
+//    45  Lia      10 treinos
+//    65  Teo      14 treinos
+//    90  Ivo       3 treinos
+//   busca 90: Ivo
+//   busca 15: não achou
 ```
 
 ```bash
@@ -3733,20 +3886,30 @@ Total: 4
 
 **Exercício E620** · ★☆☆
 
-SEM RODAR, preveja a saída. Desenhe a BST de matrículas a cada operação.
+Complete a função resumo(cad), que mostra numa linha a matrícula e o nome
+de quem está na raiz do cadastro, a altura e a quantidade de alunos, ou
+"cadastro vazio" se não houver ninguém. O main chama resumo depois de
+inserir seis alunos e depois de cada remoção da raiz:
+
+
+```text
+Saída esperada:
+raiz 40 (Teo), altura 2, 6 alunos
+raiz 50 (Joana), altura 2, 5 alunos
+raiz 60 (Caio), altura 2, 4 alunos
+raiz 20 (Paulo), altura 1, 3 alunos
+raiz 30 (Lia), altura 1, 2 alunos
+raiz 10 (Rita), altura 0, 1 alunos
+cadastro vazio
+```
 
 **Dicas:**
 
-1. Inserção na ordem 40, 20, 60, 10, 30, 50: a árvore fica cheinha.
-2. Remover o 40 (a raiz, com dois filhos): o sucessor é o menor da direita.
-   E a busca pelo 40, depois disso?
-3. Resposta esperada:
-   altura 2, 6 alunos
-   40 saiu; nova raiz: 50 (Joana)
-   busca 40: não achou
-   altura 2, 5 alunos
-   e a lista em ordem de matrícula: 10 Rita (3 treinos), 20 Paulo (7),
-   30 Lia (9), 50 Joana (5) e 60 Caio (6).
+1. A raiz é o próprio ponteiro cad: os dados estão em cad->a.matricula e
+   cad->a.nome. Teste cad == NULL antes de usar.
+2. A altura e a contagem vêm prontas do TAD: cad_altura e cad_conta.
+3. Resposta esperada: a saída acima. Quando o 60 sai, ele só tinha filho
+   esquerdo: o 20 sobe direto para a raiz, sem sucessor.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E620.c
@@ -3832,8 +3995,7 @@ copiados: 3
 ```
 
 
-Ache a linha errada, conserte e explique o que acontecia com o valor de
-pos em cada chamada.
+Ache a linha errada, conserte e rode até sair a saída esperada.
 
 **Dicas:**
 

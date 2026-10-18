@@ -10,8 +10,8 @@
 //   Ficha depois de remover o 30: 35
 //
 // Mas o AddressSanitizer para o programa com "heap-use-after-free". O 35
-// nem foi removido! Rode, leia o relatório (procure "freed by") e explique o
-// que aconteceu. Conserte sem mexer no bst.c.
+// nem foi removido! Rode, leia o relatório (procure "freed by"), conserte
+// sem mexer no bst.c e rode de novo até sair a saída esperada, sem erro.
 //
 // Dicas:
 // 1. O 30 tem dois filhos. Quem é o sucessor dele? O que o bst_remove faz com

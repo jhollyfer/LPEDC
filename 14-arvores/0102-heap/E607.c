@@ -1,28 +1,37 @@
 // 0102 · Heap e fila de prioridade
 // Exercício E607 · ★☆☆
 //
-// No papel, diga quais destes vetores são heaps de máximo. Para cada um que
-// não for, aponte um pai menor que um filho (com os índices).
+// No heap, a árvore mora no vetor e ninguém guarda ponteiro: os filhos de i
+// estão em 2i + 1 e 2i + 2. Complete a função mostra_filhos(v, n), que, para
+// cada posição do vetor, mostra o valor e quem são os filhos dele (só os que
+// existem, isto é, com índice menor que n). Teste com o heap da triagem
+// depois das seis chegadas:
 //
-//   a) [95 60 80 20 60 75 10]
-//   b) [50 40 45 42 10 30 44]
-//   c) [7]
-//   d) [10 20]
-//   e) [9 8 7 6 5 4 3 2 1]
+//   Saída esperada:
+//   v[0] = 90: filhos 70 e 30
+//   v[1] = 70: filhos 40 e 50
+//   v[2] = 30: filho 20
+//   v[3] = 40: folha
+//   v[4] = 50: folha
+//   v[5] = 20: folha
 //
 // Dicas:
-// 1. Para cada i a partir de 1, compare v[i] com o pai v[(i - 1) / 2].
-// 2. Desenhar a árvore ajuda: os índices vão nível por nível.
-// 3. Resposta esperada: a) sim (o 60 repetido não atrapalha: pai >= filho);
-//    b) não: v[3] = 42 é filho de v[1] = 40; c) sim (um elemento só);
-//    d) não: v[1] = 20 é filho de v[0] = 10; e) sim: todo vetor decrescente
-//    é heap.
+// 1. Calcule esq = 2 * i + 1 e dir = 2 * i + 2.
+// 2. Se esq >= n, é folha. Se só esq < n, tem um filho. Senão, tem os dois.
+// 3. Resposta esperada: a saída acima. Só o v[2] tem um filho só: num heap,
+//    no máximo um nó fica nessa situação.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (complete mostra_filhos):
 
 #include <stdio.h>
 
-int main(void) {
+void mostra_filhos(const int v[], int n) {
+    (void)v; // apague estas duas linhas quando escrever a função
+    (void)n;
+}
 
+int main(void) {
+    int heap[] = {90, 70, 30, 40, 50, 20};
+    mostra_filhos(heap, 6);
     return 0;
 }

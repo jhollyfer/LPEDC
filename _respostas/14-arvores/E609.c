@@ -1,17 +1,48 @@
 // 0102 · Heap e fila de prioridade
 // Exercício E609 · ★★☆
-//
-// Resposta: a saída é
-//
-//   depois das 5 inserções: [45 35 25 15 5]
-//   saiu 45: [35 15 25 5]
-//   entrou 40: [40 35 25 5 15]
-//   saiu 40: [35 15 25 5]
-//   saiu 35: [25 15 5]
-//
-// Inserções: 15; 35 sobe sobre o 15; 25 fica; 45 entra no índice 3, passa o
-// 15 e o 35; 5 fica. Tirar o 45: o 5 vai para a raiz e desce pelo 35 (maior
-// que 25) e depois pelo 15. Entrar 40: índice 4, pai 15 (troca), pai 35
-// (troca). Tirar o 40: o 15 vai para a raiz e desce pelo 35; os filhos dele
-// agora são só o 5, então para. Tirar o 35: o 5 sobe para a raiz e desce
-// pelo 25.
+
+#include <stdio.h>
+#include "heap.h"
+
+// tira o máximo e põe x numa descida só
+int troca_topo(Heap *h, int x) {
+    int maximo = h->v[0];
+    h->v[0] = x;
+    int i = 0;
+    while (2 * i + 1 < h->n) {
+        int f = 2 * i + 1;
+        if (f + 1 < h->n && h->v[f + 1] > h->v[f]) {
+            f++; // o direito é maior
+        }
+        if (h->v[i] >= h->v[f]) {
+            break;
+        }
+        int t = h->v[i];
+        h->v[i] = h->v[f];
+        h->v[f] = t;
+        i = f;
+    }
+    return maximo;
+}
+
+int main(void) {
+    Heap *h = heap_cria(8);
+    int valores[] = {15, 35, 25, 45, 5};
+    for (int i = 0; i < 5; i++) {
+        heap_insere(h, valores[i]);
+    }
+    printf("depois das 5 inserções: ");
+    heap_mostra(h);
+    printf("\n");
+
+    int novos[] = {40, 10};
+    for (int i = 0; i < 2; i++) {
+        int saiu = troca_topo(h, novos[i]);
+        printf("saiu %d, entrou %d: ", saiu, novos[i]);
+        heap_mostra(h);
+        printf("\n");
+    }
+
+    heap_libera(h);
+    return 0;
+}
