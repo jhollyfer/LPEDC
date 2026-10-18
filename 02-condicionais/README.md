@@ -2834,15 +2834,23 @@ Problemas extras para fechar o módulo. Escreva cada um num arquivo seu, rode
 com o `rodar` e teste todos os caminhos. Nada de laços ainda: só decisões.
 
 **1. Maior e menor de quatro.** Leia quatro números inteiros e mostre o maior
-e o menor, usando só `if` (sem `else`). Quantas comparações você fez? Dá para
-fazer com menos?
+e o menor, usando só `if` (sem `else`). Conte as comparações com uma variável
+`comparacoes`, somando 1 antes de cada `if`, e mostre o total. Depois
+acrescente ao mesmo programa uma segunda versão que ache o maior e o menor
+com só 4 comparações e mostre a contagem dela também. Teste com 7 2 9 4.
 
 <details><summary>Resposta</summary>
 
-Com 7, 2, 9, 4: maior **9**, menor **2**. O jeito direto (`maior = a`, depois
-um `if` para cada outro número, e o mesmo para o menor) faz 6 comparações. Dá
-para fazer com 4: compare em pares (a com b, c com d), o maior de cada par
-disputa o maior e o menor de cada par disputa o menor.
+```text
+Quatro números: 7 2 9 4
+Direto: maior 9, menor 2, 6 comparações
+Em pares: maior 9, menor 2, 4 comparações
+```
+
+O jeito direto (`maior = a`, depois um `if` para cada outro número, e o mesmo
+para o menor) faz 6 comparações. A versão de 4 compara em pares (a com b, c
+com d): o maior de cada par disputa o maior e o menor de cada par disputa o
+menor. Zere `comparacoes` antes da segunda versão.
 
 </details>
 
@@ -2885,16 +2893,24 @@ casos ficam `case 10: case 9:` → A (fall-through empilhado: 100 / 10 é 10),
 </details>
 
 **5. Bom dia, boa tarde, boa noite.** Leia a hora (0 a 23) e cumprimente: de
-5h a 11h59 "Bom dia", de 12h a 17h59 "Boa tarde", senão "Boa noite". Faça duas
-versões: com `else if` e com ternários encadeados. Qual fica mais legível?
+5h a 11h59 "Bom dia", de 12h a 17h59 "Boa tarde", senão "Boa noite". No mesmo
+programa, faça duas versões, uma com `else if` e outra com ternários
+encadeados dentro de um `printf("%s")`, e mostre as duas respostas, uma por
+linha, para conferir que batem. Rode com 4, 5, 12 e 18.
 
 <details><summary>Resposta</summary>
 
-4 → Boa noite; 5 → Bom dia; 12 → Boa tarde; 18 → Boa noite. Repare que "Boa
+```text
+Hora: 12
+else if:  Boa tarde
+ternário: Boa tarde
+```
+
+4 → Boa noite; 5 → Bom dia; 18 → Boa noite, nas duas linhas. Repare que "Boa
 noite" cobre duas faixas separadas (0 a 4 e 18 a 23): com `else if`
-começando por `hora >= 5 && hora < 12`, ela cai naturalmente no `else`. A
-versão `else if` costuma ganhar em legibilidade; o ternário encadeado só vale
-quando cabe numa linha curta.
+começando por `hora >= 5 && hora < 12`, ela cai naturalmente no `else`. O
+ternário encadeado fica `cond1 ? "Bom dia" : cond2 ? "Boa tarde" : "Boa
+noite"`: compacto, mas só vale quando cabe numa linha curta.
 
 </details>
 

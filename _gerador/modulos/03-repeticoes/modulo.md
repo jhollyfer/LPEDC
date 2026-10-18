@@ -89,15 +89,21 @@ um divisor maior que a raiz, tem também um menor, que já foi testado.
 </details>
 
 **2. Fibonacci passa de mil.** A sequência começa com 1, 1, e cada termo é a
-soma dos dois anteriores. Qual é o primeiro termo maior que 1000, e qual é a
-posição dele?
+soma dos dois anteriores. Escreva um programa que mostre os termos numa linha
+até o primeiro maior que 1000 e, na linha de baixo, esse termo e a posição
+dele, contando as posições numa variável.
 
 <details><summary>Resposta</summary>
 
-**1597**, o **17º** termo (1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233,
-377, 610, 987, 1597). É um `while`: você sabe quando parar, mas não quantas
-voltas são. O truque é guardar os dois últimos: `prox = a + b; a = b; b =
-prox;`.
+```text
+1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
+Primeiro acima de 1000: 1597 (posição 17)
+```
+
+É um `while (b <= 1000)`: você sabe quando parar, mas não quantas voltas são.
+O truque é guardar os dois últimos: `prox = a + b; a = b; b = prox;`. A
+posição começa em 2 (os dois primeiros 1 já estão contados) e sobe a cada
+volta.
 
 </details>
 
@@ -187,28 +193,41 @@ aparece uma vez só. Dá para tirar o terceiro laço: calcule `c * c` e teste se
 
 </details>
 
-**9. Quantos setes?** Escrevendo todos os números de 1 a 1000, quantas vezes
-você escreve o dígito 7?
+**9. Contando setes.** Escreva um programa que conte quantas vezes o dígito 7
+aparece quando você escreve todos os números de 1 a 1000, e mostre o total.
 
 <details><summary>Resposta</summary>
 
-**300** vezes. Um laço de 1 a 1000 e, dentro, um `while` que desmonta o número
-com `% 10` e `/ 10` (como o A040), contando os dígitos 7. Conferindo de
-cabeça: o 7 aparece 100 vezes na casa das unidades, 100 na das dezenas e 100
-na das centenas.
+```text
+Setes de 1 a 1000: 300
+```
+
+Um laço de 1 a 1000 e, dentro, um `while` que desmonta uma **cópia** do número
+com `% 10` e `/ 10` (como o A040), contando os dígitos 7. Se você desmontar o
+próprio contador do `for`, o laço nunca termina. Para conferir: o 7 aparece
+100 vezes na casa das unidades, 100 na das dezenas e 100 na das centenas.
 
 </details>
 
 **10. O computador adivinha.** Inverta o jogo do E153: você pensa num número
 de 1 a 1000, e o computador chuta. A cada chute você responde 1 (mais alto),
-2 (mais baixo) ou 0 (acertou). Quantos chutes ele precisa, no pior caso?
+2 (mais baixo) ou 0 (acertou). Escreva esse jogo. Depois, para achar o pior
+caso, troque você por um laço que testa cada número secreto de 1 a 1000 e
+calcula a resposta sozinho: conte os chutes de cada número e mostre o maior
+número de chutes, o primeiro secreto que precisou dele e quantos secretos
+precisaram dele.
 
 <details><summary>Resposta</summary>
 
-Com a estratégia certa, no máximo **10**, porque 2¹⁰ = 1024 ≥ 1000. O
-computador guarda o intervalo possível (`menor = 1`, `maior = 1000`), chuta
-sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta. É a
-**busca binária**, que volta no assunto 0090.
+```text
+Pior caso: 10 chutes (primeiro número assim: 2)
+Números que precisam de 10 chutes: 489
+```
+
+O computador guarda o intervalo possível (`menor = 1`, `maior = 1000`), chuta
+sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
+`menor = chute + 1`; com 2, `maior = chute - 1`. No máximo 10 chutes, porque
+2¹⁰ = 1024 ≥ 1000. É a **busca binária**, que volta no assunto 0090.
 
 </details>
 

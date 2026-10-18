@@ -4305,13 +4305,19 @@ moedas**. O caminho: converta para centavos inteiros **arredondando**
 </details>
 
 **2. Que dia da semana?** Numere os dias de 0 (domingo) a 6 (sábado). Hoje é
-sábado. Que dia da semana será daqui a 100 dias? E daqui a 1000?
+sábado (6). Escreva um programa que leia daqui a quantos dias e mostre o
+número do dia da semana que vai ser. Rode com 100 e com 1000.
 
 <details><summary>Resposta</summary>
 
-`(6 + 100) % 7` dá 1: **segunda-feira**. `(6 + 1000) % 7` dá 5: **sexta-feira**.
-O `%` é perfeito para tudo que "dá a volta": dias da semana, horas do
-relógio, posições numa roda.
+```text
+Daqui a quantos dias? 100
+Dia da semana: 1
+```
+
+Com 1000 sai `Dia da semana: 5`. Ou seja: **segunda-feira** e **sexta-feira**.
+A conta inteira é `(6 + dias) % 7`. O `%` é perfeito para tudo que "dá a
+volta": dias da semana, horas do relógio, posições numa roda.
 
 </details>
 
@@ -4342,26 +4348,38 @@ primeira multiplicação que estoura.
 </details>
 
 **5. Quanto preciso tirar?** A média final é ponderada: P1 com peso 3, P2 com
-peso 4 e P3 com peso 3. Você tirou 5,0 na P1 e 6,5 na P2. Quanto precisa
-tirar na P3 para ficar com média 6,0?
+peso 4 e P3 com peso 3. Escreva um programa que leia a P1, a P2 e a média
+desejada e mostre, com duas casas, quanto precisa tirar na P3. Teste com
+5.0, 6.5 e 6.0.
 
 <details><summary>Resposta</summary>
 
-Média = (3·P1 + 4·P2 + 3·P3) / 10. Isolando: P3 = (6,0·10 − 3·5,0 − 4·6,5) / 3
-= (60 − 15 − 26) / 3 = **6,33**. Use `double` em tudo: com `int`, a divisão
-final daria 6.
+```text
+P1, P2 e média desejada: 5.0 6.5 6.0
+Precisa tirar na P3: 6.33
+```
+
+Média = (3·P1 + 4·P2 + 3·P3) / 10. Isolando: P3 = (média·10 − 3·P1 − 4·P2) / 3
+= (60 − 15 − 26) / 3. Use `double` em tudo: com `int`, a divisão final daria 6.
 
 </details>
 
-**6. O voo noturno.** Um voo sai de Manaus às 22:40 (horário de Manaus) e dura
-3h50. São Paulo está uma hora à frente de Manaus. A que horas, no horário de
-São Paulo, ele pousa?
+**6. O voo noturno.** São Paulo está uma hora à frente de Manaus. Escreva um
+programa que leia a hora e o minuto de saída de um voo em Manaus (horário de
+Manaus) e a duração em minutos, e mostre a hora do pouso no horário de São
+Paulo, no formato `hh:mm`, e quantos dias ela avançou. Teste com um voo que
+sai às 22:40 e dura 3h50 (230 minutos).
 
 <details><summary>Resposta</summary>
 
-Em minutos: 22·60 + 40 = 1360; mais 230 de voo e 60 de fuso = 1650;
-`1650 % 1440` = 210 minutos = **03:30**, no dia seguinte (`1650 / 1440` = 1).
-É a mesma técnica do E066.
+```text
+Saída (hh mm) e duração em minutos: 22 40 230
+Pouso em São Paulo: 03:30 (+1 dia)
+```
+
+Em minutos: 22·60 + 40 = 1360; mais 230 de voo e 60 de fuso = 1650. Os dias
+são `1650 / 1440` = 1; o resto, `1650 % 1440` = 210 minutos, vira `210 / 60`
+horas e `210 % 60` minutos, mostrados com `%02d`. É a mesma técnica do E066.
 
 </details>
 
@@ -4377,15 +4395,24 @@ arredonde e multiplique de volta.
 
 </details>
 
-**8. sizeof de cabeça.** Sem rodar: quanto vale
-`sizeof(char) + sizeof('a') + sizeof("a") + sizeof(1.0f) + sizeof(1.0)` num
-PC de 64 bits?
+**8. sizeof de cada um.** Escreva um programa que mostre, uma por linha, o
+`sizeof` de `char`, de `'a'`, de `"a"`, de `1.0f` e de `1.0`, e no fim o total
+das cinco. Rode num PC de 64 bits.
 
 <details><summary>Resposta</summary>
 
-1 + 4 + 2 + 4 + 8 = **19**. As armadilhas: `'a'` é `int` no C (4 bytes) e
-`"a"` tem o byte zero do fim (2 bytes). O resultado é do tipo `size_t`:
-mostre com `%zu`.
+```text
+sizeof(char) = 1
+sizeof('a')  = 4
+sizeof("a")  = 2
+sizeof(1.0f) = 4
+sizeof(1.0)  = 8
+Total: 19
+```
+
+As armadilhas: `'a'` é `int` no C (4 bytes) e `"a"` tem o byte zero do fim (2
+bytes). O resultado de `sizeof` é do tipo `size_t`: mostre com `%zu`, e para
+o `"` dentro do `printf` use a sequência de escape `\"`.
 
 </details>
 
@@ -4401,8 +4428,10 @@ meio segundo.
 
 </details>
 
-**10. Qual dá a volta com garantia?** Preveja o que acontece em cada trecho e
-diga qual deles o C garante:
+**10. Qual dá a volta com garantia?** Coloque os dois trechos abaixo num
+`main`, mostre `placar` e `pontos` com `printf` e rode com o `rodar`. Depois
+conserte o trecho que o `rodar` acusar, mudando só o tipo da variável, para
+que ele mostre o valor certo, sem estourar.
 
 ```c
 unsigned short placar = 65530;
@@ -4414,10 +4443,18 @@ pontos += 1;
 
 <details><summary>Resposta</summary>
 
-O `unsigned short` dá a volta com garantia: 65540 − 65536 = **4**. O `int`
-com sinal estoura, e isso é **comportamento indefinido**: costuma virar
--2147483648, mas o padrão não garante nada, e o `rodar` acusa
-`signed integer overflow`.
+Na primeira rodada, o `rodar` mostra `runtime error: signed integer overflow:
+2147483647 + 1 cannot be represented in type 'int'`. Depois do conserto
+(`long long pontos`, mostrado com `%lld`):
+
+```text
+placar = 4
+pontos = 2147483648
+```
+
+O `unsigned short` dá a volta com garantia: 65540 − 65536 = 4. O `int` com
+sinal estoura, e isso é **comportamento indefinido**: costuma virar
+-2147483648, mas o padrão não garante nada.
 
 </details>
 
