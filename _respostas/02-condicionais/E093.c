@@ -1,25 +1,26 @@
 // 0016 · else if, if aninhado e o else pendurado
 // Exercício E093 · ★★☆
 //
-// Resposta: o else é do if (b > 0), o mais próximo sem else.
-// a) a = -1, b = 5: o if de fora é falso; mostra só "C".
-// b) a = 2, b = -1: entra no de fora, b > 0 é falso, cai no else: "B", "C".
-// c) a = 2, b = 3: "A", "C".
-// Abaixo, a versão com chaves em que o else fica com o if (a > 0). Com ela:
-// a) "B" e "C"; b) só "C"; c) "A" e "C". Troque os valores para testar.
+// Sem chaves, o else ficava com o if (chuva). Com as chaves, ele volta para
+// o if (vai_sair), como o recuo prometia.
 
 #include <stdio.h>
 
 int main(void) {
-    int a = -1, b = 5;
+    int vai_sair, chuva;
+    printf("Vai sair? Vai chover? ");
+    if (scanf("%d %d", &vai_sair, &chuva) != 2) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
-    if (a > 0) {
-        if (b > 0) {
-            printf("A\n");
+    if (vai_sair) {
+        if (chuva) {
+            printf("Leve o guarda-chuva.\n");
         }
     } else {
-        printf("B\n");
+        printf("Fique em casa e descanse.\n");
     }
-    printf("C\n");
+    printf("Bom dia!\n");
     return 0;
 }

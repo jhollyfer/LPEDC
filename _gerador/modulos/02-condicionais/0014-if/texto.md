@@ -84,11 +84,11 @@ Sim chega depois do desconto:
 > `cmp` compara `total` com 200. Depois vem um salto condicional que faz o
 > **contrário** do que você escreveu: "se for **menor**, pula o bloco". Quando
 > a condição é verdadeira, o processador simplesmente não pula e cai dentro do
-> bloco. Rode `gcc -S A027.c` e procure um `jb`, `jl` ou parecido logo depois
-> do `comisd` ou `cmp`. O `if` é só isso: comparar e, talvez, pular.
+> bloco. Salve o código acima num arquivo, rode `gcc -S` nele e procure um
+> `jb`, `jl` ou parecido logo depois do `comisd` ou `cmp`. O `if` é só isso: comparar e, talvez, pular.
 
 > [!NOTE]
 > **Pergunta para você:** e se a compra der exatamente R$ 200,00? E R$ 199,99?
-> Responda olhando o `>=` e depois troque `230.0` no A027 para conferir.
+> Responda olhando o `>=` e depois troque `230.0` no código acima para conferir.
 
 {{pratique}}

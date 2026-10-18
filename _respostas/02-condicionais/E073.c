@@ -1,20 +1,27 @@
 // 0013 · Lógicos: E, OU, NÃO
 // Exercício E073 · ★☆☆
-//
-// Resposta: 0 1 0 1 1 0
-// a && b = 1 && 0 = 0; a || b = 1; !a = 0; !b && c = 1 && 1 = 1;
-// (a && b) || c = 0 || 1 = 1; a && (b || !c) = 1 && (0 || 0) = 0.
 
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    bool a = true, b = false, c = true;
-    printf("%d ", a && b);
-    printf("%d ", a || b);
-    printf("%d ", !a);
-    printf("%d ", !b && c);
-    printf("%d ", (a && b) || c);
-    printf("%d\n", a && (b || !c));
+    bool a, b;
+    printf("a b | E OU NAO\n");
+
+    a = false;
+    b = false;
+    printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
+
+    a = false;
+    b = true;
+    printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
+
+    a = true;
+    b = false;
+    printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
+
+    a = true;
+    b = true;
+    printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
     return 0;
 }

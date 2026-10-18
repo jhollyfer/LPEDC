@@ -1,25 +1,31 @@
-// A023 · O placar em zeros e uns
+// A023 · A nota no limite e a contagem sem if
 
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int gols_casa = 2;
-    int gols_fora = 1;
+    double nota_ana = 7.0; // bem no limite da média
+    double nota_bia = 6.9;
+    double nota_caio = 8.5;
 
-    printf("casa >  fora? %d\n", gols_casa > gols_fora);
-    printf("casa == fora? %d\n", gols_casa == gols_fora);
-    printf("casa <  fora? %d\n", gols_casa < gols_fora);
+    // > e >= só discordam num caso: quando os dois lados são iguais
+    printf("7.0 >  7? %d\n", nota_ana > 7);
+    printf("7.0 >= 7? %d\n", nota_ana >= 7);
 
-    bool venceu = gols_casa > gols_fora;   // guarda a resposta: true
-    bool empatou = gols_casa == gols_fora; // false
+    bool ana = nota_ana >= 7;
+    bool bia = nota_bia >= 7;
+    bool caio = nota_caio >= 7;
 
-    int pontos = 3 * venceu + empatou;     // 3 * 1 + 0
-    printf("Pontos do mandante: %d\n", pontos);
+    // cada bool vale 0 ou 1: somar conta quantos passaram
+    int aprovados = ana + bia + caio;
+    printf("Aprovados: %d de 3\n", aprovados);
+    printf("Todos passaram? %d\n", aprovados == 3);
+    printf("Alguém ficou de fora? %d\n", aprovados != 3);
     return 0;
 }
 // Saída:
-// casa >  fora? 1
-// casa == fora? 0
-// casa <  fora? 0
-// Pontos do mandante: 3
+// 7.0 >  7? 0
+// 7.0 >= 7? 1
+// Aprovados: 2 de 3
+// Todos passaram? 0
+// Alguém ficou de fora? 1

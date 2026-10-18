@@ -87,6 +87,6 @@ ternário resolve em uma linha:
 
 > [!NOTE]
 > **Pergunta para você:** com `qtd = 1` e `total = 199.0`, quais são as três
-> linhas da saída? Pense nos dois ternários antes de mudar o A033.
+> linhas da saída? Pense nos dois ternários antes de mudar o código acima.
 
 {{pratique}}

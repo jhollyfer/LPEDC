@@ -1,79 +1,51 @@
-// A037 · A conta de luz
+// A037 · A situação no fim do semestre
 
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int consumo, resposta;
-    char bandeira;
+    double nota1 = 6.5;
+    double nota2 = 8.0;
+    int frequencia = 80; // porcentagem de presença
 
-    printf("Consumo do mês (kWh): ");
-    if (scanf("%d", &consumo) != 1 || consumo < 0) { // guarda
-        printf("Consumo inválido.\n");
+    // guarda: dado impossível sai logo
+    if (nota1 < 0 || nota1 > 10 || nota2 < 0 || nota2 > 10 ||
+        frequencia < 0 || frequencia > 100) {
+        printf("Dados inválidos.\n");
         return 1;
     }
-    printf("Bandeira (V, A ou R): ");
-    if (scanf(" %c", &bandeira) != 1) {
-        printf("Bandeira inválida.\n");
-        return 1;
-    }
-    printf("Tarifa social (1 = sim, 0 = não): ");
-    if (scanf("%d", &resposta) != 1) {
-        printf("Resposta inválida.\n");
-        return 1;
-    }
-    bool social = resposta;
 
-    double adicional; // por kWh, conforme a bandeira
-    switch (bandeira) {
-    case 'V':
-    case 'v':
-        adicional = 0.0;
+    double media = (nota1 + nota2) / 2;
+    bool presente = frequencia >= 75;
+    printf("Média: %.2f\n", media);
+    printf("Frequência: %d%% (%s)\n", frequencia, presente ? "ok" : "abaixo de 75%");
+
+    if (!presente) { // a falta reprova antes de olhar a nota
+        printf("Reprovado por falta.\n");
+    } else if (media >= 7) {
+        printf("Aprovado.\n");
+    } else if (media >= 4) {
+        printf("Recuperação: precisa de %.2f na prova final.\n", 10 - media);
+    } else {
+        printf("Reprovado por nota.\n");
+    }
+
+    switch ((int) media) { // o cast corta as casas: 7.25 vira 7
+    case 10:
+    case 9:
+        printf("Menção: excelente\n");
         break;
-    case 'A':
-    case 'a':
-        adicional = 0.02;
-        break;
-    case 'R':
-    case 'r':
-        adicional = 0.05;
+    case 8:
+    case 7:
+        printf("Menção: bom\n");
         break;
     default:
-        printf("Bandeira inválida.\n");
-        return 1;
+        printf("Menção: precisa melhorar\n");
     }
-
-    double energia = consumo * 0.80;
-    double extra = consumo * adicional;
-    double desconto = 0.0;
-    if (social && consumo <= 220) {
-        desconto = (energia + extra) * 0.40;
-    }
-    double iluminacao = consumo > 100 ? 15.0 : 5.0;
-    double total = energia + extra - desconto + iluminacao;
-
-    printf("Energia: R$ %.2f\n", energia);
-    printf("Bandeira: R$ %.2f\n", extra);
-    if (desconto > 0) {
-        printf("Desconto social: -R$ %.2f\n", desconto);
-    }
-    printf("Iluminação pública: R$ %.2f\n", iluminacao);
-
-    if (consumo <= 100) {
-        printf("Consumo baixo.\n");
-    } else if (consumo <= 300) {
-        printf("Consumo médio.\n");
-    } else {
-        printf("Consumo alto.\n");
-    }
-    printf("Total: R$ %.2f\n", total);
     return 0;
 }
-// Consumo do mês (kWh): 230
-// Bandeira (V, A ou R): A
-// Tarifa social (1 = sim, 0 = não): 0
-// Energia: R$ 184.00
-// Bandeira: R$ 4.60
-// Iluminação pública: R$ 15.00
-// Consumo médio.
-// Total: R$ 203.60
+// Saída:
+// Média: 7.25
+// Frequência: 80% (ok)
+// Aprovado.
+// Menção: bom

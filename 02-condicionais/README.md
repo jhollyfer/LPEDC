@@ -65,7 +65,7 @@ o `math.h`. Os exercícios que leem do teclado aceitam a entrada por um pipe,
 o que facilita testar vários casos seguidos:
 
 ```bash
-printf '230\nA\n0\n' | ~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A037.c
+printf '12.90 8.50\n' | ~/LPEDC/rodar 02-condicionais/0014-if/A028.c
 ```
 
 Alguns exercícios do tipo "ache o erro" trazem o código quebrado **de
@@ -190,32 +190,38 @@ escolhe um caminho é o `if`, que vem daqui a dois assuntos:
 
 Os arquivos ficam em [`0012-relacionais/`](0012-relacionais/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A023 · O placar em zeros e uns**
+**Exemplo A023 · A nota no limite e a contagem sem if**
 
 ```c
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int gols_casa = 2;
-    int gols_fora = 1;
+    double nota_ana = 7.0; // bem no limite da média
+    double nota_bia = 6.9;
+    double nota_caio = 8.5;
 
-    printf("casa >  fora? %d\n", gols_casa > gols_fora);
-    printf("casa == fora? %d\n", gols_casa == gols_fora);
-    printf("casa <  fora? %d\n", gols_casa < gols_fora);
+    // > e >= só discordam num caso: quando os dois lados são iguais
+    printf("7.0 >  7? %d\n", nota_ana > 7);
+    printf("7.0 >= 7? %d\n", nota_ana >= 7);
 
-    bool venceu = gols_casa > gols_fora;   // guarda a resposta: true
-    bool empatou = gols_casa == gols_fora; // false
+    bool ana = nota_ana >= 7;
+    bool bia = nota_bia >= 7;
+    bool caio = nota_caio >= 7;
 
-    int pontos = 3 * venceu + empatou;     // 3 * 1 + 0
-    printf("Pontos do mandante: %d\n", pontos);
+    // cada bool vale 0 ou 1: somar conta quantos passaram
+    int aprovados = ana + bia + caio;
+    printf("Aprovados: %d de 3\n", aprovados);
+    printf("Todos passaram? %d\n", aprovados == 3);
+    printf("Alguém ficou de fora? %d\n", aprovados != 3);
     return 0;
 }
 // Saída:
-// casa >  fora? 1
-// casa == fora? 0
-// casa <  fora? 0
-// Pontos do mandante: 3
+// 7.0 >  7? 0
+// 7.0 >= 7? 1
+// Aprovados: 2 de 3
+// Todos passaram? 0
+// Alguém ficou de fora? 1
 ```
 
 ```bash
@@ -291,26 +297,27 @@ Etanol compensa? 1
 
 **Exercício E068** · ★☆☆
 
-Preveja, sem rodar, o que este trecho mostra. Escreva a resposta como
-comentário e só depois copie o código para dentro do main e confira:
+Leia a idade de dois irmãos e mostre as seis comparações entre elas, uma
+por linha, cada uma com o 0 ou o 1 que o C devolve (sem if):
 
 
 ```text
-int i = 4, j = -2;
-double x = 2.5;
-printf("%d ", i > j);
-printf("%d ", i == 4);
-printf("%d ", j >= 0);
-printf("%d ", x < 3);
-printf("%d ", i != 2 * 2);
-printf("%d\n", 'b' > 'a');
+Idades: 12 9
+12 >  9? 1
+12 <  9? 0
+12 >= 9? 1
+12 <= 9? 0
+12 == 9? 0
+12 != 9? 1
 ```
 
 **Dicas:**
 
-1. Cada comparação vale 1 (verdade) ou 0 (mentira).
-2. A conta 2 * 2 é feita antes do !=: os aritméticos vêm primeiro.
-3. Resposta esperada: 1 1 0 1 0 1
+1. Leia as duas idades com um scanf só: scanf("%d %d", &a, &b).
+2. Cada linha é um printf com %d para a idade e outro %d para a
+   comparação: printf("%d >  %d? %d\n", a, b, a > b);
+3. Resposta esperada: 12 9 → 1 0 1 0 0 1 (de cima para baixo);
+   7 7 → 0 0 1 1 1 0.
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0012-relacionais/E068.c
@@ -343,17 +350,18 @@ A pagar: R$ 174.90
 **Exercício E070** · ★★☆
 
 A bala custa R$ 0,70 e a criança pagou com sete moedas de 10 centavos. O
-programa abaixo diz que ela NÃO pagou o valor exato. Rode, explique o
-motivo e conserte de dois jeitos: (a) com uma tolerância usando fabs;
-(b) trabalhando com centavos em int.
+programa abaixo diz que ela NÃO pagou o valor exato. Rode, acrescente um
+printf que mostre pago com 20 casas e conserte de dois jeitos, mostrando
+as duas linhas: (a) com uma tolerância usando fabs; (b) trabalhando com
+centavos em int.
 
 **Dicas:**
 
 1. Mostre pago com printf("%.20f") e veja o que tem lá dentro.
 2. (a) fabs(pago - preco) < 1e-9; (b) int preco = 70; int pago = 7 * 10;
-3. Resposta esperada: 0.1 não é exato em binário e 0.1 * 7 dá
-   0.70000000000000006661, diferente de 0.7. Consertado, mostra
-   "Pagou o valor exato? 1".
+3. Resposta esperada: o printf mostra 0.70000000000000006661 (0.1 não é
+   exato em binário), diferente de 0.7. Consertado, os dois jeitos
+   mostram "Pagou o valor exato? 1".
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0012-relacionais/E070.c
@@ -361,26 +369,31 @@ motivo e conserte de dois jeitos: (a) com uma tolerância usando fabs;
 
 **Exercício E071** · ★★★
 
-Na matemática, 5 > 4 > 3 é verdade. No C, é outra conversa. Preveja o que
-cada linha mostra, explique por quê e só depois teste (o compilador vai
-avisar: leia o aviso, ele está certo).
+O sistema da gincana confere se a nota digitada vale (de 0 a 10) e se os
+três jurados deram a mesma nota. Quem escreveu copiou a matemática:
+0 <= nota <= 10 e j1 == j2 == j3. Compila, com avisos (de propósito), e
+erra. Rode com as entradas abaixo, leia os avisos e conserte as duas
+linhas SEM usar && (ele só chega no 0013): use o fato de que cada
+comparação vale 0 ou 1.
 
 
 ```text
-printf("%d\n", 5 > 4 > 3);
-printf("%d\n", 3 < 2 < 1);
-printf("%d\n", 1 == 1 == 1);
-printf("%d\n", 2 == 2 == 2);
-printf("%d\n", -1 < 0 < 1);
+Nota: 15
+Jurados: 7 7 7
+Nota válida? 0
+Unanimidade? 1
 ```
 
 **Dicas:**
 
-1. O C avalia da esquerda para a direita: 5 > 4 > 3 é (5 > 4) > 3.
-2. A primeira comparação já virou 0 ou 1. A segunda compara esse número.
-3. Resposta esperada: 0, 1, 1, 0, 0. Por exemplo, 2 == 2 == 2 vira
-   1 == 2, que é 0. Para "entre" de verdade, você vai precisar do &&
-   (assunto 0013).
+1. O C avalia da esquerda para a direita: 0 <= nota <= 10 é
+   (0 <= nota) <= 10, e o 0 ou 1 da esquerda é sempre <= 10.
+2. "As duas coisas são verdade" é o mesmo que "o produto das duas vale
+   1": (0 <= nota) * (nota <= 10).
+3. Resposta esperada: valida = (nota >= 0) * (nota <= 10);
+   unanime = (j1 == j2) * (j2 == j3). Testes: 15 e 7 7 7 → 0 e 1;
+   8 e 7 7 9 → 1 e 0; 10 e 2 2 2 → 1 e 1. Sem o conserto, 15 e 7 7 7
+   mostram 1 e 0.
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0012-relacionais/E071.c
@@ -511,33 +524,44 @@ pularia direto para a pré-estreia: isso é o curto-circuito desenhado:
 > [!NOTE]
 > **Pergunta para você:** se a pessoa fosse estudante, a comparação
 > `idade >= 60` seria feita? E se a sessão fosse pré-estreia, a idade mudaria
-> alguma coisa? Siga o fluxograma e depois mude os valores no A025.
+> alguma coisa? Siga o fluxograma e depois mude os valores no código acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0013-logicos/`](0013-logicos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A025 · Meia-entrada no cinema**
+**Exemplo A025 · Dentro, fora e "só um dos dois"**
 
 ```c
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int idade = 67;
-    bool estudante = false;
-    bool pre_estreia = false;
+    int hora = 22;
 
-    // os parênteses são obrigatórios aqui: && vem antes de ||
-    bool meia = (estudante || idade >= 60) && !pre_estreia;
+    // dentro da faixa: um E de duas comparações
+    bool comercial = hora >= 8 && hora < 18;
+    // fora da faixa: um OU. É o NÃO do de cima, aberto por De Morgan:
+    // !(hora >= 8 && hora < 18) vira hora < 8 || hora >= 18
+    bool fora = hora < 8 || hora >= 18;
+    printf("Horário comercial? %d\n", comercial);
+    printf("Fora do horário?   %d\n", fora);
 
-    printf("Meia-entrada? %d\n", meia);
-    printf("Ingresso: R$ %.2f\n", 40.0 - meia * 20.0);
+    // o C não tem um "OU exclusivo" lógico, mas com bool o != faz o papel:
+    // verdade quando exatamente um dos dois é verdade
+    bool cupom = true;
+    bool primeira_compra = true;
+    bool um_desconto_so = cupom != primeira_compra;
+    bool algum_desconto = cupom || primeira_compra;
+    printf("Algum desconto?    %d\n", algum_desconto);
+    printf("Só um desconto?    %d\n", um_desconto_so);
     return 0;
 }
 // Saída:
-// Meia-entrada? 1
-// Ingresso: R$ 20.00
+// Horário comercial? 0
+// Fora do horário?   1
+// Algum desconto?    1
+// Só um desconto?    0
 ```
 
 ```bash
@@ -585,25 +609,27 @@ int main(void) {
 
 **Exercício E073** · ★☆☆
 
-Preveja o que cada linha mostra. Escreva a resposta e depois confira
-rodando o trecho dentro do main:
+Monte a tabela-verdade no terminal. Para cada uma das quatro combinações
+de a e b (0 0, 0 1, 1 0, 1 1), dê os valores às duas variáveis e mostre
+uma linha com a, b, a && b, a || b e !a, calculados pelo programa (nada de
+digitar os resultados no printf).
 
 
 ```text
-bool a = true, b = false, c = true;
-printf("%d ", a && b);
-printf("%d ", a || b);
-printf("%d ", !a);
-printf("%d ", !b && c);
-printf("%d ", a && b || c);
-printf("%d\n", a && (b || !c));
+a b | E OU NAO
+0 0 | 0 0  1
+0 1 | 0 1  1
+1 0 | 0 1  0
+1 1 | 1 1  0
 ```
 
 **Dicas:**
 
-1. Troque cada variável por 0 ou 1 antes de calcular.
-2. Sem parênteses, o && é feito antes do ||: a && b || c é (a && b) || c.
-3. Resposta esperada: 0 1 0 1 1 0
+1. Declare bool a, b; e, antes de cada linha, faça a = ...; b = ...;
+2. Use sempre o mesmo printf:
+   printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
+3. Resposta esperada: a tabela acima. A coluna do E só tem 1 na última
+   linha; a do OU só tem 0 na primeira.
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0013-logicos/E073.c
@@ -684,25 +710,29 @@ barrado (De Morgan): 1
 
 **Exercício E077** · ★★★
 
-Curto-circuito com efeito colateral. Preveja os cinco números que este
-trecho mostra. Atenção: a++ entrega o valor ANTIGO e só depois soma 1
-(assunto 0009), mas só se aquela parte da expressão for avaliada!
+O app do banco mostra se o gasto médio por dia passou de R$ 100. Com uma
+conta nova, sem nenhum dia registrado, o programa abaixo quebra: o
+sanitizer acusa "division by zero". Rode com 900 0 e veja o erro. Depois:
+(a) conserte a linha do gasto_alto usando o curto-circuito do &&, sem if;
+(b) complete a linha do alerta, que deve ser verdade quando não há dias
+registrados OU quando o gasto é alto. Ela também não pode dividir por zero.
 
 
 ```text
-int a = 0, b = 0;
-bool r1 = (a++ > 0) && (b++ > 0);
-bool r2 = (a++ > 0) || (b++ > 0);
-bool r3 = (b++ > 0) || (a++ > 5);
-printf("%d %d %d %d %d\n", r1, r2, r3, a, b);
+Gasto total e dias: 900 6
+Gasto alto? 1
+Alerta? 1
 ```
 
 **Dicas:**
 
-1. Faça um teste de mesa com as colunas a, b, r1, r2, r3.
-2. Em r1, a primeira parte é 0 > 0. Precisa olhar a segunda? Em r2, a
-   primeira parte é 1 > 0. Precisa olhar a segunda?
-3. Resposta esperada: 0 1 0 3 1 (o b++ de r1 e o de r2 nunca rodam).
+1. No &&, se o lado esquerdo é falso, o direito nem é calculado. Ponha a
+   pergunta que protege (dias != 0) na frente da divisão.
+2. No ||, se o lado esquerdo é verdade, o direito é pulado: comece com
+   dias == 0.
+3. Resposta esperada: gasto_alto = dias != 0 && gasto / dias > 100;
+   alerta = dias == 0 || gasto / dias > 100. Testes: 900 6 → 1 e 1;
+   900 0 → 0 e 1 (sem erro); 300 5 → 0 e 0.
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0013-logicos/E077.c
@@ -712,9 +742,10 @@ printf("%d %d %d %d %d\n", r1, r2, r3, a, b);
 
 Este programa deveria dizer se o número é par e se está entre 10 e 20
 (sem incluir os extremos). Ele compila, mas com dois avisos, e erra.
-Teste com 14 (deveria dar 1 e 1) e com 25 (deveria dar 0 e 0). Explique
-cada erro e conserte. Lembrete: n & 1 pega o último bit de n em
-binário: 0 para par, 1 para ímpar (o & bit a bit vem no assunto 0065).
+Teste com 14 (deveria dar 1 e 1) e com 25 (deveria dar 0 e 0). Conserte
+as duas linhas e rode de novo com 14, 25 e 20. Lembrete: n & 1 pega o
+último bit de n em binário: 0 para par, 1 para ímpar (o & bit a bit vem
+no assunto 0065).
 
 **Dicas:**
 
@@ -723,7 +754,8 @@ binário: 0 para par, 1 para ímpar (o & bit a bit vem no assunto 0065).
    (10 < n) < 20.
 3. Resposta esperada: n & 1 == 0 é n & (1 == 0), que é n & 0, sempre 0;
    o certo é (n & 1) == 0. 10 < n < 20 compara 0 ou 1 com 20, sempre 1;
-   o certo é n > 10 && n < 20. Consertado: 14 → 1 e 1; 25 → 0 e 0.
+   o certo é n > 10 && n < 20. Consertado: 14 → 1 e 1; 25 → 0 e 0;
+   20 → 1 e 0.
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0013-logicos/E078.c
@@ -817,37 +849,47 @@ Sim chega depois do desconto:
 > `cmp` compara `total` com 200. Depois vem um salto condicional que faz o
 > **contrário** do que você escreveu: "se for **menor**, pula o bloco". Quando
 > a condição é verdadeira, o processador simplesmente não pula e cai dentro do
-> bloco. Rode `gcc -S A027.c` e procure um `jb`, `jl` ou parecido logo depois
-> do `comisd` ou `cmp`. O `if` é só isso: comparar e, talvez, pular.
+> bloco. Salve o código acima num arquivo, rode `gcc -S` nele e procure um
+> `jb`, `jl` ou parecido logo depois do `comisd` ou `cmp`. O `if` é só isso: comparar e, talvez, pular.
 
 > [!NOTE]
 > **Pergunta para você:** e se a compra der exatamente R$ 200,00? E R$ 199,99?
-> Responda olhando o `>=` e depois troque `230.0` no A027 para conferir.
+> Responda olhando o `>=` e depois troque `230.0` no código acima para conferir.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0014-if/`](0014-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A027 · Desconto a partir de R$ 200**
+**Exemplo A027 · Avisos independentes no painel do carro**
 
 ```c
+#include <stdbool.h>
 #include <stdio.h>
 
+// Três if seguidos, sem else: cada pergunta é feita, não importa o que as
+// outras responderam. Pode acender nenhum aviso, um, dois ou os três.
 int main(void) {
-    double total = 230.0;
+    int combustivel = 12; // porcentagem do tanque
+    bool porta_aberta = true;
+    int km_revisao = 0;   // quilômetros até a próxima revisão
 
-    printf("Total: R$ %.2f\n", total);
-    if (total >= 200) {
-        total = total * 0.9; // 10% de desconto
-        printf("Desconto de 10%% aplicado!\n");
+    if (combustivel < 15) {
+        printf("Aviso: tanque na reserva (%d%%).\n", combustivel);
     }
-    printf("A pagar: R$ %.2f\n", total);
+    if (porta_aberta) { // a variável sozinha: verdade se não for zero
+        printf("Aviso: porta aberta.\n");
+    }
+    if (!km_revisao) {  // o mesmo que km_revisao == 0
+        printf("Aviso: hora da revisão.\n");
+    }
+    printf("Boa viagem!\n");
     return 0;
 }
 // Saída:
-// Total: R$ 230.00
-// Desconto de 10% aplicado!
-// A pagar: R$ 207.00
+// Aviso: tanque na reserva (12%).
+// Aviso: porta aberta.
+// Aviso: hora da revisão.
+// Boa viagem!
 ```
 
 ```bash
@@ -938,8 +980,8 @@ Nota final: 10.0
 
 O cinema quer barrar menores de 18 anos neste filme. Mas o programa
 abaixo mostra "Entrada proibida" até para quem tem 25 anos. Rode com 25,
-leia o aviso do compilador (ele existe de propósito), explique o erro e
-conserte.
+leia o aviso do compilador (ele existe de propósito), conserte e rode de
+novo com 25 e com 15.
 
 **Dicas:**
 
@@ -978,31 +1020,29 @@ Maior orçamento: R$ 3790
 
 **Exercício E083** · ★★★
 
-Preveja a saída deste trecho. O recuo foi feito para enganar: o compilador
-não olha os espaços. Escreva a resposta e só depois teste (vão aparecer
-avisos, e eles dão pistas).
+O controle de estoque da padaria tem duas regras: com menos de 10 pães,
+mostra "Estoque baixo." e "Pedir mais pão."; com 0 pão, mostra também
+"Esgotado!" e "Desligar a vitrine.". O recuo do programa abaixo promete
+isso, mas o compilador não olha recuo: com 40 pães aparecem duas linhas
+que não deviam. Rode com 40, leia os avisos (o código está quebrado de
+propósito) e conserte. Depois, acrescente uma terceira regra: com mais de
+100 pães, mostre quantos passaram do ideal.
 
 
 ```text
-int n = 7;
-if (n > 10)
-    printf("grande ");
-    printf("sete ");
-if (n % 2)
-    printf("ímpar ");
-if (!(n - 7))
-    printf("igual ");
-if (n & 1 == 0)
-    printf("par ");
-printf("fim\n");
+Pães no estoque: 130
+Excesso: 30 pães acima do ideal.
+Estoque: 130
 ```
 
 **Dicas:**
 
-1. Sem chaves, cada if manda só na primeira instrução depois dele.
-2. n % 2 vale 1 (verdade). n - 7 vale 0, e !0 vale 1. E o == vem antes
-   do & (reveja o WARNING do 0013).
-3. Resposta esperada: sete ímpar igual fim
+1. Sem chaves, o if manda só na primeira instrução depois dele.
+2. Ponha chaves em todos os if. A regra nova é outro if solto, com
+   estoque - 100 no printf.
+3. Resposta esperada: 40 → só "Estoque: 40"; 6 → "Estoque baixo.",
+   "Pedir mais pão." e "Estoque: 6"; 0 → as quatro mensagens e
+   "Estoque: 0"; 130 → a linha do excesso e "Estoque: 130".
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0014-if/E083.c
@@ -1128,33 +1168,41 @@ dois:
 > [!NOTE]
 > **Pergunta para você:** se o saldo fosse exatamente R$ 5,00, o que
 > apareceria, e com quanto o cartão ficaria? E se você trocasse `>=` por `>`?
-> Pense antes de mudar o A029.
+> Pense antes de mudar o código acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0015-if-else/`](0015-if-else/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A029 · A catraca do metrô**
+**Exemplo A029 · O estacionamento e a constante à esquerda**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    double saldo = 3.50;
-    double tarifa = 5.00;
+    int horas = 5;
+    int vagas_livres = 0;
+    double valor;
 
-    if (saldo >= tarifa) {
-        saldo = saldo - tarifa;
-        printf("Catraca liberada. Saldo: R$ %.2f\n", saldo);
+    // os dois caminhos guardam o resultado na mesma variável
+    if (horas <= 3) {
+        valor = 12.0;                      // preço fechado até 3 horas
     } else {
-        printf("Saldo insuficiente.\n");
-        printf("Faltam R$ %.2f\n", tarifa - saldo);
+        valor = 12.0 + (horas - 3) * 4.0;  // R$ 4 por hora a mais
+    }
+    printf("%d horas: R$ %.2f\n", horas, valor); // roda depois de qualquer lado
+
+    // constante à esquerda: se esquecer um =, "0 = vagas_livres" nem compila
+    if (0 == vagas_livres) {
+        printf("Placa na entrada: LOTADO\n");
+    } else {
+        printf("Placa na entrada: %d vagas\n", vagas_livres);
     }
     return 0;
 }
 // Saída:
-// Saldo insuficiente.
-// Faltam R$ 1.50
+// 5 horas: R$ 20.00
+// Placa na entrada: LOTADO
 ```
 
 ```bash
@@ -1236,8 +1284,9 @@ Novo salário: R$ 1980.00
 **Exercício E087** · ★★☆
 
 O caixa eletrônico bloqueia o cartão na 3ª senha errada. Mas este programa
-bloqueia logo na primeira! Rode com 1, leia o aviso do compilador, explique
-os DOIS estragos que o erro causa e conserte.
+bloqueia logo na primeira! Rode com 1, leia o aviso do compilador e repare
+nos DOIS estragos que o erro causa (a mensagem e a última linha).
+Conserte e rode de novo com 1 e com 3.
 
 **Dicas:**
 
@@ -1279,30 +1328,29 @@ Negado: a parcela passa do limite.
 
 **Exercício E089** · ★★★
 
-Preveja a saída deste trecho. Depois troque "b = 2" por "b == 2" e preveja
-de novo. Só então rode as duas versões.
+Na entrada do estacionamento, o totem confere se há vaga e, se houver,
+se o motorista é mensalista (entra direto) ou não (retira o ticket). O
+programa abaixo tem o = no lugar do == em DOIS if aninhados (quebrado de
+propósito). Rode com 12 0: ele chama um avulso de mensalista e ainda zera
+as vagas. Conserte os dois testes escrevendo a constante à esquerda
+(0 == vagas), para que um = esquecido vire erro de compilação.
 
 
 ```text
-int a = 3, b = 0;
-if (b = 2) {
-    if (a == 2) {
-        printf("X ");
-    } else {
-        printf("Y ");
-    }
-} else {
-    printf("Z ");
-}
-printf("%d %d\n", a, b);
+Vagas livres e mensalista (1 = sim, 0 = não): 12 0
+Retire o ticket. Cancela aberta.
+Vagas livres: 12
 ```
 
 **Dicas:**
 
-1. Com um sinal só, b recebe 2 e o if testa o 2.
-2. Com dois sinais, o if compara 0 com 2 e b não muda.
-3. Resposta esperada: com "b = 2" mostra "Y 3 2"; com "b == 2" mostra
-   "Z 3 0".
+1. vagas = 0 guarda 0 e testa 0 (sempre falso); mensalista = 1 guarda 1
+   e testa 1 (sempre verdade).
+2. Teste a sua versão trocando um == por = de propósito: com a constante
+   à esquerda, o gcc recusa ("lvalue required"). Depois desfaça.
+3. Resposta esperada: if (0 == vagas) e if (1 == mensalista). Testes:
+   12 0 → ticket e "Vagas livres: 12"; 12 1 → "Bem-vindo, mensalista.
+   Cancela aberta." e 12; 0 1 → "Lotado." e "Vagas livres: 0".
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0015-if-else/E089.c
@@ -1438,36 +1486,48 @@ losangos de baixo nunca são visitados:
 
 > [!NOTE]
 > **Pergunta para você:** a 72 km/h, qual mensagem aparece? E a 90 km/h?
-> Repare que os limites das faixas usam `<=`. Depois confira no A031.
+> Repare que os limites das faixas usam `<=`. Depois confira mudando a velocidade no código acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0016-else-if/`](0016-else-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A031 · As faixas do radar**
+**Exemplo A031 · FizzBuzz e a ordem que importa**
 
 ```c
 #include <stdio.h>
 
+// Aqui as condições não são faixas: um número pode cumprir várias ao mesmo
+// tempo. Como o else if para no primeiro Sim, a mais exigente vem primeiro.
 int main(void) {
-    int limite = 60;
-    int velocidade = 80;
-    int faixa_media = limite + limite / 5; // 72: até 20% acima
-    int faixa_grave = limite + limite / 2; // 90: até 50% acima
+    int n = 15; // divisível por 3 e por 5
 
-    if (velocidade <= limite) {
-        printf("Dentro do limite. Boa viagem!\n");
-    } else if (velocidade <= faixa_media) {
-        printf("Infração média: R$ 130.16\n");
-    } else if (velocidade <= faixa_grave) {
-        printf("Infração grave: R$ 195.23\n");
+    printf("Ordem certa:  ");
+    if (n % 3 == 0 && n % 5 == 0) {
+        printf("FizzBuzz\n");
+    } else if (n % 3 == 0) {
+        printf("Fizz\n");
+    } else if (n % 5 == 0) {
+        printf("Buzz\n");
     } else {
-        printf("Infração gravíssima: R$ 880.41\n");
+        printf("%d\n", n);
+    }
+
+    printf("Ordem errada: ");
+    if (n % 3 == 0) { // 15 já para aqui: o FizzBuzz nunca é testado
+        printf("Fizz\n");
+    } else if (n % 5 == 0) {
+        printf("Buzz\n");
+    } else if (n % 3 == 0 && n % 5 == 0) {
+        printf("FizzBuzz\n");
+    } else {
+        printf("%d\n", n);
     }
     return 0;
 }
 // Saída:
-// Infração grave: R$ 195.23
+// Ordem certa:  FizzBuzz
+// Ordem errada: Fizz
 ```
 
 ```bash
@@ -1554,35 +1614,31 @@ Conta no vermelho.
 
 **Exercício E093** · ★★☆
 
-O recuo deste trecho mente. Preveja a saída para os três pares de valores
-e só depois rode:
+O assistente do celular lê duas respostas: você vai sair (1 ou 0)? Vai
+chover (1 ou 0)? Quem vai sair e vê chuva deve ler "Leve o guarda-chuva.";
+quem NÃO vai sair deve ler "Fique em casa e descanse."; todo mundo lê
+"Bom dia!" no fim. O recuo do programa abaixo promete isso, mas o else
+pendurado tem outro dono (o código está quebrado de propósito e o gcc
+avisa). Rode com 0 1, 1 0 e 1 1, veja a saída errada e conserte com
+chaves.
 
 
 ```text
-if (a > 0)
-    if (b > 0)
-        printf("A\n");
-else
-    printf("B\n");
-printf("C\n");
+Vai sair? Vai chover? 0 1
+Fique em casa e descanse.
+Bom dia!
 ```
-
-
-
-```text
-a) a = -1, b = 5      b) a = 2, b = -1      c) a = 2, b = 3
-```
-
-
-Por fim, coloque chaves para que o else fique de fato com o if (a > 0).
 
 **Dicas:**
 
-1. O else pertence ao if mais próximo que ainda não tem else.
-2. Com a = -1, o if de fora é falso, e o else não é dele.
-3. Resposta esperada: a) só "C"; b) "B" e "C"; c) "A" e "C". Com as
-   chaves em volta do if (b > 0), o caso a) passa a mostrar "B" e "C", e o
-   caso b) mostra só "C".
+1. Sem chaves, o else pertence ao if mais próximo que ainda não tem else:
+   o if (chuva).
+2. Ponha chaves em volta do if de dentro (e, de quebra, em todos os
+   blocos).
+3. Resposta esperada, depois do conserto: 0 1 → "Fique em casa e
+   descanse." e "Bom dia!"; 1 0 → só "Bom dia!"; 1 1 → "Leve o
+   guarda-chuva." e "Bom dia!". Antes do conserto, 0 1 mostrava só
+   "Bom dia!" e 1 0 mandava ficar em casa.
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0016-else-if/E093.c
@@ -1592,7 +1648,8 @@ Por fim, coloque chaves para que o else fique de fato com o if (a > 0).
 
 O conceito deveria ser A (nota 9 ou mais), B (7 ou mais), C (5 ou mais)
 ou D (abaixo de 5). Mas quem tirou 9.5 recebeu C. O programa compila sem
-nenhum aviso: o erro é de lógica. Ache e conserte.
+nenhum aviso: o erro é de lógica. Ache, conserte e rode com as quatro
+notas da resposta esperada.
 
 **Dicas:**
 
@@ -1758,32 +1815,40 @@ ternário resolve em uma linha:
 
 > [!NOTE]
 > **Pergunta para você:** com `qtd = 1` e `total = 199.0`, quais são as três
-> linhas da saída? Pense nos dois ternários antes de mudar o A033.
+> linhas da saída? Pense nos dois ternários antes de mudar o código acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0017-ternario/`](0017-ternario/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A033 · Frete e plural no carrinho**
+**Exemplo A033 · O ternário que protege a divisão**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    int qtd = 3;
-    double total = 150.0;
+    int vendido = 0; // o food truck ainda não abriu
+    int dias = 0;
 
-    double frete = total >= 199 ? 0.0 : 19.90;
+    // só um dos lados é calculado: com dias == 0, a divisão nem acontece
+    double media = dias != 0 ? (double) vendido / dias : 0.0;
+    printf("Média por dia: R$ %.2f\n", media);
+    printf("Situação: %s\n", dias != 0 ? "funcionando" : "ainda não abriu");
 
-    printf("%d %s no carrinho\n", qtd, qtd == 1 ? "item" : "itens");
-    printf("Frete: R$ %.2f\n", frete);
-    printf("Total: R$ %.2f\n", total + frete);
+    // os dois lados viram um tipo comum: int com double dá double
+    int pedidos = 3;
+    printf("Fator: %.1f\n", pedidos > 0 ? pedidos : 0.5); // sai 3.0, não 3
+
+    // no meio de uma conta, o ternário vai entre parênteses
+    double taxa = 5.0 + (pedidos > 2 ? 2.5 : 0.0);
+    printf("Taxa de entrega: R$ %.2f\n", taxa);
     return 0;
 }
 // Saída:
-// 3 itens no carrinho
-// Frete: R$ 19.90
-// Total: R$ 169.90
+// Média por dia: R$ 0.00
+// Situação: ainda não abriu
+// Fator: 3.0
+// Taxa de entrega: R$ 7.50
 ```
 
 ```bash
@@ -1873,24 +1938,30 @@ Quantidade: 5
 
 **Exercício E099** · ★★☆
 
-Preveja o valor de cada expressão com i = 2, j = 5 e k = 0. Depois confira
-com printf (as quatro primeiras com %d, a última com %s).
+Leia dois inteiros, a e b, e mostre quatro linhas, cada resultado saído
+de UM ternário (nada de if): a distância entre os dois (o maior menos o
+menor); se a soma é "par" ou "ímpar"; o menor dos dois; e se a é
+divisível por b. Com b igual a 0, a última linha mostra "não dá para
+dividir por zero", sem calcular o resto.
 
 
 ```text
-a) k ? i : j
-b) j > i ? j - i : i - j
-c) i == 2 || k ? 7 : 8
-d) k ? 1 : i ? 2 : 3
-e) j % 2 ? "ímpar" : "par"
+Dois números: 2 5
+Distância: 3
+Soma: ímpar
+Menor: 2
+2 por 5: não divisível
 ```
 
 **Dicas:**
 
-1. Lembre: 0 é falso, o resto é verdade.
-2. Em c), o || vem antes do ?: na precedência. Em d), o ternário de dentro
-   é o "senão" do de fora: k ? 1 : (i ? 2 : 3).
-3. Resposta esperada: a) 5; b) 3; c) 7; d) 2; e) ímpar.
+1. Distância: a > b ? a - b : b - a. Soma: (a + b) % 2 ? "ímpar" : "par".
+2. Na última linha, um ternário dentro do "senão" do outro:
+   b == 0 ? "não dá para dividir por zero" : a % b == 0 ? ... : ...
+   Como o ternário só calcula um lado, a % 0 nunca acontece.
+3. Resposta esperada: 2 5 → 3, ímpar, 2, não divisível;
+   12 4 → 8, par, 4, divisível; 7 0 → 7, ímpar, 0,
+   não dá para dividir por zero.
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0017-ternario/E099.c
@@ -1922,8 +1993,8 @@ Maior nota: 10
 
 O total da compra deveria ser o subtotal mais o frete (R$ 19.90 abaixo de
 R$ 199, grátis a partir disso). Com subtotal 150, o programa mostra
-"Total: R$ 0.00"! Compila sem nenhum aviso. Explique o que o C entende
-nessa linha e conserte.
+"Total: R$ 0.00"! Compila sem nenhum aviso. Conserte a linha do total
+com parênteses e rode de novo com 150 e com 250.
 
 **Dicas:**
 
@@ -2074,44 +2145,56 @@ de Sim e Não:
 
 > [!NOTE]
 > **Pergunta para você:** com `codigo = 7`, o que aparece? E o total? Pense
-> no valor inicial de `preco` antes de mudar o A035.
+> no valor inicial de `preco` antes de mudar o código acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0018-switch/`](0018-switch/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A035 · O cardápio da lanchonete**
+**Exemplo A035 · Faixas de nota com a divisão inteira**
 
 ```c
 #include <stdio.h>
 
+// O switch só compara com valores exatos. Para usar faixas, transforme a
+// faixa num número: 87 / 10 dá 8 na divisão inteira.
 int main(void) {
-    int codigo = 2;
-    int quantidade = 2;
-    double preco = 0;
+    int nota = 87; // de 0 a 100
+    char conceito;
 
-    switch (codigo) {
-    case 1:
-        printf("X-Burger\n");
-        preco = 15.00;
+    switch (nota / 10) {
+    case 10: // 100 também é A
+    case 9:
+        conceito = 'A';
         break;
-    case 2:
-        printf("X-Salada\n");
-        preco = 18.00;
-        break; // sem ele, cairia no case 3
-    case 3:
-        printf("Misto quente\n");
-        preco = 9.00;
+    case 8:
+        conceito = 'B';
+        break;
+    case 7:
+        conceito = 'C';
+        break;
+    default: // de 0 a 69
+        conceito = 'D';
+    }
+    printf("Nota %d: conceito %c\n", nota, conceito);
+
+    // char também é número: dá para fazer switch numa letra
+    switch (conceito) {
+    case 'A':
+    case 'B':
+        printf("Parabéns!\n");
+        break;
+    case 'C':
+        printf("Passou raspando.\n");
         break;
     default:
-        printf("Código inválido\n");
+        printf("Vai para a recuperação.\n");
     }
-    printf("Total: R$ %.2f\n", quantidade * preco);
     return 0;
 }
 // Saída:
-// X-Salada
-// Total: R$ 36.00
+// Nota 87: conceito B
+// Parabéns!
 ```
 
 ```bash
@@ -2222,33 +2305,30 @@ Novo salário: R$ 1150.00
 
 **Exercício E105** · ★★☆
 
-Preveja a saída deste switch para n = 2, 5, 7 e 9. Repare que o default
-está no meio e que nem todo case tem break.
+O atendimento por telefone do banco tem um menu de teclas: 1 → "Consultar
+saldo."; 2 → "Segunda via da fatura."; 9 → "Transferindo para um
+atendente..."; 0 → "Repetindo o menu.". Qualquer outra tecla mostra
+"Opção inválida." e, em seguida, também repete o menu. Escreva com UM
+switch em que o default fica no meio, logo antes do case 0, e cai nele
+de propósito (sem repetir o printf do menu).
 
 
 ```text
-switch (n) {
-case 2:
-    printf("dois ");
-case 5:
-    printf("cinco ");
-    break;
-default:
-    printf("outro ");
-case 7:
-    printf("sete ");
-}
-printf("fim\n");
+Tecla: 7
+Opção inválida.
+Repetindo o menu.
 ```
 
 **Dicas:**
 
-1. O switch pula para o rótulo certo (ou para o default, esteja ele onde
-   estiver) e desce até um break ou até o fim.
-2. O default não precisa ser o último. Depois dele, o case 7 está logo
-   embaixo.
-3. Resposta esperada: 2 → "dois cinco fim"; 5 → "cinco fim";
-   7 → "sete fim"; 9 → "outro sete fim".
+1. O default não precisa ser o último: o switch pula para ele quando
+   nenhum case bate, esteja onde estiver.
+2. Ordem dos rótulos: case 1, case 2, case 9, default, case 0. Todos com
+   break, menos o default; no lugar do break dele, escreva o comentário
+   "// fall through" (o gcc entende e não avisa).
+3. Resposta esperada: 1 → "Consultar saldo."; 2 → "Segunda via da
+   fatura."; 9 → "Transferindo para um atendente..."; 0 → só "Repetindo
+   o menu."; 7 → "Opção inválida." e "Repetindo o menu.".
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0018-switch/E105.c
@@ -2481,92 +2561,64 @@ parece por fora:
 > [!NOTE]
 > **Pergunta para você:** com 400 kWh, bandeira vermelha e tarifa social,
 > quanto dá a conta? O desconto entra? Faça a conta no papel e depois rode o
-> A037 com essa entrada.
+> código acima com essa entrada.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0019-juntando-tudo/`](0019-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A037 · A conta de luz**
+**Exemplo A037 · A situação no fim do semestre**
 
 ```c
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int consumo, resposta;
-    char bandeira;
+    double nota1 = 6.5;
+    double nota2 = 8.0;
+    int frequencia = 80; // porcentagem de presença
 
-    printf("Consumo do mês (kWh): ");
-    if (scanf("%d", &consumo) != 1 || consumo < 0) { // guarda
-        printf("Consumo inválido.\n");
+    // guarda: dado impossível sai logo
+    if (nota1 < 0 || nota1 > 10 || nota2 < 0 || nota2 > 10 ||
+        frequencia < 0 || frequencia > 100) {
+        printf("Dados inválidos.\n");
         return 1;
     }
-    printf("Bandeira (V, A ou R): ");
-    if (scanf(" %c", &bandeira) != 1) {
-        printf("Bandeira inválida.\n");
-        return 1;
-    }
-    printf("Tarifa social (1 = sim, 0 = não): ");
-    if (scanf("%d", &resposta) != 1) {
-        printf("Resposta inválida.\n");
-        return 1;
-    }
-    bool social = resposta;
 
-    double adicional; // por kWh, conforme a bandeira
-    switch (bandeira) {
-    case 'V':
-    case 'v':
-        adicional = 0.0;
+    double media = (nota1 + nota2) / 2;
+    bool presente = frequencia >= 75;
+    printf("Média: %.2f\n", media);
+    printf("Frequência: %d%% (%s)\n", frequencia, presente ? "ok" : "abaixo de 75%");
+
+    if (!presente) { // a falta reprova antes de olhar a nota
+        printf("Reprovado por falta.\n");
+    } else if (media >= 7) {
+        printf("Aprovado.\n");
+    } else if (media >= 4) {
+        printf("Recuperação: precisa de %.2f na prova final.\n", 10 - media);
+    } else {
+        printf("Reprovado por nota.\n");
+    }
+
+    switch ((int) media) { // o cast corta as casas: 7.25 vira 7
+    case 10:
+    case 9:
+        printf("Menção: excelente\n");
         break;
-    case 'A':
-    case 'a':
-        adicional = 0.02;
-        break;
-    case 'R':
-    case 'r':
-        adicional = 0.05;
+    case 8:
+    case 7:
+        printf("Menção: bom\n");
         break;
     default:
-        printf("Bandeira inválida.\n");
-        return 1;
+        printf("Menção: precisa melhorar\n");
     }
-
-    double energia = consumo * 0.80;
-    double extra = consumo * adicional;
-    double desconto = 0.0;
-    if (social && consumo <= 220) {
-        desconto = (energia + extra) * 0.40;
-    }
-    double iluminacao = consumo > 100 ? 15.0 : 5.0;
-    double total = energia + extra - desconto + iluminacao;
-
-    printf("Energia: R$ %.2f\n", energia);
-    printf("Bandeira: R$ %.2f\n", extra);
-    if (desconto > 0) {
-        printf("Desconto social: -R$ %.2f\n", desconto);
-    }
-    printf("Iluminação pública: R$ %.2f\n", iluminacao);
-
-    if (consumo <= 100) {
-        printf("Consumo baixo.\n");
-    } else if (consumo <= 300) {
-        printf("Consumo médio.\n");
-    } else {
-        printf("Consumo alto.\n");
-    }
-    printf("Total: R$ %.2f\n", total);
     return 0;
 }
-// Consumo do mês (kWh): 230
-// Bandeira (V, A ou R): A
-// Tarifa social (1 = sim, 0 = não): 0
-// Energia: R$ 184.00
-// Bandeira: R$ 4.60
-// Iluminação pública: R$ 15.00
-// Consumo médio.
-// Total: R$ 203.60
+// Saída:
+// Média: 7.25
+// Frequência: 80% (ok)
+// Aprovado.
+// Menção: bom
 ```
 
 ```bash

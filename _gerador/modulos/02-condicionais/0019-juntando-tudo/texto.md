@@ -143,6 +143,6 @@ parece por fora:
 > [!NOTE]
 > **Pergunta para você:** com 400 kWh, bandeira vermelha e tarifa social,
 > quanto dá a conta? O desconto entra? Faça a conta no papel e depois rode o
-> A037 com essa entrada.
+> código acima com essa entrada.
 
 {{pratique}}

@@ -1,31 +1,32 @@
 // 0018 · switch, case, break e fall-through
 // Exercício E105 · ★★☆
-//
-// Resposta:
-// n = 2: entra no case 2, cai no case 5 e para no break → "dois cinco fim"
-// n = 5: entra no case 5 e para no break                → "cinco fim"
-// n = 7: entra no case 7, que é o último                → "sete fim"
-// n = 9: nenhum case casa, entra no default e cai no 7  → "outro sete fim"
-// Abaixo, o switch com os comentários de fall-through (para o gcc não
-// avisar), rodando para n = 9.
 
 #include <stdio.h>
 
 int main(void) {
-    int n = 9;
-    switch (n) {
+    int tecla;
+    printf("Tecla: ");
+    if (scanf("%d", &tecla) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
+
+    switch (tecla) {
+    case 1:
+        printf("Consultar saldo.\n");
+        break;
     case 2:
-        printf("dois ");
-        // fall through
-    case 5:
-        printf("cinco ");
+        printf("Segunda via da fatura.\n");
+        break;
+    case 9:
+        printf("Transferindo para um atendente...\n");
         break;
     default:
-        printf("outro ");
+        printf("Opção inválida.\n");
         // fall through
-    case 7:
-        printf("sete ");
+    case 0:
+        printf("Repetindo o menu.\n");
+        break;
     }
-    printf("fim\n");
     return 0;
 }

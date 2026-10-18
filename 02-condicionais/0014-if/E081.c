@@ -3,8 +3,8 @@
 //
 // O cinema quer barrar menores de 18 anos neste filme. Mas o programa
 // abaixo mostra "Entrada proibida" até para quem tem 25 anos. Rode com 25,
-// leia o aviso do compilador (ele existe de propósito), explique o erro e
-// conserte.
+// leia o aviso do compilador (ele existe de propósito), conserte e rode de
+// novo com 25 e com 15.
 //
 // Dicas:
 // 1. Olhe com atenção o fim da linha do if.

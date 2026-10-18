@@ -1,28 +1,40 @@
 // 0013 · Lógicos: E, OU, NÃO
 // Exercício E077 · ★★★
 //
-// Curto-circuito com efeito colateral. Preveja os cinco números que este
-// trecho mostra. Atenção: a++ entrega o valor ANTIGO e só depois soma 1
-// (assunto 0009), mas só se aquela parte da expressão for avaliada!
+// O app do banco mostra se o gasto médio por dia passou de R$ 100. Com uma
+// conta nova, sem nenhum dia registrado, o programa abaixo quebra: o
+// sanitizer acusa "division by zero". Rode com 900 0 e veja o erro. Depois:
+// (a) conserte a linha do gasto_alto usando o curto-circuito do &&, sem if;
+// (b) complete a linha do alerta, que deve ser verdade quando não há dias
+// registrados OU quando o gasto é alto. Ela também não pode dividir por zero.
 //
-//   int a = 0, b = 0;
-//   bool r1 = (a++ > 0) && (b++ > 0);
-//   bool r2 = (a++ > 0) || (b++ > 0);
-//   bool r3 = (b++ > 0) || (a++ > 5);
-//   printf("%d %d %d %d %d\n", r1, r2, r3, a, b);
+//   Gasto total e dias: 900 6
+//   Gasto alto? 1
+//   Alerta? 1
 //
 // Dicas:
-// 1. Faça um teste de mesa com as colunas a, b, r1, r2, r3.
-// 2. Em r1, a primeira parte é 0 > 0. Precisa olhar a segunda? Em r2, a
-//    primeira parte é 1 > 0. Precisa olhar a segunda?
-// 3. Resposta esperada: 0 1 0 3 1 (o b++ de r1 e o de r2 nunca rodam).
+// 1. No &&, se o lado esquerdo é falso, o direito nem é calculado. Ponha a
+//    pergunta que protege (dias != 0) na frente da divisão.
+// 2. No ||, se o lado esquerdo é verdade, o direito é pulado: comece com
+//    dias == 0.
+// 3. Resposta esperada: gasto_alto = dias != 0 && gasto / dias > 100;
+//    alerta = dias == 0 || gasto / dias > 100. Testes: 900 6 → 1 e 1;
+//    900 0 → 0 e 1 (sem erro); 300 5 → 0 e 0.
 //
-// Escreva sua resposta abaixo:
+// Escreva sua resposta abaixo (conserte e complete o código):
 
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
+    int gasto = 0, dias = 0;
+    printf("Gasto total e dias: ");
+    scanf("%d %d", &gasto, &dias);
 
+    bool gasto_alto = gasto / dias > 100 && dias != 0;
+    bool alerta = false; // complete: sem dias OU gasto alto
+
+    printf("Gasto alto? %d\n", gasto_alto);
+    printf("Alerta? %d\n", alerta);
     return 0;
 }
