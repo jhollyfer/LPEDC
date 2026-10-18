@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Compila e roda um arquivo .c do LPEDC.
+#
+#   ~/LPEDC/rodar 01-fundamentos/0007-variaveis/A013.c
+#   ~/LPEDC/rodar --valgrind 07-memoria-dinamica/0059-malloc-free/A117.c
+#   ~/LPEDC/rodar 09-arquivos/0074-argumentos/A147.c um dois tres   (argumentos vão para o programa)
+#
+# O caminho pode ser relativo à pasta atual, relativo ao LPEDC ou absoluto.
+# Arquivos .c de apoio da mesma pasta (nomes que não são A000.c/E000.c, como
+# pilha.c) entram juntos na compilação.
+set -euo pipefail
+
+RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+modo="asan"
+if [[ "${1:-}" == "--valgrind" ]]; then modo="valgrind"; shift; fi
+if [[ $# -lt 1 ]]; then
+  echo "uso: rodar [--valgrind] caminho/do/arquivo.c [argumentos...]" >&2
+  exit 1
+fi
+
+alvo="$1"; shift
+if [[ ! -f "$alvo" && -f "$RAIZ/$alvo" ]]; then alvo="$RAIZ/$alvo"; fi
+if [[ ! -f "$alvo" ]]; then echo "rodar: não achei o arquivo $alvo" >&2; exit 1; fi
+
+pasta="$(cd "$(dirname "$alvo")" && pwd)"
+nome="$(basename "$alvo" .c)"
+apoio=()
+for f in "$pasta"/*.c; do
+  base="$(basename "$f")"
+  [[ "$base" =~ ^[AE][0-9]{3}\.c$ ]] && continue
+  [[ "$f" == "$pasta/$(basename "$alvo")" ]] && continue
+  apoio+=("$f")
+done
+
+saida="${TMPDIR:-/tmp}/lpedc"
+mkdir -p "$saida"
+binario="$saida/$nome"
+
+flags=(-std=c17 -Wall -Wextra -pedantic -g -I"$pasta")
+if [[ "$modo" == "asan" ]]; then flags+=(-fsanitize=address,undefined -fno-omit-frame-pointer); fi
+
+gcc "${flags[@]}" "$pasta/$(basename "$alvo")" "${apoio[@]}" -o "$binario" -lm
+
+if [[ "$modo" == "valgrind" ]]; then
+  exec valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes "$binario" "$@"
+fi
+exec "$binario" "$@"
