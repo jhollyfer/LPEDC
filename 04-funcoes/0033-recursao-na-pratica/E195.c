@@ -3,7 +3,7 @@
 //
 // Escreva "int fib_rapido(int n)" SEM recursão, com um laço e duas variáveis
 // (anterior e atual). Mostre fib(10), fib(40) e fib(46), o maior que cabe num
-// int. Depois coloque o fib recursivo do A065 no mesmo arquivo, calcule
+// int. Depois coloque o fib recursivo do texto no mesmo arquivo, calcule
 // fib(40) com ele e compare o tempo (no olho mesmo).
 //
 //   Saída esperada:

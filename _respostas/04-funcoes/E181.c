@@ -1,23 +1,25 @@
 // 0031 · A pilha de chamadas
 // Exercício E181 · ★☆☆
-//
-// Resposta (base -> topo), quando a linha (*) roda:
-//   main      resultado ainda sem valor (esperando imc voltar)
-//   imc       peso = 72.0, altura = 1.80 (esperando quadrado voltar)
-//   quadrado  x = 1.80                     <- topo, é quem está rodando
-// quadrado devolve 3.24, imc devolve 72.0 / 3.24 = 22.2..., main mostra.
 
 #include <stdio.h>
 
 double quadrado(double x) {
-    return x * x; // (*)
+    printf("    entra quadrado(x = %.2f)\n", x);
+    double resultado = x * x;
+    printf("    sai quadrado -> %.2f\n", resultado);
+    return resultado;
 }
 
 double imc(double peso, double altura) {
-    return peso / quadrado(altura);
+    printf("  entra imc(peso = %.1f, altura = %.2f)\n", peso, altura);
+    double area = quadrado(altura);
+    double resultado = peso / area;
+    printf("  sai imc -> %.1f\n", resultado);
+    return resultado;
 }
 
 int main(void) {
+    printf("main chama imc\n");
     double resultado = imc(72.0, 1.80);
     printf("IMC: %.1f\n", resultado);
     return 0;

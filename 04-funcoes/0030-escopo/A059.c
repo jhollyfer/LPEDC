@@ -1,29 +1,41 @@
-// A059 · O painel de senhas do banco
+// A059 · A função que lembra o recorde
 
+#include <stdbool.h>
 #include <stdio.h>
 
-int atendidos = 0; // global: vive o programa todo, todo mundo enxerga
+// devolve true quando a temperatura bate o recorde do dia
+bool novo_recorde(int temperatura) {
+    static bool primeira = true; // true só até a primeira chamada
+    static int recorde = 0;      // o maior valor visto até agora
 
-int chamar(void) {
-    static int senha = 100; // static: inicializada uma vez só, guarda o valor
-    int vezes = 0;          // local: nasce de novo a cada chamada
+    if (primeira || temperatura > recorde) {
+        primeira = false;
+        recorde = temperatura;
+        return true;
+    }
+    return false;
+}
 
-    senha++;
-    vezes++;
-    atendidos++;
-    printf("Senha %d | vezes: %d | atendidos: %d\n", senha, vezes, atendidos);
-    return senha;
+void leitura(int hora, int temperatura) {
+    printf("%2dh: %d °C", hora, temperatura);
+    if (novo_recorde(temperatura)) {
+        printf(" (recorde!)");
+    }
+    printf("\n");
 }
 
 int main(void) {
-    chamar();
-    chamar();
-    int ultima = chamar();
-    printf("Última senha chamada: %d\n", ultima);
+    leitura(6, 19);  // a primeira leitura é sempre recorde
+    leitura(9, 24);
+    leitura(12, 22); // 22 < 24: a static lembra do 24
+    leitura(15, 30);
+    leitura(18, 27);
+    // printf("%d\n", recorde); // erro: recorde só existe dentro da função
     return 0;
 }
 // Saída:
-// Senha 101 | vezes: 1 | atendidos: 1
-// Senha 102 | vezes: 1 | atendidos: 2
-// Senha 103 | vezes: 1 | atendidos: 3
-// Última senha chamada: 103
+//  6h: 19 °C (recorde!)
+//  9h: 24 °C (recorde!)
+// 12h: 22 °C
+// 15h: 30 °C (recorde!)
+// 18h: 27 °C

@@ -1,49 +1,35 @@
 // 0036 · Juntando tudo: o caixa da lanchonete
 // Exercício E214 · ★★☆
 //
-// Tudo do módulo num programa só. Preveja a saída:
+// Tudo do módulo num programa só. Escreva as peças e o main:
 //
-//   #define DOBRO(x) ((x) * 2)
+//   #define DOBRO(x)            o dobro, à prova de precedência
+//   int total = 0;              global
+//   int proximo_id(void)        static id começando em 10; soma 1 e devolve
+//   int soma_ate(int n)         recursiva: 0 + 1 + ... + n; soma 1 na global
+//                               total a cada chamada
+//   int altera(int total)       põe 99 no parâmetro e devolve
 //
-//   int total = 0;
+// O main mostra, nesta ordem: um id; a soma de mais dois ids; soma_ate(4); a
+// global total; chama altera(total) sem guardar o retorno e mostra a global
+// de novo; e por fim DOBRO(total + 1).
 //
-//   int proximo_id(void) {
-//       static int id = 10;
-//       id++;
-//       return id;
-//   }
-//
-//   int soma_ate(int n) {
-//       total++;
-//       if (n == 0) {
-//           return 0;
-//       }
-//       return n + soma_ate(n - 1);
-//   }
-//
-//   int altera(int total) {
-//       total = 99;
-//       return total;
-//   }
-//
-//   int main(void) {
-//       printf("%d\n", proximo_id());
-//       printf("%d\n", proximo_id() + proximo_id());
-//       printf("%d\n", soma_ate(4));
-//       printf("%d\n", total);
-//       altera(total);
-//       printf("%d\n", DOBRO(total + 1));
-//       return 0;
-//   }
+//   Saída esperada:
+//   id: 11
+//   dois ids somados: 25
+//   soma_ate(4) = 10
+//   chamadas: 5
+//   depois de altera: 5
+//   DOBRO(total + 1) = 12
 //
 // Dicas:
-// 1. id é static: 11, depois 12 e 13.
-// 2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0), e cada uma soma 1 na global.
-// 3. Resposta esperada: 11, 25, 10, 5, 12. O parâmetro total de altera esconde
-//    a global: o 99 vai para a cópia, e o retorno é jogado fora.
-//    DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
+// 1. Para os dois ids, guarde cada um numa variável e some depois: a ordem
+//    em que o C avalia os dois lados de um + não é garantida.
+// 2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0). O parâmetro total de
+//    altera esconde a global: o 99 vai para a cópia.
+// 3. Resposta esperada: a saída acima. DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
 //
-// Escreva sua resposta abaixo (em comentário, ou cole o código e rode):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

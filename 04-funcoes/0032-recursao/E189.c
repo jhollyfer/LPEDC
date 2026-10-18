@@ -1,30 +1,29 @@
 // 0032 · Recursão
 // Exercício E189 · ★★☆
 //
-// Preveja a saída, linha por linha:
+// Escreva "void eco(int n, int nivel)", recursiva, que mostra "ida n" antes
+// da chamada recursiva, "fundo" no caso base (n == 0) e "volta n" depois da
+// chamada. Cada linha é recuada 2 espaços por nível: o main chama eco(3, 0),
+// e cada chamada recursiva passa nivel + 1. Use uma função "void recuo(int
+// nivel)" para os espaços.
 //
-//   void eco(int n) {
-//       if (n == 0) {
-//           printf("fundo\n");
-//           return;
-//       }
-//       printf("ida %d\n", n);
-//       eco(n - 1);
-//       printf("volta %d\n", n);
-//   }
-//
-//   int main(void) {
-//       eco(3);
-//       return 0;
-//   }
+//   Saída esperada:
+//   ida 3
+//     ida 2
+//       ida 1
+//         fundo
+//       volta 1
+//     volta 2
+//   volta 3
 //
 // Dicas:
-// 1. O printf da volta só roda depois que a chamada de dentro terminou.
-// 2. Cada quadro lembra o seu n: o de eco(3) ainda vale 3 na volta.
-// 3. Resposta esperada: ida 3 / ida 2 / ida 1 / fundo / volta 1 / volta 2 /
-//    volta 3.
+// 1. recuo: um for de 0 até nivel - 1 com printf("  ").
+// 2. eco: if (n == 0) { recuo; "fundo"; return; } depois recuo, "ida",
+//    eco(n - 1, nivel + 1), recuo, "volta".
+// 3. Resposta esperada: a saída acima. O printf da volta só roda depois que a
+//    chamada de dentro terminou, e cada quadro lembra o seu n e o seu nivel.
 //
-// Escreva sua resposta abaixo (em comentário, ou cole o código e rode):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

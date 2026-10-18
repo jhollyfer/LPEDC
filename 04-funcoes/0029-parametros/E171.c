@@ -2,9 +2,10 @@
 // Exercício E171 · ★★☆
 //
 // O programa abaixo deveria mostrar as duas notas em ordem crescente, mas
-// mostra "Em ordem: 9 e 6". Rode, explique por que a função não funciona e
-// conserte. Você ainda não pode usar ponteiros: troque "ordenar" por duas
-// funções que devolvem valor, "menor" e "maior".
+// mostra "Em ordem: 9 e 6": a troca dentro de ordenar não chega ao main.
+// Conserte e rode até aparecer "Em ordem: 6 e 9". Você ainda não pode usar
+// ponteiros: troque "ordenar" por duas funções que devolvem valor, "menor" e
+// "maior", e use as duas no printf.
 //
 // Dicas:
 // 1. Uma função em C devolve um valor só, pelo return. A troca dentro de

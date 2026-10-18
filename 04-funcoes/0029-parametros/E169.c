@@ -1,29 +1,29 @@
 // 0029 · Parâmetros e passagem por valor
 // Exercício E169 · ★☆☆
 //
-// Sem rodar, preveja as quatro linhas que este programa mostra:
+// No app do cartão fidelidade, a promoção dobra os pontos. Escreva
+// "int dobrar_pontos(int pontos)", que dobra o próprio parâmetro, mostra
+// "dentro: <valor>" e devolve o valor dobrado. No main, comece com
+// pontos = 150 e faça, nesta ordem:
 //
-//   int dobrar_pontos(int pontos) {
-//       pontos = pontos * 2;
-//       printf("dentro: %d\n", pontos);
-//       return pontos;
-//   }
+//   1. chame dobrar_pontos(pontos) SEM guardar o retorno e mostre "main: ...";
+//   2. chame de novo, agora com pontos = dobrar_pontos(pontos), e mostre
+//      "main: ..." outra vez.
 //
-//   int main(void) {
-//       int pontos = 150;
-//       dobrar_pontos(pontos);
-//       printf("main: %d\n", pontos);
-//       pontos = dobrar_pontos(pontos);
-//       printf("main: %d\n", pontos);
-//       return 0;
-//   }
+//   Saída esperada:
+//   dentro: 300
+//   main: 150
+//   dentro: 300
+//   main: 300
 //
 // Dicas:
-// 1. O "pontos" da função e o "pontos" do main são duas variáveis.
-// 2. Na primeira chamada, o retorno não é guardado em lugar nenhum.
-// 3. Resposta esperada: dentro: 300 / main: 150 / dentro: 300 / main: 300.
+// 1. Dentro da função: pontos = pontos * 2; printf(...); return pontos;
+// 2. O "pontos" da função e o "pontos" do main são duas variáveis: mudar uma
+//    não muda a outra.
+// 3. Resposta esperada: a saída acima. Na primeira chamada, o 300 volta pelo
+//    return e é jogado fora; só na segunda ele chega ao main.
 //
-// Escreva sua resposta abaixo (em comentário, ou cole o código e rode):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

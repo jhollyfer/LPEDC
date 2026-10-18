@@ -1,18 +1,30 @@
-// A067 · A viagem usando o módulo de conversão
+// A067 · O .h incluído duas vezes e o protótipo que converte
 
 #include <stdio.h>
 
-#include "conversao.h" // aspas: procura primeiro na pasta deste arquivo
+#include "conversao.h"
+#include "conversao.h" // de propósito: o include guard faz esta virar nada
 
 int main(void) {
-    printf("30 °C = %.1f °F\n", celsius_para_fahrenheit(30));
-    printf("100 km = %.1f milhas\n", km_para_milhas(100));
-    printf("R$ 1000.00 = US$ %.2f\n", reais_para_dolares(1000, 5.40));
+    int trecho = 42;      // int
+    int orcamento = 2700; // int
+
+    // o protótipo do .h diz que os parâmetros são double:
+    // o compilador converte 42 em 42.0 antes de chamar
+    printf("Maratona: %d km = %.1f milhas\n", trecho, km_para_milhas(trecho));
+    printf("Orçamento: R$ %d = US$ %.2f\n", orcamento,
+           reais_para_dolares(orcamento, 5.40));
+
+    // a função do módulo vira peça de uma conta maior
+    double ida_e_volta = 2 * km_para_milhas(trecho);
+    printf("Ida e volta: %.1f milhas\n", ida_e_volta);
+    printf("Conversões feitas: %d\n", conversoes_feitas());
     return 0;
 }
-// Compilando à mão (o rodar faz isso sozinho):
-//   gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem
+// Para ver o guard trabalhando: gcc -E A067.c | grep -c km_para_milhas
+// dá 3: o protótipo aparece uma vez só, mais as duas linhas do main.
 // Saída:
-// 30 °C = 86.0 °F
-// 100 km = 62.1 milhas
-// R$ 1000.00 = US$ 185.19
+// Maratona: 42 km = 26.1 milhas
+// Orçamento: R$ 2700 = US$ 500.00
+// Ida e volta: 52.2 milhas
+// Conversões feitas: 3

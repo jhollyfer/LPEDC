@@ -1,45 +1,47 @@
 // 0030 · Escopo e tempo de vida
 // Exercício E179 · ★★★
-//
-// Resposta:
-// main: 20 / bloco: 30 / a: 1 -> 2 / b: 5 -> 10 / c: 10 -> 20 /
-// a: 1 -> 2 / b: 10 -> 15 / c: 20 -> 40 / main: 20.
-// A local de a recomeça em 1; a static de b guarda o valor; c dobra a global
-// (10, depois 20); o x do main nunca é tocado por ninguém.
 
 #include <stdio.h>
 
-int x = 10;
+int x = 10; // global
 
 void a(void) {
-    int x = 1;
+    int x = 1; // local: recomeça em 1 a cada chamada
     printf("a: %d", x);
     x++;
     printf(" -> %d\n", x);
 }
 
-void b(void) {
-    static int x = 5;
+int b(void) {
+    static int x = 5; // static: continua de onde parou
     printf("b: %d", x);
     x += 5;
     printf(" -> %d\n", x);
+    return x;
 }
 
 void c(void) {
-    printf("c: %d", x);
+    printf("c: %d", x); // a global
     x *= 2;
     printf(" -> %d\n", x);
 }
 
 int main(void) {
     int x = 20;
+    int soma = 0;
+
     printf("main: %d\n", x);
     {
         int x = 30;
         printf("bloco: %d\n", x);
     }
-    a(); b(); c();
-    a(); b(); c();
+    a();
+    soma += b();
+    c();
+    a();
+    soma += b();
+    c();
     printf("main: %d\n", x);
+    printf("soma dos b: %d\n", soma);
     return 0;
 }

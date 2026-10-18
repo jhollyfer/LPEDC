@@ -12,7 +12,7 @@
 //   Total: 23.00 m2
 //
 // Dicas:
-// 1. Escreva o protótipo antes do main e a definição depois, como no A055.
+// 1. Escreva o protótipo antes do main e a definição depois, como no texto.
 // 2. Dá para somar as duas chamadas direto: area_comodo(4.0, 3.5) + area_comodo(3.0, 3.0).
 // 3. Resposta esperada: sala 14.00, quarto 9.00, total 23.00.
 //

@@ -1,32 +1,31 @@
 // 0031 · A pilha de chamadas
 // Exercício E181 · ★☆☆
 //
-// Desenhe (em texto) a pilha de chamadas no momento em que a linha marcada
-// com (*) roda. Liste os quadros de baixo para cima, com os parâmetros e as
-// locais que já têm valor.
+// Faça o programa do IMC mostrar a pilha enquanto roda. Escreva:
 //
-//   double quadrado(double x) {
-//       return x * x;                       // (*)
-//   }
+//   double quadrado(double x)                  devolve x * x
+//   double imc(double peso, double altura)     devolve peso / quadrado(altura)
 //
-//   double imc(double peso, double altura) {
-//       return peso / quadrado(altura);
-//   }
+// Cada função mostra uma linha ao entrar (com os parâmetros) e outra ao sair
+// (com o valor que devolve), recuada 2 espaços a mais que a de quem a chamou.
+// O main calcula imc(72.0, 1.80), guarda numa local e mostra o resultado.
 //
-//   int main(void) {
-//       double resultado = imc(72.0, 1.80);
-//       printf("IMC: %.1f\n", resultado);
-//       return 0;
-//   }
+//   Saída esperada:
+//   main chama imc
+//     entra imc(peso = 72.0, altura = 1.80)
+//       entra quadrado(x = 1.80)
+//       sai quadrado -> 3.24
+//     sai imc -> 22.2
+//   IMC: 22.2
 //
 // Dicas:
-// 1. Quem chamou quadrado? E quem chamou essa função?
-// 2. resultado ainda não tem valor: o main está esperando imc voltar.
-// 3. Resposta esperada (base -> topo): main (resultado ainda sem valor) ->
-//    imc (peso = 72.0, altura = 1.80) -> quadrado (x = 1.80). Ao rodar,
-//    mostra "IMC: 22.2".
+// 1. Os espaços do recuo podem ir direto no texto do printf.
+// 2. Em imc, guarde o retorno de quadrado numa local antes de dividir; assim
+//    a linha "sai imc" pode mostrar o resultado.
+// 3. Resposta esperada: a saída acima. Na hora em que quadrado roda, a pilha
+//    tem três quadros: main (esperando), imc (esperando) e quadrado no topo.
 //
-// Escreva sua resposta abaixo (em comentário):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

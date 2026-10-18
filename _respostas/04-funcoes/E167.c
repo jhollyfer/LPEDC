@@ -1,10 +1,5 @@
 // 0028 · Funções
 // Exercício E167 · ★★★
-//
-// Resposta: 8, 4, 11 e 5. ajusta(7) = 8 (ímpar, soma 1); dobro(7) = 14 e
-// ajusta(14) = 4; ajusta(8) = 4, dobro(4) = 8, dobro(3) = 6, ajusta(6) = 3,
-// 8 + 3 = 11; ajusta(30) = 20, ajusta(20) = 10, ajusta(10) = 5. O printf
-// depois do return em dobro nunca roda (o compilador nem gera código para ele).
 
 #include <stdio.h>
 
@@ -23,10 +18,31 @@ int ajusta(int n) {
     return n + 1;
 }
 
+int passos(int n) {
+    int contador = 0;
+    while (n != 1) {
+        n = ajusta(n);
+        printf("%d ", n);
+        contador++;
+    }
+    return contador;
+}
+
 int main(void) {
-    printf("%d\n", ajusta(7));
-    printf("%d\n", ajusta(dobro(7)));
-    printf("%d\n", dobro(ajusta(8)) + ajusta(dobro(3)));
-    printf("%d\n", ajusta(ajusta(ajusta(30))));
+    int total;
+
+    printf("7: ");
+    total = passos(7);
+    printf("(%d passos)\n", total);
+
+    printf("14: ");
+    total = passos(14);
+    printf("(%d passos)\n", total);
+
+    printf("30: ");
+    total = passos(30);
+    printf("(%d passos)\n", total);
+
+    printf("ajusta(dobro(7)) = %d\n", ajusta(dobro(7)));
     return 0;
 }

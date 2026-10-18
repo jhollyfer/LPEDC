@@ -98,7 +98,8 @@ tiver mais de um `.c`.
 > com valor inicial ficam na seção **`.data`**, gravada dentro do próprio
 > executável; as que começam em zero ficam na **`.bss`**, que o sistema zera ao
 > carregar o programa. As locais ficam na **pilha**, um espaço reaproveitado a
-> cada chamada (o próximo assunto). Rode `gcc -c A059.c` e depois `nm A059.o`:
+> cada chamada (o próximo assunto). Salve o código acima como `senhas.c`, rode
+> `gcc -c senhas.c` e depois `nm senhas.o`:
 > aparecem `atendidos` (B, na `.bss`) e `senha.0` (d, na `.data`). A `vezes`
 > nem aparece: ela não tem lugar fixo.
 

@@ -1,40 +1,31 @@
 // 0031 · A pilha de chamadas
 // Exercício E182 · ★☆☆
 //
-// Preveja a ordem exata das linhas na tela:
+// Escreva três funções void, a, b e c, que se chamam assim:
 //
-//   void c(void) {
-//       printf("c\n");
-//   }
+//   c mostra "c (vez N)", em que N conta quantas vezes c já rodou;
+//   b mostra "b começa", chama c e mostra "b termina";
+//   a mostra "a começa", chama b, chama c e mostra "a termina".
 //
-//   void b(void) {
-//       printf("b começa\n");
-//       c();
-//       printf("b termina\n");
-//   }
+// O main chama a e depois c.
 //
-//   void a(void) {
-//       printf("a começa\n");
-//       b();
-//       c();
-//       printf("a termina\n");
-//   }
-//
-//   int main(void) {
-//       a();
-//       c();
-//       return 0;
-//   }
-//
-// Qual é o número máximo de quadros na pilha ao mesmo tempo, contando o main?
+//   Saída esperada:
+//   a começa
+//   b começa
+//   c (vez 1)
+//   b termina
+//   c (vez 2)
+//   a termina
+//   c (vez 3)
 //
 // Dicas:
-// 1. Uma função só continua depois que a função que ela chamou retornou.
-// 2. O ponto mais fundo é main -> a -> b -> c.
-// 3. Resposta esperada: a começa / b começa / c / b termina / c / a termina /
-//    c. No máximo 4 quadros.
+// 1. Uma função só continua depois que a função que ela chamou retornou: por
+//    isso "b termina" vem depois do c.
+// 2. O contador de c é uma static int vezes = 0; dentro dela (assunto 0030).
+// 3. Resposta esperada: a saída acima. O ponto mais fundo é main -> a -> b
+//    -> c: quatro quadros na pilha ao mesmo tempo.
 //
-// Escreva sua resposta abaixo (em comentário, ou cole o código e rode):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

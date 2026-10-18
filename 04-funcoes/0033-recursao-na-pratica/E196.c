@@ -1,23 +1,30 @@
 // 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 // Exercício E196 · ★★☆
 //
-// Sem rodar, responda sobre fib(6) com o código do A065:
+// Meça o desperdício do Fibonacci recursivo. Copie o fib do texto (o de duas
+// chamadas por vez) e acrescente três globais:
 //
-// a) Quanto vale fib(6)?
-// b) Quantas chamadas de fib, no total, fib(6) faz (contando a primeira)?
-// c) Quantas vezes fib(2) é calculado?
-// d) Qual é o maior número de quadros de fib na pilha ao mesmo tempo?
+//   chamadas      quantas vezes fib foi chamada, no total
+//   repetidas     quantas dessas chamadas foram com n == 2
+//   maior_altura  o maior número de quadros de fib na pilha ao mesmo tempo
 //
-// Depois altere o A065 para conferir (b) e (c): conte as chamadas e, numa
-// segunda global, só as chamadas com n == 2.
+// Para a altura, use uma quarta global, altura: some 1 ao entrar em fib e
+// tire 1 logo antes de cada return. Mostre tudo para fib(6).
+//
+//   Saída esperada:
+//   fib(6) = 8
+//   chamadas: 25
+//   fib(2) calculado 5 vezes
+//   maior altura: 6
 //
 // Dicas:
-// 1. Chamadas(n) = 1 + Chamadas(n - 1) + Chamadas(n - 2), com Chamadas(0) =
-//    Chamadas(1) = 1. Do A065: Chamadas(5) = 15. Falta Chamadas(4).
-// 2. fib(6) chama fib(5) e fib(4); conte quantas vezes fib(2) aparece em cada
-//    uma (em fib(5) são 3).
-// 3. Resposta esperada: a) 8; b) 25; c) 5; d) 6 (fib(6), fib(5), fib(4),
-//    fib(3), fib(2), fib(1)).
+// 1. Ao entrar: chamadas++; altura++; if (altura > maior_altura)
+//    maior_altura = altura; e if (n == 2) repetidas++.
+// 2. Para tirar 1 da altura antes de devolver, guarde o resultado numa
+//    local: int r = fib(n - 1) + fib(n - 2); altura--; return r;
+// 3. Resposta esperada: a saída acima. O caminho mais fundo é fib(6),
+//    fib(5), fib(4), fib(3), fib(2), fib(1): 6 quadros. A altura cresce
+//    devagar (n), mas as chamadas crescem muito rápido.
 //
 // Escreva sua resposta abaixo:
 

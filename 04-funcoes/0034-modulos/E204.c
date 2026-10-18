@@ -20,16 +20,16 @@
 //   Saldo: R$ 45.00
 //   Operações: 3
 //
-// Por fim, responda num comentário: o que você escreveria no cofrinho.h de
-// verdade (com o include guard), e o que ficaria só no cofrinho.c?
+// O bloco "// cofrinho.h" tem que estar pronto para virar arquivo: com o
+// include guard COFRINHO_H em volta dos protótipos.
 //
 // Dicas:
 // 1. static double saldo_atual = 0; e static int contador = 0; no bloco de baixo.
 //    Para usar os nomes no main, os protótipos de cima bastam.
 // 2. Cuidado: a função se chama saldo, então a variável precisa de outro nome.
 // 3. Resposta esperada: a saída acima (o depósito de -10 e o saque de 100 não
-//    contam). No .h: o guard COFRINHO_H, o #include <stdbool.h> e os quatro
-//    protótipos. No .c: o #include "cofrinho.h", as duas variáveis static e
+//    contam). No bloco do .h: #ifndef COFRINHO_H, #define COFRINHO_H, os
+//    quatro protótipos e #endif. No bloco do .c: as duas variáveis static e
 //    os corpos das funções.
 //
 // Escreva sua resposta abaixo:

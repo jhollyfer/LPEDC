@@ -1,22 +1,18 @@
 // 0035 · Pré-processador: macros e #ifdef
 // Exercício E205 · ★☆☆
-//
-// Resposta:
-//   DOBRO(4)        -> 4 + 4               = 8
-//   3 * DOBRO(4)    -> 3 * 4 + 4           = 16 (e não 24)
-//   METADE(10 + 4)  -> ((10 + 4) / 2)      = 7
-//   100 + TAXA * 2  -> 100 + 10 * 2        = 120
 
 #include <stdio.h>
 
-#define DOBRO(x) x + x
+#define DOBRO(x) ((x) + (x)) // agora 3 * DOBRO(4) vira 3 * ((4) + (4))
 #define METADE(x) ((x) / 2)
 #define TAXA 10
+#define TRIPLO(x) ((x) * 3)
 
 int main(void) {
-    printf("%d\n", DOBRO(4));
-    printf("%d\n", 3 * DOBRO(4));
-    printf("%d\n", METADE(10 + 4));
-    printf("%d\n", 100 + TAXA * 2);
+    printf("DOBRO(4) = %d\n", DOBRO(4));
+    printf("3 * DOBRO(4) = %d\n", 3 * DOBRO(4));
+    printf("METADE(10 + 4) = %d\n", METADE(10 + 4));
+    printf("100 + TAXA * 2 = %d\n", 100 + TAXA * 2);
+    printf("TRIPLO(2 + 1) = %d\n", TRIPLO(2 + 1));
     return 0;
 }

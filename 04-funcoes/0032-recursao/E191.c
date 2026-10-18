@@ -2,9 +2,10 @@
 // Exercício E191 · ★★★
 //
 // Esta função deveria somar os dígitos de um número (2026 -> 10), mas tem
-// DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois. Se você rodar mesmo
-// assim, o programa morre com stack-overflow. Explique os dois erros e
-// conserte.
+// DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois.
+// Se você rodar mesmo assim, o programa morre com stack-overflow. Conserte
+// os dois erros e rode até aparecer "2026 -> 10" e "99999 -> 45", sem
+// nenhum aviso.
 //
 // Dicas:
 // 1. Leia o aviso "suggest parentheses around assignment": o que n = 0 faz

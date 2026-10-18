@@ -1,11 +1,5 @@
 // 0036 · Juntando tudo: o caixa da lanchonete
 // Exercício E214 · ★★☆
-//
-// Resposta: 11, 25, 10, 5, 12.
-// proximo_id: id é static, 11; depois 12 + 13 = 25 (a ordem das duas chamadas
-// não importa para a soma). soma_ate(4) = 4 + 3 + 2 + 1 + 0 = 10, com 5
-// chamadas, e cada uma soma 1 na global total: 5. Em altera, o parâmetro total
-// esconde a global e o 99 vai para a cópia. DOBRO(total + 1) = ((5 + 1) * 2).
 
 #include <stdio.h>
 
@@ -27,17 +21,20 @@ int soma_ate(int n) {
     return n + soma_ate(n - 1);
 }
 
-int altera(int total) {
+int altera(int total) { // esconde a global
     total = 99;
     return total;
 }
 
 int main(void) {
-    printf("%d\n", proximo_id());
-    printf("%d\n", proximo_id() + proximo_id());
-    printf("%d\n", soma_ate(4));
-    printf("%d\n", total);
+    printf("id: %d\n", proximo_id());
+    int id1 = proximo_id();
+    int id2 = proximo_id();
+    printf("dois ids somados: %d\n", id1 + id2);
+    printf("soma_ate(4) = %d\n", soma_ate(4));
+    printf("chamadas: %d\n", total);
     altera(total);
-    printf("%d\n", DOBRO(total + 1));
+    printf("depois de altera: %d\n", total);
+    printf("DOBRO(total + 1) = %d\n", DOBRO(total + 1));
     return 0;
 }

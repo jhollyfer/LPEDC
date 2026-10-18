@@ -1,19 +1,24 @@
-// A063 · De quantos jeitos 5 amigos sentam no cinema
+// A063 · Em quantos meses a dívida dobra
 
 #include <stdio.h>
 
-int fatorial(int n) {
-    if (n <= 1) {
-        return 1; // caso base: resolve direto, sem chamar ninguém
+// o caso base não é um contador chegando a zero: é uma condição
+int meses_para_chegar(double divida, double meta, double juros) {
+    if (divida >= meta) {
+        return 0; // caso base: já chegou, não falta nenhum mês
     }
-    return n * fatorial(n - 1); // caso recursivo: um problema menor
+    // um mês de juros e o mesmo problema, um pouco mais perto da meta
+    return 1 + meses_para_chegar(divida * (1 + juros / 100), meta, juros);
 }
 
 int main(void) {
-    printf("5 amigos: %d jeitos\n", fatorial(5));
-    printf("12 amigos: %d jeitos\n", fatorial(12)); // o maior que cabe num int
+    printf("Cartão (12%% ao mês): %d meses\n", meses_para_chegar(1000, 2000, 12));
+    printf("Empréstimo (3%% ao mês): %d meses\n", meses_para_chegar(1000, 2000, 3));
+    // caso de borda: a meta já foi batida, nenhuma chamada recursiva
+    printf("Já dobrou: %d meses\n", meses_para_chegar(2500, 2000, 3));
     return 0;
 }
 // Saída:
-// 5 amigos: 120 jeitos
-// 12 amigos: 479001600 jeitos
+// Cartão (12% ao mês): 7 meses
+// Empréstimo (3% ao mês): 24 meses
+// Já dobrou: 0 meses

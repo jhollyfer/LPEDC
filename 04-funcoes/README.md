@@ -184,8 +184,8 @@ função que só calcula serve para a tela, para um arquivo ou para outra conta.
 > `call` do processador, que guarda o endereço de volta e pula para a função;
 > o `return` vira `ret`, que pula de volta. No Linux de 64 bits, o argumento
 > `double` vai num registrador do processador (`xmm0`) e o resultado volta
-> pelo mesmo registrador. Rode `gcc -S A055.c` e procure `call preco_corrida`
-> no arquivo `A055.s`.
+> pelo mesmo registrador. Salve o código acima como `corrida.c`, rode
+> `gcc -S corrida.c` e procure `call preco_corrida` no arquivo `corrida.s`.
 
 > [!NOTE]
 > **Pergunta para você:** o que mostra
@@ -196,30 +196,54 @@ função que só calcula serve para a tela, para um arquivo ou para outra conta.
 
 Os arquivos ficam em [`0028-funcoes/`](0028-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A055 · O preço da corrida, calculado num lugar só**
+**Exemplo A055 · A conta de luz: funções que chamam funções**
 
 ```c
 #include <stdio.h>
 
-// protótipo: avisa o compilador que a função existe e como chamá-la
-double preco_corrida(double km);
+int consumo(int leitura_anterior, int leitura_atual);
+double tarifa(int kwh);
+double valor_conta(int kwh);
 
 int main(void) {
-    printf("Corrida 1: R$ %.2f\n", preco_corrida(4.0));
-    printf("Corrida 2: R$ %.2f\n", preco_corrida(10.0));
-    printf("Corrida 3: R$ %.2f\n", preco_corrida(2.5));
+    int janeiro = consumo(4210, 4390);
+    int fevereiro = consumo(4390, 4625);
+
+    printf("Janeiro: %d kWh, R$ %.2f\n", janeiro, valor_conta(janeiro));
+    printf("Fevereiro: %d kWh, R$ %.2f\n", fevereiro, valor_conta(fevereiro));
+
+    // a chamada de dentro roda primeiro e o resultado vira o argumento
+    printf("Março: R$ %.2f\n", valor_conta(consumo(4625, 4720)));
+
+    // o retorno serve até como condição de um if
+    if (valor_conta(fevereiro) > 150.00) {
+        printf("Fevereiro passou de R$ 150.00\n");
+    }
     return 0;
 }
 
-// definição: bandeirada de R$ 5.00 mais R$ 2.50 por km
-double preco_corrida(double km) {
-    double preco = 5.00 + 2.50 * km;
-    return preco; // devolve o valor para quem chamou
+int consumo(int leitura_anterior, int leitura_atual) {
+    return leitura_atual - leitura_anterior;
+}
+
+// quem gasta mais paga mais caro por kWh
+double tarifa(int kwh) {
+    if (kwh <= 100) {
+        return 0.60;
+    }
+    return 0.80;
+}
+
+// valor_conta não sabe a tarifa: ela pergunta para outra função
+double valor_conta(int kwh) {
+    double iluminacao_publica = 12.00;
+    return kwh * tarifa(kwh) + iluminacao_publica;
 }
 // Saída:
-// Corrida 1: R$ 15.00
-// Corrida 2: R$ 30.00
-// Corrida 3: R$ 11.25
+// Janeiro: 180 kWh, R$ 156.00
+// Fevereiro: 235 kWh, R$ 200.00
+// Março: R$ 69.00
+// Fevereiro passou de R$ 150.00
 ```
 
 ```bash
@@ -285,7 +309,7 @@ Total: 23.00 m2
 
 **Dicas:**
 
-1. Escreva o protótipo antes do main e a definição depois, como no A055.
+1. Escreva o protótipo antes do main e a definição depois, como no texto.
 2. Dá para somar as duas chamadas direto: area_comodo(4.0, 3.5) + area_comodo(3.0, 3.0).
 3. Resposta esperada: sala 14.00, quarto 9.00, total 23.00.
 
@@ -374,50 +398,32 @@ Total do dia: R$ 34.00
 
 **Exercício E167** · ★★★
 
-Sem rodar, preveja a saída. Depois rode e confira.
+A função ajusta, já pronta no arquivo, tem três return. Só o primeiro que
+for alcançado vale: os testes de baixo nem são feitos.
+
+Escreva "int passos(int n)", que aplica ajusta em n repetidas vezes até
+n chegar a 1, mostrando cada valor no caminho, e devolve quantas vezes
+aplicou. No main, use passos para 7, 14 e 30 e mostre o total de cada um,
+e mostre também ajusta(dobro(7)), resolvida de dentro para fora.
 
 
 ```text
-int dobro(int n) {
-    return 2 * n;
-    printf("nunca aparece\n");
-}
-```
-
-
-
-```text
-int ajusta(int n) {
-    if (n > 10) {
-        return n - 10;
-    }
-    if (n % 2 == 0) {
-        return n / 2;
-    }
-    return n + 1;
-}
-```
-
-
-
-```text
-int main(void) {
-    printf("%d\n", ajusta(7));
-    printf("%d\n", ajusta(dobro(7)));
-    printf("%d\n", dobro(ajusta(8)) + ajusta(dobro(3)));
-    printf("%d\n", ajusta(ajusta(ajusta(30))));
-    return 0;
-}
+Saída esperada:
+7: 8 4 2 1 (4 passos)
+14: 4 2 1 (3 passos)
+30: 20 10 5 6 3 4 2 1 (8 passos)
+ajusta(dobro(7)) = 4
 ```
 
 **Dicas:**
 
-1. Resolva de dentro para fora: ajusta(dobro(7)) é ajusta(14).
-2. Em ajusta, o primeiro return que for alcançado encerra a função: os
-   testes de baixo nem são feitos.
-3. Resposta esperada: 8, 4, 11 e 5. (ajusta(8) = 4 e dobro(4) = 8;
-   dobro(3) = 6 e ajusta(6) = 3; 8 + 3 = 11. ajusta(30) = 20,
-   ajusta(20) = 10, ajusta(10) = 5.) O printf depois do return nunca roda.
+1. Dentro de passos, um while (n != 1) com n = ajusta(n), um printf e um
+   contador. O parâmetro n é uma cópia: pode mudar à vontade.
+2. O main mostra "7: ", chama passos(7) e depois mostra "(%d passos)" com o
+   retorno. Guarde o retorno numa variável antes do printf, para os números
+   do caminho saírem antes do total.
+3. Resposta esperada: a saída acima. Em dobro, o printf depois do return
+   nunca roda: o return encerra a função na hora.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0028-funcoes/E167.c
@@ -452,8 +458,9 @@ Saída esperada:
 1. soma_divisores testa d de 1 até n / 2: se n % d == 0, soma d.
 2. eh_perfeito cabe numa linha: return soma_divisores(n) == n;
 3. Resposta esperada: 6, 28, 496 e 8128. São tão raros que o próximo é
-   33550336. Desafio extra: testar d só até a raiz de n (d * d <= n),
-   somando d e n / d de uma vez. Por que isso é muito mais rápido?
+   33550336. Desafio extra: teste d só até a raiz de n (d * d <= n),
+   somando d e n / d de uma vez, e conte numa variável quantas vezes o %
+   roda em cada versão para n = 8128 (4064 contra 90).
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0028-funcoes/E168.c
@@ -568,37 +575,51 @@ Mais três regras sobre parâmetros:
 
 Os arquivos ficam em [`0029-parametros/`](0029-parametros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A057 · A mensalidade que a função não consegue mudar**
+**Exemplo A057 · O parâmetro casa pela posição, não pelo nome**
 
 ```c
 #include <stdio.h>
 
-double reajustar(double mensalidade, double percentual);
+double com_desconto(double preco, double percentual);
+void contagem(int segundos);
 
 int main(void) {
-    double mensalidade = 120.00;
+    double preco = 80.00;
+    double percentual = 25;
 
-    printf("Antes: %.2f\n", mensalidade);
-    reajustar(mensalidade, 10); // o resultado é jogado fora
-    printf("Depois: %.2f\n", mensalidade); // continua 120.00
+    // certo: o 1º argumento vai para o 1º parâmetro, o 2º para o 2º
+    printf("Certo: R$ %.2f\n", com_desconto(preco, percentual));
 
-    mensalidade = reajustar(mensalidade, 10); // agora guarda o retorno
-    printf("Guardando o retorno: %.2f\n", mensalidade);
+    // trocado: os nomes iguais não ajudam, o C só olha a ordem
+    printf("Trocado: R$ %.2f\n", com_desconto(percentual, preco));
+
+    // literal e expressão também servem: a função recebe só o valor
+    printf("Literal: R$ %.2f\n", com_desconto(200, 10 + 5));
+
+    int tempo = 3;
+    contagem(tempo);
+    printf("No main, tempo continua %d\n", tempo);
     return 0;
 }
 
-// mensalidade aqui é uma CÓPIA: outra variável, com o mesmo nome
-double reajustar(double mensalidade, double percentual) {
-    mensalidade = mensalidade * (1 + percentual / 100);
-    printf("Dentro: %.2f\n", mensalidade);
-    return mensalidade;
+double com_desconto(double preco, double percentual) {
+    return preco - preco * percentual / 100;
+}
+
+// o parâmetro é uma variável de trabalho: pode diminuir até zero
+void contagem(int segundos) {
+    while (segundos > 0) {
+        printf("%d... ", segundos);
+        segundos--;
+    }
+    printf("já!\n");
 }
 // Saída:
-// Antes: 120.00
-// Dentro: 132.00
-// Depois: 120.00
-// Dentro: 132.00
-// Guardando o retorno: 132.00
+// Certo: R$ 60.00
+// Trocado: R$ 5.00
+// Literal: R$ 170.00
+// 3... 2... 1... já!
+// No main, tempo continua 3
 ```
 
 ```bash
@@ -650,35 +671,35 @@ void linha(void) {
 
 **Exercício E169** · ★☆☆
 
-Sem rodar, preveja as quatro linhas que este programa mostra:
+No app do cartão fidelidade, a promoção dobra os pontos. Escreva
+"int dobrar_pontos(int pontos)", que dobra o próprio parâmetro, mostra
+"dentro: <valor>" e devolve o valor dobrado. No main, comece com
+pontos = 150 e faça, nesta ordem:
 
 
 ```text
-int dobrar_pontos(int pontos) {
-    pontos = pontos * 2;
-    printf("dentro: %d\n", pontos);
-    return pontos;
-}
+1. chame dobrar_pontos(pontos) SEM guardar o retorno e mostre "main: ...";
+2. chame de novo, agora com pontos = dobrar_pontos(pontos), e mostre
+   "main: ..." outra vez.
 ```
 
 
 
 ```text
-int main(void) {
-    int pontos = 150;
-    dobrar_pontos(pontos);
-    printf("main: %d\n", pontos);
-    pontos = dobrar_pontos(pontos);
-    printf("main: %d\n", pontos);
-    return 0;
-}
+Saída esperada:
+dentro: 300
+main: 150
+dentro: 300
+main: 300
 ```
 
 **Dicas:**
 
-1. O "pontos" da função e o "pontos" do main são duas variáveis.
-2. Na primeira chamada, o retorno não é guardado em lugar nenhum.
-3. Resposta esperada: dentro: 300 / main: 150 / dentro: 300 / main: 300.
+1. Dentro da função: pontos = pontos * 2; printf(...); return pontos;
+2. O "pontos" da função e o "pontos" do main são duas variáveis: mudar uma
+   não muda a outra.
+3. Resposta esperada: a saída acima. Na primeira chamada, o 300 volta pelo
+   return e é jogado fora; só na segunda ele chega ao main.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0029-parametros/E169.c
@@ -717,9 +738,10 @@ Total       R$ 9.70
 **Exercício E171** · ★★☆
 
 O programa abaixo deveria mostrar as duas notas em ordem crescente, mas
-mostra "Em ordem: 9 e 6". Rode, explique por que a função não funciona e
-conserte. Você ainda não pode usar ponteiros: troque "ordenar" por duas
-funções que devolvem valor, "menor" e "maior".
+mostra "Em ordem: 9 e 6": a troca dentro de ordenar não chega ao main.
+Conserte e rode até aparecer "Em ordem: 6 e 9". Você ainda não pode usar
+ponteiros: troque "ordenar" por duas funções que devolvem valor, "menor" e
+"maior", e use as duas no printf.
 
 **Dicas:**
 
@@ -762,51 +784,40 @@ No main, capital continua R$ 1000.00
 
 **Exercício E173** · ★★★
 
-Preveja a saída. Atenção às conversões: cada argumento é convertido para o
-tipo do parâmetro, e o valor do return é convertido para o tipo da função.
+O boletim abaixo calcula a média de duas notas inteiras, mas mostra
+"media(7, 8) = 7.0". Cada argumento é convertido para o tipo do parâmetro,
+e o valor do return é convertido para o tipo da função: o problema está
+numa dessas conversões. Rode e veja.
 
+Depois:
 
 ```text
-int metade(int x) {
-    return x / 2;
-}
+1. conserte media sem mudar os tipos dos parâmetros (continuam int);
+2. escreva "int arredondar(double x)", que arredonda para o inteiro mais
+   próximo (x >= 0), sem math.h, e tire as barras das duas linhas
+   comentadas do main.
 ```
 
+A linha de metade(7.9) não muda: ela mostra outra conversão acontecendo.
 
 
 ```text
-double media(int a, int b) {
-    return (a + b) / 2;
-}
-```
-
-
-
-```text
-double media_certa(double a, double b) {
-    return (a + b) / 2;
-}
-```
-
-
-
-```text
-int main(void) {
-    printf("%d\n", metade(7.9));
-    printf("%.1f\n", media(7, 8));
-    printf("%.1f\n", media_certa(7, 8));
-    printf("%d\n", metade(metade(31) + 1));
-    return 0;
-}
+Saída esperada:
+metade(7.9) = 3
+media(7, 8) = 7.5
+media(9, 10) = 9.5
+arredondar(7.5) = 8
+arredondar(media(6, 7)) = 7
 ```
 
 **Dicas:**
 
-1. 7.9 entra num parâmetro int: a parte decimal é cortada antes da conta.
-2. Em media, a e b são int: a divisão (a + b) / 2 é inteira. Só depois o
-   resultado vira double.
-3. Resposta esperada: 3, 7.0, 7.5 e 8. (metade(31) = 15; 15 + 1 = 16;
-   metade(16) = 8.)
+1. Em media, a e b são int: (a + b) / 2 é divisão inteira, e só depois o
+   resultado vira double. Basta um dos lados da divisão ser double: 2.0.
+2. arredondar: some 0.5 e deixe a conversão para int cortar a parte
+   decimal: return x + 0.5; (o return converte para int sozinho).
+3. Resposta esperada: a saída acima. 7.9 entra num parâmetro int e vira 7
+   antes da conta: 7 / 2 = 3. media(6, 7) = 6.5, e 6.5 + 0.5 = 7.0 vira 7.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0029-parametros/E173.c
@@ -950,7 +961,8 @@ tiver mais de um `.c`.
 > com valor inicial ficam na seção **`.data`**, gravada dentro do próprio
 > executável; as que começam em zero ficam na **`.bss`**, que o sistema zera ao
 > carregar o programa. As locais ficam na **pilha**, um espaço reaproveitado a
-> cada chamada (o próximo assunto). Rode `gcc -c A059.c` e depois `nm A059.o`:
+> cada chamada (o próximo assunto). Salve o código acima como `senhas.c`, rode
+> `gcc -c senhas.c` e depois `nm senhas.o`:
 > aparecem `atendidos` (B, na `.bss`) e `senha.0` (d, na `.data`). A `vezes`
 > nem aparece: ela não tem lugar fixo.
 
@@ -963,36 +975,48 @@ tiver mais de um `.c`.
 
 Os arquivos ficam em [`0030-escopo/`](0030-escopo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A059 · O painel de senhas do banco**
+**Exemplo A059 · A função que lembra o recorde**
 
 ```c
+#include <stdbool.h>
 #include <stdio.h>
 
-int atendidos = 0; // global: vive o programa todo, todo mundo enxerga
+// devolve true quando a temperatura bate o recorde do dia
+bool novo_recorde(int temperatura) {
+    static bool primeira = true; // true só até a primeira chamada
+    static int recorde = 0;      // o maior valor visto até agora
 
-int chamar(void) {
-    static int senha = 100; // static: inicializada uma vez só, guarda o valor
-    int vezes = 0;          // local: nasce de novo a cada chamada
+    if (primeira || temperatura > recorde) {
+        primeira = false;
+        recorde = temperatura;
+        return true;
+    }
+    return false;
+}
 
-    senha++;
-    vezes++;
-    atendidos++;
-    printf("Senha %d | vezes: %d | atendidos: %d\n", senha, vezes, atendidos);
-    return senha;
+void leitura(int hora, int temperatura) {
+    printf("%2dh: %d °C", hora, temperatura);
+    if (novo_recorde(temperatura)) {
+        printf(" (recorde!)");
+    }
+    printf("\n");
 }
 
 int main(void) {
-    chamar();
-    chamar();
-    int ultima = chamar();
-    printf("Última senha chamada: %d\n", ultima);
+    leitura(6, 19);  // a primeira leitura é sempre recorde
+    leitura(9, 24);
+    leitura(12, 22); // 22 < 24: a static lembra do 24
+    leitura(15, 30);
+    leitura(18, 27);
+    // printf("%d\n", recorde); // erro: recorde só existe dentro da função
     return 0;
 }
 // Saída:
-// Senha 101 | vezes: 1 | atendidos: 1
-// Senha 102 | vezes: 1 | atendidos: 2
-// Senha 103 | vezes: 1 | atendidos: 3
-// Última senha chamada: 103
+//  6h: 19 °C (recorde!)
+//  9h: 24 °C (recorde!)
+// 12h: 22 °C
+// 15h: 30 °C (recorde!)
+// 18h: 27 °C
 ```
 
 ```bash
@@ -1046,43 +1070,38 @@ int main(void) {
 
 **Exercício E175** · ★☆☆
 
-Preveja as cinco linhas, sem rodar:
+O cartão fidelidade da farmácia tem 100 pontos guardados (uma global) e a
+compra de hoje vale 30 pontos (uma local do main com o MESMO nome). Escreva:
 
 
 ```text
-int volume = 10;
+int pontos = 100;                 global: o saldo do cartão
+void extrato(void)                mostra "extrato: <pontos>"
+void somar_na_global(int valor)   soma valor nos pontos do cartão
 ```
 
 
-
-```text
-void mostrar(void) {
-    printf("%d\n", volume);
-}
-```
-
+No main, chame extrato, declare "int pontos = 30;", mostre "compra de hoje",
+chame somar_na_global(pontos), chame extrato de novo e mostre a compra de
+hoje outra vez.
 
 
 ```text
-int main(void) {
-    mostrar();
-    int volume = 25;
-    printf("%d\n", volume);
-    {
-        int volume = 40;
-        printf("%d\n", volume);
-    }
-    printf("%d\n", volume);
-    mostrar();
-    return 0;
-}
+Saída esperada:
+extrato: 100
+compra de hoje: 30
+extrato: 130
+compra de hoje: 30
 ```
 
 **Dicas:**
 
-1. A função mostrar está fora do main: ela não enxerga nenhuma variável do main.
-2. Vale a declaração mais próxima; o bloco interno acaba no "}".
-3. Resposta esperada: 10, 25, 40, 25, 10.
+1. Dentro de extrato e de somar_na_global só existe a global: as funções
+   não enxergam nada do main.
+2. No main, depois de "int pontos = 30;", o nome pontos é a local: ela
+   esconde a global daí para baixo.
+3. Resposta esperada: a saída acima. somar_na_global recebe uma cópia do 30
+   e soma na global; a local do main nem fica sabendo.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0030-escopo/E175.c
@@ -1092,7 +1111,11 @@ int main(void) {
 
 O site da sua loja quer contar as visitas. Escreva "int registrar_visita(void)"
 que soma 1 a um contador static e devolve o número da visita. Chame 4 vezes
-num for. Depois responda num comentário: o que aparece se você tirar o static?
+num for, mostrando "Visita nº ...".
+
+Para ver a diferença, escreva também "int registrar_sem_static(void)",
+igual à primeira mas SEM o static, chame 4 vezes noutro for e mostre os
+quatro retornos numa linha só.
 
 
 ```text
@@ -1101,14 +1124,16 @@ Visita nº 1
 Visita nº 2
 Visita nº 3
 Visita nº 4
+Sem static: 1 1 1 1
 ```
 
 **Dicas:**
 
-1. static int visitas = 0; dentro da função.
-2. Sem static, a variável nasce com 0 em toda chamada.
-3. Resposta esperada: com static, 1, 2, 3, 4. Sem static, "Visita nº 1"
-   quatro vezes.
+1. static int visitas = 0; dentro da primeira função; int visitas = 0; na
+   segunda.
+2. Sem static, a variável nasce com 0 em toda chamada e morre no return.
+3. Resposta esperada: a saída acima. A static guarda o valor entre as
+   chamadas; a local recomeça sempre.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0030-escopo/E176.c
@@ -1118,8 +1143,9 @@ Visita nº 4
 
 Este programa deveria somar os quatro itens da compra (R$ 12.50, R$ 8.00,
 R$ 30.00 e R$ 4.75) e mostrar "Total: R$ 55.25". Ele compila sem aviso, mas
-mostra "Total: R$ 4.75". Explique o erro usando as palavras escopo e tempo
-de vida, e conserte.
+mostra "Total: R$ 4.75". O erro é de escopo e tempo de vida: descubra
+qual variável nasce no lugar errado, conserte e rode até aparecer o total
+certo.
 
 **Dicas:**
 
@@ -1135,50 +1161,33 @@ de vida, e conserte.
 
 **Exercício E178** · ★★☆
 
-O vale-refeição foi escrito com uma variável global. Primeiro preveja a
-saída. Depois refatore: tire a global, faça gastar receber o saldo e
-devolver o saldo novo, e mantenha a mesma saída.
+O vale-refeição abaixo foi escrito com uma variável global, e a função que
+deveria só calcular um preço cobra uma "taxa escondida" de R$ 1.00 na
+global. Os gastos são R$ 45.00 e R$ 32.50, então o certo seria
+300 - 45 - 1 - 32.50 - 1 = R$ 220.50. Rode: aqui ele mostra R$ 222.50.
+
+Refatore: tire a global, troque as duas funções por
+"double gastar(double saldo, double valor)", que recebe o saldo e devolve o
+saldo novo, já com a taxa, e faça o main guardar o retorno numa local.
+Depois acrescente um terceiro gasto de R$ 18.00 e mostre o saldo de novo.
 
 
 ```text
-double saldo = 300.00;
-```
-
-
-
-```text
-double preco_com_taxa(double valor) {
-    saldo = saldo - 1.00; // "taxa escondida"
-    return valor;
-}
-```
-
-
-
-```text
-void gastar(double valor) {
-    saldo = saldo - preco_com_taxa(valor);
-}
-```
-
-
-
-```text
-int main(void) {
-    gastar(45.00);
-    gastar(32.50);
-    printf("Saldo: R$ %.2f\n", saldo);
-    return 0;
-}
+Saída esperada:
+Saldo: R$ 220.50
+Saldo: R$ 201.50
 ```
 
 **Dicas:**
 
-1. Toda função mexe na mesma global, inclusive a que só deveria calcular um preço.
-2. Na versão nova: double gastar(double saldo, double valor) devolve
-   saldo - valor - 1.00, e o main faz saldo = gastar(saldo, 45.00).
-3. Resposta esperada: Saldo: R$ 220.50 (300 - 45 - 1 - 32.50 - 1). Sem
-   global, a taxa fica visível na função que a cobra.
+1. Em "saldo = saldo - preco_com_taxa(valor);" o compilador pode ler o
+   saldo ANTES de a função tirar a taxa, e depois grava por cima: a taxa
+   some. O C não define essa ordem. Global mudada no meio de uma conta é
+   bug esperando para acontecer.
+2. Na versão nova, gastar devolve saldo - valor - 1.00, e o main faz
+   saldo = gastar(saldo, 45.00). O saldo vira uma local do main.
+3. Resposta esperada: 220.50 e, depois do gasto de 18.00 (mais 1.00 de
+   taxa), 201.50. Sem global, a taxa fica visível na função que a cobra.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0030-escopo/E178.c
@@ -1186,70 +1195,46 @@ int main(void) {
 
 **Exercício E179** · ★★★
 
-Teste de mesa caprichado: preveja as linhas, na ordem.
+Quatro variáveis chamadas x, cada uma com escopo e tempo de vida
+diferentes. Escreva o programa a partir destas regras:
 
 
 ```text
-int x = 10;
+int x = 10;     global
+void a(void)    tem uma local x = 1; mostra "a: <x>", soma 1, mostra " -> <x>"
+int b(void)     tem uma static x = 5; mostra "b: <x>", soma 5, mostra
+                " -> <x>" e devolve o x novo
+void c(void)    não declara x: mostra "c: <x>", dobra, mostra " -> <x>"
 ```
 
 
-
-```text
-void a(void) {
-    int x = 1;
-    printf("a: %d", x);
-    x++;
-    printf(" -> %d\n", x);
-}
-```
-
+O main tem a própria local x = 20 e mostra "main: 20"; abre um bloco com
+outra x = 30 e mostra "bloco: 30"; chama a, b e c duas vezes, nessa ordem,
+somando numa local os dois retornos de b; mostra "main: <x>" e a soma.
 
 
 ```text
-void b(void) {
-    static int x = 5;
-    printf("b: %d", x);
-    x += 5;
-    printf(" -> %d\n", x);
-}
-```
-
-
-
-```text
-void c(void) {
-    printf("c: %d", x);
-    x *= 2;
-    printf(" -> %d\n", x);
-}
-```
-
-
-
-```text
-int main(void) {
-    int x = 20;
-    printf("main: %d\n", x);
-    {
-        int x = 30;
-        printf("bloco: %d\n", x);
-    }
-    a(); b(); c();
-    a(); b(); c();
-    printf("main: %d\n", x);
-    return 0;
-}
+Saída esperada:
+main: 20
+bloco: 30
+a: 1 -> 2
+b: 5 -> 10
+c: 10 -> 20
+a: 1 -> 2
+b: 10 -> 15
+c: 20 -> 40
+main: 20
+soma dos b: 25
 ```
 
 **Dicas:**
 
-1. São quatro x diferentes fora do bloco: a global, a do main, a local de a
-   e a static de b. Qual cada função enxerga?
-2. A local de a recomeça em 1; a static de b continua de onde parou; c mexe
-   na global.
-3. Resposta esperada: main: 20 / bloco: 30 / a: 1 -> 2 / b: 5 -> 10 /
-   c: 10 -> 20 / a: 1 -> 2 / b: 10 -> 15 / c: 20 -> 40 / main: 20.
+1. A local de a recomeça em 1 a cada chamada; a static de b continua de
+   onde parou; c mexe na global, porque é a única x que ela enxerga.
+2. O main não enxerga a static de b: o único jeito de saber o valor dela
+   lá fora é pelo return.
+3. Resposta esperada: a saída acima. A x do main nunca muda, e a global
+   termina valendo 40.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0030-escopo/E179.c
@@ -1433,40 +1418,50 @@ no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
 
 Os arquivos ficam em [`0031-pilha-de-chamadas/`](0031-pilha-de-chamadas/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A061 · Quem chamou quem no pedido do delivery**
+**Exemplo A061 · O valor que desce a pilha, quadro por quadro**
 
 ```c
 #include <stdio.h>
 
-double taxa_entrega(double valor) {
-    printf("    entra taxa_entrega(%.2f)\n", valor);
-    double taxa = valor < 80.00 ? 7.90 : 0.00;
-    printf("    sai taxa_entrega -> %.2f\n", taxa);
-    return taxa;
+// topo da pilha: não chama ninguém, só devolve
+double tarifa_base(void) {
+    double valor = 5.00;
+    printf("      tarifa_base devolve %.2f\n", valor);
+    return valor;
 }
 
-double total_com_entrega(double valor) {
-    printf("  entra total_com_entrega(%.2f)\n", valor);
-    double total = valor + taxa_entrega(valor);
-    printf("  sai total_com_entrega -> %.2f\n", total);
-    return total;
+double com_integracao(void) {
+    double valor = 1.50; // outro "valor": cada quadro tem o seu
+    printf("    com_integracao espera (o seu valor é %.2f)\n", valor);
+    valor = valor + tarifa_base();
+    printf("    com_integracao devolve %.2f\n", valor);
+    return valor;
+}
+
+double meia_passagem(void) {
+    double valor = 0.50;
+    printf("  meia_passagem espera (o seu valor é %.2f)\n", valor);
+    valor = com_integracao() * valor;
+    printf("  meia_passagem devolve %.2f\n", valor);
+    return valor;
 }
 
 int main(void) {
-    double subtotal = 50.00;
+    double valor = 0; // o do main fica parado esperando lá embaixo
 
-    printf("entra main\n");
-    double total = total_com_entrega(subtotal);
-    printf("Total: R$ %.2f\n", total);
+    printf("main espera\n");
+    valor = meia_passagem();
+    printf("main recebe %.2f\n", valor);
     return 0;
 }
 // Saída:
-// entra main
-//   entra total_com_entrega(50.00)
-//     entra taxa_entrega(50.00)
-//     sai taxa_entrega -> 7.90
-//   sai total_com_entrega -> 57.90
-// Total: R$ 57.90
+// main espera
+//   meia_passagem espera (o seu valor é 0.50)
+//     com_integracao espera (o seu valor é 1.50)
+//       tarifa_base devolve 5.00
+//     com_integracao devolve 6.50
+//   meia_passagem devolve 3.25
+// main recebe 3.25
 ```
 
 ```bash
@@ -1531,42 +1526,37 @@ int main(void) {
 
 **Exercício E181** · ★☆☆
 
-Desenhe (em texto) a pilha de chamadas no momento em que a linha marcada
-com (*) roda. Liste os quadros de baixo para cima, com os parâmetros e as
-locais que já têm valor.
+Faça o programa do IMC mostrar a pilha enquanto roda. Escreva:
 
 
 ```text
-double quadrado(double x) {
-    return x * x;                       // (*)
-}
+double quadrado(double x)                  devolve x * x
+double imc(double peso, double altura)     devolve peso / quadrado(altura)
 ```
 
 
-
-```text
-double imc(double peso, double altura) {
-    return peso / quadrado(altura);
-}
-```
-
+Cada função mostra uma linha ao entrar (com os parâmetros) e outra ao sair
+(com o valor que devolve), recuada 2 espaços a mais que a de quem a chamou.
+O main calcula imc(72.0, 1.80), guarda numa local e mostra o resultado.
 
 
 ```text
-int main(void) {
-    double resultado = imc(72.0, 1.80);
-    printf("IMC: %.1f\n", resultado);
-    return 0;
-}
+Saída esperada:
+main chama imc
+  entra imc(peso = 72.0, altura = 1.80)
+    entra quadrado(x = 1.80)
+    sai quadrado -> 3.24
+  sai imc -> 22.2
+IMC: 22.2
 ```
 
 **Dicas:**
 
-1. Quem chamou quadrado? E quem chamou essa função?
-2. resultado ainda não tem valor: o main está esperando imc voltar.
-3. Resposta esperada (base -> topo): main (resultado ainda sem valor) ->
-   imc (peso = 72.0, altura = 1.80) -> quadrado (x = 1.80). Ao rodar,
-   mostra "IMC: 22.2".
+1. Os espaços do recuo podem ir direto no texto do printf.
+2. Em imc, guarde o retorno de quadrado numa local antes de dividir; assim
+   a linha "sai imc" pode mostrar o resultado.
+3. Resposta esperada: a saída acima. Na hora em que quadrado roda, a pilha
+   tem três quadros: main (esperando), imc (esperando) e quadrado no topo.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E181.c
@@ -1574,55 +1564,37 @@ int main(void) {
 
 **Exercício E182** · ★☆☆
 
-Preveja a ordem exata das linhas na tela:
+Escreva três funções void, a, b e c, que se chamam assim:
 
 
 ```text
-void c(void) {
-    printf("c\n");
-}
+c mostra "c (vez N)", em que N conta quantas vezes c já rodou;
+b mostra "b começa", chama c e mostra "b termina";
+a mostra "a começa", chama b, chama c e mostra "a termina".
 ```
 
+
+O main chama a e depois c.
 
 
 ```text
-void b(void) {
-    printf("b começa\n");
-    c();
-    printf("b termina\n");
-}
+Saída esperada:
+a começa
+b começa
+c (vez 1)
+b termina
+c (vez 2)
+a termina
+c (vez 3)
 ```
-
-
-
-```text
-void a(void) {
-    printf("a começa\n");
-    b();
-    c();
-    printf("a termina\n");
-}
-```
-
-
-
-```text
-int main(void) {
-    a();
-    c();
-    return 0;
-}
-```
-
-
-Qual é o número máximo de quadros na pilha ao mesmo tempo, contando o main?
 
 **Dicas:**
 
-1. Uma função só continua depois que a função que ela chamou retornou.
-2. O ponto mais fundo é main -> a -> b -> c.
-3. Resposta esperada: a começa / b começa / c / b termina / c / a termina /
-   c. No máximo 4 quadros.
+1. Uma função só continua depois que a função que ela chamou retornou: por
+   isso "b termina" vem depois do c.
+2. O contador de c é uma static int vezes = 0; dentro dela (assunto 0030).
+3. Resposta esperada: a saída acima. O ponto mais fundo é main -> a -> b
+   -> c: quatro quadros na pilha ao mesmo tempo.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E182.c
@@ -1661,44 +1633,29 @@ sai finalizar_compra
 
 **Exercício E184** · ★★☆
 
-Cada quadro tem as suas variáveis, mesmo com nomes iguais. Preveja a saída e
-monte uma tabela com o valor de cada "n" e cada "r" em cada quadro.
+Cada quadro tem as suas variáveis, mesmo com nomes iguais: aqui são três
+"n" e três "r". Estenda o programa abaixo com printfs que mostrem n e r em
+cada quadro: na entrada e na saída de dobro_mais_um e na saída de processa
+(o valor que ela devolve). Não mude nenhuma conta.
 
 
 ```text
-int dobro_mais_um(int n) {
-    int r = n * 2;
-    n = r + 1;
-    return n;
-}
-```
-
-
-
-```text
-int processa(int n) {
-    int r = dobro_mais_um(n);
-    printf("processa: n = %d, r = %d\n", n, r);
-    return r + n;
-}
-```
-
-
-
-```text
-int main(void) {
-    int n = 5;
-    int r = processa(n);
-    printf("main: n = %d, r = %d\n", n, r);
-    return 0;
-}
+Saída esperada:
+dobro_mais_um entra: n = 5
+dobro_mais_um sai: n = 11, r = 10
+processa: n = 5, r = 11
+processa devolve 16
+main: n = 5, r = 16
 ```
 
 **Dicas:**
 
-1. Em dobro_mais_um, n vira 11, mas é o n do quadro dela.
-2. processa continua com n = 5 e recebe r = 11.
-3. Resposta esperada: "processa: n = 5, r = 11" e "main: n = 5, r = 16".
+1. Em dobro_mais_um, o printf de entrada vem antes de "int r"; o de saída,
+   logo antes do return.
+2. Em processa, guarde r + n numa local antes do return para poder
+   mostrar o valor.
+3. Resposta esperada: a saída acima. O n de dobro_mais_um vira 11, mas é o
+   n do quadro dela: o de processa continua 5, e o do main também.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E184.c
@@ -1707,44 +1664,49 @@ int main(void) {
 **Exercício E185** · ★★★
 
 Um programa de notas travou com divisão por zero. No gdb, o comando bt
-(backtrace) mostrou isto:
+(backtrace) mostrou a pilha do topo (#0) para a base:
 
 
 ```text
 #0  dividir (a=27, b=0) at notas.c:4
 #1  media (soma=27, quantidade=0) at notas.c:9
-#2  relatorio (turma=3) at notas.c:15
+#2  relatorio (turma=3, soma=27, quantidade=0) at notas.c:15
 #3  main () at notas.c:22
 ```
 
 
-Responda:
-a) Qual função estava rodando quando o programa travou?
-b) Quem chamou media? E quem chamou relatorio?
-c) Se dividir não tivesse travado, qual função voltaria a rodar primeiro
+Reconstrua o programa com essa mesma pilha, mas sem o erro:
+
 
 ```text
- quando ela retornasse? E qual seria a última a terminar?
+double dividir(int a, int b)        devolve a / b com casas decimais e
+                                    mostra a pilha naquele momento
+double media(int soma, int quantidade)
+                                    devolve 0 quando quantidade é 0, sem
+                                    chamar dividir
+void relatorio(int turma, int soma, int quantidade)
+                                    mostra "Turma N: média X"
 ```
 
-d) Onde está o erro de lógica, provavelmente: em dividir ou antes?
-e) Escreva um programa com as quatro funções (dividir, media, relatorio e
+
+dividir também conta numa static quantas divisões já fez e mostra o número
+na linha da pilha. O main chama relatorio(3, 27, 3) e relatorio(3, 27, 0).
+
 
 ```text
- main) formando essa mesma pilha, mas com a proteção certa: media devolve
- 0 quando quantidade é 0. Com soma 27 e quantidade 3, mostre
- "Turma 3: média 9.0"; com quantidade 0, "Turma 3: média 0.0".
+Saída esperada:
+  [divisão 1, pilha: main -> relatorio -> media -> dividir]
+Turma 3: média 9.0
+Turma 3: média 0.0
 ```
 
 **Dicas:**
 
-1. O bt lista do topo (#0) para a base (main): a função que estava rodando
-   quando o programa parou aparece primeiro.
-2. dividir só fez a conta que pediram. Quem deveria ter conferido o zero?
-3. Resposta esperada: a) dividir; b) relatorio chamou media, main chamou
-   relatorio; c) media volta primeiro, main termina por último; d) antes:
-   media (ou relatorio) passou quantidade 0 adiante sem conferir. e) as
-   duas linhas acima.
+1. Com a e b int, use (double)a / b para não perder as casas decimais.
+2. dividir só faz a conta que pediram: quem conhece o sentido de
+   "quantidade" é media, então a conferência do zero fica lá.
+3. Resposta esperada: a saída acima. Na segunda chamada, media devolve 0
+   antes de chamar dividir, e por isso só aparece uma linha de pilha.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E185.c
@@ -1895,26 +1857,31 @@ resolve cada metade".
 
 Os arquivos ficam em [`0032-recursao/`](0032-recursao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A063 · De quantos jeitos 5 amigos sentam no cinema**
+**Exemplo A063 · Em quantos meses a dívida dobra**
 
 ```c
 #include <stdio.h>
 
-int fatorial(int n) {
-    if (n <= 1) {
-        return 1; // caso base: resolve direto, sem chamar ninguém
+// o caso base não é um contador chegando a zero: é uma condição
+int meses_para_chegar(double divida, double meta, double juros) {
+    if (divida >= meta) {
+        return 0; // caso base: já chegou, não falta nenhum mês
     }
-    return n * fatorial(n - 1); // caso recursivo: um problema menor
+    // um mês de juros e o mesmo problema, um pouco mais perto da meta
+    return 1 + meses_para_chegar(divida * (1 + juros / 100), meta, juros);
 }
 
 int main(void) {
-    printf("5 amigos: %d jeitos\n", fatorial(5));
-    printf("12 amigos: %d jeitos\n", fatorial(12)); // o maior que cabe num int
+    printf("Cartão (12%% ao mês): %d meses\n", meses_para_chegar(1000, 2000, 12));
+    printf("Empréstimo (3%% ao mês): %d meses\n", meses_para_chegar(1000, 2000, 3));
+    // caso de borda: a meta já foi batida, nenhuma chamada recursiva
+    printf("Já dobrou: %d meses\n", meses_para_chegar(2500, 2000, 3));
     return 0;
 }
 // Saída:
-// 5 amigos: 120 jeitos
-// 12 amigos: 479001600 jeitos
+// Cartão (12% ao mês): 7 meses
+// Empréstimo (3% ao mês): 24 meses
+// Já dobrou: 0 meses
 ```
 
 ```bash
@@ -2014,36 +1981,31 @@ Saída esperada:
 
 **Exercício E189** · ★★☆
 
-Preveja a saída, linha por linha:
+Escreva "void eco(int n, int nivel)", recursiva, que mostra "ida n" antes
+da chamada recursiva, "fundo" no caso base (n == 0) e "volta n" depois da
+chamada. Cada linha é recuada 2 espaços por nível: o main chama eco(3, 0),
+e cada chamada recursiva passa nivel + 1. Use uma função "void recuo(int
+nivel)" para os espaços.
 
 
 ```text
-void eco(int n) {
-    if (n == 0) {
-        printf("fundo\n");
-        return;
-    }
-    printf("ida %d\n", n);
-    eco(n - 1);
-    printf("volta %d\n", n);
-}
-```
-
-
-
-```text
-int main(void) {
-    eco(3);
-    return 0;
-}
+Saída esperada:
+ida 3
+  ida 2
+    ida 1
+      fundo
+    volta 1
+  volta 2
+volta 3
 ```
 
 **Dicas:**
 
-1. O printf da volta só roda depois que a chamada de dentro terminou.
-2. Cada quadro lembra o seu n: o de eco(3) ainda vale 3 na volta.
-3. Resposta esperada: ida 3 / ida 2 / ida 1 / fundo / volta 1 / volta 2 /
-   volta 3.
+1. recuo: um for de 0 até nivel - 1 com printf("  ").
+2. eco: if (n == 0) { recuo; "fundo"; return; } depois recuo, "ida",
+   eco(n - 1, nivel + 1), recuo, "volta".
+3. Resposta esperada: a saída acima. O printf da volta só roda depois que a
+   chamada de dentro terminou, e cada quadro lembra o seu n e o seu nivel.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0032-recursao/E189.c
@@ -2077,9 +2039,10 @@ Saída esperada:
 **Exercício E191** · ★★★
 
 Esta função deveria somar os dígitos de um número (2026 -> 10), mas tem
-DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois. Se você rodar mesmo
-assim, o programa morre com stack-overflow. Explique os dois erros e
-conserte.
+DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois.
+Se você rodar mesmo assim, o programa morre com stack-overflow. Conserte
+os dois erros e rode até aparecer "2026 -> 10" e "99999 -> 45", sem
+nenhum aviso.
 
 **Dicas:**
 
@@ -2254,36 +2217,43 @@ Euclides é recursão com **uma** chamada só e que encolhe depressa: barata.
 
 Os arquivos ficam em [`0033-recursao-na-pratica/`](0033-recursao-na-pratica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A065 · Fibonacci: bonito e caro**
+**Exemplo A065 · Fibonacci sem recalcular: a recursão que carrega o par**
 
 ```c
 #include <stdio.h>
 
-long chamadas = 0; // conta quantas vezes fib foi chamada
+long chamadas = 0;
 
-int fib(int n) {
+// a e b são dois vizinhos da sequência; a cada chamada o par anda uma casa
+long long fib_par(int n, long long a, long long b) {
     chamadas++;
-    if (n < 2) {
-        return n; // fib(0) = 0 e fib(1) = 1
+    if (n == 0) {
+        return a; // caso base: andou tudo, a é a resposta
     }
-    return fib(n - 1) + fib(n - 2); // duas chamadas por vez
+    return fib_par(n - 1, b, a + b); // UMA chamada só, não duas
+}
+
+long long fib(int n) {
+    return fib_par(n, 0, 1); // começa no par (fib(0), fib(1))
 }
 
 int main(void) {
-    for (int n = 5; n <= 30; n += 5) {
+    for (int n = 10; n <= 30; n += 10) {
         chamadas = 0;
-        int resultado = fib(n);
-        printf("fib(%d) = %d, com %ld chamadas\n", n, resultado, chamadas);
+        long long resultado = fib(n);
+        printf("fib(%d) = %lld, com %ld chamadas\n", n, resultado, chamadas);
     }
+
+    chamadas = 0;
+    long long grande = fib(90); // com duas chamadas por vez, não terminaria hoje
+    printf("fib(90) = %lld, com %ld chamadas\n", grande, chamadas);
     return 0;
 }
 // Saída:
-// fib(5) = 5, com 15 chamadas
-// fib(10) = 55, com 177 chamadas
-// fib(15) = 610, com 1973 chamadas
-// fib(20) = 6765, com 21891 chamadas
-// fib(25) = 75025, com 242785 chamadas
-// fib(30) = 832040, com 2692537 chamadas
+// fib(10) = 55, com 11 chamadas
+// fib(20) = 6765, com 21 chamadas
+// fib(30) = 832040, com 31 chamadas
+// fib(90) = 2880067194370816120, com 91 chamadas
 ```
 
 ```bash
@@ -2395,7 +2365,7 @@ Saída esperada:
 
 Escreva "int fib_rapido(int n)" SEM recursão, com um laço e duas variáveis
 (anterior e atual). Mostre fib(10), fib(40) e fib(46), o maior que cabe num
-int. Depois coloque o fib recursivo do A065 no mesmo arquivo, calcule
+int. Depois coloque o fib recursivo do texto no mesmo arquivo, calcule
 fib(40) com ele e compare o tempo (no olho mesmo).
 
 
@@ -2420,24 +2390,38 @@ fib(46) = 1836311903
 
 **Exercício E196** · ★★☆
 
-Sem rodar, responda sobre fib(6) com o código do A065:
+Meça o desperdício do Fibonacci recursivo. Copie o fib do texto (o de duas
+chamadas por vez) e acrescente três globais:
 
-a) Quanto vale fib(6)?
-b) Quantas chamadas de fib, no total, fib(6) faz (contando a primeira)?
-c) Quantas vezes fib(2) é calculado?
-d) Qual é o maior número de quadros de fib na pilha ao mesmo tempo?
 
-Depois altere o A065 para conferir (b) e (c): conte as chamadas e, numa
-segunda global, só as chamadas com n == 2.
+```text
+chamadas      quantas vezes fib foi chamada, no total
+repetidas     quantas dessas chamadas foram com n == 2
+maior_altura  o maior número de quadros de fib na pilha ao mesmo tempo
+```
+
+
+Para a altura, use uma quarta global, altura: some 1 ao entrar em fib e
+tire 1 logo antes de cada return. Mostre tudo para fib(6).
+
+
+```text
+Saída esperada:
+fib(6) = 8
+chamadas: 25
+fib(2) calculado 5 vezes
+maior altura: 6
+```
 
 **Dicas:**
 
-1. Chamadas(n) = 1 + Chamadas(n - 1) + Chamadas(n - 2), com Chamadas(0) =
-   Chamadas(1) = 1. Do A065: Chamadas(5) = 15. Falta Chamadas(4).
-2. fib(6) chama fib(5) e fib(4); conte quantas vezes fib(2) aparece em cada
-   uma (em fib(5) são 3).
-3. Resposta esperada: a) 8; b) 25; c) 5; d) 6 (fib(6), fib(5), fib(4),
-   fib(3), fib(2), fib(1)).
+1. Ao entrar: chamadas++; altura++; if (altura > maior_altura)
+   maior_altura = altura; e if (n == 2) repetidas++.
+2. Para tirar 1 da altura antes de devolver, guarde o resultado numa
+   local: int r = fib(n - 1) + fib(n - 2); altura--; return r;
+3. Resposta esperada: a saída acima. O caminho mais fundo é fib(6),
+   fib(5), fib(4), fib(3), fib(2), fib(1): 6 quadros. A altura cresce
+   devagar (n), mas as chamadas crescem muito rápido.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E196.c
@@ -2485,8 +2469,8 @@ rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 
 Esta Torre de Hanói compila sem aviso e faz 7 movimentos, mas está errada.
 Siga os movimentos com três pilhas de moedas (ou no papel) e ache o primeiro
-movimento ilegal (disco maior sobre um menor) ou o problema no final.
-Explique o erro e conserte. A saída certa é a do A066.
+movimento ilegal (disco maior sobre um menor). Conserte e rode até a saída
+ficar igual à do A066.
 
 **Dicas:**
 
@@ -2526,16 +2510,16 @@ na pasta do seu `.c`; com `< >`, só nas pastas do sistema.
 
 Cada `.c` é compilado **sozinho**, sem saber que os outros existem. O
 compilador transforma cada um num **arquivo objeto** (`.o`). Quando ele vê a
-chamada `km_para_milhas(100)` em `A067.c`, só sabe que a função existe (o
+chamada `km_para_milhas(100)` em `viagem.c`, só sabe que a função existe (o
 protótipo prometeu), e deixa um buraco com o nome dela. Quem tapa o buraco é o
 **ligador** (*linker*), que junta os `.o` e procura cada nome. Isso é a
 **compilação separada**:
 
 ```bash
 gcc -std=c17 -Wall -Wextra -c conversao.c       # gera conversao.o
-gcc -std=c17 -Wall -Wextra -c A067.c            # gera A067.o
-gcc A067.o conversao.o -o viagem                # o ligador junta
-gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem   # ou tudo de uma vez
+gcc -std=c17 -Wall -Wextra -c viagem.c            # gera viagem.o
+gcc viagem.o conversao.o -o viagem                # o ligador junta
+gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
 ```
 
 Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
@@ -2564,7 +2548,7 @@ int conversoes_feitas(void);
 
 O `conversao.c` tem o corpo das quatro funções, um contador `static` e uma
 função auxiliar `static` (abra o arquivo na pasta). E o programa que usa só
-precisa do `.h`:
+precisa do `.h` (chame este arquivo de `viagem.c`):
 
 ```c
 #include <stdio.h>
@@ -2578,7 +2562,7 @@ int main(void) {
     return 0;
 }
 // Compilando à mão (o rodar faz isso sozinho):
-//   gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem
+//   gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem
 // Saída:
 // 30 °C = 86.0 °F
 // 100 km = 62.1 milhas
@@ -2618,38 +2602,50 @@ Três peças fecham o assunto:
 > **Por dentro do C:** rode `gcc -c conversao.c` e depois `nm conversao.o`. As
 > funções públicas aparecem com `T` (maiúsculo: visível para os outros); a
 > `contar`, com `t`, e o `contador`, com `b` (minúsculos: `static`, só deste
-> arquivo). Agora `gcc -c A067.c` e `nm A067.o`: as três conversões aparecem
+> arquivo). Agora `gcc -c viagem.c` e `nm viagem.o`: as três conversões aparecem
 > com `U`, de *undefined*. São os buracos que o ligador tapa. O `.h` não gera
 > nada sozinho: ele só existe para o compilador.
 
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `#include "conversao.h"` do
-> `A067.c`, o programa compila? O que o gcc avisa? E se você apagar só o
+> `viagem.c`, o programa compila? O que o gcc avisa? E se você apagar só o
 > `conversao.c` da linha do `gcc`?
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0034-modulos/`](0034-modulos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A067 · A viagem usando o módulo de conversão**
+**Exemplo A067 · O .h incluído duas vezes e o protótipo que converte**
 
 ```c
 #include <stdio.h>
 
-#include "conversao.h" // aspas: procura primeiro na pasta deste arquivo
+#include "conversao.h"
+#include "conversao.h" // de propósito: o include guard faz esta virar nada
 
 int main(void) {
-    printf("30 °C = %.1f °F\n", celsius_para_fahrenheit(30));
-    printf("100 km = %.1f milhas\n", km_para_milhas(100));
-    printf("R$ 1000.00 = US$ %.2f\n", reais_para_dolares(1000, 5.40));
+    int trecho = 42;      // int
+    int orcamento = 2700; // int
+
+    // o protótipo do .h diz que os parâmetros são double:
+    // o compilador converte 42 em 42.0 antes de chamar
+    printf("Maratona: %d km = %.1f milhas\n", trecho, km_para_milhas(trecho));
+    printf("Orçamento: R$ %d = US$ %.2f\n", orcamento,
+           reais_para_dolares(orcamento, 5.40));
+
+    // a função do módulo vira peça de uma conta maior
+    double ida_e_volta = 2 * km_para_milhas(trecho);
+    printf("Ida e volta: %.1f milhas\n", ida_e_volta);
+    printf("Conversões feitas: %d\n", conversoes_feitas());
     return 0;
 }
-// Compilando à mão (o rodar faz isso sozinho):
-//   gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem
+// Para ver o guard trabalhando: gcc -E A067.c | grep -c km_para_milhas
+// dá 3: o protótipo aparece uma vez só, mais as duas linhas do main.
 // Saída:
-// 30 °C = 86.0 °F
-// 100 km = 62.1 milhas
-// R$ 1000.00 = US$ 185.19
+// Maratona: 42 km = 26.1 milhas
+// Orçamento: R$ 2700 = US$ 500.00
+// Ida e volta: 52.2 milhas
+// Conversões feitas: 3
 ```
 
 ```bash
@@ -2694,30 +2690,41 @@ int main(void) {
 
 **Exercício E199** · ★☆☆
 
-Você vai criar o módulo "frete" (frete.h e frete.c). Para cada linha
-abaixo, diga se ela vai no frete.h, no frete.c ou em nenhum dos dois:
+Monte o módulo "frete" num arquivo só, com cada peça no bloco certo. Os
+três blocos já estão marcados no esqueleto: "// frete.h" (o que o módulo
+oferece), "// main.c" (quem usa) e "// frete.c" (como ele faz).
 
 
 ```text
-a) double calcular_frete(double peso_kg, int distancia_km);
-b) double calcular_frete(double peso_kg, int distancia_km) { ... }
-c) #ifndef FRETE_H
-d) static double taxa_por_km(int distancia_km) { ... }
-e) #include "frete.h"
-f) int main(void) { ... }
-g) #define FRETE_GRATIS_ACIMA 200.0
-h) #include "frete.c"
+no frete.h:  o include guard (#ifndef FRETE_H / #define FRETE_H / #endif),
+             #define FRETE_GRATIS_ACIMA 200.0 e o protótipo
+             double calcular_frete(double valor_compra, double peso_kg,
+                                   int distancia_km);
+no frete.c:  static double taxa_por_km(int distancia_km), que devolve
+             0.20 por km, e o corpo de calcular_frete
+no main.c:   o main
+```
+
+
+O frete é grátis quando a compra chega a FRETE_GRATIS_ACIMA; senão, é
+R$ 10.00 + R$ 1.50 por kg + a taxa por km. Calcule três pedidos.
+
+
+```text
+Saída esperada:
+Pedido 1 (R$ 150.00, 2.0 kg, 30 km): frete R$ 19.00
+Pedido 2 (R$ 250.00, 5.0 kg, 100 km): frete R$ 0.00
+Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 ```
 
 **Dicas:**
 
-1. O .h diz O QUE o módulo oferece; o .c diz COMO.
-2. Uma função static é interna: quem usa o módulo não precisa saber que ela existe.
-3. Resposta esperada: a) .h; b) .c; c) .h (abre o include guard); d) .c;
-   e) .c (o frete.c inclui o próprio .h, e o programa que usa também);
-   f) nenhum dos dois: o main fica no programa que usa o módulo; g) .h, se
-   quem usa precisa saber o valor (senão, no .c); h) nenhum: nunca inclua
-   um .c.
+1. O .h diz O QUE o módulo oferece; o .c diz COMO. A taxa_por_km é
+   static: quem usa o módulo nem sabe que ela existe.
+2. Para não repetir o printf três vezes, escreva no main.c uma função
+   void mostrar_pedido(int numero, double valor, double peso, int km).
+3. Resposta esperada: 10 + 3 + 6 = 19.00; 250 >= 200, frete grátis;
+   10 + 1.50 + 2.40 = 13.90.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-modulos/E199.c
@@ -2754,34 +2761,41 @@ Conversões: 5
 
 **Exercício E201** · ★★☆
 
-O app de academia tem três arquivos: main.c, treino.c e treino.h (o main.c
-e o treino.c incluem o treino.h). Responda:
+O módulo conversao (conversao.h e conversao.c, nesta pasta) converte km em
+milhas, mas não faz o contrário. Sem mexer no módulo, escreva NESTE arquivo
+"double milhas_para_km(double milhas)" (1 milha = 1.609344 km) e use as
+duas funções juntas:
 
-a) Escreva os três comandos gcc para compilar cada .c em separado (gerando
-
-```text
- os .o) e depois ligar tudo no executável "academia".
-```
-
-b) Você corrigiu um erro dentro de uma função de treino.c. Quais comandos
 
 ```text
- precisa repetir?
+1. a maratona de 26.2 milhas em km;
+2. a volta completa: km_para_milhas(milhas_para_km(26.2)) tem que dar
+   26.2 de novo;
+3. a meia maratona de 13.1 milhas em km;
+4. quantas conversões o módulo contou.
 ```
 
-c) Você mudou um protótipo em treino.h. Quais comandos precisa repetir?
-d) Por que o treino.h não aparece em nenhum comando?
+
+Antes de terminar, tente escrever "contador++;" dentro da sua função, rode,
+leia o erro e apague a linha.
+
+
+```text
+Saída esperada:
+Maratona: 26.2 milhas = 42.2 km
+Volta completa: 26.2 milhas
+Meia: 13.1 milhas = 21.1 km
+Conversões do módulo: 1
+```
 
 **Dicas:**
 
-1. gcc -c arquivo.c gera arquivo.o; para ligar, passe os .o e -o nome.
-2. Quem usa o .h precisa ser recompilado quando ele muda.
-3. Resposta esperada: a) gcc -std=c17 -Wall -Wextra -c main.c;
-   gcc -std=c17 -Wall -Wextra -c treino.c; gcc main.o treino.o -o academia.
-   b) compilar treino.c e ligar de novo (main.o continua valendo).
-   c) compilar os dois .c e ligar, porque os dois incluem o .h.
-   d) porque o .h não é compilado sozinho: ele é colado pelo #include
-   dentro de cada .c. (Ferramentas como o make fazem essas contas por você.)
+1. O include do módulo já está aí embaixo; o rodar compila o conversao.c
+   junto, sozinho.
+2. O contador é static dentro do conversao.c: o seu arquivo não enxerga
+   esse nome ('contador' undeclared). Só as funções do módulo contam.
+3. Resposta esperada: a saída acima. O módulo contou 1: só a chamada de
+   km_para_milhas passa pelo contador; a sua função é de fora.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-modulos/E201.c
@@ -2791,9 +2805,9 @@ d) Por que o treino.h não aparece em nenhum comando?
 
 Este programa NÃO gera o executável, de propósito. Ele imita um módulo num
 arquivo só: o protótipo em cima (como se viesse de um desconto.h) e a
-definição embaixo (como se estivesse no desconto.c). Rode e leia a mensagem.
-Responda: quem reclamou, o compilador ou o ligador? Por que o compilador
-deixou passar? Conserte.
+definição embaixo (como se estivesse no desconto.c). Rode e leia a
+mensagem: quem reclama aqui é o ligador, não o compilador. Conserte e rode
+até aparecer "Tênis: R$ 239.92".
 
 **Dicas:**
 
@@ -2811,60 +2825,47 @@ deixou passar? Conserte.
 
 **Exercício E203** · ★★★
 
-Um projeto de placar tem dois arquivos, compilados juntos com
-"gcc placar.c main.c -o placar":
+Escreva o módulo "placar" de um campeonato entre dois times, num arquivo
+só, com os blocos "// placar.h", "// main.c" e "// placar.c". Os dados
+moram em globais static no bloco do placar.c: os gols da partida atual de
+cada time e os pontos e gols de cada um no campeonato. Ninguém de fora mexe
+neles sem passar pelas funções:
 
 
 ```text
-// placar.c
-static int gols = 0;
-int partidas = 0;
-static void anotar(void) { gols++; }
-void marcar_gol(void) { anotar(); }
-int total_gols(void) { return gols; }
+void marcar_gol(int time)      time 1 (casa) ou 2 (visitante)
+void encerrar_partida(void)    mostra "Partida N: X x Y", dá 3 pontos
+                               para quem venceu (1 para cada no empate),
+                               soma os gols no campeonato e zera o placar
+int pontos(int time)
+int gols(int time)             gols no campeonato
 ```
 
+
+Uma função static do placar.c, "void anotar(int time)", é a única que mexe
+nos gols da partida; marcar_gol só a chama. O main simula: 2 x 1, 0 x 0 e
+1 x 3, e mostra a tabela.
 
 
 ```text
-// main.c
-#include <stdio.h>
-void marcar_gol(void);
-int total_gols(void);
-extern int partidas;
-int main(void) {
-    marcar_gol();
-    marcar_gol();
-    partidas = partidas + 1;
-    printf("%d gols em %d partida\n", total_gols(), partidas);
-    return 0;
-}
+Saída esperada:
+Partida 1: 2 x 1
+Partida 2: 0 x 0
+Partida 3: 1 x 3
+Casa: 4 pontos, 3 gols
+Visitante: 4 pontos, 4 gols
 ```
-
-
-Responda:
-a) O que o programa mostra?
-b) Se o main.c tivesse "extern int gols;" e usasse gols, o que aconteceria?
-c) E se o main.c chamasse anotar() (com o protótipo "void anotar(void);")?
-d) Se o main.c tivesse "int partidas = 0;" em vez de "extern int partidas;",
-
-```text
- o que aconteceria?
-```
-
-e) Qual a vantagem de gols ser static e ter a função total_gols?
 
 **Dicas:**
 
-1. static fora de função: o nome não sai do arquivo. extern: "está definida
-   em outro arquivo".
-2. Erros com nomes que não existem ou existem duas vezes aparecem no
-   ligador, não no compilador.
-3. Resposta esperada: a) "2 gols em 1 partida". b) e c) compila, mas o
-   ligador dá "undefined reference": gols e anotar são static em placar.c.
-   d) duas definições de partidas: o ligador dá "multiple definition of
-   partidas". e) ninguém de fora consegue mudar o placar sem passar por
-   marcar_gol: o módulo controla o próprio dado.
+1. Quatro globais static para o campeonato (pontos_casa, pontos_visitante,
+   gols_casa, gols_visitante), duas para a partida atual e uma para o
+   número da partida. Todas começam em 0.
+2. O bloco do placar.h tem o include guard e os quatro protótipos públicos;
+   o protótipo de anotar NÃO vai lá. Como o main vem antes do placar.c, os
+   protótipos do bloco de cima bastam para ele.
+3. Resposta esperada: a saída acima. Casa: vitória (3) + empate (1);
+   visitante: empate (1) + vitória (3).
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-modulos/E203.c
@@ -2899,8 +2900,8 @@ Operações: 3
 ```
 
 
-Por fim, responda num comentário: o que você escreveria no cofrinho.h de
-verdade (com o include guard), e o que ficaria só no cofrinho.c?
+O bloco "// cofrinho.h" tem que estar pronto para virar arquivo: com o
+include guard COFRINHO_H em volta dos protótipos.
 
 **Dicas:**
 
@@ -2908,8 +2909,8 @@ verdade (com o include guard), e o que ficaria só no cofrinho.c?
    Para usar os nomes no main, os protótipos de cima bastam.
 2. Cuidado: a função se chama saldo, então a variável precisa de outro nome.
 3. Resposta esperada: a saída acima (o depósito de -10 e o saque de 100 não
-   contam). No .h: o guard COFRINHO_H, o #include <stdbool.h> e os quatro
-   protótipos. No .c: o #include "cofrinho.h", as duas variáveis static e
+   contam). No bloco do .h: #ifndef COFRINHO_H, #define COFRINHO_H, os
+   quatro protótipos e #endif. No bloco do .c: as duas variáveis static e
    os corpos das funções.
 
 ```bash
@@ -3016,8 +3017,9 @@ Ferramentas que o exemplo A070 usa:
 > linha que parece perfeita.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A069.c | tail -12` e veja o que o
-> compilador recebe de verdade: `printf(..., lado + 3 * lado + 3)`, sem
+> **Por dentro do C:** salve o código acima como `terreno.c`, rode
+> `gcc -E terreno.c | tail -12` e veja o que o compilador recebe de verdade:
+> `printf(..., lado + 3 * lado + 3)`, sem
 > nenhuma macro. Por isso macro não aparece no depurador e não tem endereço.
 > Para cálculos, o C moderno prefere funções pequenas: com `gcc -O2`, o
 > compilador costuma copiar o corpo de uma função curta direto no lugar da
@@ -3033,31 +3035,43 @@ Ferramentas que o exemplo A070 usa:
 
 Os arquivos ficam em [`0035-preprocessador/`](0035-preprocessador/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A069 · A macro que esqueceu os parênteses**
+**Exemplo A069 · A macro não tem tipo nem é função**
 
 ```c
 #include <stdio.h>
 
-#define QUAD_RUIM(x) x * x       // sem parênteses: perigo
-#define QUAD(x) ((x) * (x))      // parênteses no parâmetro E em volta de tudo
+#define DIAS_UTEIS 22
+#define HORAS_POR_DIA 8
+#define HORAS_NO_MES (DIAS_UTEIS * HORAS_POR_DIA) // macro feita de macros
+
+#define MAIOR(a, b) ((a) > (b) ? (a) : (b)) // serve para int, double...
+
+int maior_int(int a, int b) { // a função tem tipo: só int
+    return a > b ? a : b;
+}
 
 int main(void) {
-    int lado = 2;
+    double salario = 3520.00;
 
-    // terreno quadrado de lado (2 + 3) metros
-    printf("QUAD_RUIM(lado + 3) = %d\n", QUAD_RUIM(lado + 3)); // 2 + 3 * 2 + 3
-    printf("QUAD(lado + 3)      = %d\n", QUAD(lado + 3));      // ((2 + 3) * (2 + 3))
+    printf("Horas no mês: %d\n", HORAS_NO_MES);
+    printf("Valor da hora: R$ %.2f\n", salario / HORAS_NO_MES);
 
-    // quantos lotes de 5 x 5 cabem em 100 m2?
-    printf("100 / QUAD_RUIM(5)  = %d\n", 100 / QUAD_RUIM(5));  // 100 / 5 * 5
-    printf("100 / QUAD(5)       = %d\n", 100 / QUAD(5));       // 100 / ((5) * (5))
+    // a macro só cola texto: com double, a comparação é feita em double
+    printf("MAIOR(4.75, 4.70)     = %.2f\n", MAIOR(4.75, 4.70));
+    // a função converte os argumentos para int antes: 4 e 4
+    printf("maior_int(4.75, 4.70) = %d\n", maior_int(4.75, 4.70));
+
+    // com int, as duas concordam
+    printf("MAIOR(12, 30) = %d, maior_int(12, 30) = %d\n",
+           MAIOR(12, 30), maior_int(12, 30));
     return 0;
 }
 // Saída:
-// QUAD_RUIM(lado + 3) = 11
-// QUAD(lado + 3)      = 25
-// 100 / QUAD_RUIM(5)  = 100
-// 100 / QUAD(5)       = 4
+// Horas no mês: 176
+// Valor da hora: R$ 20.00
+// MAIOR(4.75, 4.70)     = 4.75
+// maior_int(4.75, 4.70) = 4
+// MAIOR(12, 30) = 30, maior_int(12, 30) = 30
 ```
 
 ```bash
@@ -3105,31 +3119,28 @@ int main(void) {
 
 **Exercício E205** · ★☆☆
 
-Para cada linha, escreva como o pré-processador expande a macro e o valor
-que o printf mostra. Só depois rode.
+Rode o programa abaixo: a segunda linha mostra 16, mas 3 vezes o dobro de
+4 é 24. Conserte a macro DOBRO, sem mexer no main. Depois escreva a macro
+TRIPLO(x), já à prova de precedência, e tire as barras da última linha.
 
 
 ```text
-#define DOBRO(x) x + x
-#define METADE(x) ((x) / 2)
-#define TAXA 10
-```
-
-
-
-```text
-printf("%d\n", DOBRO(4));
-printf("%d\n", 3 * DOBRO(4));
-printf("%d\n", METADE(10 + 4));
-printf("%d\n", 100 + TAXA * 2);
+Saída esperada:
+DOBRO(4) = 8
+3 * DOBRO(4) = 24
+METADE(10 + 4) = 7
+100 + TAXA * 2 = 120
+TRIPLO(2 + 1) = 9
 ```
 
 **Dicas:**
 
-1. Escreva a troca de texto literalmente, sem parênteses que não existem.
-2. Depois aplique a precedência normal: * e / antes de + e -.
-3. Resposta esperada: 4 + 4 = 8; 3 * 4 + 4 = 16 (e não 24); ((10 + 4) / 2)
-   = 7; 100 + 10 * 2 = 120.
+1. Escreva a troca de texto à mão: 3 * DOBRO(4) vira 3 * 4 + 4. A
+   multiplicação vem antes da soma.
+2. Parênteses em cada parâmetro e em volta de tudo, como em METADE.
+3. Resposta esperada: a saída acima, com #define DOBRO(x) ((x) + (x)) e
+   #define TRIPLO(x) ((x) * 3). Sem os parênteses no x, TRIPLO(2 + 1)
+   viraria 2 + 1 * 3 = 5.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-preprocessador/E205.c
@@ -3173,7 +3184,8 @@ ENTRE(25, 10, 20) = 0
 
 O sistema da lanchonete tem dois erros, os dois nos #define. Um deles impede
 a compilação; o outro compila e dá a conta errada. Rode, leia o erro (que
-aponta para uma linha que parece certa), explique e conserte os dois.
+aponta para uma linha que parece certa), conserte os dois e rode até a
+saída ficar certa.
 
 
 ```text
@@ -3236,79 +3248,40 @@ Total: R$ 1050.00
 
 **Exercício E209** · ★★★
 
-A macro avalia o argumento cada vez que ele aparece. Preveja a saída:
+A macro avalia o argumento cada vez que ele aparece. Rode o programa: nas
+linhas da macro, x anda duas vezes e pontos é chamada a mais.
 
+Conserte sem apagar a macro MAIOR:
 
 ```text
-#define MAIOR(a, b) ((a) > (b) ? (a) : (b))
+1. nas duas linhas marcadas "macro:", guarde cada argumento numa variável
+   ANTES de usar a macro, para elas mostrarem o mesmo que as da função;
+2. escreva "int maior3(int a, int b, int c)" usando a função maior e
+   acrescente a última linha da saída. A linha "macro aninhada" fica como
+   está, para comparar.
 ```
 
 
 
 ```text
-int chamadas = 0;
-```
-
-
-
-```text
-int pontos(int p) {
-    chamadas++;
-    return p;
-}
-```
-
-
-
-```text
-int maior(int a, int b) {
-    return a > b ? a : b;
-}
-```
-
-
-
-```text
-int main(void) {
-    int x = 5;
-    int y = 3;
-    int m = MAIOR(x++, y);
-    printf("m = %d, x = %d\n", m, x);
-```
-
-
-
-```text
-    x = 5;
-    m = maior(x++, y);
-    printf("m = %d, x = %d\n", m, x);
-```
-
-
-
-```text
-    m = MAIOR(pontos(40), pontos(25));
-    printf("m = %d, chamadas = %d\n", m, chamadas);
-```
-
-
-
-```text
-    chamadas = 0;
-    m = maior(pontos(40), pontos(25));
-    printf("m = %d, chamadas = %d\n", m, chamadas);
-    return 0;
-}
+Saída esperada:
+macro:  m = 5, x = 6
+função: m = 5, x = 6
+macro:  m = 40, chamadas = 2
+função: m = 40, chamadas = 2
+macro aninhada: m = 19, chamadas = 7
+maior3: m = 19, chamadas = 3
 ```
 
 **Dicas:**
 
-1. Expanda MAIOR(x++, y) à mão: ((x++) > (y) ? (x++) : (y)). Quantos x++
-   rodam quando a comparação é verdadeira?
-2. Na função, o argumento x++ é avaliado uma vez, antes da chamada.
-3. Resposta esperada: m = 6, x = 7 / m = 5, x = 6 / m = 40, chamadas = 3 /
-   m = 40, chamadas = 2. (No primeiro, x++ compara 5, vira 6; o segundo x++
-   devolve 6 e vira 7.)
+1. Expanda MAIOR(x++, y) à mão: ((x++) > (y) ? (x++) : (y)). Com a
+   comparação verdadeira, x++ roda duas vezes. Com int a = x++; antes,
+   a macro recebe só o nome a.
+2. Na função, cada argumento é avaliado uma vez, antes da chamada.
+   maior3 cabe numa linha: return maior(maior(a, b), c);
+3. Resposta esperada: a saída acima. Na macro aninhada, o MAIOR de dentro
+   é colado duas vezes no de fora: 3 + 1 + 3 = 7 chamadas de pontos.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-preprocessador/E209.c
@@ -3370,10 +3343,10 @@ que ela faz:
 | --- | --- | --- |
 | `mostrar_cardapio`, `preco_centavos`, `mostrar_item` | `cardapio.c` | módulo `.h`/`.c`, `switch` |
 | `itens_vendidos` | `cardapio.c` | global `static`: só o módulo mexe |
-| `ler_codigo` | `A071.c` | validação com `do...while` e retorno do `scanf` |
-| `proxima_nota` | `A071.c` | função pura: entra uma nota, sai a seguinte |
-| `dar_troco` | `A071.c` | recursão: caso base "troco zerado" |
-| `TAXA_SERVICO` | `A071.c` | `#define` |
+| `ler_codigo` | `caixa.c` | validação com `do...while` e retorno do `scanf` |
+| `proxima_nota` | `caixa.c` | função pura: entra uma nota, sai a seguinte |
+| `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
+| `TAXA_SERVICO` | `caixa.c` | `#define` |
 
 Uma decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira
 `790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3`, e o troco de
@@ -3392,8 +3365,8 @@ a conta é R$ 42,24. Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 
 <p align="center"><img src="0036-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
 
-O programa principal. O `cardapio.h` e o `cardapio.c` estão na pasta do
-assunto, e o `rodar` compila o módulo junto:
+O programa principal, `caixa.c`, usa o módulo do cardápio. O `cardapio.h` e o
+`cardapio.c` estão na pasta do assunto (abra os dois):
 
 ```c
 #include <math.h>
@@ -3497,7 +3470,8 @@ int main(void) {
 //   0.50
 //   0.25
 //   0.01
-// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
+// Para testar sem digitar, salve como caixa.c numa pasta sua, com cópias do
+// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar caixa.c
 ```
 
 Repara no fluxograma: o laço dos pedidos termina com o código 0; depois vêm a
@@ -3538,111 +3512,87 @@ precisa de biblioteca de testes: uma macro de dez linhas resolve.
 
 Os arquivos ficam em [`0036-juntando-tudo/`](0036-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A071 · O caixa da lanchonete**
+**Exemplo A071 · Rachando a conta da mesa sem perder centavo**
 
 ```c
-#include <math.h>
 #include <stdio.h>
 
 #include "cardapio.h"
 
 #define TAXA_SERVICO 10 // por cento
 
-// lê um código de 0 a 4; insiste até vir um válido
-int ler_codigo(void) {
-    int codigo;
-    int lidos;
-    do {
-        printf("Código (0 fecha): ");
-        lidos = scanf("%d", &codigo);
-        if (lidos != 1) {
-            return 0; // entrada acabou ou não é número: fecha a conta
-        }
-    } while (codigo < 0 || codigo > 4);
-    return codigo;
+void mostrar_reais(int centavos) {
+    printf("R$ %d.%02d", centavos / 100, centavos % 100);
 }
 
-// a nota seguinte, da maior para a menor (em centavos)
-int proxima_nota(int nota) {
-    switch (nota) {
-    case 10000: return 5000;
-    case 5000: return 2000;
-    case 2000: return 1000;
-    case 1000: return 500;
-    case 500: return 200;
-    case 200: return 100;
-    case 100: return 50;
-    case 50: return 25;
-    case 25: return 10;
-    case 10: return 5;
-    default: return 1;
+// lança um item e devolve o preço (0 se o código não existe)
+int pedir(int codigo) {
+    int preco = preco_centavos(codigo);
+    if (preco == 0) {
+        printf("código %d não existe\n", codigo);
+        return 0;
     }
+    mostrar_item(codigo);
+    printf(": ");
+    mostrar_reais(preco);
+    printf("\n");
+    return preco;
 }
 
-// recursão: dá uma nota e resolve o troco que sobrou
-void dar_troco(int centavos, int nota) {
-    if (centavos == 0) {
-        return; // caso base: troco completo
+// quanto a pessoa número "pessoa" (1, 2, ...) paga:
+// a divisão inteira deixa uma sobra, e as primeiras pagam 1 centavo a mais
+int parte(int conta, int pessoas, int pessoa) {
+    int base = conta / pessoas;
+    int sobra = conta % pessoas;
+    if (pessoa <= sobra) {
+        return base + 1;
     }
-    if (centavos >= nota) {
-        printf("  %d.%02d\n", nota / 100, nota % 100);
-        dar_troco(centavos - nota, nota);
-    } else {
-        dar_troco(centavos, proxima_nota(nota));
+    return base;
+}
+
+// recursiva: soma as partes da pessoa "de" até a última, para conferir
+int soma_partes(int conta, int pessoas, int de) {
+    if (de > pessoas) {
+        return 0; // caso base: não sobrou ninguém
     }
+    return parte(conta, pessoas, de) + soma_partes(conta, pessoas, de + 1);
 }
 
 int main(void) {
     int total = 0;
+    total += pedir(1); // uma linha por pedido: assim a ordem na tela é garantida
+    total += pedir(1);
+    total += pedir(2);
+    total += pedir(7);
+    total += pedir(4);
+    int conta = total + total * TAXA_SERVICO / 100;
 
-    mostrar_cardapio();
-    for (int codigo = ler_codigo(); codigo != 0; codigo = ler_codigo()) {
-        total += preco_centavos(codigo);
-        mostrar_item(codigo);
-        printf(" adicionado\n");
-    }
+    printf("%d itens, com serviço: ", itens_vendidos());
+    mostrar_reais(conta);
+    printf("\n");
 
-    int servico = total * TAXA_SERVICO / 100;
-    int conta = total + servico;
-    printf("%d itens, conta com serviço: R$ %d.%02d\n",
-           itens_vendidos(), conta / 100, conta % 100);
-
-    double pago;
-    printf("Valor pago: ");
-    if (scanf("%lf", &pago) != 1) {
-        return 0;
+    int pessoas = 3;
+    for (int p = 1; p <= pessoas; p++) {
+        printf("Pessoa %d paga ", p);
+        mostrar_reais(parte(conta, pessoas, p));
+        printf("\n");
     }
-    int troco = (int)lround(pago * 100) - conta;
-    if (troco < 0) {
-        printf("Faltam R$ %d.%02d\n", -troco / 100, -troco % 100);
-        return 0;
-    }
-    printf("Troco: R$ %d.%02d\n", troco / 100, troco % 100);
-    dar_troco(troco, 10000);
+    printf("Conferindo: ");
+    mostrar_reais(soma_partes(conta, pessoas, 1));
+    printf("\n");
     return 0;
 }
-// Exemplo de uso (o que você digita vem depois dos dois-pontos):
-// 1 X-salada   R$ 18.50
-// 2 Batata     R$ 12.00
-// 3 Suco       R$  7.90
-// 4 Açaí       R$ 15.00
-// Código (0 fecha): 1
-// X-salada adicionado
-// Código (0 fecha): 2
-// Batata adicionado
-// Código (0 fecha): 3
-// Suco adicionado
-// Código (0 fecha): 9
-// Código (0 fecha): 0
-// 3 itens, conta com serviço: R$ 42.24
-// Valor pago: 50
-// Troco: R$ 7.76
-//   5.00
-//   2.00
-//   0.50
-//   0.25
-//   0.01
-// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
+// Saída:
+// X-salada: R$ 18.50
+// X-salada: R$ 18.50
+// Batata: R$ 12.00
+// código 7 não existe
+// Açaí: R$ 15.00
+// 4 itens, com serviço: R$ 70.40
+// Pessoa 1 paga R$ 23.47
+// Pessoa 2 paga R$ 23.47
+// Pessoa 3 paga R$ 23.46
+// Conferindo: R$ 70.40
 ```
 
 ```bash
@@ -3819,71 +3769,41 @@ Saída esperada:
 
 **Exercício E214** · ★★☆
 
-Tudo do módulo num programa só. Preveja a saída:
+Tudo do módulo num programa só. Escreva as peças e o main:
 
 
 ```text
-#define DOBRO(x) ((x) * 2)
+#define DOBRO(x)            o dobro, à prova de precedência
+int total = 0;              global
+int proximo_id(void)        static id começando em 10; soma 1 e devolve
+int soma_ate(int n)         recursiva: 0 + 1 + ... + n; soma 1 na global
+                            total a cada chamada
+int altera(int total)       põe 99 no parâmetro e devolve
 ```
 
 
-
-```text
-int total = 0;
-```
-
+O main mostra, nesta ordem: um id; a soma de mais dois ids; soma_ate(4); a
+global total; chama altera(total) sem guardar o retorno e mostra a global
+de novo; e por fim DOBRO(total + 1).
 
 
 ```text
-int proximo_id(void) {
-    static int id = 10;
-    id++;
-    return id;
-}
-```
-
-
-
-```text
-int soma_ate(int n) {
-    total++;
-    if (n == 0) {
-        return 0;
-    }
-    return n + soma_ate(n - 1);
-}
-```
-
-
-
-```text
-int altera(int total) {
-    total = 99;
-    return total;
-}
-```
-
-
-
-```text
-int main(void) {
-    printf("%d\n", proximo_id());
-    printf("%d\n", proximo_id() + proximo_id());
-    printf("%d\n", soma_ate(4));
-    printf("%d\n", total);
-    altera(total);
-    printf("%d\n", DOBRO(total + 1));
-    return 0;
-}
+Saída esperada:
+id: 11
+dois ids somados: 25
+soma_ate(4) = 10
+chamadas: 5
+depois de altera: 5
+DOBRO(total + 1) = 12
 ```
 
 **Dicas:**
 
-1. id é static: 11, depois 12 e 13.
-2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0), e cada uma soma 1 na global.
-3. Resposta esperada: 11, 25, 10, 5, 12. O parâmetro total de altera esconde
-   a global: o 99 vai para a cópia, e o retorno é jogado fora.
-   DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
+1. Para os dois ids, guarde cada um numa variável e some depois: a ordem
+   em que o C avalia os dois lados de um + não é garantida.
+2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0). O parâmetro total de
+   altera esconde a global: o 99 vai para a cópia.
+3. Resposta esperada: a saída acima. DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E214.c
@@ -3933,29 +3853,31 @@ existem? Para chegar a (c, l), o último passo veio de (c - 1, l) ou de
 (c, l - 1); quem está na borda (c == 0 ou l == 0) tem um caminho só.
 
 Escreva "long long caminhos(int c, int l)", recursiva, que também conta as
-próprias chamadas numa global. Mostre para 2 x 2, 3 x 3, 5 x 5 e 12 x 12.
+próprias chamadas numa global. Para medir o desperdício, use uma segunda
+global que conta quantas vezes a mesma esquina (1, 1) é calculada. Escreva
+também "void mostrar(int n)", que zera as globais, resolve n x n e mostra a
+linha, com "confere" quando chamadas == 2 * caminhos - 1 (e "não confere"
+se não). Mostre para 2 x 2, 3 x 3, 5 x 5 e 12 x 12.
 
 
 ```text
 Saída esperada:
-2 x 2: 6 caminhos (11 chamadas)
-3 x 3: 20 caminhos (39 chamadas)
-5 x 5: 252 caminhos (503 chamadas)
-12 x 12: 2704156 caminhos (5408311 chamadas)
+2 x 2: 6 caminhos, 11 chamadas (confere), esquina (1, 1): 2 vezes
+3 x 3: 20 caminhos, 39 chamadas (confere), esquina (1, 1): 6 vezes
+5 x 5: 252 caminhos, 503 chamadas (confere), esquina (1, 1): 70 vezes
+12 x 12: 2704156 caminhos, 5408311 chamadas (confere), esquina (1, 1): 705432 vezes
 ```
-
-
-Responda num comentário: por que o número de chamadas é quase o dobro do
-resultado? O que se repete, como no Fibonacci?
 
 **Dicas:**
 
-1. Caso base: if (c == 0 || l == 0) return 1;
+1. Caso base: if (c == 0 || l == 0) return 1; antes dele, conte a chamada
+   e, se c == 1 && l == 1, conte a esquina.
 2. Cada chamada que não é borda gera duas. As folhas da árvore de chamadas
    são as bordas, e cada folha devolve 1: o resultado é o número de folhas.
-3. Resposta esperada: a saída acima. Uma árvore em que todo nó interno tem
-   dois filhos tem (folhas - 1) nós internos, então chamadas = 2 * caminhos
-   - 1. As mesmas esquinas são recalculadas muitas vezes; guardar as
+   Uma árvore em que todo nó interno tem dois filhos tem (folhas - 1) nós
+   internos, então chamadas = 2 * caminhos - 1.
+3. Resposta esperada: a saída acima. A esquina (1, 1) é recalculada por
+   cada caminho que passa por ela, como fib(2) dentro do fib(6). Guardar as
    respostas numa tabela (memoização) resolve, e isso pede vetores, o
    assunto do próximo módulo.
 
