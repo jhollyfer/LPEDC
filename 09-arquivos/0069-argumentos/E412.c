@@ -14,9 +14,9 @@
 // a) um índice errado no argv;
 // b) uma conferência que falta antes de usar o argv.
 //
-// Explique cada um e conserte. Sem argumentos (ou com um número de vezes que
-// não é inteiro positivo), o programa deve mostrar uma mensagem de uso em
-// stderr e devolver 1.
+// Conserte os dois e rode de novo com "Ana 3" e sem argumentos. Sem
+// argumentos (ou com um número de vezes que não é inteiro positivo), o
+// programa deve mostrar uma mensagem de uso em stderr e devolver 1.
 //
 // Dicas:
 // 1. Quem é argv[0]? O que atoi("Ana") devolve?

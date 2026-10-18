@@ -119,14 +119,15 @@ uma pergunta feita antes dela:
 > indicadores de erro e de fim e um **buffer** de alguns KB (no Linux, em
 > geral 4096 bytes). Cada `fprintf` só copia bytes para esse buffer, na RAM. A
 > entrega ao sistema operacional, uma chamada `write`, só acontece quando o
-> buffer enche, quando você chama `fflush(arq)` ou no `fclose`. Compile sem o
-> sanitizer (`gcc A133.c -o /tmp/a143`, porque o ASan não gosta do `strace`) e
-> rode `strace -e trace=write /tmp/a143`: as três despesas saem num único
+> buffer enche, quando você chama `fflush(arq)` ou no `fclose`. Salve o código
+> acima como `despesas.c`, compile sem o sanitizer (`gcc despesas.c -o
+> /tmp/despesas`, porque o ASan não gosta do `strace`) e rode
+> `strace -e trace=write /tmp/despesas`: as três despesas saem num único
 > `write` de 40 bytes (15 + 10 + 15). Se o programa cair antes do `fclose`, o
 > que estava no buffer se perde.
 
 > [!NOTE]
-> **Pergunta para você:** rode o A133 duas vezes seguidas. O arquivo fica com
+> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O arquivo fica com
 > 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em vez de `"w"`?
 
 {{pratique}}

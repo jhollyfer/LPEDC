@@ -1,20 +1,31 @@
 // 0067 · Arquivos texto
 // Exercício E398 · ★☆☆
 //
-// Preveja a saída antes de rodar. O programa abre o MESMO arquivo quatro
-// vezes, alternando os modos "w" e "a", e grava um nome em cada vez. No fim,
-// mostra o que sobrou no arquivo. Abra o E398.c para ler o código.
+// O programa abre o MESMO arquivo quatro vezes, alternando os modos "w" e
+// "a", e grava um nome em cada vez. A função grava já está pronta. Escreva a
+// função mostra, que abre o arquivo para leitura, lê linha por linha com
+// fgets e imprime todos os nomes na mesma linha, separados por espaço.
+// Depois chame mostra logo após cada grava no main, para enxergar o que cada
+// modo fez com o arquivo:
+//
+//   Saída esperada:
+//   w Ana  -> Ana
+//   a Bia  -> Ana Bia
+//   w Caio -> Caio
+//   a Duda -> Caio Duda
 //
 // Dicas:
-// 1. "w" cria o arquivo vazio, apagando o que já existia.
-// 2. "a" abre e escreve depois do último byte, sem apagar nada.
-// 3. Resposta esperada: duas linhas, "Caio" e "Duda". Ana e Bia sumiram
-//    quando o terceiro fopen abriu com "w".
+// 1. "w" cria o arquivo vazio, apagando o que já existia; "a" escreve depois
+//    do último byte, sem apagar nada.
+// 2. Para imprimir o nome sem o '\n' que o fgets traz, troque o '\n' por
+//    '\0': linha[strcspn(linha, "\n")] = '\0'; (strcspn é de <string.h>).
+// 3. Resposta esperada: as quatro linhas acima. Ana e Bia somem quando o
+//    terceiro fopen abre com "w".
 //
-// Escreva sua resposta abaixo (um comentário com a saída prevista) e depois
-// rode para conferir:
+// Escreva sua resposta abaixo (complete onde está o TODO):
 
 #include <stdio.h>
+#include <string.h>
 
 void grava(const char *caminho, const char *modo, const char *nome) {
     FILE *arq = fopen(caminho, modo);
@@ -26,23 +37,19 @@ void grava(const char *caminho, const char *modo, const char *nome) {
     fclose(arq);
 }
 
+// TODO: escreva void mostra(const char *caminho)
+
 int main(void) {
     const char *caminho = "/tmp/fila.txt";
     grava(caminho, "w", "Ana");
+    printf("w Ana  ->");
+    // TODO: mostra(caminho);
+    printf("\n");
     grava(caminho, "a", "Bia");
     grava(caminho, "w", "Caio");
     grava(caminho, "a", "Duda");
+    // TODO: o mesmo para Bia, Caio e Duda
 
-    FILE *arq = fopen(caminho, "r");
-    if (arq == NULL) {
-        perror(caminho);
-        return 1;
-    }
-    char linha[50];
-    while (fgets(linha, sizeof linha, arq) != NULL) {
-        printf("%s", linha);
-    }
-    fclose(arq);
     remove(caminho);
     return 0;
 }

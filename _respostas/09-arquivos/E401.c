@@ -1,9 +1,9 @@
 // 0067 · Arquivos texto
 // Exercício E401 · ★★★
 //
-// Resposta: a) feof só fica verdadeiro depois que uma leitura falha. Depois do
-// 20 ainda sobra o '\n', então o laço roda uma quarta vez: o fscanf falha, valor
-// continua 20 e é somado de novo. b) Teste o retorno da própria leitura.
+// O feof só fica verdadeiro depois que uma leitura falha. Depois do 20 ainda
+// sobra o '\n', então o laço rodava uma quarta vez: o fscanf falhava, valor
+// continuava 20 e era somado de novo. O conserto testa o retorno da leitura.
 
 #include <stdio.h>
 

@@ -1,34 +1,36 @@
 // 0070 · Juntando tudo
 // Exercício E416 · ★☆☆
 //
-// Preveja a saída antes de rodar. O programa grava os mesmos quatro números
-// num arquivo texto (um por linha) e num binário, e mostra o tamanho de cada
-// um. Leia o código do E416.c, preveja e depois rode com:
+// Texto ou binário: quem ocupa mais? O programa recebe um nome pela linha de
+// comando e monta dois caminhos, /tmp/<nome>.txt e /tmp/<nome>.bin. Complete
+// as duas partes marcadas com TODO:
+//
+// a) a função tamanho, que devolve o tamanho do arquivo em bytes (ou -1 se
+//    não abrir);
+// b) a gravação dos quatro números de v: no texto, um por linha com
+//    fprintf; no binário, todos de uma vez com UM fwrite.
 //
 //   $ rodar E416.c medidas
+//   2 argumentos
+//   /tmp/medidas.txt: 20 bytes
+//   /tmp/medidas.bin: 16 bytes
 //
 // Dicas:
-// 1. No texto, cada número vira um caractere por dígito, mais o '\n'.
-// 2. No binário, cada int ocupa sizeof(int) bytes, seja 7 ou 4000000.
-// 3. argc conta o nome do programa.
-// 4. Resposta esperada: "2 argumentos"; "/tmp/medidas.txt: 20 bytes";
-//    "/tmp/medidas.bin: 16 bytes" (texto: 2 + 4 + 6 + 8 = 20; binário: 4 ints
-//    de 4 bytes = 16).
+// 1. Tamanho: abra com "rb", fseek(arq, 0, SEEK_END), guarde o ftell e
+//    feche o arquivo antes de devolver.
+// 2. No texto, cada número vira um caractere por dígito, mais o '\n'. No
+//    binário, cada int ocupa sizeof(int) bytes, seja 7 ou 4000000.
+// 3. Resposta esperada: a saída acima (texto: 2 + 4 + 6 + 8 = 20; binário:
+//    4 ints de 4 bytes = 16).
 //
-// Escreva sua resposta abaixo (um comentário com a saída prevista) e depois
-// rode para conferir:
+// Escreva sua resposta abaixo (complete onde estão os TODO):
 
 #include <stdio.h>
 
 long tamanho(const char *caminho) {
-    FILE *arq = fopen(caminho, "rb");
-    if (arq == NULL) {
-        return -1;
-    }
-    fseek(arq, 0, SEEK_END);
-    long t = ftell(arq);
-    fclose(arq);
-    return t;
+    // TODO a): abrir, ir para o fim, perguntar a posição, fechar
+    (void) caminho; // apague esta linha quando usar o parâmetro
+    return -1;
 }
 
 int main(int argc, char *argv[]) {
@@ -49,10 +51,8 @@ int main(int argc, char *argv[]) {
         if (b != NULL) fclose(b);
         return 1;
     }
-    for (int i = 0; i < 4; i++) {
-        fprintf(t, "%d\n", v[i]);
-    }
-    fwrite(v, sizeof(int), 4, b);
+    // TODO b): gravar v no texto (um por linha) e no binário (um fwrite)
+    (void) v; // apague esta linha quando usar v
     fclose(t);
     fclose(b);
 

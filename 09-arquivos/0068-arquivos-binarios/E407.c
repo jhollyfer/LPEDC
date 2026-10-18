@@ -11,7 +11,7 @@
 // a) um que faz o arquivo ficar com menos bytes do que devia;
 // b) um que esconde o problema em vez de avisar.
 //
-// Ache e conserte os dois.
+// Conserte os dois e rode de novo: a saída tem que mostrar as 5 leituras.
 //
 // Dicas:
 // 1. Dentro de salvar, v é um int *, não um vetor. Quanto vale sizeof(v)?

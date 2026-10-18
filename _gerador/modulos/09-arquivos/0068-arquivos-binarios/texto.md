@@ -116,7 +116,7 @@ chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
 > mudar. Para trocar dados entre máquinas, prefira texto (CSV, JSON).
 
 > [!TIP]
-> **Por dentro do C:** tire o `remove` do A135, rode e depois
+> **Por dentro do C:** salve o código acima como `estoque.c`, tire o `remove`, rode e depois
 > `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada linha mostra 16
 > bytes, então cada produto ocupa duas linhas.
 > Você vai ver `Arroz` seguido de zeros: o `fwrite` grava os 20 bytes do vetor

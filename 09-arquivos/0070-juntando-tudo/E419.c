@@ -15,7 +15,7 @@
 // Mas o programa mostra "0 anotações:" toda vez, e depois de rodar as duas
 // vezes o arquivo só tem "pagar a luz" (confira com cat /tmp/diario.txt).
 // E "rodar E419.c anota", sem o texto, tem comportamento indefinido. Ache os
-// TRÊS erros e conserte.
+// TRÊS erros, conserte e rode as duas execuções de novo.
 //
 // Dicas:
 // 1. Qual modo de abertura apaga o que já existia?
