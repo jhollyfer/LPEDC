@@ -1,14 +1,5 @@
 // 0079 · Lista dupla
 // Exercício E470 · ★☆☆
-//
-// Resposta:
-//   4 <-> 2 <-> 1 <-> 3     fim(1), início(2), fim(3), início(4)
-//   3 <-> 1 <-> 2 <-> 4     o mesmo caminho, seguindo os ant
-//   2 2                     inicio->prox é o 2; fim->ant->ant: 3 -> 1 -> 2
-//   2 3                     os vizinhos do 1
-//   2: 2 <-> 1              saíram o 4 (primeiro) e o 3 (último)
-//   1 <-> 2
-//   1                       as pontas novas têm ant e prox NULL
 
 #include <stdio.h>
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
@@ -152,6 +143,21 @@ void lista_libera(Lista *l) {
 }
 // ---- fim de lista.h e lista.c ----
 
+void mostra_vizinhos(const Lista *l, int valor) {
+    No *p = lista_busca(l, valor);
+    if (p == NULL) {
+        printf("%d: não está na lista\n", valor);
+        return;
+    }
+    printf("%d: antes ", valor);
+    if (p->ant != NULL) printf("%d", p->ant->valor);
+    else printf("nenhum");
+    printf(", depois ");
+    if (p->prox != NULL) printf("%d", p->prox->valor);
+    else printf("nenhum");
+    printf("\n");
+}
+
 int main(void) {
     Lista l;
     lista_inicia(&l);
@@ -160,18 +166,11 @@ int main(void) {
     lista_insere_fim(&l, 3);
     lista_insere_inicio(&l, 4);
     lista_imprime(&l);
-    lista_imprime_reverso(&l);
 
-    printf("%d %d\n", l.inicio->prox->valor, l.fim->ant->ant->valor);
-    No *p = lista_busca(&l, 1);
-    printf("%d %d\n", p->ant->valor, p->prox->valor);
-
-    lista_remove_no(&l, l.inicio);
-    lista_remove_no(&l, l.fim);
-    printf("%d: ", l.tamanho);
-    lista_imprime(&l);
-    lista_imprime_reverso(&l);
-    printf("%d\n", l.inicio->ant == NULL && l.fim->prox == NULL);
+    mostra_vizinhos(&l, 4);
+    mostra_vizinhos(&l, 1);
+    mostra_vizinhos(&l, 3);
+    mostra_vizinhos(&l, 9);
 
     lista_libera(&l);
     return 0;

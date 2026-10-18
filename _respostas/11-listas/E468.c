@@ -1,12 +1,7 @@
 // 0078 · Lista ordenada
 // Exercício E468 · ★★★
-//
-// Custo: cada encaixe pode percorrer a lista ordenada inteira, então no pior
-// caso são 0 + 1 + ... + (n-1) comparações: O(n²). Encaixar não desloca
-// ninguém, ao contrário do insertion sort em vetor.
 
 #include <stdio.h>
-
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
 // lista.h · lista simplesmente encadeada em ordem crescente
 
@@ -129,36 +124,52 @@ void lista_libera(No *inicio) {
 }
 // ---- fim de lista.h e lista.c ----
 
-No *ordena(No *inicio) {
+No *ordena(No *inicio, int *passos) {
+    *passos = 0;
     No *ordenada = NULL;
     while (inicio != NULL) {
-        No *no = inicio;        // desengata o primeiro
-        inicio = inicio->prox;  // (o resto foi guardado antes)
+        No *no = inicio;      // desengata o primeiro
+        inicio = inicio->prox;
 
         No *ant = NULL;
         No *p = ordenada;
         while (p != NULL && p->valor < no->valor) {
             ant = p;
             p = p->prox;
+            (*passos)++;
         }
-        no->prox = p;
-        if (ant == NULL) ordenada = no;
-        else ant->prox = no;
+        no->prox = p;         // encaixa entre ant e p
+        if (ant == NULL) {
+            ordenada = no;
+        } else {
+            ant->prox = no;
+        }
     }
     return ordenada;
+}
+
+// mostra antes e depois de ordenar, com os passos
+static No *testa(No *l) {
+    int passos;
+    printf("antes:  ");
+    lista_imprime(l);
+    l = ordena(l, &passos);
+    printf("depois: ");
+    for (const No *p = l; p != NULL; p = p->prox) printf("%d -> ", p->valor);
+    printf("NULL  (%d passos)\n", passos);
+    return l;
 }
 
 int main(void) {
     int pedidos[] = {4, 9, 1, 7, 3}; // inseridos no início: ficam ao contrário
     No *l = NULL;
     for (int i = 0; i < 5; i++) l = lista_insere_inicio(l, pedidos[i]);
-
-    printf("antes:  ");
-    lista_imprime(l);
-    l = ordena(l);
-    printf("depois: ");
-    lista_imprime(l);
-
+    l = testa(l);
     lista_libera(l);
+
+    No *crescente = NULL;
+    for (int i = 5; i >= 1; i--) crescente = lista_insere_inicio(crescente, i);
+    crescente = testa(crescente);
+    lista_libera(crescente);
     return 0;
 }

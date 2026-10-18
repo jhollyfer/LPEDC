@@ -1,8 +1,5 @@
 // 0075 · Vetor dinâmico
 // Exercício E448 · ★★☆
-//
-// Fila de senhas: deslocando, porque a ordem de chegada é a regra.
-// Carrinho de compras: trocando, porque a ordem não importa e sai em O(1).
 
 #include <stdio.h>
 
@@ -17,9 +14,13 @@ int remove_deslocando(int v[], int *n, int pos) {
 }
 
 int remove_trocando(int v[], int *n, int pos) {
-    v[pos] = v[*n - 1]; // o último tapa o buraco
+    int movimentos = 0;
+    if (pos != *n - 1) {
+        v[pos] = v[*n - 1]; // o último tapa o buraco
+        movimentos = 1;
+    }
     (*n)--;
-    return 1;
+    return movimentos;
 }
 
 void mostra(const int v[], int n) {
@@ -45,5 +46,10 @@ int main(void) {
     printf("trocando:   ");
     mostra(b, nb);
     printf("  movimentos: %d\n", mb);
+
+    int total_a = 0, total_b = 0;
+    while (na > 0) total_a += remove_deslocando(a, &na, 0);
+    while (nb > 0) total_b += remove_trocando(b, &nb, 0);
+    printf("esvaziando pela frente: deslocando %d, trocando %d\n", total_a, total_b);
     return 0;
 }

@@ -1,19 +1,8 @@
 // 0078 · Lista ordenada
 // Exercício E464 · ★☆☆
-//
-// Resposta (onde o laço para, e a lista depois):
-//   25: ant NULL, p NULL (lista vazia)  -> 25
-//   10: ant NULL, p no 25 (10 < 25)     -> 10 25
-//   40: ant no 25, p NULL (fim)         -> 10 25 40
-//   10: ant NULL, p no primeiro 10      -> 10 10 25 40
-//       (10 < 10 é falso: o novo entra ANTES do 10 antigo)
-//   30: ant no 25, p no 40              -> 10 10 25 30 40
-//
-// Com "<=", o segundo 10 passaria pelo primeiro (10 <= 10) e pararia com ant
-// no 10 e p no 25: entraria DEPOIS dele. Com "<=" os iguais ficam na ordem
-// de chegada; com "<", o mais novo fica na frente.
 
 #include <stdio.h>
+#include <stdlib.h>
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
 // lista.h · lista simplesmente encadeada em ordem crescente
 
@@ -136,12 +125,42 @@ void lista_libera(No *inicio) {
 }
 // ---- fim de lista.h e lista.c ----
 
+// escreve "ant 25" ou "ant NULL"
+void mostra_no(const char *nome, const No *n) {
+    if (n == NULL) {
+        printf("%s NULL", nome);
+    } else {
+        printf("%s %d", nome, n->valor);
+    }
+}
+
+static No *insere_rastreando(No *inicio, int valor) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) exit(1);
+    novo->valor = valor;
+    No *ant = NULL;
+    No *p = inicio;
+    while (p != NULL && p->valor < valor) {
+        ant = p;
+        p = p->prox;
+    }
+    printf("%d: ", valor);
+    mostra_no("ant", ant);
+    printf(", ");
+    mostra_no("p", p);
+    printf("\n");
+
+    novo->prox = p;
+    if (ant == NULL) return novo;
+    ant->prox = novo;
+    return inicio;
+}
+
 int main(void) {
     int valores[] = {25, 10, 40, 10, 30};
     No *l = NULL;
     for (int i = 0; i < 5; i++) {
-        l = lista_insere_ordenado(l, valores[i]);
-        printf("inseriu %d: ", valores[i]);
+        l = insere_rastreando(l, valores[i]);
         lista_imprime(l);
     }
     lista_libera(l);

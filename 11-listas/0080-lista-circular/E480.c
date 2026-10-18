@@ -4,8 +4,7 @@
 // A escala de plantão do hospital é circular: depois do último enfermeiro,
 // volta o primeiro. As duas funções deste programa têm erros de propósito.
 // Rode, compare com a saída esperada e leia o relatório do AddressSanitizer.
-// Conserte as duas funções e responda: por que um laço "while (p != NULL)"
-// nunca termina sozinho numa lista circular?
+// Conserte as duas funções e rode de novo até a saída bater.
 //
 //   Saída esperada depois do conserto:
 //   escala: 101 102 103 104
@@ -18,9 +17,9 @@
 // 2. O ASan acusa "heap-use-after-free" em libera_escala: depois de liberar
 //    o último, o "seguinte" dele é o primeiro, que já foi liberado. Nenhum
 //    prox é NULL! Corte o círculo antes (ultimo->prox = NULL).
-// 3. Resposta esperada: a saída acima. Na circular, todo nó tem um próximo
-//    de verdade: p nunca vira NULL, e o laço daria voltas para sempre (ou,
-//    como aqui, andaria por memória já liberada).
+// 3. Resposta esperada: a saída acima, sem relatório do ASan. Na circular,
+//    todo nó tem um próximo de verdade: um laço "while (p != NULL)" nunca
+//    para sozinho (ou, como aqui, anda por memória já liberada).
 //
 // Escreva sua resposta abaixo (conserte o código):
 

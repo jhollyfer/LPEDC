@@ -1,43 +1,47 @@
-// A161 · A playlist da viagem
+// A161 · A trilha do trajeto até o trabalho
 
 #include <stdio.h>
 #include "playlist.h"
 
 int main(void) {
-    Playlist *viagem = playlist_cria();
-    if (viagem == NULL) return 1;
-    playlist_adiciona(viagem, "Aquarela", "Toquinho", 252);
-    playlist_adiciona(viagem, "Asa Branca", "Luiz Gonzaga", 186);
-    playlist_adiciona(viagem, "Mas Que Nada", "Jorge Ben", 182);
-    playlist_adiciona(viagem, "Evidências", "Chitãozinho e Xororó", 279);
-    playlist_adiciona(viagem, "Tempo Perdido", "Legião Urbana", 302);
+    // uma playlist vazia não toca nada, e não quebra
+    Playlist *trajeto = playlist_cria();
+    if (trajeto == NULL) return 1;
+    if (playlist_atual(trajeto) == NULL && playlist_proxima(trajeto) == NULL) {
+        printf("playlist vazia: nada tocando\n");
+    }
 
-    int total = playlist_duracao(viagem);
-    printf("%d músicas, %d:%02d no total\n", playlist_tamanho(viagem), total / 60, total % 60);
+    playlist_adiciona(trajeto, "Trem das Onze", "Adoniran Barbosa", 190);
+    playlist_adiciona(trajeto, "Detalhes", "Roberto Carlos", 268);
+    playlist_adiciona(trajeto, "O Bêbado e a Equilibrista", "Elis Regina", 228);
+    playlist_adiciona(trajeto, "Sina", "Djavan", 233);
+    playlist_repetir(trajeto, true); // o ônibus demora mais que a playlist
 
-    playlist_proxima(viagem);
-    playlist_proxima(viagem);   // pulou duas: agora toca a 3ª
-    playlist_imprime(viagem);
+    // 20 minutos de ônibus: toca música atrás de música até chegar
+    int trajeto_s = 20 * 60;
+    int relogio = 0; // em segundos, desde que entrou no ônibus
+    const Musica *m = playlist_atual(trajeto);
+    while (relogio + m->segundos <= trajeto_s) {
+        printf("%2d:%02d %s\n", relogio / 60, relogio % 60, m->titulo);
+        relogio += m->segundos;
+        m = playlist_proxima(trajeto); // com repetir, nunca é NULL
+    }
+    int ouviu = trajeto_s - relogio;
+    printf("%2d:%02d %s (chegou no ponto depois de %d s)\n",
+           relogio / 60, relogio % 60, m->titulo, ouviu);
 
-    playlist_remove(viagem, "Asa Branca");
-    playlist_proxima(viagem);
-    playlist_proxima(viagem);   // chegou na última
-    if (playlist_proxima(viagem) == NULL) printf("fim da playlist\n");
+    // amanhã continua de onde parou: a playlist lembra a música atual
+    printf("amanhã começa em: %s\n", playlist_atual(trajeto)->titulo);
 
-    playlist_repetir(viagem, true);
-    printf("repetir ligado, próxima: %s\n", playlist_proxima(viagem)->titulo);
-    printf("anterior: %s\n", playlist_anterior(viagem)->titulo);
-
-    playlist_libera(viagem);
+    playlist_libera(trajeto);
     return 0;
 }
 // Saída:
-// 5 músicas, 20:01 no total
-//   1. Aquarela - Toquinho (4:12)
-//   2. Asa Branca - Luiz Gonzaga (3:06)
-// > 3. Mas Que Nada - Jorge Ben (3:02)
-//   4. Evidências - Chitãozinho e Xororó (4:39)
-//   5. Tempo Perdido - Legião Urbana (5:02)
-// fim da playlist
-// repetir ligado, próxima: Aquarela
-// anterior: Tempo Perdido
+// playlist vazia: nada tocando
+//  0:00 Trem das Onze
+//  3:10 Detalhes
+//  7:38 O Bêbado e a Equilibrista
+// 11:26 Sina
+// 15:19 Trem das Onze
+// 18:29 Detalhes (chegou no ponto depois de 91 s)
+// amanhã começa em: Detalhes

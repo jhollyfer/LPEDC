@@ -1,61 +1,53 @@
 // 0081 · Juntando tudo
 // Exercício E482 · ★☆☆
 //
-// Sem rodar, preveja as nove linhas deste programa. Releia em playlist.h o
-// que acontece nas pontas e quando a música removida é a que está tocando.
-// Depois rode e confira.
+// Hora de testar as pontas da playlist. Escreva a função
 //
-// O código está no arquivo, logo abaixo deste enunciado.
+//   void mostra(const Musica *m)
+//
+// que imprime o título da música, ou "(nada)" quando m é NULL. Depois crie
+// uma playlist com Um (Banda A, 100 s), Dois (Banda B, 200 s) e Tres
+// (Banda C, 300 s) e faça, nesta ordem, chamando mostra com o que cada
+// passo marcado com * devolve:
+//
+//   * a música atual
+//   * volta uma (anterior)
+//     avança uma
+//   * avança uma
+//   * avança uma
+//     liga o repetir
+//   * avança uma
+//   * volta uma
+//     remove "Tres"
+//   * a música atual
+//     remove "Um" e mostra quantas músicas e quantos segundos sobraram
+//   * avança uma
+//
+//   Saída esperada:
+//   Um
+//   (nada)
+//   Tres
+//   (nada)
+//   Um
+//   Tres
+//   Dois
+//   1 música, 200 s
+//   Dois
 //
 // Dicas:
 // 1. Com repetir desligado, andar além da ponta devolve NULL e não sai do
-//    lugar.
+//    lugar; ligado, dá a volta.
 // 2. Removendo a música que toca, passa a tocar a seguinte; se ela era a
-//    última, a anterior.
-// 3. Com uma música só e repetir ligado, a próxima da última é... ela mesma.
-// 4. Resposta esperada:
-//    Um
-//    (nada)
-//    Tres
-//    (nada)
-//    Um
-//    Tres
-//    Dois
-//    1 música, 200 s
-//    Dois
+//    última, a anterior. Com uma música só e repetir ligado, a próxima é
+//    ela mesma.
+// 3. Resposta esperada: a saída acima.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "playlist.h"
 
-static void mostra(const Musica *m) {
-    printf("%s\n", m != NULL ? m->titulo : "(nada)");
-}
-
 int main(void) {
-    Playlist *p = playlist_cria();
-    if (p == NULL) return 1;
-    playlist_adiciona(p, "Um", "Banda A", 100);
-    playlist_adiciona(p, "Dois", "Banda B", 200);
-    playlist_adiciona(p, "Tres", "Banda C", 300);
 
-    mostra(playlist_atual(p));
-    mostra(playlist_anterior(p));
-    playlist_proxima(p);
-    mostra(playlist_proxima(p));
-    mostra(playlist_proxima(p));
-
-    playlist_repetir(p, true);
-    mostra(playlist_proxima(p));
-    mostra(playlist_anterior(p));
-
-    playlist_remove(p, "Tres");
-    mostra(playlist_atual(p));
-    playlist_remove(p, "Um");
-    printf("%d música, %d s\n", playlist_tamanho(p), playlist_duracao(p));
-    mostra(playlist_proxima(p));
-
-    playlist_libera(p);
     return 0;
 }

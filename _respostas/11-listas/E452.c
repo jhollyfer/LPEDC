@@ -1,19 +1,7 @@
 // 0076 · Lista encadeada
 // Exercício E452 · ★☆☆
-//
-// Resposta:
-//   12                          o último inserido (4 * 3) fica na frente
-//   6                           12 -> 9 -> 6: dois prox a partir do primeiro
-//   3                           o laço para no nó cujo prox é NULL: o último
-//   99 -> 9 -> 6 -> 3 -> NULL   o 99 aponta para l->prox, que é o 9
-//   12 -> 9 -> 6 -> 3 -> NULL   l não mudou
-//
-// As duas listas compartilham a cauda 9 -> 6 -> 3. lista_libera(outra)
-// liberaria esses três nós, e lista_libera(l) tentaria liberá-los de novo:
-// free duplo. Por isso só o nó 99, que é só de "outra", sai com free(outra).
 
 #include <stdio.h>
-#include <stdlib.h>
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
 // lista.h · lista simplesmente encadeada de inteiros
 //
@@ -88,20 +76,16 @@ int main(void) {
     for (int i = 1; i <= 4; i++) {
         l = lista_insere_inicio(l, i * 3);
     }
-    printf("%d\n", l->valor);
-    printf("%d\n", l->prox->prox->valor);
+    lista_imprime(l);
+    printf("primeiro: %d\n", l->valor);
+    printf("terceiro: %d\n", l->prox->prox->valor);
 
     No *p = l;
     while (p->prox != NULL) {
         p = p->prox;
     }
-    printf("%d\n", p->valor);
+    printf("último: %d\n", p->valor);
 
-    No *outra = lista_insere_inicio(l->prox, 99);
-    lista_imprime(outra);
-    lista_imprime(l);
-
-    free(outra);
     lista_libera(l);
     return 0;
 }

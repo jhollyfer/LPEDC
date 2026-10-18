@@ -1,14 +1,5 @@
 // 0077 · Busca e remoção
 // Exercício E458 · ★☆☆
-//
-// Resposta:
-//   1                          tirou o PRIMEIRO 5 (o do começo)
-//   2 -> 5 -> 9 -> 5 -> NULL
-//   0                          não tem 7: devolve false
-//   2 -> 5 -> 4 -> 5 -> NULL   p aponta para o nó do 9; p->valor = 4 muda a lista
-//   1                          agora não existe mais 9: a busca devolve NULL
-//   2 -> 4 -> NULL             os dois 5 restantes saem, um por chamada
-//   2
 
 #include <stdio.h>
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
@@ -109,24 +100,31 @@ void lista_libera(No *inicio) {
 }
 // ---- fim de lista.h e lista.c ----
 
+int conta(const No *inicio, int valor) {
+    int n = 0;
+    for (const No *p = inicio; p != NULL; p = p->prox) {
+        if (p->valor == valor) n++;
+    }
+    return n;
+}
+
 int main(void) {
     No *l = NULL;
     int v[] = {5, 9, 5, 2, 5};
     for (int i = 0; i < 5; i++) l = lista_insere_inicio(l, v[i]);
 
-    printf("%d\n", lista_remove(&l, 5));
     lista_imprime(l);
-    printf("%d\n", lista_remove(&l, 7));
+    printf("quantos 5: %d\n", conta(l, 5));
 
     No *p = lista_busca(l, 9);
-    p->valor = 4;
+    if (p != NULL) p->valor = 4;
     lista_imprime(l);
-    printf("%d\n", lista_busca(l, 9) == NULL);
 
-    lista_remove(&l, 5);
-    lista_remove(&l, 5);
+    int removidos = 0;
+    while (lista_remove(&l, 5)) removidos++;
+    printf("removidos: %d\n", removidos);
     lista_imprime(l);
-    printf("%d\n", lista_tamanho(l));
+    printf("tamanho: %d\n", lista_tamanho(l));
 
     lista_libera(l);
     return 0;

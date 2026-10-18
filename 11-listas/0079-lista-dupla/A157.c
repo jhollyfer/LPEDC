@@ -1,36 +1,51 @@
-// A157 · O trem de minério: desengatar um vagão do meio
+// A157 · Mexendo nas duas pontas: a fila do pronto-socorro
 
 #include <stdio.h>
 #include "lista.h"
 
+static void mostra(const Lista *l) {
+    printf("(%d) ", l->tamanho);
+    lista_imprime(l);
+}
+
 int main(void) {
-    Lista trem;
-    lista_inicia(&trem);
-    int cargas[] = {98, 105, 87, 110}; // toneladas, da locomotiva para o fim
-    for (int i = 0; i < 4; i++) lista_insere_fim(&trem, cargas[i]);
+    Lista fila;
+    lista_inicia(&fila);
 
-    printf("da locomotiva: ");
-    lista_imprime(&trem);
-    printf("do fim:        ");
-    lista_imprime_reverso(&trem);
+    // fichas de atendimento: normais entram atrás, urgente entra na frente
+    lista_insere_fim(&fila, 31);
+    lista_insere_fim(&fila, 32);
+    lista_insere_fim(&fila, 33);
+    lista_insere_inicio(&fila, 90); // caso urgente: passa na frente
+    mostra(&fila);
 
-    No *vagao = lista_busca(&trem, 87);
-    if (vagao != NULL) {
-        lista_remove_no(&trem, vagao); // sem procurar o anterior: p->ant
-        printf("desengatou o vagão de 87 t (%d vagões)\n", trem.tamanho);
-    }
+    // atender o primeiro: remover o início é O(1)
+    printf("atende %d\n", fila.inicio->valor);
+    lista_remove_no(&fila, fila.inicio);
 
-    printf("da locomotiva: ");
-    lista_imprime(&trem);
-    printf("do fim:        ");
-    lista_imprime_reverso(&trem);
+    // o último desistiu: com o ponteiro fim, tirar o último também é O(1)
+    printf("desistiu %d\n", fila.fim->valor);
+    lista_remove_no(&fila, fila.fim);
+    mostra(&fila);
 
-    lista_libera(&trem);
+    // esvaziando pela frente: no fim, as DUAS pontas voltam a NULL
+    while (fila.inicio != NULL) lista_remove_no(&fila, fila.inicio);
+    printf("vazia: inicio %s, fim %s, tamanho %d\n",
+           fila.inicio == NULL ? "NULL" : "?",
+           fila.fim == NULL ? "NULL" : "?", fila.tamanho);
+
+    // e a lista vazia continua pronta para uso
+    lista_insere_inicio(&fila, 34);
+    printf("um só: início e fim são o mesmo nó? %s\n",
+           fila.inicio == fila.fim ? "sim" : "não");
+
+    lista_libera(&fila);
     return 0;
 }
 // Saída:
-// da locomotiva: 98 <-> 105 <-> 87 <-> 110
-// do fim:        110 <-> 87 <-> 105 <-> 98
-// desengatou o vagão de 87 t (3 vagões)
-// da locomotiva: 98 <-> 105 <-> 110
-// do fim:        110 <-> 105 <-> 98
+// (4) 90 <-> 31 <-> 32 <-> 33
+// atende 90
+// desistiu 33
+// (2) 31 <-> 32
+// vazia: inicio NULL, fim NULL, tamanho 0
+// um só: início e fim são o mesmo nó? sim

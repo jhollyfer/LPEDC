@@ -1,16 +1,5 @@
 // 0081 · Juntando tudo
 // Exercício E482 · ★☆☆
-//
-// Resposta:
-//   Um            a primeira adicionada começa tocando
-//   (nada)        já está no começo e o repetir está desligado
-//   Tres          duas próximas: Dois, Tres
-//   (nada)        já está no fim: devolve NULL e continua na Tres
-//   Um            com repetir, a próxima da última é a primeira
-//   Tres          e a anterior da primeira é a última
-//   Dois          removeu a que tocava (Tres, a última): passa para a anterior
-//   1 música, 200 s
-//   Dois          sozinha e com repetir: a próxima dela é ela mesma
 
 #include <stdio.h>
 // ---- playlist.h e playlist.c colados aqui, para esta resolução rodar sozinha ----
@@ -224,7 +213,7 @@ Playlist *playlist_carrega(const char *caminho) {
 }
 // ---- fim de playlist.h e playlist.c ----
 
-static void mostra(const Musica *m) {
+void mostra(const Musica *m) {
     printf("%s\n", m != NULL ? m->titulo : "(nada)");
 }
 
