@@ -2875,8 +2875,8 @@ Saída esperada:
 ## Desafios do módulo
 
 Problemas para resolver num arquivo seu, rodando com o `rodar` (e com
-`rodar --valgrind` quando quiser a segunda opinião). Todos precisam terminar
-sem nenhum relatório de erro.
+`rodar --valgrind` quando quiser a segunda opinião). A versão final de cada
+um precisa terminar sem nenhum relatório de erro.
 
 **1. Apagar do caderno.** No caderninho de fiado do texto do assunto 0058,
 escreva `int remover(char **nomes, int *centavos, int *qtd, const char *nome)`,
@@ -2909,43 +2909,87 @@ veio de um `malloc`.
 
 **3. Matriz simétrica econômica.** Numa tabela de distâncias entre 4
 cidades, `d[i][j] == d[j][i]` e a diagonal é 0. Guarde só o triângulo de baixo
-(com a diagonal) num vetor de `n * (n + 1) / 2` posições, com o elemento
-`(i, j)`, `i >= j`, em `i * (i + 1) / 2 + j`. Quantas posições para n = 4? Em
-que índice fica `(3, 1)`? E `(1, 3)`?
+(com a diagonal) num vetor alocado com `malloc` de `n * (n + 1) / 2`
+posições, com o elemento `(i, j)`, `i >= j`, em `i * (i + 1) / 2 + j`.
+Escreva `int indice(int i, int j)`, que troca `i` e `j` quando `i < j`.
+Preencha o vetor com a tabela `{{0, 12, 30, 25}, {12, 0, 18, 40}, {30, 18,
+0, 22}, {25, 40, 22, 0}}` (só o triângulo de baixo), imprima quantas
+posições o vetor tem, os índices de `(3, 1)` e de `(1, 3)` e, por fim, a
+tabela 4 x 4 inteira lida só do vetor, com `%4d`.
 
 <details><summary>Resposta</summary>
 
-**10** posições (contra 16 da matriz cheia). `(3, 1)` fica em 3 * 4 / 2 + 1 =
-**7**. Para `(1, 3)`, troque i e j, porque `i < j`: é o mesmo índice 7. Com
-n = 1000, a economia passa de 499 mil posições.
+```
+posicoes: 10 (matriz cheia: 16)
+(3,1) -> 7   (1,3) -> 7
+   0  12  30  25
+  12   0  18  40
+  30  18   0  22
+  25  40  22   0
+```
+
+Dica: preencha com dois laços, `j` indo só até `i`, gravando
+`d[indice(i, j)] = dist[i][j]`. Na hora de imprimir, os dois laços vão até
+`n` e o `indice` cuida da metade de cima: `(1, 3)` vira `(3, 1)`, índice
+3 * 4 / 2 + 1 = 7. Com n = 1000, a economia passa de 499 mil posições.
 
 </details>
 
-**4. O gerente do heap.** O heap tem dois blocos livres, de 120 e de 60 bytes,
-e chegam três pedidos: 30, 80 e 55. Simule duas estratégias: **first fit**
-(usa o primeiro bloco que serve, olhando o de 120 antes) e **best fit** (usa o
-menor bloco que serve). Alguma delas falha?
+**4. O gerente do heap.** O heap tem dois blocos livres, de 120 e de 60 bytes
+(`int livre[2] = {120, 60}`), e chegam três pedidos: 30, 80 e 55. Escreva
+`void simula(const char *nome, int best)` que atende os pedidos na ordem,
+descontando do bloco escolhido, e imprime a cada pedido o bloco usado e o que
+sobrou nos dois (ou "falhou"). Com `best == 0` é **first fit** (o primeiro
+bloco que serve, olhando o 0 antes); com `best == 1` é **best fit** (o menor
+bloco que serve). Chame as duas.
 
 <details><summary>Resposta</summary>
 
-First fit: 30 sai do 120 (sobra 90), 80 sai do 90 (sobra 10), 55 sai do 60
-(sobra 5): **atende os três**. Best fit: 30 sai do 60 (sobra 30), 80 sai do
-120 (sobra 40), e 55 **falha** (sobram 40 e 30). Escolher "o mais justo" nem
-sempre é o melhor: deixa sobras pequenas demais. Os `malloc` reais usam
+```
+first fit:
+  30: bloco 0, livres 90 e 60
+  80: bloco 0, livres 10 e 60
+  55: bloco 1, livres 10 e 5
+best fit:
+  30: bloco 1, livres 120 e 30
+  80: bloco 0, livres 40 e 30
+  55: falhou (livres 40 e 30)
+```
+
+Dica: para cada pedido, percorra os dois blocos guardando o índice escolhido
+(começando em -1); no first fit pare no primeiro que serve, no best fit troque
+a escolha quando achar um bloco que serve e é menor. Escolher "o mais justo"
+nem sempre é o melhor: deixa sobras pequenas demais. Os `malloc` reais usam
 variações de first fit com listas por tamanho.
 
 </details>
 
-**5. Tem memória, mas não cabe.** Um heap de 1000 bytes recebe A = 300, B = 200
-e C = 400 (sobram 100 no fim). Depois `free(B)`. Há 300 bytes livres. Por que
-um pedido de 250 bytes falha?
+**5. Tem memória, mas não cabe.** Simule um heap de 1000 bytes com um
+`char heap[1000]`, todo preenchido com `'.'` (livre). Escreva
+`int aloca(char dono, int tam)`, que procura `tam` posições livres
+**seguidas** a partir do começo, marca com a letra do dono e devolve onde o
+bloco começa (ou -1), e `void libera(char dono)`. Escreva também um
+`relatorio` que imprime o total livre e o maior pedaço livre contíguo. Aloque
+A = 300, B = 200 e C = 400, libere B, mostre o relatório e tente alocar
+D = 250. Depois libere C, mostre o relatório e tente D de novo.
 
 <details><summary>Resposta</summary>
 
-Os livres são **dois pedaços separados**, de 200 (onde era B) e de 100 (no
-fim), e um bloco do `malloc` precisa ser contíguo. Isso é **fragmentação
-externa**. Se C fosse liberado, os 200 de B, os 400 de C e os 100 do fim se
-juntariam num bloco de 700 e o pedido passaria.
+```
+A em 0
+B em 300
+C em 500
+livres: 300, maior pedaco contiguo: 200
+D (250) em -1
+livres: 700, maior pedaco contiguo: 700
+D (250) em 300
+```
+
+Dica: no `aloca`, conte uma "corrida" de livres (zere ao achar uma posição
+ocupada); quando ela chegar a `tam`, o bloco começa em `i - tam + 1`. Há 300
+bytes livres, mas em dois pedaços (200 onde era B e 100 no fim), e um bloco
+precisa ser contíguo: é a **fragmentação externa**. Liberando C, os pedaços
+se juntam num de 700.
 
 </details>
 
@@ -2962,21 +3006,43 @@ Monte com `strcpy` no primeiro e `strcat` nos seguintes, ou copiando com um
 
 </details>
 
-**7. O vetor que encolhe.** Um vetor dinâmico começa com capacidade 1, dobra
-quando enche e **corta pela metade** quando a quantidade fica menor que um
-quarto da capacidade. Você insere 9 elementos e depois remove 6. Qual a
-capacidade depois das inserções? E no fim?
+**7. O vetor que encolhe.** Escreva um vetor dinâmico de `int` que começa
+com capacidade 1, dobra com `realloc` quando enche e **corta pela metade**
+quando a quantidade fica menor que um quarto da capacidade. Use
+`int insere(int **v, int *qtd, int *cap, int x)` e
+`void remove_fim(int **v, int *qtd, int *cap)`. Insira 10, 20, ..., 90 e
+depois remova 6 vezes, imprimindo `qtd` e `cap` depois de cada operação.
 
 <details><summary>Resposta</summary>
 
-Inserindo: 1 → 2 → 4 → 8 → 16, então **16** com 9 elementos. Removendo:
-com 3 elementos, 3 < 16 / 4 = 4, e a capacidade cai para **8**. O "um quarto"
-(e não "metade") evita o vai e vem: se encolhesse com metade, um push e um
-pop alternados na fronteira fariam um `realloc` a cada operação.
+```
+insere 10: qtd 1 cap 1
+insere 20: qtd 2 cap 2
+insere 30: qtd 3 cap 4
+insere 40: qtd 4 cap 4
+insere 50: qtd 5 cap 8
+insere 60: qtd 6 cap 8
+insere 70: qtd 7 cap 8
+insere 80: qtd 8 cap 8
+insere 90: qtd 9 cap 16
+remove: qtd 8 cap 16
+remove: qtd 7 cap 16
+remove: qtd 6 cap 16
+remove: qtd 5 cap 16
+remove: qtd 4 cap 16
+remove: qtd 3 cap 8
+```
+
+Dica: a função recebe `int **v` porque o `realloc` pode mudar o endereço do
+bloco; use um ponteiro temporário e só troque `*v` se ele não for `NULL`. No
+`remove_fim`, depois de `(*qtd)--`, teste `*cap > 1 && *qtd < *cap / 4`. O
+"um quarto" (e não "metade") evita o vai e vem: com metade, um insere e um
+remove alternados na fronteira fariam um `realloc` a cada operação.
 
 </details>
 
-**8. Dois nomes, um bloco.** Preveja:
+**8. Dois nomes, um bloco.** Monte um programa com o trecho abaixo e rode
+com o `rodar`:
 
 ```c
 int *a = malloc(3 * sizeof *a);
@@ -2985,29 +3051,52 @@ b[0] = 5;
 free(a);
 a = NULL;
 printf("%d\n", b == NULL);
+printf("%d\n", b[0]);
 ```
 
-O que aparece? O `b[0]` ainda é seguro?
+Anote o que aparece. Depois conserte: guarde o valor de `b[0]` numa variável
+**antes** do `free`, zere os dois ponteiros e imprima
+`guardado = ...` e `a == NULL: ..., b == NULL: ...`.
 
 <details><summary>Resposta</summary>
 
-Mostra **0**: `a = NULL` muda só a variável `a`. `b` continua guardando o
-endereço do bloco liberado: é um ponteiro solto, e `b[0]` é uso depois do
-`free` (o ASan acusa `heap-use-after-free`). O hábito de zerar o ponteiro
-ajuda, mas não substitui saber **quem é o dono** do bloco.
+A primeira versão mostra `0` e cai no `b[0]`: o compilador já avisa
+`pointer 'b' used after 'free'` e o ASan acusa
+`ERROR: AddressSanitizer: heap-use-after-free`. A consertada mostra:
+
+```
+guardado = 5
+a == NULL: 1, b == NULL: 1
+```
+
+Dica: `a = NULL` muda só a variável `a`; `b` continua com o endereço do bloco
+liberado (um ponteiro solto). Zerar o ponteiro ajuda, mas não substitui saber
+**quem é o dono** do bloco.
 
 </details>
 
-**9. O vazamento a conta-gotas.** Uma função é chamada 1000 vezes. Em cada
-chamada ela faz um `malloc` de 24 bytes, mas só dá `free` quando o número da
-chamada é par. Quanto vaza? O que o LeakSanitizer mostra?
+**9. O vazamento a conta-gotas.** Escreva `void tarefa(int chamada)`, que faz
+um `malloc` de 24 bytes, escreve um caractere no bloco e só dá `free` quando
+`chamada` é par; nas ímpares, soma 24 numa variável global `vazou`. Chame
+`tarefa` de 1 a 1000, imprima `bytes sem free: ...` e rode com o `rodar`.
+Depois conserte a função e rode de novo.
 
 <details><summary>Resposta</summary>
 
-500 chamadas ímpares * 24 = **12000 bytes** em 500 blocos:
-`Direct leak of 12000 byte(s) in 500 object(s)`, com a linha do `malloc`. Num
-servidor que roda essa função 1 milhão de vezes por dia, são 12 MB por dia:
-é assim que o sistema da padaria trava no sábado.
+```
+bytes sem free: 12000
+
+==...==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 12000 byte(s) in 500 object(s) allocated from:
+    #0 ... in malloc ...
+    #1 ... in tarefa ...
+```
+
+O seu contador e o LeakSanitizer batem: 500 chamadas ímpares × 24 = 12000
+bytes em 500 blocos, com a linha do `malloc` apontada. Consertado (`free`
+sempre), sai só `bytes sem free: 0`, sem relatório. Dica: num servidor que
+roda essa função 1 milhão de vezes por dia, são 12 MB por dia.
 
 </details>
 

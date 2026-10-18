@@ -3367,32 +3367,53 @@ fim para o começo.
 </details>
 
 **5. Desfazer e refazer.** Um editor guarda o histórico de versões numa
-lista dupla com um cursor na versão atual. "Desfazer" volta, "refazer"
-avança. O que precisa acontecer com as versões à frente do cursor quando a
-pessoa desfaz duas vezes e depois digita algo novo?
+lista dupla com um cursor na versão atual (`inicio`, `fim` e `cursor` numa
+struct `Historico`). Escreva `digita` (que **descarta e libera** as versões
+à frente do cursor antes de inserir a nova depois dele), `desfaz` (volta o
+cursor, se der), `refaz` (avança, se der) e `mostra` (imprime as versões com
+a atual entre colchetes). Digite "v1" a "v4", desfaça duas vezes, refaça uma,
+digite "v5" e tente refazer, mostrando a lista depois de cada passo.
 
 <details><summary>Resposta</summary>
 
-Elas são **descartadas**: libere todos os nós depois do cursor, faça
-`cursor->prox = NULL`, atualize o `fim` e só então insira a versão nova
-depois do cursor. É o comportamento de todo editor: depois de editar, o
-"refazer" some. Esquecer os `free` desses nós é vazamento clássico.
+```
+digitou 4:   v1 v2 v3 [v4]
+desfez 2:    v1 [v2] v3 v4
+refez 1:     v1 v2 [v3] v4
+digitou v5:  v1 v2 v3 [v5]
+refez 1:     v1 v2 v3 [v5]
+```
+
+Dica: no `digita`, libere todos os nós depois do cursor, faça
+`cursor->prox = NULL` e `fim = cursor`, e só então insira no fim. É o
+comportamento de todo editor: depois de editar, o "refazer" some. Esquecer os
+`free` desses nós é vazamento clássico, e o `rodar` acusa.
 
 </details>
 
 **6. LRU: o cache das páginas recentes.** Um navegador guarda as últimas 3
-páginas visitadas. Visitar uma página que já está na lista leva ela para a
-frente; visitar uma nova com a lista cheia expulsa a mais antiga (a do fim).
-Simule as visitas A, B, C, A, D, B. Como fica a lista?
+páginas visitadas numa lista dupla (cada nó guarda um `char`). Visitar uma
+página que já está na lista leva ela para a frente; visitar uma nova com a
+lista cheia expulsa (e libera) a mais antiga, a do fim. Escreva
+`void visita(char pg)` e simule as visitas A, B, C, A, D, B, imprimindo a
+lista depois de cada uma.
 
 <details><summary>Resposta</summary>
 
-A → `A`; B → `B A`; C → `C B A`; A (já está: vai para a frente) → `A C B`;
-D (nova, cheia: sai o B do fim) → `D A C`; B (nova, cheia: sai o C) →
-**`B D A`**. A lista dupla com `inicio` e `fim` faz cada movimento em O(1)
-depois de achar o nó. Achar ainda é O(n); com uma tabela hash (módulo 15)
-apontando para os nós, tudo vira O(1). É assim que caches de verdade
-funcionam.
+```
+A -> A
+B -> B A
+C -> C B A
+A -> A C B
+D -> D A C
+B -> B D A
+```
+
+Dica: duas funções auxiliares resolvem tudo: `desliga(p)` tira o nó da lista
+sem liberar (cuidando de `inicio` e `fim`) e `poe_na_frente(p)` insere no
+início. Página encontrada: desliga e põe na frente. Página nova: se cheia,
+desliga e libera o `fim`; depois cria o nó e põe na frente. Achar ainda é
+O(n); com uma tabela hash (módulo 15) apontando para os nós, tudo vira O(1).
 
 </details>
 
@@ -3439,19 +3460,27 @@ auxiliar: só religa nós. É o assunto 0094, um módulo adiantado.
 
 </details>
 
-**10. Josephus de cabeça.** Com n pessoas em roda e eliminando de k em k, a
-posição do sobrevivente (contando de 0) obedece a J(1) = 0 e
-J(n) = (J(n − 1) + k) % n. Use a fórmula para n = 8, k = 3 e confira com a
-batata quente do A160. Depois responda: quando vale a pena simular com a
-lista e quando a fórmula basta?
+**10. Josephus: fórmula contra lista.** Com n pessoas em roda e eliminando
+de k em k, a posição do sobrevivente (contando de 0) obedece a J(1) = 0 e
+J(n) = (J(n − 1) + k) % n. Escreva um programa que, para n = 8 e k = 3,
+imprima J(1) a J(8) com um laço e o sobrevivente (numerado de 1), e depois
+simule a roda com uma lista circular (como a batata quente do A160),
+imprimindo a ordem de saída e quem sobra.
 
 <details><summary>Resposta</summary>
 
-J(1)=0, J(2)=1, J(3)=1, J(4)=0, J(5)=3, J(6)=0, J(7)=3, J(8)=6. Posição 6
-contando de 0 é a pessoa **7**, igual ao A160. A fórmula é O(n) e não usa
-memória, mas só diz quem sobra. A lista dá a **ordem** de eliminação e
-aguenta variações que a fórmula não cobre (passo diferente para cada pessoa,
-alguém entrando no meio).
+```
+formula: J(1)=0 J(2)=1 J(3)=1 J(4)=0 J(5)=3 J(6)=0 J(7)=3 J(8)=6
+sobrevivente pela formula: pessoa 7
+simulacao: saem 3 6 1 5 2 8 4, sobra a pessoa 7
+```
+
+Dica: a fórmula é um laço `for (m = 2; m <= n; m++) j = (j + k) % m;`,
+O(n) e sem memória, e a pessoa é `j + 1`. A simulação começa com `ant` no
+último nó e `p` no primeiro e anda `k - 1` passos antes de cada remoção. A
+fórmula só diz quem sobra; a lista dá a **ordem** de eliminação e aguenta
+variações que a fórmula não cobre (passo diferente para cada pessoa, alguém
+entrando no meio).
 
 </details>
 

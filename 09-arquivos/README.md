@@ -2232,20 +2232,30 @@ assim que se ordenam arquivos maiores que a RAM.
 
 </details>
 
-**8. Por que não dá para editar no meio?** Um arquivo texto tem
-`Ana 25\nBia 31\n`. Você abre com `"r+"`, posiciona no começo e grava
-`Mariana 25\n`. O que fica no arquivo? Por que o mesmo problema não acontece
-com registros binários de tamanho fixo?
+**8. Editar no meio do arquivo.** Escreva um programa que grave
+`Ana 25\nBia 31\n` em `/tmp/pessoas.txt`, feche, abra de novo com `"r+"` e
+grave `Mariana 25\n` logo no começo. Volte ao início com `fseek` e imprima
+cada linha do arquivo entre colchetes. Depois faça o mesmo com registros
+binários `typedef struct { char nome[12]; int idade; } Pessoa;`: grave
+Ana (25) e Bia (31) em `/tmp/pessoas.bin`, reabra com `"rb+"`, grave por cima
+do primeiro o registro Mariana (25) e imprima os registros.
 
 <details><summary>Resposta</summary>
 
-Fica `Mariana 25\n31\n`: a linha nova tem 11 bytes, ocupa os 7 da linha da
-Ana e os 4 primeiros da linha da Bia (`Bia `), e sobra o `31\n` como uma linha
-solta.
-Arquivo não "abre espaço" no meio: escrever é sempre sobrescrever. Em texto,
-os campos têm tamanho variável, então mudar um valor obriga a reescrever o
-arquivo inteiro (copiar para um novo e renomear). Com registros fixos, o novo
-valor ocupa exatamente os bytes do antigo.
+```
+texto:
+[Mariana 25]
+[31]
+binario:
+[Mariana 25]
+[Bia 31]
+```
+
+Dica: tire o `'\n'` do `fgets` antes de imprimir, e use `fseek(f, 0,
+SEEK_SET)` entre escrever e ler. No texto, a linha nova tem 11 bytes, ocupa os
+7 da linha da Ana e os 4 primeiros da Bia (`Bia `) e sobra o `31` solto:
+arquivo não "abre espaço" no meio, escrever é sempre sobrescrever. Com
+registros de tamanho fixo, o novo valor ocupa exatamente os bytes do antigo.
 
 </details>
 
@@ -2263,17 +2273,25 @@ juntos, são iguais.
 
 </details>
 
-**10. Texto ou binário, na ponta do lápis.** Você vai guardar os números de 0
-a 999.999, um por linha num arquivo texto, ou como `int` num binário. Quantos
-bytes ocupa cada um?
+**10. Texto ou binário, medido.** Escreva um programa que grave os números
+de 0 a 999.999 em `/tmp/numeros.txt` (um por linha, com `fprintf`) e em
+`/tmp/numeros.bin` (como `int`, com `fwrite`), feche os dois e imprima o
+tamanho de cada um com `fseek` e `ftell`, e quantos por cento o texto ocupa
+a mais.
 
 <details><summary>Resposta</summary>
 
-Binário: 1.000.000 × 4 = **4.000.000 bytes**. Texto: dígitos de 1 a 6 casas,
-10 × 1 + 90 × 2 + 900 × 3 + 9.000 × 4 + 90.000 × 5 + 900.000 × 6 = 5.888.890,
-mais 1.000.000 de `\n`: **6.888.890 bytes**, uns 72% a mais. Para números
-pequenos o texto até ganha (`7\n` tem 2 bytes); para números grandes, o
-binário ganha sempre e ainda poupa a conversão.
+```
+texto:   6888890 bytes
+binario: 4000000 bytes
+o texto ocupa 72.2% a mais
+```
+
+Dica: escreva uma `long tamanho(const char *nome)` que abre com `"rb"`, vai
+ao fim com `fseek(f, 0, SEEK_END)` e devolve o `ftell`. A conta bate com o
+papel: binário é 1.000.000 × 4; texto é 10 × 1 + 90 × 2 + 900 × 3 + 9.000 × 4
++ 90.000 × 5 + 900.000 × 6 dígitos, mais 1.000.000 de `\n`. Para números
+pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 </details>
 
