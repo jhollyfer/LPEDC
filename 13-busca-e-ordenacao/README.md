@@ -37,7 +37,7 @@ trocas** e conferir que a teoria bate com a prática.
 4. Siga o **fluxograma** com o dedo.
 5. Rode os exemplos. Mude os vetores, compare as contagens.
 6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -323,15 +323,12 @@ Saída esperada:
 Última de R$ 200: posição -1 (7 comparações)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Se você procurar do começo, só sabe que é a última depois de olhar tudo.
 2. Comece em i = n - 1 e vá descendo até 0: a primeira que achar é a última.
 3. Resposta esperada: posição 5 com 2 comparações (olha 15 e depois 50);
    para 200, -1 com 7 comparações.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E559.c
@@ -352,16 +349,13 @@ Carla: pode entrar (posição 2)
 Fábio: não está na lista
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Strings no C não se comparam com ==: isso compara endereços, não letras.
 2. Use strcmp(convidados[i], nome), que devolve 0 quando são iguais.
 3. Depois de pos = i, um break encerra o laço.
 4. Resposta esperada: if (strcmp(convidados[i], nome) == 0) { pos = i;
    break; }
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E560.c
@@ -390,16 +384,13 @@ R$ 47: comum -1 (10 olhados), ordenada -1 (7 olhados)
 R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Num vetor crescente, se v[i] > x, todos depois de i também são maiores.
 2. Na busca_ordenada, cada volta faz dois testes: v[i] == x e v[i] > x.
    Conte só um "olhado" por volta.
 3. A melhora só aparece quando a chave NÃO está no vetor. Continua O(n).
 4. Resposta esperada: a saída acima (47 para no 52, que é o 7º elemento).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E561.c
@@ -435,15 +426,12 @@ No vetor: Café 500g R$ 20.79
 9999: não cadastrado
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. return &v[i]; devolve o endereço da gaveta i, não uma cópia.
 2. Com o ponteiro, p->preco = p->preco * 1.10 muda o próprio vetor.
 3. Sempre teste p != NULL antes de usar p->.
 4. Resposta esperada: a saída acima (18,90 * 1,10 = 20,79).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E562.c
@@ -463,16 +451,13 @@ Primeira senha 7: posição 1
 Primeira senha 99: posição -1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quantas voltas o laço dá para n = 6? Qual o último i?
 2. Mesmo sem o erro de memória, que posição ela devolve para 7: 1, 3 ou 5?
 3. Resposta esperada: i <= n lê v[6], fora do vetor (stack-buffer-overflow);
    e, sem parar no primeiro encontro, pos guarda a ÚLTIMA ocorrência (5).
    Conserto: i < n e return i assim que achar.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E563.c
@@ -503,16 +488,13 @@ Sem mover: 27 comparações
 Movendo para a frente: 20 comparações
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use const char *agenda[5]: mover um contato é só mover ponteiros.
 2. Achou na posição i? Guarde agenda[i], empurre agenda[i-1..0] uma casa
    para a direita (de trás para frente) e ponha o guardado em agenda[0].
 3. Sem mover: Mãe custa 5 sempre, Ana 4, Pizzaria 3: 5+4+5+5+3+5 = 27.
 4. Resposta esperada: a saída acima (5+5+2+1+5+2 = 20 comparações).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E564.c
@@ -775,8 +757,7 @@ programa abaixo procura dois números nela. SEM RODAR, escreva a saída exata
 deste programa. Faça o teste de mesa com
 ini, fim e meio em cada volta. Só depois rode para conferir.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. n = 9, então a primeira volta tem ini = 0, fim = 8 e meio = 4.
 2. Para o 5: depois de cada volta, anote o novo intervalo [ini, fim].
@@ -784,8 +765,6 @@ ini, fim e meio em cada volta. Só depois rode para conferir.
 4. Resposta esperada: para 47 aparecem meio=4 (30), meio=6 (47) e "achou na
    posição 6"; para 5 aparecem meio=4 (30), meio=1 (9), meio=0 (4) e "não
    achou".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E565.c
@@ -819,8 +798,7 @@ CEP 40020000: posição 4
 CEP 22222222: posição -1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dois casos base: intervalo vazio (ini > fim) e achou (v[meio] == x).
 2. Caso recursivo: chame a função de novo só na metade que interessa.
@@ -828,8 +806,6 @@ CEP 22222222: posição -1
    lá de baixo se perde.
 4. Resposta esperada: a saída acima; a primeira chamada é
    busca_rec(ceps, 0, 9, x).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E566.c
@@ -860,8 +836,7 @@ Nota 4: posições 7 a 8, 2 avaliações
 Nota 5: posições 9 a 11, 3 avaliações
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use o estilo semiaberto do exemplo A190: ini = 0, fim = n, while (ini < fim).
 2. As duas funções só diferem numa comparação: v[meio] < x ou v[meio] <= x.
@@ -869,8 +844,6 @@ Nota 5: posições 9 a 11, 3 avaliações
    posições a até b - 1.
 4. Resposta esperada: a saída acima. Com um milhão de avaliações, cada
    contagem custa umas 40 voltas, e não um milhão.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E567.c
@@ -897,8 +870,7 @@ Natal: posição 10 (4 voltas)
 Palmas: posição -1 (4 voltas)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. strcmp(a, b) devolve negativo se a vem antes, 0 se iguais, positivo se
    a vem depois. É o "v[meio] < x" das strings.
@@ -907,8 +879,6 @@ Palmas: posição -1 (4 voltas)
    de "Belém", porque o 'é' em UTF-8 começa com um byte maior que o 'o'.
    Esta lista foi escolhida para não cair nessa armadilha.
 4. Resposta esperada: a saída acima (meios 7, 11, 9 e 10 nas duas buscas).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E568.c
@@ -930,8 +900,7 @@ Saída esperada (depois de consertar):
 vazio: posição -1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Faça o teste de mesa da busca pelo 3: quanto vale meio na última volta?
 2. Quanto é 0 - 1 num tipo sem sinal? (assunto 0008)
@@ -940,8 +909,6 @@ vazio: posição -1
    ini <= fim continua verdadeiro e v[meio] lê longe do vetor. Conserto:
    intervalo semiaberto (fim = n, while (ini < fim), fim = meio), que nunca
    subtrai 1 de um size_t.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E569.c
@@ -964,8 +931,7 @@ Saída esperada:
 2147483647 m²: lado 46340 m (31 voltas)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para L = 0, 1, 2, ... a resposta de "L * L <= A?" é sim, sim, ..., não,
    não. Você procura o último sim.
@@ -975,8 +941,6 @@ Saída esperada:
 4. Com ini = meio, calcule meio arredondando para CIMA,
    ini + (fim - ini + 1) / 2; senão, com fim = ini + 1, o laço nunca acaba.
 5. Resposta esperada: a saída acima (46340² = 2147395600).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E570.c
@@ -1261,15 +1225,12 @@ Saída esperada:
 Ranking: 31 31 25 18 12 7
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Parta do bubble do exemplo A191.
 2. Basta mudar uma comparação: troque quando o da esquerda for MENOR.
 3. Os dois 31 empatados não são trocados entre si (31 < 31 é falso).
 4. Resposta esperada: Ranking: 31 31 25 18 12 7
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E571.c
@@ -1282,8 +1243,7 @@ programa abaixo ordena com bubble sort (sem bandeira) e mostra o vetor no
 fim de cada passada. SEM RODAR, escreva a saída exata, incluindo o total
 de trocas. Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Na passada 1, o 9 ganha todas as comparações e vai para o fim.
 2. Sem bandeira, o programa faz as 4 passadas mesmo se o vetor já estiver
@@ -1292,8 +1252,6 @@ de trocas. Depois rode e confira.
 4. Resposta esperada: passada 1: 4 7 1 5 9; passada 2: 4 1 5 7 9; passada
    3: 1 4 5 7 9; passada 4: 1 4 5 7 9; trocas: 7 (as inversões: 9 com 4, 7, 1
    e 5; 4 com 1; 7 com 1 e 5).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E572.c
@@ -1311,8 +1269,7 @@ Saída esperada (depois de consertar):
 19 22 27 34 45
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Na passada 1, qual o maior valor de j? E de j + 1?
 2. Conserte o primeiro erro e rode de novo: alguma idade sumiu e outra
@@ -1322,8 +1279,6 @@ Saída esperada (depois de consertar):
    lê idades[5], fora do vetor); e a troca precisa de uma variável
    auxiliar: int aux = idades[j]; idades[j] = idades[j + 1];
    idades[j + 1] = aux;
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E573.c
@@ -1360,16 +1315,13 @@ Saída esperada:
 5º Inter      65 pts 18 vit
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Primeiro compare os pontos; só se forem iguais, compare as vitórias.
 2. Struct se copia inteira com =: Time aux = tabela[j]; funciona.
 3. Para alinhar: printf("%dº %-10s %2d pts %2d vit\n", ...).
 4. Resposta esperada: a saída acima (Palmeiras passa o Flamengo pelas
    vitórias).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E574.c
@@ -1395,8 +1347,7 @@ shaker: 3 passadas, 18 comparações
 resultado: 1 2 3 4 5 6 7 8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Guarde a parte ainda bagunçada em v[ini..fim]. Depois da ida, fim--;
    depois da volta, ini++.
@@ -1404,8 +1355,6 @@ resultado: 1 2 3 4 5 6 7 8
 3. Pare quando uma passada (de ida ou de volta) não trocar nada.
 4. Resposta esperada: a saída acima. A ida troca só o 8 com o 1, a volta
    traz o 1 para a frente, e a terceira passada confirma que acabou.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E575.c
@@ -1434,8 +1383,7 @@ n = 6: 15 inversões, 15 trocas
 n = 3: 2 inversões, 2 trocas
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Na inversoes, o j começa em i + 1.
 2. O que acontece com as inversões quando você troca dois VIZINHOS a > b?
@@ -1443,8 +1391,6 @@ n = 3: 2 inversões, 2 trocas
 3. No vetor invertido, todo par é uma inversão: n(n - 1)/2.
 4. Resposta esperada: a saída acima. Cada troca de vizinhos desfaz
    exatamente uma inversão e não cria nenhuma; o vetor ordenado tem zero.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E576.c
@@ -1715,16 +1661,13 @@ fim = 2: 30 45 60 75 89 120
 fim = 1: 30 45 60 75 89 120
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O laço de fora: for (int fim = n - 1; fim > 0; fim--).
 2. O de dentro procura o índice do maior em v[0..fim] (repare no <=).
 3. Depois do laço de dentro, troque v[fim] com v[maior].
 4. Resposta esperada: a saída acima. O vetor fica pronto em fim = 3, mas o
    selection não tem como saber disso e continua.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E577.c
@@ -1736,15 +1679,12 @@ Cinco caixas de uma mudança estão numeradas fora de ordem: 3, 1, 2, 5, 4.
 SEM RODAR, escreva a saída exata do programa abaixo, incluindo o total de
 trocas. Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em cada passada i, ache o menor de v[i..4] e veja se ele já está em v[i].
 2. Repare no if (menor != i): troca de alguém com ele mesmo não conta.
 3. Resposta esperada: i = 0: 1 3 2 5 4; i = 1: 1 2 3 5 4; i = 2: 1 2 3 5
    4; i = 3: 1 2 3 4 5; trocas: 3.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E578.c
@@ -1769,15 +1709,12 @@ Saída esperada:
 5 trocas de ponteiro
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. "v[j] < v[menor]" vira strcmp(alunos[j], alunos[menor]) < 0.
 2. A variável auxiliar da troca é um const char *, não um vetor de char.
 3. Trocar ponteiros custa 8 bytes, seja o nome curto ou comprido.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E579.c
@@ -1798,16 +1735,13 @@ Saída esperada:
 18 comparações (ordenar tudo custaria 28)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. É o selection de sempre com o laço de fora indo até i < k.
 2. As passadas fazem 7, 6 e 5 comparações.
 3. Ordenar tudo: n(n - 1)/2 = 28.
 4. Resposta esperada: a saída acima. O resto do vetor (v[3..7]) fica fora
    de ordem, e tudo bem.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E580.c
@@ -1834,8 +1768,7 @@ Saída esperada (depois de consertar):
 15 21 28 33 40
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em que linha menor recebe um valor? Quantas vezes essa linha roda?
 2. Na passada 0, o 15 já está na gaveta 0: menor fica 0 e a troca é dele
@@ -1844,8 +1777,6 @@ Saída esperada (depois de consertar):
    de fora. Na passada 1 ele ainda vale 0 (o 15, o menor de todos), ninguém
    de v[2..4] é menor que 15, e a troca joga o 15 de volta para a gaveta 1
    e o 40 para a 0. Conserto: int menor = i; no começo de cada passada.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E581.c
@@ -1887,16 +1818,13 @@ loja[0] continua sendo: Fone sem fio
 3 trocas de 4 bytes, em vez de 216 bytes
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. ordem[k] responde "qual produto aparece em k-ésimo lugar?".
 2. Compare pelos produtos, troque os índices: a troca é de int.
 3. Para mostrar: const Produto *p = &loja[ordem[k]];
 4. sizeof(Produto) é 4 + 4 de enchimento + 8 + 200 = 216. Use %zu.
 5. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E582.c
@@ -2168,15 +2096,12 @@ Saída esperada:
 Classificação: 810 720 690 650 580
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Parta do insertion do exemplo A195 (pode tirar a contagem).
 2. Agora quem precisa abrir espaço são os elementos MENORES que x.
 3. Só muda uma comparação no while.
 4. Resposta esperada: Classificação: 810 720 690 650 580
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E583.c
@@ -2195,8 +2120,7 @@ Saída esperada (depois de completar):
 8 15 19 23 30
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro do while, a mala malas[i] é maior que x: ela anda uma casa para
    a direita.
@@ -2204,8 +2128,6 @@ Saída esperada (depois de completar):
    vale -1). O buraco está uma casa à direita de i.
 3. Resposta esperada: malas[i + 1] = malas[i]; dentro do while e
    malas[i + 1] = x; depois dele.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E584.c
@@ -2235,16 +2157,13 @@ Saída esperada:
 9900: 9900 9800 8750 7500 7200
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Com espaço sobrando, comece a empurrar de i = n - 1 e aumente n no fim.
 2. Cheio: o último vai ser descartado mesmo, então comece de i = n - 2 (o
    empurrão escreve por cima de top[n - 1]).
 3. O ranking é decrescente: empurre enquanto top[i] < pontos.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E585.c
@@ -2257,8 +2176,7 @@ Os pedidos de uma lanchonete chegam com o tempo de preparo, em minutos:
 depois de cada encaixe, quantos deslocamentos cada encaixe fez e o total.
 Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Antes do j = 3, a parte arrumada é 3 6 8. Quem o segundo 3 empurra?
 2. Ele para ao encontrar o primeiro 3, porque 3 > 3 é falso.
@@ -2266,8 +2184,6 @@ Depois rode e confira.
 4. Resposta esperada: j = 1: 3 6 8 3 1 (deslocou 1); j = 2: 3 6 8 3 1
    (deslocou 0); j = 3: 3 3 6 8 1 (deslocou 2); j = 4: 1 3 3 6 8 (deslocou
    4); total: 7.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E586.c
@@ -2286,16 +2202,13 @@ Saída esperada (depois de consertar):
 8 12 19 27 31 45
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quando o 12 é encaixado, i chega a -1. O que o while faz primeiro?
 2. Releia a seção sobre o curto-circuito do && (assunto 0018).
 3. No fim do while, a posição i foi empurrada ou não? Onde está o buraco?
 4. Resposta esperada: o while deve ser (i >= 0 && idades[i] > x), senão lê
    idades[-1]; e o encaixe é idades[i + 1] = x, não idades[i] = x.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E587.c
@@ -2318,8 +2231,7 @@ binária:  49 comparações, 120 deslocamentos
 ordenado? sim
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Procure a PRIMEIRA posição de v[0..j-1] com valor maior que x (estilo
    semiaberto do A190, com v[meio] <= x). Assim os iguais ficam na ordem de
@@ -2330,8 +2242,6 @@ ordenado? sim
 4. Resposta esperada: a saída acima. As comparações caem, mas os
    deslocamentos não mudam: cada elemento ainda anda casa por casa, então
    continua O(n²).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E588.c
@@ -2633,8 +2543,7 @@ Notas: 45 50 60 60 75 85 90 95 98
 7 comparações
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Três índices: i em a, j em b, k em c.
 2. Enquanto as duas têm elementos, copie o menor das frentes e avance só o
@@ -2642,8 +2551,6 @@ Notas: 45 50 60 60 75 85 90 95 98
 3. Quando uma acabar, copie o resto da outra sem comparar.
 4. Resposta esperada: a saída acima. A turma A acaba depois da 7ª
    comparação, e 95 e 98 vêm direto.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E589.c
@@ -2655,8 +2562,7 @@ O programa abaixo não ordena nada: ele só mostra QUAIS chamadas o merge sort
 faria para um vetor de 5 elementos, com um recuo de dois espaços por nível
 de recursão. SEM RODAR, escreva a saída exata. Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece por ordena(0, 5): q = 0 + 5 / 2 = 2. As metades são [0, 2) e [2, 5).
 2. A metade esquerda inteira (com todas as suas chamadas) é mostrada antes
@@ -2666,8 +2572,6 @@ de recursão. SEM RODAR, escreva a saída exata. Depois rode e confira.
    [1, 2), [2, 5), [2, 3), [3, 5), [3, 4) e [4, 5). Recuo: nenhum na
    primeira; 2 espaços em [0, 2) e [2, 5); 4 em [0, 1), [1, 2), [2, 3) e
    [3, 5); 6 nas duas últimas.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E590.c
@@ -2695,16 +2599,13 @@ Saída esperada:
 foram nos dois turnos: 2
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. É a intercalação com três casos em vez de dois: a[i] < b[j],
    a[i] > b[j] e a[i] == b[j].
 2. No empate, copie uma vez só e avance i E j.
 3. Faça a função devolver o tamanho do resultado.
 4. Resposta esperada: a saída acima (1034 e 1077 estão nas duas).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E591.c
@@ -2732,8 +2633,7 @@ Saída esperada:
 Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O rascunho agora é Pedido *w = malloc(n * sizeof *w); confira NULL e
    dê free no fim.
@@ -2741,8 +2641,6 @@ Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
 3. Com <, no empate a intercalação pega o da direita primeiro.
 4. Resposta esperada: a saída acima; com <, sai Eva 20, Davi 30, Bruno 30,
    Carla 50, Ana 50 (deixa de ser estável).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E592.c
@@ -2769,8 +2667,7 @@ Saída esperada (depois de consertar):
 3 5 10 15 21 42
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Coloque um printf no fim de intercala mostrando p, r e o vetor inteiro.
 2. A primeira intercalação junta [1, 2) com [2, 3), os números 5 e 42.
@@ -2779,8 +2676,6 @@ Saída esperada (depois de consertar):
 4. Resposta esperada: a cópia de volta faz v[k] = w[k], que escreve no
    começo do vetor; o certo é v[p + k] = w[k]. Só a intercalação com
    p = 0 cai no lugar certo; as outras escrevem por cima de v[0..].
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E593.c
@@ -2806,8 +2701,7 @@ merge sort:  10 discordâncias
 de 28 pares possíveis
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Se v[j] (direita) vai para o rascunho e ainda há q - i elementos na
    esquerda, some q - i às inversões.
@@ -2815,8 +2709,6 @@ de 28 pares possíveis
 3. Rode a força bruta ANTES: a versão rápida ordena o vetor.
 4. Use long long: com n = 100 mil, as inversões passam de 2 bilhões.
 5. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E594.c
@@ -3119,16 +3011,13 @@ UMA separação (só o separa, sem recursão), com o pivô no fim. SEM RODAR,
 escreva a saída exata: cada troca feita, o vetor final e a posição do pivô.
 Depois rode e confira.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O pivô é 5. Só 2 e 4 são <= 5.
 2. k anda sempre; j só anda depois de uma troca.
 3. No fim, o pivô troca de lugar com quem está em v[j].
 4. Resposta esperada: troca v[0] e v[1]; troca v[1] e v[3]; troca v[2] e
    v[5]; vetor: 2 4 5 9 8 6; pivô na posição 2.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E595.c
@@ -3150,16 +3039,13 @@ Saída esperada:
 3 contas no vermelho
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. É o separa trocando "v[k] <= pivo" por "v[k] < 0", e sem a troca final
    do pivô.
 2. O zero não é negativo: fica do lado direito.
 3. Repare que a ordem dentro de cada lado muda (o -80 vem depois do -10).
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E596.c
@@ -3186,15 +3072,12 @@ arroz, banana, café, feijão, leite, ovos, pão, tomate
 14 comparações
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A função troca recebe const char ** (o endereço de cada ponteiro).
 2. v[k] <= pivo vira strcmp(v[k], pivo) <= 0.
 3. O primeiro pivô é "feijão": ele separa arroz, café e banana do resto.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E597.c
@@ -3213,8 +3096,7 @@ Saída esperada (depois de consertar):
 2 4 7 9
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Faça a primeira separação à mão: onde o 7 vai parar? Qual é o j?
 2. Quais pedaços as duas chamadas recursivas recebem? Algum inclui o pivô?
@@ -3223,8 +3105,6 @@ Saída esperada (depois de consertar):
 4. Resposta esperada: quick_sort(v, p, j) inclui o pivô; quando ele é o
    maior do pedaço, j == r e a chamada recebe o mesmo pedaço para sempre.
    O certo é quick_sort(v, p, j - 1).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E598.c
@@ -3250,16 +3130,13 @@ mediana: 33 min (quickselect: 10 comparações)
 ordenando tudo: 33 min (23 comparações)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Reaproveite o separa do A199, contando comparações num static int.
 2. Diferente do quick sort, o quickselect só segue UM dos lados.
 3. Se p == r, sobrou um elemento só: é ele.
 4. Na média, o quickselect é O(n): n + n/2 + n/4 + ... < 2n.
 5. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E599.c
@@ -3290,8 +3167,7 @@ Saída esperada:
 todos iguais:   Lomuto 66, três vias 12 | 2 2 2 2 2 2 2 2 2 2 2 2
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Três índices: lt, i e gt. Comece com lt = i = p e gt = r; pivô = v[r].
 2. v[i] < pivô: troca v[lt] com v[i], avança os dois. v[i] > pivô: troca
@@ -3301,8 +3177,6 @@ todos iguais:   Lomuto 66, três vias 12 | 2 2 2 2 2 2 2 2 2 2 2 2
 4. Todos iguais: uma passada só, sem recursão nenhuma. Lomuto: 11 + 10 +
    ... + 1 = 66.
 5. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E600.c
@@ -3695,16 +3569,13 @@ R$ 5.89
 R$ 5.79
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A compara recebe const void *: converta para const double * e leia.
 2. Decrescente: devolva negativo quando o primeiro for MAIOR.
 3. Não devolva x - y: com double, 0.1 vira 0 ao converter para int.
    Use (x < y) - (x > y).
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E601.c
@@ -3732,16 +3603,13 @@ e) Ordenar um vetor de structs num programa comum, sem requisitos
 f) Em que situação real o bubble sort é a melhor escolha?
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Releia a tabela de custo e estabilidade do assunto.
 2. "Adaptativo" e "estável" são as palavras-chave de a) e b).
 3. Resposta esperada: a) insertion; b) merge (estável); c) selection (no
    máximo n - 1 trocas); d) merge (n log n garantido); e) qsort; f) em
    nenhuma: o insertion faz o mesmo papel melhor.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E602.c
@@ -3768,8 +3636,7 @@ Cazuza Legiao Pitty Raimundos Skank Titas
 Pitty Skank Titas Cazuza Legiao Raimundos
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Cada elemento do vetor é um const char *. O qsort passa para a compara
    o ENDEREÇO do elemento, ou seja, um ponteiro para ponteiro.
@@ -3777,8 +3644,6 @@ Pitty Skank Titas Cazuza Legiao Raimundos
 3. O erro clássico é fazer strcmp(a, b) direto: compara os bytes dos
    ponteiros, não as letras.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E603.c
@@ -3802,8 +3667,7 @@ Saída esperada (depois de consertar):
 2000000000
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quanto é 2000000000 - (-1500000000)? Cabe num int (assunto 0008)?
 2. A compara não precisa devolver a diferença, só o SINAL certo.
@@ -3811,8 +3675,6 @@ Saída esperada (depois de consertar):
 4. Resposta esperada: x - y dá overflow com valores grandes de sinais
    opostos; o resultado vira negativo e a compara diz que 2000000000 vem
    antes de -1500000000. Conserto: return (x > y) - (x < y);
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E604.c
@@ -3855,8 +3717,7 @@ Carla: 11 98765-4321 (posição 1)
 Zeca: não está na agenda
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. São duas funções de comparação: a do qsort recebe dois Contato *; a do
    bsearch recebe a CHAVE no 1º argumento (const char *) e um Contato * no
@@ -3867,8 +3728,6 @@ Zeca: não está na agenda
    formato é %td.
 4. Resposta esperada: a saída acima (ordenada: Bruno, Carla, Diego,
    Marina, Rafael).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E605.c
@@ -3900,8 +3759,7 @@ Saída esperada:
 7 Gui
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Antes do qsort, um laço faz turma[i].ordem = i.
 2. Na compara: notas diferentes decidem (decrescente); notas iguais,
@@ -3909,8 +3767,6 @@ Saída esperada:
 3. Com esse desempate, não existem dois elementos "iguais" para a compara,
    então a estabilidade do algoritmo deixa de importar.
 4. Resposta esperada: a saída acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E606.c

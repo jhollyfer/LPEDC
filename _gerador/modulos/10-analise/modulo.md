@@ -34,7 +34,7 @@ mostrando o custo de cada escolha.
 4. Rode os exemplos. Mude o n, troque os dados, quebre um invariante de
    propósito e veja o `assert` disparar.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 

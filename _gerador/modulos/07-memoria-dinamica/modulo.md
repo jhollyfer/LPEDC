@@ -35,7 +35,7 @@ estruturas sem medo.
 4. Rode os exemplos. Mude um valor, apague um `free`, quebre de propósito e
    leia o que o `rodar` responde.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 

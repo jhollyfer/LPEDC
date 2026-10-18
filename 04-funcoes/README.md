@@ -37,7 +37,7 @@ formato das estruturas de dados da segunda metade do curso.
 3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
 4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -284,14 +284,11 @@ Quarto: 9.00 m2
 Total: 23.00 m2
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Escreva o protótipo antes do main e a definição depois, como no A065.
 2. Dá para somar as duas chamadas direto: area_comodo(4.0, 3.5) + area_comodo(3.0, 3.0).
 3. Resposta esperada: sala 14.00, quarto 9.00, total 23.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0033-funcoes/E193.c
@@ -313,15 +310,12 @@ Bia: 3600 s
 Caio: 4999 s
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Pelo uso, a função recebe três int e devolve um int.
 2. Uma hora tem 3600 segundos; um minuto, 60.
 3. Resposta esperada: int total_segundos(int h, int m, int s) devolvendo
    h * 3600 + m * 60 + s. Ana 5415, Bia 3600, Caio 4999.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0033-funcoes/E194.c
@@ -340,15 +334,12 @@ Saída esperada:
 Bissextos: 8
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A regra cabe num return só: return (ano % 4 == 0 && ano % 100 != 0) || ano % 400 == 0;
 2. No main, um for de 2000 a 2030 com um if (eh_bissexto(ano)) e um contador.
 3. Resposta esperada: 8 anos. 2000 entra (divisível por 400); 1900, se
    estivesse no intervalo, não entraria.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0033-funcoes/E195.c
@@ -370,16 +361,13 @@ Carro 3 (12.0 h): R$ 20.00
 Total do dia: R$ 34.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. "Hora ou fração" é arredondar para cima: ceil(horas - 2) dá as horas extras.
 2. Use dois return: um para até 2 horas e outro para o resto. No resto,
    se a conta passar de 20, devolva 20.
 3. Resposta esperada: 3.2 h são 2 h + 1.2 h extra, que viram 2 horas
    cobradas: 5 + 4 = 9. Com 12 h a conta daria 25, mas o teto é 20. Total 34.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0033-funcoes/E196.c
@@ -423,8 +411,7 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Resolva de dentro para fora: ajusta(dobro(7)) é ajusta(14).
 2. Em ajusta, o primeiro return que for alcançado encerra a função: os
@@ -432,8 +419,6 @@ int main(void) {
 3. Resposta esperada: 8, 4, 11 e 5. (ajusta(8) = 4 e dobro(4) = 8;
    dobro(3) = 6 e ajusta(6) = 3; 8 + 3 = 11. ajusta(30) = 20,
    ajusta(20) = 10, ajusta(10) = 5.) O printf depois do return nunca roda.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0033-funcoes/E197.c
@@ -463,16 +448,13 @@ Saída esperada:
 8128 = soma dos divisores 8128
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. soma_divisores testa d de 1 até n / 2: se n % d == 0, soma d.
 2. eh_perfeito cabe numa linha: return soma_divisores(n) == n;
 3. Resposta esperada: 6, 28, 496 e 8128. São tão raros que o próximo é
    33550336. Desafio extra: testar d só até a raiz de n (d * d <= n),
    somando d e n / d de uma vez. Por que isso é muito mais rápido?
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0033-funcoes/E198.c
@@ -694,14 +676,11 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O "pontos" da função e o "pontos" do main são duas variáveis.
 2. Na primeira chamada, o retorno não é guardado em lugar nenhum.
 3. Resposta esperada: dentro: 300 / main: 150 / dentro: 300 / main: 300.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-parametros/E199.c
@@ -726,15 +705,12 @@ Total       R$ 9.70
 ====================
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Dentro da função, um for de 1 até vezes com printf("%c", simbolo).
 2. A função é void: não tem return com valor.
 3. Resposta esperada: repetir('=', 20) na primeira e na última linha,
    repetir('-', 20) nas linhas do meio.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-parametros/E200.c
@@ -747,16 +723,13 @@ mostra "Em ordem: 9 e 6". Rode, explique por que a função não funciona e
 conserte. Você ainda não pode usar ponteiros: troque "ordenar" por duas
 funções que devolvem valor, "menor" e "maior".
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma função em C devolve um valor só, pelo return. A troca dentro de
    ordenar acontece nas cópias.
 2. printf("Em ordem: %d e %d\n", menor(a, b), maior(a, b));
 3. Resposta esperada: "Em ordem: 6 e 9". A troca de verdade, com a função
    mexendo nas variáveis do main, precisa de ponteiros (assunto 0051).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-parametros/E201.c
@@ -778,15 +751,12 @@ Saída esperada:
 No main, capital continua R$ 1000.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O parâmetro é uma variável local como outra qualquer: pode mudar à vontade.
 2. Um for de 1 até meses, multiplicando, e no fim return capital.
 3. Resposta esperada: 1126.83 e 1269.73; o capital do main continua 1000.00,
    porque a função mexeu só na cópia.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-parametros/E202.c
@@ -832,16 +802,13 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. 7.9 entra num parâmetro int: a parte decimal é cortada antes da conta.
 2. Em media, a e b são int: a divisão (a + b) / 2 é inteira. Só depois o
    resultado vira double.
 3. Resposta esperada: 3, 7.0, 7.5 e 8. (metade(31) = 15; 15 + 1 = 16;
    metade(16) = 8.)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-parametros/E203.c
@@ -871,16 +838,13 @@ No main, numero continua 12345
 Capicuas de 100 a 999: 90
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para inverter: enquanto n > 0, invertido = invertido * 10 + n % 10 e
    n = n / 10.
 2. eh_capicua cabe numa linha: return inverter(n) == n;
 3. Resposta esperada: 54321, 12345 e 90 capicuas (9 escolhas para o primeiro
    dígito, que também é o último, vezes 10 para o do meio).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0034-parametros/E204.c
@@ -1117,14 +1081,11 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. A função mostrar está fora do main: ela não enxerga nenhuma variável do main.
 2. Vale a declaração mais próxima; o bloco interno acaba no "}".
 3. Resposta esperada: 10, 25, 40, 25, 10.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-escopo/E205.c
@@ -1145,15 +1106,12 @@ Visita nº 3
 Visita nº 4
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. static int visitas = 0; dentro da função.
 2. Sem static, a variável nasce com 0 em toda chamada.
 3. Resposta esperada: com static, 1, 2, 3, 4. Sem static, "Visita nº 1"
    quatro vezes.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-escopo/E206.c
@@ -1166,16 +1124,13 @@ R$ 30.00 e R$ 4.75) e mostrar "Total: R$ 55.25". Ele compila sem aviso, mas
 mostra "Total: R$ 4.75". Explique o erro usando as palavras escopo e tempo
 de vida, e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em que momento a variável total nasce? Quantas vezes?
 2. Uma variável declarada dentro do corpo do for é criada de novo a cada volta.
 3. Resposta esperada: total é local do corpo do for: nasce com 0 a cada volta
    e só guarda o último item. Declare "double total = 0;" antes do for e
    mostre depois do laço: Total: R$ 55.25.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-escopo/E207.c
@@ -1220,16 +1175,13 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Toda função mexe na mesma global, inclusive a que só deveria calcular um preço.
 2. Na versão nova: double gastar(double saldo, double valor) devolve
    saldo - valor - 1.00, e o main faz saldo = gastar(saldo, 45.00).
 3. Resposta esperada: Saldo: R$ 220.50 (300 - 45 - 1 - 32.50 - 1). Sem
    global, a taxa fica visível na função que a cobra.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-escopo/E208.c
@@ -1293,8 +1245,7 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. São quatro x diferentes fora do bloco: a global, a do main, a local de a
    e a static de b. Qual cada função enxerga?
@@ -1302,8 +1253,6 @@ int main(void) {
    na global.
 3. Resposta esperada: main: 20 / bloco: 30 / a: 1 -> 2 / b: 5 -> 10 /
    c: 10 -> 20 / a: 1 -> 2 / b: 10 -> 15 / c: 20 -> 40 / main: 20.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-escopo/E209.c
@@ -1344,8 +1293,7 @@ Saída esperada:
 5 1 2 3 3 6 3 2 4 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. static unsigned int estado = 1; fora das funções, logo depois dos includes.
 2. Com unsigned int, a multiplicação que passa do limite dá a volta (não é
@@ -1353,8 +1301,6 @@ Saída esperada:
    estado em 31 bits.
 3. Resposta esperada: as duas linhas iguais, como acima. Mesma semente,
    mesma sequência: é assim que o rand e o srand funcionam por dentro.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-escopo/E210.c
@@ -1616,16 +1562,13 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quem chamou quadrado? E quem chamou essa função?
 2. resultado ainda não tem valor: o main está esperando imc voltar.
 3. Resposta esperada (base -> topo): main (resultado ainda sem valor) ->
    imc (peso = 72.0, altura = 1.80) -> quadrado (x = 1.80). Ao rodar,
    mostra "IMC: 22.2".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E211.c
@@ -1676,15 +1619,12 @@ int main(void) {
 
 Qual é o número máximo de quadros na pilha ao mesmo tempo, contando o main?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma função só continua depois que a função que ela chamou retornou.
 2. O ponto mais fundo é main -> a -> b -> c.
 3. Resposta esperada: a começa / b começa / c / b termina / c / a termina /
    c. No máximo 4 quadros.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E212.c
@@ -1710,15 +1650,12 @@ entra finalizar_compra
 sai finalizar_compra
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O main chama finalizar_compra(0).
 2. Cada função: recuo, "entra", chama a próxima com nivel + 1, recuo, "sai".
    consultar_banco só imprime a linha dela.
 3. Resposta esperada: a saída acima. O recuo é a altura da pilha naquela hora.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E213.c
@@ -1759,14 +1696,11 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Em dobro_mais_um, n vira 11, mas é o n do quadro dela.
 2. processa continua com n = 5 e recebe r = 11.
 3. Resposta esperada: "processa: n = 5, r = 11" e "main: n = 5, r = 16".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E214.c
@@ -1804,8 +1738,7 @@ e) Escreva um programa com as quatro funções (dividir, media, relatorio e
  "Turma 3: média 9.0"; com quantidade 0, "Turma 3: média 0.0".
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O bt lista do topo (#0) para a base (main). É o stack trace do Node, com
    a mesma ordem.
@@ -1814,8 +1747,6 @@ e) Escreva um programa com as quatro funções (dividir, media, relatorio e
    relatorio; c) media volta primeiro, main termina por último; d) antes:
    media (ou relatorio) passou quantidade 0 adiante sem conferir. e) as
    duas linhas acima.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E215.c
@@ -1839,8 +1770,7 @@ Maior altura: 4
 Altura agora: 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. void entrar(void) { altura++; if (altura > maior_altura) maior_altura = altura; }
 2. O caminho mais fundo é main -> checkout -> pagamento -> antifraude.
@@ -1848,8 +1778,6 @@ Altura agora: 1
 3. Resposta esperada: maior altura 4, altura no fim 1 (só o main). Se
    alguma função esquecer o sair(), a altura no fim passa de 1: é assim que
    se caça esse tipo de erro.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E216.c
@@ -2051,14 +1979,11 @@ soma_ate(100) = 5050
 Cumprimentos com 12 duplas: 66
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Caso base: soma_ate(0) vale 0 (ou soma_ate(1) vale 1).
 2. Caso recursivo: soma_ate(n) = n + soma_ate(n - 1).
 3. Resposta esperada: 10, 5050 e 66 (soma_ate(11)).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0037-recursao/E217.c
@@ -2078,15 +2003,12 @@ Saída esperada:
 7^0 = 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O caso base é expoente == 0.
 2. O caso recursivo devolve base * potencia(base, expoente - 1).
 3. Resposta esperada: 1024, 81 e 1. Para 2^10, a pilha chega a 11 quadros
    de potencia (expoentes de 10 até 0).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0037-recursao/E218.c
@@ -2118,15 +2040,12 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O printf da volta só roda depois que a chamada de dentro terminou.
 2. Cada quadro lembra o seu n: o de eco(3) ainda vale 3 na volta.
 3. Resposta esperada: ida 3 / ida 2 / ida 1 / fundo / volta 1 / volta 2 /
    volta 3.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0037-recursao/E219.c
@@ -2146,15 +2065,12 @@ Saída esperada:
 2026 = 11111101010
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Caso base: se n < 2, mostre n e pare.
 2. Caso recursivo: primeiro binario(n / 2), depois printf("%d", n % 2).
 3. Resposta esperada: 1101, 11111111 e 11111101010. Se você imprimir antes
    de chamar, sai 1011 para o 13: os bits ao contrário.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0037-recursao/E220.c
@@ -2167,8 +2083,7 @@ DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois. Se voc�
 assim, o programa morre com stack-overflow. Explique os dois erros e
 conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Leia o aviso "suggest parentheses around assignment": o que n = 0 faz
    dentro do if? Quanto vale essa expressão?
@@ -2178,8 +2093,6 @@ conserte.
    base nunca é aceito, e a chamada seguinte é soma_digitos(0) de novo, para
    sempre. O certo é n == 0. (2) Falta o return na linha do caso recursivo.
    Consertado: 2026 -> 10 e 99999 -> 45.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0037-recursao/E221.c
@@ -2200,16 +2113,13 @@ Saída esperada:
 9 x 0 = 0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Para b > 0: a * b = a + a * (b - 1). Caso base: b == 0 dá 0.
 2. Com b negativo, b - 1 se afasta do zero e a recursão nunca para. Para
    b < 0, ande para o outro lado: a * b = a * (b + 1) - a.
 3. Resposta esperada: 28, -21, -30 e 0. São três ramos: b == 0, b > 0 e
    b < 0. Em todos, b chega mais perto de 0 a cada chamada.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0037-recursao/E222.c
@@ -2445,14 +2355,11 @@ mdc(84, 36) = 12 -> 84/36 = 7/3
 mdc(1000, 625) = 125 -> 1000/625 = 8/5
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Caso base: b == 0 devolve a. Caso recursivo: mdc(b, a % b).
 2. Para simplificar, divida os dois números pelo MDC.
 3. Resposta esperada: 12 e 7/3; 125 e 8/5.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E223.c
@@ -2474,16 +2381,13 @@ Saída esperada:
 64 discos: 18446744073709551615
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. movimentos(n) = 2 * movimentos(n - 1) + 1. Repare: UMA chamada só, não duas.
 2. O resultado para 64 é 2^64 - 1: não cabe em long long (que vai até
    2^63 - 1), por isso o unsigned. Mostre com %llu.
 3. Resposta esperada: 7, 1023, 1048575 e 18446744073709551615. A um
    movimento por segundo, os 64 discos levariam uns 585 bilhões de anos.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E224.c
@@ -2504,16 +2408,13 @@ fib(40) = 102334155
 fib(46) = 1836311903
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com anterior = 0 e atual = 1. A cada volta: proximo = anterior +
    atual; anterior = atual; atual = proximo.
 2. Cuidado com fib(0): devolva 0 antes do laço.
 3. Resposta esperada: 55, 102334155 e 1836311903. O laço faz 46 somas; o
    recursivo faz mais de 300 milhões de chamadas só para fib(40).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E225.c
@@ -2531,8 +2432,7 @@ d) Qual é o maior número de quadros de fib na pilha ao mesmo tempo?
 Depois altere o A075 para conferir (b) e (c): conte as chamadas e, numa
 segunda global, só as chamadas com n == 2.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Chamadas(n) = 1 + Chamadas(n - 1) + Chamadas(n - 2), com Chamadas(0) =
    Chamadas(1) = 1. Do A075: Chamadas(5) = 15. Falta Chamadas(4).
@@ -2540,8 +2440,6 @@ segunda global, só as chamadas com n == 2.
    uma (em fib(5) são 3).
 3. Resposta esperada: a) 8; b) 25; c) 5; d) 6 (fib(6), fib(5), fib(4),
    fib(3), fib(2), fib(1)).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E226.c
@@ -2572,8 +2470,7 @@ lenta:  2^60 = 1152921504606846976 (60 multiplicações)
 rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Caso base das duas: e == 0 devolve 1 (sem multiplicar).
 2. Na rápida, com e par, calcule metade = pot_rapida(x, e / 2) UMA vez e
@@ -2581,8 +2478,6 @@ rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 3. Resposta esperada: a saída acima. A lenta faz e multiplicações; a rápida,
    no máximo umas 2 vezes log2(e). É o mesmo truque de "cortar ao meio" da
    busca binária.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E227.c
@@ -2595,8 +2490,7 @@ Siga os movimentos com três pilhas de moedas (ou no papel) e ache o primeiro
 movimento ilegal (disco maior sobre um menor) ou o problema no final.
 Explique o erro e conserte. A saída certa é a do A076.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. No passo 1 da receita, os n - 1 discos vão para a estaca AUXILIAR.
    Confira para onde a primeira chamada recursiva manda.
@@ -2607,8 +2501,6 @@ Explique o erro e conserte. A saída certa é a do A076.
    para o destino, justo onde o maior vai cair. Já no movimento 2 o disco 2
    cai sobre o disco 1 (ilegal), e no 3 o programa tira um disco de B, que
    está vazia. O certo é hanoi(n - 1, origem, auxiliar, destino).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E228.c
@@ -2820,8 +2712,7 @@ g) #define FRETE_GRATIS_ACIMA 200.0
 h) #include "frete.c"
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O .h diz O QUE o módulo oferece; o .c diz COMO.
 2. Uma função static é interna: quem usa o módulo não precisa saber que ela existe.
@@ -2830,8 +2721,6 @@ h) #include "frete.c"
    f) nenhum dos dois: o main fica no programa que usa o módulo; g) .h, se
    quem usa precisa saber o valor (senão, no .c); h) nenhum: nunca inclua
    um .c.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0039-modulos/E229.c
@@ -2855,15 +2744,12 @@ Saída esperada:
 Conversões: 5
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O include já está aí embaixo. Um for de 0 a 40, somando 10.
 2. conversoes_feitas() devolve o contador que mora escondido no conversao.c.
 3. Resposta esperada: a tabela acima e "Conversões: 5". À mão, o comando
    seria: gcc -std=c17 -Wall -Wextra E230.c conversao.c -o tabela
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0039-modulos/E230.c
@@ -2889,8 +2775,7 @@ b) Você corrigiu um erro dentro de uma função de treino.c. Quais comandos
 c) Você mudou um protótipo em treino.h. Quais comandos precisa repetir?
 d) Por que o treino.h não aparece em nenhum comando?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. gcc -c arquivo.c gera arquivo.o; para ligar, passe os .o e -o nome.
 2. Quem usa o .h precisa ser recompilado quando ele muda.
@@ -2900,8 +2785,6 @@ d) Por que o treino.h não aparece em nenhum comando?
    c) compilar os dois .c e ligar, porque os dois incluem o .h.
    d) porque o .h não é compilado sozinho: ele é colado pelo #include
    dentro de cada .c. (Ferramentas como o make fazem essas contas por você.)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0039-modulos/E231.c
@@ -2915,8 +2798,7 @@ definição embaixo (como se estivesse no desconto.c). Rode e leia a mensagem.
 Responda: quem reclamou, o compilador ou o ligador? Por que o compilador
 deixou passar? Conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Procure "undefined reference" na mensagem.
 2. Compare letra por letra o nome do protótipo com o nome da definição.
@@ -2925,8 +2807,6 @@ deixou passar? Conserte.
    e o protótipo existe, então ele confia e deixa o buraco. A definição se
    chama aplica_desconto: é outra função, e ninguém definiu
    aplicar_desconto. Acertando o nome: "Tênis: R$ 239.92".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0039-modulos/E232.c
@@ -2977,8 +2857,7 @@ d) Se o main.c tivesse "int partidas = 0;" em vez de "extern int partidas;",
 
 e) Qual a vantagem de gols ser static e ter a função total_gols?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. static fora de função: o nome não sai do arquivo. extern: "está definida
    em outro arquivo".
@@ -2989,8 +2868,6 @@ e) Qual a vantagem de gols ser static e ter a função total_gols?
    d) duas definições de partidas: o ligador dá "multiple definition of
    partidas". e) ninguém de fora consegue mudar o placar sem passar por
    marcar_gol: o módulo controla o próprio dado.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0039-modulos/E233.c
@@ -3028,8 +2905,7 @@ Operações: 3
 Por fim, responda num comentário: o que você escreveria no cofrinho.h de
 verdade (com o include guard), e o que ficaria só no cofrinho.c?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. static double saldo_atual = 0; e static int contador = 0; no bloco de baixo.
    Para usar os nomes no main, os protótipos de cima bastam.
@@ -3038,8 +2914,6 @@ verdade (com o include guard), e o que ficaria só no cofrinho.c?
    contam). No .h: o guard COFRINHO_H, o #include <stdbool.h> e os quatro
    protótipos. No .c: o #include "cofrinho.h", as duas variáveis static e
    os corpos das funções.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0039-modulos/E234.c
@@ -3253,15 +3127,12 @@ printf("%d\n", METADE(10 + 4));
 printf("%d\n", 100 + TAXA * 2);
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Escreva a troca de texto literalmente, sem parênteses que não existem.
 2. Depois aplique a precedência normal: * e / antes de + e -.
 3. Resposta esperada: 4 + 4 = 8; 3 * 4 + 4 = 16 (e não 24); ((10 + 4) / 2)
    = 7; 100 + 10 * 2 = 120.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0040-preprocessador/E235.c
@@ -3290,15 +3161,12 @@ ENTRE(25, 10, 20) = 0
 100 / ABS(-5 * 2) = 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Use o ternário: ((a) > (b) ? (a) : (b)).
 2. Parênteses em cada parâmetro e em volta de tudo. O último teste quebra se
    faltar o par de fora.
 3. Resposta esperada: a saída acima. ABS(x) fica ((x) < 0 ? -(x) : (x)).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0040-preprocessador/E236.c
@@ -3317,8 +3185,7 @@ Desconto: R$ 3.50
 Dois combos: R$ 60.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O que vem depois do nome, no #define, é colado INTEIRO no lugar, inclusive
    um ";" perdido.
@@ -3327,8 +3194,6 @@ Dois combos: R$ 60.00
    printf ele vira "preco * 0.10;", e o compilador reclama de um ")"
    esperado) e escrever "#define PRECO_COMBO (25 + 5)": sem os parênteses,
    dois combos davam 55.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0040-preprocessador/E237.c
@@ -3361,15 +3226,12 @@ Saída esperada sem MODO_TESTE:
 Total: R$ 1050.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Parcela k: 250 * (1 + 0.02 * k).
 2. O printf do teste fica entre #ifdef MODO_TESTE e #endif, dentro do for.
 3. Resposta esperada: as duas saídas acima. Sem MODO_TESTE, o printf do teste
    nem chega ao compilador: rode gcc -E e confira.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0040-preprocessador/E238.c
@@ -3442,8 +3304,7 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Expanda MAIOR(x++, y) à mão: ((x++) > (y) ? (x++) : (y)). Quantos x++
    rodam quando a comparação é verdadeira?
@@ -3451,8 +3312,6 @@ int main(void) {
 3. Resposta esperada: m = 6, x = 7 / m = 5, x = 6 / m = 40, chamadas = 3 /
    m = 40, chamadas = 2. (No primeiro, x++ compara 5, vira 6; o segundo x++
    devolve 6 e vira 7.)
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0040-preprocessador/E239.c
@@ -3481,8 +3340,7 @@ FALHOU: com_desconto(150) == 150 (linha 42)
 Falhas: 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma macro de várias linhas termina cada linha com "\". Dá para escrever
    numa linha só: #define CONFERIR(cond) if (cond) printf(...); else { ... }
@@ -3492,8 +3350,6 @@ Falhas: 1
 3. Resposta esperada: 4 ok, 1 falha (com 150 o certo é 135). É o que o
    assert.h faz: assert(cond) para o programa com o texto e a linha da
    condição que falhou.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0040-preprocessador/E240.c
@@ -3892,16 +3748,13 @@ Para testar sem digitar:
 printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E241.c
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. do { printf(...); lidos = scanf("%d", &valor); if (lidos != 1) return min; }
    while (valor < min || valor > max);
 2. A mensagem usa os parâmetros: printf("Valor entre %d e %d: ", min, max).
 3. Resposta esperada: com a entrada acima, "Nota 8, quantidade 3". A mesma
    função serve para as duas leituras: é para isso que parâmetros existem.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E241.c
@@ -3922,16 +3775,13 @@ Pessoa 2: IMC 27.8 (acima)
 Pessoa 3: IMC 17.6 (abaixo)
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Copie um bloco, troque os números pelos parâmetros, e apague os outros dois.
 2. mostrar_imc chama imc. Quem decide "abaixo/normal/acima" pode ser uma
    terceira função, se você quiser.
 3. Resposta esperada: a mesma saída, com o main de três linhas. Se a regra
    mudar (o limite de 25 virar 24.9), agora você muda num lugar só.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E242.c
@@ -3959,15 +3809,12 @@ Saída esperada:
 29/02/2023: data inválida
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. dias_no_mes com switch: 4, 6, 9 e 11 têm 30; 2 tem 28 ou 29; o resto, 31.
 2. dia_do_ano: um for de 1 até mes - 1 somando dias_no_mes, mais o dia.
    Para "data inválida", confira dia <= dias_no_mes(mes, ano) antes.
 3. Resposta esperada: 291, 61, 366 e inválida (2023 não é bissexto).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E243.c
@@ -4033,16 +3880,13 @@ int main(void) {
 }
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. id é static: 11, depois 12 e 13.
 2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0), e cada uma soma 1 na global.
 3. Resposta esperada: 11, 25, 10, 5, 12. O parâmetro total de altera esconde
    a global: o 99 vai para a cópia, e o retorno é jogado fora.
    DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E244.c
@@ -4072,16 +3916,13 @@ Saída esperada:
 10 na base 20: base inválida
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. char é número: '0' + 7 é '7', e 'A' + (valor - 10) dá as letras.
 2. em_base: se n < base, imprima digito(n); senão em_base(n / base, base) e
    depois digito(n % base). Imprimir com %c.
 3. Resposta esperada: a saída acima. Confira o 7EA: 7 * 256 + 14 * 16 + 10
    = 2026.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E245.c
@@ -4110,8 +3951,7 @@ Saída esperada:
 Responda num comentário: por que o número de chamadas é quase o dobro do
 resultado? O que se repete, como no Fibonacci?
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Caso base: if (c == 0 || l == 0) return 1;
 2. Cada chamada que não é borda gera duas. As folhas da árvore de chamadas
@@ -4121,8 +3961,6 @@ resultado? O que se repete, como no Fibonacci?
    - 1. As mesmas esquinas são recalculadas muitas vezes; guardar as
    respostas numa tabela (memoização) resolve, e isso pede vetores, o
    assunto do próximo módulo.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E246.c

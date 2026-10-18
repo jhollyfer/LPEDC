@@ -35,7 +35,7 @@ trocas** e conferir que a teoria bate com a prática.
 4. Siga o **fluxograma** com o dedo.
 5. Rode os exemplos. Mude os vetores, compare as contagens.
 6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 

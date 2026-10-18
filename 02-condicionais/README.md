@@ -39,7 +39,7 @@ de decisões que parecem certas. Os avisos do compilador viram aliados: o
 4. Rode os exemplos. Mude um valor para cair no outro ramo, quebre de
    propósito, rode de novo.
 5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam escondidas: abra só se travar.
+   As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
 
@@ -279,15 +279,12 @@ Gasolina: 6.09
 Etanol compensa? 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. 70% da gasolina é gasolina * 0.7.
 2. bool compensa = etanol <= gasolina * 0.7; (não esqueça o stdbool.h).
 3. Resposta esperada: com 4.19 e 6.09 mostra 1 (o limite é 4.263); com
    4.59 e 6.09 mostra 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0017-relacionais/E097.c
@@ -310,14 +307,11 @@ printf("%d ", i != 2 * 2);
 printf("%d\n", 'b' > 'a');
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Cada comparação vale 1 (verdade) ou 0 (mentira).
 2. A conta 2 * 2 é feita antes do !=: os aritméticos vêm primeiro.
 3. Resposta esperada: 1 1 0 1 0 1
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0017-relacionais/E098.c
@@ -336,15 +330,12 @@ Frete: R$ 24.90
 A pagar: R$ 174.90
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. (total < 199) vale 1 quando o frete é cobrado e 0 quando não é.
 2. Multiplique essa comparação pelo valor do frete.
 3. Resposta esperada: 150 → frete 24.90, paga 174.90; 210 → frete 0.00,
    paga 210.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0017-relacionais/E099.c
@@ -357,16 +348,13 @@ programa abaixo diz que ela NÃO pagou o valor exato. Rode, explique o
 motivo e conserte de dois jeitos: (a) com uma tolerância usando fabs;
 (b) trabalhando com centavos em int.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Mostre pago com printf("%.20f") e veja o que tem lá dentro.
 2. (a) fabs(pago - preco) < 1e-9; (b) int preco = 70; int pago = 7 * 10;
 3. Resposta esperada: 0.1 não é exato em binário e 0.1 * 7 dá
    0.70000000000000006661, diferente de 0.7. Consertado, mostra
    "Pagou o valor exato? 1".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0017-relacionais/E100.c
@@ -387,16 +375,13 @@ printf("%d\n", 2 == 2 == 2);
 printf("%d\n", -1 < 0 < 1);
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O C avalia da esquerda para a direita: 5 > 4 > 3 é (5 > 4) > 3.
 2. A primeira comparação já virou 0 ou 1. A segunda compara esse número.
 3. Resposta esperada: 0, 1, 1, 0, 0. Por exemplo, 2 == 2 == 2 vira
    1 == 2, que é 0. Para "entre" de verdade, você vai precisar do &&
    (assunto 0018).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0017-relacionais/E101.c
@@ -415,15 +400,12 @@ Desconto: 5%
 A pagar: R$ 142.50
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Cada faixa alcançada soma 5: 5 * (total >= 100) + 5 * (total >= 300).
 2. Para mostrar o símbolo de porcentagem no printf, escreva %%.
 3. Resposta esperada: 80 → 0%, paga 80.00; 150 → 5%, paga 142.50;
    400 → 10%, paga 360.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0017-relacionais/E102.c
@@ -618,14 +600,11 @@ printf("%d ", a && b || c);
 printf("%d\n", a && (b || !c));
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Troque cada variável por 0 ou 1 antes de calcular.
 2. Sem parênteses, o && é feito antes do ||: a && b || c é (a && b) || c.
 3. Resposta esperada: 0 1 0 1 1 0
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0018-logicos/E103.c
@@ -644,14 +623,11 @@ Dentro da faixa? 1
 Alarme? 0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. "Entre 2 e 8" no C é temp >= 2 && temp <= 8. Nada de 2 <= temp <= 8.
 2. O alarme é !dentro.
 3. Resposta esperada: 5 → 1 e 0; 9.5 → 0 e 1; 2 → 1 e 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0018-logicos/E104.c
@@ -669,16 +645,13 @@ Ano: 2024
 Bissexto? 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. "Divisível por 4" é ano % 4 == 0; "não divisível por 100" é
    ano % 100 != 0.
 2. (divisível por 4 E não por 100) OU divisível por 400. Use parênteses
    para deixar claro, mesmo que o && já venha antes do ||.
 3. Resposta esperada: 1900 → 0; 2000 → 1; 2023 → 0; 2024 → 1.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0018-logicos/E105.c
@@ -699,15 +672,12 @@ barrado (original):  1
 barrado (De Morgan): 1
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. !(a && b) vira !a || !b.
 2. !(idade >= 18) é idade < 18. E !tem_ingresso fica como está.
 3. Resposta esperada: barrado = idade < 18 || !tem_ingresso.
    Testes: 20 e 1 → 0; 16 e 1 → 1; 30 e 0 → 1.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0018-logicos/E106.c
@@ -728,15 +698,12 @@ bool r3 = (b++ > 0) || (a++ > 5);
 printf("%d %d %d %d %d\n", r1, r2, r3, a, b);
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Faça um teste de mesa com as colunas a, b, r1, r2, r3.
 2. Em r1, a primeira parte é 0 > 0. Precisa olhar a segunda? Em r2, a
    primeira parte é 1 > 0. Precisa olhar a segunda?
 3. Resposta esperada: 0 1 0 3 1 (o b++ de r1 e o de r2 nunca rodam).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0018-logicos/E107.c
@@ -750,8 +717,7 @@ Teste com 14 (deveria dar 1 e 1) e com 25 (deveria dar 0 e 0). Explique
 cada erro e conserte. Lembrete: n & 1 pega o último bit de n em
 binário: 0 para par, 1 para ímpar (o & bit a bit vem no assunto 0070).
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Leia os avisos do gcc: eles apontam exatamente as duas linhas.
 2. Na tabela de precedência, o == fica ACIMA do &. E 10 < n < 20 é
@@ -759,8 +725,6 @@ binário: 0 para par, 1 para ímpar (o & bit a bit vem no assunto 0070).
 3. Resposta esperada: n & 1 == 0 é n & (1 == 0), que é n & 0, sempre 0;
    o certo é (n & 1) == 0. 10 < n < 20 compara 0 ou 1 com 20, sempre 1;
    o certo é n > 10 && n < 20. Consertado: 14 → 1 e 1; 25 → 0 e 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0018-logicos/E108.c
@@ -939,15 +903,12 @@ Temperatura: 38.2 °C
 Febre! Procure um médico.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um printf antes do if (roda sempre) e outro dentro dele.
 2. "Passar de" é >, não >=.
 3. Resposta esperada: 38.2 → as duas linhas; 36.5 → só
    "Temperatura: 36.5 °C"; 37.5 → só a primeira linha também.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0019-if/E109.c
@@ -965,14 +926,11 @@ Nota da prova: 9.5
 Nota final: 10.0
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Primeiro some o bônus. Depois pergunte.
 2. Dentro do if, uma atribuição só: nota = 10.
 3. Resposta esperada: 9.5 → 10.0; 7.2 → 8.2; 9.0 → 10.0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0019-if/E110.c
@@ -985,16 +943,13 @@ abaixo mostra "Entrada proibida" até para quem tem 25 anos. Rode com 25,
 leia o aviso do compilador (ele existe de propósito), explique o erro e
 conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Olhe com atenção o fim da linha do if.
 2. O que fica sendo o corpo do if? E o bloco entre chaves, de quem é?
 3. Resposta esperada: o ";" depois de if (idade < 18) é uma instrução
    vazia e vira o corpo do if; o bloco embaixo roda sempre. Tirando o ";",
    25 mostra só "Bom filme!" e 15 mostra as duas mensagens.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0019-if/E111.c
@@ -1011,16 +966,13 @@ Orçamentos: 3200 3790 3450
 Maior orçamento: R$ 3790
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece supondo que o primeiro é o maior: int maior = a;
 2. Depois, um if para cada um dos outros: se for maior que "maior",
    ele passa a ser o maior.
 3. Resposta esperada: 3200 3790 3450 → 3790; 5000 4100 4999 → 5000;
    10 20 30 → 30.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0019-if/E112.c
@@ -1047,15 +999,12 @@ if (n & 1 == 0)
 printf("fim\n");
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Sem chaves, cada if manda só na primeira instrução depois dele.
 2. n % 2 vale 1 (verdade). n - 7 vale 0, e !0 vale 1. E o == vem antes
    do & (reveja o WARNING do 0018).
 3. Resposta esperada: sete ímpar igual fim
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0019-if/E113.c
@@ -1074,15 +1023,12 @@ Consumo (m³): 18
 Conta: R$ 94.60
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com valor = 45.00, que todo mundo paga.
 2. Primeiro if: se consumo > 10, some (consumo - 10) * 6.20. Segundo if:
    se consumo > 30, multiplique o valor por 1.15. A ordem importa.
 3. Resposta esperada: 8 → R$ 45.00; 18 → R$ 94.60; 35 → R$ 230.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0019-if/E114.c
@@ -1257,15 +1203,12 @@ Idade: 16
 Faltam 2 ano(s) para a maioridade.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O que falta é 18 - idade.
 2. Um if (idade >= 18) com else.
 3. Resposta esperada: 16 → "Faltam 2 ano(s) para a maioridade.";
    18 → "Maior de idade."; 40 → "Maior de idade.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0020-if-else/E115.c
@@ -1282,14 +1225,11 @@ Salário: 1800
 Novo salário: R$ 1980.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. "Até 2000, inclusive" é salario <= 2000.
 2. Em cada ramo, multiplique por 1.10 ou por 1.06.
 3. Resposta esperada: 1800 → 1980.00; 2000 → 2200.00; 2500 → 2650.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0020-if-else/E116.c
@@ -1301,8 +1241,7 @@ O caixa eletrônico bloqueia o cartão na 3ª senha errada. Mas este programa
 bloqueia logo na primeira! Rode com 1, leia o aviso do compilador, explique
 os DOIS estragos que o erro causa e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Compare o "Tentativas registradas" com o número que você digitou.
 2. Quantos sinais de igual tem a condição do if?
@@ -1310,8 +1249,6 @@ os DOIS estragos que o erro causa e conserte.
    e o if testa esse 3, que é sempre verdade (estrago 2). Com ==, a
    entrada 1 mostra "Senha errada. Restam 2 tentativa(s)." e
    "Tentativas registradas: 1"; a entrada 3 mostra "Cartão bloqueado.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0020-if-else/E117.c
@@ -1331,15 +1268,12 @@ Limite da parcela: R$ 1050.00
 Negado: a parcela passa do limite.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. limite = salario * 0.35. Mostre o limite antes do if.
 2. Parcela igual ao limite ainda é aprovada: use <=.
 3. Resposta esperada: 3000 e 1200 → limite 1050.00, negado;
    3000 e 900 → limite 1050.00, "Aprovado!".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0020-if-else/E118.c
@@ -1365,15 +1299,12 @@ if (b = 2) {
 printf("%d %d\n", a, b);
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Com um sinal só, b recebe 2 e o if testa o 2.
 2. Com dois sinais, o if compara 0 com 2 e b não muda.
 3. Resposta esperada: com "b = 2" mostra "Y 3 2"; com "b == 2" mostra
    "Z 3 0".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0020-if-else/E119.c
@@ -1392,16 +1323,13 @@ x1 = 3.00
 x2 = 2.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. sqrt está no math.h (assunto 0015). O rodar já liga com -lm.
 2. x1 = (-b + sqrt(delta)) / (2 * a). Os parênteses em volta de 2 * a
    são obrigatórios.
 3. Resposta esperada: 1 -5 6 → 3.00 e 2.00; 1 -4 4 → 2.00 e 2.00;
    1 2 5 → "Sem raízes reais."; 2 -3 -2 → 2.00 e -0.50.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0020-if-else/E120.c
@@ -1594,15 +1522,12 @@ Idade: 45
 Mensalidade: R$ 520.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Teste em ordem crescente: idade <= 18, depois idade <= 38...
 2. Quando chega no segundo teste, você já sabe que a idade passou de 18.
 3. Resposta esperada: 10 → 150.00; 18 → 150.00; 19 → 280.00;
    45 → 520.00; 59 → 900.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0021-else-if/E121.c
@@ -1619,14 +1544,11 @@ Saldo: -35.80
 Conta no vermelho.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Três caminhos: if, else if, else.
 2. Qual caso sobra para o else, sem precisar de teste?
 3. Resposta esperada: 120.50 → azul; -35.80 → vermelho; 0 → zerada.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0021-else-if/E122.c
@@ -1656,16 +1578,13 @@ a) a = -1, b = 5      b) a = 2, b = -1      c) a = 2, b = 3
 
 Por fim, coloque chaves para que o else fique de fato com o if (a > 0).
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O else pertence ao if mais próximo que ainda não tem else.
 2. Com a = -1, o if de fora é falso, e o else não é dele.
 3. Resposta esperada: a) só "C"; b) "B" e "C"; c) "A" e "C". Com as
    chaves em volta do if (b > 0), o caso a) passa a mostrar "B" e "C", e o
    caso b) mostra só "C".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0021-else-if/E123.c
@@ -1677,16 +1596,13 @@ O conceito deveria ser A (nota 9 ou mais), B (7 ou mais), C (5 ou mais)
 ou D (abaixo de 5). Mas quem tirou 9.5 recebeu C. O programa compila sem
 nenhum aviso: o erro é de lógica. Ache e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Com 9.5, qual é a primeira condição verdadeira?
 2. O else if para no primeiro Sim. Uma nota alta também é >= 5.
 3. Resposta esperada: as condições estão na ordem errada; teste primeiro
    >= 9, depois >= 7, depois >= 5. Consertado: 9.5 → A; 7.0 → B;
    5.5 → C; 3.0 → D.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0021-else-if/E124.c
@@ -1705,16 +1621,13 @@ Lados: 5 5 8
 Triângulo isósceles.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Não forma se a >= b + c ou b >= a + c ou c >= a + b.
 2. Depois, teste o equilátero ANTES do isósceles (todo equilátero também
    tem dois lados iguais).
 3. Resposta esperada: 5 5 5 → equilátero; 5 5 8 → isósceles;
    3 4 5 → escaleno; 1 2 3 → "Não forma triângulo." (1 + 2 não passa de 3).
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0021-else-if/E125.c
@@ -1744,16 +1657,13 @@ Salário: 5000
 Imposto: R$ 412.50
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma cadeia de else if escolhe a faixa mais alta que o salário alcança.
 2. As faixas de baixo, quando cheias, valem um valor fixo: a faixa de 7.5%
    cheia dá 75.00 e a de 15% cheia dá 225.00. Some só a parte da última.
 3. Resposta esperada: 1800 → 0.00; 2500 → 37.50; 3500 → 150.00;
    5000 → 412.50.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0021-else-if/E126.c
@@ -1930,15 +1840,12 @@ Idade: 15
 Ingresso: R$ 20.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O formato é: variavel = condição ? valor1 : valor2;
 2. A declaração pode ir junto: double preco = ...;
 3. Resposta esperada: double preco = idade >= 18 ? 40.0 : 20.0;
    15 → 20.00; 30 → 40.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0022-ternario/E127.c
@@ -1955,15 +1862,12 @@ Quantidade: 5
 5 mensagens novas
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Duas palavras mudam: mensagem/mensagens e nova/novas.
 2. printf("%d %s %s\n", n, n == 1 ? ... : ..., n == 1 ? ... : ...);
 3. Resposta esperada: 1 → "1 mensagem nova"; 5 → "5 mensagens novas";
    0 → "0 mensagens novas".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0022-ternario/E128.c
@@ -1983,15 +1887,12 @@ d) k ? 1 : i ? 2 : 3
 e) j % 2 ? "ímpar" : "par"
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Lembre: 0 é falso, o resto é verdade.
 2. Em c), o || vem antes do ?: na precedência. Em d), o ternário de dentro
    é o "senão" do de fora: k ? 1 : (i ? 2 : 3).
 3. Resposta esperada: a) 5; b) 3; c) 7; d) 2; e) ímpar.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0022-ternario/E129.c
@@ -2008,15 +1909,12 @@ Notas: 7 10 9
 Maior nota: 10
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Faça em dois passos: o maior entre a e b, depois o maior entre esse
    resultado e c.
 2. int maior = a > b ? a : b;  e depois  maior = c > maior ? c : maior;
 3. Resposta esperada: 7 10 9 → 10; 8 3 5 → 8; 4 6 9 → 9.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0022-ternario/E130.c
@@ -2029,8 +1927,7 @@ R$ 199, grátis a partir disso). Com subtotal 150, o programa mostra
 "Total: R$ 0.00"! Compila sem nenhum aviso. Explique o que o C entende
 nessa linha e conserte.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Quem é feito primeiro: o +, o >= ou o ?: ?
 2. Monte os parênteses que o C coloca sozinho.
@@ -2038,8 +1935,6 @@ nessa linha e conserte.
    e 300 >= 199 dá 0.0. O certo é
    subtotal + (subtotal >= 199 ? 0.0 : 19.90). Consertado: 150 → 169.90;
    250 → 250.00.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0022-ternario/E131.c
@@ -2057,15 +1952,12 @@ Hora (0 a 23): 13
 1 PM
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. AM vai de 0 a 11; PM de 12 a 23: hora < 12 ? "AM" : "PM".
 2. O número é hora % 12, exceto quando isso dá 0: aí é 12.
 3. Resposta esperada: 0 → 12 AM; 9 → 9 AM; 12 → 12 PM; 13 → 1 PM;
    23 → 11 PM; 24 → Hora inválida.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0022-ternario/E132.c
@@ -2294,15 +2186,12 @@ Dia (1 a 7): 4
 Quarta-feira
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Um case para cada número, cada um com seu printf e seu break.
 2. O default cuida do inválido.
 3. Resposta esperada: 1 → Domingo; 4 → Quarta-feira; 7 → Sábado;
    9 → Dia inválido.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0023-switch/E133.c
@@ -2321,16 +2210,13 @@ Classe (A, B ou C): b
 Novo salário: R$ 1150.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Leia a letra com scanf(" %c", &classe): o espaço antes do %c pula o
    Enter que sobrou da leitura do salário.
 2. Empilhe os case: case 'B': case 'b': fazem a mesma coisa.
 3. Resposta esperada: 1000 e b → 1150.00; 2000 e A → 2200.00;
    1500 e c → 1800.00; 1000 e D → Classe inválida.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0023-switch/E134.c
@@ -2357,8 +2243,7 @@ case 7:
 printf("fim\n");
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O switch pula para o rótulo certo (ou para o default, esteja ele onde
    estiver) e desce até um break ou até o fim.
@@ -2366,8 +2251,6 @@ printf("fim\n");
    embaixo.
 3. Resposta esperada: 2 → "dois cinco fim"; 5 → "cinco fim";
    7 → "sete fim"; 9 → "outro sete fim".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0023-switch/E135.c
@@ -2385,16 +2268,13 @@ Conta: 20 / 4
 = 5.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. scanf("%lf %c %lf", &a, &op, &b) lê os três pedaços. Confira se o
    retorno é 3.
 2. Dentro do case '/', um if para o divisor zero.
 3. Resposta esperada: 20 / 4 → = 5.00; 7 * 1.5 → = 10.50;
    3 - 8 → = -5.00; 7 / 0 → Divisão por zero.; 2 ^ 3 → Operador inválido.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0023-switch/E136.c
@@ -2413,8 +2293,7 @@ Pizza (M, C ou P): m
 Muçarela: R$ 45.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. O que faz a execução sair de um switch?
 2. Para as minúsculas, empilhe: case 'M': case 'm':
@@ -2422,8 +2301,6 @@ Muçarela: R$ 45.00
    -Wimplicit-fallthrough avisa "this statement may fall through").
    Consertado: M ou m → só "Muçarela: R$ 45.00"; P → só
    "Portuguesa: R$ 55.00"; X → só "Opção inválida.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0023-switch/E137.c
@@ -2446,8 +2323,7 @@ Lavagem: R$ 30.00
 Total: R$ 70.00
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Comece com total = 0. Cada case mostra o seu serviço e soma o preço.
 2. Ponha os case na ordem 3, 2, 1; só o 1 tem break. Escreva o comentário
@@ -2455,8 +2331,6 @@ Total: R$ 70.00
    não avisa.
 3. Resposta esperada: 3 → R$ 70.00; 2 → aspiração e lavagem, R$ 45.00;
    1 → só lavagem, R$ 30.00; 4 → "Pacote inválido.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0023-switch/E138.c
@@ -2763,15 +2637,12 @@ IMC: 22.86
 Peso normal
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Guarda primeiro: if (scanf(...) != 2 || altura <= 0).
 2. Depois, uma cadeia de else if em ordem crescente.
 3. Resposta esperada: 70 1.75 → 22.86, Peso normal; 50 1.70 → 17.30,
    Abaixo do peso; 95 1.80 → 29.32, Sobrepeso; 70 0 → Dados inválidos.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E139.c
@@ -2791,15 +2662,12 @@ Valor do saque: 120
 Saque de R$ 120. Saldo: R$ 380
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Uma cadeia de if / else if / else, com os erros primeiro.
 2. "Não é múltiplo de 10" é saque % 10 != 0.
 3. Resposta esperada: 120 → saque feito, saldo 380; 125 → notas de 10;
    600 → saldo insuficiente; -20 → valor inválido; 500 → saldo 0.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E140.c
@@ -2817,8 +2685,7 @@ Data (dd/mm/aaaa): 29/02/2023
 Data inválida.
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. scanf("%d/%d/%d", &dia, &mes, &ano) lê as barras também. Confira o
    retorno (3).
@@ -2826,8 +2693,6 @@ Data inválida.
    A046) e um default marca o mês inválido. Depois, um if confere o dia.
 3. Resposta esperada: 29/02/2023 → inválida; 29/02/2024 → válida;
    31/04/2025 → inválida; 15/13/2025 → inválida; 31/12/2025 → válida.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E141.c
@@ -2847,8 +2712,7 @@ Horário de pico? sim
 Tarifa: R$ 14.40
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. No case 3, leia o número de eixos antes de calcular (declare
    int eixos lá no começo do main, junto com categoria).
@@ -2856,8 +2720,6 @@ Tarifa: R$ 14.40
    tarifa = pico ? tarifa * 1.2 : tarifa;
 3. Resposta esperada: carro às 18h → 14.40; caminhão com 4 eixos às 10h
    → 48.00; moto às 19h → 7.20; categoria 5 → "Categoria inválida.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E142.c
@@ -2874,8 +2736,7 @@ recebe "Boa sessão!".
 Este programa tem QUATRO erros, todos pegadinhas do módulo. Rode, leia os
 avisos do compilador, ache e conserte os quatro.
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Os quatro: um sinal de igual, um ponto e vírgula, uma palavra que falta
    no switch e um else que mudou de dono.
@@ -2885,8 +2746,6 @@ avisos do compilador, ache e conserte os quatro.
    chaves no if de dentro. Consertado: 30 T → R$ 20.00 e "Boa sessão!";
    8 S → R$ 20.00 e o aviso; 65 Q → R$ 15.00 e "Boa sessão!";
    0 → "Idade inválida.".
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E143.c
@@ -2904,8 +2763,7 @@ Data (dd/mm/aaaa): 28/02/2024
 Dia seguinte: 29/02/2024
 ```
 
-<details>
-<summary>Dicas</summary>
+**Dicas:**
 
 1. Descubra quantos dias tem o mês (switch, como no A046).
 2. Se dia < dias_do_mes, só soma 1 no dia. Senão, o dia vira 1 e o mês
@@ -2913,8 +2771,6 @@ Dia seguinte: 29/02/2024
 3. Resposta esperada: 28/02/2024 → 29/02/2024; 28/02/2025 → 01/03/2025;
    30/04/2025 → 01/05/2025; 31/12/2025 → 01/01/2026;
    15/08/2025 → 16/08/2025.
-
-</details>
 
 ```bash
 ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E144.c
