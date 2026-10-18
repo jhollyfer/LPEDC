@@ -2,9 +2,10 @@
 // Exercício E053 · ★★★
 //
 // Este programa compila, mas o gcc mostra avisos. Pior: cada compilador
-// pode mostrar uma saída diferente. Rode, leia os avisos e explique por que
-// essas linhas não têm resposta certa. Depois reescreva para ficar claro e
-// previsível, com a intenção indicada em cada comentário.
+// pode mostrar uma saída diferente. Rode e leia os avisos. Depois conserte:
+// reescreva as duas linhas marcadas para ficarem claras e previsíveis, com
+// a intenção indicada em cada comentário, e rode de novo até não sobrar
+// aviso.
 //
 //   Saída esperada (depois de consertar):
 //   senha 1235

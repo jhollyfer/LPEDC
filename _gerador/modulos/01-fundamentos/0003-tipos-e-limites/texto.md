@@ -102,6 +102,6 @@ baixo, sem avisar ninguém:
 
 > [!NOTE]
 > **Pergunta para você:** se a catraca começasse em 65.530 e passassem 10
-> torcedores, o que o painel mostraria? Mude o A005 e confira.
+> torcedores, o que o painel mostraria? Mude o programa acima e confira.
 
 {{pratique}}

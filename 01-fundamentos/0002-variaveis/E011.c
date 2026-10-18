@@ -2,9 +2,9 @@
 // Exercício E011 · ★★★
 //
 // Este programa tem TRÊS erros e o gcc mostra um aviso para cada um (numa
-// versão mais nova do gcc, um deles já vira erro). Rode, leia os avisos, diga
-// o que cada um quer dizer e conserte. O jogo terminou 2 x 1 para o time da
-// casa, com público de 45000 pessoas.
+// versão mais nova do gcc, um deles já vira erro). Conserte o código: rode,
+// leia os avisos, corrija um por vez e rode de novo até não sobrar aviso. O
+// jogo terminou 2 x 1 para o time da casa, com público de 45000 pessoas.
 //
 //   Saída esperada (depois de consertar):
 //   Placar: 2 x 1

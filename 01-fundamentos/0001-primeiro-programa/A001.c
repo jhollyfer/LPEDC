@@ -1,23 +1,34 @@
-// A001 · O aviso da padaria
+// A001 · Quem separa as instruções é o ponto e vírgula
 
-// Aviso do painel da padaria
+/*
+   Para o compilador, quebra de linha, espaço e recuo são só enfeite.
+   O que termina uma instrução é o ; e o que agrupa é o par de chaves.
+*/
 #include <stdio.h>
 
 int main(void) {
-    printf("Padaria Pão Quente\n");
-    printf("Pão francês saindo às 17h\n");
-    printf("R$ 0,90 a unidade\n");
-    return 0; // 0 = terminou bem
+    // duas instruções na mesma linha: o ; separa uma da outra
+    printf("Banca do Seu Zé\n"); printf("Frutas e verduras\n");
+
+    // uma instrução espalhada em três linhas: ela só acaba no ;
+    printf(
+        "Abacaxi: R$ 7,00\n"
+    );
+
+    printf("\n"); // um printf só com \n deixa uma linha em branco
+
+    printf("Banana: R$ 5,50 a dúzia\n"); /* comentário de bloco no fim */
+    printf(/* comentário até no meio */ "Laranja: R$ 4,00 o kg\n");
+    return 0;
 }
 // Saída:
-// Padaria Pão Quente
-// Pão francês saindo às 17h
-// R$ 0,90 a unidade
+// Banca do Seu Zé
+// Frutas e verduras
+// Abacaxi: R$ 7,00
 //
-// Experimente no terminal, dentro desta pasta:
-//   gcc -E A001.c | wc -l     quantas linhas depois do pré-processador
-//   gcc -S A001.c             gera A001.s (assembly): procure "call"
-//   gcc -c A001.c             gera A001.o (código objeto)
-//   gcc A001.o -o padaria     liga e gera o executável
-//   ./padaria
-//   echo $?                   mostra o 0 do return
+// Banana: R$ 5,50 a dúzia
+// Laranja: R$ 4,00 o kg
+//
+// O recuo de 4 espaços também é só para quem lê: apague todos e rode de
+// novo. A saída é a mesma. Agora apague o ; do primeiro printf e veja o gcc
+// reclamar do printf seguinte, que está na mesma linha.

@@ -1,9 +1,9 @@
 // 0001 · O primeiro programa
 // Exercício E003 · ★★☆
 //
-// Este programa tem QUATRO erros e não compila de propósito. Rode com o
-// rodar, leia a primeira mensagem, conserte, rode de novo e repita até
-// funcionar. Para cada erro, anote o que o gcc disse e qual estação
+// Este programa tem QUATRO erros e não compila de propósito. Conserte o
+// código: rode com o rodar, leia a primeira mensagem, conserte, rode de novo
+// e repita até sair a saída esperada. A cada rodada, repare qual estação
 // reclamou: compilador ou ligador.
 //
 //   Saída esperada (depois de consertar):

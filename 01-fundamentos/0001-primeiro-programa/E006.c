@@ -1,34 +1,37 @@
 // 0001 · O primeiro programa
 // Exercício E006 · ★★★
 //
-// Para cada situação, diga quem reclama: o pré-processador, o compilador, o
-// ligador, ou ninguém (o erro só aparece quando o programa roda). Depois
-// provoque cada uma no seu E001 e confira a mensagem.
+// O letreiro do ônibus abaixo tem um erro para cada tipo de reclamação: um
+// que o pré-processador pega, um do compilador, um do ligador e um que
+// ninguém pega (o programa roda e mostra o valor errado: a tarifa certa é
+// R$ 4,90). Conserte o código, um erro por vez. A cada rodada, repare qual
+// estação parou a linha de montagem, e só pare quando a saída for
+// exatamente a esperada.
 //
-//   a) #include <stdoi.h>
-//   b) printf("Linha 077\n")   (sem o ponto e vírgula)
-//   c) int Main(void) { ... }  (M maiúsculo)
-//   d) prinft("Via Av. Brasil\n");
-//   e) printf("Tarifa: R$ 9,40\n"); quando a tarifa certa é R$ 4,90
-//   f) o } final apagado
+//   Saída esperada (depois de consertar):
+//   Linha 077 - Terminal Centro
+//   Via Av. Brasil
+//   Tarifa: R$ 4,90
 //
 // Dicas:
-// 1. O pré-processador só cuida das linhas com #.
-// 2. O ligador procura funções pelo nome, inclusive a main.
-// 3. O compilador confere a gramática, mas não sabe qual é a tarifa certa.
-// 4. Resposta esperada: a) pré-processador ("stdoi.h: No such file or
-//    directory"); b) compilador ("expected ';'"); c) ligador: o código
-//    compila, mas não existe main ("undefined reference to `main'"); d)
-//    ligador ("undefined reference to `prinft'", depois do aviso de
-//    "implicit declaration"); e) ninguém: compila, roda e mostra o valor
-//    errado, um erro de execução (de lógica); f) compilador ("expected
-//    declaration or statement at end of input").
+// 1. O pré-processador só cuida das linhas com #. O compilador para no
+//    primeiro erro de gramática. O ligador procura funções pelo nome,
+//    inclusive a main.
+// 2. Depois que tudo compilar, compare a saída com a esperada, letra por
+//    letra: o compilador não sabe qual é a tarifa certa.
+// 3. Resposta esperada: (1) stdoi.h vira stdio.h ("No such file or
+//    directory", pré-processador); (2) falta o ; depois do primeiro printf
+//    ("expected ';'", compilador); (3) Main com M maiúsculo não é a main
+//    ("undefined reference to `main'", ligador); (4) R$ 9,40 vira R$ 4,90
+//    (erro de execução, de lógica). E as três linhas acima.
 //
-// Escreva sua resposta abaixo:
+// Escreva sua resposta abaixo (conserte o código):
 
-#include <stdio.h>
+#include <stdoi.h>
 
-int main(void) {
-
+int Main(void) {
+    printf("Linha 077 - Terminal Centro\n")
+    printf("Via Av. Brasil\n");
+    printf("Tarifa: R$ 9,40\n");
     return 0;
 }

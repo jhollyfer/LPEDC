@@ -1,35 +1,36 @@
 // 0003 · Tipos e limites
 // Exercício E015 · ★★☆
 //
-// Os três contadores abaixo são unsigned, então o estouro dá a volta.
-// Sem rodar, escreva o que cada printf mostra:
+// Três contadores unsigned, três estouros que dão a volta. O programa abaixo
+// já tem os valores iniciais. Complete: faça cada conta indicada no
+// comentário (guardando o resultado na própria variável) e mostre uma
+// linha por contador, com o valor de antes, a conta, o valor de depois e o
+// máximo do tipo, tirado do limits.h.
 //
-//   unsigned char brilho = 250;      // LED, de 0 a 255
-//   brilho = brilho + 10;
-//   printf("%d\n", brilho);
-//
-//   unsigned int estoque = 0;
-//   estoque = estoque - 1;           // vendeu um que não tinha
-//   printf("%u\n", estoque);
-//
-//   unsigned short odometro = 65000; // km, num painel de 16 bits
-//   odometro = odometro + 1000;
-//   printf("%d\n", odometro);
-//
-// Depois copie para a main, rode e confira.
+//   Saída esperada:
+//   brilho: 250 + 10 = 4 (máximo 255)
+//   estoque: 0 - 1 = 4294967295 (máximo 4294967295)
+//   odômetro: 65000 + 1000 = 464 (máximo 65535)
 //
 // Dicas:
-// 1. Passou do máximo, volta a contar do zero: faça a conta e tire 2^n
-//    (256 para 8 bits, 65536 para 16, 4294967296 para 32).
-// 2. Abaixo de zero, dá a volta para o máximo: 0 - 1 vira o maior valor.
-// 3. Resposta esperada: 4 (260 - 256), 4294967295 (o maior unsigned int) e
-//    464 (66000 - 65536).
+// 1. A conta muda a variável. Para mostrar o valor de antes, guarde uma
+//    cópia numa variável int antes da conta.
+// 2. Os máximos: UCHAR_MAX, UINT_MAX e USHRT_MAX. O unsigned int se mostra
+//    com %u; o unsigned char e o unsigned short, com %d.
+// 3. Passou do máximo, volta a contar do zero: 260 - 256 = 4 e
+//    66000 - 65536 = 464. Abaixo de zero, vai para o máximo.
+// 4. Resposta esperada: as três linhas acima.
 //
-// Escreva sua resposta abaixo:
+// Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>
+#include <limits.h>
 
 int main(void) {
+    unsigned char brilho = 250;      // LED, de 0 a 255: some 10
+    unsigned int estoque = 0;        // vendeu um que não tinha: tire 1
+    unsigned short odometro = 65000; // painel de 16 bits: some 1000
 
+    (void)brilho; (void)estoque; (void)odometro; // apague esta linha
     return 0;
 }

@@ -1,23 +1,17 @@
 // 0008 · Conversão e cast
 // Exercício E048 · ★★★
-//
-// Resposta: "A 65" ('a' é 97; 97 - 32 = 65); 25 (122 - 97); 4 (260 dá a
-// volta: 260 - 256); 4.0 (5 / 2 é 2, e 2 * 2.0 = 4.0); 5.0 (2.0 * 5 = 10.0,
-// e 10.0 / 2 = 5.0); 7 (3.7 + 3.7 = 7.4, cortado); 6 (3 + 3).
 
 #include <stdio.h>
 
 int main(void) {
-    char c = 'a';
-    printf("%c %d\n", c - 32, c - 32);
-    printf("%d\n", 'z' - 'a');
-    unsigned char u = 250;
-    u = u + 10;
-    printf("%d\n", u);
-    printf("%.1f\n", 5 / 2 * 2.0);
-    printf("%.1f\n", 2.0 * 5 / 2);
-    int i = 3.7 + 3.7;
-    printf("%d\n", i);
-    printf("%d\n", (int) 3.7 + (int) 3.7);
+    char letra = 'g';
+    double x = 3.7, y = 3.7;
+
+    printf("Letra: %c (código %d)\n", letra, letra);
+    printf("Maiúscula: %c (código %d)\n", letra - 'a' + 'A', letra - 'a' + 'A');
+    printf("Posição no alfabeto: %d\n", letra - 'a' + 1);
+    printf("Três adiante: %c\n", letra + 3);
+    printf("Somando e cortando: %d; cortando e somando: %d\n",
+           (int) (x + y), (int) x + (int) y);
     return 0;
 }

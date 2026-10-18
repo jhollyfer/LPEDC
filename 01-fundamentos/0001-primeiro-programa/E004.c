@@ -1,36 +1,27 @@
 // 0001 · O primeiro programa
 // Exercício E004 · ★★☆
 //
-// Escreva um programa que mostre só "Bom dia" (com \n). Depois, dentro
-// desta pasta, rode cada estação separada e responda como comentário:
+// O aviso do cinema foi escrito com pressa: quase tudo numa linha só, sem
+// recuo, e com um comentário no lugar errado. Ele compila sem aviso, mas
+// mostra só duas das três linhas. Reorganize o código: uma instrução por
+// linha, recuo de 4 espaços dentro da main, um comentário de bloco no topo
+// dizendo o que o programa faz, e o comentário "sala 2" num lugar onde não
+// engula nada. Rode e confira as três linhas.
 //
-//   gcc -E E004.c | wc -l
-//   gcc -S E004.c
-//   gcc -c E004.c
-//   gcc E004.o -o bomdia && ./bomdia
-//
-// a) Quantas linhas o arquivo tem depois do pré-processador? De onde veio
-//    tanta linha? O que aconteceu com os comentários?
-// b) Abra o E004.s. Que função aparece depois de "call": printf ou puts?
-// c) Troque o texto por printf("Bom dia %d\n", 7); e gere o .s de novo.
-//    Mudou? Por quê?
-// d) Que arquivos novos apareceram na pasta, e qual deles roda?
+//   Saída esperada:
+//   Cine Estação
+//   Sessão: 19h30 (sala 2)
+//   Ingresso: R$ 28,00
 //
 // Dicas:
-// 1. O wc -l conta linhas. Procure "printf" no resultado do gcc -E.
-// 2. O texto fixo fica numa linha .string do .s, com uma etiqueta como .LC0.
-// 3. Resposta esperada: a) algumas centenas (uns 700 a 900, depende do
-//    sistema): é o stdio.h colado no lugar do #include; os comentários
-//    somem; b) puts: o texto é fixo e termina em \n, então o compilador troca
-//    por uma função mais simples; c) com o %d ele precisa formatar e volta a
-//    chamar printf; d) E004.s (assembly, texto), E004.o (objeto, binário) e
-//    bomdia (o executável, o único que roda).
+// 1. O // desliga tudo o que vem depois dele, até o fim da LINHA, e não até
+//    o próximo ;.
+// 2. O texto "(sala 2)" tem de ir para dentro das aspas do segundo printf.
+// 3. Resposta esperada: três printf, cada um na sua linha, e as três linhas
+//    acima. O comentário // pode ficar no fim de uma linha, depois do ;.
 //
-// Escreva sua resposta abaixo:
+// Escreva sua resposta abaixo (reorganize o código):
 
 #include <stdio.h>
-
-int main(void) {
-
-    return 0;
-}
+int main(void){printf("Cine Estação\n");printf("Sessão: 19h30\n"); // sala 2 printf("Ingresso: R$ 28,00\n");
+return 0;}

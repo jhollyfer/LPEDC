@@ -96,9 +96,10 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 > **seguinte**, porque só lá ele percebe que faltou alguma coisa.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A001.c | wc -l` e veja o seu programa de
-> poucas linhas virar centenas: é o `stdio.h` colado. Rode `gcc -S A001.c`, abra o
-> `A001.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
+> **Por dentro do C:** salve o programa da padaria como `padaria.c`, rode
+> `gcc -E padaria.c | wc -l` e veja o seu programa de poucas linhas virar
+> centenas: é o `stdio.h` colado. Rode `gcc -S padaria.c`, abra o
+> `padaria.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
 > que era só texto fixo com `\n` e trocou por uma função mais simples. Dentro
 > do executável, cada texto entre aspas fica guardado byte a byte, seguido de
 > um byte zero que marca o fim. Acento custa mais: no UTF-8, `ã` ocupa 2
@@ -108,6 +109,6 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `\n` do segundo `printf`, quantas
 > linhas aparecem e como fica cada uma? E se escrever `Printf` com P
-> maiúsculo, qual estação reclama? Responda e teste no A001.
+> maiúsculo, qual estação reclama? Responda e teste no `padaria.c`.
 
 {{pratique}}

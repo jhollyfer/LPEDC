@@ -1,24 +1,34 @@
-// A011 · O Pix agendado
+// A011 · Dois valores numa linha e a sobra que atrapalha
 
 #include <stdio.h>
 
 int main(void) {
-    double valor;
-    int dia;
+    int quantidade = 0;
+    double preco = 0.0;
+    int parcelas = 1;
 
-    printf("Valor do Pix: R$ ");
-    scanf("%lf", &valor);            // %lf: double no scanf
-    printf("Dia do mês: ");
-    int lidos = scanf("%d", &dia);   // devolve quantos itens leu
+    // um scanf, dois valores: o %lf pula o espaço entre eles
+    printf("Quantidade e preço (ex.: 3 4.99): ");
+    int lidos = scanf("%d%lf", &quantidade, &preco);
+    printf("Itens lidos: %d\n", lidos);
 
-    printf("Pix de R$ %.2f agendado para o dia %d\n", valor, dia);
-    printf("O último scanf leu %d item\n", lidos);
+    printf("Parcelas: ");
+    lidos = scanf("%d", &parcelas);
+    printf("Itens lidos: %d\n", lidos);
+
+    printf("%d unidade(s) de R$ %.2f em %d parcela(s)\n", quantidade, preco, parcelas);
     return 0;
 }
 // Exemplo de execução:
-// Valor do Pix: R$ 150.75
-// Dia do mês: 12
-// Pix de R$ 150.75 agendado para o dia 12
-// O último scanf leu 1 item
+// Quantidade e preço (ex.: 3 4.99): 3 4.99
+// Itens lidos: 2
+// Parcelas: 2
+// Itens lidos: 1
+// 3 unidade(s) de R$ 4.99 em 2 parcela(s)
 //
-// Para testar sem digitar: printf '150.75\n12\n' | ~/LPEDC/rodar <este arquivo>
+// Teste: printf '3 4.99\n2\n' | ~/LPEDC/rodar <este arquivo>
+//
+// Agora digite "3 4.99 reais" na primeira pergunta:
+//   printf '3 4.99 reais\n2\n' | ~/LPEDC/rodar <este arquivo>
+// O " reais" fica na fila. O %d das parcelas tropeça no 'r', devolve 0
+// ("Itens lidos: 0") e parcelas continua com 1. O 2 nem chega a ser lido.

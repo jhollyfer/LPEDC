@@ -104,7 +104,7 @@ Programas que leem do teclado esperam você digitar. Para testar sem digitar,
 mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
-printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
+printf '3 4.99\n2\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
 ```
 
 > [!NOTE]
@@ -226,9 +226,10 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 > **seguinte**, porque só lá ele percebe que faltou alguma coisa.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A001.c | wc -l` e veja o seu programa de
-> poucas linhas virar centenas: é o `stdio.h` colado. Rode `gcc -S A001.c`, abra o
-> `A001.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
+> **Por dentro do C:** salve o programa da padaria como `padaria.c`, rode
+> `gcc -E padaria.c | wc -l` e veja o seu programa de poucas linhas virar
+> centenas: é o `stdio.h` colado. Rode `gcc -S padaria.c`, abra o
+> `padaria.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
 > que era só texto fixo com `\n` e trocou por uma função mais simples. Dentro
 > do executável, cada texto entre aspas fica guardado byte a byte, seguido de
 > um byte zero que marca o fim. Acento custa mais: no UTF-8, `ã` ocupa 2
@@ -238,36 +239,47 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `\n` do segundo `printf`, quantas
 > linhas aparecem e como fica cada uma? E se escrever `Printf` com P
-> maiúsculo, qual estação reclama? Responda e teste no A001.
+> maiúsculo, qual estação reclama? Responda e teste no `padaria.c`.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0001-primeiro-programa/`](0001-primeiro-programa/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A001 · O aviso da padaria**
+**Exemplo A001 · Quem separa as instruções é o ponto e vírgula**
 
 ```c
-// Aviso do painel da padaria
+/*
+   Para o compilador, quebra de linha, espaço e recuo são só enfeite.
+   O que termina uma instrução é o ; e o que agrupa é o par de chaves.
+*/
 #include <stdio.h>
 
 int main(void) {
-    printf("Padaria Pão Quente\n");
-    printf("Pão francês saindo às 17h\n");
-    printf("R$ 0,90 a unidade\n");
-    return 0; // 0 = terminou bem
+    // duas instruções na mesma linha: o ; separa uma da outra
+    printf("Banca do Seu Zé\n"); printf("Frutas e verduras\n");
+
+    // uma instrução espalhada em três linhas: ela só acaba no ;
+    printf(
+        "Abacaxi: R$ 7,00\n"
+    );
+
+    printf("\n"); // um printf só com \n deixa uma linha em branco
+
+    printf("Banana: R$ 5,50 a dúzia\n"); /* comentário de bloco no fim */
+    printf(/* comentário até no meio */ "Laranja: R$ 4,00 o kg\n");
+    return 0;
 }
 // Saída:
-// Padaria Pão Quente
-// Pão francês saindo às 17h
-// R$ 0,90 a unidade
+// Banca do Seu Zé
+// Frutas e verduras
+// Abacaxi: R$ 7,00
 //
-// Experimente no terminal, dentro desta pasta:
-//   gcc -E A001.c | wc -l     quantas linhas depois do pré-processador
-//   gcc -S A001.c             gera A001.s (assembly): procure "call"
-//   gcc -c A001.c             gera A001.o (código objeto)
-//   gcc A001.o -o padaria     liga e gera o executável
-//   ./padaria
-//   echo $?                   mostra o 0 do return
+// Banana: R$ 5,50 a dúzia
+// Laranja: R$ 4,00 o kg
+//
+// O recuo de 4 espaços também é só para quem lê: apague todos e rode de
+// novo. A saída é a mesma. Agora apague o ; do primeiro printf e veja o gcc
+// reclamar do printf seguinte, que está na mesma linha.
 ```
 
 ```bash
@@ -343,25 +355,34 @@ Tarifa: R$ 4,90
 
 **Exercício E002** · ★☆☆
 
-Sem rodar, escreva (como comentário) exatamente o que este trecho mostra
-na tela. Atenção às linhas em branco. Depois copie o trecho para a main,
-rode e confira.
+Monte a lista de compras abaixo com estas regras: a primeira linha sai de
+TRÊS printf, um para "Bom ", um para "dia" e um para "!"; as outras quatro
+linhas (contando a vazia) saem de UM printf só. Deixe também, entre os
+dois grupos, um printf("Boa tarde\n"); desligado com //, que não pode
+aparecer na saída.
 
 
 ```text
-printf("Bom ");
-printf("dia");
-printf("!\n");
-// printf("Boa tarde\n");
-printf("Café\nPão\n\nManteiga\n");
+Saída esperada:
+Bom dia!
+Café
+Pão
+```
+
+
+
+```text
+Manteiga
 ```
 
 **Dicas:**
 
-1. Sem \n, o próximo printf continua na mesma linha.
-2. A linha que começa com // não roda. Dois \n seguidos deixam uma linha vazia.
-3. Resposta esperada: "Bom dia!", "Café", "Pão", uma linha em branco e
-   "Manteiga" (5 linhas no total, contando a vazia).
+1. Sem \n, o próximo printf continua na mesma linha: só o terceiro da
+   primeira linha leva \n.
+2. Dois \n seguidos deixam uma linha vazia.
+3. Resposta esperada: printf("Bom "); printf("dia"); printf("!\n");
+   // printf("Boa tarde\n"); printf("Café\nPão\n\nManteiga\n"); e as 5
+   linhas acima (a 4ª vazia).
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E002.c
@@ -369,9 +390,9 @@ printf("Café\nPão\n\nManteiga\n");
 
 **Exercício E003** · ★★☆
 
-Este programa tem QUATRO erros e não compila de propósito. Rode com o
-rodar, leia a primeira mensagem, conserte, rode de novo e repita até
-funcionar. Para cada erro, anote o que o gcc disse e qual estação
+Este programa tem QUATRO erros e não compila de propósito. Conserte o
+código: rode com o rodar, leia a primeira mensagem, conserte, rode de novo
+e repita até sair a saída esperada. A cada rodada, repare qual estação
 reclamou: compilador ou ligador.
 
 
@@ -399,43 +420,28 @@ Plantão: (11) 5555-0199
 
 **Exercício E004** · ★★☆
 
-Escreva um programa que mostre só "Bom dia" (com \n). Depois, dentro
-desta pasta, rode cada estação separada e responda como comentário:
+O aviso do cinema foi escrito com pressa: quase tudo numa linha só, sem
+recuo, e com um comentário no lugar errado. Ele compila sem aviso, mas
+mostra só duas das três linhas. Reorganize o código: uma instrução por
+linha, recuo de 4 espaços dentro da main, um comentário de bloco no topo
+dizendo o que o programa faz, e o comentário "sala 2" num lugar onde não
+engula nada. Rode e confira as três linhas.
 
 
 ```text
-gcc -E E004.c | wc -l
-gcc -S E004.c
-gcc -c E004.c
-gcc E004.o -o bomdia && ./bomdia
+Saída esperada:
+Cine Estação
+Sessão: 19h30 (sala 2)
+Ingresso: R$ 28,00
 ```
-
-
-a) Quantas linhas o arquivo tem depois do pré-processador? De onde veio
-
-```text
- tanta linha? O que aconteceu com os comentários?
-```
-
-b) Abra o E004.s. Que função aparece depois de "call": printf ou puts?
-c) Troque o texto por printf("Bom dia %d\n", 7); e gere o .s de novo.
-
-```text
- Mudou? Por quê?
-```
-
-d) Que arquivos novos apareceram na pasta, e qual deles roda?
 
 **Dicas:**
 
-1. O wc -l conta linhas. Procure "printf" no resultado do gcc -E.
-2. O texto fixo fica numa linha .string do .s, com uma etiqueta como .LC0.
-3. Resposta esperada: a) algumas centenas (uns 700 a 900, depende do
-   sistema): é o stdio.h colado no lugar do #include; os comentários
-   somem; b) puts: o texto é fixo e termina em \n, então o compilador troca
-   por uma função mais simples; c) com o %d ele precisa formatar e volta a
-   chamar printf; d) E004.s (assembly, texto), E004.o (objeto, binário) e
-   bomdia (o executável, o único que roda).
+1. O // desliga tudo o que vem depois dele, até o fim da LINHA, e não até
+   o próximo ;.
+2. O texto "(sala 2)" tem de ir para dentro das aspas do segundo printf.
+3. Resposta esperada: três printf, cada um na sua linha, e as três linhas
+   acima. O comentário // pode ficar no fim de uma linha, depois do ;.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E004.c
@@ -443,34 +449,41 @@ d) Que arquivos novos apareceram na pasta, e qual deles roda?
 
 **Exercício E005** · ★★★
 
-O número do return chega ao sistema e é assim que scripts e ferramentas
-de CI sabem se um programa deu certo.
-Escreva um programa que mostre "Backup concluído" e termine com return 0.
-Rode assim, de dentro desta pasta:
+O número do return chega ao sistema, e é assim que scripts e ferramentas
+de CI sabem se um programa deu certo: 0 é sucesso, qualquer outro número
+é um código de erro. Escreva o programa de um backup que FALHOU: ele
+mostra as duas linhas abaixo e devolve o código 2 ao sistema. Rode assim,
+de dentro desta pasta, e confira as três linhas da saída esperada:
 
 
 ```text
-~/LPEDC/rodar E005.c; echo $?
-~/LPEDC/rodar E005.c && echo "pode seguir"
+~/LPEDC/rodar E005.c; echo "código: $?"
 ```
 
 
-Depois troque para return 3 e rode as duas linhas de novo. Por fim, teste
-return 256. Responda como comentário:
 
-a) O que o echo $? mostra com return 0, return 3 e return 256?
-b) Com return 3, a mensagem "pode seguir" aparece? Por quê?
-c) Por que 256 dá esse resultado?
+```text
+Saída esperada:
+Backup falhou: disco cheio
+Código de saída: 2
+código: 2
+```
+
+
+Depois rode ~/LPEDC/rodar E005.c && echo "pode seguir" e confira que o
+"pode seguir" NÃO aparece. Por fim, troque para return 258 e rode a
+primeira linha de novo: o terminal tem de mostrar "código: 2" outra vez.
 
 **Dicas:**
 
-1. O $? guarda o código de saída do último comando.
+1. A segunda linha é um printf comum, com o texto fixo. A terceira quem
+   escreve é o echo do terminal: o $? guarda o código de saída do último
+   comando.
 2. O && do terminal só roda o segundo comando se o primeiro devolveu 0.
 3. O sistema guarda só 1 byte (8 bits) do código de saída, e um byte vai
-   de 0 a 255 (você vai ver o porquê no assunto 0003).
-4. Resposta esperada: a) 0, 3 e 0; b) não: 3 significa erro, e o && para;
-   c) só os 8 bits de baixo chegam ao sistema: 256 é 1 0000 0000 em
-   binário, e os 8 bits de baixo são todos zero.
+   de 0 a 255 (o porquê vem no assunto 0003): 258 dá a volta e vira 2.
+4. Resposta esperada: dois printf e return 2;. A saída acima, sem o
+   "pode seguir"; com return 258, "código: 2" de novo.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E005.c
@@ -478,32 +491,33 @@ c) Por que 256 dá esse resultado?
 
 **Exercício E006** · ★★★
 
-Para cada situação, diga quem reclama: o pré-processador, o compilador, o
-ligador, ou ninguém (o erro só aparece quando o programa roda). Depois
-provoque cada uma no seu E001 e confira a mensagem.
+O letreiro do ônibus abaixo tem um erro para cada tipo de reclamação: um
+que o pré-processador pega, um do compilador, um do ligador e um que
+ninguém pega (o programa roda e mostra o valor errado: a tarifa certa é
+R$ 4,90). Conserte o código, um erro por vez. A cada rodada, repare qual
+estação parou a linha de montagem, e só pare quando a saída for
+exatamente a esperada.
 
 
 ```text
-a) #include <stdoi.h>
-b) printf("Linha 077\n")   (sem o ponto e vírgula)
-c) int Main(void) { ... }  (M maiúsculo)
-d) prinft("Via Av. Brasil\n");
-e) printf("Tarifa: R$ 9,40\n"); quando a tarifa certa é R$ 4,90
-f) o } final apagado
+Saída esperada (depois de consertar):
+Linha 077 - Terminal Centro
+Via Av. Brasil
+Tarifa: R$ 4,90
 ```
 
 **Dicas:**
 
-1. O pré-processador só cuida das linhas com #.
-2. O ligador procura funções pelo nome, inclusive a main.
-3. O compilador confere a gramática, mas não sabe qual é a tarifa certa.
-4. Resposta esperada: a) pré-processador ("stdoi.h: No such file or
-   directory"); b) compilador ("expected ';'"); c) ligador: o código
-   compila, mas não existe main ("undefined reference to `main'"); d)
-   ligador ("undefined reference to `prinft'", depois do aviso de
-   "implicit declaration"); e) ninguém: compila, roda e mostra o valor
-   errado, um erro de execução (de lógica); f) compilador ("expected
-   declaration or statement at end of input").
+1. O pré-processador só cuida das linhas com #. O compilador para no
+   primeiro erro de gramática. O ligador procura funções pelo nome,
+   inclusive a main.
+2. Depois que tudo compilar, compare a saída com a esperada, letra por
+   letra: o compilador não sabe qual é a tarifa certa.
+3. Resposta esperada: (1) stdoi.h vira stdio.h ("No such file or
+   directory", pré-processador); (2) falta o ; depois do primeiro printf
+   ("expected ';'", compilador); (3) Main com M maiúsculo não é a main
+   ("undefined reference to `main'", ligador); (4) R$ 9,40 vira R$ 4,90
+   (erro de execução, de lógica). E as três linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E006.c
@@ -536,7 +550,7 @@ muda nunca mais. Os quatro tipos básicos:
 primeiro valor junto: `int idade = 25;`. Para mostrar o valor, o `printf` usa
 um código para cada tipo: `%d` para `int`, `%f` para `float` e `double`, `%c`
 para `char`. O `%.1f` limita a uma casa decimal (o `printf` completo vem no
-0010).
+0005).
 
 Guardar um valor novo **apaga** o antigo: depois de `peso = 71.8;`, o 72,5
 sumiu para sempre. Ler a variável, ao contrário, não muda nada. E o operador
@@ -611,41 +625,43 @@ um passo depois do outro:
 
 > [!NOTE]
 > **Pergunta para você:** o `char` guarda um número pequeno. O que você acha
-> que `printf("%d\n", plano);` mostra? Teste no A003.
+> que `printf("%d\n", plano);` mostra? Teste no programa acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0002-variaveis/`](0002-variaveis/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A003 · A ficha da academia**
+**Exemplo A003 · A cópia que não acompanha e o float que arredonda**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    int idade = 25;       // inteiro
-    float altura = 1.75;  // real com uns 7 dígitos
-    double peso = 72.5;   // real com uns 15 dígitos
-    char plano = 'B';     // um caractere, entre aspas simples
+    // = copia o VALOR: depois disso, as duas variáveis seguem separadas
+    int pao_manha = 40;
+    int pao_tarde = pao_manha;  // a tarde começa com uma cópia: 40
+    pao_manha = 25;             // mudar uma não mexe na outra
+    printf("Pães de manhã: %d, de tarde: %d\n", pao_manha, pao_tarde);
 
-    printf("Idade: %d anos\n", idade);
-    printf("Altura: %.2f m\n", altura);
-    printf("Peso: %.1f kg\n", peso);
-    printf("Plano: %c\n", plano);
+    // várias variáveis do mesmo tipo numa linha, separadas por vírgula
+    char fila = 'C', caixa = '3';
+    printf("Fila %c, caixa %c\n", fila, caixa);
 
-    peso = 71.8; // um mês depois: o 72.5 some
-    printf("Peso novo: %.1f kg\n", peso);
-    printf("Bytes: %zu, %zu, %zu, %zu\n",
-           sizeof idade, sizeof altura, sizeof peso, sizeof plano);
+    // o float guarda uns 7 dígitos; o double, uns 15
+    float premio_float = 12345678.9;
+    double premio_double = 12345678.9;
+    printf("Prêmio no float:  %.1f\n", premio_float);
+    printf("Prêmio no double: %.1f\n", premio_double);
     return 0;
 }
 // Saída:
-// Idade: 25 anos
-// Altura: 1.75 m
-// Peso: 72.5 kg
-// Plano: B
-// Peso novo: 71.8 kg
-// Bytes: 4, 4, 8, 1
+// Pães de manhã: 25, de tarde: 40
+// Fila C, caixa 3
+// Prêmio no float:  12345679.0
+// Prêmio no double: 12345678.9
+//
+// O 12345678.9 tem 9 dígitos: o float não dá conta e guarda o valor mais
+// perto que ele consegue representar. Dinheiro e medidas: use double.
 ```
 
 ```bash
@@ -719,29 +735,33 @@ Setor: H
 
 **Exercício E008** · ★☆☆
 
-Quais destes nomes de variável o C aceita? Para cada inválido, diga o
-motivo. Depois tente declarar alguns (int nome = 0;) e veja o erro do gcc.
+O colega começou o pedido de segunda via do boleto, mas escolheu nomes de
+variável que o C não aceita, e o programa não compila. Renomeie as
+variáveis inválidas (snake_case, sem acento, sem espaço), sem mudar os
+valores, até compilar e mostrar a saída abaixo. As variáveis preco e
+Preco estão certas: deixe as duas como estão e repare que o programa
+mostra valores diferentes para elas.
 
 
 ```text
-preco_kg    2via       _total      valor-final   Preco
-float       nota1      média       qtd$          dia util
+Saída esperada (depois de consertar):
+Via: 2
+Valor final: R$ 89.90
+Parcelas: 3
+Dia útil: S
+preco: 10, Preco: 20
 ```
-
-
-E mais uma: preco e Preco podem existir no mesmo programa? São a mesma
-variável?
 
 **Dicas:**
 
-1. Só letras, dígitos e _, sem começar por dígito, sem acento, sem espaço.
-2. Palavras do próprio C (int, float, return...) são reservadas.
-3. Resposta esperada: válidos: preco_kg, _total, Preco, nota1. Inválidos:
-   2via (começa com dígito), valor-final (o - é subtração), float (palavra
-   reservada), média (acento), qtd$ ($ não faz parte do padrão; o gcc
-   aceita como extensão, mas não use) e dia util (espaço). preco e Preco
-   podem coexistir e são variáveis diferentes. Evite começar nomes com _:
-   é válido, mas o compilador e a biblioteca usam esses nomes.
+1. Nome só com letras, dígitos e _, sem começar por dígito, sem espaço.
+   O - é o sinal de menos. Palavras do C (int, float, return...) são
+   reservadas.
+2. Troque o nome na declaração E no printf.
+3. Resposta esperada: 2via vira via (ou segunda_via), valor-final vira
+   valor_final, float vira parcelas (ou qtd_parcelas) e dia util vira
+   dia_util. preco e Preco são variáveis diferentes. E as cinco linhas
+   acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0002-variaveis/E008.c
@@ -751,8 +771,11 @@ variável?
 
 O cadastro de um aluno da autoescola guarda: idade (int, 19), nota da
 prova teórica (double, 8.5), nota da prova prática (double, 9.0),
-categoria da CNH (char, 'B') e número de aulas feitas (int, 20). Declare as cinco variáveis e
-mostre os valores e o sizeof de cada uma, uma por linha, no formato:
+categoria da CNH (char, 'B') e número de aulas feitas (int, 20). Declare
+as cinco variáveis e mostre os valores e o sizeof de cada uma, uma por
+linha. Depois, mostre mais duas linhas, calculadas pelo programa: o total
+de bytes das cinco variáveis (somando os sizeof) e quanto seria o total
+se as duas notas fossem float (use sizeof(float) no lugar delas).
 
 
 ```text
@@ -762,19 +785,18 @@ teorica: 8.5 (8 bytes)
 pratica: 9.0 (8 bytes)
 categoria: B (1 byte)
 aulas: 20 (4 bytes)
+total: 25 bytes
+com float nas notas: 17 bytes
 ```
-
-
-Depois responda, sem rodar: quantos bytes as cinco variáveis ocupam
-juntas? Se você trocasse as duas notas para float, quanto economizaria?
 
 **Dicas:**
 
 1. sizeof nome_da_variavel e %zu no printf.
-2. Some os tamanhos: 4 + 8 + 8 + 1 + 4.
-3. Resposta esperada: as cinco linhas acima; juntas ocupam 25 bytes; com
-   float nas notas seriam 17 bytes (8 a menos). Na memória pode haver
-   folgas entre as variáveis, mas o total de dados é esse.
+2. O sizeof pode entrar numa soma, direto no printf:
+   sizeof idade + sizeof teorica + ...
+3. Resposta esperada: as sete linhas acima (4 + 8 + 8 + 1 + 4 = 25 e
+   4 + 4 + 4 + 1 + 4 = 17). Na memória pode haver folgas entre as
+   variáveis, mas o total de dados é esse.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0002-variaveis/E009.c
@@ -808,9 +830,9 @@ Casa 3 x 1 Visitante
 **Exercício E011** · ★★★
 
 Este programa tem TRÊS erros e o gcc mostra um aviso para cada um (numa
-versão mais nova do gcc, um deles já vira erro). Rode, leia os avisos, diga
-o que cada um quer dizer e conserte. O jogo terminou 2 x 1 para o time da
-casa, com público de 45000 pessoas.
+versão mais nova do gcc, um deles já vira erro). Conserte o código: rode,
+leia os avisos, corrija um por vez e rode de novo até não sobrar aviso. O
+jogo terminou 2 x 1 para o time da casa, com público de 45000 pessoas.
 
 
 ```text
@@ -837,31 +859,43 @@ Público: 45000
 
 **Exercício E012** · ★★★
 
-Para o C, um char é só um número pequeno, e o %c mostra o símbolo que
-tem aquele código. Sem rodar, escreva o que cada printf mostra:
+Para o C, um char é só um número pequeno: o %c mostra o símbolo que tem
+aquele código, e o %d mostra o próprio código. Escreva um programa que
+mostre as linhas abaixo usando UMA variável char, que você vai
+reaproveitando (declara uma vez e troca o valor). As regras:
 
+- nas linhas 1, 3 e 4, o símbolo e o código saem da mesma variável, uma
 
 ```text
-char letra = 'A';
-printf("%c %d\n", letra, letra);
-letra = 66;
-printf("%c\n", letra);
-char digito = '7';
-printf("%c %d\n", digito, digito);
-char espaco = ' ';
-printf("[%c] %d\n", espaco, espaco);
+vez com %c e outra com %d;
+```
+
+- para o B da linha 2, guarde na variável o NÚMERO 66 (nada de 'B');
+- para o espaço da linha 4, guarde o número 32 (nada de ' ');
+- a última linha mostra lado a lado o caractere '7' e o número 7, os dois
+
+```text
+com %d.
 ```
 
 
-Depois copie para a main, rode e confira. Pergunta final: '7' e 7 são a
-mesma coisa?
+
+```text
+Saída esperada:
+A 65
+B
+7 55
+[ ] 32
+'7' vale 55, 7 vale 7
+```
 
 **Dicas:**
 
-1. Na tabela ASCII, 'A' é 65 e as letras seguem em ordem.
-2. Os dígitos também têm códigos: '0' é 48, '1' é 49, e assim por diante.
-3. Resposta esperada: "A 65", "B", "7 55", "[ ] 32". '7' é o caractere
-   sete, de código 55; 7 é o número sete. São diferentes.
+1. char letra = 'A'; printf("%c %d\n", letra, letra);
+2. Depois: letra = 66; e assim por diante. Na tabela ASCII, 'A' é 65, '0'
+   é 48 e o espaço é 32.
+3. Resposta esperada: as cinco linhas acima. '7' é o caractere sete, de
+   código 55; 7 é o número sete. São diferentes.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0002-variaveis/E012.c
@@ -973,35 +1007,44 @@ baixo, sem avisar ninguém:
 
 > [!NOTE]
 > **Pergunta para você:** se a catraca começasse em 65.530 e passassem 10
-> torcedores, o que o painel mostraria? Mude o A005 e confira.
+> torcedores, o que o painel mostraria? Mude o programa acima e confira.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0003-tipos-e-limites/`](0003-tipos-e-limites/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A005 · A catraca que voltou a zero**
+**Exemplo A005 · O mesmo byte lido de dois jeitos**
 
 ```c
 #include <stdio.h>
-#include <limits.h>
+#include <stdint.h>
 
 int main(void) {
-    unsigned short catraca = 65535; // 16 bits, todos ligados
-    printf("Maior unsigned short: %d\n", USHRT_MAX);
-    printf("Catraca: %d (0x%X)\n", catraca, catraca);
+    // o freezer marca -10 °C e guarda a temperatura num byte com sinal
+    int8_t freezer = -10;
+    printf("Freezer: %d °C\n", freezer);
 
-    catraca = catraca + 1; // 65536 não cabe em 16 bits
-    printf("Mais um torcedor: %d\n", catraca);
+    // o painel recebe os MESMOS 8 bits, mas lê como byte sem sinal
+    uint8_t byte_no_cabo = freezer;
+    printf("No cabo: 0x%X, que sem sinal vale %d\n", byte_no_cabo, byte_no_cabo);
 
-    int publico = 78838; // int tem 32 bits: sobra espaço
-    printf("Público: %d (o int vai até %d)\n", publico, INT_MAX);
+    // a faixa de cada um: 256 combinações nos dois, deslocadas
+    printf("int8_t:  %d a %d\n", INT8_MIN, INT8_MAX);
+    printf("uint8_t: 0 a %d\n", UINT8_MAX);
+
+    // -10 e 246 completam juntos 256 (2 elevado a 8)
+    printf("%d + %d = %d\n", byte_no_cabo, 10, byte_no_cabo + 10);
     return 0;
 }
 // Saída:
-// Maior unsigned short: 65535
-// Catraca: 65535 (0xFFFF)
-// Mais um torcedor: 0
-// Público: 78838 (o int vai até 2147483647)
+// Freezer: -10 °C
+// No cabo: 0xF6, que sem sinal vale 246
+// int8_t:  -128 a 127
+// uint8_t: 0 a 255
+// 246 + 10 = 256
+//
+// Os bits são 1111 0110 nos dois casos. O tipo decide se o bit de cima
+// vale +128 (sem sinal: 246) ou -128 (com sinal: -128 + 118 = -10).
 ```
 
 ```bash
@@ -1056,28 +1099,41 @@ int main(void) {
 
 **Exercício E013** · ★☆☆
 
-Sem calculadora, responda como comentário:
+Converta na mão cada binário para hexadecimal (cada grupo de 4 bits vira
+um dígito hexa) e escreva os números no código SÓ em hexadecimal, com 0x
+na frente. Quem converte para decimal é o printf, com %d. Na tabela de
+quantos valores cabem, use também hexa: 2 elevado a 4 é 0x10.
 
 
 ```text
-a) 00010110 em decimal
-b) 11111111 em decimal e em hexadecimal
-c) 0x1F e 0x100 em decimal
-d) quantos valores diferentes cabem em 4, 8 e 16 bits
+binários: 0001 0110 e 1111 1111; hexas prontos: 0x1F e 0x100
 ```
 
 
-Depois confira os hexadecimais com printf: printf("%d\n", 0x1F); mostra
-o valor em decimal. (Binário escrito como 0b10110 só virou padrão no C23;
-o rodar, que segue o C17, avisa se você usar.)
+
+```text
+Saída esperada:
+0001 0110 = 0x16 = 22
+1111 1111 = 0xFF = 255
+0x1F = 31
+0x100 = 256
+4 bits: 16 valores
+8 bits: 256 valores
+16 bits: 65536 valores
+```
+
+
+(Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
+C17, avisa se você usar.)
 
 **Dicas:**
 
-1. Some as casas que têm 1: 128, 64, 32, 16, 8, 4, 2, 1.
-2. Cada dígito hexa vale 4 bits: 0x1F é 1 * 16 + 15.
-3. Com n bits cabem 2 elevado a n valores.
-4. Resposta esperada: a) 16 + 4 + 2 = 22; b) 255 e 0xFF; c) 31 e 256;
-   d) 16, 256 e 65.536.
+1. 0001 é 1 e 0110 é 6: o primeiro binário é 0x16. 1111 é 15, o F.
+2. printf("0001 0110 = 0x16 = %d\n", 0x16); o texto antes do %d é fixo.
+3. Com n bits cabem 2 elevado a n valores: em binário é um 1 seguido de n
+   zeros, e cada 4 zeros viram um 0 no hexa: 0x10, 0x100 e 0x10000.
+4. Resposta esperada: as sete linhas acima (16 + 4 + 2 = 22; 1 * 16 + 15
+   = 31).
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E013.c
@@ -1124,42 +1180,29 @@ ano: 1991
 
 **Exercício E015** · ★★☆
 
-Os três contadores abaixo são unsigned, então o estouro dá a volta.
-Sem rodar, escreva o que cada printf mostra:
+Três contadores unsigned, três estouros que dão a volta. O programa abaixo
+já tem os valores iniciais. Complete: faça cada conta indicada no
+comentário (guardando o resultado na própria variável) e mostre uma
+linha por contador, com o valor de antes, a conta, o valor de depois e o
+máximo do tipo, tirado do limits.h.
 
 
 ```text
-unsigned char brilho = 250;      // LED, de 0 a 255
-brilho = brilho + 10;
-printf("%d\n", brilho);
+Saída esperada:
+brilho: 250 + 10 = 4 (máximo 255)
+estoque: 0 - 1 = 4294967295 (máximo 4294967295)
+odômetro: 65000 + 1000 = 464 (máximo 65535)
 ```
-
-
-
-```text
-unsigned int estoque = 0;
-estoque = estoque - 1;           // vendeu um que não tinha
-printf("%u\n", estoque);
-```
-
-
-
-```text
-unsigned short odometro = 65000; // km, num painel de 16 bits
-odometro = odometro + 1000;
-printf("%d\n", odometro);
-```
-
-
-Depois copie para a main, rode e confira.
 
 **Dicas:**
 
-1. Passou do máximo, volta a contar do zero: faça a conta e tire 2^n
-   (256 para 8 bits, 65536 para 16, 4294967296 para 32).
-2. Abaixo de zero, dá a volta para o máximo: 0 - 1 vira o maior valor.
-3. Resposta esperada: 4 (260 - 256), 4294967295 (o maior unsigned int) e
-   464 (66000 - 65536).
+1. A conta muda a variável. Para mostrar o valor de antes, guarde uma
+   cópia numa variável int antes da conta.
+2. Os máximos: UCHAR_MAX, UINT_MAX e USHRT_MAX. O unsigned int se mostra
+   com %u; o unsigned char e o unsigned short, com %d.
+3. Passou do máximo, volta a contar do zero: 260 - 256 = 4 e
+   66000 - 65536 = 464. Abaixo de zero, vai para o máximo.
+4. Resposta esperada: as três linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E015.c
@@ -1170,7 +1213,8 @@ Depois copie para a main, rode e confira.
 De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
 13! (13 fatorial = 1 * 2 * ... * 13). O programa abaixo parte de 12! e
 multiplica por 13. Ele compila sem aviso, mas está errado: rode e leia a
-mensagem "runtime error" que aparece. Explique o problema e conserte.
+mensagem "runtime error" que aparece. Conserte o código e rode de novo
+até sair a saída esperada, sem nenhum runtime error.
 
 
 ```text
@@ -1193,43 +1237,32 @@ Saída esperada (depois de consertar):
 
 **Exercício E017** · ★★★
 
-Dois estouros que viraram notícia:
-
-- Em 2014, o clipe "Gangnam Style" passou de 2.147.483.647 visualizações
-
-```text
-e o YouTube teve de trocar o tipo do contador.
-```
-
-- Muitos sistemas guardam a hora como "segundos desde 1/1/1970" num
-
-```text
-inteiro de 32 bits com sinal. Esse contador estoura em 19/01/2038.
-```
-
-
-Escreva um programa que mostre o maior int32_t e o maior int64_t, usando
-as constantes do stdint.h. Responda como comentário:
-
-a) Por que o número do YouTube é exatamente esse?
-b) Por que 2038? (um ano tem uns 31,5 milhões de segundos)
-c) Com int64_t, o problema some? Quantos anos cabem?
+Muitos sistemas guardam a hora como "segundos desde 1/1/1970" num inteiro
+de 32 bits com sinal. Esse contador estoura em 19/01/2038. Escreva um
+programa que mostre por quê: o maior int32_t, quantos segundos têm 68 e 69
+anos (de 365 dias) e o maior int64_t. Compare os números: 1970 + 68 =
+2038, e o contador de 32 bits não aguenta chegar aos 69 anos.
 
 
 ```text
 Saída esperada:
 int32_t vai até 2147483647
+68 anos: 2144448000 segundos
+69 anos: 2175984000 segundos
 int64_t vai até 9223372036854775807
 ```
 
 **Dicas:**
 
-1. INT32_MAX e INT64_MAX. Para mostrar o de 64 bits, converta para long
-   long e use %lld: (long long)INT64_MAX.
-2. 2147483647 é 2^31 - 1: 31 bits para o número e 1 para o sinal.
-3. Resposta esperada: a) é o INT32_MAX, o maior int de 32 bits com sinal;
-   b) 2147483647 / 31,5 milhões dá uns 68 anos, e 1970 + 68 = 2038;
-   c) some na prática: 2^63 segundos são uns 292 bilhões de anos.
+1. INT32_MAX e INT64_MAX vêm do stdint.h. Para mostrar o de 64 bits,
+   converta para long long e use %lld: (long long)INT64_MAX.
+2. Um ano tem 365 * 24 * 60 * 60 = 31536000 segundos, que cabe num int.
+   Mas 69 anos já não cabem: se a conta for feita em int, o rodar acusa
+   "signed integer overflow". Guarde os segundos de um ano numa variável
+   long long: aí a multiplicação por 68 ou 69 já é feita em long long.
+3. Resposta esperada: as quatro linhas acima. 2147483647 é 2^31 - 1 (31
+   bits para o número e 1 para o sinal); com 64 bits, cabem uns 292
+   bilhões de anos.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E017.c
@@ -1237,37 +1270,33 @@ int64_t vai até 9223372036854775807
 
 **Exercício E018** · ★★★
 
-Sem rodar, preveja a saída num PC Linux de 64 bits. Depois copie para a
-main (com os #include) e confira.
+Complemento de dois na prática. O painel de um freezer recebe a
+temperatura num byte. Para cada temperatura (-1, -128, 127 e 0), guarde o
+valor num int8_t, copie para um uint8_t e mostre: o valor com sinal, o
+valor sem sinal e o byte em hexa. Reaproveite as mesmas duas variáveis
+(declare uma vez e troque os valores). Por fim, mostre a faixa do int8_t
+com as constantes do stdint.h.
 
 
 ```text
-printf("%d\n", SCHAR_MAX);
-printf("%d\n", SCHAR_MIN);
-printf("%d\n", UCHAR_MAX);
-printf("%d\n", SHRT_MIN);
-printf("%u\n", UINT_MAX);
-printf("%zu %zu\n", sizeof(long), sizeof(long long));
-printf("%d\n", 0x7F + 0x01);
-```
-
-
-Responda também:
-a) Por que o menor valor tem um número a mais que o maior (-128 e 127)?
-b) Num PC com Windows, o sizeof(long) daria o mesmo? Que tipo você usa
-
-```text
- quando precisa de exatamente 64 bits em qualquer sistema?
+Saída esperada:
+-1 -> 255 (0xFF)
+-128 -> 128 (0x80)
+127 -> 127 (0x7F)
+0 -> 0 (0x0)
+int8_t: -128 a 127
 ```
 
 **Dicas:**
 
-1. SCHAR é signed char (1 byte com sinal); UCHAR, unsigned char.
-2. Complemento de dois: o bit de cima pesa negativo (-128 num byte).
-3. Resposta esperada: 127, -128, 255, -32768, 4294967295, "8 8" e 128.
-   a) o zero ocupa uma das combinações do lado positivo, e não existe -0:
-   sobram 128 negativos e 127 positivos. b) não: no Windows o long tem 4
-   bytes; use int64_t (ou long long, que tem pelo menos 64 bits).
+1. int8_t com_sinal = -1; uint8_t sem_sinal = com_sinal; e depois
+   com_sinal = -128; sem_sinal = com_sinal; e assim por diante.
+2. printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
+3. Os bits não mudam na cópia: o tipo só decide se o bit de cima vale
+   -128 ou +128. Para os negativos, sem sinal = com sinal + 256.
+4. Resposta esperada: as cinco linhas acima. A faixa é assimétrica
+   porque o zero ocupa uma das combinações sem o bit de cima, e não
+   existe -0.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E018.c
@@ -1355,8 +1384,9 @@ os números:
 > linha onde o nome é **usado**, não na linha do `#define`, o que confunde.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A007.c | tail -12` e veja: não sobrou
-> nenhum `TARIFA`, só `4.90`. Por isso um `#define` não ocupa memória, não tem
+> **Por dentro do C:** salve o programa acima como `tarifa.c`, rode
+> `gcc -E tarifa.c | tail -12` e veja: não sobrou nenhum `TARIFA`, só
+> `4.90`. Por isso um `#define` não ocupa memória, não tem
 > tipo e não aparece no depurador. Já a `const int linha` mora na memória:
 > `&linha` tem endereço e `sizeof linha` vale 4. E os literais têm tamanho:
 > `sizeof(4.90)` é 8 (`double`), `sizeof(4.90f)` é 4 e `sizeof('A')` é 4,
@@ -1365,37 +1395,45 @@ os números:
 
 > [!NOTE]
 > **Pergunta para você:** o pré-processador troca `TARIFA` dentro das aspas?
-> O que `printf("TARIFA\n");` mostra? Teste no A007.
+> O que `printf("TARIFA\n");` mostra? Teste no programa acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0004-constantes/`](0004-constantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A007 · A tarifa num lugar só**
+**Exemplo A007 · Uma constante feita de outras**
 
 ```c
 #include <stdio.h>
 
-#define TARIFA 4.90          // muda aqui, muda no programa todo
-#define EMPRESA "Viação Sol"
+#define TARIFA_CHEIA 4.90
+#define DESCONTO_ESTUDANTE 0.5                          // estudante paga meia
+#define TARIFA_MEIA (TARIFA_CHEIA * DESCONTO_ESTUDANTE) // um #define usando outros
+#define CIDADE "Belo Horizonte"
 
 int main(void) {
-    const int linha = 101;   // variável só de leitura
+    const double recarga = 50.00; // const: tem tipo, tamanho e endereço
 
-    printf("%s\n", EMPRESA);
-    printf("Linha %d \"Centro - Bairro\"\n", linha);
-    printf("Tarifa: R$ %.2f\n", TARIFA);
-    printf("Ida e volta: R$ %.2f\n", 2 * TARIFA); // o compilador vê 2 * 4.90
+    printf("Ônibus de " CIDADE "\n"); // textos lado a lado viram um só
+    printf("Inteira: R$ %.2f\n", TARIFA_CHEIA);
+    printf("Meia:    R$ %.2f\n", TARIFA_MEIA);
+    printf("Recarga: R$ %.2f\n", recarga);
+
+    // o literal tem tamanho, decidido pelo jeito de escrever
+    printf("recarga: %zu bytes; 4.90: %zu; 4.90f: %zu\n",
+           sizeof recarga, sizeof 4.90, sizeof 4.90f);
     return 0;
 }
 // Saída:
-// Viação Sol
-// Linha 101 "Centro - Bairro"
-// Tarifa: R$ 4.90
-// Ida e volta: R$ 9.80
+// Ônibus de Belo Horizonte
+// Inteira: R$ 4.90
+// Meia:    R$ 2.45
+// Recarga: R$ 50.00
+// recarga: 8 bytes; 4.90: 8; 4.90f: 4
 //
-// Veja a troca acontecendo: gcc -E A007.c | tail -12
-// Tente escrever linha = 102; dentro da main e leia o erro do gcc.
+// Veja o que o compilador recebe: gcc -E A007.c | tail -14
+// A linha do printf vira "Ônibus de " "Belo Horizonte" "\n" e a meia vira
+// (4.90 * 0.5): os parênteses do #define TARIFA_MEIA vão junto.
 ```
 
 ```bash
@@ -1525,8 +1563,10 @@ Vencimento: dia 10
 
 **Exercício E022** · ★★☆
 
-Para cada literal, diga o tipo e o valor. Depois escreva um programa que
-mostre o sizeof de cada um (com %zu) para confirmar os tipos.
+O jeito de escrever um literal decide o tipo e, às vezes, o valor. Escreva
+um programa que mostre, para cada literal abaixo, o valor (com %d para os
+inteiros e %.1f para os reais) e o tamanho (sizeof, com %zu). O "0" é
+texto: dele, mostre só o tamanho.
 
 
 ```text
@@ -1537,14 +1577,14 @@ mostre o sizeof de cada um (com %zu) para confirmar os tipos.
 
 ```text
 Saída esperada:
-10: 4 bytes
-10.0: 8 bytes
-10.0f: 4 bytes
-010: 4 bytes
-0x10: 4 bytes
-'0': 4 bytes
+10: vale 10, 4 bytes
+10.0: vale 10.0, 8 bytes
+10.0f: vale 10.0, 4 bytes
+010: vale 8, 4 bytes
+0x10: vale 16, 4 bytes
+'0': vale 48, 4 bytes
 "0": 2 bytes
-1e3: 8 bytes
+1e3: vale 1000.0, 8 bytes
 ```
 
 **Dicas:**
@@ -1552,9 +1592,9 @@ Saída esperada:
 1. Sem ponto é int; com ponto é double; o sufixo f faz float.
 2. Zero à esquerda é octal; 0x é hexadecimal; aspas simples dão o código
    do caractere (um int); aspas duplas são texto com o byte zero no fim.
-3. Resposta esperada: 10 int (10); 10.0 double (10); 10.0f float (10);
-   010 int (8, octal); 0x10 int (16); '0' int (48, o código do caractere
-   zero); "0" texto de 2 bytes ('0' e '\0'); 1e3 double (1000).
+3. Para mostrar aspas e apóstrofo no formato: \" e '.
+4. Resposta esperada: as oito linhas acima. Ex.:
+   printf("010: vale %d, %zu bytes\n", 010, sizeof 010);
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0004-constantes/E022.c
@@ -1563,31 +1603,25 @@ Saída esperada:
 **Exercício E023** · ★★★
 
 Alguém quis guardar o pi numa constante e calcular o comprimento de uma
-pista circular de raio 10 m. O programa compila sem aviso nenhum. Sem
-rodar, diga o que ele mostra e por quê. Depois conserte de dois jeitos:
-com const e com #define.
-
-
-```text
-const int pi = 3.14159;
-int raio = 10;
-printf("Comprimento: %d m\n", 2 * pi * raio);
-```
-
+pista circular de raio 10 m (2 * pi * raio). O programa compila sem aviso
+nenhum, mas mostra 60 m. Conserte o código de dois jeitos, e deixe os
+dois no programa: na primeira linha, com uma const do tipo certo; na
+segunda, com um #define PI.
 
 
 ```text
 Saída esperada (depois de consertar):
-Comprimento: 62.83 m
+Comprimento (const):  62.83 m
+Comprimento (define): 62.83 m
 ```
 
 **Dicas:**
 
-1. const não muda o tipo: pi continua sendo um int.
-2. Um int guarda só a parte inteira de 3.14159.
-3. Resposta esperada: mostra "Comprimento: 60 m", porque pi virou 3 (a
-   parte depois da vírgula foi jogada fora em silêncio). Consertos:
-   const double pi = 3.14159; ou #define PI 3.14159, com %.2f no printf.
+1. const não muda o tipo: pi continua sendo um int, que guarda só a parte
+   inteira de 3.14159. Sobra 2 * 3 * 10 = 60.
+2. Com o tipo real, o resultado da conta também é real: troque o %d.
+3. Resposta esperada: const double pi = 3.14159; e #define PI 3.14159,
+   com %.2f nos dois printf.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0004-constantes/E023.c
@@ -1595,33 +1629,44 @@ Comprimento: 62.83 m
 
 **Exercício E024** · ★★★
 
-Sem rodar, preveja cada linha da saída. Depois copie para um programa e
-confira.
+Escreva um programa que mostre as seis linhas abaixo, seguindo as regras
+de cada uma:
 
+1. crie #define CIDADE "Recife" e use-o para o Recife; a palavra CIDADE
 
 ```text
-#define CIDADE "Recife"
-#define DDD 81
+ do começo da linha fica dentro das aspas do formato;
 ```
 
+2. crie #define DDD 81 e use-o com %d;
+3. os três números saem dos literais 010, 0x10 e 10, com %d;
+4. "Oi!" sai de %c%c%c, com o 'O', o código do i escrito em hexa (0x69)
+
+```text
+ e o código do ! escrito em decimal (33);
+```
+
+5. o % aparece na tela;
+6. a barra e o n aparecem de verdade, numa linha só.
 
 
 ```text
-printf("CIDADE: %s\n", CIDADE);
-printf("DDD %d\n", DDD);
-printf("%d %d %d\n", 010, 0x10, 10);
-printf("%c%c%c\n", 'O', 0x69, 33);
-printf("50%% off\n");
-printf("a\\n b\n");
+Saída esperada:
+CIDADE: Recife
+DDD 81
+8 16 10
+Oi!
+50% off
+a\n b
 ```
 
 **Dicas:**
 
 1. O pré-processador não mexe no que está dentro das aspas.
-2. 0x69 é 6 * 16 + 9; na tabela ASCII, 105 é 'i' e 33 é '!'.
-3. Em `"a\\n b"`, o `\\` vira uma barra e o n fica sozinho.
-4. Resposta esperada: "CIDADE: Recife", "DDD 81", "8 16 10", "Oi!",
-   "50% off" e "a\n b" (com a barra e o n de verdade, numa linha só).
+2. 0x69 é 6 * 16 + 9 = 105, o i na tabela ASCII.
+3. Para o % na tela, %%. Para a barra, \\ (e o n fica sozinho).
+4. Resposta esperada: as seis linhas acima. A primeira:
+   printf("CIDADE: %s\n", CIDADE);
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0004-constantes/E024.c
@@ -1723,25 +1768,34 @@ formato. Mudar a largura de uma coluna é mudar um número só, em cada linha:
 
 Os arquivos ficam em [`0005-printf/`](0005-printf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A009 · O cupom alinhado do mercado**
+**Exemplo A009 · O extrato que corta o nome comprido**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    printf("%-10s %3s %9s\n", "Item", "Qtd", "Total");
-    printf("%-10s %3d %9.2f\n", "Arroz 5kg", 2, 51.80);
-    printf("%-10s %3d %9.2f\n", "Leite", 12, 71.88);
-    printf("%-10s %3d %9.2f\n", "Banana", 1, 7.49);
-    printf("%-10s %13.2f\n", "TOTAL", 131.17);
+    // zeros à esquerda: o número da conta tem sempre 6 dígitos
+    printf("Conta %06d-%d\n", 4521, 7);
+
+    // %-14.14s: coluna de 14 casas e, se o texto for maior, corta em 14
+    // %+9.2f: sinal sempre, para entrada e saída ficarem claras
+    printf("%-14.14s %+9.2f\n", "Pix recebido de Mariana", 250.00);
+    printf("%-14.14s %+9.2f\n", "Mercado", -87.35);
+    printf("%-14.14s %+9.2f\n", "Conta de luz da casa", -142.10);
+    printf("%-14s %9.2f\n", "Saldo", 20.55);
+
+    // o mesmo valor com precisões diferentes: só a tela muda
+    double juros = 0.0875;
+    printf("Juros: %.1f%% ou %.3f%%\n", juros * 100, juros * 100);
     return 0;
 }
 // Saída:
-// Item       Qtd     Total
-// Arroz 5kg    2     51.80
-// Leite       12     71.88
-// Banana       1      7.49
-// TOTAL             131.17
+// Conta 004521-7
+// Pix recebido d   +250.00
+// Mercado           -87.35
+// Conta de luz d   -142.10
+// Saldo              20.55
+// Juros: 8.8% ou 8.750%
 ```
 
 ```bash
@@ -1818,26 +1872,30 @@ Conceito: B
 
 **Exercício E026** · ★☆☆
 
-Sem rodar, escreva exatamente o que cada linha mostra (os colchetes ajudam
-a ver os espaços). Depois copie para a main e confira.
+Escreva os printf que produzem exatamente as quatro linhas abaixo. Os
+argumentos são dados: na linha 1, o 42 quatro vezes; na 2, o 3.14159 três
+vezes; na 3, o 'R' e três vezes o "Rio"; na 4, o 26 três vezes. Os
+colchetes vão fixos no formato, mas nenhum espaço e nenhum zero dentro
+deles pode ser digitado à mão: quem põe é o especificador.
 
 
 ```text
-printf("[%5d][%-5d][%05d][%+d]\n", 42, 42, 42, 42);
-printf("[%.1f][%.3f][%8.2f]\n", 3.14159, 3.14159, 3.14159);
-printf("[%c][%s][%6s][%-6s]\n", 'R', "Rio", "Rio", "Rio");
-printf("[%x][%X][%o]\n", 26, 26, 26);
+Saída esperada:
+[   42][42   ][00042][+42]
+[3.1][3.142][    3.14]
+[R][Rio][   Rio][Rio   ]
+[1a][1A][32]
 ```
 
 **Dicas:**
 
-1. Largura é o mínimo de casas; sem o -, o valor encosta na direita.
-2. 26 = 16 + 10: em hexa, 1 e A. Em octal, 26 = 3 * 8 + 2.
-3. Resposta esperada:
-   [   42][42   ][00042][+42]
-   [3.1][3.142][    3.14]
-   [R][Rio][   Rio][Rio   ]
-   [1a][1A][32]
+1. Largura é o mínimo de casas; sem o -, o valor encosta na direita. O 0
+   completa com zeros e o + mostra o sinal.
+2. Conte as casas de cada colchete: [    3.14] tem 8.
+3. 26 = 16 + 10: em hexa, 1 e A (minúsculo com %x, maiúsculo com %X). Em
+   octal (%o), 26 = 3 * 8 + 2.
+4. Resposta esperada: printf("[%5d][%-5d][%05d][%+d]\n", 42, 42, 42, 42);
+   e, nas outras, %.1f %.3f %8.2f; %c %s %6s %-6s; %x %X %o.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0005-printf/E026.c
@@ -1930,29 +1988,46 @@ Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
 
 **Exercício E030** · ★★★
 
-Seis linhas, seis pegadinhas. Sem rodar, preveja a saída de cada uma e
-explique. Depois rode e confira.
+Seis linhas, seis pegadinhas. Escreva um programa que mostre exatamente a
+saída abaixo usando, como argumento de cada printf, o valor indicado (e
+não o texto pronto):
 
 
 ```text
-printf("[%5.1f]\n", 3456.78);
-printf("[%.3s]\n", "Brasília");
-printf("[%.2f]\n", 2.675);
-printf("[%e]\n", 123456.0);
-printf("[%g] [%g]\n", 0.0001, 0.00001);
-int n = printf("Pão\n");
-printf("[%d]\n", n);
+linha 1: 3456.78
+linha 2: "Brasília"
+linha 3: 2.675, duas vezes
+linha 4: 123456.0
+linha 5: 0.0001 e 0.00001, com o mesmo especificador nos dois
+linhas 6 e 7: "Pão" e o número que o printf do "Pão" devolveu
+```
+
+
+
+```text
+Saída esperada:
+[3456.8]
+[Bra]
+[2.67] [2.67499999999999982236]
+[1.234560e+05]
+[0.0001] [1e-05]
+Pão
+[5]
 ```
 
 **Dicas:**
 
-1. A largura é mínima, nunca corta. A precisão de um %s corta.
-2. 2.675 não existe exato em binário: o double guarda 2.67499999...
+1. A largura é mínima, nunca corta: [3456.8] sai de %.1f, de %5.1f e até
+   de %1.1f. Já a precisão de um %s corta o texto.
+2. 2.675 não existe exato em binário: o double guarda 2.67499999...,
+   por isso o %.2f mostra 2.67, e não 2.68. Com %.20f você vê o número
+   guardado.
 3. O %g escolhe o formato mais curto e passa para o científico quando o
-   número fica pequeno demais (expoente menor que -4).
-4. O printf devolve quantos BYTES escreveu: o ã ocupa 2.
-5. Resposta esperada: [3456.8]; [Bra]; [2.67] (e não 2.68); [1.234560e+05];
-   [0.0001] [1e-05]; "Pão" e depois [5] (P, ã com 2 bytes, o e o \n).
+   expoente fica menor que -4. O científico de sempre é o %e.
+4. O printf devolve quantos BYTES escreveu: int n = printf("Pão\n");
+   O ã ocupa 2 bytes no UTF-8.
+5. Resposta esperada: as sete linhas acima. A última vem de
+   printf("[%d]\n", n): P, ã (2 bytes), o e o \n somam 5.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0005-printf/E030.c
@@ -2033,9 +2108,9 @@ int main(void) {
 // O último scanf leu 1 item
 ```
 
-Para testar sem digitar, mande a entrada por um cano:
-`printf '150.75\n12\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c`. O
-que vem antes do `|` vira o teclado do programa.
+Para testar sem digitar, salve o programa como `pix.c` e mande a entrada
+por um cano: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`. O que vem antes
+do `|` vira o teclado do programa.
 
 Repara no fluxograma: as duas leituras são paralelogramos de entrada, cada
 uma guardando o valor numa caixinha, e só depois vem a saída:
@@ -2068,31 +2143,41 @@ uma guardando o valor numa caixinha, e só depois vem a saída:
 
 Os arquivos ficam em [`0006-scanf/`](0006-scanf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A011 · O Pix agendado**
+**Exemplo A011 · Dois valores numa linha e a sobra que atrapalha**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    double valor;
-    int dia;
+    int quantidade = 0;
+    double preco = 0.0;
+    int parcelas = 1;
 
-    printf("Valor do Pix: R$ ");
-    scanf("%lf", &valor);            // %lf: double no scanf
-    printf("Dia do mês: ");
-    int lidos = scanf("%d", &dia);   // devolve quantos itens leu
+    // um scanf, dois valores: o %lf pula o espaço entre eles
+    printf("Quantidade e preço (ex.: 3 4.99): ");
+    int lidos = scanf("%d%lf", &quantidade, &preco);
+    printf("Itens lidos: %d\n", lidos);
 
-    printf("Pix de R$ %.2f agendado para o dia %d\n", valor, dia);
-    printf("O último scanf leu %d item\n", lidos);
+    printf("Parcelas: ");
+    lidos = scanf("%d", &parcelas);
+    printf("Itens lidos: %d\n", lidos);
+
+    printf("%d unidade(s) de R$ %.2f em %d parcela(s)\n", quantidade, preco, parcelas);
     return 0;
 }
 // Exemplo de execução:
-// Valor do Pix: R$ 150.75
-// Dia do mês: 12
-// Pix de R$ 150.75 agendado para o dia 12
-// O último scanf leu 1 item
+// Quantidade e preço (ex.: 3 4.99): 3 4.99
+// Itens lidos: 2
+// Parcelas: 2
+// Itens lidos: 1
+// 3 unidade(s) de R$ 4.99 em 2 parcela(s)
 //
-// Para testar sem digitar: printf '150.75\n12\n' | ~/LPEDC/rodar <este arquivo>
+// Teste: printf '3 4.99\n2\n' | ~/LPEDC/rodar <este arquivo>
+//
+// Agora digite "3 4.99 reais" na primeira pergunta:
+//   printf '3 4.99 reais\n2\n' | ~/LPEDC/rodar <este arquivo>
+// O " reais" fica na fila. O %d das parcelas tropeça no 'r', devolve 0
+// ("Itens lidos: 0") e parcelas continua com 1. O 2 nem chega a ser lido.
 ```
 
 ```bash
@@ -2210,8 +2295,9 @@ Alarme para 06:05
 ```
 
 
-Depois rode digitando "6 05" (com espaço no lugar dos dois pontos). O que
-acontece com os itens lidos e com os minutos? Por quê?
+Depois rode com "6 05" (espaço no lugar dos dois pontos):
+printf '6 05\n' | ~/LPEDC/rodar E033.c. O seu programa tem de mostrar
+"Itens lidos: 1" e os minutos zerados: "Alarme para 6h00".
 
 **Dicas:**
 
@@ -2219,7 +2305,8 @@ acontece com os itens lidos e com os minutos? Por quê?
 2. Inicialize as variáveis com 0 para o teste com espaço ficar previsível.
 3. Resposta esperada: com 6:05, "Itens lidos: 2", "Alarme para 6h05" e
    "Alarme para 06:05". Com "6 05", o scanf lê o 6, espera um ":" e acha
-   um espaço: para ali, lê só 1 item, e os minutos ficam 0.
+   um espaço: para ali, lê só 1 item, e os minutos ficam 0 ("Alarme para
+   6h00" e "Alarme para 06:00").
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0006-scanf/E033.c
@@ -2229,8 +2316,9 @@ acontece com os itens lidos e com os minutos? Por quê?
 
 A lanchonete pergunta quantos lanches e se é para viagem (V) ou para comer
 aqui (A). Este programa compila sem aviso, mas não funciona: rode com
-printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia. Explique
-o que aconteceu e conserte mudando UM caractere.
+printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia.
+Conserte o código mudando UM caractere e rode de novo com a mesma
+entrada.
 
 
 ```text
@@ -2254,7 +2342,8 @@ Quantidade: Opção (V/A): 3 lanche(s), opção V (código 86)
 
 Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
 UM scanf("%d %d", &a, &b), guarde o retorno e mostre "lidos=? a=? b=?".
-Antes de testar, preveja o resultado para cada entrada:
+Rode com cada uma das entradas abaixo e confira a saída de cada uma com a
+resposta esperada (a última dica):
 
 
 ```text
@@ -2408,32 +2497,42 @@ que `fatias` tem valor:
 
 Os arquivos ficam em [`0007-aritmetica/`](0007-aritmetica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A013 · Rachando a pizza**
+**Exemplo A013 · O final da placa e o rodízio**
 
 ```c
 #include <stdio.h>
 
+// No rodízio de São Paulo, o dia em que o carro não roda depende do último
+// dígito da placa (finais 7 e 8: quinta-feira). Quem separa dígitos é o par
+// / e %, com divisores 10, 100, 1000...
 int main(void) {
-    int pizzas = 3;
-    int fatias = pizzas * 8;      // 24
-    int amigos = 5;
+    int placa = 4827;                 // a parte numérica de ABC-4827
 
-    int cada = fatias / amigos;   // divisão inteira: 4
-    int sobra = fatias % amigos;  // resto: 4
+    int final = placa % 10;           // o resto por 10 é o último dígito: 7
+    int sem_final = placa / 10;       // a divisão por 10 corta o último: 482
+    int dois_primeiros = placa / 100; // 48
+    int dois_ultimos = placa % 100;   // 27
 
-    printf("%d fatias para %d amigos\n", fatias, amigos);
-    printf("Cada um come %d, sobram %d\n", cada, sobra);
+    printf("Final da placa: %d\n", final);
+    printf("Sem o final: %d\n", sem_final);
+    printf("Metades: %d e %d\n", dois_primeiros, dois_ultimos);
+    printf("Final %% 2 = %d (0 é par, 1 é ímpar)\n", final % 2);
 
-    double conta = 159.00;
-    printf("Cada um paga R$ %.2f\n", conta / amigos); // real / int: divisão real
-    printf("Com inteiros: R$ %d\n", 159 / amigos);    // int / int: corta o resto
+    // a regra que amarra os dois: (a / b) * b + a % b devolve o a
+    printf("%d * 100 + %d = %d\n", dois_primeiros, dois_ultimos,
+           dois_primeiros * 100 + dois_ultimos);
+
+    // o dígito do meio: corta pela direita com /, isola com %
+    printf("Dígito das centenas: %d\n", placa / 100 % 10);
     return 0;
 }
 // Saída:
-// 24 fatias para 5 amigos
-// Cada um come 4, sobram 4
-// Cada um paga R$ 31.80
-// Com inteiros: R$ 31
+// Final da placa: 7
+// Sem o final: 482
+// Metades: 48 e 27
+// Final % 2 = 1 (0 é par, 1 é ímpar)
+// 48 * 100 + 27 = 4827
+// Dígito das centenas: 8
 ```
 
 ```bash
@@ -2504,8 +2603,10 @@ Ingressos: R$ 245
 
 **Exercício E038** · ★☆☆
 
-Sem rodar, calcule cada expressão. Depois confira com um printf para cada
-uma (%d para as inteiras e %.1f para a real).
+Escreva um programa que mostre o valor de cada expressão abaixo, uma por
+linha, com a letra na frente. A expressão vai como argumento do printf,
+do jeito que está escrita (quem calcula é o C): %d para as inteiras e
+%.1f para a real.
 
 
 ```text
@@ -2514,6 +2615,24 @@ b) (7 + 3) * 2        f) -17 % 5
 c) 17 / 5             g) 2 * 3 % 4
 d) 17 % 5             h) 17.0 / 5
 ```
+
+
+
+```text
+Saída esperada:
+a) 13
+b) 20
+c) 3
+d) 2
+e) -3
+f) -2
+g) 2
+h) 3.4
+```
+
+
+Antes de rodar, tente chegar a cada valor na mão: é o treino de
+precedência.
 
 **Dicas:**
 
@@ -2587,22 +2706,25 @@ Média 2: 7.67
 **Exercício E041** · ★★★
 
 O kit escolar custa R$ 20 de material mais R$ 5 de frete. Alguém criou um
-#define para o preço do kit e calculou o preço de 3 kits. Sem rodar, diga
-o que o programa mostra e por quê. Depois conserte mudando só o #define.
+#define para o preço do kit e calculou o preço de 3 kits e a parcela do
+kit em 5 vezes. O programa compila sem aviso, mas as duas contas saem
+erradas. Rode, veja os valores e conserte mudando só a linha do #define.
 
 
 ```text
 Saída esperada (depois de consertar):
 3 kits: R$ 75
+Kit em 5x: R$ 5
 ```
 
 **Dicas:**
 
-1. O #define não calcula nada: ele cola o texto. Escreva a linha do printf
-   com o texto colado e aplique a precedência.
+1. O #define não calcula nada: ele cola o texto. Escreva cada printf com
+   o texto colado e aplique a precedência.
 2. Toda macro que é uma conta deve vir entre parênteses.
-3. Resposta esperada: mostra "3 kits: R$ 65", porque 3 * KIT vira
-   3 * 20 + 5 = 65. Conserto: #define KIT (20 + 5).
+3. Resposta esperada: antes, "3 kits: R$ 65" (3 * 20 + 5) e "Kit em 5x:
+   R$ 21" (20 + 5 / 5). Conserto: #define KIT (20 + 5), e as duas linhas
+   acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E041.c
@@ -2611,7 +2733,8 @@ Saída esperada (depois de consertar):
 **Exercício E042** · ★★★
 
 Leia um número de 3 dígitos e mostre ao contrário, usando só / e %
-(nada de texto). Depois teste com 120: o que aparece? Como mostrar 021?
+(nada de texto). O programa tem de funcionar também quando o número
+termina em zero: com 120, a saída é 021, sempre com três dígitos.
 
 
 ```text
@@ -2621,15 +2744,24 @@ Ao contrário: 274
 ```
 
 
-Teste: printf '472\n' | ~/LPEDC/rodar E042.c
+
+```text
+Exemplo de execução:
+Número: 120
+Ao contrário: 021
+```
+
+
+Teste: printf '472\n' | ~/LPEDC/rodar E042.c e depois com '120\n'.
 
 **Dicas:**
 
 1. n % 10 é o último dígito; n / 10 % 10 é o do meio; n / 100 é o
    primeiro.
 2. Monte o novo número: unidade * 100 + dezena * 10 + centena.
-3. Resposta esperada: 472 vira 274. Com 120, o número invertido vale 21
-   (zero à esquerda não existe num int); para mostrar 021, use %03d.
+3. Com 120, o número invertido vale 21: zero à esquerda não existe num
+   int. Quem põe o zero é o printf: %03d.
+4. Resposta esperada: 472 vira 274 e 120 vira 021.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E042.c
@@ -2730,32 +2862,36 @@ programa rodar. O exemplo segue pelo Sim, graças ao cast:
 
 Os arquivos ficam em [`0008-conversao/`](0008-conversao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A015 · O consumo do carro**
+**Exemplo A015 · O cast que corta de propósito**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    int km = 523;     // rodados desde o último tanque
-    int litros = 41;  // para encher de novo
+    // quantos pacotes cheios de 2.5 kg saem de 18 kg de café?
+    double estoque = 18.0, pacote = 2.5;
+    int cheios = (int) (estoque / pacote);   // 7.2 vira 7: aqui cortar é o certo
+    double sobra = estoque - cheios * pacote; // int * double: a conta é real
+    printf("Pacotes cheios: %d\n", cheios);
+    printf("Sobram %.1f kg\n", sobra);
 
-    double errado = km / litros;            // int / int = 12; depois vira 12.0
-    double certo = (double) km / litros;    // 523.0 / 41 = 12.756...
-    double tarde = (double) (km / litros);  // o cast chegou depois da divisão
+    // horas decimais do ponto eletrônico para horas e minutos
+    double trabalhadas = 2.75;
+    int horas = (int) trabalhadas;                    // 2
+    int minutos = (int) ((trabalhadas - horas) * 60); // 0.75 * 60 = 45
+    printf("%.2f h = %d h %d min\n", trabalhadas, horas, minutos);
 
-    printf("Sem cast:      %.2f km/l\n", errado);
-    printf("Com cast:      %.2f km/l\n", certo);
-    printf("Cast atrasado: %.2f km/l\n", tarde);
-
-    int inteiro = certo;                    // double -> int: corta, não arredonda
-    printf("Num int:       %d km/l\n", inteiro);
+    // o cast pega só o valor logo à direita dele
+    printf("(int) 2.75 * 60 = %d\n", (int) 2.75 * 60);     // 2 * 60
+    printf("(int) (2.75 * 60) = %d\n", (int) (2.75 * 60)); // 165.0 vira 165
     return 0;
 }
 // Saída:
-// Sem cast:      12.00 km/l
-// Com cast:      12.76 km/l
-// Cast atrasado: 12.00 km/l
-// Num int:       12 km/l
+// Pacotes cheios: 7
+// Sobram 0.5 kg
+// 2.75 h = 2 h 45 min
+// (int) 2.75 * 60 = 120
+// (int) (2.75 * 60) = 165
 ```
 
 ```bash
@@ -2831,27 +2967,33 @@ Média: 8.33
 
 **Exercício E044** · ★☆☆
 
-Sem rodar, diga o valor guardado em cada variável. Depois mostre todas
-com printf (%d para int, %.1f para double, %c para char) e confira.
+Cada linha do programa abaixo tem, no comentário, o valor que a pessoa
+QUERIA guardar. Algumas guardam outra coisa. Acrescente um printf para
+cada variável (%d para int, %.1f para double, %c para char), rode e
+conserte as linhas erradas mexendo só no lado direito do =, sem trocar o
+tipo de nenhuma variável, até a saída ficar igual à esperada.
 
 
 ```text
-int a = 7.9;
-double b = 7 / 2;
-double c = 7 / 2.0;
-int d = -7.9;
-char e = 66;
-double f = (double) (7 / 2);
-int g = (int) 3.999;
+Saída esperada (depois de consertar):
+a = 7
+b = 3.5
+c = 3.5
+d = -7
+e = B
+f = 3.5
+g = 3
 ```
 
 **Dicas:**
 
 1. Na atribuição, o valor vira o tipo da esquerda: real para int corta a
    parte fracionária, em direção ao zero.
-2. A conta da direita é feita primeiro, com os tipos dela.
-3. Resposta esperada: a = 7; b = 3.0; c = 3.5; d = -7; e = 'B';
-   f = 3.0; g = 3.
+2. A conta da direita é feita primeiro, com os tipos dela: 7 / 2 entre
+   dois int dá 3, e só depois vira 3.0.
+3. Resposta esperada: só b e f estavam erradas (as duas mostravam 3.0).
+   Conserto: double b = 7 / 2.0; e double f = (double) 7 / 2; (o cast
+   antes da divisão). E as sete linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0008-conversao/E044.c
@@ -2859,24 +3001,27 @@ int g = (int) 3.999;
 
 **Exercício E045** · ★★☆
 
-Na eleição para síndico, a candidata Marta teve 47 dos 130 votos. Mostre
-o percentual dela com duas casas. Depois responda: por que a fórmula
-"votos / total * 100" com dois int dá 0? E por que "100 * votos / total"
-dá 36 e não 36.15?
+Na eleição para síndico, a candidata Marta teve 47 dos 130 votos. Guarde
+os dois números em variáveis int e mostre o percentual dela com duas
+casas. Depois mostre também o resultado das duas fórmulas que o colega
+tentou antes, com as mesmas variáveis e %d, para ver o estrago de cada
+uma.
 
 
 ```text
 Saída esperada:
 Marta: 36.15% dos votos
+votos / total * 100 = 0
+100 * votos / total = 36
 ```
 
 **Dicas:**
 
 1. Basta um operando real no lugar certo: 100.0 * votos / total.
 2. Faça cada fórmula errada passo a passo, da esquerda para a direita.
-3. Resposta esperada: 36.15%. Em votos / total * 100, 47 / 130 é 0 (divisão
-   inteira) e 0 * 100 = 0. Em 100 * votos / total, 4700 / 130 = 36: certo
-   na parte inteira, mas os decimais somem.
+3. Resposta esperada: as três linhas acima. Em votos / total * 100,
+   47 / 130 é 0 (divisão inteira) e 0 * 100 = 0. Em 100 * votos / total,
+   4700 / 130 = 36: certo na parte inteira, mas os decimais somem.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0008-conversao/E045.c
@@ -2910,12 +3055,13 @@ Saída esperada (depois de consertar):
 
 Sistemas de pagamento guardam dinheiro em centavos inteiros, para fugir
 dos erros dos números reais. Este programa converte R$ 19.99 para
-centavos. Sem rodar, quanto você espera? Rode. Explique o que aconteceu e
-conserte para mostrar 1999.
+centavos, mas mostra 1998. Rode, acrescente um printf que mostre
+valor * 100 com %.15f para ver o número de verdade, e conserte a conta
+para mostrar 1999 (sem trocar o tipo das variáveis).
 
 
 ```text
-Saída esperada (depois de consertar):
+Saída esperada (depois de consertar), na última linha:
 R$ 19.99 = 1999 centavos
 ```
 
@@ -2935,29 +3081,33 @@ R$ 19.99 = 1999 centavos
 
 **Exercício E048** · ★★★
 
-Sem rodar, preveja cada linha. Pense no tipo de cada pedaço da conta.
+Letras são números, e as contas com elas seguem as regras de conversão.
+Escreva um programa que comece com char letra = 'g'; e mostre as linhas
+abaixo. Regras: tirando a própria letra 'g', só valem os literais 'a',
+'A', 1 e 3 (nada de escrever 'G', 71, 7, 'j' ou 32). Na última linha, use
+as variáveis double x = 3.7, y = 3.7 e casts para int.
 
 
 ```text
-char c = 'a';
-printf("%c %d\n", c - 32, c - 32);
-printf("%d\n", 'z' - 'a');
-unsigned char u = 250;
-u = u + 10;
-printf("%d\n", u);
-printf("%.1f\n", 5 / 2 * 2.0);
-printf("%.1f\n", 2.0 * 5 / 2);
-int i = 3.7 + 3.7;
-printf("%d\n", i);
-printf("%d\n", (int) 3.7 + (int) 3.7);
+Saída esperada:
+Letra: g (código 103)
+Maiúscula: G (código 71)
+Posição no alfabeto: 7
+Três adiante: j
+Somando e cortando: 7; cortando e somando: 6
 ```
 
 **Dicas:**
 
-1. char vira int nas contas: 'a' é 97.
-2. 250 + 10 é feito em int (260); guardar num unsigned char dá a volta.
-3. Somar antes de cortar não é o mesmo que cortar antes de somar.
-4. Resposta esperada: "A 65"; 25; 4; 4.0; 5.0; 7 (7.4 cortado); 6 (3 + 3).
+1. Numa conta, o char vira int: letra - 'a' é a distância da letra até o
+   'a' (g está 6 depois do a).
+2. Maiúscula: a mesma distância, a partir do 'A'. Mostre o resultado com
+   %c e com %d.
+3. Somar antes de cortar não é o mesmo que cortar antes de somar:
+   (int) (x + y) e (int) x + (int) y.
+4. Resposta esperada: as cinco linhas acima. A maiúscula é
+   letra - 'a' + 'A'; a posição, letra - 'a' + 1; três adiante,
+   letra + 3; e 7.4 cortado dá 7, enquanto 3 + 3 dá 6.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0008-conversao/E048.c
@@ -3066,31 +3216,47 @@ repetição; o `+=` e o `++` são o coração de todo contador e acumulador:
 
 Os arquivos ficam em [`0009-atribuicao/`](0009-atribuicao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A017 · O bilhete único**
+**Exemplo A017 · Vagas que descem, senhas que sobem (até de letra)**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    double saldo = 20.00;
-    int viagens = 0;
+    // -- conta para baixo: cada carro que entra ocupa uma vaga
+    int vagas = 3;
+    vagas--;                 // 2
+    vagas--;                 // 1
+    printf("Vagas livres: %d\n", vagas);
 
-    saldo += 30.00;   // recarga: saldo = saldo + 30.00
-    saldo -= 4.40;    // 1ª viagem
-    viagens++;        // viagens = viagens + 1
-    saldo -= 4.40;    // 2ª viagem
-    viagens++;
+    // ++ num char: o char é número, então ++ vai para a próxima letra
+    char fila = 'A';
+    int senha = 41;
+    printf("Chamando %c%02d\n", fila, senha);
+    senha++;
+    printf("Chamando %c%02d\n", fila, senha);
+    fila++;                  // 'A' (65) vira 'B' (66)
+    senha = 1;               // a fila nova recomeça do 1
+    printf("Chamando %c%02d\n", fila, senha);
 
-    printf("Saldo: R$ %.2f depois de %d viagens\n", saldo, viagens);
+    // /= com int faz divisão inteira: a moeda ímpar some
+    int moedas = 25;
+    moedas /= 2;
+    printf("Cada irmão fica com %d moedas\n", moedas);
 
-    int antes = viagens++;   // pós: usa o 2, depois soma (viagens vira 3)
-    int depois = ++viagens;  // pré: soma primeiro (vira 4), depois usa o 4
-    printf("antes = %d, depois = %d, viagens = %d\n", antes, depois, viagens);
+    // -= com double: o desconto sai do valor que já está lá
+    double conta = 120.00;
+    conta -= 15.50;          // cupom
+    conta -= conta * 0.10;   // mais 10% sobre o que sobrou
+    printf("Conta final: R$ %.2f\n", conta);
     return 0;
 }
 // Saída:
-// Saldo: R$ 41.20 depois de 2 viagens
-// antes = 2, depois = 4, viagens = 4
+// Vagas livres: 1
+// Chamando A41
+// Chamando A42
+// Chamando B01
+// Cada irmão fica com 12 moedas
+// Conta final: R$ 94.05
 ```
 
 ```bash
@@ -3169,24 +3335,25 @@ pontos 110, vidas 2, moedas 40, tempo 45, fase 4
 
 **Exercício E050** · ★☆☆
 
-Sem rodar, faça o teste de mesa: uma tabela com uma coluna para cada
-variável e uma linha para cada instrução. Qual o valor final de x, y, z
-e w? Depois copie para a main, mostre os quatro e confira.
+Acrescente um printf depois de cada uma das três últimas linhas,
+mostrando a instrução, o valor de x e o valor da variável que acabou de
+ser criada, no formato abaixo. Antes de rodar, tente adivinhar cada
+número; depois confira com a saída.
 
 
 ```text
-int x = 5;
-int y = x++;
-int z = ++x;
-int w = x--;
+Saída esperada:
+y = x++ -> x = 6, y = 5
+z = ++x -> x = 7, z = 7
+w = x-- -> x = 6, w = 7
 ```
 
 **Dicas:**
 
 1. x++ entrega o valor antigo e depois soma; ++x soma e entrega o novo.
-2. Siga uma linha por vez: depois de y = x++, quanto vale x?
-3. Resposta esperada: y = 5 (x vira 6); z = 7 (x vira 7 antes); w = 7
-   (x vira 6 depois). Final: x = 6, y = 5, z = 7, w = 7.
+2. O printf vai na linha de baixo, sozinho: printf("y = x++ -> x = %d,
+   y = %d\n", x, y);
+3. Resposta esperada: as três linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E050.c
@@ -3224,30 +3391,31 @@ Rendimento: R$ 17.68
 
 **Exercício E052** · ★★☆
 
-Sem rodar, diga o valor de x depois de cada linha (as linhas rodam em
-sequência, uma depois da outra). Depois confira com um printf após cada
-uma.
+As quatro linhas com operadores compostos rodam em sequência, uma depois
+da outra. Acrescente um printf depois de cada uma, mostrando a instrução
+e o novo valor de x. Depois, para provar que x = x * 2 + y e
+x *= 2 + y são contas diferentes, volte x para 10 e mostre as duas: a
+primeira só no printf, sem guardar; a segunda guardando em x.
 
 
 ```text
-int x = 10, y = 3;
-x *= y + 1;
-x -= y - 1;
-x /= y + 1;
-x %= y + 2;
+Saída esperada:
+x *= y + 1 -> 40
+x -= y - 1 -> 38
+x /= y + 1 -> 9
+x %= y + 2 -> 4
+x * 2 + y = 23
+x *= 2 + y -> 50
 ```
-
-
-Por fim, responda: x = x * 2 + y pode ser escrito como x *= 2 + y? Por
-quê?
 
 **Dicas:**
 
 1. O composto age sobre toda a expressão da direita: x op= expr é
    x = x op (expr).
-2. A divisão é entre int.
-3. Resposta esperada: 40 (10 * 4), 38 (40 - 2), 9 (38 / 4), 4 (9 % 5).
-   Não: x *= 2 + y é x = x * (2 + y), outra conta.
+2. A divisão é entre int: 38 / 4 dá 9.
+3. Para o % aparecer no printf, %%.
+4. Resposta esperada: as seis linhas acima. x *= 2 + y é
+   x = x * (2 + y) = 10 * 5, e não 10 * 2 + 3.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E052.c
@@ -3256,9 +3424,10 @@ quê?
 **Exercício E053** · ★★★
 
 Este programa compila, mas o gcc mostra avisos. Pior: cada compilador
-pode mostrar uma saída diferente. Rode, leia os avisos e explique por que
-essas linhas não têm resposta certa. Depois reescreva para ficar claro e
-previsível, com a intenção indicada em cada comentário.
+pode mostrar uma saída diferente. Rode e leia os avisos. Depois conserte:
+reescreva as duas linhas marcadas para ficarem claras e previsíveis, com
+a intenção indicada em cada comentário, e rode de novo até não sobrar
+aviso.
 
 
 ```text
@@ -3293,18 +3462,15 @@ Saída esperada:
 Casa 5 x 2 Visitante
 ```
 
-
-Depois responda: por que este truque é perigoso com valores muito
-grandes, perto de INT_MAX?
-
 **Dicas:**
 
 1. Guarde a soma dos dois numa das variáveis: casa += visitante (casa = 7).
 2. Da soma, dá para recuperar cada um tirando o outro.
-3. Resposta esperada: casa += visitante; visitante = casa - visitante;
-   casa -= visitante; e a saída "Casa 5 x 2 Visitante". Com valores
-   grandes, a soma pode passar de INT_MAX: estouro de int, comportamento
-   indefinido. A versão com variável auxiliar é mais segura e mais clara.
+3. Cuidado na vida real: com valores perto de INT_MAX, a soma estoura o
+   int (comportamento indefinido). A versão com variável auxiliar é mais
+   segura e mais clara; este truque é só para treinar os compostos.
+4. Resposta esperada: casa += visitante; visitante = casa - visitante;
+   casa -= visitante; e a saída "Casa 5 x 2 Visitante".
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E054.c
@@ -3418,38 +3584,38 @@ expressão, como num processamento comum:
 
 Os arquivos ficam em [`0010-math/`](0010-math/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A019 · Uma pizza grande ou duas médias?**
+**Exemplo A019 · A escada no muro e o posto na estrada**
 
 ```c
 #include <stdio.h>
 #include <math.h>
 
-#define PI 3.14159265358979 // o C padrão não define o pi
+#define PI 3.14159265358979
 
 int main(void) {
-    double diametro_grande = 35.0, diametro_media = 25.0; // cm
-    double preco_grande = 59.90, preco_medias = 2 * 39.90;
+    // sin e cos trabalham em radianos: converta com graus * PI / 180
+    double escada = 5.0;            // metros
+    double graus = 60.0;            // ângulo da escada com o chão
+    double radianos = graus * PI / 180;
+    printf("Altura no muro: %.2f m\n", escada * sin(radianos));
+    printf("Pé da escada a %.2f m do muro\n", escada * cos(radianos));
 
-    double area_grande = PI * pow(diametro_grande / 2, 2);     // pi * r²
-    double area_medias = 2 * PI * pow(diametro_media / 2, 2);
+    // fmod: o resto de uma divisão entre reais (o % só aceita inteiros)
+    double km = 31.0, entre_postos = 7.5;
+    double desde_ultimo = fmod(km, entre_postos);   // 31 - 4 * 7.5 = 1.0
+    printf("Último posto há %.1f km; próximo em %.1f km\n",
+           desde_ultimo, entre_postos - desde_ultimo);
 
-    printf("Grande: %.0f cm² por R$ %.2f\n", round(area_grande), preco_grande);
-    printf("Duas médias: %.0f cm² por R$ %.2f\n", round(area_medias), preco_medias);
-    printf("Diferença: %.1f cm²\n", fabs(area_grande - area_medias));
-    printf("R$ por 100 cm²: grande %.2f, médias %.2f\n",
-           preco_grande / area_grande * 100, preco_medias / area_medias * 100);
-
-    // a pizza única com a mesma área das duas médias: r = raiz(área / pi)
-    double diametro_igual = 2 * sqrt(area_medias / PI);
-    printf("Duas médias = uma pizza de %.1f cm\n", diametro_igual);
+    // fabs: a distância entre dois valores, não importa a ordem da conta
+    double tarde = 14.5, madrugada = -3.0;
+    printf("Variação no dia: %.1f graus\n", fabs(madrugada - tarde));
     return 0;
 }
 // Saída:
-// Grande: 962 cm² por R$ 59.90
-// Duas médias: 982 cm² por R$ 79.80
-// Diferença: 19.6 cm²
-// R$ por 100 cm²: grande 6.23, médias 8.13
-// Duas médias = uma pizza de 35.4 cm
+// Altura no muro: 4.33 m
+// Pé da escada a 2.50 m do muro
+// Último posto há 1.0 km; próximo em 6.5 km
+// Variação no dia: 17.5 graus
 ```
 
 ```bash
@@ -3525,23 +3691,44 @@ TV de 55 polegadas
 
 **Exercício E056** · ★☆☆
 
-Sem rodar, diga o resultado de cada chamada. Depois mostre todas com
-%.2f e confira. Atenção especial aos negativos.
+Para cada situação, escolha a função do math.h que resolve e escreva um
+printf que mostre a linha com o resultado. Os números da conta vão como
+argumento da função (quem calcula é o programa). Mostre os resultados com
+%.0f, menos o saldo, com %.2f.
 
 
 ```text
-floor(3.7)   ceil(3.2)    round(2.5)   round(-2.5)
-floor(-3.2)  ceil(-3.7)   fabs(-7.25)  sqrt(144)
-pow(2, 10)   pow(9, 0.5)  fmod(10, 3)
+a) 13 pessoas, 4 por viagem do elevador: quantas viagens?
+b) quem tem 34.9 anos tem quantos anos completos?
+c) a nota 6.5 arredondada para o inteiro mais perto
+d) o saldo de -42.75, sem o sinal
+e) o lado de um quadrado de 144 m²
+f) 2 elevado a 10
+g) -3.2 graus, arredondado para baixo
+```
+
+
+
+```text
+Saída esperada:
+a) 4 viagens
+b) 34 anos
+c) nota 7
+d) R$ 42.75
+e) 12 m
+f) 1024
+g) -4 graus
 ```
 
 **Dicas:**
 
 1. floor desce na reta numérica; ceil sobe. Com negativo, "descer" é ir
    para mais longe do zero.
-2. round leva o meio (x.5) para longe do zero.
-3. Resposta esperada: 3.00, 4.00, 3.00, -3.00, -4.00, -3.00, 7.25, 12.00,
-   1024.00, 3.00 (raiz de 9) e 1.00.
+2. round leva o meio (x.5) para longe do zero. Em a), cuidado: 13 / 4
+   entre dois int já sai cortado; use 13.0 / 4.
+3. Resposta esperada: a) ceil(13.0 / 4); b) floor(34.9); c) round(6.5);
+   d) fabs(-42.75); e) sqrt(144); f) pow(2, 10); g) floor(-3.2). E as
+   sete linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0010-math/E056.c
@@ -3577,27 +3764,26 @@ Total: R$ 269.70
 Você aplica R$ 1000.00 num investimento que rende 1% ao mês, com juros
 compostos (juros sobre juros). O montante depois de n meses é
 capital * (1 + taxa) elevado a n. Mostre o montante e o rendimento depois
-de 12 e de 24 meses.
+de 12 e de 24 meses. Para comparar, mostre também quanto teria em 24
+meses com juros simples (1% do capital por mês, sem juros sobre juros) e
+a diferença entre os dois em 24 meses.
 
 
 ```text
 Saída esperada:
 12 meses: R$ 1126.83 (rendeu R$ 126.83)
 24 meses: R$ 1269.73 (rendeu R$ 269.73)
+Juros simples, 24 meses: R$ 1240.00
+Diferença: R$ 29.73
 ```
-
-
-Depois responda: com juros simples (1% de R$ 1000 por mês, sem juros
-sobre juros), quanto teria em 24 meses? Por que a diferença cresce com o
-tempo?
 
 **Dicas:**
 
 1. A taxa de 1% é 0.01. pow(1 + taxa, 12).
 2. Rendimento = montante - capital.
-3. Resposta esperada: R$ 1126.83 e R$ 1269.73. Com juros simples, R$ 1240
-   em 24 meses: os compostos rendem também sobre o que já rendeu, e essa
-   parte cresce a cada mês.
+3. Juros simples: capital + capital * taxa * 24.
+4. Resposta esperada: as quatro linhas acima. Os compostos rendem também
+   sobre o que já rendeu, e essa parte cresce a cada mês.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0010-math/E058.c
@@ -3606,7 +3792,8 @@ tempo?
 **Exercício E059** · ★★★
 
 Três contas, três erros. O programa compila com um aviso e mostra três
-valores errados. Explique cada erro e conserte.
+valores errados. Conserte o código e rode de novo até sair a saída
+esperada, sem aviso.
 
 - A caixa d'água em forma de cubo tem 27 m³. Qual a aresta? (3 m)
 - O termômetro marcou -2.75 °C. Quanto falta para chegar a 0? (2.75)
@@ -3796,54 +3983,60 @@ losango. É o retrato de todo programa deste módulo:
 
 Os arquivos ficam em [`0011-juntando-tudo/`](0011-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A021 · A conta de luz da república**
+**Exemplo A021 · Quantas caixas de piso comprar**
 
 ```c
 #include <stdio.h>
 #include <math.h>
 
-#define TARIFA_KWH 0.82    // R$ por kWh
-#define ILUMINACAO 18.50   // taxa fixa de iluminação pública
-#define DIAS 30
+#define PERDA 1.10          // 10% a mais para os recortes
+#define M2_POR_CAIXA 2.5    // cada caixa cobre 2,5 m²
 
 int main(void) {
-    int anterior, atual, moradores;
+    double largura = 0, comprimento = 0, preco_caixa = 0;
 
-    // entrada
-    printf("Leitura anterior (kWh): ");
-    scanf("%d", &anterior);
-    printf("Leitura atual (kWh): ");
-    scanf("%d", &atual);
-    printf("Moradores: ");
-    int lidos = scanf("%d", &moradores);
+    // entrada: o retorno de cada scanf vai somando no total de leituras
+    printf("Largura do cômodo (m): ");
+    int leituras = scanf("%lf", &largura);
+    printf("Comprimento (m): ");
+    leituras += scanf("%lf", &comprimento);
+    printf("Preço da caixa (R$): ");
+    leituras += scanf("%lf", &preco_caixa);
 
     // processamento
-    int consumo = atual - anterior;
-    double total = consumo * TARIFA_KWH;
-    total += ILUMINACAO;
-    double por_dia = (double) consumo / DIAS;
-    double cada = ceil(total / moradores * 100) / 100; // centavo para cima
+    double area = largura * comprimento;
+    double area_compra = area;
+    area_compra *= PERDA;
+    int caixas = (int) ceil(area_compra / M2_POR_CAIXA); // caixa não vem pela metade
+    double total = caixas * preco_caixa;
+    double sobra = caixas * M2_POR_CAIXA - area_compra;
 
-    // saída
-    printf("\n%-18s %8d kWh\n", "Consumo:", consumo);
-    printf("%-18s %8.2f kWh\n", "Por dia:", por_dia);
-    printf("%-18s R$ %8.2f\n", "Total da conta:", total);
-    printf("%-18s R$ %8.2f\n", "Cada morador:", cada);
-    printf("(o último scanf leu %d item)\n", lidos);
+    // saída: rótulos com acento direto no formato, porque a largura do %s
+    // conta bytes, e cada letra acentuada ocupa 2
+    printf("\nÁrea do cômodo:   %8.2f m²\n", area);
+    printf("Com 10%% de perda: %8.2f m²\n", area_compra);
+    printf("Caixas:           %8d\n", caixas);
+    printf("Sobra na última:  %8.2f m²\n", sobra);
+    printf("Total (R$):       %8.2f\n", total);
+    printf("(leituras certas: %d de 3)\n", leituras);
     return 0;
 }
 // Exemplo de execução:
-// Leitura anterior (kWh): 45230
-// Leitura atual (kWh): 45487
-// Moradores: 3
+// Largura do cômodo (m): 3.2
+// Comprimento (m): 4.5
+// Preço da caixa (R$): 89.90
 //
-// Consumo:                257 kWh
-// Por dia:               8.57 kWh
-// Total da conta:    R$   229.24
-// Cada morador:      R$    76.42
-// (o último scanf leu 1 item)
+// Área do cômodo:      14.40 m²
+// Com 10% de perda:    15.84 m²
+// Caixas:                  7
+// Sobra na última:      1.66 m²
+// Total (R$):         629.30
+// (leituras certas: 3 de 3)
 //
-// Teste: printf '45230\n45487\n3\n' | ~/LPEDC/rodar <este arquivo>
+// Teste: printf '3.2\n4.5\n89.90\n' | ~/LPEDC/rodar <este arquivo>
+// Com uma letra no preço, printf '3.2\n4.5\nabc\n' | ~/LPEDC/rodar <este arquivo>
+// mostra "(leituras certas: 2 de 3)" e o total sai 0.00: o preço ficou com
+// o valor inicial. No módulo 02, com o if, o programa vai poder parar ali.
 ```
 
 ```bash
