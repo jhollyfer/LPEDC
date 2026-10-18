@@ -1,0 +1,116 @@
+// A trie do teclado (só o ramo do b): cada aresta é uma letra, os nós verdes
+// terminam palavra. As arestas verdes são o caminho do prefixo "bol"; tudo o
+// que está embaixo do l é sugestão. Os rótulos com espaço no fim só servem para
+// o desenho ter vértices diferentes com a mesma letra.
+const X = 160
+const Y = 230
+
+export const ideia = {
+  caixas: [
+    {
+      forma: 'grafo',
+      id: 't',
+      x: X,
+      y: Y,
+      raio: 32,
+      vertices: [
+        ['raiz', 520, 0],
+        ['b', 520, 115],
+        ['o', 520, 230],
+        ['l', 280, 345],
+        ['m', 820, 345],
+        ['a', 40, 460],
+        ['e', 200, 460],
+        ['o ', 360, 460],
+        ['s', 520, 460],
+        ['b ', 820, 460],
+        ['t', 200, 575],
+        ['a ', 520, 575],
+        ['o  ', 820, 575],
+        ['o   ', 200, 690],
+        ['m ', 820, 690],
+      ],
+      arestas: [
+        ['raiz', 'b'],
+        ['b', 'o'],
+        ['o', 'l'],
+        ['o', 'm'],
+        ['l', 'a'],
+        ['l', 'e'],
+        ['l', 'o '],
+        ['l', 's'],
+        ['m', 'b '],
+        ['e', 't'],
+        ['s', 'a '],
+        ['b ', 'o  '],
+        ['t', 'o   '],
+        ['o  ', 'm '],
+      ],
+      estados: {
+        raiz: 'cinza',
+        l: 'amarelo',
+        a: 'verde',
+        'o ': 'verde',
+        'a ': 'verde',
+        'o   ': 'verde',
+        m: 'verde',
+        'm ': 'verde',
+      },
+      marcadas: [
+        ['raiz', 'b'],
+        ['b', 'o'],
+        ['o', 'l'],
+      ],
+    },
+    {
+      id: 'q',
+      x: 1130,
+      y: 470,
+      w: 380,
+      h: 230,
+      cor: 'roxo',
+      rotulo: 'autocompleta("bol")',
+      texto: ['bola', 'boleto bolo', 'bolsa'],
+    },
+  ],
+  setas: [],
+  notas: [
+    { x: X + 40, y: Y + 530, texto: 'bola', cor: 'verde', tam: 24, ancora: 'middle' },
+    { x: X + 410, y: Y + 470, texto: 'bolo', cor: 'verde', tam: 24 },
+    { x: X + 520, y: Y + 645, texto: 'bolsa', cor: 'verde', tam: 24, ancora: 'middle' },
+    { x: X + 200, y: Y + 760, texto: 'boleto', cor: 'verde', tam: 24, ancora: 'middle' },
+    { x: X + 880, y: Y + 355, texto: 'bom', cor: 'verde', tam: 24 },
+    { x: X + 820, y: Y + 760, texto: 'bombom', cor: 'verde', tam: 24, ancora: 'middle' },
+    { x: X + 580, y: Y + 125, texto: 'b', cor: 'roxo', tam: 24 },
+    { x: X + 580, y: Y + 240, texto: 'bo', cor: 'roxo', tam: 24 },
+    { x: X + 160, y: Y + 340, texto: '"bol": existe,', cor: 'roxo', tam: 24, ancora: 'end' },
+    { x: X + 160, y: Y + 378, texto: 'mas fim = false', cor: 'roxo', tam: 24, ancora: 'end' },
+    { x: 1130, y: 760, texto: ['verde: fim = true', '(uma palavra termina ali)'], cor: 'verde', tam: 24 },
+    { x: 100, y: 200, texto: 'O RAMO DO "b"', cor: 'cinza' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'trie_insere(r, palavra)'],
+    ['B', 'dec', 'Ainda tem letra?'],
+    ['C', 'proc', 'i = letra - \'a\''],
+    ['D', 'dec', 'r->filho[i] == NULL?'],
+    ['E', 'proc', 'Cria o nó do filho i'],
+    ['F', 'proc', 'r = r->filho[i]; próxima letra'],
+    ['G', 'proc', 'r->fim = true'],
+    ['H', 'io', 'Palavra guardada'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C', 'Sim'],
+    ['C', 'D'],
+    ['D', 'E', 'Sim'],
+    ['D', 'F', 'Não'],
+    ['E', 'F'],
+    ['F', 'B'],
+    ['B', 'G', 'Não'],
+    ['G', 'H'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'F', 'B', 'C', 'D', 'F', 'B', 'C', 'D', 'E', 'F', 'B', 'G', 'H'],
+}
