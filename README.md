@@ -67,8 +67,8 @@ O caminho de cada assunto:
 1. Leia o assunto no `README.md` do módulo e tente responder a **Pergunta para
    você** antes de rodar.
 2. Rode os exemplos e mexa neles à vontade.
-3. Faça os exercícios. Travou? Abra as dicas (ficam escondidas no README e no
-   topo do arquivo).
+3. Faça os exercícios. Travou? As dicas estão logo abaixo do enunciado, no
+   README e no topo do arquivo.
 
 As formas e as cores dos desenhos:
 

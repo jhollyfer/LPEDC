@@ -41,7 +41,7 @@ const imagem = (src, alt, svg) => {
 }
 
 // "Hora de praticar": cada exemplo (A) com título, código e comando; cada
-// exercício (E) com nível, enunciado, dicas (escondidas) e comando
+// exercício (E) com nível, enunciado, dicas e comando
 const comando = (caminho) => ['```bash', `~/LPEDC/rodar ${caminho}`, '```']
 
 // exemplo: a 1ª linha "// A001 · título" é o título, o resto é o código
@@ -86,7 +86,7 @@ const exercicio = (caminho, nome) => {
     ...corpo.join('\n').trim().split('\n'),
     '',
     ...(listaDicas.length
-      ? ['<details>', '<summary>Dicas</summary>', '', ...listaDicas, '', '</details>', '']
+      ? ['**Dicas:**', '', ...listaDicas, '']
       : []),
     ...comando(caminho),
   ]
