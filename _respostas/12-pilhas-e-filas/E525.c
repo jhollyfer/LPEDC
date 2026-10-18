@@ -1,75 +1,58 @@
-// 0088 · Pilha encadeada
+// 0088 · Juntando tudo: a calculadora de expressões
 // Exercício E525 · ★★☆
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-typedef struct pagina {
-    char url[40];
-    struct pagina *ant; // a página de onde você veio
-} Pagina;
+// Na pasta do assunto basta incluir os .h (o rodar compila o pilha.c e o
+// fila.c junto). Aqui a resolução inclui as implementações para compilar
+// sozinha.
+#include "../../12-pilhas-e-filas/0088-juntando-tudo/fila.c"
+#include "../../12-pilhas-e-filas/0088-juntando-tudo/pilha.c"
 
 typedef struct {
-    Pagina *topo; // a página aberta agora
-} Historico;
+    Pilha *entrada;
+    Pilha *saida;
+} FilaDuasPilhas;
 
-bool visita(Historico *h, const char *url) {
-    Pagina *nova = malloc(sizeof *nova);
-    if (nova == NULL) {
-        return false;
-    }
-    strcpy(nova->url, url); // as urls do exemplo cabem em 40 bytes
-    nova->ant = h->topo;
-    h->topo = nova;
-    return true;
+bool fdp_insere(FilaDuasPilhas *f, int valor) {
+    return pilha_empilha(f->entrada, valor);
 }
 
-bool voltar(Historico *h) {
-    if (h->topo == NULL || h->topo->ant == NULL) {
-        return false; // vazio ou só uma página: não tem para onde voltar
+bool fdp_retira(FilaDuasPilhas *f, int *valor) {
+    if (pilha_vazia(f->saida)) { // só despeja quando a saída esvaziou
+        int x;
+        while (pilha_desempilha(f->entrada, &x)) {
+            pilha_empilha(f->saida, x);
+        }
     }
-    Pagina *velha = h->topo;
-    h->topo = velha->ant;
-    free(velha);
-    return true;
-}
-
-void historico_libera(Historico *h) {
-    while (h->topo != NULL) {
-        Pagina *ant = h->topo->ant;
-        free(h->topo);
-        h->topo = ant;
-    }
-}
-
-void tenta_voltar(Historico *h) {
-    if (voltar(h)) {
-        printf("Voltar -> %s\n", h->topo->url);
-    } else if (h->topo != NULL) {
-        printf("Não dá para voltar de %s\n", h->topo->url);
-    }
+    return pilha_desempilha(f->saida, valor);
 }
 
 int main(void) {
-    Historico h = {NULL};
-
-    visita(&h, "g1.globo.com");
-    visita(&h, "ge.globo.com");
-    visita(&h, "receitas.com");
-    if (h.topo != NULL) {
-        printf("Agora em: %s\n", h.topo->url);
+    FilaDuasPilhas f = {pilha_cria(), pilha_cria()};
+    if (f.entrada == NULL || f.saida == NULL) {
+        if (f.entrada != NULL) {
+            pilha_libera(f.entrada);
+        }
+        if (f.saida != NULL) {
+            pilha_libera(f.saida);
+        }
+        return 1;
     }
-    tenta_voltar(&h);
-    visita(&h, "cifraclub.com.br");
-    if (h.topo != NULL) {
-        printf("Agora em: %s\n", h.topo->url);
+    int x;
+    fdp_insere(&f, 1);
+    fdp_insere(&f, 2);
+    fdp_insere(&f, 3);
+    if (fdp_retira(&f, &x)) {
+        printf("Saiu: %d\n", x);
     }
-    tenta_voltar(&h);
-    tenta_voltar(&h);
-    tenta_voltar(&h);
-
-    historico_libera(&h);
+    fdp_insere(&f, 4);
+    printf("Depois:");
+    while (fdp_retira(&f, &x)) {
+        printf(" %d", x);
+    }
+    printf("\n");
+    pilha_libera(f.entrada);
+    pilha_libera(f.saida);
     return 0;
 }

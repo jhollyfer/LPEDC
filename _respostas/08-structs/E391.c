@@ -1,34 +1,39 @@
-// 0066 · Vetor de structs
+// 0066 · Juntando tudo: o cardápio
 // Exercício E391 · ★☆☆
 
 #include <stdio.h>
 
+typedef enum { HORTIFRUTI, LATICINIOS, PADARIA } Setor;
+
+#define PROMO       (1u << 0)
+#define ORGANICO    (1u << 1)
+#define REFRIGERADO (1u << 2)
+
 typedef struct {
-    char nome[20];
-    int qtd;
+    char nome[24];
+    Setor setor;
     double preco;
-} Item;
+    unsigned flags;
+} Produto;
+
+void etiqueta(const Produto *p) {
+    const char *setores[] = {"hortifrúti", "laticínios", "padaria"};
+    printf("%s (%s) R$ %.2f/kg", p->nome, setores[p->setor], p->preco);
+    if (p->flags & PROMO) printf(" [promo]");
+    if (p->flags & ORGANICO) printf(" [orgânico]");
+    if (p->flags & REFRIGERADO) printf(" [refrigerado]");
+    printf("\n");
+}
 
 int main(void) {
-    Item lista[] = {
-        {"Arroz 5kg", 2, 27.90},
-        {"Feijão", 3, 8.49},
-        {"Café", 1, 18.90},
-        {"Óleo", 4, 7.99},
+    Produto prateleira[] = {
+        {"Banana prata", HORTIFRUTI, 6.99, ORGANICO},
+        {"Iogurte natural", LATICINIOS, 4.50, PROMO | REFRIGERADO},
+        {"Pão francês", PADARIA, 16.90, 0},
     };
-    int n = sizeof lista / sizeof lista[0];
-    double total = 0;
-    int mais_caro = 0;
 
-    for (int i = 0; i < n; i++) {
-        double sub = lista[i].qtd * lista[i].preco;
-        printf("%s: R$ %.2f\n", lista[i].nome, sub);
-        total += sub;
-        if (sub > lista[mais_caro].qtd * lista[mais_caro].preco) {
-            mais_caro = i;
-        }
+    for (int i = 0; i < 3; i++) {
+        etiqueta(&prateleira[i]);
     }
-    printf("Total: R$ %.2f\n", total);
-    printf("Mais caro: %s\n", lista[mais_caro].nome);
     return 0;
 }

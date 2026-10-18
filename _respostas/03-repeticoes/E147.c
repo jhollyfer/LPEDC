@@ -1,21 +1,28 @@
-// 0025 · While
+// 0025 · Padrões de laço
 // Exercício E147 · ★★☆
-//
-// Resposta: o laço perguntava "ainda tem água?" (litros > 0) e deixava gastar
-// 180 litros no 6º dia, quando só havia 100. A pergunta certa é "tem água para
-// mais um dia inteiro?".
 
 #include <stdio.h>
 
 int main(void) {
-    int litros = 1000;
-    int consumo = 180;
-    int dias = 0;
+    double preco, menor = 0.0, maior = 0.0;
+    int posto_menor = 0, posto_maior = 0;
 
-    while (litros >= consumo) {
-        litros = litros - consumo;
-        dias++;
+    for (int posto = 1; posto <= 6; posto++) {
+        printf("Posto %d: ", posto);
+        if (scanf("%lf", &preco) != 1) {
+            return 1;
+        }
+        if (posto == 1 || preco < menor) {
+            menor = preco;
+            posto_menor = posto;
+        }
+        if (posto == 1 || preco > maior) {
+            maior = preco;
+            posto_maior = posto;
+        }
     }
-    printf("Dá para %d dias. Sobram %d litros.\n", dias, litros);
+    printf("Mais barato: posto %d (R$ %.2f)\n", posto_menor, menor);
+    printf("Mais caro: posto %d (R$ %.2f)\n", posto_maior, maior);
+    printf("Diferença: R$ %.2f por litro\n", maior - menor);
     return 0;
 }

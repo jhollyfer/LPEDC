@@ -1,24 +1,12 @@
-// 0034 · Parâmetros e passagem por valor
+// 0034 · Módulos: .h, .c e compilação separada
 // Exercício E201 · ★★☆
 //
-// Resposta: ordenar recebe cópias de a e b. A troca acontece nas cópias, que
-// somem quando a função termina; o a e o b do main nunca mudam. Sem ponteiros,
-// a saída é ter funções que devolvem o valor certo.
-
-#include <stdio.h>
-
-int menor(int a, int b) {
-    return a < b ? a : b;
-}
-
-int maior(int a, int b) {
-    return a > b ? a : b;
-}
-
-int main(void) {
-    int a = 9;
-    int b = 6;
-
-    printf("Em ordem: %d e %d\n", menor(a, b), maior(a, b));
-    return 0;
-}
+// Resposta:
+// a) gcc -std=c17 -Wall -Wextra -c main.c      (gera main.o)
+//    gcc -std=c17 -Wall -Wextra -c treino.c    (gera treino.o)
+//    gcc main.o treino.o -o academia           (liga)
+// b) Só gcc -c treino.c e a ligação. O main.o não muda.
+// c) Os dois gcc -c e a ligação: main.c e treino.c incluem o treino.h, e o
+//    texto colado neles mudou.
+// d) O .h não é compilado sozinho: o #include cola o texto dele dentro de cada
+//    .c, e é o .c que vai para o compilador.

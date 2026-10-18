@@ -54,7 +54,7 @@ Para passar argumentos a um programa, escreva-os depois do caminho, no
 `rodar`: ele repassa tudo para o programa.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/A147.c 187.40 4
+~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4
 ```
 
 Duas ferramentas ajudam a enxergar o que os programas gravam: `od -A d -t x1
@@ -66,20 +66,20 @@ sudo pacman -S strace       # Arch Linux
 sudo apt install strace     # Debian / Ubuntu
 ```
 
-Você vai usar structs (módulo 08), strings com `fgets` (0047) e ponteiros o
+Você vai usar structs (módulo 08), strings com `fgets` (0042) e ponteiros o
 tempo todo. Se `typedef struct`, `sizeof` e `char *` ainda dão aquela
 hesitação, revise antes.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0072](#0072--arquivos-texto) | Arquivos texto | [`0072-arquivos-texto/`](0072-arquivos-texto/) |
-| [0073](#0073--arquivos-binários) | Arquivos binários | [`0073-arquivos-binarios/`](0073-arquivos-binarios/) |
-| [0074](#0074--argumentos-da-linha-de-comando) | Argumentos da linha de comando | [`0074-argumentos/`](0074-argumentos/) |
-| [0075](#0075--juntando-tudo-a-caderneta-de-gastos) | Juntando tudo: a caderneta de gastos | [`0075-juntando-tudo/`](0075-juntando-tudo/) |
+| [0067](#0067--arquivos-texto) | Arquivos texto | [`0067-arquivos-texto/`](0067-arquivos-texto/) |
+| [0068](#0068--arquivos-binários) | Arquivos binários | [`0068-arquivos-binarios/`](0068-arquivos-binarios/) |
+| [0069](#0069--argumentos-da-linha-de-comando) | Argumentos da linha de comando | [`0069-argumentos/`](0069-argumentos/) |
+| [0070](#0070--juntando-tudo-a-caderneta-de-gastos) | Juntando tudo: a caderneta de gastos | [`0070-juntando-tudo/`](0070-juntando-tudo/) |
 
 ---
 
-## 0072 · Arquivos texto
+## 0067 · Arquivos texto
 
 Todo mês você anota as despesas: mercado, luz, internet. Se anotar só de
 cabeça, esquece. Se anotar no caderno, no mês que vem está tudo lá. Um
@@ -115,7 +115,7 @@ Também existem `fputs(texto, arq)` (uma string, sem pôr `\n`) e
 **Ler.** Três jeitos, conforme o formato:
 
 - `fgets(linha, tamanho, arq)`: uma **linha** inteira, com o `\n` no fim.
-  Devolve `NULL` quando o arquivo acaba. É o mesmo `fgets` do assunto 0047, só
+  Devolve `NULL` quando o arquivo acaba. É o mesmo `fgets` do assunto 0042, só
   que lendo do arquivo em vez do teclado.
 - `fscanf(arq, "%s %lf", ...)`: campos com formato, como o `scanf`. Devolve
   quantos campos conseguiu ler.
@@ -136,7 +136,7 @@ O `fclose` descarrega o buffer em `despesas.txt`. Depois o programa abre o
 arquivo de novo, em modo leitura, e o `fgets` traz as linhas de volta, uma
 por vez:
 
-<p align="center"><img src="0072-arquivos-texto/ideia.svg" alt="Diagrama da ideia: Arquivos texto" width="858"></p>
+<p align="center"><img src="0067-arquivos-texto/ideia.svg" alt="Diagrama da ideia: Arquivos texto" width="858"></p>
 
 O código grava em `/tmp/despesas.txt` e deixa o arquivo lá, para você abrir
 com `cat`:
@@ -184,13 +184,13 @@ Repara no fluxograma: a leitura é um laço que pergunta ao próprio `fgets` se
 ele conseguiu ler. Quem diz que o arquivo acabou é a leitura que falhou, não
 uma pergunta feita antes dela:
 
-<p align="center"><img src="0072-arquivos-texto/fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
+<p align="center"><img src="0067-arquivos-texto/fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
 
 > [!WARNING]
 > Você vai ver `while (!feof(arq))` em muito material, inclusive livro. Não use.
 > O `feof` não olha adiante: ele só fica verdadeiro **depois** que uma leitura
 > tentou passar do fim e falhou. Resultado: o laço roda uma vez a mais e
-> processa a última linha duas vezes (o E431 mostra isso). Teste o retorno da
+> processa a última linha duas vezes (o E401 mostra isso). Teste o retorno da
 > leitura: `fgets(...) != NULL`, `fscanf(...) == 2`, `(c = fgetc(arq)) != EOF`.
 > E nesse último, `c` é `int`: com `char`, o `EOF` (que vale -1) se confunde
 > com um byte de verdade.
@@ -201,20 +201,20 @@ uma pergunta feita antes dela:
 > geral 4096 bytes). Cada `fprintf` só copia bytes para esse buffer, na RAM. A
 > entrega ao sistema operacional, uma chamada `write`, só acontece quando o
 > buffer enche, quando você chama `fflush(arq)` ou no `fclose`. Compile sem o
-> sanitizer (`gcc A143.c -o /tmp/a143`, porque o ASan não gosta do `strace`) e
+> sanitizer (`gcc A133.c -o /tmp/a143`, porque o ASan não gosta do `strace`) e
 > rode `strace -e trace=write /tmp/a143`: as três despesas saem num único
 > `write` de 40 bytes (15 + 10 + 15). Se o programa cair antes do `fclose`, o
 > que estava no buffer se perde.
 
 > [!NOTE]
-> **Pergunta para você:** rode o A143 duas vezes seguidas. O arquivo fica com
+> **Pergunta para você:** rode o A133 duas vezes seguidas. O arquivo fica com
 > 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em vez de `"w"`?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0072-arquivos-texto/`](0072-arquivos-texto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0067-arquivos-texto/`](0067-arquivos-texto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A143 · O caderno de despesas**
+**Exemplo A133 · O caderno de despesas**
 
 ```c
 #include <stdio.h>
@@ -260,10 +260,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/A143.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/A133.c
 ```
 
-**Exemplo A144 · Acrescentar e somar**
+**Exemplo A134 · Acrescentar e somar**
 
 ```c
 #include <stdio.h>
@@ -317,12 +317,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/A144.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/A134.c
 ```
 
 #### Exercícios
 
-**Exercício E427** · ★☆☆
+**Exercício E397** · ★☆☆
 
 Grave a tabuada do 7 no arquivo /tmp/tabuada7.txt, uma conta por linha,
 usando fprintf. Feche o arquivo, abra de novo em modo leitura e mostre o
@@ -345,14 +345,14 @@ Saída esperada:
    "7 x 10 = 70". O arquivo fica em /tmp: confira com cat /tmp/tabuada7.txt.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E427.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E397.c
 ```
 
-**Exercício E428** · ★☆☆
+**Exercício E398** · ★☆☆
 
 Preveja a saída antes de rodar. O programa abre o MESMO arquivo quatro
 vezes, alternando os modos "w" e "a", e grava um nome em cada vez. No fim,
-mostra o que sobrou no arquivo. Abra o E428.c para ler o código.
+mostra o que sobrou no arquivo. Abra o E398.c para ler o código.
 
 **Dicas:**
 
@@ -362,10 +362,10 @@ mostra o que sobrou no arquivo. Abra o E428.c para ler o código.
    quando o terceiro fopen abriu com "w".
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E428.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E398.c
 ```
 
-**Exercício E429** · ★★☆
+**Exercício E399** · ★★☆
 
 Faça um "wc" caseiro. Primeiro, grave em /tmp/recado.txt exatamente estas
 três linhas (cada uma termina com '\n'):
@@ -399,10 +399,10 @@ Caracteres: 53
    letras e espaços, mais os 3 '\n'). Confira com: wc /tmp/recado.txt
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E429.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E399.c
 ```
 
-**Exercício E430** · ★★☆
+**Exercício E400** · ★★☆
 
 Complete o programa. A parte que cria o arquivo /tmp/turma.txt já está
 pronta: cada linha tem o nome do aluno e duas notas. Falta a leitura: use
@@ -428,10 +428,10 @@ Média da turma: 6.92
    (20.75 / 3 = 6.9166...).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E430.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E400.c
 ```
 
-**Exercício E431** · ★★★
+**Exercício E401** · ★★★
 
 Este programa compila sem aviso e roda sem erro do sanitizer, mas a conta
 sai errada. Ele grava três Pix recebidos (R$ 50, R$ 30 e R$ 20) e depois
@@ -462,10 +462,10 @@ b) Conserte o laço para mostrar três Pix e Total: 100.00.
    dentro do laço. Saída: os três Pix e Total: 100.00.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E431.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E401.c
 ```
 
-**Exercício E432** · ★★★
+**Exercício E402** · ★★★
 
 Lista de compras automática. O programa deve:
 
@@ -507,12 +507,12 @@ Se o segundo fopen falhar, feche o primeiro arquivo antes de sair.
 4. Resposta esperada: arroz 2, cafe 5, ovos 3 e "3 itens na lista".
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0072-arquivos-texto/E432.c
+~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E402.c
 ```
 
 ---
 
-## 0073 · Arquivos binários
+## 0068 · Arquivos binários
 
 O mercadinho do bairro guarda o estoque em fichas de papel, todas do mesmo
 tamanho, numa caixa. Para achar a terceira ficha, ninguém lê as duas
@@ -559,7 +559,7 @@ bytes. Um `fwrite` grava os três em sequência: 96 bytes. Para ler o café, o
 programa pula 2 × 32 = 64 bytes desde o começo e faz um `fread` de um
 registro só:
 
-<p align="center"><img src="0073-arquivos-binarios/ideia.svg" alt="Diagrama da ideia: Arquivos binários" width="858"></p>
+<p align="center"><img src="0068-arquivos-binarios/ideia.svg" alt="Diagrama da ideia: Arquivos binários" width="858"></p>
 
 O arquivo fica em `/tmp/estoque.bin` e é apagado no fim:
 
@@ -618,7 +618,7 @@ Repara no fluxograma: não tem laço nenhum para chegar ao café. São duas
 chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
 3 milhões:
 
-<p align="center"><img src="0073-arquivos-binarios/fluxograma.svg" alt="Fluxograma: Arquivos binários" width="441"></p>
+<p align="center"><img src="0068-arquivos-binarios/fluxograma.svg" alt="Fluxograma: Arquivos binários" width="441"></p>
 
 > [!WARNING]
 > `fwrite` copia bytes, não "dados". Se a struct tiver um ponteiro
@@ -630,7 +630,7 @@ chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
 > mudar. Para trocar dados entre máquinas, prefira texto (CSV, JSON).
 
 > [!TIP]
-> **Por dentro do C:** tire o `remove` do A145, rode e depois
+> **Por dentro do C:** tire o `remove` do A135, rode e depois
 > `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada linha mostra 16
 > bytes, então cada produto ocupa duas linhas.
 > Você vai ver `Arroz` seguido de zeros: o `fwrite` grava os 20 bytes do vetor
@@ -648,9 +648,9 @@ chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0073-arquivos-binarios/`](0073-arquivos-binarios/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0068-arquivos-binarios/`](0068-arquivos-binarios/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A145 · Pular direto para o registro**
+**Exemplo A135 · Pular direto para o registro**
 
 ```c
 #include <stdio.h>
@@ -706,10 +706,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/A145.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/A135.c
 ```
 
-**Exemplo A146 · O mesmo número em texto e em binário**
+**Exemplo A136 · O mesmo número em texto e em binário**
 
 ```c
 #include <stdio.h>
@@ -773,12 +773,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/A146.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/A136.c
 ```
 
 #### Exercícios
 
-**Exercício E433** · ★☆☆
+**Exercício E403** · ★☆☆
 
 Uma estação meteorológica registrou as máximas da semana útil:
 31, 29, 33, 35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com
@@ -799,14 +799,14 @@ Média: 31.6 graus
 3. Resposta esperada: Lidos: 5 valores e Média: 31.6 graus (158 / 5).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E433.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E403.c
 ```
 
-**Exercício E434** · ★☆☆
+**Exercício E404** · ★☆☆
 
 Preveja a saída antes de rodar. O arquivo tem 4 ints, gravados em
 binário: 10, 20, 30 e 40. Cada int ocupa 4 bytes. Siga as chamadas de
-fseek, fread e ftell no E434.c e escreva o que cada printf mostra.
+fseek, fread e ftell no E404.c e escreva o que cada printf mostra.
 
 **Dicas:**
 
@@ -818,10 +818,10 @@ fseek, fread e ftell no E434.c e escreva o que cada printf mostra.
    e) posição 16.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E434.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E404.c
 ```
 
-**Exercício E435** · ★★☆
+**Exercício E405** · ★★☆
 
 Atualizar um registro no meio do arquivo, sem reescrever o resto. O
 arquivo /tmp/contas.bin tem 3 contas (número e saldo). Complete a função
@@ -854,10 +854,10 @@ Depois:
 4. Resposta esperada: só a conta 1002 muda, de 80.50 para 180.50.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E435.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E405.c
 ```
 
-**Exercício E436** · ★★☆
+**Exercício E406** · ★★☆
 
 Escreva a função
 
@@ -890,10 +890,10 @@ Registros em /tmp/nao-existe.bin: -1
    que não existe.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E436.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E406.c
 ```
 
-**Exercício E437** · ★★★
+**Exercício E407** · ★★★
 
 Este programa deveria salvar as 5 leituras de um medidor de água e lê-las
 de volta. Ele compila sem aviso e roda sem erro do sanitizer, mas mostra:
@@ -923,10 +923,10 @@ Ache e conserte os dois.
    devolveu 5 e avise se não.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E437.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E407.c
 ```
 
-**Exercício E438** · ★★★
+**Exercício E408** · ★★★
 
 O extrato do banco mostra os lançamentos mais recentes primeiro. Grave em
 /tmp/extrato.bin estes 6 lançamentos, nesta ordem (do mais antigo para o
@@ -967,12 +967,12 @@ Saldo: R$ 1876.20
 4. Resposta esperada: Padaria, Farmácia, Pix da Ana, e Saldo: R$ 1876.20.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0073-arquivos-binarios/E438.c
+~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E408.c
 ```
 
 ---
 
-## 0074 · Argumentos da linha de comando
+## 0069 · Argumentos da linha de comando
 
 Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Você poderia
 fazer um programa que pergunta "qual o total?" e "quantas pessoas?" com
@@ -1020,10 +1020,10 @@ Vamos ver na prática. O comando `./racha 187.40 4` chega ao programa como
 `argc = 3` e um `argv` com três strings mais o `NULL`. O programa confere a
 quantidade, converte `argv[1]` e `argv[2]` em números e divide:
 
-<p align="center"><img src="0074-argumentos/ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
+<p align="center"><img src="0069-argumentos/ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
 
 Para passar argumentos com o `rodar`, escreva depois do nome do arquivo:
-`~/LPEDC/rodar 09-arquivos/0074-argumentos/A147.c 187.40 4`.
+`~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4`.
 
 ```c
 #include <stdio.h>
@@ -1052,12 +1052,12 @@ int main(int argc, char *argv[]) {
     printf("Cada um: R$ %.2f\n", total / pessoas);
     return 0;
 }
-// $ rodar A147.c 187.40 4
+// $ rodar A137.c 187.40 4
 // Conta: R$ 187.40
 // Pessoas: 4
 // Cada um: R$ 46.85
 //
-// $ rodar A147.c 187.40 quatro
+// $ rodar A137.c 187.40 quatro
 // Número de pessoas inválido: quatro
 ```
 
@@ -1065,12 +1065,12 @@ Repara no fluxograma: antes de qualquer conta, duas perguntas de
 desconfiança. Veio a quantidade certa de argumentos? Eles são números de
 verdade? Só no caminho verde o programa trabalha:
 
-<p align="center"><img src="0074-argumentos/fluxograma.svg" alt="Fluxograma: Argumentos da linha de comando" width="634"></p>
+<p align="center"><img src="0069-argumentos/fluxograma.svg" alt="Fluxograma: Argumentos da linha de comando" width="634"></p>
 
 > [!WARNING]
 > Nunca toque em `argv[1]` sem conferir o `argc`. Se a pessoa rodar o programa
 > sem argumentos, `argv[1]` é `NULL`, e `atoi(NULL)` ou `strlen(NULL)` derruba
-> o programa (o E442 mostra isso). E cuidado com o `*` numa calculadora:
+> o programa (o E412 mostra isso). E cuidado com o `*` numa calculadora:
 > `./calc 9 * 3` não passa um asterisco. O shell troca o `*` pelos nomes dos
 > arquivos da pasta antes de o seu programa rodar. Use aspas (`'*'`) ou outro
 > símbolo, como `x`.
@@ -1083,24 +1083,24 @@ verdade? Só no caminho verde o programa trabalha:
 > partida da biblioteca C (o `_start`, que o ligador põe no executável) conta
 > os ponteiros, chama `main(argc, argv)` e passa o valor do `return` para o
 > `exit`. Por isso `char *argv[]` e `char **argv` são a mesma coisa na lista
-> de parâmetros: um vetor como parâmetro vira ponteiro, como no assunto 0043.
+> de parâmetros: um vetor como parâmetro vira ponteiro, como no assunto 0038.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `argc` em `./racha "187.40 4"`? E em
 > `./racha 187.40 4 > conta.txt`? Pense em quem trata as aspas e o `>` antes
-> de rodar o A148 para conferir.
+> de rodar o A138 para conferir.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0074-argumentos/`](0074-argumentos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0069-argumentos/`](0069-argumentos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A147 · Rachar a conta pela linha de comando**
+**Exemplo A137 · Rachar a conta pela linha de comando**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0074-argumentos/A147.c 187.40 4
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4
 int main(int argc, char *argv[]) {
     if (argc != 3) {
         fprintf(stderr, "Uso: %s <total> <pessoas>\n", argv[0]);
@@ -1124,29 +1124,29 @@ int main(int argc, char *argv[]) {
     printf("Cada um: R$ %.2f\n", total / pessoas);
     return 0;
 }
-// $ rodar A147.c 187.40 4
+// $ rodar A137.c 187.40 4
 // Conta: R$ 187.40
 // Pessoas: 4
 // Cada um: R$ 46.85
 //
-// $ rodar A147.c 187.40 quatro
+// $ rodar A137.c 187.40 quatro
 // Número de pessoas inválido: quatro
 //
-// $ rodar A147.c
-// Uso: /tmp/lpedc/A147 <total> <pessoas>
+// $ rodar A137.c
+// Uso: /tmp/lpedc/A137 <total> <pessoas>
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/A147.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c
 ```
 
-**Exemplo A148 · O que chega no argv**
+**Exemplo A138 · O que chega no argv**
 
 ```c
 #include <stdio.h>
 #include <string.h>
 
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0074-argumentos/A148.c 10 -v "São Paulo" 3.5
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A138.c 10 -v "São Paulo" 3.5
 int main(int argc, char *argv[]) {
     printf("argc = %d\n", argc);
     // argv[0] é o caminho do executável; os seus argumentos começam no 1
@@ -1161,7 +1161,7 @@ int main(int argc, char *argv[]) {
     printf("argv[%d] é %s\n", argc, argv[argc] == NULL ? "NULL" : "outra coisa");
     return 0;
 }
-// $ rodar A148.c 10 -v "São Paulo" 3.5
+// $ rodar A138.c 10 -v "São Paulo" 3.5
 // argc = 5
 // argv[1] = "10" (2 bytes)
 // argv[2] = "-v" (2 bytes)  <- parece uma opção
@@ -1171,12 +1171,12 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/A148.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/A138.c
 ```
 
 #### Exercícios
 
-**Exercício E439** · ★☆☆
+**Exercício E409** · ★☆☆
 
 Faça o seu próprio "echo": o programa mostra os argumentos recebidos, na
 mesma linha, separados por um espaço (sem espaço sobrando no fim), e na
@@ -1184,7 +1184,7 @@ linha de baixo quantos foram. Sem argumentos, mostra só "0 argumentos".
 
 
 ```text
-$ rodar E439.c bom dia Brasil
+$ rodar E409.c bom dia Brasil
 bom dia Brasil
 3 argumentos
 ```
@@ -1197,23 +1197,23 @@ bom dia Brasil
    porque argv[0] também conta).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/E439.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/E409.c
 ```
 
-**Exercício E440** · ★☆☆
+**Exercício E410** · ★☆☆
 
-Leia o código do E440.c e preveja a saída antes de rodar, para este comando:
+Leia o código do E410.c e preveja a saída antes de rodar, para este comando:
 
 
 ```text
-$ rodar E440.c 7 + 3a
+$ rodar E410.c 7 + 3a
 ```
 
 **Dicas:**
 
 1. Tudo no argv é string. argv[1][0] é o primeiro CARACTERE do primeiro
    argumento.
-2. '7' - '0' vale 7: é o truque do assunto 0045 para transformar um dígito
+2. '7' - '0' vale 7: é o truque do assunto 0040 para transformar um dígito
    em número.
 3. atoi lê enquanto encontra dígitos e para no primeiro que não é: não
    avisa nada.
@@ -1221,10 +1221,10 @@ $ rodar E440.c 7 + 3a
    "7 + 3 = 10"; "atoi("3a") = 3"; "atoi("+") = 0".
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/E440.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/E410.c
 ```
 
-**Exercício E441** · ★★☆
+**Exercício E411** · ★★☆
 
 As notas da prova chegam pela linha de comando. Mostre quantas notas
 válidas vieram, a média, a maior e a menor. Argumento que não é número
@@ -1233,7 +1233,7 @@ nenhuma nota válida, mostre "Nenhuma nota válida" e devolva 1.
 
 
 ```text
-$ rodar E441.c 8.5 7 nove 9.25 6 11
+$ rodar E411.c 8.5 7 nove 9.25 6 11
 Ignorando "nove"
 Ignorando "11"
 Notas: 4
@@ -1251,16 +1251,16 @@ Menor: 6.00
    e menor 6.00.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/E441.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/E411.c
 ```
 
-**Exercício E442** · ★★☆
+**Exercício E412** · ★★☆
 
 O programa deveria cumprimentar alguém um certo número de vezes:
 
 
 ```text
-$ rodar E442.c Ana 3
+$ rodar E412.c Ana 3
 Olá, Ana!
 Olá, Ana!
 Olá, Ana!
@@ -1268,7 +1268,7 @@ Olá, Ana!
 
 
 Mas, rodando assim, ele não mostra nada. E rodando sem argumentos
-("rodar E442.c"), ele cai com SEGV no AddressSanitizer. São dois erros:
+("rodar E412.c"), ele cai com SEGV no AddressSanitizer. São dois erros:
 
 a) um índice errado no argv;
 b) uma conferência que falta antes de usar o argv.
@@ -1284,14 +1284,14 @@ stderr e devolver 1.
 3. Resposta esperada: a) o nome está em argv[1] e as vezes em argv[2]; o
    código usava argv[0] (o caminho do programa) e argv[1] ("Ana", que o
    atoi vira 0, então o laço não roda); b) falta conferir argc != 3 antes
-   de tocar no argv. Consertado, "rodar E442.c Ana 3" mostra Olá, Ana! três
+   de tocar no argv. Consertado, "rodar E412.c Ana 3" mostra Olá, Ana! três
    vezes.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/E442.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/E412.c
 ```
 
-**Exercício E443** · ★★★
+**Exercício E413** · ★★★
 
 Faça um "wc" de verdade: o nome do arquivo vem pela linha de comando. O
 programa abre o arquivo, conta linhas, palavras e bytes e mostra no
@@ -1304,20 +1304,20 @@ Para testar, crie um arquivo no terminal e passe o caminho:
 
 ```text
 $ printf 'Oi, Ana\ntudo certo?\n\nAté amanhã\n' > /tmp/recado.txt
-$ rodar E443.c /tmp/recado.txt
+$ rodar E413.c /tmp/recado.txt
 4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
 ```
 
 
 
 ```text
-$ rodar E443.c /tmp/nao-existe.txt
+$ rodar E413.c /tmp/nao-existe.txt
 /tmp/nao-existe.txt: No such file or directory
 ```
 
 **Dicas:**
 
-1. Aproveite a lógica do E429: fgetc com int, uma flag dentro_palavra e
+1. Aproveite a lógica do E399: fgetc com int, uma flag dentro_palavra e
    isspace.
 2. "bytes", e não "letras": cada 'ã' e 'é' em UTF-8 ocupa 2 bytes. Por isso
    dá 34, e não 32. Confira com: wc /tmp/recado.txt
@@ -1325,22 +1325,22 @@ $ rodar E443.c /tmp/nao-existe.txt
    (a linha vazia conta como linha).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/E443.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/E413.c
 ```
 
-**Exercício E444** · ★★★
+**Exercício E414** · ★★★
 
 Calculadora de linha de comando: número, operador, número.
 
 
 ```text
-$ rodar E444.c 12.5 + 7.5
+$ rodar E414.c 12.5 + 7.5
 12.50 + 7.50 = 20.00
-$ rodar E444.c 9 x 3
+$ rodar E414.c 9 x 3
 9.00 x 3.00 = 27.00
-$ rodar E444.c 10 / 0
+$ rodar E414.c 10 / 0
 Erro: divisão por zero
-$ rodar E444.c 2 ^ 3
+$ rodar E414.c 2 ^ 3
 Erro: operador "^" desconhecido (use + - x /)
 ```
 
@@ -1349,7 +1349,7 @@ Regras: exatamente 3 argumentos (senão, uso em stderr); os dois números
 validados com strtod; o operador tem que ter exatamente 1 caractere. Todo
 erro vai para stderr e o programa devolve 1. Use um switch no operador.
 
-Por que "x" e não "*"? Teste "rodar E444.c 9 * 3" sem aspas e descubra:
+Por que "x" e não "*"? Teste "rodar E414.c 9 * 3" sem aspas e descubra:
 o shell troca o * pelos nomes dos arquivos da pasta ANTES de o programa
 rodar. Com aspas ('*') funciona.
 
@@ -1361,12 +1361,12 @@ rodar. Com aspas ('*') funciona.
 3. Resposta esperada: as quatro saídas acima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/E444.c
+~/LPEDC/rodar 09-arquivos/0069-argumentos/E414.c
 ```
 
 ---
 
-## 0075 · Juntando tudo: a caderneta de gastos
+## 0070 · Juntando tudo: a caderneta de gastos
 
 Fim de mês e a pergunta de sempre: para onde foi o dinheiro? Aplicativo de
 finanças resolve, mas você agora tem tudo para fazer o seu, de terminal, do
@@ -1382,15 +1382,15 @@ gastos limpa                   # começa do zero
 
 O programa junta as três peças do módulo, cada uma no papel em que é melhor:
 
-- **argumentos** (0074): `argv[1]` diz **o que** fazer; os seguintes trazem
+- **argumentos** (0069): `argv[1]` diz **o que** fazer; os seguintes trazem
   os dados. É o mesmo desenho do `git` (`git commit`, `git log`): um
   programa, vários subcomandos. O `main` só confere o `argc` de cada comando e
   chama a função certa.
-- **arquivo binário** (0073): a caderneta em si. Cada gasto é um registro
+- **arquivo binário** (0068): a caderneta em si. Cada gasto é um registro
   `Gasto` de tamanho fixo, gravado com `fwrite` em modo `"ab"`: binário e
   sempre no fim, sem precisar ler o que já existe. Como os registros têm o
   mesmo tamanho, `ftell / sizeof(Gasto)` diz quantos já existem.
-- **arquivo texto** (0072): a exportação. O binário é ótimo para o programa,
+- **arquivo texto** (0067): a exportação. O binário é ótimo para o programa,
   mas ninguém abre um `.dat` na planilha. O `exporta` lê os registros e
   escreve um **CSV** com `fprintf`, separado por `;`, que o LibreOffice e o
   Google Planilhas abrem direto.
@@ -1407,7 +1407,7 @@ programa. O `novo` acrescenta um registro de 32 bytes em `gastos.dat`; o
 `lista` lê os registros de volta com `fread`; o `exporta` transforma o binário
 em texto:
 
-<p align="center"><img src="0075-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a caderneta de gastos" width="870"></p>
+<p align="center"><img src="0070-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a caderneta de gastos" width="870"></p>
 
 O programa é longo, mas cada função cabe na cabeça:
 `novo`, `lista` e `exporta` são os exemplos dos três assuntos anteriores, e o
@@ -1525,20 +1525,20 @@ int main(int argc, char *argv[]) {
     uso(argv[0]);
     return 1;
 }
-// $ rodar A149.c limpa
+// $ rodar A139.c limpa
 // Caderneta apagada.
-// $ rodar A149.c novo mercado 152.40
+// $ rodar A139.c novo mercado 152.40
 // Gravado: mercado R$ 152.40 (registro 0)
-// $ rodar A149.c novo luz 98.75
+// $ rodar A139.c novo luz 98.75
 // Gravado: luz R$ 98.75 (registro 1)
-// $ rodar A149.c novo farmacia 45.30
+// $ rodar A139.c novo farmacia 45.30
 // Gravado: farmacia R$ 45.30 (registro 2)
-// $ rodar A149.c lista
+// $ rodar A139.c lista
 // 0  mercado      R$   152.40
 // 1  luz          R$    98.75
 // 2  farmacia     R$    45.30
 // Total: R$ 296.45 em 3 gastos
-// $ rodar A149.c exporta /tmp/gastos.csv
+// $ rodar A139.c exporta /tmp/gastos.csv
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
@@ -1546,14 +1546,14 @@ Repara no fluxograma do comando `lista`: o `main` vai perguntando qual é o
 comando até achar um que ele conhece. Comando desconhecido, ou com argumentos
 de menos, cai no mesmo lugar: a mensagem de uso:
 
-<p align="center"><img src="0075-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a caderneta de gastos" width="749"></p>
+<p align="center"><img src="0070-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a caderneta de gastos" width="749"></p>
 
 > [!WARNING]
 > Trocar `"ab"` por `"wb"` no `novo` é o erro mais caro do módulo: cada gasto
 > novo apagaria todos os anteriores, sem aviso. E não leia o que acabou de
 > escrever pelo mesmo caminho com outro `FILE *` antes do `fclose` (ou
 > `fflush`): os bytes ainda estão no buffer, e a leitura acha o arquivo vazio
-> ou pela metade. O E449 junta os dois erros num programa só.
+> ou pela metade. O E419 junta os dois erros num programa só.
 
 > [!TIP]
 > **Por dentro do C:** em `"ab"` (ou `"a"`), **toda** escrita vai para o fim do
@@ -1561,7 +1561,7 @@ de menos, cai no mesmo lugar: a mensagem de uso:
 > sistema o modo `O_APPEND`, e o próprio núcleo posiciona no fim a cada
 > `write`. Por isso dois programas anotando gastos ao mesmo tempo não
 > sobrescrevem um ao outro (desde que cada registro saia num `write` só). Já o
-> `return` do `main` vira o código de saída: rode `rodar A149.c novo x abc;
+> `return` do `main` vira o código de saída: rode `rodar A139.c novo x abc;
 > echo $?` e veja o 1. É assim que scripts encadeiam comandos com `&&`.
 
 > [!NOTE]
@@ -1571,9 +1571,9 @@ de menos, cai no mesmo lugar: a mensagem de uso:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0075-juntando-tudo/`](0075-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0070-juntando-tudo/`](0070-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A149 · Caderneta de gastos no terminal**
+**Exemplo A139 · Caderneta de gastos no terminal**
 
 ```c
 #include <stdio.h>
@@ -1584,7 +1584,7 @@ Os arquivos ficam em [`0075-juntando-tudo/`](0075-juntando-tudo/). Os comandos f
 // registro binário no fim de /tmp/gastos.dat; "lista" lê tudo de volta;
 // "exporta" gera um CSV de texto; "limpa" apaga o arquivo.
 //
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/A149.c lista
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A139.c lista
 
 #define ARQUIVO "/tmp/gastos.dat"
 
@@ -1693,28 +1693,28 @@ int main(int argc, char *argv[]) {
     uso(argv[0]);
     return 1;
 }
-// $ rodar A149.c limpa
+// $ rodar A139.c limpa
 // Caderneta apagada.
-// $ rodar A149.c novo mercado 152.40
+// $ rodar A139.c novo mercado 152.40
 // Gravado: mercado R$ 152.40 (registro 0)
-// $ rodar A149.c novo luz 98.75
+// $ rodar A139.c novo luz 98.75
 // Gravado: luz R$ 98.75 (registro 1)
-// $ rodar A149.c novo farmacia 45.30
+// $ rodar A139.c novo farmacia 45.30
 // Gravado: farmacia R$ 45.30 (registro 2)
-// $ rodar A149.c lista
+// $ rodar A139.c lista
 // 0  mercado      R$   152.40
 // 1  luz          R$    98.75
 // 2  farmacia     R$    45.30
 // Total: R$ 296.45 em 3 gastos
-// $ rodar A149.c exporta /tmp/gastos.csv
+// $ rodar A139.c exporta /tmp/gastos.csv
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/A149.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A139.c
 ```
 
-**Exemplo A150 · Do texto para o binário**
+**Exemplo A140 · Do texto para o binário**
 
 ```c
 #include <stdio.h>
@@ -1724,7 +1724,7 @@ int main(int argc, char *argv[]) {
 // binário de registros fixos (fácil de consultar). Com um número na linha de
 // comando, mostra só aquele aluno, indo direto ao registro com fseek.
 //
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/A150.c 2
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A140.c 2
 
 typedef struct {
     char nome[20];
@@ -1809,25 +1809,25 @@ int main(int argc, char *argv[]) {
     remove(BINARIO);
     return 0;
 }
-// $ rodar A150.c
+// $ rodar A140.c
 // 4 alunos convertidos (40 bytes cada)
 // Aluno 0: Ana    média 7.75
 // Aluno 1: Bruno  média 5.75
 // Aluno 2: Carla  média 9.00
 // Aluno 3: Davi   média 7.75
 //
-// $ rodar A150.c 2
+// $ rodar A140.c 2
 // 4 alunos convertidos (40 bytes cada)
 // Aluno 2: Carla  média 9.00
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/A150.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A140.c
 ```
 
 #### Exercícios
 
-**Exercício E445** · ★☆☆
+**Exercício E415** · ★☆☆
 
 Placar do bolão. O programa recebe três argumentos: o arquivo, o nome de
 quem apostou e o palpite. Ele ACRESCENTA a linha "nome palpite" no fim do
@@ -1838,9 +1838,9 @@ stderr e devolve 1.
 
 ```text
 $ rm -f /tmp/bolao.txt
-$ rodar E445.c /tmp/bolao.txt Rita 2x1
+$ rodar E415.c /tmp/bolao.txt Rita 2x1
 1. Rita 2x1
-$ rodar E445.c /tmp/bolao.txt Caio 0x0
+$ rodar E415.c /tmp/bolao.txt Caio 0x0
 1. Rita 2x1
 2. Caio 0x0
 ```
@@ -1852,18 +1852,18 @@ $ rodar E445.c /tmp/bolao.txt Caio 0x0
 3. Resposta esperada: na segunda execução, "1. Rita 2x1" e "2. Caio 0x0".
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E445.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E415.c
 ```
 
-**Exercício E446** · ★☆☆
+**Exercício E416** · ★☆☆
 
 Preveja a saída antes de rodar. O programa grava os mesmos quatro números
 num arquivo texto (um por linha) e num binário, e mostra o tamanho de cada
-um. Leia o código do E446.c, preveja e depois rode com:
+um. Leia o código do E416.c, preveja e depois rode com:
 
 
 ```text
-$ rodar E446.c medidas
+$ rodar E416.c medidas
 ```
 
 **Dicas:**
@@ -1876,10 +1876,10 @@ $ rodar E446.c medidas
    de 4 bytes = 16).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E446.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E416.c
 ```
 
-**Exercício E447** · ★★☆
+**Exercício E417** · ★★☆
 
 Arquivo com cabeçalho. O arquivo /tmp/agenda.bin começa com um int que diz
 quantos contatos ele tem, seguido dos contatos (registros de tamanho
@@ -1913,10 +1913,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E447.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E417.c
 ```
 
-**Exercício E448** · ★★☆
+**Exercício E418** · ★★☆
 
 Relatório de vendas da feira. O programa:
 
@@ -1930,7 +1930,7 @@ cujo nome vem em argv[1]. Sem argumento, usa /tmp/vendas.csv;
 
 
 ```text
-$ rodar E448.c
+$ rodar E418.c
 produto;qtd;total
 pastel;30;240.00
 caldo de cana;25;162.50
@@ -1948,20 +1948,20 @@ Total geral: R$ 662.50 (gravado em /tmp/vendas.csv)
 4. Resposta esperada: as 5 linhas do CSV e Total geral: R$ 662.50.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E448.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E418.c
 ```
 
-**Exercício E449** · ★★★
+**Exercício E419** · ★★★
 
 Um diário de linha de comando: "anota <texto>" acrescenta uma linha em
 /tmp/diario.txt e mostra todas as anotações até agora. O esperado é:
 
 
 ```text
-$ rodar E449.c anota "comprar pão"
+$ rodar E419.c anota "comprar pão"
 1 anotações:
 comprar pão
-$ rodar E449.c anota "pagar a luz"
+$ rodar E419.c anota "pagar a luz"
 2 anotações:
 comprar pão
 pagar a luz
@@ -1970,7 +1970,7 @@ pagar a luz
 
 Mas o programa mostra "0 anotações:" toda vez, e depois de rodar as duas
 vezes o arquivo só tem "pagar a luz" (confira com cat /tmp/diario.txt).
-E "rodar E449.c anota", sem o texto, tem comportamento indefinido. Ache os
+E "rodar E419.c anota", sem o texto, tem comportamento indefinido. Ache os
 TRÊS erros e conserte.
 
 **Dicas:**
@@ -1986,16 +1986,16 @@ TRÊS erros e conserte.
    saída fica igual à do enunciado (apague /tmp/diario.txt antes de testar).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E449.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E419.c
 ```
 
-**Exercício E450** · ★★★
+**Exercício E420** · ★★★
 
 Faça um "grep" simplificado:
 
 
 ```text
-rodar E450.c [-c] <palavra> <arquivo>
+rodar E420.c [-c] <palavra> <arquivo>
 ```
 
 
@@ -2010,13 +2010,13 @@ Para testar:
 
 ```text
 $ printf 'arroz 5kg\nfeijao\narroz integral\ncafe\n' > /tmp/lista.txt
-$ rodar E450.c arroz /tmp/lista.txt
+$ rodar E420.c arroz /tmp/lista.txt
 1: arroz 5kg
 3: arroz integral
 2 linhas
-$ rodar E450.c -c arroz /tmp/lista.txt
+$ rodar E420.c -c arroz /tmp/lista.txt
 2
-$ rodar E450.c leite /tmp/lista.txt; echo "código: $?"
+$ rodar E420.c leite /tmp/lista.txt; echo "código: $?"
 0 linhas
 código: 1
 ```
@@ -2033,7 +2033,7 @@ código: 1
 4. Resposta esperada: as saídas acima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0075-juntando-tudo/E450.c
+~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E420.c
 ```
 
 ---
@@ -2135,7 +2135,7 @@ ordem, lendo cada arquivo uma vez só. Com `1 4 9` e `2 3 10`, sai
 
 Leia o primeiro número de cada arquivo. Enquanto os dois tiverem número,
 grave o menor e leia o próximo **daquele** arquivo. Quando um acabar, copie o
-resto do outro. É a etapa de intercalação do merge sort (assunto 0099), e é
+resto do outro. É a etapa de intercalação do merge sort (assunto 0094), e é
 assim que se ordenam arquivos maiores que a RAM.
 
 </details>

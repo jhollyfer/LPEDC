@@ -1,22 +1,30 @@
-// 0009 · Constantes
+// 0009 · Atribuição, ++ e --
 // Exercício E051 · ★★☆
-//
-// Resposta: (1) o ; do #define MENSALIDADE ia parar dentro do printf
-// ("expected ')' before ';' token", na linha do printf); (2) o = do
-// #define DESCONTO virava "%.2f\n", = 10.00 ("expected expression before
-// '=' token"); (3) const precisa do valor na declaração: atribuir depois dá
-// "assignment of read-only variable 'dia'".
 
 #include <stdio.h>
 
-#define MENSALIDADE 89.90
-#define DESCONTO 10.00
-
 int main(void) {
-    const int dia = 10;
+    double saldo = 0.0;
+    int depositos = 0;
 
-    printf("Mensalidade: R$ %.2f\n", MENSALIDADE);
-    printf("Desconto: R$ %.2f\n", DESCONTO);
-    printf("Vencimento: dia %d\n", dia);
+    saldo += 15.00;
+    depositos++;
+    printf("Depósito %d: R$ %.2f\n", depositos, saldo);
+
+    saldo += 20.00;
+    depositos++;
+    printf("Depósito %d: R$ %.2f\n", depositos, saldo);
+
+    saldo += 12.50;
+    depositos++;
+    printf("Depósito %d: R$ %.2f\n", depositos, saldo);
+
+    saldo -= 30.00;
+    printf("Presente: R$ %.2f\n", saldo);
+
+    saldo *= 1.01;
+    printf("Rendimento: R$ %.2f\n", saldo);
+
+    printf("%d depósitos\n", depositos);
     return 0;
 }

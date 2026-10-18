@@ -1,13 +1,13 @@
-// 0008 · Tipos e limites
+// 0008 · Conversão e cast
 // Exercício E043 · ★☆☆
-//
-// Resposta: a) 16 + 4 + 2 = 22; b) 255, que é 0xFF; c) 0x1F = 31 e
-// 0x100 = 256; d) 16, 256 e 65.536 valores.
 
 #include <stdio.h>
 
 int main(void) {
-    printf("%d\n", 0xFF);
-    printf("%d %d\n", 0x1F, 0x100);
+    int nota1 = 7, nota2 = 8, nota3 = 10;
+
+    double media = (double) (nota1 + nota2 + nota3) / 3;
+
+    printf("Média: %.2f\n", media);
     return 0;
 }

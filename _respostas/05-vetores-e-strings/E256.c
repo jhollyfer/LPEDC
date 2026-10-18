@@ -1,47 +1,61 @@
-// 0043 · Vetores e funções
+// 0043 · Juntando tudo
 // Exercício E256 · ★★☆
 
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 
-#define MESES 12
+#define DIGITOS 11
 
-int indice_do_maior(const double v[], int n) {
-    int pos = 0;
-    for (int i = 1; i < n; i++) {
-        if (v[i] > v[pos]) {
-            pos = i;
-        }
-    }
-    return pos;
-}
-
-double media(const double v[], int n) {
-    double soma = 0.0;
+// usa os n primeiros dígitos, com pesos n + 1, n, ..., 2
+int verificador(const int d[], int n) {
+    int soma = 0;
     for (int i = 0; i < n; i++) {
-        soma += v[i];
+        soma += d[i] * (n + 1 - i);
     }
-    return soma / n;
-}
-
-int contar_acima(const double v[], int n, double limite) {
-    int quantos = 0;
-    for (int i = 0; i < n; i++) {
-        if (v[i] > limite) {
-            quantos++;
-        }
-    }
-    return quantos;
+    int r = soma % 11;
+    return r < 2 ? 0 : 11 - r;
 }
 
 int main(void) {
-    double contas[MESES] = {182.40, 175.10, 190.75, 168.30, 150.20, 141.90,
-                            139.60, 144.80, 158.25, 171.40, 189.90, 205.35};
+    char linha[40];
+    int d[DIGITOS];
+    int quantos = 0;
+    bool valido = true;
 
-    int pos = indice_do_maior(contas, MESES);
-    double m = media(contas, MESES);
+    printf("CPF: ");
+    if (fgets(linha, sizeof(linha), stdin) == NULL) {
+        return 1;
+    }
+    linha[strcspn(linha, "\n")] = '\0';
 
-    printf("Mês mais caro: %d (R$ %.2f)\n", pos + 1, contas[pos]);
-    printf("Média mensal: R$ %.2f\n", m);
-    printf("Meses acima da média: %d\n", contar_acima(contas, MESES, m));
+    for (int i = 0; linha[i] != '\0'; i++) {
+        unsigned char c = (unsigned char) linha[i];
+        if (isdigit(c)) {
+            if (quantos < DIGITOS) {
+                d[quantos] = c - '0';
+            }
+            quantos++;
+        } else if (c != '.' && c != '-') {
+            valido = false;
+        }
+    }
+
+    if (valido && quantos == DIGITOS) {
+        bool todos_iguais = true;
+        for (int i = 1; i < DIGITOS; i++) {
+            if (d[i] != d[0]) {
+                todos_iguais = false;
+            }
+        }
+        if (todos_iguais || verificador(d, 9) != d[9] || verificador(d, 10) != d[10]) {
+            valido = false;
+        }
+    } else {
+        valido = false;
+    }
+
+    printf(valido ? "CPF válido.\n" : "CPF inválido.\n");
     return 0;
 }

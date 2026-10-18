@@ -1,32 +1,43 @@
-// 0036 · A pilha de chamadas
+// 0036 · Juntando tudo: o caixa da lanchonete
 // Exercício E214 · ★★☆
 //
-// Resposta: "processa: n = 5, r = 11" e "main: n = 5, r = 16".
-//
-// | Quadro        | n            | r                    |
-// | main          | 5            | 16 (no fim)          |
-// | processa      | 5            | 11                   |
-// | dobro_mais_um | 5, depois 11 | 10                   |
-//
-// dobro_mais_um muda o n do quadro dela; processa e main nem ficam sabendo.
+// Resposta: 11, 25, 10, 5, 12.
+// proximo_id: id é static, 11; depois 12 + 13 = 25 (a ordem das duas chamadas
+// não importa para a soma). soma_ate(4) = 4 + 3 + 2 + 1 + 0 = 10, com 5
+// chamadas, e cada uma soma 1 na global total: 5. Em altera, o parâmetro total
+// esconde a global e o 99 vai para a cópia. DOBRO(total + 1) = ((5 + 1) * 2).
 
 #include <stdio.h>
 
-int dobro_mais_um(int n) {
-    int r = n * 2;
-    n = r + 1;
-    return n;
+#define DOBRO(x) ((x) * 2)
+
+int total = 0;
+
+int proximo_id(void) {
+    static int id = 10;
+    id++;
+    return id;
 }
 
-int processa(int n) {
-    int r = dobro_mais_um(n);
-    printf("processa: n = %d, r = %d\n", n, r);
-    return r + n;
+int soma_ate(int n) {
+    total++;
+    if (n == 0) {
+        return 0;
+    }
+    return n + soma_ate(n - 1);
+}
+
+int altera(int total) {
+    total = 99;
+    return total;
 }
 
 int main(void) {
-    int n = 5;
-    int r = processa(n);
-    printf("main: n = %d, r = %d\n", n, r);
+    printf("%d\n", proximo_id());
+    printf("%d\n", proximo_id() + proximo_id());
+    printf("%d\n", soma_ate(4));
+    printf("%d\n", total);
+    altera(total);
+    printf("%d\n", DOBRO(total + 1));
     return 0;
 }

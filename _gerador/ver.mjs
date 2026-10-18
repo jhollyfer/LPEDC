@@ -1,5 +1,5 @@
 // Converte SVGs em PNG para conferir os desenhos (usa o Chromium do Playwright).
-//   node ver.mjs ../01-fundamentos/0007-variaveis/ideia.svg [outro.svg ...]
+//   node ver.mjs ../01-fundamentos/0002-variaveis/ideia.svg [outro.svg ...]
 // O PNG sai em /tmp/lpedc-ver/<pasta>-<nome>.png
 import { createRequire } from 'node:module'
 import { execSync } from 'node:child_process'

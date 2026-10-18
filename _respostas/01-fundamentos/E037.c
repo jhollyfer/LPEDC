@@ -1,17 +1,16 @@
-// 0007 · Variáveis
+// 0007 · Aritmética
 // Exercício E037 · ★☆☆
 
 #include <stdio.h>
 
 int main(void) {
-    int codigo = 1042;
-    double preco = 8.99;
-    double peso = 0.5;
-    char setor = 'H';
+    int brigadeiros = 50;
+    int por_caixa = 12;
+    int ingressos = 7;
+    int preco_ingresso = 35;
 
-    printf("Código: %d\n", codigo);
-    printf("Preço: R$ %.2f\n", preco);
-    printf("Peso: %.1f kg\n", peso);
-    printf("Setor: %c\n", setor);
+    printf("Caixas cheias: %d\n", brigadeiros / por_caixa);
+    printf("Sobram: %d brigadeiros\n", brigadeiros % por_caixa);
+    printf("Ingressos: R$ %d\n", ingressos * preco_ingresso);
     return 0;
 }

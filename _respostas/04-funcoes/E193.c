@@ -1,20 +1,22 @@
-// 0033 · Funções
+// 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 // Exercício E193 · ★☆☆
 
 #include <stdio.h>
 
-double area_comodo(double largura, double comprimento);
-
-int main(void) {
-    double sala = area_comodo(4.0, 3.5);
-    double quarto = area_comodo(3.0, 3.0);
-
-    printf("Sala: %.2f m2\n", sala);
-    printf("Quarto: %.2f m2\n", quarto);
-    printf("Total: %.2f m2\n", sala + quarto);
-    return 0;
+int mdc(int a, int b) {
+    if (b == 0) {
+        return a;
+    }
+    return mdc(b, a % b);
 }
 
-double area_comodo(double largura, double comprimento) {
-    return largura * comprimento;
+void simplificar(int a, int b) {
+    int m = mdc(a, b);
+    printf("mdc(%d, %d) = %d -> %d/%d = %d/%d\n", a, b, m, a, b, a / m, b / m);
+}
+
+int main(void) {
+    simplificar(84, 36);
+    simplificar(1000, 625);
+    return 0;
 }

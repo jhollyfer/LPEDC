@@ -1,20 +1,16 @@
-// 0017 · Relacionais e a verdade em C
+// 0017 · Ternário: condição ? a : b
 // Exercício E098 · ★☆☆
-//
-// Resposta: 1 1 0 1 0 1
-// (4 > -2 sim; 4 == 4 sim; -2 >= 0 não; 2.5 < 3 sim; 4 != 4 não;
-// 'b' (98) > 'a' (97) sim.)
 
 #include <stdio.h>
 
 int main(void) {
-    int i = 4, j = -2;
-    double x = 2.5;
-    printf("%d ", i > j);
-    printf("%d ", i == 4);
-    printf("%d ", j >= 0);
-    printf("%d ", x < 3);
-    printf("%d ", i != 2 * 2);
-    printf("%d\n", 'b' > 'a');
+    int n;
+    printf("Quantidade: ");
+    if (scanf("%d", &n) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
+
+    printf("%d %s %s\n", n, n == 1 ? "mensagem" : "mensagens", n == 1 ? "nova" : "novas");
     return 0;
 }

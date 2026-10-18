@@ -11,7 +11,7 @@
 
 ## 00-logica
 
-### 0001-algoritmo
+### logica1-algoritmo
 **Conceitos-chave**
 - Algoritmo = *ações* + *ordem* em que são executadas. Especificar essa ordem é o "controle do programa".
 - Antes de codificar, é preciso entender o problema e planejar a solução. O livro defende que a parte difícil é chegar ao algoritmo certo, e que a tradução para C vem quase direto depois disso.
@@ -32,7 +32,7 @@
 - Escrever em linguagem natural o algoritmo de um procedimento manual. No livro: substituir palavras com gênero num texto e decidir o que fazer com "super-homem". Resposta: discutir que substituir só a palavra inteira evita estragar palavras compostas.
 - V/F: "a parte mais difícil é produzir o programa em C funcional". Resposta: falso, a parte difícil é o algoritmo.
 
-### 0002-pseudocodigo
+### logica2-pseudocodigo
 **Conceitos-chave**
 - Pseudocódigo é uma linguagem informal, parecida com a fala do dia a dia, usada para *pensar* o programa. Não é executada.
 - Contém só ações executáveis. Declarações de variáveis não são ações: são recados para o compilador. Alguns programadores listam as variáveis no topo com o propósito de cada uma.
@@ -59,7 +59,7 @@
 - Pseudocódigo para: ler 2 números e mostrar a soma; mostrar o maior ou "iguais"; somar positivos até a sentinela −1.
 - Fazer o teste de mesa do loop "primeira potência de 3 maior que 100": produto = 3, 9, 27, 81, 243. Resposta: 243.
 
-### 0003-fluxograma
+### logica3-fluxograma
 **Conceitos-chave**
 - Símbolos:
   - retângulo = ação (cálculo ou E/S);
@@ -78,7 +78,7 @@
 - Desenhar o fluxograma do `for (c = 1; c <= 10; c++)`. Deve aparecer que a inicialização roda uma vez e que o incremento vem depois do corpo.
 - Mostrar um fluxograma com blocos sobrepostos e pedir que o aluno diga por que ele não é estruturado.
 
-### 0004-binario
+### logica4-binario
 **Conceitos-chave** (o tema aparece pouco aqui; o apêndice C fica fora do trecho)
 - `%p` costuma mostrar endereços em hexadecimal. Hexa usa os dígitos 0–9 e as letras A–F (10–15).
 - Valor posicional: em decimal, 234 = 4·1 + 3·10 + 2·100. Em binário as casas valem 1, 2, 4, 8…
@@ -87,7 +87,7 @@
 - Ler um "inteiro binário" (só 0s e 1s) e imprimir o decimal, separando os dígitos com `% 10` e `/ 10`. Exemplo: 1101 → 13.
 - Tabela dos equivalentes binário, octal e hexa de 1 a 256.
 
-### 0005-compilacao
+### logica5-compilacao
 **Conceitos-chave**
 - Três níveis de linguagem, com o **mesmo cálculo** em cada um. Ótimo exemplo para reaproveitar:
   - máquina: números que somam hora extra ao salário;
@@ -117,7 +117,7 @@
 
 ## 01-fundamentos
 
-### 0006-primeiro-programa
+### 0001-primeiro-programa
 **Conceitos-chave**
 - Esqueleto: comentário, `#include <stdio.h>`, `int main(void) { … return 0; }`.
 - `#include` traz para o arquivo o cabeçalho com as informações (protótipos) que o compilador usa para conferir as chamadas a `printf`.
@@ -139,7 +139,7 @@
 - Desenhar formas com asteriscos (retângulo, oval, seta, losango) usando só `printf`. Prever a saída de `printf("*\n**\n***\n****\n*****\n")`.
 - Imprimir as próprias iniciais em letras grandes formadas pela própria letra.
 
-### 0007-variaveis
+### 0002-variaveis
 **Conceitos-chave**
 - Variável = posição de memória com **nome, tipo e valor**.
 - Identificador: letras, dígitos e `_`, sem começar por dígito. O C89 só garante 31 caracteres significativos.
@@ -157,7 +157,7 @@
 - Classificar identificadores como válidos ou inválidos. `_sub_barra_`, `m928134`, `t5`, `j7`, `suas_vendas`, `z2` são válidos. `3g`, `87`, `67h2` e `2h` são inválidos. **`h22` é válido** — essa é a pegadinha do item.
 - V/F: "`numero` e `NuMeRo` são a mesma variável". Resposta: falso.
 
-### 0008-tipos-e-limites
+### 0003-tipos-e-limites
 **Conceitos-chave**
 - Faixas mínimas garantidas pelo padrão:
   - `short`: −32768..32767;
@@ -173,7 +173,7 @@
 - Loop infinito imprimindo 2, 4, 8, 16… e perguntar o que acontece. Resposta: o valor estoura e vira negativo ou zero; ótimo gancho para o overflow.
 - Fibonacci com `int` e depois com `double`, até falhar.
 
-### 0009-constantes
+### 0004-constantes
 **Conceitos-chave**
 - Sequências de escape: `\n`, `\t`, `\a` (alerta sonoro), `\\` e `\"`.
 - `#define TAMANHO 10` cria uma constante simbólica. O pré-processador **troca o texto** antes de compilar; a constante não ocupa memória.
@@ -185,7 +185,7 @@
 - `#define VALOR = 120` está errado: não leva `=`.
 - `SIZE = 10;` no meio do código é erro, porque a constante não é variável.
 
-### 0010-printf
+### 0005-printf
 **Conceitos-chave**
 - A string de formato mistura texto literal e especificadores, e cada especificador consome um argumento.
 - Especificadores: `%d`; `%f` (precisão padrão de 6 casas); `%.2f` arredonda **só na exibição**, sem mudar o valor na memória; `%c`; `%s`; `%p`; `%u`; `%ld`; `%hd`; `%Lf`.
@@ -202,7 +202,7 @@
 - Com x = 2 e y = 3, o que cada linha imprime: `"%d"` → x; `"x="` → texto; `"%d = %d", x+y, y+x` → `5 = 5`; `z = x + y;` → nada; um `printf` comentado → nada.
 - Tabela de quadrados e cubos de 0 a 10 com `\t`, e tabela N, 10N, 100N, 1000N.
 
-### 0011-scanf
+### 0006-scanf
 **Conceitos-chave**
 - `scanf("%d", &x)`: o `&` informa **onde** guardar o valor. A explicação completa fica para os ponteiros.
 - Vários valores numa chamada: `"%d%d%d"`.
@@ -215,7 +215,7 @@
 - Vírgulas entre os especificadores do `scanf`.
 - **Sobra no buffer:** ler um inteiro com `scanf` e depois um caractere com `getchar` (usuário digita `100 A`) faz o `getchar` pegar o espaço ou o `\n`, não o `A` (exercício 4.5c). No `switch` de notas, o livro trata `'\n'`, `'\t'` e `' '` com `case` próprios para não exibir "nota inválida" a cada Enter.
 
-### 0012-aritmetica
+### 0007-aritmetica
 **Conceitos-chave**
 - Operadores `+ - * / %`. Divisão entre inteiros **trunca**: 7/4 = 1 e 17/5 = 3. `%` dá o resto e só vale para inteiros: 7%4 = 3 e 17%5 = 2.
 - Expressões em formato de linha: `ab` vira um identificador, então escreva `a * b`. Não existe operador de potência.
@@ -237,7 +237,7 @@
 - Ler 3 inteiros e mostrar soma, média, produto, menor e maior. Com 13 27 14: soma 54, média 18, produto 4914, menor 13, maior 27. Usar só `if` simples.
 - Criptografia de 4 dígitos: troque cada dígito por (dígito + 7) % 10, depois troque o 1º com o 3º e o 2º com o 4º. Fazer também o decodificador.
 
-### 0013-conversao
+### 0008-conversao
 **Conceitos-chave**
 - `int/int` dá `int` mesmo que o resultado vá para um `float`: o truncamento acontece antes da atribuição.
 - Cast `(float) total / contador` cria uma cópia temporária em float. A variável original não muda.
@@ -250,7 +250,7 @@
 - **Dinheiro em float/double:** 14.234 + 18.673 aparecem como 14.23 + 18.67 = 32.91, quando a soma dos valores exibidos daria 32.90. A sugestão do livro é trabalhar em centavos inteiros e usar `/` e `%` para separar reais e centavos (exercício 4.23).
 - Outros exemplos do livro: 10/3 = 3,333… não cabe em espaço finito; o termômetro marca "36,7" mas o valor real é 36,6999…
 
-### 0014-atribuicao
+### 0009-atribuicao
 **Conceitos-chave**
 - `x op= expr` equivale a `x = x op expr`. Com c = 3, d = 5, e = 4, f = 6, g = 12: `c += 7` → 10; `d -= 4` → 1; `e *= 5` → 20; `f /= 3` → 2; `g %= 9` → 3.
 - Pré-incremento (`++c`) incrementa e depois usa o valor; pós-incremento (`c++`) usa o valor e depois incrementa. Sozinhos numa linha, os dois têm o mesmo efeito.
@@ -269,7 +269,7 @@
 - `z = x++ + y;` · `total -= --x;` · `total += x--;` · `q %= divisor`.
 - produto = 5 e x = 5; depois de `produto *= x++;` → produto 25, x 6.
 
-### 0015-math
+### 0010-math
 **Conceitos-chave**
 - `#include <math.h>` e, no Linux, `-lm`. As funções recebem e devolvem `double`.
 - Tabela de casos de teste com valores:
@@ -290,7 +290,7 @@
 - Juros compostos: R$ 1000 a 5% ao ano por 10 anos, com `pow(1.0 + taxa, ano)`. Ano 1 = 1050.00 … ano 10 = 1628.89. Variar a taxa de 5% a 10%.
 - Hipotenusa: (3,4) → 5; (5,12) → 13; (8,15) → 17. Distância entre dois pontos.
 
-### 0016-juntando-tudo (ideias de programa de módulo)
+### 0011-juntando-tudo (ideias de programa de módulo)
 - Calculadora de IMC (peso / altura²) com a tabela de faixas: abaixo de 18,5; 18,5–24,9; 25–29,9; 30 ou mais.
 - Custo diário do carro para avaliar carona solidária: km por dia, preço do litro, km/l, estacionamento e pedágio.
 - Círculo: diâmetro, circunferência e área com π = 3.14159.
@@ -300,7 +300,7 @@
 
 ## 02-condicionais
 
-### 0017-relacionais
+### 0012-relacionais
 **Conceitos-chave**
 - Operadores `== != > < >= <=`. Os relacionais têm precedência maior que os de igualdade, e todos associam da esquerda para a direita.
 - Em C, a condição é qualquer expressão: 0 é falso e qualquer outro valor é verdadeiro. Comparações e operações lógicas **produzem 0 ou 1**.
@@ -312,7 +312,7 @@
 **Ideias de exercícios (com resposta)**
 - Com i = 1, j = 2, k = 3, m = 2: `i == 1` → 1; `j == 3` → 0; `i >= 1 && j < 4` → 1; `m <= 99 && k < m` → 0; `j >= i || k == m` → 1; `k + m < j || 3 - j >= k` → 0; `!m` → 0; `!(j - m)` → 1; `!(k > m)` → 0; `!(j > k)` → 1.
 
-### 0018-logicos
+### 0013-logicos
 **Conceitos-chave**
 - `&&`, `||` e `!` com tabelas-verdade de 0 / "não zero". `&&` tem precedência maior que `||`. `!` é unário, com precedência alta, e por isso pede parênteses: `!(nota == sentinela)`. Muitas vezes dá para trocar por `!=`.
 - **Curto-circuito:** a avaliação para assim que o resultado é conhecido.
@@ -324,7 +324,7 @@
 - Completar as tabelas-verdade de `&&`, `||` e `!`.
 - Triângulo: três lados (diferentes de zero) formam triângulo? E triângulo retângulo?
 
-### 0019-if / 0020-if-else
+### 0014-if / 0015-if-else
 **Conceitos-chave**
 - `if` = seleção única; `if…else` = seleção dupla. Sem chaves, o corpo é **uma** instrução. Um bloco `{}` vale como uma instrução em qualquer lugar.
 - Instrução vazia: um `;` sozinho.
@@ -346,7 +346,7 @@
 - Achar e corrigir os erros: `if (c < 7);{…}`, `if (c => 7)`, `if (idade >= 65); … else …`, `if (x = y);`.
 - Maior de dois números, ou "esses números são iguais", usando só `if`. Maior e menor de 5 números só com `if`.
 
-### 0021-else-if
+### 0016-else-if
 **Conceitos-chave**
 - Notas 90/80/70/60 → A/B/C/D/F. A versão em escada aninhada e a forma `else if` são equivalentes para o compilador. A segunda evita o recuo que empurra o código para a direita.
 - Se a nota é ≥ 90, as 4 condições são verdadeiras, mas só o primeiro ramo executa.
@@ -361,7 +361,7 @@
 - Exercício 3.32: inserir chaves num `if (y == 8) if (x == 5) … else …` para obter 4 saídas pedidas: `@@@@@ $$$$$ &&&&&`, só `@@@@@`, `@@@@@ &&&&&`, e com y = 7 `##### $$$$$ &&&&&`.
 - Função `qualityPoints`: média 90–100 → 4, 80–89 → 3, 70–79 → 2, 60–69 → 1, abaixo de 60 → 0.
 
-### 0022-ternario
+### 0017-ternario
 **Conceitos-chave**
 - É o único operador ternário. `printf("%s\n", nota >= 60 ? "Aprovado" : "Reprovado");` cabe onde um `if` não cabe (dentro de uma expressão). Os operandos também podem ser ações: `cond ? printf(...) : printf(...)`.
 - Garante a ordem: avalia a condição primeiro e depois **só um** dos ramos.
@@ -370,7 +370,7 @@
 - Prever a saída de `printf("%s\n", contador % 2 ? "****" : "++++++++");` com o contador indo de 1 a 10: as linhas se alternam.
 - Laço aninhado com `linha % 2 ? "<" : ">"` (exercício 3.30).
 
-### 0023-switch
+### 0018-switch
 **Conceitos-chave**
 - Uma expressão de controle comparada com rótulos `case`, que só aceitam **expressão inteira constante** (constantes de caractere valem). `default` é opcional e recomendado por último; nele o `break` é opcional.
 - Vários `case` empilhados compartilham as mesmas ações (`case 'A': case 'a':`). Não precisa de chaves para várias ações num `case`.
@@ -388,7 +388,7 @@
 - Folha de pagamento por código: gerente (fixo); horista (1,5× acima de 40 h); comissionado (250 + 5,7%); por peça.
 - Reescrever o `switch` de notas com `if…else` aninhado e depois só com `if` (o `default` fica mais difícil). Mostra que o `switch` é conveniência.
 
-### 0024-juntando-tudo (ideias)
+### 0019-juntando-tudo (ideias)
 - Programa de notas por conceito (o do `switch`) mais a média da turma (exercício 4.22).
 - Calculadoras do cap. 3, todas com sentinela −1:
   - consumo de combustível: litros e km por tanque, mais o consumo geral (287 km / 25,6 l = 11,21 km/l…);
@@ -401,7 +401,7 @@
 
 ## 03-repeticoes
 
-### 0025-while
+### 0020-while
 **Conceitos-chave**
 - Repete enquanto a condição for verdadeira. Algo no corpo precisa tornar a condição falsa, senão o loop é infinito.
 - Repetição controlada por contador (definida) e por sentinela (indefinida).
@@ -418,7 +418,7 @@
 - Soma de 1 a 10 com `while`. Potência x^y com `while` (o exercício 3.8 já traz a solução).
 - Prever a saída do programa que imprime os quadrados de 1 a 10 e o total, 385.
 
-### 0026-do-while
+### 0021-do-while
 **Conceitos-chave**
 - Testa no fim, então executa pelo menos uma vez. Use sempre chaves, para que o `while (cond);` final não pareça um `while` com corpo vazio.
 
@@ -426,7 +426,7 @@
 - Validação: refazer o programa do exame de corretores aceitando só 1 ou 2, repetindo a pergunta até vir um valor válido (exercício 3.28).
 - Converter `do…while` em `while` e vice-versa. Que problema aparece quando a condição é falsa logo de início? Resposta: o `do…while` executaria o corpo uma vez a mais; é preciso um `if` antes.
 
-### 0027-for
+### 0022-for
 **Conceitos-chave**
 - `for (expr1; expr2; expr3)` equivale a `expr1; while (expr2) { corpo; expr3; }`. A exceção é o `continue`: no `for` ele executa o incremento; numa tradução literal em `while` ele pula o incremento.
 - As 3 expressões são opcionais; sem `expr2` o loop é infinito. As expressões podem ser aritméticas: com x = 2 e y = 10, `for (j = x; j <= 4*x*y; j += y/x)` é o mesmo que `for (j = 2; j <= 80; j += 5)`.
@@ -445,12 +445,12 @@
 - Soma dos pares de 2 a 100 = 2550; pares de 2 a 30 = 240; produto dos ímpares de 1 a 15 = 2027025; ímpares de 1 a 99 com `for`.
 - Achar os erros: `For (x = 100, x >= 1, x++)`; `for (x = 999; x >= 1; x += 2)` (infinito); `for (x = 100; x <= 150; x++); { total += x; }`.
 
-### 0028-break-continue
+### 0023-break-continue
 **Conceitos-chave**
 - `break` num laço com `x == 5` imprime `1 2 3 4` e "saiu em x == 5". `continue` com `x == 5` imprime `1 2 3 4 6 7 8 9 10`.
 - O livro registra que há quem considere `break` e `continue` não estruturados. Exercícios 4.35 e 4.37: removê-los usando uma flag na condição do laço.
 
-### 0029-lacos-aninhados
+### 0024-lacos-aninhados
 **Ideias de exemplos e exercícios**
 - Retângulo de `@` com x colunas e y linhas (exercício 4.8). Quadrado cheio de lado 1..20 e quadrado só com a borda.
 - Os 4 triângulos de `*` só com `printf("*")` e espaços. Losango de 9 linhas e losango de tamanho ímpar lido.
@@ -458,7 +458,7 @@
 - Histograma: para cada número lido de 1 a 30, uma barra de `*` daquele tamanho.
 - Força bruta: triplas pitagóricas até 500 com três `for` aninhados.
 
-### 0030-padroes-de-laco
+### 0025-padroes-de-laco
 **Conceitos-chave**
 - **Contador** começa em 0 ou 1 conforme o uso. **Total (acumulador)** começa em 0; se não for inicializado, carrega o lixo da memória.
 - **Sentinela:** precisa ser um valor impossível nos dados (−1 para notas, 9999 no exercício 4.10). O prompt deve **lembrar** ao usuário qual é a sentinela. "Ler a primeira antes do laço e a próxima no fim do corpo" é o padrão de leitura antecipada.
@@ -469,7 +469,7 @@
 **Analogias**
 - Termos do livro: valor sentinela = "sinalizador" ou "flag".
 
-### 0031-aleatorios
+### 0026-aleatorios
 **Conceitos-chave**
 - `rand()` (em `<stdlib.h>`) devolve de 0 a `RAND_MAX`, que vale pelo menos 32767.
 - Escala e deslocamento: `n = a + rand() % b`, com `a` = primeiro valor da faixa e `b` = largura da faixa. Dado: `1 + rand() % 6`.
@@ -487,7 +487,7 @@
 - "Adivinhe o número" de 1 a 1000 com "muito alto/baixo": com boa estratégia, 10 tentativas bastam porque 2¹⁰ = 1024. É a busca binária intuitiva.
 - Treino de tabuada com mensagens variadas escolhidas por `rand()` dentro de `switch`, 75% de acerto para "passar de nível", níveis de dificuldade e tipos de operação (exercícios 5.50–5.54).
 
-### 0032-juntando-tudo (ideias)
+### 0027-juntando-tudo (ideias)
 - **Craps** como projeto do módulo:
   - Regras: 7 ou 11 no 1º lançamento vence; 2, 3 ou 12 perde; outra soma vira o "ponto", e o jogador relança até tirar o ponto (vence) ou 7 (perde).
   - Estrutura: `enum Status {CONTINUE, WON, LOST}`, uma função que lança os dois dados, um `switch` para o 1º lançamento e um `while` para os seguintes.
@@ -497,7 +497,7 @@
 
 ## 04-funcoes
 
-### 0033-funcoes
+### 0028-funcoes
 **Conceitos-chave**
 - Motivos para modularizar: dividir para conquistar, reutilizar, abstrair (usar sem saber como funciona por dentro) e evitar código repetido.
 - Uma função faz **uma** tarefa, e o nome a descreve. Se não dá para achar um nome curto, ela está fazendo coisas demais: decomponha. O livro sugere funções de até meia página e cabeçalho numa linha; muitos parâmetros indicam tarefa demais. `main` deve ser basicamente uma sequência de chamadas.
@@ -527,14 +527,14 @@
   - número perfeito (6, 28, 496); primo testando até √n e não até n/2 (por quê?); MDC;
   - estacionamento: R$ 2 até 3 h, mais R$ 0,50 por hora ou fração, teto de R$ 10. 1,5 h → 2,00; 4 h → 2,50; 24 h → 10,00; total 14,50.
 
-### 0034-parametros
+### 0029-parametros
 **Conceitos-chave**
 - Em C **toda passagem é por valor**: o parâmetro recebe uma cópia, e mexer nela não afeta o original. A "referência" se simula com ponteiros (cap. 7).
 - Use passagem por valor sempre que a função não precisar alterar o original; isso evita efeitos colaterais.
 - `void` na lista indica que a função não tem parâmetros.
 - Prefira nomes diferentes para o argumento e o parâmetro, para não confundir.
 
-### 0035-escopo
+### 0030-escopo
 **Conceitos-chave**
 - Atributos de um identificador: classe de armazenamento, duração, escopo e vinculação.
 - Duração automática: a variável nasce ao entrar no bloco e morre ao sair (locais e parâmetros). Duração estática: existe do início ao fim do programa (globais e `static` locais).
@@ -555,7 +555,7 @@
 **Obsoleto**
 - `auto` é redundante. `register` é só uma sugestão, e os compiladores atuais ignoram ou otimizam sozinhos.
 
-### 0036-pilha-de-chamadas
+### 0031-pilha-de-chamadas
 **Conceitos-chave**
 - A pilha de execução guarda, a cada chamada, um **registro de ativação** (quadro): o endereço de retorno e as variáveis locais. Ele é empilhado na chamada e desempilhado no retorno, e por isso as locais "somem".
 - A memória é finita: chamadas demais causam estouro de pilha (stack overflow). Ligar com a recursão infinita.
@@ -566,7 +566,7 @@
 **Ideias de exercícios**
 - Desenhar os quadros da pilha durante `fatorial(5)`, ou durante `main → maximo`.
 
-### 0037-recursao
+### 0032-recursao
 **Conceitos-chave**
 - A função só sabe resolver diretamente o **caso base**. No resto, divide o problema numa parte que sabe resolver e numa versão menor do mesmo problema, chama a si mesma com essa versão e combina os resultados no `return`.
 - A sequência de chamadas precisa **convergir** para o caso base.
@@ -590,7 +590,7 @@
 - `potencia(b, e)` recursiva com base `e == 1`. Visualizar a recursão imprimindo com recuo proporcional à profundidade.
 - Funções recursivas sobre arrays: imprimir; menor elemento; palíndromo ("radar"), ignorando espaços e pontuação; string invertida; busca linear e busca binária.
 
-### 0038-recursao-na-pratica
+### 0033-recursao-na-pratica
 **Conceitos-chave**
 - **Fibonacci** 0, 1, 1, 2, 3, 5, 8…: fib(10) = 55, fib(20) = 6765, fib(30) = 832040, fib(35) = 9227465. Cada chamada gera **duas**, então o custo é da ordem de 2ⁿ (fib(20) ≈ um milhão de chamadas, fib(30) ≈ um bilhão). Árvore de chamadas de fib(3). Razão áurea ≈ 1,618.
 - Em `fib(n-1) + fib(n-2)` a ordem das duas chamadas não é garantida. Não faz diferença aqui, mas faria se houvesse efeitos colaterais.
@@ -603,21 +603,21 @@
 **Ideias de exercícios**
 - Fibonacci iterativo e "até onde dá" com `int` e `double`. Pesquisar a recursão de cauda.
 
-### 0039-modulos
+### 0034-modulos
 - Pouco conteúdo neste trecho. Cada biblioteca padrão tem um cabeçalho com os protótipos, os tipos e as constantes dela. Seus próprios cabeçalhos usam `.h` e são incluídos com aspas: `#include "quadrado.h"`. A compilação separada fica no cap. 14 (fora do trecho).
 - Tabela de cabeçalhos útil para a aula: `assert ctype errno float limits locale math setjmp signal stdarg stddef stdio stdlib string time`.
 
-### 0040-preprocessador
+### 0035-preprocessador
 - Neste trecho: `#include`, `#define` para constantes simbólicas, a armadilha do `;` no fim e o lembrete de que o pré-processador não é C, só manipula texto. Macros com parâmetros ficam no cap. 13 (fora do trecho).
 
-### 0041-juntando-tudo (ideias)
-- Craps (ver 0032) ou o treino de tabuada (IAC) com funções separadas. Testador da biblioteca matemática imprimindo tabelas de valores.
+### 0036-juntando-tudo (ideias)
+- Craps (ver 0027) ou o treino de tabuada (IAC) com funções separadas. Testador da biblioteca matemática imprimindo tabelas de valores.
 
 ---
 
 ## 05-vetores-e-strings
 
-### 0042-vetores
+### 0037-vetores
 **Conceitos-chave**
 - Array = posições contíguas com o mesmo nome e o mesmo tipo. O índice começa em 0, e o i-ésimo elemento é `c[i-1]`.
 - O índice pode ser uma expressão inteira: com a = 5 e b = 6, `c[a+b] += 2` mexe em `c[11]`. `[]` é um operador com a mesma precedência da chamada de função. `c[i]` é um lvalue.
@@ -652,7 +652,7 @@
 - Crivo de Eratóstenes com 1000 posições.
 - Reserva de passagens aéreas: 10 assentos (1–5 primeira, 6–10 econômica), 0 = livre e 1 = ocupado, oferecendo a outra classe quando uma enche.
 
-### 0043-vetores-e-funcoes
+### 0038-vetores-e-funcoes
 **Conceitos-chave**
 - Passe o **nome** (sem colchetes) e o **tamanho**, porque arrays não-string não têm terminador. O nome vale o endereço do 1º elemento: imprimir `array`, `&array[0]` e `&array` com `%p` dá o mesmo valor.
 - Por isso a função **altera o original**. Demo: {0,1,2,3,4} vira {0,2,4,6,8}.
@@ -663,7 +663,7 @@
 **Pegadinhas**
 - Na análise de média, mediana e moda do livro, `mediana` ordena o array do chamador como efeito colateral. Bom para discutir quando usar `const` ou copiar o array antes.
 
-### 0044-matrizes
+### 0039-matrizes
 **Conceitos-chave**
 - `a[linha][coluna]`; um array m×n tem m·n elementos.
 - Inicialização por linhas: `{{1,2},{3,4}}`; `{{1},{3,4}}` deixa `b[0][1] = 0`. Sem as chaves internas, os valores preenchem linha por linha.
@@ -682,7 +682,7 @@
 - Gráficos de tartaruga: piso 50×50 com comandos 1 (caneta para cima), 2 (caneta para baixo), 3 (direita), 4 (esquerda), "5,n" (andar n), 6 (imprimir) e 9 (fim).
 - Passeio do cavalo com vetores `horizontal[]` e `vertical[]` e heurística de acessibilidade (2 nos cantos, 8 no centro). Oito rainhas (uma rainha no canto "elimina" 22 casas). Sudoku 9×9.
 
-### 0045-caracteres
+### 0040-caracteres
 **Conceitos-chave**
 - `char` é um inteiro pequeno, de 1 byte. Um caractere cabe em qualquer tipo inteiro.
 - `printf("(%c) vale %d", 'a', 'a')` mostra `a` e 97 (ASCII). `scanf` com `%c`.
@@ -691,7 +691,7 @@
 - O padrão `while ((c = getchar()) != EOF)` funciona porque a atribuição tem valor.
 - `<ctype.h>` aparece só na tabela de cabeçalhos.
 
-### 0046-strings
+### 0041-strings
 **Conceitos-chave**
 - Uma string é um array de `char` terminado em `'\0'`. `char s[] = "first";` tem 6 posições e equivale a `{'f','i','r','s','t','\0'}`. `s[3]` é `'s'`.
 - Percorrer até o terminador: `for (i = 0; s[i] != '\0'; i++)`.
@@ -699,7 +699,7 @@
 - O livro diz que a string literal é um "array static". A questão de ela ser somente leitura fica para o cap. 7/8.
 - `strlen`, `strcpy` e as outras funções de `string.h` ficam no cap. 8 (fora do trecho).
 
-### 0047-lendo-strings
+### 0042-lendo-strings
 **Conceitos-chave**
 - `scanf("%s", s)` vai **sem `&`**, porque o nome já é um endereço. Para no primeiro espaço.
 - `char s[20]` guarda no máximo 19 caracteres e o `'\0'`. Use **`%19s`** para limitar.
@@ -709,7 +709,7 @@
 **Pegadinhas**
 - `char str[5]` lendo "olá": cabe na contagem de letras, mas em UTF-8 o "á" ocupa 2 bytes. Bom gancho moderno.
 
-### 0048-juntando-tudo (ideias)
+### 0043-juntando-tudo (ideias)
 - **Análise de pesquisa com 99 respostas de 1 a 9:** média 681/99 = 6.8788; mediana (ordenar e pegar `[n/2]`) = 7; moda = 8 (27 vezes), com histograma. Desafios: mediana com n par (média dos dois do meio) e empate na moda.
 - Boletim de notas com matriz e funções de mínimo, máximo e média.
 
@@ -717,7 +717,7 @@
 
 ## 06-ponteiros (só os ganchos deste trecho)
 
-### 0049-memoria
+### 0044-memoria
 - `%p` imprime endereços. O `&` do `scanf` "diz onde está a variável". O nome do array é o endereço do 1º elemento.
 - O livro adia a explicação para o cap. 7, que começa na linha ~13034 e fica com o outro agente.
 - Esquecer o `&` no `scanf` causa violação de acesso ("acessar memória sem permissão").
@@ -726,7 +726,7 @@
 
 ## 10-analise (ganchos)
 
-### 0076-eficiencia / 0077-big-o
+### 0071-eficiencia / 0072-big-o
 - Busca linear: em média, compara com metade dos elementos.
 - Busca binária: o máximo de comparações é o expoente da primeira potência de 2 maior que n. 1023 elementos → 10; 2²⁰ → 20; um bilhão → 30, contra 500 milhões em média na linear.
 - Fibonacci recursivo é exponencial, ~2ⁿ chamadas.
@@ -737,11 +737,11 @@
 
 ## 13-busca-e-ordenacao
 
-### 0094-busca-sequencial
+### 0089-busca-sequencial
 - `buscaLinear(const int v[], int chave, int n)` devolve o índice ou −1. Demo: `v[x] = 2*x` com 100 elementos; a chave 36 está no índice 18; 37 não é encontrada.
 - Exercício: versão recursiva.
 
-### 0095-busca-binaria
+### 0090-busca-binaria
 - Só funciona em array ordenado. `baixo`, `alto`, `meio = (baixo + alto) / 2`. Se a chave é menor, `alto = meio - 1`; se é maior, `baixo = meio + 1`. O laço roda `while (baixo <= alto)`.
 - Demo visual excelente: 15 elementos 0, 2, …, 28, imprimindo o subarray de cada passo com o meio marcado por `*`.
   - Chave 25: meios 14 → 22 → 26 → 24, não encontrada.
@@ -750,7 +750,7 @@
 - Pegadinha moderna (não está no livro): `(baixo + alto) / 2` pode estourar para arrays enormes. Prefira `baixo + (alto - baixo) / 2`.
 - Exercício: versão recursiva com índices inicial e final.
 
-### 0096-bubble-sort
+### 0091-bubble-sort
 - Várias passadas; cada uma compara vizinhos e troca os que estão fora de ordem. O maior "afunda" até o fim, e por isso n−1 passadas bastam. O livro também chama de *sinking sort*.
 - Demo: {2,6,4,8,10,12,89,68,45,37} → 2 4 6 8 10 12 37 45 68 89.
 - **A troca precisa de variável auxiliar.** Com `a[i] = 7` e `a[i+1] = 5`, fazer só `a[i] = a[i+1]; a[i+1] = a[i];` deixa os dois valendo 5.
@@ -769,7 +769,7 @@
 - `scanf("%s")` sem largura: sempre `%Ns`, e preferir `fgets` para linhas. O livro já renega `gets`.
 - Ferramentas: Visual C++ 2008 Express e GCC 4.3. O Allegro aparece como biblioteca de jogos, e há a recomendação de Cygwin/MinGW. Para o curso: gcc ou clang atuais com `-Wall -Wextra`.
 - Visão "OOP resolve tudo" e tendências do cap. 1 (Java para páginas web, .NET, Lei de Moore): datadas e fora do escopo.
-- Explicação de que "o linker não acha `pow` sem `math.h`": incorreta (ver 0015).
+- Explicação de que "o linker não acha `pow` sem `math.h`": incorreta (ver 0010).
 - Erros de digitação em exemplos: `aCont`/`aCount`; `n == 0 | n == 1`; `nota` (int) impressa com `%f`; `x*10+5` no arredondamento; a figura do `while` com `<= 1000` e `2*produto`, que não bate com o texto (`<= 100`, `3*produto`). A tabela de precedência diz que o pós-fixo associa da direita para a esquerda, mas é da esquerda para a direita.
 - Algumas dicas de desempenho envelheceram: "inicializar na declaração ocorre em tempo de compilação" (falso para variáveis locais); a ordem dos operandos no `&&` como otimização (vale mais pela legibilidade e pela segurança).
 

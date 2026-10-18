@@ -1,17 +1,17 @@
-// 0017 · Relacionais e a verdade em C
+// 0017 · Ternário: condição ? a : b
 // Exercício E097 · ★☆☆
 
-#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    double etanol, gasolina;
-    printf("Etanol: ");
-    scanf("%lf", &etanol);
-    printf("Gasolina: ");
-    scanf("%lf", &gasolina);
+    int idade;
+    printf("Idade: ");
+    if (scanf("%d", &idade) != 1) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
-    bool compensa = etanol <= gasolina * 0.7;
-    printf("Etanol compensa? %d\n", compensa);
+    double preco = idade >= 18 ? 40.0 : 20.0;
+    printf("Ingresso: R$ %.2f\n", preco);
     return 0;
 }

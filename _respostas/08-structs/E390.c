@@ -1,38 +1,38 @@
-// 0065 · Typedef
+// 0065 · Bits, máscaras e flags
 // Exercício E390 · ★★★
-//
-// Resposta (b): Celsius errado = febre; não compila (o gcc diz "invalid
-// initializer"; numa atribuição comum diria "incompatible types"). Cada
-// struct é um tipo diferente, mesmo com campos iguais. Com typedef double Celsius e
-// typedef double Fahrenheit, os dois seriam double: compilaria, e o erro de
-// unidade passaria calado.
 
 #include <stdio.h>
 
-typedef struct {
-    double graus;
-} Celsius;
+#define DOM (1u << 0)
+#define SEG (1u << 1)
+#define TER (1u << 2)
+#define QUA (1u << 3)
+#define QUI (1u << 4)
+#define SEX (1u << 5)
+#define SAB (1u << 6)
+#define TODOS 0x7Fu
 
-typedef struct {
-    double graus;
-} Fahrenheit;
-
-Fahrenheit para_fahrenheit(Celsius c) {
-    Fahrenheit f = {c.graus * 9 / 5 + 32};
-    return f;
-}
-
-Celsius para_celsius(Fahrenheit f) {
-    Celsius c = {(f.graus - 32) * 5 / 9};
-    return c;
+void listar(const char *rotulo, unsigned dias) {
+    const char *nomes[] = {"dom", "seg", "ter", "qua", "qui", "sex", "sáb"};
+    int n = 0;
+    printf("%s:", rotulo);
+    for (int d = 0; d < 7; d++) {
+        if (dias & (1u << d)) {
+            printf(" %s", nomes[d]);
+            n++;
+        }
+    }
+    printf(" (%d dias)\n", n);
 }
 
 int main(void) {
-    Celsius agua = {100.0};
-    Fahrenheit febre = {98.6};
+    unsigned alarme = SEG | TER | QUA | QUI | SEX;
+    unsigned academia = SEG | QUA | SEX;
 
-    printf("%.1f °C = %.1f °F\n", agua.graus, para_fahrenheit(agua).graus);
-    printf("%.1f °F = %.1f °C\n", febre.graus, para_celsius(febre).graus);
-    // Celsius errado = febre; // não compila: tipos incompatíveis
+    listar("alarme", alarme);
+    listar("academia", academia);
+    listar("alarme sem academia", alarme & ~academia);
+    listar("sem alarme", ~alarme & TODOS);
+    printf("academia em dia sem alarme? %s\n", (academia & ~alarme) != 0 ? "sim" : "não");
     return 0;
 }

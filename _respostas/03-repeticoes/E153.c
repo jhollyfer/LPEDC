@@ -1,28 +1,30 @@
-// 0026 · Do-while
+// 0026 · Aleatórios
 // Exercício E153 · ★★☆
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 int main(void) {
-    double preco;
-    double total = 0.0;
-    int itens = 0;
-    char resposta;
+    srand((unsigned) time(NULL));
+    int segredo = 1 + rand() % 100;
+    int palpite;
+    int tentativas = 0;
 
     do {
-        printf("Preço: ");
-        if (scanf("%lf", &preco) != 1) {
-            return 1;
+        printf("Palpite: ");
+        if (scanf("%d", &palpite) != 1) {
+            printf("\nFim de jogo. O número era %d.\n", segredo);
+            return 0;
         }
-        total = total + preco;
-        itens++;
-        printf("Mais algum item? (s/n) ");
-        if (scanf(" %c", &resposta) != 1) {
-            resposta = 'n';
+        tentativas++;
+        if (palpite < segredo) {
+            printf("Mais alto.\n");
+        } else if (palpite > segredo) {
+            printf("Mais baixo.\n");
         }
-    } while (resposta == 's' || resposta == 'S');
+    } while (palpite != segredo);
 
-    printf("Itens: %d\n", itens);
-    printf("Total: R$ %.2f\n", total);
+    printf("Acertou em %d tentativas!\n", tentativas);
     return 0;
 }

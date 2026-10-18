@@ -1,31 +1,20 @@
-// 0035 · Escopo e tempo de vida
+// 0035 · Pré-processador: macros e #ifdef
 // Exercício E207 · ★★☆
 //
-// Resposta: total foi declarada dentro do corpo do for. O escopo dela é só
-// aquele bloco e o tempo de vida é uma volta: a cada volta nasce outra total,
-// com 0, e soma só o item da vez. Na última volta ela vale 4.75. Declarada
-// antes do for, ela vive o laço inteiro e acumula.
+// Resposta: (1) "#define DESCONTO 0.10;" leva o ";" junto: o printf vira
+// printf("...", preco * 0.10;) e o compilador reclama "expected ')' before ';'"
+// numa linha que parece certa. (2) "#define PRECO_COMBO 25 + 5" faz
+// 2.0 * PRECO_COMBO virar 2.0 * 25 + 5 = 55. Com parênteses, (25 + 5), dá 60.
 
 #include <stdio.h>
 
-double preco_item(int i) {
-    if (i == 1) {
-        return 12.50;
-    }
-    if (i == 2) {
-        return 8.00;
-    }
-    if (i == 3) {
-        return 30.00;
-    }
-    return 4.75;
-}
+#define DESCONTO 0.10
+#define PRECO_COMBO (25 + 5)
 
 int main(void) {
-    double total = 0;
-    for (int i = 1; i <= 4; i++) {
-        total += preco_item(i);
-    }
-    printf("Total: R$ %.2f\n", total);
+    double preco = 35.00;
+
+    printf("Desconto: R$ %.2f\n", preco * DESCONTO);
+    printf("Dois combos: R$ %.2f\n", 2.0 * PRECO_COMBO);
     return 0;
 }

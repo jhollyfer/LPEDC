@@ -58,7 +58,7 @@ Em outra máquina, os números podem mudar, e é justamente isso que o módulo
 quer que você perceba.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/A127.c
+~/LPEDC/rodar 08-structs/0059-struct/A117.c
 ```
 
 {{indice}}

@@ -1,19 +1,20 @@
-// 0011 · scanf
+// 0011 · Juntando tudo
 // Exercício E063 · ★★☆
-//
-// Resposta: com "6 05", o scanf lê o 6 e espera um ":"; acha um espaço,
-// para ali e devolve 1. Os minutos continuam 0 (o valor inicial).
 
 #include <stdio.h>
+#include <math.h>
 
 int main(void) {
-    int hora = 0, minuto = 0;
+    double tamanho_gb, velocidade_mbps;
 
-    printf("Alarme (hh:mm): ");
-    int lidos = scanf("%d:%d", &hora, &minuto);
+    printf("Tamanho (GB): ");
+    scanf("%lf", &tamanho_gb);
+    printf("Internet (Mbps): ");
+    scanf("%lf", &velocidade_mbps);
 
-    printf("Itens lidos: %d\n", lidos);
-    printf("Alarme para %dh%02d\n", hora, minuto);
-    printf("Alarme para %02d:%02d\n", hora, minuto);
+    double megabits = tamanho_gb * 1000 * 8;      // GB -> MB -> megabits
+    int segundos = (int) round(megabits / velocidade_mbps);
+
+    printf("Tempo: %d s = %d min %d s\n", segundos, segundos / 60, segundos % 60);
     return 0;
 }

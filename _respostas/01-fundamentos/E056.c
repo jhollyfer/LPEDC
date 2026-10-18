@@ -1,18 +1,15 @@
-// 0010 · printf
+// 0010 · math.h
 // Exercício E056 · ★☆☆
 //
-// Resposta:
-//   [   42][42   ][00042][+42]
-//   [3.1][3.142][    3.14]
-//   [R][Rio][   Rio][Rio   ]
-//   [1a][1A][32]
+// Resposta: 3.00, 4.00, 3.00, -3.00, -4.00, -3.00, 7.25, 12.00, 1024.00,
+// 3.00 e 1.00.
 
 #include <stdio.h>
+#include <math.h>
 
 int main(void) {
-    printf("[%5d][%-5d][%05d][%+d]\n", 42, 42, 42, 42);
-    printf("[%.1f][%.3f][%8.2f]\n", 3.14159, 3.14159, 3.14159);
-    printf("[%c][%s][%6s][%-6s]\n", 'R', "Rio", "Rio", "Rio");
-    printf("[%x][%X][%o]\n", 26, 26, 26);
+    printf("%.2f %.2f %.2f %.2f\n", floor(3.7), ceil(3.2), round(2.5), round(-2.5));
+    printf("%.2f %.2f %.2f %.2f\n", floor(-3.2), ceil(-3.7), fabs(-7.25), sqrt(144));
+    printf("%.2f %.2f %.2f\n", pow(2, 10), pow(9, 0.5), fmod(10, 3));
     return 0;
 }

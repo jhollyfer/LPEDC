@@ -1,10 +1,11 @@
-// 0087 · Pilha
+// 0087 · Deque
 // Exercício E517 · ★☆☆
 //
-// Resposta:
-//   7          (empilha 4 e 7; desempilha o 7)
-//   9          (pilha: 4 2 9; topo só olha o 9)
-//   2 1        (desempilha 9 e depois 2; sobra só o 4)
-//   4          (o laço esvazia a pilha)
-//   vazia? 1   (true vira 1 no printf)
-// Mais um pilha_desempilha devolve false e não mexe em x: x continua 4.
+// Resposta (frente à esquerda):
+//   insere_fim 1      1
+//   insere_inicio 2   2 1
+//   insere_fim 3      2 1 3
+//   insere_inicio 4   4 2 1 3
+//   retira_fim        4 2 1      mostra "saiu do fim: 3"
+//   retira_inicio     2 1        mostra "saiu da frente: 4"
+//   mostra "frente 2, fundo 1, tamanho 2"

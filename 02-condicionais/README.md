@@ -65,7 +65,7 @@ o `math.h`. Os exercícios que leem do teclado aceitam a entrada por um pipe,
 o que facilita testar vários casos seguidos:
 
 ```bash
-printf '230\nA\n0\n' | ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/A047.c
+printf '230\nA\n0\n' | ~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A037.c
 ```
 
 Alguns exercícios do tipo "ache o erro" trazem o código quebrado **de
@@ -75,18 +75,18 @@ quando é o caso. Fora deles, a regra do curso vale: código bom compila com
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0017](#0017--relacionais-e-a-verdade-em-c) | Relacionais e a verdade em C | [`0017-relacionais/`](0017-relacionais/) |
-| [0018](#0018--lógicos-e-ou-não) | Lógicos: E, OU, NÃO | [`0018-logicos/`](0018-logicos/) |
-| [0019](#0019--if) | if | [`0019-if/`](0019-if/) |
-| [0020](#0020--ifelse-e-o--no-lugar-do-) | if/else e o = no lugar do == | [`0020-if-else/`](0020-if-else/) |
-| [0021](#0021--else-if-if-aninhado-e-o-else-pendurado) | else if, if aninhado e o else pendurado | [`0021-else-if/`](0021-else-if/) |
-| [0022](#0022--ternário-condição--a--b) | Ternário: condição ? a : b | [`0022-ternario/`](0022-ternario/) |
-| [0023](#0023--switch-case-break-e-fall-through) | switch, case, break e fall-through | [`0023-switch/`](0023-switch/) |
-| [0024](#0024--juntando-tudo-a-conta-de-luz) | Juntando tudo: a conta de luz | [`0024-juntando-tudo/`](0024-juntando-tudo/) |
+| [0012](#0012--relacionais-e-a-verdade-em-c) | Relacionais e a verdade em C | [`0012-relacionais/`](0012-relacionais/) |
+| [0013](#0013--lógicos-e-ou-não) | Lógicos: E, OU, NÃO | [`0013-logicos/`](0013-logicos/) |
+| [0014](#0014--if) | if | [`0014-if/`](0014-if/) |
+| [0015](#0015--ifelse-e-o--no-lugar-do-) | if/else e o = no lugar do == | [`0015-if-else/`](0015-if-else/) |
+| [0016](#0016--else-if-if-aninhado-e-o-else-pendurado) | else if, if aninhado e o else pendurado | [`0016-else-if/`](0016-else-if/) |
+| [0017](#0017--ternário-condição--a--b) | Ternário: condição ? a : b | [`0017-ternario/`](0017-ternario/) |
+| [0018](#0018--switch-case-break-e-fall-through) | switch, case, break e fall-through | [`0018-switch/`](0018-switch/) |
+| [0019](#0019--juntando-tudo-a-conta-de-luz) | Juntando tudo: a conta de luz | [`0019-juntando-tudo/`](0019-juntando-tudo/) |
 
 ---
 
-## 0017 · Relacionais e a verdade em C
+## 0012 · Relacionais e a verdade em C
 
 Domingo, fim de jogo: mandante 2 x 1 visitante. A tabela do campeonato não
 quer saber de lances bonitos. Ela faz três perguntas de sim ou não: o mandante
@@ -110,7 +110,7 @@ quando é mentira. Dá para imprimir com `%d`, somar, multiplicar.
 
 E o caminho de volta é ainda mais solto: para o C, **0 é falso e qualquer
 outro valor é verdadeiro**. 1, 42, -3 e 0.5 contam como verdade. Só o zero é
-falso. Você vai usar isso o tempo todo a partir do `if` (assunto 0019).
+falso. Você vai usar isso o tempo todo a partir do `if` (assunto 0014).
 
 Durante muito tempo o C não teve um tipo para verdadeiro e falso: usava `int`
 mesmo. O C99 criou o `_Bool` e o cabeçalho **`<stdbool.h>`**, que dá os nomes
@@ -121,13 +121,13 @@ a intenção.
 Cuidado com três detalhes de escrita: `=<`, `=>` e `<>` não existem (o
 símbolo vem sempre antes do `=`, e diferente é `!=`); `= =` com espaço também
 não; e `=` sozinho é **atribuição**, não comparação. Leia `=` como "recebe" e
-`==` como "é igual a". O estrago que essa troca faz fica para o 0020.
+`==` como "é igual a". O estrago que essa troca faz fica para o 0015.
 
 Vamos ver na prática. Os dois placares entram, viram três perguntas, e cada
 resposta é um 0 ou um 1. A tabela usa esses números direto na conta dos
 pontos:
 
-<p align="center"><img src="0017-relacionais/ideia.svg" alt="Diagrama da ideia: Relacionais e a verdade em C" width="858"></p>
+<p align="center"><img src="0012-relacionais/ideia.svg" alt="Diagrama da ideia: Relacionais e a verdade em C" width="858"></p>
 
 O mesmo exemplo em C. Não tem nenhum `if`: a verdade vira número e entra na
 conta:
@@ -162,7 +162,7 @@ Repara no fluxograma: não tem losango. Comparar não é decidir. A comparação
 só **calcula** uma resposta e guarda numa caixinha, como qualquer conta. Quem
 escolhe um caminho é o `if`, que vem daqui a dois assuntos:
 
-<p align="center"><img src="0017-relacionais/fluxograma.svg" alt="Fluxograma: Relacionais e a verdade em C" width="1510"></p>
+<p align="center"><img src="0012-relacionais/fluxograma.svg" alt="Fluxograma: Relacionais e a verdade em C" width="1510"></p>
 
 > [!WARNING]
 > **Não compare `float` ou `double` com `==`.** Rode `printf("%d", 0.1 + 0.2
@@ -188,9 +188,9 @@ escolhe um caminho é o `if`, que vem daqui a dois assuntos:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0017-relacionais/`](0017-relacionais/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0012-relacionais/`](0012-relacionais/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A033 · O placar em zeros e uns**
+**Exemplo A023 · O placar em zeros e uns**
 
 ```c
 #include <stdbool.h>
@@ -219,10 +219,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/A033.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/A023.c
 ```
 
-**Exemplo A034 · Zero é falso, o resto é verdade**
+**Exemplo A024 · Zero é falso, o resto é verdade**
 
 ```c
 #include <math.h>
@@ -260,12 +260,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/A034.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/A024.c
 ```
 
 #### Exercícios
 
-**Exercício E097** · ★☆☆
+**Exercício E067** · ★☆☆
 
 No posto, a regra de bolso diz que o etanol compensa quando custa no
 máximo 70% do preço da gasolina. Leia os dois preços e guarde a resposta
@@ -286,10 +286,10 @@ Etanol compensa? 1
    4.59 e 6.09 mostra 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/E097.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/E067.c
 ```
 
-**Exercício E098** · ★☆☆
+**Exercício E068** · ★☆☆
 
 Preveja, sem rodar, o que este trecho mostra. Escreva a resposta como
 comentário e só depois copie o código para dentro do main e confira:
@@ -313,10 +313,10 @@ printf("%d\n", 'b' > 'a');
 3. Resposta esperada: 1 1 0 1 0 1
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/E098.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/E068.c
 ```
 
-**Exercício E099** · ★★☆
+**Exercício E069** · ★★☆
 
 A loja cobra frete de R$ 24.90, mas só quando a compra é menor que
 R$ 199.00. Complete a linha do frete SEM usar if: use o 0 ou 1 de uma
@@ -337,10 +337,10 @@ A pagar: R$ 174.90
    paga 210.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/E099.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/E069.c
 ```
 
-**Exercício E100** · ★★☆
+**Exercício E070** · ★★☆
 
 A bala custa R$ 0,70 e a criança pagou com sete moedas de 10 centavos. O
 programa abaixo diz que ela NÃO pagou o valor exato. Rode, explique o
@@ -356,10 +356,10 @@ motivo e conserte de dois jeitos: (a) com uma tolerância usando fabs;
    "Pagou o valor exato? 1".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/E100.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/E070.c
 ```
 
-**Exercício E101** · ★★★
+**Exercício E071** · ★★★
 
 Na matemática, 5 > 4 > 3 é verdade. No C, é outra conversa. Preveja o que
 cada linha mostra, explique por quê e só depois teste (o compilador vai
@@ -380,13 +380,13 @@ printf("%d\n", -1 < 0 < 1);
 2. A primeira comparação já virou 0 ou 1. A segunda compara esse número.
 3. Resposta esperada: 0, 1, 1, 0, 0. Por exemplo, 2 == 2 == 2 vira
    1 == 2, que é 0. Para "entre" de verdade, você vai precisar do &&
-   (assunto 0018).
+   (assunto 0013).
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/E101.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/E071.c
 ```
 
-**Exercício E102** · ★★★
+**Exercício E072** · ★★★
 
 Desconto progressivo, sem nenhum if: compras a partir de R$ 100 ganham
 5%; a partir de R$ 300, ganham mais 5% (10% no total). Leia o total,
@@ -407,12 +407,12 @@ A pagar: R$ 142.50
    400 → 10%, paga 360.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-relacionais/E102.c
+~/LPEDC/rodar 02-condicionais/0012-relacionais/E072.c
 ```
 
 ---
 
-## 0018 · Lógicos: E, OU, NÃO
+## 0013 · Lógicos: E, OU, NÃO
 
 Bilheteria do cinema. A regra da meia-entrada diz: paga meia quem é
 estudante **ou** tem 60 anos ou mais, **e** a sessão **não** é pré-estreia.
@@ -425,7 +425,7 @@ Os **operadores lógicos** juntam comparações:
 - `a || b` (**OU**): verdade se pelo menos uma for verdade;
 - `!a` (**NÃO**): inverte. `!1` vale 0 e `!0` vale 1.
 
-A **tabela-verdade** mostra todas as combinações. Como no assunto 0017, o
+A **tabela-verdade** mostra todas as combinações. Como no assunto 0012, o
 resultado é sempre um `int` 0 ou 1:
 
 | `a` | `b` | `a && b` | `a \|\| b` | `!a` |
@@ -437,7 +437,7 @@ resultado é sempre um `int` 0 ou 1:
 
 Na escola você escrevia 18 ≤ idade ≤ 65. No C, intervalo é sempre um E de duas
 comparações: `idade >= 18 && idade <= 65`. Escrever `18 <= idade <= 65` compila,
-mas compara o 0 ou 1 da primeira parte com 65 (lembra do 0017?).
+mas compara o 0 ou 1 da primeira parte com 65 (lembra do 0012?).
 
 **Precedência**, da mais forte para a mais fraca: `!` (junto com o menos
 unário), depois os aritméticos, os relacionais (`<` `>` `<=` `>=`), a
@@ -461,7 +461,7 @@ Vamos ver na prática. Uma pessoa de 67 anos, que não é estudante, numa sessã
 comum. O OU dá verdade pela idade, o NÃO da pré-estreia dá verdade, e o E
 fecha com meia-entrada:
 
-<p align="center"><img src="0018-logicos/ideia.svg" alt="Diagrama da ideia: Lógicos: E, OU, NÃO" width="882"></p>
+<p align="center"><img src="0013-logicos/ideia.svg" alt="Diagrama da ideia: Lógicos: E, OU, NÃO" width="882"></p>
 
 O mesmo exemplo em C:
 
@@ -490,10 +490,10 @@ Repara no fluxograma: é assim que o C avalia a expressão, uma pergunta de cada
 vez. Como `estudante` é falso, ele precisa olhar a idade. Se fosse verdade,
 pularia direto para a pré-estreia: isso é o curto-circuito desenhado:
 
-<p align="center"><img src="0018-logicos/fluxograma.svg" alt="Fluxograma: Lógicos: E, OU, NÃO" width="418"></p>
+<p align="center"><img src="0013-logicos/fluxograma.svg" alt="Fluxograma: Lógicos: E, OU, NÃO" width="418"></p>
 
 > [!WARNING]
-> **`&` não é `&&`.** O `&` simples é o E **bit a bit** (assunto 0070): não tem
+> **`&` não é `&&`.** O `&` simples é o E **bit a bit** (assunto 0065): não tem
 > curto-circuito e, pior, tem precedência **menor** que o `==`. Quem escreve
 > `if (x & 1 == 0)` para testar se `x` é par ganha `x & (1 == 0)`, que é
 > `x & 0`, que é **sempre 0**. O certo é `(x & 1) == 0` ou, mais claro,
@@ -511,13 +511,13 @@ pularia direto para a pré-estreia: isso é o curto-circuito desenhado:
 > [!NOTE]
 > **Pergunta para você:** se a pessoa fosse estudante, a comparação
 > `idade >= 60` seria feita? E se a sessão fosse pré-estreia, a idade mudaria
-> alguma coisa? Siga o fluxograma e depois mude os valores no A035.
+> alguma coisa? Siga o fluxograma e depois mude os valores no A025.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0018-logicos/`](0018-logicos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0013-logicos/`](0013-logicos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A035 · Meia-entrada no cinema**
+**Exemplo A025 · Meia-entrada no cinema**
 
 ```c
 #include <stdbool.h>
@@ -541,10 +541,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/A035.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/A025.c
 ```
 
-**Exemplo A036 · O curto-circuito protege a divisão**
+**Exemplo A026 · O curto-circuito protege a divisão**
 
 ```c
 #include <stdbool.h>
@@ -578,12 +578,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/A036.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/A026.c
 ```
 
 #### Exercícios
 
-**Exercício E103** · ★☆☆
+**Exercício E073** · ★☆☆
 
 Preveja o que cada linha mostra. Escreva a resposta e depois confira
 rodando o trecho dentro do main:
@@ -606,10 +606,10 @@ printf("%d\n", a && (b || !c));
 3. Resposta esperada: 0 1 0 1 1 0
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/E103.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/E073.c
 ```
 
-**Exercício E104** · ★☆☆
+**Exercício E074** · ★☆☆
 
 A geladeira de vacinas do posto de saúde precisa ficar entre 2 °C e 8 °C,
 incluindo os extremos. Leia a temperatura (pode ter vírgula) e mostre se
@@ -629,10 +629,10 @@ Alarme? 0
 3. Resposta esperada: 5 → 1 e 0; 9.5 → 0 e 1; 2 → 1 e 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/E104.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/E074.c
 ```
 
-**Exercício E105** · ★★☆
+**Exercício E075** · ★★☆
 
 Um ano é bissexto quando é divisível por 4 e não por 100, ou quando é
 divisível por 400. Leia o ano e calcule a resposta numa ÚNICA expressão,
@@ -653,10 +653,10 @@ Bissexto? 1
 3. Resposta esperada: 1900 → 0; 2000 → 1; 2023 → 0; 2024 → 1.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/E105.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/E075.c
 ```
 
-**Exercício E106** · ★★☆
+**Exercício E076** · ★★☆
 
 Na portaria do show, a regra está escrita com um NÃO na frente de tudo.
 Use De Morgan para reescrever "barrado" sem o ! do lado de fora dos
@@ -679,14 +679,14 @@ barrado (De Morgan): 1
    Testes: 20 e 1 → 0; 16 e 1 → 1; 30 e 0 → 1.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/E106.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/E076.c
 ```
 
-**Exercício E107** · ★★★
+**Exercício E077** · ★★★
 
 Curto-circuito com efeito colateral. Preveja os cinco números que este
 trecho mostra. Atenção: a++ entrega o valor ANTIGO e só depois soma 1
-(assunto 0014), mas só se aquela parte da expressão for avaliada!
+(assunto 0009), mas só se aquela parte da expressão for avaliada!
 
 
 ```text
@@ -705,16 +705,16 @@ printf("%d %d %d %d %d\n", r1, r2, r3, a, b);
 3. Resposta esperada: 0 1 0 3 1 (o b++ de r1 e o de r2 nunca rodam).
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/E107.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/E077.c
 ```
 
-**Exercício E108** · ★★★
+**Exercício E078** · ★★★
 
 Este programa deveria dizer se o número é par e se está entre 10 e 20
 (sem incluir os extremos). Ele compila, mas com dois avisos, e erra.
 Teste com 14 (deveria dar 1 e 1) e com 25 (deveria dar 0 e 0). Explique
 cada erro e conserte. Lembrete: n & 1 pega o último bit de n em
-binário: 0 para par, 1 para ímpar (o & bit a bit vem no assunto 0070).
+binário: 0 para par, 1 para ímpar (o & bit a bit vem no assunto 0065).
 
 **Dicas:**
 
@@ -726,12 +726,12 @@ binário: 0 para par, 1 para ímpar (o & bit a bit vem no assunto 0070).
    o certo é n > 10 && n < 20. Consertado: 14 → 1 e 1; 25 → 0 e 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-logicos/E108.c
+~/LPEDC/rodar 02-condicionais/0013-logicos/E078.c
 ```
 
 ---
 
-## 0019 · if
+## 0014 · if
 
 No caixa do mercado, a placa avisa: compras a partir de R$ 200 ganham 10% de
 desconto. Sua compra deu R$ 230. A moça do caixa faz uma pergunta e, só se a
@@ -748,7 +748,7 @@ if (condição) {
 
 A **condição** vai sempre entre parênteses. Ela pode ser qualquer expressão
 que dê um número: uma comparação (`total >= 200`), uma combinação lógica
-(`idade >= 18 && tem_cnh`) ou até uma variável sozinha. Vale a regra do 0017:
+(`idade >= 18 && tem_cnh`) ou até uma variável sozinha. Vale a regra do 0012:
 **zero é falso, o resto é verdade**. `if (saldo)` é o mesmo que
 `if (saldo != 0)`, e `if (!saldo)` é o mesmo que `if (saldo == 0)`.
 
@@ -774,7 +774,7 @@ Vamos ver na prática. Os R$ 230 entram, a pergunta responde Sim, o desconto
 acontece e o valor final sai com R$ 207. Se a resposta fosse Não, a seta
 cinza levaria direto para o final, sem passar pelo desconto:
 
-<p align="center"><img src="0019-if/ideia.svg" alt="Diagrama da ideia: if" width="870"></p>
+<p align="center"><img src="0014-if/ideia.svg" alt="Diagrama da ideia: if" width="870"></p>
 
 O mesmo exemplo em C. O `%%` dentro do `printf` mostra um `%`:
 
@@ -802,7 +802,7 @@ Repara no fluxograma: o losango tem duas saídas, como sempre, mas a do Não
 não faz nada. Ela vai direto para o "Mostrar", o mesmo ponto onde o caminho do
 Sim chega depois do desconto:
 
-<p align="center"><img src="0019-if/fluxograma.svg" alt="Fluxograma: if" width="367"></p>
+<p align="center"><img src="0014-if/fluxograma.svg" alt="Fluxograma: if" width="367"></p>
 
 > [!WARNING]
 > **O `;` depois do `if` mata a condição.** Em `if (total >= 200);` o
@@ -817,18 +817,18 @@ Sim chega depois do desconto:
 > `cmp` compara `total` com 200. Depois vem um salto condicional que faz o
 > **contrário** do que você escreveu: "se for **menor**, pula o bloco". Quando
 > a condição é verdadeira, o processador simplesmente não pula e cai dentro do
-> bloco. Rode `gcc -S A037.c` e procure um `jb`, `jl` ou parecido logo depois
+> bloco. Rode `gcc -S A027.c` e procure um `jb`, `jl` ou parecido logo depois
 > do `comisd` ou `cmp`. O `if` é só isso: comparar e, talvez, pular.
 
 > [!NOTE]
 > **Pergunta para você:** e se a compra der exatamente R$ 200,00? E R$ 199,99?
-> Responda olhando o `>=` e depois troque `230.0` no A037 para conferir.
+> Responda olhando o `>=` e depois troque `230.0` no A027 para conferir.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0019-if/`](0019-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0014-if/`](0014-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A037 · Desconto a partir de R$ 200**
+**Exemplo A027 · Desconto a partir de R$ 200**
 
 ```c
 #include <stdio.h>
@@ -851,10 +851,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/A037.c
+~/LPEDC/rodar 02-condicionais/0014-if/A027.c
 ```
 
-**Exemplo A038 · Dois preços em ordem**
+**Exemplo A028 · Dois preços em ordem**
 
 ```c
 #include <stdio.h>
@@ -884,12 +884,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/A038.c
+~/LPEDC/rodar 02-condicionais/0014-if/A028.c
 ```
 
 #### Exercícios
 
-**Exercício E109** · ★☆☆
+**Exercício E079** · ★☆☆
 
 Leia a temperatura de uma pessoa e mostre sempre o valor lido. Só se ela
 passar de 37.5, mostre também o aviso de febre.
@@ -909,10 +909,10 @@ Febre! Procure um médico.
    "Temperatura: 36.5 °C"; 37.5 → só a primeira linha também.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/E109.c
+~/LPEDC/rodar 02-condicionais/0014-if/E079.c
 ```
 
-**Exercício E110** · ★☆☆
+**Exercício E080** · ★☆☆
 
 O professor deu 1 ponto de bônus para a turma, mas a nota máxima continua
 sendo 10. Leia a nota da prova, some o bônus e, se passar de 10, corte
@@ -931,10 +931,10 @@ Nota final: 10.0
 3. Resposta esperada: 9.5 → 10.0; 7.2 → 8.2; 9.0 → 10.0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/E110.c
+~/LPEDC/rodar 02-condicionais/0014-if/E080.c
 ```
 
-**Exercício E111** · ★★☆
+**Exercício E081** · ★★☆
 
 O cinema quer barrar menores de 18 anos neste filme. Mas o programa
 abaixo mostra "Entrada proibida" até para quem tem 25 anos. Rode com 25,
@@ -950,10 +950,10 @@ conserte.
    25 mostra só "Bom filme!" e 15 mostra as duas mensagens.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/E111.c
+~/LPEDC/rodar 02-condicionais/0014-if/E081.c
 ```
 
-**Exercício E112** · ★★☆
+**Exercício E082** · ★★☆
 
 Três lojas deram orçamento para a mesma geladeira. Leia os três valores
 (inteiros, em reais) e mostre o MAIOR, usando só if (sem else).
@@ -973,10 +973,10 @@ Maior orçamento: R$ 3790
    10 20 30 → 30.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/E112.c
+~/LPEDC/rodar 02-condicionais/0014-if/E082.c
 ```
 
-**Exercício E113** · ★★★
+**Exercício E083** · ★★★
 
 Preveja a saída deste trecho. O recuo foi feito para enganar: o compilador
 não olha os espaços. Escreva a resposta e só depois teste (vão aparecer
@@ -1001,14 +1001,14 @@ printf("fim\n");
 
 1. Sem chaves, cada if manda só na primeira instrução depois dele.
 2. n % 2 vale 1 (verdade). n - 7 vale 0, e !0 vale 1. E o == vem antes
-   do & (reveja o WARNING do 0018).
+   do & (reveja o WARNING do 0013).
 3. Resposta esperada: sete ímpar igual fim
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/E113.c
+~/LPEDC/rodar 02-condicionais/0014-if/E083.c
 ```
 
-**Exercício E114** · ★★★
+**Exercício E084** · ★★★
 
 A conta de água da cidade funciona assim: até 10 m³, paga a tarifa mínima
 de R$ 45.00. Cada m³ acima de 10 custa R$ 6.20. E, se o consumo passar de
@@ -1029,19 +1029,19 @@ Conta: R$ 94.60
 3. Resposta esperada: 8 → R$ 45.00; 18 → R$ 94.60; 35 → R$ 230.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-if/E114.c
+~/LPEDC/rodar 02-condicionais/0014-if/E084.c
 ```
 
 ---
 
-## 0020 · if/else e o = no lugar do ==
+## 0015 · if/else e o = no lugar do ==
 
 Catraca do metrô, horário de pico. Você encosta o cartão e a máquina decide em
 um instante: tem saldo para a tarifa de R$ 5,00? Se tem, libera e desconta.
 Se não tem, barra e mostra quanto falta. Não existe uma terceira opção, e uma
 das duas **sempre** acontece.
 
-O `if` do 0019 fazia um passo a mais ou nada. Agora são **dois caminhos**, e o
+O `if` do 0014 fazia um passo a mais ou nada. Agora são **dois caminhos**, e o
 segundo é o **`else`** ("senão"):
 
 ```c
@@ -1055,10 +1055,10 @@ if (condição) {
 É a **seleção dupla**: exatamente um dos dois blocos roda, nunca os dois e
 nunca nenhum. Repare que o `else` **não tem condição**. Ele é "todo o resto".
 Escrever `else (saldo < 5)` é erro: se você precisa de outra pergunta, ela vira
-um novo `if` (assunto 0021).
+um novo `if` (assunto 0016).
 
 As regras de chaves são as mesmas: sem chaves, o `else` também manda em uma
-instrução só. E o `;` depois do `if` do 0019 agora costuma virar erro de
+instrução só. E o `;` depois do `if` do 0014 agora costuma virar erro de
 compilação: em `if (c); { ... } else { ... }`, o bloco fica solto e o `else`
 fica sem `if` para se apoiar. Pelo menos esse o compilador pega.
 
@@ -1077,7 +1077,7 @@ compila com zero avisos.
 Vamos ver na prática. O cartão tem R$ 3,50, a tarifa é R$ 5,00. A pergunta
 responde Não, e desta vez o caminho que vale é o de baixo:
 
-<p align="center"><img src="0020-if-else/ideia.svg" alt="Diagrama da ideia: if/else e o = no lugar do ==" width="864"></p>
+<p align="center"><img src="0015-if-else/ideia.svg" alt="Diagrama da ideia: if/else e o = no lugar do ==" width="864"></p>
 
 O mesmo exemplo em C:
 
@@ -1106,7 +1106,7 @@ Repara no fluxograma: o caminho verde sai pelo Não. Cada lado do losango tem
 o seu bloco, e os dois se encontram de novo no Fim. Não há como passar pelos
 dois:
 
-<p align="center"><img src="0020-if-else/fluxograma.svg" alt="Fluxograma: if/else e o = no lugar do ==" width="626"></p>
+<p align="center"><img src="0015-if-else/fluxograma.svg" alt="Fluxograma: if/else e o = no lugar do ==" width="626"></p>
 
 > [!WARNING]
 > **`=` no lugar de `==`.** Com `if (saldo = 0)`, o saldo vira zero e o `else`
@@ -1128,13 +1128,13 @@ dois:
 > [!NOTE]
 > **Pergunta para você:** se o saldo fosse exatamente R$ 5,00, o que
 > apareceria, e com quanto o cartão ficaria? E se você trocasse `>=` por `>`?
-> Pense antes de mudar o A039.
+> Pense antes de mudar o A029.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0020-if-else/`](0020-if-else/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0015-if-else/`](0015-if-else/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A039 · A catraca do metrô**
+**Exemplo A029 · A catraca do metrô**
 
 ```c
 #include <stdio.h>
@@ -1158,10 +1158,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/A039.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/A029.c
 ```
 
-**Exemplo A040 · Par ou ímpar no palitinho**
+**Exemplo A030 · Par ou ímpar no palitinho**
 
 ```c
 #include <stdio.h>
@@ -1185,12 +1185,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/A040.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/A030.c
 ```
 
 #### Exercícios
 
-**Exercício E115** · ★☆☆
+**Exercício E085** · ★☆☆
 
 Leia a idade. Se for 18 ou mais, mostre "Maior de idade."; senão, mostre
 quantos anos faltam para os 18.
@@ -1209,10 +1209,10 @@ Faltam 2 ano(s) para a maioridade.
    18 → "Maior de idade."; 40 → "Maior de idade.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/E115.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/E085.c
 ```
 
-**Exercício E116** · ★☆☆
+**Exercício E086** · ★☆☆
 
 A empresa vai dar aumento: quem ganha até R$ 2000 (inclusive) recebe 10%;
 quem ganha mais, 6%. Leia o salário e mostre o novo.
@@ -1230,10 +1230,10 @@ Novo salário: R$ 1980.00
 3. Resposta esperada: 1800 → 1980.00; 2000 → 2200.00; 2500 → 2650.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/E116.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/E086.c
 ```
 
-**Exercício E117** · ★★☆
+**Exercício E087** · ★★☆
 
 O caixa eletrônico bloqueia o cartão na 3ª senha errada. Mas este programa
 bloqueia logo na primeira! Rode com 1, leia o aviso do compilador, explique
@@ -1249,10 +1249,10 @@ os DOIS estragos que o erro causa e conserte.
    "Tentativas registradas: 1"; a entrada 3 mostra "Cartão bloqueado.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/E117.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/E087.c
 ```
 
-**Exercício E118** · ★★☆
+**Exercício E088** · ★★☆
 
 No empréstimo consignado, a parcela não pode passar de 35% do salário.
 Leia o salário e o valor da parcela. Mostre o limite e se o empréstimo
@@ -1274,10 +1274,10 @@ Negado: a parcela passa do limite.
    3000 e 900 → limite 1050.00, "Aprovado!".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/E118.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/E088.c
 ```
 
-**Exercício E119** · ★★★
+**Exercício E089** · ★★★
 
 Preveja a saída deste trecho. Depois troque "b = 2" por "b == 2" e preveja
 de novo. Só então rode as duas versões.
@@ -1305,10 +1305,10 @@ printf("%d %d\n", a, b);
    "Z 3 0".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/E119.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/E089.c
 ```
 
-**Exercício E120** · ★★★
+**Exercício E090** · ★★★
 
 Bhaskara. Leia os coeficientes a, b e c de ax² + bx + c = 0 (suponha
 a diferente de zero). Calcule delta = b² - 4ac. Se delta for negativo,
@@ -1323,19 +1323,19 @@ x2 = 2.00
 
 **Dicas:**
 
-1. sqrt está no math.h (assunto 0015). O rodar já liga com -lm.
+1. sqrt está no math.h (assunto 0010). O rodar já liga com -lm.
 2. x1 = (-b + sqrt(delta)) / (2 * a). Os parênteses em volta de 2 * a
    são obrigatórios.
 3. Resposta esperada: 1 -5 6 → 3.00 e 2.00; 1 -4 4 → 2.00 e 2.00;
    1 2 5 → "Sem raízes reais."; 2 -3 -2 → 2.00 e -0.50.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0020-if-else/E120.c
+~/LPEDC/rodar 02-condicionais/0015-if-else/E090.c
 ```
 
 ---
 
-## 0021 · else if, if aninhado e o else pendurado
+## 0016 · else if, if aninhado e o else pendurado
 
 Radar na avenida, limite de 60 km/h, e você passou a 80. O Código de Trânsito
 não tem só "multou ou não multou". Ele tem **faixas**: até 20% acima do limite
@@ -1374,7 +1374,7 @@ primeira deu Sim: "o usuário existe? Se existe, a senha confere?". O `else if`
 Vamos ver na prática. Os 80 km/h passam pelas perguntas em ordem: 80 é menor
 ou igual a 60? Não. A 72? Não. A 90? Sim, e a busca para ali:
 
-<p align="center"><img src="0021-else-if/ideia.svg" alt="Diagrama da ideia: else if, if aninhado e o else pendurado" width="858"></p>
+<p align="center"><img src="0016-else-if/ideia.svg" alt="Diagrama da ideia: else if, if aninhado e o else pendurado" width="858"></p>
 
 O mesmo exemplo em C. Os limites das faixas são calculados a partir do limite
 da via, para valerem em qualquer avenida:
@@ -1407,7 +1407,7 @@ Repara no fluxograma: é uma escada de losangos, cada um pendurado no Não do
 anterior. O caminho verde desce pelos Nãos até o primeiro Sim, e os
 losangos de baixo nunca são visitados:
 
-<p align="center"><img src="0021-else-if/fluxograma.svg" alt="Fluxograma: else if, if aninhado e o else pendurado" width="998"></p>
+<p align="center"><img src="0016-else-if/fluxograma.svg" alt="Fluxograma: else if, if aninhado e o else pendurado" width="998"></p>
 
 > [!WARNING]
 > **O `else` pendurado.** Sem chaves, um `else` pertence ao `if` **mais
@@ -1438,13 +1438,13 @@ losangos de baixo nunca são visitados:
 
 > [!NOTE]
 > **Pergunta para você:** a 72 km/h, qual mensagem aparece? E a 90 km/h?
-> Repare que os limites das faixas usam `<=`. Depois confira no A041.
+> Repare que os limites das faixas usam `<=`. Depois confira no A031.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0021-else-if/`](0021-else-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0016-else-if/`](0016-else-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A041 · As faixas do radar**
+**Exemplo A031 · As faixas do radar**
 
 ```c
 #include <stdio.h>
@@ -1471,10 +1471,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/A041.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/A031.c
 ```
 
-**Exemplo A042 · Login com if aninhado**
+**Exemplo A032 · Login com if aninhado**
 
 ```c
 #include <stdbool.h>
@@ -1503,12 +1503,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/A042.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/A032.c
 ```
 
 #### Exercícios
 
-**Exercício E121** · ★☆☆
+**Exercício E091** · ★☆☆
 
 O plano de saúde cobra por faixa de idade: até 18 anos, R$ 150; de 19 a
 38, R$ 280; de 39 a 58, R$ 520; de 59 em diante, R$ 900. Leia a idade e
@@ -1528,10 +1528,10 @@ Mensalidade: R$ 520.00
    45 → 520.00; 59 → 900.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/E121.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/E091.c
 ```
 
-**Exercício E122** · ★☆☆
+**Exercício E092** · ★☆☆
 
 Leia o saldo da conta (pode ter centavos) e mostre uma de três mensagens:
 "Conta no azul.", "Conta no vermelho." ou "Conta zerada.".
@@ -1549,10 +1549,10 @@ Conta no vermelho.
 3. Resposta esperada: 120.50 → azul; -35.80 → vermelho; 0 → zerada.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/E122.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/E092.c
 ```
 
-**Exercício E123** · ★★☆
+**Exercício E093** · ★★☆
 
 O recuo deste trecho mente. Preveja a saída para os três pares de valores
 e só depois rode:
@@ -1585,10 +1585,10 @@ Por fim, coloque chaves para que o else fique de fato com o if (a > 0).
    caso b) mostra só "C".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/E123.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/E093.c
 ```
 
-**Exercício E124** · ★★☆
+**Exercício E094** · ★★☆
 
 O conceito deveria ser A (nota 9 ou mais), B (7 ou mais), C (5 ou mais)
 ou D (abaixo de 5). Mas quem tirou 9.5 recebeu C. O programa compila sem
@@ -1603,10 +1603,10 @@ nenhum aviso: o erro é de lógica. Ache e conserte.
    5.5 → C; 3.0 → D.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/E124.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/E094.c
 ```
 
-**Exercício E125** · ★★★
+**Exercício E095** · ★★★
 
 Leia três medidas inteiras (em cm). Primeiro diga se elas formam um
 triângulo: cada lado tem que ser menor que a soma dos outros dois. Se
@@ -1628,10 +1628,10 @@ Triângulo isósceles.
    3 4 5 → escaleno; 1 2 3 → "Não forma triângulo." (1 + 2 não passa de 3).
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/E125.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/E095.c
 ```
 
-**Exercício E126** · ★★★
+**Exercício E096** · ★★★
 
 Imposto progressivo (tabela simplificada, inspirada no IR). Cada alíquota
 vale só para a PARTE do salário que cai na faixa:
@@ -1664,12 +1664,12 @@ Imposto: R$ 412.50
    5000 → 412.50.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0021-else-if/E126.c
+~/LPEDC/rodar 02-condicionais/0016-else-if/E096.c
 ```
 
 ---
 
-## 0022 · Ternário: condição ? a : b
+## 0017 · Ternário: condição ? a : b
 
 Carrinho da loja on-line: "3 itens", "Frete: R$ 19,90". Se fosse um item só,
 apareceria "1 item", no singular. E se a compra passasse de R$ 199, o frete
@@ -1693,7 +1693,7 @@ printf("%s\n", qtd == 1 ? "item" : "itens"); // escolhe um texto
 ```
 
 O C garante a ordem: primeiro avalia a condição e depois **só um** dos dois
-lados. O outro nem é calculado, como no curto-circuito do 0018. Então
+lados. O outro nem é calculado, como no curto-circuito do 0013. Então
 `b != 0 ? a / b : 0` nunca divide por zero.
 
 Os dois lados viram um **tipo comum**. Em `n > 0 ? n : 0.5`, com `n` inteiro,
@@ -1708,7 +1708,7 @@ que código longo.
 Vamos ver na prática. Os R$ 150 entram, a pergunta "passou de 199?" responde
 Não, e o ternário devolve 19.90, que vai direto para a caixinha `frete`:
 
-<p align="center"><img src="0022-ternario/ideia.svg" alt="Diagrama da ideia: Ternário: condição ? a : b" width="858"></p>
+<p align="center"><img src="0017-ternario/ideia.svg" alt="Diagrama da ideia: Ternário: condição ? a : b" width="858"></p>
 
 O mesmo exemplo em C. Dois ternários: um escolhe o frete, o outro escolhe a
 palavra:
@@ -1737,7 +1737,7 @@ Repara no fluxograma: é o mesmo desenho de um `if/else` em que cada lado só
 guarda um valor na mesma variável. Sempre que você vir esse formato, um
 ternário resolve em uma linha:
 
-<p align="center"><img src="0022-ternario/fluxograma.svg" alt="Fluxograma: Ternário: condição ? a : b" width="377"></p>
+<p align="center"><img src="0017-ternario/fluxograma.svg" alt="Fluxograma: Ternário: condição ? a : b" width="377"></p>
 
 > [!WARNING]
 > **O ternário tem precedência baixíssima**: só ganha da atribuição e da
@@ -1758,13 +1758,13 @@ ternário resolve em uma linha:
 
 > [!NOTE]
 > **Pergunta para você:** com `qtd = 1` e `total = 199.0`, quais são as três
-> linhas da saída? Pense nos dois ternários antes de mudar o A043.
+> linhas da saída? Pense nos dois ternários antes de mudar o A033.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0022-ternario/`](0022-ternario/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0017-ternario/`](0017-ternario/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A043 · Frete e plural no carrinho**
+**Exemplo A033 · Frete e plural no carrinho**
 
 ```c
 #include <stdio.h>
@@ -1787,10 +1787,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/A043.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/A033.c
 ```
 
-**Exemplo A044 · Maior, distância do zero e verdade em texto**
+**Exemplo A034 · Maior, distância do zero e verdade em texto**
 
 ```c
 #include <stdbool.h>
@@ -1822,12 +1822,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/A044.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/A034.c
 ```
 
 #### Exercícios
 
-**Exercício E127** · ★☆☆
+**Exercício E097** · ★☆☆
 
 Refatore: troque o if/else abaixo por UMA linha com o operador ternário.
 A saída tem que continuar igual.
@@ -1846,10 +1846,10 @@ Ingresso: R$ 20.00
    15 → 20.00; 30 → 40.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/E127.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/E097.c
 ```
 
-**Exercício E128** · ★☆☆
+**Exercício E098** · ★☆☆
 
 O aplicativo de mensagens mostra "1 mensagem nova" ou "5 mensagens novas".
 Leia a quantidade e mostre a frase certa com UM printf e ternários.
@@ -1868,10 +1868,10 @@ Quantidade: 5
    0 → "0 mensagens novas".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/E128.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/E098.c
 ```
 
-**Exercício E129** · ★★☆
+**Exercício E099** · ★★☆
 
 Preveja o valor de cada expressão com i = 2, j = 5 e k = 0. Depois confira
 com printf (as quatro primeiras com %d, a última com %s).
@@ -1893,10 +1893,10 @@ e) j % 2 ? "ímpar" : "par"
 3. Resposta esperada: a) 5; b) 3; c) 7; d) 2; e) ímpar.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/E129.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/E099.c
 ```
 
-**Exercício E130** · ★★☆
+**Exercício E100** · ★★☆
 
 Leia três notas inteiras de jurados e mostre a maior, usando só o operador
 ternário (nada de if).
@@ -1915,10 +1915,10 @@ Maior nota: 10
 3. Resposta esperada: 7 10 9 → 10; 8 3 5 → 8; 4 6 9 → 9.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/E130.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/E100.c
 ```
 
-**Exercício E131** · ★★★
+**Exercício E101** · ★★★
 
 O total da compra deveria ser o subtotal mais o frete (R$ 19.90 abaixo de
 R$ 199, grátis a partir disso). Com subtotal 150, o programa mostra
@@ -1935,10 +1935,10 @@ nessa linha e conserte.
    250 → 250.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/E131.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/E101.c
 ```
 
-**Exercício E132** · ★★★
+**Exercício E102** · ★★★
 
 Converta uma hora do formato 24 h (0 a 23) para o formato de 12 h com AM e
 PM, usando ternários. Meia-noite é 12 AM e meio-dia é 12 PM. Se a hora não
@@ -1958,12 +1958,12 @@ Hora (0 a 23): 13
    23 → 11 PM; 24 → Hora inválida.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0022-ternario/E132.c
+~/LPEDC/rodar 02-condicionais/0017-ternario/E102.c
 ```
 
 ---
 
-## 0023 · switch, case, break e fall-through
+## 0018 · switch, case, break e fall-through
 
 Na lanchonete, o cardápio tem número: 1 é X-Burger, 2 é X-Salada, 3 é Misto
 quente. Você não diz "quero um pão com hambúrguer, alface e tomate". Diz "um
@@ -2012,7 +2012,7 @@ comentário `// fall through` (o `gcc` reconhece esse comentário e não reclama
 Vamos ver na prática. O código 2 entra, o `switch` pula direto para o
 `case 2`, sem testar o 1 nem o 3, e o `break` sai antes do `case 3`:
 
-<p align="center"><img src="0023-switch/ideia.svg" alt="Diagrama da ideia: switch, case, break e fall-through" width="882"></p>
+<p align="center"><img src="0018-switch/ideia.svg" alt="Diagrama da ideia: switch, case, break e fall-through" width="882"></p>
 
 O mesmo exemplo em C:
 
@@ -2052,7 +2052,7 @@ Repara no fluxograma: o losango do `switch` tem **várias** saídas, uma para
 cada `case` e uma para o `default`. Por isso as setas levam o valor no lugar
 de Sim e Não:
 
-<p align="center"><img src="0023-switch/fluxograma.svg" alt="Fluxograma: switch, case, break e fall-through" width="965"></p>
+<p align="center"><img src="0018-switch/fluxograma.svg" alt="Fluxograma: switch, case, break e fall-through" width="965"></p>
 
 > [!WARNING]
 > **Esquecer o `break`.** Tire o `break` do `case 2` e peça um X-Salada: a
@@ -2074,13 +2074,13 @@ de Sim e Não:
 
 > [!NOTE]
 > **Pergunta para você:** com `codigo = 7`, o que aparece? E o total? Pense
-> no valor inicial de `preco` antes de mudar o A045.
+> no valor inicial de `preco` antes de mudar o A035.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0023-switch/`](0023-switch/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0018-switch/`](0018-switch/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A045 · O cardápio da lanchonete**
+**Exemplo A035 · O cardápio da lanchonete**
 
 ```c
 #include <stdio.h>
@@ -2115,10 +2115,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/A045.c
+~/LPEDC/rodar 02-condicionais/0018-switch/A035.c
 ```
 
-**Exemplo A046 · Quantos dias tem o mês**
+**Exemplo A036 · Quantos dias tem o mês**
 
 ```c
 #include <stdbool.h>
@@ -2168,12 +2168,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/A046.c
+~/LPEDC/rodar 02-condicionais/0018-switch/A036.c
 ```
 
 #### Exercícios
 
-**Exercício E133** · ★☆☆
+**Exercício E103** · ★☆☆
 
 Leia um número de 1 a 7 e mostre o dia da semana (1 é domingo, 7 é
 sábado). Qualquer outro número mostra "Dia inválido.". Use switch.
@@ -2192,10 +2192,10 @@ Quarta-feira
    9 → Dia inválido.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/E133.c
+~/LPEDC/rodar 02-condicionais/0018-switch/E103.c
 ```
 
-**Exercício E134** · ★☆☆
+**Exercício E104** · ★☆☆
 
 O aumento depende da classe do funcionário: A ganha 10%, B ganha 15% e C
 ganha 20%. A classe pode vir em maiúscula ou minúscula. Leia o salário e a
@@ -2217,10 +2217,10 @@ Novo salário: R$ 1150.00
    1500 e c → 1800.00; 1000 e D → Classe inválida.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/E134.c
+~/LPEDC/rodar 02-condicionais/0018-switch/E104.c
 ```
 
-**Exercício E135** · ★★☆
+**Exercício E105** · ★★☆
 
 Preveja a saída deste switch para n = 2, 5, 7 e 9. Repare que o default
 está no meio e que nem todo case tem break.
@@ -2251,10 +2251,10 @@ printf("fim\n");
    7 → "sete fim"; 9 → "outro sete fim".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/E135.c
+~/LPEDC/rodar 02-condicionais/0018-switch/E105.c
 ```
 
-**Exercício E136** · ★★☆
+**Exercício E106** · ★★☆
 
 Calculadora de bolso. Leia uma conta no formato "número operador número"
 (por exemplo, 20 / 4) e mostre o resultado com duas casas. Aceite + - * /
@@ -2275,10 +2275,10 @@ Conta: 20 / 4
    3 - 8 → = -5.00; 7 / 0 → Divisão por zero.; 2 ^ 3 → Operador inválido.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/E136.c
+~/LPEDC/rodar 02-condicionais/0018-switch/E106.c
 ```
 
-**Exercício E137** · ★★★
+**Exercício E107** · ★★★
 
 A pizzaria mostra o preço da pizza escolhida. Mas quem pede muçarela vê
 os quatro textos, inclusive "Opção inválida.". Rode com M, leia os avisos
@@ -2301,10 +2301,10 @@ Muçarela: R$ 45.00
    "Portuguesa: R$ 55.00"; X → só "Opção inválida.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/E137.c
+~/LPEDC/rodar 02-condicionais/0018-switch/E107.c
 ```
 
-**Exercício E138** · ★★★
+**Exercício E108** · ★★★
 
 Fall-through de propósito. O lava-rápido tem três pacotes, e cada um
 inclui os de baixo: o 1 é só lavagem (R$ 30); o 2 é aspiração (R$ 15) +
@@ -2331,12 +2331,12 @@ Total: R$ 70.00
    1 → só lavagem, R$ 30.00; 4 → "Pacote inválido.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0023-switch/E138.c
+~/LPEDC/rodar 02-condicionais/0018-switch/E108.c
 ```
 
 ---
 
-## 0024 · Juntando tudo: a conta de luz
+## 0019 · Juntando tudo: a conta de luz
 
 Chegou a conta de luz, e ela é um festival de decisões. O valor depende do
 consumo, da **bandeira** do mês (verde, amarela ou vermelha), de você ter ou
@@ -2356,7 +2356,7 @@ metade do trabalho:
 
 Repare na última linha. Um programa que lê do teclado precisa desconfiar de
 quem digita. O `scanf` devolve **quantos valores conseguiu ler** (assunto
-0011): se você pediu um número e a pessoa digitou "abc", ele devolve 0. A
+0006): se você pediu um número e a pessoa digitou "abc", ele devolve 0. A
 primeira decisão do programa é essa: se a entrada não presta, avisa e sai com
 `return 1` (o código de erro que o terminal enxerga). Esse padrão tem nome:
 **cláusula de guarda**. Trate o caso ruim primeiro e o resto do código fica
@@ -2369,7 +2369,7 @@ kWh, vermelha com R$ 0,05, desconto social de 40%.
 Vamos ver na prática. Consumo de 230 kWh, bandeira amarela, sem tarifa social.
 Cada decisão do módulo entra em cena uma vez, e o total sai no terminal:
 
-<p align="center"><img src="0024-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a conta de luz" width="876"></p>
+<p align="center"><img src="0019-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a conta de luz" width="876"></p>
 
 O programa completo. Ele lê os três dados, e o comentário no fim mostra uma
 execução:
@@ -2459,7 +2459,7 @@ para o Fim. Depois dela, o caminho é quase uma linha reta, com um único
 desvio opcional para o desconto. É assim que um programa bem organizado se
 parece por fora:
 
-<p align="center"><img src="0024-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a conta de luz" width="534"></p>
+<p align="center"><img src="0019-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a conta de luz" width="534"></p>
 
 > [!WARNING]
 > **A ordem dos passos é parte da regra.** O desconto social vale sobre a
@@ -2481,13 +2481,13 @@ parece por fora:
 > [!NOTE]
 > **Pergunta para você:** com 400 kWh, bandeira vermelha e tarifa social,
 > quanto dá a conta? O desconto entra? Faça a conta no papel e depois rode o
-> A047 com essa entrada.
+> A037 com essa entrada.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0024-juntando-tudo/`](0024-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0019-juntando-tudo/`](0019-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A047 · A conta de luz**
+**Exemplo A037 · A conta de luz**
 
 ```c
 #include <stdbool.h>
@@ -2570,10 +2570,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/A047.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A037.c
 ```
 
-**Exemplo A048 · Pedra, papel e tesoura**
+**Exemplo A038 · Pedra, papel e tesoura**
 
 ```c
 #include <stdbool.h>
@@ -2615,12 +2615,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/A048.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A038.c
 ```
 
 #### Exercícios
 
-**Exercício E139** · ★☆☆
+**Exercício E109** · ★☆☆
 
 Leia o peso (kg) e a altura (m), calcule o IMC = peso / altura² e mostre a
 classificação: abaixo de 18.5, "Abaixo do peso"; abaixo de 25, "Peso
@@ -2643,10 +2643,10 @@ Peso normal
    Abaixo do peso; 95 1.80 → 29.32, Sobrepeso; 70 0 → Dados inválidos.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E139.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E109.c
 ```
 
-**Exercício E140** · ★☆☆
+**Exercício E110** · ★☆☆
 
 O caixa eletrônico tem saldo de R$ 500 na conta e só notas de 10. Leia o
 valor do saque (inteiro) e responda com UMA das mensagens, nesta ordem de
@@ -2668,10 +2668,10 @@ Saque de R$ 120. Saldo: R$ 380
    600 → saldo insuficiente; -20 → valor inválido; 500 → saldo 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E140.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E110.c
 ```
 
-**Exercício E141** · ★★☆
+**Exercício E111** · ★★☆
 
 Leia uma data no formato dia/mês/ano e diga se ela existe. O mês vai de 1
 a 12; o dia vai de 1 até o número de dias do mês, e fevereiro tem 29 dias
@@ -2688,15 +2688,15 @@ Data inválida.
 1. scanf("%d/%d/%d", &dia, &mes, &ano) lê as barras também. Confira o
    retorno (3).
 2. Um switch descobre quantos dias tem o mês (com case empilhados, como no
-   A046) e um default marca o mês inválido. Depois, um if confere o dia.
+   A036) e um default marca o mês inválido. Depois, um if confere o dia.
 3. Resposta esperada: 29/02/2023 → inválida; 29/02/2024 → válida;
    31/04/2025 → inválida; 15/13/2025 → inválida; 31/12/2025 → válida.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E141.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E111.c
 ```
 
-**Exercício E142** · ★★☆
+**Exercício E112** · ★★☆
 
 Complete o programa do pedágio. Moto (1) paga R$ 6.00; carro (2) paga
 R$ 12.00; caminhão (3) paga R$ 12.00 por eixo. No horário de pico (das 17h
@@ -2720,10 +2720,10 @@ Tarifa: R$ 14.40
    → 48.00; moto às 19h → 7.20; categoria 5 → "Categoria inválida.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E142.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E112.c
 ```
 
-**Exercício E143** · ★★★
+**Exercício E113** · ★★★
 
 O cinema cobra R$ 30. Menores de 12 e pessoas de 60 ou mais pagam meia.
 Na terça ('T'), o ingresso tem R$ 10 de desconto; no sábado ('S'), custa
@@ -2746,10 +2746,10 @@ avisos do compilador, ache e conserte os quatro.
    0 → "Idade inválida.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E143.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E113.c
 ```
 
-**Exercício E144** · ★★★
+**Exercício E114** · ★★★
 
 Dia seguinte. Leia uma data válida e mostre a data do dia seguinte, com
 dois dígitos no dia e no mês. Cuidado com as viradas: fim de mês, fim de
@@ -2763,7 +2763,7 @@ Dia seguinte: 29/02/2024
 
 **Dicas:**
 
-1. Descubra quantos dias tem o mês (switch, como no A046).
+1. Descubra quantos dias tem o mês (switch, como no A036).
 2. Se dia < dias_do_mes, só soma 1 no dia. Senão, o dia vira 1 e o mês
    avança; e se o mês era 12, ele vira 1 e o ano avança. Use %02d.
 3. Resposta esperada: 28/02/2024 → 29/02/2024; 28/02/2025 → 01/03/2025;
@@ -2771,7 +2771,7 @@ Dia seguinte: 29/02/2024
    15/08/2025 → 16/08/2025.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/E144.c
+~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E114.c
 ```
 
 ---
@@ -2795,7 +2795,7 @@ disputa o maior e o menor de cada par disputa o menor.
 </details>
 
 **2. Três números em ordem.** Leia três inteiros e mostre em ordem
-crescente. Use trocas com uma variável auxiliar, como no A038.
+crescente. Use trocas com uma variável auxiliar, como no A028.
 
 <details><summary>Resposta</summary>
 
@@ -2805,7 +2805,7 @@ disso `a <= b <= c`. Teste também com números repetidos (5, 5, 1).
 
 </details>
 
-**3. Bhaskara completo.** Estenda o E120: se `a` for 0, avise que não é
+**3. Bhaskara completo.** Estenda o E090: se `a` for 0, avise que não é
 equação do 2º grau (e resolva a do 1º grau, se `b` não for 0); se delta for
 zero, mostre uma raiz só; se for positivo, as duas; se for negativo, "Sem
 raízes reais".
@@ -2919,7 +2919,7 @@ signo começa num dia de um mês e termina no mês seguinte (Áries: 21/03 a
 
 Um `switch (mes)` com um `if` dentro de cada `case`: em abril, por exemplo,
 `dia <= 19` é Áries, senão Touro. 25/04 → **Touro**; 10/04 → **Áries**. São
-12 `case`, cada um com um ternário ou `if/else`. Valide a data antes (o E141
+12 `case`, cada um com um ternário ou `if/else`. Valide a data antes (o E111
 já faz isso).
 
 </details>

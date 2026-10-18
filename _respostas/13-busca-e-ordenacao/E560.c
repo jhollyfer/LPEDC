@@ -1,34 +1,16 @@
-// 0094 · Busca sequencial
+// 0094 · Merge sort
 // Exercício E560 · ★☆☆
-
-#include <stdio.h>
-#include <string.h>
-
-int main(void) {
-    const char *convidados[] = {"Ana", "Bruno", "Carla", "Diego", "Elisa"};
-    int n = 5;
-    const char *procurados[] = {"Carla", "Fábio"};
-
-    printf("Lista:");
-    for (int i = 0; i < n; i++) {
-        printf(" %s", convidados[i]);
-    }
-    printf("\n");
-
-    for (int k = 0; k < 2; k++) {
-        const char *nome = procurados[k];
-        int pos = -1;
-        for (int i = 0; i < n; i++) {
-            if (strcmp(convidados[i], nome) == 0) {
-                pos = i;
-                break;
-            }
-        }
-        if (pos >= 0) {
-            printf("%s: pode entrar (posição %d)\n", nome, pos);
-        } else {
-            printf("%s: não está na lista\n", nome);
-        }
-    }
-    return 0;
-}
+//
+// Resposta:
+//   [0, 5)
+//     [0, 2)
+//       [0, 1)
+//       [1, 2)
+//     [2, 5)
+//       [2, 3)
+//       [3, 5)
+//         [3, 4)
+//         [4, 5)
+// São 9 chamadas: as 5 folhas são os pedaços de 1 elemento, e as 4 de cima
+// são as que fazem intercalação (sempre n - 1 delas). Com 5 elementos a
+// árvore fica torta: a metade direita, de 3, desce um nível a mais.

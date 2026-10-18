@@ -1,35 +1,23 @@
-// 0042 · Vetores
+// 0042 · Lendo strings
 // Exercício E252 · ★★★
+//
+// Resposta: o 1º fgets lê "abaca" (encheu os 5); o 2º lê "xi\n" (achou o
+// Enter); o 3º lê "uva\n"; o 4º devolve NULL. Saída:
+//   [abaca][xi
+//   ][uva
+//   ]
+//   3 leituras
 
 #include <stdio.h>
-#include <stdbool.h>
-
-#define N 50
 
 int main(void) {
-    bool primo[N + 1];
+    char s[6];
+    int leituras = 0;
 
-    for (int i = 0; i <= N; i++) {
-        primo[i] = true;
+    while (fgets(s, sizeof(s), stdin) != NULL) {
+        printf("[%s]", s);
+        leituras++;
     }
-    primo[0] = false;
-    primo[1] = false;
-
-    for (int p = 2; p * p <= N; p++) {
-        if (primo[p]) {
-            for (int m = p * p; m <= N; m += p) {
-                primo[m] = false;
-            }
-        }
-    }
-
-    int total = 0;
-    for (int i = 2; i <= N; i++) {
-        if (primo[i]) {
-            printf(total == 0 ? "%d" : " %d", i);
-            total++;
-        }
-    }
-    printf("\n%d primos até %d\n", total, N);
+    printf("\n%d leituras\n", leituras);
     return 0;
 }

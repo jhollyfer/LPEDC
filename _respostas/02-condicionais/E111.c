@@ -1,22 +1,46 @@
-// 0019 · if
+// 0019 · Juntando tudo: a conta de luz
 // Exercício E111 · ★★☆
-//
-// Resposta: o ";" logo depois de if (idade < 18) é uma instrução vazia, que
-// vira o corpo do if. O bloco entre chaves fica solto e roda sempre.
 
+#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int idade;
-    printf("Idade: ");
-    if (scanf("%d", &idade) != 1) {
+    int dia, mes, ano;
+    printf("Data (dd/mm/aaaa): ");
+    if (scanf("%d/%d/%d", &dia, &mes, &ano) != 3) {
         printf("Entrada inválida\n");
         return 1;
     }
 
-    if (idade < 18) {
-        printf("Entrada proibida para menores.\n");
+    bool bissexto = (ano % 4 == 0 && ano % 100 != 0) || ano % 400 == 0;
+    int dias_do_mes;
+    switch (mes) {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+        dias_do_mes = 31;
+        break;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        dias_do_mes = 30;
+        break;
+    case 2:
+        dias_do_mes = bissexto ? 29 : 28;
+        break;
+    default:
+        dias_do_mes = 0; // mês inválido: nenhum dia serve
     }
-    printf("Bom filme!\n");
+
+    if (dia >= 1 && dia <= dias_do_mes) {
+        printf("Data válida.\n");
+    } else {
+        printf("Data inválida.\n");
+    }
     return 0;
 }

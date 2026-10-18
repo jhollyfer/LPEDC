@@ -1,25 +1,22 @@
-// 0006 · O primeiro programa
+// 0006 · scanf
 // Exercício E032 · ★☆☆
 //
-// Resposta: a saída tem 5 linhas (a 4ª é vazia):
-//
-//   Bom dia!
-//   Café
-//   Pão
-//
-//   Manteiga
-//
-// Os três primeiros printf montam uma linha só, porque só o último tem \n.
-// O "Boa tarde" está comentado e não roda. Os dois \n seguidos depois de
-// "Pão" deixam uma linha em branco.
+// Resposta: (1) scanf("%d", calcado) entregava o valor de calcado (0) como
+// se fosse um endereço; o scanf tentou escrever no endereço 0 e o programa
+// quebrou (SEGV). O certo é &calcado. (2) peso é double: no scanf, %lf. Com
+// %f, o scanf escreveria só 4 bytes, no formato de float.
 
 #include <stdio.h>
 
 int main(void) {
-    printf("Bom ");
-    printf("dia");
-    printf("!\n");
-    // printf("Boa tarde\n");
-    printf("Café\nPão\n\nManteiga\n");
+    int calcado = 0;
+    double peso = 0;
+
+    printf("Número do calçado: ");
+    scanf("%d", &calcado);
+    printf("Peso (kg): ");
+    scanf("%lf", &peso);
+
+    printf("Calçado %d, peso %.1f kg\n", calcado, peso);
     return 0;
 }

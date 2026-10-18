@@ -1,25 +1,22 @@
-// 0043 · Vetores e funções
+// 0043 · Juntando tudo
 // Exercício E257 · ★★★
 //
-// Resposta: dentro da função, sizeof(doacoes) é o tamanho de um endereço (8),
-// não do vetor (24). A conta 8 / 4 dá 2, e o laço soma só 50 + 20 = 70.
-// Conserto: receber o tamanho num parâmetro e calcular n com sizeof no main,
-// onde o vetor foi declarado.
+// Resposta: invertido[9] não tem lugar para os 9 caracteres e o '\0' (o laço
+// escrevia em invertido[9], fora do vetor); e o laço copiava nome[n], que é o
+// '\0', para invertido[0], deixando a string vazia. Conserto abaixo.
 
 #include <stdio.h>
-
-int total(const int doacoes[], int n) {
-    int soma = 0;
-    for (int i = 0; i < n; i++) {
-        soma += doacoes[i];
-    }
-    return soma;
-}
+#include <string.h>
 
 int main(void) {
-    int doacoes[] = {50, 20, 100, 35, 15, 80};
-    int n = sizeof(doacoes) / sizeof(doacoes[0]);
+    char nome[] = "Ana Paula";
+    char invertido[10];
+    int n = (int) strlen(nome);
 
-    printf("Total arrecadado: R$ %d\n", total(doacoes, n));
+    for (int i = 0; i < n; i++) {
+        invertido[i] = nome[n - 1 - i];
+    }
+    invertido[n] = '\0';
+    printf("%s\n", invertido);
     return 0;
 }

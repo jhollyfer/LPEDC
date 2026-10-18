@@ -1,24 +1,22 @@
-// 0036 · A pilha de chamadas
+// 0036 · Juntando tudo: o caixa da lanchonete
 // Exercício E211 · ★☆☆
-//
-// Resposta (base -> topo), quando a linha (*) roda:
-//   main      resultado ainda sem valor (esperando imc voltar)
-//   imc       peso = 72.0, altura = 1.80 (esperando quadrado voltar)
-//   quadrado  x = 1.80                     <- topo, é quem está rodando
-// quadrado devolve 3.24, imc devolve 72.0 / 3.24 = 22.2..., main mostra.
 
 #include <stdio.h>
 
-double quadrado(double x) {
-    return x * x; // (*)
-}
-
-double imc(double peso, double altura) {
-    return peso / quadrado(altura);
+int ler_inteiro_entre(int min, int max) {
+    int valor;
+    do {
+        printf("Valor entre %d e %d: ", min, max);
+        if (scanf("%d", &valor) != 1) {
+            return min;
+        }
+    } while (valor < min || valor > max);
+    return valor;
 }
 
 int main(void) {
-    double resultado = imc(72.0, 1.80);
-    printf("IMC: %.1f\n", resultado);
+    int nota = ler_inteiro_entre(0, 10);
+    int quantidade = ler_inteiro_entre(1, 5);
+    printf("Nota %d, quantidade %d\n", nota, quantidade);
     return 0;
 }

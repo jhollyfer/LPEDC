@@ -1,37 +1,54 @@
-// 0104 · BST: busca e inserção
+// 0104 · Juntando tudo
 // Exercício E621 · ★★☆
 
 #include <stdio.h>
-#include "bst.h"
+#include "cadastro.h"
 
-void faixa(const No *r, int min, int max, int *visitados) {
-    if (r == NULL) {
-        return;
+#define MAX 16
+
+// insere o do meio primeiro: ele vira a raiz desta parte
+NoAluno *monta(NoAluno *r, const Aluno v[], int ini, int fim) {
+    if (ini > fim) {
+        return r;
     }
-    (*visitados)++;
-    if (r->chave > min) {
-        faixa(r->esq, min, max, visitados); // pode ter resposta à esquerda
-    }
-    if (r->chave >= min && r->chave <= max) {
-        printf(" %d", r->chave);
-    }
-    if (r->chave < max) {
-        faixa(r->dir, min, max, visitados);
+    int meio = (ini + fim) / 2;
+    r = cad_insere(r, v[meio]);
+    r = monta(r, v, ini, meio - 1);
+    return monta(r, v, meio + 1, fim);
+}
+
+NoAluno *rebalanceia(NoAluno *r) {
+    Aluno v[MAX];
+    int n = cad_para_vetor(r, v, 0); // em ordem de matrícula
+    r = cad_libera(r);
+    return monta(NULL, v, 0, n - 1);
+}
+
+void matriculas(const NoAluno *r) {
+    if (r != NULL) {
+        matriculas(r->esq);
+        printf(" %d", r->a.matricula);
+        matriculas(r->dir);
     }
 }
 
 int main(void) {
-    int precos[] = {50, 30, 70, 20, 40, 60, 80, 10, 90};
-    No *raiz = NULL;
-    for (int i = 0; i < 9; i++) {
-        raiz = bst_insere(raiz, precos[i]);
+    Aluno planilha[] = {
+        {20, "Davi", 4}, {30, "Bruno", 8}, {40, "Eva", 20}, {50, "Ana", 12},
+        {60, "Fabio", 9}, {70, "Carla", 15}, {80, "Gil", 11},
+    };
+    NoAluno *cad = NULL;
+    for (int i = 0; i < 7; i++) {
+        cad = cad_insere(cad, planilha[i]);
     }
+    printf("Antes:  altura %d\n", cad_altura(cad));
 
-    int visitados = 0;
-    printf("Entre 35 e 65:");
-    faixa(raiz, 35, 65, &visitados);
-    printf("\nNós visitados: %d de 9\n", visitados);
+    cad = rebalanceia(cad);
+    printf("Depois: altura %d, raiz %d (%s)\n", cad_altura(cad), cad->a.matricula, cad->a.nome);
+    printf("Alunos em ordem:");
+    matriculas(cad);
+    printf("\n");
 
-    raiz = bst_libera(raiz);
+    cad = cad_libera(cad);
     return 0;
 }

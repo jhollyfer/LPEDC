@@ -1,100 +1,76 @@
-// 0081 · Lista encadeada
+// 0081 · Juntando tudo
 // Exercício E484 · ★★☆
 
 #include <stdio.h>
-
-// ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
-// lista.h · lista simplesmente encadeada de inteiros
-//
-// Aqui a struct do nó fica no .h DE PROPÓSITO: o assunto é justamente mexer
-// nos nós (p->valor, p->prox). A lista é um ponteiro para o primeiro nó, e a
-// lista vazia é NULL:  No *inicio = NULL;
-
-#ifndef LISTA_H
-#define LISTA_H
-
-typedef struct no {
-    int valor;
-    struct no *prox; // o próximo nó, ou NULL no último
-} No;
-
-// cria um nó com "valor" na frente da lista e devolve o NOVO início:
-//   inicio = lista_insere_inicio(inicio, 20);
-No *lista_insere_inicio(No *inicio, int valor);
-
-// mostra a lista assim: 80 -> 10 -> 45 -> NULL
-void lista_imprime(const No *inicio);
-
-// quantos nós a lista tem
-int lista_tamanho(const No *inicio);
-
-// devolve a memória de todos os nós
-void lista_libera(No *inicio);
-
-#endif
-
-// lista.c · implementação da lista simplesmente encadeada
-
-#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
-No *lista_insere_inicio(No *inicio, int valor) {
-    No *novo = malloc(sizeof(No));
-    if (novo == NULL) { // num programa pequeno, desistir é o mais honesto
-        fprintf(stderr, "sem memória\n");
-        exit(1);
+typedef struct participante {
+    char nome[20];
+    int pontos;
+    struct participante *prox;
+} Participante;
+
+static bool vem_antes(const Participante *a, const Participante *b) {
+    if (a->pontos != b->pontos) return a->pontos > b->pontos;
+    return strcmp(a->nome, b->nome) < 0;
+}
+
+static Participante *insere(Participante *inicio, const char *nome, int pontos) {
+    Participante *novo = malloc(sizeof(Participante));
+    if (novo == NULL) exit(1);
+    snprintf(novo->nome, sizeof novo->nome, "%s", nome);
+    novo->pontos = pontos;
+    Participante *ant = NULL;
+    Participante *p = inicio;
+    while (p != NULL && vem_antes(p, novo)) {
+        ant = p;
+        p = p->prox;
     }
-    novo->valor = valor;
-    novo->prox = inicio; // o antigo primeiro vira o segundo
-    return novo;         // o novo nó é o novo início
+    novo->prox = p;
+    if (ant == NULL) return novo;
+    ant->prox = novo;
+    return inicio;
 }
 
-void lista_imprime(const No *inicio) {
-    for (const No *p = inicio; p != NULL; p = p->prox) {
-        printf("%d -> ", p->valor);
+static bool remove_nome(Participante **inicio, const char *nome) {
+    Participante *ant = NULL;
+    Participante *p = *inicio;
+    while (p != NULL && strcmp(p->nome, nome) != 0) {
+        ant = p;
+        p = p->prox;
     }
-    printf("NULL\n");
+    if (p == NULL) return false;
+    if (ant == NULL) *inicio = p->prox;
+    else ant->prox = p->prox;
+    free(p);
+    return true;
 }
 
-int lista_tamanho(const No *inicio) {
-    int n = 0;
-    for (const No *p = inicio; p != NULL; p = p->prox) n++;
-    return n;
-}
-
-void lista_libera(No *inicio) {
-    No *p = inicio;
-    while (p != NULL) {
-        No *seguinte = p->prox; // guarda ANTES do free
-        free(p);
-        p = seguinte;
+static void imprime(const Participante *inicio) {
+    int pos = 1;
+    for (const Participante *p = inicio; p != NULL; p = p->prox) {
+        printf("%d. %s %d\n", pos++, p->nome, p->pontos);
     }
-}
-// ---- fim de lista.h e lista.c ----
-
-void imprime_ao_contrario(const No *p) {
-    if (p == NULL) return;
-    imprime_ao_contrario(p->prox); // primeiro o resto da lista...
-    printf(" %d", p->valor);       // ...depois este nó
-}
-
-int tamanho_rec(const No *p) {
-    if (p == NULL) return 0;
-    return 1 + tamanho_rec(p->prox);
 }
 
 int main(void) {
-    int pix[] = {15, 60, 35, 90, 25};
-    No *extrato = NULL;
-    for (int i = 0; i < 5; i++) extrato = lista_insere_inicio(extrato, pix[i]);
+    Participante *bolao = NULL;
+    bolao = insere(bolao, "Ana", 12);
+    bolao = insere(bolao, "Beto", 15);
+    bolao = insere(bolao, "Cris", 12);
+    bolao = insere(bolao, "Duda", 9);
+    bolao = insere(bolao, "Edu", 15);
+    imprime(bolao);
 
-    printf("mais novo primeiro: ");
-    lista_imprime(extrato);
-    printf("mais antigo primeiro:");
-    imprime_ao_contrario(extrato);
-    printf("\n");
-    printf("tamanho (recursivo): %d\n", tamanho_rec(extrato));
+    if (remove_nome(&bolao, "Cris")) printf("Cris saiu do bolão\n");
+    imprime(bolao);
 
-    lista_libera(extrato);
+    while (bolao != NULL) {
+        Participante *seguinte = bolao->prox;
+        free(bolao);
+        bolao = seguinte;
+    }
     return 0;
 }

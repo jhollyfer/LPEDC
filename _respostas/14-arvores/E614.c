@@ -1,34 +1,45 @@
-// 0103 · Árvore binária e percursos
+// 0103 · Heapsort
 // Exercício E614 · ★☆☆
 
 #include <stdio.h>
-#include "arvore.h"
 
-int conta_folhas(const No *r) {
-    if (r == NULL) {
-        return 0;
-    }
-    if (r->esq == NULL && r->dir == NULL) {
-        return 1;
-    }
-    return conta_folhas(r->esq) + conta_folhas(r->dir);
+void troca(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
 }
 
-int conta_internos(const No *r) {
-    if (r == NULL || (r->esq == NULL && r->dir == NULL)) {
-        return 0; // vazia ou folha
+void desce_min(int v[], int n, int i) {
+    while (2 * i + 1 < n) {
+        int f = 2 * i + 1;
+        if (f + 1 < n && v[f + 1] < v[f]) {
+            f++; // o MENOR dos filhos
+        }
+        if (v[i] <= v[f]) {
+            break;
+        }
+        troca(&v[i], &v[f]);
+        i = f;
     }
-    return 1 + conta_internos(r->esq) + conta_internos(r->dir);
+}
+
+void heapsort_decrescente(int v[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        desce_min(v, n, i);
+    }
+    for (int fim = n - 1; fim > 0; fim--) {
+        troca(&v[0], &v[fim]); // o MENOR vai para o fim
+        desce_min(v, fim, 0);
+    }
 }
 
 int main(void) {
-    No *raiz = arv_cria('*',
-                        arv_cria('-', arv_cria('8', NULL, NULL), arv_cria('3', NULL, NULL)),
-                        arv_cria('+', arv_cria('4', NULL, NULL), arv_cria('2', NULL, NULL)));
-
-    printf("Números: %d\n", conta_folhas(raiz));
-    printf("Operadores: %d\n", conta_internos(raiz));
-
-    raiz = arv_libera(raiz);
+    int pontos[] = {45, 62, 38, 70, 51, 29, 66};
+    heapsort_decrescente(pontos, 7);
+    printf("Tabela:");
+    for (int i = 0; i < 7; i++) {
+        printf(" %d", pontos[i]);
+    }
+    printf("\n");
     return 0;
 }

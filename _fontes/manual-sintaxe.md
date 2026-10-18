@@ -14,17 +14,17 @@
 
 ---
 
-### 0005-compilacao / 0006-primeiro-programa
+### logica5-compilacao / 0001-primeiro-programa
 - Organização típica de um arquivo-fonte: comentários (propósito, autor, data) → diretivas → declarações visíveis no
   arquivo → definições de funções. `static` em global/função limita ao módulo; `extern` indica definição em outro
-  arquivo (bom para 0039).
+  arquivo (bom para 0034).
 - Primeiro programa ANSI com `int main()` e `return 0;`.
 - Palavras reservadas do C89 (32): auto, break, case, char, const, continue, default, do, double, else, enum, extern,
   float, for, goto, if, int, long, register, return, short, signed, sizeof, static, struct, switch, typedef, union,
   unsigned, void, volatile, while. (Bom para tabela; acrescentar as do C99/C11: `inline`, `restrict`, `_Bool`...)
 - Comentários não aninham: `/* a /* b */ c */` é ilegal.
 
-### 0007-variaveis / 0008-tipos-e-limites
+### 0002-variaveis / 0003-tipos-e-limites
 - **Conceito útil:** *declaração* informa o tipo; se reserva armazenamento é *definição*. Maiúsculas importam
   (`Temperatura`, `TEMPERATURA`, `temperatura` são três variáveis). `int v1, v2, v3, v4;` numa linha.
 - Tabelas de inteiros (signed/unsigned char, short, int, long com bytes, bits, mín. e máx.) e de reais (float,
@@ -33,7 +33,7 @@
   `42.125`); `int x = 0, não = 0;` (identificador com acento); `inte v4;`.
 - `char` e `int` são intercambiáveis para guardar caracteres (o literal `'M'` é um int com o código 77).
 
-### 0009-constantes
+### 0004-constantes
 - Literal sem ponto é inteiro; com ponto é `double`; `025` é octal (= 21), `0x25` hexa (= 37), `250L` long.
   **Exercício:** quanto vale `025 + 0x25`? (21 + 37 = 58).
 - Tabela de escapes com códigos ASCII (`\a` 7, `\b` 8, `\f` 12, `\n` 10, `\r` 13, `\t` 9, `\v` 11, `\\` 92, `\?` 63,
@@ -43,7 +43,7 @@
 - Strings literais adjacentes são concatenadas: `"um" "caractere" "cadeia"` ≡ `"umcaracterecadeia"` (útil para
   quebrar strings longas no `printf`).
 
-### 0010-printf / 0011-scanf
+### 0005-printf / 0006-scanf
 - Cadeia de controle = texto + especificadores + escapes; nº de especificadores = nº de argumentos. Tabelas de
   códigos (`%d %c %s %f %e %g %lf %u %o %x`; no scanf também `%ld`, `%h`).
 - **Exemplo:** `printf("/%s/", "Serra Magna")` e `printf("/%-20s/", ...)` — mostrar largura e alinhamento à esquerda
@@ -52,23 +52,23 @@
   barra em "12/5"); como está escrito, o scanf espera um `*` literal.
 - `scanf("%s %s", cidade, provincia)` sem `&` (arrays).
 
-### 0012-aritmetica / 0013-conversao / 0014-atribuicao
+### 0007-aritmetica / 0008-conversao / 0009-atribuicao
 - Tabela de compostos completa: `*= /= %= += -= <<= >>= &= ^= |=`; `C = A = B` (direita para esquerda);
   `C = (A = B)`.
 - Cast: `(int)29.55 + (int)21.99` → 29 + 21 = **50**; `(float)6 / (float)4` → **1.5** (sem cast, 6/4 = 1).
 - `sizeof(tipo)` e `sizeof expr`; quantidade de elementos de um array:
-  `sizeof(lista) / sizeof(lista[0])` — ótimo para 0042 (com o aviso: não funciona com parâmetro, que é ponteiro).
+  `sizeof(lista) / sizeof(lista[0])` — ótimo para 0037 (com o aviso: não funciona com parâmetro, que é ponteiro).
 - **Operador vírgula:** avalia da esquerda para a direita, valor e tipo do último; uso típico no `for`
   (`for (i = 0, soma = 0; i <= 100; soma += i, i++);`).
 
-### 0017-relacionais / 0018-logicos / 0070-bits
+### 0012-relacionais / 0013-logicos / 0065-bits
 - `if (expr != 0)` ≡ `if (expr)`. Tabela de operadores bit a bit: `& | ^ << >> ~` com exemplos `C = A & B`.
 - **Tabela de precedência (15 níveis)** — base para a tabela do curso: `() [] . ->` | unários `* & ! ~ ++ -- + -
   (cast) sizeof` (D→E) | `* / %` | `+ -` | `<< >>` | `< <= > >=` | `== !=` | `&` | `^` | `|` | `&&` | `||` | `?:`
   (D→E) | atribuições (D→E) | `,`. **Pegadinha derivada:** `&` bit a bit está ABAIXO de `==`, então
   `if (x & 1 == 0)` é `x & (1 == 0)` = sempre 0 — usar parênteses `(x & 1) == 0`.
 
-### 0019-if … 0023-switch
+### 0014-if … 0018-switch
 - Sintaxes de `if`, `if-else`, `else if` com `SentençaPorOmissão` opcional; ternário: `premio = (opcao == 'S') ?
   1000 : 0;` (a fonte diz que b e c devem ter o mesmo tipo — na verdade são convertidos para um tipo comum).
 - **Pegadinha (exemplo D.3 da fonte):** `switch (op) { case 'a': func1(); break; case 'b': func2(); break;
@@ -76,14 +76,14 @@
   Exercício: o que imprime para 'a', 'H' e 'z'? (nada/func1; Olá + Saída; Saída).
 - Erros de digitação na fonte: `case valor3;` e `default;` com ponto e vírgula no lugar de dois-pontos.
 
-### 0025-while / 0026-do-while / 0027-for / 0028-break-continue
+### 0020-while / 0021-do-while / 0022-for / 0023-break-continue
 - Equivalência `for(e1; e2; e3) s;` ≡ `e1; while (e2) { s; e3; }`.
 - **Sentença nula:** `for (i = 0; cad[i] != '\0'; i++);` acha o fim da string (corpo vazio de propósito).
   **Pegadinha associada para o curso:** o `;` acidental — `for (i = 0; i < 10; i++); printf("%d", i);` imprime só 10;
   `while (x > 0); { ... }` trava. Recomenda-se escrever o corpo vazio como `{ }` ou comentar.
 - `break` sai do laço ou do switch; `continue` volta ao início; `goto` com rótulo terminado em `:`.
 
-### 0033-funcoes / 0034-parametros
+### 0028-funcoes / 0029-parametros
 - Formato, chamada e protótipo (`int SelecionarMenu(void); double Area(int x, int y); void sair(int estado);`);
   `void` para "nada retorna/nada recebe" e para ponteiro genérico.
 - **"Erros típicos de funções" (lista boa para o curso):** (1) função não-void que termina sem `return` devolve valor
@@ -91,13 +91,13 @@
   devolve `int` mesmo que retorne `double` (resultado lixo); (4) efeitos colaterais por alteração de globais.
 - `exit(0)` termina na hora e fecha os arquivos; `return valor;` no `main` é o jeito normal.
 
-### 0040-preprocessador / 0039-modulos
+### 0035-preprocessador / 0034-modulos
 - **Conceitos-chave:** três usos — `#include` (inserir arquivo), `#define` (constantes e macros), compilação
   condicional (`#if`, `#ifdef`, `#ifndef`, `#elif`, `#else`, `#endif`) para código de vários sistemas. `#undef` apaga
   uma macro; `#error texto` aborta a compilação com mensagem (a fonte escreve "#erro"); `#pragma` é específico do
   compilador (ignorado se desconhecido); `#line` muda número/nome nas mensagens; `#` sozinho é diretiva nula;
   macros predefinidas `__LINE__`, `__FILE__`, `__DATE__`, `__TIME__`, `__STDC__`.
-- **Include guard (para 0039):** `#ifndef NOME_H / #define NOME_H / ... / #endif` evita processar o mesmo
+- **Include guard (para 0034):** `#ifndef NOME_H / #define NOME_H / ... / #endif` evita processar o mesmo
   cabeçalho duas vezes. (A fonte usa `_PAREJA` e depois fala em `_DUPLA` — inconsistência de tradução; e nomes
   começando com `_` + maiúscula são reservados à implementação: preferir `PAREJA_H`.)
 - **Erro na fonte:** diz que `#elif`/`#else` NÃO podem ser usados com `#ifndef` — podem, como com `#ifdef`.
@@ -108,7 +108,7 @@
 - Ideia de exemplo: `#ifdef DEBUG printf("x = %d (linha %d)\n", x, __LINE__); #endif` e compilar com
   `gcc -DDEBUG`.
 
-### 0042-vetores / 0044-matrizes / 0046-strings
+### 0037-vetores / 0039-matrizes / 0041-strings
 - Índices começam em 0; `float lista[10][25]`; `int tres_d[5][2][20]` tem 200 inteiros.
 - Inicialização de matriz: `int m[4][3] = {{1,2,3},{4,5,6},{7,8,9},{0,0,0}}` ≡ `{1,2,3,4,5,6,7,8,9}` (o que falta
   vira 0). **Erro na fonte (bom exercício):** explica `int m[4][3] = {{1},{4},{7}}` como "1º, 2º e 3º elemento da
@@ -118,16 +118,16 @@
 - `char frutas[][10] = {"laranja", "banana", "maçã"};` (matriz de char) × `char *cores[] = {...}` (vetor de
   ponteiros para literais).
 
-### 0050-ponteiros / 0052-ponteiros-e-vetores / 0054 / 0055 / 0056
+### 0045-ponteiros / 0047-ponteiros-e-vetores / 0049 / 0050 / 0051
 - `int *p; p = &m;` `*p` acessa o valor; ponteiro nulo (`NULL` ou `0`), testar `if (fp != NULL)`; `void *` aponta
   tipo não especificado. `listafloat[4]` ≡ `*(listafloat + 4)`; `ponteiro = lista` ≡ `= &lista[0]`.
-- `char **lista;` "equivale a" `char *lista[]` — **só é verdade em parâmetro de função** (pegadinha para 0054).
-- Distinção de declarações (ótima para 0055): `float *minhafun(void);` = função que devolve ponteiro;
+- `char **lista;` "equivale a" `char *lista[]` — **só é verdade em parâmetro de função** (pegadinha para 0049).
+- Distinção de declarações (ótima para 0050): `float *minhafun(void);` = função que devolve ponteiro;
   `int (*ptrafuncao)(void);` = ponteiro para função; `float (*pf)(int, int);`.
 - **Erros na fonte:** `double *total; double ctotal; total = &total;` (deveria ser `&ctotal` — tipo incompatível);
   `comprimentoOnda = *cabo1;` sem sentido.
 
-### 0064-struct / 0065-typedef / 0068-enum / 0069-union / 0070-bits
+### 0059-struct / 0060-typedef / 0063-enum / 0064-union / 0065-bits
 - `struct data { int mes; int dia; int ano; }; struct data hoje;` + notação ponto; struct coordenada; `typedef
   struct coordenada {...} Coordenadas;`; `typedef struct { float x, y; } PONTO; PONTO origem = {0.0, 0.0};`.
 - **enum:** começa em 0; pode-se fixar valores. **Erro na fonte (pegadinha ótima):** com

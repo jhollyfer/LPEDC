@@ -34,7 +34,7 @@ Pontos fracos para o LPEDC:
   copie código dele.
 - Strings com acentos nos exemplos dão, em UTF-8, contagens diferentes das impressas.
 
-### 0004-binario
+### logica4-binario
 - **Conceitos-chave:** Notação posicional: cada posição vale uma potência da base; o "valor do símbolo" é o dígito,
   o "valor posicional" é a potência. O maior dígito de uma base é sempre (base − 1).
 - Octal e hexadecimal existem para **abreviar binário**, porque 8 = 2³ e 16 = 2⁴: agrupe os bits
@@ -59,9 +59,9 @@ Pontos fracos para o LPEDC:
   (resp.: `47754₈`).
 - `EFD4₁₆` para decimal (resp.: 61396); 177 para as três bases (resp.: `10110001`, `261`, `B1`).
 - Escrever −1 em 32 bits (resp.: 32 uns). Qual é o menor/maior dígito na base 12?
-- Programa: ler um `unsigned` e imprimir os 32 bits (liga com 0070).
+- Programa: ler um `unsigned` e imprimir os 32 bits (liga com 0065).
 
-### 0005-compilacao
+### logica5-compilacao
 - **Conceitos-chave:** O pré-processador roda antes do compilador; o **ligador (linker)** resolve nomes usados num
   arquivo e definidos em outro. Uma declaração `extern int flag;` diz "existe em algum lugar";
   se o linker não achar a definição, o erro é **de ligação**, não de compilação.
@@ -81,7 +81,7 @@ Pontos fracos para o LPEDC:
 - Projeto do módulo: o simulador do Simpletron em C, com validação de entrada (−9999..9999),
   erros fatais (divisão por zero, opcode inválido, estouro do acumulador) e "dump" da memória.
 
-### 0008-tipos-e-limites
+### 0003-tipos-e-limites
 - **Conceitos-chave:** `sizeof` é avaliado **na compilação**; dá bytes. Tamanhos variam por máquina (o livro mostra
   `long` = 4 e `long double` = 8 numa máquina de 32 bits; hoje no Linux 64 bits são 8 e 16).
 - `size_t` é o tipo inteiro sem sinal que `sizeof` devolve.
@@ -95,7 +95,7 @@ Pontos fracos para o LPEDC:
 - **Ideias de exemplos:** Tabela de `sizeof` de todos os tipos, impressa e depois gravada em arquivo (ex. 11.16).
 - **Ideias de exercícios:** Prever e testar o que `printf("%u\n", -1)` mostra; explicar com complemento de dois.
 
-### 0009-constantes
+### 0004-constantes
 - **Conceitos-chave:** Sequências de escape: `\' \" \? \\ \a \b \f \n \r \t \v`. Para imprimir `%` em `printf`, `%%`.
 - Constante de caractere é um `int` (`'z'` vale 122 em ASCII, `'\n'` vale 10).
 - `#define PI 3.14159` substitui texto; tudo à direita do nome entra na substituição.
@@ -104,7 +104,7 @@ Pontos fracos para o LPEDC:
   array de 2 bytes, não um `char`).
 - **Ideias de exercícios:** Programa que testa cada escape que move o cursor, imprimindo um caractere antes e depois.
 
-### 0010-printf
+### 0005-printf
 - **Conceitos-chave:** Forma geral: `%[flags][largura][.precisão][modificador]conversão`.
 - Inteiros: `d`/`i` (iguais no `printf`), `o`, `u`, `x`/`X`; modificadores `h` (short) e `l`.
 - Reais: `f` (6 casas), `e`/`E` (notação científica, 1 dígito antes do ponto), `g`/`G` (escolhe
@@ -135,7 +135,7 @@ Pontos fracos para o LPEDC:
 - "Proteção de cheque": imprimir um valor em 9 posições com asteriscos à esquerda
   (`****99,87`).
 
-### 0011-scanf
+### 0006-scanf
 - **Conceitos-chave:** Os argumentos são **endereços**. Array de `char` já é endereço (sem `&`).
 - `%d` só decimal; `%i` aceita decimal, octal (`010`) e hex (`0x10`).
 - No `scanf`, `double` exige `%lf` (no `printf` não faz diferença).
@@ -158,7 +158,7 @@ Pontos fracos para o LPEDC:
 - Ler `3.5%` guardando 3.5 num `float` sem usar `*` (resp.: `scanf("%f%%", &p)`).
 - Ler uma string entre aspas (`"suzy"`) descartando as aspas (resp.: `"\"%[^\"]\""`).
 
-### 0031-aleatorios
+### 0026-aleatorios
 - **Conceitos-chave:** **Adiamento indefinido:** o embaralhamento "natural" do cap. 7 (sorteia linha e coluna até
   achar uma posição vazia) pode demorar sem limite perto do fim, pois quase tudo já foi sorteado.
 - Versão melhor (cap. 10): preencha o baralho em ordem e, para cada posição `i`, troque com uma
@@ -172,7 +172,7 @@ Pontos fracos para o LPEDC:
   10% volta 12, 30% anda 1, 20% volta 2; nunca abaixo da casa 1). Imprima a pista a cada tique.
 - Pôquer (7.12): detectar par, dois pares, trinca, quadra, flush e sequência numa mão de 5.
 
-### 0035-escopo
+### 0030-escopo
 - **Conceitos-chave:** `static` numa global ou função dá **ligação interna**: só o próprio arquivo enxerga. Sem
   `static`, a ligação é externa.
 - Globais violam o princípio do menor privilégio; use só para recursos realmente
@@ -181,20 +181,20 @@ Pontos fracos para o LPEDC:
   protótipo de `swap` dentro de `bubbleSort`).
 - **Ideias de exemplos:** `static const double PI = 3.14159;` num `.c` utilitário; funções auxiliares `static`.
 
-### 0036-pilha-de-chamadas
+### 0031-pilha-de-chamadas
 - **Conceitos-chave:** A cada chamada, o endereço de retorno e as variáveis automáticas vão para uma pilha (LIFO);
   ao retornar, saem e "deixam de existir". A recursão usa o mesmo mecanismo.
 - **Ideias de exemplos:** Usar a própria pilha encadeada do cap. 12 para "imitar" a pilha de chamadas de `reverse`.
 
-### 0037-recursao
+### 0032-recursao
 - **Conceitos-chave / ideias de exemplos:** `reverse(s)`: se `s[0] == '\0'` retorna; senão chama `reverse(&s[1])` e **depois** imprime
   `s[0]` (a ordem das duas linhas é o que inverte). "apos a sopa" sai igual (palíndromo).
-- `insertNode` na BST e os três percursos são recursivos (ver 0103/0104).
+- `insertNode` na BST e os três percursos são recursivos (ver 0098/0104).
 - **Ideias de exercícios:** Imprimir lista encadeada de trás para frente recursivamente; buscar recursivamente.
 - **Labirinto (7.22):** percorrer uma grade 12×12 de `#` e `.` pelo método "mão direita na
   parede", marcando `X`; gerar labirintos aleatórios (7.23); generalizar o tamanho (7.24).
 
-### 0039-modulos
+### 0034-modulos
 - **Conceitos-chave:** A definição de uma função fica inteira em **um** arquivo. O `.h` traz protótipos, structs,
   enums; cada `.c` inclui o `.h` de que precisa.
 - `make` + `makefile` recompilam só o que mudou.
@@ -203,7 +203,7 @@ Pontos fracos para o LPEDC:
 - **Analogias/explicações boas:** **Rádio:** os botões são a interface (trocar estação, volume); cada fabricante implementa
   por dentro de um jeito. Ótima para introduzir `.h`/`.c`.
 
-### 0040-preprocessador
+### 0035-preprocessador
 - **Conceitos-chave:** Diretivas começam com `#` (só espaços/comentários antes na linha).
 - `#include <x.h>` procura nos diretórios do sistema; `#include "x.h"` procura primeiro no
   diretório do arquivo.
@@ -230,7 +230,7 @@ Pontos fracos para o LPEDC:
 - Programa que imprime as cinco constantes pré-definidas (atenção: `__STDC__` é inteiro; a
   resposta do livro usa `%s`, o que está errado).
 
-### 0042-vetores / 0043-vetores-e-funcoes
+### 0037-vetores / 0038-vetores-e-funcoes
 - **Conceitos-chave:** Ao passar um vetor, a função recebe só o endereço do 1º elemento; o tamanho **não vai junto**
   → sempre passe o tamanho (ou ponteiro de início + ponteiro de fim).
 - `sizeof(v)/sizeof(v[0])` dá o número de elementos **só no escopo onde o vetor foi
@@ -239,7 +239,7 @@ Pontos fracos para o LPEDC:
 - Truque curioso: um vetor dentro de uma `struct` é copiado quando a struct é passada por valor.
 - **Ideias de exercícios:** Prever a saída de `getSize` (vetor de 20 `float`) no `main` e dentro da função, no seu PC.
 
-### 0045-caracteres
+### 0040-caracteres
 - **Conceitos-chave:** `char` é número; comparar caracteres é comparar códigos (ASCII: `'0'`=48, `'A'`=65,
   `'a'`=97, `'&'`=38). Dígitos vêm antes das maiúsculas, que vêm antes das minúsculas.
 - `<ctype.h>`: `isdigit isalpha isalnum isxdigit islower isupper isspace iscntrl ispunct
@@ -252,7 +252,7 @@ Pontos fracos para o LPEDC:
 - **Ideias de exercícios:** Reescrever as funções de `ctype.h` usando só a tabela ASCII (8.26).
 - Ler um caractere e imprimir o retorno de cada função; ler códigos 0..255 e imprimir.
 
-### 0046-strings
+### 0041-strings
 - **Conceitos-chave:** String = vetor de `char` terminado em `'\0'`; o "valor" de uma string é o endereço do 1º
   caractere. `char cor[] = "azul";` tem 5 elementos.
 - `strcpy`, `strncpy`, `strcat`, `strncat`, `strcmp`, `strncmp`, `strlen` (não conta o `'\0'`,
@@ -289,7 +289,7 @@ Pontos fracos para o LPEDC:
   2011`; valor de cheque por extenso; codificador/decodificador Morse.
 - Ordenar 10 nomes de cidades com `strcmp` + bubble sort.
 
-### 0047-lendo-strings
+### 0042-lendo-strings
 - **Conceitos-chave:** `fgets(s, n, stdin)` lê no máximo `n - 1` caracteres, para no `'\n'` (e **o inclui**) e põe
   `'\0'`.
 - `scanf("%s")` para no primeiro espaço; use `%19s` para `char s[20]`.
@@ -299,7 +299,7 @@ Pontos fracos para o LPEDC:
   `char`: bom para pedir "ache os 3 bugs".
 - O livro menciona `gets` no início do cap. 9 sem alertar; ver "Obsoleto".
 
-### 0049-memoria / 0050-ponteiros
+### 0044-memoria / 0045-ponteiros
 - **Conceitos-chave:** Ponteiro é uma variável cujo valor é um endereço; acessar um valor através dele é
   **indireção**. `&` dá o endereço; `*` desreferencia. `&*p` e `*&p` dão o mesmo.
 - `int *a, b;` → só `a` é ponteiro (o `*` não "distribui").
@@ -315,7 +315,7 @@ Pontos fracos para o LPEDC:
 - Achar o erro: `int *n; printf("%d", *n);`, `float *r; long *i; i = r;`, `int *x, y; x = y;`,
   `char *s; printf("%s", s);`.
 
-### 0051-passagem-por-referencia
+### 0046-passagem-por-referencia
 - **Conceitos-chave:** **Em C tudo é passado por valor**; "por referência" é simulado passando o endereço.
 - `cuboPorValor(n)` devolve o resultado com `return`; `cuboPorReferencia(&n)` faz
   `*p = *p * *p * *p`.
@@ -326,7 +326,7 @@ Pontos fracos para o LPEDC:
   para valor e em 3 etapas para referência: vale redesenhar.
 - **Pegadinhas e erros comuns:** Passar um valor onde se espera ponteiro (o compilador pode só avisar; roda e dá segfault).
 
-### 0052-ponteiros-e-vetores
+### 0047-ponteiros-e-vetores
 - **Conceitos-chave:** Aritmética: `p++`, `p--`, `p + n`, `p - n`, `p2 - p1`. Somar `n` avança `n * sizeof(*p)` bytes.
 - Com `int v[5]` em 3000 e `int` de 4 bytes, `vPtr += 2` dá 3008; se `v2Ptr` = 3008 e
   `vPtr` = 3000, `v2Ptr - vPtr` = **2** (elementos, não bytes).
@@ -348,7 +348,7 @@ Pontos fracos para o LPEDC:
   (conta até o `'\0'` → `strlen`); `mystery3` (compara caractere a caractere; tem bug: diz
   "iguais" quando uma é prefixo da outra).
 
-### 0053-ponteiros-e-strings
+### 0048-ponteiros-e-strings
 - **Conceitos-chave:** `char cor[] = "azul";` cria um vetor modificável; `const char *p = "azul";` aponta para um
   literal que pode estar em memória só de leitura → se for alterar, use vetor.
 - **Vetor de ponteiros** para strings (`const char *naipe[4] = {"Copas", ...}`): só os
@@ -367,7 +367,7 @@ Pontos fracos para o LPEDC:
 - Sentenças aleatórias com 4 vetores de `char *` (artigo, substantivo, verbo, preposição),
   maiúscula inicial e ponto final (8.11).
 
-### 0055-ponteiro-para-funcao
+### 0050-ponteiro-para-funcao
 - **Conceitos-chave:** O nome de uma função é o endereço do seu código. Ponteiros para função podem ser passados,
   devolvidos, guardados em vetores e atribuídos.
 - `int (*compara)(int, int)` → ponteiro para função; sem os parênteses, `int *compara(int,int)`
@@ -381,14 +381,14 @@ Pontos fracos para o LPEDC:
 - Círculo: circunferência, área, volume da esfera via vetor de ponteiros `void f(double)`.
 - Reescrever o menu de notas (mínimo, máximo, médias) uniformizando as assinaturas.
 
-### 0056-void-generico
+### 0051-void-generico
 - **Conceitos-chave:** `void *` recebe e é atribuído a qualquer ponteiro de dado sem cast (em C).
 - Não pode ser desreferenciado: o compilador não sabe quantos bytes ler. Converta antes:
   `*(int *)p`.
 - Por isso `memcpy`/`memset`/`malloc` usam `void *` + tamanho em bytes.
 - **Pegadinhas e erros comuns:** Atribuir ponteiros de tipos diferentes (nenhum `void *`) é erro.
 
-### 0058-pilha-e-heap / 0059-malloc-free
+### 0053-pilha-e-heap / 0054-malloc-free
 - **Pilha × heap (pouco no livro):** automáticas vivem na pilha e somem no retorno; o que vem
   de `malloc` dura até o `free`, limitado pela memória disponível.
 - **Conceitos-chave:** `p = malloc(sizeof(struct no));` devolve `void *`; **memória não inicializada**; `NULL` se
@@ -397,7 +397,7 @@ Pontos fracos para o LPEDC:
 - **Pegadinhas e erros comuns (caixas do livro):** Não testar `NULL`. Não liberar (vazamento). Liberar o que não veio de `malloc`. Usar
   memória já liberada.
 
-### 0060-calloc-realloc
+### 0055-calloc-realloc
 - **Conceitos-chave:** `calloc(n, tam)` aloca `n` elementos e **zera**. `realloc(p, novo)` muda o tamanho
   preservando o conteúdo até o menor dos dois tamanhos; `realloc(NULL, n)` = `malloc`;
   `realloc(p, 0)` libera; se falhar devolve `NULL` e o bloco original fica intacto.
@@ -406,13 +406,13 @@ Pontos fracos para o LPEDC:
 - **Ideias de exercícios:** Ler `n`, alocar `n` inteiros, preencher, imprimir, reduzir para `n/2` com `realloc` e
   conferir que a primeira metade se manteve (14.7).
 
-### 0062-erros-de-memoria
+### 0057-erros-de-memoria
 - O livro lista: vazamento, uso após `free`, `free` de memória não dinâmica, não testar
   `NULL`, último nó sem `NULL` (estrutura "sem fim"). Não fala de valgrind/ASan nem de free
   duplo. Exercício bom: pegar o laço de liberação de lista da resposta 12.4(e), em que o
   `free(tempPtr)` saiu do laço por erro de diagramação, e pedir para achar o vazamento.
 
-### 0064-struct
+### 0059-struct
 - **Conceitos-chave:** Struct (agregação) junta membros de tipos diferentes; a declaração cria um **tipo**, não
   reserva memória. Termina com `;`.
 - Pode conter vetores e outras structs, mas **não uma instância de si mesma**; pode conter um
@@ -430,18 +430,18 @@ Pontos fracos para o LPEDC:
   aninhados `reg.pessoal.telefone` e `p->pessoal.telefone`.
 - `PerfilSaude` (nome, sexo, data de nascimento, altura, peso) + funções de idade e IMC.
 
-### 0065-typedef
+### 0060-typedef
 - `typedef struct carta Carta;` ou `typedef struct { ... } Carta;`. Cria **sinônimo**, não
   tipo novo. Maiúscula inicial por convenção. Útil para portabilidade (`typedef int Inteiro4;`).
 - `typedef ListNode *ListNodePtr;` aparece no cap. 12. (Esconder ponteiro em typedef costuma
   confundir iniciantes; decidir a convenção do curso.)
 
-### 0066-vetor-de-structs
+### 0061-vetor-de-structs
 - Baralho como `Carta deck[52]`; embaralhar trocando structs inteiras (`temp = d[i]; d[i] =
   d[j]; d[j] = temp;`); distribuir numa passada. Erro comum: esquecer o índice
   (`copas.face` em vez de `copas[10].face`).
 
-### 0067-ponteiro-para-struct
+### 0062-ponteiro-para-struct
 - **Conceitos-chave:** `p->m` é o mesmo que `(*p).m`; os parênteses são obrigatórios porque `.` tem precedência
   maior que `*`. `-` e `>` sem espaço entre eles.
 - **Pegadinhas e erros comuns:** `*p.m` é erro. `*p->face` desreferencia o **char** (imprime lixo com `%s`). A "correção" do
@@ -449,13 +449,13 @@ Pontos fracos para o LPEDC:
 - **Ideias de exercícios:** Com `Peca b[10]` e `ptr = b`, imprimir o elemento 3 por `ptr` (resp.: `(ptr + 3)->num` ou
   `ptr[3].num`).
 
-### 0068-enum
+### 0063-enum
 - Constantes inteiras com nome; começam em 0 e sobem de 1, a não ser que se atribua
   (`enum meses {JAN = 1, FEV, ..., DEZ}` → 1..12). Nomes únicos; valores podem repetir; não se
   atribui depois. Maiúsculas.
 - Exemplo: laço `for (m = JAN; m <= DEZ; m++)` indexando `nomeMes[m]` com `nomeMes[0] = ""`.
 
-### 0069-union
+### 0064-union
 - **Conceitos-chave:** Membros **compartilham** o mesmo espaço; tamanho ≥ maior membro. Só um membro "vale" por vez;
   quem controla é o programador. Inicializa só com o tipo do **primeiro** membro.
 - Operações: atribuição, `&`, `.` e `->`; não compara.
@@ -464,7 +464,7 @@ Pontos fracos para o LPEDC:
 - **Ideias de exercícios:** `union inteiro {char c; short s; int i; long l;}`: guardar em um, imprimir como todos;
   "os valores saem certos sempre?".
 
-### 0070-bits
+### 0065-bits
 - **Conceitos-chave:** `&` (os dois 1), `|` (algum 1), `^` (exatamente um 1), `~` (inverte), `<<` (entra 0 à
   direita), `>>` (em `unsigned` entra 0; em `signed` depende da máquina). Use `unsigned`.
 - **Máscara**: valor com bits escolhidos em 1; `&` com máscara isola bits, `|` liga bits.
@@ -487,7 +487,7 @@ Pontos fracos para o LPEDC:
 - Inverter a ordem dos bits; contar bits 1 e dizer a paridade ("o que faz?" 10.20).
 - "Qual é X?" (10.19): a função testa se os 10 bits baixos são zero → X = 1024.
 
-### 0072-arquivos-texto
+### 0067-arquivos-texto
 - **Conceitos-chave:** Para o C, arquivo = sequência de bytes com marca de fim; o "registro" é convenção sua.
 - `FILE *f = fopen(nome, modo)`; `NULL` se falhar (não existe, sem permissão, disco cheio).
   `fclose(f)` assim que não precisar mais.
@@ -513,7 +513,7 @@ Pontos fracos para o LPEDC:
   várias transações por conta. Dados de teste prontos no livro.
 - Copiar arquivo trocando `\t` por espaço; contar palavras de phishing num arquivo.
 
-### 0073-arquivos-binarios
+### 0068-arquivos-binarios
 - **Conceitos-chave:** `fwrite(&x, sizeof(int), 1, f)` sempre grava `sizeof(int)` bytes (com `fprintf` seriam de
   1 a 11 caracteres). `fread` análogo. O 3º argumento é o número de elementos (vale vetores).
 - Registros de tamanho fixo → posição calculada pela chave:
@@ -531,7 +531,7 @@ Pontos fracos para o LPEDC:
   sobre `credito.dat` aberto em `rb+`.
 - Inventário de ferramentas `ferragens.dat` com 100 registros (dados iniciais no livro).
 
-### 0074-argumentos
+### 0069-argumentos
 - **Conceitos-chave:** `int main(int argc, char *argv[])`; `argv[0]` é o nome do programa (conta em `argc`).
 - Redirecionamento é do **sistema operacional**, não do C: `prog < entrada`, `prog > saida`,
   `prog >> saida`, `gera | soma`. Programa que lê `stdin` até `EOF` já funciona com arquivos.
@@ -541,13 +541,13 @@ Pontos fracos para o LPEDC:
 - **Ideias de exercícios:** Imprimir todos os argumentos; ordenar um vetor com opção `-c`/`-d`; copiar arquivo
   invertido.
 
-### 0077-big-o
+### 0072-big-o
 - Busca numa BST balanceada: no máximo log₂ n comparações (1.000 itens → 10; 1.000.000 → 20).
 - Inserir/remover no meio de vetor ordenado exige deslocar tudo; vetor tem acesso direto por
   cálculo de endereço, lista não.
 - Exercício 12.18: eliminar duplicatas com vetor × com BST e comparar os custos.
 
-### 0079-tad
+### 0074-tad
 - **Conceitos-chave (cap. 18, parte C++, mas a ideia é de C):** TAD = representação dos dados + operações permitidas. O próprio `int` é um TAD: aproxima o
   inteiro matemático com faixa limitada.
 - O cliente de uma pilha/fila só quer saber **o que** ela faz (push/pop, enqueue/dequeue), não
@@ -555,7 +555,7 @@ Pontos fracos para o LPEDC:
   interna: operações fora da interface não existem para o cliente.
 - Funções com erro comum devem devolver um código (0, `NULL`) em vez de abortar (cap. 24).
 
-### 0081-lista-encadeada / 0082-lista-busca-remocao / 0083-lista-ordenada
+### 0076-lista-encadeada / 0077-lista-busca-remocao / 0078-lista-ordenada
 - **Conceitos-chave:** Nó = dado + ponteiro para o próximo; acesso pelo ponteiro do 1º nó; último aponta `NULL`.
 - Vantagens sobre vetor: tamanho imprevisível, cresce e encolhe, não desperdiça; desvantagens:
   sem acesso direto, ponteiros ocupam espaço, custo de cada `malloc`.
@@ -577,7 +577,7 @@ Pontos fracos para o LPEDC:
   onde `ant` e `atual` apontam em cada caso (início: `ant == NULL`; fim: `atual == NULL`;
   meio: entre Jones e Smith).
 
-### 0087-pilha / 0088-pilha-encadeada
+### 0082-pilha / 0083-pilha-encadeada
 - **Conceitos-chave:** Pilha = lista com inserção e remoção só no topo (LIFO). Mesma representação da lista.
 - `push`: novo nó aponta para o topo antigo; topo passa a ser o novo.
 - `pop`: guarda o topo em `temp`, salva o valor, topo avança, `free(temp)`, devolve o valor.
@@ -585,7 +585,7 @@ Pontos fracos para o LPEDC:
   expressões pelo compilador.
 - **Pegadinhas e erros comuns:** `pop` do livro não testa pilha vazia (quem testa é o `main`).
 
-### 0089-pilha-aplicacoes
+### 0084-pilha-aplicacoes
 - **Conceitos-chave / exercícios:** **Infixa → pós-fixa (12.12):** empilhe `(` e acrescente `)` ao fim; dígito vai direto para a
   saída; `(` empilha; operador: desempilha para a saída enquanto o topo tiver precedência
   maior ou igual, depois empilha; `)` desempilha até o `(` e o descarta.
@@ -595,7 +595,7 @@ Pontos fracos para o LPEDC:
   um dígito.
 - Inverter uma linha com pilha; testar palíndromo ignorando espaços e pontuação.
 
-### 0090-fila / 0091-fila-encadeada
+### 0085-fila / 0086-fila-encadeada
 - **Conceitos-chave:** FIFO com dois ponteiros: cabeça (sai) e cauda (entra). Aplicações: processos esperando a
   CPU, fila de impressão (spool), pacotes num roteador.
 - `enqueue`: novo nó com `prox = NULL`; se vazia, cabeça = novo, senão `cauda->prox = novo`;
@@ -608,12 +608,12 @@ Pontos fracos para o LPEDC:
   1–4 min, por 720 min; medir o maior tamanho de fila e a maior espera; repetir com chegada
   de 1–3 min e observar a fila crescer sem parar.
 
-### 0096-bubble-sort / 0101-comparando
+### 0091-bubble-sort / 0096-comparando
 - Bubble sort com `swap(&v[j], &v[j+1])` e protótipo de `swap` dentro de `bubbleSort`;
   parâmetros `int *const v` e `const int n` (menor privilégio).
 - Versão com ponteiro para função de comparação (crescente/decrescente) → prepara o `qsort`.
 
-### 0102-arvores / 0103-arvore-binaria
+### 0097-arvores / 0098-arvore-binaria
 - **Conceitos-chave:** Árvore é não linear; na binária cada nó tem dois links (qualquer um pode ser `NULL`). Raiz,
   filho esquerdo/direito, subárvores, irmãos, folha, pai. Desenha-se de cima para baixo.
 - Percursos recursivos: **em ordem** (esq, nó, dir), **pré-ordem** (nó, esq, dir), **pós-ordem**
@@ -629,7 +629,7 @@ Pontos fracos para o LPEDC:
   44 83 71 69 72 97 92 99`; pós `11 19 18 32 44 40 28 69 72 71 92 99 97 83 49`).
 - `profundidade(raiz)` (número de níveis).
 
-### 0104-bst-busca-insercao
+### 0099-bst-busca-insercao
 - **Conceitos-chave:** BST: tudo à esquerda é menor que o pai, tudo à direita é maior. O formato depende da ordem
   de inserção. **Insere-se sempre como folha.**
 - `insere(&raiz, v)` recursivo: se `*raiz == NULL` aloca e preenche (filhos `NULL`); se menor
@@ -641,7 +641,7 @@ Pontos fracos para o LPEDC:
 - **Ideias de exercícios:** `buscaBST(raiz, chave)` devolvendo ponteiro ou `NULL`; BST de palavras com `strtok`;
   versão que aceita duplicatas.
 
-### 0105-bst-remocao
+### 0100-bst-remocao
 - Exercício 12.22 descreve os três casos: folha (pai aponta `NULL`), um filho (pai aponta
   para o neto), dois filhos (substituto = maior da subárvore esquerda, o nó "mais à direita",
   ou menor da direita), com o passo a passo de religação para o substituto folha ou com filho

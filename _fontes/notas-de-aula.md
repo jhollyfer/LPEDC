@@ -16,14 +16,14 @@
 
 ---
 
-### 0002-pseudocodigo
+### logica2-pseudocodigo
 - **Ideia de exemplo:** o mesmo problema (perímetro e área do círculo de raio R) escrito como
   `ALGORITMO PERIMETRO_AREA ... FIM_ALGORITMO` (com `Leia`, `Escreva`, `**` para potência) e depois em C.
   Bom modelo de "tradução" pseudocódigo → C, linha a linha (Leia→scanf, Escreva→printf, `**`→pow).
 - **Pegadinha da própria fonte:** no algoritmo, `Raio` é `int` — lê só raio inteiro. Pergunta: e se o usuário
   digitar 2.5? (lê 2 e deixa ".5" no buffer).
 
-### 0006-primeiro-programa
+### 0001-primeiro-programa
 - **Conceitos-chave:** programa = uma ou mais funções; `main` marca o início; sentença simples termina em
   `;`; sentença composta (bloco) entre chaves; o corpo de `main` é uma sentença composta.
 - **Comentários:** `/* ... */` não aninham — `/* a /* b */ c */` é ilegal (o primeiro `*/` fecha tudo e
@@ -33,7 +33,7 @@
   (`i++; /* incrementa i */`); documentar cada função com **ação, entrada, saída, suposições, algoritmo**.
 - **Exercício:** dado um comentário ruim, reescrevê-lo (comentar o código, não codificar o comentário).
 
-### 0007-variaveis
+### 0002-variaveis
 - **Analogia excelente:** variável é uma caixa: nome e endereço nunca mudam, o conteúdo muda, o tipo diz o
   tamanho da caixa e como interpretar o que está dentro. Resumo: **tipo, nome, endereço, valor**.
 - **Conceitos-chave:** declarar antes de usar (senão, erro de compilação); declarar NÃO dá valor — usar antes
@@ -46,11 +46,11 @@
 - `float` guarda mantissa e expoente (como 6.023e23); só ~6-7 dígitos significativos — gancho para
   "por que 0.1 + 0.2 não dá exatamente 0.3".
 
-### 0008-tipos-e-limites
+### 0003-tipos-e-limites
 - Tabela de modificadores (`short`, `long`, `signed`, `unsigned`) com faixas mínimas (int 16 bits na
   tabela; dizer no curso que hoje é 32). `sizeof(char *)` dá o tamanho de um ponteiro.
 
-### 0009-constantes
+### 0004-constantes
 - **Conceitos-chave:** constantes não ocupam lugar com nome na memória e têm tipo pela forma de escrever:
   `2` é int, `2.0` é double (toda constante real é double por convenção). Sequência de escape: a barra
   invertida avisa que o próximo caractere não é ele mesmo (`\n`, `\\`). `'A' + 1` vale 66, e como char é
@@ -58,7 +58,7 @@
   nunca vê o nome `PRECO`. Convenção: maiúsculas para `#define`, minúsculas para variáveis. Alternativa:
   `const`. Vantagem: `#define NUM_ALUNOS 81` muda num lugar só.
 
-### 0010-printf
+### 0005-printf
 - **Conceitos-chave:** o 1º argumento é sempre uma string; especificadores casam com os argumentos NA ORDEM;
   argumentos podem ser expressões (`peso * PRECO`). Largura é mínima: `%6d`, `%6.3f`, `%.3f`, `%6.0f`; se o
   número não couber, sai inteiro.
@@ -70,7 +70,7 @@
   — o valor é calculado e nunca impresso. Bom "ache o erro".
 - `%%` para imprimir `%` (ex.: "Juros 7%%.").
 
-### 0011-scanf
+### 0006-scanf
 - **Conceitos-chave:** `&` antes de variáveis simples; vários valores num `scanf` separados por qualquer
   espaço em branco (espaço, tab, Enter) — os espaços no formato `"%d %d %d"` são só estética, `"%d%d%d"`
   funciona igual; **`%c` NÃO pula espaços** (espaço é caractere, código 32).
@@ -85,7 +85,7 @@
 - **Pegadinha da fonte:** `double raio; scanf("%f", &raio);` — para double é `%lf` no scanf (no printf `%f`
   serve para os dois). "Ache o erro".
 
-### 0012-aritmetica
+### 0007-aritmetica
 - **Conceitos-chave:** `* / %` mesma precedência, acima de `+ -`; operadores de mesma precedência associam da
   esquerda para a direita: `a * b / c * d % e` ≡ `((((a*b)/c)*d)%e)`. `%` só com inteiros (`22.3 % 5` é erro
   de compilação). `22 % 5` = 2. Expressões podem aparecer onde se usa valor, mas não à esquerda de `=` nem
@@ -100,7 +100,7 @@
 - **Exemplos:** par/ímpar imprimindo `numero % 2` (0 par, 1 ímpar); soma, média (`soma / 3.0`) e produto de
   3 inteiros; Fahrenheit → Celsius `(f - 32) * 5.0 / 9.0`.
 
-### 0013-conversao
+### 0008-conversao
 - **Conceitos-chave:** expressão tem valor **e tipo**; operandos iguais → resultado do mesmo tipo; diferentes
   → promove para o "mais complexo" (`char < int < long < float < double`). Na atribuição, converte para o
   tipo da esquerda: `float a = 3;` → 3.0; `int a = 3.1415;` → 3 (trunca); valor que não cabe → resultado
@@ -110,7 +110,7 @@
   divisão inteira ANTES de virar real; a=7, b=2 → 3.5 × 3.0).
 - **Exemplo:** fração para decimal com `1.0 * a / b` e testando `b != 0` antes (divisão por zero).
 
-### 0014-atribuicao
+### 0009-atribuicao
 - **Conceitos-chave (explicação muito boa):** `=` é um operador e **a atribuição é uma expressão com valor**
   (o valor atribuído). Por isso `i = j = k = 0` funciona (associa da direita: `i = (j = (k = 0))`). lvalue =
   algo que tem endereço (por enquanto, só variáveis). Efeito colateral:
@@ -127,15 +127,15 @@
 - **Exercício:** o que imprime `int k = 5; printf("%d ", k++); printf("%d ", k); printf("%d", ++k);`?
   (5 6 7).
 
-### 0017-relacionais
+### 0012-relacionais
 - **Conceitos-chave:** resultado é 0 (falso) ou 1 (verdadeiro); C (antigo) não tem tipo booleano e guarda
   isso em `int`; mas qualquer valor ≠ 0 conta como verdadeiro. Aritméticos têm precedência maior:
   `3 + 5 < 6 * 2` ≡ `(3+5) < (6*2)`.
 - **Exemplo pronto:** "Pode tirar carteira de motorista? %d" com `idade >= 18` → 0 para 17, 1 para 35.
 - **Truque:** `score + (score == 0)` — usa o 0/1 da comparação dentro de uma conta.
-- **Pegadinha:** `=` no lugar de `==` não é erro de sintaxe (ver 0020).
+- **Pegadinha:** `=` no lugar de `==` não é erro de sintaxe (ver 0015).
 
-### 0018-logicos
+### 0013-logicos
 - **Conceitos-chave:** `!` (unário, precedência alta, junto do `-` unário), `&&` (verdadeiro só se ambos),
   `||` (falso só se ambos); `&&` antes de `||`; ambos abaixo dos relacionais (dispensa parênteses em
   `x >= 3 && x <= 50` e `x == 1 || x == 2 || x == 3`). **Leis de De Morgan:** `!(x && y)` ≡ `!x || !y`;
@@ -148,12 +148,12 @@
   `s3`) e um parêntese a mais; e a versão com `!(num % 2)` usa `num > 0` em vez de `>=` (exclui o zero).
 - Curto-circuito não é explicado — complementar com outra fonte.
 
-### 0019-if
+### 0014-if
 - **Conceitos-chave:** se a expressão vale ≠ 0, executa a sentença (simples ou bloco).
 - **Exemplos:** fração → decimal só se `b != 0`; ordenar dois números trocando com `aux` se `num1 > num2`
-  (gancho para o swap de 0051).
+  (gancho para o swap de 0046).
 
-### 0020-if-else
+### 0015-if-else
 - **Pegadinha MODELO (usar no curso):** `int saldo = 2000; if (saldo = 1) printf("Voce esta quebrado!");
   else printf("Seu saldo e %d", saldo);` → imprime "Voce esta quebrado!" **e** muda o saldo para 1. Com
   `==` imprime "Seu saldo e 2000". Não é erro de compilação (use `-Wall`).
@@ -163,7 +163,7 @@
   conforme x e y.
 - **Exemplo:** calculadora `5 * 3.5` → "= 17.50"; `10 x 5.0` → "Operador invalido" (com `else if`).
 
-### 0021-else-if
+### 0016-else-if
 - **Regra do else pendurado (enunciado curto):** um `else` pertence ao último `if` sem `else`.
 - **Pegadinha MODELO:** número de peras: `if (num != 0) if (num == 1) "Voce tem uma pera."; else "Voce nao tem
   nenhuma pera.";` — a endentação engana: o `else` é do `if (num == 1)`, então com 5 peras diz "não tem
@@ -173,7 +173,7 @@
 - **Exercício:** ler 3 números e imprimir o maior.
 - `if` aninhado: positivo/negativo × par/ímpar (4 mensagens).
 
-### 0023-switch
+### 0018-switch
 - **Conceitos-chave:** compara a expressão com constantes; executa a partir do `case` igual e **segue
   executando tudo abaixo** até um `break` (diagrama mostra a diferença com e sem break); lista de sentenças
   do case não precisa de chaves; pode ser vazia — vários `case` compartilham a ação:
@@ -182,7 +182,7 @@
 - **Exercício:** ler mês e ano e imprimir o número de dias do mês (fevereiro com ano bissexto: divisível por
   4 e não por 100, ou por 400). Ex.: 2/2024 → 29; 2/1900 → 28; 4/2023 → 30.
 
-### 0025-while
+### 0020-while
 - **Conceitos-chave:** testa antes; corpo simples ou bloco; ao sair, a variável de controle vale o primeiro
   valor que falhou (`contador` termina em 5).
 - **Exemplo:** pedir números até a soma ≥ 20 (3, 8, 15 → total final 26) — número de repetições desconhecido.
@@ -190,14 +190,14 @@
   endentação. Regra: use chaves sempre (ao acrescentar uma linha depois, você não esquece).
 - **Estilo:** três posições de chaves e espaço depois do `while` — escolha um e seja consistente.
 
-### 0026-do-while
+### 0021-do-while
 - **Conceitos-chave:** testa depois; executa pelo menos uma vez; ideal para validar entrada.
 - **Exemplo:** "Entre com um numero par": digita 3, 1, 5, 4 → "Obrigado." Comparação com a versão `while`,
   que obriga a inicializar `num = 1` artificialmente para entrar no laço (explicação ótima de quando usar
   do-while).
 - Erro da fonte: `#include <stdio>` sem `.h`.
 
-### 0027-for
+### 0022-for
 - **Conceitos-chave:** 4 partes (inicialização uma vez, teste, corpo, incremento); equivalência exata com
   `inicialização; while (teste) { corpo; incremento; }`; vírgula para várias inicializações
   (`contador = 0, total = 0`); escolha `for` quando há inicialização + incremento, `while` quando o nº de
@@ -208,7 +208,7 @@
   divisíveis por 3 em ordem decrescente → 30 27 24 21 18 15 12 9 6, soma = 162.
 - Pré ou pós-incremento na 3ª parte do `for` dá no mesmo.
 
-### 0029-lacos-aninhados
+### 0024-lacos-aninhados
 - **Exemplos:** tabuada 4×4 com `while` aninhado e `%3d`; mesma coisa com o `printf("\n")` dentro do laço
   interno (um número por linha) — exercício "onde fica o `\n`?"; triângulo de asteriscos com `\t` e
   `while (coluna < linha)`.
@@ -217,11 +217,11 @@
   asteriscos tem a 1ª e a última linha? Como corrigir para 1..7? (`coluna <= linha`).
 - Tabuada 10×10 com cabeçalho de colunas, linha de traços e `%2d|` na margem.
 
-### 0030-padroes-de-laco
+### 0025-padroes-de-laco
 - Acumulador (`total += num`), contador, sentinela (EOF / valor negativo), flag `ordenado` no bubble sort,
   validação com do-while. Contar caracteres até EOF: `while ((ch = getchar()) != EOF) total++;`.
 
-### 0033-funcoes
+### 0028-funcoes
 - **Por que funções (bem explicado):** evitar repetição (o teste de primo escrito duas vezes no main vira
   `ehPrimo(n)`), corrigir num só lugar, reduzir complexidade, projeto *top-down*; quem usa precisa saber **o
   que** a função faz e **como chamar**, não como foi feita (como `printf`, `sqrt`).
@@ -237,7 +237,7 @@
   (moedas → reais).
 - **Exercício:** `dinheiro(3, 2, 1, 4)` → 0.75 + 0.20 + 0.05 + 0.04 = 1.04.
 
-### 0034-parametros
+### 0029-parametros
 - **Conceitos-chave:** cada parâmetro precisa de tipo e nome; são variáveis locais já definidas no
   cabeçalho (redefini-las no corpo é erro) e já chegam inicializadas pelo chamador; argumentos reais podem
   ser expressões, avaliadas antes da chamada; ordem e tipos devem casar.
@@ -247,7 +247,7 @@
 - **Exemplos:** `abs` que faz `x = -x` no parâmetro sem afetar `n`; `fahr_para_cels(212.0)` = 100.0;
   `area(14.0, 21.5)` = 301.0; `triang_area(raio, circ_area(raio))` (chamada como argumento).
 
-### 0035-escopo
+### 0030-escopo
 - **Conceitos-chave:** local = visível só na função (ou bloco), existe só durante a ativação ("automatic");
   duas funções podem ter `x` próprios sem conflito; `static` local guarda o valor entre chamadas; global =
   visível do ponto de definição até o fim do arquivo; local com mesmo nome **esconde** a global.
@@ -260,20 +260,20 @@
 - **Exemplo de global (com ressalva):** caixa eletrônico com `saldo` global alterado por `credito`, `debito`,
   `juros` (7%): 1000 + 200 − 80 = 1120 × 1.07 = **1198.40**. A fonte só permite globais com autorização.
 
-### 0036-pilha-de-chamadas
+### 0031-pilha-de-chamadas
 - **Explicação ótima:** cada execução de uma função é uma **ativação**; ao chamar, cria-se um **registro de
   ativação** com o endereço de retorno; locais são alocadas na entrada e liberadas na saída; o retorno vai
   para um lugar combinado. Se A chama B e B chama C, C é a última a começar e a primeira a terminar
   (**último que entra, primeiro que sai**) — base para desenhar a pilha de frames.
 - **Exercício:** desenhar os registros de ativação para main → triang_area → (volta) → circ_area.
 
-### 0040-preprocessador
+### 0035-preprocessador
 - Diretivas ocupam a linha inteira; `#define` = substituição de texto antes da compilação; `#include
   "geom.h"` (diretório do projeto, para compartilhar `#define PI` entre vários arquivos de uma biblioteca
   geométrica) × `<stdio.h>` (diretório padrão); `.h` é convenção (*header*); o pré-processador remove
   comentários. Não trata macros com parâmetro nem `#ifdef`.
 
-### 0042-vetores
+### 0037-vetores
 - **Motivação boa:** média de 4 alunos com `nota0..nota3` — e se fossem 100? → array.
 - **Conceitos-chave:** elementos do mesmo tipo em endereços adjacentes; índice de 0 a n−1; índice pode ser
   qualquer expressão inteira; o nome do array é um endereço constante; o array como um todo não tem valor,
@@ -291,7 +291,7 @@
 - **Pegadinha:** `arr2 = arr1;` não copia e `arr1 == arr2` não compara conteúdos (compara endereços) —
   copiar/comparar elemento a elemento.
 
-### 0043-vetores-e-funcoes
+### 0038-vetores-e-funcoes
 - **Explicação MODELO (usar):** `troca(x)` com x = 10 não altera x (imprime x=10), mas `troca_vet(v)` com
   v = {30, 40, 50} deixa v = {60, 70, 80}: o nome do array vale o **endereço** do 1º elemento (ex.: 1342),
   e é esse endereço que é copiado para o parâmetro — a função escreve na mesma memória. Passar um único
@@ -301,7 +301,7 @@
 - **Exemplos/exercícios:** `array_max` (73, 85, 42, −103, 15 → 85); `inicializaArray(v, n, 42)`;
   `pesquisa_linear(v, n, chave)` devolve índice ou −1; `soma_array(a, b, c, n)`.
 
-### 0044-matrizes
+### 0039-matrizes
 - **Conceitos-chave:** array de arrays; `int tabela[3][5]` → índices 0..2 e 0..4; armazenamento com o
   **último índice variando mais rápido** (tabela[0][0], [0][1], [0][2], [1][0]...); `tabela[4][5]` pode ser
   vista como 4 elementos, cada um um vetor de 5 (tabela[1] → {20, 22, 24, 26, 28}); inicialização com
@@ -311,7 +311,7 @@
   trocando `[y][x]` com `[x][y]` só no triângulo `x <= y` — exercício: o que acontece se percorrer a matriz
   inteira? volta ao original).
 
-### 0045-caracteres
+### 0040-caracteres
 - `getchar` devolve `int` (código do caractere ou EOF); digitar `AbcD⏎` e chamar `getchar` uma vez lê só o
   'A' (o resto fica no buffer).
 - **Pegadinha não percebida pela fonte (ótima):** testa letra com `if (ch < 'A' || ch > 'z')` — aceita
@@ -320,7 +320,7 @@
 - Ordem garantida só dentro de cada grupo ('0' < ... < '9', 'A' < ... < 'Z', 'a' < ... < 'z');
   `tolower('A')` = 'a', `tolower('1')` = '1'.
 
-### 0046-strings
+### 0041-strings
 - **Conceitos-chave:** string = array de char que **deve** terminar em `'\0'`; `"ci208"` ocupa 6; para guardar
   "programar e divertido" (21 caracteres) precisa de 22; `puts` imprime e pula linha (sem formatação);
   `%s`; array de strings `char nomes[5][20]`.
@@ -331,13 +331,13 @@
   nulo e caractere nulo (use `'\0'`); protótipo `void strcmp(...)` escrito no lugar de `strcpy`.
 - **Exemplo:** "Dostoevsky" → 10 caracteres.
 
-### 0047-lendo-strings
+### 0042-lendo-strings
 - `gets` lê a linha toda, mas estoura se o usuário digitar mais que o tamanho (perigoso); `scanf("%s", nome)`
   lê só a 1ª palavra ("Jose Silva" → "Oi, Jose.") e **sem `&`** (o nome do array já é endereço).
 - Na parte de arquivos, a própria fonte pergunta "por que `fgets` e não `gets`?" e usa
   `while (fgets(linha, 80, stdin) != NULL) fputs(linha, fp);`.
 
-### 0049-memoria / 0050-ponteiros
+### 0044-memoria / 0045-ponteiros
 - **Explicação boa:** `int i = 5; char c = 'G';` desenhados na memória: i no endereço 1342 (ocupa 1342-1343;
   o endereço é onde começa), c em 1346. `&i` vale 1342. `&` só se aplica a lvalues.
 - **Conceitos-chave:** ponteiro guarda endereço; há um tipo de ponteiro para cada tipo (todos os endereços têm
@@ -347,13 +347,13 @@
   ponteiro).
 - **Pegadinha:** `float *p3 = p1;` (p1 é `int *`) → só aviso, mas está errado.
 
-### 0051-passagem-por-referencia
+### 0046-passagem-por-referencia
 - **Sequência didática MODELO:** (1) troca no próprio main com `temp` funciona; (2) função `troca(int x, int y)`
   NÃO funciona (3 5 → continua 3 5) — por valor e `return` só devolve um valor; (3) `troca(int *px, int *py)`
   chamada com `troca(&a, &b)` funciona (5 3). Regra: se a função precisa alterar variável do chamador,
   passe o endereço e use ponteiro no parâmetro. Explica o `&` do `scanf`.
 
-### 0052-ponteiros-e-vetores
+### 0047-ponteiros-e-vetores
 - **Conceitos-chave:** só soma/subtração de inteiros; subtração e comparação entre ponteiros do mesmo tipo
   (com sentido só no mesmo array); somar dois ponteiros não faz sentido. `ptr = val` ≡ `ptr = &val[0]`;
   `nome + 4` ≡ `&nome[4]`; `*(ptr + 3)` ≡ `ptr[3]` ≡ `val[3]`.
@@ -364,28 +364,28 @@
 - **Contraste ótimo:** dentro de `func_1(char vet[])`, `vet++` É permitido (o parâmetro é um ponteiro
   comum), enquanto no main `ender++` não é.
 
-### 0053-ponteiros-e-strings
+### 0048-ponteiros-e-strings
 - Constante string = array anônimo; seu valor é um ponteiro para o 1º caractere. Array de ponteiros:
   `char *frases[60]; frases[3] = "..."; puts(frases[3]);`.
 - **Recomendação da fonte a corrigir no curso:** propõe `char *nome = "..."` como forma preferida — hoje:
   usar `const char *nome = "..."` (literal não pode ser modificado) ou `char nome[] = "..."` (cópia
-  modificável). Bom ponto para 0053.
+  modificável). Bom ponto para 0048.
 
-### 0055-ponteiro-para-funcao
+### 0050-ponteiro-para-funcao
 - Não coberto.
 
-### 0059-malloc-free / 0060-calloc-realloc
+### 0054-malloc-free / 0055-calloc-realloc
 - **Motivação boa:** reservar o tamanho máximo para todo arquivo desperdiça memória e prejudica outros
   processos num sistema multitarefa (swapping).
 - **Conceitos-chave:** `malloc(bytes)`, `calloc(n, tam)` (zera a área), `realloc(p, novo)` (pode mover e
   copiar), `free(p)`; testar NULL sempre.
 - **Exemplo:** ler inteiros até digitar 0, crescendo o vetor de 1 em 1 com `realloc` (`(i + 2) * sizeof(int)`)
-  — bom ponto de partida para 0060, discutindo o custo de crescer de 1 em 1 × dobrar.
+  — bom ponto de partida para 0055, discutindo o custo de crescer de 1 em 1 × dobrar.
 - **Pegadinhas/desatualizações:** diz que malloc retorna `char *` (é `void *` desde C89; cast desnecessário
   em C); `memint = realloc(memint, ...)` perde o bloco se falhar; afirma que realloc mantém o endereço ao
   diminuir e muda ao aumentar (não é garantido).
 
-### 0064-struct / 0066-vetor-de-structs / 0067-ponteiro-para-struct
+### 0059-struct / 0061-vetor-de-structs / 0062-ponteiro-para-struct
 - **Conceitos-chave:** declaração de struct cria um TIPO (não aloca); definir variável aloca; membros
   uninicializados = indefinidos; inicialização na ordem `{3, 'C'}`; nomes de membros podem repetir nomes de
   variáveis sem conflito. **Diferença essencial com array:** struct pode ser atribuída inteira com `=`
@@ -399,14 +399,14 @@
   eficiente que copiar struct grande; se só vai ler, pode passar por valor.
 - **Exercício:** por que `*pfac.num` não compila? (vira `*(pfac.num)`).
 
-### 0068-enum
+### 0063-enum
 - **Motivação boa:** códigos mágicos (`sexo == 2`, `cor = cor + sexo`) tornam o programa obscuro.
   `enum TpSemana {SEG, TER, QUA, QUI, SEX, SAB, DOM};` (0..6); usar valor fora da lista (`AZUL`) é erro.
 - **Exemplo:** pagamento que cai no fim de semana passa para segunda: `if (diaSem == SAB) dia += 2; else if
   (diaSem == DOM) dia++;` — compare com a versão `== 5`/`== 6`.
 - **Pegadinha (para exercício):** no dia 31 isso gera "dia 33" — falta tratar a virada do mês.
 
-### 0072-arquivos-texto
+### 0067-arquivos-texto
 - **Conceitos-chave:** arquivo = fluxo sequencial de bytes; abrir → processar → fechar; `FILE *` aponta para
   o bloco de controle do arquivo; `stdin`, `stdout`, `stderr` já abertos; modos "r", "w" (cria/apaga), etc.;
   fopen devolve NULL em caso de erro (inexistente para leitura, disco cheio, sem permissão) — testar;
@@ -418,18 +418,18 @@
 - **Pegadinhas na fonte:** `cargadb` não testa `fopen` nem o limite de 50 registros; compara `fscanf` com
   `EOF` (se a linha estiver malformada, retorna 0 e entra em laço infinito — comparar com `== 2`).
 
-### 0074-argumentos
+### 0069-argumentos
 - `main(int argc, char *argv[])`; `argc` ≥ 1; `argv[0]` = nome do programa; aspas agrupam palavras.
   **Exercício:** `nroff -mm -TXR memo1` → argc = 4; argv[2] = "-TXR".
 
-### 0096-bubble-sort / 0097-selection-sort / 0094-busca-sequencial
+### 0091-bubble-sort / 0092-selection-sort / 0089-busca-sequencial
 - **Seleção (traço pronto):** 9 5 2 7 3 8 1 4 6 → após cada passagem: 1 5 2 7 3 8 9 4 6 / 1 2 5 7 3 8 9 4 6 /
   1 2 3 7 5 8 9 4 6 / ... / 1 2 3 4 5 6 7 8 9; sempre n−1 passagens mesmo se já ordenado.
 - **Bolha (traço pronto):** começando do fim e comparando com o anterior; 9 8 7 6 5 4 3 2 1 → 1 9 8 7 6 5 4 3 2
   → 1 2 9 8 7 6 5 4 3 → ...; versão otimizada com flag `ordenado` (para quando uma passagem não troca nada).
 - **Busca linear:** `pesquisa_linear(v, n, chave)` → índice ou −1.
 
-### 0110-hashing … 0118
+### 0105-hashing … 0113
 - Não cobertos.
 
 ---

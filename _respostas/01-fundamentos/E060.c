@@ -1,24 +1,20 @@
-// 0010 · printf
+// 0010 · math.h
 // Exercício E060 · ★★★
-//
-// Resposta:
-//   [3456.8]        a largura 5 é mínima: o número sai inteiro
-//   [Bra]           em %s, a precisão é o máximo de caracteres
-//   [2.67]          2.675 vira 2.67499999... em binário, e arredonda para baixo
-//   [1.234560e+05]  1,23456 x 10 elevado a 5
-//   [0.0001] [1e-05]  o %g muda para científico com expoente menor que -4
-//   Pão
-//   [5]             P (1) + ã (2) + o (1) + \n (1) = 5 bytes
 
 #include <stdio.h>
+#include <math.h>
 
 int main(void) {
-    printf("[%5.1f]\n", 3456.78);
-    printf("[%.3s]\n", "Brasília");
-    printf("[%.2f]\n", 2.675);
-    printf("[%e]\n", 123456.0);
-    printf("[%g] [%g]\n", 0.0001, 0.00001);
-    int n = printf("Pão\n");
-    printf("[%d]\n", n);
+    double a = -5, b = 20, c = 1.5;
+
+    double delta = b * b - 4 * a * c;
+    double t_chao = (-b - sqrt(delta)) / (2 * a);
+
+    double t_max = -b / (2 * a);
+    double h_max = a * pow(t_max, 2) + b * t_max + c;
+
+    printf("Delta: %.2f\n", delta);
+    printf("Chega ao chão em %.2f s\n", t_chao);
+    printf("Altura máxima: %.2f m, em %.2f s\n", h_max, t_max);
     return 0;
 }

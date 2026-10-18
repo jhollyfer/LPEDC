@@ -1,30 +1,51 @@
-// 0019 · if
+// 0019 · Juntando tudo: a conta de luz
 // Exercício E113 · ★★★
 //
-// Resposta: sete ímpar igual fim
-// - n > 10 é falso: só o printf("grande ") é pulado; "sete " roda sempre.
-// - n % 2 vale 1: verdade, mostra "ímpar ".
-// - n - 7 vale 0 e !0 vale 1: mostra "igual ".
-// - n & 1 == 0 é n & (1 == 0) = n & 0 = 0: "par " nunca aparece.
-// Abaixo, o mesmo trecho com chaves e parênteses mostrando o que o C entende.
+// Resposta, os quatro erros:
+// 1. if (idade = 0) atribuía 0 à idade (e nunca era verdade): o certo é ==.
+// 2. O ";" depois de if (idade < 12 || idade >= 60) fazia todo mundo pagar meia.
+// 3. Faltava break no case 'T': a terça caía no sábado e somava R$ 5.
+// 4. O else ficava com o if (dia == 'S'); com chaves no if de dentro, ele
+//    volta para o if (idade < 18).
 
 #include <stdio.h>
 
 int main(void) {
-    int n = 7;
-    if (n > 10) {
-        printf("grande ");
+    int idade;
+    char dia;
+    double preco = 30.0;
+
+    printf("Idade e dia (ex.: 30 T): ");
+    if (scanf("%d %c", &idade, &dia) != 2) {
+        printf("Entrada inválida\n");
+        return 1;
     }
-    printf("sete ");
-    if (n % 2) {
-        printf("ímpar ");
+
+    if (idade == 0) {
+        printf("Idade inválida.\n");
+        return 1;
     }
-    if (!(n - 7)) {
-        printf("igual ");
+
+    if (idade < 12 || idade >= 60) {
+        preco = preco / 2;
     }
-    if (n & (1 == 0)) {
-        printf("par ");
+
+    switch (dia) {
+    case 'T':
+        preco = preco - 10;
+        break;
+    case 'S':
+        preco = preco + 5;
+        break;
     }
-    printf("fim\n");
+    printf("Ingresso: R$ %.2f\n", preco);
+
+    if (idade < 18) {
+        if (dia == 'S') {
+            printf("Aviso: a sessão da meia-noite é só para maiores.\n");
+        }
+    } else {
+        printf("Boa sessão!\n");
+    }
     return 0;
 }

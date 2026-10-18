@@ -60,23 +60,23 @@ Em outra máquina, os números podem mudar, e é justamente isso que o módulo
 quer que você perceba.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/A127.c
+~/LPEDC/rodar 08-structs/0059-struct/A117.c
 ```
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0064](#0064--struct) | Struct | [`0064-struct/`](0064-struct/) |
-| [0065](#0065--typedef) | Typedef | [`0065-typedef/`](0065-typedef/) |
-| [0066](#0066--vetor-de-structs) | Vetor de structs | [`0066-vetor-de-structs/`](0066-vetor-de-structs/) |
-| [0067](#0067--ponteiro-para-struct) | Ponteiro para struct | [`0067-ponteiro-para-struct/`](0067-ponteiro-para-struct/) |
-| [0068](#0068--enum) | Enum | [`0068-enum/`](0068-enum/) |
-| [0069](#0069--union) | Union | [`0069-union/`](0069-union/) |
-| [0070](#0070--bits-máscaras-e-flags) | Bits, máscaras e flags | [`0070-bits/`](0070-bits/) |
-| [0071](#0071--juntando-tudo-o-cardápio) | Juntando tudo: o cardápio | [`0071-juntando-tudo/`](0071-juntando-tudo/) |
+| [0059](#0059--struct) | Struct | [`0059-struct/`](0059-struct/) |
+| [0060](#0060--typedef) | Typedef | [`0060-typedef/`](0060-typedef/) |
+| [0061](#0061--vetor-de-structs) | Vetor de structs | [`0061-vetor-de-structs/`](0061-vetor-de-structs/) |
+| [0062](#0062--ponteiro-para-struct) | Ponteiro para struct | [`0062-ponteiro-para-struct/`](0062-ponteiro-para-struct/) |
+| [0063](#0063--enum) | Enum | [`0063-enum/`](0063-enum/) |
+| [0064](#0064--union) | Union | [`0064-union/`](0064-union/) |
+| [0065](#0065--bits-máscaras-e-flags) | Bits, máscaras e flags | [`0065-bits/`](0065-bits/) |
+| [0066](#0066--juntando-tudo-o-cardápio) | Juntando tudo: o cardápio | [`0066-juntando-tudo/`](0066-juntando-tudo/) |
 
 ---
 
-## 0064 · Struct
+## 0059 · Struct
 
 Você pede açaí pelo app: copo M, 2 unidades, R$ 18,50 cada. Para o sistema,
 esse pedido não é um número só. É um pacote com três informações de tipos
@@ -118,7 +118,7 @@ em sequência. O programa multiplica dois deles, chega a R$ 37,00 e decide o
 frete. Repare no buraco cinza entre `tamanho` e `quantidade`: ele é explicado
 no "Por dentro do C" logo abaixo:
 
-<p align="center"><img src="0064-struct/ideia.svg" alt="Diagrama da ideia: Struct" width="916"></p>
+<p align="center"><img src="0059-struct/ideia.svg" alt="Diagrama da ideia: Struct" width="916"></p>
 
 O mesmo pedido em C:
 
@@ -163,7 +163,7 @@ copia.
 Repara no fluxograma: a struct não muda o jeito de pensar o programa. Os
 passos são os de sempre; a diferença é que os dados viajam num pacote só:
 
-<p align="center"><img src="0064-struct/fluxograma.svg" alt="Fluxograma: Struct" width="462"></p>
+<p align="center"><img src="0059-struct/fluxograma.svg" alt="Fluxograma: Struct" width="462"></p>
 
 > [!WARNING]
 > Atribuir uma struct não faz as duas variáveis **apontarem** para o mesmo
@@ -191,9 +191,9 @@ passos são os de sempre; a diferença é que os dados viajam num pacote só:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0064-struct/`](0064-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0059-struct/`](0059-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A127 · O pedido de açaí**
+**Exemplo A117 · O pedido de açaí**
 
 ```c
 #include <stdio.h>
@@ -228,10 +228,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/A127.c
+~/LPEDC/rodar 08-structs/0059-struct/A117.c
 ```
 
-**Exemplo A128 · A ficha copiada**
+**Exemplo A118 · A ficha copiada**
 
 ```c
 #include <stdio.h>
@@ -272,12 +272,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/A128.c
+~/LPEDC/rodar 08-structs/0059-struct/A118.c
 ```
 
 #### Exercícios
 
-**Exercício E379** · ★☆☆
+**Exercício E349** · ★☆☆
 
 Crie uma struct livro com os campos titulo (até 39 letras), autor (até 29
 letras), ano (int) e preco (double). Declare uma variável já inicializada
@@ -301,10 +301,10 @@ Na promoção: R$ 31.41
 4. Resposta esperada: a saída acima (34.90 * 0.9 = 31.41).
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/E379.c
+~/LPEDC/rodar 08-structs/0059-struct/E349.c
 ```
 
-**Exercício E380** · ★☆☆
+**Exercício E350** · ★☆☆
 
 Preveja a saída deste trecho antes de rodar. Depois responda: e se, no
 lugar de struct placar b = a, fosse struct placar *b = &a (com b->fora)?
@@ -337,10 +337,10 @@ printf("b: %d x %d\n", b.casa, b.fora);
    5 x 3.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/E380.c
+~/LPEDC/rodar 08-structs/0059-struct/E350.c
 ```
 
-**Exercício E381** · ★★☆
+**Exercício E351** · ★★☆
 
 Um terreno retangular é descrito por dois cantos: o inferior esquerdo
 (2, 1) e o superior direito (10, 6), em metros. Crie uma struct ponto
@@ -367,10 +367,10 @@ Perímetro: 26.0 m
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/E381.c
+~/LPEDC/rodar 08-structs/0059-struct/E351.c
 ```
 
-**Exercício E382** · ★★☆
+**Exercício E352** · ★★☆
 
 Este programa NÃO compila, de propósito: ele tem três erros clássicos de
 struct. Rode, leia as mensagens do gcc e conserte um por um. O programa
@@ -395,10 +395,10 @@ a e b são iguais
    a.gols == b.gols.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/E382.c
+~/LPEDC/rodar 08-structs/0059-struct/E352.c
 ```
 
-**Exercício E383** · ★★★
+**Exercício E353** · ★★★
 
 Crie uma struct data (dia, mes, ano) e escreva:
 
@@ -432,10 +432,10 @@ Saída esperada:
 5. Resposta esperada: a saída acima (%02d mostra o zero à esquerda).
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/E383.c
+~/LPEDC/rodar 08-structs/0059-struct/E353.c
 ```
 
-**Exercício E384** · ★★★
+**Exercício E354** · ★★★
 
 As quatro structs abaixo guardam quase os mesmos campos, só que em ordens
 diferentes. Num PC de 64 bits (int com 4 bytes, double com 8), preveja o
@@ -462,12 +462,12 @@ struct d { double saldo; int id; char ativo; char nivel; };
    d = 16. Regra prática: declare do maior campo para o menor.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-struct/E384.c
+~/LPEDC/rodar 08-structs/0059-struct/E354.c
 ```
 
 ---
 
-## 0065 · Typedef
+## 0060 · Typedef
 
 No grupo da família, ninguém chama o seu tio de "José Carlos da Silva". É
 "Zé". O apelido não cria outra pessoa: é o mesmo tio, com um nome mais curto.
@@ -503,7 +503,7 @@ Vamos ver na prática. Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno
 de R$ 1.000,00 que os bancos aplicam entre 20h e 6h. Repare que `Pix` e
 `Reais` são só etiquetas novas coladas em coisas que já existiam:
 
-<p align="center"><img src="0065-typedef/ideia.svg" alt="Diagrama da ideia: Typedef" width="858"></p>
+<p align="center"><img src="0060-typedef/ideia.svg" alt="Diagrama da ideia: Typedef" width="858"></p>
 
 O programa usa os dois apelidos. A função recebe um `Pix` e decide:
 
@@ -550,7 +550,7 @@ sinal" sem depender do nome do tipo em cada máquina.
 Repara no fluxograma: são duas perguntas em sequência. Só bloqueia se for
 horário noturno **e** o valor passar do limite:
 
-<p align="center"><img src="0065-typedef/fluxograma.svg" alt="Fluxograma: Typedef" width="403"></p>
+<p align="center"><img src="0060-typedef/fluxograma.svg" alt="Fluxograma: Typedef" width="403"></p>
 
 > [!WARNING]
 > `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
@@ -564,7 +564,7 @@ horário noturno **e** o valor passar do limite:
 > [!TIP]
 > **Por dentro do C:** o typedef não existe no executável. Ele é resolvido
 > pelo compilador e some, sem custo nenhum. Para ver de onde vem um apelido da
-> biblioteca, rode `gcc -E A129.c | grep "typedef.* size_t;"`: no Linux de 64
+> biblioteca, rode `gcc -E A119.c | grep "typedef.* size_t;"`: no Linux de 64
 > bits aparece `typedef long unsigned int size_t;`. Diferente do `#define`, que
 > o pré-processador troca como texto, o typedef entende a gramática do C:
 > `typedef char *Texto; Texto a, b;` faz **os dois** serem ponteiros, enquanto
@@ -576,9 +576,9 @@ horário noturno **e** o valor passar do limite:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0065-typedef/`](0065-typedef/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0060-typedef/`](0060-typedef/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A129 · O Pix da madrugada**
+**Exemplo A119 · O Pix da madrugada**
 
 ```c
 #include <stdbool.h>
@@ -616,10 +616,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/A129.c
+~/LPEDC/rodar 08-structs/0060-typedef/A119.c
 ```
 
-**Exemplo A130 · A cor do site**
+**Exemplo A120 · A cor do site**
 
 ```c
 #include <stdint.h>
@@ -658,12 +658,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/A130.c
+~/LPEDC/rodar 08-structs/0060-typedef/A120.c
 ```
 
 #### Exercícios
 
-**Exercício E385** · ★☆☆
+**Exercício E355** · ★☆☆
 
 O programa abaixo funciona, mas repete "struct produto" em todo lugar.
 Refatore: crie o apelido Produto com typedef e troque todas as ocorrências.
@@ -685,10 +685,10 @@ Total: R$ 67.44
    nem nas funções.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/E385.c
+~/LPEDC/rodar 08-structs/0060-typedef/E355.c
 ```
 
-**Exercício E386** · ★☆☆
+**Exercício E356** · ★☆☆
 
 Preveja: o trecho compila? Se compila, o que mostra?
 
@@ -724,10 +724,10 @@ printf("%zu %zu\n", sizeof atleta, strlen(atleta));
    mas o C não sabe disso) e mostra 120, "5 m/s", 12 e "12 6".
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/E386.c
+~/LPEDC/rodar 08-structs/0060-typedef/E356.c
 ```
 
-**Exercício E387** · ★★☆
+**Exercício E357** · ★★☆
 
 Na receita de bolo você soma 1/4 de xícara com 1/6 de xícara. Crie o tipo
 Fracao (numerador e denominador inteiros) com typedef e escreva:
@@ -751,16 +751,16 @@ Saída esperada:
 **Dicas:**
 
 1. a/b + c/d = (a*d + c*b) / (b*d). Depois simplifique.
-2. MDC por Euclides (assunto 0038): mdc(a, b) = mdc(b, a % b), mdc(a, 0) = a.
+2. MDC por Euclides (assunto 0033): mdc(a, b) = mdc(b, a % b), mdc(a, 0) = a.
 3. Uma função pode devolver Fracao: return (Fracao){n, d}; ou monte uma
    variável e devolva.
 4. Resposta esperada: a saída acima (1/4 + 1/6 = 10/24 = 5/12).
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/E387.c
+~/LPEDC/rodar 08-structs/0060-typedef/E357.c
 ```
 
-**Exercício E388** · ★★☆
+**Exercício E358** · ★★☆
 
 Este programa NÃO compila, de propósito: há três erros com typedef. Rode,
 leia as mensagens e conserte. O programa mostra o saldo do vale-refeição
@@ -785,12 +785,12 @@ Ana: R$ 600.00 -> R$ 563.50
    Cartao c; e mover o protótipo de pagar para depois do typedef.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/E388.c
+~/LPEDC/rodar 08-structs/0060-typedef/E358.c
 ```
 
-**Exercício E389** · ★★★
+**Exercício E359** · ★★★
 
-Ponteiro para função (assunto 0055) tem uma declaração difícil de ler:
+Ponteiro para função (assunto 0050) tem uma declaração difícil de ler:
 double (*f)(double, double). Com typedef ela fica limpa. Crie:
 
 
@@ -820,10 +820,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/E389.c
+~/LPEDC/rodar 08-structs/0060-typedef/E359.c
 ```
 
-**Exercício E390** · ★★★
+**Exercício E360** · ★★★
 
 A sonda Mars Climate Orbiter se perdeu em 1999 porque um programa mandava
 valores em libra-força e outro esperava newtons. Para o computador, eram
@@ -860,12 +860,12 @@ Saída esperada (sem a linha errada):
    typedef double, compilaria e o erro passaria calado.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-typedef/E390.c
+~/LPEDC/rodar 08-structs/0060-typedef/E360.c
 ```
 
 ---
 
-## 0066 · Vetor de structs
+## 0061 · Vetor de structs
 
 Abra qualquer app de futebol e olhe a tabela do campeonato. Cada linha é um
 time, e toda linha tem as mesmas colunas: nome, vitórias, empates, derrotas.
@@ -900,7 +900,7 @@ percorre o vetor, calcula os pontos de cada um (3 por vitória, 1 por empate) e
 guarda o **índice** do melhor até agora. Palmeiras, no índice 2, termina na
 frente:
 
-<p align="center"><img src="0066-vetor-de-structs/ideia.svg" alt="Diagrama da ideia: Vetor de structs" width="858"></p>
+<p align="center"><img src="0061-vetor-de-structs/ideia.svg" alt="Diagrama da ideia: Vetor de structs" width="858"></p>
 
 O código faz exatamente esse passeio:
 
@@ -954,7 +954,7 @@ Uma cópia seria um time solto, desligado da tabela.
 Repara no fluxograma: é o padrão "maior até agora" do módulo de laços, só que
 a comparação olha um campo calculado de cada struct:
 
-<p align="center"><img src="0066-vetor-de-structs/fluxograma.svg" alt="Fluxograma: Vetor de structs" width="575"></p>
+<p align="center"><img src="0061-vetor-de-structs/fluxograma.svg" alt="Fluxograma: Vetor de structs" width="575"></p>
 
 > [!WARNING]
 > `tabela[i] = tabela[j]` copia o time **inteiro**, todos os campos. Isso é
@@ -981,9 +981,9 @@ a comparação olha um campo calculado de cada struct:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0066-vetor-de-structs/`](0066-vetor-de-structs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0061-vetor-de-structs/`](0061-vetor-de-structs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A131 · A tabela do campeonato**
+**Exemplo A121 · A tabela do campeonato**
 
 ```c
 #include <stdio.h>
@@ -1029,10 +1029,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/A131.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/A121.c
 ```
 
-**Exemplo A132 · A classificação ordenada**
+**Exemplo A122 · A classificação ordenada**
 
 ```c
 #include <stdio.h>
@@ -1086,12 +1086,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/A132.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/A122.c
 ```
 
 #### Exercícios
 
-**Exercício E391** · ★☆☆
+**Exercício E361** · ★☆☆
 
 Monte a lista de compras abaixo como um vetor de structs (nome,
 quantidade, preço unitário). Percorra o vetor mostrando o subtotal de cada
@@ -1125,10 +1125,10 @@ Mais caro: Arroz 5kg
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/E391.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E361.c
 ```
 
-**Exercício E392** · ★☆☆
+**Exercício E362** · ★☆☆
 
 Complete o programa: falta o laço que calcula a média de cada aluno
 (média simples das duas provas), mostra se passou (média >= 7) e conta os
@@ -1151,10 +1151,10 @@ Aprovados: 2 de 4
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/E392.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E362.c
 ```
 
-**Exercício E393** · ★★☆
+**Exercício E363** · ★★☆
 
 Leia do teclado 3 atletas: o nome (pode ter espaço) numa linha e, na linha
 seguinte, a altura e a idade. Guarde num vetor de structs e mostre o mais
@@ -1178,13 +1178,13 @@ Para testar sem digitar:
 
 
 ```text
-printf 'Rebeca Andrade\n1.55 26\nDarlan Romani\n1.88 34\nRayssa Leal\n1.50 17\n' | ~/LPEDC/rodar 08-structs/0066-vetor-de-structs/E393.c
+printf 'Rebeca Andrade\n1.55 26\nDarlan Romani\n1.88 34\nRayssa Leal\n1.50 17\n' | ~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E363.c
 ```
 
 **Dicas:**
 
 1. Nome com fgets(v[i].nome, sizeof v[i].nome, stdin) e tire o '\n' com
-   strcspn (assunto 0047).
+   strcspn (assunto 0042).
 2. Depois do scanf("%lf %d", ...), o '\n' fica no buffer e o próximo fgets
    leria uma linha vazia. Consuma o resto da linha: while (getchar() != '\n');
    (num programa de verdade, pare também no EOF).
@@ -1192,10 +1192,10 @@ printf 'Rebeca Andrade\n1.55 26\nDarlan Romani\n1.88 34\nRayssa Leal\n1.50 17\n'
 4. Resposta esperada: com a entrada acima, Darlan Romani nos dois.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/E393.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E363.c
 ```
 
-**Exercício E394** · ★★☆
+**Exercício E364** · ★★☆
 
 Uma loja tem estes celulares em estoque:
 
@@ -1208,7 +1208,7 @@ Redmi      R$ 999.00
 ```
 
 
-Use qsort (assunto 0055) duas vezes: primeiro em ordem alfabética do nome,
+Use qsort (assunto 0050) duas vezes: primeiro em ordem alfabética do nome,
 depois do mais caro para o mais barato. Mostre a lista após cada ordenação.
 
 
@@ -1238,10 +1238,10 @@ Por preço:
    depois de todas as maiúsculas.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/E394.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E364.c
 ```
 
-**Exercício E395** · ★★★
+**Exercício E365** · ★★★
 
 Este programa compila e roda, mas o ranking não sai em ordem de pontos,
 embora o bubble sort pareça certo. Rode, compare com a saída esperada, ache
@@ -1265,10 +1265,10 @@ Saída esperada (depois de consertado):
    v[j] = v[j + 1]; v[j + 1] = tmp;
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/E395.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E365.c
 ```
 
-**Exercício E396** · ★★★
+**Exercício E366** · ★★★
 
 Um terreno irregular tem 5 cantos, em metros, dados em ordem (dando a volta
 no terreno):
@@ -1300,12 +1300,12 @@ Perímetro: 22.49 m
 4. Resposta esperada: a saída acima (66 / 2 = 33; lados 6, 4, 4.24, 4.24, 4).
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-vetor-de-structs/E396.c
+~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E366.c
 ```
 
 ---
 
-## 0067 · Ponteiro para struct
+## 0062 · Ponteiro para struct
 
 Você passa o cartão do ônibus na catraca e o validador desconta R$ 4,40. Ele
 não faz uma cópia do seu cartão para descontar dela: mexe no saldo do cartão
@@ -1335,7 +1335,7 @@ Vamos ver na prática. O cartão da Luana mora no heap com R$ 10,00. A variável
 uma cópia desse **endereço**, não do cartão. As duas setas apontam para o
 mesmo lugar:
 
-<p align="center"><img src="0067-ponteiro-para-struct/ideia.svg" alt="Diagrama da ideia: Ponteiro para struct" width="858"></p>
+<p align="center"><img src="0062-ponteiro-para-struct/ideia.svg" alt="Diagrama da ideia: Ponteiro para struct" width="858"></p>
 
 Três passagens seguidas. A terceira não passa:
 
@@ -1405,7 +1405,7 @@ Repara no fluxograma: a pergunta do saldo fica dentro da função, mas o laço
 que chama três vezes é do `main`. Como a função mexe no original, cada volta
 do laço enxerga o saldo que a anterior deixou:
 
-<p align="center"><img src="0067-ponteiro-para-struct/fluxograma.svg" alt="Fluxograma: Ponteiro para struct" width="820"></p>
+<p align="center"><img src="0062-ponteiro-para-struct/fluxograma.svg" alt="Fluxograma: Ponteiro para struct" width="820"></p>
 
 > [!WARNING]
 > O erro mais comum é esquecer que struct vai por valor. Uma função
@@ -1420,7 +1420,7 @@ do laço enxerga o saldo que a anterior deixou:
 > [!TIP]
 > **Por dentro do C:** passar por valor custa uma cópia do tamanho da struct
 > **a cada chamada**. Um `Cartao` tem 48 bytes, então tanto faz. Mas uma struct
-> com `double leituras[1000]` tem mais de 8 KB, e o exemplo A134 mostra o
+> com `double leituras[1000]` tem mais de 8 KB, e o exemplo A124 mostra o
 > `sizeof` dentro da função: 8016 bytes copiados na pilha a cada chamada,
 > contra 8 bytes do ponteiro. Por isso, em C, struct grande quase sempre anda
 > por ponteiro, mesmo quando a função só lê. Para deixar claro que ela só lê,
@@ -1433,9 +1433,9 @@ do laço enxerga o saldo que a anterior deixou:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0067-ponteiro-para-struct/`](0067-ponteiro-para-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0062-ponteiro-para-struct/`](0062-ponteiro-para-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A133 · O cartão do ônibus**
+**Exemplo A123 · O cartão do ônibus**
 
 ```c
 #include <stdbool.h>
@@ -1490,10 +1490,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/A133.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/A123.c
 ```
 
-**Exemplo A134 · O preço da cópia**
+**Exemplo A124 · O preço da cópia**
 
 ```c
 #include <stdio.h>
@@ -1546,12 +1546,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/A134.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/A124.c
 ```
 
 #### Exercícios
 
-**Exercício E397** · ★☆☆
+**Exercício E367** · ★☆☆
 
 A empresa deu 8% de reajuste. Crie o tipo Funcionario (nome e salário) e
 escreva duas funções:
@@ -1584,10 +1584,10 @@ Beto: R$ 4428.00
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/E397.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E367.c
 ```
 
-**Exercício E398** · ★☆☆
+**Exercício E368** · ★☆☆
 
 Preveja a saída antes de rodar:
 
@@ -1635,10 +1635,10 @@ int main(void) {
    contam; gol_copia aumenta uma cópia que some no fim da função.
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/E398.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E368.c
 ```
 
-**Exercício E399** · ★★☆
+**Exercício E369** · ★★☆
 
 Crie o tipo Conta (titular e saldo) e três funções:
 
@@ -1673,10 +1673,10 @@ Ana: R$ 300.00 | Beto: R$ 320.00
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/E399.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E369.c
 ```
 
-**Exercício E400** · ★★☆
+**Exercício E370** · ★★☆
 
 Este programa compila com um AVISO e quebra quando roda. Leia o aviso do
 gcc, entenda o problema e conserte usando malloc. Atenção: depois do
@@ -1700,10 +1700,10 @@ Fone Bluetooth: R$ 149.90
    "detected memory leaks".
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/E400.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E370.c
 ```
 
-**Exercício E401** · ★★★
+**Exercício E371** · ★★★
 
 Leia produtos (nome sem espaço e preço) até a entrada acabar, guardando
 num vetor de structs no heap que começa com capacidade 2 e dobra com
@@ -1714,7 +1714,7 @@ Para testar:
 
 
 ```text
-printf 'Arroz 27.90\nFeijao 8.49\nCafe 18.90\nOleo 7.99\nAcucar 4.59\n' | ~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/E401.c
+printf 'Arroz 27.90\nFeijao 8.49\nCafe 18.90\nOleo 7.99\nAcucar 4.59\n' | ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E371.c
 ```
 
 
@@ -1742,10 +1742,10 @@ Total: R$ 67.87
 4. Resposta esperada: a saída acima, e um free(v) no fim.
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/E401.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E371.c
 ```
 
-**Exercício E402** · ★★★
+**Exercício E372** · ★★★
 
 Uma struct pode ter um ponteiro para outra struct do mesmo tipo (é a base
 das listas encadeadas do módulo 11). Para isso, ela precisa de nome:
@@ -1791,12 +1791,12 @@ printf("%td\n", (char *)(p + 1) - (char *)p);
 4. Resposta esperada: Caio; Bia; 25; "Bia 30"; A; 24.
 
 ```bash
-~/LPEDC/rodar 08-structs/0067-ponteiro-para-struct/E402.c
+~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E372.c
 ```
 
 ---
 
-## 0068 · Enum
+## 0063 · Enum
 
 O app de delivery mostra o seu pedido passando por etapas: recebido, em
 preparo, saiu para entrega, entregue. São quatro estados, sempre os mesmos,
@@ -1826,7 +1826,7 @@ Vamos ver na prática. A variável `s` começa em `RECEBIDO` e anda uma etapa
 por vez, porque um enum é um inteiro e aceita `s++`. Cada valor tem um nome
 no código e um número na memória:
 
-<p align="center"><img src="0068-enum/ideia.svg" alt="Diagrama da ideia: Enum" width="870"></p>
+<p align="center"><img src="0063-enum/ideia.svg" alt="Diagrama da ideia: Enum" width="870"></p>
 
 O código percorre as etapas e traduz cada uma para texto com um `switch`:
 
@@ -1881,7 +1881,7 @@ status.
 Repara no fluxograma: é um laço comum, controlado por uma pergunta sobre o
 enum. O `s++` é o que faz o pedido andar:
 
-<p align="center"><img src="0068-enum/fluxograma.svg" alt="Fluxograma: Enum" width="503"></p>
+<p align="center"><img src="0063-enum/fluxograma.svg" alt="Fluxograma: Enum" width="503"></p>
 
 > [!WARNING]
 > O C **não confere** se o valor de um enum é válido. `Status s = 42;`
@@ -1894,7 +1894,7 @@ enum. O `s++` é o que faz o pedido andar:
 > [!TIP]
 > **Por dentro do C:** o enum some na compilação. `A_CAMINHO` vira o número 2
 > no código de máquina, e uma variável `Status` ocupa o mesmo que um `int` (4
-> bytes, como mostra o A136). Então por que não usar `#define`? Porque o
+> bytes, como mostra o A126). Então por que não usar `#define`? Porque o
 > compilador **conhece** o enum. Apague o `case ENTREGUE:` do exemplo e rode:
 > o `-Wall` avisa `enumeration value 'ENTREGUE' not handled in switch`. Com
 > `#define`, ninguém avisaria. Esse aviso só aparece se o `switch` **não** tiver
@@ -1908,9 +1908,9 @@ enum. O `s++` é o que faz o pedido andar:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0068-enum/`](0068-enum/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0063-enum/`](0063-enum/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A135 · O pedido a caminho**
+**Exemplo A125 · O pedido a caminho**
 
 ```c
 #include <stdio.h>
@@ -1954,10 +1954,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/A135.c
+~/LPEDC/rodar 08-structs/0063-enum/A125.c
 ```
 
-**Exemplo A136 · O troco em notas**
+**Exemplo A126 · O troco em notas**
 
 ```c
 #include <stdio.h>
@@ -2002,12 +2002,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/A136.c
+~/LPEDC/rodar 08-structs/0063-enum/A126.c
 ```
 
 #### Exercícios
 
-**Exercício E403** · ★☆☆
+**Exercício E373** · ★☆☆
 
 Preveja o valor de cada nome e o resultado do último printf:
 
@@ -2031,10 +2031,10 @@ printf("%d\n", G + XG);
    sentido, mas compila: para o C, são só inteiros.
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/E403.c
+~/LPEDC/rodar 08-structs/0063-enum/E373.c
 ```
 
-**Exercício E404** · ★☆☆
+**Exercício E374** · ★☆☆
 
 Crie o enum Cor { VERDE, AMARELO, VERMELHO } de um semáforo e duas funções:
 Cor proxima(Cor c), que devolve a cor seguinte (depois do vermelho volta o
@@ -2059,10 +2059,10 @@ vermelho -> verde
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/E404.c
+~/LPEDC/rodar 08-structs/0063-enum/E374.c
 ```
 
-**Exercício E405** · ★★☆
+**Exercício E375** · ★★☆
 
 Jokenpô! Crie os enums Jogada { PEDRA, PAPEL, TESOURA } e
 Resultado { EMPATE, VITORIA, DERROTA }. Escreva
@@ -2101,10 +2101,10 @@ Placar: 2 vitórias, 1 empate, 2 derrotas
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/E405.c
+~/LPEDC/rodar 08-structs/0063-enum/E375.c
 ```
 
-**Exercício E406** · ★★☆
+**Exercício E376** · ★★☆
 
 Este programa compila sem nenhum aviso, mas uma das cartas sai como "???".
 Ache o problema, conserte e responda: por que o gcc, que avisa quando um
@@ -2129,10 +2129,10 @@ Saída esperada (depois de consertado):
    case COPAS, tire o default e devolva "???" depois do switch.
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/E406.c
+~/LPEDC/rodar 08-structs/0063-enum/E376.c
 ```
 
-**Exercício E407** · ★★★
+**Exercício E377** · ★★★
 
 A catraca do metrô é uma máquina de estados. Ela está TRAVADA ou LIBERADA,
 e recebe dois eventos: BILHETE e EMPURRAO. As regras:
@@ -2174,10 +2174,10 @@ Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/E407.c
+~/LPEDC/rodar 08-structs/0063-enum/E377.c
 ```
 
-**Exercício E408** · ★★★
+**Exercício E378** · ★★★
 
 O app pediu uma nota para a entrega e recebeu 15 respostas:
 
@@ -2213,12 +2213,12 @@ Satisfação: 66.7%
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0068-enum/E408.c
+~/LPEDC/rodar 08-structs/0063-enum/E378.c
 ```
 
 ---
 
-## 0069 · Union
+## 0064 · Union
 
 No coworking, a mesma mesa é usada de manhã por uma designer e à tarde por um
 programador. O espaço é um só. Quem chega usa a mesa inteira, e o que estava
@@ -2248,7 +2248,7 @@ por baixo, um número de 32 bits: `0xC0A8000A` (C0 = 192, A8 = 168, 00 = 0,
 0A = 10). O programa grava o número em `ip.numero` e lê os bytes por
 `ip.bytes`. Repare na ordem em que eles aparecem na memória:
 
-<p align="center"><img src="0069-union/ideia.svg" alt="Diagrama da ideia: Union" width="882"></p>
+<p align="center"><img src="0064-union/ideia.svg" alt="Diagrama da ideia: Union" width="882"></p>
 
 Os bytes saem **ao contrário** do que você escreveu:
 
@@ -2303,7 +2303,7 @@ Repara no fluxograma: a pergunta sobre o primeiro byte é um detector de
 endianness. O mesmo programa, compilado numa máquina big-endian, seguiria pelo
 outro lado:
 
-<p align="center"><img src="0069-union/fluxograma.svg" alt="Fluxograma: Union" width="426"></p>
+<p align="center"><img src="0064-union/fluxograma.svg" alt="Fluxograma: Union" width="426"></p>
 
 > [!WARNING]
 > Numa union, escrever num campo **estraga** os outros. Se você grava
@@ -2311,7 +2311,7 @@ outro lado:
 > union usada para economizar espaço, ler um campo diferente do último que
 > você gravou dá lixo, e o C não avisa: ele não sabe qual campo está valendo.
 > Por isso a union quase sempre vem acompanhada de um **enum** que diz qual
-> campo vale agora (a union "etiquetada" do A138). Quem confere a etiqueta é você, não
+> campo vale agora (a union "etiquetada" do A128). Quem confere a etiqueta é você, não
 > o compilador. E lembre: o
 > resultado de ler os bytes depende da endianness, então esse código não dá a
 > mesma saída em todas as máquinas.
@@ -2333,9 +2333,9 @@ outro lado:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0069-union/`](0069-union/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0064-union/`](0064-union/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A137 · Os bytes do IP**
+**Exemplo A127 · Os bytes do IP**
 
 ```c
 #include <stdint.h>
@@ -2378,10 +2378,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/A137.c
+~/LPEDC/rodar 08-structs/0064-union/A127.c
 ```
 
-**Exemplo A138 · Um pagamento, três formas**
+**Exemplo A128 · Um pagamento, três formas**
 
 ```c
 #include <stdio.h>
@@ -2438,12 +2438,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/A138.c
+~/LPEDC/rodar 08-structs/0064-union/A128.c
 ```
 
 #### Exercícios
 
-**Exercício E409** · ★☆☆
+**Exercício E379** · ★☆☆
 
 Num PC de 64 bits, preveja os três sizeof e depois confira com um
 programa:
@@ -2459,16 +2459,16 @@ union Nome   { char texto[10]; int codigo; };
 
 1. Union: o tamanho do maior campo, arredondado para um múltiplo do
    alinhamento do campo mais exigente.
-2. Struct: os campos em sequência, com sobras de alinhamento (assunto 0064).
+2. Struct: os campos em sequência, com sobras de alinhamento (assunto 0059).
 3. Resposta esperada: union Caixa = 8; struct Ficha = 16 (c em 0, i em 4,
    d em 8); union Nome = 12 (10 bytes de texto, arredondados para múltiplo
    de 4 por causa do int).
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/E409.c
+~/LPEDC/rodar 08-structs/0064-union/E379.c
 ```
 
-**Exercício E410** · ★☆☆
+**Exercício E380** · ★☆☆
 
 Um float também é feito de 4 bytes, mas eles não guardam o número do jeito
 que um int guardaria. Crie uma union com um float e um uint32_t e mostre,
@@ -2493,10 +2493,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/E410.c
+~/LPEDC/rodar 08-structs/0064-union/E380.c
 ```
 
-**Exercício E411** · ★★☆
+**Exercício E381** · ★★☆
 
 Um arquivo vindo de uma máquina big-endian guardou números de 16 bits com
 os dois bytes na ordem oposta à do seu PC. Escreva
@@ -2521,10 +2521,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/E411.c
+~/LPEDC/rodar 08-structs/0064-union/E381.c
 ```
 
-**Exercício E412** · ★★☆
+**Exercício E382** · ★★☆
 
 Um app de reforma calcula a área de peças de formatos diferentes. Crie uma
 union etiquetada:
@@ -2564,10 +2564,10 @@ Total: 39.57 m2
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/E412.c
+~/LPEDC/rodar 08-structs/0064-union/E382.c
 ```
 
-**Exercício E413** · ★★★
+**Exercício E383** · ★★★
 
 Este programa compila sem aviso e roda sem erro do sanitizer, mas duas
 linhas saem erradas: um "real" aparece como 0.00 e um "texto" aparece como
@@ -2594,10 +2594,10 @@ texto: ok
    (use TEXTO).
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/E413.c
+~/LPEDC/rodar 08-structs/0064-union/E383.c
 ```
 
-**Exercício E414** · ★★★
+**Exercício E384** · ★★★
 
 Preveja a saída deste trecho em DUAS máquinas: o seu PC (little-endian) e
 uma máquina big-endian (como um roteador antigo com processador MIPS).
@@ -2633,12 +2633,12 @@ printf("n = 0x%08X\n", (unsigned)x.n);
    m[1] = 0x3344; b[0] = 0x11, b[3] = 0x44; n = 0xFF223344.
 
 ```bash
-~/LPEDC/rodar 08-structs/0069-union/E414.c
+~/LPEDC/rodar 08-structs/0064-union/E384.c
 ```
 
 ---
 
-## 0070 · Bits, máscaras e flags
+## 0065 · Bits, máscaras e flags
 
 Rode `ls -l` num terminal Linux e você vê algo como `-rwxr-xr-x` do lado de
 cada arquivo. Para mudar isso, alguém digita `chmod 755`. Por que 755? Porque
@@ -2700,7 +2700,7 @@ Vamos ver na prática. Um arquivo começa com `rw-` (110). Para ligar a
 execução, o OU com a máscara `001` acende só o último bit, e os outros ficam
 como estavam:
 
-<p align="center"><img src="0070-bits/ideia.svg" alt="Diagrama da ideia: Bits, máscaras e flags" width="858"></p>
+<p align="center"><img src="0065-bits/ideia.svg" alt="Diagrama da ideia: Bits, máscaras e flags" width="858"></p>
 
 O programa aplica as quatro receitas em sequência e mostra os bits a cada
 passo:
@@ -2750,13 +2750,13 @@ int main(void) {
 ```
 
 O `(p >> 2) & 1u` é o jeito de ler o bit 2: empurra ele para a casa 0 e apaga
-o resto com a máscara `1`. O `chmod 755` completo, no A140, é a mesma ideia
+o resto com a máscara `1`. O `chmod 755` completo, no A130, é a mesma ideia
 com três grupos de 3 bits: dono `111`, grupo `101`, outros `101`.
 
 Repara no fluxograma: a pergunta "pode escrever?" é só um `&` com a máscara.
 Sobrou algum bit, a resposta é Sim:
 
-<p align="center"><img src="0070-bits/fluxograma.svg" alt="Fluxograma: Bits, máscaras e flags" width="488"></p>
+<p align="center"><img src="0065-bits/fluxograma.svg" alt="Fluxograma: Bits, máscaras e flags" width="488"></p>
 
 > [!WARNING]
 > Três armadilhas. (1) **Precedência**: `&`, `^` e `|` ficam **abaixo** do
@@ -2785,9 +2785,9 @@ Sobrou algum bit, a resposta é Sim:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0070-bits/`](0070-bits/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0065-bits/`](0065-bits/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A139 · As permissões do arquivo**
+**Exemplo A129 · As permissões do arquivo**
 
 ```c
 #include <stdio.h>
@@ -2834,10 +2834,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/A139.c
+~/LPEDC/rodar 08-structs/0065-bits/A129.c
 ```
 
-**Exemplo A140 · O chmod 755**
+**Exemplo A130 · O chmod 755**
 
 ```c
 #include <stdio.h>
@@ -2884,12 +2884,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/A140.c
+~/LPEDC/rodar 08-structs/0065-bits/A130.c
 ```
 
 #### Exercícios
 
-**Exercício E415** · ★☆☆
+**Exercício E385** · ★☆☆
 
 Faça à mão, em binário, com a = 0xCA e b = 0x5C (dois unsigned char).
 Dê cada resultado em binário, hexa e decimal. Depois confira com printf.
@@ -2918,10 +2918,10 @@ f) a >> 3
    f) 0001 1001 = 0x19 = 25 (202 / 8 = 25, divisão inteira).
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/E415.c
+~/LPEDC/rodar 08-structs/0065-bits/E385.c
 ```
 
-**Exercício E416** · ★☆☆
+**Exercício E386** · ★☆☆
 
 Sem usar %, * nem /, só com operadores de bits, mostre para cada número de
 {7, 12, 25, 40} se ele é par ou ímpar, ele vezes 8 e ele dividido por 4
@@ -2944,10 +2944,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/E416.c
+~/LPEDC/rodar 08-structs/0065-bits/E386.c
 ```
 
-**Exercício E417** · ★★☆
+**Exercício E387** · ★★☆
 
 Escreva duas funções para um uint16_t (16 bits):
 
@@ -2980,10 +2980,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/E417.c
+~/LPEDC/rodar 08-structs/0065-bits/E387.c
 ```
 
-**Exercício E418** · ★★☆
+**Exercício E388** · ★★☆
 
 As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4). O
 usuário tinha email e push ligados e desligou o push. Mas a tela mostra o
@@ -3006,10 +3006,10 @@ email: ligado | sms: desligado | push: desligado
    f && SMS; f &= ~PUSH em vez de f &= PUSH.
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/E418.c
+~/LPEDC/rodar 08-structs/0065-bits/E388.c
 ```
 
-**Exercício E419** · ★★★
+**Exercício E389** · ★★★
 
 No CSS, uma cor como #FF8800 são três bytes juntos: vermelho (FF), verde
 (88) e azul (00). Guarde cores num uint32_t (os 8 bits de cima ficam
@@ -3042,10 +3042,10 @@ rgb(255, 136, 0) = #FF8800
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/E419.c
+~/LPEDC/rodar 08-structs/0065-bits/E389.c
 ```
 
-**Exercício E420** · ★★★
+**Exercício E390** · ★★★
 
 O despertador do celular guarda os dias da semana num byte: bit 0 é
 domingo, bit 1 segunda, ..., bit 6 sábado. O alarme toca nos dias úteis e
@@ -3075,12 +3075,12 @@ academia em dia sem alarme? não
    (academia & ~alarme) != 0.
 
 ```bash
-~/LPEDC/rodar 08-structs/0070-bits/E420.c
+~/LPEDC/rodar 08-structs/0065-bits/E390.c
 ```
 
 ---
 
-## 0071 · Juntando tudo: o cardápio
+## 0066 · Juntando tudo: o cardápio
 
 A lanchonete do bairro quer um cardápio no app. Cada item tem nome, preço,
 uma categoria (lanche, bebida ou sobremesa) e algumas marcações: vegano, sem
@@ -3111,7 +3111,7 @@ Contra a máscara `011`, o `&` devolve `011`, igual à máscara: passa. O burger
 de grão-de-bico tem `001`: o `&` devolve `001`, falta o sem glúten, e ele fica
 de fora:
 
-<p align="center"><img src="0071-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o cardápio" width="957"></p>
+<p align="center"><img src="0066-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o cardápio" width="957"></p>
 
 O programa completo:
 
@@ -3212,7 +3212,7 @@ int main(void) {
 Repara no fluxograma do `filtrar`: um laço sobre o vetor e uma única
 pergunta de bits por item. O mesmo desenho serve para qualquer máscara:
 
-<p align="center"><img src="0071-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o cardápio" width="504"></p>
+<p align="center"><img src="0066-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o cardápio" width="504"></p>
 
 > [!WARNING]
 > `c->itens[c->n++] = it` copia o item para **dentro** do vetor. Depois disso,
@@ -3238,9 +3238,9 @@ pergunta de bits por item. O mesmo desenho serve para qualquer máscara:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0071-juntando-tudo/`](0071-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0066-juntando-tudo/`](0066-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A141 · O cardápio da lanchonete**
+**Exemplo A131 · O cardápio da lanchonete**
 
 ```c
 #include <stdio.h>
@@ -3337,10 +3337,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/A141.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/A131.c
 ```
 
-**Exemplo A142 · A comanda e o pagamento**
+**Exemplo A132 · A comanda e o pagamento**
 
 ```c
 #include <stdio.h>
@@ -3422,12 +3422,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/A142.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/A132.c
 ```
 
 #### Exercícios
 
-**Exercício E421** · ★☆☆
+**Exercício E391** · ★☆☆
 
 O mercado imprime etiquetas para a prateleira. Crie:
 
@@ -3459,10 +3459,10 @@ Pão francês (padaria) R$ 16.90/kg
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/E421.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/E391.c
 ```
 
-**Exercício E422** · ★☆☆
+**Exercício E392** · ★☆☆
 
 Preveja cada linha da saída (num PC de 64 bits):
 
@@ -3512,10 +3512,10 @@ printf("%u\n", u.flags);
 4. Resposta esperada: "6 2"; "2 3"; 20 (12 + 4 + 4, sem sobras); ativa; 5.
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/E422.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/E392.c
 ```
 
-**Exercício E423** · ★★☆
+**Exercício E393** · ★★☆
 
 Monte um estoque que cresce: typedef struct { Produto *v; int n, cap; }
 Estoque; com as funções
@@ -3553,10 +3553,10 @@ remover Macarrão: não encontrado
 4. Resposta esperada: a saída acima, sem vazamento no ASan.
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/E423.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/E393.c
 ```
 
-**Exercício E424** · ★★☆
+**Exercício E394** · ★★☆
 
 Este programa compila sem aviso, mas tem três bugs. O AddressSanitizer
 pega dois deles (um de cada vez: conserte e rode de novo); o terceiro é de
@@ -3585,10 +3585,10 @@ Pudim R$ 12.00 [destaque]
    itens[1].tags &= DESTAQUE vira itens[1].tags &= ~DESTAQUE.
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/E424.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/E394.c
 ```
 
-**Exercício E425** · ★★★
+**Exercício E395** · ★★★
 
 Uma agenda de tarefas. Cada Tarefa tem título, Prioridade (enum BAIXA,
 MEDIA, ALTA), prazo (dia do mês) e tags em bits: TRABALHO, CASA, URGENTE.
@@ -3634,10 +3634,10 @@ Trabalho:
 4. Resposta esperada: a saída acima, e free no fim.
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/E425.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/E395.c
 ```
 
-**Exercício E426** · ★★★
+**Exercício E396** · ★★★
 
 Um valor JSON pode ser número, texto, booleano ou null.
 Represente isso em C com uma union etiquetada:
@@ -3673,7 +3673,7 @@ Saída esperada:
 5. Resposta esperada: a linha acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0071-juntando-tudo/E426.c
+~/LPEDC/rodar 08-structs/0066-juntando-tudo/E396.c
 ```
 
 ---

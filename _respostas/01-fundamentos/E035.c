@@ -1,15 +1,18 @@
-// 0006 · O primeiro programa
+// 0006 · scanf
 // Exercício E035 · ★★★
 //
-// Resposta: a) com return 0, echo $? mostra 0; com return 3, mostra 3; com
-// return 256, mostra 0. b) Com return 3, "pode seguir" não aparece: o && do
-// terminal só roda o segundo comando quando o primeiro devolve 0 (sucesso).
-// c) O sistema guarda só o byte de baixo do código de saída: 256 em binário
-// é 1 0000 0000, e os 8 bits de baixo são todos zero.
+// Resposta:
+//   '7 9'     -> lidos=2 a=7 b=9
+//   '7 x'     -> lidos=1 a=7 b=0   (o x não serve para %d: para ali)
+//   'x 7'     -> lidos=0 a=0 b=0   (falha logo no primeiro)
+//   '7\n\n9'  -> lidos=2 a=7 b=9   (o %d pula quantos Enters houver)
+//   ''        -> lidos=-1 a=0 b=0  (fim da entrada: EOF)
 
 #include <stdio.h>
 
 int main(void) {
-    printf("Backup concluído\n");
-    return 0; // troque por 3 e depois por 256 para testar
+    int a = 0, b = 0;
+    int lidos = scanf("%d %d", &a, &b);
+    printf("lidos=%d a=%d b=%d\n", lidos, a, b);
+    return 0;
 }

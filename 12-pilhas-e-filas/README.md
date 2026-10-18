@@ -50,7 +50,7 @@ já virou vaga.
 
 Você precisa estar à vontade com ponteiros, `malloc`/`free`, `struct` com
 `->` e listas encadeadas (módulos 06, 07, 08 e 11), além da ideia de TAD do
-assunto 0079.
+assunto 0074.
 
 Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
 `pilha.h` e `pilha.c`, `fila.h` e `fila.c` ou `deque.h` e `deque.c`. O
@@ -58,7 +58,7 @@ Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
 da pasta, então basta:
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/A173.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A163.c
 ```
 
 Por isso, num exercício, **não** crie funções com os nomes do TAD
@@ -68,17 +68,17 @@ e trazem tudo no próprio arquivo.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0087](#0087--pilha) | Pilha | [`0087-pilha/`](0087-pilha/) |
-| [0088](#0088--pilha-encadeada) | Pilha encadeada | [`0088-pilha-encadeada/`](0088-pilha-encadeada/) |
-| [0089](#0089--pilha-na-prática-parênteses-e-notação-pós-fixa) | Pilha na prática: parênteses e notação pós-fixa | [`0089-pilha-aplicacoes/`](0089-pilha-aplicacoes/) |
-| [0090](#0090--fila) | Fila | [`0090-fila/`](0090-fila/) |
-| [0091](#0091--fila-encadeada) | Fila encadeada | [`0091-fila-encadeada/`](0091-fila-encadeada/) |
-| [0092](#0092--deque) | Deque | [`0092-deque/`](0092-deque/) |
-| [0093](#0093--juntando-tudo-a-calculadora-de-expressões) | Juntando tudo: a calculadora de expressões | [`0093-juntando-tudo/`](0093-juntando-tudo/) |
+| [0082](#0082--pilha) | Pilha | [`0082-pilha/`](0082-pilha/) |
+| [0083](#0083--pilha-encadeada) | Pilha encadeada | [`0083-pilha-encadeada/`](0083-pilha-encadeada/) |
+| [0084](#0084--pilha-na-prática-parênteses-e-notação-pós-fixa) | Pilha na prática: parênteses e notação pós-fixa | [`0084-pilha-aplicacoes/`](0084-pilha-aplicacoes/) |
+| [0085](#0085--fila) | Fila | [`0085-fila/`](0085-fila/) |
+| [0086](#0086--fila-encadeada) | Fila encadeada | [`0086-fila-encadeada/`](0086-fila-encadeada/) |
+| [0087](#0087--deque) | Deque | [`0087-deque/`](0087-deque/) |
+| [0088](#0088--juntando-tudo-a-calculadora-de-expressões) | Juntando tudo: a calculadora de expressões | [`0088-juntando-tudo/`](0088-juntando-tudo/) |
 
 ---
 
-## 0087 · Pilha
+## 0082 · Pilha
 
 Você monta o pedido no app de delivery: pizza, refrigerante, pudim. Bateu o
 arrependimento e você toca em "desfazer". Sai o pudim, o último que entrou.
@@ -88,7 +88,7 @@ Esse comportamento tem nome: **pilha** (*stack*). Só uma ponta está ao seu
 alcance, o **topo**. Tudo entra por cima e sai por cima, então o último a
 entrar é o primeiro a sair: **LIFO** (*last in, first out*). É a pilha de
 pratos do restaurante por quilo, o Ctrl+Z do editor, o botão Voltar do
-navegador e a pilha de chamadas que você viu no assunto 0036.
+navegador e a pilha de chamadas que você viu no assunto 0031.
 
 As operações são poucas, e é isso que dá força à pilha:
 
@@ -97,7 +97,7 @@ As operações são poucas, e é isso que dá força à pilha:
 - **olhar o topo** (*peek*): lê o topo sem tirar;
 - **vazia?**: pergunta se ainda tem alguma coisa.
 
-No C não existe nada pronto, então você monta a pilha como um **TAD** (assunto 0079):
+No C não existe nada pronto, então você monta a pilha como um **TAD** (assunto 0074):
 o `pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
 só inclui o `.h`:
 
@@ -120,7 +120,7 @@ vetor tem tamanho fixo.
 
 Por dentro, a versão deste assunto usa um **vetor** e um contador `n`. O fundo
 fica em `itens[0]`, o topo em `itens[n - 1]`, e `n` é a próxima vaga. O trecho
-que importa do [`pilha.c`](0087-pilha/pilha.c):
+que importa do [`pilha.c`](0082-pilha/pilha.c):
 
 ```c
 struct pilha {
@@ -151,7 +151,7 @@ Vamos ver na prática. Os três preços entram em centavos (2590, 800 e 1200),
 um em cima do outro. No vetor, ocupam as gavetas 0, 1 e 2, e `n` vale 3. O
 desfazer tira o 1200 do topo:
 
-<p align="center"><img src="0087-pilha/ideia.svg" alt="Diagrama da ideia: Pilha" width="858"></p>
+<p align="center"><img src="0082-pilha/ideia.svg" alt="Diagrama da ideia: Pilha" width="858"></p>
 
 O programa do pedido. Ele não sabe que existe um vetor lá dentro: só conversa
 com as funções do `pilha.h`:
@@ -192,7 +192,7 @@ int main(void) {
 Repara no fluxograma do desfazer: a primeira coisa é perguntar se a pilha está
 vazia. Só depois `n` diminui e o valor é lido:
 
-<p align="center"><img src="0087-pilha/fluxograma.svg" alt="Fluxograma: Pilha" width="506"></p>
+<p align="center"><img src="0082-pilha/fluxograma.svg" alt="Fluxograma: Pilha" width="506"></p>
 
 > [!WARNING]
 > A ordem de `n--` e da leitura é o erro clássico. Se você lê `itens[n]` antes
@@ -212,15 +212,15 @@ vazia. Só depois `n` diminui e o valor é lido:
 > com só 3 itens dentro. O vetor é a casa da pilha, não a pilha.
 
 > [!NOTE]
-> **Pergunta para você:** no A173, se o cliente tocar em "desfazer" mais três
+> **Pergunta para você:** no A163, se o cliente tocar em "desfazer" mais três
 > vezes seguidas, o que cada chamada de `pilha_desempilha` devolve? E o que
 > fica em `preco` na última? Pense antes de testar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0087-pilha/`](0087-pilha/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0082-pilha/`](0082-pilha/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A173 · Desfazer no app de delivery**
+**Exemplo A163 · Desfazer no app de delivery**
 
 ```c
 #include <stdio.h>
@@ -256,10 +256,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/A173.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A163.c
 ```
 
-**Exemplo A174 · Decimal para binário: a pilha inverte a ordem**
+**Exemplo A164 · Decimal para binário: a pilha inverte a ordem**
 
 ```c
 #include <stdio.h>
@@ -294,12 +294,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/A174.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A164.c
 ```
 
 #### Exercícios
 
-**Exercício E517** · ★☆☆
+**Exercício E487** · ★☆☆
 
 O garçom empilha as comandas no espeto do balcão, e a cozinha sempre pega a
 de cima. Sem rodar, preveja o que o programa abaixo mostra, linha por linha.
@@ -315,10 +315,10 @@ ficaria valendo x?
    desempilha devolve false e não mexe em x, que continua 4.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E517.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E487.c
 ```
 
-**Exercício E518** · ★☆☆
+**Exercício E488** · ★☆☆
 
 Leia uma palavra com fgets e mostre a palavra de trás para frente usando a
 pilha do pilha.h: empilhe cada letra e depois desempilhe tudo. Um char é
@@ -332,15 +332,15 @@ Ao contrário: AMOR
 
 **Dicas:**
 
-1. Tire o '\n' que o fgets deixa no fim antes de empilhar (assunto 0047).
+1. Tire o '\n' que o fgets deixa no fim antes de empilhar (assunto 0042).
 2. Empilhe com pilha_empilha(p, palavra[i]) e mostre com printf("%c", c).
 3. Resposta esperada: com ROMA, "Ao contrário: AMOR". Com OVO, "OVO".
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E518.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E488.c
 ```
 
-**Exercício E519** · ★★☆
+**Exercício E489** · ★★☆
 
 Complete a função soma_pedido: ela devolve a soma de todos os preços da
 pilha (em centavos), usando só as funções do pilha.h. A pilha tem que
@@ -366,10 +366,10 @@ Topo continua: R$ 12,00 (3 itens)
    itens.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E519.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E489.c
 ```
 
-**Exercício E520** · ★★☆
+**Exercício E490** · ★★☆
 
 No balcão do restaurante cabem 4 bandejas empilhadas. Este programa traz a
 própria pilha (com a convenção topo = -1 para pilha vazia) e tenta
@@ -400,10 +400,10 @@ No topo: bandeja 4
    if (b->topo == CAPACIDADE - 1).
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E520.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E490.c
 ```
 
-**Exercício E521** · ★★★
+**Exercício E491** · ★★★
 
 Os números 1, 2, 3, 4 chegam nessa ordem. A cada passo você pode empilhar
 o próximo que chegou (E) ou desempilhar e mostrar o topo (D). A sequência
@@ -436,10 +436,10 @@ Depois responda sem programar: dá para sair 3 1 2 4? Por quê?
    do 1. Então o 2 sai antes do 1, sempre.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E521.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E491.c
 ```
 
-**Exercício E522** · ★★★
+**Exercício E492** · ★★★
 
 A bancada da cozinha tem 6 lugares e guarda duas pilhas ao mesmo tempo:
 os pratos limpos crescem a partir da esquerda (posição 0) e os sujos a
@@ -473,19 +473,19 @@ Sujos: 20 10
 4. Resposta esperada: as cinco linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0087-pilha/E522.c
+~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E492.c
 ```
 
 ---
 
-## 0088 · Pilha encadeada
+## 0083 · Pilha encadeada
 
 Na planilha do orçamento, a célula B2 começou em R$ 1500 e você mudou para
 1800, 2100 e 2500. Agora aperta Ctrl+Z duas vezes. A planilha não sabe quantas
 vezes você vai editar: pode ser 3, pode ser 3 mil. Uma pilha com
 `CAPACIDADE 100` fixa não serve.
 
-A pilha do 0087 tem um teto porque mora num vetor. A saída é guardar cada item
+A pilha do 0082 tem um teto porque mora num vetor. A saída é guardar cada item
 num **nó** alocado com `malloc`, como na lista encadeada do módulo 11. A pilha
 cresce um nó por vez e só "enche" quando acaba a memória.
 
@@ -500,9 +500,9 @@ achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
   o nó velho;
 - **vazia** = `topo == NULL`.
 
-O melhor: o [`pilha.h`](0088-pilha-encadeada/pilha.h) é **idêntico** ao do
-0087. Só o [`pilha.c`](0088-pilha-encadeada/pilha.c) mudou. Esse é o ganho do
-TAD: o A173 do delivery roda sem mudar uma vírgula com esta implementação.
+O melhor: o [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do
+0082. Só o [`pilha.c`](0083-pilha-encadeada/pilha.c) mudou. Esse é o ganho do
+TAD: o A163 do delivery roda sem mudar uma vírgula com esta implementação.
 Por dentro, a struct agora guarda um ponteiro:
 
 ```c
@@ -545,7 +545,7 @@ Vamos ver na prática. Antes de cada edição, o valor antigo da B2 vai para a
 pilha: 1500, depois 1800, depois 2100. O último a entrar, 2100, fica no
 primeiro nó, e é ele que o primeiro Ctrl+Z devolve:
 
-<p align="center"><img src="0088-pilha-encadeada/ideia.svg" alt="Diagrama da ideia: Pilha encadeada" width="890"></p>
+<p align="center"><img src="0083-pilha-encadeada/ideia.svg" alt="Diagrama da ideia: Pilha encadeada" width="890"></p>
 
 O programa da planilha:
 
@@ -590,7 +590,7 @@ int main(void) {
 Repara no fluxograma do empilhar o 2100: a ordem das duas ligações importa.
 Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
 
-<p align="center"><img src="0088-pilha-encadeada/fluxograma.svg" alt="Fluxograma: Pilha encadeada" width="469"></p>
+<p align="center"><img src="0083-pilha-encadeada/fluxograma.svg" alt="Fluxograma: Pilha encadeada" width="469"></p>
 
 > [!WARNING]
 > Troque a ordem e você perde a pilha inteira. Se fizer `p->topo = novo`
@@ -604,22 +604,22 @@ Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
 > **Por dentro do C:** cada nó ocupa 16 bytes: 4 do `int`, 4 de
 > **preenchimento** (*padding*) para alinhar o ponteiro e 8 do ponteiro, num
 > sistema de 64 bits. Para guardar 4 bytes de dado, você gasta 16, mais o
-> controle interno do `malloc`. O vetor do 0087 gasta 4 bytes por item, todos
+> controle interno do `malloc`. O vetor do 0082 gasta 4 bytes por item, todos
 > juntos na memória, o que o cache do processador adora. A encadeada troca
 > espaço e velocidade por **não ter teto**. E todo `malloc` do empilhar
 > precisa de um `free`: é por isso que `pilha_libera` percorre a lista toda
 > antes de liberar a struct.
 
 > [!NOTE]
-> **Pergunta para você:** no A175, se o laço do Ctrl+Z rodasse 5 vezes em vez
+> **Pergunta para você:** no A165, se o laço do Ctrl+Z rodasse 5 vezes em vez
 > de 2, quantas linhas `Ctrl+Z` apareceriam e qual seria o último valor de B2?
 > Siga a lista do desenho antes de rodar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0088-pilha-encadeada/`](0088-pilha-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0083-pilha-encadeada/`](0083-pilha-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A175 · Ctrl+Z na planilha**
+**Exemplo A165 · Ctrl+Z na planilha**
 
 ```c
 #include <stdio.h>
@@ -660,17 +660,17 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/A175.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/A165.c
 ```
 
-**Exemplo A176 · Sem teto: 100 mil itens na pilha encadeada**
+**Exemplo A166 · Sem teto: 100 mil itens na pilha encadeada**
 
 ```c
 #include <stdio.h>
 #include "pilha.h"
 
-// A pilha do vetor (0087) recusaria o 101º item. Esta só para quando acabar a
-// memória. O código é o mesmo do cliente da 0087: só o pilha.c mudou.
+// A pilha do vetor (0082) recusaria o 101º item. Esta só para quando acabar a
+// memória. O código é o mesmo do cliente da 0082: só o pilha.c mudou.
 int main(void) {
     Pilha *p = pilha_cria();
     if (p == NULL) {
@@ -701,12 +701,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/A176.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/A166.c
 ```
 
 #### Exercícios
 
-**Exercício E523** · ★☆☆
+**Exercício E493** · ★☆☆
 
 Sem rodar, desenhe a lista encadeada da pilha depois de cada linha do main
 (no formato topo -> ... -> NULL) e preveja a saída. Depois conte: até o
@@ -723,10 +723,10 @@ pilha_cria também faz um malloc.
    (2 nos desempilhas + 2 nós no pilha_libera + 1 da struct).
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E523.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E493.c
 ```
 
-**Exercício E524** · ★☆☆
+**Exercício E494** · ★☆☆
 
 Você vai lendo os valores das notas fiscais do mês (inteiros, em reais) até
 digitar 0. Não dá para saber de antemão quantas são, e por isso a pilha
@@ -748,10 +748,10 @@ Lidas 3 notas. Da última para a primeira: 300 45 120
    primeira: 300 45 120".
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E524.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E494.c
 ```
 
-**Exercício E525** · ★★☆
+**Exercício E495** · ★★☆
 
 O botão Voltar do navegador é uma pilha de páginas. Este programa monta a
 própria pilha encadeada, com um texto em cada nó (por isso não usa o
@@ -782,10 +782,10 @@ Não dá para voltar de g1.globo.com
 4. Resposta esperada: as seis linhas acima, sem vazamento no sanitizer.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E525.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E495.c
 ```
 
-**Exercício E526** · ★★☆
+**Exercício E496** · ★★☆
 
 Pilha de pratos do restaurante, cada prato com um número. Este programa
 compila (o gcc 13 até solta um aviso: leia com atenção) e, sem o
@@ -816,10 +816,10 @@ Tirou o prato 10
    antes do free (passe a linha do *numero para antes do free).
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E526.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E496.c
 ```
 
-**Exercício E527** · ★★★
+**Exercício E497** · ★★★
 
 Os pedidos da cozinha chegaram empilhados fora de ordem: 5, 3, 8, 1 e 4 (o
 4 no topo). Escreva void ordena(Pilha *p), que deixa a pilha ordenada com o
@@ -840,13 +840,13 @@ Saída esperada:
 3. Quando a original esvaziar, despeje a auxiliar de volta nela: o maior
    vai para o fundo, e o menor fica no topo.
 4. Resposta esperada: 1 3 4 5 8. No pior caso são O(n²) movimentos, como
-   na ordenação por inserção (assunto 0098).
+   na ordenação por inserção (assunto 0093).
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E527.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E497.c
 ```
 
-**Exercício E528** · ★★★
+**Exercício E498** · ★★★
 
 Uma estação meteorológica empilha as temperaturas do dia e às vezes
 descarta a última leitura (sensor com defeito). A qualquer momento ela
@@ -882,12 +882,12 @@ desempilha 19 -> mínimo 22
    troca de O(1) na consulta.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0088-pilha-encadeada/E528.c
+~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E498.c
 ```
 
 ---
 
-## 0089 · Pilha na prática: parênteses e notação pós-fixa
+## 0084 · Pilha na prática: parênteses e notação pós-fixa
 
 Você esquece de fechar um colchete no VS Code e, na hora, o editor sublinha
 de vermelho o lugar certo. Ele não está contando parênteses. Está usando uma
@@ -915,10 +915,10 @@ delimitadores `{ [ ( ) ] }`. Os três primeiros são empilhados. Quando chega o
 `)`, o topo é `(`: casou, desempilha e segue. Depois `]` casa com `[` e `}`
 casa com `{`:
 
-<p align="center"><img src="0089-pilha-aplicacoes/ideia.svg" alt="Diagrama da ideia: Pilha na prática: parênteses e notação pós-fixa" width="858"></p>
+<p align="center"><img src="0084-pilha-aplicacoes/ideia.svg" alt="Diagrama da ideia: Pilha na prática: parênteses e notação pós-fixa" width="858"></p>
 
 O verificador, testado com quatro expressões. O `pilha.h` e o `pilha.c` são
-os mesmos do 0088 e estão na pasta do assunto:
+os mesmos do 0083 e estão na pasta do assunto:
 
 ```c
 #include <stdbool.h>
@@ -978,7 +978,7 @@ int main(void) {
 Repara no fluxograma: o laço só tem duas saídas antecipadas para o erro, e a
 pergunta "pilha vazia?" só acontece quando a string acaba:
 
-<p align="center"><img src="0089-pilha-aplicacoes/fluxograma.svg" alt="Fluxograma: Pilha na prática: parênteses e notação pós-fixa" width="796"></p>
+<p align="center"><img src="0084-pilha-aplicacoes/fluxograma.svg" alt="Fluxograma: Pilha na prática: parênteses e notação pós-fixa" width="796"></p>
 
 ### Notação pós-fixa
 
@@ -1003,7 +1003,7 @@ número só, o resultado:
 | `4` | empilha | 180 4 |
 | `/` | tira 4 e 180, empilha 180 / 4 | 45 |
 
-Cada um paga R$ 45. O exemplo A178 faz exatamente essa tabela em C, juntando
+Cada um paga R$ 45. O exemplo A168 faz exatamente essa tabela em C, juntando
 os dígitos de `35` num número só e acusando expressão inválida quando falta
 operando ou sobra número na pilha. É assim que compiladores e máquinas
 virtuais (a JVM, o WebAssembly) calculam: traduzem a sua expressão para algo
@@ -1029,13 +1029,13 @@ parecido com a pós-fixa e rodam numa pilha.
 > [!NOTE]
 > **Pergunta para você:** quanto vale `2 3 4 * +`? E `2 3 + 4 *`? Escreva as
 > duas na forma infixa, com parênteses só onde precisa, antes de testar no
-> A178.
+> A168.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0089-pilha-aplicacoes/`](0089-pilha-aplicacoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0084-pilha-aplicacoes/`](0084-pilha-aplicacoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A177 · Parênteses, colchetes e chaves balanceados**
+**Exemplo A167 · Parênteses, colchetes e chaves balanceados**
 
 ```c
 #include <stdbool.h>
@@ -1093,10 +1093,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/A177.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/A167.c
 ```
 
-**Exemplo A178 · A conta do bar em notação pós-fixa**
+**Exemplo A168 · A conta do bar em notação pós-fixa**
 
 ```c
 #include <stdbool.h>
@@ -1164,12 +1164,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/A178.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/A168.c
 ```
 
 #### Exercícios
 
-**Exercício E529** · ★☆☆
+**Exercício E499** · ★☆☆
 
 Sem programar, escreva cada expressão na notação pós-fixa e calcule o
 valor. Depois avalie a última, que já está em pós-fixa, fazendo a tabela
@@ -1193,10 +1193,10 @@ d) 6 2 / 3 1 - *        (já em pós-fixa)
    então vale 6 (a infixa é (6 / 2) * (3 - 1)).
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E529.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E499.c
 ```
 
-**Exercício E530** · ★☆☆
+**Exercício E500** · ★☆☆
 
 Quando só existe um tipo de delimitador, nem precisa de pilha. Escreva
 bool parenteses_ok(const char *s) usando só um contador int: soma 1 no
@@ -1222,12 +1222,12 @@ Saída esperada:
    contador só sabe QUANTOS estão abertos, não QUAL foi o último a abrir.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E530.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E500.c
 ```
 
-**Exercício E531** · ★★☆
+**Exercício E501** · ★★☆
 
-Este verificador é mais educado que o do A177: além de dizer que deu
+Este verificador é mais educado que o do A167: além de dizer que deu
 errado, diz onde e por quê. Sem rodar, preveja as quatro linhas que ele
 mostra. Atenção às posições: a primeira posição da string é 0.
 
@@ -1243,10 +1243,10 @@ mostra. Atenção às posições: a primeira posição da string é 0.
    if (a[0] {: faltou fechar 2
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E531.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E501.c
 ```
 
-**Exercício E532** · ★★☆
+**Exercício E502** · ★★☆
 
 Esta calculadora pós-fixa (operandos de um dígito) compila sem aviso e
 acerta a soma. Mas erra outras contas. Rode, compare com a saída esperada,
@@ -1273,10 +1273,10 @@ Saída esperada depois do conserto:
    a + b == b + a.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E532.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E502.c
 ```
 
-**Exercício E533** · ★★★
+**Exercício E503** · ★★★
 
 Escreva void para_posfixa(const char *in, char *out), que converte uma
 expressão infixa com operandos de UM dígito, + - * / e parênteses para a
@@ -1307,14 +1307,14 @@ Saída esperada:
 2. Monte a saída com um índice: out[k++] = c; out[k++] = ' '; e no fim
    troque o último espaço por '\0'.
 3. O "maior ou igual" é o que faz 9-4-2 virar (9-4)-2, e não 9-(4-2).
-4. Resposta esperada: as quatro linhas acima. Confira a segunda no A178
+4. Resposta esperada: as quatro linhas acima. Confira a segunda no A168
    (troque os números): o valor de (6+2)*5-8/4 é 38.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E533.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E503.c
 ```
 
-**Exercício E534** · ★★★
+**Exercício E504** · ★★★
 
 Faça uma calculadora pós-fixa de verdade: ela lê expressões, uma por linha
 (com fgets), até o fim da entrada (Ctrl+D no terminal), aceita números com
@@ -1329,7 +1329,7 @@ vários dígitos e, em vez de quebrar, explica o erro:
 
 
 ```text
-Teste: printf '10 2 8 * + 3 -\n4 0 /\n5 +\n1 2 3 +\n2 x +\n' | rodar E534.c
+Teste: printf '10 2 8 * + 3 -\n4 0 /\n5 +\n1 2 3 +\n2 x +\n' | rodar E504.c
 = 23
 erro: divisão por zero
 erro: falta operando
@@ -1342,16 +1342,16 @@ erro: símbolo inválido 'x'
 1. Uma função int avalia(const char *linha, int *resultado) que devolve um
    código (0 = ok, 1, 2, 3, 4 para cada erro) deixa o main simples.
 2. Crie a pilha dentro de avalia e libere em TODOS os caminhos de saída.
-3. Junte os dígitos como no A178. O '\n' do fgets conta como espaço.
+3. Junte os dígitos como no A168. O '\n' do fgets conta como espaço.
 4. Resposta esperada: as cinco linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0089-pilha-aplicacoes/E534.c
+~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E504.c
 ```
 
 ---
 
-## 0090 · Fila
+## 0085 · Fila
 
 Na lotérica, você pega a senha 35 e espera. Quem chegou antes é atendido
 antes, e ninguém fura: a senha 40, que acabou de sair da maquininha, vai
@@ -1363,7 +1363,7 @@ contrário da pilha. Na computação, fila aparece onde existe ordem de chegada:
 a fila de impressão, as requisições esperando um servidor web, os processos
 esperando a vez na CPU, as mensagens de um RabbitMQ.
 
-O TAD tem a mesma cara da pilha, no [`fila.h`](0090-fila/fila.h):
+O TAD tem a mesma cara da pilha, no [`fila.h`](0085-fila/fila.h):
 
 ```c
 typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
@@ -1388,7 +1388,7 @@ A saída é a **fila circular**: quando o índice passa da última gaveta, volta
 para a 0. O vetor vira um anel. Basta guardar onde está o **início** e
 quantos itens tem (`n`); a próxima vaga é `(inicio + n) % CAPACIDADE`. O `%`
 faz a volta: com 8 gavetas, depois da 7 vem `(7 + 1) % 8 = 0`. O coração do
-[`fila.c`](0090-fila/fila.c):
+[`fila.c`](0085-fila/fila.c):
 
 ```c
 #define CAPACIDADE 8
@@ -1425,7 +1425,7 @@ Vamos ver na prática. O painel da lotérica guarda 8 senhas. Chegam as senhas
 Chegam 37 a 40: o 37 e o 38 ocupam as gavetas 6 e 7, e o 39 e o 40 **dão a
 volta** e caem nas gavetas 0 e 1, que já estavam livres:
 
-<p align="center"><img src="0090-fila/ideia.svg" alt="Diagrama da ideia: Fila" width="864"></p>
+<p align="center"><img src="0085-fila/ideia.svg" alt="Diagrama da ideia: Fila" width="864"></p>
 
 O programa da lotérica. Ele só vê as funções do `fila.h`; a volta no vetor é
 problema do `fila.c`:
@@ -1478,7 +1478,7 @@ int main(void) {
 Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 `n = 4`, e o `%` manda o 39 para a gaveta 0:
 
-<p align="center"><img src="0090-fila/fluxograma.svg" alt="Fluxograma: Fila" width="522"></p>
+<p align="center"><img src="0085-fila/fluxograma.svg" alt="Fluxograma: Fila" width="522"></p>
 
 > [!WARNING]
 > Sem o contador `n`, cheia e vazia ficam **iguais**. Se você guardar só
@@ -1501,15 +1501,15 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 > custam **O(1)**, sem mover ninguém.
 
 > [!NOTE]
-> **Pergunta para você:** depois do último laço do A179, a fila está vazia.
+> **Pergunta para você:** depois do último laço do A169, a fila está vazia.
 > Quanto valem `inicio` e `n` lá dentro? Em que gaveta entraria a próxima
 > senha?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0090-fila/`](0090-fila/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0085-fila/`](0085-fila/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A179 · As senhas da lotérica**
+**Exemplo A169 · As senhas da lotérica**
 
 ```c
 #include <stdio.h>
@@ -1557,10 +1557,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/A179.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/A169.c
 ```
 
-**Exemplo A180 · Painel cheio: a fila circular reaproveita as vagas**
+**Exemplo A170 · Painel cheio: a fila circular reaproveita as vagas**
 
 ```c
 #include <stdio.h>
@@ -1606,12 +1606,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/A180.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/A170.c
 ```
 
 #### Exercícios
 
-**Exercício E535** · ★☆☆
+**Exercício E505** · ★☆☆
 
 Faça o teste de mesa de uma fila circular como a do fila.c, mas com
 CAPACIDADE 4. Para cada operação, anote o vetor (use _ para gaveta nunca
@@ -1638,10 +1638,10 @@ próximo?
    próximo entraria na gaveta (3 + 2) % 4 = 1.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E535.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E505.c
 ```
 
-**Exercício E536** · ★☆☆
+**Exercício E506** · ★☆☆
 
 A impressora do escritório recebe quatro trabalhos, nesta ordem, com 3, 10,
 2 e 5 páginas. Use o fila.h para guardar o número de páginas de cada
@@ -1665,10 +1665,10 @@ Total: 20 páginas em 4 trabalhos
 3. Resposta esperada: as cinco linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E536.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E506.c
 ```
 
-**Exercício E537** · ★★☆
+**Exercício E507** · ★★☆
 
 Outra convenção muito comum de fila circular não guarda o contador n. Ela
 guarda inicio (o próximo a sair) e fim (a próxima vaga) e SACRIFICA uma
@@ -1698,10 +1698,10 @@ Na fila: 3 4 6 7
    que é o inicio: cheia, e o 8 é recusado.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E537.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E507.c
 ```
 
-**Exercício E538** · ★★☆
+**Exercício E508** · ★★☆
 
 O drive-thru da lanchonete usa uma fila circular com inicio, fim (próxima
 vaga) e uma gaveta sacrificada. O programa compila sem aviso, nenhum
@@ -1727,10 +1727,10 @@ Carros na fila: 4
    return (f->fim - f->inicio + TAM) % TAM;
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E538.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E508.c
 ```
 
-**Exercício E539** · ★★★
+**Exercício E509** · ★★★
 
 Batata quente: 7 pessoas numeradas de 1 a 7 estão em roda. A batata passa
 de mão em mão, e quem estiver com ela na 3ª passada sai. A contagem
@@ -1757,10 +1757,10 @@ Sobrou: 4
 4. Resposta esperada: Saíram: 3 6 2 7 5 1 e Sobrou: 4.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E539.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E509.c
 ```
 
-**Exercício E540** · ★★★
+**Exercício E510** · ★★★
 
 O app de corrida mostra a velocidade média dos últimos 3 registros do GPS
 (uma média móvel). As leituras foram 60, 64, 70, 66, 58 e 62 km/h. A partir
@@ -1789,15 +1789,15 @@ Leitura 6: média 62.0 km/h
    186/3).
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0090-fila/E540.c
+~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E510.c
 ```
 
 ---
 
-## 0091 · Fila encadeada
+## 0086 · Fila encadeada
 
 Sexta à noite, a cozinha da pizzaria recebe os pedidos do app. O painel de 8
-lugares do 0090 lotou às 20h, e o nono pedido foi recusado. Pedido recusado é
+lugares do 0085 lotou às 20h, e o nono pedido foi recusado. Pedido recusado é
 cliente perdido. A fila precisa crescer o quanto for preciso.
 
 A solução é a mesma da pilha: trocar o vetor por **nós** encadeados. Só que a
@@ -1814,8 +1814,8 @@ Repare na direção: a fila **sai pelo início e entra pelo fim**. O contrário
 porque para remover o último você precisaria do penúltimo, e o nó não sabe
 quem está antes dele.
 
-O [`fila.h`](0091-fila-encadeada/fila.h) é o mesmo do 0090, palavra por
-palavra. O [`fila.c`](0091-fila-encadeada/fila.c) agora guarda dois
+O [`fila.h`](0086-fila-encadeada/fila.h) é o mesmo do 0085, palavra por
+palavra. O [`fila.c`](0086-fila-encadeada/fila.c) agora guarda dois
 ponteiros, e os casos de borda moram neles:
 
 ```c
@@ -1862,7 +1862,7 @@ Vamos ver na prática. Chegam os pedidos 501, 502 e 503. A cozinha pega o
 501: o início anda para o 502 e o nó do 501 é liberado. Chega o 504, que é
 pendurado depois do 503, e o fim passa a apontar para ele:
 
-<p align="center"><img src="0091-fila-encadeada/ideia.svg" alt="Diagrama da ideia: Fila encadeada" width="858"></p>
+<p align="center"><img src="0086-fila-encadeada/ideia.svg" alt="Diagrama da ideia: Fila encadeada" width="858"></p>
 
 O programa da cozinha:
 
@@ -1903,7 +1903,7 @@ Repara no fluxograma da entrada do 504: a fila não estava vazia, então o
 caminho passa por `fim->prox = novo`. Na fila vazia, quem recebe o novo nó é
 o `inicio`:
 
-<p align="center"><img src="0091-fila-encadeada/fluxograma.svg" alt="Fluxograma: Fila encadeada" width="597"></p>
+<p align="center"><img src="0086-fila-encadeada/fluxograma.svg" alt="Fluxograma: Fila encadeada" width="597"></p>
 
 > [!WARNING]
 > Os dois bugs clássicos estão nas bordas. Ao inserir na fila **vazia**,
@@ -1925,15 +1925,15 @@ o `inicio`:
 > quando enche, ou uma lista de nós reaproveitados.
 
 > [!NOTE]
-> **Pergunta para você:** no A182, se o cliente 3 levasse 1 minuto em vez de
+> **Pergunta para você:** no A172, se o cliente 3 levasse 1 minuto em vez de
 > 4, quanto cada um esperaria? A maior fila mudaria? Simule à mão antes de
 > rodar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0091-fila-encadeada/`](0091-fila-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0086-fila-encadeada/`](0086-fila-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A181 · Os pedidos da cozinha**
+**Exemplo A171 · Os pedidos da cozinha**
 
 ```c
 #include <stdio.h>
@@ -1969,10 +1969,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/A181.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/A171.c
 ```
 
-**Exemplo A182 · Simulando o caixa do mercado**
+**Exemplo A172 · Simulando o caixa do mercado**
 
 ```c
 #include <stdio.h>
@@ -2029,12 +2029,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/A182.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/A172.c
 ```
 
 #### Exercícios
 
-**Exercício E541** · ★☆☆
+**Exercício E511** · ★☆☆
 
 Sem rodar, desenhe a lista da fila depois de cada operação do main, no
 formato inicio -> ... -> NULL, marcando onde está o fim. Preveja a saída.
@@ -2050,10 +2050,10 @@ Depois responda: em quais momentos inicio e fim apontam para o MESMO nó?
    inserir o 7 e depois de cada retirada.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E541.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/E511.c
 ```
 
-**Exercício E542** · ★☆☆
+**Exercício E512** · ★☆☆
 
 Na UBS, a recepcionista digita as senhas que vão chegando até digitar 0.
 Depois o painel chama todo mundo na ordem de chegada. Use o fila.h (aqui,
@@ -2076,10 +2076,10 @@ Chamando senha 18
    fila".
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E542.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/E512.c
 ```
 
-**Exercício E543** · ★★☆
+**Exercício E513** · ★★☆
 
 A fila do caixa da padaria guarda o NOME de cada cliente, então o programa
 traz a própria fila encadeada, com um texto em cada nó. Complete:
@@ -2106,10 +2106,10 @@ Fila vazia
 4. Resposta esperada: as cinco linhas acima, sem erro do sanitizer.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E543.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/E513.c
 ```
 
-**Exercício E544** · ★★☆
+**Exercício E514** · ★★☆
 
 A fila de pedidos da cozinha funciona bem no começo da noite. Mas o
 sanitizer explode quando a fila esvazia e chega um pedido novo. Rode, leia
@@ -2135,10 +2135,10 @@ Pronto: 14
    de avançar o início, if (f->inicio == NULL) f->fim = NULL;
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E544.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/E514.c
 ```
 
-**Exercício E545** · ★★★
+**Exercício E515** · ★★★
 
 No banco, a lei manda atender primeiro quem tem prioridade, mas sem largar
 a fila comum esquecida. A regra da agência: chame 2 preferenciais, depois
@@ -2165,10 +2165,10 @@ Chamando: P101 P102 C1 P103 C2 C3 C4
 4. Resposta esperada: Chamando: P101 P102 C1 P103 C2 C3 C4.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E545.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/E515.c
 ```
 
-**Exercício E546** · ★★★
+**Exercício E516** · ★★★
 
 Dá para fazer uma fila com UM ponteiro só: numa lista circular, o último
 nó aponta de volta para o primeiro. Guardando só ultimo, o primeiro é
@@ -2181,7 +2181,7 @@ bool circ_retira(No **ultimo, int *valor)
 ```
 
 
-e teste com a mesma história do A181: entram 501, 502 e 503, sai um, entra
+e teste com a mesma história do A171: entram 501, 502 e 503, sai um, entra
 o 504 e a fila é esvaziada.
 
 
@@ -2201,12 +2201,12 @@ Depois: 502 503 504
 4. Resposta esperada: as duas linhas acima, sem vazamento.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0091-fila-encadeada/E546.c
+~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/E516.c
 ```
 
 ---
 
-## 0092 · Deque
+## 0087 · Deque
 
 No app de música, você monta a fila: faixa 5, faixa 8, faixa 3. Aí lembra de
 uma que quer ouvir agora e toca em "tocar em seguida": a faixa 11 fura a fila
@@ -2225,7 +2225,7 @@ O deque generaliza as duas estruturas que você já viu. Usando só uma ponta
 no início, é uma **fila**. Num vetor comum, inserir ou retirar no início custa O(n),
 porque desloca todo mundo. Aqui as quatro operações custam **O(1)**.
 
-A implementação do [`deque.c`](0092-deque/deque.c) é a fila circular do 0090
+A implementação do [`deque.c`](0087-deque/deque.c) é a fila circular do 0085
 com uma novidade: o `inicio` agora também anda para **trás**. Para inserir na
 frente, ele recua uma gaveta, e da gaveta 0 ele volta para a última. A conta
 de "gaveta anterior" mora numa função auxiliar `static`, que só o `deque.c`
@@ -2266,7 +2266,7 @@ Vamos ver na prática. As faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1
 e 2. A faixa 11 entra pela frente: o início, que estava na gaveta 0, recua e
 dá a volta para a gaveta 7. A ordem da fila fica 11, 5, 8, 3:
 
-<p align="center"><img src="0092-deque/ideia.svg" alt="Diagrama da ideia: Deque" width="864"></p>
+<p align="center"><img src="0087-deque/ideia.svg" alt="Diagrama da ideia: Deque" width="864"></p>
 
 O programa da fila de músicas:
 
@@ -2313,7 +2313,7 @@ Repara no fluxograma da entrada da faixa 11: a única diferença para a fila é
 o passo que faz o início recuar com `anterior`, que soma 8 antes do `%` para
 o índice não ficar negativo:
 
-<p align="center"><img src="0092-deque/fluxograma.svg" alt="Fluxograma: Deque" width="535"></p>
+<p align="center"><img src="0087-deque/fluxograma.svg" alt="Fluxograma: Deque" width="535"></p>
 
 > [!WARNING]
 > Em C, o resto de um número negativo é **negativo**: `-1 % 8` vale `-1`, não
@@ -2330,19 +2330,19 @@ o índice não ficar negativo:
 > arquivo pode ter a sua própria `anterior` sem conflito. É o jeito do C de
 > fazer uma função **privada** do módulo. O
 > deque com lista encadeada também é possível, mas precisa de lista **dupla**
-> (assunto 0084): para retirar do fim, o último nó tem que saber quem é o
+> (assunto 0079): para retirar do fim, o último nó tem que saber quem é o
 > penúltimo.
 
 > [!NOTE]
-> **Pergunta para você:** se o A183 fizesse mais um `deque_insere_inicio`
+> **Pergunta para você:** se o A173 fizesse mais um `deque_insere_inicio`
 > logo depois do 11, em que gaveta o novo item cairia? E se o deque estivesse
 > com as 8 gavetas ocupadas?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0092-deque/`](0092-deque/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0087-deque/`](0087-deque/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A183 · A fila de músicas do streaming**
+**Exemplo A173 · A fila de músicas do streaming**
 
 ```c
 #include <stdio.h>
@@ -2384,10 +2384,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/A183.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/A173.c
 ```
 
-**Exemplo A184 · Palíndromo com deque: compara as duas pontas**
+**Exemplo A174 · Palíndromo com deque: compara as duas pontas**
 
 ```c
 #include <stdbool.h>
@@ -2431,12 +2431,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/A184.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/A174.c
 ```
 
 #### Exercícios
 
-**Exercício E547** · ★☆☆
+**Exercício E517** · ★☆☆
 
 Sem rodar, preveja a saída. Desenhe o deque como uma fileira, com a
 frente à esquerda, e atualize a cada operação.
@@ -2450,10 +2450,10 @@ frente à esquerda, e atualize a cada operação.
    tamanho 2".
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E547.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E517.c
 ```
 
-**Exercício E548** · ★☆☆
+**Exercício E518** · ★☆☆
 
 Num vetor circular de cap gavetas, escreva a função
 int volta(int i, int passos, int cap), que devolve a gaveta que fica
@@ -2480,10 +2480,10 @@ volta(2, 18, 8) = 0
 4. Resposta esperada: as cinco linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E548.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E518.c
 ```
 
-**Exercício E549** · ★★☆
+**Exercício E519** · ★★☆
 
 No vôlei, os 6 jogadores de um time fazem rodízio. Guarde os números 1 a 6
 num deque do deque.h e escreva três funções que usam só a interface:
@@ -2513,10 +2513,10 @@ Direita 3: 6 1 2 3 4 5
 4. Resposta esperada: as três linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E549.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E519.c
 ```
 
-**Exercício E550** · ★★☆
+**Exercício E520** · ★★☆
 
 Embarque no avião: quem viaja com criança de colo entra na frente da fila;
 o resto entra no fim. Este programa traz o próprio deque circular e
@@ -2538,15 +2538,15 @@ Embarcando: 40 10 20 30
    Conserto: e->inicio = (e->inicio - 1 + TAM) % TAM;
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E550.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E520.c
 ```
 
-**Exercício E551** · ★★★
+**Exercício E521** · ★★★
 
 O deque também pode ser feito com nós, mas precisa de lista DUPLA: para
 retirar do fim, o último nó tem que saber quem é o penúltimo (o ant).
 Complete as quatro operações deste deque encadeado, sem limite de
-capacidade. O main repete a história da fila de músicas do A183.
+capacidade. O main repete a história da fila de músicas do A173.
 
 
 ```text
@@ -2568,10 +2568,10 @@ Ainda na fila: 5 8
 4. Resposta esperada: as três linhas acima, sem erro do sanitizer.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E551.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E521.c
 ```
 
-**Exercício E552** · ★★★
+**Exercício E522** · ★★★
 
 As máximas de 8 dias foram 24, 27, 22, 25, 30, 21, 19 e 23 graus. Para
 cada janela de 3 dias seguidos, mostre a maior temperatura. O jeito óbvio
@@ -2608,14 +2608,14 @@ Dias 6-8: máxima 23
 4. Resposta esperada: as seis linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0092-deque/E552.c
+~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E522.c
 ```
 
 ---
 
-## 0093 · Juntando tudo: a calculadora de expressões
+## 0088 · Juntando tudo: a calculadora de expressões
 
-Lembra da conta do bar do 0089? Lá, você mesmo escreveu `35 25 + 3 * 4 /`
+Lembra da conta do bar do 0084? Lá, você mesmo escreveu `35 25 + 3 * 4 /`
 na notação pós-fixa. Ninguém digita assim no celular. A pessoa quer digitar
 `(35 + 25) * 3 / 4` e ver 45. O programa do módulo faz o caminho inteiro, e
 usa as duas estruturas: uma **fila** e duas **pilhas**.
@@ -2626,10 +2626,10 @@ São duas etapas, uma linha de produção:
    fila de saída, na ordem em que aparecem. Os operadores esperam numa
    **pilha**: um operador só pode ir para a fila quando ninguém mais forte
    precisa passar na frente. É o algoritmo do **pátio de manobras**
-   (*shunting-yard*), de Dijkstra, o mesmo do exercício E533;
+   (*shunting-yard*), de Dijkstra, o mesmo do exercício E503;
 2. **avaliar** a pós-fixa. Os itens saem da fila na ordem em que entraram
    (FIFO, exatamente o que a pós-fixa exige) e passam por uma **pilha de
-   valores**, como no A178.
+   valores**, como no A168.
 
 Por que fila no meio, e não uma string? Porque a etapa 1 produz itens e a
 etapa 2 consome itens, um de cada vez, na mesma ordem. É o padrão
@@ -2639,7 +2639,7 @@ precisar juntar dígitos de novo.
 
 Um detalhe: a fila e a pilha do curso só guardam `int`. Como fazer caber um
 `+` ali? Os números da calculadora são sempre `>= 0`, então os operadores
-viram **códigos negativos** com um `enum` (assunto 0068): `SOMA = -1`,
+viram **códigos negativos** com um `enum` (assunto 0063): `SOMA = -1`,
 `SUB = -2` e assim por diante. Na hora de avaliar, `t >= 0` é número e
 `t < 0` é operador. É um truque comum quando o tipo é fixo; a alternativa
 seria uma `struct` com uma etiqueta dizendo o que o item é.
@@ -2657,10 +2657,10 @@ Vamos ver na prática. Com `(35 + 25) * 3 / 4`, a fila de saída fica
 `35 25 + 3 * 4 /`. Na avaliação, a pilha de valores chega a ter 180 e 4
 quando aparece o `/`, e a última conta dá 45:
 
-<p align="center"><img src="0093-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a calculadora de expressões" width="862"></p>
+<p align="center"><img src="0088-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a calculadora de expressões" width="862"></p>
 
-O programa completo. A pasta tem o `pilha.h`/`pilha.c` do 0088 e o
-`fila.h`/`fila.c` do 0091, e o `rodar` compila os quatro junto:
+O programa completo. A pasta tem o `pilha.h`/`pilha.c` do 0083 e o
+`fila.h`/`fila.c` do 0086, e o `rodar` compila os quatro junto:
 
 ```c
 #include <stdbool.h>
@@ -2776,9 +2776,9 @@ Repara no fluxograma: as duas etapas ficam em sequência, e as perguntas de
 erro só aparecem na avaliação, que é onde falta de operando e divisão por
 zero se revelam:
 
-<p align="center"><img src="0093-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a calculadora de expressões" width="612"></p>
+<p align="center"><img src="0088-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a calculadora de expressões" width="612"></p>
 
-O segundo exemplo, A186, junta fila e pilha de outro jeito: as letras de uma
+O segundo exemplo, A176, junta fila e pilha de outro jeito: as letras de uma
 frase entram nas duas ao mesmo tempo. A fila devolve na ordem original, a
 pilha devolve ao contrário. Se as duas sequências baterem letra por letra, a
 frase é um palíndromo.
@@ -2789,7 +2789,7 @@ frase é um palíndromo.
 > `(8 - 3) - 2 = 3`: operadores de mesma precedência associam **à esquerda**,
 > então o que já está na pilha sai antes do novo. (A potência é a exceção que
 > associa à direita, e por isso este programa não tem `^`.) Esse é o bug do
-> E556.
+> E526.
 
 > [!TIP]
 > **Por dentro do C:** os quatro `.c` da pasta são compilados separados e
@@ -2804,13 +2804,13 @@ frase é um palíndromo.
 > [!NOTE]
 > **Pergunta para você:** como fica a pós-fixa de `100 / (2 + 3) - 4`? E o
 > resultado? Faça a conversão à mão, com a pilha de operadores desenhada,
-> antes de trocar a expressão no A185.
+> antes de trocar a expressão no A175.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0093-juntando-tudo/`](0093-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0088-juntando-tudo/`](0088-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A185 · A calculadora completa: infixa, pós-fixa e resultado**
+**Exemplo A175 · A calculadora completa: infixa, pós-fixa e resultado**
 
 ```c
 #include <stdbool.h>
@@ -2923,10 +2923,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/A185.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/A175.c
 ```
 
-**Exemplo A186 · Palíndromo com uma fila e uma pilha**
+**Exemplo A176 · Palíndromo com uma fila e uma pilha**
 
 ```c
 #include <ctype.h>
@@ -2980,12 +2980,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/A186.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/A176.c
 ```
 
 #### Exercícios
 
-**Exercício E553** · ★☆☆
+**Exercício E523** · ★☆☆
 
 Faça à mão a conversão de 2 * (3 + 4) com as regras do texto. Para cada
 símbolo, anote o que está na pilha de operadores e o que já está na fila
@@ -3001,10 +3001,10 @@ de saída. Depois avalie a fila com a pilha de valores.
    2 3 4 + *. Avaliação: 2 | 2 3 | 2 3 4 | 2 7 | 14. Resultado: 14.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E553.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E523.c
 ```
 
-**Exercício E554** · ★☆☆
+**Exercício E524** · ★☆☆
 
 O sistema da fila do banco chamou as senhas ao contrário por engano, e
 agora é preciso desfazer a ordem. Escreva void inverte(Fila *f), que
@@ -3026,10 +3026,10 @@ Depois: 40 30 20 10
 3. Resposta esperada: as duas linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E554.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E524.c
 ```
 
-**Exercício E555** · ★★☆
+**Exercício E525** · ★★☆
 
 Pergunta clássica de entrevista: faça uma FILA usando só duas PILHAS.
 Escreva um tipo FilaDuasPilhas com duas Pilha * (entrada e saida) e as
@@ -3058,10 +3058,10 @@ Depois: 2 3 4
 3. Resposta esperada: as duas linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E555.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E525.c
 ```
 
-**Exercício E556** · ★★☆
+**Exercício E526** · ★★☆
 
 Esta versão enxuta da calculadora (operandos de um dígito, sem
 parênteses) acerta 2+3*4, mas erra 8-3-2 e 9/3/3. Compila sem aviso e o
@@ -3086,10 +3086,10 @@ Saída esperada depois do conserto:
    direita: 8 - (3 - 2) = 7 e 9 / (3 / 3) = 9.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E556.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E526.c
 ```
 
-**Exercício E557** · ★★★
+**Exercício E527** · ★★★
 
 O estacionamento da vila é um beco sem saída onde cabem 4 carros em fila
 indiana: quem entrou por último fica na boca do beco. Para um carro do
@@ -3128,10 +3128,10 @@ Carro 5 saiu; manobras: 3
 5. Resposta esperada: as sete linhas acima.
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E557.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E527.c
 ```
 
-**Exercício E558** · ★★★
+**Exercício E528** · ★★★
 
 O sistema operacional divide a CPU entre os processos com o rodízio
 (round-robin): cada processo da fila roda no máximo 2 ms (o quantum). Se
@@ -3161,7 +3161,7 @@ Tempo médio de término: 10.0 ms
 3. Resposta esperada: as cinco linhas acima ((13 + 10 + 5 + 12) / 4).
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0093-juntando-tudo/E558.c
+~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E528.c
 ```
 
 ---
@@ -3180,7 +3180,7 @@ são possíveis: (a) 3 2 1 5 4; (b) 4 5 3 1 2; (c) 1 2 3 4 5; (d) 5 4 3 2 1?
 (a), (c) e (d) são possíveis. (b) não: quando o 3 sai, o 1 e o 2 estão na
 pilha com o 2 por cima, então o 2 tem que sair antes do 1. A regra geral:
 uma saída é impossível se tiver o padrão "c ... a ... b" com a < b < c.
-Simule com o `simula` do E521.
+Simule com o `simula` do E491.
 
 </details>
 
@@ -3190,14 +3190,14 @@ também com `<ul><li>a</li><li>b</li></ul>`.
 
 <details><summary>Resposta</summary>
 
-Primeiro, segundo e terceiro: certo, errado, certo. É o A177 com palavras no
+Primeiro, segundo e terceiro: certo, errado, certo. É o A167 com palavras no
 lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
-encadeada, como a do E525); ao ler `</nome>`, desempilhe e compare com
+encadeada, como a do E495); ao ler `</nome>`, desempilhe e compare com
 `strcmp`. No fim, a pilha precisa estar vazia.
 
 </details>
 
-**3. Duas pilhas, uma fila e o custo.** Na fila com duas pilhas do E555,
+**3. Duas pilhas, uma fila e o custo.** Na fila com duas pilhas do E525,
 faça 1000 inserções seguidas e depois 1000 retiradas. Quantos `pilha_empilha`
 acontecem no total? E se você alternar uma inserção e uma retirada?
 
@@ -3210,7 +3210,7 @@ uma retirada pode custar O(n), mas a média por operação é O(1).
 
 </details>
 
-**4. Fila circular que cresce.** Mude o `fila.c` do 0090 para começar com 4
+**4. Fila circular que cresce.** Mude o `fila.c` do 0085 para começar com 4
 gavetas alocadas com `malloc` e dobrar com `realloc` quando encher, sem mudar
 o `fila.h`. Teste inserindo 1 a 10 depois de ter retirado dois itens (para a
 fila já ter dado a volta).
@@ -3225,7 +3225,7 @@ gaveta 0 e zerar o `inicio`. A ordem de saída tem que continuar 3 4 5 ... 10.
 
 </details>
 
-**5. O caixa com dois atendentes.** Refaça o A182 com dois caixas e uma fila
+**5. O caixa com dois atendentes.** Refaça o A172 com dois caixas e uma fila
 única (como no banco). Com os mesmos clientes (chegadas 0, 1, 2, 5, 6 e
 durações 3, 2, 4, 1, 2), qual é a espera média?
 
@@ -3291,7 +3291,7 @@ o malloc e o free de cada volta. Remover do meio não é o forte da fila.
 
 </details>
 
-**10. Avaliar com variáveis.** Estenda o A185 para aceitar letras como
+**10. Avaliar com variáveis.** Estenda o A175 para aceitar letras como
 variáveis, com os valores num vetor `int val[26]`: com A = 3, B = 4 e C = 5,
 calcule `A + B * C` e `(A + B) * C`.
 

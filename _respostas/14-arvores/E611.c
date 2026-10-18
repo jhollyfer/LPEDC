@@ -1,64 +1,71 @@
-// 0102 · Árvores
+// 0102 · Heap e fila de prioridade
 // Exercício E611 · ★★★
-//
-// Resposta: (1) "int maior = 0" faz cada folha devolver 1, e a árvore dá 3.
-// Começando com -1, a folha devolve 0. (2) libera dava free(n) e depois lia
-// n->qtd e n->filhos (uso depois de liberar). O free vai depois do laço.
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#define MAX_FILHOS 4
+#define K 3
 
-typedef struct No {
-    char nome[16];
-    struct No *filhos[MAX_FILHOS];
-    int qtd;
-} No;
+int v[K]; // min-heap: o menor dos três fica em v[0]
+int n = 0;
 
-No *novo(const char *nome) {
-    No *n = malloc(sizeof(No));
-    if (n == NULL) {
-        exit(1);
+void troca(int a, int b) {
+    int t = v[a];
+    v[a] = v[b];
+    v[b] = t;
+}
+
+void sobe(int i) {
+    while (i > 0 && v[(i - 1) / 2] > v[i]) { // MENOR que o pai sobe
+        troca((i - 1) / 2, i);
+        i = (i - 1) / 2;
     }
-    strcpy(n->nome, nome);
-    n->qtd = 0;
-    return n;
 }
 
-No *adiciona(No *pai, const char *nome) {
-    No *filho = novo(nome);
-    pai->filhos[pai->qtd++] = filho;
-    return filho;
-}
-
-int altura(const No *n) {
-    int maior = -1; // folha: -1 + 1 = 0
-    for (int i = 0; i < n->qtd; i++) {
-        int h = altura(n->filhos[i]);
-        if (h > maior) {
-            maior = h;
+void desce(int i) {
+    while (2 * i + 1 < n) {
+        int f = 2 * i + 1;
+        if (f + 1 < n && v[f + 1] < v[f]) {
+            f++; // o MENOR dos filhos
         }
+        if (v[i] <= v[f]) {
+            break;
+        }
+        troca(i, f);
+        i = f;
     }
-    return maior + 1;
 }
 
-void libera(No *n) {
-    for (int i = 0; i < n->qtd; i++) {
-        libera(n->filhos[i]);
-    }
-    free(n); // só depois de visitar os filhos
+int tira_menor(void) {
+    int menor = v[0];
+    v[0] = v[--n];
+    desce(0);
+    return menor;
 }
 
 int main(void) {
-    No *vovo = novo("vovo");
-    No *mae = adiciona(vovo, "mae");
-    adiciona(vovo, "tio");
-    adiciona(mae, "voce");
-    adiciona(mae, "irma");
+    int notas[] = {72, 95, 60, 88, 91, 45, 98, 83, 77, 90, 66, 85};
+    int total = sizeof(notas) / sizeof(notas[0]);
 
-    printf("Altura da família: %d\n", altura(vovo));
-    libera(vovo);
+    for (int i = 0; i < total; i++) {
+        if (n < K) {
+            v[n] = notas[i];
+            sobe(n);
+            n++;
+        } else if (notas[i] > v[0]) {
+            v[0] = notas[i]; // a menor do pódio sai, a nova entra
+            desce(0);
+        }
+    }
+
+    int podio[K];
+    int qtd = n;
+    for (int i = 0; i < qtd; i++) {
+        podio[i] = tira_menor(); // sai em ordem crescente
+    }
+    printf("Pódio:");
+    for (int i = qtd - 1; i >= 0; i--) {
+        printf(" %d", podio[i]);
+    }
+    printf("\n");
     return 0;
 }

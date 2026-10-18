@@ -1,12 +1,19 @@
-// 0007 · Variáveis
+// 0007 · Aritmética
 // Exercício E038 · ★☆☆
 //
-// Resposta:
-// válidos: preco_kg, _total, Preco, nota1.
-// inválidos: 2via (começa com dígito); valor-final (o - é o operador de
-// subtração: o C lê "valor menos final"); float (palavra reservada); média
-// (acento não vale em nome); qtd$ (o $ não é do padrão; o gcc aceita como
-// extensão, mas o código deixa de ser portável); dia util (espaço).
-// preco e Preco podem existir juntas e são variáveis diferentes: o C
-// diferencia maiúsculas de minúsculas. _total é válido, mas nomes que começam
-// com _ são usados pelo compilador e pela biblioteca: evite.
+// Resposta: a) 13; b) 20; c) 3; d) 2; e) -3; f) -2; g) 2 (2 * 3 = 6, e
+// 6 % 4 = 2); h) 3.4.
+
+#include <stdio.h>
+
+int main(void) {
+    printf("a) %d\n", 7 + 3 * 2);
+    printf("b) %d\n", (7 + 3) * 2);
+    printf("c) %d\n", 17 / 5);
+    printf("d) %d\n", 17 % 5);
+    printf("e) %d\n", -17 / 5);
+    printf("f) %d\n", -17 % 5);
+    printf("g) %d\n", 2 * 3 % 4);
+    printf("h) %.1f\n", 17.0 / 5);
+    return 0;
+}

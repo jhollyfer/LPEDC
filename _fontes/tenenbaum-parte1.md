@@ -23,7 +23,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0004-binario
+### logica4-binario
 
 **Conceitos-chave**
 - Um bit é a menor unidade: uma escolha entre duas possibilidades exclusivas. `n` chaves liga/desliga distinguem `2^n` estados; 3 bits bastam para 8 posições de um seletor.
@@ -59,7 +59,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0007-variaveis e 0008-tipos-e-limites
+### 0002-variaveis e 0003-tipos-e-limites
 
 **Conceitos-chave**
 - Uma declaração faz duas coisas: (1) reserva uma quantidade de memória e (2) diz como interpretar esses bits. O identificador é um apelido conveniente para um endereço.
@@ -78,7 +78,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0009-constantes
+### 0004-constantes
 
 **Conceitos-chave**
 - Use `#define NUMELTS 100` para o tamanho do vetor: muda-se num só lugar (declaração e laço).
@@ -90,7 +90,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0012-aritmetica e 0013-conversao
+### 0007-aritmetica e 0008-conversao
 
 **Pegadinha real do livro (ótimo exemplo de "ache o erro")**
 - No programa de média e desvios, `total` é `int`, `NUMELTS` é inteiro e o código faz `avg = total / NUMELTS;` com `avg` `float`: a divisão é **inteira** antes da conversão. Além disso, imprime `avg` e `diff` (floats) com `%d`. Corrigir: `(float) total / NUMELTS` e `%f`.
@@ -98,7 +98,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0030-padroes-de-laco
+### 0025-padroes-de-laco
 
 **Conceitos-chave**
 - Por que guardar as entradas num vetor, mas a diferença numa variável simples? Porque cada número precisa ser revisitado depois que a média é conhecida, e cada diferença é usada uma vez e descartada. Regra prática: **guarde só o que você vai precisar ler de novo.**
@@ -110,7 +110,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0034-parametros
+### 0029-parametros
 
 **Conceitos-chave**
 - Passagem por valor: o parâmetro é uma cópia. Exemplo clássico: `x = 5; funct(x);` em que `funct` incrementa e imprime 6, mas `x` continua 5 no chamador.
@@ -121,7 +121,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0035-escopo (e um pouco de 0039-modulos)
+### 0030-escopo (e um pouco de 0034-modulos)
 
 **Conceitos-chave**
 - Variáveis **automáticas**: parâmetros e locais, criadas na chamada e destruídas no retorno. Um bloco interno pode redeclarar e esconder um nome externo.
@@ -139,7 +139,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0036-pilha-de-chamadas
+### 0031-pilha-de-chamadas
 
 **Conceitos-chave** (seção 3.4, muito boa)
 - Uma chamada de função faz três coisas: passa argumentos (cópias), aloca locais e temporárias, e transfere o controle **depois de guardar o endereço de retorno**.
@@ -156,7 +156,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0037-recursao
+### 0032-recursao
 
 **Conceitos-chave**
 - Uma definição recursiva define um objeto em termos de um caso **mais simples** dele mesmo. `n! = 1` se `n == 0`; `n! = n * (n−1)!` se `n > 0`. Não é circular, é um jeito compacto de escrever infinitas equações (0!, 1! = 1·0!, 2! = 2·1!, ...).
@@ -182,7 +182,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0038-recursao-na-pratica
+### 0033-recursao-na-pratica
 
 **Conceitos-chave**
 - **Fibonacci**: a definição chama a si mesma duas vezes e recalcula muito (em `fib(6)`, `fib(3)` é calculado 3 vezes). A versão iterativa com `lofib`/`hifib` é muito mais barata. Em fatorial e multiplicação o número de operações é o mesmo nas duas versões; em Fibonacci não.
@@ -211,7 +211,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0042-vetores
+### 0037-vetores
 
 **Conceitos-chave**
 - Vetor (abstrato) é um conjunto **finito, ordenado e homogêneo**. Duas operações: extrair (`a[i]`) e armazenar (`a[i] = x`). Antes de armazenar, o valor é indefinido.
@@ -228,7 +228,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0043-vetores-e-funcoes
+### 0038-vetores-e-funcoes
 
 **Conceitos-chave**
 - O parâmetro vetor não aloca memória nova: refere-se ao vetor original. Por isso a faixa precisa ser passada separadamente (`avg(a, size)`) e alterações na função valem no chamador.
@@ -240,7 +240,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0044-matrizes
+### 0039-matrizes
 
 **Conceitos-chave**
 - Matriz é uma visão **lógica**; a memória é **linear**. Armazenamento por linha (row-major): `endereço(ar[i1][i2]) = base + (i1*r2 + i2) * esize`.
@@ -260,7 +260,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0046-strings
+### 0041-strings
 
 **Conceitos-chave**
 - Duas representações de string de tamanho variável: (a) **prefixada pelo tamanho** (1º byte = comprimento, máximo 255 caracteres); (b) **terminada em `'\0'`** (a de C): sem limite, mas descobrir o tamanho exige percorrer.
@@ -279,7 +279,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0049-memoria, 0050-ponteiros, 0052-ponteiros-e-vetores
+### 0044-memoria, 0045-ponteiros, 0047-ponteiros-e-vetores
 
 **Conceitos-chave**
 - `&x` é o endereço (ponteiro) de x; `*pi` é o objeto apontado. Todo ponteiro tem um **tipo base**: `int *` e `float *` são tipos diferentes.
@@ -291,7 +291,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0059-malloc-free e 0062-erros-de-memoria
+### 0054-malloc-free e 0057-erros-de-memoria
 
 **Conceitos-chave**
 - `malloc(sizeof(T))` cria uma variável dinâmica sem nome; só se chega a ela por ponteiro.
@@ -309,7 +309,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0064-struct, 0065-typedef, 0066-vetor-de-structs, 0067-ponteiro-para-struct
+### 0059-struct, 0060-typedef, 0061-vetor-de-structs, 0062-ponteiro-para-struct
 
 **Conceitos-chave**
 - Struct = itens heterogêneos com nomes (membros); acesso com `.`; structs aninhadas (`nmad1.name.midinit`).
@@ -337,7 +337,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0069-union
+### 0064-union
 
 **Conceitos-chave**
 - Union = vários "mapas" para a mesma área de memória; o tamanho é o do maior membro.
@@ -352,7 +352,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0076-eficiencia (e 0077-big-o, de leve)
+### 0071-eficiencia (e 0072-big-o, de leve)
 
 **Conceitos-chave**
 - Eficiência tem duas faces, tempo e espaço, e quase sempre há troca entre elas.
@@ -366,7 +366,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0079-tad
+### 0074-tad
 
 **Conceitos-chave**
 - TDA = conjunto de valores + operações, definido sem pensar em eficiência. Duas partes: **definição de valor** (com cláusula de condição) e **definição de operadores** (cabeçalho, pré-condição opcional, pós-condição).
@@ -384,7 +384,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0081-lista-encadeada
+### 0076-lista-encadeada
 
 **Conceitos-chave**
 - Nó = `info` + `next`; ponteiro externo `list` para o primeiro; `NULL` no último; lista vazia é `list == NULL`.
@@ -407,7 +407,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0082-lista-busca-remocao
+### 0077-lista-busca-remocao
 
 **Conceitos-chave**
 - Não se insere **antes** de um nó nem se remove um nó dado só o ponteiro para ele: falta o predecessor. Daí `insafter(p,x)` e `delafter(p,&x)`.
@@ -420,15 +420,15 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0083-lista-ordenada
+### 0078-lista-ordenada
 
 **Conceitos-chave**
 - `place(&list, x)`: avança enquanto `x > p->info` guardando o anterior; se não há anterior, insere no início (`push`); senão `insafter(q, x)`.
-- Custo médio ≈ n/2 (ver 0076).
+- Custo médio ≈ n/2 (ver 0071).
 
 ---
 
-### 0084-lista-dupla
+### 0079-lista-dupla
 
 **Conceitos-chave**
 - Nó com `left` e `right`; propriedade `left(right(p)) == p == right(left(p))` (lista circular).
@@ -441,7 +441,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0085-lista-circular
+### 0080-lista-circular
 
 **Conceitos-chave**
 - Último nó aponta para o primeiro. Convenção: o ponteiro externo aponta para o **último** nó; o primeiro é `next(list)`. Assim inserir no início e no fim custa O(1).
@@ -467,7 +467,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0087-pilha
+### 0082-pilha
 
 **Conceitos-chave**
 - Pilha = conjunto ordenado com inserção e remoção numa só ponta (topo); LIFO. `push`, `pop`, `empty`, `stacktop` (que é um `pop` seguido de `push`).
@@ -490,7 +490,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0088-pilha-encadeada
+### 0083-pilha-encadeada
 
 **Conceitos-chave**
 - Topo = primeiro nó; push = inserir no início; pop = remover do início. Overflow só quando `getnode` falha.
@@ -500,7 +500,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0089-pilha-aplicacoes
+### 0084-pilha-aplicacoes
 
 **Conceitos-chave**
 - **Parênteses**: com um só tipo basta um contador (nunca negativo, termina em 0). Com `()[]{}` é preciso **pilha**, porque o fechamento tem que casar com o tipo da última abertura.
@@ -536,7 +536,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0090-fila
+### 0085-fila
 
 **Conceitos-chave**
 - Fila: remove numa ponta (início), insere na outra (final); FIFO.
@@ -558,7 +558,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0091-fila-encadeada
+### 0086-fila-encadeada
 
 **Conceitos-chave**
 - Ponteiros `front` e `rear`; inserir no fim, remover do início.
@@ -568,7 +568,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0092-deque
+### 0087-deque
 
 **Conceitos-chave** (só em exercícios)
 - Deque: insere e remove nas duas pontas (`insrtleft`, `insrtright`, `remvleft`, `remvright`).
@@ -576,7 +576,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0095-busca-binaria
+### 0090-busca-binaria
 
 **Conceitos-chave**
 - Analogia da lista telefônica: abrir no meio e descartar metade.
@@ -596,7 +596,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0102-arvores
+### 0097-arvores
 
 **Conceitos-chave**
 - Árvore binária: vazia, ou raiz + subárvore esquerda + subárvore direita (disjuntas).
@@ -618,7 +618,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0103-arvore-binaria
+### 0098-arvore-binaria
 
 **Conceitos-chave**
 - Operações: `info`, `left`, `right`, `father`, `brother`, `isleft`, `isright`; construção com `maketree`, `setleft`, `setright`.
@@ -652,7 +652,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0104-bst-busca-insercao
+### 0099-bst-busca-insercao
 
 **Conceitos-chave**
 - Aplicação de abertura do livro: achar números repetidos. Cada número desce comparando (menor → esquerda, maior → direita); se achar igual, é repetido; se cair num vazio, insere.
@@ -668,7 +668,7 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 
 ---
 
-### 0107-heap (só a parte de fila de prioridade)
+### 0102-heap (só a parte de fila de prioridade)
 
 **Conceitos-chave**
 - Fila de prioridade **ascendente** (remove o menor) e **descendente** (remove o maior). Pilha e fila são casos particulares, com o tempo de inserção como prioridade.

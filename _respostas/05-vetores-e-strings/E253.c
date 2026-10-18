@@ -1,26 +1,32 @@
-// 0043 · Vetores e funções
+// 0043 · Juntando tudo
 // Exercício E253 · ★☆☆
 
 #include <stdio.h>
-
-#define RODADAS 8
-
-int soma(const int v[], int n) {
-    int total = 0;
-    for (int i = 0; i < n; i++) {
-        total += v[i];
-    }
-    return total;
-}
-
-double media(const int v[], int n) {
-    return (double) soma(v, n) / n;
-}
+#include <string.h>
+#include <ctype.h>
 
 int main(void) {
-    int gols[RODADAS] = {3, 1, 0, 2, 4, 1, 2, 3};
+    char frase[200];
+    char vogais[] = "aeiou";
+    int contagem[5] = {0};
 
-    printf("Gols no campeonato: %d\n", soma(gols, RODADAS));
-    printf("Média por rodada: %.2f\n", media(gols, RODADAS));
+    printf("Frase: ");
+    if (fgets(frase, sizeof(frase), stdin) == NULL) {
+        return 1;
+    }
+    frase[strcspn(frase, "\n")] = '\0';
+
+    for (int i = 0; frase[i] != '\0'; i++) {
+        int c = tolower((unsigned char) frase[i]);
+        for (int k = 0; k < 5; k++) {
+            if (c == vogais[k]) {
+                contagem[k]++;
+            }
+        }
+    }
+
+    for (int k = 0; k < 5; k++) {
+        printf("%c: %d\n", vogais[k], contagem[k]);
+    }
     return 0;
 }

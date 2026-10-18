@@ -71,18 +71,18 @@ enunciado avisa.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0094](#0094--busca-sequencial) | Busca sequencial | [`0094-busca-sequencial/`](0094-busca-sequencial/) |
-| [0095](#0095--busca-binária) | Busca binária | [`0095-busca-binaria/`](0095-busca-binaria/) |
-| [0096](#0096--bubble-sort) | Bubble sort | [`0096-bubble-sort/`](0096-bubble-sort/) |
-| [0097](#0097--selection-sort) | Selection sort | [`0097-selection-sort/`](0097-selection-sort/) |
-| [0098](#0098--insertion-sort) | Insertion sort | [`0098-insertion-sort/`](0098-insertion-sort/) |
-| [0099](#0099--merge-sort) | Merge sort | [`0099-merge-sort/`](0099-merge-sort/) |
-| [0100](#0100--quick-sort) | Quick sort | [`0100-quick-sort/`](0100-quick-sort/) |
-| [0101](#0101--comparando-estabilidade-custo-e-qsort) | Comparando: estabilidade, custo e qsort | [`0101-comparando/`](0101-comparando/) |
+| [0089](#0089--busca-sequencial) | Busca sequencial | [`0089-busca-sequencial/`](0089-busca-sequencial/) |
+| [0090](#0090--busca-binária) | Busca binária | [`0090-busca-binaria/`](0090-busca-binaria/) |
+| [0091](#0091--bubble-sort) | Bubble sort | [`0091-bubble-sort/`](0091-bubble-sort/) |
+| [0092](#0092--selection-sort) | Selection sort | [`0092-selection-sort/`](0092-selection-sort/) |
+| [0093](#0093--insertion-sort) | Insertion sort | [`0093-insertion-sort/`](0093-insertion-sort/) |
+| [0094](#0094--merge-sort) | Merge sort | [`0094-merge-sort/`](0094-merge-sort/) |
+| [0095](#0095--quick-sort) | Quick sort | [`0095-quick-sort/`](0095-quick-sort/) |
+| [0096](#0096--comparando-estabilidade-custo-e-qsort) | Comparando: estabilidade, custo e qsort | [`0096-comparando/`](0096-comparando/) |
 
 ---
 
-## 0094 · Busca sequencial
+## 0089 · Busca sequencial
 
 Você passa a carteirinha na catraca da academia. Em meio segundo ela responde
 "liberado" ou "bloqueado". Por trás, o sistema procurou a sua matrícula numa
@@ -107,14 +107,14 @@ verdade:
 - **caso médio** (chave presente, em posição sorteada): `(n + 1) / 2`
   comparações, mais ou menos metade do vetor.
 
-Em notação do assunto 0077, a busca sequencial é **O(n)**: dobrou o número de
+Em notação do assunto 0072, a busca sequencial é **O(n)**: dobrou o número de
 alunos, dobrou o tempo da catraca no pior caso.
 
 Vamos ver na prática. A academia tem 6 alunos ativos e a catraca procura a
 matrícula 1290. Ela compara com 4172, 3305 e 8821 (diferentes, em amarelo) e
 acha na quarta gaveta, a de índice 3. As duas últimas nem são olhadas:
 
-<p align="center"><img src="0094-busca-sequencial/ideia.svg" alt="Diagrama da ideia: Busca sequencial" width="858"></p>
+<p align="center"><img src="0089-busca-sequencial/ideia.svg" alt="Diagrama da ideia: Busca sequencial" width="858"></p>
 
 O mesmo exemplo em C. A função conta as comparações num ponteiro, para você
 ver o custo de cada busca:
@@ -171,7 +171,7 @@ Repara no fluxograma: são duas perguntas por volta. A primeira (`i < n?`)
 protege o vetor; a segunda (`v[i] == x?`) é a busca de fato. O caminho verde
 dá a volta três vezes antes de sair pelo Sim:
 
-<p align="center"><img src="0094-busca-sequencial/fluxograma.svg" alt="Fluxograma: Busca sequencial" width="670"></p>
+<p align="center"><img src="0089-busca-sequencial/fluxograma.svg" alt="Fluxograma: Busca sequencial" width="670"></p>
 
 > [!WARNING]
 > O erro clássico é decidir cedo demais. Com `if (v[i] == x) return i; else
@@ -189,18 +189,18 @@ dá a volta três vezes antes de sair pelo Sim:
 > estruturas "mais espertas". Um truque antigo é a **sentinela**: copiar a
 > chave para uma gaveta extra no fim. Aí o laço não precisa mais perguntar
 > `i < n`, porque sempre vai achar. É uma pergunta a menos por volta (veja o
-> exemplo A188).
+> exemplo A178).
 
 > [!NOTE]
 > **Pergunta para você:** se a matrícula 3305 aparecesse duas vezes no vetor,
 > nas posições 1 e 4, qual posição a função devolveria? E quantas comparações
-> ela faria para achar 7034? Responda e confira mudando o exemplo A187.
+> ela faria para achar 7034? Responda e confira mudando o exemplo A177.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0094-busca-sequencial/`](0094-busca-sequencial/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0089-busca-sequencial/`](0089-busca-sequencial/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A187 · A catraca procura a matrícula**
+**Exemplo A177 · A catraca procura a matrícula**
 
 ```c
 #include <stdio.h>
@@ -235,10 +235,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/A187.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/A177.c
 ```
 
-**Exemplo A188 · A sentinela no fim da fila**
+**Exemplo A178 · A sentinela no fim da fila**
 
 ```c
 #include <stdio.h>
@@ -293,12 +293,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/A188.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/A178.c
 ```
 
 #### Exercícios
 
-**Exercício E559** · ★☆☆
+**Exercício E529** · ★☆☆
 
 O extrato do Pix do mês tem estes valores, em reais, do mais antigo para o
 mais recente: 50, 120, 35, 50, 80, 50, 15. Você quer achar a ÚLTIMA
@@ -329,10 +329,10 @@ Saída esperada:
    para 200, -1 com 7 comparações.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E559.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E529.c
 ```
 
-**Exercício E560** · ★☆☆
+**Exercício E530** · ★☆☆
 
 A portaria de uma festa confere o nome na lista de convidados. O programa
 abaixo está quase pronto: falta só o miolo do laço que procura o nome.
@@ -356,10 +356,10 @@ Fábio: não está na lista
    break; }
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E560.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E530.c
 ```
 
-**Exercício E561** · ★★☆
+**Exercício E531** · ★★☆
 
 A tabela de preços de uma loja está em ordem crescente:
 12, 19, 25, 31, 38, 44, 52, 60, 73, 89. Escreva duas funções que devolvem o
@@ -391,10 +391,10 @@ R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
 4. Resposta esperada: a saída acima (47 para no 52, que é o 7º elemento).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E561.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E531.c
 ```
 
-**Exercício E562** · ★★☆
+**Exercício E532** · ★★☆
 
 O estoque do mercadinho é um vetor de structs:
 
@@ -432,10 +432,10 @@ No vetor: Café 500g R$ 20.79
 4. Resposta esperada: a saída acima (18,90 * 1,10 = 20,79).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E562.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E532.c
 ```
 
-**Exercício E563** · ★★★
+**Exercício E533** · ★★★
 
 A função abaixo deveria devolver a PRIMEIRA posição da senha procurada no
 painel do banco. Ela tem DOIS erros, de propósito. Rode com o rodar: o
@@ -458,10 +458,10 @@ Primeira senha 99: posição -1
    Conserto: i < n e return i assim que achar.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E563.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E533.c
 ```
 
-**Exercício E564** · ★★★
+**Exercício E534** · ★★★
 
 Na agenda do celular você liga muito mais para umas pessoas do que para
 outras. Uma heurística antiga é o MOVER PARA A FRENTE: toda vez que a busca
@@ -495,12 +495,12 @@ Movendo para a frente: 20 comparações
 4. Resposta esperada: a saída acima (5+5+2+1+5+2 = 20 comparações).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-busca-sequencial/E564.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E534.c
 ```
 
 ---
 
-## 0095 · Busca binária
+## 0090 · Busca binária
 
 Lembra da brincadeira "pensei num número de 1 a 100"? Quem chuta 1, 2, 3...
 pode precisar de 100 tentativas. Quem chuta 50, ouve "menor", chuta 25 e assim
@@ -513,13 +513,13 @@ esquerda do meio é menor ainda e pode ser **descartado** de uma vez. Se é
 menor, descarte a direita. Cada pergunta joga fora metade do que sobrou.
 
 O código guarda o pedaço que ainda pode ter a chave entre dois índices, `ini`
-e `fim` (os dois inclusive). Isso é um **invariante** (assunto 0078): "se `x`
+e `fim` (os dois inclusive). Isso é um **invariante** (assunto 0073): "se `x`
 está no vetor, está em `v[ini..fim]`". Cada volta encolhe o intervalo e mantém
 o invariante. Quando `ini` passa de `fim`, o intervalo ficou vazio e a
 resposta é `-1`.
 
 Quantas voltas? Com 15 elementos sobram 15, 7, 3, 1: no máximo **4**. Com um
-milhão, no máximo 20. Com um bilhão, 30. É o **O(log n)** do assunto 0077: a
+milhão, no máximo 20. Com um bilhão, 30. É o **O(log n)** do assunto 0072: a
 cada vez que `n` dobra, a busca ganha só **uma** volta a mais.
 
 O preço é a pré-condição: o vetor precisa estar em ordem. Num vetor bagunçado,
@@ -531,7 +531,7 @@ procura o 216. O meio (índice 7) tem 189, menor que 216: a metade esquerda
 inteira fica cinza. O novo meio (11) tem 245, maior: a direita dele também
 sai. Na terceira volta, o meio (9) é o 216:
 
-<p align="center"><img src="0095-busca-binaria/ideia.svg" alt="Diagrama da ideia: Busca binária" width="864"></p>
+<p align="center"><img src="0090-busca-binaria/ideia.svg" alt="Diagrama da ideia: Busca binária" width="864"></p>
 
 O mesmo exemplo em C. O `printf` dentro do laço mostra o intervalo de cada
 volta:
@@ -602,19 +602,19 @@ ficar vazio:
 | fim | 4 | 3 | | | `ini > fim`: devolve `-1` |
 
 Repara que o `ini = 4` final é exatamente onde o 150 **deveria** estar para o
-vetor continuar ordenado. Essa informação vale ouro (veja o exemplo A190).
+vetor continuar ordenado. Essa informação vale ouro (veja o exemplo A180).
 
 Repara no fluxograma: diferente da busca sequencial, aqui são três perguntas
 por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 
-<p align="center"><img src="0095-busca-binaria/fluxograma.svg" alt="Fluxograma: Busca binária" width="944"></p>
+<p align="center"><img src="0090-busca-binaria/fluxograma.svg" alt="Fluxograma: Busca binária" width="944"></p>
 
 > [!WARNING]
 > Busca binária é famosa por erros de um. `while (ini < fim)` com o intervalo
 > fechado `[ini, fim]` deixa de olhar o último candidato. E `fim = meio` (em
 > vez de `meio - 1`) no intervalo fechado pode nunca encolher: com `ini = 4` e
 > `fim = 4`, o meio é 4 de novo, para sempre. Escolha um estilo (fechado, como
-> no A189, ou semiaberto `[ini, fim)`, como no A190) e siga as regras dele em
+> no A179, ou semiaberto `[ini, fim)`, como no A180) e siga as regras dele em
 > todas as linhas.
 
 > [!TIP]
@@ -626,18 +626,18 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
 > 11, depois 9), então não aproveita a linha de cache como a sequencial. Por
 > isso, para vetores bem pequenos, a sequencial pode ganhar. A `stdlib.h` traz
-> uma pronta, a `bsearch`, que você vai usar no assunto 0101.
+> uma pronta, a `bsearch`, que você vai usar no assunto 0096.
 
 > [!NOTE]
-> **Pergunta para você:** quantas voltas o A189 dá para achar o 103, o
+> **Pergunta para você:** quantas voltas o A179 dá para achar o 103, o
 > primeiro do catálogo? E qual é o máximo de voltas para um vetor de 1000
 > elementos? Faça o teste de mesa antes de rodar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0095-busca-binaria/`](0095-busca-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0090-busca-binaria/`](0090-busca-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A189 · O catálogo do atacadão**
+**Exemplo A179 · O catálogo do atacadão**
 
 ```c
 #include <stdio.h>
@@ -692,10 +692,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/A189.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/A179.c
 ```
 
-**Exemplo A190 · Em qual faixa de frete cai o pacote?**
+**Exemplo A180 · Em qual faixa de frete cai o pacote?**
 
 ```c
 #include <stdio.h>
@@ -743,12 +743,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/A190.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/A180.c
 ```
 
 #### Exercícios
 
-**Exercício E565** · ★☆☆
+**Exercício E535** · ★☆☆
 
 Os armários livres do vestiário do clube estão numa lista ordenada, e o
 programa abaixo procura dois números nela. SEM RODAR, escreva a saída exata
@@ -765,10 +765,10 @@ ini, fim e meio em cada volta. Só depois rode para conferir.
    achou".
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E565.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E535.c
 ```
 
-**Exercício E566** · ★☆☆
+**Exercício E536** · ★☆☆
 
 Escreva a busca binária em versão RECURSIVA:
 
@@ -806,10 +806,10 @@ CEP 22222222: posição -1
    busca_rec(ceps, 0, 9, x).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E566.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E536.c
 ```
 
-**Exercício E567** · ★★☆
+**Exercício E537** · ★★☆
 
 As avaliações de um app (de 1 a 5 estrelas) já estão ordenadas:
 
@@ -836,7 +836,7 @@ Nota 5: posições 9 a 11, 3 avaliações
 
 **Dicas:**
 
-1. Use o estilo semiaberto do exemplo A190: ini = 0, fim = n, while (ini < fim).
+1. Use o estilo semiaberto do exemplo A180: ini = 0, fim = n, while (ini < fim).
 2. As duas funções só diferem numa comparação: v[meio] < x ou v[meio] <= x.
 3. Se a primeira dá a e a segunda dá b, a nota aparece b - a vezes, nas
    posições a até b - 1.
@@ -844,10 +844,10 @@ Nota 5: posições 9 a 11, 3 avaliações
    contagem custa umas 40 voltas, e não um milhão.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E567.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E537.c
 ```
 
-**Exercício E568** · ★★☆
+**Exercício E538** · ★★☆
 
 Busca binária também funciona com strings, desde que estejam em ordem.
 Escreva int busca_nome(const char *v[], int n, const char *nome, int *voltas)
@@ -879,10 +879,10 @@ Palmas: posição -1 (4 voltas)
 4. Resposta esperada: a saída acima (meios 7, 11, 9 e 10 nas duas buscas).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E568.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E538.c
 ```
 
-**Exercício E569** · ★★★
+**Exercício E539** · ★★★
 
 Alguém "modernizou" a busca binária trocando int por size_t, "porque índice
 nunca é negativo". O código compila sem nenhum aviso, acha o 35... e
@@ -901,7 +901,7 @@ vazio: posição -1
 **Dicas:**
 
 1. Faça o teste de mesa da busca pelo 3: quanto vale meio na última volta?
-2. Quanto é 0 - 1 num tipo sem sinal? (assunto 0008)
+2. Quanto é 0 - 1 num tipo sem sinal? (assunto 0003)
 3. O vetor vazio (n = 0) tem o mesmo problema logo na primeira linha.
 4. Resposta esperada: fim = meio - 1 com meio = 0 dá a volta para SIZE_MAX,
    ini <= fim continua verdadeiro e v[meio] lê longe do vetor. Conserto:
@@ -909,10 +909,10 @@ vazio: posição -1
    subtrai 1 de um size_t.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E569.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E539.c
 ```
 
-**Exercício E570** · ★★★
+**Exercício E540** · ★★★
 
 Busca binária não precisa de vetor: basta uma pergunta de sim ou não que
 muda de resposta uma única vez. Um terreno quadrado tem que caber numa área
@@ -941,12 +941,12 @@ Saída esperada:
 5. Resposta esperada: a saída acima (46340² = 2147395600).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-busca-binaria/E570.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E540.c
 ```
 
 ---
 
-## 0096 · Bubble sort
+## 0091 · Bubble sort
 
 No app de delivery, cinco restaurantes prometem entregar em 42, 17, 35, 8 e
 23 minutos. Você quer a lista do mais rápido para o mais lento. Para usar a
@@ -981,7 +981,7 @@ Vamos ver na prática. Na passada 1 o 42 ganha de todo mundo e afunda até o
 fim (verde). Na passada 2 o 35 encontra o seu lugar. Na 3, o 8 chega à frente.
 A passada 4 não troca nada, e a bandeira encerra:
 
-<p align="center"><img src="0096-bubble-sort/ideia.svg" alt="Diagrama da ideia: Bubble sort" width="858"></p>
+<p align="center"><img src="0091-bubble-sort/ideia.svg" alt="Diagrama da ideia: Bubble sort" width="858"></p>
 
 O mesmo exemplo em C, contando comparações e trocas:
 
@@ -1059,7 +1059,7 @@ desfaz exatamente uma inversão.
 Repara no fluxograma: são dois laços. O de dentro (`j`) faz uma passada; o de
 fora repete passadas enquanto a bandeira disser que houve troca:
 
-<p align="center"><img src="0096-bubble-sort/fluxograma.svg" alt="Fluxograma: Bubble sort" width="681"></p>
+<p align="center"><img src="0091-bubble-sort/fluxograma.svg" alt="Fluxograma: Bubble sort" width="681"></p>
 
 > [!WARNING]
 > Troca sem variável auxiliar não troca nada: `v[j] = v[j + 1]; v[j + 1] =
@@ -1080,13 +1080,13 @@ fora repete passadas enquanto a bandeira disser que houve troca:
 > [!NOTE]
 > **Pergunta para você:** quantas passadas o bubble com bandeira faz no vetor
 > `8 17 23 35 42`, que já está ordenado? E em `17 23 35 42 8`, com o menor lá
-> no fim? Faça a previsão e teste no A191.
+> no fim? Faça a previsão e teste no A181.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0096-bubble-sort/`](0096-bubble-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0091-bubble-sort/`](0091-bubble-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A191 · Os tempos de entrega borbulhando**
+**Exemplo A181 · Os tempos de entrega borbulhando**
 
 ```c
 #include <stdio.h>
@@ -1142,10 +1142,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/A191.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/A181.c
 ```
 
-**Exemplo A192 · A bandeirinha que economiza passadas**
+**Exemplo A182 · A bandeirinha que economiza passadas**
 
 ```c
 #include <stdio.h>
@@ -1206,12 +1206,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/A192.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/A182.c
 ```
 
 #### Exercícios
 
-**Exercício E571** · ★☆☆
+**Exercício E541** · ★☆☆
 
 No bolão da firma, os pontos de seis participantes são 18, 31, 7, 25, 31 e
 12. Ordene com bubble sort (com a bandeira) em ordem DECRESCENTE, do líder
@@ -1225,16 +1225,16 @@ Ranking: 31 31 25 18 12 7
 
 **Dicas:**
 
-1. Parta do bubble do exemplo A191.
+1. Parta do bubble do exemplo A181.
 2. Basta mudar uma comparação: troque quando o da esquerda for MENOR.
 3. Os dois 31 empatados não são trocados entre si (31 < 31 é falso).
 4. Resposta esperada: Ranking: 31 31 25 18 12 7
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E571.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E541.c
 ```
 
-**Exercício E572** · ★☆☆
+**Exercício E542** · ★☆☆
 
 A fila do caixa preferencial tem senhas fora de ordem: 9, 4, 7, 1, 5. O
 programa abaixo ordena com bubble sort (sem bandeira) e mostra o vetor no
@@ -1252,10 +1252,10 @@ de trocas. Depois rode e confira.
    e 5; 4 com 1; 7 com 1 e 5).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E572.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E542.c
 ```
 
-**Exercício E573** · ★★☆
+**Exercício E543** · ★★☆
 
 Este bubble sort deveria ordenar as idades da turma de natação: 34, 19,
 27, 45, 22. Ele tem DOIS erros, de propósito. Rode: o sanitizer
@@ -1279,10 +1279,10 @@ Saída esperada (depois de consertar):
    idades[j + 1] = aux;
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E573.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E543.c
 ```
 
-**Exercício E574** · ★★☆
+**Exercício E544** · ★★☆
 
 Monte a tabela do campeonato. Cada time é uma struct:
 
@@ -1322,10 +1322,10 @@ Saída esperada:
    vitórias).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E574.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E544.c
 ```
 
-**Exercício E575** · ★★★
+**Exercício E545** · ★★★
 
 O bubble tem um ponto fraco: elemento pequeno no fim (uma "tartaruga") anda
 só UMA casa para a esquerda por passada. No vetor 2, 3, 4, 5, 6, 7, 8, 1, o
@@ -1355,10 +1355,10 @@ resultado: 1 2 3 4 5 6 7 8
    traz o 1 para a frente, e a terceira passada confirma que acabou.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E575.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E545.c
 ```
 
-**Exercício E576** · ★★★
+**Exercício E546** · ★★★
 
 Uma INVERSÃO é um par de posições i < j com v[i] > v[j]. Escreva:
 
@@ -1391,12 +1391,12 @@ n = 3: 2 inversões, 2 trocas
    exatamente uma inversão e não cria nenhuma; o vetor ordenado tem zero.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-bubble-sort/E576.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E546.c
 ```
 
 ---
 
-## 0097 · Selection sort
+## 0092 · Selection sort
 
 Final da bateria de kart com os amigos. Os tempos da melhor volta, em
 segundos, foram 58, 31, 47, 19 e 26. Para montar o pódio, você faz o óbvio:
@@ -1412,7 +1412,7 @@ duas partes: à esquerda, a parte **pronta** (os menores, já na ordem final);
 
 Repare que a passada guarda o **índice** do menor, não o valor. É o índice
 que permite fazer a troca no fim. É a mesma ideia do padrão "maior/menor" do
-assunto 0030, rodando de novo a cada passada.
+assunto 0025, rodando de novo a cada passada.
 
 Custo: a passada 0 compara `n - 1` vezes, a 1 compara `n - 2` vezes... No
 total, `n(n - 1)/2` comparações, **sempre**. Vetor bagunçado, ordenado ou ao
@@ -1427,7 +1427,7 @@ Vamos ver na prática. Em cada linha, a gaveta roxa é a posição `i` que vai
 receber o menor, e a amarela é o menor que a passada achou. Depois da troca,
 a gaveta vira verde e não sai mais do lugar:
 
-<p align="center"><img src="0097-selection-sort/ideia.svg" alt="Diagrama da ideia: Selection sort" width="858"></p>
+<p align="center"><img src="0092-selection-sort/ideia.svg" alt="Diagrama da ideia: Selection sort" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -1500,7 +1500,7 @@ troca. As passadas seguintes fazem 3, 2 e 1 comparações: 10 no total.
 Repara no fluxograma: a caixa "acha o menor" esconde um laço inteiro (a
 tabela acima). A troca acontece **fora** dele, uma vez por passada:
 
-<p align="center"><img src="0097-selection-sort/fluxograma.svg" alt="Fluxograma: Selection sort" width="511"></p>
+<p align="center"><img src="0092-selection-sort/fluxograma.svg" alt="Fluxograma: Selection sort" width="511"></p>
 
 > [!WARNING]
 > O erro mais comum é trocar **dentro** do laço que procura o menor: toda vez
@@ -1514,7 +1514,7 @@ tabela acima). A troca acontece **fora** dele, uma vez por passada:
 > **Por dentro do C:** a troca do selection é de **longa distância**: o 19
 > salta da gaveta 3 para a 0 de uma vez, e o 58 vai para a 3 passando por cima
 > do 31 e do 47. Esse salto é o que torna o selection **instável**: dois
-> elementos iguais podem trocar de ordem entre si (o exemplo A194 mostra a
+> elementos iguais podem trocar de ordem entre si (o exemplo A184 mostra a
 > Bia passando na frente da Ana). Já em custo de memória ele é ótimo: ordena
 > no próprio vetor, com uma variável `aux` e dois índices. Isso se chama
 > ordenar **in-place**, com **O(1)** de memória extra.
@@ -1526,9 +1526,9 @@ tabela acima). A troca acontece **fora** dele, uma vez por passada:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0097-selection-sort/`](0097-selection-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0092-selection-sort/`](0092-selection-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A193 · O pódio do kart, um de cada vez**
+**Exemplo A183 · O pódio do kart, um de cada vez**
 
 ```c
 #include <stdio.h>
@@ -1581,10 +1581,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/A193.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/A183.c
 ```
 
-**Exemplo A194 · A troca que passa por cima**
+**Exemplo A184 · A troca que passa por cima**
 
 ```c
 #include <stdio.h>
@@ -1637,12 +1637,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/A194.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/A184.c
 ```
 
 #### Exercícios
 
-**Exercício E577** · ★☆☆
+**Exercício E547** · ★☆☆
 
 Uma variação do selection: em vez de procurar o MENOR e pôr na frente,
 procure o MAIOR e ponha no FIM. A parte pronta cresce pela direita. Ordene
@@ -1668,10 +1668,10 @@ fim = 1: 30 45 60 75 89 120
    selection não tem como saber disso e continua.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E577.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E547.c
 ```
 
-**Exercício E578** · ★☆☆
+**Exercício E548** · ★☆☆
 
 Cinco caixas de uma mudança estão numeradas fora de ordem: 3, 1, 2, 5, 4.
 SEM RODAR, escreva a saída exata do programa abaixo, incluindo o total de
@@ -1685,10 +1685,10 @@ trocas. Depois rode e confira.
    4; i = 3: 1 2 3 4 5; trocas: 3.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E578.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E548.c
 ```
 
-**Exercício E579** · ★★☆
+**Exercício E549** · ★★☆
 
 Monte a lista de chamada em ordem alfabética com selection sort. Os nomes
 ficam em const char *alunos[] = {"Rafael", "Ana", "Lucas", "Beatriz",
@@ -1715,10 +1715,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E579.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E549.c
 ```
 
-**Exercício E580** · ★★☆
+**Exercício E550** · ★★☆
 
 Um site de passagens achou 8 voos: R$ 420, 315, 689, 298, 512, 350, 275 e
 601. A tela só mostra os 3 MAIS BARATOS. Ordenar tudo é desperdício: o
@@ -1742,10 +1742,10 @@ Saída esperada:
    de ordem, e tudo bem.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E580.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E550.c
 ```
 
-**Exercício E581** · ★★★
+**Exercício E551** · ★★★
 
 Na estufa, as mudas precisam ficar em fila da mais baixa para a mais alta.
 Este selection sort tem UM erro, de propósito: compila sem aviso, roda sem
@@ -1777,10 +1777,10 @@ Saída esperada (depois de consertar):
    e o 40 para a 0. Conserto: int menor = i; no começo de cada passada.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E581.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E551.c
 ```
 
-**Exercício E582** · ★★★
+**Exercício E552** · ★★★
 
 Os produtos de uma loja têm uma descrição de 200 bytes, então cada struct
 é pesada de mover:
@@ -1825,12 +1825,12 @@ loja[0] continua sendo: Fone sem fio
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0097-selection-sort/E582.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E552.c
 ```
 
 ---
 
-## 0098 · Insertion sort
+## 0093 · Insertion sort
 
 Rodada de buraco com a família. Você recebe as cartas uma a uma: 7, 4, 9, 2,
 5. Ninguém espera chegarem todas para arrumar. A cada carta nova, você olha a
@@ -1863,7 +1863,7 @@ Vamos ver na prática. Em cada linha, a parte verde é a mão já arrumada e a
 amarela é a carta que acabou de entrar. O 9 não anda nada; o 2 atravessa a
 mão inteira:
 
-<p align="center"><img src="0098-insertion-sort/ideia.svg" alt="Diagrama da ideia: Insertion sort" width="858"></p>
+<p align="center"><img src="0093-insertion-sort/ideia.svg" alt="Diagrama da ideia: Insertion sort" width="858"></p>
 
 O mesmo exemplo em C. A função `maior` só existe para contar as
 comparações:
@@ -1941,13 +1941,13 @@ comparações** e 1 + 0 + 3 + 2 = **6 deslocamentos**.
 Repara no fluxograma: o laço de dentro tem uma pergunta dupla. Ele para por
 dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
 
-<p align="center"><img src="0098-insertion-sort/fluxograma.svg" alt="Fluxograma: Insertion sort" width="692"></p>
+<p align="center"><img src="0093-insertion-sort/fluxograma.svg" alt="Fluxograma: Insertion sort" width="692"></p>
 
 > [!WARNING]
 > A ordem das condições importa: `while (i >= 0 && v[i] > x)`. Escrita ao
 > contrário, `while (v[i] > x && i >= 0)`, quando `i` chega a `-1` o programa
 > lê `v[-1]` **antes** de perguntar se `i` é válido. É o curto-circuito do
-> `&&` (assunto 0018) que protege o vetor: se `i >= 0` dá falso, o lado
+> `&&` (assunto 0013) que protege o vetor: se `i >= 0` dá falso, o lado
 > direito nem é avaliado.
 
 > [!TIP]
@@ -1961,14 +1961,14 @@ dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
 
 > [!NOTE]
 > **Pergunta para você:** e se a condição fosse `v[i] >= x`? O vetor
-> continuaria saindo ordenado? Quantos deslocamentos o A195 faria? E o que
+> continuaria saindo ordenado? Quantos deslocamentos o A185 faria? E o que
 > aconteceria com dois elementos iguais?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0098-insertion-sort/`](0098-insertion-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0093-insertion-sort/`](0093-insertion-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A195 · Arrumando as cartas na mão**
+**Exemplo A185 · Arrumando as cartas na mão**
 
 ```c
 #include <stdio.h>
@@ -2025,10 +2025,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/A195.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/A185.c
 ```
 
-**Exemplo A196 · Quase em ordem custa quase nada**
+**Exemplo A186 · Quase em ordem custa quase nada**
 
 ```c
 #include <stdio.h>
@@ -2077,12 +2077,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/A196.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/A186.c
 ```
 
 #### Exercícios
 
-**Exercício E583** · ★☆☆
+**Exercício E553** · ★☆☆
 
 As notas de redação de cinco candidatos foram 650, 720, 580, 810 e 690.
 Ordene com insertion sort em ordem DECRESCENTE (a maior primeiro) e mostre a
@@ -2096,16 +2096,16 @@ Classificação: 810 720 690 650 580
 
 **Dicas:**
 
-1. Parta do insertion do exemplo A195 (pode tirar a contagem).
+1. Parta do insertion do exemplo A185 (pode tirar a contagem).
 2. Agora quem precisa abrir espaço são os elementos MENORES que x.
 3. Só muda uma comparação no while.
 4. Resposta esperada: Classificação: 810 720 690 650 580
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E583.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E553.c
 ```
 
-**Exercício E584** · ★☆☆
+**Exercício E554** · ★☆☆
 
 No check-in, as malas (em kg) precisam ir para a esteira da mais leve para
 a mais pesada. O insertion sort abaixo está quase pronto: faltam DUAS
@@ -2128,10 +2128,10 @@ Saída esperada (depois de completar):
    malas[i + 1] = x; depois dele.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E584.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E554.c
 ```
 
-**Exercício E585** · ★★☆
+**Exercício E555** · ★★☆
 
 O fliperama guarda os 5 maiores recordes, do maior para o menor. Hoje o
 ranking tem 4: 9800, 8750, 7200, 6100. Escreva
@@ -2164,10 +2164,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E585.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E555.c
 ```
 
-**Exercício E586** · ★★☆
+**Exercício E556** · ★★☆
 
 Os pedidos de uma lanchonete chegam com o tempo de preparo, em minutos:
 6, 3, 8, 3, 1. SEM RODAR, escreva a saída exata do programa abaixo: o vetor
@@ -2184,10 +2184,10 @@ Depois rode e confira.
    4); total: 7.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E586.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E556.c
 ```
 
-**Exercício E587** · ★★★
+**Exercício E557** · ★★★
 
 Este insertion sort deveria ordenar as idades do grupo de corrida:
 31, 12, 45, 27, 8, 19. Ele tem DOIS erros, de propósito. O primeiro faz o
@@ -2203,16 +2203,16 @@ Saída esperada (depois de consertar):
 **Dicas:**
 
 1. Quando o 12 é encaixado, i chega a -1. O que o while faz primeiro?
-2. Releia a seção sobre o curto-circuito do && (assunto 0018).
+2. Releia a seção sobre o curto-circuito do && (assunto 0013).
 3. No fim do while, a posição i foi empurrada ou não? Onde está o buraco?
 4. Resposta esperada: o while deve ser (i >= 0 && idades[i] > x), senão lê
    idades[-1]; e o encaixe é idades[i + 1] = x, não idades[i] = x.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E587.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E557.c
 ```
 
-**Exercício E588** · ★★★
+**Exercício E558** · ★★★
 
 Ideia aparentemente esperta: a parte v[0..j-1] já está ordenada, então dá
 para achar o lugar de x com BUSCA BINÁRIA em vez de andar casa por casa.
@@ -2232,7 +2232,7 @@ ordenado? sim
 **Dicas:**
 
 1. Procure a PRIMEIRA posição de v[0..j-1] com valor maior que x (estilo
-   semiaberto do A190, com v[meio] <= x). Assim os iguais ficam na ordem de
+   semiaberto do A180, com v[meio] <= x). Assim os iguais ficam na ordem de
    chegada.
 2. Achou a posição p? Empurre v[p..j-1] uma casa para a direita e ponha x
    em v[p].
@@ -2242,12 +2242,12 @@ ordenado? sim
    continua O(n²).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0098-insertion-sort/E588.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E558.c
 ```
 
 ---
 
-## 0099 · Merge sort
+## 0094 · Merge sort
 
 Fim de semestre: duas monitoras corrigiram as provas da turma, cada uma
 metade, e cada uma entregou a sua pilha já em ordem de nota. Para montar uma
@@ -2258,13 +2258,13 @@ o fim.
 Juntar duas sequências ordenadas numa só é a **intercalação** (em inglês,
 *merge*). Ela é barata: cada comparação manda **um** elemento para o
 resultado, então juntar `n` elementos custa no máximo `n - 1` comparações.
-O exemplo A198 mostra a intercalação sozinha.
+O exemplo A188 mostra a intercalação sozinha.
 
 O **merge sort** (ordenação por intercalação) usa isso com a ideia de
 **dividir e conquistar**:
 
 1. **divida** o vetor ao meio;
-2. **ordene** cada metade, com o próprio merge sort (recursão, assunto 0037);
+2. **ordene** cada metade, com o próprio merge sort (recursão, assunto 0032);
 3. **intercale** as duas metades ordenadas.
 
 O caso base é o pedaço com 0 ou 1 elemento: ele já está ordenado, não há o
@@ -2286,7 +2286,7 @@ Vamos ver na prática. As notas descem sendo divididas até virar pares (e,
 mais embaixo, pedaços de 1). Depois sobem sendo intercaladas, em verde, até
 formar o vetor inteiro:
 
-<p align="center"><img src="0099-merge-sort/ideia.svg" alt="Diagrama da ideia: Merge sort" width="858"></p>
+<p align="center"><img src="0094-merge-sort/ideia.svg" alt="Diagrama da ideia: Merge sort" width="858"></p>
 
 O mesmo exemplo em C. O rascunho `w` é alocado **uma vez** no `main` e
 emprestado para todas as intercalações:
@@ -2355,7 +2355,7 @@ int main(void) {
 
 Repara na ordem das linhas da saída: a recursão termina **toda** a metade
 esquerda (`[0, 4)`) antes de começar a direita. É a pilha de chamadas do
-assunto 0036 trabalhando.
+assunto 0031 trabalhando.
 
 ### Passo a passo
 
@@ -2379,7 +2379,7 @@ Sete comparações para 8 elementos: o máximo, `n - 1`. Somando os níveis:
 Repara no fluxograma: ele é curto porque a recursão esconde o trabalho. As
 duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 
-<p align="center"><img src="0099-merge-sort/fluxograma.svg" alt="Fluxograma: Merge sort" width="351"></p>
+<p align="center"><img src="0094-merge-sort/fluxograma.svg" alt="Fluxograma: Merge sort" width="351"></p>
 
 > [!WARNING]
 > Com o intervalo semiaberto, o caso base é `r - p < 2`, e não `p < r` virado
@@ -2399,15 +2399,15 @@ duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 > original dos iguais. Isso faz o merge sort ser **estável**.
 
 > [!NOTE]
-> **Pergunta para você:** quantas comparações o A197 faria se as notas já
+> **Pergunta para você:** quantas comparações o A187 faria se as notas já
 > estivessem em ordem, `7 12 18 26 33 41 52 60`? Pista: na intercalação, o
 > que acontece quando a metade esquerda inteira é menor que a direita?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0099-merge-sort/`](0099-merge-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0094-merge-sort/`](0094-merge-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A197 · Duas pilhas de provas viram uma**
+**Exemplo A187 · Duas pilhas de provas viram uma**
 
 ```c
 #include <stdio.h>
@@ -2472,10 +2472,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/A197.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/A187.c
 ```
 
-**Exemplo A198 · Os pedidos das duas lojas numa fila só**
+**Exemplo A188 · Os pedidos das duas lojas numa fila só**
 
 ```c
 #include <stdio.h>
@@ -2515,12 +2515,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/A198.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/A188.c
 ```
 
 #### Exercícios
 
-**Exercício E589** · ★☆☆
+**Exercício E559** · ★☆☆
 
 Duas turmas fizeram a mesma prova e cada professora mandou as notas em
 ordem: turma A = 45, 60, 75, 90 e turma B = 50, 60, 85, 95, 98. Escreva
@@ -2551,10 +2551,10 @@ Notas: 45 50 60 60 75 85 90 95 98
    comparação, e 95 e 98 vêm direto.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E589.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E559.c
 ```
 
-**Exercício E590** · ★☆☆
+**Exercício E560** · ★☆☆
 
 O programa abaixo não ordena nada: ele só mostra QUAIS chamadas o merge sort
 faria para um vetor de 5 elementos, com um recuo de dois espaços por nível
@@ -2572,10 +2572,10 @@ de recursão. SEM RODAR, escreva a saída exata. Depois rode e confira.
    [3, 5); 6 nas duas últimas.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E590.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E560.c
 ```
 
-**Exercício E591** · ★★☆
+**Exercício E561** · ★★☆
 
 A academia tem duas listas de presença, cada uma em ordem de matrícula e
 sem repetidos dentro dela:
@@ -2606,10 +2606,10 @@ foram nos dois turnos: 2
 4. Resposta esperada: a saída acima (1034 e 1077 estão nas duas).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E591.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E561.c
 ```
 
-**Exercício E592** · ★★☆
+**Exercício E562** · ★★☆
 
 A fila de pedidos de uma padaria chegou nesta ordem:
 
@@ -2620,7 +2620,7 @@ typedef struct { char cliente[8]; int valor; } Pedido;
 ```
 
 
-Ordene por valor com merge sort (adapte o A197 para Pedido) e mostre a
+Ordene por valor com merge sort (adapte o A187 para Pedido) e mostre a
 fila. Quem empatou no valor deve continuar na ordem de chegada (Bruno antes
 de Davi, Ana antes de Carla). Depois troque o <= da intercalação por < e
 anote, num comentário, o que muda.
@@ -2641,10 +2641,10 @@ Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
    Carla 50, Ana 50 (deixa de ser estável).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E592.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E562.c
 ```
 
-**Exercício E593** · ★★★
+**Exercício E563** · ★★★
 
 Este merge sort deveria ordenar as distâncias de corrida da semana, em km:
 21, 5, 42, 10, 15, 3. Ele compila sem aviso, roda sem reclamação do
@@ -2676,10 +2676,10 @@ Saída esperada (depois de consertar):
    p = 0 cai no lugar certo; as outras escrevem por cima de v[0..].
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E593.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E563.c
 ```
 
-**Exercício E594** · ★★★
+**Exercício E564** · ★★★
 
 Ana e Bia ranquearam as mesmas 8 séries. Numerando as séries pela ordem da
 Bia, o ranking da Ana fica: 3, 1, 7, 2, 8, 4, 6, 5. Quanto mais INVERSÕES
@@ -2709,12 +2709,12 @@ de 28 pares possíveis
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0099-merge-sort/E594.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E564.c
 ```
 
 ---
 
-## 0100 · Quick sort
+## 0095 · Quick sort
 
 Black Friday: você tem 7 fones na lista, de R$ 35, 12, 48, 7, 29, 51 e 20 (é
 promoção, vai). Em vez de comparar todos com todos, você escolhe um deles, o
@@ -2744,14 +2744,14 @@ O custo depende do pivô. Se ele cai perto do meio, o vetor é cortado em
 metades, como no merge sort: **O(n log n)**. Se ele é sempre o menor ou o
 maior, um dos montes fica vazio e o outro com `n - 1`: são `n` níveis e
 **O(n²)**. Com o pivô no fim, isso acontece justamente no vetor **já
-ordenado** (veja o exemplo A200). Na média, com dados embaralhados, o quick
+ordenado** (veja o exemplo A190). Na média, com dados embaralhados, o quick
 sort é O(n log n) e costuma ser o mais rápido na prática.
 
 Vamos ver na prática. O 20 (roxo) separa o vetor: 12 e 7 à esquerda, o resto
 à direita, e ele fica verde, no lugar. Depois, cada lado escolhe o próprio
 pivô (o último de cada pedaço):
 
-<p align="center"><img src="0100-quick-sort/ideia.svg" alt="Diagrama da ideia: Quick sort" width="858"></p>
+<p align="center"><img src="0095-quick-sort/ideia.svg" alt="Diagrama da ideia: Quick sort" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -2836,7 +2836,7 @@ Seis comparações, e o 20 está na posição 2 para sempre. Depois vêm `[12 7]
 Repara no fluxograma: o pivô não entra em nenhuma das duas chamadas
 recursivas. É isso que garante que o problema sempre diminui:
 
-<p align="center"><img src="0100-quick-sort/fluxograma.svg" alt="Fluxograma: Quick sort" width="398"></p>
+<p align="center"><img src="0095-quick-sort/fluxograma.svg" alt="Fluxograma: Quick sort" width="398"></p>
 
 > [!WARNING]
 > Se as chamadas forem `quick_sort(v, p, j)` e `quick_sort(v, j + 1, r)`, o
@@ -2849,7 +2849,7 @@ recursivas. É isso que garante que o problema sempre diminui:
 
 > [!TIP]
 > **Por dentro do C:** no pior caso, a recursão desce `n` níveis, e cada nível
-> é um frame na pilha (assunto 0036). Com um vetor ordenado de 1 milhão de
+> é um frame na pilha (assunto 0031). Com um vetor ordenado de 1 milhão de
 > elementos e o pivô no fim, são 1 milhão de frames: a pilha de 8 MB do Linux
 > estoura e o programa morre com *segmentation fault*. Implementações sérias
 > se protegem de três jeitos: escolhem o pivô melhor (o do meio, um sorteado,
@@ -2860,13 +2860,13 @@ recursivas. É isso que garante que o problema sempre diminui:
 > [!NOTE]
 > **Pergunta para você:** o quick sort é estável? Pense no que acontece com
 > `3a 3b 1` (dois 3 iguais, `a` chegou antes de `b`) quando o pivô é o 1.
-> Faça a separação à mão antes de ler o assunto 0101.
+> Faça a separação à mão antes de ler o assunto 0096.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0100-quick-sort/`](0100-quick-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0095-quick-sort/`](0095-quick-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A199 · Os fones divididos pelo pivô**
+**Exemplo A189 · Os fones divididos pelo pivô**
 
 ```c
 #include <stdio.h>
@@ -2928,10 +2928,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/A199.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/A189.c
 ```
 
-**Exemplo A200 · O pior caso: vetor que já chega em ordem**
+**Exemplo A190 · O pior caso: vetor que já chega em ordem**
 
 ```c
 #include <stdio.h>
@@ -2997,12 +2997,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/A200.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/A190.c
 ```
 
 #### Exercícios
 
-**Exercício E595** · ★☆☆
+**Exercício E565** · ★☆☆
 
 As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. O programa abaixo faz
 UMA separação (só o separa, sem recursão), com o pivô no fim. SEM RODAR,
@@ -3018,15 +3018,15 @@ Depois rode e confira.
    v[5]; vetor: 2 4 5 9 8 6; pivô na posição 2.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E595.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E565.c
 ```
 
-**Exercício E596** · ★☆☆
+**Exercício E566** · ★☆☆
 
 Aquecimento de separação, sem pivô: o banco quer as contas no vermelho no
 começo do relatório. Os saldos são 120, -45, 300, -10, 0, -80, 55. Escreva
 int separa_negativos(int v[], int n), que deixa os negativos à esquerda e
-devolve quantos são. Use o MESMO esquema do separa do A199: k anda pelo
+devolve quantos são. Use o MESMO esquema do separa do A189: k anda pelo
 vetor e j marca onde entra o próximo negativo (troca v[j] com v[k] e
 avança j).
 
@@ -3046,13 +3046,13 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E596.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E566.c
 ```
 
-**Exercício E597** · ★★☆
+**Exercício E567** · ★★☆
 
 Ordene a lista do mercado em ordem alfabética com quick sort (pivô no fim,
-separação de Lomuto, como no A199), trocando só os ponteiros:
+separação de Lomuto, como no A189), trocando só os ponteiros:
 
 
 ```text
@@ -3078,10 +3078,10 @@ arroz, banana, café, feijão, leite, ovos, pão, tomate
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E597.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E567.c
 ```
 
-**Exercício E598** · ★★☆
+**Exercício E568** · ★★☆
 
 Este quick sort deveria ordenar os andares das entregas do prédio: 4, 9, 2,
 7. Ele tem UM erro, de propósito, numa única linha. Rode: o programa morre
@@ -3105,10 +3105,10 @@ Saída esperada (depois de consertar):
    O certo é quick_sort(v, p, j - 1).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E598.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E568.c
 ```
 
-**Exercício E599** · ★★★
+**Exercício E569** · ★★★
 
 Os 11 corredores do grupo fizeram 5 km em 45, 22, 38, 31, 50, 27, 24, 41,
 29, 35 e 33 minutos. Qual o tempo MEDIANO (o do meio, se a lista estivesse
@@ -3130,17 +3130,17 @@ ordenando tudo: 33 min (23 comparações)
 
 **Dicas:**
 
-1. Reaproveite o separa do A199, contando comparações num static int.
+1. Reaproveite o separa do A189, contando comparações num static int.
 2. Diferente do quick sort, o quickselect só segue UM dos lados.
 3. Se p == r, sobrou um elemento só: é ele.
 4. Na média, o quickselect é O(n): n + n/2 + n/4 + ... < 2n.
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E599.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E569.c
 ```
 
-**Exercício E600** · ★★★
+**Exercício E570** · ★★★
 
 Num app de entregas, as avaliações vão de 1 a 3 estrelas: muitos valores
 iguais. A separação de Lomuto sofre com isso: com 12 valores TODOS iguais,
@@ -3177,12 +3177,12 @@ todos iguais:   Lomuto 66, três vias 12 | 2 2 2 2 2 2 2 2 2 2 2 2
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0100-quick-sort/E600.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E570.c
 ```
 
 ---
 
-## 0101 · Comparando: estabilidade, custo e qsort
+## 0096 · Comparando: estabilidade, custo e qsort
 
 Você exporta a planilha de pedidos da loja virtual. Ela vem em ordem de
 horário. O pessoal da logística pede: "agrupa por cidade, mas dentro de cada
@@ -3220,7 +3220,7 @@ o mais rápido na média e não usa rascunho, mas tem o pior caso O(n²) e não 
 estável. O selection faz o mínimo de trocas. O bubble... ensina.
 
 Na prática, você quase nunca escreve um desses: a `stdlib.h` traz o
-**`qsort`**, genérico, que apareceu no assunto 0055 (ponteiro para função):
+**`qsort`**, genérico, que apareceu no assunto 0050 (ponteiro para função):
 
 ```text
 void qsort(void *base, size_t n, size_t tamanho,
@@ -3236,7 +3236,7 @@ Vamos ver na prática. Os pedidos chegam por horário. Ordenando por cidade, um
 algoritmo estável (insertion, merge) mantém R1, R3, R6. O selection sort, com
 as suas trocas de longa distância, entrega R3 antes de R1:
 
-<p align="center"><img src="0101-comparando/ideia.svg" alt="Diagrama da ideia: Comparando: estabilidade, custo e qsort" width="858"></p>
+<p align="center"><img src="0096-comparando/ideia.svg" alt="Diagrama da ideia: Comparando: estabilidade, custo e qsort" width="858"></p>
 
 A norma do C **não promete** que o `qsort` é estável. Então, quando a ordem
 dos empatados importa, ponha o desempate na própria `compara`. É o que o
@@ -3294,7 +3294,7 @@ int main(void) {
 
 ### Passo a passo
 
-Os números de verdade. O exemplo A202 roda os cinco algoritmos do módulo com
+Os números de verdade. O exemplo A192 roda os cinco algoritmos do módulo com
 os mesmos 1000 números e conta as comparações:
 
 | n = 1000 | aleatório | ordenado | invertido |
@@ -3314,7 +3314,7 @@ Repara no fluxograma: é um guia de decisão, não um algoritmo. O caminho
 marcado é o deste exemplo: a ordem de chegada importa, mas cabe como
 desempate na `compara` (o horário), então `qsort` resolve:
 
-<p align="center"><img src="0101-comparando/fluxograma.svg" alt="Fluxograma: Comparando: estabilidade, custo e qsort" width="706"></p>
+<p align="center"><img src="0096-comparando/fluxograma.svg" alt="Fluxograma: Comparando: estabilidade, custo e qsort" width="706"></p>
 
 > [!WARNING]
 > A `compara` preguiçosa `return *(const int *) a - *(const int *) b;`
@@ -3335,16 +3335,16 @@ desempate na `compara` (o horário), então `qsort` resolve:
 > `stdlib.h` traz a **`bsearch`**, com a mesma `compara`.
 
 > [!NOTE]
-> **Pergunta para você:** se a `compara` do A201 só comparasse a cidade (sem o
+> **Pergunta para você:** se a `compara` do A191 só comparasse a cidade (sem o
 > desempate por horário), a saída seria sempre a mesma? Em que ordem você
 > esperaria os três pedidos de Recife? Rode algumas vezes, troque a ordem do
 > vetor de entrada e veja.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0101-comparando/`](0101-comparando/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0096-comparando/`](0096-comparando/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A201 · Os pedidos agrupados por cidade com qsort**
+**Exemplo A191 · Os pedidos agrupados por cidade com qsort**
 
 ```c
 #include <stdio.h>
@@ -3397,10 +3397,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/A201.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/A191.c
 ```
 
-**Exemplo A202 · Cinco algoritmos, a mesma corrida**
+**Exemplo A192 · Cinco algoritmos, a mesma corrida**
 
 ```c
 #include <stdio.h>
@@ -3544,12 +3544,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/A202.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/A192.c
 ```
 
 #### Exercícios
 
-**Exercício E601** · ★☆☆
+**Exercício E571** · ★☆☆
 
 O app de combustível mostra o preço da gasolina em seis postos:
 5.89, 6.19, 5.79, 6.05, 5.99 e 6.29. Ordene do MAIS CARO para o mais
@@ -3575,10 +3575,10 @@ R$ 5.79
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E601.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E571.c
 ```
 
-**Exercício E602** · ★☆☆
+**Exercício E572** · ★☆☆
 
 Para cada situação, escolha UM algoritmo do módulo (bubble, selection,
 insertion, merge, quick ou o qsort da biblioteca) e justifique em uma
@@ -3609,10 +3609,10 @@ f) Em que situação real o bubble sort é a melhor escolha?
    nenhuma: o insertion faz o mesmo papel melhor.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E602.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E572.c
 ```
 
-**Exercício E603** · ★★☆
+**Exercício E573** · ★★☆
 
 A playlist tem as bandas const char *bandas[] = {"Skank", "Titas",
 "Legiao", "Raimundos", "Pitty", "Cazuza"} (sem acentos, para o strcmp não
@@ -3643,10 +3643,10 @@ Pitty Skank Titas Cazuza Legiao Raimundos
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E603.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E573.c
 ```
 
-**Exercício E604** · ★★☆
+**Exercício E574** · ★★☆
 
 Os saldos (em centavos) de cinco contas de uma corretora precisam sair do
 menor para o maior. A compara abaixo é a "versão curta" que aparece em
@@ -3666,7 +3666,7 @@ Saída esperada (depois de consertar):
 
 **Dicas:**
 
-1. Quanto é 2000000000 - (-1500000000)? Cabe num int (assunto 0008)?
+1. Quanto é 2000000000 - (-1500000000)? Cabe num int (assunto 0003)?
 2. A compara não precisa devolver a diferença, só o SINAL certo.
 3. (x > y) - (x < y) vale 1, 0 ou -1 e nunca estoura.
 4. Resposta esperada: x - y dá overflow com valores grandes de sinais
@@ -3674,10 +3674,10 @@ Saída esperada (depois de consertar):
    antes de -1500000000. Conserto: return (x > y) - (x < y);
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E604.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E574.c
 ```
 
-**Exercício E605** · ★★★
+**Exercício E575** · ★★★
 
 Uma agenda de contatos:
 
@@ -3727,10 +3727,10 @@ Zeca: não está na agenda
    Marina, Rafael).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E605.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E575.c
 ```
 
-**Exercício E606** · ★★★
+**Exercício E576** · ★★★
 
 O boletim está em ordem alfabética: Ana 8, Bruno 9, Caio 8, Duda 7,
 Enzo 9, Fabi 8, Gui 7. A coordenação quer por nota, da maior para a menor,
@@ -3766,7 +3766,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0101-comparando/E606.c
+~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E576.c
 ```
 
 ---
@@ -3823,7 +3823,7 @@ quantos há de cada.
 
 <details><summary>Resposta</summary>
 
-É a partição de três vias do exercício E600 com pivô 1 (a "bandeira holandesa"
+É a partição de três vias do exercício E570 com pivô 1 (a "bandeira holandesa"
 de Dijkstra): `lt`, `i` e `gt`. 0 vai para a frente (`troca(v[lt], v[i])`,
 `lt++`, `i++`), 2 vai para o fim (`troca(v[i], v[gt])`, `gt--`), 1 fica
 (`i++`). Resultado: `0 0 0 1 1 1 2 2 2`, com n comparações.
@@ -3845,7 +3845,7 @@ limite de O(n log n) vale para algoritmos que **comparam**.
 
 **6. O merge sort de baixo para cima.** Escreva o merge sort sem recursão:
 intercale pedaços de tamanho 1, depois 2, 4, 8... até cobrir o vetor. Teste
-com as notas do assunto 0099, `52 18 33 7 41 26 60 12`, e com um vetor de 7
+com as notas do assunto 0094, `52 18 33 7 41 26 60 12`, e com um vetor de 7
 elementos.
 
 <details><summary>Resposta</summary>
@@ -3858,7 +3858,7 @@ Laço de fora: `for (int b = 1; b < n; b *= 2)`. Laço de dentro:
 
 </details>
 
-**7. Quick sort que não estoura a pilha.** Mude o quick sort do A199 para
+**7. Quick sort que não estoura a pilha.** Mude o quick sort do A189 para
 fazer a recursão só no lado **menor** e tratar o maior com um `while`. Meça a
 maior profundidade de recursão num vetor já ordenado de 10.000 elementos,
 antes e depois.
@@ -3874,7 +3874,7 @@ mediana de três).
 </details>
 
 **8. Quick sort híbrido.** Faça o quick sort chamar o insertion sort quando o
-pedaço tiver menos de `L` elementos. Com o contador de comparações do A202,
+pedaço tiver menos de `L` elementos. Com o contador de comparações do A192,
 teste `L = 1, 8, 16, 32` num vetor aleatório de 10.000.
 
 <details><summary>Resposta</summary>

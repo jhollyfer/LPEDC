@@ -1,28 +1,74 @@
-// 0058 · Pilha e heap
+// 0058 · Juntando tudo
 // Exercício E348 · ★★★
-//
-// O problema: montar_senha devolvia o endereço de um vetor local, que morre
-// no return. O gcc avisa e devolve NULL no lugar (por isso aparecia
-// "(null)"). Agora quem chama empresta o vetor, que mora no frame de main.
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void montar_senha(int numero, char senha[]) {
-    senha[0] = 'A';
-    senha[1] = (char)('0' + numero / 100);
-    senha[2] = (char)('0' + numero / 10 % 10);
-    senha[3] = (char)('0' + numero % 10);
-    senha[4] = '\0';
+void liberar_pedacos(char **v, int n) {
+    if (v == NULL) {
+        return;
+    }
+    for (int i = 0; i < n; i++) {
+        free(v[i]);
+    }
+    free(v);
+}
+
+char **dividir(const char *texto, char separador, int *qtd) {
+    int n = 1;
+    for (int i = 0; texto[i] != '\0'; i++) {
+        if (texto[i] == separador) {
+            n++;
+        }
+    }
+    *qtd = 0;
+    char **v = malloc(n * sizeof *v);
+    if (v == NULL) {
+        return NULL;
+    }
+    int inicio = 0;
+    for (int k = 0; k < n; k++) {
+        int fim = inicio;
+        while (texto[fim] != '\0' && texto[fim] != separador) {
+            fim++;
+        }
+        int tamanho = fim - inicio;
+        v[k] = malloc(tamanho + 1);
+        if (v[k] == NULL) {
+            liberar_pedacos(v, k);
+            return NULL;
+        }
+        for (int j = 0; j < tamanho; j++) {
+            v[k][j] = texto[inicio + j];
+        }
+        v[k][tamanho] = '\0';
+        inicio = fim + 1; // pula o separador
+    }
+    *qtd = n;
+    return v;
+}
+
+void mostrar(const char *texto) {
+    int n;
+    char **pedacos = dividir(texto, ';', &n);
+    if (pedacos == NULL) {
+        printf("Sem memória\n");
+        return;
+    }
+    printf("%d itens:", n);
+    for (int i = 0; i < n; i++) {
+        printf(" [%s]", pedacos[i]);
+    }
+    printf("\n");
+    liberar_pedacos(pedacos, n);
 }
 
 int main(void) {
-    char senha[8];
-    montar_senha(42, senha);
-    printf("Senha: %s\n", senha);
-    montar_senha(107, senha);
-    printf("Senha: %s\n", senha);
+    mostrar("arroz;feijao;cafe;oleo de soja");
+    mostrar(";;");
     return 0;
 }
 // Saída:
-// Senha: A042
-// Senha: A107
+// 4 itens: [arroz] [feijao] [cafe] [oleo de soja]
+// 3 itens: [] [] []

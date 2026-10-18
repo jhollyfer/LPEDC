@@ -1,15 +1,12 @@
-// 0095 · Busca binária
+// 0095 · Quick sort
 // Exercício E565 · ★☆☆
 //
 // Resposta:
-//   Procurando 47
-//   meio=4 (30)
-//   meio=6 (47)
-//   achou na posição 6
-//   Procurando 5
-//   meio=4 (30)
-//   meio=1 (9)
-//   meio=0 (4)
-//   não achou
-// Para o 5 o intervalo vai de [0, 8] para [0, 3], [0, 0] e fica vazio com
-// ini = 1, fim = 0: 3 voltas.
+//   troca v[0] e v[1]
+//   troca v[1] e v[3]
+//   troca v[2] e v[5]
+//   vetor: 2 4 5 9 8 6
+//   pivô na posição 2
+// O 2 (k = 1) vai para a gaveta 0 e o 4 (k = 3) para a 1. A última troca põe
+// o pivô 5 em v[2]: à esquerda só há menores (2 4), à direita só maiores
+// (9 8 6), ainda fora de ordem entre si.

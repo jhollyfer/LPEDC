@@ -1,18 +1,42 @@
-// 0104 · BST: busca e inserção
+// 0104 · Juntando tudo
 // Exercício E619 · ★☆☆
-//
-// Resposta:
-//
-//   45
-//   ├── esq: 20
-//   │   ├── esq: 10
-//   │   └── dir: 30
-//   │       └── esq: 25
-//   └── dir: 70
-//       ├── esq: 60
-//       └── dir: 90
-//
-// (a) altura 3 (45 → 20 → 30 → 25).
-// (b) a busca pelo 25 passa por 45, 20, 30 e acha o 25 (4 comparações).
-// (c) a busca pelo 65 passa por 45, 70, 60 e cai no NULL à direita do 60.
-// O programa confirma: em ordem 10 20 25 30 45 60 70 90 e altura 3.
+
+#include <stdio.h>
+#include "cadastro.h"
+
+int conta_brinde(const NoAluno *r) {
+    if (r == NULL) {
+        return 0;
+    }
+    int este = r->a.treinos >= 10 ? 1 : 0;
+    return este + conta_brinde(r->esq) + conta_brinde(r->dir);
+}
+
+void mostra_brinde(const NoAluno *r) {
+    if (r == NULL) {
+        return;
+    }
+    mostra_brinde(r->esq);
+    if (r->a.treinos >= 10) {
+        printf(" %s", r->a.nome);
+    }
+    mostra_brinde(r->dir);
+}
+
+int main(void) {
+    Aluno turma[] = {
+        {50, "Ana", 12}, {30, "Bruno", 8}, {70, "Carla", 15}, {20, "Davi", 4},
+        {40, "Eva", 20}, {60, "Fabio", 9}, {80, "Gil", 11},
+    };
+    NoAluno *cad = NULL;
+    for (int i = 0; i < 7; i++) {
+        cad = cad_insere(cad, turma[i]);
+    }
+
+    printf("Ganham brinde:");
+    mostra_brinde(cad);
+    printf("\nTotal: %d\n", conta_brinde(cad));
+
+    cad = cad_libera(cad);
+    return 0;
+}

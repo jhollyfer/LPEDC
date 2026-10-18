@@ -57,10 +57,10 @@ costuma ser o bloco que mora no heap.
 
 Você precisa estar à vontade com ponteiros (módulo 06): `&`, `*`, `NULL`,
 `a[i] == *(a + i)`, `char *` e `**`. Se `int **m` ainda assusta, releia os
-assuntos 0052 e 0054 antes.
+assuntos 0047 e 0049 antes.
 
 O `rodar` já compila com o **AddressSanitizer**, que vigia a memória enquanto
-o programa roda e avisa de vazamentos no fim. Para o assunto 0062, instale
+o programa roda e avisa de vazamentos no fim. Para o assunto 0057, instale
 também o **valgrind**:
 
 ```bash
@@ -72,7 +72,7 @@ E rode qualquer arquivo com ele assim (sem AddressSanitizer, dentro do
 valgrind):
 
 ```bash
-~/LPEDC/rodar --valgrind 07-memoria-dinamica/0062-erros-de-memoria/A124.c
+~/LPEDC/rodar --valgrind 07-memoria-dinamica/0057-erros-de-memoria/A114.c
 ```
 
 A regra do módulo inteiro cabe numa linha: **todo `malloc` tem um `free`, e
@@ -92,7 +92,7 @@ Problemas para resolver num arquivo seu, rodando com o `rodar` (e com
 `rodar --valgrind` quando quiser a segunda opinião). Todos precisam terminar
 sem nenhum relatório de erro.
 
-**1. Apagar do caderno.** No caderninho de fiado do A125, escreva
+**1. Apagar do caderno.** No caderninho de fiado do A115, escreva
 `int remover(char **nomes, int *centavos, int *qtd, const char *nome)`, que
 apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
 "Seu Jorge" e mostre o caderno.
@@ -225,7 +225,7 @@ servidor que roda essa função 1 milhão de vezes por dia, são 12 MB por dia:
 
 </details>
 
-**10. Frase ao contrário.** Use o `dividir` do E378 e uma função de juntar
+**10. Frase ao contrário.** Use o `dividir` do E348 e uma função de juntar
 para inverter a ordem das palavras: "o rato roeu a roupa" vira
 "roupa a roeu rato o". A frase resultante deve ser um bloco novo, do tamanho
 exato.

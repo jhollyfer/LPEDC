@@ -1,47 +1,35 @@
-// 0065 · Typedef
+// 0065 · Bits, máscaras e flags
 // Exercício E387 · ★★☆
 
+#include <stdint.h>
 #include <stdio.h>
 
-typedef struct {
-    int num;
-    int den;
-} Fracao;
-
-int mdc(int a, int b) {
-    return b == 0 ? a : mdc(b, a % b);
+void mostrar_bits(uint16_t x) {
+    for (int b = 15; b >= 0; b--) {
+        printf("%u", (x >> b) & 1u);
+        if (b % 4 == 0 && b > 0) {
+            printf(" ");
+        }
+    }
 }
 
-Fracao simplificar(Fracao f) {
-    int d = mdc(f.num, f.den);
-    f.num /= d;
-    f.den /= d;
-    return f;
-}
-
-Fracao somar(Fracao a, Fracao b) {
-    Fracao r = {a.num * b.den + b.num * a.den, a.den * b.den};
-    return simplificar(r);
-}
-
-Fracao multiplicar(Fracao a, Fracao b) {
-    Fracao r = {a.num * b.num, a.den * b.den};
-    return simplificar(r);
-}
-
-void mostrar(Fracao a, char op, Fracao b, Fracao r) {
-    printf("%d/%d %c %d/%d = %d/%d\n", a.num, a.den, op, b.num, b.den, r.num, r.den);
+int contar_uns(uint16_t x) {
+    int n = 0;
+    while (x != 0) {
+        n += x & 1u;
+        x >>= 1;
+    }
+    return n;
 }
 
 int main(void) {
-    Fracao um_quarto = {1, 4};
-    Fracao um_sexto = {1, 6};
-    Fracao dois_tercos = {2, 3};
-    Fracao nove_quartos = {9, 4};
-    Fracao tres_quartos = {3, 4};
+    uint16_t valores[] = {2025, 255, 4096};
 
-    mostrar(um_quarto, '+', um_sexto, somar(um_quarto, um_sexto));
-    mostrar(dois_tercos, '*', nove_quartos, multiplicar(dois_tercos, nove_quartos));
-    mostrar(tres_quartos, '+', um_quarto, somar(tres_quartos, um_quarto));
+    for (int i = 0; i < 3; i++) {
+        int uns = contar_uns(valores[i]);
+        printf("%u: ", (unsigned)valores[i]);
+        mostrar_bits(valores[i]);
+        printf(" -> %d bits 1 (%s)\n", uns, (uns & 1) ? "ímpar" : "par");
+    }
     return 0;
 }

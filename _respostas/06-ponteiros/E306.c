@@ -1,25 +1,32 @@
-// 0051 · Passagem por referência
+// 0051 · void * e cast
 // Exercício E306 · ★★★
 //
-// Resposta: "x = 9, y = 4" e depois "x = 0". Na segunda chamada a e b
-// apontam para a mesma gaveta (aliasing). x vale 9: *a = 18; *b = 18 - 18 = 0 (zera x, que é *a também);
-// *a = 0 - 0 = 0. A troca com tmp do A101 não tem o problema: com a e b
-// iguais, tmp guarda 9, *a = 9, *b = 9.
+// Resposta (little-endian: o byte menos significativo primeiro):
+//   curto: 02 01        (258 = 0x0102)
+//   cor: 0d 0c 0b 0a    (0x0A0B0C0D)
+//   negativo: fe ff ff ff  (-2 = 0xFFFFFFFE)
+//   sigla: 42 52 00     ('B', 'R' e o '\0')
 
 #include <stdio.h>
 
-void troca_sem_aux(int *a, int *b) {
-    *a = *a + *b;
-    *b = *a - *b;
-    *a = *a - *b;
+void mostra_bytes(const char *rotulo, const void *p, size_t tam) {
+    const unsigned char *byte = p;
+    printf("%s:", rotulo);
+    for (size_t i = 0; i < tam; i++) {
+        printf(" %02x", byte[i]);
+    }
+    printf("\n");
 }
 
 int main(void) {
-    int x = 4, y = 9;
+    short curto = 258;
+    unsigned int cor = 0x0A0B0C0D;
+    int negativo = -2;
+    char sigla[] = "BR";
 
-    troca_sem_aux(&x, &y);
-    printf("x = %d, y = %d\n", x, y);
-    troca_sem_aux(&x, &x);
-    printf("x = %d\n", x);
+    mostra_bytes("curto", &curto, sizeof curto);
+    mostra_bytes("cor", &cor, sizeof cor);
+    mostra_bytes("negativo", &negativo, sizeof negativo);
+    mostra_bytes("sigla", sigla, sizeof sigla);
     return 0;
 }

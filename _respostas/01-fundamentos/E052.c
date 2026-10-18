@@ -1,21 +1,20 @@
-// 0009 · Constantes
+// 0009 · Atribuição, ++ e --
 // Exercício E052 · ★★☆
 //
-// Resposta: 10 é int (10); 10.0 é double (10); 10.0f é float (10); 010 é
-// int em octal (8); 0x10 é int em hexadecimal (16); '0' é int (48, o código
-// do caractere zero); "0" é um texto de 2 bytes ('0' e o byte zero); 1e3 é
-// double (1000).
+// Resposta: 40, 38, 9 e 4. x *= 2 + y não é o mesmo que x = x * 2 + y: o
+// composto põe a direita entre parênteses, x = x * (2 + y).
 
 #include <stdio.h>
 
 int main(void) {
-    printf("10: %zu bytes\n", sizeof(10));
-    printf("10.0: %zu bytes\n", sizeof(10.0));
-    printf("10.0f: %zu bytes\n", sizeof(10.0f));
-    printf("010: %zu bytes\n", sizeof(010));
-    printf("0x10: %zu bytes\n", sizeof(0x10));
-    printf("'0': %zu bytes\n", sizeof('0'));
-    printf("\"0\": %zu bytes\n", sizeof("0"));
-    printf("1e3: %zu bytes\n", sizeof(1e3));
+    int x = 10, y = 3;
+    x *= y + 1;  // 10 * 4
+    printf("%d\n", x);
+    x -= y - 1;  // 40 - 2
+    printf("%d\n", x);
+    x /= y + 1;  // 38 / 4, divisão inteira
+    printf("%d\n", x);
+    x %= y + 2;  // 9 % 5
+    printf("%d\n", x);
     return 0;
 }

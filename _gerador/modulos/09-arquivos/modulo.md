@@ -52,7 +52,7 @@ Para passar argumentos a um programa, escreva-os depois do caminho, no
 `rodar`: ele repassa tudo para o programa.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0074-argumentos/A147.c 187.40 4
+~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c 187.40 4
 ```
 
 Duas ferramentas ajudam a enxergar o que os programas gravam: `od -A d -t x1
@@ -64,7 +64,7 @@ sudo pacman -S strace       # Arch Linux
 sudo apt install strace     # Debian / Ubuntu
 ```
 
-Você vai usar structs (módulo 08), strings com `fgets` (0047) e ponteiros o
+Você vai usar structs (módulo 08), strings com `fgets` (0042) e ponteiros o
 tempo todo. Se `typedef struct`, `sizeof` e `char *` ainda dão aquela
 hesitação, revise antes.
 
@@ -173,7 +173,7 @@ ordem, lendo cada arquivo uma vez só. Com `1 4 9` e `2 3 10`, sai
 
 Leia o primeiro número de cada arquivo. Enquanto os dois tiverem número,
 grave o menor e leia o próximo **daquele** arquivo. Quando um acabar, copie o
-resto do outro. É a etapa de intercalação do merge sort (assunto 0099), e é
+resto do outro. É a etapa de intercalação do merge sort (assunto 0094), e é
 assim que se ordenam arquivos maiores que a RAM.
 
 </details>

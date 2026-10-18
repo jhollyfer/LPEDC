@@ -1,21 +1,20 @@
-// 0009 · Constantes
+// 0009 · Atribuição, ++ e --
 // Exercício E054 · ★★★
 //
-// Resposta: "CIDADE: Recife" (dentro das aspas nada é trocado), "DDD 81",
-// "8 16 10" (octal, hexa e decimal), "Oi!" (0x69 = 105 = 'i'; 33 = '!'),
-// "50% off" e "a\n b" (o \\ vira uma barra; o n fica como letra).
+// Resposta: com valores perto de INT_MAX, casa += visitante pode estourar o
+// int, o que é comportamento indefinido. A troca com variável auxiliar não
+// tem esse risco e é mais fácil de ler.
 
 #include <stdio.h>
 
-#define CIDADE "Recife"
-#define DDD 81
-
 int main(void) {
-    printf("CIDADE: %s\n", CIDADE);
-    printf("DDD %d\n", DDD);
-    printf("%d %d %d\n", 010, 0x10, 10);
-    printf("%c%c%c\n", 'O', 0x69, 33);
-    printf("50%% off\n");
-    printf("a\\n b\n");
+    int casa = 2;
+    int visitante = 5;
+
+    casa += visitante;            // casa = 7 (a soma dos dois)
+    visitante = casa - visitante; // 7 - 5 = 2
+    casa -= visitante;            // 7 - 2 = 5
+
+    printf("Casa %d x %d Visitante\n", casa, visitante);
     return 0;
 }

@@ -63,26 +63,26 @@ sudo pacman -S gdb          # Arch Linux
 sudo apt install gdb        # Debian / Ubuntu
 ```
 
-Nos assuntos 0039 e 0041, a pasta tem arquivos de apoio (`conversao.h` e
+Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
 `conversao.c`, `cardapio.h` e `cardapio.c`). O `rodar` compila esses `.c`
 junto com o exemplo, sozinho. O texto mostra também o comando `gcc` para fazer
 isso à mão.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0033](#0033--funções) | Funções | [`0033-funcoes/`](0033-funcoes/) |
-| [0034](#0034--parâmetros-e-passagem-por-valor) | Parâmetros e passagem por valor | [`0034-parametros/`](0034-parametros/) |
-| [0035](#0035--escopo-e-tempo-de-vida) | Escopo e tempo de vida | [`0035-escopo/`](0035-escopo/) |
-| [0036](#0036--a-pilha-de-chamadas) | A pilha de chamadas | [`0036-pilha-de-chamadas/`](0036-pilha-de-chamadas/) |
-| [0037](#0037--recursão) | Recursão | [`0037-recursao/`](0037-recursao/) |
-| [0038](#0038--recursão-na-prática-fibonacci-hanói-e-euclides) | Recursão na prática: Fibonacci, Hanói e Euclides | [`0038-recursao-na-pratica/`](0038-recursao-na-pratica/) |
-| [0039](#0039--módulos-h-c-e-compilação-separada) | Módulos: .h, .c e compilação separada | [`0039-modulos/`](0039-modulos/) |
-| [0040](#0040--pré-processador-macros-e-ifdef) | Pré-processador: macros e #ifdef | [`0040-preprocessador/`](0040-preprocessador/) |
-| [0041](#0041--juntando-tudo-o-caixa-da-lanchonete) | Juntando tudo: o caixa da lanchonete | [`0041-juntando-tudo/`](0041-juntando-tudo/) |
+| [0028](#0028--funções) | Funções | [`0028-funcoes/`](0028-funcoes/) |
+| [0029](#0029--parâmetros-e-passagem-por-valor) | Parâmetros e passagem por valor | [`0029-parametros/`](0029-parametros/) |
+| [0030](#0030--escopo-e-tempo-de-vida) | Escopo e tempo de vida | [`0030-escopo/`](0030-escopo/) |
+| [0031](#0031--a-pilha-de-chamadas) | A pilha de chamadas | [`0031-pilha-de-chamadas/`](0031-pilha-de-chamadas/) |
+| [0032](#0032--recursão) | Recursão | [`0032-recursao/`](0032-recursao/) |
+| [0033](#0033--recursão-na-prática-fibonacci-hanói-e-euclides) | Recursão na prática: Fibonacci, Hanói e Euclides | [`0033-recursao-na-pratica/`](0033-recursao-na-pratica/) |
+| [0034](#0034--módulos-h-c-e-compilação-separada) | Módulos: .h, .c e compilação separada | [`0034-modulos/`](0034-modulos/) |
+| [0035](#0035--pré-processador-macros-e-ifdef) | Pré-processador: macros e #ifdef | [`0035-preprocessador/`](0035-preprocessador/) |
+| [0036](#0036--juntando-tudo-o-caixa-da-lanchonete) | Juntando tudo: o caixa da lanchonete | [`0036-juntando-tudo/`](0036-juntando-tudo/) |
 
 ---
 
-## 0033 · Funções
+## 0028 · Funções
 
 Você abre o app de corrida e ele mostra o preço antes de você confirmar: R$
 5,00 de bandeirada mais R$ 2,50 por quilômetro. O app faz essa conta para
@@ -124,7 +124,7 @@ Vamos ver na prática. O `main` chama `preco_corrida(4.0)`: o valor 4.0 é
 copiado para o parâmetro `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve
 15.00, e o `main` continua de onde parou, já com o resultado na mão:
 
-<p align="center"><img src="0033-funcoes/ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
+<p align="center"><img src="0028-funcoes/ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
 
 O mesmo exemplo em C, com as três corridas:
 
@@ -156,7 +156,7 @@ Repara no fluxograma: a chamada é um desvio. O programa sai do `main`, executa
 o corpo da função e **volta para o mesmo ponto**, trazendo o valor. Isso se
 repete a cada corrida:
 
-<p align="center"><img src="0033-funcoes/fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
+<p align="center"><img src="0028-funcoes/fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
 
 Três vocabulários que você vai ver o tempo todo: a **definição** é o corpo
 inteiro (`double preco_corrida(double km) { ... }`); a **chamada** é o uso
@@ -184,8 +184,8 @@ função que só calcula serve para a tela, para um arquivo ou para outra conta.
 > `call` do processador, que guarda o endereço de volta e pula para a função;
 > o `return` vira `ret`, que pula de volta. No Linux de 64 bits, o argumento
 > `double` vai num registrador do processador (`xmm0`) e o resultado volta
-> pelo mesmo registrador. Rode `gcc -S A065.c` e procure `call preco_corrida`
-> no arquivo `A065.s`.
+> pelo mesmo registrador. Rode `gcc -S A055.c` e procure `call preco_corrida`
+> no arquivo `A055.s`.
 
 > [!NOTE]
 > **Pergunta para você:** o que mostra
@@ -194,9 +194,9 @@ função que só calcula serve para a tela, para um arquivo ou para outra conta.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0033-funcoes/`](0033-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0028-funcoes/`](0028-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A065 · O preço da corrida, calculado num lugar só**
+**Exemplo A055 · O preço da corrida, calculado num lugar só**
 
 ```c
 #include <stdio.h>
@@ -223,10 +223,10 @@ double preco_corrida(double km) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/A065.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/A055.c
 ```
 
-**Exemplo A066 · Funções que só fazem e funções que respondem**
+**Exemplo A056 · Funções que só fazem e funções que respondem**
 
 ```c
 #include <stdio.h>
@@ -263,12 +263,12 @@ double menor(double a, double b) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/A066.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/A056.c
 ```
 
 #### Exercícios
 
-**Exercício E193** · ★☆☆
+**Exercício E163** · ★☆☆
 
 Você vai trocar o piso de dois cômodos e precisa da área de cada um. Escreva
 a função "double area_comodo(double largura, double comprimento)" e use-a no
@@ -285,15 +285,15 @@ Total: 23.00 m2
 
 **Dicas:**
 
-1. Escreva o protótipo antes do main e a definição depois, como no A065.
+1. Escreva o protótipo antes do main e a definição depois, como no A055.
 2. Dá para somar as duas chamadas direto: area_comodo(4.0, 3.5) + area_comodo(3.0, 3.0).
 3. Resposta esperada: sala 14.00, quarto 9.00, total 23.00.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/E193.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/E163.c
 ```
 
-**Exercício E194** · ★☆☆
+**Exercício E164** · ★☆☆
 
 O cronômetro da corrida de rua mostra o tempo em horas, minutos e segundos,
 mas o ranking ordena por segundos. O main do arquivo já tem as três
@@ -317,10 +317,10 @@ Caio: 4999 s
    h * 3600 + m * 60 + s. Ana 5415, Bia 3600, Caio 4999.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/E194.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/E164.c
 ```
 
-**Exercício E195** · ★★☆
+**Exercício E165** · ★★☆
 
 Um ano é bissexto se for divisível por 4 e não por 100, ou se for divisível
 por 400. Escreva "bool eh_bissexto(int ano)" e use-a num laço para mostrar
@@ -341,10 +341,10 @@ Bissextos: 8
    estivesse no intervalo, não entraria.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/E195.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/E165.c
 ```
 
-**Exercício E196** · ★★☆
+**Exercício E166** · ★★☆
 
 O estacionamento do shopping cobra R$ 5.00 pelas primeiras 2 horas e mais
 R$ 2.00 por hora ou fração depois disso, com teto de R$ 20.00 por dia.
@@ -369,10 +369,10 @@ Total do dia: R$ 34.00
    cobradas: 5 + 4 = 9. Com 12 h a conta daria 25, mas o teto é 20. Total 34.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/E196.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/E166.c
 ```
 
-**Exercício E197** · ★★★
+**Exercício E167** · ★★★
 
 Sem rodar, preveja a saída. Depois rode e confira.
 
@@ -420,10 +420,10 @@ int main(void) {
    ajusta(20) = 10, ajusta(10) = 5.) O printf depois do return nunca roda.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/E197.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/E167.c
 ```
 
-**Exercício E198** · ★★★
+**Exercício E168** · ★★★
 
 Um número é perfeito quando é igual à soma dos seus divisores menores que
 ele: 6 = 1 + 2 + 3. Escreva duas funções que trabalham juntas:
@@ -456,12 +456,12 @@ Saída esperada:
    somando d e n / d de uma vez. Por que isso é muito mais rápido?
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-funcoes/E198.c
+~/LPEDC/rodar 04-funcoes/0028-funcoes/E168.c
 ```
 
 ---
 
-## 0034 · Parâmetros e passagem por valor
+## 0029 · Parâmetros e passagem por valor
 
 Você tira foto do boleto e manda no grupo da família. Sua tia rabisca a foto,
 escreve "pago!" em cima. O boleto de papel, na sua gaveta, continua igual: ela
@@ -488,7 +488,7 @@ Vamos ver na prática. A academia reajusta a mensalidade de R$ 120,00 em 10%.
 Há duas caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a
 do `main` e a cópia da função. A função muda só a dela para 132.00:
 
-<p align="center"><img src="0034-parametros/ideia.svg" alt="Diagrama da ideia: Parâmetros e passagem por valor" width="858"></p>
+<p align="center"><img src="0029-parametros/ideia.svg" alt="Diagrama da ideia: Parâmetros e passagem por valor" width="858"></p>
 
 O código mostra as duas situações: primeiro ignorando o retorno, depois
 guardando:
@@ -528,7 +528,7 @@ Repara no fluxograma: o valor sai do `main` por cópia e só volta pelo
 `return`. A pergunta "guardou o retorno?" decide se o `main` fica sabendo do
 reajuste:
 
-<p align="center"><img src="0034-parametros/fluxograma.svg" alt="Fluxograma: Parâmetros e passagem por valor" width="471"></p>
+<p align="center"><img src="0029-parametros/fluxograma.svg" alt="Fluxograma: Parâmetros e passagem por valor" width="471"></p>
 
 Mais três regras sobre parâmetros:
 
@@ -549,7 +549,7 @@ Mais três regras sobre parâmetros:
 > acontece, porque a troca foi entre as cópias. Do
 > mesmo jeito, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
 > mexer numa variável sua, você precisa passar o **endereço** dela. É o que o
-> `&` do `scanf` faz, e você vai entender de vez no assunto 0051.
+> `&` do `scanf` faz, e você vai entender de vez no assunto 0046.
 
 > [!TIP]
 > **Por dentro do C:** a cópia é literal. O `main` põe o valor 120.00 num
@@ -566,9 +566,9 @@ Mais três regras sobre parâmetros:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0034-parametros/`](0034-parametros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0029-parametros/`](0029-parametros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A067 · A mensalidade que a função não consegue mudar**
+**Exemplo A057 · A mensalidade que a função não consegue mudar**
 
 ```c
 #include <stdio.h>
@@ -602,10 +602,10 @@ double reajustar(double mensalidade, double percentual) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/A067.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/A057.c
 ```
 
-**Exemplo A068 · void, conversão e expressões como argumento**
+**Exemplo A058 · void, conversão e expressões como argumento**
 
 ```c
 #include <stdio.h>
@@ -643,12 +643,12 @@ void linha(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/A068.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/A058.c
 ```
 
 #### Exercícios
 
-**Exercício E199** · ★☆☆
+**Exercício E169** · ★☆☆
 
 Sem rodar, preveja as quatro linhas que este programa mostra:
 
@@ -681,10 +681,10 @@ int main(void) {
 3. Resposta esperada: dentro: 300 / main: 150 / dentro: 300 / main: 300.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/E199.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/E169.c
 ```
 
-**Exercício E200** · ★☆☆
+**Exercício E170** · ★☆☆
 
 Escreva "void repetir(char simbolo, int vezes)", que mostra o símbolo
 "vezes" vezes e pula a linha. Use-a para montar o cupom da padaria abaixo.
@@ -711,10 +711,10 @@ Total       R$ 9.70
    repetir('-', 20) nas linhas do meio.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/E200.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/E170.c
 ```
 
-**Exercício E201** · ★★☆
+**Exercício E171** · ★★☆
 
 O programa abaixo deveria mostrar as duas notas em ordem crescente, mas
 mostra "Em ordem: 9 e 6". Rode, explique por que a função não funciona e
@@ -727,13 +727,13 @@ funções que devolvem valor, "menor" e "maior".
    ordenar acontece nas cópias.
 2. printf("Em ordem: %d e %d\n", menor(a, b), maior(a, b));
 3. Resposta esperada: "Em ordem: 6 e 9". A troca de verdade, com a função
-   mexendo nas variáveis do main, precisa de ponteiros (assunto 0051).
+   mexendo nas variáveis do main, precisa de ponteiros (assunto 0046).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/E201.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/E171.c
 ```
 
-**Exercício E202** · ★★☆
+**Exercício E172** · ★★☆
 
 Você aplica R$ 1000.00 num investimento que rende 1% ao mês. Escreva
 "double montante(double capital, double taxa, int meses)" que usa o próprio
@@ -757,10 +757,10 @@ No main, capital continua R$ 1000.00
    porque a função mexeu só na cópia.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/E202.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/E172.c
 ```
 
-**Exercício E203** · ★★★
+**Exercício E173** · ★★★
 
 Preveja a saída. Atenção às conversões: cada argumento é convertido para o
 tipo do parâmetro, e o valor do return é convertido para o tipo da função.
@@ -809,10 +809,10 @@ int main(void) {
    metade(16) = 8.)
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/E203.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/E173.c
 ```
 
-**Exercício E204** · ★★★
+**Exercício E174** · ★★★
 
 Um número é capicua (palíndromo) quando se lê igual de trás para frente:
 1221, 343. Escreva:
@@ -845,12 +845,12 @@ Capicuas de 100 a 999: 90
    dígito, que também é o último, vezes 10 para o do meio).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-parametros/E204.c
+~/LPEDC/rodar 04-funcoes/0029-parametros/E174.c
 ```
 
 ---
 
-## 0035 · Escopo e tempo de vida
+## 0030 · Escopo e tempo de vida
 
 No banco, o painel chama a senha 101, depois a 102, depois a 103. Ele
 **lembra** onde parou. Já o atendente que te chama zera a conversa a cada
@@ -885,7 +885,7 @@ Vamos ver na prática. A função `chamar` tem três contadores: a global
 numa região da memória que dura o programa inteiro; a local mora no espaço da
 chamada e some quando a função retorna. Depois de três chamadas, fica assim:
 
-<p align="center"><img src="0035-escopo/ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
+<p align="center"><img src="0030-escopo/ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
 
 No código, repare que `vezes` mostra 1 sempre, enquanto os outros dois
 avançam:
@@ -924,7 +924,7 @@ Repara no fluxograma: a cada chamada, a local é criada de novo com 0, e a
 `static` já está esperando com o valor anterior. Não existe um passo
 "criar senha" dentro da repetição:
 
-<p align="center"><img src="0035-escopo/fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
+<p align="center"><img src="0030-escopo/fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
 
 E as globais? Funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
@@ -934,7 +934,7 @@ use global só para algo que é de fato do programa todo.
 
 Uma última peça: `static` **fora** de função muda outra coisa. Uma global
 `static int total;` continua vivendo o programa todo, mas só pode ser usada
-**naquele arquivo**. Isso vai fazer sentido no assunto 0039, quando o programa
+**naquele arquivo**. Isso vai fazer sentido no assunto 0034, quando o programa
 tiver mais de um `.c`.
 
 > [!WARNING]
@@ -950,7 +950,7 @@ tiver mais de um `.c`.
 > com valor inicial ficam na seção **`.data`**, gravada dentro do próprio
 > executável; as que começam em zero ficam na **`.bss`**, que o sistema zera ao
 > carregar o programa. As locais ficam na **pilha**, um espaço reaproveitado a
-> cada chamada (o próximo assunto). Rode `gcc -c A069.c` e depois `nm A069.o`:
+> cada chamada (o próximo assunto). Rode `gcc -c A059.c` e depois `nm A059.o`:
 > aparecem `atendidos` (B, na `.bss`) e `senha.0` (d, na `.data`). A `vezes`
 > nem aparece: ela não tem lugar fixo.
 
@@ -961,9 +961,9 @@ tiver mais de um `.c`.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0035-escopo/`](0035-escopo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0030-escopo/`](0030-escopo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A069 · O painel de senhas do banco**
+**Exemplo A059 · O painel de senhas do banco**
 
 ```c
 #include <stdio.h>
@@ -996,10 +996,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/A069.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/A059.c
 ```
 
-**Exemplo A070 · Três variáveis com o mesmo nome**
+**Exemplo A060 · Três variáveis com o mesmo nome**
 
 ```c
 #include <stdio.h>
@@ -1039,12 +1039,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/A070.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/A060.c
 ```
 
 #### Exercícios
 
-**Exercício E205** · ★☆☆
+**Exercício E175** · ★☆☆
 
 Preveja as cinco linhas, sem rodar:
 
@@ -1085,10 +1085,10 @@ int main(void) {
 3. Resposta esperada: 10, 25, 40, 25, 10.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/E205.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/E175.c
 ```
 
-**Exercício E206** · ★☆☆
+**Exercício E176** · ★☆☆
 
 O site da sua loja quer contar as visitas. Escreva "int registrar_visita(void)"
 que soma 1 a um contador static e devolve o número da visita. Chame 4 vezes
@@ -1111,10 +1111,10 @@ Visita nº 4
    quatro vezes.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/E206.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/E176.c
 ```
 
-**Exercício E207** · ★★☆
+**Exercício E177** · ★★☆
 
 Este programa deveria somar os quatro itens da compra (R$ 12.50, R$ 8.00,
 R$ 30.00 e R$ 4.75) e mostrar "Total: R$ 55.25". Ele compila sem aviso, mas
@@ -1130,10 +1130,10 @@ de vida, e conserte.
    mostre depois do laço: Total: R$ 55.25.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/E207.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/E177.c
 ```
 
-**Exercício E208** · ★★☆
+**Exercício E178** · ★★☆
 
 O vale-refeição foi escrito com uma variável global. Primeiro preveja a
 saída. Depois refatore: tire a global, faça gastar receber o saldo e
@@ -1181,10 +1181,10 @@ int main(void) {
    global, a taxa fica visível na função que a cobra.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/E208.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/E178.c
 ```
 
-**Exercício E209** · ★★★
+**Exercício E179** · ★★★
 
 Teste de mesa caprichado: preveja as linhas, na ordem.
 
@@ -1252,10 +1252,10 @@ int main(void) {
    c: 10 -> 20 / a: 1 -> 2 / b: 10 -> 15 / c: 20 -> 40 / main: 20.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/E209.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/E179.c
 ```
 
-**Exercício E210** · ★★★
+**Exercício E180** · ★★★
 
 Monte o seu próprio sorteador de dado, sem rand. Ele guarda um "estado" que
 muda a cada sorteio:
@@ -1300,12 +1300,12 @@ Saída esperada:
    mesma sequência: é assim que o rand e o srand funcionam por dentro.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-escopo/E210.c
+~/LPEDC/rodar 04-funcoes/0030-escopo/E180.c
 ```
 
 ---
 
-## 0036 · A pilha de chamadas
+## 0031 · A pilha de chamadas
 
 Quando um programa em C quebra dentro do `gdb`, o comando `bt` mostra algo
 assim:
@@ -1345,7 +1345,7 @@ Vamos ver na prática. Um pedido de R$ 50,00: o `main` chama
 quadros na pilha. Quando `taxa_entrega` devolve 7.90, o quadro dela sai, e
 `total_com_entrega` volta a rodar, já com o valor:
 
-<p align="center"><img src="0036-pilha-de-chamadas/ideia.svg" alt="Diagrama da ideia: A pilha de chamadas" width="928"></p>
+<p align="center"><img src="0031-pilha-de-chamadas/ideia.svg" alt="Diagrama da ideia: A pilha de chamadas" width="928"></p>
 
 O código imprime "entra" e "sai" em cada função, com recuo, e a pilha aparece
 na saída:
@@ -1388,7 +1388,7 @@ Repara no fluxograma: as chamadas empilham na descida, e os retornos
 desempilham na ordem contrária. A decisão da taxa acontece lá no topo, dentro
 de `taxa_entrega`, enquanto as outras duas funções esperam paradas:
 
-<p align="center"><img src="0036-pilha-de-chamadas/fluxograma.svg" alt="Fluxograma: A pilha de chamadas" width="359"></p>
+<p align="center"><img src="0031-pilha-de-chamadas/fluxograma.svg" alt="Fluxograma: A pilha de chamadas" width="359"></p>
 
 ### Passo a passo
 
@@ -1431,9 +1431,9 @@ no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0036-pilha-de-chamadas/`](0036-pilha-de-chamadas/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0031-pilha-de-chamadas/`](0031-pilha-de-chamadas/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A071 · Quem chamou quem no pedido do delivery**
+**Exemplo A061 · Quem chamou quem no pedido do delivery**
 
 ```c
 #include <stdio.h>
@@ -1470,10 +1470,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/A071.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/A061.c
 ```
 
-**Exemplo A072 · A mesma função volta para lugares diferentes**
+**Exemplo A062 · A mesma função volta para lugares diferentes**
 
 ```c
 #include <stdio.h>
@@ -1524,12 +1524,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/A072.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/A062.c
 ```
 
 #### Exercícios
 
-**Exercício E211** · ★☆☆
+**Exercício E181** · ★☆☆
 
 Desenhe (em texto) a pilha de chamadas no momento em que a linha marcada
 com (*) roda. Liste os quadros de baixo para cima, com os parâmetros e as
@@ -1569,10 +1569,10 @@ int main(void) {
    mostra "IMC: 22.2".
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E211.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E181.c
 ```
 
-**Exercício E212** · ★☆☆
+**Exercício E182** · ★☆☆
 
 Preveja a ordem exata das linhas na tela:
 
@@ -1625,10 +1625,10 @@ Qual é o número máximo de quadros na pilha ao mesmo tempo, contando o main?
    c. No máximo 4 quadros.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E212.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E182.c
 ```
 
-**Exercício E213** · ★★☆
+**Exercício E183** · ★★☆
 
 Monte o rastro de uma compra online. Escreva quatro funções que se chamam em
 cadeia: finalizar_compra chama pagar, que chama antifraude, que chama
@@ -1656,10 +1656,10 @@ sai finalizar_compra
 3. Resposta esperada: a saída acima. O recuo é a altura da pilha naquela hora.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E213.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E183.c
 ```
 
-**Exercício E214** · ★★☆
+**Exercício E184** · ★★☆
 
 Cada quadro tem as suas variáveis, mesmo com nomes iguais. Preveja a saída e
 monte uma tabela com o valor de cada "n" e cada "r" em cada quadro.
@@ -1701,10 +1701,10 @@ int main(void) {
 3. Resposta esperada: "processa: n = 5, r = 11" e "main: n = 5, r = 16".
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E214.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E184.c
 ```
 
-**Exercício E215** · ★★★
+**Exercício E185** · ★★★
 
 Um programa de notas travou com divisão por zero. No gdb, o comando bt
 (backtrace) mostrou isto:
@@ -1747,10 +1747,10 @@ e) Escreva um programa com as quatro funções (dividir, media, relatorio e
    duas linhas acima.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E215.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E185.c
 ```
 
-**Exercício E216** · ★★★
+**Exercício E186** · ★★★
 
 Meça a altura da pilha. Use duas globais, "altura" e "maior_altura". Toda
 função, ao entrar, chama entrar() (que soma 1 em altura e atualiza
@@ -1778,12 +1778,12 @@ Altura agora: 1
    se caça esse tipo de erro.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-pilha-de-chamadas/E216.c
+~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E186.c
 ```
 
 ---
 
-## 0037 · Recursão
+## 0032 · Recursão
 
 Cinco amigos vão ao cinema e querem saber de quantos jeitos dá para sentar nas
 cinco cadeiras. O primeiro tem 5 escolhas. Depois que ele senta, o problema
@@ -1810,7 +1810,7 @@ funciona e pergunte só: com essa resposta na mão, como eu monto a de `n`?
 Depois confira o caso base. Se os dois estão certos, a função está certa.
 
 Não tem mágica: cada chamada é uma chamada comum, com o **seu próprio quadro**
-na pilha (assunto 0036). `fatorial(5)` empilha `fatorial(4)`, que empilha
+na pilha (assunto 0031). `fatorial(5)` empilha `fatorial(4)`, que empilha
 `fatorial(3)`... São cinco quadros de `fatorial` ao mesmo tempo, cada um com o
 seu `n`, e todos parados esperando, menos o do topo.
 
@@ -1819,7 +1819,7 @@ caso base e devolve 1 sem chamar ninguém. Na **volta**, cada quadro recebe a
 resposta de cima, faz a sua multiplicação e devolve para o de baixo: 1, 2, 6,
 24, 120:
 
-<p align="center"><img src="0037-recursao/ideia.svg" alt="Diagrama da ideia: Recursão" width="858"></p>
+<p align="center"><img src="0032-recursao/ideia.svg" alt="Diagrama da ideia: Recursão" width="858"></p>
 
 O código é quase a definição matemática:
 
@@ -1848,7 +1848,7 @@ duas voltas. A primeira é a ida (empilha de novo com `n - 1` até o caso
 base); a segunda é a volta (cada quadro esperando faz a sua multiplicação e
 sai):
 
-<p align="center"><img src="0037-recursao/fluxograma.svg" alt="Fluxograma: Recursão" width="620"></p>
+<p align="center"><img src="0032-recursao/fluxograma.svg" alt="Fluxograma: Recursão" width="620"></p>
 
 ### Passo a passo
 
@@ -1893,9 +1893,9 @@ resolve cada metade".
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0037-recursao/`](0037-recursao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0032-recursao/`](0032-recursao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A073 · De quantos jeitos 5 amigos sentam no cinema**
+**Exemplo A063 · De quantos jeitos 5 amigos sentam no cinema**
 
 ```c
 #include <stdio.h>
@@ -1918,10 +1918,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/A073.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/A063.c
 ```
 
-**Exemplo A074 · Imprimir antes ou depois da chamada**
+**Exemplo A064 · Imprimir antes ou depois da chamada**
 
 ```c
 #include <stdio.h>
@@ -1957,12 +1957,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/A074.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/A064.c
 ```
 
 #### Exercícios
 
-**Exercício E217** · ★☆☆
+**Exercício E187** · ★☆☆
 
 Num torneio de vôlei de praia, cada dupla que chega cumprimenta todas as que
 já estão lá. Com 12 duplas, são 0 + 1 + 2 + ... + 11 cumprimentos. Escreva
@@ -1984,10 +1984,10 @@ Cumprimentos com 12 duplas: 66
 3. Resposta esperada: 10, 5050 e 66 (soma_ate(11)).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/E217.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/E187.c
 ```
 
-**Exercício E218** · ★☆☆
+**Exercício E188** · ★☆☆
 
 Complete a função potencia, recursiva, sem laço e sem pow. Hoje ela só
 devolve 0 para o programa compilar. Use: base elevado a 0 é 1; base elevado
@@ -2009,10 +2009,10 @@ Saída esperada:
    de potencia (expoentes de 10 até 0).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/E218.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/E188.c
 ```
 
-**Exercício E219** · ★★☆
+**Exercício E189** · ★★☆
 
 Preveja a saída, linha por linha:
 
@@ -2046,10 +2046,10 @@ int main(void) {
    volta 3.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/E219.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/E189.c
 ```
 
-**Exercício E220** · ★★☆
+**Exercício E190** · ★★☆
 
 Escreva "void binario(int n)", recursiva, que mostra n em binário. A conta
 de dividir por 2 dá os bits de trás para frente (o último resto é o primeiro
@@ -2071,10 +2071,10 @@ Saída esperada:
    de chamar, sai 1011 para o 13: os bits ao contrário.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/E220.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/E190.c
 ```
 
-**Exercício E221** · ★★★
+**Exercício E191** · ★★★
 
 Esta função deveria somar os dígitos de um número (2026 -> 10), mas tem
 DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois. Se você rodar mesmo
@@ -2093,10 +2093,10 @@ conserte.
    Consertado: 2026 -> 10 e 99999 -> 45.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/E221.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/E191.c
 ```
 
-**Exercício E222** · ★★★
+**Exercício E192** · ★★★
 
 A calculadora velha da loja só sabe somar e subtrair. Escreva
 "int multiplicar(int a, int b)", recursiva, que só usa + e - (nada de *),
@@ -2120,12 +2120,12 @@ Saída esperada:
    b < 0. Em todos, b chega mais perto de 0 a cada chamada.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0037-recursao/E222.c
+~/LPEDC/rodar 04-funcoes/0032-recursao/E192.c
 ```
 
 ---
 
-## 0038 · Recursão na prática: Fibonacci, Hanói e Euclides
+## 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 
 A escada do prédio tem 4 degraus, e você sobe de 1 em 1 ou pulando 2 de uma
 vez. De quantos jeitos dá para subir? Pense no último passo: ou você chegou
@@ -2153,7 +2153,7 @@ cada chamada (o número no círculo é o `n`). Os dois nós amarelos são
 `fib(3)`: o mesmo cálculo, com tudo o que vem embaixo dele, feito duas vezes. Mas repare na pilha: ela nunca passa de 5 quadros de `fib`, porque
 o programa desce um galho de cada vez:
 
-<p align="center"><img src="0038-recursao-na-pratica/ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
+<p align="center"><img src="0033-recursao-na-pratica/ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
 
 O programa conta as chamadas com uma global:
 
@@ -2196,7 +2196,7 @@ desconfie.
 Repara no fluxograma: o caso recursivo tem duas chamadas, uma depois da outra.
 A segunda só começa quando a primeira voltou com a resposta inteira:
 
-<p align="center"><img src="0038-recursao-na-pratica/fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
+<p align="center"><img src="0033-recursao-na-pratica/fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
 
 ### Quando a recursão é a melhor ideia: Hanói
 
@@ -2211,7 +2211,7 @@ pensar recursivamente. Para mover `n` discos de A para C:
 
 Os passos 1 e 3 são o mesmo problema com um disco a menos, e com os papéis das
 estacas trocados. Por isso a função recebe as três estacas como parâmetro. O
-exemplo A076 resolve 3 discos em 7 movimentos. Com `n` discos são `2ⁿ - 1`
+exemplo A066 resolve 3 discos em 7 movimentos. Com `n` discos são `2ⁿ - 1`
 movimentos, e não existe jeito mais curto: aqui a recursão não desperdiça
 nada.
 
@@ -2252,9 +2252,9 @@ Euclides é recursão com **uma** chamada só e que encolhe depressa: barata.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0038-recursao-na-pratica/`](0038-recursao-na-pratica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0033-recursao-na-pratica/`](0033-recursao-na-pratica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A075 · Fibonacci: bonito e caro**
+**Exemplo A065 · Fibonacci: bonito e caro**
 
 ```c
 #include <stdio.h>
@@ -2287,10 +2287,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/A075.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/A065.c
 ```
 
-**Exemplo A076 · Torre de Hanói e o MDC de Euclides**
+**Exemplo A066 · Torre de Hanói e o MDC de Euclides**
 
 ```c
 #include <stdio.h>
@@ -2335,12 +2335,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/A076.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/A066.c
 ```
 
 #### Exercícios
 
-**Exercício E223** · ★☆☆
+**Exercício E193** · ★☆☆
 
 A receita pede 84 g de farinha para 36 g de açúcar. Escreva o MDC de
 Euclides, recursivo, "int mdc(int a, int b)", e use-o para simplificar a
@@ -2360,10 +2360,10 @@ mdc(1000, 625) = 125 -> 1000/625 = 8/5
 3. Resposta esperada: 12 e 7/3; 125 e 8/5.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E223.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E193.c
 ```
 
-**Exercício E224** · ★☆☆
+**Exercício E194** · ★☆☆
 
 Quantos movimentos a Torre de Hanói precisa? Para mover n discos você move
 n - 1, depois 1, depois n - 1 de novo. Escreva
@@ -2388,14 +2388,14 @@ Saída esperada:
    movimento por segundo, os 64 discos levariam uns 585 bilhões de anos.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E224.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E194.c
 ```
 
-**Exercício E225** · ★★☆
+**Exercício E195** · ★★☆
 
 Escreva "int fib_rapido(int n)" SEM recursão, com um laço e duas variáveis
 (anterior e atual). Mostre fib(10), fib(40) e fib(46), o maior que cabe num
-int. Depois coloque o fib recursivo do A075 no mesmo arquivo, calcule
+int. Depois coloque o fib recursivo do A065 no mesmo arquivo, calcule
 fib(40) com ele e compare o tempo (no olho mesmo).
 
 
@@ -2415,35 +2415,35 @@ fib(46) = 1836311903
    recursivo faz mais de 300 milhões de chamadas só para fib(40).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E225.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E195.c
 ```
 
-**Exercício E226** · ★★☆
+**Exercício E196** · ★★☆
 
-Sem rodar, responda sobre fib(6) com o código do A075:
+Sem rodar, responda sobre fib(6) com o código do A065:
 
 a) Quanto vale fib(6)?
 b) Quantas chamadas de fib, no total, fib(6) faz (contando a primeira)?
 c) Quantas vezes fib(2) é calculado?
 d) Qual é o maior número de quadros de fib na pilha ao mesmo tempo?
 
-Depois altere o A075 para conferir (b) e (c): conte as chamadas e, numa
+Depois altere o A065 para conferir (b) e (c): conte as chamadas e, numa
 segunda global, só as chamadas com n == 2.
 
 **Dicas:**
 
 1. Chamadas(n) = 1 + Chamadas(n - 1) + Chamadas(n - 2), com Chamadas(0) =
-   Chamadas(1) = 1. Do A075: Chamadas(5) = 15. Falta Chamadas(4).
+   Chamadas(1) = 1. Do A065: Chamadas(5) = 15. Falta Chamadas(4).
 2. fib(6) chama fib(5) e fib(4); conte quantas vezes fib(2) aparece em cada
    uma (em fib(5) são 3).
 3. Resposta esperada: a) 8; b) 25; c) 5; d) 6 (fib(6), fib(5), fib(4),
    fib(3), fib(2), fib(1)).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E226.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E196.c
 ```
 
-**Exercício E227** · ★★★
+**Exercício E197** · ★★★
 
 Exponenciação rápida. Para calcular 3^13 dá para multiplicar 3 por ele mesmo
 12 vezes, mas existe um atalho: se o expoente é par, x^e = (x^(e/2))²; se é
@@ -2478,15 +2478,15 @@ rápida: 2^60 = 1152921504606846976 (9 multiplicações)
    busca binária.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E227.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E197.c
 ```
 
-**Exercício E228** · ★★★
+**Exercício E198** · ★★★
 
 Esta Torre de Hanói compila sem aviso e faz 7 movimentos, mas está errada.
 Siga os movimentos com três pilhas de moedas (ou no papel) e ache o primeiro
 movimento ilegal (disco maior sobre um menor) ou o problema no final.
-Explique o erro e conserte. A saída certa é a do A076.
+Explique o erro e conserte. A saída certa é a do A066.
 
 **Dicas:**
 
@@ -2501,12 +2501,12 @@ Explique o erro e conserte. A saída certa é a do A076.
    está vazia. O certo é hanoi(n - 1, origem, auxiliar, destino).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0038-recursao-na-pratica/E228.c
+~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E198.c
 ```
 
 ---
 
-## 0039 · Módulos: .h, .c e compilação separada
+## 0034 · Módulos: .h, .c e compilação separada
 
 Quando várias partes de um programa precisam converter quilômetros em milhas,
 ninguém cola o código da conversão em cada uma delas. Ele mora num lugar só, e
@@ -2526,16 +2526,16 @@ na pasta do seu `.c`; com `< >`, só nas pastas do sistema.
 
 Cada `.c` é compilado **sozinho**, sem saber que os outros existem. O
 compilador transforma cada um num **arquivo objeto** (`.o`). Quando ele vê a
-chamada `km_para_milhas(100)` em `A077.c`, só sabe que a função existe (o
+chamada `km_para_milhas(100)` em `A067.c`, só sabe que a função existe (o
 protótipo prometeu), e deixa um buraco com o nome dela. Quem tapa o buraco é o
 **ligador** (*linker*), que junta os `.o` e procura cada nome. Isso é a
 **compilação separada**:
 
 ```bash
 gcc -std=c17 -Wall -Wextra -c conversao.c       # gera conversao.o
-gcc -std=c17 -Wall -Wextra -c A077.c            # gera A077.o
-gcc A077.o conversao.o -o viagem                # o ligador junta
-gcc -std=c17 -Wall -Wextra A077.c conversao.c -o viagem   # ou tudo de uma vez
+gcc -std=c17 -Wall -Wextra -c A067.c            # gera A067.o
+gcc A067.o conversao.o -o viagem                # o ligador junta
+gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem   # ou tudo de uma vez
 ```
 
 Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
@@ -2545,7 +2545,7 @@ estiver na pasta (todo arquivo que não se chama `A000.c` ou `E000.c`).
 Vamos ver na prática. O `conversao.h` é incluído pelos dois `.c`. Cada um vira
 um `.o` separado, e o ligador junta os dois no executável `viagem`:
 
-<p align="center"><img src="0039-modulos/ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
+<p align="center"><img src="0034-modulos/ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
 
 O módulo fica na pasta do assunto. O `conversao.h`:
 
@@ -2578,7 +2578,7 @@ int main(void) {
     return 0;
 }
 // Compilando à mão (o rodar faz isso sozinho):
-//   gcc -std=c17 -Wall -Wextra A077.c conversao.c -o viagem
+//   gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem
 // Saída:
 // 30 °C = 86.0 °F
 // 100 km = 62.1 milhas
@@ -2588,7 +2588,7 @@ int main(void) {
 Repara no fluxograma: cada `.c` passa pelo compilador separado, e o erro de
 "função que não existe" só aparece no fim, no ligador:
 
-<p align="center"><img src="0039-modulos/fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
+<p align="center"><img src="0034-modulos/fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
 
 Três peças fecham o assunto:
 
@@ -2618,20 +2618,20 @@ Três peças fecham o assunto:
 > **Por dentro do C:** rode `gcc -c conversao.c` e depois `nm conversao.o`. As
 > funções públicas aparecem com `T` (maiúsculo: visível para os outros); a
 > `contar`, com `t`, e o `contador`, com `b` (minúsculos: `static`, só deste
-> arquivo). Agora `gcc -c A077.c` e `nm A077.o`: as três conversões aparecem
+> arquivo). Agora `gcc -c A067.c` e `nm A067.o`: as três conversões aparecem
 > com `U`, de *undefined*. São os buracos que o ligador tapa. O `.h` não gera
 > nada sozinho: ele só existe para o compilador.
 
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `#include "conversao.h"` do
-> `A077.c`, o programa compila? O que o gcc avisa? E se você apagar só o
+> `A067.c`, o programa compila? O que o gcc avisa? E se você apagar só o
 > `conversao.c` da linha do `gcc`?
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0039-modulos/`](0039-modulos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0034-modulos/`](0034-modulos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A077 · A viagem usando o módulo de conversão**
+**Exemplo A067 · A viagem usando o módulo de conversão**
 
 ```c
 #include <stdio.h>
@@ -2645,7 +2645,7 @@ int main(void) {
     return 0;
 }
 // Compilando à mão (o rodar faz isso sozinho):
-//   gcc -std=c17 -Wall -Wextra A077.c conversao.c -o viagem
+//   gcc -std=c17 -Wall -Wextra A067.c conversao.c -o viagem
 // Saída:
 // 30 °C = 86.0 °F
 // 100 km = 62.1 milhas
@@ -2653,10 +2653,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/A077.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/A067.c
 ```
 
-**Exemplo A078 · O módulo guarda segredos**
+**Exemplo A068 · O módulo guarda segredos**
 
 ```c
 #include <stdio.h>
@@ -2687,12 +2687,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/A078.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/A068.c
 ```
 
 #### Exercícios
 
-**Exercício E229** · ★☆☆
+**Exercício E199** · ★☆☆
 
 Você vai criar o módulo "frete" (frete.h e frete.c). Para cada linha
 abaixo, diga se ela vai no frete.h, no frete.c ou em nenhum dos dois:
@@ -2720,10 +2720,10 @@ h) #include "frete.c"
    um .c.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/E229.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/E199.c
 ```
 
-**Exercício E230** · ★☆☆
+**Exercício E200** · ★☆☆
 
 Use o módulo conversao.h, que está nesta pasta, para mostrar uma tabela de
 temperaturas de 0 °C a 40 °C, de 10 em 10. Não escreva nenhuma fórmula: use
@@ -2746,13 +2746,13 @@ Conversões: 5
 1. O include já está aí embaixo. Um for de 0 a 40, somando 10.
 2. conversoes_feitas() devolve o contador que mora escondido no conversao.c.
 3. Resposta esperada: a tabela acima e "Conversões: 5". À mão, o comando
-   seria: gcc -std=c17 -Wall -Wextra E230.c conversao.c -o tabela
+   seria: gcc -std=c17 -Wall -Wextra E200.c conversao.c -o tabela
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/E230.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/E200.c
 ```
 
-**Exercício E231** · ★★☆
+**Exercício E201** · ★★☆
 
 O app de academia tem três arquivos: main.c, treino.c e treino.h (o main.c
 e o treino.c incluem o treino.h). Responda:
@@ -2784,10 +2784,10 @@ d) Por que o treino.h não aparece em nenhum comando?
    dentro de cada .c. (Ferramentas como o make fazem essas contas por você.)
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/E231.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/E201.c
 ```
 
-**Exercício E232** · ★★☆
+**Exercício E202** · ★★☆
 
 Este programa NÃO gera o executável, de propósito. Ele imita um módulo num
 arquivo só: o protótipo em cima (como se viesse de um desconto.h) e a
@@ -2806,10 +2806,10 @@ deixou passar? Conserte.
    aplicar_desconto. Acertando o nome: "Tênis: R$ 239.92".
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/E232.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/E202.c
 ```
 
-**Exercício E233** · ★★★
+**Exercício E203** · ★★★
 
 Um projeto de placar tem dois arquivos, compilados juntos com
 "gcc placar.c main.c -o placar":
@@ -2867,10 +2867,10 @@ e) Qual a vantagem de gols ser static e ter a função total_gols?
    marcar_gol: o módulo controla o próprio dado.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/E233.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/E203.c
 ```
 
-**Exercício E234** · ★★★
+**Exercício E204** · ★★★
 
 Escreva o módulo "cofrinho" num arquivo só, já organizado como se fosse
 virar cofrinho.h e cofrinho.c: um bloco de protótipos em cima (marcado
@@ -2913,12 +2913,12 @@ verdade (com o include guard), e o que ficaria só no cofrinho.c?
    os corpos das funções.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0039-modulos/E234.c
+~/LPEDC/rodar 04-funcoes/0034-modulos/E204.c
 ```
 
 ---
 
-## 0040 · Pré-processador: macros e #ifdef
+## 0035 · Pré-processador: macros e #ifdef
 
 Sabe o "localizar e substituir" do VS Code? Troca todo `TAXA` por `0.05` no
 arquivo inteiro, sem entender nada do que está escrito. O **pré-processador**
@@ -2949,7 +2949,7 @@ O texto `QUAD_RUIM(lado + 3)` passa pelo pré-processador e chega ao compilador
 como `lado + 3 * lado + 3`, que dá 11. A versão com parênteses chega como
 `((lado + 3) * (lado + 3))` e dá 25:
 
-<p align="center"><img src="0040-preprocessador/ideia.svg" alt="Diagrama da ideia: Pré-processador: macros e #ifdef" width="858"></p>
+<p align="center"><img src="0035-preprocessador/ideia.svg" alt="Diagrama da ideia: Pré-processador: macros e #ifdef" width="858"></p>
 
 O mesmo exemplo em C, com mais uma armadilha, a da divisão:
 
@@ -2982,7 +2982,7 @@ Repara no fluxograma: o pré-processador não pergunta nada sobre o C. Ele só
 procura o nome da macro e troca. Quem descobre o erro (quando descobre) é o
 compilador, olhando um código que você nem escreveu:
 
-<p align="center"><img src="0040-preprocessador/fluxograma.svg" alt="Fluxograma: Pré-processador: macros e #ifdef" width="365"></p>
+<p align="center"><img src="0035-preprocessador/fluxograma.svg" alt="Fluxograma: Pré-processador: macros e #ifdef" width="365"></p>
 
 O pré-processador também decide **o que entra** no programa, com a
 **compilação condicional**:
@@ -3000,7 +3000,7 @@ compilador: o executável fica sem nenhum vestígio dela. Existem também
 código: `gcc -DDEPURAR programa.c`. Um truque útil: `#if 0` ... `#endif` desliga
 um trecho inteiro, mesmo que ele tenha comentários `/* */` dentro.
 
-Ferramentas que o exemplo A080 usa:
+Ferramentas que o exemplo A070 usa:
 
 - `__LINE__` vira o número da linha, e `__func__` o nome da função atual. Os
   dois são ótimos em mensagens de depuração.
@@ -3016,7 +3016,7 @@ Ferramentas que o exemplo A080 usa:
 > linha que parece perfeita.
 
 > [!TIP]
-> **Por dentro do C:** rode `gcc -E A079.c | tail -12` e veja o que o
+> **Por dentro do C:** rode `gcc -E A069.c | tail -12` e veja o que o
 > compilador recebe de verdade: `printf(..., lado + 3 * lado + 3)`, sem
 > nenhuma macro. Por isso macro não aparece no depurador e não tem endereço.
 > Para cálculos, o C moderno prefere funções pequenas: com `gcc -O2`, o
@@ -3031,9 +3031,9 @@ Ferramentas que o exemplo A080 usa:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0040-preprocessador/`](0040-preprocessador/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0035-preprocessador/`](0035-preprocessador/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A079 · A macro que esqueceu os parênteses**
+**Exemplo A069 · A macro que esqueceu os parênteses**
 
 ```c
 #include <stdio.h>
@@ -3061,10 +3061,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/A079.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/A069.c
 ```
 
-**Exemplo A080 · Modo depuração com #ifdef**
+**Exemplo A070 · Modo depuração com #ifdef**
 
 ```c
 #include <stdio.h>
@@ -3098,12 +3098,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/A080.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/A070.c
 ```
 
 #### Exercícios
 
-**Exercício E235** · ★☆☆
+**Exercício E205** · ★☆☆
 
 Para cada linha, escreva como o pré-processador expande a macro e o valor
 que o printf mostra. Só depois rode.
@@ -3132,10 +3132,10 @@ printf("%d\n", 100 + TAXA * 2);
    = 7; 100 + 10 * 2 = 120.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/E235.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/E205.c
 ```
 
-**Exercício E236** · ★☆☆
+**Exercício E206** · ★☆☆
 
 Escreva três macros à prova de precedência e teste com os valores abaixo:
 
@@ -3166,10 +3166,10 @@ ENTRE(25, 10, 20) = 0
 3. Resposta esperada: a saída acima. ABS(x) fica ((x) < 0 ? -(x) : (x)).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/E236.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/E206.c
 ```
 
-**Exercício E237** · ★★☆
+**Exercício E207** · ★★☆
 
 O sistema da lanchonete tem dois erros, os dois nos #define. Um deles impede
 a compilação; o outro compila e dá a conta errada. Rode, leia o erro (que
@@ -3193,10 +3193,10 @@ Dois combos: R$ 60.00
    dois combos davam 55.00.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/E237.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/E207.c
 ```
 
-**Exercício E238** · ★★☆
+**Exercício E208** · ★★☆
 
 Escreva um simulador de parcelas com modo de teste. Uma compra de R$ 1000.00
 em 4 parcelas com juros de 2% ao mês: cada parcela é o valor original
@@ -3231,10 +3231,10 @@ Total: R$ 1050.00
    nem chega ao compilador: rode gcc -E e confira.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/E238.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/E208.c
 ```
 
-**Exercício E239** · ★★★
+**Exercício E209** · ★★★
 
 A macro avalia o argumento cada vez que ele aparece. Preveja a saída:
 
@@ -3311,10 +3311,10 @@ int main(void) {
    devolve 6 e vira 7.)
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/E239.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/E209.c
 ```
 
-**Exercício E240** · ★★★
+**Exercício E210** · ★★★
 
 Monte um mini-framework de testes em C. Escreva a macro CONFERIR(cond), que mostra
 "ok: <cond>" se a condição for verdadeira e "FALHOU: <cond> (linha N)" se
@@ -3349,12 +3349,12 @@ Falhas: 1
    condição que falhou.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0040-preprocessador/E240.c
+~/LPEDC/rodar 04-funcoes/0035-preprocessador/E210.c
 ```
 
 ---
 
-## 0041 · Juntando tudo: o caixa da lanchonete
+## 0036 · Juntando tudo: o caixa da lanchonete
 
 Sexta à noite, fila no food truck. O caixa lança os pedidos pelo código, soma,
 põe os 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
@@ -3370,10 +3370,10 @@ que ela faz:
 | --- | --- | --- |
 | `mostrar_cardapio`, `preco_centavos`, `mostrar_item` | `cardapio.c` | módulo `.h`/`.c`, `switch` |
 | `itens_vendidos` | `cardapio.c` | global `static`: só o módulo mexe |
-| `ler_codigo` | `A081.c` | validação com `do...while` e retorno do `scanf` |
-| `proxima_nota` | `A081.c` | função pura: entra uma nota, sai a seguinte |
-| `dar_troco` | `A081.c` | recursão: caso base "troco zerado" |
-| `TAXA_SERVICO` | `A081.c` | `#define` |
+| `ler_codigo` | `A071.c` | validação com `do...while` e retorno do `scanf` |
+| `proxima_nota` | `A071.c` | função pura: entra uma nota, sai a seguinte |
+| `dar_troco` | `A071.c` | recursão: caso base "troco zerado" |
+| `TAXA_SERVICO` | `A071.c` | `#define` |
 
 Uma decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira
 `790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3`, e o troco de
@@ -3390,7 +3390,7 @@ Vamos ver na prática. Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço,
 a conta é R$ 42,24. Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 5 + 2 + 0,50 + 0,25 + 0,01:
 
-<p align="center"><img src="0041-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
+<p align="center"><img src="0036-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
 
 O programa principal. O `cardapio.h` e o `cardapio.c` estão na pasta do
 assunto, e o `rodar` compila o módulo junto:
@@ -3497,17 +3497,17 @@ int main(void) {
 //   0.50
 //   0.25
 //   0.01
-// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/A081.c
+// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
 ```
 
 Repara no fluxograma: o laço dos pedidos termina com o código 0; depois vêm a
 conta, o pagamento e a decisão "pagou o suficiente?". O troco, que parece um
 laço, é a recursão de `dar_troco`:
 
-<p align="center"><img src="0041-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
+<p align="center"><img src="0036-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
 
-O exemplo A082 mostra o outro lado de dividir em funções: dá para **testar
-cada peça sozinha**. Com a macro `CONFERIR` (a do exercício E240), ele confere
+O exemplo A072 mostra o outro lado de dividir em funções: dá para **testar
+cada peça sozinha**. Com a macro `CONFERIR` (a do exercício E210), ele confere
 o preço, o contador `static` e a contagem de notas sem digitar nada. Não
 precisa de biblioteca de testes: uma macro de dez linhas resolve.
 
@@ -3536,9 +3536,9 @@ precisa de biblioteca de testes: uma macro de dez linhas resolve.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0041-juntando-tudo/`](0041-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0036-juntando-tudo/`](0036-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A081 · O caixa da lanchonete**
+**Exemplo A071 · O caixa da lanchonete**
 
 ```c
 #include <math.h>
@@ -3642,14 +3642,14 @@ int main(void) {
 //   0.50
 //   0.25
 //   0.01
-// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/A081.c
+// Para testar sem digitar: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/A081.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
 ```
 
-**Exemplo A082 · Testando as peças do caixa**
+**Exemplo A072 · Testando as peças do caixa**
 
 ```c
 #include <stdio.h>
@@ -3716,12 +3716,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/A082.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A072.c
 ```
 
 #### Exercícios
 
-**Exercício E241** · ★☆☆
+**Exercício E211** · ★☆☆
 
 Escreva "int ler_inteiro_entre(int min, int max)", que pede um número e
 insiste até ele estar entre min e max. Se o scanf falhar (entrada acabou ou
@@ -3742,7 +3742,7 @@ Nota 8, quantidade 3
 Para testar sem digitar:
 
 ```text
-printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E241.c
+printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E211.c
 ```
 
 **Dicas:**
@@ -3754,10 +3754,10 @@ printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E241.c
    função serve para as duas leituras: é para isso que parâmetros existem.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E241.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E211.c
 ```
 
-**Exercício E242** · ★☆☆
+**Exercício E212** · ★☆☆
 
 Refatore o programa abaixo: a mesma conta e a mesma classificação aparecem
 três vezes. Crie "double imc(double peso, double altura)" e
@@ -3781,10 +3781,10 @@ Pessoa 3: IMC 17.6 (abaixo)
    mudar (o limite de 25 virar 24.9), agora você muda num lugar só.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E242.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E212.c
 ```
 
-**Exercício E243** · ★★☆
+**Exercício E213** · ★★☆
 
 O app de hábitos mostra "dia 291 de 365". Escreva três funções que se
 apoiam umas nas outras:
@@ -3814,10 +3814,10 @@ Saída esperada:
 3. Resposta esperada: 291, 61, 366 e inválida (2023 não é bissexto).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E243.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E213.c
 ```
 
-**Exercício E244** · ★★☆
+**Exercício E214** · ★★☆
 
 Tudo do módulo num programa só. Preveja a saída:
 
@@ -3886,12 +3886,12 @@ int main(void) {
    DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E244.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E214.c
 ```
 
-**Exercício E245** · ★★★
+**Exercício E215** · ★★★
 
-Generalize o binário recursivo (E220) para qualquer base de 2 a 16. Escreva:
+Generalize o binário recursivo (E190) para qualquer base de 2 a 16. Escreva:
 
 
 ```text
@@ -3922,10 +3922,10 @@ Saída esperada:
    = 2026.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E245.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E215.c
 ```
 
-**Exercício E246** · ★★★
+**Exercício E216** · ★★★
 
 O entregador sai da esquina (0, 0) e vai até (colunas, linhas) numa cidade em
 grade, andando só para a direita ou para baixo. Quantos caminhos diferentes
@@ -3960,7 +3960,7 @@ resultado? O que se repete, como no Fibonacci?
    assunto do próximo módulo.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0041-juntando-tudo/E246.c
+~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E216.c
 ```
 
 ---
@@ -4020,7 +4020,7 @@ Um `static int` em cada função resolve a contagem, mas `relatorio` não enxerg
 o `static` de outra função. Saída: cada função aceita um parâmetro "só
 consultar" (`int contar(bool so_ler)`) que devolve o contador sem somar, ou o
 trio vai para um módulo com contadores `static` de arquivo e funções de
-consulta, como o `conversoes_feitas` do assunto 0039.
+consulta, como o `conversoes_feitas` do assunto 0034.
 
 </details>
 

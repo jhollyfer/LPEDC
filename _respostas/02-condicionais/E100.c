@@ -1,25 +1,18 @@
-// 0017 · Relacionais e a verdade em C
+// 0017 · Ternário: condição ? a : b
 // Exercício E100 · ★★☆
-//
-// Resposta: 0.1 não tem representação exata em binário; 0.1 * 7 fica
-// 0.70000000000000006661, e o == compara bit a bit com 0.7 (que também é
-// aproximado, mas de outro jeito). Abaixo, os dois consertos.
 
-#include <math.h>
-#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    // (a) tolerância
-    double preco = 0.7;
-    double pago = 0.1 * 7;
-    bool exato = fabs(pago - preco) < 1e-9;
-    printf("Pagou o valor exato? %d\n", exato);
+    int a, b, c;
+    printf("Notas: ");
+    if (scanf("%d %d %d", &a, &b, &c) != 3) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
-    // (b) centavos em int: conta exata
-    int preco_centavos = 70;
-    int pago_centavos = 7 * 10;
-    bool exato_centavos = pago_centavos == preco_centavos;
-    printf("Pagou o valor exato? %d\n", exato_centavos);
+    int maior = a > b ? a : b;
+    maior = c > maior ? c : maior;
+    printf("Maior nota: %d\n", maior);
     return 0;
 }

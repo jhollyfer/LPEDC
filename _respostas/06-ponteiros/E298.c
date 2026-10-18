@@ -1,20 +1,24 @@
-// 0050 · Ponteiros
+// 0050 · Ponteiro para função
 // Exercício E298 · ★★☆
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int alfabetica(const void *a, const void *b) {
+    const char *x = *(const char * const *)a;
+    const char *y = *(const char * const *)b;
+    return strcmp(x, y);
+}
 
 int main(void) {
-    int mala_azul = 19, mala_preta = 26;
-    int *pesada = NULL;
+    const char *frutas[] = {"manga", "abacaxi", "caju", "banana", "acerola"};
+    int n = (int)(sizeof frutas / sizeof frutas[0]);
 
-    if (mala_azul > mala_preta) {
-        pesada = &mala_azul;
-    } else {
-        pesada = &mala_preta;
+    qsort(frutas, (size_t)n, sizeof frutas[0], alfabetica);
+    for (int i = 0; i < n; i++) {
+        printf("%s ", frutas[i]);
     }
-    printf("Mais pesada: %d kg\n", *pesada);
-    *pesada -= 4;
-
-    printf("Depois de tirar 4 kg: azul %d kg, preta %d kg\n", mala_azul, mala_preta);
+    printf("\n");
     return 0;
 }

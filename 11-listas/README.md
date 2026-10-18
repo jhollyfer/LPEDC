@@ -55,15 +55,15 @@ usa; vermelho, o nó que vai embora.
 ## Antes de começar
 
 Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`
-(módulo 07), structs e `->` (módulo 08) e no padrão TAD (assunto 0079). Se
-`No **inicio` ainda assusta, releia o assunto 0054 antes do 0082.
+(módulo 07), structs e `->` (módulo 08) e no padrão TAD (assunto 0074). Se
+`No **inicio` ainda assusta, releia o assunto 0049 antes do 0077.
 
 Cada pasta de assunto traz um `lista.h` (a interface) e um `lista.c` (a
 implementação). O `rodar` compila o `lista.c` junto com o exemplo ou o
 exercício automaticamente, porque ele está na mesma pasta:
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/A161.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
 ```
 
 Por isso, nos exercícios, não dê às suas funções o mesmo nome de uma função
@@ -78,17 +78,17 @@ Os exercícios que usam outra estrutura trazem tudo no próprio arquivo.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0080](#0080--vetor-dinâmico) | Vetor dinâmico | [`0080-vetor-dinamico/`](0080-vetor-dinamico/) |
-| [0081](#0081--lista-encadeada) | Lista encadeada | [`0081-lista-encadeada/`](0081-lista-encadeada/) |
-| [0082](#0082--busca-e-remoção) | Busca e remoção | [`0082-lista-busca-remocao/`](0082-lista-busca-remocao/) |
-| [0083](#0083--lista-ordenada) | Lista ordenada | [`0083-lista-ordenada/`](0083-lista-ordenada/) |
-| [0084](#0084--lista-dupla) | Lista dupla | [`0084-lista-dupla/`](0084-lista-dupla/) |
-| [0085](#0085--lista-circular) | Lista circular | [`0085-lista-circular/`](0085-lista-circular/) |
-| [0086](#0086--juntando-tudo) | Juntando tudo | [`0086-juntando-tudo/`](0086-juntando-tudo/) |
+| [0075](#0075--vetor-dinâmico) | Vetor dinâmico | [`0075-vetor-dinamico/`](0075-vetor-dinamico/) |
+| [0076](#0076--lista-encadeada) | Lista encadeada | [`0076-lista-encadeada/`](0076-lista-encadeada/) |
+| [0077](#0077--busca-e-remoção) | Busca e remoção | [`0077-lista-busca-remocao/`](0077-lista-busca-remocao/) |
+| [0078](#0078--lista-ordenada) | Lista ordenada | [`0078-lista-ordenada/`](0078-lista-ordenada/) |
+| [0079](#0079--lista-dupla) | Lista dupla | [`0079-lista-dupla/`](0079-lista-dupla/) |
+| [0080](#0080--lista-circular) | Lista circular | [`0080-lista-circular/`](0080-lista-circular/) |
+| [0081](#0081--juntando-tudo) | Juntando tudo | [`0081-juntando-tudo/`](0081-juntando-tudo/) |
 
 ---
 
-## 0080 · Vetor dinâmico
+## 0075 · Vetor dinâmico
 
 Você vai passar o fim de semana na praia e quer anotar cada despesa da
 viagem: o café, o estacionamento, o almoço. Quantas serão? Não dá para saber.
@@ -105,12 +105,12 @@ endereço do vetor no heap (`itens`), quantos itens estão em uso (`tam`) e
 quantos cabem (`cap`). Enquanto `tam < cap`, inserir no fim é só escrever em
 `itens[tam]`.
 
-Quando `tam == cap`, o vetor está cheio. Aí entra o `realloc` (assunto 0060):
+Quando `tam == cap`, o vetor está cheio. Aí entra o `realloc` (assunto 0055):
 ele pede um bloco maior, copia os itens e devolve o bloco antigo. A pergunta
 é: maior quanto? A resposta clássica é **dobrar a capacidade**. Você vai ver
 no "Por dentro do C" por que crescer de um em um é uma péssima ideia.
 
-O pacote todo vira um **TAD** (assunto 0079): `lista.h` diz **o que** a lista
+O pacote todo vira um **TAD** (assunto 0074): `lista.h` diz **o que** a lista
 faz e `lista.c` diz **como**. A `struct lista` fica escondida no `.c`, então
 quem usa a lista nunca mexe em `tam` na mão. O `rodar` compila o `lista.c`
 junto com o exemplo, porque ele está na mesma pasta.
@@ -119,7 +119,7 @@ Vamos ver na prática. A lista começa com espaço para 2 despesas. A 3ª dobra
 para 4 e a 5ª, o R$ 27, encontra o vetor cheio de novo: o `realloc` dobra
 para 8, copia os quatro valores e ainda sobram três vagas:
 
-<p align="center"><img src="0080-vetor-dinamico/ideia.svg" alt="Diagrama da ideia: Vetor dinâmico" width="858"></p>
+<p align="center"><img src="0075-vetor-dinamico/ideia.svg" alt="Diagrama da ideia: Vetor dinâmico" width="858"></p>
 
 O coração do `lista.c` é a função que garante espaço antes de cada inserção:
 
@@ -193,10 +193,10 @@ do 27 a resposta é Sim, o vetor dobra e só depois o valor entra em
 `itens[4]`. Se o `realloc` falhar, a função avisa com `false` e a lista
 continua inteira:
 
-<p align="center"><img src="0080-vetor-dinamico/fluxograma.svg" alt="Fluxograma: Vetor dinâmico" width="510"></p>
+<p align="center"><img src="0075-vetor-dinamico/fluxograma.svg" alt="Fluxograma: Vetor dinâmico" width="510"></p>
 
 O preço do vetor aparece quando você insere ou remove **no meio**: todo mundo
-que vem depois precisa andar uma casa (o exemplo A160 mostra). Ler a posição
+que vem depois precisa andar uma casa (o exemplo A150 mostra). Ler a posição
 `i`, por outro lado, é instantâneo: `itens[i]` é uma conta de endereço.
 
 > [!WARNING]
@@ -222,9 +222,9 @@ que vem depois precisa andar uma casa (o exemplo A160 mostra). Ler a posição
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0080-vetor-dinamico/`](0080-vetor-dinamico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0075-vetor-dinamico/`](0075-vetor-dinamico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A159 · As despesas da viagem numa lista que cresce**
+**Exemplo A149 · As despesas da viagem numa lista que cresce**
 
 ```c
 #include <stdio.h>
@@ -264,10 +264,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/A159.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/A149.c
 ```
 
-**Exemplo A160 · Inserir e remover no meio: todo mundo se mexe**
+**Exemplo A150 · Inserir e remover no meio: todo mundo se mexe**
 
 ```c
 #include <stdio.h>
@@ -310,12 +310,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/A160.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/A150.c
 ```
 
 #### Exercícios
 
-**Exercício E475** · ★☆☆
+**Exercício E445** · ★☆☆
 
 O medidor de glicose da sua mãe registrou estas leituras na semana (mg/dL):
 98, 110, 87, 132, 105, 91. Usando só as funções de lista.h, crie uma lista
@@ -341,10 +341,10 @@ maior: 132
    chegou a 5ª leitura. Não esqueça do lista_libera no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/E475.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E445.c
 ```
 
-**Exercício E476** · ★☆☆
+**Exercício E446** · ★☆☆
 
 Sem rodar, preveja as linhas que este programa mostra. Anote em cada
 passo como está o vetor por dentro (itens, tam e cap). Depois rode e
@@ -367,10 +367,10 @@ O código está no arquivo, logo abaixo deste enunciado.
    E: tam 5, cap 8
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/E476.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E446.c
 ```
 
-**Exercício E477** · ★★☆
+**Exercício E447** · ★★☆
 
 O pluviômetro da escola anota a chuva do dia em mm, e grava -1 quando o
 sensor falha. Complete as duas funções usando SÓ a interface de lista.h:
@@ -403,10 +403,10 @@ depois: [4, 0, 12, 7]
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/E477.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E447.c
 ```
 
-**Exercício E478** · ★★☆
+**Exercício E448** · ★★☆
 
 Existem dois jeitos de tirar um item do meio de uma lista sequencial:
 
@@ -442,10 +442,10 @@ posto de saúde? E para os itens de um carrinho de compras?
    deslocando. No carrinho, a ordem não importa: trocando, que é O(1).
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/E478.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E448.c
 ```
 
-**Exercício E479** · ★★★
+**Exercício E449** · ★★★
 
 Este programa guarda as velocidades medidas por um radar num vetor que
 cresce. Ele compila sem aviso, mas tem TRÊS problemas de propósito: dois o
@@ -473,10 +473,10 @@ primeiro: 40
    a POSIÇÃO (índice 0) em vez do endereço, lendo v.itens[0] no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/E479.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E449.c
 ```
 
-**Exercício E480** · ★★★
+**Exercício E450** · ★★★
 
 Um vetor que só cresce nunca devolve memória: se um dia guardou um milhão
 de itens e agora guarda três, continua ocupando um milhão. Complete
@@ -515,12 +515,12 @@ empurra, tira..." para sempre.
    Com 1/4, depois de encolher sobra folga para os dois lados.
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-vetor-dinamico/E480.c
+~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E450.c
 ```
 
 ---
 
-## 0081 · Lista encadeada
+## 0076 · Lista encadeada
 
 Abra o extrato do Pix no app do banco: o mais recente aparece em cima. Cada
 Pix novo entra na frente, e ninguém precisa empurrar os antigos para baixo.
@@ -582,7 +582,7 @@ frente, então o extrato mostra o 80 primeiro. Embaixo, a mesma lista como ela
 está de verdade no heap: endereços fora de ordem, com outros dados no meio, e
 cada nó guardando o endereço do próximo:
 
-<p align="center"><img src="0081-lista-encadeada/ideia.svg" alt="Diagrama da ideia: Lista encadeada" width="858"></p>
+<p align="center"><img src="0076-lista-encadeada/ideia.svg" alt="Diagrama da ideia: Lista encadeada" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -617,7 +617,7 @@ Repara no fluxograma: percorrer é um laço que pergunta "ainda tem nó?" antes
 de cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
 `NULL`. Aí o laço para, com o total em R$ 155:
 
-<p align="center"><img src="0081-lista-encadeada/fluxograma.svg" alt="Fluxograma: Lista encadeada" width="543"></p>
+<p align="center"><img src="0076-lista-encadeada/fluxograma.svg" alt="Fluxograma: Lista encadeada" width="543"></p>
 
 > [!WARNING]
 > `lista_insere_inicio(extrato, 20);` sozinho, sem o `extrato =` na frente,
@@ -645,9 +645,9 @@ de cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0081-lista-encadeada/`](0081-lista-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0076-lista-encadeada/`](0076-lista-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A161 · O extrato do Pix, do mais novo para o mais antigo**
+**Exemplo A151 · O extrato do Pix, do mais novo para o mais antigo**
 
 ```c
 #include <stdio.h>
@@ -679,10 +679,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/A161.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
 ```
 
-**Exemplo A162 · Inserir no fim com um ponteiro para o último**
+**Exemplo A152 · Inserir no fim com um ponteiro para o último**
 
 ```c
 #include <stdio.h>
@@ -724,12 +724,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/A162.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/A152.c
 ```
 
 #### Exercícios
 
-**Exercício E481** · ★☆☆
+**Exercício E451** · ★☆☆
 
 O app do banco quer destacar os Pix "grandes". Monte o extrato inserindo
 no início os Pix 30, 75, 12, 50, 120 e 64 (nesta ordem), mostre a lista e
@@ -759,10 +759,10 @@ Saída esperada:
 4. Resposta esperada: a saída acima (64, 120 e 75). Libere a lista no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/E481.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/E451.c
 ```
 
-**Exercício E482** · ★☆☆
+**Exercício E452** · ★☆☆
 
 Sem rodar, preveja as cinco linhas que este programa mostra. Desenhe os
 nós e as setas no papel: é o jeito certo de pensar em lista. Depois
@@ -788,10 +788,10 @@ O código está no arquivo, logo abaixo deste enunciado.
    Por isso só o nó 99 sai com free(outra).
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/E482.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/E452.c
 ```
 
-**Exercício E483** · ★★☆
+**Exercício E453** · ★★☆
 
 Os preços do hortifruti chegaram num vetor: {5, 18, 7, 22, 9}. Escreva:
 
@@ -823,10 +823,10 @@ vetor: 5 18 7 22 9
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/E483.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/E453.c
 ```
 
-**Exercício E484** · ★★☆
+**Exercício E454** · ★★☆
 
 Uma lista é NULL ou um nó seguido de outra lista. Essa definição é
 recursiva, e as funções também podem ser. O extrato recebeu os Pix 15, 60,
@@ -857,10 +857,10 @@ tamanho (recursivo): 5
    printf("mais novo primeiro: ") seguido de lista_imprime.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/E484.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/E454.c
 ```
 
-**Exercício E485** · ★★★
+**Exercício E455** · ★★★
 
 A cartela de fidelidade da padaria guarda os pontos de cada compra numa
 lista. O programa tem DOIS erros de propósito. Rode, leia o aviso do gcc,
@@ -885,10 +885,10 @@ total de pontos: 26
    em libera_tudo, guardar p->prox numa variável antes do free.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/E485.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/E455.c
 ```
 
-**Exercício E486** · ★★★
+**Exercício E456** · ★★★
 
 A fila de embarque foi montada ao contrário: 5 -> 4 -> 3 -> 2 -> 1.
 Escreva No *inverte(No *inicio), que inverte a lista SÓ MEXENDO NOS
@@ -915,12 +915,12 @@ um só:  7 -> NULL
    extra.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-lista-encadeada/E486.c
+~/LPEDC/rodar 11-listas/0076-lista-encadeada/E456.c
 ```
 
 ---
 
-## 0082 · Busca e remoção
+## 0077 · Busca e remoção
 
 Sábado de manhã, barbearia lotada. Cada cliente pega uma senha e o barbeiro
 anota numa lista: 31, 17, 42, 8. Aí o 42 cansa de esperar e vai embora. Ele
@@ -955,7 +955,7 @@ Achado o nó, há dois casos:
 
 Nos dois casos, só depois de religar vem o `free(p)`. Como remover o primeiro
 muda o início e a função ainda quer devolver se achou ou não, ela recebe o
-**endereço** do início: `No **inicio` (ponteiro para ponteiro, assunto 0054).
+**endereço** do início: `No **inicio` (ponteiro para ponteiro, assunto 0049).
 No assunto anterior a inserção devolvia o início novo. São os dois estilos que
 você vai encontrar por aí.
 
@@ -982,7 +982,7 @@ Vamos ver na prática. Para tirar o 42, o laço para com `p` no 42 e `ant` no
 17. Uma única atribuição desvia a seta do 17 para o 8, e o nó do 42, que
 ninguém mais aponta, volta para o heap:
 
-<p align="center"><img src="0082-lista-busca-remocao/ideia.svg" alt="Diagrama da ideia: Busca e remoção" width="858"></p>
+<p align="center"><img src="0077-lista-busca-remocao/ideia.svg" alt="Diagrama da ideia: Busca e remoção" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -1026,9 +1026,9 @@ Repara no fluxograma: o laço anda até achar o 42 ou a lista acabar. Achou, e
 como `ant` não é `NULL` (é o 17), o caminho vai pelo `ant->prox = p->prox`.
 Na remoção do 31, o caminho seria o outro, `início = p->prox`:
 
-<p align="center"><img src="0082-lista-busca-remocao/fluxograma.svg" alt="Fluxograma: Busca e remoção" width="733"></p>
+<p align="center"><img src="0077-lista-busca-remocao/fluxograma.svg" alt="Fluxograma: Busca e remoção" width="733"></p>
 
-O exemplo A164 mostra um truque para sumir com o caso especial: o
+O exemplo A154 mostra um truque para sumir com o caso especial: o
 **nó-cabeça**, um nó "de mentira" no começo. Com ele, todo nó de verdade tem
 um anterior, e o primeiro deixa de ser especial.
 
@@ -1036,7 +1036,7 @@ um anterior, e o primeiro deixa de ser especial.
 > A ordem do `&&` importa. `while (p->valor != valor && p != NULL)` lê
 > `p->valor` **antes** de saber se `p` é `NULL`. Quando o valor não está na
 > lista, `p` vira `NULL` e o programa quebra. Com `p != NULL` primeiro, o
-> curto-circuito (assunto 0018) nem chega a olhar o `p->valor`. E nunca
+> curto-circuito (assunto 0013) nem chega a olhar o `p->valor`. E nunca
 > inverta "religar" e "liberar": depois do `free(p)`, `p->prox` não é mais
 > seu.
 
@@ -1057,9 +1057,9 @@ um anterior, e o primeiro deixa de ser especial.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0082-lista-busca-remocao/`](0082-lista-busca-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0077-lista-busca-remocao/`](0077-lista-busca-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A163 · A fila de espera da barbearia**
+**Exemplo A153 · A fila de espera da barbearia**
 
 ```c
 #include <stdio.h>
@@ -1100,10 +1100,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/A163.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/A153.c
 ```
 
-**Exemplo A164 · Nó-cabeça: a remoção sem caso especial**
+**Exemplo A154 · Nó-cabeça: a remoção sem caso especial**
 
 ```c
 #include <stdio.h>
@@ -1155,12 +1155,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/A164.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/A154.c
 ```
 
 #### Exercícios
 
-**Exercício E487** · ★☆☆
+**Exercício E457** · ★☆☆
 
 A fila do açougue tem as senhas 33 -> 40 -> 7 -> 25 -> 12 (monte inserindo
 no início 12, 25, 7, 40 e 33). Escreva
@@ -1196,10 +1196,10 @@ senha 50 não está na fila
    33 a resposta é 1, e para o 12, 5.
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/E487.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E457.c
 ```
 
-**Exercício E488** · ★☆☆
+**Exercício E458** · ★☆☆
 
 Sem rodar, preveja tudo o que este programa mostra. A lista tem valores
 repetidos, e é aí que mora a graça. Depois rode e confira.
@@ -1221,10 +1221,10 @@ O código está no arquivo, logo abaixo deste enunciado.
    2
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/E488.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E458.c
 ```
 
-**Exercício E489** · ★★☆
+**Exercício E459** · ★★☆
 
 O sensor de temperatura da estufa grava 0 quando falha. Escreva
 
@@ -1257,10 +1257,10 @@ só falhas: NULL (2 removidas)
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/E489.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E459.c
 ```
 
-**Exercício E490** · ★★☆
+**Exercício E460** · ★★☆
 
 Num leilão online, a cada rodada o MENOR lance sai da disputa. Os lances
 estão numa lista de structs com nome e valor. Escreva
@@ -1295,10 +1295,10 @@ Davi R$ 175 -> Carla R$ 210 -> NULL
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/E490.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E460.c
 ```
 
-**Exercício E491** · ★★★
+**Exercício E461** · ★★★
 
 A lista de presentes do chá de bebê guarda o código de cada presente. A
 função "tira" deveria remover um código, mas tem QUATRO erros de
@@ -1328,10 +1328,10 @@ Saída esperada depois do conserto:
    chame tira(&lista, ...).
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/E491.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E461.c
 ```
 
-**Exercício E492** · ★★★
+**Exercício E462** · ★★★
 
 O vagão do MEIO do trem precisa ir para a manutenção, e você só pode
 percorrer a lista UMA vez (sem contar os nós antes). Escreva
@@ -1365,12 +1365,12 @@ NULL
 4. Resposta esperada: a saída acima (saem o 4, o 40 e o único nó, 99).
 
 ```bash
-~/LPEDC/rodar 11-listas/0082-lista-busca-remocao/E492.c
+~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E462.c
 ```
 
 ---
 
-## 0083 · Lista ordenada
+## 0078 · Lista ordenada
 
 A recepcionista da clínica atende o telefone o dia todo. Um paciente marca
 às 14:30, outro às 9:00, outro às 16:00, outro às 10:15. As ligações chegam
@@ -1420,7 +1420,7 @@ das 10:15. O laço passa pelo 09:00 (menor) e para no 14:30, porque `14:30 <
 10:15` é falso. O novo nó primeiro aponta para o 14:30 e depois o 09:00 passa
 a apontar para ele:
 
-<p align="center"><img src="0083-lista-ordenada/ideia.svg" alt="Diagrama da ideia: Lista ordenada" width="858"></p>
+<p align="center"><img src="0078-lista-ordenada/ideia.svg" alt="Diagrama da ideia: Lista ordenada" width="858"></p>
 
 O horário vira um `int` no formato hhmm (1430 é 14:30), e uma função do
 próprio exemplo mostra bonito na tela:
@@ -1465,11 +1465,11 @@ Repara no fluxograma: o laço roda uma vez (passa pelo 09:00) e sai pelo Não no
 novo`. A ligação das 9:00, lá atrás, tinha ido pelo outro lado: `ant == NULL`,
 e o novo virou o início:
 
-<p align="center"><img src="0083-lista-ordenada/fluxograma.svg" alt="Fluxograma: Lista ordenada" width="575"></p>
+<p align="center"><img src="0078-lista-ordenada/fluxograma.svg" alt="Fluxograma: Lista ordenada" width="575"></p>
 
 O critério de ordem é só a comparação do `while`. Troque `p->valor < valor`
 por `strcmp(p->nome, nome) < 0` e a mesma inserção monta uma lista em ordem
-alfabética (exemplo A166).
+alfabética (exemplo A156).
 
 > [!WARNING]
 > O caso que todo mundo esquece é o **novo menor que todos**. O laço nem
@@ -1492,9 +1492,9 @@ alfabética (exemplo A166).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0083-lista-ordenada/`](0083-lista-ordenada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0078-lista-ordenada/`](0078-lista-ordenada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A165 · A agenda da clínica sempre em ordem de horário**
+**Exemplo A155 · A agenda da clínica sempre em ordem de horário**
 
 ```c
 #include <stdio.h>
@@ -1532,10 +1532,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/A165.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/A155.c
 ```
 
-**Exemplo A166 · A chamada da turma em ordem alfabética**
+**Exemplo A156 · A chamada da turma em ordem alfabética**
 
 ```c
 #include <stdio.h>
@@ -1590,12 +1590,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/A166.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/A156.c
 ```
 
 #### Exercícios
 
-**Exercício E493** · ★☆☆
+**Exercício E463** · ★☆☆
 
 As notas do simulado saíram nesta ordem: 7, 3, 9, 5, 10, 1. Insira todas
 com lista_insere_ordenado, mostre a lista e depois a menor e a maior nota.
@@ -1615,10 +1615,10 @@ menor: 1, maior: 10
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/E493.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/E463.c
 ```
 
-**Exercício E494** · ★☆☆
+**Exercício E464** · ★☆☆
 
 Teste de mesa. O programa insere 25, 10, 40, 10 e 30 numa lista vazia com
 lista_insere_ordenado. Para cada inserção, diga onde ant e p estão quando
@@ -1644,10 +1644,10 @@ O código está no arquivo, logo abaixo deste enunciado.
    Com <=, o segundo 10 entraria DEPOIS do primeiro (ant no 10, p no 25).
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/E494.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/E464.c
 ```
 
-**Exercício E495** · ★★☆
+**Exercício E465** · ★★☆
 
 O entregador anotou os números das casas da rua, com repetidos: 5, 3, 5,
 8, 3, 3, 1. Insira tudo em ordem e escreva
@@ -1679,10 +1679,10 @@ depois: 1 -> 3 -> 5 -> 8 -> NULL
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/E495.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/E465.c
 ```
 
-**Exercício E496** · ★★☆
+**Exercício E466** · ★★☆
 
 Duas linhas de ônibus saem do mesmo terminal. Os horários de cada uma
 (em minutos depois das 6h) estão em listas crescentes:
@@ -1714,10 +1714,10 @@ Saída esperada:
    lista resultado: os nós de a e b agora são dela.
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/E496.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/E466.c
 ```
 
-**Exercício E497** · ★★★
+**Exercício E467** · ★★★
 
 O ranking da corrida de 5 km guarda os tempos em segundos, do mais rápido
 para o mais lento. A função insere_ordem e o main têm TRÊS erros de
@@ -1743,10 +1743,10 @@ Saída esperada depois do conserto:
    "ranking = insere_ordem(ranking, tempos[i]);".
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/E497.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/E467.c
 ```
 
-**Exercício E498** · ★★★
+**Exercício E468** · ★★★
 
 Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4.
 Escreva No *ordena(No *inicio), que deixa a lista em ordem crescente pelo
@@ -1774,12 +1774,12 @@ Depois responda: quanto custa ordenar n nós assim, no pior caso?
    sobre o vetor é que encaixar não desloca ninguém.
 
 ```bash
-~/LPEDC/rodar 11-listas/0083-lista-ordenada/E498.c
+~/LPEDC/rodar 11-listas/0078-lista-ordenada/E468.c
 ```
 
 ---
 
-## 0084 · Lista dupla
+## 0079 · Lista dupla
 
 Na Estrada de Ferro Carajás, um trem de minério para no pátio de manobras.
 O terceiro vagão, com 87 toneladas, está com o freio travado e precisa sair.
@@ -1836,7 +1836,7 @@ Vamos ver na prática. O trem tem os vagões de 98, 105, 87 e 110 toneladas.
 Com `p` no vagão de 87, a seta de cima faz o 105 apontar para o 110, e a de
 baixo faz o 110 apontar de volta para o 105. Ninguém precisou ser procurado:
 
-<p align="center"><img src="0084-lista-dupla/ideia.svg" alt="Diagrama da ideia: Lista dupla" width="858"></p>
+<p align="center"><img src="0079-lista-dupla/ideia.svg" alt="Diagrama da ideia: Lista dupla" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -1880,10 +1880,10 @@ ponta. O vagão de 87 tem anterior e tem seguinte, então o caminho passa pelos
 dois Não. Para remover o primeiro vagão, a primeira pergunta daria Sim; para
 o último, a segunda:
 
-<p align="center"><img src="0084-lista-dupla/fluxograma.svg" alt="Fluxograma: Lista dupla" width="502"></p>
+<p align="center"><img src="0079-lista-dupla/fluxograma.svg" alt="Fluxograma: Lista dupla" width="502"></p>
 
 Imprimir de trás para frente é o mesmo `for` de sempre, começando em
-`l->fim` e andando com `p = p->ant`. O exemplo A168 usa essa ida e volta para
+`l->fim` e andando com `p = p->ant`. O exemplo A158 usa essa ida e volta para
 fazer um controle remoto com "canal seguinte" e "canal anterior".
 
 > [!WARNING]
@@ -1910,9 +1910,9 @@ fazer um controle remoto com "canal seguinte" e "canal anterior".
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0084-lista-dupla/`](0084-lista-dupla/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0079-lista-dupla/`](0079-lista-dupla/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A167 · O trem de minério: desengatar um vagão do meio**
+**Exemplo A157 · O trem de minério: desengatar um vagão do meio**
 
 ```c
 #include <stdio.h>
@@ -1952,10 +1952,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/A167.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/A157.c
 ```
 
-**Exemplo A168 · O controle remoto: canal seguinte e canal anterior**
+**Exemplo A158 · O controle remoto: canal seguinte e canal anterior**
 
 ```c
 #include <stdio.h>
@@ -1998,12 +1998,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/A168.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/A158.c
 ```
 
 #### Exercícios
 
-**Exercício E499** · ★☆☆
+**Exercício E469** · ★☆☆
 
 O pátio de manobras quer saber o peso dos ÚLTIMOS 3 vagões do trem, os que
 vão ser desengatados na próxima estação. Monte o trem com lista_insere_fim
@@ -2026,10 +2026,10 @@ Saída esperada:
    andar a lista inteira para achar os 3 últimos.
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/E499.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/E469.c
 ```
 
-**Exercício E500** · ★☆☆
+**Exercício E470** · ★☆☆
 
 Sem rodar, preveja as sete linhas que este programa mostra. Desenhe os nós
 com as duas setas de cada um. Depois rode e confira.
@@ -2051,10 +2051,10 @@ O código está no arquivo, logo abaixo deste enunciado.
    1
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/E500.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/E470.c
 ```
 
-**Exercício E501** · ★★☆
+**Exercício E471** · ★★☆
 
 Um palíndromo se lê igual nos dois sentidos. Com uma lista dupla dá para
 conferir sem vetor nenhum: um ponteiro sai do início, outro sai do fim, e
@@ -2089,10 +2089,10 @@ ab: não
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/E501.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/E471.c
 ```
 
-**Exercício E502** · ★★☆
+**Exercício E472** · ★★☆
 
 Engatar um vagão no meio do trem mexe em QUATRO setas. Escreva
 
@@ -2125,10 +2125,10 @@ Saída esperada:
 4. Não esqueça do l->tamanho++. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/E502.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/E472.c
 ```
 
-**Exercício E503** · ★★★
+**Exercício E473** · ★★★
 
 As funções engata_inicio e desengata montam e desmontam um trem, mas cada
 uma esquece UMA seta de propósito. Lista dupla com seta faltando é traiçoeira:
@@ -2158,10 +2158,10 @@ Saída esperada depois do conserto:
    p->ant; else p->prox->ant = p->ant;".
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/E503.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/E473.c
 ```
 
-**Exercício E504** · ★★★
+**Exercício E474** · ★★★
 
 Todo editor de texto tem um cursor que anda para os dois lados, e uma
 lista dupla de letras é um jeito clássico de fazer isso: inserir e apagar
@@ -2193,7 +2193,7 @@ struct letra { char c; struct letra *ant, *prox; }).
 1. Use um nó-cabeça (uma letra de mentira no começo). O cursor é um
    ponteiro para a letra que está À ESQUERDA dele; no começo do texto, ele
    aponta para a cabeça. Assim nunca existe "cursor NULL".
-2. Inserir: o novo entra depois do cursor (as quatro setas do E502) e o
+2. Inserir: o novo entra depois do cursor (as quatro setas do E472) e o
    cursor passa para o novo. Apagar: se o cursor não é a cabeça, tire o nó
    do cursor e volte o cursor para o ant dele.
 3. Faça um teste de mesa: depois de "progamr#" o texto é "progam|";
@@ -2201,12 +2201,12 @@ struct letra { char c; struct letra *ant, *prox; }).
 4. Resposta esperada: texto: programa|
 
 ```bash
-~/LPEDC/rodar 11-listas/0084-lista-dupla/E504.c
+~/LPEDC/rodar 11-listas/0079-lista-dupla/E474.c
 ```
 
 ---
 
-## 0085 · Lista circular
+## 0080 · Lista circular
 
 Na churrascaria de rodízio, o garçom da pizza passa de mesa em mesa: 3, 7,
 12, 15. Quando serve a última, ele não para: volta para a mesa 3 e começa
@@ -2242,7 +2242,7 @@ No *lista_insere_fim(No *ultimo, int valor) {
 
 Percorrer muda de cara. Não tem `NULL` para avisar que acabou: você para
 quando **voltar ao ponto de partida**. Como o primeiro passo já começa no
-ponto de partida, o laço certo é o **do-while** (assunto 0026): ele roda o
+ponto de partida, o laço certo é o **do-while** (assunto 0021): ele roda o
 corpo uma vez antes de testar. E a lista vazia (`ultimo == NULL`) precisa ser
 tratada antes, porque não tem por onde começar.
 
@@ -2250,7 +2250,7 @@ Vamos ver na prática. As quatro mesas formam o anel, o ponteiro da lista
 fica na mesa 15 (a última) e a mesa 3 é `ultimo->prox`. O garçom serve 6
 vezes seguidas sem testar nada, porque sempre existe uma próxima:
 
-<p align="center"><img src="0085-lista-circular/ideia.svg" alt="Diagrama da ideia: Lista circular" width="902"></p>
+<p align="center"><img src="0080-lista-circular/ideia.svg" alt="Diagrama da ideia: Lista circular" width="902"></p>
 
 ```c
 #include <stdio.h>
@@ -2290,10 +2290,10 @@ primeiro. Depois, `p` começa na mesa 3 e o laço mostra, anda e só então
 pergunta "já voltei ao primeiro?". Com as 4 mesas, a resposta é Não três
 vezes e Sim na quarta:
 
-<p align="center"><img src="0085-lista-circular/fluxograma.svg" alt="Fluxograma: Lista circular" width="602"></p>
+<p align="center"><img src="0080-lista-circular/fluxograma.svg" alt="Fluxograma: Lista circular" width="602"></p>
 
 O clássico da lista circular é o **problema de Josephus**: pessoas em roda, e
-a cada k passos uma sai. Quem sobra? O exemplo A170 resolve com a batata
+a cada k passos uma sai. Quem sobra? O exemplo A160 resolve com a batata
 quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
 > [!WARNING]
@@ -2321,9 +2321,9 @@ quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0085-lista-circular/`](0085-lista-circular/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0080-lista-circular/`](0080-lista-circular/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A169 · O rodízio de pizza: depois da última mesa, volta à primeira**
+**Exemplo A159 · O rodízio de pizza: depois da última mesa, volta à primeira**
 
 ```c
 #include <stdio.h>
@@ -2359,10 +2359,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/A169.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/A159.c
 ```
 
-**Exemplo A170 · Batata quente: quem sobra na roda?**
+**Exemplo A160 · Batata quente: quem sobra na roda?**
 
 ```c
 #include <stdio.h>
@@ -2403,12 +2403,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/A170.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/A160.c
 ```
 
 #### Exercícios
 
-**Exercício E505** · ★☆☆
+**Exercício E475** · ★☆☆
 
 Numa roda de chimarrão com 5 pessoas (numeradas de 1 a 5), a cuia começa
 com a pessoa 1 e passa para a seguinte 12 vezes. Com quem ela fica? Monte
@@ -2433,10 +2433,10 @@ conferindo com %: pessoa 3
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/E505.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/E475.c
 ```
 
-**Exercício E506** · ★☆☆
+**Exercício E476** · ★☆☆
 
 Sem rodar, preveja as seis linhas deste programa. Lembre: a lista é
 guardada pelo ponteiro para o ÚLTIMO nó. Depois rode e confira.
@@ -2458,10 +2458,10 @@ O código está no arquivo, logo abaixo deste enunciado.
    3
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/E506.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/E476.c
 ```
 
-**Exercício E507** · ★★☆
+**Exercício E477** · ★★☆
 
 Rita, Davi e Lia vão de carro de Belo Horizonte a Vitória e voltam: são
 1000 km de estrada.
@@ -2499,10 +2499,10 @@ struct motorista { char nome[20]; int km; struct motorista *prox; }).
    comum. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/E507.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/E477.c
 ```
 
-**Exercício E508** · ★★☆
+**Exercício E478** · ★★☆
 
 Dois salões do restaurante vão virar um só. Cada salão é uma lista
 circular de mesas, guardada pelo último nó. Escreva
@@ -2537,10 +2537,10 @@ com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
    teria que andar até o último de cada lista: O(n).
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/E508.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/E478.c
 ```
 
-**Exercício E509** · ★★★
+**Exercício E479** · ★★★
 
 O sistema operacional divide a CPU entre os programas com o escalonamento
 round-robin: cada processo roda no máximo um QUANTUM de tempo e vai para
@@ -2574,10 +2574,10 @@ Escreva tudo neste arquivo, com uma struct sua.
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/E509.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/E479.c
 ```
 
-**Exercício E510** · ★★★
+**Exercício E480** · ★★★
 
 A escala de plantão do hospital é circular: depois do último enfermeiro,
 volta o primeiro. As duas funções deste programa têm erros de propósito.
@@ -2605,12 +2605,12 @@ escala: 101 102 103 104
    como aqui, andaria por memória já liberada).
 
 ```bash
-~/LPEDC/rodar 11-listas/0085-lista-circular/E510.c
+~/LPEDC/rodar 11-listas/0080-lista-circular/E480.c
 ```
 
 ---
 
-## 0086 · Juntando tudo
+## 0081 · Juntando tudo
 
 Viagem de carro, celular no painel, a playlist tocando. Alguém pula duas
 músicas, outra pessoa tira aquela que ninguém aguenta mais, e quando a última
@@ -2628,16 +2628,16 @@ música que está tocando), `tamanho` e o `bool repetir`.
 
 Cada peça do módulo aparece num lugar:
 
-- **adicionar** é a inserção no fim da lista dupla (0084), com o `fim`
+- **adicionar** é a inserção no fim da lista dupla (0079), com o `fim`
   guardado para custar O(1);
-- **remover pelo título** é a busca com `strcmp` (0082) seguida da remoção
+- **remover pelo título** é a busca com `strcmp` (0077) seguida da remoção
   dupla, com um cuidado novo: se a música removida era a que tocava, o
   `atual` passa para a seguinte (ou para a anterior, se era a última);
 - **próxima** e **anterior** andam com `prox` e `ant`; na ponta, com repetir
-  ligado, dão a volta como numa lista circular (0085);
+  ligado, dão a volta como numa lista circular (0080);
 - **salvar** e **carregar** usam arquivo texto (módulo 09): uma música por
   linha, no formato `titulo;artista;segundos`, lida com `fgets` e `sscanf`;
-- **para cada** recebe um ponteiro para função e um `void *` (0055 e 0056),
+- **para cada** recebe um ponteiro para função e um `void *` (0050 e 0051),
   e assim quem usa a playlist percorre as músicas sem ver os nós.
 
 O "repetir" mora numa função só:
@@ -2661,7 +2661,7 @@ Vamos ver na prática. A playlist começa com cinco músicas e 20:01 no total.
 Pulando duas, toca a terceira. Depois a "Asa Branca" sai, a playlist chega na
 última e, com o repetir ligado, a próxima volta para "Aquarela":
 
-<p align="center"><img src="0086-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="933"></p>
+<p align="center"><img src="0081-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="933"></p>
 
 ```c
 #include <stdio.h>
@@ -2712,9 +2712,9 @@ próxima. Na primeira tentativa o repetir está desligado e a função devolve
 `NULL` ("fim da playlist"). Na segunda, ligado, o caminho é o verde: o
 `atual` volta para o início:
 
-<p align="center"><img src="0086-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="669"></p>
+<p align="center"><img src="0081-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="669"></p>
 
-O exemplo A172 grava a playlist em `playlist.txt`, libera tudo, carrega de
+O exemplo A162 grava a playlist em `playlist.txt`, libera tudo, carrega de
 volta numa playlist nova e usa `playlist_para_cada` com um callback para
 contar as músicas longas.
 
@@ -2735,7 +2735,7 @@ contar as músicas longas.
 > `const Musica *` que as funções devolvem aponta para **dentro** da faixa,
 > no heap. Ele vale enquanto a música existir: depois de
 > `playlist_remove` daquela música, é um ponteiro solto. É a mesma regra do
-> vetor dinâmico (0080), em outra roupa: quem empresta um endereço de dentro
+> vetor dinâmico (0075), em outra roupa: quem empresta um endereço de dentro
 > da estrutura precisa dizer até quando ele vale.
 
 > [!NOTE]
@@ -2745,9 +2745,9 @@ contar as músicas longas.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0086-juntando-tudo/`](0086-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0081-juntando-tudo/`](0081-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A171 · A playlist da viagem**
+**Exemplo A161 · A playlist da viagem**
 
 ```c
 #include <stdio.h>
@@ -2794,10 +2794,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/A171.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/A161.c
 ```
 
-**Exemplo A172 · Salvar a playlist no arquivo e carregar de volta**
+**Exemplo A162 · Salvar a playlist no arquivo e carregar de volta**
 
 ```c
 #include <stdio.h>
@@ -2850,12 +2850,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/A172.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/A162.c
 ```
 
 #### Exercícios
 
-**Exercício E511** · ★☆☆
+**Exercício E481** · ★☆☆
 
 Monte a playlist do churrasco usando só playlist.h, nesta ordem:
 
@@ -2893,10 +2893,10 @@ tocando agora: País Tropical - Jorge Ben
 4. Resposta esperada: a saída acima. Libere a playlist no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/E511.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/E481.c
 ```
 
-**Exercício E512** · ★☆☆
+**Exercício E482** · ★☆☆
 
 Sem rodar, preveja as nove linhas deste programa. Releia em playlist.h o
 que acontece nas pontas e quando a música removida é a que está tocando.
@@ -2923,14 +2923,14 @@ O código está no arquivo, logo abaixo deste enunciado.
    Dois
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/E512.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/E482.c
 ```
 
-**Exercício E513** · ★★☆
+**Exercício E483** · ★★☆
 
 A playlist não deixa você ver os nós, mas playlist_para_cada chama uma
 função SUA para cada música, levando junto um void *extra com o que você
-quiser (assuntos 0055 e 0056). Com a playlist do main, escreva duas
+quiser (assuntos 0050 e 0051). Com a playlist do main, escreva duas
 funções de callback:
 
 
@@ -2959,10 +2959,10 @@ Jorge Ben: 2 músicas, 6:11
 4. Resposta esperada: a saída acima (182 + 189 = 371 s = 6:11).
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/E513.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/E483.c
 ```
 
-**Exercício E514** · ★★☆
+**Exercício E484** · ★★☆
 
 O bolão da Copa da firma mantém um ranking: mais pontos na frente e, em
 caso de empate, ordem alfabética. Escreva, com uma lista encadeada de
@@ -2999,15 +2999,15 @@ Cris saiu do bolão
 1. Escreva uma função bool vem_antes(const Participante *a, const
    Participante *b): mais pontos, ou pontos iguais e strcmp(a->nome,
    b->nome) < 0. O laço da inserção anda enquanto vem_antes(p, novo).
-2. A remoção é a do assunto 0082, comparando nomes com strcmp.
+2. A remoção é a do assunto 0077, comparando nomes com strcmp.
 3. Copie o nome com snprintf, nunca com strcpy sem limite.
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/E514.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/E484.c
 ```
 
-**Exercício E515** · ★★★
+**Exercício E485** · ★★★
 
 No karaokê do bar, os pedidos entram numa fila (lista encadeada com
 ponteiro para o início e para o fim): pede põe no fim, chama tira do
@@ -3037,10 +3037,10 @@ ainda na fila: 1
 4. Resposta esperada: a saída acima, sem nenhum relatório do ASan.
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/E515.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/E485.c
 ```
 
-**Exercício E516** · ★★★
+**Exercício E486** · ★★★
 
 Um polinômio cabe numa lista encadeada: um nó por termo (coeficiente e
 expoente), em ordem DECRESCENTE de expoente, sem termos de coeficiente 0.
@@ -3072,7 +3072,7 @@ P + Q = 4x^4 + 7x - 5
 **Dicas:**
 
 1. struct termo { int coef; int exp; struct termo *prox; }. A inserção é
-   a ordenada do assunto 0083 com o critério invertido (anda enquanto
+   a ordenada do assunto 0078 com o critério invertido (anda enquanto
    p->exp > exp), mais o caso p->exp == exp.
 2. soma: crie uma lista vazia e chame insere_termo para cada termo de p e
    de q. O caso "soma deu 0" faz o 2x^2 e o -2x^2 sumirem sozinhos.
@@ -3083,7 +3083,7 @@ P + Q = 4x^4 + 7x - 5
    polinômios.
 
 ```bash
-~/LPEDC/rodar 11-listas/0086-juntando-tudo/E516.c
+~/LPEDC/rodar 11-listas/0081-juntando-tudo/E486.c
 ```
 
 ---
@@ -3128,7 +3128,7 @@ Para `1 3 4 7 9` e `2 3 7 8 9`, o resultado é `3 7 9`.
 
 <details><summary>Resposta</summary>
 
-Um ponteiro em cada lista, como na intercalação do E496: se os valores são
+Um ponteiro em cada lista, como na intercalação do E466: se os valores são
 iguais, copie para a resposta e ande os dois; senão ande só o do menor.
 O(n + m), sem nenhum laço aninhado. Inserir no fim com um ponteiro para o
 último mantém a ordem.
@@ -3144,7 +3144,7 @@ lista com **um dígito por nó, do menos significativo para o mais**.
 **111111111011111111100**. Com os dígitos de trás para frente, a soma anda
 nas duas listas do começo, igual à conta armada: dígito = (a + b + vai_um) %
 10, vai_um = (a + b + vai_um) / 10. No fim, se sobrar vai-um, crie mais um
-nó. Para imprimir, use recursão (como no E484) ou uma lista dupla e ande do
+nó. Para imprimir, use recursão (como no E454) ou uma lista dupla e ande do
 fim para o começo.
 
 </details>
@@ -3179,7 +3179,7 @@ funcionam.
 
 </details>
 
-**7. Sem casos especiais.** Reescreva a lista dupla do assunto 0084 com um
+**7. Sem casos especiais.** Reescreva a lista dupla do assunto 0079 com um
 **nó sentinela** circular: um nó de mentira cujo `prox` é o primeiro e cujo
 `ant` é o último. Lista vazia é a sentinela apontando para si mesma nos dois
 sentidos. Quantos `if` sobram na inserção e na remoção?
@@ -3200,7 +3200,7 @@ bloco incompleto também é invertido).
 
 <details><summary>Resposta</summary>
 
-Aplique a inversão do E486 em pedaços: inverta 3 nós, guardando o primeiro
+Aplique a inversão do E456 em pedaços: inverta 3 nós, guardando o primeiro
 do bloco (que vira o último) e o início do resto. Ligue o fim do bloco
 invertido ao resultado da inversão do resto. Fica elegante com recursão:
 `inverte_k(inicio)` inverte os 3 primeiros e faz
@@ -3208,30 +3208,30 @@ invertido ao resultado da inversão do resto. Fica elegante com recursão:
 
 </details>
 
-**9. Ordenar uma lista em O(n log n).** O E498 ordena por inserção em
+**9. Ordenar uma lista em O(n log n).** O E468 ordena por inserção em
 O(n²). Escreva o **merge sort** de lista: divida a lista ao meio, ordene cada
 metade recursivamente e intercale. Teste com `5 1 4 2 8 3 7 6`.
 
 <details><summary>Resposta</summary>
 
-Para dividir, use a lebre e a tartaruga (E492): quando a lebre chega ao fim,
+Para dividir, use a lebre e a tartaruga (E462): quando a lebre chega ao fim,
 corte depois da tartaruga (`meio = tartaruga->prox; tartaruga->prox =
-NULL`). Caso base: lista com 0 ou 1 nó. Junte com a intercalação do E496.
+NULL`). Caso base: lista com 0 ou 1 nó. Junte com a intercalação do E466.
 Resultado `1 2 3 4 5 6 7 8`. Na lista, o merge sort não precisa de vetor
-auxiliar: só religa nós. É o assunto 0099, um módulo adiantado.
+auxiliar: só religa nós. É o assunto 0094, um módulo adiantado.
 
 </details>
 
 **10. Josephus de cabeça.** Com n pessoas em roda e eliminando de k em k, a
 posição do sobrevivente (contando de 0) obedece a J(1) = 0 e
 J(n) = (J(n − 1) + k) % n. Use a fórmula para n = 8, k = 3 e confira com a
-batata quente do A170. Depois responda: quando vale a pena simular com a
+batata quente do A160. Depois responda: quando vale a pena simular com a
 lista e quando a fórmula basta?
 
 <details><summary>Resposta</summary>
 
 J(1)=0, J(2)=1, J(3)=1, J(4)=0, J(5)=3, J(6)=0, J(7)=3, J(8)=6. Posição 6
-contando de 0 é a pessoa **7**, igual ao A170. A fórmula é O(n) e não usa
+contando de 0 é a pessoa **7**, igual ao A160. A fórmula é O(n) e não usa
 memória, mas só diz quem sobra. A lista dá a **ordem** de eliminação e
 aguenta variações que a fórmula não cobre (passo diferente para cada pessoa,
 alguém entrando no meio).

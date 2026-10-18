@@ -22,7 +22,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 
 ---
 
-### 0001-algoritmo
+### logica1-algoritmo
 
 **Conceitos-chave**
 - Algoritmo = sequência finita de instruções **não ambíguas** para resolver uma tarefa.
@@ -48,7 +48,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   rendimento), prazo. Ex.: CDB, R$ 1000 de rendimento, 400 dias → 17,5% → R$ 175.
 - Maior de três números (2.12).
 
-### 0003-fluxograma
+### logica3-fluxograma
 
 **Conceitos-chave**
 - Fluxograma deixa o algoritmo estruturado e visual; recomenda fazer **sempre** o
@@ -81,7 +81,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   (qua, 30, não estudante, casal) → meia; (qui, 30, não estudante, casal) → inteira;
   (sex, 10) → meia.
 
-### 0004-binario
+### logica4-binario
 
 **Conceitos-chave**
 - Computadores trabalham com dois estados (0/1: desligado/ligado, falso/verdadeiro);
@@ -126,7 +126,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Programa: ler um `unsigned char` (0–255) e imprimir os 8 bits (12 → 00001100), com
   validação da faixa (4.44 / 5.20).
 
-### 0005-compilacao
+### logica5-compilacao
 
 **Conceitos-chave**
 - Código-fonte (texto legível, extensão .c) → compilador (pré-processamento das diretivas
@@ -151,7 +151,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Múltipla escolha 3.3 (correta: instruções de alto nível são compreensíveis por humanos).
 - Classificar erros: "esqueci o `;`" (compilação) × "média dá sempre 0" (lógica).
 
-### 0006-primeiro-programa
+### 0001-primeiro-programa
 
 **Conceitos-chave**
 - "Esqueleto" a usar sempre: include, `int main() {`, código, `return 0;`, `}`.
@@ -159,7 +159,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Comentários `//` (até o fim da linha) e `/* */` (várias linhas).
 - `puts` (imprime string e já pula linha) e `putchar` (um caractere).
 
-### 0007-variaveis
+### 0002-variaveis
 
 **Conceitos-chave**
 - Motivação: acessar memória por número de célula (1, 2, 53.427...) seria complexo e
@@ -189,7 +189,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   c) `int` é palavra reservada; d) `case` é palavra reservada → resposta **e) nenhuma**.
 - Código `a=7, b=4, soma = a+b` → **11** (4.6).
 
-### 0008-tipos-e-limites
+### 0003-tipos-e-limites
 
 **Conceitos-chave**
 - Tabela com `char`, `signed/unsigned char`, `int`, `short`, `long`, `unsigned`, `float`
@@ -205,7 +205,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Teste `if (num < 0)` com `unsigned int num` é sempre falso (aparece no conversor de
   binário do cap. 8) — ótima pegadinha.
 
-### 0009-constantes
+### 0004-constantes
 
 **Conceitos-chave**
 - `#define NOME valor` logo após os includes, nomes em maiúsculas (`MAX 100`, `ISS 0.05`,
@@ -214,9 +214,9 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 **Pegadinhas e erros comuns**
 - O livro diz que constantes "são acessadas muito mais rápido que variáveis" — exagero;
   a vantagem real é legibilidade e um só lugar para mudar.
-- Não apresenta `const` (cobrir em 0009 por outra fonte).
+- Não apresenta `const` (cobrir em 0004 por outra fonte).
 
-### 0010-printf
+### 0005-printf
 
 **Conceitos-chave**
 - Primeiro argumento é a string de controle; cada `%` consome um argumento, **na ordem**.
@@ -244,7 +244,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Composição do preço do combustível (4.33): bomba R$ 3.00 → distribuição 17% 0.51; etanol
   12% 0.36; ICMS 28% 0.84; tributos 7% 0.21; refinaria 1.08 (exemplo do próprio livro).
 
-### 0011-scanf
+### 0006-scanf
 
 **Conceitos-chave**
 - Especificadores de leitura (`%i` aceita octal com 0 e hexa com 0x; `%d`; `%ld`; `%lf`
@@ -258,7 +258,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - O livro usa `scanf("%s", &str)` (com `&` em vetor) e recomenda `gets` — corrigir.
 - Ler `double` com `%f` (precisa `%lf` no scanf).
 
-### 0012-aritmetica / 0013-conversao
+### 0007-aritmetica / 0008-conversao
 
 **Conceitos-chave**
 - **Tipo do resultado = tipo dos operandos:** 5/2 = 2 (inteiros); 5/2.0 = 5.0/2 = 2.5.
@@ -284,12 +284,12 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   pegadinha!).
 - Decompor 8531 em unidade 1, dezena 3, centena 5, milhar 8 com `/` e `%` (4.39).
 - **Tinta** (4.35): 1 L cobre 3 m²; lata de 18 L a R$ 80. 100 m² → 33,3 L → 2 latas,
-  R$ 160 (arredondar para cima — gancho para `ceil` em 0015).
+  R$ 160 (arredondar para cima — gancho para `ceil` em 0010).
 - Maçãs em caixas de 42 (4.37): 100 maçãs → 3 caixas (divisão inteira + "sobra").
 - Azulejos (4.38), lâmpadas por W/m² (4.40), combustível de F1 (4.41), Bhaskara (4.36),
   conta da lanchonete (4.34), tinta com latas e galões (4.42).
 
-### 0014-atribuicao
+### 0009-atribuicao
 
 **Conceitos-chave**
 - `=` lê-se "recebe". Tabela `x+=k`, `x-=k`, `x*=k`, `x/=k`, `x++`, `++x`.
@@ -300,7 +300,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - **Saída?** (4.19): i=10, i2=18; `(++i + i2++)/2.0` → (11+18)/2.0 = **14.500000**.
 - **Saída?** (4.20): x=7; `++x % 2` → 8 % 2 = **0**.
 
-### 0017-relacionais / 0018-logicos
+### 0012-relacionais / 0013-logicos
 
 **Conceitos-chave**
 - Condição = expressão lógica com resultado V/F. Operadores `> < >= <= == !=`, `&& || !`.
@@ -311,13 +311,13 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 
 **Pegadinhas e erros comuns**
 - **`if (a = 3)`** com a=5: atribui 3 e testa 3 → sempre verdadeiro. O certo é `==`.
-  Exemplo pronto para 0020.
+  Exemplo pronto para 0015.
 
 **Ideias de exercícios** (respostas calculadas)
 - **Quais são verdadeiras?** (5.14) com x=0, y=10: a) 0<10 && 10>10 → F; b) 0<=10 &&
   10<10 → F; c) 0<0 || 10>10 → F; d) 0>0 && ... → F; e) 0<=0 || ... → **V**. Só a (e).
 
-### 0019-if / 0020-if-else / 0021-else-if
+### 0014-if / 0015-if-else / 0016-else-if
 
 **Conceitos-chave**
 - `if` com uma instrução ou bloco; o autor sugere **usar chaves sempre** (mais seguro para
@@ -341,7 +341,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   simples/duplas trocadas → não compila (**e**). Mesmo depois de corrigido, ele imprime em
   ordem **crescente**, e não decrescente como dizem as alternativas.
 
-### 0022-ternario
+### 0017-ternario
 
 **Conceitos-chave**
 - `condição ? valor_se_V : valor_se_F` para if/else simples; envolver a condição em
@@ -349,7 +349,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Exemplo: `n >= 0 ? n++ : n--;`.
 - Ternário aninhado (zero / positivo / negativo) funciona, mas fica confuso — evitar.
 
-### 0023-switch
+### 0018-switch
 
 **Conceitos-chave**
 - Seleção múltipla sobre valor inteiro ou caractere (`case '+':` com aspas simples);
@@ -361,7 +361,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Calculadora com `+ - * / ^ r` (potência e raiz) (5.18, 6.38 com repetição até operação
   inválida).
 
-### 0025-while / 0026-do-while / 0027-for
+### 0020-while / 0021-do-while / 0022-for
 
 **Conceitos-chave**
 - Os três laços fazem a mesma coisa com pequenas diferenças; exemplos imprimindo 1 a 5
@@ -404,7 +404,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   3, 5, 7); consumo com "1 para novo cálculo"; tabuada do 7 (while) e do 3 (for); laranjas
   (R$ 0,60 se < 12; R$ 0,50 se ≥ 12: 10 → 6.00; 12 → 6.00; 20 → 10.00).
 
-### 0028-break-continue
+### 0023-break-continue
 
 **Conceitos-chave**
 - `continue` pula o resto da volta atual; `break` encerra o laço.
@@ -420,7 +420,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 **Ideias de exercícios**
 - Ler até 5 números ou até digitar 10, o que vier primeiro (6.19) — break natural.
 
-### 0029-lacos-aninhados
+### 0024-lacos-aninhados
 
 **Ideias de exercícios** (com respostas)
 - Tabuadas de 1 a 10 com dois while e com dois for (6.15, 6.16).
@@ -430,7 +430,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Matriz com moldura de zeros e miolo N+i+j (6.28): n=10 → miolo 13 14 / 14 15.
 - Letras AA a ZZ como colunas de planilha (6.35).
 
-### 0030-padroes-de-laco
+### 0025-padroes-de-laco
 
 **Ideias de exercícios** (com respostas)
 - Contar positivos e negativos de 5 valores (6.17 / 6.53).
@@ -445,13 +445,13 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - **Caixa eletrônico** (6.37): saldo começa em 0; consulta, saque, depósito, sair.
 - x elevado a y com while (6.20); fatorial com while (6.23).
 
-### 0031-aleatorios
+### 0026-aleatorios
 
 **Conceitos-chave**
 - `rand() % 10` dá 0 a 9; `srand(time(NULL))` inicializa a semente **uma única vez** no
   `main`, não dentro da função que sorteia. Includes `stdlib.h` e `time.h`.
 
-### 0033-funcoes / 0034-parametros / 0035-escopo (resumo)
+### 0028-funcoes / 0029-parametros / 0030-escopo (resumo)
 
 **Conceitos-chave**
 - Função = conjunto de comandos com nome; organiza e modulariza. `void` quando não
@@ -470,7 +470,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   distância entre pontos, soma dos divisores (8 → 7), médias aritmética/ponderada
   (5,3,2)/harmônica, valor de prestação com multa 3% + 0,1% ao dia.
 
-### 0042-vetores / 0044-matrizes / 0046-strings / 0047-lendo-strings (resumo)
+### 0037-vetores / 0039-matrizes / 0041-strings / 0042-lendo-strings (resumo)
 
 **Conceitos-chave**
 - Vetor como **uma coluna de planilha** (linhas numeradas a partir de 0); matriz como a
@@ -484,7 +484,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 
 **Pegadinhas e erros comuns**
 - `char nome2[10] = "Meu Brasil";` tem exatamente 10 letras → **não sobra lugar para o
-  `'\0'`** (o livro não percebe). Excelente pegadinha para 0046.
+  `'\0'`** (o livro não percebe). Excelente pegadinha para 0041.
 - A tabela do livro mostra "lixo" nas posições após o `'\0'` de `char nome[10] =
   "Brasil"`, mas com inicializador o resto é zerado (o próprio livro diz isso para `int`).
 - `for (i < strlen(s))` recalcula o tamanho a cada volta.
@@ -496,7 +496,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Contar letras 's' numa frase; inverter três palavras; **cifra +1** ('a'→'b') (8.20);
   matriz transposta; soma de matrizes; A(i,j) = 3i + j².
 
-### 0070-bits
+### 0065-bits
 
 **Conceitos-chave**
 - Uso real: microcontroladores — 8 bits de um byte podem ligar/desligar 8 LEDs ou motores.
@@ -517,7 +517,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   73 → 0010 1001 = 41. Zerar bits 3 e 4 e inverter 0 e 7, mostrar em hexa. Rotação sem
   perder bits; pisca-pisca 01010101/10101010.
 
-### 0072-arquivos-texto (resumo)
+### 0067-arquivos-texto (resumo)
 
 - `FILE *fp`; `fopen` com modos r, r+, w, w+, a, a+ (tabela clara); checar `NULL`;
   `fclose` retorna 0 se deu certo. Tabela de correspondência: putchar/fputc,
@@ -543,9 +543,9 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 ## Extras que não cabem no sumário
 
 - Flowgorithm como ferramenta de apoio ao módulo 00 (executa e traduz fluxogramas).
-- Bibliotecas estáticas × dinâmicas (.so/.dll): nota opcional em 0005 ou 0039.
+- Bibliotecas estáticas × dinâmicas (.so/.dll): nota opcional em 0005 ou 0034.
 - Depuração passo a passo como hábito desde o início (gdb ou depurador da IDE).
 - Tensores/deep learning e IoT como motivação para matrizes (curiosidade).
-- Formatos de arquivo texto (CSV, JSON) como contexto em 0072.
+- Formatos de arquivo texto (CSV, JSON) como contexto em 0067.
 - Apêndice de filmes (Jogo da Imitação, Piratas do Vale do Silício) — material de
   motivação, fora do conteúdo.

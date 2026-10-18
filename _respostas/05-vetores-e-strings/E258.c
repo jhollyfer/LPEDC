@@ -1,41 +1,43 @@
-// 0043 · Vetores e funções
+// 0043 · Juntando tudo
 // Exercício E258 · ★★★
 
 #include <stdio.h>
+#include <string.h>
 
-#define FAIXAS 5
+#define TAM_TEXTO 100
 
-void mostrar(const int v[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf(i == 0 ? "%d" : " %d", v[i]);
+void comprimir(const char texto[], char saida[]) {
+    int i = 0;
+    int j = 0;
+    while (texto[i] != '\0') {
+        int conta = 1;
+        while (conta < 9 && texto[i + conta] == texto[i]) {
+            conta++;
+        }
+        saida[j++] = texto[i];
+        saida[j++] = (char) ('0' + conta);
+        i += conta;
     }
-    printf("\n");
-}
-
-void inverter(int v[], int n) {
-    for (int i = 0; i < n / 2; i++) {
-        int aux = v[i];
-        v[i] = v[n - 1 - i];
-        v[n - 1 - i] = aux;
-    }
-}
-
-void rotacionar(int v[], int n) {
-    int primeira = v[0];
-    for (int i = 0; i < n - 1; i++) {
-        v[i] = v[i + 1];
-    }
-    v[n - 1] = primeira;
+    saida[j] = '\0';
 }
 
 int main(void) {
-    int playlist[FAIXAS] = {11, 22, 33, 44, 55};
+    char texto[TAM_TEXTO];
+    char saida[2 * TAM_TEXTO + 1];
 
-    mostrar(playlist, FAIXAS);
-    inverter(playlist, FAIXAS);
-    mostrar(playlist, FAIXAS);
-    rotacionar(playlist, FAIXAS);
-    rotacionar(playlist, FAIXAS);
-    mostrar(playlist, FAIXAS);
+    printf("Texto: ");
+    if (fgets(texto, sizeof(texto), stdin) == NULL) {
+        return 1;
+    }
+    texto[strcspn(texto, "\n")] = '\0';
+
+    comprimir(texto, saida);
+    size_t antes = strlen(texto);
+    size_t depois = strlen(saida);
+    printf("%s (%zu -> %zu)", saida, antes, depois);
+    if (depois >= antes) {
+        printf(": não compensa");
+    }
+    printf("\n");
     return 0;
 }

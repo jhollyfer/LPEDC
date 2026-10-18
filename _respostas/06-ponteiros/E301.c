@@ -1,17 +1,16 @@
-// 0051 · Passagem por referência
+// 0051 · void * e cast
 // Exercício E301 · ★☆☆
 
 #include <stdio.h>
 
-void dobra(int *quantidade) {
-    *quantidade = *quantidade * 2;
-}
-
 int main(void) {
-    int ingressos = 3;
+    int idade = 41;
+    double altura = 1.83;
+    void *p;
 
-    printf("Antes: %d ingressos\n", ingressos);
-    dobra(&ingressos);
-    printf("Depois: %d ingressos\n", ingressos);
+    p = &idade;
+    printf("idade: %d\n", *(int *)p);
+    p = &altura;
+    printf("altura: %.2f\n", *(double *)p);
     return 0;
 }

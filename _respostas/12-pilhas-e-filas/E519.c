@@ -1,45 +1,56 @@
-// 0087 · Pilha
+// 0087 · Deque
 // Exercício E519 · ★★☆
 
 #include <stdio.h>
-// Na pasta do assunto basta #include "pilha.h" (o rodar compila o pilha.c
+// Na pasta do assunto basta #include "deque.h" (o rodar compila o deque.c
 // junto). Aqui a resolução inclui a implementação para compilar sozinha.
-#include "../../12-pilhas-e-filas/0087-pilha/pilha.c"
+#include "../../12-pilhas-e-filas/0087-deque/deque.c"
 
-int soma_pedido(Pilha *p) {
-    Pilha *aux = pilha_cria();
-    if (aux == NULL) {
-        return -1;
+void mostra(Deque *d) {
+    int n = deque_tamanho(d);
+    for (int i = 0; i < n; i++) { // uma volta completa: termina como começou
+        int x;
+        deque_retira_inicio(d, &x);
+        printf(" %d", x);
+        deque_insere_fim(d, x);
     }
-    int soma = 0;
-    int preco;
-    while (pilha_desempilha(p, &preco)) { // tira tudo, somando
-        soma += preco;
-        pilha_empilha(aux, preco);
+    printf("\n");
+}
+
+void gira_esquerda(Deque *d, int k) {
+    for (int i = 0; i < k; i++) {
+        int x;
+        if (deque_retira_inicio(d, &x)) {
+            deque_insere_fim(d, x);
+        }
     }
-    while (pilha_desempilha(aux, &preco)) { // devolve na ordem original
-        pilha_empilha(p, preco);
+}
+
+void gira_direita(Deque *d, int k) {
+    for (int i = 0; i < k; i++) {
+        int x;
+        if (deque_retira_fim(d, &x)) {
+            deque_insere_inicio(d, x);
+        }
     }
-    pilha_libera(aux);
-    return soma;
 }
 
 int main(void) {
-    Pilha *pedido = pilha_cria();
-    if (pedido == NULL) {
+    Deque *time = deque_cria();
+    if (time == NULL) {
         return 1;
     }
-    pilha_empilha(pedido, 2590);
-    pilha_empilha(pedido, 800);
-    pilha_empilha(pedido, 1200);
-
-    int total = soma_pedido(pedido);
-    printf("Total: R$ %d,%02d\n", total / 100, total % 100);
-
-    int topo;
-    if (pilha_topo(pedido, &topo)) {
-        printf("Topo continua: R$ %d,%02d (%d itens)\n", topo / 100, topo % 100, pilha_tamanho(pedido));
+    for (int j = 1; j <= 6; j++) {
+        deque_insere_fim(time, j);
     }
-    pilha_libera(pedido);
+    printf("Início:");
+    mostra(time);
+    gira_esquerda(time, 2);
+    printf("Esquerda 2:");
+    mostra(time);
+    gira_direita(time, 3);
+    printf("Direita 3:");
+    mostra(time);
+    deque_libera(time);
     return 0;
 }

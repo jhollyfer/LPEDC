@@ -1,43 +1,60 @@
-// 0094 · Busca sequencial
+// 0094 · Merge sort
 // Exercício E562 · ★★☆
+//
+// Com "<" no lugar de "<=", a saída vira:
+//   Eva 20, Davi 30, Bruno 30, Carla 50, Ana 50
+// No empate, a intercalação passa a pegar o da DIREITA primeiro, e os
+// empatados saem na ordem inversa da chegada: o merge sort deixa de ser estável.
 
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
-    int codigo;
-    char nome[20];
-    double preco;
-} Produto;
+    char cliente[8];
+    int valor;
+} Pedido;
 
-// devolve o endereço do produto dentro do vetor, ou NULL
-Produto *busca_produto(Produto v[], int n, int codigo) {
-    for (int i = 0; i < n; i++) {
-        if (v[i].codigo == codigo) {
-            return &v[i];
+void intercala(Pedido v[], Pedido w[], int p, int q, int r) {
+    int i = p, j = q, k = 0;
+    while (i < q && j < r) {
+        if (v[i].valor <= v[j].valor) {
+            w[k++] = v[i++];
+        } else {
+            w[k++] = v[j++];
         }
     }
-    return NULL;
+    while (i < q) {
+        w[k++] = v[i++];
+    }
+    while (j < r) {
+        w[k++] = v[j++];
+    }
+    for (k = 0; k < r - p; k++) {
+        v[p + k] = w[k];
+    }
+}
+
+void merge_sort(Pedido v[], Pedido w[], int p, int r) {
+    if (r - p < 2) {
+        return;
+    }
+    int q = p + (r - p) / 2;
+    merge_sort(v, w, p, q);
+    merge_sort(v, w, q, r);
+    intercala(v, w, p, q, r);
 }
 
 int main(void) {
-    Produto estoque[] = {
-        {1010, "Arroz 5kg", 27.50},
-        {2050, "Café 500g", 18.90},
-        {3300, "Feijão 1kg", 8.40},
-        {4120, "Leite 1L", 5.20},
-    };
-    int n = 4;
-
-    Produto *p = busca_produto(estoque, n, 2050);
-    if (p != NULL) {
-        printf("%d %s R$ %.2f\n", p->codigo, p->nome, p->preco);
-        p->preco = p->preco * 1.10; // reajuste pelo ponteiro
+    Pedido fila[] = {{"Ana", 50}, {"Bruno", 30}, {"Carla", 50}, {"Davi", 30}, {"Eva", 20}};
+    int n = 5;
+    Pedido *w = malloc(n * sizeof *w);
+    if (w == NULL) {
+        return 1;
     }
-    printf("No vetor: %s R$ %.2f\n", estoque[1].nome, estoque[1].preco);
-
-    p = busca_produto(estoque, n, 9999);
-    if (p == NULL) {
-        printf("9999: não cadastrado\n");
+    merge_sort(fila, w, 0, n);
+    for (int i = 0; i < n; i++) {
+        printf("%s %d%s", fila[i].cliente, fila[i].valor, i < n - 1 ? ", " : "\n");
     }
+    free(w);
     return 0;
 }

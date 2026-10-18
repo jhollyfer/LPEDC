@@ -1,15 +1,21 @@
-// 0009 · Constantes
+// 0009 · Atribuição, ++ e --
 // Exercício E050 · ★☆☆
+//
+// Resposta (teste de mesa):
+//   instrução      x   y   z   w
+//   int x = 5;     5
+//   int y = x++;   6   5
+//   int z = ++x;   7   5   7
+//   int w = x--;   6   5   7   7
+// Final: x = 6, y = 5, z = 7, w = 7.
 
 #include <stdio.h>
 
-#define POSTO "Auto Posto Ipê"
-#define GASOLINA 6.29 // o reajuste é só trocar para 6.49 aqui
-#define ETANOL 4.19
-
 int main(void) {
-    printf("%s\n", POSTO);
-    printf("Gasolina: R$ %.2f\n", GASOLINA);
-    printf("Etanol:   R$ %.2f\n", ETANOL);
+    int x = 5;
+    int y = x++;
+    int z = ++x;
+    int w = x--;
+    printf("x = %d, y = %d, z = %d, w = %d\n", x, y, z, w);
     return 0;
 }

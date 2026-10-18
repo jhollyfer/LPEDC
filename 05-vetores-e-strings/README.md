@@ -63,17 +63,17 @@ bounds`, leia a linha indicada: é quase sempre um `<=` no lugar de `<` ou um
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
-| [0042](#0042--vetores) | Vetores | [`0042-vetores/`](0042-vetores/) |
-| [0043](#0043--vetores-e-funções) | Vetores e funções | [`0043-vetores-e-funcoes/`](0043-vetores-e-funcoes/) |
-| [0044](#0044--matrizes) | Matrizes | [`0044-matrizes/`](0044-matrizes/) |
-| [0045](#0045--caracteres) | Caracteres | [`0045-caracteres/`](0045-caracteres/) |
-| [0046](#0046--strings) | Strings | [`0046-strings/`](0046-strings/) |
-| [0047](#0047--lendo-strings) | Lendo strings | [`0047-lendo-strings/`](0047-lendo-strings/) |
-| [0048](#0048--juntando-tudo) | Juntando tudo | [`0048-juntando-tudo/`](0048-juntando-tudo/) |
+| [0037](#0037--vetores) | Vetores | [`0037-vetores/`](0037-vetores/) |
+| [0038](#0038--vetores-e-funções) | Vetores e funções | [`0038-vetores-e-funcoes/`](0038-vetores-e-funcoes/) |
+| [0039](#0039--matrizes) | Matrizes | [`0039-matrizes/`](0039-matrizes/) |
+| [0040](#0040--caracteres) | Caracteres | [`0040-caracteres/`](0040-caracteres/) |
+| [0041](#0041--strings) | Strings | [`0041-strings/`](0041-strings/) |
+| [0042](#0042--lendo-strings) | Lendo strings | [`0042-lendo-strings/`](0042-lendo-strings/) |
+| [0043](#0043--juntando-tudo) | Juntando tudo | [`0043-juntando-tudo/`](0043-juntando-tudo/) |
 
 ---
 
-## 0042 · Vetores
+## 0037 · Vetores
 
 O relógio da academia contou seus passos durante a semana: 8200 no domingo,
 10450 na segunda, e assim por diante. Para somar, achar a média e o recorde,
@@ -115,7 +115,7 @@ Vamos ver na prática. São 7 gavetas, uma por dia. O laço passa por todas
 somando e guardando a maior. O recorde está na gaveta 5, que é o **dia 6** para
 quem lê o relatório:
 
-<p align="center"><img src="0042-vetores/ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
+<p align="center"><img src="0037-vetores/ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
 
 O código percorre as gavetas com `i` de 0 a 6. Repare que o `maior` começa com
 `passos[0]`, e não com 0:
@@ -153,10 +153,10 @@ int main(void) {
 ```
 
 Repara no fluxograma: é o padrão acumulador e o padrão maior/menor do assunto
-0030, só que agora os valores vêm das gavetas do vetor, e não do teclado. A
+0025, só que agora os valores vêm das gavetas do vetor, e não do teclado. A
 pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 
-<p align="center"><img src="0042-vetores/fluxograma.svg" alt="Fluxograma: Vetores" width="535"></p>
+<p align="center"><img src="0037-vetores/fluxograma.svg" alt="Fluxograma: Vetores" width="535"></p>
 
 > [!WARNING]
 > **O C não confere o índice.** Com `int v[7]`, escrever `v[7] = 0` ou ler
@@ -183,9 +183,9 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0042-vetores/`](0042-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0037-vetores/`](0037-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A083 · Os passos da semana**
+**Exemplo A073 · Os passos da semana**
 
 ```c
 #include <stdio.h>
@@ -220,10 +220,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/A083.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/A073.c
 ```
 
-**Exemplo A084 · Inicializar, contar e copiar**
+**Exemplo A074 · Inicializar, contar e copiar**
 
 ```c
 #include <stdio.h>
@@ -261,12 +261,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/A084.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/A074.c
 ```
 
 #### Exercícios
 
-**Exercício E247** · ★☆☆
+**Exercício E217** · ★☆☆
 
 A estação meteorológica de Curitiba registrou as máximas de uma semana:
 19, 23, 21, 17, 15, 18 e 22 graus. Guarde as sete temperaturas num vetor e
@@ -293,10 +293,10 @@ Dia 1: 19 graus
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/E247.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E217.c
 ```
 
-**Exercício E248** · ★☆☆
+**Exercício E218** · ★☆☆
 
 Sem rodar, preveja o que cada printf mostra. Depois rode e confira.
 
@@ -326,10 +326,10 @@ printf("%d\n", b[0]);
 4. Resposta esperada: "2 0", "3", "8", "9" e "15".
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/E248.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E218.c
 ```
 
-**Exercício E249** · ★★☆
+**Exercício E219** · ★★☆
 
 Um professor quer saber quem ficou acima da média da turma. Leia as notas
 de 5 alunos (números reais), calcule a média e liste o número do aluno (1 a
@@ -359,10 +359,10 @@ Aluno 5: 8.5
 3. Resposta esperada (com as notas acima): média 7.00 e os alunos 1, 3 e 5.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/E249.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E219.c
 ```
 
-**Exercício E250** · ★★☆
+**Exercício E220** · ★★☆
 
 Um app de delivery recebeu 15 avaliações, de 1 a 5 estrelas:
 
@@ -390,14 +390,14 @@ Nota 1: * (1)
 
 1. int contagem[6] = {0}; e ignore a posição 0: assim contagem[5] é a nota 5.
 2. contagem[avaliacoes[i]]++ soma 1 na gaveta daquela nota.
-3. Para desenhar, um laço dentro do outro (assunto 0029).
+3. Para desenhar, um laço dentro do outro (assunto 0024).
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/E250.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E220.c
 ```
 
-**Exercício E251** · ★★★
+**Exercício E221** · ★★★
 
 Este programa deveria mostrar a máxima e a mínima de uma madrugada fria em
 São Joaquim (SC), medidas em 6 horários. Ele tem DOIS erros de propósito.
@@ -422,10 +422,10 @@ Mínima: -6 graus
    então a máxima sairia 0 (comece maior e menor com temps[0]).
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/E251.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E221.c
 ```
 
-**Exercício E252** · ★★★
+**Exercício E222** · ★★★
 
 O Crivo de Eratóstenes acha todos os primos até N sem fazer nenhuma
 divisão. Com N = 50:
@@ -460,19 +460,19 @@ Saída esperada:
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0042-vetores/E252.c
+~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E222.c
 ```
 
 ---
 
-## 0043 · Vetores e funções
+## 0038 · Vetores e funções
 
 A lanchonete da esquina vai reajustar o cardápio em 10%. A coxinha de R$ 12,50
 passa a R$ 13,75, o suco de R$ 8,00 vai para R$ 8,80. Você escreve uma função
 `reajustar` e chama passando o vetor de preços. Pergunta: a função mexe nos
 preços do `main` ou numa cópia?
 
-No assunto 0034 você viu que o C passa argumentos **por valor**: a função
+No assunto 0029 você viu que o C passa argumentos **por valor**: a função
 recebe uma cópia, e mexer na cópia não muda o original. Com vetor é diferente
 na prática: **a função mexe no vetor original**. Isso acontece porque o C nunca
 copia um vetor inteiro para uma função. O que vai é **o endereço onde o vetor
@@ -504,7 +504,7 @@ Vamos ver na prática. O `main` tem o vetor `cardapio`. A função recebe o
 endereço dele no parâmetro `precos`, e cada `precos[i]` é a mesma gaveta que
 `cardapio[i]`:
 
-<p align="center"><img src="0043-vetores-e-funcoes/ideia.svg" alt="Diagrama da ideia: Vetores e funções" width="870"></p>
+<p align="center"><img src="0038-vetores-e-funcoes/ideia.svg" alt="Diagrama da ideia: Vetores e funções" width="870"></p>
 
 O código separa as duas tarefas: `reajustar` escreve (sem `const`), `mostrar`
 só lê (com `const`):
@@ -549,12 +549,12 @@ Repara no fluxograma: o `main` chama, a função percorre as 4 gavetas e volta.
 Ela não devolve nada (`void`), e mesmo assim o `main` enxerga os preços novos,
 porque ela escreveu direto no vetor dele:
 
-<p align="center"><img src="0043-vetores-e-funcoes/fluxograma.svg" alt="Fluxograma: Vetores e funções" width="486"></p>
+<p align="center"><img src="0038-vetores-e-funcoes/fluxograma.svg" alt="Fluxograma: Vetores e funções" width="486"></p>
 
 Atenção para a diferença: **um elemento** passado sozinho vai por valor, como
 qualquer `double`. Uma função `reajustar_um(double preco)` chamada com
 `cardapio[0]` recebe uma cópia do 12.50 e não muda nada. É o vetor inteiro (o
-nome sem colchetes) que vai pelo endereço. O exemplo A086 mostra as duas
+nome sem colchetes) que vai pelo endereço. O exemplo A076 mostra as duas
 coisas lado a lado.
 
 > [!WARNING]
@@ -568,7 +568,7 @@ coisas lado a lado.
 
 > [!TIP]
 > **Por dentro do C:** quando o `main` chama `reajustar(cardapio, 4, 10)`, o
-> frame da função na pilha (assunto 0036) recebe três coisas: um endereço (8
+> frame da função na pilha (assunto 0031) recebe três coisas: um endereço (8
 > bytes), um `int` e um `double`. Os 32 bytes do vetor ficam onde estão, no
 > frame do `main`. Para um vetor de um milhão de itens, a chamada custa o
 > mesmo: 8 bytes. É por isso que o C faz assim: copiar vetores inteiros a cada
@@ -584,9 +584,9 @@ coisas lado a lado.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0043-vetores-e-funcoes/`](0043-vetores-e-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0038-vetores-e-funcoes/`](0038-vetores-e-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A085 · O reajuste do cardápio**
+**Exemplo A075 · O reajuste do cardápio**
 
 ```c
 #include <stdio.h>
@@ -625,10 +625,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/A085.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/A075.c
 ```
 
-**Exemplo A086 · Um elemento vai por valor, o vetor vai pelo endereço**
+**Exemplo A076 · Um elemento vai por valor, o vetor vai pelo endereço**
 
 ```c
 #include <stdio.h>
@@ -679,12 +679,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/A086.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/A076.c
 ```
 
 #### Exercícios
 
-**Exercício E253** · ★☆☆
+**Exercício E223** · ★☆☆
 
 O time da várzea marcou estes gols nas 8 rodadas do campeonato:
 
@@ -714,14 +714,14 @@ Média por rodada: 2.00
 
 1. Na chamada vai só o nome do vetor: soma(gols, 8).
 2. media pode chamar soma e dividir por n; cuidado com a divisão inteira
-   (assunto 0013).
+   (assunto 0008).
 3. Resposta esperada: 16 gols e média 2.00.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/E253.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E223.c
 ```
 
-**Exercício E254** · ★☆☆
+**Exercício E224** · ★☆☆
 
 Complete as duas funções. O main já está pronto: ele prepara as 10 vagas de
 um estacionamento (0 = livre), ocupa algumas e mostra o mapa.
@@ -748,10 +748,10 @@ Saída esperada:
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/E254.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E224.c
 ```
 
-**Exercício E255** · ★★☆
+**Exercício E225** · ★★☆
 
 Sem rodar, preveja as duas linhas que o programa abaixo mostra. Para cada
 parâmetro de mexer, pergunte: ele é uma cópia ou dá acesso ao original?
@@ -784,10 +784,10 @@ printf("%d %d %d\n", a[0], a[1], a[2]);
 4. Resposta esperada: "10 50 3 5" e "100 30 3".
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/E255.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E225.c
 ```
 
-**Exercício E256** · ★★☆
+**Exercício E226** · ★★☆
 
 As contas de luz do ano (janeiro a dezembro), em reais:
 
@@ -827,10 +827,10 @@ Meses acima da média: 7
 3. Resposta esperada: a saída acima (o total do ano é R$ 2017.95).
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/E256.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E226.c
 ```
 
-**Exercício E257** · ★★★
+**Exercício E227** · ★★★
 
 O programa abaixo deveria somar as 6 doações de uma vaquinha online
 (R$ 50 + 20 + 100 + 35 + 15 + 80 = R$ 300), mas mostra outro valor. Ele
@@ -862,10 +862,10 @@ Total arrecadado: R$ 300
    declarado.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/E257.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E227.c
 ```
 
-**Exercício E258** · ★★★
+**Exercício E228** · ★★★
 
 Uma playlist guarda os números das faixas: 11 22 33 44 55. Escreva:
 
@@ -901,12 +901,12 @@ Saída esperada:
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0043-vetores-e-funcoes/E258.c
+~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E228.c
 ```
 
 ---
 
-## 0044 · Matrizes
+## 0039 · Matrizes
 
 Uma rede de açaí tem 3 lojas e quer comparar as vendas das últimas 4 semanas.
 Você abre uma planilha: uma linha por loja, uma coluna por semana. No fim de
@@ -930,7 +930,7 @@ eles enchem a matriz linha por linha. Mas o gcc avisa (`-Wmissing-braces`), e
 com razão: com as chaves, quem lê vê as linhas. Use as chaves.
 
 Um índice pede um laço; dois índices pedem **dois laços aninhados** (assunto
-0029). O de fora escolhe a linha, o de dentro anda pelas colunas dessa linha.
+0024). O de fora escolhe a linha, o de dentro anda pelas colunas dessa linha.
 Para somar por coluna, você inverte: a coluna fica por fora e a linha por
 dentro. Os laços são os mesmos; muda só quem é o "relógio das horas" e quem é
 o "dos minutos".
@@ -944,7 +944,7 @@ células ficam enfileiradas: primeiro a linha 0 inteira, depois a linha 1,
 depois a 2. A célula `vendas[1][2]` (o 14) é a 7ª da fila, na posição 1 × 4 + 2
 = 6:
 
-<p align="center"><img src="0044-matrizes/ideia.svg" alt="Diagrama da ideia: Matrizes" width="858"></p>
+<p align="center"><img src="0039-matrizes/ideia.svg" alt="Diagrama da ideia: Matrizes" width="858"></p>
 
 O código mostra a tabela com o total de cada linha e, num segundo par de
 laços, o total de cada coluna:
@@ -999,13 +999,13 @@ Repara no fluxograma: são dois laços, um dentro do outro. O de dentro dá 4
 voltas para **cada** volta do de fora, então o corpo roda 3 × 4 = 12 vezes,
 uma por célula:
 
-<p align="center"><img src="0044-matrizes/fluxograma.svg" alt="Fluxograma: Matrizes" width="482"></p>
+<p align="center"><img src="0039-matrizes/fluxograma.svg" alt="Fluxograma: Matrizes" width="482"></p>
 
-Para passar uma matriz a uma função, vale a regra do assunto 0043 (vai o
+Para passar uma matriz a uma função, vale a regra do assunto 0038 (vai o
 endereço, a função mexe no original), com um detalhe: **todas as dimensões,
 menos a primeira, são obrigatórias** no parâmetro: `void mostrar(int
 m[][4], int linhas)`. O compilador precisa saber quantas colunas tem cada
-linha para achar `m[l][c]`. O exemplo A088 faz isso com um tabuleiro de jogo da
+linha para achar `m[l][c]`. O exemplo A078 faz isso com um tabuleiro de jogo da
 velha.
 
 > [!WARNING]
@@ -1031,9 +1031,9 @@ velha.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0044-matrizes/`](0044-matrizes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0039-matrizes/`](0039-matrizes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A087 · As vendas das três lojas**
+**Exemplo A077 · As vendas das três lojas**
 
 ```c
 #include <stdio.h>
@@ -1082,10 +1082,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/A087.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/A077.c
 ```
 
-**Exemplo A088 · O tabuleiro do jogo da velha**
+**Exemplo A078 · O tabuleiro do jogo da velha**
 
 ```c
 #include <stdio.h>
@@ -1137,12 +1137,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/A088.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/A078.c
 ```
 
 #### Exercícios
 
-**Exercício E259** · ★☆☆
+**Exercício E229** · ★☆☆
 
 Um quadrado mágico 3x3 tem a mesma soma em todas as linhas, colunas e nas
 duas diagonais. Guarde este numa matriz, mostre-o e calcule a soma da
@@ -1175,10 +1175,10 @@ Diagonal secundária: 15
 4. Resposta esperada: a saída acima (2 + 5 + 8 e 6 + 5 + 4).
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/E259.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E229.c
 ```
 
-**Exercício E260** · ★☆☆
+**Exercício E230** · ★☆☆
 
 Sem rodar, preveja a saída. Depois rode e confira.
 
@@ -1205,10 +1205,10 @@ printf("%zu %zu\n", sizeof(a), sizeof(a[1]));
 4. Resposta esperada: "1 0 5", "3", "3 0" e "24 12".
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/E260.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E230.c
 ```
 
-**Exercício E261** · ★★☆
+**Exercício E231** · ★★☆
 
 A academia guarda, numa matriz 2x3, quantos alunos foram em cada turno
 (linhas: segunda e terça; colunas: manhã, tarde e noite):
@@ -1243,10 +1243,10 @@ Transposta (3x2):
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/E261.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E231.c
 ```
 
-**Exercício E262** · ★★☆
+**Exercício E232** · ★★☆
 
 Uma sala de cinema pequena tem 5 fileiras (A a E) de 6 poltronas. Na matriz,
 1 é ocupada e 0 é livre:
@@ -1281,15 +1281,15 @@ Melhor fileira: B
 1. A letra da fileira é 'A' + f (um char é um número; você vai ver isso no
    próximo assunto). printf("%c", 'A' + f) mostra A, B, C...
 2. Conte os livres dentro do laço das colunas e compare com o melhor até
-   agora no laço das linhas (padrão maior, assunto 0030).
+   agora no laço das linhas (padrão maior, assunto 0025).
 3. Use > (e não >=) para ficar com a primeira em caso de empate.
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/E262.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E232.c
 ```
 
-**Exercício E263** · ★★★
+**Exercício E233** · ★★★
 
 Dois alunos fizeram 4 provas cada (uma linha por aluno, uma coluna por
 prova). O programa deveria mostrar a média de cada aluno, mas tem DOIS erros
@@ -1307,17 +1307,17 @@ Aluno 2: média 7.25
 
 1. Quantas linhas e quantas colunas a matriz tem? E até onde vai cada laço?
 2. Mesmo com os laços certos, o aluno 1 sairia com média 7.00. Por quê?
-   (assunto 0012: divisão inteira)
+   (assunto 0007: divisão inteira)
 3. Resposta esperada: os limites estão trocados (o laço dos alunos vai até
    4 e lê notas[2], notas[3]: linhas que não existem; o das provas vai só
    até 2); e soma / 4 é divisão de int por int, que joga fora o ,50
    (use soma / 4.0).
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/E263.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E233.c
 ```
 
-**Exercício E264** · ★★★
+**Exercício E234** · ★★★
 
 Campo minado! Num campo 4x5, 1 é bomba e 0 é livre:
 
@@ -1355,12 +1355,12 @@ Saída esperada:
    int vizinhas(int campo[][COLUNAS], int l, int c) para deixar o main limpo.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0044-matrizes/E264.c
+~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E234.c
 ```
 
 ---
 
-## 0045 · Caracteres
+## 0040 · Caracteres
 
 No app do Detran, você digita a placa do carro em minúsculas: `bra2e19`. O app
 mostra `BRA2E19` e diz que o formato está certo: três letras, um número, uma
@@ -1397,14 +1397,14 @@ Os testes devolvem **diferente de zero** para verdadeiro, não necessariamente
 
 Para ler um caractere por vez do teclado, existe o `getchar()`. Ele devolve um
 **`int`**: o código do caractere ou **`EOF`**, um valor negativo que avisa que
-a entrada acabou (Ctrl+D no Linux). Guarde sempre num `int`. O exemplo A090
+a entrada acabou (Ctrl+D no Linux). Guarde sempre num `int`. O exemplo A080
 conta letras e dígitos assim, até o Enter.
 
 Vamos ver na prática. A placa está num vetor de 7 `char`. O `toupper` troca
 cada minúscula pela maiúscula, que fica 32 posições antes na tabela. Os
 dígitos passam sem mudar:
 
-<p align="center"><img src="0045-caracteres/ideia.svg" alt="Diagrama da ideia: Caracteres" width="858"></p>
+<p align="center"><img src="0040-caracteres/ideia.svg" alt="Diagrama da ideia: Caracteres" width="858"></p>
 
 O código mostra cada caractere com `%c` e `%d`, antes e depois, e confere o
 formato com `isdigit` e `isalpha`:
@@ -1462,7 +1462,7 @@ Repara no fluxograma: para cada posição, converte e pergunta o que ela deveria
 ser. Basta uma posição errada para a placa ficar inválida, e o laço segue até
 o fim mesmo assim:
 
-<p align="center"><img src="0045-caracteres/fluxograma.svg" alt="Fluxograma: Caracteres" width="617"></p>
+<p align="center"><img src="0040-caracteres/fluxograma.svg" alt="Fluxograma: Caracteres" width="617"></p>
 
 > [!WARNING]
 > **Letra não é "tudo entre `'A'` e `'z'`".** Entre o `'Z'` (90) e o `'a'`
@@ -1487,9 +1487,9 @@ o fim mesmo assim:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0045-caracteres/`](0045-caracteres/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0040-caracteres/`](0040-caracteres/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A089 · A placa digitada em minúsculas**
+**Exemplo A079 · A placa digitada em minúsculas**
 
 ```c
 #include <stdio.h>
@@ -1537,10 +1537,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/A089.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/A079.c
 ```
 
-**Exemplo A090 · Contando o que foi digitado, letra por letra**
+**Exemplo A080 · Contando o que foi digitado, letra por letra**
 
 ```c
 #include <stdio.h>
@@ -1577,12 +1577,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/A090.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/A080.c
 ```
 
 #### Exercícios
 
-**Exercício E265** · ★☆☆
+**Exercício E235** · ★☆☆
 
 Mostre o código ASCII de cada caractere do vetor abaixo, um por linha, no
 formato do exemplo. Depois, mostre os caracteres dos códigos 72, 105 e 33,
@@ -1616,10 +1616,10 @@ Hi!
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/E265.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E235.c
 ```
 
-**Exercício E266** · ★☆☆
+**Exercício E236** · ★☆☆
 
 Sem rodar, preveja cada linha. Depois rode e confira.
 
@@ -1641,10 +1641,10 @@ printf("%d\n", 'z' - 'a' + 1);
 4. Resposta esperada: b, 7, c, 0, 5q e 26.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/E266.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E236.c
 ```
 
-**Exercício E267** · ★★☆
+**Exercício E237** · ★★☆
 
 A cifra de César troca cada letra pela que fica K posições depois no
 alfabeto, dando a volta no fim (com K = 3: A vira D, X vira A, Z vira C).
@@ -1676,10 +1676,10 @@ Decifrada: ZEBRA AZUL
 5. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/E267.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E237.c
 ```
 
-**Exercício E268** · ★★☆
+**Exercício E238** · ★★☆
 
 Um formulário pede o CEP. A pessoa pode digitar com ou sem o traço:
 "69050-010" e "69050010" valem. Leia a linha caractere por caractere com
@@ -1718,10 +1718,10 @@ CEP inválido.
 4. Resposta esperada: as duas execuções acima ("6905-00100" tem 9 dígitos).
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/E268.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E238.c
 ```
 
-**Exercício E269** · ★★★
+**Exercício E239** · ★★★
 
 O programa abaixo deveria contar as letras de uma senha guardada num vetor
 de char. A senha tem 4 letras (a, B, z, Q), mas ele mostra outro número. O
@@ -1751,10 +1751,10 @@ Letras na senha: 4
    isalpha(senha[i]) ou (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z').
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/E269.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E239.c
 ```
 
-**Exercício E270** · ★★★
+**Exercício E240** · ★★★
 
 Reescreva cinco funções do ctype.h usando só a tabela ASCII (nada de
 ctype.h dentro delas):
@@ -1791,12 +1791,12 @@ Diferenças em 128 códigos: 0
    código que falhou e procure o erro.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0045-caracteres/E270.c
+~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E240.c
 ```
 
 ---
 
-## 0046 · Strings
+## 0041 · Strings
 
 Na entrada de um evento de tecnologia, a recepção imprime o crachá juntando o
 nome e o sobrenome da inscrição: "Bruna" + " " + "Matos". Depois confere se o
@@ -1821,7 +1821,7 @@ As aspas duplas já colocam o `'\0'` no fim. Por isso `"Bruna"` ocupa 6 bytes,
 e um vetor para guardar um texto de N caracteres precisa de **N + 1**
 posições. Esquecer esse +1 é o erro mais comum com string.
 
-Como string é vetor, valem as regras do assunto 0042: não dá para atribuir
+Como string é vetor, valem as regras do assunto 0037: não dá para atribuir
 com `=` depois da declaração, nem comparar com `==`. As operações de texto
 são funções do **`<string.h>`**:
 
@@ -1836,7 +1836,7 @@ O `strlen` devolve um `size_t` (inteiro sem sinal para tamanhos), que se
 mostra com `%zu`. E repare na ordem dos argumentos de `strcpy` e `strcat`: o
 **destino vem primeiro**, como numa atribuição (`dest = orig`).
 
-E uma lista de nomes? É uma matriz de `char` (assunto 0044): cada linha é uma
+E uma lista de nomes? É uma matriz de `char` (assunto 0039): cada linha é uma
 string. Em `char nomes[3][10] = {"Ana", "Bia", "Caio"};`, `nomes[1]` é a
 string "Bia", e cabem até 9 caracteres por nome.
 
@@ -1844,7 +1844,7 @@ Vamos ver na prática. O vetor `cracha` tem 20 posições. Depois do `strcpy` e
 dos dois `strcat`, as 11 primeiras guardam "Bruna Matos", a 12ª guarda o
 `'\0'`, e o resto não importa:
 
-<p align="center"><img src="0046-strings/ideia.svg" alt="Diagrama da ideia: Strings" width="858"></p>
+<p align="center"><img src="0041-strings/ideia.svg" alt="Diagrama da ideia: Strings" width="858"></p>
 
 O código monta o crachá, compara `strlen` com `sizeof` e confere com
 `strcmp`:
@@ -1882,7 +1882,7 @@ Repara no fluxograma: o `strcat` não sabe onde o crachá termina; ele procura
 o `'\0'` do destino e começa a escrever ali, por cima dele, e põe um `'\0'`
 novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
-<p align="center"><img src="0046-strings/fluxograma.svg" alt="Fluxograma: Strings" width="441"></p>
+<p align="center"><img src="0041-strings/fluxograma.svg" alt="Fluxograma: Strings" width="441"></p>
 
 > [!WARNING]
 > **`strcpy` e `strcat` não sabem o tamanho do destino.** Elas escrevem até
@@ -1908,9 +1908,9 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0046-strings/`](0046-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0041-strings/`](0041-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A091 · O nome no crachá**
+**Exemplo A081 · O nome no crachá**
 
 ```c
 #include <stdio.h>
@@ -1942,10 +1942,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/A091.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/A081.c
 ```
 
-**Exemplo A092 · Percorrendo até o '\0'**
+**Exemplo A082 · Percorrendo até o '\0'**
 
 ```c
 #include <stdio.h>
@@ -1989,12 +1989,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/A092.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/A082.c
 ```
 
 #### Exercícios
 
-**Exercício E271** · ★☆☆
+**Exercício E241** · ★☆☆
 
 Declare char cidade[] = "Manaus"; e mostre cada posição do vetor, INCLUINDO
 a do '\0', com o caractere e o código. Para o '\0', mostre \0 no lugar do
@@ -2021,10 +2021,10 @@ strlen = 6, sizeof = 7
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/E271.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E241.c
 ```
 
-**Exercício E272** · ★☆☆
+**Exercício E242** · ★☆☆
 
 Sem rodar, preveja cada linha. Para o strcmp, diga só o sinal (negativo,
 zero ou positivo): o valor exato pode mudar de um sistema para outro.
@@ -2051,10 +2051,10 @@ printf("%d\n", strcmp("casa", "casamento") < 0);
 4. Resposta esperada: "6 10", "6", "past 4", 1, 1 e 1.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/E272.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E242.c
 ```
 
-**Exercício E273** · ★★☆
+**Exercício E243** · ★★☆
 
 Implemente, sem usar o string.h, as suas versões de três funções:
 
@@ -2094,10 +2094,10 @@ igual a "joao.silva"? sim
 3. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/E273.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E243.c
 ```
 
-**Exercício E274** · ★★☆
+**Exercício E244** · ★★☆
 
 Um palíndromo se lê igual nos dois sentidos: "arara", "osso". Escreva
 
@@ -2138,10 +2138,10 @@ A: sim
    espaços e teste com "Anotaram a data da maratona".
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/E274.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E244.c
 ```
 
-**Exercício E275** · ★★★
+**Exercício E245** · ★★★
 
 O programa abaixo monta o endereço "Rio de Janeiro - RJ" e confere a
 cidade. Ele tem TRÊS erros de propósito. Dois o compilador avisa (leia os
@@ -2167,10 +2167,10 @@ Cidade conferida.
    use strcmp(cidade, "Rio") == 0.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/E275.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E245.c
 ```
 
-**Exercício E276** · ★★★
+**Exercício E246** · ★★★
 
 Uma biblioteca quer padronizar os títulos dos livros: a primeira letra de
 cada palavra em maiúscula e as outras em minúscula. Escreva
@@ -2208,12 +2208,12 @@ Saída esperada:
    das pontas continuam lá).
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0046-strings/E276.c
+~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E246.c
 ```
 
 ---
 
-## 0047 · Lendo strings
+## 0042 · Lendo strings
 
 No cadastro de um app de consultas, a pessoa digita o nome completo: "Maria
 Clara". O programa responde "Olá, Maria!". Cadê o "Clara"? O culpado é o
@@ -2223,7 +2223,7 @@ Clara". O programa responde "Olá, Maria!". Cadê o "Clara"? O culpado é o
 Antes de ver a solução, as regras do `scanf` com string:
 
 - **sem `&`**: `scanf("%s", nome)`. O nome do vetor já é o endereço do
-  começo (assunto 0043), então o `&` não vai;
+  começo (assunto 0038), então o `&` não vai;
 - para no primeiro espaço, tab ou Enter;
 - **não sabe o tamanho do vetor**. Digitou 60 letras num `char nome[40]`? Ele
   escreve as 60. Dá para limitar com a largura: `scanf("%39s", nome)`.
@@ -2258,7 +2258,7 @@ Vamos ver na prática. O vetor `nome` tem 40 bytes. O `fgets` copia os 11
 caracteres, depois o `'\n'`, depois o `'\0'`. O `strcspn` acha o `'\n'` na
 posição 11, e ele vira o novo fim:
 
-<p align="center"><img src="0047-lendo-strings/ideia.svg" alt="Diagrama da ideia: Lendo strings" width="858"></p>
+<p align="center"><img src="0042-lendo-strings/ideia.svg" alt="Diagrama da ideia: Lendo strings" width="858"></p>
 
 O código mostra a string entre colchetes antes e depois da limpeza, para você
 enxergar o `'\n'`:
@@ -2292,7 +2292,7 @@ int main(void) {
 Repara no fluxograma: o teste do `NULL` vem antes de qualquer uso. Se a
 entrada acabou, não existe nome para limpar:
 
-<p align="center"><img src="0047-lendo-strings/fluxograma.svg" alt="Fluxograma: Lendo strings" width="506"></p>
+<p align="center"><img src="0042-lendo-strings/fluxograma.svg" alt="Fluxograma: Lendo strings" width="506"></p>
 
 > [!WARNING]
 > **`scanf("%d")` seguido de `fgets` "pula" a leitura.** O `scanf` lê o
@@ -2300,7 +2300,7 @@ entrada acabou, não existe nome para limpar:
 > e devolve uma linha vazia na hora, sem esperar você digitar. A solução é
 > jogar fora o resto da linha depois do `scanf`:
 > `while ((c = getchar()) != '\n' && c != EOF) {}` (com `int c`). O exemplo
-> A094 faz isso. Você vai ver `fflush(stdin)` em material antigo: é
+> A084 faz isso. Você vai ver `fflush(stdin)` em material antigo: é
 > comportamento indefinido pelo padrão. Não use.
 
 > [!TIP]
@@ -2320,9 +2320,9 @@ entrada acabou, não existe nome para limpar:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0047-lendo-strings/`](0047-lendo-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0042-lendo-strings/`](0042-lendo-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A093 · O nome completo no cadastro**
+**Exemplo A083 · O nome completo no cadastro**
 
 ```c
 #include <stdio.h>
@@ -2351,10 +2351,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/A093.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/A083.c
 ```
 
-**Exemplo A094 · Número, depois texto, e a linha que não coube**
+**Exemplo A084 · Número, depois texto, e a linha que não coube**
 
 ```c
 #include <stdio.h>
@@ -2401,12 +2401,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/A094.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/A084.c
 ```
 
 #### Exercícios
 
-**Exercício E277** · ★☆☆
+**Exercício E247** · ★☆☆
 
 Leia o nome da cidade onde a pessoa mora com fgets (o nome pode ter
 espaços), tire o '\n' com strcspn e mostre a frase abaixo. Se o fgets
@@ -2428,10 +2428,10 @@ Você mora em Porto Alegre (12 caracteres).
 4. Resposta esperada: a execução acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/E277.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E247.c
 ```
 
-**Exercício E278** · ★☆☆
+**Exercício E248** · ★☆☆
 
 O programa abaixo faz três leituras seguidas. Rode-o digitando a linha
 
@@ -2453,10 +2453,10 @@ mas ANTES preveja o que aparece entre cada par de colchetes.
    antes de ler; o fgets não pula nada.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/E278.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E248.c
 ```
 
-**Exercício E279** · ★★☆
+**Exercício E249** · ★★☆
 
 Este programa lê a quantidade de ingressos e o nome do comprador. Rode
 digitando 2 e Enter: ele nem espera você digitar o nome, e mostra o
@@ -2481,10 +2481,10 @@ Nome do comprador: Ana Lima
    int c; while ((c = getchar()) != '\n' && c != EOF) {}
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/E279.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E249.c
 ```
 
-**Exercício E280** · ★★☆
+**Exercício E250** · ★★☆
 
 O cadastro do banco exige uma senha com pelo menos 8 caracteres, uma letra
 maiúscula, uma minúscula e um dígito (espaço é permitido). Leia a senha com
@@ -2525,10 +2525,10 @@ Senha forte.
 4. Resposta esperada: as três execuções acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/E280.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E250.c
 ```
 
-**Exercício E281** · ★★★
+**Exercício E251** · ★★★
 
 Monte uma lista de compras. Leia até 5 itens, um por linha, com fgets,
 guardando cada um numa linha da matriz char itens[5][16] (até 15
@@ -2571,10 +2571,10 @@ Primeiro em ordem alfabética: arroz
 5. Resposta esperada: a execução acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/E281.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E251.c
 ```
 
-**Exercício E282** · ★★★
+**Exercício E252** · ★★★
 
 O programa abaixo lê com fgets num vetor de só 6 bytes, num laço, até a
 entrada acabar, e mostra cada pedaço lido entre colchetes. Preveja a saída
@@ -2603,12 +2603,12 @@ deste arquivo.
    parece uma linha nova se você não conferir o '\n'.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0047-lendo-strings/E282.c
+~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E252.c
 ```
 
 ---
 
-## 0048 · Juntando tudo
+## 0043 · Juntando tudo
 
 A escola do bairro abriu uma enquete para escolher o mascote da festa junina:
 arara, boto ou capivara. Os votos chegam do formulário, um por linha, do jeito
@@ -2617,30 +2617,30 @@ contar, desenhar um gráfico de barras e anunciar o vencedor.
 
 O problema usa tudo o que o módulo ensinou:
 
-- **`fgets` num laço** (assunto 0047) lê um voto por linha até a entrada
+- **`fgets` num laço** (assunto 0042) lê um voto por linha até a entrada
   acabar, quando ele devolve `NULL`;
-- **caracteres** (0045): `tolower` em cada letra deixa "BOTO" e "boto" iguais;
-- **strings** (0046): `strcspn` tira o `'\n'` e `strcmp` compara o voto com
+- **caracteres** (0040): `tolower` em cada letra deixa "BOTO" e "boto" iguais;
+- **strings** (0041): `strcspn` tira o `'\n'` e `strcmp` compara o voto com
   cada candidato;
-- **matriz de `char`** (0044): os nomes dos candidatos, um por linha;
-- **vetor de contadores** (0042): `votos[i]` conta os votos do candidato `i`.
+- **matriz de `char`** (0039): os nomes dos candidatos, um por linha;
+- **vetor de contadores** (0037): `votos[i]` conta os votos do candidato `i`.
   A posição do nome na matriz é a mesma do contador no vetor;
-- **funções que recebem vetores** (0043): `normalizar` altera a linha lida,
+- **funções que recebem vetores** (0038): `normalizar` altera a linha lida,
   `buscar` só lê.
 
 Divida assim: o `main` cuida do laço e do resultado; cada função faz uma coisa
-só. `buscar` devolve a posição ou -1, como a busca do A086: é assim que "Tatu"
+só. `buscar` devolve a posição ou -1, como a busca do A076: é assim que "Tatu"
 cai nos inválidos sem nenhum `if` especial. E o `(unsigned char)` dentro do
-`tolower` protege contra votos com acento (veja o assunto 0045).
+`tolower` protege contra votos com acento (veja o assunto 0040).
 
 Vamos ver na prática. Cada linha passa pela mesma esteira: lê, normaliza,
 procura na matriz de nomes e soma 1 no contador da posição certa. "Tatu" não
 está na matriz, então vai para os inválidos:
 
-<p align="center"><img src="0048-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
+<p align="center"><img src="0043-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
 
 O programa completo. Para testar sem digitar, mande os votos com `printf
-'boto\nArara\n...' | ~/LPEDC/rodar` e o caminho do A095:
+'boto\nArara\n...' | ~/LPEDC/rodar` e o caminho do A085:
 
 ```c
 #include <stdio.h>
@@ -2714,16 +2714,16 @@ int main(void) {
 // Vencedor: boto
 ```
 
-Repara no fluxograma: é um laço com sentinela (assunto 0030), só que a
+Repara no fluxograma: é um laço com sentinela (assunto 0025), só que a
 sentinela é o `NULL` do `fgets`. Dentro dele, uma decisão: achou o candidato
 ou não. O resultado só sai depois que a entrada acaba:
 
-<p align="center"><img src="0048-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="607"></p>
+<p align="center"><img src="0043-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="607"></p>
 
 E se a lista de nomes precisasse sair em ordem alfabética? Como string não se
 atribui com `=`, trocar dois nomes de lugar é um `strcpy` triplo, com uma
-string auxiliar. O exemplo A096 ordena uma lista de chamada assim, uma prévia
-da ordenação por seleção (assunto 0097).
+string auxiliar. O exemplo A086 ordena uma lista de chamada assim, uma prévia
+da ordenação por seleção (assunto 0092).
 
 > [!WARNING]
 > **Empate.** Com `votos[i] > votos[vencedor]`, um empate fica com quem
@@ -2749,9 +2749,9 @@ da ordenação por seleção (assunto 0097).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0048-juntando-tudo/`](0048-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Os arquivos ficam em [`0043-juntando-tudo/`](0043-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A095 · A enquete do mascote**
+**Exemplo A085 · A enquete do mascote**
 
 ```c
 #include <stdio.h>
@@ -2826,10 +2826,10 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/A095.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/A085.c
 ```
 
-**Exemplo A096 · A lista de chamada em ordem alfabética**
+**Exemplo A086 · A lista de chamada em ordem alfabética**
 
 ```c
 #include <stdio.h>
@@ -2880,12 +2880,12 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/A096.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/A086.c
 ```
 
 #### Exercícios
 
-**Exercício E283** · ★☆☆
+**Exercício E253** · ★☆☆
 
 Leia uma frase com fgets e conte quantas vezes aparece cada vogal, sem
 diferenciar maiúscula de minúscula. Guarde as contagens num vetor de 5 int
@@ -2911,10 +2911,10 @@ u: 2
 4. Resposta esperada: a execução acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/E283.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E253.c
 ```
 
-**Exercício E284** · ★☆☆
+**Exercício E254** · ★☆☆
 
 Complete as funções para mostrar a tabela de artilheiros do campeonato do
 bairro, com o nome alinhado à esquerda em 10 colunas e o total no fim. O
@@ -2936,17 +2936,17 @@ Artilheiro: Duda
 
 1. printf("%-10s%6d\n", nomes[i], gols[i]) alinha o nome à esquerda em 10
    colunas e o número à direita em 6.
-2. indice_artilheiro é o padrão "posição do maior" do assunto 0043.
+2. indice_artilheiro é o padrão "posição do maior" do assunto 0038.
 3. Repare que "Kauã" tem um acento: em UTF-8 são 5 bytes, e o printf conta
    bytes. Por isso o número dele aparece uma coluna à esquerda dos
    outros. Tudo bem aqui; só saiba por quê.
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/E284.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E254.c
 ```
 
-**Exercício E285** · ★★☆
+**Exercício E255** · ★★☆
 
 Uma rodada de forca, com tudo fixo no código: a palavra secreta é "BANANA"
 e os chutes, na ordem, estão no vetor abaixo. Depois de cada chute, mostre
@@ -2981,10 +2981,10 @@ Venceu com 1 erro(s)!
 4. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/E285.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E255.c
 ```
 
-**Exercício E286** · ★★☆
+**Exercício E256** · ★★☆
 
 Valide um CPF digitado com fgets, com ou sem pontuação ("529.982.247-25"
 ou "52998224725"). Os dois últimos dígitos são verificadores, calculados a
@@ -3029,10 +3029,10 @@ CPF inválido.
 4. Resposta esperada: as duas execuções acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/E286.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E256.c
 ```
 
-**Exercício E287** · ★★★
+**Exercício E257** · ★★★
 
 O programa abaixo deveria mostrar o nome de trás para frente. Ele tem DOIS
 erros de propósito. Rode com o rodar: o sanitizer acusa um. Conserte esse,
@@ -3057,10 +3057,10 @@ aluaP anA
    nome[n - 1 - i]; e depois invertido[n] = '\0'.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/E287.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E257.c
 ```
 
-**Exercício E288** · ★★★
+**Exercício E258** · ★★★
 
 Compressão RLE (run-length encoding): cada sequência de letras repetidas
 vira a letra seguida de quantas vezes ela aparece. "aaabccdddd" vira
@@ -3107,7 +3107,7 @@ z9z3 (12 -> 4)
 4. Resposta esperada: as três execuções acima.
 
 ```bash
-~/LPEDC/rodar 05-vetores-e-strings/0048-juntando-tudo/E288.c
+~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E258.c
 ```
 
 ---
@@ -3151,7 +3151,7 @@ Monte `c` com os 7 valores em ordem, sem ordenar `c` depois.
 
 `1 2 3 4 9 10 12`. Um índice em cada vetor: compare `a[i]` com `b[j]`, copie
 o menor para `c[k]` e avance quem foi copiado. Quando um acabar, copie o
-resto do outro. É o coração do *merge sort* (assunto 0099).
+resto do outro. É o coração do *merge sort* (assunto 0094).
 
 </details>
 
@@ -3243,7 +3243,7 @@ vizinhas nasce; o resto morre ou fica morto. Calcule a próxima geração de um
 Ela vira uma **coluna** de três: `[1][2]`, `[2][2]`, `[3][2]`. Na geração
 seguinte, volta a ser linha. O cuidado: calcule tudo numa **segunda matriz**.
 Se você atualizar a original enquanto conta, as células já mudadas atrapalham
-a contagem das vizinhas. A contagem de vizinhas é a do campo minado (E264).
+a contagem das vizinhas. A contagem de vizinhas é a do campo minado (E234).
 
 </details>
 

@@ -1,25 +1,22 @@
-// 0026 · Do-while
+// 0026 · Aleatórios
 // Exercício E155 · ★★★
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void) {
-    const int correta = 4321;
-    int senha;
-    int tentativas = 0;
+    const int pontos = 1000000;
+    int dentro = 0;
 
-    do {
-        printf("Senha: ");
-        if (scanf("%d", &senha) != 1) {
-            return 1;
+    srand(42);
+    for (int i = 0; i < pontos; i++) {
+        double x = (double) rand() / RAND_MAX; // de 0.0 a 1.0
+        double y = (double) rand() / RAND_MAX;
+        if (x * x + y * y <= 1.0) {
+            dentro++;
         }
-        tentativas++;
-    } while (senha != correta && tentativas < 3);
-
-    if (senha == correta) {
-        printf("Senha correta na tentativa %d.\n", tentativas);
-    } else {
-        printf("Cartão bloqueado.\n");
     }
+    printf("Dentro do círculo: %d de %d\n", dentro, pontos);
+    printf("pi ~ %.4f\n", 4.0 * dentro / pontos);
     return 0;
 }

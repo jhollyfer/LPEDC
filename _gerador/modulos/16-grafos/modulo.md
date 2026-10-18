@@ -54,9 +54,9 @@ verdes são as que a busca usou (a árvore da busca ou a rota final).
 
 ## Antes de começar
 
-Você vai usar sem cerimônia: matrizes (0044), structs e `typedef` (0064 e
-0065), `malloc` e `free` (0059), lista encadeada (0081), pilha (0087), fila
-(0090), recursão (0037) e, no último assunto, heap (0107). Se algum desses
+Você vai usar sem cerimônia: matrizes (0039), structs e `typedef` (0059 e
+0060), `malloc` e `free` (0054), lista encadeada (0076), pilha (0082), fila
+(0085), recursão (0032) e, no último assunto, heap (0102). Se algum desses
 estiver enferrujado, dê uma revisada antes.
 
 Os vértices são sempre números de 0 a V-1, e o nome de cada um fica num
@@ -64,7 +64,7 @@ vetor de strings à parte. Nos exemplos, os vizinhos são examinados em ordem
 crescente de índice. Isso decide empates e a ordem da visita: se você mudar a
 numeração, a saída muda, e não está errada.
 
-O assunto 0114 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
+O assunto 0109 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
 `rodar` compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
 assuntos, cada arquivo traz tudo dentro dele, com matriz de adjacência, para
 o algoritmo ficar inteiro na tela.
@@ -160,7 +160,7 @@ Na BFS, guarde `cont[origem] = 1` e, ao examinar a aresta u-v: se v é novo,
 
 </details>
 
-**7. Estrada crítica.** No mapa da transportadora do A235 (sem a Ilha), existe
+**7. Estrada crítica.** No mapa da transportadora do A225 (sem a Ilha), existe
 alguma estrada que, se cair, deixa algum lugar sem acesso ao CD? Como
 descobrir com o que você já sabe?
 
@@ -174,7 +174,7 @@ um algoritmo com uma DFS só (Tarjan) para achar todas.
 
 </details>
 
-**8. Kruskal contra Prim.** Refaça a fibra óptica do A236 com o algoritmo de
+**8. Kruskal contra Prim.** Refaça a fibra óptica do A226 com o algoritmo de
 **Kruskal**: ordene todos os trechos do mais barato ao mais caro e aceite cada
 um que não feche ciclo. Em que ordem os trechos entram? O total muda?
 
@@ -196,13 +196,13 @@ d[i][k] + d[k][j])`. Qual o custo? Qual cuidado com o INFINITO?
 <details><summary>Resposta</summary>
 
 **O(V³)**: igual a V execuções do Dijkstra com matriz, mas com código bem
-menor. O cuidado é o mesmo do assunto 0117: `d[i][k] + d[k][j]` estoura se um
+menor. O cuidado é o mesmo do assunto 0112: `d[i][k] + d[k][j]` estoura se um
 dos dois for `INT_MAX`. Teste antes de somar, ou use um INFINITO folgado,
 como `1000000000`, que somado duas vezes ainda cabe em `int`.
 
 </details>
 
-**10. Labirinto com lama.** No galpão do A230, algumas casas têm lama: entrar
+**10. Labirinto com lama.** No galpão do A220, algumas casas têm lama: entrar
 nelas custa 5 passos em vez de 1. A BFS ainda acha o caminho mais rápido? O
 que você usaria?
 

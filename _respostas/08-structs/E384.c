@@ -1,23 +1,28 @@
-// 0064 · Struct
+// 0064 · Union
 // Exercício E384 · ★★★
 //
-// Resposta: a = 12 (ativo 0, 3 de sobra, id 4, nivel 8, 3 de sobra no fim),
-// b = 8 (id 0, ativo 4, nivel 5, 2 de sobra), c = 24 (ativo 0, 7 de sobra,
-// saldo 8, nivel 16, 7 de sobra) e d = 16 (saldo 0, id 8, ativo 12, nivel 13,
-// 2 de sobra). Do maior campo para o menor desperdiça menos.
+// Resposta. Na memória, little-endian guarda 44 33 22 11 e big-endian guarda
+// 11 22 33 44.
+// Little-endian (o seu PC): m[0] = 0x3344, m[1] = 0x1122; b[0] = 0x44,
+// b[3] = 0x11; trocar b[0] troca o byte menos significativo: n = 0x112233FF.
+// Big-endian: m[0] = 0x1122, m[1] = 0x3344; b[0] = 0x11, b[3] = 0x44; b[0] é
+// o byte mais significativo: n = 0xFF223344.
 
-#include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 
-struct a { char ativo; int id; char nivel; };
-struct b { int id; char ativo; char nivel; };
-struct c { char ativo; double saldo; char nivel; };
-struct d { double saldo; int id; char ativo; char nivel; };
+typedef union {
+    uint32_t n;
+    uint16_t m[2];
+    unsigned char b[4];
+} Visao;
 
 int main(void) {
-    printf("sizeof: a = %zu, b = %zu, c = %zu, d = %zu\n",
-           sizeof(struct a), sizeof(struct b), sizeof(struct c), sizeof(struct d));
-    printf("struct a: ativo em %zu, id em %zu, nivel em %zu\n",
-           offsetof(struct a, ativo), offsetof(struct a, id), offsetof(struct a, nivel));
+    Visao x;
+    x.n = 0x11223344;
+    printf("m[0] = 0x%04X, m[1] = 0x%04X\n", (unsigned)x.m[0], (unsigned)x.m[1]);
+    printf("b[0] = 0x%02X, b[3] = 0x%02X\n", x.b[0], x.b[3]);
+    x.b[0] = 0xFF;
+    printf("n = 0x%08X\n", (unsigned)x.n);
     return 0;
 }

@@ -1,32 +1,42 @@
-// 0033 · Funções
+// 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 // Exercício E197 · ★★★
-//
-// Resposta: 8, 4, 11 e 5. ajusta(7) = 8 (ímpar, soma 1); dobro(7) = 14 e
-// ajusta(14) = 4; ajusta(8) = 4, dobro(4) = 8, dobro(3) = 6, ajusta(6) = 3,
-// 8 + 3 = 11; ajusta(30) = 20, ajusta(20) = 10, ajusta(10) = 5. O printf
-// depois do return em dobro nunca roda (o compilador nem gera código para ele).
 
 #include <stdio.h>
 
-int dobro(int n) {
-    return 2 * n;
-    printf("nunca aparece\n");
+int multiplicacoes = 0;
+
+long long pot_lenta(long long x, int e) {
+    if (e == 0) {
+        return 1;
+    }
+    multiplicacoes++;
+    return x * pot_lenta(x, e - 1);
 }
 
-int ajusta(int n) {
-    if (n > 10) {
-        return n - 10;
+long long pot_rapida(long long x, int e) {
+    if (e == 0) {
+        return 1;
     }
-    if (n % 2 == 0) {
-        return n / 2;
+    if (e % 2 == 0) {
+        long long metade = pot_rapida(x, e / 2);
+        multiplicacoes++;
+        return metade * metade;
     }
-    return n + 1;
+    multiplicacoes++;
+    return x * pot_rapida(x, e - 1);
+}
+
+void comparar(long long x, int e) {
+    multiplicacoes = 0;
+    long long r = pot_lenta(x, e);
+    printf("lenta:  %lld^%d = %lld (%d multiplicações)\n", x, e, r, multiplicacoes);
+    multiplicacoes = 0;
+    r = pot_rapida(x, e);
+    printf("rápida: %lld^%d = %lld (%d multiplicações)\n", x, e, r, multiplicacoes);
 }
 
 int main(void) {
-    printf("%d\n", ajusta(7));
-    printf("%d\n", ajusta(dobro(7)));
-    printf("%d\n", dobro(ajusta(8)) + ajusta(dobro(3)));
-    printf("%d\n", ajusta(ajusta(ajusta(30))));
+    comparar(3, 13);
+    comparar(2, 60);
     return 0;
 }

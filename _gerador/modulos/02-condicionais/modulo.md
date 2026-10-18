@@ -63,7 +63,7 @@ o `math.h`. Os exercícios que leem do teclado aceitam a entrada por um pipe,
 o que facilita testar vários casos seguidos:
 
 ```bash
-printf '230\nA\n0\n' | ~/LPEDC/rodar 02-condicionais/0024-juntando-tudo/A047.c
+printf '230\nA\n0\n' | ~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A037.c
 ```
 
 Alguns exercícios do tipo "ache o erro" trazem o código quebrado **de
@@ -98,7 +98,7 @@ disputa o maior e o menor de cada par disputa o menor.
 </details>
 
 **2. Três números em ordem.** Leia três inteiros e mostre em ordem
-crescente. Use trocas com uma variável auxiliar, como no A038.
+crescente. Use trocas com uma variável auxiliar, como no A028.
 
 <details><summary>Resposta</summary>
 
@@ -108,7 +108,7 @@ disso `a <= b <= c`. Teste também com números repetidos (5, 5, 1).
 
 </details>
 
-**3. Bhaskara completo.** Estenda o E120: se `a` for 0, avise que não é
+**3. Bhaskara completo.** Estenda o E090: se `a` for 0, avise que não é
 equação do 2º grau (e resolva a do 1º grau, se `b` não for 0); se delta for
 zero, mostre uma raiz só; se for positivo, as duas; se for negativo, "Sem
 raízes reais".
@@ -222,7 +222,7 @@ signo começa num dia de um mês e termina no mês seguinte (Áries: 21/03 a
 
 Um `switch (mes)` com um `if` dentro de cada `case`: em abril, por exemplo,
 `dia <= 19` é Áries, senão Touro. 25/04 → **Touro**; 10/04 → **Áries**. São
-12 `case`, cada um com um ternário ou `if/else`. Valide a data antes (o E141
+12 `case`, cada um com um ternário ou `if/else`. Valide a data antes (o E111
 já faz isso).
 
 </details>

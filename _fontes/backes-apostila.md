@@ -29,7 +29,7 @@
 
 ## 00-logica
 
-### 0001-algoritmo / 0003-fluxograma
+### logica1-algoritmo / logica3-fluxograma
 - **Conceitos-chave:** a apostila não ensina algoritmo do zero, mas usa fluxogramas (losango =
   decisão) para explicar `if`, `else`, `switch`, `while`, `for`, `do-while`, `break`, `continue`.
   Mostra o mesmo laço em pseudocódigo ("enquanto A < B faça…") e em fluxograma.
@@ -40,7 +40,7 @@
 - **Ideias de exercícios:** dado o pseudocódigo "X ← 4; enquanto X < 5: X ← X − 1; imprima X",
   dizer o que acontece. Resposta: laço infinito (X só diminui, nunca chega a 5).
 
-### 0004-binario
+### logica4-binario
 - **Conceitos-chave:** literais em octal (prefixo `0`) e hexadecimal (`0x`); conversão manual
   (`044` = 4·8+4 = 36; `0x44` = 4·16+4 = 68). Número 44 em binário = `00101100` (usado nos
   exemplos de operadores bit a bit).
@@ -48,7 +48,7 @@
 - **Ideias de exercícios:** quanto vale `int a = 017;`? (15). E `0x1F`? (31). Imprimir 125 em
   `%o`, `%x`, `%X` → `175`, `7d`, `7D`.
 
-### 0005-compilacao
+### logica5-compilacao
 - **Conceitos-chave:** compilar arquivo → objeto; *build* → compila tudo e liga (linkagem) →
   executável; *build and run*. Diretivas são processadas antes da compilação pelo pré-processador.
   `#include <...>` procura nos diretórios do sistema; `#include "..."` procura primeiro na pasta do
@@ -65,7 +65,7 @@
 
 ## 01-fundamentos
 
-### 0006-primeiro-programa
+### 0001-primeiro-programa
 - **Conceitos-chave:** esqueleto (`#include`, `int main()`, chaves delimitam bloco, `return 0`
   avisa que terminou bem); quase todo comando termina em `;`; parênteses delimitam argumentos de
   função; indentação mostra hierarquia (o mesmo programa em 3 linhas compila, mas é ilegível);
@@ -73,7 +73,7 @@
 - **Pegadinhas:** `system("pause")` aparece em todo exemplo — é só do Windows; **não usar** no curso.
 - **Ideias de exercícios:** reescrever um programa "achatado" em uma linha com indentação correta.
 
-### 0007-variaveis
+### 0002-variaveis
 - **Conceitos-chave:** variável = posição de memória com nome e tipo; o tipo define valores e
   operações possíveis; declarar antes de usar; várias na mesma linha separadas por vírgula.
   Regras de nome: letras, dígitos e `_`, começando por letra ou `_`; maiúsculas ≠ minúsculas
@@ -87,7 +87,7 @@
   `1cont`, `-x`, `comp!`, `int`, `x&` inválidos).
 - **Ideias de exercícios:** classificar 10 nomes como válidos ou não, justificando.
 
-### 0008-tipos-e-limites
+### 0003-tipos-e-limites
 - **Conceitos-chave:** tipos básicos `char`, `int`, `float`, `double`, `void`; modificadores
   `signed`, `unsigned`, `short`, `long` (podem combinar: `unsigned long int`). `unsigned` "ganha" o
   bit de sinal e dobra o máximo positivo. `void` não serve para variável.
@@ -101,7 +101,7 @@
 - **Ideias de exercícios:** prever a saída do exemplo acima; escrever programa que imprime
   `sizeof` de todos os tipos e compara com a tabela.
 
-### 0009-constantes
+### 0004-constantes
 - **Conceitos-chave:** `#define NOME valor` (substituição textual antes da compilação) × `const
   tipo NOME = valor;` (variável que não pode mudar, segue regras de escopo). Constante precisa ser
   inicializada na declaração. `#define TAMANHO 100` permite redimensionar todos os vetores mudando
@@ -111,7 +111,7 @@
 - **Ideias de exercícios:** escrever um `printf` que produza exatamente: `Caminho: C:\temp\novo` e
   outra linha com aspas. Resposta: `printf("Caminho: C:\\temp\\novo\n\"ok\"\n");`
 
-### 0010-printf
+### 0005-printf
 - **Conceitos-chave (básico, cap. 2):** string de formato + lista de valores na mesma ordem;
   `%c %d %i %u %f %s %p %e`; texto livre antes/entre/depois dos especificadores; `printf` **não** usa
   `&`. `putchar` escreve um caractere (aceita int: `putchar(65)` imprime `A`).
@@ -131,7 +131,7 @@
 - **Ideias de exercícios:** prever a saída de `printf("[%5d][%-5d][%05d][%+d]", 5,5,5,5)` →
   `[    5][5    ][00005][+5]`; imprimir `123.45678` com `%.3f`, `%.5e`, `%.5g`.
 
-### 0011-scanf
+### 0006-scanf
 - **Conceitos-chave:** cada variável lida leva `&` (scanf precisa do endereço); `%d%d` e `%d %d` são
   equivalentes (espaços em branco são ignorados); usuário pode separar com espaço ou ENTER.
   Caracteres fixos no formato precisam ser digitados e são descartados: `scanf("%d/%d/%d", &d,&m,&a)`
@@ -149,7 +149,7 @@
 - **Ideias de exercícios:** ler data `dd/mm/aaaa` e imprimir `aaaa-mm-dd`; ler "Ana 20 Computação"
   com `%s %*d %s`; validar retorno do scanf (repetir até ler um inteiro).
 
-### 0012-aritmetica
+### 0007-aritmetica
 - **Conceitos-chave:** `+ - * / %`; menos unário inverte sinal; `/` entre inteiros descarta a parte
   fracionária (`5/4` = 1, `5/4.0` = 1.25); `%` só para inteiros; precedência segue a matemática,
   parênteses forçam ordem. Tabela grande de precedência no fim do cap. 2.
@@ -159,13 +159,13 @@
 - **Ideias de exercícios:** média de 3 notas inteiras: por que `(a+b+c)/3` erra e `(a+b+c)/3.0`
   acerta?
 
-### 0013-conversao
+### 0008-conversao
 - **Conceitos-chave:** atribuição entre tipos diferentes converte para o tipo da esquerda, podendo
   perder informação: `char ch = 65;` → 'A'; `int x = 25.1;` → 25; `float f = ch;` → 65.0. Cast
   explícito `(tipo)expressão`: `y = (int)(65.5/10.0)` → 6.0.
 - **Ideias de exemplos:** o exemplo `x = f/10.0` × `y = (int)(f/10.0)` com f = 65.5 (6.55 × 6.00).
 
-### 0014-atribuicao
+### 0009-atribuicao
 - **Conceitos-chave:** `=` copia o valor da direita para a variável da esquerda (`5 = x` e
   `y + 5 = x` são erros); atribuição múltipla `x = y = z = 5` (da direita para a esquerda);
   compostos `+= -= *= /= %= &= |= ^= <<= >>=` (`x += 10*y` ≡ `x = x + 10*y`); `++x` incrementa antes
@@ -176,7 +176,7 @@
   para `(*p)++;` e `index = (index + 1) % 4;`.
 - **Ideias de exercícios:** prever x e y após `x=10; y = x++ + 1;` (x=11, y=11).
 
-### 0015-math
+### 0010-math
 - **Conceitos-chave:** lista de `math.h`: trigonométricas (radianos), hiperbólicas, `exp`, `log`,
   `log10`, `modf`, `pow`, `sqrt`, `ceil`, `floor`, `fabs`, `fmod`. `stdlib.h`: `abs`, `labs`,
   `div`, `ldiv`.
@@ -187,20 +187,20 @@
 
 ## 02-condicionais
 
-### 0017-relacionais
+### 0012-relacionais
 - **Conceitos-chave:** `> >= < <= == !=` devolvem 1 (verdadeiro) ou 0 (falso); em C qualquer valor
   ≠ 0 é verdadeiro: `if (num)` ≡ `if (num != 0)`; `if (!num)` ≡ `if (num == 0)`. Condição pode
   misturar aritméticos, relacionais e lógicos (`x/2 > y - 3`).
 - **Pegadinhas:** não existem `=<`, `=>` nem `<>` (este é do Pascal).
 - **Ideias de exercícios:** com x=5, y=3, avaliar `x > 4`, `x == 4`, `x != y`, `x != y+2` → 1,0,1,0.
 
-### 0018-logicos
+### 0013-logicos
 - **Conceitos-chave:** `&&`, `||`, `!` com tabela-verdade; intervalo 0 < x < 10 vira `x > 0 && x < 10`.
 - **Pegadinhas:** escrever `0 < x < 10` em C compila mas não faz o que parece. (A apostila não fala
   de curto-circuito — completar com outra fonte.)
 - **Ideias de exercícios:** montar a tabela-verdade de `!a || b`.
 
-### 0019-if / 0020-if-else
+### 0014-if / 0015-if-else
 - **Conceitos-chave:** `if` executa só o comando seguinte, a menos que haja bloco `{}`; `else` não
   tem condição (é o "caso contrário"); cada um tem seu próprio par de chaves.
 - **Pegadinhas (todas com exemplo certo × errado):** `if (num > 10);` — o `;` vira o corpo do if e o
@@ -210,19 +210,19 @@
 - **Ideias de exercícios:** "ache o erro": entregar 4 trechos com `;` após if, `else (cond)`, `=` no
   lugar de `==`, chaves faltando; pedir a saída para num = 3.
 
-### 0021-else-if
+### 0016-else-if
 - **Conceitos-chave:** if aninhado para três caminhos (igual/maior/menor que 10). O `else` liga-se
   ao `if` mais próximo sem else dentro do mesmo bloco, **independente da indentação**; para ligar ao
   de fora, isolar o interno com `{}`. Não existe "else de else".
 - **Ideias de exercícios:** prever saída de `if (a>0) if (b>0) printf("A"); else printf("B");` para
   a = −1, b = 5 (não imprime nada).
 
-### 0022-ternario
+### 0017-ternario
 - **Conceitos-chave:** `cond ? expr1 : expr2`, típico em atribuição (`z = x > y ? x : y`); pode
   chamar funções nos ramos.
 - **Ideias de exemplos:** contador circular 0,1,2,3,0,… (corrigido: `i = (i == 3) ? 0 : i + 1`).
 
-### 0023-switch
+### 0018-switch
 - **Conceitos-chave:** compara uma variável inteira/char com constantes (`case`), `default`
   opcional; mais elegante que cadeia de if-else para igualdades. Sem `break` a execução "cai" nos
   cases seguintes. Se o primeiro comando de um case declara variável, envolver o case em `{}`
@@ -237,19 +237,19 @@
 
 ## 03-repeticoes
 
-### 0025-while
+### 0020-while
 - **Conceitos-chave:** testa antes, repete 0 ou mais vezes; atua só no comando seguinte sem `{}`.
   Laço infinito: falta condição de parada ou ela nunca é atingida (variável da condição não muda, ou
   muda no sentido errado).
 - **Pegadinhas:** `while (a < b); { ... }` — laço infinito vazio.
 - **Ideias de exercícios:** imprimir os inteiros entre a e b (exclusivo) com while.
 
-### 0026-do-while
+### 0021-do-while
 - **Conceitos-chave:** executa ao menos uma vez; exige `;` após `while(cond)`. Uso típico: menu que
   repete enquanto opção inválida (`while (i < 1 || i > 3)`).
 - **Ideias de exercícios:** menu de 3 opções com validação; depois transformar em função `int menu()`.
 
-### 0027-for
+### 0022-for
 - **Conceitos-chave:** inicialização → teste → corpo → incremento → teste…; qualquer cláusula pode
   ser omitida mas os dois `;` ficam; sem condição = laço infinito; "incremento" pode ser qualquer
   atualização (`c = c + 2`, ou até `scanf`); vírgula permite duas variáveis
@@ -258,7 +258,7 @@
 - **Ideias de exercícios:** imprimir o alfabeto; i sobe de 0 e j desce de 100 até se cruzarem —
   quantas linhas? (50).
 
-### 0028-break-continue
+### 0023-break-continue
 - **Conceitos-chave:** `break` sai do laço/switch; `continue` pula para a próxima iteração (só em
   laços). `goto rótulo` (mesma função) existe, programação estruturada dispensa; único uso defendido:
   sair de laços aninhados.
@@ -268,16 +268,16 @@
 - **Ideias de exercícios:** três laços aninhados (i,j,k de 0 a 4) que param quando i=2, j=3, k=1:
   fazer com `goto`, depois sem goto (flag ou função com `return`).
 
-### 0029-lacos-aninhados
+### 0024-lacos-aninhados
 - **Conceitos-chave:** laço dentro de laço para percorrer pares (linha, coluna); pode misturar tipos
   de laço.
 - **Ideias de exemplos:** matriz identidade 4×4 impressa com dois `for` e com dois `while`.
 
-### 0030-padroes-de-laco
+### 0025-padroes-de-laco
 - **Ideias de exemplos (cap. 5):** soma de vetor, maior valor (começa com `lista[0]` e varre de 1),
   média (`soma / 5.0`), soma de matriz, impressão linha a linha.
 
-### 0031-aleatorios
+### 0026-aleatorios
 - **Conceitos-chave:** apenas listados (`rand`, `srand` em stdlib; `time`, `clock`, `difftime`,
   `CLOCKS_PER_SEC` em time.h). Sem exemplos — completar com outra fonte.
 
@@ -285,7 +285,7 @@
 
 ## 04-funcoes
 
-### 0033-funcoes
+### 0028-funcoes
 - **Conceitos-chave:** motivos: estruturar o programa em blocos e reutilizar código. Forma
   `tipo nome(parâmetros) { ... }`; definir antes do `main` ou declarar **protótipo** antes (nomes
   dos parâmetros são opcionais no protótipo). Funcionamento: chamada interrompe o fluxo, valores são
@@ -301,13 +301,13 @@
 - **Ideias de exercícios:** extrair o fatorial do `main` para uma função; escrever `int maior(int,int)`
   com um e com dois `return`.
 
-### 0034-parametros
+### 0029-parametros
 - **Conceitos-chave:** em C tudo é passado por valor (cópia); alterar o parâmetro não altera a
   variável original (`soma_mais_um(x)`: antes 5, dentro 6, depois 5). Parâmetro é variável local.
 - **Ideias de exercícios:** prever a saída do exemplo `Troca(x, y)` por valor (dentro troca, fora
   não) — ponte para ponteiros.
 
-### 0035-escopo
+### 0030-escopo
 - **Conceitos-chave:** escopo = onde e quando a variável vale. Global (fora de funções) vive o
   programa todo e é visível em todo lugar; local vive só no bloco `{}`. Variável local com mesmo nome
   **oculta** a global/externa; a declaração mais próxima vence. Exemplo célebre: x global = 5, depois
@@ -323,12 +323,12 @@
   tem ligação externa; com `static` fica restrita ao arquivo.
 - **Ideias de exercícios:** prever a saída do exemplo 5/4/3/4; função `contaChamadas()` com `static`.
 
-### 0036-pilha-de-chamadas
+### 0031-pilha-de-chamadas
 - **Conceitos-chave:** cada chamada guarda parâmetros, locais e endereço de retorno; na recursão isso
   é empilhado a cada chamada, por isso custa memória e tempo. Figura de fatorial(3) descendo
   (chamadas) e subindo (retornos).
 
-### 0037-recursao / 0038-recursao-na-pratica
+### 0032-recursao / 0033-recursao-na-pratica
 - **Conceitos-chave:** função que chama a si mesma; "definição circular"; dividir para conquistar.
   Dois cuidados: **critério de parada** (0! = 1) e **parâmetro que muda** a cada chamada (n−1).
   Versões recursiva e iterativa de fatorial e Fibonacci.
@@ -337,12 +337,12 @@
 - **Ideias de exercícios:** contar quantas chamadas `fibo(5)` faz (15); escrever Fibonacci
   iterativo com a, b, c.
 
-### 0039-modulos
+### 0034-modulos
 - **Conceitos-chave:** `#include "arquivo.h"` com caminho; `extern` para compartilhar global entre
   arquivos; `static` para esconder função no arquivo. (Não mostra include guards explicitamente, mas
   mostra `#ifndef ... #define ... #endif`, que é a base.)
 
-### 0040-preprocessador
+### 0035-preprocessador
 - **Conceitos-chave:** diretivas começam com `#`, uma por linha. `#define` em três usos: símbolo
   (só para testar com `#ifdef`), constante, macro com parâmetros. `#undef` apaga para redefinir.
   `#ifdef/#ifndef/#if/#elif/#else/#endif`. Macro multilinha com `\` no fim. `#x` transforma
@@ -363,7 +363,7 @@
 
 ## 05-vetores-e-strings
 
-### 0042-vetores
+### 0037-vetores
 - **Conceitos-chave:** motivação: 5 alunos com 5 variáveis já é ruim, 100 é inviável → um nome só
   com índice. `tipo nome[N]`, índices de 0 a N−1; cada posição é uma variável comum (scanf com
   `&notas[i]`); acesso em tempo igual para qualquer posição; o nome indica onde começa e o índice
@@ -375,14 +375,14 @@
 - **Ideias de exemplos:** o problema "imprimir alunos com nota acima da média" (motivador).
 - **Ideias de exercícios:** ler 5 notas, calcular média e listar as acima da média.
 
-### 0043-vetores-e-funcoes
+### 0038-vetores-e-funcoes
 - **Conceitos-chave:** vetor é sempre passado por "referência" (vai o endereço do 1º elemento) —
   evita cópia e a função altera o original; passar o tamanho em outro parâmetro.
   `int *m`, `int m[]`, `int m[5]` são equivalentes no parâmetro (o 5 é ignorado). Na chamada, só o
   nome, sem colchetes.
 - **Ideias de exercícios:** `void imprime(int *v, int n)`; função que dobra todos os elementos.
 
-### 0044-matrizes
+### 0039-matrizes
 - **Conceitos-chave:** `tipo m[L][C]`; dois índices; multidimensionais com um par de colchetes por
   dimensão; armazenamento linear, **o índice mais à direita varia mais rápido**; inicialização com
   um único `{}` (preenche linha a linha) ou com chaves aninhadas; só a 1ª dimensão pode ficar sem
@@ -392,12 +392,12 @@
 - **Ideias de exercícios:** zerar um cubo 5×5×5; somar matriz 3×3; imprimir matriz 3×2 via função
   com `int m[][2]` e via ponteiro 1D.
 
-### 0045-caracteres
+### 0040-caracteres
 - **Conceitos-chave:** `char` guarda número pequeno ou código ASCII; `%c` × `%d` do mesmo char;
   `putchar(65)` → `A`. Lista de `ctype.h`: `isalnum isalpha iscntrl isdigit islower isprint ispunct
   isspace isupper isxdigit tolower toupper`. `enum` pode receber caracteres (`novalinha = '\n'`).
 
-### 0046-strings
+### 0041-strings
 - **Conceitos-chave:** string = vetor de `char` terminado em `'\0'`; o `'\0'` separa o texto do lixo
   nas posições não usadas; num `char s[50]` cabem 49 letras. Inicializar com aspas duplas já põe o
   `'\0'` (`char texto[] = "Linguagem C."` tem 13 posições). Acesso por índice (`str[0] = 'L'`
@@ -412,7 +412,7 @@
 - **Ideias de exemplos:** "bom" + "dia" com strcat (sem espaço! → "bomdia").
 - **Ideias de exercícios:** implementar `meu_strlen` e `meu_strcpy`; comparar senha com `strcmp`.
 
-### 0047-lendo-strings
+### 0042-lendo-strings
 - **Conceitos-chave:** `scanf("%s", str)` sem `&` lê só até o primeiro espaço; `fgets(str, tam,
   stdin)` lê até ENTER ou tam−1 caracteres e **guarda o `'\n'`**; `fputs(str, stdout)`.
 - **Pegadinhas:** a apostila apresenta `gets` como "alternativa mais eficiente" e a usa em dezenas
@@ -426,14 +426,14 @@
 
 ## 06-ponteiros
 
-### 0049-memoria
+### 0044-memoria
 - **Conceitos-chave:** toda informação está na memória e tem endereço; o programador pensa no nome,
   o computador no endereço. `&x` dá o endereço; `%p` imprime.
 - **Analogias/explicações boas:** ponteiro para ponteiro = "anotar o endereço de um papel que contém o
   endereço da casa do seu amigo" (vale também para ponteiro simples: o ponteiro é o papel com o
   endereço).
 
-### 0050-ponteiros
+### 0045-ponteiros
 - **Conceitos-chave:** variável guarda valor; ponteiro guarda endereço. `tipo *p;` — o tipo diz para
   que tipo ele pode apontar. `*` tem três papéis conforme o contexto: multiplicação (binário),
   declaração, acesso ao conteúdo. Ponteiro não inicializado aponta para lugar indefinido (UB);
@@ -445,7 +445,7 @@
   literal fazem `int *p = 0x5DC;` sem cast (gera aviso) e imprimem ponteiro com `%d` (errado).
 - **Ideias de exercícios:** tabela "o que vale" para `x`, `&x`, `p`, `*p`, `&p` após `p = &x`.
 
-### 0051-passagem-por-referencia
+### 0046-passagem-por-referencia
 - **Conceitos-chave:** passar o endereço (`&x` na chamada) e receber ponteiro (`int *n`), usando
   `*n` dentro; é o que `scanf` faz — por isso o `&`. Troca (swap) por valor (não funciona fora) ×
   por referência (funciona): saídas "Antes 2 e 3 / Dentro 3 e 2 / Depois 2 e 3" × "... Depois 3 e 2".
@@ -454,7 +454,7 @@
 - **Ideias de exercícios:** `void minmax(int *v, int n, int *min, int *max)`; função que zera uma
   struct ponto recebida por ponteiro, nas duas notações.
 
-### 0052-ponteiros-e-vetores
+### 0047-ponteiros-e-vetores
 - **Conceitos-chave:** nome do vetor = endereço do 1º elemento (`p = vet` ≡ `p = &vet[0]`);
   `p[i]` ≡ `*(p+i)`; `&vet[i]` ≡ `vet + i`. Aritmética só soma/subtrai inteiros e anda em unidades
   do tipo (int* +1 → +4 bytes; double* +1 → +8). `void*` anda de 1 em 1 byte (extensão do GCC; no
@@ -466,7 +466,7 @@
 - **Ideias de exercícios:** percorrer vetor com `*(p+i)` e com `p++`; somar matriz 2×2 com um único
   laço via ponteiro.
 
-### 0053-ponteiros-e-strings
+### 0048-ponteiros-e-strings
 - **Conceitos-chave:** ponteiro pode percorrer string; vetor de ponteiros (`int *pvet[2]`) guarda
   endereço de variável ou de outro vetor (`pvet[1] = y; pvet[1][1]`).
   **Avançado:** `int (*p3)[10]` = ponteiro para vetor de 10 ints; `int *p4[10]` = vetor de 10
@@ -474,12 +474,12 @@
 - **Pegadinhas:** a apostila escreve `typedef vetor int[10];` (sintaxe errada; o certo é
   `typedef int vetor[10];`).
 
-### 0054-ponteiro-para-ponteiro
+### 0049-ponteiro-para-ponteiro
 - **Conceitos-chave:** `int **p2 = &p;` — `*p2` é o endereço de x, `**p2` é x; nº de `*` =
   níveis; evitar muitos níveis. Base para matriz dinâmica (cada nível = uma dimensão).
 - **Ideias de exemplos:** `char letra = 'a'` acessada por `*ptrChar`, `**ptrPtrChar`, `***ptrPtr`.
 
-### 0055-ponteiro-para-funcao
+### 0050-ponteiro-para-funcao
 - **Conceitos-chave:** função também está na memória; o nome da função é seu endereço (`p = max;`
   sem `&`); declaração `int (*p)(int, int);` — parênteses obrigatórios (sem eles é função que
   retorna `int*`); só aponta para funções com o mesmo protótipo; chamar `p(x, y)`; pode ser NULL;
@@ -491,7 +491,7 @@
   vetor de funções) e chama `ops[i](x, y)`.
 - **Ideias de exercícios:** reescrever a calculadora sem switch, mapeando o caractere para índice.
 
-### 0056-void-generico
+### 0051-void-generico
 - **Conceitos-chave:** `void *pp` aceita endereço de qualquer tipo (até de ponteiro), mas não pode
   ser desreferenciado sem cast: `*(int*)pp`. `malloc` retorna `void*` porque não sabe o uso.
 
@@ -499,14 +499,14 @@
 
 ## 07-memoria-dinamica
 
-### 0058-pilha-e-heap
+### 0053-pilha-e-heap
 - **Conceitos-chave:** motivação: salários de uma empresa — `float salarios[1000]` desperdiça se
   houver menos e não cabe se houver mais; alocação dinâmica pede memória em tempo de execução e
   devolve o endereço num ponteiro. Variáveis comuns são liberadas automaticamente; dinâmicas não.
   `exit(1)` encerra o programa (fecha arquivos abertos). Locais ficam na pilha (dito no capítulo de
   funções).
 
-### 0059-malloc-free
+### 0054-malloc-free
 - **Conceitos-chave:** `malloc(nbytes)` → `void*` (ou NULL); sempre `n * sizeof(tipo)` (1000 bytes
   = 1000 chars, mas 250 ints); testar `if (p == NULL)`; usar como vetor (`p[i]`). `free(p)` com o
   ponteiro do início do bloco; o sistema sabe o tamanho por uma tabela interna. Depois de `free`, o
@@ -517,7 +517,7 @@
   operador) e tem o typo "50 * 4 bytes" para 5 ints.
 - **Ideias de exercícios:** ler N, alocar N notas, calcular média, liberar.
 
-### 0060-calloc-realloc
+### 0055-calloc-realloc
 - **Conceitos-chave:** `calloc(n, tam)` recebe quantidade e tamanho separados e zera todos os bits
   (comparar impressão de `calloc` × `malloc` não inicializado); `realloc(p, novoTam)` aumenta ou
   diminui, pode mover o bloco (copia o conteúdo), área nova não inicializada; `realloc(NULL, t)` ≡
@@ -529,7 +529,7 @@
   com lixo).
 - **Ideias de exercícios:** ler números até 0, dobrando a capacidade com realloc quando encher.
 
-### 0061-matriz-dinamica (destaque da apostila)
+### 0056-matriz-dinamica (destaque da apostila)
 - **Conceitos-chave — três soluções:**
   1. **Vetor 1D** de L·C elementos, acesso `p[i*ncol + j]` (perde-se `p[i][j]`; um `malloc`, um
      `free`).
@@ -544,7 +544,7 @@
 - **Ideias de exercícios:** implementar as três para uma matriz 3×4 lida do teclado e comparar o nº
   de malloc/free; triângulo de Pascal com matriz triangular.
 
-### 0062-erros-de-memoria
+### 0057-erros-de-memoria
 - **Conceitos-chave:** ponteiro solto (*dangling*) após free; ponteiro não inicializado; usar
   memória liberada; esquecer free. (Sem valgrind/ASan — completar.)
 
@@ -552,7 +552,7 @@
 
 ## 08-structs
 
-### 0064-struct
+### 0059-struct
 - **Conceitos-chave:** agrupa variáveis de tipos possivelmente diferentes sob um nome ("variável que
   contém variáveis"); declarada em geral no escopo global; `;` obrigatório após `}`; pode declarar
   variáveis junto (`} cad1, cad2;`); declarar com `struct cadastro c;`; acesso com `.`; campos string
@@ -564,30 +564,30 @@
   c1, c2, c3, c4` × `struct cadastro c[4]`.
 - **Ideias de exercícios:** struct `endereco` dentro de `cadastro`; ler e imprimir.
 
-### 0065-typedef
+### 0060-typedef
 - **Conceitos-chave:** `typedef` cria sinônimo, não tipo novo (`typedef int inteiro;` — int e
   inteiro se misturam livremente). Uso principal: `typedef struct cadastro cad;` ou tudo junto
   `typedef struct { ... } cad;` (nome da struct pode ser omitido).
 - **Pegadinhas:** sinônimos que escondem demais confundem: `typedef unsigned int positivos[5];` —
   `positivos v;` não deixa claro que v é vetor.
 
-### 0066-vetor-de-structs
+### 0061-vetor-de-structs
 - **Conceitos-chave:** `struct cadastro c[4]`; acesso `c[i].nome` (índice antes do ponto);
   `c[1] = c[2]` é válido.
 
-### 0067-ponteiro-para-struct
+### 0062-ponteiro-para-struct
 - **Conceitos-chave:** struct por valor (cópia inteira) ou só um campo (`imprime_valor(p1.x)`); por
   referência com `(*p).x` ou `p->x`. Função pode retornar struct (truque para "retornar vetor").
 - **Pegadinhas:** exemplo `imprime_valor(int x)` da apostila usa `p.x` dentro da função (não
   compila).
 
-### 0068-enum
+### 0063-enum
 - **Conceitos-chave:** lista de constantes inteiras com nome; primeira vale 0, cada uma vale a
   anterior + 1; pode fixar valores (`Domingo = 1, ..., Quarta = 7, Quinta` → 8); aceita caracteres
   (`'\n'`); como são inteiros, `s1 + s2` compila (mesmo sem sentido).
 - **Ideias de exercícios:** prever valores de `enum {A=1, B, C, D=7, E, F}` → 1,2,3,7,8,9.
 
-### 0069-union
+### 0064-union
 - **Conceitos-chave:** sintaxe igual à struct, mas todos os campos compartilham a mesma memória; o
   tamanho é o do maior campo; só um valor válido por vez (alterar um altera os outros). Exemplo:
   `union { short x; unsigned char c; }` com x = 1545 → c = 9 (byte baixo); c = 69 → x = 1605. Uso
@@ -595,7 +595,7 @@
 - **Pegadinhas:** o resultado depende da ordem dos bytes da máquina (little-endian).
 - **Ideias de exercícios:** explicar 1545 = 6·256 + 9 e 1605 = 6·256 + 69.
 
-### 0070-bits
+### 0065-bits
 - **Conceitos-chave:** `~ & | ^ << >>` sobre inteiros (não em float/double, cuja representação é
   mantissa × 2^expoente). Com x = 44 (`00101100`) em `unsigned char`: `~x` = 211, `x & 167` = 36,
   `x | 129` = 173, `x ^ 167` = 139, `x << 2` = 176, `x >> 2` = 11; deslocar 1 posição ≈ ×2 ou ÷2.
@@ -610,7 +610,7 @@
 
 ## 09-arquivos
 
-### 0072-arquivos-texto
+### 0067-arquivos-texto
 - **Conceitos-chave:** arquivo = sequência de bytes em memória secundária; vantagens: persistência,
   volume, acesso aleatório. **Texto** (legível, convertido para caracteres, maior e mais lento; `\n`
   pode virar `\r\n`) × **binário** (cópia da memória, sem conversão). Ex.: o int 12345678 ocupa 4
@@ -636,7 +636,7 @@
 - **Ideias de exercícios:** copiar um arquivo texto caractere a caractere; contar linhas de um
   arquivo com fgets; corrigir o laço `while(!feof)` para `while (fscanf(arq, "%d", &v) == 1)`.
 
-### 0073-arquivos-binarios
+### 0068-arquivos-binarios
 - **Conceitos-chave:** `fwrite(ptr, tamItem, qtd, fp)` / `fread(...)` → devolvem quantos itens
   foram processados (menor que qtd = erro/fim). Variáveis simples e structs com `&`, vetores sem.
   Pode gravar parte de vetor (qtd = 2 grava só as 2 primeiras posições). Ao ler string, pôr o
@@ -653,7 +653,7 @@
 - **Ideias de exercícios:** cadastro de structs em binário; ler o 3º registro direto com
   `fseek(fp, 2*sizeof(struct r), SEEK_SET)`; descobrir o tamanho de um arquivo.
 
-### 0074-argumentos
+### 0069-argumentos
 - **Conceitos-chave:** `int main(int argc, char *argv[])`; `argc` ≥ 1 (o nome do programa conta);
   `argv[0]` = nome do programa; `atoi` converte texto em número.
 - **Ideias de exemplos:** listar parâmetros (`prog par1 par2` → "Parametro 1: par1 …"); somar os
