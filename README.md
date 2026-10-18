@@ -78,7 +78,7 @@ As formas e as cores dos desenhos:
 
 | Módulo | Assuntos | O que você sai sabendo |
 | --- | --- | --- |
-| [01 · Fundamentos de C](01-fundamentos/README.md) | 0001–0011 | variáveis, tipos, limites, `printf`, `scanf`, operadores, conversão |
+| [01 · Fundamentos de C](01-fundamentos/README.md) | 0001–0011 | algoritmo, compilação, variáveis, tipos, limites, `printf`, `scanf`, operadores, conversão |
 | [02 · Decisões](02-condicionais/README.md) | 0012–0019 | relacionais, lógicos, `if`, `else if`, ternário, `switch` |
 | [03 · Laços](03-repeticoes/README.md) | 0020–0027 | `while`, `do...while`, `for`, `break`, padrões de laço, aleatórios |
 | [04 · Funções](04-funcoes/README.md) | 0028–0036 | funções, escopo, pilha de chamadas, recursão, módulos `.h`/`.c`, macros |
@@ -90,10 +90,19 @@ As formas e as cores dos desenhos:
 | [10 · Análise de algoritmos](10-analise/README.md) | 0071–0074 | contar passos, Big-O, invariantes, tipo abstrato de dado |
 | [11 · Listas](11-listas/README.md) | 0075–0081 | vetor dinâmico, listas encadeadas simples, dupla e circular |
 | [12 · Pilhas e filas](12-pilhas-e-filas/README.md) | 0082–0088 | pilha, fila circular, deque e suas aplicações |
-| [13 · Busca e ordenação](13-busca-e-ordenacao/README.md) | 0089–0101 | busca binária, bubble, selection, insertion, merge, quick |
+| [13 · Busca e ordenação](13-busca-e-ordenacao/README.md) | 0089–0096 | busca binária, bubble, selection, insertion, merge, quick |
 | [14 · Árvores](14-arvores/README.md) | 0097–0104 | árvore binária, BST, AVL, heap, heapsort |
-| [15 · Tabelas hash](15-hash/README.md) | 0110–0108 | função hash, encadeamento, endereçamento aberto |
+| [15 · Tabelas hash](15-hash/README.md) | 0105–0108 | função hash, encadeamento, endereçamento aberto |
 | [16 · Grafos](16-grafos/README.md) | 0109–0113 | representação, BFS, DFS, Dijkstra |
+| [17 · Análise avançada](17-analise-avancada/README.md) | 0114–0118 | recorrências, teorema mestre, análise amortizada, limite inferior |
+| [18 · Ordenação linear](18-ordenacao-linear/README.md) | 0119–0124 | shell, counting, radix e bucket sort, quickselect |
+| [19 · Backtracking](19-backtracking/README.md) | 0125–0130 | subconjuntos, permutações, poda, N-rainhas, labirinto, sudoku |
+| [20 · Divisão e conquista e gulosos](20-dc-e-gulosos/README.md) | 0131–0137 | potência rápida, inversões, troco, intervalos, mochila fracionária, Huffman |
+| [21 · Programação dinâmica](21-programacao-dinamica/README.md) | 0138–0143 | memoização, troco, mochila 0/1, LCS, distância de edição |
+| [22 · Árvores avançadas](22-arvores-avancadas/README.md) | 0144–0149 | árvores gerais, rubro-negra, árvore B, trie, union-find |
+| [23 · Grafos avançados](23-grafos-avancados/README.md) | 0150–0156 | componentes, ordenação topológica, Kruskal, Prim, Bellman-Ford, Floyd-Warshall |
+| [24 · Busca de padrões](24-busca-de-padroes/README.md) | 0157–0161 | força bruta, KMP, Horspool, Rabin-Karp |
+| [25 · Estruturas extras](25-estruturas-extras/README.md) | 0162–0165 | matriz esparsa, skip list, listas autoajustáveis |
 
 O sumário detalhado, assunto por assunto, está em
 [`_fontes/sumario.md`](_fontes/sumario.md).
