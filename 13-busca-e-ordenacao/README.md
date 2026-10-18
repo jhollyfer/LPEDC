@@ -194,44 +194,55 @@ dá a volta três vezes antes de sair pelo Sim:
 > [!NOTE]
 > **Pergunta para você:** se a matrícula 3305 aparecesse duas vezes no vetor,
 > nas posições 1 e 4, qual posição a função devolveria? E quantas comparações
-> ela faria para achar 7034? Responda e confira mudando o exemplo A177.
+> ela faria para achar 7034? Responda e confira rodando o código acima com o
+> vetor alterado. O exemplo A177 mostra como achar todas as ocorrências.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0089-busca-sequencial/`](0089-busca-sequencial/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A177 · A catraca procura a matrícula**
+**Exemplo A177 · Quantas vezes o aluno passou na catraca**
 
 ```c
 #include <stdio.h>
 
-// devolve o índice de x em v[0..n-1], ou -1 se x não estiver lá
-int busca(const int v[], int n, int x, int *comparacoes) {
-    *comparacoes = 0;
-    for (int i = 0; i < n; i++) {
+// procura x a partir da posição inicio; devolve o índice ou -1
+int busca_a_partir(const int v[], int n, int x, int inicio, int *comparacoes) {
+    for (int i = inicio; i < n; i++) {
         (*comparacoes)++;
         if (v[i] == x) {
-            return i; // achou: para na hora
+            return i;
         }
     }
-    return -1; // olhou todos e não achou
+    return -1;
 }
 
 int main(void) {
-    int matriculas[] = {4172, 3305, 8821, 1290, 5567, 7034};
-    int n = sizeof matriculas / sizeof matriculas[0];
-    int comparacoes;
+    // registro do dia: cada número é uma passagem pela catraca, em ordem
+    int passagens[] = {3305, 4172, 3305, 8821, 1290, 3305, 7034, 4172};
+    int n = sizeof passagens / sizeof passagens[0];
+    int procuradas[] = {3305, 1290, 5567};
 
-    int pos = busca(matriculas, n, 1290, &comparacoes);
-    printf("1290: posição %d, %d comparações\n", pos, comparacoes);
-
-    pos = busca(matriculas, n, 9999, &comparacoes);
-    printf("9999: posição %d, %d comparações\n", pos, comparacoes);
+    for (int k = 0; k < 3; k++) {
+        int x = procuradas[k];
+        int comparacoes = 0, vezes = 0;
+        printf("%d passou nas posições:", x);
+        // cada achado vira o ponto de partida da próxima busca
+        int pos = busca_a_partir(passagens, n, x, 0, &comparacoes);
+        while (pos != -1) {
+            printf(" %d", pos);
+            vezes++;
+            pos = busca_a_partir(passagens, n, x, pos + 1, &comparacoes);
+        }
+        printf("%s -> %d vez(es), %d comparações\n",
+               vezes == 0 ? " nenhuma" : "", vezes, comparacoes);
+    }
     return 0;
 }
 // Saída:
-// 1290: posição 3, 4 comparações
-// 9999: posição -1, 6 comparações
+// 3305 passou nas posições: 0 2 5 -> 3 vez(es), 8 comparações
+// 1290 passou nas posições: 4 -> 1 vez(es), 8 comparações
+// 5567 passou nas posições: nenhuma -> 0 vez(es), 8 comparações
 ```
 
 ```bash
@@ -439,8 +450,8 @@ No vetor: Café 500g R$ 20.79
 
 A função abaixo deveria devolver a PRIMEIRA posição da senha procurada no
 painel do banco. Ela tem DOIS erros, de propósito. Rode com o rodar: o
-AddressSanitizer vai reclamar de um deles. Ache os dois, explique e
-conserte.
+AddressSanitizer vai reclamar de um deles. Conserte os dois e rode de novo
+até a saída bater com a esperada.
 
 
 ```text
@@ -614,8 +625,8 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > fechado `[ini, fim]` deixa de olhar o último candidato. E `fim = meio` (em
 > vez de `meio - 1`) no intervalo fechado pode nunca encolher: com `ini = 4` e
 > `fim = 4`, o meio é 4 de novo, para sempre. Escolha um estilo (fechado, como
-> no A179, ou semiaberto `[ini, fim)`, como no A180) e siga as regras dele em
-> todas as linhas.
+> no código acima, ou semiaberto `[ini, fim)`, como no A180) e siga as regras
+> dele em todas as linhas.
 
 > [!TIP]
 > **Por dentro do C:** por que `ini + (fim - ini) / 2` e não
@@ -629,66 +640,74 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > uma pronta, a `bsearch`, que você vai usar no assunto 0096.
 
 > [!NOTE]
-> **Pergunta para você:** quantas voltas o A179 dá para achar o 103, o
+> **Pergunta para você:** quantas voltas o código acima dá para achar o 103, o
 > primeiro do catálogo? E qual é o máximo de voltas para um vetor de 1000
-> elementos? Faça o teste de mesa antes de rodar.
+> elementos? Faça o teste de mesa antes de rodar. O A179 mostra a conta com
+> um milhão de elementos.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0090-busca-binaria/`](0090-busca-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A179 · O catálogo do atacadão**
+**Exemplo A179 · Um milhão de notas fiscais**
 
 ```c
 #include <stdio.h>
 
-// v está em ordem crescente; devolve o índice de x ou -1
-int busca_binaria(const int v[], int n, int x, int *voltas) {
+#define N 1000000
+
+int sequencial(const int v[], int n, int x, long *passos) {
+    *passos = 0;
+    for (int i = 0; i < n; i++) {
+        (*passos)++;
+        if (v[i] == x) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int binaria(const int v[], int n, int x, long *passos) {
     int ini = 0, fim = n - 1;
-    *voltas = 0;
-    while (ini <= fim) {              // ainda sobra alguém no intervalo
+    *passos = 0;
+    while (ini <= fim) {
         int meio = ini + (fim - ini) / 2;
-        (*voltas)++;
-        printf("  ini=%2d fim=%2d meio=%2d v[meio]=%d\n", ini, fim, meio, v[meio]);
+        (*passos)++;
         if (v[meio] == x) {
             return meio;
         }
         if (v[meio] < x) {
-            ini = meio + 1;           // x só pode estar à direita
+            ini = meio + 1;
         } else {
-            fim = meio - 1;           // x só pode estar à esquerda
+            fim = meio - 1;
         }
     }
     return -1;
 }
 
 int main(void) {
-    int codigos[] = {103, 118, 125, 140, 152, 167, 171, 189,
-                     204, 216, 230, 245, 258, 263, 279};
-    int n = sizeof codigos / sizeof codigos[0];
-    int voltas;
+    static int notas[N];              // 4 MB: static, fora da pilha
+    for (int i = 0; i < N; i++) {
+        notas[i] = 500000 + 3 * i;    // números das notas, em ordem crescente
+    }
+    // a primeira, uma do meio, a última e uma que não existe
+    int procuradas[] = {500000, 2000000, 3499997, 2000001};
+    long ps, pb;
 
-    printf("Procurando 216:\n");
-    int pos = busca_binaria(codigos, n, 216, &voltas);
-    printf("posição %d em %d voltas\n", pos, voltas);
-
-    printf("Procurando 150:\n");
-    pos = busca_binaria(codigos, n, 150, &voltas);
-    printf("posição %d em %d voltas\n", pos, voltas);
+    printf("    nota   posição  sequencial  binária\n");
+    for (int k = 0; k < 4; k++) {
+        int pos = sequencial(notas, N, procuradas[k], &ps);
+        binaria(notas, N, procuradas[k], &pb);
+        printf("%8d  %8d  %10ld  %7ld\n", procuradas[k], pos, ps, pb);
+    }
     return 0;
 }
-// Saída:
-// Procurando 216:
-//   ini= 0 fim=14 meio= 7 v[meio]=189
-//   ini= 8 fim=14 meio=11 v[meio]=245
-//   ini= 8 fim=10 meio= 9 v[meio]=216
-// posição 9 em 3 voltas
-// Procurando 150:
-//   ini= 0 fim=14 meio= 7 v[meio]=189
-//   ini= 0 fim= 6 meio= 3 v[meio]=140
-//   ini= 4 fim= 6 meio= 5 v[meio]=167
-//   ini= 4 fim= 4 meio= 4 v[meio]=152
-// posição -1 em 4 voltas
+// Saída (a binária nunca passa de 20 voltas: 2^20 > 1 milhão):
+//     nota   posição  sequencial  binária
+//   500000         0           1       19
+//  2000000    500000      500001       19
+//  3499997    999999     1000000       20
+//  2000001        -1     1000000       20
 ```
 
 ```bash
@@ -751,18 +770,47 @@ int main(void) {
 **Exercício E535** · ★☆☆
 
 Os armários livres do vestiário do clube estão numa lista ordenada, e o
-programa abaixo procura dois números nela. SEM RODAR, escreva a saída exata
-deste programa. Faça o teste de mesa com
-ini, fim e meio em cada volta. Só depois rode para conferir.
+programa abaixo procura números nela. Deixe a busca "falar" o que está
+fazendo:
+
+a) no printf de cada volta, mostre também ini e fim;
+b) conte as voltas numa variável e mostre o total no "achou" e no
+
+```text
+ "não achou";
+```
+
+c) no "não achou", mostre ainda os valores de ini e fim que pararam o laço;
+d) no main, procure também o 62, o último armário.
+
+
+```text
+Saída esperada:
+Procurando 47
+ini=0 fim=8 meio=4 (30)
+ini=5 fim=8 meio=6 (47)
+achou na posição 6 em 2 voltas
+Procurando 5
+ini=0 fim=8 meio=4 (30)
+ini=0 fim=3 meio=1 (9)
+ini=0 fim=0 meio=0 (4)
+não achou em 3 voltas (parou com ini=1 fim=0)
+Procurando 62
+ini=0 fim=8 meio=4 (30)
+ini=5 fim=8 meio=6 (47)
+ini=7 fim=8 meio=7 (55)
+ini=8 fim=8 meio=8 (62)
+achou na posição 8 em 4 voltas
+```
 
 **Dicas:**
 
-1. n = 9, então a primeira volta tem ini = 0, fim = 8 e meio = 4.
-2. Para o 5: depois de cada volta, anote o novo intervalo [ini, fim].
-3. O laço para quando ini fica maior que fim.
-4. Resposta esperada: para 47 aparecem meio=4 (30), meio=6 (47) e "achou na
-   posição 6"; para 5 aparecem meio=4 (30), meio=1 (9), meio=0 (4) e "não
-   achou".
+1. Crie int voltas = 0; antes do while e some 1 logo depois de calcular meio.
+2. O printf da volta fica: printf("ini=%d fim=%d meio=%d (%d)\n", ...).
+3. O laço para quando ini fica maior que fim: é isso que o "não achou"
+   vai mostrar.
+4. Resposta esperada: a saída acima. Repare que o 62 custa 4 voltas, o
+   máximo para 9 elementos.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E535.c
@@ -887,8 +935,8 @@ Palmas: posição -1 (4 voltas)
 Alguém "modernizou" a busca binária trocando int por size_t, "porque índice
 nunca é negativo". O código compila sem nenhum aviso, acha o 35... e
 explode ao procurar o 3. O erro é de propósito: rode com o rodar e leia o
-que o AddressSanitizer diz. Explique o que acontece e conserte, mantendo
-size_t.
+que o AddressSanitizer diz. Conserte, mantendo size_t, e rode de novo até
+as três linhas da saída esperada aparecerem.
 
 
 ```text
@@ -1080,65 +1128,71 @@ fora repete passadas enquanto a bandeira disser que houve troca:
 > [!NOTE]
 > **Pergunta para você:** quantas passadas o bubble com bandeira faz no vetor
 > `8 17 23 35 42`, que já está ordenado? E em `17 23 35 42 8`, com o menor lá
-> no fim? Faça a previsão e teste no A181.
+> no fim? Faça a previsão e teste mudando o vetor do código acima.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0091-bubble-sort/`](0091-bubble-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A181 · Os tempos de entrega borbulhando**
+**Exemplo A181 · Anagramas: borbulhando as letras**
 
 ```c
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
-void mostra(const int v[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%3d", v[i]);
-    }
-    printf("\n");
-}
-
-void bubble_sort(int v[], int n) {
-    int comparacoes = 0, trocas = 0;
-    for (int passada = 1; passada < n; passada++) {
-        bool trocou = false;
-        // os últimos passada-1 já estão no lugar: nem olha
+// ordena as letras da string s com bubble sort (char também é número)
+void ordena_letras(char s[], bool mostrar) {
+    int n = (int) strlen(s);          // o '\0' do fim fica fora
+    bool trocou = true;
+    for (int passada = 1; passada < n && trocou; passada++) {
+        trocou = false;
         for (int j = 0; j < n - passada; j++) {
-            comparacoes++;
-            if (v[j] > v[j + 1]) {      // vizinhos fora de ordem: troca
-                int aux = v[j];
-                v[j] = v[j + 1];
-                v[j + 1] = aux;
-                trocas++;
+            if (s[j] > s[j + 1]) {    // compara os códigos das letras
+                char aux = s[j];
+                s[j] = s[j + 1];
+                s[j + 1] = aux;
                 trocou = true;
             }
         }
-        printf("passada %d:", passada);
-        mostra(v, n);
-        if (!trocou) {
-            break;                      // nenhuma troca: já está ordenado
+        if (mostrar) {
+            printf("  passada %d: %s\n", passada, s);
         }
     }
-    printf("%d comparações, %d trocas\n", comparacoes, trocas);
+}
+
+bool anagramas(const char *a, const char *b, bool mostrar) {
+    char x[32], y[32];
+    if (strlen(a) != strlen(b) || strlen(a) >= sizeof x) {
+        return false;
+    }
+    strcpy(x, a);                     // ordena cópias: as originais ficam intactas
+    strcpy(y, b);
+    ordena_letras(x, mostrar);
+    ordena_letras(y, false);
+    return strcmp(x, y) == 0;         // mesmas letras ordenadas = anagramas
 }
 
 int main(void) {
-    int minutos[] = {42, 17, 35, 8, 23};
-    int n = 5;
-
-    printf("início:   ");
-    mostra(minutos, n);
-    bubble_sort(minutos, n);
+    printf("ordenando \"pernambuco\":\n");
+    bool r = anagramas("pernambuco", "cobrapenum", true);
+    printf("pernambuco / cobrapenum: %s\n", r ? "anagramas" : "não");
+    printf("amor / roma: %s\n", anagramas("amor", "roma", false) ? "anagramas" : "não");
+    printf("pato / topo: %s\n", anagramas("pato", "topo", false) ? "anagramas" : "não");
     return 0;
 }
-// Saída:
-// início:    42 17 35  8 23
-// passada 1: 17 35  8 23 42
-// passada 2: 17  8 23 35 42
-// passada 3:  8 17 23 35 42
-// passada 4:  8 17 23 35 42
-// 10 comparações, 7 trocas
+// Saída (a passada 7 não troca nada: a bandeira encerra):
+// ordenando "pernambuco":
+//   passada 1: epnambrcou
+//   passada 2: enambpcoru
+//   passada 3: eambncopru
+//   passada 4: aebmcnopru
+//   passada 5: abecmnopru
+//   passada 6: abcemnopru
+//   passada 7: abcemnopru
+// pernambuco / cobrapenum: anagramas
+// amor / roma: anagramas
+// pato / topo: não
 ```
 
 ```bash
@@ -1225,7 +1279,7 @@ Ranking: 31 31 25 18 12 7
 
 **Dicas:**
 
-1. Parta do bubble do exemplo A181.
+1. Parta do bubble do código do assunto (o do texto).
 2. Basta mudar uma comparação: troque quando o da esquerda for MENOR.
 3. Os dois 31 empatados não são trocados entre si (31 < 31 é falso).
 4. Resposta esperada: Ranking: 31 31 25 18 12 7
@@ -1238,18 +1292,36 @@ Ranking: 31 31 25 18 12 7
 
 A fila do caixa preferencial tem senhas fora de ordem: 9, 4, 7, 1, 5. O
 programa abaixo ordena com bubble sort (sem bandeira) e mostra o vetor no
-fim de cada passada. SEM RODAR, escreva a saída exata, incluindo o total
-de trocas. Depois rode e confira.
+fim de cada passada. Melhore o programa:
+
+a) conte as trocas de CADA passada numa variável própria e mostre esse
+
+```text
+ número entre parênteses no fim da linha da passada;
+```
+
+b) acrescente a bandeira trocou, para parar na primeira passada sem troca.
+
+
+```text
+Saída esperada:
+passada 1: 4 7 1 5 9 (4 trocas)
+passada 2: 4 1 5 7 9 (2 trocas)
+passada 3: 1 4 5 7 9 (1 trocas)
+passada 4: 1 4 5 7 9 (0 trocas)
+trocas: 7
+```
 
 **Dicas:**
 
-1. Na passada 1, o 9 ganha todas as comparações e vai para o fim.
-2. Sem bandeira, o programa faz as 4 passadas mesmo se o vetor já estiver
-   ordenado antes.
-3. Conte as inversões do vetor original: é o total de trocas.
-4. Resposta esperada: passada 1: 4 7 1 5 9; passada 2: 4 1 5 7 9; passada
-   3: 1 4 5 7 9; passada 4: 1 4 5 7 9; trocas: 7 (as inversões: 9 com 4, 7, 1
-   e 5; 4 com 1; 7 com 1 e 5).
+1. Declare int nesta = 0; no começo de cada passada (dentro do laço de
+   fora) e some 1 junto com trocas++.
+2. A bandeira: bool trocou = true; antes do laço, condição
+   passada < n && trocou, e trocou = false; no começo de cada passada.
+3. A passada 4 ainda acontece: a bandeira só descobre que acabou depois de
+   uma passada inteira sem trocas.
+4. Resposta esperada: a saída acima. O total 7 é o número de inversões do
+   vetor original.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E542.c
@@ -1259,7 +1331,8 @@ de trocas. Depois rode e confira.
 
 Este bubble sort deveria ordenar as idades da turma de natação: 34, 19,
 27, 45, 22. Ele tem DOIS erros, de propósito. Rode: o sanitizer
-("runtime error: index 5 out of bounds") acusa um deles. Ache os dois, explique e conserte.
+("runtime error: index 5 out of bounds") acusa um deles. Conserte os dois
+e rode de novo até a saída bater com a esperada.
 
 
 ```text
@@ -1370,15 +1443,15 @@ int trocas_bubble(int v[], int n)        ordena e devolve quantas trocas fez
 
 
 Teste com 42 17 35 8 23, com 6 5 4 3 2 1 e com 3 1 2 (conte as inversões
-ANTES de ordenar). Depois explique, num comentário, por que os dois números
-sempre dão iguais.
+ANTES de ordenar). Depois de ordenar, chame inversoes de novo e mostre
+quantas sobraram.
 
 
 ```text
 Saída esperada:
-n = 5: 7 inversões, 7 trocas
-n = 6: 15 inversões, 15 trocas
-n = 3: 2 inversões, 2 trocas
+n = 5: 7 inversões, 7 trocas, 0 depois
+n = 6: 15 inversões, 15 trocas, 0 depois
+n = 3: 2 inversões, 2 trocas, 0 depois
 ```
 
 **Dicas:**
@@ -1528,56 +1601,56 @@ tabela acima). A troca acontece **fora** dele, uma vez por passada:
 
 Os arquivos ficam em [`0092-selection-sort/`](0092-selection-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A183 · O pódio do kart, um de cada vez**
+**Exemplo A183 · Selection não se importa com a ordem de entrada**
 
 ```c
 #include <stdio.h>
 
-void mostra(const int v[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%3d", v[i]);
-    }
-    printf("\n");
-}
-
-void selection_sort(int v[], int n) {
-    int comparacoes = 0, trocas = 0;
+// selection sort que devolve comparações e trocas
+void selection_sort(int v[], int n, int *comparacoes, int *trocas) {
+    *comparacoes = 0;
+    *trocas = 0;
     for (int i = 0; i < n - 1; i++) {
-        int menor = i;                    // índice do menor de v[i..n-1]
+        int menor = i;
         for (int j = i + 1; j < n; j++) {
-            comparacoes++;
+            (*comparacoes)++;           // o laço de dentro roda inteiro, sempre
             if (v[j] < v[menor]) {
                 menor = j;
             }
         }
-        if (menor != i) {                 // uma troca só por passada
+        if (menor != i) {
             int aux = v[i];
             v[i] = v[menor];
             v[menor] = aux;
-            trocas++;
+            (*trocas)++;
         }
-        printf("i = %d:  ", i);
-        mostra(v, n);
     }
-    printf("%d comparações, %d trocas\n", comparacoes, trocas);
+}
+
+void testa(const char *nome, int v[], int n) {
+    int c, t;
+    selection_sort(v, n, &c, &t);
+    printf("%-11s %2d comparações, %d trocas\n", nome, c, t);
 }
 
 int main(void) {
-    int tempos[] = {58, 31, 47, 19, 26}; // segundos por volta
-    int n = 5;
+    // pesos de caixas de mudança (kg): trocar caixa é caro, olhar é barato
+    int ordenado[] = {5, 8, 12, 20, 25, 31};
+    int invertido[] = {31, 25, 20, 12, 8, 5};
+    int misturado[] = {20, 5, 31, 8, 25, 12};
+    int menor_no_fim[] = {8, 12, 20, 25, 31, 5};
 
-    printf("início: ");
-    mostra(tempos, n);
-    selection_sort(tempos, n);
+    testa("ordenado:", ordenado, 6);
+    testa("invertido:", invertido, 6);
+    testa("misturado:", misturado, 6);
+    testa("5 no fim:", menor_no_fim, 6);
     return 0;
 }
-// Saída:
-// início:  58 31 47 19 26
-// i = 0:   19 31 47 58 26
-// i = 1:   19 26 47 58 31
-// i = 2:   19 26 31 58 47
-// i = 3:   19 26 31 47 58
-// 10 comparações, 4 trocas
+// Saída (comparações: sempre 5+4+3+2+1 = 15; trocas: nunca mais que n - 1 = 5):
+// ordenado:   15 comparações, 0 trocas
+// invertido:  15 comparações, 3 trocas
+// misturado:  15 comparações, 3 trocas
+// 5 no fim:   15 comparações, 5 trocas
 ```
 
 ```bash
@@ -1674,15 +1747,40 @@ fim = 1: 30 45 60 75 89 120
 **Exercício E548** · ★☆☆
 
 Cinco caixas de uma mudança estão numeradas fora de ordem: 3, 1, 2, 5, 4.
-SEM RODAR, escreva a saída exata do programa abaixo, incluindo o total de
-trocas. Depois rode e confira.
+O programa abaixo ordena com selection sort e conta as trocas. Estenda o
+programa:
+
+a) conte também as comparações (caixas[j] < caixas[menor]) e mostre o
+
+```text
+ total no fim;
+```
+
+b) nas passadas em que o menor já estava no lugar (nenhuma troca), escreva
+
+```text
+ " (sem troca)" no fim da linha.
+```
+
+
+
+```text
+Saída esperada:
+i = 0: 1 3 2 5 4
+i = 1: 1 2 3 5 4
+i = 2: 1 2 3 5 4 (sem troca)
+i = 3: 1 2 3 4 5
+trocas: 3
+comparações: 10
+```
 
 **Dicas:**
 
-1. Em cada passada i, ache o menor de v[i..4] e veja se ele já está em v[i].
-2. Repare no if (menor != i): troca de alguém com ele mesmo não conta.
-3. Resposta esperada: i = 0: 1 3 2 5 4; i = 1: 1 2 3 5 4; i = 2: 1 2 3 5
-   4; i = 3: 1 2 3 4 5; trocas: 3.
+1. O contador de comparações sobe dentro do laço de dentro, uma vez por
+   volta.
+2. "Sem troca" é exatamente quando menor == i depois do laço de dentro.
+3. As comparações não dependem dos valores: 4 + 3 + 2 + 1 = 10.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E548.c
@@ -1758,7 +1856,7 @@ reclamação do sanitizer e mesmo assim mostra
 
 
 Faça o teste de mesa das passadas i = 0 e i = 1, anotando o valor de menor,
-explique o erro e conserte.
+ache o erro, conserte e rode de novo.
 
 
 ```text
@@ -1961,67 +2059,59 @@ dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
 
 > [!NOTE]
 > **Pergunta para você:** e se a condição fosse `v[i] >= x`? O vetor
-> continuaria saindo ordenado? Quantos deslocamentos o A185 faria? E o que
-> aconteceria com dois elementos iguais?
+> continuaria saindo ordenado? Quantos deslocamentos o código acima faria? E o
+> que aconteceria com dois elementos iguais? (O A185 mostra por que isso
+> importa.)
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0093-insertion-sort/`](0093-insertion-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A185 · Arrumando as cartas na mão**
+**Exemplo A185 · A triagem que respeita a ordem de chegada**
 
 ```c
 #include <stdio.h>
-#include <stdbool.h>
 
-static int comparacoes = 0;
+typedef struct {
+    char nome[10];
+    int chegada;      // ordem em que entrou no pronto-socorro
+    int prioridade;   // 1 = urgente, 2 = pouco urgente, 3 = não urgente
+} Paciente;
 
-// a > b, contando a comparação
-bool maior(int a, int b) {
-    comparacoes++;
-    return a > b;
-}
-
-void mostra(const int v[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%3d", v[i]);
-    }
-    printf("\n");
-}
-
-void insertion_sort(int v[], int n) {
-    int deslocamentos = 0;
+// insertion sort por prioridade: só empurra quem é ESTRITAMENTE maior
+void ordena_triagem(Paciente v[], int n) {
     for (int j = 1; j < n; j++) {
-        int x = v[j];                   // a carta que vai ser encaixada
+        Paciente x = v[j];              // a struct inteira é copiada
         int i = j - 1;
-        while (i >= 0 && maior(v[i], x)) {
-            v[i + 1] = v[i];            // abre espaço: empurra para a direita
-            deslocamentos++;
+        while (i >= 0 && v[i].prioridade > x.prioridade) {
+            v[i + 1] = v[i];
             i--;
         }
-        v[i + 1] = x;                   // encaixa no buraco
-        printf("j = %d (x = %d):", j, x);
-        mostra(v, n);
+        v[i + 1] = x;                   // para atrás de quem tem a mesma prioridade
     }
-    printf("%d comparações, %d deslocamentos\n", comparacoes, deslocamentos);
 }
 
 int main(void) {
-    int mao[] = {7, 4, 9, 2, 5};
-    int n = 5;
+    Paciente fila[] = {
+        {"Rita", 1, 3}, {"Paulo", 2, 2}, {"Joana", 3, 1},
+        {"Caio", 4, 3}, {"Lia", 5, 1}, {"Beto", 6, 2},
+    };
+    int n = 6;
 
-    printf("início:       ");
-    mostra(mao, n);
-    insertion_sort(mao, n);
+    ordena_triagem(fila, n);
+    for (int k = 0; k < n; k++) {
+        printf("prioridade %d: %-6s (chegou em %dº)\n",
+               fila[k].prioridade, fila[k].nome, fila[k].chegada);
+    }
     return 0;
 }
-// Saída:
-// início:         7  4  9  2  5
-// j = 1 (x = 4):  4  7  9  2  5
-// j = 2 (x = 9):  4  7  9  2  5
-// j = 3 (x = 2):  2  4  7  9  5
-// j = 4 (x = 5):  2  4  5  7  9
-// 8 comparações, 6 deslocamentos
+// Saída (empatados na prioridade continuam na ordem de chegada: é estável):
+// prioridade 1: Joana  (chegou em 3º)
+// prioridade 1: Lia    (chegou em 5º)
+// prioridade 2: Paulo  (chegou em 2º)
+// prioridade 2: Beto   (chegou em 6º)
+// prioridade 3: Rita   (chegou em 1º)
+// prioridade 3: Caio   (chegou em 4º)
 ```
 
 ```bash
@@ -2096,7 +2186,7 @@ Classificação: 810 720 690 650 580
 
 **Dicas:**
 
-1. Parta do insertion do exemplo A185 (pode tirar a contagem).
+1. Parta do insertion do código do assunto (pode tirar a contagem).
 2. Agora quem precisa abrir espaço são os elementos MENORES que x.
 3. Só muda uma comparação no while.
 4. Resposta esperada: Classificação: 810 720 690 650 580
@@ -2170,18 +2260,42 @@ Saída esperada:
 **Exercício E556** · ★★☆
 
 Os pedidos de uma lanchonete chegam com o tempo de preparo, em minutos:
-6, 3, 8, 3, 1. SEM RODAR, escreva a saída exata do programa abaixo: o vetor
-depois de cada encaixe, quantos deslocamentos cada encaixe fez e o total.
-Depois rode e confira.
+6, 3, 8, 3, 1. O programa abaixo ordena com insertion sort e mostra cada
+encaixe. Transforme-o:
+
+a) leve a ordenação para int ordena(int v[], int n, bool maior_ou_igual,
+
+```text
+ bool mostrar), que devolve o total de deslocamentos. Com maior_ou_igual
+ falso, o while usa preparo[i] > x (como agora); com verdadeiro, usa >=;
+```
+
+b) na linha de cada encaixe, mostre também x e a posição onde ele entrou;
+c) no main, ordene o vetor com > (mostrando os encaixes) e uma cópia dele
+
+```text
+ com >= (sem mostrar), e imprima os dois totais.
+```
+
+
+
+```text
+Saída esperada:
+j = 1 (x = 3 entrou na posição 0): 3 6 8 3 1 (deslocou 1)
+j = 2 (x = 8 entrou na posição 2): 3 6 8 3 1 (deslocou 0)
+j = 3 (x = 3 entrou na posição 1): 3 3 6 8 1 (deslocou 2)
+j = 4 (x = 1 entrou na posição 0): 1 3 3 6 8 (deslocou 4)
+total com >: 7
+total com >=: 8
+```
 
 **Dicas:**
 
-1. Antes do j = 3, a parte arrumada é 3 6 8. Quem o segundo 3 empurra?
-2. Ele para ao encontrar o primeiro 3, porque 3 > 3 é falso.
-3. O 1 atravessa todo mundo.
-4. Resposta esperada: j = 1: 3 6 8 3 1 (deslocou 1); j = 2: 3 6 8 3 1
-   (deslocou 0); j = 3: 3 3 6 8 1 (deslocou 2); j = 4: 1 3 3 6 8 (deslocou
-   4); total: 7.
+1. Quando o while termina, x é guardado em v[i + 1]: essa é a posição.
+2. A condição pode ser (maior_ou_igual ? v[i] >= x : v[i] > x).
+3. Com >=, o segundo 3 passa por cima do primeiro: um deslocamento a mais,
+   e os dois 3 trocam de ordem (deixa de ser estável).
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E556.c
@@ -2192,7 +2306,7 @@ Depois rode e confira.
 Este insertion sort deveria ordenar as idades do grupo de corrida:
 31, 12, 45, 27, 8, 19. Ele tem DOIS erros, de propósito. O primeiro faz o
 sanitizer parar o programa; o segundo só aparece depois que você
-consertar o primeiro. Ache os dois, explique e conserte.
+consertar o primeiro. Conserte os dois e rode de novo.
 
 
 ```text
@@ -2216,16 +2330,22 @@ Saída esperada (depois de consertar):
 
 Ideia aparentemente esperta: a parte v[0..j-1] já está ordenada, então dá
 para achar o lugar de x com BUSCA BINÁRIA em vez de andar casa por casa.
-Implemente essa "insertion binária" e compare com a normal no vetor
-invertido 160, 150, ..., 10 (16 elementos), contando comparações e
-deslocamentos. Depois responda num comentário: o algoritmo deixou de ser
-O(n²)?
+Implemente essa "insertion binária" e compare com a normal num vetor
+invertido, contando comparações e deslocamentos. Escreva uma função
+void testa(int n) que monta o vetor invertido de n elementos (10n, ...,
+20, 10), roda as duas versões e mostra os números. Chame com n = 16 e
+n = 32 para ver o que acontece quando n dobra.
 
 
 ```text
 Saída esperada:
+n = 16
 normal:  120 comparações, 120 deslocamentos
 binária:  49 comparações, 120 deslocamentos
+ordenado? sim
+n = 32
+normal:  496 comparações, 496 deslocamentos
+binária: 129 comparações, 496 deslocamentos
 ordenado? sim
 ```
 
@@ -2237,9 +2357,10 @@ ordenado? sim
 2. Achou a posição p? Empurre v[p..j-1] uma casa para a direita e ponha x
    em v[p].
 3. Na normal, conte uma comparação por teste v[i] <= x feito.
-4. Resposta esperada: a saída acima. As comparações caem, mas os
-   deslocamentos não mudam: cada elemento ainda anda casa por casa, então
-   continua O(n²).
+4. Use vetores de 32 posições dentro de testa e preencha só os n primeiros.
+5. Resposta esperada: a saída acima. As comparações caem, mas os
+   deslocamentos não mudam e quase quadruplicam quando n dobra: cada
+   elemento ainda anda casa por casa, então continua O(n²).
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E558.c
@@ -2399,76 +2520,70 @@ duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 > original dos iguais. Isso faz o merge sort ser **estável**.
 
 > [!NOTE]
-> **Pergunta para você:** quantas comparações o A187 faria se as notas já
-> estivessem em ordem, `7 12 18 26 33 41 52 60`? Pista: na intercalação, o
-> que acontece quando a metade esquerda inteira é menor que a direita?
+> **Pergunta para você:** quantas comparações o código acima faria se as
+> notas já estivessem em ordem, `7 12 18 26 33 41 52 60`? Pista: na
+> intercalação, o que acontece quando a metade esquerda inteira é menor que a
+> direita?
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0094-merge-sort/`](0094-merge-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A187 · Duas pilhas de provas viram uma**
+**Exemplo A187 · Merge sort sem recursão, de baixo para cima**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
-static int comparacoes = 0;
-
 // junta v[p..q-1] e v[q..r-1], já ordenados, usando w como rascunho
 void intercala(int v[], int w[], int p, int q, int r) {
     int i = p, j = q, k = 0;
-    while (i < q && j < r) {            // as duas metades ainda têm cartas
-        comparacoes++;
-        if (v[i] <= v[j]) {             // <= mantém a ordem dos iguais
-            w[k++] = v[i++];
-        } else {
-            w[k++] = v[j++];
-        }
+    while (i < q && j < r) {
+        w[k++] = (v[i] <= v[j]) ? v[i++] : v[j++];
     }
-    while (i < q) w[k++] = v[i++];      // sobrou só a esquerda
-    while (j < r) w[k++] = v[j++];      // sobrou só a direita
+    while (i < q) w[k++] = v[i++];
+    while (j < r) w[k++] = v[j++];
     for (k = 0; k < r - p; k++) {
-        v[p + k] = w[k];                // devolve para o lugar
+        v[p + k] = w[k];
     }
-    printf("intercala [%d, %d):", p, r);
-    for (k = p; k < r; k++) printf(" %d", v[k]);
+}
+
+void mostra(const int v[], int n) {
+    for (int i = 0; i < n; i++) printf(" %d", v[i]);
     printf("\n");
 }
 
-// ordena v[p..r-1] (intervalo semiaberto)
-void merge_sort(int v[], int w[], int p, int r) {
-    if (r - p < 2) {
-        return;                         // 0 ou 1 elemento: já está ordenado
-    }
-    int q = p + (r - p) / 2;
-    merge_sort(v, w, p, q);             // ordena a metade esquerda
-    merge_sort(v, w, q, r);             // ordena a metade direita
-    intercala(v, w, p, q, r);           // junta as duas
-}
-
 int main(void) {
-    int notas[] = {52, 18, 33, 7, 41, 26, 60, 12};
-    int n = 8;
-    int *w = malloc(n * sizeof *w);     // um rascunho só, para todas as intercalações
+    int tempos[] = {41, 17, 33, 8, 52, 26, 12};   // 7: não é potência de 2
+    int n = 7;
+    int *w = malloc(n * sizeof *w);
     if (w == NULL) {
         return 1;
     }
 
-    merge_sort(notas, w, 0, n);
-    printf("%d comparações\n", comparacoes);
+    printf("início:     ");
+    mostra(tempos, n);
+    // blocos de 1 viram blocos de 2, que viram de 4, que viram de 8...
+    for (int largura = 1; largura < n; largura *= 2) {
+        for (int p = 0; p < n - largura; p += 2 * largura) {
+            int q = p + largura;
+            int r = p + 2 * largura;
+            if (r > n) {
+                r = n;                  // o último bloco pode ser mais curto
+            }
+            intercala(tempos, w, p, q, r);
+        }
+        printf("blocos de %d:", 2 * largura);
+        mostra(tempos, n);
+    }
     free(w);
     return 0;
 }
-// Saída:
-// intercala [0, 2): 18 52
-// intercala [2, 4): 7 33
-// intercala [0, 4): 7 18 33 52
-// intercala [4, 6): 26 41
-// intercala [6, 8): 12 60
-// intercala [4, 8): 12 26 41 60
-// intercala [0, 8): 7 12 18 26 33 41 52 60
-// 17 comparações
+// Saída (o 12 fica sozinho até a última rodada; 3 rodadas = log2 de 8):
+// início:      41 17 33 8 52 26 12
+// blocos de 2: 17 41 8 33 26 52 12
+// blocos de 4: 8 17 33 41 12 26 52
+// blocos de 8: 8 12 17 26 33 41 52
 ```
 
 ```bash
@@ -2558,18 +2673,51 @@ Notas: 45 50 60 60 75 85 90 95 98
 
 O programa abaixo não ordena nada: ele só mostra QUAIS chamadas o merge sort
 faria para um vetor de 5 elementos, com um recuo de dois espaços por nível
-de recursão. SEM RODAR, escreva a saída exata. Depois rode e confira.
+de recursão. Estenda o programa:
+
+a) escreva " folha" ao lado dos pedaços com menos de 2 elementos (os que
+
+```text
+ não chamam ninguém);
+```
+
+b) conte, em variáveis static, quantas chamadas aconteceram e quantas
+
+```text
+ foram folhas;
+```
+
+c) no fim do main, mostre os dois totais e quantas intercalações o merge
+
+```text
+ sort faria (uma por chamada que não é folha).
+```
+
+
+
+```text
+Saída esperada:
+[0, 5)
+  [0, 2)
+    [0, 1) folha
+    [1, 2) folha
+  [2, 5)
+    [2, 3) folha
+    [3, 5)
+      [3, 4) folha
+      [4, 5) folha
+9 chamadas, 5 folhas, 4 intercalações
+```
 
 **Dicas:**
 
-1. Comece por ordena(0, 5): q = 0 + 5 / 2 = 2. As metades são [0, 2) e [2, 5).
-2. A metade esquerda inteira (com todas as suas chamadas) é mostrada antes
-   da direita.
-3. Pedaços com menos de 2 elementos aparecem, mas não chamam ninguém.
-4. Resposta esperada: 9 linhas, nesta ordem: [0, 5), [0, 2), [0, 1),
-   [1, 2), [2, 5), [2, 3), [3, 5), [3, 4) e [4, 5). Recuo: nenhum na
-   primeira; 2 espaços em [0, 2) e [2, 5); 4 em [0, 1), [1, 2), [2, 3) e
-   [3, 5); 6 nas duas últimas.
+1. static int chamadas = 0, folhas = 0; fora das funções.
+2. Some 1 em chamadas logo na entrada de ordena; some em folhas dentro do
+   if que faz o return.
+3. Troque o printf("[%d, %d)\n", ...) por um sem \n e decida depois se
+   escreve " folha\n" ou só "\n".
+4. Resposta esperada: a saída acima. As folhas são os n elementos, e as
+   intercalações são sempre n - 1.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E560.c
@@ -2620,15 +2768,18 @@ typedef struct { char cliente[8]; int valor; } Pedido;
 ```
 
 
-Ordene por valor com merge sort (adapte o A187 para Pedido) e mostre a
-fila. Quem empatou no valor deve continuar na ordem de chegada (Bruno antes
-de Davi, Ana antes de Carla). Depois troque o <= da intercalação por < e
-anote, num comentário, o que muda.
+Ordene por valor com merge sort (adapte o código do assunto para Pedido) e
+mostre a fila. Quem empatou no valor deve continuar na ordem de chegada
+(Bruno antes de Davi, Ana antes de Carla). Para ver o papel do <= da
+intercalação, dê à intercala (e ao merge_sort) um parâmetro bool estavel:
+verdadeiro compara com <=, falso compara com <. Ordene duas cópias da fila,
+uma de cada jeito, e mostre as duas.
 
 
 ```text
 Saída esperada:
-Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
+com <=: Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
+com <:  Eva 20, Davi 30, Bruno 30, Carla 50, Ana 50
 ```
 
 **Dicas:**
@@ -2636,9 +2787,10 @@ Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
 1. O rascunho agora é Pedido *w = malloc(n * sizeof *w); confira NULL e
    dê free no fim.
 2. Compare v[i].valor <= v[j].valor; copie a struct inteira com =.
-3. Com <, no empate a intercalação pega o da direita primeiro.
-4. Resposta esperada: a saída acima; com <, sai Eva 20, Davi 30, Bruno 30,
-   Carla 50, Ana 50 (deixa de ser estável).
+3. A condição pode ser (estavel ? v[i].valor <= v[j].valor
+   : v[i].valor < v[j].valor).
+4. Resposta esperada: a saída acima. Com <, no empate a intercalação pega
+   o da direita primeiro e o merge sort deixa de ser estável.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E562.c
@@ -2657,7 +2809,7 @@ sanitizer e mostra
 
 
 Números somem e outros se repetem. Há UM erro, de propósito, numa única
-linha. Ache, explique e conserte.
+linha. Ache, conserte e rode de novo.
 
 
 ```text
@@ -2866,65 +3018,88 @@ recursivas. É isso que garante que o problema sempre diminui:
 
 Os arquivos ficam em [`0095-quick-sort/`](0095-quick-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A189 · Os fones divididos pelo pivô**
+**Exemplo A189 · Duas pontas que se encontram: a separação de Hoare**
 
 ```c
 #include <stdio.h>
 
-static int comparacoes = 0;
+static int trocas;
 
 void troca(int *a, int *b) {
     int aux = *a;
     *a = *b;
     *b = aux;
+    trocas++;
 }
 
-// separa v[p..r] em torno do pivô v[r]: menores ou iguais à esquerda,
-// maiores à direita. Devolve a posição final do pivô.
-int separa(int v[], int p, int r) {
-    int pivo = v[r];
-    int j = p;                          // v[p..j-1] são os <= pivô
+// Lomuto (a do texto): um índice só, varrendo da esquerda para a direita
+int lomuto(int v[], int p, int r) {
+    int pivo = v[r], j = p;
     for (int k = p; k < r; k++) {
-        comparacoes++;
         if (v[k] <= pivo) {
             troca(&v[j], &v[k]);
             j++;
         }
     }
-    troca(&v[j], &v[r]);                // o pivô vai para o meio deles
+    troca(&v[j], &v[r]);
     return j;
 }
 
-// ordena v[p..r] (intervalo fechado)
-void quick_sort(int v[], int p, int r) {
-    if (p >= r) {
-        return;                         // 0 ou 1 elemento
+void quick_lomuto(int v[], int p, int r) {
+    if (p >= r) return;
+    int j = lomuto(v, p, r);
+    quick_lomuto(v, p, j - 1);
+    quick_lomuto(v, j + 1, r);
+}
+
+// Hoare: i vem da esquerda, j vem da direita; só troca quem está do lado errado.
+// Devolve j tal que v[p..j] <= pivô <= v[j+1..r] (o pivô não fica "no lugar").
+int hoare(int v[], int p, int r) {
+    int pivo = v[p + (r - p) / 2];
+    int i = p - 1, j = r + 1;
+    while (1) {
+        do { i++; } while (v[i] < pivo);    // para num que é >= pivô
+        do { j--; } while (v[j] > pivo);    // para num que é <= pivô
+        if (i >= j) {
+            return j;                        // as pontas se cruzaram
+        }
+        troca(&v[i], &v[j]);
     }
-    int j = separa(v, p, r);
-    printf("pivô %d foi para a posição %d:", v[j], j);
-    for (int i = p; i <= r; i++) printf(" %d", v[i]);
+}
+
+void quick_hoare(int v[], int p, int r) {
+    if (p >= r) return;
+    int j = hoare(v, p, r);
+    quick_hoare(v, p, j);                    // repare: j, e não j - 1
+    quick_hoare(v, j + 1, r);
+}
+
+void mostra(const char *nome, const int v[], int n) {
+    printf("%-7s %2d trocas:", nome, trocas);
+    for (int i = 0; i < n; i++) printf(" %d", v[i]);
     printf("\n");
-    quick_sort(v, p, j - 1);            // o pivô já está no lugar:
-    quick_sort(v, j + 1, r);            // fica fora das duas chamadas
 }
 
 int main(void) {
-    int precos[] = {35, 12, 48, 7, 29, 51, 20};
-    int n = 7;
+    // idades na fila da vacinação
+    int a[] = {67, 23, 81, 45, 30, 72, 18, 55, 39, 60};
+    int b[] = {67, 23, 81, 45, 30, 72, 18, 55, 39, 60};
+    int n = 10;
 
-    quick_sort(precos, 0, n - 1);
-    printf("resultado:");
-    for (int i = 0; i < n; i++) printf(" %d", precos[i]);
-    printf("\n%d comparações\n", comparacoes);
+    trocas = 0;
+    quick_lomuto(a, 0, n - 1);
+    mostra("Lomuto:", a, n);
+
+    trocas = 0;
+    quick_hoare(b, 0, n - 1);
+    mostra("Hoare:", b, n);
     return 0;
 }
+// O Lomuto conta até as trocas de alguém com ele mesmo; o Hoare só troca
+// pares que estão do lado errado.
 // Saída:
-// pivô 20 foi para a posição 2: 12 7 20 35 29 51 48
-// pivô 7 foi para a posição 0: 7 12
-// pivô 48 foi para a posição 5: 35 29 48 51
-// pivô 29 foi para a posição 3: 29 35
-// resultado: 7 12 20 29 35 48 51
-// 11 comparações
+// Lomuto: 17 trocas: 18 23 30 39 45 55 60 67 72 81
+// Hoare:   8 trocas: 18 23 30 39 45 55 60 67 72 81
 ```
 
 ```bash
@@ -3005,17 +3180,39 @@ int main(void) {
 **Exercício E565** · ★☆☆
 
 As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. O programa abaixo faz
-UMA separação (só o separa, sem recursão), com o pivô no fim. SEM RODAR,
-escreva a saída exata: cada troca feita, o vetor final e a posição do pivô.
-Depois rode e confira.
+UMA separação (só o separa, sem recursão), com o pivô no fim, e mostra cada
+troca. Dê o próximo passo do quick sort à mão, no código:
+
+a) conte as comparações (v[k] <= pivo) numa variável static;
+b) depois da primeira separação, chame separa de novo só no lado DIREITO
+
+```text
+ do pivô e mostre outra vez o vetor e a nova posição do pivô;
+```
+
+c) no fim, mostre o total de comparações das duas separações.
+
+
+```text
+Saída esperada:
+troca v[0] e v[1]
+troca v[1] e v[3]
+troca v[2] e v[5]
+vetor: 2 4 5 9 8 6
+pivô na posição 2
+troca v[3] e v[5]
+vetor: 2 4 5 6 8 9
+pivô na posição 3
+comparações: 7
+```
 
 **Dicas:**
 
-1. O pivô é 5. Só 2 e 4 são <= 5.
-2. k anda sempre; j só anda depois de uma troca.
-3. No fim, o pivô troca de lugar com quem está em v[j].
-4. Resposta esperada: troca v[0] e v[1]; troca v[1] e v[3]; troca v[2] e
-   v[5]; vetor: 2 4 5 9 8 6; pivô na posição 2.
+1. O lado direito do pivô vai de j + 1 até 5: separa(senhas, j + 1, 5).
+2. Uma função mostra(v, n) evita repetir o laço do printf.
+3. A primeira separação compara 5 elementos com o pivô; a segunda, 2.
+4. Resposta esperada: a saída acima. O lado esquerdo (2 4) e o pedaço que
+   sobrou (8 9) já estão em ordem.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E565.c
@@ -3026,9 +3223,9 @@ Depois rode e confira.
 Aquecimento de separação, sem pivô: o banco quer as contas no vermelho no
 começo do relatório. Os saldos são 120, -45, 300, -10, 0, -80, 55. Escreva
 int separa_negativos(int v[], int n), que deixa os negativos à esquerda e
-devolve quantos são. Use o MESMO esquema do separa do A189: k anda pelo
-vetor e j marca onde entra o próximo negativo (troca v[j] com v[k] e
-avança j).
+devolve quantos são. Use o MESMO esquema do separa do texto do assunto:
+k anda pelo vetor e j marca onde entra o próximo negativo (troca v[j] com
+v[k] e avança j).
 
 
 ```text
@@ -3052,7 +3249,7 @@ Saída esperada:
 **Exercício E567** · ★★☆
 
 Ordene a lista do mercado em ordem alfabética com quick sort (pivô no fim,
-separação de Lomuto, como no A189), trocando só os ponteiros:
+separação de Lomuto, como no texto do assunto), trocando só os ponteiros:
 
 
 ```text
@@ -3085,8 +3282,8 @@ arroz, banana, café, feijão, leite, ovos, pão, tomate
 
 Este quick sort deveria ordenar os andares das entregas do prédio: 4, 9, 2,
 7. Ele tem UM erro, de propósito, numa única linha. Rode: o programa morre
-e o AddressSanitizer fala em "stack-overflow". Ache o erro, explique por
-que a recursão nunca termina e conserte.
+e o AddressSanitizer fala em "stack-overflow". Ache a linha que faz a
+recursão nunca terminar, conserte e rode de novo.
 
 
 ```text
@@ -3130,7 +3327,7 @@ ordenando tudo: 33 min (23 comparações)
 
 **Dicas:**
 
-1. Reaproveite o separa do A189, contando comparações num static int.
+1. Reaproveite o separa do texto, contando comparações num static int.
 2. Diferente do quick sort, o quickselect só segue UM dos lados.
 3. Se p == r, sobrou um elemento só: é ele.
 4. Na média, o quickselect é O(n): n + n/2 + n/4 + ... < 2n.
@@ -3335,16 +3532,16 @@ desempate na `compara` (o horário), então `qsort` resolve:
 > `stdlib.h` traz a **`bsearch`**, com a mesma `compara`.
 
 > [!NOTE]
-> **Pergunta para você:** se a `compara` do A191 só comparasse a cidade (sem o
-> desempate por horário), a saída seria sempre a mesma? Em que ordem você
-> esperaria os três pedidos de Recife? Rode algumas vezes, troque a ordem do
-> vetor de entrada e veja.
+> **Pergunta para você:** se a `compara` do código acima só comparasse a
+> cidade (sem o desempate por horário), a saída seria sempre a mesma? Em que
+> ordem você esperaria os três pedidos de Recife? Rode algumas vezes, troque a
+> ordem do vetor de entrada e veja.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0096-comparando/`](0096-comparando/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A191 · Os pedidos agrupados por cidade com qsort**
+**Exemplo A191 · Duas vitrines do mesmo cardápio com qsort**
 
 ```c
 #include <stdio.h>
@@ -3352,48 +3549,68 @@ Os arquivos ficam em [`0096-comparando/`](0096-comparando/). Os comandos funcion
 #include <string.h>
 
 typedef struct {
-    int numero;
-    int hora;          // hhmm
-    char cidade[16];
-} Pedido;
+    char nome[16];
+    double preco;
+    int calorias;
+} Prato;
 
-// contrato do qsort: negativo se a vem antes, 0 se empata, positivo se depois
-int compara(const void *a, const void *b) {
-    const Pedido *p = a;
-    const Pedido *q = b;
-    int c = strcmp(p->cidade, q->cidade);   // 1º critério: cidade
-    if (c != 0) {
-        return c;
+// o vetor ordenado é de Prato *: o qsort entrega o ENDEREÇO de cada ponteiro
+int por_preco(const void *a, const void *b) {
+    const Prato *p = *(const Prato *const *) a;
+    const Prato *q = *(const Prato *const *) b;
+    return (p->preco > q->preco) - (p->preco < q->preco);
+}
+
+int por_calorias_desc(const void *a, const void *b) {
+    const Prato *p = *(const Prato *const *) a;
+    const Prato *q = *(const Prato *const *) b;
+    if (p->calorias != q->calorias) {
+        return (p->calorias < q->calorias) - (p->calorias > q->calorias);
     }
-    return (p->hora > q->hora) - (p->hora < q->hora); // desempate: horário
+    return strcmp(p->nome, q->nome);        // desempate: nome
+}
+
+void mostra(const char *titulo, Prato *const v[], size_t n) {
+    printf("%s\n", titulo);
+    for (size_t i = 0; i < n; i++) {
+        printf("  %-10s R$ %5.2f %4d kcal\n", v[i]->nome, v[i]->preco, v[i]->calorias);
+    }
 }
 
 int main(void) {
-    Pedido pedidos[] = {           // chegaram nesta ordem (por horário)
-        {101, 910, "Recife"},
-        {102, 925, "Manaus"},
-        {103, 1005, "Recife"},
-        {104, 1040, "Natal"},
-        {105, 1115, "Manaus"},
-        {106, 1150, "Recife"},
+    Prato cardapio[] = {
+        {"Coxinha", 7.50, 290}, {"Pastel", 9.00, 340}, {"Tapioca", 12.00, 250},
+        {"Esfiha", 6.50, 250}, {"Cuscuz", 15.00, 480},
     };
-    size_t n = sizeof pedidos / sizeof pedidos[0];
-
-    qsort(pedidos, n, sizeof pedidos[0], compara);
-
+    size_t n = sizeof cardapio / sizeof cardapio[0];
+    Prato *vitrine1[5], *vitrine2[5];
     for (size_t i = 0; i < n; i++) {
-        printf("%-7s %02d:%02d  #%d\n", pedidos[i].cidade,
-               pedidos[i].hora / 100, pedidos[i].hora % 100, pedidos[i].numero);
+        vitrine1[i] = vitrine2[i] = &cardapio[i];  // só endereços, nada copiado
     }
+
+    qsort(vitrine1, n, sizeof vitrine1[0], por_preco);
+    qsort(vitrine2, n, sizeof vitrine2[0], por_calorias_desc);
+
+    mostra("Mais barato primeiro:", vitrine1, n);
+    mostra("Mais calórico primeiro:", vitrine2, n);
+    printf("cardapio[0] continua: %s (cada ponteiro tem %zu bytes, cada Prato %zu)\n",
+           cardapio[0].nome, sizeof vitrine1[0], sizeof cardapio[0]);
     return 0;
 }
-// Saída:
-// Manaus  09:25  #102
-// Manaus  11:15  #105
-// Natal   10:40  #104
-// Recife  09:10  #101
-// Recife  10:05  #103
-// Recife  11:50  #106
+// Saída (8 e 32 bytes numa máquina de 64 bits comum):
+// Mais barato primeiro:
+//   Esfiha     R$  6.50  250 kcal
+//   Coxinha    R$  7.50  290 kcal
+//   Pastel     R$  9.00  340 kcal
+//   Tapioca    R$ 12.00  250 kcal
+//   Cuscuz     R$ 15.00  480 kcal
+// Mais calórico primeiro:
+//   Cuscuz     R$ 15.00  480 kcal
+//   Pastel     R$  9.00  340 kcal
+//   Coxinha    R$  7.50  290 kcal
+//   Esfiha     R$  6.50  250 kcal
+//   Tapioca    R$ 12.00  250 kcal
+// cardapio[0] continua: Coxinha (cada ponteiro tem 8 bytes, cada Prato 32)
 ```
 
 ```bash
@@ -3580,33 +3797,31 @@ R$ 5.79
 
 **Exercício E572** · ★☆☆
 
-Para cada situação, escolha UM algoritmo do módulo (bubble, selection,
-insertion, merge, quick ou o qsort da biblioteca) e justifique em uma
-linha. Responda como comentário.
+O placar de um torneio de 12 jogadores é reordenado a cada ponto marcado,
+então ele está sempre QUASE em ordem. Qual algoritmo usar? Decida com
+números, não com palpite. O selection sort abaixo já devolve quantas
+comparações fez. Escreva int insertion(int v[], int n), que também devolve
+as comparações (uma por teste v[i] <= x feito), rode os dois em cópias do
+placar e mostre qual foi melhor.
 
 
 ```text
-a) Um placar de 20 jogadores, reordenado a cada ponto marcado (o vetor
-   está sempre quase em ordem).
-b) A lista de alunos já está em ordem alfabética e você quer ordenar
-   por nota sem bagunçar a ordem alfabética dos empatados, sem mexer
-   na compara.
-c) Registros enormes num cartão de memória lento: cada troca custa
-   caro, comparar é barato.
-d) Um servidor que ordena dados enviados por usuários e não pode, de jeito
-   nenhum, cair num caso O(n²).
-e) Ordenar um vetor de structs num programa comum, sem requisitos
-   especiais.
-f) Em que situação real o bubble sort é a melhor escolha?
+Saída esperada:
+selection: 66 comparações
+insertion: 13 comparações
+melhor para o placar: insertion
 ```
 
 **Dicas:**
 
-1. Releia a tabela de custo e estabilidade do assunto.
-2. "Adaptativo" e "estável" são as palavras-chave de a) e b).
-3. Resposta esperada: a) insertion; b) merge (estável); c) selection (no
-   máximo n - 1 trocas); d) merge (n log n garantido); e) qsort; f) em
-   nenhuma: o insertion faz o mesmo papel melhor.
+1. Faça outra cópia, como o main já faz para o selection: cada algoritmo
+   precisa receber o placar original, não o já ordenado.
+2. No insertion, conte dentro do while e saia com break quando
+   v[i] <= x: é aí que ele economiza.
+3. O selection faz sempre 11 + 10 + ... + 1 = 66, esteja o vetor como
+   estiver.
+4. Resposta esperada: a saída acima. Só o 58 está fora do lugar, então o
+   insertion faz pouco mais que n comparações.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E572.c
@@ -3651,8 +3866,8 @@ Pitty Skank Titas Cazuza Legiao Raimundos
 Os saldos (em centavos) de cinco contas de uma corretora precisam sair do
 menor para o maior. A compara abaixo é a "versão curta" que aparece em
 muito tutorial. O erro é de propósito: rode e veja o UBSan reclamar
-("signed integer overflow") e a ordem sair errada. Explique o que acontece
-e conserte sem mudar o tipo int.
+("signed integer overflow") e a ordem sair errada. Conserte a compara sem
+mudar o tipo int e rode de novo.
 
 
 ```text
@@ -3858,7 +4073,7 @@ Laço de fora: `for (int b = 1; b < n; b *= 2)`. Laço de dentro:
 
 </details>
 
-**7. Quick sort que não estoura a pilha.** Mude o quick sort do A189 para
+**7. Quick sort que não estoura a pilha.** Mude o quick sort do assunto 0095 para
 fazer a recursão só no lado **menor** e tratar o maior com um `while`. Meça a
 maior profundidade de recursão num vetor já ordenado de 10.000 elementos,
 antes e depois.

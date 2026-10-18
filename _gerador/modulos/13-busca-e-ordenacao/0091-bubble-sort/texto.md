@@ -132,6 +132,6 @@ fora repete passadas enquanto a bandeira disser que houve troca:
 > [!NOTE]
 > **Pergunta para você:** quantas passadas o bubble com bandeira faz no vetor
 > `8 17 23 35 42`, que já está ordenado? E em `17 23 35 42 8`, com o menor lá
-> no fim? Faça a previsão e teste no A181.
+> no fim? Faça a previsão e teste mudando o vetor do código acima.
 
 {{pratique}}

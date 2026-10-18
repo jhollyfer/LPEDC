@@ -3,8 +3,8 @@
 //
 // Este quick sort deveria ordenar os andares das entregas do prédio: 4, 9, 2,
 // 7. Ele tem UM erro, de propósito, numa única linha. Rode: o programa morre
-// e o AddressSanitizer fala em "stack-overflow". Ache o erro, explique por
-// que a recursão nunca termina e conserte.
+// e o AddressSanitizer fala em "stack-overflow". Ache a linha que faz a
+// recursão nunca terminar, conserte e rode de novo.
 //
 //   Saída esperada (depois de consertar):
 //   2 4 7 9

@@ -7,13 +7,13 @@
 //   int trocas_bubble(int v[], int n)        ordena e devolve quantas trocas fez
 //
 // Teste com 42 17 35 8 23, com 6 5 4 3 2 1 e com 3 1 2 (conte as inversões
-// ANTES de ordenar). Depois explique, num comentário, por que os dois números
-// sempre dão iguais.
+// ANTES de ordenar). Depois de ordenar, chame inversoes de novo e mostre
+// quantas sobraram.
 //
 //   Saída esperada:
-//   n = 5: 7 inversões, 7 trocas
-//   n = 6: 15 inversões, 15 trocas
-//   n = 3: 2 inversões, 2 trocas
+//   n = 5: 7 inversões, 7 trocas, 0 depois
+//   n = 6: 15 inversões, 15 trocas, 0 depois
+//   n = 3: 2 inversões, 2 trocas, 0 depois
 //
 // Dicas:
 // 1. Na inversoes, o j começa em i + 1.

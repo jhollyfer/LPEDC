@@ -1,10 +1,9 @@
 // 0093 · Insertion sort
 // Exercício E558 · ★★★
 //
-// Conclusão: a busca binária derruba as comparações (de 120 para 49 no vetor
-// invertido), mas os deslocamentos continuam 120: cada elemento ainda precisa
-// andar até o seu lugar, uma casa por vez. Como o custo dominante passa a ser
-// mover memória, o algoritmo continua O(n²).
+// A busca binária derruba as comparações, mas os deslocamentos continuam os
+// mesmos: cada elemento ainda anda casa por casa. Dobrando n, os deslocamentos
+// quase quadruplicam (120 -> 496): continua O(n²).
 
 #include <stdio.h>
 
@@ -51,16 +50,22 @@ void insertion_binaria(int v[], int n, int *comp, int *desl) {
     }
 }
 
-int main(void) {
-    int a[16], b[16];
-    for (int i = 0; i < 16; i++) {
-        a[i] = b[i] = 160 - 10 * i;   // 160, 150, ..., 10
+void testa(int n) {
+    int a[32], b[32];
+    for (int i = 0; i < n; i++) {
+        a[i] = b[i] = 10 * (n - i);   // invertido: 10n, ..., 20, 10
     }
     int c1, d1, c2, d2;
-    insertion(a, 16, &c1, &d1);
-    insertion_binaria(b, 16, &c2, &d2);
+    insertion(a, n, &c1, &d1);
+    insertion_binaria(b, n, &c2, &d2);
+    printf("n = %d\n", n);
     printf("normal:  %3d comparações, %3d deslocamentos\n", c1, d1);
     printf("binária: %3d comparações, %3d deslocamentos\n", c2, d2);
-    printf("ordenado? %s\n", b[0] == 10 && b[15] == 160 ? "sim" : "não");
+    printf("ordenado? %s\n", b[0] == 10 && b[n - 1] == 10 * n ? "sim" : "não");
+}
+
+int main(void) {
+    testa(16);
+    testa(32);
     return 0;
 }

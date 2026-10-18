@@ -1,49 +1,49 @@
-// A183 · O pódio do kart, um de cada vez
+// A183 · Selection não se importa com a ordem de entrada
 
 #include <stdio.h>
 
-void mostra(const int v[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%3d", v[i]);
-    }
-    printf("\n");
-}
-
-void selection_sort(int v[], int n) {
-    int comparacoes = 0, trocas = 0;
+// selection sort que devolve comparações e trocas
+void selection_sort(int v[], int n, int *comparacoes, int *trocas) {
+    *comparacoes = 0;
+    *trocas = 0;
     for (int i = 0; i < n - 1; i++) {
-        int menor = i;                    // índice do menor de v[i..n-1]
+        int menor = i;
         for (int j = i + 1; j < n; j++) {
-            comparacoes++;
+            (*comparacoes)++;           // o laço de dentro roda inteiro, sempre
             if (v[j] < v[menor]) {
                 menor = j;
             }
         }
-        if (menor != i) {                 // uma troca só por passada
+        if (menor != i) {
             int aux = v[i];
             v[i] = v[menor];
             v[menor] = aux;
-            trocas++;
+            (*trocas)++;
         }
-        printf("i = %d:  ", i);
-        mostra(v, n);
     }
-    printf("%d comparações, %d trocas\n", comparacoes, trocas);
+}
+
+void testa(const char *nome, int v[], int n) {
+    int c, t;
+    selection_sort(v, n, &c, &t);
+    printf("%-11s %2d comparações, %d trocas\n", nome, c, t);
 }
 
 int main(void) {
-    int tempos[] = {58, 31, 47, 19, 26}; // segundos por volta
-    int n = 5;
+    // pesos de caixas de mudança (kg): trocar caixa é caro, olhar é barato
+    int ordenado[] = {5, 8, 12, 20, 25, 31};
+    int invertido[] = {31, 25, 20, 12, 8, 5};
+    int misturado[] = {20, 5, 31, 8, 25, 12};
+    int menor_no_fim[] = {8, 12, 20, 25, 31, 5};
 
-    printf("início: ");
-    mostra(tempos, n);
-    selection_sort(tempos, n);
+    testa("ordenado:", ordenado, 6);
+    testa("invertido:", invertido, 6);
+    testa("misturado:", misturado, 6);
+    testa("5 no fim:", menor_no_fim, 6);
     return 0;
 }
-// Saída:
-// início:  58 31 47 19 26
-// i = 0:   19 31 47 58 26
-// i = 1:   19 26 47 58 31
-// i = 2:   19 26 31 58 47
-// i = 3:   19 26 31 47 58
-// 10 comparações, 4 trocas
+// Saída (comparações: sempre 5+4+3+2+1 = 15; trocas: nunca mais que n - 1 = 5):
+// ordenado:   15 comparações, 0 trocas
+// invertido:  15 comparações, 3 trocas
+// misturado:  15 comparações, 3 trocas
+// 5 no fim:   15 comparações, 5 trocas

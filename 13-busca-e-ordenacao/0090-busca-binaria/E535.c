@@ -2,19 +2,41 @@
 // Exercício E535 · ★☆☆
 //
 // Os armários livres do vestiário do clube estão numa lista ordenada, e o
-// programa abaixo procura dois números nela. SEM RODAR, escreva a saída exata
-// deste programa. Faça o teste de mesa com
-// ini, fim e meio em cada volta. Só depois rode para conferir.
+// programa abaixo procura números nela. Deixe a busca "falar" o que está
+// fazendo:
+//
+// a) no printf de cada volta, mostre também ini e fim;
+// b) conte as voltas numa variável e mostre o total no "achou" e no
+//    "não achou";
+// c) no "não achou", mostre ainda os valores de ini e fim que pararam o laço;
+// d) no main, procure também o 62, o último armário.
+//
+//   Saída esperada:
+//   Procurando 47
+//   ini=0 fim=8 meio=4 (30)
+//   ini=5 fim=8 meio=6 (47)
+//   achou na posição 6 em 2 voltas
+//   Procurando 5
+//   ini=0 fim=8 meio=4 (30)
+//   ini=0 fim=3 meio=1 (9)
+//   ini=0 fim=0 meio=0 (4)
+//   não achou em 3 voltas (parou com ini=1 fim=0)
+//   Procurando 62
+//   ini=0 fim=8 meio=4 (30)
+//   ini=5 fim=8 meio=6 (47)
+//   ini=7 fim=8 meio=7 (55)
+//   ini=8 fim=8 meio=8 (62)
+//   achou na posição 8 em 4 voltas
 //
 // Dicas:
-// 1. n = 9, então a primeira volta tem ini = 0, fim = 8 e meio = 4.
-// 2. Para o 5: depois de cada volta, anote o novo intervalo [ini, fim].
-// 3. O laço para quando ini fica maior que fim.
-// 4. Resposta esperada: para 47 aparecem meio=4 (30), meio=6 (47) e "achou na
-//    posição 6"; para 5 aparecem meio=4 (30), meio=1 (9), meio=0 (4) e "não
-//    achou".
+// 1. Crie int voltas = 0; antes do while e some 1 logo depois de calcular meio.
+// 2. O printf da volta fica: printf("ini=%d fim=%d meio=%d (%d)\n", ...).
+// 3. O laço para quando ini fica maior que fim: é isso que o "não achou"
+//    vai mostrar.
+// 4. Resposta esperada: a saída acima. Repare que o 62 custa 4 voltas, o
+//    máximo para 9 elementos.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>
 

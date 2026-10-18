@@ -1,51 +1,58 @@
-// A179 · O catálogo do atacadão
+// A179 · Um milhão de notas fiscais
 
 #include <stdio.h>
 
-// v está em ordem crescente; devolve o índice de x ou -1
-int busca_binaria(const int v[], int n, int x, int *voltas) {
+#define N 1000000
+
+int sequencial(const int v[], int n, int x, long *passos) {
+    *passos = 0;
+    for (int i = 0; i < n; i++) {
+        (*passos)++;
+        if (v[i] == x) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int binaria(const int v[], int n, int x, long *passos) {
     int ini = 0, fim = n - 1;
-    *voltas = 0;
-    while (ini <= fim) {              // ainda sobra alguém no intervalo
+    *passos = 0;
+    while (ini <= fim) {
         int meio = ini + (fim - ini) / 2;
-        (*voltas)++;
-        printf("  ini=%2d fim=%2d meio=%2d v[meio]=%d\n", ini, fim, meio, v[meio]);
+        (*passos)++;
         if (v[meio] == x) {
             return meio;
         }
         if (v[meio] < x) {
-            ini = meio + 1;           // x só pode estar à direita
+            ini = meio + 1;
         } else {
-            fim = meio - 1;           // x só pode estar à esquerda
+            fim = meio - 1;
         }
     }
     return -1;
 }
 
 int main(void) {
-    int codigos[] = {103, 118, 125, 140, 152, 167, 171, 189,
-                     204, 216, 230, 245, 258, 263, 279};
-    int n = sizeof codigos / sizeof codigos[0];
-    int voltas;
+    static int notas[N];              // 4 MB: static, fora da pilha
+    for (int i = 0; i < N; i++) {
+        notas[i] = 500000 + 3 * i;    // números das notas, em ordem crescente
+    }
+    // a primeira, uma do meio, a última e uma que não existe
+    int procuradas[] = {500000, 2000000, 3499997, 2000001};
+    long ps, pb;
 
-    printf("Procurando 216:\n");
-    int pos = busca_binaria(codigos, n, 216, &voltas);
-    printf("posição %d em %d voltas\n", pos, voltas);
-
-    printf("Procurando 150:\n");
-    pos = busca_binaria(codigos, n, 150, &voltas);
-    printf("posição %d em %d voltas\n", pos, voltas);
+    printf("    nota   posição  sequencial  binária\n");
+    for (int k = 0; k < 4; k++) {
+        int pos = sequencial(notas, N, procuradas[k], &ps);
+        binaria(notas, N, procuradas[k], &pb);
+        printf("%8d  %8d  %10ld  %7ld\n", procuradas[k], pos, ps, pb);
+    }
     return 0;
 }
-// Saída:
-// Procurando 216:
-//   ini= 0 fim=14 meio= 7 v[meio]=189
-//   ini= 8 fim=14 meio=11 v[meio]=245
-//   ini= 8 fim=10 meio= 9 v[meio]=216
-// posição 9 em 3 voltas
-// Procurando 150:
-//   ini= 0 fim=14 meio= 7 v[meio]=189
-//   ini= 0 fim= 6 meio= 3 v[meio]=140
-//   ini= 4 fim= 6 meio= 5 v[meio]=167
-//   ini= 4 fim= 4 meio= 4 v[meio]=152
-// posição -1 em 4 voltas
+// Saída (a binária nunca passa de 20 voltas: 2^20 > 1 milhão):
+//     nota   posição  sequencial  binária
+//   500000         0           1       19
+//  2000000    500000      500001       19
+//  3499997    999999     1000000       20
+//  2000001        -1     1000000       20

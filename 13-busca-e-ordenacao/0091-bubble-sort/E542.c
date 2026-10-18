@@ -3,21 +3,33 @@
 //
 // A fila do caixa preferencial tem senhas fora de ordem: 9, 4, 7, 1, 5. O
 // programa abaixo ordena com bubble sort (sem bandeira) e mostra o vetor no
-// fim de cada passada. SEM RODAR, escreva a saída exata, incluindo o total
-// de trocas. Depois rode e confira.
+// fim de cada passada. Melhore o programa:
+//
+// a) conte as trocas de CADA passada numa variável própria e mostre esse
+//    número entre parênteses no fim da linha da passada;
+// b) acrescente a bandeira trocou, para parar na primeira passada sem troca.
+//
+//   Saída esperada:
+//   passada 1: 4 7 1 5 9 (4 trocas)
+//   passada 2: 4 1 5 7 9 (2 trocas)
+//   passada 3: 1 4 5 7 9 (1 trocas)
+//   passada 4: 1 4 5 7 9 (0 trocas)
+//   trocas: 7
 //
 // Dicas:
-// 1. Na passada 1, o 9 ganha todas as comparações e vai para o fim.
-// 2. Sem bandeira, o programa faz as 4 passadas mesmo se o vetor já estiver
-//    ordenado antes.
-// 3. Conte as inversões do vetor original: é o total de trocas.
-// 4. Resposta esperada: passada 1: 4 7 1 5 9; passada 2: 4 1 5 7 9; passada
-//    3: 1 4 5 7 9; passada 4: 1 4 5 7 9; trocas: 7 (as inversões: 9 com 4, 7, 1
-//    e 5; 4 com 1; 7 com 1 e 5).
+// 1. Declare int nesta = 0; no começo de cada passada (dentro do laço de
+//    fora) e some 1 junto com trocas++.
+// 2. A bandeira: bool trocou = true; antes do laço, condição
+//    passada < n && trocou, e trocou = false; no começo de cada passada.
+// 3. A passada 4 ainda acontece: a bandeira só descobre que acabou depois de
+//    uma passada inteira sem trocas.
+// 4. Resposta esperada: a saída acima. O total 7 é o número de inversões do
+//    vetor original.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>
+#include <stdbool.h>
 
 int main(void) {
     int senhas[] = {9, 4, 7, 1, 5};

@@ -112,8 +112,8 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > fechado `[ini, fim]` deixa de olhar o último candidato. E `fim = meio` (em
 > vez de `meio - 1`) no intervalo fechado pode nunca encolher: com `ini = 4` e
 > `fim = 4`, o meio é 4 de novo, para sempre. Escolha um estilo (fechado, como
-> no A179, ou semiaberto `[ini, fim)`, como no A180) e siga as regras dele em
-> todas as linhas.
+> no código acima, ou semiaberto `[ini, fim)`, como no A180) e siga as regras
+> dele em todas as linhas.
 
 > [!TIP]
 > **Por dentro do C:** por que `ini + (fim - ini) / 2` e não
@@ -127,8 +127,9 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > uma pronta, a `bsearch`, que você vai usar no assunto 0096.
 
 > [!NOTE]
-> **Pergunta para você:** quantas voltas o A179 dá para achar o 103, o
+> **Pergunta para você:** quantas voltas o código acima dá para achar o 103, o
 > primeiro do catálogo? E qual é o máximo de voltas para um vetor de 1000
-> elementos? Faça o teste de mesa antes de rodar.
+> elementos? Faça o teste de mesa antes de rodar. O A179 mostra a conta com
+> um milhão de elementos.
 
 {{pratique}}

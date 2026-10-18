@@ -8,7 +8,7 @@
 //   10 10 15 3 15 3
 //
 // Números somem e outros se repetem. Há UM erro, de propósito, numa única
-// linha. Ache, explique e conserte.
+// linha. Ache, conserte e rode de novo.
 //
 //   Saída esperada (depois de consertar):
 //   3 5 10 15 21 42

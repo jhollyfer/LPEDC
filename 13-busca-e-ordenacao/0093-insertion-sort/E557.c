@@ -4,7 +4,7 @@
 // Este insertion sort deveria ordenar as idades do grupo de corrida:
 // 31, 12, 45, 27, 8, 19. Ele tem DOIS erros, de propósito. O primeiro faz o
 // sanitizer parar o programa; o segundo só aparece depois que você
-// consertar o primeiro. Ache os dois, explique e conserte.
+// consertar o primeiro. Conserte os dois e rode de novo.
 //
 //   Saída esperada (depois de consertar):
 //   8 12 19 27 31 45

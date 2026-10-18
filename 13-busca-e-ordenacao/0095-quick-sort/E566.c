@@ -4,9 +4,9 @@
 // Aquecimento de separação, sem pivô: o banco quer as contas no vermelho no
 // começo do relatório. Os saldos são 120, -45, 300, -10, 0, -80, 55. Escreva
 // int separa_negativos(int v[], int n), que deixa os negativos à esquerda e
-// devolve quantos são. Use o MESMO esquema do separa do A189: k anda pelo
-// vetor e j marca onde entra o próximo negativo (troca v[j] com v[k] e
-// avança j).
+// devolve quantos são. Use o MESMO esquema do separa do texto do assunto:
+// k anda pelo vetor e j marca onde entra o próximo negativo (troca v[j] com
+// v[k] e avança j).
 //
 //   Saída esperada:
 //   -45 -10 -80 120 0 300 55

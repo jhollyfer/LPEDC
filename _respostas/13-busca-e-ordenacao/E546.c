@@ -1,12 +1,9 @@
 // 0091 · Bubble sort
 // Exercício E546 · ★★★
 //
-// Por que sempre dá igual: o bubble só troca VIZINHOS fora de ordem. Trocar
-// dois vizinhos a > b desfaz exatamente a inversão entre eles e não muda a
-// ordem relativa de nenhum outro par (quem estava antes dos dois continua
-// antes, quem estava depois continua depois). Então cada troca diminui as
-// inversões em 1, e o vetor ordenado tem 0 inversões: trocas = inversões.
-// No pior caso (invertido), todos os n(n-1)/2 pares são inversões.
+// Cada troca de vizinhos a > b desfaz exatamente a inversão entre eles e não
+// mexe na ordem relativa dos outros pares: por isso trocas = inversões, e o
+// vetor ordenado termina com 0.
 
 #include <stdio.h>
 
@@ -40,7 +37,7 @@ int trocas_bubble(int v[], int n) {
 void testa(int v[], int n) {
     int inv = inversoes(v, n);       // conta antes de ordenar
     int tr = trocas_bubble(v, n);
-    printf("n = %d: %d inversões, %d trocas\n", n, inv, tr);
+    printf("n = %d: %d inversões, %d trocas, %d depois\n", n, inv, tr, inversoes(v, n));
 }
 
 int main(void) {

@@ -1,53 +1,44 @@
-// A185 · Arrumando as cartas na mão
+// A185 · A triagem que respeita a ordem de chegada
 
 #include <stdio.h>
-#include <stdbool.h>
 
-static int comparacoes = 0;
+typedef struct {
+    char nome[10];
+    int chegada;      // ordem em que entrou no pronto-socorro
+    int prioridade;   // 1 = urgente, 2 = pouco urgente, 3 = não urgente
+} Paciente;
 
-// a > b, contando a comparação
-bool maior(int a, int b) {
-    comparacoes++;
-    return a > b;
-}
-
-void mostra(const int v[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%3d", v[i]);
-    }
-    printf("\n");
-}
-
-void insertion_sort(int v[], int n) {
-    int deslocamentos = 0;
+// insertion sort por prioridade: só empurra quem é ESTRITAMENTE maior
+void ordena_triagem(Paciente v[], int n) {
     for (int j = 1; j < n; j++) {
-        int x = v[j];                   // a carta que vai ser encaixada
+        Paciente x = v[j];              // a struct inteira é copiada
         int i = j - 1;
-        while (i >= 0 && maior(v[i], x)) {
-            v[i + 1] = v[i];            // abre espaço: empurra para a direita
-            deslocamentos++;
+        while (i >= 0 && v[i].prioridade > x.prioridade) {
+            v[i + 1] = v[i];
             i--;
         }
-        v[i + 1] = x;                   // encaixa no buraco
-        printf("j = %d (x = %d):", j, x);
-        mostra(v, n);
+        v[i + 1] = x;                   // para atrás de quem tem a mesma prioridade
     }
-    printf("%d comparações, %d deslocamentos\n", comparacoes, deslocamentos);
 }
 
 int main(void) {
-    int mao[] = {7, 4, 9, 2, 5};
-    int n = 5;
+    Paciente fila[] = {
+        {"Rita", 1, 3}, {"Paulo", 2, 2}, {"Joana", 3, 1},
+        {"Caio", 4, 3}, {"Lia", 5, 1}, {"Beto", 6, 2},
+    };
+    int n = 6;
 
-    printf("início:       ");
-    mostra(mao, n);
-    insertion_sort(mao, n);
+    ordena_triagem(fila, n);
+    for (int k = 0; k < n; k++) {
+        printf("prioridade %d: %-6s (chegou em %dº)\n",
+               fila[k].prioridade, fila[k].nome, fila[k].chegada);
+    }
     return 0;
 }
-// Saída:
-// início:         7  4  9  2  5
-// j = 1 (x = 4):  4  7  9  2  5
-// j = 2 (x = 9):  4  7  9  2  5
-// j = 3 (x = 2):  2  4  7  9  5
-// j = 4 (x = 5):  2  4  5  7  9
-// 8 comparações, 6 deslocamentos
+// Saída (empatados na prioridade continuam na ordem de chegada: é estável):
+// prioridade 1: Joana  (chegou em 3º)
+// prioridade 1: Lia    (chegou em 5º)
+// prioridade 2: Paulo  (chegou em 2º)
+// prioridade 2: Beto   (chegou em 6º)
+// prioridade 3: Rita   (chegou em 1º)
+// prioridade 3: Caio   (chegou em 4º)

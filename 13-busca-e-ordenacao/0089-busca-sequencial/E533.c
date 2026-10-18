@@ -3,8 +3,8 @@
 //
 // A função abaixo deveria devolver a PRIMEIRA posição da senha procurada no
 // painel do banco. Ela tem DOIS erros, de propósito. Rode com o rodar: o
-// AddressSanitizer vai reclamar de um deles. Ache os dois, explique e
-// conserte.
+// AddressSanitizer vai reclamar de um deles. Conserte os dois e rode de novo
+// até a saída bater com a esperada.
 //
 //   Saída esperada (depois de consertar):
 //   Primeira senha 7: posição 1

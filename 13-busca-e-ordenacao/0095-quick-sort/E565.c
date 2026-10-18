@@ -2,18 +2,33 @@
 // Exercício E565 · ★☆☆
 //
 // As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. O programa abaixo faz
-// UMA separação (só o separa, sem recursão), com o pivô no fim. SEM RODAR,
-// escreva a saída exata: cada troca feita, o vetor final e a posição do pivô.
-// Depois rode e confira.
+// UMA separação (só o separa, sem recursão), com o pivô no fim, e mostra cada
+// troca. Dê o próximo passo do quick sort à mão, no código:
+//
+// a) conte as comparações (v[k] <= pivo) numa variável static;
+// b) depois da primeira separação, chame separa de novo só no lado DIREITO
+//    do pivô e mostre outra vez o vetor e a nova posição do pivô;
+// c) no fim, mostre o total de comparações das duas separações.
+//
+//   Saída esperada:
+//   troca v[0] e v[1]
+//   troca v[1] e v[3]
+//   troca v[2] e v[5]
+//   vetor: 2 4 5 9 8 6
+//   pivô na posição 2
+//   troca v[3] e v[5]
+//   vetor: 2 4 5 6 8 9
+//   pivô na posição 3
+//   comparações: 7
 //
 // Dicas:
-// 1. O pivô é 5. Só 2 e 4 são <= 5.
-// 2. k anda sempre; j só anda depois de uma troca.
-// 3. No fim, o pivô troca de lugar com quem está em v[j].
-// 4. Resposta esperada: troca v[0] e v[1]; troca v[1] e v[3]; troca v[2] e
-//    v[5]; vetor: 2 4 5 9 8 6; pivô na posição 2.
+// 1. O lado direito do pivô vai de j + 1 até 5: separa(senhas, j + 1, 5).
+// 2. Uma função mostra(v, n) evita repetir o laço do printf.
+// 3. A primeira separação compara 5 elementos com o pivô; a segunda, 2.
+// 4. Resposta esperada: a saída acima. O lado esquerdo (2 4) e o pedaço que
+//    sobrou (8 9) já estão em ordem.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>
 
