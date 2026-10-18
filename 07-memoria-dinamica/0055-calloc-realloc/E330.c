@@ -3,9 +3,8 @@
 //
 // A fila do banco guarda as senhas num vetor que cresce. O programa guarda o
 // endereço da primeira senha para mostrar no painel depois. Ele está ERRADO
-// de propósito: rode com o rodar, leia o relatório do AddressSanitizer e
-// responda: qual é o erro, em que linha, e por que o realloc é o culpado?
-// Depois conserte.
+// de propósito: rode com o rodar e leia o relatório do AddressSanitizer
+// (ele aponta a linha). Conserte e rode de novo até sair sem relatório.
 //
 //   Saída esperada depois do conserto:
 //   Painel: senha 101

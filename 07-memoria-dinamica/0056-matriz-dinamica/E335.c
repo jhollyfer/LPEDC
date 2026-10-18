@@ -4,7 +4,8 @@
 // Este programa monta a grade de 3 turnos x 5 dias de uma clínica, com o
 // número de consultas, e mostra o total. Ele tem DOIS erros de memória, de
 // propósito (o gcc até avisa sobre um deles). Rode com o rodar, leia o aviso
-// e os relatórios e conserte um de cada vez.
+// e os relatórios e conserte um de cada vez, rodando de novo a cada conserto
+// até sair o total sem relatório nenhum.
 //
 //   Saída esperada depois do conserto:
 //   Total de consultas: 105

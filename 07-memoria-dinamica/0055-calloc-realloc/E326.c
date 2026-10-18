@@ -3,7 +3,8 @@
 //
 // O programa abaixo funciona e mostra as notas do boletim. Mesmo assim, a
 // linha do realloc tem um problema que só aparece quando falta memória.
-// Explique o problema e refatore a linha, sem mudar a saída.
+// Refatore o trecho do realloc para ele não perder o bloco antigo se
+// falhar, e rode de novo para conferir que a saída não mudou.
 //
 //   Saída esperada (antes e depois):
 //   Notas: 7 8 10

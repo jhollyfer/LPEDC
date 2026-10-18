@@ -7,13 +7,12 @@
 //
 // 1) rode com o rodar e veja o total;
 // 2) rode com ~/LPEDC/rodar --valgrind e leia a primeira mensagem;
-// 3) conserte com UMA palavra trocada.
+// 3) conserte trocando a função que aloca o bloco e rode de novo com os
+//    dois.
 //
 //   Saída esperada depois do conserto:
 //   Total: 6 gols
 //   Média por rodada: 1.2
-//
-// Por que o ASan não pegou e o valgrind pegou?
 //
 // Dicas:
 // 1. Quem deu valor para gols[4]?

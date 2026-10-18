@@ -3,21 +3,23 @@
 //
 // O placar do campeonato de futsal da firma guarda os gols dos 3 times. O
 // programa tem um erro de propósito (o gcc até avisa). Rode e leia o aviso e
-// o relatório: qual é o erro? Por que "um ponteiro é um backup" é uma ideia errada? Conserte
-// mantendo a saída.
+// o relatório. Depois conserte fazendo de backup uma cópia DE VERDADE, num
+// bloco só dele. Para provar que ficou independente, zere placar[0] (o
+// jogo foi anulado) antes de mostrar os dois.
 //
 //   Saída esperada depois do conserto:
-//   Gols: 4 2 7
+//   Placar: 0 2 7
+//   Backup: 4 2 7
 //   Placar encerrado
 //
 // Dicas:
 // 1. Procure "attempting double-free". Quantos blocos existem? Quantos
 //    free?
 // 2. backup = placar copia o ENDEREÇO, não os números.
-// 3. Resposta esperada: placar e backup apontam para o MESMO bloco; liberar
-//    os dois é free duplo. Conserto: um só free (apague o free(backup)). Se
-//    quisesse uma cópia de verdade, precisaria de outro malloc e de copiar
-//    os 3 números.
+// 3. Resposta esperada: a saída acima. No original, placar e backup apontam
+//    para o MESMO bloco e liberar os dois é free duplo. Com
+//    int *backup = malloc(3 * sizeof *backup); e um laço que copia os 3
+//    números, são dois blocos: aí, sim, cada um tem o seu free.
 //
 // Escreva sua resposta abaixo (conserte o código):
 

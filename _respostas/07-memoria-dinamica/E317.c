@@ -1,14 +1,8 @@
 // 0053 · Pilha e heap
 // Exercício E317 · ★★★
 //
-// Resposta: 41, 51 e 95.
-// - contador (global) e chamadas (static) moram nos dados: há um só de cada.
-// - local mora na pilha: cada um dos 4 frames de passo(3) tem a sua, e cada
-//   uma vale 1.
-// - Quando o primeiro frame (n = 3) chega ao return, as 3 chamadas de dentro
-//   já terminaram: chamadas = 4, local = 1 -> 41.
-// - passo(0) é a 5ª chamada: 5 * 10 + 1 = 51.
-// - contador perdeu 1 em cada uma das 5 chamadas: 95.
+// contador (global) e chamadas (static) moram nos dados: há um só de cada.
+// local mora na pilha: cada frame tem a sua, e cada uma vale 1.
 
 #include <stdio.h>
 
@@ -20,10 +14,13 @@ int passo(int n) {
     chamadas++;
     local++;
     contador--;
+    printf("entra n=%d: chamadas=%d local=%d contador=%d\n", n, chamadas, local, contador);
     if (n > 0) {
         passo(n - 1);
     }
-    return chamadas * 10 + local;
+    int resultado = chamadas * 10 + local;
+    printf("sai n=%d: devolve %d\n", n, resultado);
+    return resultado;
 }
 
 int main(void) {
@@ -33,6 +30,16 @@ int main(void) {
     return 0;
 }
 // Saída:
+// entra n=3: chamadas=1 local=1 contador=99
+// entra n=2: chamadas=2 local=1 contador=98
+// entra n=1: chamadas=3 local=1 contador=97
+// entra n=0: chamadas=4 local=1 contador=96
+// sai n=0: devolve 41
+// sai n=1: devolve 41
+// sai n=2: devolve 41
+// sai n=3: devolve 41
 // 41
+// entra n=0: chamadas=5 local=1 contador=95
+// sai n=0: devolve 51
 // 51
 // 95

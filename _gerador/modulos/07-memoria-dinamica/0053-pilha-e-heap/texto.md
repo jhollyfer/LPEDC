@@ -102,7 +102,7 @@ no fim de `main`:
 > isso locais são de graça. O `malloc` precisa procurar um pedaço livre do
 > tamanho certo numa lista de blocos e anotar o tamanho num cabeçalho
 > escondido logo antes do endereço que ele te entrega. É bem mais caro. Rode
-> `size` no executável (`gcc A105.c -o comanda && size comanda`) e veja as
+> `size` no executável (`gcc A105.c -o bolao && size bolao`) e veja as
 > colunas `text` (código), `data` (globais com valor) e `bss` (globais
 > zeradas). Heap e pilha não aparecem: eles só existem quando o programa roda.
 

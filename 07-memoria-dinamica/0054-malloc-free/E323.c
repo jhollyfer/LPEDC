@@ -3,8 +3,8 @@
 //
 // O app de caminhada calcula a média de passos dos últimos 4 dias. A conta
 // sai certa, mas o programa termina com um relatório do AddressSanitizer.
-// O erro está de propósito. Rode, leia o relatório e responda: qual linha
-// está errada e por quê? Depois conserte.
+// O erro está de propósito. Rode, leia o relatório, conserte e rode de novo
+// até o programa terminar sem relatório nenhum.
 //
 //   Saída esperada depois do conserto:
 //   Média: 9000 passos

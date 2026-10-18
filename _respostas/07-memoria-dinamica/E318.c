@@ -24,5 +24,5 @@ int main(void) {
     return 0;
 }
 // Saída:
-// Senha: A032
-// Senha: A097
+// Senha: A042
+// Senha: A107

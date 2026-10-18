@@ -1,37 +1,58 @@
-// A113 · O carrinho que não vaza
+// A113 · Todo caminho de saída libera
 
 #include <stdio.h>
 #include <stdlib.h>
 
-// Soma os preços de um pedido. A cópia é temporária: nasce e morre aqui.
-int total_do_pedido(const int *precos, int itens) {
-    int *copia = malloc(itens * sizeof *copia);
+// Copia as notas de um aluno e calcula a média. Uma nota fora de 0 a 10
+// cancela tudo, e a função sai mais cedo: esse return também precisa do free.
+// Devolve -1 se a lista for inválida ou faltar memória.
+double media_valida(const double *notas, int n) {
+    double *copia = malloc(n * sizeof *copia);
     if (copia == NULL) {
-        return -1;
+        return -1; // nada foi alocado: nada a liberar
     }
-    int total = 0;
-    for (int i = 0; i < itens; i++) {
-        copia[i] = precos[i];
-        total += copia[i];
+    double soma = 0;
+    for (int i = 0; i < n; i++) {
+        if (notas[i] < 0 || notas[i] > 10) {
+            printf("  nota %d inválida: %.1f\n", i + 1, notas[i]);
+            free(copia); // a saída de erro é a que mais esquece
+            return -1;
+        }
+        copia[i] = notas[i];
+        soma += copia[i];
     }
-    free(copia); // sem esta linha, cada pedido deixaria 16 bytes para trás
-    return total;
+    free(copia); // a saída normal
+    return soma / n;
 }
 
 int main(void) {
-    int pedido[] = {30, 12, 45, 8};
-    for (int p = 1; p <= 3; p++) {
-        printf("Pedido %d: R$ %d\n", p, total_do_pedido(pedido, 4));
+    double ana[] = {7.5, 8.0, 9.0};
+    double beto[] = {6.0, 11.0, 7.0}; // alguém digitou 11
+    double caio[] = {5.0, 7.0, 6.0};
+
+    const double *turma[] = {ana, beto, caio};
+    const char *nomes[] = {"Ana", "Beto", "Caio"};
+    for (int a = 0; a < 3; a++) {
+        printf("%s:\n", nomes[a]);
+        double m = media_valida(turma[a], 3);
+        if (m < 0) {
+            printf("  sem média\n");
+        } else {
+            printf("  média %.1f\n", m);
+        }
     }
     return 0;
 }
 // Saída:
-// Pedido 1: R$ 95
-// Pedido 2: R$ 95
-// Pedido 3: R$ 95
+// Ana:
+//   média 8.2
+// Beto:
+//   nota 2 inválida: 11.0
+//   sem média
+// Caio:
+//   média 6.0
 //
-// Apague o free(copia) e rode de novo: a saída é a mesma, mas no fim o
-// LeakSanitizer (parte do AddressSanitizer) avisa:
-//   ERROR: LeakSanitizer: detected memory leaks
-//   Direct leak of 48 byte(s) in 3 object(s) allocated from:
-//       #1 ... in total_do_pedido A113.c:8
+// Apague o free(copia) de dentro do if e rode de novo: Ana e Caio continuam
+// certos, mas no fim o LeakSanitizer acusa 24 bytes em 1 bloco, o do Beto.
+// Vazamento em caminho de erro é traiçoeiro: só aparece quando o erro
+// acontece. Antes de cada return, pergunte: o que já foi alocado aqui?

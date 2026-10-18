@@ -22,7 +22,7 @@
 //
 // Dicas:
 // 1. c[i][j] é a soma de a[i][k] * b[k][j] para k de 0 a ca - 1.
-// 2. Reaproveite criar_matriz e liberar_matriz do A111. Para preencher A e
+// 2. Reaproveite criar_matriz e liberar_matriz do texto. Para preencher A e
 //    B, copie de matrizes fixas int [2][3] e int [3][2].
 // 3. Resposta esperada: a saída acima. Libere A, B e o produto; o NULL de
 //    A * A não precisa de free (free(NULL) também não faria mal).
