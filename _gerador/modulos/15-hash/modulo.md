@@ -74,131 +74,231 @@ escrever cada pedaço com as mãos.
 
 ## Desafios do módulo
 
-Problemas extras, misturando os assuntos do módulo. Resolva no papel primeiro
-e depois, se quiser, num arquivo seu.
+Problemas extras, misturando os assuntos do módulo. Todos pedem código:
+resolva num arquivo seu e rode com o `rodar`.
 
 **1. Base e tamanho brigando.** Um colega usou o hash polinomial de base 31
-com uma tabela de `m = 31` baldes. Num texto com 500 palavras diferentes,
-quase todas caíram em poucos baldes. Por quê? Que `m` você usaria?
+(`h = h * 31 + c`) com uma tabela de `m = 31` baldes, e quase todas as
+palavras caíram em poucos baldes. Escreva `unsigned hash(const char *s,
+unsigned m)` e uma função que imprime o balde de cada palavra de `{"casa",
+"mesa", "bola", "pato", "gato", "rato", "sapo", "dado", "vaso", "copo",
+"lua", "rua"}` e quantos baldes diferentes foram usados. Rode com `m = 31` e
+com `m = 37`.
 
 <details><summary>Resposta</summary>
 
-Como `h = h * 31 + c`, o resto por 31 de `h * 31` é sempre 0: sobra só `c %
-31`, o código da **última letra**. Todas as palavras terminadas em "a" caem
-juntas, e assim por diante. Use um `m` sem fator comum com a base: um primo
+```
+m = 31: 4 4 4 18 18 18 18 18 18 18 4 4 -> 2 baldes usados
+m = 37: 15 34 0 27 10 2 32 14 32 33 27 21 -> 10 baldes usados
+```
+
+Dica: marque os baldes usados num vetor de flags. Com `m = 31`, o resto de
+`h * 31` por 31 é sempre 0: sobra só `c % 31`, o código da **última letra**
+(`'a'` dá 4, `'o'` dá 18). Use um `m` sem fator comum com a base: um primo
 diferente de 31, como 37, 101 ou 1009.
 
 </details>
 
-**2. Sondagem linear à mão.** Tabela com `m = 7`, `h(k) = k % 7`, sondagem
-linear. Insira 15, 22, 9, 4 e 29, nessa ordem. Desenhe a tabela e conte as
-sondagens de cada inserção. Quantas sondagens custa depois buscar o 36, que
-não está lá?
+**2. Sondagem linear contada.** Tabela com `m = 7`, `h(k) = k % 7`,
+sondagem linear e `-1` marcando posição vazia. Escreva o `insere`, que
+devolve quantas posições olhou, e o `busca`, que conta as sondagens até
+achar a chave ou uma vazia. Insira 15, 22, 9, 4 e 29, mostrando onde cada um
+ficou e as sondagens, o total, a tabela inteira e quantas sondagens custa
+buscar o 36, que não está lá.
 
 <details><summary>Resposta</summary>
 
-15 → 1 (1 sondagem); 22 → 2 (2); 9 → 3 (2, porque a 2 já tem o 22); 4 → 4
-(1); 29 → 5 (5: tenta 1, 2, 3, 4 e 5). Total: 11. A busca pelo 36 (hash 1)
-olha 1, 2, 3, 4, 5 e para na 6, livre: **6 sondagens**. Um bloco de 5
-ocupadas seguidas é o agrupamento primário em ação.
+```
+15 -> [1], sondagens: 1
+22 -> [2], sondagens: 2
+9 -> [3], sondagens: 2
+4 -> [4], sondagens: 1
+29 -> [5], sondagens: 5
+total: 11
+[0] -
+[1] 15
+[2] 22
+[3] 9
+[4] 4
+[5] 29
+[6] -
+busca 36: nao esta com 6 sondagens
+```
+
+Dica: o laço anda com `i = (i + 1) % M` e soma 1 a cada posição olhada; na
+busca, limite a `M` voltas para não girar para sempre numa tabela cheia. O
+29 (hash 1) tenta 1, 2, 3, 4 e 5; o 36 olha de 1 a 5 e para na 6, livre. Um
+bloco de 5 ocupadas seguidas é o agrupamento primário em ação.
 
 </details>
 
-**3. Média de comparações.** Uma tabela com encadeamento tem 5 baldes, com
-correntes de 3, 1, 0, 2 e 0 nós. Em média, quantas comparações custa buscar
-uma chave que **está** na tabela? E uma que não está, supondo que ela caia em
-qualquer balde com a mesma chance?
+**3. Média de comparações.** Monte uma tabela com encadeamento de 5 baldes
+(`h(k) = k % 5`, inserindo no fim de cada corrente) com as chaves 0, 5, 10,
+1, 3 e 8, o que dá correntes de 3, 1, 0, 2 e 0 nós. Escreva uma busca que
+conta as comparações. Mostre os baldes, a média de comparações para buscar
+cada uma das 6 chaves que estão lá e a média para buscar 100, 101, 102, 103
+e 104 (uma chave ausente em cada balde).
 
 <details><summary>Resposta</summary>
 
-Achar o k-ésimo nó de uma corrente custa k comparações: (1 + 2 + 3) + 1 + (1
-+ 2) = 10 para 6 chaves, **≈ 1,67**. Sem sucesso, você percorre a corrente
-inteira: (3 + 1 + 0 + 2 + 0) / 5 = **1,2**, que é exatamente o fator de carga
-α = 6/5.
+```
+[0] 0 5 10
+[1] 1
+[2]
+[3] 3 8
+[4]
+com sucesso: 10 comparacoes / 6 = 1.67
+sem sucesso: 6 comparacoes / 5 = 1.20
+```
+
+Dica: achar o k-ésimo nó de uma corrente custa k comparações, (1 + 2 + 3) +
+1 + (1 + 2) = 10. Sem sucesso, a busca percorre a corrente inteira:
+(3 + 1 + 0 + 2 + 0) / 5 = 1,2, que é exatamente o fator de carga α = 6/5.
+Libere as correntes no fim.
 
 </details>
 
-**4. A remoção que quebra tudo.** Tabela aberta com `m = 5`, `h(k) = k % 5`.
-Entram 10, 15 e 20 (vão para 0, 1 e 2). O 15 sai e alguém marca a posição 1
-como **livre**. O que acontece ao buscar o 20? E com a marca de removida?
+**4. A remoção que quebra tudo.** Tabela aberta com `m = 5`,
+`h(k) = k % 5` e um vetor de estados (`LIVRE`, `OCUPADA`, `REMOVIDA`, com
+`enum`). Entram 10, 15 e 20 (vão para 0, 1 e 2) e o 15 sai. Escreva uma
+busca que para numa posição `LIVRE`, pula as `REMOVIDA` e conta as
+sondagens. Faça duas rodadas: na primeira, a remoção marca a posição do 15
+como `LIVRE`; na segunda, como `REMOVIDA`. Em cada uma, busque o 20.
 
 <details><summary>Resposta</summary>
 
-Com livre: a busca começa em 0 (é o 10), vai para 1, vê livre e conclui que
-o 20 **não está**, embora ele esteja na 2. Com removida: a busca passa reto
-pela 1 e acha o 20 na 2, com 3 sondagens. Uma inserção nova com hash 0 pode
-reaproveitar a 1, depois de conferir que a chave não existe adiante.
+```
+marcando livre: 20 nao encontrado (2 sondagens)
+marcando removida: 20 na posicao 2 (3 sondagens)
+```
+
+Dica: escreva uma função `rodada(int marca, const char *nome)` que zera a
+tabela, insere os três, remove o 15 com a marca dada e busca o 20. Com
+`LIVRE`, a busca vê o buraco na 1 e conclui que o 20 não está, embora ele
+esteja na 2. Uma inserção nova com hash 0 pode reaproveitar a posição
+`REMOVIDA`, depois de conferir que a chave não existe adiante.
 
 </details>
 
-**5. Hash de número negativo.** Uma função `int h(int k) { return k % 10; }`
-recebe o saldo de uma conta: -37. Qual índice sai? Como consertar sem perder
-a distribuição?
+**5. Hash de número negativo.** Escreva `int h_errado(int k)`, que devolve
+`k % 10`, e `int h_certo(int k, int m)`, que sempre devolve um índice de 0 a
+`m - 1`. Imprima os dois para os saldos -37, 42, -10 e -5.
 
 <details><summary>Resposta</summary>
 
-Em C, o resto tem o sinal do dividendo: `-37 % 10` é **-7**, índice fora do
-vetor. Conserto: `((k % m) + m) % m`, que dá 3. Ou converta antes para
-`unsigned` (o valor muda, mas fica sempre no intervalo certo).
+```
+ -37: errado  -7, certo 3
+  42: errado   2, certo 2
+ -10: errado   0, certo 0
+  -5: errado  -5, certo 5
+```
+
+Dica: em C, o resto tem o sinal do dividendo, então `-37 % 10` é -7, um
+índice fora do vetor. O conserto é `((k % m) + m) % m`, que soma `m` a um
+resto negativo e não estraga os positivos. Outro caminho é converter antes
+para `unsigned` (o valor muda, mas fica sempre no intervalo certo).
 
 </details>
 
-**6. Dois preços que fecham a conta.** Você tem um vale de R$ 50 e uma
-lista de preços: 12, 31, 7, 19 e 43. Existe um par de produtos que soma
-exatamente 50? Descreva um algoritmo O(n) com uma tabela hash usada como
-conjunto.
+**6. Dois preços que fecham a conta.** Você tem um vale de R$ 50 e os
+preços 12, 31, 7, 19 e 43. Escreva um programa que ache um par que soma
+exatamente 50 numa passada só, usando uma tabela hash como conjunto
+(endereçamento aberto com `m = 11`, funções `insere` e `contem`): para cada
+preço `p`, pergunte se `50 - p` já está no conjunto; se não, guarde `p`.
+Imprima cada passo.
 
 <details><summary>Resposta</summary>
 
-Para cada preço `p`, pergunte se `50 - p` já está no conjunto; se não, guarde
-`p`. Com 12: 38 não está, guarda 12. Com 31: 19 não está, guarda 31. Com 7:
-43 não está, guarda 7. Com 19: **31 está**: o par é 31 + 19. Uma passada só,
+```
+12: 38 nao esta, guarda 12
+31: 19 nao esta, guarda 31
+7: 43 nao esta, guarda 7
+19: 31 ja esta -> par 31 + 19
+```
+
+Dica: pare no primeiro par achado e imprima "nenhum par" se o laço terminar.
+Cuidado com `50 - p` negativo (um preço maior que o vale): não procure. É
 O(n) em média, contra O(n²) de testar todos os pares.
 
 </details>
 
-**7. Qual estrutura?** Para cada caso, escolha entre tabela hash e árvore de
-busca equilibrada (AVL), e justifique: (a) o compilador consultando as
-palavras reservadas; (b) a agenda que precisa listar os contatos em ordem
-alfabética e achar "todos entre Ana e Bia"; (c) o cache de sessões de um
-servidor, com milhares de entradas e saídas por segundo.
+**7. Hash ou árvore?** A agenda precisa listar os contatos em ordem
+alfabética e achar "todos entre Ana e Bia". Insira `{"Caio", "Ana", "Bruno",
+"Bia", "Davi", "Alice", "Beto"}` numa tabela hash com encadeamento (`m = 7`,
+hash polinomial de base 31, inserindo no início da corrente) e numa árvore
+binária de busca. Imprima a tabela balde a balde, a árvore em ordem e, só
+com a árvore, os nomes entre "Ana" e "Bia" (inclusive).
 
 <details><summary>Resposta</summary>
 
-(a) **hash**: conjunto fixo, só pergunta "existe?"; dá até para achar um
-`m` sem colisão (hash perfeito). (b) **árvore**: a tabela não guarda ordem,
-e listar em ordem ou por intervalo exigiria ordenar tudo a cada consulta;
-a AVL faz isso com o percurso em ordem. (c) **hash**: O(1) médio em
-inserir, buscar e remover; com encadeamento a remoção é simples, com
-endereçamento aberto as lápides pedem reconstruções periódicas.
+```
+hash (balde a balde): Beto Caio Alice Davi Ana Bia Bruno
+arvore (em ordem): Alice Ana Beto Bia Bruno Caio Davi
+entre Ana e Bia: Ana Beto Bia
+```
+
+Dica: o intervalo é um percurso em ordem com poda: só desça à esquerda se
+"Ana" for menor que o nó, e à direita se o nó for menor que "Bia". A tabela
+espalha as chaves de propósito e não guarda ordem: para listar em ordem ou
+por intervalo, ela teria que ordenar tudo a cada consulta. Para só perguntar
+"existe?" (palavras reservadas de um compilador, cache de sessões), a hash
+ganha com O(1) médio.
 
 </details>
 
-**8. Crescer sem copiar.** Uma tabela aberta com `m = 7` tem 5 chaves (α ≈
-0,71) e vai crescer para `m = 17`. Por que não dá para copiar o vetor velho
-para o começo do novo, posição por posição? Quanto custa crescer?
+**8. Crescer sem copiar.** Uma tabela aberta com `m = 7` (sondagem linear,
+`h(k) = k % m`) tem as chaves 10, 24, 31, 45 e 52 e vai crescer para
+`m = 17`. Escreva `insere` e `busca` que recebem o vetor e o `m`. Mostre a
+tabela velha; depois copie o vetor velho para o começo de um novo de 17
+posições, posição por posição, e busque as 5 chaves; por fim, monte outra
+tabela de 17 **reinserindo** cada chave e busque de novo. Marque com `(?)` as
+chaves não encontradas.
 
 <details><summary>Resposta</summary>
 
-A posição de cada chave depende de `m`: `k % 7` e `k % 17` são outros
-índices, e as sondagens também mudam. Copiar deixaria as chaves onde a busca
-nova não procura. É preciso **reinserir** cada uma: O(n) para crescer. Como
-isso acontece só quando a tabela dobra, o custo diluído por inserção
+```
+velha (m = 7): 52 - - 10 24 31 45
+copiando posicao por posicao: 10(?) 24(?) 31(?) 45(?) 52(?) -> acha 0 de 5
+reinserindo: 10 24 31 45 52 -> acha 5 de 5
+```
+
+Dica: as cinco chaves têm `k % 7 == 3` e se amontoam a partir da posição 3
+(o 52 dá a volta até a 0). Com `m = 17`, `k % 17` aponta para outras
+posições, que na cópia estão vazias, e a busca desiste. Reinserir custa O(n),
+mas como acontece só quando a tabela dobra, o custo diluído por inserção
 continua O(1), igual ao vetor que cresce com `realloc` (módulo 07).
 
 </details>
 
-**9. A letra mais comum, em O(1) de memória.** Conte quantas vezes cada
-letra de "a" a "z" aparece num texto, sem tabela hash com listas. Por que
-essa solução é uma tabela hash perfeita?
+**9. A letra mais comum, sem colisão.** Conte quantas vezes cada letra de
+"a" a "z" aparece no texto `"a arara azul voa sobre a casa da vovo"` usando
+só um `int conta[26]` com `conta[c - 'a']++`. Imprima as letras que
+aparecem, com a contagem, e a mais comum.
 
 <details><summary>Resposta</summary>
 
-Um vetor `int conta[26] = {0};` e `conta[c - 'a']++` para cada letra
-minúscula. A "função hash" `c - 'a'` leva as 26 chaves possíveis em 26
-posições diferentes: zero colisões, porque o universo de chaves é pequeno e
-conhecido. É o endereçamento direto, o caso em que a tabela hash nem
-precisa de função esperta.
+```
+a: 10
+b: 1
+c: 1
+d: 1
+e: 1
+l: 1
+o: 4
+r: 3
+s: 2
+u: 1
+v: 3
+z: 1
+mais comum: a (10 vezes)
+```
+
+Dica: só conte os caracteres entre `'a'` e `'z'` (o espaço fica de fora) e
+troque a mais comum só quando a contagem for **maior**, para o empate ficar
+com a primeira letra. A "função hash" `c - 'a'` leva as 26 chaves possíveis
+em 26 posições diferentes: zero colisões. É o endereçamento direto, uma
+tabela hash perfeita, possível porque o universo de chaves é pequeno e
+conhecido.
 
 </details>
 

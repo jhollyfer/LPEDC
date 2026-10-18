@@ -78,15 +78,25 @@ Problemas para resolver num arquivo seu, misturando os assuntos do módulo.
 Use os TADs das pastas ou escreva a estrutura do zero.
 
 **1. Quais saídas são possíveis?** Os números 1, 2, 3, 4 e 5 entram numa
-pilha nessa ordem, e você pode desempilhar quando quiser. Quais destas saídas
-são possíveis: (a) 3 2 1 5 4; (b) 4 5 3 1 2; (c) 1 2 3 4 5; (d) 5 4 3 2 1?
+pilha nessa ordem, e você pode desempilhar quando quiser. Escreva
+`bool possivel(const int *saida, int n, char *ops)` com o TAD `pilha.h`,
+que simula a pilha e, quando a saída for possível, preenche `ops` com a
+sequência de `E` (empilha) e `D` (desempilha) usada. Teste com (a) 3 2 1 5 4;
+(b) 4 5 3 1 2; (c) 1 2 3 4 5; (d) 5 4 3 2 1.
 
 <details><summary>Resposta</summary>
 
-(a), (c) e (d) são possíveis. (b) não: quando o 3 sai, o 1 e o 2 estão na
-pilha com o 2 por cima, então o 2 tem que sair antes do 1. A regra geral:
-uma saída é impossível se tiver o padrão "c ... a ... b" com a < b < c.
-Simule com o `simula` do E491.
+```
+(a) 3 2 1 5 4: possivel com EEEDDDEEDD
+(b) 4 5 3 1 2: impossivel
+(c) 1 2 3 4 5: possivel com EDEDEDEDED
+(d) 5 4 3 2 1: possivel com EEEEEDDDDD
+```
+
+Dica: para cada número da saída, empilhe os próximos que chegam enquanto o
+topo não for ele (e ainda houver números); se mesmo assim o topo não for
+ele, é impossível. Em (b), quando o 3 sai, o 2 está por cima do 1, então o 2
+teria que sair antes. Libere a pilha nos dois caminhos.
 
 </details>
 
@@ -103,16 +113,24 @@ encadeada, como a do E495); ao ler `</nome>`, desempilhe e compare com
 
 </details>
 
-**3. Duas pilhas, uma fila e o custo.** Na fila com duas pilhas do E525,
-faça 1000 inserções seguidas e depois 1000 retiradas. Quantos `pilha_empilha`
-acontecem no total? E se você alternar uma inserção e uma retirada?
+**3. Duas pilhas, uma fila e o custo.** Pegue a fila com duas pilhas do E525
+e conte as chamadas de `pilha_empilha` numa variável global (troque as
+chamadas por uma `conta_empilha` que soma 1 e empilha). Faça 1000 inserções
+seguidas e depois 1000 retiradas; zere o contador e faça 1000 vezes "insere
+um, retira um". Imprima o contador e a soma dos itens retirados nos dois
+casos.
 
 <details><summary>Resposta</summary>
 
-No primeiro caso, 2000: cada item é empilhado na entrada e depois uma vez na
-saída (o despejo único acontece na primeira retirada). Alternando, também
-2000: cada item ainda passa uma vez por cada pilha. É o **custo amortizado**:
-uma retirada pode custar O(n), mas a média por operação é O(1).
+```
+1000 insercoes e depois 1000 retiradas: 2000 empilhas (soma 500500)
+alternando 1000 vezes: 2000 empilhas (soma 500500)
+```
+
+Dica: a soma confere que saiu tudo, na ordem certa ou não (1 + ... + 1000).
+Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída.
+É o **custo amortizado**: uma retirada pode custar O(n) (o despejo), mas a
+média por operação é O(1).
 
 </details>
 
@@ -158,16 +176,28 @@ de `char[64]`). Número: empilha o texto. Operador: desempilha b e a e empilha
 
 **7. Deque de entrada restrita.** Um deque que só aceita inserção no fim,
 mas deixa retirar das duas pontas. Os números 1, 2, 3 e 4 chegam nessa ordem,
-e você pode retirar (de qualquer ponta) quando quiser. Dá para obter a saída
-4 1 3 2? E 4 2 1 3?
+e você pode retirar (de qualquer ponta) quando quiser. Escreva
+`bool possivel(const int *alvo, int n)`, que testa recursivamente todas as
+escolhas (inserir o próximo, tirar do início, tirar do fim) e diz se dá para
+obter a saída `alvo`. Teste com 4 1 3 2 e 4 2 1 3 e depois passe pelas 24
+ordens de 1 a 4, imprimindo as impossíveis e quantas são.
 
 <details><summary>Resposta</summary>
 
-4 1 3 2 **sim**: insira os quatro, retire o 4 do fim, o 1 do início, o 3 do
-fim e o 2. 4 2 1 3 **não**: para o 4 sair primeiro, o deque precisa estar
-1 2 3 4; aí o 2 está no meio e não sai antes do 1 ou do 3. Das 24 ordens,
-só 4 2 1 3 e 4 2 3 1 são impossíveis. Confirme com um programa que testa
-todas as escolhas recursivamente.
+```
+4 1 3 2: possivel
+4 2 1 3: impossivel
+impossivel: 4 2 1 3
+impossivel: 4 2 3 1
+2 de 24 ordens sao impossiveis
+```
+
+Dica: guarde o deque num vetor com `ini` e `fim` e a função recursiva recebe
+o próximo número a chegar e quantos já saíram; só tire de uma ponta se o
+número dela for o próximo esperado, e desfaça a mudança ao voltar da
+recursão. As 24 ordens saem de quatro `for` aninhados que pulam valores
+repetidos. Em 4 2 1 3, para o 4 sair primeiro o deque precisa estar
+1 2 3 4, e aí o 2 está no meio.
 
 </details>
 
