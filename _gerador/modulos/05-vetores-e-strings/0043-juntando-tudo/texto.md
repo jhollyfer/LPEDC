@@ -29,8 +29,9 @@ está na matriz, então vai para os inválidos:
 
 {{ideia}}
 
-O programa completo. Para testar sem digitar, mande os votos com `printf
-'boto\nArara\n...' | ~/LPEDC/rodar` e o caminho do A085:
+O programa completo. Para testar sem digitar, salve o código num arquivo `.c`
+e mande os votos com `printf 'boto\nArara\n...' | ~/LPEDC/rodar` seguido do
+caminho do arquivo:
 
 ```c
 #include <stdio.h>

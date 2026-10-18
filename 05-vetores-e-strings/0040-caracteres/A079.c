@@ -1,44 +1,36 @@
-// A079 · A placa digitada em minúsculas
+// A079 · O dígito '7' não vale 7
 
 #include <stdio.h>
 #include <ctype.h>
-#include <stdbool.h>
 
-#define TAM 7
+#define TAM 8
 
 int main(void) {
-    // placa Mercosul: letra letra letra número letra número número
-    char placa[TAM] = {'b', 'r', 'a', '2', 'e', '1', '9'};
-    bool valida = true;
+    // código de um boleto, guardado como caracteres (do jeito que foi digitado)
+    char codigo[TAM] = {'3', '4', '1', '9', '1', '0', '7', '8'};
+
+    int soma_codigos = 0; // soma os códigos ASCII: '3' é 51, não 3
+    int soma_valores = 0; // soma o que cada dígito vale
 
     for (int i = 0; i < TAM; i++) {
-        char antes = placa[i];
-        placa[i] = (char) toupper(placa[i]);
-        printf("%c (%3d) -> %c (%3d)\n", antes, antes, placa[i], placa[i]);
-
-        // posições 3, 5 e 6 são dígitos; as outras, letras
-        bool deve_ser_digito = (i == 3 || i == 5 || i == 6);
-        if (deve_ser_digito && !isdigit(placa[i])) {
-            valida = false;
+        if (!isdigit(codigo[i])) {
+            printf("Posição %d não é dígito\n", i);
+            return 1;
         }
-        if (!deve_ser_digito && !isalpha(placa[i])) {
-            valida = false;
-        }
+        soma_codigos += codigo[i];
+        soma_valores += codigo[i] - '0'; // '7' - '0' = 55 - 48 = 7
     }
 
-    printf("Placa: ");
-    for (int i = 0; i < TAM; i++) {
-        putchar(placa[i]);
-    }
-    printf(" -> %s\n", valida ? "válida" : "inválida");
+    printf("Somando os códigos: %d\n", soma_codigos);
+    printf("Somando os valores: %d\n", soma_valores);
+
+    // o caminho de volta: um número de 0 a 9 vira o caractere do dígito
+    int resto = soma_valores % 10;
+    char dv = (char) ('0' + resto);
+    printf("Último dígito da soma: %c (código %d)\n", dv, dv);
     return 0;
 }
 // Saída:
-// b ( 98) -> B ( 66)
-// r (114) -> R ( 82)
-// a ( 97) -> A ( 65)
-// 2 ( 50) -> 2 ( 50)
-// e (101) -> E ( 69)
-// 1 ( 49) -> 1 ( 49)
-// 9 ( 57) -> 9 ( 57)
-// Placa: BRA2E19 -> válida
+// Somando os códigos: 417
+// Somando os valores: 33
+// Último dígito da soma: 3 (código 51)

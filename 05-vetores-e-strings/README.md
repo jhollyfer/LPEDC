@@ -185,38 +185,46 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 
 Os arquivos ficam em [`0037-vetores/`](0037-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A073 · Os passos da semana**
+**Exemplo A073 · O hidrômetro e a gaveta vizinha**
 
 ```c
 #include <stdio.h>
 
-#define DIAS 7
+#define LEITURAS 8
 
 int main(void) {
-    // 7 gavetas de int, uma por dia; o índice vai de 0 a 6
-    int passos[DIAS] = {8200, 10450, 6300, 12000, 9100, 15300, 7400};
+    // o relógio d'água só acumula: cada leitura é o total desde a instalação
+    int leitura[LEITURAS] = {1520, 1690, 1830, 2075, 2210, 2300, 2510, 2640};
 
-    int total = 0;
-    int maior = passos[0]; // começa pelo primeiro, não por 0
+    int maior = 0; // aqui 0 serve: consumo nunca é negativo
     int dia_maior = 0;
 
-    for (int i = 0; i < DIAS; i++) { // i < DIAS: o último índice é 6
-        total += passos[i];
-        if (passos[i] > maior) {
-            maior = passos[i];
-            dia_maior = i;
+    // 8 leituras dão 7 dias de consumo: i vai até LEITURAS - 2,
+    // porque o laço lê a gaveta vizinha, leitura[i + 1]
+    for (int i = 0; i < LEITURAS - 1; i++) {
+        int consumo = leitura[i + 1] - leitura[i];
+        printf("Dia %d: %d litros\n", i + 1, consumo);
+        if (consumo > maior) {
+            maior = consumo;
+            dia_maior = i + 1;
         }
     }
 
-    printf("Total: %d passos\n", total);
-    printf("Média: %.1f por dia\n", (double) total / DIAS);
-    printf("Recorde: %d passos no dia %d\n", maior, dia_maior + 1);
+    // a primeira e a última gaveta dão o total, sem somar nada
+    printf("Na semana: %d litros\n", leitura[LEITURAS - 1] - leitura[0]);
+    printf("Pico: dia %d, com %d litros\n", dia_maior, maior);
     return 0;
 }
 // Saída:
-// Total: 68750 passos
-// Média: 9821.4 por dia
-// Recorde: 15300 passos no dia 6
+// Dia 1: 170 litros
+// Dia 2: 140 litros
+// Dia 3: 245 litros
+// Dia 4: 135 litros
+// Dia 5: 90 litros
+// Dia 6: 210 litros
+// Dia 7: 130 litros
+// Na semana: 1120 litros
+// Pico: dia 3, com 245 litros
 ```
 
 ```bash
@@ -298,32 +306,42 @@ Dia 1: 19 graus
 
 **Exercício E218** · ★☆☆
 
-Sem rodar, preveja o que cada printf mostra. Depois rode e confira.
+Declare os dois vetores abaixo e escreva o código que mostra as quatro
+linhas da saída esperada. Nada de digitar os valores no printf: tudo tem de
+sair das gavetas, de laços e do sizeof.
 
 
 ```text
 int a[5] = {4, 2};
 int b[] = {7, 8, 9};
-int i = 4;
 ```
 
 
 
 ```text
-printf("%d %d\n", a[1], a[3]);
-printf("%zu\n", sizeof(b) / sizeof(b[0]));
-printf("%d\n", b[i % 3]);
-printf("%d\n", a[i] + b[2]);
-b[0] = b[0] + b[1];
-printf("%d\n", b[0]);
+1. Mostre as 5 gavetas de a, com o índice de cada uma.
+2. Mostre quantos itens b tem, calculado com sizeof.
+3. Com i indo de 4 a 8, mostre b[i % 3]: o resto faz o índice dar a volta
+   e nunca passar da última gaveta.
+4. Guarde b[0] + b[1] em b[0] e mostre o novo b[0].
+```
+
+
+
+```text
+Saída esperada:
+a[0]=4 a[1]=2 a[2]=0 a[3]=0 a[4]=0
+b tem 3 itens
+De 4 a 8: 8 9 7 8 9
+Novo b[0]: 15
 ```
 
 **Dicas:**
 
-1. Na inicialização parcial, as posições que faltam viram 0.
-2. Sem tamanho, o compilador conta os valores entre as chaves.
-3. 4 % 3 é 1.
-4. Resposta esperada: "2 0", "3", "8", "9" e "15".
+1. Na inicialização parcial, as gavetas que faltam viram 0.
+2. sizeof(b) / sizeof(b[0]) devolve size_t: mostre com %zu.
+3. 4 % 3 é 1, 5 % 3 é 2, 6 % 3 é 0...
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E218.c
@@ -402,7 +420,8 @@ Nota 1: * (1)
 Este programa deveria mostrar a máxima e a mínima de uma madrugada fria em
 São Joaquim (SC), medidas em 6 horários. Ele tem DOIS erros de propósito.
 Rode com o rodar: o AddressSanitizer vai acusar um deles. O outro não dá
-erro nenhum, só resultado errado. Ache os dois, explique e conserte.
+erro nenhum, só resultado errado. Conserte os dois no código abaixo e rode
+de novo até a saída bater com a esperada.
 
 
 ```text
@@ -586,42 +605,47 @@ coisas lado a lado.
 
 Os arquivos ficam em [`0038-vetores-e-funcoes/`](0038-vetores-e-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A075 · O reajuste do cardápio**
+**Exemplo A075 · Um vetor entra, outro sai cheio**
 
 ```c
 #include <stdio.h>
 
-#define ITENS 4
-
-// const: esta função promete só ler o vetor
-void mostrar(const double precos[], int n) {
+// lê as notas (const) e escreve o resultado em aprovado[], que é do main
+void corrigir(const double notas[], int aprovado[], int n, double minima) {
     for (int i = 0; i < n; i++) {
-        printf("R$ %6.2f\n", precos[i]);
+        aprovado[i] = notas[i] >= minima; // 1 ou 0
     }
 }
 
-// sem const: esta função escreve nas gavetas do vetor de quem chamou
-void reajustar(double precos[], int n, double percentual) {
+int contar(const int v[], int n) {
+    int total = 0;
     for (int i = 0; i < n; i++) {
-        precos[i] = precos[i] * (1 + percentual / 100);
+        total += v[i];
     }
+    return total;
 }
 
 int main(void) {
-    double cardapio[ITENS] = {12.50, 8.00, 22.90, 5.50};
+    // duas turmas de tamanhos diferentes: a função é a mesma
+    double manha[5] = {7.5, 4.0, 6.0, 9.5, 5.9};
+    double noite[3] = {8.0, 6.5, 3.0};
+    int ok_manha[5]; // a função preenche: não precisa inicializar
+    int ok_noite[3];
 
-    reajustar(cardapio, ITENS, 10); // vai o vetor (sem colchetes) e o tamanho
+    corrigir(manha, ok_manha, 5, 6.0);
+    corrigir(noite, ok_noite, 3, 6.0);
 
-    printf("Depois do reajuste de 10%%:\n");
-    mostrar(cardapio, ITENS);
+    printf("Manhã: %d de 5 aprovados\n", contar(ok_manha, 5));
+    printf("Noite: %d de 3 aprovados\n", contar(ok_noite, 3));
+
+    // a função só olha as n primeiras gavetas que você mandar
+    printf("Só os 2 primeiros da manhã: %d\n", contar(ok_manha, 2));
     return 0;
 }
 // Saída:
-// Depois do reajuste de 10%:
-// R$  13.75
-// R$   8.80
-// R$  25.19
-// R$   6.05
+// Manhã: 3 de 5 aprovados
+// Noite: 2 de 3 aprovados
+// Só os 2 primeiros da manhã: 1
 ```
 
 ```bash
@@ -753,35 +777,37 @@ Saída esperada:
 
 **Exercício E225** · ★★☆
 
-Sem rodar, preveja as duas linhas que o programa abaixo mostra. Para cada
-parâmetro de mexer, pergunte: ele é uma cópia ou dá acesso ao original?
+A função mexer abaixo recebe um vetor e um int. Uma das duas mudanças que
+ela faz chega ao main; a outra se perde. Mostre isso na tela:
 
 
 ```text
-void mexer(int v[], int x) {
-    v[0] = v[0] * 10;
-    x = x * 10;
-    v[1] = x;
-}
+1. No fim de mexer, acrescente um printf que mostre v[0], v[1], v[2] e x
+   (formato "dentro: ...", como na saída esperada).
+2. No main, troque os dois printf pelos do formato "fora: ...".
+3. Escreva void vezes_dez(int v[], int pos), que multiplica por 10 só a
+   gaveta pos do vetor, e use no fim do main para multiplicar a[2] de
+   verdade (coisa que mexer(a, a[2]) não fez).
 ```
 
 
 
 ```text
-int a[3] = {1, 2, 3};
-int b = 5;
-mexer(a, b);
-printf("%d %d %d %d\n", a[0], a[1], a[2], b);
-mexer(a, a[2]);
-printf("%d %d %d\n", a[0], a[1], a[2]);
+Saída esperada:
+dentro: v = 10 50 3, x = 50
+fora: a = 10 50 3, b = 5
+dentro: v = 100 30 3, x = 30
+fora: a = 100 30 3
+depois de vezes_dez: a = 100 30 30
 ```
 
 **Dicas:**
 
 1. v recebe o endereço de a: v[0] e a[0] são a mesma gaveta.
 2. x recebe uma cópia: mudar x não muda b, nem a[2].
-3. Na segunda chamada, x começa com o valor de a[2] naquele momento.
-4. Resposta esperada: "10 50 3 5" e "100 30 3".
+3. Para mudar a[2] dentro de uma função, mande o vetor e a posição, não o
+   valor da gaveta.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E225.c
@@ -839,8 +865,9 @@ aviso (warning) com calma.
 
 
 ```text
-1. Que valor ele mostra no seu PC, e por quê?
-2. Conserte sem mudar o main mais do que o necessário.
+1. Rode e veja o total errado que ele mostra.
+2. Conserte o código, sem mudar o main mais do que o necessário, e rode
+   de novo até a saída bater com a esperada.
 ```
 
 
@@ -1033,52 +1060,54 @@ velha.
 
 Os arquivos ficam em [`0039-matrizes/`](0039-matrizes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A077 · As vendas das três lojas**
+**Exemplo A077 · O primeiro horário livre da agenda**
 
 ```c
 #include <stdio.h>
+#include <stdbool.h>
 
-#define LOJAS 3
-#define SEMANAS 4
+#define DIAS 5
+#define HORARIOS 4
 
 int main(void) {
-    // 3 linhas (lojas) x 4 colunas (semanas): caixas de açaí vendidas
-    int vendas[LOJAS][SEMANAS] = {
-        {12, 15, 9, 20},
-        {8, 11, 14, 10},
-        {17, 13, 16, 19},
+    // linhas: segunda a sexta; colunas: 8h, 10h, 14h, 16h (1 = marcado)
+    int agenda[DIAS][HORARIOS] = {
+        {1, 1, 1, 1},
+        {1, 1, 1, 1},
+        {1, 1, 1, 1},
+        {1, 0, 1, 0},
+        {0, 0, 1, 1},
     };
+    int horas[HORARIOS] = {8, 10, 14, 16};
 
-    printf("        S1  S2  S3  S4  Total\n");
-    for (int l = 0; l < LOJAS; l++) {         // uma volta por linha
-        int total_loja = 0;
-        printf("Loja %d", l + 1);
-        for (int s = 0; s < SEMANAS; s++) {   // uma volta por coluna
-            printf("%4d", vendas[l][s]);
-            total_loja += vendas[l][s];
+    // busca em duas dimensões: o laço de fora para assim que achar
+    bool achou = false;
+    int dia = 0, hora = 0;
+    for (int l = 0; l < DIAS && !achou; l++) {
+        for (int c = 0; c < HORARIOS && !achou; c++) {
+            if (agenda[l][c] == 0) {
+                achou = true;
+                dia = l;
+                hora = c;
+            }
         }
-        printf("%7d\n", total_loja);
     }
 
-    int geral = 0;
-    printf("Semana");
-    for (int s = 0; s < SEMANAS; s++) {       // agora a coluna fica por fora
-        int total_semana = 0;
-        for (int l = 0; l < LOJAS; l++) {
-            total_semana += vendas[l][s];
-        }
-        printf("%4d", total_semana);
-        geral += total_semana;
+    if (achou) {
+        printf("Primeiro livre: dia %d às %dh\n", dia + 1, horas[hora]);
+        // na memória, as linhas vêm uma atrás da outra:
+        // a casa [l][c] é a de número l * HORARIOS + c, contando do 0
+        printf("É a casa %d das %d da matriz\n", dia * HORARIOS + hora, DIAS * HORARIOS);
+    } else {
+        printf("Agenda lotada.\n");
     }
-    printf("%7d\n", geral);
+    printf("A matriz ocupa %zu bytes: %d int seguidos\n", sizeof(agenda), DIAS * HORARIOS);
     return 0;
 }
 // Saída:
-//         S1  S2  S3  S4  Total
-// Loja 1  12  15   9  20     56
-// Loja 2   8  11  14  10     43
-// Loja 3  17  13  16  19     65
-// Semana  37  39  39  49    164
+// Primeiro livre: dia 4 às 10h
+// É a casa 13 das 20 da matriz
+// A matriz ocupa 80 bytes: 20 int seguidos
 ```
 
 ```bash
@@ -1180,7 +1209,10 @@ Diagonal secundária: 15
 
 **Exercício E230** · ★☆☆
 
-Sem rodar, preveja a saída. Depois rode e confira.
+Declare as duas matrizes abaixo e mostre-as inteiras, em forma de grade,
+para ver onde o compilador pôs os zeros. O número de linhas de b não está
+escrito em lugar nenhum: calcule com sizeof e use no laço. No fim, mostre
+quantos bytes a ocupa e quantos ocupa uma linha dela.
 
 
 ```text
@@ -1191,18 +1223,24 @@ int b[][2] = {{1, 2}, {3, 4}, {5}};
 
 
 ```text
-printf("%d %d %d\n", a[0][0], a[0][2], a[1][1]);
-printf("%zu\n", sizeof(b) / sizeof(b[0]));
-printf("%d %d\n", b[1][0], b[2][1]);
-printf("%zu %zu\n", sizeof(a), sizeof(a[1]));
+Saída esperada:
+a (2x3):
+1 0 0
+4 5 0
+b (3 linhas):
+1 2
+3 4
+5 0
+a: 24 bytes, uma linha: 12 bytes
 ```
 
 **Dicas:**
 
 1. Com chaves internas, cada chave é uma linha; o que falta vira 0.
-2. Sem o tamanho da 1ª dimensão, o compilador conta as chaves internas.
-3. sizeof(b[0]) é o tamanho de uma linha (2 int = 8 bytes).
-4. Resposta esperada: "1 0 5", "3", "3 0" e "24 12".
+2. sizeof(b) / sizeof(b[0]) é o número de linhas: o tamanho da matriz
+   dividido pelo de uma linha. Guarde num int.
+3. sizeof(a[0]) é o tamanho de uma linha de a. Mostre com %zu.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E230.c
@@ -1294,7 +1332,8 @@ Melhor fileira: B
 Dois alunos fizeram 4 provas cada (uma linha por aluno, uma coluna por
 prova). O programa deveria mostrar a média de cada aluno, mas tem DOIS erros
 de propósito. Rode com o rodar: o sanitizer acusa um deles. O outro só dá
-resultado errado. Ache, explique e conserte os dois.
+resultado errado. Conserte os dois no código abaixo e rode de novo até a
+saída bater com a esperada.
 
 
 ```text
@@ -1489,51 +1528,43 @@ o fim mesmo assim:
 
 Os arquivos ficam em [`0040-caracteres/`](0040-caracteres/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A079 · A placa digitada em minúsculas**
+**Exemplo A079 · O dígito '7' não vale 7**
 
 ```c
 #include <stdio.h>
 #include <ctype.h>
-#include <stdbool.h>
 
-#define TAM 7
+#define TAM 8
 
 int main(void) {
-    // placa Mercosul: letra letra letra número letra número número
-    char placa[TAM] = {'b', 'r', 'a', '2', 'e', '1', '9'};
-    bool valida = true;
+    // código de um boleto, guardado como caracteres (do jeito que foi digitado)
+    char codigo[TAM] = {'3', '4', '1', '9', '1', '0', '7', '8'};
+
+    int soma_codigos = 0; // soma os códigos ASCII: '3' é 51, não 3
+    int soma_valores = 0; // soma o que cada dígito vale
 
     for (int i = 0; i < TAM; i++) {
-        char antes = placa[i];
-        placa[i] = (char) toupper(placa[i]);
-        printf("%c (%3d) -> %c (%3d)\n", antes, antes, placa[i], placa[i]);
-
-        // posições 3, 5 e 6 são dígitos; as outras, letras
-        bool deve_ser_digito = (i == 3 || i == 5 || i == 6);
-        if (deve_ser_digito && !isdigit(placa[i])) {
-            valida = false;
+        if (!isdigit(codigo[i])) {
+            printf("Posição %d não é dígito\n", i);
+            return 1;
         }
-        if (!deve_ser_digito && !isalpha(placa[i])) {
-            valida = false;
-        }
+        soma_codigos += codigo[i];
+        soma_valores += codigo[i] - '0'; // '7' - '0' = 55 - 48 = 7
     }
 
-    printf("Placa: ");
-    for (int i = 0; i < TAM; i++) {
-        putchar(placa[i]);
-    }
-    printf(" -> %s\n", valida ? "válida" : "inválida");
+    printf("Somando os códigos: %d\n", soma_codigos);
+    printf("Somando os valores: %d\n", soma_valores);
+
+    // o caminho de volta: um número de 0 a 9 vira o caractere do dígito
+    int resto = soma_valores % 10;
+    char dv = (char) ('0' + resto);
+    printf("Último dígito da soma: %c (código %d)\n", dv, dv);
     return 0;
 }
 // Saída:
-// b ( 98) -> B ( 66)
-// r (114) -> R ( 82)
-// a ( 97) -> A ( 65)
-// 2 ( 50) -> 2 ( 50)
-// e (101) -> E ( 69)
-// 1 ( 49) -> 1 ( 49)
-// 9 ( 57) -> 9 ( 57)
-// Placa: BRA2E19 -> válida
+// Somando os códigos: 417
+// Somando os valores: 33
+// Último dígito da soma: 3 (código 51)
 ```
 
 ```bash
@@ -1621,24 +1652,40 @@ Hi!
 
 **Exercício E236** · ★☆☆
 
-Sem rodar, preveja cada linha. Depois rode e confira.
+Escreva um programa que chegue a cada resultado abaixo fazendo a CONTA com
+os caracteres. Vale usar 'a', 'C', '7' e companhia; não vale escrever o
+resultado pronto (nada de printf("b") ou do número 32 digitado).
 
 
 ```text
-printf("%c\n", 'a' + 1);
-printf("%d\n", '7' - '0');
-printf("%c\n", 'C' + 32);
-printf("%d\n", 'B' > 'a');
-printf("%c%c\n", toupper('5'), tolower('Q'));
-printf("%d\n", 'z' - 'a' + 1);
+1. A letra que vem depois de 'a'.
+2. O valor numérico do caractere '7'.
+3. O 'C' em minúscula, somando a distância entre 'a' e 'A' (sem tolower).
+4. Se 'B' vem antes de 'a' na tabela: mostre "sim" ou "não".
+5. toupper('5') e tolower('Q').
+6. Quantas letras existem de 'a' até 'z'.
+```
+
+
+
+```text
+Saída esperada:
+Depois de a: b
+'7' vale 7
+C em minúscula: c
+'B' antes de 'a'? sim
+toupper('5') = 5, tolower('Q') = q
+Letras de a a z: 26
 ```
 
 **Dicas:**
 
-1. 'a' é 97, 'A' é 65, '0' é 48. Faça as contas com os códigos.
-2. Toda maiúscula vem ANTES de toda minúscula na tabela.
-3. toupper de algo que não é letra devolve o mesmo caractere.
-4. Resposta esperada: b, 7, c, 0, 5q e 26.
+1. 'a' é 97, 'A' é 65, '0' é 48. Um char entra em conta como qualquer int.
+2. 'a' + 1 com %c mostra a letra; '7' - '0' com %d mostra o número.
+3. Toda maiúscula vem ANTES de toda minúscula na tabela: 'B' < 'a' é
+   verdadeiro.
+4. toupper de algo que não é letra devolve o mesmo caractere.
+5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E236.c
@@ -1730,15 +1777,22 @@ de propósito.
 
 
 ```text
-1. Sem rodar: que número ele mostra?
-2. Por quê? Quais caracteres foram contados como letra sem ser?
-3. Conserte de dois jeitos: com isalpha e sem o ctype.h.
+1. Dentro do if, acrescente um printf que mostre cada caractere contado e
+   o código dele ("contou: _ (95)"). Rode e veja quem entrou sem ser
+   letra.
+2. Conserte o teste com isalpha e rode.
+3. Troque por uma versão sem o ctype.h (só comparações com a tabela
+   ASCII), rode de novo e confira que dá o mesmo resultado.
 ```
 
 
 
 ```text
-Saída esperada depois do conserto:
+Saída esperada depois do conserto (com o printf do passo 1):
+contou: a (97)
+contou: B (66)
+contou: z (122)
+contou: Q (81)
 Letras na senha: 4
 ```
 
@@ -1746,9 +1800,10 @@ Letras na senha: 4
 
 1. Olhe a tabela ASCII entre o 'Z' (90) e o 'a' (97).
 2. Quais caracteres da senha estão nesse buraco?
-3. Resposta esperada: mostra 7. O teste c >= 'A' && c <= 'z' aceita '_'
-   (95), '[' (91) e '^' (94), que ficam entre 'Z' e 'a'. Conserto:
-   isalpha(senha[i]) ou (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z').
+3. Resposta esperada: antes do conserto, mostra 7. O teste
+   c >= 'A' && c <= 'z' aceita '_' (95), '[' (91) e '^' (94), que ficam
+   entre 'Z' e 'a'. Conserto: isalpha(c) ou
+   (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'), e a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E239.c
@@ -1910,35 +1965,44 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
 Os arquivos ficam em [`0041-strings/`](0041-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A081 · O nome no crachá**
+**Exemplo A081 · A etiqueta que não pode estourar**
 
 ```c
 #include <stdio.h>
 #include <string.h>
 
+#define TAM 20 // a etiqueta impressa tem 19 caracteres + o '\0'
+
 int main(void) {
-    char nome[] = "Bruna";       // 6 bytes: 5 letras + '\0'
-    char sobrenome[] = "Matos";
-    char cracha[20];             // espaço de sobra: até 19 letras + '\0'
+    char etiqueta[TAM] = "SP"; // as outras 18 posições viram '\0'
+    char partes[3][12] = {"/Campinas", "/Centro", "/Bloco B"};
 
-    strcpy(cracha, nome);        // cracha = "Bruna"
-    strcat(cracha, " ");         // cracha = "Bruna "
-    strcat(cracha, sobrenome);   // cracha = "Bruna Matos"
+    for (int i = 0; i < 3; i++) {
+        // antes do strcat, a conta: o que tem + o que vem + 1 do '\0'
+        size_t precisa = strlen(etiqueta) + strlen(partes[i]) + 1;
+        if (precisa <= sizeof(etiqueta)) {
+            strcat(etiqueta, partes[i]);
+            printf("+ %-9s -> %s\n", partes[i], etiqueta);
+        } else {
+            printf("%s não cabe: precisaria de %zu bytes\n", partes[i], precisa);
+        }
+    }
 
-    printf("Crachá: %s\n", cracha);
-    printf("strlen: %zu caracteres\n", strlen(cracha)); // conta até o '\0'
-    printf("sizeof: %zu bytes\n", sizeof(cracha));      // o vetor inteiro
-
-    if (strcmp(cracha, "Bruna Matos") == 0) {           // 0 quer dizer iguais
-        printf("Confere com a inscrição.\n");
+    // strcmp compara códigos: maiúscula e minúscula são diferentes
+    if (strcmp(etiqueta, "SP/Campinas/Centro") == 0) {
+        printf("Igual a \"SP/Campinas/Centro\"\n");
+    }
+    if (strcmp(etiqueta, "sp/campinas/centro") != 0) {
+        printf("Diferente de \"sp/campinas/centro\": 'S' é 83, 's' é 115\n");
     }
     return 0;
 }
 // Saída:
-// Crachá: Bruna Matos
-// strlen: 11 caracteres
-// sizeof: 20 bytes
-// Confere com a inscrição.
+// + /Campinas -> SP/Campinas
+// + /Centro   -> SP/Campinas/Centro
+// /Bloco B não cabe: precisaria de 27 bytes
+// Igual a "SP/Campinas/Centro"
+// Diferente de "sp/campinas/centro": 'S' é 83, 's' é 115
 ```
 
 ```bash
@@ -2026,29 +2090,40 @@ strlen = 6, sizeof = 7
 
 **Exercício E242** · ★☆☆
 
-Sem rodar, preveja cada linha. Para o strcmp, diga só o sinal (negativo,
-zero ou positivo): o valor exato pode mudar de um sistema para outro.
+Escreva um programa que mostre as seis linhas abaixo. Os números saem de
+strlen e sizeof, nunca digitados à mão.
 
 
 ```text
-char s[10] = "pastel";
-printf("%zu %zu\n", strlen(s), sizeof(s));
-printf("%zu\n", sizeof("verde"));
-s[4] = '\0';
-printf("%s %zu\n", s, strlen(s));
-printf("%d\n", strcmp("abc", "abd") < 0);
-printf("%d\n", strcmp("Zebra", "abelha") < 0);
-printf("%d\n", strcmp("casa", "casamento") < 0);
+1. Declare char s[10] = "pastel"; e mostre strlen e sizeof de s.
+2. Mostre quantos bytes o literal "verde" ocupa (sizeof("verde")).
+3. Faça s[4] = '\0'; e mostre s e o novo strlen.
+4. Escreva void ordem(const char a[], const char b[]), que usa strcmp
+   para mostrar qual das duas vem antes, e chame com os três pares:
+   "abc" e "abd", "Zebra" e "abelha", "casa" e "casamento".
+```
+
+
+
+```text
+Saída esperada:
+pastel: strlen 6, sizeof 10
+"verde" ocupa 6 bytes
+cortada: past (4)
+abc vem antes de abd
+Zebra vem antes de abelha
+casa vem antes de casamento
 ```
 
 **Dicas:**
 
-1. sizeof de um literal conta o '\0'; strlen não.
-2. Depois de s[4] = '\0', o texto acaba na posição 4. O "el" continua na
-   memória, só que ninguém olha para ele.
-3. strcmp compara os códigos, letra a letra: 'Z' é 90 e 'a' é 97.
-   Quando uma string acaba antes, o '\0' (0) é menor que qualquer letra.
-4. Resposta esperada: "6 10", "6", "past 4", 1, 1 e 1.
+1. sizeof de um literal conta o '\0'; strlen não. Os dois devolvem size_t:
+   use %zu.
+2. Para mostrar aspas dentro do printf, use \".
+3. Em ordem, olhe só o sinal: strcmp(a, b) < 0 quer dizer que a vem antes.
+   'Z' é 90 e 'a' é 97; quando uma string acaba antes, o '\0' (0) é menor
+   que qualquer letra.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E242.c
@@ -2146,7 +2221,8 @@ A: sim
 O programa abaixo monta o endereço "Rio de Janeiro - RJ" e confere a
 cidade. Ele tem TRÊS erros de propósito. Dois o compilador avisa (leia os
 warnings!). O terceiro não gera aviso nenhum: só o sanitizer pega, e só
-depois que você conserta os outros dois. Ache, explique e conserte.
+depois que você conserta os outros dois. Conserte os três no código
+abaixo e rode de novo até a saída bater com a esperada.
 
 
 ```text
@@ -2322,32 +2398,41 @@ entrada acabou, não existe nome para limpar:
 
 Os arquivos ficam em [`0042-lendo-strings/`](0042-lendo-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A083 · O nome completo no cadastro**
+**Exemplo A083 · O recado que termina numa linha vazia**
 
 ```c
 #include <stdio.h>
 #include <string.h>
 
+#define TAM 60
+
 int main(void) {
-    char nome[40];
+    char linha[TAM];
+    int linhas = 0;
+    size_t letras = 0;
 
-    printf("Nome completo: ");
-    if (fgets(nome, sizeof(nome), stdin) == NULL) { // NULL: a entrada acabou
-        printf("Nada foi digitado.\n");
-        return 1;
+    printf("Digite o recado (linha vazia termina):\n");
+    // para no fim da entrada (NULL) ou numa linha vazia, o que vier primeiro
+    while (fgets(linha, sizeof(linha), stdin) != NULL) {
+        linha[strcspn(linha, "\n")] = '\0';
+        if (strlen(linha) == 0) { // só o Enter: depois de tirar o '\n', sobra ""
+            break;
+        }
+        linhas++;
+        letras += strlen(linha);
+        printf("%d| %s\n", linhas, linha);
     }
-    printf("Lido: [%s]", nome);                     // o '\n' veio junto
 
-    nome[strcspn(nome, "\n")] = '\0';               // troca o '\n' pelo fim
-    printf("Limpo: [%s]\n", nome);
-
-    printf("Olá, %s! Seu nome tem %zu caracteres.\n", nome, strlen(nome));
+    printf("%d linhas, %zu caracteres\n", linhas, letras);
     return 0;
 }
-// Nome completo: Maria Clara
-// Lido: [Maria Clara
-// ]Limpo: [Maria Clara]
-// Olá, Maria Clara! Seu nome tem 11 caracteres.
+// Digite o recado (linha vazia termina):
+// Chego umas 19h
+// 1| Chego umas 19h
+// Deixa a chave com a vizinha
+// 2| Deixa a chave com a vizinha
+//
+// 2 linhas, 41 caracteres
 ```
 
 ```bash
@@ -2433,7 +2518,10 @@ Você mora em Porto Alegre (12 caracteres).
 
 **Exercício E248** · ★☆☆
 
-O programa abaixo faz três leituras seguidas. Rode-o digitando a linha
+O programa abaixo faz três leituras seguidas da mesma linha: dois scanf e um
+fgets. Troque o printf final por um printf depois de CADA leitura, que
+mostre o que ela pegou entre colchetes e o strlen. No fgets, mostre o
+strlen antes e depois de tirar o '\n'. Rode digitando a linha
 
 
 ```text
@@ -2441,16 +2529,26 @@ Maria Clara Souza
 ```
 
 
-mas ANTES preveja o que aparece entre cada par de colchetes.
+
+```text
+Saída esperada (depois da linha digitada):
+1ª leitura: [Maria] (5)
+2ª leitura: [Clar] (4)
+fgets: 8 com o '\n', limpo: [a Souza] (7)
+```
+
+
+Para testar sem digitar: printf 'Maria Clara Souza\n' | ~/LPEDC/rodar
+seguido do caminho deste arquivo.
 
 **Dicas:**
 
 1. O %s para no primeiro espaço; %4s lê no máximo 4 caracteres.
 2. O que o scanf não leu continua na entrada, esperando a próxima leitura.
-3. O fgets pega o que sobrou da linha, do ponto exato em que o scanf
-   parou, e vai até o Enter.
-4. Resposta esperada: [Maria] [Clar] [a Souza]. Cada %s pula os espaços
-   antes de ler; o fgets não pula nada.
+   Cada %s pula os espaços antes de ler; o fgets não pula nada.
+3. O fgets pega o resto da linha do ponto exato em que o scanf parou, com
+   o '\n' no fim. Guarde o strlen num size_t antes do strcspn.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E248.c
@@ -2460,8 +2558,8 @@ mas ANTES preveja o que aparece entre cada par de colchetes.
 
 Este programa lê a quantidade de ingressos e o nome do comprador. Rode
 digitando 2 e Enter: ele nem espera você digitar o nome, e mostra o
-comprador vazio. O erro é de propósito. Explique por que acontece e
-conserte.
+comprador vazio. O erro é de propósito. Conserte o código e rode de novo
+até a execução bater com a esperada.
 
 
 ```text
@@ -2577,30 +2675,41 @@ Primeiro em ordem alfabética: arroz
 **Exercício E252** · ★★★
 
 O programa abaixo lê com fgets num vetor de só 6 bytes, num laço, até a
-entrada acabar, e mostra cada pedaço lido entre colchetes. Preveja a saída
-EXATA (inclusive onde caem as quebras de linha) para esta entrada de duas
-linhas:
+entrada acabar. Uma linha longa chega em pedaços, e cada pedaço parece uma
+linha nova. Sem aumentar o vetor s, mude o programa para que ele:
 
 
 ```text
-abacaxi
-uva
+1. mostre cada pedaço numerado, entre colchetes, com o '\n' (quando vier)
+   escrito como \n, sem quebrar a linha da tela;
+2. perceba quando um pedaço fecha uma linha (termina em '\n') e mostre o
+   número da linha e quantas letras ela teve, somando os pedaços;
+3. no fim, mostre quantas leituras e quantas linhas de verdade houve.
 ```
 
 
-Depois rode com `printf 'abacaxi\nuva\n' | ~/LPEDC/rodar` seguido do caminho
-deste arquivo.
+Rode com printf 'abacaxi\nuva\n' | ~/LPEDC/rodar seguido do caminho deste
+arquivo.
+
+
+```text
+Saída esperada:
+pedaço 1: [abaca]
+pedaço 2: [xi\n] fim da linha 1 (7 letras)
+pedaço 3: [uva\n] fim da linha 2 (3 letras)
+3 leituras, 2 linhas
+```
 
 **Dicas:**
 
-1. Com 6 bytes, cada fgets lê no máximo 5 caracteres (sobra 1 para o '\0').
-2. O fgets para no '\n' (e o guarda) ou quando enche, o que vier primeiro.
-   O que não coube fica para a próxima chamada.
-3. Um '\n' guardado no pedaço quebra a linha ANTES do ']'.
-4. Resposta esperada: os pedaços são "abaca", "xi\n" e "uva\n" (3
-   leituras). Na tela: a 1ª linha é [abaca][xi, a 2ª é ][uva, a 3ª é ] e
-   a última, "3 leituras". Uma linha longa chega em pedaços, e cada pedaço
-   parece uma linha nova se você não conferir o '\n'.
+1. Com 6 bytes, cada fgets lê no máximo 5 caracteres (sobra 1 para o
+   '\0'). Ele para no '\n' (e o guarda) ou quando enche.
+2. Use n = strcspn(s, "\n"): se s[n] == '\n', o pedaço fecha uma linha.
+   Mostre só os n primeiros caracteres com printf("%.*s", n, s) (n como
+   int) e escreva o \n à mão com "\\n".
+3. Some n numa variável a cada pedaço; quando a linha fechar, mostre e
+   zere.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E252.c
@@ -2639,8 +2748,9 @@ está na matriz, então vai para os inválidos:
 
 <p align="center"><img src="0043-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
 
-O programa completo. Para testar sem digitar, mande os votos com `printf
-'boto\nArara\n...' | ~/LPEDC/rodar` e o caminho do A085:
+O programa completo. Para testar sem digitar, salve o código num arquivo `.c`
+e mande os votos com `printf 'boto\nArara\n...' | ~/LPEDC/rodar` seguido do
+caminho do arquivo:
 
 ```c
 #include <stdio.h>
@@ -2751,78 +2861,86 @@ da ordenação por seleção (assunto 0092).
 
 Os arquivos ficam em [`0043-juntando-tudo/`](0043-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A085 · A enquete do mascote**
+**Exemplo A085 · Os logins da empresa nova**
 
 ```c
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-#define CANDIDATOS 3
-#define TAM_NOME 12
-#define TAM_LINHA 40
+#define MAX 10
+#define TAM_LOGIN 16
+#define TAM_LINHA 60
 
-// tira o '\n' e deixa tudo em minúsculas: "BOTO\n" vira "boto"
-void normalizar(char s[]) {
-    s[strcspn(s, "\n")] = '\0';
-    for (int i = 0; s[i] != '\0'; i++) {
-        s[i] = (char) tolower((unsigned char) s[i]);
+// iniciais dos nomes do meio + o último nome, tudo em minúsculas:
+// "Ana Paula Souza" vira "apsouza"
+void gerar_login(const char nome[], char login[]) {
+    int n = (int) strlen(nome);
+    int ultimo = 0; // onde começa a última palavra
+    for (int i = 0; i < n; i++) {
+        if (nome[i] == ' ') {
+            ultimo = i + 1;
+        }
     }
+
+    int j = 0;
+    for (int i = 0; i < n && j < TAM_LOGIN - 2; i++) { // sobra lugar p/ dígito e '\0'
+        int comeca_palavra = nome[i] != ' ' && (i == 0 || nome[i - 1] == ' ');
+        if (i >= ultimo || comeca_palavra) {
+            login[j] = (char) tolower((unsigned char) nome[i]);
+            j++;
+        }
+    }
+    login[j] = '\0';
 }
 
-// devolve a posição do candidato, ou -1 se o voto não bate com nenhum
-int buscar(char nomes[][TAM_NOME], int n, const char voto[]) {
+int buscar(char logins[][TAM_LOGIN], int n, const char login[]) {
     for (int i = 0; i < n; i++) {
-        if (strcmp(nomes[i], voto) == 0) {
+        if (strcmp(logins[i], login) == 0) {
             return i;
         }
     }
     return -1;
 }
 
-void mostrar_barra(const char nome[], int votos) {
-    printf("%-9s ", nome);
-    for (int i = 0; i < votos; i++) {
-        putchar('#');
-    }
-    printf(" %d\n", votos);
-}
-
 int main(void) {
-    char nomes[CANDIDATOS][TAM_NOME] = {"arara", "boto", "capivara"};
-    int votos[CANDIDATOS] = {0};
-    int invalidos = 0;
+    char logins[MAX][TAM_LOGIN];
+    int total = 0;
     char linha[TAM_LINHA];
 
-    while (fgets(linha, sizeof(linha), stdin) != NULL) { // um voto por linha
-        normalizar(linha);
-        int pos = buscar(nomes, CANDIDATOS, linha);
-        if (pos >= 0) {
-            votos[pos]++;
-        } else {
-            invalidos++;
+    while (total < MAX && fgets(linha, sizeof(linha), stdin) != NULL) {
+        linha[strcspn(linha, "\n")] = '\0';
+        if (strlen(linha) == 0) {
+            continue; // linha em branco não vira login
         }
-    }
 
-    int vencedor = 0;
-    for (int i = 0; i < CANDIDATOS; i++) {
-        mostrar_barra(nomes[i], votos[i]);
-        if (votos[i] > votos[vencedor]) {
-            vencedor = i;
+        char base[TAM_LOGIN];
+        gerar_login(linha, base);
+        strcpy(logins[total], base);
+
+        // já existe? tenta base2, base3... até achar um livre
+        for (int k = 2; buscar(logins, total, logins[total]) >= 0; k++) {
+            strcpy(logins[total], base);
+            size_t fim = strlen(logins[total]);
+            logins[total][fim] = (char) ('0' + k);
+            logins[total][fim + 1] = '\0';
         }
+
+        printf("%-22s -> %s\n", linha, logins[total]);
+        total++;
     }
-    printf("Inválidos: %d\n", invalidos);
-    printf("Vencedor: %s\n", nomes[vencedor]);
+    printf("%d logins criados\n", total);
     return 0;
 }
-// Entrada (um voto por linha):
-// boto, Arara, CAPIVARA, boto, Tatu, capivara, Boto, arara, boto
+// Entrada (um nome por linha, com uma linha em branco depois do 3º):
+// Ana Paula Souza, Joao Lima, Antonio Pedro Souza, Bia Alves, Amanda P Souza
 // Saída:
-// arara     ## 2
-// boto      #### 4
-// capivara  ## 2
-// Inválidos: 1
-// Vencedor: boto
+// Ana Paula Souza        -> apsouza
+// Joao Lima              -> jlima
+// Antonio Pedro Souza    -> apsouza2
+// Bia Alves              -> balves
+// Amanda P Souza         -> apsouza3
+// 5 logins criados
 ```
 
 ```bash

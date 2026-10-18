@@ -4,7 +4,8 @@
 // Dois alunos fizeram 4 provas cada (uma linha por aluno, uma coluna por
 // prova). O programa deveria mostrar a média de cada aluno, mas tem DOIS erros
 // de propósito. Rode com o rodar: o sanitizer acusa um deles. O outro só dá
-// resultado errado. Ache, explique e conserte os dois.
+// resultado errado. Conserte os dois no código abaixo e rode de novo até a
+// saída bater com a esperada.
 //
 //   Saída esperada depois do conserto:
 //   Aluno 1: média 7.50

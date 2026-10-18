@@ -1,31 +1,39 @@
-// A073 · Os passos da semana
+// A073 · O hidrômetro e a gaveta vizinha
 
 #include <stdio.h>
 
-#define DIAS 7
+#define LEITURAS 8
 
 int main(void) {
-    // 7 gavetas de int, uma por dia; o índice vai de 0 a 6
-    int passos[DIAS] = {8200, 10450, 6300, 12000, 9100, 15300, 7400};
+    // o relógio d'água só acumula: cada leitura é o total desde a instalação
+    int leitura[LEITURAS] = {1520, 1690, 1830, 2075, 2210, 2300, 2510, 2640};
 
-    int total = 0;
-    int maior = passos[0]; // começa pelo primeiro, não por 0
+    int maior = 0; // aqui 0 serve: consumo nunca é negativo
     int dia_maior = 0;
 
-    for (int i = 0; i < DIAS; i++) { // i < DIAS: o último índice é 6
-        total += passos[i];
-        if (passos[i] > maior) {
-            maior = passos[i];
-            dia_maior = i;
+    // 8 leituras dão 7 dias de consumo: i vai até LEITURAS - 2,
+    // porque o laço lê a gaveta vizinha, leitura[i + 1]
+    for (int i = 0; i < LEITURAS - 1; i++) {
+        int consumo = leitura[i + 1] - leitura[i];
+        printf("Dia %d: %d litros\n", i + 1, consumo);
+        if (consumo > maior) {
+            maior = consumo;
+            dia_maior = i + 1;
         }
     }
 
-    printf("Total: %d passos\n", total);
-    printf("Média: %.1f por dia\n", (double) total / DIAS);
-    printf("Recorde: %d passos no dia %d\n", maior, dia_maior + 1);
+    // a primeira e a última gaveta dão o total, sem somar nada
+    printf("Na semana: %d litros\n", leitura[LEITURAS - 1] - leitura[0]);
+    printf("Pico: dia %d, com %d litros\n", dia_maior, maior);
     return 0;
 }
 // Saída:
-// Total: 68750 passos
-// Média: 9821.4 por dia
-// Recorde: 15300 passos no dia 6
+// Dia 1: 170 litros
+// Dia 2: 140 litros
+// Dia 3: 245 litros
+// Dia 4: 135 litros
+// Dia 5: 90 litros
+// Dia 6: 210 litros
+// Dia 7: 130 litros
+// Na semana: 1120 litros
+// Pico: dia 3, com 245 litros

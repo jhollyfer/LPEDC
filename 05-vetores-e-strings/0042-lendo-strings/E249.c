@@ -3,8 +3,8 @@
 //
 // Este programa lê a quantidade de ingressos e o nome do comprador. Rode
 // digitando 2 e Enter: ele nem espera você digitar o nome, e mostra o
-// comprador vazio. O erro é de propósito. Explique por que acontece e
-// conserte.
+// comprador vazio. O erro é de propósito. Conserte o código e rode de novo
+// até a execução bater com a esperada.
 //
 //   Exemplo de execução depois do conserto:
 //   Quantidade de ingressos: 2

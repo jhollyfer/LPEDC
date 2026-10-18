@@ -1,28 +1,37 @@
-// A081 · O nome no crachá
+// A081 · A etiqueta que não pode estourar
 
 #include <stdio.h>
 #include <string.h>
 
+#define TAM 20 // a etiqueta impressa tem 19 caracteres + o '\0'
+
 int main(void) {
-    char nome[] = "Bruna";       // 6 bytes: 5 letras + '\0'
-    char sobrenome[] = "Matos";
-    char cracha[20];             // espaço de sobra: até 19 letras + '\0'
+    char etiqueta[TAM] = "SP"; // as outras 18 posições viram '\0'
+    char partes[3][12] = {"/Campinas", "/Centro", "/Bloco B"};
 
-    strcpy(cracha, nome);        // cracha = "Bruna"
-    strcat(cracha, " ");         // cracha = "Bruna "
-    strcat(cracha, sobrenome);   // cracha = "Bruna Matos"
+    for (int i = 0; i < 3; i++) {
+        // antes do strcat, a conta: o que tem + o que vem + 1 do '\0'
+        size_t precisa = strlen(etiqueta) + strlen(partes[i]) + 1;
+        if (precisa <= sizeof(etiqueta)) {
+            strcat(etiqueta, partes[i]);
+            printf("+ %-9s -> %s\n", partes[i], etiqueta);
+        } else {
+            printf("%s não cabe: precisaria de %zu bytes\n", partes[i], precisa);
+        }
+    }
 
-    printf("Crachá: %s\n", cracha);
-    printf("strlen: %zu caracteres\n", strlen(cracha)); // conta até o '\0'
-    printf("sizeof: %zu bytes\n", sizeof(cracha));      // o vetor inteiro
-
-    if (strcmp(cracha, "Bruna Matos") == 0) {           // 0 quer dizer iguais
-        printf("Confere com a inscrição.\n");
+    // strcmp compara códigos: maiúscula e minúscula são diferentes
+    if (strcmp(etiqueta, "SP/Campinas/Centro") == 0) {
+        printf("Igual a \"SP/Campinas/Centro\"\n");
+    }
+    if (strcmp(etiqueta, "sp/campinas/centro") != 0) {
+        printf("Diferente de \"sp/campinas/centro\": 'S' é 83, 's' é 115\n");
     }
     return 0;
 }
 // Saída:
-// Crachá: Bruna Matos
-// strlen: 11 caracteres
-// sizeof: 20 bytes
-// Confere com a inscrição.
+// + /Campinas -> SP/Campinas
+// + /Centro   -> SP/Campinas/Centro
+// /Bloco B não cabe: precisaria de 27 bytes
+// Igual a "SP/Campinas/Centro"
+// Diferente de "sp/campinas/centro": 'S' é 83, 's' é 115
