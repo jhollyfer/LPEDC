@@ -173,8 +173,7 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 > `struct` resolve no módulo 08: um vetor de `struct cliente` com um `realloc`
 > só. Mesmo assim, o desenho na memória continua parecido: o nome é um
 > `char *` que aponta para um bloco do heap, e a struct guarda só os 8 bytes
-> do ponteiro. No TypeScript, um `{ nome: string, centavos: number }[]` faz o
-> mesmo por baixo, com o coletor de lixo no papel do `liberar`.
+> do ponteiro.
 
 > [!NOTE]
 > **Pergunta para você:** se Dona Cida pagar e você quiser **apagar** a linha

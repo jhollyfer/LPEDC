@@ -27,8 +27,7 @@ typedef struct {
 } Pix;
 ```
 
-A partir daí você escreve `Pix p;`, como no TypeScript você escreveria
-`const p: Pix`. Nomes de tipo com inicial maiúscula são uma convenção comum (e
+A partir daí você escreve só `Pix p;`, sem o `struct` na frente. Nomes de tipo com inicial maiúscula são uma convenção comum (e
 a deste curso) para não confundir tipo com variável.
 
 Vamos ver na prática. Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno
@@ -87,8 +86,7 @@ horário noturno **e** o valor passar do limite:
 > [!WARNING]
 > `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
 > e `typedef double Dolares;`, o compilador aceita `Reais r = dolares;` sem
-> piscar: para ele, os dois são `double`. É igual ao `type Reais = number` do
-> TypeScript, que também não protege nada. Se você quer que o compilador
+> piscar: para ele, os dois são `double`. Se você quer que o compilador
 > barre a mistura, embrulhe numa struct: `typedef struct { double v; } Reais;`.
 > Structs diferentes não se misturam. E cuidado com typedef que esconde
 > demais: `typedef int *PInt;` faz `PInt a, b;` parecer inocente, mas esconde

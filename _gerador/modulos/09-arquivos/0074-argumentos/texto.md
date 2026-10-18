@@ -3,12 +3,11 @@
 Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Você poderia
 fazer um programa que pergunta "qual o total?" e "quantas pessoas?" com
 `scanf`. Mas os programas de terminal que você usa todo dia não perguntam
-nada: `git commit -m "msg"`, `cp origem destino`, `npm run dev`. Os dados vão
+nada: `git commit -m "msg"`, `cp origem destino`, `gcc -o prog prog.c`. Os dados vão
 **junto do comando**, na mesma linha. São os **argumentos da linha de
 comando**.
 
-No Node eles chegam em `process.argv`, um array de strings. No C chegam como
-parâmetros do `main`, que até agora você escrevia com `void`:
+No C, eles chegam como parâmetros do `main`, que até agora você escrevia com `void`:
 
 ```c
 int main(int argc, char *argv[])

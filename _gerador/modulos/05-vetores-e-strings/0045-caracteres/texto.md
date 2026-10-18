@@ -20,8 +20,8 @@ mesmo valor.
 O que decide se você vê a letra ou o número é o `printf`: `%c` mostra o
 símbolo, `%d` mostra o código. Como é número, dá para fazer conta e comparar:
 `'a' + 1` é `'b'`, `c >= 'A' && c <= 'Z'` pergunta se é maiúscula, e
-`c - '0'` transforma o dígito `'7'` no número 7. No JS você precisaria de
-`charCodeAt` e `String.fromCharCode`; no C, não há conversão nenhuma.
+`c - '0'` transforma o dígito `'7'` no número 7. Não há função de conversão
+nenhuma: o caractere já é o número.
 
 Para não decorar a tabela, o `<ctype.h>` traz funções prontas:
 

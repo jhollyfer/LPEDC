@@ -26,8 +26,8 @@ fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
 só, a tabela vira uma lista única e a busca volta a ser O(n).
 
 No encadeamento a tabela **nunca enche**: α pode passar de 1, as listas só
-ficam mais compridas. É o modelo do `Map` do JS e do `HashMap` do Java (que,
-quando uma corrente fica comprida demais, até troca a lista por uma árvore).
+ficam mais compridas. Algumas implementações, quando uma corrente fica
+comprida demais, até trocam a lista por uma árvore.
 
 Vamos ver na prática. Seis frutas entram na ordem banana, uva, pera, kiwi,
 manga e caju, com o hash polinomial do assunto anterior e `m = 5`. Os índices

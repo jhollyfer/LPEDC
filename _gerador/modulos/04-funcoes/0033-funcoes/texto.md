@@ -26,10 +26,10 @@ tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
 - o **`return`** devolve o valor e **encerra a função na hora**. O que vem
   depois dele, naquele caminho, não roda.
 
-No TypeScript seria `function precoCorrida(km: number): number { ... }`. A
-ideia é a mesma, mas no C o tipo vem antes do nome e é obrigatório.
+No C, o tipo vem antes do nome e é obrigatório, tanto no retorno quanto em
+cada parâmetro.
 
-Tem um detalhe que o JS não tem: o compilador do C lê o arquivo **de cima para
+Tem mais um detalhe: o compilador do C lê o arquivo **de cima para
 baixo**, uma vez só. Se o `main` chama `preco_corrida` antes de o compilador
 ter visto essa função, ele não sabe que tipo ela devolve nem quantos
 parâmetros recebe. A solução é o **protótipo**: o cabeçalho da função com `;`

@@ -17,8 +17,7 @@ As operações são poucas, e é isso que dá força à pilha:
 - **olhar o topo** (*peek*): lê o topo sem tirar;
 - **vazia?**: pergunta se ainda tem alguma coisa.
 
-No JS, um array já faz isso: `pedido.push(2590)` e `pedido.pop()`. No C não
-existe nada pronto, então você monta a pilha como um **TAD** (assunto 0079):
+No C não existe nada pronto, então você monta a pilha como um **TAD** (assunto 0079):
 o `pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
 só inclui o `.h`:
 

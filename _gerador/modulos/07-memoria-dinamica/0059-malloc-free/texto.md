@@ -19,7 +19,7 @@ Três detalhes nessa linha:
 - o `malloc` conta em **bytes**, não em elementos. `malloc(4)` não é espaço
   para 4 `double`, é espaço para 4 bytes. Por isso sempre `n * sizeof(tipo)`;
 - ele devolve `void *` (assunto 0056), que vira `double *` sozinho. Em C não
-  precisa de cast; o `(double *)` que você vê em livro antigo é herança do C++;
+  precisa de cast; o `(double *)` que você vê em livro antigo é dispensável;
 - se não houver memória, ele devolve **`NULL`**. Sempre confira antes de usar.
 
 O bloco vem com **lixo**: o que estava naqueles bytes antes. O `malloc` não
@@ -31,9 +31,8 @@ o próprio `malloc` anotou isso num cabeçalho escondido antes do bloco. Depois
 do `free`, o ponteiro continua guardando o endereço antigo, só que agora ele
 aponta para um bloco que não é mais seu. Por isso o hábito: `corridas = NULL;`.
 
-A regra de ouro é simples de dizer: **todo `malloc` tem um `free`**. No
-TypeScript, `new Array(n)` some sozinho quando ninguém mais o referencia. Aqui,
-o bloco que você esquece de liberar fica ocupado até o programa acabar. Isso é
+A regra de ouro é simples de dizer: **todo `malloc` tem um `free`**. Nada some
+sozinho: o bloco que você esquece de liberar fica ocupado até o programa acabar. Isso é
 um **vazamento** (*memory leak*), tema do assunto 0062.
 
 Vamos ver na prática. O programa pergunta quantas corridas foram (4), pede ao

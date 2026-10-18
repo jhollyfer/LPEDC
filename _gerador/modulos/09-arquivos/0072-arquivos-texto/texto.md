@@ -6,8 +6,7 @@ programa tem o mesmo problema: as variáveis moram na RAM e **somem quando ele
 termina**. Para lembrar de alguma coisa na próxima execução, ele precisa
 escrever num **arquivo**, que fica no disco.
 
-No Node você faz `fs.writeFileSync('despesas.txt', texto)` e pronto. No C o
-trabalho é igual, só que em passos que você enxerga: **abrir**, **ler ou
+No C, esse trabalho acontece em passos que você enxerga: **abrir**, **ler ou
 escrever** e **fechar**. Tudo vem do `<stdio.h>`, o mesmo do `printf`.
 
 Para o C, um arquivo é só uma **sequência de bytes** no disco. Num **arquivo

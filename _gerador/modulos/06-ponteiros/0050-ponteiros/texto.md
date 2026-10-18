@@ -26,7 +26,7 @@ declaração (`int *p`) e desreferência (`*p = 5`). Leia devagar no começo.
 
 E se o ponteiro ainda não aponta para nada? Use **`NULL`**: um endereço
 especial que significa "lugar nenhum". Dá para testar (`if (cartao != NULL)`)
-antes de usar. No TypeScript, é o papel do `null` num campo opcional.
+antes de usar.
 
 Vamos ver na prática. No caixa da farmácia, o cliente tem 120 pontos no
 cartão fidelidade. O ponteiro `cartao` começa em `NULL` (nenhum cartão).

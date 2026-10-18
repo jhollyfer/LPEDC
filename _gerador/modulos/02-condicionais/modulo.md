@@ -6,10 +6,10 @@ frete, liberar ou barrar a catraca, achar a faixa certa da multa. Essa é a
 segunda das três peças de qualquer algoritmo (sequência, decisão e
 repetição).
 
-A sintaxe vai parecer familiar: `if`, `else`, `switch` e o ternário são quase
-iguais aos do TypeScript. O que muda é o que está por baixo. No C não existe
+A sintaxe é curta: `if`, `else`, `switch` e o ternário. O que importa é o que
+está por baixo. No C não existe
 um tipo "verdadeiro ou falso" de nascença: a verdade é um **número**, 0 é
-falso e qualquer outra coisa é verdade. Daí vêm pegadinhas que o JS não tem,
+falso e qualquer outra coisa é verdade. Daí vêm pegadinhas,
 como um `=` no lugar de `==` que compila, roda e estraga a variável em
 silêncio.
 

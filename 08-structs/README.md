@@ -7,8 +7,7 @@ vetor de coisas iguais. Só que os dados do mundo real vêm em pacotes. Um
 pedido tem tamanho, quantidade e preço; um time tem nome, vitórias e empates.
 Este módulo ensina o C a guardar pacotes.
 
-No TypeScript você descreve um pacote com `type` ou `interface` e cria objetos
-à vontade, e o motor do JS cuida do resto. No C, você desenha o pacote byte a
+No C, você desenha o pacote byte a
 byte: decide a ordem dos campos (e paga pelas sobras de alinhamento), decide se
 ele anda por cópia ou por ponteiro (e paga pela cópia), decide se dois campos
 dividem a mesma memória. Nada é escondido, e por isso você passa a entender o
@@ -85,9 +84,8 @@ diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
 
 Até aqui, você teria três variáveis soltas: `char tamanho`, `int quantidade`,
 `double preco`. Com dez pedidos, seriam trinta variáveis, e nada no código diz
-que `tamanho3` e `preco3` são do mesmo pedido. No TypeScript você resolveria
-com um objeto `{ tamanho: 'M', quantidade: 2, preco: 18.5 }`. No C, com uma
-**struct**.
+que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso
+com uma **struct**.
 
 Uma struct **agrupa variáveis de tipos diferentes sob um nome só**. Cada
 variável de dentro é um **campo** (ou membro). Você primeiro descreve o molde:
@@ -168,8 +166,8 @@ passos são os de sempre; a diferença é que os dados viajam num pacote só:
 <p align="center"><img src="0064-struct/fluxograma.svg" alt="Fluxograma: Struct" width="462"></p>
 
 > [!WARNING]
-> Quem vem do JS espera que `b = a` faça `b` **apontar** para o mesmo objeto.
-> No C, não: `struct pedido p2 = p1;` cria uma **cópia independente**. Mudar
+> Atribuir uma struct não faz as duas variáveis **apontarem** para o mesmo
+> lugar: `struct pedido p2 = p1;` cria uma **cópia independente**. Mudar
 > `p2.quantidade` não mexe em `p1`. Duas outras coisas também não funcionam:
 > `p1 == p2` nem compila (compare campo a campo), e um campo vetor não recebe
 > texto com `=`: `cliente.nome = "Ana";` é erro; use `strcpy(cliente.nome, "Ana")`.
@@ -308,8 +306,8 @@ Na promoção: R$ 31.41
 
 **Exercício E380** · ★☆☆
 
-Preveja a saída deste trecho antes de rodar. Depois responda: e se fosse
-JavaScript, com objetos ({ casa: 2, fora: 1 }) e const b = a?
+Preveja a saída deste trecho antes de rodar. Depois responda: e se, no
+lugar de struct placar b = a, fosse struct placar *b = &a (com b->fora)?
 
 
 ```text
@@ -334,8 +332,9 @@ printf("b: %d x %d\n", b.casa, b.fora);
 
 1. Em C, b = a copia todos os campos. Depois disso, a e b são independentes.
 2. Faça uma tabela com a.casa, a.fora, b.casa e b.fora, linha a linha.
-3. Resposta esperada: "a: 5 x 1" e "b: 2 x 3". No JS, b seria o MESMO
-   objeto que a: b.fora = 3 mudaria a.fora, e os dois mostrariam 5 x 3.
+3. Resposta esperada: "a: 5 x 1" e "b: 2 x 3". Com o ponteiro, b apontaria
+   para o MESMO placar: b->fora = 3 mudaria a.fora, e os dois mostrariam
+   5 x 3.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0064-struct/E380.c
@@ -497,8 +496,7 @@ typedef struct {
 } Pix;
 ```
 
-A partir daí você escreve `Pix p;`, como no TypeScript você escreveria
-`const p: Pix`. Nomes de tipo com inicial maiúscula são uma convenção comum (e
+A partir daí você escreve só `Pix p;`, sem o `struct` na frente. Nomes de tipo com inicial maiúscula são uma convenção comum (e
 a deste curso) para não confundir tipo com variável.
 
 Vamos ver na prática. Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno
@@ -557,8 +555,7 @@ horário noturno **e** o valor passar do limite:
 > [!WARNING]
 > `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
 > e `typedef double Dolares;`, o compilador aceita `Reais r = dolares;` sem
-> piscar: para ele, os dois são `double`. É igual ao `type Reais = number` do
-> TypeScript, que também não protege nada. Se você quer que o compilador
+> piscar: para ele, os dois são `double`. Se você quer que o compilador
 > barre a mistura, embrulhe numa struct: `typedef struct { double v; } Reais;`.
 > Structs diferentes não se misturam. E cuidado com typedef que esconde
 > demais: `typedef int *PInt;` faz `PInt a, b;` parecer inocente, mas esconde
@@ -876,10 +873,9 @@ Uma linha é uma struct. A tabela inteira é um **vetor de structs**.
 
 Você já conhece as duas peças. Um vetor guarda vários valores do mesmo tipo,
 lado a lado. Uma struct é um tipo. Junte as duas: `Time tabela[4];` são quatro
-`Time` seguidos na memória. É o equivalente ao `Time[]` do TypeScript, um
-array de objetos, com uma diferença importante: no JS o array guarda
-**referências** para objetos espalhados pela memória; no C, os bytes das
-structs ficam **dentro** do vetor, um time colado no outro.
+`Time` seguidos na memória. O vetor não guarda **referências** para structs
+espalhadas pela memória: os bytes das structs ficam **dentro** do vetor, um
+time colado no outro.
 
 Para chegar num campo, você primeiro escolhe a linha e depois a coluna:
 `tabela[2].nome`. O índice vem **antes** do ponto, porque `tabela[2]` é um
@@ -974,8 +970,8 @@ a comparação olha um campo calculado de cada struct:
 > `tabela[2].vitorias`, o compilador faz uma conta só: início do vetor
 > + 2 × 32 (pula dois times) + 20 (pula o nome). Por isso percorrer um vetor de
 > structs é rápido: os dados estão em sequência, e o processador traz vários
-> de uma vez para o cache. Um `Time[]` no JS, com objetos espalhados pela
-> memória, não tem essa vantagem.
+> de uma vez para o cache. Dados espalhados pela memória não têm essa
+> vantagem.
 
 > [!NOTE]
 > **Pergunta para você:** se o Vasco tivesse 9 vitórias, 7 empates e 0
@@ -1414,8 +1410,8 @@ do laço enxerga o saldo que a anterior deixou:
 > [!WARNING]
 > O erro mais comum é esquecer que struct vai por valor. Uma função
 > `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
-> faz nada: recarrega uma cópia que morre no fim da função. Quem vem do JS
-> estranha, porque lá objeto passado para função é alterado. O segundo erro é
+> faz nada: recarrega uma cópia que morre no fim da função. Para a função
+> alterar a struct de quem chamou, passe o endereço: `Cartao *c`. O segundo erro é
 > a precedência: `*c.saldo` não compila. Escreva `c->saldo` ou `(*c).saldo`.
 > E nunca devolva o endereço de uma struct local (`return &cartao;`): ela morre
 > quando a função termina. Para criar uma struct dentro de uma função e
@@ -1823,9 +1819,7 @@ O primeiro nome vale 0, e cada um vale o anterior mais 1: `RECEBIDO` é 0,
 e quem vem depois de um valor escolhido continua contando a partir dele. Os
 nomes ficam em MAIÚSCULAS por convenção, como as constantes do `#define`.
 
-Se você usa `enum` no TypeScript, é quase a mesma coisa: `enum Status {
-Recebido, Preparando }` também numera a partir de 0. A diferença é que no C o
-enum é **só um inteiro com apelido**: o compilador deixa somar, comparar com
+Mas atenção: no C o enum é **só um inteiro com apelido**: o compilador deixa somar, comparar com
 `<` e até guardar 42 numa variável `Status`.
 
 Vamos ver na prática. A variável `s` começa em `RECEBIDO` e anda uma etapa
@@ -2317,16 +2311,15 @@ outro lado:
 > union usada para economizar espaço, ler um campo diferente do último que
 > você gravou dá lixo, e o C não avisa: ele não sabe qual campo está valendo.
 > Por isso a union quase sempre vem acompanhada de um **enum** que diz qual
-> campo vale agora (a union "etiquetada" do A138). É exatamente a *discriminated
-> union* do TypeScript (`{ tipo: 'pix', chave } | { tipo: 'cartao', final }`),
-> só que no C quem confere a etiqueta é você, não o compilador. E lembre: o
+> campo vale agora (a union "etiquetada" do A138). Quem confere a etiqueta é você, não
+> o compilador. E lembre: o
 > resultado de ler os bytes depende da endianness, então esse código não dá a
 > mesma saída em todas as máquinas.
 
 > [!TIP]
 > **Por dentro do C:** uma union não gera código nenhum. `ip.numero` e
 > `ip.bytes[0]` são o mesmo endereço; muda só o tipo com que o compilador lê o
-> que está lá. Em C (diferente do C++), ler um campo diferente do último
+> que está lá. Em C, ler um campo diferente do último
 > gravado é permitido: os bytes são reinterpretados no tipo novo. É assim que
 > se inspeciona um `float` bit a bit, por exemplo. Na rede, a convenção é
 > big-endian (a "ordem de rede"); por isso programas de rede usam `htonl` e
@@ -3646,7 +3639,7 @@ Trabalho:
 
 **Exercício E426** · ★★★
 
-No TypeScript, um valor JSON pode ser número, texto, booleano ou null.
+Um valor JSON pode ser número, texto, booleano ou null.
 Represente isso em C com uma union etiquetada:
 
 

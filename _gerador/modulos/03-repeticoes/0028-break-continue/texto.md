@@ -92,8 +92,8 @@ A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 > **Por dentro do C:** `break` e `continue` são saltos com destino fixo. O
 > `break` vira "pule para depois do laço"; o `continue`, "pule para o passo"
 > (no `for`) ou "pule para a pergunta" (no `while`). Eles valem só para o laço
-> **mais interno**. No JS existe `break rotulo;` para sair de dois laços de uma
-> vez; no C, não. O C tem o `goto rotulo;`, que salta para qualquer ponto da
+> **mais interno**. Não existe `break` com rótulo para sair de dois laços de
+> uma vez. O C tem o `goto rotulo;`, que salta para qualquer ponto da
 > mesma função. Evite: ele só é aceito, em código de verdade, para sair de
 > vários laços de uma vez ou para pular para a limpeza no fim de uma função.
 

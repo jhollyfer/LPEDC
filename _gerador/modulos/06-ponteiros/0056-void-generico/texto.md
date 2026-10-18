@@ -6,22 +6,20 @@ recebe é que abre e sabe se dentro tem um livro ou um tênis. O **`void *`**
 é essa caixa fechada.
 
 Um `void *` é um **ponteiro genérico**: guarda o endereço de qualquer dado
-(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. No TS,
-o parente mais próximo é o `unknown`: aceita qualquer coisa, e você precisa
-dizer o tipo antes de usar.
+(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. Antes
+de usar o dado, você precisa dizer o tipo.
 
 Duas regras saem disso:
 
 - **conversão livre.** Em C, qualquer ponteiro de dado vira `void *` e
-  volta sem cast: `void *p = &senha;` e `int *q = p;` compilam limpo (no C++
-  não, por isso você vê casts desnecessários em código copiado de lá);
+  volta sem cast: `void *p = &senha;` e `int *q = p;` compilam limpo;
 - **não dá para desreferenciar.** `*p` com `p` do tipo `void *` não
   compila: o compilador não sabe quantos bytes ler nem como interpretar.
   Converta antes, com um **cast**: `*(int *)p`. Pelo mesmo motivo, `p + 1`
   não existe no C padrão (o `gcc` aceita como extensão, e o `-pedantic`
   avisa).
 
-O cast é uma promessa sua, igual ao `as` do TS: o compilador acredita. Se
+O cast é uma promessa sua: o compilador acredita. Se
 você disser `(double *)` para um endereço onde mora um `int`, ele lê 8
 bytes onde só tinha 4 e mostra lixo. Ninguém confere por você.
 

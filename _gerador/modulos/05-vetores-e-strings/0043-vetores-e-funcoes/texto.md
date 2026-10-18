@@ -22,8 +22,7 @@ reajustar(cardapio, 4, 10);                                // chamada
 Repare no `int n`. Como só o endereço do começo chega à função, **o tamanho
 não vai junto**. A função não tem como descobrir quantos itens existem: você
 passa o tamanho num parâmetro separado. É o par que você vai ver o curso
-inteiro: vetor + tamanho. No TS seria `function reajustar(precos: number[])` e
-`precos.length` resolveria; no C, não existe `.length`.
+inteiro: vetor + tamanho. No C, não existe `.length`.
 
 Um número dentro dos colchetes do parâmetro é ignorado: `double precos[4]`,
 `double precos[100]` e `double precos[]` são a mesma coisa para o compilador.

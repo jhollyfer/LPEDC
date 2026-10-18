@@ -27,9 +27,8 @@ Para somar por coluna, você inverte: a coluna fica por fora e a linha por
 dentro. Os laços são os mesmos; muda só quem é o "relógio das horas" e quem é
 o "dos minutos".
 
-No JS, uma "matriz" é um array de arrays: cada linha é um objeto separado,
-pode ter tamanho diferente e mora em qualquer lugar da memória. No C, não. A
-matriz é **um bloco só, contínuo**, com todas as linhas do mesmo tamanho,
+No C, a matriz não é um punhado de linhas soltas, cada uma num canto da
+memória. Ela é **um bloco só, contínuo**, com todas as linhas do mesmo tamanho,
 uma colada na outra.
 
 Vamos ver na prática. A planilha tem 3 linhas e 4 colunas. Na memória, as 12

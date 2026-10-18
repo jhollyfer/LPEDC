@@ -8,9 +8,8 @@ um conserto esquece uma das cópias e ninguém mais acha nada. Este módulo é
 sobre **dividir**: dar nome a cada tarefa, escrever uma vez e chamar quantas
 vezes precisar.
 
-Você já faz isso no TypeScript o tempo todo, com funções e com `import` e
-`export`. A ideia é a mesma. A diferença é que no C dá para ver **o que
-acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
+No C, isso se faz com funções e com módulos (`.h` e `.c`). E dá para ver **o
+que acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
 nasce na pilha, o endereço de volta, a variável que some no `return`. Com essa
 imagem na cabeça, a **recursão** deixa de ser mágica e vira só mais uma
 chamada.
@@ -111,10 +110,10 @@ tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
 - o **`return`** devolve o valor e **encerra a função na hora**. O que vem
   depois dele, naquele caminho, não roda.
 
-No TypeScript seria `function precoCorrida(km: number): number { ... }`. A
-ideia é a mesma, mas no C o tipo vem antes do nome e é obrigatório.
+No C, o tipo vem antes do nome e é obrigatório, tanto no retorno quanto em
+cada parâmetro.
 
-Tem um detalhe que o JS não tem: o compilador do C lê o arquivo **de cima para
+Tem mais um detalhe: o compilador do C lê o arquivo **de cima para
 baixo**, uma vez só. Se o `main` chama `preco_corrida` antes de o compilador
 ter visto essa função, ele não sabe que tipo ela devolve nem quantos
 parâmetros recebe. A solução é o **protótipo**: o cabeçalho da função com `;`
@@ -547,9 +546,8 @@ Mais três regras sobre parâmetros:
 > [!WARNING]
 > A função que "deveria" mudar a variável e não muda. O exemplo clássico é
 > `void trocar(int a, int b)` que troca `a` e `b` lá dentro: no `main`, nada
-> acontece, porque a troca foi entre as cópias. No JS é igual para números
-> (`function f(n) { n++ }` não muda o seu `n`). A diferença é que no JS um
-> objeto passado para a função pode ser alterado por ela; no C, para a função
+> acontece, porque a troca foi entre as cópias. Do
+> mesmo jeito, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
 > mexer numa variável sua, você precisa passar o **endereço** dela. É o que o
 > `&` do `scanf` faz, e você vai entender de vez no assunto 0051.
 
@@ -932,8 +930,7 @@ E as globais? Funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
 qualquer lugar. A mesma chamada pode dar resultados diferentes conforme o que
 outra função fez antes. Prefira passar por parâmetro e devolver com `return`;
-use global só para algo que é de fato do programa todo. No TS é o mesmo
-conselho de evitar `let` no topo do módulo.
+use global só para algo que é de fato do programa todo.
 
 Uma última peça: `static` **fora** de função muda outra coisa. Uma global
 `static int total;` continua vivendo o programa todo, mas só pode ser usada
@@ -1310,18 +1307,19 @@ Saída esperada:
 
 ## 0036 · A pilha de chamadas
 
-Você já viu isto no Node, quando algo explode:
+Quando um programa em C quebra dentro do `gdb`, o comando `bt` mostra algo
+assim:
 
 ```text
-TypeError: Cannot read properties of undefined
-    at calcularTaxa (pedido.js:12)
-    at fecharPedido (pedido.js:30)
-    at main (index.js:5)
+#0  calcular_taxa (valor=0) at pedido.c:12
+#1  fechar_pedido () at pedido.c:30
+#2  main () at pedido.c:5
 ```
 
-Isso é um **stack trace**: a **pilha de chamadas** impressa no momento do erro.
-A função de cima estava rodando; ela foi chamada pela de baixo, que foi chamada
-pela de baixo dela. O C tem exatamente a mesma pilha, só que sem esconder nada.
+Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** impressa no
+momento do erro. A função de cima estava rodando; ela foi chamada pela de
+baixo, que foi chamada pela de baixo dela. O C mostra essa pilha sem esconder
+nada.
 
 Cada vez que uma função é chamada, o programa reserva um pedaço de memória só
 para aquela chamada: o **quadro** (em inglês, *stack frame*, ou registro de
@@ -1424,8 +1422,8 @@ no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
 > o sistema mata o programa: é o **stack overflow** (no Linux, aparece como
 > `Segmentation fault`). Com 8 MB e quadros de algumas dezenas de bytes, dá
 > para empilhar centenas de milhares de chamadas, mas não infinitas. No
-> `gdb`, o comando `bt` (*backtrace*) imprime a pilha, igual ao stack trace
-> do Node.
+> `gdb`, o comando `bt` (*backtrace*) imprime a pilha, como no começo deste
+> assunto.
 
 > [!NOTE]
 > **Pergunta para você:** mude o subtotal para 95.00. Quantos quadros a pilha
@@ -1740,8 +1738,8 @@ e) Escreva um programa com as quatro funções (dividir, media, relatorio e
 
 **Dicas:**
 
-1. O bt lista do topo (#0) para a base (main). É o stack trace do Node, com
-   a mesma ordem.
+1. O bt lista do topo (#0) para a base (main): a função que estava rodando
+   quando o programa parou aparece primeiro.
 2. dividir só fez a conta que pediram. Quem deveria ter conferido o zero?
 3. Resposta esperada: a) dividir; b) relatorio chamou media, main chamou
    relatorio; c) media volta primeiro, main termina por último; d) antes:
@@ -1869,7 +1867,7 @@ Recursão e laço resolvem os mesmos problemas: todo `for` vira recursão e toda
 recursão vira laço (às vezes com bastante trabalho). O fatorial com `for` é
 até mais simples e mais barato. A recursão brilha quando o problema **é**
 recursivo por natureza: pastas dentro de pastas, árvores, "divide ao meio e
-resolve cada metade". No TS você já fez isso ao percorrer um JSON aninhado.
+resolve cada metade".
 
 > [!WARNING]
 > Caso base que nunca chega. Com `if (n == 1)` no lugar de `if (n <= 1)`,
@@ -2510,10 +2508,9 @@ Explique o erro e conserte. A saída certa é a do A076.
 
 ## 0039 · Módulos: .h, .c e compilação separada
 
-No TypeScript, você escreve `export function kmParaMilhas()` num arquivo e
-`import { kmParaMilhas } from './conversao'` no outro. Ninguém cola o código
-da conversão em cada tela do app. No C, a ideia é a mesma, mas sem `import`:
-um **módulo** é um par de arquivos.
+Quando várias partes de um programa precisam converter quilômetros em milhas,
+ninguém cola o código da conversão em cada uma delas. Ele mora num lugar só, e
+quem precisa usa. No C, esse lugar é um **módulo**: um par de arquivos.
 
 - **`conversao.h`** (o *header*, cabeçalho): a **interface**. Diz **o que** o
   módulo oferece: os protótipos das funções, as constantes, os tipos. É o
@@ -3008,7 +3005,7 @@ Ferramentas que o exemplo A080 usa:
 - `__LINE__` vira o número da linha, e `__func__` o nome da função atual. Os
   dois são ótimos em mensagens de depuração.
 - `#x` dentro de uma macro transforma o argumento em texto: `MOSTRAR(7 * 6)`
-  mostra `7 * 6 = 42`. É o `console.log({ x })` do C.
+  mostra `7 * 6 = 42`: a expressão e o valor numa linha só, sem repetir nada.
 
 > [!WARNING]
 > A macro avalia o argumento **cada vez que ele aparece**. Com
@@ -3319,7 +3316,7 @@ int main(void) {
 
 **Exercício E240** · ★★★
 
-Monte um mini-Jest em C. Escreva a macro CONFERIR(cond), que mostra
+Monte um mini-framework de testes em C. Escreva a macro CONFERIR(cond), que mostra
 "ok: <cond>" se a condição for verdadeira e "FALHOU: <cond> (linha N)" se
 for falsa, contando as falhas numa global. Use #cond para virar texto e
 __LINE__ para a linha. Teste a função "double com_desconto(double preco)",
@@ -3511,8 +3508,8 @@ laço, é a recursão de `dar_troco`:
 
 O exemplo A082 mostra o outro lado de dividir em funções: dá para **testar
 cada peça sozinha**. Com a macro `CONFERIR` (a do exercício E240), ele confere
-o preço, o contador `static` e a contagem de notas sem digitar nada. No TS
-você faria isso com Jest; aqui, uma macro de dez linhas resolve.
+o preço, o contador `static` e a contagem de notas sem digitar nada. Não
+precisa de biblioteca de testes: uma macro de dez linhas resolve.
 
 > [!WARNING]
 > Efeito colateral escondido. `preco_centavos` parece só consultar um preço,

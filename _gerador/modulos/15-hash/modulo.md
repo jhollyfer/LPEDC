@@ -5,9 +5,9 @@ n) na busca binária e na árvore equilibrada. A tabela hash troca a procura
 por uma **conta**: uma função transforma a chave num índice de vetor, e o
 acesso ao vetor custa O(1). É a estrutura de dados mais usada na prática.
 
-Você usa tabela hash todo dia no TypeScript sem pensar: `Map`, `Set` e os
-objetos `{}` usados como dicionário são tabelas hash por baixo. No C não tem
-nada disso pronto, e é aí que você entende o que o motor do JS faz: a função
+Dicionários, conjuntos e caches de quase todo software são tabelas hash por
+baixo. No C não tem nada disso pronto, e é aí que você entende como elas
+funcionam: a função
 hash que mistura os bytes da chave, o que acontece quando duas chaves caem no
 mesmo lugar, por que a tabela cresce quando enche e por que ela não guarda
 ordem nenhuma.

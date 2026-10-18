@@ -1,17 +1,18 @@
 ## 0036 · A pilha de chamadas
 
-Você já viu isto no Node, quando algo explode:
+Quando um programa em C quebra dentro do `gdb`, o comando `bt` mostra algo
+assim:
 
 ```text
-TypeError: Cannot read properties of undefined
-    at calcularTaxa (pedido.js:12)
-    at fecharPedido (pedido.js:30)
-    at main (index.js:5)
+#0  calcular_taxa (valor=0) at pedido.c:12
+#1  fechar_pedido () at pedido.c:30
+#2  main () at pedido.c:5
 ```
 
-Isso é um **stack trace**: a **pilha de chamadas** impressa no momento do erro.
-A função de cima estava rodando; ela foi chamada pela de baixo, que foi chamada
-pela de baixo dela. O C tem exatamente a mesma pilha, só que sem esconder nada.
+Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** impressa no
+momento do erro. A função de cima estava rodando; ela foi chamada pela de
+baixo, que foi chamada pela de baixo dela. O C mostra essa pilha sem esconder
+nada.
 
 Cada vez que uma função é chamada, o programa reserva um pedaço de memória só
 para aquela chamada: o **quadro** (em inglês, *stack frame*, ou registro de
@@ -114,8 +115,8 @@ no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
 > o sistema mata o programa: é o **stack overflow** (no Linux, aparece como
 > `Segmentation fault`). Com 8 MB e quadros de algumas dezenas de bytes, dá
 > para empilhar centenas de milhares de chamadas, mas não infinitas. No
-> `gdb`, o comando `bt` (*backtrace*) imprime a pilha, igual ao stack trace
-> do Node.
+> `gdb`, o comando `bt` (*backtrace*) imprime a pilha, como no começo deste
+> assunto.
 
 > [!NOTE]
 > **Pergunta para você:** mude o subtotal para 95.00. Quantos quadros a pilha

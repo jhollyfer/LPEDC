@@ -23,8 +23,7 @@ compilador guarda esse texto **uma vez só**, numa região da memória
   região só de leitura e o programa cai.
 
 Por isso, quando o ponteiro aponta para literal, declare **`const char
-*`**. Aí o compilador recusa `apelido[0] = 'B'` antes de rodar, como um
-`readonly` do TypeScript.
+*`**. Aí o compilador recusa `apelido[0] = 'B'` antes de rodar.
 
 As diferenças continuam. O ponteiro pode mudar de alvo: `apelido =
 "bibi";` vale. O vetor não: `nome = "joana";` nem compila (para trocar o
@@ -76,7 +75,7 @@ andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
 {{fluxograma}}
 
 > [!WARNING]
-> `char *s = "ola"; s[0] = 'O';` compila **sem aviso** no C (no C++ é erro),
+> `char *s = "ola"; s[0] = 'O';` compila **sem aviso** no C,
 > e derruba o programa quando roda: `segmentation fault`, porque a página do
 > literal é só de leitura. Você vai ver muito `char *p = "..."` em material
 > antigo. Escreva `const char *` sempre que apontar para literal, ou use

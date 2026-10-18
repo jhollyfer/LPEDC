@@ -9,9 +9,9 @@ restrição que dá a garantia: o desfazer sempre desfaz o último passo, e quem
 chegou primeiro sempre é atendido primeiro.
 
 Você usa essas estruturas o dia inteiro sem ver. A pilha de chamadas do seu
-programa, o Ctrl+Z, o botão Voltar e o *parser* do TypeScript são pilhas. O
-*event loop* do Node, a fila de jobs do seu backend e a impressora do
-escritório são filas. Aqui você constrói as duas do zero, cada uma de dois
+programa, o Ctrl+Z, o botão Voltar e o *parser* de um compilador são pilhas. A
+fila de processos do sistema operacional, a fila de jobs do seu backend e a
+impressora do escritório são filas. Aqui você constrói as duas do zero, cada uma de dois
 jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
 `.c` trocado por baixo, e o programa cliente nem percebe.
 
@@ -97,8 +97,7 @@ As operações são poucas, e é isso que dá força à pilha:
 - **olhar o topo** (*peek*): lê o topo sem tirar;
 - **vazia?**: pergunta se ainda tem alguma coisa.
 
-No JS, um array já faz isso: `pedido.push(2590)` e `pedido.pop()`. No C não
-existe nada pronto, então você monta a pilha como um **TAD** (assunto 0079):
+No C não existe nada pronto, então você monta a pilha como um **TAD** (assunto 0079):
 o `pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
 só inclui o `.h`:
 
@@ -1361,8 +1360,8 @@ esperar todo mundo da frente.
 Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
 primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*). É o
 contrário da pilha. Na computação, fila aparece onde existe ordem de chegada:
-a fila de impressão, as requisições esperando o servidor Fastify, os eventos
-esperando o *event loop* do Node, as mensagens de um RabbitMQ.
+a fila de impressão, as requisições esperando um servidor web, os processos
+esperando a vez na CPU, as mensagens de um RabbitMQ.
 
 O TAD tem a mesma cara da pilha, no [`fila.h`](0090-fila/fila.h):
 
@@ -1380,8 +1379,8 @@ bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem 
 
 Guardar uma fila num vetor tem um problema que a pilha não tinha. A pilha
 mexe numa ponta só. A fila mexe nas duas: entra à direita e sai à esquerda.
-Se, a cada atendimento, você empurrar todo mundo uma casa para a esquerda
-(como o `shift()` do JS faz), cada retirada custa **O(n)**. Se não empurrar,
+Se, a cada atendimento, você empurrar todo mundo uma casa para a esquerda,
+cada retirada custa **O(n)**. Se não empurrar,
 a fila vai "andando" para a direita e bate no fim do vetor com as primeiras
 gavetas vazias.
 
@@ -2223,9 +2222,8 @@ principais:
 
 O deque generaliza as duas estruturas que você já viu. Usando só uma ponta
 (insere e retira no fim), ele é uma **pilha**. Inserindo no fim e retirando
-no início, é uma **fila**. No JS, o array tem as quatro operações (`push`,
-`pop`, `unshift`, `shift`), mas `unshift` e `shift` custam O(n), porque
-deslocam todo mundo. Aqui as quatro custam **O(1)**.
+no início, é uma **fila**. Num vetor comum, inserir ou retirar no início custa O(n),
+porque desloca todo mundo. Aqui as quatro operações custam **O(1)**.
 
 A implementação do [`deque.c`](0092-deque/deque.c) é a fila circular do 0090
 com uma novidade: o `inicio` agora também anda para **trás**. Para inserir na
@@ -2323,14 +2321,14 @@ o índice não ficar negativo:
 > e o resto acompanha o sinal do dividendo.) Então `(inicio - 1) %
 > CAPACIDADE`, com `inicio = 0`, dá `-1`, e `itens[-1]` escreve **fora** do
 > vetor. Some a capacidade antes do `%`: `(inicio - 1 + CAPACIDADE) %
-> CAPACIDADE`. O JS tem a mesma pegadinha: `-1 % 8` também dá `-1` lá.
+> CAPACIDADE`.
 
 > [!TIP]
 > **Por dentro do C:** a palavra `static` numa função fora de qualquer bloco
 > não tem nada a ver com variável estática: ela tira a função da **ligação
 > externa**. O ligador nem fica sabendo que `anterior` existe, então outro
 > arquivo pode ter a sua própria `anterior` sem conflito. É o jeito do C de
-> fazer uma função **privada** do módulo, como um método `private` no TS. O
+> fazer uma função **privada** do módulo. O
 > deque com lista encadeada também é possível, mas precisa de lista **dupla**
 > (assunto 0084): para retirar do fim, o último nó tem que saber quem é o
 > penúltimo.

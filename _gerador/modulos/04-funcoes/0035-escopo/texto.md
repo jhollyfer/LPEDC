@@ -78,8 +78,7 @@ E as globais? Funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
 qualquer lugar. A mesma chamada pode dar resultados diferentes conforme o que
 outra função fez antes. Prefira passar por parâmetro e devolver com `return`;
-use global só para algo que é de fato do programa todo. No TS é o mesmo
-conselho de evitar `let` no topo do módulo.
+use global só para algo que é de fato do programa todo.
 
 Uma última peça: `static` **fora** de função muda outra coisa. Uma global
 `static int total;` continua vivendo o programa todo, mas só pode ser usada

@@ -138,9 +138,9 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 > item, sem ponteiro `prox`, sem nó espalhado pelo heap. Andar para a próxima
 > vaga é andar 12 bytes na memória, e o processador já trouxe as vizinhas para
 > a cache junto com a primeira. Por isso o endereçamento aberto costuma ganhar
-> do encadeamento na prática, mesmo fazendo mais sondagens. O `dict` do Python
-> e o `HashMap` do Rust usam endereçamento aberto (com sondagens mais
-> espertas que a linear).
+> do encadeamento na prática, mesmo fazendo mais sondagens. Muitas tabelas
+> hash de bibliotecas usam endereçamento aberto (com sondagens mais espertas
+> que a linear).
 
 > [!NOTE]
 > **Pergunta para você:** depois dos 5 carros, chega o do apartamento 1203

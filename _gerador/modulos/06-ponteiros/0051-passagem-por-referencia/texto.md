@@ -11,9 +11,7 @@ e `b`, com 8 e 25 dentro. A função troca as cópias, termina, e as cópias
 somem junto com o frame dela (assunto 0036). O `arroz` do `main` nem ficou
 sabendo.
 
-No JS é igual para números: `function troca(a, b)` também não troca dois
-`number` de quem chamou. A diferença é que no C existe a saída: em vez do
-valor, passe o **endereço**.
+A saída é mudar o que se entrega: em vez do valor, passe o **endereço**.
 
 A função passa a receber ponteiros, `void troca(int *a, int *b)`, e quem
 chama entrega os endereços: `troca(&arroz, &feijao)`. O endereço também é

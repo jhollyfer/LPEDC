@@ -8,10 +8,10 @@ frete, liberar ou barrar a catraca, achar a faixa certa da multa. Essa é a
 segunda das três peças de qualquer algoritmo (sequência, decisão e
 repetição).
 
-A sintaxe vai parecer familiar: `if`, `else`, `switch` e o ternário são quase
-iguais aos do TypeScript. O que muda é o que está por baixo. No C não existe
+A sintaxe é curta: `if`, `else`, `switch` e o ternário. O que importa é o que
+está por baixo. No C não existe
 um tipo "verdadeiro ou falso" de nascença: a verdade é um **número**, 0 é
-falso e qualquer outra coisa é verdade. Daí vêm pegadinhas que o JS não tem,
+falso e qualquer outra coisa é verdade. Daí vêm pegadinhas,
 como um `=` no lugar de `==` que compila, roda e estraga a variável em
 silêncio.
 
@@ -104,8 +104,8 @@ Toda decisão de um programa começa assim: uma **comparação**. O C tem seis
 | `==` | igual? (dois sinais!) | `2 == 1` vale 0 |
 | `!=` | diferente? | `2 != 1` vale 1 |
 
-Repare na última coluna. No TypeScript, `2 > 1` dá `true`, um valor de outro
-tipo. No C, uma comparação dá um **`int`**: **1** quando é verdade e **0**
+Repare na última coluna. No C, uma comparação não dá um valor de tipo
+especial: dá um **`int`**: **1** quando é verdade e **0**
 quando é mentira. Dá para imprimir com `%d`, somar, multiplicar.
 
 E o caminho de volta é ainda mais solto: para o C, **0 é falso e qualquer
@@ -166,8 +166,7 @@ escolhe um caminho é o `if`, que vem daqui a dois assuntos:
 
 > [!WARNING]
 > **Não compare `float` ou `double` com `==`.** Rode `printf("%d", 0.1 + 0.2
-> == 0.3);` e veja um **0**. Você já viu isso no JS: `0.1 + 0.2 === 0.3` é
-> `false` lá também. O motivo é o mesmo: 0,1 não tem representação exata em
+> == 0.3);` e veja um **0**. O motivo: 0,1 não tem representação exata em
 > binário, e a soma fica em 0.30000000000000004. Para números
 > com vírgula, pergunte se estão **perto o bastante**:
 > `fabs(a - b) < 1e-9`. Para dinheiro, a saída mais segura é guardar
@@ -447,7 +446,7 @@ igualdade (`==` `!=`), o `&&` e por último o `||`. Por isso
 o E vem antes do OU. Na dúvida, ponha parênteses. Eles não custam nada e
 contam a sua intenção.
 
-E tem o **curto-circuito**, que o JS também tem. O C avalia da esquerda para a
+E tem o **curto-circuito**. O C avalia da esquerda para a
 direita e **para assim que sabe a resposta**. Em `a && b`, se `a` é falso, o
 `b` nem é calculado: falso E qualquer coisa é falso. Em `a || b`, se `a` é
 verdade, o `b` é pulado. Isso protege contas perigosas:
@@ -738,8 +737,7 @@ No caixa do mercado, a placa avisa: compras a partir de R$ 200 ganham 10% de
 desconto. Sua compra deu R$ 230. A moça do caixa faz uma pergunta e, só se a
 resposta for sim, faz um passo a mais. Se for não, a vida segue sem desconto.
 
-Esse "só se" é o **`if`**. Você já conhece a sintaxe do TypeScript, e no C ela
-é igual:
+Esse "só se" é o **`if`**. No C, a sintaxe é esta:
 
 ```c
 if (condição) {
@@ -1071,7 +1069,7 @@ pergunta nada. Ele **guarda 0 no saldo** e testa esse 0, que é falso. E
 `if (opcao = 1)` guarda 1 e testa 1, que é sempre verdade. O programa compila,
 roda e faz besteira em silêncio.
 
-No TypeScript, `if (x = 5)` até compila, mas o ESLint grita. No C, quem grita
+O compilador não recusa esse código, mas avisa se você pedir. Quem grita
 é o `-Wall`: "suggest parentheses around assignment used as truth value". O
 `rodar` liga esse aviso. **Nunca ignore um warning**: no curso, código bom
 compila com zero avisos.
@@ -1684,7 +1682,7 @@ Para isso existe o **operador ternário** (o único do C com três partes):
 condição ? valor_se_verdade : valor_se_falso
 ```
 
-Você já usa no TypeScript, e no C ele funciona igual. A diferença para o
+A diferença para o
 `if` é que o ternário é uma **expressão**: ele **devolve um valor**. Por isso
 cabe onde um `if` não cabe: do lado direito de uma atribuição, dentro de um
 `printf`, no meio de uma conta.
@@ -1809,7 +1807,7 @@ int main(void) {
 
     printf("Maior preço: R$ %d\n", maior);
     printf("Distância do zero: %d graus\n", distancia);
-    printf("Vai chover? %s\n", chuva ? "true" : "false"); // como no JS
+    printf("Vai chover? %s\n", chuva ? "true" : "false"); // texto no lugar de 1 ou 0
 
     // ternário dentro de ternário: funciona, mas já começa a pesar
     printf("Temperatura %s\n",
@@ -1994,8 +1992,8 @@ o `case` com o mesmo valor. O **`default`** pega o que não casou com nenhum
 As regras são mais rígidas que as do `if`, e é bom saber por quê:
 
 - a expressão tem que ser **inteira**: `int`, `char` (que é número) ou
-  parecido. Nada de `double`, e nada de string. No JS você faz
-  `switch (nome)` com textos; no C, não;
+  parecido. Nada de `double`, e nada de string: `switch (nome)`
+  com um texto não compila;
 - cada `case` leva uma **constante** conhecida na compilação (`case 2:`,
   `case 'S':`). Não dá para escrever `case x:` nem `case > 10:`;
 - dois `case` não podem ter o mesmo valor.

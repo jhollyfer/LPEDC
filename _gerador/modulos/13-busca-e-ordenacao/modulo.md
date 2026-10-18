@@ -5,12 +5,11 @@ contatos do celular, o extrato do banco, o resultado de uma busca na loja
 virtual, o índice de um banco de dados: tudo isso é dado sendo ordenado para
 depois ser achado rápido.
 
-No TypeScript você escreve `lista.sort((a, b) => a - b)` e
-`lista.indexOf(x)` e segue a vida. Aqui você vai abrir essas caixas pretas.
-Vai ver por que uma busca num vetor ordenado acha qualquer coisa entre um
-milhão de elementos em 20 passos, por que uma ordenação "óbvia" leva horas
-onde outra leva um segundo, e por que o próprio `a - b` daquele `sort` pode
-dar errado no C.
+Aqui você vai abrir as caixas pretas de buscar e ordenar. Vai ver por que uma
+busca num vetor ordenado acha qualquer coisa entre um milhão de elementos em
+20 passos, por que uma ordenação "óbvia" leva horas onde outra leva um
+segundo, e por que a comparação `a - b`, tão comum numa função de comparar,
+pode dar errado no C.
 
 O módulo junta as ferramentas dos anteriores: vetores e ponteiros, recursão,
 `malloc`, structs e, principalmente, o jeito de contar passos e pensar em

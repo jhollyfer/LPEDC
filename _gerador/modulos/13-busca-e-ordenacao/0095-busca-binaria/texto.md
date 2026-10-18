@@ -119,8 +119,8 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > **Por dentro do C:** por que `ini + (fim - ini) / 2` e não
 > `(ini + fim) / 2`? Num vetor com mais de 1 bilhão de elementos, `ini + fim`
 > passa de `INT_MAX` (2.147.483.647) e dá **overflow**, que no C é
-> comportamento indefinido. Esse bug ficou escondido por anos na busca binária
-> da biblioteca do Java e só apareceu em 2006, quando os vetores ficaram
+> comportamento indefinido. Esse bug ficou escondido por anos em
+> implementações famosas da busca binária e só apareceu em 2006, quando os vetores ficaram
 > grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
 > 11, depois 9), então não aproveita a linha de cache como a sequencial. Por
 > isso, para vetores bem pequenos, a sequencial pode ganhar. A `stdlib.h` traz

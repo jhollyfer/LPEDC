@@ -83,9 +83,8 @@ Mais três regras sobre parâmetros:
 > [!WARNING]
 > A função que "deveria" mudar a variável e não muda. O exemplo clássico é
 > `void trocar(int a, int b)` que troca `a` e `b` lá dentro: no `main`, nada
-> acontece, porque a troca foi entre as cópias. No JS é igual para números
-> (`function f(n) { n++ }` não muda o seu `n`). A diferença é que no JS um
-> objeto passado para a função pode ser alterado por ela; no C, para a função
+> acontece, porque a troca foi entre as cópias. Do
+> mesmo jeito, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
 > mexer numa variável sua, você precisa passar o **endereço** dela. É o que o
 > `&` do `scanf` faz, e você vai entender de vez no assunto 0051.
 

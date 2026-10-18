@@ -4,8 +4,7 @@ No caixa do mercado, a placa avisa: compras a partir de R$ 200 ganham 10% de
 desconto. Sua compra deu R$ 230. A moça do caixa faz uma pergunta e, só se a
 resposta for sim, faz um passo a mais. Se for não, a vida segue sem desconto.
 
-Esse "só se" é o **`if`**. Você já conhece a sintaxe do TypeScript, e no C ela
-é igual:
+Esse "só se" é o **`if`**. No C, a sintaxe é esta:
 
 ```c
 if (condição) {

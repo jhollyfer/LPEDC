@@ -1,7 +1,7 @@
 // 0116 · DFS: busca em profundidade
 // Exercício E695 · ★★★
 //
-// O npm reclamou de dependência circular no seu projeto. Os pacotes são
+// O gerenciador de pacotes reclamou de dependência circular no seu projeto. Os pacotes são
 // app 0, api 1, auth 2, db 3, log 4 e utils 5, e uma seta A -> B quer dizer
 // "A importa B":
 //

@@ -1,9 +1,8 @@
 ## 0039 · Módulos: .h, .c e compilação separada
 
-No TypeScript, você escreve `export function kmParaMilhas()` num arquivo e
-`import { kmParaMilhas } from './conversao'` no outro. Ninguém cola o código
-da conversão em cada tela do app. No C, a ideia é a mesma, mas sem `import`:
-um **módulo** é um par de arquivos.
+Quando várias partes de um programa precisam converter quilômetros em milhas,
+ninguém cola o código da conversão em cada uma delas. Ele mora num lugar só, e
+quem precisa usa. No C, esse lugar é um **módulo**: um par de arquivos.
 
 - **`conversao.h`** (o *header*, cabeçalho): a **interface**. Diz **o que** o
   módulo oferece: os protótipos das funções, as constantes, os tipos. É o

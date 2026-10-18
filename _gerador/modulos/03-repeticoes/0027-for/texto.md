@@ -36,7 +36,7 @@ O `for` é exatamente o `while` de cima, reorganizado. O compilador trata os
 dois do mesmo jeito. Use `for` quando há um **contador** com começo, fim e
 passo conhecidos; `while` quando você só sabe a condição de parada.
 
-Como no JS com `let`, o `int parcela` declarado dentro do `for` só existe
+O `int parcela` declarado dentro do `for` só existe
 dentro do laço (C99 em diante). O passo pode ser qualquer conta: `c += 10`,
 `s--`, `x *= 3`. O contador pode ser `char`, porque `char` é número. E a
 vírgula permite duas variáveis: `for (int i = 1, j = 9; i < j; i++, j--)`. O

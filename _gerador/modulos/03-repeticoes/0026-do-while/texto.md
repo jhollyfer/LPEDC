@@ -17,8 +17,7 @@ do {
 ```
 
 A ordem: roda o corpo, testa a condição; se der verdadeiro, volta para o
-começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero. O JS
-tem o mesmo `do...while`, com a mesma cara.
+começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero.
 
 O lugar natural dele é onde a primeira volta é obrigatória:
 

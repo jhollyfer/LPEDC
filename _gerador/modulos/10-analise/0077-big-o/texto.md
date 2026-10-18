@@ -120,9 +120,8 @@ responde Sim só 10 vezes, porque cada volta joga metade fora:
 > não do tempo para um n específico. Um algoritmo de 100n passos perde de um de
 > n² até n = 100 (o exemplo A154 mostra a virada). Para 10 itens, o simples
 > costuma ganhar. A segunda pegadinha é a inversa: um laço O(n) que chama, a
-> cada volta, uma função O(n) dá **O(n²)**, mesmo parecendo um laço só. No JS
-> é o `array.includes()` dentro de um `filter()`; no C, o `strlen(s)` na
-> condição do `for`.
+> cada volta, uma função O(n) dá **O(n²)**, mesmo parecendo um laço só. O
+> exemplo clássico no C é o `strlen(s)` na condição do `for`.
 
 > [!TIP]
 > **Por dentro do C:** por que `v[i]` é O(1), não importa se i vale 3 ou 3

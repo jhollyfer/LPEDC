@@ -11,8 +11,7 @@ Um **tipo abstrato de dado** (TAD) é isso no código: um tipo definido pelas
 dentro sem avisar ninguém, desde que as operações continuem cumprindo o
 prometido.
 
-No TypeScript você faz isso com uma `class` de campos `#privados` ou com um
-módulo que exporta só funções. No C, a divisão é física, em dois arquivos:
+No C, a divisão é física, em dois arquivos:
 
 - **`contador.h`, a interface**: o contrato. Declara o tipo e os protótipos,
   cada um com um comentário dizendo o que entra, o que sai e o que pode dar

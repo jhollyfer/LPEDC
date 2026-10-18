@@ -33,7 +33,7 @@ pergunta nada. Ele **guarda 0 no saldo** e testa esse 0, que é falso. E
 `if (opcao = 1)` guarda 1 e testa 1, que é sempre verdade. O programa compila,
 roda e faz besteira em silêncio.
 
-No TypeScript, `if (x = 5)` até compila, mas o ESLint grita. No C, quem grita
+O compilador não recusa esse código, mas avisa se você pedir. Quem grita
 é o `-Wall`: "suggest parentheses around assignment used as truth value". O
 `rodar` liga esse aviso. **Nunca ignore um warning**: no curso, código bom
 compila com zero avisos.

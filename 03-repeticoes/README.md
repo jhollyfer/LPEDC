@@ -8,9 +8,8 @@ até acertar, desenhar uma tabela, sortear dados até sair dupla. Sem laço,
 você copiaria o mesmo código dez, cem, mil vezes. Com laço, escreve uma vez e
 diz **quando parar**.
 
-A sintaxe vai parecer familiar: `while`, `do...while`, `for`, `break` e
-`continue` têm no C a mesma cara que no TypeScript. O C não tem `for...of`,
-`forEach` nem `map`: aqui todo laço é "na mão", com contador e condição. Isso
+O C tem cinco palavras para repetir: `while`, `do...while`, `for`, `break` e
+`continue`. Nenhuma percorre uma coleção sozinha: aqui todo laço é "na mão", com contador e condição. Isso
 obriga a pensar no que importa: onde o laço começa, o que muda a cada volta e
 qual pergunta faz ele terminar. Errar qualquer uma das três dá o laço
 infinito ou a volta a mais, os dois bugs mais comuns da programação.
@@ -99,8 +98,8 @@ novo**. Quando a resposta for falsa, o programa pula o corpo e segue na linha
 depois da `}`. Cada passada pelo corpo se chama **iteração** (ou volta).
 
 Como a pergunta vem **antes**, o corpo pode rodar **zero vezes**: se o saldo
-já começasse em R$ 1.200, o laço nem entraria. E a sintaxe é idêntica à do
-JS. A diferença é a de sempre no C: a condição é um número, e qualquer valor
+já começasse em R$ 1.200, o laço nem entraria. E vale a regra de
+sempre no C: a condição é um número, e qualquer valor
 diferente de zero conta como verdadeiro (assunto 0017).
 
 O `while` serve quando você **não sabe quantas voltas** vai dar. Você sabe
@@ -480,8 +479,7 @@ do {
 ```
 
 A ordem: roda o corpo, testa a condição; se der verdadeiro, volta para o
-começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero. O JS
-tem o mesmo `do...while`, com a mesma cara.
+começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero.
 
 O lugar natural dele é onde a primeira volta é obrigatória:
 
@@ -880,7 +878,7 @@ O `for` é exatamente o `while` de cima, reorganizado. O compilador trata os
 dois do mesmo jeito. Use `for` quando há um **contador** com começo, fim e
 passo conhecidos; `while` quando você só sabe a condição de parada.
 
-Como no JS com `let`, o `int parcela` declarado dentro do `for` só existe
+O `int parcela` declarado dentro do `for` só existe
 dentro do laço (C99 em diante). O passo pode ser qualquer conta: `c += 10`,
 `s--`, `x *= 3`. O contador pode ser `char`, porque `char` é número. E a
 vírgula permite duas variáveis: `for (int i = 1, j = 9; i < j; i++, j--)`. O
@@ -1294,8 +1292,8 @@ A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 > **Por dentro do C:** `break` e `continue` são saltos com destino fixo. O
 > `break` vira "pule para depois do laço"; o `continue`, "pule para o passo"
 > (no `for`) ou "pule para a pergunta" (no `while`). Eles valem só para o laço
-> **mais interno**. No JS existe `break rotulo;` para sair de dois laços de uma
-> vez; no C, não. O C tem o `goto rotulo;`, que salta para qualquer ponto da
+> **mais interno**. Não existe `break` com rótulo para sair de dois laços de
+> uma vez. O C tem o `goto rotulo;`, que salta para qualquer ponto da
 > mesma função. Evite: ele só é aceito, em código de verdade, para sair de
 > vários laços de uma vez ou para pular para a limpeza no fim de uma função.
 

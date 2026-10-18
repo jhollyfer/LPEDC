@@ -11,9 +11,8 @@ do vetor: pode estar em qualquer ordem.
 
 O contrato é o de sempre no C: a função recebe o vetor, o tamanho e o valor
 procurado (a **chave**), e devolve o **índice** onde achou. Se não achou,
-devolve `-1`, que nunca é um índice válido. É exatamente o que o
-`Array.prototype.indexOf` faz no JS. A diferença é que aqui você escreve o
-laço e passa o tamanho, porque o vetor do C não sabe quantos elementos tem.
+devolve `-1`, que nunca é um índice válido. Você escreve o laço e passa o
+tamanho, porque o vetor do C não sabe quantos elementos tem.
 
 Quanto custa? Conte as **comparações** com a chave, que é o trabalho de
 verdade:

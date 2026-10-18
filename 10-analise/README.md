@@ -16,10 +16,10 @@ laço, em vez de confiar em meia dúzia de testes; e **esconder os detalhes**
 atrás de um tipo abstrato de dado, para poder trocar a implementação sem
 quebrar quem usa.
 
-Quem vem do TypeScript já esbarrou nisso sem nome: o `includes` dentro do
-`filter` que deixou a tela lenta, a classe com campos `#privados`, a
-`interface` que esconde a implementação. Aqui é a mesma coisa, com o C
-mostrando o custo de cada escolha.
+Todo programador já esbarrou nisso sem nome: a busca dentro de um laço que
+deixou o programa lento, o módulo que esconde a implementação atrás de
+funções. Aqui essas coisas ganham nome, com o C mostrando o custo de cada
+escolha.
 
 ## O que você vai aprender
 
@@ -604,9 +604,8 @@ responde Sim só 10 vezes, porque cada volta joga metade fora:
 > não do tempo para um n específico. Um algoritmo de 100n passos perde de um de
 > n² até n = 100 (o exemplo A154 mostra a virada). Para 10 itens, o simples
 > costuma ganhar. A segunda pegadinha é a inversa: um laço O(n) que chama, a
-> cada volta, uma função O(n) dá **O(n²)**, mesmo parecendo um laço só. No JS
-> é o `array.includes()` dentro de um `filter()`; no C, o `strlen(s)` na
-> condição do `for`.
+> cada volta, uma função O(n) dá **O(n²)**, mesmo parecendo um laço só. O
+> exemplo clássico no C é o `strlen(s)` na condição do `for`.
 
 > [!TIP]
 > **Por dentro do C:** por que `v[i]` é O(1), não importa se i vale 3 ou 3
@@ -1422,8 +1421,7 @@ Um **tipo abstrato de dado** (TAD) é isso no código: um tipo definido pelas
 dentro sem avisar ninguém, desde que as operações continuem cumprindo o
 prometido.
 
-No TypeScript você faz isso com uma `class` de campos `#privados` ou com um
-módulo que exporta só funções. No C, a divisão é física, em dois arquivos:
+No C, a divisão é física, em dois arquivos:
 
 - **`contador.h`, a interface**: o contrato. Declara o tipo e os protótipos,
   cada um com um comentário dizendo o que entra, o que sai e o que pode dar
@@ -2015,8 +2013,7 @@ Qual a diferença para quem usa?
 As duas cumprem: devolvem o mesmo valor. Mas a primeira tem `contador_valor`
 em **O(1)** e a segunda em **O(n)**. Um cliente que chama `contador_valor`
 dentro de um laço passa de O(n) para O(n²) sem mudar uma linha. Por isso boas
-bibliotecas documentam o custo junto com o contrato (a biblioteca padrão do
-C++ faz isso em cada operação).
+bibliotecas documentam o custo junto com o contrato.
 
 </details>
 

@@ -5,10 +5,9 @@ junto. As variáveis moram na RAM, e a RAM é esvaziada quando o processo
 termina. Para um programa **lembrar** de alguma coisa (um cadastro, uma
 configuração, o placar de ontem), ele precisa gravar em **arquivo**.
 
-No Node, `fs.readFileSync` devolve o arquivo inteiro numa string e você nem
-pensa no resto. No C você vê as engrenagens: o `FILE *` que representa o
+No C você vê as engrenagens: o `FILE *` que representa o
 arquivo aberto, o buffer que junta os bytes antes de ir para o disco, a
-posição que anda a cada leitura. E aparece uma escolha que o JSON esconde:
+posição que anda a cada leitura. E aparece uma escolha importante:
 gravar **texto**, legível e portável, ou **binário**, a cópia exata dos bytes
 da memória, compacta e com acesso direto a qualquer registro.
 

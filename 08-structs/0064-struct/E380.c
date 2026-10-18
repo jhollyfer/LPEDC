@@ -1,8 +1,8 @@
 // 0064 · Struct
 // Exercício E380 · ★☆☆
 //
-// Preveja a saída deste trecho antes de rodar. Depois responda: e se fosse
-// JavaScript, com objetos ({ casa: 2, fora: 1 }) e const b = a?
+// Preveja a saída deste trecho antes de rodar. Depois responda: e se, no
+// lugar de struct placar b = a, fosse struct placar *b = &a (com b->fora)?
 //
 //   struct placar {
 //       int casa;
@@ -19,8 +19,9 @@
 // Dicas:
 // 1. Em C, b = a copia todos os campos. Depois disso, a e b são independentes.
 // 2. Faça uma tabela com a.casa, a.fora, b.casa e b.fora, linha a linha.
-// 3. Resposta esperada: "a: 5 x 1" e "b: 2 x 3". No JS, b seria o MESMO
-//    objeto que a: b.fora = 3 mudaria a.fora, e os dois mostrariam 5 x 3.
+// 3. Resposta esperada: "a: 5 x 1" e "b: 2 x 3". Com o ponteiro, b apontaria
+//    para o MESMO placar: b->fora = 3 mudaria a.fora, e os dois mostrariam
+//    5 x 3.
 //
 // Escreva sua resposta abaixo (como comentário; depois cole o trecho no main
 // e confira):

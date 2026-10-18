@@ -6,8 +6,7 @@ de variáveis. Este módulo traz a primeira **estrutura de dados** do curso: o
 **vetor**, várias variáveis do mesmo tipo com um nome só, lado a lado na
 memória.
 
-No TypeScript, o array é um objeto esperto: cresce com `push`, sabe o próprio
-`length`, devolve `undefined` fora dos limites. No C, o vetor é só um bloco de
+No C, o vetor é só um bloco de
 bytes. Tamanho fixo, nenhum `length`, nenhuma conferência de índice. Parece
 pouco, e é justamente por isso que é rápido: acessar a posição 999 custa o
 mesmo que acessar a 0.
