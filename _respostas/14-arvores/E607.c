@@ -1,13 +1,25 @@
 // 0102 · Heap e fila de prioridade
 // Exercício E607 · ★☆☆
-//
-// Resposta:
-// a) [95 60 80 20 60 75 10]: é heap. Pais: 95 >= 60, 80; 60 >= 20, 60;
-//    80 >= 75, 10. Repetido não atrapalha (a regra é >=).
-// b) [50 40 45 42 10 30 44]: não é. v[3] = 42 tem pai v[1] = 40.
-//    (O 44 em v[6] está certo: o pai dele é v[2] = 45.)
-// c) [7]: é heap (um elemento só, não há pai para conferir).
-// d) [10 20]: não é. v[1] = 20 tem pai v[0] = 10.
-// e) [9 8 7 6 5 4 3 2 1]: é heap. Num vetor decrescente, todo pai vem antes
-//    do filho e por isso é maior. A recíproca é falsa: (a) é heap e não é
-//    decrescente.
+
+#include <stdio.h>
+
+void mostra_filhos(const int v[], int n) {
+    for (int i = 0; i < n; i++) {
+        int esq = 2 * i + 1;
+        int dir = 2 * i + 2;
+        printf("v[%d] = %d: ", i, v[i]);
+        if (esq >= n) {
+            printf("folha\n");
+        } else if (dir >= n) {
+            printf("filho %d\n", v[esq]);
+        } else {
+            printf("filhos %d e %d\n", v[esq], v[dir]);
+        }
+    }
+}
+
+int main(void) {
+    int heap[] = {90, 70, 30, 40, 50, 20};
+    mostra_filhos(heap, 6);
+    return 0;
+}

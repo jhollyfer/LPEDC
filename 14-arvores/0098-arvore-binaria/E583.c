@@ -1,8 +1,9 @@
 // 0098 · Árvore binária e percursos
 // Exercício E583 · ★☆☆
 //
-// No papel, escreva os quatro percursos desta árvore (pré-ordem, em ordem,
-// pós-ordem e por nível):
+// Monte esta árvore com arv_cria, do TAD arvore.h, e imprima os quatro
+// percursos (pré-ordem, em ordem, pós-ordem e por nível), a quantidade de
+// nós e a altura. Depois libere a árvore com arv_libera.
 //
 //   M
 //   ├── esq: G
@@ -11,36 +12,26 @@
 //   └── dir: T
 //       └── dir: X
 //
-// O programa abaixo monta essa árvore e imprime os percursos. Só rode DEPOIS
-// de escrever as suas respostas, para conferir.
+//   Saída esperada:
+//   Pré-ordem: M G C J T X
+//   Em ordem:  C G J M T X
+//   Pós-ordem: C J G X T M
+//   Por nível: M G T C J X
+//   Nós: 6, altura: 2
 //
 // Dicas:
-// 1. Pré-ordem: anote a raiz ao chegar nela. Pós-ordem: ao sair dela.
-// 2. Em ordem: tudo da esquerda, a raiz, tudo da direita. T não tem filho
-//    esquerdo, então T vem antes de X.
-// 3. Resposta esperada: pré M G C J T X; em C G J M T X; pós C J G X T M;
-//    por nível M G T C J X.
+// 1. Monte de baixo para cima: as folhas são arv_cria('C', NULL, NULL) e
+//    companhia. T não tem filho esquerdo: o 2º argumento dele é NULL.
+// 2. Cada função de percurso imprime um espaço antes de cada letra; use
+//    printf("Pré-ordem:") e chame arv_pre_ordem(raiz) logo depois.
+// 3. Resposta esperada: as 5 linhas acima.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "arvore.h"
 
 int main(void) {
-    No *raiz = arv_cria('M',
-                        arv_cria('G', arv_cria('C', NULL, NULL), arv_cria('J', NULL, NULL)),
-                        arv_cria('T', NULL, arv_cria('X', NULL, NULL)));
 
-    printf("Pré-ordem:");
-    arv_pre_ordem(raiz);
-    printf("\nEm ordem: ");
-    arv_em_ordem(raiz);
-    printf("\nPós-ordem:");
-    arv_pos_ordem(raiz);
-    printf("\nPor nível:");
-    arv_por_nivel(raiz);
-    printf("\n");
-
-    raiz = arv_libera(raiz);
     return 0;
 }

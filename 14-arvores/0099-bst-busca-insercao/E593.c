@@ -19,8 +19,8 @@
 //   Busca 60 na árvore 1: não achou
 //
 // A árvore 1 NÃO é BST, e a prova é a terceira linha: o 60 está lá, mas a
-// busca não acha. Explique por que eh_bst erra e reescreva a função para dar
-// "não é BST" na árvore 1 e "é BST" na árvore 2.
+// busca não acha. Conserte eh_bst para dar "não é BST" na árvore 1 e "é BST"
+// na árvore 2, e rode para conferir.
 //
 // Dicas:
 // 1. A função só compara cada nó com os FILHOS. Olhe o 60 em relação ao 50.

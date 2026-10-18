@@ -1,35 +1,46 @@
-// A203 · A triagem do pronto-socorro
+// A203 · O leilão com vagas contadas
 
 #include <stdio.h>
 #include "heap.h"
 
 int main(void) {
-    // gravidade de cada paciente, na ordem em que chegaram (maior = mais urgente)
-    int chegada[] = {40, 70, 20, 90, 50, 30};
-    Heap *fila = heap_cria(10);
+    // lances (em R$) por uma bicicleta usada; o leiloeiro só anota 4
+    int lances[] = {300, 450, 450, 200, 500};
+    Heap *mesa = heap_cria(4);
 
-    for (int i = 0; i < 6; i++) {
-        heap_insere(fila, chegada[i]);
-        printf("Chega %d: ", chegada[i]);
-        heap_mostra(fila);
+    for (int i = 0; i < 5; i++) {
+        // heap_insere avisa quando não cabe: o vetor tem tamanho fixo, e o
+        // heap recusa até o maior lance de todos
+        if (heap_insere(mesa, lances[i])) {
+            printf("Lance R$ %d anotado: ", lances[i]);
+        } else {
+            printf("Lance R$ %d recusado, mesa cheia: ", lances[i]);
+        }
+        heap_mostra(mesa);
         printf("\n");
     }
-    for (int i = 0; i < 2; i++) {
-        int atendido = heap_remove(fila);
-        printf("Atende %d: ", atendido);
-        heap_mostra(fila);
-        printf("\n");
+
+    // olhar o topo não tira ninguém
+    printf("Maior lance agora: R$ %d\n", heap_topo(mesa));
+    printf("Olhei de novo: R$ %d\n", heap_topo(mesa));
+
+    // empate: os dois 450 continuam lá, um depois do outro
+    while (!heap_vazio(mesa)) {
+        printf("Sai R$ %d\n", heap_remove(mesa));
     }
 
-    heap_libera(fila);
+    heap_libera(mesa);
     return 0;
 }
 // Saída:
-// Chega 40: [40]
-// Chega 70: [70 40]
-// Chega 20: [70 40 20]
-// Chega 90: [90 70 20 40]
-// Chega 50: [90 70 20 40 50]
-// Chega 30: [90 70 30 40 50 20]
-// Atende 90: [70 50 30 40 20]
-// Atende 70: [50 40 30 20]
+// Lance R$ 300 anotado: [300]
+// Lance R$ 450 anotado: [450 300]
+// Lance R$ 450 anotado: [450 300 450]
+// Lance R$ 200 anotado: [450 300 450 200]
+// Lance R$ 500 recusado, mesa cheia: [450 300 450 200]
+// Maior lance agora: R$ 450
+// Olhei de novo: R$ 450
+// Sai R$ 450
+// Sai R$ 450
+// Sai R$ 300
+// Sai R$ 200

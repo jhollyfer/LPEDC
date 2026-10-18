@@ -11,8 +11,8 @@
 //   * + 2 4 - 3 8
 //
 // O programa não quebra e o AddressSanitizer não reclama: o erro é de
-// lógica. Ache a linha errada, conserte, e responda: que estrutura de dados
-// a função está usando sem querer? E que percurso é esse que aparece?
+// lógica. Ache a linha errada, conserte e rode até aparecer a saída
+// esperada.
 //
 // Dicas:
 // 1. Uma fila tira da frente e põe no fim. Olhe de onde sai o "atual".

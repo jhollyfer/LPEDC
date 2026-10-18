@@ -12,8 +12,7 @@
 //   copiados: 3
 //   50 Ana, 70 Carla, 80 Gil
 //
-// Ache a linha errada, conserte e explique o que acontecia com o valor de
-// pos em cada chamada.
+// Ache a linha errada, conserte e rode até sair a saída esperada.
 //
 // Dicas:
 // 1. pos é passado por VALOR. Quando a chamada da esquerda coloca 3 alunos

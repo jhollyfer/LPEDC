@@ -2,7 +2,7 @@
 // Exercício E608 · ★☆☆
 //
 // Complete eh_heap(v, n): devolve true se o vetor v[0..n-1] for um heap de
-// máximo. O main testa os vetores do E607:
+// máximo. O main testa cinco vetores:
 //
 //   Saída esperada:
 //   a) heap

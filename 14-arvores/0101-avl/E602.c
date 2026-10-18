@@ -1,43 +1,47 @@
 // 0101 · AVL: balanceamento e rotações
 // Exercício E602 · ★☆☆
 //
-// SEM RODAR, preveja o que o programa mostra. Ele insere duas sequências em
-// duas AVL diferentes e mostra a pré-ordem, a altura e o total de rotações
-// simples feitas até ali (a dupla conta 2). Desenhe cada inserção no papel.
+// O main insere os pedidos de 1 a 7, em ordem, numa AVL do TAD avl.h. Com 5
+// e com 7 chaves ele mostra a pré-ordem e chama fatores(r), que você vai
+// escrever: ela percorre a árvore em ordem e mostra cada chave com o fator
+// de balanceamento dela entre parênteses (use avl_fator).
+//
+//   Saída esperada:
+//   Com 5 chaves: pré 2 1 4 3 5
+//     fatores: 1(0) 2(-1) 3(0) 4(0) 5(0)
+//   Com 7 chaves: pré 4 2 1 3 6 5 7
+//     fatores: 1(0) 2(0) 3(0) 4(0) 5(0) 6(0) 7(0)
+//   Rotações: 4
 //
 // Dicas:
-// 1. 30, 10, 20: o 30 fica com fator +2 e o filho 10 com -1. Que caso é?
-// 2. De 1 a 7: as rotações acontecem ao inserir o 3, o 5, o 6 e o 7.
-// 3. Resposta esperada:
-//    30 10 20 -> pré 20 10 30 | altura 1 | rotações 2
-//    1 a 7    -> pré 4 2 1 3 6 5 7 | altura 2 | rotações 6
-//    (a primeira árvore usou 2 rotações; a segunda, mais 4, e o contador é
-//    um só para o programa todo). A árvore de 1 a 7 fica perfeita.
+// 1. É uma em ordem: esquerda, o nó, direita. Árvore vazia não imprime nada.
+// 2. Cada chave sai como printf(" %d(%d)", r->chave, avl_fator(r)).
+// 3. Resposta esperada: a saída acima. Com 5 chaves a raiz 2 pende para a
+//    direita (fator -1) e mesmo assim é AVL; com 7 a árvore fica perfeita.
 //
-// Escreva sua resposta abaixo (a saída, como comentário):
+// Escreva sua resposta abaixo (complete fatores):
 
 #include <stdio.h>
 #include "avl.h"
 
+void fatores(const No *r) {
+    (void)r; // apague esta linha quando escrever a função
+}
+
 int main(void) {
-    int a[] = {30, 10, 20};
-    No *r1 = NULL;
-    for (int i = 0; i < 3; i++) {
-        r1 = avl_insere(r1, a[i]);
-    }
-    printf("30 10 20 -> pré");
-    avl_pre_ordem(r1);
-    printf(" | altura %d | rotações %d\n", avl_altura(r1), avl_rotacoes());
-
-    No *r2 = NULL;
+    No *raiz = NULL;
     for (int i = 1; i <= 7; i++) {
-        r2 = avl_insere(r2, i);
+        raiz = avl_insere(raiz, i);
+        if (i == 5 || i == 7) {
+            printf("Com %d chaves: pré", i);
+            avl_pre_ordem(raiz);
+            printf("\n  fatores:");
+            fatores(raiz);
+            printf("\n");
+        }
     }
-    printf("1 a 7    -> pré");
-    avl_pre_ordem(r2);
-    printf(" | altura %d | rotações %d\n", avl_altura(r2), avl_rotacoes());
+    printf("Rotações: %d\n", avl_rotacoes());
 
-    r1 = avl_libera(r1);
-    r2 = avl_libera(r2);
+    raiz = avl_libera(raiz);
     return 0;
 }

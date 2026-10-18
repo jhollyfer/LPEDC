@@ -1,21 +1,60 @@
 // 0101 · AVL: balanceamento e rotações
 // Exercício E601 · ★☆☆
-//
-// Resposta:
-// alturas: 10: 0, 20: 1, 40: 0, 30: 2, 90: 0, 80: 1, 70: 2, 50: 3.
-// fatores: 50: 2 - 2 = 0; 30: 1 - 0 = +1; 20: 0 - (-1) = +1; 10: 0; 40: 0;
-//          70: -1 - 1 = -2; 80: -1 - 0 = -1; 90: 0.
-// (a) Não é AVL: o 70 tem fator -2.
-// (b) O 70 está pesado à direita e o filho direito (80) também (fator -1):
-//     caso direita-direita.
-// (c) Rotação à esquerda no 70: o 80 sobe, o 70 vira filho esquerdo dele e o
-//     90 continua à direita. A árvore fica:
-//
-//   50
-//   ├── esq: 30
-//   │   ├── esq: 20
-//   │   │   └── esq: 10
-//   │   └── dir: 40
-//   └── dir: 80
-//       ├── esq: 70
-//       └── dir: 90
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Arv {
+    int chave;
+    struct Arv *esq, *dir;
+} Arv;
+
+Arv *no(int chave, Arv *esq, Arv *dir) {
+    Arv *n = malloc(sizeof(Arv));
+    if (n == NULL) {
+        exit(1);
+    }
+    n->chave = chave;
+    n->esq = esq;
+    n->dir = dir;
+    return n;
+}
+
+void libera(Arv *r) {
+    if (r != NULL) {
+        libera(r->esq);
+        libera(r->dir);
+        free(r);
+    }
+}
+
+int altura(const Arv *r) {
+    if (r == NULL) {
+        return -1;
+    }
+    int he = altura(r->esq);
+    int hd = altura(r->dir);
+    return 1 + (he > hd ? he : hd);
+}
+
+// pré-ordem: mostra o nó e depois as subárvores; devolve quantos estão fora
+int relatorio(const Arv *r) {
+    if (r == NULL) {
+        return 0;
+    }
+    int fator = altura(r->esq) - altura(r->dir);
+    int ruim = fator < -1 || fator > 1;
+    printf("%d: altura %d, fator %d%s\n", r->chave, altura(r), fator,
+           ruim ? " <- desequilibrado" : "");
+    return ruim + relatorio(r->esq) + relatorio(r->dir);
+}
+
+int main(void) {
+    Arv *raiz = no(50, no(30, no(20, no(10, NULL, NULL), NULL), no(40, NULL, NULL)),
+                   no(70, NULL, no(80, NULL, no(90, NULL, NULL))));
+
+    int ruins = relatorio(raiz);
+    printf("É AVL? %s\n", ruins == 0 ? "sim" : "não");
+    libera(raiz);
+    return 0;
+}

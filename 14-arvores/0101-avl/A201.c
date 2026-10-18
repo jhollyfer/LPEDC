@@ -1,27 +1,35 @@
-// A201 · Os pedidos que chegam em ordem
+// A201 · Os quatro casos, três chaves cada
 
 #include <stdio.h>
 #include "avl.h"
 
+// insere as três chaves numa AVL nova e mostra quantas rotações custou
+void testa(const char *caso, int a, int b, int c) {
+    int antes = avl_rotacoes(); // o contador é um só para o programa todo
+    No *r = NULL;
+    r = avl_insere(r, a);
+    r = avl_insere(r, b);
+    r = avl_insere(r, c);
+    printf("%-18s %d %d %d -> pré", caso, a, b, c);
+    avl_pre_ordem(r);
+    printf(" | rotações %d\n", avl_rotacoes() - antes);
+    r = avl_libera(r);
+}
+
 int main(void) {
-    // números de pedido quase sempre chegam crescentes: o pior caso da BST
-    int pedidos[] = {10, 20, 30, 40, 50, 25};
-    No *raiz = NULL;
-
-    for (int i = 0; i < 6; i++) {
-        raiz = avl_insere(raiz, pedidos[i]);
-        printf("Insere %d: pré", pedidos[i]);
-        avl_pre_ordem(raiz);
-        printf(" | altura %d | rotações %d\n", avl_altura(raiz), avl_rotacoes());
-    }
-
-    raiz = avl_libera(raiz);
+    // em linha reta: uma rotação simples resolve
+    testa("esquerda-esquerda", 30, 20, 10);
+    testa("direita-direita", 10, 20, 30);
+    // em zigue-zague: primeiro endireita o filho, depois gira o avô
+    testa("esquerda-direita", 30, 10, 20);
+    testa("direita-esquerda", 10, 30, 20);
+    // nenhum desequilíbrio: o do meio chegou primeiro
+    testa("nenhum caso", 20, 10, 30);
     return 0;
 }
 // Saída:
-// Insere 10: pré 10 | altura 0 | rotações 0
-// Insere 20: pré 10 20 | altura 1 | rotações 0
-// Insere 30: pré 20 10 30 | altura 1 | rotações 1
-// Insere 40: pré 20 10 30 40 | altura 2 | rotações 1
-// Insere 50: pré 20 10 40 30 50 | altura 2 | rotações 2
-// Insere 25: pré 30 20 10 25 40 50 | altura 2 | rotações 4
+// esquerda-esquerda  30 20 10 -> pré 20 10 30 | rotações 1
+// direita-direita    10 20 30 -> pré 20 10 30 | rotações 1
+// esquerda-direita   30 10 20 -> pré 20 10 30 | rotações 2
+// direita-esquerda   10 30 20 -> pré 20 10 30 | rotações 2
+// nenhum caso        20 10 30 -> pré 20 10 30 | rotações 0

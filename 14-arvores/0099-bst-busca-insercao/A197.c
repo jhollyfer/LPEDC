@@ -1,41 +1,55 @@
-// A197 · As matrículas da academia
+// A197 · Onde cada pedido vai morar
 
 #include <stdio.h>
 #include "bst.h"
 
-// busca mostrando o caminho: em cada nó, uma comparação decide o lado
-void procura(const No *r, int chave) {
-    printf("Busca %d:", chave);
-    while (r != NULL) {
+// antes de inserir, refaz a descida que o insere vai fazer e conta onde a
+// chave vai virar folha (ou se já existe)
+void anuncia(const No *r, int chave) {
+    printf("%2d:", chave);
+    if (r == NULL) {
+        printf(" árvore vazia, vira a raiz\n");
+        return;
+    }
+    while (1) {
         printf(" %d", r->chave);
         if (chave == r->chave) {
-            printf(" -> achou\n");
+            printf(" -> já existe, ignorado\n");
             return;
         }
-        r = chave < r->chave ? r->esq : r->dir;
+        const No *prox = chave < r->chave ? r->esq : r->dir;
+        if (prox == NULL) {
+            printf(" -> filho %s do %d\n", chave < r->chave ? "esquerdo" : "direito", r->chave);
+            return;
+        }
+        r = prox;
     }
-    printf(" -> NULL, não existe\n");
 }
 
 int main(void) {
-    int matriculas[] = {50, 30, 70, 20, 40, 60, 80};
+    // números dos pedidos da lanchonete, na ordem em que chegaram
+    int pedidos[] = {42, 17, 63, 8, 25, 50, 25, 30};
     No *raiz = NULL;
-    for (int i = 0; i < 7; i++) {
-        raiz = bst_insere(raiz, matriculas[i]);
+    for (int i = 0; i < 8; i++) {
+        anuncia(raiz, pedidos[i]);
+        raiz = bst_insere(raiz, pedidos[i]);
     }
 
-    printf("Em ordem:");
-    bst_em_ordem(raiz);
-    printf("\n");
-    procura(raiz, 60);
-    procura(raiz, 45);
+    // o primeiro que chegou continua na raiz: inserir nunca mexe no que já está
+    printf("Raiz: %d\n", raiz->chave);
     printf("Altura: %d\n", bst_altura(raiz));
 
     raiz = bst_libera(raiz);
     return 0;
 }
 // Saída:
-// Em ordem: 20 30 40 50 60 70 80
-// Busca 60: 50 70 60 -> achou
-// Busca 45: 50 30 40 -> NULL, não existe
-// Altura: 2
+// 42: árvore vazia, vira a raiz
+// 17: 42 -> filho esquerdo do 42
+// 63: 42 -> filho direito do 42
+//  8: 42 17 -> filho esquerdo do 17
+// 25: 42 17 -> filho direito do 17
+// 50: 42 63 -> filho esquerdo do 63
+// 25: 42 17 25 -> já existe, ignorado
+// 30: 42 17 25 -> filho direito do 25
+// Raiz: 42
+// Altura: 3

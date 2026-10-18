@@ -12,7 +12,7 @@
 //   Atendimento: 90 70 40 30 50 20
 //
 // O programa não quebra; o erro é de lógica, numa linha da descida. Ache,
-// conserte e mostre, com o vetor, o momento exato em que o heap quebrou.
+// conserte e rode até a ordem de atendimento ficar igual à esperada.
 //
 // Dicas:
 // 1. Depois das chegadas o vetor é [90 70 50 40 30 20]. Faça à mão a

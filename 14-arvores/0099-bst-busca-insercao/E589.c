@@ -1,26 +1,40 @@
 // 0099 · BST: busca e inserção
 // Exercício E589 · ★☆☆
 //
-// No papel, insira estas senhas de atendimento numa BST vazia, nesta ordem:
+// O posto de saúde guarda as senhas de atendimento numa BST. O main insere,
+// nesta ordem:
 //
 //   45 20 70 10 30 60 90 25
 //
-// Desenhe a árvore e responda: (a) qual é a altura? (b) por quais nós passa a
-// busca pelo 25? (c) e a busca pelo 65, que não existe, termina à direita ou
-// à esquerda de quem? Depois rode o programa e confira a em ordem e a altura.
+// Complete a função nivel_de(r, chave), que desce pela árvore como a busca e
+// devolve a profundidade da chave (a raiz tem nível 0), ou -1 se a chave não
+// estiver lá. O main mostra a em ordem, a altura e o nível de algumas senhas:
+//
+//   Saída esperada:
+//   Em ordem: 10 20 25 30 45 60 70 90
+//   Altura: 3
+//   Senha 45: nível 0
+//   Senha 70: nível 1
+//   Senha 30: nível 2
+//   Senha 25: nível 3
+//   Senha 65: nível -1
 //
 // Dicas:
-// 1. Cada chave desce da raiz comparando: menor vai para a esquerda, maior
-//    para a direita, até achar um NULL.
-// 2. O 25 é menor que 45, maior que 20 e menor que 30.
-// 3. Resposta esperada: 45 na raiz; 20 (filhos 10 e 30) à esquerda; 70
-//    (filhos 60 e 90) à direita; 25 é filho esquerdo do 30. (a) altura 3;
-//    (b) 45, 20, 30, 25; (c) 45, 70, 60 e cai à direita do 60.
+// 1. Use um laço igual ao de bst_busca e um contador que começa em 0 e sobe
+//    1 a cada vez que você desce um nível.
+// 2. Se o laço terminar com r == NULL, a chave não existe: devolva -1.
+// 3. Resposta esperada: a saída acima. O 25 fica embaixo de 45, 20 e 30.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (complete nivel_de):
 
 #include <stdio.h>
 #include "bst.h"
+
+int nivel_de(const No *r, int chave) {
+    (void)r; // apague estas duas linhas quando escrever a função
+    (void)chave;
+    return -1;
+}
 
 int main(void) {
     int senhas[] = {45, 20, 70, 10, 30, 60, 90, 25};
@@ -32,6 +46,11 @@ int main(void) {
     printf("Em ordem:");
     bst_em_ordem(raiz);
     printf("\nAltura: %d\n", bst_altura(raiz));
+
+    int testes[] = {45, 70, 30, 25, 65};
+    for (int i = 0; i < 5; i++) {
+        printf("Senha %d: nível %d\n", testes[i], nivel_de(raiz, testes[i]));
+    }
 
     raiz = bst_libera(raiz);
     return 0;

@@ -11,8 +11,7 @@
 //   Saída que aparece:
 //   Em ordem: 20 35 35 40 45 50 60 70 80
 //
-// Ache a linha, conserte e explique o que a versão errada fazia. Por que o
-// programa não deu erro de memória nem vazamento?
+// Ache a linha, conserte e rode até aparecer a saída esperada.
 //
 // Dicas:
 // 1. O 35 foi copiado para o lugar do 30. E depois, qual chave a chamada

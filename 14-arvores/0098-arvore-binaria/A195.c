@@ -1,30 +1,51 @@
-// A195 · A conta do churrasco em árvore
+// A195 · Duas árvores com a mesma em ordem
 
 #include <stdio.h>
 #include "arvore.h"
 
+void percursos(const char *titulo, const No *r) {
+    printf("%s\n  pré:", titulo);
+    arv_pre_ordem(r);
+    printf("\n  em:");
+    arv_em_ordem(r);
+    printf("\n  pós:");
+    arv_pos_ordem(r);
+    printf("\n  altura %d\n", arv_altura(r));
+}
+
 int main(void) {
-    // (8 - 3) * (4 + 2): 8 pessoas, 3 não bebem; cerveja R$ 4 + gelo R$ 2
-    No *menos = arv_cria('-', arv_cria('8', NULL, NULL), arv_cria('3', NULL, NULL));
-    No *mais = arv_cria('+', arv_cria('4', NULL, NULL), arv_cria('2', NULL, NULL));
-    No *raiz = arv_cria('*', menos, mais);
+    // equilibrada: B na raiz, A à esquerda, C à direita
+    No *cheia = arv_cria('B', arv_cria('A', NULL, NULL), arv_cria('C', NULL, NULL));
 
-    printf("Pré-ordem:");
-    arv_pre_ordem(raiz);
-    printf("\nEm ordem: ");
-    arv_em_ordem(raiz);
-    printf("\nPós-ordem:");
-    arv_pos_ordem(raiz);
-    printf("\nPor nível:");
-    arv_por_nivel(raiz);
-    printf("\nNós: %d, altura: %d\n", arv_conta(raiz), arv_altura(raiz));
+    // torta: cada nó só tem filho à direita (parece uma lista)
+    No *torta = arv_cria('A', NULL, arv_cria('B', NULL, arv_cria('C', NULL, NULL)));
 
-    raiz = arv_libera(raiz);
+    // caso de borda: árvore vazia (os percursos não mostram nada)
+    No *vazia = NULL;
+
+    percursos("cheia:", cheia);
+    percursos("torta:", torta);
+    percursos("vazia:", vazia);
+
+    // a em ordem é igual nas duas primeiras: sozinha ela não diz a forma;
+    // a pré-ordem (ou a pós) junto com ela já diz
+    cheia = arv_libera(cheia);
+    torta = arv_libera(torta);
     return 0;
 }
 // Saída:
-// Pré-ordem: * - 8 3 + 4 2
-// Em ordem:  8 - 3 * 4 + 2
-// Pós-ordem: 8 3 - 4 2 + *
-// Por nível: * - + 8 3 4 2
-// Nós: 7, altura: 2
+// cheia:
+//   pré: B A C
+//   em: A B C
+//   pós: A C B
+//   altura 1
+// torta:
+//   pré: A B C
+//   em: A B C
+//   pós: C B A
+//   altura 2
+// vazia:
+//   pré:
+//   em:
+//   pós:
+//   altura -1

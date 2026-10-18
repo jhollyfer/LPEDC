@@ -7,8 +7,8 @@
 //   1 2 3 4 5 6 7
 //
 // Mas a saída sai fora de ordem. A fase 2 está certa e o desce também. O
-// erro está numa linha só da fase 1. Ache, conserte e explique por que a
-// ordem em que os pais descem importa.
+// erro está numa linha só da fase 1. Ache, conserte e rode até sair a
+// saída esperada.
 //
 // Dicas:
 // 1. Mostre o vetor logo depois da fase 1 e confira: ele é um heap?

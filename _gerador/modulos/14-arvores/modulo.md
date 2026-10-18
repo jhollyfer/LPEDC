@@ -41,8 +41,8 @@ de ela fazer sentido.
    As dicas vêm logo abaixo do enunciado: tente antes de ler.
 
 Em árvore, **papel e lápis** são obrigatórios. Desenhe a árvore antes de rodar,
-a cada inserção e a cada remoção. Os exercícios de "preveja a saída" existem
-para isso.
+a cada inserção e a cada remoção, e só depois rode o programa para conferir o
+desenho com a saída.
 
 ## As cores e as formas
 

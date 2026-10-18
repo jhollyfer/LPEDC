@@ -1,8 +1,8 @@
 // 0101 · AVL: balanceamento e rotações
 // Exercício E601 · ★☆☆
 //
-// Calcule, no papel, a altura e o fator de balanceamento (altura da esquerda
-// menos altura da direita) de cada nó desta BST:
+// O main monta à mão esta BST (sem campo de altura, com o struct Arv do
+// próprio arquivo):
 //
 //   50
 //   ├── esq: 30
@@ -13,23 +13,73 @@
 //       └── dir: 80
 //           └── dir: 90
 //
-// Responda: (a) ela é uma AVL? (b) se não for, qual nó está desequilibrado e
-// em qual dos quatro casos ele cai? (c) que rotação conserta, e como fica a
-// árvore depois?
+// Complete altura(r) e relatorio(r). A relatorio mostra, em pré-ordem, a
+// altura e o fator de balanceamento (altura da esquerda menos altura da
+// direita) de cada nó, e marca com "<- desequilibrado" quem tem fator fora
+// de -1..1. No fim, o main diz se a árvore é AVL.
+//
+//   Saída esperada:
+//   50: altura 3, fator 0
+//   30: altura 2, fator 1
+//   20: altura 1, fator 1
+//   10: altura 0, fator 0
+//   40: altura 0, fator 0
+//   70: altura 2, fator -2 <- desequilibrado
+//   80: altura 1, fator -1
+//   90: altura 0, fator 0
+//   É AVL? não
 //
 // Dicas:
-// 1. Comece pelas folhas (altura 0) e suba. NULL tem altura -1.
-// 2. O 70 não tem filho esquerdo: altura(esq) = -1.
-// 3. Resposta esperada: fatores 50: 0, 30: +1, 20: +1, 10: 0, 40: 0,
-//    70: -2, 80: -1, 90: 0. (a) não é AVL; (b) o 70, caso direita-direita;
-//    (c) rotação à esquerda no 70: o 80 sobe com filhos 70 e 90, e a árvore
-//    fica 50 (30 (20 (10), 40), 80 (70, 90)).
+// 1. altura: vazia devolve -1; senão, 1 + a maior altura entre os filhos.
+// 2. relatorio devolve quantos nós desequilibrados achou (o do nó mais os
+//    das duas subárvores); a árvore é AVL quando o total é 0.
+// 3. Resposta esperada: a saída acima. O 70 cai no caso direita-direita.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (complete altura e relatorio):
 
 #include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Arv {
+    int chave;
+    struct Arv *esq, *dir;
+} Arv;
+
+Arv *no(int chave, Arv *esq, Arv *dir) {
+    Arv *n = malloc(sizeof(Arv));
+    if (n == NULL) {
+        exit(1);
+    }
+    n->chave = chave;
+    n->esq = esq;
+    n->dir = dir;
+    return n;
+}
+
+void libera(Arv *r) {
+    if (r != NULL) {
+        libera(r->esq);
+        libera(r->dir);
+        free(r);
+    }
+}
+
+int altura(const Arv *r) {
+    (void)r; // apague esta linha quando escrever a função
+    return -1;
+}
+
+int relatorio(const Arv *r) {
+    (void)r; // apague esta linha quando escrever a função
+    return 0;
+}
 
 int main(void) {
+    Arv *raiz = no(50, no(30, no(20, no(10, NULL, NULL), NULL), no(40, NULL, NULL)),
+                   no(70, NULL, no(80, NULL, no(90, NULL, NULL))));
 
+    int ruins = relatorio(raiz);
+    printf("É AVL? %s\n", ruins == 0 ? "sim" : "não");
+    libera(raiz);
     return 0;
 }

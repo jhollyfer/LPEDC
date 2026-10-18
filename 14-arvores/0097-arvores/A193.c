@@ -1,4 +1,4 @@
-// A193 · As pastas do computador
+// A193 · Os mesmos nós, alturas diferentes
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +8,8 @@
 
 typedef struct No {
     char nome[16];
-    struct No *filhos[MAX_FILHOS]; // ponteiros para as subpastas
-    int qtd;                       // quantas subpastas tem
+    struct No *filhos[MAX_FILHOS];
+    int qtd;
 } No;
 
 No *novo(const char *nome) {
@@ -22,24 +22,15 @@ No *novo(const char *nome) {
     return n;
 }
 
-// pendura o filho no pai e devolve o filho (para encadear)
 No *adiciona(No *pai, const char *nome) {
     No *filho = novo(nome);
     pai->filhos[pai->qtd++] = filho;
     return filho;
 }
 
-// mostra cada pasta recuada conforme a profundidade
-void mostra(const No *n, int profundidade) {
-    printf("%*s%s (%d)\n", 2 * profundidade, "", n->nome, profundidade);
-    for (int i = 0; i < n->qtd; i++) {
-        mostra(n->filhos[i], profundidade + 1);
-    }
-}
-
 int conta_folhas(const No *n) {
     if (n->qtd == 0) {
-        return 1; // sem filhos: é folha
+        return 1;
     }
     int total = 0;
     for (int i = 0; i < n->qtd; i++) {
@@ -48,7 +39,6 @@ int conta_folhas(const No *n) {
     return total;
 }
 
-// altura = maior altura entre os filhos + 1; folha dá -1 + 1 = 0
 int altura(const No *n) {
     int maior = -1;
     for (int i = 0; i < n->qtd; i++) {
@@ -60,7 +50,18 @@ int altura(const No *n) {
     return maior + 1;
 }
 
-// libera os filhos antes do pai (senão perde o caminho até eles)
+// o maior grau da árvore: compara o nó com o maior grau de cada filho
+int maior_grau(const No *n) {
+    int maior = n->qtd;
+    for (int i = 0; i < n->qtd; i++) {
+        int g = maior_grau(n->filhos[i]);
+        if (g > maior) {
+            maior = g;
+        }
+    }
+    return maior;
+}
+
 void libera(No *n) {
     for (int i = 0; i < n->qtd; i++) {
         libera(n->filhos[i]);
@@ -68,33 +69,39 @@ void libera(No *n) {
     free(n);
 }
 
+void resumo(const char *titulo, const No *raiz) {
+    printf("%-10s folhas %d, altura %d, maior grau %d\n", titulo,
+           conta_folhas(raiz), altura(raiz), maior_grau(raiz));
+}
+
 int main(void) {
-    No *casa = novo("casa");
-    No *fotos = adiciona(casa, "fotos");
-    No *contas = adiciona(casa, "contas");
-    adiciona(casa, "musica");
-    adiciona(fotos, "praia");
-    adiciona(fotos, "natal");
-    adiciona(contas, "agua");
-    No *luz = adiciona(contas, "luz");
-    adiciona(luz, "2025");
+    // larga: o grupo da família, todo mundo direto embaixo do admin
+    No *grupo = novo("admin");
+    adiciona(grupo, "mae");
+    adiciona(grupo, "pai");
+    adiciona(grupo, "tia");
+    adiciona(grupo, "primo");
 
-    mostra(casa, 0);
-    printf("Folhas: %d\n", conta_folhas(casa));
-    printf("Altura: %d\n", altura(casa));
+    // funda: o sumário de um livro, cada item dentro do anterior
+    No *livro = novo("livro");
+    No *p = adiciona(livro, "cap 1");
+    p = adiciona(p, "secao 1.1");
+    p = adiciona(p, "item 1.1.1");
+    adiciona(p, "nota");
 
-    libera(casa);
+    // caso de borda: um nó sozinho já é uma árvore (e é raiz e folha)
+    No *sozinho = novo("rascunho");
+
+    resumo("larga:", grupo);     // 5 nós
+    resumo("funda:", livro);     // 5 nós
+    resumo("sozinho:", sozinho); // 1 nó
+
+    libera(grupo);
+    libera(livro);
+    libera(sozinho);
     return 0;
 }
 // Saída:
-// casa (0)
-//   fotos (1)
-//     praia (2)
-//     natal (2)
-//   contas (1)
-//     agua (2)
-//     luz (2)
-//       2025 (3)
-//   musica (1)
-// Folhas: 5
-// Altura: 3
+// larga:     folhas 4, altura 1, maior grau 4
+// funda:     folhas 1, altura 4, maior grau 1
+// sozinho:   folhas 1, altura 0, maior grau 0
