@@ -4,8 +4,9 @@
 // Este programa tem um erro de propósito. Ele calcula o voo mais barato
 // saindo de São Paulo. Manaus e Belém têm voo entre si, mas nenhum voo liga
 // as duas ao resto do mapa. Rode com o rodar: o UndefinedBehaviorSanitizer
-// acusa "signed integer overflow". Explique num comentário em que linha e por
-// que a conta estoura, e conserte sem trocar o valor de INFINITO.
+// acusa "signed integer overflow" e aponta a linha da conta que estoura.
+// Conserte sem trocar o valor de INFINITO e rode de novo até a saída bater
+// com a esperada, sem nenhum aviso do sanitizer.
 //
 //   Saída esperada depois do conserto:
 //   Rio: R$ 200

@@ -106,8 +106,10 @@ soma 1 no grau de cada um, então a soma dos graus é sempre o dobro do número
 de arestas. Isso serve de teste rápido: se a soma der ímpar, você esqueceu um
 dos sentidos em algum lugar.
 
-O exemplo A218 mostra a outra representação, a lista de adjacência, como um
-TAD (`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
+O exemplo A217 guarda na matriz o tamanho de cada estrada em vez do 1 (um
+grafo ponderado) e mostra um vértice isolado, de linha toda zerada. O A218
+mostra a outra representação, a lista de adjacência, como um TAD
+(`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
 
 > [!WARNING]
 > Em grafo não dirigido, a aresta entra **nos dois sentidos**: `adj[a][b] = 1`
@@ -127,6 +129,6 @@ TAD (`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
 > [!NOTE]
 > **Pergunta para você:** se a prefeitura abrir uma ciclovia entre Praia e
 > Estádio, quais números da saída mudam? Preveja a nova matriz e a soma dos
-> graus antes de mudar o A217.
+> graus antes de mudar o programa acima.
 
 {{pratique}}

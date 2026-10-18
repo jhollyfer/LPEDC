@@ -160,7 +160,7 @@ Na BFS, guarde `cont[origem] = 1` e, ao examinar a aresta u-v: se v é novo,
 
 </details>
 
-**7. Estrada crítica.** No mapa da transportadora do A225 (sem a Ilha), existe
+**7. Estrada crítica.** No mapa da transportadora do assunto 0113 (sem a Ilha), existe
 alguma estrada que, se cair, deixa algum lugar sem acesso ao CD? Como
 descobrir com o que você já sabe?
 

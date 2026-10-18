@@ -87,7 +87,8 @@ Sede, Lago, Ponte, Gruta, Topo, Bica. Nenhuma está errada; servem a perguntas
 diferentes. A DFS **não** dá o caminho mais curto: ela chegou ao Topo pela
 Gruta (três trilhas), mas o Lago liga direto no Topo (duas).
 
-O exemplo A222 faz a mesma DFS sem recursão, com uma pilha explícita, e
+O exemplo A221 usa a DFS para separar as arestas de árvore das de retorno e
+contar os ciclos de uma rede de cabos. O A222 faz a mesma DFS sem recursão, com uma pilha explícita, e
 mostra a pilha a cada passo.
 
 > [!WARNING]
@@ -110,6 +111,6 @@ mostra a pilha a cada passo.
 > [!NOTE]
 > **Pergunta para você:** se a trilha Lago–Gruta for interditada, qual passa a
 > ser a ordem da DFS a partir da Sede, e qual o recuo de cada linha? Preveja
-> antes de apagar o par `{1, 2}` no A221.
+> antes de apagar o par `{1, 2}` no programa acima.
 
 {{pratique}}

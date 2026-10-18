@@ -21,10 +21,11 @@ int main(void) {
         {0, 1, 1, 0},
     };
     bool visitado[V] = {false};
-    int fila[V], inicio = 0, fim = 0;
+    int fila[V], inicio = 0, fim = 0, entradas = 0;
 
     visitado[0] = true; // a origem é marcada antes de entrar
     fila[fim++] = 0;
+    entradas++;
     while (inicio < fim) {
         int u = fila[inicio++];
         printf("%s ", nomes[u]);
@@ -32,9 +33,10 @@ int main(void) {
             if (adj[u][v] && !visitado[v]) {
                 visitado[v] = true; // marca ao ENTRAR na fila
                 fila[fim++] = v;
+                entradas++;
             }
         }
     }
-    printf("\n");
+    printf("\nEntradas na fila: %d\n", entradas);
     return 0;
 }

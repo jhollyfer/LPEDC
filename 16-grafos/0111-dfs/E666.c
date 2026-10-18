@@ -4,8 +4,9 @@
 // Num escape room, as portas só abrem num sentido (grafo dirigido). A função
 // existe_caminho deveria dizer se dá para sair de uma sala e chegar em outra.
 // O programa tem DOIS erros de propósito e responde "não" para tudo. Rode,
-// ache os dois e conserte. Atenção: depois de consertar o primeiro, a
-// resposta do meio continua errada.
+// ache os dois, conserte e rode de novo até a saída bater com a esperada.
+// Atenção: depois de consertar o primeiro, a resposta do meio continua
+// errada.
 //
 //   Saída esperada depois do conserto:
 //   Sala 0 -> Sala 4: sim
