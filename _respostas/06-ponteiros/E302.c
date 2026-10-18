@@ -1,25 +1,19 @@
 // 0051 · void * e cast
 // Exercício E302 · ★☆☆
-//
-// Resposta:
-// L1: não compila: *p com void * ("invalid use of void expression").
-// L2: compila e mostra 300 (void * vira int * sem cast em C).
-// L3: compila com aviso do -pedantic (aritmética com void * é extensão do
-//     gcc, que anda 1 byte); depois disso, *(int *)p lê um int fora do
-//     lugar e o rodar acusa "load of misaligned address".
-// L4: compila, mas lê 8 bytes onde só existe um int de 4: lixo e
-//     stack-buffer-overflow no AddressSanitizer.
-// O programa abaixo deixa só a L2, que é a correta.
 
 #include <stdio.h>
 
 int main(void) {
-    int pontos = 300;
-    void *p = &pontos;
+    int pontos[2] = {300, 450}; // pontos do cartão em dois meses
+    void *p = pontos;
 
-    int *q = p;
-    printf("%d\n", *q);
+    printf("L1: %d\n", *(int *)p);                 // converta antes de ler
+    int *q = p;                                     // void * vira int * sem cast
+    printf("L2: %d\n", q[1]);
+    p = (int *)p + 1;                               // anda um int, não um byte
+    printf("L3: %d\n", *(int *)p);
+    printf("L4: %.1f\n", (double)*(int *)p);        // lê o int, depois converte
 
-    printf("pontos = %d\n", *(int *)p);
+    printf("pontos[0] = %d\n", pontos[0]);
     return 0;
 }

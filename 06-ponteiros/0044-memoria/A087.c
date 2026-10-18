@@ -1,22 +1,30 @@
-// A087 · Três variáveis, três gavetas
+// A087 · O valor muda, a gaveta não
 
 #include <stdio.h>
 
 int main(void) {
-    int idade = 30;
-    double mensalidade = 119.90;
-    char plano = 'B';
+    double saldo = 250.00; // saldo da conta, antes dos Pix do dia
 
-    // & pergunta "em que gaveta você mora?"; %p mostra a resposta em hexa
-    printf("idade:       %d, mora em %p, ocupa %zu bytes\n",
-           idade, (void *)&idade, sizeof idade);
-    printf("mensalidade: %.2f, mora em %p, ocupa %zu bytes\n",
-           mensalidade, (void *)&mensalidade, sizeof mensalidade);
-    printf("plano:       %c, mora em %p, ocupa %zu byte\n",
-           plano, (void *)&plano, sizeof plano);
+    printf("saldo = %7.2f, mora em %p\n", saldo, (void *)&saldo);
+
+    saldo -= 89.90; // Pix para a conta de luz
+    printf("saldo = %7.2f, mora em %p\n", saldo, (void *)&saldo);
+
+    saldo += 1200.00; // salário caiu
+    printf("saldo = %7.2f, mora em %p\n", saldo, (void *)&saldo);
+
+    // atribuir troca o conteúdo da gaveta; o endereço fica o mesmo até o fim
+    // do programa
+    double reserva = saldo; // cópia do valor: outra gaveta, mesmo conteúdo
+    printf("reserva = %7.2f, mora em %p\n", reserva, (void *)&reserva);
+    // endereços também se comparam com ==
+    printf("mesmo valor? %d  mesma gaveta? %d\n", reserva == saldo,
+           &reserva == &saldo);
     return 0;
 }
-// Saída (os endereços mudam a cada execução):
-// idade:       30, mora em 0x7f0440e00030, ocupa 4 bytes
-// mensalidade: 119.90, mora em 0x7f0440e00040, ocupa 8 bytes
-// plano:       B, mora em 0x7f0440e00020, ocupa 1 byte
+// Saída (os endereços mudam a cada execução, mas se repetem dentro dela):
+// saldo =  250.00, mora em 0x7f8a1c500020
+// saldo =  160.10, mora em 0x7f8a1c500020
+// saldo = 1360.10, mora em 0x7f8a1c500020
+// reserva = 1360.10, mora em 0x7f8a1c500040
+// mesmo valor? 1  mesma gaveta? 0

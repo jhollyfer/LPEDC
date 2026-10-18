@@ -1,28 +1,22 @@
 // 0045 · Ponteiros
 // Exercício E269 · ★★★
-//
-// Resposta: a = 5, b = 16, *p = 16, *q = 5.
-//
-//   linha              a    b    p    q
-//   início             3    8    &a   &b
-//   *p = *q + 1        9    8    &a   &b
-//   p = q              9    8    &b   &b
-//   *p = *p * 2        9    16   &b   &b
-//   q = &a             9    16   &b   &a
-//   *q -= 4            5    16   &b   &a
 
 #include <stdio.h>
 
 int main(void) {
     int a = 3, b = 8;
     int *p = &a, *q = &b;
+    printf("início        a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
 
     *p = *q + 1;
+    printf("*p = *q + 1   a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
     p = q;
+    printf("p = q         a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
     *p = *p * 2;
+    printf("*p = *p * 2   a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
     q = &a;
+    printf("q = &a        a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
     *q -= 4;
-
-    printf("a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
+    printf("*q -= 4       a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
     return 0;
 }

@@ -1,8 +1,5 @@
 // 0045 · Ponteiros
 // Exercício E266 · ★☆☆
-//
-// Resposta: vagas = 7; &vagas = 0x3000; p = 0x3000; *p = 7; &p = 0x3008;
-// *&vagas = 7. No programa, &vagas e p saem iguais; &p sai diferente.
 
 #include <stdio.h>
 
@@ -16,5 +13,8 @@ int main(void) {
     printf("*p      = %d\n", *p);
     printf("&p      = %p\n", (void *)&p);
     printf("*&vagas = %d\n", *&vagas);
+    printf("p == &vagas: %d\n", p == &vagas);
+    printf("*p == vagas: %d\n", *p == vagas);
+    printf("&p == &vagas: %d\n", (void *)&p == (void *)&vagas);
     return 0;
 }

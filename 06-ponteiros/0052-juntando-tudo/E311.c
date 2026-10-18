@@ -6,8 +6,9 @@
 //
 //   Mercadinho: total 125, desconto 15%
 //
-// Rode com o rodar, leia os avisos e os relatórios (conserte um erro, rode
-// de novo) e explique cada um.
+// Rode com o rodar, leia os avisos e os relatórios e conserte um erro de
+// cada vez, rodando de novo, até a saída ficar igual à esperada e o rodar
+// não reclamar de nada.
 //
 // Dicas:
 // 1. Uma variável local some quando a função termina. O endereço dela

@@ -8,16 +8,18 @@
 //   12 8 15 20 9
 //
 // Rode com o rodar: um erro só aparece no resultado, o outro o
-// AddressSanitizer denuncia. Explique cada um e conserte.
+// AddressSanitizer denuncia. Conserte os dois e rode de novo até a saída
+// ficar igual à esperada, sem aviso do sanitizer.
 //
 // Dicas:
 // 1. Depois de p += 1, para onde p aponta? E p[3], então, é qual elemento?
 // 2. Um vetor de 5 tem endereços válidos para leitura de estoque até
 //    estoque + 4.
-// 3. Resposta esperada: (1) com p em estoque[1], p[3] é estoque[4] (o
-//    índice é relativo a p), e o 9 virou 20: o certo é p[2] = 20 (ou
-//    estoque[3] = 20); (2) o laço vai até q <= estoque + 5 e lê uma gaveta
-//    depois do fim (stack-buffer-overflow): o certo é q < estoque + 5.
+// 3. Resposta esperada: a saída "12 8 15 20 9". (1) com p em estoque[1],
+//    p[3] é estoque[4] (o índice é relativo a p), e o 9 virou 20: o certo
+//    é p[2] = 20 (ou estoque[3] = 20); (2) o laço vai até q <= estoque + 5
+//    e lê uma gaveta depois do fim (stack-buffer-overflow): o certo é
+//    q < estoque + 5.
 //
 // Escreva sua resposta abaixo (conserte o código):
 

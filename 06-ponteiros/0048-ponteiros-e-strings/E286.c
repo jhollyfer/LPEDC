@@ -7,7 +7,8 @@
 //   Bloco: B
 //   Mesmo morador
 //
-// Rode com o rodar, leia o relatório e conserte. Explique cada erro.
+// Rode com o rodar, leia o relatório e conserte os três erros, um de cada
+// vez, rodando de novo até a saída ficar igual à esperada.
 //
 // Dicas:
 // 1. Onde mora o texto "ola, visitante!"? Dá para escrever lá?

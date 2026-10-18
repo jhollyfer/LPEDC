@@ -7,9 +7,9 @@
 //   Passageiros: 3
 //   Bilhetes avulsos: 0
 //
-// mas mostra outra coisa. Rode, leia o aviso do compilador e descubra os
-// dois erros. Conserte sem mudar o main (exceto se precisar acrescentar um
-// & numa chamada).
+// mas mostra outra coisa. Rode, leia o aviso do compilador e conserte os
+// dois erros sem mudar o main (exceto se precisar acrescentar um & numa
+// chamada). Rode de novo e confira a saída acima.
 //
 // Dicas:
 // 1. Em *contador++, o ++ age antes do *: ele anda com o ponteiro, não

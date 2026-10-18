@@ -1,9 +1,5 @@
 // 0044 · Memória e endereços
 // Exercício E264 · ★★★
-//
-// Resposta: total_vendas, chamadas e o texto "Feira" ficam numa região baixa
-// (0x55... ou 0x56...); caixa e valor ficam na pilha (0x7f...). O endereço
-// de chamadas se repete nas duas chamadas (static vive o programa todo).
 
 #include <stdio.h>
 
@@ -22,8 +18,11 @@ int main(void) {
 
     registra(10);
     registra(20);
-    printf("total_vendas em %p (vale %d)\n", (void *)&total_vendas, total_vendas);
-    printf("texto \"%s\" em %p\n", loja, (void *)loja);
-    printf("caixa em %p (vale %d)\n", (void *)&caixa, caixa);
+    printf("vivem o programa todo:\n");
+    printf("  total_vendas em %p\n", (void *)&total_vendas);
+    printf("  texto \"%s\" em %p\n", loja, (void *)loja);
+    printf("nascem e morrem:\n");
+    printf("  caixa em %p\n", (void *)&caixa);
+    printf("total_vendas = %d\n", total_vendas);
     return 0;
 }

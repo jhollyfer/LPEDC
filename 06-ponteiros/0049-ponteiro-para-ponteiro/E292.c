@@ -3,9 +3,9 @@
 //
 // A função aponta_maior deveria fazer o ponteiro do main apontar para o
 // maior lance do leilão. Mas o programa tem um erro de propósito: o
-// ponteiro do main continua NULL e o programa cai. Rode, veja o relatório
-// do AddressSanitizer e explique por que a função não funciona. Depois
-// conserte (a função e a chamada).
+// ponteiro do main continua NULL e o programa cai. Rode e veja o relatório
+// do AddressSanitizer. Conserte a função e a chamada para que o ponteiro do
+// main receba o endereço do maior lance, e rode de novo.
 //
 //   Saída esperada:
 //   Maior lance: R$ 870

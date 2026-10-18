@@ -1,17 +1,5 @@
 // 0049 · Ponteiro para ponteiro
 // Exercício E294 · ★★★
-//
-// Resposta: x=10 y=3 *p=3 *q=10 **pp=10.
-//
-//   linha            x    y    p    q    pp
-//   início           1    2    &x   &y   &p
-//   **pp = 10        10   2    &x   &y   &p
-//   *pp = q          10   2    &y   &y   &p
-//   **pp += 5        10   7    &y   &y   &p
-//   pp = &q          10   7    &y   &y   &q
-//   *q = **pp * 2    10   14   &y   &y   &q
-//   *pp = &x         10   14   &y   &x   &q
-//   *p = 3           10   3    &y   &x   &q
 
 #include <stdio.h>
 
@@ -19,15 +7,21 @@ int main(void) {
     int x = 1, y = 2;
     int *p = &x, *q = &y;
     int **pp = &p;
+    printf("início          x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
 
     **pp = 10;
+    printf("**pp = 10       x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
     *pp = q;
+    printf("*pp = q         x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
     **pp += 5;
+    printf("**pp += 5       x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
     pp = &q;
+    printf("pp = &q         x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
     *q = **pp * 2;
+    printf("*q = **pp * 2   x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
     *pp = &x;
+    printf("*pp = &x        x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
     *p = 3;
-
-    printf("x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
+    printf("*p = 3          x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
     return 0;
 }
