@@ -2,16 +2,30 @@
 // Exercício E548 · ★☆☆
 //
 // Cinco caixas de uma mudança estão numeradas fora de ordem: 3, 1, 2, 5, 4.
-// SEM RODAR, escreva a saída exata do programa abaixo, incluindo o total de
-// trocas. Depois rode e confira.
+// O programa abaixo ordena com selection sort e conta as trocas. Estenda o
+// programa:
+//
+// a) conte também as comparações (caixas[j] < caixas[menor]) e mostre o
+//    total no fim;
+// b) nas passadas em que o menor já estava no lugar (nenhuma troca), escreva
+//    " (sem troca)" no fim da linha.
+//
+//   Saída esperada:
+//   i = 0: 1 3 2 5 4
+//   i = 1: 1 2 3 5 4
+//   i = 2: 1 2 3 5 4 (sem troca)
+//   i = 3: 1 2 3 4 5
+//   trocas: 3
+//   comparações: 10
 //
 // Dicas:
-// 1. Em cada passada i, ache o menor de v[i..4] e veja se ele já está em v[i].
-// 2. Repare no if (menor != i): troca de alguém com ele mesmo não conta.
-// 3. Resposta esperada: i = 0: 1 3 2 5 4; i = 1: 1 2 3 5 4; i = 2: 1 2 3 5
-//    4; i = 3: 1 2 3 4 5; trocas: 3.
+// 1. O contador de comparações sobe dentro do laço de dentro, uma vez por
+//    volta.
+// 2. "Sem troca" é exatamente quando menor == i depois do laço de dentro.
+// 3. As comparações não dependem dos valores: 4 + 3 + 2 + 1 = 10.
+// 4. Resposta esperada: a saída acima.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>
 

@@ -3,7 +3,8 @@
 //
 // Este bubble sort deveria ordenar as idades da turma de natação: 34, 19,
 // 27, 45, 22. Ele tem DOIS erros, de propósito. Rode: o sanitizer
-// ("runtime error: index 5 out of bounds") acusa um deles. Ache os dois, explique e conserte.
+// ("runtime error: index 5 out of bounds") acusa um deles. Conserte os dois
+// e rode de novo até a saída bater com a esperada.
 //
 //   Saída esperada (depois de consertar):
 //   19 22 27 34 45

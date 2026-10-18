@@ -110,6 +110,7 @@ dá a volta três vezes antes de sair pelo Sim:
 > [!NOTE]
 > **Pergunta para você:** se a matrícula 3305 aparecesse duas vezes no vetor,
 > nas posições 1 e 4, qual posição a função devolveria? E quantas comparações
-> ela faria para achar 7034? Responda e confira mudando o exemplo A177.
+> ela faria para achar 7034? Responda e confira rodando o código acima com o
+> vetor alterado. O exemplo A177 mostra como achar todas as ocorrências.
 
 {{pratique}}

@@ -9,7 +9,7 @@
 //   Ranking: 31 31 25 18 12 7
 //
 // Dicas:
-// 1. Parta do bubble do exemplo A181.
+// 1. Parta do bubble do código do assunto (o do texto).
 // 2. Basta mudar uma comparação: troque quando o da esquerda for MENOR.
 // 3. Os dois 31 empatados não são trocados entre si (31 < 31 é falso).
 // 4. Resposta esperada: Ranking: 31 31 25 18 12 7

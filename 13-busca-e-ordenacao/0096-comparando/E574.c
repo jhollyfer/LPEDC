@@ -4,8 +4,8 @@
 // Os saldos (em centavos) de cinco contas de uma corretora precisam sair do
 // menor para o maior. A compara abaixo é a "versão curta" que aparece em
 // muito tutorial. O erro é de propósito: rode e veja o UBSan reclamar
-// ("signed integer overflow") e a ordem sair errada. Explique o que acontece
-// e conserte sem mudar o tipo int.
+// ("signed integer overflow") e a ordem sair errada. Conserte a compara sem
+// mudar o tipo int e rode de novo.
 //
 //   Saída esperada (depois de consertar):
 //   -1500000000

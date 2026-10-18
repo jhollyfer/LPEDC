@@ -150,8 +150,9 @@ duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 > original dos iguais. Isso faz o merge sort ser **estável**.
 
 > [!NOTE]
-> **Pergunta para você:** quantas comparações o A187 faria se as notas já
-> estivessem em ordem, `7 12 18 26 33 41 52 60`? Pista: na intercalação, o
-> que acontece quando a metade esquerda inteira é menor que a direita?
+> **Pergunta para você:** quantas comparações o código acima faria se as
+> notas já estivessem em ordem, `7 12 18 26 33 41 52 60`? Pista: na
+> intercalação, o que acontece quando a metade esquerda inteira é menor que a
+> direita?
 
 {{pratique}}

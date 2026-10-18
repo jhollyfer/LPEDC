@@ -4,8 +4,8 @@
 // Alguém "modernizou" a busca binária trocando int por size_t, "porque índice
 // nunca é negativo". O código compila sem nenhum aviso, acha o 35... e
 // explode ao procurar o 3. O erro é de propósito: rode com o rodar e leia o
-// que o AddressSanitizer diz. Explique o que acontece e conserte, mantendo
-// size_t.
+// que o AddressSanitizer diz. Conserte, mantendo size_t, e rode de novo até
+// as três linhas da saída esperada aparecerem.
 //
 //   Saída esperada (depois de consertar):
 //   35: posição 3

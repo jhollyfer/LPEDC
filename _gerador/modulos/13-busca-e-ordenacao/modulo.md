@@ -162,7 +162,7 @@ Laço de fora: `for (int b = 1; b < n; b *= 2)`. Laço de dentro:
 
 </details>
 
-**7. Quick sort que não estoura a pilha.** Mude o quick sort do A189 para
+**7. Quick sort que não estoura a pilha.** Mude o quick sort do assunto 0095 para
 fazer a recursão só no lado **menor** e tratar o maior com um `while`. Meça a
 maior profundidade de recursão num vetor já ordenado de 10.000 elementos,
 antes e depois.

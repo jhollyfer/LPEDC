@@ -8,7 +8,7 @@
 //   40 15 21 28 33
 //
 // Faça o teste de mesa das passadas i = 0 e i = 1, anotando o valor de menor,
-// explique o erro e conserte.
+// ache o erro, conserte e rode de novo.
 //
 //   Saída esperada (depois de consertar):
 //   15 21 28 33 40

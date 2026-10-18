@@ -151,9 +151,9 @@ desempate na `compara` (o horário), então `qsort` resolve:
 > `stdlib.h` traz a **`bsearch`**, com a mesma `compara`.
 
 > [!NOTE]
-> **Pergunta para você:** se a `compara` do A191 só comparasse a cidade (sem o
-> desempate por horário), a saída seria sempre a mesma? Em que ordem você
-> esperaria os três pedidos de Recife? Rode algumas vezes, troque a ordem do
-> vetor de entrada e veja.
+> **Pergunta para você:** se a `compara` do código acima só comparasse a
+> cidade (sem o desempate por horário), a saída seria sempre a mesma? Em que
+> ordem você esperaria os três pedidos de Recife? Rode algumas vezes, troque a
+> ordem do vetor de entrada e veja.
 
 {{pratique}}

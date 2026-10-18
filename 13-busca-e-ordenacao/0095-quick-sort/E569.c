@@ -17,7 +17,7 @@
 //   ordenando tudo: 33 min (23 comparações)
 //
 // Dicas:
-// 1. Reaproveite o separa do A189, contando comparações num static int.
+// 1. Reaproveite o separa do texto, contando comparações num static int.
 // 2. Diferente do quick sort, o quickselect só segue UM dos lados.
 // 3. Se p == r, sobrou um elemento só: é ele.
 // 4. Na média, o quickselect é O(n): n + n/2 + n/4 + ... < 2n.

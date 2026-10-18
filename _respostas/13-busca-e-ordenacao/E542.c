@@ -1,12 +1,33 @@
 // 0091 · Bubble sort
 // Exercício E542 · ★☆☆
-//
-// Resposta:
-//   passada 1: 4 7 1 5 9
-//   passada 2: 4 1 5 7 9
-//   passada 3: 1 4 5 7 9
-//   passada 4: 1 4 5 7 9
-//   trocas: 7
-// O vetor fica pronto na passada 3, mas sem bandeira a passada 4 acontece do
-// mesmo jeito. As 7 trocas são as 7 inversões do vetor original: 9 com 4, 7,
-// 1 e 5; 4 com 1; 7 com 1 e 5.
+
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    int senhas[] = {9, 4, 7, 1, 5};
+    int n = 5, trocas = 0;
+    bool trocou = true;
+
+    for (int passada = 1; passada < n && trocou; passada++) {
+        trocou = false;
+        int nesta = 0;                  // trocas só desta passada
+        for (int j = 0; j < n - passada; j++) {
+            if (senhas[j] > senhas[j + 1]) {
+                int aux = senhas[j];
+                senhas[j] = senhas[j + 1];
+                senhas[j + 1] = aux;
+                trocas++;
+                nesta++;
+                trocou = true;
+            }
+        }
+        printf("passada %d:", passada);
+        for (int i = 0; i < n; i++) {
+            printf(" %d", senhas[i]);
+        }
+        printf(" (%d trocas)\n", nesta);
+    }
+    printf("trocas: %d\n", trocas);
+    return 0;
+}

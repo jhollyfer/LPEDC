@@ -129,7 +129,8 @@ dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
 
 > [!NOTE]
 > **Pergunta para você:** e se a condição fosse `v[i] >= x`? O vetor
-> continuaria saindo ordenado? Quantos deslocamentos o A185 faria? E o que
-> aconteceria com dois elementos iguais?
+> continuaria saindo ordenado? Quantos deslocamentos o código acima faria? E o
+> que aconteceria com dois elementos iguais? (O A185 mostra por que isso
+> importa.)
 
 {{pratique}}

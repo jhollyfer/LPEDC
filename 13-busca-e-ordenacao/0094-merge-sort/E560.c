@@ -3,19 +3,37 @@
 //
 // O programa abaixo não ordena nada: ele só mostra QUAIS chamadas o merge sort
 // faria para um vetor de 5 elementos, com um recuo de dois espaços por nível
-// de recursão. SEM RODAR, escreva a saída exata. Depois rode e confira.
+// de recursão. Estenda o programa:
+//
+// a) escreva " folha" ao lado dos pedaços com menos de 2 elementos (os que
+//    não chamam ninguém);
+// b) conte, em variáveis static, quantas chamadas aconteceram e quantas
+//    foram folhas;
+// c) no fim do main, mostre os dois totais e quantas intercalações o merge
+//    sort faria (uma por chamada que não é folha).
+//
+//   Saída esperada:
+//   [0, 5)
+//     [0, 2)
+//       [0, 1) folha
+//       [1, 2) folha
+//     [2, 5)
+//       [2, 3) folha
+//       [3, 5)
+//         [3, 4) folha
+//         [4, 5) folha
+//   9 chamadas, 5 folhas, 4 intercalações
 //
 // Dicas:
-// 1. Comece por ordena(0, 5): q = 0 + 5 / 2 = 2. As metades são [0, 2) e [2, 5).
-// 2. A metade esquerda inteira (com todas as suas chamadas) é mostrada antes
-//    da direita.
-// 3. Pedaços com menos de 2 elementos aparecem, mas não chamam ninguém.
-// 4. Resposta esperada: 9 linhas, nesta ordem: [0, 5), [0, 2), [0, 1),
-//    [1, 2), [2, 5), [2, 3), [3, 5), [3, 4) e [4, 5). Recuo: nenhum na
-//    primeira; 2 espaços em [0, 2) e [2, 5); 4 em [0, 1), [1, 2), [2, 3) e
-//    [3, 5); 6 nas duas últimas.
+// 1. static int chamadas = 0, folhas = 0; fora das funções.
+// 2. Some 1 em chamadas logo na entrada de ordena; some em folhas dentro do
+//    if que faz o return.
+// 3. Troque o printf("[%d, %d)\n", ...) por um sem \n e decida depois se
+//    escreve " folha\n" ou só "\n".
+// 4. Resposta esperada: a saída acima. As folhas são os n elementos, e as
+//    intercalações são sempre n - 1.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>
 
