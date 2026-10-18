@@ -1,0 +1,51 @@
+export const ideia = {
+  caixas: [
+    { id: 'est', forma: 'caixinha', x: 100, y: 0, nome: 'estudante', valor: 'false', tipo: 'bool' },
+    { id: 'id', forma: 'caixinha', x: 100, y: 250, nome: 'idade', valor: '67', tipo: 'int' },
+    { id: 'pre', forma: 'caixinha', x: 100, y: 500, nome: 'pre_estreia', valor: 'false', tipo: 'bool' },
+    { id: 'q1', x: 450, y: 70, w: 330, h: 110, cor: 'cinza', texto: ['estudante → 0'] },
+    { id: 'q2', x: 450, y: 320, w: 330, h: 110, cor: 'amarelo', texto: ['idade >= 60 → 1'] },
+    { id: 'q3', x: 450, y: 570, w: 330, h: 110, cor: 'amarelo', texto: ['!pre_estreia → 1'] },
+    { id: 'ou', x: 900, y: 190, w: 250, cor: 'roxo', rotulo: 'OU ||', texto: ['0 || 1 = 1'] },
+    { id: 'e', x: 900, y: 500, w: 250, cor: 'roxo', rotulo: 'E &&', texto: ['1 && 1 = 1'] },
+    { id: 'r', x: 1250, y: 470, w: 270, cor: 'verde', rotulo: 'resultado', texto: ['meia = 1', 'R$ 20.00'] },
+  ],
+  setas: [
+    { de: 'est', para: 'q1' },
+    { de: 'id', para: 'q2' },
+    { de: 'pre', para: 'q3' },
+    { de: 'q1', para: 'ou', cor: 'cinza' },
+    { de: 'q2', para: 'ou' },
+    { de: 'ou', para: 'e' },
+    { de: 'q3', para: 'e' },
+    { de: 'e', para: 'r', cor: 'verde' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'Início'],
+    ['B', 'io', 'Ler idade, estudante e pre_estreia'],
+    ['C', 'dec', 'estudante?'],
+    ['D', 'dec', 'idade >= 60?'],
+    ['E', 'dec', 'pre_estreia?'],
+    ['F', 'proc', 'meia = true'],
+    ['G', 'proc', 'meia = false'],
+    ['H', 'io', 'Mostrar o ingresso'],
+    ['I', 'inicio', 'Fim'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'E', 'Sim'],
+    ['C', 'D', 'Não'],
+    ['D', 'E', 'Sim'],
+    ['D', 'G', 'Não'],
+    ['E', 'G', 'Sim'],
+    ['E', 'F', 'Não'],
+    ['F', 'H'],
+    ['G', 'H'],
+    ['H', 'I'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'E', 'F', 'H', 'I'],
+}

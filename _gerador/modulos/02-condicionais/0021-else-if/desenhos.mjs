@@ -1,0 +1,55 @@
+export const ideia = {
+  caixas: [
+    { id: 'v', forma: 'caixinha', x: 785, y: 0, w: 230, nome: 'velocidade', valor: '80', tipo: 'km/h' },
+    {
+      id: 'r',
+      forma: 'array',
+      x: 100,
+      y: 330,
+      celula: 320,
+      indices: false,
+      itens: ['até 60', '61 a 72', '73 a 90', 'acima de 90'],
+      estados: { 0: 'apagado', 1: 'apagado', 2: 'verde', 3: 'apagado' },
+    },
+  ],
+  setas: [{ de: 'v', para: 'r:2', lados: 'bc', cor: 'verde' }],
+  notas: [
+    { x: 120, y: 90, texto: '1º  80 <= 60 ?  Não', cor: 'vermelho' },
+    { x: 120, y: 135, texto: '2º  80 <= 72 ?  Não', cor: 'vermelho' },
+    { x: 120, y: 180, texto: '3º  80 <= 90 ?  Sim: para aqui', cor: 'verde' },
+    { x: 260, y: 470, texto: 'dentro do limite', cor: 'cinza', ancora: 'middle' },
+    { x: 580, y: 470, texto: 'média R$ 130.16', cor: 'cinza', ancora: 'middle' },
+    { x: 900, y: 470, texto: 'grave R$ 195.23', cor: 'verde', ancora: 'middle' },
+    { x: 1220, y: 470, texto: 'gravíssima R$ 880.41', cor: 'cinza', ancora: 'middle' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'Início'],
+    ['B', 'io', 'Ler velocidade (80)'],
+    ['C', 'dec', 'velocidade <= 60?'],
+    ['D', 'dec', 'velocidade <= 72?'],
+    ['E', 'dec', 'velocidade <= 90?'],
+    ['F', 'io', 'Mostrar "Dentro do limite"'],
+    ['G', 'io', 'Mostrar "média"'],
+    ['H', 'io', 'Mostrar "grave"'],
+    ['I', 'io', 'Mostrar "gravíssima"'],
+    ['J', 'inicio', 'Fim'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'F', 'Sim'],
+    ['C', 'D', 'Não'],
+    ['D', 'G', 'Sim'],
+    ['D', 'E', 'Não'],
+    ['E', 'H', 'Sim'],
+    ['E', 'I', 'Não'],
+    ['F', 'J'],
+    ['G', 'J'],
+    ['H', 'J'],
+    ['I', 'J'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'E', 'H', 'J'],
+}
