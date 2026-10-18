@@ -3928,17 +3928,29 @@ depois de zerar: 12 0 33 47 5
 Problemas extras, misturando os assuntos do módulo. Resolva num arquivo seu
 e rode com o `rodar`.
 
-**1. O gaveteiro de três níveis.** Desenhe a memória para
-`int x = 7; int *p = &x; int **pp = &p; **pp = 9; *pp = NULL;` com
-endereços fictícios (`x` em `0x100`, `p` em `0x108`, `pp` em `0x110`).
-Quanto valem `x`, `p` e `pp` no fim? O que acontece se a próxima linha for
-`printf("%d", *p);`?
+**1. O gaveteiro de três níveis.** Ponha num `main` as linhas
+`int x = 7; int *p = &x; int **pp = &p; **pp = 9; *pp = NULL;` e, depois
+delas, mostre o valor de `x`, o resultado de `p == NULL` e o de `pp == &p`.
+Acrescente então `printf("%d\n", *p);`, rode com o `rodar` e veja o que
+acontece. Por fim, conserte: só mostre `*p` se `p` não for `NULL`; senão,
+mostre `p não aponta para nada`.
 
 <details><summary>Resposta</summary>
 
-`x` vale **9**, `p` vale **NULL** (a linha `*pp = NULL` mudou o ponteiro `p`,
-não o `x`) e `pp` continua guardando **`0x108`**, o endereço de `p`. O
-`printf` desreferencia `NULL` e o programa cai (*segmentation fault*). Desenhe sempre o que cada `*` atravessa.
+Com o `printf` de `*p` solto, o AddressSanitizer derruba o programa:
+`AddressSanitizer: SEGV on unknown address 0x000000000000`. Depois do
+conserto:
+
+```text
+x = 9
+p == NULL: 1
+pp == &p: 1
+p não aponta para nada
+```
+
+`**pp = 9` atravessa dois `*` e chega no `x`; `*pp = NULL` atravessa um só e
+muda o ponteiro `p`, não o `x`. O `pp` continua guardando o endereço de `p`.
+Desenhe sempre o que cada `*` atravessa.
 
 </details>
 
@@ -3972,7 +3984,8 @@ com `v[n - 1] = tmp`. Nenhum caractere é copiado: só endereços.
 **4. O meu strcat.** Escreva `char *junta(char *destino, const char
 *origem)` só com ponteiros: ande até o `'\0'` do destino e copie a origem dali
 em diante. Devolva `destino`. Teste com `char cidade[30] = "Campina";` e
-`" Grande"`. O que acontece se o vetor tiver só 10 posições?
+`" Grande"`. Depois troque para `char cidade[10]`, rode de novo com o
+`rodar` e veja o erro que ele mostra.
 
 <details><summary>Resposta</summary>
 

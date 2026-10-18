@@ -176,29 +176,62 @@ no fim (ou escreva de trás para frente num vetor com uma posição extra para o
 </details>
 
 **9. Cifra de Vigenère.** É a César com um deslocamento diferente para cada
-letra, dado por uma chave que se repete. Com a chave "LIMAO", cifre
-"ATACARAGORA" (A = 0, B = 1, ..., L = 11...).
+letra, dado por uma chave que se repete (A = 0, B = 1, ..., L = 11...).
+Escreva `void vigenere(char texto[], const char chave[], int sentido)` que
+cifra o texto no próprio vetor com `sentido` 1 e decifra com -1. No `main`,
+cifre `char msg[] = "ATACARAGORA"` com a chave "LIMAO", mostre, decifre e
+mostre de novo.
 
 <details><summary>Resposta</summary>
 
-Resultado: **LBMCOCISOFL**. A letra `i` do texto anda `chave[i % 5] - 'A'`
-posições: A + L = L, T + I = B, A + M = M, C + A = C, A + O = O, R + L = C, e
-assim por diante, sempre com `% 26`. Para decifrar, ande `26 - desloc`.
+```text
+Cifrado:   LBMCOCISOFL
+Decifrado: ATACARAGORA
+```
+
+A letra `i` do texto anda `chave[i % strlen(chave)] - 'A'` posições: A + L =
+L, T + I = B, A + M = M, C + A = C, A + O = O, R + L = C, e assim por diante,
+sempre com `% 26`. Para decifrar, ande `26 - desloc`, o que mantém a conta
+sem número negativo.
 
 </details>
 
-**10. Jogo da vida, uma geração.** Numa matriz 5×5 de 0 e 1, cada célula
+**10. Jogo da vida, duas gerações.** Numa matriz 5×5 de 0 e 1, cada célula
 viva com 2 ou 3 vizinhas vivas continua viva; uma morta com exatamente 3
-vizinhas nasce; o resto morre ou fica morto. Calcule a próxima geração de um
-"pisca-pisca": uma linha de três vivas no meio (`m[2][1]`, `m[2][2]`,
-`m[2][3]`).
+vizinhas nasce; o resto morre ou fica morto. Escreva
+`void proxima(int m[5][5], int nova[5][5])` e uma função que mostre a matriz
+com `#` para viva e `.` para morta. Comece com um "pisca-pisca", uma linha de
+três vivas no meio (`m[2][1]`, `m[2][2]`, `m[2][3]`), e mostre as gerações 0,
+1 e 2.
 
 <details><summary>Resposta</summary>
 
-Ela vira uma **coluna** de três: `[1][2]`, `[2][2]`, `[3][2]`. Na geração
-seguinte, volta a ser linha. O cuidado: calcule tudo numa **segunda matriz**.
-Se você atualizar a original enquanto conta, as células já mudadas atrapalham
-a contagem das vizinhas. A contagem de vizinhas é a do campo minado (E234).
+```text
+Geração 0:
+.....
+.....
+.###.
+.....
+.....
+Geração 1:
+.....
+..#..
+..#..
+..#..
+.....
+Geração 2:
+.....
+.....
+.###.
+.....
+.....
+```
+
+A linha vira **coluna** e volta a ser linha. O cuidado: calcule tudo numa
+**segunda matriz**. Se você atualizar a original enquanto conta, as células
+já mudadas atrapalham a contagem das vizinhas. A contagem de vizinhas é a do
+campo minado (E234). Para a geração 2, chame `proxima(b, a)`: as duas
+matrizes revezam.
 
 </details>
 

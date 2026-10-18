@@ -119,17 +119,27 @@ sempre terminou.
 
 </details>
 
-**4. Contador de chamadas por função.** Sem globais, faça cada uma de três
-funções saber quantas vezes já foi chamada e escreva `void relatorio(void)` que
-mostra os três números. O que precisa mudar no desenho?
+**4. Contador de chamadas por função.** Sem globais, faça três funções,
+`int pix(bool so_ler)`, `int boleto(bool so_ler)` e `int cartao(bool so_ler)`,
+saberem quantas vezes já foram chamadas: cada uma soma 1 no seu contador e
+devolve o valor, mas com `so_ler` verdadeiro só devolve, sem somar. Escreva
+`void relatorio(void)` que mostra os três números. No `main`, chame `pix` 3
+vezes, `boleto` 1 e `cartao` 2, chame `relatorio`, chame `pix` mais uma vez e
+chame `relatorio` de novo.
 
 <details><summary>Resposta</summary>
 
-Um `static int` em cada função resolve a contagem, mas `relatorio` não enxerga
-o `static` de outra função. Saída: cada função aceita um parâmetro "só
-consultar" (`int contar(bool so_ler)`) que devolve o contador sem somar, ou o
-trio vai para um módulo com contadores `static` de arquivo e funções de
-consulta, como o `conversoes_feitas` do assunto 0034.
+```text
+pix: 3, boleto: 1, cartao: 2
+pix: 4, boleto: 1, cartao: 2
+```
+
+Um `static int vezes = 0;` em cada função guarda a contagem entre as
+chamadas, mas `relatorio` não enxerga o `static` de outra função: por isso o
+parâmetro "só consultar", que devolve o contador sem somar. As chamadas de
+`relatorio` não mudam nada, e a segunda linha mostra isso. Outra saída seria
+um módulo com contadores `static` de arquivo e funções de consulta, como o
+`conversoes_feitas` do assunto 0034.
 
 </details>
 
@@ -144,29 +154,62 @@ exponencial; `A(4, 2)` já tem 19.729 dígitos. Use `long long` no contador.
 
 </details>
 
-**6. A pilha de mdc.** Sem rodar: quantos quadros de `mdc` existem no ponto
-mais fundo de `mdc(89, 55)`? E de `mdc(100, 75)`?
+**6. A pilha de mdc.** Acrescente ao `mdc` recursivo de Euclides um parâmetro
+`int nivel`: cada chamada mostra `mdc(a, b)` recuado dois espaços por nível
+e, no caso base, devolve quantos quadros de `mdc` estavam empilhados no ponto
+mais fundo (`nivel + 1`). Mostre a pilha e os quadros de `mdc(100, 75)` e de
+`mdc(89, 55)`.
 
 <details><summary>Resposta</summary>
 
-`mdc(89, 55)` passa por (55, 34), (34, 21), (21, 13), (13, 8), (8, 5), (5, 3),
-(3, 2), (2, 1), (1, 0): **10 quadros**. Números de Fibonacci consecutivos são
-o pior caso de Euclides. `mdc(100, 75)` passa por (75, 25) e (25, 0): só **3
-quadros**.
+```text
+mdc(100, 75)
+  mdc(75, 25)
+    mdc(25, 0)
+Quadros: 3
+```
+
+`mdc(89, 55)` desce em escada por (55, 34), (34, 21), (21, 13), (13, 8),
+(8, 5), (5, 3), (3, 2), (2, 1) e (1, 0) e termina com `Quadros: 10`. Números
+de Fibonacci consecutivos são o pior caso de Euclides. O recuo é um `for` de
+0 a `nivel` mostrando dois espaços antes do `printf`, e a chamada recursiva
+passa `nivel + 1`.
 
 </details>
 
-**7. Macro de troca.** Escreva `TROCAR(a, b)` que troca duas variáveis `int`.
-Por que `#define TROCAR(a, b) int t = a; a = b; b = t;` quebra dentro de um
-`if` sem chaves? Como consertar?
+**7. Macro de troca.** Escreva `#define TROCAR(a, b) int t = a; a = b; b =
+t;` e use num `if (x > y) TROCAR(x, y);` sem chaves: rode com o `rodar` e veja
+o `gcc` recusar. Conserte a macro para que esta função compile e funcione,
+sem mexer nela:
+
+```c
+void ordena(int x, int y) {
+    if (x > y)
+        TROCAR(x, y);
+    else
+        printf("já em ordem: ");
+    printf("%d %d\n", x, y);
+}
+```
+
+Chame `ordena(9, 4)` e `ordena(1, 5)`.
 
 <details><summary>Resposta</summary>
 
-Dentro de `if (x > y) TROCAR(x, y);` só a primeira instrução fica no `if`; as
-outras rodam sempre (e o `int t` dentro do `if` sem chaves nem compila). A
-forma segura: `#define TROCAR(a, b) do { int t_ = (a); (a) = (b); (b) = t_; }
-while (0)`. Repare que aqui a macro **consegue** trocar e uma função não
-conseguiria: ela não recebe cópias, ela é colada no lugar.
+A versão ingênua dá `error: expected expression before 'int'`: só a primeira
+instrução da macro fica no `if`, e uma declaração não pode ser o corpo de um
+`if` sem chaves. Com a forma segura, `#define TROCAR(a, b) do { int t_ = (a);
+(a) = (b); (b) = t_; } while (0)`:
+
+```text
+4 9
+já em ordem: 1 5
+```
+
+Só com chaves (`{ ... }`) o `;` depois de `TROCAR(x, y)` fecharia o `if` e
+deixaria o `else` órfão; o `do { } while (0)` engole esse `;`. Repare que
+aqui a macro **consegue** trocar e uma função não conseguiria: ela não recebe
+cópias, ela é colada no lugar.
 
 </details>
 
