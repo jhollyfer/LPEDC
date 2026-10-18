@@ -1,0 +1,55 @@
+export const ideia = {
+  caixas: [
+    { id: 'c', forma: 'caixinha', x: 100, y: 0, nome: 'consumo', valor: '230', tipo: 'kWh' },
+    { id: 'b', forma: 'caixinha', x: 100, y: 250, nome: 'bandeira', valor: "'A'", tipo: 'char' },
+    { id: 's', forma: 'caixinha', x: 100, y: 500, nome: 'social', valor: 'false', tipo: 'bool' },
+    { id: 'e', x: 450, y: 0, w: 560, h: 120, cor: 'roxo', rotulo: 'conta', texto: ['energia = 230 * 0.80 = 184.00'] },
+    { id: 'sw', x: 450, y: 150, w: 560, h: 120, cor: 'roxo', rotulo: 'switch', texto: ["case 'A': + 230 * 0.02 = 4.60"] },
+    { id: 'i', x: 450, y: 300, w: 560, h: 120, cor: 'amarelo', rotulo: 'if com &&', texto: ['social && consumo <= 220 ? Não'] },
+    { id: 't', x: 450, y: 450, w: 560, h: 120, cor: 'roxo', rotulo: 'ternário', texto: ['consumo > 100 ? 15 : 5  → 15'] },
+    { id: 'f', x: 450, y: 600, w: 560, h: 120, cor: 'amarelo', rotulo: 'else if', texto: ['<= 100? Não. <= 300? Sim: médio'] },
+    {
+      id: 'term',
+      forma: 'terminal',
+      x: 1110,
+      y: 170,
+      w: 400,
+      texto: ['Energia: 184.00', 'Bandeira: 4.60', 'Iluminação: 15.00', 'Consumo médio.', 'Total: R$ 203.60'],
+    },
+  ],
+  setas: [
+    { de: 'c', para: 'e' },
+    { de: 'b', para: 'sw', lados: 'de' },
+    { de: 's', para: 'i', lados: 'de' },
+    { de: 'f', para: 'term', lados: 'db', cotovelo: true, cor: 'verde' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'Início'],
+    ['B', 'io', 'Ler consumo, bandeira e social'],
+    ['C', 'dec', 'Leitura ok e consumo >= 0?'],
+    ['D', 'io', 'Mostrar "Consumo inválido"'],
+    ['E', 'proc', 'energia e bandeira (switch)'],
+    ['F', 'dec', 'social && consumo <= 220?'],
+    ['G', 'proc', 'desconto de 40%'],
+    ['H', 'proc', 'iluminação (ternário)'],
+    ['I', 'io', 'Mostrar a conta e a faixa (else if)'],
+    ['J', 'inicio', 'Fim'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'E', 'Sim'],
+    ['C', 'D', 'Não'],
+    ['E', 'F'],
+    ['F', 'G', 'Sim'],
+    ['F', 'H', 'Não'],
+    ['G', 'H'],
+    ['H', 'I'],
+    ['I', 'J'],
+    ['D', 'J'],
+  ],
+  caminho: ['A', 'B', 'C', 'E', 'F', 'H', 'I', 'J'],
+}
