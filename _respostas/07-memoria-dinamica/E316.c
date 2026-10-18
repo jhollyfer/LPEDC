@@ -19,8 +19,10 @@ int main(void) {
     for (int i = 0; i < TOTAL; i++) {
         soma += leituras[i];
     }
+    printf("O vetor ocupa %zu bytes\n", sizeof leituras);
     printf("Soma das leituras: %ld\n", soma);
     return 0;
 }
 // Saída:
+// O vetor ocupa 20000000 bytes
 // Soma das leituras: 14999995

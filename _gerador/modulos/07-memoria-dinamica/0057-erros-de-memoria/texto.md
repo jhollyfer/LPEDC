@@ -49,16 +49,17 @@ mostra isso no fim da execução:
 
 {{ideia}}
 
-O relatório da versão quebrada, sem o `free`. Leia de cima para baixo: o tipo
-do erro, quanto vazou e a pilha de chamadas que fez o `malloc`:
+O relatório da versão quebrada, sem o `free` (salva como `pedido.c`). Leia de
+cima para baixo: o tipo do erro, quanto vazou e a pilha de chamadas que fez o
+`malloc`:
 
 ```text
 ==12072==ERROR: LeakSanitizer: detected memory leaks
 
 Direct leak of 48 byte(s) in 3 object(s) allocated from:
     #0 0x7f1503afd9c7 in malloc
-    #1 0x55bff3c602ef in total_do_pedido A113.c:8
-    #2 0x55bff3c6071c in main A113.c:23
+    #1 0x55bff3c602ef in total_do_pedido pedido.c:5
+    #2 0x55bff3c6071c in main pedido.c:20
 
 SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
 ```

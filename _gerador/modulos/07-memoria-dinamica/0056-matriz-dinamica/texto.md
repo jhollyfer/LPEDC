@@ -126,7 +126,7 @@ uma linha falhar, o caminho de erro passa pela liberação do que já existe:
 > dois `malloc`, os dados ficam contíguos e `m[i][j]` continua valendo.
 
 > [!NOTE]
-> **Pergunta para você:** quantos `malloc` e quantos `free` o A111 faz para 3
-> lojas? E para 100 lojas? Quantos faria a versão de bloco único (A112)?
+> **Pergunta para você:** quantos `malloc` e quantos `free` o código acima faz
+> para 3 lojas? E para 100 lojas? Quantos faria a versão de bloco único (A112)?
 
 {{pratique}}

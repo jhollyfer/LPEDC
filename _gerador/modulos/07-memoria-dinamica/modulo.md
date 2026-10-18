@@ -92,9 +92,9 @@ Problemas para resolver num arquivo seu, rodando com o `rodar` (e com
 `rodar --valgrind` quando quiser a segunda opinião). Todos precisam terminar
 sem nenhum relatório de erro.
 
-**1. Apagar do caderno.** No caderninho de fiado do A115, escreva
-`int remover(char **nomes, int *centavos, int *qtd, const char *nome)`, que
-apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
+**1. Apagar do caderno.** No caderninho de fiado do texto do assunto 0058,
+escreva `int remover(char **nomes, int *centavos, int *qtd, const char *nome)`,
+que apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
 "Seu Jorge" e mostre o caderno.
 
 <details><summary>Resposta</summary>

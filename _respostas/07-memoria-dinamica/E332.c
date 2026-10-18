@@ -1,21 +1,45 @@
 // 0056 · Matriz dinâmica
 // Exercício E332 · ★☆☆
-//
-// Resposta: a) 19; b) 39 = 5 * 8 - 1, a última das 40 posições; c) 5;
-// d) (3, 2), porque 26 / 8 = 3 e 26 % 8 = 2.
 
 #include <stdio.h>
+#include <stdlib.h>
+
+int indice(int i, int j, int colunas) {
+    return i * colunas + j;
+}
+
+void posicao(int k, int colunas, int *i, int *j) {
+    *i = k / colunas;
+    *j = k % colunas;
+}
 
 int main(void) {
+    int linhas = 5;
     int colunas = 8;
-    printf("a) (2, 3) -> %d\n", 2 * colunas + 3);
-    printf("b) (4, 7) -> %d\n", 4 * colunas + 7);
-    printf("c) (0, 5) -> %d\n", 0 * colunas + 5);
-    printf("d) 26 -> (%d, %d)\n", 26 / colunas, 26 % colunas);
+    int *v = malloc(linhas * colunas * sizeof *v);
+    if (v == NULL) {
+        return 1;
+    }
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            v[indice(i, j, colunas)] = i * 10 + j;
+        }
+    }
+
+    int casos[3][2] = {{2, 3}, {4, 7}, {0, 5}};
+    for (int c = 0; c < 3; c++) {
+        int k = indice(casos[c][0], casos[c][1], colunas);
+        printf("(%d, %d) -> índice %d, valor %d\n", casos[c][0], casos[c][1], k, v[k]);
+    }
+    int i, j;
+    posicao(26, colunas, &i, &j);
+    printf("índice 26 -> (%d, %d), valor %d\n", i, j, v[26]);
+
+    free(v);
     return 0;
 }
 // Saída:
-// a) (2, 3) -> 19
-// b) (4, 7) -> 39
-// c) (0, 5) -> 5
-// d) 26 -> (3, 2)
+// (2, 3) -> índice 19, valor 23
+// (4, 7) -> índice 39, valor 47
+// (0, 5) -> índice 5, valor 5
+// índice 26 -> (3, 2), valor 32

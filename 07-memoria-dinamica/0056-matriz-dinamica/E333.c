@@ -18,7 +18,7 @@
 //   1 0
 //
 // Dicas:
-// 1. Escreva antes criar_matriz e liberar_matriz como no A111; transpor usa
+// 1. Escreva antes criar_matriz e liberar_matriz como no texto; transpor usa
 //    criar_matriz(colunas, linhas).
 // 2. Cuidado ao liberar: a original tem 2 linhas, a transposta tem 3.
 // 3. Resposta esperada: a saída acima, e as duas matrizes liberadas.

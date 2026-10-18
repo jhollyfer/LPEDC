@@ -3,10 +3,10 @@
 //
 // A lista de presença de uma aula de yoga começa com 2 vagas e a função
 // adicionar faz o vetor crescer. Com o rodar, o programa quebra com um
-// relatório do AddressSanitizer na 4ª chegada. O erro está de propósito.
-// Explique por que o main fica com um ponteiro solto, mesmo que a função
-// adicionar esteja "certa" por dentro. Conserte mudando a assinatura de
-// adicionar.
+// relatório do AddressSanitizer na 4ª chegada. O erro está de propósito: o
+// main fica com um ponteiro solto, mesmo com a função adicionar "certa" por
+// dentro. Conserte mudando a assinatura de adicionar e rode de novo até a
+// lista sair completa, sem relatório.
 //
 //   Saída esperada depois do conserto:
 //   Presentes: 11 27 35 48

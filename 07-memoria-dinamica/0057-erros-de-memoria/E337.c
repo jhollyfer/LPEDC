@@ -2,24 +2,26 @@
 // Exercício E337 · ★☆☆
 //
 // O painel da rodoviária monta 4 avisos, um de cada vez. A saída está certa,
-// mas o programa vaza memória. O erro está de propósito. Rode, leia o
-// relatório do LeakSanitizer e responda: quantos bytes vazaram, em quantos
-// blocos, e por quê? Depois conserte.
+// mas o programa vaza memória. O erro está de propósito. Rode e leia o
+// relatório do LeakSanitizer. Depois conserte e acrescente dois contadores,
+// um somado a cada malloc e outro a cada free, mostrados no fim: eles têm
+// que bater, e o LeakSanitizer tem que ficar quieto.
 //
-//   Saída esperada (antes e depois do conserto):
+//   Saída esperada depois do conserto:
 //   Aviso: Ônibus para Belém às 08h
 //   Aviso: Ônibus para Macapá às 09h
 //   Aviso: Ônibus para Santarém às 11h
 //   Aviso: Ônibus para Manaus às 14h
+//   malloc: 4 | free: 4
 //
 // Dicas:
 // 1. Conte quantos malloc e quantos free acontecem durante a execução.
 // 2. A cada volta, msg recebe um endereço novo. O que acontece com o
 //    anterior?
-// 3. Resposta esperada: "Direct leak of 192 byte(s) in 3 object(s)": 4
-//    malloc de 64 bytes e só 1 free (o do último bloco, depois do laço).
-//    Conserto: free(msg) dentro do laço, depois do printf, e apagar o free
-//    de fora.
+// 3. Resposta esperada: a saída acima. Antes do conserto, o relatório diz
+//    "Direct leak of 192 byte(s) in 3 object(s)": 4 malloc de 64 bytes e só
+//    1 free (o do último bloco, depois do laço). Conserto: free(msg) dentro
+//    do laço, depois do printf, e apagar o free de fora.
 //
 // Escreva sua resposta abaixo (conserte o código):
 

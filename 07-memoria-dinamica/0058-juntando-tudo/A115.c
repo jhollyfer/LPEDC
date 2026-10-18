@@ -1,4 +1,4 @@
-// A115 · O caderninho de fiado
+// A115 · A agenda em que cada linha cresce sozinha
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,103 +13,81 @@ char *duplicar(const char *texto) {
     return copia;
 }
 
-// Dobra a capacidade dos dois vetores paralelos. Recebe o ENDEREÇO dos
-// ponteiros do main (char *** e int **) porque o realloc pode mudá-los.
-int crescer(char ***nomes, int **centavos, int *cap) {
-    int nova = *cap * 2;
-    char **mais_nomes = realloc(*nomes, nova * sizeof **nomes);
-    if (mais_nomes == NULL) {
-        return 0;
-    }
-    *nomes = mais_nomes;
-    int *mais_centavos = realloc(*centavos, nova * sizeof **centavos);
-    if (mais_centavos == NULL) {
-        return 0;
-    }
-    *centavos = mais_centavos;
-    printf("(caderno cresceu: %d -> %d clientes)\n", *cap, nova);
-    *cap = nova;
-    return 1;
-}
-
-int buscar(char **nomes, int qtd, const char *nome) {
-    for (int i = 0; i < qtd; i++) {
-        if (strcmp(nomes[i], nome) == 0) {
-            return i;
+// Põe um horário na linha do barbeiro b. Só ESSA linha cresce: as outras
+// nem ficam sabendo. Devolve 0 se faltar memória.
+int agendar(int **horarios, int *qtd, int *cap, int b, int hora) {
+    if (qtd[b] == cap[b]) {
+        int nova = cap[b] == 0 ? 1 : cap[b] * 2;
+        int *maior = realloc(horarios[b], nova * sizeof *maior); // NULL na 1ª vez
+        if (maior == NULL) {
+            return 0;
         }
+        horarios[b] = maior;
+        cap[b] = nova;
     }
-    return -1;
-}
-
-// Soma uma compra na conta do cliente; cria a conta se ela não existe.
-int anotar(char ***nomes, int **centavos, int *qtd, int *cap, const char *nome, int valor) {
-    int i = buscar(*nomes, *qtd, nome);
-    if (i >= 0) {
-        (*centavos)[i] += valor;
-        return 1;
-    }
-    if (*qtd == *cap && !crescer(nomes, centavos, cap)) {
-        return 0;
-    }
-    char *copia = duplicar(nome);
-    if (copia == NULL) {
-        return 0;
-    }
-    (*nomes)[*qtd] = copia;
-    (*centavos)[*qtd] = valor;
-    (*qtd)++;
+    horarios[b][qtd[b]] = hora;
+    qtd[b]++;
     return 1;
 }
 
-void liberar(char **nomes, int *centavos, int qtd) {
-    for (int i = 0; i < qtd; i++) {
-        free(nomes[i]); // cada nome é um bloco
+void liberar(char **nomes, int **horarios, int *qtd, int *cap, int n) {
+    for (int b = 0; b < n; b++) {
+        free(nomes[b]);    // cada nome é um bloco
+        free(horarios[b]); // cada linha também (free(NULL) não faz nada)
     }
-    free(nomes);        // depois o vetor de ponteiros
-    free(centavos);
+    free(nomes);
+    free(horarios);
+    free(qtd);
+    free(cap);
 }
 
 int main(void) {
-    int qtd = 0;
-    int cap = 2;
-    char **nomes = malloc(cap * sizeof *nomes);
-    int *centavos = malloc(cap * sizeof *centavos);
-    if (nomes == NULL || centavos == NULL) {
-        free(nomes);
-        free(centavos);
+    const char *equipe[] = {"Juca", "Neide", "Rafa"};
+    int n = 3;
+
+    // calloc: linhas começam NULL e contadores começam em 0
+    char **nomes = calloc(n, sizeof *nomes);
+    int **horarios = calloc(n, sizeof *horarios);
+    int *qtd = calloc(n, sizeof *qtd);
+    int *cap = calloc(n, sizeof *cap);
+    if (nomes == NULL || horarios == NULL || qtd == NULL || cap == NULL) {
+        liberar(nomes, horarios, qtd, cap, 0);
         return 1;
     }
-
-    const char *quem[] = {"Dona Cida", "Seu Jorge", "Dona Cida", "Bia", "Tonho", "Rosa"};
-    int valor[] = {1250, 830, 470, 2000, 315, 560}; // em centavos
-    for (int k = 0; k < 6; k++) {
-        if (!anotar(&nomes, &centavos, &qtd, &cap, quem[k], valor[k])) {
-            liberar(nomes, centavos, qtd);
+    for (int b = 0; b < n; b++) {
+        nomes[b] = duplicar(equipe[b]);
+        if (nomes[b] == NULL) {
+            liberar(nomes, horarios, qtd, cap, n);
             return 1;
         }
     }
 
-    int i = buscar(nomes, qtd, "Seu Jorge"); // Seu Jorge pagou tudo
-    if (i >= 0) {
-        centavos[i] = 0;
+    // pedidos do dia: barbeiro escolhido e horário
+    int quem[] = {1, 0, 1, 1, 2, 1, 0};
+    int hora[] = {9, 10, 11, 13, 14, 15, 16};
+    for (int k = 0; k < 7; k++) {
+        if (!agendar(horarios, qtd, cap, quem[k], hora[k])) {
+            liberar(nomes, horarios, qtd, cap, n);
+            return 1;
+        }
     }
 
-    int total = 0;
-    for (int k = 0; k < qtd; k++) {
-        printf("%-10s R$ %3d.%02d\n", nomes[k], centavos[k] / 100, centavos[k] % 100);
-        total += centavos[k];
+    for (int b = 0; b < n; b++) {
+        printf("%-6s (%d de %d):", nomes[b], qtd[b], cap[b]);
+        for (int j = 0; j < qtd[b]; j++) {
+            printf(" %dh", horarios[b][j]);
+        }
+        printf("\n");
     }
-    printf("Total na rua: R$ %d.%02d\n", total / 100, total % 100);
 
-    liberar(nomes, centavos, qtd);
+    liberar(nomes, horarios, qtd, cap, n);
     return 0;
 }
 // Saída:
-// (caderno cresceu: 2 -> 4 clientes)
-// (caderno cresceu: 4 -> 8 clientes)
-// Dona Cida  R$  17.20
-// Seu Jorge  R$   0.00
-// Bia        R$  20.00
-// Tonho      R$   3.15
-// Rosa       R$   5.60
-// Total na rua: R$ 45.95
+// Juca   (2 de 2): 10h 16h
+// Neide  (4 de 4): 9h 11h 13h 15h
+// Rafa   (1 de 1): 14h
+//
+// É uma matriz irregular que muda de forma enquanto o programa roda: a linha
+// da Neide cresceu 1 -> 2 -> 4 e a do Rafa ficou com 1. No fim existem 10
+// blocos (4 de controle, 3 nomes e 3 linhas), e liberar faz 10 free.

@@ -1,61 +1,79 @@
-// A111 · Vendas por loja e semana
+// A111 · Trocar linhas sem copiar
 
 #include <stdio.h>
 #include <stdlib.h>
 
-void liberar_matriz(int **m, int linhas) {
-    if (m == NULL) {
-        return;
+int total_da_linha(const int *linha, int colunas) {
+    int total = 0;
+    for (int j = 0; j < colunas; j++) {
+        total += linha[j];
     }
-    for (int i = 0; i < linhas; i++) {
-        free(m[i]); // primeiro cada linha...
-    }
-    free(m);        // ...depois o vetor de ponteiros
-}
-
-int **criar_matriz(int linhas, int colunas) {
-    int **m = malloc(linhas * sizeof *m); // vetor de int *: uma por linha
-    if (m == NULL) {
-        return NULL;
-    }
-    for (int i = 0; i < linhas; i++) {
-        m[i] = malloc(colunas * sizeof *m[i]); // cada linha: colunas ints
-        if (m[i] == NULL) {
-            liberar_matriz(m, i); // desfaz as linhas que já deram certo
-            return NULL;
-        }
-    }
-    return m;
+    return total;
 }
 
 int main(void) {
-    int lojas = 3;
-    int semanas = 4;
-    int vendas[3][4] = {{12, 15, 11, 18}, {9, 10, 14, 13}, {20, 17, 19, 22}}; // R$ mil
+    int times = 4;
+    int rodadas = 5;
+    int pontos[4][5] = {{1, 0, 3, 1, 0},  // Time A
+                        {3, 3, 1, 0, 3},  // Time B
+                        {0, 1, 1, 1, 1},  // Time C
+                        {3, 0, 3, 3, 1}}; // Time D
 
-    int **m = criar_matriz(lojas, semanas);
-    if (m == NULL) {
-        printf("Sem memória\n");
+    int **tabela = malloc(times * sizeof *tabela);
+    if (tabela == NULL) {
         return 1;
     }
-    for (int i = 0; i < lojas; i++) {
-        for (int j = 0; j < semanas; j++) {
-            m[i][j] = vendas[i][j]; // a notação de sempre
+    for (int i = 0; i < times; i++) {
+        tabela[i] = malloc(rodadas * sizeof *tabela[i]);
+        if (tabela[i] == NULL) {
+            for (int k = 0; k < i; k++) {
+                free(tabela[k]);
+            }
+            free(tabela);
+            return 1;
+        }
+        for (int j = 0; j < rodadas; j++) {
+            tabela[i][j] = pontos[i][j];
         }
     }
+    char nome[4] = {'A', 'B', 'C', 'D'};
 
-    for (int i = 0; i < lojas; i++) {
-        int total = 0;
-        for (int j = 0; j < semanas; j++) {
-            total += m[i][j];
+    // Ordena do mais pontuado ao menos (seleção). Trocar duas linhas é
+    // trocar dois PONTEIROS: 8 bytes cada, não importa quantas rodadas.
+    for (int i = 0; i < times - 1; i++) {
+        int melhor = i;
+        for (int k = i + 1; k < times; k++) {
+            if (total_da_linha(tabela[k], rodadas) > total_da_linha(tabela[melhor], rodadas)) {
+                melhor = k;
+            }
         }
-        printf("Loja %d: R$ %d mil\n", i + 1, total);
+        int *linha = tabela[i]; // só o endereço da linha muda de gaveta
+        tabela[i] = tabela[melhor];
+        tabela[melhor] = linha;
+        char letra = nome[i];
+        nome[i] = nome[melhor];
+        nome[melhor] = letra;
     }
 
-    liberar_matriz(m, lojas);
+    for (int i = 0; i < times; i++) {
+        printf("%dº Time %c: %2d pts |", i + 1, nome[i], total_da_linha(tabela[i], rodadas));
+        for (int j = 0; j < rodadas; j++) {
+            printf(" %d", tabela[i][j]);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < times; i++) {
+        free(tabela[i]); // a ordem das linhas mudou, mas cada bloco é o mesmo
+    }
+    free(tabela);
     return 0;
 }
 // Saída:
-// Loja 1: R$ 56 mil
-// Loja 2: R$ 46 mil
-// Loja 3: R$ 78 mil
+// 1º Time B: 10 pts | 3 3 1 0 3
+// 2º Time D: 10 pts | 3 0 3 3 1
+// 3º Time A:  5 pts | 1 0 3 1 0
+// 4º Time C:  4 pts | 0 1 1 1 1
+//
+// Numa matriz fixa int [4][5], trocar duas linhas exigiria copiar os 5
+// números de cada uma. Com int **, as linhas nem saem do lugar no heap.

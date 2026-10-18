@@ -2,12 +2,13 @@
 // Exercício E318 · ★★★
 //
 // Este programa compila com um AVISO (warning) de propósito e mostra lixo ou
-// quebra. Rode, leia o aviso e responda: qual é o problema? Depois conserte
-// sem usar static nem malloc: quem chama empresta o vetor.
+// quebra. Rode e leia o aviso. Depois conserte sem usar static nem malloc
+// (quem chama empresta o vetor) e rode de novo até sair a senha certa, sem
+// aviso nenhum.
 //
 //   Saída esperada depois do conserto:
-//   Senha: A032
-//   Senha: A097
+//   Senha: A042
+//   Senha: A107
 //
 // Dicas:
 // 1. Procure "returns address of local variable" no aviso.

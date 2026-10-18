@@ -195,7 +195,7 @@ no fim de `main`:
 > isso locais são de graça. O `malloc` precisa procurar um pedaço livre do
 > tamanho certo numa lista de blocos e anotar o tamanho num cabeçalho
 > escondido logo antes do endereço que ele te entrega. É bem mais caro. Rode
-> `size` no executável (`gcc A105.c -o comanda && size comanda`) e veja as
+> `size` no executável (`gcc A105.c -o bolao && size bolao`) e veja as
 > colunas `text` (código), `data` (globais com valor) e `bss` (globais
 > zeradas). Heap e pilha não aparecem: eles só existem quando o programa roda.
 
@@ -208,45 +208,66 @@ no fim de `main`:
 
 Os arquivos ficam em [`0053-pilha-e-heap/`](0053-pilha-e-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A105 · A comanda em três regiões**
+**Exemplo A105 · Um bloco, três funções**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
-int pedidos_do_dia = 0; // DADOS: existe do começo ao fim do programa
+int blocos_abertos = 0; // DADOS: conta os blocos do heap ainda não devolvidos
 
-// Monta a comanda da mesa e devolve o endereço dela.
-int *abrir_comanda(int mesa) {
-    int itens = 3; // PILHA: some quando a função retorna
-    int *comanda = malloc(itens * sizeof(int)); // o bloco fica no HEAP
-    if (comanda == NULL) {
-        return NULL;
+// Cria o bolão no heap. O tamanho só aparece na hora de rodar.
+int *criar_bolao(int participantes) {
+    int *palpites = malloc(participantes * sizeof *palpites); // HEAP
+    if (palpites != NULL) {
+        blocos_abertos++;
     }
-    comanda[0] = 18; // suco
-    comanda[1] = 25; // prato feito
-    comanda[2] = 7;  // pudim
-    pedidos_do_dia++;
-    printf("Mesa %d: comanda com %d itens\n", mesa, itens);
-    return comanda; // o endereço volta; o bloco continua vivo no heap
+    return palpites; // o frame de criar_bolao some aqui; o bloco, não
+}
+
+// Outra função, outro frame: mexe no MESMO bloco só pelo endereço.
+void anotar_palpites(int *palpites, int participantes) {
+    for (int i = 0; i < participantes; i++) { // i mora na PILHA deste frame
+        palpites[i] = (i * 3) % 5; // quantos gols cada um aposta
+    }
+}
+
+// Uma terceira função decide a hora de devolver o bloco.
+void encerrar_bolao(int *palpites) {
+    free(palpites);
+    blocos_abertos--;
 }
 
 int main(void) {
-    int *comanda = abrir_comanda(4); // PILHA: o ponteiro mora no frame de main
-    if (comanda == NULL) {
+    int participantes = 4;
+    int *bolao = criar_bolao(participantes);
+    if (bolao == NULL) {
         printf("Sem memória\n");
         return 1;
     }
-    int total = comanda[0] + comanda[1] + comanda[2];
-    printf("Total: R$ %d\n", total);
-    printf("Pedidos do dia: %d\n", pedidos_do_dia);
-    free(comanda); // devolve o bloco ao heap
+    printf("Blocos abertos: %d\n", blocos_abertos);
+
+    anotar_palpites(bolao, participantes);
+    for (int i = 0; i < participantes; i++) {
+        printf("Participante %d: palpite %d\n", i + 1, bolao[i]);
+    }
+
+    encerrar_bolao(bolao);
+    bolao = NULL; // o endereço guardado não vale mais nada
+    printf("Blocos abertos: %d\n", blocos_abertos);
     return 0;
 }
 // Saída:
-// Mesa 4: comanda com 3 itens
-// Total: R$ 50
-// Pedidos do dia: 1
+// Blocos abertos: 1
+// Participante 1: palpite 0
+// Participante 2: palpite 3
+// Participante 3: palpite 1
+// Participante 4: palpite 4
+// Blocos abertos: 0
+//
+// O bloco nasceu em criar_bolao, foi preenchido em anotar_palpites e morreu
+// em encerrar_bolao. Nenhuma das três precisou estar viva ao mesmo tempo que
+// as outras: quem manda no tempo de vida de um bloco do heap é você.
 ```
 
 ```bash
@@ -306,40 +327,37 @@ int main(void) {
 
 **Exercício E313** · ★☆☆
 
-Leia o trecho abaixo (não precisa rodar) e diga em que região da memória
-mora cada item: código, dados, heap ou pilha.
+Complete o programa do placar do campeonato. Ele já tem a global recorde
+e o protótipo de ler_placar. Escreva ler_placar(int jogos) assim:
+
+- uma static int chamadas, que soma 1 a cada chamada;
+- um bloco no heap com jogos ints (confira o NULL);
+- placar[i] = i * 2 para cada jogo i;
+- mostra "Chamada N:" e os gols, e devolve o ponteiro.
+
+No main, chame ler_placar(3), atualize recorde com o maior gol do bloco e
+libere o bloco; depois faça o mesmo com ler_placar(2). No fim, mostre o
+recorde. Ao lado de cada declaração, escreva num comentário a região onde
+ela mora: código, dados, pilha ou heap.
 
 
 ```text
-int recorde = 0;
-
-int *ler_placar(int jogos) {
-    static int chamadas = 0;
-    int gols = 2;
-    int *placar = malloc(jogos * sizeof(int));
-    chamadas++;
-    return placar;
-}
+Saída esperada:
+Chamada 1: 0 2 4
+Chamada 2: 0 2
+Recorde: 4
 ```
-
-
-a) recorde; b) chamadas; c) jogos; d) gols;
-e) a variável placar (o ponteiro);
-f) o bloco para onde placar aponta;
-g) as instruções de ler_placar.
-
-Depois responda: quais desses itens ainda existem quando ler_placar
-retorna?
 
 **Dicas:**
 
-1. static dentro de função não mora no frame: mora junto das globais.
-2. O ponteiro e o bloco apontado são duas coisas diferentes, em lugares
-   diferentes.
-3. Resposta esperada: a) dados; b) dados; c) pilha (parâmetro é local);
-   d) pilha; e) pilha; f) heap; g) código. Depois do return continuam vivos
-   recorde, chamadas, o bloco do heap e o código. jogos, gols e o ponteiro
-   placar somem com o frame; por isso o endereço precisa voltar no return.
+1. static dentro da função não mora no frame: mora junto das globais, e
+   por isso chamadas lembra o valor de uma chamada para a outra.
+2. O ponteiro placar (pilha) e o bloco apontado (heap) são duas coisas
+   diferentes: o ponteiro some no return, o bloco continua vivo. Por isso
+   o endereço precisa voltar no return.
+3. Resposta esperada: a saída acima. Regiões: recorde e chamadas nos
+   dados; jogos, i e o ponteiro placar na pilha; o bloco no heap; as
+   instruções de ler_placar no código.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E313.c
@@ -380,26 +398,27 @@ ação num vetor local: int historico[2000]; e chama a si mesma.
 
 Escreva um programa que calcule e mostre quantos bytes esse vetor ocupa em
 cada chamada e quantas chamadas, no máximo, cabem numa pilha de 8 MiB.
-Use sizeof para o tamanho do int e divisão inteira.
+Depois faça a mesma conta para o vetor double historico[2000]; e mostre
+também. Use sizeof para o tamanho de cada tipo e divisão inteira.
 
 
 ```text
 Saída esperada:
-Cada chamada usa pelo menos 8000 bytes
-Cabem no máximo 1048 chamadas
+int: cada chamada usa pelo menos 8000 bytes
+int: cabem no máximo 1048 chamadas
+double: cada chamada usa pelo menos 16000 bytes
+double: cabem no máximo 524 chamadas
 ```
-
-
-Responda também: por que o número real de chamadas é um pouco menor?
 
 **Dicas:**
 
 1. 8 MiB = 8 * 1024 * 1024 bytes.
 2. sizeof devolve size_t; mostre com %zu.
-3. Resposta esperada: 8000 bytes e 1048 chamadas (8388608 / 8000). Na
-   prática cabem menos: cada frame guarda também o endereço de retorno e
-   outras locais, e a pilha já tem o frame de main e as variáveis de
-   ambiente. Passou do limite, o programa morre com stack overflow.
+3. Resposta esperada: a saída acima (8388608 / 8000 = 1048 e
+   8388608 / 16000 = 524). Na prática cabem menos: cada frame guarda
+   também o endereço de retorno e outras locais, e a pilha já tem o frame
+   de main e as variáveis de ambiente. Passou do limite, o programa morre
+   com stack overflow.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E315.c
@@ -410,7 +429,7 @@ Responda também: por que o número real de chamadas é um pouco menor?
 Um sensor de vibração de uma ponte grava 5.000.000 de leituras por dia.
 Simule as leituras com leitura[i] = i % 7 e mostre a soma de todas.
 
-Faça em dois passos:
+Faça em três passos:
 1) declare o vetor int leituras[5000000]; como LOCAL de main e rode com o
 
 ```text
@@ -418,22 +437,27 @@ Faça em dois passos:
 ```
 
 2) mude o vetor para os DADOS (global ou static) e rode de novo.
-
+3) acrescente uma linha que mostre quantos bytes o vetor ocupa, com
 
 ```text
-Saída esperada (no passo 2):
-Soma das leituras: 14999995
+ sizeof aplicado ao próprio vetor.
 ```
 
 
-Responda: quantos bytes o vetor ocupa? Por que o passo 1 quebra?
+
+```text
+Saída esperada (depois do passo 3):
+O vetor ocupa 20000000 bytes
+Soma das leituras: 14999995
+```
 
 **Dicas:**
 
 1. 5.000.000 * 4 bytes = 20.000.000 bytes, uns 19 MiB.
 2. Basta escrever static na frente da declaração, dentro de main.
-3. Resposta esperada: 14999995. O vetor tem 20 MB e a pilha só tem 8 MiB:
-   no passo 1 o AddressSanitizer acusa stack-overflow (sem ele, o programa
+   sizeof leituras dá o tamanho do vetor inteiro (size_t: use %zu).
+3. Resposta esperada: a saída acima. O vetor tem 20 MB e a pilha só tem
+   8 MiB: no passo 1 o AddressSanitizer acusa stack-overflow (sem ele, o programa
    morre com Segmentation fault). Nos dados, o espaço é reservado quando o
    programa carrega e não depende do tamanho da pilha. No assunto 0054 você
    vai fazer o mesmo com malloc, escolhendo o tamanho na hora de rodar.
@@ -444,43 +468,44 @@ Responda: quantos bytes o vetor ocupa? Por que o passo 1 quebra?
 
 **Exercício E317** · ★★★
 
-Preveja a saída SEM rodar. Depois rode e confira.
+O programa abaixo mistura uma global, uma static e uma local numa função
+recursiva. Estenda o programa (sem mudar as contas) para ele mostrar o que
+acontece em cada frame:
+
+- logo depois de contador--, um printf com n, chamadas, local e contador;
+- logo antes do return, um printf com n e o valor que o frame devolve.
+
+Use os formatos da saída esperada. Rode e confira cada número com o lugar
+onde mora cada variável.
 
 
 ```text
-int contador = 100;
-
-int passo(int n) {
-    static int chamadas = 0;
-    int local = 0;
-    chamadas++;
-    local++;
-    contador--;
-    if (n > 0) {
-        passo(n - 1);
-    }
-    return chamadas * 10 + local;
-}
-
-int main(void) {
-    printf("%d\n", passo(3));
-    printf("%d\n", passo(0));
-    printf("%d\n", contador);
-    return 0;
-}
+Saída esperada:
+entra n=3: chamadas=1 local=1 contador=99
+entra n=2: chamadas=2 local=1 contador=98
+entra n=1: chamadas=3 local=1 contador=97
+entra n=0: chamadas=4 local=1 contador=96
+sai n=0: devolve 41
+sai n=1: devolve 41
+sai n=2: devolve 41
+sai n=3: devolve 41
+41
+entra n=0: chamadas=5 local=1 contador=95
+sai n=0: devolve 51
+51
+95
 ```
-
-
-Explique cada número pensando em onde mora cada variável.
 
 **Dicas:**
 
-1. passo(3) gera 4 frames: n = 3, 2, 1 e 0. Cada um tem a sua local.
-2. chamadas é uma só para todos os frames. Quando o primeiro frame chega ao
-   return, as chamadas de dentro já terminaram.
-3. Resposta esperada: 41, 51 e 95. No return do primeiro passo(3),
-   chamadas já vale 4 e a local daquele frame vale 1 (cada frame tem a sua):
-   41. passo(0) é a 5ª chamada: 51. contador foi decrementado 5 vezes: 95.
+1. Para o segundo printf, guarde a conta numa variável antes do return:
+   int resultado = chamadas * 10 + local;
+2. passo(3) gera 4 frames (n = 3, 2, 1 e 0) e cada um tem a sua local.
+   chamadas e contador são um só para todos os frames.
+3. Resposta esperada: a saída acima. local vale sempre 1 porque nasce de
+   novo em cada frame (pilha); chamadas só cresce porque mora nos dados.
+   Quando o primeiro frame chega ao return, as chamadas de dentro já
+   terminaram: por isso todos os frames de passo(3) devolvem 41.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E317.c
@@ -489,14 +514,15 @@ Explique cada número pensando em onde mora cada variável.
 **Exercício E318** · ★★★
 
 Este programa compila com um AVISO (warning) de propósito e mostra lixo ou
-quebra. Rode, leia o aviso e responda: qual é o problema? Depois conserte
-sem usar static nem malloc: quem chama empresta o vetor.
+quebra. Rode e leia o aviso. Depois conserte sem usar static nem malloc
+(quem chama empresta o vetor) e rode de novo até sair a senha certa, sem
+aviso nenhum.
 
 
 ```text
 Saída esperada depois do conserto:
-Senha: A032
-Senha: A097
+Senha: A042
+Senha: A107
 ```
 
 **Dicas:**
@@ -641,57 +667,53 @@ esse caminho:
 
 Os arquivos ficam em [`0054-malloc-free/`](0054-malloc-free/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A107 · As corridas do mês**
+**Exemplo A107 · A foto que não cabe na pilha**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(void) {
-    int n;
-    printf("Quantas corridas? ");
-    if (scanf("%d", &n) != 1 || n <= 0) {
-        printf("Quantidade inválida\n");
+    int largura = 4000;
+    int altura = 3000; // uma foto de 12 megapixels, em tons de cinza
+
+    // 12.000.000 de bytes: como vetor local, estouraria a pilha de 8 MiB.
+    // No heap, o limite é a memória livre da máquina.
+    size_t total = (size_t)largura * altura;
+    unsigned char *brilho = malloc(total * sizeof *brilho);
+    if (brilho == NULL) { // pedido grande: o NULL é possível de verdade
+        printf("Sem memória para a foto\n");
         return 1;
     }
+    printf("Pedi %zu bytes ao heap\n", total * sizeof *brilho);
 
-    // pede n * 8 bytes ao heap; o tamanho só é conhecido agora
-    double *corridas = malloc(n * sizeof(double));
-    if (corridas == NULL) {
-        printf("Sem memória\n");
-        return 1;
+    // simula a foto: um degradê que vai de 0 (preto) a 255 (branco)
+    for (size_t i = 0; i < total; i++) {
+        brilho[i] = (unsigned char)(i % 256);
     }
 
-    for (int i = 0; i < n; i++) {
-        printf("Valor da corrida %d: ", i + 1);
-        if (scanf("%lf", &corridas[i]) != 1) { // usa como um vetor comum
-            printf("Valor inválido\n");
-            free(corridas);
-            return 1;
+    long soma = 0;
+    int claros = 0;
+    for (size_t i = 0; i < total; i++) {
+        soma += brilho[i];
+        if (brilho[i] >= 200) {
+            claros++;
         }
     }
+    printf("Brilho médio: %.2f\n", (double)soma / total);
+    printf("Pixels claros: %d\n", claros);
 
-    double total = 0;
-    for (int i = 0; i < n; i++) {
-        total += corridas[i];
-    }
-    printf("Total: R$ %.2f\n", total);
-    printf("Média: R$ %.2f\n", total / n);
-
-    free(corridas);  // devolve os bytes ao heap
-    corridas = NULL; // o ponteiro não aponta mais para lugar nenhum
+    free(brilho); // 12 MB de volta ao heap de uma vez
+    brilho = NULL;
     return 0;
 }
-// Exemplo de uso:
-// Quantas corridas? 4
-// Valor da corrida 1: 12.50
-// Valor da corrida 2: 18
-// Valor da corrida 3: 25.90
-// Valor da corrida 4: 9.60
-// Total: R$ 66.00
-// Média: R$ 16.50
+// Saída:
+// Pedi 12000000 bytes ao heap
+// Brilho médio: 127.50
+// Pixels claros: 2625000
 //
-// Para testar sem digitar: printf '4\n12.50 18 25.90 9.60\n' | ~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/A107.c
+// Troque o malloc por unsigned char brilho[12000000]; dentro do main e rode:
+// o AddressSanitizer acusa stack-overflow antes da primeira linha.
 ```
 
 ```bash
@@ -844,9 +866,11 @@ Saída esperada:
 
 **Exercício E322** · ★★☆
 
-Quantos bytes cada chamada pede? Responda antes de rodar, supondo um PC de
-64 bits. Depois escreva um programa que mostre os cinco números com sizeof
-e strlen, para conferir.
+Escreva um programa que faça de verdade as cinco alocações abaixo. Antes
+de cada malloc, guarde numa variável size_t quantos bytes ele vai pedir
+(ex.: size_t ta = 5 * sizeof(int);) e passe essa variável para o malloc.
+Confira o NULL de cada uma, mostre os cinco tamanhos, mostre quantos int
+cabem inteiros no bloco e) e libere os cinco blocos no fim.
 
 
 ```text
@@ -858,15 +882,25 @@ e) int *e = malloc(5);
 ```
 
 
-Em e), quantos int cabem de verdade? O que acontece em e[1] = 9; ?
+
+```text
+Saída esperada (num PC de 64 bits):
+a) 20 bytes
+b) 40 bytes
+c) 24 bytes
+d) 7 bytes
+e) 5 bytes: cabe 1 int
+```
 
 **Dicas:**
 
 1. int tem 4 bytes, double 8 e qualquer ponteiro 8 (em 64 bits).
-2. "Recife" tem 6 letras, mais o '\0'.
-3. Resposta esperada: a) 20; b) 40; c) 24; d) 7; e) 5 bytes: cabe só um
-   int (sobra 1 byte). e[1] ocupa os bytes 4 a 7: escreve fora do bloco, e
-   o AddressSanitizer acusa heap-buffer-overflow.
+   "Recife" tem 6 letras, mais o '\0'.
+2. Se um malloc falhar, libere os que já deram certo antes de sair
+   (free(NULL) não faz nada, então dá para liberar todos de uma vez).
+3. Resposta esperada: a saída acima. Em e) sobra 1 byte: escrever e[1]
+   ocuparia os bytes 4 a 7, fora do bloco. Acrescente e[1] = 9; para ver
+   o AddressSanitizer acusar heap-buffer-overflow, e depois apague a linha.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E322.c
@@ -876,8 +910,8 @@ Em e), quantos int cabem de verdade? O que acontece em e[1] = 9; ?
 
 O app de caminhada calcula a média de passos dos últimos 4 dias. A conta
 sai certa, mas o programa termina com um relatório do AddressSanitizer.
-O erro está de propósito. Rode, leia o relatório e responda: qual linha
-está errada e por quê? Depois conserte.
+O erro está de propósito. Rode, leia o relatório, conserte e rode de novo
+até o programa terminar sem relatório nenhum.
 
 
 ```text
@@ -1055,51 +1089,53 @@ custa só uma atribuição:
 
 Os arquivos ficam em [`0055-calloc-realloc/`](0055-calloc-realloc/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A109 · O vetor que cresce**
+**Exemplo A109 · A lista que nasce do NULL**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(void) {
-    int chegando[] = {50, 120, 35, 80, 15}; // os Pix do dia, em R$
-    int capacidade = 2;                      // cabem 2 por enquanto
-    int quantidade = 0;                      // quantos já guardei
-    int *pix = malloc(capacidade * sizeof *pix);
-    if (pix == NULL) {
-        return 1;
-    }
+    const char *itens[] = {"arroz", "leite", "banana", "ovos"};
+    char *lista = NULL; // ainda não existe bloco nenhum
+    size_t tamanho = 0; // bytes do bloco atual
 
-    for (int i = 0; i < 5; i++) {
-        if (quantidade == capacidade) { // encheu: dobra a capacidade
-            int nova = capacidade * 2;
-            int *maior = realloc(pix, nova * sizeof *pix); // temporário!
-            if (maior == NULL) {
-                free(pix); // o bloco antigo continua valendo: libera
-                return 1;
-            }
-            printf("Capacidade: %d -> %d\n", capacidade, nova);
-            pix = maior;
-            capacidade = nova;
+    for (int i = 0; i < 4; i++) {
+        // + 2 para o ", " entre os itens (só a partir do segundo);
+        // + 1 para o '\0' entra só no primeiro, quando tamanho ainda é 0
+        size_t extra = strlen(itens[i]) + (i == 0 ? 1 : 2);
+
+        // realloc(NULL, n) funciona como malloc(n): a primeira volta cria o
+        // bloco; as outras aumentam e PRESERVAM o que já estava escrito.
+        char *maior = realloc(lista, tamanho + extra);
+        if (maior == NULL) {
+            free(lista);
+            return 1;
         }
-        pix[quantidade] = chegando[i]; // o "push"
-        quantidade++;
+        lista = maior;
+        if (i == 0) {
+            lista[0] = '\0'; // bloco novo vem com lixo: vira string vazia
+        } else {
+            strcat(lista, ", ");
+        }
+        strcat(lista, itens[i]);
+        tamanho += extra;
+        printf("%2zu bytes: %s\n", tamanho, lista);
     }
 
-    int total = 0;
-    for (int i = 0; i < quantidade; i++) {
-        total += pix[i];
-    }
-    printf("%d Pix, total R$ %d\n", quantidade, total);
-    printf("Sobram %d posições livres\n", capacidade - quantidade);
-    free(pix);
+    free(lista);
     return 0;
 }
 // Saída:
-// Capacidade: 2 -> 4
-// Capacidade: 4 -> 8
-// 5 Pix, total R$ 300
-// Sobram 3 posições livres
+//  6 bytes: arroz
+// 13 bytes: arroz, leite
+// 21 bytes: arroz, leite, banana
+// 27 bytes: arroz, leite, banana, ovos
+//
+// Cada linha tem strlen + 1 bytes, nem um a mais: o bloco cresce no tamanho
+// exato de cada item. Começar com o ponteiro em NULL evita um malloc separado
+// antes do laço.
 ```
 
 ```bash
@@ -1186,7 +1222,8 @@ Saída esperada:
 
 O programa abaixo funciona e mostra as notas do boletim. Mesmo assim, a
 linha do realloc tem um problema que só aparece quando falta memória.
-Explique o problema e refatore a linha, sem mudar a saída.
+Refatore o trecho do realloc para ele não perder o bloco antigo se
+falhar, e rode de novo para conferir que a saída não mudou.
 
 
 ```text
@@ -1230,7 +1267,7 @@ Para testar: printf '5 8 2 9 4 0\n' | ~/LPEDC/rodar <este arquivo>
 
 1. Duas variáveis de controle: quantidade e capacidade. Encheu quando
    quantidade == capacidade.
-2. Use o realloc com ponteiro temporário, como no A109.
+2. Use o realloc com ponteiro temporário, como no exemplo do texto.
 3. Resposta esperada: "Ao contrário: 4 9 2 8 5" e "Capacidade final: 8"
    (a capacidade foi 2, 4 e 8). Também trate o fim da entrada: se o scanf
    não devolver 1, pare como se fosse o 0.
@@ -1306,9 +1343,8 @@ dobrar: 10 realocações, 1023 cópias
 
 A fila do banco guarda as senhas num vetor que cresce. O programa guarda o
 endereço da primeira senha para mostrar no painel depois. Ele está ERRADO
-de propósito: rode com o rodar, leia o relatório do AddressSanitizer e
-responda: qual é o erro, em que linha, e por que o realloc é o culpado?
-Depois conserte.
+de propósito: rode com o rodar e leia o relatório do AddressSanitizer
+(ele aponta a linha). Conserte e rode de novo até sair sem relatório.
 
 
 ```text
@@ -1462,75 +1498,93 @@ uma linha falhar, o caminho de erro passa pela liberação do que já existe:
 > dois `malloc`, os dados ficam contíguos e `m[i][j]` continua valendo.
 
 > [!NOTE]
-> **Pergunta para você:** quantos `malloc` e quantos `free` o A111 faz para 3
-> lojas? E para 100 lojas? Quantos faria a versão de bloco único (A112)?
+> **Pergunta para você:** quantos `malloc` e quantos `free` o código acima faz
+> para 3 lojas? E para 100 lojas? Quantos faria a versão de bloco único (A112)?
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0056-matriz-dinamica/`](0056-matriz-dinamica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A111 · Vendas por loja e semana**
+**Exemplo A111 · Trocar linhas sem copiar**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
-void liberar_matriz(int **m, int linhas) {
-    if (m == NULL) {
-        return;
+int total_da_linha(const int *linha, int colunas) {
+    int total = 0;
+    for (int j = 0; j < colunas; j++) {
+        total += linha[j];
     }
-    for (int i = 0; i < linhas; i++) {
-        free(m[i]); // primeiro cada linha...
-    }
-    free(m);        // ...depois o vetor de ponteiros
-}
-
-int **criar_matriz(int linhas, int colunas) {
-    int **m = malloc(linhas * sizeof *m); // vetor de int *: uma por linha
-    if (m == NULL) {
-        return NULL;
-    }
-    for (int i = 0; i < linhas; i++) {
-        m[i] = malloc(colunas * sizeof *m[i]); // cada linha: colunas ints
-        if (m[i] == NULL) {
-            liberar_matriz(m, i); // desfaz as linhas que já deram certo
-            return NULL;
-        }
-    }
-    return m;
+    return total;
 }
 
 int main(void) {
-    int lojas = 3;
-    int semanas = 4;
-    int vendas[3][4] = {{12, 15, 11, 18}, {9, 10, 14, 13}, {20, 17, 19, 22}}; // R$ mil
+    int times = 4;
+    int rodadas = 5;
+    int pontos[4][5] = {{1, 0, 3, 1, 0},  // Time A
+                        {3, 3, 1, 0, 3},  // Time B
+                        {0, 1, 1, 1, 1},  // Time C
+                        {3, 0, 3, 3, 1}}; // Time D
 
-    int **m = criar_matriz(lojas, semanas);
-    if (m == NULL) {
-        printf("Sem memória\n");
+    int **tabela = malloc(times * sizeof *tabela);
+    if (tabela == NULL) {
         return 1;
     }
-    for (int i = 0; i < lojas; i++) {
-        for (int j = 0; j < semanas; j++) {
-            m[i][j] = vendas[i][j]; // a notação de sempre
+    for (int i = 0; i < times; i++) {
+        tabela[i] = malloc(rodadas * sizeof *tabela[i]);
+        if (tabela[i] == NULL) {
+            for (int k = 0; k < i; k++) {
+                free(tabela[k]);
+            }
+            free(tabela);
+            return 1;
+        }
+        for (int j = 0; j < rodadas; j++) {
+            tabela[i][j] = pontos[i][j];
         }
     }
+    char nome[4] = {'A', 'B', 'C', 'D'};
 
-    for (int i = 0; i < lojas; i++) {
-        int total = 0;
-        for (int j = 0; j < semanas; j++) {
-            total += m[i][j];
+    // Ordena do mais pontuado ao menos (seleção). Trocar duas linhas é
+    // trocar dois PONTEIROS: 8 bytes cada, não importa quantas rodadas.
+    for (int i = 0; i < times - 1; i++) {
+        int melhor = i;
+        for (int k = i + 1; k < times; k++) {
+            if (total_da_linha(tabela[k], rodadas) > total_da_linha(tabela[melhor], rodadas)) {
+                melhor = k;
+            }
         }
-        printf("Loja %d: R$ %d mil\n", i + 1, total);
+        int *linha = tabela[i]; // só o endereço da linha muda de gaveta
+        tabela[i] = tabela[melhor];
+        tabela[melhor] = linha;
+        char letra = nome[i];
+        nome[i] = nome[melhor];
+        nome[melhor] = letra;
     }
 
-    liberar_matriz(m, lojas);
+    for (int i = 0; i < times; i++) {
+        printf("%dº Time %c: %2d pts |", i + 1, nome[i], total_da_linha(tabela[i], rodadas));
+        for (int j = 0; j < rodadas; j++) {
+            printf(" %d", tabela[i][j]);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < times; i++) {
+        free(tabela[i]); // a ordem das linhas mudou, mas cada bloco é o mesmo
+    }
+    free(tabela);
     return 0;
 }
 // Saída:
-// Loja 1: R$ 56 mil
-// Loja 2: R$ 46 mil
-// Loja 3: R$ 78 mil
+// 1º Time B: 10 pts | 3 3 1 0 3
+// 2º Time D: 10 pts | 3 0 3 3 1
+// 3º Time A:  5 pts | 1 0 3 1 0
+// 4º Time C:  4 pts | 0 1 1 1 1
+//
+// Numa matriz fixa int [4][5], trocar duas linhas exigiria copiar os 5
+// números de cada uma. Com int **, as linhas nem saem do lugar no heap.
 ```
 
 ```bash
@@ -1620,26 +1674,37 @@ Para testar: printf '4\n' | ~/LPEDC/rodar <este arquivo>
 
 **Exercício E332** · ★☆☆
 
-Uma matriz de 5 linhas e 8 colunas está guardada num bloco único:
+Uma matriz de 5 linhas e 8 colunas vai morar num bloco único:
 int *v = malloc(5 * 8 * sizeof *v); e o elemento (i, j) fica em
-v[i * 8 + j]. Responda de cabeça e depois confira com um programa que
-mostre as contas:
+v[i * 8 + j]. Escreva as duas funções de conversão:
 
 
 ```text
-a) Em que índice de v fica o elemento (2, 3)?
-b) E o (4, 7)? Por que ele é o último?
-c) E o (0, 5)?
-d) O índice 26 é qual (i, j)?
+int indice(int i, int j, int colunas);             // (i, j) -> k
+void posicao(int k, int colunas, int *i, int *j);  // k -> (i, j)
+```
+
+
+No main, aloque o bloco, guarde em cada (i, j) o valor i * 10 + j (usando
+indice) e mostre os quatro casos abaixo. O valor guardado confere a conta:
+o 23 só pode estar na linha 2, coluna 3. Libere o bloco no fim.
+
+
+```text
+Saída esperada:
+(2, 3) -> índice 19, valor 23
+(4, 7) -> índice 39, valor 47
+(0, 5) -> índice 5, valor 5
+índice 26 -> (3, 2), valor 32
 ```
 
 **Dicas:**
 
-1. Cada linha completa "pula" 8 posições.
-2. Para voltar: i = k / 8 e j = k % 8.
-3. Resposta esperada: a) 19; b) 39 = 5 * 8 - 1, a última das 40
-   posições; c) 5 (a linha 0 não pula nada); d) (3, 2), porque 26 / 8 = 3
-   e 26 % 8 = 2.
+1. Cada linha completa "pula" 8 posições: k = i * colunas + j.
+2. Para voltar: *i = k / colunas e *j = k % colunas (os dois resultados
+   voltam por ponteiro, como no assunto 0046).
+3. Resposta esperada: a saída acima. O (4, 7) cai no índice 39 = 5 * 8 - 1,
+   a última das 40 posições.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E332.c
@@ -1676,7 +1741,7 @@ Saída esperada (a transposta, 3 x 2):
 
 **Dicas:**
 
-1. Escreva antes criar_matriz e liberar_matriz como no A111; transpor usa
+1. Escreva antes criar_matriz e liberar_matriz como no texto; transpor usa
    criar_matriz(colunas, linhas).
 2. Cuidado ao liberar: a original tem 2 linhas, a transposta tem 3.
 3. Resposta esperada: a saída acima, e as duas matrizes liberadas.
@@ -1721,7 +1786,8 @@ Elementos guardados: 21
 Este programa monta a grade de 3 turnos x 5 dias de uma clínica, com o
 número de consultas, e mostra o total. Ele tem DOIS erros de memória, de
 propósito (o gcc até avisa sobre um deles). Rode com o rodar, leia o aviso
-e os relatórios e conserte um de cada vez.
+e os relatórios e conserte um de cada vez, rodando de novo a cada conserto
+até sair o total sem relatório nenhum.
 
 
 ```text
@@ -1780,7 +1846,7 @@ A * A: dimensões incompatíveis
 **Dicas:**
 
 1. c[i][j] é a soma de a[i][k] * b[k][j] para k de 0 a ca - 1.
-2. Reaproveite criar_matriz e liberar_matriz do A111. Para preencher A e
+2. Reaproveite criar_matriz e liberar_matriz do texto. Para preencher A e
    B, copie de matrizes fixas int [2][3] e int [3][2].
 3. Resposta esperada: a saída acima. Libere A, B e o produto; o NULL de
    A * A não precisa de free (free(NULL) também não faria mal).
@@ -1842,16 +1908,17 @@ mostra isso no fim da execução:
 
 <p align="center"><img src="0057-erros-de-memoria/ideia.svg" alt="Diagrama da ideia: Erros de memória" width="858"></p>
 
-O relatório da versão quebrada, sem o `free`. Leia de cima para baixo: o tipo
-do erro, quanto vazou e a pilha de chamadas que fez o `malloc`:
+O relatório da versão quebrada, sem o `free` (salva como `pedido.c`). Leia de
+cima para baixo: o tipo do erro, quanto vazou e a pilha de chamadas que fez o
+`malloc`:
 
 ```text
 ==12072==ERROR: LeakSanitizer: detected memory leaks
 
 Direct leak of 48 byte(s) in 3 object(s) allocated from:
     #0 0x7f1503afd9c7 in malloc
-    #1 0x55bff3c602ef in total_do_pedido A113.c:8
-    #2 0x55bff3c6071c in main A113.c:23
+    #1 0x55bff3c602ef in total_do_pedido pedido.c:5
+    #2 0x55bff3c6071c in main pedido.c:20
 
 SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
 ```
@@ -1919,44 +1986,65 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 
 Os arquivos ficam em [`0057-erros-de-memoria/`](0057-erros-de-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A113 · O carrinho que não vaza**
+**Exemplo A113 · Todo caminho de saída libera**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
-// Soma os preços de um pedido. A cópia é temporária: nasce e morre aqui.
-int total_do_pedido(const int *precos, int itens) {
-    int *copia = malloc(itens * sizeof *copia);
+// Copia as notas de um aluno e calcula a média. Uma nota fora de 0 a 10
+// cancela tudo, e a função sai mais cedo: esse return também precisa do free.
+// Devolve -1 se a lista for inválida ou faltar memória.
+double media_valida(const double *notas, int n) {
+    double *copia = malloc(n * sizeof *copia);
     if (copia == NULL) {
-        return -1;
+        return -1; // nada foi alocado: nada a liberar
     }
-    int total = 0;
-    for (int i = 0; i < itens; i++) {
-        copia[i] = precos[i];
-        total += copia[i];
+    double soma = 0;
+    for (int i = 0; i < n; i++) {
+        if (notas[i] < 0 || notas[i] > 10) {
+            printf("  nota %d inválida: %.1f\n", i + 1, notas[i]);
+            free(copia); // a saída de erro é a que mais esquece
+            return -1;
+        }
+        copia[i] = notas[i];
+        soma += copia[i];
     }
-    free(copia); // sem esta linha, cada pedido deixaria 16 bytes para trás
-    return total;
+    free(copia); // a saída normal
+    return soma / n;
 }
 
 int main(void) {
-    int pedido[] = {30, 12, 45, 8};
-    for (int p = 1; p <= 3; p++) {
-        printf("Pedido %d: R$ %d\n", p, total_do_pedido(pedido, 4));
+    double ana[] = {7.5, 8.0, 9.0};
+    double beto[] = {6.0, 11.0, 7.0}; // alguém digitou 11
+    double caio[] = {5.0, 7.0, 6.0};
+
+    const double *turma[] = {ana, beto, caio};
+    const char *nomes[] = {"Ana", "Beto", "Caio"};
+    for (int a = 0; a < 3; a++) {
+        printf("%s:\n", nomes[a]);
+        double m = media_valida(turma[a], 3);
+        if (m < 0) {
+            printf("  sem média\n");
+        } else {
+            printf("  média %.1f\n", m);
+        }
     }
     return 0;
 }
 // Saída:
-// Pedido 1: R$ 95
-// Pedido 2: R$ 95
-// Pedido 3: R$ 95
+// Ana:
+//   média 8.2
+// Beto:
+//   nota 2 inválida: 11.0
+//   sem média
+// Caio:
+//   média 6.0
 //
-// Apague o free(copia) e rode de novo: a saída é a mesma, mas no fim o
-// LeakSanitizer (parte do AddressSanitizer) avisa:
-//   ERROR: LeakSanitizer: detected memory leaks
-//   Direct leak of 48 byte(s) in 3 object(s) allocated from:
-//       #1 ... in total_do_pedido A113.c:8
+// Apague o free(copia) de dentro do if e rode de novo: Ana e Caio continuam
+// certos, mas no fim o LeakSanitizer acusa 24 bytes em 1 bloco, o do Beto.
+// Vazamento em caminho de erro é traiçoeiro: só aparece quando o erro
+// acontece. Antes de cada return, pergunte: o que já foi alocado aqui?
 ```
 
 ```bash
@@ -2018,17 +2106,19 @@ int main(void) {
 **Exercício E337** · ★☆☆
 
 O painel da rodoviária monta 4 avisos, um de cada vez. A saída está certa,
-mas o programa vaza memória. O erro está de propósito. Rode, leia o
-relatório do LeakSanitizer e responda: quantos bytes vazaram, em quantos
-blocos, e por quê? Depois conserte.
+mas o programa vaza memória. O erro está de propósito. Rode e leia o
+relatório do LeakSanitizer. Depois conserte e acrescente dois contadores,
+um somado a cada malloc e outro a cada free, mostrados no fim: eles têm
+que bater, e o LeakSanitizer tem que ficar quieto.
 
 
 ```text
-Saída esperada (antes e depois do conserto):
+Saída esperada depois do conserto:
 Aviso: Ônibus para Belém às 08h
 Aviso: Ônibus para Macapá às 09h
 Aviso: Ônibus para Santarém às 11h
 Aviso: Ônibus para Manaus às 14h
+malloc: 4 | free: 4
 ```
 
 **Dicas:**
@@ -2036,10 +2126,10 @@ Aviso: Ônibus para Manaus às 14h
 1. Conte quantos malloc e quantos free acontecem durante a execução.
 2. A cada volta, msg recebe um endereço novo. O que acontece com o
    anterior?
-3. Resposta esperada: "Direct leak of 192 byte(s) in 3 object(s)": 4
-   malloc de 64 bytes e só 1 free (o do último bloco, depois do laço).
-   Conserto: free(msg) dentro do laço, depois do printf, e apagar o free
-   de fora.
+3. Resposta esperada: a saída acima. Antes do conserto, o relatório diz
+   "Direct leak of 192 byte(s) in 3 object(s)": 4 malloc de 64 bytes e só
+   1 free (o do último bloco, depois do laço). Conserto: free(msg) dentro
+   do laço, depois do printf, e apagar o free de fora.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E337.c
@@ -2047,33 +2137,42 @@ Aviso: Ônibus para Manaus às 14h
 
 **Exercício E338** · ★☆☆
 
-Cada trecho abaixo é a primeira linha de um relatório do
-AddressSanitizer. Para cada um, diga qual erro aconteceu e dê um exemplo
-de código que causaria aquilo.
+Cada função abaixo tem UM erro de memória, de propósito, e cada uma gera
+um relatório diferente do AddressSanitizer:
 
 
 ```text
-a) ERROR: AddressSanitizer: heap-buffer-overflow on address ...
-   WRITE of size 4 ... is located 0 bytes after 16-byte region
-b) ERROR: AddressSanitizer: heap-use-after-free on address ...
-c) ERROR: AddressSanitizer: attempting double-free on ...
-d) ERROR: LeakSanitizer: detected memory leaks
-e) ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000
+heap-buffer-overflow    heap-use-after-free    attempting double-free
+SEGV on unknown address 0x000000000000    LeakSanitizer: memory leaks
 ```
 
 
-Em a), quantos ints tinha o bloco e qual índice foi usado?
+O gcc até avisa sobre dois deles. O ASan para no primeiro erro: rode, leia
+a primeira linha do relatório, ache a função culpada pela pilha de
+chamadas e conserte com a menor mudança possível. Rode de novo e repita
+até as cinco linhas saírem e o programa terminar sem relatório nenhum.
+
+
+```text
+Saída esperada depois dos consertos:
+a) Notas: 7 8 9 10
+b) Saldo: R$ 150
+c) Senha 42 atendida
+d) Cupom: 15% de desconto
+e) Vagas livres: 3
+```
 
 **Dicas:**
 
-1. "0 bytes after" quer dizer "logo depois do último byte do bloco".
-2. O endereço 0x0 é o NULL.
-3. Resposta esperada: a) estouro: escreveu além do fim do bloco; 16
-   bytes são 4 ints e o índice usado foi 4 (ex.: for com i <= 4);
-   b) uso depois do free: free(p); printf("%d", p[0]);
-   c) free duplo: free(p); free(p); d) vazamento: malloc sem free;
-   e) acesso pelo ponteiro NULL: p = malloc(...) falhou e ninguém
-   conferiu, ou int *p = NULL; *p = 1;
+1. "0 bytes after 16-byte region" quer dizer "logo depois do último byte
+   de um bloco de 16 bytes": 4 ints, índices 0 a 3.
+2. O endereço 0x0 é o NULL. O vazamento só é acusado no fim, quando todo
+   o resto já está certo.
+3. Resposta esperada: a saída acima. a) i <= 4 vira i < 4 (estouro);
+   b) o printf vem antes do free (uso depois do free); c) apague o
+   segundo free (free duplo); d) acrescente free(cupom) (vazamento);
+   e) o ponteiro NULL precisa de um bloco: malloc e conferir o NULL antes
+   de escrever (e free no fim).
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E338.c
@@ -2083,13 +2182,15 @@ Em a), quantos ints tinha o bloco e qual índice foi usado?
 
 O placar do campeonato de futsal da firma guarda os gols dos 3 times. O
 programa tem um erro de propósito (o gcc até avisa). Rode e leia o aviso e
-o relatório: qual é o erro? Por que "um ponteiro é um backup" é uma ideia errada? Conserte
-mantendo a saída.
+o relatório. Depois conserte fazendo de backup uma cópia DE VERDADE, num
+bloco só dele. Para provar que ficou independente, zere placar[0] (o
+jogo foi anulado) antes de mostrar os dois.
 
 
 ```text
 Saída esperada depois do conserto:
-Gols: 4 2 7
+Placar: 0 2 7
+Backup: 4 2 7
 Placar encerrado
 ```
 
@@ -2098,10 +2199,10 @@ Placar encerrado
 1. Procure "attempting double-free". Quantos blocos existem? Quantos
    free?
 2. backup = placar copia o ENDEREÇO, não os números.
-3. Resposta esperada: placar e backup apontam para o MESMO bloco; liberar
-   os dois é free duplo. Conserto: um só free (apague o free(backup)). Se
-   quisesse uma cópia de verdade, precisaria de outro malloc e de copiar
-   os 3 números.
+3. Resposta esperada: a saída acima. No original, placar e backup apontam
+   para o MESMO bloco e liberar os dois é free duplo. Com
+   int *backup = malloc(3 * sizeof *backup); e um laço que copia os 3
+   números, são dois blocos: aí, sim, cada um tem o seu free.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E339.c
@@ -2138,10 +2239,10 @@ Km da semana: 238
 
 A lista de presença de uma aula de yoga começa com 2 vagas e a função
 adicionar faz o vetor crescer. Com o rodar, o programa quebra com um
-relatório do AddressSanitizer na 4ª chegada. O erro está de propósito.
-Explique por que o main fica com um ponteiro solto, mesmo que a função
-adicionar esteja "certa" por dentro. Conserte mudando a assinatura de
-adicionar.
+relatório do AddressSanitizer na 4ª chegada. O erro está de propósito: o
+main fica com um ponteiro solto, mesmo com a função adicionar "certa" por
+dentro. Conserte mudando a assinatura de adicionar e rode de novo até a
+lista sair completa, sem relatório.
 
 
 ```text
@@ -2177,7 +2278,12 @@ AddressSanitizer NÃO acusa. Faça assim:
 
 1) rode com o rodar e veja o total;
 2) rode com ~/LPEDC/rodar --valgrind e leia a primeira mensagem;
-3) conserte com UMA palavra trocada.
+3) conserte trocando a função que aloca o bloco e rode de novo com os
+
+```text
+ dois.
+```
+
 
 
 ```text
@@ -2185,9 +2291,6 @@ Saída esperada depois do conserto:
 Total: 6 gols
 Média por rodada: 1.2
 ```
-
-
-Por que o ASan não pegou e o valgrind pegou?
 
 **Dicas:**
 
@@ -2393,7 +2496,7 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 
 Os arquivos ficam em [`0058-juntando-tudo/`](0058-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A115 · O caderninho de fiado**
+**Exemplo A115 · A agenda em que cada linha cresce sozinha**
 
 ```c
 #include <stdio.h>
@@ -2409,106 +2512,84 @@ char *duplicar(const char *texto) {
     return copia;
 }
 
-// Dobra a capacidade dos dois vetores paralelos. Recebe o ENDEREÇO dos
-// ponteiros do main (char *** e int **) porque o realloc pode mudá-los.
-int crescer(char ***nomes, int **centavos, int *cap) {
-    int nova = *cap * 2;
-    char **mais_nomes = realloc(*nomes, nova * sizeof **nomes);
-    if (mais_nomes == NULL) {
-        return 0;
-    }
-    *nomes = mais_nomes;
-    int *mais_centavos = realloc(*centavos, nova * sizeof **centavos);
-    if (mais_centavos == NULL) {
-        return 0;
-    }
-    *centavos = mais_centavos;
-    printf("(caderno cresceu: %d -> %d clientes)\n", *cap, nova);
-    *cap = nova;
-    return 1;
-}
-
-int buscar(char **nomes, int qtd, const char *nome) {
-    for (int i = 0; i < qtd; i++) {
-        if (strcmp(nomes[i], nome) == 0) {
-            return i;
+// Põe um horário na linha do barbeiro b. Só ESSA linha cresce: as outras
+// nem ficam sabendo. Devolve 0 se faltar memória.
+int agendar(int **horarios, int *qtd, int *cap, int b, int hora) {
+    if (qtd[b] == cap[b]) {
+        int nova = cap[b] == 0 ? 1 : cap[b] * 2;
+        int *maior = realloc(horarios[b], nova * sizeof *maior); // NULL na 1ª vez
+        if (maior == NULL) {
+            return 0;
         }
+        horarios[b] = maior;
+        cap[b] = nova;
     }
-    return -1;
-}
-
-// Soma uma compra na conta do cliente; cria a conta se ela não existe.
-int anotar(char ***nomes, int **centavos, int *qtd, int *cap, const char *nome, int valor) {
-    int i = buscar(*nomes, *qtd, nome);
-    if (i >= 0) {
-        (*centavos)[i] += valor;
-        return 1;
-    }
-    if (*qtd == *cap && !crescer(nomes, centavos, cap)) {
-        return 0;
-    }
-    char *copia = duplicar(nome);
-    if (copia == NULL) {
-        return 0;
-    }
-    (*nomes)[*qtd] = copia;
-    (*centavos)[*qtd] = valor;
-    (*qtd)++;
+    horarios[b][qtd[b]] = hora;
+    qtd[b]++;
     return 1;
 }
 
-void liberar(char **nomes, int *centavos, int qtd) {
-    for (int i = 0; i < qtd; i++) {
-        free(nomes[i]); // cada nome é um bloco
+void liberar(char **nomes, int **horarios, int *qtd, int *cap, int n) {
+    for (int b = 0; b < n; b++) {
+        free(nomes[b]);    // cada nome é um bloco
+        free(horarios[b]); // cada linha também (free(NULL) não faz nada)
     }
-    free(nomes);        // depois o vetor de ponteiros
-    free(centavos);
+    free(nomes);
+    free(horarios);
+    free(qtd);
+    free(cap);
 }
 
 int main(void) {
-    int qtd = 0;
-    int cap = 2;
-    char **nomes = malloc(cap * sizeof *nomes);
-    int *centavos = malloc(cap * sizeof *centavos);
-    if (nomes == NULL || centavos == NULL) {
-        free(nomes);
-        free(centavos);
+    const char *equipe[] = {"Juca", "Neide", "Rafa"};
+    int n = 3;
+
+    // calloc: linhas começam NULL e contadores começam em 0
+    char **nomes = calloc(n, sizeof *nomes);
+    int **horarios = calloc(n, sizeof *horarios);
+    int *qtd = calloc(n, sizeof *qtd);
+    int *cap = calloc(n, sizeof *cap);
+    if (nomes == NULL || horarios == NULL || qtd == NULL || cap == NULL) {
+        liberar(nomes, horarios, qtd, cap, 0);
         return 1;
     }
-
-    const char *quem[] = {"Dona Cida", "Seu Jorge", "Dona Cida", "Bia", "Tonho", "Rosa"};
-    int valor[] = {1250, 830, 470, 2000, 315, 560}; // em centavos
-    for (int k = 0; k < 6; k++) {
-        if (!anotar(&nomes, &centavos, &qtd, &cap, quem[k], valor[k])) {
-            liberar(nomes, centavos, qtd);
+    for (int b = 0; b < n; b++) {
+        nomes[b] = duplicar(equipe[b]);
+        if (nomes[b] == NULL) {
+            liberar(nomes, horarios, qtd, cap, n);
             return 1;
         }
     }
 
-    int i = buscar(nomes, qtd, "Seu Jorge"); // Seu Jorge pagou tudo
-    if (i >= 0) {
-        centavos[i] = 0;
+    // pedidos do dia: barbeiro escolhido e horário
+    int quem[] = {1, 0, 1, 1, 2, 1, 0};
+    int hora[] = {9, 10, 11, 13, 14, 15, 16};
+    for (int k = 0; k < 7; k++) {
+        if (!agendar(horarios, qtd, cap, quem[k], hora[k])) {
+            liberar(nomes, horarios, qtd, cap, n);
+            return 1;
+        }
     }
 
-    int total = 0;
-    for (int k = 0; k < qtd; k++) {
-        printf("%-10s R$ %3d.%02d\n", nomes[k], centavos[k] / 100, centavos[k] % 100);
-        total += centavos[k];
+    for (int b = 0; b < n; b++) {
+        printf("%-6s (%d de %d):", nomes[b], qtd[b], cap[b]);
+        for (int j = 0; j < qtd[b]; j++) {
+            printf(" %dh", horarios[b][j]);
+        }
+        printf("\n");
     }
-    printf("Total na rua: R$ %d.%02d\n", total / 100, total % 100);
 
-    liberar(nomes, centavos, qtd);
+    liberar(nomes, horarios, qtd, cap, n);
     return 0;
 }
 // Saída:
-// (caderno cresceu: 2 -> 4 clientes)
-// (caderno cresceu: 4 -> 8 clientes)
-// Dona Cida  R$  17.20
-// Seu Jorge  R$   0.00
-// Bia        R$  20.00
-// Tonho      R$   3.15
-// Rosa       R$   5.60
-// Total na rua: R$ 45.95
+// Juca   (2 de 2): 10h 16h
+// Neide  (4 de 4): 9h 11h 13h 15h
+// Rafa   (1 de 1): 14h
+//
+// É uma matriz irregular que muda de forma enquanto o programa roda: a linha
+// da Neide cresceu 1 -> 2 -> 4 e a do Rafa ficou com 1. No fim existem 10
+// blocos (4 de controle, 3 nomes e 3 linhas), e liberar faz 10 free.
 ```
 
 ```bash
@@ -2797,9 +2878,9 @@ Problemas para resolver num arquivo seu, rodando com o `rodar` (e com
 `rodar --valgrind` quando quiser a segunda opinião). Todos precisam terminar
 sem nenhum relatório de erro.
 
-**1. Apagar do caderno.** No caderninho de fiado do A115, escreva
-`int remover(char **nomes, int *centavos, int *qtd, const char *nome)`, que
-apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
+**1. Apagar do caderno.** No caderninho de fiado do texto do assunto 0058,
+escreva `int remover(char **nomes, int *centavos, int *qtd, const char *nome)`,
+que apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
 "Seu Jorge" e mostre o caderno.
 
 <details><summary>Resposta</summary>

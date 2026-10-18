@@ -15,7 +15,7 @@
 // Dicas:
 // 1. Duas variáveis de controle: quantidade e capacidade. Encheu quando
 //    quantidade == capacidade.
-// 2. Use o realloc com ponteiro temporário, como no A109.
+// 2. Use o realloc com ponteiro temporário, como no exemplo do texto.
 // 3. Resposta esperada: "Ao contrário: 4 9 2 8 5" e "Capacidade final: 8"
 //    (a capacidade foi 2, 4 e 8). Também trate o fim da entrada: se o scanf
 //    não devolver 1, pare como se fosse o 0.

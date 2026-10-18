@@ -1,50 +1,46 @@
-// A107 · As corridas do mês
+// A107 · A foto que não cabe na pilha
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(void) {
-    int n;
-    printf("Quantas corridas? ");
-    if (scanf("%d", &n) != 1 || n <= 0) {
-        printf("Quantidade inválida\n");
+    int largura = 4000;
+    int altura = 3000; // uma foto de 12 megapixels, em tons de cinza
+
+    // 12.000.000 de bytes: como vetor local, estouraria a pilha de 8 MiB.
+    // No heap, o limite é a memória livre da máquina.
+    size_t total = (size_t)largura * altura;
+    unsigned char *brilho = malloc(total * sizeof *brilho);
+    if (brilho == NULL) { // pedido grande: o NULL é possível de verdade
+        printf("Sem memória para a foto\n");
         return 1;
     }
+    printf("Pedi %zu bytes ao heap\n", total * sizeof *brilho);
 
-    // pede n * 8 bytes ao heap; o tamanho só é conhecido agora
-    double *corridas = malloc(n * sizeof(double));
-    if (corridas == NULL) {
-        printf("Sem memória\n");
-        return 1;
+    // simula a foto: um degradê que vai de 0 (preto) a 255 (branco)
+    for (size_t i = 0; i < total; i++) {
+        brilho[i] = (unsigned char)(i % 256);
     }
 
-    for (int i = 0; i < n; i++) {
-        printf("Valor da corrida %d: ", i + 1);
-        if (scanf("%lf", &corridas[i]) != 1) { // usa como um vetor comum
-            printf("Valor inválido\n");
-            free(corridas);
-            return 1;
+    long soma = 0;
+    int claros = 0;
+    for (size_t i = 0; i < total; i++) {
+        soma += brilho[i];
+        if (brilho[i] >= 200) {
+            claros++;
         }
     }
+    printf("Brilho médio: %.2f\n", (double)soma / total);
+    printf("Pixels claros: %d\n", claros);
 
-    double total = 0;
-    for (int i = 0; i < n; i++) {
-        total += corridas[i];
-    }
-    printf("Total: R$ %.2f\n", total);
-    printf("Média: R$ %.2f\n", total / n);
-
-    free(corridas);  // devolve os bytes ao heap
-    corridas = NULL; // o ponteiro não aponta mais para lugar nenhum
+    free(brilho); // 12 MB de volta ao heap de uma vez
+    brilho = NULL;
     return 0;
 }
-// Exemplo de uso:
-// Quantas corridas? 4
-// Valor da corrida 1: 12.50
-// Valor da corrida 2: 18
-// Valor da corrida 3: 25.90
-// Valor da corrida 4: 9.60
-// Total: R$ 66.00
-// Média: R$ 16.50
+// Saída:
+// Pedi 12000000 bytes ao heap
+// Brilho médio: 127.50
+// Pixels claros: 2625000
 //
-// Para testar sem digitar: printf '4\n12.50 18 25.90 9.60\n' | ~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/A107.c
+// Troque o malloc por unsigned char brilho[12000000]; dentro do main e rode:
+// o AddressSanitizer acusa stack-overflow antes da primeira linha.
