@@ -1,39 +1,42 @@
-// A127 · Os bytes do IP
+// A127 · A balança da feira
 
-#include <stdint.h>
 #include <stdio.h>
 
-// os dois campos começam no MESMO endereço: são dois jeitos de ler 4 bytes
+// um produto da feira é vendido por unidade OU por quilo, nunca pelos dois
 typedef union {
-    uint32_t numero;
-    unsigned char bytes[4];
-} Endereco;
+    int unidades;
+    double quilos;
+} Quantidade;
+
+// a mesma informação numa struct: os dois campos ocupam espaço sempre
+typedef struct {
+    int unidades;
+    double quilos;
+} QuantidadeStruct;
 
 int main(void) {
-    Endereco ip;
-    ip.numero = 0xC0A8000A; // 192.168.0.10, escrito como um número só
+    Quantidade q;
 
-    printf("sizeof: %zu bytes\n", sizeof ip);
-    printf("numero: 0x%08X\n", (unsigned)ip.numero);
-    printf("bytes na memória:");
-    for (int i = 0; i < 4; i++) {
-        printf(" %02X", ip.bytes[i]); // lê os mesmos 4 bytes, um por um
-    }
-    printf("\n");
+    q.unidades = 12; // uma dúzia de ovos
+    printf("unidades: %d\n", q.unidades);
 
-    if (ip.bytes[0] == 0x0A) {
-        printf("little-endian: o byte menos significativo vem primeiro\n");
-    } else {
-        printf("big-endian: o byte mais significativo vem primeiro\n");
-    }
+    q.quilos = 2.5;  // agora 2,5 kg de tomate: os mesmos bytes, reescritos
+    printf("quilos: %.1f\n", q.quilos);
+    // 2.5 em double é 0x4004000000000000; num PC little-endian, os 4 bytes
+    // que o int lê são os de baixo, todos zero
+    printf("unidades agora: %d (lixo: a dúzia sumiu)\n", q.unidades);
 
-    ip.bytes[3] = 10; // muda um byte: o número inteiro muda junto
-    printf("depois de bytes[3] = 10: 0x%08X\n", (unsigned)ip.numero);
+    printf("union: %zu bytes, struct: %zu bytes\n", sizeof(Quantidade),
+           sizeof(QuantidadeStruct));
+    printf("1000 produtos: %zu contra %zu bytes\n", 1000 * sizeof(Quantidade),
+           1000 * sizeof(QuantidadeStruct));
+    printf("mesmo endereço? %s\n", (void *)&q.unidades == (void *)&q.quilos ? "sim" : "não");
     return 0;
 }
 // Saída (num PC Intel/AMD ou ARM):
-// sizeof: 4 bytes
-// numero: 0xC0A8000A
-// bytes na memória: 0A 00 A8 C0
-// little-endian: o byte menos significativo vem primeiro
-// depois de bytes[3] = 10: 0x0AA8000A
+// unidades: 12
+// quilos: 2.5
+// unidades agora: 0 (lixo: a dúzia sumiu)
+// union: 8 bytes, struct: 16 bytes
+// 1000 produtos: 8000 contra 16000 bytes
+// mesmo endereço? sim

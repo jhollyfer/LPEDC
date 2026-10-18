@@ -1,10 +1,5 @@
 // 0059 · Struct
 // Exercício E354 · ★★★
-//
-// Resposta: a = 12 (ativo 0, 3 de sobra, id 4, nivel 8, 3 de sobra no fim),
-// b = 8 (id 0, ativo 4, nivel 5, 2 de sobra), c = 24 (ativo 0, 7 de sobra,
-// saldo 8, nivel 16, 7 de sobra) e d = 16 (saldo 0, id 8, ativo 12, nivel 13,
-// 2 de sobra). Do maior campo para o menor desperdiça menos.
 
 #include <stddef.h>
 #include <stdio.h>
@@ -14,10 +9,14 @@ struct b { int id; char ativo; char nivel; };
 struct c { char ativo; double saldo; char nivel; };
 struct d { double saldo; int id; char ativo; char nivel; };
 
+// do maior para o menor: id em 0, ativo em 4, nivel em 5, 2 de sobra
+struct a_enxuta { int id; char ativo; char nivel; };
+
 int main(void) {
     printf("sizeof: a = %zu, b = %zu, c = %zu, d = %zu\n",
            sizeof(struct a), sizeof(struct b), sizeof(struct c), sizeof(struct d));
     printf("struct a: ativo em %zu, id em %zu, nivel em %zu\n",
            offsetof(struct a, ativo), offsetof(struct a, id), offsetof(struct a, nivel));
+    printf("struct a_enxuta: %zu bytes\n", sizeof(struct a_enxuta));
     return 0;
 }

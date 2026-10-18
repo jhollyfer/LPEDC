@@ -4,7 +4,7 @@
 // Este programa compila sem aviso e roda sem erro do sanitizer, mas duas
 // linhas saem erradas: um "real" aparece como 0.00 e um "texto" aparece como
 // um número estranho. O C não confere a etiqueta de uma union: isso é
-// trabalho seu. Ache os dois erros e conserte.
+// trabalho seu. Rode, ache os dois erros, conserte e rode de novo.
 //
 //   Saída esperada (depois de consertado):
 //   inteiro: 7

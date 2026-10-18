@@ -1,30 +1,28 @@
 // 0059 · Struct
 // Exercício E350 · ★☆☆
 //
-// Preveja a saída deste trecho antes de rodar. Depois responda: e se, no
-// lugar de struct placar b = a, fosse struct placar *b = &a (com b->fora)?
+// Copiar uma struct com = cria um placar novo, independente do original.
+// Escreva um programa que prove isso. Crie a struct placar (campos casa e
+// fora, int) e faça, nesta ordem:
 //
-//   struct placar {
-//       int casa;
-//       int fora;
-//   };
+//   1. a começa 2 x 1, e b é uma cópia de a (struct placar b = a;);
+//   2. mude b.fora para 3 e some b.fora em a.casa;
+//   3. mostre a e b;
+//   4. crie c como cópia de b, zere os dois campos de c e mostre c e b.
 //
-//   struct placar a = {2, 1};
-//   struct placar b = a;
-//   b.fora = 3;
-//   a.casa = a.casa + b.fora;
-//   printf("a: %d x %d\n", a.casa, a.fora);
-//   printf("b: %d x %d\n", b.casa, b.fora);
+//   Saída esperada:
+//   a: 5 x 1
+//   b: 2 x 3
+//   c: 0 x 0
+//   b: 2 x 3
 //
 // Dicas:
-// 1. Em C, b = a copia todos os campos. Depois disso, a e b são independentes.
-// 2. Faça uma tabela com a.casa, a.fora, b.casa e b.fora, linha a linha.
-// 3. Resposta esperada: "a: 5 x 1" e "b: 2 x 3". Com o ponteiro, b apontaria
-//    para o MESMO placar: b->fora = 3 mudaria a.fora, e os dois mostrariam
-//    5 x 3.
+// 1. A cópia leva todos os campos de uma vez: struct placar b = a;
+// 2. Depois da cópia, mudar b não muda a (e mudar c não muda b).
+// 3. a.casa = a.casa + b.fora dá 2 + 3 = 5.
+// 4. Resposta esperada: a saída acima.
 //
-// Escreva sua resposta abaixo (como comentário; depois cole o trecho no main
-// e confira):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

@@ -3,8 +3,8 @@
 //
 // As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4). O
 // usuário tinha email e push ligados e desligou o push. Mas a tela mostra o
-// SMS ligado e, depois, nada desliga. O gcc até dá uma pista (um aviso). Ache os
-// três erros e conserte.
+// SMS ligado e, depois, nada desliga. O gcc até dá uma pista (um aviso). Rode,
+// ache os três erros, conserte e rode de novo.
 //
 //   Saída esperada (depois de consertado):
 //   email: ligado | sms: desligado | push: ligado

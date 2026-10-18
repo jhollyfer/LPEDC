@@ -1,29 +1,33 @@
 // 0060 · Typedef
 // Exercício E356 · ★☆☆
 //
-// Preveja: o trecho compila? Se compila, o que mostra?
+// Escreva um programa que crie três apelidos:
 //
 //   typedef int Metros;
 //   typedef int Segundos;
 //   typedef char Nome[12];
 //
-//   Metros distancia = 100;
-//   Segundos tempo = 20;
-//   Nome atleta = "Rayssa";
+// Declare distancia (Metros) com 100, tempo (Segundos) com 20 e atleta
+// (Nome) com "Rayssa". Mostre o nome, a velocidade, o sizeof(Nome) e o strlen
+// do nome. Por último, mostre distancia + tempo: somar metros com segundos
+// não faz sentido, e mesmo assim o programa tem que compilar sem aviso.
 //
-//   printf("%d\n", distancia + tempo);
-//   printf("%d m/s\n", distancia / tempo);
-//   printf("%zu\n", sizeof(Nome));
-//   printf("%zu %zu\n", sizeof atleta, strlen(atleta));
+//   Saída esperada:
+//   Atleta: Rayssa
+//   Velocidade: 5 m/s
+//   sizeof(Nome) = 12, strlen = 6
+//   distancia + tempo = 120
 //
 // Dicas:
-// 1. typedef não cria tipo novo: Metros e Segundos são int.
-// 2. Nome é um apelido para "vetor de 12 char".
-// 3. Resposta esperada: compila (somar metros com segundos não faz sentido,
-//    mas o C não sabe disso) e mostra 120, "5 m/s", 12 e "12 6".
+// 1. typedef não cria tipo novo: Metros e Segundos são int, e %d mostra os
+//    dois.
+// 2. Nome é um apelido para "vetor de 12 char": Nome atleta = "Rayssa";
+//    funciona como char atleta[12] = "Rayssa";
+// 3. sizeof e strlen devolvem size_t: mostre com %zu.
+// 4. Resposta esperada: a saída acima. O vetor tem 12 bytes; o texto, 6
+//    letras.
 //
-// Escreva sua resposta abaixo (como comentário; depois cole o trecho no main
-// e confira):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <string.h>

@@ -9,19 +9,23 @@
 //    typedef struct { double graus; } Celsius; (e o mesmo para Fahrenheit).
 //    Escreva Fahrenheit para_fahrenheit(Celsius c) e
 //    Celsius para_celsius(Fahrenheit f), e converta 100 °C e 98.6 °F.
-// b) Escreva no main a linha Celsius errado = febre; (febre é Fahrenheit).
-//    O que acontece? E se os dois fossem typedef double?
+// b) Escreva no main a linha Celsius errado = febre; (febre é Fahrenheit),
+//    rode e leia o erro do gcc. Depois troque a linha pela conversão certa,
+//    Celsius febre_c = para_celsius(febre);, e mostre se é febre (a partir
+//    de 37.5 °C) ou não.
 //
-//   Saída esperada (sem a linha errada):
+//   Saída esperada (depois de trocar a linha errada):
 //   100.0 °C = 212.0 °F
 //   98.6 °F = 37.0 °C
+//   37.0 °C: sem febre
 //
 // Dicas:
 // 1. F = C * 9 / 5 + 32 e C = (F - 32) * 5 / 9.
 // 2. Para criar o valor: Celsius agua = {100.0}; acesse com agua.graus.
-// 3. Resposta esperada: a saída acima. Em (b), não compila (o gcc diz
-//    "invalid initializer"): duas structs diferentes nunca se misturam. Com
-//    typedef double, compilaria e o erro passaria calado.
+// 3. Em (b), a linha errada não compila (o gcc diz "invalid initializer"):
+//    duas structs diferentes nunca se misturam. Com typedef double,
+//    compilaria e o erro passaria calado.
+// 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:
 

@@ -193,38 +193,55 @@ passos são os de sempre; a diferença é que os dados viajam num pacote só:
 
 Os arquivos ficam em [`0059-struct/`](0059-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A117 · O pedido de açaí**
+**Exemplo A117 · A matrícula na academia**
 
 ```c
+#include <stddef.h>
 #include <stdio.h>
 
-// o molde: diz quais campos um pedido tem (ainda não reserva memória)
-struct pedido {
-    char tamanho;   // 'P', 'M' ou 'G'
-    int quantidade; // quantos copos
-    double preco;   // preço de cada copo
+struct aluno {
+    char plano;       // 'M' mensal, 'T' trimestral, 'A' anual
+    int faltas;       // faltas no mês
+    double mensalidade;
+    int armario;      // 0 = sem armário
 };
 
 int main(void) {
-    struct pedido p1 = {'M', 2, 18.50}; // os valores vão na ordem dos campos
+    // com nome de campo, a ordem é livre; quem não aparece começa com zero
+    struct aluno caio = {.mensalidade = 99.90, .plano = 'M'};
+    printf("Caio: plano %c, R$ %.2f, %d faltas, armário %d\n",
+           caio.plano, caio.mensalidade, caio.faltas, caio.armario);
 
-    double total = p1.quantidade * p1.preco; // o ponto acessa um campo
-    printf("Pedido: %d copos %c de R$ %.2f\n", p1.quantidade, p1.tamanho, p1.preco);
-    printf("Total: R$ %.2f\n", total);
+    // literal composto: troca a struct inteira de uma vez
+    caio = (struct aluno){'A', 0, 79.90, 12};
+    printf("Caio: plano %c, R$ %.2f, %d faltas, armário %d\n",
+           caio.plano, caio.mensalidade, caio.faltas, caio.armario);
 
-    if (total >= 30.0) {
-        printf("Frete grátis!\n");
-    } else {
-        printf("Frete: R$ 5.00\n");
+    // comparar structs: campo a campo (== entre structs não compila)
+    struct aluno duda = caio;
+    duda.armario = 13;
+    if (duda.plano == caio.plano && duda.mensalidade == caio.mensalidade) {
+        printf("Duda e Caio têm o mesmo plano\n");
     }
-    printf("O pedido ocupa %zu bytes\n", sizeof(struct pedido));
+    if (duda.armario != caio.armario) {
+        printf("mas armários diferentes: %d e %d\n", duda.armario, caio.armario);
+    }
+
+    // onde cada campo começa dentro da struct
+    printf("plano em %zu, faltas em %zu, mensalidade em %zu, armario em %zu\n",
+           offsetof(struct aluno, plano), offsetof(struct aluno, faltas),
+           offsetof(struct aluno, mensalidade), offsetof(struct aluno, armario));
+    // 16 + 4 = 20, mas o total arredonda para múltiplo de 8 (o double): 24
+    printf("sizeof: %zu bytes\n", sizeof(struct aluno));
     return 0;
 }
 // Saída:
-// Pedido: 2 copos M de R$ 18.50
-// Total: R$ 37.00
-// Frete grátis!
-// O pedido ocupa 16 bytes
+// Caio: plano M, R$ 99.90, 0 faltas, armário 0
+// Caio: plano A, R$ 79.90, 0 faltas, armário 12
+// Duda e Caio têm o mesmo plano
+// mas armários diferentes: 13 e 12
+// plano em 0, faltas em 4, mensalidade em 8, armario em 16
+// sizeof: 24 bytes
 ```
 
 ```bash
@@ -306,35 +323,34 @@ Na promoção: R$ 31.41
 
 **Exercício E350** · ★☆☆
 
-Preveja a saída deste trecho antes de rodar. Depois responda: e se, no
-lugar de struct placar b = a, fosse struct placar *b = &a (com b->fora)?
+Copiar uma struct com = cria um placar novo, independente do original.
+Escreva um programa que prove isso. Crie a struct placar (campos casa e
+fora, int) e faça, nesta ordem:
 
 
 ```text
-struct placar {
-    int casa;
-    int fora;
-};
+1. a começa 2 x 1, e b é uma cópia de a (struct placar b = a;);
+2. mude b.fora para 3 e some b.fora em a.casa;
+3. mostre a e b;
+4. crie c como cópia de b, zere os dois campos de c e mostre c e b.
 ```
 
 
 
 ```text
-struct placar a = {2, 1};
-struct placar b = a;
-b.fora = 3;
-a.casa = a.casa + b.fora;
-printf("a: %d x %d\n", a.casa, a.fora);
-printf("b: %d x %d\n", b.casa, b.fora);
+Saída esperada:
+a: 5 x 1
+b: 2 x 3
+c: 0 x 0
+b: 2 x 3
 ```
 
 **Dicas:**
 
-1. Em C, b = a copia todos os campos. Depois disso, a e b são independentes.
-2. Faça uma tabela com a.casa, a.fora, b.casa e b.fora, linha a linha.
-3. Resposta esperada: "a: 5 x 1" e "b: 2 x 3". Com o ponteiro, b apontaria
-   para o MESMO placar: b->fora = 3 mudaria a.fora, e os dois mostrariam
-   5 x 3.
+1. A cópia leva todos os campos de uma vez: struct placar b = a;
+2. Depois da cópia, mudar b não muda a (e mudar c não muda b).
+3. a.casa = a.casa + b.fora dá 2 + 3 = 5.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0059-struct/E350.c
@@ -438,10 +454,10 @@ Saída esperada:
 **Exercício E354** · ★★★
 
 As quatro structs abaixo guardam quase os mesmos campos, só que em ordens
-diferentes. Num PC de 64 bits (int com 4 bytes, double com 8), preveja o
-sizeof de cada uma, desenhando os bytes no papel. Depois escreva um
-programa que mostre o sizeof de cada uma e o offsetof de cada campo de
-struct a.
+diferentes. Escreva um programa que mostre o sizeof de cada uma e o
+offsetof de cada campo de struct a. Depois crie a struct a_enxuta, com os
+MESMOS três campos de struct a numa ordem que ocupe o mínimo possível, e
+mostre o sizeof dela.
 
 
 ```text
@@ -451,15 +467,24 @@ struct c { char ativo; double saldo; char nivel; };
 struct d { double saldo; int id; char ativo; char nivel; };
 ```
 
+
+
+```text
+Saída esperada (num PC de 64 bits):
+sizeof: a = 12, b = 8, c = 24, d = 16
+struct a: ativo em 0, id em 4, nivel em 8
+struct a_enxuta: 8 bytes
+```
+
 **Dicas:**
 
 1. Cada campo começa num endereço múltiplo do próprio tamanho (char: 1,
-   int: 4, double: 8).
-2. O tamanho total também é arredondado para um múltiplo do maior campo,
-   para que um vetor dessas structs continue alinhado.
-3. offsetof(struct a, id) está em <stddef.h> e se mostra com %zu.
-4. Resposta esperada: a = 12 (ativo 0, id 4, nivel 8), b = 8, c = 24 e
-   d = 16. Regra prática: declare do maior campo para o menor.
+   int: 4, double: 8). O tamanho total é arredondado para um múltiplo do
+   maior campo.
+2. offsetof(struct a, id) está em <stddef.h> e se mostra com %zu.
+3. Regra prática para a versão enxuta: do maior campo para o menor.
+4. Resposta esperada: a saída acima; a_enxuta = { int id; char ativo;
+   char nivel; } (é a struct b com outro nome).
 
 ```bash
 ~/LPEDC/rodar 08-structs/0059-struct/E354.c
@@ -578,41 +603,51 @@ horário noturno **e** o valor passar do limite:
 
 Os arquivos ficam em [`0060-typedef/`](0060-typedef/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A119 · O Pix da madrugada**
+**Exemplo A119 · A frota de ônibus**
 
 ```c
-#include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
-typedef double Reais; // Reais é só outro nome para double
+typedef char Placa[8];      // apelido para um vetor: Placa é "char[8]"
+typedef unsigned Minutos;   // apelido para um tipo simples
 
-typedef struct {      // struct sem nome, batizada de Pix pelo typedef
-    char chave[40];
-    Reais valor;
-    int hora;         // 0 a 23
-} Pix;
+typedef struct onibus Onibus; // apelido antes da struct existir
 
-#define LIMITE_NOTURNO 1000.0
+struct onibus {             // a struct com nome: dá para usar os dois nomes
+    Placa placa;
+    int linha;
+    Minutos atraso;
+};
 
-bool pix_permitido(Pix p) {
-    bool noturno = p.hora >= 20 || p.hora < 6;
-    return !(noturno && p.valor > LIMITE_NOTURNO);
+void mostrar(Onibus o) {
+    printf("Linha %d (%s): %u min de atraso\n", o.linha, o.placa, o.atraso);
 }
 
 int main(void) {
-    Pix p = {"ana@email.com", 1500.00, 22}; // sem a palavra struct
+    Onibus a = {"QWE1R23", 512, 0};
+    struct onibus b = {"RTY4U56", 307, 15}; // o nome completo também vale
+    Minutos tolerancia = 10;
 
-    printf("Pix de R$ %.2f para %s às %dh\n", p.valor, p.chave, p.hora);
-    if (pix_permitido(p)) {
-        printf("Enviado!\n");
-    } else {
-        printf("Bloqueado: o limite noturno é R$ %.2f\n", LIMITE_NOTURNO);
+    mostrar(a);
+    mostrar(b);
+    if (b.atraso > tolerancia) {
+        printf("Linha %d passou da tolerância de %u min\n", b.linha, tolerancia);
     }
+
+    Placa nova;              // é um vetor de 8 char, como qualquer outro
+    strcpy(nova, "ZXC7V89"); // vetor: strcpy, não =
+    printf("Placa nova: %s, %zu bytes\n", nova, sizeof nova);
+    printf("Onibus ocupa %zu bytes, igual a struct onibus: %zu\n",
+           sizeof(Onibus), sizeof(struct onibus));
     return 0;
 }
 // Saída:
-// Pix de R$ 1500.00 para ana@email.com às 22h
-// Bloqueado: o limite noturno é R$ 1000.00
+// Linha 512 (QWE1R23): 0 min de atraso
+// Linha 307 (RTY4U56): 15 min de atraso
+// Linha 307 passou da tolerância de 10 min
+// Placa nova: ZXC7V89, 8 bytes
+// Onibus ocupa 16 bytes, igual a struct onibus: 16
 ```
 
 ```bash
@@ -690,7 +725,7 @@ Total: R$ 67.44
 
 **Exercício E356** · ★☆☆
 
-Preveja: o trecho compila? Se compila, o que mostra?
+Escreva um programa que crie três apelidos:
 
 
 ```text
@@ -700,28 +735,29 @@ typedef char Nome[12];
 ```
 
 
-
-```text
-Metros distancia = 100;
-Segundos tempo = 20;
-Nome atleta = "Rayssa";
-```
-
+Declare distancia (Metros) com 100, tempo (Segundos) com 20 e atleta
+(Nome) com "Rayssa". Mostre o nome, a velocidade, o sizeof(Nome) e o strlen
+do nome. Por último, mostre distancia + tempo: somar metros com segundos
+não faz sentido, e mesmo assim o programa tem que compilar sem aviso.
 
 
 ```text
-printf("%d\n", distancia + tempo);
-printf("%d m/s\n", distancia / tempo);
-printf("%zu\n", sizeof(Nome));
-printf("%zu %zu\n", sizeof atleta, strlen(atleta));
+Saída esperada:
+Atleta: Rayssa
+Velocidade: 5 m/s
+sizeof(Nome) = 12, strlen = 6
+distancia + tempo = 120
 ```
 
 **Dicas:**
 
-1. typedef não cria tipo novo: Metros e Segundos são int.
-2. Nome é um apelido para "vetor de 12 char".
-3. Resposta esperada: compila (somar metros com segundos não faz sentido,
-   mas o C não sabe disso) e mostra 120, "5 m/s", 12 e "12 6".
+1. typedef não cria tipo novo: Metros e Segundos são int, e %d mostra os
+   dois.
+2. Nome é um apelido para "vetor de 12 char": Nome atleta = "Rayssa";
+   funciona como char atleta[12] = "Rayssa";
+3. sizeof e strlen devolvem size_t: mostre com %zu.
+4. Resposta esperada: a saída acima. O vetor tem 12 bytes; o texto, 6
+   letras.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0060-typedef/E356.c
@@ -837,27 +873,31 @@ a) Crie Celsius e Fahrenheit como structs de um campo só:
  Celsius para_celsius(Fahrenheit f), e converta 100 °C e 98.6 °F.
 ```
 
-b) Escreva no main a linha Celsius errado = febre; (febre é Fahrenheit).
+b) Escreva no main a linha Celsius errado = febre; (febre é Fahrenheit),
 
 ```text
- O que acontece? E se os dois fossem typedef double?
+ rode e leia o erro do gcc. Depois troque a linha pela conversão certa,
+ Celsius febre_c = para_celsius(febre);, e mostre se é febre (a partir
+ de 37.5 °C) ou não.
 ```
 
 
 
 ```text
-Saída esperada (sem a linha errada):
+Saída esperada (depois de trocar a linha errada):
 100.0 °C = 212.0 °F
 98.6 °F = 37.0 °C
+37.0 °C: sem febre
 ```
 
 **Dicas:**
 
 1. F = C * 9 / 5 + 32 e C = (F - 32) * 5 / 9.
 2. Para criar o valor: Celsius agua = {100.0}; acesse com agua.graus.
-3. Resposta esperada: a saída acima. Em (b), não compila (o gcc diz
-   "invalid initializer"): duas structs diferentes nunca se misturam. Com
-   typedef double, compilaria e o erro passaria calado.
+3. Em (b), a linha errada não compila (o gcc diz "invalid initializer"):
+   duas structs diferentes nunca se misturam. Com typedef double,
+   compilaria e o erro passaria calado.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0060-typedef/E360.c
@@ -983,49 +1023,70 @@ a comparação olha um campo calculado de cada struct:
 
 Os arquivos ficam em [`0061-vetor-de-structs/`](0061-vetor-de-structs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A121 · A tabela do campeonato**
+**Exemplo A121 · O estoque da farmácia**
 
 ```c
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
     char nome[20];
-    int vitorias;
-    int empates;
-    int derrotas;
-} Time;
+    int estoque;
+    int minimo; // abaixo disso, precisa repor
+} Remedio;
 
-int pontos(Time t) {
-    return 3 * t.vitorias + t.empates;
+// devolve o índice do remédio com esse nome, ou -1 se não achar
+int buscar(const Remedio v[], int n, const char *nome) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(v[i].nome, nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void vender(Remedio v[], int n, const char *nome, int qtd) {
+    int i = buscar(v, n, nome);
+    if (i == -1) {
+        printf("%s: não temos\n", nome);
+    } else if (v[i].estoque < qtd) {
+        printf("%s: só restam %d\n", nome, v[i].estoque);
+    } else {
+        v[i].estoque -= qtd; // mexe direto no elemento do vetor
+        printf("%s: vendidas %d, restam %d\n", nome, qtd, v[i].estoque);
+    }
 }
 
 int main(void) {
-    Time tabela[] = {
-        {"Bahia", 8, 5, 3},
-        {"Flamengo", 9, 6, 1},
-        {"Palmeiras", 10, 4, 2},
-        {"Vasco", 7, 7, 2},
+    Remedio farmacia[] = {
+        {"Dipirona", 40, 10},
+        {"Paracetamol", 12, 10},
+        {"Ibuprofeno", 5, 8},
     };
-    int n = sizeof tabela / sizeof tabela[0]; // 4 times
+    int n = sizeof farmacia / sizeof farmacia[0];
 
-    int lider = 0; // índice do melhor até agora
+    vender(farmacia, n, "Paracetamol", 3);
+    vender(farmacia, n, "Ibuprofeno", 6);
+    vender(farmacia, n, "Amoxicilina", 1);
+    vender(farmacia, n, "Dipirona", 30);
+
+    printf("Repor:\n");
     for (int i = 0; i < n; i++) {
-        printf("%d. %-10s %2d pts\n", i, tabela[i].nome, pontos(tabela[i]));
-        if (pontos(tabela[i]) > pontos(tabela[lider])) {
-            lider = i;
+        if (farmacia[i].estoque < farmacia[i].minimo) { // 10 de 10 ainda não
+            printf("  %s (%d de %d)\n", farmacia[i].nome, farmacia[i].estoque,
+                   farmacia[i].minimo);
         }
     }
-    printf("Líder: %s, com %d pontos\n", tabela[lider].nome, pontos(tabela[lider]));
-    printf("A tabela ocupa %zu bytes (%d x %zu)\n", sizeof tabela, n, sizeof(Time));
     return 0;
 }
 // Saída:
-// 0. Bahia      29 pts
-// 1. Flamengo   33 pts
-// 2. Palmeiras  34 pts
-// 3. Vasco      28 pts
-// Líder: Palmeiras, com 34 pontos
-// A tabela ocupa 128 bytes (4 x 32)
+// Paracetamol: vendidas 3, restam 9
+// Ibuprofeno: só restam 5
+// Amoxicilina: não temos
+// Dipirona: vendidas 30, restam 10
+// Repor:
+//   Paracetamol (9 de 10)
+//   Ibuprofeno (5 de 8)
 ```
 
 ```bash
@@ -1435,58 +1496,74 @@ do laço enxerga o saldo que a anterior deixou:
 
 Os arquivos ficam em [`0062-ponteiro-para-struct/`](0062-ponteiro-para-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A123 · O cartão do ônibus**
+**Exemplo A123 · As comandas do bar**
 
 ```c
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-#define TARIFA 4.40
 
 typedef struct {
-    char titular[30];
-    double saldo;
-    int viagens;
-} Cartao;
+    int mesa;
+    double total;
+    int itens;
+} Comanda;
 
-// recebe o ENDEREÇO do cartão: mexe no original, não numa cópia
-bool cobrar_passagem(Cartao *c) {
-    if (c->saldo < TARIFA) { // c->saldo é o mesmo que (*c).saldo
-        return false;
+// cria um vetor de comandas no heap e devolve o endereço (NULL se falhar)
+Comanda *abrir_comandas(int n) {
+    Comanda *v = malloc(n * sizeof *v);
+    if (v == NULL) {
+        return NULL;
     }
-    c->saldo -= TARIFA;
-    c->viagens++;
-    return true;
+    for (int i = 0; i < n; i++) {
+        v[i] = (Comanda){i + 1, 0.0, 0}; // mesas 1, 2, 3...
+    }
+    return v;
+}
+
+void lancar(Comanda *c, double preco) {
+    c->total += preco;
+    c->itens++;
+}
+
+// devolve um ponteiro para a comanda mais cara: sem copiar nenhuma
+const Comanda *mais_cara(const Comanda *v, int n) {
+    const Comanda *m = &v[0];
+    for (int i = 1; i < n; i++) {
+        if (v[i].total > m->total) {
+            m = &v[i];
+        }
+    }
+    return m;
 }
 
 int main(void) {
-    Cartao *c = malloc(sizeof *c); // um Cartao inteiro no heap
-    if (c == NULL) {
+    int n = 3;
+    Comanda *bar = abrir_comandas(n);
+    if (bar == NULL) {
         return 1;
     }
-    strcpy(c->titular, "Luana");
-    c->saldo = 10.00;
-    c->viagens = 0;
 
-    for (int i = 1; i <= 3; i++) {
-        if (cobrar_passagem(c)) {
-            printf("Viagem %d: liberada, saldo R$ %.2f\n", i, c->saldo);
-        } else {
-            printf("Viagem %d: saldo insuficiente (R$ %.2f)\n", i, c->saldo);
-        }
+    lancar(&bar[0], 12.00); // chope na mesa 1
+    lancar(&bar[2], 35.90); // porção na mesa 3
+    lancar(&bar[0], 12.00);
+    lancar(bar + 1, 8.50);  // bar + 1 é o mesmo que &bar[1]
+
+    // o ponteiro anda de comanda em comanda: p++ pula sizeof(Comanda) bytes
+    for (Comanda *p = bar; p < bar + n; p++) {
+        printf("Mesa %d: %d itens, R$ %.2f\n", p->mesa, p->itens, p->total);
     }
-    printf("%s fez %d viagens\n", c->titular, c->viagens);
 
-    free(c);
+    const Comanda *top = mais_cara(bar, n);
+    printf("Maior conta: mesa %d\n", top->mesa);
+
+    free(bar); // depois disso, top também fica solto: não use mais
     return 0;
 }
 // Saída:
-// Viagem 1: liberada, saldo R$ 5.60
-// Viagem 2: liberada, saldo R$ 1.20
-// Viagem 3: saldo insuficiente (R$ 1.20)
-// Luana fez 2 viagens
+// Mesa 1: 2 itens, R$ 24.00
+// Mesa 2: 1 itens, R$ 8.50
+// Mesa 3: 1 itens, R$ 35.90
+// Maior conta: mesa 3
 ```
 
 ```bash
@@ -1589,50 +1666,37 @@ Beto: R$ 4428.00
 
 **Exercício E368** · ★☆☆
 
-Preveja a saída antes de rodar:
+Complete o programa abaixo. Escreva as duas funções, uma que recebe o
+placar por valor e outra que recebe o endereço:
 
 
 ```text
-typedef struct {
-    int gols;
-} Placar;
+- void gol_copia(Placar p): soma 1 em p.gols;
+- void gol(Placar *p): soma 1 em p->gols.
 ```
 
 
-
-```text
-void gol_copia(Placar p) { p.gols++; }
-void gol(Placar *p) { p->gols++; }
-```
-
+No main, depois de cada chamada, mostre casa.gols. No fim, crie um
+ponteiro ptr para casa, some 10 por ele com a seta e mostre casa.gols e
+(*ptr).gols.
 
 
 ```text
-int main(void) {
-    Placar casa = {0};
-    gol_copia(casa);
-    gol(&casa);
-    gol(&casa);
-    gol_copia(casa);
-    printf("%d\n", casa.gols);
-```
-
-
-
-```text
-    Placar *ptr = &casa;
-    ptr->gols += 10;
-    printf("%d %d\n", casa.gols, (*ptr).gols);
-    return 0;
-}
+Saída esperada:
+depois de gol_copia: 0
+depois de gol: 1
+depois de gol: 2
+depois de gol_copia: 2
+casa.gols = 12, (*ptr).gols = 12
 ```
 
 **Dicas:**
 
-1. Quem recebe Placar (sem *) trabalha numa cópia.
-2. ptr->gols e (*ptr).gols são a mesma coisa, e ptr aponta para casa.
-3. Resposta esperada: 2 e depois "12 12". Só as duas chamadas de gol(&casa)
-   contam; gol_copia aumenta uma cópia que some no fim da função.
+1. Quem recebe Placar (sem *) trabalha numa cópia que some no fim da
+   função.
+2. Na chamada por endereço, passe &casa.
+3. ptr->gols e (*ptr).gols são a mesma coisa, e ptr aponta para casa.
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E368.c
@@ -1749,46 +1813,42 @@ Total: R$ 67.87
 
 Uma struct pode ter um ponteiro para outra struct do mesmo tipo (é a base
 das listas encadeadas do módulo 11). Para isso, ela precisa de nome:
-dentro dela, o apelido do typedef ainda não existe. Preveja cada linha:
+dentro dela, o apelido do typedef ainda não existe. Três amigos formam uma
+roda: Ana aponta para Caio, Caio para Bia e Bia para Ana.
+
+Complete o programa com três funções que andam SÓ pelas setas (p->amigo),
+sem usar o vetor g:
 
 
 ```text
-typedef struct Pessoa {
-    char nome[10];
-    int idade;
-    struct Pessoa *amigo;
-} Pessoa;
+- void seguir(const Pessoa *p, int passos): mostra o nome de p e dos
+  próximos "passos" amigos;
+- int tamanho_da_roda(const Pessoa *inicio): conta quantas pessoas há
+  até voltar para quem começou;
+- const Pessoa *mais_velha(const Pessoa *inicio): devolve um ponteiro
+  para a pessoa de maior idade da roda.
 ```
 
 
-
-```text
-Pessoa g[3] = {{"Ana", 30, NULL}, {"Bia", 25, NULL}, {"Caio", 41, NULL}};
-g[0].amigo = &g[2];
-g[1].amigo = &g[0];
-g[2].amigo = &g[1];
-```
-
+Chame seguir(&g[0], 4), tamanho_da_roda(&g[0]) e mais_velha(&g[1]) (a
+busca começa na Bia de propósito), e mostre também o sizeof(Pessoa).
 
 
 ```text
-Pessoa *p = g;
-printf("%s\n", p->amigo->nome);
-printf("%s\n", p->amigo->amigo->nome);
-printf("%d\n", (p + 1)->idade);
-p++;
-printf("%s %d\n", p->nome, p->amigo->idade);
-printf("%c\n", (*p->amigo).nome[0]);
-printf("%td\n", (char *)(p + 1) - (char *)p);
+Saída esperada (num PC de 64 bits):
+Ana -> Caio -> Bia -> Ana -> Caio
+Roda da Ana: 3 pessoas
+Maior idade: Caio (41)
+sizeof(Pessoa) = 24
 ```
 
 **Dicas:**
 
-1. Desenhe os três quadrados e as setas dos amigos: Ana -> Caio -> Bia -> Ana.
-2. p + 1 anda um elemento inteiro (uma Pessoa), não um byte.
-3. A última linha mede, em bytes, o tamanho de uma Pessoa: nome (10), 2 de
-   sobra, idade (4), amigo (8, um ponteiro em 64 bits).
-4. Resposta esperada: Caio; Bia; 25; "Bia 30"; A; 24.
+1. Para andar: p = p->amigo; repetido. A roda não tem fim: quem decide
+   quando parar é você.
+2. Para contar, comece em inicio->amigo e pare quando p == inicio.
+3. O tamanho: nome (10), 2 de sobra, idade (4), amigo (8, um ponteiro).
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E372.c
@@ -1910,47 +1970,58 @@ enum. O `s++` é o que faz o pedido andar:
 
 Os arquivos ficam em [`0063-enum/`](0063-enum/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A125 · O pedido a caminho**
+**Exemplo A125 · As formas de pagamento**
 
 ```c
 #include <stdio.h>
 
-typedef enum {
-    RECEBIDO,   // 0
-    PREPARANDO, // 1
-    A_CAMINHO,  // 2
-    ENTREGUE    // 3
-} Status;
+// prefixo PAG_ evita choque de nomes; QTD_PAG conta quantas formas existem
+typedef enum { PAG_PIX, PAG_DEBITO, PAG_CREDITO, PAG_DINHEIRO, QTD_PAG } Pagamento;
 
-const char *nome_status(Status s) {
-    switch (s) {
-    case RECEBIDO:
-        return "recebido pelo restaurante";
-    case PREPARANDO:
-        return "em preparo";
-    case A_CAMINHO:
-        return "saiu para entrega";
-    case ENTREGUE:
-        return "entregue";
-    }
-    return "desconhecido"; // só chega aqui com um valor inválido
-}
+typedef struct {
+    double valor;
+    Pagamento forma; // um enum dentro de uma struct
+} Venda;
 
 int main(void) {
-    Status s = RECEBIDO;
+    // vetores do tamanho do enum, indexados pelo próprio enum
+    const char *nomes[QTD_PAG] = {"Pix", "débito", "crédito", "dinheiro"};
+    const double taxa[QTD_PAG] = {0.0, 1.5, 3.2, 0.0}; // % que a maquininha cobra
 
-    while (s != ENTREGUE) {
-        printf("[%d] Pedido %s\n", s, nome_status(s));
-        s++; // enum é um inteiro: avança para o próximo status
+    Venda vendas[] = {
+        {50.00, PAG_PIX},
+        {120.00, PAG_CREDITO},
+        {35.00, PAG_DEBITO},
+        {80.00, PAG_PIX},
+        {20.00, 7}, // compila! o C não confere se 7 é uma forma válida
+    };
+    int n = sizeof vendas / sizeof vendas[0];
+
+    int contagem[QTD_PAG] = {0};
+    double taxas = 0;
+    for (int i = 0; i < n; i++) {
+        Pagamento f = vendas[i].forma;
+        if (f < 0 || f >= QTD_PAG) { // quem confere é você
+            printf("venda %d: forma inválida (%d)\n", i, f);
+            continue;
+        }
+        contagem[f]++;
+        taxas += vendas[i].valor * taxa[f] / 100;
     }
-    printf("[%d] Pedido %s. Bom apetite!\n", s, nome_status(s));
+
+    for (Pagamento f = PAG_PIX; f < QTD_PAG; f++) {
+        printf("%s: %d venda(s)\n", nomes[f], contagem[f]);
+    }
+    printf("Taxas pagas: R$ %.2f\n", taxas);
     return 0;
 }
 // Saída:
-// [0] Pedido recebido pelo restaurante
-// [1] Pedido em preparo
-// [2] Pedido saiu para entrega
-// [3] Pedido entregue. Bom apetite!
+// venda 4: forma inválida (7)
+// Pix: 2 venda(s)
+// débito: 1 venda(s)
+// crédito: 1 venda(s)
+// dinheiro: 0 venda(s)
+// Taxas pagas: R$ 4.37
 ```
 
 ```bash
@@ -2009,7 +2080,7 @@ int main(void) {
 
 **Exercício E373** · ★☆☆
 
-Preveja o valor de cada nome e o resultado do último printf:
+Declare o enum abaixo, com alguns valores escolhidos e outros não:
 
 
 ```text
@@ -2017,18 +2088,32 @@ enum Tamanho { P = 1, M, G, GG = 10, XG, XXG = GG * 2, ESP };
 ```
 
 
+Guarde os sete tamanhos num vetor e os nomes deles num vetor de textos, e
+mostre um por linha, num laço. Depois guarde G + XG numa variável
+enum Tamanho e mostre: o C deixa, mesmo que somar tamanhos não faça
+sentido.
+
 
 ```text
-printf("%d %d %d %d %d %d %d\n", P, M, G, GG, XG, XXG, ESP);
-printf("%d\n", G + XG);
+Saída esperada:
+P = 1
+M = 2
+G = 3
+GG = 10
+XG = 11
+XXG = 20
+ESP = 21
+G + XG = 14
 ```
 
 **Dicas:**
 
 1. Sem valor escolhido, um nome vale o anterior + 1.
 2. Um valor pode usar nomes que já apareceram antes: XXG = GG * 2.
-3. Resposta esperada: "1 2 3 10 11 20 21" e 14. Somar tamanhos não faz
-   sentido, mas compila: para o C, são só inteiros.
+3. const enum Tamanho tamanhos[] = {P, M, G, ...}; e
+   const char *nomes[] = {"P", "M", ...}; andam juntos pelo mesmo índice.
+4. Resposta esperada: a saída acima. 14 não é tamanho nenhum, e o C não
+   reclama: para ele, são só inteiros.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0063-enum/E373.c
@@ -2107,9 +2192,10 @@ Placar: 2 vitórias, 1 empate, 2 derrotas
 **Exercício E376** · ★★☆
 
 Este programa compila sem nenhum aviso, mas uma das cartas sai como "???".
-Ache o problema, conserte e responda: por que o gcc, que avisa quando um
-switch de enum esquece um caso, desta vez ficou quieto? Mude o código para
-que, se alguém acrescentar um naipe novo no futuro, o gcc avise.
+Rode, ache o problema e conserte. O gcc avisa quando um switch de enum
+esquece um caso, mas desta vez ficou quieto: mude o código para que ele
+avise. Para testar, acrescente um quinto naipe CORINGA no fim do enum e
+rode: tem que aparecer o aviso. Depois tire o CORINGA e rode de novo.
 
 
 ```text
@@ -2335,46 +2421,49 @@ outro lado:
 
 Os arquivos ficam em [`0064-union/`](0064-union/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A127 · Os bytes do IP**
+**Exemplo A127 · A balança da feira**
 
 ```c
-#include <stdint.h>
 #include <stdio.h>
 
-// os dois campos começam no MESMO endereço: são dois jeitos de ler 4 bytes
+// um produto da feira é vendido por unidade OU por quilo, nunca pelos dois
 typedef union {
-    uint32_t numero;
-    unsigned char bytes[4];
-} Endereco;
+    int unidades;
+    double quilos;
+} Quantidade;
+
+// a mesma informação numa struct: os dois campos ocupam espaço sempre
+typedef struct {
+    int unidades;
+    double quilos;
+} QuantidadeStruct;
 
 int main(void) {
-    Endereco ip;
-    ip.numero = 0xC0A8000A; // 192.168.0.10, escrito como um número só
+    Quantidade q;
 
-    printf("sizeof: %zu bytes\n", sizeof ip);
-    printf("numero: 0x%08X\n", (unsigned)ip.numero);
-    printf("bytes na memória:");
-    for (int i = 0; i < 4; i++) {
-        printf(" %02X", ip.bytes[i]); // lê os mesmos 4 bytes, um por um
-    }
-    printf("\n");
+    q.unidades = 12; // uma dúzia de ovos
+    printf("unidades: %d\n", q.unidades);
 
-    if (ip.bytes[0] == 0x0A) {
-        printf("little-endian: o byte menos significativo vem primeiro\n");
-    } else {
-        printf("big-endian: o byte mais significativo vem primeiro\n");
-    }
+    q.quilos = 2.5;  // agora 2,5 kg de tomate: os mesmos bytes, reescritos
+    printf("quilos: %.1f\n", q.quilos);
+    // 2.5 em double é 0x4004000000000000; num PC little-endian, os 4 bytes
+    // que o int lê são os de baixo, todos zero
+    printf("unidades agora: %d (lixo: a dúzia sumiu)\n", q.unidades);
 
-    ip.bytes[3] = 10; // muda um byte: o número inteiro muda junto
-    printf("depois de bytes[3] = 10: 0x%08X\n", (unsigned)ip.numero);
+    printf("union: %zu bytes, struct: %zu bytes\n", sizeof(Quantidade),
+           sizeof(QuantidadeStruct));
+    printf("1000 produtos: %zu contra %zu bytes\n", 1000 * sizeof(Quantidade),
+           1000 * sizeof(QuantidadeStruct));
+    printf("mesmo endereço? %s\n", (void *)&q.unidades == (void *)&q.quilos ? "sim" : "não");
     return 0;
 }
 // Saída (num PC Intel/AMD ou ARM):
-// sizeof: 4 bytes
-// numero: 0xC0A8000A
-// bytes na memória: 0A 00 A8 C0
-// little-endian: o byte menos significativo vem primeiro
-// depois de bytes[3] = 10: 0x0AA8000A
+// unidades: 12
+// quilos: 2.5
+// unidades agora: 0 (lixo: a dúzia sumiu)
+// union: 8 bytes, struct: 16 bytes
+// 1000 produtos: 8000 contra 16000 bytes
+// mesmo endereço? sim
 ```
 
 ```bash
@@ -2445,8 +2534,9 @@ int main(void) {
 
 **Exercício E379** · ★☆☆
 
-Num PC de 64 bits, preveja os três sizeof e depois confira com um
-programa:
+Escreva um programa que declare os três tipos abaixo e mostre o sizeof de
+cada um. Para a union Caixa e a struct Ficha, mostre também onde cada campo
+começa (offsetof): é a diferença entre as duas, em números.
 
 
 ```text
@@ -2455,14 +2545,24 @@ struct Ficha { char c; int i; double d; };
 union Nome   { char texto[10]; int codigo; };
 ```
 
+
+
+```text
+Saída esperada (num PC de 64 bits):
+union Caixa: 8 bytes, campos em 0, 0 e 0
+struct Ficha: 16 bytes, campos em 0, 4 e 8
+union Nome: 12 bytes
+```
+
 **Dicas:**
 
-1. Union: o tamanho do maior campo, arredondado para um múltiplo do
-   alinhamento do campo mais exigente.
-2. Struct: os campos em sequência, com sobras de alinhamento (assunto 0059).
-3. Resposta esperada: union Caixa = 8; struct Ficha = 16 (c em 0, i em 4,
-   d em 8); union Nome = 12 (10 bytes de texto, arredondados para múltiplo
-   de 4 por causa do int).
+1. offsetof(union Caixa, i) também funciona com union; está em
+   <stddef.h> e se mostra com %zu.
+2. Union: o tamanho do maior campo, arredondado para um múltiplo do
+   alinhamento do campo mais exigente. Struct: os campos em sequência, com
+   sobras de alinhamento (assunto 0059).
+3. Resposta esperada: a saída acima. A union Nome tem 12 bytes, não 10:
+   o int pede um tamanho múltiplo de 4.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0064-union/E379.c
@@ -2572,7 +2672,7 @@ Total: 39.57 m2
 Este programa compila sem aviso e roda sem erro do sanitizer, mas duas
 linhas saem erradas: um "real" aparece como 0.00 e um "texto" aparece como
 um número estranho. O C não confere a etiqueta de uma union: isso é
-trabalho seu. Ache os dois erros e conserte.
+trabalho seu. Rode, ache os dois erros, conserte e rode de novo.
 
 
 ```text
@@ -2599,8 +2699,8 @@ texto: ok
 
 **Exercício E384** · ★★★
 
-Preveja a saída deste trecho em DUAS máquinas: o seu PC (little-endian) e
-uma máquina big-endian (como um roteador antigo com processador MIPS).
+Na rede, a convenção é mandar os números em big-endian (a "ordem de
+rede"). Use a union abaixo para escrever:
 
 
 ```text
@@ -2614,23 +2714,34 @@ typedef union {
 
 
 ```text
-Visao x;
-x.n = 0x11223344;
-printf("m[0] = 0x%04X, m[1] = 0x%04X\n", (unsigned)x.m[0], (unsigned)x.m[1]);
-printf("b[0] = 0x%02X, b[3] = 0x%02X\n", x.b[0], x.b[3]);
-x.b[0] = 0xFF;
-printf("n = 0x%08X\n", (unsigned)x.n);
+- void mostrar_memoria(Visao x): mostra os 4 bytes na ordem da memória;
+- int little_endian(void): devolve 1 se a máquina é little-endian;
+- uint32_t ordem_de_rede(uint32_t x): devolve o número com os bytes
+  arrumados para que, na memória, apareçam do mais significativo para o
+  menos. Numa máquina big-endian, devolve x sem mexer.
+```
+
+
+Teste com x.n = 0x11223344: mostre a memória, m[0] e m[1], a endianness e
+a memória do número convertido.
+
+
+```text
+Saída esperada (num PC Intel/AMD ou ARM):
+memória: 44 33 22 11
+m[0] = 0x3344, m[1] = 0x1122
+esta máquina é little-endian
+em ordem de rede, memória: 11 22 33 44
 ```
 
 **Dicas:**
 
-1. Desenhe os 4 bytes na memória para cada máquina. Little-endian:
-   44 33 22 11. Big-endian: 11 22 33 44.
-2. m[0] são os dois primeiros bytes da memória, lidos como um número de 16
-   bits na ordem daquela máquina.
-3. Resposta esperada. Little-endian: m[0] = 0x3344, m[1] = 0x1122;
-   b[0] = 0x44, b[3] = 0x11; n = 0x112233FF. Big-endian: m[0] = 0x1122,
-   m[1] = 0x3344; b[0] = 0x11, b[3] = 0x44; n = 0xFF223344.
+1. Para descobrir a endianness: grave 1 em .n e olhe se .b[0] vale 1.
+2. Para inverter: duas Visao, de e para; para.b[i] = de.b[3 - i].
+3. m[0] são os dois primeiros bytes da memória, lidos como um número de 16
+   bits na ordem da máquina: 44 33 vira 0x3344.
+4. Resposta esperada: a saída acima. A última linha sai igual em qualquer
+   máquina: é para isso que serve a ordem de rede.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0064-union/E384.c
@@ -2787,50 +2898,57 @@ Sobrou algum bit, a resposta é Sim:
 
 Os arquivos ficam em [`0065-bits/`](0065-bits/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A129 · As permissões do arquivo**
+**Exemplo A129 · Os ingredientes da pizza**
 
 ```c
 #include <stdio.h>
 
-// cada permissão é um bit: 4 = 100, 2 = 010, 1 = 001
-#define LER      4u // r
-#define ESCREVER 2u // w
-#define EXECUTAR 1u // x
+// cada ingrediente é um bit: 1u << n liga só o bit n
+#define QUEIJO    (1u << 0)
+#define TOMATE    (1u << 1)
+#define CEBOLA    (1u << 2)
+#define CALABRESA (1u << 3)
+#define AZEITONA  (1u << 4)
 
-void mostrar(const char *passo, unsigned p) {
-    printf("%-12s %u%u%u = %u  %c%c%c\n", passo,
-           (p >> 2) & 1u, (p >> 1) & 1u, p & 1u, p, // os 3 bits, um por um
-           (p & LER) ? 'r' : '-',
-           (p & ESCREVER) ? 'w' : '-',
-           (p & EXECUTAR) ? 'x' : '-');
+void mostrar(const char *nome, unsigned p) {
+    const char *ingredientes[] = {"queijo", "tomate", "cebola", "calabresa", "azeitona"};
+    printf("%-12s", nome);
+    for (int b = 0; b < 5; b++) {
+        if (p & (1u << b)) {
+            printf(" %s", ingredientes[b]);
+        }
+    }
+    printf("\n");
 }
 
 int main(void) {
-    unsigned perm = LER | ESCREVER; // liga dois bits de uma vez: 110
-    mostrar("inicial", perm);
+    unsigned calabresa = QUEIJO | CALABRESA | CEBOLA | AZEITONA;
+    unsigned marguerita = QUEIJO | TOMATE;
+    mostrar("calabresa", calabresa);
+    mostrar("marguerita", marguerita);
 
-    perm |= EXECUTAR;               // OU liga um bit
-    mostrar("liga x", perm);
+    unsigned meu = calabresa & ~(CEBOLA | AZEITONA); // tira dois de uma vez
+    mostrar("a minha", meu);
 
-    perm &= ~ESCREVER;              // E com o inverso desliga um bit
-    mostrar("desliga w", perm);
+    mostrar("em comum", calabresa & marguerita);   // E: o que as duas têm
+    mostrar("meio a meio", calabresa | marguerita); // OU: tudo junto
 
-    if (perm & ESCREVER) {          // E isola um bit para testar
-        printf("pode escrever\n");
-    } else {
-        printf("não pode escrever\n");
-    }
-
-    perm ^= EXECUTAR;               // OU exclusivo inverte um bit
-    mostrar("inverte x", perm);
+    unsigned alergia = CEBOLA | TOMATE;
+    // "tem ALGUM" e "tem TODOS" são testes diferentes
+    printf("marguerita tem algum de cebola/tomate? %s\n",
+           (marguerita & alergia) != 0 ? "sim" : "não");
+    printf("marguerita tem todos? %s\n",
+           (marguerita & alergia) == alergia ? "sim" : "não");
     return 0;
 }
 // Saída:
-// inicial      110 = 6  rw-
-// liga x       111 = 7  rwx
-// desliga w    101 = 5  r-x
-// não pode escrever
-// inverte x    100 = 4  r--
+// calabresa    queijo cebola calabresa azeitona
+// marguerita   queijo tomate
+// a minha      queijo calabresa
+// em comum     queijo
+// meio a meio  queijo tomate cebola calabresa azeitona
+// marguerita tem algum de cebola/tomate? sim
+// marguerita tem todos? não
 ```
 
 ```bash
@@ -2891,31 +3009,41 @@ int main(void) {
 
 **Exercício E385** · ★☆☆
 
-Faça à mão, em binário, com a = 0xCA e b = 0x5C (dois unsigned char).
-Dê cada resultado em binário, hexa e decimal. Depois confira com printf.
+Escreva a função void mostrar(const char *nome, unsigned char r), que
+mostra o nome, os 8 bits de r (com um espaço no meio), o valor em hexa e
+em decimal. Com a = 0xCA e b = 0x5C (dois unsigned char), use a função
+para mostrar a, b e os seis resultados abaixo, guardando cada um num
+unsigned char:
 
 
 ```text
-a) a & b
-b) a | b
-c) a ^ b
-d) ~a      (guardado num unsigned char)
-e) a << 1  (guardado num unsigned char)
-f) a >> 3
+a & b    a | b    a ^ b    ~a    a << 1    a >> 3
+```
+
+
+
+```text
+Saída esperada:
+a       1100 1010 = 0xCA = 202
+b       0101 1100 = 0x5C = 92
+a & b   0100 1000 = 0x48 = 72
+a | b   1101 1110 = 0xDE = 222
+a ^ b   1001 0110 = 0x96 = 150
+~a      0011 0101 = 0x35 = 53
+a << 1  1001 0100 = 0x94 = 148
+a >> 3  0001 1001 = 0x19 = 25
 ```
 
 **Dicas:**
 
-1. Primeiro passe para binário: cada dígito hexa vira 4 bits.
-   C = 1100, A = 1010, 5 = 0101.
-2. Escreva um embaixo do outro e aplique a regra casa por casa.
-3. Guardado num unsigned char, só sobram os 8 bits de baixo:
-   unsigned char r = ~a; e mostre com %02X.
-4. Resposta esperada: a = 1100 1010 (202), b = 0101 1100 (92).
-   a) 0100 1000 = 0x48 = 72; b) 1101 1110 = 0xDE = 222;
-   c) 1001 0110 = 0x96 = 150; d) 0011 0101 = 0x35 = 53;
-   e) 1001 0100 = 0x94 = 148 (o 1 da esquerda caiu fora);
-   f) 0001 1001 = 0x19 = 25 (202 / 8 = 25, divisão inteira).
+1. O bit b de r: (r >> b) & 1u. Percorra b de 7 até 0 e ponha o espaço
+   depois do bit 4.
+2. Para conferir uma linha: C = 1100, A = 1010, 5 = 0101. Com um
+   embaixo do outro, a regra se aplica casa por casa.
+3. Num unsigned char só sobram os 8 bits de baixo: passe
+   (unsigned char)~a e (unsigned char)(a << 1). Em a << 1, o 1 da esquerda
+   cai fora.
+4. Resposta esperada: a saída acima (%-7s alinha os nomes).
 
 ```bash
 ~/LPEDC/rodar 08-structs/0065-bits/E385.c
@@ -2987,8 +3115,8 @@ Saída esperada:
 
 As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4). O
 usuário tinha email e push ligados e desligou o push. Mas a tela mostra o
-SMS ligado e, depois, nada desliga. O gcc até dá uma pista (um aviso). Ache os
-três erros e conserte.
+SMS ligado e, depois, nada desliga. O gcc até dá uma pista (um aviso). Rode,
+ache os três erros, conserte e rode de novo.
 
 
 ```text
@@ -3240,100 +3368,113 @@ pergunta de bits por item. O mesmo desenho serve para qualquer máscara:
 
 Os arquivos ficam em [`0066-juntando-tudo/`](0066-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A131 · O cardápio da lanchonete**
+**Exemplo A131 · Os alunos da academia**
 
 ```c
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-typedef enum { LANCHE, BEBIDA, SOBREMESA, QTD_CATEGORIAS } Categoria;
+typedef enum { MENSAL, TRIMESTRAL, ANUAL, QTD_PLANOS } Plano;
 
-// flags: cada característica é um bit
-#define VEGANO     (1u << 0)
-#define SEM_GLUTEN (1u << 1)
-#define PICANTE    (1u << 2)
-
-typedef struct {
-    char nome[32];
-    Categoria categoria;
-    double preco;
-    unsigned tags;
-} Item;
+// modalidades: cada uma é um bit
+#define MUSCULACAO (1u << 0)
+#define NATACAO    (1u << 1)
+#define YOGA       (1u << 2)
 
 typedef struct {
-    Item *itens; // vetor no heap
-    int n;       // quantos itens tem
-    int cap;     // quantos cabem
-} Cardapio;
+    char nome[16];
+    Plano plano;
+    unsigned modalidades;
+} Aluno;
 
-int cardapio_adicionar(Cardapio *c, Item it) {
-    if (c->n == c->cap) {
-        int nova = c->cap == 0 ? 2 : 2 * c->cap;
-        Item *novo = realloc(c->itens, nova * sizeof *novo);
+typedef struct {
+    Aluno *v;
+    int n, cap;
+} Academia;
+
+bool matricular(Academia *a, const char *nome, Plano plano, unsigned mods) {
+    if (a->n == a->cap) {
+        int nova = a->cap == 0 ? 2 : 2 * a->cap;
+        Aluno *novo = realloc(a->v, nova * sizeof *novo);
         if (novo == NULL) {
-            return 0;
+            return false;
         }
-        c->itens = novo;
-        c->cap = nova;
+        a->v = novo;
+        a->cap = nova;
     }
-    c->itens[c->n++] = it; // copia a struct inteira para dentro do vetor
-    return 1;
+    Aluno *al = &a->v[a->n]; // ponteiro usado logo, antes de outro realloc
+    strcpy(al->nome, nome);
+    al->plano = plano;
+    al->modalidades = mods;
+    a->n++;
+    return true;
 }
 
-void mostrar_item(const Item *it) {
-    const char *categorias[QTD_CATEGORIAS] = {"lanche", "bebida", "sobremesa"};
-    printf("  R$ %5.2f  %s (%s)%s%s%s\n", it->preco, it->nome, categorias[it->categoria],
-           (it->tags & VEGANO) ? " [V]" : "",
-           (it->tags & SEM_GLUTEN) ? " [SG]" : "",
-           (it->tags & PICANTE) ? " [P]" : "");
+// devolve o índice (e não um ponteiro: o vetor pode mudar de lugar)
+int procurar(const Academia *a, const char *nome) {
+    for (int i = 0; i < a->n; i++) {
+        if (strcmp(a->v[i].nome, nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
 }
 
-// mostra os itens que têm TODAS as tags da máscara
-void filtrar(const Cardapio *c, unsigned mascara) {
-    for (int i = 0; i < c->n; i++) {
-        if ((c->itens[i].tags & mascara) == mascara) {
-            mostrar_item(&c->itens[i]);
+// "alguma" das modalidades da máscara, não "todas"
+void listar_alguma(const Academia *a, unsigned mascara) {
+    for (int i = 0; i < a->n; i++) {
+        if ((a->v[i].modalidades & mascara) != 0) {
+            printf("  %s\n", a->v[i].nome);
         }
     }
 }
 
 int main(void) {
-    Cardapio c = {NULL, 0, 0};
-    Item itens[] = {
-        {"X-Burger", LANCHE, 28.90, 0},
-        {"Burger de grão-de-bico", LANCHE, 32.00, VEGANO},
-        {"Tapioca de frango", LANCHE, 18.50, SEM_GLUTEN},
-        {"Asinha apimentada", LANCHE, 24.00, PICANTE | SEM_GLUTEN},
-        {"Suco de caju", BEBIDA, 9.00, VEGANO | SEM_GLUTEN},
-        {"Pudim", SOBREMESA, 12.00, SEM_GLUTEN},
-    };
-    int n = sizeof itens / sizeof itens[0];
+    const char *planos[QTD_PLANOS] = {"mensal", "trimestral", "anual"};
+    Academia a = {NULL, 0, 0};
 
-    for (int i = 0; i < n; i++) {
-        if (!cardapio_adicionar(&c, itens[i])) {
-            free(c.itens);
-            return 1;
-        }
+    bool ok = matricular(&a, "Bruna", ANUAL, MUSCULACAO | YOGA) &&
+              matricular(&a, "Davi", MENSAL, NATACAO) &&
+              matricular(&a, "Elis", MENSAL, MUSCULACAO) &&
+              matricular(&a, "Fabio", TRIMESTRAL, MUSCULACAO | NATACAO | YOGA) &&
+              matricular(&a, "Gil", ANUAL, 0);
+    if (!ok) {
+        free(a.v);
+        return 1;
     }
 
-    printf("Cardápio (%d itens, capacidade %d):\n", c.n, c.cap);
-    filtrar(&c, 0); // máscara vazia: todo item passa
-    printf("Veganos e sem glúten:\n");
-    filtrar(&c, VEGANO | SEM_GLUTEN);
+    int i = procurar(&a, "Davi");
+    if (i != -1) {
+        a.v[i].modalidades |= YOGA; // Davi entrou na yoga
+        a.v[i].plano = ANUAL;       // e trocou de plano
+    }
 
-    free(c.itens);
+    int por_plano[QTD_PLANOS] = {0};
+    for (int k = 0; k < a.n; k++) {
+        por_plano[a.v[k].plano]++;
+    }
+    for (Plano p = MENSAL; p < QTD_PLANOS; p++) {
+        printf("%s: %d aluno(s)\n", planos[p], por_plano[p]);
+    }
+
+    printf("Fazem natação ou yoga:\n");
+    listar_alguma(&a, NATACAO | YOGA);
+    printf("%d alunos, capacidade %d\n", a.n, a.cap);
+
+    free(a.v);
     return 0;
 }
 // Saída:
-// Cardápio (6 itens, capacidade 8):
-//   R$ 28.90  X-Burger (lanche)
-//   R$ 32.00  Burger de grão-de-bico (lanche) [V]
-//   R$ 18.50  Tapioca de frango (lanche) [SG]
-//   R$ 24.00  Asinha apimentada (lanche) [SG] [P]
-//   R$  9.00  Suco de caju (bebida) [V] [SG]
-//   R$ 12.00  Pudim (sobremesa) [SG]
-// Veganos e sem glúten:
-//   R$  9.00  Suco de caju (bebida) [V] [SG]
+// mensal: 1 aluno(s)
+// trimestral: 1 aluno(s)
+// anual: 3 aluno(s)
+// Fazem natação ou yoga:
+//   Bruna
+//   Davi
+//   Fabio
+// 5 alunos, capacidade 8
 ```
 
 ```bash
@@ -3464,52 +3605,37 @@ Pão francês (padaria) R$ 16.90/kg
 
 **Exercício E392** · ★☆☆
 
-Preveja cada linha da saída (num PC de 64 bits):
+Complete o programa da lista de tarefas. Escreva
+void mostrar(const char *rotulo, const Tarefa *t), que mostra o rótulo, o
+título, a prioridade (como número), as flags (como número) e, para cada
+flag ligada, uma etiqueta: [feita], [fixada], [arquivada]. No main:
 
 
 ```text
-typedef enum { BAIXA = 1, MEDIA, ALTA = 5, URGENTE } Prioridade;
+1. t começa com "Pagar luz", URGENTE e FIXADA; u é uma cópia de t;
+2. ligue FEITA em u e troque a prioridade de u para MEDIA;
+3. mostre t e u;
+4. inverta FIXADA e ARQUIVADA de u numa operação só e mostre u;
+5. mostre o sizeof(Tarefa).
 ```
 
 
 
 ```text
-#define FEITA     1u
-#define FIXADA    2u
-#define ARQUIVADA 4u
-```
-
-
-
-```text
-typedef struct {
-    char titulo[12];
-    Prioridade p;
-    unsigned flags;
-} Tarefa;
-```
-
-
-
-```text
-Tarefa t = {"Pagar luz", URGENTE, FIXADA};
-Tarefa u = t;
-u.flags |= FEITA;
-u.p = MEDIA;
-printf("%d %d\n", t.p, u.p);
-printf("%u %u\n", t.flags, u.flags);
-printf("%zu\n", sizeof(Tarefa));
-printf("%s\n", (u.flags & ARQUIVADA) ? "arquivada" : "ativa");
-u.flags ^= FIXADA | ARQUIVADA;
-printf("%u\n", u.flags);
+Saída esperada (num PC de 64 bits):
+t: Pagar luz, prioridade 6, flags 2 [fixada]
+u: Pagar luz, prioridade 2, flags 3 [feita] [fixada]
+u: Pagar luz, prioridade 2, flags 5 [feita] [arquivada]
+sizeof(Tarefa) = 20
 ```
 
 **Dicas:**
 
-1. URGENTE vem logo depois de ALTA = 5.
-2. u = t faz uma cópia: mudar u não muda t.
-3. 3 ^ 6 em binário: 011 ^ 110.
-4. Resposta esperada: "6 2"; "2 3"; 20 (12 + 4 + 4, sem sobras); ativa; 5.
+1. URGENTE vem logo depois de ALTA = 5, por isso vale 6.
+2. Tarefa u = t; faz uma cópia: mudar u não muda t.
+3. Ligar: |=. Inverter dois bits de uma vez: u.flags ^= FIXADA | ARQUIVADA;
+   (011 ^ 110 = 101).
+4. Resposta esperada: a saída acima. O sizeof é 12 + 4 + 4, sem sobras.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0066-juntando-tudo/E392.c
@@ -3723,9 +3849,11 @@ sobrepõe (no quadrado de (3,2) a (4,3)); o segundo, não.
 
 </details>
 
-**4. A struct gorda.** Quanto mede `struct Sensor { char id; double leitura;
-char status; int contador; };` num PC de 64 bits? Reorganize os campos para
-ocupar o mínimo e diga quanto economiza num vetor de 1 milhão de sensores.
+**4. A struct gorda.** Escreva um programa que mostre o `sizeof` e o
+`offsetof` de cada campo de `struct Sensor { char id; double leitura; char
+status; int contador; };`. Crie uma versão com os campos reorganizados para
+ocupar o mínimo e mostre quantos bytes ela economiza num vetor de 1 milhão de
+sensores.
 
 <details><summary>Resposta</summary>
 
@@ -3761,8 +3889,9 @@ de erro medem quantos bits uma transmissão estragou.
 
 </details>
 
-**7. Potência de 2 numa linha.** Explique por que `n > 0 && (n & (n - 1)) ==
-0` é verdadeiro só quando `n` é potência de 2. Teste com 64, 96 e 1.
+**7. Potência de 2 numa linha.** Escreva `bool potencia_de_2(unsigned n)` só
+com `n > 0 && (n & (n - 1)) == 0`. Para 64, 96 e 1, mostre o resultado e os
+bits de `n` e de `n - 1`, um embaixo do outro, para ver por que funciona.
 
 <details><summary>Resposta</summary>
 

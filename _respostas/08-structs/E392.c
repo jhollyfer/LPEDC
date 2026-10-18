@@ -1,9 +1,5 @@
 // 0066 · Juntando tudo: o cardápio
 // Exercício E392 · ★☆☆
-//
-// Resposta: "6 2" (URGENTE = ALTA + 1; u é cópia); "2 3" (só u ganhou FEITA:
-// 010 | 001 = 011); 20 (12 + 4 + 4, já alinhado); ativa (o bit 4 está
-// desligado); 5 (011 ^ 110 = 101: FIXADA desligou e ARQUIVADA ligou).
 
 #include <stdio.h>
 
@@ -19,16 +15,23 @@ typedef struct {
     unsigned flags;
 } Tarefa;
 
+void mostrar(const char *rotulo, const Tarefa *t) {
+    printf("%s: %s, prioridade %d, flags %u%s%s%s\n", rotulo, t->titulo, t->p, t->flags,
+           (t->flags & FEITA) ? " [feita]" : "",
+           (t->flags & FIXADA) ? " [fixada]" : "",
+           (t->flags & ARQUIVADA) ? " [arquivada]" : "");
+}
+
 int main(void) {
     Tarefa t = {"Pagar luz", URGENTE, FIXADA};
-    Tarefa u = t;
+    Tarefa u = t; // cópia: mudar u não muda t
     u.flags |= FEITA;
     u.p = MEDIA;
-    printf("%d %d\n", t.p, u.p);
-    printf("%u %u\n", t.flags, u.flags);
-    printf("%zu\n", sizeof(Tarefa));
-    printf("%s\n", (u.flags & ARQUIVADA) ? "arquivada" : "ativa");
-    u.flags ^= FIXADA | ARQUIVADA;
-    printf("%u\n", u.flags);
+
+    mostrar("t", &t);
+    mostrar("u", &u);
+    u.flags ^= FIXADA | ARQUIVADA; // 011 ^ 110 = 101
+    mostrar("u", &u);
+    printf("sizeof(Tarefa) = %zu\n", sizeof(Tarefa));
     return 0;
 }

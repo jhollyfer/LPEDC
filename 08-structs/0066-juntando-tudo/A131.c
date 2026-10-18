@@ -1,93 +1,106 @@
-// A131 · O cardápio da lanchonete
+// A131 · Os alunos da academia
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-typedef enum { LANCHE, BEBIDA, SOBREMESA, QTD_CATEGORIAS } Categoria;
+typedef enum { MENSAL, TRIMESTRAL, ANUAL, QTD_PLANOS } Plano;
 
-// flags: cada característica é um bit
-#define VEGANO     (1u << 0)
-#define SEM_GLUTEN (1u << 1)
-#define PICANTE    (1u << 2)
-
-typedef struct {
-    char nome[32];
-    Categoria categoria;
-    double preco;
-    unsigned tags;
-} Item;
+// modalidades: cada uma é um bit
+#define MUSCULACAO (1u << 0)
+#define NATACAO    (1u << 1)
+#define YOGA       (1u << 2)
 
 typedef struct {
-    Item *itens; // vetor no heap
-    int n;       // quantos itens tem
-    int cap;     // quantos cabem
-} Cardapio;
+    char nome[16];
+    Plano plano;
+    unsigned modalidades;
+} Aluno;
 
-int cardapio_adicionar(Cardapio *c, Item it) {
-    if (c->n == c->cap) {
-        int nova = c->cap == 0 ? 2 : 2 * c->cap;
-        Item *novo = realloc(c->itens, nova * sizeof *novo);
+typedef struct {
+    Aluno *v;
+    int n, cap;
+} Academia;
+
+bool matricular(Academia *a, const char *nome, Plano plano, unsigned mods) {
+    if (a->n == a->cap) {
+        int nova = a->cap == 0 ? 2 : 2 * a->cap;
+        Aluno *novo = realloc(a->v, nova * sizeof *novo);
         if (novo == NULL) {
-            return 0;
+            return false;
         }
-        c->itens = novo;
-        c->cap = nova;
+        a->v = novo;
+        a->cap = nova;
     }
-    c->itens[c->n++] = it; // copia a struct inteira para dentro do vetor
-    return 1;
+    Aluno *al = &a->v[a->n]; // ponteiro usado logo, antes de outro realloc
+    strcpy(al->nome, nome);
+    al->plano = plano;
+    al->modalidades = mods;
+    a->n++;
+    return true;
 }
 
-void mostrar_item(const Item *it) {
-    const char *categorias[QTD_CATEGORIAS] = {"lanche", "bebida", "sobremesa"};
-    printf("  R$ %5.2f  %s (%s)%s%s%s\n", it->preco, it->nome, categorias[it->categoria],
-           (it->tags & VEGANO) ? " [V]" : "",
-           (it->tags & SEM_GLUTEN) ? " [SG]" : "",
-           (it->tags & PICANTE) ? " [P]" : "");
+// devolve o índice (e não um ponteiro: o vetor pode mudar de lugar)
+int procurar(const Academia *a, const char *nome) {
+    for (int i = 0; i < a->n; i++) {
+        if (strcmp(a->v[i].nome, nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
 }
 
-// mostra os itens que têm TODAS as tags da máscara
-void filtrar(const Cardapio *c, unsigned mascara) {
-    for (int i = 0; i < c->n; i++) {
-        if ((c->itens[i].tags & mascara) == mascara) {
-            mostrar_item(&c->itens[i]);
+// "alguma" das modalidades da máscara, não "todas"
+void listar_alguma(const Academia *a, unsigned mascara) {
+    for (int i = 0; i < a->n; i++) {
+        if ((a->v[i].modalidades & mascara) != 0) {
+            printf("  %s\n", a->v[i].nome);
         }
     }
 }
 
 int main(void) {
-    Cardapio c = {NULL, 0, 0};
-    Item itens[] = {
-        {"X-Burger", LANCHE, 28.90, 0},
-        {"Burger de grão-de-bico", LANCHE, 32.00, VEGANO},
-        {"Tapioca de frango", LANCHE, 18.50, SEM_GLUTEN},
-        {"Asinha apimentada", LANCHE, 24.00, PICANTE | SEM_GLUTEN},
-        {"Suco de caju", BEBIDA, 9.00, VEGANO | SEM_GLUTEN},
-        {"Pudim", SOBREMESA, 12.00, SEM_GLUTEN},
-    };
-    int n = sizeof itens / sizeof itens[0];
+    const char *planos[QTD_PLANOS] = {"mensal", "trimestral", "anual"};
+    Academia a = {NULL, 0, 0};
 
-    for (int i = 0; i < n; i++) {
-        if (!cardapio_adicionar(&c, itens[i])) {
-            free(c.itens);
-            return 1;
-        }
+    bool ok = matricular(&a, "Bruna", ANUAL, MUSCULACAO | YOGA) &&
+              matricular(&a, "Davi", MENSAL, NATACAO) &&
+              matricular(&a, "Elis", MENSAL, MUSCULACAO) &&
+              matricular(&a, "Fabio", TRIMESTRAL, MUSCULACAO | NATACAO | YOGA) &&
+              matricular(&a, "Gil", ANUAL, 0);
+    if (!ok) {
+        free(a.v);
+        return 1;
     }
 
-    printf("Cardápio (%d itens, capacidade %d):\n", c.n, c.cap);
-    filtrar(&c, 0); // máscara vazia: todo item passa
-    printf("Veganos e sem glúten:\n");
-    filtrar(&c, VEGANO | SEM_GLUTEN);
+    int i = procurar(&a, "Davi");
+    if (i != -1) {
+        a.v[i].modalidades |= YOGA; // Davi entrou na yoga
+        a.v[i].plano = ANUAL;       // e trocou de plano
+    }
 
-    free(c.itens);
+    int por_plano[QTD_PLANOS] = {0};
+    for (int k = 0; k < a.n; k++) {
+        por_plano[a.v[k].plano]++;
+    }
+    for (Plano p = MENSAL; p < QTD_PLANOS; p++) {
+        printf("%s: %d aluno(s)\n", planos[p], por_plano[p]);
+    }
+
+    printf("Fazem natação ou yoga:\n");
+    listar_alguma(&a, NATACAO | YOGA);
+    printf("%d alunos, capacidade %d\n", a.n, a.cap);
+
+    free(a.v);
     return 0;
 }
 // Saída:
-// Cardápio (6 itens, capacidade 8):
-//   R$ 28.90  X-Burger (lanche)
-//   R$ 32.00  Burger de grão-de-bico (lanche) [V]
-//   R$ 18.50  Tapioca de frango (lanche) [SG]
-//   R$ 24.00  Asinha apimentada (lanche) [SG] [P]
-//   R$  9.00  Suco de caju (bebida) [V] [SG]
-//   R$ 12.00  Pudim (sobremesa) [SG]
-// Veganos e sem glúten:
-//   R$  9.00  Suco de caju (bebida) [V] [SG]
+// mensal: 1 aluno(s)
+// trimestral: 1 aluno(s)
+// anual: 3 aluno(s)
+// Fazem natação ou yoga:
+//   Bruna
+//   Davi
+//   Fabio
+// 5 alunos, capacidade 8

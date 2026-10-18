@@ -1,12 +1,5 @@
 // 0064 · Union
 // Exercício E384 · ★★★
-//
-// Resposta. Na memória, little-endian guarda 44 33 22 11 e big-endian guarda
-// 11 22 33 44.
-// Little-endian (o seu PC): m[0] = 0x3344, m[1] = 0x1122; b[0] = 0x44,
-// b[3] = 0x11; trocar b[0] troca o byte menos significativo: n = 0x112233FF.
-// Big-endian: m[0] = 0x1122, m[1] = 0x3344; b[0] = 0x11, b[3] = 0x44; b[0] é
-// o byte mais significativo: n = 0xFF223344.
 
 #include <stdint.h>
 #include <stdio.h>
@@ -17,12 +10,44 @@ typedef union {
     unsigned char b[4];
 } Visao;
 
+void mostrar_memoria(Visao x) {
+    printf("memória:");
+    for (int i = 0; i < 4; i++) {
+        printf(" %02X", x.b[i]);
+    }
+    printf("\n");
+}
+
+int little_endian(void) {
+    Visao t;
+    t.n = 1;
+    return t.b[0] == 1; // o byte menos significativo veio primeiro?
+}
+
+// devolve o número com os bytes na ordem de rede (big-endian)
+uint32_t ordem_de_rede(uint32_t x) {
+    if (!little_endian()) {
+        return x; // já está na ordem certa
+    }
+    Visao de, para;
+    de.n = x;
+    for (int i = 0; i < 4; i++) {
+        para.b[i] = de.b[3 - i];
+    }
+    return para.n;
+}
+
 int main(void) {
     Visao x;
     x.n = 0x11223344;
+
+    mostrar_memoria(x);
     printf("m[0] = 0x%04X, m[1] = 0x%04X\n", (unsigned)x.m[0], (unsigned)x.m[1]);
-    printf("b[0] = 0x%02X, b[3] = 0x%02X\n", x.b[0], x.b[3]);
-    x.b[0] = 0xFF;
-    printf("n = 0x%08X\n", (unsigned)x.n);
+    printf("esta máquina é %s\n", little_endian() ? "little-endian" : "big-endian");
+
+    Visao rede;
+    rede.n = ordem_de_rede(x.n);
+    printf("em ordem de rede, ");
+    mostrar_memoria(rede);
     return 0;
 }

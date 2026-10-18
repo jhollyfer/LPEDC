@@ -114,9 +114,11 @@ sobrepõe (no quadrado de (3,2) a (4,3)); o segundo, não.
 
 </details>
 
-**4. A struct gorda.** Quanto mede `struct Sensor { char id; double leitura;
-char status; int contador; };` num PC de 64 bits? Reorganize os campos para
-ocupar o mínimo e diga quanto economiza num vetor de 1 milhão de sensores.
+**4. A struct gorda.** Escreva um programa que mostre o `sizeof` e o
+`offsetof` de cada campo de `struct Sensor { char id; double leitura; char
+status; int contador; };`. Crie uma versão com os campos reorganizados para
+ocupar o mínimo e mostre quantos bytes ela economiza num vetor de 1 milhão de
+sensores.
 
 <details><summary>Resposta</summary>
 
@@ -152,8 +154,9 @@ de erro medem quantos bits uma transmissão estragou.
 
 </details>
 
-**7. Potência de 2 numa linha.** Explique por que `n > 0 && (n & (n - 1)) ==
-0` é verdadeiro só quando `n` é potência de 2. Teste com 64, 96 e 1.
+**7. Potência de 2 numa linha.** Escreva `bool potencia_de_2(unsigned n)` só
+com `n > 0 && (n & (n - 1)) == 0`. Para 64, 96 e 1, mostre o resultado e os
+bits de `n` e de `n - 1`, um embaixo do outro, para ver por que funciona.
 
 <details><summary>Resposta</summary>
 

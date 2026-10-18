@@ -1,43 +1,50 @@
-// A129 · As permissões do arquivo
+// A129 · Os ingredientes da pizza
 
 #include <stdio.h>
 
-// cada permissão é um bit: 4 = 100, 2 = 010, 1 = 001
-#define LER      4u // r
-#define ESCREVER 2u // w
-#define EXECUTAR 1u // x
+// cada ingrediente é um bit: 1u << n liga só o bit n
+#define QUEIJO    (1u << 0)
+#define TOMATE    (1u << 1)
+#define CEBOLA    (1u << 2)
+#define CALABRESA (1u << 3)
+#define AZEITONA  (1u << 4)
 
-void mostrar(const char *passo, unsigned p) {
-    printf("%-12s %u%u%u = %u  %c%c%c\n", passo,
-           (p >> 2) & 1u, (p >> 1) & 1u, p & 1u, p, // os 3 bits, um por um
-           (p & LER) ? 'r' : '-',
-           (p & ESCREVER) ? 'w' : '-',
-           (p & EXECUTAR) ? 'x' : '-');
+void mostrar(const char *nome, unsigned p) {
+    const char *ingredientes[] = {"queijo", "tomate", "cebola", "calabresa", "azeitona"};
+    printf("%-12s", nome);
+    for (int b = 0; b < 5; b++) {
+        if (p & (1u << b)) {
+            printf(" %s", ingredientes[b]);
+        }
+    }
+    printf("\n");
 }
 
 int main(void) {
-    unsigned perm = LER | ESCREVER; // liga dois bits de uma vez: 110
-    mostrar("inicial", perm);
+    unsigned calabresa = QUEIJO | CALABRESA | CEBOLA | AZEITONA;
+    unsigned marguerita = QUEIJO | TOMATE;
+    mostrar("calabresa", calabresa);
+    mostrar("marguerita", marguerita);
 
-    perm |= EXECUTAR;               // OU liga um bit
-    mostrar("liga x", perm);
+    unsigned meu = calabresa & ~(CEBOLA | AZEITONA); // tira dois de uma vez
+    mostrar("a minha", meu);
 
-    perm &= ~ESCREVER;              // E com o inverso desliga um bit
-    mostrar("desliga w", perm);
+    mostrar("em comum", calabresa & marguerita);   // E: o que as duas têm
+    mostrar("meio a meio", calabresa | marguerita); // OU: tudo junto
 
-    if (perm & ESCREVER) {          // E isola um bit para testar
-        printf("pode escrever\n");
-    } else {
-        printf("não pode escrever\n");
-    }
-
-    perm ^= EXECUTAR;               // OU exclusivo inverte um bit
-    mostrar("inverte x", perm);
+    unsigned alergia = CEBOLA | TOMATE;
+    // "tem ALGUM" e "tem TODOS" são testes diferentes
+    printf("marguerita tem algum de cebola/tomate? %s\n",
+           (marguerita & alergia) != 0 ? "sim" : "não");
+    printf("marguerita tem todos? %s\n",
+           (marguerita & alergia) == alergia ? "sim" : "não");
     return 0;
 }
 // Saída:
-// inicial      110 = 6  rw-
-// liga x       111 = 7  rwx
-// desliga w    101 = 5  r-x
-// não pode escrever
-// inverte x    100 = 4  r--
+// calabresa    queijo cebola calabresa azeitona
+// marguerita   queijo tomate
+// a minha      queijo calabresa
+// em comum     queijo
+// meio a meio  queijo tomate cebola calabresa azeitona
+// marguerita tem algum de cebola/tomate? sim
+// marguerita tem todos? não
