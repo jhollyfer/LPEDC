@@ -117,8 +117,11 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
     .filter((n) => /^\d{4}-/.test(n))
     .sort()
   // com filtro, só entra o módulo que tem o filtro no nome ou em algum assunto
-  if (filtro && !modulo.includes(filtro) && !assuntos.some((a) => a.includes(filtro))) continue
-  const desenharTudo = modulo.includes(filtro)
+  // "10-" ou "10-analise" escolhe o módulo pelo começo do nome; "0016" escolhe pelo assunto
+  const porModulo = /^\d{2}-/.test(filtro)
+  const doModulo = porModulo ? modulo.startsWith(filtro) : !filtro
+  if (filtro && !doModulo && (porModulo || !assuntos.some((a) => a.includes(filtro)))) continue
+  const desenharTudo = doModulo
   const indice = []
   const partes = []
 
