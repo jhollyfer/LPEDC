@@ -1,43 +1,61 @@
 // 0086 · Fila encadeada
 // Exercício E511 · ★☆☆
 //
-// Sem rodar, desenhe a lista da fila depois de cada operação do main, no
-// formato inicio -> ... -> NULL, marcando onde está o fim. Preveja a saída.
-// Depois responda: em quais momentos inicio e fim apontam para o MESMO nó?
+// Os nós da fila ficam escondidos no fila.c, mas dá para mostrar a fila
+// inteira só com o fila.h: retire o primeiro, mostre e insira de novo no
+// fim, fila_tamanho vezes. No fim da volta, a fila está igual. Escreva a
+// função mostra assim, do início para o fim (7 -> 4), e acrescente
+// "(um nó só: início e fim apontam para ele)" quando a fila tiver 1 item.
+// O main já chama mostra depois de cada operação.
+//
+//   Saída esperada:
+//   insere 7: 7 (um nó só: início e fim apontam para ele)
+//   insere 4: 7 -> 4
+//   retira 7: 4 (um nó só: início e fim apontam para ele)
+//   insere 9: 4 -> 9
+//   retira 4: 9 (um nó só: início e fim apontam para ele)
+//   insere 1: 9 -> 1
+//   retira 9: 1 (um nó só: início e fim apontam para ele)
+//   retira 1: vazia
 //
 // Dicas:
-// 1. Insere pendura no fim; retira tira do início.
-// 2. inicio == fim (sem ser NULL) quer dizer fila com um só nó.
-// 3. Resposta esperada: mostra "7 4 9 " e depois "sobrou 1 (1 na fila)".
-//    A sequência é [7], [7, 4], [4], [4, 9], [9], [9, 1], [1]. inicio e
-//    fim apontam para o mesmo nó quando a fila tem um nó só: depois de
-//    inserir o 7 e depois de cada retirada.
+// 1. Guarde fila_tamanho num int antes do laço e faça o for até ele.
+// 2. Mostre " -> " antes de cada item, menos do primeiro.
+// 3. Cada volta faz um free (retira) e um malloc (insere): a fila é a
+//    mesma, mas os nós são novos.
+// 4. Resposta esperada: as oito linhas acima, sem vazamento.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (escreva mostra):
 
 #include <stdio.h>
 #include "fila.h"
+
+void mostra(Fila *f) {
+    (void)f; // apague esta linha quando usar f
+    printf("\n");
+}
 
 int main(void) {
     Fila *f = fila_cria();
     if (f == NULL) {
         return 1;
     }
+    int entram[] = {7, 4, 9, 1};
     int x;
 
-    fila_insere(f, 7);
-    fila_insere(f, 4);
-    fila_retira(f, &x);
-    printf("%d ", x);
-    fila_insere(f, 9);
-    fila_retira(f, &x);
-    printf("%d ", x);
-    fila_insere(f, 1);
-    fila_retira(f, &x);
-    printf("%d \n", x);
-
-    fila_primeiro(f, &x);
-    printf("sobrou %d (%d na fila)\n", x, fila_tamanho(f));
+    for (int i = 0; i < 4; i++) {
+        fila_insere(f, entram[i]);
+        printf("insere %d: ", entram[i]);
+        mostra(f);
+        if (i > 0 && fila_retira(f, &x)) { // a partir do segundo, sai um
+            printf("retira %d: ", x);
+            mostra(f);
+        }
+    }
+    if (fila_retira(f, &x)) {
+        printf("retira %d: ", x);
+        mostra(f);
+    }
     fila_libera(f);
     return 0;
 }

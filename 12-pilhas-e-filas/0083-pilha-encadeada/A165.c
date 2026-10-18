@@ -1,37 +1,61 @@
-// A165 · Ctrl+Z na planilha
+// A165 · Desfazer e refazer com duas pilhas
 
 #include <stdio.h>
 #include "pilha.h"
+
+// esvazia uma pilha: uma edição nova apaga o que dava para refazer
+void esvazia(Pilha *p) {
+    int lixo;
+    while (pilha_desempilha(p, &lixo)) {
+    }
+}
 
 int main(void) {
     Pilha *desfazer = pilha_cria();
     if (desfazer == NULL) {
         return 1;
     }
+    Pilha *refazer = pilha_cria();
+    if (refazer == NULL) {
+        pilha_libera(desfazer);
+        return 1;
+    }
 
-    int celula = 1500; // B2: orçamento do mês, em R$
-    int novos[] = {1800, 2100, 2500};
+    int temp = 22; // ar-condicionado da sala, em graus
+    int ajustes[] = {20, 18, 24};
     for (int i = 0; i < 3; i++) {
-        pilha_empilha(desfazer, celula); // guarda o valor antigo antes de mudar
-        celula = novos[i];
-        printf("B2 = %d\n", celula);
+        pilha_empilha(desfazer, temp); // guarda o valor antigo
+        esvazia(refazer);
+        temp = ajustes[i];
     }
+    printf("Ajustado para %d\n", temp); // desfazer: topo -> 18 -> 20 -> 22
 
-    // a pilha agora é: topo -> 2100 -> 1800 -> 1500 -> NULL
     for (int i = 0; i < 2; i++) { // Ctrl+Z duas vezes
-        if (pilha_desempilha(desfazer, &celula)) {
-            printf("Ctrl+Z: B2 = %d\n", celula);
-        }
+        pilha_empilha(refazer, temp); // o atual vai para o refazer
+        pilha_desempilha(desfazer, &temp);
+        printf("Desfez: %d\n", temp);
     }
-    printf("Ainda dá para desfazer %d vez(es)\n", pilha_tamanho(desfazer));
 
-    pilha_libera(desfazer); // libera o nó que sobrou e a própria pilha
+    pilha_empilha(desfazer, temp); // Ctrl+Y: o caminho inverso
+    pilha_desempilha(refazer, &temp);
+    printf("Refez: %d\n", temp);
+    printf("Dá para refazer mais %d vez(es)\n", pilha_tamanho(refazer));
+
+    pilha_empilha(desfazer, temp); // edição nova: o refazer perde o sentido
+    esvazia(refazer);
+    temp = 21;
+    printf("Ajustado para %d; refazer agora tem %d\n", temp, pilha_tamanho(refazer));
+    printf("Desfazer guarda %d valores\n", pilha_tamanho(desfazer));
+
+    pilha_libera(desfazer);
+    pilha_libera(refazer);
     return 0;
 }
 // Saída:
-// B2 = 1800
-// B2 = 2100
-// B2 = 2500
-// Ctrl+Z: B2 = 2100
-// Ctrl+Z: B2 = 1800
-// Ainda dá para desfazer 1 vez(es)
+// Ajustado para 24
+// Desfez: 18
+// Desfez: 20
+// Refez: 18
+// Dá para refazer mais 1 vez(es)
+// Ajustado para 21; refazer agora tem 0
+// Desfazer guarda 3 valores

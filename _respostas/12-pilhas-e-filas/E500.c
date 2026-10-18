@@ -22,10 +22,29 @@ bool parenteses_ok(const char *s) {
     return abertos == 0;
 }
 
+// conta os três tipos juntos: só sabe quantos estão abertos
+bool contador_ok(const char *s) {
+    int abertos = 0;
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (s[i] == '(' || s[i] == '[' || s[i] == '{') {
+            abertos++;
+        } else if (s[i] == ')' || s[i] == ']' || s[i] == '}') {
+            abertos--;
+            if (abertos < 0) {
+                return false;
+            }
+        }
+    }
+    return abertos == 0;
+}
+
 int main(void) {
     const char *testes[] = {"(a+(b*c))", "(a+b))(", ")(", "((x)"};
     for (int i = 0; i < 4; i++) {
         printf("%-10s %s\n", testes[i], parenteses_ok(testes[i]) ? "ok" : "erro");
+    }
+    if (contador_ok("( [ ) ]")) {
+        printf("%-10s %s\n", "( [ ) ]", "contador diz ok, mas está errado");
     }
     return 0;
 }

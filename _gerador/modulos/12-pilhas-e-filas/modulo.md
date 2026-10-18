@@ -96,8 +96,8 @@ também com `<ul><li>a</li><li>b</li></ul>`.
 
 <details><summary>Resposta</summary>
 
-Primeiro, segundo e terceiro: certo, errado, certo. É o A167 com palavras no
-lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
+Primeiro, segundo e terceiro: certo, errado, certo. É o verificador do 0084 com palavras
+no lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
 encadeada, como a do E495); ao ler `</nome>`, desempilhe e compare com
 `strcmp`. No fim, a pilha precisa estar vazia.
 

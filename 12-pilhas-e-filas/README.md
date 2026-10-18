@@ -212,47 +212,63 @@ vazia. Só depois `n` diminui e o valor é lido:
 > com só 3 itens dentro. O vetor é a casa da pilha, não a pilha.
 
 > [!NOTE]
-> **Pergunta para você:** no A163, se o cliente tocar em "desfazer" mais três
-> vezes seguidas, o que cada chamada de `pilha_desempilha` devolve? E o que
+> **Pergunta para você:** no programa do pedido, se o cliente tocar em
+> "desfazer" mais três vezes seguidas, o que cada chamada de `pilha_desempilha` devolve? E o que
 > fica em `preco` na última? Pense antes de testar.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0082-pilha/`](0082-pilha/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A163 · Desfazer no app de delivery**
+**Exemplo A163 · As bordas da pilha: cheia e vazia**
 
 ```c
 #include <stdio.h>
 #include "pilha.h"
 
 int main(void) {
-    Pilha *pedido = pilha_cria();
-    if (pedido == NULL) {
+    Pilha *cadeiras = pilha_cria(); // o depósito do salão empilha até 100
+    if (cadeiras == NULL) {
         return 1;
     }
 
-    // preços em centavos: inteiro não tem erro de arredondamento
-    pilha_empilha(pedido, 2590); // pizza: R$ 25,90
-    pilha_empilha(pedido, 800);  // refrigerante: R$ 8,00
-    pilha_empilha(pedido, 1200); // pudim: R$ 12,00
-
-    int preco;
-    if (pilha_desempilha(pedido, &preco)) { // "desfazer": sai o último que entrou
-        printf("Desfeito: R$ %d,%02d\n", preco / 100, preco % 100);
+    // chegam 103 cadeiras numeradas: as 3 últimas não cabem (overflow)
+    int recusadas = 0;
+    for (int c = 1; c <= 103; c++) {
+        if (!pilha_empilha(cadeiras, c)) {
+            recusadas++;
+        }
     }
-    if (pilha_topo(pedido, &preco)) { // só olha, não tira
-        printf("Agora no topo: R$ %d,%02d\n", preco / 100, preco % 100);
-    }
-    printf("Itens no pedido: %d\n", pilha_tamanho(pedido));
+    int topo = 0;
+    pilha_topo(cadeiras, &topo);
+    printf("Empilhadas: %d, recusadas: %d, no topo: %d\n", pilha_tamanho(cadeiras), recusadas, topo);
 
-    pilha_libera(pedido);
+    // a festa usa todas: esvazia a pilha
+    int cadeira = 0;
+    int retiradas = 0;
+    while (pilha_desempilha(cadeiras, &cadeira)) {
+        retiradas++;
+    }
+    printf("Retiradas: %d, a última foi a %d\n", retiradas, cadeira);
+
+    // mais uma retirada com a pilha vazia (underflow): devolve false e
+    // não mexe na variável. O -1 serve de marcador para provar isso.
+    cadeira = -1;
+    if (!pilha_desempilha(cadeiras, &cadeira)) {
+        printf("Pilha vazia: nada saiu, cadeira continua %d\n", cadeira);
+    }
+    if (!pilha_topo(cadeiras, &topo)) {
+        printf("Topo também falha: vazia? %d\n", pilha_vazia(cadeiras));
+    }
+
+    pilha_libera(cadeiras);
     return 0;
 }
 // Saída:
-// Desfeito: R$ 12,00
-// Agora no topo: R$ 8,00
-// Itens no pedido: 2
+// Empilhadas: 100, recusadas: 3, no topo: 100
+// Retiradas: 100, a última foi a 1
+// Pilha vazia: nada saiu, cadeira continua -1
+// Topo também falha: vazia? 1
 ```
 
 ```bash
@@ -302,17 +318,28 @@ int main(void) {
 **Exercício E487** · ★☆☆
 
 O garçom empilha as comandas no espeto do balcão, e a cozinha sempre pega a
-de cima. Sem rodar, preveja o que o programa abaixo mostra, linha por linha.
-Depois responda: se o laço final terminasse e você chamasse
-pilha_desempilha(p, &x) mais uma vez, o que a função devolveria? E quanto
-ficaria valendo x?
+de cima. O programa abaixo já mexe na pilha. Complete o final: depois que o
+laço esvazia a pilha, chame pilha_desempilha(p, &x) mais uma vez, guarde o
+retorno numa variável bool e mostre o que a função devolveu e quanto x
+ficou valendo.
+
+
+```text
+Saída esperada:
+7
+9
+2 1
+4
+vazia? 1
+mais um desempilha: devolveu 0, x = 4
+```
 
 **Dicas:**
 
-1. Desenhe a pilha de lado, com o topo à direita, e atualize a cada linha.
-2. pilha_topo só olha: a pilha não muda.
-3. Resposta esperada: "7", "9", "2 1", "4 " e "vazia? 1". Mais um
-   desempilha devolve false e não mexe em x, que continua 4.
+1. bool ok = pilha_desempilha(p, &x); e mostre ok com %d (false vira 0).
+2. Com a pilha vazia, a função não escreve em x: ele fica com o último
+   valor que saiu.
+3. Resposta esperada: as seis linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E487.c
@@ -375,7 +402,7 @@ No balcão do restaurante cabem 4 bandejas empilhadas. Este programa traz a
 própria pilha (com a convenção topo = -1 para pilha vazia) e tenta
 empilhar 5 bandejas. A quinta deveria ser recusada, mas o programa tem um
 bug. Rode com o rodar: o sanitizer acusa o erro (procure "out of bounds").
-Ache a linha, explique o que acontece na memória e conserte.
+Ache a linha, conserte e rode de novo até a saída bater com a esperada.
 
 
 ```text
@@ -423,7 +450,16 @@ EDDE: 1 erro: pilha vazia
 ```
 
 
-Depois responda sem programar: dá para sair 3 1 2 4? Por quê?
+Depois escreva bool possivel(const int ordem[], int n), que diz se uma
+ordem de saída dá para ser produzida pela pilha (com os números chegando
+1, 2, ..., n), e teste com 2 3 1 4 e 3 1 2 4.
+
+
+```text
+Saída esperada (continuação):
+2 3 1 4: possível
+3 1 2 4: impossível
+```
 
 **Dicas:**
 
@@ -431,7 +467,9 @@ Depois responda sem programar: dá para sair 3 1 2 4? Por quê?
 2. pilha_desempilha devolve false com a pilha vazia: é o seu teste de
    erro.
 3. Libere a pilha antes de sair da função, inclusive no caso de erro.
-4. Resposta esperada: as três linhas acima. 3 1 2 4 é impossível: para o
+4. Em possivel, para cada número da ordem: empilhe os que chegam até ele
+   aparecer no topo. Se ele já passou e não está no topo, é impossível.
+5. Resposta esperada: as cinco linhas acima. 3 1 2 4 é impossível: para o
    3 sair primeiro, o 1 e o 2 precisam estar empilhados com o 2 por cima
    do 1. Então o 2 sai antes do 1, sempre.
 
@@ -502,7 +540,8 @@ achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
 
 O melhor: o [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do
 0082. Só o [`pilha.c`](0083-pilha-encadeada/pilha.c) mudou. Esse é o ganho do
-TAD: o A163 do delivery roda sem mudar uma vírgula com esta implementação.
+TAD: o programa do delivery do 0082 roda sem mudar uma vírgula com esta
+implementação.
 Por dentro, a struct agora guarda um ponteiro:
 
 ```c
@@ -611,52 +650,76 @@ Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
 > antes de liberar a struct.
 
 > [!NOTE]
-> **Pergunta para você:** no A165, se o laço do Ctrl+Z rodasse 5 vezes em vez
-> de 2, quantas linhas `Ctrl+Z` apareceriam e qual seria o último valor de B2?
+> **Pergunta para você:** no programa da planilha, se o laço do Ctrl+Z
+> rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual seria o último valor de B2?
 > Siga a lista do desenho antes de rodar.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0083-pilha-encadeada/`](0083-pilha-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A165 · Ctrl+Z na planilha**
+**Exemplo A165 · Desfazer e refazer com duas pilhas**
 
 ```c
 #include <stdio.h>
 #include "pilha.h"
+
+// esvazia uma pilha: uma edição nova apaga o que dava para refazer
+void esvazia(Pilha *p) {
+    int lixo;
+    while (pilha_desempilha(p, &lixo)) {
+    }
+}
 
 int main(void) {
     Pilha *desfazer = pilha_cria();
     if (desfazer == NULL) {
         return 1;
     }
+    Pilha *refazer = pilha_cria();
+    if (refazer == NULL) {
+        pilha_libera(desfazer);
+        return 1;
+    }
 
-    int celula = 1500; // B2: orçamento do mês, em R$
-    int novos[] = {1800, 2100, 2500};
+    int temp = 22; // ar-condicionado da sala, em graus
+    int ajustes[] = {20, 18, 24};
     for (int i = 0; i < 3; i++) {
-        pilha_empilha(desfazer, celula); // guarda o valor antigo antes de mudar
-        celula = novos[i];
-        printf("B2 = %d\n", celula);
+        pilha_empilha(desfazer, temp); // guarda o valor antigo
+        esvazia(refazer);
+        temp = ajustes[i];
     }
+    printf("Ajustado para %d\n", temp); // desfazer: topo -> 18 -> 20 -> 22
 
-    // a pilha agora é: topo -> 2100 -> 1800 -> 1500 -> NULL
     for (int i = 0; i < 2; i++) { // Ctrl+Z duas vezes
-        if (pilha_desempilha(desfazer, &celula)) {
-            printf("Ctrl+Z: B2 = %d\n", celula);
-        }
+        pilha_empilha(refazer, temp); // o atual vai para o refazer
+        pilha_desempilha(desfazer, &temp);
+        printf("Desfez: %d\n", temp);
     }
-    printf("Ainda dá para desfazer %d vez(es)\n", pilha_tamanho(desfazer));
 
-    pilha_libera(desfazer); // libera o nó que sobrou e a própria pilha
+    pilha_empilha(desfazer, temp); // Ctrl+Y: o caminho inverso
+    pilha_desempilha(refazer, &temp);
+    printf("Refez: %d\n", temp);
+    printf("Dá para refazer mais %d vez(es)\n", pilha_tamanho(refazer));
+
+    pilha_empilha(desfazer, temp); // edição nova: o refazer perde o sentido
+    esvazia(refazer);
+    temp = 21;
+    printf("Ajustado para %d; refazer agora tem %d\n", temp, pilha_tamanho(refazer));
+    printf("Desfazer guarda %d valores\n", pilha_tamanho(desfazer));
+
+    pilha_libera(desfazer);
+    pilha_libera(refazer);
     return 0;
 }
 // Saída:
-// B2 = 1800
-// B2 = 2100
-// B2 = 2500
-// Ctrl+Z: B2 = 2100
-// Ctrl+Z: B2 = 1800
-// Ainda dá para desfazer 1 vez(es)
+// Ajustado para 24
+// Desfez: 18
+// Desfez: 20
+// Refez: 18
+// Dá para refazer mais 1 vez(es)
+// Ajustado para 21; refazer agora tem 0
+// Desfazer guarda 3 valores
 ```
 
 ```bash
@@ -708,19 +771,32 @@ int main(void) {
 
 **Exercício E493** · ★☆☆
 
-Sem rodar, desenhe a lista encadeada da pilha depois de cada linha do main
-(no formato topo -> ... -> NULL) e preveja a saída. Depois conte: até o
-fim do programa, quantas vezes o malloc foi chamado? E o free? Lembre que
-pilha_cria também faz um malloc.
+Você não enxerga os nós da pilha (o tipo é opaco), mas dá para acompanhar
+o que acontece com as funções do pilha.h. Complete a função estado: ela
+mostra quantos itens a pilha tem e quem está no topo, ou "[vazia]". O main
+já chama estado depois de cada operação.
+
+
+```text
+Saída esperada:
+[1 item, topo 3]
+[2 itens, topo 8]
+saiu 8 -> [1 item, topo 3]
+[2 itens, topo 5]
+[3 itens, topo 9]
+saiu 9 -> [2 itens, topo 5]
+saiu 5 -> [1 item, topo 3]
+saiu 3 -> [vazia]
+```
 
 **Dicas:**
 
-1. Empilhar insere no início: o novo nó vira o primeiro da lista.
-2. Cada empilha faz um malloc; cada desempilha faz um free; pilha_libera
-   faz um free por nó que sobrou e mais um da struct.
-3. Resposta esperada: mostra "8", "9" e "2 itens, topo 5". A lista final
-   é topo -> 5 -> 3 -> NULL. São 5 mallocs (1 da pilha + 4 nós) e 5 frees
-   (2 nos desempilhas + 2 nós no pilha_libera + 1 da struct).
+1. pilha_topo devolve false com a pilha vazia: use isso para decidir o que
+   mostrar.
+2. "item" no singular quando o tamanho é 1: um ternário resolve.
+3. estado só olha: não desempilhe nada dentro dela.
+4. Resposta esperada: as oito linhas acima. Cada empilha fez um malloc e
+   cada saiu fez um free; o sanitizer não acusa vazamento.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E493.c
@@ -789,12 +865,10 @@ Não dá para voltar de g1.globo.com
 
 Pilha de pratos do restaurante, cada prato com um número. Este programa
 compila (o gcc 13 até solta um aviso: leia com atenção) e, sem o
-sanitizer, às vezes mostra os números certos. Mesmo assim está errado:
-rode com o rodar e leia o relatório do AddressSanitizer. Responda:
-
-a) Qual é o nome do erro no relatório e em que linha ele acontece?
-b) Por que o programa às vezes "funciona" sem o sanitizer?
-c) Como consertar mudando a ordem de duas linhas?
+sanitizer, às vezes mostra os números certos. Mesmo assim está errado.
+Rode com o rodar, ache no relatório do AddressSanitizer o nome do erro e
+a linha, conserte mudando a ordem de duas linhas e rode de novo: a saída
+tem que bater e o relatório tem que sumir.
 
 
 ```text
@@ -808,12 +882,11 @@ Tirou o prato 10
 
 1. Procure "heap-use-after-free" e o número da linha no relatório.
 2. Depois do free, o nó não é mais seu, mesmo que os bytes ainda estejam
-   lá.
-3. Resposta esperada: a) heap-use-after-free, na linha que faz
-   "*numero = velho->numero", depois do free(velho); b) o free só marca
-   a memória como livre: até alguém reaproveitá-la, os bytes antigos
-   continuam lá, então ler parece funcionar por sorte; c) ler o valor
-   antes do free (passe a linha do *numero para antes do free).
+   lá: o free só marca a memória como livre, e é por sorte que sem o
+   sanitizer a leitura parece funcionar.
+3. Resposta esperada: o erro é heap-use-after-free, na linha que faz
+   "*numero = velho->numero", depois do free(velho). Conserto: passe a
+   linha do *numero para antes do free. Saída: as três linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0083-pilha-encadeada/E496.c
@@ -1035,61 +1108,73 @@ parecido com a pós-fixa e rodam numa pilha.
 
 Os arquivos ficam em [`0084-pilha-aplicacoes/`](0084-pilha-aplicacoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A167 · Parênteses, colchetes e chaves balanceados**
+**Exemplo A167 · Parênteses dentro de aspas não contam**
 
 ```c
 #include <stdbool.h>
 #include <stdio.h>
 #include "pilha.h"
 
-// a abertura que combina com cada fechamento
 char abertura_de(char fecha) {
-    if (fecha == ')') {
-        return '(';
-    }
-    if (fecha == ']') {
-        return '[';
-    }
-    return '{';
+    return fecha == ')' ? '(' : fecha == ']' ? '[' : '{';
 }
 
-bool balanceada(const char *s) {
+// Confere uma linha de código C. Com pula_aspas, o que está entre "..." ou
+// '...' é texto, não código: um ')' dentro de aspas não fecha nada.
+bool balanceada(const char *s, bool pula_aspas) {
     Pilha *p = pilha_cria();
     if (p == NULL) {
         return false;
     }
     bool ok = true;
+    char aspa = '\0'; // '\0' = fora de aspas; senão, a aspa que abriu
     for (int i = 0; s[i] != '\0' && ok; i++) {
         char c = s[i];
-        if (c == '(' || c == '[' || c == '{') {
-            pilha_empilha(p, c); // abriu: espera o fechamento lá na frente
+        if (aspa != '\0') {
+            if (c == '\\' && s[i + 1] != '\0') {
+                i++; // \" ou \' não fecham a aspa: pula o caractere seguinte
+            } else if (c == aspa) {
+                aspa = '\0'; // fechou o texto
+            }
+        } else if (pula_aspas && (c == '"' || c == '\'')) {
+            aspa = c; // começou um texto
+        } else if (c == '(' || c == '[' || c == '{') {
+            pilha_empilha(p, c);
         } else if (c == ')' || c == ']' || c == '}') {
             int topo;
-            // fechou: tem que existir uma abertura e ela tem que ser do mesmo tipo
             if (!pilha_desempilha(p, &topo) || topo != abertura_de(c)) {
                 ok = false;
             }
         }
     }
-    if (!pilha_vazia(p)) {
-        ok = false; // sobrou abertura sem fechamento
+    if (!pilha_vazia(p) || aspa != '\0') {
+        ok = false; // sobrou abertura, ou uma aspa ficou aberta
     }
     pilha_libera(p);
     return ok;
 }
 
 int main(void) {
-    const char *testes[] = {"{ x = v[(i + 1)] }", "( [ ) ]", "(a + b))", "{ [ ("};
+    const char *linhas[] = {
+        "if (c == ')') { n++; }",
+        "printf(\"[%d]\\n\", v[i]);",
+        "puts(\"sorriso :)\");",
+        "v[(i + 1] = 0;",
+    };
+    printf("%-28s %-10s %s\n", "linha", "simples", "pulando aspas");
     for (int i = 0; i < 4; i++) {
-        printf("%-20s %s\n", testes[i], balanceada(testes[i]) ? "balanceada" : "com erro");
+        printf("%-28s %-10s %s\n", linhas[i],
+               balanceada(linhas[i], false) ? "ok" : "erro",
+               balanceada(linhas[i], true) ? "ok" : "erro");
     }
     return 0;
 }
 // Saída:
-// { x = v[(i + 1)] }   balanceada
-// ( [ ) ]              com erro
-// (a + b))             com erro
-// { [ (                com erro
+// linha                        simples    pulando aspas
+// if (c == ')') { n++; }       erro       ok
+// printf("[%d]\n", v[i]);      ok         ok
+// puts("sorriso :)");          erro       ok
+// v[(i + 1] = 0;               erro       erro
 ```
 
 ```bash
@@ -1171,16 +1256,27 @@ int main(void) {
 
 **Exercício E499** · ★☆☆
 
-Sem programar, escreva cada expressão na notação pós-fixa e calcule o
-valor. Depois avalie a última, que já está em pós-fixa, fazendo a tabela
-"lê / faz / pilha" do texto.
+A função avalia abaixo já calcula uma expressão pós-fixa. Falta o resto:
+preencha o vetor posfixas com as expressões a), b) e c) traduzidas para a
+pós-fixa (a d já está pronta) e o vetor infixas com a mesma conta escrita
+direto em C, para o programa conferir uma com a outra.
 
 
 ```text
 a) (7 + 3) * 2
 b) 7 + 3 * 2
 c) 100 / (2 + 3) - 4
-d) 6 2 / 3 1 - *        (já em pós-fixa)
+d) 6 2 / 3 1 - *        (já em pós-fixa; a infixa é (6 / 2) * (3 - 1))
+```
+
+
+
+```text
+Saída esperada:
+7 3 + 2 * = 20 (em C: 20) confere
+7 3 2 * + = 13 (em C: 13) confere
+100 2 3 + / 4 - = 16 (em C: 16) confere
+6 2 / 3 1 - * = 6 (em C: 6) confere
 ```
 
 **Dicas:**
@@ -1188,9 +1284,9 @@ d) 6 2 / 3 1 - *        (já em pós-fixa)
 1. Os números aparecem na mesma ordem nas duas notações; só os
    operadores mudam de lugar.
 2. Na b, a multiplicação acontece primeiro, então o * aparece antes do +.
-3. Resposta esperada: a) 7 3 + 2 * = 20; b) 7 3 2 * + = 13;
-   c) 100 2 3 + / 4 - = 16; d) pilha 6 | 6 2 | 3 | 3 3 | 3 3 1 | 3 2 | 6,
-   então vale 6 (a infixa é (6 / 2) * (3 - 1)).
+3. Em infixas, escreva a conta mesmo: {(7 + 3) * 2, ...}. O compilador
+   calcula.
+4. Resposta esperada: as quatro linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E499.c
@@ -1200,8 +1296,10 @@ d) 6 2 / 3 1 - *        (já em pós-fixa)
 
 Quando só existe um tipo de delimitador, nem precisa de pilha. Escreva
 bool parenteses_ok(const char *s) usando só um contador int: soma 1 no
-"(", tira 1 no ")". Teste com as quatro strings abaixo. Depois responda:
-por que essa ideia não serve para "( [ ) ]"?
+"(", tira 1 no ")". Teste com as quatro strings abaixo. Depois escreva
+uma segunda versão, bool contador_ok(const char *s), que conta os três
+tipos juntos (abre: "(", "[" ou "{"; fecha: ")", "]" ou "}") e teste com
+"( [ ) ]": repare que o contador aprova uma expressão errada.
 
 
 ```text
@@ -1210,6 +1308,7 @@ Saída esperada:
 (a+b))(    erro
 )(         erro
 ((x)       erro
+( [ ) ]    contador diz ok, mas está errado
 ```
 
 **Dicas:**
@@ -1218,7 +1317,8 @@ Saída esperada:
    sem abrir. É o que pega o ")(".
 2. No fim, ok só se o contador for 0.
 3. Use printf("%-10s %s\n", s, ...) para alinhar.
-4. Resposta esperada: as quatro linhas acima. Com tipos diferentes, o
+4. Para a última linha: if (contador_ok("( [ ) ]")) printf(...).
+5. Resposta esperada: as cinco linhas acima. Com tipos diferentes, o
    contador só sabe QUANTOS estão abertos, não QUAL foi o último a abrir.
 
 ```bash
@@ -1227,20 +1327,27 @@ Saída esperada:
 
 **Exercício E501** · ★★☆
 
-Este verificador é mais educado que o do A167: além de dizer que deu
-errado, diz onde e por quê. Sem rodar, preveja as quatro linhas que ele
-mostra. Atenção às posições: a primeira posição da string é 0.
+Este verificador é mais educado que o do texto: além de dizer que deu
+errado, diz onde. Melhore ainda mais: em vez de empilhar o caractere,
+empilhe a POSIÇÃO dele na string (o caractere você recupera com s[pos]).
+Assim as mensagens também podem dizer onde a abertura estava. A primeira
+posição da string é 0.
+
+
+```text
+Saída esperada:
+[1, (2, 3)]: ok
+{a: [1, 2}]: esperava ] e veio } na posição 9 (o [ abriu na posição 4)
+f(x)): fecha sem abrir na posição 4
+if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
+```
 
 **Dicas:**
 
-1. Faça uma tabela com a posição, o caractere e a pilha depois dele.
-2. O laço para no primeiro erro; "faltou fechar" só aparece quando a
-   string acaba sem erro antes.
-3. Resposta esperada:
-   [1, (2, 3)]: ok
-   {a: [1, 2}]: esperava ] e veio } na posição 9
-   f(x)): fecha sem abrir na posição 4
-   if (a[0] {: faltou fechar 2
+1. pilha_empilha(p, i) no lugar de pilha_empilha(p, c).
+2. Ao desempilhar, a abertura é s[topo], e topo é a posição dela.
+3. No "faltou fechar", use pilha_topo para pegar a última abertura.
+4. Resposta esperada: as quatro linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E501.c
@@ -1501,7 +1608,8 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 > custam **O(1)**, sem mover ninguém.
 
 > [!NOTE]
-> **Pergunta para você:** depois do último laço do A169, a fila está vazia.
+> **Pergunta para você:** depois do último laço do programa da lotérica, a
+> fila está vazia.
 > Quanto valem `inicio` e `n` lá dentro? Em que gaveta entraria a próxima
 > senha?
 
@@ -1509,51 +1617,52 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 
 Os arquivos ficam em [`0085-fila/`](0085-fila/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A169 · As senhas da lotérica**
+**Exemplo A169 · Só as 8 últimas corridas: a mais antiga dá lugar**
 
 ```c
 #include <stdio.h>
 #include "fila.h"
 
 int main(void) {
-    Fila *senhas = fila_cria(); // o painel guarda até 8 senhas
-    if (senhas == NULL) {
+    Fila *historico = fila_cria(); // o app mostra as 8 corridas mais recentes
+    if (historico == NULL) {
         return 1;
     }
 
-    for (int s = 31; s <= 36; s++) { // chegam 6 pessoas
-        fila_insere(senhas, s);
-    }
+    int corridas[] = {18, 25, 12, 40, 9, 31, 22, 15, 27, 33, 11}; // em R$
+    int total = sizeof corridas / sizeof corridas[0];
 
-    printf("Atendidas:");
-    for (int i = 0; i < 4; i++) { // o caixa chama 4
-        int s;
-        if (fila_retira(senhas, &s)) {
-            printf(" %d", s);
+    for (int i = 0; i < total; i++) {
+        // cheia? em vez de recusar a nova, descarta a mais antiga (o início)
+        if (!fila_insere(historico, corridas[i])) {
+            int velha;
+            fila_retira(historico, &velha);
+            fila_insere(historico, corridas[i]);
+            printf("Corrida de R$ %d saiu do histórico para entrar a de R$ %d\n", velha, corridas[i]);
         }
     }
 
-    printf("\nChegaram:");
-    for (int s = 37; s <= 40; s++) { // 39 e 40 dão a volta no vetor
-        if (fila_insere(senhas, s)) {
-            printf(" %d", s);
-        }
+    // percorre sem perder ninguém: retira, mostra e devolve ao fim
+    int soma = 0;
+    printf("Histórico (%d):", fila_tamanho(historico));
+    for (int i = 0; i < fila_tamanho(historico); i++) {
+        int valor;
+        fila_retira(historico, &valor);
+        printf(" %d", valor);
+        soma += valor;
+        fila_insere(historico, valor);
     }
+    printf("\nGasto nas últimas 8: R$ %d\n", soma);
 
-    printf("\nNa fila (%d):", fila_tamanho(senhas));
-    int s;
-    while (fila_retira(senhas, &s)) {
-        printf(" %d", s);
-    }
-    printf("\n");
-
-    fila_libera(senhas);
+    fila_libera(historico);
     return 0;
 }
 // Saída:
-// Atendidas: 31 32 33 34
-// Chegaram: 37 38 39 40
-// Na fila (6): 35 36 37 38 39 40
+// Corrida de R$ 18 saiu do histórico para entrar a de R$ 27
+// Corrida de R$ 25 saiu do histórico para entrar a de R$ 33
+// Corrida de R$ 12 saiu do histórico para entrar a de R$ 11
+// Histórico (8): 40 9 31 22 15 27 33 11
+// Gasto nas últimas 8: R$ 188
 ```
 
 ```bash
@@ -1613,29 +1722,33 @@ int main(void) {
 
 **Exercício E505** · ★☆☆
 
-Faça o teste de mesa de uma fila circular como a do fila.c, mas com
-CAPACIDADE 4. Para cada operação, anote o vetor (use _ para gaveta nunca
-usada), inicio e n. Quando uma inserção for recusada, diga por quê.
+Este programa traz uma fila circular igual à do fila.c, mas com só 4
+gavetas e com os campos à vista. Escreva a função mostra, que imprime o
+vetor inteiro (com _ nas gavetas que valem -1, ou seja, nunca usadas),
+depois inicio e n. O main já faz as operações e chama mostra depois de
+cada uma. Rode e acompanhe o 5 dando a volta no vetor.
 
 
 ```text
-insere 1, insere 2, retira, insere 3, insere 4,
-insere 5, insere 6, retira, retira
+Saída esperada:
+insere 1: [1 _ _ _] inicio 0, n 1
+insere 2: [1 2 _ _] inicio 0, n 2
+retira 1: [1 2 _ _] inicio 1, n 1
+insere 3: [1 2 3 _] inicio 1, n 2
+insere 4: [1 2 3 4] inicio 1, n 3
+insere 5: [5 2 3 4] inicio 1, n 4
+insere 6: recusado [5 2 3 4] inicio 1, n 4
+retira 2: [5 2 3 4] inicio 2, n 3
+retira 3: [5 2 3 4] inicio 3, n 2
+próxima vaga: gaveta 1
 ```
-
-
-No fim: quem sobrou na fila, na ordem de saída? Em que gaveta entraria o
-próximo?
 
 **Dicas:**
 
-1. A posição de inserção é (inicio + n) % 4; retirar faz
-   inicio = (inicio + 1) % 4.
-2. Retirar não apaga a gaveta: o valor velho fica lá.
-3. Resposta esperada: o 5 entra na gaveta 0 (deu a volta) e o vetor fica
-   [5, 2, 3, 4] com inicio 1 e n 4; o 6 é recusado (n == 4, cheia). As
-   retiradas finais devolvem 2 e 3. Sobram 4 e 5, com inicio 3 e n 2; o
-   próximo entraria na gaveta (3 + 2) % 4 = 1.
+1. Um for de 0 a CAP - 1: se itens[i] == -1, mostre "_"; senão, o número.
+2. Repare que retirar não apaga a gaveta: o 1 continua lá depois de sair.
+3. A próxima vaga é (inicio + n) % CAP: mostre no fim do main.
+4. Resposta esperada: as dez linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E505.c
@@ -1706,8 +1819,8 @@ Na fila: 3 4 6 7
 O drive-thru da lanchonete usa uma fila circular com inicio, fim (próxima
 vaga) e uma gaveta sacrificada. O programa compila sem aviso, nenhum
 sanitizer reclama, e mesmo assim o telão mostra que há -2 carros na fila.
-Ache o erro, explique por que ele só aparece depois de um tempo e
-conserte.
+Ache o erro, conserte e rode até as três linhas baterem com a saída
+esperada.
 
 
 ```text
@@ -1721,10 +1834,10 @@ Carros na fila: 4
 
 1. Desenhe o vetor de 6 gavetas e acompanhe inicio e fim em cada etapa.
 2. Na terceira linha, inicio = 4 e fim = 2. Quantos carros há de verdade?
-3. Resposta esperada: tamanho faz fim - inicio, que só funciona enquanto a
-   fila não deu a volta no vetor. Depois que fim volta para o começo,
-   fim < inicio e a conta fica negativa. Conserto:
-   return (f->fim - f->inicio + TAM) % TAM;
+3. O erro só aparece depois que fim dá a volta e fica menor que inicio.
+4. Resposta esperada: tamanho faz fim - inicio, que só funciona enquanto a
+   fila não deu a volta no vetor. Conserto:
+   return (f->fim - f->inicio + TAM) % TAM; e a saída fica 5, 1 e 4.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E508.c
@@ -1933,39 +2046,55 @@ o `inicio`:
 
 Os arquivos ficam em [`0086-fila-encadeada/`](0086-fila-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A171 · Os pedidos da cozinha**
+**Exemplo A171 · Pedágio na sexta: a fila cresce, esvazia e recomeça**
 
 ```c
 #include <stdio.h>
 #include "fila.h"
 
+// a cabine libera todos os carros que estão na fila
+int libera_todos(Fila *f) {
+    int passaram = 0;
+    int placa;
+    while (fila_retira(f, &placa)) {
+        passaram++;
+    }
+    return passaram;
+}
+
 int main(void) {
-    Fila *pedidos = fila_cria();
-    if (pedidos == NULL) {
+    Fila *cabine = fila_cria();
+    if (cabine == NULL) {
         return 1;
     }
 
-    fila_insere(pedidos, 501); // chegam três pedidos do app
-    fila_insere(pedidos, 502);
-    fila_insere(pedidos, 503);
-
-    int p;
-    if (fila_retira(pedidos, &p)) { // a cozinha pega o mais antigo
-        printf("Preparando: %d\n", p);
+    // 18h: chegam 12 carros. O painel de 8 do 0085 recusaria 4; aqui cabem todos
+    for (int placa = 1001; placa <= 1012; placa++) {
+        if (!fila_insere(cabine, placa)) {
+            printf("Faltou memória para o carro %d\n", placa);
+        }
     }
-    fila_insere(pedidos, 504); // entra mais um, lá no fim
+    int primeiro;
+    fila_primeiro(cabine, &primeiro);
+    printf("Na fila: %d carros, o primeiro é o %d\n", fila_tamanho(cabine), primeiro);
 
-    // a fila agora é: inicio -> 502 -> 503 -> 504 <- fim
-    if (fila_primeiro(pedidos, &p)) {
-        printf("Próximo: %d (%d esperando)\n", p, fila_tamanho(pedidos));
-    }
+    int passaram = libera_todos(cabine); // antes do printf: a ordem dos argumentos não é garantida
+    printf("Passaram: %d; vazia? %d\n", passaram, fila_vazia(cabine));
 
-    fila_libera(pedidos); // libera os 3 nós que sobraram
+    // 19h: a fila tinha esvaziado. O fila_retira zerou o fim lá dentro, então
+    // o próximo carro vira início e fim ao mesmo tempo, sem tocar no nó liberado
+    fila_insere(cabine, 2001);
+    fila_insere(cabine, 2002);
+    fila_primeiro(cabine, &primeiro);
+    printf("Recomeçou: %d carros, o primeiro é o %d\n", fila_tamanho(cabine), primeiro);
+
+    fila_libera(cabine); // libera os 2 nós que sobraram
     return 0;
 }
 // Saída:
-// Preparando: 501
-// Próximo: 502 (3 esperando)
+// Na fila: 12 carros, o primeiro é o 1001
+// Passaram: 12; vazia? 1
+// Recomeçou: 2 carros, o primeiro é o 2001
 ```
 
 ```bash
@@ -2036,18 +2165,33 @@ int main(void) {
 
 **Exercício E511** · ★☆☆
 
-Sem rodar, desenhe a lista da fila depois de cada operação do main, no
-formato inicio -> ... -> NULL, marcando onde está o fim. Preveja a saída.
-Depois responda: em quais momentos inicio e fim apontam para o MESMO nó?
+Os nós da fila ficam escondidos no fila.c, mas dá para mostrar a fila
+inteira só com o fila.h: retire o primeiro, mostre e insira de novo no
+fim, fila_tamanho vezes. No fim da volta, a fila está igual. Escreva a
+função mostra assim, do início para o fim (7 -> 4), e acrescente
+"(um nó só: início e fim apontam para ele)" quando a fila tiver 1 item.
+O main já chama mostra depois de cada operação.
+
+
+```text
+Saída esperada:
+insere 7: 7 (um nó só: início e fim apontam para ele)
+insere 4: 7 -> 4
+retira 7: 4 (um nó só: início e fim apontam para ele)
+insere 9: 4 -> 9
+retira 4: 9 (um nó só: início e fim apontam para ele)
+insere 1: 9 -> 1
+retira 9: 1 (um nó só: início e fim apontam para ele)
+retira 1: vazia
+```
 
 **Dicas:**
 
-1. Insere pendura no fim; retira tira do início.
-2. inicio == fim (sem ser NULL) quer dizer fila com um só nó.
-3. Resposta esperada: mostra "7 4 9 " e depois "sobrou 1 (1 na fila)".
-   A sequência é [7], [7, 4], [4], [4, 9], [9], [9, 1], [1]. inicio e
-   fim apontam para o mesmo nó quando a fila tem um nó só: depois de
-   inserir o 7 e depois de cada retirada.
+1. Guarde fila_tamanho num int antes do laço e faça o for até ele.
+2. Mostre " -> " antes de cada item, menos do primeiro.
+3. Cada volta faz um free (retira) e um malloc (insere): a fila é a
+   mesma, mas os nós são novos.
+4. Resposta esperada: as oito linhas acima, sem vazamento.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0086-fila-encadeada/E511.c
@@ -2113,8 +2257,8 @@ Fila vazia
 
 A fila de pedidos da cozinha funciona bem no começo da noite. Mas o
 sanitizer explode quando a fila esvazia e chega um pedido novo. Rode, leia
-o relatório (procure "heap-use-after-free" e a linha) e conserte. Explique
-por que o erro só aparece nessa situação.
+o relatório (procure "heap-use-after-free" e a linha), conserte e rode de
+novo: as quatro linhas têm que aparecer sem nenhum relatório do sanitizer.
 
 
 ```text
@@ -2129,7 +2273,8 @@ Pronto: 14
 
 1. Em que linha o relatório aponta? Que ponteiro está sendo usado ali?
 2. Depois de cozinha_sai tirar o último pedido, para onde aponta f->fim?
-3. Resposta esperada: cozinha_sai não zera o fim quando a fila esvazia.
+3. O erro só aparece quando a fila esvazia e depois recebe um pedido.
+4. Resposta esperada: cozinha_sai não zera o fim quando a fila esvazia.
    O fim continua apontando para o nó liberado, e o próximo cozinha_entra
    vê fim != NULL e escreve f->fim->prox nesse nó morto. Conserto: depois
    de avançar o início, if (f->inicio == NULL) f->fim = NULL;
@@ -2181,8 +2326,8 @@ bool circ_retira(No **ultimo, int *valor)
 ```
 
 
-e teste com a mesma história do A171: entram 501, 502 e 503, sai um, entra
-o 504 e a fila é esvaziada.
+e teste com a mesma história da cozinha do texto: entram 501, 502 e 503,
+sai um, entra o 504 e a fila é esvaziada.
 
 
 ```text
@@ -2334,53 +2479,57 @@ o índice não ficar negativo:
 > penúltimo.
 
 > [!NOTE]
-> **Pergunta para você:** se o A173 fizesse mais um `deque_insere_inicio`
-> logo depois do 11, em que gaveta o novo item cairia? E se o deque estivesse
+> **Pergunta para você:** se o programa da fila de músicas fizesse mais um
+> `deque_insere_inicio` logo depois do 11, em que gaveta o novo item cairia? E se o deque estivesse
 > com as 8 gavetas ocupadas?
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0087-deque/`](0087-deque/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A173 · A fila de músicas do streaming**
+**Exemplo A173 · Desfazer com limite: o deque esquece o mais antigo**
 
 ```c
 #include <stdio.h>
 #include "deque.h"
 
+#define LIMITE 5 // o editor de fotos só lembra os 5 últimos passos
+
 int main(void) {
-    Deque *fila = deque_cria(); // guarda o número da faixa do álbum
-    if (fila == NULL) {
+    Deque *historico = deque_cria();
+    if (historico == NULL) {
         return 1;
     }
 
-    deque_insere_fim(fila, 5); // "adicionar à fila": vai para o fim
-    deque_insere_fim(fila, 8);
-    deque_insere_fim(fila, 3);
-    deque_insere_inicio(fila, 11); // "tocar em seguida": fura a fila
-
-    // ordem agora: 11 5 8 3
-    int faixa;
-    if (deque_retira_inicio(fila, &faixa)) {
-        printf("Tocando a faixa %d\n", faixa);
+    int brilho = 50;
+    int ajustes[] = {55, 60, 65, 70, 75, 80, 85};
+    for (int i = 0; i < 7; i++) {
+        if (deque_tamanho(historico) == LIMITE) {
+            int esquecido;
+            deque_retira_inicio(historico, &esquecido); // o mais antigo sai pela frente
+            printf("Esqueceu o brilho %d\n", esquecido);
+        }
+        deque_insere_fim(historico, brilho); // o valor antigo entra pelo fundo
+        brilho = ajustes[i];
     }
-    if (deque_retira_fim(fila, &faixa)) { // desistiu da última que adicionou
-        printf("Removida a faixa %d\n", faixa);
-    }
+    printf("Brilho atual: %d\n", brilho);
 
-    printf("Ainda na fila:");
-    while (deque_retira_inicio(fila, &faixa)) {
-        printf(" %d", faixa);
+    // desfazer usa o fundo como uma pilha: o mais recente sai primeiro
+    printf("Desfazendo:");
+    while (deque_retira_fim(historico, &brilho)) {
+        printf(" %d", brilho);
     }
-    printf("\n");
+    printf("\nNão dá para desfazer mais: o brilho fica em %d\n", brilho);
 
-    deque_libera(fila);
+    deque_libera(historico);
     return 0;
 }
 // Saída:
-// Tocando a faixa 11
-// Removida a faixa 3
-// Ainda na fila: 5 8
+// Esqueceu o brilho 50
+// Esqueceu o brilho 55
+// Brilho atual: 85
+// Desfazendo: 80 75 70 65 60
+// Não dá para desfazer mais: o brilho fica em 60
 ```
 
 ```bash
@@ -2438,16 +2587,27 @@ int main(void) {
 
 **Exercício E517** · ★☆☆
 
-Sem rodar, preveja a saída. Desenhe o deque como uma fileira, com a
-frente à esquerda, e atualize a cada operação.
+Os números 1, 2, 3 e 4 chegam nessa ordem, um de cada vez. Para cada um,
+você escolhe se ele entra pela frente (deque_insere_inicio) ou pelo fundo
+(deque_insere_fim). Escreva as quatro inserções, nessa ordem de chegada,
+para que o deque fique 4 2 1 3 da frente para o fundo. O resto do main
+(pronto) tira um do fundo, um da frente e mostra o que sobrou.
+
+
+```text
+Saída esperada:
+saiu do fim: 3
+saiu da frente: 4
+frente 2, fundo 1, tamanho 2
+```
 
 **Dicas:**
 
 1. insere_inicio põe à esquerda; insere_fim, à direita.
-2. primeiro e ultimo só olham.
-3. Resposta esperada: a ordem depois das quatro inserções é 4 2 1 3. A
-   saída é "saiu do fim: 3", "saiu da frente: 4" e "frente 2, fundo 1,
-   tamanho 2".
+2. O 1 entra primeiro e acaba no meio: quem chega depois dele se divide
+   entre os dois lados.
+3. Resposta esperada: fim 1, início 2, fim 3, início 4, e as três linhas
+   acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E517.c
@@ -2546,7 +2706,7 @@ Embarcando: 40 10 20 30
 O deque também pode ser feito com nós, mas precisa de lista DUPLA: para
 retirar do fim, o último nó tem que saber quem é o penúltimo (o ant).
 Complete as quatro operações deste deque encadeado, sem limite de
-capacidade. O main repete a história da fila de músicas do A173.
+capacidade. O main repete a história da fila de músicas do texto.
 
 
 ```text
@@ -2804,40 +2964,43 @@ frase é um palíndromo.
 > [!NOTE]
 > **Pergunta para você:** como fica a pós-fixa de `100 / (2 + 3) - 4`? E o
 > resultado? Faça a conversão à mão, com a pilha de operadores desenhada,
-> antes de trocar a expressão no A175.
+> antes de trocar a expressão no programa da calculadora.
 
 ### Hora de praticar
 
 Os arquivos ficam em [`0088-juntando-tudo/`](0088-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A175 · A calculadora completa: infixa, pós-fixa e resultado**
+**Exemplo A175 · A calculadora que explica o erro**
 
 ```c
-#include <stdbool.h>
 #include <stdio.h>
 #include "fila.h"
 #include "pilha.h"
 
-// Na fila e na pilha só cabe int. Números são >= 0; operadores e o "("
-// viram códigos negativos, que nunca se confundem com um número.
 enum { SOMA = -1, SUB = -2, MULT = -3, DIV = -4, ABRE = -5 };
 
-int codigo_de(char c) {
-    return c == '+' ? SOMA : c == '-' ? SUB : c == '*' ? MULT : DIV;
-}
+// códigos de erro: cada etapa descobre os seus
+enum { OK, FECHA_SEM_ABRIR, FALTOU_FECHAR, FALTA_OPERANDO, DIV_ZERO, SOBROU_NUMERO, SEM_MEMORIA };
+
+const char *mensagem[] = {
+    "ok", "')' sem '(' antes", "'(' sem ')' depois",
+    "falta operando", "divisão por zero", "sobrou número", "faltou memória",
+};
 
 int precedencia(int op) {
-    return (op == MULT || op == DIV) ? 2 : (op == SOMA || op == SUB) ? 1 : 0; // ABRE: 0
+    return (op == MULT || op == DIV) ? 2 : (op == SOMA || op == SUB) ? 1 : 0;
 }
 
-// Etapa 1: infixa -> fila em ordem pós-fixa. A pilha segura os operadores.
-bool converte(const char *s, Fila *saida) {
+// Etapa 1. Os erros de parêntese só aparecem aqui: na fila pós-fixa não
+// existe parêntese nenhum, e um ABRE perdido lá dentro viraria lixo na conta.
+int converte(const char *s, Fila *saida) {
     Pilha *ops = pilha_cria();
     if (ops == NULL) {
-        return false;
+        return SEM_MEMORIA;
     }
+    int erro = OK;
     int topo;
-    for (int i = 0; s[i] != '\0'; i++) {
+    for (int i = 0; s[i] != '\0' && erro == OK; i++) {
         char c = s[i];
         if (c >= '0' && c <= '9') {
             int numero = 0;
@@ -2845,16 +3008,19 @@ bool converte(const char *s, Fila *saida) {
                 numero = numero * 10 + (s[i] - '0');
             }
             i--;
-            fila_insere(saida, numero); // número vai direto para a saída
+            fila_insere(saida, numero);
         } else if (c == '(') {
             pilha_empilha(ops, ABRE);
         } else if (c == ')') {
+            topo = 0; // se a pilha já estiver vazia, topo não pode ficar com lixo
             while (pilha_desempilha(ops, &topo) && topo != ABRE) {
                 fila_insere(saida, topo);
             }
+            if (topo != ABRE) {
+                erro = FECHA_SEM_ABRIR; // a pilha acabou antes de achar o '('
+            }
         } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            int op = codigo_de(c);
-            // sai antes quem tem precedência maior ou igual (conta da esquerda primeiro)
+            int op = c == '+' ? SOMA : c == '-' ? SUB : c == '*' ? MULT : DIV;
             while (pilha_topo(ops, &topo) && precedencia(topo) >= precedencia(op)) {
                 pilha_desempilha(ops, &topo);
                 fila_insere(saida, topo);
@@ -2862,64 +3028,71 @@ bool converte(const char *s, Fila *saida) {
             pilha_empilha(ops, op);
         }
     }
-    while (pilha_desempilha(ops, &topo)) {
-        fila_insere(saida, topo);
+    while (erro == OK && pilha_desempilha(ops, &topo)) {
+        if (topo == ABRE) {
+            erro = FALTOU_FECHAR; // sobrou um '(' que ninguém fechou
+        } else {
+            fila_insere(saida, topo);
+        }
     }
     pilha_libera(ops);
-    return true;
+    return erro;
 }
 
-// Etapa 2: consome a fila pós-fixa com uma pilha de valores.
-bool avalia(Fila *posfixa, int *resultado) {
+// Etapa 2. Aqui aparecem os erros de conta.
+int avalia(Fila *posfixa, int *resultado) {
     Pilha *val = pilha_cria();
     if (val == NULL) {
-        return false;
+        return SEM_MEMORIA;
     }
-    bool ok = true;
+    int erro = OK;
     int t, a, b;
-    printf("Pós-fixa: ");
-    while (ok && fila_retira(posfixa, &t)) {
+    while (erro == OK && fila_retira(posfixa, &t)) {
         if (t >= 0) {
-            printf(" %d", t);
             pilha_empilha(val, t);
-        } else if (!pilha_desempilha(val, &b) || !pilha_desempilha(val, &a) || (t == DIV && b == 0)) {
-            ok = false;
+        } else if (!pilha_desempilha(val, &b) || !pilha_desempilha(val, &a)) {
+            erro = FALTA_OPERANDO;
+        } else if (t == DIV && b == 0) {
+            erro = DIV_ZERO;
         } else {
-            printf(" %c", t == SOMA ? '+' : t == SUB ? '-' : t == MULT ? '*' : '/');
             pilha_empilha(val, t == SOMA ? a + b : t == SUB ? a - b : t == MULT ? a * b : a / b);
         }
     }
-    printf("\n");
-    ok = ok && pilha_desempilha(val, resultado) && pilha_vazia(val);
+    if (erro == OK && (!pilha_desempilha(val, resultado) || !pilha_vazia(val))) {
+        erro = pilha_vazia(val) ? FALTA_OPERANDO : SOBROU_NUMERO;
+    }
     pilha_libera(val);
-    return ok;
+    return erro;
 }
 
 int main(void) {
-    const char *contas[] = {"(35 + 25) * 3 / 4", "2 * (3 + 4) - 10 / 5"};
-    for (int i = 0; i < 2; i++) {
+    const char *contas[] = {"(10 + 2) * 3", "10 / (5 - 5)", "4 * (2 + 3", "4 + 2) * 3", "7 * + 2", "(8) 9"};
+    for (int i = 0; i < 6; i++) {
         Fila *posfixa = fila_cria();
         if (posfixa == NULL) {
             return 1;
         }
-        int r;
-        printf("Infixa:    %s\n", contas[i]);
-        if (converte(contas[i], posfixa) && avalia(posfixa, &r)) {
-            printf("Resultado: %d\n", r);
-        } else {
-            printf("Expressão inválida\n");
+        int r = 0;
+        int erro = converte(contas[i], posfixa);
+        if (erro == OK) {
+            erro = avalia(posfixa, &r);
         }
-        fila_libera(posfixa);
+        if (erro == OK) {
+            printf("%-14s = %d\n", contas[i], r);
+        } else {
+            printf("%-14s erro: %s\n", contas[i], mensagem[erro]);
+        }
+        fila_libera(posfixa); // libera também o que sobrou na fila depois de um erro
     }
     return 0;
 }
 // Saída:
-// Infixa:    (35 + 25) * 3 / 4
-// Pós-fixa:  35 25 + 3 * 4 /
-// Resultado: 45
-// Infixa:    2 * (3 + 4) - 10 / 5
-// Pós-fixa:  2 3 4 + * 10 5 / -
-// Resultado: 12
+// (10 + 2) * 3   = 36
+// 10 / (5 - 5)   erro: divisão por zero
+// 4 * (2 + 3     erro: '(' sem ')' depois
+// 4 + 2) * 3     erro: ')' sem '(' antes
+// 7 * + 2        erro: falta operando
+// (8) 9          erro: sobrou número
 ```
 
 ```bash
@@ -2987,18 +3160,26 @@ int main(void) {
 
 **Exercício E523** · ★☆☆
 
-Faça à mão a conversão de 2 * (3 + 4) com as regras do texto. Para cada
-símbolo, anote o que está na pilha de operadores e o que já está na fila
-de saída. Depois avalie a fila com a pilha de valores.
+A função avalia abaixo é a etapa 2 da calculadora: ela consome uma fila
+pós-fixa (números >= 0 e operadores como códigos negativos do enum) com
+uma pilha de valores. Faça você a etapa 1, à mão: converta 2 * (3 + 4) e
+2 * 3 + 4 para a pós-fixa e insira os itens nas filas c1 e c2 com
+fila_insere, usando SOMA e MULT para os operadores.
+
+
+```text
+Saída esperada:
+2 * (3 + 4) ->  2 3 4 + * = 14
+2 * 3 + 4   ->  2 3 * 4 + = 10
+```
 
 **Dicas:**
 
-1. Comece com a pilha e a fila vazias. O 2 vai direto para a fila.
-2. O "(" sempre empilha; o "+" que vem depois não tira o "*" de lá,
-   porque o "(" está no meio.
-3. Resposta esperada: depois do "4", a pilha é * ( + e a fila é 2 3 4.
-   O ")" manda o + para a fila e descarta o "(". No fim, o * sai. Pós-fixa:
-   2 3 4 + *. Avaliação: 2 | 2 3 | 2 3 4 | 2 7 | 14. Resultado: 14.
+1. Os números entram na fila na mesma ordem em que aparecem na infixa.
+2. Em 2 * (3 + 4), o "(" segura o * na pilha de operadores até o ")",
+   então o + sai primeiro. Em 2 * 3 + 4, o * sai assim que chega o +.
+3. Resposta esperada: c1 recebe 2, 3, 4, SOMA, MULT; c2 recebe 2, 3,
+   MULT, 4, SOMA. A saída é a das duas linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E523.c
@@ -3157,7 +3338,8 @@ Tempo médio de término: 10.0 ms
 
 1. A cada volta: retire um processo, rode min(2, restante) ms somando no
    relógio, desconte do restante e, se ainda sobrar, insira de novo.
-2. Faça o teste de mesa da fila antes: [1 2 3 4], [2 3 4 1], [3 4 1 2]...
+2. Para depurar, mostre a fila a cada volta: [1 2 3 4], [2 3 4 1],
+   [3 4 1 2]...
 3. Resposta esperada: as cinco linhas acima ((13 + 10 + 5 + 12) / 4).
 
 ```bash
@@ -3190,8 +3372,8 @@ também com `<ul><li>a</li><li>b</li></ul>`.
 
 <details><summary>Resposta</summary>
 
-Primeiro, segundo e terceiro: certo, errado, certo. É o A167 com palavras no
-lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
+Primeiro, segundo e terceiro: certo, errado, certo. É o verificador do 0084 com palavras
+no lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
 encadeada, como a do E495); ao ler `</nome>`, desempilhe e compare com
 `strcmp`. No fim, a pilha precisa estar vazia.
 

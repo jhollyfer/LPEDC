@@ -1,21 +1,25 @@
 // 0084 · Pilha na prática: parênteses e notação pós-fixa
 // Exercício E501 · ★★☆
 //
-// Este verificador é mais educado que o do A167: além de dizer que deu
-// errado, diz onde e por quê. Sem rodar, preveja as quatro linhas que ele
-// mostra. Atenção às posições: a primeira posição da string é 0.
+// Este verificador é mais educado que o do texto: além de dizer que deu
+// errado, diz onde. Melhore ainda mais: em vez de empilhar o caractere,
+// empilhe a POSIÇÃO dele na string (o caractere você recupera com s[pos]).
+// Assim as mensagens também podem dizer onde a abertura estava. A primeira
+// posição da string é 0.
+//
+//   Saída esperada:
+//   [1, (2, 3)]: ok
+//   {a: [1, 2}]: esperava ] e veio } na posição 9 (o [ abriu na posição 4)
+//   f(x)): fecha sem abrir na posição 4
+//   if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
 //
 // Dicas:
-// 1. Faça uma tabela com a posição, o caractere e a pilha depois dele.
-// 2. O laço para no primeiro erro; "faltou fechar" só aparece quando a
-//    string acaba sem erro antes.
-// 3. Resposta esperada:
-//    [1, (2, 3)]: ok
-//    {a: [1, 2}]: esperava ] e veio } na posição 9
-//    f(x)): fecha sem abrir na posição 4
-//    if (a[0] {: faltou fechar 2
+// 1. pilha_empilha(p, i) no lugar de pilha_empilha(p, c).
+// 2. Ao desempilhar, a abertura é s[topo], e topo é a posição dela.
+// 3. No "faltou fechar", use pilha_topo para pegar a última abertura.
+// 4. Resposta esperada: as quatro linhas acima.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo (modifique diagnostico):
 
 #include <stdio.h>
 #include "pilha.h"

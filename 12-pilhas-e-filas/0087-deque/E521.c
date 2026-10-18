@@ -4,7 +4,7 @@
 // O deque também pode ser feito com nós, mas precisa de lista DUPLA: para
 // retirar do fim, o último nó tem que saber quem é o penúltimo (o ant).
 // Complete as quatro operações deste deque encadeado, sem limite de
-// capacidade. O main repete a história da fila de músicas do A173.
+// capacidade. O main repete a história da fila de músicas do texto.
 //
 //   Saída esperada:
 //   Tocando a faixa 11

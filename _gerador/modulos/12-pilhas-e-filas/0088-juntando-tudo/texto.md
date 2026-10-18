@@ -189,6 +189,6 @@ frase é um palíndromo.
 > [!NOTE]
 > **Pergunta para você:** como fica a pós-fixa de `100 / (2 + 3) - 4`? E o
 > resultado? Faça a conversão à mão, com a pilha de operadores desenhada,
-> antes de trocar a expressão no A175.
+> antes de trocar a expressão no programa da calculadora.
 
 {{pratique}}

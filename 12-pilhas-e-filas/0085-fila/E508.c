@@ -4,8 +4,8 @@
 // O drive-thru da lanchonete usa uma fila circular com inicio, fim (próxima
 // vaga) e uma gaveta sacrificada. O programa compila sem aviso, nenhum
 // sanitizer reclama, e mesmo assim o telão mostra que há -2 carros na fila.
-// Ache o erro, explique por que ele só aparece depois de um tempo e
-// conserte.
+// Ache o erro, conserte e rode até as três linhas baterem com a saída
+// esperada.
 //
 //   Saída esperada depois do conserto:
 //   Carros na fila: 5
@@ -15,10 +15,10 @@
 // Dicas:
 // 1. Desenhe o vetor de 6 gavetas e acompanhe inicio e fim em cada etapa.
 // 2. Na terceira linha, inicio = 4 e fim = 2. Quantos carros há de verdade?
-// 3. Resposta esperada: tamanho faz fim - inicio, que só funciona enquanto a
-//    fila não deu a volta no vetor. Depois que fim volta para o começo,
-//    fim < inicio e a conta fica negativa. Conserto:
-//    return (f->fim - f->inicio + TAM) % TAM;
+// 3. O erro só aparece depois que fim dá a volta e fica menor que inicio.
+// 4. Resposta esperada: tamanho faz fim - inicio, que só funciona enquanto a
+//    fila não deu a volta no vetor. Conserto:
+//    return (f->fim - f->inicio + TAM) % TAM; e a saída fica 5, 1 e 4.
 //
 // Escreva sua resposta abaixo (conserte o código):
 

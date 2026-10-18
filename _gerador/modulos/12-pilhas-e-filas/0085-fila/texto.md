@@ -148,7 +148,8 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 > custam **O(1)**, sem mover ninguém.
 
 > [!NOTE]
-> **Pergunta para você:** depois do último laço do A169, a fila está vazia.
+> **Pergunta para você:** depois do último laço do programa da lotérica, a
+> fila está vazia.
 > Quanto valem `inicio` e `n` lá dentro? Em que gaveta entraria a próxima
 > senha?
 

@@ -22,7 +22,8 @@ achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
 
 O melhor: o [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do
 0082. Só o [`pilha.c`](0083-pilha-encadeada/pilha.c) mudou. Esse é o ganho do
-TAD: o A163 do delivery roda sem mudar uma vírgula com esta implementação.
+TAD: o programa do delivery do 0082 roda sem mudar uma vírgula com esta
+implementação.
 Por dentro, a struct agora guarda um ponteiro:
 
 ```c
@@ -131,8 +132,8 @@ Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
 > antes de liberar a struct.
 
 > [!NOTE]
-> **Pergunta para você:** no A165, se o laço do Ctrl+Z rodasse 5 vezes em vez
-> de 2, quantas linhas `Ctrl+Z` apareceriam e qual seria o último valor de B2?
+> **Pergunta para você:** no programa da planilha, se o laço do Ctrl+Z
+> rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual seria o último valor de B2?
 > Siga a lista do desenho antes de rodar.
 
 {{pratique}}

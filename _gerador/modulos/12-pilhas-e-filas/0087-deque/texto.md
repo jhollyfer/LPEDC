@@ -126,8 +126,8 @@ o índice não ficar negativo:
 > penúltimo.
 
 > [!NOTE]
-> **Pergunta para você:** se o A173 fizesse mais um `deque_insere_inicio`
-> logo depois do 11, em que gaveta o novo item cairia? E se o deque estivesse
+> **Pergunta para você:** se o programa da fila de músicas fizesse mais um
+> `deque_insere_inicio` logo depois do 11, em que gaveta o novo item cairia? E se o deque estivesse
 > com as 8 gavetas ocupadas?
 
 {{pratique}}
