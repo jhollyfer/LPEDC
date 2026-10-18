@@ -3991,16 +3991,27 @@ Saída esperada:
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
 com o `rodar`.
 
-**1. Quantas voltas no pior caso?** Uma busca binária num vetor ordenado de
-5.000 CPFs falhou (o CPF não estava lá). Quantas voltas do laço ela deu, no
-máximo? E num vetor de 5 milhões?
+**1. Quantas voltas no pior caso?** Escreva a busca binária com um contador
+de voltas do laço, devolvido por um ponteiro `int *voltas`. Num vetor criado
+com `malloc` e preenchido só com pares (`v[i] = 2 * i`), busque **todos** os
+ímpares de `-1` a `2n - 1` (todas essas buscas falham) e mostre o maior
+número de voltas que alguma delas deu. Rode com `n = 5000` e com
+`n = 5000000`.
 
 <details><summary>Resposta</summary>
 
+```text
+n = 5000: no máximo 13 voltas
+n = 5000000: no máximo 23 voltas
+```
+
 O intervalo cai pela metade a cada volta: o máximo é `⌊log₂ n⌋ + 1`. Para
-5.000, 2¹² = 4096 ≤ 5000 < 8192 = 2¹³, então **13 voltas**. Para 5 milhões,
-2²² = 4.194.304 ≤ 5.000.000 < 2²³, então **23 voltas**. Mil vezes mais dados,
-só 10 voltas a mais.
+5.000, 2¹² = 4096 ≤ 5000 < 8192 = 2¹³, então 13 voltas; para 5 milhões,
+2²² ≤ 5.000.000 < 2²³, então 23. Mil vezes mais dados, só 10 voltas a mais.
+Caminho: `ini = 0`, `fim = n - 1`, `(*voltas)++` logo no começo do `while
+(ini <= fim)`, e no `main` um laço `for (int x = -1; x <= 2 * n - 1; x += 2)`
+guardando o maior. Use `meio = ini + (fim - ini) / 2`; com 5 milhões, a
+soma `ini + fim` ainda cabe em `int`, mas o hábito evita o estouro.
 
 </details>
 
@@ -4018,17 +4029,33 @@ descarta um elemento que não pode fazer parte de nenhum par.
 
 </details>
 
-**3. Primeiro ordena, depois busca?** Você tem um vetor desordenado de `n =
-100.000` elementos e precisa responder `k` buscas. A partir de quantas buscas
-vale a pena ordenar (n log₂ n ≈ 1,7 milhão de comparações) e usar busca
-binária (17 por busca), em vez de fazer busca sequencial (uns n/2 = 50 mil por
-busca)?
+**3. Primeiro ordena, depois busca?** Você tem um vetor desordenado de
+`n = 100.000` elementos e precisa responder `k` buscas. Escreva um programa
+que calcule o custo dos dois planos em comparações: busca sequencial (uns
+`n / 2` por busca) e ordenar (`n · log₂ n`) para depois fazer busca binária
+(`log₂ n` por busca). Calcule `log₂ n` arredondado para cima com um laço que
+dobra uma variável até passar de `n`. Mostre os dois custos para `k = 1, 10,
+34, 35, 1000` e, com um `while`, o primeiro `k` em que ordenar fica mais
+barato.
 
 <details><summary>Resposta</summary>
 
-Sequencial: `50.000 k`. Ordenar e buscar: `1.700.000 + 17 k`. Igualando,
-`k ≈ 34`. Com **mais de umas 34 buscas**, ordenar compensa; com milhares de
-buscas, a diferença é enorme. Com 1 ou 2 buscas, ordenar é desperdício.
+```text
+log2(n) arredondado para cima: 17
+Ordenar: 1700000 comparações
+k =    1: sequencial     50000, ordenar + binária  1700017
+k =   10: sequencial    500000, ordenar + binária  1700170
+k =   34: sequencial   1700000, ordenar + binária  1700578
+k =   35: sequencial   1750000, ordenar + binária  1700595  <- ordenar ganha
+k = 1000: sequencial  50000000, ordenar + binária  1717000  <- ordenar ganha
+Ordenar compensa a partir de 35 buscas
+```
+
+Igualando `50.000 k = 1.700.000 + 17 k`, dá `k ≈ 34`: com mais de umas 34
+buscas, ordenar compensa; com milhares, a diferença é enorme; com 1 ou 2,
+ordenar é desperdício. Use `long` nas contas: com `k` acima de uns 43 mil,
+`k * 50000` passa do `INT_MAX`. O `while (ordenar + k * lg >= k * (n /
+2)) k++;` acha o ponto de virada.
 
 </details>
 
@@ -4115,17 +4142,28 @@ O(1) de memória.
 </details>
 
 **10. A compara que mente.** Esta compara foi escrita para ordenar do maior
-para o menor: `return *(const int *) a < *(const int *) b;`. Ela compila. O
-que está errado e o que pode acontecer?
+para o menor: `return *(const int *) a < *(const int *) b;`. Ela compila.
+Escreva-a ao lado da versão certa, `certa`, e mostre o que cada uma devolve
+para os pares `(3, 7)`, `(7, 3)` e `(5, 5)`, marcando o par em que a errada
+devolve 0 com números diferentes. Depois ordene `52 18 33 7 41 26 60 12` com
+`qsort` e a `certa`.
 
 <details><summary>Resposta</summary>
 
-Ela devolve só 0 ou 1, nunca negativo. Para o `qsort`, "0" quer dizer
-"empate" e "1" quer dizer "a vem depois": quando `a > b`, ela diz que empatam.
-O contrato fica inconsistente (se `a` empata com `b` e `b` empata com `c`,
-`a` deveria empatar com `c`), e o resultado depende de como a biblioteca
-implementa o `qsort`: pode sair certo num computador e errado em outro. O
-certo é `return (x < y) - (x > y);`.
+```text
+(3, 7): errada  1, certa  1
+(7, 3): errada  0, certa -1  <- a errada diz que empatam
+(5, 5): errada  0, certa  0
+60 52 41 33 26 18 12 7
+```
+
+A errada devolve só 0 ou 1, nunca negativo: quando `a > b`, ela diz ao
+`qsort` que empatam. O contrato fica inconsistente (se `a` empata com `b` e
+`b` empata com `c`, `a` deveria empatar com `c`), e o resultado depende de
+como a biblioteca implementa o `qsort`: pode sair certo num computador e
+errado em outro. Por isso o teste olha a **compara**, não só o vetor
+ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
+(x < y) - (x > y);`, que devolve -1, 0 ou 1 sem risco de estouro.
 
 </details>
 

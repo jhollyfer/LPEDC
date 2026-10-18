@@ -79,45 +79,89 @@ o algoritmo ficar inteiro na tela.
 
 ## Desafios do módulo
 
-Problemas para resolver no papel ou num arquivo seu. Misturam os assuntos do
-módulo.
+Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
+com o `rodar`.
 
-**1. Contando arestas.** Um grafo não dirigido tem 10 vértices, todos de grau
-3. Quantas arestas ele tem? Existe um grafo não dirigido com 7 vértices, todos
-de grau 3?
+**1. Contando arestas.** Escreva `int arestas(const int grau[], int n)`, que
+recebe os graus dos vértices de um grafo não dirigido e devolve quantas
+arestas ele tem, ou -1 se esses graus forem impossíveis. Teste com 10
+vértices de grau 3 e com 7 vértices de grau 3. Depois monte numa matriz de
+adjacência 10 × 10 um grafo de verdade com todos os graus 3 (ligue cada `i` a
+`(i + 1) % 10` e a `(i + 5) % 10`) e confira, contando os 1 da matriz, quantas
+arestas ele tem e se todos os graus deram 3.
 
 <details><summary>Resposta</summary>
 
-A soma dos graus é o dobro das arestas: 10 × 3 = 30, então **15 arestas**.
-Com 7 vértices de grau 3 a soma seria 21, ímpar: **não existe**. Todo grafo
-tem um número par de vértices de grau ímpar.
+```text
+10 vértices de grau 3: 15 arestas
+7 vértices de grau 3: impossível (soma dos graus ímpar)
+Grafo montado: 15 arestas, todos de grau 3: sim
+```
+
+Cada aresta soma 1 no grau de cada ponta, então a soma dos graus é o dobro das
+arestas: 30 / 2 = 15. Com 7 vértices de grau 3 a soma seria 21, ímpar: não
+existe. Todo grafo tem um número par de vértices de grau ímpar. Na matriz,
+cada aresta aparece duas vezes (`adj[i][j]` e `adj[j][i]`), por isso a soma dos
+1 também se divide por 2.
 
 </details>
 
 **2. Matriz ou lista?** Um mapa tem 10 mil esquinas e 30 mil ruas de mão
-dupla. Quanta memória gasta a matriz de `int`? E a lista de adjacência com
-nós de 16 bytes?
+dupla. Com `sizeof`, calcule quanta memória gasta a matriz de adjacência de
+`int` e quanto gasta a lista de adjacência com nós `struct No { int destino;
+struct No *prox; }` (cada rua vira dois nós, mais um vetor de 10 mil
+ponteiros para as cabeças). Mostre o `sizeof(No)`, os dois totais em bytes e
+quantas vezes a matriz é maior. Use `long` nas contas.
 
 <details><summary>Resposta</summary>
 
-Matriz: 10⁴ × 10⁴ × 4 bytes = **400 MB**, quase tudo zero. Lista: cada rua
-vira 2 nós, 60 mil × 16 bytes = 960 KB, mais 80 KB do vetor de ponteiros:
-**cerca de 1 MB**. Para grafos esparsos, a lista ganha de longe.
+```text
+sizeof(No) = 16 bytes
+Matriz: 400000000 bytes (400.0 MB)
+Lista: 960000 + 80000 = 1040000 bytes (1.04 MB)
+A matriz gasta 384 vezes mais
+```
+
+(Num computador de 64 bits; com ponteiros de 4 bytes os números da lista
+mudam.) O nó tem 4 bytes do `int`, 4 de preenchimento para alinhar o
+ponteiro e 8 do ponteiro. A matriz guarda 100 milhões de casas, quase todas
+zero: para grafos esparsos, a lista ganha de longe. `10000 * 10000 * 4` passa
+do `INT_MAX`, por isso o `long`.
 
 </details>
 
-**3. Qual algoritmo?** Para cada pergunta, diga se você usaria BFS, DFS ou
-Dijkstra: (a) o menor número de cliques para ir de uma página da Wikipédia a
-outra; (b) se existe import circular num projeto; (c) o voo mais barato entre
-duas cidades; (d) quantas ilhas há num mapa; (e) a ordem para cursar
-disciplinas com pré-requisitos.
+**3. Qual algoritmo? As ilhas.** Quantas ilhas há num mapa é uma pergunta de
+componentes, e tanto a BFS quanto a DFS respondem. Neste mapa, `#` é terra e
+`.` é água, e duas casas de terra vizinhas (cima, baixo, esquerda, direita)
+são a mesma ilha:
+
+```text
+##..#...
+#...##..
+..#....#
+......##
+##.#....
+```
+
+Escreva `int dfs(...)` recursiva e `int bfs(...)` com fila, as duas marcando
+as casas de uma ilha e devolvendo o tamanho dela. Varra o mapa linha por linha
+e, a cada terra ainda não visitada, chame a busca. Mostre, para cada uma, os
+tamanhos na ordem em que as ilhas aparecem e o total.
 
 <details><summary>Resposta</summary>
 
-(a) **BFS** (todo clique custa 1); (b) **DFS** com três cores; (c)
-**Dijkstra** (preços são pesos, todos positivos); (d) **BFS ou DFS**, tanto
-faz: é contar componentes; (e) **DFS** (pós-ordem invertida) ou o algoritmo
-de Kahn, com fila.
+```text
+DFS: tamanhos 3 3 1 3 2 1 -> 6 ilhas
+BFS: tamanhos 3 3 1 3 2 1 -> 6 ilhas
+```
+
+Só a ordem de visita **dentro** de cada ilha muda; a contagem é a mesma. Para
+as outras perguntas do módulo: o menor número de cliques entre duas páginas é
+**BFS** (todo clique custa 1); o voo mais barato é **Dijkstra** (preços são
+pesos positivos); achar import circular e ordenar disciplinas com
+pré-requisito são **DFS** (ou o Kahn, com fila, do desafio 4). Uma assinatura
+`void conta(const char *nome, int (*busca)(int[L][C], int, int))` deixa o
+mesmo laço de varredura servir às duas.
 
 </details>
 
@@ -138,39 +182,73 @@ ciclo e não existe ordem possível.
 
 </details>
 
-**5. Dijkstra à mão.** Grafo dirigido: S→A 3, S→B 7, A→B 2, A→C 6, B→C 1,
-C→T 2, B→T 8. Qual a distância de S a cada vértice e qual o caminho até T?
+**5. Dijkstra no grafo dirigido.** Monte numa matriz de pesos o grafo
+dirigido S→A 3, S→B 7, A→B 2, A→C 6, B→C 1, C→T 2, B→T 8 (só `peso[a][b]`, sem
+a volta) e rode o Dijkstra de S. Mostre os vértices na ordem em que são
+fixados, com a distância de cada um, e o caminho até T voltando pelo `pai[]`.
 
 <details><summary>Resposta</summary>
 
-Fixa S (0), A (3), B (5, via A, melhor que 7), C (6, via B), T (8, via C;
-por B direto daria 13). Caminho: **S → A → B → C → T, custo 8**.
+```text
+Fixados: S(0) A(3) B(5) C(6) T(8)
+Caminho até T: S -> A -> B -> C -> T (custo 8)
+```
+
+B fica com 5 (via A), melhor que os 7 diretos; C com 6 (via B); T com 8 (via
+C), melhor que os 13 por B direto. O código é o do assunto 0112; a única
+diferença do não dirigido é preencher a matriz numa direção só. Para mostrar o
+caminho na ordem certa, guarde os vértices de `pai[]` num vetor e imprima de
+trás para frente.
 
 </details>
 
-**6. Quantos caminhos mínimos?** Grafo não dirigido: A-B, A-C, B-D, C-D,
-D-E, D-F, E-G, F-G. Quantos caminhos diferentes, todos com o menor número de
-arestas, ligam A a G? Como adaptar a BFS para contar?
+**6. Quantos caminhos mínimos?** Grafo não dirigido: A-B, A-C, B-D, C-D, D-E,
+D-F, E-G, F-G. Adapte a BFS a partir de A para contar, em `cont[v]`, quantos
+caminhos com o menor número de arestas chegam a cada vértice, e mostre
+`dist` e `cont` de todos.
 
 <details><summary>Resposta</summary>
 
-**4 caminhos** de 4 arestas: A-B-D-E-G, A-B-D-F-G, A-C-D-E-G, A-C-D-F-G.
-Na BFS, guarde `cont[origem] = 1` e, ao examinar a aresta u-v: se v é novo,
-`cont[v] = cont[u]`; se `dist[v] == dist[u] + 1`, `cont[v] += cont[u]`.
+```text
+A: dist 0, caminhos 1
+B: dist 1, caminhos 1
+C: dist 1, caminhos 1
+D: dist 2, caminhos 2
+E: dist 3, caminhos 2
+F: dist 3, caminhos 2
+G: dist 4, caminhos 4
+```
+
+Os 4 caminhos até G: A-B-D-E-G, A-B-D-F-G, A-C-D-E-G e A-C-D-F-G. Comece com
+`cont[A] = 1`. Ao examinar a aresta u-v: se v é novo, `dist[v] = dist[u] + 1`
+e `cont[v] = cont[u]`; se v já foi visto e `dist[v] == dist[u] + 1`, então
+`cont[v] += cont[u]` (mais um jeito de chegar com o mesmo tamanho). Como a BFS
+tira os vértices por camada, `cont[u]` já está completo quando u sai da fila.
 
 </details>
 
-**7. Estrada crítica.** No mapa da transportadora do assunto 0113 (sem a Ilha), existe
-alguma estrada que, se cair, deixa algum lugar sem acesso ao CD? Como
-descobrir com o que você já sabe?
+**7. Estrada crítica.** Pegue o mapa da transportadora do assunto 0113 e
+escreva `void criticas(Grafo *g)`: para cada estrada, apague (km 0), rode a
+DFS do CD e veja se o número de lugares alcançáveis caiu; depois recoloque o
+km. Mostre as estradas críticas, ou "nenhuma estrada crítica". Rode no mapa
+original e depois de ligar a Ilha à Vila com uma ponte de 6 km.
 
 <details><summary>Resposta</summary>
 
-**Nenhuma.** Toda estrada está em algum ciclo (CD-Centro-Feira,
-Centro-Porto-Morro-Feira, Centro-Porto-Vila). Método simples: para cada
-aresta, apague, rode uma DFS do CD e veja se todos foram visitados; depois
-recoloque. Custa O(E · (V + E)). Essas arestas se chamam **pontes**, e existe
-um algoritmo com uma DFS só (Tarjan) para achar todas.
+```text
+Mapa do assunto 0113:
+  nenhuma estrada crítica
+Com a ponte Vila-Ilha:
+  crítica: Vila-Ilha
+```
+
+No mapa original, toda estrada está em algum ciclo (CD-Centro-Feira,
+Centro-Porto-Morro-Feira, Centro-Porto-Vila): se uma cai, sempre há outro
+caminho. A ponte nova é o único acesso à Ilha. Compare com o total de antes
+de apagar, não com `g->n`: no mapa original a Ilha já está fora. Percorra só
+`b > a` para testar cada estrada uma vez. Custa O(E · (V + E)); essas
+arestas se chamam **pontes**, e existe um algoritmo com uma DFS só (Tarjan)
+para achar todas.
 
 </details>
 
@@ -189,29 +267,65 @@ aresta se os chefes forem diferentes (a ideia do union-find).
 </details>
 
 **9. Todas as distâncias.** Rodar Dijkstra a partir de cada vértice dá a
-tabela de todas as distâncias. Existe um jeito com três laços aninhados,
-o **Floyd-Warshall**: `para k, para i, para j: d[i][j] = min(d[i][j],
-d[i][k] + d[k][j])`. Qual o custo? Qual cuidado com o INFINITO?
+tabela de todas as distâncias. Existe um jeito com três laços aninhados, o
+**Floyd-Warshall**: `para k, para i, para j: d[i][j] = min(d[i][j], d[i][k] +
+d[k][j])`. Escreva-o para o mapa do assunto 0113 (com a Ilha), começando com
+`d[i][i] = 0`, os km das estradas e `INFINITO` no resto, e mostre a tabela
+(`-` onde não há caminho) e quantas vezes o laço de dentro rodou.
 
 <details><summary>Resposta</summary>
 
-**O(V³)**: igual a V execuções do Dijkstra com matriz, mas com código bem
-menor. O cuidado é o mesmo do assunto 0112: `d[i][k] + d[k][j]` estoura se um
-dos dois for `INT_MAX`. Teste antes de somar, ou use um INFINITO folgado,
-como `1000000000`, que somado duas vezes ainda cabe em `int`.
+```text
+            CD Centro  Feira  Porto  Morro   Vila   Ilha
+CD           0      3      2      7      5     10      -
+Centro       3      0      1      6      4      9      -
+Feira        2      1      0      5      3      8      -
+Porto        7      6      5      0      2      3      -
+Morro        5      4      3      2      0      5      -
+Vila        10      9      8      3      5      0      -
+Ilha         -      -      -      -      -      -      0
+Passos do laço de dentro: 343
+```
+
+São V³ = 7³ = 343 passos: O(V³), igual a V execuções do Dijkstra com matriz,
+mas com código bem menor. O cuidado é o do assunto 0112: com `INT_MAX`,
+`d[i][k] + d[k][j]` estoura. Use `#define INFINITO 1000000000`, que somado
+duas vezes ainda cabe em `int`, e mostre `-` quando `d[i][j] >= INFINITO`.
+A linha do CD confere com o Dijkstra do assunto 0113: 10 km até a Vila.
 
 </details>
 
-**10. Labirinto com lama.** No galpão do A220, algumas casas têm lama: entrar
-nelas custa 5 passos em vez de 1. A BFS ainda acha o caminho mais rápido? O
-que você usaria?
+**10. Labirinto com lama.** Num galpão como o do A220, casas com `~` têm
+lama: entrar nelas custa 5 em vez de 1.
+
+```text
+S.~~~.E
+.#~#.#.
+.......
+```
+
+Rode a BFS e o Dijkstra (cada casa é um vértice; o peso da aresta é o custo
+de entrar na casa de destino) de S até E. Para cada um, mostre quantos passos
+o caminho tem, o custo total e o mapa com o caminho marcado com `*`.
 
 <details><summary>Resposta</summary>
 
-**Não**: a BFS conta casas, não custo. Use **Dijkstra** na grade: cada casa é
-um vértice, e o peso da aresta é o custo de entrar na casa de destino. Os
-vizinhos continuam saindo da conta das 4 direções; só a fila vira "o menor
-`dist` primeiro".
+```text
+BFS: 6 passos, custo 18
+S*****E
+.#~#.#.
+.......
+Dijkstra: 10 passos, custo 10
+S.~~~.E
+*#~#.#*
+*******
+```
+
+A BFS conta casas, não custo: acha o caminho com menos passos, que atravessa
+três casas de lama (1 + 5 + 5 + 5 + 1 + 1 = 18). O Dijkstra dá a volta por
+baixo e chega com 10. Os vizinhos continuam saindo da conta das 4 direções;
+só a fila vira "o menor `dist` primeiro", com `dist[u] + custo(v)` no lugar de
+`dist[u] + 1`. A casa `u` é o número `l * C + c`, como no A220.
 
 </details>
 
