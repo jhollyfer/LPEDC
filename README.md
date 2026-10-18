@@ -108,7 +108,7 @@ referência os fichamentos em [`_fontes/`](_fontes/) dos materiais abaixo:
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. PUC-Rio, 2002.
 - TENENBAUM, A.; LANGSAM, Y.; AUGENSTEIN, M. *Estruturas de dados usando C*. Makron Books.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Universidade de Aveiro.
-- *Estrutura de dados com algoritmos e C*.
+- LAUREANO, M. *Estrutura de dados com algoritmos e C*. Rio de Janeiro: Brasport, 2008.
 - LEAL, G. C. L. *Algoritmos e lógica de programação II*. Unicesumar.
 - CARVALHO, V. A. *Lógica de programação*. IFES.
 - ANTONELLO, R. *Linguagem C*.
