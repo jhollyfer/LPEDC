@@ -1,11 +1,5 @@
 // 0106 · Encadeamento
 // Exercício E635 · ★★★
-//
-// Resposta: a) a linha "p = p->prox;" logo depois de "free(p);": ela lê o
-// campo prox de um nó que acabou de ser liberado. b) o free normalmente não
-// apaga os bytes na hora, então o prox antigo ainda está lá por sorte; um
-// malloc no meio (ou outro alocador) pode reaproveitar a memória e o laço
-// segue para um endereço qualquer. Conserto: guardar o próximo antes do free.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,16 +31,19 @@ void convida(No *baldes[], const char *nome) {
     baldes[b] = novo;
 }
 
-void libera(No *baldes[]) {
+int libera(No *baldes[]) {
+    int soltos = 0;
     for (int b = 0; b < M; b++) {
         No *p = baldes[b];
         while (p != NULL) {
             No *prox = p->prox; // guarda antes de liberar
             free(p);
+            soltos++;
             p = prox;
         }
         baldes[b] = NULL;
     }
+    return soltos;
 }
 
 int main(void) {
@@ -62,6 +59,6 @@ int main(void) {
         }
         printf("\n");
     }
-    libera(baldes);
+    printf("liberados: %d\n", libera(baldes));
     return 0;
 }

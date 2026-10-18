@@ -12,7 +12,7 @@ melhor, que você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
 
 Quando a chave já é um número pequeno, dá para usá-la direto como índice. Os
 DDDs vão de 11 a 99, então `const char *estado[100]` resolve: `estado[61]` é
-"DF", em um passo. Isso é **endereçamento direto**. O problema aparece quando
+"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O problema aparece quando
 a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
 bilhões de posições para guardar 50 alunos?) e um nome nem é número.
 
@@ -112,6 +112,6 @@ laço, índice 6, armário ocupado, colisão:
 > [!NOTE]
 > **Pergunta para você:** se a tabela tivesse 10 armários em vez de 7, quais
 > alunos colidiriam? Faça as contas com as somas (ana 304, davi 420, lia 310,
-> bia 300, caio 412) antes de trocar `7` por `10` no exemplo A209 e rodar.
+> bia 300, caio 412) antes de trocar `7` por `10` no código acima e rodar.
 
 {{pratique}}

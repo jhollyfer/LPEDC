@@ -4,22 +4,25 @@
 // A lista de convidados do aniversário fica numa tabela com encadeamento. O
 // programa mostra a tabela certinho, mas o gcc dá um aviso e o
 // AddressSanitizer acusa "heap-use-after-free" no fim. O erro está aí de
-// propósito. Rode, leia o aviso e o relatório e responda:
+// propósito. Rode, leia o aviso e o relatório e conserte a função libera.
+// Aproveite e faça libera devolver quantos nós soltou ("int libera(...)"),
+// e mostre esse número no fim do main. Rode de novo: nenhum aviso do gcc e
+// nenhuma reclamação do sanitizer.
 //
-// a) Em que linha está o erro e o que ela faz de errado?
-// b) Por que o programa às vezes "funciona" sem o AddressSanitizer?
-//
-// Depois conserte a função libera.
+//   Saída esperada:
+//   [0] rita
+//   [1] tiago
+//   [2] lara joao
+//   liberados: 4
 //
 // Dicas:
 // 1. O relatório mostra duas pilhas: onde o nó foi liberado e onde ele foi
 //    usado depois. Compare as duas linhas.
 // 2. Depois do free(p), a memória de *p não é mais sua, nem para ler p->prox.
-// 3. Resposta esperada: a) a linha "p = p->prox;" logo depois do free(p): lê
-//    o campo prox de um nó já liberado. b) o free normalmente não apaga os
-//    bytes na hora, então o prox antigo ainda está lá por sorte; um malloc no
-//    meio pode reaproveitar a memória. Conserto: guardar o próximo antes:
-//    "No *prox = p->prox; free(p); p = prox;".
+//    Às vezes "funciona" sem o sanitizer só porque o free não apaga os bytes
+//    na hora.
+// 3. Resposta esperada: a saída acima. O conserto é guardar o próximo antes:
+//    "No *prox = p->prox; free(p); p = prox;", contando cada free.
 //
 // Escreva sua resposta abaixo (conserte o código):
 

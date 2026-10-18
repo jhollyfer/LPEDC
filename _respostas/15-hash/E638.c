@@ -1,14 +1,5 @@
 // 0107 · Endereçamento aberto
 // Exercício E638 · ★☆☆
-//
-// Resposta:
-// 16: vaga 0 (1)
-// 8: vaga 1 (2)
-// 3: vaga 3 (1)
-// 24: vaga 2 (3)
-// 11: vaga 4 (2)
-// 16, 8 e 24 têm hash 0 e formam um bloco 0-1-2; o 11 (hash 3) encontra o 3
-// na sua vaga e vai para a 4.
 
 #include <stdio.h>
 
@@ -26,6 +17,21 @@ int main(void) {
         }
         tab[i] = chaves[k];
         printf("%d: vaga %d (%d)\n", chaves[k], i, s);
+    }
+
+    int procurar[] = {24, 19};
+    for (int k = 0; k < 2; k++) {
+        int i = procurar[k] % M;
+        int s = 1;
+        while (tab[i] != 0 && tab[i] != procurar[k]) {
+            i = (i + 1) % M;
+            s++;
+        }
+        if (tab[i] == procurar[k]) {
+            printf("busca %d: vaga %d (%d sondagens)\n", procurar[k], i, s);
+        } else {
+            printf("busca %d: não está (%d sondagens)\n", procurar[k], s);
+        }
     }
     return 0;
 }

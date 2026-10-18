@@ -29,7 +29,7 @@ fim, a lista vai para o vetor, o `qsort` ordena e o ranking sai:
 
 {{ideia}}
 
-O programa completo (exemplo A215). O TAD `palavras.h` fica na pasta, e o
+O programa completo. O TAD `palavras.h` fica na pasta, e o
 `main` só conhece as funções dele:
 
 ```c

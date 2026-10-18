@@ -26,7 +26,7 @@ fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
 só, a tabela vira uma lista única e a busca volta a ser O(n).
 
 No encadeamento a tabela **nunca enche**: α pode passar de 1, as listas só
-ficam mais compridas. Algumas implementações, quando uma corrente fica
+ficam mais compridas (o exemplo A211 põe 8 itens em 2 baldes). Algumas implementações, quando uma corrente fica
 comprida demais, até trocam a lista por uma árvore.
 
 Vamos ver na prática. Seis frutas entram na ordem banana, uva, pera, kiwi,
@@ -74,7 +74,7 @@ bool tabela_busca(const Tabela *t, const char *chave, int *valor, int *comparaco
 }
 ```
 
-E o cliente, que só conhece o `tabela.h` (exemplo A211):
+E o cliente, que só conhece o `tabela.h`:
 
 ```c
 #include <stdio.h>
@@ -142,6 +142,6 @@ logo na primeira pergunta:
 > **Pergunta para você:** o "limao" cai no balde 0. Se você inserir "limao"
 > com 9 caixas e depois buscar "coco" (que também cai no balde 0), quantas
 > comparações a busca faz? E se a inserção fosse no fim da corrente, mudaria
-> alguma coisa? Teste no A211.
+> alguma coisa? Teste mudando o `main` acima.
 
 {{pratique}}

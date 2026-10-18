@@ -24,7 +24,8 @@ seguidos, e qualquer chave que cai num bloco vai parar no fim dele, deixando o
 bloco ainda maior. Isso é o **agrupamento primário**. Com α = 0,5 uma busca
 sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. A regra
 prática: não passe de 70% a 75% de ocupação. Passou, crie uma tabela maior e
-reinsira tudo.
+reinsira tudo (o exemplo A213 lota uma tabela
+de 7 vagas e mostra as sondagens crescendo).
 
 Vamos ver na prática. Entram os carros dos apartamentos 101, 202, 301, 1104
 e 504. O 101 vai para a vaga 2 e o 202 para a 4. O 301 também dá 4 (301 % 11
@@ -64,7 +65,7 @@ static int procura(const Aberta *t, int chave, int *sondagens) {
 }
 ```
 
-E o programa do condomínio (exemplo A213):
+E o programa do condomínio:
 
 ```c
 #include <stdio.h>
