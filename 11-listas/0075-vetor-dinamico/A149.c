@@ -1,36 +1,46 @@
-// A149 · As despesas da viagem numa lista que cresce
+// A149 · Quantas vezes o vetor mudou de casa
 
 #include <stdio.h>
 #include "lista.h"
 
 int main(void) {
-    int despesas[] = {12, 35, 8, 50, 27}; // em reais
-    Lista *viagem = lista_cria(2);        // começa com espaço para 2
-    if (viagem == NULL) return 1;
+    // capacidade 0 não existe: lista_cria corrige para 1
+    Lista *passos = lista_cria(0);
+    if (passos == NULL) return 1;
+    printf("criou: tam %d, cap %d\n", lista_tamanho(passos), lista_capacidade(passos));
 
-    for (int i = 0; i < 5; i++) {
-        lista_insere_fim(viagem, despesas[i]);
-        printf("inseriu %2d: tam %d, cap %d\n", despesas[i],
-               lista_tamanho(viagem), lista_capacidade(viagem));
+    // 20 dias de passos no app da academia (em milhares)
+    int crescimentos = 0;
+    for (int dia = 1; dia <= 20; dia++) {
+        int cap_antes = lista_capacidade(passos);
+        if (!lista_insere_fim(passos, 5 + dia % 4)) break;
+        if (lista_capacidade(passos) != cap_antes) { // houve realloc
+            crescimentos++;
+            printf("dia %2d: cap %2d -> %2d\n", dia, cap_antes, lista_capacidade(passos));
+        }
     }
-    lista_imprime(viagem);
 
-    int total = 0;
-    for (int i = 0; i < lista_tamanho(viagem); i++) {
-        int valor;
-        lista_pega(viagem, i, &valor);
-        total += valor;
+    int tam = lista_tamanho(passos);
+    int cap = lista_capacidade(passos);
+    printf("%d itens, cap %d, %d vagas livres\n", tam, cap, cap - tam);
+    printf("realloc: %d vezes\n", crescimentos);
+
+    // posição fora da lista: lista_pega recusa e não mexe na variável
+    int valor = -1;
+    if (!lista_pega(passos, 20, &valor)) {
+        printf("posição 20 não existe; valor continua %d\n", valor);
     }
-    printf("total: R$ %d\n", total);
 
-    lista_libera(viagem);
+    lista_libera(passos);
     return 0;
 }
 // Saída:
-// inseriu 12: tam 1, cap 2
-// inseriu 35: tam 2, cap 2
-// inseriu  8: tam 3, cap 4
-// inseriu 50: tam 4, cap 4
-// inseriu 27: tam 5, cap 8
-// [12, 35, 8, 50, 27]
-// total: R$ 132
+// criou: tam 0, cap 1
+// dia  2: cap  1 ->  2
+// dia  3: cap  2 ->  4
+// dia  5: cap  4 ->  8
+// dia  9: cap  8 -> 16
+// dia 17: cap 16 -> 32
+// 20 itens, cap 32, 12 vagas livres
+// realloc: 5 vezes
+// posição 20 não existe; valor continua -1

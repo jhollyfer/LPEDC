@@ -224,43 +224,53 @@ que vem depois precisa andar uma casa (o exemplo A150 mostra). Ler a posição
 
 Os arquivos ficam em [`0075-vetor-dinamico/`](0075-vetor-dinamico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A149 · As despesas da viagem numa lista que cresce**
+**Exemplo A149 · Quantas vezes o vetor mudou de casa**
 
 ```c
 #include <stdio.h>
 #include "lista.h"
 
 int main(void) {
-    int despesas[] = {12, 35, 8, 50, 27}; // em reais
-    Lista *viagem = lista_cria(2);        // começa com espaço para 2
-    if (viagem == NULL) return 1;
+    // capacidade 0 não existe: lista_cria corrige para 1
+    Lista *passos = lista_cria(0);
+    if (passos == NULL) return 1;
+    printf("criou: tam %d, cap %d\n", lista_tamanho(passos), lista_capacidade(passos));
 
-    for (int i = 0; i < 5; i++) {
-        lista_insere_fim(viagem, despesas[i]);
-        printf("inseriu %2d: tam %d, cap %d\n", despesas[i],
-               lista_tamanho(viagem), lista_capacidade(viagem));
+    // 20 dias de passos no app da academia (em milhares)
+    int crescimentos = 0;
+    for (int dia = 1; dia <= 20; dia++) {
+        int cap_antes = lista_capacidade(passos);
+        if (!lista_insere_fim(passos, 5 + dia % 4)) break;
+        if (lista_capacidade(passos) != cap_antes) { // houve realloc
+            crescimentos++;
+            printf("dia %2d: cap %2d -> %2d\n", dia, cap_antes, lista_capacidade(passos));
+        }
     }
-    lista_imprime(viagem);
 
-    int total = 0;
-    for (int i = 0; i < lista_tamanho(viagem); i++) {
-        int valor;
-        lista_pega(viagem, i, &valor);
-        total += valor;
+    int tam = lista_tamanho(passos);
+    int cap = lista_capacidade(passos);
+    printf("%d itens, cap %d, %d vagas livres\n", tam, cap, cap - tam);
+    printf("realloc: %d vezes\n", crescimentos);
+
+    // posição fora da lista: lista_pega recusa e não mexe na variável
+    int valor = -1;
+    if (!lista_pega(passos, 20, &valor)) {
+        printf("posição 20 não existe; valor continua %d\n", valor);
     }
-    printf("total: R$ %d\n", total);
 
-    lista_libera(viagem);
+    lista_libera(passos);
     return 0;
 }
 // Saída:
-// inseriu 12: tam 1, cap 2
-// inseriu 35: tam 2, cap 2
-// inseriu  8: tam 3, cap 4
-// inseriu 50: tam 4, cap 4
-// inseriu 27: tam 5, cap 8
-// [12, 35, 8, 50, 27]
-// total: R$ 132
+// criou: tam 0, cap 1
+// dia  2: cap  1 ->  2
+// dia  3: cap  2 ->  4
+// dia  5: cap  4 ->  8
+// dia  9: cap  8 -> 16
+// dia 17: cap 16 -> 32
+// 20 itens, cap 32, 12 vagas livres
+// realloc: 5 vezes
+// posição 20 não existe; valor continua -1
 ```
 
 ```bash
@@ -346,25 +356,40 @@ maior: 132
 
 **Exercício E446** · ★☆☆
 
-Sem rodar, preveja as linhas que este programa mostra. Anote em cada
-passo como está o vetor por dentro (itens, tam e cap). Depois rode e
-confira.
+Escreva um programa que acompanhe o vetor por dentro. Primeiro escreva a
+função mostra(rotulo, l), que imprime o rótulo, o tamanho, a capacidade e
+a lista, assim: "A: tam 2, cap 2 [5, 9]". Depois, começando com
+lista_cria(1), faça estas operações e chame mostra onde está indicado:
 
-O código está no arquivo, logo abaixo deste enunciado.
+
+```text
+insere 5 no fim; insere 9 no fim              -> mostra "A"
+insere 3 na posição 0; insere 7 no fim        -> mostra "B"
+remove a posição 1 guardando em x;
+insere x * 2 na posição 3                     -> mostra "C"
+tenta remover a posição 4; se falhar, imprima "D: falhou, x = ..."
+insere 1 no fim                               -> mostra "E"
+```
+
+
+
+```text
+Saída esperada:
+A: tam 2, cap 2 [5, 9]
+B: tam 4, cap 4 [3, 5, 9, 7]
+C: tam 4, cap 4 [3, 9, 7, 10]
+D: falhou, x = 5
+E: tam 5, cap 8 [3, 9, 7, 10, 1]
+```
 
 **Dicas:**
 
-1. lista_cria(1) começa com cap 1. Cada vez que enche, a capacidade dobra.
+1. lista_imprime já termina com quebra de linha: em mostra, use printf
+   para o começo da linha e lista_imprime para o fim.
 2. Inserir na posição igual ao tamanho é o mesmo que inserir no fim.
 3. Remover numa posição que não existe devolve false e não mexe em x.
-4. Resposta esperada:
-   A: tam 2, cap 2
-   B: tam 4, cap 4
-   [3, 5, 9, 7]
-   C: x = 5, tam 4, cap 4
-   [3, 9, 7, 10]
-   D: falhou, x continua 5
-   E: tam 5, cap 8
+4. Resposta esperada: a saída acima. A capacidade dobra de 1 para 2, de 2
+   para 4 e de 4 para 8.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E446.c
@@ -420,26 +445,29 @@ trocando:   copia o ÚLTIMO item para o buraco e diminui o tamanho
 
 
 Escreva as duas funções. Cada uma recebe o vetor, o endereço do tamanho e
-a posição, e devolve quantos itens precisou mover. Teste tirando a posição
-2 de duas cópias das senhas 101 a 108:
+a posição, e devolve quantos itens precisou mover (trocando move 1, ou 0
+quando a posição já é a última). Teste tirando a posição 2 de duas cópias
+das senhas 101 a 108. Depois, para sentir a diferença de custo, esvazie
+as duas cópias tirando SEMPRE a posição 0 e mostre o total de movimentos
+de cada uma:
 
 
 ```text
 Saída esperada:
 deslocando: [101, 102, 104, 105, 106, 107, 108]  movimentos: 5
 trocando:   [101, 102, 108, 104, 105, 106, 107]  movimentos: 1
+esvaziando pela frente: deslocando 21, trocando 6
 ```
-
-
-Depois responda: qual das duas você usaria para a fila de senhas do
-posto de saúde? E para os itens de um carrinho de compras?
 
 **Dicas:**
 
 1. Assinatura sugerida: int remove_deslocando(int v[], int *n, int pos).
 2. Ao final, as duas fazem (*n)--.
-3. Resposta esperada: a saída acima. Na fila, a ordem é a regra do jogo:
-   deslocando. No carrinho, a ordem não importa: trocando, que é O(1).
+3. Para esvaziar: while (n > 0) total += remove_xxx(v, &n, 0);
+4. Resposta esperada: a saída acima. Deslocando, tirar da frente custa
+   6 + 5 + 4 + 3 + 2 + 1 + 0 = 21 movimentos (cresce como n²); trocando,
+   um por item, menos o último. Use deslocando quando a ordem importa
+   (fila de senhas) e trocando quando não importa (itens do carrinho).
 
 ```bash
 ~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E448.c
@@ -479,14 +507,25 @@ primeiro: 40
 **Exercício E450** · ★★★
 
 Um vetor que só cresce nunca devolve memória: se um dia guardou um milhão
-de itens e agora guarda três, continua ocupando um milhão. Complete
-vet_tira para que, depois de tirar o último item, o vetor ENCOLHA PELA
-METADE quando o tamanho ficar menor ou igual a 1/4 da capacidade (sem
-nunca descer de capacidade 2).
+de itens e agora guarda três, continua ocupando um milhão. Complete as
+duas funções que tiram o último item e encolhem o vetor pela metade (sem
+nunca descer de capacidade 2), cada uma com uma regra:
 
 
 ```text
-Saída esperada (o main já está pronto):
+vet_tira         encolhe quando o tamanho fica <= 1/4 da capacidade
+vet_tira_metade  encolhe quando o tamanho fica <= 1/2 da capacidade
+```
+
+
+Toda vez que um realloc der certo (crescendo ou encolhendo), some 1 em
+v->reallocs. O main já está pronto: ele esvazia um vetor de 9 itens com
+vet_tira e depois compara as duas regras num vetor com tam 4 e cap 4 que
+alterna "empurra, tira" 10 vezes.
+
+
+```text
+Saída esperada:
 empurrou 9: tam 9, cap 16
 tirou 9: tam 8, cap 16
 tirou 8: tam 7, cap 16
@@ -497,22 +536,21 @@ tirou 4: tam 3, cap 8
 tirou 3: tam 2, cap 4
 tirou 2: tam 1, cap 2
 tirou 1: tam 0, cap 2
+alternando com 1/2: 20 realloc
+alternando com 1/4: 1 realloc
 ```
-
-
-Por fim responda: por que encolher em 1/4 e não assim que chegar na
-metade? Pense num vetor com tam 4 e cap 4 que alterna "empurra, tira,
-empurra, tira..." para sempre.
 
 **Dicas:**
 
-1. Depois de diminuir o tamanho: if (v->cap > 2 && v->tam <= v->cap / 4).
+1. Depois de diminuir o tamanho, em vet_tira:
+   if (v->cap > 2 && v->tam <= v->cap / 4). Em vet_tira_metade, troque
+   o 4 por 2.
 2. Use realloc para a nova capacidade, numa variável temporária. Se ele
    falhar, tudo bem: o vetor só continua grande.
-3. Resposta esperada: a saída acima. Encolhendo na metade, a alternância
-   faria um realloc a CADA operação (empurra cresce para 8, tira volta a
-   tam 4 e encolhe para 4, empurra cresce para 8...), e cada um copia tudo.
-   Com 1/4, depois de encolher sobra folga para os dois lados.
+3. Resposta esperada: a saída acima. Encolhendo na metade, cada "empurra"
+   cresce para 8 e cada "tira" volta a 4: um realloc (que copia tudo) a
+   cada operação. Com 1/4, depois de crescer sobra folga para os dois
+   lados.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E450.c
@@ -647,35 +685,49 @@ de cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
 
 Os arquivos ficam em [`0076-lista-encadeada/`](0076-lista-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A151 · O extrato do Pix, do mais novo para o mais antigo**
+**Exemplo A151 · Andando pelas setas: o terceiro nó e a lista vazia**
 
 ```c
 #include <stdio.h>
 #include "lista.h"
 
 int main(void) {
-    No *extrato = NULL; // lista vazia
-
-    // os Pix chegam nesta ordem: 20, 45, 10, 80
-    extrato = lista_insere_inicio(extrato, 20);
-    extrato = lista_insere_inicio(extrato, 45);
-    extrato = lista_insere_inicio(extrato, 10);
-    extrato = lista_insere_inicio(extrato, 80);
-
-    lista_imprime(extrato); // o último a chegar aparece primeiro
-
-    int total = 0;
-    for (No *p = extrato; p != NULL; p = p->prox) { // percorrer: siga os prox
-        total += p->valor;
+    // temperaturas da semana em Cuiabá, lidas de segunda a domingo
+    int temps[] = {31, 34, 29, 36, 33, 28, 35};
+    No *semana = NULL;
+    for (int i = 0; i < 7; i++) {
+        semana = lista_insere_inicio(semana, temps[i]);
     }
-    printf("%d Pix, total R$ %d\n", lista_tamanho(extrato), total);
+    lista_imprime(semana); // domingo na frente: a ordem saiu invertida
 
-    lista_libera(extrato);
+    // não existe semana[2]: para chegar no 3º nó, siga duas setas
+    No *p = semana;
+    for (int passo = 0; passo < 2 && p != NULL; passo++) {
+        p = p->prox;
+    }
+    if (p != NULL) printf("3º nó: %d (sexta-feira)\n", p->valor);
+
+    // percorrer também serve para procurar o maior
+    int maior = semana->valor;
+    for (No *q = semana->prox; q != NULL; q = q->prox) {
+        if (q->valor > maior) maior = q->valor;
+    }
+    printf("maior: %d\n", maior);
+
+    // a lista vazia não é caso especial: o laço só não roda nenhuma vez
+    No *vazia = NULL;
+    printf("vazia tem %d nós: ", lista_tamanho(vazia));
+    lista_imprime(vazia);
+    lista_libera(vazia); // não faz nada, e não quebra
+
+    lista_libera(semana);
     return 0;
 }
 // Saída:
-// 80 -> 10 -> 45 -> 20 -> NULL
-// 4 Pix, total R$ 155
+// 35 -> 28 -> 33 -> 36 -> 29 -> 34 -> 31 -> NULL
+// 3º nó: 33 (sexta-feira)
+// maior: 36
+// vazia tem 0 nós: NULL
 ```
 
 ```bash
@@ -764,28 +816,32 @@ Saída esperada:
 
 **Exercício E452** · ★☆☆
 
-Sem rodar, preveja as cinco linhas que este programa mostra. Desenhe os
-nós e as setas no papel: é o jeito certo de pensar em lista. Depois
-responda: por que o fim do programa usa free(outra) e não
-lista_libera(outra)?
+O laço do programa abaixo já monta uma lista inserindo 3, 6, 9 e 12 no
+início. Complete o main para mostrar a lista e mais três linhas:
 
-O código está no arquivo, logo abaixo deste enunciado.
+
+```text
+o primeiro valor da lista;
+o terceiro, seguindo duas setas a partir do início (l->prox->prox);
+o último, andando com um ponteiro p até o nó cujo prox é NULL.
+```
+
+
+
+```text
+Saída esperada:
+12 -> 9 -> 6 -> 3 -> NULL
+primeiro: 12
+terceiro: 6
+último: 3
+```
 
 **Dicas:**
 
-1. O laço insere 3, 6, 9 e 12 no início: quem fica na frente?
+1. Desenhe os nós e as setas no papel antes: quem ficou na frente?
 2. l->prox->prox anda dois nós a partir do primeiro.
-3. "outra" ganha um nó novo cujo prox é l->prox: as duas listas passam a
-   COMPARTILHAR a mesma cauda.
-4. Resposta esperada:
-   12
-   6
-   3
-   99 -> 9 -> 6 -> 3 -> NULL
-   12 -> 9 -> 6 -> 3 -> NULL
-   Como a cauda 9 -> 6 -> 3 é das duas, lista_libera(outra) liberaria esses
-   nós, e depois lista_libera(l) daria free neles de novo (free duplo).
-   Por isso só o nó 99 sai com free(outra).
+3. Para o último: No *p = l; while (p->prox != NULL) p = p->prox;
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0076-lista-encadeada/E452.c
@@ -1059,44 +1115,61 @@ um anterior, e o primeiro deixa de ser especial.
 
 Os arquivos ficam em [`0077-lista-busca-remocao/`](0077-lista-busca-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A153 · A fila de espera da barbearia**
+**Exemplo A153 · Buscar por condição e tirar o último**
 
 ```c
 #include <stdio.h>
 #include "lista.h"
 
+// variação da busca: em vez de "igual a", o primeiro nó "acima de" limite
+static No *busca_acima(No *inicio, int limite) {
+    No *p = inicio;
+    while (p != NULL && p->valor <= limite) {
+        p = p->prox;
+    }
+    return p; // o nó, ou NULL se ninguém passou do limite
+}
+
 int main(void) {
-    No *fila = NULL;
-    fila = lista_insere_inicio(fila, 8);
-    fila = lista_insere_inicio(fila, 42);
-    fila = lista_insere_inicio(fila, 17);
-    fila = lista_insere_inicio(fila, 31);
-    lista_imprime(fila);
+    // contas do mês, em reais
+    No *contas = NULL;
+    contas = lista_insere_inicio(contas, 480);
+    contas = lista_insere_inicio(contas, 99);
+    contas = lista_insere_inicio(contas, 135);
+    contas = lista_insere_inicio(contas, 62);
+    lista_imprime(contas);
 
-    // a senha 42 ainda está esperando?
-    No *achou = lista_busca(fila, 42);
-    if (achou != NULL) printf("senha %d: na fila\n", achou->valor);
+    No *cara = busca_acima(contas, 100);
+    if (cara != NULL) printf("primeira acima de R$ 100: %d\n", cara->valor);
+    if (busca_acima(contas, 500) == NULL) printf("nenhuma acima de R$ 500\n");
 
-    // o 42 desistiu: sai do meio
-    lista_remove(&fila, 42);
-    lista_imprime(fila);
+    // tirar o ÚLTIMO: o anterior dele (99) passa a apontar para NULL
+    lista_remove(&contas, 480);
+    lista_imprime(contas);
 
-    // o 31 foi atendido: sai do começo (o início muda)
-    lista_remove(&fila, 31);
-    lista_imprime(fila);
+    // tirar até sobrar um nó e depois o único: o início vira NULL
+    lista_remove(&contas, 135);
+    lista_remove(&contas, 62);
+    lista_imprime(contas);
+    lista_remove(&contas, 99);
+    lista_imprime(contas);
 
-    // o 99 nunca esteve na fila
-    if (!lista_remove(&fila, 99)) printf("senha 99: não está na fila\n");
+    // na lista vazia, buscar e remover só devolvem "não achei"
+    if (lista_busca(contas, 62) == NULL && !lista_remove(&contas, 62)) {
+        printf("lista vazia: nada para buscar nem tirar\n");
+    }
 
-    lista_libera(fila);
+    lista_libera(contas);
     return 0;
 }
 // Saída:
-// 31 -> 17 -> 42 -> 8 -> NULL
-// senha 42: na fila
-// 31 -> 17 -> 8 -> NULL
-// 17 -> 8 -> NULL
-// senha 99: não está na fila
+// 62 -> 135 -> 99 -> 480 -> NULL
+// primeira acima de R$ 100: 135
+// nenhuma acima de R$ 500
+// 62 -> 135 -> 99 -> NULL
+// 99 -> NULL
+// NULL
+// lista vazia: nada para buscar nem tirar
 ```
 
 ```bash
@@ -1201,24 +1274,46 @@ senha 50 não está na fila
 
 **Exercício E458** · ★☆☆
 
-Sem rodar, preveja tudo o que este programa mostra. A lista tem valores
-repetidos, e é aí que mora a graça. Depois rode e confira.
+A lotérica anotou os valores dos boletos pagos numa lista com valores
+repetidos: monte-a inserindo no início 5, 9, 5, 2 e 5. Escreva a função
 
-O código está no arquivo, logo abaixo deste enunciado.
+
+```text
+int conta(const No *inicio, int valor)
+```
+
+
+que devolve quantas vezes o valor aparece. Depois, no main:
+
+
+```text
+mostre a lista e quantos 5 ela tem;
+o 9 foi digitado errado: troque por 4 usando o nó que lista_busca
+devolve, e mostre a lista;
+tire TODOS os 5 chamando lista_remove num laço, conte quantas remoções
+deram certo e mostre a lista e o tamanho.
+```
+
+
+
+```text
+Saída esperada:
+5 -> 2 -> 5 -> 9 -> 5 -> NULL
+quantos 5: 3
+5 -> 2 -> 5 -> 4 -> 5 -> NULL
+removidos: 3
+2 -> 4 -> NULL
+tamanho: 2
+```
 
 **Dicas:**
 
-1. A lista começa como 5 -> 2 -> 5 -> 9 -> 5.
-2. lista_remove tira só o PRIMEIRO nó que tem o valor.
-3. lista_busca devolve o endereço do nó: mudar p->valor muda a lista.
-4. Resposta esperada:
-   1
-   2 -> 5 -> 9 -> 5 -> NULL
-   0
-   2 -> 5 -> 4 -> 5 -> NULL
-   1
-   2 -> 4 -> NULL
-   2
+1. conta é o "for de lista" com um if e um contador.
+2. lista_busca devolve o endereço do nó: mudar p->valor muda a lista.
+   Confira se não voltou NULL antes de mexer.
+3. lista_remove tira só o PRIMEIRO nó com o valor e devolve true se
+   tirou: while (lista_remove(&l, 5)) removidos++;
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E458.c
@@ -1494,41 +1589,61 @@ alfabética (exemplo A156).
 
 Os arquivos ficam em [`0078-lista-ordenada/`](0078-lista-ordenada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A155 · A agenda da clínica sempre em ordem de horário**
+**Exemplo A155 · Tabela do campeonato: maior primeiro**
 
 ```c
 #include <stdio.h>
+#include <stdlib.h>
 #include "lista.h"
 
-// cada horário é um int hhmm: 1430 quer dizer 14:30
-static void mostra_agenda(const No *inicio) {
-    for (const No *p = inicio; p != NULL; p = p->prox) {
-        printf("%02d:%02d -> ", p->valor / 100, p->valor % 100);
+// mesma inserção ordenada, com o critério virado: anda enquanto os de lá
+// têm MAIS pontos. Em caso de empate, quem chega fica atrás (>=)
+static No *insere_decrescente(No *inicio, int pontos) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) exit(1);
+    novo->valor = pontos;
+    No *ant = NULL;
+    No *p = inicio;
+    while (p != NULL && p->valor >= pontos) {
+        ant = p;
+        p = p->prox;
     }
-    printf("fim do dia\n");
+    novo->prox = p;
+    if (ant == NULL) return novo;
+    ant->prox = novo;
+    return inicio;
 }
 
 int main(void) {
-    No *agenda = NULL;
-    int marcacoes[] = {1430, 900, 1600, 1015}; // na ordem em que ligaram
+    No *tabela = NULL;
+    tabela = insere_decrescente(tabela, 40); // lista vazia
+    tabela = insere_decrescente(tabela, 52); // maior de todos: vira o início
+    tabela = insere_decrescente(tabela, 31); // menor de todos: vai para o fim
+    tabela = insere_decrescente(tabela, 45); // cai no meio
+    lista_imprime(tabela);
 
-    for (int i = 0; i < 4; i++) {
-        agenda = lista_insere_ordenado(agenda, marcacoes[i]);
-        mostra_agenda(agenda);
+    tabela = insere_decrescente(tabela, 40); // empate: entra DEPOIS do outro 40
+    lista_imprime(tabela);
+
+    // líder e lanterna saem de graça das pontas
+    No *ultimo = tabela;
+    while (ultimo->prox != NULL) ultimo = ultimo->prox;
+    printf("líder: %d pontos, lanterna: %d pontos\n", tabela->valor, ultimo->valor);
+
+    // as funções do lista.h supõem ordem CRESCENTE: não use a busca
+    // ordenada aqui, ela desistiria logo no 52
+    if (lista_busca_ordenada(tabela, 45) == NULL) {
+        printf("busca crescente numa lista decrescente: não achou o 45\n");
     }
 
-    // 11:00 está livre? A busca para no 14:30, sem olhar o resto
-    if (lista_busca_ordenada(agenda, 1100) == NULL) printf("11:00 livre\n");
-
-    lista_libera(agenda);
+    lista_libera(tabela);
     return 0;
 }
 // Saída:
-// 14:30 -> fim do dia
-// 09:00 -> 14:30 -> fim do dia
-// 09:00 -> 14:30 -> 16:00 -> fim do dia
-// 09:00 -> 10:15 -> 14:30 -> 16:00 -> fim do dia
-// 11:00 livre
+// 52 -> 45 -> 40 -> 31 -> NULL
+// 52 -> 45 -> 40 -> 40 -> 31 -> NULL
+// líder: 52 pontos, lanterna: 31 pontos
+// busca crescente numa lista decrescente: não achou o 45
 ```
 
 ```bash
@@ -1620,28 +1735,39 @@ menor: 1, maior: 10
 
 **Exercício E464** · ★☆☆
 
-Teste de mesa. O programa insere 25, 10, 40, 10 e 30 numa lista vazia com
-lista_insere_ordenado. Para cada inserção, diga onde ant e p estão quando
-o laço "while (p != NULL && p->valor < valor)" para, e como fica a lista.
-Depois rode e confira as listas.
+Teste de mesa feito pelo próprio programa. A função insere_rastreando
+abaixo é a inserção ordenada do texto. Acrescente, logo depois do while,
+uma linha que mostre o valor inserido e onde ant e p pararam (use a
+função mostra_no, que já está pronta e escreve NULL quando o ponteiro é
+NULL). O main insere 25, 10, 40, 10 e 30 e mostra a lista a cada passo.
 
-Por fim: se a condição fosse "p->valor <= valor", onde entraria o segundo
-10?
 
-O código está no arquivo, logo abaixo deste enunciado.
+```text
+Saída esperada:
+25: ant NULL, p NULL
+25 -> NULL
+10: ant NULL, p 25
+10 -> 25 -> NULL
+40: ant 25, p NULL
+10 -> 25 -> 40 -> NULL
+10: ant NULL, p 10
+10 -> 10 -> 25 -> 40 -> NULL
+30: ant 25, p 40
+10 -> 10 -> 25 -> 30 -> 40 -> NULL
+```
+
+
+Por fim, troque "p->valor < valor" por "p->valor <= valor" e rode de novo:
+a linha do segundo 10 tem que virar "10: ant 10, p 25" (o novo 10 entra
+DEPOIS do primeiro, não antes). Deixe a versão com < no arquivo final.
 
 **Dicas:**
 
-1. ant == NULL quer dizer "o novo vira o início"; p == NULL quer dizer
+1. printf("%d: ", valor); mostra_no("ant", ant); printf(", ");
+   mostra_no("p", p); printf("\n");
+2. ant == NULL quer dizer "o novo vira o início"; p == NULL quer dizer
    "o novo vai para o fim".
-2. No segundo 10, compare 10 < 10.
-3. Resposta esperada:
-   25: ant NULL, p NULL (lista vazia)  -> 25
-   10: ant NULL, p no 25               -> 10 25
-   40: ant no 25, p NULL               -> 10 25 40
-   10: ant NULL, p no primeiro 10      -> 10 10 25 40 (o novo entra ANTES)
-   30: ant no 25, p no 40              -> 10 10 25 30 40
-   Com <=, o segundo 10 entraria DEPOIS do primeiro (ant no 10, p no 25).
+3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0078-lista-ordenada/E464.c
@@ -1749,29 +1875,32 @@ Saída esperada depois do conserto:
 **Exercício E468** · ★★★
 
 Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4.
-Escreva No *ordena(No *inicio), que deixa a lista em ordem crescente pelo
-método da inserção, SÓ RELIGANDO os nós: nada de malloc, nada de free,
-nada de trocar valores entre nós.
+Escreva No *ordena(No *inicio, int *passos), que deixa a lista em ordem
+crescente pelo método da inserção, SÓ RELIGANDO os nós: nada de malloc,
+nada de free, nada de trocar valores entre nós. Para medir o custo, some
+1 em *passos cada vez que o laço de encaixe anda um nó. O main já testa a
+lista dos pedidos e o pior caso, uma lista que já chega crescente.
 
 
 ```text
 Saída esperada:
 antes:  3 -> 7 -> 1 -> 9 -> 4 -> NULL
-depois: 1 -> 3 -> 4 -> 7 -> 9 -> NULL
+depois: 1 -> 3 -> 4 -> 7 -> 9 -> NULL  (6 passos)
+antes:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
+depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
 ```
-
-
-Depois responda: quanto custa ordenar n nós assim, no pior caso?
 
 **Dicas:**
 
 1. Comece uma lista "ordenada" vazia (NULL). Enquanto a original tiver nós,
    DESENGATE o primeiro dela (guarde o resto antes!).
 2. Encaixe o nó desengatado na ordenada com o mesmo laço ant/p da
-   inserção ordenada, só que sem malloc: o nó já existe.
-3. Resposta esperada: a saída acima. Cada encaixe percorre até a lista
-   ordenada inteira: 0 + 1 + ... + (n-1), O(n²) no pior caso. A vantagem
-   sobre o vetor é que encaixar não desloca ninguém.
+   inserção ordenada, só que sem malloc: o nó já existe. O (*passos)++ vai
+   dentro desse laço.
+3. Resposta esperada: a saída acima. Na lista crescente, cada nó novo é o
+   maior e o encaixe percorre a ordenada inteira: 0 + 1 + 2 + 3 + 4 = 10,
+   O(n²) no pior caso. A vantagem sobre o vetor é que encaixar não
+   desloca ninguém.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0078-lista-ordenada/E468.c
@@ -1912,43 +2041,58 @@ fazer um controle remoto com "canal seguinte" e "canal anterior".
 
 Os arquivos ficam em [`0079-lista-dupla/`](0079-lista-dupla/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A157 · O trem de minério: desengatar um vagão do meio**
+**Exemplo A157 · Mexendo nas duas pontas: a fila do pronto-socorro**
 
 ```c
 #include <stdio.h>
 #include "lista.h"
 
+static void mostra(const Lista *l) {
+    printf("(%d) ", l->tamanho);
+    lista_imprime(l);
+}
+
 int main(void) {
-    Lista trem;
-    lista_inicia(&trem);
-    int cargas[] = {98, 105, 87, 110}; // toneladas, da locomotiva para o fim
-    for (int i = 0; i < 4; i++) lista_insere_fim(&trem, cargas[i]);
+    Lista fila;
+    lista_inicia(&fila);
 
-    printf("da locomotiva: ");
-    lista_imprime(&trem);
-    printf("do fim:        ");
-    lista_imprime_reverso(&trem);
+    // fichas de atendimento: normais entram atrás, urgente entra na frente
+    lista_insere_fim(&fila, 31);
+    lista_insere_fim(&fila, 32);
+    lista_insere_fim(&fila, 33);
+    lista_insere_inicio(&fila, 90); // caso urgente: passa na frente
+    mostra(&fila);
 
-    No *vagao = lista_busca(&trem, 87);
-    if (vagao != NULL) {
-        lista_remove_no(&trem, vagao); // sem procurar o anterior: p->ant
-        printf("desengatou o vagão de 87 t (%d vagões)\n", trem.tamanho);
-    }
+    // atender o primeiro: remover o início é O(1)
+    printf("atende %d\n", fila.inicio->valor);
+    lista_remove_no(&fila, fila.inicio);
 
-    printf("da locomotiva: ");
-    lista_imprime(&trem);
-    printf("do fim:        ");
-    lista_imprime_reverso(&trem);
+    // o último desistiu: com o ponteiro fim, tirar o último também é O(1)
+    printf("desistiu %d\n", fila.fim->valor);
+    lista_remove_no(&fila, fila.fim);
+    mostra(&fila);
 
-    lista_libera(&trem);
+    // esvaziando pela frente: no fim, as DUAS pontas voltam a NULL
+    while (fila.inicio != NULL) lista_remove_no(&fila, fila.inicio);
+    printf("vazia: inicio %s, fim %s, tamanho %d\n",
+           fila.inicio == NULL ? "NULL" : "?",
+           fila.fim == NULL ? "NULL" : "?", fila.tamanho);
+
+    // e a lista vazia continua pronta para uso
+    lista_insere_inicio(&fila, 34);
+    printf("um só: início e fim são o mesmo nó? %s\n",
+           fila.inicio == fila.fim ? "sim" : "não");
+
+    lista_libera(&fila);
     return 0;
 }
 // Saída:
-// da locomotiva: 98 <-> 105 <-> 87 <-> 110
-// do fim:        110 <-> 87 <-> 105 <-> 98
-// desengatou o vagão de 87 t (3 vagões)
-// da locomotiva: 98 <-> 105 <-> 110
-// do fim:        110 <-> 105 <-> 98
+// (4) 90 <-> 31 <-> 32 <-> 33
+// atende 90
+// desistiu 33
+// (2) 31 <-> 32
+// vazia: inicio NULL, fim NULL, tamanho 0
+// um só: início e fim são o mesmo nó? sim
 ```
 
 ```bash
@@ -2031,24 +2175,35 @@ Saída esperada:
 
 **Exercício E470** · ★☆☆
 
-Sem rodar, preveja as sete linhas que este programa mostra. Desenhe os nós
-com as duas setas de cada um. Depois rode e confira.
+Na lista dupla, quem acha um nó acha também os dois vizinhos dele, sem
+percorrer de novo. O main abaixo já monta a lista misturando inserções no
+início e no fim. Escreva a função
 
-O código está no arquivo, logo abaixo deste enunciado.
+
+```text
+void mostra_vizinhos(const Lista *l, int valor)
+```
+
+
+que busca o valor com lista_busca e mostra quem vem antes e quem vem
+depois dele ("nenhum" nas pontas), ou avisa que ele não está na lista.
+
+
+```text
+Saída esperada:
+4 <-> 2 <-> 1 <-> 3
+4: antes nenhum, depois 2
+1: antes 2, depois 3
+3: antes 1, depois nenhum
+9: não está na lista
+```
 
 **Dicas:**
 
-1. Depois das quatro inserções, a lista é 4 2 1 3.
-2. l.fim->ant->ant anda duas casas para trás a partir do último.
-3. Tirar l.inicio e l.fim usa os dois casos de borda da remoção.
-4. Resposta esperada:
-   4 <-> 2 <-> 1 <-> 3
-   3 <-> 1 <-> 2 <-> 4
-   2 2
-   2 3
-   2: 2 <-> 1
-   1 <-> 2
-   1
+1. Desenhe os nós com as duas setas antes: a ordem saiu 4 2 1 3.
+2. Achado o nó p, o vizinho de trás é p->ant e o da frente é p->prox.
+   Teste cada um contra NULL antes de ler o valor.
+3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0079-lista-dupla/E470.c
@@ -2196,7 +2351,7 @@ struct letra { char c; struct letra *ant, *prox; }).
 2. Inserir: o novo entra depois do cursor (as quatro setas do E472) e o
    cursor passa para o novo. Apagar: se o cursor não é a cabeça, tire o nó
    do cursor e volte o cursor para o ant dele.
-3. Faça um teste de mesa: depois de "progamr#" o texto é "progam|";
+3. Para conferir no caminho: depois de "progamr#" o texto é "progam|";
    "<<" deixa "prog|am"; o "r" faz "progr|am"; ">>" e "a" terminam.
 4. Resposta esperada: texto: programa|
 
@@ -2323,39 +2478,56 @@ quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
 Os arquivos ficam em [`0080-lista-circular/`](0080-lista-circular/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A159 · O rodízio de pizza: depois da última mesa, volta à primeira**
+**Exemplo A159 · A playlist no repetir: um nó só, as duas pontas e o meio**
 
 ```c
 #include <stdio.h>
 #include "lista.h"
 
 int main(void) {
-    No *salao = NULL; // ponteiro para a ÚLTIMA mesa
-    int mesas[] = {3, 7, 12, 15};
-    for (int i = 0; i < 4; i++) salao = lista_insere_fim(salao, mesas[i]);
-    lista_imprime(salao);
+    No *playlist = NULL; // ponteiro para a ÚLTIMA faixa
+    lista_imprime(playlist);
 
-    // o garçom sai da primeira mesa e serve 6 vezes, sem nunca achar um fim
-    printf("serve:");
-    No *garcom = salao->prox;
-    for (int i = 0; i < 6; i++) {
-        printf(" %d", garcom->valor);
-        garcom = garcom->prox;
-    }
+    // uma faixa só: ela é a primeira e a última, e aponta para si mesma
+    playlist = lista_insere_fim(playlist, 4);
+    lista_imprime(playlist);
+    printf("aponta para si mesma? %s\n", playlist->prox == playlist ? "sim" : "não");
+
+    // com o ponteiro no último, as duas pontas custam O(1)
+    playlist = lista_insere_fim(playlist, 9);
+    playlist = lista_insere_fim(playlist, 2);
+    playlist = lista_insere_inicio(playlist, 7); // entra antes da primeira
+    lista_imprime(playlist);
+    printf("primeira: %d, última: %d\n", playlist->prox->valor, playlist->valor);
+
+    // dá para dar uma volta completa a partir de QUALQUER faixa
+    No *comeco = playlist->prox;
+    while (comeco->valor != 9) comeco = comeco->prox;
+    printf("tocando a partir da 9:");
+    No *p = comeco;
+    do {
+        printf(" %d", p->valor);
+        p = p->prox;
+    } while (p != comeco);
     printf("\n");
 
-    lista_remove(&salao, 12);
-    printf("a mesa 12 pagou e foi embora\n");
-    lista_imprime(salao);
+    // tirar a última: o ponteiro da lista recua para a penúltima
+    lista_remove(&playlist, 2);
+    lista_imprime(playlist);
+    printf("%d faixas\n", lista_tamanho(playlist));
 
-    lista_libera(salao);
+    lista_libera(playlist);
     return 0;
 }
 // Saída:
-// 3 -> 7 -> 12 -> 15 -> (volta ao 3)
-// serve: 3 7 12 15 3 7
-// a mesa 12 pagou e foi embora
-// 3 -> 7 -> 15 -> (volta ao 3)
+// (vazia)
+// 4 -> (volta ao 4)
+// aponta para si mesma? sim
+// 7 -> 4 -> 9 -> 2 -> (volta ao 7)
+// primeira: 7, última: 2
+// tocando a partir da 9: 9 2 7 4
+// 7 -> 4 -> 9 -> (volta ao 7)
+// 3 faixas
 ```
 
 ```bash
@@ -2438,24 +2610,37 @@ conferindo com %: pessoa 3
 
 **Exercício E476** · ★☆☆
 
-Sem rodar, preveja as seis linhas deste programa. Lembre: a lista é
-guardada pelo ponteiro para o ÚLTIMO nó. Depois rode e confira.
+Girar uma roda circular não mexe em nenhuma seta: basta mudar QUEM é o
+último. Escreva a função
 
-O código está no arquivo, logo abaixo deste enunciado.
+
+```text
+No *gira(No *ultimo, int k)
+```
+
+
+que anda k nós com o ponteiro do último e devolve o novo último (assim o
+primeiro passa a ser o que estava k casas à frente). O main já monta a
+roda. Complete o main para: mostrar a roda e o primeiro e o último; girar
+2 casas e mostrar; tirar o 10 e mostrar; e mostrar quantos nós sobraram.
+
+
+```text
+Saída esperada:
+5 -> 10 -> 20 -> 30 -> (volta ao 5)
+primeiro 5, último 30
+girou 2: 20 -> 30 -> 5 -> 10 -> (volta ao 20)
+sem o 10: 20 -> 30 -> 5 -> (volta ao 20)
+3 nós
+```
 
 **Dicas:**
 
-1. Depois das quatro inserções: 5 10 20 30, com u no 30.
-2. O for anda 6 vezes a partir do 10: ele passa do fim e continua.
-3. "u = u->prox->prox" não muda nenhuma seta: só muda QUEM é o último.
-   É girar a roda em O(1).
-4. Resposta esperada:
-   5 -> 10 -> 20 -> 30 -> (volta ao 5)
-   30 5
-   10 20 30 5 10 20
-   20 -> 30 -> 5 -> 10 -> (volta ao 20)
-   20 -> 30 -> 5 -> (volta ao 20)
-   3
+1. A lista é guardada pelo ponteiro para o ÚLTIMO: o primeiro é u->prox.
+2. gira é um for de k voltas com ultimo = ultimo->prox. Na lista vazia
+   (NULL), devolva NULL sem andar.
+3. Depois de girar, guarde o resultado: u = gira(u, 2);
+4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0080-lista-circular/E476.c
@@ -2582,8 +2767,7 @@ Escreva tudo neste arquivo, com uma struct sua.
 A escala de plantão do hospital é circular: depois do último enfermeiro,
 volta o primeiro. As duas funções deste programa têm erros de propósito.
 Rode, compare com a saída esperada e leia o relatório do AddressSanitizer.
-Conserte as duas funções e responda: por que um laço "while (p != NULL)"
-nunca termina sozinho numa lista circular?
+Conserte as duas funções e rode de novo até a saída bater.
 
 
 ```text
@@ -2600,9 +2784,9 @@ escala: 101 102 103 104
 2. O ASan acusa "heap-use-after-free" em libera_escala: depois de liberar
    o último, o "seguinte" dele é o primeiro, que já foi liberado. Nenhum
    prox é NULL! Corte o círculo antes (ultimo->prox = NULL).
-3. Resposta esperada: a saída acima. Na circular, todo nó tem um próximo
-   de verdade: p nunca vira NULL, e o laço daria voltas para sempre (ou,
-   como aqui, andaria por memória já liberada).
+3. Resposta esperada: a saída acima, sem relatório do ASan. Na circular,
+   todo nó tem um próximo de verdade: um laço "while (p != NULL)" nunca
+   para sozinho (ou, como aqui, anda por memória já liberada).
 
 ```bash
 ~/LPEDC/rodar 11-listas/0080-lista-circular/E480.c
@@ -2747,50 +2931,54 @@ contar as músicas longas.
 
 Os arquivos ficam em [`0081-juntando-tudo/`](0081-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A161 · A playlist da viagem**
+**Exemplo A161 · A trilha do trajeto até o trabalho**
 
 ```c
 #include <stdio.h>
 #include "playlist.h"
 
 int main(void) {
-    Playlist *viagem = playlist_cria();
-    if (viagem == NULL) return 1;
-    playlist_adiciona(viagem, "Aquarela", "Toquinho", 252);
-    playlist_adiciona(viagem, "Asa Branca", "Luiz Gonzaga", 186);
-    playlist_adiciona(viagem, "Mas Que Nada", "Jorge Ben", 182);
-    playlist_adiciona(viagem, "Evidências", "Chitãozinho e Xororó", 279);
-    playlist_adiciona(viagem, "Tempo Perdido", "Legião Urbana", 302);
+    // uma playlist vazia não toca nada, e não quebra
+    Playlist *trajeto = playlist_cria();
+    if (trajeto == NULL) return 1;
+    if (playlist_atual(trajeto) == NULL && playlist_proxima(trajeto) == NULL) {
+        printf("playlist vazia: nada tocando\n");
+    }
 
-    int total = playlist_duracao(viagem);
-    printf("%d músicas, %d:%02d no total\n", playlist_tamanho(viagem), total / 60, total % 60);
+    playlist_adiciona(trajeto, "Trem das Onze", "Adoniran Barbosa", 190);
+    playlist_adiciona(trajeto, "Detalhes", "Roberto Carlos", 268);
+    playlist_adiciona(trajeto, "O Bêbado e a Equilibrista", "Elis Regina", 228);
+    playlist_adiciona(trajeto, "Sina", "Djavan", 233);
+    playlist_repetir(trajeto, true); // o ônibus demora mais que a playlist
 
-    playlist_proxima(viagem);
-    playlist_proxima(viagem);   // pulou duas: agora toca a 3ª
-    playlist_imprime(viagem);
+    // 20 minutos de ônibus: toca música atrás de música até chegar
+    int trajeto_s = 20 * 60;
+    int relogio = 0; // em segundos, desde que entrou no ônibus
+    const Musica *m = playlist_atual(trajeto);
+    while (relogio + m->segundos <= trajeto_s) {
+        printf("%2d:%02d %s\n", relogio / 60, relogio % 60, m->titulo);
+        relogio += m->segundos;
+        m = playlist_proxima(trajeto); // com repetir, nunca é NULL
+    }
+    int ouviu = trajeto_s - relogio;
+    printf("%2d:%02d %s (chegou no ponto depois de %d s)\n",
+           relogio / 60, relogio % 60, m->titulo, ouviu);
 
-    playlist_remove(viagem, "Asa Branca");
-    playlist_proxima(viagem);
-    playlist_proxima(viagem);   // chegou na última
-    if (playlist_proxima(viagem) == NULL) printf("fim da playlist\n");
+    // amanhã continua de onde parou: a playlist lembra a música atual
+    printf("amanhã começa em: %s\n", playlist_atual(trajeto)->titulo);
 
-    playlist_repetir(viagem, true);
-    printf("repetir ligado, próxima: %s\n", playlist_proxima(viagem)->titulo);
-    printf("anterior: %s\n", playlist_anterior(viagem)->titulo);
-
-    playlist_libera(viagem);
+    playlist_libera(trajeto);
     return 0;
 }
 // Saída:
-// 5 músicas, 20:01 no total
-//   1. Aquarela - Toquinho (4:12)
-//   2. Asa Branca - Luiz Gonzaga (3:06)
-// > 3. Mas Que Nada - Jorge Ben (3:02)
-//   4. Evidências - Chitãozinho e Xororó (4:39)
-//   5. Tempo Perdido - Legião Urbana (5:02)
-// fim da playlist
-// repetir ligado, próxima: Aquarela
-// anterior: Tempo Perdido
+// playlist vazia: nada tocando
+//  0:00 Trem das Onze
+//  3:10 Detalhes
+//  7:38 O Bêbado e a Equilibrista
+// 11:26 Sina
+// 15:19 Trem das Onze
+// 18:29 Detalhes (chegou no ponto depois de 91 s)
+// amanhã começa em: Detalhes
 ```
 
 ```bash
@@ -2898,29 +3086,58 @@ tocando agora: País Tropical - Jorge Ben
 
 **Exercício E482** · ★☆☆
 
-Sem rodar, preveja as nove linhas deste programa. Releia em playlist.h o
-que acontece nas pontas e quando a música removida é a que está tocando.
-Depois rode e confira.
+Hora de testar as pontas da playlist. Escreva a função
 
-O código está no arquivo, logo abaixo deste enunciado.
+
+```text
+void mostra(const Musica *m)
+```
+
+
+que imprime o título da música, ou "(nada)" quando m é NULL. Depois crie
+uma playlist com Um (Banda A, 100 s), Dois (Banda B, 200 s) e Tres
+(Banda C, 300 s) e faça, nesta ordem, chamando mostra com o que cada
+passo marcado com * devolve:
+
+
+```text
+* a música atual
+* volta uma (anterior)
+  avança uma
+* avança uma
+* avança uma
+  liga o repetir
+* avança uma
+* volta uma
+  remove "Tres"
+* a música atual
+  remove "Um" e mostra quantas músicas e quantos segundos sobraram
+* avança uma
+```
+
+
+
+```text
+Saída esperada:
+Um
+(nada)
+Tres
+(nada)
+Um
+Tres
+Dois
+1 música, 200 s
+Dois
+```
 
 **Dicas:**
 
 1. Com repetir desligado, andar além da ponta devolve NULL e não sai do
-   lugar.
+   lugar; ligado, dá a volta.
 2. Removendo a música que toca, passa a tocar a seguinte; se ela era a
-   última, a anterior.
-3. Com uma música só e repetir ligado, a próxima da última é... ela mesma.
-4. Resposta esperada:
-   Um
-   (nada)
-   Tres
-   (nada)
-   Um
-   Tres
-   Dois
-   1 música, 200 s
-   Dois
+   última, a anterior. Com uma música só e repetir ligado, a próxima é
+   ela mesma.
+3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0081-juntando-tudo/E482.c

@@ -25,7 +25,7 @@
 // 2. Inserir: o novo entra depois do cursor (as quatro setas do E472) e o
 //    cursor passa para o novo. Apagar: se o cursor não é a cabeça, tire o nó
 //    do cursor e volte o cursor para o ant dele.
-// 3. Faça um teste de mesa: depois de "progamr#" o texto é "progam|";
+// 3. Para conferir no caminho: depois de "progamr#" o texto é "progam|";
 //    "<<" deixa "prog|am"; o "r" faz "progr|am"; ">>" e "a" terminam.
 // 4. Resposta esperada: texto: programa|
 //

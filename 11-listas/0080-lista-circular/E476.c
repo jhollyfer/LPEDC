@@ -1,25 +1,31 @@
 // 0080 · Lista circular
 // Exercício E476 · ★☆☆
 //
-// Sem rodar, preveja as seis linhas deste programa. Lembre: a lista é
-// guardada pelo ponteiro para o ÚLTIMO nó. Depois rode e confira.
+// Girar uma roda circular não mexe em nenhuma seta: basta mudar QUEM é o
+// último. Escreva a função
 //
-// O código está no arquivo, logo abaixo deste enunciado.
+//   No *gira(No *ultimo, int k)
+//
+// que anda k nós com o ponteiro do último e devolve o novo último (assim o
+// primeiro passa a ser o que estava k casas à frente). O main já monta a
+// roda. Complete o main para: mostrar a roda e o primeiro e o último; girar
+// 2 casas e mostrar; tirar o 10 e mostrar; e mostrar quantos nós sobraram.
+//
+//   Saída esperada:
+//   5 -> 10 -> 20 -> 30 -> (volta ao 5)
+//   primeiro 5, último 30
+//   girou 2: 20 -> 30 -> 5 -> 10 -> (volta ao 20)
+//   sem o 10: 20 -> 30 -> 5 -> (volta ao 20)
+//   3 nós
 //
 // Dicas:
-// 1. Depois das quatro inserções: 5 10 20 30, com u no 30.
-// 2. O for anda 6 vezes a partir do 10: ele passa do fim e continua.
-// 3. "u = u->prox->prox" não muda nenhuma seta: só muda QUEM é o último.
-//    É girar a roda em O(1).
-// 4. Resposta esperada:
-//    5 -> 10 -> 20 -> 30 -> (volta ao 5)
-//    30 5
-//    10 20 30 5 10 20
-//    20 -> 30 -> 5 -> 10 -> (volta ao 20)
-//    20 -> 30 -> 5 -> (volta ao 20)
-//    3
+// 1. A lista é guardada pelo ponteiro para o ÚLTIMO: o primeiro é u->prox.
+// 2. gira é um for de k voltas com ultimo = ultimo->prox. Na lista vazia
+//    (NULL), devolva NULL sem andar.
+// 3. Depois de girar, guarde o resultado: u = gira(u, 2);
+// 4. Resposta esperada: a saída acima.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "lista.h"
@@ -30,21 +36,8 @@ int main(void) {
     u = lista_insere_fim(u, 20);
     u = lista_insere_inicio(u, 5);
     u = lista_insere_fim(u, 30);
-    lista_imprime(u);
-    printf("%d %d\n", u->valor, u->prox->valor);
 
-    const No *p = u->prox->prox;
-    for (int i = 0; i < 6; i++) {
-        printf(i == 0 ? "%d" : " %d", p->valor);
-        p = p->prox;
-    }
-    printf("\n");
-
-    u = u->prox->prox;
-    lista_imprime(u);
-    lista_remove(&u, 10);
-    lista_imprime(u);
-    printf("%d\n", lista_tamanho(u));
+    // escreva aqui, antes de liberar
 
     lista_libera(u);
     return 0;

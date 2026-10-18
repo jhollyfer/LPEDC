@@ -1,25 +1,29 @@
 // 0079 · Lista dupla
 // Exercício E470 · ★☆☆
 //
-// Sem rodar, preveja as sete linhas que este programa mostra. Desenhe os nós
-// com as duas setas de cada um. Depois rode e confira.
+// Na lista dupla, quem acha um nó acha também os dois vizinhos dele, sem
+// percorrer de novo. O main abaixo já monta a lista misturando inserções no
+// início e no fim. Escreva a função
 //
-// O código está no arquivo, logo abaixo deste enunciado.
+//   void mostra_vizinhos(const Lista *l, int valor)
+//
+// que busca o valor com lista_busca e mostra quem vem antes e quem vem
+// depois dele ("nenhum" nas pontas), ou avisa que ele não está na lista.
+//
+//   Saída esperada:
+//   4 <-> 2 <-> 1 <-> 3
+//   4: antes nenhum, depois 2
+//   1: antes 2, depois 3
+//   3: antes 1, depois nenhum
+//   9: não está na lista
 //
 // Dicas:
-// 1. Depois das quatro inserções, a lista é 4 2 1 3.
-// 2. l.fim->ant->ant anda duas casas para trás a partir do último.
-// 3. Tirar l.inicio e l.fim usa os dois casos de borda da remoção.
-// 4. Resposta esperada:
-//    4 <-> 2 <-> 1 <-> 3
-//    3 <-> 1 <-> 2 <-> 4
-//    2 2
-//    2 3
-//    2: 2 <-> 1
-//    1 <-> 2
-//    1
+// 1. Desenhe os nós com as duas setas antes: a ordem saiu 4 2 1 3.
+// 2. Achado o nó p, o vizinho de trás é p->ant e o da frente é p->prox.
+//    Teste cada um contra NULL antes de ler o valor.
+// 3. Resposta esperada: a saída acima.
 //
-// Escreva sua resposta abaixo (como comentário):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "lista.h"
@@ -32,18 +36,8 @@ int main(void) {
     lista_insere_fim(&l, 3);
     lista_insere_inicio(&l, 4);
     lista_imprime(&l);
-    lista_imprime_reverso(&l);
 
-    printf("%d %d\n", l.inicio->prox->valor, l.fim->ant->ant->valor);
-    No *p = lista_busca(&l, 1);
-    printf("%d %d\n", p->ant->valor, p->prox->valor);
-
-    lista_remove_no(&l, l.inicio);
-    lista_remove_no(&l, l.fim);
-    printf("%d: ", l.tamanho);
-    lista_imprime(&l);
-    lista_imprime_reverso(&l);
-    printf("%d\n", l.inicio->ant == NULL && l.fim->prox == NULL);
+    // chame mostra_vizinhos para 4, 1, 3 e 9
 
     lista_libera(&l);
     return 0;

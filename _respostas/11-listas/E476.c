@@ -1,13 +1,5 @@
 // 0080 · Lista circular
 // Exercício E476 · ★☆☆
-//
-// Resposta:
-//   5 -> 10 -> 20 -> 30 -> (volta ao 5)   o 5 entrou na frente; u está no 30
-//   30 5                                  o último e o primeiro (u->prox)
-//   10 20 30 5 10 20                      depois do 30 vem o 5 de novo
-//   20 -> 30 -> 5 -> 10 -> (volta ao 20)  u andou dois: agora o último é o 10
-//   20 -> 30 -> 5 -> (volta ao 20)        tirou o último; o 5 assume
-//   3
 
 #include <stdio.h>
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
@@ -133,27 +125,32 @@ void lista_libera(No *ultimo) {
 }
 // ---- fim de lista.h e lista.c ----
 
+No *gira(No *ultimo, int k) {
+    if (ultimo == NULL) return NULL;
+    for (int i = 0; i < k; i++) {
+        ultimo = ultimo->prox; // nenhuma seta muda: só quem é o último
+    }
+    return ultimo;
+}
+
 int main(void) {
     No *u = NULL;
     u = lista_insere_fim(u, 10);
     u = lista_insere_fim(u, 20);
     u = lista_insere_inicio(u, 5);
     u = lista_insere_fim(u, 30);
-    lista_imprime(u);
-    printf("%d %d\n", u->valor, u->prox->valor);
 
-    const No *p = u->prox->prox;
-    for (int i = 0; i < 6; i++) {
-        printf(i == 0 ? "%d" : " %d", p->valor);
-        p = p->prox;
-    }
-    printf("\n");
-
-    u = u->prox->prox;
     lista_imprime(u);
+    printf("primeiro %d, último %d\n", u->prox->valor, u->valor);
+
+    u = gira(u, 2);
+    printf("girou 2: ");
+    lista_imprime(u);
+
     lista_remove(&u, 10);
+    printf("sem o 10: ");
     lista_imprime(u);
-    printf("%d\n", lista_tamanho(u));
+    printf("%d nós\n", lista_tamanho(u));
 
     lista_libera(u);
     return 0;

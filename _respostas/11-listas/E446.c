@@ -1,15 +1,5 @@
 // 0075 · Vetor dinâmico
 // Exercício E446 · ★☆☆
-//
-// Resposta:
-//   A: tam 2, cap 2        itens [5, 9]: a 2ª inserção dobrou de 1 para 2
-//   B: tam 4, cap 4        o 3 entrou na frente (dobrou para 4) e o 7 no fim
-//   [3, 5, 9, 7]
-//   C: x = 5, tam 4, cap 4 tirou o 5 (posição 1); x * 2 = 10 entrou na
-//                          posição 3, que era igual ao tamanho: foi para o fim
-//   [3, 9, 7, 10]
-//   D: falhou, x continua 5 a posição 4 não existe (vai de 0 a 3)
-//   E: tam 5, cap 8        o 5º item encontrou o vetor cheio: dobrou para 8
 
 #include <stdio.h>
 // ---- lista.h e lista.c colados aqui, para esta resolução rodar sozinha ----
@@ -147,31 +137,34 @@ void lista_imprime(const Lista *l) {
 }
 // ---- fim de lista.h e lista.c ----
 
+void mostra(const char *rotulo, const Lista *l) {
+    printf("%s: tam %d, cap %d ", rotulo, lista_tamanho(l), lista_capacidade(l));
+    lista_imprime(l);
+}
+
 int main(void) {
     Lista *l = lista_cria(1);
     if (l == NULL) return 1;
 
     lista_insere_fim(l, 5);
     lista_insere_fim(l, 9);
-    printf("A: tam %d, cap %d\n", lista_tamanho(l), lista_capacidade(l));
+    mostra("A", l);
 
     lista_insere_em(l, 0, 3);
     lista_insere_fim(l, 7);
-    printf("B: tam %d, cap %d\n", lista_tamanho(l), lista_capacidade(l));
-    lista_imprime(l);
+    mostra("B", l);
 
     int x = 0;
     lista_remove_em(l, 1, &x);
     lista_insere_em(l, 3, x * 2);
-    printf("C: x = %d, tam %d, cap %d\n", x, lista_tamanho(l), lista_capacidade(l));
-    lista_imprime(l);
+    mostra("C", l);
 
     if (!lista_remove_em(l, 4, &x)) {
-        printf("D: falhou, x continua %d\n", x);
+        printf("D: falhou, x = %d\n", x);
     }
 
     lista_insere_fim(l, 1);
-    printf("E: tam %d, cap %d\n", lista_tamanho(l), lista_capacidade(l));
+    mostra("E", l);
 
     lista_libera(l);
     return 0;

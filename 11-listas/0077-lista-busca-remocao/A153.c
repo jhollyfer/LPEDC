@@ -1,37 +1,54 @@
-// A153 · A fila de espera da barbearia
+// A153 · Buscar por condição e tirar o último
 
 #include <stdio.h>
 #include "lista.h"
 
+// variação da busca: em vez de "igual a", o primeiro nó "acima de" limite
+static No *busca_acima(No *inicio, int limite) {
+    No *p = inicio;
+    while (p != NULL && p->valor <= limite) {
+        p = p->prox;
+    }
+    return p; // o nó, ou NULL se ninguém passou do limite
+}
+
 int main(void) {
-    No *fila = NULL;
-    fila = lista_insere_inicio(fila, 8);
-    fila = lista_insere_inicio(fila, 42);
-    fila = lista_insere_inicio(fila, 17);
-    fila = lista_insere_inicio(fila, 31);
-    lista_imprime(fila);
+    // contas do mês, em reais
+    No *contas = NULL;
+    contas = lista_insere_inicio(contas, 480);
+    contas = lista_insere_inicio(contas, 99);
+    contas = lista_insere_inicio(contas, 135);
+    contas = lista_insere_inicio(contas, 62);
+    lista_imprime(contas);
 
-    // a senha 42 ainda está esperando?
-    No *achou = lista_busca(fila, 42);
-    if (achou != NULL) printf("senha %d: na fila\n", achou->valor);
+    No *cara = busca_acima(contas, 100);
+    if (cara != NULL) printf("primeira acima de R$ 100: %d\n", cara->valor);
+    if (busca_acima(contas, 500) == NULL) printf("nenhuma acima de R$ 500\n");
 
-    // o 42 desistiu: sai do meio
-    lista_remove(&fila, 42);
-    lista_imprime(fila);
+    // tirar o ÚLTIMO: o anterior dele (99) passa a apontar para NULL
+    lista_remove(&contas, 480);
+    lista_imprime(contas);
 
-    // o 31 foi atendido: sai do começo (o início muda)
-    lista_remove(&fila, 31);
-    lista_imprime(fila);
+    // tirar até sobrar um nó e depois o único: o início vira NULL
+    lista_remove(&contas, 135);
+    lista_remove(&contas, 62);
+    lista_imprime(contas);
+    lista_remove(&contas, 99);
+    lista_imprime(contas);
 
-    // o 99 nunca esteve na fila
-    if (!lista_remove(&fila, 99)) printf("senha 99: não está na fila\n");
+    // na lista vazia, buscar e remover só devolvem "não achei"
+    if (lista_busca(contas, 62) == NULL && !lista_remove(&contas, 62)) {
+        printf("lista vazia: nada para buscar nem tirar\n");
+    }
 
-    lista_libera(fila);
+    lista_libera(contas);
     return 0;
 }
 // Saída:
-// 31 -> 17 -> 42 -> 8 -> NULL
-// senha 42: na fila
-// 31 -> 17 -> 8 -> NULL
-// 17 -> 8 -> NULL
-// senha 99: não está na fila
+// 62 -> 135 -> 99 -> 480 -> NULL
+// primeira acima de R$ 100: 135
+// nenhuma acima de R$ 500
+// 62 -> 135 -> 99 -> NULL
+// 99 -> NULL
+// NULL
+// lista vazia: nada para buscar nem tirar
