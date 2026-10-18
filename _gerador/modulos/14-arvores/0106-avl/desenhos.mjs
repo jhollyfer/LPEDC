@@ -1,0 +1,101 @@
+// rotações da AVL, antes e depois. Em cima, a simples (insere 30); embaixo,
+// a dupla (insere 25), passo a passo.
+const comum = { forma: 'arvore', dx: 62, dy: 120 }
+
+export const ideia = {
+  caixas: [
+    {
+      ...comum,
+      id: 's1',
+      x: 100,
+      y: 160,
+      raiz: { v: 10, d: { v: 20, d: { v: 30 } } },
+      estados: { 10: 'vermelho', 30: 'azul' },
+    },
+    {
+      ...comum,
+      id: 's2',
+      x: 600,
+      y: 160,
+      raiz: { v: 20, e: { v: 10 }, d: { v: 30 } },
+      estados: { 20: 'verde' },
+    },
+    {
+      id: 'c1',
+      x: 1000,
+      y: 160,
+      w: 480,
+      h: 190,
+      cor: 'roxo',
+      rotulo: 'direita-direita',
+      texto: ['uma rotação à esquerda', 'no 10: o 20 sobe'],
+    },
+    {
+      ...comum,
+      id: 'd1',
+      x: 100,
+      y: 620,
+      raiz: { v: 20, e: { v: 10 }, d: { v: 40, e: { v: 30, e: { v: 25 } }, d: { v: 50 } } },
+      estados: { 20: 'vermelho', 40: 'amarelo', 25: 'azul' },
+    },
+    {
+      ...comum,
+      id: 'd2',
+      x: 600,
+      y: 620,
+      raiz: { v: 20, e: { v: 10 }, d: { v: 30, e: { v: 25 }, d: { v: 40, d: { v: 50 } } } },
+      estados: { 20: 'vermelho', 30: 'amarelo' },
+    },
+    {
+      ...comum,
+      id: 'd3',
+      x: 1100,
+      y: 620,
+      raiz: { v: 30, e: { v: 20, e: { v: 10 }, d: { v: 25 } }, d: { v: 40, d: { v: 50 } } },
+      estados: { 30: 'verde' },
+    },
+  ],
+  setas: [
+    { pontos: [[340, 196], [580, 196]], rotulo: 'esquerda no 10', cor: 'roxo' },
+    { pontos: [[345, 656], [590, 656]], rotulo: '1. direita no 40', cor: 'roxo' },
+    { pontos: [[800, 656], [1090, 656]], rotulo: '2. esquerda no 20', cor: 'roxo' },
+  ],
+  notas: [
+    { x: 182, y: 204, texto: 'fb -2', cor: 'vermelho' },
+    { x: 244, y: 324, texto: 'fb -1', cor: 'roxo' },
+    { x: 744, y: 204, texto: 'fb 0', cor: 'verde' },
+    { x: 244, y: 664, texto: 'fb -2', cor: 'vermelho' },
+    { x: 430, y: 784, texto: 'fb +1', cor: 'roxo' },
+    { x: 1368, y: 664, texto: 'fb 0', cor: 'verde' },
+    { x: 100, y: 130, texto: 'ROTAÇÃO SIMPLES: inseriu 30', cor: 'cinza' },
+    { x: 100, y: 590, texto: 'ROTAÇÃO DUPLA: inseriu 25 (direita-esquerda)', cor: 'cinza' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'Na volta: rebalanceia(r)'],
+    ['B', 'proc', 'Atualiza a altura; fb = fator(r)'],
+    ['C', 'dec', 'fb < -1?'],
+    ['D', 'dec', 'fator(r->dir) > 0?'],
+    ['E', 'proc', 'Rotação à direita no filho'],
+    ['F', 'proc', 'Rotação à esquerda em r'],
+    ['G', 'dec', 'fb > 1?'],
+    ['H', 'proc', 'O espelho: rotações à direita'],
+    ['I', 'io', 'Devolver a raiz da subárvore'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'D', 'Sim'],
+    ['D', 'E', 'Sim'],
+    ['D', 'F', 'Não'],
+    ['E', 'F'],
+    ['F', 'I'],
+    ['C', 'G', 'Não'],
+    ['G', 'H', 'Sim'],
+    ['G', 'I', 'Não'],
+    ['H', 'I'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'E', 'F', 'I'],
+}
