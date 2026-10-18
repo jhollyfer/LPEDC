@@ -4,11 +4,16 @@ Curso pessoal de **Lógica de Programação, Linguagem C e Estrutura de Dados**,
 português do Brasil. Mesma filosofia do LPPOO (github.com/jhollyfer/LPPOO), mas
 organizado por **módulos** em vez de datas.
 
-Quem estuda: um dev adulto que já programa em TypeScript (React + Vite,
-Node + Fastify, AdonisJS) e quer **relembrar lógica**, **aprender estrutura de
-dados** e **entender de verdade como o C e a memória funcionam**. Não é aula
-para turma: o texto fala com "você", direto, sem infantilizar. Pode comparar
-com JS/TS quando ajudar ("no JS o array cresce sozinho; no C, não").
+Quem estuda: um adulto que quer **relembrar (ou aprender) lógica de
+programação**, **aprender estrutura de dados** e **entender de verdade como o C
+e a memória funcionam**. Não é aula para turma: o texto fala com "você",
+direto, sem infantilizar. **Nunca** compare com outra linguagem (nada de
+TypeScript, JavaScript, Python, Java...): tudo é explicado em termos de C.
+
+O curso começa direto em C: o módulo 01 abre com algoritmo e o modelo
+entrada → processamento → saída (a estrutura sequencial); depois vêm
+decisões, laços, funções e assim por diante. Instalação: Arch Linux primeiro
+(`pacman`), depois Debian/Ubuntu (`apt`) e Windows (WSL).
 
 O sumário completo (módulos, assuntos e números) está em
 [`_fontes/sumario.md`](_fontes/sumario.md). Os fichamentos dos livros estão em
@@ -68,8 +73,8 @@ valores**. Roteiro:
 7. `> [!WARNING]` com a pegadinha principal (o erro que todo mundo comete).
 8. `> [!TIP]` começando com **Por dentro do C:** — o que acontece por baixo:
    memória, bytes, endereços, o que o compilador faz, custo. É a marca do curso
-   (no LPPOO era o "Poder do TypeScript"). No módulo 00 e nos assuntos de
-   estrutura de dados também vale: "Por dentro do C" mostra a memória.
+   Nos assuntos de estrutura de dados também vale: "Por dentro do C" mostra a
+   memória.
 9. `> [!NOTE]` com **Pergunta para você:** algo para prever antes de rodar.
 10. `{{pratique}}` (gerado: exemplos e exercícios).
 
