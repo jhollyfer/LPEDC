@@ -13,6 +13,7 @@ int main(void) {
     // (a) tolerância
     double preco = 0.7;
     double pago = 0.1 * 7;
+    printf("pago = %.20f\n", pago); // 0.70000000000000006661
     bool exato = fabs(pago - preco) < 1e-9;
     printf("Pagou o valor exato? %d\n", exato);
 

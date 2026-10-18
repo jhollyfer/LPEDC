@@ -92,6 +92,6 @@ dois:
 > [!NOTE]
 > **Pergunta para você:** se o saldo fosse exatamente R$ 5,00, o que
 > apareceria, e com quanto o cartão ficaria? E se você trocasse `>=` por `>`?
-> Pense antes de mudar o A029.
+> Pense antes de mudar o código acima.
 
 {{pratique}}

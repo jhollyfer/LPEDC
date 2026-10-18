@@ -1,19 +1,29 @@
-// A027 · Desconto a partir de R$ 200
+// A027 · Avisos independentes no painel do carro
 
+#include <stdbool.h>
 #include <stdio.h>
 
+// Três if seguidos, sem else: cada pergunta é feita, não importa o que as
+// outras responderam. Pode acender nenhum aviso, um, dois ou os três.
 int main(void) {
-    double total = 230.0;
+    int combustivel = 12; // porcentagem do tanque
+    bool porta_aberta = true;
+    int km_revisao = 0;   // quilômetros até a próxima revisão
 
-    printf("Total: R$ %.2f\n", total);
-    if (total >= 200) {
-        total = total * 0.9; // 10% de desconto
-        printf("Desconto de 10%% aplicado!\n");
+    if (combustivel < 15) {
+        printf("Aviso: tanque na reserva (%d%%).\n", combustivel);
     }
-    printf("A pagar: R$ %.2f\n", total);
+    if (porta_aberta) { // a variável sozinha: verdade se não for zero
+        printf("Aviso: porta aberta.\n");
+    }
+    if (!km_revisao) {  // o mesmo que km_revisao == 0
+        printf("Aviso: hora da revisão.\n");
+    }
+    printf("Boa viagem!\n");
     return 0;
 }
 // Saída:
-// Total: R$ 230.00
-// Desconto de 10% aplicado!
-// A pagar: R$ 207.00
+// Aviso: tanque na reserva (12%).
+// Aviso: porta aberta.
+// Aviso: hora da revisão.
+// Boa viagem!

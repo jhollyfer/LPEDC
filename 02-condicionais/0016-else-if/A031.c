@@ -1,23 +1,35 @@
-// A031 · As faixas do radar
+// A031 · FizzBuzz e a ordem que importa
 
 #include <stdio.h>
 
+// Aqui as condições não são faixas: um número pode cumprir várias ao mesmo
+// tempo. Como o else if para no primeiro Sim, a mais exigente vem primeiro.
 int main(void) {
-    int limite = 60;
-    int velocidade = 80;
-    int faixa_media = limite + limite / 5; // 72: até 20% acima
-    int faixa_grave = limite + limite / 2; // 90: até 50% acima
+    int n = 15; // divisível por 3 e por 5
 
-    if (velocidade <= limite) {
-        printf("Dentro do limite. Boa viagem!\n");
-    } else if (velocidade <= faixa_media) {
-        printf("Infração média: R$ 130.16\n");
-    } else if (velocidade <= faixa_grave) {
-        printf("Infração grave: R$ 195.23\n");
+    printf("Ordem certa:  ");
+    if (n % 3 == 0 && n % 5 == 0) {
+        printf("FizzBuzz\n");
+    } else if (n % 3 == 0) {
+        printf("Fizz\n");
+    } else if (n % 5 == 0) {
+        printf("Buzz\n");
     } else {
-        printf("Infração gravíssima: R$ 880.41\n");
+        printf("%d\n", n);
+    }
+
+    printf("Ordem errada: ");
+    if (n % 3 == 0) { // 15 já para aqui: o FizzBuzz nunca é testado
+        printf("Fizz\n");
+    } else if (n % 5 == 0) {
+        printf("Buzz\n");
+    } else if (n % 3 == 0 && n % 5 == 0) {
+        printf("FizzBuzz\n");
+    } else {
+        printf("%d\n", n);
     }
     return 0;
 }
 // Saída:
-// Infração grave: R$ 195.23
+// Ordem certa:  FizzBuzz
+// Ordem errada: Fizz

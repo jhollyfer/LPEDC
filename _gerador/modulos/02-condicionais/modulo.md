@@ -63,7 +63,7 @@ o `math.h`. Os exercícios que leem do teclado aceitam a entrada por um pipe,
 o que facilita testar vários casos seguidos:
 
 ```bash
-printf '230\nA\n0\n' | ~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A037.c
+printf '12.90 8.50\n' | ~/LPEDC/rodar 02-condicionais/0014-if/A028.c
 ```
 
 Alguns exercícios do tipo "ache o erro" trazem o código quebrado **de

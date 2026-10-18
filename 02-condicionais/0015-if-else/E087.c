@@ -2,8 +2,9 @@
 // Exercício E087 · ★★☆
 //
 // O caixa eletrônico bloqueia o cartão na 3ª senha errada. Mas este programa
-// bloqueia logo na primeira! Rode com 1, leia o aviso do compilador, explique
-// os DOIS estragos que o erro causa e conserte.
+// bloqueia logo na primeira! Rode com 1, leia o aviso do compilador e repare
+// nos DOIS estragos que o erro causa (a mensagem e a última linha).
+// Conserte e rode de novo com 1 e com 3.
 //
 // Dicas:
 // 1. Compare o "Tentativas registradas" com o número que você digitou.

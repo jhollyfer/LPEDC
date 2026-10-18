@@ -101,6 +101,6 @@ losangos de baixo nunca são visitados:
 
 > [!NOTE]
 > **Pergunta para você:** a 72 km/h, qual mensagem aparece? E a 90 km/h?
-> Repare que os limites das faixas usam `<=`. Depois confira no A031.
+> Repare que os limites das faixas usam `<=`. Depois confira mudando a velocidade no código acima.
 
 {{pratique}}

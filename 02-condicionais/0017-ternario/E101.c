@@ -3,8 +3,8 @@
 //
 // O total da compra deveria ser o subtotal mais o frete (R$ 19.90 abaixo de
 // R$ 199, grátis a partir disso). Com subtotal 150, o programa mostra
-// "Total: R$ 0.00"! Compila sem nenhum aviso. Explique o que o C entende
-// nessa linha e conserte.
+// "Total: R$ 0.00"! Compila sem nenhum aviso. Conserte a linha do total
+// com parênteses e rode de novo com 150 e com 250.
 //
 // Dicas:
 // 1. Quem é feito primeiro: o +, o >= ou o ?: ?

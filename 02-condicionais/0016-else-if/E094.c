@@ -3,7 +3,8 @@
 //
 // O conceito deveria ser A (nota 9 ou mais), B (7 ou mais), C (5 ou mais)
 // ou D (abaixo de 5). Mas quem tirou 9.5 recebeu C. O programa compila sem
-// nenhum aviso: o erro é de lógica. Ache e conserte.
+// nenhum aviso: o erro é de lógica. Ache, conserte e rode com as quatro
+// notas da resposta esperada.
 //
 // Dicas:
 // 1. Com 9.5, qual é a primeira condição verdadeira?

@@ -1,29 +1,26 @@
 // 0018 · switch, case, break e fall-through
 // Exercício E105 · ★★☆
 //
-// Preveja a saída deste switch para n = 2, 5, 7 e 9. Repare que o default
-// está no meio e que nem todo case tem break.
+// O atendimento por telefone do banco tem um menu de teclas: 1 → "Consultar
+// saldo."; 2 → "Segunda via da fatura."; 9 → "Transferindo para um
+// atendente..."; 0 → "Repetindo o menu.". Qualquer outra tecla mostra
+// "Opção inválida." e, em seguida, também repete o menu. Escreva com UM
+// switch em que o default fica no meio, logo antes do case 0, e cai nele
+// de propósito (sem repetir o printf do menu).
 //
-//   switch (n) {
-//   case 2:
-//       printf("dois ");
-//   case 5:
-//       printf("cinco ");
-//       break;
-//   default:
-//       printf("outro ");
-//   case 7:
-//       printf("sete ");
-//   }
-//   printf("fim\n");
+//   Tecla: 7
+//   Opção inválida.
+//   Repetindo o menu.
 //
 // Dicas:
-// 1. O switch pula para o rótulo certo (ou para o default, esteja ele onde
-//    estiver) e desce até um break ou até o fim.
-// 2. O default não precisa ser o último. Depois dele, o case 7 está logo
-//    embaixo.
-// 3. Resposta esperada: 2 → "dois cinco fim"; 5 → "cinco fim";
-//    7 → "sete fim"; 9 → "outro sete fim".
+// 1. O default não precisa ser o último: o switch pula para ele quando
+//    nenhum case bate, esteja onde estiver.
+// 2. Ordem dos rótulos: case 1, case 2, case 9, default, case 0. Todos com
+//    break, menos o default; no lugar do break dele, escreva o comentário
+//    "// fall through" (o gcc entende e não avisa).
+// 3. Resposta esperada: 1 → "Consultar saldo."; 2 → "Segunda via da
+//    fatura."; 9 → "Transferindo para um atendente..."; 0 → só "Repetindo
+//    o menu."; 7 → "Opção inválida." e "Repetindo o menu.".
 //
 // Escreva sua resposta abaixo:
 

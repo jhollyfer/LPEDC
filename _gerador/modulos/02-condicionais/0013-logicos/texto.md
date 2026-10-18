@@ -97,6 +97,6 @@ pularia direto para a pré-estreia: isso é o curto-circuito desenhado:
 > [!NOTE]
 > **Pergunta para você:** se a pessoa fosse estudante, a comparação
 > `idade >= 60` seria feita? E se a sessão fosse pré-estreia, a idade mudaria
-> alguma coisa? Siga o fluxograma e depois mude os valores no A025.
+> alguma coisa? Siga o fluxograma e depois mude os valores no código acima.
 
 {{pratique}}

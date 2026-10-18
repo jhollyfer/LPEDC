@@ -1,19 +1,27 @@
-// A033 · Frete e plural no carrinho
+// A033 · O ternário que protege a divisão
 
 #include <stdio.h>
 
 int main(void) {
-    int qtd = 3;
-    double total = 150.0;
+    int vendido = 0; // o food truck ainda não abriu
+    int dias = 0;
 
-    double frete = total >= 199 ? 0.0 : 19.90;
+    // só um dos lados é calculado: com dias == 0, a divisão nem acontece
+    double media = dias != 0 ? (double) vendido / dias : 0.0;
+    printf("Média por dia: R$ %.2f\n", media);
+    printf("Situação: %s\n", dias != 0 ? "funcionando" : "ainda não abriu");
 
-    printf("%d %s no carrinho\n", qtd, qtd == 1 ? "item" : "itens");
-    printf("Frete: R$ %.2f\n", frete);
-    printf("Total: R$ %.2f\n", total + frete);
+    // os dois lados viram um tipo comum: int com double dá double
+    int pedidos = 3;
+    printf("Fator: %.1f\n", pedidos > 0 ? pedidos : 0.5); // sai 3.0, não 3
+
+    // no meio de uma conta, o ternário vai entre parênteses
+    double taxa = 5.0 + (pedidos > 2 ? 2.5 : 0.0);
+    printf("Taxa de entrega: R$ %.2f\n", taxa);
     return 0;
 }
 // Saída:
-// 3 itens no carrinho
-// Frete: R$ 19.90
-// Total: R$ 169.90
+// Média por dia: R$ 0.00
+// Situação: ainda não abriu
+// Fator: 3.0
+// Taxa de entrega: R$ 7.50

@@ -1,21 +1,23 @@
 // 0013 · Lógicos: E, OU, NÃO
 // Exercício E073 · ★☆☆
 //
-// Preveja o que cada linha mostra. Escreva a resposta e depois confira
-// rodando o trecho dentro do main:
+// Monte a tabela-verdade no terminal. Para cada uma das quatro combinações
+// de a e b (0 0, 0 1, 1 0, 1 1), dê os valores às duas variáveis e mostre
+// uma linha com a, b, a && b, a || b e !a, calculados pelo programa (nada de
+// digitar os resultados no printf).
 //
-//   bool a = true, b = false, c = true;
-//   printf("%d ", a && b);
-//   printf("%d ", a || b);
-//   printf("%d ", !a);
-//   printf("%d ", !b && c);
-//   printf("%d ", a && b || c);
-//   printf("%d\n", a && (b || !c));
+//   a b | E OU NAO
+//   0 0 | 0 0  1
+//   0 1 | 0 1  1
+//   1 0 | 0 1  0
+//   1 1 | 1 1  0
 //
 // Dicas:
-// 1. Troque cada variável por 0 ou 1 antes de calcular.
-// 2. Sem parênteses, o && é feito antes do ||: a && b || c é (a && b) || c.
-// 3. Resposta esperada: 0 1 0 1 1 0
+// 1. Declare bool a, b; e, antes de cada linha, faça a = ...; b = ...;
+// 2. Use sempre o mesmo printf:
+//    printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
+// 3. Resposta esperada: a tabela acima. A coluna do E só tem 1 na última
+//    linha; a do OU só tem 0 na primeira.
 //
 // Escreva sua resposta abaixo:
 

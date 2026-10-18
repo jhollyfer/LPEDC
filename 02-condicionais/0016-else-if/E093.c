@@ -1,32 +1,45 @@
 // 0016 · else if, if aninhado e o else pendurado
 // Exercício E093 · ★★☆
 //
-// O recuo deste trecho mente. Preveja a saída para os três pares de valores
-// e só depois rode:
+// O assistente do celular lê duas respostas: você vai sair (1 ou 0)? Vai
+// chover (1 ou 0)? Quem vai sair e vê chuva deve ler "Leve o guarda-chuva.";
+// quem NÃO vai sair deve ler "Fique em casa e descanse."; todo mundo lê
+// "Bom dia!" no fim. O recuo do programa abaixo promete isso, mas o else
+// pendurado tem outro dono (o código está quebrado de propósito e o gcc
+// avisa). Rode com 0 1, 1 0 e 1 1, veja a saída errada e conserte com
+// chaves.
 //
-//   if (a > 0)
-//       if (b > 0)
-//           printf("A\n");
-//   else
-//       printf("B\n");
-//   printf("C\n");
-//
-//   a) a = -1, b = 5      b) a = 2, b = -1      c) a = 2, b = 3
-//
-// Por fim, coloque chaves para que o else fique de fato com o if (a > 0).
+//   Vai sair? Vai chover? 0 1
+//   Fique em casa e descanse.
+//   Bom dia!
 //
 // Dicas:
-// 1. O else pertence ao if mais próximo que ainda não tem else.
-// 2. Com a = -1, o if de fora é falso, e o else não é dele.
-// 3. Resposta esperada: a) só "C"; b) "B" e "C"; c) "A" e "C". Com as
-//    chaves em volta do if (b > 0), o caso a) passa a mostrar "B" e "C", e o
-//    caso b) mostra só "C".
+// 1. Sem chaves, o else pertence ao if mais próximo que ainda não tem else:
+//    o if (chuva).
+// 2. Ponha chaves em volta do if de dentro (e, de quebra, em todos os
+//    blocos).
+// 3. Resposta esperada, depois do conserto: 0 1 → "Fique em casa e
+//    descanse." e "Bom dia!"; 1 0 → só "Bom dia!"; 1 1 → "Leve o
+//    guarda-chuva." e "Bom dia!". Antes do conserto, 0 1 mostrava só
+//    "Bom dia!" e 1 0 mandava ficar em casa.
 //
-// Escreva sua resposta abaixo:
+// Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>
 
 int main(void) {
+    int vai_sair, chuva;
+    printf("Vai sair? Vai chover? ");
+    if (scanf("%d %d", &vai_sair, &chuva) != 2) {
+        printf("Entrada inválida\n");
+        return 1;
+    }
 
+    if (vai_sair)
+        if (chuva)
+            printf("Leve o guarda-chuva.\n");
+    else
+        printf("Fique em casa e descanse.\n");
+    printf("Bom dia!\n");
     return 0;
 }

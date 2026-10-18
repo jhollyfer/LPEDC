@@ -1,20 +1,31 @@
-// A025 · Meia-entrada no cinema
+// A025 · Dentro, fora e "só um dos dois"
 
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int idade = 67;
-    bool estudante = false;
-    bool pre_estreia = false;
+    int hora = 22;
 
-    // os parênteses são obrigatórios aqui: && vem antes de ||
-    bool meia = (estudante || idade >= 60) && !pre_estreia;
+    // dentro da faixa: um E de duas comparações
+    bool comercial = hora >= 8 && hora < 18;
+    // fora da faixa: um OU. É o NÃO do de cima, aberto por De Morgan:
+    // !(hora >= 8 && hora < 18) vira hora < 8 || hora >= 18
+    bool fora = hora < 8 || hora >= 18;
+    printf("Horário comercial? %d\n", comercial);
+    printf("Fora do horário?   %d\n", fora);
 
-    printf("Meia-entrada? %d\n", meia);
-    printf("Ingresso: R$ %.2f\n", 40.0 - meia * 20.0);
+    // o C não tem um "OU exclusivo" lógico, mas com bool o != faz o papel:
+    // verdade quando exatamente um dos dois é verdade
+    bool cupom = true;
+    bool primeira_compra = true;
+    bool um_desconto_so = cupom != primeira_compra;
+    bool algum_desconto = cupom || primeira_compra;
+    printf("Algum desconto?    %d\n", algum_desconto);
+    printf("Só um desconto?    %d\n", um_desconto_so);
     return 0;
 }
 // Saída:
-// Meia-entrada? 1
-// Ingresso: R$ 20.00
+// Horário comercial? 0
+// Fora do horário?   1
+// Algum desconto?    1
+// Só um desconto?    0

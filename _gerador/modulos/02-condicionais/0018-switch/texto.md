@@ -109,6 +109,6 @@ de Sim e Não:
 
 > [!NOTE]
 > **Pergunta para você:** com `codigo = 7`, o que aparece? E o total? Pense
-> no valor inicial de `preco` antes de mudar o A035.
+> no valor inicial de `preco` antes de mudar o código acima.
 
 {{pratique}}
