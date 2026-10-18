@@ -155,7 +155,10 @@ espaço, ligue de novo. Espaços repetidos e nas pontas não atrapalham.
 
 </details>
 
-**6. Preveja.** Sem rodar:
+**6. O laço que se encontra no meio.** Rode o trecho abaixo dentro de um
+`main` e acrescente, dentro do laço, um `printf` que mostre a cada volta os
+índices de `p` e `q` (`p - v` e `q - v`, com `%td`) e o vetor inteiro.
+Depois troque a condição para `p <= q` e veja o que muda no `v[2]`.
 
 ```c
 int v[5] = {1, 2, 3, 4, 5};
@@ -170,8 +173,10 @@ printf("%d %d %d %d %d\n", v[0], v[1], v[2], v[3], v[4]);
 
 <details><summary>Resposta</summary>
 
-**6 6 3 4 5**. Primeira volta: `v[0] = 1 + 5`; segunda: `v[1] = 2 + 4`; aí
-`p` e `q` se encontram em `v[2]` e o laço para. Só a metade esquerda muda.
+Duas voltas: `p=0 q=4` (vira **6** 2 3 4 5) e `p=1 q=3` (vira 6 **6** 3 4 5);
+aí `p` e `q` se encontram em `v[2]` e o laço para: **6 6 3 4 5**. Com
+`p <= q` há uma terceira volta com os dois em `v[2]`, que soma o elemento
+com ele mesmo: **6 6 6 4 5**.
 
 </details>
 
@@ -208,7 +213,7 @@ no assunto 0052, usando `p - mesa` para achar o minuto.
 descobre a ordem dos bytes da máquina olhando o primeiro byte de um `int`
 que vale 1 (através de um `unsigned char *`). Depois escreva
 `unsigned int inverte_bytes(unsigned int x)` que troca a ordem dos 4 bytes
-usando `troca_generica` do A101 nos bytes certos.
+usando a `troca_generica` do assunto 0051 nos bytes certos.
 
 <details><summary>Resposta</summary>
 

@@ -1,29 +1,41 @@
-// A089 · O cartão fidelidade
+// A089 · Duas cancelas, um contador
 
 #include <stdio.h>
 
 int main(void) {
-    int pontos = 120;     // pontos do cartão fidelidade
-    int *cartao = NULL;   // ponteiro para int; NULL: ainda não aponta para nada
+    int vagas = 40; // vagas livres no estacionamento do shopping
 
-    cartao = &pontos;     // o cliente passou o cartão: cartao guarda &pontos
+    // dois ponteiros podem apontar para a MESMA variável
+    int *entrada = &vagas, *saida = &vagas; // o * vai em cada nome
+    int *cancela_vip = NULL;                // ainda não foi instalada
 
-    printf("&pontos = %p\n", (void *)&pontos);
-    printf("cartao  = %p\n", (void *)cartao); // o mesmo endereço
-    printf("*cartao = %d\n", *cartao);        // o que tem na gaveta apontada
+    *entrada -= 1; // entrou um carro
+    *entrada -= 1; // entrou outro
+    *saida += 1;   // saiu um
+    printf("vagas = %d\n", vagas);
 
-    if (cartao != NULL) {
-        *cartao = *cartao + 30; // compra de R$ 30: muda pontos ATRAVÉS do ponteiro
+    // comparar ponteiros pergunta "apontam para a mesma gaveta?"
+    printf("entrada == saida? %d\n", entrada == saida);
+    printf("*entrada = %d, *saida = %d\n", *entrada, *saida);
+
+    // antes de usar *cancela_vip, confira: *NULL derruba o programa
+    if (cancela_vip != NULL) {
+        *cancela_vip -= 1;
     } else {
-        printf("Compra sem cartão\n");
+        printf("cancela VIP desligada: nada a fazer\n");
     }
-    printf("pontos  = %d\n", pontos);
-    printf("&cartao = %p\n", (void *)&cartao); // o ponteiro também mora numa gaveta
+
+    int vagas_moto = 12;
+    saida = &vagas_moto; // saida agora aponta para outra gaveta
+    *saida += 1;
+    printf("entrada == saida? %d\n", entrada == saida);
+    printf("vagas = %d, vagas_moto = %d\n", vagas, vagas_moto);
     return 0;
 }
-// Saída (os endereços mudam a cada execução):
-// &pontos = 0x7f631f200030
-// cartao  = 0x7f631f200030
-// *cartao = 120
-// pontos  = 150
-// &cartao = 0x7f631f200040
+// Saída:
+// vagas = 39
+// entrada == saida? 1
+// *entrada = 39, *saida = 39
+// cancela VIP desligada: nada a fazer
+// entrada == saida? 0
+// vagas = 39, vagas_moto = 13

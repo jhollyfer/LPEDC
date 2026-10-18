@@ -1,56 +1,62 @@
-// A103 · O ranking da feira
+// A103 · A lista de compras picada no lugar
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define N 4
-
-// devolve dois resultados: o total (double *) e ONDE está o maior (const double **)
-void resumo(const double *v, int n, double *total, const double **maior) {
-    *total = 0;
-    *maior = v;
-    for (const double *p = v; p < v + n; p++) {
-        *total += *p;
-        if (*p > **maior) {
-            *maior = p;
+// corta a linha nos ';' (trocando cada um por '\0') e guarda em campos o
+// endereço do começo de cada pedaço. Nada é copiado: os pedaços continuam
+// morando dentro de linha. Devolve quantos pedaços achou
+int separa(char *linha, char **campos, int max) {
+    int n = 0;
+    char *p = linha;
+    while (n < max) {
+        campos[n++] = p;            // um pedaço começa aqui
+        while (*p != '\0' && *p != ';') {
+            p++;
         }
+        if (*p == '\0') {
+            break;                  // fim da linha: último pedaço
+        }
+        *p = '\0';                  // corta
+        p++;                        // o próximo começa depois do corte
     }
+    return n;
 }
 
-// cada elemento de ordem é um const double *; o qsort entrega o ENDEREÇO dele
-int maior_primeiro(const void *a, const void *b) {
-    double x = **(const double * const *)a;
-    double y = **(const double * const *)b;
-    return (x < y) - (x > y); // decrescente
+// o qsort entrega o endereço de cada char *: um char ** disfarçado de void *
+int alfabetica(const void *a, const void *b) {
+    const char *x = *(char *const *)a;
+    const char *y = *(char *const *)b;
+    return strcmp(x, y);
 }
 
 int main(void) {
-    const char *produtos[N] = {"tomate", "alface", "queijo", "pastel"};
-    int qtd[N] = {30, 45, 8, 60};
-    double preco[N] = {6.50, 3.00, 32.00, 9.00};
-    double fat[N];               // faturamento de cada barraca
-    const double *ordem[N];      // ponteiros para fat: é isso que vamos ordenar
+    char linha[] = "cafe;arroz;leite;banana;feijao";
+    char *itens[10];
 
-    for (int i = 0; i < N; i++) {
-        fat[i] = qtd[i] * preco[i];
-        ordem[i] = &fat[i];
-    }
-    qsort(ordem, N, sizeof ordem[0], maior_primeiro); // fat continua intacto
+    int n = separa(linha, itens, 10);
+    qsort(itens, (size_t)n, sizeof itens[0], alfabetica); // ordena os ponteiros
 
-    for (int i = 0; i < N; i++) {
-        int k = (int)(ordem[i] - fat); // ponteiro - início = índice do produto
-        printf("%dº %-7s R$ %7.2f\n", i + 1, produtos[k], *ordem[i]);
+    for (int i = 0; i < n; i++) {
+        // a posição na linha original sai da distância entre ponteiros
+        printf("%d. %-7s (byte %2td da linha)\n", i + 1, itens[i], itens[i] - linha);
     }
 
-    double total;
-    const double *maior;
-    resumo(fat, N, &total, &maior);
-    printf("Total: R$ %.2f  Campeão: %s\n", total, produtos[maior - fat]);
+    // a linha agora tem '\0' no lugar dos ';': o printf para no primeiro
+    printf("linha depois: %s\n", linha);
+
+    // caso de borda: um campo vazio entre dois ';' também vira um pedaço
+    char outra[] = "pao;;ovos";
+    n = separa(outra, itens, 10);
+    printf("%d pedaços, o do meio tem %zu letras\n", n, strlen(itens[1]));
     return 0;
 }
 // Saída:
-// 1º pastel  R$  540.00
-// 2º queijo  R$  256.00
-// 3º tomate  R$  195.00
-// 4º alface  R$  135.00
-// Total: R$ 1126.00  Campeão: pastel
+// 1. arroz   (byte  5 da linha)
+// 2. banana  (byte 17 da linha)
+// 3. cafe    (byte  0 da linha)
+// 4. feijao  (byte 24 da linha)
+// 5. leite   (byte 11 da linha)
+// linha depois: cafe
+// 3 pedaços, o do meio tem 0 letras

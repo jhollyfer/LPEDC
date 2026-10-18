@@ -193,29 +193,37 @@ ocupa:
 
 Os arquivos ficam em [`0044-memoria/`](0044-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A087 · Três variáveis, três gavetas**
+**Exemplo A087 · O valor muda, a gaveta não**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    int idade = 30;
-    double mensalidade = 119.90;
-    char plano = 'B';
+    double saldo = 250.00; // saldo da conta, antes dos Pix do dia
 
-    // & pergunta "em que gaveta você mora?"; %p mostra a resposta em hexa
-    printf("idade:       %d, mora em %p, ocupa %zu bytes\n",
-           idade, (void *)&idade, sizeof idade);
-    printf("mensalidade: %.2f, mora em %p, ocupa %zu bytes\n",
-           mensalidade, (void *)&mensalidade, sizeof mensalidade);
-    printf("plano:       %c, mora em %p, ocupa %zu byte\n",
-           plano, (void *)&plano, sizeof plano);
+    printf("saldo = %7.2f, mora em %p\n", saldo, (void *)&saldo);
+
+    saldo -= 89.90; // Pix para a conta de luz
+    printf("saldo = %7.2f, mora em %p\n", saldo, (void *)&saldo);
+
+    saldo += 1200.00; // salário caiu
+    printf("saldo = %7.2f, mora em %p\n", saldo, (void *)&saldo);
+
+    // atribuir troca o conteúdo da gaveta; o endereço fica o mesmo até o fim
+    // do programa
+    double reserva = saldo; // cópia do valor: outra gaveta, mesmo conteúdo
+    printf("reserva = %7.2f, mora em %p\n", reserva, (void *)&reserva);
+    // endereços também se comparam com ==
+    printf("mesmo valor? %d  mesma gaveta? %d\n", reserva == saldo,
+           &reserva == &saldo);
     return 0;
 }
-// Saída (os endereços mudam a cada execução):
-// idade:       30, mora em 0x7f0440e00030, ocupa 4 bytes
-// mensalidade: 119.90, mora em 0x7f0440e00040, ocupa 8 bytes
-// plano:       B, mora em 0x7f0440e00020, ocupa 1 byte
+// Saída (os endereços mudam a cada execução, mas se repetem dentro dela):
+// saldo =  250.00, mora em 0x7f8a1c500020
+// saldo =  160.10, mora em 0x7f8a1c500020
+// saldo = 1360.10, mora em 0x7f8a1c500020
+// reserva = 1360.10, mora em 0x7f8a1c500040
+// mesmo valor? 1  mesma gaveta? 0
 ```
 
 ```bash
@@ -283,39 +291,29 @@ setor = X, endereço 0x7f..., tamanho 1
 
 **Exercício E260** · ★☆☆
 
-Olhe este gaveteiro (endereços fictícios) de um programa de futebol e
-responda sem rodar nada:
+O placar eletrônico do estádio guarda três dados de um time: os gols
+(int, 3), a média de gols por jogo (double, 1.5) e o resultado da
+partida (char, 'V'). Escreva um programa que monte o "gaveteiro" dessas
+variáveis: uma linha por variável, com o nome, o valor, o endereço e
+quantos bytes ela ocupa. No fim, mostre quantos bytes as três ocupam
+juntas, somando os sizeof.
 
 
 ```text
-endereço   conteúdo   variável
-0x2000     3          gols   (int)
-0x2004     (livre)
-0x2008     1.5        media  (double)
-0x2010     'V'        result (char)
+Saída esperada (os endereços mudam a cada execução):
+gols   = 3   em 0x7f..., 4 bytes
+media  = 1.5 em 0x7f..., 8 bytes
+result = V   em 0x7f..., 1 bytes
+total: 13 bytes
 ```
-
-
-
-```text
-a) Quanto vale gols? E &gols?
-b) Quanto vale &media?
-c) media ocupa 8 bytes. Qual é o endereço do último byte dela?
-d) Que bytes a variável gols ocupa?
-e) Rodando o programa de novo, &gols continua 0x2000?
-```
-
-
-Depois, escreva o programa com as três variáveis e mostre os endereços
-reais com %p.
 
 **Dicas:**
 
-1. O endereço de uma variável é o da primeira gaveta dela.
-2. Do 0x2008 andando 8 gavetas, a última é 0x2008 + 7.
-3. Resposta esperada: a) 3 e 0x2000; b) 0x2008; c) 0x200F;
-   d) 0x2000, 0x2001, 0x2002 e 0x2003; e) não: o sistema sorteia os
-   endereços a cada execução (ASLR).
+1. O endereço sai com %p e (void *)&nome; o tamanho, com %zu e sizeof.
+2. sizeof dá um size_t: guarde a soma numa variável size_t e mostre
+   com %zu.
+3. Resposta esperada: os tamanhos 4, 8 e 1 e a linha "total: 13 bytes";
+   os endereços aparecem em hexadecimal e mudam a cada vez que você roda.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0044-memoria/E260.c
@@ -332,9 +330,11 @@ numa matriz double precos[2][3]:
 ```
 
 
-Mostre o endereço de cada posição, linha por linha, com dois for
-aninhados. Depois responda: de quanto em quanto os endereços sobem? Onde
-começa a linha 1 em relação ao fim da linha 0?
+Mostre o valor e o endereço de cada posição, linha por linha, com dois
+for aninhados. Depois mostre, com sizeof, quantos bytes ocupa uma
+posição, uma linha inteira (precos[0]) e a matriz toda. Compare os
+endereços de precos[0][2] e precos[1][0] na saída: a linha 1 começa logo
+onde a linha 0 acaba.
 
 
 ```text
@@ -343,15 +343,19 @@ precos[0][0] = 6.00 em 0x7f...30
 precos[0][1] = 7.50 em 0x7f...38
 ...
 precos[1][2] = 12.50 em 0x7f...58
+uma posição: 8 bytes
+uma linha: 24 bytes
+a matriz: 48 bytes
 ```
 
 **Dicas:**
 
 1. &precos[i][j] dá o endereço de uma posição.
-2. Olhe só os dois últimos dígitos hexa: 0x30, 0x38, 0x40...
-3. Resposta esperada: sobem de 8 em 8 (sizeof(double)); precos[1][0]
-   fica logo depois de precos[0][2], sem buraco: a matriz é uma fila só
-   de 6 doubles, linha após linha (assunto 0039).
+2. sizeof precos[0][0], sizeof precos[0] e sizeof precos dão os três
+   tamanhos. Olhe só os dois últimos dígitos hexa dos endereços.
+3. Resposta esperada: os endereços sobem de 8 em 8 (0x30, 0x38, 0x40...)
+   sem buraco entre as linhas, e os tamanhos 8, 24 e 48: a matriz é uma
+   fila só de 6 doubles, linha após linha (assunto 0039).
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0044-memoria/E261.c
@@ -360,19 +364,28 @@ precos[1][2] = 12.50 em 0x7f...58
 **Exercício E262** · ★★☆
 
 Este programa da pizzaria tenta mostrar o endereço da variável pedidos de
-três jeitos, e os três estão errados DE PROPÓSITO. Rode com o rodar, leia
-os avisos do compilador e responda: o que cada linha mostra e por que está
-errada? Depois conserte para as três linhas mostrarem o endereço certo.
+três jeitos, e os três estão errados DE PROPÓSITO. Rode com o rodar e leia
+os avisos do compilador. Conserte as três linhas para mostrarem o
+endereço do jeito certo, rode de novo e confira que o rodar não reclama
+mais e que as três linhas mostram o mesmo endereço.
+
+
+```text
+Saída esperada depois do conserto (o endereço muda a cada execução):
+Endereço: 0x7f...
+Endereço: 0x7f...
+Endereço: 0x7f...
+```
 
 **Dicas:**
 
 1. Leia o aviso inteiro: ele diz o tipo que o formato espera e o tipo que
    recebeu.
 2. Um endereço tem 8 bytes; %d e %x leem um int de 4.
-3. Resposta esperada: %d mostra um número cortado (às vezes negativo); %x
-   mostra só a metade de baixo do endereço; %p sem cast funciona na
-   prática, mas o padrão pede void *. As três viram
-   printf("Endereço: %p\n", (void *)&pedidos);
+3. Resposta esperada: compila sem nenhum aviso e as três linhas mostram
+   o mesmo endereço em hexa. %d e %x leem só 4 bytes (número cortado);
+   %p sem cast funciona na prática, mas o padrão pede void *. As três
+   viram printf("Endereço: %p\n", (void *)&pedidos);
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0044-memoria/E262.c
@@ -380,7 +393,8 @@ errada? Depois conserte para as três linhas mostrarem o endereço certo.
 
 **Exercício E263** · ★★★
 
-Investigue: variáveis declaradas juntas ficam juntas na memória? Declare
+Variáveis declaradas juntas ficam juntas na memória? Escreva um programa
+que declare
 
 
 ```text
@@ -389,28 +403,38 @@ int v[3] = {1, 2, 3};
 ```
 
 
-e mostre o endereço de a, b, c e de v[0], v[1], v[2]. Rode com o rodar.
-Depois compile SEM o sanitizer e rode de novo:
+e mostre o endereço de a, b e c (uma linha cada) e depois, com um for, o
+endereço de v[0], v[1] e v[2]. No fim, mostre sizeof v e a soma
+sizeof a + sizeof b + sizeof c. Rode com o rodar. Depois compile SEM o
+sanitizer e rode de novo, para comparar as duas saídas:
 
 
 ```text
-gcc -std=c17 E263.c -o e293 && ./e293
+gcc -std=c17 E263.c -o e263 && ./e263
 ```
 
 
-Responda: (a) os elementos do vetor ficam colados e em ordem? (b) e a, b
-e c? (c) o que você pode concluir para escrever programas?
+
+```text
+Saída esperada (endereços mudam a cada execução; com o rodar):
+a em 0x7f...30
+b em 0x7f...40
+c em 0x7f...50
+v[0] em 0x7f...60
+v[1] em 0x7f...64
+v[2] em 0x7f...68
+sizeof v = 12, a + b + c = 12
+```
 
 **Dicas:**
 
-1. Compare os últimos dígitos hexa de cada endereço.
+1. Compare só os últimos dígitos hexa de cada endereço.
 2. O AddressSanitizer coloca "zonas proibidas" entre as variáveis para
    pegar estouros; sem ele, o compilador arruma do jeito que quiser.
-3. Resposta esperada: (a) sim, sempre: v[0], v[1], v[2] sobem de 4 em 4,
-   nas duas compilações; (b) depende: com o rodar ficaram 16 bytes
-   distantes; sem o sanitizer costumam ficar a 4 bytes, mas a ordem e
-   a distância são escolha do compilador e podem mudar; (c) só o vetor tem ordem garantida. Nunca suponha que
-   b mora "logo depois" de a.
+3. Resposta esperada: v[0], v[1] e v[2] sobem de 4 em 4 nas duas
+   compilações; a, b e c ficam a 16 bytes um do outro com o rodar e
+   costumam ficar a 4 bytes sem ele, em qualquer ordem. Os dois tamanhos
+   dão 12: o mesmo espaço, mas só o vetor tem ordem garantida.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0044-memoria/E263.c
@@ -419,33 +443,47 @@ e c? (c) o que você pode concluir para escrever programas?
 **Exercício E264** · ★★★
 
 Um programa tem variáveis de "espécies" diferentes (assunto 0030).
-Escreva um programa com:
+Escreva um programa da feira com:
 
 
 ```text
 - uma variável global int total_vendas = 0;
 - uma função void registra(int valor) com uma variável local static
-  int chamadas e mostrando o endereço de chamadas e do parâmetro valor;
+  int chamadas, que soma valor em total_vendas, conta a chamada e
+  mostra o endereço de chamadas e do parâmetro valor;
 - no main, uma variável local int caixa = 100 e um texto fixo
   const char *loja = "Feira"; (mostre o endereço do texto com
   (void *)loja, sem &).
 ```
 
 
-Chame registra(10) e registra(20) e mostre todos os endereços. Agrupe
-os endereços pelo começo (0x55... ou 0x7f...) e responda: quem mora
-"perto" de quem? Qual endereço se repete nas duas chamadas de registra?
+Chame registra(10) e registra(20). Depois mostre os endereços em dois
+blocos, com um título cada: "vivem o programa todo" (total_vendas, o
+texto) e "nascem e morrem" (caixa). Termine mostrando total_vendas.
+
+
+```text
+Saída esperada (endereços mudam a cada execução):
+registra(10): chamadas em 0x55..., valor em 0x7f...
+registra(20): chamadas em 0x55..., valor em 0x7f...
+vivem o programa todo:
+  total_vendas em 0x55...
+  texto "Feira" em 0x55...
+nascem e morrem:
+  caixa em 0x7f...
+total_vendas = 30
+```
 
 **Dicas:**
 
 1. Olhe só os 4 primeiros dígitos hexa de cada endereço.
 2. Globais, static e textos fixos vivem enquanto o programa vive; locais
    e parâmetros nascem e morrem a cada chamada.
-3. Resposta esperada: total_vendas, chamadas e o texto "Feira" ficam
-   juntos numa região (começando com 0x55... ou 0x56...); caixa e valor
-   ficam em outra, bem mais alta (0x7f...), a pilha. O endereço de
-   chamadas é o mesmo nas duas chamadas; o de valor pode mudar. O mapa
-   completo (pilha, heap, dados e código) é o assunto 0053.
+3. Resposta esperada: total_vendas, chamadas e o texto ficam numa região
+   (começando com 0x55... ou 0x56...); caixa e valor ficam em outra, bem
+   mais alta (0x7f...), a pilha. O endereço de chamadas é o mesmo nas
+   duas chamadas, e total_vendas termina em 30. O mapa completo (pilha,
+   heap, dados e código) é o assunto 0053.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0044-memoria/E264.c
@@ -559,36 +597,48 @@ você vai repetir o curso inteiro:
 
 Os arquivos ficam em [`0045-ponteiros/`](0045-ponteiros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A089 · O cartão fidelidade**
+**Exemplo A089 · Duas cancelas, um contador**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    int pontos = 120;     // pontos do cartão fidelidade
-    int *cartao = NULL;   // ponteiro para int; NULL: ainda não aponta para nada
+    int vagas = 40; // vagas livres no estacionamento do shopping
 
-    cartao = &pontos;     // o cliente passou o cartão: cartao guarda &pontos
+    // dois ponteiros podem apontar para a MESMA variável
+    int *entrada = &vagas, *saida = &vagas; // o * vai em cada nome
+    int *cancela_vip = NULL;                // ainda não foi instalada
 
-    printf("&pontos = %p\n", (void *)&pontos);
-    printf("cartao  = %p\n", (void *)cartao); // o mesmo endereço
-    printf("*cartao = %d\n", *cartao);        // o que tem na gaveta apontada
+    *entrada -= 1; // entrou um carro
+    *entrada -= 1; // entrou outro
+    *saida += 1;   // saiu um
+    printf("vagas = %d\n", vagas);
 
-    if (cartao != NULL) {
-        *cartao = *cartao + 30; // compra de R$ 30: muda pontos ATRAVÉS do ponteiro
+    // comparar ponteiros pergunta "apontam para a mesma gaveta?"
+    printf("entrada == saida? %d\n", entrada == saida);
+    printf("*entrada = %d, *saida = %d\n", *entrada, *saida);
+
+    // antes de usar *cancela_vip, confira: *NULL derruba o programa
+    if (cancela_vip != NULL) {
+        *cancela_vip -= 1;
     } else {
-        printf("Compra sem cartão\n");
+        printf("cancela VIP desligada: nada a fazer\n");
     }
-    printf("pontos  = %d\n", pontos);
-    printf("&cartao = %p\n", (void *)&cartao); // o ponteiro também mora numa gaveta
+
+    int vagas_moto = 12;
+    saida = &vagas_moto; // saida agora aponta para outra gaveta
+    *saida += 1;
+    printf("entrada == saida? %d\n", entrada == saida);
+    printf("vagas = %d, vagas_moto = %d\n", vagas, vagas_moto);
     return 0;
 }
-// Saída (os endereços mudam a cada execução):
-// &pontos = 0x7f631f200030
-// cartao  = 0x7f631f200030
-// *cartao = 120
-// pontos  = 150
-// &cartao = 0x7f631f200040
+// Saída:
+// vagas = 39
+// entrada == saida? 1
+// *entrada = 39, *saida = 39
+// cancela VIP desligada: nada a fazer
+// entrada == saida? 0
+// vagas = 39, vagas_moto = 13
 ```
 
 ```bash
@@ -662,7 +712,7 @@ Pela variável: 24.0
 
 **Exercício E266** · ★☆☆
 
-Depois de executar
+O painel do estacionamento guarda as vagas livres:
 
 
 ```text
@@ -671,31 +721,32 @@ int *p = &vagas;
 ```
 
 
-imagine que vagas mora no endereço 0x3000 e p no 0x3008. Preencha a
-tabela sem rodar:
+Escreva o programa e mostre cada expressão abaixo com printf (use %d
+para as que são int e %p com (void *) para as que são endereço):
+vagas, &vagas, p, *p, &p e *&vagas. Depois mostre, com %d, o resultado
+de três comparações: p == &vagas, *p == vagas e (void *)&p == (void *)&vagas.
 
 
 ```text
-expressão   valor
-vagas       ?
-&vagas      ?
-p           ?
-*p          ?
-&p          ?
-*&vagas     ?
+Saída esperada (endereços mudam a cada execução):
+vagas   = 7
+&vagas  = 0x7f...30
+p       = 0x7f...30
+*p      = 7
+&p      = 0x7f...40
+*&vagas = 7
+p == &vagas: 1
+*p == vagas: 1
+&p == &vagas: 0
 ```
-
-
-Depois escreva o programa e mostre cada expressão com printf (use %d
-para as que são int e %p com (void *) para as que são endereço). Os
-endereços reais vão ser outros; confira só quais são iguais entre si.
 
 **Dicas:**
 
 1. & dá o endereço; * vai até o endereço e pega o que tem lá.
 2. *&vagas: primeiro pega o endereço de vagas, depois vai até ele.
-3. Resposta esperada: vagas = 7; &vagas = 0x3000; p = 0x3000; *p = 7;
-   &p = 0x3008; *&vagas = 7. No programa, &vagas e p saem iguais.
+3. Resposta esperada: &vagas e p saem iguais, &p sai diferente (o
+   ponteiro mora na sua própria gaveta); *p e *&vagas valem 7; as
+   comparações dão 1, 1 e 0.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E266.c
@@ -760,8 +811,10 @@ Depois de tirar 4 kg: azul 19 kg, preta 22 kg
 
 **Exercício E269** · ★★★
 
-Preveja a saída SEM rodar. Faça um teste de mesa com uma coluna para a,
-b e para onde p e q apontam. Só depois rode para conferir.
+Transforme o trecho abaixo num teste de mesa que o próprio programa
+imprime. Cole o código no main e, depois da declaração e depois de CADA
+uma das cinco linhas, acrescente um printf que mostre a linha executada
+e os valores de a, b, *p e *q naquele momento.
 
 
 ```text
@@ -782,15 +835,23 @@ q = &a;
 
 
 ```text
-printf("a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
+Saída esperada:
+início        a = 3, b = 8, *p = 3, *q = 8
+*p = *q + 1   a = 9, b = 8, *p = 9, *q = 8
+p = q         a = 9, b = 8, *p = 8, *q = 8
+...
+*q -= 4       a = 5, b = 16, *p = 16, *q = 5
 ```
 
 **Dicas:**
 
-1. Linha a linha: quem é mudado é a variável apontada, não o ponteiro
-   (exceto em p = q e q = &a, que só trocam o alvo).
-2. Depois de p = q, p aponta para b.
-3. Resposta esperada: a = 5, b = 16, *p = 16, *q = 5.
+1. Quem muda com *p = ... é a variável apontada; p = q e q = &a só trocam
+   o alvo do ponteiro, sem mexer em a nem em b.
+2. Use o mesmo printf seis vezes, mudando só o texto da linha; alinhe
+   com espaços para a tabela ficar fácil de ler.
+3. Resposta esperada: as seis linhas terminam em a = 5, b = 16, *p = 16,
+   *q = 5; no meio aparecem "*p = *p * 2  a = 9, b = 16, *p = 16, *q = 16"
+   e "q = &a  a = 9, b = 16, *p = 16, *q = 9".
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E269.c
@@ -957,40 +1018,43 @@ ordem. A troca em si são três passos, sempre com a variável auxiliar:
 
 Os arquivos ficam em [`0046-passagem-por-referencia/`](0046-passagem-por-referencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A091 · Os preços trocados**
+**Exemplo A091 · O plantão que vira o relógio**
 
 ```c
 #include <stdio.h>
 
-// recebe CÓPIAS: troca as cópias e o main nem fica sabendo
-void troca_copias(int a, int b) {
-    int tmp = a;
-    a = b;
-    b = tmp;
+// parâmetro de ida E volta: lê os valores do main e escreve de volta
+void normaliza(int *horas, int *minutos) {
+    *horas += *minutos / 60; // cada 60 minutos viram uma hora
+    *minutos %= 60;
+    *horas %= 24;            // passou da meia-noite, recomeça do 0
 }
 
-// recebe ENDEREÇOS: troca o que está nas gavetas do main
-void troca(int *a, int *b) {
-    int tmp = *a; // guarda o valor da primeira gaveta
-    *a = *b;      // primeira gaveta recebe o da segunda
-    *b = tmp;     // segunda gaveta recebe o guardado
+// horas e minutos já SÃO endereços: repassa para normaliza sem &
+void soma_minutos(int *horas, int *minutos, int extra) {
+    *minutos += extra;
+    normaliza(horas, minutos);
 }
 
 int main(void) {
-    int arroz = 8, feijao = 25; // digitados trocados: o arroz é o mais caro
+    int h = 22, m = 40; // começo do plantão no hospital
 
-    troca_copias(arroz, feijao);
-    printf("Depois de troca_copias: arroz %d, feijão %d\n", arroz, feijao);
+    soma_minutos(&h, &m, 95); // o primeiro atendimento durou 95 minutos
+    printf("Fim do 1º atendimento: %02d:%02d\n", h, m);
 
-    if (arroz < feijao) {         // o pacote de arroz deveria custar mais
-        troca(&arroz, &feijao);   // passa os endereços, não os valores
-    }
-    printf("Depois de troca:        arroz %d, feijão %d\n", arroz, feijao);
+    soma_minutos(&h, &m, 50);
+    printf("Fim do 2º atendimento: %02d:%02d\n", h, m);
+
+    // normaliza sozinha também arruma um horário anotado errado
+    int h2 = 9, m2 = 135; // alguém anotou 9h135
+    normaliza(&h2, &m2);
+    printf("9h135 arrumado: %02d:%02d\n", h2, m2);
     return 0;
 }
 // Saída:
-// Depois de troca_copias: arroz 8, feijão 25
-// Depois de troca:        arroz 25, feijão 8
+// Fim do 1º atendimento: 00:15
+// Fim do 2º atendimento: 01:05
+// 9h135 arrumado: 11:15
 ```
 
 ```bash
@@ -1133,9 +1197,9 @@ Bilhetes avulsos: 0
 ```
 
 
-mas mostra outra coisa. Rode, leia o aviso do compilador e descubra os
-dois erros. Conserte sem mudar o main (exceto se precisar acrescentar um
-& numa chamada).
+mas mostra outra coisa. Rode, leia o aviso do compilador e conserte os
+dois erros sem mudar o main (exceto se precisar acrescentar um & numa
+chamada). Rode de novo e confira a saída acima.
 
 **Dicas:**
 
@@ -1188,8 +1252,8 @@ x² + 1 = 0        ->  nenhuma raiz real
 
 **Exercício E276** · ★★★
 
-Esta função troca dois valores sem usar variável auxiliar. Preveja a
-saída SEM rodar, fazendo o teste de mesa das duas chamadas:
+Esta função troca dois valores sem usar variável auxiliar, mas tem uma
+armadilha:
 
 
 ```text
@@ -1201,29 +1265,34 @@ void troca_sem_aux(int *a, int *b) {
 ```
 
 
+Escreva um programa com essa função e, no main, faça:
+
 
 ```text
 int x = 4, y = 9;
-troca_sem_aux(&x, &y);
-printf("x = %d, y = %d\n", x, y);
-troca_sem_aux(&x, &x);
-printf("x = %d\n", x);
+troca_sem_aux(&x, &y);   e mostre "x = ..., y = ..."
+troca_sem_aux(&x, &x);   e mostre "x = ..."
 ```
 
 
-Depois explique: por que a segunda chamada dá um resultado estranho? A
-troca com tmp do A091 tem o mesmo problema?
+Rode: a segunda chamada zera o x, porque a e b apontam para a MESMA
+gaveta. Conserte a função para que, quando os dois ponteiros forem
+iguais, ela não faça nada. Rode de novo.
+
+
+```text
+Saída esperada (depois do conserto):
+x = 9, y = 4
+x = 9
+```
 
 **Dicas:**
 
-1. Na segunda chamada, a e b apontam para a MESMA gaveta: escrever em *a
-   é escrever em *b.
-2. Refaça o teste de mesa com uma coluna só para x.
-3. Resposta esperada: "x = 9, y = 4" e depois "x = 0". Na segunda
-   chamada, *a = 18; *b = 18 - 18 = 0 (e *a também vira 0); *a = 0 - 0.
-   Quando dois ponteiros apontam para o mesmo lugar (aliasing), cada
-   escrita muda os dois. A troca com tmp não sofre disso: x continua
-   igual.
+1. Antes do conserto, a saída é "x = 9, y = 4" e depois "x = 0": com a e
+   b iguais, *a = 18; *b = 18 - 18 = 0 zera também o *a.
+2. Ponteiros se comparam com ==: if (a == b) { return; } logo no começo.
+3. Resposta esperada: "x = 9, y = 4" e "x = 9". Trocar uma gaveta com ela
+   mesma não muda nada; a troca com tmp já se comporta assim sem o if.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E276.c
@@ -1348,34 +1417,41 @@ anda é o ponteiro, não um índice:
 
 Os arquivos ficam em [`0047-ponteiros-e-vetores/`](0047-ponteiros-e-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A093 · A conta de luz com ponteiro**
+**Exemplo A093 · De trás para frente, um passo por tipo**
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-    int kwh[5] = {210, 185, 240, 198, 225}; // consumo de 5 meses
-    int soma = 0;
+    double temp[5] = {18.5, 21.0, 24.5, 23.0, 19.5}; // de segunda a sexta
+    char turno[3] = {'M', 'T', 'N'};                   // manhã, tarde, noite
 
-    // kwh sozinho vira &kwh[0]; kwh + 5 é "um depois do último"
-    for (const int *p = kwh; p < kwh + 5; p++) {
-        printf("p = %p  *p = %d\n", (void *)p, *p);
-        soma += *p;
+    // andar para trás: comece em temp + 5 (um depois do último) e recue
+    // ANTES de usar. Parar em p >= temp obrigaria p a ir para temp - 1,
+    // um endereço que o C não garante que exista
+    printf("De sexta para segunda:");
+    for (const double *p = temp + 5; p > temp;) {
+        p--;
+        printf(" %.1f", *p);
     }
-    printf("Total: %d kWh  Média: %.1f kWh\n", soma, soma / 5.0);
+    printf("\n");
 
-    // as duas notações são a mesma conta
-    printf("kwh[3] = %d  *(kwh + 3) = %d\n", kwh[3], *(kwh + 3));
+    // p + 1 anda UM elemento: para double são 8 bytes, para char, 1
+    printf("temp  em %p, temp + 1  em %p\n", (void *)temp, (void *)(temp + 1));
+    printf("turno em %p, turno + 1 em %p\n", (void *)turno, (void *)(turno + 1));
+
+    // a distância entre ponteiros também é contada em elementos
+    const double *quarta = &temp[2];
+    printf("de segunda até quarta: %td elementos\n", quarta - temp);
+    printf("turno[2] = %c, *(turno + 2) = %c\n", turno[2], *(turno + 2));
     return 0;
 }
-// Saída (os endereços mudam a cada execução; repare que sobem de 4 em 4):
-// p = 0x7fa4cb400020  *p = 210
-// p = 0x7fa4cb400024  *p = 185
-// p = 0x7fa4cb400028  *p = 240
-// p = 0x7fa4cb40002c  *p = 198
-// p = 0x7fa4cb400030  *p = 225
-// Total: 1058 kWh  Média: 211.6 kWh
-// kwh[3] = 198  *(kwh + 3) = 198
+// Saída (os endereços mudam a cada execução; repare no último dígito):
+// De sexta para segunda: 19.5 23.0 24.5 21.0 18.5
+// temp  em 0x7ff177100030, temp + 1  em 0x7ff177100038
+// turno em 0x7ff177100080, turno + 1 em 0x7ff177100081
+// de segunda até quarta: 2 elementos
+// turno[2] = N, *(turno + 2) = N
 ```
 
 ```bash
@@ -1459,8 +1535,7 @@ Média: 7.75
 
 **Exercício E278** · ★☆☆
 
-Preveja cada valor SEM rodar. O vetor v começa no endereço (fictício)
-0x2000 e cada int tem 4 bytes.
+Complete o programa. O vetor e o ponteiro já estão declarados:
 
 
 ```text
@@ -1469,29 +1544,51 @@ int *p = v + 1;
 ```
 
 
+Sem escrever v nem números entre colchetes de v (só p, *, + e p[...]),
+mostre, um por linha:
+
 
 ```text
-a) *p          b) *(p + 3)      c) *p + 3
-d) p[2]        e) *(v + 5)      f) o endereço p + 3
+a) o 20, com *
+b) o 50, com * e +
+c) o 23, somando 3 ao valor apontado
+d) o 40, com colchetes em p
+e) o endereço de p e o de p + 3, com %p
+```
+
+
+Depois faça p += 2 e mostre:
+
+
+```text
+f) o 40, com *
+g) o 30, com colchetes em p
+h) quantos elementos p está à frente do começo do vetor (aqui pode
+   usar v)
 ```
 
 
 
 ```text
-Depois de p += 2:
-g) *p          h) p[-1]         i) p - v
+Saída esperada (o endereço muda a cada execução):
+a) 20
+b) 50
+c) 23
+d) 40
+e) p = 0x7f...24, p + 3 = 0x7f...30
+f) 40
+g) 30
+h) 3
 ```
-
-
-Escreva o programa e mostre cada item para conferir (o endereço do item
-f vai sair diferente; confira só que fica 12 bytes depois de p).
 
 **Dicas:**
 
 1. p começa em v[1]. p[k] é *(p + k), contado a partir de onde p está.
-2. Em *p + 3, o * vem primeiro.
-3. Resposta esperada: a) 20; b) 50; c) 23; d) 40; e) 60; f) 0x2010;
-   g) 40; h) 30; i) 3.
+2. *(p + 3) anda antes de pegar o valor; *p + 3 pega o valor e soma. Um
+   índice negativo, como p[-1], olha para trás.
+3. Resposta esperada: a saída acima, com *p, *(p + 3), *p + 3, p[2],
+   depois *p, p[-1] e p - v (formato %td). O endereço de p + 3 fica 12
+   bytes depois do de p.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E278.c
@@ -1543,17 +1640,19 @@ Saída esperada:
 
 
 Rode com o rodar: um erro só aparece no resultado, o outro o
-AddressSanitizer denuncia. Explique cada um e conserte.
+AddressSanitizer denuncia. Conserte os dois e rode de novo até a saída
+ficar igual à esperada, sem aviso do sanitizer.
 
 **Dicas:**
 
 1. Depois de p += 1, para onde p aponta? E p[3], então, é qual elemento?
 2. Um vetor de 5 tem endereços válidos para leitura de estoque até
    estoque + 4.
-3. Resposta esperada: (1) com p em estoque[1], p[3] é estoque[4] (o
-   índice é relativo a p), e o 9 virou 20: o certo é p[2] = 20 (ou
-   estoque[3] = 20); (2) o laço vai até q <= estoque + 5 e lê uma gaveta
-   depois do fim (stack-buffer-overflow): o certo é q < estoque + 5.
+3. Resposta esperada: a saída "12 8 15 20 9". (1) com p em estoque[1],
+   p[3] é estoque[4] (o índice é relativo a p), e o 9 virou 20: o certo
+   é p[2] = 20 (ou estoque[3] = 20); (2) o laço vai até q <= estoque + 5
+   e lê uma gaveta depois do fim (stack-buffer-overflow): o certo é
+   q < estoque + 5.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E280.c
@@ -1746,33 +1845,42 @@ andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
 
 Os arquivos ficam em [`0048-ponteiros-e-strings/`](0048-ponteiros-e-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A095 · O crachá do evento**
+**Exemplo A095 · A string começa onde o ponteiro aponta**
 
 ```c
 #include <stdio.h>
-#include <ctype.h>
 
 int main(void) {
-    char nome[] = "ana";          // vetor de 4 chars, CÓPIA do literal: pode mudar
-    const char *apelido = "bia";  // ponteiro para o literal: só leitura
+    char endereco[] = "Rua das Flores, 120 - Centro"; // vetor: dá para mudar
 
-    // passa o nome para maiúsculas andando com um ponteiro até o '\0'
-    for (char *p = nome; *p != '\0'; p++) {
-        *p = (char)toupper((unsigned char)*p);
+    // procura a vírgula andando com um ponteiro
+    char *virgula = endereco;
+    while (*virgula != '\0' && *virgula != ',') {
+        virgula++;
     }
-    printf("Crachá: %s (%s)\n", nome, apelido);
 
-    printf("sizeof nome = %zu, sizeof apelido = %zu\n", sizeof nome, sizeof apelido);
+    // para o printf, a string vai do endereço recebido até o primeiro '\0'
+    printf("Inteiro:     %s\n", endereco);
+    printf("Da vírgula:  %s\n", virgula);
+    printf("Depois dela: %s\n", virgula + 2); // pula a vírgula e o espaço
 
-    apelido = "bibi";  // vale: o ponteiro passa a apontar para outro literal
-    // nome = "joana"; // não compila: vetor não pode receber outro endereço
-    printf("Novo apelido: %s\n", apelido);
+    // um '\0' no meio corta a string: o resto continua na memória
+    if (*virgula == ',') {
+        *virgula = '\0';
+    }
+    printf("Só a rua:    %s\n", endereco);
+    printf("O resto:     %s\n", virgula + 2); // a parte de trás segue lá
+
+    // com const char * apontando para um literal, isso não seria permitido:
+    // const char *fixo = "Rua A, 10"; fixo[5] = '\0'; não compila
     return 0;
 }
 // Saída:
-// Crachá: ANA (bia)
-// sizeof nome = 4, sizeof apelido = 8
-// Novo apelido: bibi
+// Inteiro:     Rua das Flores, 120 - Centro
+// Da vírgula:  , 120 - Centro
+// Depois dela: 120 - Centro
+// Só a rua:    Rua das Flores
+// O resto:     120 - Centro
 ```
 
 ```bash
@@ -1854,7 +1962,7 @@ Vogais: 15
 
 **Exercício E284** · ★☆☆
 
-Considere as declarações
+Complete o programa, que já tem as declarações
 
 
 ```text
@@ -1863,36 +1971,37 @@ const char *estado = "RN";
 ```
 
 
-a) Quanto vale sizeof cidade? E sizeof estado?
-b) Quanto vale strlen(cidade)? E strlen(estado)?
-c) Quais destas linhas compilam e funcionam? Para as outras, diga se o
+1. O programa já mostra sizeof e strlen das duas.
+2. Troque a primeira letra da cidade por 'n', faça estado apontar para
 
 ```text
- erro é de compilação ou de execução:
+ "PB" e mostre "cidade - estado".
+```
+
+3. Volte a cidade para "Natal" com strcpy e mostre de novo.
+4. Tente também cidade = "Recife"; e estado[0] = 'r'; rode, leia o erro
+
+```text
+ do compilador e apague essas duas linhas.
 ```
 
 
 
 ```text
-1. cidade[0] = 'n';
-2. estado = "PB";
-3. cidade = "Recife";
-4. estado[0] = 'r';
-5. strcpy(cidade, "Natal");
+Saída esperada:
+sizeof cidade = 6, sizeof estado = 8
+strlen cidade = 5, strlen estado = 2
+natal - PB
+Natal - PB
 ```
-
-
-Responda em comentário. Depois teste: escreva o programa com as linhas que
-funcionam e mostre os sizeof e strlen com printf.
 
 **Dicas:**
 
-1. Vetor: o tamanho inclui o '\0'. Ponteiro: o tamanho de um endereço.
-2. Vetor não recebe outro endereço; const char * não deixa escrever.
-3. Resposta esperada: a) 6 e 8; b) 5 e 2; c) 1 funciona; 2 funciona;
-   3 não compila (vetor não pode ser atribuído); 4 não compila por
-   causa do const (sem o const, compilaria e cairia na execução);
-   5 funciona (cabe: 5 letras + '\0' em 6 bytes).
+1. Vetor: o sizeof inclui o '\0'. Ponteiro: o sizeof é o de um endereço.
+2. Vetor não recebe outro endereço com =; const char * não deixa
+   escrever no texto apontado. Os dois erros aparecem na compilação.
+3. Resposta esperada: a saída acima. "Natal" cabe nos 6 bytes de cidade
+   (5 letras + '\0'); "Recife" não caberia.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E284.c
@@ -1908,18 +2017,8 @@ void copia(char *destino, const char *origem)
 ```
 
 
-Copie caractere por caractere, INCLUINDO o '\0' do fim. Teste copiando
-"Porto Alegre" para um vetor char destino[20] e mostrando o resultado e
-o strlen dele.
-
-
-```text
-Saída esperada:
-Destino: Porto Alegre (12 letras)
-```
-
-
-Desafio extra: a versão clássica tem o corpo do laço vazio:
+Copie caractere por caractere, INCLUINDO o '\0' do fim. Depois escreva
+uma segunda versão, copia_classica, com o laço clássico de corpo vazio:
 
 
 ```text
@@ -1928,16 +2027,27 @@ while ((*destino++ = *origem++) != '\0') {
 ```
 
 
-Explique em comentário por que ela funciona.
+Teste as duas copiando "Porto Alegre" para um vetor char destino[20] e
+mostrando o resultado e o strlen dele. Para provar que a clássica copia
+o '\0', antes de chamá-la encha destino com "XXXXXXXXXXXXXXXXXXX" (19 X)
+e confira que nenhum X sobra no fim.
+
+
+```text
+Saída esperada:
+copia:          Porto Alegre (12 letras)
+copia_classica: Porto Alegre (12 letras)
+```
 
 **Dicas:**
 
 1. Versão simples: enquanto *origem != '\0', copie e avance os dois; no
    fim, *destino = '\0'.
 2. Na versão clássica, a atribuição copia, o valor dela é o caractere
-   copiado e o ++ avança os dois ponteiros depois.
-3. Resposta esperada: "Porto Alegre", 12 letras. O laço clássico para
-   logo depois de copiar o '\0', porque o valor copiado é 0.
+   copiado e o ++ avança os dois ponteiros depois. O laço para logo
+   depois de copiar o '\0', porque o valor copiado é 0.
+3. Resposta esperada: as duas linhas acima, com 12 letras; se sobrasse
+   X, o '\0' não teria sido copiado.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E285.c
@@ -1955,7 +2065,8 @@ Mesmo morador
 ```
 
 
-Rode com o rodar, leia o relatório e conserte. Explique cada erro.
+Rode com o rodar, leia o relatório e conserte os três erros, um de cada
+vez, rodando de novo até a saída ficar igual à esperada.
 
 **Dicas:**
 
@@ -2148,35 +2259,50 @@ corrente de volta até chegar em `vagas`:
 
 Os arquivos ficam em [`0049-ponteiro-para-ponteiro/`](0049-ponteiro-para-ponteiro/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A097 · As vagas do estacionamento**
+**Exemplo A097 · A lista de chamada termina em NULL**
 
 ```c
 #include <stdio.h>
 
+// alunos é um const char **: aponta para a primeira casa de um vetor de
+// ponteiros. A lista termina numa casa NULL, então nem precisa do tamanho
+int conta_com_letra(const char **alunos, char letra) {
+    int total = 0;
+    for (const char **p = alunos; *p != NULL; p++) { // *p: um nome
+        if (**p == letra) {                          // **p: a 1ª letra dele
+            total++;
+        }
+    }
+    return total;
+}
+
 int main(void) {
-    int vagas = 40;      // vagas livres no estacionamento do shopping
-    int *p = &vagas;     // p guarda o endereço de vagas
-    int **pp = &p;       // pp guarda o endereço de p
+    const char *turma[] = {"Bruna", "Caio", "Beto", "Davi", "Bia", NULL};
 
-    printf("&vagas = %p\n", (void *)&vagas);
-    printf("p      = %p   (o endereço de vagas)\n", (void *)p);
-    printf("&p     = %p\n", (void *)&p);
-    printf("pp     = %p   (o endereço de p)\n", (void *)pp);
-    printf("*pp    = %p   (o que tem em p)\n", (void *)*pp);
-    printf("**pp   = %d\n", **pp);
+    for (const char **p = turma; *p != NULL; p++) {
+        printf("%-6s começa com %c\n", *p, **p);
+    }
+    printf("Com B: %d alunos\n", conta_com_letra(turma, 'B'));
+    printf("Com Z: %d alunos\n", conta_com_letra(turma, 'Z'));
 
-    **pp = **pp - 2;     // entraram 2 carros: muda vagas em dois saltos
-    printf("vagas  = %d\n", vagas);
+    // caso de borda: lista vazia, só a marca do fim
+    const char *vazia[] = {NULL};
+    printf("Lista vazia, com B: %d\n", conta_com_letra(vazia, 'B'));
+
+    // p + 1 anda uma casa do vetor: 8 bytes, o tamanho de um ponteiro
+    printf("sizeof turma[0] = %zu\n", sizeof turma[0]);
     return 0;
 }
-// Saída (os endereços mudam a cada execução):
-// &vagas = 0x7fe808c00030
-// p      = 0x7fe808c00030   (o endereço de vagas)
-// &p     = 0x7fe808c00040
-// pp     = 0x7fe808c00040   (o endereço de p)
-// *pp    = 0x7fe808c00030   (o que tem em p)
-// **pp   = 40
-// vagas  = 38
+// Saída:
+// Bruna  começa com B
+// Caio   começa com C
+// Beto   começa com B
+// Davi   começa com D
+// Bia    começa com B
+// Com B: 3 alunos
+// Com Z: 0 alunos
+// Lista vazia, com B: 0
+// sizeof turma[0] = 8
 ```
 
 ```bash
@@ -2258,36 +2384,52 @@ Agora: K
 
 **Exercício E290** · ★☆☆
 
-Olhe o gaveteiro (endereços fictícios) e preencha a tabela sem rodar:
+Complete o programa, que já monta o gaveteiro:
 
 
 ```text
-endereço   conteúdo   variável
-0x4000     5          x   (int)
-0x4010     0x4000     p   (int *)
-0x4020     0x4010     pp  (int **)
+int x = 5;
+int *p = &x;
+int **pp = &p;
 ```
 
 
+1. Mostre, um por linha, x, p, *p, pp, *pp, **pp, &pp e &*pp (use %d
 
 ```text
-expressão   valor
-x           ?
-p           ?
-*p          ?
-pp          ?
-*pp         ?
-**pp        ?
-&pp         ?
-&*pp        ?
+ para int e %p com (void *) para endereço). Três linhas já estão lá.
+```
+
+2. Mostre com %d o resultado de quatro comparações: *pp == p,
+
+```text
+ *pp == &x, &*pp == pp e **pp == x.
+```
+
+3. Usando só pp, mude x para 8 e mostre x.
+
+
+```text
+Saída esperada (os endereços mudam a cada execução):
+x    = 5
+p    = 0x7f...30
+*p   = 5
+pp   = 0x7f...40
+*pp  = 0x7f...30
+**pp = 5
+&pp  = 0x7f...60
+&*pp = 0x7f...40
+comparações: 1 1 1 1
+x agora = 8
 ```
 
 **Dicas:**
 
 1. Cada * dá um salto: vai até o endereço e pega o que tem lá.
 2. & e * se anulam: &*pp é o mesmo que pp.
-3. Resposta esperada: x = 5; p = 0x4000; *p = 5; pp = 0x4010;
-   *pp = 0x4000; **pp = 5; &pp = 0x4020; &*pp = 0x4010.
+3. Resposta esperada: p e *pp mostram o mesmo endereço (o de x); pp e
+   &*pp, o de p; &pp é um terceiro endereço. As quatro comparações dão 1
+   e **pp = 8; faz x valer 8 ("x agora = 8").
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E290.c
@@ -2339,9 +2481,9 @@ Teste também com "Sem numero": deve sair uma linha vazia.
 
 A função aponta_maior deveria fazer o ponteiro do main apontar para o
 maior lance do leilão. Mas o programa tem um erro de propósito: o
-ponteiro do main continua NULL e o programa cai. Rode, veja o relatório
-do AddressSanitizer e explique por que a função não funciona. Depois
-conserte (a função e a chamada).
+ponteiro do main continua NULL e o programa cai. Rode e veja o relatório
+do AddressSanitizer. Conserte a função e a chamada para que o ponteiro do
+main receba o endereço do maior lance, e rode de novo.
 
 
 ```text
@@ -2406,8 +2548,10 @@ Originais: j1=9 j2=7 j3=10 j4=8
 
 **Exercício E294** · ★★★
 
-Preveja a saída SEM rodar. Monte um teste de mesa com x, y e para onde
-p, q e pp apontam a cada linha.
+Transforme o trecho abaixo num teste de mesa que o próprio programa
+imprime. Cole o código no main e, depois das declarações e depois de
+CADA uma das sete linhas, mostre a linha executada e os valores de x, y,
+*p, *q e **pp naquele momento.
 
 
 ```text
@@ -2431,15 +2575,23 @@ pp = &q;
 
 
 ```text
-printf("x=%d y=%d *p=%d *q=%d **pp=%d\n", x, y, *p, *q, **pp);
+Saída esperada:
+início          x=1 y=2 *p=1 *q=2 **pp=1
+**pp = 10       x=10 y=2 *p=10 *q=2 **pp=10
+*pp = q         x=10 y=2 *p=2 *q=2 **pp=2
+...
+*p = 3          x=10 y=3 *p=3 *q=10 **pp=10
 ```
 
 **Dicas:**
 
 1. *pp = algo muda o ponteiro para onde pp aponta (p no começo, q
-   depois de pp = &q).
-2. Depois de *pp = q, p aponta para y.
-3. Resposta esperada: x=10 y=3 *p=3 *q=10 **pp=10.
+   depois de pp = &q). Depois de *pp = q, p aponta para y.
+2. Escreva o printf uma vez, teste, e copie para as outras linhas,
+   mudando só o texto.
+3. Resposta esperada: oito linhas; a última é
+   "*p = 3  x=10 y=3 *p=3 *q=10 **pp=10" e a do *pp = &x é
+   "*pp = &x  x=10 y=14 *p=14 *q=10 **pp=10".
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E294.c
@@ -2561,36 +2713,59 @@ copie o molde do A100.
 
 Os arquivos ficam em [`0050-ponteiro-para-funcao/`](0050-ponteiro-para-funcao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A099 · Quantos dias de calor?**
+**Exemplo A099 · A promoção do dia é um parâmetro**
 
 ```c
 #include <stdio.h>
 
-int eh_calor(int t) { return t >= 30; }
-int eh_frio(int t) { return t <= 18; }
+double menos_dez(double preco) { return preco * 0.90; }
+double leve_tres(double preco) { return preco * 2.0 / 3.0; } // leve 3, pague 2
 
-// conta quantos elementos passam no teste; QUAL teste, quem chama decide
-int conta_se(const int *v, int n, int (*criterio)(int)) {
-    int cont = 0;
-    for (int i = 0; i < n; i++) {
-        if (criterio(v[i])) { // chama a função para onde criterio aponta
-            cont++;
-        }
+// aplica a regra em cada preço; regra NULL quer dizer "sem promoção hoje"
+void aplica(double *precos, int n, double (*regra)(double)) {
+    if (regra == NULL) {
+        return; // chamar um ponteiro NULL derrubaria o programa
     }
-    return cont;
+    for (int i = 0; i < n; i++) {
+        precos[i] = regra(precos[i]);
+    }
+}
+
+void mostra(const char *titulo, const double *precos, int n) {
+    printf("%-10s", titulo);
+    for (int i = 0; i < n; i++) {
+        printf(" %6.2f", precos[i]);
+    }
+    printf("\n");
 }
 
 int main(void) {
-    int temps[7] = {31, 27, 33, 18, 16, 29, 34}; // máximas da semana
+    double cesta[3] = {30.00, 12.90, 8.40}; // café, biscoito, leite
+    int dia = 3;                             // 1 = domingo ... 7 = sábado
 
-    int (*regra)(int) = eh_calor;  // o nome da função já é o endereço dela
-    printf("Dias de calor: %d\n", conta_se(temps, 7, regra));
-    printf("Dias de frio:  %d\n", conta_se(temps, 7, eh_frio));
+    double (*regra)(double) = NULL; // o ponteiro escolhe a regra em tempo de execução
+    if (dia == 3) {
+        regra = menos_dez;          // terça: 10% em tudo
+    } else if (dia == 5) {
+        regra = leve_tres;
+    }
+
+    mostra("Antes:", cesta, 3);
+    aplica(cesta, 3, regra);
+    mostra("Depois:", cesta, 3);
+
+    // ponteiros para função também se comparam com ==
+    printf("Regra de hoje: %s\n", regra == menos_dez ? "10% off" : "outra");
+
+    aplica(cesta, 3, NULL); // nenhuma regra: nada muda
+    mostra("Sem regra:", cesta, 3);
     return 0;
 }
 // Saída:
-// Dias de calor: 3
-// Dias de frio:  2
+// Antes:      30.00  12.90   8.40
+// Depois:     27.00  11.61   7.56
+// Regra de hoje: 10% off
+// Sem regra:  27.00  11.61   7.56
 ```
 
 ```bash
@@ -2778,7 +2953,8 @@ const char * (um ponteiro para ponteiro, assunto 0049).
 Este programa ordena os saldos de uma corretora (em centavos) e tem um
 bug de propósito na função de comparação. Ele compila sem aviso, mas o
 rodar acusa um erro quando roda, e a ordem pode sair errada. Rode, leia a
-mensagem "runtime error" e explique o problema. Depois conserte.
+mensagem "runtime error" e conserte a função compara. Rode de novo: a
+mensagem tem que sumir e a ordem tem que ficar certa.
 
 
 ```text
@@ -2790,7 +2966,8 @@ Saída esperada:
 
 1. Quanto dá 2000000000 - (-2000000000)? Cabe num int (assunto 0003)?
 2. A comparação só precisa devolver o SINAL certo, não a diferença.
-3. Resposta esperada: a subtração estoura o int (signed integer
+3. Resposta esperada: "-2000000000 5 2000000000", sem runtime error. A
+   subtração estoura o int (signed integer
    overflow): o resultado "dá a volta" e fica negativo, dizendo que
    2000000000 vem antes de -2000000000. Conserto:
    return (x > y) - (x < y);
@@ -2811,22 +2988,23 @@ int precos[7] = {47, 58, 50, 39, 53, 61, 44};
 ```
 
 
+A função de comparação só recebe dois endereços, então guarde o alvo
+numa variável global static. Depois de mostrar a ordem para 50, mude o
+alvo para 60 (você achou mais R$ 10), ordene de novo e mostre.
+
 
 ```text
 Saída esperada:
 50 47 53 44 58 39 61
+61 58 53 50 47 44 39
 ```
-
-
-Desafio extra: guarde o alvo (50) numa variável global static e mude
-para 60 antes de ordenar de novo. Qual sai a ordem?
 
 **Dicas:**
 
 1. Calcule as distâncias de x e y com abs() (stdlib.h).
 2. Compare primeiro as distâncias; se forem iguais, compare os preços.
-3. Resposta esperada: 50 47 53 44 58 39 61. Com alvo 60:
-   61 58 53 50 47 44 39.
+3. Resposta esperada: 50 47 53 44 58 39 61 e, com alvo 60,
+   61 58 53 50 47 44 39 (61 está a 1 do alvo, 58 está a 2).
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E300.c
@@ -2945,37 +3123,56 @@ como saber. Ela só pergunta "ainda tem byte para trocar?":
 
 Os arquivos ficam em [`0051-void-generico/`](0051-void-generico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A101 · Uma troca para qualquer tipo**
+**Exemplo A101 · O backup que copia qualquer coisa**
 
 ```c
 #include <stdio.h>
+#include <string.h>
 
-// void *: "endereço de qualquer coisa". Como a função não sabe o tipo,
-// recebe o tamanho em bytes e troca byte a byte.
-void troca_generica(void *a, void *b, size_t tam) {
-    unsigned char *x = a; // void * vira outro ponteiro sem cast, em C
-    unsigned char *y = b;
+// copia tam bytes de origem para destino; const void *: só lê a origem.
+// Devolve destino, como o memcpy da string.h
+void *copia_bytes(void *destino, const void *origem, size_t tam) {
+    unsigned char *d = destino;
+    const unsigned char *o = origem;
     for (size_t i = 0; i < tam; i++) {
-        unsigned char tmp = x[i];
-        x[i] = y[i];
-        y[i] = tmp;
+        d[i] = o[i];
     }
+    return destino;
 }
 
 int main(void) {
-    int senha_a = 17, senha_b = 42;               // senhas do atendimento
-    double preco_a = 12.90, preco_b = 8.50;       // preços na etiqueta
+    int itens = 7;
+    double total = 184.35;
+    int qtd[4] = {2, 1, 6, 3}; // quantidade de cada produto no carrinho
 
-    troca_generica(&senha_a, &senha_b, sizeof senha_a);   // troca 4 bytes
-    troca_generica(&preco_a, &preco_b, sizeof preco_a);   // troca 8 bytes
+    int itens_bkp;
+    double total_bkp;
+    int qtd_bkp[4];
 
-    printf("senhas: %d e %d\n", senha_a, senha_b);
-    printf("preços: %.2f e %.2f\n", preco_a, preco_b);
+    copia_bytes(&itens_bkp, &itens, sizeof itens);  // 4 bytes
+    copia_bytes(&total_bkp, &total, sizeof total);  // 8 bytes
+    copia_bytes(qtd_bkp, qtd, sizeof qtd);          // o vetor inteiro: 16 bytes
+
+    qtd[2] = 0; // o cliente tirou os 6 iogurtes; o backup não muda
+    printf("itens: %d, total: %.2f\n", itens_bkp, total_bkp);
+    printf("qtd agora:  %d %d %d %d\n", qtd[0], qtd[1], qtd[2], qtd[3]);
+    printf("qtd backup: %d %d %d %d\n", qtd_bkp[0], qtd_bkp[1], qtd_bkp[2], qtd_bkp[3]);
+
+    // o void * devolvido precisa voltar ao tipo certo para ser lido
+    int *volta = copia_bytes(qtd, qtd_bkp, sizeof qtd); // restaura o carrinho
+    printf("restaurado: %d (o mesmo endereço de qtd? %d)\n", volta[2], volta == qtd);
+
+    // a biblioteca já tem essa função pronta
+    memcpy(&itens, &itens_bkp, sizeof itens);
+    printf("memcpy: %d\n", itens);
     return 0;
 }
 // Saída:
-// senhas: 42 e 17
-// preços: 8.50 e 12.90
+// itens: 7, total: 184.35
+// qtd agora:  2 1 0 3
+// qtd backup: 2 1 6 3
+// restaurado: 6 (o mesmo endereço de qtd? 1)
+// memcpy: 7
 ```
 
 ```bash
@@ -3051,21 +3248,32 @@ altura: 1.83
 
 **Exercício E302** · ★☆☆
 
-O programa abaixo tem quatro linhas comentadas, marcadas de L1 a L4.
-ANTES de testar, diga para cada uma: compila? Se compila, funciona? Depois
-descomente UMA linha de cada vez, rode com o rodar e leia a mensagem.
+O programa abaixo tem quatro linhas, de L1 a L4, e cada comentário diz o
+que a linha QUERIA fazer. A L2 está certa e já roda. As outras três
+estão comentadas porque têm erro: descomente UMA de cada vez, rode com o
+rodar, leia a mensagem e conserte a linha para que ela faça o que
+promete. No fim, as quatro devem ficar descomentadas e rodando limpo.
+
+
+```text
+Saída esperada:
+L1: 300
+L2: 450
+L3: 450
+L4: 450.0
+pontos[0] = 300
+```
 
 **Dicas:**
 
-1. void * não diz quantos bytes ler nem quantos bytes andar.
-2. Em C, void * vira int * sem cast.
-3. Resposta esperada: L1 não compila (desreferenciar void *: "invalid use
-   of void expression"); L2 compila e mostra 300; L3 compila só com
-   aviso do -pedantic ("pointer of type 'void *' used in arithmetic"),
-   porque aritmética com void * é extensão do gcc; o gcc anda 1 byte, e
-   o printf final passa a ler um int fora do lugar ("load of misaligned
-   address"); L4 compila, mas lê 8 bytes onde só há um int de 4: lixo e
-   erro do AddressSanitizer (stack-buffer-overflow).
+1. void * não diz quantos bytes ler nem quantos bytes andar: antes de
+   usar * ou +, converta para o tipo certo. Em C, void * vira int * sem
+   cast.
+2. L1 não compila ("invalid use of void expression"). L3 só passa com
+   aviso do -pedantic: aritmética com void * é extensão do gcc, que anda
+   1 byte. L4 lê 8 bytes onde há um int de 4 (o sanitizer reclama).
+3. Resposta esperada: a saída acima, com L1: *(int *)p; L2 igual;
+   L3: p = (int *)p + 1; L4: (double)*(int *)p com %.1f.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-void-generico/E302.c
@@ -3188,8 +3396,16 @@ bruno no índice -1
 
 **Exercício E306** · ★★★
 
-Usando a função mostra_bytes do A102, preveja SEM rodar o que aparece
-para cada variável, num PC little-endian:
+Escreva a função
+
+
+```text
+void mostra_bytes(const char *rotulo, const void *p, size_t tam)
+```
+
+
+que imprime, em hexa, os tam bytes que estão a partir de p (como no
+A102). No main, com
 
 
 ```text
@@ -3200,18 +3416,31 @@ char sigla[] = "BR";
 ```
 
 
-Depois rode e confira.
+mostre os bytes das quatro variáveis. Depois, usando um unsigned char *
+apontado para cada variável, troque SÓ o primeiro byte de cor para 0xFF
+e SÓ o primeiro byte de negativo para 0x00, e mostre os dois valores
+inteiros (cor com printf("%#010x"), negativo com %d).
+
+
+```text
+Saída esperada (num PC Intel/AMD ou ARM, que são little-endian):
+curto: 02 01
+cor: 0d 0c 0b 0a
+negativo: fe ff ff ff
+sigla: 42 52 00
+cor depois: 0x0a0b0cff
+negativo depois: -256
+```
 
 **Dicas:**
 
-1. Escreva cada número em hexa com todos os bytes (short tem 2, int 4) e
-   inverta a ordem dos bytes.
-2. -2 em complemento de dois é 0xFFFFFFFE. 'B' é 0x42 e 'R' é 0x52.
-3. Resposta esperada:
-   curto: 02 01 (258 = 0x0102)
-   cor: 0d 0c 0b 0a
-   negativo: fe ff ff ff
-   sigla: 42 52 00
+1. Escreva cada número em hexa com todos os bytes (short tem 2, int 4):
+   258 é 0x0102 e -2 é 0xFFFFFFFE. No little-endian, o primeiro byte na
+   memória é o MENOS significativo.
+2. unsigned char *b = (unsigned char *)&cor; b[0] = 0xFF; muda só o byte
+   de baixo.
+3. Resposta esperada: a saída acima. negativo vira 0xFFFFFF00, que em
+   complemento de dois é -256.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-void-generico/E306.c
@@ -3346,63 +3575,69 @@ percorre a ordem nova traduzindo cada ponteiro para um índice:
 
 Os arquivos ficam em [`0052-juntando-tudo/`](0052-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
 
-**Exemplo A103 · O ranking da feira**
+**Exemplo A103 · A lista de compras picada no lugar**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define N 4
-
-// devolve dois resultados: o total (double *) e ONDE está o maior (const double **)
-void resumo(const double *v, int n, double *total, const double **maior) {
-    *total = 0;
-    *maior = v;
-    for (const double *p = v; p < v + n; p++) {
-        *total += *p;
-        if (*p > **maior) {
-            *maior = p;
+// corta a linha nos ';' (trocando cada um por '\0') e guarda em campos o
+// endereço do começo de cada pedaço. Nada é copiado: os pedaços continuam
+// morando dentro de linha. Devolve quantos pedaços achou
+int separa(char *linha, char **campos, int max) {
+    int n = 0;
+    char *p = linha;
+    while (n < max) {
+        campos[n++] = p;            // um pedaço começa aqui
+        while (*p != '\0' && *p != ';') {
+            p++;
         }
+        if (*p == '\0') {
+            break;                  // fim da linha: último pedaço
+        }
+        *p = '\0';                  // corta
+        p++;                        // o próximo começa depois do corte
     }
+    return n;
 }
 
-// cada elemento de ordem é um const double *; o qsort entrega o ENDEREÇO dele
-int maior_primeiro(const void *a, const void *b) {
-    double x = **(const double * const *)a;
-    double y = **(const double * const *)b;
-    return (x < y) - (x > y); // decrescente
+// o qsort entrega o endereço de cada char *: um char ** disfarçado de void *
+int alfabetica(const void *a, const void *b) {
+    const char *x = *(char *const *)a;
+    const char *y = *(char *const *)b;
+    return strcmp(x, y);
 }
 
 int main(void) {
-    const char *produtos[N] = {"tomate", "alface", "queijo", "pastel"};
-    int qtd[N] = {30, 45, 8, 60};
-    double preco[N] = {6.50, 3.00, 32.00, 9.00};
-    double fat[N];               // faturamento de cada barraca
-    const double *ordem[N];      // ponteiros para fat: é isso que vamos ordenar
+    char linha[] = "cafe;arroz;leite;banana;feijao";
+    char *itens[10];
 
-    for (int i = 0; i < N; i++) {
-        fat[i] = qtd[i] * preco[i];
-        ordem[i] = &fat[i];
-    }
-    qsort(ordem, N, sizeof ordem[0], maior_primeiro); // fat continua intacto
+    int n = separa(linha, itens, 10);
+    qsort(itens, (size_t)n, sizeof itens[0], alfabetica); // ordena os ponteiros
 
-    for (int i = 0; i < N; i++) {
-        int k = (int)(ordem[i] - fat); // ponteiro - início = índice do produto
-        printf("%dº %-7s R$ %7.2f\n", i + 1, produtos[k], *ordem[i]);
+    for (int i = 0; i < n; i++) {
+        // a posição na linha original sai da distância entre ponteiros
+        printf("%d. %-7s (byte %2td da linha)\n", i + 1, itens[i], itens[i] - linha);
     }
 
-    double total;
-    const double *maior;
-    resumo(fat, N, &total, &maior);
-    printf("Total: R$ %.2f  Campeão: %s\n", total, produtos[maior - fat]);
+    // a linha agora tem '\0' no lugar dos ';': o printf para no primeiro
+    printf("linha depois: %s\n", linha);
+
+    // caso de borda: um campo vazio entre dois ';' também vira um pedaço
+    char outra[] = "pao;;ovos";
+    n = separa(outra, itens, 10);
+    printf("%d pedaços, o do meio tem %zu letras\n", n, strlen(itens[1]));
     return 0;
 }
 // Saída:
-// 1º pastel  R$  540.00
-// 2º queijo  R$  256.00
-// 3º tomate  R$  195.00
-// 4º alface  R$  135.00
-// Total: R$ 1126.00  Campeão: pastel
+// 1. arroz   (byte  5 da linha)
+// 2. banana  (byte 17 da linha)
+// 3. cafe    (byte  0 da linha)
+// 4. feijao  (byte 24 da linha)
+// 5. leite   (byte 11 da linha)
+// linha depois: cafe
+// 3 pedaços, o do meio tem 0 letras
 ```
 
 ```bash
@@ -3495,7 +3730,8 @@ R$ 19.99 = 19 reais e 99 centavos
 **Dicas:**
 
 1. Converta tudo para centavos primeiro: long total = lround(valor * 100);
-   (math.h). Por que lround e não um cast direto? Teste (int)(19.99 * 100).
+   (math.h). Para ver por que não usar um cast direto, mostre também
+   (int)(19.99 * 100).
 2. Depois, *reais = total / 100 e *centavos = total % 100.
 3. Resposta esperada: as três linhas acima. Com cast direto, 19.99 * 100
    vira 1998.9999... e o cast corta para 98 centavos.
@@ -3506,36 +3742,37 @@ R$ 19.99 = 19 reais e 99 centavos
 
 **Exercício E308** · ★☆☆
 
-Preveja a saída SEM rodar. A função troca é a do assunto 0046.
+Estenda o programa abaixo para ele imprimir o próprio teste de mesa.
+Escreva a função
 
 
 ```text
-int v[4] = {5, 10, 15, 20};
-int *p = v + 3;
-char s[] = "feira";
-char *c = s + 1;
+void estado(const char *rotulo, const int *v, const int *p, const char *s)
 ```
 
 
-
-```text
-troca(&v[0], p);
-*c = 'E';
-p--;
-*p += *(v + 1);
-```
-
+que mostra o rótulo, os 4 valores de v, em que índice de v o ponteiro p
+está (use p - v) e a string s. Chame estado antes da primeira linha e
+depois de cada uma das quatro linhas do meio.
 
 
 ```text
-printf("%d %d %d %d | %s | %c\n", v[0], v[1], v[2], v[3], s, *(c + 2));
+Saída esperada:
+antes     5 10 15 20 | p em v[3] | feira
+troca     20 10 15 5 | p em v[3] | feira
+*c = 'E'  20 10 15 5 | p em v[3] | fEira
+p--       20 10 15 5 | p em v[2] | fEira
+*p += ... 20 10 25 5 | p em v[2] | fEira
+20 10 25 5 | fEira | r
 ```
 
 **Dicas:**
 
 1. p começa em v[3]; troca(&v[0], p) troca o primeiro com o último.
-2. c aponta para s[1]; c + 2 é s[3].
-3. Resposta esperada: 20 10 25 5 | fEira | r
+2. c aponta para s[1]; c + 2 é s[3]. p - v dá um ptrdiff_t: mostre com
+   %td.
+3. Resposta esperada: as seis linhas acima; a última é a do printf que
+   já está no programa.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E308.c
@@ -3616,8 +3853,9 @@ Mercadinho: total 125, desconto 15%
 ```
 
 
-Rode com o rodar, leia os avisos e os relatórios (conserte um erro, rode
-de novo) e explique cada um.
+Rode com o rodar, leia os avisos e os relatórios e conserte um erro de
+cada vez, rodando de novo, até a saída ficar igual à esperada e o rodar
+não reclamar de nada.
 
 **Dicas:**
 
@@ -3759,7 +3997,10 @@ espaço, ligue de novo. Espaços repetidos e nas pontas não atrapalham.
 
 </details>
 
-**6. Preveja.** Sem rodar:
+**6. O laço que se encontra no meio.** Rode o trecho abaixo dentro de um
+`main` e acrescente, dentro do laço, um `printf` que mostre a cada volta os
+índices de `p` e `q` (`p - v` e `q - v`, com `%td`) e o vetor inteiro.
+Depois troque a condição para `p <= q` e veja o que muda no `v[2]`.
 
 ```c
 int v[5] = {1, 2, 3, 4, 5};
@@ -3774,8 +4015,10 @@ printf("%d %d %d %d %d\n", v[0], v[1], v[2], v[3], v[4]);
 
 <details><summary>Resposta</summary>
 
-**6 6 3 4 5**. Primeira volta: `v[0] = 1 + 5`; segunda: `v[1] = 2 + 4`; aí
-`p` e `q` se encontram em `v[2]` e o laço para. Só a metade esquerda muda.
+Duas voltas: `p=0 q=4` (vira **6** 2 3 4 5) e `p=1 q=3` (vira 6 **6** 3 4 5);
+aí `p` e `q` se encontram em `v[2]` e o laço para: **6 6 3 4 5**. Com
+`p <= q` há uma terceira volta com os dois em `v[2]`, que soma o elemento
+com ele mesmo: **6 6 6 4 5**.
 
 </details>
 
@@ -3812,7 +4055,7 @@ no assunto 0052, usando `p - mesa` para achar o minuto.
 descobre a ordem dos bytes da máquina olhando o primeiro byte de um `int`
 que vale 1 (através de um `unsigned char *`). Depois escreva
 `unsigned int inverte_bytes(unsigned int x)` que troca a ordem dos 4 bytes
-usando `troca_generica` do A101 nos bytes certos.
+usando a `troca_generica` do assunto 0051 nos bytes certos.
 
 <details><summary>Resposta</summary>
 

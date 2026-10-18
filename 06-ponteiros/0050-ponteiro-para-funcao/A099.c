@@ -1,29 +1,52 @@
-// A099 · Quantos dias de calor?
+// A099 · A promoção do dia é um parâmetro
 
 #include <stdio.h>
 
-int eh_calor(int t) { return t >= 30; }
-int eh_frio(int t) { return t <= 18; }
+double menos_dez(double preco) { return preco * 0.90; }
+double leve_tres(double preco) { return preco * 2.0 / 3.0; } // leve 3, pague 2
 
-// conta quantos elementos passam no teste; QUAL teste, quem chama decide
-int conta_se(const int *v, int n, int (*criterio)(int)) {
-    int cont = 0;
-    for (int i = 0; i < n; i++) {
-        if (criterio(v[i])) { // chama a função para onde criterio aponta
-            cont++;
-        }
+// aplica a regra em cada preço; regra NULL quer dizer "sem promoção hoje"
+void aplica(double *precos, int n, double (*regra)(double)) {
+    if (regra == NULL) {
+        return; // chamar um ponteiro NULL derrubaria o programa
     }
-    return cont;
+    for (int i = 0; i < n; i++) {
+        precos[i] = regra(precos[i]);
+    }
+}
+
+void mostra(const char *titulo, const double *precos, int n) {
+    printf("%-10s", titulo);
+    for (int i = 0; i < n; i++) {
+        printf(" %6.2f", precos[i]);
+    }
+    printf("\n");
 }
 
 int main(void) {
-    int temps[7] = {31, 27, 33, 18, 16, 29, 34}; // máximas da semana
+    double cesta[3] = {30.00, 12.90, 8.40}; // café, biscoito, leite
+    int dia = 3;                             // 1 = domingo ... 7 = sábado
 
-    int (*regra)(int) = eh_calor;  // o nome da função já é o endereço dela
-    printf("Dias de calor: %d\n", conta_se(temps, 7, regra));
-    printf("Dias de frio:  %d\n", conta_se(temps, 7, eh_frio));
+    double (*regra)(double) = NULL; // o ponteiro escolhe a regra em tempo de execução
+    if (dia == 3) {
+        regra = menos_dez;          // terça: 10% em tudo
+    } else if (dia == 5) {
+        regra = leve_tres;
+    }
+
+    mostra("Antes:", cesta, 3);
+    aplica(cesta, 3, regra);
+    mostra("Depois:", cesta, 3);
+
+    // ponteiros para função também se comparam com ==
+    printf("Regra de hoje: %s\n", regra == menos_dez ? "10% off" : "outra");
+
+    aplica(cesta, 3, NULL); // nenhuma regra: nada muda
+    mostra("Sem regra:", cesta, 3);
     return 0;
 }
 // Saída:
-// Dias de calor: 3
-// Dias de frio:  2
+// Antes:      30.00  12.90   8.40
+// Depois:     27.00  11.61   7.56
+// Regra de hoje: 10% off
+// Sem regra:  27.00  11.61   7.56

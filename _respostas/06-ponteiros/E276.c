@@ -1,14 +1,12 @@
 // 0046 · Passagem por referência
 // Exercício E276 · ★★★
-//
-// Resposta: "x = 9, y = 4" e depois "x = 0". Na segunda chamada a e b
-// apontam para a mesma gaveta (aliasing). x vale 9: *a = 18; *b = 18 - 18 = 0 (zera x, que é *a também);
-// *a = 0 - 0 = 0. A troca com tmp do A091 não tem o problema: com a e b
-// iguais, tmp guarda 9, *a = 9, *b = 9.
 
 #include <stdio.h>
 
 void troca_sem_aux(int *a, int *b) {
+    if (a == b) { // mesma gaveta: trocar com ela mesma não muda nada
+        return;
+    }
     *a = *a + *b;
     *b = *a - *b;
     *a = *a - *b;

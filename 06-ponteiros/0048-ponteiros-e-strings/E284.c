@@ -1,39 +1,46 @@
 // 0048 · Ponteiros e strings
 // Exercício E284 · ★☆☆
 //
-// Considere as declarações
+// Complete o programa, que já tem as declarações
 //
 //   char cidade[] = "Natal";
 //   const char *estado = "RN";
 //
-// a) Quanto vale sizeof cidade? E sizeof estado?
-// b) Quanto vale strlen(cidade)? E strlen(estado)?
-// c) Quais destas linhas compilam e funcionam? Para as outras, diga se o
-//    erro é de compilação ou de execução:
+// 1. O programa já mostra sizeof e strlen das duas.
+// 2. Troque a primeira letra da cidade por 'n', faça estado apontar para
+//    "PB" e mostre "cidade - estado".
+// 3. Volte a cidade para "Natal" com strcpy e mostre de novo.
+// 4. Tente também cidade = "Recife"; e estado[0] = 'r'; rode, leia o erro
+//    do compilador e apague essas duas linhas.
 //
-//   1. cidade[0] = 'n';
-//   2. estado = "PB";
-//   3. cidade = "Recife";
-//   4. estado[0] = 'r';
-//   5. strcpy(cidade, "Natal");
-//
-// Responda em comentário. Depois teste: escreva o programa com as linhas que
-// funcionam e mostre os sizeof e strlen com printf.
+//   Saída esperada:
+//   sizeof cidade = 6, sizeof estado = 8
+//   strlen cidade = 5, strlen estado = 2
+//   natal - PB
+//   Natal - PB
 //
 // Dicas:
-// 1. Vetor: o tamanho inclui o '\0'. Ponteiro: o tamanho de um endereço.
-// 2. Vetor não recebe outro endereço; const char * não deixa escrever.
-// 3. Resposta esperada: a) 6 e 8; b) 5 e 2; c) 1 funciona; 2 funciona;
-//    3 não compila (vetor não pode ser atribuído); 4 não compila por
-//    causa do const (sem o const, compilaria e cairia na execução);
-//    5 funciona (cabe: 5 letras + '\0' em 6 bytes).
+// 1. Vetor: o sizeof inclui o '\0'. Ponteiro: o sizeof é o de um endereço.
+// 2. Vetor não recebe outro endereço com =; const char * não deixa
+//    escrever no texto apontado. Os dois erros aparecem na compilação.
+// 3. Resposta esperada: a saída acima. "Natal" cabe nos 6 bytes de cidade
+//    (5 letras + '\0'); "Recife" não caberia.
 //
-// Escreva sua resposta abaixo:
+// Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>
 #include <string.h>
 
 int main(void) {
+    char cidade[] = "Natal";
+    const char *estado = "RN";
+
+    printf("sizeof cidade = %zu, sizeof estado = %zu\n", sizeof cidade, sizeof estado);
+    printf("strlen cidade = %zu, strlen estado = %zu\n", strlen(cidade), strlen(estado));
+
+    // 2. 'n', "PB" e a linha "cidade - estado"
+
+    // 3. strcpy e a linha de novo
 
     return 0;
 }

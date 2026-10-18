@@ -1,30 +1,25 @@
 // 0044 · Memória e endereços
 // Exercício E260 · ★☆☆
 //
-// Olhe este gaveteiro (endereços fictícios) de um programa de futebol e
-// responda sem rodar nada:
+// O placar eletrônico do estádio guarda três dados de um time: os gols
+// (int, 3), a média de gols por jogo (double, 1.5) e o resultado da
+// partida (char, 'V'). Escreva um programa que monte o "gaveteiro" dessas
+// variáveis: uma linha por variável, com o nome, o valor, o endereço e
+// quantos bytes ela ocupa. No fim, mostre quantos bytes as três ocupam
+// juntas, somando os sizeof.
 //
-//   endereço   conteúdo   variável
-//   0x2000     3          gols   (int)
-//   0x2004     (livre)
-//   0x2008     1.5        media  (double)
-//   0x2010     'V'        result (char)
-//
-//   a) Quanto vale gols? E &gols?
-//   b) Quanto vale &media?
-//   c) media ocupa 8 bytes. Qual é o endereço do último byte dela?
-//   d) Que bytes a variável gols ocupa?
-//   e) Rodando o programa de novo, &gols continua 0x2000?
-//
-// Depois, escreva o programa com as três variáveis e mostre os endereços
-// reais com %p.
+//   Saída esperada (os endereços mudam a cada execução):
+//   gols   = 3   em 0x7f..., 4 bytes
+//   media  = 1.5 em 0x7f..., 8 bytes
+//   result = V   em 0x7f..., 1 bytes
+//   total: 13 bytes
 //
 // Dicas:
-// 1. O endereço de uma variável é o da primeira gaveta dela.
-// 2. Do 0x2008 andando 8 gavetas, a última é 0x2008 + 7.
-// 3. Resposta esperada: a) 3 e 0x2000; b) 0x2008; c) 0x200F;
-//    d) 0x2000, 0x2001, 0x2002 e 0x2003; e) não: o sistema sorteia os
-//    endereços a cada execução (ASLR).
+// 1. O endereço sai com %p e (void *)&nome; o tamanho, com %zu e sizeof.
+// 2. sizeof dá um size_t: guarde a soma numa variável size_t e mostre
+//    com %zu.
+// 3. Resposta esperada: os tamanhos 4, 8 e 1 e a linha "total: 13 bytes";
+//    os endereços aparecem em hexadecimal e mudam a cada vez que você roda.
 //
 // Escreva sua resposta abaixo:
 

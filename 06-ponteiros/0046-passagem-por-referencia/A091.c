@@ -1,33 +1,36 @@
-// A091 · Os preços trocados
+// A091 · O plantão que vira o relógio
 
 #include <stdio.h>
 
-// recebe CÓPIAS: troca as cópias e o main nem fica sabendo
-void troca_copias(int a, int b) {
-    int tmp = a;
-    a = b;
-    b = tmp;
+// parâmetro de ida E volta: lê os valores do main e escreve de volta
+void normaliza(int *horas, int *minutos) {
+    *horas += *minutos / 60; // cada 60 minutos viram uma hora
+    *minutos %= 60;
+    *horas %= 24;            // passou da meia-noite, recomeça do 0
 }
 
-// recebe ENDEREÇOS: troca o que está nas gavetas do main
-void troca(int *a, int *b) {
-    int tmp = *a; // guarda o valor da primeira gaveta
-    *a = *b;      // primeira gaveta recebe o da segunda
-    *b = tmp;     // segunda gaveta recebe o guardado
+// horas e minutos já SÃO endereços: repassa para normaliza sem &
+void soma_minutos(int *horas, int *minutos, int extra) {
+    *minutos += extra;
+    normaliza(horas, minutos);
 }
 
 int main(void) {
-    int arroz = 8, feijao = 25; // digitados trocados: o arroz é o mais caro
+    int h = 22, m = 40; // começo do plantão no hospital
 
-    troca_copias(arroz, feijao);
-    printf("Depois de troca_copias: arroz %d, feijão %d\n", arroz, feijao);
+    soma_minutos(&h, &m, 95); // o primeiro atendimento durou 95 minutos
+    printf("Fim do 1º atendimento: %02d:%02d\n", h, m);
 
-    if (arroz < feijao) {         // o pacote de arroz deveria custar mais
-        troca(&arroz, &feijao);   // passa os endereços, não os valores
-    }
-    printf("Depois de troca:        arroz %d, feijão %d\n", arroz, feijao);
+    soma_minutos(&h, &m, 50);
+    printf("Fim do 2º atendimento: %02d:%02d\n", h, m);
+
+    // normaliza sozinha também arruma um horário anotado errado
+    int h2 = 9, m2 = 135; // alguém anotou 9h135
+    normaliza(&h2, &m2);
+    printf("9h135 arrumado: %02d:%02d\n", h2, m2);
     return 0;
 }
 // Saída:
-// Depois de troca_copias: arroz 8, feijão 25
-// Depois de troca:        arroz 25, feijão 8
+// Fim do 1º atendimento: 00:15
+// Fim do 2º atendimento: 01:05
+// 9h135 arrumado: 11:15

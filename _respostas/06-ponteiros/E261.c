@@ -1,8 +1,5 @@
 // 0044 · Memória e endereços
 // Exercício E261 · ★★☆
-//
-// Resposta: os endereços sobem de 8 em 8 (um double tem 8 bytes) e
-// precos[1][0] começa logo depois de precos[0][2]: a matriz é contígua.
 
 #include <stdio.h>
 
@@ -14,5 +11,8 @@ int main(void) {
             printf("precos[%d][%d] = %.2f em %p\n", i, j, precos[i][j], (void *)&precos[i][j]);
         }
     }
+    printf("uma posição: %zu bytes\n", sizeof precos[0][0]);
+    printf("uma linha: %zu bytes\n", sizeof precos[0]);
+    printf("a matriz: %zu bytes\n", sizeof precos);
     return 0;
 }

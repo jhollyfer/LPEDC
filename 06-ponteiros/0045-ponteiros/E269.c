@@ -1,8 +1,10 @@
 // 0045 · Ponteiros
 // Exercício E269 · ★★★
 //
-// Preveja a saída SEM rodar. Faça um teste de mesa com uma coluna para a,
-// b e para onde p e q apontam. Só depois rode para conferir.
+// Transforme o trecho abaixo num teste de mesa que o próprio programa
+// imprime. Cole o código no main e, depois da declaração e depois de CADA
+// uma das cinco linhas, acrescente um printf que mostre a linha executada
+// e os valores de a, b, *p e *q naquele momento.
 //
 //   int a = 3, b = 8;
 //   int *p = &a, *q = &b;
@@ -13,15 +15,23 @@
 //   q = &a;
 //   *q -= 4;
 //
-//   printf("a = %d, b = %d, *p = %d, *q = %d\n", a, b, *p, *q);
+//   Saída esperada:
+//   início        a = 3, b = 8, *p = 3, *q = 8
+//   *p = *q + 1   a = 9, b = 8, *p = 9, *q = 8
+//   p = q         a = 9, b = 8, *p = 8, *q = 8
+//   ...
+//   *q -= 4       a = 5, b = 16, *p = 16, *q = 5
 //
 // Dicas:
-// 1. Linha a linha: quem é mudado é a variável apontada, não o ponteiro
-//    (exceto em p = q e q = &a, que só trocam o alvo).
-// 2. Depois de p = q, p aponta para b.
-// 3. Resposta esperada: a = 5, b = 16, *p = 16, *q = 5.
+// 1. Quem muda com *p = ... é a variável apontada; p = q e q = &a só trocam
+//    o alvo do ponteiro, sem mexer em a nem em b.
+// 2. Use o mesmo printf seis vezes, mudando só o texto da linha; alinhe
+//    com espaços para a tabela ficar fácil de ler.
+// 3. Resposta esperada: as seis linhas terminam em a = 5, b = 16, *p = 16,
+//    *q = 5; no meio aparecem "*p = *p * 2  a = 9, b = 16, *p = 16, *q = 16"
+//    e "q = &a  a = 9, b = 16, *p = 16, *q = 9".
 //
-// Escreva sua resposta abaixo (cole o código e confira):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 

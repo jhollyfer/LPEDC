@@ -1,26 +1,35 @@
-// A095 · O crachá do evento
+// A095 · A string começa onde o ponteiro aponta
 
 #include <stdio.h>
-#include <ctype.h>
 
 int main(void) {
-    char nome[] = "ana";          // vetor de 4 chars, CÓPIA do literal: pode mudar
-    const char *apelido = "bia";  // ponteiro para o literal: só leitura
+    char endereco[] = "Rua das Flores, 120 - Centro"; // vetor: dá para mudar
 
-    // passa o nome para maiúsculas andando com um ponteiro até o '\0'
-    for (char *p = nome; *p != '\0'; p++) {
-        *p = (char)toupper((unsigned char)*p);
+    // procura a vírgula andando com um ponteiro
+    char *virgula = endereco;
+    while (*virgula != '\0' && *virgula != ',') {
+        virgula++;
     }
-    printf("Crachá: %s (%s)\n", nome, apelido);
 
-    printf("sizeof nome = %zu, sizeof apelido = %zu\n", sizeof nome, sizeof apelido);
+    // para o printf, a string vai do endereço recebido até o primeiro '\0'
+    printf("Inteiro:     %s\n", endereco);
+    printf("Da vírgula:  %s\n", virgula);
+    printf("Depois dela: %s\n", virgula + 2); // pula a vírgula e o espaço
 
-    apelido = "bibi";  // vale: o ponteiro passa a apontar para outro literal
-    // nome = "joana"; // não compila: vetor não pode receber outro endereço
-    printf("Novo apelido: %s\n", apelido);
+    // um '\0' no meio corta a string: o resto continua na memória
+    if (*virgula == ',') {
+        *virgula = '\0';
+    }
+    printf("Só a rua:    %s\n", endereco);
+    printf("O resto:     %s\n", virgula + 2); // a parte de trás segue lá
+
+    // com const char * apontando para um literal, isso não seria permitido:
+    // const char *fixo = "Rua A, 10"; fixo[5] = '\0'; não compila
     return 0;
 }
 // Saída:
-// Crachá: ANA (bia)
-// sizeof nome = 4, sizeof apelido = 8
-// Novo apelido: bibi
+// Inteiro:     Rua das Flores, 120 - Centro
+// Da vírgula:  , 120 - Centro
+// Depois dela: 120 - Centro
+// Só a rua:    Rua das Flores
+// O resto:     120 - Centro

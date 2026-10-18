@@ -1,11 +1,5 @@
 // 0051 · void * e cast
 // Exercício E306 · ★★★
-//
-// Resposta (little-endian: o byte menos significativo primeiro):
-//   curto: 02 01        (258 = 0x0102)
-//   cor: 0d 0c 0b 0a    (0x0A0B0C0D)
-//   negativo: fe ff ff ff  (-2 = 0xFFFFFFFE)
-//   sigla: 42 52 00     ('B', 'R' e o '\0')
 
 #include <stdio.h>
 
@@ -28,5 +22,13 @@ int main(void) {
     mostra_bytes("cor", &cor, sizeof cor);
     mostra_bytes("negativo", &negativo, sizeof negativo);
     mostra_bytes("sigla", sigla, sizeof sigla);
+
+    unsigned char *b = (unsigned char *)&cor;
+    b[0] = 0xFF; // o primeiro byte na memória é o menos significativo
+    printf("cor depois: %#010x\n", cor);
+
+    b = (unsigned char *)&negativo;
+    b[0] = 0x00; // fe ff ff ff vira 00 ff ff ff = 0xFFFFFF00
+    printf("negativo depois: %d\n", negativo);
     return 0;
 }

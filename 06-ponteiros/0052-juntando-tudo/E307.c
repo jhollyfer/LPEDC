@@ -15,7 +15,8 @@
 //
 // Dicas:
 // 1. Converta tudo para centavos primeiro: long total = lround(valor * 100);
-//    (math.h). Por que lround e não um cast direto? Teste (int)(19.99 * 100).
+//    (math.h). Para ver por que não usar um cast direto, mostre também
+//    (int)(19.99 * 100).
 // 2. Depois, *reais = total / 100 e *centavos = total % 100.
 // 3. Resposta esperada: as três linhas acima. Com cast direto, 19.99 * 100
 //    vira 1998.9999... e o cast corta para 98 centavos.
