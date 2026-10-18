@@ -1,10 +1,8 @@
 // 0083 · Pilha encadeada
 // Exercício E496 · ★★☆
 //
-// Resposta: a) heap-use-after-free, na linha "*numero = velho->numero", que
-// vinha depois do free(velho); b) o free só marca a memória como livre: até
-// alguém reaproveitá-la, os bytes antigos continuam lá, e a leitura parece
-// funcionar por sorte; c) ler o valor antes do free.
+// O erro era heap-use-after-free: "*numero = velho->numero" vinha depois
+// do free(velho). Conserto: ler o valor antes do free.
 
 #include <stdbool.h>
 #include <stdio.h>

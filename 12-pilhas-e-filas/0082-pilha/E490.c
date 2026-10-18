@@ -5,7 +5,7 @@
 // própria pilha (com a convenção topo = -1 para pilha vazia) e tenta
 // empilhar 5 bandejas. A quinta deveria ser recusada, mas o programa tem um
 // bug. Rode com o rodar: o sanitizer acusa o erro (procure "out of bounds").
-// Ache a linha, explique o que acontece na memória e conserte.
+// Ache a linha, conserte e rode de novo até a saída bater com a esperada.
 //
 //   Saída esperada depois do conserto:
 //   Empilhou a bandeja 1

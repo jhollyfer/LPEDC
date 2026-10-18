@@ -1,14 +1,50 @@
 // 0086 · Fila encadeada
 // Exercício E511 · ★☆☆
-//
-// Resposta:
-//   insere 7   inicio -> 7 -> NULL           (fim no 7)
-//   insere 4   inicio -> 7 -> 4 -> NULL      (fim no 4)
-//   retira     inicio -> 4 -> NULL           mostra "7 " (fim no 4)
-//   insere 9   inicio -> 4 -> 9 -> NULL      (fim no 9)
-//   retira     inicio -> 9 -> NULL           mostra "4 " (fim no 9)
-//   insere 1   inicio -> 9 -> 1 -> NULL      (fim no 1)
-//   retira     inicio -> 1 -> NULL           mostra "9 " (fim no 1)
-// Saída: "7 4 9 " e "sobrou 1 (1 na fila)".
-// inicio e fim apontam para o mesmo nó quando a fila tem um nó só: depois
-// de inserir o 7 e depois de cada uma das três retiradas.
+
+#include <stdio.h>
+// Na pasta do assunto basta #include "fila.h" (o rodar compila o fila.c
+// junto). Aqui a resolução inclui a implementação para compilar sozinha.
+#include "../../12-pilhas-e-filas/0086-fila-encadeada/fila.c"
+
+void mostra(Fila *f) {
+    int n = fila_tamanho(f);
+    if (n == 0) {
+        printf("vazia\n");
+        return;
+    }
+    for (int i = 0; i < n; i++) { // uma volta completa: a fila termina igual
+        int v;
+        fila_retira(f, &v);
+        printf(i == 0 ? "%d" : " -> %d", v);
+        fila_insere(f, v);
+    }
+    if (n == 1) {
+        printf(" (um nó só: início e fim apontam para ele)");
+    }
+    printf("\n");
+}
+
+int main(void) {
+    Fila *f = fila_cria();
+    if (f == NULL) {
+        return 1;
+    }
+    int entram[] = {7, 4, 9, 1};
+    int x;
+
+    for (int i = 0; i < 4; i++) {
+        fila_insere(f, entram[i]);
+        printf("insere %d: ", entram[i]);
+        mostra(f);
+        if (i > 0 && fila_retira(f, &x)) { // a partir do segundo, sai um
+            printf("retira %d: ", x);
+            mostra(f);
+        }
+    }
+    if (fila_retira(f, &x)) {
+        printf("retira %d: ", x);
+        mostra(f);
+    }
+    fila_libera(f);
+    return 0;
+}

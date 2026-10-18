@@ -3,8 +3,8 @@
 //
 // A fila de pedidos da cozinha funciona bem no começo da noite. Mas o
 // sanitizer explode quando a fila esvazia e chega um pedido novo. Rode, leia
-// o relatório (procure "heap-use-after-free" e a linha) e conserte. Explique
-// por que o erro só aparece nessa situação.
+// o relatório (procure "heap-use-after-free" e a linha), conserte e rode de
+// novo: as quatro linhas têm que aparecer sem nenhum relatório do sanitizer.
 //
 //   Saída esperada depois do conserto:
 //   Pronto: 11
@@ -15,7 +15,8 @@
 // Dicas:
 // 1. Em que linha o relatório aponta? Que ponteiro está sendo usado ali?
 // 2. Depois de cozinha_sai tirar o último pedido, para onde aponta f->fim?
-// 3. Resposta esperada: cozinha_sai não zera o fim quando a fila esvazia.
+// 3. O erro só aparece quando a fila esvazia e depois recebe um pedido.
+// 4. Resposta esperada: cozinha_sai não zera o fim quando a fila esvazia.
 //    O fim continua apontando para o nó liberado, e o próximo cozinha_entra
 //    vê fim != NULL e escreve f->fim->prox nesse nó morto. Conserto: depois
 //    de avançar o início, if (f->inicio == NULL) f->fim = NULL;

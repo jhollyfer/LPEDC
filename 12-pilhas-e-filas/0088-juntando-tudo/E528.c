@@ -21,7 +21,8 @@
 // Dicas:
 // 1. A cada volta: retire um processo, rode min(2, restante) ms somando no
 //    relógio, desconte do restante e, se ainda sobrar, insira de novo.
-// 2. Faça o teste de mesa da fila antes: [1 2 3 4], [2 3 4 1], [3 4 1 2]...
+// 2. Para depurar, mostre a fila a cada volta: [1 2 3 4], [2 3 4 1],
+//    [3 4 1 2]...
 // 3. Resposta esperada: as cinco linhas acima ((13 + 10 + 5 + 12) / 4).
 //
 // Escreva sua resposta abaixo:

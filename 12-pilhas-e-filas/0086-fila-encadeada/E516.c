@@ -8,8 +8,8 @@
 //   bool circ_insere(No **ultimo, int valor)
 //   bool circ_retira(No **ultimo, int *valor)
 //
-// e teste com a mesma história do A171: entram 501, 502 e 503, sai um, entra
-// o 504 e a fila é esvaziada.
+// e teste com a mesma história da cozinha do texto: entram 501, 502 e 503,
+// sai um, entra o 504 e a fila é esvaziada.
 //
 //   Saída esperada:
 //   Preparando: 501

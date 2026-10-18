@@ -1,44 +1,45 @@
-// A169 · As senhas da lotérica
+// A169 · Só as 8 últimas corridas: a mais antiga dá lugar
 
 #include <stdio.h>
 #include "fila.h"
 
 int main(void) {
-    Fila *senhas = fila_cria(); // o painel guarda até 8 senhas
-    if (senhas == NULL) {
+    Fila *historico = fila_cria(); // o app mostra as 8 corridas mais recentes
+    if (historico == NULL) {
         return 1;
     }
 
-    for (int s = 31; s <= 36; s++) { // chegam 6 pessoas
-        fila_insere(senhas, s);
-    }
+    int corridas[] = {18, 25, 12, 40, 9, 31, 22, 15, 27, 33, 11}; // em R$
+    int total = sizeof corridas / sizeof corridas[0];
 
-    printf("Atendidas:");
-    for (int i = 0; i < 4; i++) { // o caixa chama 4
-        int s;
-        if (fila_retira(senhas, &s)) {
-            printf(" %d", s);
+    for (int i = 0; i < total; i++) {
+        // cheia? em vez de recusar a nova, descarta a mais antiga (o início)
+        if (!fila_insere(historico, corridas[i])) {
+            int velha;
+            fila_retira(historico, &velha);
+            fila_insere(historico, corridas[i]);
+            printf("Corrida de R$ %d saiu do histórico para entrar a de R$ %d\n", velha, corridas[i]);
         }
     }
 
-    printf("\nChegaram:");
-    for (int s = 37; s <= 40; s++) { // 39 e 40 dão a volta no vetor
-        if (fila_insere(senhas, s)) {
-            printf(" %d", s);
-        }
+    // percorre sem perder ninguém: retira, mostra e devolve ao fim
+    int soma = 0;
+    printf("Histórico (%d):", fila_tamanho(historico));
+    for (int i = 0; i < fila_tamanho(historico); i++) {
+        int valor;
+        fila_retira(historico, &valor);
+        printf(" %d", valor);
+        soma += valor;
+        fila_insere(historico, valor);
     }
+    printf("\nGasto nas últimas 8: R$ %d\n", soma);
 
-    printf("\nNa fila (%d):", fila_tamanho(senhas));
-    int s;
-    while (fila_retira(senhas, &s)) {
-        printf(" %d", s);
-    }
-    printf("\n");
-
-    fila_libera(senhas);
+    fila_libera(historico);
     return 0;
 }
 // Saída:
-// Atendidas: 31 32 33 34
-// Chegaram: 37 38 39 40
-// Na fila (6): 35 36 37 38 39 40
+// Corrida de R$ 18 saiu do histórico para entrar a de R$ 27
+// Corrida de R$ 25 saiu do histórico para entrar a de R$ 33
+// Corrida de R$ 12 saiu do histórico para entrar a de R$ 11
+// Histórico (8): 40 9 31 22 15 27 33 11
+// Gasto nas últimas 8: R$ 188

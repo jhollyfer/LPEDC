@@ -1,32 +1,48 @@
-// A163 · Desfazer no app de delivery
+// A163 · As bordas da pilha: cheia e vazia
 
 #include <stdio.h>
 #include "pilha.h"
 
 int main(void) {
-    Pilha *pedido = pilha_cria();
-    if (pedido == NULL) {
+    Pilha *cadeiras = pilha_cria(); // o depósito do salão empilha até 100
+    if (cadeiras == NULL) {
         return 1;
     }
 
-    // preços em centavos: inteiro não tem erro de arredondamento
-    pilha_empilha(pedido, 2590); // pizza: R$ 25,90
-    pilha_empilha(pedido, 800);  // refrigerante: R$ 8,00
-    pilha_empilha(pedido, 1200); // pudim: R$ 12,00
-
-    int preco;
-    if (pilha_desempilha(pedido, &preco)) { // "desfazer": sai o último que entrou
-        printf("Desfeito: R$ %d,%02d\n", preco / 100, preco % 100);
+    // chegam 103 cadeiras numeradas: as 3 últimas não cabem (overflow)
+    int recusadas = 0;
+    for (int c = 1; c <= 103; c++) {
+        if (!pilha_empilha(cadeiras, c)) {
+            recusadas++;
+        }
     }
-    if (pilha_topo(pedido, &preco)) { // só olha, não tira
-        printf("Agora no topo: R$ %d,%02d\n", preco / 100, preco % 100);
-    }
-    printf("Itens no pedido: %d\n", pilha_tamanho(pedido));
+    int topo = 0;
+    pilha_topo(cadeiras, &topo);
+    printf("Empilhadas: %d, recusadas: %d, no topo: %d\n", pilha_tamanho(cadeiras), recusadas, topo);
 
-    pilha_libera(pedido);
+    // a festa usa todas: esvazia a pilha
+    int cadeira = 0;
+    int retiradas = 0;
+    while (pilha_desempilha(cadeiras, &cadeira)) {
+        retiradas++;
+    }
+    printf("Retiradas: %d, a última foi a %d\n", retiradas, cadeira);
+
+    // mais uma retirada com a pilha vazia (underflow): devolve false e
+    // não mexe na variável. O -1 serve de marcador para provar isso.
+    cadeira = -1;
+    if (!pilha_desempilha(cadeiras, &cadeira)) {
+        printf("Pilha vazia: nada saiu, cadeira continua %d\n", cadeira);
+    }
+    if (!pilha_topo(cadeiras, &topo)) {
+        printf("Topo também falha: vazia? %d\n", pilha_vazia(cadeiras));
+    }
+
+    pilha_libera(cadeiras);
     return 0;
 }
 // Saída:
-// Desfeito: R$ 12,00
-// Agora no topo: R$ 8,00
-// Itens no pedido: 2
+// Empilhadas: 100, recusadas: 3, no topo: 100
+// Retiradas: 100, a última foi a 1
+// Pilha vazia: nada saiu, cadeira continua -1
+// Topo também falha: vazia? 1

@@ -1,30 +1,33 @@
-// A175 · A calculadora completa: infixa, pós-fixa e resultado
+// A175 · A calculadora que explica o erro
 
-#include <stdbool.h>
 #include <stdio.h>
 #include "fila.h"
 #include "pilha.h"
 
-// Na fila e na pilha só cabe int. Números são >= 0; operadores e o "("
-// viram códigos negativos, que nunca se confundem com um número.
 enum { SOMA = -1, SUB = -2, MULT = -3, DIV = -4, ABRE = -5 };
 
-int codigo_de(char c) {
-    return c == '+' ? SOMA : c == '-' ? SUB : c == '*' ? MULT : DIV;
-}
+// códigos de erro: cada etapa descobre os seus
+enum { OK, FECHA_SEM_ABRIR, FALTOU_FECHAR, FALTA_OPERANDO, DIV_ZERO, SOBROU_NUMERO, SEM_MEMORIA };
+
+const char *mensagem[] = {
+    "ok", "')' sem '(' antes", "'(' sem ')' depois",
+    "falta operando", "divisão por zero", "sobrou número", "faltou memória",
+};
 
 int precedencia(int op) {
-    return (op == MULT || op == DIV) ? 2 : (op == SOMA || op == SUB) ? 1 : 0; // ABRE: 0
+    return (op == MULT || op == DIV) ? 2 : (op == SOMA || op == SUB) ? 1 : 0;
 }
 
-// Etapa 1: infixa -> fila em ordem pós-fixa. A pilha segura os operadores.
-bool converte(const char *s, Fila *saida) {
+// Etapa 1. Os erros de parêntese só aparecem aqui: na fila pós-fixa não
+// existe parêntese nenhum, e um ABRE perdido lá dentro viraria lixo na conta.
+int converte(const char *s, Fila *saida) {
     Pilha *ops = pilha_cria();
     if (ops == NULL) {
-        return false;
+        return SEM_MEMORIA;
     }
+    int erro = OK;
     int topo;
-    for (int i = 0; s[i] != '\0'; i++) {
+    for (int i = 0; s[i] != '\0' && erro == OK; i++) {
         char c = s[i];
         if (c >= '0' && c <= '9') {
             int numero = 0;
@@ -32,16 +35,19 @@ bool converte(const char *s, Fila *saida) {
                 numero = numero * 10 + (s[i] - '0');
             }
             i--;
-            fila_insere(saida, numero); // número vai direto para a saída
+            fila_insere(saida, numero);
         } else if (c == '(') {
             pilha_empilha(ops, ABRE);
         } else if (c == ')') {
+            topo = 0; // se a pilha já estiver vazia, topo não pode ficar com lixo
             while (pilha_desempilha(ops, &topo) && topo != ABRE) {
                 fila_insere(saida, topo);
             }
+            if (topo != ABRE) {
+                erro = FECHA_SEM_ABRIR; // a pilha acabou antes de achar o '('
+            }
         } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            int op = codigo_de(c);
-            // sai antes quem tem precedência maior ou igual (conta da esquerda primeiro)
+            int op = c == '+' ? SOMA : c == '-' ? SUB : c == '*' ? MULT : DIV;
             while (pilha_topo(ops, &topo) && precedencia(topo) >= precedencia(op)) {
                 pilha_desempilha(ops, &topo);
                 fila_insere(saida, topo);
@@ -49,61 +55,68 @@ bool converte(const char *s, Fila *saida) {
             pilha_empilha(ops, op);
         }
     }
-    while (pilha_desempilha(ops, &topo)) {
-        fila_insere(saida, topo);
+    while (erro == OK && pilha_desempilha(ops, &topo)) {
+        if (topo == ABRE) {
+            erro = FALTOU_FECHAR; // sobrou um '(' que ninguém fechou
+        } else {
+            fila_insere(saida, topo);
+        }
     }
     pilha_libera(ops);
-    return true;
+    return erro;
 }
 
-// Etapa 2: consome a fila pós-fixa com uma pilha de valores.
-bool avalia(Fila *posfixa, int *resultado) {
+// Etapa 2. Aqui aparecem os erros de conta.
+int avalia(Fila *posfixa, int *resultado) {
     Pilha *val = pilha_cria();
     if (val == NULL) {
-        return false;
+        return SEM_MEMORIA;
     }
-    bool ok = true;
+    int erro = OK;
     int t, a, b;
-    printf("Pós-fixa: ");
-    while (ok && fila_retira(posfixa, &t)) {
+    while (erro == OK && fila_retira(posfixa, &t)) {
         if (t >= 0) {
-            printf(" %d", t);
             pilha_empilha(val, t);
-        } else if (!pilha_desempilha(val, &b) || !pilha_desempilha(val, &a) || (t == DIV && b == 0)) {
-            ok = false;
+        } else if (!pilha_desempilha(val, &b) || !pilha_desempilha(val, &a)) {
+            erro = FALTA_OPERANDO;
+        } else if (t == DIV && b == 0) {
+            erro = DIV_ZERO;
         } else {
-            printf(" %c", t == SOMA ? '+' : t == SUB ? '-' : t == MULT ? '*' : '/');
             pilha_empilha(val, t == SOMA ? a + b : t == SUB ? a - b : t == MULT ? a * b : a / b);
         }
     }
-    printf("\n");
-    ok = ok && pilha_desempilha(val, resultado) && pilha_vazia(val);
+    if (erro == OK && (!pilha_desempilha(val, resultado) || !pilha_vazia(val))) {
+        erro = pilha_vazia(val) ? FALTA_OPERANDO : SOBROU_NUMERO;
+    }
     pilha_libera(val);
-    return ok;
+    return erro;
 }
 
 int main(void) {
-    const char *contas[] = {"(35 + 25) * 3 / 4", "2 * (3 + 4) - 10 / 5"};
-    for (int i = 0; i < 2; i++) {
+    const char *contas[] = {"(10 + 2) * 3", "10 / (5 - 5)", "4 * (2 + 3", "4 + 2) * 3", "7 * + 2", "(8) 9"};
+    for (int i = 0; i < 6; i++) {
         Fila *posfixa = fila_cria();
         if (posfixa == NULL) {
             return 1;
         }
-        int r;
-        printf("Infixa:    %s\n", contas[i]);
-        if (converte(contas[i], posfixa) && avalia(posfixa, &r)) {
-            printf("Resultado: %d\n", r);
-        } else {
-            printf("Expressão inválida\n");
+        int r = 0;
+        int erro = converte(contas[i], posfixa);
+        if (erro == OK) {
+            erro = avalia(posfixa, &r);
         }
-        fila_libera(posfixa);
+        if (erro == OK) {
+            printf("%-14s = %d\n", contas[i], r);
+        } else {
+            printf("%-14s erro: %s\n", contas[i], mensagem[erro]);
+        }
+        fila_libera(posfixa); // libera também o que sobrou na fila depois de um erro
     }
     return 0;
 }
 // Saída:
-// Infixa:    (35 + 25) * 3 / 4
-// Pós-fixa:  35 25 + 3 * 4 /
-// Resultado: 45
-// Infixa:    2 * (3 + 4) - 10 / 5
-// Pós-fixa:  2 3 4 + * 10 5 / -
-// Resultado: 12
+// (10 + 2) * 3   = 36
+// 10 / (5 - 5)   erro: divisão por zero
+// 4 * (2 + 3     erro: '(' sem ')' depois
+// 4 + 2) * 3     erro: ')' sem '(' antes
+// 7 * + 2        erro: falta operando
+// (8) 9          erro: sobrou número

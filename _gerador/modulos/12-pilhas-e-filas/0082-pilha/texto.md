@@ -132,8 +132,8 @@ vazia. Só depois `n` diminui e o valor é lido:
 > com só 3 itens dentro. O vetor é a casa da pilha, não a pilha.
 
 > [!NOTE]
-> **Pergunta para você:** no A163, se o cliente tocar em "desfazer" mais três
-> vezes seguidas, o que cada chamada de `pilha_desempilha` devolve? E o que
+> **Pergunta para você:** no programa do pedido, se o cliente tocar em
+> "desfazer" mais três vezes seguidas, o que cada chamada de `pilha_desempilha` devolve? E o que
 > fica em `preco` na última? Pense antes de testar.
 
 {{pratique}}
