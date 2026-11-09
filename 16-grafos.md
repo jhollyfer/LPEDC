@@ -4310,214 +4310,233 @@ Galpão 2: -1
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
-letra e só depois abra o gabarito. Sempre que a questão traz código, dá para
-conferir rodando.
+letra e só depois abra o gabarito. Nas de simulação, desenhe o grafo e
+anote a fila, a pilha ou a tabela de distâncias a cada passo. Quando o
+enunciado não disser outra coisa, os vizinhos são examinados em ordem
+alfabética (ou numérica) e o grafo é simples.
 
-**1.** O grafo não dirigido abaixo tem os vértices A a H e as arestas A–B,
-A–D, B–C, B–E, C–F, D–E, E–F, E–G, F–H e G–H. Uma busca em largura (BFS)
-começa em A e examina os vizinhos de cada vértice em ordem alfabética. Em que
-ordem os vértices saem da fila?
+**1.** Considere as afirmações sobre as representações de um grafo
+G = (V, E):
 
-- (A) A, B, C, D, E, F, G, H
-- (B) A, B, D, C, E, F, G, H
-- (C) A, B, C, F, E, D, G, H
-- (D) A, D, B, E, C, G, F, H
-- (E) A, B, D, E, C, F, G, H
+I. A matriz de adjacências ocupa Θ(V²) de memória, qualquer que seja o número
+de arestas.
+II. A lista de adjacências ocupa Θ(V + E).
+III. Na lista de adjacências, testar se a aresta (u, v) existe custa O(1) no
+pior caso.
+IV. Num grafo não dirigido, a soma dos graus de todos os vértices é 2|E|.
 
-<details><summary>Gabarito</summary>
+Marque a alternativa **CORRETA**.
 
-**B.** A descobre B e D (distância 1). B descobre C e E (distância 2); D não
-descobre ninguém, porque E já está na fila. C descobre F, E descobre G
-(distância 3), e F descobre H (distância 4). A ordem da fila é a ordem da
-descoberta: A, B, D, C, E, F, G, H. A alternativa (C) é a ordem da DFS no
-mesmo grafo. Veja 0110.
-
-</details>
-
-**2.** Uma DFS no estilo do Cormen percorre o grafo **dirigido** com as arestas
-A→B, A→D, B→C, C→A, C→E, D→E, E→F e F→D. O laço principal tenta os vértices
-em ordem alfabética, as listas de adjacência estão em ordem alfabética, e o
-relógio começa em 1 (cada descoberta e cada término avança o relógio). Quais
-são o tempo de descoberta e o de término de E (`E.d / E.f`)?
-
-- (A) 4 / 7
-- (B) 5 / 8
-- (C) 6 / 7
-- (D) 3 / 10
-- (E) 4 / 9
+- (A) Apenas I e II.
+- (B) Apenas I, II e IV.
+- (C) Apenas III e IV.
+- (D) Apenas I e III.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**E.** A desce para B (2), B para C (3). C→A leva a um vértice cinza (aresta
-de retorno), então C desce para E (4), E para F (5) e F para D (6). D→E é outra
-aresta de retorno, e D termina em 7. Na volta: F termina em 8, **E em 9**, C em
-10, B em 11 e A em 12 (A→D já encontra D preto). Tempos: A 1/12, B 2/11, C
-3/10, E 4/9, F 5/8, D 6/7. Veja 0111.
+**B.** A III é falsa: na lista é preciso percorrer os vizinhos de `u`, o que custa
+O(grau de u) e, no pior caso, O(V). É a matriz que responde em O(1). A IV é o
+lema do aperto de mãos: cada aresta soma 1 ao grau de cada ponta. Veja 0109.
 
 </details>
 
-**3.** Um grafo não dirigido simples tem 7 vértices e 10 arestas. Seis dos
-graus são 1, 2, 2, 3, 3 e 4. Qual é o grau do sétimo vértice?
+**2.** Considere as afirmações sobre a busca em largura (BFS) e a busca em
+profundidade (DFS), ambas sobre listas de adjacências:
 
-- (A) 3
-- (B) 4
-- (C) 5
-- (D) 6
-- (E) não existe grafo assim
+I. A BFS usa uma fila e, em grafo não ponderado, calcula o menor número de
+arestas da origem até cada vértice alcançável.
+II. A BFS pode usar uma pilha no lugar da fila sem mudar a ordem em que os
+vértices são visitados.
+III. As duas custam Θ(V + E).
+
+Marque a alternativa **CORRETA**.
+
+- (A) Apenas I.
+- (B) Apenas II.
+- (C) Apenas II e III.
+- (D) Apenas I e III.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**C.** A soma dos graus é o dobro do número de arestas: 2 × 10 = 20. Os seis
-graus conhecidos somam 15, então falta 5. Um grau 5 cabe num grafo de 7
-vértices (o máximo é 6), e a sequência 5, 4, 3, 3, 2, 2, 1 é realizável. Veja
-0109.
+**D.** Trocar a fila por uma pilha transforma a BFS numa variante da DFS: a
+ordem de visita muda, e a garantia de menor distância some (II falsa). Em
+ambas, cada vértice entra uma vez e cada aresta é examinada uma ou duas vezes,
+o que dá Θ(V + E) com lista de adjacências. Veja 0110 e 0111.
 
 </details>
 
-**4.** Sobre as representações de um grafo G = (V, E), assinale a afirmação
-correta.
+**3.** Considere as afirmações sobre o algoritmo de Dijkstra:
 
-- (A) A lista de adjacências ocupa Θ(V²) de memória, qualquer que seja E.
-- (B) Na matriz de adjacências, listar todos os vizinhos de um vértice custa
-  Θ(grau do vértice).
-- (C) Na lista de adjacências, saber se a aresta (u, v) existe custa O(1).
-- (D) A matriz ocupa Θ(V²) e responde "(u, v) é aresta?" em O(1); a lista
-  ocupa Θ(V + E) e é a escolha natural para grafos esparsos.
-- (E) Num grafo não dirigido, a lista de adjacências guarda cada aresta uma
-  vez só.
+I. Ele exige que todos os pesos das arestas sejam não negativos.
+II. Quando um vértice sai da fila de prioridade, a distância dele já é a
+definitiva.
+III. Com pesos negativos ele continua correto, desde que o grafo seja
+conexo.
+IV. Com heap binário e lista de adjacências, custa O((V + E) log V).
+
+Marque a alternativa **CORRETA**.
+
+- (A) Apenas I, II e IV.
+- (B) Apenas I e II.
+- (C) Apenas II e III.
+- (D) I, II, III e IV.
+- (E) Apenas III e IV.
 
 <details><summary>Gabarito</summary>
 
-**D.** A matriz tem V² casas, mesmo com poucas arestas, e consultar
-`adj[u][v]` é O(1). A lista guarda só o que existe: V cabeças mais um nó por
-aresta dirigida (duas por aresta não dirigida, por isso a (E) está errada).
-Listar os vizinhos na matriz custa Θ(V), porque a linha inteira é varrida.
-Veja 0109.
+**A.** A III é falsa: a conectividade não ajuda. Com uma aresta negativa, um
+vértice já extraído pode ganhar um caminho melhor depois, e o argumento de que
+a distância é definitiva deixa de valer. Para pesos negativos use Bellman-Ford.
+Veja 0112.
 
 </details>
 
-**5.** Rode o Dijkstra a partir de `s` no grafo **dirigido** com os pesos
-s→a 4, s→b 1, b→a 2, a→c 1, b→c 5, c→d 3, b→d 8, d→t 1 e c→t 6. Qual é a
-ordem em que os vértices são extraídos da fila de prioridade e qual é o valor
-final de `t.d`?
+**4.** O grafo não dirigido tem as arestas S–A, S–C, A–B, A–D, B–E, C–D, D–F,
+E–G, F–G e F–H. Uma BFS começa em S. Em que ordem os vértices saem da fila?
 
-- (A) s, b, a, c, d, t; `t.d` = 8
-- (B) s, b, a, c, t, d; `t.d` = 10
-- (C) s, a, b, c, d, t; `t.d` = 9
-- (D) s, b, c, a, d, t; `t.d` = 8
-- (E) s, b, a, d, c, t; `t.d` = 7
+- (A) S, A, B, C, D, E, F, G, H
+- (B) S, A, B, D, C, E, F, G, H
+- (C) S, A, C, B, D, E, F, G, H
+- (D) S, C, A, D, B, F, E, G, H
+- (E) S, A, C, D, B, E, F, H, G
 
 <details><summary>Gabarito</summary>
 
-**A.** Depois de `s`: a = 4, b = 1. Extrai b (1) e relaxa: a cai para 3, c = 6,
-d = 9. Extrai a (3): c cai para 4. Extrai c (4): d cai para 7, t = 10. Extrai
-d (7): t cai para 8. Por último, t. Não há empate em nenhum passo. O caminho
-é s, b, a, c, d, t, com custo 1 + 2 + 1 + 3 + 1 = 8. Veja 0112.
+**C.** S descobre A e C (distância 1). A descobre B e D; C só vê D, que já foi
+descoberto (distância 2). B descobre E e D descobre F (distância 3). E
+descobre G, e F vê G e descobre H (distância 4). A fila sai por distância
+crescente: S; A, C; B, D; E, F; G, H. Veja 0110.
 
 </details>
 
-**6.** Sobre caminhos mínimos, assinale a afirmação correta.
+**5.** Uma DFS percorre o grafo **dirigido** de vértices 1 a 6 e arestas 1→2,
+1→3, 2→4, 3→4, 3→6, 4→5, 5→2 e 6→5. O laço principal tenta os vértices em
+ordem crescente, os vizinhos também, e o relógio começa em 1 (cada descoberta
+e cada término avança o relógio). Quais são o tempo de descoberta e o de
+término do vértice 3 (`d / f`)?
 
-- (A) A BFS acha o caminho de menor peso em qualquer grafo ponderado.
-- (B) O Dijkstra está correto com pesos negativos, desde que não haja ciclo
-  de peso negativo.
-- (C) O Bellman-Ford roda em O(V · E), aceita pesos negativos e detecta um
-  ciclo negativo alcançável a partir da origem.
-- (D) Com heap binário e lista de adjacências, o Dijkstra custa Θ(V³).
-- (E) O Floyd-Warshall resolve só o problema de fonte única.
+- (A) 8 / 10
+- (B) 9 / 10
+- (C) 3 / 6
+- (D) 8 / 12
+- (E) 8 / 11
 
 <details><summary>Gabarito</summary>
 
-**C.** O Bellman-Ford relaxa todas as arestas V - 1 vezes e, numa passada a
-mais, qualquer relaxamento que ainda melhore uma distância denuncia um ciclo
-negativo. O Dijkstra fixa um vértice de vez e pode errar com uma aresta
-negativa que aparece depois, mesmo sem ciclo negativo. Com heap, ele custa
-O((V + E) log V). A BFS só serve quando todas as arestas custam o mesmo, e o
-Floyd-Warshall calcula **todos os pares**. Veja 0112 e 0154.
+**E.** A DFS desce 1 (d=1), 2 (2), 4 (3), 5 (4); em 5 a aresta 5→2 aponta para 2,
+que ainda está aberto: é uma aresta de retorno, e o grafo tem ciclo. 5 termina
+em 5, 4 em 6, 2 em 7. Volta ao 1, que desce para 3 (d=8), cujo vizinho 4 já
+terminou; 3 desce para 6 (d=9), 6 vê 5 (já terminou) e termina em 10; 3 termina
+em 11 e o 1, em 12. A (D) mistura o `d` do 3 com o `f` do 1. Veja 0111.
 
 </details>
 
-**7.** Qual é a complexidade da BFS abaixo, em função do número de vértices
-`n` e de arestas `m`, sabendo que cada vértice entra na fila no máximo uma vez?
+**6.** Rode o Dijkstra a partir de `s` no grafo **dirigido** com as arestas
+s→a 7, s→b 2, b→a 3, b→c 8, a→c 2, a→d 4, c→d 1, c→t 6 e d→t 2. Qual é a ordem
+em que os vértices saem da fila de prioridade e o valor final de `t.d`?
+
+- (A) s, b, a, d, c, t; `t.d` = 10
+- (B) s, b, a, c, d, t; `t.d` = 10
+- (C) s, a, b, c, d, t; `t.d` = 11
+- (D) s, b, a, c, d, t; `t.d` = 9
+- (E) s, b, c, a, d, t; `t.d` = 14
+
+<details><summary>Gabarito</summary>
+
+**B.** Distâncias finais: b = 2, a = 5 (por b, não pelo 7 direto), c = 7 (a→c), d = 8
+(c→d, melhor que a→d, que daria 9) e t = 10 (d→t). A ordem de extração é a das
+distâncias crescentes: s(0), b(2), a(5), c(7), d(8), t(10). O caminho de peso
+mínimo é s, b, a, c, d, t. Veja 0112.
+
+</details>
+
+**7.** Um grafo não dirigido simples tem 8 vértices e todos têm grau 3. Quantas
+arestas ele tem?
+
+- (A) 24
+- (B) 8
+- (C) 11
+- (D) 12
+- (E) 16
+
+<details><summary>Gabarito</summary>
+
+**D.** A soma dos graus é 8 · 3 = 24, e cada aresta é contada duas vezes (uma em
+cada ponta): |E| = 24/2 = 12. A (A) é a soma dos graus, esquecendo de dividir
+por 2. Veja 0109.
+
+</details>
+
+**8.** O trecho abaixo é uma DFS recursiva sobre um grafo representado por
+matriz de adjacências. Para o grafo não dirigido com as arestas 0–1 e 1–2 e
+a chamada `dfs(0)`, o que acontece?
 
 ```c
-while (inicio < fim) {
-    int u = fila[inicio++];
-    for (int v = 0; v < n; v++) {
-        if (adj[u][v] && dist[v] == -1) {
-            dist[v] = dist[u] + 1;
-            fila[fim++] = v;
-        }
-    }
+#define N 3
+int adj[N][N];
+int visitado[N];
+
+void dfs(int u) {
+    for (int v = 0; v < N; v++)
+        if (adj[u][v] && !visitado[v])
+            dfs(v);
+    visitado[u] = 1;
 }
 ```
 
-- (A) Θ(n + m)
-- (B) Θ(n²)
-- (C) Θ(m log n)
-- (D) Θ(n · m)
-- (E) Θ(m)
+- (A) A recursão não termina (estouro de pilha): o vértice só é marcado depois do laço, e `dfs(1)` volta a chamar `dfs(0)`.
+- (B) Visita 0, 1 e 2 uma vez cada e termina.
+- (C) Visita só o vértice 0, porque `visitado[0]` já vale 1.
+- (D) Falta um `free(visitado)` no fim da função.
+- (E) Acessa `adj[3][0]`, fora da matriz.
 
 <details><summary>Gabarito</summary>
 
-**B.** Com matriz de adjacências, cada vértice que sai da fila varre a linha
-inteira, de `n` casas, tenha ele muitos ou poucos vizinhos. Se o grafo é
-conexo, os `n` vértices passam pela fila: n × n. O Θ(n + m) da BFS vale com
-lista de adjacências. Veja 0110.
+**A.** A marcação está no lugar errado. `dfs(0)` chama `dfs(1)` (0 ainda não está
+marcado); `dfs(1)` enxerga o vizinho 0, ainda "não visitado", e chama `dfs(0)`
+de novo, e assim por diante. Rodando, o programa termina em falha de
+segmentação por estouro da pilha. A marca `visitado[u] = 1` tem de vir antes do
+laço. Veja 0111.
 
 </details>
 
-**8.** Na DFS da questão 2, como fica a classificação das arestas?
+**9.** Sobre BFS, DFS e ordenação topológica, marque a alternativa
+**INCORRETA**.
 
-- (A) A→D é de árvore, e o grafo é acíclico.
-- (B) A→D é de retorno, e é ela que prova que o grafo tem ciclo.
-- (C) A→D é de cruzamento, e C→A é de avanço.
-- (D) Não há aresta de retorno, então o grafo admite ordenação topológica.
-- (E) A→D é de avanço; C→A e D→E são de retorno, então o grafo tem ciclo e
-  não admite ordenação topológica.
+- (A) A BFS visita os vértices em ordem crescente de distância (em arestas) a partir da origem.
+- (B) Num grafo dirigido, a DFS encontra uma aresta de retorno se e somente se o grafo tem ciclo.
+- (C) Num grafo não dirigido, a DFS gera apenas arestas de árvore e de retorno.
+- (D) A ordenação topológica só existe para grafo dirigido sem ciclo.
+- (E) A BFS a partir de `s` alcança todos os vértices do grafo, qualquer que seja ele.
 
 <details><summary>Gabarito</summary>
 
-**E.** Quando A examina A→D, D já está preto e é descendente de A (A.d = 1 <
-D.d = 6): aresta de **avanço**. C→A e D→E chegam a vértices cinzas, ainda na
-pilha de chamadas: arestas de **retorno**. Um grafo dirigido tem ciclo se e
-somente se a DFS acha aresta de retorno; aqui há dois ciclos (A, B, C e D, E,
-F). Veja 0111.
+**E.** O "qualquer que seja ele" derruba a alternativa: num grafo desconexo, ou
+num dirigido sem caminho de `s` até alguns vértices, a BFS só alcança os
+vértices acessíveis a partir de `s`. As demais são verdadeiras: a fila garante
+a ordem por distância (A), o ciclo é a aresta de retorno (B), em grafo não
+dirigido não há avanço nem cruzamento (C) e a ordenação topológica exige DAG
+(D). Veja 0110 e 0111.
 
 </details>
 
-**9.** Qual é o peso total da árvore geradora mínima do grafo não dirigido com
-as arestas A–B 4, A–C 1, B–C 3, B–D 2, C–D 5, C–E 7, D–E 6, D–F 8 e E–F 3?
+**10.** Sobre grafos não dirigidos, marque a alternativa **CORRETA**.
 
-- (A) 13
-- (B) 14
-- (C) 16
-- (D) 15
-- (E) 18
-
-<details><summary>Gabarito</summary>
-
-**D.** No Kruskal, em ordem de peso: A–C (1), B–D (2), B–C (3) e E–F (3)
-entram; A–B (4) e C–D (5) fechariam ciclo; D–E (6) liga os dois grupos. São 5
-arestas para 6 vértices: 1 + 2 + 3 + 3 + 6 = 15. O Prim a partir de qualquer
-vértice chega à mesma soma. Veja 0113 (Prim) e, no módulo 23, 0152 e 0153.
-
-</details>
-
-**10.** Um grafo não dirigido tem 12 vértices e 3 componentes conexos, e cada
-componente é uma árvore. Quantas arestas ele tem?
-
-- (A) 9
-- (B) 10
-- (C) 11
-- (D) 12
-- (E) depende do formato das árvores
+- (A) Todo grafo com `n` vértices e `n − 1` arestas é uma árvore.
+- (B) Um grafo conexo com `n` vértices tem pelo menos `n` arestas.
+- (C) Um grafo conexo com `n` vértices e exatamente `n − 1` arestas não tem ciclo, ou seja, é uma árvore.
+- (D) O número de vértices de grau ímpar pode ser ímpar.
+- (E) Um grafo simples com `n` vértices pode ter até `n²` arestas.
 
 <details><summary>Gabarito</summary>
 
-**A.** Uma árvore com k vértices tem k - 1 arestas. Somando as três
-componentes: (k₁ - 1) + (k₂ - 1) + (k₃ - 1) = 12 - 3 = 9, qualquer que seja o
-tamanho de cada uma. Veja 0109 e 0111 (contar componentes com DFS).
+**C.** Conexo exige no mínimo `n − 1` arestas, e com exatamente `n − 1` não
+sobra aresta para fechar ciclo. A (A) falha porque o grafo pode ser desconexo e
+ainda ter um ciclo (um triângulo mais vértices isolados). A (D) é impossível
+pelo lema do aperto de mãos: a soma dos graus é par. O máximo num grafo simples
+é `n(n − 1)/2`, não `n²` (E). Veja 0109 e 0150.
 
 </details>
 

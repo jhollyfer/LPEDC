@@ -334,22 +334,31 @@ geral, `2n - 1`. Sem o memo seriam 21.891 chamadas, e 10.946 é o valor de
 
 </details>
 
-**6.** Segundo o Cormen, as duas propriedades que indicam que um problema
-de otimização pode ser resolvido por programação dinâmica são:
+**6.** Sobre programação dinâmica (PD), analise as afirmações.
 
-- (A) subestrutura ótima e subproblemas sobrepostos.
-- (B) propriedade da escolha gulosa e subestrutura ótima.
-- (C) subproblemas independentes e entrada ordenada.
-- (D) recorrência linear e memória O(1).
-- (E) subproblemas disjuntos e divisão ao meio.
+- I. Para a PD servir, o problema precisa ter subestrutura ótima e
+  subproblemas sobrepostos.
+- II. A memoização (de cima para baixo) e o preenchimento da tabela (de baixo
+  para cima) resolvem cada subproblema uma única vez.
+- III. Assim como no guloso, a PD nunca precisa guardar o resultado de
+  subproblemas.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e II, apenas.
+- (B) I e III, apenas.
+- (C) II e III, apenas.
+- (D) I, apenas.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**(A).** A solução ótima é feita de soluções ótimas de subproblemas
-(**subestrutura ótima**) e esses subproblemas se repetem
-(**sobrepostos**), o que torna a tabela vantajosa. Escolha gulosa é a
-marca dos gulosos (0133); subproblemas disjuntos, sem repetição, são o
-terreno da divisão e conquista, como no merge sort. Veja 0138 e 0139.
+**(A).** I é o critério do Cormen: a solução ótima é feita de soluções ótimas
+de subproblemas (**subestrutura ótima**) e esses subproblemas se repetem
+(**sobrepostos**). II é verdadeira: é por guardar o resultado que o custo cai
+de exponencial para polinomial. III é falsa: guardar os resultados é o
+coração da PD; o guloso é que decide sem olhar para trás (0133). Veja 0138 e
+0139.
 
 </details>
 
@@ -420,20 +429,29 @@ seria 8 (os dois itens, uma vez cada). Veja 0140 e o A279.
 </details>
 
 **10.** Sobre memoização (de cima para baixo) e tabela (de baixo para
-cima), assinale a alternativa **correta**:
+cima), analise as afirmações.
 
-- (A) A memoização tem complexidade assintótica pior que a tabela, porque faz chamadas recursivas.
-- (B) A tabela sempre calcula menos subproblemas que a memoização.
-- (C) A memoização só serve para problemas com um parâmetro.
-- (D) As duas resolvem cada subproblema uma vez; o custo é (número de subproblemas) × (trabalho de cada um), e a memoização pode pular subproblemas que a resposta não usa.
-- (E) A tabela precisa de recursão para saber a ordem de preenchimento.
+- I. A memoização tem complexidade assintótica pior que a da tabela, porque
+  faz chamadas recursivas.
+- II. A memoização resolve só os subproblemas que a resposta realmente usa; a
+  tabela costuma preencher todos.
+- III. A tabela exige uma ordem de preenchimento em que as dependências já
+  estejam prontas.
+- IV. Nas duas, o custo é (número de subproblemas) × (trabalho de cada um).
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e II, apenas.
+- (B) I, III e IV, apenas.
+- (C) I e IV, apenas.
+- (D) II, III e IV, apenas.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**(D).** As duas têm o mesmo custo assintótico. A memoização paga o frame
-de cada chamada (e pode estourar a pilha), mas só visita o que a pergunta
-precisa; a tabela enche tudo, numa ordem em que as dependências já estão
-prontas. Veja 0138.
+**(D).** I é falsa: as duas têm o mesmo custo assintótico; a memoização só
+paga o frame de cada chamada (e pode estourar a pilha). II, III e IV são
+verdadeiras. Veja 0138.
 
 </details>
 

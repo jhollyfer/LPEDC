@@ -298,22 +298,29 @@ Acrescente b→c (1) e a resposta vira FALSO. Veja 0154.
 
 </details>
 
-**5.** Sobre os algoritmos de caminhos mínimos, assinale a alternativa
-**correta**:
+**5.** Sobre caminhos mínimos, analise as afirmações.
 
-- (A) O Dijkstra funciona com pesos negativos desde que não haja ciclo negativo.
-- (B) O Bellman-Ford custa O(V + E) com lista de adjacência.
-- (C) O Floyd-Warshall custa Θ(V³) de tempo e Θ(V²) de memória e aceita pesos negativos sem ciclo negativo.
-- (D) O Floyd-Warshall funciona com qualquer ordem dos três laços.
-- (E) Num DAG com pesos negativos, só o Bellman-Ford resolve.
+- I. O Dijkstra funciona com pesos negativos, desde que não haja ciclo
+  negativo.
+- II. O Floyd-Warshall custa Θ(V³) de tempo e Θ(V²) de memória.
+- III. Num DAG com pesos negativos, relaxar as arestas na ordem topológica dá
+  os caminhos mínimos em O(V + E).
+
+Marque a alternativa **CORRETA**.
+
+- (A) I, apenas.
+- (B) I e II, apenas.
+- (C) II e III, apenas.
+- (D) I e III, apenas.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**(C).** Três laços de V voltas e uma matriz V × V. O Dijkstra pode errar
-com qualquer peso negativo (o exemplo do motoboy no 0154); o Bellman-Ford é
-O(V · E); no Floyd-Warshall o `k` tem que ser o laço de fora; e num DAG
-basta relaxar as arestas na ordem topológica, em O(V + E). Veja 0154 e
-0155.
+**(C).** I é falsa: o Dijkstra pode errar com qualquer peso negativo, mesmo
+sem ciclo negativo (o exemplo do motoboy no 0154); quem aceita pesos
+negativos sem ciclo negativo é o Bellman-Ford, em O(V · E). II: três laços de
+V voltas e uma matriz V × V. III: no DAG não há ciclo, e cada vértice é
+relaxado depois de todos os seus antecessores. Veja 0151, 0154 e 0155.
 
 </details>
 
@@ -336,21 +343,49 @@ melhora. Veja 0155.
 
 </details>
 
-**7.** Na DFS de um grafo dirigido com as cores branco, cinza e preto,
-encontrar uma aresta `(u, v)` com `v` **cinza** significa que:
+**7.** O programa roda uma DFS com cores (0 branco, 1 cinza, 2 preto) no
+grafo dirigido com as arestas 0→1, 1→2, 2→0, 0→3, 3→4, 4→3 e 2→4, e conta as
+arestas que chegam a um vértice **cinza**. O que ele mostra?
 
-- (A) `v` já terminou e `(u, v)` é uma aresta de cruzamento.
-- (B) existe um ciclo: `v` é ancestral de `u` na árvore da DFS (aresta de retorno).
-- (C) `v` é descendente de `u`, e `(u, v)` é uma aresta de avanço.
-- (D) o grafo é desconexo.
-- (E) `v` nunca foi visto e a DFS vai descer por ele.
+```c
+#include <stdio.h>
+
+int g[5][5], cor[5], voltas = 0;
+
+void dfs(int u) {
+    cor[u] = 1;
+    for (int v = 0; v < 5; v++) {
+        if (!g[u][v]) continue;
+        if (cor[v] == 1) voltas++;
+        else if (cor[v] == 0) dfs(v);
+    }
+    cor[u] = 2;
+}
+
+int main(void) {
+    int e[][2] = {{0, 1}, {1, 2}, {2, 0}, {0, 3}, {3, 4}, {4, 3}, {2, 4}};
+    for (int k = 0; k < 7; k++) g[e[k][0]][e[k][1]] = 1;
+    for (int u = 0; u < 5; u++)
+        if (cor[u] == 0) dfs(u);
+    printf("%d\n", voltas);
+    return 0;
+}
+```
+
+- (A) 0
+- (B) 1
+- (C) 2
+- (D) 3
+- (E) 4
 
 <details><summary>Gabarito</summary>
 
-**(B).** Cinza é quem está na pilha da recursão, então `v` é ancestral de
-`u`, e o caminho de `v` até `u` mais a aresta `(u, v)` formam um ciclo. Seta
-para preto é avanço ou cruzamento (A, C) e não indica ciclo; para branco é
-aresta da árvore (E). Veja 0150.
+**(C).** A DFS desce 0, 1, 2; de 2, a aresta 2→0 chega a um vértice cinza (uma
+aresta de retorno, e o ciclo 0, 1, 2). A aresta 2→4 é de árvore: o 4 ainda é
+branco e a DFS desce por ele. De 4, vai para 3 (branco); do 3, a aresta 3→4
+chega ao 4, que está cinza: segunda aresta de retorno, o ciclo 3, 4. A aresta
+4→3 já foi tratada como aresta da árvore, e 0→3 chega depois ao 3, já preto.
+Cinza na pilha significa ciclo. Veja 0150.
 
 </details>
 
@@ -373,22 +408,30 @@ componente só (A), que é a conectividade **fraca**. Veja 0150.
 
 </details>
 
-**9.** Sobre árvores geradoras mínimas de um grafo conexo e não dirigido,
-assinale a alternativa **correta**:
+**9.** Sobre árvores geradoras mínimas (MST) de um grafo conexo e não
+dirigido, analise as afirmações.
 
-- (A) A MST é sempre única.
-- (B) A MST contém sempre a aresta de maior peso do grafo.
-- (C) O Kruskal e o Prim podem devolver totais diferentes no mesmo grafo.
-- (D) A aresta mais leve que cruza qualquer corte pode fazer parte de uma MST, e com todos os pesos distintos a MST é única.
-- (E) A MST dá o caminho mínimo entre quaisquer dois vértices.
+- I. Se todos os pesos forem distintos, a MST é única.
+- II. Com pesos repetidos, o Kruskal e o Prim podem devolver árvores
+  diferentes, mas sempre com o mesmo peso total.
+- III. A MST sempre dá o caminho mínimo entre quaisquer dois vértices.
+- IV. A MST sempre contém a aresta de maior peso do grafo.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e II, apenas.
+- (B) II e III, apenas.
+- (C) III e IV, apenas.
+- (D) I, II e IV, apenas.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**(D).** É a propriedade do corte (no Cormen, a aresta **leve** é
-**segura**). Com empates pode haver várias MSTs, mas o total é o mesmo
-(por isso C está errada). A aresta mais pesada de um ciclo, se for a única
-com aquele peso, nunca entra em MST nenhuma (B). E a MST não é árvore de caminhos mínimos: no 0153, a árvore do Dijkstra gasta
-21 m e a do Prim, 18 m. Veja 0152 e 0153.
+**(A).** I e II decorrem da propriedade do corte: a aresta leve que cruza um
+corte é segura, e com empates há mais de uma MST de mesmo total. III é falsa:
+no 0153, a árvore do Dijkstra gasta 21 m e a do Prim, 18 m. IV é falsa: a
+aresta mais pesada de um ciclo, se for a única com aquele peso, não entra em
+MST nenhuma. Veja 0152 e 0153.
 
 </details>
 

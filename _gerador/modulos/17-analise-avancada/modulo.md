@@ -211,212 +211,242 @@ apenas não distinguem `n^1,5` de, digamos, `n log² n`.
 
 Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
 letra e só depois abra o gabarito. O teorema mestre usado aqui é o da forma
-do Cormen (veja o [!NOTE] do assunto 0115).
+do Cormen (veja o `[!NOTE]` do assunto 0115). Quando o enunciado diz que
+cada passo custa 1, conte passo a passo, sem estimar.
 
-**1.** Qual é a solução de `T(n) = 4 T(n/2) + n²`?
+**1.** Considere as afirmações sobre notação assintótica:
 
-- (A) Θ(n²)
-- (B) Θ(n³)
-- (C) Θ(n² log n)
-- (D) Θ(n log n)
-- (E) Θ(n⁴)
+I. Se `f(n) = Θ(g(n))`, então `f(n) = O(g(n))` e `f(n) = Ω(g(n))`.
+II. `3n² + 10n = O(n³)`.
+III. Um algoritmo O(n) é sempre mais rápido que um O(n²), para qualquer
+entrada e qualquer valor de `n`.
+IV. `n log n = O(n²)`.
 
-<details><summary>Gabarito</summary>
+Marque a alternativa **CORRETA**.
 
-**C.** `a = 4`, `b = 2`: `n^(log₂ 4) = n²`, igual a `f(n) = n²`. Caso 2 (o custo
-por nível não muda): Θ(n² log n). São `log₂ n + 1` níveis de custo `n²` cada.
-Veja 0115.
-
-</details>
-
-**2.** Qual é a solução de `T(n) = 2 T(n/4) + √n`?
-
-- (A) Θ(√n log n)
-- (B) Θ(√n)
-- (C) Θ(n)
-- (D) Θ(log n)
-- (E) Θ(n log n)
+- (A) Apenas I e II.
+- (B) Apenas II e III.
+- (C) Apenas I, II e IV.
+- (D) Apenas III e IV.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**A.** `n^(log₄ 2) = n^(1/2) = √n`, do mesmo tamanho de `f(n)`: caso 2,
-Θ(√n log n). Quem compara `f(n)` com `n` em vez de com `n^(log_b a)` marca
-(C) e erra. Veja 0115.
+**C.** A III é falsa por dois "quaisquer": a notação O descreve o crescimento
+para `n` grande e esconde constantes. Um algoritmo `100n` perde para um `n²` em
+`n < 100`. O limite superior não precisa ser justo, então II e IV são
+verdadeiras. Veja 0114.
 
 </details>
 
-**3.** Qual é a solução de `T(n) = 5 T(n/2) + n³`?
+**2.** Considere as afirmações sobre recorrências e o teorema mestre:
 
-- (A) Θ(n^(log₂ 5))
-- (B) Θ(n³ log n)
-- (C) Θ(n^2,32 log n)
-- (D) Θ(n⁵)
-- (E) Θ(n³)
+I. `T(n) = 2T(n/2) + n` tem solução Θ(n log n).
+II. `T(n) = T(n/2) + n` tem solução Θ(n log n).
+III. `T(n) = T(n − 1) + n` não pode ser resolvida diretamente pelo teorema
+mestre, pois `n − 1` não é uma fração de `n`.
+IV. `T(n) = 4T(n/2) + n` tem solução Θ(n²).
+
+Marque a alternativa **CORRETA**.
+
+- (A) Apenas I, III e IV.
+- (B) Apenas I e II.
+- (C) Apenas II e IV.
+- (D) Apenas III e IV.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**E.** `log₂ 5 ≈ 2,32 < 3`: `f(n) = n³` é polinomialmente maior que
-`n^(log₂ 5)`. Caso 3, desde que valha a condição de regularidade:
-`5 (n/2)³ = (5/8) n³ ≤ c · n³` com `c = 5/8 < 1`. Vale, e a raiz domina:
-Θ(n³). Veja 0115.
+**A.** Em I, `n^(log₂ 2) = n` empata com `f(n) = n` (caso 2): Θ(n log n). Em II, `a = 1`
+e `n^(log₂ 1) = 1`, e `f(n) = n` domina (caso 3): a solução é Θ(n), não Θ(n log n).
+Em IV, `n^(log₂ 4) = n²` domina `f(n) = n` (caso 1): Θ(n²). A III é verdadeira:
+a forma `T(n − 1)` se resolve pela árvore de recursão (soma `n + (n−1) + ...`,
+Θ(n²)). Veja 0114 e 0115.
 
 </details>
 
-**4.** Qual é o custo de tempo de cada função, em função de `n`?
+**3.** Considere as afirmações:
 
-```c
-int f(int n) {
-    if (n <= 1) return 1;
-    return f(n - 1) + f(n - 1);
-}
+I. A análise amortizada dá o custo médio por operação no pior caso de uma
+**sequência** de operações, sem usar probabilidade.
+II. Numa sequência de inserções num vetor dinâmico que dobra a capacidade,
+cada inserção individual custa O(1) no pior caso.
+III. Qualquer algoritmo de ordenação por comparação precisa de Ω(n log n)
+comparações no pior caso.
+IV. O limite Ω(n log n) vale para todo algoritmo de ordenação, inclusive os que
+não comparam chaves.
 
-int g(int n) {
-    if (n <= 1) return 1;
-    return 2 * g(n - 1);
-}
-```
+Marque a alternativa **CORRETA**.
 
-- (A) `f` e `g` são Θ(2ⁿ).
-- (B) `f` é Θ(2ⁿ) e `g` é Θ(n).
-- (C) `f` é Θ(n) e `g` é Θ(2ⁿ).
-- (D) `f` e `g` são Θ(n).
-- (E) `f` é Θ(n²) e `g` é Θ(n).
+- (A) Apenas I.
+- (B) Apenas I, III e IV.
+- (C) Apenas II e III.
+- (D) Apenas I, II e III.
+- (E) Apenas I e III.
 
 <details><summary>Gabarito</summary>
 
-**B.** As duas devolvem 2ⁿ⁻¹, mas `f` faz **duas** chamadas com `n - 1`:
-`T(n) = 2 T(n-1) + 1`, Θ(2ⁿ) (com `n = 20`, 1.048.575 chamadas). `g` faz uma
-só e multiplica o resultado: `T(n) = T(n-1) + 1`, Θ(n) (20 chamadas). O que
-conta é quantas vezes a função chama a si mesma, não o valor devolvido. Veja
-0114.
+**E.** A II é falsa: a inserção que enche o vetor copia todos os elementos e custa
+Θ(n); só o custo **amortizado** é O(1). A IV é falsa porque o limite vem da
+árvore de decisão, que só existe para quem decide por comparações; ordenações
+que usam os dígitos ou os valores das chaves como índice escapam dele. Veja
+0116 e 0117.
 
 </details>
 
-**5.** Quanto vale `conta` depois de `h(16)`?
+**4.** Qual é o valor de `conta` depois de `g(20)`? Lembre que `20 / 4 = 5` e
+`1 / 4 = 0` em divisão inteira.
 
 ```c
 int conta = 0;
 
-void h(int n) {
-    if (n == 0) return;
+void g(int n) {
+    if (n <= 1) return;
     conta++;
-    h(n / 2);
-    h(n / 2);
+    g(n / 2);
+    g(n / 2);
+    g(n / 4);
 }
 ```
 
-- (A) 16
-- (B) 32
-- (C) 80
-- (D) 31
-- (E) 63
+- (A) 15
+- (B) 20
+- (C) 19
+- (D) 25
+- (E) 10
 
 <details><summary>Gabarito</summary>
 
-**D.** `C(0) = 0` e `C(n) = 1 + 2 C(n/2)`: C(1) = 1, C(2) = 3, C(4) = 7,
-C(8) = 15, **C(16) = 31**. A árvore de recursão tem 1 + 2 + 4 + 8 + 16 nós que
-contam: `2n - 1`, Θ(n). Duas chamadas com metade não é n log n quando o
-trabalho fora das chamadas é constante. Veja 0114.
+**B.** Seja `c(n)` o valor deixado por `g(n)`. Para `n ≤ 1`, `c = 0`. Então
+`c(2) = c(3) = 1` (só `g(1)` e `g(0)` por dentro), `c(5) = 1 + 2·c(2) + c(1) = 3`,
+`c(10) = 1 + 2·c(5) + c(2) = 8` e `c(20) = 1 + 2·c(10) + c(5) = 1 + 16 + 3 = 20`.
+Rodando o programa, `conta` vale 20. Veja 0114.
 
 </details>
 
-**6.** Pela versão do teorema mestre da 4ª edição do Cormen, qual é a
-solução de `T(n) = 2 T(n/2) + n log n`?
+**5.** Um contador binário de 5 bits começa em 00000. Cada incremento troca os bits
+`1` finais para `0` e o primeiro `0` para `1`; cada troca de bit custa 1. Qual é
+o custo total de 20 incrementos seguidos?
+
+- (A) 20
+- (B) 34
+- (C) 36
+- (D) 38
+- (E) 40
+
+<details><summary>Gabarito</summary>
+
+**D.** O bit 0 troca em todos os 20 incrementos; o bit 1, em 10; o bit 2, em 5;
+o bit 3, em 2; o bit 4, em 1. Total: 20 + 10 + 5 + 2 + 1 = 38 (rodando o contador,
+o valor final é 10100). Em geral, `n` incrementos custam `2n − (número de bits 1
+de n)`, sempre menos que `2n`: o custo amortizado por incremento é O(1). A (E)
+é o teto grosseiro `2n`. Veja 0116.
+
+</details>
+
+**6.** Pelo teorema mestre, qual é a solução de `T(n) = 3T(n/3) + n²`?
 
 - (A) Θ(n log n)
-- (B) Θ(n log² n)
+- (B) Θ(n³)
 - (C) Θ(n²)
-- (D) o teorema não se aplica
-- (E) Θ(n^1,5)
+- (D) Θ(n² log n)
+- (E) Θ(n)
 
 <details><summary>Gabarito</summary>
 
-**B.** `n^(log₂ 2) = n` e `f(n) = n log n = Θ(n · log¹ n)`. O caso 2 do
-Cormen, na forma `f(n) = Θ(n^(log_b a) · logᵏ n)` com `k ≥ 0`, dá
-Θ(n^(log_b a) · log^(k+1) n) = Θ(n log² n). Na forma simples, com `f(n) = nᵏ`,
-o teorema não pega essa recorrência, e muito material antigo responde (D).
-Veja 0115.
+**C.** Aqui `a = 3`, `b = 3` e `n^(log₃ 3) = n`. Como `f(n) = n²` cresce
+polinomialmente mais que `n`, é o caso 3. A condição de regularidade vale:
+`3 · (n/3)² = n²/3 ≤ c · n²` com `c = 1/3`. Solução Θ(n²). A (A) seria o caso 2,
+se `f(n)` fosse `n`. Veja 0115.
 
 </details>
 
-**7.** Em qual destas recorrências o teorema mestre se aplica diretamente?
+**7.** Quanto vale `passos` ao fim do trecho abaixo, com `n = 64`?
 
-- (A) `T(n) = T(n - 1) + n`
-- (B) `T(n) = T(n/3) + T(2n/3) + n`
-- (C) `T(n) = 2 T(n/2) + n / log n`
-- (D) `T(n) = 2ⁿ T(n/2) + n`
-- (E) `T(n) = 9 T(n/3) + n`
+```c
+long passos = 0;
+for (int i = n; i >= 1; i /= 2)
+    for (int j = 0; j < n; j++)
+        passos++;
+```
+
+- (A) 384
+- (B) 64
+- (C) 512
+- (D) 4096
+- (E) 448
 
 <details><summary>Gabarito</summary>
 
-**E.** `a = 9`, `b = 3`: `n^(log₃ 9) = n²`, polinomialmente maior que `n`.
-Caso 1: Θ(n²). Nas outras: (A) o tamanho cai subtraindo; (B) os pedaços têm
-tamanhos diferentes; (C) `n / log n` fica abaixo de `n` só por um fator de
-log, e o caso 2 exige `k ≥ 0`; (D) `a` não é constante. Veja 0115.
+**E.** O laço externo roda com `i = 64, 32, 16, 8, 4, 2, 1`: sete vezes (`log₂ 64 + 1`).
+O interno roda `n = 64` vezes a cada volta: 7 · 64 = 448, ordem Θ(n log n). A (A)
+esquece a volta com `i = 1`. Veja 0114.
 
 </details>
 
-**8.** Um vetor dinâmico começa com capacidade 1 e dobra quando enche (alocar
-o novo e copiar todos os elementos). Cada escrita e cada cópia custam 1. Qual
-é o custo total de 33 inserções seguidas, e o custo amortizado por inserção?
+**8.** A busca binária recursiva abaixo tem um defeito. O que acontece em
+`bb(v, 0, 4, 5)`, com `v = {2, 5, 9, 14, 20}`?
 
-- (A) 96; O(1)
-- (B) 63; O(log n)
-- (C) 528; O(n)
-- (D) 33; O(1)
-- (E) 96; O(log n)
+```c
+int bb(int v[], int ini, int fim, int x) {
+    if (ini > fim) return -1;
+    int meio = (ini + fim) / 2;
+    if (v[meio] == x) return meio;
+    if (v[meio] < x) return bb(v, meio, fim, x);
+    return bb(v, ini, meio - 1, x);
+}
+```
+
+- (A) Não termina (estouro de pilha): a chamada da direita usa `meio` em vez de `meio + 1`, e com `ini = 0`, `fim = 1` ela se repete idêntica.
+- (B) Devolve 1 e termina normalmente.
+- (C) Devolve -1, porque a base da recursão está errada.
+- (D) Falta um `free(v)` no fim da função.
+- (E) `(ini + fim) / 2` sempre estoura o `int`.
 
 <details><summary>Gabarito</summary>
 
-**A.** As cópias acontecem nas inserções 2, 3, 5, 9, 17 e 33: 1 + 2 + 4 + 8 +
-16 + 32 = 63. Somadas às 33 escritas, 96, menos que 3 × 33. Pelo método
-agregado, o custo amortizado é O(1), mesmo com a 33ª inserção custando 33
-sozinha. Veja 0116.
+**A.** A primeira chamada tem `meio = 2` e `v[2] = 9 > 5`, então vai para
+`bb(v, 0, 1, 5)`. Aí `meio = 0`, `v[0] = 2 < 5` e a chamada é `bb(v, 0, 1, 5)` de novo,
+sem reduzir nada: recursão infinita. Rodando, o programa termina em falha de
+segmentação. O certo é `bb(v, meio + 1, fim, x)`. O estouro de `ini + fim` (E)
+só ocorre com índices próximos de `INT_MAX`. Veja 0114 e 0090.
 
 </details>
 
-**9.** Qual é o menor número de comparações que **qualquer** algoritmo de
-ordenação por comparação precisa fazer, no pior caso, para ordenar 5
-elementos distintos?
+**9.** Sobre o limite inferior de ordenação por comparação, marque a alternativa
+**INCORRETA**.
 
-- (A) 5
-- (B) 6
-- (C) 7
+- (A) A árvore de decisão de um algoritmo que ordena `n` elementos tem pelo menos `n!` folhas.
+- (B) A altura mínima dessa árvore é ⌈log₂ n⌉.
+- (C) Mergesort e heapsort são assintoticamente ótimos entre os algoritmos por comparação.
+- (D) `log₂(n!) = Θ(n log n)`.
+- (E) O limite vale para o pior caso: em certas entradas, um algoritmo pode fazer só `n − 1` comparações.
+
+<details><summary>Gabarito</summary>
+
+**B.** Com `n!` folhas, uma árvore binária tem altura de pelo menos ⌈log₂(n!)⌉, que é
+Θ(n log n), muito maior que ⌈log₂ n⌉. As outras são verdadeiras. Em (E), o
+insertion sort num vetor já ordenado faz `n − 1` comparações: o limite fala do
+pior caso, não de toda entrada. Veja 0117.
+
+</details>
+
+**10.** Qual é o limite inferior da árvore de decisão para o número de
+comparações de **qualquer** ordenação por comparação de 6 elementos distintos,
+no pior caso?
+
+- (A) 6
+- (B) 7
+- (C) 9
 - (D) 10
 - (E) 12
 
 <details><summary>Gabarito</summary>
 
-**C.** A árvore de decisão precisa de uma folha para cada uma das 5! = 120
-ordens, e uma árvore binária de altura `h` tem no máximo 2ʰ folhas. 2⁶ = 64 <
-120 ≤ 128 = 2⁷: `h ≥ ⌈log₂ 120⌉ = 7`. Veja 0117.
-
-</details>
-
-**10.** Qual é a complexidade do trecho abaixo?
-
-```c
-long passos = 0;
-for (int i = 1; i < n; i *= 2) {
-    for (int j = 0; j < i; j++) {
-        passos++;
-    }
-}
-```
-
-- (A) Θ(log n)
-- (B) Θ(n log n)
-- (C) Θ(n²)
-- (D) Θ(n)
-- (E) Θ(log² n)
-
-<details><summary>Gabarito</summary>
-
-**D.** O laço de fora roda log₂ n vezes, mas o de dentro não roda `n` vezes em
-cada uma: roda 1, 2, 4, ..., até menos que `n`. A soma geométrica fica abaixo
-de `2n` (com `n = 1024`, são 1023 passos). Multiplicar "log n voltas por n"
-dá (B), um limite superior folgado, mas não o Θ. Veja 0114 e, para somatórios,
-0167.
+**D.** Há 6! = 720 ordens possíveis, e uma árvore binária de altura `h` tem no
+máximo `2^h` folhas. Como `2^9 = 512 < 720 ≤ 1024 = 2^10`, a altura mínima é 10:
+⌈log₂ 720⌉ = 10. A (C) é o piso de `log₂ 720 ≈ 9,49`; é preciso arredondar para
+cima. Veja 0117.
 
 </details>
 

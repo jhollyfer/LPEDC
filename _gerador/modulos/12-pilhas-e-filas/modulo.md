@@ -224,233 +224,263 @@ pós-fixas ficam `A B C * +` e `A B + C *`.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado. Desenhe a pilha ou a fila
-a cada operação antes de escolher a alternativa.
+Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
+papel, desenhando a pilha ou a fila a cada operação, e só depois abra o
+gabarito. As simulações e os trechos de código foram conferidos rodando
+programas em C (`gcc -std=c17 -Wall`, com AddressSanitizer). Nos trechos, o nó
+é `typedef struct no { int valor; struct no *prox; } No;`. Atenção a "sempre",
+"com certeza" e "nunca".
 
-**1.** Numa pilha inicialmente vazia são feitas, nesta ordem: PUSH(4),
-PUSH(7), POP, PUSH(2), PUSH(9), POP, POP, PUSH(5). Quais valores saem, na
-ordem, e qual fica no topo?
+**Questão 1.** Uma pilha de inteiros começa vazia. Qual é a sequência de
+valores devolvidos pelas operações `desempilha`, na ordem em que elas
+ocorrem?
 
-- (A) saem 4, 2, 9; topo 5
-- (B) saem 7, 9, 2; topo 5
-- (C) saem 7, 2, 9; topo 5
-- (D) saem 7, 9, 2; topo 4
-- (E) saem 4, 7, 2; topo 9
-
-<details><summary>Gabarito</summary>
-
-**B.** O primeiro POP tira o 7. Depois a pilha é `4 2 9` (topo à direita): sai
-o 9 e depois o 2. Entra o 5 sobre o 4, e a pilha termina `4 5`. Veja 0082.
-
-</details>
-
-**2.** Os números 1, 2, 3, 4, 5 são empilhados **nesta ordem**, mas
-desempilhamentos podem acontecer a qualquer momento entre um empilhamento e
-outro. Cada número desempilhado é impresso. Qual sequência **não** pode ser
-impressa?
-
-- (A) `1 2 3 4 5`
-- (B) `3 2 1 5 4`
-- (C) `2 4 3 5 1`
-- (D) `4 3 5 1 2`
-- (E) `5 4 3 2 1`
-
-<details><summary>Gabarito</summary>
-
-**D.** Para sair o 4 primeiro, entram 1, 2, 3, 4; saem 4 e 3; entra e sai o 5.
-Sobram 1 e 2 na pilha, com o **2 no topo**: o 1 não pode sair antes dele. As
-outras são possíveis (a (A) desempilha logo depois de cada empilhamento). Veja
-0082.
-
-</details>
-
-**3.** Uma fila circular usa um vetor de 8 posições (0 a 7) com os índices
-`head` (o primeiro da fila) e `tail` (a próxima vaga), como no Cormen: fila
-vazia é `head == tail` e, para cheia e vazia não se confundirem, uma posição
-fica sempre livre. Começando com `head = tail = 0`, são feitos 6 ENQUEUE, 4
-DEQUEUE e mais 5 ENQUEUE. Qual é o estado final?
-
-- (A) `head = 4`, `tail = 11`, com 7 elementos
-- (B) `head = 4`, `tail = 3`, com 6 elementos
-- (C) `head = 0`, `tail = 7`, com 7 elementos
-- (D) `head = 4`, `tail = 2`, e o último ENQUEUE dá *overflow*
-- (E) `head = 4`, `tail = 3`, com 7 elementos, e a fila está cheia
-
-<details><summary>Gabarito</summary>
-
-**E.** Depois dos 6 ENQUEUE, `tail = 6`; os 4 DEQUEUE levam `head` a 4. Os 5
-ENQUEUE usam as posições 6, 7, 0, 1 e 2, e `tail` dá a volta até
-`(6 + 5) % 8 = 3`. São 7 elementos, o máximo dessa convenção:
-`(tail + 1) % 8 == head`. O Cormen indexa o vetor de 1 a n, mas a conta é a
-mesma. Veja 0085 (o aviso sobre sacrificar uma gaveta).
-
-</details>
-
-**4.** Qual é o valor da expressão pós-fixa `8 2 5 * + 1 3 2 * + 4 - /`?
-
-- (A) 6
-- (B) 18
-- (C) 2
-- (D) 3
-- (E) 9
-
-<details><summary>Gabarito</summary>
-
-**A.** Com a pilha: `2 5 *` dá 10, `8 10 +` dá 18; depois `3 2 *` dá 6,
-`1 6 +` dá 7, `7 4 -` dá 3; por fim `18 3 /` dá 6. Na infixa:
-`(8 + 2 * 5) / (1 + 3 * 2 - 4)`. Veja 0084.
-
-</details>
-
-**5.** Convertendo a expressão infixa `A * (B + C) - D / E` para a notação
-pós-fixa, o resultado é:
-
-- (A) `A B * C + D E / -`
-- (B) `A B C + D E / * -`
-- (C) `A B C + * D E / -`
-- (D) `* A + B C - / D E`
-- (E) `A B C * + D E - /`
-
-<details><summary>Gabarito</summary>
-
-**C.** O parêntese obriga `B + C` antes do `*`: `A B C + *`. Depois, `D / E`
-vira `D E /`, e o `-` de menor precedência fica por último. A (D) é a forma
-prefixa (com a ordem errada). Veja 0084 e 0088.
-
-</details>
-
-**6.** Num deque inicialmente vazio são feitas: `insere_fim(1)`,
-`insere_fim(2)`, `insere_inicio(3)`, `insere_inicio(4)`, `retira_fim()`,
-`insere_fim(5)`, `retira_inicio()`. Qual é o conteúdo final, do início para o
-fim?
-
-- (A) `4 3 1`
-- (B) `3 1 5`
-- (C) `1 2 5`
-- (D) `3 1 2 5`
-- (E) `5 1 3`
-
-<details><summary>Gabarito</summary>
-
-**B.** Depois das quatro inserções: `4 3 1 2`. Sai o 2 (fim), entra o 5 no
-fim (`4 3 1 5`) e sai o 4 (início). Veja 0087.
-
-</details>
-
-**7.** Uma fila é implementada com duas pilhas, E e S. ENQUEUE empilha em E.
-DEQUEUE, se S estiver vazia, desempilha **todos** os itens de E empilhando-os
-em S, e então desempilha de S. Sobre o custo, é correto afirmar:
-
-- (A) todo DEQUEUE custa O(1) no pior caso.
-- (B) todo DEQUEUE custa Θ(n).
-- (C) todo ENQUEUE custa Θ(n).
-- (D) uma sequência de n operações pode custar Θ(n²).
-- (E) um DEQUEUE isolado pode custar Θ(n), mas n operações custam O(n) no total: O(1) amortizado.
-
-<details><summary>Gabarito</summary>
-
-**E.** Cada item é empilhado e desempilhado no máximo duas vezes (uma em E e
-uma em S), então o total de n operações é O(n), embora o DEQUEUE que faz o
-despejo custe proporcional ao que estava em E. Veja o exercício E525 (0088) e o
-custo amortizado do 0075.
-
-</details>
-
-**8.** Qual implementação de **fila de prioridade** com n elementos faz
-inserção e remoção do máximo em O(log n) **no pior caso**?
-
-- (A) heap binário
-- (B) vetor ordenado
-- (C) lista encadeada não ordenada
-- (D) fila circular em vetor
-- (E) árvore binária de busca sem balanceamento
-
-<details><summary>Gabarito</summary>
-
-**A.** O heap sobe ou desce por um único caminho de altura ⌊log₂ n⌋. No vetor
-ordenado, inserir custa O(n); na lista não ordenada, achar o máximo custa
-O(n); a fila circular é FIFO, não por prioridade; a BST degenera em O(n). Veja
-0102.
-
-</details>
-
-**9.** O que o trecho imprime?
-
-```c
-int p[10], topo = -1;
-for (int i = 1; i <= 5; i++) {
-    p[++topo] = i * i;
-    if (i % 2 == 0) {
-        topo--;
-    }
-}
-printf("%d %d\n", topo, p[topo]);
+```text
+empilha(5)  empilha(2)  desempilha  empilha(7)  empilha(1)  desempilha
+desempilha  empilha(9)  desempilha  empilha(3)  desempilha
 ```
 
-- (A) `4 25`
-- (B) `2 16`
-- (C) `2 25`
-- (D) `1 9`
-- (E) `3 25`
+- (A) 2 1 7 9 3
+- (B) 2 7 1 9 3
+- (C) 5 2 7 9 3
+- (D) 2 1 7 3 9
+- (E) 5 2 7 1 9
 
 <details><summary>Gabarito</summary>
 
-**C.** Aqui `topo` é o índice do topo (pilha vazia é `-1`). Os pares
-empilham e logo desempilham: o 4 sai, o 16 sai. Ficam 1, 9 e 25 nas posições
-0, 1 e 2, com `topo = 2`. O 16 foi escrito em `p[2]` e depois o 25 escreveu
-por cima. Veja 0082 (as duas convenções de topo).
+**(A)**. Acompanhando o topo: `[5]`, `[5 2]`, sai 2, `[5 7]`, `[5 7 1]`, sai
+1, sai 7, `[5 9]`, sai 9, `[5 3]`, sai 3. Saídas: 2 1 7 9 3, e o 5 fica no
+fundo. A (C) e a (E) são o raciocínio de fila (sai o mais antigo). Conferido
+rodando o programa. Veja 0082.
 
 </details>
 
-**10.** O que o programa imprime?
+**Questão 2.** Uma fila de inteiros começa vazia. As operações são
+`enfileira(x)` e `desenfileira`. Depois da sequência abaixo, a fila, do
+início para o fim, contém:
+
+```text
+enfileira(4)  enfileira(8)  desenfileira  enfileira(6)  desenfileira
+enfileira(2)  enfileira(9)  desenfileira  enfileira(5)
+```
+
+- (A) 5 9 2
+- (B) 9 2 5
+- (C) 6 2 9 5
+- (D) 2 9 5
+- (E) 8 6 2 9 5
+
+<details><summary>Gabarito</summary>
+
+**(D)**. Os três `desenfileira` tiram, nessa ordem, o 4, o 8 e o 6 (sempre o
+que está há mais tempo). Sobram, na ordem de chegada, 2, 9 e 5. A (A) é a
+fila lida ao contrário (visão de pilha). Veja 0085.
+
+</details>
+
+**Questão 3.** Uma fila circular em vetor de capacidade `C = 6` guarda
+`inicio` (posição do próximo a sair) e `n` (quantos itens há). Enfileirar
+grava em `(inicio + n) % C` e depois faz `n++`; desenfileirar faz
+`inicio = (inicio + 1) % C` e `n--`. Partindo da fila vazia com
+`inicio = 0`, ocorrem 5 enfileiramentos, 3 desenfileiramentos, 3
+enfileiramentos e 2 desenfileiramentos, nessa ordem. Qual é o valor de
+`inicio` agora e em que posição do vetor entra o próximo item?
+
+- (A) `inicio` = 5, próximo item na posição 8.
+- (B) `inicio` = 5, próximo item na posição 2.
+- (C) `inicio` = 3, próximo item na posição 2.
+- (D) `inicio` = 2, próximo item na posição 5.
+- (E) `inicio` = 0, próximo item na posição 3.
+
+<details><summary>Gabarito</summary>
+
+**(B)**. Estados `(inicio, n)`: depois dos 5 primeiros, `(0, 5)`; depois dos
+3 desenfileiramentos, `(3, 2)`; depois dos 3 enfileiramentos, `(3, 5)`
+(o último ocupou a posição `(3 + 4) % 6 = 1`, dando a volta); depois de
+2 desenfileiramentos, `(5, 3)`. O próximo item vai para
+`(5 + 3) % 6 = 2`. A (A) esqueceu o `% C`: a posição 8 nem existe. Veja
+0085.
+
+</details>
+
+**Questão 4.** Considere as afirmações sobre pilhas e filas:
+
+I. Numa pilha, o próximo elemento a ser removido é sempre o último que foi
+inserido e ainda não foi removido.
+II. Numa fila, o próximo elemento a ser removido é o último que foi inserido.
+III. Se os valores 1, 2 e 3 entram, nessa ordem, numa pilha (com remoções
+intercaladas permitidas), a saída 3 1 2 é possível.
+IV. Se os valores 1, 2 e 3 entram, nessa ordem, numa fila, eles só podem sair
+na ordem 1, 2, 3.
+
+- (A) Apenas I.
+- (B) Apenas II e III.
+- (C) Apenas I, III e IV.
+- (D) Apenas II e IV.
+- (E) Apenas I e IV.
+
+<details><summary>Gabarito</summary>
+
+**(E)**. I é a definição de pilha (LIFO). II é falsa: na fila sai o primeiro
+que entrou (FIFO). III é falsa: para o 3 sair primeiro, o 1 e o 2 já estão
+empilhados, com o 2 acima do 1, então o 2 sai antes do 1: as saídas
+possíveis com a entrada 1 2 3 são 123, 132, 213, 231 e 321, e a 312 não está
+entre elas. IV é verdadeira: a fila nunca troca a ordem. Veja 0082 e 0085.
+
+</details>
+
+**Questão 5.** Considere as afirmações sobre aplicações de pilhas e filas:
+
+I. A chamada de funções recursivas usa, na memória, uma pilha.
+II. Para verificar se os parênteses de uma expressão estão balanceados, a
+pilha pode chegar a ter um tamanho proporcional ao da expressão (por exemplo,
+com `((((`).
+III. O "desfazer" (Ctrl+Z) de um editor é uma aplicação típica de fila.
+IV. Uma expressão pós-fixa nunca precisa de pilha para ser avaliada.
+
+- (A) Apenas I.
+- (B) Apenas II e III.
+- (C) Apenas I e II.
+- (D) Apenas III e IV.
+- (E) Todas estão corretas.
+
+<details><summary>Gabarito</summary>
+
+**(C)**. I é verdadeira: cada chamada empilha seu registro, e a volta
+desempilha. II é verdadeira: cada `(` espera na pilha o seu `)`. III é falsa:
+o "desfazer" desfaz primeiro a **última** ação, que é o comportamento de pilha.
+IV é falsa ("nunca"): os operandos esperam numa pilha até chegar o operador.
+Veja 0082 e 0084.
+
+</details>
+
+**Questão 6.** Considere as afirmações sobre implementações:
+
+I. Numa pilha em vetor com `n` itens e espaço livre, empilhar custa O(1).
+II. Numa fila encadeada com ponteiros `inicio` e `fim`, enfileirar e
+desenfileirar custam O(1).
+III. Numa fila circular em vetor de capacidade `C`, com `inicio` e `n`, a
+próxima posição livre é `(inicio + n) % C`.
+IV. Num deque feito com lista simplesmente encadeada com `inicio` e `fim`,
+remover do fim custa O(1).
+
+- (A) Apenas I e II.
+- (B) Apenas I, II e III.
+- (C) Apenas II, III e IV.
+- (D) Apenas I e IV.
+- (E) Todas estão corretas.
+
+<details><summary>Gabarito</summary>
+
+**(B)**. I, II e III são verdadeiras. IV é falsa: remover o último nó de uma
+lista simples exige mudar o `prox` do penúltimo, e achar o penúltimo custa
+O(n). Por isso o deque encadeado usa lista **dupla**. Veja 0083, 0086 e
+0087.
+
+</details>
+
+**Questão 7.** A pilha encadeada tem os valores 7 (topo), 5 e 2. Qual
+afirmação sobre o trecho é **correta**?
 
 ```c
-#include <stdio.h>
-#define N 5
-
-int q[N], ini = 0, fim = 0;
-
-void enfileira(int x) {
-    if ((fim + 1) % N == ini) {
-        printf("cheia ");
-        return;
-    }
-    q[fim] = x;
-    fim = (fim + 1) % N;
+int desempilha(No *topo) {
+    int v = topo->valor;
+    No *aux = topo;
+    topo = topo->prox;
+    free(aux);
+    return v;
 }
 
-int desenfileira(void) {
-    int x = q[ini];
-    ini = (ini + 1) % N;
-    return x;
-}
+/* no main, com topo apontando para o nó do 7: */
+int x = desempilha(topo);
+int y = desempilha(topo);
+```
 
-int main(void) {
-    for (int i = 1; i <= 5; i++) {
-        enfileira(i * 10);
-    }
-    desenfileira();
-    desenfileira();
-    enfileira(60);
-    enfileira(70);
-    enfileira(80);
-    printf("%d %d\n", ini, fim);
-    return 0;
+- (A) `x` vale 7 e `y` vale 5.
+- (B) `x` e `y` valem 7, porque a pilha não é alterada.
+- (C) O código não compila: `topo` é reatribuído dentro da função.
+- (D) `x` vale 7, mas o `topo` do `main` continua no nó liberado, e a segunda chamada lê memória já devolvida.
+- (E) `x` vale 7 e `y` vale 5, mas o nó do 5 é perdido na memória.
+
+<details><summary>Gabarito</summary>
+
+**(D)**. `topo` é recebido **por valor**: `topo = topo->prox` muda só a
+cópia local. O `main` continua apontando para o nó do 7, que já passou pelo
+`free`. A segunda chamada lê `topo->valor` de memória liberada (o
+AddressSanitizer acusa `heap-use-after-free`), e o `y` é lixo ou
+qualquer valor. Para a função mexer no `topo` do chamador, ela recebe
+`No **topo`. Veja 0083 e 0049.
+
+</details>
+
+**Questão 8.** Na fila encadeada abaixo, `insere` pendura o nó novo atrás de
+`fim`, ou o torna `inicio` quando `fim` é `NULL`. Depois de `insere(1)`,
+`insere(2)`, `retira`, `retira` e `insere(3)`, o que acontece?
+
+```c
+int retira(Fila *f, int *v) {
+    if (f->inicio == NULL) return 0;
+    No *velho = f->inicio;
+    *v = velho->valor;
+    f->inicio = velho->prox;
+    free(velho);
+    return 1;
 }
 ```
 
-- (A) `2 1`
-- (B) `cheia 2 0`
-- (C) `cheia 0 2`
-- (D) `cheia cheia 2 1`
-- (E) `cheia cheia 1 2`
+- (A) A fila fica com um único nó, o 3, como esperado.
+- (B) A fila fica com os nós 2 e 3.
+- (C) O programa não compila, porque `retira` não atualiza `fim`.
+- (D) A fila fica com o 3, mas o segundo `retira` devolve 0.
+- (E) `insere(3)` escreve em um nó já liberado (via `f->fim`), e `inicio` continua `NULL`: o 3 se perde.
 
 <details><summary>Gabarito</summary>
 
-**D.** Com uma posição sacrificada, cabem 4 em 5: o 50 é recusado. Saem 10 e
-20 (`ini = 2`). O 60 vai para `q[4]` e `fim` dá a volta para 0; o 70 vai para
-`q[0]` e `fim = 1`. O 80 encontra `(1 + 1) % 5 == 2 == ini`: cheia de novo.
-Veja 0085.
+**(E)**. Quando o segundo `retira` esvazia a fila, `inicio` vira `NULL`, mas
+`fim` continua apontando para o nó do 2, que acabou de ser liberado. Em
+`insere(3)`, `fim` não é `NULL`, então o código faz
+`f->fim->prox = novo`, escrevendo num bloco liberado, e `inicio` nunca é
+atualizado: o 3 fica solto. O AddressSanitizer reporta `heap-use-after-free`
+na escrita. A correção é, em `retira`, fazer `if (f->inicio == NULL)
+f->fim = NULL;` antes do `free`. Veja 0086.
+
+</details>
+
+**Questão 9.** A expressão pós-fixa `20 4 2 + 3 * -` é avaliada com uma
+pilha: números são empilhados, e cada operador desempilha dois operandos
+(primeiro o `b`, depois o `a`), calcula `a op b` e empilha o resultado.
+Qual o valor final?
+
+- (A) 2
+- (B) -2
+- (C) 18
+- (D) 6
+- (E) 26
+
+<details><summary>Gabarito</summary>
+
+**(A)**. Pilha: `[20 4 2]`; o `+` dá `4 + 2 = 6`, `[20 6]`; empilha 3,
+`[20 6 3]`; o `*` dá `6 * 3 = 18`, `[20 18]`; o `-` calcula `a - b` com
+`a = 20` e `b = 18`, resultado 2. A (B) troca a ordem dos operandos
+(`18 - 20`), erro comum em operador não comutativo. Em infixa, é
+`20 - (4 + 2) * 3`. A pilha chega a 3 itens. Veja 0084.
+
+</details>
+
+**Questão 10.** Marque a alternativa **INCORRETA**.
+
+- (A) Desempilhar de uma pilha vazia deve ser tratado como erro (*underflow*), e não pode devolver um valor qualquer.
+- (B) Na fila circular em vetor, guardar `inicio` e `n` evita confundir fila cheia com fila vazia.
+- (C) Numa pilha encadeada em que o topo é o primeiro nó da lista, empilhar custa O(n), pois é preciso achar o último nó.
+- (D) Um deque permite inserir e remover nas duas extremidades.
+- (E) Uma recursão profunda demais pode estourar a pilha de chamadas.
+
+<details><summary>Gabarito</summary>
+
+**(C)**. Com o topo no primeiro nó, empilhar é criar o nó, apontar o `prox`
+dele para o topo antigo e mover o topo: O(1), sem percorrer nada. A (A), a
+(B) e a (D) são definições, e a (E) é o estouro de pilha (*stack overflow*) da
+recursão sem parada ou funda demais. Veja 0083 e 0087.
 
 </details>
 

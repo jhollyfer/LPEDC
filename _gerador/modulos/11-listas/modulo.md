@@ -242,224 +242,275 @@ entrando no meio).
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado: leia, decida e só depois
-abra o gabarito. Nas que têm código, simule à mão com os nós e as setas
-desenhados.
+Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Leia,
+decida e só depois abra o gabarito. Nas que têm código, desenhe os nós e as
+setas e simule à mão. As questões de código e de simulação foram conferidas
+rodando programas em C (`gcc -std=c17 -Wall`, com AddressSanitizer). Os nós
+são do tipo do assunto 0076: `typedef struct no { int valor; struct no *prox; } No;`.
+Desconfie de "sempre", "com certeza" e "nunca".
 
-**1.** Uma lista simplesmente encadeada com `n` nós é acessada só pelo
-ponteiro para o primeiro nó (`inicio`). Qual é o custo, no pior caso, de
-inserir um nó novo no **fim** da lista?
-
-- (A) O(1)
-- (B) O(log n)
-- (C) O(n)
-- (D) O(n log n)
-- (E) O(n²)
-
-<details><summary>Gabarito</summary>
-
-**C.** Sem um ponteiro para o último, é preciso andar do início até o nó cujo
-`prox` é `NULL`: `n` passos. Guardando também um ponteiro `fim`, a inserção no
-fim cai para O(1), como na fila encadeada. Veja 0076 e 0086.
-
-</details>
-
-**2.** Considere que `insere_inicio(l, v)` cria um nó com `v` no começo e
-devolve o novo início, e que `remove(&l, v)` tira a **primeira** ocorrência de
-`v`. O que o trecho imprime?
+**Questão 1.** Com o código abaixo, qual afirmação é **correta**?
 
 ```c
-No *l = NULL;
-int v[] = {3, 8, 5, 8, 2};
-for (int i = 0; i < 5; i++) {
-    l = insere_inicio(l, v[i]);
-}
-remove(&l, 8);
-imprime(l);
-```
-
-- (A) `3 5 8 2`
-- (B) `3 8 5 2`
-- (C) `2 8 5 3`
-- (D) `2 5 3`
-- (E) `2 5 8 3`
-
-<details><summary>Gabarito</summary>
-
-**E.** Inserindo sempre no início, a lista fica `2 8 5 8 3` (ao contrário da
-ordem do vetor). A primeira ocorrência de 8, contando do início, é a segunda
-posição: sai ela, e sobra `2 5 8 3`. Veja 0076 e 0077.
-
-</details>
-
-**3.** Compare uma lista em vetor (lista sequencial) com `n` itens e uma lista
-simplesmente encadeada com `n` nós. Qual afirmação é correta?
-
-- (A) Acessar o k-ésimo item custa O(1) no vetor e O(k) na lista encadeada.
-- (B) Inserir na posição 0 custa O(1) no vetor e O(n) na lista encadeada.
-- (C) Remover o último item custa O(n) no vetor e O(1) na lista encadeada.
-- (D) Com os itens em ordem, a busca binária roda em O(log n) nas duas.
-- (E) A lista encadeada gasta menos memória por item que o vetor.
-
-<details><summary>Gabarito</summary>
-
-**A.** No vetor, `v[k]` é uma conta de endereço; na lista, é preciso seguir
-`k` setas. (B) está invertida: no vetor todos andam uma casa. (C) também: no
-vetor basta diminuir o tamanho. (D) falha porque chegar ao meio da lista custa
-O(n). (E) falha porque cada nó carrega um ponteiro. Veja 0075 e 0078.
-
-</details>
-
-**4.** Numa lista duplamente encadeada, `p` aponta para um nó que **não** é o
-primeiro nem o último. Qual par de comandos tira esse nó da lista (antes do
-`free(p)`)?
-
-- (A) `p->prox = p->ant; p->ant = p->prox;`
-- (B) `p->ant->prox = p->ant; p->prox->ant = p->prox;`
-- (C) `p->ant->ant = p->prox; p->prox->prox = p->ant;`
-- (D) `p->ant->prox = p->prox; p->prox->ant = p->ant;`
-- (E) `p->ant->prox = p; p->prox->ant = p;`
-
-<details><summary>Gabarito</summary>
-
-**D.** O anterior passa a apontar para o seguinte e o seguinte passa a apontar
-de volta para o anterior: as duas setas que chegavam em `p` desviam dele. O(1),
-sem procurar ninguém. Veja 0079.
-
-</details>
-
-**5.** Uma lista circular simplesmente encadeada é guardada por um ponteiro
-para o seu **último** nó (`ultimo`). Qual afirmação é correta?
-
-- (A) Inserir no início custa O(1), mas inserir no fim custa O(n).
-- (B) Inserir no início e no fim custam O(1), e o primeiro nó é `ultimo->prox`.
-- (C) Remover o último custa O(1), porque o anterior dele é `ultimo->prox`.
-- (D) Para percorrer a lista, o laço termina quando `p == NULL`.
-- (E) Numa lista com um nó só, `ultimo->prox == NULL`.
-
-<details><summary>Gabarito</summary>
-
-**B.** Do último se chega ao primeiro em um passo. Inserir no fim é inserir
-depois do último e mover `ultimo` para o novo. (C) falha: para remover o último
-é preciso o penúltimo, O(n). (D) falha: não há `NULL` no anel. (E) falha: o
-único nó aponta para si mesmo. Veja 0080.
-
-</details>
-
-**6.** O Cormen implementa a lista duplamente ligada como uma lista
-**circular com sentinela**: um nó `L.nil` sem dado, em que `L.nil.next` é o
-primeiro nó e `L.nil.prev` é o último. Qual afirmação é correta?
-
-- (A) Na lista vazia, `L.nil.next` e `L.nil.prev` apontam para o próprio `L.nil`.
-- (B) Na lista vazia, `L.nil` vale `NIL`.
-- (C) A sentinela torna a busca de uma chave O(1).
-- (D) Para remover um nó `x`, ainda é preciso testar se `x` é o primeiro ou o último.
-- (E) A sentinela fica entre o primeiro e o segundo nó da lista.
-
-<details><summary>Gabarito</summary>
-
-**A.** A sentinela sempre existe; vazia, ela aponta para si mesma nos dois
-sentidos. A vantagem é sumir com os casos de borda (por isso (D) é falsa): a
-remoção é sempre `x.prev.next = x.next; x.next.prev = x.prev`. A busca continua
-O(n), porque ainda percorre os nós. Veja 0077 (nó-cabeça), o desafio 7 acima e
-o assunto 0174, que aprofunda a sentinela.
-
-</details>
-
-**7.** O que o trecho imprime, se a lista `l` contém `40 30 20 10` (o 40 é o
-primeiro)?
-
-```c
-No *f(No *l) {
-    No *r = NULL;
-    while (l != NULL) {
-        No *t = l->prox;
-        l->prox = r;
-        r = l;
-        l = t;
+void insere_inicio(No *prim, int v) {
+    No *novo = malloc(sizeof(No));
+    if (novo) {
+        novo->valor = v;
+        novo->prox = prim;
+        prim = novo;
     }
-    return r;
 }
 
-l = f(l);
-imprime(l);
+int main(void) {
+    No *lista = NULL;
+    insere_inicio(lista, 3);
+    insere_inicio(lista, 8);
+    imprime(lista);
+    return 0;
+}
 ```
 
-- (A) `40 30 20 10`
-- (B) `40`
-- (C) `10`
-- (D) `10 20 30 40`
-- (E) nada: o laço nunca termina
+- (A) Imprime `8 3`.
+- (B) Imprime `3 8`.
+- (C) Imprime só `8`.
+- (D) Não imprime nenhum valor e os dois nós alocados ficam perdidos na memória.
+- (E) Falha de segmentação ao imprimir, porque `lista` é `NULL`.
 
 <details><summary>Gabarito</summary>
 
-**D.** `f` inverte a lista só mexendo nos ponteiros: cada nó tirado da frente
-de `l` é posto na frente de `r`. Ela gasta O(n) de tempo e O(1) de memória
-extra. Veja 0076 (exercício E456).
+**(D)**. O C passa tudo por valor: `prim` dentro da função é uma **cópia**
+de `lista`. A atribuição `prim = novo` muda a cópia, e a `lista` do `main`
+continua `NULL`. Cada chamada aloca um nó que ninguém mais alcança (vazamento).
+`imprime(NULL)` com laço `while (p != NULL)` simplesmente não imprime nada,
+então não há falha (E). A correção é receber `No **prim` e fazer `*prim = novo`.
+Veja 0076 e 0049.
 
 </details>
 
-**8.** Uma lista **simplesmente** encadeada guarda ponteiros para o primeiro e
-para o último nó. Qual operação continua custando O(n) no pior caso?
-
-- (A) inserir no início
-- (B) remover o último nó
-- (C) inserir no fim
-- (D) remover o primeiro nó
-- (E) ler o valor do último nó
-
-<details><summary>Gabarito</summary>
-
-**B.** Depois de remover o último, o penúltimo vira o novo último, e para
-achá-lo é preciso andar desde o início: o nó não sabe quem vem antes dele. É
-por isso que a fila encadeada sai pelo início e entra pelo fim, e o deque
-encadeado pede lista dupla. Veja 0079, 0086 e 0087.
-
-</details>
-
-**9.** A lista `l` contém `1 2 3 4 5 6 7`. O que `imprime(l)` mostra depois de
-`g(l)`?
+**Questão 2.** A lista tem os valores 8 e 3 (montada corretamente). Sobre a
+função abaixo, é **correto** afirmar que:
 
 ```c
-void g(No *l) {
-    while (l != NULL && l->prox != NULL) {
-        No *t = l->prox;
-        l->prox = t->prox;
-        free(t);
-        l = l->prox;
+int soma(No *prim) {
+    No *p = malloc(sizeof(No));
+    int s = 0;
+    p = prim;
+    while (p != NULL) {
+        s += p->valor;
+        p = p->prox;
+    }
+    return s;
+}
+```
+
+- (A) Devolve 11, mas a cada chamada perde um bloco de memória alocado.
+- (B) Devolve 0, porque `p` começa apontando para um nó sem valor.
+- (C) Falha de segmentação, porque `p` termina valendo `NULL`.
+- (D) Devolve 11 e não tem nenhum problema de memória.
+- (E) Não compila, porque `p` é declarado e depois reatribuído.
+
+<details><summary>Gabarito</summary>
+
+**(A)**. A soma está certa: `p = prim` descarta o nó recém-alocado e o laço
+percorre a lista de verdade. Mas esse `malloc` fica sem ponteiro e sem `free`:
+um bloco perdido por chamada (o LeakSanitizer acusa isso). Para percorrer
+uma lista não se aloca nada. Veja 0076 e 0054.
+
+</details>
+
+**Questão 3.** A função deveria remover o primeiro nó de uma lista
+simplesmente encadeada. Qual alternativa descreve o que o código faz?
+
+```c
+void remove_primeiro(No **prim) {
+    if (*prim != NULL) {
+        No *aux = *prim;
+        free(aux);
+        *prim = aux->prox;
     }
 }
 ```
 
-- (A) `2 4 6`
-- (B) `1 2 3 4`
-- (C) `1 4 7`
-- (D) `1`
-- (E) `1 3 5 7`
+- (A) Funciona: o nó sai e `*prim` passa a apontar para o segundo.
+- (B) Funciona, mas vaza o nó removido.
+- (C) Não compila, porque `aux` é usado depois do `free`.
+- (D) Só dá problema se a lista tiver um único nó.
+- (E) Lê `aux->prox` depois do `free(aux)`: comportamento indefinido.
 
 <details><summary>Gabarito</summary>
 
-**E.** Cada volta remove o nó **seguinte** ao atual (religa antes do `free`) e
-anda para o próximo que sobrou: saem 2, 4 e 6. O teste `l->prox != NULL`
-protege o fim da lista. Veja 0077.
+**(E)**. O `free(aux)` devolve o bloco, e a linha seguinte ainda lê
+`aux->prox` dele. O compilador deixa passar (o `gcc -Wall` até avisa), mas
+o AddressSanitizer reporta `heap-use-after-free`. Como o bloco liberado
+costuma continuar com o conteúdo antigo, o código pode "funcionar" por
+sorte, e é por isso que é perigoso. A ordem certa é guardar
+`aux->prox` em `*prim` e só então dar o `free`. Veja 0076, 0077 e 0057.
 
 </details>
 
-**10.** Sete pessoas, numeradas de 1 a 7, formam uma lista circular. Começando
-pela pessoa 1, conta-se 1, 2, 3, e a terceira sai da roda; a contagem recomeça
-na pessoa seguinte à que saiu. Quem sobra?
+**Questão 4.** Considere as afirmações sobre listas simplesmente encadeadas
+e vetores de `n` elementos:
 
-- (A) 1
-- (B) 3
-- (C) 4
-- (D) 6
-- (E) 7
+I. Remover um nó do meio da lista, já tendo o ponteiro para o nó anterior,
+não obriga a mover nenhum outro nó.
+II. Acessar o k-ésimo elemento da lista custa O(1), como no vetor.
+III. A lista ocupa sempre menos memória que um vetor com os mesmos `n`
+elementos.
+IV. Inserir no início da lista custa O(1), qualquer que seja `n`.
+
+- (A) Apenas I.
+- (B) Apenas II e III.
+- (C) Apenas I e IV.
+- (D) Apenas II, III e IV.
+- (E) Todas estão corretas.
 
 <details><summary>Gabarito</summary>
 
-**C.** Saem, na ordem, 3, 6, 2, 7, 5 e 1, e sobra a pessoa 4. É o problema de
-Josephus com n = 7 e k = 3; a fórmula J(n) = (J(n − 1) + k) % n, com J(1) = 0,
-dá J(7) = 3, que é a pessoa 4. Veja 0080 (exemplo A160) e o desafio 10.
+**(C)**. I e IV são verdadeiras: só se religam ponteiros, sem mover nós. II é
+falsa: para chegar ao k-ésimo é preciso andar k nós, O(k). III é falsa por
+causa do "sempre": cada nó guarda também o `prox`, então a lista costuma
+gastar mais que o vetor. Veja 0075 e 0076.
+
+</details>
+
+**Questão 5.** Considere as afirmações sobre listas duplamente encadeadas e
+circulares:
+
+I. Na lista duplamente encadeada, dado só o ponteiro para um nó, é possível
+removê-lo sem percorrer a lista desde o início.
+II. Numa lista circular, o laço `while (p != NULL)` pode nunca terminar, porque
+nenhum nó aponta para `NULL`.
+III. A lista duplamente encadeada gasta o mesmo espaço por nó que a
+simplesmente encadeada.
+
+- (A) Apenas I.
+- (B) Apenas I e II.
+- (C) Apenas II e III.
+- (D) Apenas I e III.
+- (E) Todas estão corretas.
+
+<details><summary>Gabarito</summary>
+
+**(B)**. I é verdadeira: o nó conhece o anterior (`ant`) e o próximo
+(`prox`), então basta religar os dois vizinhos. II é verdadeira: na circular
+o último aponta para o primeiro, e o laço precisa parar ao voltar ao ponto de
+partida. III é falsa: o nó da dupla carrega um ponteiro a mais (`ant`).
+Veja 0079 e 0080.
+
+</details>
+
+**Questão 6.** Considere as afirmações sobre vetor dinâmico e lista ordenada:
+
+I. Se o vetor dobra de capacidade sempre que fica cheio, inserir `n` itens
+copia, no total, menos de 2n elementos.
+II. Depois de um `realloc`, um ponteiro guardado antes para um item do vetor
+continua válido, sempre.
+III. Inserir um valor numa lista encadeada ordenada de `n` nós custa O(n) no
+pior caso.
+IV. Como a lista está ordenada, dá para achar a posição de inserção com busca
+binária em O(log n).
+
+- (A) Apenas I.
+- (B) Apenas II e III.
+- (C) Apenas III e IV.
+- (D) Apenas I, II e IV.
+- (E) Apenas I e III.
+
+<details><summary>Gabarito</summary>
+
+**(E)**. I é verdadeira: as cópias somam 1 + 2 + 4 + ... < 2n. II é falsa
+("sempre"): o `realloc` pode mover o bloco, e o ponteiro antigo passa a
+apontar para memória liberada. III é verdadeira: no pior caso o valor vai
+para o fim, depois de `n` nós. IV é falsa: a lista não tem acesso direto ao
+meio, então não há busca binária. Veja 0075 e 0078.
+
+</details>
+
+**Questão 7.** Uma lista começa vazia. `insere_inicio(v)` e `insere_fim(v)`
+colocam o valor no começo e no fim, e `remove(v)` tira a **primeira**
+ocorrência de `v` (se existir). Depois das operações abaixo, a lista, do
+início ao fim, é:
+
+```text
+insere_fim(4)   insere_inicio(9)   insere_fim(6)   insere_inicio(4)
+remove(4)       insere_fim(1)      remove(7)        remove(6)
+```
+
+- (A) `9 6 1`
+- (B) `9 4 1`
+- (C) `4 9 1`
+- (D) `4 9 6 1`
+- (E) `9 4 6 1`
+
+<details><summary>Gabarito</summary>
+
+**(B)**. Passo a passo: `4`; `9 4`; `9 4 6`; `4 9 4 6`. O `remove(4)`
+tira a primeira ocorrência (a do início): `9 4 6`. Entra o 1 no fim:
+`9 4 6 1`. O `remove(7)` não encontra nada e não muda a lista, e o
+`remove(6)` deixa `9 4 1`. A (A) é o erro de remover o segundo 4. Conferido
+rodando o programa. Veja 0076 e 0077.
+
+</details>
+
+**Questão 8.** Numa lista duplamente encadeada `... <-> p <-> q <-> ...`, o
+nó `n` deve ser inserido entre `p` e `q = p->prox` (com `q` existente). Qual
+sequência de atribuições deixa os dois sentidos da lista corretos?
+
+- (A) `n->prox = p->prox; n->ant = p; p->prox->ant = n; p->prox = n;`
+- (B) `n->prox = p->prox; n->ant = p; p->prox = n; p->prox->ant = n;`
+- (C) `p->prox = n; n->prox = p->prox; n->ant = p; p->prox->ant = n;`
+- (D) `n->ant = p; n->prox = p->prox; p->prox = n;`
+- (E) `n->prox = p; n->ant = p->prox; p->prox = n; p->prox->ant = n;`
+
+<details><summary>Gabarito</summary>
+
+**(A)**. O ponto é a **ordem**: enquanto `p->prox` ainda é `q`, ele serve
+para alcançar `q` e ligar `q->ant = n`; só depois `p->prox` passa a ser `n`.
+Na (B), a linha `p->prox->ant = n` roda com `p->prox` já valendo `n`, e
+o `n` vira o próprio anterior. Na (C), `n->prox = p->prox` faz o nó apontar
+para si mesmo. A (D) esquece o `q->ant`: andando de trás para a frente o
+`n` é pulado. A (E) inverte os campos. Cada opção foi testada percorrendo a
+lista nos dois sentidos. Veja 0079.
+
+</details>
+
+**Questão 9.** Um vetor dinâmico nasce com capacidade 3 (alocado com
+`malloc`). Antes de cada inserção, se `tam == cap`, ele dobra a capacidade
+com `realloc`. Depois de inserir 100 itens, quantas vezes o `realloc` rodou e
+qual é a capacidade final?
+
+- (A) 5 vezes, capacidade 96.
+- (B) 6 vezes, capacidade 100.
+- (C) 7 vezes, capacidade 192.
+- (D) 6 vezes, capacidade 192.
+- (E) 33 vezes, capacidade 100.
+
+<details><summary>Gabarito</summary>
+
+**(D)**. O `realloc` roda ao inserir o 4º item (3 para 6), o 7º (12), o 13º
+(24), o 25º (48), o 49º (96) e o 97º (192): 6 vezes, e sobram 92 posições.
+Com 96 itens ainda cabe na capacidade 96; é o 97º que dobra de novo. A (C)
+conta a alocação inicial como se fosse `realloc`. Conferido rodando o laço.
+Veja 0075.
+
+</details>
+
+**Questão 10.** Marque a alternativa **INCORRETA** sobre custos em listas
+encadeadas com `n` nós.
+
+- (A) Numa lista simples com ponteiro só para o início, inserir no fim custa O(n).
+- (B) Numa lista simples com ponteiros para o início e para o fim, inserir no fim custa O(1).
+- (C) Numa lista simples com ponteiros para o início e para o fim, remover o último nó custa O(1).
+- (D) Numa lista dupla com ponteiros para o início e para o fim, remover o último nó custa O(1).
+- (E) Buscar uma chave numa lista não ordenada custa O(n) no pior caso.
+
+<details><summary>Gabarito</summary>
+
+**(C)**. Para remover o último nó da lista simples é preciso mudar o `prox`
+do **penúltimo**, e o ponteiro `fim` não diz quem ele é: só percorrendo desde o
+início, O(n). Na lista dupla o último tem `ant`, e a remoção é O(1) (D).
+Inserir no fim com `fim` guardado é O(1) (B) e sem ele é O(n) (A). Veja
+0076 e 0079.
 
 </details>
 

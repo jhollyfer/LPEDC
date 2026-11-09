@@ -283,20 +283,26 @@ esperada fica perto de log₂ n = 10. Veja 0163.
 
 </details>
 
-**4.** Sobre a busca numa skip list com `n` chaves, assinale a alternativa
-**correta**:
+**4.** Sobre a busca numa skip list com `n` chaves, analise as afirmações.
 
-- (A) O(log n) no pior caso, como na AVL.
-- (B) O(1), porque a cabeça está em todos os andares.
-- (C) O(n) esperado, porque o andar 0 tem todas as chaves.
-- (D) O(log n) esperado, na média dos sorteios; no pior caso, O(n).
-- (E) O(√n) sempre.
+- I. O tempo esperado da busca é O(log n), na média dos sorteios.
+- II. No pior caso (azar total nos sorteios, com todos os nós no andar 0), a
+  busca é O(n).
+- III. A skip list garante O(log n) no pior caso, como a AVL.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e II, apenas.
+- (B) I e III, apenas.
+- (C) II e III, apenas.
+- (D) I, apenas.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**(D).** A garantia é probabilística: um azar (todos os nós no andar 0)
-transforma a skip list numa lista comum. A AVL garante O(log n) no pior
-caso (A). Veja 0163 e 0165.
+**(A).** A garantia da skip list é probabilística: um azar transforma a
+estrutura numa lista comum, e a busca passa a O(n). A AVL é que garante
+O(log n) no pior caso, o que derruba a III. Veja 0163 e 0165.
 
 </details>
 
@@ -357,21 +363,89 @@ prática, perto de 10). Veja 0165, 0099 e 0101.
 
 </details>
 
-**8.** Por que a lista encadeada combina melhor com **mover para a frente**
-do que um vetor?
+**8.** Sobre a política **mover para a frente** em busca sequencial, analise
+as afirmações.
 
-- (A) Porque no vetor a busca sequencial é mais lenta.
-- (B) Porque, achado o nó (com o anterior guardado), tirá-lo do lugar e pô-lo no início são três atribuições de ponteiro, O(1); no vetor, é preciso empurrar todos os anteriores, O(posição).
-- (C) Porque a lista ocupa menos memória que o vetor.
-- (D) Porque o vetor não permite busca sequencial.
-- (E) Porque a lista mantém as chaves ordenadas.
+- I. Na lista encadeada, achado o nó (com o anterior guardado), movê-lo para o
+  início custa O(1): são três atribuições de ponteiro.
+- II. No vetor, mover para a frente exige empurrar todos os elementos
+  anteriores, O(posição).
+- III. A lista encadeada gasta menos memória que o vetor, e por isso combina
+  melhor com a política.
+- IV. A política de contagem faz a lista tender à ordem decrescente de
+  frequência de busca.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e III, apenas.
+- (B) II e III, apenas.
+- (C) I, II, III e IV.
+- (D) I, II e IV, apenas.
+- (E) III, apenas.
 
 <details><summary>Gabarito</summary>
 
-**(B).** A busca custa o mesmo nos dois, O(posição); a diferença está na
-mudança de lugar. Já a **transposição** troca dois vizinhos e funciona bem
-nas duas representações. A lista gasta **mais** memória, por causa dos
-ponteiros (C). Veja 0164.
+**(D).** A busca custa o mesmo nos dois, O(posição); a diferença está na
+mudança de lugar (I e II). III é falsa: a lista gasta **mais** memória, por
+causa dos ponteiros. IV é verdadeira: é a ideia da contagem. A
+**transposição** troca só dois vizinhos e funciona bem nas duas
+representações. Veja 0164.
+
+</details>
+
+**9.** A função abaixo deveria mover para a frente o nó com a chave `k`. O
+que o programa mostra?
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+struct No {
+    int chave;
+    struct No *prox;
+};
+
+void mover_para_frente(struct No *prim, int k) {
+    struct No *ant = NULL, *p = prim;
+    while (p != NULL && p->chave != k) {
+        ant = p;
+        p = p->prox;
+    }
+    if (p == NULL || ant == NULL) return;
+    ant->prox = p->prox;
+    p->prox = prim;
+    prim = p;
+}
+
+int main(void) {
+    struct No *prim = NULL;
+    for (int k = 3; k >= 1; k--) {
+        struct No *n = malloc(sizeof *n);
+        n->chave = k;
+        n->prox = prim;
+        prim = n;
+    }
+    mover_para_frente(prim, 3);
+    for (struct No *p = prim; p != NULL; p = p->prox) printf("%d ", p->chave);
+    printf("\n");
+    return 0;
+}
+```
+
+- (A) 3 1 2
+- (B) 1 2
+- (C) 1 2 3
+- (D) 3 1 2 3
+- (E) o programa não compila
+
+<details><summary>Gabarito</summary>
+
+**(B).** A lista é 1, 2, 3. `prim` chega à função **por valor**: a atribuição
+`prim = p` muda só a cópia local, e o `prim` do `main` continua apontando para
+o 1. Já `ant->prox = p->prox` mexeu na lista de verdade: o 2 passou a apontar
+para `NULL`, e o 3 ficou fora dela (e vazado). Para o `prim` do chamador mudar
+é preciso receber `struct No **prim`, chamar com `&prim` e escrever `*prim =
+p`. Veja 0164, 0046 e 0049.
 
 </details>
 

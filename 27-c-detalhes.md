@@ -3188,11 +3188,15 @@ int r = a + b > 12 ? 1 : 0 + 100;
 printf("%d", r);
 ```
 
-(A) 1 (B) 101 (C) 100 (D) 16 (E) 0
+- (A) 1
+- (B) 101
+- (C) 100
+- (D) 16
+- (E) 0
 
 <details><summary>Gabarito</summary>
 
-**(A)**. O `?:` tem precedência menor que `+` e `>`: a expressão é
+**(A).** O `?:` tem precedência menor que `+` e `>`: a expressão é
 `((a + b) > 12) ? 1 : (0 + 100)`. Como 15 > 12, vale 1. O `+ 100` faz parte
 só do ramo do "senão". Veja 0170.
 
@@ -3206,11 +3210,15 @@ if (x & 1 == 0) printf("par");
 else printf("impar");
 ```
 
-(A) par (B) impar (C) erro de compilação (D) comportamento indefinido (E) nada é impresso
+- (A) par
+- (B) impar
+- (C) erro de compilação
+- (D) comportamento indefinido
+- (E) nada é impresso
 
 <details><summary>Gabarito</summary>
 
-**(B)**. O `==` vem antes do `&`: a condição é `x & (1 == 0)`, isto é,
+**(B).** O `==` vem antes do `&`: a condição é `x & (1 == 0)`, isto é,
 `6 & 0`, que é 0. Cai no `else`, mesmo com 6 sendo par. Compila (com um
 aviso do gcc). O certo é `(x & 1) == 0`. Veja 0170 e 0065.
 
@@ -3224,11 +3232,15 @@ int i = -1;
 printf("%s", i < u ? "menor" : "maior");
 ```
 
-(A) menor (B) maior (C) erro de compilação (D) depende do valor de lixo de `i` (E) comportamento indefinido
+- (A) menor
+- (B) erro de compilação
+- (C) maior
+- (D) depende do valor de lixo de `i`
+- (E) comportamento indefinido
 
 <details><summary>Gabarito</summary>
 
-**(B)**. Pela conversão aritmética usual, o `int` vira `unsigned`: -1 vira
+**(C).** Pela conversão aritmética usual, o `int` vira `unsigned`: -1 vira
 4294967295, que é maior que 1. A conversão é definida pelo padrão; o gcc
 avisa com `-Wsign-compare`. Veja 0171.
 
@@ -3241,15 +3253,15 @@ for (unsigned i = 3; i >= 0; i--)
     printf("%u ", i);
 ```
 
-(A) mostra `3 2 1 0` e termina
-(B) mostra `3 2 1` e termina
-(C) não mostra nada
-(D) nunca termina: depois do 0, `i` vira 4294967295
-(E) não compila, porque `i` é `unsigned`
+- (A) mostra `3 2 1 0` e termina.
+- (B) mostra `3 2 1` e termina.
+- (C) não mostra nada.
+- (D) nunca termina: depois do 0, `i` vira 4294967295.
+- (E) não compila, porque `i` é `unsigned`.
 
 <details><summary>Gabarito</summary>
 
-**(D)**. Um `unsigned` é sempre `>= 0`, então a condição nunca é falsa. Ao
+**(D).** Um `unsigned` é sempre `>= 0`, então a condição nunca é falsa. Ao
 descer de 0, `i` dá a volta para `UINT_MAX`. O certo é
 `for (unsigned i = 4; i-- > 0;)`. Veja 0171.
 
@@ -3264,49 +3276,72 @@ c = c + 10;
 printf("%d %d", s, c);
 ```
 
-(A) 260 4 (B) 4 4 (C) 260 260 (D) 4 260 (E) comportamento indefinido
+- (A) comportamento indefinido
+- (B) 4 4
+- (C) 260 260
+- (D) 4 260
+- (E) 260 4
 
 <details><summary>Gabarito</summary>
 
-**(A)**. Na soma, `c` sofre promoção inteira e vira `int`: 250 + 10 = 260,
+**(E).** Na soma, `c` sofre promoção inteira e vira `int`: 250 + 10 = 260,
 guardado em `s`, um `int`. Ao guardar de volta em `c`, sobra o resto da
 divisão por 256: 4. Conversão para sem sinal é sempre definida. Veja 0171.
 
 </details>
 
-**6.** Qual a saída?
+**6.** Sobre `switch`, operadores bit a bit, `union` e `enum`, num sistema com
+`int` de 32 bits, analise as afirmações.
 
-```c
-int x = 2, y = 3, z;
-z = x = y += x * 2;
-printf("%d %d %d", x, y, z);
-```
+- I. Com `unsigned char c = 0xF0;`, a expressão `~c` vale -241, porque `c` é
+  promovido a `int` antes do `~`.
+- II. Num `switch`, um `case` sem `break` no fim deixa a execução seguir para
+  o `case` seguinte.
+- III. Numa `union` com um `int` e um `char[8]`, o tamanho é a soma dos
+  tamanhos dos membros, 12 bytes.
+- IV. Num `enum` sem valores explícitos, o primeiro enumerador vale 0 e os
+  seguintes crescem de 1 em 1.
 
-(A) 2 7 7 (B) 7 7 7 (C) 4 7 4 (D) 2 3 7 (E) comportamento indefinido
+Marque a alternativa **CORRETA**.
+
+- (A) I, II e IV, apenas.
+- (B) I e III, apenas.
+- (C) II e III, apenas.
+- (D) II, III e IV, apenas.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**(B)**. Atribuições agrupam da direita: `z = (x = (y += (x * 2)))`. Primeiro
-`y += 4` faz `y` = 7; depois `x` = 7 e `z` = 7. Não há comportamento
-indefinido: `x` é lido para calcular o lado direito antes de receber o novo
-valor. Veja 0170.
+**(A).** I: `~0x000000F0` é `0xFFFFFF0F`, que como `int` vale -241. Só ao
+guardar de volta num `unsigned char` sobraria o byte `0x0F`. II: é o "cair para o
+próximo caso" do `switch` (fall-through). III é falsa: os membros da `union`
+**compartilham** o mesmo espaço, e o tamanho é o do maior membro (arredondado
+pelo alinhamento): 8 bytes. IV: é a regra do `enum`. Veja 0170, 0171 e 0172.
 
 </details>
 
-**7.** Sobre os vetores de tamanho variável (VLA) no C17, é correto afirmar:
+**7.** Sobre os vetores de tamanho variável (VLA) no C17, analise as
+afirmações.
 
-(A) `int v[n] = {0};` é válido sempre que `n > 0`.
-(B) O `sizeof` de um VLA é calculado em tempo de execução.
-(C) Um VLA pode ser declarado `static` dentro de uma função.
-(D) Todo compilador C17 é obrigado a aceitar VLA.
-(E) Se faltar memória, a declaração do VLA devolve `NULL`.
+- I. `int v[n] = {0};`, com `n` variável, é válido sempre que `n > 0`.
+- II. O `sizeof` de um VLA é calculado em tempo de execução.
+- III. Desde o C11 o suporte a VLA é opcional, e o compilador que não o aceita
+  define `__STDC_NO_VLA__`.
+- IV. Se faltar memória, a declaração do VLA devolve `NULL`.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e II, apenas.
+- (B) II e III, apenas.
+- (C) I e IV, apenas.
+- (D) III e IV, apenas.
+- (E) II, III e IV, apenas.
 
 <details><summary>Gabarito</summary>
 
-**(B)**. Como o tamanho só é conhecido na execução, o `sizeof` também é.
-(A) é falso: VLA não aceita inicializador no C17. (C) é falso: VLA só pode
-ter duração automática. (D) é falso: desde o C11 o VLA é opcional, e quem
-não aceita define `__STDC_NO_VLA__`. (E) é falso: VLA não é ponteiro e não
+**(B).** II: como o tamanho só é conhecido na execução, o `sizeof` também é.
+III: é o que o padrão diz. I é falsa: VLA não aceita inicializador no C17
+(um `memset` ou um laço faz o serviço). IV é falsa: VLA não é ponteiro e não
 avisa falha; quem devolve `NULL` é o `malloc`. Veja 0172.
 
 </details>
@@ -3314,17 +3349,17 @@ avisa falha; quem devolve `NULL` é o `malloc`. Veja 0172.
 **8.** Qual protótipo recebe corretamente uma matriz de `l` linhas e `c`
 colunas, com `l` e `c` conhecidos só na execução?
 
-(A) `void f(int m[l][c], int l, int c);`
-(B) `void f(int l, int c, int m[l][c]);`
-(C) `void f(int l, int c, int m[][]);`
-(D) `void f(int m[][], int l, int c);`
-(E) `void f(int l, int c, int m[l][]);`
+- (A) `void f(int m[l][c], int l, int c);`
+- (B) `void f(int l, int c, int m[][]);`
+- (C) `void f(int l, int c, int m[l][c]);`
+- (D) `void f(int m[][], int l, int c);`
+- (E) `void f(int l, int c, int m[l][]);`
 
 <details><summary>Gabarito</summary>
 
-**(B)**. Num parâmetro VLA, as dimensões precisam ser declaradas **antes** da
+**(C).** Num parâmetro VLA, as dimensões precisam ser declaradas **antes** da
 matriz, porque o tipo `m[l][c]` usa os dois nomes. Em (A), `l` e `c` ainda
-não existem quando `m` é lida. Em (C), (D) e (E), falta o número de colunas,
+não existem quando `m` é lida. Em (B), (D) e (E), falta o número de colunas,
 e o compilador precisa dele para calcular `m[i][j]`. Veja 0172.
 
 </details>
@@ -3337,11 +3372,15 @@ if (i++ || ++j) i += 10;
 printf("%d %d", i, j);
 ```
 
-(A) 11 1 (B) 10 1 (C) 11 0 (D) 1 1 (E) 10 0
+- (A) 1 1
+- (B) 10 1
+- (C) 11 0
+- (D) 11 1
+- (E) 10 0
 
 <details><summary>Gabarito</summary>
 
-**(A)**. `i++` vale 0 (o valor antigo) e deixa `i` = 1. Como o lado esquerdo
+**(D).** `i++` vale 0 (o valor antigo) e deixa `i` = 1. Como o lado esquerdo
 do `||` deu falso, o direito roda: `++j` deixa `j` = 1 e vale 1. A condição
 é verdadeira e `i += 10` dá 11. O `||` garante que o lado esquerdo termina,
 `++` incluído, antes do direito. Veja 0170.
@@ -3355,11 +3394,15 @@ do `||` deu falso, o direito roda: `++j` deixa `j` = 1 e vale 1. A condição
 printf("%d", QUAD(2 + 3));
 ```
 
-(A) 25 (B) 11 (C) 13 (D) 10 (E) erro de compilação
+- (A) 25
+- (B) erro de compilação
+- (C) 13
+- (D) 10
+- (E) 11
 
 <details><summary>Gabarito</summary>
 
-**(B)**. O `#define` só troca texto: `QUAD(2 + 3)` vira `2 + 3 * 2 + 3`, que
+**(E).** O `#define` só troca texto: `QUAD(2 + 3)` vira `2 + 3 * 2 + 3`, que
 pela precedência é 2 + 6 + 3 = 11. Para dar 25, a macro precisa de
 parênteses: `#define QUAD(x) ((x) * (x))`. Veja 0170 (E1019) e 0004.
 

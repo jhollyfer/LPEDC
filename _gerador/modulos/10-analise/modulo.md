@@ -278,222 +278,247 @@ assunto 0071, a constante importa quando n é fixo.
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só depois abra o gabarito. As contagens foram
-conferidas rodando os trechos (compilados com `gcc -std=c17 -Wall -Wextra`)
-com um contador na linha de dentro. As definições de O, Ω e Θ seguem o
-Cormen.
+papel, marque uma letra e só depois abra o gabarito. Nas questões de contagem,
+o resultado foi conferido rodando o trecho em C (`gcc -std=c17 -Wall`) com um
+contador. As definições de O, Ω e Θ seguem o Cormen. Cuidado com as palavras
+"sempre", "com certeza" e "nunca": quase sempre derrubam a afirmação.
 
-**Questão 1.** Quantas vezes a linha `c++` executa, em função de `n`?
+**Questão 1.** Seja f(n) = 3n² + 40n + 7. Marque a alternativa **INCORRETA**.
 
-```c
-for (int i = 0; i < n; i++)
-    for (int j = i; j < n; j++)
-        c++;
-```
-
-- (A) n
-- (B) n²
-- (C) n(n − 1)/2
-- (D) n(n + 1)/2
-- (E) n log₂ n
+- (A) f(n) é O(n²).
+- (B) f(n) é Θ(n³).
+- (C) f(n) é O(n³).
+- (D) f(n) é Ω(n).
+- (E) f(n) é Θ(n²).
 
 <details><summary>Gabarito</summary>
 
-**(D)**. Com `i = 0` o laço de dentro roda n vezes, com `i = 1`, n − 1, e
-assim até 1: 1 + 2 + ... + n = n(n + 1)/2. Para n = 10, 55. Essa é a
-**função de custo**; a classe é Θ(n²). A (C) seria o laço com
-`j = i + 1`. Veja 0071 e 0072 (e 0167 para os somatórios).
+**(B)**. Θ é teto e piso ao mesmo tempo. Como f cresce como n², o teto n³ é
+folgado (C é verdadeira) e o piso n é folgado (D é verdadeira), mas n³ nunca
+serve de piso: f não é Ω(n³), logo não é Θ(n³). Só n² é teto e piso juntos
+(A e E). Veja 0072.
 
 </details>
 
-**Questão 2.** Qual a complexidade do trecho, com `n` potência de 2?
+**Questão 2.** Sobre a busca em um vetor de `n` inteiros, considere as afirmações:
 
-```c
-for (int i = 0; i < n; i++)
-    for (int j = 1; j < n; j *= 2)
-        c++;
-```
+I. A busca sequencial tem melhor caso O(1), mesmo com o vetor desordenado.
+II. A busca binária funciona em qualquer vetor, desde que `n` seja potência de 2.
+III. No pior caso, a busca binária examina ⌊log₂ n⌋ + 1 elementos.
+IV. A busca binária é, com certeza, mais rápida que a sequencial para qualquer chave.
 
-- (A) Θ(n)
-- (B) Θ(n log n)
-- (C) Θ(n²)
-- (D) Θ(log n)
-- (E) Θ(2ⁿ)
+- (A) Apenas I.
+- (B) Apenas II e III.
+- (C) Apenas III e IV.
+- (D) Todas estão corretas.
+- (E) Apenas I e III.
 
 <details><summary>Gabarito</summary>
 
-**(B)**. O laço de fora roda n vezes. O de dentro dobra `j` a cada volta,
-
-log₂ n voltas. Total: n log₂ n (para n = 16, 64). Veja 0072.
+**(E)**. I é verdadeira: se a chave está na posição 0, a sequencial pára no
+primeiro exame. II é falsa: o que a binária exige é o vetor **ordenado**, não
+um tamanho especial. III é verdadeira (para n = 1000, são 10 exames no pior
+caso). IV é falsa por causa do "com certeza": para uma chave que está na
+posição 0, a sequencial faz 1 comparação e a binária, 3 ou mais. Veja 0071
+e 0072 (e 0090 para a busca binária).
 
 </details>
 
-**Questão 3.** Qual a complexidade do trecho, com `n` potência de 2?
+**Questão 3.** O vetor ordenado abaixo tem 12 posições. A busca binária usa
+`meio = (ini + fim) / 2` e conta **uma comparação por elemento `v[meio]`
+examinado** (acertou ou errou). Quantas comparações, no total, são feitas ao
+buscar em sequência as chaves 4, 82 e 50?
 
 ```c
-for (int i = 1; i < n; i *= 2)
+int v[] = {4, 9, 15, 22, 27, 31, 38, 44, 53, 61, 70, 82};
+```
+
+- (A) 9
+- (B) 10
+- (C) 11
+- (D) 12
+- (E) 13
+
+<details><summary>Gabarito</summary>
+
+**(C)**. Chave 4: examina `v[5]` = 31, `v[2]` = 15, `v[0]` = 4: 3
+comparações. Chave 82: `v[5]`, `v[8]` = 53, `v[10]` = 70, `v[11]` = 82: 4.
+Chave 50 (não existe): `v[5]`, `v[8]` = 53, `v[6]` = 38, `v[7]` = 44, e
+então `ini` passa de `fim`: 4. Total 3 + 4 + 4 = 11. Com 12 elementos o máximo
+é ⌊log₂ 12⌋ + 1 = 4 por busca. Veja 0090.
+
+</details>
+
+**Questão 4.** Quantas vezes a linha `c++` executa para `n = 81`?
+
+```c
+long c = 0;
+for (int i = 1; i <= n; i *= 3)
     for (int j = 0; j < i; j++)
         c++;
 ```
 
-- (A) Θ(log n)
-- (B) Θ(n log n)
-- (C) Θ(n²)
-- (D) Θ(log² n)
-- (E) Θ(n)
+- (A) 40
+- (B) 81
+- (C) 120
+- (D) 121
+- (E) 243
 
 <details><summary>Gabarito</summary>
 
-**(E)**. A pegadinha: multiplicar "log n voltas por até n" dá n log n, mas
-é um teto frouxo. O de dentro roda 1, 2, 4, ..., n/2 vezes: a soma
-geométrica dá n − 1 (para n = 64, 63). Some de verdade em vez de
-multiplicar os máximos. Veja 0072 e 0167.
+**(D)**. `i` assume 1, 3, 9, 27 e 81 (o 243 já passa de `n`), e a cada valor
+o laço de dentro roda `i` vezes: 1 + 3 + 9 + 27 + 81 = 121. É uma soma
+geométrica, dominada pelo último termo, então o custo é Θ(n). A (C) esquece
+o 1 da primeira volta. Veja 0071 e 0072.
 
 </details>
 
-**Questão 4.** Qual alternativa ordena as funções da que cresce **mais
-devagar** para a que cresce **mais rápido**?
+**Questão 5.** Considere as afirmações sobre invariantes de laço:
 
-- (A) log n, √n, n, n log n, n², 2ⁿ, n!
-- (B) √n, log n, n, n log n, n², n!, 2ⁿ
-- (C) log n, n, √n, n log n, 2ⁿ, n², n!
-- (D) log n, √n, n log n, n, n², 2ⁿ, n!
-- (E) 1, log n, n, n², n log n, 2ⁿ, n!
+I. O invariante precisa valer antes da primeira iteração e continuar valendo
+depois de cada iteração.
+II. Quando o laço termina, o invariante, junto com a negação da condição do
+laço, deve implicar que o resultado está correto.
+III. Um invariante verdadeiro garante, sempre, que o algoritmo está correto,
+não importando o que o laço faz ao terminar.
+
+- (A) Apenas I e II.
+- (B) Apenas II e III.
+- (C) Apenas I e III.
+- (D) Apenas III.
+- (E) Todas estão corretas.
 
 <details><summary>Gabarito</summary>
 
-**(A)**. Qualquer potência positiva de n (até √n = n^0,5) acaba passando do
-log n. n log n fica entre n e n². Toda exponencial passa qualquer
-polinômio, e n! passa 2ⁿ (a partir de n = 4, n! > 2ⁿ). Veja 0072 e 0166.
+**(A)**. I e II são as etapas de início, manutenção e término da prova por
+invariante. III é falsa: o invariante `i >= 0` vale em quase todo laço e não
+prova nada. Ele só serve se, no término, junto com a condição de parada,
+levar ao resultado que a função promete. Veja 0073.
 
 </details>
 
-**Questão 5.** Seja f(n) = 3n² + 10n. Qual afirmação é **falsa**?
-
-- (A) f(n) = O(n³)
-- (B) f(n) = Ω(n)
-- (C) f(n) = O(n)
-- (D) f(n) = Θ(n²)
-- (E) f(n) = Ω(n²)
-
-<details><summary>Gabarito</summary>
-
-**(C)**. O é teto, Ω é piso, Θ é os dois. f cresce como n², então qualquer
-teto de ordem n² ou maior vale (A, D) e qualquer piso de ordem n² ou menor
-vale (B, E). Mas não existe c com 3n² + 10n ≤ c · n para todo n grande: n²
-passa de qualquer reta. Veja 0072 e 0166.
-
-</details>
-
-**Questão 6.** Quantas chamadas de `f` acontecem para calcular `f(5)`, e
-qual a ordem de crescimento do número de chamadas?
+**Questão 6.** A função abaixo deveria devolver o maior elemento de `v` (com
+`n >= 1`). O programador quer manter o invariante "no começo de cada volta,
+`m` é um máximo de `v[0..i-1]`". Qual afirmação sobre o código é **correta**?
 
 ```c
-int f(int n) {
-    if (n <= 1) return 1;
-    return f(n - 1) + f(n - 1);
+int maior(int v[], int n) {
+    int m = v[0];
+    for (int i = 1; i <= n; i++) {
+        if (v[i] > m)
+            m = v[i];
+    }
+    return m;
 }
 ```
 
-- (A) 31 chamadas; Θ(2ⁿ)
-- (B) 5 chamadas; Θ(n)
-- (C) 9 chamadas; Θ(n)
-- (D) 16 chamadas; Θ(2ⁿ)
-- (E) 25 chamadas; Θ(n²)
+- (A) `m` deveria começar em 0, senão o invariante não vale antes da primeira volta.
+- (B) O laço deveria começar em `i = 0`, porque `v[0]` ainda não foi comparado.
+- (C) A condição `i <= n` faz a última volta ler `v[n]`, fora do vetor, e o resultado pode ficar errado.
+- (D) O código está correto: `v[n]` existe, e o `>` já garante o máximo.
+- (E) O código devolve o menor elemento, pois o invariante está invertido.
 
 <details><summary>Gabarito</summary>
 
-**(A)**. Cada chamada com n > 1 abre duas com n − 1: a árvore de chamadas
-tem 1 + 2 + 4 + 8 + 16 = 2ⁿ − 1 = 31 nós. O 16 é o **valor** devolvido, não
-o número de chamadas. Guardar `f(n - 1)` numa variável e devolver o dobro
-derrubaria para Θ(n) chamadas. Veja 0033, 0072 e 0114.
+**(C)**. Com `i = n`, a função lê `v[n]`, uma posição que não existe (um
+vetor de `n` posições vai de 0 a `n - 1`). O comportamento é indefinido: com o
+vetor `{3, 9, 4}` e `n = 3`, o AddressSanitizer acusa `heap-buffer-overflow`
+ao ler a quarta posição. A (A) está errada porque `m = v[0]` já faz o
+invariante valer com `i = 1`; começar em 0 quebraria o caso de vetor só de
+negativos. B só repete uma comparação, e E confunde o sentido do `>`. O
+laço correto é `i < n`. Veja 0073 e 0054.
 
 </details>
 
-**Questão 7.** Na busca sequencial num vetor de n elementos distintos, com
-o alvo presente e igualmente provável em qualquer posição, quantas
-comparações são feitas no melhor caso, no caso médio e no pior caso?
-
-- (A) 0, n/2 e n
-- (B) 1, (n + 1)/2 e n
-- (C) 1, n/2 e n − 1
-- (D) 1, log₂ n e n
-- (E) n, n e n
-
-<details><summary>Gabarito</summary>
-
-**(B)**. Melhor caso: o alvo está na posição 0, 1 comparação. Pior caso: na
-última, n. Média: (1 + 2 + ... + n)/n = (n + 1)/2. As três funções são
-Θ(1), Θ(n) e Θ(n). Veja 0071.
-
-</details>
-
-**Questão 8.** `s` é uma string de n caracteres. Qual a complexidade do
-trecho?
+**Questão 7.** Quantas vezes a função `t` é chamada ao executar `t(8)`,
+contando a chamada inicial?
 
 ```c
-for (size_t i = 0; i < strlen(s); i++)
-    if (s[i] == ' ') espacos++;
+void t(int n) {
+    if (n > 2) {
+        t(n - 2);
+        t(n - 3);
+    }
+}
 ```
 
-- (A) Θ(1)
-- (B) Θ(log n)
-- (C) Θ(n)
-- (D) Θ(n log n)
-- (E) Θ(n²)
+- (A) 8
+- (B) 13
+- (C) 15
+- (D) 21
+- (E) 24
 
 <details><summary>Gabarito</summary>
 
-**(E)**. O `strlen` percorre a string inteira (Θ(n)) e é chamado a cada
-teste da condição, n + 1 vezes. Guardar o tamanho numa variável antes do
-laço deixa o trecho Θ(n). Veja 0072.
+**(B)**. Seja C(n) o número de chamadas: C(n) = 1 quando n ≤ 2 e
+C(n) = 1 + C(n − 2) + C(n − 3) quando n > 2. Daí C(3) = 3, C(4) = 3,
+C(5) = 5, C(6) = 7, C(7) = 9 e C(8) = 1 + C(6) + C(5) = 1 + 7 + 5 = 13.
+Conferido rodando o programa com um contador. Veja 0071 e 0032.
 
 </details>
 
-**Questão 9.** Duas funções somam um vetor de n inteiros: uma com um `for` e
-um acumulador, outra recursiva (`soma(v, n) = v[n-1] + soma(v, n-1)`).
-Sobre a **complexidade espacial** (memória extra além do vetor), assinale a
-correta.
+**Questão 8.** Um algoritmo de custo Θ(n²) leva 2 segundos para processar
+uma entrada de tamanho n = 2000. Desprezando os termos menores, quanto
+tempo ele leva, aproximadamente, para n = 10000?
 
-- (A) As duas usam Θ(1).
-- (B) As duas usam Θ(n).
-- (C) A iterativa usa Θ(1); a recursiva usa Θ(n), pela pilha de chamadas.
-- (D) A iterativa usa Θ(n); a recursiva usa Θ(1).
-- (E) A recursiva usa Θ(log n), porque divide o problema.
+- (A) 10 s
+- (B) 20 s
+- (C) 25 s
+- (D) 40 s
+- (E) 50 s
 
 <details><summary>Gabarito</summary>
 
-**(C)**. As duas fazem Θ(n) somas (mesma complexidade temporal). Mas a
-recursiva empilha n frames antes de começar a voltar; a iterativa usa só
-`i` e o acumulador. A (E) valeria para uma recursão que divide o vetor ao
-meio, não para esta. Veja 0168.
+**(E)**. O tamanho foi multiplicado por 5, e o custo, que cresce com n²,
+é multiplicado por 5² = 25: 2 s × 25 = 50 s. A (A) seria o raciocínio de um
+algoritmo linear. A (C) esquece de multiplicar pelos 2 s originais. Veja
+0072.
 
 </details>
 
-**Questão 10.** O `contador.h` de um TAD declara só
-`typedef struct contador Contador;` e os protótipos das funções
-(`contador_cria`, `contador_libera`...). Num cliente que inclui só esse
-`.h`, quais linhas **compilam**?
+**Questão 9.** Considere as afirmações sobre tipos abstratos de dados (TAD)
+em C:
 
-```c
-Contador *c = contador_cria(3);     /* I   */
-Contador d;                         /* II  */
-printf("%zu\n", sizeof(Contador));  /* III */
-c->valor = 2;                       /* IV  */
-```
+I. Num tipo opaco, o `.h` declara apenas `typedef struct pilha Pilha;` e a
+definição da `struct` fica no `.c`.
+II. Com um tipo opaco, é possível trocar a implementação (por exemplo, de
+vetor para lista encadeada) sem alterar o código de quem usa o TAD.
+III. Quem usa um TAD opaco pode acessar `p->topo` diretamente, desde que
+inclua o `.h`.
+IV. O TAD define **o que** cada operação faz; **como** ela faz, e portanto o
+seu custo, depende da implementação escolhida.
 
-- (A) todas
-- (B) I e IV
-- (C) I, II e III
-- (D) apenas I
-- (E) nenhuma
+- (A) Apenas I e II.
+- (B) Apenas II e III.
+- (C) Apenas III e IV.
+- (D) Apenas I, II e IV.
+- (E) Todas estão corretas.
 
 <details><summary>Gabarito</summary>
 
-**(D)**. Sem os campos, `struct contador` é um **tipo incompleto** no
-cliente: dá para ter ponteiro para ele, mas não variável (II), nem `sizeof`
-(III), nem acesso a campo (IV). É o tipo opaco que protege o invariante do
-TAD. Veja 0074.
+**(D)**. I, II e IV descrevem o TAD como o curso o usa. III é falsa: com o
+tipo opaco o compilador só conhece o nome, e `p->topo` dá erro de "tipo
+incompleto". É justamente isso que protege o invariante da estrutura. Veja
+0074.
+
+</details>
+
+**Questão 10.** Um vetor tem 100 chaves distintas, e a chave buscada está
+no vetor, com a mesma probabilidade em cada posição. Na busca sequencial, o
+número médio de comparações é:
+
+- (A) 50,5
+- (B) 50
+- (C) 51
+- (D) 99,5
+- (E) 100
+
+<details><summary>Gabarito</summary>
+
+**(A)**. Achar a chave na posição k custa k comparações, com k de 1 a 100,
+todas igualmente prováveis. A média é (1 + 2 + ... + 100) / 100 = (n + 1) / 2
+= 50,5. O pior caso (100, alternativa E) e o melhor (1) são os
+extremos; a média fica no meio. Veja 0071.
 
 </details>
 

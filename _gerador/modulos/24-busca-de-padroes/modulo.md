@@ -228,39 +228,69 @@ borda de `p[0..j]`) do padrão `aabaaab`?
 
 </details>
 
-**2.** A força bruta compara letra a letra em cada alinhamento e para no
-primeiro erro. Quantas comparações de letra ela faz para procurar `aaab`
-em `aaaaaaaa`?
+**2.** O programa abaixo procura `aaab` em `aaaaaaaa` por força bruta, com
+comparação letra a letra, e para no primeiro erro de cada alinhamento. O que
+ele mostra (comparações e posição achada, com -1 se não achar)?
 
-- (A) 20
-- (B) 8
-- (C) 32
-- (D) 5
-- (E) 11
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    const char *t = "aaaaaaaa", *p = "aaab";
+    int n = strlen(t), m = strlen(p), cmp = 0, achou = -1;
+    for (int i = 0; i + m <= n && achou < 0; i++) {
+        int j = 0;
+        while (j < m) {
+            cmp++;
+            if (t[i + j] != p[j]) break;
+            j++;
+        }
+        if (j == m) achou = i;
+    }
+    printf("%d %d\n", cmp, achou);
+    return 0;
+}
+```
+
+- (A) 20 -1
+- (B) 8 -1
+- (C) 32 -1
+- (D) 20 4
+- (E) 5 -1
 
 <details><summary>Gabarito</summary>
 
 **(A).** Há `n − m + 1 = 5` alinhamentos, e em cada um os três `a` casam e o
 `b` falha: 4 comparações. São 5 × 4 = 20, o pior caso `(n − m + 1) · m`, que
-é O(n · m). O KMP faria no máximo `2n = 16`. Veja 0157.
+é O(n · m), e nenhum alinhamento casa (-1). O KMP faria no máximo `2n = 16`.
+Veja 0157.
 
 </details>
 
-**3.** Qual é a complexidade de tempo do KMP no pior caso, para texto de
-tamanho `n` e padrão de tamanho `m`?
+**3.** Sobre o custo dos algoritmos de busca de padrão, com texto de tamanho
+`n` e padrão de tamanho `m`, analise as afirmações.
 
-- (A) O(n · m), como a força bruta.
-- (B) O(n log m).
-- (C) O(m²) para a tabela e O(n · m) para a busca.
-- (D) O(n / m), porque ele pula letras.
-- (E) O(n + m): O(m) para a tabela π e O(n) para a busca.
+- I. O KMP faz, no pior caso, Θ(n · m) comparações, como a força bruta.
+- II. O KMP gasta O(m) para montar a tabela π e O(n) na busca.
+- III. O Horspool costuma pular letras do texto e comparar menos que o KMP em
+  textos comuns, mas o pior caso dele continua O(n · m).
+
+Marque a alternativa **CORRETA**.
+
+- (A) I, apenas.
+- (B) I e II, apenas.
+- (C) II e III, apenas.
+- (D) I e III, apenas.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**(E).** Na busca, `k` sobe no máximo uma vez por letra do texto e cada
-recuo o diminui, então avanços e recuos somam no máximo `2n`. O mesmo
-argumento vale para montar a tabela. Pular letras (D, na média) é a marca do
-Horspool, não do KMP. Veja 0158.
+**(C).** II é verdadeira: na busca, `k` sobe no máximo uma vez por letra do
+texto e cada recuo o diminui, então avanços e recuos somam no máximo `2n`; o
+mesmo argumento vale para montar a tabela. Por isso I é falsa. III é
+verdadeira: o salto do Horspool ajuda na média, não na pior entrada. Veja
+0158 e 0159.
 
 </details>
 
@@ -302,20 +332,28 @@ nenhum salto seja 0 (alternativa B). Veja 0159.
 
 </details>
 
-**6.** Sobre o Rabin-Karp com módulo primo `q`, segundo o Cormen, é
-correto afirmar:
+**6.** Sobre o Rabin-Karp com módulo primo `q`, analise as afirmações.
 
-- (A) ele nunca precisa comparar letra a letra, porque hashes iguais garantem janelas iguais.
-- (B) o pré-processamento é Θ(m) e o pior caso da busca é Θ((n − m + 1) · m), mas o tempo esperado é O(n + m) com poucas ocorrências e `q` grande.
-- (C) o pior caso é O(n + m), como o KMP.
-- (D) o hash de cada janela custa O(m), por isso a busca é sempre O(n · m).
-- (E) ele só funciona com alfabeto binário.
+- I. Hashes iguais garantem janelas iguais, então ele nunca precisa comparar
+  letra a letra.
+- II. O pior caso da busca é Θ((n − m + 1) · m), quando quase toda janela
+  colide.
+- III. O hash rolante atualiza o hash da janela seguinte em O(1).
+- IV. O pré-processamento (hash do padrão e da primeira janela) é Θ(m).
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e II, apenas.
+- (B) I e III, apenas.
+- (C) III e IV, apenas.
+- (D) II, III e IV, apenas.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**(B).** Hash igual pode ser colisão, então a conferência é obrigatória
-(A está errada), e se todas as janelas colidirem cada uma custa `m`. O hash
-**rolante** atualiza a janela em O(1), o que derruba D. Veja 0160.
+**(D).** I é falsa: hash igual pode ser colisão (falso positivo), então a
+conferência letra a letra é obrigatória. II, III e IV são verdadeiras; com
+`q` grande e poucas ocorrências, o tempo esperado é O(n + m). Veja 0160.
 
 </details>
 

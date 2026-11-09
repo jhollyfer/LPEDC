@@ -4401,21 +4401,27 @@ Torre de Hanói. Veja 0033 e 0125.
 </details>
 
 **4.** Sobre o problema das N-rainhas resolvido por backtracking (uma rainha
-por linha, poda por coluna e diagonais), assinale a correta.
+por linha, poda por coluna e diagonais), analise as afirmações.
 
-- (A) O número de soluções cresce sempre com N.
-- (B) Há 2 soluções para N = 4, 10 para N = 5 e 4 para N = 6.
-- (C) Para N = 3 há exatamente uma solução.
-- (D) A poda deixa o algoritmo polinomial em N.
-- (E) Sem a regra "uma rainha por linha", o número de configurações testadas
-  seria o mesmo.
+- I. Para N = 4 existem exatamente 2 soluções.
+- II. O número de soluções sempre cresce quando N cresce.
+- III. Para N = 3 não há solução: o programa percorre a árvore, volta de todos
+  os ramos e termina sem mostrar nada.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e III, apenas.
+- (B) I e II, apenas.
+- (C) II e III, apenas.
+- (D) I, II e III.
+- (E) II, apenas.
 
 <details><summary>Gabarito</summary>
 
-**B.** Contando com o programa do assunto: N = 4 dá 2, N = 5 dá 10, N = 6 dá
-4 (e N = 8 dá 92). O número não cresce sempre, por isso (A) erra. N = 2 e
-N = 3 não têm solução. A poda corta muito, mas a árvore continua exponencial
-no pior caso. Veja 0128.
+**A.** I é verdadeira (N = 4 dá 2). II é falsa por causa do "sempre": N = 5
+dá 10 soluções e N = 6 dá só 4. III é verdadeira: N = 2 e N = 3 não têm
+solução. Mesmo com a poda, a árvore continua exponencial no pior caso. Veja
+0128.
 
 </details>
 
@@ -4485,24 +4491,30 @@ o `l - c` sem o deslocamento, que escreveria fora do vetor. Veja 0128.
 
 </details>
 
-**8.** Num labirinto em grade, assinale a afirmação correta.
+**8.** Num labirinto em grade, sem pesos, analise as afirmações.
 
-- (A) O backtracking em profundidade (a DFS do labirinto) acha **um** caminho
-  até a saída, não necessariamente o mais curto; o mais curto em número de
-  passos sai de uma BFS.
-- (B) A DFS sempre acha o caminho mais curto, porque visita cada casa uma vez.
-- (C) Marcar casas visitadas é opcional numa grade sem ciclos de corredores.
-- (D) A BFS precisa de backtracking para achar o caminho mais curto.
-- (E) Mudar a ordem das direções testadas não muda o caminho encontrado pela
-  DFS.
+- I. O backtracking em profundidade (a DFS do labirinto) acha um caminho até a
+  saída, mas não garante que seja o mais curto.
+- II. A BFS, que explora por distância, acha com certeza o caminho com menor
+  número de passos.
+- III. Se as casas já visitadas não forem marcadas, a busca termina sempre,
+  porque a grade é finita.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I, apenas.
+- (B) I e II, apenas.
+- (C) II e III, apenas.
+- (D) I e III, apenas.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**A.** A DFS segue a primeira direção que funciona e para no primeiro
-caminho que dá certo; a ordem das direções decide qual é ele. A BFS explora
-por distância e acha o menor número de passos. Sem marca de visitada, a busca
-anda em círculos assim que houver dois caminhos para a mesma casa. Veja 0129
-e 0110.
+**B.** I e II estão certas: a DFS para no primeiro caminho que dá certo, e a
+ordem das direções decide qual é ele; a BFS anda por camadas e a primeira vez
+que chega à saída é pelo menor número de passos. III é falsa: sem a marca,
+duas casas vizinhas se chamam uma à outra sem fim (ou a busca anda em
+círculos) e a pilha estoura. Veja 0129 e 0110.
 
 </details>
 

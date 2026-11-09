@@ -3019,15 +3019,15 @@ abrir o gabarito.
 
 **1.** Seja `f(n) = 3n² + 10n + 20`. Assinale a alternativa correta.
 
-- (A) `f(n)` é O(n).
+- (A) `f(n)` é Θ(n²).
 - (B) `f(n)` é Ω(n³).
-- (C) `f(n)` é Θ(n²).
+- (C) `f(n)` é O(n).
 - (D) `f(n)` é O(n log n).
 - (E) `f(n)` é Θ(n).
 
 <details><summary>Gabarito</summary>
 
-**C.** `3n² ≤ f(n) ≤ 4n²` para todo `n ≥ 12`. (A), (D) e (E) pedem um teto
+**A.** `3n² ≤ f(n) ≤ 4n²` para todo `n ≥ 12`. (C), (D) e (E) pedem um teto
 menor que n², que nenhum `c` sustenta; (B) pede um piso n³, que `f` não
 alcança. Veja 0166.
 
@@ -3091,13 +3091,13 @@ O espaço extra usado por `soma(v, n)` é:
 
 - (A) Θ(1), porque a função não declara vetores.
 - (B) Θ(log n), porque cada chamada reduz o problema.
-- (C) Θ(n), por causa da pilha de chamadas.
-- (D) Θ(n log n), por causa das somas parciais.
+- (C) Θ(n log n), por causa das somas parciais.
+- (D) Θ(n), por causa da pilha de chamadas.
 - (E) Θ(n²), porque cada chamada copia o vetor.
 
 <details><summary>Gabarito</summary>
 
-**C.** Ficam `n + 1` frames vivos ao mesmo tempo, cada um de tamanho
+**D.** Ficam `n + 1` frames vivos ao mesmo tempo, cada um de tamanho
 constante. O vetor não é copiado (passa um ponteiro), o que derruba (E).
 Veja 0168.
 
@@ -3125,20 +3125,29 @@ Está correto o que se afirma em:
 
 </details>
 
-**6.** Sobre o merge sort que usa um vetor auxiliar de `n` posições, o
-tempo no pior caso e o espaço extra são, respectivamente:
+**6.** Sobre algoritmos de ordenação, analise as afirmações.
 
-- (A) Θ(n log n) e Θ(1)
-- (B) Θ(n²) e Θ(n)
-- (C) Θ(n log n) e Θ(n)
-- (D) Θ(n log n) e Θ(log n)
-- (E) Θ(n) e Θ(n)
+- I. O merge sort com vetor auxiliar tem tempo Θ(n log n) em qualquer entrada
+  e espaço extra Θ(n).
+- II. O heapsort ordena no próprio vetor, com espaço extra Θ(1), e é estável.
+- III. O quick sort, com pivô sempre no extremo e vetor já ordenado, tem tempo
+  Θ(n²).
+
+Marque a alternativa **CORRETA**.
+
+- (A) I, apenas.
+- (B) I e II, apenas.
+- (C) I e III, apenas.
+- (D) II e III, apenas.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**C.** O tempo é Θ(n log n) em qualquer entrada. O espaço extra soma o
-auxiliar, Θ(n), e a pilha, Θ(log n): o auxiliar domina. (D) esquece o
-vetor; (A) descreve o heapsort. Veja 0168 e 0169.
+**C.** I: o tempo é Θ(n log n) em qualquer entrada, e o espaço soma o
+auxiliar, Θ(n), e a pilha, Θ(log n): o auxiliar domina. II é falsa: o heapsort
+usa Θ(1) de espaço extra, mas **não** é estável (a troca da raiz com o último
+embaralha chaves iguais). III: o pivô nos extremos só tira um elemento por
+nível, e a recorrência vira `T(n) = T(n - 1) + Θ(n)`. Veja 0168 e 0169.
 
 </details>
 
@@ -3146,14 +3155,14 @@ vetor; (A) descreve o heapsort. Veja 0168 e 0169.
 é o **menor** `n₀` possível?
 
 - (A) 6
-- (B) 8
+- (B) 40
 - (C) 20
-- (D) 40
+- (D) 8
 - (E) 45
 
 <details><summary>Gabarito</summary>
 
-**D.** `5n + 40 ≤ 6n` equivale a `n ≥ 40`. O 20 serve para `c = 7` e o 8
+**B.** `5n + 40 ≤ 6n` equivale a `n ≥ 40`. O 20 serve para `c = 7` e o 8
 para `c = 10`: quanto maior o `c`, menor o `n₀`. Veja 0166 (exercício E991).
 
 </details>
@@ -3187,13 +3196,13 @@ independentes. Veja 0167 (exercício E999).
 - (A) `2^(n+1)` é O(2ⁿ).
 - (B) `log₂(n²)` é Θ(log n).
 - (C) `n log n` é O(n²).
-- (D) `4ⁿ` é O(2ⁿ).
-- (E) `100n + 5` é O(n).
+- (D) `100n + 5` é O(n).
+- (E) `4ⁿ` é O(2ⁿ).
 
 <details><summary>Gabarito</summary>
 
-**D.** `4ⁿ / 2ⁿ = 2ⁿ` cresce sem limite: nenhum `c` serve. Em (A) a razão é
-2; em (B), `log₂(n²) = 2 log₂ n`; em (C), `log n ≤ n`; em (E), `c = 105`
+**E.** `4ⁿ / 2ⁿ = 2ⁿ` cresce sem limite: nenhum `c` serve. Em (A) a razão é
+2; em (B), `log₂(n²) = 2 log₂ n`; em (C), `log n ≤ n`; em (D), `c = 105`
 com `n₀ = 1`. Veja 0166 (exemplo A332).
 
 </details>

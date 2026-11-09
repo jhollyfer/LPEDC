@@ -210,21 +210,44 @@ Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
 letra e só depois abra o gabarito. Sempre que a questão traz código ou
 números, dá para conferir rodando.
 
-**1.** Com a função `potencia` do assunto 0131 (uma multiplicação quando o
-expoente é par, duas quando é ímpar, nenhuma no caso base `n == 0`), quantas
-multiplicações são feitas para calcular 3¹³?
+**1.** O programa abaixo segue a função `potencia` do assunto 0131 (uma
+multiplicação quando o expoente é par, duas quando é ímpar, nenhuma no caso
+base) e conta as multiplicações. O que ele mostra?
 
-- (A) 6
-- (B) 7
-- (C) 8
-- (D) 12
-- (E) 13
+```c
+#include <stdio.h>
+
+int mult = 0;
+
+long long potencia(long long x, int n) {
+    if (n == 0) return 1;
+    long long m = potencia(x, n / 2);
+    mult++;
+    if (n % 2 == 1) {
+        mult++;
+        return m * m * x;
+    }
+    return m * m;
+}
+
+int main(void) {
+    long long r = potencia(3, 12);
+    printf("%lld %d\n", r, mult);
+    return 0;
+}
+```
+
+- (A) 531441 11
+- (B) 531441 6
+- (C) 531441 4
+- (D) 1594323 6
+- (E) 531441 12
 
 <details><summary>Gabarito</summary>
 
-**B.** Os expoentes visitados são 13, 6, 3, 1 e 0. O 13, o 3 e o 1 são ímpares
-(2 cada) e o 6 é par (1): 2 + 1 + 2 + 2 = 7. O laço simples faria 12. Veja
-0131.
+**B.** 3¹² = 531441. Os expoentes visitados são 12, 6, 3, 1 e 0. O 12 e o 6
+são pares (1 multiplicação cada) e o 3 e o 1 são ímpares (2 cada): 1 + 1 + 2 +
+2 = 6. O laço simples faria 11 multiplicações; o 1594323 é 3¹³. Veja 0131.
 
 </details>
 
@@ -356,39 +379,58 @@ seriam 36 × 3 = 108. Veja 0136.
 
 </details>
 
-**9.** Sobre o método guloso, assinale a afirmação correta.
+**9.** Sobre o método guloso, analise as afirmações.
 
-- (A) Todo problema com subestrutura ótima é resolvido por um guloso.
-- (B) O Bellman-Ford é guloso: fixa um vértice por vez, como o Dijkstra.
-- (C) O guloso pela razão valor/peso resolve a mochila 0/1.
-- (D) Escolher o intervalo mais curto primeiro maximiza o número de reservas.
-- (E) Um guloso correto precisa da propriedade da escolha gulosa e de
-  subestrutura ótima; Prim, Kruskal, Dijkstra e Huffman são exemplos.
+- I. O Bellman-Ford não é guloso: ele relaxa todas as arestas V - 1 vezes, sem
+  fixar um vértice por vez como o Dijkstra.
+- II. O guloso pela razão valor/peso é ótimo na mochila fracionária, mas não
+  garante o ótimo na mochila 0/1.
+- III. Todo problema com subestrutura ótima é resolvido por um algoritmo
+  guloso.
+- IV. Escolher sempre o intervalo mais curto primeiro maximiza o número de
+  reservas.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I, apenas.
+- (B) I e II, apenas.
+- (C) II e III, apenas.
+- (D) III e IV, apenas.
+- (E) I, II e IV, apenas.
 
 <details><summary>Gabarito</summary>
 
-**E.** Os dois ingredientes do Cormen: alguma escolha gulosa faz parte de uma
-solução ótima, e o que sobra é um subproblema do mesmo tipo. Subestrutura
-ótima sozinha não basta: a mochila 0/1 tem e pede programação dinâmica. O
-Bellman-Ford relaxa todas as arestas V - 1 vezes, sem fixar ninguém. Veja 0133,
-0134 e 0135.
+**B.** I e II são verdadeiras. III é falsa: subestrutura ótima sozinha não
+basta, e a mochila 0/1 tem e pede programação dinâmica; o guloso precisa
+também da propriedade da escolha gulosa. IV é falsa: o intervalo mais curto
+pode bloquear dois intervalos compridos que caberiam; o que funciona é o que
+termina primeiro. Veja 0133, 0134 e 0135.
 
 </details>
 
-**10.** O algoritmo de Strassen multiplica matrizes `n × n` com 7
-multiplicações de matrizes `n/2 × n/2` e Θ(n²) de somas. Qual é o custo?
+**10.** Sobre divisão e conquista, analise as afirmações.
 
-- (A) Θ(n³)
-- (B) Θ(n^(log₂ 7)), cerca de Θ(n^2,81)
-- (C) Θ(n² log n)
-- (D) Θ(n^3,5)
-- (E) Θ(n²)
+- I. No Strassen, `T(n) = 7 T(n/2) + Θ(n²)` leva a Θ(n^(log₂ 7)), cerca de
+  Θ(n^2,81), menos que o Θ(n³) do método escolar.
+- II. Na busca binária, `T(n) = T(n/2) + Θ(1)` leva a Θ(log n).
+- III. No merge sort, `T(n) = 2 T(n/2) + Θ(n)` leva a Θ(n log n), seja qual
+  for a entrada.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I, apenas.
+- (B) II, apenas.
+- (C) I e II, apenas.
+- (D) II e III, apenas.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**B.** `T(n) = 7 T(n/2) + Θ(n²)`. Como `n^(log₂ 7) ≈ n^2,81` é polinomialmente
-maior que `n²`, vale o caso 1: Θ(n^(log₂ 7)). O método escolar, com 8
-multiplicações de metades, dá `8 T(n/2) + Θ(n²)` = Θ(n³). Veja 0115 e 0131.
+**E.** As três recorrências estão certas. I: `n^(log₂ 7) ≈ n^2,81` é
+polinomialmente maior que `n²`, caso 1 do teorema mestre; o método escolar,
+com 8 multiplicações de metades, dá Θ(n³). II: caso 2 com `a = 1`. III: caso 2
+com `a = b = 2`, e o merge sort não depende da ordem da entrada. Veja 0115 e
+0131.
 
 </details>
 

@@ -3450,197 +3450,236 @@ menor intervalo: ABC1D23, passagens 1 e 4 (distância 3)
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado. Nas de endereçamento
-aberto, desenhe a tabela e preencha posição por posição; a notação é a do
-Cormen: `h(k, i)` é a posição da tentativa `i`, começando em `i = 0`.
+Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
+letra e só depois abra o gabarito. Nas de simulação, desenhe a tabela e
+preencha posição por posição; nas de encadeamento, desenhe cada balde. Em
+todas, `h(k) = k mod m` e as posições começam em 0.
 
-**1.** Uma tabela com encadeamento tem `m = 7` baldes, `h(k) = k mod 7`, e cada
-chave nova entra no **início** da lista do seu balde. São inseridas
-`15 22 8 29 3 36 10`, nesta ordem. Qual é a lista do balde 1, da cabeça ao
-fim?
+**1.** Considere as afirmações sobre uma tabela hash com encadeamento:
 
-- (A) `15 22 8 29 36`
-- (B) `8 15 22 29 36`
-- (C) `36 29 22 15 8`
-- (D) `36 29 8 22 15`
-- (E) `36 29 8 22 15 3 10`
+I. Com hashing uniforme, a busca sem sucesso examina em média Θ(1 + α)
+posições e chaves, onde α = n/m é o fator de carga.
+II. A tabela aceita mais chaves do que o seu número de posições, pois cada
+balde guarda uma lista.
+III. O pior caso da busca é sempre O(1), porque a função hash leva direto ao
+balde certo.
 
-<details><summary>Gabarito</summary>
+Marque a alternativa **CORRETA**.
 
-**D.** 15, 22, 8, 29 e 36 dão resto 1; o 3 e o 10 vão para o balde 3. Como
-cada nova entra na cabeça, a lista fica na ordem inversa da chegada. Cinco das
-sete chaves no mesmo balde: as chaves têm um padrão (diferença múltipla de 7)
-que o método da divisão não desfaz. Veja 0106.
-
-</details>
-
-**2.** Uma tabela com `m = 11` posições usa sondagem linear,
-`h(k, i) = (k mod 11 + i) mod 11`. Inserem-se `20 31 9 42 14 53 25`, nesta
-ordem. Em que posições ficam o 53 e o 25?
-
-- (A) 9 e 3
-- (B) 2 e 4
-- (C) 2 e 3
-- (D) 1 e 4
-- (E) 4 e 5
+- (A) Apenas I.
+- (B) Apenas II.
+- (C) Apenas I e II.
+- (D) Apenas II e III.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**B.** 20 vai para 9; 31 (casa 9) para 10; 9 (casa 9) dá a volta até 0; 42
-(casa 9) até 1; 14 para 3; 53 (casa 9) tenta 9, 10, 0, 1 e para no 2, com 5
-sondagens; 25 (casa 3) para no 4. O bloco 9, 10, 0, 1, 2, que cresce a cada
-inserção, é o agrupamento primário. Veja 0107.
+**C.** I e II são verdadeiras. A III é falsa por causa do "sempre": se todas as
+chaves caírem no mesmo balde, a busca percorre uma lista de `n` nós e custa
+Θ(n). O O(1) é o custo **esperado** sob hashing uniforme, não o pior caso. Veja
+0106.
 
 </details>
 
-**3.** Uma tabela com `m = 8` posições usa sondagem quadrática
-`h(k, i) = (k mod 8 + (i + i²)/2) mod 8` (o caso c₁ = c₂ = 1/2 do Cormen).
-Inserem-se `17 25 9 33 41`, todas com `k mod 8 = 1`. Em que posição fica o 41?
+**2.** Considere as afirmações sobre endereçamento aberto com sondagem linear:
 
-- (A) 3
-- (B) 5
-- (C) 6
-- (D) 0
-- (E) nenhuma: a sondagem não encontra posição livre
+I. Um bloco contínuo de posições ocupadas torna mais prováveis as colisões
+nas inserções seguintes que caem sobre ele (agrupamento primário).
+II. A busca com sucesso sempre examina uma única posição.
+III. A tabela não comporta mais chaves do que o seu número de posições.
+IV. Chaves com posições iniciais diferentes podem disputar a mesma posição:
+é a colisão secundária.
+
+Marque a alternativa **CORRETA**.
+
+- (A) Apenas I, III e IV.
+- (B) Apenas II e III.
+- (C) Apenas I, II e III.
+- (D) Apenas I e IV.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**A.** Os deslocamentos são 0, 1, 3, 6, 10, ...: o 17 fica em 1, o 25 em 2, o
-9 em 4 e o 33 em 7. O 41 tenta 1, 2, 4, 7 e, com `i = 4`, `(1 + 10) mod 8 =
-3`. Com `m` potência de 2 e esses coeficientes, a sequência visita todas as
-posições. Veja 0107 e o assunto 0179, que aprofunda a sondagem quadrática.
+**A.** A II é falsa: a chave pode estar depois de várias posições ocupadas por
+outras, e a busca percorre a sequência de sondagem até achá-la. As outras três
+são verdadeiras. A tabela guarda no máximo `m` chaves (III), e a colisão
+secundária pertence ao endereçamento aberto, não ao encadeamento (IV). Veja
+0107.
 
 </details>
 
-**4.** Uma tabela com `m = 13` posições usa dispersão dupla
-`h(k, i) = (h₁(k) + i · h₂(k)) mod 13`, com `h₁(k) = k mod 13` e
-`h₂(k) = 1 + (k mod 11)`. Inserem-se `18 44 57 31`, nesta ordem. Em que
-posições ficam o 57 e o 31?
+**3.** Considere as afirmações sobre funções hash:
 
-- (A) 7 e 8
-- (B) 6 e 7
-- (C) 8 e 3
-- (D) 5 e 5
-- (E) 8 e 2
+I. Uma boa função distribui as chaves de modo aproximadamente uniforme pelas
+posições da tabela.
+II. No método da divisão, se `m` é uma potência de 2, `k mod m` depende só dos
+bits menos significativos de `k`.
+III. A função hash precisa ser injetora, ou a tabela não funciona.
+
+Marque a alternativa **CORRETA**.
+
+- (A) Apenas I.
+- (B) Apenas I e III.
+- (C) Apenas II e III.
+- (D) Apenas III.
+- (E) Apenas I e II.
 
 <details><summary>Gabarito</summary>
 
-**E.** As quatro chaves têm `h₁ = 5`. O 18 fica em 5. O 44 tem `h₂ = 1` e vai
-para 6. O 57 tem `h₂ = 3`: tenta 5 e para em 8. O 31 tem `h₂ = 10`: tenta 5 e
-para em `15 mod 13 = 2`. A (A) é o que a sondagem linear faria. Cada chave anda
-com o seu próprio passo, e por isso a dispersão dupla não forma blocos. Veja o
-assunto 0179.
+**E.** A III é falsa: como há mais chaves possíveis do que posições, a
+colisão é inevitável, e as tabelas existem justamente para tratá-la (por
+encadeamento ou por sondagem). Na II, `k mod 2^p` são os `p` últimos bits, e por
+isso se prefere um primo longe de potências de 2. Veja 0105.
 
 </details>
 
-**5.** Pelo método da multiplicação, `h(k) = ⌊m · (k · A mod 1)⌋`. Com
-`m = 8` e `A = 157/256 ≈ 0,613`, quanto vale `h(21)`?
+**4.** Uma tabela com encadeamento tem `m = 7` baldes e cada chave nova entra
+no **início** da lista do seu balde. São inseridas, nesta ordem,
+`50 23 14 36 9 29 44 7`. Quantas chaves são comparadas numa busca pelo 50?
 
 - (A) 5
-- (B) 1
-- (C) 7
-- (D) 12
-- (E) 0
-
-<details><summary>Gabarito</summary>
-
-**C.** `21 · 157 = 3297 = 12 · 256 + 225`, então `21 · A = 12,879...` e a
-parte fracionária é `225/256 ≈ 0,879`. Vezes 8 dá 7,03, e o piso é 7. Em C, com
-`w = 8` bits, é o *multiply-shift* da 4. ed. do Cormen: `((21 * 157) % 256) >>
-5` também dá 7. A (A) é o `21 mod 8` da divisão. Veja 0105 e o assunto 0178,
-que aprofunda o método da multiplicação.
-
-</details>
-
-**6.** Uma tabela com endereçamento aberto tem `m = 1000` posições e
-`n = 800` chaves. Supondo hashing uniforme, qual é o limite do Cormen para o
-número esperado de sondagens numa busca **sem sucesso**?
-
-- (A) 0,8
-- (B) 5
-- (C) 1,25
-- (D) cerca de 2,01
-- (E) 800
-
-<details><summary>Gabarito</summary>
-
-**B.** O fator de carga é α = n/m = 0,8, e o limite é 1/(1 − α) = 1/0,2 = 5.
-A (D) é o limite da busca **com** sucesso, (1/α) ln(1/(1 − α)) ≈ 2,01. Com
-encadeamento, a mesma carga daria Θ(1 + α). Veja 0105, 0106 e 0107.
-
-</details>
-
-**7.** Pelo método da divisão, `h(k) = k mod m`, para cerca de mil chaves
-inteiras. Qual valor de `m` é a melhor escolha?
-
-- (A) 256
-- (B) 1000
-- (C) 389
-- (D) 512
-- (E) 1024
-
-<details><summary>Gabarito</summary>
-
-**C.** O Cormen recomenda um primo longe de potências de 2. Com `m = 2^p`
-(256, 512, 1024), `k mod m` são só os `p` bits menos significativos da chave;
-com `m = 1000`, só os três últimos dígitos decimais. O 389 é primo e fica longe
-de 256 e de 512. O fator de carga fica perto de 2,6, o que o encadeamento
-aguenta bem. Veja 0105 e 0108.
-
-</details>
-
-**8.** Sobre a **remoção** numa tabela com endereçamento aberto e sondagem
-linear, qual afirmação é correta?
-
-- (A) Marcar a posição como livre pode fazer uma busca parar cedo e não achar uma chave que está na tabela; por isso se usa uma marca de removida.
-- (B) Basta marcar a posição como livre, porque a busca sempre percorre a tabela inteira.
-- (C) A remoção é impossível: a única saída é reconstruir a tabela.
-- (D) A remoção custa O(1) e nunca afeta as buscas seguintes.
-- (E) As marcas de removida tornam as buscas sem sucesso mais curtas.
-
-<details><summary>Gabarito</summary>
-
-**A.** A busca para na primeira posição livre. Se uma chave tinha pulado a
-posição removida, a busca por ela pararia ali. A marca `DELETED` (lápide) deixa
-a busca passar e a inserção reaproveitar a posição. O preço: com muitas
-lápides, as buscas sem sucesso ficam **longas** (por isso (E) é falsa). Veja
-0107 (exemplo A214).
-
-</details>
-
-**9.** Uma tabela com encadeamento tem `m = 5`, `h(k) = k mod 5`, e insere
-cada chave no início da lista do balde. São inseridas `12 7 22 3 17 8`.
-Quantas chaves são comparadas na busca pelo 12?
-
-- (A) 1
 - (B) 2
-- (C) 3
-- (D) 6
-- (E) 4
+- (C) 4
+- (D) 3
+- (E) 1
 
 <details><summary>Gabarito</summary>
 
-**E.** 12, 7, 22 e 17 caem no balde 2, que fica `17 22 7 12`; o 3 e o 8 vão
-para o balde 3. A busca vai direto ao balde 2 e compara com 17, 22, 7 e 12.
-O 12, primeiro a chegar, é o último da lista. Veja 0106.
+**D.** `50 mod 7 = 1`, assim como 36 e 29: o balde 1 recebe 50, depois 36, depois
+29, e como cada uma entra na cabeça a lista fica `29 36 50`. A busca compara
+29, 36 e 50. O 50, a primeira chave a chegar, é a última da lista. As demais
+chaves ficam nos baldes 0 (`7 14`) e 2 (`44 9 23`). Veja 0106.
 
 </details>
 
-**10.** Sobre as sondagens do endereçamento aberto, qual afirmação é correta?
+**5.** Uma tabela com endereçamento aberto tem `m = 8` posições e sondagem
+linear, `h(k, i) = (k mod 8 + i) mod 8`, com a volta ao início do vetor.
+Inserem-se `13 21 5 29 6 14`, nesta ordem. Conte como colisão cada tentativa
+numa posição já ocupada. Quantas colisões ocorrem no total?
 
-- (A) A sondagem linear evita o agrupamento primário.
-- (B) A sondagem quadrática evita o agrupamento secundário.
-- (C) A sondagem linear gera Θ(m²) sequências de sondagem diferentes.
-- (D) A dispersão dupla gera Θ(m²) sequências diferentes e evita os agrupamentos primário e secundário.
-- (E) O encadeamento sofre de agrupamento primário.
+- (A) 12
+- (B) 13
+- (C) 11
+- (D) 15
+- (E) 6
 
 <details><summary>Gabarito</summary>
 
-**D.** Na linear e na quadrática, a primeira posição decide a sequência
-inteira: só há `m` sequências. A linear forma blocos (agrupamento primário); a
-quadrática não, mas chaves com a mesma casa seguem o mesmo caminho
-(agrupamento secundário). Na dispersão dupla, cada par `(h₁(k), h₂(k))` dá uma
-sequência. O encadeamento não sonda nada. Veja 0107 e o assunto 0179.
+**B.** Todas as chaves têm `k mod 8` entre 5 e 6. O 13 vai para 5 (0 colisões);
+o 21 tenta 5 e fica em 6 (1); o 5 tenta 5 e 6 e fica em 7 (2); o 29 tenta 5, 6
+e 7 e dá a volta até 0 (3); o 6 tenta 6, 7 e 0 e fica em 1 (3); o 14 tenta 6, 7,
+0 e 1 e fica em 2 (4). Total: 0 + 1 + 2 + 3 + 3 + 4 = 13. A tabela termina
+`29 6 14 _ _ 13 21 5`. A (E) é o erro de contar uma colisão por chave. Veja
+0107.
+
+</details>
+
+**6.** Uma tabela com `m = 10` posições usa sondagem linear. Inserem-se
+`14 24 34 5 44 15`, nesta ordem, e depois remove-se o 24 **marcando a posição
+como removida** (lápide, que a busca atravessa). Quantas posições a busca pelo
+44 examina, contando a da lápide?
+
+- (A) 2
+- (B) 3
+- (C) 4
+- (D) 8
+- (E) 5
+
+<details><summary>Gabarito</summary>
+
+**E.** Antes da remoção a tabela é `_ _ _ _ 14 24 34 5 44 15` (posições 0 a 9).
+A busca começa em 4 e examina 4 (14), 5 (lápide), 6 (34), 7 (5) e 8 (44):
+cinco posições. A (A) é o que ocorreria se a posição 5 fosse marcada como
+**livre**: a busca pararia ali e não encontraria o 44, que está na tabela. A
+lápide existe para evitar isso. Veja 0107.
+
+</details>
+
+**7.** Uma tabela com encadeamento tem `m = 400` baldes e guarda `n = 1200`
+chaves, com hashing uniforme. Em média, quantas chaves são comparadas numa
+busca **sem sucesso**?
+
+- (A) 1,5
+- (B) 2,5
+- (C) 3
+- (D) 4
+- (E) 400
+
+<details><summary>Gabarito</summary>
+
+**C.** O fator de carga é α = 1200/400 = 3, e a busca sem sucesso percorre a
+lista inteira do balde, de tamanho médio α: 3 chaves. A (B) é a busca **com**
+sucesso, que para no meio da lista, em média 1 + α/2 = 2,5. Veja 0106 e 0108.
+
+</details>
+
+**8.** O trecho abaixo implementa a busca numa tabela com encadeamento. Qual
+alternativa descreve corretamente o defeito dele?
+
+```c
+#define M 5
+typedef struct no { int chave; struct no *prox; } No;
+No *tabela[M];
+
+int buscar(int k) {
+    No *p = tabela[k % M];
+    while (p->chave != k)
+        p = p->prox;
+    return 1;
+}
+```
+
+- (A) `k % M` pode dar resultado negativo e sempre sai do vetor.
+- (B) Falta um `free` no fim da função.
+- (C) A tabela deveria ser `No tabela[M]`, sem ponteiros.
+- (D) Se a chave não está na lista (ou o balde está vazio), `p` chega a `NULL` e o laço lê `p->chave`: comportamento indefinido.
+- (E) O laço deveria percorrer os `M` baldes, não só um.
+
+<details><summary>Gabarito</summary>
+
+**D.** O laço só termina quando acha a chave. Numa busca sem sucesso `p` vira
+`NULL` e `p->chave` desreferencia um ponteiro nulo (no teste, a busca por uma
+chave ausente termina em falha de segmentação). O certo é
+`while (p != NULL && p->chave != k)` e devolver 0 se `p` terminar nulo. A (A)
+só vale para chave negativa, e mesmo assim não "sempre". Veja 0106.
+
+</details>
+
+**9.** Sobre endereçamento aberto com sondagem linear, marque a alternativa
+**INCORRETA**.
+
+- (A) O número de chaves armazenadas nunca passa do tamanho da tabela.
+- (B) Para remover uma chave, basta marcar a posição como livre: as buscas das outras chaves continuam corretas.
+- (C) Chaves com a mesma posição inicial seguem a mesma sequência de sondagem.
+- (D) Uma inserção pode ficar mais cara depois que outras chaves formaram um bloco contínuo.
+- (E) Quanto maior o fator de carga, maior o custo médio de uma busca sem sucesso.
+
+<details><summary>Gabarito</summary>
+
+**B.** Marcar como livre quebra a busca: se outra chave tinha pulado aquela
+posição, a busca por ela para ali e conclui, por engano, que a chave não existe.
+Usa-se uma marca de removida (lápide). As demais são verdadeiras: no máximo `m`
+chaves (A), uma única sequência por posição inicial (C), agrupamento primário
+(D) e custo crescente com α (E). Veja 0107.
+
+</details>
+
+**10.** Sobre o **pior caso** de uma tabela hash com encadeamento, marque a
+alternativa **CORRETA**.
+
+- (A) Se as `n` chaves caírem no mesmo balde, a busca custa Θ(n), mesmo que o custo esperado seja Θ(1 + α).
+- (B) É O(log n), porque as listas são mantidas ordenadas.
+- (C) É O(1), pois a função hash calcula o balde sem comparar chaves.
+- (D) É Θ(m), independentemente das chaves inseridas.
+- (E) É sempre melhor que o do endereçamento aberto.
+
+<details><summary>Gabarito</summary>
+
+**A.** Uma função hash ruim (ou chaves escolhidas de propósito) pode jogar tudo
+num balde só, e a tabela degenera numa lista encadeada. O custo esperado
+Θ(1 + α) vale sob hashing uniforme. As listas do encadeamento não são
+ordenadas (B), e nenhuma das duas técnicas vence a outra em todos os casos (E).
+Veja 0106.
 
 </details>
 

@@ -5591,7 +5591,11 @@ rodado antes de fixar o gabarito.
 **Questão 1.** Um grafo simples não dirigido tem 6 vértices e 9 arestas.
 Cinco vértices têm graus 3, 3, 4, 2 e 2. Qual o grau do sexto?
 
-(A) 1  (B) 2  (C) 3  (D) 4  (E) 5
+- (A) 1
+- (B) 2
+- (C) 3
+- (D) 4
+- (E) 5
 
 <details><summary>Gabarito</summary>
 
@@ -5602,12 +5606,15 @@ cinco somam 14, então o sexto tem grau 4. Veja 0182.
 
 **Questão 2.** Qual destes grafos tem circuito euleriano?
 
-(A) o completo K4  (B) o completo K5  (C) o bipartido completo K3,3
-(D) o cubo (8 vértices, grau 3)  (E) a casinha do A364
+- (A) o completo K4
+- (B) o bipartido completo K3,3
+- (C) o cubo (8 vértices, grau 3)
+- (D) a casinha do A364
+- (E) o completo K5
 
 <details><summary>Gabarito</summary>
 
-**(B)**. No K5 todo vértice tem grau 4 (par) e o grafo é conexo. K4, K3,3 e
+**(E)**. No K5 todo vértice tem grau 4 (par) e o grafo é conexo. K4, K3,3 e
 o cubo têm todos os graus iguais a 3; a casinha tem dois vértices de grau 3
 (tem trajeto aberto, não circuito). Veja 0182.
 
@@ -5637,8 +5644,11 @@ int main(void) {
 }
 ```
 
-(A) `circuito`  (B) `trajeto`  (C) `nenhum`  (D) nada  (E) o programa não
-compila
+- (A) `circuito`
+- (B) `trajeto`
+- (C) `nenhum`
+- (D) nada
+- (E) o programa não compila
 
 <details><summary>Gabarito</summary>
 
@@ -5647,23 +5657,29 @@ conexidade, mas este grafo é conexo.) Veja 0182.
 
 </details>
 
-**Questão 4.** Sobre ciclo hamiltoniano e circuito euleriano, é correto
-afirmar:
+**Questão 4.** Sobre circuito euleriano e ciclo hamiltoniano, analise as
+afirmações.
 
-(A) todo grafo com circuito euleriano tem ciclo hamiltoniano
-(B) decidir se existe circuito euleriano é NP-completo
-(C) decidir se existe ciclo hamiltoniano pode ser feito em O(V + E) contando
-graus
-(D) decidir se existe ciclo hamiltoniano é NP-completo, e verificar uma rota
-dada é polinomial
-(E) um grafo com todos os graus pares sempre tem ciclo hamiltoniano
+- I. Decidir se existe circuito euleriano está em P: basta conferir a
+  conexidade e se todos os graus são pares.
+- II. Verificar se uma sequência de vértices dada é um ciclo hamiltoniano é
+  polinomial, mas decidir se o grafo tem algum é NP-completo.
+- III. Todo grafo conexo com todos os graus pares tem ciclo hamiltoniano.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I, apenas.
+- (B) II, apenas.
+- (C) I e II, apenas.
+- (D) II e III, apenas.
+- (E) I e III, apenas.
 
 <details><summary>Gabarito</summary>
 
-**(D)**. A gravata do A365 derruba (A) e (E): todos os graus pares, circuito
-euleriano, nenhum ciclo hamiltoniano. O euleriano está em P (graus e
-conexidade), o que derruba (B). Para o hamiltoniano não se conhece teste
-rápido, o que derruba (C). Veja 0183 e 0186.
+**(C)**. I e II são verdadeiras. III é falsa: a gravata do A365 tem todos os
+graus pares (circuito euleriano) e nenhum ciclo hamiltoniano. Para o
+hamiltoniano não se conhece teste rápido, só o verificador polinomial. Veja
+0183 e 0186.
 
 </details>
 
@@ -5694,8 +5710,11 @@ int main(void) {
 }
 ```
 
-(A) nada  (B) `2-3`  (C) `2-3` e `3-4`  (D) `0-1` e `2-3`  (E) `2-3`, `3-4`
-e `4-5`
+- (A) nada
+- (B) `2-3`
+- (C) `2-3` e `3-4`
+- (D) `0-1` e `2-3`
+- (E) `2-3`, `3-4` e `4-5`
 
 <details><summary>Gabarito</summary>
 
@@ -5708,42 +5727,53 @@ ao ancestral e o teste `low[v] > tin[u]` falha. Veja 0184.
 **Questão 6.** Matrizes A1 (5 × 10), A2 (10 × 3), A3 (3 × 12) e A4 (12 × 5).
 Qual o menor número de multiplicações escalares para calcular A1 A2 A3 A4?
 
-(A) 330  (B) 405  (C) 580  (D) 630  (E) 750
+- (A) 405
+- (B) 330
+- (C) 580
+- (D) 630
+- (E) 750
 
 <details><summary>Gabarito</summary>
 
-**(B)**. A ordem ótima é `(A1 A2)(A3 A4)`: 150 + 180 + 5 · 3 · 5 = 405. Da
+**(A)**. A ordem ótima é `(A1 A2)(A3 A4)`: 150 + 180 + 5 · 3 · 5 = 405. Da
 esquerda para a direita custaria 150 + 180 + 300 = 630; `A1 (A2 (A3 A4))`,
 580. O 330 é `m[1][3]` (e também `m[2][4]`), não a cadeia inteira. Veja
 0185.
 
 </details>
 
-**Questão 7.** Sobre as classes P e NP, é correto afirmar:
+**Questão 7.** Sobre as classes P e NP, analise as afirmações.
 
-(A) NP é a classe dos problemas que não têm algoritmo polinomial
-(B) P ⊆ NP, e se algum problema NP-completo tiver algoritmo polinomial,
-então P = NP
-(C) todo problema NP-difícil está em NP
-(D) já foi provado que P ≠ NP
-(E) SAT está em P, mas 3-SAT é NP-completo
+- I. P ⊆ NP.
+- II. NP é a classe dos problemas que não têm algoritmo polinomial.
+- III. Se algum problema NP-completo tiver algoritmo polinomial, então
+  P = NP.
+- IV. Já foi provado que P ≠ NP.
+
+Marque a alternativa **CORRETA**.
+
+- (A) I e II, apenas.
+- (B) II e IV, apenas.
+- (C) III e IV, apenas.
+- (D) I e III, apenas.
+- (E) I, II e III, apenas.
 
 <details><summary>Gabarito</summary>
 
-**(B)**. NP é "verificável em tempo polinomial", não "não polinomial" (A).
-Há problemas NP-difíceis fora de NP, como o caixeiro na versão de
-otimização (C). P versus NP está em aberto (D). SAT e 3-SAT são ambos
-NP-completos (E). Veja 0186.
+**(D)**. NP é "verificável em tempo polinomial", não "não polinomial" (II é
+falsa), e todo problema de P é verificável rápido (I). III é a razão de se
+procurar um algoritmo rápido para qualquer NP-completo. IV é falsa: P versus
+NP está em aberto. Veja 0186.
 
 </details>
 
 **Questão 8.** Para provar que um problema novo X é NP-difícil, basta:
 
-(A) reduzir X a SAT em tempo polinomial
-(B) mostrar que a força bruta de X é exponencial
-(C) reduzir em tempo polinomial um problema NP-completo conhecido a X
-(D) mostrar um verificador polinomial para X
-(E) reduzir X a um problema de P
+- (A) reduzir X a SAT em tempo polinomial.
+- (B) mostrar que a força bruta de X é exponencial.
+- (C) reduzir em tempo polinomial um problema NP-completo conhecido a X.
+- (D) mostrar um verificador polinomial para X.
+- (E) reduzir X a um problema de P.
 
 <details><summary>Gabarito</summary>
 
@@ -5757,12 +5787,12 @@ Veja 0187.
 **Questão 9.** Num grafo G com 10 vértices, o maior conjunto independente tem
 4 vértices. Então:
 
-(A) a maior clique de G tem 6 vértices
-(B) a maior clique do complemento de G tem 4 vértices e a menor cobertura de
-vértices de G tem 6
-(C) a menor cobertura de vértices de G tem 4 vértices
-(D) a maior clique do complemento de G tem 6 vértices
-(E) não dá para concluir nada sobre clique e cobertura
+- (A) a maior clique de G tem 6 vértices.
+- (B) a maior clique do complemento de G tem 4 vértices e a menor cobertura de
+  vértices de G tem 6.
+- (C) a menor cobertura de vértices de G tem 4 vértices.
+- (D) a maior clique do complemento de G tem 6 vértices.
+- (E) não dá para concluir nada sobre clique e cobertura.
 
 <details><summary>Gabarito</summary>
 
@@ -5792,11 +5822,15 @@ int main(void) {
 }
 ```
 
-(A) 3  (B) 4  (C) 5  (D) 6  (E) 9
+- (A) 3
+- (B) 4
+- (C) 9
+- (D) 6
+- (E) 5
 
 <details><summary>Gabarito</summary>
 
-**(C)**. As caixas ficam (5 5), (7 2 1), (4 2), (5) e (6). O limite inferior
+**(E)**. As caixas ficam (5 5), (7 2 1), (4 2), (5) e (6). O limite inferior
 é 37 / 10 → 4, e 4 caixas são possíveis, por exemplo (5 5), (7 2 1),
 (6 4) e (5 2): o first fit não é ótimo, mas tem garantia. Veja 0188.
 
