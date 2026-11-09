@@ -40,7 +40,7 @@ pontos:
 
 {{ideia}}
 
-O mesmo exemplo em C. Não tem nenhum `if`: a verdade vira número e entra na
+O placar em C. Não tem nenhum `if`: a verdade vira número e entra na
 conta:
 
 ```c

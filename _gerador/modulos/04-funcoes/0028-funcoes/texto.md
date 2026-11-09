@@ -48,7 +48,7 @@ copiado para o parâmetro `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve
 
 {{ideia}}
 
-O mesmo exemplo em C, com as três corridas:
+O app em C, com as três corridas:
 
 ```c
 #include <stdio.h>
@@ -87,8 +87,8 @@ você passa na chamada (`4.0`) se chama **argumento**; a variável que o recebe
 (`km`) é o **parâmetro**.
 
 Uma função boa faz **uma** tarefa, e o nome diz qual. Se você não acha um nome
-curto, ela está fazendo coisas demais: quebre em duas. E repare que
-`preco_corrida` não usa `printf`. Quem mostra o resultado é o `main`. Uma
+curto, ela está fazendo coisas demais: quebre em duas. E
+`preco_corrida` não usa `printf`: quem mostra o resultado é o `main`. Uma
 função que só calcula serve para a tela, para um arquivo ou para outra conta.
 
 > [!WARNING]

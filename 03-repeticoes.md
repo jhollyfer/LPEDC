@@ -65,8 +65,7 @@ Você quer um celular de R$ 1.000 e consegue guardar R$ 150 por mês. Em
 quantos meses compra? Dá para fazer a conta de cabeça, mas repare no jeito
 que você pensa: "guardo, confiro se já deu; se não deu, guardo de novo".
 
-Esse "de novo" é a terceira peça de todo algoritmo, depois da sequência e da
-decisão: a **repetição**. Em C, a forma mais simples de repetir é o **`while`** ("enquanto"):
+Esse "de novo" é a **repetição**. Em C, a forma mais simples de repetir é o **`while`** ("enquanto"):
 
 ```c
 while (condição) {
@@ -445,8 +444,8 @@ C: | voltas 0, k final 10
 ## 0021 · Do-while
 
 A geladeira custa R$ 1.200 e o app pergunta: "em quantas parcelas (1 a 12)?".
-Você digita 15, ele recusa e pergunta de novo. Repare num detalhe: antes da
-primeira resposta, não há nada para conferir. A pergunta **tem** que aparecer
+Você digita 15, ele recusa e pergunta de novo. Antes da primeira resposta,
+não há nada para conferir. A pergunta **tem** que aparecer
 pelo menos uma vez.
 
 Com o `while`, a pergunta vem antes do corpo. Para usá-lo aqui, você teria que
@@ -848,7 +847,7 @@ Você comprou uma TV de R$ 1.800 em 6 parcelas de R$ 300 e quer ver o carnê
 inteiro: parcela 1, parcela 2... até a 6. Aqui você **sabe** quantas voltas são,
 antes de começar.
 
-Dá para fazer com `while`, mas repare em quantos lugares o contador aparece:
+Dá para fazer com `while`, mas veja em quantos lugares o contador aparece:
 
 ```c
 int parcela = 1;              // começa
@@ -2100,7 +2099,7 @@ olha para o valor que acabou de chegar:
 > (*overflow*, assunto 0003). Com `double`, o perigo é outro: 0,1 não tem
 > representação exata em binário, então somar 0,1 dez vezes dá
 > 0,9999999999999999, não 1. Para dinheiro, sistemas reais acumulam
-> **centavos** num inteiro grande (`long long`) e só divide por 100 na
+> **centavos** num inteiro grande (`long long`) e só dividem por 100 na
 > hora de mostrar.
 
 > [!NOTE]
@@ -2815,14 +2814,13 @@ de situação que funciona como flag (assuntos 0020 e 0025), e um contador de
 lançamentos.
 
 O `while` dos relançamentos é do tipo "não sei quantas voltas": pode acabar
-no segundo lançamento ou no trigésimo. E a condição dele não é sobre os
-dados, e sim sobre a **situação**: `0` continua, `1` ganhou, `-1` perdeu.
+no segundo lançamento ou no trigésimo. E a condição dele testa a
+**situação**: `0` continua, `1` ganhou, `-1` perdeu.
 Quem muda a situação é o corpo do laço, que é o único lugar que sabe o que
 saiu.
 
 Repare num incômodo do código: o sorteio `1 + rand() % 6` aparece quatro
 vezes. No módulo 04 ele vira uma **função** `lancar()` e o programa encolhe.
-Por enquanto, a repetição é o preço de ainda não ter funções.
 
 Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O
 `switch` não acha o 9 em nenhum caso especial, e ele vira o ponto. O jogo

@@ -33,7 +33,7 @@ aparece quando o valor é **usado** na mesma expressão:
 - **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
 
 A atribuição também é uma expressão, e vale o valor guardado. Ela associa **da direita para a esquerda**, ao
-contrário dos aritméticos. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
+contrário dos aritméticos: em `a = b = c = 7`, o C faz `c = 7`,
 que vale 7, depois `b = 7` e por fim `a = 7`.
 
 O saldo passa por quatro valores, cada um calculado a
@@ -41,7 +41,7 @@ partir do anterior, na mesma caixinha. As viagens sobem de um em um:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+O bilhete único em C:
 
 ```c
 #include <stdio.h>

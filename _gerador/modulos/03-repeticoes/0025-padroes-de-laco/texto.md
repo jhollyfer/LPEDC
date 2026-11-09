@@ -117,7 +117,7 @@ olha para o valor que acabou de chegar:
 > (*overflow*, assunto 0003). Com `double`, o perigo é outro: 0,1 não tem
 > representação exata em binário, então somar 0,1 dez vezes dá
 > 0,9999999999999999, não 1. Para dinheiro, sistemas reais acumulam
-> **centavos** num inteiro grande (`long long`) e só divide por 100 na
+> **centavos** num inteiro grande (`long long`) e só dividem por 100 na
 > hora de mostrar.
 
 > [!NOTE]

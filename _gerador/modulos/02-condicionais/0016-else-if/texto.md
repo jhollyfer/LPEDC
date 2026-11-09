@@ -38,7 +38,7 @@ Os 80 km/h passam pelas perguntas em ordem: 80 é menor ou igual a 60? Não. A 7
 
 {{ideia}}
 
-O mesmo exemplo em C. Os limites das faixas são calculados a partir do limite
+O radar em C. Os limites das faixas são calculados a partir do limite
 da via, para valerem em qualquer avenida:
 
 ```c
@@ -100,6 +100,6 @@ baixo nunca são visitados:
 
 > [!NOTE]
 > **Pergunta para você:** a 72 km/h, qual mensagem aparece? E a 90 km/h?
-> Repare que os limites das faixas usam `<=`. Depois confira mudando a velocidade no código acima.
+> Os limites das faixas usam `<=`. Depois confira mudando a velocidade no código acima.
 
 {{pratique}}

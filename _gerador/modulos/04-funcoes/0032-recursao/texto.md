@@ -6,7 +6,7 @@ virou outro, **igual mas menor**: de quantos jeitos 4 pessoas sentam em 4
 cadeiras? E assim vai, até sobrar 1 pessoa, que só tem 1 jeito. A resposta é
 5 × 4 × 3 × 2 × 1 = 120, o **fatorial** de 5.
 
-Repare no raciocínio: "para resolver o de 5, eu resolvo o de 4 e multiplico
+O raciocínio foi: "para resolver o de 5, eu resolvo o de 4 e multiplico
 por 5". Uma função que resolve o problema chamando **a si mesma** com uma
 versão menor do problema é uma **função recursiva**. Ela tem sempre duas
 partes:

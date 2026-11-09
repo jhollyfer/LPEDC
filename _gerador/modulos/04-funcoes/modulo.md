@@ -189,8 +189,8 @@ já em ordem: 1 5
 ```
 
 Só com chaves (`{ ... }`) o `;` depois de `TROCAR(x, y)` fecharia o `if` e
-deixaria o `else` órfão; o `do { } while (0)` engole esse `;`. Repare que
-aqui a macro **consegue** trocar e uma função não conseguiria: ela não recebe
+deixaria o `else` órfão; o `do { } while (0)` engole esse `;`. Aqui a
+macro **consegue** trocar e uma função não conseguiria: ela não recebe
 cópias, ela é colada no lugar.
 
 </details>

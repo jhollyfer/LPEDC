@@ -45,7 +45,7 @@ desaparece:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+A ficha em C:
 
 ```c
 #include <stdio.h>

@@ -33,7 +33,7 @@ engana muita gente quando acrescenta uma segunda linha "dentro" do `if` sem
 chaves e ela roda sempre. Por isso o conselho do curso: **use chaves sempre**,
 mesmo com uma linha só. Abra e feche as chaves antes de escrever o miolo.
 
-Repare que o `if` sozinho não tem um "senão". Quando a condição é falsa, o
+O `if` sozinho não tem um "senão". Quando a condição é falsa, o
 bloco é pulado e o programa continua na linha seguinte. Isso é a
 **seleção simples**: fazer um passo extra ou não fazer nada.
 
@@ -43,7 +43,7 @@ cinza levaria direto para o final, sem passar pelo desconto:
 
 {{ideia}}
 
-O mesmo exemplo em C. O `%%` dentro do `printf` mostra um `%`:
+O desconto em C. O `%%` dentro do `printf` mostra um `%`:
 
 ```c
 #include <stdio.h>

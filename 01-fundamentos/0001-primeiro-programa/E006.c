@@ -4,7 +4,7 @@
 // O letreiro do ônibus abaixo tem um erro para cada tipo de reclamação: um
 // que o pré-processador pega, um do compilador, um do ligador e um que
 // ninguém pega (o programa roda e mostra o valor errado: a tarifa certa é
-// R$ 4,90). Conserte o código, um erro por vez. A cada rodada, repare qual
+// R$ 4,90). Conserte o código, um erro por vez. A cada rodada, anote qual
 // estação parou a linha de montagem, e só pare quando a saída for
 // exatamente a esperada.
 //

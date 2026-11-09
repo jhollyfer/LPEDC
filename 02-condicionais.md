@@ -108,7 +108,7 @@ pontos:
 
 <p align="center"><img src="02-condicionais/0012-relacionais/ideia.svg" alt="Diagrama da ideia: Relacionais e a verdade em C" width="858"></p>
 
-O mesmo exemplo em C. Não tem nenhum `if`: a verdade vira número e entra na
+O placar em C. Não tem nenhum `if`: a verdade vira número e entra na
 conta:
 
 ```c
@@ -455,7 +455,7 @@ fecha com meia-entrada:
 
 <p align="center"><img src="02-condicionais/0013-logicos/ideia.svg" alt="Diagrama da ideia: Lógicos: E, OU, NÃO" width="882"></p>
 
-O mesmo exemplo em C:
+A bilheteria em C:
 
 ```c
 #include <stdbool.h>
@@ -777,7 +777,7 @@ engana muita gente quando acrescenta uma segunda linha "dentro" do `if` sem
 chaves e ela roda sempre. Por isso o conselho do curso: **use chaves sempre**,
 mesmo com uma linha só. Abra e feche as chaves antes de escrever o miolo.
 
-Repare que o `if` sozinho não tem um "senão". Quando a condição é falsa, o
+O `if` sozinho não tem um "senão". Quando a condição é falsa, o
 bloco é pulado e o programa continua na linha seguinte. Isso é a
 **seleção simples**: fazer um passo extra ou não fazer nada.
 
@@ -787,7 +787,7 @@ cinza levaria direto para o final, sem passar pelo desconto:
 
 <p align="center"><img src="02-condicionais/0014-if/ideia.svg" alt="Diagrama da ideia: if" width="870"></p>
 
-O mesmo exemplo em C. O `%%` dentro do `printf` mostra um `%`:
+O desconto em C. O `%%` dentro do `printf` mostra um `%`:
 
 ```c
 #include <stdio.h>
@@ -1070,7 +1070,7 @@ if (condição) {
 ```
 
 É a **seleção dupla**: exatamente um dos dois blocos roda, nunca os dois e
-nunca nenhum. Repare que o `else` **não tem condição**. Ele é "todo o resto".
+nunca nenhum. O `else` **não tem condição**. Ele é "todo o resto".
 Escrever `else (saldo < 5)` é erro: se você precisa de outra pergunta, ela vira
 um novo `if` (assunto 0016).
 
@@ -1096,7 +1096,7 @@ responde Não, e desta vez o caminho que vale é o de baixo:
 
 <p align="center"><img src="02-condicionais/0015-if-else/ideia.svg" alt="Diagrama da ideia: if/else e o = no lugar do ==" width="864"></p>
 
-O mesmo exemplo em C:
+O metrô em C:
 
 ```c
 #include <stdio.h>
@@ -1399,7 +1399,7 @@ Os 80 km/h passam pelas perguntas em ordem: 80 é menor ou igual a 60? Não. A 7
 
 <p align="center"><img src="02-condicionais/0016-else-if/ideia.svg" alt="Diagrama da ideia: else if, if aninhado e o else pendurado" width="858"></p>
 
-O mesmo exemplo em C. Os limites das faixas são calculados a partir do limite
+O radar em C. Os limites das faixas são calculados a partir do limite
 da via, para valerem em qualquer avenida:
 
 ```c
@@ -1461,7 +1461,7 @@ baixo nunca são visitados:
 
 > [!NOTE]
 > **Pergunta para você:** a 72 km/h, qual mensagem aparece? E a 90 km/h?
-> Repare que os limites das faixas usam `<=`. Depois confira mudando a velocidade no código acima.
+> Os limites das faixas usam `<=`. Depois confira mudando a velocidade no código acima.
 
 ### Hora de praticar
 
@@ -2076,7 +2076,7 @@ Acompanhe o pedido do desenho: o código 2 entra, o `switch` pula direto para o
 
 <p align="center"><img src="02-condicionais/0018-switch/ideia.svg" alt="Diagrama da ideia: switch, case, break e fall-through" width="882"></p>
 
-O mesmo exemplo em C:
+O pedido em C:
 
 ```c
 #include <stdio.h>
@@ -2414,8 +2414,7 @@ consumo, da **bandeira** do mês (verde, amarela ou vermelha), de você ter ou
 não **tarifa social**, de uma taxa de iluminação que muda com o consumo, e
 ainda vem um carimbo dizendo se o seu consumo foi baixo, médio ou alto.
 
-Cada pedaço pede uma ferramenta diferente do módulo, e escolher a certa é
-metade do trabalho:
+Cada pedaço pede uma ferramenta diferente do módulo:
 
 | Decisão | Ferramenta | Por quê |
 | --- | --- | --- |
@@ -2425,8 +2424,8 @@ metade do trabalho:
 | consumo baixo, médio ou alto? | `else if` | faixas, testadas em ordem |
 | a leitura deu certo e o consumo não é negativo? | `if` com `\|\|` | barra a entrada ruim logo no começo |
 
-Repare na última linha. Um programa que lê do teclado precisa desconfiar de
-quem digita. O `scanf` devolve **quantos valores conseguiu ler** (assunto
+A última linha cuida da entrada: um programa que lê do teclado precisa
+desconfiar de quem digita. O `scanf` devolve **quantos valores conseguiu ler** (assunto
 0006): se você pediu um número e a pessoa digitou "abc", ele devolve 0. A
 primeira decisão do programa é essa: se a entrada não presta, avisa e sai com
 `return 1` (o código de erro que o terminal enxerga). Esse padrão tem nome:
@@ -2540,11 +2539,11 @@ desconto:
 > 120 + 0 - 48 + 15 = **R$ 87.00**) e confira com a saída.
 
 > [!TIP]
-> **Por dentro do C:** o `return 1` da guarda não é enfeite. O valor que o
+> **Por dentro do C:** o `return 1` da guarda tem destino: o valor que o
 > `main` devolve vira o **código de saída** do processo. No terminal,
 > `echo $?` logo depois de rodar mostra 0 (deu certo) ou 1 (deu erro). Scripts
 > e ferramentas como o `make` usam esse número para decidir se continuam.
-> Repare também que o `switch` aqui tem um `default` com `return`: assim o
+> No `switch`, o `default` também tem um `return`: assim o
 > compilador sabe que `adicional` sempre recebe um valor antes de ser usado.
 > Tire o `return` e o `gcc -O2 -Wall` avisa que ela pode ser usada sem valor.
 
@@ -2896,7 +2895,7 @@ else if:  Boa tarde
 ternário: Boa tarde
 ```
 
-4 → Boa noite; 5 → Bom dia; 18 → Boa noite, nas duas linhas. Repare que "Boa
+4 → Boa noite; 5 → Bom dia; 18 → Boa noite, nas duas linhas. "Boa
 noite" cobre duas faixas separadas (0 a 4 e 18 a 23): com `else if`
 começando por `hora >= 5 && hora < 12`, ela cai naturalmente no `else`. O
 ternário encadeado fica `cond1 ? "Bom dia" : cond2 ? "Boa tarde" : "Boa

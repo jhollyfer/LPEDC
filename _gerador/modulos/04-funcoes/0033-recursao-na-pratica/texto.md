@@ -63,8 +63,8 @@ int main(void) {
 
 Quase 2,7 milhões de chamadas para achar `fib(30)`. Um laço com duas variáveis
 (`anterior` e `atual`) faz a mesma conta em 30 passos. Para `fib(50)`, a
-versão recursiva levaria minutos; o laço, microssegundos. Código curto não
-quer dizer código barato: quando as chamadas **repetem trabalho**, desconfie.
+versão recursiva levaria minutos; o laço, microssegundos. Quando as chamadas
+**repetem trabalho**, desconfie.
 
 No fluxograma, o caso recursivo tem duas chamadas, uma depois da outra.
 A segunda só começa quando a primeira voltou com a resposta inteira:
@@ -103,7 +103,7 @@ teste de mesa de `mdc(1071, 462)`:
 | `mdc(21, 0)` | 21 | 0 | caso base: devolve **21** |
 
 Quatro chamadas para números na casa do milhar: o resto cai muito rápido.
-Euclides é recursão com **uma** chamada só e que encolhe depressa: barata.
+Euclides faz **uma** chamada só por vez e encolhe depressa, por isso sai barato.
 
 > [!WARNING]
 > Usar Fibonacci recursivo "de verdade" num programa. Ele serve para aprender

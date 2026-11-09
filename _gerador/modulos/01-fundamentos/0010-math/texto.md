@@ -36,7 +36,7 @@ dois, dá 981,75 cm², um pouco mais que a grande:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+A comparação das pizzas em C:
 
 ```c
 #include <stdio.h>

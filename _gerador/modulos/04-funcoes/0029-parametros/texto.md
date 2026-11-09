@@ -14,7 +14,7 @@ parâmetro é uma variável nova, local da função, que nasce já com a cópia.
 função pode mudar o parâmetro à vontade: a variável de quem chamou nem fica
 sabendo.
 
-Repare que a função recebe **só o número**. Para ela, `reajustar(mensalidade,
+A função recebe **só o número**. Para ela, `reajustar(mensalidade,
 10)`, `reajustar(120.00, 10)` e `reajustar(100 + 20, 5 * 2)` são idênticas: chega
 120.00 e chega 10. Ela não sabe de onde o valor veio nem onde mora a variável
 original. Por isso não tem como alterá-la.

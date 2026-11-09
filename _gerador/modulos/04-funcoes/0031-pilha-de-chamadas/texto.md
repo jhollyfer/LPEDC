@@ -28,8 +28,8 @@ função a começar é sempre a primeira a terminar: **último a entrar, primeir
 sair** (LIFO, de *last in, first out*). Só o quadro do topo está rodando; os
 outros estão parados, esperando um retorno.
 
-É por isso que local "some" no `return`: o quadro dela foi desempilhado. E é
-por isso que uma função não enxerga as variáveis de quem a chamou: elas estão
+É por isso que local "some" no `return`: o quadro dela foi desempilhado. Pelo
+mesmo motivo, uma função não enxerga as variáveis de quem a chamou: elas estão
 noutro quadro, mais embaixo.
 
 Num pedido de R$ 50,00, o `main` chama

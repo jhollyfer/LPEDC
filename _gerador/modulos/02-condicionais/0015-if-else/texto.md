@@ -17,7 +17,7 @@ if (condição) {
 ```
 
 É a **seleção dupla**: exatamente um dos dois blocos roda, nunca os dois e
-nunca nenhum. Repare que o `else` **não tem condição**. Ele é "todo o resto".
+nunca nenhum. O `else` **não tem condição**. Ele é "todo o resto".
 Escrever `else (saldo < 5)` é erro: se você precisa de outra pergunta, ela vira
 um novo `if` (assunto 0016).
 
@@ -43,7 +43,7 @@ responde Não, e desta vez o caminho que vale é o de baixo:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+O metrô em C:
 
 ```c
 #include <stdio.h>

@@ -16,14 +16,13 @@ de situação que funciona como flag (assuntos 0020 e 0025), e um contador de
 lançamentos.
 
 O `while` dos relançamentos é do tipo "não sei quantas voltas": pode acabar
-no segundo lançamento ou no trigésimo. E a condição dele não é sobre os
-dados, e sim sobre a **situação**: `0` continua, `1` ganhou, `-1` perdeu.
+no segundo lançamento ou no trigésimo. E a condição dele testa a
+**situação**: `0` continua, `1` ganhou, `-1` perdeu.
 Quem muda a situação é o corpo do laço, que é o único lugar que sabe o que
 saiu.
 
 Repare num incômodo do código: o sorteio `1 + rand() % 6` aparece quatro
 vezes. No módulo 04 ele vira uma **função** `lancar()` e o programa encolhe.
-Por enquanto, a repetição é o preço de ainda não ter funções.
 
 Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O
 `switch` não acha o 9 em nenhum caso especial, e ele vira o ponto. O jogo

@@ -137,7 +137,7 @@ else if:  Boa tarde
 ternário: Boa tarde
 ```
 
-4 → Boa noite; 5 → Bom dia; 18 → Boa noite, nas duas linhas. Repare que "Boa
+4 → Boa noite; 5 → Bom dia; 18 → Boa noite, nas duas linhas. "Boa
 noite" cobre duas faixas separadas (0 a 4 e 18 a 23): com `else if`
 começando por `hora >= 5 && hora < 12`, ela cai naturalmente no `else`. O
 ternário encadeado fica `cond1 ? "Bom dia" : cond2 ? "Boa tarde" : "Boa

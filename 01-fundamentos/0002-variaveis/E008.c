@@ -5,7 +5,7 @@
 // variável que o C não aceita, e o programa não compila. Renomeie as
 // variáveis inválidas (snake_case, sem acento, sem espaço), sem mudar os
 // valores, até compilar e mostrar a saída abaixo. As variáveis preco e
-// Preco estão certas: deixe as duas como estão e repare que o programa
+// Preco estão certas: deixe as duas como estão e confira que o programa
 // mostra valores diferentes para elas.
 //
 //   Saída esperada (depois de consertar):

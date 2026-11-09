@@ -465,7 +465,7 @@ primeira linha de novo: o terminal tem de mostrar "código: 2" outra vez.
 O letreiro do ônibus abaixo tem um erro para cada tipo de reclamação: um
 que o pré-processador pega, um do compilador, um do ligador e um que
 ninguém pega (o programa roda e mostra o valor errado: a tarifa certa é
-R$ 4,90). Conserte o código, um erro por vez. A cada rodada, repare qual
+R$ 4,90). Conserte o código, um erro por vez. A cada rodada, anote qual
 estação parou a linha de montagem, e só pare quando a saída for
 exatamente a esperada.
 
@@ -543,7 +543,7 @@ desaparece:
 
 <p align="center"><img src="01-fundamentos/0002-variaveis/ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
 
-O mesmo exemplo em C:
+A ficha em C:
 
 ```c
 #include <stdio.h>
@@ -713,7 +713,7 @@ O colega começou o pedido de segunda via do boleto, mas escolheu nomes de
 variável que o C não aceita, e o programa não compila. Renomeie as
 variáveis inválidas (snake_case, sem acento, sem espaço), sem mudar os
 valores, até compilar e mostrar a saída abaixo. As variáveis preco e
-Preco estão certas: deixe as duas como estão e repare que o programa
+Preco estão certas: deixe as duas como estão e confira que o programa
 mostra valores diferentes para elas.
 
 
@@ -919,7 +919,7 @@ PC Linux ele tem sinal. Num PC Linux de 64 bits:
 | `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
 
 O padrão do C só garante mínimos (o `int` pode ter 2 bytes num
-microcontrolador, e o `long` tem 4 bytes no Windows). Por isso não decore a
+microcontrolador, e o `long` tem 4 bytes no Windows). Então não decore a
 tabela: o **`<limits.h>`** traz os limites reais da máquina (`INT_MAX`,
 `SHRT_MIN`, `USHRT_MAX`...). E quando o tamanho exato importa, o
 **`<stdint.h>`** tem tipos com o número de bits no nome: `int8_t`, `uint16_t`,
@@ -933,7 +933,7 @@ não cabe e some:
 
 <p align="center"><img src="01-fundamentos/0003-tipos-e-limites/ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
 
-O mesmo exemplo em C:
+A catraca em C:
 
 ```c
 #include <stdio.h>
@@ -975,7 +975,7 @@ seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
 > **Por dentro do C:** os negativos são guardados em **complemento de dois**:
 > o bit mais à esquerda pesa negativo. Num byte com sinal, ele vale -128, e
 > `11111111` é -128 + 127 = -1. Por isso a faixa é assimétrica (-128 a 127):
-> não existe "-0". E por isso o mesmo byte `0xFF` é 255 num `unsigned char` e
+> não existe "-0". O byte `0xFF` é 255 num `unsigned char` e
 > -1 num `char`: os bits são iguais, o tipo decide como ler. A ordem dos bytes
 > na memória também é curiosa: nos PCs, o byte menos significativo vem
 > primeiro (**little-endian**). O 13 num `int` fica como `0D 00 00 00`.
@@ -2059,7 +2059,7 @@ sobrou, tira o `12` e escreve em `dia`. O último `'\n'` continua na fila:
 
 <p align="center"><img src="01-fundamentos/0006-scanf/ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
 
-O mesmo exemplo em C:
+O agendamento em C:
 
 ```c
 #include <stdio.h>
@@ -2084,9 +2084,8 @@ int main(void) {
 // O último scanf leu 1 item
 ```
 
-Para testar sem digitar, salve o programa como `pix.c` e mande a entrada
-por um cano: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`. O que vem antes
-do `|` vira o teclado do programa.
+Para testar sem digitar, salve o programa como `pix.c` e use o cano (`|`)
+apresentado no começo do módulo: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`.
 
 No fluxograma, as duas leituras são paralelogramos de entrada, cada uma
 guardando o valor numa caixinha. A saída vem depois:
@@ -2416,7 +2415,7 @@ fecham mais uma rodada:
 
 <p align="center"><img src="01-fundamentos/0007-aritmetica/ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
 
-O mesmo exemplo em C:
+A divisão das fatias em C:
 
 ```c
 #include <stdio.h>
@@ -2777,7 +2776,7 @@ transforma o 523 em 523.0 antes da divisão, e o resultado é real:
 
 <p align="center"><img src="01-fundamentos/0008-conversao/ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
 
-O mesmo exemplo em C:
+O consumo do carro em C:
 
 ```c
 #include <stdio.h>
@@ -3124,7 +3123,7 @@ aparece quando o valor é **usado** na mesma expressão:
 - **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
 
 A atribuição também é uma expressão, e vale o valor guardado. Ela associa **da direita para a esquerda**, ao
-contrário dos aritméticos. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
+contrário dos aritméticos: em `a = b = c = 7`, o C faz `c = 7`,
 que vale 7, depois `b = 7` e por fim `a = 7`.
 
 O saldo passa por quatro valores, cada um calculado a
@@ -3132,7 +3131,7 @@ partir do anterior, na mesma caixinha. As viagens sobem de um em um:
 
 <p align="center"><img src="01-fundamentos/0009-atribuicao/ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
 
-O mesmo exemplo em C:
+O bilhete único em C:
 
 ```c
 #include <stdio.h>
@@ -3490,7 +3489,7 @@ dois, dá 981,75 cm², um pouco mais que a grande:
 
 <p align="center"><img src="01-fundamentos/0010-math/ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
 
-O mesmo exemplo em C:
+A comparação das pizzas em C:
 
 ```c
 #include <stdio.h>
@@ -3764,9 +3763,8 @@ Diferença: R$ 29.73
 
 **Exercício E059** · ★★★
 
-Três contas, três erros. O programa compila com um aviso e mostra três
-valores errados. Conserte o código e rode de novo até sair a saída
-esperada, sem aviso.
+O programa compila com um aviso e mostra três valores errados. Conserte
+o código e rode de novo até sair a saída esperada, sem aviso.
 
 - A caixa d'água em forma de cubo tem 27 m³. Qual a aresta? (3 m)
 - O termômetro marcou -2.75 °C. Quanto falta para chegar a 0? (2.75)

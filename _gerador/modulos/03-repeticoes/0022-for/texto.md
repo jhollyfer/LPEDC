@@ -4,7 +4,7 @@ Você comprou uma TV de R$ 1.800 em 6 parcelas de R$ 300 e quer ver o carnê
 inteiro: parcela 1, parcela 2... até a 6. Aqui você **sabe** quantas voltas são,
 antes de começar.
 
-Dá para fazer com `while`, mas repare em quantos lugares o contador aparece:
+Dá para fazer com `while`, mas veja em quantos lugares o contador aparece:
 
 ```c
 int parcela = 1;              // começa

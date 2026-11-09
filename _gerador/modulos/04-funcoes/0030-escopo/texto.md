@@ -35,7 +35,7 @@ chamada e some quando a função retorna. Depois de três chamadas, fica assim:
 
 {{ideia}}
 
-No código, repare que `vezes` mostra 1 sempre, enquanto os outros dois
+No código, `vezes` mostra 1 sempre, enquanto os outros dois
 avançam:
 
 ```c

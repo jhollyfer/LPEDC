@@ -46,7 +46,7 @@ sobrou, tira o `12` e escreve em `dia`. O último `'\n'` continua na fila:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+O agendamento em C:
 
 ```c
 #include <stdio.h>
@@ -71,9 +71,8 @@ int main(void) {
 // O último scanf leu 1 item
 ```
 
-Para testar sem digitar, salve o programa como `pix.c` e mande a entrada
-por um cano: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`. O que vem antes
-do `|` vira o teclado do programa.
+Para testar sem digitar, salve o programa como `pix.c` e use o cano (`|`)
+apresentado no começo do módulo: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`.
 
 No fluxograma, as duas leituras são paralelogramos de entrada, cada uma
 guardando o valor numa caixinha. A saída vem depois:

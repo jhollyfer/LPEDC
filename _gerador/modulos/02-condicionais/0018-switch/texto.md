@@ -50,7 +50,7 @@ Acompanhe o pedido do desenho: o código 2 entra, o `switch` pula direto para o
 
 {{ideia}}
 
-O mesmo exemplo em C:
+O pedido em C:
 
 ```c
 #include <stdio.h>

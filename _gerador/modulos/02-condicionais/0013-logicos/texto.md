@@ -49,7 +49,7 @@ fecha com meia-entrada:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+A bilheteria em C:
 
 ```c
 #include <stdbool.h>

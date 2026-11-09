@@ -169,7 +169,7 @@ precisa de biblioteca de testes: uma macro de dez linhas resolve.
 > **Por dentro do C:** no troco de R$ 7,76, a pilha chega a 17 quadros de
 > `dar_troco` ao mesmo tempo: 1 da primeira chamada, 5 das notas dadas, 11
 > das trocas de nota (de 100 para 50, de 50 para 20...). Nenhum sai antes
-> do caso base. Repare que a chamada recursiva é a última coisa que cada
+> do caso base. A chamada recursiva é a última coisa que cada
 > `dar_troco` faz: isso se chama **recursão de cauda**, e com `-O2` o `gcc`
 > transforma tudo num laço, com um quadro só. Já o `cardapio.o` exporta 4 símbolos (`T`) e esconde o
 > `vendidos` (`b`): confira com `nm`.

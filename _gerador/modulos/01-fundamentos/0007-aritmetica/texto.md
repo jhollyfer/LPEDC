@@ -42,7 +42,7 @@ fecham mais uma rodada:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+A divisão das fatias em C:
 
 ```c
 #include <stdio.h>

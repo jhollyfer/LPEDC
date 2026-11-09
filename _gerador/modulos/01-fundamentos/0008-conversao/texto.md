@@ -29,7 +29,7 @@ transforma o 523 em 523.0 antes da divisão, e o resultado é real:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+O consumo do carro em C:
 
 ```c
 #include <stdio.h>

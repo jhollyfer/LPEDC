@@ -40,7 +40,7 @@ PC Linux ele tem sinal. Num PC Linux de 64 bits:
 | `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
 
 O padrão do C só garante mínimos (o `int` pode ter 2 bytes num
-microcontrolador, e o `long` tem 4 bytes no Windows). Por isso não decore a
+microcontrolador, e o `long` tem 4 bytes no Windows). Então não decore a
 tabela: o **`<limits.h>`** traz os limites reais da máquina (`INT_MAX`,
 `SHRT_MIN`, `USHRT_MAX`...). E quando o tamanho exato importa, o
 **`<stdint.h>`** tem tipos com o número de bits no nome: `int8_t`, `uint16_t`,
@@ -54,7 +54,7 @@ não cabe e some:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+A catraca em C:
 
 ```c
 #include <stdio.h>
@@ -96,7 +96,7 @@ seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
 > **Por dentro do C:** os negativos são guardados em **complemento de dois**:
 > o bit mais à esquerda pesa negativo. Num byte com sinal, ele vale -128, e
 > `11111111` é -128 + 127 = -1. Por isso a faixa é assimétrica (-128 a 127):
-> não existe "-0". E por isso o mesmo byte `0xFF` é 255 num `unsigned char` e
+> não existe "-0". O byte `0xFF` é 255 num `unsigned char` e
 > -1 num `char`: os bits são iguais, o tipo decide como ler. A ordem dos bytes
 > na memória também é curiosa: nos PCs, o byte menos significativo vem
 > primeiro (**little-endian**). O 13 num `int` fica como `0D 00 00 00`.

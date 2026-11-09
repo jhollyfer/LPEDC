@@ -1,8 +1,8 @@
 ## 0021 · Do-while
 
 A geladeira custa R$ 1.200 e o app pergunta: "em quantas parcelas (1 a 12)?".
-Você digita 15, ele recusa e pergunta de novo. Repare num detalhe: antes da
-primeira resposta, não há nada para conferir. A pergunta **tem** que aparecer
+Você digita 15, ele recusa e pergunta de novo. Antes da primeira resposta,
+não há nada para conferir. A pergunta **tem** que aparecer
 pelo menos uma vez.
 
 Com o `while`, a pergunta vem antes do corpo. Para usá-lo aqui, você teria que

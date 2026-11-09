@@ -114,7 +114,7 @@ copiado para o parâmetro `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve
 
 <p align="center"><img src="04-funcoes/0028-funcoes/ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
 
-O mesmo exemplo em C, com as três corridas:
+O app em C, com as três corridas:
 
 ```c
 #include <stdio.h>
@@ -153,8 +153,8 @@ você passa na chamada (`4.0`) se chama **argumento**; a variável que o recebe
 (`km`) é o **parâmetro**.
 
 Uma função boa faz **uma** tarefa, e o nome diz qual. Se você não acha um nome
-curto, ela está fazendo coisas demais: quebre em duas. E repare que
-`preco_corrida` não usa `printf`. Quem mostra o resultado é o `main`. Uma
+curto, ela está fazendo coisas demais: quebre em duas. E
+`preco_corrida` não usa `printf`: quem mostra o resultado é o `main`. Uma
 função que só calcula serve para a tela, para um arquivo ou para outra conta.
 
 > [!WARNING]
@@ -472,7 +472,7 @@ parâmetro é uma variável nova, local da função, que nasce já com a cópia.
 função pode mudar o parâmetro à vontade: a variável de quem chamou nem fica
 sabendo.
 
-Repare que a função recebe **só o número**. Para ela, `reajustar(mensalidade,
+A função recebe **só o número**. Para ela, `reajustar(mensalidade,
 10)`, `reajustar(120.00, 10)` e `reajustar(100 + 20, 5 * 2)` são idênticas: chega
 120.00 e chega 10. Ela não sabe de onde o valor veio nem onde mora a variável
 original. Por isso não tem como alterá-la.
@@ -889,7 +889,7 @@ chamada e some quando a função retorna. Depois de três chamadas, fica assim:
 
 <p align="center"><img src="04-funcoes/0030-escopo/ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
 
-No código, repare que `vezes` mostra 1 sempre, enquanto os outros dois
+No código, `vezes` mostra 1 sempre, enquanto os outros dois
 avançam:
 
 ```c
@@ -1311,8 +1311,8 @@ função a começar é sempre a primeira a terminar: **último a entrar, primeir
 sair** (LIFO, de *last in, first out*). Só o quadro do topo está rodando; os
 outros estão parados, esperando um retorno.
 
-É por isso que local "some" no `return`: o quadro dela foi desempilhado. E é
-por isso que uma função não enxerga as variáveis de quem a chamou: elas estão
+É por isso que local "some" no `return`: o quadro dela foi desempilhado. Pelo
+mesmo motivo, uma função não enxerga as variáveis de quem a chamou: elas estão
 noutro quadro, mais embaixo.
 
 Num pedido de R$ 50,00, o `main` chama
@@ -1743,7 +1743,7 @@ virou outro, **igual mas menor**: de quantos jeitos 4 pessoas sentam em 4
 cadeiras? E assim vai, até sobrar 1 pessoa, que só tem 1 jeito. A resposta é
 5 × 4 × 3 × 2 × 1 = 120, o **fatorial** de 5.
 
-Repare no raciocínio: "para resolver o de 5, eu resolvo o de 4 e multiplico
+O raciocínio foi: "para resolver o de 5, eu resolvo o de 4 e multiplico
 por 5". Uma função que resolve o problema chamando **a si mesma** com uma
 versão menor do problema é uma **função recursiva**. Ela tem sempre duas
 partes:
@@ -2142,8 +2142,8 @@ int main(void) {
 
 Quase 2,7 milhões de chamadas para achar `fib(30)`. Um laço com duas variáveis
 (`anterior` e `atual`) faz a mesma conta em 30 passos. Para `fib(50)`, a
-versão recursiva levaria minutos; o laço, microssegundos. Código curto não
-quer dizer código barato: quando as chamadas **repetem trabalho**, desconfie.
+versão recursiva levaria minutos; o laço, microssegundos. Quando as chamadas
+**repetem trabalho**, desconfie.
 
 No fluxograma, o caso recursivo tem duas chamadas, uma depois da outra.
 A segunda só começa quando a primeira voltou com a resposta inteira:
@@ -2182,7 +2182,7 @@ teste de mesa de `mdc(1071, 462)`:
 | `mdc(21, 0)` | 21 | 0 | caso base: devolve **21** |
 
 Quatro chamadas para números na casa do milhar: o resto cai muito rápido.
-Euclides é recursão com **uma** chamada só e que encolhe depressa: barata.
+Euclides faz **uma** chamada só por vez e encolhe depressa, por isso sai barato.
 
 > [!WARNING]
 > Usar Fibonacci recursivo "de verdade" num programa. Ele serve para aprender
@@ -3486,7 +3486,7 @@ precisa de biblioteca de testes: uma macro de dez linhas resolve.
 > **Por dentro do C:** no troco de R$ 7,76, a pilha chega a 17 quadros de
 > `dar_troco` ao mesmo tempo: 1 da primeira chamada, 5 das notas dadas, 11
 > das trocas de nota (de 100 para 50, de 50 para 20...). Nenhum sai antes
-> do caso base. Repare que a chamada recursiva é a última coisa que cada
+> do caso base. A chamada recursiva é a última coisa que cada
 > `dar_troco` faz: isso se chama **recursão de cauda**, e com `-O2` o `gcc`
 > transforma tudo num laço, com um quadro só. Já o `cardapio.o` exporta 4 símbolos (`T`) e esconde o
 > `vendidos` (`b`): confira com `nm`.
@@ -4008,8 +4008,8 @@ já em ordem: 1 5
 ```
 
 Só com chaves (`{ ... }`) o `;` depois de `TROCAR(x, y)` fecharia o `if` e
-deixaria o `else` órfão; o `do { } while (0)` engole esse `;`. Repare que
-aqui a macro **consegue** trocar e uma função não conseguiria: ela não recebe
+deixaria o `else` órfão; o `do { } while (0)` engole esse `;`. Aqui a
+macro **consegue** trocar e uma função não conseguiria: ela não recebe
 cópias, ela é colada no lugar.
 
 </details>
