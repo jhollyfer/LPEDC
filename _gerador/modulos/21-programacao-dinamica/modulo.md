@@ -357,7 +357,7 @@ Marque a alternativa **CORRETA**.
 de subproblemas (**subestrutura ótima**) e esses subproblemas se repetem
 (**sobrepostos**). II é verdadeira: é por guardar o resultado que o custo cai
 de exponencial para polinomial. III é falsa: guardar os resultados é o
-coração da PD; o guloso é que decide sem olhar para trás (0133). Veja 0138 e
+que define a PD; o guloso é que decide sem olhar para trás (0133). Veja 0138 e
 0139.
 
 </details>

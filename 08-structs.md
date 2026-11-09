@@ -9,8 +9,8 @@ módulo ensina o C a guardar pacotes.
 
 No C, você desenha o pacote byte a byte: decide a ordem dos campos (e paga
 pelas sobras de alinhamento), decide se ele anda por cópia ou por ponteiro (e
-paga pela cópia), decide se dois campos dividem a mesma memória. Nada fica
-escondido, e você passa a saber o que um objeto **custa**.
+paga pela cópia), decide se dois campos dividem a mesma memória. Você passa a
+saber o que um objeto **custa**.
 
 O módulo fecha no nível do bit: máscaras e flags, o jeito mais compacto de
 guardar sim/não. Com struct, ponteiro para struct e `malloc`, você tem todas

@@ -1,11 +1,10 @@
 # Simulados da prova do PPGI
 
-Três simulados de 20 questões cada, no formato das provas mais recentes do PPGI: quatro alternativas (a a d), questões de conceito, de afirmações I, II e III combinadas, de simulação, de cálculo e de código C com erro. O peso de cada tema segue [o que caiu de 2016 a 2023](PPGI.md#o-que-caiu-de-2016-a-2023): árvores, estruturas elementares, ordenação, hash e busca, com grafos e custo de operações em todos, que voltaram em 2022 e 2023. As questões são originais, com cenários e valores novos.
+Três simulados de 20 questões cada, no formato das provas mais recentes do PPGI: quatro alternativas (a a d), questões de conceito, de afirmações I, II e III combinadas, de simulação, de cálculo e de código C com erro. O peso de cada tema segue [o que caiu de 2016 a 2023](PPGI.md#o-que-caiu-de-2016-a-2023). As questões são originais, com cenários e valores novos.
 
 Como usar:
 
-- Faça um simulado por vez, cronometrando. O edital não fixa a duração; reserve 3 minutos por questão (1 hora no total) e treine nesse ritmo.
-- Cada questão vale 0,5. Com 14 acertos você chega à nota mínima, 7,0.
+- Faça um simulado por vez, cronometrando: 3 minutos por questão, 1 hora no total. Pontuação e nota mínima estão no [resumo do edital](PPGI.md).
 - Resolva no papel, sem consultar o curso, e só confira o gabarito no fim, depois de marcar as 20 respostas.
 - Para cada erro, abra o link da coluna Estude, releia o assunto e refaça a questão sem olhar a resposta.
 - Nas questões de simulação, refaça o passo a passo à mão antes de rodar qualquer coisa.

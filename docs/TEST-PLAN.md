@@ -22,9 +22,9 @@ resposta é conferida). Passa com `<modulo>: 0 com problema`.
 |---|---|---|
 | revisão não mexeu no que não pode | `python3 _gerador/conferir-texto.py <modulo> ...` (compara com o `HEAD`: blocos de código, código inline, `{{...}}`, títulos de assunto, callouts, gabaritos) | `0 problema(s)` |
 | humanizer | skill `humanizer-pt` e o script `auditoria_pos_edicao.py antes.txt depois.txt` | valores, força da norma, certeza e corte OK; o BLOQUEIO em "vestígios de ferramenta" é falso positivo se o arquivo do `HEAD` contra ele mesmo der o mesmo |
-| `.md` gerado | `cd _gerador && npm run gerar -- 03-` | sem erro, e o `git diff` do `.md` mostra só o que mudou na fonte |
+| `.md` gerado | o gerador do módulo (`ARCHITECTURE.md` §1) | sem erro, e o `git diff` do `.md` mostra só o que mudou na fonte |
 | links | links e imagens relativos dos `.md` da raiz apontam para arquivo que existe | nenhum quebrado |
-| desenho | `node ver.mjs ../<modulo>/<assunto>/ideia.svg` e abrir o PNG | sem sobreposição, texto cortado ou seta solta (`DESIGN.md`) |
+| desenho | `ver.mjs` e abrir o PNG (`DESIGN.md`) | sem sobreposição, texto cortado ou seta solta (`DESIGN.md`) |
 
 ## 4. Definição de pronto
 

@@ -320,7 +320,7 @@ void g(int n) {
 **B.** Seja `c(n)` o valor deixado por `g(n)`. Para `n ≤ 1`, `c = 0`. Então
 `c(2) = c(3) = 1` (só `g(1)` e `g(0)` por dentro), `c(5) = 1 + 2·c(2) + c(1) = 3`,
 `c(10) = 1 + 2·c(5) + c(2) = 8` e `c(20) = 1 + 2·c(10) + c(5) = 1 + 16 + 3 = 20`.
-Rodando o programa, `conta` vale 20. Veja 0114.
+Veja 0114.
 
 </details>
 
@@ -337,8 +337,8 @@ o custo total de 20 incrementos seguidos?
 <details><summary>Gabarito</summary>
 
 **D.** O bit 0 troca em todos os 20 incrementos; o bit 1, em 10; o bit 2, em 5;
-o bit 3, em 2; o bit 4, em 1. Total: 20 + 10 + 5 + 2 + 1 = 38 (rodando o contador,
-o valor final é 10100). Em geral, `n` incrementos custam `2n − (número de bits 1
+o bit 3, em 2; o bit 4, em 1. Total: 20 + 10 + 5 + 2 + 1 = 38 (o valor final do
+contador é 10100). Em geral, `n` incrementos custam `2n − (número de bits 1
 de n)`, sempre menos que `2n`: o custo amortizado por incremento é O(1). A (E)
 é o teto grosseiro `2n`. Veja 0116.
 

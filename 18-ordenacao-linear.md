@@ -3315,7 +3315,7 @@ heap de máximo de tamanho 10 (assunto 0102).
 <details><summary>Resposta</summary>
 
 Ordenar: O(n log n), uns 3,5 milhões de comparações. Quickselect em
-`k = 9` deixa os 10 menores em `v[0..9]`; ordenar esses 10 é nada: O(n) em
+`k = 9` deixa os 10 menores em `v[0..9]`; ordenar esses 10 custa quase nada: O(n) em
 média, uns 400 mil passos. O heap de 10 passa uma vez pelo vetor: cada
 motoboy mais perto que o pior do heap entra no lugar dele, O(n log 10), sem
 bagunçar o vetor e funcionando com dados que chegam aos poucos.
@@ -4756,7 +4756,7 @@ saída (contando de 0) cai o elemento `v[0]`, o primeiro 3?
 as posições 5, 6 e 7. Andando de trás para a frente, o último 3 (`v[6]`) pega a
 7, o do meio (`v[3]`) pega a 6 e o primeiro (`v[0]`) pega a 5. É a ordem
 original dos iguais, o que torna o método estável. Com o laço de frente para
-trás, o `v[0]` iria para a 7 (a alternativa E). Conferi rodando. Veja 0120.
+trás, o `v[0]` iria para a 7 (a alternativa E). Veja 0120.
 
 </details>
 
@@ -4775,8 +4775,7 @@ vetor depois da **segunda** passada (a das dezenas)?
 **A.** A passada das unidades dá `891 672 243 123 305 126 457 118` (a
 alternativa B). Na das dezenas, 123 e 126 têm dezena 2 e mantêm a ordem da
 passada anterior (123 antes de 126); a C inverte esse empate, o que só um
-método instável faria. A D é o vetor depois da terceira passada. Conferido
-rodando. Veja 0121.
+método instável faria. A D é o vetor depois da terceira passada. Veja 0121.
 
 </details>
 
@@ -4796,7 +4795,7 @@ ordena `23 8 41 5 16 30 2 19`. Como fica o vetor depois da passada com
 com `h = 2` faz insertion sort nas posições pares (`16 2 23 41` vira
 `2 16 23 41`) e nas ímpares (`8 5 30 19` vira `5 8 19 30`), intercaladas:
 `2 5 16 8 23 19 41 30`. Falta a passada `h = 1`, que termina o serviço (a B).
-Conferi rodando. Veja 0119.
+Veja 0119.
 
 </details>
 
@@ -4848,8 +4847,8 @@ Marque a alternativa CORRETA.
 
 **E.** I é verdadeira: depois de particionar, o quickselect segue por um lado
 só, e a soma `n + n/2 + n/4 + ...` dá menos que 2n. II é verdadeira: os saltos
-de `h` posições passam por cima de iguais (rodei `20 21 10`, chaves iguais com
-rótulos, e o shell sort trocou os dois iguais de lugar). III é verdadeira: a
+de `h` posições passam por cima de iguais (com `20 21 10`, chaves iguais com
+rótulos, o shell sort troca os dois iguais de lugar). III é verdadeira: a
 árvore de decisão com `n!` folhas tem altura de pelo menos log₂ n!. O "todo"
 aqui está certo porque a afirmação restringe o conjunto aos métodos por
 comparação. Veja 0119, 0123 e 0117.
@@ -4909,7 +4908,7 @@ O que o programa imprime?
 acumulada (8). Os dois 4 vão para as posições 1 e 0, a posição 0 que deveria
 ser do 0, e o 0 acaba sobrescrito pelo 4. As posições 6 e 7 nunca são
 escritas e ficam com o 0 inicial. Compila sem aviso, e o resultado é o
-impresso (conferi rodando). O limite correto é `x <= K`. Veja 0120.
+impresso. O limite correto é `x <= K`. Veja 0120.
 
 </details>
 
@@ -4955,7 +4954,7 @@ quantas partições são feitas?
 **C.** O 3º menor está no índice 2 do vetor ordenado. 1ª partição, pivô 21: ele
 fica no índice 6, e o 3º menor está à esquerda. 2ª partição, no trecho `12 7
 19 3 15 8` com pivô 8: o vetor fica `7 3 8 12 15 19 21` e o 8 cai no índice 2.
-Achou, com 2 partições e sem precisar ordenar nada. Conferi rodando. Veja
+Achou, com 2 partições e sem precisar ordenar nada. Veja
 0123.
 
 </details>

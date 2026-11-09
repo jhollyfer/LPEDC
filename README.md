@@ -1,16 +1,14 @@
 # LPEDC · Lógica de Programação, Estrutura de Dados e C
 
-Material de estudo pessoal para **relembrar lógica de programação**, **aprender
-estrutura de dados** e **entender de verdade como a linguagem C funciona**: a
+Material de estudo pessoal para relembrar lógica de programação, aprender
+estrutura de dados e entender de verdade como a linguagem C funciona: a
 memória, os ponteiros, a compilação e o custo de cada escolha.
 
 > [!IMPORTANT]
 > **Preparação para o Mestrado do PPGI/UFAM.** O curso está alinhado à Prova de
 > Conhecimentos do edital 070/2026 (prova em 27/11/2026). O guia
 > [`PPGI.md`](PPGI.md) liga cada tópico do edital e do cursinho do PPGI ao
-> assunto que o ensina e traz um roteiro dia a dia. Cada módulo termina com
-> uma **lista prática de 30 exercícios** e **questões no estilo da prova**,
-> com gabarito comentado.
+> assunto que o ensina e traz um roteiro dia a dia.
 
 Segue a filosofia do [LPPOO](https://github.com/jhollyfer/LPPOO). Cada assunto
 conta **um exemplo só**, em quatro partes que batem entre si: o texto, o
@@ -68,18 +66,11 @@ práticas e cerca de 280 questões objetivas.
 Todo o texto fica na raiz: este `README.md` é o guia, e cada módulo é um
 arquivo só (`01-fundamentos.md`, `02-condicionais.md`...), com todos os
 assuntos, os exemplos, os exercícios, a lista prática, os desafios e as
-questões da prova. As pastas guardam só o que você roda e os desenhos:
-
-```
-01-fundamentos.md      o módulo inteiro: é por ele que você estuda
-01-fundamentos/
-├── lista/             P0101.c ... P0130.c: a lista prática
-└── 0002-variaveis/    um assunto
-    ├── ideia.svg      o diagrama da ideia
-    ├── fluxograma.svg o caminho que o programa faz
-    ├── A003.c A004.c  exemplos: rode, mude, quebre, rode de novo
-    └── E007.c ...     exercícios
-```
+questões da prova. As pastas guardam só o que você roda e os desenhos: em
+cada uma, a `lista/` (`P0101.c` a `P0130.c`) e uma subpasta por assunto, com
+`ideia.svg`, `fluxograma.svg`, os exemplos (`A003.c`...) e os exercícios
+(`E007.c`...). A árvore completa está em
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#1-peças).
 
 ## Como estudar cada assunto
 
@@ -181,8 +172,9 @@ Os `.md` dos módulos (na raiz) e os SVGs são gerados. O guia de escrita está 
 cd _gerador && npm install
 npm run gerar           # tudo
 npm run gerar -- 03-    # só o módulo 03
-node ver.mjs ../03-repeticoes/0020-while/ideia.svg   # vira PNG para conferir
 ```
+
+Como conferir um desenho está em [`docs/DESIGN.md`](docs/DESIGN.md).
 
 A fonte Excalifont (`_gerador/fonte/`) vem do projeto Excalidraw e usa a
 licença SIL Open Font License.

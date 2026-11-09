@@ -5378,7 +5378,7 @@ Marque a alternativa CORRETA.
 **C.** I é verdadeira: a chave na primeira posição custa 1 comparação. II é
 falsa: com repetidas, a busca binária para na primeira que o `meio` encontrar,
 e essa pode ser qualquer uma; o "sempre" derruba a afirmação. III é verdadeira:
-o máximo é ⌊log₂ n⌋ + 1, e ⌊log₂ 2n⌋ = ⌊log₂ n⌋ + 1 (conferi rodando: 1000
+o máximo é ⌊log₂ n⌋ + 1, e ⌊log₂ 2n⌋ = ⌊log₂ n⌋ + 1 (1000
 elementos dão 10, 2000 dão 11). Veja 0089 e 0090.
 
 </details>
@@ -5398,8 +5398,8 @@ ausente?
 
 **B.** O máximo é ⌊log₂ n⌋ + 1 = ⌊12,29⌋ + 1 = 13. A (12) esquece o "+ 1"; D e E
 são os custos da busca sequencial no pior caso (E) e no caso médio (D, quando
-a chave está no vetor). Rodei a busca para todas as chaves e para as ausentes:
-nenhuma passou de 13. Veja 0090.
+a chave está no vetor). Nenhuma chave, presente
+ou ausente, passa de 13 comparações. Veja 0090.
 
 </details>
 
@@ -5421,8 +5421,7 @@ Quantos elementos do vetor são comparados com a chave até ela ser encontrada?
 <details><summary>Gabarito</summary>
 
 **A.** Meio 5 (27 < 53, `ini = 6`), meio 8 (42 < 53, `ini = 9`), meio 10 (53,
-achou). São 3 comparações, contra 11 da busca sequencial. Rodei o programa
-contando: o 53 sai com 3. Veja 0090.
+achou). São 3 comparações, contra 11 da busca sequencial. Veja 0090.
 
 </details>
 
@@ -5460,8 +5459,7 @@ comparações são feitas no total?
 
 **D.** Inserir o 2: 1 comparação. Inserir o 9: 1 (o 6 é menor, para). Inserir
 o 4: 3 (9, 6, e o 2 que interrompe). Inserir o 1: 4 (9, 6, 4 e 2; o laço acaba
-porque `i` chega a -1, sem comparação extra). Total 1 + 1 + 3 + 4 = 9, que
-confere com a contagem rodando o código. Num vetor já ordenado seriam só
+porque `i` chega a -1, sem comparação extra). Total 1 + 1 + 3 + 4 = 9. Num vetor já ordenado seriam só
 n - 1 = 4. Veja 0093.
 
 </details>
@@ -5513,7 +5511,7 @@ Marque a alternativa CORRETA.
 <details><summary>Gabarito</summary>
 
 **C.** Os elementos `<= 12` são 3, 9 e 6, então o pivô vai para o índice 3 e o
-vetor fica `3 9 6 12 17 21 14` (conferido rodando). I e II são verdadeiras. III
+vetor fica `3 9 6 12 17 21 14`. I e II são verdadeiras. III
 é falsa: no original, os maiores aparecem como 14, 21, 17 e, depois da
 partição, como 17, 21, 14: a troca final do pivô com o primeiro dos maiores
 (o 14) bagunça a ordem. É por isso que o quick sort não é estável. Veja 0095.
@@ -5571,8 +5569,7 @@ o pivô são feitas no total?
 **D.** Cada partição de um trecho de `m` elementos faz `m - 1` comparações com
 o pivô e deixa um lado vazio, então o trecho seguinte tem `m - 1` elementos:
 11 + 10 + ... + 1 = 66 = n(n - 1)/2, o pior caso Θ(n²). A (C) é a soma até 12,
-que conta uma comparação do pivô consigo mesmo. Rodei a contagem para n = 12:
-66. Veja 0095.
+que conta uma comparação do pivô consigo mesmo. Veja 0095.
 
 </details>
 

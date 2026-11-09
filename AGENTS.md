@@ -6,8 +6,7 @@ Prova de Conhecimentos do Mestrado do PPGI/UFAM.
 ## O padrão Maiyu, adaptado ao curso
 
 Este repositório segue a filosofia do `maiyu-pattern` (github.com/jhollyfer/maiyu-pattern):
-documentação viva em `docs/`, autor único, commits Conventional em pt-BR, zero duplicidade e
-texto para humano passado no humanizer. A régua de TypeScript (`_doc-lib/`, `_standards/`, skills
+documentação viva em `docs/`, autor único, commits Conventional em pt-BR e zero duplicidade. A régua de TypeScript (`_doc-lib/`, `_standards/`, skills
 de backend e frontend) não vem para cá: o curso não tem código de aplicação. O que muda em relação
 ao padrão está em `docs/DECISIONS.md`.
 

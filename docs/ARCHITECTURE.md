@@ -52,8 +52,8 @@ Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 6 exercí
    `desenhos.mjs` por assunto.
 2. Os enunciados dos exercícios e da lista saem do bloco de comentários do topo dos `.c`
    (`RULES.md` §5 e §6).
-3. `cd _gerador && npm run gerar -- 03-` monta `03-repeticoes.md` na raiz, os SVGs na pasta do
-   módulo e acerta os caminhos dos links e das imagens.
+3. O gerador (§1) monta o `.md` na raiz, os SVGs na pasta do módulo e acerta os caminhos dos
+   links e das imagens.
 
 ## 4. Linguagem do domínio
 

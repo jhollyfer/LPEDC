@@ -17,7 +17,7 @@ tempo polinomial, P e NP, reduções, e o que fazer quando o problema é
 difícil e a resposta é para hoje: aproximar com garantia ou resolver exato
 só quando a entrada é pequena.
 
-A mudança na cabeça é perguntar, antes de "qual o algoritmo?", se o problema
+Antes de perguntar "qual o algoritmo?", pergunte se o problema
 **tem** algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o
 outro não. Conferir uma resposta custa menos que achá-la. E quando não se
 conhece algoritmo rápido, ainda dá para aproximar ou podar em C.
@@ -48,7 +48,7 @@ conhece algoritmo rápido, ainda dá para aproximar ou podar em C.
 
 ## Antes de começar
 
-Este módulo usa sem cerimônia a matriz de adjacência e a DFS (0109, 0111),
+Este módulo usa a matriz de adjacência e a DFS (0109, 0111),
 os componentes conexos (0150), o Prim (0153), a recursão e o backtracking
 (0032, 0126, 0127), a programação dinâmica (0138 a 0140), o `qsort` (0096) e
 as máscaras de bits (0065). Se a DFS recursiva estiver enferrujada, releia o
@@ -60,7 +60,6 @@ papel o **passo a passo** quando houver (a pilha do Hierholzer, os
 Nos grafos, a origem fica roxa, as arestas verdes
 são as escolhidas (o circuito, o ciclo, as pontes, a clique) e, nas
 articulações, o amarelo marca os vértices de corte.
-
 
 Convenções que valem para o módulo todo:
 

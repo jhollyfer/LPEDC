@@ -19,14 +19,12 @@ TypeScript, JavaScript, Python, Java...): tudo é explicado em termos de C.
 
 O curso começa direto em C: o módulo 01 abre com algoritmo e o modelo
 entrada → processamento → saída (a estrutura sequencial); depois vêm
-decisões, laços, funções e assim por diante. Instalação: Arch Linux primeiro
-(`pacman`), depois Debian/Ubuntu (`apt`) e Windows (WSL).
+decisões, laços, funções e assim por diante. A instalação está no
+[`README.md`](../README.md#como-preparar-o-computador).
 
 **Objetivo principal:** preparar para a Prova de Conhecimentos do Mestrado do
-PPGI/UFAM (edital 070/2026): 20 questões objetivas sobre algoritmos, C,
-estruturas de dados, análise, ordenação, hash, árvores e grafos, com
-bibliografia Cormen, Ziviani e Deitel. O mapa edital → assuntos e o roteiro de
-estudo estão em [`PPGI.md`](../PPGI.md). Quando um livro divergir, siga as
+PPGI/UFAM (escopo em `PRD.md`; mapa edital → assuntos e roteiro em
+[`PPGI.md`](../PPGI.md)). Quando um livro divergir, siga as
 definições e os nomes do **Cormen** e cite o nome alternativo ("também chamado
 de...").
 
@@ -77,8 +75,8 @@ linguagem ("onde" como coringa, "de forma X", "através de" no lugar de "por
 meio de", "realizar" no lugar de "fazer", "possuir" no lugar de "ter", "vale
 ressaltar", "é importante notar", "basicamente", "na verdade", "ou seja" em
 série) e sem marcas de texto gerado ("não é só X, é Y", trios forçados,
-"crucial", "fundamental" a cada parágrafo, conclusão genérica, travessão). Antes do commit, o texto passa pelo `humanizer-pt`
-(`TEST-PLAN.md` §3). Não repita o que outro assunto ou o README já disse: aponte para ele.
+"crucial", "fundamental" a cada parágrafo, conclusão genérica, travessão).
+O `humanizer-pt` entra antes do commit (`TEST-PLAN.md` §3). Não repita o que outro assunto ou o README já disse: aponte para ele.
 
 ## 4. Exemplos (A003.c)
 
@@ -100,11 +98,8 @@ int main(void) {
   português sem acento em `snake_case`, comentários curtos em português.
 - Prefira valores fixos (saída previsível). Quando ler do teclado, mostre no
   comentário um exemplo de interação: `// Digite a idade: 25`.
-- **Obrigatório**: compila sem nenhum warning com `./rodar` (que usa
-  `-std=c17 -Wall -Wextra -pedantic -fsanitize=address,undefined`) e roda sem
-  erro do sanitizer (sem vazamento). A saída nos comentários tem que ser a
-  saída real: rode e confira. Para ler entrada no teste, use
-  `printf '25\n' | ./rodar caminho.c`.
+- **Obrigatório**: passa na conferência de `TEST-PLAN.md` §1. A saída nos
+  comentários tem que ser a saída real: rode e confira.
 - Os dois exemplos **não repetem o código que já aparece no texto**. O texto
   mostra o exemplo principal; os arquivos A trazem cenários novos que mostram
   outras facetas do mesmo conceito (um caso de borda, uma variação, um uso

@@ -5,8 +5,7 @@
 Até aqui, todo programa do curso descia de cima para baixo, linha por linha,
 sempre pelo mesmo caminho. Agora ele passa a **escolher**: cobrar ou não o
 frete, liberar ou barrar a catraca, achar a faixa certa da multa. Essa é a
-segunda das três peças de qualquer algoritmo (sequência, decisão e
-repetição).
+segunda das três peças de qualquer algoritmo.
 
 A sintaxe é curta: `if`, `else`, `switch` e o ternário. O que importa é o que
 está por baixo. O C não nasceu com um tipo "verdadeiro ou falso": a verdade é
@@ -2912,8 +2911,7 @@ do outro. Valide as horas (0 a 23) e os minutos (0 a 59).
 Converta tudo para minutos desde a meia-noite: `h * 60 + m`. 08:45 e 10:20 →
 525 e 620: o primeiro é mais cedo, **95 minutos** de diferença. Comparar
 horas e minutos separados também funciona, mas exige `if` aninhado
-(`h1 < h2 || (h1 == h2 && m1 < m2)`). Converter para uma unidade só é um truque
-que você vai usar muito.
+(`h1 < h2 || (h1 == h2 && m1 < m2)`).
 
 </details>
 

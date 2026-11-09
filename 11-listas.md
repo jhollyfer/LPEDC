@@ -14,8 +14,8 @@ remover sem empurrar ninguém. Vai fazer busca, remoção, inserção em ordem, 
 lista dupla (que anda para os dois lados) e a circular (que não tem fim).
 
 A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
-"quem aponta para quem, antes e depois". O conselho do módulo inteiro,
-então, é desenhar os nós e as setas no papel antes de escrever o código. E
+"quem aponta para quem, antes e depois". O conselho do módulo inteiro
+é desenhar os nós e as setas no papel antes de escrever o código. E
 rode tudo com o `rodar`: com ponteiros, o AddressSanitizer pega o que o olho
 deixa passar.
 
@@ -45,7 +45,7 @@ implementação): abra os dois junto com o exemplo. O `rodar` compila o
 ~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
 ```
 
-Nos exercícios, então, não dê às suas funções o mesmo nome de uma função do
+Nos exercícios, não dê às suas funções o mesmo nome de uma função do
 `lista.c` (como `lista_imprime`): o ligador reclamaria de nome repetido.
 Os exercícios que usam outra estrutura trazem tudo no próprio arquivo.
 
@@ -4819,7 +4819,7 @@ void remove_primeiro(No **prim) {
 `aux->prox` dele. O compilador deixa passar (o `gcc -Wall` até avisa), mas
 o AddressSanitizer reporta `heap-use-after-free`. Como o bloco liberado
 costuma continuar com o conteúdo antigo, o código pode "funcionar" por
-sorte, e é por isso que é perigoso. A ordem certa é guardar
+sorte, e por isso é perigoso. A ordem certa é guardar
 `aux->prox` em `*prim` e só então dar o `free`. Veja 0076, 0077 e 0057.
 
 </details>
@@ -4923,8 +4923,7 @@ remove(4)       insere_fim(1)      remove(7)        remove(6)
 **(B)**. Passo a passo: `4`; `9 4`; `9 4 6`; `4 9 4 6`. O `remove(4)`
 tira a primeira ocorrência (a do início): `9 4 6`. Entra o 1 no fim:
 `9 4 6 1`. O `remove(7)` não encontra nada e não muda a lista, e o
-`remove(6)` deixa `9 4 1`. A (A) é o erro de remover o segundo 4. Conferido
-rodando o programa. Veja 0076 e 0077.
+`remove(6)` deixa `9 4 1`. A (A) é o erro de remover o segundo 4. Veja 0076 e 0077.
 
 </details>
 
@@ -4945,8 +4944,7 @@ para alcançar `q` e ligar `q->ant = n`; só depois `p->prox` passa a ser `n`.
 Na (B), a linha `p->prox->ant = n` roda com `p->prox` já valendo `n`, e
 o `n` vira o próprio anterior. Na (C), `n->prox = p->prox` faz o nó apontar
 para si mesmo. A (D) esquece o `q->ant`: andando de trás para a frente o
-`n` é pulado. A (E) inverte os campos. Cada opção foi testada percorrendo a
-lista nos dois sentidos. Veja 0079.
+`n` é pulado. A (E) inverte os campos. Veja 0079.
 
 </details>
 
@@ -4966,8 +4964,7 @@ qual é a capacidade final?
 **(D)**. O `realloc` roda ao inserir o 4º item (3 para 6), o 7º (12), o 13º
 (24), o 25º (48), o 49º (96) e o 97º (192): 6 vezes, e sobram 92 posições.
 Com 96 itens ainda cabe na capacidade 96; é o 97º que dobra de novo. A (C)
-conta a alocação inicial como se fosse `realloc`. Conferido rodando o laço.
-Veja 0075.
+conta a alocação inicial como se fosse `realloc`. Veja 0075.
 
 </details>
 

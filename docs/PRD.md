@@ -37,7 +37,7 @@ C faz na memória.
 | 2 | 2 exemplos e 6 exercícios por assunto, com resolução em `_respostas/` | feito |
 | 3 | Lista prática de 30 exercícios por módulo | feito |
 | 4 | Desafios e questões no estilo da prova em cada módulo | feito |
-| 5 | Questões, mapa e simulados ajustados a provas reais anteriores | a fazer (`TASKS.md` fase 4) |
+| 5 | Questões, mapa e simulados ajustados a provas reais anteriores | feito |
 
 ## 5. Fica de fora
 
@@ -48,7 +48,7 @@ C faz na memória.
 
 | Tema | Requisito |
 |---|---|
-| Leitura | cada `.md` de módulo abre no GitHub (abaixo do limite de renderização, hoje o maior tem ~200 KB) |
+| Leitura | cada `.md` de módulo abre no GitHub (abaixo do limite de renderização; `DECISIONS.md` #1) |
 | Ambiente | Arch Linux primeiro, depois Debian/Ubuntu e Windows com WSL |
 | Código | C17, `-Wall -Wextra -pedantic`, AddressSanitizer e UBSan sem erro |
 
@@ -61,7 +61,7 @@ C faz na memória.
 
 ## 8. Perguntas em aberto
 
-- [ ] Quais provas anteriores entram como referência de formato e frequência de tópico: o dono envia.
+- [x] Provas anteriores como referência de formato e frequência: as 11 de 2016 a 2023 entraram (`TASKS.md` fase 4).
 
 ## Histórico
 

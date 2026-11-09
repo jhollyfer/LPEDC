@@ -3617,7 +3617,7 @@ int buscar(int k) {
 <details><summary>Gabarito</summary>
 
 **D.** O laço só termina quando acha a chave. Numa busca sem sucesso `p` vira
-`NULL` e `p->chave` desreferencia um ponteiro nulo (no teste, a busca por uma
+`NULL` e `p->chave` desreferencia um ponteiro nulo (a busca por uma
 chave ausente termina em falha de segmentação). O certo é
 `while (p != NULL && p->chave != k)` e devolver 0 se `p` terminar nulo. A (A)
 só vale para chave negativa, e mesmo assim não "sempre". Veja 0106.

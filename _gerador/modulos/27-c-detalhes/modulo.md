@@ -13,7 +13,7 @@ um número com sinal encontra um sem sinal, e por que `-1 > 0u` é verdadeiro;
 e o vetor de tamanho variável (VLA), o único vetor do C cujo `sizeof` é
 calculado com o programa rodando.
 
-A mudança na cabeça é ler a expressão como o compilador, e não como
+O truque é ler a expressão como o compilador, e não como
 matemática: primeiro os tipos (promoção e conversão), depois a árvore
 (precedência), e só então os valores. Aí a pegadinha vira conta.
 
@@ -42,7 +42,6 @@ deste módulo. Os exemplos compilam limpos; quando o texto mostra uma linha
 que o gcc avisaria, ela aparece fora do programa ou com a conversão escrita
 à vista. Ao rodar, tire um parêntese, troque `unsigned` por `int`, aumente o
 VLA e leia o que o gcc diz.
-
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/A339.c

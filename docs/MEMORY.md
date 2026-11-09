@@ -9,12 +9,6 @@
 |---|---|---|---|
 | 2026-11-09 | 4 · Provas reais (concluída) | 16/16 tarefas | curso pronto para a prova de 2026-11-27 |
 
-## Já feito
-
-- 29 módulos gerados na raiz, com lista prática, desafios e questões no estilo da prova.
-- Revisão de texto e humanizer em todos os módulos, no `README.md` e no `PPGI.md`.
-- `AGENTS.md` e `docs/` no formato do `maiyu-pattern`; histórico reescrito com autor único.
-
 ## Parou em
 
 Fase 4 concluída: `PROVAS.md` (11 provas), frequência em `PPGI.md`, questões dos 29 módulos ajustadas e `SIMULADOS.md`.
@@ -26,9 +20,7 @@ Fase 4 concluída: `PROVAS.md` (11 provas), frequência em `PPGI.md`, questões 
 
 ## Contexto importante
 
-- Só a prova 071/2023 tem gabarito oficial; nas outras, as letras de `PROVAS.md` são do curso, conferidas rodando código.
-- Desde 2022 a prova tem 4 alternativas e trechos em Python.
-- A prova é em 2026-11-27 (`PPGI.md`, "Roteiro até a prova").
+- Sobre as provas (gabarito, formato, data): `PROVAS.md` e `PPGI.md`.
 - A branch `claude/inspiring-einstein-y1aulj` no GitHub é antiga e já está toda na `main`; o proxy
   da sessão na nuvem recusa apagá-la. O dono apaga pela página de branches.
 
@@ -44,9 +36,7 @@ Fase 4 concluída: `PROVAS.md` (11 provas), frequência em `PPGI.md`, questões 
 
 ## Problemas conhecidos
 
-| Problema | Onde | Contorno |
-|---|---|---|
-| A auditoria do `humanizer-pt` sempre acusa BLOQUEIO em "vestígios de ferramenta" | `{{ideia}}`, `[!TIP]`, `<details>`, `[i]` | é falso positivo: compare com o arquivo do `HEAD` contra ele mesmo (`TEST-PLAN.md` §3) |
+- A auditoria do `humanizer-pt` acusa BLOQUEIO em "vestígios de ferramenta": falso positivo, explicado em `TEST-PLAN.md` §3.
 
 ## Links úteis
 

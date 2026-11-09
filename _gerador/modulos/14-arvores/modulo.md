@@ -491,8 +491,7 @@ int main(void) {
 <details><summary>Gabarito</summary>
 
 **D.** O C passa tudo por valor, ponteiro inclusive. O `malloc` atribui ao
-`raiz` local, e o `r` do `main` continua `NULL` nas duas chamadas: não há
-segunda chamada com raiz válida (então nada de falha, B), e os dois blocos
+`raiz` local, e o `r` do `main` continua `NULL` nas duas chamadas, e os dois blocos
 ficam sem dono (no valgrind aparecem 2 blocos perdidos). Nada é lido de
 memória inválida, então não há falha de segmentação (B). A correção é
 receber `No **raiz` (e chamar `inserir(&r, 40)`) ou devolver o novo ponteiro

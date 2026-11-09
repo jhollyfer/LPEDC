@@ -15,8 +15,8 @@ Prioridade: `Alta` · `Média` · `Baixa`.
 |---|---|---|---|---|
 | 1.1 | Gerador de `.md` e de desenhos | Alta | Feita | `_gerador/` |
 | 1.2 | Fichamentos dos livros | Alta | Feita | `_fontes/` |
-| 1.3 | 29 módulos com assuntos, exemplos, exercícios e respostas | Alta | Feita | 189 assuntos |
-| 1.4 | Lista prática de 30 exercícios por módulo | Alta | Feita | 870 exercícios |
+| 1.3 | 29 módulos com assuntos, exemplos, exercícios e respostas | Alta | Feita | |
+| 1.4 | Lista prática de 30 exercícios por módulo | Alta | Feita | |
 | 1.5 | Mapa edital → assuntos | Alta | Feita | `PPGI.md` |
 
 ## Fase 2 · Revisão (4/4)

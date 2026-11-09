@@ -193,9 +193,8 @@ custo de um algoritmo. Nos assuntos que você já viu, leia o texto, refaça a
 **Pergunta para você** e faça só os exercícios ★★☆ e ★★★. Nos novos (0166 em
 diante), faça tudo.
 
-Cada módulo tem ainda uma **lista prática** de 30 exercícios e as **Questões
-no estilo da prova**, as duas no fim do `.md` do módulo. Faça as questões
-sempre, cronometrando: o edital não fixa a duração da prova, então confira o
+Faça sempre as **Questões no estilo da prova** do fim de cada módulo,
+cronometrando: o edital não fixa a duração da prova, então confira o
 horário quando sair o local (24/11) e treine no mesmo ritmo. A cada dois dias,
 resolva uma prova antiga de [`PROVAS.md`](PROVAS.md) inteira, também cronometrada. Na última semana, faça os três
 simulados de [`SIMULADOS.md`](SIMULADOS.md), um por dia.
@@ -215,10 +214,9 @@ os dias de revisão.
 | 16–17 | revisão | os **Desafios do módulo** de 10, 13, 14, 15 e 16 |
 | 18 | descanso | revise só os `[!WARNING]` dos assuntos |
 
-Lembretes do calendário: inscrição até **11/11**, homologação preliminar em
-18/11, local da prova em 24/11, prova em **27/11** (leve caneta azul ou preta e
-documento com foto; não entra depois do horário), gabarito preliminar no mesmo
-dia.
+Outras datas: homologação preliminar em 18/11, local da prova em 24/11 e
+gabarito preliminar no dia da prova. Leve caneta azul ou preta e documento com
+foto; não entra depois do horário.
 
 ## Python 3
 

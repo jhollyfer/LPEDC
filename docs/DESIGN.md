@@ -11,9 +11,7 @@ export const ideia = { caixas: [...], setas: [...], notas: [...] }
 export const fluxograma = { nos: [[id, tipo, texto]], setas: [[de, para, rotulo?]], caminho: [ids] }
 ```
 
-- Cores: **azul** dado que entra ou sai, **roxo** o programa faz algo,
-  **amarelo** pergunta, **verde** caminho seguido e resultado, **cinza** o que o
-  exemplo não usa, **vermelho** erro.
+- Cores: as da legenda do `README.md`, valem para os dois desenhos.
 - Fluxograma: tipos `inicio`, `io`, `proc`, `dec`. Marque `caminho` com o
   trajeto do exemplo do texto. Mantenha de 4 a 10 nós.
 - Diagrama da ideia: **desenhe o conceito, não o código**. Peças prontas (use

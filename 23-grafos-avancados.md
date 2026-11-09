@@ -4,8 +4,8 @@
 
 O módulo 16 apresentou os grafos e as três buscas que mais aparecem: BFS,
 DFS e Dijkstra. Aqui a pergunta muda de "como eu ando por ele?" para
-"**o que esse grafo esconde?**". Ele tem pedaços soltos? Tem um ciclo que trava tudo? Em que ordem as tarefas cabem?
-Qual o jeito mais barato de ligar todo mundo? E quando o peso é negativo, ou
+"**o que esse grafo esconde?**". Ele tem pedaços soltos? Tem um ciclo que
+trava tudo? Em que ordem as tarefas cabem? Qual o jeito mais barato de ligar todo mundo? E quando o peso é negativo, ou
 quando a pergunta é "de todos para todos"?
 
 Cada assunto responde uma dessas perguntas com um algoritmo clássico, e
@@ -37,7 +37,7 @@ union-find, o heap do Prim, as rodadas do Bellman-Ford. Nos desenhos, a
 origem fica roxa e as arestas verdes são as escolhidas; na DFS de três
 cores, amarelo faz o papel do cinza (na pilha) e verde, do preto (terminado).
 
-Este módulo usa sem cerimônia o módulo 16 inteiro: matriz de adjacência, BFS
+Este módulo usa o módulo 16 inteiro: matriz de adjacência, BFS
 (0110), DFS (0111) e Dijkstra (0112). Também aparecem a fila (0085), o heap
 (0102), o `qsort` (0096), o union-find (0148), a recursão (0032), as
 permutações (0126) e a ideia de programação dinâmica (módulo 21). Se o

@@ -43,7 +43,7 @@ da pasta:
 ~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A163.c
 ```
 
-Num exercício, então, **não** crie funções com os nomes do TAD
+Num exercício, **não** crie funções com os nomes do TAD
 (`pilha_cria`, `fila_insere`...): o ligador reclamaria de definição
 duplicada. Os exercícios que pedem uma estrutura diferente usam outros nomes
 e trazem tudo no próprio arquivo.
@@ -4759,8 +4759,7 @@ desempilha  empilha(9)  desempilha  empilha(3)  desempilha
 
 **(A)**. Acompanhando o topo: `[5]`, `[5 2]`, sai 2, `[5 7]`, `[5 7 1]`, sai
 1, sai 7, `[5 9]`, sai 9, `[5 3]`, sai 3. Saídas: 2 1 7 9 3, e o 5 fica no
-fundo. A (C) e a (E) são o raciocínio de fila (sai o mais antigo). Conferido
-rodando o programa. Veja 0082.
+fundo. A (C) e a (E) são o raciocínio de fila (sai o mais antigo). Veja 0082.
 
 </details>
 
@@ -4916,8 +4915,7 @@ int y = desempilha(topo);
 **(D)**. `topo` é recebido **por valor**: `topo = topo->prox` muda só a
 cópia local. O `main` continua apontando para o nó do 7, que já passou pelo
 `free`. A segunda chamada lê `topo->valor` de memória liberada (o
-AddressSanitizer acusa `heap-use-after-free`), e o `y` é lixo ou
-qualquer valor. Para a função mexer no `topo` do chamador, ela recebe
+AddressSanitizer acusa `heap-use-after-free`), e o `y` é lixo. Para a função mexer no `topo` do chamador, ela recebe
 `No **topo`. Veja 0083 e 0049.
 
 </details>
