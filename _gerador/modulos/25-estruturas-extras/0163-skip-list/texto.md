@@ -37,10 +37,10 @@ o nó em todos os andares.
 
 O custo é **O(log n) esperado**: com 1 milhão de chaves, cerca de 20 andares e uns
 40 nós olhados por busca, contra meio milhão em média na lista simples. "Esperado"
-quer dizer na média dos sorteios, não garantido: uma sequência de azar absurda
-poderia deixar todos os nós no andar 0. Na prática, isso não acontece.
+quer dizer na média dos sorteios, sem garantia: uma sequência de azar absurda
+poderia deixar todos os nós no andar 0, mas na prática isso não acontece.
 
-Vamos ver na prática. As oito paradas entram com os andares que a moeda "deu":
+No exemplo, as oito paradas entram com os andares que a moeda "deu":
 o 23 e o 56 em 3 andares, o 12 e o 40 em 2, os outros só no andar 0. A busca
 pelo 47 anda no andar 2 até o 23 (o próximo, 56, já passou), desce, anda até o
 40, desce, e o próximo no andar 0 é o 47:
@@ -115,8 +115,8 @@ int main(void) {
 // km 20: não tem parada, 5 nós olhados
 ```
 
-Repara no fluxograma: são dois laços, um dentro do outro. O de dentro avança no
-andar; o de fora desce. O caminho verde é a busca do 47: avança uma vez no andar
+O fluxograma tem dois laços, um dentro do outro: o de dentro avança no andar,
+o de fora desce. O caminho verde é a busca do 47: avança uma vez no andar
 2, uma no andar 1, nenhuma no andar 0, e o próximo é o 47:
 
 {{fluxograma}}

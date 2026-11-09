@@ -2,9 +2,8 @@
 
 Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa". Em menos de
 um segundo, o leitor pinta todas as ocorrências. Por trás disso há um problema
-clássico: achar um **padrão** (a palavra procurada) dentro de um **texto**. Ele
-aparece no editor, no `grep`, no antivírus, na análise de DNA e no filtro de
-spam.
+clássico: achar um **padrão** (a palavra procurada) dentro de um **texto**, o
+mesmo que o `grep` e o antivírus resolvem.
 
 Os nomes de sempre: o texto tem `n` letras e o padrão tem `m`, com `m <= n`. Um
 **alinhamento** é encostar o padrão no texto a partir de uma posição `i`. Se as
@@ -24,10 +23,10 @@ segunda letra, e o total fica perto de `n` comparações. No **pior caso**, cada
 alinhamento compara quase o padrão inteiro antes de falhar: até
 `(n - m + 1) · m` comparações, que é **O(n·m)** (o Cormen chama cada
 alinhamento de **deslocamento**, e o algoritmo de **ingênuo**). Procurar `"00001"` num código
-de vinte zeros faz isso (veja o A314). Os próximos três assuntos são três jeitos
-de trabalhar menos que isso.
+de vinte zeros faz isso (veja o A314). Os próximos três assuntos trabalham
+menos que isso.
 
-Vamos ver na prática. A placa da feira diz "banana bacana" e você procura "ana".
+A placa da feira diz "banana bacana" e você procura "ana".
 São 11 alinhamentos. No 0, o "b" já não bate. No 1, as três letras batem:
 ocorrência. No 5, o "a" bate e o espaço não. No 10, ocorrência de novo:
 
@@ -99,7 +98,7 @@ padrão `m = 3`):
 
 O teto seria `11 · 3 = 33`. Deu 19 porque a maioria dos alinhamentos falha cedo.
 
-Repara no fluxograma: dois laços, um dentro do outro. O de fora anda o
+O fluxograma tem dois laços, um dentro do outro. O de fora anda o
 alinhamento `i`; o de dentro anda a letra `j`. O `i` sempre avança 1, tenha
 achado ou não:
 
@@ -121,11 +120,11 @@ novo a partir de `p + 1` (o exemplo A313 mostra a diferença entre recomeçar em
 
 > [!TIP]
 > **Por dentro do C:** o texto é um vetor de `char` contíguo, então o laço de
-> dentro lê bytes vizinhos, e o cache do processador adora isso. A força bruta
-> não gasta memória extra nenhuma: O(1). O `strstr` da glibc não é a força bruta
+> dentro lê bytes vizinhos, o que favorece o cache do processador. A força
+> bruta não gasta memória extra: O(1). O `strstr` da glibc não é a força bruta
 > deste assunto: para padrões maiores ele usa o algoritmo **Two-Way**, que é
-> linear no pior caso, e instruções que comparam vários bytes de uma vez. Repara
-> também que `strstr` recebe `const char *` e devolve `char *` sem `const`: se
+> linear no pior caso, e instruções que comparam vários bytes de uma vez. Note
+> que `strstr` recebe `const char *` e devolve `char *` sem `const`: se
 > o texto era um literal, escrever pelo ponteiro devolvido é comportamento
 > indefinido (assunto 0048).
 

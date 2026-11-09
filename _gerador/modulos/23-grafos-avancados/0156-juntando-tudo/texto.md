@@ -6,8 +6,8 @@ semestres dá para se formar, e o que cursar em cada um? A segunda é de
 geografia: o campus é enorme, e a aula de Laboratório começa cinco minutos
 depois do almoço no Bandejão. Qual o caminho mais rápido entre os prédios?
 
-São dois grafos diferentes, e cada pergunta tem o seu algoritmo. O módulo
-inteiro serve para você bater o olho na pergunta e saber qual usar:
+São dois grafos diferentes, e cada pergunta tem o seu algoritmo. A tabela
+resume o módulo: bata o olho na pergunta e escolha:
 
 | Pergunta | Algoritmo | Custo |
 | --- | --- | --- |
@@ -21,7 +21,7 @@ inteiro serve para você bater o olho na pergunta e saber qual usar:
 
 A grade de disciplinas é um **DAG**: setas "antes de", sem peso. A pergunta
 "quantos semestres" é o Kahn por rodadas do exemplo A302: cada rodada pega
-tudo que já está liberado. E de quebra ele avisa se a coordenação criou um
+tudo que já está liberado. Ele também avisa se a coordenação criou um
 pré-requisito circular.
 
 O mapa do campus é um grafo **não dirigido** e ponderado, com seis prédios.
@@ -36,13 +36,13 @@ vértices, os nomes e uma matriz de pesos. A função `liga` recebe se a aresta
 minutos de caminhada. As funções recebem `const Grafo *` para não copiar a
 struct, que passa de 300 bytes.
 
-Vamos ver na prática. Em cima, a grade com o semestre de cada disciplina;
+O desenho mostra em cima a grade com o semestre de cada disciplina e,
 embaixo, o campus com as duas rotas que o programa calcula, em verde:
 
 {{ideia}}
 
-O código completo. Cada algoritmo mora numa função, e o `main` só monta os
-dois grafos e faz as perguntas:
+Cada algoritmo fica numa função, e o `main` só monta os dois grafos e faz
+as perguntas:
 
 ```c
 #include <stdio.h>
@@ -152,8 +152,7 @@ int main(void) {
 //   8 min: Lab -> Reitoria -> Ginásio
 ```
 
-Repara no fluxograma: é o `main`, e as duas perguntas são independentes. A
-grade passa pelo Kahn e por um teste de ciclo; o campus passa pelo
+O fluxograma é o `main`, com as duas perguntas independentes. A grade passa pelo Kahn e por um teste de ciclo; o campus passa pelo
 Floyd-Warshall uma vez e depois só consulta a tabela:
 
 {{fluxograma}}
@@ -169,9 +168,8 @@ ordem certa, com a DFS em pós-ordem.
 > um mapa com uma passarela "de graça" entre dois prédios precisaria de outra
 > marca para "sem aresta", como o próprio INFINITO. E não misture as
 > perguntas: Floyd-Warshall num grafo de 100 mil vértices é inviável (10¹⁵
-> passos), e Kruskal não responde caminho mínimo. A árvore mínima liga
-> todos barato, mas a rota entre dois pontos dentro dela pode ser bem pior
-> que a ótima.
+> passos), e Kruskal não responde caminho mínimo (veja os 21 m contra 18 m
+> no 0153).
 
 > [!TIP]
 > **Por dentro do C:** cada `Grafo` tem o `n` (4 bytes), 4 bytes de
@@ -180,8 +178,8 @@ ordem certa, com a DFS em pós-ordem.
 > peso[8][8]` (256 bytes): `sizeof(Grafo)` dá 328, no frame de `main`. Os
 > nomes em si são literais de string, que moram numa área só de leitura do
 > programa; a struct guarda só os endereços. Passar `&campus` copia 8 bytes;
-> passar `campus` por valor copiaria os 328 a cada chamada. Já `int d[][MAX]` como parâmetro é, na
-> verdade, um ponteiro para linhas de `MAX` inteiros: o compilador precisa
+> passar `campus` por valor copiaria os 328 a cada chamada. Já `int d[][MAX]`
+> como parâmetro é um ponteiro para linhas de `MAX` inteiros: o compilador precisa
 > saber o `MAX` para calcular onde fica `d[i][j]`.
 
 > [!NOTE]

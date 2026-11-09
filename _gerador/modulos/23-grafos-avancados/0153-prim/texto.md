@@ -1,13 +1,13 @@
 ## 0153 · Prim: a árvore que cresce
 
 Cinco chácaras de um condomínio vão dividir a água de um poço artesiano. O
-encanador mediu os trechos onde dá para passar cano: do Poço até a casa da
+encanador mediu os trechos por onde dá para passar cano: do Poço até a casa da
 Ana são 4 m, da Ana até o Beto 3 m, e assim por diante. A água pode passar
 de uma casa para outra, então não precisa de um cano do Poço até cada casa.
 O objetivo é o mesmo do Kruskal: ligar todo mundo com o **mínimo de cano**.
 
-O Kruskal resolveria, olhando a lista de trechos inteira. Só que o
-encanador pensa diferente: ele sai do Poço e vai **esticando a rede**. A
+O Kruskal resolveria, olhando a lista de trechos inteira. O encanador
+pensa de outro jeito: ele sai do Poço e vai **esticando a rede**. A
 cada passo, entre todos os canos que ligam uma casa já atendida a uma casa
 ainda sem água, ele escolhe o **mais curto**. Esse é o algoritmo de
 **Prim**.
@@ -15,29 +15,28 @@ ainda sem água, ele escolhe o **mais curto**. Esse é o algoritmo de
 Prim é guloso e acerta pelo mesmo motivo do Kruskal: as casas atendidas e
 as não atendidas formam dois grupos, e o cano mais curto entre os dois
 grupos sempre pode fazer parte de uma árvore mínima (a propriedade do
-corte). A diferença é só a ordem: Kruskal junta florestas espalhadas; Prim
+corte). Muda a ordem: Kruskal junta florestas espalhadas; Prim
 mantém **uma árvore só**, que cresce a partir da origem.
 
 Para achar rápido "o cano mais curto que sai da rede", Prim usa a fila de
 prioridade do assunto 0102, um **heap de mínimo**. Cada item diz "dá para
 ligar `v` com `chave` metros a partir de `de`". Quando uma casa entra na
 rede, os canos que saem dela entram no heap. Ao tirar um item cuja casa já
-está na rede, é só **descartar**: ela já entrou por um cano melhor. Essa
+está na rede, **descarte**: ela já entrou por um cano melhor. Essa
 versão, que não atualiza itens dentro do heap, se chama **preguiçosa**. A do
 Cormen (`MST-PRIM`) põe todos os vértices no heap com chave infinita e baixa a
 chave no lugar (`DECREASE-KEY`); com heap binário, as duas custam O(E log V).
 
-Se isso lembrou o Dijkstra (assunto 0112), não é coincidência. O código é
-quase o mesmo. A diferença está numa linha só, a chave de quem entra no
-heap:
+Isso lembra o Dijkstra (assunto 0112), e o código é quase o mesmo. A
+diferença está numa linha, a chave de quem entra no heap:
 
 | | chave de `w` ao sair de `v` | o que a árvore minimiza |
 | --- | --- | --- |
 | Prim | `cano[v][w]` | a soma de **todos** os canos |
 | Dijkstra | `dist[v] + cano[v][w]` | a distância de **cada** casa até o Poço |
 
-Vamos ver na prática. Os números em cima são a ordem de entrada na rede, as
-arestas verdes são os canos escolhidos, e à direita está o heap logo depois
+No desenho, os números em cima são a ordem de entrada na rede, as arestas
+verdes são os canos escolhidos, e à direita está o heap logo depois
 que a Ana entra:
 
 {{ideia}}
@@ -129,9 +128,9 @@ int main(void) {
 // Total: 18 m de cano
 ```
 
-Repara no fluxograma: é o laço do Dijkstra com heap. A pergunta "já está na
-rede?" é o que torna a versão preguiçosa correta: o heap pode ter itens
-velhos, e eles são jogados fora na saída:
+O fluxograma é o laço do Dijkstra com heap. A pergunta "já está na rede?"
+torna a versão preguiçosa correta: o heap pode ter itens velhos, e eles são
+jogados fora na saída:
 
 {{fluxograma}}
 
@@ -151,8 +150,8 @@ O heap depois de cada casa que entra (só as chaves e as casas):
 E se fosse o Dijkstra a partir do Poço? Beto ficaria pendurado no Poço (6 m
 direto, contra 4 + 3 = 7 passando pela Ana), e o resto seguiria Beto, Cida,
 Davi, Elza. Cada casa estaria o mais perto possível do Poço, mas a rede
-gastaria 4 + 6 + 5 + 2 + 4 = **21 m**. O Prim gasta **18 m**. Perguntas
-diferentes, árvores diferentes.
+gastaria 4 + 6 + 5 + 2 + 4 = **21 m**. O Prim gasta **18 m**: outra
+pergunta, outra árvore.
 
 O A305 faz o Prim sem heap, em O(V²), para um grafo completo de postes de
 luz, em que a versão com vetor ganha. O A306 roda Prim e Dijkstra lado a lado
@@ -163,7 +162,7 @@ no mesmo mapa e mostra as duas árvores.
 > "entra" de novo na rede: o total soma cano que ninguém vai instalar (aqui
 > daria 18 + 6 + 8 + 8 + 9 = 49 m). O mesmo vale para o laço dos vizinhos: sem
 > `!na_rede[w]`, o heap enche de itens inúteis, e a capacidade `CAP` pode
-> estourar. Prim, como Kruskal, só faz sentido em grafo **não dirigido**: num
+> estourar. Prim, como Kruskal, só vale para grafo **não dirigido**: no
 > dirigido, "ligar todo mundo pelo mínimo" é outro problema, bem mais difícil.
 
 > [!TIP]

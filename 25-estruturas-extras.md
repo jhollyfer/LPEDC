@@ -4,8 +4,8 @@
 
 Os módulos anteriores montaram a caixa de ferramentas clássica: listas, pilhas,
 filas, árvores, heaps, tabelas hash e grafos. Este módulo mostra três estruturas
-que nascem de um problema bem específico e resolvem esse problema com uma ideia
-simples, quase sempre uma lista encadeada com um truque a mais.
+que nascem de um problema específico e o resolvem com uma ideia simples, quase
+sempre uma lista encadeada com um truque a mais.
 
 A **matriz esparsa** aparece quando quase tudo é zero: notas de clientes para
 filmes, voos entre aeroportos, produtos por pedido. Guardar os zeros desperdiça
@@ -17,9 +17,8 @@ a lista um pouco para a próxima.
 
 O assunto final coloca tudo na mesma bancada: BST, AVL, skip list e lista com
 mover para a frente respondem ao mesmo teste, atrás da mesma interface de
-ponteiros para função. A lição muda a cabeça: não existe estrutura melhor em
-abstrato. Existe a melhor **para aquele padrão de uso**, e a forma honesta de
-descobrir é medir.
+ponteiros para função. Não existe estrutura melhor em abstrato, só a melhor
+**para aquele padrão de uso**, e o jeito honesto de descobrir é medir.
 
 ## O que você vai aprender
 
@@ -31,39 +30,20 @@ descobrir é medir.
 - quando cada política ganha e quando perde (o cache **LRU** é uma delas)
 - comparar estruturas com justiça: mesmas chaves, mesmas buscas, mesma medida
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos valores do código.
-2. Leia o código. Cada assunto tem um **TAD** na pasta (`esparsa.h`, `skip.h`,
-   `autolista.h`, `bancada.h`) e o exemplo usa a interface. Abra o `.c` do TAD:
-   é lá que moram os ponteiros.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos. Mude a semente do sorteio, troque a ordem dos acessos, rode
-   de novo e veja o que muda.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Aqui, mais do que nunca, desenhe. Uma linha da matriz é uma lista; um nó da skip
-list é uma torre de ponteiros; uma busca autoajustável muda a lista. Faça o
-desenho antes e depois de cada operação.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos desenhos de lista, o nó verde é o achado, os amarelos são os comparados
-pelo caminho e os cinza são os que a busca nem tocou.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo é complemento: matriz esparsa, skip list e listas autoajustáveis
-não caem diretamente na prova do PPGI (o que mais cai está em `PPGI.md`, na
-raiz do curso).
+não caem direto na prova do PPGI (o que mais cai está em `PPGI.md`, na raiz do
+curso).
 
-Este módulo é uma síntese. Você vai usar o tempo todo a **lista encadeada** com o
+Cada assunto tem um **TAD** na pasta (`esparsa.h`, `skip.h`, `autolista.h`,
+`bancada.h`); abra o `.c` dele, que guarda os ponteiros. Desenhe antes e depois
+de cada operação: uma linha da matriz é uma lista, um nó da skip list é uma
+torre de ponteiros, e uma busca autoajustável muda a lista. Nos desenhos de
+lista, o nó verde é o achado, os amarelos são os comparados pelo caminho e os
+cinza, os que a busca nem tocou.
+
+O módulo é uma síntese. Você vai usar o tempo todo a **lista encadeada** com o
 par `ant` e `p` (assuntos 0076 a 0078), `malloc` e `free` (0054), **ponteiro para
 ponteiro** (0049) e a ideia de **TAD** (0074). O 0164 conversa com a busca
 sequencial (0089), e o 0165 usa a BST (0099), a AVL (0101), ponteiros para função
@@ -98,15 +78,14 @@ com uma linha por cliente e uma coluna por filme, ocupa 5 × 10¹⁰ posições 
 bytes: **200 GB**. Só que cada cliente avalia, em média, uns 20 filmes. Mais de
 99,9% dessa matriz é zero.
 
-Uma matriz assim, quase toda de zeros, é uma **matriz esparsa**. Ela aparece em
-todo lugar: quem segue quem numa rede social, voos diretos entre aeroportos,
-produtos comprados por cliente, as ligações de um grafo grande. A ideia para
-guardá-la é simples: **zero não se guarda**. Só os valores diferentes de zero
+Uma matriz assim, quase toda de zeros, é uma **matriz esparsa**: quem segue
+quem numa rede social, voos diretos entre aeroportos, as ligações de um grafo
+grande. A regra para guardá-la: **zero não se guarda**. Só os valores diferentes de zero
 ocupam memória, e quem não está guardado vale 0.
 
 O jeito mais simples é uma lista de **triplas** `(linha, coluna, valor)`, num
 vetor de structs em ordem de linha e coluna. Serve bem para gravar em arquivo ou
-para uma matriz que não muda. Mas inserir no meio do vetor obriga a empurrar
+para uma matriz que não muda. Inserir no meio do vetor, porém, obriga a empurrar
 todo mundo, como em qualquer vetor ordenado.
 
 Quando a matriz muda o tempo todo, a escolha é a **lista por linha**: um vetor
@@ -132,14 +111,14 @@ célula não aparecer, a resposta é 0. Gravar é uma **inserção ordenada** (a
 0078) com uma regra a mais: gravar 0 numa célula que existe **remove** a célula.
 Se o zero ficasse guardado, a matriz ia engordando com nada dentro.
 
-Vamos ver na prática. Uma locadora pequena tem 4 clientes (Ana, Bruno, Carla e
+Uma locadora pequena tem 4 clientes (Ana, Bruno, Carla e
 Davi, linhas 0 a 3) e 8 filmes (colunas 0 a 7). Chegam seis notas; depois Bruno
 apaga a dele. Das 32 posições, sobram 5 células. A linha de Carla nem tem lista:
 o ponteiro dela é `NULL`, e a linha inteira vale zero:
 
 <p align="center"><img src="25-estruturas-extras/0162-matriz-esparsa/ideia.svg" alt="Diagrama da ideia: Matriz esparsa" width="858"></p>
 
-O TAD fica em `esparsa.h` e `esparsa.c`. O coração dele é `esp_define`, que
+O TAD fica em `esparsa.h` e `esparsa.c`. A função central é `esp_define`, que
 anda na linha com dois ponteiros, `ant` e `p`, como na lista ordenada:
 
 ```c
@@ -217,15 +196,15 @@ int main(void) {
 //   5  0  0  4  0  0  0  1
 ```
 
-Repara no fluxograma: depois de andar pela linha, `esp_define` cai em um de
-quatro casos (trocar, remover, ignorar ou criar). O caminho verde é o de Bruno
+No fluxograma, depois de andar pela linha, `esp_define` cai em um de quatro
+casos (trocar, remover, ignorar ou criar). O caminho verde é o de Bruno
 apagando a nota: a coluna 3 existe e o valor novo é 0, então a célula sai:
 
 <p align="center"><img src="25-estruturas-extras/0162-matriz-esparsa/fluxograma.svg" alt="Fluxograma: Matriz esparsa" width="707"></p>
 
 > [!WARNING]
 > Esquecer a regra do zero é o erro clássico. Se `esp_define(m, 1, 3, 0)`
-> apenas trocasse o valor, a célula ficaria na lista guardando um 0: `nao_zeros`
+> trocasse o valor, a célula ficaria na lista guardando um 0: `nao_zeros`
 > mentiria, e uma matriz que recebe muitas atualizações acabaria cheia de células
 > inúteis, gastando mais memória que a matriz cheia. Toda operação que pode gerar
 > zero (gravar, somar, subtrair) precisa remover a célula.
@@ -654,10 +633,10 @@ o nó em todos os andares.
 
 O custo é **O(log n) esperado**: com 1 milhão de chaves, cerca de 20 andares e uns
 40 nós olhados por busca, contra meio milhão em média na lista simples. "Esperado"
-quer dizer na média dos sorteios, não garantido: uma sequência de azar absurda
-poderia deixar todos os nós no andar 0. Na prática, isso não acontece.
+quer dizer na média dos sorteios, sem garantia: uma sequência de azar absurda
+poderia deixar todos os nós no andar 0, mas na prática isso não acontece.
 
-Vamos ver na prática. As oito paradas entram com os andares que a moeda "deu":
+No exemplo, as oito paradas entram com os andares que a moeda "deu":
 o 23 e o 56 em 3 andares, o 12 e o 40 em 2, os outros só no andar 0. A busca
 pelo 47 anda no andar 2 até o 23 (o próximo, 56, já passou), desce, anda até o
 40, desce, e o próximo no andar 0 é o 47:
@@ -732,8 +711,8 @@ int main(void) {
 // km 20: não tem parada, 5 nós olhados
 ```
 
-Repara no fluxograma: são dois laços, um dentro do outro. O de dentro avança no
-andar; o de fora desce. O caminho verde é a busca do 47: avança uma vez no andar
+O fluxograma tem dois laços, um dentro do outro: o de dentro avança no andar,
+o de fora desce. O caminho verde é a busca do 47: avança uma vez no andar
 2, uma no andar 1, nenhuma no andar 0, e o próximo é o 47:
 
 <p align="center"><img src="25-estruturas-extras/0163-skip-list/fluxograma.svg" alt="Fluxograma: Skip list" width="1086"></p>
@@ -1111,12 +1090,12 @@ pote, ele volta para a frente. Com o tempo, o armário se arruma sozinho pelo us
 
 A busca sequencial (assunto 0089) custa a **posição** do item: o primeiro sai com
 1 comparação, o décimo com 10. Se todo item fosse procurado com a mesma
-frequência, a ordem não faria diferença. Mas quase nunca é assim: na agenda do
+frequência, a ordem não faria diferença. Quase nunca é assim: na agenda do
 celular, meia dúzia de contatos recebe quase todas as ligações. Se eles
 estivessem na frente, a busca média cairia muito.
 
-O problema é que você não sabe de antemão quem são os mais procurados, e isso
-muda com o tempo. A **lista autoajustável** descobre sozinha: a cada busca
+Só que você não sabe de antemão quem são os mais procurados, e isso muda com
+o tempo. A **lista autoajustável** descobre sozinha: a cada busca
 bem-sucedida, ela muda a ordem para aproximar o item achado do começo. A busca
 deixa de ser só leitura; ela também arruma. Há três políticas clássicas:
 
@@ -1134,7 +1113,7 @@ e pendurá-lo no início são três atribuições de ponteiro. Num vetor, seria
 preciso empurrar todos os anteriores uma casa para trás. Já a transposição é uma
 troca de dois vizinhos e funciona bem nos dois.
 
-Vamos ver na prática. A agenda tem Ana, Bia, Caio, Duda e Edu, nessa ordem. As
+A agenda do exemplo tem Ana, Bia, Caio, Duda e Edu, nessa ordem. As
 ligações do dia são para Edu, Edu, Caio, Edu e Edu. Na terceira, Caio é achado na
 quarta comparação e passa para a frente; Edu, que estava em primeiro, desce para
 o segundo lugar:
@@ -1216,7 +1195,7 @@ int main(void) {
 // Total: 13 comparações (sem ajuste: 23)
 ```
 
-Repara no fluxograma: até achar, é a busca sequencial de sempre. A diferença está
+No fluxograma, até achar, é a busca sequencial de sempre. A diferença vem
 depois do "Sim": se o nó não é o primeiro, ele é desligado e religado no início.
 O caminho verde é a chamada para Caio, achado na quarta volta:
 
@@ -1235,8 +1214,8 @@ O caminho verde é a chamada para Caio, achado na quarta volta:
 > saem do lugar na memória. No vetor, levar o décimo item para a frente obriga a
 > copiar os nove anteriores, e cada cópia move a struct inteira (o exemplo A327
 > conta isso). A contagem custa um `int` a mais por nó e, a cada acesso, uma
-> caminhada extra para reinserir o nó no lugar certo. E existe um resultado
-> famoso (Sleator e Tarjan, 1985): mover para a frente nunca gasta mais que o
+> caminhada extra para reinserir o nó no lugar certo. Um resultado clássico
+> (Sleator e Tarjan, 1985) diz que mover para a frente nunca gasta mais que o
 > dobro da melhor ordem fixa, aquela escolhida por quem já conhece todas as
 > buscas de antemão.
 
@@ -1606,8 +1585,8 @@ aaabbbaaa: 0 0 0 1 0 0 1 0 0 -> aaabbbaaa
 
 ## 0165 · Juntando tudo
 
-A loja virtual tem 1000 produtos e recebe 10 mil consultas por dia. Só que a
-procura não é igual: os 20 produtos da promoção da semana levam 80% das
+A loja virtual tem 1000 produtos e recebe 10 mil consultas por dia. A procura
+não é igual: os 20 produtos da promoção da semana levam 80% das
 consultas. Em qual estrutura guardar o catálogo? Uma BST, uma AVL, uma skip list ou
 uma lista que move o achado para a frente?
 
@@ -1616,13 +1595,12 @@ altura depende da ordem de chegada. A **AVL** (0101) garante altura perto de
 log₂ n com rotações. A **skip list** (0163) promete O(log n) na média dos
 sorteios, sem rotação nenhuma. A **lista com mover para a frente** (0164) é O(n),
 mas aposta que os mais procurados vão ficar na frente. No papel, todas parecem
-boas. A pergunta só se responde **medindo**.
+boas; a resposta sai **medindo**.
 
 Medir com justiça tem três regras. Todo mundo recebe **as mesmas chaves, na mesma
 ordem**. Todo mundo responde **as mesmas buscas**, sorteadas uma vez só e
 guardadas num vetor. E a medida é a mesma para todos: o **custo** de uma busca é
-quantas chaves ela comparou. Contar comparações, em vez de cronometrar, dá o
-mesmo número em qualquer computador.
+quantas chaves ela comparou (a convenção do módulo).
 
 Para o teste não precisar de quatro versões, as estruturas ficam atrás de uma
 **interface comum**: uma struct com ponteiros para função (assunto 0050), em que
@@ -1646,7 +1624,7 @@ O `bancada.c` traz os quatro concorrentes (a skip list é a do `skip.h`, as outr
 três vêm dentro dele) e um sorteio repetível, `bc_sorteio`, com o mesmo gerador
 de uma linha do `skip.c`.
 
-Vamos ver na prática. Cada concorrente recebe as 1000 chaves duas vezes: uma em
+Cada concorrente recebe as 1000 chaves duas vezes: uma em
 ordem embaralhada, outra em ordem crescente (o catálogo exportado de uma planilha
 já ordenada). Depois responde às mesmas 10 mil consultas:
 
@@ -1713,17 +1691,17 @@ int main(void) {
 // lista MTF        114.6      114.5
 ```
 
-Repara no fluxograma: o laço não sabe quem está medindo. Trocar ou acrescentar
-um concorrente é mexer no vetor `CONCORRENTES`, nunca no teste:
+O laço do fluxograma não sabe quem está medindo. Para trocar ou acrescentar
+um concorrente, mexa no vetor `CONCORRENTES`, nunca no teste:
 
 <p align="center"><img src="25-estruturas-extras/0165-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="492"></p>
 
-Como ler a tabela. A **BST** vai bem com chaves embaralhadas e desaba com a
+Na tabela, a **BST** vai bem com chaves embaralhadas e desaba com a
 planilha ordenada: virou uma lista, e a busca média passa de 500 comparações. A
 **AVL** nem percebe a diferença: as rotações seguram a altura perto de
 log₂ 1000. A **skip list** fica perto dela, também sem ligar para a ordem,
 porque quem decide a forma é a moeda, não a chegada. Ela olha uns 18 nós, contra
-uns 9 da AVL, mas não tem rotação nenhuma no código. E a **lista MTF** perde feio:
+uns 9 da AVL, sem rotação nenhuma no código. A **lista MTF** perde feio:
 os 20% de consultas espalhadas custam umas 500 comparações cada e ainda empurram
 os produtos da promoção para trás. O exemplo A329 mostra quando o jogo vira.
 
@@ -1739,8 +1717,8 @@ os produtos da promoção para trás. O exemplo A329 mostra quando o jogo vira.
 > lê o endereço da função na struct e salta para ele. Por isso, em geral, o
 > compilador não consegue copiar o corpo da função no lugar da chamada, como faz
 > com funções pequenas chamadas direto, e cada busca paga um salto a mais. Num
-> teste que conta comparações isso não aparece, mas num cronômetro aparece.
-> Repare também no `static int buscas[BUSCAS]`: com `static`, os 40 KB do vetor
+> teste que conta comparações isso não aparece; num cronômetro, sim. Já no
+> `static int buscas[BUSCAS]`, com `static`, os 40 KB do vetor
 > ficam na área de dados (assunto 0053), e não na pilha do `main`.
 
 > [!NOTE]
@@ -2186,7 +2164,7 @@ lista por linha passa a gastar mais que a matriz cheia?
 
 Cheia: 4 × 10⁸ posições × 4 bytes = **1,6 GB**. Lista por linha: 60 000 × 16 +
 20 000 × 8 = 960 000 + 160 000 bytes, cerca de **1,1 MB**. Empata quando
-16k + 160 000 = 1,6 × 10⁹, ou seja, k perto de **100 milhões** de células: um
+16k + 160 000 = 1,6 × 10⁹, isto é, k perto de **100 milhões** de células: um
 quarto das posições. Caminho: cada célula custa 4 `int`s, então a esparsa só
 compensa abaixo de 25% de ocupação (na prática, bem abaixo, porque ler uma
 posição custa andar na lista).
@@ -2202,13 +2180,13 @@ coluna. Quantas triplas cada linha da transposta tem?
 Trocando linha e coluna e reordenando: **(0,1,7) (1,0,5) (1,2,4) (2,2,9) (3,0,2)**.
 A transposta tem 4 linhas, com 1, 2, 1 e 1 triplas: é a contagem das colunas da
 original. Com essa contagem dá para transpor sem ordenar: as somas acumuladas
-(0, 1, 3, 4) dizem onde começa cada linha nova, como no counting sort.
+(0, 1, 3, 4) dizem em que posição começa cada linha nova, como no counting sort.
 
 </details>
 
 **3. A soma que some.** A linha 2 de A tem as células (col 1: 4), (col 3: -2) e
 (col 6: 5). A linha 2 de B tem (col 0: 1), (col 3: 2) e (col 6: 1). Quais células
-tem a linha 2 de A + B, e quantas comparações de coluna a intercalação faz?
+estão na linha 2 de A + B, e quantas comparações de coluna a intercalação faz?
 
 <details><summary>Resposta</summary>
 
@@ -3588,7 +3566,7 @@ Ordem ótima: 0 1 2 3 4 5 6 7 9 8
 
 ## Questões no estilo da prova
 
-Estas estruturas não caem diretamente na prova do PPGI, mas questões no
+Estas estruturas não caem direto na prova do PPGI, mas questões no
 mesmo formato treinam o que cai: contar memória, contar comparações e
 separar custo esperado de pior caso. Uma alternativa certa em cada.
 

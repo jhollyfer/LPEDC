@@ -6,24 +6,24 @@ possíveis, de R$ 2 mil a R$ 9 mil. A exigência é uma só: depois da obra, dá
 para ir de qualquer vila a qualquer outra pelo asfalto. E o prefeito quer
 gastar o mínimo.
 
-Repare que ninguém pediu o caminho mais curto entre duas vilas. Pediu um
+Ninguém pediu o caminho mais curto entre duas vilas. O pedido é um
 conjunto de estradas que **ligue todo mundo** com a **menor soma**. Esse
 conjunto nunca tem ciclo: num ciclo, dá para tirar a estrada mais cara e
 todo mundo continua ligado, mais barato. Um grafo conexo e sem ciclo é uma
-**árvore**, e uma árvore com V vértices tem exatamente **V - 1 arestas**.
+**árvore**, e uma árvore com V vértices tem **V - 1 arestas**.
 
 O que se procura, então, é a **árvore geradora mínima** (MST, de *minimum
-spanning tree*): uma árvore que "gera", ou seja, toca todos os vértices, com
+spanning tree*): uma árvore que "gera" (toca todos os vértices) com
 a menor soma de pesos possível. O grafo é **não dirigido** e ponderado.
 
-O algoritmo de **Kruskal** é guloso (assunto 0133) e quase óbvio:
+O algoritmo de **Kruskal** é guloso (assunto 0133):
 
 1. ordene as arestas da mais barata para a mais cara;
 2. percorra a lista e **aceite** cada aresta que **não feche ciclo** com as
    já aceitas;
 3. pare quando tiver V - 1 arestas.
 
-A única parte difícil é o passo 2: como saber, rápido, se `a` e `b` já estão
+A parte difícil é o passo 2: como saber, rápido, se `a` e `b` já estão
 ligados pelas arestas aceitas? É a pergunta que o **union-find** do assunto
 0148 responde. Cada grupo de vilas já ligadas é um conjunto. Se `acha(a)` e
 `acha(b)` devolvem o mesmo representante, a aresta fecharia um ciclo. Se
@@ -36,8 +36,7 @@ argumento tem nome nos livros: **propriedade do corte**. O Cormen diz que a
 aresta **leve** (a mais barata) que cruza um corte é uma aresta **segura**:
 ela pode entrar sem estragar a árvore mínima.
 
-Vamos ver na prática. As arestas verdes são as aceitas. Embaixo, a lista
-ordenada: verde entrou, vermelho fecharia ciclo, cinza nem foi olhado porque
+No desenho, as arestas verdes são as aceitas. Embaixo, a lista ordenada: verde entrou, vermelho fecharia ciclo, cinza nem foi olhado porque
 as 5 arestas já tinham saído:
 
 {{ideia}}
@@ -118,8 +117,8 @@ int main(void) {
 // Total: R$ 21 mil em 5 estradas
 ```
 
-Repara no fluxograma: o laço tem duas saídas, acabar a lista ou completar
-V - 1 arestas. A pergunta do meio é a do union-find, e ela decide tudo:
+O laço do fluxograma tem duas saídas: acabar a lista ou completar V - 1
+arestas. A pergunta do meio, a do union-find, decide cada aresta:
 
 {{fluxograma}}
 
@@ -148,7 +147,7 @@ das melhores conexões de uma rede Wi-Fi.
 
 > [!WARNING]
 > Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico.
-> O `pai` de um vértice é só o próximo passo rumo ao representante, não o
+> O `pai` de um vértice é o próximo passo rumo ao representante, e não o
 > representante. Dois vértices do mesmo grupo podem ter pais diferentes, e
 > aí a aresta entre eles é aceita, fechando um ciclo e estragando o total. E
 > o comparador do `qsort` com `x->custo - y->custo` só é seguro porque os

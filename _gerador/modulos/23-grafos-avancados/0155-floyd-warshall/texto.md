@@ -4,17 +4,17 @@ Todo guia rodoviário antigo tinha, na última página, uma tabela triangular:
 a distância de cada cidade para cada outra. Um aplicativo de corrida
 precisa da mesma tabela, em minutos, para estimar o preço antes de chamar o
 motorista. São cinco bairros com ruas de **mão única**: Centro, Porto, Vila,
-Alto e Feira. A pergunta deixou de ser "de A até os outros" e passou a ser
-"**de todo mundo para todo mundo**".
+Alto e Feira. A pergunta agora é "**de todo mundo para todo mundo**", e não
+"de A até os outros".
 
 Dá para rodar o Dijkstra uma vez a partir de cada bairro. O
 **Floyd-Warshall** faz a tabela inteira de outro jeito, com uma matriz e
-três laços aninhados. A ideia é de programação dinâmica (módulo 21): em vez
-de pensar em caminhos inteiros, pense nos bairros que um caminho pode usar
-**como passagem**.
+três laços aninhados. A ideia vem da programação dinâmica (módulo 21):
+pense nos bairros que um caminho pode usar **como passagem**, e não em
+caminhos inteiros.
 
 Comece com `d[i][j]` = tempo da rua direta de `i` para `j` (INFINITO se não
-existe, 0 na diagonal). Agora libere o Centro como passagem: para cada par
+existe, 0 na diagonal). Libere o Centro como passagem: para cada par
 `i`, `j`, vale a pena ir de `i` ao Centro e do Centro a `j`? Depois libere
 também o Porto, depois a Vila, e assim por diante:
 
@@ -35,8 +35,7 @@ esqueça: aí é Dijkstra com heap, de cada origem que interessar. E o
 Floyd-Warshall aceita pesos negativos (sem ciclo negativo); se houver um,
 ele aparece como `d[i][i] < 0` no fim.
 
-Vamos ver na prática. As setas são as ruas com os minutos; em verde, o
-melhor caminho de Centro até Alto, que passa por três bairros. Embaixo, a
+No desenho, as setas são as ruas com os minutos; em verde, o melhor caminho de Centro até Alto, que passa por três bairros. Embaixo, a
 tabela final, com a mesma linha do Centro destacada:
 
 {{ideia}}
@@ -84,8 +83,8 @@ int main(void) {
 // Feira         6     11      8      1      0
 ```
 
-Repara no fluxograma: não há fila, heap nem "escolher o menor". São três
-contadores e uma comparação no miolo, repetida V³ vezes:
+O fluxograma não tem fila, heap nem "escolher o menor": três contadores e
+uma comparação no miolo, repetida V³ vezes:
 
 {{fluxograma}}
 
@@ -105,8 +104,8 @@ então ela começa em ∞:
 
 Na rodada da Vila, o programa não "sabe" o caminho inteiro: ele só soma
 `d[Centro][Vila]` (2) com `d[Vila][Alto]` (7, que a rodada do Porto já tinha
-calculado). Cada rodada aproveita o trabalho das anteriores. É a tabela da
-programação dinâmica, preenchida no lugar.
+calculado). Cada rodada aproveita o trabalho das anteriores, como uma tabela
+de programação dinâmica preenchida no lugar.
 
 O A309 guarda, junto com a distância, o próximo passo de cada rota, e
 imprime o caminho entre quaisquer dois bairros. O A310 troca `+` e `min` por
@@ -126,7 +125,7 @@ imprime o caminho entre quaisquer dois bairros. O A310 troca `+` e `min` por
 > sequência, e o cache aproveita cada linha que busca. Trocar a ordem para
 > `j` por fora e `i` por dentro daria o mesmo resultado (a rodada continua
 > sendo o `k`), só que pulando 20 bytes a cada passo. Numa matriz de 2000 ×
-> 2000, essa diferença vale um programa várias vezes mais lento.
+> 2000, o programa fica várias vezes mais lento.
 
 > [!NOTE]
 > **Pergunta para você:** se a prefeitura abrir uma rua Alto → Porto de 2

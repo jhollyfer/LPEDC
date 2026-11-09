@@ -3,7 +3,7 @@
 O síndico digitou os avisos do condomínio num arquivo, uma linha por aviso, e
 quer saber quais falam da garagem. No terminal, isso é `grep garagem
 avisos.txt`: o programa lê o arquivo linha por linha e mostra as que têm o
-padrão. Neste assunto você monta o seu **mini-grep** com os quatro algoritmos
+padrão. Aqui você monta o seu **mini-grep** com os quatro algoritmos
 do módulo e mede qual trabalha menos.
 
 O primeiro passo é dar aos quatro a **mesma cara**. Eles ficam num TAD,
@@ -27,9 +27,9 @@ acumular o custo de um arquivo inteiro, linha após linha.
 Com a mesma assinatura, o algoritmo vira um **dado**. `Busca` é um tipo
 ponteiro para função (assunto 0050), e um vetor de structs `{nome, busca}`
 guarda os quatro. O grep chama `algs[a].busca(...)` sem saber qual está do outro
-lado: trocar de algoritmo é trocar um índice, não reescrever o laço.
+lado: para trocar de algoritmo, basta trocar o índice.
 
-E qual escolher? Cada um vence numa situação:
+Cada um vence numa situação:
 
 | | preparo | memória extra | pior caso | caso comum | ponto forte |
 | --- | --- | --- | --- | --- | --- |
@@ -38,7 +38,7 @@ E qual escolher? Cada um vence numa situação:
 | Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
 | Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
 
-Vamos ver na prática. São 8 avisos e o padrão é "garagem". O grep mostra as
+São 8 avisos e o padrão é "garagem". O grep mostra as
 linhas 3, 5 e 8 (a 3 tem duas ocorrências). Depois, as mesmas linhas passam pelos
 quatro algoritmos: o resultado é igual, o trabalho não:
 
@@ -113,8 +113,8 @@ int main(void) {
 //   4 ocorrências,  28 comparações: Rabin-Karp
 ```
 
-Repara no fluxograma: o grep é um laço sobre as linhas com uma chamada de
-busca no meio. Toda a esperteza do módulo está escondida atrás dessa chamada:
+O fluxograma do grep é um laço sobre as linhas com uma chamada de busca no
+meio. Os quatro algoritmos do módulo ficam atrás dessa chamada:
 
 {{fluxograma}}
 
@@ -139,8 +139,8 @@ em textos de 2 milhões de letras.
 > [!TIP]
 > **Por dentro do C:** `clock()`, de `<time.h>`, devolve o tempo de processador
 > gasto pelo programa, em "tiques"; dividindo a diferença por `CLOCKS_PER_SEC`,
-> você tem segundos. Ele mede o seu programa, não o relógio da parede. Três
-> cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
+> você tem segundos. Ele mede o tempo do seu programa, e não o do relógio da
+> parede. Três cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
 > `rodar` compila com AddressSanitizer, que confere cada acesso à memória e
 > deixa o programa umas duas vezes mais lento; e com `-O2` o `gcc` pode apagar uma busca cujo
 > resultado ninguém usa. Por isso o A321 imprime o total achado junto com o

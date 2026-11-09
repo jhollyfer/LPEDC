@@ -5,10 +5,9 @@ um vírus, o filtro que esconde palavrões no chat, o laboratório procurando um
 trecho de DNA num genoma de 3 bilhões de letras. Tudo isso é o mesmo problema:
 achar um **padrão** de `m` letras dentro de um **texto** de `n` letras.
 
-A solução óbvia, testar cada posição, funciona e é o que você escreveria sem
-pensar. Mas ela tem um pior caso de O(n·m), e em textos grandes isso pesa. Este
-módulo mostra três ideias diferentes para fazer melhor, cada uma com um truque
-que vale para muito além de strings: **não reler** o que já foi visto (KMP),
+A solução óbvia, testar cada posição, funciona, mas tem pior caso O(n·m), e
+em textos grandes isso pesa. Este módulo mostra três ideias para fazer
+melhor, cada uma com um truque que serve além de strings: **não reler** o que já foi visto (KMP),
 **pular** o que não pode dar certo (Horspool) e **comparar números** em vez de
 letras (Rabin-Karp).
 
@@ -29,36 +28,16 @@ mede qual trabalha menos.
 - a comparar algoritmos por **comparações de letra** e por tempo com `clock()`,
   e a escolher o certo para cada texto
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: o texto aparece como uma fileira
-   de gavetas, uma letra em cada, e o padrão aparece embaixo, encostado em cada
-   alinhamento.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis antes de conferir a tabela.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Mude o texto e o padrão, compare as contagens.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nas fileiras de letras dos diagramas da ideia, **verde** é letra que bateu (ou
-ocorrência achada), **vermelha** é a letra que falhou (ou o falso positivo),
-**amarela** é a letra que decide o próximo passo, **roxa** é o padrão, **azul**
-é texto ainda não comparado e **cinza** é o que o algoritmo não precisou olhar.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
-Este módulo é complemento: busca de padrões não cai diretamente na prova do
+Nos diagramas da ideia, o texto é uma fileira de gavetas, uma letra em cada,
+com o padrão encostado embaixo. **Verde** é letra que bateu (ou ocorrência
+achada), **vermelha** a que falhou (ou o falso positivo), **amarela** a letra
+que decide o próximo passo, **roxa** o padrão, **azul** texto ainda não
+comparado e **cinza** o que o algoritmo não precisou olhar. Faça o passo a
+passo no papel e responda a **Pergunta para você** antes de rodar.
+
+Este módulo é complemento: busca de padrões não cai direto na prova do
 PPGI (o que mais cai está em `PPGI.md`, na raiz do curso).
 
 Os exemplos dos quatro primeiros assuntos cabem cada um num arquivo só: os
@@ -66,9 +45,9 @@ algoritmos são funções curtas, e ver a função inteira junto do `main` ajuda
 mais do que separar em `.h` e `.c`. No assunto 0161 eles viram o TAD
 `padroes.h`, que o `rodar` compila junto com os exemplos e exercícios da pasta.
 
-Vários exemplos contam **comparações de letra**. Isso não faz parte do
-algoritmo: é o "cronômetro" que mostra o custo e que dá o mesmo número em
-qualquer máquina. Tempo de relógio só aparece no A321.
+Vários exemplos contam **comparações de letra**. A contagem não faz parte do
+algoritmo: é o "cronômetro" que mede o custo com o mesmo número em qualquer
+máquina. Tempo de relógio só aparece no A321.
 
 Os algoritmos trabalham com **bytes**. Em UTF-8, uma letra acentuada ocupa dois
 bytes acima de 127, e num `char` com sinal eles viram números negativos. Isso
@@ -76,8 +55,7 @@ não atrapalha comparar, mas atrapalha usar a letra como índice de tabela: o
 assunto 0159 mostra o problema e o conserto.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. É esperado: o
-enunciado avisa.
+AddressSanitizer (ou o UBSan) do `rodar` para o programa. O enunciado avisa.
 
 {{indice}}
 
@@ -99,8 +77,8 @@ qualquer letra. Procure `c?sa` em `"casa cosa cesta case"`.
 
 A única mudança é a comparação do laço de dentro: a letra casa se
 `padrao[j] == '?' || padrao[j] == texto[i + j]`. As ocorrências ficam em **0**
-("casa") e **5** ("cosa"); "cesta" falha no `t` e "case" no `e`. Repare que o
-KMP e o Horspool não se adaptam tão fácil: a tabela π e a de saltos supõem que
+("casa") e **5** ("cosa"); "cesta" falha no `t` e "case" no `e`. O KMP e o
+Horspool não se adaptam tão fácil: a tabela π e a de saltos supõem que
 cada letra do padrão é uma letra só.
 
 </details>
@@ -137,7 +115,7 @@ E a força bruta?
 <details><summary>Resposta</summary>
 
 Toda letra sob a última casa está fora do padrão, então todo salto é 3: os
-alinhamentos são `i = 0, 3, ..., 2997`, ou seja, **1000**, com 1 comparação
+alinhamentos são `i = 0, 3, ..., 2997`, **1000** ao todo, com 1 comparação
 cada: **1000** comparações. A força bruta testa os 2998 alinhamentos, com uma
 comparação cada (o `x` nunca bate): **2998**. É o melhor caso do Horspool,
 `n / m`.
@@ -230,7 +208,7 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 ## Questões no estilo da prova
 
-Busca de padrões não cai diretamente na prova do PPGI, mas questões no mesmo
+Busca de padrões não cai direto na prova do PPGI, mas questões no mesmo
 formato treinam o que cai: contar passos, reconhecer a complexidade e seguir
 uma tabela à mão. Uma alternativa certa em cada.
 

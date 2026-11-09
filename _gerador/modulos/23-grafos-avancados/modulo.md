@@ -1,9 +1,8 @@
 # Módulo 23 · Grafos: estrutura e caminhos
 
 O módulo 16 apresentou os grafos e as três buscas que mais aparecem: BFS,
-DFS e Dijkstra. Este módulo volta aos grafos com outra pergunta na cabeça:
-não "como eu ando por ele?", mas "**o que esse grafo esconde?**". Ele tem
-pedaços soltos? Tem um ciclo que trava tudo? Em que ordem as tarefas cabem?
+DFS e Dijkstra. Aqui a pergunta muda de "como eu ando por ele?" para
+"**o que esse grafo esconde?**". Ele tem pedaços soltos? Tem um ciclo que trava tudo? Em que ordem as tarefas cabem?
 Qual o jeito mais barato de ligar todo mundo? E quando o peso é negativo, ou
 quando a pergunta é "de todos para todos"?
 
@@ -11,11 +10,10 @@ Cada assunto responde uma dessas perguntas com um algoritmo clássico, e
 quase todos reaproveitam peças que você já tem. A DFS vira detector de
 ciclos e ordenação topológica. A fila vira o algoritmo de Kahn. O `qsort` e
 o union-find viram o Kruskal. O heap vira o Prim. A tabela da programação
-dinâmica vira o Floyd-Warshall. Pouca coisa é nova; o novo é enxergar qual
-peça encaixa em qual pergunta.
+dinâmica vira o Floyd-Warshall. O trabalho novo é enxergar qual peça
+encaixa em qual pergunta.
 
-A mudança na cabeça é parar de ver o grafo como um mapa e começar a ver
-como um **modelo**. Uma planilha com fórmulas, uma grade de disciplinas, a
+O grafo deixa de ser um mapa e vira um **modelo**. Uma planilha com fórmulas, uma grade de disciplinas, a
 fiação de um loteamento, uma tabela de câmbio: tudo isso é grafo, e a
 pergunta que você faz decide o algoritmo.
 
@@ -29,33 +27,14 @@ pergunta que você faz decide o algoritmo.
 - a tabela de distâncias entre **todos os pares** com **Floyd-Warshall**, e como reconstruir as rotas
 - escolher o algoritmo pela pergunta, num programa que planeja semestres e rotas
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos vértices, pesos e resultados do código.
-2. Leia o código. Cada arquivo traz o algoritmo inteiro, sem TAD escondendo
-   nada: em grafos, ver o laço completo é metade do aprendizado.
-3. Siga o **fluxograma** com o dedo e refaça o **passo a passo** no papel: a
-   fila do Kahn, os grupos do union-find, o heap do Prim, as rodadas do
-   Bellman-Ford, a casa da matriz no Floyd-Warshall.
-4. Rode os exemplos. Mude um peso, inverta uma seta, crie um ciclo, e veja o
-   resultado mudar.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos grafos, a origem fica roxa e as arestas verdes são as escolhidas (a
-árvore mínima ou a rota). Na DFS de três cores, o amarelo faz o papel do
-cinza (na pilha) e o verde, do preto (terminado).
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+Cada assunto traz o algoritmo inteiro num arquivo, sem TAD escondendo o
+laço. Refaça no papel o passo a passo: a fila do Kahn, os grupos do
+union-find, o heap do Prim, as rodadas do Bellman-Ford, e responda a
+**Pergunta para você** antes de rodar. Nos desenhos, a
+origem fica roxa e as arestas verdes são as escolhidas; na DFS de três
+cores, amarelo faz o papel do cinza (na pilha) e verde, do preto (terminado).
 
 Este módulo usa sem cerimônia o módulo 16 inteiro: matriz de adjacência, BFS
 (0110), DFS (0111) e Dijkstra (0112). Também aparecem a fila (0085), o heap
@@ -74,8 +53,8 @@ Três convenções valem para o módulo todo:
 - na matriz de pesos, **0 quer dizer "sem aresta"**, exceto quando o texto
   avisa o contrário (o A311 mostra por que isso pode ser um problema);
 - quando o algoritmo soma distâncias, o INFINITO é `1000000000` (um bilhão),
-  que somado com outro INFINITO ainda cabe num `int`. Onde aparece `INT_MAX`,
-  o código testa antes de somar.
+  que somado com outro INFINITO ainda cabe num `int`. Quando o código usa
+  `INT_MAX`, ele testa antes de somar.
 
 {{indice}}
 
@@ -229,8 +208,8 @@ se o grafo tivesse 15 arestas no total, quantas formariam ciclo?
 <details><summary>Resposta</summary>
 
 Cada aresta aceita junta dois grupos: 10 - 7 = **3 componentes**. Das 15
-arestas, 7 entraram e **8** foram recusadas por fechar ciclo. Kruskal até o
-fim é um contador de componentes de brinde, igual ao union-find do A300.
+arestas, 7 entraram e **8** foram recusadas por fechar ciclo. Rodado até o
+fim, o Kruskal também conta componentes, como o union-find do A300.
 
 </details>
 

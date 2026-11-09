@@ -1,7 +1,7 @@
 ## 0165 · Juntando tudo
 
-A loja virtual tem 1000 produtos e recebe 10 mil consultas por dia. Só que a
-procura não é igual: os 20 produtos da promoção da semana levam 80% das
+A loja virtual tem 1000 produtos e recebe 10 mil consultas por dia. A procura
+não é igual: os 20 produtos da promoção da semana levam 80% das
 consultas. Em qual estrutura guardar o catálogo? Uma BST, uma AVL, uma skip list ou
 uma lista que move o achado para a frente?
 
@@ -10,13 +10,12 @@ altura depende da ordem de chegada. A **AVL** (0101) garante altura perto de
 log₂ n com rotações. A **skip list** (0163) promete O(log n) na média dos
 sorteios, sem rotação nenhuma. A **lista com mover para a frente** (0164) é O(n),
 mas aposta que os mais procurados vão ficar na frente. No papel, todas parecem
-boas. A pergunta só se responde **medindo**.
+boas; a resposta sai **medindo**.
 
 Medir com justiça tem três regras. Todo mundo recebe **as mesmas chaves, na mesma
 ordem**. Todo mundo responde **as mesmas buscas**, sorteadas uma vez só e
 guardadas num vetor. E a medida é a mesma para todos: o **custo** de uma busca é
-quantas chaves ela comparou. Contar comparações, em vez de cronometrar, dá o
-mesmo número em qualquer computador.
+quantas chaves ela comparou (a convenção do módulo).
 
 Para o teste não precisar de quatro versões, as estruturas ficam atrás de uma
 **interface comum**: uma struct com ponteiros para função (assunto 0050), em que
@@ -40,7 +39,7 @@ O `bancada.c` traz os quatro concorrentes (a skip list é a do `skip.h`, as outr
 três vêm dentro dele) e um sorteio repetível, `bc_sorteio`, com o mesmo gerador
 de uma linha do `skip.c`.
 
-Vamos ver na prática. Cada concorrente recebe as 1000 chaves duas vezes: uma em
+Cada concorrente recebe as 1000 chaves duas vezes: uma em
 ordem embaralhada, outra em ordem crescente (o catálogo exportado de uma planilha
 já ordenada). Depois responde às mesmas 10 mil consultas:
 
@@ -107,17 +106,17 @@ int main(void) {
 // lista MTF        114.6      114.5
 ```
 
-Repara no fluxograma: o laço não sabe quem está medindo. Trocar ou acrescentar
-um concorrente é mexer no vetor `CONCORRENTES`, nunca no teste:
+O laço do fluxograma não sabe quem está medindo. Para trocar ou acrescentar
+um concorrente, mexa no vetor `CONCORRENTES`, nunca no teste:
 
 {{fluxograma}}
 
-Como ler a tabela. A **BST** vai bem com chaves embaralhadas e desaba com a
+Na tabela, a **BST** vai bem com chaves embaralhadas e desaba com a
 planilha ordenada: virou uma lista, e a busca média passa de 500 comparações. A
 **AVL** nem percebe a diferença: as rotações seguram a altura perto de
 log₂ 1000. A **skip list** fica perto dela, também sem ligar para a ordem,
 porque quem decide a forma é a moeda, não a chegada. Ela olha uns 18 nós, contra
-uns 9 da AVL, mas não tem rotação nenhuma no código. E a **lista MTF** perde feio:
+uns 9 da AVL, sem rotação nenhuma no código. A **lista MTF** perde feio:
 os 20% de consultas espalhadas custam umas 500 comparações cada e ainda empurram
 os produtos da promoção para trás. O exemplo A329 mostra quando o jogo vira.
 
@@ -133,8 +132,8 @@ os produtos da promoção para trás. O exemplo A329 mostra quando o jogo vira.
 > lê o endereço da função na struct e salta para ele. Por isso, em geral, o
 > compilador não consegue copiar o corpo da função no lugar da chamada, como faz
 > com funções pequenas chamadas direto, e cada busca paga um salto a mais. Num
-> teste que conta comparações isso não aparece, mas num cronômetro aparece.
-> Repare também no `static int buscas[BUSCAS]`: com `static`, os 40 KB do vetor
+> teste que conta comparações isso não aparece; num cronômetro, sim. Já no
+> `static int buscas[BUSCAS]`, com `static`, os 40 KB do vetor
 > ficam na área de dados (assunto 0053), e não na pilha do `main`.
 
 > [!NOTE]

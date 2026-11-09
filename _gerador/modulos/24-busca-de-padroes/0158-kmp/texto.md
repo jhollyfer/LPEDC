@@ -5,14 +5,14 @@ Ninguém aperta "Enter": a central olha as teclas uma a uma, conforme chegam, e
 não guarda o histórico. Você digita `1 2 1 2`, erra e aperta `1`. A central
 precisa recomeçar do zero?
 
-Não precisa. As últimas teclas foram `1 2 1`, e `1 2 1` é o começo da senha.
+Não. As últimas teclas foram `1 2 1`, e `1 2 1` é o começo da senha.
 A força bruta jogaria isso fora: voltaria ao alinhamento seguinte e compararia
 de novo letras que já tinha visto. O **KMP** (Knuth, Morris e Pratt, 1977)
 nunca volta no texto. Cada letra do texto é lida uma vez, e a busca custa
 **O(n + m)**, sempre.
 
-O truque é olhar só para o padrão. Se `k` letras do padrão já casaram e a
-próxima falhou, o que o texto tem no fim é exatamente `padrao[0..k-1]`. A
+O truque está no padrão. Se `k` letras do padrão já casaram e a próxima
+falhou, o fim do texto lido é `padrao[0..k-1]`. A
 pergunta "quanto disso ainda serve como começo do padrão?" depende **só do
 padrão**, então dá para responder antes de ler o texto.
 
@@ -34,7 +34,7 @@ texto:
 A própria tabela π sai do mesmo jeito: é o padrão sendo procurado dentro dele
 mesmo. Por isso as duas funções do código se parecem tanto.
 
-Vamos ver na prática. As teclas são `1 2 1 2 1 2 3`. As quatro primeiras casam
+No exemplo, as teclas são `1 2 1 2 1 2 3`. As quatro primeiras casam
 (`k = 4`). A quinta, `1`, não é o `3` esperado. Em vez de recomeçar, a central
 olha `pi[3] = 2`: o `1 2` do fim continua valendo, e o padrão "escorrega" duas
 casas para a frente sem reler nada. A mesma tecla `1` agora casa com
@@ -42,8 +42,7 @@ casas para a frente sem reler nada. A mesma tecla `1` agora casa com
 
 {{ideia}}
 
-O mesmo exemplo em C. O `printf` dentro do laço mostra o `k` depois de cada
-tecla:
+Em C, o `printf` dentro do laço mostra o `k` depois de cada tecla:
 
 ```c
 #include <stdio.h>
@@ -136,7 +135,7 @@ Na busca, foram 8 comparações para 7 teclas: uma a mais por causa do recuo na
 quinta. A força bruta faria 11 (5 no alinhamento 0, 1 no alinhamento 1, 5 no
 alinhamento 2).
 
-Repara no fluxograma: o texto avança num laço só, e o recuo é um laço **dentro**
+No fluxograma, o texto avança num laço só, e o recuo é um laço **dentro**
 dele que mexe apenas em `k`. O índice `i` do texto nunca anda para trás:
 
 {{fluxograma}}
@@ -159,7 +158,7 @@ argumento.
 > [!TIP]
 > **Por dentro do C:** a tabela π é um vetor de `m` inteiros: para um padrão de
 > 32 letras são 128 bytes na pilha, e ela não depende do tamanho do texto. O
-> texto, por sua vez, é lido **uma vez, em ordem, sem voltar**. Isso deixa o KMP
+> texto é lido **uma vez, em ordem, sem voltar**. Isso deixa o KMP
 > trabalhar sobre um fluxo de `getchar()` ou de `fgetc()` sem guardar o texto
 > em lugar nenhum: um arquivo de 10 GB passa por ele com a memória da tabela e
 > de um `int`. A força bruta não consegue isso, porque volta `j - 1` letras a

@@ -17,13 +17,13 @@ grafo, e as duas se respondem com a DFS do assunto 0111:
   seguindo as setas.
 
 **Componentes.** Uma DFS a partir de um vértice marca tudo que ele alcança.
-Num grafo não dirigido, isso é exatamente o componente dele. Para achar todos,
+Num grafo não dirigido, isso é o componente dele. Para achar todos,
 um **laço externo** passa por cada vértice e, se ele ainda não tem grupo,
 começa uma DFS nova com um número de grupo novo. Cada recomeço é um
 componente. Custa O(V + E) com lista de adjacência: cada vértice é marcado uma
 vez só.
 
-**Ciclo num grafo dirigido.** Aqui o `visitado[]` simples engana. Repare no
+**Ciclo num grafo dirigido.** Aqui o `visitado[]` simples engana. Veja o
 Frete: Total chega nele direto e também por Obra, Piso. Quando a DFS volta a
 Total e olha o Frete, ele já foi visitado, mas isso não é ciclo: são dois
 caminhos que se encontram. Ciclo é voltar a um vértice que **ainda está na
@@ -35,9 +35,9 @@ Por isso a DFS usa **três cores**:
 - **cinza**: a chamada dele começou e não terminou (está na pilha);
 - **preto**: terminado, tudo abaixo dele já foi explorado.
 
-Achar uma seta para um vértice **cinza** é achar um ciclo. Seta para preto é
-só um atalho para algo já resolvido. E o vetor `pai[]` reconstrói o ciclo:
-basta subir de pai em pai até o vértice cinza. O Cormen usa as mesmas três
+Achar uma seta para um vértice **cinza** é achar um ciclo. Seta para preto
+leva a algo já resolvido. O vetor `pai[]` reconstrói o ciclo: suba de pai em
+pai até o vértice cinza. O Cormen usa as mesmas três
 cores e chama a seta para um cinza de **aresta de retorno** (*back edge*): um
 grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
 
@@ -49,8 +49,7 @@ grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
 > grafo com as setas invertidas, em O(V + E). Pontes e vértices de
 > articulação, a conectividade "frágil", ficam para o assunto 0184.
 
-Vamos ver na prática. Os números mostram a ordem em que a DFS descobre cada
-célula. No momento do desenho, o grupo da obra já está todo preto (verde) e a
+No desenho, os números dão a ordem em que a DFS descobre cada célula. No momento do desenho, o grupo da obra já está todo preto (verde) e a
 DFS do financiamento está no fundo da pilha, com os três em cinza (amarelo).
 A seta de Parcela para Juros aponta para um cinza:
 
@@ -131,8 +130,8 @@ int main(void) {
 // Referência circular: Juros -> Saldo -> Parcela -> Juros
 ```
 
-Repara no fluxograma: é a chamada `acha_ciclo(u)`. Cada vizinho cai numa de
-três situações. Cinza encerra tudo com o ciclo; branco desce na recursão;
+O fluxograma é a chamada `acha_ciclo(u)`. Cada vizinho cai numa de três
+situações. Cinza encerra tudo com o ciclo; branco desce na recursão;
 preto é ignorado. Quando os vizinhos acabam, `u` fica preto e a chamada
 volta para quem a chamou:
 
@@ -140,8 +139,8 @@ volta para quem a chamou:
 
 ### Passo a passo
 
-As cores no fim de cada chamada ou descoberta. Repare na linha do Frete visto
-de Total: ele já está preto, e a DFS segue em frente sem alarme:
+As cores no fim de cada chamada ou descoberta. Na linha do Frete visto de
+Total, ele já está preto, e a DFS segue em frente sem alarme:
 
 | Evento | Cinza (na pilha) | Preto |
 | --- | --- | --- |
@@ -155,24 +154,23 @@ de Total: ele já está preto, e a DFS segue em frente sem alarme:
 | Parcela olha Juros: **cinza**, ciclo | | |
 
 O exemplo A299 faz o mesmo num grafo **não dirigido** (a rede de cabos de um
-escritório), onde não há cores: basta ignorar o pai. O A300 conta os grupos
+escritório), que dispensa as cores: basta ignorar o pai. O A300 conta os grupos
 de amigos à medida que as amizades chegam, com o union-find do assunto 0148.
 
 > [!WARNING]
 > Usar só `visitado[]` para achar ciclo num grafo dirigido dá **alarme
-> falso**. No exemplo, Total encontraria o Frete já visitado e gritaria
-> "ciclo!" sem existir ciclo nenhum. A pergunta certa não é "já vi?", é "ele
-> ainda está na pilha?". No grafo **não dirigido** o erro é o oposto: toda
+> falso**, como o do Frete visto de Total. Pergunte "ele ainda está na
+> pilha?", e não "já vi?". No grafo **não dirigido** o erro é o oposto: toda
 > aresta aparece nos dois sentidos, e o vizinho que é o pai sempre parece um
 > ciclo. Lá, ignore o pai.
 
 > [!TIP]
 > **Por dentro do C:** a cor cinza é a pilha de chamadas escrita num vetor.
-> Os vértices cinza são exatamente os que têm um frame de `acha_ciclo` vivo
+> Os vértices cinza são os que têm um frame de `acha_ciclo` vivo
 > na pilha do programa, e o `enum` deixa isso legível: `BRANCO`, `CINZA` e
-> `PRETO` são só as constantes inteiras 0, 1 e 2. Como os vetores são
-> globais, começam zerados, ou seja, todo mundo nasce `BRANCO` e com
-> `grupo` 0 sem precisar de laço de inicialização. O vetor `volta[V]` é
+> `PRETO` são as constantes inteiras 0, 1 e 2. Os vetores são globais e
+> começam zerados: todo mundo nasce `BRANCO` e com `grupo` 0, sem laço de
+> inicialização. O vetor `volta[V]` é
 > local: só existe durante a chamada que achou o ciclo.
 
 > [!NOTE]

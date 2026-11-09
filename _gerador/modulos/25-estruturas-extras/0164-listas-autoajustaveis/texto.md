@@ -6,12 +6,12 @@ pote, ele volta para a frente. Com o tempo, o armário se arruma sozinho pelo us
 
 A busca sequencial (assunto 0089) custa a **posição** do item: o primeiro sai com
 1 comparação, o décimo com 10. Se todo item fosse procurado com a mesma
-frequência, a ordem não faria diferença. Mas quase nunca é assim: na agenda do
+frequência, a ordem não faria diferença. Quase nunca é assim: na agenda do
 celular, meia dúzia de contatos recebe quase todas as ligações. Se eles
 estivessem na frente, a busca média cairia muito.
 
-O problema é que você não sabe de antemão quem são os mais procurados, e isso
-muda com o tempo. A **lista autoajustável** descobre sozinha: a cada busca
+Só que você não sabe de antemão quem são os mais procurados, e isso muda com
+o tempo. A **lista autoajustável** descobre sozinha: a cada busca
 bem-sucedida, ela muda a ordem para aproximar o item achado do começo. A busca
 deixa de ser só leitura; ela também arruma. Há três políticas clássicas:
 
@@ -29,7 +29,7 @@ e pendurá-lo no início são três atribuições de ponteiro. Num vetor, seria
 preciso empurrar todos os anteriores uma casa para trás. Já a transposição é uma
 troca de dois vizinhos e funciona bem nos dois.
 
-Vamos ver na prática. A agenda tem Ana, Bia, Caio, Duda e Edu, nessa ordem. As
+A agenda do exemplo tem Ana, Bia, Caio, Duda e Edu, nessa ordem. As
 ligações do dia são para Edu, Edu, Caio, Edu e Edu. Na terceira, Caio é achado na
 quarta comparação e passa para a frente; Edu, que estava em primeiro, desce para
 o segundo lugar:
@@ -111,7 +111,7 @@ int main(void) {
 // Total: 13 comparações (sem ajuste: 23)
 ```
 
-Repara no fluxograma: até achar, é a busca sequencial de sempre. A diferença está
+No fluxograma, até achar, é a busca sequencial de sempre. A diferença vem
 depois do "Sim": se o nó não é o primeiro, ele é desligado e religado no início.
 O caminho verde é a chamada para Caio, achado na quarta volta:
 
@@ -130,8 +130,8 @@ O caminho verde é a chamada para Caio, achado na quarta volta:
 > saem do lugar na memória. No vetor, levar o décimo item para a frente obriga a
 > copiar os nove anteriores, e cada cópia move a struct inteira (o exemplo A327
 > conta isso). A contagem custa um `int` a mais por nó e, a cada acesso, uma
-> caminhada extra para reinserir o nó no lugar certo. E existe um resultado
-> famoso (Sleator e Tarjan, 1985): mover para a frente nunca gasta mais que o
+> caminhada extra para reinserir o nó no lugar certo. Um resultado clássico
+> (Sleator e Tarjan, 1985) diz que mover para a frente nunca gasta mais que o
 > dobro da melhor ordem fixa, aquela escolhida por quem já conhece todas as
 > buscas de antemão.
 

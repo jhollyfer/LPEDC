@@ -13,7 +13,7 @@ atrás. Mas Base, Shopping, Centro custa 6 - 4 = **R$ 2**. A promessa do
 Dijkstra ("somar pesos só aumenta") deixou de valer, e ele termina dizendo
 que Casa custa R$ 12, quando custa R$ 10.
 
-O algoritmo de **Bellman-Ford** não confia em ninguém. Ele **relaxa todas
+O algoritmo de **Bellman-Ford** não fixa ninguém cedo. Ele **relaxa todas
 as arestas**, uma rodada inteira de cada vez, sem escolher o menor:
 
 - `dist[origem] = 0` e INFINITO no resto;
@@ -33,21 +33,21 @@ Aí não existe caminho mínimo: dar mais uma volta sempre diminui o custo, e a
 extra: se depois das V - 1 rodadas alguma aresta ainda melhora, há ciclo
 negativo alcançável.
 
-O preço da desconfiança é o tempo: V - 1 rodadas de E arestas, **O(V · E)**,
+O preço é o tempo: V - 1 rodadas de E arestas, **O(V · E)**,
 contra O((V + E) log V) do Dijkstra com heap. Use Bellman-Ford quando houver
-peso negativo; sem eles, Dijkstra. E se o grafo for um DAG, nem isso: relaxar
+peso negativo; sem eles, Dijkstra. Num DAG, nem isso: relaxar
 cada aresta uma vez, na ordem topológica (0151), já dá os caminhos mínimos em
 O(V + E), mesmo com pesos negativos.
 
-Vamos ver na prática. Os números nas setas são o custo líquido; em cima de
-cada lugar, a `dist` final; verde, a rota até Casa. Embaixo, o vetor `dist`
+No desenho, os números nas setas são o custo líquido; em cima de cada
+lugar, a `dist` final; verde, a rota até Casa. Embaixo, o vetor `dist`
 rodada a rodada:
 
 {{ideia}}
 
-O código guarda as arestas numa lista (é só percorrer todas, então não
-precisa de matriz). A ordem da lista foi escolhida de propósito para mostrar
-as rodadas: começa pelas arestas que chegam em Casa.
+O código guarda as arestas numa lista: ele percorre todas, então não precisa
+de matriz. A lista começa de propósito pelas arestas que chegam em Casa, para
+as rodadas aparecerem.
 
 ```c
 #include <stdbool.h>
@@ -114,17 +114,15 @@ int main(void) {
 // Até Casa (R$ 10): Base -> Shopping -> Centro -> Hospital -> Casa
 ```
 
-Repara no fluxograma: não existe "escolher o menor". São dois laços
-cegos, rodadas por fora e arestas por dentro, e duas saídas: uma rodada sem
-mudança ou as V - 1 rodadas completas. Depois vem a rodada extra, só para
-perguntar:
+O fluxograma não tem "escolher o menor". São dois laços cegos, rodadas por
+fora e arestas por dentro, com duas saídas: uma rodada sem mudança ou as
+V - 1 rodadas completas. Depois vem a rodada extra, que só pergunta:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-Cada rodada passa pela lista inteira, na ordem dela. Repare na Casa, que
-aparece com 12 na rodada 3 (o mesmo valor errado do Dijkstra) e cai para 10
+Cada rodada passa pela lista inteira, na ordem dela. A Casa aparece com 12 na rodada 3 (o mesmo valor errado do Dijkstra) e cai para 10
 na rodada 4, quando a melhora do Centro chega até ela:
 
 | Rodada | O que muda | Base | Shopping | Centro | Faculdade | Hospital | Casa |
@@ -145,15 +143,15 @@ verdade, numa tabela de câmbio entre moedas, e mostra o ciclo.
 > é obrigatório por outro motivo além do estouro: `INT_MAX + (-4)` **não**
 > estoura, dá `INT_MAX - 4`, que é menor que `INT_MAX`. Sem o teste, um
 > vértice inalcançável "melhora" outro vértice inalcançável, e o programa
-> mostra uma distância gigante e falsa no lugar de "sem caminho". E cuidado:
-> em grafo **não dirigido**, uma aresta negativa já é um ciclo negativo (ir e
+> mostra uma distância gigante e falsa no lugar de "sem caminho". Em grafo
+> **não dirigido**, uma aresta negativa já é um ciclo negativo (ir e
 > voltar por ela).
 
 > [!TIP]
 > **Por dentro do C:** a lista de arestas é um vetor de `Trecho` contíguo, 12
 > bytes por aresta, e cada rodada o percorre em sequência, do primeiro ao
-> último byte. Isso é o melhor caso para o cache do processador, e é um dos
-> motivos de o Bellman-Ford ser usado de verdade em roteadores (o protocolo
+> último byte. É o melhor caso para o cache do processador, um dos motivos
+> de o Bellman-Ford ser usado em roteadores (o protocolo
 > RIP espalha distâncias assim, vizinho a vizinho). O `INFINITO` de um bilhão
 > deixa folga: `1000000000 + 1000000000` ainda cabe num `int` de 32 bits
 > (até 2147483647), então nem a soma de dois "infinitos" estoura.

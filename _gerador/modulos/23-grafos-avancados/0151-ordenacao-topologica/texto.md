@@ -23,8 +23,8 @@ obras faria:
 4. repita até a fila esvaziar.
 
 Se a lista terminar com menos de V serviços, sobrou gente esperando para
-sempre: os que estão num ciclo, ou depois de um. Kahn já detecta o ciclo de
-graça. Cada vértice entra e sai da fila uma vez e cada seta é descontada uma
+sempre: os que estão num ciclo, ou depois de um. O Kahn detecta o ciclo sem
+custo extra. Cada vértice entra e sai da fila uma vez e cada seta é descontada uma
 vez: O(V + E) com lista de adjacência, O(V²) com matriz.
 
 A resposta **não é única**. Elétrica, Hidráulica e Telhado ficam livres ao
@@ -35,13 +35,12 @@ errada.
 Existe um segundo caminho, pela DFS do assunto 0111. Quando a chamada
 `dfs(u)` termina, tudo o que depende de `u` já terminou antes. Então a ordem
 em que as chamadas **terminam** (a **pós-ordem**), lida de trás para a
-frente, é uma ordenação topológica. Na prática: empilhe `u` no fim de
-`dfs(u)` e, no final, desempilhe tudo. O exemplo A301 faz assim. É essa a
-versão do Cormen (ordem decrescente do tempo de término `u.f`); o Kahn é a
+frente, é uma ordenação topológica: empilhe `u` no fim de `dfs(u)` e, no
+final, desempilhe tudo, como faz o exemplo A301. Essa é a versão do Cormen (ordem decrescente do tempo de término `u.f`); o Kahn é a
 alternativa por graus de entrada.
 
-Vamos ver na prática. O número em cima de cada serviço é a posição dele na
-lista. Repare no Reboco, que espera três serviços e só entra em sétimo:
+No desenho, o número em cima de cada serviço é a posição dele na lista. O
+Reboco espera três serviços e só entra em sétimo:
 
 {{ideia}}
 
@@ -93,8 +92,8 @@ int main(void) {
 // 8. Pintura
 ```
 
-Repara no fluxograma: o laço só pergunta "a fila tem alguém?". A pergunta
-sobre o ciclo fica para o fim, quando se compara quantos saíram com V:
+No fluxograma, o laço só pergunta "a fila tem alguém?". O teste do ciclo
+fica para o fim, comparando quantos saíram com V:
 
 {{fluxograma}}
 
@@ -128,7 +127,7 @@ tudo que já está liberado.
 
 > [!TIP]
 > **Por dentro do C:** a fila daqui nunca dá a volta, por isso não precisa ser
-> circular como a do assunto 0085: cada vértice entra exatamente uma vez,
+> circular como a do assunto 0085: cada vértice entra uma vez só,
 > então `fim` nunca passa de V. No fim do laço, `fila[0..fim-1]` é a própria
 > ordenação, guardada em ordem. O vetor `grau[]` é a única coisa que o
 > algoritmo destrói: depois de rodar, ele está todo zerado (ou com sobras nos

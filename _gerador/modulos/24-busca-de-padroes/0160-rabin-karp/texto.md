@@ -10,30 +10,30 @@ padrão uma vez. Depois calcula o hash de cada **janela** de `m` letras do texto
 e só compara letra a letra quando os hashes batem. É o assunto 0105 (hashing)
 aplicado a pedaços de texto.
 
-Mas calcular o hash de cada janela do zero custa `m` passos, e aí não se ganha
-nada da força bruta. O pulo do gato é o **hash rolante**: a janela seguinte
+Calcular o hash de cada janela do zero custa `m` passos, e aí não se ganha
+nada da força bruta. A saída é o **hash rolante**: a janela seguinte
 perde uma letra na esquerda e ganha uma na direita, e o hash novo sai do antigo
 em O(1).
 
-Pense em dígitos. A janela `271` é o número 271. A próxima, `718`, é
+Com dígitos fica fácil ver. A janela `271` é o número 271. A próxima, `718`, é
 `(271 - 2·100)·10 + 8`: tira o dígito que sai (pesando 10^(m-1)), desloca uma
 casa e soma o que entra. Com letras é igual, só que na base 256, uma "casa" por
 byte. Como esses números ficam enormes, tudo é feito **módulo um primo `q`**:
 o hash é o resto, e a regra continua valendo com `% q` a cada passo.
 
 O preço do resto é a **colisão**: duas janelas diferentes podem ter o mesmo
-resto. Isso é um **falso positivo**, e é por isso que a conferência letra a
-letra nunca pode ser pulada. Com `q` grande, colisões ficam raras, e a busca
+resto. Isso é um **falso positivo**, e por isso a conferência letra a letra
+nunca pode ser pulada. Com `q` grande, colisões ficam raras, e a busca
 custa O(n + m) na média. No pior caso (tudo colidindo), volta a O(n·m).
 
-Vamos ver na prática. Você procura `182` na sequência `2718281828459`, com
+No exemplo, você procura `182` na sequência `2718281828459`, com
 `q = 13` (pequeno de propósito, para aparecer colisão). O hash do padrão é
 `182 % 13 = 0`. Rolando a janela pelas 11 posições, o hash 0 aparece três
 vezes: duas são o `182` de verdade, e uma é o `845`, que também deixa resto 0:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -122,8 +122,7 @@ Duas operações por janela, não importa o tamanho do padrão. Com `m = 1000`, 
 força bruta pode gastar até mil comparações por janela; o hash rolante continua
 gastando duas contas.
 
-Repara no fluxograma: o caminho comum é só calcular, comparar dois números e
-rolar. A comparação letra a letra fica num desvio que quase nunca é tomado
+No fluxograma, o caminho comum é calcular, comparar dois números e rolar. A comparação letra a letra fica num desvio que quase nunca é tomado
 quando `q` é grande:
 
 {{fluxograma}}
@@ -132,7 +131,7 @@ quando `q` é grande:
 > Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
 > Na rolagem, `ht - t[i] * pot` fica negativo com frequência, e um hash
 > negativo nunca bate com o do padrão: a busca **perde ocorrências** sem dar
-> erro nenhum (o E959 cai nisso). Por isso a linha é
+> erro (o E959 cai nisso). Por isso a linha é
 > `(ht - t[i] * pot % Q + Q) % Q`: reduz o produto, soma `Q` e só então tira o
 > resto. E nunca pule a conferência letra a letra: sem ela, o `845` acima
 > seria contado como ocorrência.

@@ -5,7 +5,7 @@ por letra: você bate o olho numa placa, vê que ela termina com uma letra que
 nem existe em "MANGA" e já pula para a próxima. A força bruta e o KMP leem
 todas as letras do texto. Dá para ler **menos**?
 
-Dá, e o truque é comparar o padrão **da direita para a esquerda**. Encoste o
+Dá: compare o padrão **da direita para a esquerda**. Encoste o
 padrão no texto e olhe primeiro a letra que está sob a **última** casa dele. Se
 essa letra nem aparece no padrão, nenhum alinhamento que a cubra pode dar
 certo, e o padrão inteiro pula para depois dela: `m` casas de uma vez.
@@ -30,7 +30,7 @@ Na busca, cada alinhamento `i` compara de `j = m - 1` para trás. Achando ou
 não, o próximo alinhamento é `i + salto[texto[i + m - 1]]`: a letra que
 decide é sempre a que está sob a última casa da janela.
 
-Vamos ver na prática. A placa é "A BANCA VENDE MANGA" (19 letras) e o padrão é
+A placa do exemplo é "A BANCA VENDE MANGA" (19 letras) e o padrão é
 "MANGA" (`m = 5`). Os saltos são M = 4, A = 3, N = 2, G = 1 e 5 para as outras.
 No alinhamento 0, sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C`
 não, e o `A` manda saltar 3. No 5, o `E` não está em "MANGA": salta 5. No 10,
@@ -38,7 +38,7 @@ o `M` manda saltar 4. No 14, as cinco letras batem:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -119,8 +119,8 @@ Os cinco alinhamentos. A janela é `texto[i..i+4]` e a letra que decide o salto
 Foram 10 comparações de letra. A força bruta faz 19 no mesmo texto e passa por
 todas as letras; aqui, 10 das 19 letras da placa nunca foram olhadas.
 
-Repara no fluxograma: diferente da força bruta, o `i` não anda de 1 em 1. O
-quanto ele anda vem da tabela, e quem decide é a última letra da janela, tenha
+No fluxograma, ao contrário da força bruta, o `i` não anda de 1 em 1. O
+passo vem da tabela, e quem decide é a última letra da janela, tenha
 o alinhamento dado certo ou não:
 
 {{fluxograma}}
@@ -136,7 +136,7 @@ em cada alinhamento (é o exercício E952).
 > O índice da tabela tem que ser `unsigned char`. Em UTF-8, letras acentuadas
 > viram dois bytes acima de 127, e no gcc para x86 o `char` tem sinal: o `ã`
 > começa com o byte 0xC3, que num `char` vale **-61**. `salto[-61]` escreve
-> fora do vetor, em memória de outra variável, sem erro de compilação nenhum
+> fora do vetor, em memória de outra variável, sem erro de compilação
 > (o E953 mostra o estrago). Converta sempre: `salto[(unsigned char) c]`. E não
 > ponha a última letra do padrão na tabela, ou o salto dela vira 0.
 

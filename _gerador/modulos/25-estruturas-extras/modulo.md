@@ -2,8 +2,8 @@
 
 Os módulos anteriores montaram a caixa de ferramentas clássica: listas, pilhas,
 filas, árvores, heaps, tabelas hash e grafos. Este módulo mostra três estruturas
-que nascem de um problema bem específico e resolvem esse problema com uma ideia
-simples, quase sempre uma lista encadeada com um truque a mais.
+que nascem de um problema específico e o resolvem com uma ideia simples, quase
+sempre uma lista encadeada com um truque a mais.
 
 A **matriz esparsa** aparece quando quase tudo é zero: notas de clientes para
 filmes, voos entre aeroportos, produtos por pedido. Guardar os zeros desperdiça
@@ -15,9 +15,8 @@ a lista um pouco para a próxima.
 
 O assunto final coloca tudo na mesma bancada: BST, AVL, skip list e lista com
 mover para a frente respondem ao mesmo teste, atrás da mesma interface de
-ponteiros para função. A lição muda a cabeça: não existe estrutura melhor em
-abstrato. Existe a melhor **para aquele padrão de uso**, e a forma honesta de
-descobrir é medir.
+ponteiros para função. Não existe estrutura melhor em abstrato, só a melhor
+**para aquele padrão de uso**, e o jeito honesto de descobrir é medir.
 
 ## O que você vai aprender
 
@@ -29,39 +28,20 @@ descobrir é medir.
 - quando cada política ganha e quando perde (o cache **LRU** é uma delas)
 - comparar estruturas com justiça: mesmas chaves, mesmas buscas, mesma medida
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos valores do código.
-2. Leia o código. Cada assunto tem um **TAD** na pasta (`esparsa.h`, `skip.h`,
-   `autolista.h`, `bancada.h`) e o exemplo usa a interface. Abra o `.c` do TAD:
-   é lá que moram os ponteiros.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos. Mude a semente do sorteio, troque a ordem dos acessos, rode
-   de novo e veja o que muda.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Aqui, mais do que nunca, desenhe. Uma linha da matriz é uma lista; um nó da skip
-list é uma torre de ponteiros; uma busca autoajustável muda a lista. Faça o
-desenho antes e depois de cada operação.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos desenhos de lista, o nó verde é o achado, os amarelos são os comparados
-pelo caminho e os cinza são os que a busca nem tocou.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo é complemento: matriz esparsa, skip list e listas autoajustáveis
-não caem diretamente na prova do PPGI (o que mais cai está em `PPGI.md`, na
-raiz do curso).
+não caem direto na prova do PPGI (o que mais cai está em `PPGI.md`, na raiz do
+curso).
 
-Este módulo é uma síntese. Você vai usar o tempo todo a **lista encadeada** com o
+Cada assunto tem um **TAD** na pasta (`esparsa.h`, `skip.h`, `autolista.h`,
+`bancada.h`); abra o `.c` dele, que guarda os ponteiros. Desenhe antes e depois
+de cada operação: uma linha da matriz é uma lista, um nó da skip list é uma
+torre de ponteiros, e uma busca autoajustável muda a lista. Nos desenhos de
+lista, o nó verde é o achado, os amarelos são os comparados pelo caminho e os
+cinza, os que a busca nem tocou.
+
+O módulo é uma síntese. Você vai usar o tempo todo a **lista encadeada** com o
 par `ant` e `p` (assuntos 0076 a 0078), `malloc` e `free` (0054), **ponteiro para
 ponteiro** (0049) e a ideia de **TAD** (0074). O 0164 conversa com a busca
 sequencial (0089), e o 0165 usa a BST (0099), a AVL (0101), ponteiros para função
@@ -101,7 +81,7 @@ lista por linha passa a gastar mais que a matriz cheia?
 
 Cheia: 4 × 10⁸ posições × 4 bytes = **1,6 GB**. Lista por linha: 60 000 × 16 +
 20 000 × 8 = 960 000 + 160 000 bytes, cerca de **1,1 MB**. Empata quando
-16k + 160 000 = 1,6 × 10⁹, ou seja, k perto de **100 milhões** de células: um
+16k + 160 000 = 1,6 × 10⁹, isto é, k perto de **100 milhões** de células: um
 quarto das posições. Caminho: cada célula custa 4 `int`s, então a esparsa só
 compensa abaixo de 25% de ocupação (na prática, bem abaixo, porque ler uma
 posição custa andar na lista).
@@ -117,13 +97,13 @@ coluna. Quantas triplas cada linha da transposta tem?
 Trocando linha e coluna e reordenando: **(0,1,7) (1,0,5) (1,2,4) (2,2,9) (3,0,2)**.
 A transposta tem 4 linhas, com 1, 2, 1 e 1 triplas: é a contagem das colunas da
 original. Com essa contagem dá para transpor sem ordenar: as somas acumuladas
-(0, 1, 3, 4) dizem onde começa cada linha nova, como no counting sort.
+(0, 1, 3, 4) dizem em que posição começa cada linha nova, como no counting sort.
 
 </details>
 
 **3. A soma que some.** A linha 2 de A tem as células (col 1: 4), (col 3: -2) e
 (col 6: 5). A linha 2 de B tem (col 0: 1), (col 3: 2) e (col 6: 1). Quais células
-tem a linha 2 de A + B, e quantas comparações de coluna a intercalação faz?
+estão na linha 2 de A + B, e quantas comparações de coluna a intercalação faz?
 
 <details><summary>Resposta</summary>
 
@@ -243,7 +223,7 @@ faixa (E974); a skip list com um código mais simples; (c) **hash**: só pergunt
 
 ## Questões no estilo da prova
 
-Estas estruturas não caem diretamente na prova do PPGI, mas questões no
+Estas estruturas não caem direto na prova do PPGI, mas questões no
 mesmo formato treinam o que cai: contar memória, contar comparações e
 separar custo esperado de pior caso. Uma alternativa certa em cada.
 

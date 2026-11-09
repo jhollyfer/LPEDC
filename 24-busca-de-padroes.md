@@ -7,10 +7,9 @@ um vírus, o filtro que esconde palavrões no chat, o laboratório procurando um
 trecho de DNA num genoma de 3 bilhões de letras. Tudo isso é o mesmo problema:
 achar um **padrão** de `m` letras dentro de um **texto** de `n` letras.
 
-A solução óbvia, testar cada posição, funciona e é o que você escreveria sem
-pensar. Mas ela tem um pior caso de O(n·m), e em textos grandes isso pesa. Este
-módulo mostra três ideias diferentes para fazer melhor, cada uma com um truque
-que vale para muito além de strings: **não reler** o que já foi visto (KMP),
+A solução óbvia, testar cada posição, funciona, mas tem pior caso O(n·m), e
+em textos grandes isso pesa. Este módulo mostra três ideias para fazer
+melhor, cada uma com um truque que serve além de strings: **não reler** o que já foi visto (KMP),
 **pular** o que não pode dar certo (Horspool) e **comparar números** em vez de
 letras (Rabin-Karp).
 
@@ -31,36 +30,16 @@ mede qual trabalha menos.
 - a comparar algoritmos por **comparações de letra** e por tempo com `clock()`,
   e a escolher o certo para cada texto
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: o texto aparece como uma fileira
-   de gavetas, uma letra em cada, e o padrão aparece embaixo, encostado em cada
-   alinhamento.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis antes de conferir a tabela.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Mude o texto e o padrão, compare as contagens.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nas fileiras de letras dos diagramas da ideia, **verde** é letra que bateu (ou
-ocorrência achada), **vermelha** é a letra que falhou (ou o falso positivo),
-**amarela** é a letra que decide o próximo passo, **roxa** é o padrão, **azul**
-é texto ainda não comparado e **cinza** é o que o algoritmo não precisou olhar.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
-Este módulo é complemento: busca de padrões não cai diretamente na prova do
+Nos diagramas da ideia, o texto é uma fileira de gavetas, uma letra em cada,
+com o padrão encostado embaixo. **Verde** é letra que bateu (ou ocorrência
+achada), **vermelha** a que falhou (ou o falso positivo), **amarela** a letra
+que decide o próximo passo, **roxa** o padrão, **azul** texto ainda não
+comparado e **cinza** o que o algoritmo não precisou olhar. Faça o passo a
+passo no papel e responda a **Pergunta para você** antes de rodar.
+
+Este módulo é complemento: busca de padrões não cai direto na prova do
 PPGI (o que mais cai está em `PPGI.md`, na raiz do curso).
 
 Os exemplos dos quatro primeiros assuntos cabem cada um num arquivo só: os
@@ -68,9 +47,9 @@ algoritmos são funções curtas, e ver a função inteira junto do `main` ajuda
 mais do que separar em `.h` e `.c`. No assunto 0161 eles viram o TAD
 `padroes.h`, que o `rodar` compila junto com os exemplos e exercícios da pasta.
 
-Vários exemplos contam **comparações de letra**. Isso não faz parte do
-algoritmo: é o "cronômetro" que mostra o custo e que dá o mesmo número em
-qualquer máquina. Tempo de relógio só aparece no A321.
+Vários exemplos contam **comparações de letra**. A contagem não faz parte do
+algoritmo: é o "cronômetro" que mede o custo com o mesmo número em qualquer
+máquina. Tempo de relógio só aparece no A321.
 
 Os algoritmos trabalham com **bytes**. Em UTF-8, uma letra acentuada ocupa dois
 bytes acima de 127, e num `char` com sinal eles viram números negativos. Isso
@@ -78,8 +57,7 @@ não atrapalha comparar, mas atrapalha usar a letra como índice de tabela: o
 assunto 0159 mostra o problema e o conserto.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. É esperado: o
-enunciado avisa.
+AddressSanitizer (ou o UBSan) do `rodar` para o programa. O enunciado avisa.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -95,9 +73,8 @@ enunciado avisa.
 
 Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa". Em menos de
 um segundo, o leitor pinta todas as ocorrências. Por trás disso há um problema
-clássico: achar um **padrão** (a palavra procurada) dentro de um **texto**. Ele
-aparece no editor, no `grep`, no antivírus, na análise de DNA e no filtro de
-spam.
+clássico: achar um **padrão** (a palavra procurada) dentro de um **texto**, o
+mesmo que o `grep` e o antivírus resolvem.
 
 Os nomes de sempre: o texto tem `n` letras e o padrão tem `m`, com `m <= n`. Um
 **alinhamento** é encostar o padrão no texto a partir de uma posição `i`. Se as
@@ -117,10 +94,10 @@ segunda letra, e o total fica perto de `n` comparações. No **pior caso**, cada
 alinhamento compara quase o padrão inteiro antes de falhar: até
 `(n - m + 1) · m` comparações, que é **O(n·m)** (o Cormen chama cada
 alinhamento de **deslocamento**, e o algoritmo de **ingênuo**). Procurar `"00001"` num código
-de vinte zeros faz isso (veja o A314). Os próximos três assuntos são três jeitos
-de trabalhar menos que isso.
+de vinte zeros faz isso (veja o A314). Os próximos três assuntos trabalham
+menos que isso.
 
-Vamos ver na prática. A placa da feira diz "banana bacana" e você procura "ana".
+A placa da feira diz "banana bacana" e você procura "ana".
 São 11 alinhamentos. No 0, o "b" já não bate. No 1, as três letras batem:
 ocorrência. No 5, o "a" bate e o espaço não. No 10, ocorrência de novo:
 
@@ -192,7 +169,7 @@ padrão `m = 3`):
 
 O teto seria `11 · 3 = 33`. Deu 19 porque a maioria dos alinhamentos falha cedo.
 
-Repara no fluxograma: dois laços, um dentro do outro. O de fora anda o
+O fluxograma tem dois laços, um dentro do outro. O de fora anda o
 alinhamento `i`; o de dentro anda a letra `j`. O `i` sempre avança 1, tenha
 achado ou não:
 
@@ -214,11 +191,11 @@ novo a partir de `p + 1` (o exemplo A313 mostra a diferença entre recomeçar em
 
 > [!TIP]
 > **Por dentro do C:** o texto é um vetor de `char` contíguo, então o laço de
-> dentro lê bytes vizinhos, e o cache do processador adora isso. A força bruta
-> não gasta memória extra nenhuma: O(1). O `strstr` da glibc não é a força bruta
+> dentro lê bytes vizinhos, o que favorece o cache do processador. A força
+> bruta não gasta memória extra: O(1). O `strstr` da glibc não é a força bruta
 > deste assunto: para padrões maiores ele usa o algoritmo **Two-Way**, que é
-> linear no pior caso, e instruções que comparam vários bytes de uma vez. Repara
-> também que `strstr` recebe `const char *` e devolve `char *` sem `const`: se
+> linear no pior caso, e instruções que comparam vários bytes de uma vez. Note
+> que `strstr` recebe `const char *` e devolve `char *` sem `const`: se
 > o texto era um literal, escrever pelo ponteiro devolvido é comportamento
 > indefinido (assunto 0048).
 
@@ -549,14 +526,14 @@ Ninguém aperta "Enter": a central olha as teclas uma a uma, conforme chegam, e
 não guarda o histórico. Você digita `1 2 1 2`, erra e aperta `1`. A central
 precisa recomeçar do zero?
 
-Não precisa. As últimas teclas foram `1 2 1`, e `1 2 1` é o começo da senha.
+Não. As últimas teclas foram `1 2 1`, e `1 2 1` é o começo da senha.
 A força bruta jogaria isso fora: voltaria ao alinhamento seguinte e compararia
 de novo letras que já tinha visto. O **KMP** (Knuth, Morris e Pratt, 1977)
 nunca volta no texto. Cada letra do texto é lida uma vez, e a busca custa
 **O(n + m)**, sempre.
 
-O truque é olhar só para o padrão. Se `k` letras do padrão já casaram e a
-próxima falhou, o que o texto tem no fim é exatamente `padrao[0..k-1]`. A
+O truque está no padrão. Se `k` letras do padrão já casaram e a próxima
+falhou, o fim do texto lido é `padrao[0..k-1]`. A
 pergunta "quanto disso ainda serve como começo do padrão?" depende **só do
 padrão**, então dá para responder antes de ler o texto.
 
@@ -578,7 +555,7 @@ texto:
 A própria tabela π sai do mesmo jeito: é o padrão sendo procurado dentro dele
 mesmo. Por isso as duas funções do código se parecem tanto.
 
-Vamos ver na prática. As teclas são `1 2 1 2 1 2 3`. As quatro primeiras casam
+No exemplo, as teclas são `1 2 1 2 1 2 3`. As quatro primeiras casam
 (`k = 4`). A quinta, `1`, não é o `3` esperado. Em vez de recomeçar, a central
 olha `pi[3] = 2`: o `1 2` do fim continua valendo, e o padrão "escorrega" duas
 casas para a frente sem reler nada. A mesma tecla `1` agora casa com
@@ -586,8 +563,7 @@ casas para a frente sem reler nada. A mesma tecla `1` agora casa com
 
 <p align="center"><img src="24-busca-de-padroes/0158-kmp/ideia.svg" alt="Diagrama da ideia: KMP" width="858"></p>
 
-O mesmo exemplo em C. O `printf` dentro do laço mostra o `k` depois de cada
-tecla:
+Em C, o `printf` dentro do laço mostra o `k` depois de cada tecla:
 
 ```c
 #include <stdio.h>
@@ -680,7 +656,7 @@ Na busca, foram 8 comparações para 7 teclas: uma a mais por causa do recuo na
 quinta. A força bruta faria 11 (5 no alinhamento 0, 1 no alinhamento 1, 5 no
 alinhamento 2).
 
-Repara no fluxograma: o texto avança num laço só, e o recuo é um laço **dentro**
+No fluxograma, o texto avança num laço só, e o recuo é um laço **dentro**
 dele que mexe apenas em `k`. O índice `i` do texto nunca anda para trás:
 
 <p align="center"><img src="24-busca-de-padroes/0158-kmp/fluxograma.svg" alt="Fluxograma: KMP" width="647"></p>
@@ -703,7 +679,7 @@ argumento.
 > [!TIP]
 > **Por dentro do C:** a tabela π é um vetor de `m` inteiros: para um padrão de
 > 32 letras são 128 bytes na pilha, e ela não depende do tamanho do texto. O
-> texto, por sua vez, é lido **uma vez, em ordem, sem voltar**. Isso deixa o KMP
+> texto é lido **uma vez, em ordem, sem voltar**. Isso deixa o KMP
 > trabalhar sobre um fluxo de `getchar()` ou de `fgetc()` sem guardar o texto
 > em lugar nenhum: um arquivo de 10 GB passa por ele com a memória da tabela e
 > de um `int`. A força bruta não consegue isso, porque volta `j - 1` letras a
@@ -1048,7 +1024,7 @@ por letra: você bate o olho numa placa, vê que ela termina com uma letra que
 nem existe em "MANGA" e já pula para a próxima. A força bruta e o KMP leem
 todas as letras do texto. Dá para ler **menos**?
 
-Dá, e o truque é comparar o padrão **da direita para a esquerda**. Encoste o
+Dá: compare o padrão **da direita para a esquerda**. Encoste o
 padrão no texto e olhe primeiro a letra que está sob a **última** casa dele. Se
 essa letra nem aparece no padrão, nenhum alinhamento que a cubra pode dar
 certo, e o padrão inteiro pula para depois dela: `m` casas de uma vez.
@@ -1073,7 +1049,7 @@ Na busca, cada alinhamento `i` compara de `j = m - 1` para trás. Achando ou
 não, o próximo alinhamento é `i + salto[texto[i + m - 1]]`: a letra que
 decide é sempre a que está sob a última casa da janela.
 
-Vamos ver na prática. A placa é "A BANCA VENDE MANGA" (19 letras) e o padrão é
+A placa do exemplo é "A BANCA VENDE MANGA" (19 letras) e o padrão é
 "MANGA" (`m = 5`). Os saltos são M = 4, A = 3, N = 2, G = 1 e 5 para as outras.
 No alinhamento 0, sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C`
 não, e o `A` manda saltar 3. No 5, o `E` não está em "MANGA": salta 5. No 10,
@@ -1081,7 +1057,7 @@ o `M` manda saltar 4. No 14, as cinco letras batem:
 
 <p align="center"><img src="24-busca-de-padroes/0159-horspool/ideia.svg" alt="Diagrama da ideia: Horspool" width="865"></p>
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -1162,8 +1138,8 @@ Os cinco alinhamentos. A janela é `texto[i..i+4]` e a letra que decide o salto
 Foram 10 comparações de letra. A força bruta faz 19 no mesmo texto e passa por
 todas as letras; aqui, 10 das 19 letras da placa nunca foram olhadas.
 
-Repara no fluxograma: diferente da força bruta, o `i` não anda de 1 em 1. O
-quanto ele anda vem da tabela, e quem decide é a última letra da janela, tenha
+No fluxograma, ao contrário da força bruta, o `i` não anda de 1 em 1. O
+passo vem da tabela, e quem decide é a última letra da janela, tenha
 o alinhamento dado certo ou não:
 
 <p align="center"><img src="24-busca-de-padroes/0159-horspool/fluxograma.svg" alt="Fluxograma: Horspool" width="495"></p>
@@ -1179,7 +1155,7 @@ em cada alinhamento (é o exercício E952).
 > O índice da tabela tem que ser `unsigned char`. Em UTF-8, letras acentuadas
 > viram dois bytes acima de 127, e no gcc para x86 o `char` tem sinal: o `ã`
 > começa com o byte 0xC3, que num `char` vale **-61**. `salto[-61]` escreve
-> fora do vetor, em memória de outra variável, sem erro de compilação nenhum
+> fora do vetor, em memória de outra variável, sem erro de compilação
 > (o E953 mostra o estrago). Converta sempre: `salto[(unsigned char) c]`. E não
 > ponha a última letra do padrão na tabela, ou o salto dela vira 0.
 
@@ -1549,30 +1525,30 @@ padrão uma vez. Depois calcula o hash de cada **janela** de `m` letras do texto
 e só compara letra a letra quando os hashes batem. É o assunto 0105 (hashing)
 aplicado a pedaços de texto.
 
-Mas calcular o hash de cada janela do zero custa `m` passos, e aí não se ganha
-nada da força bruta. O pulo do gato é o **hash rolante**: a janela seguinte
+Calcular o hash de cada janela do zero custa `m` passos, e aí não se ganha
+nada da força bruta. A saída é o **hash rolante**: a janela seguinte
 perde uma letra na esquerda e ganha uma na direita, e o hash novo sai do antigo
 em O(1).
 
-Pense em dígitos. A janela `271` é o número 271. A próxima, `718`, é
+Com dígitos fica fácil ver. A janela `271` é o número 271. A próxima, `718`, é
 `(271 - 2·100)·10 + 8`: tira o dígito que sai (pesando 10^(m-1)), desloca uma
 casa e soma o que entra. Com letras é igual, só que na base 256, uma "casa" por
 byte. Como esses números ficam enormes, tudo é feito **módulo um primo `q`**:
 o hash é o resto, e a regra continua valendo com `% q` a cada passo.
 
 O preço do resto é a **colisão**: duas janelas diferentes podem ter o mesmo
-resto. Isso é um **falso positivo**, e é por isso que a conferência letra a
-letra nunca pode ser pulada. Com `q` grande, colisões ficam raras, e a busca
+resto. Isso é um **falso positivo**, e por isso a conferência letra a letra
+nunca pode ser pulada. Com `q` grande, colisões ficam raras, e a busca
 custa O(n + m) na média. No pior caso (tudo colidindo), volta a O(n·m).
 
-Vamos ver na prática. Você procura `182` na sequência `2718281828459`, com
+No exemplo, você procura `182` na sequência `2718281828459`, com
 `q = 13` (pequeno de propósito, para aparecer colisão). O hash do padrão é
 `182 % 13 = 0`. Rolando a janela pelas 11 posições, o hash 0 aparece três
 vezes: duas são o `182` de verdade, e uma é o `845`, que também deixa resto 0:
 
 <p align="center"><img src="24-busca-de-padroes/0160-rabin-karp/ideia.svg" alt="Diagrama da ideia: Rabin-Karp" width="870"></p>
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -1661,8 +1637,7 @@ Duas operações por janela, não importa o tamanho do padrão. Com `m = 1000`, 
 força bruta pode gastar até mil comparações por janela; o hash rolante continua
 gastando duas contas.
 
-Repara no fluxograma: o caminho comum é só calcular, comparar dois números e
-rolar. A comparação letra a letra fica num desvio que quase nunca é tomado
+No fluxograma, o caminho comum é calcular, comparar dois números e rolar. A comparação letra a letra fica num desvio que quase nunca é tomado
 quando `q` é grande:
 
 <p align="center"><img src="24-busca-de-padroes/0160-rabin-karp/fluxograma.svg" alt="Fluxograma: Rabin-Karp" width="677"></p>
@@ -1671,7 +1646,7 @@ quando `q` é grande:
 > Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
 > Na rolagem, `ht - t[i] * pot` fica negativo com frequência, e um hash
 > negativo nunca bate com o do padrão: a busca **perde ocorrências** sem dar
-> erro nenhum (o E959 cai nisso). Por isso a linha é
+> erro (o E959 cai nisso). Por isso a linha é
 > `(ht - t[i] * pot % Q + Q) % Q`: reduz o produto, soma `Q` e só então tira o
 > resto. E nunca pule a conferência letra a letra: sem ela, o `845` acima
 > seria contado como ocorrência.
@@ -2049,7 +2024,7 @@ polinomial: 2 verificações, 2 ocorrências
 O síndico digitou os avisos do condomínio num arquivo, uma linha por aviso, e
 quer saber quais falam da garagem. No terminal, isso é `grep garagem
 avisos.txt`: o programa lê o arquivo linha por linha e mostra as que têm o
-padrão. Neste assunto você monta o seu **mini-grep** com os quatro algoritmos
+padrão. Aqui você monta o seu **mini-grep** com os quatro algoritmos
 do módulo e mede qual trabalha menos.
 
 O primeiro passo é dar aos quatro a **mesma cara**. Eles ficam num TAD,
@@ -2073,9 +2048,9 @@ acumular o custo de um arquivo inteiro, linha após linha.
 Com a mesma assinatura, o algoritmo vira um **dado**. `Busca` é um tipo
 ponteiro para função (assunto 0050), e um vetor de structs `{nome, busca}`
 guarda os quatro. O grep chama `algs[a].busca(...)` sem saber qual está do outro
-lado: trocar de algoritmo é trocar um índice, não reescrever o laço.
+lado: para trocar de algoritmo, basta trocar o índice.
 
-E qual escolher? Cada um vence numa situação:
+Cada um vence numa situação:
 
 | | preparo | memória extra | pior caso | caso comum | ponto forte |
 | --- | --- | --- | --- | --- | --- |
@@ -2084,7 +2059,7 @@ E qual escolher? Cada um vence numa situação:
 | Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
 | Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
 
-Vamos ver na prática. São 8 avisos e o padrão é "garagem". O grep mostra as
+São 8 avisos e o padrão é "garagem". O grep mostra as
 linhas 3, 5 e 8 (a 3 tem duas ocorrências). Depois, as mesmas linhas passam pelos
 quatro algoritmos: o resultado é igual, o trabalho não:
 
@@ -2159,8 +2134,8 @@ int main(void) {
 //   4 ocorrências,  28 comparações: Rabin-Karp
 ```
 
-Repara no fluxograma: o grep é um laço sobre as linhas com uma chamada de
-busca no meio. Toda a esperteza do módulo está escondida atrás dessa chamada:
+O fluxograma do grep é um laço sobre as linhas com uma chamada de busca no
+meio. Os quatro algoritmos do módulo ficam atrás dessa chamada:
 
 <p align="center"><img src="24-busca-de-padroes/0161-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="649"></p>
 
@@ -2185,8 +2160,8 @@ em textos de 2 milhões de letras.
 > [!TIP]
 > **Por dentro do C:** `clock()`, de `<time.h>`, devolve o tempo de processador
 > gasto pelo programa, em "tiques"; dividindo a diferença por `CLOCKS_PER_SEC`,
-> você tem segundos. Ele mede o seu programa, não o relógio da parede. Três
-> cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
+> você tem segundos. Ele mede o tempo do seu programa, e não o do relógio da
+> parede. Três cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
 > `rodar` compila com AddressSanitizer, que confere cada acesso à memória e
 > deixa o programa umas duas vezes mais lento; e com `-O2` o `gcc` pode apagar uma busca cujo
 > resultado ninguém usa. Por isso o A321 imprime o total achado junto com o
@@ -2638,8 +2613,8 @@ qualquer letra. Procure `c?sa` em `"casa cosa cesta case"`.
 
 A única mudança é a comparação do laço de dentro: a letra casa se
 `padrao[j] == '?' || padrao[j] == texto[i + j]`. As ocorrências ficam em **0**
-("casa") e **5** ("cosa"); "cesta" falha no `t` e "case" no `e`. Repare que o
-KMP e o Horspool não se adaptam tão fácil: a tabela π e a de saltos supõem que
+("casa") e **5** ("cosa"); "cesta" falha no `t` e "case" no `e`. O KMP e o
+Horspool não se adaptam tão fácil: a tabela π e a de saltos supõem que
 cada letra do padrão é uma letra só.
 
 </details>
@@ -2676,7 +2651,7 @@ E a força bruta?
 <details><summary>Resposta</summary>
 
 Toda letra sob a última casa está fora do padrão, então todo salto é 3: os
-alinhamentos são `i = 0, 3, ..., 2997`, ou seja, **1000**, com 1 comparação
+alinhamentos são `i = 0, 3, ..., 2997`, **1000** ao todo, com 1 comparação
 cada: **1000** comparações. A força bruta testa os 2998 alinhamentos, com uma
 comparação cada (o `x` nunca bate): **2998**. É o melhor caso do Horspool,
 `n / m`.
@@ -3892,7 +3867,7 @@ aa: 10* (1)
 
 ## Questões no estilo da prova
 
-Busca de padrões não cai diretamente na prova do PPGI, mas questões no mesmo
+Busca de padrões não cai direto na prova do PPGI, mas questões no mesmo
 formato treinam o que cai: contar passos, reconhecer a complexidade e seguir
 uma tabela à mão. Uma alternativa certa em cada.
 

@@ -3,9 +3,8 @@
 # Módulo 23 · Grafos: estrutura e caminhos
 
 O módulo 16 apresentou os grafos e as três buscas que mais aparecem: BFS,
-DFS e Dijkstra. Este módulo volta aos grafos com outra pergunta na cabeça:
-não "como eu ando por ele?", mas "**o que esse grafo esconde?**". Ele tem
-pedaços soltos? Tem um ciclo que trava tudo? Em que ordem as tarefas cabem?
+DFS e Dijkstra. Aqui a pergunta muda de "como eu ando por ele?" para
+"**o que esse grafo esconde?**". Ele tem pedaços soltos? Tem um ciclo que trava tudo? Em que ordem as tarefas cabem?
 Qual o jeito mais barato de ligar todo mundo? E quando o peso é negativo, ou
 quando a pergunta é "de todos para todos"?
 
@@ -13,11 +12,10 @@ Cada assunto responde uma dessas perguntas com um algoritmo clássico, e
 quase todos reaproveitam peças que você já tem. A DFS vira detector de
 ciclos e ordenação topológica. A fila vira o algoritmo de Kahn. O `qsort` e
 o union-find viram o Kruskal. O heap vira o Prim. A tabela da programação
-dinâmica vira o Floyd-Warshall. Pouca coisa é nova; o novo é enxergar qual
-peça encaixa em qual pergunta.
+dinâmica vira o Floyd-Warshall. O trabalho novo é enxergar qual peça
+encaixa em qual pergunta.
 
-A mudança na cabeça é parar de ver o grafo como um mapa e começar a ver
-como um **modelo**. Uma planilha com fórmulas, uma grade de disciplinas, a
+O grafo deixa de ser um mapa e vira um **modelo**. Uma planilha com fórmulas, uma grade de disciplinas, a
 fiação de um loteamento, uma tabela de câmbio: tudo isso é grafo, e a
 pergunta que você faz decide o algoritmo.
 
@@ -31,33 +29,14 @@ pergunta que você faz decide o algoritmo.
 - a tabela de distâncias entre **todos os pares** com **Floyd-Warshall**, e como reconstruir as rotas
 - escolher o algoritmo pela pergunta, num programa que planeja semestres e rotas
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos vértices, pesos e resultados do código.
-2. Leia o código. Cada arquivo traz o algoritmo inteiro, sem TAD escondendo
-   nada: em grafos, ver o laço completo é metade do aprendizado.
-3. Siga o **fluxograma** com o dedo e refaça o **passo a passo** no papel: a
-   fila do Kahn, os grupos do union-find, o heap do Prim, as rodadas do
-   Bellman-Ford, a casa da matriz no Floyd-Warshall.
-4. Rode os exemplos. Mude um peso, inverta uma seta, crie um ciclo, e veja o
-   resultado mudar.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos grafos, a origem fica roxa e as arestas verdes são as escolhidas (a
-árvore mínima ou a rota). Na DFS de três cores, o amarelo faz o papel do
-cinza (na pilha) e o verde, do preto (terminado).
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+Cada assunto traz o algoritmo inteiro num arquivo, sem TAD escondendo o
+laço. Refaça no papel o passo a passo: a fila do Kahn, os grupos do
+union-find, o heap do Prim, as rodadas do Bellman-Ford, e responda a
+**Pergunta para você** antes de rodar. Nos desenhos, a
+origem fica roxa e as arestas verdes são as escolhidas; na DFS de três
+cores, amarelo faz o papel do cinza (na pilha) e verde, do preto (terminado).
 
 Este módulo usa sem cerimônia o módulo 16 inteiro: matriz de adjacência, BFS
 (0110), DFS (0111) e Dijkstra (0112). Também aparecem a fila (0085), o heap
@@ -76,8 +55,8 @@ Três convenções valem para o módulo todo:
 - na matriz de pesos, **0 quer dizer "sem aresta"**, exceto quando o texto
   avisa o contrário (o A311 mostra por que isso pode ser um problema);
 - quando o algoritmo soma distâncias, o INFINITO é `1000000000` (um bilhão),
-  que somado com outro INFINITO ainda cabe num `int`. Onde aparece `INT_MAX`,
-  o código testa antes de somar.
+  que somado com outro INFINITO ainda cabe num `int`. Quando o código usa
+  `INT_MAX`, ele testa antes de somar.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -110,13 +89,13 @@ grafo, e as duas se respondem com a DFS do assunto 0111:
   seguindo as setas.
 
 **Componentes.** Uma DFS a partir de um vértice marca tudo que ele alcança.
-Num grafo não dirigido, isso é exatamente o componente dele. Para achar todos,
+Num grafo não dirigido, isso é o componente dele. Para achar todos,
 um **laço externo** passa por cada vértice e, se ele ainda não tem grupo,
 começa uma DFS nova com um número de grupo novo. Cada recomeço é um
 componente. Custa O(V + E) com lista de adjacência: cada vértice é marcado uma
 vez só.
 
-**Ciclo num grafo dirigido.** Aqui o `visitado[]` simples engana. Repare no
+**Ciclo num grafo dirigido.** Aqui o `visitado[]` simples engana. Veja o
 Frete: Total chega nele direto e também por Obra, Piso. Quando a DFS volta a
 Total e olha o Frete, ele já foi visitado, mas isso não é ciclo: são dois
 caminhos que se encontram. Ciclo é voltar a um vértice que **ainda está na
@@ -128,9 +107,9 @@ Por isso a DFS usa **três cores**:
 - **cinza**: a chamada dele começou e não terminou (está na pilha);
 - **preto**: terminado, tudo abaixo dele já foi explorado.
 
-Achar uma seta para um vértice **cinza** é achar um ciclo. Seta para preto é
-só um atalho para algo já resolvido. E o vetor `pai[]` reconstrói o ciclo:
-basta subir de pai em pai até o vértice cinza. O Cormen usa as mesmas três
+Achar uma seta para um vértice **cinza** é achar um ciclo. Seta para preto
+leva a algo já resolvido. O vetor `pai[]` reconstrói o ciclo: suba de pai em
+pai até o vértice cinza. O Cormen usa as mesmas três
 cores e chama a seta para um cinza de **aresta de retorno** (*back edge*): um
 grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
 
@@ -142,8 +121,7 @@ grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
 > grafo com as setas invertidas, em O(V + E). Pontes e vértices de
 > articulação, a conectividade "frágil", ficam para o assunto 0184.
 
-Vamos ver na prática. Os números mostram a ordem em que a DFS descobre cada
-célula. No momento do desenho, o grupo da obra já está todo preto (verde) e a
+No desenho, os números dão a ordem em que a DFS descobre cada célula. No momento do desenho, o grupo da obra já está todo preto (verde) e a
 DFS do financiamento está no fundo da pilha, com os três em cinza (amarelo).
 A seta de Parcela para Juros aponta para um cinza:
 
@@ -224,8 +202,8 @@ int main(void) {
 // Referência circular: Juros -> Saldo -> Parcela -> Juros
 ```
 
-Repara no fluxograma: é a chamada `acha_ciclo(u)`. Cada vizinho cai numa de
-três situações. Cinza encerra tudo com o ciclo; branco desce na recursão;
+O fluxograma é a chamada `acha_ciclo(u)`. Cada vizinho cai numa de três
+situações. Cinza encerra tudo com o ciclo; branco desce na recursão;
 preto é ignorado. Quando os vizinhos acabam, `u` fica preto e a chamada
 volta para quem a chamou:
 
@@ -233,8 +211,8 @@ volta para quem a chamou:
 
 ### Passo a passo
 
-As cores no fim de cada chamada ou descoberta. Repare na linha do Frete visto
-de Total: ele já está preto, e a DFS segue em frente sem alarme:
+As cores no fim de cada chamada ou descoberta. Na linha do Frete visto de
+Total, ele já está preto, e a DFS segue em frente sem alarme:
 
 | Evento | Cinza (na pilha) | Preto |
 | --- | --- | --- |
@@ -248,24 +226,23 @@ de Total: ele já está preto, e a DFS segue em frente sem alarme:
 | Parcela olha Juros: **cinza**, ciclo | | |
 
 O exemplo A299 faz o mesmo num grafo **não dirigido** (a rede de cabos de um
-escritório), onde não há cores: basta ignorar o pai. O A300 conta os grupos
+escritório), que dispensa as cores: basta ignorar o pai. O A300 conta os grupos
 de amigos à medida que as amizades chegam, com o union-find do assunto 0148.
 
 > [!WARNING]
 > Usar só `visitado[]` para achar ciclo num grafo dirigido dá **alarme
-> falso**. No exemplo, Total encontraria o Frete já visitado e gritaria
-> "ciclo!" sem existir ciclo nenhum. A pergunta certa não é "já vi?", é "ele
-> ainda está na pilha?". No grafo **não dirigido** o erro é o oposto: toda
+> falso**, como o do Frete visto de Total. Pergunte "ele ainda está na
+> pilha?", e não "já vi?". No grafo **não dirigido** o erro é o oposto: toda
 > aresta aparece nos dois sentidos, e o vizinho que é o pai sempre parece um
 > ciclo. Lá, ignore o pai.
 
 > [!TIP]
 > **Por dentro do C:** a cor cinza é a pilha de chamadas escrita num vetor.
-> Os vértices cinza são exatamente os que têm um frame de `acha_ciclo` vivo
+> Os vértices cinza são os que têm um frame de `acha_ciclo` vivo
 > na pilha do programa, e o `enum` deixa isso legível: `BRANCO`, `CINZA` e
-> `PRETO` são só as constantes inteiras 0, 1 e 2. Como os vetores são
-> globais, começam zerados, ou seja, todo mundo nasce `BRANCO` e com
-> `grupo` 0 sem precisar de laço de inicialização. O vetor `volta[V]` é
+> `PRETO` são as constantes inteiras 0, 1 e 2. Os vetores são globais e
+> começam zerados: todo mundo nasce `BRANCO` e com `grupo` 0, sem laço de
+> inicialização. O vetor `volta[V]` é
 > local: só existe durante a chamada que achou o ciclo.
 
 > [!NOTE]
@@ -648,8 +625,8 @@ obras faria:
 4. repita até a fila esvaziar.
 
 Se a lista terminar com menos de V serviços, sobrou gente esperando para
-sempre: os que estão num ciclo, ou depois de um. Kahn já detecta o ciclo de
-graça. Cada vértice entra e sai da fila uma vez e cada seta é descontada uma
+sempre: os que estão num ciclo, ou depois de um. O Kahn detecta o ciclo sem
+custo extra. Cada vértice entra e sai da fila uma vez e cada seta é descontada uma
 vez: O(V + E) com lista de adjacência, O(V²) com matriz.
 
 A resposta **não é única**. Elétrica, Hidráulica e Telhado ficam livres ao
@@ -660,13 +637,12 @@ errada.
 Existe um segundo caminho, pela DFS do assunto 0111. Quando a chamada
 `dfs(u)` termina, tudo o que depende de `u` já terminou antes. Então a ordem
 em que as chamadas **terminam** (a **pós-ordem**), lida de trás para a
-frente, é uma ordenação topológica. Na prática: empilhe `u` no fim de
-`dfs(u)` e, no final, desempilhe tudo. O exemplo A301 faz assim. É essa a
-versão do Cormen (ordem decrescente do tempo de término `u.f`); o Kahn é a
+frente, é uma ordenação topológica: empilhe `u` no fim de `dfs(u)` e, no
+final, desempilhe tudo, como faz o exemplo A301. Essa é a versão do Cormen (ordem decrescente do tempo de término `u.f`); o Kahn é a
 alternativa por graus de entrada.
 
-Vamos ver na prática. O número em cima de cada serviço é a posição dele na
-lista. Repare no Reboco, que espera três serviços e só entra em sétimo:
+No desenho, o número em cima de cada serviço é a posição dele na lista. O
+Reboco espera três serviços e só entra em sétimo:
 
 <p align="center"><img src="23-grafos-avancados/0151-ordenacao-topologica/ideia.svg" alt="Diagrama da ideia: Ordenação topológica" width="864"></p>
 
@@ -718,8 +694,8 @@ int main(void) {
 // 8. Pintura
 ```
 
-Repara no fluxograma: o laço só pergunta "a fila tem alguém?". A pergunta
-sobre o ciclo fica para o fim, quando se compara quantos saíram com V:
+No fluxograma, o laço só pergunta "a fila tem alguém?". O teste do ciclo
+fica para o fim, comparando quantos saíram com V:
 
 <p align="center"><img src="23-grafos-avancados/0151-ordenacao-topologica/fluxograma.svg" alt="Fluxograma: Ordenação topológica" width="647"></p>
 
@@ -753,7 +729,7 @@ tudo que já está liberado.
 
 > [!TIP]
 > **Por dentro do C:** a fila daqui nunca dá a volta, por isso não precisa ser
-> circular como a do assunto 0085: cada vértice entra exatamente uma vez,
+> circular como a do assunto 0085: cada vértice entra uma vez só,
 > então `fim` nunca passa de V. No fim do laço, `fila[0..fim-1]` é a própria
 > ordenação, guardada em ordem. O vetor `grau[]` é a única coisa que o
 > algoritmo destrói: depois de rodar, ele está todo zerado (ou com sobras nos
@@ -1146,24 +1122,24 @@ possíveis, de R$ 2 mil a R$ 9 mil. A exigência é uma só: depois da obra, dá
 para ir de qualquer vila a qualquer outra pelo asfalto. E o prefeito quer
 gastar o mínimo.
 
-Repare que ninguém pediu o caminho mais curto entre duas vilas. Pediu um
+Ninguém pediu o caminho mais curto entre duas vilas. O pedido é um
 conjunto de estradas que **ligue todo mundo** com a **menor soma**. Esse
 conjunto nunca tem ciclo: num ciclo, dá para tirar a estrada mais cara e
 todo mundo continua ligado, mais barato. Um grafo conexo e sem ciclo é uma
-**árvore**, e uma árvore com V vértices tem exatamente **V - 1 arestas**.
+**árvore**, e uma árvore com V vértices tem **V - 1 arestas**.
 
 O que se procura, então, é a **árvore geradora mínima** (MST, de *minimum
-spanning tree*): uma árvore que "gera", ou seja, toca todos os vértices, com
+spanning tree*): uma árvore que "gera" (toca todos os vértices) com
 a menor soma de pesos possível. O grafo é **não dirigido** e ponderado.
 
-O algoritmo de **Kruskal** é guloso (assunto 0133) e quase óbvio:
+O algoritmo de **Kruskal** é guloso (assunto 0133):
 
 1. ordene as arestas da mais barata para a mais cara;
 2. percorra a lista e **aceite** cada aresta que **não feche ciclo** com as
    já aceitas;
 3. pare quando tiver V - 1 arestas.
 
-A única parte difícil é o passo 2: como saber, rápido, se `a` e `b` já estão
+A parte difícil é o passo 2: como saber, rápido, se `a` e `b` já estão
 ligados pelas arestas aceitas? É a pergunta que o **union-find** do assunto
 0148 responde. Cada grupo de vilas já ligadas é um conjunto. Se `acha(a)` e
 `acha(b)` devolvem o mesmo representante, a aresta fecharia um ciclo. Se
@@ -1176,8 +1152,7 @@ argumento tem nome nos livros: **propriedade do corte**. O Cormen diz que a
 aresta **leve** (a mais barata) que cruza um corte é uma aresta **segura**:
 ela pode entrar sem estragar a árvore mínima.
 
-Vamos ver na prática. As arestas verdes são as aceitas. Embaixo, a lista
-ordenada: verde entrou, vermelho fecharia ciclo, cinza nem foi olhado porque
+No desenho, as arestas verdes são as aceitas. Embaixo, a lista ordenada: verde entrou, vermelho fecharia ciclo, cinza nem foi olhado porque
 as 5 arestas já tinham saído:
 
 <p align="center"><img src="23-grafos-avancados/0152-kruskal/ideia.svg" alt="Diagrama da ideia: Kruskal: árvore geradora mínima" width="858"></p>
@@ -1258,8 +1233,8 @@ int main(void) {
 // Total: R$ 21 mil em 5 estradas
 ```
 
-Repara no fluxograma: o laço tem duas saídas, acabar a lista ou completar
-V - 1 arestas. A pergunta do meio é a do union-find, e ela decide tudo:
+O laço do fluxograma tem duas saídas: acabar a lista ou completar V - 1
+arestas. A pergunta do meio, a do union-find, decide cada aresta:
 
 <p align="center"><img src="23-grafos-avancados/0152-kruskal/fluxograma.svg" alt="Fluxograma: Kruskal: árvore geradora mínima" width="568"></p>
 
@@ -1288,7 +1263,7 @@ das melhores conexões de uma rede Wi-Fi.
 
 > [!WARNING]
 > Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico.
-> O `pai` de um vértice é só o próximo passo rumo ao representante, não o
+> O `pai` de um vértice é o próximo passo rumo ao representante, e não o
 > representante. Dois vértices do mesmo grupo podem ter pais diferentes, e
 > aí a aresta entre eles é aceita, fechando um ciclo e estragando o total. E
 > o comparador do `qsort` com `x->custo - y->custo` só é seguro porque os
@@ -1693,13 +1668,13 @@ Maior subida: 14 m
 ## 0153 · Prim: a árvore que cresce
 
 Cinco chácaras de um condomínio vão dividir a água de um poço artesiano. O
-encanador mediu os trechos onde dá para passar cano: do Poço até a casa da
+encanador mediu os trechos por onde dá para passar cano: do Poço até a casa da
 Ana são 4 m, da Ana até o Beto 3 m, e assim por diante. A água pode passar
 de uma casa para outra, então não precisa de um cano do Poço até cada casa.
 O objetivo é o mesmo do Kruskal: ligar todo mundo com o **mínimo de cano**.
 
-O Kruskal resolveria, olhando a lista de trechos inteira. Só que o
-encanador pensa diferente: ele sai do Poço e vai **esticando a rede**. A
+O Kruskal resolveria, olhando a lista de trechos inteira. O encanador
+pensa de outro jeito: ele sai do Poço e vai **esticando a rede**. A
 cada passo, entre todos os canos que ligam uma casa já atendida a uma casa
 ainda sem água, ele escolhe o **mais curto**. Esse é o algoritmo de
 **Prim**.
@@ -1707,29 +1682,28 @@ ainda sem água, ele escolhe o **mais curto**. Esse é o algoritmo de
 Prim é guloso e acerta pelo mesmo motivo do Kruskal: as casas atendidas e
 as não atendidas formam dois grupos, e o cano mais curto entre os dois
 grupos sempre pode fazer parte de uma árvore mínima (a propriedade do
-corte). A diferença é só a ordem: Kruskal junta florestas espalhadas; Prim
+corte). Muda a ordem: Kruskal junta florestas espalhadas; Prim
 mantém **uma árvore só**, que cresce a partir da origem.
 
 Para achar rápido "o cano mais curto que sai da rede", Prim usa a fila de
 prioridade do assunto 0102, um **heap de mínimo**. Cada item diz "dá para
 ligar `v` com `chave` metros a partir de `de`". Quando uma casa entra na
 rede, os canos que saem dela entram no heap. Ao tirar um item cuja casa já
-está na rede, é só **descartar**: ela já entrou por um cano melhor. Essa
+está na rede, **descarte**: ela já entrou por um cano melhor. Essa
 versão, que não atualiza itens dentro do heap, se chama **preguiçosa**. A do
 Cormen (`MST-PRIM`) põe todos os vértices no heap com chave infinita e baixa a
 chave no lugar (`DECREASE-KEY`); com heap binário, as duas custam O(E log V).
 
-Se isso lembrou o Dijkstra (assunto 0112), não é coincidência. O código é
-quase o mesmo. A diferença está numa linha só, a chave de quem entra no
-heap:
+Isso lembra o Dijkstra (assunto 0112), e o código é quase o mesmo. A
+diferença está numa linha, a chave de quem entra no heap:
 
 | | chave de `w` ao sair de `v` | o que a árvore minimiza |
 | --- | --- | --- |
 | Prim | `cano[v][w]` | a soma de **todos** os canos |
 | Dijkstra | `dist[v] + cano[v][w]` | a distância de **cada** casa até o Poço |
 
-Vamos ver na prática. Os números em cima são a ordem de entrada na rede, as
-arestas verdes são os canos escolhidos, e à direita está o heap logo depois
+No desenho, os números em cima são a ordem de entrada na rede, as arestas
+verdes são os canos escolhidos, e à direita está o heap logo depois
 que a Ana entra:
 
 <p align="center"><img src="23-grafos-avancados/0153-prim/ideia.svg" alt="Diagrama da ideia: Prim: a árvore que cresce" width="864"></p>
@@ -1821,9 +1795,9 @@ int main(void) {
 // Total: 18 m de cano
 ```
 
-Repara no fluxograma: é o laço do Dijkstra com heap. A pergunta "já está na
-rede?" é o que torna a versão preguiçosa correta: o heap pode ter itens
-velhos, e eles são jogados fora na saída:
+O fluxograma é o laço do Dijkstra com heap. A pergunta "já está na rede?"
+torna a versão preguiçosa correta: o heap pode ter itens velhos, e eles são
+jogados fora na saída:
 
 <p align="center"><img src="23-grafos-avancados/0153-prim/fluxograma.svg" alt="Fluxograma: Prim: a árvore que cresce" width="602"></p>
 
@@ -1843,8 +1817,8 @@ O heap depois de cada casa que entra (só as chaves e as casas):
 E se fosse o Dijkstra a partir do Poço? Beto ficaria pendurado no Poço (6 m
 direto, contra 4 + 3 = 7 passando pela Ana), e o resto seguiria Beto, Cida,
 Davi, Elza. Cada casa estaria o mais perto possível do Poço, mas a rede
-gastaria 4 + 6 + 5 + 2 + 4 = **21 m**. O Prim gasta **18 m**. Perguntas
-diferentes, árvores diferentes.
+gastaria 4 + 6 + 5 + 2 + 4 = **21 m**. O Prim gasta **18 m**: outra
+pergunta, outra árvore.
 
 O A305 faz o Prim sem heap, em O(V²), para um grafo completo de postes de
 luz, em que a versão com vetor ganha. O A306 roda Prim e Dijkstra lado a lado
@@ -1855,7 +1829,7 @@ no mesmo mapa e mostra as duas árvores.
 > "entra" de novo na rede: o total soma cano que ninguém vai instalar (aqui
 > daria 18 + 6 + 8 + 8 + 9 = 49 m). O mesmo vale para o laço dos vizinhos: sem
 > `!na_rede[w]`, o heap enche de itens inúteis, e a capacidade `CAP` pode
-> estourar. Prim, como Kruskal, só faz sentido em grafo **não dirigido**: num
+> estourar. Prim, como Kruskal, só vale para grafo **não dirigido**: no
 > dirigido, "ligar todo mundo pelo mínimo" é outro problema, bem mais difícil.
 
 > [!TIP]
@@ -2263,7 +2237,7 @@ atrás. Mas Base, Shopping, Centro custa 6 - 4 = **R$ 2**. A promessa do
 Dijkstra ("somar pesos só aumenta") deixou de valer, e ele termina dizendo
 que Casa custa R$ 12, quando custa R$ 10.
 
-O algoritmo de **Bellman-Ford** não confia em ninguém. Ele **relaxa todas
+O algoritmo de **Bellman-Ford** não fixa ninguém cedo. Ele **relaxa todas
 as arestas**, uma rodada inteira de cada vez, sem escolher o menor:
 
 - `dist[origem] = 0` e INFINITO no resto;
@@ -2283,21 +2257,21 @@ Aí não existe caminho mínimo: dar mais uma volta sempre diminui o custo, e a
 extra: se depois das V - 1 rodadas alguma aresta ainda melhora, há ciclo
 negativo alcançável.
 
-O preço da desconfiança é o tempo: V - 1 rodadas de E arestas, **O(V · E)**,
+O preço é o tempo: V - 1 rodadas de E arestas, **O(V · E)**,
 contra O((V + E) log V) do Dijkstra com heap. Use Bellman-Ford quando houver
-peso negativo; sem eles, Dijkstra. E se o grafo for um DAG, nem isso: relaxar
+peso negativo; sem eles, Dijkstra. Num DAG, nem isso: relaxar
 cada aresta uma vez, na ordem topológica (0151), já dá os caminhos mínimos em
 O(V + E), mesmo com pesos negativos.
 
-Vamos ver na prática. Os números nas setas são o custo líquido; em cima de
-cada lugar, a `dist` final; verde, a rota até Casa. Embaixo, o vetor `dist`
+No desenho, os números nas setas são o custo líquido; em cima de cada
+lugar, a `dist` final; verde, a rota até Casa. Embaixo, o vetor `dist`
 rodada a rodada:
 
 <p align="center"><img src="23-grafos-avancados/0154-bellman-ford/ideia.svg" alt="Diagrama da ideia: Bellman-Ford: pesos negativos" width="858"></p>
 
-O código guarda as arestas numa lista (é só percorrer todas, então não
-precisa de matriz). A ordem da lista foi escolhida de propósito para mostrar
-as rodadas: começa pelas arestas que chegam em Casa.
+O código guarda as arestas numa lista: ele percorre todas, então não precisa
+de matriz. A lista começa de propósito pelas arestas que chegam em Casa, para
+as rodadas aparecerem.
 
 ```c
 #include <stdbool.h>
@@ -2364,17 +2338,15 @@ int main(void) {
 // Até Casa (R$ 10): Base -> Shopping -> Centro -> Hospital -> Casa
 ```
 
-Repara no fluxograma: não existe "escolher o menor". São dois laços
-cegos, rodadas por fora e arestas por dentro, e duas saídas: uma rodada sem
-mudança ou as V - 1 rodadas completas. Depois vem a rodada extra, só para
-perguntar:
+O fluxograma não tem "escolher o menor". São dois laços cegos, rodadas por
+fora e arestas por dentro, com duas saídas: uma rodada sem mudança ou as
+V - 1 rodadas completas. Depois vem a rodada extra, que só pergunta:
 
 <p align="center"><img src="23-grafos-avancados/0154-bellman-ford/fluxograma.svg" alt="Fluxograma: Bellman-Ford: pesos negativos" width="621"></p>
 
 ### Passo a passo
 
-Cada rodada passa pela lista inteira, na ordem dela. Repare na Casa, que
-aparece com 12 na rodada 3 (o mesmo valor errado do Dijkstra) e cai para 10
+Cada rodada passa pela lista inteira, na ordem dela. A Casa aparece com 12 na rodada 3 (o mesmo valor errado do Dijkstra) e cai para 10
 na rodada 4, quando a melhora do Centro chega até ela:
 
 | Rodada | O que muda | Base | Shopping | Centro | Faculdade | Hospital | Casa |
@@ -2395,15 +2367,15 @@ verdade, numa tabela de câmbio entre moedas, e mostra o ciclo.
 > é obrigatório por outro motivo além do estouro: `INT_MAX + (-4)` **não**
 > estoura, dá `INT_MAX - 4`, que é menor que `INT_MAX`. Sem o teste, um
 > vértice inalcançável "melhora" outro vértice inalcançável, e o programa
-> mostra uma distância gigante e falsa no lugar de "sem caminho". E cuidado:
-> em grafo **não dirigido**, uma aresta negativa já é um ciclo negativo (ir e
+> mostra uma distância gigante e falsa no lugar de "sem caminho". Em grafo
+> **não dirigido**, uma aresta negativa já é um ciclo negativo (ir e
 > voltar por ela).
 
 > [!TIP]
 > **Por dentro do C:** a lista de arestas é um vetor de `Trecho` contíguo, 12
 > bytes por aresta, e cada rodada o percorre em sequência, do primeiro ao
-> último byte. Isso é o melhor caso para o cache do processador, e é um dos
-> motivos de o Bellman-Ford ser usado de verdade em roteadores (o protocolo
+> último byte. É o melhor caso para o cache do processador, um dos motivos
+> de o Bellman-Ford ser usado em roteadores (o protocolo
 > RIP espalha distâncias assim, vizinho a vizinho). O `INFINITO` de um bilhão
 > deixa folga: `1000000000 + 1000000000` ainda cabe num `int` de 32 bits
 > (até 2147483647), então nem a soma de dois "infinitos" estoura.
@@ -2780,17 +2752,17 @@ Todo guia rodoviário antigo tinha, na última página, uma tabela triangular:
 a distância de cada cidade para cada outra. Um aplicativo de corrida
 precisa da mesma tabela, em minutos, para estimar o preço antes de chamar o
 motorista. São cinco bairros com ruas de **mão única**: Centro, Porto, Vila,
-Alto e Feira. A pergunta deixou de ser "de A até os outros" e passou a ser
-"**de todo mundo para todo mundo**".
+Alto e Feira. A pergunta agora é "**de todo mundo para todo mundo**", e não
+"de A até os outros".
 
 Dá para rodar o Dijkstra uma vez a partir de cada bairro. O
 **Floyd-Warshall** faz a tabela inteira de outro jeito, com uma matriz e
-três laços aninhados. A ideia é de programação dinâmica (módulo 21): em vez
-de pensar em caminhos inteiros, pense nos bairros que um caminho pode usar
-**como passagem**.
+três laços aninhados. A ideia vem da programação dinâmica (módulo 21):
+pense nos bairros que um caminho pode usar **como passagem**, e não em
+caminhos inteiros.
 
 Comece com `d[i][j]` = tempo da rua direta de `i` para `j` (INFINITO se não
-existe, 0 na diagonal). Agora libere o Centro como passagem: para cada par
+existe, 0 na diagonal). Libere o Centro como passagem: para cada par
 `i`, `j`, vale a pena ir de `i` ao Centro e do Centro a `j`? Depois libere
 também o Porto, depois a Vila, e assim por diante:
 
@@ -2811,8 +2783,7 @@ esqueça: aí é Dijkstra com heap, de cada origem que interessar. E o
 Floyd-Warshall aceita pesos negativos (sem ciclo negativo); se houver um,
 ele aparece como `d[i][i] < 0` no fim.
 
-Vamos ver na prática. As setas são as ruas com os minutos; em verde, o
-melhor caminho de Centro até Alto, que passa por três bairros. Embaixo, a
+No desenho, as setas são as ruas com os minutos; em verde, o melhor caminho de Centro até Alto, que passa por três bairros. Embaixo, a
 tabela final, com a mesma linha do Centro destacada:
 
 <p align="center"><img src="23-grafos-avancados/0155-floyd-warshall/ideia.svg" alt="Diagrama da ideia: Floyd-Warshall: todos os pares" width="876"></p>
@@ -2860,8 +2831,8 @@ int main(void) {
 // Feira         6     11      8      1      0
 ```
 
-Repara no fluxograma: não há fila, heap nem "escolher o menor". São três
-contadores e uma comparação no miolo, repetida V³ vezes:
+O fluxograma não tem fila, heap nem "escolher o menor": três contadores e
+uma comparação no miolo, repetida V³ vezes:
 
 <p align="center"><img src="23-grafos-avancados/0155-floyd-warshall/fluxograma.svg" alt="Fluxograma: Floyd-Warshall: todos os pares" width="633"></p>
 
@@ -2881,8 +2852,8 @@ então ela começa em ∞:
 
 Na rodada da Vila, o programa não "sabe" o caminho inteiro: ele só soma
 `d[Centro][Vila]` (2) com `d[Vila][Alto]` (7, que a rodada do Porto já tinha
-calculado). Cada rodada aproveita o trabalho das anteriores. É a tabela da
-programação dinâmica, preenchida no lugar.
+calculado). Cada rodada aproveita o trabalho das anteriores, como uma tabela
+de programação dinâmica preenchida no lugar.
 
 O A309 guarda, junto com a distância, o próximo passo de cada rota, e
 imprime o caminho entre quaisquer dois bairros. O A310 troca `+` e `min` por
@@ -2902,7 +2873,7 @@ imprime o caminho entre quaisquer dois bairros. O A310 troca `+` e `min` por
 > sequência, e o cache aproveita cada linha que busca. Trocar a ordem para
 > `j` por fora e `i` por dentro daria o mesmo resultado (a rodada continua
 > sendo o `k`), só que pulando 20 bytes a cada passo. Numa matriz de 2000 ×
-> 2000, essa diferença vale um programa várias vezes mais lento.
+> 2000, o programa fica várias vezes mais lento.
 
 > [!NOTE]
 > **Pergunta para você:** se a prefeitura abrir uma rua Alto → Porto de 2
@@ -3262,8 +3233,8 @@ semestres dá para se formar, e o que cursar em cada um? A segunda é de
 geografia: o campus é enorme, e a aula de Laboratório começa cinco minutos
 depois do almoço no Bandejão. Qual o caminho mais rápido entre os prédios?
 
-São dois grafos diferentes, e cada pergunta tem o seu algoritmo. O módulo
-inteiro serve para você bater o olho na pergunta e saber qual usar:
+São dois grafos diferentes, e cada pergunta tem o seu algoritmo. A tabela
+resume o módulo: bata o olho na pergunta e escolha:
 
 | Pergunta | Algoritmo | Custo |
 | --- | --- | --- |
@@ -3277,7 +3248,7 @@ inteiro serve para você bater o olho na pergunta e saber qual usar:
 
 A grade de disciplinas é um **DAG**: setas "antes de", sem peso. A pergunta
 "quantos semestres" é o Kahn por rodadas do exemplo A302: cada rodada pega
-tudo que já está liberado. E de quebra ele avisa se a coordenação criou um
+tudo que já está liberado. Ele também avisa se a coordenação criou um
 pré-requisito circular.
 
 O mapa do campus é um grafo **não dirigido** e ponderado, com seis prédios.
@@ -3292,13 +3263,13 @@ vértices, os nomes e uma matriz de pesos. A função `liga` recebe se a aresta
 minutos de caminhada. As funções recebem `const Grafo *` para não copiar a
 struct, que passa de 300 bytes.
 
-Vamos ver na prática. Em cima, a grade com o semestre de cada disciplina;
+O desenho mostra em cima a grade com o semestre de cada disciplina e,
 embaixo, o campus com as duas rotas que o programa calcula, em verde:
 
 <p align="center"><img src="23-grafos-avancados/0156-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o assistente do calouro" width="858"></p>
 
-O código completo. Cada algoritmo mora numa função, e o `main` só monta os
-dois grafos e faz as perguntas:
+Cada algoritmo fica numa função, e o `main` só monta os dois grafos e faz
+as perguntas:
 
 ```c
 #include <stdio.h>
@@ -3408,8 +3379,7 @@ int main(void) {
 //   8 min: Lab -> Reitoria -> Ginásio
 ```
 
-Repara no fluxograma: é o `main`, e as duas perguntas são independentes. A
-grade passa pelo Kahn e por um teste de ciclo; o campus passa pelo
+O fluxograma é o `main`, com as duas perguntas independentes. A grade passa pelo Kahn e por um teste de ciclo; o campus passa pelo
 Floyd-Warshall uma vez e depois só consulta a tabela:
 
 <p align="center"><img src="23-grafos-avancados/0156-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o assistente do calouro" width="587"></p>
@@ -3425,9 +3395,8 @@ ordem certa, com a DFS em pós-ordem.
 > um mapa com uma passarela "de graça" entre dois prédios precisaria de outra
 > marca para "sem aresta", como o próprio INFINITO. E não misture as
 > perguntas: Floyd-Warshall num grafo de 100 mil vértices é inviável (10¹⁵
-> passos), e Kruskal não responde caminho mínimo. A árvore mínima liga
-> todos barato, mas a rota entre dois pontos dentro dela pode ser bem pior
-> que a ótima.
+> passos), e Kruskal não responde caminho mínimo (veja os 21 m contra 18 m
+> no 0153).
 
 > [!TIP]
 > **Por dentro do C:** cada `Grafo` tem o `n` (4 bytes), 4 bytes de
@@ -3436,8 +3405,8 @@ ordem certa, com a DFS em pós-ordem.
 > peso[8][8]` (256 bytes): `sizeof(Grafo)` dá 328, no frame de `main`. Os
 > nomes em si são literais de string, que moram numa área só de leitura do
 > programa; a struct guarda só os endereços. Passar `&campus` copia 8 bytes;
-> passar `campus` por valor copiaria os 328 a cada chamada. Já `int d[][MAX]` como parâmetro é, na
-> verdade, um ponteiro para linhas de `MAX` inteiros: o compilador precisa
+> passar `campus` por valor copiaria os 328 a cada chamada. Já `int d[][MAX]`
+> como parâmetro é um ponteiro para linhas de `MAX` inteiros: o compilador precisa
 > saber o `MAX` para calcular onde fica `d[i][j]`.
 
 > [!NOTE]
@@ -4029,8 +3998,8 @@ se o grafo tivesse 15 arestas no total, quantas formariam ciclo?
 <details><summary>Resposta</summary>
 
 Cada aresta aceita junta dois grupos: 10 - 7 = **3 componentes**. Das 15
-arestas, 7 entraram e **8** foram recusadas por fechar ciclo. Kruskal até o
-fim é um contador de componentes de brinde, igual ao union-find do A300.
+arestas, 7 entraram e **8** foram recusadas por fechar ciclo. Rodado até o
+fim, o Kruskal também conta componentes, como o union-find do A300.
 
 </details>
 

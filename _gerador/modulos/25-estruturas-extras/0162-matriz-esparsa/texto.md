@@ -6,15 +6,14 @@ com uma linha por cliente e uma coluna por filme, ocupa 5 × 10¹⁰ posições 
 bytes: **200 GB**. Só que cada cliente avalia, em média, uns 20 filmes. Mais de
 99,9% dessa matriz é zero.
 
-Uma matriz assim, quase toda de zeros, é uma **matriz esparsa**. Ela aparece em
-todo lugar: quem segue quem numa rede social, voos diretos entre aeroportos,
-produtos comprados por cliente, as ligações de um grafo grande. A ideia para
-guardá-la é simples: **zero não se guarda**. Só os valores diferentes de zero
+Uma matriz assim, quase toda de zeros, é uma **matriz esparsa**: quem segue
+quem numa rede social, voos diretos entre aeroportos, as ligações de um grafo
+grande. A regra para guardá-la: **zero não se guarda**. Só os valores diferentes de zero
 ocupam memória, e quem não está guardado vale 0.
 
 O jeito mais simples é uma lista de **triplas** `(linha, coluna, valor)`, num
 vetor de structs em ordem de linha e coluna. Serve bem para gravar em arquivo ou
-para uma matriz que não muda. Mas inserir no meio do vetor obriga a empurrar
+para uma matriz que não muda. Inserir no meio do vetor, porém, obriga a empurrar
 todo mundo, como em qualquer vetor ordenado.
 
 Quando a matriz muda o tempo todo, a escolha é a **lista por linha**: um vetor
@@ -40,14 +39,14 @@ célula não aparecer, a resposta é 0. Gravar é uma **inserção ordenada** (a
 0078) com uma regra a mais: gravar 0 numa célula que existe **remove** a célula.
 Se o zero ficasse guardado, a matriz ia engordando com nada dentro.
 
-Vamos ver na prática. Uma locadora pequena tem 4 clientes (Ana, Bruno, Carla e
+Uma locadora pequena tem 4 clientes (Ana, Bruno, Carla e
 Davi, linhas 0 a 3) e 8 filmes (colunas 0 a 7). Chegam seis notas; depois Bruno
 apaga a dele. Das 32 posições, sobram 5 células. A linha de Carla nem tem lista:
 o ponteiro dela é `NULL`, e a linha inteira vale zero:
 
 {{ideia}}
 
-O TAD fica em `esparsa.h` e `esparsa.c`. O coração dele é `esp_define`, que
+O TAD fica em `esparsa.h` e `esparsa.c`. A função central é `esp_define`, que
 anda na linha com dois ponteiros, `ant` e `p`, como na lista ordenada:
 
 ```c
@@ -125,15 +124,15 @@ int main(void) {
 //   5  0  0  4  0  0  0  1
 ```
 
-Repara no fluxograma: depois de andar pela linha, `esp_define` cai em um de
-quatro casos (trocar, remover, ignorar ou criar). O caminho verde é o de Bruno
+No fluxograma, depois de andar pela linha, `esp_define` cai em um de quatro
+casos (trocar, remover, ignorar ou criar). O caminho verde é o de Bruno
 apagando a nota: a coluna 3 existe e o valor novo é 0, então a célula sai:
 
 {{fluxograma}}
 
 > [!WARNING]
 > Esquecer a regra do zero é o erro clássico. Se `esp_define(m, 1, 3, 0)`
-> apenas trocasse o valor, a célula ficaria na lista guardando um 0: `nao_zeros`
+> trocasse o valor, a célula ficaria na lista guardando um 0: `nao_zeros`
 > mentiria, e uma matriz que recebe muitas atualizações acabaria cheia de células
 > inúteis, gastando mais memória que a matriz cheia. Toda operação que pode gerar
 > zero (gravar, somar, subtrair) precisa remover a célula.
