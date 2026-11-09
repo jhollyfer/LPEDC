@@ -410,7 +410,7 @@ ajusta(dobro(7)) = 4
 2. O main mostra "7: ", chama passos(7) e depois mostra "(%d passos)" com o
    retorno. Guarde o retorno numa variável antes do printf, para os números
    do caminho saírem antes do total.
-3. Resposta esperada: a saída acima. Em dobro, o printf depois do return
+3. Em dobro, o printf depois do return
    nunca roda: o return encerra a função na hora.
 
 ```bash
@@ -689,7 +689,7 @@ main: 300
 1. Dentro da função: pontos = pontos * 2; printf(...); return pontos;
 2. O "pontos" da função e o "pontos" do main são duas variáveis: mudar uma
    não muda a outra.
-3. Resposta esperada: a saída acima. Na primeira chamada, o 300 volta pelo
+3. Na primeira chamada, o 300 volta pelo
    return e é jogado fora; só na segunda ele chega ao main.
 
 ```bash
@@ -807,7 +807,7 @@ arredondar(media(6, 7)) = 7
    resultado vira double. Basta um dos lados da divisão ser double: 2.0.
 2. arredondar: some 0.5 e deixe a conversão para int cortar a parte
    decimal: return x + 0.5; (o return converte para int sozinho).
-3. Resposta esperada: a saída acima. 7.9 entra num parâmetro int e vira 7
+3. 7.9 entra num parâmetro int e vira 7
    antes da conta: 7 / 2 = 3. media(6, 7) = 6.5, e 6.5 + 0.5 = 7.0 vira 7.
 
 ```bash
@@ -1091,7 +1091,7 @@ compra de hoje: 30
    não enxergam nada do main.
 2. No main, depois de "int pontos = 30;", o nome pontos é a local: ela
    esconde a global daí para baixo.
-3. Resposta esperada: a saída acima. somar_na_global recebe uma cópia do 30
+3. somar_na_global recebe uma cópia do 30
    e soma na global; a local do main nem fica sabendo.
 
 ```bash
@@ -1123,7 +1123,7 @@ Sem static: 1 1 1 1
 1. static int visitas = 0; dentro da primeira função; int visitas = 0; na
    segunda.
 2. Sem static, a variável nasce com 0 em toda chamada e morre no return.
-3. Resposta esperada: a saída acima. A static guarda o valor entre as
+3. A static guarda o valor entre as
    chamadas; a local recomeça sempre.
 
 ```bash
@@ -1224,7 +1224,7 @@ soma dos b: 25
    onde parou; c mexe na global, porque é a única x que ela enxerga.
 2. O main não enxerga a static de b: o único jeito de saber o valor dela
    lá fora é pelo return.
-3. Resposta esperada: a saída acima. A x do main nunca muda, e a global
+3. A x do main nunca muda, e a global
    termina valendo 40.
 
 ```bash
@@ -1545,7 +1545,7 @@ IMC: 22.2
 1. Os espaços do recuo podem ir direto no texto do printf.
 2. Em imc, guarde o retorno de quadrado numa local antes de dividir; assim
    a linha "sai imc" pode mostrar o resultado.
-3. Resposta esperada: a saída acima. Na hora em que quadrado roda, a pilha
+3. Na hora em que quadrado roda, a pilha
    tem três quadros: main (esperando), imc (esperando) e quadrado no topo.
 
 ```bash
@@ -1583,7 +1583,7 @@ c (vez 3)
 1. Uma função só continua depois que a função que ela chamou retornou: por
    isso "b termina" vem depois do c.
 2. O contador de c é uma static int vezes = 0; dentro dela (assunto 0030).
-3. Resposta esperada: a saída acima. O ponto mais fundo é main -> a -> b
+3. O ponto mais fundo é main -> a -> b
    -> c: quatro quadros na pilha ao mesmo tempo.
 
 ```bash
@@ -1615,7 +1615,7 @@ sai finalizar_compra
 1. O main chama finalizar_compra(0).
 2. Cada função: recuo, "entra", chama a próxima com nivel + 1, recuo, "sai".
    consultar_banco só imprime a linha dela.
-3. Resposta esperada: a saída acima. O recuo é a altura da pilha naquela hora.
+3. O recuo é a altura da pilha naquela hora.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E183.c
@@ -1644,7 +1644,7 @@ main: n = 5, r = 16
    logo antes do return.
 2. Em processa, guarde r + n numa local antes do return para poder
    mostrar o valor.
-3. Resposta esperada: a saída acima. O n de dobro_mais_um vira 11, mas é o
+3. O n de dobro_mais_um vira 11, mas é o
    n do quadro dela: o de processa continua 5, e o do main também.
 
 ```bash
@@ -1695,7 +1695,7 @@ Turma 3: média 0.0
 1. Com a e b int, use (double)a / b para não perder as casas decimais.
 2. dividir só faz a conta que pediram: quem conhece o sentido de
    "quantidade" é media, então a conferência do zero fica lá.
-3. Resposta esperada: a saída acima. Na segunda chamada, media devolve 0
+3. Na segunda chamada, media devolve 0
    antes de chamar dividir, e por isso só aparece uma linha de pilha.
 
 ```bash
@@ -1993,7 +1993,7 @@ volta 3
 1. recuo: um for de 0 até nivel - 1 com printf("  ").
 2. eco: if (n == 0) { recuo; "fundo"; return; } depois recuo, "ida",
    eco(n - 1, nivel + 1), recuo, "volta".
-3. Resposta esperada: a saída acima. O printf da volta só roda depois que a
+3. O printf da volta só roda depois que a
    chamada de dentro terminou, e cada quadro lembra o seu n e o seu nivel.
 
 ```bash
@@ -2408,7 +2408,7 @@ maior altura: 6
    maior_altura = altura; e if (n == 2) repetidas++.
 2. Para tirar 1 da altura antes de devolver, guarde o resultado numa
    local: int r = fib(n - 1) + fib(n - 2); altura--; return r;
-3. Resposta esperada: a saída acima. O caminho mais fundo é fib(6),
+3. O caminho mais fundo é fib(6),
    fib(5), fib(4), fib(3), fib(2), fib(1): 6 quadros. A altura cresce
    devagar (n), mas as chamadas crescem muito rápido.
 
@@ -2446,7 +2446,7 @@ rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 1. Caso base das duas: e == 0 devolve 1 (sem multiplicar).
 2. Na rápida, com e par, calcule metade = pot_rapida(x, e / 2) UMA vez e
    devolva metade * metade. Chamar pot_rapida duas vezes joga fora o ganho.
-3. Resposta esperada: a saída acima. A lenta faz e multiplicações; a rápida,
+3. A lenta faz e multiplicações; a rápida,
    no máximo umas 2 vezes log2(e). É o mesmo truque de "cortar ao meio" da
    busca binária.
 
@@ -2782,7 +2782,7 @@ Conversões do módulo: 1
    junto, sozinho.
 2. O contador é static dentro do conversao.c: o seu arquivo não enxerga
    esse nome ('contador' undeclared). Só as funções do módulo contam.
-3. Resposta esperada: a saída acima. O módulo contou 1: só a chamada de
+3. O módulo contou 1: só a chamada de
    km_para_milhas passa pelo contador; a sua função é de fora.
 
 ```bash
@@ -2852,7 +2852,7 @@ Visitante: 4 pontos, 4 gols
 2. O bloco do placar.h tem o include guard e os quatro protótipos públicos;
    o protótipo de anotar NÃO vai lá. Como o main vem antes do placar.c, os
    protótipos do bloco de cima bastam para ele.
-3. Resposta esperada: a saída acima. Casa: vitória (3) + empate (1);
+3. Casa: vitória (3) + empate (1);
    visitante: empate (1) + vitória (3).
 
 ```bash
@@ -3162,7 +3162,7 @@ ENTRE(25, 10, 20) = 0
 1. Use o ternário: ((a) > (b) ? (a) : (b)).
 2. Parênteses em cada parâmetro e em volta de tudo. O último teste quebra se
    faltar o par de fora.
-3. Resposta esperada: a saída acima. ABS(x) fica ((x) < 0 ? -(x) : (x)).
+3. ABS(x) fica ((x) < 0 ? -(x) : (x)).
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0035-preprocessador/E206.c
@@ -3268,7 +3268,7 @@ maior3: m = 19, chamadas = 3
    a macro recebe só o nome a.
 2. Na função, cada argumento é avaliado uma vez, antes da chamada.
    maior3 cabe numa linha: return maior(maior(a, b), c);
-3. Resposta esperada: a saída acima. Na macro aninhada, o MAIOR de dentro
+3. Na macro aninhada, o MAIOR de dentro
    é colado duas vezes no de fora: 3 + 1 + 3 = 7 chamadas de pontos.
 
 ```bash
@@ -3791,7 +3791,7 @@ DOBRO(total + 1) = 12
    em que o C avalia os dois lados de um + não é garantida.
 2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0). O parâmetro total de
    altera esconde a global: o 99 vai para a cópia.
-3. Resposta esperada: a saída acima. DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
+3. DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E214.c
@@ -3826,7 +3826,7 @@ Saída esperada:
 1. char é número: '0' + 7 é '7', e 'A' + (valor - 10) dá as letras.
 2. em_base: se n < base, imprima digito(n); senão em_base(n / base, base) e
    depois digito(n % base). Imprimir com %c.
-3. Resposta esperada: a saída acima. Confira o 7EA: 7 * 256 + 14 * 16 + 10
+3. Confira o 7EA: 7 * 256 + 14 * 16 + 10
    = 2026.
 
 ```bash
@@ -3864,7 +3864,7 @@ Saída esperada:
    são as bordas, e cada folha devolve 1: o resultado é o número de folhas.
    Uma árvore em que todo nó interno tem dois filhos tem (folhas - 1) nós
    internos, então chamadas = 2 * caminhos - 1.
-3. Resposta esperada: a saída acima. A esquina (1, 1) é recalculada por
+3. A esquina (1, 1) é recalculada por
    cada caminho que passa por ela, como fib(2) dentro do fib(6). Guardar as
    respostas numa tabela (memoização) resolve, e isso pede vetores, o
    assunto do próximo módulo.
@@ -4773,7 +4773,6 @@ Saída esperada:
 2. menor_parcela: para p de 2 em diante, devolva o primeiro p com eh_primo(p)
    && eh_primo(n - p).
 3. formas: conte os p de 2 até n / 2 que funcionam.
-4. Resposta esperada: as sete linhas acima.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/lista/P0424.c
@@ -4926,7 +4925,6 @@ Saída esperada:
 3. ate_999(n): se n == 100, "cem"; senão a centena (cento, duzentos...) e,
    se sobrar algo, " e " e ate_99 do resto.
 4. extenso(n): milhar = n / 1000 e resto = n % 1000; milhar 1 é só "mil".
-5. Resposta esperada: as dez linhas acima.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/lista/P0428.c
@@ -4994,7 +4992,6 @@ Saída esperada:
 3. O " x " entre os fatores aparece antes de cada fator que não é o
    primeiro: passe essa informação num parâmetro a mais, ou mostre o " x "
    antes da chamada recursiva quando ainda sobrar algo.
-4. Resposta esperada: as quatro linhas acima.
 
 ```bash
 ~/LPEDC/rodar 04-funcoes/lista/P0430.c

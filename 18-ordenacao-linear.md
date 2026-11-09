@@ -439,7 +439,6 @@ n = 1000000: 797161 265720 88573 29524 9841 3280 1093 364 121 40 13 4 1
    h < n / 3.
 2. Depois desça com h /= 3 até h chegar a 0, mostrando cada h.
 3. Um milhão de elementos pede só 13 rodadas.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0119-shell-sort/E709.c
@@ -466,7 +465,6 @@ h = 1: 18 19 20 22 24 26 27 29 31 33 35
 1. É o laço de dentro do shell_sort do texto, sem o laço dos saltos.
 2. O i começa em h, e o j anda de h em h para trás: j >= h e v[j - h].
 3. Com h = 5, as fileiras são 31 18 26, 19 24, 27 29, 22 20 e 35 33.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0119-shell-sort/E710.c
@@ -501,7 +499,6 @@ Amanda, Bianca, Caio, Diego, Elisa, Helena, Larissa, Murilo, Paulo, Rafael, Sofi
 2. Com n = 12, os saltos são 4 e 1.
 3. Para contar cada strcmp, escreva o while só com j >= h e faça o teste
    do strcmp dentro dele, com um break.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0119-shell-sort/E711.c
@@ -534,7 +531,6 @@ trabalho da anterior.
    todo i de h até n - 1.
 2. Achou um par fora de ordem? Pode devolver false na hora.
 3. 1-ordenado é o mesmo que ordenado.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0119-shell-sort/E712.c
@@ -605,7 +601,6 @@ os movimentos são exatamente as inversões que sobraram.
 2. Um pulo de h casas pode desfazer várias inversões de uma vez: todos os
    elementos que ficavam entre as duas posições também entram na conta.
 3. Formatos: "h = %3d: %5ld inversões, %4ld movimentos".
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0119-shell-sort/E714.c
@@ -912,7 +907,6 @@ mais comum: 7 (5 alunos)
 2. Para reescrever, use um índice pos que só anda para a frente.
 3. A nota mais comum é o x com o maior c[x]: dá para achar no mesmo laço
    que reescreve o vetor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0120-counting-sort/E715.c
@@ -948,7 +942,6 @@ tamanho 44: posição 26
    começo é 0.
 3. Bloco vazio (começo igual a c[x]) não aparece; bloco de um par só usa
    "posição", no singular.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0120-counting-sort/E716.c
@@ -984,7 +977,6 @@ Saída esperada:
 2. Depois é o counting_sort do texto com v[i].estrelas trocado por
    chave(&v[i]). O vetor de saída é outro vetor de Paciente.
 3. Formato de cada linha: "%2d. %-5s (%s)\n".
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0120-counting-sort/E717.c
@@ -1014,7 +1006,6 @@ carro -> acorr | corra -> acorr: anagramas
    vira um byte negativo, e c[-61] escreve antes do vetor.
 3. Depois, reescreva a string: cada x de 0 a 255, c[x] vezes. O '\0' do
    fim fica onde estava, porque o tamanho não muda.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0120-counting-sort/E718.c
@@ -1103,7 +1094,6 @@ estável cuja chave é a frequência.
    nenhum esforço extra.
 4. O vetor ordenado guarda letras (0 a 25), não frequências: ranking[i]
    é a letra que ficou na posição i.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0120-counting-sort/E720.c
@@ -1442,7 +1432,6 @@ Saída esperada:
 1. quantos_digitos: comece com 1 e divida por 10 enquanto x >= 10.
    Cuidado com o 0, que tem 1 dígito.
 2. digito: divida x por 10, pos vezes, e devolva x % 10.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0121-radix-sort/E721.c
@@ -1474,7 +1463,6 @@ exp = 10000: 01310 13010 13083 40140 69005 69050 88015
    verdade", mas na quinta passada o dígito dele é 0, e ele vai para a
    frente.
 3. Formato das linhas: "exp = %5d:" seguido de " %05d" para cada número.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0121-radix-sort/E722.c
@@ -1511,7 +1499,6 @@ exp = 100: 000 001 008 027 064 125 216 343 512 729
 2. Cada fila recebe no máximo os 10 números, então MAX = 16 sobra.
 3. A fila é o que garante a estabilidade: quem entrou antes no escaninho
    sai antes. Com uma PILHA no lugar, o resultado sairia errado.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0121-radix-sort/E723.c
@@ -1541,7 +1528,6 @@ ano:    28/02/2024 05/11/2024 10/11/2024 15/01/2025 28/01/2025 05/03/2025 15/03/
    serve para os três campos.
 2. Com 32 contadores, cabem os dias (1 a 31), os meses e os anos.
 3. Formato de cada data: " %02d/%02d/%d".
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0121-radix-sort/E724.c
@@ -1615,7 +1601,6 @@ com a chave: -2147483648 -150000 -98000 -7 0 7 3200 98000 2147483647
    (FFFFFFFF) vira 7FFFFFFF, 0 vira 80000000 e INT_MAX vira FFFFFFFF: a
    ordem dos int passa a ser a ordem dos uint32_t.
 3. Só a chave muda: o vetor continua guardando os int32_t originais.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0121-radix-sort/E726.c
@@ -1987,7 +1972,6 @@ R$  9.99 -> balde 0
    é o balde: (int) (x / max * nb).
 2. Só o próprio max dá nb, que não existe. Trate esse caso com um if.
 3. Formato: "R$ %5.2f -> balde %d\n".
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0122-bucket-sort/E727.c
@@ -2019,7 +2003,6 @@ ordenados: 201 255 287 295 298 318 365 409 433 470 512
 2. Lista vazia, ou x menor que o primeiro: o novo nó vira o começo.
 3. Senão, ande com p enquanto p->prox existir e p->prox->valor <= x, e
    encaixe o nó depois de p.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0122-bucket-sort/E728.c
@@ -2051,7 +2034,6 @@ agenda: Alberto Amanda Ana Beatriz Bruno Caio Carla Marcos Mariana Marta Mauro
    strcmp(nome, lista->nome) < 0 (e o mesmo no laço).
 3. Na hora de juntar, copie p->nome para o vetor e dê free(p) antes de
    passar para o próximo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0122-bucket-sort/E729.c
@@ -2086,7 +2068,6 @@ faixa: 7.0 a 7.0, 3 baldes de 0.00
    Teste esse caso antes e mande todos para o balde 0.
 4. Reaproveite insere_ordenado e junta. Formato da faixa:
    "faixa: %.1f a %.1f, %d baldes de %.2f\n".
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0122-bucket-sort/E730.c
@@ -2163,7 +2144,6 @@ conferindo com qsort: 160 min
 3. O balde 0 sempre tem o menor horário: comece com anterior = maior do
    balde 0 e pule os baldes vazios.
 4. Para mostrar a hora: sprintf(s, "%02d:%02d", m / 60, m % 60).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0122-bucket-sort/E732.c
@@ -2524,7 +2504,6 @@ primeira do vetor continua: 720
 2. As posições contam de 0: a menor é k = 0, a segunda menor é k = 1, a
    maior é k = n - 1 e a segunda maior, k = n - 2.
 3. Com n = 11, a mediana está em k = n / 2 = 5.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0123-quickselect/E733.c
@@ -2553,7 +2532,6 @@ Saída esperada:
 1. O "k-ésimo" das pessoas é a posição k - 1 do quickselect.
 2. Confira a faixa ANTES: com k = 8 e n = 7, o quickselect devolveria um
    valor qualquer, ou leria fora do vetor.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0123-quickselect/E734.c
@@ -2582,7 +2560,6 @@ conferindo: 38 e 41 no meio
    v[k]: o outro do meio é o MENOR desse lado, e um laço simples acha.
 3. Divida por 2.0, não por 2: (38 + 41) / 2 em int dá 39.
 4. A compara do qsort já está no arquivo: qsort(v, 10, sizeof(int), compara).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0123-quickselect/E735.c
@@ -2612,7 +2589,6 @@ conferindo: 138, 630 e 826
    Para n = 50: p50 fica na posição 24, p90 na 44 e p99 na 49.
 2. Não precisa copiar o vetor entre um percentil e outro: o quickselect
    só troca os valores de lugar, não muda quais valores existem.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0123-quickselect/E736.c
@@ -2701,7 +2677,6 @@ simples ganha.
    sempre absoluto (posição no vetor inteiro).
 4. Por que garante O(n)? A mediana das medianas é maior que uns 30% dos
    elementos e menor que outros 30%: cada volta descarta pelo menos 30%.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0123-quickselect/E738.c
@@ -3106,7 +3081,6 @@ maior: #0000005 14:28:08 R$    3960,62
    contadores: confira.
 3. pix_mostra já pula a linha; para o "menor: " ficar na mesma linha,
    use printf sem \n antes.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0124-juntando-tudo/E739.c
@@ -3135,7 +3109,6 @@ R$ 1000 ou mais:    112358 (11.2%)
 2. Um int c[4] = {0}; e c[faixa(v[i].centavos)]++ para cada Pix.
 3. O vetor de 1 milhão de Pix (12 MB) vai no heap, com malloc e free.
 4. Formato: "%s %6d (%4.1f%%)\n", com os rótulos já alinhados com espaços.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0124-juntando-tudo/E740.c
@@ -3167,7 +3140,6 @@ horário, depois valor: (valor, horário)? sim
    quatro ordenações.
 3. A última passada é a que manda (é a chave principal); as anteriores só
    desempatam, e só porque as duas ordenações são estáveis.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0124-juntando-tudo/E741.c
@@ -3198,7 +3170,6 @@ conferindo com o radix: iguais
 3. Dá para chamar a seleção duas vezes no mesmo vetor de int: a segunda
    chamada só reaproveita a bagunça da primeira.
 4. Formato do dinheiro: "R$ %d,%02d" com centavos / 100 e centavos % 100.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0124-juntando-tudo/E742.c
@@ -3267,7 +3238,6 @@ valores até R$ 2,55: 1 passada de 4, igual ao pix_por_valor? sim
 3. Use dois ponteiros, origem e destino, e troque os dois depois de cada
    passada feita. Com um número ímpar de passadas (3 ou 1), o resultado
    termina no aux: copie de volta com memcpy.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 18-ordenacao-linear/0124-juntando-tudo/E744.c

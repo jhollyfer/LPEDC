@@ -1981,7 +1981,7 @@ Natal - PB
 1. Vetor: o sizeof inclui o '\0'. Ponteiro: o sizeof é o de um endereço.
 2. Vetor não recebe outro endereço com =; const char * não deixa
    escrever no texto apontado. Os dois erros aparecem na compilação.
-3. Resposta esperada: a saída acima. "Natal" cabe nos 6 bytes de cidade
+3. "Natal" cabe nos 6 bytes de cidade
    (5 letras + '\0'); "Recife" não caberia.
 
 ```bash
@@ -3322,7 +3322,6 @@ Saída esperada:
 1. Converta o início para const unsigned char * e some i * tam: isso anda
    byte a byte.
 2. mostra_int faz printf("%d ", *(const int *)p);
-3. Resposta esperada: as duas linhas acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0051-void-generico/E304.c
@@ -3415,7 +3414,7 @@ negativo depois: -256
    memória é o MENOS significativo.
 2. unsigned char *b = (unsigned char *)&cor; b[0] = 0xFF; muda só o byte
    de baixo.
-3. Resposta esperada: a saída acima. negativo vira 0xFFFFFF00, que em
+3. negativo vira 0xFFFFFF00, que em
    complemento de dois é -256.
 
 ```bash
@@ -3707,7 +3706,7 @@ R$ 19.99 = 19 reais e 99 centavos
    (math.h). Para ver por que não usar um cast direto, mostre também
    (int)(19.99 * 100).
 2. Depois, *reais = total / 100 e *centavos = total % 100.
-3. Resposta esperada: as três linhas acima. Com cast direto, 19.99 * 100
+3. Com cast direto, 19.99 * 100
    vira 1998.9999... e o cast corta para 98 centavos.
 
 ```bash
@@ -3889,7 +3888,6 @@ depois de zerar: 12 0 33 47 5
 2. Para as frutas, cada elemento é um const char *: o resultado de
    maximo é, na verdade, um const char ** (converta para usar).
 3. Para o índice: (const int *)m - pontos.
-4. Resposta esperada: as quatro linhas acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E312.c
@@ -4184,7 +4182,6 @@ R$ 50.00 / 0: ninguém para pagar
 2. No main, declare double cada, gorjeta; e passe &cada e &gorjeta.
 3. Teste o retorno antes de usar os valores: se a função devolveu false,
    eles não foram preenchidos.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0603.c
@@ -4223,7 +4220,6 @@ QXZ9B07: Mercosul
    e p[7] tem que ser o '\0'.
 3. Não dá para passar um literal ("abc1234") para maiusculas: literal é só
    de leitura. Por isso as placas estão num vetor de char.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0604.c
@@ -4301,7 +4297,6 @@ Tabela: 34 34 30 29 25 21 18 12
 2. Para decrescente, devolva negativo quando x deve vir ANTES de y, ou
    seja, quando x > y: return (x < y) - (x > y);
 3. Evite return y - x: com números grandes a subtração estoura o int.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0606.c
@@ -4344,7 +4339,6 @@ Leve mais     R$  376.40
    igual a chamar pelo nome.
 3. Para não repetir o printf, guarde os ponteiros num vetor:
    double (*regras[4])(double) = {nenhuma, black_friday, cupom10, leve_mais};
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0607.c
@@ -4372,7 +4366,6 @@ Sessão mais cheia: 142
    num endereço qualquer. Faça p apontar para uma variável de verdade.
 2. A variável local de uma função mora no frame dela, que some no return.
    Devolva o VALOR (int), não o endereço.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0608.c
@@ -4419,7 +4412,6 @@ Frentista:   Rosinete
 2. Para a string, o próprio p já é o endereço do primeiro char:
    printf("%s", (const char *) p).
 3. Use um switch no tipo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0609.c
@@ -4502,7 +4494,6 @@ Pares: 5 casas; o lado ímpar começa na posição 5
    par: os pares são (esq - v) + 1; senão, são esq - v.
 5. A ordem dentro de cada lado muda; isso é normal (é a mesma partição do
    quicksort, no módulo 13).
-6. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0611.c
@@ -4546,7 +4537,6 @@ Cada elemento tem 20 bytes
 2. Compare com o vetor de ponteiros (const char *v[]): lá o elemento é um
    ponteiro, e a comparação precisa de *(const char **) a.
 3. qsort(bairros, 6, sizeof bairros[0], compara);
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0612.c
@@ -4587,7 +4577,6 @@ Miúdos: -89 45 -12 -75 (4 itens, soma -131)
 2. O vetor saida precisa caber o pior caso: todos passam. int saida[10].
 3. Escreva void relatorio(const char *nome, const int *v, int n,
    bool (*passa)(int)) para o main ficar com três linhas.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0613.c
@@ -4637,7 +4626,6 @@ backup.tar.gz        [gz] posição 11
 2. No fim, p aponta para o '\0': é ele que você devolve quando não há
    extensão. Se ultimo for NULL ou igual a nome, return p.
 3. Senão, return ultimo + 1 (o caractere logo depois do ponto).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0614.c
@@ -4682,7 +4670,6 @@ Feijoada não está no cardápio
    const char *. *gaveta é o ponteiro da gaveta; **gaveta seria a primeira
    letra do prato.
 3. Antes de usar o retorno, teste se é NULL.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0615.c
@@ -4722,7 +4709,6 @@ sem caixa: Ademir ana Beatriz bruna Caio carlos
    **): const char *x = *(const char **) pa;
 3. Escreva duas comparações (uma com strcmp e outra com a sua) e ordene uma
    cópia do vetor para cada.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0616.c
@@ -4750,7 +4736,6 @@ Total: R$ 35
    apontado, use (*p)++ ou *p += 1.
 2. fim = precos + n aponta para a casa DEPOIS da última: ela pode ser
    comparada, mas não lida. O laço precisa de p < fim.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0617.c
@@ -4792,7 +4777,6 @@ notas + 1 fica 16 bytes depois de notas
 2. A distância em bytes: (char *) (notas + 1) - (char *) notas.
 3. O parâmetro int (*linha)[4] é o mesmo que int linha[][4]: o compilador
    precisa saber o tamanho da linha para dar o salto.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0618.c
@@ -4872,7 +4856,6 @@ Pares primeiro: 12 30 58 66  9 21 47 85
    iguais: compare os valores.
 3. O qsort não sabe nada de pares e ímpares: quem decide a ordem é só a
    comparação que você passa.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0620.c
@@ -4918,7 +4901,6 @@ Pos Inscr Nota Idade
    const int *x = a, *y = b; e x[1] é a nota, x[2] a idade.
 3. Compare um critério de cada vez: if (x[1] != y[1]) return y[1] - x[1];
    depois a idade (decrescente), depois a inscrição (crescente).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0621.c
@@ -4968,7 +4950,6 @@ Cidades: Autazes Borba Coari Manaus Tefe
    pb são unsigned char *.
 3. As comparações são as de sempre: para int, *(const int *) a; para a
    matriz de char, o endereço da linha já é a string (strcmp direto).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0622.c
@@ -5014,7 +4995,6 @@ A linha agora: "27/11/2026"
 3. A posição de cada campo é campos[i] - linha.
 4. Depois de separar, printf("%s", linha) mostra só o primeiro campo: o
    '\0' que você pôs no lugar do ';' termina a string ali.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0623.c
@@ -5061,7 +5041,6 @@ CDXLIV = 444
    de subtração: 1000 M, 900 CM, 500 D, 400 CD, 100 C, 90 XC, 50 L,
    40 XL, 10 X, 9 IX, 5 V, 4 IV, 1 I. Enquanto n >= valor, copie o símbolo
    (andando com char *p) e tire o valor de n. Feche com *p = '\0'.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0624.c
@@ -5095,7 +5074,6 @@ Crachá do último: Wellington
    comparação recebe o endereço da gaveta e precisa de *(const char **) a
    para chegar na string.
 3. Conte as letras de "Wellington" e o tamanho do crachá.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0625.c
@@ -5140,7 +5118,6 @@ lucro: sem troca de sinal em [5.0, 10.0]
    e deixe *voltas = -1 (o main avisa).
 4. A raiz exata da primeira é 12 - sqrt(64) = 4: a bisseção chega em
    4.0000 com 17 voltas.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0626.c
@@ -5191,7 +5168,6 @@ a x I == a? sim
 2. Monte a identidade 3x3 num int id[9] com id[i * 3 + j] = (i == j), e
    teste-a com a sua função identidade antes de usar.
 3. Para conferir a x I = a, compare as 6 posições do resultado com as de a.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0627.c
@@ -5281,7 +5257,6 @@ Semente final: 3469224078
 3. j = sorteio(semente, i + 1) sorteia de 0 a i. Pule a troca se j == i.
 4. A semente é passada por ponteiro para que a segunda chamada continue
    a sequência da primeira.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0629.c
@@ -5324,7 +5299,6 @@ CUPU   não está na grade
    matriz é estouro (o AddressSanitizer acusa).
 3. Ande pela palavra com um ponteiro: for (const char *p = palavra; *p;
    p++, k++).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 06-ponteiros/lista/P0630.c

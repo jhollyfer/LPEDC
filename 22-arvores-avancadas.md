@@ -410,7 +410,6 @@ Mais caro em papelaria: estojo (R$ 25)
 1. Se r não tem filho, a resposta é o próprio r.
 2. Senão, comece com melhor = NULL e, para cada filho p, pegue
    c = mais_caro(p); se melhor for NULL ou c->valor > melhor->valor, troque.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E860.c
@@ -439,7 +438,6 @@ janela: não encontrado
 2. Se nenhum filho achou, devolva -1. O que ficou em trilha[0..nivel] na
    volta é exatamente o caminho (as posições de quem falhou são
    sobrescritas pelos próximos irmãos).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E861.c
@@ -468,7 +466,6 @@ Geração 3 (1): Leo
 1. Desça subtraindo: se alvo == 0, r é da geração procurada. Senão, peça
    a cada filho a geração alvo - 1.
 2. As gerações vão de 0 até ag_altura(r).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E862.c
@@ -897,7 +894,6 @@ nós: 10 | vermelhos: 2 | pretos: 8
    contagem das duas subárvores.
 2. Cada vermelho é a "segunda chave" de um nó 2-3. Com 10 chaves e 8 nós
    pretos, a árvore 2-3 equivalente tem 8 nós.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E865.c
@@ -925,7 +921,7 @@ pior caso entre as 100: 7 passos (altura 6)
 
 1. É a busca da BST com um contador: a cor não muda nada na busca.
 2. Some 1 a cada nó visitado; pare quando achar ou quando r ficar NULL.
-3. Resposta esperada: a saída acima. O 64 é a raiz: inserindo em ordem
+3. O 64 é a raiz: inserindo em ordem
    crescente, a raiz cai numa potência de 2 (teste com 10 e com 1000).
 
 ```bash
@@ -961,7 +957,7 @@ TAD (1 a 20): ok, altura preta 4
    r e r->esq são vermelhos, -2.
 2. Peça confere das duas subárvores; se alguma for negativa, repasse. Se
    forem diferentes, -3. Senão, devolva o valor + (r é preto ? 1 : 0).
-3. Resposta esperada: a saída acima. Cada nó é visitado uma vez só: O(n).
+3. Cada nó é visitado uma vez só: O(n).
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E867.c
@@ -994,7 +990,7 @@ Vencedor: 45 com 4 de 12 votos
    novo() já começa qtd em 1.
 2. apura é um percurso em ordem. vencedor compara o nó com o melhor de
    cada lado (cuidado com os NULL).
-3. Resposta esperada: a saída acima. A árvore guarda 5 nós, não 12: o
+3. A árvore guarda 5 nós, não 12: o
    tamanho dela depende dos números diferentes, não do total de votos.
 
 ```bash
@@ -1062,7 +1058,7 @@ Lia: na lista | Rafa: fora
 2. Na inserção, guarde int cmp = strcmp(nome, h->nome) e decida pelo sinal.
    Para copiar o nome para o nó, use snprintf(n->nome, sizeof n->nome,
    "%s", nome).
-3. Resposta esperada: a saída acima. Não esqueça de pintar a raiz de preto
+3. Não esqueça de pintar a raiz de preto
    depois de cada inserção e de liberar tudo no fim.
 
 ```bash
@@ -1387,7 +1383,7 @@ chaves: 20 | nós: 17 | média: 1.18 chaves por nó
 1. Um nó com n chaves tem n + 1 filhos, de filho[0] a filho[n]. Folha não
    tem filho nenhum: confira r->folha antes de descer.
 2. conta_chaves começa com r->n; conta_nos começa com 1.
-3. Resposta esperada: a saída acima. A inserção em ordem deixa
+3. A inserção em ordem deixa
    quase todo nó com uma chave só, de três possíveis.
 
 ```bash
@@ -1417,7 +1413,7 @@ máxima: 36 graus (3 nós lidos)
    r->folha ser verdadeiro e devolva chave[0].
 2. A maior está na folha mais à direita: desça por filho[r->n] e devolva
    chave[r->n - 1].
-3. Resposta esperada: a saída acima. Como todas as folhas estão no mesmo
+3. Como todas as folhas estão no mesmo
    nível, os dois caminhos leem altura + 1 nós.
 
 ```bash
@@ -1447,7 +1443,7 @@ embaralhada: nós 127 | altura 5 | ocupação 52.5%
    filhos de 0 a r->n se não for folha.
 2. Faça a conta em double: 100.0 * chaves / (nos * AB_MAX). Para imprimir
    o símbolo de porcentagem no printf, escreva %%.
-3. Resposta esperada: a saída acima. Na ordem crescente, todo nó que se
+3. Na ordem crescente, todo nó que se
    divide deixa a metade esquerda com 1 chave para sempre: ninguém mais
    insere ali.
 
@@ -1477,7 +1473,7 @@ notas de 970 a 999: (3 nós lidos de 9)
 2. Duas podas: só desça em filho[i] se a < chave[i] (lá só há chaves
    menores que chave[i]); e, se chave[i] > b, pare o laço e não desça mais
    nada à direita (com return).
-3. Resposta esperada: a saída acima. Some 1 em *visitados logo na entrada
+3. Some 1 em *visitados logo na entrada
    da função.
 
 ```bash
@@ -1541,7 +1537,7 @@ busca 31: não achou, 3 blocos lidos
 2. Na divisão, a chave do meio é a de índice T - 1; o nó novo recebe as
    T - 1 chaves dos índices T a MAX - 1 e, se não for folha, os T filhos
    dos índices T a MAX.
-3. Resposta esperada: a saída acima. Com 3 chaves por nó (T = 2), as
+3. Com 3 chaves por nó (T = 2), as
    mesmas 30 chaves precisariam de mais um nível.
 
 ```bash
@@ -1841,7 +1837,6 @@ começam com "": 8
    mais a contagem de cada um dos 26 filhos.
 2. trie_prefixo devolve NULL quando nenhum nome começa com o prefixo, e
    a raiz quando o prefixo é "".
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E877.c
@@ -1870,7 +1865,7 @@ mkdirs  não está
 
 1. Use trie_prefixo: NULL quer dizer que nenhum comando começa assim.
 2. Achou o nó? O campo fim decide entre as outras duas mensagens.
-3. Resposta esperada: a saída acima. Imprima com printf("%-7s %s\n", ...).
+3. Imprima com printf("%-7s %s\n", ...).
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E878.c
@@ -1910,7 +1905,7 @@ roupa  2
    tam - 1 e, no fim, r->qtd++ em vez de r->fim = true.
 2. lista é a coleta do trie.c: se n->qtd > 0, termine buf com '\0' na
    posição nivel e imprima com printf("%-6s %d\n", buf, n->qtd).
-3. Resposta esperada: a saída acima. A ordem alfabética sai de
+3. A ordem alfabética sai de
    graça: os filhos são visitados de 'a' a 'z'.
 
 ```bash
@@ -1941,7 +1936,7 @@ com 11 letras: orangotango rinoceronte
    verdadeiro, buf[nivel] = '\0' fecha a palavra.
 2. Em maior_palavra, troque só quando nivel > strlen(maior): com >=, o
    empate ficaria com a última em ordem alfabética.
-3. Resposta esperada: a saída acima. Em por_tamanho, quando nivel == alvo,
+3. Em por_tamanho, quando nivel == alvo,
    confira o fim e volte (return) sem olhar os filhos.
 
 ```bash
@@ -2014,7 +2009,7 @@ tira sola: tirou | nós: 1 | sobram:
    (se ele não existir, a palavra não está: *tirou = false, devolva false).
 2. Na volta, se a chamada do filho devolveu true, faça free no filho e ponha
    NULL no ponteiro. No fim, devolva !n->fim && (n não tem filho nenhum).
-3. Resposta esperada: a saída acima. Tirar "sol" não libera nada (o nó do
+3. Tirar "sol" não libera nada (o nó do
    l continua no caminho de sola e solteiro); tirar "solteiro" libera 5.
 
 ```bash
@@ -2378,7 +2373,7 @@ Embu -> Embu: dá para ir
 1. uf_cria(7), um uf_une por estrada e uf_grupos no fim.
 2. Para cada pergunta, uf_juntos(u, a, b). A pergunta não é se existe uma
    estrada DIRETA: Araras e Dourado também se ligam pela Catanduva.
-3. Resposta esperada: a saída acima. Os grupos são {Araras, Catanduva,
+3. Os grupos são {Araras, Catanduva,
    Dourado}, {Bauru, Franca, Garça} e {Embu}.
 
 ```bash
@@ -2405,7 +2400,7 @@ grupos: 5 | maior: 5 apartamentos | sozinhos: 2
    Nos outros elementos, tam é um valor antigo, de quando eram raiz.
 2. Percorra x de 0 a u->n - 1 olhando só as raízes. Nenhuma das duas
    funções precisa chamar uf_acha.
-3. Resposta esperada: a saída acima. Os grupos são {0, 3, 7, 9, 11},
+3. Os grupos são {0, 3, 7, 9, 11},
    {1, 2, 6}, {4, 5}, {8} e {10}.
 
 ```bash
@@ -2434,7 +2429,7 @@ cabo 9 (2-5) é redundante
 1. uf_une devolve false quando os dois já estavam no mesmo grupo. É
    exatamente o teste do cabo redundante.
 2. Os cabos são numerados a partir de 1 na saída (i + 1).
-3. Resposta esperada: a saída acima. Com 7 computadores, 6 cabos sem ciclo
+3. Com 7 computadores, 6 cabos sem ciclo
    ligam tudo: é uma árvore. A mesma ideia vai aparecer no algoritmo de
    Kruskal, no módulo 23.
 
@@ -2465,7 +2460,7 @@ Time 4 (1): Gabo
    mesmo representante (uf_acha) que ele.
 2. Para listar o time de x, percorra y de x até n - 1 e mostre quem tem o
    mesmo representante. O tamanho vem de uf_tamanho.
-3. Resposta esperada: a saída acima. O representante do time 3 é o Cadu?
+3. O representante do time 3 é o Cadu?
    Não importa: a ordem de saída é pelos números, não pelas raízes.
 
 ```bash
@@ -2535,7 +2530,7 @@ A água passou no passo 13 (13 de 25 abertas)
    uf_juntos(u, TOPO, FUNDO).
 2. A cada furo, una o quadradinho com cada vizinho que já esteja furado
    (guarde isso num bool aberta[25]). Cuidado com as bordas.
-3. Resposta esperada: a saída acima. O caminho da água é (0,2), (1,2),
+3. O caminho da água é (0,2), (1,2),
    (1,1), (2,1), (3,1), (3,0), (4,0). Sem o TOPO e o FUNDO, você teria que
    testar os 25 pares de quadradinhos de cima e de baixo a cada furo.
 
@@ -3000,7 +2995,7 @@ desconhecidas: muitos alunos
 1. Carregue o dicionário com cor_cria e cor_carrega_basico.
 2. O laço é while (cor_proxima(&texto, palavra)) { ... }: a função avança
    o ponteiro texto a cada chamada (por isso o &) e devolve false no fim.
-3. Resposta esperada: a saída acima. O dicionário tem "muito" e "aluno",
+3. O dicionário tem "muito" e "aluno",
    mas não os plurais: um corretor de verdade trata as flexões à parte.
 
 ```bash
@@ -3029,7 +3024,7 @@ palavras: hoje a feira da rua tem pao e cafe
 2. O recado é um vetor (char recado[]), e não um ponteiro para literal:
    por isso dá para alterá-lo. A pontuação não precisa sair: cor_proxima já
    pula o que não é letra.
-3. Resposta esperada: a saída acima. "FEIRA" inteira some na primeira
+3. "FEIRA" inteira some na primeira
    conferência: nenhuma letra dela está entre 'a' e 'z'.
 
 ```bash
@@ -3061,7 +3056,7 @@ xis: prefixo "" | nenhuma
 2. Para listar, escreva uma função recursiva como a coleta do trie.c
    (0147), começando no nó onde a descida parou, com nivel = tamanho do
    prefixo. Use um contador para parar em max.
-3. Resposta esperada: a saída acima. Se a descida não andou nenhuma letra,
+3. Se a descida não andou nenhuma letra,
    não sugira nada: o prefixo vazio casaria com o dicionário inteiro.
 
 ```bash
@@ -3092,7 +3087,7 @@ pasou: 1
    com strcmp; se der 0, é repetida: vezes++.
 2. O dicionário é o do TAD (cor_carrega_basico) e as palavras saem do
    texto com cor_proxima. Só vão para a BST as que cor_contem rejeita.
-3. Resposta esperada: a saída acima. Libere a BST e o dicionário no fim.
+3. Libere a BST e o dicionário no fim.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/E892.c
@@ -3170,7 +3165,7 @@ mercadorias: nenhuma
 2. Na função recursiva, receba a linha do pai (const int ant[]), monte a
    sua num vetor local e passe para os filhos. Se o nó tem fim e lin[m] <= 2,
    mostre a palavra do buffer. Se o menor valor de lin passar de 2, volte.
-3. Resposta esperada: a saída acima. Repare em "jnaela": trocar duas letras
+3. Repare em "jnaela": trocar duas letras
    vizinhas de lugar custa 2 na distância de Levenshtein, mas é UMA edição no
    cor_sugere (que testa a troca de vizinhas à parte).
 

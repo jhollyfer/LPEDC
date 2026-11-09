@@ -352,7 +352,7 @@ Chamadas: 15
 1. O meio de ini e fim é ini + (fim - ini) / 2. A metade esquerda vai de
    ini a meio; a direita, de meio + 1 a fim.
 2. Incremente o contador logo na primeira linha da função, antes do if.
-3. Resposta esperada: a saída acima. Com n elementos são sempre 2n - 1
+3. Com n elementos são sempre 2n - 1
    chamadas: n folhas (os dias) e n - 1 junções. O laço simples faria o
    mesmo trabalho; aqui o objetivo é treinar o formato da técnica.
 
@@ -381,7 +381,7 @@ Multiplicações: 13
    variável e use duas vezes.
 2. Os expoentes visitados são 360, 180, 90, 45, 22, 11, 5, 2, 1 e 0.
    Quatro deles são ímpares.
-3. Resposta esperada: a saída acima. Um laço simples faria 360
+3. Um laço simples faria 360
    multiplicações (e acumularia mais erro de arredondamento do double).
 
 ```bash
@@ -457,7 +457,7 @@ Comparações: 3
 1. Caso base: ini == fim, sobrou um ponto só, e ele é o pico.
 2. Se v[meio] < v[meio + 1], chame pico(v, meio + 1, fim); senão,
    pico(v, ini, meio). Repare que o meio continua no segundo caso.
-3. Resposta esperada: a saída acima. Os pedaços são [0, 10], [0, 5],
+3. Os pedaços são [0, 10], [0, 5],
    [3, 5], [5, 5]. Com 1 milhão de pontos seriam umas 20 comparações:
    O(log n), contra O(n) de procurar o maior com um laço.
 
@@ -513,7 +513,7 @@ F(90) = 2880067194370816120 (11 produtos de matriz)
    r.d = x.c*y.b + x.d*y.d.
 2. Em potencia: metade = potencia(m, n / 2); r = multiplica(metade,
    metade); se n for ímpar, r = multiplica(r, m).
-3. Resposta esperada: a saída acima. A recursão do assunto 0033 faria
+3. A recursão do assunto 0033 faria
    bilhões de chamadas para F(90); o laço simples, 90 somas; esta versão,
    11 produtos de matriz. F(92) é o último que cabe num long long.
 
@@ -557,7 +557,7 @@ Multiplicações de 1 dígito: 11 (a conta da escola faz 16)
 2. ac = karatsuba(a, c); bd = karatsuba(b, d);
    meio = karatsuba(a + b, c + d) - ac - bd; resultado
    ac * p * p + meio * p + bd.
-3. Resposta esperada: a saída acima. São 11 e não 9 porque 87 + 65 = 152
+3. São 11 e não 9 porque 87 + 65 = 152
    tem 3 dígitos e gera um nível a mais. Para números de n dígitos o custo
    é O(n^1,59), contra O(n²) da escola: é assim que se multiplicam números
    com milhares de dígitos.
@@ -893,7 +893,7 @@ Inversões: 9 de 21 pares
 
 1. O laço de dentro começa em j = i + 1: assim cada par aparece uma vez.
 2. O total de pares é n(n - 1)/2.
-3. Resposta esperada: a saída acima. Guarde este programa: ele serve para
+3. Guarde este programa: ele serve para
    conferir a versão rápida (merge sort) dos próximos exercícios.
 
 ```bash
@@ -959,7 +959,7 @@ Pares em desacordo: 4 de 15
    busca sequencial (assunto 0089) com strcmp.
 2. Para seu ranking, v fica 2 0 1 4 5 3. Agora é o E787 com nomes: dois
    laços, e quando v[i] > v[j] mostre meu[i] e meu[j].
-3. Resposta esperada: a saída acima. Com 6 itens, 4 desacordos em 15
+3. Com 6 itens, 4 desacordos em 15
    pares: os gostos batem em 11/15, uns 73%.
 
 ```bash
@@ -1003,7 +1003,7 @@ Inversões pelo merge sort: 36
    (string.h). Sem a cópia, o segundo algoritmo receberia o vetor já
    ordenado e contaria 0.
 2. No insertion sort, conte dentro do while que faz v[j + 1] = v[j].
-3. Resposta esperada: a saída acima. Daí sai uma conclusão de custo: o
+3. Daí sai uma conclusão de custo: o
    insertion sort gasta O(n + inversões). Vetor quase ordenado, poucas
    inversões, insertion sort rápido.
 
@@ -1343,7 +1343,7 @@ Saque de R$ 1270:
 1. Guarde as notas num vetor em ordem decrescente e percorra com um for.
 2. Para cada nota, um while tira a nota enquanto ela couber no valor,
    contando quantas saíram.
-3. Resposta esperada: a saída acima. (Tente um saque de R$ 8 depois: o
+3. (Tente um saque de R$ 8 depois: o
    guloso dá uma nota de 5, uma de 2 e trava com R$ 1 sobrando, embora
    quatro notas de 2 resolvam. Sem a nota de 1, o guloso nem sempre acha
    uma resposta que existe.)
@@ -1376,7 +1376,7 @@ Total: 5 moedas
 1. Duas linhas fazem o trabalho: quantas = valor / moedas[i]; e
    valor %= moedas[i]; (nesta ordem!).
 2. Mostre a linha só se quantas > 0. Some quantas em total sempre.
-3. Resposta esperada: a saída acima. A versão com / e % faz uma volta por
+3. A versão com / e % faz uma volta por
    tipo de moeda, O(k), qualquer que seja o valor do troco.
 
 ```bash
@@ -1416,7 +1416,7 @@ Total: 5 barcos
    pesado = n - 1. O laço vai enquanto leve <= pesado.
 2. Se leve < pesado e a soma cabe, o leve vai junto (leve++). Em todo
    caso, pesado-- e barcos++.
-3. Resposta esperada: a saída acima. Por que dá certo: se o mais pesado
+3. Por que dá certo: se o mais pesado
    não cabe nem com o mais leve, não cabe com ninguém e precisa ir
    sozinho; se cabe, pôr o mais leve com ele nunca piora o resto.
 
@@ -1499,7 +1499,7 @@ Saída esperada:
    for (int c = 0; c * m[i] <= valor; c++), compare com
    c + otimo(m, k, i + 1, valor - c * m[i]).
 2. Em testa, pare no primeiro valor em que guloso != otimo.
-3. Resposta esperada: a saída acima. O teste só vai até 100, então
+3. O teste só vai até 100, então
    "acertou de 1 a 100" não é prova de que o sistema é canônico. (Para
    sistemas de moedas existe um resultado conhecido: se o guloso falha,
    falha num valor menor que a soma das duas maiores moedas.)
@@ -1540,7 +1540,7 @@ Carla -> Fábio: R$ 15.00
 1. saldo[i] = pagou[i] - parte. Positivo: tem a receber; negativo: deve.
 2. A cada volta, ache o índice do menor saldo (quem mais deve) e o do
    maior (quem mais tem a receber). Se o menor saldo é 0, acabou.
-3. Resposta esperada: a saída acima. Cada Pix zera pelo menos uma pessoa,
+3. Cada Pix zera pelo menos uma pessoa,
    então são no máximo n - 1 Pix. (Achar o MÍNIMO absoluto de Pix é um
    problema bem mais difícil; o guloso dá uma boa resposta, rápida.)
 
@@ -1865,7 +1865,7 @@ Total: 5
 
 1. Uma variável livre_em = 0 e um for de 0 a n - 1.
 2. Se ini[i] >= livre_em: mostre o pedido, conte e faça livre_em = fim[i].
-3. Resposta esperada: a saída acima. Como os pedidos já vieram ordenados,
+3. Como os pedidos já vieram ordenados,
    o custo é O(n).
 
 ```bash
@@ -1895,7 +1895,7 @@ Gabi (150 a 180)
 1. Converta os ponteiros: const Horario *x = a; const Horario *y = b;
 2. Devolva negativo se x termina antes, positivo se termina depois e 0 se
    empatam: (x->fim > y->fim) - (x->fim < y->fim).
-3. Resposta esperada: a saída acima. A Duda (45 a 100) encosta
+3. A Duda (45 a 100) encosta
    na Lia, e a Nina (100 a 120) encosta na Duda.
 
 ```bash
@@ -1934,7 +1934,7 @@ Termina primeiro: 4
    quando a < d e c < b. Guarde os aceitos num vetor.
 2. A duração é fim - ini. As três comparações têm a mesma cara:
    (x > y) - (x < y), mudando só o que se compara.
-3. Resposta esperada: a saída acima. "Começa primeiro" pega [0, 10) e
+3. "Começa primeiro" pega [0, 10) e
    depois só [10, 12); "mais curto" pega [3, 5), [6, 8) e [10, 12), que
    bloqueiam os outros; "termina primeiro" acha [1, 4), [4, 7), [7, 10) e
    [10, 12).
@@ -1976,7 +1976,7 @@ Total: 3 visitas
 1. Guarde a hora da última visita (começa em -1). A feira i ainda não foi
    vista se abre depois dela: f[i].abre > ultima.
 2. Para listar quem está aberta na hora h: f[j].abre <= h && h <= f[j].fecha.
-3. Resposta esperada: a saída acima. A Liberdade aparece duas vezes
+3. A Liberdade aparece duas vezes
    porque está aberta nas duas horas; ela já estava coberta na visita das
    14h. É o problema do texto visto ao contrário: cada visita "fura" todas
    as feiras que a cruzam.
@@ -2069,7 +2069,7 @@ Jogos aceitos: 7 de 10
 2. Por que a que ficou livre mais tarde? Porque a outra, livre há mais
    tempo, pode receber um jogo que começa cedo e que esta não receberia.
    Usar a quadra "mais folgada" desperdiça folga.
-3. Resposta esperada: a saída acima. (Com printf("%2dh-%2dh ...") os
+3. (Com printf("%2dh-%2dh ...") os
    horários ficam alinhados.)
 
 ```bash
@@ -2383,7 +2383,7 @@ Total: R$ 1190.00
 1. leva = o menor entre peso[i] e livre. O valor levado é proporcional:
    valor[i] * leva / peso[i].
 2. O laço para quando livre chega a 0 (ou acabam os lotes).
-3. Resposta esperada: a saída acima. O vidro rende R$ 0,20/kg, então os
+3. O vidro rende R$ 0,20/kg, então os
    200 kg dele valem R$ 40.
 
 ```bash
@@ -2419,7 +2419,7 @@ Total: R$ 410.00
    para y.
 2. Para a ordem DECRESCENTE, devolva negativo quando rx > ry:
    (rx < ry) - (rx > ry).
-3. Resposta esperada: a saída acima. As razões são pimenta 40, canela 30,
+3. As razões são pimenta 40, canela 30,
    cominho 25 e orégano 20 (R$/kg).
 
 ```bash
@@ -2502,7 +2502,7 @@ Total: R$ 151140.00
 2. compra = o menor entre a oferta e o que falta. O custo parcial é
    (long long)compra * centavos: 12000 * 510 já passa de 6 milhões, e com
    pedidos maiores um int estouraria.
-3. Resposta esperada: a saída acima. Para mostrar R$ 4.89 a partir de 489:
+3. Para mostrar R$ 4.89 a partir de 489:
    printf("%d.%02d", 489 / 100, 489 % 100).
 
 ```bash
@@ -2586,7 +2586,7 @@ Total: R$ 3040.00
    kg de cada grão vai diminuir conforme ele é carregado.
 2. Um índice i do grão da vez, que só avança quando o grão acaba
    (kg[i] == 0). Para cada caminhão, um while (livre > 0 && i < n).
-3. Resposta esperada: a saída acima. O cacau e o café ficaram
+3. O cacau e o café ficaram
    partidos entre dois caminhões; o total é o mesmo de uma mochila só de
    85 kg.
 
@@ -2940,7 +2940,7 @@ Saída esperada:
 1. long freq[256] = {0}; e um laço que faz freq[(unsigned char)*p]++.
 2. huf_constroi(freq), huf_codigos(raiz, cod) com static char
    cod[256][256], e no fim huf_libera(raiz).
-3. Resposta esperada: a saída acima. Para imprimir o símbolo %, escreva
+3. Para imprimir o símbolo %, escreva
    %% no printf. O P e o A, os mais frequentes, ganharam 2 bits.
 
 ```bash
@@ -2975,7 +2975,7 @@ Média: 1.40 bits por leitura
 1. Um char é um número: freq['N'] usa a posição 78 do vetor.
 2. Some freq[c] * strlen(cod[c]) para os bits e freq[c] para o total de
    leituras.
-3. Resposta esperada: a saída acima. Quanto mais desigual a distribuição,
+3. Quanto mais desigual a distribuição,
    maior o ganho: com as quatro contagens iguais (250 cada), o Huffman
    daria os mesmos 2 bits do código fixo.
 
@@ -3104,7 +3104,7 @@ Saída esperada:
    ordene os dois juntos (um insertion sort basta: são poucos).
 2. Guarde o código num unsigned. Para mostrar com l bits:
    for (int b = l - 1; b >= 0; b--) putchar((codigo >> b) & 1 ? '1' : '0');
-3. Resposta esperada: a saída acima. Os comprimentos são os mesmos, então o
+3. Os comprimentos são os mesmos, então o
    total de bits continua 33, e o código continua livre de prefixo. A
    vantagem: para descompactar, bastam 5 números (os comprimentos).
 
@@ -3144,7 +3144,7 @@ Total: 132 bits
 2. Pegue da folha se ainda há folha e (a fila de internos está vazia ou
    folha[f] <= interno[ini]); senão, pegue o interno. Faça isso duas vezes
    por junção e enfileire a soma em interno[fim++].
-3. Resposta esperada: a saída acima. A soma das junções é igual à soma de
+3. A soma das junções é igual à soma de
    frequência × profundidade das folhas. Com Fibonacci a árvore é uma
    "escada": o símbolo de frequência 1 fica com um código de 7 bits.
 
@@ -3478,7 +3478,7 @@ Descompactado: 5460 bytes
    grave com fputs dentro de um for de 30 voltas.
 2. arq_tamanho, huf_compacta e huf_descompacta devolvem tamanhos em
    bytes (ou -1 se der erro).
-3. Resposta esperada: a saída acima. Os acentos contam 2 bytes cada em
+3. Os acentos contam 2 bytes cada em
    UTF-8; por isso cada cardápio tem 182 bytes, e não 180.
 
 ```bash
@@ -3519,7 +3519,7 @@ Saída esperada:
    o byte como unsigned char, de 0 a 255, ou EOF).
 2. Para os 5 maiores: 5 vezes, ache o índice do maior e, depois de
    mostrar, ponha -1 nele para tirá-lo da disputa.
-3. Resposta esperada: a saída acima. O "á" e o "ã" não aparecem como uma
+3. O "á" e o "ã" não aparecem como uma
    letra só: em UTF-8 cada um vira dois bytes (0xC3 e mais um).
 
 ```bash
@@ -3556,7 +3556,7 @@ linhas  original  compactado
 1. Um vetor int vezes[] = {1, 10, 30, 60, 100, 300} e, para cada caso,
    abra com "w" (que apaga o conteúdo anterior), grave e feche.
 2. printf("%6d  %8ld  %10ld  %s\n", ...) monta as colunas.
-3. Resposta esperada: a saída acima. Os bits sozinhos ocupam uns 54% do
+3. Os bits sozinhos ocupam uns 54% do
    original; o cabeçalho é que estraga os arquivos pequenos. Apague os
    arquivos no fim.
 
@@ -3596,7 +3596,7 @@ zeros à direita (por isso 10 vira 10000000).
    Ninguém grava esse byte.
 2. void fecha_bits(Saida *s): se s->n > 0, grave s->byte << (8 - s->n) e
    zere byte e n. Chame antes do fclose.
-3. Resposta esperada: a saída acima. É o descarrega do compactador.c; sem
+3. É o descarrega do compactador.c; sem
    ele, o descompactador perde o fim do arquivo.
 
 ```bash
@@ -3675,7 +3675,7 @@ Entropia:     3.040 bits por letra
 1. log2 e ceil estão em math.h (o rodar já liga com -lm). Calcule p como
    double: (double)freq[c] / n.
 2. A média do Huffman é a soma de freq[c] * strlen(cod[c]) dividida por n.
-3. Resposta esperada: a saída acima. A diferença de 0,07 bit por letra
+3. A diferença de 0,07 bit por letra
    vem de o Huffman só usar comprimentos inteiros. Os compactadores que
    chegam ainda mais perto da entropia usam outra técnica (codificação
    aritmética).

@@ -607,7 +607,7 @@ a b | E OU NAO
 1. Declare bool a, b; e, antes de cada linha, faça a = ...; b = ...;
 2. Use sempre o mesmo printf:
    printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
-3. Resposta esperada: a tabela acima. A coluna do E só tem 1 na última
+3. A coluna do E só tem 1 na última
    linha; a do OU só tem 0 na primeira.
 
 ```bash

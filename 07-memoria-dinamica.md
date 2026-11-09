@@ -339,7 +339,7 @@ Recorde: 4
 2. O ponteiro placar (pilha) e o bloco apontado (heap) são duas coisas
    diferentes: o ponteiro some no return, o bloco continua vivo. Por isso
    o endereço precisa voltar no return.
-3. Resposta esperada: a saída acima. Regiões: recorde e chamadas nos
+3. Regiões: recorde e chamadas nos
    dados; jogos, i e o ponteiro placar na pilha; o bloco no heap; as
    instruções de ler_placar no código.
 
@@ -367,7 +367,7 @@ local: 1 | static: 3
 1. static int total = 0; dentro da função só zera uma vez, antes de o
    programa começar.
 2. A local nasce de novo, valendo 0, em cada frame novo.
-3. Resposta esperada: a saída acima. A local mora na pilha e morre a cada
+3. A local mora na pilha e morre a cada
    return; a static mora nos dados e vive o programa todo.
 
 ```bash
@@ -440,7 +440,7 @@ Soma das leituras: 14999995
 1. 5.000.000 * 4 bytes = 20.000.000 bytes, uns 19 MiB.
 2. Basta escrever static na frente da declaração, dentro de main.
    sizeof leituras dá o tamanho do vetor inteiro (size_t: use %zu).
-3. Resposta esperada: a saída acima. O vetor tem 20 MB e a pilha só tem
+3. O vetor tem 20 MB e a pilha só tem
    8 MiB: no passo 1 o AddressSanitizer acusa stack-overflow (sem ele, o programa
    morre com Segmentation fault). Nos dados, o espaço é reservado quando o
    programa carrega e não depende do tamanho da pilha. No assunto 0054 você
@@ -486,7 +486,7 @@ sai n=0: devolve 51
    int resultado = chamadas * 10 + local;
 2. passo(3) gera 4 frames (n = 3, 2, 1 e 0) e cada um tem a sua local.
    chamadas e contador são um só para todos os frames.
-3. Resposta esperada: a saída acima. local vale sempre 1 porque nasce de
+3. local vale sempre 1 porque nasce de
    novo em cada frame (pilha); chamadas só cresce porque mora nos dados.
    Quando o primeiro frame chega ao return, as chamadas de dentro já
    terminaram: por isso todos os frames de passo(3) devolvem 41.
@@ -805,7 +805,7 @@ Cópia: COXINHA
 
 1. Quantos bytes ocupa "coxinha"? Conte o '\0'.
 2. malloc(strlen(texto) + 1), confira o NULL e use strcpy.
-3. Resposta esperada: a saída acima. Sem o + 1, o strcpy escreve o '\0'
+3. Sem o + 1, o strcpy escreve o '\0'
    um byte depois do fim do bloco e o AddressSanitizer acusa
    heap-buffer-overflow.
 
@@ -880,7 +880,7 @@ e) 5 bytes: cabe 1 int
    "Recife" tem 6 letras, mais o '\0'.
 2. Se um malloc falhar, libere os que já deram certo antes de sair
    (free(NULL) não faz nada, então dá para liberar todos de uma vez).
-3. Resposta esperada: a saída acima. Em e) sobra 1 byte: escrever e[1]
+3. Em e) sobra 1 byte: escrever e[1]
    ocuparia os bytes 4 a 7, fora do bloco. Acrescente e[1] = 9; para ver
    o AddressSanitizer acusar heap-buffer-overflow, e depois apague a linha.
 
@@ -939,7 +939,7 @@ Crachá: Maria Clara Fonseca (19 caracteres)
 
 1. O bloco precisa de strlen(a) + 1 (espaço) + strlen(b) + 1 ('\0') bytes.
 2. strcpy(novo, a); strcat(novo, " "); strcat(novo, b);
-3. Resposta esperada: a saída acima. O resultado do primeiro juntar
+3. O resultado do primeiro juntar
    ("Maria Clara") também é um bloco do heap: libere-o depois de usá-lo no
    segundo juntar. São dois malloc, então dois free.
 
@@ -1191,7 +1191,7 @@ Saída esperada:
 
 1. calloc(7, sizeof(int)) dá as posições 0 a 6; use 1 a 6 e ignore a 0.
 2. contagem[jogadas[i]]++ conta a face da jogada i.
-3. Resposta esperada: a saída acima. Troque calloc por malloc e rode
+3. Troque calloc por malloc e rode
    algumas vezes: os números mudam ou ficam errados, porque os contadores
    começam com lixo.
 
@@ -1276,7 +1276,7 @@ Bloco encolheu de 40 para 24 bytes
 1. Ande com dois índices: i lê todas as posições, j marca onde escrever a
    próxima válida. No fim, j é a quantidade de válidas.
 2. realloc também diminui: realloc(v, j * sizeof *v). Use temporário.
-3. Resposta esperada: a saída acima. Encolher preserva as primeiras j
+3. Encolher preserva as primeiras j
    posições, exatamente as válidas.
 
 ```bash
@@ -1312,7 +1312,7 @@ dobrar: 10 realocações, 1023 cópias
 1. Escreva uma função que recebe um "modo" (1 ou 2) e devolve as contagens
    por ponteiro (int *realocacoes, long *copias).
 2. Antes de cada realloc, copias += quantidade.
-3. Resposta esperada: a saída acima. No +1, as cópias são 1 + 2 + ... +
+3. No +1, as cópias são 1 + 2 + ... +
    999 = 499500, um custo quadrático. Dobrando, 1 + 2 + 4 + ... + 512 =
    1023: em média, nem uma cópia por elemento.
 
@@ -1686,7 +1686,7 @@ Saída esperada:
 1. Cada linha completa "pula" 8 posições: k = i * colunas + j.
 2. Para voltar: *i = k / colunas e *j = k % colunas (os dois resultados
    voltam por ponteiro, como no assunto 0046).
-3. Resposta esperada: a saída acima. O (4, 7) cai no índice 39 = 5 * 8 - 1,
+3. O (4, 7) cai no índice 39 = 5 * 8 - 1,
    a última das 40 posições.
 
 ```bash
@@ -1757,7 +1757,7 @@ Elementos guardados: 21
 1. p[i] = malloc((i + 1) * sizeof *p[i]);
 2. Uma matriz 6 x 6 guardaria 36 números; o triângulo guarda
    1 + 2 + ... + 6.
-3. Resposta esperada: a saída acima. Para liberar, o laço é o mesmo: cada
+3. Para liberar, o laço é o mesmo: cada
    p[i] e depois p.
 
 ```bash
@@ -1831,7 +1831,7 @@ A * A: dimensões incompatíveis
 1. c[i][j] é a soma de a[i][k] * b[k][j] para k de 0 a ca - 1.
 2. Reaproveite criar_matriz e liberar_matriz do texto. Para preencher A e
    B, copie de matrizes fixas int [2][3] e int [3][2].
-3. Resposta esperada: a saída acima. Libere A, B e o produto; o NULL de
+3. Libere A, B e o produto; o NULL de
    A * A não precisa de free (free(NULL) também não faria mal).
 
 ```bash
@@ -2109,7 +2109,7 @@ malloc: 4 | free: 4
 1. Conte quantos malloc e quantos free acontecem durante a execução.
 2. A cada volta, msg recebe um endereço novo. O que acontece com o
    anterior?
-3. Resposta esperada: a saída acima. Antes do conserto, o relatório diz
+3. Antes do conserto, o relatório diz
    "Direct leak of 192 byte(s) in 3 object(s)": 4 malloc de 64 bytes e só
    1 free (o do último bloco, depois do laço). Conserto: free(msg) dentro
    do laço, depois do printf, e apagar o free de fora.
@@ -2151,7 +2151,7 @@ e) Vagas livres: 3
    de um bloco de 16 bytes": 4 ints, índices 0 a 3.
 2. O endereço 0x0 é o NULL. O vazamento só é acusado no fim, quando todo
    o resto já está certo.
-3. Resposta esperada: a saída acima. a) i <= 4 vira i < 4 (estouro);
+3. a) i <= 4 vira i < 4 (estouro);
    b) o printf vem antes do free (uso depois do free); c) apague o
    segundo free (free duplo); d) acrescente free(cupom) (vazamento);
    e) o ponteiro NULL precisa de um bloco: malloc e conferir o NULL antes
@@ -2182,7 +2182,7 @@ Placar encerrado
 1. Procure "attempting double-free". Quantos blocos existem? Quantos
    free?
 2. backup = placar copia o ENDEREÇO, não os números.
-3. Resposta esperada: a saída acima. No original, placar e backup apontam
+3. No original, placar e backup apontam
    para o MESMO bloco e liberar os dois é free duplo. Com
    int *backup = malloc(3 * sizeof *backup); e um laço que copia os 3
    números, são dois blocos: aí, sim, cada um tem o seu free.
@@ -2779,7 +2779,7 @@ Para testar: printf '3 2\n7 8\n5 6\n9 10\n' | ~/LPEDC/rodar <este arquivo>
 1. double **notas = malloc(alunos * sizeof *notas); e uma linha de
    provas doubles para cada aluno.
 2. double *medias = malloc(alunos * sizeof *medias);
-3. Resposta esperada: a saída acima. São alunos + 2 malloc (3 linhas, o
+3. São alunos + 2 malloc (3 linhas, o
    vetor de linhas e as médias) e o mesmo número de free.
 
 ```bash
@@ -2843,7 +2843,7 @@ Saída esperada:
 2. Segunda passada: para cada pedaço, ache o início e o tamanho, faça o
    malloc(tamanho + 1), copie os chars e ponha o '\0'. Pedaço vazio é um
    bloco de 1 byte só com o '\0'.
-3. Resposta esperada: a saída acima. Escreva também liberar_pedacos(v, n)
+3. Escreva também liberar_pedacos(v, n)
    e chame para os dois resultados. Se um malloc falhar no meio, libere o
    que já foi feito e devolva NULL.
 
@@ -3131,7 +3131,6 @@ Desconto: 11.16  3.42 22.59  6.84 16.20  4.77 | total 64.98
    continua certo mesmo se o tipo do ponteiro mudar.
 3. km mora na pilha (some com o main); a cópia mora no heap e só some com
    free.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0701.c
@@ -3166,7 +3165,6 @@ Saída esperada:
 
 1. Os bytes: strlen(a) + strlen(sep) + strlen(b) + 1. O + 1 é do '\0'.
 2. Depois do malloc: strcpy(novo, a); strcat(novo, sep); strcat(novo, b);
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0702.c
@@ -3242,7 +3240,6 @@ Identidade 4x4:
 3. Se o calloc de uma linha falhar, libere as linhas que já deram certo
    e o vetor de ponteiros, e devolva NULL.
 4. Ordem do free: primeiro cada linha, depois o vetor de ponteiros.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0704.c
@@ -3272,7 +3269,6 @@ Total: 100 pães
 2. attempting free on address which was not malloc()-ed: só se passa para
    o free um endereço que veio do malloc, calloc ou realloc. Variável
    local mora na pilha e some sozinha.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0705.c
@@ -3308,7 +3304,6 @@ Saída esperada:
    de 0) vira '*' se k < total - 4.
 2. malloc(strlen(num) + 1) e não esqueça o '\0' no fim da cópia.
 3. Quem chama recebe o bloco e é quem faz o free.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0706.c
@@ -3353,7 +3348,6 @@ Saída esperada:
 2. int *cont = calloc(faixas, sizeof *cont); — o calloc zera, então dá
    para fazer cont[idades[i] / 10]++ direto.
 3. Com malloc, os contadores começariam com lixo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0707.c
@@ -3394,7 +3388,6 @@ Transposta (3x2):
 2. Na hora de liberar, cada matriz é liberada com o SEU número de
    linhas: liberar(m, 2) e liberar(t, 3).
 3. Se criar devolver NULL, libere o que já existe antes de sair.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0708.c
@@ -3433,7 +3426,6 @@ Placar (5 jogadores): 3 0 1 0 3
 2. for (int i = n_velho; i < n_novo; i++) novo[i] = 0;
 3. As posições antigas o realloc preserva (ele copia, se precisar mudar o
    bloco de lugar).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0709.c
@@ -3474,7 +3466,6 @@ Modelo 3:  35  39
 2. São três matrizes de 3 linhas: três chamadas de liberar(x, 3).
 3. Se alguma criação falhar, libere as que já existem (liberar aceita
    NULL).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0710.c
@@ -3522,7 +3513,6 @@ Saída esperada:
    para o fim resolve.)
 3. Os bytes do "tucumã" são 7: o ã ocupa 2 em UTF-8, e o strlen conta
    bytes.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0711.c
@@ -3566,7 +3556,6 @@ Bytes das notas: 80 (matriz 3x5 usaria 120)
    divida pelo total de alunos (10).
 3. Bytes: (3 + 5 + 2) * sizeof(double) contra 3 * 5 * sizeof(double).
 4. Libere cada linha e depois o vetor de ponteiros.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0712.c
@@ -3652,7 +3641,6 @@ Preços (7 de 8): 5 12 12 30 45 70 89
    empurre os maiores, guarde em i + 1).
 3. Comece no main com int *v = NULL, n = 0, cap = 0: realloc(NULL, x) é o
    mesmo que malloc(x). A primeira capacidade é 2; depois, dobra.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0714.c
@@ -3683,7 +3671,6 @@ Viagem total: 31 horas
 3. Se o realloc falhar, ele devolve NULL e o bloco antigo continua lá.
    Com v = realloc(v, ...), você perde o único endereço dele (vazamento).
    Receba o retorno num ponteiro novo e só depois troque.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0715.c
@@ -3734,7 +3721,6 @@ Miolo 2x4:
 2. Para recortar o recorte, passe (const char **) recorte: as linhas dele
    também são strings.
 3. Cada recorte é liberado com o seu número de linhas.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0716.c
@@ -3779,7 +3765,6 @@ Min 9: leitura 3.5, média das últimas 4 = 5.00
    ser sobrescrito (janela[pos]) antes de escrever o novo.
 3. pos = (pos + 1) % K faz a volta.
 4. A média é soma / usados: sem somar a janela inteira a cada minuto.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0717.c
@@ -3822,7 +3807,6 @@ Linha 0 da profunda é a de m? não
 3. Liberar: as linhas de m e o vetor de m; o vetor da rasa (só ele!); as
    linhas e o vetor da profunda. Liberar as linhas da rasa seria free
    duplo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0718.c
@@ -3864,7 +3848,6 @@ Nos dois grupos (3): 103 204 402
 3. Ao encolher, um realloc para 0 bytes pode devolver NULL: se *n for 0,
    devolva o bloco como está. Se o realloc falhar, o bloco grande ainda
    serve.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0719.c
@@ -3952,7 +3935,6 @@ Público (n = 3, cap = 4): 18450.50 22010.00 9875.25
    o primeiro realloc funciona como malloc.
 3. memcpy(destino, item, tam) copia os bytes, seja qual for o tipo.
 4. Para ler de volta, converta: const int *g = v_gols; g[i].
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0721.c
@@ -3997,7 +3979,6 @@ Esparsa: 72 bytes; grade cheia: 40000 bytes
 3. Se a soma de uma posição der 0, ela não entra (aqui não acontece, mas
    a regra da matriz esparsa é guardar só o que não é zero).
 4. Bytes: 3 * n * sizeof(int) contra 100 * 100 * sizeof(int).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0722.c
@@ -4099,7 +4080,6 @@ Saída esperada:
    casas[k] %= 10.
 4. Ache o dígito mais alto que não é zero (se todos forem zero, a resposta
    é "0"), aloque a string e escreva do mais alto para o mais baixo.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0724.c
@@ -4134,7 +4114,6 @@ Saída esperada:
    return. A cópia tem que ir para o heap: malloc(strlen(s) + 1).
 3. Liberar o vetor e DEPOIS ler lista[i] para liberar cada nome é ler
    memória já devolvida. A ordem é: cada nome, e só então o vetor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0725.c
@@ -4180,7 +4159,6 @@ r(2) = 27; p(2) * q(2) = 27
 3. Para a potência, guarde o resultado atual, multiplique, libere o
    antigo e fique com o novo. Comece com o polinômio 1 (grau 0).
 4. No mostrar, pule coeficientes zero e mostre "x^k" (x^1 como x).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0726.c
@@ -4274,7 +4252,6 @@ Saída esperada:
 3. Para as 3 maiores, faça 3 passadas: em cada uma, pegue o maior cont
    que ainda não foi escolhido (marque num vetor bool, ou use um calloc).
 4. Libere cada palavra, o vetor de palavras e o de contagens.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0728.c
@@ -4385,7 +4362,6 @@ Saída esperada:
    as duas áreas se sobrepõem.
 3. Em apagar: free(v[pos]) antes de puxar, senão a linha vaza.
 4. No fim, libere cada linha e o vetor.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 07-memoria-dinamica/lista/P0730.c

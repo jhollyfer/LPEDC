@@ -326,7 +326,6 @@ mais um desempilha: devolveu 0, x = 4
 1. bool ok = pilha_desempilha(p, &x); e mostre ok com %d (false vira 0).
 2. Com a pilha vazia, a função não escreve em x: ele fica com o último
    valor que saiu.
-3. Resposta esperada: as seis linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E487.c
@@ -456,7 +455,7 @@ Saída esperada (continuação):
 3. Libere a pilha antes de sair da função, inclusive no caso de erro.
 4. Em possivel, para cada número da ordem: empilhe os que chegam até ele
    aparecer no topo. Se ele já passou e não está no topo, é impossível.
-5. Resposta esperada: as cinco linhas acima. 3 1 2 4 é impossível: para o
+5. 3 1 2 4 é impossível: para o
    3 sair primeiro, o 1 e o 2 precisam estar empilhados com o 2 por cima
    do 1. Então o 2 sai antes do 1, sempre.
 
@@ -495,7 +494,6 @@ Sujos: 20 10
    (começa em 6 e diminui antes de cada empilhamento sujo).
 2. A bancada está cheia quando n_limpos == topo_sujos.
 3. Desempilhar limpo: n_limpos > 0. Desempilhar sujo: topo_sujos < 6.
-4. Resposta esperada: as cinco linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/E492.c
@@ -780,7 +778,7 @@ saiu 3 -> [vazia]
    mostrar.
 2. "item" no singular quando o tamanho é 1: um ternário resolve.
 3. estado só olha: não desempilhe nada dentro dela.
-4. Resposta esperada: as oito linhas acima. Cada empilha fez um malloc e
+4. Cada empilha fez um malloc e
    cada saiu fez um free; o sanitizer não acusa vazamento.
 
 ```bash
@@ -936,7 +934,7 @@ desempilha 19 -> mínimo 22
    empilhe nela o menor entre o valor novo e o mínimo atual.
 2. Ao desempilhar, tire das duas.
 3. min_atual é só um pilha_topo na pilha dos mínimos.
-4. Resposta esperada: as nove linhas acima. Custa o dobro de memória em
+4. Custa o dobro de memória em
    troca de O(1) na consulta.
 
 ```bash
@@ -1269,7 +1267,6 @@ Saída esperada:
 2. Na b, a multiplicação acontece primeiro, então o * aparece antes do +.
 3. Em infixas, escreva a conta mesmo: {(7 + 3) * 2, ...}. O compilador
    calcula.
-4. Resposta esperada: as quatro linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E499.c
@@ -1301,7 +1298,7 @@ Saída esperada:
 2. No fim, ok só se o contador for 0.
 3. Use printf("%-10s %s\n", s, ...) para alinhar.
 4. Para a última linha: if (contador_ok("( [ ) ]")) printf(...).
-5. Resposta esperada: as cinco linhas acima. Com tipos diferentes, o
+5. Com tipos diferentes, o
    contador só sabe QUANTOS estão abertos, não QUAL foi o último a abrir.
 
 ```bash
@@ -1330,7 +1327,6 @@ if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
 1. pilha_empilha(p, i) no lugar de pilha_empilha(p, c).
 2. Ao desempilhar, a abertura é s[topo], e topo é a posição dela.
 3. No "faltou fechar", use pilha_topo para pegar a última abertura.
-4. Resposta esperada: as quatro linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E501.c
@@ -1397,7 +1393,7 @@ Saída esperada:
 2. Monte a saída com um índice: out[k++] = c; out[k++] = ' '; e no fim
    troque o último espaço por '\0'.
 3. O "maior ou igual" é o que faz 9-4-2 virar (9-4)-2, e não 9-(4-2).
-4. Resposta esperada: as quatro linhas acima. Confira a segunda no A168
+4. Confira a segunda no A168
    (troque os números): o valor de (6+2)*5-8/4 é 38.
 
 ```bash
@@ -1433,7 +1429,6 @@ erro: símbolo inválido 'x'
    código (0 = ok, 1, 2, 3, 4 para cada erro) deixa o main simples.
 2. Crie a pilha dentro de avalia e libere em TODOS os caminhos de saída.
 3. Junte os dígitos como no A168. O '\n' do fgets conta como espaço.
-4. Resposta esperada: as cinco linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0084-pilha-aplicacoes/E504.c
@@ -1731,7 +1726,6 @@ próxima vaga: gaveta 1
 1. Um for de 0 a CAP - 1: se itens[i] == -1, mostre "_"; senão, o número.
 2. Repare que retirar não apaga a gaveta: o 1 continua lá depois de sair.
 3. A próxima vaga é (inicio + n) % CAP: mostre no fim do main.
-4. Resposta esperada: as dez linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E505.c
@@ -1758,7 +1752,6 @@ Total: 20 páginas em 4 trabalhos
 
 1. Guarde as páginas num vetor e insira com um for.
 2. Antes de esvaziar a fila, guarde fila_tamanho num int: depois ela vale 0.
-3. Resposta esperada: as cinco linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0085-fila/E506.c
@@ -1789,7 +1782,7 @@ Na fila: 3 4 6 7
 1. fc_vazia e fc_cheia são uma linha cada, com as fórmulas do enunciado.
 2. fc_insere grava em itens[fim] e avança fim com % TAM.
 3. fc_retira lê itens[inicio] e avança inicio com % TAM.
-4. Resposta esperada: as cinco linhas acima. O 6 entra na gaveta 4 e fim
+4. O 6 entra na gaveta 4 e fim
    dá a volta para 0; o 7 entra na 0 e fim vira 1. Aí (1 + 1) % 5 == 2,
    que é o inicio: cheia, e o 8 é recusado.
 
@@ -2623,7 +2616,6 @@ volta(2, 18, 8) = 0
    passos % cap, aí i - passos fica maior que -cap.
 2. Depois some cap e tire o resto: (i - passos % cap + cap) % cap.
 3. Para mostrar o %, escreva %% dentro do printf.
-4. Resposta esperada: as cinco linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E518.c
@@ -2656,7 +2648,6 @@ Direita 3: 6 1 2 3 4 5
 2. gira_direita é o espelho: retira_fim e insere_inicio.
 3. Cada giro custa O(1). Num vetor comum, girar uma posição custaria
    O(n), porque todo mundo anda uma casa.
-4. Resposta esperada: as três linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E519.c
@@ -2751,7 +2742,6 @@ Dias 6-8: máxima 23
 2. O deque nunca guarda mais que 3 índices, então a capacidade 8 do
    deque.c sobra.
 3. Cada índice entra uma vez e sai no máximo uma vez: O(n) no total.
-4. Resposta esperada: as seis linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0087-deque/E522.c
@@ -3193,7 +3183,6 @@ Depois: 40 30 20 10
 1. Esvazie a fila na pilha; depois esvazie a pilha na fila.
 2. Para mostrar a fila sem perder ninguém, retire, mostre e insira de
    novo, fila_tamanho vezes.
-3. Resposta esperada: as duas linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E524.c
@@ -3225,7 +3214,6 @@ Depois: 2 3 4
 2. Cada item é empilhado e desempilhado no máximo duas vezes, então,
    na média, cada operação custa O(1) (custo amortizado), mesmo que um
    despejo isolado custe O(n).
-3. Resposta esperada: as duas linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E525.c
@@ -3295,7 +3283,6 @@ Carro 5 saiu; manobras: 3
    primeiro entra no beco.
 4. Represente os eventos com dois vetores: char tipo[] = "EEEEESSSSS" e
    int carro[] = {1, 2, 3, 4, 5, 2, 1, 4, 3, 5}.
-5. Resposta esperada: as sete linhas acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0088-juntando-tudo/E527.c
@@ -3542,7 +3529,6 @@ Saída esperada:
    topo é v[n - 1].
 2. Use do { empilha(&p, n % 2); n /= 2; } while (n > 0); para o 0 também
    gerar um dígito. Depois desempilhe e mostre até a pilha ficar vazia.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1201.c
@@ -3582,7 +3568,6 @@ insere 80: fila cheia
    inicio == fim nos dois casos.
 3. Repare em "insere 50": o fim deu a volta e foi para 0. E em
    "insere 70": inicio == fim == 2 com a fila cheia.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1202.c
@@ -3663,7 +3648,6 @@ Saída esperada:
    empilha, compare o tamanho com o maior visto até ali.
 2. No fechamento, a pilha não pode estar vazia e o topo tem que ser o
    abre do mesmo tipo. No fim da string, a pilha tem que estar vazia.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1204.c
@@ -3697,7 +3681,6 @@ Na fila: 0 pedidos
    {NULL, NULL, 0}.
 2. Quando a fila esvazia em sai, o fim também tem que voltar a NULL. Se
    não voltar, a próxima entrada escreve num nó já liberado.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1205.c
@@ -3735,7 +3718,6 @@ a: sim
 1. Campos: char v[32]; int inicio, n. O fim é (inicio + n) % CAP.
    retira_fim pega v[(inicio + n - 1) % CAP] e faz n--.
 2. Pare quando sobrar 0 ou 1 letra: a do meio não tem par.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1206.c
@@ -3807,7 +3789,7 @@ abc -> abc
    (vazia); c; ca.
 2. A pilha pode ser o próprio vetor sobra, com um índice n: o fundo da
    pilha é sobra[0]. No fim, sobra[n] = '\0'.
-3. Resposta esperada: a saída acima. Cada bolha entra e sai no máximo uma
+3. Cada bolha entra e sai no máximo uma
    vez: O(n).
 
 ```bash
@@ -3838,7 +3820,6 @@ Circular:   saíram 1 2 3 4 5 com 0 deslocamentos
    Esvaziar uma fila de n itens custa n (n - 1) / 2: O(n²).
 2. Na circular, retirar só anda o inicio: inicio = (inicio + 1) % CAP.
    Cada operação é O(1).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1209.c
@@ -3878,7 +3859,7 @@ original depois:          30 20 10
    cada item que sai da auxiliar, empilhe-o na original E na cópia.
 2. A função recebe No ** porque desempilha e empilha mudam o topo da
    original.
-3. Resposta esperada: a saída acima. Cada item é movido 3 vezes: O(n).
+3. Cada item é movido 3 vezes: O(n).
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1210.c
@@ -3913,7 +3894,6 @@ A/B^C-D -> ABC^/D-
    que op, ou IGUAL e op associar à esquerda, desempilhe para a saída.
    Depois empilhe op. Com ^ e ^ no topo, a igualdade não desempilha.
 3. No fim, desempilhe tudo para a saída e termine com '\0'.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1211.c
@@ -3955,7 +3935,6 @@ itens movidos entre as filas: 5
    p->a = p->b; p->b = t;).
 3. Movidos: empilha 1 move 0, empilha 2 move 1, empilha 3 move 2; depois
    de tirar o 3 sobram dois, então empilha 4 move 2: 0 + 1 + 2 + 2 = 5.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1212.c
@@ -3994,7 +3973,7 @@ sobrescritas: 3
    comum. Se n == 4, grave em v[inicio] (onde está a mais antiga) e
    avance inicio: a segunda mais antiga vira a primeira.
 2. Para mostrar: for (k = 0; k < n; k++) v[(inicio + k) % 4].
-3. Resposta esperada: a saída acima. Cada registro é O(1), não importa
+3. Cada registro é O(1), não importa
    quantas leituras já passaram.
 
 ```bash
@@ -4031,7 +4010,6 @@ Ana: 10 pontos, Beto: 17 pontos
 3. Repare que pegar sempre a maior ponta NÃO é a melhor estratégia: Ana
    perdeu porque, ao pegar o 3, deixou o 9 para o Beto. (A estratégia
    ótima é assunto de programação dinâmica.)
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1214.c
@@ -4075,7 +4053,6 @@ Saída esperada:
 2. É o contrário da pós-fixa, onde o primeiro que sai é o da direita.
    Com "- 8 3", o 3 é empilhado antes do 8, então o 8 sai primeiro.
 3. No fim, a expressão é válida se sobrou exatamente 1 item.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1215.c
@@ -4155,7 +4132,7 @@ depois: 10 30 20 40
    original; tire um da frente da original (da segunda metade) e ponha no
    fim dela de novo.
 3. Para mostrar a fila sem destruí-la, tire e reponha cada item, n vezes.
-4. Resposta esperada: a saída acima. Cada item é movido O(1) vezes: O(n).
+4. Cada item é movido O(1) vezes: O(n).
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1217.c
@@ -4236,7 +4213,6 @@ desfaz: nada para desfazer
    Desfazer um 'A' é colar o texto guardado de volta no fim (strcat).
 2. Para guardar o que apagou: copie &e->texto[n - k] para a operação
    ANTES de pôr o '\0' em e->texto[n - k].
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1219.c
@@ -4277,7 +4253,6 @@ A e B vazias: sim
 2. É a intercalação de listas ordenadas, mas só com as operações da fila:
    você não enxerga os nós. Custa O(n + m).
 3. Para mostrar uma fila sem perdê-la, tire e reponha cada item.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1220.c
@@ -4373,7 +4348,6 @@ Saída esperada:
    precedência >= à de op, aplica; depois empilha op.
 3. No fim, aplique o que sobrou. Deu certo se a pilha de valores ficou
    com um item só. O ">=" na dica 2 é o que faz 8-3-2 dar 3.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1222.c
@@ -4467,7 +4441,6 @@ Pino C (de baixo para cima): 3 2 1
    y para x.
 3. São sempre 2ⁿ - 1 movimentos: 7 para n = 3. O laço pode ir até o pino
    C ter n discos.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1224.c
@@ -4518,7 +4491,6 @@ Maior: 4 casas
    nenhuma casa entra duas vezes na pilha, e 48 posições sempre bastam.
 3. Essa é a busca em profundidade; trocando a pilha por uma fila vira
    busca em largura, e o número de lagos é o mesmo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1225.c
@@ -4565,7 +4537,6 @@ atende Fabi (azul)
 2. Atender é tirar do início: O(1). Chegar é O(n) (procura o lugar). Com
    um heap (assunto 0102) as duas ficam O(log n).
 3. Um vetor de nomes de cor, indexado por cor - 1, evita um switch.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1226.c
@@ -4700,7 +4671,6 @@ Caio joga normal; vez de Davi
    duas vezes. normal: ande uma vez.
 3. Por que um deque: no horário você mexe nas duas pontas de um jeito, no
    anti-horário do outro. Uma fila só não dá conta do segundo caso.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1229.c
@@ -4756,7 +4726,6 @@ Fim do atendimento: minuto 16
    antes do %c pula o separador.
 3. O relatório não usa a fila: a fila só existe durante o expediente; o
    log é o que sobra depois. Espera média = (0 + 3 + 4 + 8 + 10 + 15) / 6.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/lista/P1230.c

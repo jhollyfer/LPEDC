@@ -327,7 +327,7 @@ maior: 132
 2. Para ler o item i, use lista_pega(l, i, &valor): você não enxerga
    l->itens daqui, porque a struct está escondida em lista.c.
 3. Para a média, divida a soma por (double) o tamanho.
-4. Resposta esperada: a saída acima. A capacidade foi de 4 para 8 quando
+4. A capacidade foi de 4 para 8 quando
    chegou a 5ª leitura. Não esqueça do lista_libera no fim.
 
 ```bash
@@ -368,7 +368,7 @@ E: tam 5, cap 8 [3, 9, 7, 10, 1]
    para o começo da linha e lista_imprime para o fim.
 2. Inserir na posição igual ao tamanho é o mesmo que inserir no fim.
 3. Remover numa posição que não existe devolve false e não mexe em x.
-4. Resposta esperada: a saída acima. A capacidade dobra de 1 para 2, de 2
+4. A capacidade dobra de 1 para 2, de 2
    para 4 e de 4 para 8.
 
 ```bash
@@ -405,7 +405,6 @@ depois: [4, 0, 12, 7]
 3. Cuidado com o atalho "for (i = 0; i < tam; i++) se for -1, remove i":
    depois de remover, o vizinho escorrega para a posição i e o i++ pula
    ele. Com dois -1 seguidos, um escapa.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E447.c
@@ -444,7 +443,7 @@ esvaziando pela frente: deslocando 21, trocando 6
 1. Assinatura sugerida: int remove_deslocando(int v[], int *n, int pos).
 2. Ao final, as duas fazem (*n)--.
 3. Para esvaziar: while (n > 0) total += remove_xxx(v, &n, 0);
-4. Resposta esperada: a saída acima. Deslocando, tirar da frente custa
+4. Deslocando, tirar da frente custa
    6 + 5 + 4 + 3 + 2 + 1 + 0 = 21 movimentos (cresce como n²); trocando,
    um por item, menos o último. Use deslocando quando a ordem importa
    (fila de senhas) e trocando quando não importa (itens do carrinho).
@@ -527,7 +526,7 @@ alternando com 1/4: 1 realloc
    o 4 por 2.
 2. Use realloc para a nova capacidade, numa variável temporária. Se ele
    falhar, tudo bem: o vetor só continua grande.
-3. Resposta esperada: a saída acima. Encolhendo na metade, cada "empurra"
+3. Encolhendo na metade, cada "empurra"
    cresce para 8 e cada "tira" volta a 4: um realloc (que copia tudo) a
    cada operação. Com 1/4, depois de crescer sobra folga para os dois
    lados.
@@ -826,7 +825,6 @@ terceiro: 6
 1. Desenhe os nós e as setas no papel antes: quem ficou na frente?
 2. l->prox->prox anda dois nós a partir do primeiro.
 3. Para o último: No *p = l; while (p->prox != NULL) p = p->prox;
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0076-lista-encadeada/E452.c
@@ -861,7 +859,6 @@ vetor: 5 18 7 22 9
    trás para frente: o último a entrar (v[0]) fica na frente.
 2. Em lista_para_vetor, ande com p e com um contador i ao mesmo tempo:
    pare quando p for NULL ou i chegar em max.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0076-lista-encadeada/E453.c
@@ -894,7 +891,7 @@ tamanho (recursivo): 5
 2. Para imprimir ao contrário, imprima o RESTO da lista primeiro
    (chamada com p->prox) e só depois o p->valor.
 3. tamanho_rec(p) = 1 + tamanho_rec(p->prox).
-4. Resposta esperada: a saída acima. Para a primeira linha, use
+4. Para a primeira linha, use
    printf("mais novo primeiro: ") seguido de lista_imprime.
 
 ```bash
@@ -952,7 +949,7 @@ um só:  7 -> NULL
 2. A cada passo: seg = p->prox; p->prox = ant; ant = p; p = seg. A ordem
    importa: se você trocar p->prox antes de guardar seg, perde o resto.
 3. Quando p vira NULL, ant é o novo início.
-4. Resposta esperada: a saída acima. É O(n) em tempo e O(1) em memória
+4. É O(n) em tempo e O(1) em memória
    extra.
 
 ```bash
@@ -1301,7 +1298,6 @@ tamanho: 2
    Confira se não voltou NULL antes de mexer.
 3. lista_remove tira só o PRIMEIRO nó com o valor e devolve true se
    tirou: while (lista_remove(&l, 5)) removidos++;
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E458.c
@@ -1337,7 +1333,6 @@ só falhas: NULL (2 removidas)
    SEM mexer no ant.
 2. Quando não remover, aí sim: ant = p e p anda.
 3. Os 0 do começo são o caso traiçoeiro: o início muda duas vezes seguidas.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E459.c
@@ -1375,7 +1370,6 @@ Davi R$ 175 -> Carla R$ 210 -> NULL
 2. Para percorrer guardando o anterior, ande com ant e p, e quando
    p->valor < menor->valor, faça menor = p e ant_menor = ant.
 3. Copiar uma struct inteira é uma atribuição só: *saiu = *menor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E460.c
@@ -1715,7 +1709,6 @@ menor: 1, maior: 10
 1. Toda inserção é "notas = lista_insere_ordenado(notas, valor);".
 2. Numa lista crescente, a menor é a do início: nem precisa procurar.
 3. A maior é a do último nó: ande até o nó cujo prox é NULL.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0078-lista-ordenada/E463.c
@@ -1755,7 +1748,6 @@ DEPOIS do primeiro, não antes). Deixe a versão com < no arquivo final.
    mostra_no("p", p); printf("\n");
 2. ant == NULL quer dizer "o novo vira o início"; p == NULL quer dizer
    "o novo vai para o fim".
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0078-lista-ordenada/E464.c
@@ -1790,7 +1782,6 @@ depois: 1 -> 3 -> 5 -> 8 -> NULL
    avance o p: pode haver um terceiro igual.
 3. Por que a função não precisa de No **? O primeiro nó nunca sai: quando
    há repetidos, sai sempre o de trás.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0078-lista-ordenada/E465.c
@@ -1824,7 +1815,7 @@ Saída esperada:
 2. Enquanto as duas tiverem nós: o menor dos dois inícios vai para
    fim->prox, e a lista de onde ele saiu anda.
 3. Quando uma acabar, pendure a outra inteira no fim: fim->prox = a ou b.
-4. Resposta esperada: a saída acima. Depois de intercalar, libere só a
+4. Depois de intercalar, libere só a
    lista resultado: os nós de a e b agora são dela.
 
 ```bash
@@ -1885,7 +1876,7 @@ depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
 2. Encaixe o nó desengatado na ordenada com o mesmo laço ant/p da
    inserção ordenada, só que sem malloc: o nó já existe. O (*passos)++ vai
    dentro desse laço.
-3. Resposta esperada: a saída acima. Na lista crescente, cada nó novo é o
+3. Na lista crescente, cada nó novo é o
    maior e o encaixe percorre a ordenada inteira: 0 + 1 + 2 + 3 + 4 = 10,
    O(n²) no pior caso. A vantagem sobre o vetor é que encaixar não
    desloca ninguém.
@@ -2154,7 +2145,7 @@ Saída esperada:
 
 1. trem.fim é o último nó; p->ant anda uma casa para trás.
 2. Um for com contador: for (p = trem.fim; p != NULL && k < 3; p = p->ant).
-3. Resposta esperada: a saída acima. Numa lista simples, você teria que
+3. Numa lista simples, você teria que
    andar a lista inteira para achar os 3 últimos.
 
 ```bash
@@ -2191,7 +2182,6 @@ Saída esperada:
 1. Desenhe os nós com as duas setas antes: a ordem saiu 4 2 1 3.
 2. Achado o nó p, o vizinho de trás é p->ant e o da frente é p->prox.
    Teste cada um contra NULL antes de ler o valor.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0079-lista-dupla/E470.c
@@ -2229,7 +2219,6 @@ ab: não
    vezes: compare, e = e->prox, d = d->ant.
 3. Use a mesma Lista para todas as palavras, com lista_libera entre uma e
    outra (ela deixa a lista vazia de novo).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0079-lista-dupla/E471.c
@@ -2591,7 +2580,6 @@ conferindo com %: pessoa 3
    NULL: não precisa testar nada.
 3. A conta: a pessoa 1 está na posição 0; depois de k passadas, a posição
    é k % 5, e a pessoa é a posição + 1.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0080-lista-circular/E475.c
@@ -2629,7 +2617,6 @@ sem o 10: 20 -> 30 -> 5 -> (volta ao 20)
 2. gira é um for de k voltas com ultimo = ultimo->prox. Na lista vazia
    (NULL), devolva NULL sem andar.
 3. Depois de girar, guarde o resultado: u = gira(u, 2);
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0080-lista-circular/E476.c
@@ -2707,7 +2694,7 @@ com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
 2. Guarde o primeiro de a (ult_a->prox) antes de mexer.
 3. O último da lista nova é o último de b. Se uma das listas for NULL,
    devolva a outra.
-4. Resposta esperada: a saída acima. Com ponteiro para o PRIMEIRO, você
+4. Com ponteiro para o PRIMEIRO, você
    teria que andar até o último de cada lista: O(n).
 
 ```bash
@@ -2745,7 +2732,6 @@ Escreva tudo neste arquivo, com uma struct sua.
 3. Se o processo terminou, tire ele da roda (ultimo->prox = p->prox,
    free, e cuidado se ele era o único). Se não terminou, ele vai para o
    fim: basta fazer ultimo = p. Girar a roda é mudar um ponteiro.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0080-lista-circular/E479.c
@@ -3067,7 +3053,7 @@ tocando agora: País Tropical - Jorge Ben
    devolveu NULL.
 2. Para min:seg, use total / 60 e total % 60 com "%d:%02d".
 3. playlist_atual devolve um const Musica *: acesse m->titulo e m->artista.
-4. Resposta esperada: a saída acima. Libere a playlist no fim.
+4. Libere a playlist no fim.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0081-juntando-tudo/E481.c
@@ -3126,7 +3112,6 @@ Dois
 2. Removendo a música que toca, passa a tocar a seguinte; se ela era a
    última, a anterior. Com uma música só e repetir ligado, a próxima é
    ela mesma.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0081-juntando-tudo/E482.c
@@ -3207,7 +3192,6 @@ Cris saiu do bolão
    b->nome) < 0. O laço da inserção anda enquanto vem_antes(p, novo).
 2. A remoção é a do assunto 0077, comparando nomes com strcmp.
 3. Copie o nome com snprintf, nunca com strcpy sem limite.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/0081-juntando-tudo/E484.c
@@ -3285,7 +3269,7 @@ P + Q = 4x^4 + 7x - 5
 3. imprime: o primeiro termo leva o sinal colado ("-5"); os outros, " + "
    ou " - " e o valor absoluto. Coeficiente 1 não aparece (x^4), expoente
    1 vira "x" e expoente 0 é só o número.
-4. Resposta esperada: a saída acima. 4*16 + 7*2 - 5 = 73. Libere os três
+4. 4*16 + 7*2 - 5 = 73. Libere os três
    polinômios.
 
 ```bash
@@ -3550,7 +3534,6 @@ Nós visitados: 10
 3. A k-ésima inserção visita k - 1 nós: 0 + 1 + 2 + 3 + 4 = 10. Para n
    paradas, n (n - 1) / 2: montar a lista assim é O(n²). Um ponteiro para
    o último deixa cada inserção O(1).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1102.c
@@ -3669,7 +3652,7 @@ a com b vazia: 1 -> 2 -> 3 -> 4 -> 5 -> NULL (5 nós)
 2. Em concatena: se b está vazia, nada a fazer. Se a está vazia, a
    recebe os ponteiros de b. Senão, a->fim->prox = b->inicio e
    a->fim = b->fim. Nos dois últimos casos, some os tamanhos e zere b.
-3. Resposta esperada: a saída acima. Só a lista a é liberada no fim (os
+3. Só a lista a é liberada no fim (os
    nós de b agora são dela).
 
 ```bash
@@ -3702,7 +3685,6 @@ Volta: Armênia -> Tiradentes -> Luz -> Sé
    recursão, que é o que a seta extra compra.
 3. Para não sobrar " -> " no fim, imprima a seta ANTES de cada estação,
    menos da primeira.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1106.c
@@ -3744,7 +3726,6 @@ A partir da 4: [4:3] [5:1] [6:4] [1:2] [2:4] [3:0]
    O do-while garante que a primeira cabine é visitada.
 3. Para liberar, quebre o círculo antes (ultimo->prox = NULL, depois de
    guardar o primeiro) e libere como uma lista comum.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1107.c
@@ -3817,7 +3798,6 @@ Ana Bia Lia Marcos Teo
    (strcmp(nome, inicio->nome) < 0). Aí o novo vira o início.
 2. Senão, ande com p enquanto p->prox != NULL e strcmp(p->prox->nome,
    nome) < 0. O novo entra entre p e p->prox.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1109.c
@@ -3854,7 +3834,6 @@ Saída esperada:
    andando i para a frente e j para trás.
 2. São n / 2 trocas (divisão inteira): com n ímpar, o do meio fica onde
    está. O custo é O(n) e a memória extra é O(1).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1110.c
@@ -3901,7 +3880,7 @@ mural: 12 -> 10 -> 9 -> 8 -> 7 -> 5 -> 5 -> 2 -> 1 -> NULL
    menor->prox = resultado; resultado = menor.
 3. Quando uma lista acaba, continue tirando da outra (não dá para só
    "pendurar" o resto, porque ele está na ordem errada).
-4. Resposta esperada: a saída acima. São n + m passos: O(n + m).
+4. São n + m passos: O(n + m).
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1111.c
@@ -3941,7 +3920,6 @@ depois: 7 -> 3 -> 9 -> 1 -> NULL
    a função não precisa devolver um novo início.
 4. Custo: O(n²) comparações. Com a lista ordenada daria para fazer em
    O(n), porque os repetidos ficariam lado a lado.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1112.c
@@ -3981,7 +3959,7 @@ k = 5: não existe
    rapido == NULL. Nesse momento, lento é o k-ésimo do fim.
 3. Se ant == NULL, o removido é o primeiro (foi o que aconteceu com k = 4
    na lista de 4 vagões).
-4. Resposta esperada: a saída acima. Uma passada, O(n), memória O(1).
+4. Uma passada, O(n), memória O(1).
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1113.c
@@ -4027,7 +4005,7 @@ Total sem mover: 18
 2. Se p já é o início, não mexa em nada.
 3. Sem mover, cada busca custa a posição original + 1: 4 + 4 + 5 + 4 + 1.
    Para calcular isso, use um vetor com os nomes na ordem original.
-4. Resposta esperada: a saída acima. É a ideia por trás de caches como o
+4. É a ideia por trás de caches como o
    LRU: o que foi usado há pouco tende a ser usado de novo.
 
 ```bash
@@ -4067,7 +4045,7 @@ Lava a louça: Ana
 2. Para tirar: No *sai = ant->prox; ant->prox = sai->prox; free(sai). A
    contagem recomeça em ant->prox, sem mexer em ant.
 3. Pare quando sobrar um só: ant->prox == ant.
-4. Resposta esperada: a saída acima. São n - 1 eliminações de k passos:
+4. São n - 1 eliminações de k passos:
    O(n · k).
 
 ```bash
@@ -4113,7 +4091,6 @@ Sem 09:00: 08:00 10:00 12:00
    esquerda (do começo para o fim).
 3. Buscar é O(log n), mas inserir e remover continuam O(n) por causa do
    deslocamento. Essa é a troca da lista sequencial ordenada.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1116.c
@@ -4151,7 +4128,7 @@ depois: 2 -> 4 -> 4 -> 6 -> 7 -> 9 -> 1 -> NULL
    FIM da sua lista (é isso que mantém a ordem).
 2. No fim, ligue o fim dos pares no início dos ímpares e ponha NULL no
    fim dos ímpares. Cuidado com as listas que ficarem vazias.
-3. Resposta esperada: a saída acima. Uma passada: O(n).
+3. Uma passada: O(n).
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1117.c
@@ -4225,7 +4202,6 @@ De trás para frente: 70 61 60 58 55
 2. Depois acerte os vizinhos: se novo->ant existe, novo->ant->prox =
    novo, senão r->inicio = novo; se p existe, p->ant = novo, senão
    r->fim = novo. Assim os quatro casos saem do mesmo código.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1119.c
@@ -4265,7 +4241,7 @@ k = 0:  2 -> 3 -> 4 -> 5 -> 1 -> NULL
 2. Ligue o último no primeiro (a lista vira circular por um instante).
    Ande n - k nós a partir do último: esse nó é o novo último. O seguinte
    dele é o novo início; corte o círculo com novo_ultimo->prox = NULL.
-3. Resposta esperada: a saída acima. O(n) e memória O(1).
+3. O(n) e memória O(1).
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1120.c
@@ -4372,7 +4348,6 @@ Livre: 40 posições, maior bloco: 30
    termina onde p começa, junte p também (e libere o nó de p).
 3. O último "aloca 40" falha com 40 posições livres: é a FRAGMENTAÇÃO
    externa. Os blocos livres existem, mas nenhum é grande o bastante.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1122.c
@@ -4464,7 +4439,6 @@ fila:   1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> NULL
    aponta para o primeiro nó DEPOIS do trecho e ant para o novo primeiro.
 3. Religue as pontas: prim->prox = p; e antes->prox = ant (ou, se antes
    é NULL, o novo início é ant).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1124.c
@@ -4551,7 +4525,6 @@ célula 5: 50 -> -1
 2. A inserção ordenada é a mesma da lista com ponteiros, trocando p->prox
    por l->c[p].prox e NULL por -1.
 3. Repare na célula 1: o 10 saiu e o 25 reaproveitou a mesma célula.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1126.c
@@ -4596,7 +4569,7 @@ roda de 6: 1 2 3 4 5 6
    lento é o último da metade 1 e rápido é o último da metade 2.
 3. Religue: rapido->prox = lento->prox (fecha a metade 2) e
    lento->prox = primeiro (fecha a metade 1).
-4. Resposta esperada: a saída acima. Com n = 1, a metade 2 fica vazia
+4. Com n = 1, a metade 2 fica vazia
    (NULL); trate esse caso também.
 
 ```bash
@@ -4643,7 +4616,6 @@ Saída esperada:
    encaixe depois de p. O laço sempre para, porque o último é mais caro.
    O "mais barato de todos" cai aqui: entra logo depois do último, sem
    mudar quem é o último.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1128.c
@@ -4687,7 +4659,7 @@ Saída esperada:
    segunda acabar.
 3. Restaure com lento->prox = inverte(inicio_da_segunda). Com n ímpar, o
    nó do meio fica na primeira metade e não precisa ser comparado.
-4. Resposta esperada: a saída acima. O(n) de tempo, O(1) de memória.
+4. O(n) de tempo, O(1) de memória.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1129.c
@@ -4738,7 +4710,7 @@ Não nulos: 6 de 15
    5 + (-5) da linha 0). Use um ponteiro para o fim da lista nova.
 3. A soma custa O(não nulos de A + não nulos de B), não O(linhas x
    colunas): é para isso que a matriz esparsa existe.
-4. Resposta esperada: a saída acima. Libere as três matrizes.
+4. Libere as três matrizes.
 
 ```bash
 ~/LPEDC/rodar 11-listas/lista/P1130.c

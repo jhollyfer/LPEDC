@@ -343,7 +343,7 @@ d) 4 passos em 10 voltas
 1. Em a), o laço de dentro roda inteiro a cada volta do de fora: 6 * 4.
 2. Em b), o laço de dentro encolhe porque começa em i: 6 + 5 + ... + 1.
 3. Em c), os valores de i são 1, 2, 4, 8, 16, 32, 64.
-4. Resposta esperada: a saída acima. O d) mostra que o número depende do
+4. O d) mostra que o número depende do
    que você escolhe contar: 10 voltas, mas só 4 passam no if.
 
 ```bash
@@ -441,7 +441,6 @@ Saída esperada:
 2. Use dois contadores globais e zere os dois antes de cada n.
 3. Com n 100 vezes maior, o ingênuo cresceu 100 vezes e o esperto
    só uns 12. A raiz de 100 é 10.
-4. Resposta esperada: a tabela acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0071-eficiencia/E424.c
@@ -817,7 +816,7 @@ f) O(n log n)      64    10240
 2. Um laço de dentro com tamanho fixo (10) não depende de n. Laços em
    sequência somam; laços aninhados multiplicam.
 3. Formato da linha: printf("%-14s %6ld %8ld\n", "a) O(n)", ...).
-4. Resposta esperada: a tabela acima. As linhas a) e f) dão 10240 com
+4. As linhas a) e f) dão 10240 com
    n = 1024, mas por motivos diferentes: 10 é constante, log₂ 1024 = 10
    cresce com n.
 
@@ -860,7 +859,7 @@ f) O(n^2)          0.5500     0.5005     0.5000
    fórmula e a aposta como ponteiros para função (assunto 0050):
    void linha(const char *rotulo, double (*f)(double), double (*g)(double)).
 3. Formato: "%-14s" no rótulo e " %10.4f" em cada razão.
-4. Resposta esperada: a tabela acima. No d), a razão cai devagar até 2
+4. No d), a razão cai devagar até 2
    (o 50n perde força quando n cresce); se você apostasse O(n), ela
    cresceria sem parar. Para ver isso, troque uma aposta e rode de novo.
 
@@ -929,7 +928,7 @@ d:      32 ->      45  razão 1.41  O(raiz n)
    printf quatro vezes.
 3. A d) não é nenhuma das cinco classes do texto. Que número elevado ao
    quadrado dá 2? Olhe a condição d * d < n.
-4. Resposta esperada: a saída acima. a) n/3 passos; c) n²/2 passos;
+4. a) n/3 passos; c) n²/2 passos;
    d) raiz de n: dobrar n multiplica por √2 ≈ 1,41.
 
 ```bash
@@ -1317,7 +1316,7 @@ d) último 8 na posição 3
 3. d) anda de trás para frente: a parte já vista fica à direita de k.
    assert(nao_esta(v, k + 1, n, x)); depois do laço,
    assert(k == -1 || v[k] == x).
-4. Resposta esperada: a saída acima. Invariantes: a) s é a soma de
+4. Invariantes: a) s é a soma de
    gastos[0..i-1]; b) c conta as notas >= 6 de notas[0..i-1]; c) p é 2
    elevado a k; d) x não está em v[k+1..n-1].
 
@@ -1802,7 +1801,7 @@ Na garagem: 0 a bordo
    sistema. O rodar compila o contador.c junto.
 2. contador_incrementa devolve false quando a van está cheia: use isso
    para contar quem ficou no ponto.
-3. Resposta esperada: a saída acima. Você não precisou saber
+3. Você não precisou saber
    como o contador guarda o valor.
 
 ```bash
@@ -1909,7 +1908,7 @@ Bia: R$ 44,50 | Caio: R$ 45,50
    dinheiro do nada.
 2. Os valores são centavos: R$ 35,50 é 3550.
 3. Para mostrar: saldo / 100 e saldo % 100 com %02d.
-4. Resposta esperada: a saída acima. A nova operação respeita o
+4. A nova operação respeita o
    invariante (saldo >= 0) de graça, porque só usa operações que já o
    respeitam.
 
@@ -1955,7 +1954,6 @@ Saída esperada:
    e pode ser uma função static.
 3. Denominador negativo: troque o sinal dos dois.
 4. Cada Racional devolvido é um malloc: libere todos.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/0074-tad/E443.c
@@ -2249,7 +2247,6 @@ Saída esperada:
 3. Repare: multiplicar n por 1000 só soma umas 10 voltas no /2. Trocar a
    base do log muda a conta por uma constante (log₃ n = log₂ n / log₂ 3),
    por isso as duas funções são O(log n).
-4. Resposta esperada: a tabela acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1001.c
@@ -2287,7 +2284,6 @@ n = 8: soma 448 (64 somas), diagonal 56 (8 somas)
 2. soma_diagonal tem um for só: n somas, O(n).
 3. Dobrar n multiplica por 4 as somas da planilha inteira e só
    por 2 as da diagonal.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1002.c
@@ -2323,7 +2319,6 @@ n = 100000: laço 5000050000 (100000 passos), fórmula 5000050000 (3 passos)
 2. Na fórmula, faça a conta em long long: (long long) n * (n + 1) / 2.
    A soma, a multiplicação e a divisão são os 3 passos.
 3. O laço é O(n); a fórmula é O(1): não importa o tamanho de n.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1003.c
@@ -2429,7 +2424,6 @@ Saída esperada:
 2. 7000000000 não cabe num int: use long long e "%lld".
 3. n multiplicado por 1000 custa só 3 divisões a mais: o número de passos
    é piso(log₁₀ n) + 1, ou seja, O(log n).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1006.c
@@ -2498,7 +2492,6 @@ Horner:  p(3) = 89 com 4 multiplicações
 2. No ingênuo, grau 4 dá 0 + 1 + 2 + 3 + 4 = 10 multiplicações das
    potências mais 5 dos coeficientes. Para grau n: (n + 1)(n + 2) / 2,
    O(n²). Horner faz n: O(n).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1008.c
@@ -2561,7 +2554,6 @@ n = 1000: laço 499500, fórmula 499500, confere
 2. A pessoa 0 faz n - 1 apertos, a 1 faz n - 2, ..., a última faz 0:
    (n - 1) + (n - 2) + ... + 0 = n (n - 1) / 2. É Θ(n²), e é o mesmo
    número de comparações de quem testa "todo par" num vetor.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1010.c
@@ -2606,7 +2598,7 @@ Fórmula confere de 1 a 1000: sim
 2. Com n = 2m + 1: 2m + 1, 2m - 1, ..., 1, a soma dos ímpares: (m + 1)².
 3. As duas cabem numa expressão só com divisão inteira:
    ((n + 1) / 2) * ((n + 2) / 2). Confira com n = 5: 3 * 3 = 9.
-4. Resposta esperada: a saída acima. T(n) ≈ n² / 4, então Θ(n²).
+4. T(n) ≈ n² / 4, então Θ(n²).
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1011.c
@@ -2648,7 +2640,6 @@ N = 10000: 1229 primos | divisão: 117527 ops | crivo: 16981 ops
    já foram marcados por primos menores que i.
 3. A divisão custa perto de N·√N / log N; o crivo, N·log log N. Com N
    100 vezes maior, a divisão ficou 500 vezes mais cara e o crivo, 160.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1012.c
@@ -2726,7 +2717,6 @@ Trocas: 4
    É exatamente o que se queria, e i é a resposta.
 3. A função é O(n): cada j é visto uma vez. A ordem dentro de cada grupo
    muda (o 120 foi para o fim): essa partição não é estável.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1014.c
@@ -2772,7 +2762,6 @@ De 09/11/2026 até 27/11/2026: 18 dias
 2. data_dias_entre pode andar de dia em dia com data_seguinte até chegar
    em b (O(dias)). Libere cada Data intermediária.
 3. data_compara: compare ano, depois mês, depois dia.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1015.c
@@ -2812,7 +2801,6 @@ Por inserção (n = 2000): +1 = 999.5, dobrando = 1.0
 2. Crescendo de 1 em 1: 1 + 2 + ... + (n - 1) = n (n - 1) / 2 cópias,
    O(n²) no total. Dobrando: 1 + 2 + 4 + ... < 2n, O(n) no total, O(1)
    por inserção "em média" (o custo amortizado).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1016.c
@@ -2879,7 +2867,6 @@ mdc(100, 75) = 25 em 2 passos
 3. Dois Fibonacci seguidos (89 e 55) são o pior caso de Euclides: cada
    passo só desce um degrau na sequência. Mesmo assim o número de passos
    é O(log n).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1018.c
@@ -2927,7 +2914,6 @@ Desvio: 2.36 min
 2. A interface não muda se um dia você trocar a implementação para
    guardar todos os tempos (para ter a mediana, por exemplo): o cliente
    continua compilando igual. Só o custo muda.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1019.c
@@ -3065,7 +3051,6 @@ Interseção ingênua: 8 20 (20 comparações)
 2. Na união, quando um vetor acaba, copie o resto do outro sem comparar.
 3. Como os dois já estão em ordem, os resultados saem em ordem, e o
    invariante do TAD vale para eles sem ordenar nada.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1022.c
@@ -3112,7 +3097,7 @@ Eleição 2: ninguém tem maioria
    (o 1), mas ele tem só 3 de 7.
 3. O ingênuo é O(n²) no pior caso (sem maioria, n · n); Boyer-Moore é
    O(n) e usa O(1) de memória extra.
-4. Resposta esperada: a saída acima. Imprima a contagem de votos na
+4. Imprima a contagem de votos na
    eleição 1 com mais um laço.
 
 ```bash
@@ -3157,7 +3142,6 @@ Saída esperada:
 2. O laço é while (i < 4 && j >= 0); conte 1 comparação por volta.
 3. Com L linhas e C colunas, a escada faz no máximo L + C - 1
    comparações, O(L + C), contra O(L · C) da força bruta.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1024.c
@@ -3213,7 +3197,6 @@ Memória: 32 bytes para 256 lugares
 4. lugares_bytes devolve sizeof(struct lugares), e só pode ser escrita
    DENTRO do lugares.c: o cliente não enxerga a struct, então não
    consegue fazer esse sizeof.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1025.c
@@ -3274,7 +3257,6 @@ Respostas iguais: sim
 3. Nenhuma é "a melhor": com muitas marcações e poucas consultas, A ganha;
    com muitas consultas, B ganha. Como o cliente só usa a interface, dá
    para trocar uma pela outra sem mexer nele.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1026.c
@@ -3322,7 +3304,6 @@ Rampa: pico na posição 15 (1600 m), binária 4, sequencial 15
    vizinho: é um pico.
 3. As duas podem achar picos DIFERENTES (a trilha tem dois: 610 e 520).
    Aqui, por acaso, acharam o mesmo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1027.c
@@ -3364,7 +3345,6 @@ C(20, 10) = 184756 | recursão: 369511 chamadas | tabela: 145 somas
    t[i][j] = t[i-1][j-1] + t[i-1][j]. São O(n · k) somas.
 3. A recursão recalcula os mesmos C(a, b) muitas e muitas vezes; a tabela
    calcula cada um uma vez só. É a ideia da programação dinâmica.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1028.c
@@ -3408,7 +3388,6 @@ A = 2000000000: lado 44721 | linear 44722 passos | binária 31 passos
 2. O invariante no fim (hi - lo == 1) diz lo² <= a < (lo + 1)²: lo é
    exatamente a raiz inteira.
 3. A linear é O(√A); a binária é O(log A).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 10-analise/lista/P1029.c

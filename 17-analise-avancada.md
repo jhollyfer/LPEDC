@@ -465,7 +465,6 @@ Saída esperada:
    return com a equação.
 2. B não precisa de duas chamadas: 2 * rec_b(n / 2) + 1 calcula o mesmo
    valor com uma só (aqui você calcula o custo, não roda o algoritmo).
-3. Resposta esperada: a tabela acima.
 
 ```bash
 ~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E680.c
@@ -509,7 +508,6 @@ texto, em que todo nível custava igual.
 3. Por que 2n² - n? Os níveis custam n², n²/2, n²/4, ..., n: a soma de
    uma progressão geométrica de razão 1/2 fica abaixo do dobro do
    primeiro termo. A raiz sozinha já é metade de tudo: Θ(n²).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E681.c
@@ -548,7 +546,7 @@ total: 28 = 8 · 7 / 2
 2. A recorrência é T(n) = T(n-1) + (n - 1), com T(1) = 0. A árvore de
    recursão vira uma linha: 7 + 6 + ... + 1.
 3. Some as comparações num contador global para o total.
-4. Resposta esperada: a saída acima. Para n = 1000 seriam 499.500
+4. Para n = 1000 seriam 499.500
    comparações: Θ(n²), mesmo sem nenhum laço aninhado no código. A
    recursão faz o papel do laço de fora.
 
@@ -637,7 +635,6 @@ C(40) / C(39) = 1.6180
 2. Zere o contador antes de cada fib(n).
 3. A razão tende a 1,618... (o número de ouro): cada n a mais multiplica
    as chamadas por 1,6. É isso que quer dizer Θ(1,618ⁿ).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E684.c
@@ -1017,7 +1014,7 @@ Saída esperada:
 
 1. potencia(b, k) começa com p = 1 e multiplica por b, k vezes. Use long.
 2. Depois são dois if: a > bk devolve 1; a == bk devolve 2; senão, 3.
-3. Resposta esperada: a saída acima. Repare no 9 T(n/3) + n²: 9 = 3²,
+3. Repare no 9 T(n/3) + n²: 9 = 3²,
    então é empate, Θ(n² log n).
 
 ```bash
@@ -1050,7 +1047,7 @@ Saída esperada:
 1. Guarde o valor anterior numa variável: comece com anterior =
    trabalho(32) e, a cada volta, atualize anterior = t.
 2. A divisão precisa de um cast: (double)t / anterior.
-3. Resposta esperada: a tabela acima. A razão começa um pouco acima de 3
+3. A razão começa um pouco acima de 3
    (o "+ n" ainda pesa com n pequeno) e vai chegando em 3.
 
 ```bash
@@ -1124,7 +1121,6 @@ ternária: 47.3 comparações por busca
    (2 · log₂ n ≈ 40). A ternária gasta até 4 para dividir por 3
    (4 · log₃ n ≈ 4 · 12,6 ≈ 50; um pouco menos, porque às vezes para
    na terceira). Θ igual não quer dizer tempo igual.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E688.c
@@ -1166,7 +1162,7 @@ n = 256:  65536 contra  6561 multiplicações, mesmo resultado
    sa = a0 + a1 e sb = b0 + b1, de h coeficientes cada.
 3. Monte o resultado como em multiplica4: r[i] += p0[i];
    r[i + h] += p1[i]; r[i + 2h] += p2[i]. Não esqueça do free.
-4. Resposta esperada: a saída acima. 16 = 4², 729 = 3⁶, 6561 = 3⁸: com
+4. 16 = 4², 729 = 3⁶, 6561 = 3⁸: com
    n = 2^j, são 4^j contra 3^j multiplicações.
 
 ```bash
@@ -1218,7 +1214,6 @@ para que ela nunca dependa da precisão do double.
 3. O conserto mais limpo nem usa log: compare a com b^k, calculado com
    inteiros num laço. a > b^k é folhas; a == b^k, empate; senão, raiz.
    (Outra saída, pior: considerar iguais se fabs(c - k) < 1e-9.)
-4. Resposta esperada: a saída esperada acima.
 
 ```bash
 ~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E690.c
@@ -1597,7 +1592,7 @@ Saída esperada:
    (confira o NULL) e copias = 0.
 2. As cópias são 1 + 2 + 4 + ... até a última potência de 2 menor que
    n. Para n = 10: 1 + 2 + 4 + 8 = 15.
-3. Resposta esperada: a tabela acima. A média nunca passa de 2: é o
+3. A média nunca passa de 2: é o
    O(1) amortizado na prática.
 
 ```bash
@@ -1632,7 +1627,7 @@ Saída esperada:
 1. As variáveis da simulação são só cap, tam e copias, todas long.
 2. Multiplicar n por 10 multiplica as cópias do "soma 10" por 100: é a
    marca do Θ(n²) no total.
-3. Resposta esperada: a tabela acima. Com +10, cada inserção custa em
+3. Com +10, cada inserção custa em
    média n/20 cópias (O(n) amortizado); dobrando, menos de 2 (O(1)).
 
 ```bash
@@ -1672,7 +1667,7 @@ nova capacidade seja sempre maior que a antiga.
 1. Calcule com long para não estourar: (int)((long)v->cap * num / den).
 2. Se a conta não passar de cap, use cap + 1.
 3. printf("%-6s %8d %10ld %8.2f %9d\n", ...) dá as colunas da saída.
-4. Resposta esperada: a tabela acima. O fator 1,5 copia o dobro (cada
+4. O fator 1,5 copia o dobro (cada
    elemento é copiado, em média, umas 2 vezes), mas continua O(1)
    amortizado. A sobra parecida aqui é coincidência deste n: no pior
    caso, o x 2 deixa metade vazia; o x 1,5, só um terço.
@@ -1707,7 +1702,7 @@ inc/dec alternados a partir de 511: 1000 trocas (10.00 por operação)
 2. Em carrega, o bit i de x é (x >> i) & 1 (assunto 0065).
 3. 511 + 1 = 512 = 1000000000: os 10 bits mudam. 512 - 1 volta a 511:
    os 10 mudam de novo. Cada operação custa 10, para sempre.
-4. Resposta esperada: a saída acima. O argumento amortizado só vale
+4. O argumento amortizado só vale
    para a sequência de operações que ele analisou. Com o decremento, o
    cofrinho que os incrementos baratos enchiam nunca chega a encher.
 
@@ -1751,7 +1746,6 @@ atendidos: 1 2 3 4 5 6 7 8
    de enfileirados, e cada operação custa O(1) amortizado.
 3. O "pior atendimento" mostra o outro lado: uma única operação chegou a
    mover 262.144 pedidos de uma vez.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 17-analise-avancada/0116-amortizada/E695.c
@@ -1793,7 +1787,7 @@ esvaziar: 15 cópias (cap 1)
 2. A operação cara precisa de "folga" dos dois lados. Depois de encolher
    de cap para cap/2 com n = cap/4, o vetor fica meio cheio: faltam cap/4
    inserções para dobrar e cap/8 remoções para encolher de novo.
-3. Resposta esperada: a saída esperada acima. A condição vira
+3. A condição vira
    v->n == v->cap / 4.
 
 ```bash
@@ -2221,7 +2215,7 @@ Saída esperada:
 2. teto_log2 começa com h = 0 e folhas = 1; enquanto folhas < x,
    dobra folhas e soma 1 em h.
 3. Calcule o fatorial acumulando no próprio laço do main (fat *= n).
-4. Resposta esperada: a tabela acima. Nas linhas que não aparecem, o
+4. Nas linhas que não aparecem, o
    limite é 13, 16, 19, 22 e 26 (n = 7 a 11) e 33, 37, 41, 45, 49, 53 e
    57 (n = 13 a 19). Por que inteiros? Com log2 em double, um valor que
    devia dar 3 exato pode sair 3.0000000000000004, e o teto erra por 1.
@@ -2255,7 +2249,7 @@ limite inferior: 5
 2. Conte as comparações dentro de uma função maior(a, b) que soma 1 num
    contador global e devolve a > b; use-a no while do insertion.
 3. Ao achar um pior novo, zere o contador de "quantas no pior".
-4. Resposta esperada: a saída acima. O insertion de 4 não é ótimo: faz
+4. O insertion de 4 não é ótimo: faz
    6 no pior caso, um a mais que o limite (o exercício E702 mostra um
    método com 5). A média 4,92 abaixo de 5 não contradiz nada: o limite
    é de pior caso.
@@ -2287,7 +2281,7 @@ Saída esperada:
    v[0] sozinho é mínimo e máximo, e os pares começam em i = 1.
 2. O laço é for (; i + 1 < n; i += 2), com a = v[i] e b = v[i + 1];
    troque a e b se b for menor.
-3. Resposta esperada: a saída acima. São ⌈3n/2⌉ - 2 comparações, e dá
+3. São ⌈3n/2⌉ - 2 comparações, e dá
    para provar (com um argumento de adversário, como no exemplo A234)
    que nenhum método faz menos.
 
@@ -2333,7 +2327,7 @@ Saída esperada:
 
 1. Em C, ⌈n/2⌉ é (n + 1) / 2 e ⌊n/2⌋ é n / 2 (divisão inteira).
 2. O fatorial cabe em unsigned long long até n = 20.
-3. Resposta esperada: a tabela acima. O merge sort é ótimo até n = 4 e
+3. O merge sort é ótimo até n = 4 e
    depois fica a poucas comparações do limite (4 a mais em n = 16). O
    insertion se afasta cada vez mais: Θ(n²) contra Θ(n log n).
 
@@ -2386,7 +2380,7 @@ pior caso: 3 comparações
    respostas levam até a folha? O que elas dizem sobre x, y e z?
 2. Para a pergunta repetida: no ramo do else de menor(x, y), o que você
    já sabe sobre x e y? Alguma pergunta ali tem resposta garantida?
-3. Resposta esperada: a saída esperada acima. A folha do "x < y, y > z,
+3. A folha do "x < y, y > z,
    x < z" é x z y; e, com tempos diferentes, o menor(y, x) dentro do
    else é sempre verdadeiro: pode sair.
 
@@ -2426,7 +2420,7 @@ pior caso: 5 comparações (limite: 5)
 2. No passo 3, quem perde (o maior dos dois "menores") é um dos do meio.
    No passo 4, quem perde (o menor dos dois "maiores") é o outro.
 3. No fim, escreva mínimo, meio, meio e máximo de volta em v[0..3].
-4. Resposta esperada: a saída acima. Esse método atinge o limite: é
+4. Esse método atinge o limite: é
    ótimo. Para 5 elementos o limite é 7, e também existe um método com
    7 (bem mais chato de escrever).
 
@@ -2835,7 +2829,7 @@ merge,     20 mil -> 1 milhão:    0.2790 s
 
 1. log2 está em <math.h> (o rodar já liga a biblioteca matemática).
 2. Use double em tudo: n1 * n1 com int estoura para n1 = 1 milhão.
-3. Resposta esperada: a saída acima. 2000 s são mais de 33 minutos,
+3. 2000 s são mais de 33 minutos,
    contra um quarto de segundo. Entrada 50 vezes maior: o insertion fica
    2500 vezes mais lento, o merge, só 70.
 
@@ -2875,7 +2869,7 @@ vencedor: insertion
    mas static int base[N], v[N]; os tira da pilha.
 3. Use o sorteia() já escrito, sem mudar a semente, para dar os mesmos
    números da saída esperada.
-4. Resposta esperada: a saída acima. O insertion faz n - 1 comparações
+4. O insertion faz n - 1 comparações
    mais uma por inversão: Θ(n) num vetor quase ordenado. O pior caso
    Θ(n²) não conta a história toda; o heapsort, ótimo no pior caso, é o
    pior aqui.
@@ -2921,7 +2915,7 @@ anda de 2 em 2?
    divisão inteira.
 2. Para n log n, dobrar n dá 2 · log(2n) / log n: com n = 64, 2 · 7 / 6 =
    2,33. Por isso o limite do Θ(n) é 2,15, e não 2,5.
-3. Resposta esperada: a saída acima. O misterio_b é T(n) = 2 T(n/2) + 1
+3. O misterio_b é T(n) = 2 T(n/2) + 1
    (caso 1 do teorema mestre, Θ(n)); o passo 2 do misterio_d só divide
    o custo por uma constante.
 
@@ -3001,7 +2995,7 @@ quick:       331546 comparações, 0.004 s
    divisão inteira?
 2. Onde a contagem é zerada? Uma vez só, antes do laço?
 3. Depois do insertion, como está o vetor v? O que o merge recebe?
-4. Resposta esperada: a saída esperada acima. Os consertos: dividir em
+4. Os consertos: dividir em
    double ((double)(clock() - ini) / CLOCKS_PER_SEC), chamar
    ord_zera_contagem() antes de cada ordenação e copiar o original para
    v (memcpy) também antes de cada uma.

@@ -347,7 +347,6 @@ area = 30
 1. Rode antes de mexer: sai 18, 87 e 12. Descubra por que, olhando a
    tabela de precedência.
 2. Na moldura, cada lado ganha 2: (4 + 2) * (3 + 2).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/E1015.c
@@ -382,7 +381,6 @@ x -= 1 + 2 -> x = 2
 1. *, / e % estão no mesmo nível e agrupam da esquerda para a direita.
 2. A atribuição agrupa da direita: a = (b = (c = 7)).
 3. x -= 1 + 2 é x = x - (1 + 2), não x = x - 1 + 2.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/E1016.c
@@ -414,7 +412,6 @@ com funcoes: a = 7, b = 10, c = 14
 
 1. Em pos_incremento, guarde *p numa variável antes de somar.
 2. b2 = pos_incremento(&a2) * 2; c2 = pre_incremento(&a2) * 2;
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/E1017.c
@@ -449,7 +446,6 @@ desconto à vista: R$ 240
    árvore que o C montou.
 2. O ?: fica abaixo do + e do >: ele engoliu a conta inteira.
 3. 10 / 100 em inteiros é 0. Multiplique antes de dividir.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/E1018.c
@@ -484,7 +480,6 @@ maior = 3, fila = 4
    texto que cada macro gera.
 2. #define DOBRO(x) ((x) + (x))
 3. Com a função, a chamada fica maior(fila++, limite).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/E1019.c
@@ -528,7 +523,6 @@ vetor vazio: indice -1, leituras 0
 2. Para contar só as leituras que acontecem, use o operador vírgula no
    lado direito: (++*lidos, v[i] != alvo).
 3. Comece *lidos em 0 dentro da função.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/E1020.c
@@ -772,7 +766,6 @@ vidas: 1 0 255
 1. contador++ num unsigned char: 255 + 1 dá a volta para 0, e isso é
    definido pelo padrão (conta módulo 256).
 2. Para mostrar, %d serve: o byte vira int ao entrar no printf.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0171-com-e-sem-sinal/E1021.c
@@ -806,7 +799,6 @@ unsigned long:  8 bytes, 0 a 18446744073709551615
    USHRT_MAX), %u para UINT_MAX, %ld para long, %lu para unsigned long.
 3. O mesmo número de bits dá a mesma quantidade de valores: o com sinal
    só divide metade para os negativos.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0171-com-e-sem-sinal/E1022.c
@@ -852,7 +844,6 @@ ultimo par em {1, 3}: nenhum
    laço, i vai de n - 1 até 0.
 2. "Não achei" com size_t não pode ser -1: devolva n, que nunca é um
    índice válido.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0171-com-e-sem-sinal/E1023.c
@@ -888,7 +879,6 @@ restam 0 caracteres
 2. strlen(a) - strlen(b) > 0 é verdadeiro sempre que os tamanhos são
    diferentes. Compare os dois direto.
 3. Em restantes, teste se a mensagem passou do limite ANTES de subtrair.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0171-com-e-sem-sinal/E1024.c
@@ -926,7 +916,6 @@ alterado: nao confere
    sem sinal dá a volta exatamente como precisa.
 3. Cuidado com a promoção: soma + v vira int, e 226 + 30 = 256, que não é
    0. Escreva (unsigned char)(soma + v) == 0.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0171-com-e-sem-sinal/E1025.c
@@ -967,7 +956,6 @@ compara(7, 3) = 1
 3. compara: trate a < 0 primeiro. Depois a já é positivo, e
    (unsigned)a é seguro.
 4. (x > y) - (x < y) dá -1, 0 ou 1 numa linha só.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0171-com-e-sem-sinal/E1026.c
@@ -1225,7 +1213,6 @@ Saída esperada:
 1. t[i] = base * (i + 1).
 2. sizeof t de um VLA é calculado na hora: n * sizeof(int). Mostre com
    %zu.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0172-vla/E1027.c
@@ -1262,7 +1249,6 @@ trimestre 4: 83
 1. Uma matriz comum int m[3][4] pode ser passada para um parâmetro VLA:
    soma_linha(3, 4, vendas, 0).
 2. As dimensões vêm antes da matriz na lista de parâmetros.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0172-vla/E1028.c
@@ -1300,7 +1286,6 @@ transposta (3 x 2):
 1. Um VLA não aceita "= {...}": preencha com a[i][j] = i * c + j + 1.
 2. Cuidado: t tem as dimensões trocadas, t[c][l].
 3. Cada número com %3d.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0172-vla/E1029.c
@@ -1332,7 +1317,6 @@ n = 3000000, media = R$ 50.00
 2. malloc(n * sizeof *precos). Se der NULL, mostre "sem memória" e
    devolva 1.
 3. O resto do código não muda: precos[i] funciona igual com o ponteiro.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0172-vla/E1030.c
@@ -1373,7 +1357,6 @@ loja 2: A = R$ 62, B = R$ 52 -> melhor B
 2. As três dimensões vêm antes das matrizes. Crie r como VLA no main,
    com int lojas = 2, fornecedores = 2.
 3. Zere r[i][j] antes de acumular: VLA não pode ser inicializado com {0}.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0172-vla/E1031.c
@@ -1411,7 +1394,6 @@ n = 100000: heap, soma = 333338333350000
 2. Para o quadrado não estourar o int, converta antes de multiplicar:
    (long long)(i + 1) * (i + 1).
 3. Confira com a fórmula n(n + 1)(2n + 1) / 6.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0172-vla/E1032.c
@@ -1755,7 +1737,6 @@ tem R|I? nao
 
 1. Ligar: *p |= m. Desligar: *p &= ~m.
 2. "Todos": (p & m) == m, com os parênteses (o == vem antes do &).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0173-juntando-tudo/E1033.c
@@ -1786,7 +1767,6 @@ ER-G- = 11
 2. Em de_texto, qualquer caractere diferente de '-' na posição b liga o
    bit b: p |= 1u << b.
 3. Não esqueça o '\0' em s[QTD_PERMS].
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0173-juntando-tudo/E1034.c
@@ -1820,7 +1800,6 @@ tem E e R? sim
 2. p | ~m liga todos os bits que NÃO estão em m. Para apagar, o
    operador é outro.
 3. (p & m) != 0 é "sobrou algum". "Sobraram todos" compara com m.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0173-juntando-tudo/E1035.c
@@ -1855,7 +1834,6 @@ Carla: usou E----, nunca usou -R---
 1. Comece com 0 e faça m |= uso[i][j] para cada dia.
 2. "Tem mas não usou" = efetivas[i] & ~usado(...).
 3. Uma função que escreve a máscara como texto ajuda (veja o E1034).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0173-juntando-tudo/E1036.c
@@ -1895,7 +1873,6 @@ pedido -----: nenhum (falta ao visitante: -----)
 2. Falta = pedido & ~base[VISITANTE].
 3. Repare na última linha: o bit 5 não aparece no texto de 5 letras, mas
    ainda impede todos os papéis. Só os 5 bits de baixo viram texto.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0173-juntando-tudo/E1037.c
@@ -1941,7 +1918,6 @@ Teo: ER---
    mudaria o resultado.
 2. No main, os ids podem ser VLAs: int k = 3; int ids_lia[k]; e preencha
    um por um (VLA não aceita = {...}).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0173-juntando-tudo/E1038.c
@@ -2125,7 +2101,6 @@ Saída esperada:
    case de baixo.
 2. O default pega qualquer char que não tem case.
 3. No printf, o % sozinho se escreve %%; o char da operação sai com %c.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2701.c
@@ -2153,7 +2128,6 @@ Saída esperada:
 1. O último dígito é n % 10; tirar o último dígito é n /= 10.
 2. do { ... } while (n > 0); com ponto e vírgula depois do while.
 3. Com while comum, o 0 daria 0 dígitos.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2702.c
@@ -2181,7 +2155,6 @@ bandeira: 11% do preço do kWh
 1. Rode antes: sai R$ 215.10 e 0%.
 2. O consumo multiplica a soma da tarifa com a bandeira.
 3. 10 / 90 em inteiros é 0: multiplique por 100 antes de dividir.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2703.c
@@ -2220,7 +2193,6 @@ inverter 7 -> 10101100
 1. A máscara do bit n é 1u << n.
 2. Ligar é |, desligar é & com ~, inverter é ^, testar é (x >> n) & 1u.
 3. Cada operação parte do x original: as funções não mudam x.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2704.c
@@ -2259,7 +2231,6 @@ Saída esperada:
    unsigned char a = (unsigned char)300;
 3. unsigned char e unsigned short viram int no printf: %d serve. O
    unsigned vai com %u.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2705.c
@@ -2284,7 +2255,6 @@ depois: 12 25 30
 
 1. Três comparações bastam: (a, b), (b, c) e de novo (a, b).
 2. Dentro de ordenar3, a, b e c já são ponteiros: trocar(a, b), sem &.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2706.c
@@ -2322,7 +2292,6 @@ total da feira: R$ 40.80
 2. fscanf(f, " %31[^;];%lf", nome, &preco) lê o nome até o ; e depois o
    número. O espaço no começo pula o \n da linha anterior.
 3. O laço continua enquanto o fscanf devolver 2.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2707.c
@@ -2353,7 +2322,6 @@ QUA + 2 = SEX (5)
    case SAB:
        return "fim de semana";
 2. O enum começa em 0: QUA vale 3, e QUA + 2 vale 5, que é SEX.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2708.c
@@ -2384,7 +2352,6 @@ válidas: 3, soma dos quadrados: 174
 1. #define QUADRADO(x) ((x) * (x))
 2. #define ENTRE(x, a, b) ((x) >= (a) && (x) <= (b))
 3. Teste a macro com QUADRADO(1 + 2): tem que dar 9, não 5.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2709.c
@@ -2410,7 +2377,6 @@ mais quente: 35 no dia 4
 
 1. A média precisa de divisão real: (double)soma / 7.
 2. Calcule o tamanho com sizeof v / sizeof v[0] em vez de escrever 7.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2710.c
@@ -2449,7 +2415,6 @@ valor em estoque: R$ 148.00
 
 1. if (q > p->qtd) return false; e só depois p->qtd -= q.
 2. O valor é a soma de qtd * preco: 7 * 18 + 4 * 5.5 + 0 * 6.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2711.c
@@ -2490,7 +2455,6 @@ sizeof(Celula) = 24, sizeof da union = 16
    union e os 16 da union: 24.
 3. Para o texto, use strcpy(c.v.s, "feira") depois de pôr c.tipo = TEXTO.
 4. sizeof c.v mede só a union.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2712.c
@@ -2525,7 +2489,6 @@ tabuleiro 2: vencedor -
    não é '.', ou 0, deixa o código curto.
 2. São 8 trincas: 3 linhas, 3 colunas e 2 diagonais.
 3. Inicialize com strings: char t1[3][3] = {{'X','O','.'}, ...}.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2713.c
@@ -2556,7 +2519,6 @@ Saída esperada:
 2. Um enum { LOAD, ADD, SUB, JMP } deixa os case legíveis: os valores 0 a
    3 batem com os bits.
 3. Guarde os bytes em unsigned char e mostre com 0x%02X.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2714.c
@@ -2594,7 +2556,6 @@ compara(5, 5) = 0
    -8 vira 4294967288. Converta para double antes de dividir.
 2. a - b > 0 com unsigned é verdadeiro sempre que a != b. Compare a e b
    direto.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2715.c
@@ -2624,7 +2585,6 @@ mais distantes: 0 e 3 (45 km)
 1. void preencher(int n, const int km[n], int d[n][n])
 2. A tabela é simétrica: basta olhar j > i na busca.
 3. Cada número com %3d.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2716.c
@@ -2660,7 +2620,6 @@ aprovado: Caio (7.0)
 2. fwrite(v, sizeof v[0], 4, f) devolve quantos registros gravou.
 3. while (fread(&a, sizeof a, 1, f) == 1) lê um por vez.
 4. sizeof(Aluno) = 16 + 4 = 20 bytes.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2717.c
@@ -2691,7 +2650,6 @@ bloqueios: 2
    porque a string tem pelo menos um evento.
 2. Dentro do switch (estado), um if sobre o evento decide o que fazer.
 3. Comece em TRAVADA.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2718.c
@@ -2726,7 +2684,6 @@ ordenado: 3 7 19 42 88
 1. for (int *p = ini + 1; p < fim; p++) percorre o trecho.
 2. p - v dá o índice, do tipo ptrdiff_t: mostre com %td.
 3. Na ordenação, troque *maior(ini, fim) com *(fim - 1) e faça fim--.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2719.c
@@ -2769,7 +2726,6 @@ TESTA(flags, 7 - 1) = 0
 2. #define TESTA(x, n) (((x) >> (n)) & 1u): sem os parênteses de fora,
    !TESTA(...) aplicaria o ! só ao primeiro pedaço.
 3. Guarde de volta com cast: flags = (uint8_t)LIGA(flags, 1 + 1);
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2720.c
@@ -2804,7 +2760,6 @@ Saída esperada:
 2. Cuidado com a ordem: o primeiro desempilhado é o operando da DIREITA.
    Em "9 2 3 * -", a conta é 9 - 6.
 3. Um dígito c vira número com c - '0'. Espaço, pule.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2721.c
@@ -2846,7 +2801,6 @@ girado 0: 00011101 (0x1D)
    separado para ficar claro.
 3. A promoção inteira transforma o uint8_t em int antes do <<: corte de
    volta com (uint8_t)(...).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2722.c
@@ -2890,7 +2844,6 @@ Saída esperada:
    negativos.
 3. Com 12 bits, a régua é 4096: se o bit 11 (0x800) está ligado, o valor é
    x - 4096.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2723.c
@@ -2930,7 +2883,6 @@ triângulo 3.0, 4.0, 5.0: 6.00
    ou 3 números.
 2. Heron: s = (a + b + c) / 2 e área = sqrt(s(s - a)(s - b)(s - c)).
 3. Use acos(-1.0) para o pi; o rodar já liga a libm (-lm).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2724.c
@@ -2979,7 +2931,6 @@ girada (3 x 2):
 2. Para girar várias vezes, alterne entre duas matrizes 3 x 3 (ou copie
    de volta depois de cada giro).
 3. VLA não aceita = {...}: preencha a 2 x 3 com a[i][j] = i * c + j + 1.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2725.c
@@ -3015,7 +2966,6 @@ por nome: Fast 7, Nacional 10, Paysandu 12, Remo 10
 2. int (*cmp)(const void *, const void *) = NULL; e, no switch,
    cmp = comparar_pontos;
 3. Para "mais pontos primeiro", devolva y->pontos - x->pontos.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2726.c
@@ -3051,7 +3001,6 @@ bytes: 39
 2. Uma palavra começa quando c não é espaço e o anterior era espaço (ou é
    o começo). Use isspace de <ctype.h>.
 3. A linha em branco conta como linha, mas não tem palavra.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2727.c
@@ -3083,7 +3032,6 @@ vetor de bits: 16 bytes
    32 bits sem sinal antes de deslocar.
 3. Comece o crivo em p = 2 e, para cada p não marcado, marque p * p,
    p * p + p, ... até 100.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2728.c
@@ -3116,7 +3064,6 @@ vendas sem nenhum dia: 0 dias
    e o laço que desce com size_t quando n é 0.
 3. Depois de consertar a função dos dias, chame-a também com n = 0: ela
    não pode mostrar nada nem ler fora do vetor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2729.c
@@ -3167,7 +3114,6 @@ contestadas: 1 (R$ 89.90)
    = {0}: zere com um laço (ou memset).
 4. Valores em centavos, num long: mostre reais com v / 100 e v % 100, ou
    com v / 100.0 e %.2f.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/lista/P2730.c

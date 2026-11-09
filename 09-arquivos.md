@@ -370,7 +370,7 @@ a Duda -> Caio Duda
    do último byte, sem apagar nada.
 2. Para imprimir o nome sem o '\n' que o fgets traz, troque o '\n' por
    '\0': linha[strcspn(linha, "\n")] = '\0'; (strcspn é de <string.h>).
-3. Resposta esperada: as quatro linhas acima. Ana e Bia somem quando o
+3. Ana e Bia somem quando o
    terceiro fopen abre com "w".
 
 ```bash
@@ -1299,7 +1299,7 @@ Soma dos atoi: 10
    i, e strlen(argv[i]) dá o tamanho.
 2. atoi lê enquanto encontra dígitos e para no primeiro que não é. Sem
    nenhum dígito, devolve 0. Ele não avisa nada em nenhum dos casos.
-3. Resposta esperada: a saída acima. Repare que "+" e "3a" passaram sem
+3. Repare que "+" e "3a" passaram sem
    nenhum aviso: é por isso que entrada de usuário pede strtol.
 
 ```bash
@@ -1992,7 +1992,6 @@ Saída esperada:
 1. O contato i começa em sizeof(int) + i * sizeof(Contato).
 2. Para regravar o cabeçalho: rewind(arq) e fwrite(&quantidade, ...).
 3. sizeof(Contato) = 16 + 8 = 24 bytes; 4 + 3 * 24 = 76.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E417.c
@@ -2742,7 +2741,7 @@ Saída esperada:
 2. Com ini = 0 e fim = n - 1: meio = (ini + fim) / 2, fseek para
    meio * sizeof(Aluno), fread, compare. Menor: ini = meio + 1; maior:
    fim = meio - 1. Pare quando ini > fim.
-3. Resposta esperada: a saída acima. Com 8 registros, nenhuma busca passa
+3. Com 8 registros, nenhuma busca passa
    de 4 leituras (piso de log2 8, mais 1).
 
 ```bash
@@ -3050,7 +3049,6 @@ Zeca: não está na agenda (3 leituras)
    leia o registro i e grave-o em i + 1. Depois grave o novo em pos.
 3. Deslocamentos: Marta 0, Bia 1, Rui 0, Caio 2 e Ana 4, total 7. É o
    custo de manter a ordem: inserir é O(n), mas buscar fica O(log n).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/lista/P0921.c
@@ -3169,7 +3167,6 @@ Linha 9: não existe
 1. Antes de cada fgets da primeira passada, pos[n] = ftell(arq).
 2. Para mostrar a linha k: fseek(arq, pos[k - 1], SEEK_SET) e um fgets.
 3. A linha 2 começa no byte 18 porque a linha 1 tem 17 letras mais o '\n'.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/lista/P0923.c
@@ -3261,7 +3258,7 @@ Leituras: 20, escritas: 6
 2. Com n = 6 há 5 passadas: 6 + 5 + 4 + 3 + 2 = 20 leituras. A seleção
    sempre lê a mesma quantidade, esteja o arquivo como estiver: Θ(n²).
 3. Só 3 passadas precisam trocar (i = 0, 2 e 3): 6 escritas.
-4. Resposta esperada: a saída acima. Não conte as leituras da listagem.
+4. Não conte as leituras da listagem.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/lista/P0925.c
@@ -3307,7 +3304,7 @@ Confere: sim
    e grave o par. Depois pule essa sequência.
 2. O tamanho do arquivo vem de fseek até o fim e ftell. Cada Par ocupa
    2 bytes (dois campos de 1 byte, sem preenchimento).
-3. Resposta esperada: a saída acima. RLE compensa com muita repetição; com
+3. RLE compensa com muita repetição; com
    "ABCD" o arquivo ficaria com o DOBRO do tamanho.
 
 ```bash
@@ -3387,7 +3384,6 @@ Saída esperada:
 2. Para cada jogo, atualize os dois times: saldo += gols feitos - gols
    sofridos; pontos e vitórias conforme o placar.
 3. O "%+d" do printf mostra o sinal sempre: +2, -6.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/lista/P0928.c
@@ -3430,7 +3426,6 @@ Decifrado: ataque ao amanhecer
 2. Valide a chave com strtol e o ponteiro de fim, como no assunto 0069.
 3. Grave com fputc letra por letra (e um espaço entre as palavras) e leia
    de volta com fgets.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/lista/P0929.c
@@ -3491,7 +3486,6 @@ Saída esperada:
 3. Por que não ordenar o próprio arquivo de dados? Porque registros
    grandes custam caro para mover, e dá para ter vários índices (por
    código, por ano...) sobre os mesmos dados.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 09-arquivos/lista/P0930.c

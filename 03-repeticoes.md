@@ -276,7 +276,7 @@ Pi! Pi! Pi!
 
 1. A pergunta do while é "ainda tem tempo?": tempo > 0.
 2. Dentro do laço: mostre o tempo e depois diminua (tempo-- ou tempo = tempo - 1).
-3. Resposta esperada: a saída acima. O laço roda 5 vezes; quando tempo vira 0,
+3. O laço roda 5 vezes; quando tempo vira 0,
    a pergunta dá falso e o programa segue para o apito.
 
 ```bash
@@ -432,7 +432,7 @@ C: | voltas 0, k final 10
    em 6, com 5 voltas.
 2. Trecho B: divisão inteira. 100 / 3 = 33. O printf de n vai logo depois
    da linha n = n / 3.
-3. Resposta esperada: a saída acima. No trecho C o corpo roda zero vezes,
+3. No trecho C o corpo roda zero vezes,
    porque o while pergunta antes: 10 < 10 já é falso.
 
 ```bash
@@ -713,7 +713,7 @@ Saída esperada:
    10 < 5 é falso logo na primeira pergunta.
 2. Para o while rodar o corpo pelo menos uma vez, escreva uma cópia do
    corpo ANTES do laço.
-3. Resposta esperada: a saída acima. O trecho C fica: int k = 10;
+3. O trecho C fica: int k = 10;
    printf("%d ", k); k++; while (k < 5) { printf("%d ", k); k++; } e o
    printf final.
 
@@ -1093,7 +1093,7 @@ d) 1 3 9 27 81 (5 voltas)
 1. Antes de cada laço: printf("a) ") e voltas = 0. No corpo:
    printf("%d ", x) e voltas++. Depois: printf("(%d voltas)\n", voltas).
 2. O laço c pergunta "1 >= 10?" logo de cara: o corpo nunca roda.
-3. Resposta esperada: a saída acima. O passo pode ser qualquer conta, não
+3. O passo pode ser qualquer conta, não
    só +1: no d, x é multiplicado por 3 a cada volta.
 
 ```bash
@@ -1486,7 +1486,7 @@ Saída esperada:
    logo antes do continue, dentro do mesmo if.
 2. Na cópia, o 8 é múltiplo de 4: quem chega primeiro nele, o continue ou
    o break?
-3. Resposta esperada: a saída acima. Com i == 8, o break nunca acontece,
+3. Com i == 8, o break nunca acontece,
    porque o continue pega o 8 antes; o laço vai até o 10 e pula o 4 e o 8.
 
 ```bash

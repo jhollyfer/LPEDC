@@ -81,7 +81,12 @@ const exercicio = (caminho, nome) => {
     else corpo.push(l)
   }
   if (corpo.at(-1) === 'CODIGO') corpo.splice(-1, 1, '```')
-  const listaDicas = dicas.filter((l) => l.trim())
+  // "Resposta esperada: a saída acima." só repete a saída que o enunciado já mostra: fica no .c,
+  // sai do .md
+  const soApontaParaCima = /^\d+\. Resposta esperada: (a saída( esperada)?|a tabela|as \S+ linhas) acima\.$/
+  const listaDicas = dicas
+    .filter((l) => l.trim() && !soApontaParaCima.test(l.trim()))
+    .map((l) => l.replace(/^(\d+\. )Resposta esperada: (a saída( esperada)?|a tabela|as \S+ linhas) acima\. (?=\S)/, '$1'))
   return [
     `**Exercício ${nome.replace(/\.c$/, '')}**${nivel ? ` · ${nivel}` : ''}${tituloEx ? ` · ${tituloEx}` : ''}`,
     '',

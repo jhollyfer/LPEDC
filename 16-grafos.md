@@ -372,7 +372,6 @@ Ninguém deve para: Sol
 1. Somar a LINHA i conta as setas que saem de i: para quantos i deve.
 2. Somar a COLUNA i (deve[j][i], com j variando) conta as setas que
    chegam em i: de quantos i recebe.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0109-grafos/E650.c
@@ -408,7 +407,6 @@ Mão única: 3, mão dupla: 2
 2. Olhe cada par uma vez só: i de 0 a 3 e j de i + 1 a 3. Se
    adj[i][j] e adj[j][i] valem 1, é mão dupla; se só um vale 1, mão única.
 3. A letra da esquina i é 'A' + i (char é número, assunto 0040).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0109-grafos/E651.c
@@ -515,7 +513,6 @@ Duda e Edu: 2 amigos em comum
    amigos (adj[i][j] == 1).
 3. Curiosidade: a contagem é exatamente a casa [i][j] do produto da matriz
    por ela mesma (adj x adj).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0109-grafos/E654.c
@@ -838,7 +835,6 @@ Tatuape: descoberto por Penha
 2. Anote pai[v] = u no mesmo lugar em que o código anota dist[v].
 3. Repare na Saude: ela é vizinha de Moema e de Tatuape, mas quem a
    descobre é quem sai primeiro da fila.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0110-bfs/E655.c
@@ -872,7 +868,6 @@ Rodadas até todos ouvirem: 3
 1. São duas linhas: rodada[v] = rodada[u] + 1; e fila[fim++] = v;
 2. Por que dá para marcar a rodada já aqui, antes de o vizinho sair da
    fila? Porque é isso que impede que ele entre duas vezes.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0110-bfs/E656.c
@@ -912,7 +907,7 @@ Ao contrário: Lapa -> Penha -> Tatuape -> Saude
    uma pilha (assunto 0084).
 3. Para não escrever a BFS duas vezes, ponha-a numa função com um
    parâmetro bool crescente e use v = crescente ? k : V - 1 - k.
-4. Resposta esperada: a saída acima. Os dois caminhos são mínimos; quem
+4. Os dois caminhos são mínimos; quem
    entra primeiro na fila descobre os vizinhos primeiro.
 
 ```bash
@@ -951,7 +946,6 @@ Total de grupos: 3
 2. Laço externo: para cada bairro v ainda não visitado, comece uma BFS
    nova a partir de v e some 1 nos grupos.
 3. Um vetor visitado[] só, compartilhado por todas as BFS.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0110-bfs/E658.c
@@ -995,7 +989,7 @@ Pior distância: 6
 2. A fila mistura as ondas dos dois postos, e cada casa é descoberta
    primeiro pelo posto mais perto. É a BFS de várias origens.
 3. A distância cabe num dígito aqui: imprima com '0' + dist.
-4. Resposta esperada: a saída acima. A pior casa é a da linha 4, coluna 2
+4. A pior casa é a da linha 4, coluna 2
    (contando do 0): 6 quarteirões até o posto da esquerda.
 
 ```bash
@@ -1308,7 +1302,6 @@ Mais fundo: Saída (nível 4)
    dentro de dfs, comparando com o parâmetro nivel.
 3. Repare no Banco: ele é vizinho direto do Hall, mas a DFS chega nele
    pela Praça e pela Loja, no nível 3.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0111-dfs/E661.c
@@ -1344,7 +1337,7 @@ Casa chega no Hospital? não
 1. Em grafo dirigido, adj[u][v] = 1 só no sentido da seta.
 2. A função é a mesma do texto, sem o recuo. Para zerar entre as buscas,
    um laço com visitado[v] = false.
-3. Resposta esperada: a saída acima. O Hospital alcança todo mundo, mas
+3. O Hospital alcança todo mundo, mas
    ninguém chega nele: nenhuma seta entra no Hospital.
 
 ```bash
@@ -1426,7 +1419,7 @@ Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
    de árvore do assunto 0098).
 2. Uma disciplina só termina depois de todas que dependem dela; por isso a
    ordem de término é a ordem de estudo invertida.
-3. Resposta esperada: a saída acima. Outras ordens também seriam válidas
+3. Outras ordens também seriam válidas
    (Lógica, C, Discreta...), mas esta é a que a DFS em ordem de índice dá.
 
 ```bash
@@ -1849,7 +1842,7 @@ Caminho até D: CD -> B -> A -> C -> D (8 km)
    que relaxa. Um laço interno imprime dist[v] ou "-".
 2. O caminho sai de trás para frente: guarde num vetor seguindo
    anterior[] a partir de D e imprima do fim para o começo.
-3. Resposta esperada: a saída acima. Repare no A, que cai de 7 para 5
+3. Repare no A, que cai de 7 para 5
    quando o B é fixado, e no D, que cai de 11 para 8.
 
 ```bash
@@ -1886,7 +1879,7 @@ Pinheiros: 17 min
 1. A pergunta é: existe trilho de u para v, v não está fixo, e
    dist[u] + tempo[u][v] < dist[v]?
 2. Se sim, dist[v] recebe a soma. (Aqui não precisa do anterior.)
-3. Resposta esperada: a saída acima. Na Paulista, o trilho direto
+3. Na Paulista, o trilho direto
    da Sé leva 11, mas Sé -> República -> Paulista leva 10.
 
 ```bash
@@ -1926,7 +1919,7 @@ Mais longe: Eva (11 km)
    0 para "sem rua".
 2. A rota recursiva é a do A224: imprime primeiro a rota até anterior[v],
    depois " -> " e o nome de v.
-3. Resposta esperada: a saída acima. Todas as rotas formam uma
+3. Todas as rotas formam uma
    linha só: a árvore de caminhos mínimos deste mapa é um caminho.
 
 ```bash
@@ -1967,7 +1960,7 @@ Oeste: 5 min
 1. Transpor a matriz é trocar linha por coluna: inv[j][i] = rua[i][j].
 2. Cuidado com a armadilha: Dijkstra no grafo ORIGINAL a partir do Hospital
    responde outra pergunta (do Hospital até os bairros) e dá outros números.
-3. Resposta esperada: a saída acima. Norte vai por Leste (2 + 4 = 6, e não
+3. Norte vai por Leste (2 + 4 = 6, e não
    9 direto); Sul vai por Norte (1 + 6 = 7, e não 3 + 5 = 8 por Oeste).
 
 ```bash
@@ -2052,7 +2045,7 @@ C: R$ 4
    somar (INT_MAX + peso estoura).
 3. Bellman-Ford: três laços, volta de 0 a V-2, u e v. Um caminho mínimo
    tem no máximo V - 1 arestas, e cada volta acerta pelo menos mais uma.
-4. Resposta esperada: a saída acima. A = 3 (Base -> B -> A: 6 - 3) e
+4. A = 3 (Base -> B -> A: 6 - 3) e
    C = 4 (Base -> B -> A -> C).
 
 ```bash
@@ -2525,7 +2518,7 @@ Menos peso até E: A -> B -> D -> E (6)
 2. Uma função void mostrar_rota(const int pai[], int destino) serve para
    os dois: guarda a rota num vetor seguindo pai[], imprime de trás para
    frente e soma peso[rota[i]][rota[i - 1]].
-3. Resposta esperada: a saída acima. A BFS ignora os pesos e fica com a
+3. A BFS ignora os pesos e fica com a
    aresta direta de 9.
 
 ```bash
@@ -2569,7 +2562,7 @@ Melhor lugar para o hospital: Morro (ninguém a mais de 5 km)
 2. A maior distância a partir de um vértice se chama excentricidade; o
    vértice de menor excentricidade é o CENTRO do grafo.
 3. Formato: printf("%-6s pior caso: %2d km (até %s)\n", ...).
-4. Resposta esperada: a saída acima. Em empate de maior distância, fica o
+4. Em empate de maior distância, fica o
    primeiro destino encontrado (o Morro está a 5 km do CD e da Vila).
 
 ```bash
@@ -2610,7 +2603,6 @@ Impossível: Bruno e Carla ficariam no mesmo time
 3. Um grafo que dá para dividir assim se chama BIPARTIDO. Ele deixa de
    ser bipartido quando aparece um ciclo de tamanho ímpar: Ana, Bruno,
    Carla, Ana.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E676.c
@@ -2644,7 +2636,6 @@ GATO -> PEIXE: impossível
    palavras[v])".
 3. Empates: GATO -> MATO -> MATA também leva a BOLA em 5 passos; a BFS
    fica com GATA porque ela vem antes na lista.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E677.c
@@ -2691,7 +2682,7 @@ Itens tirados do heap: 10
 2. Por isso o heap pode ter mais que V itens: cada aresta empurra no
    máximo duas vezes, então 2E + 1 posições bastam.
 3. Libere todos os nós das listas no fim (o rodar acusa vazamento).
-4. Resposta esperada: a saída acima. Saem 10 itens: os 8 vértices e 2
+4. Saem 10 itens: os 8 vértices e 2
    velhos (Gramado com 115 e Caxias com 135), que foram superados antes
    de sair.
 
@@ -3219,7 +3210,7 @@ Seguidores de Enzo: ninguém
    seguidores ficam em ordem crescente de índice.
 3. O vetor de cabeças do transposto também precisa de malloc (ou calloc,
    que já zera os ponteiros).
-4. Resposta esperada: a saída acima. Ana tem 2 seguidores; Enzo, nenhum.
+4. Ana tem 2 seguidores; Enzo, nenhum.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/lista/P1606.c
@@ -3262,7 +3253,7 @@ Coroado       2  Aleixo
    d[u] + 1, pi[v] = u, v entra na fila. Marcar na ENTRADA da fila evita que
    um bairro entre duas vezes.
 3. Cada vértice entra uma vez na fila: um vetor de V posições basta.
-4. Resposta esperada: a saída acima. Os mais longe são Educandos e Japiim
+4. Os mais longe são Educandos e Japiim
    (d = 3), e Educandos tem π = Centro.
 
 ```bash

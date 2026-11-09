@@ -1013,7 +1013,6 @@ Nós: 6, altura: 2
    companhia. T não tem filho esquerdo: o 2º argumento dele é NULL.
 2. Cada função de percurso imprime um espaço antes de cada letra; use
    printf("Pré-ordem:") e chame arv_pre_ordem(raiz) logo depois.
-3. Resposta esperada: as 5 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E583.c
@@ -1167,7 +1166,6 @@ MGC..J..T.X..
    a direita com outra, e só então chame arv_cria. Cuidado: chame as duas
    recursões em linhas separadas, porque a ordem de avaliação dos
    argumentos de uma função não é garantida em C.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E588.c
@@ -1459,7 +1457,7 @@ Senha 65: nível -1
 1. Use um laço igual ao de bst_busca e um contador que começa em 0 e sobe
    1 a cada vez que você desce um nível.
 2. Se o laço terminar com r == NULL, a chave não existe: devolva -1.
-3. Resposta esperada: a saída acima. O 25 fica embaixo de 45, 20 e 30.
+3. O 25 fica embaixo de 45, 20 e 30.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E589.c
@@ -1625,7 +1623,7 @@ Altura: 3
 
 1. Antes de inserir, pergunte com bst_busca se o número já está na árvore.
 2. Conte os distintos ao inserir (ou escreva uma função que conta nós).
-3. Resposta esperada: a saída acima. Repare que cada número repetido custa
+3. Repare que cada número repetido custa
    só uma descida pela árvore, e não uma varredura do caderno inteiro.
 
 ```bash
@@ -1916,7 +1914,7 @@ Sem o 25 (um filho):    pré 60 40 35 50 90 70
 
 1. Ache o nó com bst_busca. Se vier NULL, devolva "não existe".
 2. Conte quantos dos dois ponteiros (esq e dir) não são NULL: 0, 1 ou 2.
-3. Resposta esperada: a saída acima. O 25 tinha dois filhos no começo, mas
+3. O 25 tinha dois filhos no começo, mas
    depois que o 10 saiu ficou só com o 40.
 
 ```bash
@@ -1945,7 +1943,7 @@ Chamando 40, restam: 50 70
 2. Recursivo: se r->esq == NULL, o menor é r: guarde a chave, pegue
    r->dir, dê free(r) e devolva r->dir guardado. Senão,
    r->esq = remove_menor(r->esq, senha) e devolva r.
-3. Resposta esperada: a saída acima. Na terceira chamada, o 40 é o menor e
+3. Na terceira chamada, o 40 é o menor e
    a raiz 30 já saiu: quem é a raiz depois?
 
 ```bash
@@ -1973,7 +1971,7 @@ Sem o 50:  pré 45 20 40 35 70 60 80
    Ele nunca tem filho direito.
 2. Copie a chave dele para r e chame remove_antecessor(r->esq, ...) com a
    chave do antecessor.
-3. Resposta esperada: a saída acima. Sem o 30, o 20 assume (era folha).
+3. Sem o 30, o 20 assume (era folha).
    Sem o 50, o 45 vira a raiz.
 
 ```bash
@@ -2040,7 +2038,7 @@ Raiz: 70, altura: 2
 2. Se a chave de r estiver na faixa, use r = bst_remove(r, r->chave).
    Como as subárvores já foram limpas, nenhuma chave da faixa sobra lá.
    (Bônus: dá para pular subárvores inteiras, como no E591.)
-3. Resposta esperada: a saída acima. A raiz 50 sai; o sucessor dela, já
+3. A raiz 50 sai; o sucessor dela, já
    sem o 60, é o 70.
 
 ```bash
@@ -2405,7 +2403,7 @@ Saída esperada:
 1. altura: vazia devolve -1; senão, 1 + a maior altura entre os filhos.
 2. relatorio devolve quantos nós desequilibrados achou (o do nó mais os
    das duas subárvores); a árvore é AVL quando o total é 0.
-3. Resposta esperada: a saída acima. O 70 cai no caso direita-direita.
+3. O 70 cai no caso direita-direita.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0101-avl/E601.c
@@ -2432,7 +2430,7 @@ Rotações: 4
 
 1. É uma em ordem: esquerda, o nó, direita. Árvore vazia não imprime nada.
 2. Cada chave sai como printf(" %d(%d)", r->chave, avl_fator(r)).
-3. Resposta esperada: a saída acima. Com 5 chaves a raiz 2 pende para a
+3. Com 5 chaves a raiz 2 pende para a
    direita (fator -1) e mesmo assim é AVL; com 7 a árvore fica perfeita.
 
 ```bash
@@ -2463,7 +2461,6 @@ Saída esperada:
 2. Vazia devolve -1. Peça a altura das duas subárvores; se alguma vier -2,
    devolva -2. Se a diferença passar de 1, devolva -2. Senão, devolva
    1 + a maior.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0101-avl/E603.c
@@ -2488,7 +2485,7 @@ Teste 2: pré 60 40 20 50 70 | altura da raiz 2
 1. Copie gira_direita e troque esq por dir em todo lugar.
 2. A subárvore do meio é d->esq: ela vira r->dir. Atualize primeiro r (que
    ficou embaixo) e depois d.
-3. Resposta esperada: a saída acima. No teste 2, o 50 era filho esquerdo
+3. No teste 2, o 50 era filho esquerdo
    do 60 e passa a ser filho direito do 40.
 
 ```bash
@@ -2560,7 +2557,7 @@ Pré-ordem: 30 20 15 25 45 35 60
 2. Para imprimir "Insere X", passe a chave que está sendo inserida como
    parâmetro extra da função recursiva. O caso sai do fator do nó (+2 ou
    -2) e do fator do filho do lado pesado.
-3. Resposta esperada: a saída acima. Libere tudo no fim.
+3. Libere tudo no fim.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0101-avl/E606.c
@@ -2888,7 +2885,7 @@ v[5] = 20: folha
 
 1. Calcule esq = 2 * i + 1 e dir = 2 * i + 2.
 2. Se esq >= n, é folha. Se só esq < n, tem um filho. Senão, tem os dois.
-3. Resposta esperada: a saída acima. Só o v[2] tem um filho só: num heap,
+3. Só o v[2] tem um filho só: num heap,
    no máximo um nó fica nessa situação.
 
 ```bash
@@ -2915,7 +2912,6 @@ e) heap
 1. Basta um laço: para i de 1 até n - 1, se v[i] > v[(i - 1) / 2], não é.
 2. Também dá para olhar do ponto de vista do pai (filhos 2i + 1 e 2i + 2),
    mas aí precisa conferir se os filhos existem.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0102-heap/E608.c
@@ -2946,7 +2942,6 @@ saiu 40, entrou 10: [35 15 25 10 5]
    >= v[f], pare; senão troque v[i] com v[f] e siga com i = f.
 2. Na segunda troca, o 10 desce duas vezes: primeiro troca com o 35 e
    depois com o 15.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0102-heap/E609.c
@@ -3398,7 +3393,7 @@ fase 2:       [7 5 2 3 | 8 9]
    0, chamando desce(v, n, i) e depois mostra(v, n, n).
 2. Na fase 2, troque v[0] com v[fim], chame desce(v, fim, 0) e mostre com
    mostra(v, n, fim). Faça só para fim = 5 e fim = 4.
-3. Resposta esperada: a saída acima. O pai 1 não se mexe: 9 já é maior
+3. O pai 1 não se mexe: 9 já é maior
    que 7 e 5. Quando o 3 desce da raiz, ele desce dois níveis.
 
 ```bash
@@ -3457,7 +3452,7 @@ Os dois são heaps? sim
    maior que v[(k - 1) / 2]. A parte v[0..k-1] já é heap.
 2. Some 1 no contador a cada troca (passe um int * para as funções). Em
    eh_heap, basta conferir v[i] <= v[(i - 1) / 2] para todo i >= 1.
-3. Resposta esperada: a saída acima. Os dois são heaps válidos: a regra
+3. Os dois são heaps válidos: a regra
    só exige pai >= filhos, e existem vários vetores que a respeitam. O
    método dos pais faz menos trabalho porque metade dos elementos (as
    folhas) nem se mexe; em geral ele é O(n) e o das inserções, O(n log n).
@@ -3489,7 +3484,7 @@ iguais:      fase 1: 0 trocas, fase 2: 0 trocas -> 5 5 5 5 5 5 5
 2. Em testa, faça fase1 += desce(v, n, i) no laço dos pais e
    fase2 += desce(v, fim, 0) no laço da fase 2. Para o rótulo alinhado,
    use printf("%-12s ...", nome).
-3. Resposta esperada: a saída acima. Vetor crescente é o "contrário" de um
+3. Vetor crescente é o "contrário" de um
    heap: a fase 1 trabalha. O decrescente já é heap, mas a fase 2 trabalha
    do mesmo jeito: o heapsort não aproveita a ordem que o vetor já tinha.
 
@@ -3909,7 +3904,7 @@ cadastro vazio
 1. A raiz é o próprio ponteiro cad: os dados estão em cad->a.matricula e
    cad->a.nome. Teste cad == NULL antes de usar.
 2. A altura e a contagem vêm prontas do TAD: cad_altura e cad_conta.
-3. Resposta esperada: a saída acima. Quando o 60 sai, ele só tinha filho
+3. Quando o 60 sai, ele só tinha filho
    esquerdo: o 20 sobe direto para a raiz, sem sucessor.
 
 ```bash
@@ -3940,7 +3935,6 @@ Alunos em ordem: 20 30 40 50 60 70 80
 2. Como o do meio entra antes das duas metades, ele vira a raiz da
    subárvore, e cada metade fica de um lado. É a busca binária ao
    contrário.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E621.c
@@ -3968,7 +3962,7 @@ depois de 80: -1
    candidata: guarde e vá para a esquerda, procurando uma menor que ainda
    seja maior que x. Senão, vá para a direita.
 2. Quando chegar no NULL, a última candidata guardada é a resposta.
-3. Resposta esperada: a saída acima. Para 50, o caminho é 50 (não serve),
+3. Para 50, o caminho é 50 (não serve),
    70 (candidata), 60 (candidata melhor), NULL.
 
 ```bash
@@ -4049,7 +4043,7 @@ Chamando: Caio (1)
    strcpy), porque o buffer de leitura é reaproveitado a cada linha.
 2. Um heap de até 32 pacientes num vetor fixo basta. Para cada linha: se o
    nome está na BST, avise; senão, insira na BST e no heap.
-3. Resposta esperada: a saída acima. O segundo "Ana" (prioridade 4) é
+3. O segundo "Ana" (prioridade 4) é
    recusado e a Ana fica com a prioridade 3. Libere a BST no fim.
 
 ```bash
@@ -4355,7 +4349,6 @@ altura da árvore: 3
 2. printf("%*s", 2 * prof, "") imprime 2 * prof espaços.
 3. A altura da árvore é a altura da raiz, que é a maior profundidade (o
    Site, a 3 arestas da Diretora).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1401.c
@@ -4384,7 +4377,6 @@ pós: 20 35 40 30 65 60 80 70 50
 2. Desenhe a árvore antes: o 35 fica à esquerda do 40 e o 65 à direita do 60.
 3. A em ordem de uma BST sai sempre crescente: se não sair, a inserção está
    errada. A raiz é a primeira da pré e a última da pós.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1402.c
@@ -4423,7 +4415,6 @@ menor: 150, maior: 950
 2. O 500 desce 690, 420, 530, 480 e cai num NULL: a busca sem sucesso
    também custa a altura do caminho.
 3. No mínimo, ande enquanto r->esq != NULL (a árvore aqui não é vazia).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1403.c
@@ -4454,7 +4445,6 @@ nível 3: Nina Yuri Zoe
 2. Enfileire o filho esquerdo antes do direito.
 3. O percurso por nível é a BFS (módulo 16) aplicada à árvore: fila, e não
    pilha nem recursão.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1404.c
@@ -4488,7 +4478,6 @@ depois do 380: 510 340 450 120 90 200 380
 2. O 510 entra no índice 3, troca com o 120 (índice 1) e depois com o 340
    (índice 0): sobe 2 níveis, O(log n).
 3. O vetor do heap NÃO está ordenado; só a raiz é garantidamente o maior.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1405.c
@@ -4517,7 +4506,6 @@ chamou 75, sobrou: 70 65 30 40 10
 1. heap[0] = heap[--(*n)]; e depois desce(heap, *n, 0).
 2. Na primeira extração o 10 vai para a raiz e desce trocando com o maior
    filho: primeiro o 80, depois o 75.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1406.c
@@ -4556,7 +4544,6 @@ Saída esperada:
    da direita pode nem rodar).
 3. Sem o 27, a árvore seria AVL. Ele pendura o 25 e desequilibra o 20 e a
    raiz ao mesmo tempo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1407.c
@@ -4616,7 +4603,6 @@ folhas = (2 filhos) + 1? sim
 2. A propriedade vale para toda árvore binária não vazia: cada nó de grau 2
    "abre" um caminho a mais, e os de grau 1 não mudam o número de folhas.
    A prova cobra isso em questões de contar nós.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1409.c
@@ -4647,7 +4633,6 @@ desce(0): 31 23 12 19 8 9 4 2 17
 2. No desce(1), o 17 troca com o 23 e depois com o 19: um elemento pode
    descer vários níveis.
 3. Construir assim custa O(n), menos que n inserções (O(n log n)).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1410.c
@@ -4687,7 +4672,6 @@ Saída esperada:
 2. O antecessor é o espelho: guarde quando x > r->chave e vá para a direita.
 3. Repare no 45: ele é folha, então o sucessor é um ANCESTRAL (o 50, o
    primeiro de quem o 45 está à esquerda). É o caso que a prova adora.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1411.c
@@ -4723,7 +4707,6 @@ sem o 50: 65 40 35 45 70 80
 3. O 50, na raiz, é trocado pelo 65 (o menor à direita depois de o 60 ter
    saído). Com o antecessor, a raiz seria o 45: as duas respostas são
    válidas, e a prova diz qual convenção usar.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1412.c
@@ -4760,7 +4743,6 @@ mediana (6º de 11): 205 min
 3. Passe uma CÓPIA de k (int k = pedido; k_esimo(raiz, &k)), porque ela é
    modificada.
 4. Custa O(h + k): não precisa percorrer a árvore toda.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1413.c
@@ -4802,7 +4784,6 @@ altura: 3
 3. Com pré + em, a ideia é a mesma lendo a pré da frente para trás (raiz,
    esquerda, direita). Já pré + pós não bastam: elas não dizem se um filho
    único é esquerdo ou direito.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1414.c
@@ -4845,7 +4826,6 @@ altura final: 3
 2. Na volta da recursão: atualiza(r), olha o fator e gira se precisar.
 3. No +4, quem desequilibra é o 10 (não a raiz): a rotação acontece no
    nó desbalanceado mais baixo, e os de cima voltam a ficar em ordem.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1415.c
@@ -4894,7 +4874,6 @@ ordem de impressão:
 2. O heap NÃO é estável. Sem o campo chegada no desempate, Gerente e
    Diretor poderiam sair em qualquer ordem.
 3. Use printf("  %-8s prioridade %d, chegou em %d\n", ...).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1416.c
@@ -4967,7 +4946,6 @@ trocas: 15
    vez de " ". Na linha do heap, passe fim = n (sem barra).
 2. Ponha trocas++ dentro da função troca: assim nenhuma escapa.
 3. Os rótulos são "heap:     " e "passo %d: " seguido de mostra com " ".
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1418.c
@@ -5012,7 +4990,6 @@ Saída esperada:
    de si mesmo.
 3. Numa árvore qualquer (não BST) isso exige busca nas duas subárvores; a
    ordem da BST deixa em O(h).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1419.c
@@ -5044,7 +5021,6 @@ pilha chegou a 3 nós
 2. A pilha nunca passa de altura + 1 nós. Esta árvore tem altura 3, mas
    o caminho mais fundo (41, 20, 29, 32) sobe à direita, e quem vai à
    direita é desempilhado antes: o máximo fica em 3.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1420.c
@@ -5094,7 +5070,6 @@ sem o 5: 30 20 10 25 40 35 50   (rotação RL)  altura 2
 3. No "sem o 60", a raiz 40 fica com fator +2 e quem sobe é o 20.
 4. Zere rotacao = "" antes de cada remoção. Mostre com
    printf("   (rotação %s)", rotacao) e printf("  altura %d\n", raiz->alt).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1421.c
@@ -5149,7 +5124,6 @@ backup 3: ok
 3. No backup 2, o 50 já foi para a direita do 45; o 30 aparece depois e
    não cabe em lugar nenhum (teria que estar à esquerda do 45).
 4. Mesmo no erro, a árvore parcial precisa ser liberada.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1422.c
@@ -5205,7 +5179,6 @@ posfixa: 6 2 3 * + 8 4 - /
    primeiro, e a conta é 8 - 4.
 3. Na infixa, a folha é impressa sem parênteses.
 4. Use isdigit((unsigned char)c) de <ctype.h>; a folha vale c - '0'.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1423.c
@@ -5290,7 +5263,6 @@ atendido: ficha 4 (gravidade 2)
    achar o paciente custaria O(n); com ele, a operação toda é O(log n).
 3. É a operação HEAP-INCREASE-KEY do Cormen, a mesma que o Dijkstra
    (módulo 23) usa para diminuir distâncias.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1425.c
@@ -5338,7 +5310,6 @@ juntas: 5 7 12 18 19 21 33 40 50 60 77 88 95
 2. Um literal composto monta o item numa linha: heap[0] = (Item){v, l, i};
 3. Custa O(N log k) para N valores no total: com k listas, cada valor
    entra e sai do heap uma vez. Compare com intercalar duas a duas.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1426.c
@@ -5382,7 +5353,6 @@ chegou 60: mediana 31.0
 2. Escreva insere(h, &n, x, sinal) e extrai(h, &n, sinal).
 3. Cada pedido custa O(log n), e a mediana sai em O(1).
 4. Use printf("chegou %2d: mediana %.1f\n", ...) e divida por 2.0.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1427.c
@@ -5424,7 +5394,6 @@ AVL: altura 4, pior busca 5, total 129, média 4.16
    4 a 3, 8 a 4 e 16 a 5. Total = 1 + 4 + 12 + 32 + 80 = 129.
 3. A insere_avl pode reaproveitar insere_bst(NULL, chave) para criar
    o nó.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1428.c
@@ -5468,7 +5437,6 @@ maior caminho: 7 arestas, fazendo a curva no sensor 2
 2. Com altura de vazia = -1, um lado vazio soma (-1 + 1) = 0 arestas.
 3. Chamar altura() dentro de uma função de diâmetro recursiva daria O(n²);
    devolver a altura e atualizar o diâmetro na mesma volta dá O(n).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1429.c
@@ -5513,7 +5481,6 @@ tempo, ordem: #104(35) #107(35) #102(38) #105(38) #101(42) #103(42) #106(42)
 2. Com o desempate pelo campo ordem, não existem mais chaves iguais, e a
    estabilidade deixa de importar. É o mesmo truque que se usa com o qsort.
 3. Use printf(" #%d(%d)", ...) para cada corredor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1430.c

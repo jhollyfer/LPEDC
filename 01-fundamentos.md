@@ -701,7 +701,6 @@ Setor: H
 
 1. Código é inteiro (int); preço e peso são reais (double); setor é char.
 2. Use %d, %.2f, %.1f e %c no printf.
-3. Resposta esperada: as quatro linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0002-variaveis/E007.c
@@ -868,7 +867,7 @@ B
 1. char letra = 'A'; printf("%c %d\n", letra, letra);
 2. Depois: letra = 66; e assim por diante. Na tabela ASCII, 'A' é 65, '0'
    é 48 e o espaço é 32.
-3. Resposta esperada: as cinco linhas acima. '7' é o caractere sete, de
+3. '7' é o caractere sete, de
    código 55; 7 é o número sete. São diferentes.
 
 ```bash
@@ -1177,7 +1176,6 @@ odômetro: 65000 + 1000 = 464 (máximo 65535)
    com %u; o unsigned char e o unsigned short, com %d.
 3. Passou do máximo, volta a contar do zero: 260 - 256 = 4 e
    66000 - 65536 = 464. Abaixo de zero, vai para o máximo.
-4. Resposta esperada: as três linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E015.c
@@ -1235,7 +1233,7 @@ int64_t vai até 9223372036854775807
    Mas 69 anos já não cabem: se a conta for feita em int, o rodar acusa
    "signed integer overflow". Guarde os segundos de um ano numa variável
    long long: aí a multiplicação por 68 ou 69 já é feita em long long.
-3. Resposta esperada: as quatro linhas acima. 2147483647 é 2^31 - 1 (31
+3. 2147483647 é 2^31 - 1 (31
    bits para o número e 1 para o sinal); com 64 bits, cabem uns 292
    bilhões de anos.
 
@@ -1269,7 +1267,7 @@ int8_t: -128 a 127
 2. printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
 3. Os bits não mudam na cópia: o tipo só decide se o bit de cima vale
    -128 ou +128. Para os negativos, sem sinal = com sinal + 256.
-4. Resposta esperada: as cinco linhas acima. A faixa é assimétrica
+4. A faixa é assimétrica
    porque o zero ocupa uma das combinações sem o bit de cima, e não
    existe -0.
 
@@ -1567,7 +1565,7 @@ Saída esperada:
 2. Zero à esquerda é octal; 0x é hexadecimal; aspas simples dão o código
    do caractere (um int); aspas duplas são texto com o byte zero no fim.
 3. Para mostrar aspas e apóstrofo no formato: \" e '.
-4. Resposta esperada: as oito linhas acima. Ex.:
+4. Ex.:
    printf("010: vale %d, %zu bytes\n", 010, sizeof 010);
 
 ```bash
@@ -1639,7 +1637,7 @@ a\n b
 1. O pré-processador não mexe no que está dentro das aspas.
 2. 0x69 é 6 * 16 + 9 = 105, o i na tabela ASCII.
 3. Para o % na tela, %%. Para a barra, \\ (e o n fica sozinho).
-4. Resposta esperada: as seis linhas acima. A primeira:
+4. A primeira:
    printf("CIDADE: %s\n", CIDADE);
 
 ```bash
@@ -2002,7 +2000,7 @@ Pão
    expoente fica menor que -4. O científico de sempre é o %e.
 4. O printf devolve quantos BYTES escreveu: int n = printf("Pão\n");
    O ã ocupa 2 bytes no UTF-8.
-5. Resposta esperada: as sete linhas acima. A última vem de
+5. A última vem de
    printf("[%d]\n", n): P, ã (2 bytes), o e o \n somam 5.
 
 ```bash
@@ -2992,7 +2990,7 @@ votos / total * 100 = 0
 
 1. Basta um operando real no lugar certo: 100.0 * votos / total.
 2. Faça cada fórmula errada passo a passo, da esquerda para a direita.
-3. Resposta esperada: as três linhas acima. Em votos / total * 100,
+3. Em votos / total * 100,
    47 / 130 é 0 (divisão inteira) e 0 * 100 = 0. Em 100 * votos / total,
    4700 / 130 = 36: certo na parte inteira, mas os decimais somem.
 
@@ -3078,7 +3076,7 @@ Somando e cortando: 7; cortando e somando: 6
    %c e com %d.
 3. Somar antes de cortar não é o mesmo que cortar antes de somar:
    (int) (x + y) e (int) x + (int) y.
-4. Resposta esperada: as cinco linhas acima. A maiúscula é
+4. A maiúscula é
    letra - 'a' + 'A'; a posição, letra - 'a' + 1; três adiante,
    letra + 3; e 7.4 cortado dá 7, enquanto 3 + 3 dá 6.
 
@@ -3326,7 +3324,6 @@ w = x-- -> x = 6, w = 7
 1. x++ entrega o valor antigo e depois soma; ++x soma e entrega o novo.
 2. O printf vai na linha de baixo, sozinho: printf("y = x++ -> x = %d,
    y = %d\n", x, y);
-3. Resposta esperada: as três linhas acima.
 
 ```bash
 ~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E050.c
@@ -3387,7 +3384,7 @@ x *= 2 + y -> 50
    x = x op (expr).
 2. A divisão é entre int: 38 / 4 dá 9.
 3. Para o % aparecer no printf, %%.
-4. Resposta esperada: as seis linhas acima. x *= 2 + y é
+4. x *= 2 + y é
    x = x * (2 + y) = 10 * 5, e não 10 * 2 + 3.
 
 ```bash
@@ -3754,7 +3751,7 @@ Diferença: R$ 29.73
 1. A taxa de 1% é 0.01. pow(1 + taxa, 12).
 2. Rendimento = montante - capital.
 3. Juros simples: capital + capital * taxa * 24.
-4. Resposta esperada: as quatro linhas acima. Os compostos rendem também
+4. Os compostos rendem também
    sobre o que já rendeu, e essa parte cresce a cada mês.
 
 ```bash

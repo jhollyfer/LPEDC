@@ -333,7 +333,7 @@ Sol e lua colidem (somas 302 e 322)
 
 1. h() pode chamar soma() e só tirar o resto: "return soma(s) % M;".
 2. Pares sem repetir: "for (i = 0; i < 4; i++) for (j = i + 1; j < 4; j++)".
-3. Resposta esperada: a saída acima. "sol" e "los" são anagramas;
+3. "sol" e "los" são anagramas;
    "Sol" e "lua" só têm o mesmo resto por 5 ('S' = 83 não é 's' = 115).
 
 ```bash
@@ -773,7 +773,7 @@ vazios: 2, maior corrente: 3
 1. Para cada balde, ande com "for (No *p = baldes[b]; p != NULL;
    p = p->prox)" contando os nós.
 2. Corrente com 0 nós soma um vazio; guarde a maior contagem vista.
-3. Resposta esperada: a saída acima. Inserir no início inverte a ordem:
+3. Inserir no início inverte a ordem:
    o último a chegar fica na frente.
 
 ```bash
@@ -798,7 +798,7 @@ Saída esperada:
 
 1. O balde é matricula % M; a corrente começa em baldes[matricula % M].
 2. Use "(*comparacoes)++" a cada nó visitado, antes de comparar.
-3. Resposta esperada: a saída acima. 5005, 7210 e 2016 caem no balde 0, e
+3. 5005, 7210 e 2016 caem no balde 0, e
    a corrente ficou 2016 -> 7210 -> 5005. O balde 3, do 4000, está vazio.
 
 ```bash
@@ -873,7 +873,7 @@ polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
 2. Numa corrente de k nós, achar o 1º custa 1 comparação, o 2º custa 2...
    o total da corrente é 1 + 2 + ... + k = k * (k + 1) / 2. Some todas e
    divida por 10.
-3. Resposta esperada: a saída acima. Com o tamanho, só existem nomes de 5
+3. Com o tamanho, só existem nomes de 5
    e 6 letras, então 8 cidades amontoam num balde: a tabela vira quase uma
    lista.
 
@@ -907,7 +907,7 @@ liberados: 4
 2. Depois do free(p), a memória de *p não é mais sua, nem para ler p->prox.
    Às vezes "funciona" sem o sanitizer só porque o free não apaga os bytes
    na hora.
-3. Resposta esperada: a saída acima. O conserto é guardar o próximo antes:
+3. O conserto é guardar o próximo antes:
    "No *prox = p->prox; free(p); p = prox;", contando cada free.
 
 ```bash
@@ -1244,7 +1244,7 @@ Saída esperada:
 
 1. Um while que anda enquanto tab[i] != -1, com i = (i + 1) % 7.
 2. Faça à mão antes: 10, 24, 17 e 31 têm hash 3; o 5 tem hash 5.
-3. Resposta esperada: a saída acima. O 31 tenta 3, 4, 5 e 6, todas
+3. O 31 tenta 3, 4, 5 e 6, todas
    ocupadas, dá a volta e para na 0.
 
 ```bash
@@ -1276,7 +1276,7 @@ busca 19: não está (3 sondagens)
 1. A busca é o mesmo while da inserção, com uma condição a mais: pare
    quando tab[i] == 0 (livre) ou tab[i] == chave.
 2. Conte as sondagens do mesmo jeito: s começa em 1 e soma a cada passo.
-3. Resposta esperada: a saída acima. O 19 tem hash 3: olha a 3 (o 3), a
+3. O 19 tem hash 3: olha a 3 (o 3), a
    4 (o 11) e para na 5, livre.
 
 ```bash
@@ -1304,7 +1304,7 @@ Saída esperada:
 1. Use um for de M passos e, dentro, "(*sondagens)++" logo no começo.
 2. A ordem dos testes importa: primeiro "é LIVRE?" (para), depois
    "OCUPADA e chave igual?" (achou); senão, i = (i + 1) % M.
-3. Resposta esperada: a saída acima. O 35 olha 0, 1 (removida, segue),
+3. O 35 olha 0, 1 (removida, segue),
    2 e para na 3, livre. Se a busca parasse na REMOVIDA, não acharia o 28.
 
 ```bash
@@ -1335,7 +1335,7 @@ Saída esperada:
 1. Um "while (tab[i] != -1)" sozinho roda para sempre numa tabela cheia.
 2. Limite as tentativas: um for de no máximo 5 passos. Se nenhum passo
    achou vaga livre, devolva -1.
-3. Resposta esperada: a saída acima. Repare que o 9 e o 15 só entram
+3. Repare que o 9 e o 15 só entram
    dando a volta no fim do vetor.
 
 ```bash
@@ -1371,7 +1371,7 @@ Saída esperada depois do conserto:
 
 1. 20 % 7 = 6. Quem está na vaga 6? Qual é a "próxima" depois da 6?
 2. Num vetor de 7 posições, o maior índice é 6: "i = i + 1" chega a 7.
-3. Resposta esperada: a saída acima. O conserto é "i = (i + 1) % M", que
+3. O conserto é "i = (i + 1) % M", que
    volta para a vaga 0; conte as sondagens com uma variável que começa
    em 1 e soma a cada passo do while.
 
@@ -1412,7 +1412,7 @@ duplo : 1 2 2 1 2 2 2 4 | total: 16
    de parâmetro não usado) e "int passo_duplo(int k)" devolve 1 + k % 10.
 2. A função recebe "int (*passo)(int)" e começa cada simulação com a
    tabela toda livre.
-3. Resposta esperada: a saída acima. Na linear, 5, 16, 27 e 38 (hash 5)
+3. Na linear, 5, 16, 27 e 38 (hash 5)
    formam um bloco 5-6-7 que engole o 8 e cresce até a 9; o 38 paga 5
    sondagens. No duplo, cada um salta com o seu passo e o bloco não se
    forma.
@@ -1763,7 +1763,7 @@ paulo
 1. Dois laços dentro de um: o primeiro pula o que não é letra, o segundo
    mostra as letras com putchar(tolower(...)).
 2. Sempre converta para unsigned char antes de chamar isalpha e tolower.
-3. Resposta esperada: a saída acima. O "São" sai como "são": o tolower
+3. O "São" sai como "são": o tolower
    muda o 'S' e deixa os bytes do "ã" como estão.
 
 ```bash
@@ -1793,7 +1793,7 @@ Saída esperada:
 1. ovo = 340, sal = 320, mel = 318, las = 320: ovo, sal e las caem no 0.
 2. Compare com strcmp; copie com snprintf(novo->palavra,
    sizeof novo->palavra, "%s", w). O segundo "sal" não cria nó.
-3. Resposta esperada: a saída acima. "las" e "sal" são anagramas e a soma
+3. "las" e "sal" são anagramas e a soma
    junta os dois no mesmo balde; o strcmp é que separa as contagens.
 
 ```bash
@@ -1828,7 +1828,7 @@ primeira repetida: parte (palavra 9)
    devolve false.
 2. "reparte" não é "parte": a tabela compara a palavra inteira com
    strcmp. Não esqueça de liberar os nós antes de sair.
-3. Resposta esperada: a saída acima. Custo: O(n) em média, contra O(n²)
+3. Custo: O(n) em média, contra O(n²)
    de comparar cada palavra com todas as anteriores.
 
 ```bash
@@ -1857,7 +1857,6 @@ queijo 1
 1. compara recebe dois const void *: converta para const Contagem *.
 2. Devolva um número negativo se a deve vir antes de b. Para "mais vezes
    primeiro", a conta é y->vezes - x->vezes; no empate, use strcmp.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0108-juntando-tudo/E646.c
@@ -1889,7 +1888,7 @@ diferentes: 5
    onde aponta cada nó quando a próxima palavra é lida em "atual"?
 2. "pera" cai no mesmo balde de "sol": na busca, o strcmp compara "atual"
    com ele mesmo e dá igual, por isso a pera some e o sol ganha 1 a mais.
-3. Resposta esperada: a saída acima. O nó precisa da sua cópia:
+3. O nó precisa da sua cópia:
    "char palavra[16];" e snprintf(novo->palavra, sizeof novo->palavra,
    "%s", atual). Para o total, conte os nós ao imprimir.
 
@@ -1929,7 +1928,7 @@ sala alas
 2. O nó do balde é um grupo: a assinatura, um vetor de palavras, o
    número de palavras e o prox. Para imprimir na ordem de chegada, guarde
    também um vetor com os ponteiros dos grupos na ordem em que nasceram.
-3. Resposta esperada: a saída acima. "lata" e "cafe" ficam sozinhas e não
+3. "lata" e "cafe" ficam sozinhas e não
    aparecem. É o mesmo truque do contador: muda só o que vira chave.
 
 ```bash
@@ -2212,7 +2211,6 @@ m = 97: baldes usados 8, colisões 0
 2. Com m = 100, o resto é só os dois últimos dígitos: o padrão dos dados
    vira o padrão dos baldes. Um primo longe de potências de 10 e de 2
    mistura todos os dígitos.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1501.c
@@ -2283,7 +2281,6 @@ tabela: 21 _ 35 46 13 24 57 2 _ _ 10
 2. Repare no 2: ele chega por último e paga 6 sondagens, porque o bloco
    2..7 já está todo ocupado. É o agrupamento primário: quanto maior o
    bloco, mais chaves caem nele e mais ele cresce.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1503.c
@@ -2319,7 +2316,6 @@ tabela: _ _ 28 36 12 20 13 4
    = 2 (livre).
 3. Com m potência de 2 e esses c₁ e c₂, a sequência visita todas as
    posições. Com outros m, pode não visitar.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1504.c
@@ -2353,7 +2349,6 @@ tabela: _ 27 66 1 _ 14 _ _ _ 40 _ 53 _
    sequências se separam logo. É isso que acaba com o agrupamento.
 2. h2 nunca pode ser 0 (a sondagem ficaria parada): daí o "1 +".
 3. Com m primo, qualquer passo entre 1 e m - 1 visita as 13 posições.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1505.c
@@ -2392,7 +2387,6 @@ n = 10: alfa = 2.0, maior corrente = 4
 3. A maior corrente é o pior caso. Ela cresce mais rápido que a média
    quando as chaves se concentram (12, 7, 22, 17 caem todas no balde 2).
 4. Use printf("n = %2d: alfa = %.1f, maior corrente = %d\n", ...).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1506.c
@@ -2427,7 +2421,6 @@ acb   193485995 -> balde 11
 3. "abc" e "acb" têm hashes diferentes (a ordem conta, ao contrário da
    soma dos códigos), mas a diferença é 32: com m = 16, potência de 2, só
    os 4 bits de baixo contam, e eles batem. Um m primo separaria os dois.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1507.c
@@ -2459,7 +2452,6 @@ Saída esperada:
 1. A busca só olha a corrente do balde k % M.
 2. O balde 1 ficou 16 11 6 21: o 21, primeiro a entrar, é o último da
    corrente e custa 4. Busca sem sucesso percorre a corrente inteira.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1508.c
@@ -2527,7 +2519,6 @@ Saída esperada:
 3. Na divisão, códigos seguidos caem em baldes seguidos, e todo
    múltiplo de 16 (como 1024) vai para o 0. A multiplicação espalha.
 4. Use printf("%4d: divisão %2d, multiplicação %2d\n", ...).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1510.c
@@ -2573,7 +2564,6 @@ entra o 31: 12 _ _ 10 31 24 5
 2. A lápide não é igual a chave nenhuma (as chaves são positivas), então
    a busca nem precisa tratá-la à parte: só o VAZIO encerra.
 3. O 31 também tem h = 3 e reaproveita a lápide da posição 4.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1511.c
@@ -2657,7 +2647,6 @@ pares com hash: 5, força bruta: 5
 2. Registrar DEPOIS de consultar evita contar o par (j, j): o segundo 50
    acha só o primeiro.
 3. A força bruta é O(n²); a versão com hash é O(n) em média.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1513.c
@@ -2755,7 +2744,6 @@ dupla      sondagens 13: 13 1 _ _ 14 26 _ 39 _ 52 _ _ _
    chave tem um passo próprio.
 3. Com 6 chaves o ganho é pequeno; com a tabela mais cheia, a diferença
    explode (veja o P1528).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1515.c
@@ -2831,7 +2819,6 @@ primeiro repetido: 3307, na passagem 6
 2. O 4821 é o primeiro a APARECER entre os repetidos, mas o 3307 repete
    ANTES: a pergunta é pela repetição, não pela primeira aparição.
 3. Um conjunto é uma tabela hash só com chaves, sem valor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1517.c
@@ -2874,7 +2861,6 @@ Saída esperada:
    ao parar, grave o código (se era vazio) e some 1 nas vendas.
 2. A ordem da listagem é a das posições na tabela (k % 23 com as
    colisões), não a ordem de chegada: hash não guarda ordem.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1518.c
@@ -2906,7 +2892,6 @@ maior bloco: 5
    de uma posição vazia e ande M posições com % M.
 3. O 11 (h = 11) e o 50 (h = 11) acabaram grudados no bloco do 8 e do 21:
    blocos grandes atraem mais chaves, e a busca dentro deles fica cara.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1519.c
@@ -2944,7 +2929,6 @@ AAA0A00: não entrou aqui
    t[pos].placa[0] == '\0'.
 2. Compare placas com strcmp, nunca com ==.
 3. Use o djb2 com unsigned long long e copie a placa com snprintf.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1520.c
@@ -3046,7 +3030,6 @@ refeita:    _ 34 _ 58 70 _ _ _ _ _ _
 3. Na reconstrução, o 70 (h = 4) sai da posição 5 e volta para a 4.
 4. Por isso bibliotecas reconstroem a tabela quando vivas + lápides passam
    de um limite, e não só quando as vivas passam.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1522.c
@@ -3126,7 +3109,6 @@ períodos que zeram: 12 (força bruta: 12)
 3. O dia 5 fecha o período 2..5 (-20 - 30 + 10 + 40 = 0): o saldo 50 já
    tinha aparecido no dia 1.
 4. O hash deixa O(n); a força bruta (todos os pares i, j) é O(n²).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1524.c
@@ -3292,7 +3274,6 @@ m = 11:
    mas a sequência dele nunca passa por elas.
 3. O Cormen dá duas saídas: m primo, ou m potência de 2 com h2 sempre
    ímpar.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1527.c
@@ -3347,7 +3328,6 @@ alfa  linear (teoria)   dupla (teoria)
 3. Com α = 0,9, a linear custa 5 vezes a dupla: o agrupamento primário é o
    que separa as duas. Por isso tabelas abertas costumam fazer rehash
    antes de α chegar perto de 1.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1528.c
@@ -3442,7 +3422,6 @@ menor intervalo: ABC1D23, passagens 1 e 4 (distância 3)
 2. As passagens no resultado contam a partir de 1 (posição + 1).
 3. Com hash, O(n); comparando cada passagem com todas as anteriores,
    O(n²).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1530.c

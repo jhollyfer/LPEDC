@@ -336,7 +336,6 @@ Saída esperada:
 2. O item i entra quando m & (1 << i) é diferente de zero.
 3. Use uma variável para saber se algum item entrou; se nenhum entrou,
    escreva "só a carne".
-4. Resposta esperada: as 8 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0125-subconjuntos/E745.c
@@ -369,7 +368,6 @@ R$ 0.00:
 2. Caminho 2: marque pega[i] como false e chame gera(i + 1) de novo.
 3. Com o "com" primeiro, a ordem sai do maior valor para o menor. Por
    quê? Pense na moeda de 100: todas as escolhas com ela vêm antes.
-4. Resposta esperada: as 8 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0125-subconjuntos/E746.c
@@ -408,7 +406,6 @@ café frutas frango
 3. Muitos subconjuntos passam de 30 logo nos primeiros itens e
    mesmo assim são somados até o fim. No assunto 0127 você vai cortar
    esse desperdício.
-4. Resposta esperada: as 4 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0125-subconjuntos/E747.c
@@ -445,7 +442,6 @@ Ana: bicicleta bola livro | Beto: patinete skate patins
 2. Na folha da recursão (i == N), some o valor da Ana antes de mostrar.
    Se não der 750, ou se da_ana[0] for false, volte sem mostrar.
 3. Use um contador global para o total de divisões justas.
-4. Resposta esperada: as 3 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0125-subconjuntos/E748.c
@@ -520,7 +516,7 @@ Saída esperada:
    laço que testa cada bit (assunto 0065).
 3. Se o bit mudou e agora está ligado em g, a lâmpada acendeu; senão,
    apagou.
-4. Resposta esperada: as 8 linhas acima. Também é uma
+4. Também é uma
    enumeração de todos os subconjuntos de {0, 1, 2}, só que em outra ordem.
 
 ```bash
@@ -789,7 +785,6 @@ soma: 4440
 2. Na folha, monte o número com numero = numero * 10 + v[k].
 3. Por que 4440? Cada dígito aparece 2 vezes em cada casa: (4 + 7 + 9)
    × 2 × 111.
-4. Resposta esperada: as 7 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0126-permutacoes/E751.c
@@ -851,7 +846,7 @@ rota: Pizzaria -> Lagoa -> Centro -> Jardim -> Vila -> Pizzaria
    distância MENOR (estritamente) que a melhor até agora.
 3. A rota de trás para frente (Vila, Jardim, Centro, Lagoa) também dá
    16 km, mas aparece depois. Por que toda rota empata com a inversa?
-4. Resposta esperada: as 3 linhas acima. Este é o problema do caixeiro
+4. Este é o problema do caixeiro
    viajante: com 15 bairros seriam mais de um trilhão de ordens.
 
 ```bash
@@ -881,7 +876,6 @@ Bia aparece em 36
    folha em i == 3 em vez de i == N. Isso é um ARRANJO: 5 × 4 × 3 = 60.
 2. Na folha, olhe só v[0], v[1] e v[2] para saber se a Bia está lá.
 3. Confira a conta: pódios sem a Bia são 4 × 3 × 2 = 24, e 60 - 24 = 36.
-4. Resposta esperada: as 3 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0126-permutacoes/E754.c
@@ -954,7 +948,6 @@ depois de 1 3 5 4 2 vem 1 4 2 3 5
    inverta o trecho v[i + 1..n - 1]: 1 4 5 3 2 vira 1 4 2 3 5.
 3. Para listar todas: comece da ordem crescente e use
    do { mostra(v); } while (proxima(v, n));
-4. Resposta esperada: as 8 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0126-permutacoes/E756.c
@@ -1263,7 +1256,6 @@ comida água saco
    fogareiro" (que fecha com o último item) se perde.
 3. Quando tudo estiver certo, apague o bloco do if (i == N) que mostra a
    solução: com o seu segundo teste, ele vira só "return;".
-4. Resposta esperada: as 4 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0127-backtracking/E757.c
@@ -1293,7 +1285,6 @@ Saída esperada:
    solução, o teste de fim e os dois caminhos (leva e não leva).
 2. Leve o item ANTES de tentar sem ele: é isso que faz o 45 aparecer
    primeiro.
-3. Resposta esperada: as 5 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0127-backtracking/E758.c
@@ -1324,7 +1315,6 @@ caixas: 47 28 23
    ela é a melhor.
 4. Bônus: uma segunda poda corta os ramos em que soma + (tudo o que
    ainda falta decidir) não passa da melhor carga até agora.
-5. Resposta esperada: as 2 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0127-backtracking/E759.c
@@ -1356,7 +1346,6 @@ menos pacotes: 25 20 15 (3 pacotes)
    jeito que a soma: assim ela se desfaz sozinha na volta.
 2. Na solução, se k for menor que o melhor até agora, copie leva[0..i-1]
    para um vetor melhor[] (e zere o resto dele).
-3. Resposta esperada: as 6 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0127-backtracking/E760.c
@@ -1421,7 +1410,6 @@ Saída esperada:
    abs(10 - soma) for maior que a soma deles, nenhuma escolha de sinais
    fecha a conta. Pré-calcule essas somas num vetor resto[].
 3. Sem a poda seriam 127 chamadas (a árvore completa de 6 decisões).
-4. Resposta esperada: as 5 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0127-backtracking/E762.c
@@ -1744,7 +1732,6 @@ Saída esperada:
    as colunas: abs(l1 - l2) == abs(c1 - c2) (abs vem de stdlib.h).
 3. Outro jeito: mesma diagonal ↗ quando l1 + c1 == l2 + c2, e mesma ↘
    quando l1 - c1 == l2 - c2. Os dois jeitos dão o mesmo resultado.
-4. Resposta esperada: as 6 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0128-n-rainhas/E763.c
@@ -1774,7 +1761,6 @@ Saída esperada:
 2. Desmarcar: as mesmas três posições recebem false, logo depois.
 3. As soluções vêm em pares espelhados: trocando cada c de
    1 3 5 0 2 4 por 5 - c, sai 4 2 0 5 3 1.
-4. Resposta esperada: as 5 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0128-n-rainhas/E764.c
@@ -1803,7 +1789,6 @@ primeira: 3 0 4 7 1 6 2 5
    mesmo resultado; o segundo nem visita as outras colunas da linha 0.
 3. Para mostrar só a primeira, guarde uma cópia de pos quando o contador
    de soluções passar de 0 para 1.
-4. Resposta esperada: as 2 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0128-n-rainhas/E765.c
@@ -1836,7 +1821,6 @@ n = 6: 90 arrumações, primeira: 0 2 4 1 3 5
    teste novo compara c com pos[l - 1], e só quando l > 0.
 2. "Colunas vizinhas" quer dizer abs(c - pos[l - 1]) == 1.
 3. Guarde a primeira arrumação de cada n num vetor separado.
-4. Resposta esperada: as 3 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0128-n-rainhas/E766.c
@@ -2256,7 +2240,6 @@ labirinto 2: sem caminho até o queijo
 2. Recuse fora do mapa, parede e casa já visitada; aceite o Q.
 3. No labirinto 2, uma parede fecha o caminho na coluna 3: confira no
    papel antes de rodar.
-4. Resposta esperada: as 2 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0129-labirinto/E770.c
@@ -2290,7 +2273,6 @@ lago 5: começa em (5, 6), tamanho 1
    quando a varredura passar pelas outras casas dele.
 3. É a contagem de componentes conexos do assunto 0111, com a matriz no
    lugar do grafo.
-4. Resposta esperada: as 6 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0129-labirinto/E771.c
@@ -2325,7 +2307,6 @@ caminho: (0,0) (0,1) (1,1) (2,1) (2,2) (2,3) (3,3) (3,4) (3,5) (4,5)
    anote o tamanho (k + 1 casas, k passos).
 3. Não precisa apagar nada na volta: quando a busca recua e tenta outro
    vizinho, ele escreve por cima da mesma posição k.
-4. Resposta esperada: as 7 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0129-labirinto/E772.c
@@ -2403,7 +2384,6 @@ menor caminho: 9 passos
    seriam 449 chamadas, e a diferença cresce muito com o mapa. Mesmo
    assim, para menor caminho em mapa grande, a BFS (assunto 0110) é a
    ferramenta certa: O(L · C), sem retrocesso.
-4. Resposta esperada: as 7 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0129-labirinto/E774.c
@@ -2767,7 +2747,6 @@ grade 2: errada (coluna 0)
    A i-ésima casa dela (i de 0 a 8) está em (+ i / 3, + i % 3).
 3. Na grade 2, a troca foi dentro da linha 4: as linhas continuam certas,
    por isso o primeiro problema aparece nas colunas.
-4. Resposta esperada: as 2 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0130-juntando-tudo/E775.c
@@ -2799,7 +2778,7 @@ Saída esperada:
 2. A caixa começa em (l / 3 * 3, c / 3 * 3); a i-ésima casa dela fica i / 3
    linhas abaixo e i % 3 colunas à direita.
 3. Casas vazias valem 0 e marcam usado[0], que ninguém olha.
-4. Resposta esperada: as 6 linhas acima. A casa (4, 0) tem candidato
+4. A casa (4, 0) tem candidato
    único: um humano escreveria o 3 sem chutar nada.
 
 ```bash
@@ -2846,7 +2825,6 @@ Saída esperada:
    que ele vai de 0 a 5.
 3. Teste os dígitos de 1 a N em ordem crescente, na ordem de leitura das
    casas, para a contagem de chamadas bater.
-4. Resposta esperada: as 9 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0130-juntando-tudo/E777.c
@@ -2887,7 +2865,6 @@ jogo 2: mais de uma solução
    busca rodar por muito tempo.
 3. Não esqueça de desfazer antes de qualquer return dentro do laço: a
    grade e os vetores precisam voltar como estavam.
-4. Resposta esperada: as 2 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0130-juntando-tudo/E778.c
@@ -2978,7 +2955,6 @@ diagonais: 251796348 e 526394871
    casas, para a contagem de chamadas bater.
 4. Este jogo depende da regra nova: sem as diagonais, ele tem mais de uma
    solução (confira com o conta do E778, se quiser).
-5. Resposta esperada: as 11 linhas acima.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0130-juntando-tudo/E780.c

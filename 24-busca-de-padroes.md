@@ -329,7 +329,7 @@ o: 1 5 9 13 16 19 (6 vezes)
 2. Os alinhamentos vão de i = 0 até i = n - m, inclusive.
 3. Para cada i, avance j enquanto j < m e texto[i + j] == padrao[j]. Se j
    chegou a m, achou em i.
-4. Resposta esperada: a saída acima. O "gol" de "golaco" conta.
+4. O "gol" de "golaco" conta.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0157-forca-bruta/E937.c
@@ -356,7 +356,6 @@ posição 37: 187,45
 2. Para o valor, um ponteiro c começa em p + 3 e anda até achar ';' ou '\0',
    mostrando cada letra com putchar.
 3. A próxima busca começa depois do "R$" atual: strstr(p + 2, "R$").
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0157-forca-bruta/E938.c
@@ -392,7 +391,6 @@ posição 41: pix
    negativo (letra acentuada) é comportamento indefinido nas funções de
    ctype.h.
 3. printf("%.*s", m, texto + i) mostra só as m letras a partir de i.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0157-forca-bruta/E939.c
@@ -844,7 +842,6 @@ tatuta: 0 0 1 0 1 2
    cresce: k++. Se não, tente a borda menor, k = pi[k - 1], enquanto k > 0.
 3. Confira "tatuta" no papel: em j = 3 ('u') o k cai de 1 para 0; em
    j = 4 ('t') volta a 1.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0158-kmp/E943.c
@@ -872,7 +869,6 @@ total: 6
 2. Quando k chega a m, a ocorrência começou em i - m + 1.
 3. Depois de achar, NÃO zere o k: faça k = pi[m - 1]. É isso que encontra
    o "ana" da posição 2, que divide o 'a' com o da posição 0.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0158-kmp/E944.c
@@ -939,7 +935,6 @@ aaaaa: força bruta 130, KMP 34 (achou 25 e 25)
 3. Em "baaaa" o KMP faz MAIS comparações que a força bruta: em texto sem
    repetição, a força bruta já falha na primeira letra. O ganho do KMP é
    a garantia no pior caso.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0158-kmp/E946.c
@@ -1340,7 +1335,6 @@ A=2 R=1 outras=5
 3. A última letra não entra no laço (senão o salto dela seria 0). Por isso
    o 'A' de PIPOCA, que só aparece no fim, vale 6. Já o 'A' de ARARA vale 2:
    ele também aparece na posição 2.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0159-horspool/E949.c
@@ -1370,7 +1364,7 @@ i =  7: achou
    batem. Se j ficou negativo, achou: mostre e devolva.
 3. Senão, a letra sob a última casa é texto[i + m - 1], com ou sem acerto
    antes. Some salto[dela] ao i.
-4. Resposta esperada: a saída acima. O 'E' de COMPRE não está em PIPOCA:
+4. O 'E' de COMPRE não está em PIPOCA:
    o padrão pula inteiro.
 
 ```bash
@@ -1406,7 +1400,7 @@ posição 38: BANANA
    baixa(padrao[j]) e consulte com baixa(texto[i + m - 1]). Montar com as
    letras originais e consultar convertida faz o salto errar.
 3. Depois de achar, não pare: salte como num alinhamento qualquer.
-4. Resposta esperada: a saída acima. O "BANANE" de BANANEIRA não conta.
+4. O "BANANE" de BANANEIRA não conta.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0159-horspool/E951.c
@@ -1435,7 +1429,7 @@ abbb: força bruta  54, Horspool   9 (9 alinhamentos)
    'b'. E como a letra sob a última casa é 'a', que aparece no fim do
    padrão, o salto é 1. É o pior caso dele: m comparações e salto 1.
 3. Em "abbb", o 'a' do texto só aparece no começo do padrão: salto 3.
-4. Resposta esperada: a saída acima. Cada algoritmo tem o seu pior caso.
+4. Cada algoritmo tem o seu pior caso.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0159-horspool/E952.c
@@ -1505,7 +1499,6 @@ FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
    Sem esse '\0' (um texto lido para um vetor sem terminador), seria
    leitura fora do vetor.
 3. Use printf("%-6s: ...") para alinhar os nomes.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0159-horspool/E954.c
@@ -1875,7 +1868,7 @@ achou na posição 23
    Para não ficar negativo, faça (ht - t[i] * pot % Q + Q) % Q.
 2. Pôr: (ht * BASE + t[i + m]) % Q.
 3. Converta as letras com (unsigned char), como no resto do código.
-4. Resposta esperada: a saída acima. Uma das 3 verificações é um falso
+4. Uma das 3 verificações é um falso
    positivo: hash igual ao de "rato", letras diferentes.
 
 ```bash
@@ -1905,7 +1898,6 @@ q = 10007: 5 ocorrências,  0 falsos positivos
 3. As ocorrências não mudam com q: o que muda é o trabalho jogado fora com
    conferências inúteis. Com q pequeno, uma janela qualquer tem chance de
    1 em q de colidir.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0160-rabin-karp/E957.c
@@ -1943,7 +1935,7 @@ nosso trabalhO MEDE A AGUA DA CHUVA COM um balde
    marcar.
 3. Guarde as marcas num vetor int copiada[] e só converta para maiúscula
    no fim, com toupper((unsigned char) c).
-4. Resposta esperada: a saída acima. O 'o' de "trabalho" também é marcado:
+4. O 'o' de "trabalho" também é marcado:
    a janela "o mede a" existe no original ("projeto mede a").
 
 ```bash
@@ -2011,7 +2003,6 @@ polinomial: 2 verificações, 2 ocorrências
    omar e até o "mora" de "amora". Cada um vira uma conferência inútil.
 3. No polinômio, cada letra é multiplicada por uma potência diferente da
    base: trocar duas letras de lugar muda o valor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0160-rabin-karp/E960.c
@@ -2408,7 +2399,6 @@ os quatro concordam
    Se só quer contar, passe NULL e 0 no lugar de pos e max.
 3. O Rabin-Karp parece imbatível, mas só conta as comparações de letra da
    conferência: as duas contas do hash por janela não entram no número.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0161-juntando-tudo/E961.c
@@ -2437,7 +2427,7 @@ Saída esperada:
 2. A função devolve quantas vezes o padrão aparece na linha: maior que 0
    quer dizer que a linha entra.
 3. Linhas e ocorrências são contadores diferentes: a linha 5 tem duas.
-4. Resposta esperada: a saída acima. "ovos" contém "ovo" e conta.
+4. "ovos" contém "ovo" e conta.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0161-juntando-tudo/E962.c
@@ -2478,7 +2468,7 @@ Saída esperada:
    linha[ini + m] não é de palavra. Confira os limites ANTES de ler.
 3. "De palavra": isalnum((unsigned char) c) || c == '_'. Por isso
    "sal_marinho" não conta.
-4. Resposta esperada: a saída acima. (Com acentos isso complica: o 'ã' em
+4. (Com acentos isso complica: o 'ã' em
    UTF-8 são dois bytes que o isalnum não reconhece como letra. Esta lista
    foi escolhida sem esse problema.)
 
@@ -2518,7 +2508,6 @@ quinta: [chuva]rada de manhã   (1)
 2. Guarde onde fechar (i + m) e escreva ']' quando chegar lá, inclusive no
    fim da linha (por isso o laço vai até i <= n).
 3. As letras acentuadas passam intactas: você só copia bytes com putchar.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0161-juntando-tudo/E964.c
@@ -2592,7 +2581,6 @@ Saída esperada:
    primeiro" sem o risco de overflow do b - a, use
    (y->vezes > x->vezes) - (y->vezes < x->vezes); no empate, strcmp.
 3. O mesmo long comp pode acumular as cinco buscas: as funções somam.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 24-busca-de-padroes/0161-juntando-tudo/E966.c

@@ -331,7 +331,6 @@ b: 2 x 3
 1. A cópia leva todos os campos de uma vez: struct placar b = a;
 2. Depois da cópia, mudar b não muda a (e mudar c não muda b).
 3. a.casa = a.casa + b.fora dá 2 + 3 = 5.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0059-struct/E350.c
@@ -361,7 +360,6 @@ Perímetro: 26.0 m
    double area(struct retangulo r). Ela recebe uma cópia.
 2. Acesso encadeado: r.inf_esq.x, r.sup_dir.y.
 3. Dentro: x entre os dois x E y entre os dois y (use bool, de stdbool.h).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0059-struct/E351.c
@@ -740,7 +738,7 @@ distancia + tempo = 120
 2. Nome é um apelido para "vetor de 12 char": Nome atleta = "Rayssa";
    funciona como char atleta[12] = "Rayssa";
 3. sizeof e strlen devolvem size_t: mostre com %zu.
-4. Resposta esperada: a saída acima. O vetor tem 12 bytes; o texto, 6
+4. O vetor tem 12 bytes; o texto, 6
    letras.
 
 ```bash
@@ -837,7 +835,6 @@ Saída esperada:
 1. Escreva as quatro funções: double somar(double a, double b) etc.
 2. Botao botoes[] = {{'+', somar}, {'-', subtrair}, ...};
 3. Chame com botoes[i].f(12, 4). %g mostra 16 em vez de 16.000000.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0060-typedef/E359.c
@@ -881,7 +878,6 @@ Saída esperada (depois de trocar a linha errada):
 3. Em (b), a linha errada não compila (o gcc diz "invalid initializer"):
    duas structs diferentes nunca se misturam. Com typedef double,
    compilaria e o erro passaria calado.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0060-typedef/E360.c
@@ -1166,7 +1162,6 @@ Mais caro: Arroz 5kg
 1. typedef struct { char nome[20]; int qtd; double preco; } Item;
 2. Item lista[] = {{"Arroz 5kg", 2, 27.90}, ...};
 3. Guarde o índice do maior subtotal, como no exemplo da tabela.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E361.c
@@ -1192,7 +1187,6 @@ Aprovados: 2 de 4
 
 1. A média do aluno i é (turma[i].p1 + turma[i].p2) / 2.
 2. %.1f mostra uma casa: (6.0 + 7.5) / 2 = 6.75 aparece como 6.8.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E362.c
@@ -1277,7 +1271,7 @@ Por preço:
 2. Por nome: return strcmp(x.nome, y.nome);
 3. Por preço decrescente: cuidado, preço é double. Não devolva y.preco -
    x.preco (0.5 viraria 0 no int); use if/else e devolva -1, 0 ou 1.
-4. Resposta esperada: a saída acima. O iPhone vai para o fim na ordem
+4. O iPhone vai para o fim na ordem
    alfabética porque strcmp compara códigos ASCII: 'i' minúsculo (105) vem
    depois de todas as maiúsculas.
 
@@ -1640,7 +1634,6 @@ Beto: R$ 4428.00
 1. Dentro das funções, use a seta: f->salario.
 2. Na chamada, passe o endereço: reajustar(&ana, 8).
 3. Aumentar 8% é multiplicar por 1 + 8 / 100.0.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E367.c
@@ -1678,7 +1671,6 @@ casa.gols = 12, (*ptr).gols = 12
    função.
 2. Na chamada por endereço, passe &casa.
 3. ptr->gols e (*ptr).gols são a mesma coisa, e ptr aponta para casa.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E368.c
@@ -1716,7 +1708,6 @@ Ana: R$ 300.00 | Beto: R$ 320.00
    (ou use strncpy e ponha o '\0' no fim).
 3. Todo conta_criar precisa de um conta_destruir. Rode com o rodar: o
    AddressSanitizer acusa se você esquecer algum.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E369.c
@@ -1830,7 +1821,6 @@ sizeof(Pessoa) = 24
    quando parar é você.
 2. Para contar, comece em inicio->amigo e pare quando p == inicio.
 3. O tamanho: nome (10), 2 de sobra, idade (4), amigo (8, um ponteiro).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E372.c
@@ -2094,7 +2084,7 @@ G + XG = 14
 2. Um valor pode usar nomes que já apareceram antes: XXG = GG * 2.
 3. const enum Tamanho tamanhos[] = {P, M, G, ...}; e
    const char *nomes[] = {"P", "M", ...}; andam juntos pelo mesmo índice.
-4. Resposta esperada: a saída acima. 14 não é tamanho nenhum, e o C não
+4. 14 não é tamanho nenhum, e o C não
    reclama: para ele, são só inteiros.
 
 ```bash
@@ -2123,7 +2113,6 @@ vermelho -> verde
 1. Em proxima, um switch com um case para cada cor resolve. Outra saída:
    (c + 1) % 3.
 2. Em nome, um switch que devolve uma string literal.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0063-enum/E374.c
@@ -2165,7 +2154,6 @@ Placar: 2 vitórias, 1 empate, 2 derrotas
    (voce - outro + 3) % 3 dá 0 no empate, 1 quando você vence e 2 quando
    perde. É por isso que a ordem do enum Resultado foi escolhida assim.
 3. Um vetor int placar[3] indexado pelo Resultado conta tudo sem if.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0063-enum/E375.c
@@ -2239,7 +2227,6 @@ Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
 2. Conte olhando o par (estado atual, evento) antes de trocar de estado.
 3. Um switch dentro de outro (estado por fora, evento por dentro) deixa as
    4 regras bem visíveis.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0063-enum/E377.c
@@ -2278,7 +2265,6 @@ Satisfação: 66.7%
 2. Os nomes também cabem num vetor: const char *nomes[QTD_NOTAS] = {...};
 3. contagem[respostas[i]]++ conta sem nenhum if.
 4. Cuidado com divisão inteira: 100.0 * contagem[n] / total.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0063-enum/E378.c
@@ -2540,7 +2526,7 @@ union Nome: 12 bytes
 2. Union: o tamanho do maior campo, arredondado para um múltiplo do
    alinhamento do campo mais exigente. Struct: os campos em sequência, com
    sobras de alinhamento (assunto 0059).
-3. Resposta esperada: a saída acima. A union Nome tem 12 bytes, não 10:
+3. A union Nome tem 12 bytes, não 10:
    o int pede um tamanho múltiplo de 4.
 
 ```bash
@@ -2569,7 +2555,6 @@ Saída esperada:
 3. Repare: 1.0 não é 0x00000001. O float guarda sinal, expoente e mantissa
    (padrão IEEE 754), e 0.1 nem tem representação exata: o CCCC repetido é
    uma dízima em binário, e o D do fim é o arredondamento.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0064-union/E380.c
@@ -2597,7 +2582,6 @@ Saída esperada:
 2. 258 = 0x0102. Trocado, vira 0x0201 = 2 * 256 + 1.
 3. Curiosidade: esta função dá o mesmo resultado em qualquer endianness,
    porque ela só troca as duas metades de lugar.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0064-union/E381.c
@@ -2640,7 +2624,6 @@ Total: 39.57 m2
 1. O -std=c17 não define M_PI: use #define PI 3.14159265358979.
 2. Inicialize com nome de campo: {CIRCULO, .medida.raio = 2}.
 3. Triângulo: base * altura / 2.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0064-union/E382.c
@@ -2719,7 +2702,7 @@ em ordem de rede, memória: 11 22 33 44
 2. Para inverter: duas Visao, de e para; para.b[i] = de.b[3 - i].
 3. m[0] são os dois primeiros bytes da memória, lidos como um número de 16
    bits na ordem da máquina: 44 33 vira 0x3344.
-4. Resposta esperada: a saída acima. A última linha sai igual em qualquer
+4. A última linha sai igual em qualquer
    máquina: é para isso que serve a ordem de rede.
 
 ```bash
@@ -3048,7 +3031,6 @@ Saída esperada:
 1. Um número é ímpar quando o bit 0 está ligado: n & 1u.
 2. Multiplicar por 8 = 2 * 2 * 2 é deslocar 3 casas para a esquerda.
 3. Dividir por 4 é deslocar 2 casas para a direita (use unsigned).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0065-bits/E386.c
@@ -3084,7 +3066,6 @@ Saída esperada:
 2. Espaço a cada 4: quando b % 4 == 0 e b > 0.
 3. Contar: some o bit 0 e desloque x uma casa para a direita até x
    zerar.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0065-bits/E387.c
@@ -3146,7 +3127,6 @@ rgb(255, 136, 0) = #FF8800
 2. Desempacotar o verde: (c >> 8) & 0xFF. A máscara 0xFF guarda só 8 bits.
 3. Mostre com #%06X e um cast para unsigned.
 4. Média: (51 + 102 + 204) / 3 = 119 = 0x77.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0065-bits/E389.c
@@ -3178,7 +3158,7 @@ academia em dia sem alarme? não
    a máscara 0x7F (os 7 dias).
 4. Uma função void listar(const char *rotulo, unsigned dias) percorre os 7
    bits, mostra o nome e conta.
-5. Resposta esperada: a saída acima. A última pergunta é
+5. A última pergunta é
    (academia & ~alarme) != 0.
 
 ```bash
@@ -3574,7 +3554,6 @@ Pão francês (padaria) R$ 16.90/kg
 2. Um vetor const char *setores[] = {"hortifrúti", ...} indexado pelo enum
    traduz o setor.
 3. Para cada flag: if (p->flags & PROMO) printf(" [promo]");
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0066-juntando-tudo/E391.c
@@ -3612,7 +3591,7 @@ sizeof(Tarefa) = 20
 2. Tarefa u = t; faz uma cópia: mudar u não muda t.
 3. Ligar: |=. Inverter dois bits de uma vez: u.flags ^= FIXADA | ARQUIVADA;
    (011 ^ 110 = 101).
-4. Resposta esperada: a saída acima. O sizeof é 12 + 4 + 4, sem sobras.
+4. O sizeof é 12 + 4 + 4, sem sobras.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0066-juntando-tudo/E392.c
@@ -4009,7 +3988,6 @@ Rio Branco 23:30 + 1500 min = 00:30 (+2 dias)
 2. *dias = total / (24 * 60); o resto da divisão por 1440 dá os minutos
    do dia, que viram h e m com / 60 e % 60.
 3. Mostre com %02d para sair 02:35 e não 2:35.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0802.c
@@ -4049,7 +4027,6 @@ Código 110: não cadastrado
 1. Inicialize o vetor direto: Remedio v[6] = {{101, "Dipirona", 40, 20},
    ...}; os campos vão na ordem da struct.
 2. Falta comprar = minimo - estoque.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0803.c
@@ -4096,7 +4073,6 @@ Abasteceu 20.00 L
 3. Em rodar: o máximo possível é c->tanque * c->km_por_litro.
 4. Escreva void painel(const Carro *c) para mostrar o estado depois de
    cada operação.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0804.c
@@ -4175,7 +4151,6 @@ inverte w do grupo:    760 rwxrw----
    está ligado. A letra do bit b é "rwx"[(8 - b) % 3].
 3. Ligar: modo |= 1u << 6. Desligar: modo &= ~(1u << 2). Inverter:
    modo ^= 1u << 4.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0806.c
@@ -4222,7 +4197,6 @@ Com /16:
 3. Máscara /n: os n bits de cima ligados: 0xFFFFFFFFu << (32 - n) (vale
    para n de 1 a 31).
 4. Para mostrar um uint32_t em hexa: printf("%08X", (unsigned) ip).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0807.c
@@ -4250,7 +4224,6 @@ Dona Ivete    11 anos: R$ 96.00
 1. %d é para int; para double, %.2f. Um formato errado mostra lixo.
 2. A função recebe uma CÓPIA da struct: mudar a cópia não muda o sócio do
    main. Passe o endereço (Socio *) e use ->.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0808.c
@@ -4290,7 +4263,6 @@ Aniversário em março: Vó Nazaré (dia 12) Mãe (dia 5)
    if (a.ano != b.ano) return a.ano - b.ano; ...
 2. O mais velho nasceu ANTES: é o de menor data.
 3. Para chegar no mês: familia[i].nascimento.mes (dois pontos seguidos).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0809.c
@@ -4334,7 +4306,6 @@ show     vol 30, graves 5, agudos 4, balanço -2, loudness não, fonte "Pendrive
 1. Config padrao = {0}; zera tudo. Nos outros, use .campo = valor.
 2. A ordem dos .campo não precisa seguir a da struct.
 3. Mostre a string vazia entre aspas para ver que ela está lá: "%s".
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0810.c
@@ -4393,7 +4364,6 @@ Por preço:
    (a->preco < b->preco).
 3. qsort(cardapio, 6, sizeof cardapio[0], por_nome); — o qsort move a
    struct inteira (36 ou 40 bytes) a cada troca.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0811.c
@@ -4500,7 +4470,6 @@ sizeof da union: 40 bytes; sizeof do Pagamento: 56 bytes
    (dados.recebido de um PIX) mostra os bytes da chave lidos como double:
    lixo. Por isso a etiqueta.
 3. O tamanho da union é o do maior campo (a chave, 40 bytes).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0813.c
@@ -4547,7 +4516,6 @@ branco         (255, 255, 255) -> 0xFFFF -> (255, 255, 255)
 1. Montar: (uint16_t) (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3)).
 2. Separar: r5 = (c >> 11) & 0x1F; g6 = (c >> 5) & 0x3F; b5 = c & 0x1F.
 3. 0x1F são 5 bits ligados (31) e 0x3F são 6 (63).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0814.c
@@ -4602,7 +4570,6 @@ Mais dinheiro parado: Elétrica
    para cada produto, itens[p.cat] += p.qtd.
 3. Os nomes vêm de um vetor de strings na mesma ordem do enum:
    const char *nome_cat[N_CATEGORIAS] = {"Hidráulica", ...};
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0815.c
@@ -4690,7 +4657,6 @@ Total              R$ 184.45
    v[i]. Use um ponteiro: Produto *p = &v[i]; e p->preco.
 2. p <= v + n passa uma casa do fim: v + n é o endereço logo depois do
    último produto.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0817.c
@@ -4732,7 +4698,6 @@ i^8 = 1 + 0i
 5. Na conta de i³, a parte real sai como -0 (o double tem zero com sinal:
    -1 * 0 = -0) e o printf mostra "-0". Teste z.re == 0 (que vale para os
    dois zeros) e mostre 0.
-6. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0818.c
@@ -4773,7 +4738,6 @@ Chave 0x5A = 01011010 (4 bits ligados)
    '\0'. Guarde n = strlen(msg) ANTES de cifrar.
 2. Em hexa: printf("%02X ", (unsigned char) s[i]).
 3. Para contar bits: while (x) { cont += x & 1; x >>= 1; }
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0819.c
@@ -4822,7 +4786,6 @@ Manaus (7 dias):  0.0  4.5 22.0 18.0  0.0  6.5 11.0
    alinha o double: 24 bytes. O vetor v não entra.
 2. Depois do malloc, preencha s->n e copie os dados para s->v[i].
 3. Como é um bloco só, um free(s) libera a struct e o vetor juntos.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0820.c
@@ -4878,7 +4841,6 @@ Saída esperada:
    de um produto para o próximo: aí fecha o grupo anterior e abre outro.
 3. Os nomes das categorias: const char *nome_cat[] = {"Celulares",
    "Notebooks", "Fones"};
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0821.c
@@ -4931,7 +4893,6 @@ Depois do cancelamento, duas vezes (2): 40 98
    b.bits[i] (ou &). São 13 operações para 100 números.
 3. Conjunto vazio: Conjunto c = {0};
 4. Livres = 100 - tamanho(união).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0822.c
@@ -4984,7 +4945,6 @@ Parintins: 1
    com strcmp).
 3. Converta a idade com a sua própria conta (o atoi aceitaria "abc" e
    devolveria 0 sem avisar).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0823.c
@@ -5039,7 +4999,6 @@ At x = 10.0 4.0 12.0 4.5 15.0 1.0
 3. Matriz cheia: 6 x 6 = 36 multiplicações; esparsa: só k = 7.
 4. Na transposta, monte um Termo tt[7] com tt[p].l = a[p].c e tt[p].c =
    a[p].l. A ordem dos termos não importa para a multiplicação.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0824.c
@@ -5073,7 +5032,6 @@ Depósito: porta aberta
    linhas.
 3. A etiqueta tem que bater com o campo da union que foi preenchido: ler
    .graus de um sensor que guardou .porcento interpreta os bytes errados.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0825.c
@@ -5226,7 +5184,6 @@ sizeof(Cabecalho) = 16, sizeof(Compacto) = 4
    unsigned tipo : 4; unsigned versao : 4; } Compacto; A ordem dos bits
    dentro da palavra depende do compilador: para mandar pela rede, as
    contas com << e >> são as que você controla.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0828.c
@@ -5330,7 +5287,6 @@ Atende Téo
    fila[i] para fila[i + 1]. Uma struct se copia com = inteira.
 3. Em atender: guarde fila[0], puxe todos uma casa para a frente e faça
    (*n)--.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 08-structs/lista/P0830.c

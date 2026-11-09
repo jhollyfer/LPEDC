@@ -415,7 +415,7 @@ Pontes novas para ligar tudo: 2
    marca(u, g) põe g em u e chama a si mesma nos vizinhos com grupo 0.
 2. O laço externo chama marca(u, ++grupos) para cada ilha ainda sem
    grupo. Para listar o grupo g, percorra as ilhas em ordem de índice.
-3. Resposta esperada: a saída acima. Com g grupos, g - 1 pontes bastam:
+3. Com g grupos, g - 1 pontes bastam:
    cada ponte nova entre grupos diferentes junta dois deles.
 
 ```bash
@@ -445,7 +445,7 @@ Versão 2: dependência circular
 2. Para cada v com depende[u][v]: se cor[v] é CINZA, achou; se é BRANCO,
    chame visita(v) e, se ela devolver true, devolva true também. Se é
    PRETO, ignore.
-3. Resposta esperada: a saída acima. Na versão 2, a DFS acha o ciclo
+3. Na versão 2, a DFS acha o ciclo
    rede -> log -> util -> rede.
 
 ```bash
@@ -483,7 +483,7 @@ Ciclovias novas para ligar tudo: 3
    u, mais o que cada chamada recursiva devolver).
 2. Guarde o número do maior grupo enquanto o laço externo roda. "Sem
    ciclovia" é grau zero: a linha do bairro na matriz só tem zeros.
-3. Resposta esperada: a saída acima. São 4 grupos ({Centro, Prainha,
+3. São 4 grupos ({Centro, Prainha,
    Jardim, Porto}, {Lagoa, Vila Nova, Alto}, {Industrial}, {Mangue}),
    então faltam 4 - 1 = 3 ciclovias.
 
@@ -514,7 +514,7 @@ Parque 3: Rio Ponte Ninho Toca | 4 pontos, 4 trilhas, tem circuito
 2. Para contar as trilhas de um parque, some os graus dos pontos dele
    (a linha de cada um na matriz) e divida por 2: cada trilha aparece
    nas duas pontas.
-3. Resposta esperada: a saída acima. O parque 2 tem 4 pontos e 3
+3. O parque 2 tem 4 pontos e 3
    trilhas (4 - 1): é uma árvore, sem circuito.
 
 ```bash
@@ -554,7 +554,7 @@ DFS para que ela dê a saída esperada.
    foi visitada. Isso é ciclo?
 2. "Já visitado" não quer dizer "está na pilha". Troque o bool por três
    estados: branco (nunca visto), cinza (na pilha) e preto (terminado).
-3. Resposta esperada: a saída esperada acima. Só é ciclo a seta para um
+3. Só é ciclo a seta para um
    vértice cinza; ao terminar o laço dos vizinhos, pinte u de preto.
 
 ```bash
@@ -588,7 +588,7 @@ Impossível: Caio e Ana cairiam no mesmo turno
 2. Se um vizinho já tem o MESMO turno de u, é conflito: mostre "u e v"
    e devolva false até o topo. O laço externo cobre os componentes que
    a primeira DFS não alcança (Enzo, Flor, Gui, Hana).
-3. Resposta esperada: a saída acima. Na segunda chamada, Ana, Bia e Caio
+3. Na segunda chamada, Ana, Bia e Caio
    formam um triângulo: Ana vai para o A, Bia para o B, Caio para o A, e
    Caio e Ana ficam juntos. Um ciclo de tamanho ímpar nunca pode ser
    dividido em dois turnos.
@@ -905,7 +905,7 @@ Saída esperada:
 1. O grau de entrada de b soma a coluna b da matriz: grau[b] += antes[a][b].
 2. Comece a fila com todos de grau 0, em ordem de índice: bater os ovos,
    misturar os secos, preaquecer o forno e untar a forma.
-3. Resposta esperada: a saída acima. "Juntar tudo" só fica livre depois
+3. "Juntar tudo" só fica livre depois
    dos ovos e dos secos, e entra na fila atrás dos quatro primeiros.
 
 ```bash
@@ -944,7 +944,7 @@ Rui: inválida (placa no gabinete veio antes de cooler)
    pos[ordem[i]] = i.
 2. A regra a -> b está quebrada quando antes[a][b] e pos[a] > pos[b].
    Aí b apareceu antes de a.
-3. Resposta esperada: a saída acima. João e Lia mandaram ordens
+3. João e Lia mandaram ordens
    diferentes, e as duas valem: a ordenação topológica não é única.
 
 ```bash
@@ -981,7 +981,7 @@ Menor:  #105 #101 #106 #102 #103 #107 #104
    passos, um laço que pega o primeiro v com !feito[v] e grau[v] == 0.
 2. Feito o u, desconte grau[v] de todo v com antes[u][v]. Se num passo
    nenhum vértice estiver livre, há ciclo.
-3. Resposta esperada: a saída acima. As duas são ordenações válidas. A
+3. As duas são ordenações válidas. A
    "menor" custa O(V²) com essa busca; com um heap de mínimo (assunto
    0102) no lugar da fila, cairia para O((V + E) log V).
 
@@ -1020,7 +1020,7 @@ Caminho crítico: Fundação -> Paredes -> Telhado -> Reboco -> Pintura
 2. A ordem topológica garante que, quando v sai da fila, todos os que
    ele espera já passaram: comeca[v] está pronto. O serviço que termina
    por último dá o prazo; siga quem[] de trás para frente a partir dele.
-3. Resposta esperada: a saída acima. O Reboco espera Telhado (32),
+3. O Reboco espera Telhado (32),
    Elétrica (30) e Hidráulica (31): quem segura é o Telhado.
 
 ```bash
@@ -1102,7 +1102,7 @@ Total com 6 tarefas: 30
    usada[u], pôr em ordem[pos] e descontar grau[v] dos sucessores.
 2. Depois da chamada recursiva para pos + 1, DESFAÇA: devolva os graus e
    desmarque u. Quando pos == n, achou uma ordem completa: conte 1.
-3. Resposta esperada: a saída acima. As ordens aparecem antes da linha
+3. As ordens aparecem antes da linha
    do total porque o printf só escreve depois que conta() termina. Com 6
    tarefas são 30: em cada uma das 6 ordens, as mensagens cabem em 5
    lugares antes do "sair".
@@ -1461,7 +1461,7 @@ Mangueira total: 15 m
    int velho = grupo[b]. Se usar grupo[b] dentro do laço, ele muda no
    meio do caminho.
 2. Pare quando tiver V - 1 = 4 trechos aceitos.
-3. Resposta esperada: a saída acima. Couve-Tomate (5) é descartado:
+3. Couve-Tomate (5) é descartado:
    Couve e Tomate já estão ligados por Alface. Juntar grupos assim custa
    O(V) por aresta, o que o union-find do assunto 0148 resolve.
 
@@ -1496,7 +1496,7 @@ Total: R$ 39 mil
 2. acha: se pai[x] == x, x é a raiz. Senão, pai[x] = acha(pai[x]) e
    devolva pai[x]. A atribuição é a compressão: x passa a apontar direto
    para a raiz.
-3. Resposta esperada: a saída acima. Os trechos de 10, 11 e 12 mil são
+3. Os trechos de 10, 11 e 12 mil são
    descartados (fechariam ciclo), e o laço para nas 6 fibras.
 
 ```bash
@@ -1531,7 +1531,7 @@ Custo extra da exigência: R$ 2 mil
 2. Para saber o custo extra, rode também o Kruskal sem exigência (dá 21)
    e subtraia. Uma função kruskal(estradas, obrigatoria) que devolve o
    total ajuda; lembre de reiniciar pai[] e tamanho[] a cada chamada.
-3. Resposta esperada: a saída acima. Agora quem fecha ciclo é Sede-Brejo
+3. Agora quem fecha ciclo é Sede-Brejo
    (4): Sede e Brejo já estão ligados pela Ponte.
 
 ```bash
@@ -1564,7 +1564,7 @@ Sem travessia: 2 redes separadas, 6 cabos, 16 km
 2. Marque num vetor aceito[k] quais arestas entraram. No fim, a rede de
    uma aresta aceita é acha(a). Um sítio u abre uma rede nova se nenhum
    sítio antes dele tem o mesmo acha.
-3. Resposta esperada: a saída acima. Margem norte: Aroeira-Cedro 2,
+3. Margem norte: Aroeira-Cedro 2,
    Ipê-Jatobá 3, Jatobá-Aroeira 4. Margem sul: Pequi-Babaçu 1,
    Pequi-Juçara 2, Buriti-Juçara 4.
 
@@ -1655,7 +1655,7 @@ Maior subida: 14 m
 2. Numa árvore só existe um caminho entre dois vértices: a DFS a partir
    de Casa preenche anterior[], e a rota sai seguindo anterior[] a partir
    da Escola. Pegue o máximo das arestas no caminho.
-3. Resposta esperada: a saída acima. Pela Igreja direto, a pior subida
+3. Pela Igreja direto, a pior subida
    seria 20; por Praça, Igreja, Escola, 18. Pelo Morro, 30.
 
 ```bash
@@ -2020,7 +2020,7 @@ Total: 38 m
 2. Quando u entra, para cada v fora da rede com cabo[u][v] != 0: se
    cabo[u][v] < chave[v], então chave[v] = cabo[u][v] e pai[v] = u.
    Não some chave[u]: no Prim, a chave é só o cabo.
-3. Resposta esperada: a saída acima. O Milho começa com 30 (pelo Coco),
+3. O Milho começa com 30 (pelo Coco),
    cai para 15 (pelo Pastel) e termina em 11 (pelo Açaí).
 
 ```bash
@@ -2051,7 +2051,7 @@ Ciclofaixa total: 22 quarteirões
 2. Senão: na_rede[it.v] = true, total += it.chave e, se it.de >= 0,
    mostre "de - v: chave". Depois, para cada w fora da rede com
    dist[it.v][w] != 0, insere((Item){dist[it.v][w], w, it.v}).
-3. Resposta esperada: a saída acima. A Praça entra pela Rodoviária (5), e
+3. A Praça entra pela Rodoviária (5), e
    não pela Feira (6).
 
 ```bash
@@ -2083,7 +2083,7 @@ Estádio: Estádio Orla Museu Praça Rodoviária Feira | 22
    começa do zero, com chave[origem] = 0.
 2. Mostre cada estação no momento em que ela entra (quando é escolhida
    como u), não quando a chave dela cai.
-3. Resposta esperada: a saída acima. A ordem muda, o total não: como os
+3. A ordem muda, o total não: como os
    pesos são todos diferentes, a árvore mínima é uma só, e as seis
    execuções escolhem as mesmas cinco ciclofaixas.
 
@@ -2121,7 +2121,7 @@ Total: 18 km
    assunto 0098, numa árvore com qualquer número de filhos.
 2. printf("%*s", 2 * nivel, "") imprime 2 * nivel espaços. Os km do pai
    até v estão em fibra[pai[v]][v].
-3. Resposta esperada: a saída acima. O Posto entra pela Clínica (2 km),
+3. O Posto entra pela Clínica (2 km),
    não pela Escola (7) nem pela Central (9).
 
 ```bash
@@ -2162,7 +2162,7 @@ Total: R$ 17 mil (2 poços)
    (índices 1 a 4) e custo[0][c] = custo[c][0] = poço da casa c.
 2. No fim, quem tem pai[c] == 0 cavou poço; os outros receberam cano de
    pai[c].
-3. Resposta esperada: a saída acima. O Davi fica com o próprio poço
+3. O Davi fica com o próprio poço
    (7), mais barato que qualquer cano até ele (9 ou 10).
 
 ```bash
@@ -2562,7 +2562,7 @@ Sítio: R$ 40
 1. dist[] com INFINITO (o 1000000000 já definido) e dist[0] = 0. Faça
    V - 1 rodadas; em cada uma, passe por todas as E arestas.
 2. Só relaxe a partir de quem já tem distância: dist[de] != INFINITO.
-3. Resposta esperada: a saída acima. O Posto B sai mais barato passando
+3. O Posto B sai mais barato passando
    pelo Posto A (30 - 10 = 20) do que direto (45).
 
 ```bash
@@ -2591,7 +2591,7 @@ Tabuleiro 2: ciclo negativo
    ciclo negativo.
 2. No tabuleiro 1, a volta 1 -> 2 -> 3 -> 1 soma -3 + 4 + 1 = 2. No 2,
    soma -3 + 4 - 2 = -1.
-3. Resposta esperada: a saída acima. Uma volta com soma negativa não
+3. Uma volta com soma negativa não
    tem fundo: cada passagem por ela baixa a distância de novo.
 
 ```bash
@@ -2624,7 +2624,7 @@ Mata: inalcançável
    rota até anterior[v] seguida de v: uma função recursiva rota(v)
    imprime na ordem certa sem precisar de vetor auxiliar.
 2. Para mostrar o símbolo de porcentagem no printf, use "%%".
-3. Resposta esperada: a saída acima. A Praia (13%) gasta menos que a
+3. A Praia (13%) gasta menos que a
    Torre (18%), mesmo vindo depois dela: é o efeito da aresta negativa.
 
 ```bash
@@ -2655,7 +2655,6 @@ Saída: Dijkstra 9, Bellman-Ford 8 (Dijkstra errou)
 2. O Dijkstra fixa a Floresta com 2 antes de examinar a Caverna (5). Ele
    nunca descobre que Início -> Caverna -> Floresta custa 5 - 4 = 1, e o
    erro se espalha para Castelo e Saída.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/E922.c
@@ -2736,7 +2735,7 @@ Até 3 trechos: R$ 700
    arestas, teste e some com antes[u], mas compare e grave em dist[v].
 2. Sem a cópia, uma rodada pode encadear vários voos (se a lista estiver
    na ordem do caminho), e a resposta de k = 1 já sairia 700.
-3. Resposta esperada: a saída acima. Com 2 voos: Recife, Brasília,
+3. Com 2 voos: Recife, Brasília,
    Curitiba. Com 3: Recife, Salvador, São Paulo, Curitiba.
 
 ```bash
@@ -3030,7 +3029,7 @@ Mel       9   2   5   0
    quando os dois são infinitos.
 2. Três laços: k por fora, depois i, depois j. No miolo,
    d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j]).
-3. Resposta esperada: a saída acima. Milho -> Mel continua 15: passar por
+3. Milho -> Mel continua 15: passar por
    Leite e Frutas daria 8 + 3 + 5 = 16.
 
 ```bash
@@ -3062,7 +3061,7 @@ REC     -   -   -   -   0
    d[k][j] != INFINITO e d[i][k] + d[k][j] < d[i][j].
 2. Por causa do curto-circuito do && (assunto 0013), a soma nem chega a
    ser calculada quando um dos lados é INFINITO.
-3. Resposta esperada: a saída acima. Sem os testes, INT_MAX + 1 estoura
+3. Sem os testes, INT_MAX + 1 estoura
    e o sanitizer acusa "signed integer overflow".
 
 ```bash
@@ -3105,7 +3104,7 @@ Melhor bairro para o posto: Lagoa (ninguém fica a mais de 12 km)
    i da matriz tem a distância de i a todos.
 2. O máximo da linha i é a "excentricidade" de i. O bairro com a menor
    excentricidade é o CENTRO do grafo (que aqui nem é o bairro Centro).
-3. Resposta esperada: a saída acima. De Lagoa: Vila Rica a 12 (Lagoa,
+3. De Lagoa: Vila Rica a 12 (Lagoa,
    Centro, Jardim, Vila Rica) e Porto a 9 (Lagoa, Bosque, Porto).
 
 ```bash
@@ -3135,7 +3134,7 @@ Semana 2: ciclo negativo passando por Dólar Euro Cripto
 2. Na semana 2, Euro -> Cripto -> Dólar -> Euro soma 15 - 40 + 20 = -5.
    O Real não entra: sair do Real e voltar a ele custa sempre mais do que
    a volta negativa devolve.
-3. Resposta esperada: a saída acima. Com ciclo negativo, os outros
+3. Com ciclo negativo, os outros
    números da matriz deixam de ter sentido (ficam "mais negativos" a
    cada volta), por isso o programa só mostra as moedas do ciclo.
 
@@ -3215,7 +3214,7 @@ Confere com o Floyd completo: sim
    encurta nenhum caminho que termina em a nem nenhum que começa em b, e
    por isso d[i][a] e d[b][j] não mudam no meio. Na dúvida, copie antes
    a coluna a e a linha b em dois vetores e use as cópias.
-3. Resposta esperada: a saída acima. Mudam três casas: Porto -> Vila
+3. Mudam três casas: Porto -> Vila
    (10 vira 3), Feira -> Porto (11 vira 4) e Feira -> Vila (8 vira 1).
 
 ```bash
@@ -3635,7 +3634,7 @@ Mais longe: Portaria e Reitoria, 13 min
 2. A tabela é simétrica porque o campus é de mão dupla: d[i][j] ==
    d[j][i]. Por isso o par (Reitoria, Portaria) também tem 13, mas vem
    depois.
-3. Resposta esperada: a saída acima. Portaria -> Reitoria: Portaria,
+3. Portaria -> Reitoria: Portaria,
    Biblioteca, Lab, Reitoria (4 + 3 + 6 = 13).
 
 ```bash
@@ -3669,7 +3668,7 @@ Não reprove em Lógica
    1 (o próprio v) mais o que alcance(v, visto) devolver.
 2. Sem o visto[], o Projeto seria contado duas vezes a partir de C (por
    Arquivos e por Estruturas, Grafos).
-3. Resposta esperada: a saída acima. Lógica trava C, Estruturas,
+3. Lógica trava C, Estruturas,
    Arquivos, Grafos e Projeto.
 
 ```bash
@@ -3710,7 +3709,7 @@ Capital -> Serra pelo melhor caminho: 10 km
    ordenar; em "arvore", só as que o Kruskal aceitar.
 2. Uma função floyd(d) serve para as duas matrizes. Escreva cada estrada
    aceita como "nomes[a]-nomes[b]", na ordem do vetor.
-3. Resposta esperada: a saída acima. A árvore mínima não guarda caminhos
+3. A árvore mínima não guarda caminhos
    curtos: na rede mínima a Capital só chega à Serra dando a volta
    Capital, Litoral, Agreste, Sertão, Serra (3 + 5 + 6 + 4).
 
@@ -3753,7 +3752,7 @@ Com no máximo 2 por semestre:
    depois de escolher todas. Se descontar na hora, uma disciplina e o
    pré-requisito dela podem cair no mesmo semestre.
 2. "Sem limite" é a mesma função com limite = V.
-3. Resposta esperada: a saída acima. Repare que escolher pelo índice não
+3. Repare que escolher pelo índice não
    é o melhor: com Cálculo II e Estruturas no 2º semestre, daria para
    terminar em 4. Priorizar quem tem a corrente mais longa pela frente é a
    regra usada na prática (e um bom desafio para depois).
@@ -3843,7 +3842,7 @@ Melhor roteiro (22 min): Loja -> Ana -> Bruno -> Carla -> Loja
 2. O tempo do roteiro é d[Loja][1º] + d[1º][2º] + d[2º][3º] + d[3º][Loja],
    com d já calculada pelo Floyd-Warshall (ela embute as passagens por
    Praça e Ponte).
-3. Resposta esperada: a saída acima. Com k clientes são k! roteiros: com
+3. Com k clientes são k! roteiros: com
    3, seis; com 12, quase meio bilhão. É o problema do caixeiro-viajante,
    e para ele ninguém conhece algoritmo rápido.
 

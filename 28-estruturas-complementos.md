@@ -423,7 +423,6 @@ chama 3: [ ]
 1. Use uma variável bool (ou um contador) para alternar entre a frente e o
    fim, e um while (L->n > 0).
 2. Guarde a chave antes do sent_remove: depois dele o nó já foi liberado.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1040.c
@@ -453,7 +452,6 @@ Saída esperada:
 1. Se o laço parar na sentinela, p->ant é o último: inserir depois dele é
    inserir no fim. Se parar no primeiro, p->ant é a sentinela.
 2. A condição do while tem duas partes: p != &L->nil e p->chave < h.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1041.c
@@ -480,7 +478,6 @@ Removidos 0 do código 8: [ 7 9 5 ]
    x foi liberado e não pode ser lido.
 2. Pare quando voltar à sentinela. Os 3 seguidos e o 3 no fim não pedem
    nenhum cuidado extra.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1042.c
@@ -535,7 +532,6 @@ vazia invertida: [ ]
 1. Comece em x = &L->nil e faça um do-while: troca, depois anda.
 2. Depois da troca, o próximo nó a visitar está em x->ant (era o prox).
    Pare quando voltar à sentinela.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1044.c
@@ -860,7 +856,6 @@ grau da árvore: 2 | folhas: 5
    chame para os dois filhos.
 2. Folha é nó de grau 0. Numa árvore binária com n nós, n - 1 arestas:
    some 0·5 + 1·1 + 2·4 e confira.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1045.c
@@ -888,7 +883,6 @@ altura da árvore: 3
 1. Percorra em ordem (esquerda, nó, direita) e só mostre quem tem
    ap_profundidade(r) == k: assim sai da esquerda para a direita.
 2. A altura da árvore é a profundidade do nível mais fundo.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1046.c
@@ -913,7 +907,6 @@ Vizinhos de 12.90: 9.90 e 18.90
 
 1. for (NoP *x = ap_maximo(raiz); x != NULL; x = ap_antecessor(x)).
 2. Para os vizinhos, primeiro ap_busca(raiz, 1290).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1047.c
@@ -949,7 +942,6 @@ iguais ao ap_sucessor: 10 de 10
 1. Guarde um candidato = NULL. Na descida, toda vez que for para a
    esquerda, o nó atual vira o candidato (ele é maior que a chave).
 2. Ande pelas chaves com o próprio ap_minimo e ap_sucessor do TAD.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1048.c
@@ -1014,7 +1006,6 @@ crescente: não é AVL. Desequilibrados: 1 (fator -4) 2 (fator -3) 3 (fator -2)
 1. Vazia devolve -1. Se um filho devolveu -2, devolva -2 também.
 2. Para listar os nós, ap_fator (que recalcula alturas) serve: ali o
    custo não importa.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1050.c
@@ -1309,7 +1300,6 @@ tira 60: pré 25 10 5 1 15 50 30 27 55 | altura 3 | rotações 0
    retorno.
 2. Desenhe a árvore antes de tirar o 80: o 75 fica pesado à esquerda e,
    depois de consertado, o 50 também.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1051.c
@@ -1363,7 +1353,6 @@ Altura no começo: 4 | rotações para esvaziar: 7
 
 1. Escreva int menor(const NoA *r), que desce por r->esq enquanto puder.
 2. while (raiz != NULL): a árvore vazia volta como NULL do avr_remove.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1053.c
@@ -1391,7 +1380,7 @@ altura final: 2
 1. Hoje o código anda r->dir e depois tudo à esquerda. O antecessor é o
    espelho: r->esq e depois tudo à direita.
 2. A chamada recursiva também muda de lado: r->esq = remove(r->esq, ...).
-3. Resposta esperada: a saída acima. Com o sucessor, a raiz depois de
+3. Com o sucessor, a raiz depois de
    tirar o 40 seria o 50.
 
 ```bash
@@ -1458,7 +1447,7 @@ altura 9: 143 nós | rotações 4 | altura depois 8
    depois dê a chave ao nó (um contador global que cresce), depois monte
    a direita.
 2. A maior chave é o número de nós. Zere o contador antes de cada h.
-3. Resposta esperada: a saída acima. São h/2 rotações (arredondado para
+3. São h/2 rotações (arredondado para
    baixo): uma a cada dois níveis, até a raiz.
 
 ```bash
@@ -1759,7 +1748,6 @@ vermelhos: 2 | pretos: 8 | altura negra: 3
 
 1. (x->cor == VERMELHO) vale 1 ou 0: some com a contagem dos dois filhos.
 2. A altura negra vem pronta em vp_altura_negra(T).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1057.c
@@ -1785,7 +1773,6 @@ menor: 69010 | maior: 69099
 
 1. while (x->esq != &T->nil) x = x->esq; o máximo é o espelho.
 2. Compare o retorno de vp_busca com &T->nil, nunca com NULL.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1058.c
@@ -1821,7 +1808,6 @@ Saída esperada:
 1. Pela propriedade 5, qualquer caminho serve para bh: desça sempre pela
    esquerda e conte os pretos que encontrar depois de x (a nil é preta).
 2. 2^bh - 1 em C: (1 << b) - 1. Use "%3d %-8s" para alinhar.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1059.c
@@ -1854,7 +1840,6 @@ rotações no total: 3
    depois.
 2. Antes de rodar, desenhe a inserção do 27: o pai (25) é vermelho e o
    tio (nil, à direita do 30) é preto. O 27 forma um triângulo.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1060.c
@@ -1914,7 +1899,6 @@ Saída esperada:
    raiz, que é a sentinela).
 2. No teto, sempre que x->chave >= a, x vira candidato e você desce à
    esquerda; senão, desce à direita.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1062.c
@@ -2200,7 +2184,6 @@ Saída esperada:
 1. Guarde os CEPs num vetor de uint32_t. Atenção: 01310100 escrito assim
    em C é octal! Escreva 1310100 e mostre com %08u.
 2. Repare no 69050000 e no 69050097: diferem por 97, caem no mesmo balde.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1063.c
@@ -2230,7 +2213,7 @@ k = 8: k*A = 4.9443 | fração 0.9443 | balde 9
 
 1. "mod 1" é tirar a parte inteira: produto - floor(produto).
 2. A conversão (int) do m * fração já faz o floor (o valor é positivo).
-3. Resposta esperada: a saída acima. Veja como chaves seguidas pulam
+3. Veja como chaves seguidas pulam
    pela tabela inteira.
 
 ```bash
@@ -2257,7 +2240,7 @@ multiplicação, m = 64: 64 baldes usados, o mais cheio com 17
 
 1. Três vetores de contagem, zerados: int a[64] = {0}, b[61] = {0}, ...
 2. esp_maior_balde dá o mais cheio; os usados são as posições > 0.
-3. Resposta esperada: a saída acima. A divisão por 64 só vê os 6 bits de
+3. A divisão por 64 só vê os 6 bits de
    baixo, que são zero em todas as chaves.
 
 ```bash
@@ -2287,7 +2270,7 @@ n = 100, alfa = 2: alvo 50 -> m = 53 (a 11 da potência de 2 mais perto)
 1. Arredondar n / alfa para cima em inteiros: (n + alfa - 1) / alfa.
 2. Para a potência mais próxima, ache a maior p = 2^i <= m e compare
    m - p com 2p - m.
-3. Resposta esperada: a saída acima. O 1009 seria o primo, mas fica a 15
+3. O 1009 seria o primo, mas fica a 15
    do 1024; o primeiro primo longe o bastante é o 1151.
 
 ```bash
@@ -2349,7 +2332,6 @@ fim: n = 100, m = 128, fator de carga 0.78, maior lista 2
    de calloc((size_t)1 << p, sizeof(Item *)).
 2. Na dobra, ande em cada lista velha guardando o prox antes de religar o
    nó no balde novo; no fim, free no vetor velho (os nós continuam vivos).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1068.c
@@ -2659,7 +2641,7 @@ chave 57
 1. Crie uma tabela por modo com sd_cria(13, (ModoSondagem)modo), para
    modo de 0 a 2, e libere depois.
 2. Na dupla, o passo da 44 é 1 + 44 % 12 = 9 e o da 57 é 1 + 57 % 12 = 10.
-3. Resposta esperada: a saída acima. Linear e quadrática repetem a mesma
+3. Linear e quadrática repetem a mesma
    sequência para chaves com o mesmo começo (agrupamento secundário).
 
 ```bash
@@ -2688,7 +2670,7 @@ carga | sem sucesso | com sucesso
 
 1. ln em C é log, de <math.h>.
 2. Use "%11.2f" para alinhar as colunas.
-3. Resposta esperada: a saída acima. Com a tabela 99% cheia, procurar o
+3. Com a tabela 99% cheia, procurar o
    que não está custa 100 sondagens.
 
 ```bash
@@ -2721,7 +2703,6 @@ tabela: . . . 3 . . 19 . 35 . 51 . 67 . 83 .
 1. A posição da i-ésima sondagem é (h1(k) + i * h2(k)) % 16.
 2. Com sondagem linear, os seis ocupariam as posições 3 a 8 e o último
    faria 6 sondagens.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1071.c
@@ -2754,7 +2735,7 @@ carga 0.57 e a chave 28 ficou de fora
 
 1. Um vetor bool visitada[7] marcado com sd_posicao(t, 0, i).
 2. sd_insere devolve -1 quando a sequência acaba sem achar lugar.
-3. Resposta esperada: a saída acima. Por isso a quadrática pede carga
+3. Por isso a quadrática pede carga
    abaixo de 1/2 (com m primo, aí ela sempre acha lugar).
 
 ```bash
@@ -2817,7 +2798,7 @@ fim: n = 40, m = 163, carga 0.25, média de sondagens 1.38
    cresce se precisar e chama coloca.
 2. Para crescer: guarde o vetor velho, crie o novo cheio de -1, zere n,
    coloque de volta cada chave >= 0 e libere o velho.
-3. Resposta esperada: a saída acima. Na reconstrução as lápides (se
+3. Na reconstrução as lápides (se
    houvesse) ficariam para trás de graça.
 
 ```bash
@@ -3136,7 +3117,6 @@ casas usadas: 6 de 8
    idade c + 18, casa[c] vezes.
 2. Para números soltos, a casa só precisa contar; com registros (nome e
    idade), cada casa vira uma fila, como no pombal.c.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1075.c
@@ -3167,7 +3147,6 @@ arroz   R$ 25.90
    const Produto * e compare o preço primeiro; se empatar, strcmp nos
    nomes.
 2. Devolva negativo, zero ou positivo. Para o preço, (x < y ? -1 : 1).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1076.c
@@ -3196,7 +3175,7 @@ pigeonhole: estável     | a3(2) a7(2) a0(4) a2(4) a5(4) a6(6) a9(6) a1(8) a4(8)
    chame antes de cada ordenação.
 2. Basta comparar vizinhos: se v[i].nota == v[i-1].nota e v[i].turma <
    v[i-1].turma, não é estável.
-3. Resposta esperada: a saída acima. Um teste só prova a instabilidade;
+3. Um teste só prova a instabilidade;
    passar no teste não prova que um método é estável.
 
 ```bash
@@ -3231,7 +3210,6 @@ Saída esperada:
    entra no fim da fila da sua casa.
 2. Para a ordem decrescente, só o laço de esvaziar muda: de c = 13 até 0.
    A estabilidade continua (Gramado, Lages, Canela na ordem de chegada).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1078.c
@@ -3289,7 +3267,6 @@ seleção estável: Fabio(3) Bruno(5) Diego(5) Hugo(5) Ana(7) Elisa(7) Carla(9) 
    e v[i] = x.
 2. O preço: a troca era O(1); o deslocamento é O(n). O total continua
    O(n²) comparações, mas agora com O(n²) movimentos também.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1080.c
@@ -3592,7 +3569,7 @@ CPF 301000005: não cadastrado
 
 1. O horário vai em HHMM: 08:30 é 830.
 2. ag_marca devolve false nas duas recusas; o if decide a mensagem.
-3. Resposta esperada: a saída acima. Os horários saem em ordem porque a
+3. Os horários saem em ordem porque a
    rubro-negra é percorrida em ordem.
 
 ```bash
@@ -3621,7 +3598,6 @@ Saída esperada:
 
 1. ag_proximo devolve -1 quando não há consulta depois.
 2. Para mostrar HHMM como HH:MM: h / 100 e h % 100, os dois com %02d.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1082.c
@@ -3649,7 +3625,7 @@ noite (3): 18:30 19:45 21:00
    ag_intervalo(a, de[t], ate[t], h, 20) para cada um.
 2. O nome do paciente pode ser montado com snprintf(nome, sizeof nome,
    "P%d", i + 1).
-3. Resposta esperada: a saída acima. Cada turno custa O(log n + k): desce
+3. Cada turno custa O(log n + k): desce
    até o primeiro horário e anda pelo sucessor.
 
 ```bash
@@ -3684,7 +3660,6 @@ Espera: (ninguém)
 1. A ordem importa: ag_marca recusa paciente que já tem consulta, então
    primeiro ag_cancela, depois ag_marca.
 2. ag_cancela devolve o cpf de quem assumiu (maior que 0) ou 0.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1084.c
@@ -3755,7 +3730,6 @@ cpf 999: 1 consultas
 2. Copie os registros para um vetor lista[ordem]: assim a entrada do
    pigeonhole está na ordem de chegada, e os empates (902, 118, 640) saem
    nessa ordem.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1086.c
@@ -3953,7 +3927,6 @@ vazia: nil aponta para ela mesma? sim
 2. Inserir no fim é inserir depois de nil.ant: quatro ponteiros, sem if.
 3. Os laços começam em nil.prox (ou nil.ant) e param quando voltam a
    &L->nil.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2801.c
@@ -3983,7 +3956,6 @@ Saída esperada:
 2. Cada volta do while é uma comparação; a última (a que dá falso) também
    conta.
 3. Para 99, o laço passa pelos 6 nós e para na sentinela: 7 comparações.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2802.c
@@ -4009,7 +3981,6 @@ grau da árvore: 2 | folhas: 5
 
 1. grau(x) = (x->esq != NULL) + (x->dir != NULL).
 2. Folha é o nó de grau 0. Percorra em ordem e conte.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2803.c
@@ -4040,7 +4011,6 @@ altura: 3
 2. Um vetor conta[10] somado num percurso qualquer resolve a contagem.
 3. Para listar os nós de um nível, percorra em ordem e mostre quem tem a
    profundidade certa.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2804.c
@@ -4070,7 +4040,6 @@ não é AVL
 2. Uma flag global ou um ponteiro para bool marca se algum fator saiu de
    -1..1.
 3. O 55 entra à direita do 50 e desequilibra o 30 e o 60.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2805.c
@@ -4100,7 +4069,6 @@ depois de 1700: nenhum
 1. Ache o nó com uma busca comum antes de pedir o sucessor.
 2. O 945 não tem filho direito: o sucessor é um ancestral.
 3. O 1700 é o máximo: o sucessor é NULL.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2806.c
@@ -4128,7 +4096,6 @@ m = 10: 3 6 9 2 5 0 0 0 | colisões: 2
    que 0.
 2. Repare que 1013, 2026, ... são múltiplos de 1013 = 13 · 78 - 1.
 3. Com m = 10, a função só vê o último dígito.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2807.c
@@ -4161,7 +4128,6 @@ baldes usados: multiplicação 7, divisão 4
 
 1. "mod 1" é tirar a parte inteira: p - floor(p).
 2. Com k mod 8, as senhas múltiplas de 10 só usam baldes pares.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2808.c
@@ -4195,7 +4161,6 @@ tabela: . 23 45 12 34 56 1 . . 9 .
 2. 23, 45, 12, 34 e 56 começam todas no 1: o agrupamento primário aparece
    na hora.
 3. O 1 também começa no 1 e só acha lugar depois do bloco.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2809.c
@@ -4221,7 +4186,6 @@ ordenados: 1 1 2 2 3 3 3 3 4 5 5 6 6 6 6
 
 1. casa[face - 1]++ na primeira passada.
 2. Na segunda, a casa c devolve o valor c + 1, casa[c] vezes.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2810.c
@@ -4256,7 +4220,6 @@ total de sondagens: 22
 2. O total é o mesmo da linear (22) neste caso, mas o bloco de vagas
    seguidas some, mas todas as placas que começam no 1 seguem a mesma
    trilha (agrupamento secundário).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2811.c
@@ -4291,7 +4254,6 @@ total de sondagens: 12
    a 12 visita todas as posições.
 2. Cada chave anda com o seu passo: as trilhas se separam logo na segunda
    sondagem.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2812.c
@@ -4322,7 +4284,6 @@ insere 31:   .  .  . 10 31 24  5
 1. Na inserção, guarde a posição da primeira lápide vista; se a chave não
    estiver na tabela, use essa posição (ou a livre onde parou).
 2. O 31 também começa no 3 e ocupa o lugar do 17 removido.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2813.c
@@ -4351,7 +4312,6 @@ antes de 4700: 4100 | antes de 2500: nenhum
 1. for (No *x = maximo(raiz); x != NULL; x = antecessor(x)).
 2. O 4700 tem filho esquerdo (4100): o antecessor é o máximo dele.
 3. O 2500 é o mínimo: não tem antecessor.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2814.c
@@ -4393,7 +4353,6 @@ C: não é rubro-negra
 2. Em B, o 10 vermelho tem o 5 vermelho embaixo (propriedade 4).
 3. Em C, à esquerda do 10 há dois pretos e à direita só um (propriedade
    5).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2815.c
@@ -4426,7 +4385,6 @@ tira 25: pré 30 10 5 1 20 15 45 50 | altura 3 | rotações 0
 2. raiz = remove_chave(raiz, k): a raiz pode mudar.
 3. Tirar o 35 deixa o 40 pesado à direita, com o filho 50 pendendo para
    dentro (fator 1): rotação dupla.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2816.c
@@ -4458,7 +4416,6 @@ casas:      2:1 5:1 8:1 1:2 3:2 7:2 4:3 6:3 | estável
 2. Para o pigeonhole, três vetores (início, fim e próximo) como no
    pombal.c, ou simplesmente passe 3 vezes pela entrada, uma por bairro,
    copiando na ordem.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2817.c
@@ -4491,7 +4448,6 @@ Saída esperada:
 1. Compare o tempo; se igual, a idade ao contrário (y - x); se igual,
    strcmp.
 2. O qsort não é estável: o desempate pelo nome deixa a ordem completa.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2818.c
@@ -4521,7 +4477,6 @@ por mês: Enzo 15/1 Hana 30/1 Duda 2/3 Ana 15/3 Cris 28/3 Beto 2/11 Fabio 9/11 G
 2. Cada passada: para cada casa em ordem, copie da entrada, em ordem,
    quem cai nela.
 3. A última passada é a da chave principal (o mês).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2819.c
@@ -4550,7 +4505,6 @@ vazios  0 | mais cheio   4 | divisão, m = 31
 1. m = 32 = 2^5: a multiplicação pega os 5 bits mais altos do produto (>>
    27).
 2. k mod 32 só olha os 5 bits de baixo de k, que são todos zero.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2820.c
@@ -4583,7 +4537,6 @@ altura negra: 3 | fiscal: ok
    linha, recolore e gira no avô.
 2. Com a sentinela, o tio pode ser nil (preto) sem nenhum teste de NULL.
 3. A altura negra pode ser contada descendo sempre pela esquerda.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2821.c
@@ -4677,7 +4630,6 @@ busca 79: 3 sondagens
    caminho.
 2. Reconstruir é percorrer a tabela velha e inserir as OCUPADAS numa
    tabela zerada.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2824.c
@@ -4707,7 +4659,6 @@ dupla:       .  . 22 20  .  5  .  .  . 37 54 71 88 39  .  .  . | 15 sondagens
    os três.
 2. O 22 começa no 5: na linear, ele cai no meio do bloco que as cinco
    primeiras formaram.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2825.c
@@ -4740,7 +4691,6 @@ Saída esperada:
 2. O laço: for (x = teto(raiz, a); x != NULL && x->chave <= b; x =
    sucessor(x)).
 3. Num intervalo vazio, o teto já passa de b e nenhum sucessor é chamado.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2826.c
@@ -4781,7 +4731,6 @@ Saída esperada:
    programação dinâmica.
 2. log2 está em <math.h>; para h = 0, a razão é 0.
 3. N(h) = F(h + 3) - 1, onde F é a sequência de Fibonacci.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2827.c
@@ -4817,7 +4766,6 @@ Saída esperada:
 2. Como a entrada já está em ordem alfabética, a estabilidade cuida do
    desempate pelo nome sem nenhuma comparação.
 3. A última passada é a da chave principal: os pontos.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2828.c
@@ -4863,7 +4811,6 @@ faltas: 9 de 13
 2. Mover para a frente: tira o nó (dois ponteiros) e insere depois da
    sentinela (quatro), sem if.
 3. O menos recente é nil.ant.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2829.c
@@ -4901,7 +4848,6 @@ sem 1415 e 640: pré 1600 905 1120 1000 1830 2210
    transplanta(y, y->dir) e y herda z->dir; depois transplanta(z, y) e y
    herda z->esq.
 3. A remoção devolve a nova raiz, que pode mudar.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2830.c

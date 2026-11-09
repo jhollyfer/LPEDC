@@ -375,7 +375,6 @@ Jeitos de subir 10 degraus: 274
    t[i - 2] + t[i - 3].
 2. Os casos base são t[0] = 1, t[1] = 1 e t[2] = 2 (11 ou 2).
 3. Comece o laço em i = 3: assim nenhum índice fica negativo.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E823.c
@@ -406,7 +405,6 @@ memoização:    c(120) = 185855747875876
 1. Antes de calcular, olhe memo[n]; se já tem resposta, devolva ela.
 2. Use -1 como "não calculado": 0 é uma resposta válida aqui (c(1) = 0)!
 3. Lembre de encher o memo com -1 antes de usar (o laço já está no main).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E824.c
@@ -580,7 +578,6 @@ subproblemas guardados no memo: 1044
 3. C(60, 30) passa de 10^17: use long long e %lld.
 4. A segunda conta reaproveita o que a primeira guardou (os subproblemas
    com k pequeno); se você limpar o memo entre as duas, o número muda.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E828.c
@@ -891,7 +888,6 @@ Combinações de cestas que dão 10 pontos: 14
    jeitos[v] += jeitos[v - c].
 3. Com os laços na ordem trocada, você contaria sequências (a ordem das
    cestas no jogo), e o resultado seria bem maior.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E830.c
@@ -969,7 +965,6 @@ sequências:  26
    w[v - valor] para cada valor <= v, "qual foi a última inserção?").
 3. Confira a) à mão: 5+2, 5+1+1, 2+2+2+1, 2+2+1+1+1, 2+1+1+1+1+1 e
    sete moedas de 1.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E832.c
@@ -1052,7 +1047,6 @@ até 6 moedas: 7 combinações
 3. Ao usar mais uma moeda, o valor cai de moeda e a contagem cai de 1.
 4. Confira as 3 de seis moedas: 50+10+10+10+10+10, 50+25+10+5+5+5 e
    25+25+25+10+10+5.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E834.c
@@ -1382,7 +1376,6 @@ Retorno máximo com R$ 10 mil: R$ 22 mil por ano
 2. Linha 0 toda zero. Depois, para cada célula: t[i][c] = t[i - 1][c] e,
    se custo[i] <= c, tente retorno[i] + t[i - 1][c - custo[i]].
 3. A última linha diz o melhor retorno para cada orçamento de 0 a 10.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E835.c
@@ -1574,7 +1567,6 @@ Força bruta: R$ 79
    [v - volume[i]].
 3. A recuperação é a mesma de antes, descontando peso e volume juntos.
 4. A tabela tem 7 x 11 x 9 = 693 células: o custo é O(n x P x V).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E840.c
@@ -1954,7 +1946,7 @@ Passos na volta: 10
 2. Diferentes: se c[i - 1][j] >= c[i][j - 1], suba (i--); senão, vá para
    a esquerda (j--). Use o mesmo >= da tabela.
 3. O laço é while (i > 0 && j > 0); some 1 em passos a cada volta.
-4. Resposta esperada: a saída acima. PAAR também tem 4 letras e é comum
+4. PAAR também tem 4 letras e é comum
    às duas: a regra de desempate escolheu PGAR.
 
 ```bash
@@ -1998,7 +1990,6 @@ Saída esperada:
 2. A volta grava em saida[--k], começando com k = c[m][n].
 3. A música 12 está nas duas, mas é a primeira da Ana e a última do Beto:
    ela não cabe na mesma ordem junto com as outras.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E843.c
@@ -2043,7 +2034,6 @@ CABANA está nela? sim
    fim, p tem que ter chegado ao '\0'.
 4. Use o mesmo desempate do texto (>= sobe), senão a supersequência pode
    sair diferente (com as mesmas 8 letras).
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E844.c
@@ -2131,7 +2121,6 @@ Preços: 28 30 33 36 40 41
    duas vezes, e "33 33" não é subir.
 4. Use o desempate do texto (>= sobe). Há outras respostas com 6 preços,
    como 28 30 33 34 38 41.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E846.c
@@ -2492,7 +2481,6 @@ Saída esperada:
    entre diagonal, cima e esquerda. Uma função menor3 ajuda.
 3. A distância nunca passa do tamanho da maior palavra (troque tudo e
    insira o que faltar): FUTEBOL x BASQUETE bate nesse teto.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E847.c
@@ -2555,7 +2543,6 @@ RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
    1 + o menor entre d[i - 1][j] (remove) e d[i][j - 1] (insere).
 2. A borda é a mesma da distância comum: d[i][0] = i, d[0][j] = j.
 3. Para alinhar as colunas, use %-9s nas palavras e %2d nos números.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E849.c
@@ -2595,7 +2582,7 @@ tabelas montadas: 28 de 32
 2. abs() de <stdlib.h> dá o valor absoluto da diferença dos strlen
    (converta para int antes de subtrair: strlen devolve size_t, sem sinal).
 3. Uma flag "achou" decide se no fim da linha vai " nenhuma".
-4. Resposta esperada: a saída acima. Uma leitura exata também tem
+4. Uma leitura exata também tem
    "parentes" a distância 1: é por isso que o sistema precisa confirmar
    com uma pessoa.
 
@@ -2675,7 +2662,6 @@ ESTRELA -> ESTERIL: distância 3
 3. Teste os vizinhos na ordem do texto (igual, troca, remove, insere): com
    outra ordem, um alinhamento diferente, com a mesma distância, pode
    aparecer.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E852.c
@@ -3068,7 +3054,6 @@ semelhança: 70.6%
 2. Removidas = m - LCS; adicionadas = n - LCS.
 3. Para mostrar o %, use %% no printf; e faça a conta em double
    (100.0 * 2 * l / (m + n)), senão a divisão é inteira.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E853.c
@@ -3103,7 +3088,6 @@ Saída esperada:
    com tolower de <ctype.h>, passando (unsigned char) x[k] (um char
    negativo, como os bytes do "é", é proibido no tolower).
 3. As linhas iguais saem como estão na versão antiga.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E854.c
@@ -3147,7 +3131,6 @@ Saída esperada:
 2. Só os três printf da volta mudam; o resto fica igual.
 3. Rode também com dois arquivos seus: ~/LPEDC/rodar E855.c a.txt b.txt
    (o rodar compila junto o linhas.c da pasta).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E855.c
@@ -3197,7 +3180,6 @@ outra lista: o patch não se aplica (linha 3)
    '-': confere com orig[i] e só faz i++.
 3. novo[] pode guardar os próprios ponteiros (const char *), sem copiar
    as strings.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E856.c
@@ -3280,7 +3262,6 @@ Saída esperada:
    não for a seguinte, imprima "..." antes. No fim, se sobrou alguma
    escondida, mais um "...".
 4. Teste com CONTEXTO 0 e 2 também.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E858.c

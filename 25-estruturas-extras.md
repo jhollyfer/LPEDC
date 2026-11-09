@@ -427,7 +427,6 @@ Total: 15 horas em 5 vagas ocupadas
 
 1. valor é uma busca sequencial no vetor de triplas: compare lin e col.
 2. O total não precisa da matriz cheia: some t[k].horas direto nas triplas.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/E968.c
@@ -540,7 +539,7 @@ Células: 4
 2. As células saem em ordem crescente de coluna, então basta pendurar no
    FIM da linha nova: guarde um ponteiro para o último (ou use um
    Celula **fim que começa em &c->linha[i]). Não esqueça c->nao_zeros.
-3. Resposta esperada: a saída acima. O produto 2 da filial 0 (5 - 5) e o
+3. O produto 2 da filial 0 (5 - 5) e o
    produto 0 da filial 1 (2 - 2) zeraram e sumiram.
 
 ```bash
@@ -582,7 +581,7 @@ Porto Alegre: 2 rotas com uma escala
 2. Depois de processar a linha i, grave em c as posições de acum que não
    são zero, com esp_define(c, i, j, acum[j]) em ordem de j (cada célula
    entra no fim da linha). O total de rotas de i é a soma de acum.
-3. Resposta esperada: a saída acima. Em Manaus, as 2 rotas para Recife
+3. Em Manaus, as 2 rotas para Recife
    são Manaus-Belém-Recife e Manaus-Brasília-Recife. Ida e volta também
    conta: o 2 na diagonal de São Paulo vem de São Paulo-Brasília-São
    Paulo e São Paulo-Porto Alegre-São Paulo.
@@ -884,7 +883,6 @@ Códigos: maior 10000, 13 avanços (pelo andar 0 seriam 1000)
    s->andares - 1. Em cada andar, avance enquanto x->prox[k] != NULL.
    Depois desça.
 2. Some 1 em *avancos a cada x = x->prox[k]. No fim, x é o último nó.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E973.c
@@ -911,7 +909,6 @@ Paradas entre km 50 e km 99: 56
    x->prox[k] != NULL e x->prox[k]->chave < a; depois desça.
 2. No fim da descida, x->prox[0] é a primeira chave >= a. Ande com
    p = x->prox[0] enquanto p != NULL e p->chave <= b.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E974.c
@@ -950,7 +947,7 @@ Saída esperada:
    por isso o >> 16.
 2. Ponteiros em uso = soma dos andares de todos os nós. A média é o total
    de passos (de skip_busca) dividido por 4000.0.
-3. Resposta esperada: a saída acima. Com 1/4, a skip list usa um terço a
+3. Com 1/4, a skip list usa um terço a
    menos de ponteiros e a busca custa praticamente o mesmo: há menos
    andares, mas anda-se mais em cada um.
 
@@ -1397,7 +1394,7 @@ Ordem final: Luar Aquarela Trem Asa Garota Ciranda
 1. Um laço de 0 a 9; em cada volta, chame as duas buscas com &custo e
    acumule em duas variáveis.
 2. Para a ordem final, use al_mostra(ajusta) e depois um printf("\n").
-3. Resposta esperada: a saída acima. O Luar, a mais tocada, começou em
+3. O Luar, a mais tocada, começou em
    último e só chegou à frente no décimo acesso: a transposição aprende
    devagar (com mover para a frente, bastaria o primeiro).
 
@@ -1460,7 +1457,6 @@ Total: 17
    lugar novo, a posição i - 2 (ou 0, se i for 1): use
    NoAuto **q = &l->inicio e avance até lá com q = &(*q)->prox. Aí faça
    p->prox = *q e *q = p.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E981.c
@@ -1537,7 +1533,7 @@ Acertos: 3, faltas: 7
 2. Na falta, crie o nó no início e some 1 no tamanho. Se o tamanho passar
    de 3, ande até o penúltimo nó, libere o último e ponha NULL no prox do
    penúltimo.
-3. Resposta esperada: a saída acima. Olhe a foto 3 do sexto pedido:
+3. Olhe a foto 3 do sexto pedido:
    ela já tinha estado no cache, mas saiu antes de ser pedida de novo.
 
 ```bash
@@ -1572,7 +1568,7 @@ aaabbbaaa: 0 0 0 1 0 0 1 0 0 -> aaabbbaaa
 2. Na codificação, ache a posição i da letra (strchr(lista, c) - lista, ou
    um laço). Na decodificação, a letra é lista[codigo]. Nos dois, chame
    frente(lista, i) logo depois.
-3. Resposta esperada: a saída acima. No "banana", o primeiro "a" sai como 1
+3. No "banana", o primeiro "a" sai como 1
    porque o "b" acabou de ir para a frente; o "n" (posição 13) só custa caro
    na primeira vez.
 
@@ -1958,7 +1954,7 @@ lista MTF  média  114.6   pior 1000
 1. É a função mede do texto com uma variável a mais: zere *pior antes do
    laço e troque quando aparecer um custo maior.
 2. Não esqueça do e->libera(d) no fim.
-3. Resposta esperada: a saída acima. Na lista MTF, alguma busca percorreu
+3. Na lista MTF, alguma busca percorreu
    os 1000 nós; na AVL, nenhuma passou de 12.
 
 ```bash
@@ -1987,7 +1983,7 @@ lista MTF  achou 5173; custo médio: 492.5 quando acha, 1000.0 quando falha
 1. O valor devolvido por e->busca diz se achou. Use dois acumuladores de
    custo (long) e um contador de achadas.
 2. A média de quem falhou divide pelo número de falhas, BUSCAS - achou.
-3. Resposta esperada: a saída acima. Na lista, falhar custa sempre 1000.
+3. Na lista, falhar custa sempre 1000.
    Na skip list, falhar sai mais barato que achar: os códigos acima de
    1000 passam do último nó andando quase só pelos andares de cima.
 
@@ -2021,7 +2017,7 @@ hash                6.4        4.7
    todos os baldes.
 2. insere confere se a chave já está no balde antes de criar o nó. libera
    solta as listas de todos os baldes e depois a struct.
-3. Resposta esperada: a saída acima. Com 1000 chaves em 101 baldes, cada
+3. Com 1000 chaves em 101 baldes, cada
    lista tem umas 10; o hash ganha de todos, mas não guarda a ordem: não
    serve para "liste do código 200 ao 300".
 
@@ -2055,7 +2051,7 @@ vetor               8.7        8.7
    chave ou, se ela não existir, a posição onde ela entraria (o ini do fim
    do laço). insere e busca usam a mesma auxiliar.
 2. Na binária, use meio = ini + (fim - ini) / 2 e conte 1 a cada volta.
-3. Resposta esperada: a saída acima. O vetor empata com a AVL na busca,
+3. O vetor empata com a AVL na busca,
    mas a conta esconde o preço da inserção: cada chave nova empurra, em
    média, metade do vetor.
 
@@ -2098,7 +2094,7 @@ lista MTF  acharam 6750, custo médio 664.2
    sortear as 10000 buscas do BST, de onde o sorteio continua para a AVL?
 2. Crie static int buscas[BUSCAS] no main, preencha uma vez com o mesmo
    sorteio (bc_sorteio(&estado) % 1500 + 1) e passe o vetor para mede.
-3. Resposta esperada: a saída acima. A primeira linha não muda, porque o
+3. A primeira linha não muda, porque o
    BST já recebia a primeira sequência sorteada.
 
 ```bash
@@ -2139,7 +2135,7 @@ para raiz           6.6        7.0
    r->esq, rotacione r à direita (e à esquerda no lado direito).
 2. Use um bool *achou para a volta da recursão saber se deve rotacionar.
    Nas rotações, não há altura para atualizar.
-3. Resposta esperada: a saída acima. Mesmo com as chaves em ordem
+3. Mesmo com as chaves em ordem
    crescente, que fazem a BST virar uma lista, as buscas repetidas puxam
    os produtos da promoção para perto da raiz.
 

@@ -152,7 +152,9 @@ int main(void) {
   esperta). Varie os tipos: escrever do zero, completar código, consertar o
   erro, estender um programa pronto, refatorar.
 - Exercício só usa o que já foi ensinado até aquele assunto (siga o sumário).
-- Sempre termine as dicas com a resposta esperada (valor final ou saída).
+- Sempre termine as dicas com a resposta esperada (valor final ou saída). Quando a saída
+  esperada já está no enunciado, a última dica pode ser "Resposta esperada: a saída acima.": o
+  gerador tira essa linha do `.md`, porque ela só repete o que está logo acima.
 - O esqueleto (includes + main vazio) **compila** com `./rodar`. Inclua os
   `#include` que a solução vai precisar.
 - Escreva uma resolução de cada exercício em

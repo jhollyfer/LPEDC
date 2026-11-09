@@ -438,7 +438,7 @@ Pontos de grau ímpar: 4
 
 1. Cada trecho {a, b} acende duas casas: ciclovia[a][b] e ciclovia[b][a].
 2. O grau de u é a soma da linha u da matriz.
-3. Resposta esperada: a saída acima. A soma é sempre o dobro dos trechos, e
+3. A soma é sempre o dobro dos trechos, e
    o número de pontos de grau ímpar é sempre par (aqui, 4).
 
 ```bash
@@ -473,7 +473,7 @@ GE        não é passeio
 2. Rua repetida: os pares (s[i], s[i+1]) e (s[j], s[j+1]) são a mesma rua
    se forem iguais em qualquer ordem. Esquina repetida: compare as letras,
    mas no fechado não conte a última (ela é a primeira de novo).
-3. Resposta esperada: a saída acima. GPFIEPSFG é o circuito do texto: a
+3. GPFIEPSFG é o circuito do texto: a
    Praça e a Feira aparecem duas vezes, mas nenhuma rua.
 
 ```bash
@@ -504,7 +504,7 @@ pontes: nenhum (4 vértices ímpares)
    confira se todo vértice com grau > 0 foi visitado.
 2. Depois guarde os vértices de grau ímpar num vetor: 0 ímpares dá
    circuito; 2 dá trajeto entre eles; outro número, nenhum.
-3. Resposta esperada: a saída acima. Os triângulos têm todos os graus
+3. Os triângulos têm todos os graus
    iguais a 2 e mesmo assim não têm circuito.
 
 ```bash
@@ -546,7 +546,6 @@ Sem circuito
    a saída em todo vértice. Saída de u é a linha u; entrada, a coluna u.
 2. O Hierholzer é o do texto, mas apaga só mao[u][v]: a volta v -> u não
    existe. Remonte a matriz antes da obra, porque o circuito apaga tudo.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1090.c
@@ -581,7 +580,7 @@ Conserte-o.
 
 1. Numa matriz de grafo NÃO dirigido, cada rua ocupa duas casas.
 2. Quando o caminhão passa de u para v, qual casa é apagada? E a outra?
-3. Resposta esperada: a saída acima. Basta apagar também rua[v][u].
+3. Basta apagar também rua[v][u].
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1091.c
@@ -618,7 +617,7 @@ Traço 2: D B
    escolhendo o vizinho de menor índice.
 2. Na hora de mostrar, percorra o trajeto invertido: ao encontrar o X,
    pule-o e comece a linha do próximo traço.
-3. Resposta esperada: a saída acima. Os dois traços somam as 6 arestas.
+3. Os dois traços somam as 6 arestas.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1092.c
@@ -920,7 +919,7 @@ Rota 4: inválida
 1. Use um vetor bool visto[V] para pegar vértice repetido.
 2. A volta é o par (rota[n - 1], rota[0]); com (i + 1) % n o laço trata
    todos os pares de uma vez.
-3. Resposta esperada: a saída acima. A rota 2 falha na volta (Shopping
+3. A rota 2 falha na volta (Shopping
    para Base); a 4 repete o Centro.
 
 ```bash
@@ -949,7 +948,7 @@ Começando em Cachoeira: Cachoeira Gruta Mirante Lagoa Pedra
    true direto (não há volta para conferir); e o laço dos vizinhos começa
    no 0, porque o início não é mais fixo.
 2. Para cada início, zere usado[], ponha rota[0] = inicio e marque-o.
-3. Resposta esperada: a saída acima. O Mirante no meio do caminho é a
+3. O Mirante no meio do caminho é a
    única saída: começando nele, você nunca volta ao outro triângulo.
 
 ```bash
@@ -978,7 +977,7 @@ Completo com 5: 24 rotas, 12 ciclos distintos
    laço, some conta(pos + 1) em vez de devolver true.
 2. Use uma matriz MAXV x MAXV e uma variável global n para reaproveitar o
    mesmo código nos dois grafos (lembre de zerar usado[]).
-3. Resposta esperada: a saída acima. No completo com n vértices são
+3. No completo com n vértices são
    (n - 1)! rotas, ou (n - 1)! / 2 ciclos: 24 e 12 para n = 5.
 
 ```bash
@@ -1015,7 +1014,7 @@ Bahia > Ceará > Fortaleza > Sport > Remo
 1. venceu[a][b] = 1 só num sentido. O teste do vizinho é
    venceu[ordem[pos - 1]][v].
 2. É o caminho hamiltoniano do E1094, sem volta e com início variável.
-3. Resposta esperada: a saída acima. Curiosidade: num torneio todos
+3. Curiosidade: num torneio todos
    contra todos essa fila SEMPRE existe (teorema de Rédei), mas achar o
    ciclo hamiltoniano continua sendo trabalho de backtracking.
 
@@ -1060,7 +1059,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    crianças nunca mais são tentadas.
 2. Toda escolha feita antes da chamada recursiva precisa ser desfeita
    depois dela, se a chamada voltar com false.
-3. Resposta esperada: a saída esperada acima. Falta uma linha depois do
+3. Falta uma linha depois do
    if (hamilton(pos + 1)) return true;
 
 ```bash
@@ -1102,7 +1101,7 @@ Chamadas: 8840
    se está dentro do tabuleiro e ainda vale 0.
 2. Marque casa[l][c] = k ao entrar; se k == 25, acabou. Se nenhum salto
    der certo, volte casa[l][c] para 0 antes de devolver false.
-3. Resposta esperada: a saída acima. Mude a ordem dos saltos e o número
+3. Mude a ordem dos saltos e o número
    de chamadas muda muito: no backtracking, a ordem das tentativas pesa.
 
 ```bash
@@ -1442,7 +1441,7 @@ Articulações:
    vértice fora (use -1 para não pular nenhum).
 2. Uma rodovia é ponte se, sem ela, componentes(-1) aumenta. Uma cidade
    é articulação se componentes(cidade) é maior que o da rede inteira.
-3. Resposta esperada: a saída acima. Iranduba não é articulação: o
+3. Iranduba não é articulação: o
    triângulo com Manaus e Manacapuru dá outro caminho.
 
 ```bash
@@ -1476,7 +1475,7 @@ Itacoatiara: tin 6, low 6
    tin[v].
 2. Depois de dfs(v, u): low[u] pode cair para low[v]. E a aresta é
    ponte se low[v] > tin[u].
-3. Resposta esperada: a saída acima. As pontes saem na ordem em que a
+3. As pontes saem na ordem em que a
    DFS VOLTA, não na ordem das rodovias: Itacoatiara termina antes de
    Rio Preto da Eva.
 
@@ -1542,7 +1541,7 @@ Sem Porto, a rede parte em 3 pedaços
 1. Num vértice que não é a raiz, cada filho v com low[v] >= tin[u] vira
    um pedaço; some 1 pelo pedaço de cima, onde está o pai.
 2. Na raiz, cada filho da árvore é um pedaço (não há pedaço de cima).
-3. Resposta esperada: a saída acima. A Usina tem um filho só na DFS, e
+3. A Usina tem um filho só na DFS, e
    a rede sem ela continua inteira.
 
 ```bash
@@ -1583,7 +1582,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    o Norte: o Oeste volta ao Norte, e low[Leste] fica igual a tin[Norte].
 2. "Voltar ao próprio u" basta para u - v não ser ponte: existe outro
    caminho entre u e v. A regra com igualdade é a da articulação.
-3. Resposta esperada: a saída esperada acima. Troque um >= por >.
+3. Troque um >= por >.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1103.c
@@ -1620,7 +1619,6 @@ Conserte a DFS para que ela funcione com cabos paralelos.
    reserva, que é uma aresta de volta legítima.
 2. Em vez do vértice pai, passe o ÍNDICE do cabo pelo qual a DFS chegou
    (dfs(v, k)) e pule só esse cabo (k == cabo_pai). A raiz recebe -1.
-3. Resposta esperada: a saída esperada acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1104.c
@@ -1950,7 +1948,7 @@ Melhor: A (B C), 3.0 vezes mais barata
 
 1. (A B) é 50 x 40; multiplicá-la por C custa 50 · 40 · 30.
 2. (B C) é 10 x 30; A vezes ela custa 50 · 10 · 30.
-3. Resposta esperada: a saída acima. Faça a divisão em double.
+3. Faça a divisão em double.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1105.c
@@ -1982,7 +1980,7 @@ Total: 2392
 1. Com k = s[i][j], chame executa(i, k) e executa(k + 1, j) ANTES de
    mostrar a multiplicação atual. Um contador global dá o número da nova.
 2. A junção é uma p[i-1] x p[k] por uma p[k] x p[j].
-3. Resposta esperada: a saída acima. Os custos somam m[1][5] = 2392.
+3. Os custos somam m[1][5] = 2392.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1106.c
@@ -2012,7 +2010,6 @@ Casas calculadas: 21
    calcular de verdade.
 2. As casas com i < j são n(n-1)/2 = 21. Sem a memória (A369), seriam
    3^6 = 729 chamadas.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1107.c
@@ -2040,7 +2037,6 @@ A pior custa 40.9 vezes a melhor
    com -1 em vez de LONG_MAX). A subestrutura ótima vale para os dois.
 2. Uma função mostra(s, i, j) recebe a tabela de cortes como parâmetro:
    void mostra(int s[N + 1][N + 1], int i, int j).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1108.c
@@ -2077,7 +2073,7 @@ mudando só a ordem dos laços (a recorrência está certa).
    momento a linha 3 é preenchida?
 2. Casas ainda não calculadas valem 0 (a matriz é global): elas fingem
    que a metade de baixo é de graça.
-3. Resposta esperada: a saída esperada acima. Percorra as linhas de
+3. Percorra as linhas de
    baixo para cima (i de N até 1) ou faça o laço externo pelo tamanho.
 
 ```bash
@@ -2115,7 +2111,7 @@ PD: 3400
    matrizes de dimensões p[i-1] x p[i] e p[i] x p[i+1] custa
    p[i-1] · p[i] · p[i+1] e simplesmente apaga p[i] do vetor.
 2. Em caso de empate, fique com o par mais à esquerda (o primeiro).
-3. Resposta esperada: a saída acima. O guloso gasta quase o dobro: a
+3. O guloso gasta quase o dobro: a
    escolha barata de agora (10x20 por 20x5) deixa a dimensão 10 presa no
    resultado. A PD começa pelo fim: A1 (A2 (A3 (A4 A5))), usando o 2
    para eliminar o 30, o 40, o 5 e o 20, um de cada vez.
@@ -2457,7 +2453,6 @@ Atribuição 3: não satisfaz (cláusula 3 falsa)
    variável v.
 2. O literal lit é verdadeiro se lit > 0 ? x[lit] : !x[-lit]. Uma
    cláusula é verdadeira se ALGUM literal for; a fórmula, se TODAS forem.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1111.c
@@ -2498,7 +2493,6 @@ Grupo: Cadu Dani Edu
    polinomial no tamanho do certificado.
 2. Mostre o nome do grupo antes de chamar o verificador, porque ele
    imprime o par culpado.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1112.c
@@ -2527,7 +2521,6 @@ Total: 2 de 16 atribuições
    e não para no primeiro sim.
 2. A Ana nunca aparece: com ela, a cláusula 2 tira o Caio, a 3 obriga o
    Davi e a 5 exige o Caio de volta. Confira isso nos números.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1113.c
@@ -2581,7 +2574,6 @@ Primeira escala válida (tentativa 141):
    truque da máscara de bits, com três valores por posição.
 2. Com k cores e n vértices, a força bruta testa k^n escalas; o
    verificador, só os pares, O(n²).
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1114.c
@@ -2626,7 +2618,7 @@ Equivalentes em 32 de 32 atribuições dos x
    #define, e o programa serve para qualquer K >= 4.
 2. Para cada máscara dos x, um laço interno tenta as 2^(K-3) máscaras
    dos y. O y funciona como "ainda devo um verdadeiro mais à frente".
-3. Resposta esperada: a saída acima. A transformação cria K - 3
+3. A transformação cria K - 3
    variáveis e K - 2 cláusulas: tamanho linear, logo polinomial.
 
 ```bash
@@ -2666,7 +2658,6 @@ verificador.
    bastam para este verificador dizer "satisfaz"?
 2. Dentro da cláusula vale o OU (basta um literal); entre as cláusulas
    vale o E (todas). O laço pode sair cedo só no "não".
-3. Resposta esperada: a saída esperada acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1116.c
@@ -3003,7 +2994,6 @@ Jogos que faltam:
    "jogaria contra si mesmo" no complemento.
 2. O grafo completo com V vértices tem V(V-1)/2 arestas: G e o
    complemento dividem essas arestas entre si.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1117.c
@@ -3051,7 +3041,7 @@ Plano 2: câmeras em B D F
 1. Cobertura falha se existe rua a-b com nenhuma das pontas marcada.
    Independente falha se existe rua a-b com as duas pontas marcadas.
 2. O "resto" é o vetor com cada posição negada: resto[v] = !em[v].
-3. Resposta esperada: a saída acima. No plano 2, a rua C-E fica sem
+3. No plano 2, a rua C-E fica sem
    câmera, e é a mesma rua que liga C e E no resto.
 
 ```bash
@@ -3082,7 +3072,6 @@ Lojas no corredor: Bazar Café Doces Farmácia (4)
    outro problema sem abrir a caixa.
 2. g2[a][b] = a != b && !concorre[a][b]. O bit v da máscara devolvida
    diz se a loja v está no grupo: (s >> v) & 1.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1119.c
@@ -3118,7 +3107,7 @@ F2: 24 vértices, 204 arestas, clique de 8? não (insatisfatível)
    cláusula dele. Use uma matriz global adj[24][24].
 2. Para procurar a clique, conte em base 3 com m algarismos (3^m
    escolhas): o algarismo c diz qual literal da cláusula c entra.
-3. Resposta esperada: a saída acima. F2 é insatisfatível: cada
+3. F2 é insatisfatível: cada
    atribuição dos três x torna falsa exatamente uma das 8 cláusulas.
 
 ```bash
@@ -3155,7 +3144,7 @@ da construção do grafo. Conserte-a.
    clique que usa dois vértices da mesma cláusula escolhe o quê?
 2. A regra da redução tem duas condições: cláusulas diferentes E sem
    contradição. O código só confere uma.
-3. Resposta esperada: a saída esperada acima. Troque a != b por
+3. Troque a != b por
    a / 3 != b / 3.
 
 ```bash
@@ -3200,7 +3189,7 @@ Completo K4: 12 variáveis, 34 cláusulas
    nc; as de dois literais ficam com 0 na terceira posição.
 2. São V·(1 + 3) + 3E cláusulas: 16 + 15 = 31 e 16 + 18 = 34. A
    redução é polinomial; quem paga o exponencial é a força bruta.
-3. Resposta esperada: a saída acima. Percorra as máscaras de 0 em
+3. Percorra as máscaras de 0 em
    diante, com o bit i - 1 sendo a variável i.
 
 ```bash
@@ -3542,7 +3531,7 @@ First fit: 5 viagens
 1. O next fit só guarda o espaço livre da viagem ATUAL: uma variável, não
    um vetor. Se a carga não cabe, conta uma viagem nova e volta a 10.
 2. Limite inferior: (soma + 9) / 10, a divisão arredondada para cima.
-3. Resposta esperada: a saída acima. O next fit é O(n) e também é
+3. O next fit é O(n) e também é
    2-aproximado, mas joga fora espaço que o first fit aproveita.
 
 ```bash
@@ -3571,7 +3560,7 @@ Best fit: 3 pendrives
 1. Guarde livre[p], qtd[p] e conteudo[p][k] para cada pendrive aberto.
 2. Percorra todos os pendrives abertos e fique com o de menor livre[p]
    entre os que têm livre[p] >= tamanho. Empate: o primeiro.
-3. Resposta esperada: a saída acima. O limite inferior é 44 / 16 -> 3,
+3. O limite inferior é 44 / 16 -> 3,
    então esta resposta é ótima.
 
 ```bash
@@ -3607,7 +3596,6 @@ Ordem 2: 4 câmeras em B C E F
    ponha câmera nas duas.
 2. A ordem muda as arestas escolhidas, e com elas o resultado. As duas
    respostas respeitam a garantia: no máximo 2 x 4 = 8.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1125.c
@@ -3642,7 +3630,7 @@ Lista 3: FF 6, FFD 6, limite 5
 1. Comparador decrescente sem risco de estouro:
    return (x < y) - (x > y);
 2. FF recebe a lista original; FFD, a cópia ordenada.
-3. Resposta esperada: a saída acima. Na lista 3 nem o FFD acha o ótimo:
+3. Na lista 3 nem o FFD acha o ótimo:
    5 viagens dão certo com (3 3 4) três vezes, (4 5) e (4 4). O FFD faz
    (5 4), (4 4), (4 4), (4 3 3), (3 3 3), (3): as viagens de 8 t perdem
    2 t cada, e sobra um 3 sozinho.
@@ -3680,7 +3668,7 @@ Garantia: rota <= 2 x árvore = 42
 1. Os filhos de u são os v com pai[v] == u (e v != u). A recursão
    preordem(v) cuida dos netos.
 2. No custo, o último trecho é d[r[N - 1]][r[0]]: use (i + 1) % N.
-3. Resposta esperada: a saída acima. 34 fica entre o ótimo (30) e a
+3. 34 fica entre o ótimo (30) e a
    garantia (42): 13% acima do ótimo.
 
 ```bash
@@ -3717,7 +3705,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    as duas precisam ter?
 2. A prova do fator 2 depende de as ruas escolhidas não terem pontas em
    comum. Com o bug, isso deixa de valer e a garantia vai embora.
-3. Resposta esperada: a saída esperada acima. Troque && por ||.
+3. Troque && por ||.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1128.c
@@ -4102,7 +4090,7 @@ Rota 2: 22 quarteirões
 1. abs() de <stdlib.h> dá o valor absoluto de um int.
 2. No custo, some d[r[i]][r[(i + 1) % N]] para i de 0 a N - 1: o último
    termo é a volta para a padaria.
-3. Resposta esperada: a saída acima. A primeira linha começa com 8
+3. A primeira linha começa com 8
    espaços (printf("%8s", "")).
 
 ```bash
@@ -4128,7 +4116,7 @@ Vizinho mais próximo: 40 quarteirões
 1. Um vetor visitado[] e um laço de N - 1 passos; em cada passo, procure
    o v não visitado com menor d[atual][v] (empate: menor índice).
 2. Não esqueça a volta: some d[atual][0] no fim.
-3. Resposta esperada: a saída acima. Pior que a árvore (36) e que o
+3. Pior que a árvore (36) e que o
    ótimo (28): perto do fim, os clientes que sobraram estão longe uns dos
    outros (Dênis -> Fábio custa 11). O vizinho mais próximo não tem
    fator de aproximação constante, nem com distâncias métricas.
@@ -4160,7 +4148,7 @@ Com poda: ótimo 28, 110 rotas completas, 6977 chamadas
 2. Tente os vizinhos v = 1 a N - 1 em ordem, com usado[] e desfazendo
    a marca na volta. Zere melhor (1 << 30) e os contadores entre as duas
    rodadas.
-3. Resposta esperada: a saída acima. Sem poda são (8 - 1)! = 5040 rotas;
+3. Sem poda são (8 - 1)! = 5040 rotas;
    a poda corta metade das chamadas, mas continua exponencial.
 
 ```bash
@@ -4189,7 +4177,7 @@ Rota: Padaria Feira Escola Posto Banco Padaria
    rota[N - 1] = fim, depois o anterior, até rota[0] = 0.
 2. Em caso de empate, fique com o primeiro j (menor índice) que bate.
    Pule os j fora do conjunto e os que valem INF.
-3. Resposta esperada: a saída acima. Trocar memória por tempo: cada
+3. Trocar memória por tempo: cada
    passo da reconstrução custa O(n) a mais, mas só são n passos.
 
 ```bash
@@ -4235,7 +4223,7 @@ Tarde (30 pontos): aproximado, árvore 111, rota 172, com 2-opt 148
 2. No 2-opt, recomece a busca do começo a cada melhoria (i de 1 a n - 2,
    j de i + 1 a n - 1, aresta de volta com (j + 1) % n) e inverta o
    trecho rota[i..j].
-3. Resposta esperada: a saída acima. A rota da árvore (172) respeita a
+3. A rota da árvore (172) respeita a
    garantia (no máximo 2 x 111 = 222), e o 2-opt tira 24 quarteirões.
 
 ```bash
@@ -4271,7 +4259,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 2. O resultado errado (24) é o caminho até a Ana; da Ana à farmácia são
    mais 4 quarteirões. Uma resposta abaixo do ótimo provado é sinal de
    que o programa resolveu outro problema (aqui, o caminho hamiltoniano).
-3. Resposta esperada: a saída esperada acima. Some d[j][0] na escolha
+3. Some d[j][0] na escolha
    do último cliente e no valor.
 
 ```bash
@@ -4460,7 +4448,6 @@ Estações de grau ímpar: 6
 1. O grau de u é a soma da linha u da matriz de adjacência.
 2. Pelo lema do aperto de mãos, a soma tem de ser 2 x 9 = 18, e o número de
    estações de grau ímpar tem de ser par.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2901.c
@@ -4507,7 +4494,7 @@ Sumidouros: Limpeza
 1. Entrada de u é a coluna u da matriz; saída, a linha u.
 2. No dirigido, cada seta conta 1 na saída de quem sai e 1 na entrada de quem
    chega: as duas somas valem E = 9.
-3. Resposta esperada: a saída acima. Num grafo sem ciclo existe sempre pelo
+3. Num grafo sem ciclo existe sempre pelo
    menos uma fonte e um sumidouro.
 
 ```bash
@@ -4544,7 +4531,7 @@ DEFD    não é passeio, comprimento 3
 2. Na fechada, não conte a última letra como repetição do quiosque (ela é a
    primeira de novo). Trilha repetida: o par (x, y) aparece de novo em
    qualquer ordem.
-3. Resposta esperada: a saída acima. DEFD falha porque não existe a trilha
+3. DEFD falha porque não existe a trilha
    F-D, por mais que a sequência pareça um triângulo.
 
 ```bash
@@ -4586,7 +4573,7 @@ Mapa 3: nenhum (desconexo)
    (ignore esquinas de grau 0).
 2. Conexo e 0 ímpares: circuito. Conexo e 2 ímpares: trajeto entre eles.
    Desconexo ou outro número de ímpares: nenhum.
-3. Resposta esperada: a saída acima. O mapa 3 tem todos os graus pares e
+3. O mapa 3 tem todos os graus pares e
    mesmo assim não tem circuito.
 
 ```bash
@@ -4632,7 +4619,7 @@ D: falta ponto
 1. Primeiro confira o tamanho (n == 6), depois as repetições com um vetor
    bool visto[], depois as ruas, inclusive a de r[n - 1] para r[0].
 2. Num grafo dirigido, rua[x][y] = 1 não implica rua[y][x] = 1.
-3. Resposta esperada: a saída acima. O verificador custa O(n): é por isso que
+3. O verificador custa O(n): é por isso que
    o problema do ciclo hamiltoniano está em NP.
 
 ```bash
@@ -4673,7 +4660,7 @@ rejeitado: cabo 3-4 descoberto
    cada um precisa de pelo menos uma ponta marcada.
 2. Confira o tamanho antes: um certificado maior que k é rejeitado mesmo que
    cubra tudo.
-3. Resposta esperada: a saída acima. Conferir custa O(V + E); achar a menor
+3. Conferir custa O(V + E); achar a menor
    cobertura é NP-difícil.
 
 ```bash
@@ -4711,7 +4698,7 @@ Saída esperada:
 
 1. Conte quantos dos k(k-1)/2 pares são amigos.
 2. Todos os pares: clique. Nenhum: independente. Alguns: nenhum dos dois.
-3. Resposta esperada: a saída acima. Os dois verificadores custam O(k²).
+3. Os dois verificadores custam O(k²).
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2907.c
@@ -4742,7 +4729,7 @@ Da direita: 282
    p[0] · p[k] · p[k+1].
 2. Da direita: o acumulado é p[k-1] x p[5]; juntar A(k-1) na frente custa
    p[k-2] · p[k-1] · p[5].
-3. Resposta esperada: a saída acima. Nenhuma das duas é a ótima: a PD do
+3. Nenhuma das duas é a ótima: a PD do
    0185 acha uma ordem com 206 multiplicações.
 
 ```bash
@@ -4783,7 +4770,7 @@ rejeitado (custo 94 > 90)
    {-1, 20, 15, 0, 17}, {25, -1, 22, 17, 0}}.
 2. Mostre "aceito (custo C)", "rejeitado (custo C > L)", "rejeitado (sem
    estrada X-Y)" ou "rejeitado (repete cidade)".
-3. Resposta esperada: a saída acima. O mesmo certificado pode ser aceito
+3. O mesmo certificado pode ser aceito
    para um L e rejeitado para outro.
 
 ```bash
@@ -4850,7 +4837,7 @@ Ruas: r0 r2 r5 r6 r3 r4 r1
 1. Empilhe pares (esquina, rua pela qual chegou). Ao desempilhar, guarde a
    esquina e a rua: lidos de trás para frente, são o circuito e as ruas.
 2. A outra ponta da rua k a partir de u é rua[k][0] + rua[k][1] - u.
-3. Resposta esperada: a saída acima. Todos os graus são pares (2, 4, 4, 2,
+3. Todos os graus são pares (2, 4, 4, 2,
    2), então o circuito existe.
 
 ```bash
@@ -4892,7 +4879,7 @@ Trajeto: 0 1 2 0 3 1 4
    saída - entrada = 1 (início), um com -1 (fim), o resto com 0.
 2. O Hierholzer é o do texto, apagando só trecho[u][v] e escolhendo o
    destino de menor índice.
-3. Resposta esperada: a saída acima. O trajeto termina no porto 4, o único
+3. O trajeto termina no porto 4, o único
    com entrada - saída = 1.
 
 ```bash
@@ -4969,7 +4956,7 @@ Articulações: 2 3 5 6
    e depois preencha. Confira NULL.
 2. As regras são as do texto: ponte se low[v] > tin[u]; articulação se
    low[v] >= tin[u] fora da raiz, ou raiz com 2 ou mais filhos.
-3. Resposta esperada: a saída acima. Com lista, a DFS custa O(V + E) em vez
+3. Com lista, a DFS custa O(V + E) em vez
    de O(V²).
 
 ```bash
@@ -5006,7 +4993,7 @@ R3: 1 componente(s), 0 ponte(s): robusta
 1. Zere tin[] a cada rede. O laço externo começa uma DFS em cada nó ainda
    não visitado: cada começo é um componente.
 2. Robusta = 1 componente e 0 pontes.
-3. Resposta esperada: a saída acima. R1 não tem ponte, mas está partida em
+3. R1 não tem ponte, mas está partida em
    dois; R2 está inteira, mas o cabo 2-3 é ponte.
 
 ```bash
@@ -5041,7 +5028,6 @@ Ordem: ((A1 (A2 A3)) ((A4 A5) A6))
 1. s[i][j] é o k do melhor corte entre Ak e Ak+1.
 2. A parentização sai de uma função recursiva: se i == j mostre Ai; senão,
    "(" + metade da esquerda + " " + metade da direita + ")".
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2916.c
@@ -5088,7 +5074,6 @@ Total: 12 de 32
 1. Literal lit é verdadeiro se lit > 0 ? x[lit] : !x[-lit]; cláusula
    verdadeira se algum literal for; fórmula, se todas forem.
 2. Percorra as máscaras de 0 a 31 em ordem e mostre x1 primeiro.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2917.c
@@ -5124,7 +5109,6 @@ Cobertura do complemento: 4 5 6 (3)
 1. comp[a][b] = a != b && !g[a][b]. Independente no complemento é clique em
    G.
 2. O bit v da máscara diz se v está no conjunto; o resto é todos & ~s.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2918.c
@@ -5161,7 +5145,7 @@ completo + caminho: aprox 8, ótimo 5, razão 1.60
 1. A força bruta testa as 256 máscaras e fica com a menor que cobre todas as
    arestas.
 2. Mostre "aprox A, ótimo O, razão R" com R em %.2f.
-3. Resposta esperada: a saída acima. A razão nunca passa de 2: no caminho e
+3. A razão nunca passa de 2: no caminho e
    na estrela ela bate exatamente em 2; com o K4 ela cai.
 
 ```bash
@@ -5194,7 +5178,7 @@ First fit decrescente: 4
    first fit numa cópia ordenada.
 2. No backtracking, bt(i, motos) com livre[] global; ao abrir moto nova
    pela primeira vez já não adianta tentar abrir outra para o mesmo item.
-3. Resposta esperada: a saída acima. Soma 40: o limite inferior é 4.
+3. Soma 40: o limite inferior é 4.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2920.c
@@ -5236,7 +5220,6 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 1. Na raiz, low[v] >= tin[raiz] é sempre verdade: nada tem tin menor.
 2. A raiz é articulação só se tiver 2 ou mais filhos na árvore da DFS. Conte
    os filhos (variável local) e aplique a regra comum só fora da raiz.
-3. Resposta esperada: a saída esperada acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2921.c
@@ -5273,7 +5256,6 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 1. Juntar (Ai..Ak) com (Ak+1..Aj) é multiplicar uma matriz de quantas linhas
    por quantas colunas?
 2. A cadeia Ai..Aj começa com as linhas de Ai, que são p[i-1], não p[i].
-3. Resposta esperada: a saída esperada acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2922.c
@@ -5310,7 +5292,7 @@ Total: 910 m
 
 1. Use INF = 1000000 para "sem rua" e d[i][i] = 0 antes do Floyd.
 2. Com 0 esquinas ímpares o extra seria 0 (circuito euleriano). Aqui são 2.
-3. Resposta esperada: a saída acima. Repare que o carteiro não repete a rua
+3. Repare que o carteiro não repete a rua
    1-4 (200 m): ele refaz 1-2-4, que soma 140 m.
 
 ```bash
@@ -5342,7 +5324,7 @@ Ciclo hamiltoniano: sim
 1. x e y diferem em um bit só quando z = x ^ y é potência de 2: z != 0 e
    (z & (z - 1)) == 0.
 2. Mostre os bits com um laço de b = 3 até 0: (x >> b) & 1.
-3. Resposta esperada: a saída acima. Para o hipercubo, achar o ciclo é fácil
+3. Para o hipercubo, achar o ciclo é fácil
    porque o grafo tem estrutura; o difícil é o caso geral.
 
 ```bash
@@ -5388,7 +5370,7 @@ Satisfaz a fórmula? sim
    f(a) == -f(b).
 2. Um independente de tamanho m pega exatamente um literal por cláusula (o
    triângulo impede dois) e nunca x junto com não x.
-3. Resposta esperada: a saída acima. São 12 arestas dos triângulos mais as
+3. São 12 arestas dos triângulos mais as
    dos pares contraditórios.
 
 ```bash
@@ -5425,7 +5407,6 @@ G2: volta mais barata = 7 -> não tem
    chama o Held-Karp (dp[1 << 6][6], global).
 2. Toda volta usa n trechos; cada trecho custa 1 ou 2. Custo n quer dizer
    que todos os trechos são arestas de G.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2926.c
@@ -5457,7 +5438,6 @@ Volta fechada era 28; terminar no Gil economiza 4
    d[j][0], pegue dp[todos][7].
 2. Reconstrução: do (todos, 7), ant diz o anterior; apague o bit e repita até
    chegar ao 0.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2927.c
@@ -5498,7 +5478,7 @@ dia  ótimo  vizinho     árvore      árvore+2opt
    uma função custo(rota). Held-Karp só precisa do custo.
 2. No 2-opt, troque as arestas (a, b) e (c, e) por (a, c) e (b, e) quando
    encurtar, invertendo o trecho, até nenhuma troca ajudar.
-3. Resposta esperada: a saída acima. A árvore nunca passa de 2 vezes o
+3. A árvore nunca passa de 2 vezes o
    ótimo; o vizinho mais próximo não tem essa garantia.
 
 ```bash
@@ -5539,7 +5519,7 @@ Chamadas: 319 (força bruta: 4096 máscaras)
    Senão marque u, chame cobre(k - 1), desmarque; depois o mesmo com v.
 2. Ao achar a cobertura, não desmarque: devolva true direto, e em[] guarda a
    resposta.
-3. Resposta esperada: a saída acima. As chamadas somam todos os k testados,
+3. As chamadas somam todos os k testados,
    e mesmo assim ficam bem abaixo de 4096.
 
 ```bash
@@ -5577,7 +5557,6 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    Vértices de grau 0 não atrapalham nenhum circuito.
 2. Na conferência da conexidade, ignore as esquinas com grau 0 (e comece a
    DFS numa esquina com grau maior que 0).
-3. Resposta esperada: a saída esperada acima.
 
 ```bash
 ~/LPEDC/rodar 29-grafos-e-np/lista/P2930.c

@@ -280,7 +280,6 @@ Dia 1: 19 graus
 1. int max[7] = {19, 23, ...}; o último índice é 6.
 2. O laço pode descer: for (int i = 6; i >= 0; i--).
 3. O dia é o índice + 1.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E217.c
@@ -323,7 +322,6 @@ Novo b[0]: 15
 1. Na inicialização parcial, as gavetas que faltam viram 0.
 2. sizeof(b) / sizeof(b[0]) devolve size_t: mostre com %zu.
 3. 4 % 3 é 1, 5 % 3 é 2, 6 % 3 é 0...
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E218.c
@@ -391,7 +389,6 @@ Nota 1: * (1)
 1. int contagem[6] = {0}; e ignore a posição 0: assim contagem[5] é a nota 5.
 2. contagem[avaliacoes[i]]++ soma 1 na gaveta daquela nota.
 3. Para desenhar, um laço dentro do outro (assunto 0024).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E220.c
@@ -458,7 +455,6 @@ Saída esperada:
 2. O laço de dentro anda de p em p: for (int m = p * p; m <= N; m += p).
 3. Por que começar em p * p? Os múltiplos menores (2p, 3p...) já foram
    riscados pelos primos menores que p.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0037-vetores/E222.c
@@ -749,7 +745,6 @@ Saída esperada:
 
 1. preencher altera o vetor do main; mostrar só lê, então merece const.
 2. O for das duas é igual: de 0 a n - 1.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E224.c
@@ -787,7 +782,6 @@ depois de vezes_dez: a = 100 30 30
 2. x recebe uma cópia: mudar x não muda b, nem a[2].
 3. Para mudar a[2] dentro de uma função, mande o vetor e a posição, não o
    valor da gaveta.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E225.c
@@ -905,7 +899,6 @@ Saída esperada:
    v[n - 1 - i]. Se for até n, você inverte duas vezes e volta ao começo!
 3. Em rotacionar, guarde v[0] antes de deslizar as outras e ponha no fim.
 4. Teste com n ímpar e par: a do meio, quando existe, fica no lugar.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0038-vetores-e-funcoes/E228.c
@@ -1217,7 +1210,6 @@ a: 24 bytes, uma linha: 12 bytes
 2. sizeof(b) / sizeof(b[0]) é o número de linhas: o tamanho da matriz
    dividido pelo de uma linha. Guarde num int.
 3. sizeof(a[0]) é o tamanho de uma linha de a. Mostre com %zu.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E230.c
@@ -1255,7 +1247,6 @@ Transposta (3x2):
 
 1. A transposta tem as dimensões trocadas: int t[3][2].
 2. Dois laços sobre a original: para cada (l, c), t[c][l] = m[l][c].
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E231.c
@@ -1298,7 +1289,6 @@ Melhor fileira: B
 2. Conte os livres dentro do laço das colunas e compare com o melhor até
    agora no laço das linhas (padrão maior, assunto 0025).
 3. Use > (e não >=) para ficar com a primeira em caso de empate.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E232.c
@@ -1367,7 +1357,7 @@ Saída esperada:
    matriz, e o sanitizer avisa.
 3. A própria casa entra nos dois laços; como ela não é bomba (senão você
    nem estaria contando), não atrapalha.
-4. Resposta esperada: a saída acima. Escreva uma função
+4. Escreva uma função
    int vizinhas(int campo[][COLUNAS], int l, int c) para deixar o main limpo.
 
 ```bash
@@ -1619,7 +1609,6 @@ Hi!
 1. O mesmo valor com %c mostra o símbolo e com %d mostra o código.
 2. Para mostrar o apóstrofo, ele vai dentro das aspas duplas: "'%c' = %d\n".
 3. putchar(72) ou printf("%c", 72) mostram a letra do código 72.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E235.c
@@ -1660,7 +1649,6 @@ Letras de a a z: 26
 3. Toda maiúscula vem ANTES de toda minúscula na tabela: 'B' < 'a' é
    verdadeiro.
 4. toupper de algo que não é letra devolve o mesmo caractere.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E236.c
@@ -1695,7 +1683,6 @@ Decifrada: ZEBRA AZUL
 3. Para decifrar, ande 26 - K para frente (é o mesmo que K para trás, sem
    risco de resto negativo).
 4. O vetor tem 10 itens e não é uma string: mostre com putchar num laço.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0040-caracteres/E237.c
@@ -1817,7 +1804,7 @@ Diferenças em 128 códigos: 0
 1. meu_isdigit: return c >= '0' && c <= '9';
 2. meu_toupper: se for minúscula, return c - ('a' - 'A'); (isso é 32).
 3. Para comparar a verdade: (isdigit(c) != 0) != meu_isdigit(c).
-4. Resposta esperada: a saída acima. Se der diferente de 0, mostre o
+4. Se der diferente de 0, mostre o
    código que falhou e procure o erro.
 
 ```bash
@@ -2055,7 +2042,6 @@ strlen = 6, sizeof = 7
 1. O laço pode ir até sizeof(cidade) - 1, que inclui o '\0'.
 2. Para escrever uma barra invertida no printf, use "\\".
 3. strlen devolve size_t: mostre com %zu (sizeof também).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E241.c
@@ -2096,7 +2082,6 @@ casa vem antes de casamento
 3. Em ordem, olhe só o sinal: strcmp(a, b) < 0 quer dizer que a vem antes.
    'Z' é 90 e 'a' é 97; quando uma string acaba antes, o '\0' (0) é menor
    que qualquer letra.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E242.c
@@ -2139,7 +2124,6 @@ igual a "joao.silva"? sim
    dali, sem esquecer de pôr o '\0' no fim.
 2. meu_strcmp: avance enquanto a[i] == b[i] e a[i] != '\0'. Quando parar,
    devolva a[i] - b[i]. Se as duas acabaram juntas, isso dá 0.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0041-strings/E243.c
@@ -2182,7 +2166,7 @@ A: sim
 2. Compare tolower(s[i]) com tolower(s[j]).
 3. palavras[k] é a linha k da matriz: uma string que você passa para a
    função como qualquer outra.
-4. Resposta esperada: a saída acima. Desafio extra: ignore também os
+4. Desafio extra: ignore também os
    espaços e teste com "Anotaram a data da maratona".
 
 ```bash
@@ -2521,7 +2505,6 @@ seguido do caminho deste arquivo.
    Cada %s pula os espaços antes de ler; o fgets não pula nada.
 3. O fgets pega o resto da linha do ponto exato em que o scanf parou, com
    o '\n' no fim. Guarde o strlen num size_t antes do strcspn.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E248.c
@@ -2682,7 +2665,6 @@ pedaço 3: [uva\n] fim da linha 2 (3 letras)
    int) e escreva o \n à mão com "\\n".
 3. Some n numa variável a cada pedaço; quando a linha fechar, mostre e
    zere.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0042-lendo-strings/E252.c
@@ -3031,7 +3013,6 @@ Artilheiro: Duda
 3. Repare que "Kauã" tem um acento: em UTF-8 são 5 bytes, e o printf conta
    bytes. Por isso o número dele aparece uma coluna à esquerda dos
    outros. Tudo bem aqui; só saiba por quê.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E254.c
@@ -3069,7 +3050,6 @@ Venceu com 1 erro(s)!
 2. Se o chute não marcou nenhuma posição, é erro.
 3. Para saber se venceu: todas as posições reveladas? Escreva uma função
    bool completa(const bool revelada[], int n).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0043-juntando-tudo/E255.c
@@ -3482,7 +3462,6 @@ Depois: 117 113 110 108 105 102 101
 2. Pare no meio (i < n / 2). Se for até o fim, você destroca tudo e o vetor
    volta a ser o que era.
 3. A troca usa uma variável auxiliar: aux = v[i]; v[i] = v[j]; v[j] = aux;
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0503.c
@@ -3525,7 +3504,6 @@ Total:
    bairro[i][j], com dois for aninhados.
 2. Escreva void mostrar(const char titulo[], int m[2][3]) para não repetir
    o laço de impressão três vezes.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0504.c
@@ -3568,7 +3546,6 @@ Por dia (4x3):
 2. Dois for: o de fora em i (0 a 2), o de dentro em j (0 a 3), e a linha
    t[j][i] = aulas[i][j]; dentro.
 3. Para mostrar, os limites mudam: t tem 4 linhas de 3 colunas.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0505.c
@@ -3615,7 +3592,6 @@ quase é identidade? não
 2. Em eh_identidade, o valor esperado em cada casa também é (i == j): se
    alguma casa for diferente disso, return false na hora.
 3. Para mostrar o bool, use um operador ternário: ok ? "sim" : "não".
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0506.c
@@ -3690,7 +3666,6 @@ Iniciais: R.N.
    por toupper até o '\0'.
 2. strcat(cracha, ", ") e strcat(cracha, nome) completam o texto.
 3. As iniciais são nome[0] e sobrenome[0]: mostre com %c.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0508.c
@@ -3717,7 +3692,6 @@ Letra z: 1
 1. Um vetor que chega como parâmetro vira só um endereço: sizeof s dá o
    tamanho de um endereço (8), não o da string. Use o '\0' para parar.
 2. Dentro do if, = é atribuição; para comparar, use ==.
-3. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0509.c
@@ -3758,7 +3732,6 @@ Saída esperada:
 2. Zere o vetor de contadores na declaração: int cont[11] = {0};
 3. Um laço passa pelos 14 pares fazendo cont[vendidos[i] - 34]++; outro
    laço mostra de 0 a 10, pulando quem tem contador 0.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0510.c
@@ -3893,7 +3866,6 @@ CEP 69099999: não atendido (4 passos)
 3. Conte um passo a cada volta do while (cada vez que olha o meio).
 4. Com 10 itens, a busca linear chega a 10 comparações; a binária, no pior
    caso, a 4.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0513.c
@@ -3933,7 +3905,6 @@ Entrou 60: 95 91 84 80 77 70 66 61 60
 2. Quando o laço para, o lugar livre é i + 1.
 3. Por que do fim? Se você empurrar a partir do começo, cada cópia apaga o
    valor que ainda ia ser copiado.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0514.c
@@ -4248,7 +4219,6 @@ Vitória do O
    vencedor, então pergunte primeiro por vencedor.
 4. Os tabuleiros estão em char jogos[4][3][4]: 4 jogos, 3 linhas, 3 letras
    + '\0'. jogos[k] é um char [3][4]: passe direto para a função.
-5. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0521.c
@@ -4315,7 +4285,6 @@ Transposta cheia (6x5):
 2. Para mostrar a cheia sem montar a matriz, para cada (i, j) procure uma
    tripla com linha i e coluna j; achou, mostra o valor; senão, 0.
 3. As triplas cabem em int t[30][3] (no pior caso, nada é zero).
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0522.c
@@ -4460,7 +4429,6 @@ Ronda: 1 2 3 4 5 10 15 20 19 18 17 16 11 6 7 8 9 14 13 12
    cima <= baixo antes da linha de baixo e esq <= dir antes da coluna da
    esquerda. Sem isso, matrizes não quadradas repetem casas.
 3. Um contador de passos que começa em 1 preenche a segunda matriz.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0525.c
@@ -4511,7 +4479,6 @@ Saída esperada:
 2. Guarde a soma em soma[0], para o main mostrar; ponha -1 lá quando
    aparecer caractere inválido.
 3. Espaço: continue. Não dígito e não espaço: return false.
-4. Resposta esperada: a saída acima.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/lista/P0526.c
