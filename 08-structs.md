@@ -5367,25 +5367,22 @@ diferente, tamanho diferente. Veja 0059.
 
 </details>
 
-**Questão 2.** Em uma plataforma de 64 bits típica, quanto vale
-`sizeof(union u)`?
+**Questão 2.** Sobre struct, union e enum, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-union u { int i; double d; char s[10]; };
-```
+- **I.** O tamanho de uma `union` é o do maior campo, arredondado para o alinhamento.
+- **II.** O `sizeof` de uma `struct` é sempre a soma dos tamanhos dos campos.
+- **III.** Num `enum` sem valores explícitos, o primeiro nome vale 0 e os seguintes sobem de 1 em 1.
+- **IV.** Se `p` é um ponteiro para struct, `p->campo` equivale a `(*p).campo`.
 
-- (A) 22
-- (B) 10
-- (C) 8
-- (D) 16
-- (E) 24
+- (A) Apenas I e II
+- (B) Apenas II e IV
+- (C) Apenas I e III
+- (D) Apenas I, III e IV
+- (E) Apenas II, III e IV
 
 <details><summary>Gabarito</summary>
 
-**(D)**. Os campos de uma union começam no mesmo endereço; o tamanho é o do
-maior campo (10, do `s`) arredondado para o alinhamento mais exigente (8, do
-`double`): 16. Somar os campos (22) seria o raciocínio de uma struct sem
-preenchimento. Veja 0064.
+**(D).** I é verdadeira: os campos dividem o mesmo endereço. II é falsa: o compilador insere preenchimento (padding) para alinhar os campos, e a ordem deles muda o tamanho. III e IV são verdadeiras. Veja 0059, 0063 e 0064.
 
 </details>
 
@@ -5533,27 +5530,22 @@ maiúsculas de minúsculas, então os nomes não colidem. Veja 0060.
 
 </details>
 
-**Questão 9.** Em uma plataforma x86-64 (*little-endian*), o que o trecho
-imprime?
+**Questão 9.** Sobre operadores bit a bit, com e sem sinal, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-union { uint32_t n; unsigned char b[4]; } u;
-u.n = 0x11223344;
-printf("0x%02X 0x%02X %zu\n", u.b[0], u.b[3], sizeof u);
-```
+- **I.** Em `unsigned`, `x << 1` equivale a multiplicar por 2, desde que não haja estouro.
+- **II.** Com `int x = -1;` e `unsigned u = 1;`, a comparação `x < u` vale 1.
+- **III.** `0x0F & 0xB4` vale `0x04`.
+- **IV.** O deslocamento `>>` sobre um `unsigned` entra com bits 1 pela esquerda.
 
-- (A) `0x11 0x44 4`
-- (B) `0x11 0x44 8`
-- (C) `0x44 0x11 8`
-- (D) `0x44 0x11 4`
-- (E) `0x33 0x22 4`
+- (A) Apenas I e III
+- (B) Apenas I e II
+- (C) Apenas II e IV
+- (D) Apenas III e IV
+- (E) Apenas I, II e III
 
 <details><summary>Gabarito</summary>
 
-**(D)**. Os dois campos dividem os mesmos 4 bytes. Em *little-endian*, o
-byte menos significativo (0x44) fica no endereço mais baixo, `b[0]`, e o
-mais significativo (0x11) em `b[3]`. O tamanho é o do maior campo: 4. Numa
-máquina *big-endian* a ordem dos bytes se inverte. Veja 0064.
+**(A).** I e III são verdadeiras (`1011 0100 & 0000 1111` deixa `0100`). II é falsa: o `-1` é convertido para `unsigned`, vira 4294967295 e a comparação dá 0. IV é falsa: em `unsigned`, o `>>` entra com zeros. Veja 0065 e 0171.
 
 </details>
 

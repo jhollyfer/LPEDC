@@ -247,33 +247,22 @@ declarado; por isso o tamanho vai como parâmetro. O gcc avisa
 
 </details>
 
-**2.** Qual a saída?
+**2.** Sobre vetores e strings em C, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-void zera(int v[], int n) {
-    for (int i = 0; i < n; i++)
-        v[i] = 0;
-}
+- **I.** Uma função que recebe um vetor escreve nas gavetas do vetor original.
+- **II.** Dentro dessa função, `sizeof(v) / sizeof(v[0])` dá a quantidade de elementos do vetor original.
+- **III.** `char s[] = "ufam";` ocupa 5 bytes.
+- **IV.** `strlen("ufam")` vale 5.
 
-int main(void) {
-    int a[3] = {1, 2, 3};
-    zera(a, 2);
-    printf("%d %d %d\n", a[0], a[1], a[2]);
-    return 0;
-}
-```
-
-- (A) 0 0 3
-- (B) 1 2 3
-- (C) 0 0 0
-- (D) 1 0 0
-- (E) 0 2 3
+- (A) Apenas I e III
+- (B) Apenas I e II
+- (C) Apenas II e IV
+- (D) Apenas III e IV
+- (E) Apenas I, II e III
 
 <details><summary>Gabarito</summary>
 
-**(A).** A passagem continua sendo por valor, mas o valor copiado é o
-**endereço** do vetor. A função escreve nas gavetas originais. Com `n = 2`,
-só `a[0]` e `a[1]` viram 0. Veja 0038.
+**(A).** I é verdadeira: o que se copia é o endereço do vetor. II é falsa: dentro da função, `v` é um ponteiro, e o `sizeof` mede o ponteiro. III é verdadeira: 4 letras mais o `'\0'`. IV é falsa: o `strlen` não conta o `'\0'` e dá 4. Veja 0038 e 0041.
 
 </details>
 
@@ -315,19 +304,22 @@ conta por colunas (`1 * 3 + 2`), que não é a do C. Veja 0039.
 
 </details>
 
-**5.** Depois de `int w[5] = {3, 1};`, quanto vale a soma dos 5 itens?
+**5.** Considere as afirmações sobre vetores e matrizes e marque a alternativa CORRETA.
 
-- (A) lixo, porque três itens não foram inicializados
-- (B) 3
-- (C) 15
-- (D) 8
-- (E) 4
+- **I.** Depois de `int w[5] = {3, 1};`, os três últimos itens valem 0.
+- **II.** Se `int v[5]`, o acesso a `v[5]` é checado em tempo de execução e interrompe o programa com erro.
+- **III.** Em `int m[3][4]`, `sizeof(m)` vale `12 * sizeof(int)`.
+- **IV.** Uma string de `n` caracteres precisa de pelo menos `n + 1` bytes de vetor.
+
+- (A) Apenas I e II
+- (B) Apenas II e III
+- (C) Apenas I e IV
+- (D) Apenas III e IV
+- (E) Apenas I, III e IV
 
 <details><summary>Gabarito</summary>
 
-**(E).** Com inicializador, o que falta vira **zero**: o vetor é
-`{3, 1, 0, 0, 0}`. Lixo só aparece num vetor local declarado **sem** nenhum
-inicializador. Veja 0037.
+**(E).** I é verdadeira: com inicializador, o que falta vira zero. II é falsa: o C não confere índice, e `v[5]` é comportamento indefinido. III é verdadeira: a matriz tem 12 itens, no escopo onde foi declarada. IV é verdadeira: falta a gaveta do `'\0'` se o vetor for justo. Veja 0037, 0039 e 0041.
 
 </details>
 

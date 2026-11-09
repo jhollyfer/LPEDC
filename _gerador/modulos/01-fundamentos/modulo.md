@@ -376,41 +376,41 @@ uma saturação, que o C não faz. Veja 0003.
 
 </details>
 
-**6.** Sobre os tipos primitivos do C, é correto afirmar:
+**6.** Sobre os tipos primitivos do C, considere as afirmações e marque a alternativa CORRETA.
 
-- (A) `int` ocupa sempre 4 bytes, em qualquer máquina, por exigência do padrão.
-- (B) `sizeof(char)` vale 1 por definição; o tamanho dos outros tipos depende da máquina, respeitando os mínimos do padrão.
-- (C) `float` e `double` ocupam os mesmos bytes; só muda o jeito de mostrar no `printf`.
-- (D) `unsigned int` ocupa o dobro de bytes de `int`, porque não tem sinal.
-- (E) `sizeof` é uma função da biblioteca `<stdlib.h>`.
+- **I.** `sizeof(char)` vale 1 por definição do padrão, em qualquer máquina.
+- **II.** `int` ocupa sempre 4 bytes, por exigência do padrão.
+- **III.** `sizeof` é um operador, e não uma função de `<stdlib.h>`.
+- **IV.** `unsigned int` ocupa o dobro de bytes de `int`, porque não guarda o sinal.
+
+- (A) Apenas I
+- (B) Apenas I e II
+- (C) Apenas II e III
+- (D) Apenas III e IV
+- (E) Apenas I e III
 
 <details><summary>Gabarito</summary>
 
-**(B).** O padrão só garante mínimos (o `int` tem pelo menos 16 bits) e que
-`char` tem 1 byte. `unsigned` muda a faixa, não o tamanho; `double` costuma
-ter 8 bytes contra 4 do `float`; e `sizeof` é um **operador**, resolvido na
-compilação, sem `#include` nenhum. Veja 0002 e 0003.
+**(E).** I é verdadeira: `char` é a unidade de medida do `sizeof`. II é falsa: o padrão só exige mínimos (o `int` tem pelo menos 16 bits). III é verdadeira: `sizeof` é resolvido na compilação e não precisa de `#include`. IV é falsa: `unsigned` muda a faixa de valores, não o tamanho. Veja 0002 e 0003.
 
 </details>
 
-**7.** Qual o valor de `x` depois das duas linhas?
+**7.** Considere as afirmações sobre operadores e conversões e marque a alternativa CORRETA.
 
-```c
-int x = 10;
-x *= 2 + 3;
-```
+- **I.** Depois de `int x = 10; x *= 2 + 3;`, `x` vale 50.
+- **II.** Desde o C99, `-7 / 2` vale -4, porque a divisão inteira arredonda para baixo.
+- **III.** Em `y = x++;`, `y` recebe o valor que `x` tinha antes do incremento.
+- **IV.** `(double) 7 / 2` vale 3.5, porque o cast age antes da divisão.
 
-- (A) 23
-- (B) 25
-- (C) 13
-- (D) 50
-- (E) 60
+- (A) Apenas I e II
+- (B) Apenas II e IV
+- (C) Apenas I e III
+- (D) Apenas I, III e IV
+- (E) Apenas II, III e IV
 
 <details><summary>Gabarito</summary>
 
-**(D).** O operador composto age sobre a expressão inteira da direita:
-`x *= 2 + 3` é `x = x * (2 + 3)`, isto é, 10 × 5. O 23 viria de ler
-`x * 2 + 3`. Veja 0009.
+**(D).** I é verdadeira: `x *= 2 + 3` é `x = x * (2 + 3)`. II é falsa: o C99 corta em direção ao zero e `-7 / 2` vale -3. III é verdadeira: o pós-incremento entrega o valor antigo. IV é verdadeira: o cast tem precedência maior que o `/`, então a divisão já é real. Veja 0007, 0008 e 0009.
 
 </details>
 

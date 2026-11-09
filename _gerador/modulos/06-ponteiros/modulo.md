@@ -287,28 +287,22 @@ Veja 0047.
 
 </details>
 
-**Questão 3.** Considere a função abaixo, chamada com `x = 3` e `y = 7` como
-`troca(x, &y);`. O que `printf("%d %d", x, y)` mostra depois da chamada?
+**Questão 3.** Sobre ponteiros em C, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-void troca(int a, int *b) {
-    int t = a;
-    a = *b;
-    *b = t;
-}
-```
+- **I.** Se `p` é um `int *`, `p + 1` aponta para o `int` seguinte, `sizeof(int)` bytes adiante.
+- **II.** `*p++` incrementa o valor apontado por `p`.
+- **III.** Desreferenciar um ponteiro `NULL` é seguro: o programa só devolve 0.
+- **IV.** Se `v` é um vetor, `v[i]` equivale a `*(v + i)`.
 
-- (A) `7 3`
-- (B) `3 7`
-- (C) `7 7`
-- (D) `0 3`
-- (E) `3 3`
+- (A) Apenas I e IV
+- (B) Apenas I e II
+- (C) Apenas II e III
+- (D) Apenas III e IV
+- (E) Apenas I, II e IV
 
 <details><summary>Gabarito</summary>
 
-**(E)**. `a` é uma cópia de `x` (passagem por valor): mudar `a` não mexe em
-`x`, que continua 3. `b` guarda o endereço de `y` (passagem por referência):
-`*b = t` grava 3 em `y`. Veja 0046.
+**(A).** I é verdadeira: a aritmética de ponteiros anda em unidades do tipo apontado. II é falsa: o `++` vale para o ponteiro, e o valor lido é o antigo (para incrementar o valor, é `(*p)++`). III é falsa: é comportamento indefinido, e na prática costuma derrubar o programa. IV é verdadeira. Veja 0047.
 
 </details>
 

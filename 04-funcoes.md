@@ -5006,33 +5006,22 @@ Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. Nas de recursão, desenhe a pilha de chamadas: um quadro
 por chamada, com os parâmetros e o que cada uma devolve.
 
-**1.** Qual a saída?
+**1.** Sobre funções e escopo em C, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-void dobra(int v) {
-    v = v * 2;
-}
+- **I.** Alterar um parâmetro `int` dentro da função não altera a variável original do chamador.
+- **II.** Toda função recursiva precisa de um caso base alcançável para terminar.
+- **III.** Uma variável local `static` perde o valor ao fim de cada chamada.
+- **IV.** Uma variável local com o mesmo nome de uma global esconde a global dentro do bloco.
 
-int main(void) {
-    int a = 5;
-    dobra(a);
-    printf("%d\n", a);
-    return 0;
-}
-```
-
-- (A) 10
-- (B) 5
-- (C) 0
-- (D) lixo de memória
-- (E) não compila: um procedimento não pode alterar o parâmetro
+- (A) Apenas I e II
+- (B) Apenas II e IV
+- (C) Apenas I e IV
+- (D) Apenas I, II e IV
+- (E) Todas, de I a IV
 
 <details><summary>Gabarito</summary>
 
-**(B).** A passagem é **por valor**: `v` é uma cópia do 5, local da função.
-Dobrar a cópia não mexe no `a` do `main`. Para a função alterar `a`, ela
-teria que devolver o valor (`a = dobra(a)`) ou receber o endereço (`&a`).
-Veja 0029.
+**(D).** I é verdadeira: a passagem é por valor e o parâmetro é uma cópia. II é verdadeira: sem caso base, a recursão empilha quadros até estourar a pilha. III é falsa: a `static` local guarda o valor entre as chamadas. IV é verdadeira: é o sombreamento. Veja 0029, 0030 e 0032.
 
 </details>
 
@@ -5208,22 +5197,22 @@ macro certa leva parênteses em volta de tudo e de cada parâmetro:
 
 </details>
 
-**8.** Sobre sub-rotinas em C, é correto afirmar:
+**8.** Sobre sub-rotinas em C, considere as afirmações e marque a alternativa CORRETA.
 
-- (A) o C tem passagem por referência nativa: basta declarar o parâmetro com `&`.
-- (B) uma função recursiva sempre é mais rápida que a versão com laço.
-- (C) o protótipo é dispensável quando a função é definida depois do `main` que a chama.
-- (D) uma variável global declarada com `static` fica visível nos outros arquivos `.c` do programa.
-- (E) uma função com retorno `void` faz o papel de **procedimento**: executa uma tarefa e não devolve valor.
+- **I.** Uma função com retorno `void` faz o papel de procedimento: executa uma tarefa e não devolve valor.
+- **II.** O C tem passagem por referência nativa: basta declarar o parâmetro com `&`.
+- **III.** Uma função recursiva é sempre mais rápida que a versão com laço.
+- **IV.** Uma variável global declarada com `static` fica invisível para os outros arquivos `.c`.
+
+- (A) Apenas II e III
+- (B) Apenas I e II
+- (C) Apenas III e IV
+- (D) Apenas I e III
+- (E) Apenas I e IV
 
 <details><summary>Gabarito</summary>
 
-**(E).** No C, função e procedimento se escrevem igual; o `void` marca a que
-não devolve nada. (A) é falso: o C só passa por valor, e a "referência" se
-faz com ponteiro. (B) é falso: cada chamada custa um quadro na pilha. (C) é
-falso: sem protótipo, o compilador não conhece a função quando chega na
-chamada. (D) é o contrário: `static` numa global **esconde** o nome dos outros
-arquivos. Veja 0028, 0029 e 0034.
+**(E).** I é verdadeira. II é falsa: o C só passa por valor, e a "referência" se faz com ponteiro. III é falsa: cada chamada custa um quadro na pilha. IV é verdadeira: `static` numa global esconde o nome dos outros arquivos. Veja 0028, 0029 e 0034.
 
 </details>
 

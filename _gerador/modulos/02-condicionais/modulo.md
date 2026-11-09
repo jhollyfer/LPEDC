@@ -340,42 +340,41 @@ depois `1 < 12` também vale 1. O intervalo se escreve com um E:
 
 </details>
 
-**6.** Qual o valor de `r`?
+**6.** Sobre o comando `switch` em C, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-int q = 3;
-int r = q > 2 ? 10 : 20 + 5;
-```
+- **I.** Sem `break`, a execução continua no `case` seguinte.
+- **II.** A expressão do `switch` pode ser um `float`.
+- **III.** O rótulo `default` precisa ser o último do bloco.
+- **IV.** Os rótulos `case` têm que ser constantes inteiras (ou `char`) distintas.
 
-- (A) 15
-- (B) 10
-- (C) 25
-- (D) 35
-- (E) 30
+- (A) Apenas I e III
+- (B) Apenas I e IV
+- (C) Apenas II e III
+- (D) Apenas II e IV
+- (E) Apenas III e IV
 
 <details><summary>Gabarito</summary>
 
-**(B).** O `?:` tem precedência **menor** que o `+`, então o lado falso é
-`20 + 5` inteiro e a expressão é `(q > 2) ? 10 : (20 + 5)`. Como `q > 2`,
-sai 10. O 15 viria de ler `(q > 2 ? 10 : 20) + 5`. Veja 0017.
+**(B).** I e IV são verdadeiras: é a queda entre `case`s, e os rótulos são constantes inteiras que não se repetem. II é falsa: o `switch` só aceita expressão inteira (`char` entra porque é inteiro). III é falsa: o `default` pode estar em qualquer posição, e o `switch` pula para ele quando nenhum `case` bate. Veja 0018.
 
 </details>
 
-**7.** Qual expressão é equivalente a `!(a > 0 && b <= 5)` para quaisquer
-inteiros `a` e `b`?
+**7.** Considere as afirmações abaixo e marque a alternativa CORRETA.
 
-- (A) `a < 0 && b > 5`
-- (B) `a <= 0 && b > 5`
-- (C) `a <= 0 || b > 5`
-- (D) `a < 0 || b >= 5`
-- (E) `!(a > 0) || b <= 5`
+- **I.** `!(a > 0 && b <= 5)` é equivalente a `a <= 0 || b > 5`.
+- **II.** Em `x && y++`, se `x` vale 0, o `y++` não é executado.
+- **III.** Para `a` e `b` inteiros diferentes de zero, `a & b` e `a && b` sempre dão o mesmo resultado.
+- **IV.** `if (n = 5)` é erro de compilação em C.
+
+- (A) Apenas I
+- (B) Apenas II e III
+- (C) Apenas I e II
+- (D) Apenas I, II e IV
+- (E) Apenas III e IV
 
 <details><summary>Gabarito</summary>
 
-**(C).** Pela lei de De Morgan, o NÃO entra nos parênteses, nega cada
-comparação e troca `&&` por `||`: `!(a > 0)` é `a <= 0` e `!(b <= 5)` é
-`b > 5`. O (A) erra o contrário de `>` (é `<=`, não `<`); o (B) esquece de
-trocar o E pelo OU. Veja 0013.
+**(C).** I é verdadeira (De Morgan: nega cada comparação e troca `&&` por `||`). II é verdadeira: o curto-circuito pula o lado direito quando o esquerdo já decide. III é falsa: `2 & 4` é 0, e `2 && 4` é 1. IV é falsa: a atribuição dentro do `if` compila, só gera aviso. Veja 0013, 0015 e 0065.
 
 </details>
 

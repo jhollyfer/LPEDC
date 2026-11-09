@@ -345,27 +345,22 @@ O bloco do `malloc` mora no **heap** (alocação dinâmica). A variável
 
 </details>
 
-**Questão 2.** O que o trecho imprime?
+**Questão 2.** Sobre alocação dinâmica em C, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-int *c = calloc(5, sizeof *c);
-if (c == NULL) return 1;
-int soma = 0;
-for (int i = 0; i < 5; i++) soma += c[i];
-printf("%d\n", soma);
-free(c);
-```
+- **I.** `calloc(n, tam)` zera o bloco reservado, e `malloc` não.
+- **II.** Depois de `free(p)`, o ponteiro `p` passa a valer `NULL` automaticamente.
+- **III.** Se `realloc` falha, ele devolve `NULL` e o bloco antigo continua válido.
+- **IV.** `malloc` pode devolver `NULL`, e o resultado deve ser conferido antes do uso.
 
-- (A) um valor imprevisível, porque o bloco não foi inicializado
-- (B) 0
-- (C) 5
-- (D) 20
-- (E) não compila: `calloc` recebe um argumento só
+- (A) Apenas I e III
+- (B) Apenas I, III e IV
+- (C) Apenas II e III
+- (D) Apenas II e IV
+- (E) Apenas I, II e IV
 
 <details><summary>Gabarito</summary>
 
-**(B)**. `calloc(n, tam)` reserva `n * tam` bytes e **zera todos**. Quem
-deixa lixo é o `malloc`; aí sim a resposta seria (A). Veja 0055.
+**(B).** I é verdadeira: só o `calloc` inicializa com zeros. II é falsa: o `free` não altera `p`, que passa a apontar para memória devolvida (ponteiro pendurado). III e IV são verdadeiras. Por isso o `realloc` usa um ponteiro auxiliar: `v = realloc(v, ...)` perde o bloco antigo se falhar. Veja 0055.
 
 </details>
 
@@ -449,22 +444,22 @@ O 12 já está fora do bloco, que vai de 0 a 11. Veja 0056.
 
 </details>
 
-**Questão 7.** Uma matriz dinâmica de L linhas foi montada como vetor de
-ponteiros: `int **m` com um `malloc` para o vetor de ponteiros e um para
-cada linha. Assinale a afirmação correta.
+**Questão 7.** Uma matriz dinâmica de `L` linhas foi montada como vetor de ponteiros: `int **m`, com um `malloc` para o vetor de ponteiros e um para cada linha. Considere as afirmações e marque a alternativa CORRETA.
 
-- (A) São L chamadas de `malloc`, e basta `free(m)` para liberar tudo.
-- (B) São L + 1 chamadas de `malloc`; libere primeiro `m`, depois as linhas.
-- (C) São 2 chamadas de `malloc`, uma para os ponteiros e uma para os dados.
-- (D) As linhas ficam garantidamente vizinhas na memória.
-- (E) São L + 1 chamadas de `malloc`; libere primeiro cada `m[i]`, depois `m`.
+- **I.** São `L + 1` chamadas de `malloc`.
+- **II.** Para liberar, primeiro se libera cada `m[i]` e só depois `m`.
+- **III.** As linhas ficam garantidamente vizinhas na memória.
+- **IV.** Alocar tudo num bloco único, com `malloc(L * C * sizeof *v)`, precisa de um só `free`.
+
+- (A) Apenas I e II
+- (B) Apenas II e III
+- (C) Apenas I e III
+- (D) Apenas III e IV
+- (E) Apenas I, II e IV
 
 <details><summary>Gabarito</summary>
 
-**(E)**. Um `malloc` para o vetor de L ponteiros e um por linha. Se `m` for
-liberado antes, os endereços das linhas se perdem e elas vazam. (C)
-descreve a variante com bloco único de dados, não a desta questão. Veja
-0056.
+**(E).** I é verdadeira: uma chamada para o vetor de ponteiros e uma por linha. II é verdadeira: se `m` for liberado antes, os endereços das linhas se perdem e elas vazam. III é falsa: cada `malloc` pode cair num lugar diferente do heap. IV é verdadeira: é a variante de bloco único, indexada por `i * C + j`. Veja 0056.
 
 </details>
 

@@ -4464,27 +4464,22 @@ Na última, 1 - 3 dá -2, e aí `i > 0` é falso. O `i` nunca vale 0. Veja 0020.
 
 </details>
 
-**2.** Qual a saída?
+**2.** Sobre as estruturas de repetição do C, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-int n = 5;
-do {
-    n++;
-} while (n < 3);
-printf("%d\n", n);
-```
+- **I.** O `do...while` executa o corpo pelo menos uma vez.
+- **II.** `for (;;)` é um erro de compilação, porque falta a condição.
+- **III.** O `continue` encerra o laço por completo.
+- **IV.** O `break` dentro do laço mais interno de dois laços aninhados encerra só esse laço interno.
 
-- (A) 6
-- (B) 5
-- (C) 3
-- (D) 2
-- (E) o laço nunca termina
+- (A) Apenas I e IV
+- (B) Apenas I e II
+- (C) Apenas II e III
+- (D) Apenas III e IV
+- (E) Apenas I, III e IV
 
 <details><summary>Gabarito</summary>
 
-**(A).** O `do...while` testa **no fim**: o corpo roda uma vez antes de
-qualquer pergunta, e `n` vira 6. Aí `6 < 3` é falso e o laço acaba. Com um
-`while` comum, a saída seria 5. Veja 0021.
+**(A).** I é verdadeira: o teste fica no fim. II é falsa: condição omitida vale verdadeiro, e `for (;;)` é o laço infinito clássico. III é falsa: o `continue` só pula para a próxima volta. IV é verdadeira: o `break` sai do laço mais próximo. Veja 0021, 0022 e 0023.
 
 </details>
 
@@ -4628,28 +4623,22 @@ expression in '>= 0' is always true`. Veja 0022 e 0003.
 
 </details>
 
-**9.** Com `m = 0`, qual o valor de `t`?
+**9.** Considere as afirmações sobre laços e marque a alternativa CORRETA.
 
-```c
-int m = 0, t = 0, w = 1;
-do {
-    t += w;
-    w++;
-} while (w <= m);
-```
+- **I.** Com `n = 0`, um `for (int i = 0; i < n; i++)` executa o corpo zero vezes, e um `do...while` equivalente o executa uma vez.
+- **II.** Dois `for` aninhados, ambos de 0 a `n - 1`, executam o corpo interno `n * n` vezes.
+- **III.** Um `;` logo depois do `)` do `for` é erro de compilação.
+- **IV.** A variável declarada no cabeçalho, em `for (int i = 0; ...)`, continua visível depois do laço.
 
-- (A) 0
-- (B) 2
-- (C) 1
-- (D) o laço nunca termina
-- (E) o valor é indefinido
+- (A) Apenas I
+- (B) Apenas I e II
+- (C) Apenas II e IV
+- (D) Apenas I, II e III
+- (E) Apenas III e IV
 
 <details><summary>Gabarito</summary>
 
-**(C).** A ideia era somar de 1 até `m`, mas o `do...while` roda o corpo uma
-vez antes de testar: `t` recebe 1 mesmo com `m = 0`. Por isso acumulador com
-`do...while` pede cuidado com o caso de zero voltas; com `while` (ou `for`),
-`t` ficaria 0. Veja 0021 e 0025.
+**(B).** I e II são verdadeiras. III é falsa: o `;` compila e vira corpo vazio, e o `printf` seguinte roda uma vez só (veja a questão 3). IV é falsa: desde o C99, `i` morre no fim do `for`. Veja 0020, 0021, 0022 e 0024.
 
 </details>
 

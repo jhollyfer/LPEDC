@@ -233,22 +233,22 @@ compilados com `gcc -std=c17 -Wall -Wextra` e rodados no Linux. Nos trechos,
 a conferência de `NULL` depois do `fopen` foi omitida para encurtar; no seu
 código, ela é obrigatória.
 
-**Questão 1.** Você quer acrescentar linhas a um log: se o arquivo não
-existir, ele deve ser criado; se existir, o conteúdo antigo deve ser
-mantido e a escrita deve ir para o fim. Qual modo do `fopen` faz isso?
+**Questão 1.** Sobre arquivos em C, considere as afirmações e marque a alternativa CORRETA.
 
-- (A) `"r"`
-- (B) `"w"`
-- (C) `"r+"`
-- (D) `"a"`
-- (E) `"w+"`
+- **I.** `"w"` apaga o conteúdo de um arquivo que já existe.
+- **II.** `"a"` escreve sempre no fim do arquivo.
+- **III.** `"r"` cria o arquivo quando ele não existe.
+- **IV.** `fwrite` devolve o número de bytes gravados.
+
+- (A) Apenas I
+- (B) Apenas II e III
+- (C) Apenas I e II
+- (D) Apenas III e IV
+- (E) Apenas I, II e IV
 
 <details><summary>Gabarito</summary>
 
-**(D)**. `"a"` (*append*) cria se não existe e escreve sempre depois do fim.
-`"r"` e `"r+"` falham (devolvem `NULL`) se o arquivo não existe. `"w"` e
-`"w+"` criam, mas **apagam** o conteúdo de um arquivo que já existe. Veja
-0067.
+**(C).** I e II são verdadeiras. III é falsa: `"r"` devolve `NULL` se o arquivo não existe. IV é falsa: `fwrite` devolve o número de **itens** gravados, não de bytes. Veja 0067 e 0068.
 
 </details>
 
@@ -322,25 +322,22 @@ registro 4. Veja 0068.
 
 </details>
 
-**Questão 5.** No mesmo arquivo de 5 registros (0 a 4), qual registro é
-lido por este trecho?
+**Questão 5.** Sobre leitura e escrita de arquivos, considere as afirmações e marque a alternativa CORRETA.
 
-```c
-fseek(f, -2 * (long) sizeof(Produto), SEEK_END);
-fread(&p, sizeof p, 1, f);
-```
+- **I.** `fscanf` devolve a quantidade de campos que conseguiu converter.
+- **II.** Num arquivo texto com linhas de tamanhos diferentes, `fseek(f, k * tam, SEEK_SET)` leva ao início da linha `k`.
+- **III.** Num arquivo binário de registros de tamanho fixo, o registro `i` começa no byte `i * sizeof(registro)`.
+- **IV.** `feof` só passa a valer verdadeiro depois que uma leitura tenta passar do fim do arquivo.
 
-- (A) o registro 1
-- (B) o registro 2
-- (C) o registro 3
-- (D) o registro 4
-- (E) nenhum: deslocamento negativo é erro
+- (A) Apenas I e II
+- (B) Apenas II e III
+- (C) Apenas I e III
+- (D) Apenas I, III e IV
+- (E) Apenas II, III e IV
 
 <details><summary>Gabarito</summary>
 
-**(C)**. `SEEK_END` conta a partir do fim (byte 160). Voltar 64 bytes dá o
-byte 96, o começo do registro 3. Deslocamento negativo é permitido; o cast
-para `long` é necessário porque `sizeof` é sem sinal. Veja 0068.
+**(D).** I é verdadeira. II é falsa: as linhas não têm tamanho fixo, então não há conta para chegar à linha `k`. III é verdadeira, e é por isso que a busca binária direto no arquivo funciona. IV é verdadeira: testar `feof` antes de ler leva à volta extra clássica. Veja 0067 e 0068.
 
 </details>
 
