@@ -9,6 +9,8 @@ mod="$1"; falhas=0
 for f in "$RAIZ/$mod"/*/[AE][0-9][0-9][0-9].c "$RAIZ/$mod"/*/[AE][0-9][0-9][0-9][0-9].c "$RAIZ/_respostas/$mod"/E[0-9][0-9][0-9].c "$RAIZ/_respostas/$mod"/E[0-9][0-9][0-9][0-9].c; do
   [ -f "$f" ] || continue
   grep -q "main" "$f" || continue   # resposta só em comentário
+  # exercício "conserte o bug": o esqueleto vem quebrado de propósito (a resposta é conferida)
+  if [[ "$f" != "$RAIZ/_respostas/"* ]] && sed -n '/^[^\/]/q;p' "$f" | grep -qiE "de propósito|não compila|conserte"; then continue; fi
   saida=$(timeout 10 "$RAIZ/rodar" "$f" </dev/null 2>&1); cod=$?
   if grep -qE "warning:|error:|ERROR: (Address|Leak)Sanitizer|runtime error" <<<"$saida"; then
     echo "FALHOU ($cod): ${f#$RAIZ/}"; grep -m2 -E "warning:|error:|ERROR|runtime error" <<<"$saida" | sed 's/^/    /'; falhas=$((falhas+1))
