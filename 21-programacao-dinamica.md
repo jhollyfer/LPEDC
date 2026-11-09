@@ -61,7 +61,7 @@ AddressSanitizer (ou o UBSan) do `rodar` vai acusar ou parar o programa. É
 esperado: o enunciado avisa.
 
 PD se aprende preenchendo tabela: faça o **Passo a passo** com papel e lápis
-antes de conferir, e responda cada **Pergunta para você** antes de rodar. O diagrama da ideia quase sempre é a própria tabela, e o
+antes de conferir. O diagrama da ideia quase sempre é a própria tabela, e o
 fluxograma é a decisão de uma célula. Nas tabelas, **roxa** é a célula que está
 sendo calculada (ou de onde a volta parte), **verde** é a escolhida ou o
 caminho da solução, **amarela** é a opção que perdeu (ou um passo da volta

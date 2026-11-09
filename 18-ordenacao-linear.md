@@ -42,8 +42,7 @@ Nos vetores dos diagramas, cada linha de gavetas é um momento do algoritmo:
 **roxo** marca o pivô ou a posição da vez, **amarelo** destaca o que você deve
 acompanhar (uma fileira, um empate), **verde** é o que já está no lugar e
 **cinza** é o que o algoritmo descartou. Faça o **Passo a passo** no papel
-antes de conferir a tabela e responda a **Pergunta para você** antes de
-rodar.
+antes de conferir a tabela.
 
 Os exemplos dos cinco primeiros assuntos cabem num arquivo só. O último
 assunto, que ordena 1 milhão de registros, usa um TAD: `pix.h` e `pix.c`

@@ -43,8 +43,7 @@ O `rodar` compila com `-Wall -Wextra`, e esses avisos pegam vários erros
 deste módulo. Os exemplos compilam limpos; quando o texto mostra uma linha
 que o gcc avisaria, ela aparece fora do programa ou com a conversão escrita
 à vista. Ao rodar, tire um parêntese, troque `unsigned` por `int`, aumente o
-VLA e leia o que o gcc diz; na **Pergunta para você**, responda antes de
-rodar.
+VLA e leia o que o gcc diz.
 
 
 ```bash

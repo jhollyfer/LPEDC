@@ -29,7 +29,6 @@ deixa passar.
 
 ## Antes de começar
 
-No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
 Nos desenhos, vermelho marca o nó que vai embora.
 
 Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`

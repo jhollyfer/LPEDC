@@ -37,7 +37,7 @@ com o padrão encostado embaixo. **Verde** é letra que bateu (ou ocorrência
 achada), **vermelha** a que falhou (ou o falso positivo), **amarela** a letra
 que decide o próximo passo, **roxa** o padrão, **azul** texto ainda não
 comparado e **cinza** o que o algoritmo não precisou olhar. Faça o passo a
-passo no papel e responda a **Pergunta para você** antes de rodar.
+passo no papel antes de rodar.
 
 Este módulo é complemento: busca de padrões não cai direto na prova do
 PPGI (o que mais cai está em `PPGI.md`, na raiz do curso).

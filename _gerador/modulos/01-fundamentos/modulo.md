@@ -36,8 +36,7 @@ memória.
 ## Antes de começar
 
 Você precisa do compilador `gcc` e, para os módulos de memória, do `gdb` e do
-`valgrind`. Cada exercício tem uma resolução em `_respostas/01-fundamentos/`. Responda a
-**Pergunta para você** antes de rodar e não pule o **Por dentro do C**.
+`valgrind`. Cada exercício tem uma resolução em `_respostas/01-fundamentos/`.
 
 **Arch Linux** (e derivados, como Manjaro e EndeavourOS):
 

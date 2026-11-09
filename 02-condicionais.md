@@ -31,8 +31,7 @@ de decisões que parecem certas. Os avisos do compilador viram aliados: o
 
 ## Antes de começar
 
-Nos fluxogramas, o caminho verde mostra por onde o exemplo passou. Responda a
-**Pergunta para você** antes de rodar.
+Nos fluxogramas, o caminho verde mostra por onde o exemplo passou.
 
 > [!TIP]
 > Para testar uma decisão de verdade, rode o programa **uma vez para cada

@@ -36,8 +36,7 @@ algo, leia o relatório de cima para baixo: o tipo do erro
 envolvida.
 
 O diagrama da ideia deste módulo é quase sempre um gaveteiro com endereços e
-setas; nele, roxo marca os ponteiros. Responda a **Pergunta para você** de
-cada assunto antes de rodar.
+setas; nele, roxo marca os ponteiros.
 
 > [!NOTE]
 > Os endereços dos desenhos são **fictícios** e curtos (`0x1000`, `0x1004`)

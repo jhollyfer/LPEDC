@@ -32,8 +32,7 @@ endereço do vetor", guarde a ideia, que o módulo 06 mostra a sintaxe.
 
 Nos desenhos, cada gaveta do vetor tem o índice embaixo, em cinza. Quase todo
 assunto aqui é um laço: siga o fluxograma com o dedo e, ao rodar, mude um
-tamanho ou um índice de propósito. Responda a **Pergunta para você** de cada
-assunto antes de rodar.
+tamanho ou um índice de propósito.
 
 O **AddressSanitizer** do `rodar` confere, enquanto o programa roda, o que o
 C não confere: índice e tamanho de string. Quando aparecer

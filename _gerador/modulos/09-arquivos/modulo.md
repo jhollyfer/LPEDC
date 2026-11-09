@@ -26,9 +26,6 @@ chama no terminal como chama `git` ou `grep` e encadeia com outras em scripts.
 
 ## Antes de começar
 
-No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
-
-
 Os exemplos gravam em `/tmp`, com nomes claros (`/tmp/despesas.txt`,
 `/tmp/estoque.bin`), e quase todos apagam o arquivo no fim com `remove`.
 Quando um deixa o arquivo lá de propósito, o comentário avisa, para você

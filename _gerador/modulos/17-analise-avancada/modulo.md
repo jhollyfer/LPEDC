@@ -53,8 +53,7 @@ propósito, e o enunciado avisa.
 Nos diagramas da ideia, **roxo** é trabalho sendo feito (uma chamada, um
 nível), **verde** é o que domina o custo ou o resultado, **amarelo** marca um
 empate e **vermelho** é o caro demais ou o que deu errado. Abra cada
-recorrência à mão no **Passo a passo** e responda a **Pergunta para você**
-antes de rodar: quase todo exemplo conta algo (chamadas, cópias,
+recorrência à mão no **Passo a passo**: quase todo exemplo conta algo (chamadas, cópias,
 comparações) e confere a contagem com a fórmula.
 
 {{indice}}

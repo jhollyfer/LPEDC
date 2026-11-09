@@ -44,7 +44,7 @@ printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/rodar 03-repeticoes/0025-padroes-de
 
 Se um programa travar num laço infinito, `Ctrl+C` encerra. Nos fluxogramas,
 toda repetição é uma seta que **volta**: conte quantas vezes você passa por
-ela. Responda a **Pergunta para você** antes de rodar.
+ela.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |

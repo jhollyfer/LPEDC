@@ -56,9 +56,8 @@ as máscaras de bits (0065). Se a DFS recursiva estiver enferrujada, releia o
 
 Nada fica escondido em TAD: cada arquivo traz o algoritmo completo. Refaça no
 papel o **passo a passo** quando houver (a pilha do Hierholzer, os
-`tin`/`low` da DFS, a tabela da cadeia de matrizes) e responda a
-**Pergunta para você** antes de rodar.
- Nos grafos, a origem fica roxa, as arestas verdes
+`tin`/`low` da DFS, a tabela da cadeia de matrizes).
+Nos grafos, a origem fica roxa, as arestas verdes
 são as escolhidas (o circuito, o ciclo, as pontes, a clique) e, nas
 articulações, o amarelo marca os vértices de corte.
 

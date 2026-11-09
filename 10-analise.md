@@ -29,7 +29,6 @@ funções. Aqui essas coisas ganham nome, e o C mostra o custo de cada escolha.
 
 ## Antes de começar
 
-No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
 Nos exemplos, mude o n, troque os dados, quebre um invariante de propósito e
 veja o `assert` disparar. Nos desenhos de custo, verde é o que continua leve e
 vermelho é o custo que explodiu.

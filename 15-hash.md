@@ -35,8 +35,7 @@ structs, ponteiro para função e `qsort`. Se algo disso estiver nebuloso,
 revise antes.
 
 Nos desenhos das tabelas, cada balde é uma gaveta com o índice à esquerda, e
-a corrente de nós sai dela para a direita; vermelho marca colisão. Responda a
-**Pergunta para você** de cada assunto antes de rodar.
+a corrente de nós sai dela para a direita; vermelho marca colisão.
 
 As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
 `aberta.h`/`aberta.c` (endereçamento aberto) e `palavras.h`/`palavras.c`

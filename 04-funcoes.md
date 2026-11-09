@@ -31,8 +31,7 @@ formato das estruturas de dados da segunda metade do curso.
 ## Antes de começar
 
 Nos desenhos de pilha e recursão, cada caixa empilhada é o quadro de uma
-chamada, e a de cima é a que está rodando. Responda a **Pergunta para você**
-antes de rodar.
+chamada, e a de cima é a que está rodando.
 
 Você precisa dos módulos 01 a 03: tipos, `printf` e `scanf`, `if`, `switch` e
 laços. Vetores ainda **não** aparecem aqui (são o módulo 05), então todos os

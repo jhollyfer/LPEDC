@@ -33,8 +33,7 @@ pergunta que você faz decide o algoritmo.
 
 Cada assunto traz o algoritmo inteiro num arquivo, sem TAD escondendo o
 laço. Refaça no papel o passo a passo: a fila do Kahn, os grupos do
-union-find, o heap do Prim, as rodadas do Bellman-Ford, e responda a
-**Pergunta para você** antes de rodar. Nos desenhos, a
+union-find, o heap do Prim, as rodadas do Bellman-Ford. Nos desenhos, a
 origem fica roxa e as arestas verdes são as escolhidas; na DFS de três
 cores, amarelo faz o papel do cinza (na pilha) e verde, do preto (terminado).
 

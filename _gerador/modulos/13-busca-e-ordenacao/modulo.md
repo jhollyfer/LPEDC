@@ -28,8 +28,7 @@ tudo, a contagem de passos e o Big-O do módulo 10. Em cada algoritmo você
 Nos diagramas da ideia, cada linha de gavetas é um momento do algoritmo:
 **amarela** é a gaveta comparada (ou o menor achado), **roxa** é a posição ou
 o pivô da vez, **verde** já está no lugar, **cinza** foi descartada ou nem
-olhada. Faça o **Passo a passo** no papel antes de conferir a tabela, e
-responda a **Pergunta para você** antes de rodar.
+olhada. Faça o **Passo a passo** no papel antes de conferir a tabela.
 
 Cada exemplo cabe num arquivo só: os algoritmos são funções curtas, e ver a
 função inteira junto do `main` ajuda mais do que separar em `.h` e `.c`.

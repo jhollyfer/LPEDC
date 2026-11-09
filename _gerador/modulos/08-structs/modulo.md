@@ -34,7 +34,7 @@ Vários exemplos mostram tamanhos (`sizeof`) e a ordem dos bytes. Os valores
 dos comentários são os de um PC de 64 bits com Linux (Intel, AMD ou ARM).
 Em outra máquina os números podem mudar, e perceber isso faz parte do
 módulo. Ao rodar, troque a ordem dos campos de uma struct e compare o
-`sizeof`. Responda a **Pergunta para você** de cada assunto antes de rodar.
+`sizeof`.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0059-struct/A117.c

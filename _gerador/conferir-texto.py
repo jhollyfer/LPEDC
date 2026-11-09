@@ -34,6 +34,10 @@ for mod in sys.argv[1:]:
             continue
         a, d = partes(antes), partes(f.read_text())
         for k in a:
+            # "Por dentro do C" e "Pergunta para você" são partes de cada assunto
+            # (texto.md); no modulo.md podem aparecer ou sumir livremente.
+            if f.name == 'modulo.md' and k in ('Por dentro do C', 'Pergunta para você'):
+                continue
             if k == 'código inline':
                 perdidos = [x for x in a[k] if x not in d[k]]
                 if perdidos:

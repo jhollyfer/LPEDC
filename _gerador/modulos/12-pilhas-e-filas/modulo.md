@@ -25,7 +25,6 @@ uma de dois jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo
 
 ## Antes de começar
 
-No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
 Os diagramas da ideia mostram a memória por dentro: neles, verde marca o item
 que está saindo e cinza a gaveta que já virou vaga.
 

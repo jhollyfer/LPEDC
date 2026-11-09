@@ -36,8 +36,7 @@ estiver enferrujado, revise antes.
 Nos desenhos, a origem da busca fica roxa, o destino verde, e as arestas
 verdes são as que a busca usou (a árvore da busca ou a rota final). Faça o
 teste de mesa da fila, da pilha ou do vetor de distâncias no papel (em
-grafos, ele é metade do aprendizado) e responda a **Pergunta para você**
-antes de rodar.
+grafos, ele é metade do aprendizado).
 
 Os vértices são números de 0 a V-1, e o nome de cada um fica num vetor de
 strings à parte. Os exemplos examinam os vizinhos em ordem crescente de

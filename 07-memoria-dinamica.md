@@ -35,7 +35,7 @@ assuntos 0047 e 0049 antes.
 
 Nos diagramas deste módulo, o verde costuma ser o bloco que mora no heap. Ao
 rodar os exemplos, apague um `free` de propósito e leia o que o `rodar`
-responde. Responda a **Pergunta para você** de cada assunto antes de rodar.
+responde.
 
 > [!NOTE]
 > Neste módulo, muitos exercícios são de **achar o erro**: o arquivo vem com o

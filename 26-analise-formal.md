@@ -39,7 +39,7 @@ sort (0093 e 0094), recorrências e a notação Θ (0114 a 0117), permutações
 por backtracking (0126), potência rápida (0131) e memoização (0138).
 
 Faça as contas no papel **antes** de rodar (a desigualdade do `n₀`, o
-somatório do laço, os bytes extras), inclusive a da **Pergunta para você**;
+somatório do laço, os bytes extras);
 depois mude o `n`, dobre, e veja se o contador acompanha a fórmula. Nos
 diagramas da ideia, verde é o que vale (o teto que já segura, o espaço
 constante), vermelho é o que falha ou cresce com `n`, amarelo marca o ponto de
