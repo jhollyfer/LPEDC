@@ -26,12 +26,12 @@ decisões, laços, funções e assim por diante. Instalação: Arch Linux primei
 PPGI/UFAM (edital 070/2026): 20 questões objetivas sobre algoritmos, C,
 estruturas de dados, análise, ordenação, hash, árvores e grafos, com
 bibliografia Cormen, Ziviani e Deitel. O mapa edital → assuntos e o roteiro de
-estudo estão em [`PPGI.md`](PPGI.md). Quando um livro divergir, siga as
+estudo estão em [`PPGI.md`](../PPGI.md). Quando um livro divergir, siga as
 definições e os nomes do **Cormen** e cite o nome alternativo ("também chamado
 de...").
 
 O sumário completo (módulos, assuntos e números) está em
-[`_fontes/sumario.md`](_fontes/sumario.md). Os fichamentos dos livros estão em
+[`_fontes/sumario.md`](../_fontes/sumario.md). Os fichamentos dos livros estão em
 `_fontes/*.md`.
 
 ## 2. O agente não mexe sem perguntar
