@@ -254,6 +254,222 @@ achou. A busca binária em si é o assunto 0090.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
+papel, sem rodar, marque uma letra e só então abra o gabarito. Todos os
+trechos foram compilados com `gcc -std=c17 -Wall -Wextra`.
+
+**Questão 1.** O que o programa imprime?
+
+```c
+int v[5] = {10, 20, 30, 40, 50};
+int *p = v + 1;
+printf("%d %d %d\n", *(p + 2), p[-1], *p + 2);
+```
+
+- (A) `30 20 22`
+- (B) `40 10 22`
+- (C) `40 20 32`
+- (D) `30 10 12`
+- (E) `40 10 32`
+
+<details><summary>Gabarito</summary>
+
+**(B)**. `p` aponta para `v[1]` (20). `*(p + 2)` anda duas gavetas e lê
+`v[3]` = 40; `p[-1]` é `*(p - 1)` = `v[0]` = 10; em `*p + 2` o `*` vem
+antes do `+`: 20 + 2 = 22. Veja 0047.
+
+</details>
+
+**Questão 2.** O que o programa imprime?
+
+```c
+int v[3] = {5, 8, 2};
+int *p = v;
+int a = *p++;
+int b = (*p)++;
+printf("%d %d %d %d\n", a, b, v[0], v[1]);
+```
+
+- (A) `5 8 6 8`
+- (B) `5 9 5 9`
+- (C) `8 8 5 9`
+- (D) `5 8 5 9`
+- (E) `5 8 6 9`
+
+<details><summary>Gabarito</summary>
+
+**(D)**. Em `*p++` o `++` vale para o ponteiro: lê `v[0]` (5) e depois `p`
+passa para `v[1]`. Em `(*p)++` o `++` vale para o valor: `b` recebe 8 (o
+pós-incremento devolve o valor antigo) e `v[1]` vira 9. `v[0]` nunca muda.
+Veja 0047.
+
+</details>
+
+**Questão 3.** Considere a função abaixo, chamada com `x = 3` e `y = 7` como
+`troca(x, &y);`. O que `printf("%d %d", x, y)` mostra depois da chamada?
+
+```c
+void troca(int a, int *b) {
+    int t = a;
+    a = *b;
+    *b = t;
+}
+```
+
+- (A) `7 3`
+- (B) `3 7`
+- (C) `7 7`
+- (D) `0 3`
+- (E) `3 3`
+
+<details><summary>Gabarito</summary>
+
+**(E)**. `a` é uma cópia de `x` (passagem por valor): mudar `a` não mexe em
+`x`, que continua 3. `b` guarda o endereço de `y` (passagem por referência):
+`*b = t` grava 3 em `y`. Veja 0046.
+
+</details>
+
+**Questão 4.** Qual o valor final de `x`?
+
+```c
+int x = 4;
+int *p = &x;
+int **pp = &p;
+**pp += 3;
+*p *= 2;
+```
+
+- (A) 14
+- (B) 11
+- (C) 8
+- (D) 10
+- (E) 7
+
+<details><summary>Gabarito</summary>
+
+**(A)**. `**pp` atravessa dois `*` e chega em `x`: 4 + 3 = 7. `*p` também é
+`x`: 7 × 2 = 14. Veja 0049.
+
+</details>
+
+**Questão 5.** Com `double v[10]; double *p = &v[2], *q = &v[7];`, os
+valores de `q - p` e de `(char *)q - (char *)p` são, respectivamente:
+
+- (A) 5 e 5
+- (B) 40 e 40
+- (C) 5 e 40
+- (D) 6 e 48
+- (E) 5 e 20
+
+<details><summary>Gabarito</summary>
+
+**(C)**. A diferença de dois ponteiros do mesmo vetor conta **elementos**:
+7 − 2 = 5. Convertidos para `char *`, eles contam **bytes**: 5 × 8 = 40
+(`sizeof(double)` é 8). Veja 0047.
+
+</details>
+
+**Questão 6.** Em uma plataforma de 64 bits típica, o que o trecho imprime?
+
+```c
+char s[] = "banana";
+char *t = "banana";
+printf("%zu %zu %zu %zu\n", sizeof s, strlen(s), sizeof t, strlen(t));
+```
+
+- (A) `6 6 6 6`
+- (B) `7 6 7 6`
+- (C) `6 6 8 6`
+- (D) `7 7 8 7`
+- (E) `7 6 8 6`
+
+<details><summary>Gabarito</summary>
+
+**(E)**. `s` é um vetor: `sizeof` conta os 6 caracteres mais o `'\0'` (7).
+`t` é um ponteiro: `sizeof t` é o tamanho de um endereço (8). O `strlen` não
+conta o `'\0'` nos dois casos (6). Veja 0048.
+
+</details>
+
+**Questão 7.** Em uma plataforma com `int` de 4 bytes, o que o trecho
+imprime?
+
+```c
+int m[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+printf("%td %td %d\n", (char *)(m + 1) - (char *)m,
+       (char *)(m[0] + 1) - (char *)m[0], *(*(m + 2) + 1));
+```
+
+- (A) `4 4 10`
+- (B) `16 16 6`
+- (C) `4 16 10`
+- (D) `16 4 10`
+- (E) `16 4 6`
+
+<details><summary>Gabarito</summary>
+
+**(D)**. O elemento de `m` é uma linha inteira (4 `int`), então `m + 1`
+anda 16 bytes. `m[0]` é o endereço do primeiro `int` da linha 0, e
+`m[0] + 1` anda 4. `*(*(m + 2) + 1)` é `m[2][1]` = 10. Veja 0047 e 0039.
+
+</details>
+
+**Questão 8.** O que o programa imprime?
+
+```c
+int dobro(int x) { return 2 * x; }
+int quadrado(int x) { return x * x; }
+
+int main(void) {
+    int (*f[2])(int) = {dobro, quadrado};
+    printf("%d\n", f[1](f[0](3)));
+    return 0;
+}
+```
+
+- (A) 18
+- (B) 12
+- (C) 36
+- (D) 9
+- (E) 6
+
+<details><summary>Gabarito</summary>
+
+**(C)**. `f` é um vetor de dois ponteiros para função. `f[0](3)` chama
+`dobro(3)` = 6; `f[1](6)` chama `quadrado(6)` = 36. A resposta (A) troca a
+ordem das chamadas. Veja 0050.
+
+</details>
+
+**Questão 9.** Com `int x = 1, y = 2; const int *p = &x; int *const q = &x;`,
+quais das linhas abaixo **compilam**?
+
+```c
+p = &y;   /* I   */
+*q = 5;   /* II  */
+*p = 9;   /* III */
+q = &y;   /* IV  */
+```
+
+- (A) apenas I
+- (B) apenas I e II
+- (C) apenas I e III
+- (D) apenas II e IV
+- (E) todas
+
+<details><summary>Gabarito</summary>
+
+**(B)**. Leia da direita para a esquerda. `const int *p`: ponteiro para
+`int` constante; o ponteiro pode andar (I), mas `*p` não pode ser escrito
+(III dá `assignment of read-only location`). `int *const q`: ponteiro
+constante para `int`; `*q` pode ser escrito (II), mas `q` não pode mudar
+(IV dá `assignment of read-only variable`). Veja 0046 e 0047.
+
+</details>
+
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Cap. 10: ponteiros; cap. 13: ponteiro para função.
@@ -261,6 +477,9 @@ achou. A busca binária em si é o assunto 0090.
 - DEITEL, P. J.; DEITEL, H. M. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 7: ponteiros em C.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, 2002. Ponteiros, vetores e ordenação genérica.
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Apêndice D: endereços e ponteiros.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Ponteiros, vetores e ponteiros para função.
+- TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 1: vetores, ponteiros e estruturas em C.
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Usa o nome **apontador** e o aplica em listas, pilhas e filas.
 - LAUREANO, M. *Estrutura de dados com algoritmos e C*. Rio de Janeiro: Brasport, 2008. Cap. 1 e 2: ponteiros e uso de memória.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro, DETI. Ponteiros e ponteiro para função.
 - HARA, C.; ZOLA, W. *Linguagem C: notas de aula*. Curitiba: UFPR, 2008. Ponteiros e passagem por referência.

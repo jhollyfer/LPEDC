@@ -106,6 +106,11 @@ chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
 
 {{fluxograma}}
 
+Se os registros estiverem gravados em ordem de código, dá até para fazer
+**busca binária direto no arquivo**: `fseek` no registro do meio, `fread`,
+compara e descarta metade. São uns 20 `fread` para 1 milhão de registros,
+sem carregar o arquivo na RAM (a busca binária é o assunto 0090).
+
 > [!WARNING]
 > `fwrite` copia bytes, não "dados". Se a struct tiver um ponteiro
 > (`char *nome` em vez de `char nome[20]`), o arquivo guarda o **endereço**,

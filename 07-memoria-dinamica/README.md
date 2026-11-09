@@ -123,6 +123,10 @@ pede um bloco de N bytes, recebe o **endereço** dele e usa como vetor. O bloco
 não pertence a função nenhuma: fica vivo até você devolvê-lo com `free`. Por
 isso dá para criar numa função e usar em outra.
 
+Nos livros você vai ver três nomes para isso: alocação **estática** (dados:
+tamanho e endereço fixos desde a compilação), **automática** (pilha) e
+**dinâmica** (heap, com `malloc`). São as mesmas regiões da tabela.
+
 No C não existe coletor de lixo (*garbage collector*), um mecanismo que apaga
 sozinho o que ninguém mais usa. Você é o coletor: tudo o que pegou do heap, devolve.
 
@@ -1394,6 +1398,10 @@ Uma regra ajuda a não errar o `sizeof`: **o que você aloca tem um `*` a menos
 que o ponteiro que recebe**. `int **m` recebe um vetor de `int *`; `m[i]`, que
 é `int *`, recebe um vetor de `int`. Com `sizeof *m` e `sizeof *m[i]`, a conta
 sai certa sozinha.
+
+Desde o C99 existe um atalho, o **VLA**: `int vendas[lojas][semanas];` com
+as dimensões em variáveis. Só que ele mora na **pilha**, que é pequena e não
+avisa quando estoura; o assunto 0172 mostra quando vale a pena.
 
 Para liberar, a ordem importa: **primeiro cada linha, depois o vetor de
 ponteiros**. Se você der `free(m)` antes, perde os endereços das linhas, e
@@ -3114,12 +3122,222 @@ pedaços, o vetor deles e a frase nova.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
+papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
+compilados com `gcc -std=c17 -Wall -Wextra` (e rodados com o
+AddressSanitizer quando o assunto é vazamento).
+
+**Questão 1.** No programa abaixo, em que região da memória fica cada coisa:
+`total`, `chamadas`, `n` e o bloco apontado por `v`?
+
+```c
+int total = 0;
+
+void registra(int n) {
+    static int chamadas = 0;
+    int *v = malloc(n * sizeof *v);
+    chamadas++;
+    free(v);
+}
+```
+
+- (A) pilha, pilha, pilha, heap
+- (B) dados, pilha, pilha, heap
+- (C) dados, dados, pilha, heap
+- (D) heap, dados, pilha, heap
+- (E) dados, dados, heap, pilha
+
+<details><summary>Gabarito</summary>
+
+**(C)**. Global e `static` moram nos **dados** (alocação estática) e duram o
+programa todo. Parâmetro e local moram na **pilha** (alocação automática).
+O bloco do `malloc` mora no **heap** (alocação dinâmica). Repare: a variável
+`v` está na pilha; o bloco para onde ela aponta, no heap. Veja 0053.
+
+</details>
+
+**Questão 2.** O que o trecho imprime?
+
+```c
+int *c = calloc(5, sizeof *c);
+if (c == NULL) return 1;
+int soma = 0;
+for (int i = 0; i < 5; i++) soma += c[i];
+printf("%d\n", soma);
+free(c);
+```
+
+- (A) um valor imprevisível, porque o bloco não foi inicializado
+- (B) 0
+- (C) 5
+- (D) 20
+- (E) não compila: `calloc` recebe um argumento só
+
+<details><summary>Gabarito</summary>
+
+**(B)**. `calloc(n, tam)` reserva `n * tam` bytes e **zera todos**. Quem
+deixa lixo é o `malloc`; aí sim a resposta seria (A). Veja 0055.
+
+</details>
+
+**Questão 3.** `v` aponta para um bloco do `malloc` que precisa crescer para
+`n` inteiros. Qual forma é a correta?
+
+- (A) `v = realloc(v, n);`
+- (B) `v = realloc(v, n * sizeof *v); if (v == NULL) return 1;`
+- (C) `free(v); v = realloc(v, n * sizeof *v);`
+- (D) `realloc(v, n * sizeof *v);` e continuar usando `v`
+- (E) `int *novo = realloc(v, n * sizeof *v); if (novo == NULL) { free(v); return 1; } v = novo;`
+
+<details><summary>Gabarito</summary>
+
+**(E)**. Se o `realloc` falha, devolve `NULL` e **o bloco antigo continua
+vivo**. Em (B), `v = NULL` apaga o único endereço dele: vazamento. (A)
+esquece o `sizeof`. (C) usa o ponteiro depois do `free`. (D) ignora que o
+bloco pode ter mudado de endereço. Veja 0055.
+
+</details>
+
+**Questão 4.** Rodado com o AddressSanitizer, o que o relatório de
+vazamento acusa ao final?
+
+```c
+char *p = NULL;
+for (int i = 0; i < 3; i++) {
+    p = malloc(10);
+    if (p == NULL) return 1;
+}
+free(p);
+```
+
+- (A) nada: houve um `free`
+- (B) 30 bytes em 3 blocos
+- (C) 10 bytes em 1 bloco
+- (D) 20 bytes em 2 blocos
+- (E) *double free*
+
+<details><summary>Gabarito</summary>
+
+**(D)**. Cada volta sobrescreve `p` com um endereço novo, e os dois blocos
+anteriores ficam sem ninguém que os aponte. O `free` final libera só o
+terceiro. O ASan mostra `20 byte(s) leaked in 2 allocation(s)`. Veja 0057.
+
+</details>
+
+**Questão 5.** Um vetor dinâmico começa com capacidade 1 e **dobra** a
+capacidade (com `realloc`) sempre que enche. Depois de inserir 100
+elementos, quantos `realloc` foram feitos e qual é a capacidade final?
+
+- (A) 7 e 128
+- (B) 100 e 100
+- (C) 6 e 64
+- (D) 99 e 100
+- (E) 50 e 128
+
+<details><summary>Gabarito</summary>
+
+**(A)**. A capacidade passa por 1, 2, 4, 8, 16, 32, 64, 128: sete
+dobras. As cópias somam 1 + 2 + ... + 64 = 127 < 2 · 100, então o custo total
+das inserções é O(n) e o custo **amortizado** de cada uma é O(1). Crescer
+de 1 em 1 faria 99 `realloc` e custo total O(n²). Veja 0055.
+
+</details>
+
+**Questão 6.** Uma matriz de 3 linhas e 4 colunas foi alocada como um bloco
+único: `int *v = malloc(3 * 4 * sizeof *v);`. Em que índice de `v` fica o
+elemento da linha 2, coluna 3 (contando de 0)?
+
+- (A) 9
+- (B) 14
+- (C) 11
+- (D) 6
+- (E) 12
+
+<details><summary>Gabarito</summary>
+
+**(C)**. Linha após linha (*row-major*): `i * colunas + j` = 2 · 4 + 3 = 11.
+O 12 já está fora do bloco, que vai de 0 a 11. Veja 0056.
+
+</details>
+
+**Questão 7.** Uma matriz dinâmica de L linhas foi montada como vetor de
+ponteiros: `int **m` com um `malloc` para o vetor de ponteiros e um para
+cada linha. Assinale a afirmação correta.
+
+- (A) São L chamadas de `malloc`, e basta `free(m)` para liberar tudo.
+- (B) São L + 1 chamadas de `malloc`; libere primeiro `m`, depois as linhas.
+- (C) São 2 chamadas de `malloc`, uma para os ponteiros e uma para os dados.
+- (D) As linhas ficam garantidamente vizinhas na memória.
+- (E) São L + 1 chamadas de `malloc`; libere primeiro cada `m[i]`, depois `m`.
+
+<details><summary>Gabarito</summary>
+
+**(E)**. Um `malloc` para o vetor de L ponteiros e um por linha. Se `m` for
+liberado antes, os endereços das linhas se perdem e elas vazam. (C)
+descreve a variante com bloco único de dados, não a desta questão. Veja
+0056.
+
+</details>
+
+**Questão 8.** Em uma plataforma de 64 bits típica (`int` de 4 bytes,
+ponteiro de 8), o que há de errado em
+`int **m = malloc(3 * sizeof(int));` para guardar 3 linhas?
+
+- (A) Reserva 12 bytes, mas 3 ponteiros precisam de 24.
+- (B) Nada: `int` e `int *` têm o mesmo tamanho.
+- (C) Reserva 24 bytes, mas 3 ponteiros precisam de 12.
+- (D) Não compila: `malloc` devolve `void *`.
+- (E) Só dá errado se as linhas tiverem mais de 3 colunas.
+
+<details><summary>Gabarito</summary>
+
+**(A)**. O vetor guarda `int *`, de 8 bytes. Com `sizeof(int)` o bloco tem
+metade do tamanho certo, e gravar `m[1]` já passa do fim. Escrever
+`malloc(3 * sizeof *m)` evita o erro. (D) é falsa: `void *` converte sozinho
+para qualquer ponteiro de dado. Veja 0056.
+
+</details>
+
+**Questão 9.** O que acontece com o programa abaixo?
+
+```c
+int *cria(void) {
+    int v[3] = {1, 2, 3};
+    return v;
+}
+
+int main(void) {
+    int *p = cria();
+    printf("%d\n", p[0]);
+    return 0;
+}
+```
+
+- (A) Imprime 1, porque o vetor foi inicializado.
+- (B) Não compila: função não pode devolver ponteiro.
+- (C) Imprime 1, porque o `return` copia o vetor para o `main`.
+- (D) Comportamento indefinido: `v` morre no `return` e `p` aponta para um frame que já não existe.
+- (E) Imprime 0, porque o frame é zerado no `return`.
+
+<details><summary>Gabarito</summary>
+
+**(D)**. `v` mora no frame de `cria`, na pilha, e o frame some no `return`.
+O gcc avisa (`function returns address of local variable`) e, na prática,
+devolve `NULL` de propósito. O conserto é alocar com `malloc` (e o `main`
+dar `free`) ou receber o vetor como parâmetro. Veja 0053.
+
+</details>
+
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Cap. 11: alocação dinâmica.
 - BACKES, A. *Linguagem C descomplicada*. Apostila. Uberlândia: FACOM/UFU. Capítulo de alocação dinâmica.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, 2002. Alocação dinâmica e matrizes dinâmicas.
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson, 2011. Cap. 12: estruturas de dados (alocação dinâmica).
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Alocação dinâmica, vetores e matrizes dinâmicas.
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Alocação dinâmica com apontadores nas estruturas de dados.
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Apêndice F: alocação dinâmica de memória.
 - LAUREANO, M. *Estrutura de dados com algoritmos e C*. Rio de Janeiro: Brasport, 2008. Cap. 2: uso de memória.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro. Apostila da disciplina Programação II.

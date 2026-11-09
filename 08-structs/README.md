@@ -88,7 +88,11 @@ que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso
 com uma **struct**.
 
 Uma struct **agrupa variáveis de tipos diferentes sob um nome só**. Cada
-variável de dentro é um **campo** (ou membro). Você primeiro descreve o molde:
+variável de dentro é um **campo** (ou membro). Nos livros e na prova ela
+também se chama **registro** (ou estrutura). `int`, `char` e `double` são
+**dados simples**: guardam um valor só. Vetor e struct são **dados
+compostos**: o vetor junta valores do mesmo tipo (homogêneo); a struct, de
+tipos diferentes (heterogêneo). Você primeiro descreve o molde:
 
 ```c
 struct pedido {
@@ -499,7 +503,9 @@ No grupo da família, ninguém chama o seu tio de "José Carlos da Silva". É
 
 No assunto anterior, todo pedido era declarado como `struct pedido p1;`, com
 as duas palavras, toda vez. Em programa grande isso cansa e polui. O C tem um
-jeito de dar apelido a um tipo: o **typedef**.
+jeito de dar apelido a um tipo: o **typedef**. Struct, union e enum, com ou sem
+`typedef`, são o que os livros e o edital chamam de **tipos definidos pelo
+programador**.
 
 A regra é: escreva uma declaração de variável normal e ponha `typedef` na
 frente. O nome que seria a variável vira o **nome do tipo**:
@@ -2310,7 +2316,7 @@ No coworking, a mesma mesa é usada de manhã por uma designer e à tarde por um
 programador. O espaço é um só. Quem chega usa a mesa inteira, e o que estava
 em cima dela antes some (ou fica bagunçado).
 
-Uma **union** é isso na memória. Ela se declara igual a uma struct, mas com
+Uma **union** (união) é isso na memória. Ela se declara igual a uma struct, mas com
 uma diferença radical: na struct, cada campo tem o seu pedaço de memória, um
 depois do outro; na union, **todos os campos começam no mesmo endereço** e
 dividem os mesmos bytes. O tamanho da union é o do maior campo (arredondado
@@ -3943,13 +3949,259 @@ passam a vir do `malloc`.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
+papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
+compilados com `gcc -std=c17 -Wall -Wextra`. Onde a resposta depende da
+máquina, a questão diz qual.
+
+**Questão 1.** Em uma plataforma de 64 bits típica (`int` de 4 bytes,
+alinhado em 4), quanto valem `sizeof(struct a)` e `sizeof(struct b)`?
+
+```c
+struct a { char x; int y; char z; };
+struct b { int y; char x; char z; };
+```
+
+- (A) 6 e 6
+- (B) 12 e 8
+- (C) 12 e 12
+- (D) 8 e 8
+- (E) 9 e 6
+
+<details><summary>Gabarito</summary>
+
+**(B)**. Em `a`: `x` no byte 0, 3 bytes de preenchimento, `y` nos bytes 4 a
+7, `z` no 8 e mais 3 de preenchimento no fim para o tamanho ser múltiplo de 4
+(um vetor de `struct a` precisa manter cada `y` alinhado): 12. Em `b`: `y`
+de 0 a 3, `x` no 4, `z` no 5, 2 bytes no fim: 8. Mesmos campos, ordem
+diferente, tamanho diferente. Veja 0059.
+
+</details>
+
+**Questão 2.** Em uma plataforma de 64 bits típica, quanto vale
+`sizeof(union u)`?
+
+```c
+union u { int i; double d; char s[10]; };
+```
+
+- (A) 22
+- (B) 10
+- (C) 8
+- (D) 16
+- (E) 24
+
+<details><summary>Gabarito</summary>
+
+**(D)**. Os campos de uma union começam no mesmo endereço; o tamanho é o do
+maior campo (10, do `s`) arredondado para o alinhamento mais exigente (8, do
+`double`): 16. Somar os campos (22) seria o raciocínio de uma struct sem
+preenchimento. Veja 0064.
+
+</details>
+
+**Questão 3.** O que o trecho imprime?
+
+```c
+enum cor { AZUL, VERDE = 5, AMARELO, ROXO = 2, CINZA };
+printf("%d %d %d %d %d\n", AZUL, VERDE, AMARELO, ROXO, CINZA);
+```
+
+- (A) `0 5 6 2 3`
+- (B) `1 5 6 2 3`
+- (C) `0 5 2 2 3`
+- (D) `0 5 6 2 7`
+- (E) não compila: valores de enum fora de ordem
+
+<details><summary>Gabarito</summary>
+
+**(A)**. O primeiro vale 0; cada nome sem valor vale o anterior mais 1.
+`AMARELO` continua do 5 (6), e `CINZA` continua do 2 (3). Valores fora de
+ordem e até repetidos são permitidos. Veja 0063.
+
+</details>
+
+**Questão 4.** O que o trecho imprime?
+
+```c
+typedef struct { int qtd; double preco; } Item;
+
+Item a = {2, 9.5};
+Item b = a;
+Item *p = &a;
+b.qtd = 7;
+p->preco = 10.0;
+printf("%d %.1f %d %.1f\n", a.qtd, a.preco, b.qtd, b.preco);
+```
+
+- (A) `7 10.0 7 10.0`
+- (B) `2 9.5 7 10.0`
+- (C) `7 9.5 7 9.5`
+- (D) `2 10.0 7 10.0`
+- (E) `2 10.0 7 9.5`
+
+<details><summary>Gabarito</summary>
+
+**(E)**. `b = a` copia o registro inteiro: `b` é independente, e mudar
+`b.qtd` não mexe em `a`. Já `p` guarda o endereço de `a`, então
+`p->preco` (o mesmo que `(*p).preco`) muda `a.preco`. `b.preco` continua com
+a cópia antiga, 9.5. Veja 0059 e 0062.
+
+</details>
+
+**Questão 5.** Com `unsigned x = 0xB4;` (binário `1011 0100`), quanto valem
+`x & 0x0F`, `x | 0x01` e `x >> 2`?
+
+- (A) `0x0B`, `0xB5`, `0x2D`
+- (B) `0x04`, `0xB4`, `0x2D`
+- (C) `0x04`, `0xB5`, `0x2D`
+- (D) `0x04`, `0xB5`, `0x5A`
+- (E) `0xB0`, `0xB5`, `0x2D`
+
+<details><summary>Gabarito</summary>
+
+**(C)**. `& 0x0F` guarda só os 4 bits de baixo (`0100` = 0x04). `| 0x01`
+liga o bit 0 (`1011 0101` = 0xB5). `>> 2` empurra tudo duas casas para a
+direita (`0010 1101` = 0x2D); a resposta 0x5A seria `>> 1`. Veja 0065.
+
+</details>
+
+**Questão 6.** Qual o valor final de `flags` e o que o `printf` mostra?
+
+```c
+unsigned flags = 0x05;          /* 0101 */
+flags |= 1u << 3;
+flags &= ~(1u << 0);
+printf("%u\n", (flags >> 2) & 1u);
+```
+
+- (A) `flags` = 0x0D; imprime 1
+- (B) `flags` = 0x0C; imprime 1
+- (C) `flags` = 0x0C; imprime 0
+- (D) `flags` = 0x08; imprime 0
+- (E) `flags` = 0x04; imprime 1
+
+<details><summary>Gabarito</summary>
+
+**(B)**. `|= 1u << 3` liga o bit 3: `1101` (0x0D). `&= ~(1u << 0)` desliga o
+bit 0: `1100` (0x0C). `(flags >> 2) & 1u` testa o bit 2, que está ligado: 1.
+São as três operações clássicas: ligar com `|`, desligar com `& ~`, testar
+com `>>` e `&`. Veja 0065.
+
+</details>
+
+**Questão 7.** Em uma plataforma com `int` de 32 bits, o que o trecho
+imprime?
+
+```c
+unsigned char c = 250;
+c += 10;
+int x = -1;
+unsigned int u = 1;
+printf("%d %d\n", c, x < u);
+```
+
+- (A) `260 1`
+- (B) `4 1`
+- (C) `260 0`
+- (D) `-6 1`
+- (E) `4 0`
+
+<details><summary>Gabarito</summary>
+
+**(E)**. `unsigned char` vai de 0 a 255 e a conta "dá a volta" módulo 256:
+260 − 256 = 4 (para tipos sem sinal, isso é garantido pelo padrão). Na
+comparação, o `int` −1 é convertido para `unsigned`, virando 4294967295, que
+não é menor que 1: dá 0. O gcc avisa com `-Wsign-compare`. Veja 0065 (e
+0171, que aprofunda com e sem sinal).
+
+</details>
+
+**Questão 8.** Em uma plataforma de 64 bits típica, o que o trecho imprime?
+
+```c
+#define PINT int *
+typedef int *Pint;
+
+int n = 0;
+PINT a = &n, b = 0;
+Pint c = &n, d = &n;
+printf("%zu %zu %zu %zu\n", sizeof a, sizeof b, sizeof c, sizeof d);
+```
+
+- (A) `8 4 8 8`
+- (B) `8 8 8 8`
+- (C) `8 4 8 4`
+- (D) `4 4 8 8`
+- (E) não compila: `PINT` e `Pint` têm o mesmo nome
+
+<details><summary>Gabarito</summary>
+
+**(A)**. O `#define` só troca texto: a linha vira `int * a = &n, b = 0;`, e o
+`*` vale só para `a`; `b` é um `int` (4 bytes). O `typedef` cria um nome de
+tipo de verdade: `c` e `d` são os dois `int *` (8 bytes). E o C diferencia
+maiúsculas de minúsculas, então os nomes não colidem. Veja 0060.
+
+</details>
+
+**Questão 9.** Em uma plataforma x86-64 (*little-endian*), o que o trecho
+imprime?
+
+```c
+union { uint32_t n; unsigned char b[4]; } u;
+u.n = 0x11223344;
+printf("0x%02X 0x%02X %zu\n", u.b[0], u.b[3], sizeof u);
+```
+
+- (A) `0x11 0x44 4`
+- (B) `0x11 0x44 8`
+- (C) `0x44 0x11 8`
+- (D) `0x44 0x11 4`
+- (E) `0x33 0x22 4`
+
+<details><summary>Gabarito</summary>
+
+**(D)**. Os dois campos dividem os mesmos 4 bytes. Em *little-endian*, o
+byte menos significativo (0x44) fica no endereço mais baixo, `b[0]`, e o
+mais significativo (0x11) em `b[3]`. O tamanho é o do maior campo: 4. Numa
+máquina *big-endian* a ordem dos bytes se inverte. Veja 0064.
+
+</details>
+
+**Questão 10.** O que o trecho imprime?
+
+```c
+#define DOBRO(x) x * 2
+#define DOBRO_OK(x) ((x) * 2)
+
+printf("%d %d\n", DOBRO(3 + 1), DOBRO_OK(3 + 1));
+```
+
+- (A) `8 8`
+- (B) `5 5`
+- (C) `5 8`
+- (D) `8 5`
+- (E) não compila: macro não recebe expressão
+
+<details><summary>Gabarito</summary>
+
+**(C)**. O pré-processador cola o texto antes de compilar: `DOBRO(3 + 1)`
+vira `3 + 1 * 2`, e a multiplicação vem primeiro: 5. Com parênteses em volta
+do parâmetro e da expressão inteira, `((3 + 1) * 2)` dá 8. Veja 0004 e 0060.
+
+</details>
+
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Cap. 8: struct, union, enum e typedef; cap. 13: campos de bits.
 - BACKES, A. *Linguagem C: descomplicada*. Apostila. Uberlândia: FACOM/UFU, [s.d.].
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson, 2011. Cap. 10: estruturas, uniões, manipulações de bits e enumerações.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, 2002.
-- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Tipos estruturados: struct, union, enum e typedef.
+- TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 1: estruturas e uniões em C.
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Registros e tipos definidos pelo programador nas implementações em C.
 - MARTINS, L. G. A. *Apostila de linguagem C: conceitos básicos*. Uberlândia: FACOM/UFU, [s.d.].
 - ANTONELLO, R. *Linguagem C*. 1. ed. Disponível em: <http://www.antonello.com.br>.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *The C programming language*. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Cap. 6: structures.

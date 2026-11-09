@@ -30,6 +30,10 @@ pede um bloco de N bytes, recebe o **endereço** dele e usa como vetor. O bloco
 não pertence a função nenhuma: fica vivo até você devolvê-lo com `free`. Por
 isso dá para criar numa função e usar em outra.
 
+Nos livros você vai ver três nomes para isso: alocação **estática** (dados:
+tamanho e endereço fixos desde a compilação), **automática** (pilha) e
+**dinâmica** (heap, com `malloc`). São as mesmas regiões da tabela.
+
 No C não existe coletor de lixo (*garbage collector*), um mecanismo que apaga
 sozinho o que ninguém mais usa. Você é o coletor: tudo o que pegou do heap, devolve.
 

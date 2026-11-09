@@ -4,7 +4,7 @@ No coworking, a mesma mesa é usada de manhã por uma designer e à tarde por um
 programador. O espaço é um só. Quem chega usa a mesa inteira, e o que estava
 em cima dela antes some (ou fica bagunçado).
 
-Uma **union** é isso na memória. Ela se declara igual a uma struct, mas com
+Uma **union** (união) é isso na memória. Ela se declara igual a uma struct, mas com
 uma diferença radical: na struct, cada campo tem o seu pedaço de memória, um
 depois do outro; na union, **todos os campos começam no mesmo endereço** e
 dividem os mesmos bytes. O tamanho da union é o do maior campo (arredondado

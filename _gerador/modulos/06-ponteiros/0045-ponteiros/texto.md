@@ -8,6 +8,8 @@ casa.
 Um **ponteiro** é isso: uma variável que guarda um **endereço** em vez de um
 valor comum. Ela também mora numa gaveta da memória (tem o próprio
 endereço), mas o que está dentro dela é o número de **outra** gaveta.
+Alguns livros (o Ziviani, a tradução do K&R) dizem **apontador**: é a mesma
+coisa.
 
 Declarar tem um `*` antes do nome: `int *cartao;` se lê "cartao é um
 ponteiro para int". O tipo importa: diz **o que** mora no endereço apontado,

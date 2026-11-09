@@ -23,6 +23,11 @@ casos:
 - **pior caso**: a mais azarada (está no fim ou nem está lá): n passos;
 - **caso médio**: a média de todas as posições possíveis: (n + 1) / 2 passos.
 
+Escrita como fórmula de n, essa contagem é a **função de custo** (o Ziviani
+diz **função de complexidade**): aqui, f(n) = n no pior caso. Quando se
+conta tempo (passos), é a **complexidade temporal**; quando se conta memória
+extra, é a **complexidade espacial** (assunto 0168).
+
 O pior caso é o que importa para prometer alguma coisa: "nunca passa de n
 passos". O melhor caso não promete nada; é como dizer que a Marginal nunca tem
 trânsito porque às 4 da manhã ela estava livre.

@@ -30,6 +30,11 @@ Mas vetor **não é** ponteiro. `sizeof kwh` dá o vetor inteiro (20 bytes),
 é um endereço fixo, não uma variável que guarda endereço. O certo é dizer
 que o vetor **decai** para ponteiro.
 
+Na matriz (assunto 0039) a regra vale em dois níveis: `m[i][j]` é
+`*(*(m + i) + j)`. Numa `int m[3][4]`, cada elemento de `m` é uma linha
+inteira, então `m + 1` anda **16 bytes** (4 `int`), enquanto `m[0] + 1` anda
+só 4. Prova adora essa diferença.
+
 Vamos ver na prática. O consumo de luz de 5 meses está em `kwh`. O ponteiro
 `p` começa em `kwh` (gaveta `0x1000`) e anda uma gaveta de cada vez,
 somando o que encontra. Quando `p` chega em `kwh + 5`, a gaveta "um depois

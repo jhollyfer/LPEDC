@@ -293,14 +293,236 @@ lembrete do assunto 0071: a constante importa quando n é fixo.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
+papel, marque uma letra e só então abra o gabarito. As contagens foram
+conferidas rodando os trechos (compilados com `gcc -std=c17 -Wall -Wextra`)
+com um contador na linha de dentro. As definições de O, Ω e Θ seguem o
+Cormen.
+
+**Questão 1.** Quantas vezes a linha `c++` executa, em função de `n`?
+
+```c
+for (int i = 0; i < n; i++)
+    for (int j = i; j < n; j++)
+        c++;
+```
+
+- (A) n
+- (B) n²
+- (C) n(n − 1)/2
+- (D) n(n + 1)/2
+- (E) n log₂ n
+
+<details><summary>Gabarito</summary>
+
+**(D)**. Com `i = 0` o laço de dentro roda n vezes, com `i = 1`, n − 1, e
+assim até 1: 1 + 2 + ... + n = n(n + 1)/2. Para n = 10, 55. Essa é a
+**função de custo**; a classe é Θ(n²). A (C) seria o laço com
+`j = i + 1`. Veja 0071 e 0072 (e 0167 para os somatórios).
+
+</details>
+
+**Questão 2.** Qual a complexidade do trecho, com `n` potência de 2?
+
+```c
+for (int i = 0; i < n; i++)
+    for (int j = 1; j < n; j *= 2)
+        c++;
+```
+
+- (A) Θ(n)
+- (B) Θ(n log n)
+- (C) Θ(n²)
+- (D) Θ(log n)
+- (E) Θ(2ⁿ)
+
+<details><summary>Gabarito</summary>
+
+**(B)**. O laço de fora roda n vezes. O de dentro dobra `j` a cada volta:
+log₂ n voltas. Total: n log₂ n (para n = 16, 64). Veja 0072.
+
+</details>
+
+**Questão 3.** Qual a complexidade do trecho, com `n` potência de 2?
+
+```c
+for (int i = 1; i < n; i *= 2)
+    for (int j = 0; j < i; j++)
+        c++;
+```
+
+- (A) Θ(log n)
+- (B) Θ(n log n)
+- (C) Θ(n²)
+- (D) Θ(log² n)
+- (E) Θ(n)
+
+<details><summary>Gabarito</summary>
+
+**(E)**. A pegadinha: multiplicar "log n voltas por até n" dá n log n, mas
+é um teto frouxo. O de dentro roda 1, 2, 4, ..., n/2 vezes: a soma
+geométrica dá n − 1 (para n = 64, 63). Some de verdade em vez de
+multiplicar os máximos. Veja 0072 e 0167.
+
+</details>
+
+**Questão 4.** Qual alternativa ordena as funções da que cresce **mais
+devagar** para a que cresce **mais rápido**?
+
+- (A) log n, √n, n, n log n, n², 2ⁿ, n!
+- (B) √n, log n, n, n log n, n², n!, 2ⁿ
+- (C) log n, n, √n, n log n, 2ⁿ, n², n!
+- (D) log n, √n, n log n, n, n², 2ⁿ, n!
+- (E) 1, log n, n, n², n log n, 2ⁿ, n!
+
+<details><summary>Gabarito</summary>
+
+**(A)**. Qualquer potência positiva de n (até √n = n^0,5) acaba passando do
+log n. n log n fica entre n e n². Toda exponencial passa qualquer
+polinômio, e n! passa 2ⁿ (a partir de n = 4, n! > 2ⁿ). Veja 0072 e 0166.
+
+</details>
+
+**Questão 5.** Seja f(n) = 3n² + 10n. Qual afirmação é **falsa**?
+
+- (A) f(n) = O(n³)
+- (B) f(n) = Ω(n)
+- (C) f(n) = O(n)
+- (D) f(n) = Θ(n²)
+- (E) f(n) = Ω(n²)
+
+<details><summary>Gabarito</summary>
+
+**(C)**. O é teto, Ω é piso, Θ é os dois. f cresce como n², então qualquer
+teto de ordem n² ou maior vale (A, D) e qualquer piso de ordem n² ou menor
+vale (B, E). Mas não existe c com 3n² + 10n ≤ c · n para todo n grande: n²
+passa de qualquer reta. Veja 0072 e 0166.
+
+</details>
+
+**Questão 6.** Quantas chamadas de `f` acontecem para calcular `f(5)`, e
+qual a ordem de crescimento do número de chamadas?
+
+```c
+int f(int n) {
+    if (n <= 1) return 1;
+    return f(n - 1) + f(n - 1);
+}
+```
+
+- (A) 31 chamadas; Θ(2ⁿ)
+- (B) 5 chamadas; Θ(n)
+- (C) 9 chamadas; Θ(n)
+- (D) 16 chamadas; Θ(2ⁿ)
+- (E) 25 chamadas; Θ(n²)
+
+<details><summary>Gabarito</summary>
+
+**(A)**. Cada chamada com n > 1 abre duas com n − 1: a árvore de chamadas
+tem 1 + 2 + 4 + 8 + 16 = 2ⁿ − 1 = 31 nós. O 16 é o **valor** devolvido, não
+o número de chamadas. Guardar `f(n - 1)` numa variável e devolver o dobro
+derrubaria para Θ(n) chamadas. Veja 0033, 0072 e 0114.
+
+</details>
+
+**Questão 7.** Na busca sequencial num vetor de n elementos distintos, com
+o alvo presente e igualmente provável em qualquer posição, quantas
+comparações são feitas no melhor caso, no caso médio e no pior caso?
+
+- (A) 0, n/2 e n
+- (B) 1, (n + 1)/2 e n
+- (C) 1, n/2 e n − 1
+- (D) 1, log₂ n e n
+- (E) n, n e n
+
+<details><summary>Gabarito</summary>
+
+**(B)**. Melhor caso: o alvo está na posição 0, 1 comparação. Pior caso: na
+última, n. Média: (1 + 2 + ... + n)/n = (n + 1)/2. As três funções são
+Θ(1), Θ(n) e Θ(n). Veja 0071.
+
+</details>
+
+**Questão 8.** `s` é uma string de n caracteres. Qual a complexidade do
+trecho?
+
+```c
+for (size_t i = 0; i < strlen(s); i++)
+    if (s[i] == ' ') espacos++;
+```
+
+- (A) Θ(1)
+- (B) Θ(log n)
+- (C) Θ(n)
+- (D) Θ(n log n)
+- (E) Θ(n²)
+
+<details><summary>Gabarito</summary>
+
+**(E)**. O `strlen` percorre a string inteira (Θ(n)) e é chamado a cada
+teste da condição, n + 1 vezes. Guardar o tamanho numa variável antes do
+laço deixa o trecho Θ(n). Veja 0072.
+
+</details>
+
+**Questão 9.** Duas funções somam um vetor de n inteiros: uma com um `for` e
+um acumulador, outra recursiva (`soma(v, n) = v[n-1] + soma(v, n-1)`).
+Sobre a **complexidade espacial** (memória extra além do vetor), assinale a
+correta.
+
+- (A) As duas usam Θ(1).
+- (B) As duas usam Θ(n).
+- (C) A iterativa usa Θ(1); a recursiva usa Θ(n), pela pilha de chamadas.
+- (D) A iterativa usa Θ(n); a recursiva usa Θ(1).
+- (E) A recursiva usa Θ(log n), porque divide o problema.
+
+<details><summary>Gabarito</summary>
+
+**(C)**. As duas fazem Θ(n) somas (mesma complexidade temporal). Mas a
+recursiva empilha n frames antes de começar a voltar; a iterativa usa só
+`i` e o acumulador. A (E) valeria para uma recursão que divide o vetor ao
+meio, não para esta. Veja 0168.
+
+</details>
+
+**Questão 10.** O `contador.h` de um TAD declara só
+`typedef struct contador Contador;` e os protótipos das funções
+(`contador_cria`, `contador_libera`...). Num cliente que inclui só esse
+`.h`, quais linhas **compilam**?
+
+```c
+Contador *c = contador_cria(3);     /* I   */
+Contador d;                         /* II  */
+printf("%zu\n", sizeof(Contador));  /* III */
+c->valor = 2;                       /* IV  */
+```
+
+- (A) todas
+- (B) I e IV
+- (C) I, II e III
+- (D) apenas I
+- (E) nenhuma
+
+<details><summary>Gabarito</summary>
+
+**(D)**. Sem os campos, `struct contador` é um **tipo incompleto** no
+cliente: dá para ter ponteiro para ele, mas não variável (II), nem `sizeof`
+(III), nem acesso a campo (IV). É o tipo opaco que protege o invariante do
+TAD. Veja 0074.
+
+</details>
+
 ## Para ler mais
 
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Partes sobre documentação, invariantes e análise de algoritmos. Disponível em: <https://www.ime.usp.br/~pf/algoritmos/>.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, Departamento de Informática, 2002. Cap. 9: tipos abstratos de dados.
-- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. Rio de Janeiro: Elsevier, 2004.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Tipos abstratos de dados e eficiência.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 1 (tipos abstratos de dados) e seção 6.1 (eficiência e notação O).
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 6: busca e ordenação de vetores.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro, Departamento de Eletrônica e Telecomunicações. Cap. 5: memórias e programação modular.
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 2 (invariantes de laço) e cap. 3 (crescimento de funções).
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 2 (invariantes de laço e análise de algoritmos) e cap. 3 (notação O, Ω e Θ). Referência do edital: em caso de divergência, siga as definições dele.
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 1: função de complexidade, melhor, pior e caso médio, notação O.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Seção 4.5: arquivos de cabeçalho.
 - CPPREFERENCE. *assert*. Disponível em: <https://en.cppreference.com/w/c/error/assert>.

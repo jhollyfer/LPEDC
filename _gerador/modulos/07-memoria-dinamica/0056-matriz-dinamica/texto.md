@@ -23,6 +23,10 @@ que o ponteiro que recebe**. `int **m` recebe um vetor de `int *`; `m[i]`, que
 é `int *`, recebe um vetor de `int`. Com `sizeof *m` e `sizeof *m[i]`, a conta
 sai certa sozinha.
 
+Desde o C99 existe um atalho, o **VLA**: `int vendas[lojas][semanas];` com
+as dimensões em variáveis. Só que ele mora na **pilha**, que é pequena e não
+avisa quando estoura; o assunto 0172 mostra quando vale a pena.
+
 Para liberar, a ordem importa: **primeiro cada linha, depois o vetor de
 ponteiros**. Se você der `free(m)` antes, perde os endereços das linhas, e
 elas ficam presas no heap para sempre.

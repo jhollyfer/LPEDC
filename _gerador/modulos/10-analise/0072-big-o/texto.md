@@ -14,10 +14,10 @@ expressão curta. Ela ignora duas coisas de propósito:
 - **termos menores**: em n² + 50n + 7, o n² engole o resto quando n cresce.
   Com n = 1000, ele vale 1.000.000 e o 50n só 50.000. Fica O(n²).
 
-A definição de verdade: f(n) é **O(g(n))** se existe uma constante c tal que
-f(n) ≤ c · g(n) para todo n a partir de algum ponto. É um **teto**: "nunca
-cresce mais rápido que g". As cinco classes que você vai encontrar o curso
-inteiro, da melhor para a pior:
+A definição de verdade (a do Cormen): f(n) é **O(g(n))** se existem c > 0 e
+n₀ com 0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto**: "nunca cresce mais
+rápido que g". **Ω** é o piso (f ≥ c · g) e **Θ**, teto e piso juntos:
+n² + 50n + 7 é Θ(n²) (assunto 0166). As cinco classes do curso, da melhor para a pior:
 
 | classe | nome | n dobra, o custo... | exemplo |
 | --- | --- | --- | --- |

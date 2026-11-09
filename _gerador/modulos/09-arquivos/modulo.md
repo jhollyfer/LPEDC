@@ -241,12 +241,253 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
+papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
+compilados com `gcc -std=c17 -Wall -Wextra` e rodados no Linux. Nos trechos,
+a conferência de `NULL` depois do `fopen` foi omitida para encurtar; no seu
+código, ela é obrigatória.
+
+**Questão 1.** Você quer acrescentar linhas a um log: se o arquivo não
+existir, ele deve ser criado; se existir, o conteúdo antigo deve ser
+mantido e a escrita deve ir para o fim. Qual modo do `fopen` faz isso?
+
+- (A) `"r"`
+- (B) `"w"`
+- (C) `"r+"`
+- (D) `"a"`
+- (E) `"w+"`
+
+<details><summary>Gabarito</summary>
+
+**(D)**. `"a"` (*append*) cria se não existe e escreve sempre depois do fim.
+`"r"` e `"r+"` falham (devolvem `NULL`) se o arquivo não existe. `"w"` e
+`"w+"` criam, mas **apagam** o conteúdo de um arquivo que já existe. Veja
+0067.
+
+</details>
+
+**Questão 2.** Depois do trecho abaixo, o que há no arquivo `g.txt`?
+
+```c
+FILE *f = fopen("g.txt", "w"); fprintf(f, "abc"); fclose(f);
+f = fopen("g.txt", "a");       fprintf(f, "de");  fclose(f);
+f = fopen("g.txt", "w");       fprintf(f, "xy");  fclose(f);
+f = fopen("g.txt", "a");       fprintf(f, "z");   fclose(f);
+```
+
+- (A) `abcdexyz`
+- (B) `xyz`
+- (C) `z`
+- (D) `xycdez`
+- (E) `abcdez`
+
+<details><summary>Gabarito</summary>
+
+**(B)**. O segundo `"w"` zera o arquivo e joga fora o `abcde`. Depois dele
+ficam `xy` e o `z` acrescentado no fim. Veja 0067.
+
+</details>
+
+**Questão 3.** Em uma plataforma com `int` de 4 bytes, o trecho grava os
+mesmos três números num arquivo texto (`t`) e num binário (`b`). O que o
+`fwrite` devolve e qual o tamanho, em bytes, de cada arquivo?
+
+```c
+int v[3] = {7, 42, 1000};
+for (int i = 0; i < 3; i++) fprintf(t, "%d\n", v[i]);
+size_t n = fwrite(v, sizeof(int), 3, b);
+```
+
+- (A) `n` = 3; texto com 10 bytes; binário com 12
+- (B) `n` = 12; texto com 10 bytes; binário com 12
+- (C) `n` = 3; texto com 12 bytes; binário com 12
+- (D) `n` = 3; texto com 7 bytes; binário com 12
+- (E) `n` = 12; texto com 7 bytes; binário com 3
+
+<details><summary>Gabarito</summary>
+
+**(A)**. O `fwrite` devolve **quantos itens** gravou (3), não quantos
+bytes. No texto, cada número vira seus dígitos mais o `\n`: 2 + 3 + 5 = 10
+bytes. No binário, cada `int` ocupa sempre 4 bytes: 12. Veja 0068.
+
+</details>
+
+**Questão 4.** Um arquivo binário tem 5 registros `Produto` gravados em
+sequência, cada um com `sizeof(Produto)` = 32. Depois de
+
+```c
+fseek(f, 3 * sizeof(Produto), SEEK_SET);
+fread(&p, sizeof p, 1, f);
+```
+
+qual registro está em `p` (contando de 0) e quanto vale `ftell(f)`?
+
+- (A) o registro 3; 96
+- (B) o registro 2; 96
+- (C) o registro 4; 128
+- (D) o registro 2; 128
+- (E) o registro 3; 128
+
+<details><summary>Gabarito</summary>
+
+**(E)**. O registro `i` começa no byte `i * 32`: o 3 começa no 96. O `fread`
+lê 32 bytes e deixa a posição no fim do que leu, 128, que é o começo do
+registro 4. Veja 0068.
+
+</details>
+
+**Questão 5.** No mesmo arquivo de 5 registros (0 a 4), qual registro é
+lido por este trecho?
+
+```c
+fseek(f, -2 * (long) sizeof(Produto), SEEK_END);
+fread(&p, sizeof p, 1, f);
+```
+
+- (A) o registro 1
+- (B) o registro 2
+- (C) o registro 3
+- (D) o registro 4
+- (E) nenhum: deslocamento negativo é erro
+
+<details><summary>Gabarito</summary>
+
+**(C)**. `SEEK_END` conta a partir do fim (byte 160). Voltar 64 bytes dá o
+byte 96, o começo do registro 3. Deslocamento negativo é permitido; o cast
+para `long` é necessário porque `sizeof` é sem sinal. Veja 0068.
+
+</details>
+
+**Questão 6.** O arquivo `precos.txt` tem as quatro linhas abaixo. Quanto
+vale `lidos` no fim?
+
+```text
+arroz 5.50
+feijao 8.90
+cafe x
+leite 4.20
+```
+
+```c
+char nome[20];
+double preco;
+int lidos = 0;
+while (fscanf(f, "%19s %lf", nome, &preco) == 2) lidos++;
+```
+
+- (A) 4
+- (B) 2
+- (C) 3
+- (D) 0
+- (E) o laço não termina
+
+<details><summary>Gabarito</summary>
+
+**(B)**. O `fscanf` devolve quantos campos converteu. Nas duas primeiras
+linhas, 2. Na terceira, `x` não é número: devolve 1, o laço para e `leite`
+nem é lido. Com `!= EOF` no lugar de `== 2`, o laço daria 5 voltas e
+"leria" `cafe` e `x` com o preço velho (8.90) ainda em `preco`. Veja 0067.
+
+</details>
+
+**Questão 7.** O programa abaixo é chamado como `./divide pix 25.90 maria`.
+O que ele imprime?
+
+```c
+int main(int argc, char *argv[]) {
+    printf("%d %s %c\n", argc, argv[2], argv[3][1]);
+    return 0;
+}
+```
+
+- (A) `3 pix a`
+- (B) `3 25.90 m`
+- (C) `4 pix a`
+- (D) `4 25.90 a`
+- (E) `4 25.90 m`
+
+<details><summary>Gabarito</summary>
+
+**(D)**. `argv[0]` é o nome do programa, então são 4 argumentos. `argv[2]`
+é `"25.90"` (texto, não número) e `argv[3][1]` é o segundo caractere de
+`"maria"`. Veja 0069.
+
+</details>
+
+**Questão 8.** Um arquivo binário tem 1.000.000 de registros de tamanho
+fixo, ordenados pelo código. Uma busca binária feita direto no arquivo
+(`fseek` até o registro do meio e um `fread` por passo) faz, no pior caso,
+cerca de quantas leituras?
+
+- (A) 20
+- (B) 1.000
+- (C) 500.000
+- (D) 1.000.000
+- (E) 10
+
+<details><summary>Gabarito</summary>
+
+**(A)**. Cada leitura descarta metade dos registros que sobram, e
+2²⁰ = 1.048.576 ≥ 1.000.000: no máximo ⌊log₂ n⌋ + 1 = 20 leituras. Isso só
+funciona porque o registro `i` está no byte `i * sizeof(registro)`. Num
+arquivo texto, com linhas de tamanhos diferentes, não dá para pular para o
+meio. Veja 0068 e 0090.
+
+</details>
+
+**Questão 9.** Um programa grava com `fwrite(&c, sizeof c, 1, f)` uma
+variável do tipo abaixo e, em outra execução, lê de volta com `fread`. O que
+acontece com o nome?
+
+```c
+typedef struct { char *nome; int idade; } Cliente;
+```
+
+- (A) O nome volta certo, porque o `fwrite` segue o ponteiro.
+- (B) O nome volta certo só se o arquivo for aberto com `"rb"`.
+- (C) Não compila: struct com ponteiro não pode ir para `fwrite`.
+- (D) O nome volta certo se `nome` tiver até 8 caracteres.
+- (E) O arquivo guarda o endereço, não o texto; na outra execução, `nome` aponta para lixo.
+
+<details><summary>Gabarito</summary>
+
+**(E)**. O `fwrite` copia os bytes da struct, e o campo `nome` é um
+endereço (8 bytes num sistema de 64 bits). O texto apontado nunca vai para o
+arquivo. Para gravar em binário, use `char nome[40]` dentro da struct.
+Veja 0068.
+
+</details>
+
+**Questão 10.** Você precisa trocar o preço do registro 2 de um arquivo
+binário que já existe, sem perder os outros registros. Qual modo de
+abertura serve?
+
+- (A) `"wb"`
+- (B) `"ab"`
+- (C) `"rb+"`
+- (D) `"wb+"`
+- (E) `"rb"`
+
+<details><summary>Gabarito</summary>
+
+**(C)**. `"rb+"` abre para leitura **e** escrita sem apagar nada: dá para
+`fseek` até o registro, `fread`, alterar e `fwrite` por cima (com um `fseek`
+entre a leitura e a escrita). `"wb"` e `"wb+"` apagam o arquivo. `"ab"`
+escreve sempre no fim, mesmo depois de um `fseek`. `"rb"` não deixa
+escrever. Veja 0068 e 0070.
+
+</details>
+
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Cap. 12: arquivos; cap. 13: argumentos do main.
 - BACKES, A. R. *Linguagem C: descomplicada*. Uberlândia: FACOM/UFU, [s.d.]. Apostila. Capítulos de arquivos e de recursos avançados.
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 11: processamento de arquivos.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, 2002. Capítulo de arquivos.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Arquivos texto e binários.
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Pesquisa em memória secundária: acesso a registros em disco.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro, [s.d.]. Cap. 3: arquivos.
 - ANTONELLO, R. *Linguagem C*. 1. ed. Disponível em: <http://www.antonello.com.br>.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Cap. 7: entrada e saída.

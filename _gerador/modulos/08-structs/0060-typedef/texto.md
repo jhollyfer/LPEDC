@@ -5,7 +5,9 @@ No grupo da família, ninguém chama o seu tio de "José Carlos da Silva". É
 
 No assunto anterior, todo pedido era declarado como `struct pedido p1;`, com
 as duas palavras, toda vez. Em programa grande isso cansa e polui. O C tem um
-jeito de dar apelido a um tipo: o **typedef**.
+jeito de dar apelido a um tipo: o **typedef**. Struct, union e enum, com ou sem
+`typedef`, são o que os livros e o edital chamam de **tipos definidos pelo
+programador**.
 
 A regra é: escreva uma declaração de variável normal e ponha `typedef` na
 frente. O nome que seria a variável vira o **nome do tipo**:

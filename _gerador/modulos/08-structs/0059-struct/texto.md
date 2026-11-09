@@ -10,7 +10,11 @@ que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso
 com uma **struct**.
 
 Uma struct **agrupa variáveis de tipos diferentes sob um nome só**. Cada
-variável de dentro é um **campo** (ou membro). Você primeiro descreve o molde:
+variável de dentro é um **campo** (ou membro). Nos livros e na prova ela
+também se chama **registro** (ou estrutura). `int`, `char` e `double` são
+**dados simples**: guardam um valor só. Vetor e struct são **dados
+compostos**: o vetor junta valores do mesmo tipo (homogêneo); a struct, de
+tipos diferentes (heterogêneo). Você primeiro descreve o molde:
 
 ```c
 struct pedido {
