@@ -156,6 +156,13 @@ custo de um algoritmo. Nos assuntos que você já viu, leia o texto, refaça a
 **Pergunta para você** e faça só os exercícios ★★☆ e ★★★. Nos novos (0166 em
 diante), faça tudo.
 
+Cada módulo tem ainda uma **lista prática** de 30 exercícios (`<modulo>/lista/`)
+e as **Questões no estilo da prova**, no fim do README do módulo. Faça as
+questões sempre, cronometrando: o edital não fixa a duração da prova, então
+confira o horário quando sair o local (24/11) e treine no mesmo ritmo.
+Da lista prática, faça pelo menos os ★★☆ dos módulos do dia; os ★★★ ficam para
+os dias de revisão.
+
 | Dias | Foco | Assuntos |
 | --- | --- | --- |
 | 1–2 | C que vira pegadinha | 0007, 0008, 0013, 0018, 0030, 0046, 0047, 0064, 0065, 0170–0173 |

@@ -9,7 +9,8 @@ memória, os ponteiros, a compilação e o custo de cada escolha.
 > Conhecimentos do edital 070/2026 (prova em 27/11/2026). O guia
 > [`PPGI.md`](PPGI.md) liga cada tópico do edital e do cursinho do PPGI ao
 > assunto onde estudar e traz um roteiro dia a dia. Cada módulo termina com
-> **questões no estilo da prova**, com gabarito comentado.
+> uma **lista prática de 30 exercícios** e **questões no estilo da prova**,
+> com gabarito comentado.
 
 Segue a filosofia do [LPPOO](https://github.com/jhollyfer/LPPOO). Cada assunto
 conta **um exemplo só**, em quatro partes que batem entre si: o texto, o
@@ -54,8 +55,13 @@ Os arquivos têm nome curto e numeração única no curso inteiro:
   tentar de verdade.
 
 Cada assunto tem 2 exemplos e 6 exercícios: ★☆☆ é aquecimento, ★★☆ pede
-raciocínio e ★★★ é desafio. Cada módulo termina com uma lista de **desafios**
-que misturam tudo.
+raciocínio e ★★★ é desafio. Cada módulo termina com uma **lista prática** de
+30 exercícios de codificar (pasta `lista/`, arquivos `P????.c`, resoluções em
+`_respostas/<modulo>/lista/`), uma lista de **desafios** que misturam tudo e
+**questões no estilo da prova** do PPGI, com gabarito comentado.
+
+No total: 378 exemplos, 1134 exercícios por assunto, 870 exercícios nas listas
+práticas e cerca de 280 questões objetivas.
 
 ## Como cada módulo funciona
 
