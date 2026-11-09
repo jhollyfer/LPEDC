@@ -4434,6 +4434,10 @@ O E1132 reconstrói a rota sem a segunda tabela.
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/29-grafos-e-np/lista/`.
+
 ## Questões no estilo da prova
 
 Questões objetivas como as da prova do PPGI. Todo código foi compilado e
