@@ -12,9 +12,10 @@
 //   C11 = M1 + M4 - M5 + M7       C12 = M3 + M5
 //   C21 = M2 + M4                 C22 = M1 - M2 + M3 + M6
 //
-// Escreva do zero strassen(n, A, B, C) recursiva, com matrizes de tamanho
-// variável (VLA: int a[n][n] como parâmetro), caso base n == 1, e conte as
-// multiplicações de números. Multiplique as matrizes 4 × 4 do main pelos
+// Escreva do zero strassen(n, A, B, C) recursiva, caso base n == 1, e
+// conte as multiplicações de números. Para não precisar de matriz de
+// tamanho variável, toda matriz é int [4][4] e a função usa só o canto
+// n × n de cima à esquerda. Multiplique as matrizes 4 × 4 do main pelos
 // dois métodos e confira que dão o mesmo resultado.
 //
 //   Saída esperada:
@@ -29,7 +30,7 @@
 // Dicas:
 // 1. Escreva auxiliares soma(n, x, y, r), subtrai(n, x, y, r), pega(n, m,
 //    l0, c0, bloco) (copia um bloco) e poe(n, bloco, m, l0, c0).
-// 2. Os blocos são VLAs locais int a11[h][h], com h = n / 2. Com n = 4 a
+// 2. Os blocos são VLAs locais int a11[N][N], com h = n / 2. Com n = 4 a
 //    pilha aguenta folgada.
 // 3. Resposta esperada: o produto de cima, 64 multiplicações na definição
 //    e 49 no Strassen (7 · 7). Para n = 2^k, são 7^k contra 8^k: O(n^2,81).

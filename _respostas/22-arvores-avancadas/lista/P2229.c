@@ -90,11 +90,24 @@ void libera(Trie *n) {
 }
 
 int main(void) {
-    char texto[] = "bom dia boa tarde bom jogo bola bonita bom dia boa noite "
-                   "bolo de bolo bom bolo tarde tapioca taxi tapioca tarde bom";
+    const char *texto = "bom dia boa tarde bom jogo bola bonita bom dia boa noite "
+                        "bolo de bolo bom bolo tarde tapioca taxi tapioca tarde bom";
     Trie *r = novo();
-    for (char *p = strtok(texto, " "); p != NULL; p = strtok(NULL, " ")) {
-        insere(r, p);
+    char palavra[16];
+    int k = 0;
+    for (int i = 0;; i++) {
+        if (texto[i] == ' ' || texto[i] == '\0') {
+            if (k > 0) {
+                palavra[k] = '\0';
+                insere(r, palavra);
+                k = 0;
+            }
+            if (texto[i] == '\0') {
+                break;
+            }
+        } else {
+            palavra[k++] = texto[i];
+        }
     }
     const char *pre[4] = {"bo", "ta", "bol", "x"};
     for (int i = 0; i < 4; i++) {

@@ -65,6 +65,10 @@ int main(void) {
     printf("\n");
     printf("Uma a uma: %d comparações\n", seq);
     printf("Divisão e conquista: %d comparações\n", comps);
-    printf("Listas iguais: %s\n", memcmp(acum, dc, sizeof dc) == 0 ? "sim" : "não");
+    int iguais = n == m;
+    for (int i = 0; i < m && iguais; i++) {
+        iguais = acum[i] == dc[i];
+    }
+    printf("Listas iguais: %s\n", iguais ? "sim" : "não");
     return 0;
 }

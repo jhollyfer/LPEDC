@@ -7,7 +7,7 @@
 
 long mults = 0;
 
-void soma(int n, int x[n][n], int y[n][n], int r[n][n]) {
+void soma(int n, int x[N][N], int y[N][N], int r[N][N]) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             r[i][j] = x[i][j] + y[i][j];
@@ -15,7 +15,7 @@ void soma(int n, int x[n][n], int y[n][n], int r[n][n]) {
     }
 }
 
-void subtrai(int n, int x[n][n], int y[n][n], int r[n][n]) {
+void subtrai(int n, int x[N][N], int y[N][N], int r[N][N]) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             r[i][j] = x[i][j] - y[i][j];
@@ -23,7 +23,7 @@ void subtrai(int n, int x[n][n], int y[n][n], int r[n][n]) {
     }
 }
 
-void pega(int n, int m[2 * n][2 * n], int l0, int c0, int b[n][n]) {
+void pega(int n, int m[N][N], int l0, int c0, int b[N][N]) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             b[i][j] = m[l0 + i][c0 + j];
@@ -31,7 +31,7 @@ void pega(int n, int m[2 * n][2 * n], int l0, int c0, int b[n][n]) {
     }
 }
 
-void poe(int n, int b[n][n], int m[2 * n][2 * n], int l0, int c0) {
+void poe(int n, int b[N][N], int m[N][N], int l0, int c0) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             m[l0 + i][c0 + j] = b[i][j];
@@ -39,15 +39,15 @@ void poe(int n, int b[n][n], int m[2 * n][2 * n], int l0, int c0) {
     }
 }
 
-void strassen(int n, int a[n][n], int b[n][n], int c[n][n]) {
+void strassen(int n, int a[N][N], int b[N][N], int c[N][N]) {
     if (n == 1) {
         mults++;
         c[0][0] = a[0][0] * b[0][0];
         return;
     }
     int h = n / 2;
-    int a11[h][h], a12[h][h], a21[h][h], a22[h][h];
-    int b11[h][h], b12[h][h], b21[h][h], b22[h][h];
+    int a11[N][N], a12[N][N], a21[N][N], a22[N][N];
+    int b11[N][N], b12[N][N], b21[N][N], b22[N][N];
     pega(h, a, 0, 0, a11);
     pega(h, a, 0, h, a12);
     pega(h, a, h, 0, a21);
@@ -56,8 +56,8 @@ void strassen(int n, int a[n][n], int b[n][n], int c[n][n]) {
     pega(h, b, 0, h, b12);
     pega(h, b, h, 0, b21);
     pega(h, b, h, h, b22);
-    int t1[h][h], t2[h][h];
-    int m1[h][h], m2[h][h], m3[h][h], m4[h][h], m5[h][h], m6[h][h], m7[h][h];
+    int t1[N][N], t2[N][N];
+    int m1[N][N], m2[N][N], m3[N][N], m4[N][N], m5[N][N], m6[N][N], m7[N][N];
     soma(h, a11, a22, t1);
     soma(h, b11, b22, t2);
     strassen(h, t1, t2, m1);
@@ -75,7 +75,7 @@ void strassen(int n, int a[n][n], int b[n][n], int c[n][n]) {
     subtrai(h, a12, a22, t1);
     soma(h, b21, b22, t2);
     strassen(h, t1, t2, m7);
-    int c11[h][h], c12[h][h], c21[h][h], c22[h][h];
+    int c11[N][N], c12[N][N], c21[N][N], c22[N][N];
     soma(h, m1, m4, c11);
     subtrai(h, c11, m5, c11);
     soma(h, c11, m7, c11);
