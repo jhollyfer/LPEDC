@@ -190,7 +190,7 @@ teste `L = 1, 8, 16, 32` num vetor aleatório de 10.000.
 As comparações quase não mudam (às vezes até sobem um pouco), mas o tempo de
 relógio costuma cair, com o melhor valor em geral entre 8 e 32: o insertion
 não tem recursão nem chamadas, e pedaços pequenos cabem inteiros no cache. As bibliotecas de verdade fazem
-isso. Comparações são um bom modelo, mas não medem tudo.
+isso.
 
 </details>
 

@@ -24,7 +24,7 @@
 //    0 para "sem rua".
 // 2. A rota recursiva é a do A224: imprime primeiro a rota até anterior[v],
 //    depois " -> " e o nome de v.
-// 3. Resposta esperada: a saída acima. Repare que todas as rotas formam uma
+// 3. Resposta esperada: a saída acima. Todas as rotas formam uma
 //    linha só: a árvore de caminhos mínimos deste mapa é um caminho.
 //
 // Escreva sua resposta abaixo:

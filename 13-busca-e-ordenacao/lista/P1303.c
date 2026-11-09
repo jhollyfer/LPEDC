@@ -18,7 +18,7 @@
 // 1. Use um bool trocou = false no começo de cada passada.
 // 2. A passada 3 já deixa tudo ordenado, mas o bubble só descobre isso na 4,
 //    quando nada troca.
-// 3. Repare: depois da passada p, os p maiores já estão no fim. É isso que a
+// 3. Depois da passada p, os p maiores já estão no fim. É isso que a
 //    prova pergunta em "o vetor após a k-ésima passada".
 // 4. Resposta esperada: a saída acima.
 //

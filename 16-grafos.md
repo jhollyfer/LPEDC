@@ -560,7 +560,7 @@ formam a **árvore da BFS**, e seguir `pai[]` a partir de Rita até chegar em
 O Cormen escreve a mesma BFS com **cores**: **branco** é o vértice ainda não
 descoberto (o nosso `dist == -1`), **cinza** é o que está na fila e **preto**
 o que já saiu dela. O `v.d` dele é o nosso `dist[v]`, e o `v.π` (pi), o
-`pai[v]`. Mesma busca, outros nomes.
+`pai[v]`.
 
 No desenho, as setas verdes são as arestas da árvore da BFS (cada uma liga um
 vértice a quem o descobriu), o número em cima de cada pessoa é a distância e,
@@ -1886,7 +1886,7 @@ Pinheiros: 17 min
 1. A pergunta é: existe trilho de u para v, v não está fixo, e
    dist[u] + tempo[u][v] < dist[v]?
 2. Se sim, dist[v] recebe a soma. (Aqui não precisa do anterior.)
-3. Resposta esperada: a saída acima. Repare na Paulista: o trilho direto
+3. Resposta esperada: a saída acima. Na Paulista, o trilho direto
    da Sé leva 11, mas Sé -> República -> Paulista leva 10.
 
 ```bash
@@ -1926,7 +1926,7 @@ Mais longe: Eva (11 km)
    0 para "sem rua".
 2. A rota recursiva é a do A224: imprime primeiro a rota até anterior[v],
    depois " -> " e o nome de v.
-3. Resposta esperada: a saída acima. Repare que todas as rotas formam uma
+3. Resposta esperada: a saída acima. Todas as rotas formam uma
    linha só: a árvore de caminhos mínimos deste mapa é um caminho.
 
 ```bash

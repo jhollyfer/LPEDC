@@ -37,7 +37,7 @@
 //    x) break; ... } para contar também a comparação que para.
 // 2. Um vetor de ponteiros para função deixa o relatório curto:
 //    void (*alg[])(int[], int, int *, int *) = {bubble, selection, insertion};
-// 3. Repare: o selection compara sempre 28 = 8 · 7 / 2, mas é o que menos
+// 3. O selection compara sempre 28 = 8 · 7 / 2, mas é o que menos
 //    escreve. Bubble e insertion movem exatamente o número de inversões (13
 //    no misturado).
 // 4. Resposta esperada: a saída acima.

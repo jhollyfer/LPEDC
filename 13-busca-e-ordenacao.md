@@ -1076,7 +1076,7 @@ par comparado:
 | 3 | 17 35 8 **42 23** | sim, troca | 17 35 8 23 42 |
 
 Somando as quatro passadas: 4 + 3 + 2 + 1 = **10 comparações** e
-4 + 2 + 1 + 0 = **7 trocas**. Esse 7 não é acaso: é o número de **inversões**
+4 + 2 + 1 + 0 = **7 trocas**. Esse 7 é o número de **inversões**
 do vetor original, os pares que estão na ordem errada (42 com 17, 42 com 35,
 42 com 8, 42 com 23, 17 com 8, 35 com 8 e 35 com 23). Cada troca de vizinhos
 desfaz uma inversão, nem mais nem menos.
@@ -4108,7 +4108,7 @@ teste `L = 1, 8, 16, 32` num vetor aleatório de 10.000.
 As comparações quase não mudam (às vezes até sobem um pouco), mas o tempo de
 relógio costuma cair, com o melhor valor em geral entre 8 e 32: o insertion
 não tem recursão nem chamadas, e pedaços pequenos cabem inteiros no cache. As bibliotecas de verdade fazem
-isso. Comparações são um bom modelo, mas não medem tudo.
+isso.
 
 </details>
 
@@ -4244,7 +4244,7 @@ nenhuma troca: parou
 1. Use um bool trocou = false no começo de cada passada.
 2. A passada 3 já deixa tudo ordenado, mas o bubble só descobre isso na 4,
    quando nada troca.
-3. Repare: depois da passada p, os p maiores já estão no fim. É isso que a
+3. Depois da passada p, os p maiores já estão no fim. É isso que a
    prova pergunta em "o vetor após a k-ésima passada".
 4. Resposta esperada: a saída acima.
 
@@ -4745,7 +4745,7 @@ intercala [0..6]: 3 9 10 27 38 43 82
 
 1. merge_sort(p, r): se p < r, ordena [p..q], ordena [q+1..r] e intercala.
 2. A ordem das linhas é a ordem em que as chamadas TERMINAM: a metade
-   esquerda inteira antes da direita. Repare que o trecho [6..6] (só o 10)
+   esquerda inteira antes da direita. O trecho [6..6] (só o 10)
    não intercala nada.
 3. São n - 1 = 6 intercalações para 7 elementos.
 4. Resposta esperada: a saída acima.
@@ -5207,7 +5207,7 @@ decrescente:
    x) break; ... } para contar também a comparação que para.
 2. Um vetor de ponteiros para função deixa o relatório curto:
    void (*alg[])(int[], int, int *, int *) = {bubble, selection, insertion};
-3. Repare: o selection compara sempre 28 = 8 · 7 / 2, mas é o que menos
+3. O selection compara sempre 28 = 8 · 7 / 2, mas é o que menos
    escreve. Bubble e insertion movem exatamente o número de inversões (13
    no misturado).
 4. Resposta esperada: a saída acima.

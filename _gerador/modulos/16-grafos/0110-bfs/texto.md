@@ -35,7 +35,7 @@ formam a **árvore da BFS**, e seguir `pai[]` a partir de Rita até chegar em
 O Cormen escreve a mesma BFS com **cores**: **branco** é o vértice ainda não
 descoberto (o nosso `dist == -1`), **cinza** é o que está na fila e **preto**
 o que já saiu dela. O `v.d` dele é o nosso `dist[v]`, e o `v.π` (pi), o
-`pai[v]`. Mesma busca, outros nomes.
+`pai[v]`.
 
 No desenho, as setas verdes são as arestas da árvore da BFS (cada uma liga um
 vértice a quem o descobriu), o número em cima de cada pessoa é a distância e,

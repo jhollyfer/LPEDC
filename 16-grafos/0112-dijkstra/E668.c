@@ -21,7 +21,7 @@
 // 1. A pergunta é: existe trilho de u para v, v não está fixo, e
 //    dist[u] + tempo[u][v] < dist[v]?
 // 2. Se sim, dist[v] recebe a soma. (Aqui não precisa do anterior.)
-// 3. Resposta esperada: a saída acima. Repare na Paulista: o trilho direto
+// 3. Resposta esperada: a saída acima. Na Paulista, o trilho direto
 //    da Sé leva 11, mas Sé -> República -> Paulista leva 10.
 //
 // Escreva sua resposta abaixo (complete o código):

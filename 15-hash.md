@@ -2524,7 +2524,7 @@ Saída esperada:
 
 1. A parte fracionária de x (positivo) é x - (long)x.
 2. Depois, (int)(M * fracao) faz o piso.
-3. Repare: na divisão, códigos seguidos caem em baldes seguidos, e todo
+3. Na divisão, códigos seguidos caem em baldes seguidos, e todo
    múltiplo de 16 (como 1024) vai para o 0. A multiplicação espalha.
 4. Use printf("%4d: divisão %2d, multiplicação %2d\n", ...).
 5. Resposta esperada: a saída acima.

@@ -17,7 +17,7 @@
 // Dicas:
 // 1. merge_sort(p, r): se p < r, ordena [p..q], ordena [q+1..r] e intercala.
 // 2. A ordem das linhas é a ordem em que as chamadas TERMINAM: a metade
-//    esquerda inteira antes da direita. Repare que o trecho [6..6] (só o 10)
+//    esquerda inteira antes da direita. O trecho [6..6] (só o 10)
 //    não intercala nada.
 // 3. São n - 1 = 6 intercalações para 7 elementos.
 // 4. Resposta esperada: a saída acima.

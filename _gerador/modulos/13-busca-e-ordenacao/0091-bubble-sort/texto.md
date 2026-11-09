@@ -102,7 +102,7 @@ par comparado:
 | 3 | 17 35 8 **42 23** | sim, troca | 17 35 8 23 42 |
 
 Somando as quatro passadas: 4 + 3 + 2 + 1 = **10 comparações** e
-4 + 2 + 1 + 0 = **7 trocas**. Esse 7 não é acaso: é o número de **inversões**
+4 + 2 + 1 + 0 = **7 trocas**. Esse 7 é o número de **inversões**
 do vetor original, os pares que estão na ordem errada (42 com 17, 42 com 35,
 42 com 8, 42 com 23, 17 com 8, 35 com 8 e 35 com 23). Cada troca de vizinhos
 desfaz uma inversão, nem mais nem menos.

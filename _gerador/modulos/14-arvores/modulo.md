@@ -2,7 +2,7 @@
 
 Até aqui, toda estrutura de dados do curso era uma fila de elementos: vetor,
 lista, pilha, fila. Cada um tinha um antes e um depois. Só que muita coisa no
-mundo não é fila, é **hierarquia**: as pastas do computador, a árvore
+mundo se organiza em **hierarquia**: as pastas do computador, a árvore
 genealógica, o organograma da empresa, o sumário de um livro, a fórmula de uma
 planilha. Para isso existe a **árvore**.
 
