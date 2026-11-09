@@ -7,8 +7,8 @@
 //
 // Guarde os dígitos num vetor int d[4] (d[0] = unidades) e escreva int
 // incrementa(int d[]), que soma 1 e devolve quantas rodinhas giraram. Mostre
-// o custo de cada passo de 0997 até 1000, e o custo TOTAL e o custo por incremento
-// depois de 10, 100, 1000 e 10000 quilômetros a partir de 0000.
+// o custo de cada passo de 0997 até 1000, e o custo TOTAL e o custo por
+// incremento depois de 10, 100, 1000 e 10000 quilômetros a partir de 0000.
 //
 //   Saída esperada:
 //   0998 (giraram 1)
@@ -27,9 +27,8 @@
 //    de n · 10/9 ≈ 1,111 n.
 // 3. Em 10000 km o hodômetro volta para 0000: a rodinha dos milhares também
 //    gira 10 vezes.
-// 4. Resposta esperada: 1, 1 e 3 rodinhas nos passos 0997 -> 0998 -> 0999 ->
-//    1000;
-//    1111 rodinhas em 1000 km e 11110 em 10000 km (1,111 por km).
+// 4. Resposta esperada: 1, 1 e 4 rodinhas nos passos 0997 -> 0998 -> 0999 ->
+//    1000; 1111 rodinhas em 1000 km e 11110 em 10000 km (1,111 por km).
 //
 // Escreva sua resposta abaixo:
 

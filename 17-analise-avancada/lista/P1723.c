@@ -12,9 +12,9 @@
 //
 // Escreva o stooge sort com um contador de chamadas e a profundidade máxima
 // da recursão (a raiz tem profundidade 1), e ordene os tempos de volta de um
-// kart (vetor do esqueleto) para n = 10, 20, 40, ..., 640. Mostre, para cada
-// n: as chamadas, se ficou ordenado, a profundidade, log_{3/2} n e as n(n - 1)/2
-// comparações do bubble sort. No fim, estime o expoente entre n = 10 e
+// kart (vetor do esqueleto) para n = 10, 20, 40, ..., 640. Mostre, para
+// cada n: as chamadas, se ficou ordenado, a profundidade, log_{3/2} n e as
+// n(n - 1)/2 comparações do bubble sort. No fim, estime o expoente entre n = 10 e
 // n = 640 com log(c₆₄₀ / c₁₀) / log(64) e compare com log(3) / log(1,5).
 //
 //   Saída esperada:
@@ -38,7 +38,7 @@
 // 3. Por causa do ⌊ ⌋, a profundidade anda aos saltos: a razão entre n e 2n
 //    oscila. Estime o expoente num intervalo longo.
 // 4. Resposta esperada: todos ordenados; com n = 640, 21523360 chamadas
-//    (contra 204480 comparações do bubble); expoente estimado 2.644, teoria
+//    (contra 204480 comparações do bubble); expoente estimado 2.642, teoria
 //    2.7095.
 //
 // Escreva sua resposta abaixo:

@@ -33,10 +33,11 @@
 //    Depois libere o velho, ini = 0 e cap *= 2.
 // 2. Mostre o ini ANTES da cópia: quando ele não é 0, a fila estava dando a
 //    volta, e um memcpy do vetor inteiro embaralharia a ordem.
-// 3. As cópias somam 1 + 2 + 4 + ... + 512 < 2 · 1024: menos de uma cópia por
+// 3. As cópias somam 1 + 2 + 4 + ... + 512 = 1023: menos de uma cópia por
 //    senha enfileirada. Custo amortizado O(1).
-// 4. Resposta esperada: 11 crescimentos (até cap 1024), 1023 cópias para
-//    3000 senhas, ordem conferida, 1000 senhas na fila no fim.
+// 4. Resposta esperada: 10 crescimentos (até cap 1024), quase todos com a
+//    fila dando a volta (ini na metade do vetor); 1023 cópias para 4000
+//    senhas; ordem conferida; 1000 senhas na fila no fim.
 //
 // Escreva sua resposta abaixo:
 

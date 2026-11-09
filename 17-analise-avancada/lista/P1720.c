@@ -26,11 +26,12 @@
 //    contador global: assim nenhuma comparação escapa.
 // 2. Quadrático: dobrar n multiplica por 4. Θ(n lg n): multiplica por um
 //    pouco mais que 2 (2 · lg 2n / lg n ≈ 2,2 para n = 1000).
-// 3. O insertion sort faz em média n²/4 comparações; merge sort fica perto de
-//    n lg n - n; quicksort aleatório, perto de 1,39 n lg n.
-// 4. Resposta esperada: o insertion sort fica perto de n²/4 e quadruplica;
-//    os outros três ficam entre n lg n - n e 2 n lg n e crescem cerca de 2,2
-//    vezes.
+// 3. O insertion sort faz em média n²/4 comparações: cada par fora de ordem
+//    custa uma. Os outros três são Θ(n lg n) com constantes diferentes; o
+//    heapsort compara duas vezes por nível ao descer, e por isso perde.
+// 4. Resposta esperada: o insertion sort fica perto de n²/4 e quadruplica
+//    (razão 4,07); merge, heap e quick ficam entre 0,8 e 1,8 vezes n lg n e
+//    crescem cerca de 2,2 vezes.
 //
 // Escreva sua resposta abaixo:
 

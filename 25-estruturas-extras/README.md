@@ -2326,6 +2326,10 @@ faixa (E974); a skip list com um código mais simples; (c) **hash**: só pergunt
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/25-estruturas-extras/lista/`.
+
 ## Questões no estilo da prova
 
 Estas estruturas não caem diretamente na prova do PPGI, mas questões no

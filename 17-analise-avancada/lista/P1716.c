@@ -28,7 +28,7 @@
 // 2. zera_esperto: para i de 0 até maior, b[i] = 0 (custo maior + 1); depois
 //    maior = -1. zera_bobo: varre os 16.
 // 3. Um zerar logo depois de outro custa 0 na versão esperta (maior = -1).
-// 4. Resposta esperada: versão boba 2228, esperta 2134, limite 3555; nos 50
+// 4. Resposta esperada: versão boba 3026, esperta 2304, limite 3502; nos 50
 //    turnos curtos, cada zerar esperto custa 2 em vez de 16.
 //
 // Escreva sua resposta abaixo:

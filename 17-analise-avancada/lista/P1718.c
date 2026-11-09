@@ -13,8 +13,8 @@
 // T(n) = 3n - lg n - 2.
 //
 // Acrescente um contador global (1 por volta do laço e 1 no caso base) e
-// mostre, para n = 1, 4, 16, ..., 2^20 (potências de 4), o custo contado, 3n - lg n - 2 e a
-// razão custo / n.
+// mostre, para n = 1, 4, 16, ..., 2^20 (potências de 4), o custo contado,
+// 3n - lg n - 2 e a razão custo / n.
 //
 //   Saída esperada:
 //         n    custo  3n-lg n-2  custo/n
