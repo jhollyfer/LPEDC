@@ -18,8 +18,8 @@
 //   Vencedor: 45 com 4 de 12 votos
 //
 // Dicas:
-// 1. A contagem cabe no else que hoje não faz nada (chave igual). Repare
-//    que novo() já começa qtd em 1.
+// 1. A contagem cabe no else que hoje não faz nada (chave igual). O
+//    novo() já começa qtd em 1.
 // 2. apura é um percurso em ordem. vencedor compara o nó com o melhor de
 //    cada lado (cuidado com os NULL).
 // 3. Resposta esperada: a saída acima. A árvore guarda 5 nós, não 12: o

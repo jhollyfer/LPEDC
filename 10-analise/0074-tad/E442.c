@@ -20,7 +20,7 @@
 //    dinheiro do nada.
 // 2. Os valores são centavos: R$ 35,50 é 3550.
 // 3. Para mostrar: saldo / 100 e saldo % 100 com %02d.
-// 4. Resposta esperada: a saída acima. Repare que a nova operação respeita o
+// 4. Resposta esperada: a saída acima. A nova operação respeita o
 //    invariante (saldo >= 0) de graça, porque só usa operações que já o
 //    respeitam.
 //

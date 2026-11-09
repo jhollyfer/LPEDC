@@ -8,8 +8,8 @@ Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
 primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*), o
 contrário da pilha. Na computação, a fila aparece sempre que há ordem de
 chegada:
-a fila de impressão, as requisições esperando um servidor web, os processos
-esperando a vez na CPU, os pedidos de um aplicativo de entrega.
+as requisições esperando um servidor web, os pedidos de um aplicativo de
+entrega.
 
 O TAD tem a mesma cara da pilha, no [`fila.h`](0085-fila/fila.h):
 
@@ -150,8 +150,7 @@ O fluxograma segue a entrada da senha 39. Naquela hora, `inicio = 4` e
 
 > [!NOTE]
 > **Pergunta para você:** depois do último laço do programa da lotérica, a
-> fila está vazia. Quanto valem `inicio` e `n` lá dentro?
- Em que gaveta entraria a próxima
+> fila está vazia. Quanto valem `inicio` e `n` lá dentro? Em que gaveta entraria a próxima
 > senha?
 
 {{pratique}}

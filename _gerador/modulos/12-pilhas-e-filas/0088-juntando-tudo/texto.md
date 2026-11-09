@@ -170,7 +170,7 @@ pilha devolve ao contrário. Se as duas sequências baterem letra por letra, a
 frase é um palíndromo.
 
 > [!WARNING]
-> O "maior **ou igual**" da conversão não é detalhe. Com só "maior", `8 - 3 -
+> O "maior **ou igual**" da conversão muda o resultado. Com só "maior", `8 - 3 -
 > 2` vira `8 3 2 - -`, que calcula `8 - (3 - 2) = 7`. O certo é
 > `(8 - 3) - 2 = 3`: operadores de mesma precedência associam **à esquerda**,
 > então o que já está na pilha sai antes do novo. (A potência é a exceção que

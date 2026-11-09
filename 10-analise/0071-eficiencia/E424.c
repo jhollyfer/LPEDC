@@ -20,7 +20,7 @@
 // 1. Primo é o pior caso dos dois: nenhuma divisão dá resto 0, então o laço
 //    vai até o fim.
 // 2. Use dois contadores globais e zere os dois antes de cada n.
-// 3. Repare: n cresceu 100 vezes; o ingênuo cresceu 100 vezes, o esperto
+// 3. Com n 100 vezes maior, o ingênuo cresceu 100 vezes e o esperto
 //    só uns 12. A raiz de 100 é 10.
 // 4. Resposta esperada: a tabela acima.
 //

@@ -196,8 +196,7 @@ minuto.
 (a) **trie**: o prefixo leva direto às cidades; (b) **hash**: só busca exata, a
 mais rápida; (c) **árvore B**: poucos blocos lidos do disco por busca; (d)
 **rubro-negra**: inserção em O(log n) no pior caso e percurso em ordem; (e)
-**union-find**: cada amizade é um une, cada pergunta é um acha. Repare que
-nenhuma delas ganha em tudo.
+**union-find**: cada amizade é um une, cada pergunta é um acha.
 
 </details>
 

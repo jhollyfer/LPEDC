@@ -7,8 +7,8 @@ Ninguém espera que o desfazer apague a pizza lá do começo.
 Esse comportamento tem nome: **pilha** (*stack*). Só uma ponta está ao seu
 alcance, o **topo**. Tudo entra por cima e sai por cima, então o último a
 entrar é o primeiro a sair: **LIFO** (*last in, first out*). É a pilha de
-pratos do restaurante por quilo, o Ctrl+Z do editor, o botão Voltar do
-navegador e a pilha de chamadas que você viu no assunto 0031.
+pratos do restaurante por quilo e a pilha de chamadas que você viu no
+assunto 0031.
 
 São poucas operações:
 

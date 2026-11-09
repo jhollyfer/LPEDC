@@ -109,8 +109,7 @@ o `inicio`:
 {{fluxograma}}
 
 > [!WARNING]
-> Os dois bugs mais comuns estão nas bordas.
- Ao inserir na fila **vazia**,
+> Os dois bugs mais comuns estão nas bordas. Ao inserir na fila **vazia**,
 > esquecer de atualizar o `inicio` deixa a fila "vazia" para sempre, mesmo
 > com nós dentro. Ao retirar o **último**, esquecer de zerar o `fim` é pior:
 > o `fim` continua apontando para o nó que acabou de levar `free`, e o

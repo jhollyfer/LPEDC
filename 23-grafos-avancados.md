@@ -15,9 +15,9 @@ o union-find viram o Kruskal. O heap vira o Prim. A tabela da programação
 dinâmica vira o Floyd-Warshall. O trabalho novo é enxergar qual peça
 encaixa em qual pergunta.
 
-O grafo deixa de ser um mapa e vira um **modelo**. Uma planilha com fórmulas, uma grade de disciplinas, a
-fiação de um loteamento, uma tabela de câmbio: tudo isso é grafo, e a
-pergunta que você faz decide o algoritmo.
+Aqui o grafo é um **modelo** de coisas que não são mapas. Uma planilha com
+fórmulas, uma grade de disciplinas, a fiação de um loteamento, uma tabela de
+câmbio: tudo isso é grafo, e a pergunta que você faz decide o algoritmo.
 
 ## O que você vai aprender
 

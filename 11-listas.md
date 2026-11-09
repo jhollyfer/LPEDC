@@ -14,8 +14,8 @@ remover sem empurrar ninguém. Vai fazer busca, remoção, inserção em ordem, 
 lista dupla (que anda para os dois lados) e a circular (que não tem fim).
 
 A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
-"quem aponta para quem, antes e depois". Por isso o conselho do módulo
-inteiro é desenhar os nós e as setas no papel antes de escrever o código. E
+"quem aponta para quem, antes e depois". O conselho do módulo inteiro,
+então, é desenhar os nós e as setas no papel antes de escrever o código. E
 rode tudo com o `rodar`: com ponteiros, o AddressSanitizer pega o que o olho
 deixa passar.
 
@@ -181,8 +181,7 @@ que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
 conta de endereço.
 
 > [!WARNING]
-> Guardar o **endereço** de um item e depois inserir deixa um ponteiro solto:
- `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
+> Guardar o **endereço** de um item e depois inserir deixa um ponteiro solto: `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
 > pode ter devolvido. Guarde a **posição** (o índice), nunca o endereço. E
 > nunca escreva `l->itens = realloc(l->itens, ...)` direto: se o `realloc`
 > devolver `NULL`, você perde o único endereço do bloco antigo.
@@ -658,7 +657,6 @@ cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
 > 8) e 8 do ponteiro. E cada `malloc` ainda gasta uns 16 bytes de controle.
 > Guardar 4 inteiros numa lista custa umas 8 vezes mais memória que num
 > vetor. E há o **cache**: o processador lê a memória em blocos de 64 bytes.
-
 > No vetor, ler `itens[0]` já traz os vizinhos de brinde. Na lista, cada nó
 > pode estar longe do anterior. Percorrer a lista é O(n), igual ao vetor, mas
 > na prática bem mais lento.
@@ -2009,8 +2007,7 @@ fazer um controle remoto com "canal seguinte" e "canal anterior".
 > Lista dupla com uma seta faltando **parece certa**. Se a inserção esquecer o
 > `ant`, andar para frente funciona e só o caminho de volta sai errado, às
 > vezes muito depois, em outra parte do programa. Teste imprimindo **nos dois
-> sentidos**.
- E na remoção, os dois casos de borda são
+> sentidos**. E na remoção, os dois casos de borda são
 > obrigatórios: `p->ant->prox` com `p` no primeiro nó é acessar `NULL`, e
 > esquecer de atualizar o `fim` deixa ele apontando para memória liberada.
 
@@ -2458,8 +2455,7 @@ quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 > endereço em vez de `NULL`. E duas operações saem de graça: **girar** a roda é
 > mudar um ponteiro (`ultimo = ultimo->prox`), sem mexer em nó nenhum; e
 > **juntar** duas listas circulares é trocar dois ponteiros, O(1). O
-> escalonador de um sistema operacional faz isso:
- o processo da
+> escalonador de um sistema operacional faz isso: o processo da
 > frente roda um pouquinho e, se não terminou, a roda gira.
 
 > [!NOTE]
@@ -4967,8 +4963,7 @@ na pessoa seguinte à que saiu. Quem sobra?
 
 **C.** Saem, na ordem, 3, 6, 2, 7, 5 e 1, e sobra a pessoa 4. É o problema de
 Josephus com n = 7 e k = 3; a fórmula J(n) = (J(n − 1) + k) % n, com J(1) = 0,
-dá J(7) = 3, que é a pessoa 4.
- Veja 0080 (exemplo A160) e o desafio 10.
+dá J(7) = 3, que é a pessoa 4. Veja 0080 (exemplo A160) e o desafio 10.
 
 </details>
 

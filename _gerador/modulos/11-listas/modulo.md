@@ -12,8 +12,8 @@ remover sem empurrar ninguém. Vai fazer busca, remoção, inserção em ordem, 
 lista dupla (que anda para os dois lados) e a circular (que não tem fim).
 
 A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
-"quem aponta para quem, antes e depois". Por isso o conselho do módulo
-inteiro é desenhar os nós e as setas no papel antes de escrever o código. E
+"quem aponta para quem, antes e depois". O conselho do módulo inteiro,
+então, é desenhar os nós e as setas no papel antes de escrever o código. E
 rode tudo com o `rodar`: com ponteiros, o AddressSanitizer pega o que o olho
 deixa passar.
 
@@ -459,8 +459,7 @@ na pessoa seguinte à que saiu. Quem sobra?
 
 **C.** Saem, na ordem, 3, 6, 2, 7, 5 e 1, e sobra a pessoa 4. É o problema de
 Josephus com n = 7 e k = 3; a fórmula J(n) = (J(n − 1) + k) % n, com J(1) = 0,
-dá J(7) = 3, que é a pessoa 4.
- Veja 0080 (exemplo A160) e o desafio 10.
+dá J(7) = 3, que é a pessoa 4. Veja 0080 (exemplo A160) e o desafio 10.
 
 </details>
 

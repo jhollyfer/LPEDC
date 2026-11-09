@@ -741,9 +741,9 @@ todas as folhas no mesmo nível.
 > A cor só precisa de 1 bit, e o kernel do Linux aproveita isso: como todo nó
 > começa num endereço múltiplo de 4, os dois bits mais baixos de um ponteiro
 > para nó são sempre 0, e ele guarda a cor no bit mais baixo do ponteiro para o
-> pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas é
-> um truque de sistema operacional, não de curso. Na prática, a vantagem está
-> em outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
+> pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas
+> esse truque fica para o sistema operacional. A vantagem da LLRB está em
+> outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
 > e não recalcula alturas.
 
 > [!NOTE]
@@ -990,8 +990,8 @@ Vencedor: 45 com 4 de 12 votos
 
 **Dicas:**
 
-1. A contagem cabe no else que hoje não faz nada (chave igual). Repare
-   que novo() já começa qtd em 1.
+1. A contagem cabe no else que hoje não faz nada (chave igual). O
+   novo() já começa qtd em 1.
 2. apura é um percurso em ordem. vencedor compara o nó com o melhor de
    cada lado (cuidado com os NULL).
 3. Resposta esperada: a saída acima. A árvore guarda 5 nós, não 12: o
@@ -1387,7 +1387,7 @@ chaves: 20 | nós: 17 | média: 1.18 chaves por nó
 1. Um nó com n chaves tem n + 1 filhos, de filho[0] a filho[n]. Folha não
    tem filho nenhum: confira r->folha antes de descer.
 2. conta_chaves começa com r->n; conta_nos começa com 1.
-3. Resposta esperada: a saída acima. Repare como a inserção em ordem deixa
+3. Resposta esperada: a saída acima. A inserção em ordem deixa
    quase todo nó com uma chave só, de três possíveis.
 
 ```bash
@@ -1910,7 +1910,7 @@ roupa  2
    tam - 1 e, no fim, r->qtd++ em vez de r->fim = true.
 2. lista é a coleta do trie.c: se n->qtd > 0, termine buf com '\0' na
    posição nivel e imprima com printf("%-6s %d\n", buf, n->qtd).
-3. Resposta esperada: a saída acima. Repare que a ordem alfabética sai de
+3. Resposta esperada: a saída acima. A ordem alfabética sai de
    graça: os filhos são visitados de 'a' a 'z'.
 
 ```bash
@@ -3307,8 +3307,7 @@ minuto.
 (a) **trie**: o prefixo leva direto às cidades; (b) **hash**: só busca exata, a
 mais rápida; (c) **árvore B**: poucos blocos lidos do disco por busca; (d)
 **rubro-negra**: inserção em O(log n) no pior caso e percurso em ordem; (e)
-**union-find**: cada amizade é um une, cada pergunta é um acha. Repare que
-nenhuma delas ganha em tudo.
+**union-find**: cada amizade é um une, cada pergunta é um acha.
 
 </details>
 
@@ -3789,8 +3788,8 @@ Saída esperada:
 1. Se verm(h->esq): mostre [h->esq->chave h->chave] e desça em
    h->esq->esq, h->esq->dir e h->dir, todos com nivel + 1.
 2. Senão, mostre [h->chave] e desça em h->esq e h->dir.
-3. Resposta esperada: a 2-3 de cima. Repare que todas as folhas estão no
-   mesmo nível: é o equilíbrio perfeito da 2-3 que garante a altura
+3. Resposta esperada: a 2-3 de cima. Todas as folhas estão no
+   mesmo nível, e é esse equilíbrio perfeito da 2-3 que garante a altura
    O(lg n) da rubro-negra.
 
 ```bash

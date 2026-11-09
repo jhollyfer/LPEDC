@@ -29,7 +29,7 @@
 //    tam - 1 e, no fim, r->qtd++ em vez de r->fim = true.
 // 2. lista é a coleta do trie.c: se n->qtd > 0, termine buf com '\0' na
 //    posição nivel e imprima com printf("%-6s %d\n", buf, n->qtd).
-// 3. Resposta esperada: a saída acima. Repare que a ordem alfabética sai de
+// 3. Resposta esperada: a saída acima. A ordem alfabética sai de
 //    graça: os filhos são visitados de 'a' a 'z'.
 //
 // Escreva sua resposta abaixo (escreva conta, lista e libera):

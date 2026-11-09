@@ -138,9 +138,8 @@ em textos de 2 milhões de letras.
 
 > [!TIP]
 > **Por dentro do C:** `clock()`, de `<time.h>`, devolve o tempo de processador
-> gasto pelo programa, em "tiques"; dividindo a diferença por `CLOCKS_PER_SEC`,
-> você tem segundos. Ele mede o tempo do seu programa, e não o do relógio da
-> parede. Três cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
+> gasto pelo programa (não o tempo do relógio da parede), em "tiques";
+> dividindo a diferença por `CLOCKS_PER_SEC`, você tem segundos. Três cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
 > `rodar` compila com AddressSanitizer, que confere cada acesso à memória e
 > deixa o programa umas duas vezes mais lento; e com `-O2` o `gcc` pode apagar uma busca cujo
 > resultado ninguém usa. Por isso o A321 imprime o total achado junto com o

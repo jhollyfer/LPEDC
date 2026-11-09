@@ -8,7 +8,7 @@ Com 800, faz muita diferença.
 Até aqui a pergunta era "o programa está **certo**?". Agora entra outra: "ele
 é **rápido** o bastante?". E "rápido" não se mede em segundos.
 O mesmo código leva 2 ms no seu notebook, 9 ms num Raspberry Pi e 40 ms se o
-Chrome estiver aberto com 30 abas. Segundos medem a máquina, não o algoritmo.
+Chrome estiver aberto com 30 abas.
 
 O que não muda de máquina para máquina é **quantos passos** o algoritmo dá.
 Você escolhe a operação que domina o trabalho (a **operação dominante**) e
@@ -104,7 +104,6 @@ contador:
 > engana fácil com entradas pequenas: numa busca de microssegundos, o ruído
 > (outros programas, cache, o próprio sistema) é maior que o tempo medido, e
 > cada execução dá um número diferente. E compilado com `-O2`, o
-
 > `gcc` pode **apagar** um laço inteiro cujo resultado ninguém usa, e o tempo
 > medido vira zero. Contar passos não tem esses problemas: o contador é usado
 > no `printf`, então o compilador é obrigado a manter o laço, e o número sai

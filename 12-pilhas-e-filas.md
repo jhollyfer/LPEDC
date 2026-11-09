@@ -69,8 +69,8 @@ Ninguém espera que o desfazer apague a pizza lá do começo.
 Esse comportamento tem nome: **pilha** (*stack*). Só uma ponta está ao seu
 alcance, o **topo**. Tudo entra por cima e sai por cima, então o último a
 entrar é o primeiro a sair: **LIFO** (*last in, first out*). É a pilha de
-pratos do restaurante por quilo, o Ctrl+Z do editor, o botão Voltar do
-navegador e a pilha de chamadas que você viu no assunto 0031.
+pratos do restaurante por quilo e a pilha de chamadas que você viu no
+assunto 0031.
 
 São poucas operações:
 
@@ -1076,7 +1076,6 @@ parecido com a pós-fixa e rodam numa pilha.
 > [!TIP]
 > **Por dentro do C:** o `char` que entra no `pilha_empilha(p, c)` vira `int`
 > sem cast (promoção de inteiros), e `'('` é o número 40 na tabela
-
 > ASCII. Na pós-fixa, `expr[i] - '0'` transforma o caractere `'7'` (55) no
 > número 7, porque os dígitos são consecutivos na tabela. E o tamanho da pilha
 > nunca passa do número de caracteres da string: no pior caso, `((((((`, tudo
@@ -1452,8 +1451,8 @@ Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
 primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*), o
 contrário da pilha. Na computação, a fila aparece sempre que há ordem de
 chegada:
-a fila de impressão, as requisições esperando um servidor web, os processos
-esperando a vez na CPU, os pedidos de um aplicativo de entrega.
+as requisições esperando um servidor web, os pedidos de um aplicativo de
+entrega.
 
 O TAD tem a mesma cara da pilha, no [`fila.h`](12-pilhas-e-filas/0085-fila/fila.h):
 
@@ -1594,8 +1593,7 @@ O fluxograma segue a entrada da senha 39. Naquela hora, `inicio = 4` e
 
 > [!NOTE]
 > **Pergunta para você:** depois do último laço do programa da lotérica, a
-> fila está vazia. Quanto valem `inicio` e `n` lá dentro?
- Em que gaveta entraria a próxima
+> fila está vazia. Quanto valem `inicio` e `n` lá dentro? Em que gaveta entraria a próxima
 > senha?
 
 ### Hora de praticar
@@ -2003,8 +2001,7 @@ o `inicio`:
 <p align="center"><img src="12-pilhas-e-filas/0086-fila-encadeada/fluxograma.svg" alt="Fluxograma: Fila encadeada" width="597"></p>
 
 > [!WARNING]
-> Os dois bugs mais comuns estão nas bordas.
- Ao inserir na fila **vazia**,
+> Os dois bugs mais comuns estão nas bordas. Ao inserir na fila **vazia**,
 > esquecer de atualizar o `inicio` deixa a fila "vazia" para sempre, mesmo
 > com nós dentro. Ao retirar o **último**, esquecer de zerar o `fim` é pior:
 > o `fim` continua apontando para o nó que acabou de levar `free`, e o
@@ -2934,7 +2931,7 @@ pilha devolve ao contrário. Se as duas sequências baterem letra por letra, a
 frase é um palíndromo.
 
 > [!WARNING]
-> O "maior **ou igual**" da conversão não é detalhe. Com só "maior", `8 - 3 -
+> O "maior **ou igual**" da conversão muda o resultado. Com só "maior", `8 - 3 -
 > 2` vira `8 3 2 - -`, que calcula `8 - (3 - 2) = 7`. O certo é
 > `(8 - 3) - 2 = 3`: operadores de mesma precedência associam **à esquerda**,
 > então o que já está na pilha sai antes do novo. (A potência é a exceção que
@@ -3397,7 +3394,7 @@ alternando 1000 vezes: 2000 empilhas (soma 500500)
 
 Dica: a soma confere que saiu tudo, na ordem certa ou não (1 + ... + 1000).
 Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída:
-**custo amortizado**. uma retirada pode custar O(n) (o despejo), mas a
+**custo amortizado**. Uma retirada pode custar O(n) (o despejo), mas a
 média por operação é O(1).
 
 </details>
@@ -4941,8 +4938,7 @@ printf("%d %d\n", topo, p[topo]);
 **C.** Aqui `topo` é o índice do topo (pilha vazia é `-1`). Os pares
 empilham e logo desempilham: o 4 sai, o 16 sai. Ficam 1, 9 e 25 nas posições
 0, 1 e 2, com `topo = 2`. O 16 foi escrito em `p[2]` e depois o 25 escreveu
-por cima.
- Veja 0082 (as duas convenções de topo).
+por cima. Veja 0082 (as duas convenções de topo).
 
 </details>
 

@@ -109,8 +109,7 @@ fazer um controle remoto com "canal seguinte" e "canal anterior".
 > Lista dupla com uma seta faltando **parece certa**. Se a inserção esquecer o
 > `ant`, andar para frente funciona e só o caminho de volta sai errado, às
 > vezes muito depois, em outra parte do programa. Teste imprimindo **nos dois
-> sentidos**.
- E na remoção, os dois casos de borda são
+> sentidos**. E na remoção, os dois casos de borda são
 > obrigatórios: `p->ant->prox` com `p` no primeiro nó é acessar `NULL`, e
 > esquecer de atualizar o `fim` deixa ele apontando para memória liberada.
 

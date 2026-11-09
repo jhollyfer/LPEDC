@@ -92,8 +92,7 @@ Pense no **último passo**. Para chegar no degrau `n`, você veio do degrau
 
 É a recursão de Fibonacci do assunto 0033, e lá você viu o problema: a
 recursão pura é **exponencial**. Para `formas(35)`, ela faz quase 30 milhões
-de chamadas. O problema nem é difícil: ela é que calcula as **mesmas** coisas
-de novo e de novo. `formas(33)` é calculado 2 vezes,
+de chamadas, porque calcula as **mesmas** coisas de novo e de novo. `formas(33)` é calculado 2 vezes,
 `formas(32)` 3 vezes, `formas(31)` 5 vezes...
 
 Só existem 36 perguntas diferentes (`formas(0)` até `formas(35)`). A saída:

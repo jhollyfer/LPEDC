@@ -69,7 +69,7 @@ Com 800, faz muita diferença.
 Até aqui a pergunta era "o programa está **certo**?". Agora entra outra: "ele
 é **rápido** o bastante?". E "rápido" não se mede em segundos.
 O mesmo código leva 2 ms no seu notebook, 9 ms num Raspberry Pi e 40 ms se o
-Chrome estiver aberto com 30 abas. Segundos medem a máquina, não o algoritmo.
+Chrome estiver aberto com 30 abas.
 
 O que não muda de máquina para máquina é **quantos passos** o algoritmo dá.
 Você escolhe a operação que domina o trabalho (a **operação dominante**) e
@@ -165,7 +165,6 @@ contador:
 > engana fácil com entradas pequenas: numa busca de microssegundos, o ruído
 > (outros programas, cache, o próprio sistema) é maior que o tempo medido, e
 > cada execução dá um número diferente. E compilado com `-O2`, o
-
 > `gcc` pode **apagar** um laço inteiro cujo resultado ninguém usa, e o tempo
 > medido vira zero. Contar passos não tem esses problemas: o contador é usado
 > no `printf`, então o compilador é obrigado a manter o laço, e o número sai
@@ -440,7 +439,7 @@ Saída esperada:
 1. Primo é o pior caso dos dois: nenhuma divisão dá resto 0, então o laço
    vai até o fim.
 2. Use dois contadores globais e zere os dois antes de cada n.
-3. Repare: n cresceu 100 vezes; o ingênuo cresceu 100 vezes, o esperto
+3. Com n 100 vezes maior, o ingênuo cresceu 100 vezes e o esperto
    só uns 12. A raiz de 100 é 10.
 4. Resposta esperada: a tabela acima.
 
@@ -533,7 +532,7 @@ n = 25: 242785 chamadas, razão 1.618
 
 Você fez o app da hamburgueria. Testou com 8 pedidos: voou. Uma semana depois,
 64 pedidos por noite: tudo bem. Aí veio a Black Friday com 1024 pedidos e uma
-tela travou. O código não mudou. O que mudou foi o **n**, e cada parte do
+tela travou. O código não mudou, mas o **n** sim, e cada parte do
 programa reagiu de um jeito diferente a ele.
 
 O assunto anterior contou passos. Agora a pergunta é **como a contagem cresce
@@ -818,7 +817,7 @@ f) O(n log n)      64    10240
 2. Um laço de dentro com tamanho fixo (10) não depende de n. Laços em
    sequência somam; laços aninhados multiplicam.
 3. Formato da linha: printf("%-14s %6ld %8ld\n", "a) O(n)", ...).
-4. Resposta esperada: a tabela acima. Repare que a) e f) dão 10240 com
+4. Resposta esperada: a tabela acima. As linhas a) e f) dão 10240 com
    n = 1024, mas por motivos diferentes: 10 é constante, log₂ 1024 = 10
    cresce com n.
 
@@ -1654,8 +1653,7 @@ grafo) segue este molde. Para um TAD `x`:
 > `undefined reference to 'contador_cria'`, que é do **ligador**.
 
 > [!TIP]
-> **Por dentro do C:** o `#include "contador.h"` apenas cola texto.
- Depois do
+> **Por dentro do C:** o `#include "contador.h"` apenas cola texto. Depois do
 > pré-processador, o cliente tem os protótipos e a frase "existe uma
 > `struct contador`", mais nada. O compilador gera `A147.o` sem saber o
 > tamanho da struct (nem precisa: ponteiro tem sempre 8 bytes numa máquina de
@@ -1804,7 +1802,7 @@ Na garagem: 0 a bordo
    sistema. O rodar compila o contador.c junto.
 2. contador_incrementa devolve false quando a van está cheia: use isso
    para contar quem ficou no ponto.
-3. Resposta esperada: a saída acima. Repare que você não precisou saber
+3. Resposta esperada: a saída acima. Você não precisou saber
    como o contador guarda o valor.
 
 ```bash
@@ -1911,7 +1909,7 @@ Bia: R$ 44,50 | Caio: R$ 45,50
    dinheiro do nada.
 2. Os valores são centavos: R$ 35,50 é 3550.
 3. Para mostrar: saldo / 100 e saldo % 100 com %02d.
-4. Resposta esperada: a saída acima. Repare que a nova operação respeita o
+4. Resposta esperada: a saída acima. A nova operação respeita o
    invariante (saldo >= 0) de graça, porque só usa operações que já o
    respeitam.
 
@@ -2287,7 +2285,7 @@ n = 8: soma 448 (64 somas), diagonal 56 (8 somas)
 
 1. soma_tudo tem dois for aninhados de 0 a n - 1: n · n somas, O(n²).
 2. soma_diagonal tem um for só: n somas, O(n).
-3. Repare: dobrar n multiplica por 4 as somas da planilha inteira e só
+3. Dobrar n multiplica por 4 as somas da planilha inteira e só
    por 2 as da diagonal.
 4. Resposta esperada: a saída acima.
 

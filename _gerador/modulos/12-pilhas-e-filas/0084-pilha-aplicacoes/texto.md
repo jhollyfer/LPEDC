@@ -129,7 +129,6 @@ parecido com a pós-fixa e rodam numa pilha.
 > [!TIP]
 > **Por dentro do C:** o `char` que entra no `pilha_empilha(p, c)` vira `int`
 > sem cast (promoção de inteiros), e `'('` é o número 40 na tabela
-
 > ASCII. Na pós-fixa, `expr[i] - '0'` transforma o caractere `'7'` (55) no
 > número 7, porque os dígitos são consecutivos na tabela. E o tamanho da pilha
 > nunca passa do número de caracteres da string: no pior caso, `((((((`, tudo

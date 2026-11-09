@@ -23,8 +23,8 @@
 // 1. Se verm(h->esq): mostre [h->esq->chave h->chave] e desça em
 //    h->esq->esq, h->esq->dir e h->dir, todos com nivel + 1.
 // 2. Senão, mostre [h->chave] e desça em h->esq e h->dir.
-// 3. Resposta esperada: a 2-3 de cima. Repare que todas as folhas estão no
-//    mesmo nível: é o equilíbrio perfeito da 2-3 que garante a altura
+// 3. Resposta esperada: a 2-3 de cima. Todas as folhas estão no
+//    mesmo nível, e é esse equilíbrio perfeito da 2-3 que garante a altura
 //    O(lg n) da rubro-negra.
 //
 // Escreva sua resposta abaixo (complete o código):

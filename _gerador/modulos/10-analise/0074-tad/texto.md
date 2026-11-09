@@ -159,8 +159,7 @@ grafo) segue este molde. Para um TAD `x`:
 > `undefined reference to 'contador_cria'`, que é do **ligador**.
 
 > [!TIP]
-> **Por dentro do C:** o `#include "contador.h"` apenas cola texto.
- Depois do
+> **Por dentro do C:** o `#include "contador.h"` apenas cola texto. Depois do
 > pré-processador, o cliente tem os protótipos e a frase "existe uma
 > `struct contador`", mais nada. O compilador gera `A147.o` sem saber o
 > tamanho da struct (nem precisa: ponteiro tem sempre 8 bytes numa máquina de

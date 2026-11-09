@@ -104,8 +104,7 @@ quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 > endereço em vez de `NULL`. E duas operações saem de graça: **girar** a roda é
 > mudar um ponteiro (`ultimo = ultimo->prox`), sem mexer em nó nenhum; e
 > **juntar** duas listas circulares é trocar dois ponteiros, O(1). O
-> escalonador de um sistema operacional faz isso:
- o processo da
+> escalonador de um sistema operacional faz isso: o processo da
 > frente roda um pouquinho e, se não terminou, a roda gira.
 
 > [!NOTE]

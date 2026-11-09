@@ -30,7 +30,7 @@
 // 2. Um laço de dentro com tamanho fixo (10) não depende de n. Laços em
 //    sequência somam; laços aninhados multiplicam.
 // 3. Formato da linha: printf("%-14s %6ld %8ld\n", "a) O(n)", ...).
-// 4. Resposta esperada: a tabela acima. Repare que a) e f) dão 10240 com
+// 4. Resposta esperada: a tabela acima. As linhas a) e f) dão 10240 com
 //    n = 1024, mas por motivos diferentes: 10 é constante, log₂ 1024 = 10
 //    cresce com n.
 //

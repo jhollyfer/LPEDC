@@ -17,7 +17,7 @@
 // 1. Um nó com n chaves tem n + 1 filhos, de filho[0] a filho[n]. Folha não
 //    tem filho nenhum: confira r->folha antes de descer.
 // 2. conta_chaves começa com r->n; conta_nos começa com 1.
-// 3. Resposta esperada: a saída acima. Repare como a inserção em ordem deixa
+// 3. Resposta esperada: a saída acima. A inserção em ordem deixa
 //    quase todo nó com uma chave só, de três possíveis.
 //
 // Escreva sua resposta abaixo:

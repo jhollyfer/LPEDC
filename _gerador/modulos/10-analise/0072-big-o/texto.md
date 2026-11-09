@@ -2,7 +2,7 @@
 
 Você fez o app da hamburgueria. Testou com 8 pedidos: voou. Uma semana depois,
 64 pedidos por noite: tudo bem. Aí veio a Black Friday com 1024 pedidos e uma
-tela travou. O código não mudou. O que mudou foi o **n**, e cada parte do
+tela travou. O código não mudou, mas o **n** sim, e cada parte do
 programa reagiu de um jeito diferente a ele.
 
 O assunto anterior contou passos. Agora a pergunta é **como a contagem cresce

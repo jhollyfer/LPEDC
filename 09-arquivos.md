@@ -646,8 +646,7 @@ sem carregar o arquivo na RAM (a busca binária é o assunto 0090).
 > **Por dentro do C:** salve o código acima como `estoque.c`, tire o `remove`,
 > rode e depois `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada
 > linha mostra 16 bytes, então cada produto ocupa duas linhas.
-> Aparece `Arroz` seguido de zeros:
- o `fwrite` grava os 20 bytes do vetor
+> Aparece `Arroz` seguido de zeros: o `fwrite` grava os 20 bytes do vetor
 > `nome`, usados ou não. Logo depois vem `0c 00 00 00`, o 12 da `qtd` em
 > little-endian, e os 8 bytes do `double`. Aqui 20 + 4 + 8 dá exatamente 32,
 > sem enchimento, porque o `double` já cai num endereço múltiplo de 8. E o

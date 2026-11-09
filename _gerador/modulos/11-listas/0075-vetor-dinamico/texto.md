@@ -112,8 +112,7 @@ que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
 conta de endereço.
 
 > [!WARNING]
-> Guardar o **endereço** de um item e depois inserir deixa um ponteiro solto:
- `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
+> Guardar o **endereço** de um item e depois inserir deixa um ponteiro solto: `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
 > pode ter devolvido. Guarde a **posição** (o índice), nunca o endereço. E
 > nunca escreva `l->itens = realloc(l->itens, ...)` direto: se o `realloc`
 > devolver `NULL`, você perde o único endereço do bloco antigo.

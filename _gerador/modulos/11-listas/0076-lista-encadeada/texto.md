@@ -117,7 +117,6 @@ cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
 > 8) e 8 do ponteiro. E cada `malloc` ainda gasta uns 16 bytes de controle.
 > Guardar 4 inteiros numa lista custa umas 8 vezes mais memória que num
 > vetor. E há o **cache**: o processador lê a memória em blocos de 64 bytes.
-
 > No vetor, ler `itens[0]` já traz os vizinhos de brinde. Na lista, cada nó
 > pode estar longe do anterior. Percorrer a lista é O(n), igual ao vetor, mas
 > na prática bem mais lento.

@@ -19,7 +19,7 @@
 // Dicas:
 // 1. soma_tudo tem dois for aninhados de 0 a n - 1: n · n somas, O(n²).
 // 2. soma_diagonal tem um for só: n somas, O(n).
-// 3. Repare: dobrar n multiplica por 4 as somas da planilha inteira e só
+// 3. Dobrar n multiplica por 4 as somas da planilha inteira e só
 //    por 2 as da diagonal.
 // 4. Resposta esperada: a saída acima.
 //

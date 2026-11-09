@@ -172,9 +172,9 @@ todas as folhas no mesmo nível.
 > A cor só precisa de 1 bit, e o kernel do Linux aproveita isso: como todo nó
 > começa num endereço múltiplo de 4, os dois bits mais baixos de um ponteiro
 > para nó são sempre 0, e ele guarda a cor no bit mais baixo do ponteiro para o
-> pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas é
-> um truque de sistema operacional, não de curso. Na prática, a vantagem está
-> em outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
+> pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas
+> esse truque fica para o sistema operacional. A vantagem da LLRB está em
+> outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
 > e não recalcula alturas.
 
 > [!NOTE]

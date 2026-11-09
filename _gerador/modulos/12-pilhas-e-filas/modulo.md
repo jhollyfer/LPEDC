@@ -111,7 +111,7 @@ alternando 1000 vezes: 2000 empilhas (soma 500500)
 
 Dica: a soma confere que saiu tudo, na ordem certa ou não (1 + ... + 1000).
 Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída:
-**custo amortizado**. uma retirada pode custar O(n) (o despejo), mas a
+**custo amortizado**. Uma retirada pode custar O(n) (o despejo), mas a
 média por operação é O(1).
 
 </details>
@@ -398,8 +398,7 @@ printf("%d %d\n", topo, p[topo]);
 **C.** Aqui `topo` é o índice do topo (pilha vazia é `-1`). Os pares
 empilham e logo desempilham: o 4 sai, o 16 sai. Ficam 1, 9 e 25 nas posições
 0, 1 e 2, com `topo = 2`. O 16 foi escrito em `p[2]` e depois o 25 escreveu
-por cima.
- Veja 0082 (as duas convenções de topo).
+por cima. Veja 0082 (as duas convenções de topo).
 
 </details>
 

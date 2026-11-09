@@ -208,8 +208,7 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 ## Questões no estilo da prova
 
-Busca de padrões não cai direto na prova do PPGI, mas questões no mesmo
-formato treinam o que cai: contar passos, reconhecer a complexidade e seguir
+Questões no formato da prova do PPGI, que treinam o que cai nela: contar passos, reconhecer a complexidade e seguir
 uma tabela à mão. Uma alternativa certa em cada.
 
 **1.** Qual é a tabela π (função prefixo do KMP, `pi[j]` = tamanho da maior
