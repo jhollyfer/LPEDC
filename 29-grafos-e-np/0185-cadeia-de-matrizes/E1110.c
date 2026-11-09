@@ -24,7 +24,8 @@
 // 2. Em caso de empate, fique com o par mais à esquerda (o primeiro).
 // 3. Resposta esperada: a saída acima. O guloso gasta quase o dobro: a
 //    escolha barata de agora (10x20 por 20x5) deixa a dimensão 10 presa no
-//    resultado, e a PD prefere eliminar logo o 40 e o 30 usando o 2.
+//    resultado. A PD começa pelo fim: A1 (A2 (A3 (A4 A5))), usando o 2
+//    para eliminar o 30, o 40, o 5 e o 20, um de cada vez.
 //
 // Escreva sua resposta abaixo:
 
