@@ -41,7 +41,7 @@ R$ 9,60), soma tudo e devolve o bloco:
 
 {{ideia}}
 
-Para testar sem digitar, use o comando que está no fim do arquivo:
+O comentário no fim do código mostra uma execução completa:
 
 ```c
 #include <stdio.h>

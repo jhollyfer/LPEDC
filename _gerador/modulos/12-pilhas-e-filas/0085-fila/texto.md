@@ -9,7 +9,7 @@ primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*), o
 contrário da pilha. Na computação, a fila aparece sempre que há ordem de
 chegada:
 a fila de impressão, as requisições esperando um servidor web, os processos
-esperando a vez na CPU, as mensagens de um RabbitMQ.
+esperando a vez na CPU, os pedidos de um aplicativo de entrega.
 
 O TAD tem a mesma cara da pilha, no [`fila.h`](0085-fila/fila.h):
 

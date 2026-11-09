@@ -203,8 +203,8 @@ quem está 4, 8, ... casas para trás:
 > sort). O custo depende dos saltos, e ninguém sabe a fórmula exata para a
 > maioria das sequências: com a de Knuth, o pior caso é O(n^1,5), e na
 > prática fica perto de n^1,25. Já os saltos `n/2, n/4, ..., 1` (os de Shell)
-> têm pior caso O(n²): como todos são pares menos o último, posições pares e
-> ímpares só se comparam na rodada final.
+> têm pior caso O(n²): quando `n` é potência de 2, todos são pares menos o
+> último, e posições pares e ímpares só se comparam na rodada final.
 
 > [!NOTE]
 > **Pergunta para você:** o shell sort é estável? Pense em `5 3a 3b 1` (dois

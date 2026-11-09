@@ -135,7 +135,7 @@ A fase 1 nos tempos da corrida. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 
 > poucas variáveis (`i`, `f`, `fim` e a temporária da troca), O(1) de memória,
 > sem recursão. O lado ruim é o acesso à memória: `desce` pula de `i` para
 > `2i + 1`, cada vez mais longe, e nos vetores grandes isso sai do cache. Por
-> isso, na prática, o quick sort costuma ganhar. Bibliotecas como a do C++
+> isso, na prática, o quick sort costuma ganhar. Muitas bibliotecas padrão
 > usam o *introsort*: quick sort, e se a recursão ficar funda demais (sinal do
 > pior caso), troca para heapsort. E o heapsort **não é estável**: dois tempos
 > iguais podem trocar de ordem.

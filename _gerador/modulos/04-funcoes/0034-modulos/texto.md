@@ -91,8 +91,8 @@ Três peças fecham o assunto:
   Na segunda, o nome já existe e o texto é pulado. Use o nome do arquivo em
   maiúsculas.
 - **`static` fora de função** esconde do resto do programa: o `contador` e a
-  `contar` de `conversao.c` não existem para os outros arquivos. É o
-  `private` do C: o módulo pode mudar por dentro sem quebrar quem usa.
+  `contar` de `conversao.c` não existem para os outros arquivos. Assim o
+  módulo pode mudar por dentro sem quebrar quem usa.
 - **`extern`** declara uma global que foi **definida** noutro arquivo:
   `extern int limite;` no `.h`, `int limite = 10;` em **um** `.c` só. Use com
   moderação: global compartilhada entre arquivos é global de novo.

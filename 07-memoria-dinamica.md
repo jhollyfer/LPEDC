@@ -568,7 +568,7 @@ R$ 9,60), soma tudo e devolve o bloco:
 
 <p align="center"><img src="07-memoria-dinamica/0054-malloc-free/ideia.svg" alt="Diagrama da ideia: malloc e free" width="870"></p>
 
-Para testar sem digitar, use o comando que está no fim do arquivo:
+O comentário no fim do código mostra uma execução completa:
 
 ```c
 #include <stdio.h>

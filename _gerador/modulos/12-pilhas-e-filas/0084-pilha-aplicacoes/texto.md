@@ -115,7 +115,7 @@ número só, o resultado:
 Cada um paga R$ 45. O exemplo A168 faz essa tabela em C, juntando
 os dígitos de `35` num número só e acusando expressão inválida quando falta
 operando ou sobra número na pilha. É assim que compiladores e máquinas
-virtuais (a JVM, o WebAssembly) calculam: traduzem a sua expressão para algo
+virtuais calculam: traduzem a sua expressão para algo
 parecido com a pós-fixa e rodam numa pilha.
 
 > [!WARNING]

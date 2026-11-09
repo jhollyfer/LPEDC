@@ -2224,10 +2224,10 @@ corrente de volta até chegar em `vagas`:
 
 > [!TIP]
 > **Por dentro do C:** cada nível é uma variável de 8 bytes de verdade. Ler
-> `**pp` custa duas leituras de memória em sequência: a primeira busca o que
+> `**pp` custa três leituras de memória em sequência: a primeira busca o que
 > tem em `pp` (o endereço de `p`), a segunda busca o que tem em `p` (o
 > endereço de `vagas`), e só então a terceira traz o 40. O processador não
-> consegue adiantar a segunda antes de terminar a primeira. Por isso
+> consegue adiantar uma leitura antes de terminar a anterior. Por isso
 > estruturas cheias de ponteiros (listas, árvores) são mais lentas de
 > percorrer que um vetor contíguo, assunto que volta no módulo 10.
 

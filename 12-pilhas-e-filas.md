@@ -1063,7 +1063,7 @@ número só, o resultado:
 Cada um paga R$ 45. O exemplo A168 faz essa tabela em C, juntando
 os dígitos de `35` num número só e acusando expressão inválida quando falta
 operando ou sobra número na pilha. É assim que compiladores e máquinas
-virtuais (a JVM, o WebAssembly) calculam: traduzem a sua expressão para algo
+virtuais calculam: traduzem a sua expressão para algo
 parecido com a pós-fixa e rodam numa pilha.
 
 > [!WARNING]
@@ -1454,7 +1454,7 @@ primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*), o
 contrário da pilha. Na computação, a fila aparece sempre que há ordem de
 chegada:
 a fila de impressão, as requisições esperando um servidor web, os processos
-esperando a vez na CPU, as mensagens de um RabbitMQ.
+esperando a vez na CPU, os pedidos de um aplicativo de entrega.
 
 O TAD tem a mesma cara da pilha, no [`fila.h`](12-pilhas-e-filas/0085-fila/fila.h):
 

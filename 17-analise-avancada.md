@@ -1948,8 +1948,8 @@ comparação O(n) ou O(n log log n); dá para ganhar só na constante.
 > olha os bytes dos elementos por conta própria: tudo o que ele sabe sobre a
 > ordem vem das respostas da sua função, uma de cada vez. Por isso nenhuma
 > implementação de `qsort`, em nenhuma biblioteca, consegue fazer menos de
-> `⌈log₂ n!⌉` chamadas à `compara` no pior caso. Ponha um contador dentro da
-> sua função e confira: para `n = 1000`, ele passa de 8.530.
+> `⌈log₂ n!⌉` chamadas à `compara` no pior caso. Para `n = 1000`, sempre existe
+> alguma ordem de entrada que faz o contador da `compara` passar de 8.530.
 
 > [!NOTE]
 > **Pergunta para você:** com 4 encomendas, quantas pesagens são o mínimo
