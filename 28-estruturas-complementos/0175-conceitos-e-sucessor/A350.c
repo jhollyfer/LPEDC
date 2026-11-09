@@ -40,7 +40,7 @@ NoP *piso(NoP *r, int k) {
 
 void hora(const NoP *x) {
     if (x == NULL) {
-        printf("  --  ");
+        printf("   --");
     } else {
         printf("%2dh%02d", x->chave / 100, x->chave % 100);
     }
@@ -64,8 +64,8 @@ int main(void) {
     return 0;
 }
 // Saída:
-// Cheguei às  6h00 | último que saiu:   --   | próximo:  6h15
+// Cheguei às  6h00 | último que saiu:    -- | próximo:  6h15
 // Cheguei às  7h31 | último que saiu:  7h30 | próximo:  8h00
 // Cheguei às  9h20 | último que saiu:  9h20 | próximo:  9h20
 // Cheguei às 11h00 | último que saiu: 10h30 | próximo: 12h00
-// Cheguei às 13h00 | último que saiu: 12h00 | próximo:   -- 
+// Cheguei às 13h00 | último que saiu: 12h00 | próximo:    --
