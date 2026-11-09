@@ -17,7 +17,7 @@
 
 ## Parou em
 
-Esperando as provas anteriores do PPGI que o dono vai enviar (fase 4 de `TASKS.md`).
+Resolvendo as 8 provas de 2016 a 2019 (`_fontes/provas-ppgi.md`, `TASKS.md` 4.4).
 
 ## Próximos passos
 

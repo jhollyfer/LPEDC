@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 15 tarefas · 12 feitas · 0 em andamento · 3 bloqueadas · atualizado 2026-11-09
+**Resumo:** 16 tarefas · 12 feitas · 1 em andamento · 3 a fazer · atualizado 2026-11-09
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -36,15 +36,16 @@ Prioridade: `Alta` · `Média` · `Baixa`.
 | 3.2 | 0185: conta das casas desperdiçadas em `m` e `s` | Média | Feita | eram 15 de 25, não 4 × 4 |
 | 3.3 | 0110: "ali o grau é a distância" era ambíguo | Baixa | Feita | "prova do PPGI" e "prova do mestrado" ficam: nomeiam a mesma prova |
 
-## Fase 4 · Provas reais (0/3)
+## Fase 4 · Provas reais (0/4)
 
-Depende das provas anteriores que o dono vai enviar.
+Provas recebidas: 8 cadernos de 2016 a 2019 em `_fontes/provas-ppgi.md`, sem as letras do gabarito.
 
 | # | Tarefa | Prioridade | Status | Notas |
 |---|---|---|---|---|
-| 4.1 | Ajustar as "Questões no estilo da prova" dos módulos ao formato e ao nível das provas reais | Alta | Bloqueada | aguardando as provas |
-| 4.2 | Registrar no `PPGI.md` o que cai e com que frequência, ligado a módulo e assunto | Alta | Bloqueada | aguardando as provas |
-| 4.3 | Simulados completos de 20 questões com gabarito comentado | Alta | Bloqueada | aguardando as provas |
+| 4.1 | Ajustar as "Questões no estilo da prova" dos módulos ao formato e ao nível das provas reais | Alta | A fazer | depende de 4.4 |
+| 4.2 | Registrar no `PPGI.md` o que cai e com que frequência, ligado a módulo e assunto | Alta | A fazer | depende de 4.4 |
+| 4.3 | Simulados completos de 20 questões com gabarito comentado | Alta | A fazer | depende de 4.4 |
+| 4.4 | Resolver as 160 questões das provas, com letra, justificativa e assunto do curso | Alta | Em andamento | sem gabarito oficial: código conferido rodando |
 
 ---
 
