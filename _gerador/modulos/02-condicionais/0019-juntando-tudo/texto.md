@@ -28,7 +28,7 @@ As tarifas do exemplo são simplificadas, mas a estrutura é a de uma conta de
 verdade: energia a R$ 0,80 por kWh, bandeira amarela com R$ 0,02 a mais por
 kWh, vermelha com R$ 0,05, desconto social de 40%.
 
-Vamos ver na prática. Consumo de 230 kWh, bandeira amarela, sem tarifa social.
+O exemplo: consumo de 230 kWh, bandeira amarela, sem tarifa social.
 Cada decisão do módulo entra em cena uma vez, e o total sai no terminal:
 
 {{ideia}}
@@ -116,10 +116,9 @@ int main(void) {
 // Total: R$ 203.60
 ```
 
-Repara no fluxograma: a primeira decisão é a guarda, com uma saída direta
-para o Fim. Depois dela, o caminho é quase uma linha reta, com um único
-desvio opcional para o desconto. É assim que um programa bem organizado se
-parece por fora:
+A primeira decisão é a guarda, com uma saída direta para o Fim. Depois dela,
+o caminho é quase uma linha reta, com um único desvio opcional para o
+desconto:
 
 {{fluxograma}}
 

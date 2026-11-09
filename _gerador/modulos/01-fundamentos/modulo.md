@@ -14,12 +14,11 @@ outro), **decisão** ("se o saldo cobre, envia") e **repetição** ("enquanto a
 senha estiver errada, pergunte de novo"). Este módulo é a primeira peça: a
 **estrutura sequencial**. Decisão e repetição vêm nos módulos 02 e 03.
 
-O C é a linguagem ideal para aprender isso de verdade, porque nele nada fica
-escondido: cada variável é um pedaço de memória com endereço e
-tamanho, cada número tem um limite, e o seu `.c` passa por uma linha de
-montagem antes de virar um programa. Ao fim do módulo você vai escrever
-programas completos de entrada, processamento e saída, e vai saber
-exatamente o que cada linha faz na memória.
+Em C nada fica escondido: cada variável é um pedaço de memória com endereço
+e tamanho, cada número tem um limite, e o seu `.c` passa por uma linha de
+montagem antes de virar programa. No fim do módulo você escreve programas
+completos de entrada, processamento e saída e sabe o que cada linha faz na
+memória.
 
 ## O que você vai aprender
 
@@ -34,35 +33,11 @@ exatamente o que cada linha faz na memória.
 - operadores compostos, `++` e `--`
 - a biblioteca de matemática: `pow`, `sqrt`, `round`, `floor`, `ceil`, `fabs`
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é
-   desafio. As dicas vêm logo abaixo do enunciado: tente antes de ler. A última dica
-   sempre traz a resposta esperada, e há uma resolução de cada exercício em
-   `_respostas/01-fundamentos/`.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-E não pule o **Por dentro do C**: é onde o curso mostra o que acontece na
-memória.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, erro. No fluxograma, a pílula é o início
-e o fim, o paralelogramo é entrada ou saída, o retângulo é processamento e o
-losango é decisão.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você precisa do compilador `gcc` e, para os módulos de memória, do `gdb` e do
-`valgrind`.
+`valgrind`. Cada exercício tem uma resolução em `_respostas/01-fundamentos/`. Responda a
+**Pergunta para você** antes de rodar e não pule o **Por dentro do C**.
 
 **Arch Linux** (e derivados, como Manjaro e EndeavourOS):
 
@@ -90,13 +65,13 @@ projeto:
 ~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
 ```
 
-Ele compila e já executa. O caminho pode ser relativo à pasta onde você está,
-relativo ao LPEDC ou absoluto. Na compilação, o `rodar` usa o padrão C17
-(`-std=c17`), liga todos os avisos (`-Wall -Wextra -pedantic`) e ativa dois
-detetives: o **AddressSanitizer**, que flagra erros de memória, e o detector
-de **comportamento indefinido**, que flagra coisas como estouro de inteiro.
-Se o seu programa tem um problema desses, ele para com um relatório dizendo
-a linha. Os exercícios devem compilar **sem nenhum aviso**.
+Ele compila e executa. O caminho pode ser relativo à pasta atual, relativo
+ao LPEDC ou absoluto. O `rodar` usa o padrão C17 (`-std=c17`), liga todos os
+avisos (`-Wall -Wextra -pedantic`) e ativa dois detetives: o
+**AddressSanitizer**, que flagra erros de memória, e o detector de
+**comportamento indefinido**, que flagra coisas como estouro de inteiro. Se o
+programa tem um problema desses, ele para com um relatório que aponta a
+linha. Os exercícios devem compilar **sem nenhum aviso**.
 
 Programas que leem do teclado esperam você digitar. Para testar sem digitar,
 mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
@@ -148,9 +123,9 @@ Daqui a quantos dias? 100
 Dia da semana: 1
 ```
 
-Com 1000 sai `Dia da semana: 5`. Ou seja: **segunda-feira** e **sexta-feira**.
-A conta inteira é `(6 + dias) % 7`. O `%` é perfeito para tudo que "dá a
-volta": dias da semana, horas do relógio, posições numa roda.
+Com 1000 sai `Dia da semana: 5`: **segunda-feira** e **sexta-feira**.
+A conta inteira é `(6 + dias) % 7`. O `%` serve para tudo que "dá a volta",
+como dias da semana e horas do relógio.
 
 </details>
 
@@ -435,7 +410,7 @@ x *= 2 + 3;
 <details><summary>Gabarito</summary>
 
 **(D).** O operador composto age sobre a expressão inteira da direita:
-`x *= 2 + 3` é `x = x * (2 + 3)`, ou seja, 10 × 5. O 23 viria de ler
+`x *= 2 + 3` é `x = x * (2 + 3)`, isto é, 10 × 5. O 23 viria de ler
 `x * 2 + 3`. Veja 0009.
 
 </details>

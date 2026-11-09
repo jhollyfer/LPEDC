@@ -6,10 +6,10 @@ programa tem o mesmo problema: as variáveis moram na RAM e **somem quando ele
 termina**. Para lembrar de alguma coisa na próxima execução, ele precisa
 escrever num **arquivo**, que fica no disco.
 
-No C, esse trabalho acontece em passos que você enxerga: **abrir**, **ler ou
-escrever** e **fechar**. Tudo vem do `<stdio.h>`, o mesmo do `printf`.
+No C, o trabalho tem três passos visíveis: **abrir**, **ler ou escrever** e
+**fechar**. Tudo vem do `<stdio.h>`, o mesmo do `printf`.
 
-Para o C, um arquivo é só uma **sequência de bytes** no disco. Num **arquivo
+Para o C, um arquivo é uma **sequência de bytes** no disco. Num **arquivo
 texto**, esses bytes são caracteres que você consegue ler no editor: o número
 152.40 vira os caracteres `'1' '5' '2' '.' '4' '0'`. Quem dá sentido a eles é o
 seu programa.
@@ -34,8 +34,8 @@ Também existem `fputs(texto, arq)` (uma string, sem pôr `\n`) e
 **Ler.** Três jeitos, conforme o formato:
 
 - `fgets(linha, tamanho, arq)`: uma **linha** inteira, com o `\n` no fim.
-  Devolve `NULL` quando o arquivo acaba. É o mesmo `fgets` do assunto 0042, só
-  que lendo do arquivo em vez do teclado.
+  Devolve `NULL` quando o arquivo acaba. É o `fgets` do assunto 0042, lendo do
+  arquivo em vez do teclado.
 - `fscanf(arq, "%s %lf", ...)`: campos com formato, como o `scanf`. Devolve
   quantos campos conseguiu ler.
 - `fgetc(arq)`: um **caractere** por vez. Devolve um `int`, que vale `EOF` no
@@ -49,8 +49,8 @@ Você já usava arquivos sem saber: `stdin`, `stdout` e `stderr` são `FILE *`
 que o programa recebe abertos. `printf("oi")` é o mesmo que
 `fprintf(stdout, "oi")`.
 
-Vamos ver na prática. O programa grava as três despesas do mês. Os
-`fprintf` não vão direto para o disco: param num **buffer**, uma área na RAM.
+O programa do exemplo grava as três despesas do mês. Os `fprintf` não vão
+direto para o disco: param num **buffer**, uma área na RAM.
 O `fclose` descarrega o buffer em `despesas.txt`. Depois o programa abre o
 arquivo de novo, em modo leitura, e o `fgets` traz as linhas de volta, uma
 por vez:
@@ -99,14 +99,14 @@ int main(void) {
 // 3 linhas em /tmp/despesas.txt
 ```
 
-Repara no fluxograma: a leitura é um laço que pergunta ao próprio `fgets` se
-ele conseguiu ler. Quem diz que o arquivo acabou é a leitura que falhou, não
+No fluxograma, a leitura é um laço que pergunta ao próprio `fgets` se ele
+conseguiu ler. Quem avisa que o arquivo acabou é a leitura que falhou, e não
 uma pergunta feita antes dela:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Você vai ver `while (!feof(arq))` em muito material, inclusive livro. Não use.
+> Você vai ver `while (!feof(arq))` em muito material, até em livro. Não use.
 > O `feof` não olha adiante: ele só fica verdadeiro **depois** que uma leitura
 > tentou passar do fim e falhou. Resultado: o laço roda uma vez a mais e
 > processa a última linha duas vezes (o E401 mostra isso). Teste o retorno da
@@ -127,7 +127,9 @@ uma pergunta feita antes dela:
 > que estava no buffer se perde.
 
 > [!NOTE]
-> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O arquivo fica com
-> 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em vez de `"w"`?
+> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O
+> arquivo fica com 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em
+> vez de `"w"`?
+
 
 {{pratique}}

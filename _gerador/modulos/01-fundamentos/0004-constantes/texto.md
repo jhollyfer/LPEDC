@@ -34,7 +34,7 @@ mesmo: é uma **sequência de escape**. `\n` pula linha, `\t` é tabulação, `\
 põe aspas dentro do texto, `\\` é a própria barra e `\0` é o byte zero. Para
 mostrar `%` no `printf`, escreva `%%` (isso é regra do `printf`, não escape).
 
-Vamos ver na prática. O pré-processador troca `TARIFA` por `4.90` e `EMPRESA`
+Antes da compilação, o pré-processador troca `TARIFA` por `4.90` e `EMPRESA`
 pelo nome da viação. A `linha` é uma caixinha com cadeado: tem endereço, mas
 ninguém escreve nela:
 
@@ -64,9 +64,8 @@ int main(void) {
 // Ida e volta: R$ 9.80
 ```
 
-Repara no fluxograma: o primeiro passo acontece antes de o programa existir.
-A troca de texto é feita na compilação; quando o executável roda, ele só tem
-os números:
+O primeiro passo do fluxograma acontece antes de o programa existir: a troca
+de texto é feita na compilação, e o executável já nasce só com os números:
 
 {{fluxograma}}
 
@@ -75,13 +74,13 @@ os números:
 > `#define TARIFA 4.90;`, a linha `printf("%.2f\n", 2 * TARIFA);` vira
 > `printf("%.2f\n", 2 * 4.90;);` e não compila. Com `#define TARIFA = 4.90`,
 > vira `2 * = 4.90`. Nada de `=` nem de `;` no `#define`. E o erro aparece na
-> linha onde o nome é **usado**, não na linha do `#define`, o que confunde.
+> linha em que o nome é **usado**, não na do `#define`, o que confunde.
 
 > [!TIP]
 > **Por dentro do C:** salve o programa acima como `tarifa.c`, rode
 > `gcc -E tarifa.c | tail -12` e veja: não sobrou nenhum `TARIFA`, só
 > `4.90`. Por isso um `#define` não ocupa memória, não tem
-> tipo e não aparece no depurador. Já a `const int linha` mora na memória:
+> tipo e não aparece no depurador. A `const int linha`, ao contrário, mora na memória:
 > `&linha` tem endereço e `sizeof linha` vale 4. E os literais têm tamanho:
 > `sizeof(4.90)` é 8 (`double`), `sizeof(4.90f)` é 4 e `sizeof('A')` é 4,
 > porque no C um caractere entre aspas simples é um `int`. Já `sizeof("A")`

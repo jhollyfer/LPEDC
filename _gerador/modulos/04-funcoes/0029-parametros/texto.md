@@ -24,7 +24,7 @@ quem chamou tem que **guardar** o retorno: `mensalidade = reajustar(...)`.
 Chamar e ignorar o retorno é permitido (você faz isso com o `printf`, que
 devolve quantos caracteres escreveu), mas aí o resultado se perde.
 
-Vamos ver na prática. A academia reajusta a mensalidade de R$ 120,00 em 10%.
+No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%.
 Há duas caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a
 do `main` e a cópia da função. A função muda só a dela para 132.00:
 
@@ -64,7 +64,7 @@ double reajustar(double mensalidade, double percentual) {
 // Guardando o retorno: 132.00
 ```
 
-Repara no fluxograma: o valor sai do `main` por cópia e só volta pelo
+O valor sai do `main` por cópia e só volta pelo
 `return`. A pergunta "guardou o retorno?" decide se o `main` fica sabendo do
 reajuste:
 
@@ -86,8 +86,8 @@ Mais três regras sobre parâmetros:
 > [!WARNING]
 > A função que "deveria" mudar a variável e não muda. O exemplo clássico é
 > `void trocar(int a, int b)` que troca `a` e `b` lá dentro: no `main`, nada
-> acontece, porque a troca foi entre as cópias. Do
-> mesmo jeito, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
+> acontece, porque a troca foi entre as cópias. Da
+> mesma forma, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
 > mexer numa variável sua, você precisa passar o **endereço** dela. É o que o
 > `&` do `scanf` faz, e você vai entender de vez no assunto 0046.
 

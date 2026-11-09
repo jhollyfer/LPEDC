@@ -6,7 +6,7 @@ nos dois dados: os dois com o mesmo número. Joga, não sai, joga de novo. É um
 é sorteado.
 
 Computador não sorteia de verdade. Ele é uma máquina determinística: a mesma
-entrada dá sempre a mesma saída. O que ele faz é gerar números
+entrada dá sempre a mesma saída. Ele gera números
 **pseudoaleatórios**: uma sequência calculada por uma conta fixa, em que cada
 número sai do anterior, e que parece aleatória para quem olha.
 
@@ -23,22 +23,22 @@ Para trazer o número para a faixa que você quer, use o resto da divisão
 Para uma faixa qualquer de `a` até `b`, a fórmula é
 `a + rand() % (b - a + 1)`.
 
-E a semente? Depende do que você quer:
+A semente depende do que você quer:
 
 - **semente fixa** (`srand(2022)`): o programa sorteia sempre os mesmos
-  números. Parece inútil, mas é ouro para **testar** e **depurar**: o erro que
+  números. Parece inútil, mas ajuda muito a **testar** e **depurar**: o erro que
   apareceu volta a aparecer. Os exemplos deste curso usam semente fixa para a
   saída do comentário bater com a sua;
 - **semente do relógio** (`srand(time(NULL))`, com `<time.h>`): `time(NULL)`
   devolve quantos segundos se passaram desde 1º de janeiro de 1970. Cada
   execução começa num segundo diferente e sorteia números diferentes. É o que
-  um jogo de verdade usa.
+  um jogo real usa.
 
 Sem nenhum `srand`, é como se o programa tivesse chamado `srand(1)`: a mesma
 sequência sempre.
 
-Vamos ver na prática. A semente 2022 entra no gerador, que vai cuspindo
-números enormes, cada um calculado a partir do anterior. O `% 6 + 1`
+A semente 2022 entra no gerador, que cospe números enormes, cada um
+calculado a partir do anterior. O `% 6 + 1`
 transforma cada número numa face, e os pares de faces são as jogadas. Na
 quarta, sai 4 e 4:
 
@@ -76,7 +76,7 @@ int main(void) {
 // Dupla de 4 na jogada 4. Saiu da prisão!
 ```
 
-Repara no fluxograma: o `srand` fica **fora** do laço, antes de tudo, e roda
+O `srand` fica **fora** do laço, antes de tudo, e roda
 uma vez só. O sorteio fica dentro, e a seta do Sim volta do losango para ele.
 No exemplo, o caminho passa três vezes pelo Sim e, na quarta jogada, pelo Não:
 

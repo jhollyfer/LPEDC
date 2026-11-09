@@ -28,12 +28,12 @@ prova por indução:
 4. **Parada**: alguma quantidade inteira diminui a cada volta e não pode
    diminuir para sempre (é a **variante**). Garante que o laço acaba.
 
-Esse jeito de pensar também melhora a documentação. A função promete "recebe
+Pensar assim também melhora a documentação. A função promete "recebe
 n ≥ 1 e v; devolve o valor de **um** elemento máximo de `v[0..n-1]`". Fala de
 todos os parâmetros, diz a restrição (n ≥ 1) e usa "um" porque pode haver
 empate. É o contrato, sem contar o "como".
 
-Vamos ver na prática. Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No
+Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No
 começo da volta com i = 4, a parte verde já foi vista e o invariante garante
 que `maior` (300) é o maior dela. A parte cinza ainda não importa:
 
@@ -41,8 +41,7 @@ que `maior` (300) é o maior dela. A parte cinza ainda não importa:
 
 O `assert` de `<assert.h>` transforma o invariante em código: se a condição
 for falsa, o programa para na hora e diz a linha. A função `eh_maximo` é lenta
-de propósito: ela confere o invariante do jeito mais burro possível, só para
-testar.
+de propósito: confere o invariante pelo caminho mais ingênuo, só para testar.
 
 ```c
 #include <assert.h>
@@ -114,8 +113,8 @@ Os quatro passos aplicados a esse laço, com o teste de mesa do lado:
 `v[0..i]`, e o `i++` faz disso "o máximo de `v[0..i-1]`" de novo. **Parada**:
 n − i diminui 1 por volta e o laço acaba quando chega a 0.
 
-Repara no fluxograma: o invariante mora na seta que volta para o losango
-"i < 6?". Toda vez que o caminho passa por ali, a frase é verdadeira:
+No fluxograma, o invariante fica na seta que volta para o losango "i < 6?".
+Toda vez que o caminho passa por ali, a frase é verdadeira:
 
 {{fluxograma}}
 
@@ -131,9 +130,10 @@ Repara no fluxograma: o invariante mora na seta que volta para o losango
 > imprime arquivo, linha e a condição, e chama `abort()`. Compilando com
 > `-DNDEBUG`, o pré-processador troca cada `assert` por **nada**: nem a
 > condição é calculada. Por isso o `eh_maximo`, que é O(n) dentro de um laço
-> O(n), deixa o teste O(n²) mas não custa nada na versão final. A regra que
-> sai disso: nunca ponha dentro do `assert` algo que o programa precisa
-> fazer, como `assert(fp = fopen(...))`. Com `NDEBUG`, o arquivo nem abre.
+> O(n), deixa o teste O(n²) mas não custa nada na versão final. Daí a regra:
+> nunca ponha dentro do `assert` algo que o programa precisa fazer, como
+> `assert(fp = fopen(...))`. Com `NDEBUG`, o arquivo nem abre.
+
 
 > [!NOTE]
 > **Pergunta para você:** no exemplo A146 (fichas de R$ 5 com R$ 47), o

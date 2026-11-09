@@ -23,9 +23,9 @@ saiu.
 
 Repare num incômodo do código: o sorteio `1 + rand() % 6` aparece quatro
 vezes. No módulo 04 ele vira uma **função** `lancar()` e o programa encolhe.
-Por enquanto, a repetição de código é o preço de não ter funções ainda.
+Por enquanto, a repetição é o preço de ainda não ter funções.
 
-Vamos ver na prática. Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O
+Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O
 `switch` não acha o 9 em nenhum caso especial, e ele vira o ponto. O jogo
 relança: 8, depois 5 (nada acontece), depois 9. Saiu o ponto antes do 7:
 ganhou no quarto lançamento:
@@ -94,7 +94,7 @@ O exemplo A054 vai além: põe a rodada dentro de um menu com `do...while`,
 valida a aposta com outro `do...while` e controla uma banca de R$ 100 até você
 sair ou quebrar. É o mesmo algoritmo, embrulhado em mais dois laços.
 
-Repara no fluxograma: as duas primeiras perguntas (7 ou 11? 2, 3 ou 12?) só
+No fluxograma, as duas primeiras perguntas (7 ou 11? 2, 3 ou 12?) só
 acontecem **uma vez**. O laço começa em "soma = novo lançamento", e a seta de
 volta sai do Não de "soma == 7?". As duas saídas do laço vão para os mesmos
 "Ganhou" e "Perdeu" do primeiro lançamento:
@@ -114,8 +114,7 @@ volta sai do Não de "soma == 7?". As duas saídas do laço vão para os mesmos
 > `-1`, `0`), e quem lê o código precisa lembrar o que cada número quer dizer.
 > É um "número mágico". No módulo 08, o `enum` dá nome a esses valores
 > (`GANHOU`, `PERDEU`, `CONTINUA`), mas por baixo continuam sendo `int`: o
-> compilador troca cada nome pelo número, e o programa gerado é idêntico. O
-> nome existe só para você.
+> compilador troca cada nome pelo número, e o programa gerado é idêntico.
 
 > [!NOTE]
 > **Pergunta para você:** qual é a chance de ganhar no craps? Antes de chutar,

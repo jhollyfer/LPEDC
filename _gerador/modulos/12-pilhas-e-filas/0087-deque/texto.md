@@ -1,7 +1,7 @@
 ## 0087 · Deque
 
-No app de música, você monta a fila: faixa 5, faixa 8, faixa 3. Aí lembra de
-uma que quer ouvir agora e toca em "tocar em seguida": a faixa 11 fura a fila
+No app de música, você monta a fila: faixa 5, faixa 8, faixa 3. Então lembra
+de uma que quer ouvir agora e toca em "tocar em seguida": a faixa 11 fura a fila
 e vai para a **frente**. Depois desiste da última que adicionou e a tira do
 **fim**. Nem pilha nem fila fazem isso.
 
@@ -16,13 +16,14 @@ O deque generaliza as duas estruturas que você já viu. Usando só uma ponta
 (insere e retira no fim), ele é uma **pilha**. Inserindo no fim e retirando
 no início, é uma **fila**. E quando quem sai não é o mais antigo nem o mais
 novo, e sim o de maior prioridade, a estrutura é a **fila de prioridade**,
-que o assunto 0102 monta com um heap. Num vetor comum, inserir ou retirar no início custa O(n),
-porque desloca todo mundo. Aqui as quatro operações custam **O(1)**.
+que o assunto 0102 monta com um heap. Num vetor comum, inserir ou retirar no
+início custa O(n), porque desloca todo mundo. Aqui as quatro operações custam
+**O(1)**.
 
 A implementação do [`deque.c`](0087-deque/deque.c) é a fila circular do 0085
 com uma novidade: o `inicio` agora também anda para **trás**. Para inserir na
 frente, ele recua uma gaveta, e da gaveta 0 ele volta para a última. A conta
-de "gaveta anterior" mora numa função auxiliar `static`, que só o `deque.c`
+de "gaveta anterior" fica numa função auxiliar `static`, que só o `deque.c`
 enxerga:
 
 ```c
@@ -54,15 +55,15 @@ bool deque_retira_fim(Deque *d, int *valor) {
 ```
 
 `deque_insere_fim` e `deque_retira_inicio` são iguais aos da fila. Retirar
-do fim é o mais simples de todos: basta diminuir `n`.
+do fim é o mais simples: basta diminuir `n`.
 
-Vamos ver na prática. As faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1
+No exemplo, as faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1
 e 2. A faixa 11 entra pela frente: o início, que estava na gaveta 0, recua e
 dá a volta para a gaveta 7. A ordem da fila fica 11, 5, 8, 3:
 
 {{ideia}}
 
-O programa da fila de músicas:
+O programa da fila de músicas usa as quatro operações:
 
 ```c
 #include <stdio.h>
@@ -103,8 +104,8 @@ int main(void) {
 // Ainda na fila: 5 8
 ```
 
-Repara no fluxograma da entrada da faixa 11: a única diferença para a fila é
-o passo que faz o início recuar com `anterior`, que soma 8 antes do `%` para
+Na entrada da faixa 11, a única diferença do fluxograma para o da fila é o
+passo que faz o início recuar com `anterior`, que soma 8 antes do `%` para
 o índice não ficar negativo:
 
 {{fluxograma}}
@@ -121,15 +122,16 @@ o índice não ficar negativo:
 > **Por dentro do C:** a palavra `static` numa função fora de qualquer bloco
 > não tem nada a ver com variável estática: ela tira a função da **ligação
 > externa**. O ligador nem fica sabendo que `anterior` existe, então outro
-> arquivo pode ter a sua própria `anterior` sem conflito. É o jeito do C de
-> fazer uma função **privada** do módulo. O
-> deque com lista encadeada também é possível, mas precisa de lista **dupla**
+> arquivo pode ter a sua própria `anterior` sem conflito: é assim que o C
+> torna uma função **privada** do módulo. O deque com lista encadeada também
+> é possível, mas precisa de lista **dupla**
 > (assunto 0079): para retirar do fim, o último nó tem que saber quem é o
 > penúltimo.
 
 > [!NOTE]
 > **Pergunta para você:** se o programa da fila de músicas fizesse mais um
-> `deque_insere_inicio` logo depois do 11, em que gaveta o novo item cairia? E se o deque estivesse
-> com as 8 gavetas ocupadas?
+> `deque_insere_inicio` logo depois do 11, em que gaveta o novo item cairia?
+> E se o deque estivesse com as 8 gavetas ocupadas?
+
 
 {{pratique}}

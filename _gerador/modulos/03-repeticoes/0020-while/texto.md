@@ -35,7 +35,7 @@ acontece. Para isso, três coisas precisam existir:
 Esqueça a terceira e você tem um **laço infinito**: a pergunta dá sempre a
 mesma resposta, e o programa nunca sai dali. No terminal, `Ctrl+C` encerra.
 
-Vamos ver na prática. O saldo começa vazio, a pergunta "saldo < 1000?" responde
+O saldo começa vazio, a pergunta "saldo < 1000?" responde
 Sim sete vezes seguidas e, a cada Sim, entra um depósito e o programa volta à
 pergunta. Na oitava vez, com R$ 1.050, a resposta é Não:
 
@@ -74,7 +74,7 @@ int main(void) {
 
 ### Passo a passo
 
-O teste de mesa (uma linha por pergunta, uma coluna por variável) mostra tudo. Repare que são **8
+No teste de mesa (uma linha por pergunta, uma coluna por variável), são **8
 perguntas** para **7 voltas**: a última pergunta é a que dá Não.
 
 | Pergunta | saldo antes | `saldo < 1000?` | saldo depois | meses |
@@ -85,8 +85,8 @@ perguntas** para **7 voltas**: a última pergunta é a que dá Não.
 | 7ª | 900 | Sim | 1050 | 7 |
 | 8ª | 1050 | **Não** | (sai) | 7 |
 
-Repara no fluxograma: a seta que sai de "Mostrar mês e saldo" **volta para o
-losango**. É assim que uma repetição aparece no desenho. O caminho verde passa
+A seta que sai de "Mostrar mês e saldo" **volta para o losango**: é assim que
+uma repetição aparece no fluxograma. O caminho verde passa
 pelo Sim várias vezes e só uma vez pelo Não:
 
 {{fluxograma}}

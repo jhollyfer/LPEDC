@@ -11,8 +11,7 @@ assim:
 
 Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** impressa no
 momento do erro. A função de cima estava rodando; ela foi chamada pela de
-baixo, que foi chamada pela de baixo dela. O C mostra essa pilha sem esconder
-nada.
+baixo, que foi chamada pela de baixo dela.
 
 Cada vez que uma função é chamada, o programa reserva um pedaço de memória só
 para aquela chamada: o **quadro** (em inglês, *stack frame*, ou registro de
@@ -33,7 +32,7 @@ outros estão parados, esperando um retorno.
 por isso que uma função não enxerga as variáveis de quem a chamou: elas estão
 noutro quadro, mais embaixo.
 
-Vamos ver na prática. Um pedido de R$ 50,00: o `main` chama
+Num pedido de R$ 50,00, o `main` chama
 `total_com_entrega`, que chama `taxa_entrega`. No momento mais fundo há três
 quadros na pilha. Quando `taxa_entrega` devolve 7.90, o quadro dela sai, e
 `total_com_entrega` volta a rodar, já com o valor:
@@ -77,7 +76,7 @@ int main(void) {
 // Total: R$ 57.90
 ```
 
-Repara no fluxograma: as chamadas empilham na descida, e os retornos
+No fluxograma, as chamadas empilham na descida, e os retornos
 desempilham na ordem contrária. A decisão da taxa acontece lá no topo, dentro
 de `taxa_entrega`, enquanto as outras duas funções esperam paradas:
 
@@ -95,7 +94,7 @@ A pilha em cada momento, de baixo para cima (o topo é o último):
 | `taxa_entrega` devolveu 7.90 | `main` → `total_com_entrega` (total = 57.90) | `total_com_entrega` |
 | `total_com_entrega` devolveu 57.90 | `main` (total = 57.90) | `main` |
 
-Repara que existem **dois** `valor`, um em cada quadro, e cada função mexe só
+Existem **dois** `valor`, um em cada quadro, e cada função mexe só
 no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
 
 > [!WARNING]

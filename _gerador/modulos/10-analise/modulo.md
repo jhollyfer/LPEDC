@@ -7,17 +7,16 @@ para achar um cliente, uma busca sequencial, uma binária ou uma tabela hash.
 Todas funcionam com 10 itens. Com 1 milhão, umas respondem na hora e outras
 travam o servidor.
 
-Este módulo é a caixa de ferramentas para decidir. São três ideias que
-atravessam o resto do curso: **medir o custo** contando passos e resumindo o
+Este módulo traz as ferramentas para decidir, em três ideias que atravessam o
+resto do curso: **medir o custo** contando passos e resumindo o
 crescimento na notação O; **ter certeza de que está certo** com invariantes de
 laço, em vez de confiar em meia dúzia de testes; e **esconder os detalhes**
 atrás de um tipo abstrato de dado, para poder trocar a implementação sem
 quebrar quem usa.
 
-Todo programador já esbarrou nisso sem nome: a busca dentro de um laço que
-deixou o programa lento, o módulo que esconde a implementação atrás de
-funções. Aqui essas coisas ganham nome, com o C mostrando o custo de cada
-escolha.
+Você provavelmente já esbarrou nisso sem dar nome: a busca dentro de um laço
+que deixou o programa lento, o módulo que esconde a implementação atrás de
+funções. Aqui essas coisas ganham nome, e o C mostra o custo de cada escolha.
 
 ## O que você vai aprender
 
@@ -26,45 +25,29 @@ escolha.
 - enunciar **invariantes de laço** e usá-los para provar que um laço está certo (e achar bugs)
 - montar um **tipo abstrato de dado** com interface (`.h`), implementação (`.c`) e tipo opaco: o padrão de todos os próximos módulos
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude o n, troque os dados, quebre um invariante de
-   propósito e veja o `assert` disparar.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue (e, nas tabelas de
-custo, o que continua leve); vermelho é erro ou custo que explodiu; cinza, o
-que o exemplo não usa.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
+Nos exemplos, mude o n, troque os dados, quebre um invariante de propósito e
+veja o `assert` disparar. Nos desenhos de custo, verde é o que continua leve e
+vermelho é o custo que explodiu.
 
 Você vai usar tudo dos módulos anteriores, em especial funções, vetores,
 ponteiros, `malloc`/`free` e `struct`. Duas novidades pequenas:
 
 - `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
-  falsa. É o jeito de transformar um invariante em código.
+  falsa. É assim que um invariante vira código.
 - **arquivos de apoio**: no assunto 0074, a pasta tem `contador.h`,
   `contador.c`, `conta.h` e `conta.c` além dos exemplos. O `rodar` compila
-  junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então é só
+  junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então basta
   rodar o exemplo, como sempre:
 
 ```bash
 ~/LPEDC/rodar 10-analise/0074-tad/A147.c
 ```
 
-Os contadores de passos dos exemplos não medem segundos: medem trabalho. Rode
-na sua máquina e os números saem iguais aos do texto.
+Os contadores de passos dos exemplos não medem segundos, medem trabalho: na
+sua máquina, os números saem iguais aos do texto.
 
 {{indice}}
 
@@ -138,7 +121,7 @@ sequencial: 1000000 comparacoes (achou: -1)
 
 Dica: a binária usa `ini <= fim` e `meio = ini + (fim - ini) / 2`, e faz
 `(*comp)++` no começo de cada volta. Ela corta pela metade a cada volta e
-2²⁰ = 1.048.576 ≥ 1.000.000, por isso **20**. É a tabela de O(log n) contra
+2²⁰ = 1.048.576 ≥ 1.000.000, por isso **20**: a tabela de O(log n) contra
 O(n) do assunto 0072, com números de verdade.
 
 </details>
@@ -228,7 +211,7 @@ esperando: 1
 
 Dica: como as senhas saem em sequência, o `.c` nem precisa de vetor: a struct
 guarda a próxima senha a tirar e a próxima a chamar, e quem espera é a
-diferença entre as duas. Repare que nada no `.h` diz isso: trocar por uma fila
+diferença entre as duas. Nada no `.h` revela isso, então trocar por uma fila
 de verdade (módulo 12) não muda uma linha do `main`.
 
 </details>
@@ -273,7 +256,7 @@ sem par, n = 1000: 499500 comparacoes
 
 Dica: o `j` começa em `i + 1` e o `return` sai dos dois laços de uma vez.
 Sem par, todos os n(n − 1)/2 pares são testados: o pior caso é **O(n²)**, e
-é essa a classe que se dá. O `return` antecipado melhora a média, não a
+essa é a classe que se informa. O `return` antecipado melhora a média, não a
 garantia.
 
 </details>
@@ -288,15 +271,15 @@ Implemente com contador e confira para n = 10.
 
 Para n = 10: o jeito separado faz **18** comparações; o de pares, **13**
 (1 para o primeiro par e 3 para cada um dos outros 4 pares: 3n/2 − 2). As duas
-são O(n): a notação O não enxerga a diferença, mas o contador enxerga. É o
-lembrete do assunto 0071: a constante importa quando n é fixo.
+são O(n): a notação O não enxerga a diferença, o contador enxerga. Como no
+assunto 0071, a constante importa quando n é fixo.
 
 </details>
 
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só então abra o gabarito. As contagens foram
+papel, marque uma letra e só depois abra o gabarito. As contagens foram
 conferidas rodando os trechos (compilados com `gcc -std=c17 -Wall -Wextra`)
 com um contador na linha de dentro. As definições de O, Ω e Θ seguem o
 Cormen.
@@ -340,7 +323,8 @@ for (int i = 0; i < n; i++)
 
 <details><summary>Gabarito</summary>
 
-**(B)**. O laço de fora roda n vezes. O de dentro dobra `j` a cada volta:
+**(B)**. O laço de fora roda n vezes. O de dentro dobra `j` a cada volta,
+
 log₂ n voltas. Total: n log₂ n (para n = 16, 64). Veja 0072.
 
 </details>

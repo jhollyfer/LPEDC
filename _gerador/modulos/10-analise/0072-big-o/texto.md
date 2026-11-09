@@ -5,16 +5,16 @@ Você fez o app da hamburgueria. Testou com 8 pedidos: voou. Uma semana depois,
 tela travou. O código não mudou. O que mudou foi o **n**, e cada parte do
 programa reagiu de um jeito diferente a ele.
 
-O assunto anterior contou passos. Este pergunta: **como a contagem cresce
-quando n cresce?** É o que a **notação O** (fala-se "ó grande") resume numa
-expressão curta. Ela ignora duas coisas de propósito:
+O assunto anterior contou passos. Agora a pergunta é **como a contagem cresce
+quando n cresce**, e a **notação O** (fala-se "ó grande") resume a resposta
+numa expressão curta. Ela ignora duas coisas de propósito:
 
 - **constantes multiplicativas**: 3n e 100n são os dois O(n). A constante
   depende da máquina e de detalhes; o formato do crescimento, não;
 - **termos menores**: em n² + 50n + 7, o n² engole o resto quando n cresce.
   Com n = 1000, ele vale 1.000.000 e o 50n só 50.000. Fica O(n²).
 
-A definição de verdade (a do Cormen): f(n) é **O(g(n))** se existem c > 0 e
+A definição formal (a do Cormen): f(n) é **O(g(n))** se existem c > 0 e
 n₀ com 0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto**: "nunca cresce mais
 rápido que g". **Ω** é o piso (f ≥ c · g) e **Θ**, teto e piso juntos:
 n² + 50n + 7 é Θ(n²) (assunto 0166). As cinco classes do curso, da melhor para a pior:
@@ -32,8 +32,8 @@ n é O(n). Dois laços aninhados até n, O(n²). Um laço que **divide** n por 2
 cada volta é O(log n): de 1024 até 1 são só 10 cortes, porque 2¹⁰ = 1024. E a
 base do log não importa: trocar log₂ por log₁₀ só muda uma constante.
 
-Vamos ver na prática. Cinco perguntas sobre os mesmos pedidos, cada uma com o
-seu ritmo. Em verde, o que continua leve em 1024; em vermelho, o que explodiu:
+O exemplo faz cinco perguntas sobre os mesmos pedidos, cada uma com o seu
+ritmo. Em verde, o que continua leve em 1024; em vermelho, o que explodiu:
 
 {{ideia}}
 
@@ -105,12 +105,12 @@ int main(void) {
 //   1024     1     10   1024    10240   523776
 ```
 
-Repare na última coluna: comparar todos os pares dá n(n − 1)/2, que é mais ou
-menos n²/2. A metade é uma constante e some na notação: continua O(n²). De 64
-para 1024 o n cresceu 16 vezes e essa coluna cresceu 260 vezes. A do log
-ganhou 4 passos.
+Na última coluna, comparar todos os pares dá n(n − 1)/2, mais ou menos n²/2.
+A metade é uma constante e some na notação: continua O(n²). De 64 para 1024 o
+n cresceu 16 vezes e essa coluna cresceu 260 vezes, enquanto a do log ganhou
+4 passos.
 
-Repara no fluxograma: é o laço do O(log n) com n = 1024. A pergunta "n > 1?"
+O fluxograma mostra o laço do O(log n) com n = 1024. A pergunta "n > 1?"
 responde Sim só 10 vezes, porque cada volta joga metade fora:
 
 {{fluxograma}}
@@ -124,13 +124,14 @@ responde Sim só 10 vezes, porque cada volta joga metade fora:
 > exemplo clássico no C é o `strlen(s)` na condição do `for`.
 
 > [!TIP]
-> **Por dentro do C:** por que `v[i]` é O(1), não importa se i vale 3 ou 3
-> milhões? Porque o vetor é contínuo na memória e o endereço sai de uma conta
-> só: `endereço de v + i * sizeof(int)`. O processador faz isso numa instrução.
+> **Por dentro do C:** `v[i]` é O(1) com i valendo 3 ou 3 milhões porque o
+> vetor é contínuo na memória e o endereço sai de uma conta só:
+> `endereço de v + i * sizeof(int)`. O processador faz isso numa instrução.
 > Numa lista encadeada (módulo 11) não existe essa conta: para chegar no
-> elemento i é preciso seguir i ponteiros, um por um. Mesma pergunta, O(n).
-> A escolha da estrutura de dados decide a classe antes de você escrever o
+> elemento i é preciso seguir i ponteiros, um por um: a mesma pergunta custa
+> O(n). A estrutura de dados decide a classe antes de você escrever o
 > algoritmo.
+
 
 > [!NOTE]
 > **Pergunta para você:** se um algoritmo O(n²) leva 1 segundo com 10.000

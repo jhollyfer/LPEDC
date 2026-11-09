@@ -1,8 +1,8 @@
 ## 0035 · Pré-processador: macros e #ifdef
 
-Sabe o "localizar e substituir" do VS Code? Troca todo `TAXA` por `0.05` no
-arquivo inteiro, sem entender nada do que está escrito. O **pré-processador**
-do C é exatamente isso, e roda **antes** do compilador. Toda linha que começa
+O "localizar e substituir" do editor troca todo `TAXA` por `0.05` no arquivo
+inteiro, sem entender nada do que está escrito. O **pré-processador** do C faz
+o mesmo, e roda **antes** do compilador. Toda linha que começa
 com `#` é para ele: `#include` cola um arquivo, `#define` cria uma
 substituição. Quando o compilador recebe o código, as diretivas já sumiram.
 
@@ -13,7 +13,7 @@ parâmetros, e aí vira uma **macro**:
 #define QUAD(x) ((x) * (x))
 ```
 
-Onde aparecer `QUAD(alguma coisa)`, o pré-processador escreve
+Cada vez que aparece `QUAD(alguma coisa)`, o pré-processador escreve
 `((alguma coisa) * (alguma coisa))`. Parece uma função, mas não é: não tem
 tipo, não tem chamada, não tem pilha. É **troca de texto**. O nome e o `(`
 ficam colados: `QUAD (x)` com espaço já é outra coisa (uma constante que vale
@@ -24,7 +24,7 @@ E troca de texto não respeita a precedência dos operadores. Sem parênteses,
 primeiro. A regra que resolve: **parênteses em volta de cada parâmetro e em
 volta da expressão inteira**.
 
-Vamos ver na prática. O terreno tem `lado + 3` metros de lado, com `lado = 2`.
+No exemplo, o terreno tem `lado + 3` metros de lado, com `lado = 2`.
 O texto `QUAD_RUIM(lado + 3)` passa pelo pré-processador e chega ao compilador
 como `lado + 3 * lado + 3`, que dá 11. A versão com parênteses chega como
 `((lado + 3) * (lado + 3))` e dá 25:
@@ -58,7 +58,7 @@ int main(void) {
 // 100 / QUAD(5)       = 4
 ```
 
-Repara no fluxograma: o pré-processador não pergunta nada sobre o C. Ele só
+O pré-processador não pergunta nada sobre o C. Ele só
 procura o nome da macro e troca. Quem descobre o erro (quando descobre) é o
 compilador, olhando um código que você nem escreveu:
 

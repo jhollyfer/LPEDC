@@ -6,13 +6,11 @@ primeiras: mede com o dedo e puxa. Arquivo texto não deixa fazer isso, porque
 cada linha tem um tamanho ("Luz 98.75" tem 9 caracteres, "Internet 99.90" tem
 14). Para cair na linha 500, você precisa ler as 499 antes.
 
-Um **arquivo binário** resolve isso. Em vez de converter os dados em texto,
-ele grava os bytes **exatamente como estão na memória**. Um `int` sempre ocupa
+Um **arquivo binário** não converte os dados em texto: grava os bytes
+**exatamente como estão na memória**. Um `int` sempre ocupa
 4 bytes no arquivo, uma struct sempre ocupa `sizeof` da struct. Com
 **registros de tamanho fixo**, a posição de qualquer um vira conta: o
 registro `i` começa no byte `i * sizeof(registro)`.
-
-Em resumo: texto é legível e maior; binário é compacto e ilegível.
 
 | | texto (`fprintf`) | binário (`fwrite`) |
 | --- | --- | --- |
@@ -31,8 +29,8 @@ As ferramentas:
   quantidade` bytes a partir do endereço. Variável e struct vão com `&`; vetor
   já é endereço. Devolve **quantos itens** gravou.
 - **`fread(endereco, tamanho, quantidade, arq)`** faz o caminho de volta e
-  também devolve quantos itens leu. Menos que o pedido quer dizer fim do
-  arquivo ou erro. É esse retorno que vai no `while`.
+  devolve quantos itens leu. Menos que o pedido indica fim do arquivo ou erro.
+  É esse retorno que vai no `while`.
 - **`fseek(arq, deslocamento, origem)`** muda a posição de leitura e escrita.
   A origem é `SEEK_SET` (do começo), `SEEK_CUR` (de onde está) ou `SEEK_END`
   (do fim). O deslocamento é `long` e pode ser negativo.
@@ -40,8 +38,7 @@ As ferramentas:
   byte 0. `fseek` até o fim seguido de `ftell` é o jeito clássico de medir o
   arquivo.
 
-Vamos ver na prática. O estoque tem três produtos, e cada `Produto` ocupa 32
-bytes. Um `fwrite` grava os três em sequência: 96 bytes. Para ler o café, o
+No exemplo, o estoque tem três produtos, e cada `Produto` ocupa 32 bytes. Um `fwrite` grava os três em sequência: 96 bytes. Para ler o café, o
 programa pula 2 × 32 = 64 bytes desde o começo e faz um `fread` de um
 registro só:
 
@@ -100,15 +97,14 @@ int main(void) {
 // Registro 2: Café, 4 un., R$ 18.50
 ```
 
-Repara no fluxograma: não tem laço nenhum para chegar ao café. São duas
-chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
-3 milhões:
+O fluxograma não tem laço para chegar ao café. São duas chamadas de `fseek` e
+um `fread`, com 3 registros ou com 3 milhões:
 
 {{fluxograma}}
 
-Se os registros estiverem gravados em ordem de código, dá até para fazer
-**busca binária direto no arquivo**: `fseek` no registro do meio, `fread`,
-compara e descarta metade. São uns 20 `fread` para 1 milhão de registros,
+Com os registros gravados em ordem de código, dá para fazer **busca binária
+direto no arquivo**: `fseek` no registro do meio, `fread`, compara e descarta
+metade. São uns 20 `fread` para 1 milhão de registros,
 sem carregar o arquivo na RAM (a busca binária é o assunto 0090).
 
 > [!WARNING]
@@ -121,10 +117,11 @@ sem carregar o arquivo na RAM (a busca binária é o assunto 0090).
 > mudar. Para trocar dados entre máquinas, prefira texto (CSV, JSON).
 
 > [!TIP]
-> **Por dentro do C:** salve o código acima como `estoque.c`, tire o `remove`, rode e depois
-> `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada linha mostra 16
-> bytes, então cada produto ocupa duas linhas.
-> Você vai ver `Arroz` seguido de zeros: o `fwrite` grava os 20 bytes do vetor
+> **Por dentro do C:** salve o código acima como `estoque.c`, tire o `remove`,
+> rode e depois `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada
+> linha mostra 16 bytes, então cada produto ocupa duas linhas.
+> Aparece `Arroz` seguido de zeros:
+ o `fwrite` grava os 20 bytes do vetor
 > `nome`, usados ou não. Logo depois vem `0c 00 00 00`, o 12 da `qtd` em
 > little-endian, e os 8 bytes do `double`. Aqui 20 + 4 + 8 dá exatamente 32,
 > sem enchimento, porque o `double` já cai num endereço múltiplo de 8. E o

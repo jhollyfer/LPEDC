@@ -24,7 +24,7 @@ Cuidado com o pseudocódigo da prova: o `repita ... até condição` também tes
 no fim, mas a condição dele é de **parar**. `repita ... até x > 10` vira
 `do { ... } while (!(x > 10));`, ou seja, `while (x <= 10)`.
 
-O lugar natural dele é onde a primeira volta é obrigatória:
+Ele serve para os casos em que a primeira volta é obrigatória:
 
 - **validação de entrada**: pergunte, e repita enquanto a resposta for
   inválida;
@@ -36,7 +36,7 @@ A condição do `do...while` descreve quando **repetir**, não quando parar.
 Numa validação, ela descreve o valor **inválido**: `parcelas < 1 || parcelas >
 12`.
 
-Vamos ver na prática. A pessoa digita 0, depois 15, depois 4. As duas
+No exemplo, a pessoa digita 0, depois 15, depois 4. As duas
 primeiras respostas caem fora da faixa, a pergunta "fora de 1 a 12?" responde
 Sim e o programa volta para pedir de novo. O 4 está dentro, a resposta é Não e
 o programa segue:
@@ -70,7 +70,7 @@ int main(void) {
 // 4x de R$ 300.00
 ```
 
-Repara no fluxograma: a leitura vem **antes** do losango. A seta do Sim sai do
+Aqui a leitura vem **antes** do losango. A seta do Sim sai do
 losango e volta para o começo do corpo, "Mostrar a pergunta". No `while` (assunto
 0020) a seta voltava para o losango porque a pergunta abria o laço; aqui ela
 fecha. O caminho verde passa três vezes pelo losango: duas pelo Sim e uma pelo

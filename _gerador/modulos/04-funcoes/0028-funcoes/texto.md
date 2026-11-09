@@ -35,14 +35,14 @@ propriamente dita; a `void`, que só executa uma tarefa, é o **procedimento**.
 No C as duas se escrevem igual. Dividir o programa em sub-rotinas é a
 **modularização**.
 
-Tem mais um detalhe: o compilador do C lê o arquivo **de cima para
+Falta um detalhe: o compilador do C lê o arquivo **de cima para
 baixo**, uma vez só. Se o `main` chama `preco_corrida` antes de o compilador
 ter visto essa função, ele não sabe que tipo ela devolve nem quantos
 parâmetros recebe. A solução é o **protótipo**: o cabeçalho da função com `;`
 no fim, colocado antes do `main`. É uma promessa: "essa função existe, recebe
 um `double` e devolve um `double`; a definição vem depois".
 
-Vamos ver na prática. O `main` chama `preco_corrida(4.0)`: o valor 4.0 é
+Quando o `main` chama `preco_corrida(4.0)`, o valor 4.0 é
 copiado para o parâmetro `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve
 15.00, e o `main` continua de onde parou, já com o resultado na mão:
 
@@ -74,13 +74,13 @@ double preco_corrida(double km) {
 // Corrida 3: R$ 11.25
 ```
 
-Repara no fluxograma: a chamada é um desvio. O programa sai do `main`, executa
+A chamada é um desvio: o programa sai do `main`, executa
 o corpo da função e **volta para o mesmo ponto**, trazendo o valor. Isso se
 repete a cada corrida:
 
 {{fluxograma}}
 
-Três vocabulários que você vai ver o tempo todo: a **definição** é o corpo
+Três termos que aparecem o tempo todo: a **definição** é o corpo
 inteiro (`double preco_corrida(double km) { ... }`); a **chamada** é o uso
 (`preco_corrida(4.0)`); o **protótipo** é só o cabeçalho com `;`. O valor que
 você passa na chamada (`4.0`) se chama **argumento**; a variável que o recebe

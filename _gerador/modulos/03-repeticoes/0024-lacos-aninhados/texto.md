@@ -5,12 +5,12 @@ imprimir o mapa, você percorre a fileira A da poltrona 1 à 5, desce para a B e
 faz tudo de novo, e assim por diante. É uma repetição **dentro** de outra.
 
 Isso é um **laço aninhado**: o corpo de um laço contém outro laço inteiro. A
-regra que faz tudo funcionar:
+regra:
 
 > a cada volta do laço **de fora**, o laço **de dentro** roda **do começo ao
 > fim**.
 
-Pense no relógio: o ponteiro dos minutos dá uma volta completa a cada hora
+É como no relógio: o ponteiro dos minutos dá uma volta completa a cada hora
 que passa. O de fora é o das horas, e o de dentro é o dos minutos.
 
 Três consequências práticas:
@@ -28,7 +28,7 @@ Três consequências práticas:
 Use nomes que digam quem é quem: `fileira` e `poltrona`, `linha` e `coluna`.
 Com `i` e `j`, a troca de um pelo outro é um erro difícil de ver.
 
-Vamos ver na prática. O desenho congela o mapa no meio do caminho: a fileira A
+O desenho congela o mapa no meio do caminho: a fileira A
 já saiu inteira (o laço de dentro deu suas 5 voltas), a B está na poltrona 3, e
 a C e a D ainda esperam a vez do laço de fora:
 
@@ -61,7 +61,7 @@ int main(void) {
 // Total: 20 lugares
 ```
 
-Repara no fluxograma: são dois losangos, cada um com a sua seta de volta. A
+No fluxograma, são dois losangos, cada um com a sua seta de volta. A
 volta pequena (de "Mostrar e poltrona++" para "poltrona <= 5?") fica **dentro** da
 volta grande (de "pula linha" para "fileira <= 'D'?"). E logo depois do Sim de
 fora vem `poltrona = 1`: é ali que o laço de dentro recomeça:

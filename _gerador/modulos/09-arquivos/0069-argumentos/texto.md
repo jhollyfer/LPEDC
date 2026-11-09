@@ -1,13 +1,13 @@
 ## 0069 · Argumentos da linha de comando
 
-Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Você poderia
-fazer um programa que pergunta "qual o total?" e "quantas pessoas?" com
-`scanf`. Mas os programas de terminal que você usa todo dia não perguntam
-nada: `git commit -m "msg"`, `cp origem destino`, `gcc -o prog prog.c`. Os dados vão
+Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Um programa
+poderia perguntar "qual o total?" e "quantas pessoas?" com `scanf`. Os
+programas de terminal que você usa todo dia não perguntam nada:
+`git commit -m "msg"`, `cp origem destino`, `gcc -o prog prog.c`. Os dados vão
 **junto do comando**, na mesma linha. São os **argumentos da linha de
 comando**.
 
-No C, eles chegam como parâmetros do `main`, que até agora você escrevia com `void`:
+No C, eles chegam como parâmetros do `main`, que até agora tinha `void`:
 
 ```c
 int main(int argc, char *argv[])
@@ -35,21 +35,22 @@ Tudo no `argv` é **texto**. O `4` chega como a string `"4"`, e
   `atoi("quatro")` devolve 0 em silêncio. Servem para testes rápidos, não para
   entrada de usuário.
 
-Duas convenções de todo programa de terminal. Mensagem de erro vai para
-**`stderr`** (`fprintf(stderr, ...)`), não para `stdout`. Assim, quem redireciona
-a saída para um arquivo (`./racha 10 2 > saida.txt`) continua vendo o erro na
-tela. E o valor do `return` do `main` é o **código de saída**: 0 quer dizer
-sucesso; qualquer outro, falha. O shell guarda esse valor em `$?`, e scripts e
-o `&&` decidem o que fazer com base nele.
+Todo programa de terminal segue duas convenções. Mensagem de erro vai para
+**`stderr`** (`fprintf(stderr, ...)`), não para `stdout`: quem redireciona a
+saída para um arquivo (`./racha 10 2 > saida.txt`) continua vendo o erro na
+tela. E o valor do `return` do `main` é o **código de saída**: 0 é sucesso,
+qualquer outro é falha. O shell guarda esse valor em `$?`, e scripts e o `&&`
+decidem o que fazer com base nele.
 
-Vamos ver na prática. O comando `./racha 187.40 4` chega ao programa como
+O comando `./racha 187.40 4` chega ao programa como
 `argc = 3` e um `argv` com três strings mais o `NULL`. O programa confere a
 quantidade, converte `argv[1]` e `argv[2]` em números e divide:
 
 {{ideia}}
 
-Salve o código como `racha.c`. Para passar argumentos com o `rodar`, escreva
-depois do nome do arquivo: `~/LPEDC/rodar racha.c 187.40 4`.
+Salve o código como `racha.c` e rode com o `rodar`, passando os argumentos
+depois do arquivo: `~/LPEDC/rodar racha.c 187.40 4`.
+
 
 ```c
 #include <stdio.h>
@@ -87,9 +88,10 @@ int main(int argc, char *argv[]) {
 // Número de pessoas inválido: quatro
 ```
 
-Repara no fluxograma: antes de qualquer conta, duas perguntas de
-desconfiança. Veio a quantidade certa de argumentos? Eles são números de
-verdade? Só no caminho verde o programa trabalha:
+Antes de qualquer conta, o fluxograma faz duas perguntas de desconfiança: veio
+a quantidade certa de argumentos, e eles são números de verdade? O programa
+só trabalha no caminho verde:
+
 
 {{fluxograma}}
 

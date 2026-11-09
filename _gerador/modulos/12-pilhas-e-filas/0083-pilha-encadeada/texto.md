@@ -9,7 +9,7 @@ A pilha do 0082 tem um teto porque mora num vetor. A saída é guardar cada item
 num **nó** alocado com `malloc`, como na lista encadeada do módulo 11. A pilha
 cresce um nó por vez e só "enche" quando acaba a memória.
 
-A pergunta que decide tudo: **o topo fica no começo ou no fim da lista?** No
+A decisão central é **onde fica o topo: no começo ou no fim da lista?** No
 começo. Inserir e remover no início de uma lista simples custa O(1): você
 mexe só no ponteiro de entrada. No fim, para remover o último você precisaria
 achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
@@ -20,10 +20,9 @@ achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
   o nó velho;
 - **vazia** = `topo == NULL`.
 
-O melhor: o [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do
-0082. Só o [`pilha.c`](0083-pilha-encadeada/pilha.c) mudou. Esse é o ganho do
-TAD: o programa do delivery do 0082 roda sem mudar uma vírgula com esta
-implementação.
+O [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do 0082. Só o
+[`pilha.c`](0083-pilha-encadeada/pilha.c) mudou, e o programa do delivery do
+0082 roda com esta implementação sem mudar uma vírgula: é o ganho do TAD.
 Por dentro, a struct agora guarda um ponteiro:
 
 ```c
@@ -62,8 +61,7 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 }
 ```
 
-Vamos ver na prática. Antes de cada edição, o valor antigo da B2 vai para a
-pilha: 1500, depois 1800, depois 2100. O último a entrar, 2100, fica no
+Antes de cada edição, o valor antigo da B2 vai para a pilha: 1500, depois 1800, depois 2100. O último a entrar, 2100, fica no
 primeiro nó, e é ele que o primeiro Ctrl+Z devolve:
 
 {{ideia}}
@@ -108,8 +106,8 @@ int main(void) {
 // Ainda dá para desfazer 1 vez(es)
 ```
 
-Repara no fluxograma do empilhar o 2100: a ordem das duas ligações importa.
-Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
+No fluxograma do empilhar o 2100, a ordem das duas ligações importa: primeiro
+o novo nó aponta para o topo antigo, só depois o topo muda:
 
 {{fluxograma}}
 
@@ -122,18 +120,18 @@ Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
 > liberada, e o AddressSanitizer acusa `heap-use-after-free`.
 
 > [!TIP]
-> **Por dentro do C:** cada nó ocupa 16 bytes: 4 do `int`, 4 de
-> **preenchimento** (*padding*) para alinhar o ponteiro e 8 do ponteiro, num
-> sistema de 64 bits. Para guardar 4 bytes de dado, você gasta 16, mais o
-> controle interno do `malloc`. O vetor do 0082 gasta 4 bytes por item, todos
-> juntos na memória, o que o cache do processador adora. A encadeada troca
-> espaço e velocidade por **não ter teto**. E todo `malloc` do empilhar
-> precisa de um `free`: é por isso que `pilha_libera` percorre a lista toda
-> antes de liberar a struct.
+> **Por dentro do C:** cada nó ocupa 16 bytes num sistema de 64 bits (4 do
+> `int`, 4 de **preenchimento** e 8 do ponteiro, como no 0076), mais o
+> controle interno do `malloc`, para guardar 4 bytes de dado. O vetor do 0082
+> gasta 4 bytes por item, todos juntos na memória, o que favorece o cache. A
+> encadeada troca espaço e velocidade por **não ter teto**. E todo `malloc` do
+> empilhar precisa de um `free`: por isso `pilha_libera` percorre a lista
+> toda antes de liberar a struct.
 
 > [!NOTE]
 > **Pergunta para você:** no programa da planilha, se o laço do Ctrl+Z
-> rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual seria o último valor de B2?
-> Siga a lista do desenho antes de rodar.
+> rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual
+> seria o último valor de B2? Siga a lista do desenho antes de rodar.
+
 
 {{pratique}}

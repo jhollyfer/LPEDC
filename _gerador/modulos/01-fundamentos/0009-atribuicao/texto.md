@@ -4,8 +4,8 @@ O bilhete único tem R$ 20,00. Você recarrega R$ 30,00, pega dois ônibus de
 R$ 4,40 e o validador conta as viagens. O saldo não é recalculado do zero a
 cada passo: ele é **atualizado**, somando ou tirando do valor que já está lá.
 
-O `=` do C não é o "igual" da matemática: é "guarde o valor da direita na
-variável da esquerda". Por isso `saldo = saldo + 30.00` faz sentido: calcula
+No C, `=` quer dizer "guarde o valor da direita na variável da esquerda", e
+não o "igual" da matemática. Por isso `saldo = saldo + 30.00` faz sentido: calcula
 com o valor antigo e escreve o novo por cima. Do lado esquerdo só pode ficar
 algo que tem endereço, uma variável; `30 = saldo` e `saldo + 1 = 5` não
 compilam.
@@ -32,12 +32,11 @@ aparece quando o valor é **usado** na mesma expressão:
 - **pós** (`x++`): a expressão vale o valor **antigo**, e depois `x` aumenta;
 - **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
 
-E um detalhe que explica muita coisa: a atribuição também é uma expressão, e
-vale o valor guardado. E ela associa **da direita para a esquerda**, ao
+A atribuição também é uma expressão, e vale o valor guardado. Ela associa **da direita para a esquerda**, ao
 contrário dos aritméticos. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
 que vale 7, depois `b = 7` e por fim `a = 7`.
 
-Vamos ver na prática. O saldo passa por quatro valores, cada um calculado a
+O saldo passa por quatro valores, cada um calculado a
 partir do anterior, na mesma caixinha. As viagens sobem de um em um:
 
 {{ideia}}
@@ -69,9 +68,9 @@ int main(void) {
 // antes = 2, depois = 4, viagens = 4
 ```
 
-Repara no fluxograma: cada atualização é um retângulo, e todos mexem nas
-mesmas duas variáveis. No módulo 03 esses passos repetidos vão virar uma
-repetição; o `+=` e o `++` são o coração de todo contador e acumulador:
+Cada atualização é um retângulo, e todos mexem nas mesmas duas variáveis. No
+módulo 03 esses passos repetidos viram um laço, e o `+=` e o `++` passam a
+fazer o papel de contador e acumulador:
 
 {{fluxograma}}
 

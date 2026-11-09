@@ -3,21 +3,21 @@
 # Módulo 11 · Listas
 
 Até aqui você guardou coleções em vetores: tamanho fixo, itens lado a lado,
-acesso instantâneo pelo índice. Mas quase nunca você sabe de antemão quantos
-itens vão chegar. Este módulo começa resolvendo isso: você constrói o vetor
-que cresce sozinho, dobrando de tamanho quando enche.
+acesso instantâneo pelo índice. Só que quase nunca você sabe de antemão
+quantos itens vão chegar. Por isso o módulo começa pelo vetor que cresce
+sozinho, dobrando de tamanho quando enche.
 
-Depois vem a primeira estrutura de dados de verdade feita só de ponteiros: a
+Depois vem a primeira estrutura de dados feita só de ponteiros: a
 **lista encadeada**. Cada item mora num pedaço separado do heap e sabe onde
 está o próximo. Você troca o acesso direto pela liberdade de inserir e
 remover sem empurrar ninguém. Vai fazer busca, remoção, inserção em ordem, a
 lista dupla (que anda para os dois lados) e a circular (que não tem fim).
 
-A mudança na cabeça é parar de pensar em posições e começar a pensar em
-**setas**. Toda operação de lista é "quem aponta para quem, antes e depois".
-Por isso o conselho do módulo inteiro é um só: desenhe os nós e as setas no
-papel antes de escrever o código. E rode tudo com o `rodar`: com ponteiros, o
-AddressSanitizer vira o seu melhor amigo.
+A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
+"quem aponta para quem, antes e depois". Por isso o conselho do módulo
+inteiro é desenhar os nós e as setas no papel antes de escrever o código. E
+rode tudo com o `rodar`: com ponteiros, o AddressSanitizer pega o que o olho
+deixa passar.
 
 ## O que você vai aprender
 
@@ -29,45 +29,25 @@ AddressSanitizer vira o seu melhor amigo.
 - usar a **lista circular** para rodízios, guardando o ponteiro para o último nó
 - juntar tudo num **TAD playlist** com arquivo, callbacks e tipo opaco
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   nós e as setas.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores. As funções da
-   estrutura ficam no `lista.h` e no `lista.c` da pasta do assunto: abra os
-   dois.
-3. Siga o **fluxograma** com o dedo: é o caminho que a operação faz.
-4. Rode os exemplos. Mude um valor, apague uma linha de propósito e veja o
-   AddressSanitizer reclamar.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, o nó que vai embora.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
+Nos desenhos, vermelho marca o nó que vai embora.
 
 Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`
 (módulo 07), structs e `->` (módulo 08) e no padrão TAD (assunto 0074). Se
 `No **inicio` ainda assusta, releia o assunto 0049 antes do 0077.
 
 Cada pasta de assunto traz um `lista.h` (a interface) e um `lista.c` (a
-implementação). O `rodar` compila o `lista.c` junto com o exemplo ou o
-exercício automaticamente, porque ele está na mesma pasta:
+implementação): abra os dois junto com o exemplo. O `rodar` compila o
+`lista.c` junto com o exemplo ou o exercício, porque ele está na mesma pasta:
 
 ```bash
 ~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
 ```
 
-Por isso, nos exercícios, não dê às suas funções o mesmo nome de uma função
-do `lista.c` (como `lista_imprime`): o ligador reclamaria de nome repetido.
+Nos exercícios, então, não dê às suas funções o mesmo nome de uma função do
+`lista.c` (como `lista_imprime`): o ligador reclamaria de nome repetido.
 Os exercícios que usam outra estrutura trazem tudo no próprio arquivo.
 
 > [!NOTE]
@@ -94,34 +74,35 @@ Você vai passar o fim de semana na praia e quer anotar cada despesa da
 viagem: o café, o estacionamento, o almoço. Quantas serão? Não dá para saber.
 Um `int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101.
 
-A saída é um vetor que cresce sob demanda: ele começa com uma folga e,
-quando a folga acaba, pede um vetor maior e copia tudo. É o que toda
-biblioteca de "lista que cresce sozinha" faz por baixo, e é o que você vai
-escrever agora.
+A saída é um vetor que cresce sob demanda: começa com uma folga e, quando a
+folga acaba, pede um vetor maior e copia tudo. Toda biblioteca de "lista que
+cresce sozinha" faz isso por baixo, e você vai escrever a sua.
 
 Uma **lista sequencial** (também chamada de **lista em vetor**) guarda os
 itens lado a lado, num vetor contínuo, na ordem em que estão na lista. Para
 ela crescer, você controla três coisas: o endereço do vetor no heap (`itens`),
 quantos itens estão em uso (`tam`) e quantos cabem (`cap`). Enquanto
-`tam < cap`, inserir no fim é só escrever em `itens[tam]`.
+`tam < cap`, inserir no fim é escrever em `itens[tam]`.
 
 Quando `tam == cap`, o vetor está cheio. Aí entra o `realloc` (assunto 0055):
-ele pede um bloco maior, copia os itens e devolve o bloco antigo. A pergunta
-é: maior quanto? A resposta clássica é **dobrar a capacidade**. Você vai ver
-no "Por dentro do C" por que crescer de um em um é uma péssima ideia.
+ele pede um bloco maior, copia os itens e devolve o bloco antigo. Maior
+quanto? A resposta clássica é **dobrar a capacidade**; o "Por dentro do C"
+mostra por que crescer de um em um sai caro.
 
 O pacote todo vira um **TAD** (assunto 0074): `lista.h` diz **o que** a lista
 faz e `lista.c` diz **como**. A `struct lista` fica escondida no `.c`, então
 quem usa a lista nunca mexe em `tam` na mão. O `rodar` compila o `lista.c`
-junto com o exemplo, porque ele está na mesma pasta.
+junto, como explica o começo do módulo.
 
-Vamos ver na prática. A lista começa com espaço para 2 despesas. A 3ª dobra
+
+A lista do exemplo começa com espaço para 2 despesas. A 3ª dobra
 para 4 e a 5ª, o R$ 27, encontra o vetor cheio de novo: o `realloc` dobra
 para 8, copia os quatro valores e ainda sobram três vagas:
 
 <p align="center"><img src="11-listas/0075-vetor-dinamico/ideia.svg" alt="Diagrama da ideia: Vetor dinâmico" width="858"></p>
 
-O coração do `lista.c` é a função que garante espaço antes de cada inserção:
+A peça central do `lista.c` é a função que garante espaço antes de cada
+inserção:
 
 ```c
 struct lista {
@@ -188,8 +169,8 @@ int main(void) {
 // total: R$ 132
 ```
 
-Repara no fluxograma: a pergunta "está cheio?" vem antes de escrever. No caso
-do 27 a resposta é Sim, o vetor dobra e só depois o valor entra em
+No fluxograma, a pergunta "está cheio?" vem antes de escrever. No caso do 27
+a resposta é Sim, o vetor dobra e só depois o valor entra em
 `itens[4]`. Se o `realloc` falhar, a função avisa com `false` e a lista
 continua inteira:
 
@@ -197,12 +178,12 @@ continua inteira:
 
 O preço do vetor aparece quando você insere ou remove **no meio**: todo mundo
 que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
-(o exemplo A150 mostra). Ler a posição
-`i`, por outro lado, é instantâneo: `itens[i]` é uma conta de endereço.
+(o exemplo A150 mostra). Já ler a posição `i` é instantâneo: `itens[i]` é uma
+conta de endereço.
 
 > [!WARNING]
-> Guardar o **endereço** de um item e depois inserir é pedir um ponteiro
-> solto: `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
+> Guardar o **endereço** de um item e depois inserir deixa um ponteiro solto:
+ `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
 > pode ter devolvido. Guarde a **posição** (o índice), nunca o endereço. E
 > nunca escreva `l->itens = realloc(l->itens, ...)` direto: se o `realloc`
 > devolver `NULL`, você perde o único endereço do bloco antigo.
@@ -564,11 +545,11 @@ alternando com 1/4: 1 realloc
 Abra o extrato do Pix no app do banco: o mais recente aparece em cima. Cada
 Pix novo entra na frente, e ninguém precisa empurrar os antigos para baixo.
 No vetor do assunto anterior, inserir na posição 0 faria todos andarem uma
-casa. Existe um jeito em que ninguém anda.
+casa. A lista encadeada evita isso.
 
 Uma **lista encadeada** (no Cormen, **lista ligada**) guarda cada item num
 pedaço separado de memória, o **nó**. Além do valor, cada nó guarda o endereço
-do próximo. O último aponta para `NULL`. Para usar a lista, você só precisa do
+do próximo. O último aponta para `NULL`. Para usar a lista, basta o
 endereço do primeiro nó, o **início** (o `L.head` do Cormen). Lista vazia é
 `inicio == NULL`.
 
@@ -582,7 +563,7 @@ typedef struct no {
 } No;
 ```
 
-Repare no `struct no *prox` dentro da própria `struct no`. Uma struct não pode
+O `struct no *prox` fica dentro da própria `struct no`. Uma struct não pode
 conter a si mesma (teria tamanho infinito), mas pode conter um **ponteiro**
 para si mesma: um ponteiro tem sempre 8 bytes, aponte para o que apontar.
 
@@ -597,7 +578,7 @@ Três operações formam a base, e todas estão no `lista.c` desta pasta:
   início e devolve o novo nó, que passa a ser o início. É O(1): não importa o
   tamanho da lista.
 - **percorrer**: `for (p = inicio; p != NULL; p = p->prox)`. É o "for de
-  lista", e você vai escrever ele mil vezes.
+  lista", que aparece em quase toda função daqui em diante.
 - **liberar**: um `free` por nó, guardando o próximo **antes** do `free`.
 
 Inserir no **fim** é outra conversa: guardando só o início, é preciso andar
@@ -618,10 +599,10 @@ No *lista_insere_inicio(No *inicio, int valor) {
 ```
 
 Aqui a struct do nó fica no `lista.h`, à vista, de propósito: o assunto é
-justamente mexer em `p->valor` e `p->prox`. Na pilha e na fila (módulo 12) ela
+mexer em `p->valor` e `p->prox`. Na pilha e na fila (módulo 12) ela
 volta a ficar escondida no `.c`.
 
-Vamos ver na prática. Chegam quatro Pix: R$ 20, 45, 10 e 80. Cada um entra na
+No exemplo, chegam quatro Pix: R$ 20, 45, 10 e 80. Cada um entra na
 frente, então o extrato mostra o 80 primeiro. Embaixo, a mesma lista como ela
 está de verdade no heap: endereços fora de ordem, com outros dados no meio, e
 cada nó guardando o endereço do próximo:
@@ -657,27 +638,28 @@ int main(void) {
 // 4 Pix, total R$ 155
 ```
 
-Repara no fluxograma: percorrer é um laço que pergunta "ainda tem nó?" antes
-de cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
+Percorrer, no fluxograma, é um laço que pergunta "ainda tem nó?" antes de
+cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
 `NULL`. Aí o laço para, com o total em R$ 155:
 
 <p align="center"><img src="11-listas/0076-lista-encadeada/fluxograma.svg" alt="Fluxograma: Lista encadeada" width="543"></p>
 
 > [!WARNING]
 > `lista_insere_inicio(extrato, 20);` sozinho, sem o `extrato =` na frente,
-> compila sem aviso e está errado. A função devolve o novo início, e você
-> jogou fora. O `extrato` continua apontando para o nó antigo (ou para
+> compila sem aviso e está errado. A função devolve o novo início, e ele foi
+> jogado fora. O `extrato` continua apontando para o nó antigo (ou para
 > `NULL`), e o nó novo vira vazamento. Toda função que pode mudar o início
 > devolve o início novo, e você **sempre** guarda: `extrato =
-> lista_insere_inicio(extrato, 20);`. No `libera`, o erro clássico é o
-> contrário: ler `p->prox` depois de `free(p)`.
+> lista_insere_inicio(extrato, 20);`. No `libera`, o erro comum é outro: ler
+> `p->prox` depois de `free(p)`.
 
 > [!TIP]
 > **Por dentro do C:** num PC de 64 bits, `sizeof(No)` é 16: 4 bytes do `int`,
 > 4 de **preenchimento** (o ponteiro precisa começar num endereço múltiplo de
 > 8) e 8 do ponteiro. E cada `malloc` ainda gasta uns 16 bytes de controle.
 > Guardar 4 inteiros numa lista custa umas 8 vezes mais memória que num
-> vetor. E tem o **cache**: o processador lê a memória em blocos de 64 bytes.
+> vetor. E há o **cache**: o processador lê a memória em blocos de 64 bytes.
+
 > No vetor, ler `itens[0]` já traz os vizinhos de brinde. Na lista, cada nó
 > pode estar longe do anterior. Percorrer a lista é O(n), igual ao vetor, mas
 > na prática bem mais lento.
@@ -985,12 +967,12 @@ um só:  7 -> NULL
 ## 0077 · Busca e remoção
 
 Sábado de manhã, barbearia lotada. Cada cliente pega uma senha e o barbeiro
-anota numa lista: 31, 17, 42, 8. Aí o 42 cansa de esperar e vai embora. Ele
-sai do meio da fila, e ninguém precisa trocar de cadeira: basta o 17 passar
-a ter o 8 como próximo.
+anota numa lista: 31, 17, 42, 8. O 42 cansa de esperar e vai embora. Ele sai
+do meio da fila e ninguém troca de cadeira: o 17 passa a ter o 8 como
+próximo.
 
-**Buscar** numa lista encadeada é percorrer até achar. Não existe atalho: sem
-acesso direto, a busca é sempre sequencial, O(n). A função devolve o
+**Buscar** numa lista encadeada é percorrer até achar. Sem acesso direto, a
+busca é sempre sequencial, O(n). A função devolve o
 **endereço do nó** (ou `NULL` se não achou), e com ele você lê ou até muda o
 valor:
 
@@ -1004,7 +986,7 @@ No *lista_busca(No *inicio, int valor) {
 }
 ```
 
-**Remover** pede um cuidado a mais. Para tirar o nó `p`, quem aponta para ele
+**Remover** pede mais cuidado. Para tirar o nó `p`, quem aponta para ele
 precisa passar a apontar para o seguinte. E quem aponta para `p` é o nó
 **anterior**, que numa lista simples não tem caminho de volta. A saída é
 percorrer com **dois ponteiros**: `ant` anda sempre um passo atrás de `p`.
@@ -1018,8 +1000,8 @@ Achado o nó, há dois casos:
 Nos dois casos, só depois de religar vem o `free(p)`. Como remover o primeiro
 muda o início e a função ainda quer devolver se achou ou não, ela recebe o
 **endereço** do início: `No **inicio` (ponteiro para ponteiro, assunto 0049).
-No assunto anterior a inserção devolvia o início novo. São os dois estilos que
-você vai encontrar por aí.
+No assunto anterior, a inserção devolvia o início novo; os dois estilos são
+comuns.
 
 ```c
 bool lista_remove(No **inicio, int valor) {
@@ -1040,9 +1022,9 @@ bool lista_remove(No **inicio, int valor) {
 }
 ```
 
-Vamos ver na prática. Para tirar o 42, o laço para com `p` no 42 e `ant` no
-17. Uma única atribuição desvia a seta do 17 para o 8, e o nó do 42, que
-ninguém mais aponta, volta para o heap:
+Para tirar o 42, o laço para com `p` no 42 e `ant` no 17. Uma atribuição
+desvia a seta do 17 para o 8, e o nó do 42, para o qual ninguém mais aponta,
+volta para o heap:
 
 <p align="center"><img src="11-listas/0077-lista-busca-remocao/ideia.svg" alt="Diagrama da ideia: Busca e remoção" width="858"></p>
 
@@ -1084,13 +1066,13 @@ int main(void) {
 // senha 99: não está na fila
 ```
 
-Repara no fluxograma: o laço anda até achar o 42 ou a lista acabar. Achou, e
-como `ant` não é `NULL` (é o 17), o caminho vai pelo `ant->prox = p->prox`.
+O laço do fluxograma anda até achar o 42 ou a lista acabar. Achou, e como
+`ant` não é `NULL` (é o 17), o caminho vai pelo `ant->prox = p->prox`.
 Na remoção do 31, o caminho seria o outro, `início = p->prox`:
 
 <p align="center"><img src="11-listas/0077-lista-busca-remocao/fluxograma.svg" alt="Fluxograma: Busca e remoção" width="733"></p>
 
-O exemplo A154 mostra um truque para sumir com o caso especial: o
+O exemplo A154 mostra como sumir com o caso especial: o
 **nó-cabeça**, um nó "de mentira" no começo. Com ele, todo nó de verdade tem
 um anterior, e o primeiro deixa de ser especial. O Cormen leva a ideia mais
 longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
@@ -1111,8 +1093,9 @@ longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
 > `ant`: um `No **pp` que começa em `inicio` e anda com `pp = &(*pp)->prox`
 > aponta sempre para "o lugar que aponta para o nó atual", seja a `fila`, seja
 > o `prox` de alguém. A remoção vira `No *p = *pp; *pp = p->prox; free(p);`,
-> sem `if`. E repare no custo: religar é O(1), sem deslocar nada como no
-> vetor. O que custa O(n) é achar o nó.
+> sem `if`. Quanto ao custo, religar é O(1), sem deslocar nada como no vetor.
+> O que custa O(n) é achar o nó.
+
 
 > [!NOTE]
 > **Pergunta para você:** se a lista fosse `42 -> 17 -> 42 -> 8` e você
@@ -1478,8 +1461,8 @@ NULL
 A recepcionista da clínica atende o telefone o dia todo. Um paciente marca
 às 14:30, outro às 9:00, outro às 16:00, outro às 10:15. As ligações chegam
 fora de ordem, mas a agenda na tela tem que estar sempre em ordem de horário.
-Ordenar tudo de novo a cada ligação seria desperdício. Melhor: cada marcação
-nova já entra no lugar certo.
+Ordenar tudo de novo a cada ligação seria desperdício: cada marcação nova já
+entra no lugar certo.
 
 Uma **lista ordenada** mantém os nós em ordem a cada inserção. A
 **inserção ordenada** anda pela lista com o par `ant`/`p` do assunto anterior,
@@ -1494,7 +1477,7 @@ Encaixar é religar duas setas, nesta ordem:
 
 Se `ant` for `NULL`, o novo é o menor de todos e vira o início. Não existe
 caso especial para o fim: com `p == NULL`, o passo 1 grava `NULL` no
-`novo->prox`, e é exatamente isso que o último precisa.
+`novo->prox`, que é o que o último precisa.
 
 ```c
 No *lista_insere_ordenado(No *inicio, int valor) {
@@ -1518,15 +1501,15 @@ A ordem também ajuda na **busca**: procurando um valor numa lista crescente,
 dá para desistir assim que passar dele. Procurando 11:00, a busca para no
 14:30, porque dali para frente só tem horário mais tarde.
 
-Vamos ver na prática. A agenda já tem 09:00, 14:30 e 16:00. Chega a ligação
-das 10:15. O laço passa pelo 09:00 (menor) e para no 14:30, porque `14:30 <
+A agenda do exemplo já tem 09:00, 14:30 e 16:00 quando chega a ligação das
+10:15. O laço passa pelo 09:00 (menor) e para no 14:30, porque `14:30 <
 10:15` é falso. O novo nó primeiro aponta para o 14:30 e depois o 09:00 passa
 a apontar para ele:
 
 <p align="center"><img src="11-listas/0078-lista-ordenada/ideia.svg" alt="Diagrama da ideia: Lista ordenada" width="858"></p>
 
 O horário vira um `int` no formato hhmm (1430 é 14:30), e uma função do
-próprio exemplo mostra bonito na tela:
+próprio exemplo formata a saída:
 
 ```c
 #include <stdio.h>
@@ -1563,22 +1546,21 @@ int main(void) {
 // 11:00 livre
 ```
 
-Repara no fluxograma: o laço roda uma vez (passa pelo 09:00) e sai pelo Não no
+No fluxograma, o laço roda uma vez (passa pelo 09:00) e sai pelo Não no
 14:30. Como `ant` aponta para o 09:00, o caminho termina em `ant->prox =
 novo`. A ligação das 9:00, lá atrás, tinha ido pelo outro lado: `ant == NULL`,
 e o novo virou o início:
 
 <p align="center"><img src="11-listas/0078-lista-ordenada/fluxograma.svg" alt="Fluxograma: Lista ordenada" width="575"></p>
 
-O critério de ordem é só a comparação do `while`. Troque `p->valor < valor`
+O critério de ordem está todo na comparação do `while`. Troque `p->valor < valor`
 por `strcmp(p->nome, nome) < 0` e a mesma inserção monta uma lista em ordem
 alfabética (exemplo A156).
 
 > [!WARNING]
-> O caso que todo mundo esquece é o **novo menor que todos**. O laço nem
-> roda, `ant` fica `NULL`, e um `ant->prox = novo` sem o `if` derruba o
-> programa. Teste sempre três inserções: no começo, no meio e no fim. E
-> atenção ao `<` contra `<=`: com `<`, um valor repetido entra **antes** dos
+> O caso mais esquecido é o **novo menor que todos**. O laço nem roda, `ant`
+> fica `NULL`, e um `ant->prox = novo` sem o `if` derruba o programa. Teste
+> três inserções: no começo, no meio e no fim. E atenção ao `<` contra `<=`: com `<`, um valor repetido entra **antes** dos
 > iguais; com `<=`, entra **depois**, e os iguais ficam na ordem de chegada.
 
 > [!TIP]
@@ -1587,7 +1569,8 @@ alfabética (exemplo A156).
 > custa O(n²). E a busca, mesmo parando cedo, continua O(n): não dá para
 > fazer busca binária numa lista, porque chegar no meio exige andar n/2 nós.
 > No vetor ordenado é o contrário: a busca binária é O(log n), mas inserir
-> desloca até n itens. Cada estrutura cobra num lugar diferente.
+> desloca até n itens.
+
 
 > [!NOTE]
 > **Pergunta para você:** inserindo 50, 40, 30, 20 e 10, nesta ordem, quantas
@@ -1921,8 +1904,8 @@ depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
 Na Estrada de Ferro Carajás, um trem de minério para no pátio de manobras.
 O terceiro vagão, com 87 toneladas, está com o freio travado e precisa sair.
 O manobrista vai direto até ele, solta o engate da frente e o de trás, e
-engata o segundo vagão no quarto. Ele não precisa voltar até a locomotiva
-para descobrir quem vem antes do vagão quebrado: ele está vendo.
+engata o segundo vagão no quarto. Não precisa voltar até a locomotiva para
+descobrir quem vem antes do vagão quebrado: está vendo.
 
 Na lista simples, o nó só conhece o próximo. Para remover um nó, você
 precisa do anterior, e achar o anterior custa percorrer desde o início. Na
@@ -1935,8 +1918,8 @@ próximo) e `ant` (o anterior). Com isso:
 - dá para remover um nó conhecendo **só ele**, em O(1);
 - guardando também o ponteiro para o **último** nó, inserir no fim vira O(1).
 
-Por isso a lista desta pasta não é só um `No *`. Ela é uma struct que guarda
-as duas pontas e o tamanho, e que pode morar numa variável do `main`:
+Por isso a lista desta pasta não é um `No *` solto, e sim uma struct que
+guarda as duas pontas e o tamanho e pode morar numa variável do `main`:
 
 ```c
 typedef struct no {
@@ -1954,7 +1937,7 @@ typedef struct {
 
 A lista dupla tem uma regra que nunca pode quebrar: para todo nó `p` que não
 é o último, `p->prox->ant == p`. Toda operação mexe nas setas **aos pares**,
-e esquecer uma delas é o erro clássico.
+e o erro mais comum é esquecer uma delas.
 
 Remover o nó `p` é desviar as duas setas que chegam nele, cada uma com o seu
 caso de borda:
@@ -1970,7 +1953,7 @@ void lista_remove_no(Lista *l, No *p) {
 }
 ```
 
-Vamos ver na prática. O trem tem os vagões de 98, 105, 87 e 110 toneladas.
+O trem do exemplo tem os vagões de 98, 105, 87 e 110 toneladas.
 Com `p` no vagão de 87, a seta de cima faz o 105 apontar para o 110, e a de
 baixo faz o 110 apontar de volta para o 105. Ninguém precisou ser procurado:
 
@@ -2013,8 +1996,7 @@ int main(void) {
 // do fim:        110 <-> 105 <-> 98
 ```
 
-Repara no fluxograma: são duas perguntas independentes, uma para cada
-ponta. O vagão de 87 tem anterior e tem seguinte, então o caminho passa pelos
+O fluxograma faz duas perguntas independentes, uma para cada ponta. O vagão de 87 tem anterior e tem seguinte, então o caminho passa pelos
 dois Não. Para remover o primeiro vagão, a primeira pergunta daria Sim; para
 o último, a segunda:
 
@@ -2027,8 +2009,9 @@ fazer um controle remoto com "canal seguinte" e "canal anterior".
 > [!WARNING]
 > Lista dupla com uma seta faltando **parece certa**. Se a inserção esquecer o
 > `ant`, andar para frente funciona e só o caminho de volta sai errado, às
-> vezes muito depois, em outra parte do programa. Teste sempre imprimindo
-> **nos dois sentidos**. E na remoção, os dois casos de borda são
+> vezes muito depois, em outra parte do programa. Teste imprimindo **nos dois
+> sentidos**.
+ E na remoção, os dois casos de borda são
 > obrigatórios: `p->ant->prox` com `p` no primeiro nó é acessar `NULL`, e
 > esquecer de atualizar o `fim` deixa ele apontando para memória liberada.
 
@@ -2374,21 +2357,20 @@ struct letra { char c; struct letra *ant, *prox; }).
 
 Na churrascaria de rodízio, o garçom da pizza passa de mesa em mesa: 3, 7,
 12, 15. Quando serve a última, ele não para: volta para a mesa 3 e começa
-outra rodada. Para ele, não existe "fim da fila". Existe só "a próxima mesa".
+outra rodada. Para ele, não existe "fim da fila", só "a próxima mesa".
 
 Uma **lista circular** é uma lista encadeada em que o último nó, em vez de
 apontar para `NULL`, aponta de volta para o **primeiro**. Os nós formam um
-anel. Ela serve para tudo que é rodízio: a vez de cada jogador num jogo de
+anel. Ela serve para qualquer rodízio: a vez de cada jogador num jogo de
 tabuleiro, a playlist no "repetir tudo", os programas que dividem a CPU, o
 revezamento de motoristas numa viagem. Na lista dupla, o círculo fecha nos
 dois sentidos: o `ant` do primeiro aponta para o último. É a forma que o
 Cormen usa, com uma sentinela no meio do anel (assunto 0174).
 
-Num anel, qual nó você guarda? A escolha esperta é guardar o **último**. Dele
-você chega às duas pontas em um passo: o último é `ultimo` e o primeiro é
-`ultimo->prox`. Com isso, inserir no início **e** no fim custa O(1). Inserir
-no fim é até mais curioso: é inserir no início e dizer que o novo é o
-último.
+Num anel, convém guardar o ponteiro para o **último** nó. Dele você chega às
+duas pontas em um passo: o último é `ultimo` e o primeiro é `ultimo->prox`.
+Com isso, inserir no início **e** no fim custa O(1). Inserir no fim é inserir
+no início e declarar que o novo é o último.
 
 ```c
 No *lista_insere_inicio(No *ultimo, int valor) {
@@ -2406,14 +2388,14 @@ No *lista_insere_fim(No *ultimo, int valor) {
 }
 ```
 
-Percorrer muda de cara. Não tem `NULL` para avisar que acabou: você para
-quando **voltar ao ponto de partida**. Como o primeiro passo já começa no
+Percorrer muda. Não há `NULL` para avisar que acabou: você para quando
+**voltar ao ponto de partida**. Como o primeiro passo já começa no
 ponto de partida, o laço certo é o **do-while** (assunto 0021): ele roda o
 corpo uma vez antes de testar. E a lista vazia (`ultimo == NULL`) precisa ser
 tratada antes, porque não tem por onde começar.
 
-Vamos ver na prática. As quatro mesas formam o anel, o ponteiro da lista
-fica na mesa 15 (a última) e a mesa 3 é `ultimo->prox`. O garçom serve 6
+No exemplo, as quatro mesas formam o anel, o ponteiro da lista fica na mesa
+15 (a última) e a mesa 3 é `ultimo->prox`. O garçom serve 6
 vezes seguidas sem testar nada, porque sempre existe uma próxima:
 
 <p align="center"><img src="11-listas/0080-lista-circular/ideia.svg" alt="Diagrama da ideia: Lista circular" width="902"></p>
@@ -2451,14 +2433,14 @@ int main(void) {
 // 3 -> 7 -> 15 -> (volta ao 3)
 ```
 
-Repara no fluxograma do `lista_imprime`: a pergunta da lista vazia vem
+O fluxograma é o do `lista_imprime`, e a pergunta da lista vazia vem
 primeiro. Depois, `p` começa na mesa 3 e o laço mostra, anda e só então
 pergunta "já voltei ao primeiro?". Com as 4 mesas, a resposta é Não três
 vezes e Sim na quarta:
 
 <p align="center"><img src="11-listas/0080-lista-circular/fluxograma.svg" alt="Fluxograma: Lista circular" width="602"></p>
 
-O clássico da lista circular é o **problema de Josephus**: pessoas em roda, e
+O problema clássico da lista circular é o **problema de Josephus**: pessoas em roda, e
 a cada k passos uma sai. Quem sobra? O exemplo A160 resolve com a batata
 quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
@@ -2473,11 +2455,12 @@ quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
 > [!TIP]
 > **Por dentro do C:** o nó é o mesmo da lista simples, 16 bytes. Não há
-> custo de memória a mais: o círculo é só o último `prox` apontando para um
-> endereço em vez de `NULL`. Os truques vêm de graça: **girar** a roda é
+> custo de memória a mais: o círculo é o último `prox` apontando para um
+> endereço em vez de `NULL`. E duas operações saem de graça: **girar** a roda é
 > mudar um ponteiro (`ultimo = ultimo->prox`), sem mexer em nó nenhum; e
 > **juntar** duas listas circulares é trocar dois ponteiros, O(1). O
-> escalonador de um sistema operacional faz exatamente isso: o processo da
+> escalonador de um sistema operacional faz isso:
+ o processo da
 > frente roda um pouquinho e, se não terminou, a roda gira.
 
 > [!NOTE]
@@ -2809,7 +2792,7 @@ escala: 101 102 103 104
 
 Viagem de carro, celular no painel, a playlist tocando. Alguém pula duas
 músicas, outra pessoa tira aquela que ninguém aguenta mais, e quando a última
-acaba, o modo "repetir tudo" volta para a primeira. Por trás desse player tem
+acaba, o modo "repetir tudo" volta para a primeira. Por trás desse player está
 quase tudo deste módulo: uma lista dupla (anterior e próxima), busca e
 remoção pelo título, um cursor que anda e, no repetir, a volta da lista
 circular.
@@ -2847,12 +2830,11 @@ const Musica *playlist_proxima(Playlist *p) {
 }
 ```
 
-Repare que a lista **não** é circular de verdade: o último `prox` continua
-`NULL`. A volta é uma decisão da função, ligada ou desligada por um `bool`.
+A lista **não** é circular de verdade: o último `prox` continua `NULL`. A volta é uma decisão da função, ligada ou desligada por um `bool`.
 Assim o resto do código (imprimir, liberar, salvar) continua com o `for` de
 sempre, sem risco de laço infinito.
 
-Vamos ver na prática. A playlist começa com cinco músicas e 20:01 no total.
+A playlist do exemplo começa com cinco músicas e 20:01 no total.
 Pulando duas, toca a terceira. Depois a "Asa Branca" sai, a playlist chega na
 última e, com o repetir ligado, a próxima volta para "Aquarela":
 
@@ -2902,7 +2884,7 @@ int main(void) {
 // anterior: Tempo Perdido
 ```
 
-Repara no fluxograma da `playlist_proxima`: tocando "Tempo Perdido", não há
+O fluxograma segue a `playlist_proxima`. Tocando "Tempo Perdido", não há
 próxima. Na primeira tentativa o repetir está desligado e a função devolve
 `NULL` ("fim da playlist"). Na segunda, ligado, o caminho é o verde: o
 `atual` volta para o início:
@@ -2919,8 +2901,8 @@ contar as músicas longas.
 > playlist cheia. Com o repetir desligado na última música, o mesmo código
 > acessa `NULL`. Em código de verdade, guarde o ponteiro e teste. E copie
 > texto com `snprintf(destino, sizeof destino, "%s", origem)`: um título
-> maior que 39 caracteres é cortado em vez de estourar o vetor, coisa que o
-> `strcpy` faria sem pensar duas vezes.
+> maior que 39 caracteres é cortado em vez de estourar o vetor, como faria o
+> `strcpy`.
 
 > [!TIP]
 > **Por dentro do C:** a `Musica` tem 40 + 30 bytes de texto, 2 de
@@ -2929,9 +2911,10 @@ contar as músicas longas.
 > `sizeof(Faixa)` dá 96 bytes. O
 > `const Musica *` que as funções devolvem aponta para **dentro** da faixa,
 > no heap. Ele vale enquanto a música existir: depois de
-> `playlist_remove` daquela música, é um ponteiro solto. É a mesma regra do
-> vetor dinâmico (0075), em outra roupa: quem empresta um endereço de dentro
-> da estrutura precisa dizer até quando ele vale.
+> `playlist_remove` daquela música, é um ponteiro solto. Vale a regra do
+> vetor dinâmico (0075): quem empresta um endereço de dentro da estrutura
+> precisa dizer até quando ele vale.
+
 
 > [!NOTE]
 > **Pergunta para você:** se o exemplo chamasse `playlist_remove(viagem,
@@ -3398,7 +3381,7 @@ refez 1:     v1 v2 v3 [v5]
 Dica: no `digita`, libere todos os nós depois do cursor, faça
 `cursor->prox = NULL` e `fim = cursor`, e só então insira no fim. É o
 comportamento de todo editor: depois de editar, o "refazer" some. Esquecer os
-`free` desses nós é vazamento clássico, e o `rodar` acusa.
+`free` desses nós é vazamento, e o `rodar` acusa.
 
 </details>
 
@@ -3451,7 +3434,7 @@ bloco incompleto também é invertido).
 
 Aplique a inversão do E456 em pedaços: inverta 3 nós, guardando o primeiro
 do bloco (que vira o último) e o início do resto. Ligue o fim do bloco
-invertido ao resultado da inversão do resto. Fica elegante com recursão:
+invertido ao resultado da inversão do resto. Com recursão fica curto:
 `inverte_k(inicio)` inverte os 3 primeiros e faz
 `primeiro_do_bloco->prox = inverte_k(resto)`.
 
@@ -4985,7 +4968,8 @@ na pessoa seguinte à que saiu. Quem sobra?
 
 **C.** Saem, na ordem, 3, 6, 2, 7, 5 e 1, e sobra a pessoa 4. É o problema de
 Josephus com n = 7 e k = 3; a fórmula J(n) = (J(n − 1) + k) % n, com J(1) = 0,
-dá J(7) = 3, ou seja, a pessoa 4. Veja 0080 (exemplo A160) e o desafio 10.
+dá J(7) = 3, que é a pessoa 4.
+ Veja 0080 (exemplo A160) e o desafio 10.
 
 </details>
 

@@ -11,8 +11,7 @@ vezes precisar.
 No C, isso se faz com funções e com módulos (`.h` e `.c`). E dá para ver **o
 que acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
 nasce na pilha, o endereço de volta, a variável que some no `return`. Com essa
-imagem na cabeça, a **recursão** deixa de ser mágica e vira só mais uma
-chamada.
+imagem na cabeça, a **recursão** vira só mais uma chamada.
 
 No fim, o programa sai de um arquivo só: você monta **módulos** com `.h` e
 `.c`, compila cada parte separada e deixa o ligador juntar tudo. É o mesmo
@@ -25,31 +24,15 @@ formato das estruturas de dados da segunda metade do curso.
 - **escopo** e **tempo de vida**: local, global e `static`
 - a **pilha de chamadas**: o quadro de cada chamada e o stack overflow
 - **recursão**: caso base, caso recursivo e como confiar na função
-- o custo da recursão no Fibonacci, e onde ela brilha: Hanói e Euclides
+- o custo da recursão no Fibonacci e os casos em que ela compensa: Hanói e Euclides
 - **módulos** com `.h` e `.c`, include guards e compilação separada
 - **macros** e `#ifdef`, e as armadilhas da troca de texto
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro. Nos assuntos de pilha e recursão, cada caixa empilhada é
-o quadro de uma chamada, e o de cima é quem está rodando.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+Nos desenhos de pilha e recursão, cada caixa empilhada é o quadro de uma
+chamada, e a de cima é a que está rodando. Responda a **Pergunta para você**
+antes de rodar.
 
 Você precisa dos módulos 01 a 03: tipos, `printf` e `scanf`, `if`, `switch` e
 laços. Vetores ainda **não** aparecem aqui (são o módulo 05), então todos os
@@ -65,8 +48,8 @@ sudo apt install gdb        # Debian / Ubuntu
 
 Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
 `conversao.c`, `cardapio.h` e `cardapio.c`). O `rodar` compila esses `.c`
-junto com o exemplo, sozinho. O texto mostra também o comando `gcc` para fazer
-isso à mão.
+junto com o exemplo; o texto mostra também o comando `gcc` para fazer isso à
+mão.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -119,14 +102,14 @@ propriamente dita; a `void`, que só executa uma tarefa, é o **procedimento**.
 No C as duas se escrevem igual. Dividir o programa em sub-rotinas é a
 **modularização**.
 
-Tem mais um detalhe: o compilador do C lê o arquivo **de cima para
+Falta um detalhe: o compilador do C lê o arquivo **de cima para
 baixo**, uma vez só. Se o `main` chama `preco_corrida` antes de o compilador
 ter visto essa função, ele não sabe que tipo ela devolve nem quantos
 parâmetros recebe. A solução é o **protótipo**: o cabeçalho da função com `;`
 no fim, colocado antes do `main`. É uma promessa: "essa função existe, recebe
 um `double` e devolve um `double`; a definição vem depois".
 
-Vamos ver na prática. O `main` chama `preco_corrida(4.0)`: o valor 4.0 é
+Quando o `main` chama `preco_corrida(4.0)`, o valor 4.0 é
 copiado para o parâmetro `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve
 15.00, e o `main` continua de onde parou, já com o resultado na mão:
 
@@ -158,13 +141,13 @@ double preco_corrida(double km) {
 // Corrida 3: R$ 11.25
 ```
 
-Repara no fluxograma: a chamada é um desvio. O programa sai do `main`, executa
+A chamada é um desvio: o programa sai do `main`, executa
 o corpo da função e **volta para o mesmo ponto**, trazendo o valor. Isso se
 repete a cada corrida:
 
 <p align="center"><img src="04-funcoes/0028-funcoes/fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
 
-Três vocabulários que você vai ver o tempo todo: a **definição** é o corpo
+Três termos que aparecem o tempo todo: a **definição** é o corpo
 inteiro (`double preco_corrida(double km) { ... }`); a **chamada** é o uso
 (`preco_corrida(4.0)`); o **protótipo** é só o cabeçalho com `;`. O valor que
 você passa na chamada (`4.0`) se chama **argumento**; a variável que o recebe
@@ -500,7 +483,7 @@ quem chamou tem que **guardar** o retorno: `mensalidade = reajustar(...)`.
 Chamar e ignorar o retorno é permitido (você faz isso com o `printf`, que
 devolve quantos caracteres escreveu), mas aí o resultado se perde.
 
-Vamos ver na prática. A academia reajusta a mensalidade de R$ 120,00 em 10%.
+No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%.
 Há duas caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a
 do `main` e a cópia da função. A função muda só a dela para 132.00:
 
@@ -540,7 +523,7 @@ double reajustar(double mensalidade, double percentual) {
 // Guardando o retorno: 132.00
 ```
 
-Repara no fluxograma: o valor sai do `main` por cópia e só volta pelo
+O valor sai do `main` por cópia e só volta pelo
 `return`. A pergunta "guardou o retorno?" decide se o `main` fica sabendo do
 reajuste:
 
@@ -562,8 +545,8 @@ Mais três regras sobre parâmetros:
 > [!WARNING]
 > A função que "deveria" mudar a variável e não muda. O exemplo clássico é
 > `void trocar(int a, int b)` que troca `a` e `b` lá dentro: no `main`, nada
-> acontece, porque a troca foi entre as cópias. Do
-> mesmo jeito, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
+> acontece, porque a troca foi entre as cópias. Da
+> mesma forma, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
 > mexer numa variável sua, você precisa passar o **endereço** dela. É o que o
 > `&` do `scanf` faz, e você vai entender de vez no assunto 0046.
 
@@ -900,7 +883,7 @@ local do laço. Se um bloco interno declara um nome que já existe fora, o de
 dentro **esconde** o de fora até o bloco acabar. Vale sempre a declaração mais
 próxima.
 
-Vamos ver na prática. A função `chamar` tem três contadores: a global
+A função `chamar` tem três contadores: a global
 `atendidos`, a `static` `senha` e a local `vezes`. As duas primeiras moram
 numa região da memória que dura o programa inteiro; a local mora no espaço da
 chamada e some quando a função retorna. Depois de três chamadas, fica assim:
@@ -940,13 +923,13 @@ int main(void) {
 // Última senha chamada: 103
 ```
 
-Repara no fluxograma: a cada chamada, a local é criada de novo com 0, e a
+A cada chamada, a local é criada de novo com 0, e a
 `static` já está esperando com o valor anterior. Não existe um passo
 "criar senha" dentro da repetição:
 
 <p align="center"><img src="04-funcoes/0030-escopo/fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
 
-E as globais? Funcionam, mas cobram caro. **Qualquer** função do arquivo pode
+As globais funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
 qualquer lugar. A mesma chamada pode dar resultados diferentes conforme o que
 outra função fez antes. Prefira passar por parâmetro e devolver com `return`;
@@ -1312,8 +1295,7 @@ assim:
 
 Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** impressa no
 momento do erro. A função de cima estava rodando; ela foi chamada pela de
-baixo, que foi chamada pela de baixo dela. O C mostra essa pilha sem esconder
-nada.
+baixo, que foi chamada pela de baixo dela.
 
 Cada vez que uma função é chamada, o programa reserva um pedaço de memória só
 para aquela chamada: o **quadro** (em inglês, *stack frame*, ou registro de
@@ -1334,7 +1316,7 @@ outros estão parados, esperando um retorno.
 por isso que uma função não enxerga as variáveis de quem a chamou: elas estão
 noutro quadro, mais embaixo.
 
-Vamos ver na prática. Um pedido de R$ 50,00: o `main` chama
+Num pedido de R$ 50,00, o `main` chama
 `total_com_entrega`, que chama `taxa_entrega`. No momento mais fundo há três
 quadros na pilha. Quando `taxa_entrega` devolve 7.90, o quadro dela sai, e
 `total_com_entrega` volta a rodar, já com o valor:
@@ -1378,7 +1360,7 @@ int main(void) {
 // Total: R$ 57.90
 ```
 
-Repara no fluxograma: as chamadas empilham na descida, e os retornos
+No fluxograma, as chamadas empilham na descida, e os retornos
 desempilham na ordem contrária. A decisão da taxa acontece lá no topo, dentro
 de `taxa_entrega`, enquanto as outras duas funções esperam paradas:
 
@@ -1396,7 +1378,7 @@ A pilha em cada momento, de baixo para cima (o topo é o último):
 | `taxa_entrega` devolveu 7.90 | `main` → `total_com_entrega` (total = 57.90) | `total_com_entrega` |
 | `total_com_entrega` devolveu 57.90 | `main` (total = 57.90) | `main` |
 
-Repara que existem **dois** `valor`, um em cada quadro, e cada função mexe só
+Existem **dois** `valor`, um em cada quadro, e cada função mexe só
 no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
 
 > [!WARNING]
@@ -1780,12 +1762,12 @@ não tente seguir as chamadas de cabeça. Suponha que `fatorial(n - 1)` já
 funciona e pergunte só: com essa resposta na mão, como eu monto a de `n`?
 Depois confira o caso base. Se os dois estão certos, a função está certa.
 
-Não tem mágica: cada chamada é uma chamada comum, com o **seu próprio quadro**
+Cada chamada recursiva é uma chamada comum, com o **seu próprio quadro**
 na pilha (assunto 0031). `fatorial(5)` empilha `fatorial(4)`, que empilha
 `fatorial(3)`... São cinco quadros de `fatorial` ao mesmo tempo, cada um com o
 seu `n`, e todos parados esperando, menos o do topo.
 
-Vamos ver na prática. Na **ida**, a pilha cresce até `fatorial(1)`, que é o
+Na **ida**, a pilha cresce até `fatorial(1)`, que é o
 caso base e devolve 1 sem chamar ninguém. Na **volta**, cada quadro recebe a
 resposta de cima, faz a sua multiplicação e devolve para o de baixo: 1, 2, 6,
 24, 120:
@@ -1814,8 +1796,7 @@ int main(void) {
 // 12 amigos: 479001600 jeitos
 ```
 
-Repara no fluxograma: não existe `for` nem `while` no código, mas existem
-duas voltas. A primeira é a ida (empilha de novo com `n - 1` até o caso
+Não existe `for` nem `while` no código, mas o fluxograma tem duas voltas. A primeira é a ida (empilha de novo com `n - 1` até o caso
 base); a segunda é a volta (cada quadro esperando faz a sua multiplicação e
 sai):
 
@@ -1836,7 +1817,7 @@ baixo para cima da tabela:
 
 Recursão e laço resolvem os mesmos problemas: todo `for` vira recursão e toda
 recursão vira laço (às vezes com bastante trabalho). O fatorial com `for` é
-até mais simples e mais barato. A recursão brilha quando o problema **é**
+até mais simples e mais barato. A recursão compensa quando o problema **é**
 recursivo por natureza: pastas dentro de pastas, árvores, "divide ao meio e
 resolve cada metade".
 
@@ -2120,10 +2101,11 @@ conversam entre si: `fib(5)` calcula `fib(3)` duas vezes, `fib(2)` três
 vezes, e o trabalho se repete do zero cada vez. O número de chamadas cresce
 quase dobrando a cada `n` a mais: é **exponencial**.
 
-Vamos ver na prática. A **árvore de chamadas** de `fib(5)` tem 15 nós, um para
+A **árvore de chamadas** de `fib(5)` tem 15 nós, um para
 cada chamada (o número no círculo é o `n`). Os dois nós amarelos são
-`fib(3)`: o mesmo cálculo, com tudo o que vem embaixo dele, feito duas vezes. Mas repare na pilha: ela nunca passa de 5 quadros de `fib`, porque
-o programa desce um galho de cada vez:
+`fib(3)`: o mesmo cálculo, com tudo o que vem embaixo dele, feito duas vezes.
+Já a pilha nunca passa de 5 quadros de `fib`, porque o programa desce um
+galho de cada vez:
 
 <p align="center"><img src="04-funcoes/0033-recursao-na-pratica/ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
 
@@ -2161,11 +2143,10 @@ int main(void) {
 
 Quase 2,7 milhões de chamadas para achar `fib(30)`. Um laço com duas variáveis
 (`anterior` e `atual`) faz a mesma conta em 30 passos. Para `fib(50)`, a
-versão recursiva levaria minutos; o laço, microssegundos. A lição: recursão
-elegante não é recursão barata. Quando as chamadas **repetem trabalho**,
-desconfie.
+versão recursiva levaria minutos; o laço, microssegundos. Código curto não
+quer dizer código barato: quando as chamadas **repetem trabalho**, desconfie.
 
-Repara no fluxograma: o caso recursivo tem duas chamadas, uma depois da outra.
+No fluxograma, o caso recursivo tem duas chamadas, uma depois da outra.
 A segunda só começa quando a primeira voltou com a resposta inteira:
 
 <p align="center"><img src="04-funcoes/0033-recursao-na-pratica/fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
@@ -2535,7 +2516,7 @@ Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
 recompilar tudo. O `rodar` do curso compila junto todo `.c` de apoio que
 estiver na pasta (todo arquivo que não se chama `A000.c` ou `E000.c`).
 
-Vamos ver na prática. O `conversao.h` é incluído pelos dois `.c`. Cada um vira
+O `conversao.h` é incluído pelos dois `.c`. Cada um vira
 um `.o` separado, e o ligador junta os dois no executável `viagem`:
 
 <p align="center"><img src="04-funcoes/0034-modulos/ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
@@ -2578,7 +2559,7 @@ int main(void) {
 // R$ 1000.00 = US$ 185.19
 ```
 
-Repara no fluxograma: cada `.c` passa pelo compilador separado, e o erro de
+Cada `.c` passa pelo compilador separado, e o erro de
 "função que não existe" só aparece no fim, no ligador:
 
 <p align="center"><img src="04-funcoes/0034-modulos/fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
@@ -2593,8 +2574,7 @@ Três peças fecham o assunto:
   maiúsculas.
 - **`static` fora de função** esconde do resto do programa: o `contador` e a
   `contar` de `conversao.c` não existem para os outros arquivos. É o
-  `private` do C, e é o que deixa o módulo mudar por dentro sem quebrar quem
-  usa.
+  `private` do C: o módulo pode mudar por dentro sem quebrar quem usa.
 - **`extern`** declara uma global que foi **definida** noutro arquivo:
   `extern int limite;` no `.h`, `int limite = 10;` em **um** `.c` só. Use com
   moderação: global compartilhada entre arquivos é global de novo.
@@ -2930,9 +2910,9 @@ include guard COFRINHO_H em volta dos protótipos.
 
 ## 0035 · Pré-processador: macros e #ifdef
 
-Sabe o "localizar e substituir" do VS Code? Troca todo `TAXA` por `0.05` no
-arquivo inteiro, sem entender nada do que está escrito. O **pré-processador**
-do C é exatamente isso, e roda **antes** do compilador. Toda linha que começa
+O "localizar e substituir" do editor troca todo `TAXA` por `0.05` no arquivo
+inteiro, sem entender nada do que está escrito. O **pré-processador** do C faz
+o mesmo, e roda **antes** do compilador. Toda linha que começa
 com `#` é para ele: `#include` cola um arquivo, `#define` cria uma
 substituição. Quando o compilador recebe o código, as diretivas já sumiram.
 
@@ -2943,7 +2923,7 @@ parâmetros, e aí vira uma **macro**:
 #define QUAD(x) ((x) * (x))
 ```
 
-Onde aparecer `QUAD(alguma coisa)`, o pré-processador escreve
+Cada vez que aparece `QUAD(alguma coisa)`, o pré-processador escreve
 `((alguma coisa) * (alguma coisa))`. Parece uma função, mas não é: não tem
 tipo, não tem chamada, não tem pilha. É **troca de texto**. O nome e o `(`
 ficam colados: `QUAD (x)` com espaço já é outra coisa (uma constante que vale
@@ -2954,7 +2934,7 @@ E troca de texto não respeita a precedência dos operadores. Sem parênteses,
 primeiro. A regra que resolve: **parênteses em volta de cada parâmetro e em
 volta da expressão inteira**.
 
-Vamos ver na prática. O terreno tem `lado + 3` metros de lado, com `lado = 2`.
+No exemplo, o terreno tem `lado + 3` metros de lado, com `lado = 2`.
 O texto `QUAD_RUIM(lado + 3)` passa pelo pré-processador e chega ao compilador
 como `lado + 3 * lado + 3`, que dá 11. A versão com parênteses chega como
 `((lado + 3) * (lado + 3))` e dá 25:
@@ -2988,7 +2968,7 @@ int main(void) {
 // 100 / QUAD(5)       = 4
 ```
 
-Repara no fluxograma: o pré-processador não pergunta nada sobre o C. Ele só
+O pré-processador não pergunta nada sobre o C. Ele só
 procura o nome da macro e troca. Quem descobre o erro (quando descobre) é o
 compilador, olhando um código que você nem escreveu:
 
@@ -3343,7 +3323,7 @@ põe os 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
 número de notas e moedas. Parece um programa só, mas olhe as peças: um
 **módulo** com o cardápio, funções pequenas com **parâmetros** e retorno, um
 contador **`static`** escondido, uma **macro** para a taxa e uma função
-**recursiva** para o troco. É o módulo inteiro trabalhando junto.
+**recursiva** para o troco.
 
 Antes de escrever, divida. Cada tarefa vira uma função com um nome que diz o
 que ela faz:
@@ -3368,7 +3348,7 @@ atual cabe, dê essa nota e resolva o resto; se não cabe, tente a nota
 seguinte". Cada chamada chega mais perto do fim, porque ou o troco diminui ou
 a nota diminui.
 
-Vamos ver na prática. Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço,
+Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço,
 a conta é R$ 42,24. Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 5 + 2 + 0,50 + 0,25 + 0,01:
 
@@ -3483,7 +3463,7 @@ int main(void) {
 // cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar caixa.c
 ```
 
-Repara no fluxograma: o laço dos pedidos termina com o código 0; depois vêm a
+O laço dos pedidos termina com o código 0; depois vêm a
 conta, o pagamento e a decisão "pagou o suficiente?". O troco, que parece um
 laço, é a recursão de `dar_troco`:
 

@@ -21,10 +21,11 @@ conversam entre si: `fib(5)` calcula `fib(3)` duas vezes, `fib(2)` três
 vezes, e o trabalho se repete do zero cada vez. O número de chamadas cresce
 quase dobrando a cada `n` a mais: é **exponencial**.
 
-Vamos ver na prática. A **árvore de chamadas** de `fib(5)` tem 15 nós, um para
+A **árvore de chamadas** de `fib(5)` tem 15 nós, um para
 cada chamada (o número no círculo é o `n`). Os dois nós amarelos são
-`fib(3)`: o mesmo cálculo, com tudo o que vem embaixo dele, feito duas vezes. Mas repare na pilha: ela nunca passa de 5 quadros de `fib`, porque
-o programa desce um galho de cada vez:
+`fib(3)`: o mesmo cálculo, com tudo o que vem embaixo dele, feito duas vezes.
+Já a pilha nunca passa de 5 quadros de `fib`, porque o programa desce um
+galho de cada vez:
 
 {{ideia}}
 
@@ -62,11 +63,10 @@ int main(void) {
 
 Quase 2,7 milhões de chamadas para achar `fib(30)`. Um laço com duas variáveis
 (`anterior` e `atual`) faz a mesma conta em 30 passos. Para `fib(50)`, a
-versão recursiva levaria minutos; o laço, microssegundos. A lição: recursão
-elegante não é recursão barata. Quando as chamadas **repetem trabalho**,
-desconfie.
+versão recursiva levaria minutos; o laço, microssegundos. Código curto não
+quer dizer código barato: quando as chamadas **repetem trabalho**, desconfie.
 
-Repara no fluxograma: o caso recursivo tem duas chamadas, uma depois da outra.
+No fluxograma, o caso recursivo tem duas chamadas, uma depois da outra.
 A segunda só começa quando a primeira voltou com a resposta inteira:
 
 {{fluxograma}}

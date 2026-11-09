@@ -3,7 +3,7 @@
 A catraca do estádio conta os torcedores num contador de 16 bits. No clássico
 de domingo, o Maracanã recebeu 78.838 pessoas. Quando o torcedor número 65.536
 passou, o painel voltou a mostrar **zero**. Ninguém errou a conta: o número
-simplesmente não cabia.
+não cabia.
 
 Por baixo de tudo, a memória é feita de **bits**: chavinhas que valem 0 ou 1.
 Oito bits formam um **byte**. Um número inteiro é guardado em **binário** (base
@@ -48,7 +48,7 @@ tabela: o **`<limits.h>`** traz os limites reais da máquina (`INT_MAX`,
 
 Passar do limite é **overflow** (estouro). Num tipo `unsigned`, o C garante o
 comportamento: o número dá a volta, como o odômetro do carro passando de 99999
-para 00000. Vamos ver na prática. A catraca é um `unsigned short` com 65.535,
+para 00000. A catraca é um `unsigned short` com 65.535,
 os 16 bits ligados. Somar 1 dá 65.536, que precisa de 17 bits; o bit de cima
 não cabe e some:
 
@@ -79,9 +79,8 @@ int main(void) {
 // Público: 78838 (o int vai até 2147483647)
 ```
 
-Repara no fluxograma: a pergunta "cabe em 16 bits?" quem faz não é o seu
-programa, é o próprio hardware. Quando não cabe, ele guarda só os 16 bits de
-baixo, sem avisar ninguém:
+No fluxograma, quem faz a pergunta "cabe em 16 bits?" é o hardware, e não o
+seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
 
 {{fluxograma}}
 

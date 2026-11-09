@@ -2,10 +2,10 @@
 
 Na entrada do estacionamento do shopping tem um painel: "VAGAS LIVRES: 3". A
 cancela só abre se houver vaga. Você não sabe se o sistema conta com sensor no
-chão, câmera ou planilha, e não precisa saber. Você só usa três "botões":
+chão, câmera ou planilha, e nem precisa saber. Você usa três "botões":
 entrar, sair e ver quantas vagas sobram.
 
-Um **tipo abstrato de dado** (TAD) é isso no código: um tipo definido pelas
+Um **tipo abstrato de dado** (TAD) leva isso para o código: um tipo definido pelas
 **operações** que ele oferece, não pelo jeito como guarda os dados. Quem usa (o
 **cliente**) conhece só as operações. Quem implementa pode trocar tudo por
 dentro sem avisar ninguém, desde que as operações continuem cumprindo o
@@ -19,20 +19,19 @@ No C, a divisão é física, em dois arquivos:
 - **`contador.c`, a implementação**: define a `struct` com os campos e escreve
   as funções. O cliente nunca inclui este arquivo; ele só é compilado junto.
 
-O truque que fecha a porta é o **tipo opaco**. O `.h` diz apenas
+Quem fecha a porta é o **tipo opaco**. O `.h` diz apenas
 `typedef struct contador Contador;`, sem os campos. Para o compilador, no
 cliente, `struct contador` é um **tipo incompleto**: dá para ter um ponteiro
 `Contador *`, mas não dá para criar uma variável `Contador`, nem usar
 `sizeof`, nem acessar `->valor`. Por isso todo TAD opaco tem uma função
 `_cria`, que faz o `malloc` lá dentro, e uma `_libera`, que faz o `free`.
 
-Fechar a porta não é burocracia: é o que permite ao TAD garantir um
-**invariante**, como no assunto anterior. O contador promete
+Fechar a porta permite ao TAD garantir um **invariante**, como no assunto
+anterior. O contador promete
 `0 <= valor <= limite`. Se o cliente pudesse escrever `vagas->valor = 99`, a
 promessa não valeria nada.
 
-Vamos ver na prática. O cliente (o arquivo com o `main`) inclui só o
-contrato. O `contador.c` também inclui o contrato e guarda a `struct`
+No exemplo, o cliente (o arquivo com o `main`) inclui só o contrato. O `contador.c` também inclui o contrato e guarda a `struct`
 escondida. Na memória, o cliente tem só um ponteiro para um bloco no heap que
 ele não consegue abrir:
 
@@ -82,8 +81,8 @@ int main(void) {
 // CWB1D77 entrou (3/3)
 ```
 
-E o lado escondido, em `contador.c`. Repare que ele inclui o próprio `.h`:
-assim o compilador confere que cada função bate com o protótipo prometido.
+O lado escondido fica em `contador.c`. Ele inclui o próprio `.h`, e assim o
+compilador confere que cada função bate com o protótipo prometido.
 
 ```c
 #include <stdlib.h>
@@ -120,9 +119,9 @@ bool contador_incrementa(Contador *c) {
 //     contador_valor e contador_limite seguem o mesmo estilo
 ```
 
-Repara no fluxograma: o cliente só conversa com o TAD pelas funções. Quem
-decide "lotado" é o `contador_incrementa`, que devolve `false`. O cliente só
-reage à resposta:
+No fluxograma, o cliente conversa com o TAD só pelas funções. Quem decide
+"lotado" é o `contador_incrementa`, que devolve `false`; o cliente reage à
+resposta:
 
 {{fluxograma}}
 
@@ -153,14 +152,15 @@ grafo) segue este molde. Para um TAD `x`:
 > [!WARNING]
 > Se o cliente tentar `vagas->valor = 0;` ou `Contador c;`, o erro é de
 > **compilação**: `invalid use of incomplete typedef 'Contador'`. É o tipo
-> opaco funcionando, não um defeito. Não "conserte" movendo a `struct` para o
+> opaco funcionando. Não "conserte" movendo a `struct` para o
 > `.h`: aí qualquer cliente volta a poder quebrar o invariante. Se falta uma
 > operação, acrescente uma função na interface. O outro tropeço clássico é
 > esquecer o `contador.c` na hora de compilar à mão: o erro vira
 > `undefined reference to 'contador_cria'`, que é do **ligador**.
 
 > [!TIP]
-> **Por dentro do C:** o `#include "contador.h"` é só colar texto. Depois do
+> **Por dentro do C:** o `#include "contador.h"` apenas cola texto.
+ Depois do
 > pré-processador, o cliente tem os protótipos e a frase "existe uma
 > `struct contador`", mais nada. O compilador gera `A147.o` sem saber o
 > tamanho da struct (nem precisa: ponteiro tem sempre 8 bytes numa máquina de

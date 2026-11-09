@@ -1,22 +1,21 @@
 ## 0086 · Fila encadeada
 
 Sexta à noite, a cozinha da pizzaria recebe os pedidos do app. O painel de 8
-lugares do 0085 lotou às 20h, e o nono pedido foi recusado. Pedido recusado é
-cliente perdido. A fila precisa crescer o quanto for preciso.
+lugares do 0085 lotou às 20h, e o nono pedido foi recusado: cliente perdido.
+A fila precisa crescer o quanto for preciso.
 
 A solução é a mesma da pilha: trocar o vetor por **nós** encadeados. Só que a
-fila mexe nas duas pontas, e isso muda o desenho. Pense nos ponteiros de uma
-lista simples:
+fila mexe nas duas pontas, e isso muda o desenho. Nos ponteiros de uma lista
+simples:
 
 - **retirar** do começo é fácil: `inicio = inicio->prox`, O(1);
 - **inserir** no fim exigiria andar a lista até o último, O(n)... a não ser
   que você guarde um segundo ponteiro, o **fim**, sempre apontando para o
   último nó. Aí inserir também é O(1): `fim->prox = novo; fim = novo`.
 
-Repare na direção: a fila **sai pelo início e entra pelo fim**. O contrário
-(entrar pelo início, sair pelo fim) não funciona bem numa lista simples,
-porque para remover o último você precisaria do penúltimo, e o nó não sabe
-quem está antes dele.
+A direção importa: a fila **sai pelo início e entra pelo fim**. O contrário
+(entrar pelo início, sair pelo fim) não funciona bem numa lista simples:
+remover o último exige o penúltimo, e o nó não sabe quem está antes dele.
 
 O [`fila.h`](0086-fila-encadeada/fila.h) é o mesmo do 0085, palavra por
 palavra. O [`fila.c`](0086-fila-encadeada/fila.c) agora guarda dois
@@ -62,13 +61,13 @@ bool fila_retira(Fila *f, int *valor) {
 }
 ```
 
-Vamos ver na prática. Chegam os pedidos 501, 502 e 503. A cozinha pega o
+Chegam os pedidos 501, 502 e 503. A cozinha pega o
 501: o início anda para o 502 e o nó do 501 é liberado. Chega o 504, que é
 pendurado depois do 503, e o fim passa a apontar para ele:
 
 {{ideia}}
 
-O programa da cozinha:
+O programa da cozinha só usa o `fila.h`:
 
 ```c
 #include <stdio.h>
@@ -103,14 +102,15 @@ int main(void) {
 // Próximo: 502 (3 esperando)
 ```
 
-Repara no fluxograma da entrada do 504: a fila não estava vazia, então o
-caminho passa por `fim->prox = novo`. Na fila vazia, quem recebe o novo nó é
+Na entrada do 504, a fila não estava vazia, então o caminho do fluxograma
+passa por `fim->prox = novo`. Na fila vazia, quem recebe o novo nó é
 o `inicio`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Os dois bugs clássicos estão nas bordas. Ao inserir na fila **vazia**,
+> Os dois bugs mais comuns estão nas bordas.
+ Ao inserir na fila **vazia**,
 > esquecer de atualizar o `inicio` deixa a fila "vazia" para sempre, mesmo
 > com nós dentro. Ao retirar o **último**, esquecer de zerar o `fim` é pior:
 > o `fim` continua apontando para o nó que acabou de levar `free`, e o

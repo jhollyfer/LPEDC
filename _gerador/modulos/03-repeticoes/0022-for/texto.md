@@ -32,7 +32,7 @@ A ordem em que as partes rodam não é a ordem em que estão escritas:
 4. **passo** (`parcela++`): roda **no fim** de cada volta, e então volta para
    a condição.
 
-O `for` é exatamente o `while` de cima, reorganizado. O compilador trata os
+O `for` é o `while` de cima, reorganizado. O compilador trata os
 dois do mesmo jeito. Use `for` quando há um **contador** com começo, fim e
 passo conhecidos; `while` quando você só sabe a condição de parada.
 
@@ -46,7 +46,7 @@ exemplo A044 mostra tudo isso. Qualquer parte pode ficar vazia, mas os dois
 Quantas voltas? `for (i = a; i < b; i++)` dá `b - a` voltas. Com `<=`, dá
 `b - a + 1`. De 1 a 6 com `<=`: 6 voltas.
 
-Vamos ver na prática. O carnê começa com `parcela = 1` uma vez só, pergunta
+O carnê começa com `parcela = 1` uma vez só, pergunta
 "parcela <= 6?", roda o corpo, dá o passo e volta para a pergunta. Na sétima
 pergunta, com `parcela = 7`, a resposta é Não:
 
@@ -81,9 +81,9 @@ int main(void) {
 // Carnê quitado!
 ```
 
-Repara no fluxograma: ele é igual ao de um `while`. O `for` não inventa forma
-nova; ele só arruma o código. O passo `parcela++` fica no fim do corpo, e a
-seta sai dele e volta para o losango:
+O fluxograma é igual ao de um `while`, porque o `for` só arruma o código. O
+passo `parcela++` fica no fim do corpo, e a seta sai dele de volta para o
+losango:
 
 {{fluxograma}}
 
@@ -102,8 +102,6 @@ seta sai dele e volta para o losango:
 > otimização, o gcc o guarda num **registrador**, uma gaveta dentro do próprio
 > processador. Com `-O2`, ele pode até **desenrolar** o laço (escrever o corpo
 > várias vezes seguidas para economizar saltos) quando sabe quantas voltas são.
-> É mais um motivo para usar `for` com contador: o compilador entende a sua
-> intenção.
 
 > [!NOTE]
 > **Pergunta para você:** quantas vezes roda `for (int i = 10; i > 0; i -= 3)`

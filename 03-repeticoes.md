@@ -9,15 +9,14 @@ você copiaria o mesmo código dez, cem, mil vezes. Com laço, escreve uma vez e
 diz **quando parar**.
 
 O C tem cinco palavras para repetir: `while`, `do...while`, `for`, `break` e
-`continue`. Nenhuma percorre uma coleção sozinha: aqui todo laço é "na mão", com contador e condição. Isso
-obriga a pensar no que importa: onde o laço começa, o que muda a cada volta e
-qual pergunta faz ele terminar. Errar qualquer uma das três dá o laço
+`continue`. Nenhuma percorre uma coleção sozinha: todo laço é feito à mão,
+com contador e condição. Isso obriga a pensar em três coisas: como o laço
+começa, o que muda a cada volta e qual pergunta faz ele terminar. Errar qualquer uma das três dá o laço
 infinito ou a volta a mais, os dois bugs mais comuns da programação.
 
 O módulo fecha com os **padrões de laço** (contador, acumulador, maior e
-menor, flag e sentinela), que você vai usar pelo resto do curso, e com
-números **aleatórios**, para os laços terem alguma graça: jogos de dados e
-simulações.
+menor, flag e sentinela), que voltam no resto do curso, e com números
+**aleatórios**, para jogos de dados e simulações.
 
 ## O que você vai aprender
 
@@ -28,26 +27,6 @@ simulações.
 - aninhar laços: tabelas, mapas e desenhos com `*`, e o custo da multiplicação
 - os cinco **padrões de laço**: contador, acumulador, maior/menor, flag e sentinela
 - sortear números com **`rand`**, **`srand`** e **`time`**, e por que a semente importa
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo. Neste módulo, toda repetição aparece como
-   uma seta que **volta** para trás. Conte quantas vezes você passa por ela.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -63,7 +42,9 @@ mande a entrada pelo `printf` do terminal, um valor por linha:
 printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/rodar 03-repeticoes/0025-padroes-de-laco/A049.c
 ```
 
-E se um programa travar num laço infinito, `Ctrl+C` encerra.
+Se um programa travar num laço infinito, `Ctrl+C` encerra. Nos fluxogramas,
+toda repetição é uma seta que **volta**: conte quantas vezes você passa por
+ela. Responda a **Pergunta para você** antes de rodar.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -115,7 +96,7 @@ acontece. Para isso, três coisas precisam existir:
 Esqueça a terceira e você tem um **laço infinito**: a pergunta dá sempre a
 mesma resposta, e o programa nunca sai dali. No terminal, `Ctrl+C` encerra.
 
-Vamos ver na prática. O saldo começa vazio, a pergunta "saldo < 1000?" responde
+O saldo começa vazio, a pergunta "saldo < 1000?" responde
 Sim sete vezes seguidas e, a cada Sim, entra um depósito e o programa volta à
 pergunta. Na oitava vez, com R$ 1.050, a resposta é Não:
 
@@ -154,7 +135,7 @@ int main(void) {
 
 ### Passo a passo
 
-O teste de mesa (uma linha por pergunta, uma coluna por variável) mostra tudo. Repare que são **8
+No teste de mesa (uma linha por pergunta, uma coluna por variável), são **8
 perguntas** para **7 voltas**: a última pergunta é a que dá Não.
 
 | Pergunta | saldo antes | `saldo < 1000?` | saldo depois | meses |
@@ -165,8 +146,8 @@ perguntas** para **7 voltas**: a última pergunta é a que dá Não.
 | 7ª | 900 | Sim | 1050 | 7 |
 | 8ª | 1050 | **Não** | (sai) | 7 |
 
-Repara no fluxograma: a seta que sai de "Mostrar mês e saldo" **volta para o
-losango**. É assim que uma repetição aparece no desenho. O caminho verde passa
+A seta que sai de "Mostrar mês e saldo" **volta para o losango**: é assim que
+uma repetição aparece no fluxograma. O caminho verde passa
 pelo Sim várias vezes e só uma vez pelo Não:
 
 <p align="center"><img src="03-repeticoes/0020-while/fluxograma.svg" alt="Fluxograma: While" width="581"></p>
@@ -487,7 +468,7 @@ Cuidado com o pseudocódigo da prova: o `repita ... até condição` também tes
 no fim, mas a condição dele é de **parar**. `repita ... até x > 10` vira
 `do { ... } while (!(x > 10));`, ou seja, `while (x <= 10)`.
 
-O lugar natural dele é onde a primeira volta é obrigatória:
+Ele serve para os casos em que a primeira volta é obrigatória:
 
 - **validação de entrada**: pergunte, e repita enquanto a resposta for
   inválida;
@@ -499,7 +480,7 @@ A condição do `do...while` descreve quando **repetir**, não quando parar.
 Numa validação, ela descreve o valor **inválido**: `parcelas < 1 || parcelas >
 12`.
 
-Vamos ver na prática. A pessoa digita 0, depois 15, depois 4. As duas
+No exemplo, a pessoa digita 0, depois 15, depois 4. As duas
 primeiras respostas caem fora da faixa, a pergunta "fora de 1 a 12?" responde
 Sim e o programa volta para pedir de novo. O 4 está dentro, a resposta é Não e
 o programa segue:
@@ -533,7 +514,7 @@ int main(void) {
 // 4x de R$ 300.00
 ```
 
-Repara no fluxograma: a leitura vem **antes** do losango. A seta do Sim sai do
+Aqui a leitura vem **antes** do losango. A seta do Sim sai do
 losango e volta para o começo do corpo, "Mostrar a pergunta". No `while` (assunto
 0020) a seta voltava para o losango porque a pergunta abria o laço; aqui ela
 fecha. O caminho verde passa três vezes pelo losango: duas pelo Sim e uma pelo
@@ -895,7 +876,7 @@ A ordem em que as partes rodam não é a ordem em que estão escritas:
 4. **passo** (`parcela++`): roda **no fim** de cada volta, e então volta para
    a condição.
 
-O `for` é exatamente o `while` de cima, reorganizado. O compilador trata os
+O `for` é o `while` de cima, reorganizado. O compilador trata os
 dois do mesmo jeito. Use `for` quando há um **contador** com começo, fim e
 passo conhecidos; `while` quando você só sabe a condição de parada.
 
@@ -909,7 +890,7 @@ exemplo A044 mostra tudo isso. Qualquer parte pode ficar vazia, mas os dois
 Quantas voltas? `for (i = a; i < b; i++)` dá `b - a` voltas. Com `<=`, dá
 `b - a + 1`. De 1 a 6 com `<=`: 6 voltas.
 
-Vamos ver na prática. O carnê começa com `parcela = 1` uma vez só, pergunta
+O carnê começa com `parcela = 1` uma vez só, pergunta
 "parcela <= 6?", roda o corpo, dá o passo e volta para a pergunta. Na sétima
 pergunta, com `parcela = 7`, a resposta é Não:
 
@@ -944,9 +925,9 @@ int main(void) {
 // Carnê quitado!
 ```
 
-Repara no fluxograma: ele é igual ao de um `while`. O `for` não inventa forma
-nova; ele só arruma o código. O passo `parcela++` fica no fim do corpo, e a
-seta sai dele e volta para o losango:
+O fluxograma é igual ao de um `while`, porque o `for` só arruma o código. O
+passo `parcela++` fica no fim do corpo, e a seta sai dele de volta para o
+losango:
 
 <p align="center"><img src="03-repeticoes/0022-for/fluxograma.svg" alt="Fluxograma: For" width="608"></p>
 
@@ -965,8 +946,6 @@ seta sai dele e volta para o losango:
 > otimização, o gcc o guarda num **registrador**, uma gaveta dentro do próprio
 > processador. Com `-O2`, ele pode até **desenrolar** o laço (escrever o corpo
 > várias vezes seguidas para economizar saltos) quando sabe quantas voltas são.
-> É mais um motivo para usar `for` com contador: o compilador entende a sua
-> intenção.
 
 > [!NOTE]
 > **Pergunta para você:** quantas vezes roda `for (int i = 10; i > 0; i -= 3)`
@@ -1267,7 +1246,7 @@ Em C, esses atalhos são o **`break`** e o **`continue`**:
 Os dois quase sempre aparecem dentro de um `if`: "se acontecer tal coisa,
 saia" ou "se acontecer tal coisa, pule".
 
-Com o `break`, aparece um laço muito comum: o **`while (1)`** (ou `for (;;)`).
+Com o `break` surge um laço muito comum: o **`while (1)`** (ou `for (;;)`).
 A condição é sempre verdadeira, e quem decide a saída é um `break` no meio do
 corpo. Isso é útil quando o motivo para parar só aparece **depois** de ler o
 dado, como no caixa: você lê o preço e só então descobre que é 0.
@@ -1276,7 +1255,7 @@ Depois de um laço com `break`, às vezes você precisa saber **por que** ele
 parou: pela condição ou pelo `break`? O exemplo A046 testa se um número é
 primo assim: se o laço chegou ao fim sem achar divisor, é primo.
 
-Vamos ver na prática. A compra tem 12,90, uma leitura com erro (-1), 8,50,
+A compra do exemplo tem 12,90, uma leitura com erro (-1), 8,50,
 4,00 e, para fechar, 0. O -1 cai no `continue` e volta direto para a leitura,
 sem passar pela soma. O 0 cai no `break` e sai do laço:
 
@@ -1324,7 +1303,7 @@ int main(void) {
 // Total: R$ 25.40
 ```
 
-Repara no fluxograma: o laço tem **duas** setas de volta para "Ler preço". Uma
+O laço tem **duas** setas de volta para "Ler preço". Uma
 sai direto do losango "preço < 0?" pelo Sim: é o `continue`, que pula a soma.
 A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 "preço == 0?", que é o `break`:
@@ -1345,8 +1324,8 @@ A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 > (no `for`) ou "pule para a pergunta" (no `while`). Eles valem só para o laço
 > **mais interno**. Não existe `break` com rótulo para sair de dois laços de
 > uma vez. O C tem o `goto rotulo;`, que salta para qualquer ponto da
-> mesma função. Evite: ele só é aceito, em código de verdade, para sair de
-> vários laços de uma vez ou para pular para a limpeza no fim de uma função.
+> mesma função. Evite: em código real, ele só é aceito para sair de vários
+> laços de uma vez ou para pular para a limpeza no fim de uma função.
 
 > [!NOTE]
 > **Pergunta para você:** se o primeiro preço digitado for 0, o que aparece na
@@ -1647,12 +1626,12 @@ imprimir o mapa, você percorre a fileira A da poltrona 1 à 5, desce para a B e
 faz tudo de novo, e assim por diante. É uma repetição **dentro** de outra.
 
 Isso é um **laço aninhado**: o corpo de um laço contém outro laço inteiro. A
-regra que faz tudo funcionar:
+regra:
 
 > a cada volta do laço **de fora**, o laço **de dentro** roda **do começo ao
 > fim**.
 
-Pense no relógio: o ponteiro dos minutos dá uma volta completa a cada hora
+É como no relógio: o ponteiro dos minutos dá uma volta completa a cada hora
 que passa. O de fora é o das horas, e o de dentro é o dos minutos.
 
 Três consequências práticas:
@@ -1670,7 +1649,7 @@ Três consequências práticas:
 Use nomes que digam quem é quem: `fileira` e `poltrona`, `linha` e `coluna`.
 Com `i` e `j`, a troca de um pelo outro é um erro difícil de ver.
 
-Vamos ver na prática. O desenho congela o mapa no meio do caminho: a fileira A
+O desenho congela o mapa no meio do caminho: a fileira A
 já saiu inteira (o laço de dentro deu suas 5 voltas), a B está na poltrona 3, e
 a C e a D ainda esperam a vez do laço de fora:
 
@@ -1703,7 +1682,7 @@ int main(void) {
 // Total: 20 lugares
 ```
 
-Repara no fluxograma: são dois losangos, cada um com a sua seta de volta. A
+No fluxograma, são dois losangos, cada um com a sua seta de volta. A
 volta pequena (de "Mostrar e poltrona++" para "poltrona <= 5?") fica **dentro** da
 volta grande (de "pula linha" para "fileira <= 'D'?"). E logo depois do Sim de
 fora vem `poltrona = 1`: é ali que o laço de dentro recomeça:
@@ -2009,8 +1988,7 @@ Fim de semana de calor e você anotou a temperatura máxima de cada dia: 28, 31,
 e o mais frio? Teve algum dia de 35 °C ou mais?
 
 Cada pergunta dessas é um **padrão de laço**: um jeito de usar uma variável
-que já foi resolvido milhares de vezes. Quem programa há tempo reconhece de
-longe e escreve sem pensar. São cinco, e todos seguem o mesmo roteiro: a
+que já foi resolvido milhares de vezes. São cinco, e todos seguem o mesmo roteiro: a
 variável ganha um valor **antes** do laço, é atualizada **dentro** e usada
 **depois**.
 
@@ -2022,7 +2000,7 @@ variável ganha um valor **antes** do laço, é atualizada **dentro** e usada
 | **flag** | `calorao = false` | `if (temp >= 35) calorao = true` | aconteceu ou não? |
 | **sentinela** | ler o primeiro valor | ler o próximo, no fim | (o laço para nela) |
 
-Alguns detalhes que separam o código certo do quase certo:
+Detalhes que separam o código certo do quase certo:
 
 - o acumulador de **produto** começa em **1**: começar em 0 zera tudo;
 - a **flag** só sobe. Ninguém escreve `else calorao = false`, senão um dia de
@@ -2037,7 +2015,7 @@ Alguns detalhes que separam o código certo do quase certo:
   0`. Se a primeira coisa digitada for a sentinela, a conta vira 0 / 0: com
   `double`, sai `nan` (*not a number*); com `int`, o programa quebra.
 
-Vamos ver na prática. As cinco temperaturas entram uma a uma e cada uma
+Acompanhe as cinco temperaturas: elas entram uma a uma e cada uma
 atualiza as caixinhas. O 999 não muda nada: só manda parar. No fim, as
 caixinhas guardam as respostas:
 
@@ -2101,7 +2079,7 @@ int main(void) {
 // Teve dia de 35 °C ou mais? sim
 ```
 
-Repara no fluxograma: tem **duas** caixas de leitura. "Ler temp" fica antes do
+Há **duas** caixas de leitura. "Ler temp" fica antes do
 losango e roda uma vez; "Ler a próxima temp" fica no fim do corpo e é dela que
 sai a seta de volta para o losango. Assim, a pergunta "temp != 999?" sempre
 olha para o valor que acabou de chegar:
@@ -2121,8 +2099,8 @@ olha para o valor que acabou de chegar:
 > num `int` e, passando de 2.147.483.647, a soma dá a volta e vira negativa
 > (*overflow*, assunto 0003). Com `double`, o perigo é outro: 0,1 não tem
 > representação exata em binário, então somar 0,1 dez vezes dá
-> 0,9999999999999999, não 1. Para dinheiro, quem faz sistema de verdade
-> acumula **centavos** num inteiro grande (`long long`) e só divide por 100 na
+> 0,9999999999999999, não 1. Para dinheiro, sistemas reais acumulam
+> **centavos** num inteiro grande (`long long`) e só divide por 100 na
 > hora de mostrar.
 
 > [!NOTE]
@@ -2461,7 +2439,7 @@ nos dois dados: os dois com o mesmo número. Joga, não sai, joga de novo. É um
 é sorteado.
 
 Computador não sorteia de verdade. Ele é uma máquina determinística: a mesma
-entrada dá sempre a mesma saída. O que ele faz é gerar números
+entrada dá sempre a mesma saída. Ele gera números
 **pseudoaleatórios**: uma sequência calculada por uma conta fixa, em que cada
 número sai do anterior, e que parece aleatória para quem olha.
 
@@ -2478,22 +2456,22 @@ Para trazer o número para a faixa que você quer, use o resto da divisão
 Para uma faixa qualquer de `a` até `b`, a fórmula é
 `a + rand() % (b - a + 1)`.
 
-E a semente? Depende do que você quer:
+A semente depende do que você quer:
 
 - **semente fixa** (`srand(2022)`): o programa sorteia sempre os mesmos
-  números. Parece inútil, mas é ouro para **testar** e **depurar**: o erro que
+  números. Parece inútil, mas ajuda muito a **testar** e **depurar**: o erro que
   apareceu volta a aparecer. Os exemplos deste curso usam semente fixa para a
   saída do comentário bater com a sua;
 - **semente do relógio** (`srand(time(NULL))`, com `<time.h>`): `time(NULL)`
   devolve quantos segundos se passaram desde 1º de janeiro de 1970. Cada
   execução começa num segundo diferente e sorteia números diferentes. É o que
-  um jogo de verdade usa.
+  um jogo real usa.
 
 Sem nenhum `srand`, é como se o programa tivesse chamado `srand(1)`: a mesma
 sequência sempre.
 
-Vamos ver na prática. A semente 2022 entra no gerador, que vai cuspindo
-números enormes, cada um calculado a partir do anterior. O `% 6 + 1`
+A semente 2022 entra no gerador, que cospe números enormes, cada um
+calculado a partir do anterior. O `% 6 + 1`
 transforma cada número numa face, e os pares de faces são as jogadas. Na
 quarta, sai 4 e 4:
 
@@ -2531,7 +2509,7 @@ int main(void) {
 // Dupla de 4 na jogada 4. Saiu da prisão!
 ```
 
-Repara no fluxograma: o `srand` fica **fora** do laço, antes de tudo, e roda
+O `srand` fica **fora** do laço, antes de tudo, e roda
 uma vez só. O sorteio fica dentro, e a seta do Sim volta do losango para ele.
 No exemplo, o caminho passa três vezes pelo Sim e, na quarta jogada, pelo Não:
 
@@ -2844,9 +2822,9 @@ saiu.
 
 Repare num incômodo do código: o sorteio `1 + rand() % 6` aparece quatro
 vezes. No módulo 04 ele vira uma **função** `lancar()` e o programa encolhe.
-Por enquanto, a repetição de código é o preço de não ter funções ainda.
+Por enquanto, a repetição é o preço de ainda não ter funções.
 
-Vamos ver na prática. Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O
+Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O
 `switch` não acha o 9 em nenhum caso especial, e ele vira o ponto. O jogo
 relança: 8, depois 5 (nada acontece), depois 9. Saiu o ponto antes do 7:
 ganhou no quarto lançamento:
@@ -2915,7 +2893,7 @@ O exemplo A054 vai além: põe a rodada dentro de um menu com `do...while`,
 valida a aposta com outro `do...while` e controla uma banca de R$ 100 até você
 sair ou quebrar. É o mesmo algoritmo, embrulhado em mais dois laços.
 
-Repara no fluxograma: as duas primeiras perguntas (7 ou 11? 2, 3 ou 12?) só
+No fluxograma, as duas primeiras perguntas (7 ou 11? 2, 3 ou 12?) só
 acontecem **uma vez**. O laço começa em "soma = novo lançamento", e a seta de
 volta sai do Não de "soma == 7?". As duas saídas do laço vão para os mesmos
 "Ganhou" e "Perdeu" do primeiro lançamento:
@@ -2935,8 +2913,7 @@ volta sai do Não de "soma == 7?". As duas saídas do laço vão para os mesmos
 > `-1`, `0`), e quem lê o código precisa lembrar o que cada número quer dizer.
 > É um "número mágico". No módulo 08, o `enum` dá nome a esses valores
 > (`GANHOU`, `PERDEU`, `CONTINUA`), mas por baixo continuam sendo `int`: o
-> compilador troca cada nome pelo número, e o programa gerado é idêntico. O
-> nome existe só para você.
+> compilador troca cada nome pelo número, e o programa gerado é idêntico.
 
 > [!NOTE]
 > **Pergunta para você:** qual é a chance de ganhar no craps? Antes de chutar,

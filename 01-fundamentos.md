@@ -16,12 +16,11 @@ outro), **decisão** ("se o saldo cobre, envia") e **repetição** ("enquanto a
 senha estiver errada, pergunte de novo"). Este módulo é a primeira peça: a
 **estrutura sequencial**. Decisão e repetição vêm nos módulos 02 e 03.
 
-O C é a linguagem ideal para aprender isso de verdade, porque nele nada fica
-escondido: cada variável é um pedaço de memória com endereço e
-tamanho, cada número tem um limite, e o seu `.c` passa por uma linha de
-montagem antes de virar um programa. Ao fim do módulo você vai escrever
-programas completos de entrada, processamento e saída, e vai saber
-exatamente o que cada linha faz na memória.
+Em C nada fica escondido: cada variável é um pedaço de memória com endereço
+e tamanho, cada número tem um limite, e o seu `.c` passa por uma linha de
+montagem antes de virar programa. No fim do módulo você escreve programas
+completos de entrada, processamento e saída e sabe o que cada linha faz na
+memória.
 
 ## O que você vai aprender
 
@@ -36,35 +35,11 @@ exatamente o que cada linha faz na memória.
 - operadores compostos, `++` e `--`
 - a biblioteca de matemática: `pow`, `sqrt`, `round`, `floor`, `ceil`, `fabs`
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é
-   desafio. As dicas vêm logo abaixo do enunciado: tente antes de ler. A última dica
-   sempre traz a resposta esperada, e há uma resolução de cada exercício em
-   `_respostas/01-fundamentos/`.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-E não pule o **Por dentro do C**: é onde o curso mostra o que acontece na
-memória.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, erro. No fluxograma, a pílula é o início
-e o fim, o paralelogramo é entrada ou saída, o retângulo é processamento e o
-losango é decisão.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você precisa do compilador `gcc` e, para os módulos de memória, do `gdb` e do
-`valgrind`.
+`valgrind`. Cada exercício tem uma resolução em `_respostas/01-fundamentos/`. Responda a
+**Pergunta para você** antes de rodar e não pule o **Por dentro do C**.
 
 **Arch Linux** (e derivados, como Manjaro e EndeavourOS):
 
@@ -92,13 +67,13 @@ projeto:
 ~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
 ```
 
-Ele compila e já executa. O caminho pode ser relativo à pasta onde você está,
-relativo ao LPEDC ou absoluto. Na compilação, o `rodar` usa o padrão C17
-(`-std=c17`), liga todos os avisos (`-Wall -Wextra -pedantic`) e ativa dois
-detetives: o **AddressSanitizer**, que flagra erros de memória, e o detector
-de **comportamento indefinido**, que flagra coisas como estouro de inteiro.
-Se o seu programa tem um problema desses, ele para com um relatório dizendo
-a linha. Os exercícios devem compilar **sem nenhum aviso**.
+Ele compila e executa. O caminho pode ser relativo à pasta atual, relativo
+ao LPEDC ou absoluto. O `rodar` usa o padrão C17 (`-std=c17`), liga todos os
+avisos (`-Wall -Wextra -pedantic`) e ativa dois detetives: o
+**AddressSanitizer**, que flagra erros de memória, e o detector de
+**comportamento indefinido**, que flagra coisas como estouro de inteiro. Se o
+programa tem um problema desses, ele para com um relatório que aponta a
+linha. Os exercícios devem compilar **sem nenhum aviso**.
 
 Programas que leem do teclado esperam você digitar. Para testar sem digitar,
 mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
@@ -132,9 +107,8 @@ printf '3 4.99\n2\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
 
 A padaria do bairro comprou um painel de LED e pediu um aviso de três linhas:
 o nome da padaria, o horário da fornada e o preço do pão. São três linhas
-de saída, sem entrada nem conta: o menor programa útil que existe. Mesmo
-assim, antes de rodar, o arquivo passa por uma linha de montagem, e cada
-linha do código tem um motivo para estar ali.
+de saída, sem entrada nem conta. Mesmo assim, antes de rodar, o arquivo
+passa por uma linha de montagem, e cada linha do código tem um motivo.
 
 Um programa em C é um conjunto de **funções**. Uma delas é especial: a
 **`main`**. Quando você roda o executável, o sistema começa por ela. O
@@ -149,7 +123,7 @@ esqueleto que você vai escrever em todo exemplo do curso:
 | `return 0;` | termina a `main` e devolve 0 ao sistema: "deu tudo certo" |
 | `}` | fecha o **bloco** da `main` |
 
-Regras que valem para o resto da vida: toda **instrução** termina em `;` (o
+Regras que valem sempre: toda **instrução** termina em `;` (o
 `#include` não é instrução, e por isso não leva); as **chaves** `{ }` agrupam
 instruções num bloco; o C diferencia maiúsculas de minúsculas (`Main` não é
 `main`); comentário de uma linha começa com `//`, e o de várias linhas fica
@@ -160,8 +134,8 @@ entre `/*` e `*/`.
 O processador não entende C. Antes de rodar, o arquivo passa por quatro
 estações, e quem comanda tudo é o **compilador** `gcc`:
 
-1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>` é
-   literalmente **colar** o conteúdo do `stdio.h` no lugar da linha;
+1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>`
+   **cola** o conteúdo do `stdio.h` no lugar da linha;
 2. **compilador**: confere a gramática e os tipos e traduz o C para
    **assembly**, a língua do processador em forma de texto;
 3. **montador**: transforma o assembly em **código objeto** (`.o`), já em
@@ -176,7 +150,7 @@ com mais cuidado: liga todos os avisos (`-Wall -Wextra -pedantic`), usa o
 padrão C17 e ativa o **AddressSanitizer**, que vigia a memória enquanto o
 programa roda.
 
-Vamos ver na prática. O `padaria.c` entra na linha de montagem, ganha o
+O `padaria.c` entra na linha de montagem, ganha o
 `stdio.h` colado, vira assembly, vira `padaria.o`, é ligado ao `printf` e sai
 como o executável `padaria`, que mostra as três linhas no terminal:
 
@@ -200,9 +174,8 @@ int main(void) {
 // R$ 0,90 a unidade
 ```
 
-Repara no fluxograma: cada estação pode parar a linha de montagem, e cada
-uma reclama de um jeito. O caminho do exemplo passa por todas sem erro e
-termina com o programa rodando:
+Cada estação pode parar a linha de montagem, e cada uma reclama de um jeito.
+O exemplo passa por todas sem erro e termina com o programa rodando:
 
 <p align="center"><img src="01-fundamentos/0001-primeiro-programa/fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
 
@@ -214,8 +187,7 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 - **de ligação**: o código está certo na gramática, mas uma função não existe
   em lugar nenhum. Escreva `prinft` e o ligador para com
   `undefined reference to 'prinft'`;
-- **de execução**: compila, roda e dá errado: mostra o valor errado ou quebra
-  no meio. É o pior tipo, porque o compilador não tem como ver. Os **avisos**
+- **de execução**: compila, roda e mostra o valor errado ou quebra no meio. É o pior tipo, porque o compilador não tem como ver. Os **avisos**
   (*warnings*) do gcc e o AddressSanitizer existem para pegar parte deles.
 
 > [!WARNING]
@@ -531,9 +503,9 @@ Na matrícula da academia, a recepcionista preenche uma ficha: idade 25,
 altura 1,75 m, peso 72,5 kg, plano B. Um mês depois, ela apaga o peso e
 escreve 71,8. A ficha continua a mesma; só o conteúdo de um campo mudou.
 
-Uma **variável** é exatamente um campo dessa ficha: um pedaço da memória com
+Uma **variável** é um campo dessa ficha: um pedaço da memória com
 **nome**, **tipo**, **valor** e **endereço**. O nome é para você. O endereço é
-para o computador: é o número do primeiro byte onde o valor mora. O tipo diz
+para o computador: o número do primeiro byte que o valor ocupa. O tipo diz
 quantos bytes a variável ocupa e como ler esses bytes.
 
 No C, você escolhe o tipo de cada variável. Ele vem **antes** do nome e não
@@ -566,7 +538,7 @@ e sem espaço; `peso` e `Peso` são variáveis diferentes; palavras do C (`int`,
 `return`, `float`...) não valem. A convenção do curso é `snake_case`:
 `peso_atual`, `valor_total`.
 
-Vamos ver na prática. A ficha vira quatro caixinhas, cada uma com seu tipo,
+A ficha vira quatro caixinhas, cada uma com seu tipo,
 seu tamanho e seu endereço. Depois, o peso recebe um valor novo e o antigo
 desaparece:
 
@@ -603,9 +575,8 @@ int main(void) {
 // Bytes: 4, 4, 8, 1
 ```
 
-Repara no fluxograma: criar as variáveis é um passo de processamento (o
-programa reserva memória), e a troca do peso é outro. Ainda é sequência pura,
-um passo depois do outro:
+Criar as variáveis é um passo de processamento (o programa reserva memória),
+e a troca do peso é outro. Ainda é sequência pura:
 
 <p align="center"><img src="01-fundamentos/0002-variaveis/fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
 
@@ -912,7 +883,7 @@ B
 A catraca do estádio conta os torcedores num contador de 16 bits. No clássico
 de domingo, o Maracanã recebeu 78.838 pessoas. Quando o torcedor número 65.536
 passou, o painel voltou a mostrar **zero**. Ninguém errou a conta: o número
-simplesmente não cabia.
+não cabia.
 
 Por baixo de tudo, a memória é feita de **bits**: chavinhas que valem 0 ou 1.
 Oito bits formam um **byte**. Um número inteiro é guardado em **binário** (base
@@ -957,7 +928,7 @@ tabela: o **`<limits.h>`** traz os limites reais da máquina (`INT_MAX`,
 
 Passar do limite é **overflow** (estouro). Num tipo `unsigned`, o C garante o
 comportamento: o número dá a volta, como o odômetro do carro passando de 99999
-para 00000. Vamos ver na prática. A catraca é um `unsigned short` com 65.535,
+para 00000. A catraca é um `unsigned short` com 65.535,
 os 16 bits ligados. Somar 1 dá 65.536, que precisa de 17 bits; o bit de cima
 não cabe e some:
 
@@ -988,9 +959,8 @@ int main(void) {
 // Público: 78838 (o int vai até 2147483647)
 ```
 
-Repara no fluxograma: a pergunta "cabe em 16 bits?" quem faz não é o seu
-programa, é o próprio hardware. Quando não cabe, ele guarda só os 16 bits de
-baixo, sem avisar ninguém:
+No fluxograma, quem faz a pergunta "cabe em 16 bits?" é o hardware, e não o
+seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
 
 <p align="center"><img src="01-fundamentos/0003-tipos-e-limites/fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
 
@@ -1346,7 +1316,7 @@ mesmo: é uma **sequência de escape**. `\n` pula linha, `\t` é tabulação, `\
 põe aspas dentro do texto, `\\` é a própria barra e `\0` é o byte zero. Para
 mostrar `%` no `printf`, escreva `%%` (isso é regra do `printf`, não escape).
 
-Vamos ver na prática. O pré-processador troca `TARIFA` por `4.90` e `EMPRESA`
+Antes da compilação, o pré-processador troca `TARIFA` por `4.90` e `EMPRESA`
 pelo nome da viação. A `linha` é uma caixinha com cadeado: tem endereço, mas
 ninguém escreve nela:
 
@@ -1376,9 +1346,8 @@ int main(void) {
 // Ida e volta: R$ 9.80
 ```
 
-Repara no fluxograma: o primeiro passo acontece antes de o programa existir.
-A troca de texto é feita na compilação; quando o executável roda, ele só tem
-os números:
+O primeiro passo do fluxograma acontece antes de o programa existir: a troca
+de texto é feita na compilação, e o executável já nasce só com os números:
 
 <p align="center"><img src="01-fundamentos/0004-constantes/fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
 
@@ -1387,13 +1356,13 @@ os números:
 > `#define TARIFA 4.90;`, a linha `printf("%.2f\n", 2 * TARIFA);` vira
 > `printf("%.2f\n", 2 * 4.90;);` e não compila. Com `#define TARIFA = 4.90`,
 > vira `2 * = 4.90`. Nada de `=` nem de `;` no `#define`. E o erro aparece na
-> linha onde o nome é **usado**, não na linha do `#define`, o que confunde.
+> linha em que o nome é **usado**, não na do `#define`, o que confunde.
 
 > [!TIP]
 > **Por dentro do C:** salve o programa acima como `tarifa.c`, rode
 > `gcc -E tarifa.c | tail -12` e veja: não sobrou nenhum `TARIFA`, só
 > `4.90`. Por isso um `#define` não ocupa memória, não tem
-> tipo e não aparece no depurador. Já a `const int linha` mora na memória:
+> tipo e não aparece no depurador. A `const int linha`, ao contrário, mora na memória:
 > `&linha` tem endereço e `sizeof linha` vale 4. E os literais têm tamanho:
 > `sizeof(4.90)` é 8 (`double`), `sizeof(4.90f)` é 4 e `sizeof('A')` é 4,
 > porque no C um caractere entre aspas simples é um `int`. Já `sizeof("A")`
@@ -1719,7 +1688,7 @@ Entre o `%` e a letra cabem ajustes, nesta ordem:
 A precisão **arredonda só na tela**: `%.2f` de 7.499 mostra `7.50`, mas a
 variável continua valendo 7.499.
 
-Vamos ver na prática. A linha do arroz tem três buracos: `%-10s` reserva 10
+A linha do arroz tem três buracos: `%-10s` reserva 10
 casas para o nome, encostado à esquerda; `%3d` reserva 3 casas para a
 quantidade; `%9.2f` reserva 9 casas para o total, com 2 decimais:
 
@@ -1746,15 +1715,15 @@ int main(void) {
 // TOTAL             131.17
 ```
 
-Repara no fluxograma: cada `printf` é uma saída, e todas usam o mesmo
-formato. Mudar a largura de uma coluna é mudar um número só, em cada linha:
+Cada `printf` é uma saída, e todas usam o mesmo formato. Para mudar a largura
+de uma coluna, basta trocar um número em cada linha:
 
 <p align="center"><img src="01-fundamentos/0005-printf/fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
 
 > [!WARNING]
 > O `printf` **confia** em você: se o especificador não combina com o tipo do
 > argumento, ele lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
-> nem 10: mostra lixo. `printf("%.2f", 5)` também. Faltar argumento é igual. O
+> nem 10: mostra lixo. `printf("%.2f", 5)` também. Faltar argumento dá no mesmo. O
 > `-Wall` do `rodar` avisa (`format '%d' expects argument of type 'int'`).
 > Nunca ignore esse aviso. E no `printf` não vai `&`: ele quer o valor, não o
 > endereço.
@@ -2063,7 +2032,7 @@ escrever o número digitado. No `printf` não vai `&`; no `scanf`, vai em toda
 variável simples.
 
 Os especificadores quase repetem os do `printf`, com uma diferença que pega
-todo mundo: **`double` se lê com `%lf`** e se mostra com `%f`.
+muita gente: **`double` se lê com `%lf`** e se mostra com `%f`.
 
 | Tipo | Lê com | Mostra com |
 | --- | --- | --- |
@@ -2085,7 +2054,7 @@ itens conseguiu guardar: 1, 2, 3... ou 0 se o primeiro já falhou, ou `EOF`
 certo. No módulo 02, com o `if`, você vai usar esse número para decidir o que
 fazer; por enquanto, mostre e observe.
 
-Vamos ver na prática. Você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
+Acompanhe uma execução: você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
 `150.75` da fila e escreve no endereço de `valor`. O `%d` pula o `'\n'` que
 sobrou, tira o `12` e escreve em `dia`. O último `'\n'` continua na fila:
 
@@ -2120,8 +2089,8 @@ Para testar sem digitar, salve o programa como `pix.c` e mande a entrada
 por um cano: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`. O que vem antes
 do `|` vira o teclado do programa.
 
-Repara no fluxograma: as duas leituras são paralelogramos de entrada, cada
-uma guardando o valor numa caixinha, e só depois vem a saída:
+No fluxograma, as duas leituras são paralelogramos de entrada, cada uma
+guardando o valor numa caixinha. A saída vem depois:
 
 <p align="center"><img src="01-fundamentos/0006-scanf/fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
 
@@ -2442,7 +2411,7 @@ A **precedência** é a da matemática da escola: `*`, `/` e `%` antes de `+` e
 outra coisa (assunto 0065). Para potência, use `pow` (assunto 0010) ou
 multiplique: `x * x`.
 
-Vamos ver na prática. As 24 fatias são divididas entre os cinco, quatro para
+As 24 fatias são divididas entre os cinco, quatro para
 cada um. O `/` conta as rodadas completas e o `%` conta as fatias que não
 fecham mais uma rodada:
 
@@ -2476,9 +2445,8 @@ int main(void) {
 // Com inteiros: R$ 31
 ```
 
-Repara no fluxograma: cada conta é um retângulo de processamento, um depois
-do outro. A ordem importa: `cada` e `sobra` só podem ser calculados depois
-que `fatias` tem valor:
+Cada conta é um retângulo de processamento, e a ordem deles importa: `cada` e
+`sobra` só podem ser calculados depois que `fatias` tem valor:
 
 <p align="center"><img src="01-fundamentos/0007-aritmetica/fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
 
@@ -2497,8 +2465,7 @@ que `fatias` tem valor:
 > (`Floating point exception`), e o detector do `rodar` acusa `division by
 > zero`; com `double`, o resultado vira `inf`. Dividir também custa caro: uma
 > soma leva 1 ciclo do processador, uma divisão inteira leva dezenas. Por isso
-> o compilador troca `x / 8` por um deslocamento de bits quando pode. Você
-> escreve a conta clara, e ele cuida da velocidade.
+> o compilador troca `x / 8` por um deslocamento de bits quando pode.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `2 + 3 * 4 % 5`? Resolva na mão, na
@@ -2805,11 +2772,8 @@ temporária** convertida; a variável `km` continua `int` para sempre. Ele tem
 precedência alta, maior que a de `*` e `/`, então `(double) km / litros`
 converte só o `km`, e isso basta, porque aí a divisão já vira real.
 
-Resumo: no C, o tipo de cada pedaço da conta decide o resultado. Antes de
-confiar numa conta, pergunte de que tipo é cada operando.
-
-Vamos ver na prática. Pelo caminho de cima, os dois `int` se dividem, sai 12,
-e só então ele vira 12.0, tarde demais. Pelo caminho de baixo, o cast
+O desenho mostra os dois caminhos. Pelo de cima, os dois `int` se dividem, sai 12,
+e só então ele vira 12.0, tarde demais. Pelo de baixo, o cast
 transforma o 523 em 523.0 antes da divisão, e o resultado é real:
 
 <p align="center"><img src="01-fundamentos/0008-conversao/ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
@@ -2842,9 +2806,9 @@ int main(void) {
 // Num int:       12 km/l
 ```
 
-Repara no fluxograma: a pergunta que decide o resultado é "tem um real na
-divisão?". Ela é respondida pelo compilador, olhando os tipos, antes de o
-programa rodar. O exemplo segue pelo Sim, graças ao cast:
+A pergunta que decide o resultado é "tem um real na divisão?". Quem responde
+é o compilador, olhando os tipos, antes de o programa rodar. Graças ao cast,
+o exemplo segue pelo Sim:
 
 <p align="center"><img src="01-fundamentos/0008-conversao/fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
 
@@ -3132,8 +3096,8 @@ O bilhete único tem R$ 20,00. Você recarrega R$ 30,00, pega dois ônibus de
 R$ 4,40 e o validador conta as viagens. O saldo não é recalculado do zero a
 cada passo: ele é **atualizado**, somando ou tirando do valor que já está lá.
 
-O `=` do C não é o "igual" da matemática: é "guarde o valor da direita na
-variável da esquerda". Por isso `saldo = saldo + 30.00` faz sentido: calcula
+No C, `=` quer dizer "guarde o valor da direita na variável da esquerda", e
+não o "igual" da matemática. Por isso `saldo = saldo + 30.00` faz sentido: calcula
 com o valor antigo e escreve o novo por cima. Do lado esquerdo só pode ficar
 algo que tem endereço, uma variável; `30 = saldo` e `saldo + 1 = 5` não
 compilam.
@@ -3160,12 +3124,11 @@ aparece quando o valor é **usado** na mesma expressão:
 - **pós** (`x++`): a expressão vale o valor **antigo**, e depois `x` aumenta;
 - **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
 
-E um detalhe que explica muita coisa: a atribuição também é uma expressão, e
-vale o valor guardado. E ela associa **da direita para a esquerda**, ao
+A atribuição também é uma expressão, e vale o valor guardado. Ela associa **da direita para a esquerda**, ao
 contrário dos aritméticos. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
 que vale 7, depois `b = 7` e por fim `a = 7`.
 
-Vamos ver na prática. O saldo passa por quatro valores, cada um calculado a
+O saldo passa por quatro valores, cada um calculado a
 partir do anterior, na mesma caixinha. As viagens sobem de um em um:
 
 <p align="center"><img src="01-fundamentos/0009-atribuicao/ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
@@ -3197,9 +3160,9 @@ int main(void) {
 // antes = 2, depois = 4, viagens = 4
 ```
 
-Repara no fluxograma: cada atualização é um retângulo, e todos mexem nas
-mesmas duas variáveis. No módulo 03 esses passos repetidos vão virar uma
-repetição; o `+=` e o `++` são o coração de todo contador e acumulador:
+Cada atualização é um retângulo, e todos mexem nas mesmas duas variáveis. No
+módulo 03 esses passos repetidos viram um laço, e o `+=` e o `++` passam a
+fazer o papel de contador e acumulador:
 
 <p align="center"><img src="01-fundamentos/0009-atribuicao/fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
 
@@ -3522,7 +3485,7 @@ desce na reta (`floor(-2.3)` é -3), `ceil` sempre sobe (`ceil(-2.7)` é -2), e
 **corta** e dá -2. O `ceil` é o das contas de "quantos preciso comprar": 2,78
 latas de tinta viram 3 latas.
 
-Vamos ver na prática. O diâmetro de 35 vira raio 17,5; `pow` eleva ao
+Na conta da grande, o diâmetro de 35 vira raio 17,5; `pow` eleva ao
 quadrado; vezes pi, dá a área da grande. A mesma conta para as médias, vezes
 dois, dá 981,75 cm², um pouco mais que a grande:
 
@@ -3562,12 +3525,11 @@ int main(void) {
 // Duas médias = uma pizza de 35.4 cm
 ```
 
-Moral da pizza: duas médias dão um pouco mais de pizza, mas cada 100 cm² da
-grande sai quase R$ 2 mais barato.
+Duas médias dão um pouco mais de pizza, mas cada 100 cm² da grande sai quase
+R$ 2 mais barato.
 
-Repara no fluxograma: as funções entram no meio das contas como qualquer
-valor. `pow(...)` e `sqrt(...)` são calculados e o resultado segue na
-expressão, como num processamento comum:
+No fluxograma, as funções entram no meio das contas como qualquer valor:
+`pow(...)` e `sqrt(...)` são calculados e o resultado segue na expressão:
 
 <p align="center"><img src="01-fundamentos/0010-math/fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
 
@@ -3584,7 +3546,7 @@ expressão, como num processamento comum:
 > `int`: o compilador converte para `double` antes de chamar. O código mora
 > na biblioteca `libm`, e quem junta é o ligador com a opção `-lm` (o
 > `rodar` já passa). Sem ela, pode aparecer `undefined reference to 'pow'`.
-> E o compilador é esperto: `sqrt(x)` vira uma instrução só do processador
+> E o compilador otimiza: `sqrt(x)` vira uma instrução só do processador
 > (`sqrtsd`), `pow(x, 2)` vira `x * x`, e `sqrt(2.0)` é calculado na
 > compilação, sem chamada nenhuma.
 
@@ -3874,8 +3836,8 @@ pega o papel, faz a conta no celular e manda no grupo quanto cada um deve.
 Dá para fazer melhor: um programa que lê as duas leituras do relógio e o
 número de moradores e devolve a conta pronta, com o valor de cada um.
 
-Esse programa usa tudo o que o módulo ensinou, na ordem em que um programa
-de verdade usa:
+Esse programa usa tudo o que o módulo ensinou, na ordem em que aparece num
+programa real:
 
 - **constantes** (`#define`) para a tarifa e a taxa fixa: mudou a tarifa,
   muda uma linha;
@@ -3888,13 +3850,13 @@ de verdade usa:
   descoberta);
 - **saída** com `printf` alinhado, largura e duas casas.
 
-É o modelo **entrada → processamento → saída** do começo do módulo, agora
-com programa de verdade. E é **sequência** pura: o programa faz sempre os
+É o modelo **entrada → processamento → saída** do começo do módulo, e é
+**sequência** pura: o programa faz sempre os
 mesmos passos, na mesma ordem. Ele não pergunta nada, não confere se a
 leitura atual é maior que a anterior, não repete. Isso vem nos módulos 02
 (decisão) e 03 (repetição).
 
-Vamos ver na prática. As três leituras entram, o consumo vira 257 kWh, a
+Os três valores entram, o consumo vira 257 kWh, a
 conta vira R$ 229,24, e a divisão por três, com o centavo arredondado para
 cima, dá R$ 76,42 para cada um:
 
@@ -3965,8 +3927,8 @@ Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100 dá 7641,33...; o `ceil`
 sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
 dois centavos, mas a conta fica paga.
 
-Repara no fluxograma: uma leitura, quatro contas e uma saída, sem nenhum
-losango. É o retrato de todo programa deste módulo:
+Uma leitura, quatro contas e uma saída, sem nenhum losango: assim é todo
+programa deste módulo:
 
 <p align="center"><img src="01-fundamentos/0011-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
 
@@ -4327,9 +4289,9 @@ Daqui a quantos dias? 100
 Dia da semana: 1
 ```
 
-Com 1000 sai `Dia da semana: 5`. Ou seja: **segunda-feira** e **sexta-feira**.
-A conta inteira é `(6 + dias) % 7`. O `%` é perfeito para tudo que "dá a
-volta": dias da semana, horas do relógio, posições numa roda.
+Com 1000 sai `Dia da semana: 5`: **segunda-feira** e **sexta-feira**.
+A conta inteira é `(6 + dias) % 7`. O `%` serve para tudo que "dá a volta",
+como dias da semana e horas do relógio.
 
 </details>
 
@@ -5438,7 +5400,7 @@ x *= 2 + 3;
 <details><summary>Gabarito</summary>
 
 **(D).** O operador composto age sobre a expressão inteira da direita:
-`x *= 2 + 3` é `x = x * (2 + 3)`, ou seja, 10 × 5. O 23 viria de ler
+`x *= 2 + 3` é `x = x * (2 + 3)`, isto é, 10 × 5. O 23 viria de ler
 `x * 2 + 3`. Veja 0009.
 
 </details>

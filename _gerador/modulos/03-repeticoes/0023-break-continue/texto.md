@@ -16,7 +16,7 @@ Em C, esses atalhos são o **`break`** e o **`continue`**:
 Os dois quase sempre aparecem dentro de um `if`: "se acontecer tal coisa,
 saia" ou "se acontecer tal coisa, pule".
 
-Com o `break`, aparece um laço muito comum: o **`while (1)`** (ou `for (;;)`).
+Com o `break` surge um laço muito comum: o **`while (1)`** (ou `for (;;)`).
 A condição é sempre verdadeira, e quem decide a saída é um `break` no meio do
 corpo. Isso é útil quando o motivo para parar só aparece **depois** de ler o
 dado, como no caixa: você lê o preço e só então descobre que é 0.
@@ -25,7 +25,7 @@ Depois de um laço com `break`, às vezes você precisa saber **por que** ele
 parou: pela condição ou pelo `break`? O exemplo A046 testa se um número é
 primo assim: se o laço chegou ao fim sem achar divisor, é primo.
 
-Vamos ver na prática. A compra tem 12,90, uma leitura com erro (-1), 8,50,
+A compra do exemplo tem 12,90, uma leitura com erro (-1), 8,50,
 4,00 e, para fechar, 0. O -1 cai no `continue` e volta direto para a leitura,
 sem passar pela soma. O 0 cai no `break` e sai do laço:
 
@@ -73,7 +73,7 @@ int main(void) {
 // Total: R$ 25.40
 ```
 
-Repara no fluxograma: o laço tem **duas** setas de volta para "Ler preço". Uma
+O laço tem **duas** setas de volta para "Ler preço". Uma
 sai direto do losango "preço < 0?" pelo Sim: é o `continue`, que pula a soma.
 A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 "preço == 0?", que é o `break`:
@@ -94,8 +94,8 @@ A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 > (no `for`) ou "pule para a pergunta" (no `while`). Eles valem só para o laço
 > **mais interno**. Não existe `break` com rótulo para sair de dois laços de
 > uma vez. O C tem o `goto rotulo;`, que salta para qualquer ponto da
-> mesma função. Evite: ele só é aceito, em código de verdade, para sair de
-> vários laços de uma vez ou para pular para a limpeza no fim de uma função.
+> mesma função. Evite: em código real, ele só é aceito para sair de vários
+> laços de uma vez ou para pular para a limpeza no fim de uma função.
 
 > [!NOTE]
 > **Pergunta para você:** se o primeiro preço digitado for 0, o que aparece na

@@ -1,8 +1,7 @@
 ## 0084 · Pilha na prática: parênteses e notação pós-fixa
 
 Você esquece de fechar um colchete no VS Code e, na hora, o editor sublinha
-de vermelho o lugar certo. Ele não está contando parênteses. Está usando uma
-pilha.
+de vermelho o lugar certo. Ele não conta parênteses: usa uma pilha.
 
 Com um tipo só de parêntese, um contador resolve: soma 1 no `(`, tira 1 no
 `)`, nunca pode ficar negativo e tem que terminar em zero. Com três tipos
@@ -10,9 +9,8 @@ Com um tipo só de parêntese, um contador resolve: soma 1 no `(`, tira 1 no
 fechamentos, a conta fecha, e a expressão está errada: o `)` chegou quando
 quem estava esperando era o `[`.
 
-A regra que você precisa é: **todo fechamento casa com a abertura mais
-recente que ainda não fechou**. "Mais recente ainda pendente" é exatamente o
-topo de uma pilha. O algoritmo:
+A regra é: **todo fechamento casa com a abertura mais recente que ainda não
+fechou**. "Mais recente ainda pendente" é o topo de uma pilha. O algoritmo:
 
 1. abriu (`(`, `[` ou `{`): **empilha**;
 2. fechou: **desempilha** e confere se é o par certo. Pilha vazia ou par
@@ -21,15 +19,15 @@ topo de uma pilha. O algoritmo:
 4. acabou a string: a pilha tem que estar **vazia**. Se sobrou alguém, faltou
    fechar.
 
-Vamos ver na prática com `{ x = v[(i + 1)] }`. Tirando o resto, sobram os
+Tome `{ x = v[(i + 1)] }`. Tirando o resto, sobram os
 delimitadores `{ [ ( ) ] }`. Os três primeiros são empilhados. Quando chega o
 `)`, o topo é `(`: casou, desempilha e segue. Depois `]` casa com `[` e `}`
 casa com `{`:
 
 {{ideia}}
 
-O verificador, testado com quatro expressões. O `pilha.h` e o `pilha.c` são
-os mesmos do 0083 e estão na pasta do assunto:
+O verificador abaixo é testado com quatro expressões. O `pilha.h` e o
+`pilha.c` são os mesmos do 0083 e estão na pasta do assunto:
 
 ```c
 #include <stdbool.h>
@@ -86,8 +84,8 @@ int main(void) {
 // { [ (                com erro
 ```
 
-Repara no fluxograma: o laço só tem duas saídas antecipadas para o erro, e a
-pergunta "pilha vazia?" só acontece quando a string acaba:
+O laço do fluxograma tem só duas saídas antecipadas para o erro, e a pergunta
+"pilha vazia?" só aparece quando a string acaba:
 
 {{fluxograma}}
 
@@ -114,7 +112,7 @@ número só, o resultado:
 | `4` | empilha | 180 4 |
 | `/` | tira 4 e 180, empilha 180 / 4 | 45 |
 
-Cada um paga R$ 45. O exemplo A168 faz exatamente essa tabela em C, juntando
+Cada um paga R$ 45. O exemplo A168 faz essa tabela em C, juntando
 os dígitos de `35` num número só e acusando expressão inválida quando falta
 operando ou sobra número na pilha. É assim que compiladores e máquinas
 virtuais (a JVM, o WebAssembly) calculam: traduzem a sua expressão para algo
@@ -124,13 +122,14 @@ parecido com a pós-fixa e rodam numa pilha.
 > Na pós-fixa, o **primeiro** a sair da pilha é o operando da **direita**.
 > Em `8 3 -`, desempilha o 3 (b) e depois o 8 (a), e a conta é `a - b = 5`.
 > Inverter dá `-5`, e o erro some na soma e na multiplicação, que não ligam
-> para a ordem. Teste sempre com `-` e `/`. No verificador de parênteses, o
-> erro clássico é esquecer o passo 4: sem conferir se a pilha terminou
+> para a ordem. Teste com `-` e `/`. No verificador de parênteses, o erro
+> comum é esquecer o passo 4: sem conferir se a pilha terminou
 > vazia, `{ [ (` passa como balanceada.
 
 > [!TIP]
 > **Por dentro do C:** o `char` que entra no `pilha_empilha(p, c)` vira `int`
-> sem cast nenhum (promoção de inteiros), e `'('` é só o número 40 na tabela
+> sem cast (promoção de inteiros), e `'('` é o número 40 na tabela
+
 > ASCII. Na pós-fixa, `expr[i] - '0'` transforma o caractere `'7'` (55) no
 > número 7, porque os dígitos são consecutivos na tabela. E o tamanho da pilha
 > nunca passa do número de caracteres da string: no pior caso, `((((((`, tudo

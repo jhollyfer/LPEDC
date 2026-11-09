@@ -9,8 +9,7 @@ vezes precisar.
 No C, isso se faz com funções e com módulos (`.h` e `.c`). E dá para ver **o
 que acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
 nasce na pilha, o endereço de volta, a variável que some no `return`. Com essa
-imagem na cabeça, a **recursão** deixa de ser mágica e vira só mais uma
-chamada.
+imagem na cabeça, a **recursão** vira só mais uma chamada.
 
 No fim, o programa sai de um arquivo só: você monta **módulos** com `.h` e
 `.c`, compila cada parte separada e deixa o ligador juntar tudo. É o mesmo
@@ -23,31 +22,15 @@ formato das estruturas de dados da segunda metade do curso.
 - **escopo** e **tempo de vida**: local, global e `static`
 - a **pilha de chamadas**: o quadro de cada chamada e o stack overflow
 - **recursão**: caso base, caso recursivo e como confiar na função
-- o custo da recursão no Fibonacci, e onde ela brilha: Hanói e Euclides
+- o custo da recursão no Fibonacci e os casos em que ela compensa: Hanói e Euclides
 - **módulos** com `.h` e `.c`, include guards e compilação separada
 - **macros** e `#ifdef`, e as armadilhas da troca de texto
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro. Nos assuntos de pilha e recursão, cada caixa empilhada é
-o quadro de uma chamada, e o de cima é quem está rodando.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+Nos desenhos de pilha e recursão, cada caixa empilhada é o quadro de uma
+chamada, e a de cima é a que está rodando. Responda a **Pergunta para você**
+antes de rodar.
 
 Você precisa dos módulos 01 a 03: tipos, `printf` e `scanf`, `if`, `switch` e
 laços. Vetores ainda **não** aparecem aqui (são o módulo 05), então todos os
@@ -63,8 +46,8 @@ sudo apt install gdb        # Debian / Ubuntu
 
 Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
 `conversao.c`, `cardapio.h` e `cardapio.c`). O `rodar` compila esses `.c`
-junto com o exemplo, sozinho. O texto mostra também o comando `gcc` para fazer
-isso à mão.
+junto com o exemplo; o texto mostra também o comando `gcc` para fazer isso à
+mão.
 
 {{indice}}
 

@@ -33,12 +33,12 @@ pergunta nada. Ele **guarda 0 no saldo** e testa esse 0, que é falso. E
 `if (opcao = 1)` guarda 1 e testa 1, que é sempre verdade. O programa compila,
 roda e faz besteira em silêncio.
 
-O compilador não recusa esse código, mas avisa se você pedir. Quem grita
-é o `-Wall`: "suggest parentheses around assignment used as truth value". O
+O compilador aceita esse código, mas avisa se você pedir. Quem avisa é o
+`-Wall`: "suggest parentheses around assignment used as truth value". O
 `rodar` liga esse aviso. **Nunca ignore um warning**: no curso, código bom
 compila com zero avisos.
 
-Vamos ver na prática. O cartão tem R$ 3,50, a tarifa é R$ 5,00. A pergunta
+No exemplo, o cartão tem R$ 3,50, a tarifa é R$ 5,00. A pergunta
 responde Não, e desta vez o caminho que vale é o de baixo:
 
 {{ideia}}
@@ -66,9 +66,8 @@ int main(void) {
 // Faltam R$ 1.50
 ```
 
-Repara no fluxograma: o caminho verde sai pelo Não. Cada lado do losango tem
-o seu bloco, e os dois se encontram de novo no Fim. Não há como passar pelos
-dois:
+Desta vez o caminho verde sai pelo Não. Cada lado do losango tem o seu bloco,
+e os dois se reencontram no Fim, sem como passar pelos dois:
 
 {{fluxograma}}
 
@@ -85,9 +84,9 @@ dois:
 > **Por dentro do C:** o `if/else` vira **dois** saltos. O primeiro é o do
 > `if`: "se a condição for falsa, pula para o bloco do `else`". O segundo fica
 > no fim do bloco do `if`: um salto incondicional (`jmp`) que **pula por cima**
-> do `else`, para os dois caminhos não se misturarem. E o `=` dentro do `if`?
-> Para o compilador, `if (x = 0)` é "guarda 0 em `x`, depois compara `x` com 0".
-> É código perfeitamente legal, por isso só dá aviso, não erro.
+> do `else`, para os dois caminhos não se misturarem. Quanto ao `=` dentro do `if`:
+> para o compilador, `if (x = 0)` é "guarda 0 em `x`, depois compara `x` com 0".
+> É código válido, por isso só dá aviso, não erro.
 
 > [!NOTE]
 > **Pergunta para você:** se o saldo fosse exatamente R$ 5,00, o que

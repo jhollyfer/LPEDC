@@ -30,7 +30,7 @@ desce na reta (`floor(-2.3)` é -3), `ceil` sempre sobe (`ceil(-2.7)` é -2), e
 **corta** e dá -2. O `ceil` é o das contas de "quantos preciso comprar": 2,78
 latas de tinta viram 3 latas.
 
-Vamos ver na prática. O diâmetro de 35 vira raio 17,5; `pow` eleva ao
+Na conta da grande, o diâmetro de 35 vira raio 17,5; `pow` eleva ao
 quadrado; vezes pi, dá a área da grande. A mesma conta para as médias, vezes
 dois, dá 981,75 cm², um pouco mais que a grande:
 
@@ -70,12 +70,11 @@ int main(void) {
 // Duas médias = uma pizza de 35.4 cm
 ```
 
-Moral da pizza: duas médias dão um pouco mais de pizza, mas cada 100 cm² da
-grande sai quase R$ 2 mais barato.
+Duas médias dão um pouco mais de pizza, mas cada 100 cm² da grande sai quase
+R$ 2 mais barato.
 
-Repara no fluxograma: as funções entram no meio das contas como qualquer
-valor. `pow(...)` e `sqrt(...)` são calculados e o resultado segue na
-expressão, como num processamento comum:
+No fluxograma, as funções entram no meio das contas como qualquer valor:
+`pow(...)` e `sqrt(...)` são calculados e o resultado segue na expressão:
 
 {{fluxograma}}
 
@@ -92,7 +91,7 @@ expressão, como num processamento comum:
 > `int`: o compilador converte para `double` antes de chamar. O código mora
 > na biblioteca `libm`, e quem junta é o ligador com a opção `-lm` (o
 > `rodar` já passa). Sem ela, pode aparecer `undefined reference to 'pow'`.
-> E o compilador é esperto: `sqrt(x)` vira uma instrução só do processador
+> E o compilador otimiza: `sqrt(x)` vira uma instrução só do processador
 > (`sqrtsd`), `pow(x, 2)` vira `x * x`, e `sqrt(2.0)` é calculado na
 > compilação, sem chamada nenhuma.
 

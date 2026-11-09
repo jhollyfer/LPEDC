@@ -2,7 +2,7 @@
 
 Viagem de carro, celular no painel, a playlist tocando. Alguém pula duas
 músicas, outra pessoa tira aquela que ninguém aguenta mais, e quando a última
-acaba, o modo "repetir tudo" volta para a primeira. Por trás desse player tem
+acaba, o modo "repetir tudo" volta para a primeira. Por trás desse player está
 quase tudo deste módulo: uma lista dupla (anterior e próxima), busca e
 remoção pelo título, um cursor que anda e, no repetir, a volta da lista
 circular.
@@ -40,12 +40,11 @@ const Musica *playlist_proxima(Playlist *p) {
 }
 ```
 
-Repare que a lista **não** é circular de verdade: o último `prox` continua
-`NULL`. A volta é uma decisão da função, ligada ou desligada por um `bool`.
+A lista **não** é circular de verdade: o último `prox` continua `NULL`. A volta é uma decisão da função, ligada ou desligada por um `bool`.
 Assim o resto do código (imprimir, liberar, salvar) continua com o `for` de
 sempre, sem risco de laço infinito.
 
-Vamos ver na prática. A playlist começa com cinco músicas e 20:01 no total.
+A playlist do exemplo começa com cinco músicas e 20:01 no total.
 Pulando duas, toca a terceira. Depois a "Asa Branca" sai, a playlist chega na
 última e, com o repetir ligado, a próxima volta para "Aquarela":
 
@@ -95,7 +94,7 @@ int main(void) {
 // anterior: Tempo Perdido
 ```
 
-Repara no fluxograma da `playlist_proxima`: tocando "Tempo Perdido", não há
+O fluxograma segue a `playlist_proxima`. Tocando "Tempo Perdido", não há
 próxima. Na primeira tentativa o repetir está desligado e a função devolve
 `NULL` ("fim da playlist"). Na segunda, ligado, o caminho é o verde: o
 `atual` volta para o início:
@@ -112,8 +111,8 @@ contar as músicas longas.
 > playlist cheia. Com o repetir desligado na última música, o mesmo código
 > acessa `NULL`. Em código de verdade, guarde o ponteiro e teste. E copie
 > texto com `snprintf(destino, sizeof destino, "%s", origem)`: um título
-> maior que 39 caracteres é cortado em vez de estourar o vetor, coisa que o
-> `strcpy` faria sem pensar duas vezes.
+> maior que 39 caracteres é cortado em vez de estourar o vetor, como faria o
+> `strcpy`.
 
 > [!TIP]
 > **Por dentro do C:** a `Musica` tem 40 + 30 bytes de texto, 2 de
@@ -122,9 +121,10 @@ contar as músicas longas.
 > `sizeof(Faixa)` dá 96 bytes. O
 > `const Musica *` que as funções devolvem aponta para **dentro** da faixa,
 > no heap. Ele vale enquanto a música existir: depois de
-> `playlist_remove` daquela música, é um ponteiro solto. É a mesma regra do
-> vetor dinâmico (0075), em outra roupa: quem empresta um endereço de dentro
-> da estrutura precisa dizer até quando ele vale.
+> `playlist_remove` daquela música, é um ponteiro solto. Vale a regra do
+> vetor dinâmico (0075): quem empresta um endereço de dentro da estrutura
+> precisa dizer até quando ele vale.
+
 
 > [!NOTE]
 > **Pergunta para você:** se o exemplo chamasse `playlist_remove(viagem,

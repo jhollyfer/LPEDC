@@ -2,16 +2,16 @@
 
 A lista encadeada do módulo 11 deixa você inserir e remover em qualquer
 lugar. Este módulo faz o contrário: **proíbe**. Uma pilha só mexe no topo;
-uma fila só entra por um lado e sai pelo outro. Parece perda, mas é a
-restrição que dá a garantia: o desfazer sempre desfaz o último passo, e quem
-chegou primeiro sempre é atendido primeiro.
+uma fila só entra por um lado e sai pelo outro. Parece perda, mas a restrição
+traz uma garantia: o desfazer sempre desfaz o último passo, e quem chegou
+primeiro é atendido primeiro.
 
-Você usa essas estruturas o dia inteiro sem ver. A pilha de chamadas do seu
+Você usa essas estruturas o dia inteiro sem perceber. A pilha de chamadas do seu
 programa, o Ctrl+Z, o botão Voltar e o *parser* de um compilador são pilhas. A
 fila de processos do sistema operacional, a fila de jobs do seu backend e a
-impressora do escritório são filas. Aqui você constrói as duas do zero, cada uma de dois
-jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
-`.c` trocado por baixo, e o programa cliente nem percebe.
+impressora do escritório são filas. Aqui você constrói as duas do zero, cada
+uma de dois jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo
+`.h`, o `.c` trocado por baixo, e o programa cliente não muda.
 
 ## O que você vai aprender
 
@@ -23,28 +23,11 @@ jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
 - o **deque**, que entra e sai pelas duas pontas, e a pegadinha do resto negativo
 - uma calculadora que junta tudo: infixa → pós-fixa → resultado
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com a
-   memória por dentro.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho de uma operação.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue (e, nos desenhos de
-memória, o item que está saindo); cinza é o que ele não usa ou a gaveta que
-já virou vaga.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
+Os diagramas da ideia mostram a memória por dentro: neles, verde marca o item
+que está saindo e cinza a gaveta que já virou vaga.
 
 Você precisa estar à vontade com ponteiros, `malloc`/`free`, `struct` com
 `->` e listas encadeadas (módulos 06, 07, 08 e 11), além da ideia de TAD do
@@ -53,13 +36,13 @@ assunto 0074.
 Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
 `pilha.h` e `pilha.c`, `fila.h` e `fila.c` ou `deque.h` e `deque.c`. O
 `rodar` compila esses `.c` de apoio junto com qualquer exemplo ou exercício
-da pasta, então basta:
+da pasta:
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A163.c
 ```
 
-Por isso, num exercício, **não** crie funções com os nomes do TAD
+Num exercício, então, **não** crie funções com os nomes do TAD
 (`pilha_cria`, `fila_insere`...): o ligador reclamaria de definição
 duplicada. Os exercícios que pedem uma estrutura diferente usam outros nomes
 e trazem tudo no próprio arquivo.
@@ -106,8 +89,8 @@ também com `<ul><li>a</li><li>b</li></ul>`.
 
 <details><summary>Resposta</summary>
 
-Primeiro, segundo e terceiro: certo, errado, certo. É o verificador do 0084 com palavras
-no lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
+Certo, errado, certo. É o verificador do 0084 com palavras no lugar de
+caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
 encadeada, como a do E495); ao ler `</nome>`, desempilhe e compare com
 `strcmp`. No fim, a pilha precisa estar vazia.
 
@@ -128,8 +111,8 @@ alternando 1000 vezes: 2000 empilhas (soma 500500)
 ```
 
 Dica: a soma confere que saiu tudo, na ordem certa ou não (1 + ... + 1000).
-Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída.
-É o **custo amortizado**: uma retirada pode custar O(n) (o despejo), mas a
+Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída:
+**custo amortizado**. uma retirada pode custar O(n) (o despejo), mas a
 média por operação é O(1).
 
 </details>
@@ -223,7 +206,7 @@ Qual é o custo?
 Gire a fila uma volta completa: retire cada item e insira de novo no fim,
 exceto o x, que é descartado. A ordem dos outros se mantém e o custo é
 **O(n)**. Com acesso aos nós seria O(n) também (precisa achar o x), mas sem
-o malloc e o free de cada volta. Remover do meio não é o forte da fila.
+o malloc e o free de cada volta. A fila não foi feita para remover do meio.
 
 </details>
 
@@ -415,8 +398,9 @@ printf("%d %d\n", topo, p[topo]);
 
 **C.** Aqui `topo` é o índice do topo (pilha vazia é `-1`). Os pares
 empilham e logo desempilham: o 4 sai, o 16 sai. Ficam 1, 9 e 25 nas posições
-0, 1 e 2, com `topo = 2`. Repare que o 16 foi escrito em `p[2]` e depois o 25
-escreveu por cima. Veja 0082 (as duas convenções de topo).
+0, 1 e 2, com `topo = 2`. O 16 foi escrito em `p[2]` e depois o 25 escreveu
+por cima.
+ Veja 0082 (as duas convenções de topo).
 
 </details>
 

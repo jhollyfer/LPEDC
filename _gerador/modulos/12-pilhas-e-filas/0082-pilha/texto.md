@@ -10,7 +10,7 @@ entrar é o primeiro a sair: **LIFO** (*last in, first out*). É a pilha de
 pratos do restaurante por quilo, o Ctrl+Z do editor, o botão Voltar do
 navegador e a pilha de chamadas que você viu no assunto 0031.
 
-As operações são poucas, e é isso que dá força à pilha:
+São poucas operações:
 
 - **empilhar** (*push*): põe um item no topo;
 - **desempilhar** (*pop*): tira o item do topo e devolve o valor;
@@ -19,7 +19,7 @@ As operações são poucas, e é isso que dá força à pilha:
 
 No Cormen, elas se chamam PUSH, POP e STACK-EMPTY.
 
-No C não existe nada pronto, então você monta a pilha como um **TAD** (assunto 0074):
+O C não traz pilha pronta, então você monta uma como **TAD** (assunto 0074):
 o `pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
 só inclui o `.h`:
 
@@ -35,8 +35,8 @@ bool pilha_desempilha(Pilha *p, int *valor); // pop: false se estava vazia
 bool pilha_topo(const Pilha *p, int *valor); // peek: olha o topo sem tirar
 ```
 
-Repare no `bool` de volta. O valor desempilhado vem pelo ponteiro, e o retorno
-só diz se deu certo. Tirar de uma pilha vazia (**underflow**) é erro de lógica
+As funções devolvem `bool`: o valor desempilhado vem pelo ponteiro, e o
+retorno só diz se deu certo. Tirar de uma pilha vazia (**underflow**) é erro de lógica
 de quem chamou. Empilhar numa pilha cheia (**overflow**) só acontece porque o
 vetor tem tamanho fixo.
 
@@ -69,14 +69,14 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 }
 ```
 
-Vamos ver na prática. Os três preços entram em centavos (2590, 800 e 1200),
-um em cima do outro. No vetor, ocupam as gavetas 0, 1 e 2, e `n` vale 3. O
+No exemplo, os três preços entram em centavos (2590, 800 e 1200), um em cima
+do outro. No vetor, ocupam as gavetas 0, 1 e 2, e `n` vale 3. O
 desfazer tira o 1200 do topo:
 
 {{ideia}}
 
-O programa do pedido. Ele não sabe que existe um vetor lá dentro: só conversa
-com as funções do `pilha.h`:
+O programa do pedido não sabe que existe um vetor lá dentro: só conversa com
+as funções do `pilha.h`:
 
 ```c
 #include <stdio.h>
@@ -111,18 +111,18 @@ int main(void) {
 // Itens no pedido: 2
 ```
 
-Repara no fluxograma do desfazer: a primeira coisa é perguntar se a pilha está
-vazia. Só depois `n` diminui e o valor é lido:
+O fluxograma do desfazer começa perguntando se a pilha está vazia. Só depois
+`n` diminui e o valor é lido:
 
 {{fluxograma}}
 
 > [!WARNING]
-> A ordem de `n--` e da leitura é o erro clássico. Se você lê `itens[n]` antes
+> O erro mais comum é a ordem de `n--` e da leitura. Se você lê `itens[n]` antes
 > de diminuir `n`, pega a gaveta **vazia** logo acima do topo: lixo, ou um
 > valor velho que já tinha saído. Fixe a convenção e não misture: aqui `n` é a
 > próxima vaga (empilha em `itens[n]` e depois `n++`; desempilha com `n--` e
 > depois lê). Muito livro usa `topo = -1` para pilha vazia, e aí o topo é
-> `itens[topo]`. As duas funcionam. Misturar as duas não. O Cormen indexa o
+> `itens[topo]`. As duas funcionam; misturar as duas, não. O Cormen indexa o
 > vetor a partir de 1: lá, `S.top` é o índice do topo **e** a quantidade de
 > itens, e pilha vazia é `S.top = 0`.
 
@@ -131,13 +131,14 @@ vazia. Só depois `n` diminui e o valor é lido:
 > gaveta 2; ele só deixou de fazer parte da pilha porque `n` voltou para 2. O
 > próximo `push` escreve por cima. Por isso empilhar e desempilhar custam
 > **O(1)**: uma conta e uma cópia, não importa se a pilha tem 3 ou 100 itens.
-> E repare no tamanho: `sizeof(struct pilha)` dá 404 bytes (100 `int` de 4
+> Quanto ao tamanho, `sizeof(struct pilha)` dá 404 bytes (100 `int` de 4
 > bytes, mais o `n`), alocados de uma vez pelo `malloc` no `pilha_cria`, mesmo
-> com só 3 itens dentro. O vetor é a casa da pilha, não a pilha.
+> com só 3 itens dentro.
 
 > [!NOTE]
 > **Pergunta para você:** no programa do pedido, se o cliente tocar em
-> "desfazer" mais três vezes seguidas, o que cada chamada de `pilha_desempilha` devolve? E o que
-> fica em `preco` na última? Pense antes de testar.
+> "desfazer" mais três vezes seguidas, o que cada chamada de
+> `pilha_desempilha` devolve? E o que fica em `preco` na última?
+
 
 {{pratique}}

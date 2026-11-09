@@ -24,12 +24,12 @@ não tente seguir as chamadas de cabeça. Suponha que `fatorial(n - 1)` já
 funciona e pergunte só: com essa resposta na mão, como eu monto a de `n`?
 Depois confira o caso base. Se os dois estão certos, a função está certa.
 
-Não tem mágica: cada chamada é uma chamada comum, com o **seu próprio quadro**
+Cada chamada recursiva é uma chamada comum, com o **seu próprio quadro**
 na pilha (assunto 0031). `fatorial(5)` empilha `fatorial(4)`, que empilha
 `fatorial(3)`... São cinco quadros de `fatorial` ao mesmo tempo, cada um com o
 seu `n`, e todos parados esperando, menos o do topo.
 
-Vamos ver na prática. Na **ida**, a pilha cresce até `fatorial(1)`, que é o
+Na **ida**, a pilha cresce até `fatorial(1)`, que é o
 caso base e devolve 1 sem chamar ninguém. Na **volta**, cada quadro recebe a
 resposta de cima, faz a sua multiplicação e devolve para o de baixo: 1, 2, 6,
 24, 120:
@@ -58,8 +58,7 @@ int main(void) {
 // 12 amigos: 479001600 jeitos
 ```
 
-Repara no fluxograma: não existe `for` nem `while` no código, mas existem
-duas voltas. A primeira é a ida (empilha de novo com `n - 1` até o caso
+Não existe `for` nem `while` no código, mas o fluxograma tem duas voltas. A primeira é a ida (empilha de novo com `n - 1` até o caso
 base); a segunda é a volta (cada quadro esperando faz a sua multiplicação e
 sai):
 
@@ -80,7 +79,7 @@ baixo para cima da tabela:
 
 Recursão e laço resolvem os mesmos problemas: todo `for` vira recursão e toda
 recursão vira laço (às vezes com bastante trabalho). O fatorial com `for` é
-até mais simples e mais barato. A recursão brilha quando o problema **é**
+até mais simples e mais barato. A recursão compensa quando o problema **é**
 recursivo por natureza: pastas dentro de pastas, árvores, "divide ao meio e
 resolve cada metade".
 

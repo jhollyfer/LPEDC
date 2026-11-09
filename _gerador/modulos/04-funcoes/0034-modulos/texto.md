@@ -34,7 +34,7 @@ Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
 recompilar tudo. O `rodar` do curso compila junto todo `.c` de apoio que
 estiver na pasta (todo arquivo que não se chama `A000.c` ou `E000.c`).
 
-Vamos ver na prática. O `conversao.h` é incluído pelos dois `.c`. Cada um vira
+O `conversao.h` é incluído pelos dois `.c`. Cada um vira
 um `.o` separado, e o ligador junta os dois no executável `viagem`:
 
 {{ideia}}
@@ -77,7 +77,7 @@ int main(void) {
 // R$ 1000.00 = US$ 185.19
 ```
 
-Repara no fluxograma: cada `.c` passa pelo compilador separado, e o erro de
+Cada `.c` passa pelo compilador separado, e o erro de
 "função que não existe" só aparece no fim, no ligador:
 
 {{fluxograma}}
@@ -92,8 +92,7 @@ Três peças fecham o assunto:
   maiúsculas.
 - **`static` fora de função** esconde do resto do programa: o `contador` e a
   `contar` de `conversao.c` não existem para os outros arquivos. É o
-  `private` do C, e é o que deixa o módulo mudar por dentro sem quebrar quem
-  usa.
+  `private` do C: o módulo pode mudar por dentro sem quebrar quem usa.
 - **`extern`** declara uma global que foi **definida** noutro arquivo:
   `extern int limite;` no `.h`, `int limite = 10;` em **um** `.c` só. Use com
   moderação: global compartilhada entre arquivos é global de novo.

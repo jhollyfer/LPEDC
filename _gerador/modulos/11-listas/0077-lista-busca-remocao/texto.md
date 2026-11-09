@@ -1,12 +1,12 @@
 ## 0077 · Busca e remoção
 
 Sábado de manhã, barbearia lotada. Cada cliente pega uma senha e o barbeiro
-anota numa lista: 31, 17, 42, 8. Aí o 42 cansa de esperar e vai embora. Ele
-sai do meio da fila, e ninguém precisa trocar de cadeira: basta o 17 passar
-a ter o 8 como próximo.
+anota numa lista: 31, 17, 42, 8. O 42 cansa de esperar e vai embora. Ele sai
+do meio da fila e ninguém troca de cadeira: o 17 passa a ter o 8 como
+próximo.
 
-**Buscar** numa lista encadeada é percorrer até achar. Não existe atalho: sem
-acesso direto, a busca é sempre sequencial, O(n). A função devolve o
+**Buscar** numa lista encadeada é percorrer até achar. Sem acesso direto, a
+busca é sempre sequencial, O(n). A função devolve o
 **endereço do nó** (ou `NULL` se não achou), e com ele você lê ou até muda o
 valor:
 
@@ -20,7 +20,7 @@ No *lista_busca(No *inicio, int valor) {
 }
 ```
 
-**Remover** pede um cuidado a mais. Para tirar o nó `p`, quem aponta para ele
+**Remover** pede mais cuidado. Para tirar o nó `p`, quem aponta para ele
 precisa passar a apontar para o seguinte. E quem aponta para `p` é o nó
 **anterior**, que numa lista simples não tem caminho de volta. A saída é
 percorrer com **dois ponteiros**: `ant` anda sempre um passo atrás de `p`.
@@ -34,8 +34,8 @@ Achado o nó, há dois casos:
 Nos dois casos, só depois de religar vem o `free(p)`. Como remover o primeiro
 muda o início e a função ainda quer devolver se achou ou não, ela recebe o
 **endereço** do início: `No **inicio` (ponteiro para ponteiro, assunto 0049).
-No assunto anterior a inserção devolvia o início novo. São os dois estilos que
-você vai encontrar por aí.
+No assunto anterior, a inserção devolvia o início novo; os dois estilos são
+comuns.
 
 ```c
 bool lista_remove(No **inicio, int valor) {
@@ -56,9 +56,9 @@ bool lista_remove(No **inicio, int valor) {
 }
 ```
 
-Vamos ver na prática. Para tirar o 42, o laço para com `p` no 42 e `ant` no
-17. Uma única atribuição desvia a seta do 17 para o 8, e o nó do 42, que
-ninguém mais aponta, volta para o heap:
+Para tirar o 42, o laço para com `p` no 42 e `ant` no 17. Uma atribuição
+desvia a seta do 17 para o 8, e o nó do 42, para o qual ninguém mais aponta,
+volta para o heap:
 
 {{ideia}}
 
@@ -100,13 +100,13 @@ int main(void) {
 // senha 99: não está na fila
 ```
 
-Repara no fluxograma: o laço anda até achar o 42 ou a lista acabar. Achou, e
-como `ant` não é `NULL` (é o 17), o caminho vai pelo `ant->prox = p->prox`.
+O laço do fluxograma anda até achar o 42 ou a lista acabar. Achou, e como
+`ant` não é `NULL` (é o 17), o caminho vai pelo `ant->prox = p->prox`.
 Na remoção do 31, o caminho seria o outro, `início = p->prox`:
 
 {{fluxograma}}
 
-O exemplo A154 mostra um truque para sumir com o caso especial: o
+O exemplo A154 mostra como sumir com o caso especial: o
 **nó-cabeça**, um nó "de mentira" no começo. Com ele, todo nó de verdade tem
 um anterior, e o primeiro deixa de ser especial. O Cormen leva a ideia mais
 longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
@@ -127,8 +127,9 @@ longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
 > `ant`: um `No **pp` que começa em `inicio` e anda com `pp = &(*pp)->prox`
 > aponta sempre para "o lugar que aponta para o nó atual", seja a `fila`, seja
 > o `prox` de alguém. A remoção vira `No *p = *pp; *pp = p->prox; free(p);`,
-> sem `if`. E repare no custo: religar é O(1), sem deslocar nada como no
-> vetor. O que custa O(n) é achar o nó.
+> sem `if`. Quanto ao custo, religar é O(1), sem deslocar nada como no vetor.
+> O que custa O(n) é achar o nó.
+
 
 > [!NOTE]
 > **Pergunta para você:** se a lista fosse `42 -> 17 -> 42 -> 8` e você

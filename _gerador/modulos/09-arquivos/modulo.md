@@ -5,16 +5,15 @@ junto. As variáveis moram na RAM, e a RAM é esvaziada quando o processo
 termina. Para um programa **lembrar** de alguma coisa (um cadastro, uma
 configuração, o placar de ontem), ele precisa gravar em **arquivo**.
 
-No C você vê as engrenagens: o `FILE *` que representa o
-arquivo aberto, o buffer que junta os bytes antes de ir para o disco, a
-posição que anda a cada leitura. E aparece uma escolha importante:
-gravar **texto**, legível e portável, ou **binário**, a cópia exata dos bytes
-da memória, compacta e com acesso direto a qualquer registro.
+No C você vê as engrenagens: o `FILE *` que representa o arquivo aberto, o
+buffer que junta os bytes antes de ir para o disco, a posição que anda a cada
+leitura. E aparece uma escolha: gravar **texto**, legível e portável, ou
+**binário**, a cópia exata dos bytes da memória, que ocupa menos e deixa pular
+direto para qualquer registro.
 
 O módulo fecha com a outra porta de entrada de um programa: os **argumentos
-da linha de comando**. É o que transforma os seus exercícios em ferramentas de
-verdade, do tipo que você chama no terminal como chama `git` ou `grep`, e que
-encadeia com outras em scripts.
+da linha de comando**. Com eles, os seus exercícios viram ferramentas que você
+chama no terminal como chama `git` ou `grep` e encadeia com outras em scripts.
 
 ## O que você vai aprender
 
@@ -25,22 +24,10 @@ encadeia com outras em scripts.
 - receber dados pelo **`argc` e `argv`**, converter com `strtol` e `strtod` e devolver o **código de saída**
 - juntar tudo numa ferramenta de terminal com subcomandos
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
+
 
 Os exemplos gravam em `/tmp`, com nomes claros (`/tmp/despesas.txt`,
 `/tmp/estoque.bin`), e quase todos apagam o arquivo no fim com `remove`.
@@ -65,8 +52,8 @@ sudo apt install strace     # Debian / Ubuntu
 ```
 
 Você vai usar structs (módulo 08), strings com `fgets` (0042) e ponteiros o
-tempo todo. Se `typedef struct`, `sizeof` e `char *` ainda dão aquela
-hesitação, revise antes.
+tempo todo. Se `typedef struct`, `sizeof` e `char *` ainda fazem você hesitar,
+revise antes.
 
 {{indice}}
 
@@ -88,11 +75,11 @@ quantos bytes copiou. Teste copiando o próprio executável e comparando com
 
 <details><summary>Resposta</summary>
 
-Abra a origem com `"rb"` e o destino com `"wb"`; se o segundo `fopen` falhar,
+Abra a origem com `"rb"` e o destino com `"wb"`. Se o segundo `fopen` falhar,
 feche o primeiro. O laço é `while ((c = fgetc(ent)) != EOF) { fputc(c, sai);
 n++; }` com `int c`. Com `char c`, um byte 0xFF no meio do arquivo vira -1 e o
-laço para antes da hora: a cópia de um executável sai cortada. Use o modo
-`b`, para valer no Windows também.
+laço para antes da hora e a cópia de um executável sai cortada. Use o modo
+`b` para funcionar no Windows também.
 
 </details>
 
@@ -143,9 +130,9 @@ código 4321 lendo o mínimo possível de registros. No máximo, quantos `fread`
 
 Busca binária com `fseek`: `ini = 0`, `fim = 999`; leia o registro do `meio`
 com `fseek(f, meio * (long) sizeof(Registro), SEEK_SET)` e um `fread`; compare
-e corte metade. São no máximo **10 leituras**, porque 2¹⁰ = 1024 ≥ 1000. Só
-funciona porque os registros têm tamanho fixo: num arquivo texto, você não
-sabe onde fica o "meio".
+e corte metade. São no máximo **10 leituras**, porque 2¹⁰ = 1024 ≥ 1000. Isso
+depende de os registros terem tamanho fixo: num arquivo texto, você não sabe
+onde fica o "meio".
 
 </details>
 
@@ -174,7 +161,7 @@ ordem, lendo cada arquivo uma vez só. Com `1 4 9` e `2 3 10`, sai
 Leia o primeiro número de cada arquivo. Enquanto os dois tiverem número,
 grave o menor e leia o próximo **daquele** arquivo. Quando um acabar, copie o
 resto do outro. É a etapa de intercalação do merge sort (assunto 0094), e é
-assim que se ordenam arquivos maiores que a RAM.
+assim que se ordena um arquivo maior que a RAM.
 
 </details>
 
@@ -244,7 +231,7 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
+papel, marque uma letra e só depois abra o gabarito. Todos os trechos foram
 compilados com `gcc -std=c17 -Wall -Wextra` e rodados no Linux. Nos trechos,
 a conferência de `NULL` depois do `fopen` foi omitida para encurtar; no seu
 código, ela é obrigatória.

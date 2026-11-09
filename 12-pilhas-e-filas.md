@@ -4,16 +4,16 @@
 
 A lista encadeada do módulo 11 deixa você inserir e remover em qualquer
 lugar. Este módulo faz o contrário: **proíbe**. Uma pilha só mexe no topo;
-uma fila só entra por um lado e sai pelo outro. Parece perda, mas é a
-restrição que dá a garantia: o desfazer sempre desfaz o último passo, e quem
-chegou primeiro sempre é atendido primeiro.
+uma fila só entra por um lado e sai pelo outro. Parece perda, mas a restrição
+traz uma garantia: o desfazer sempre desfaz o último passo, e quem chegou
+primeiro é atendido primeiro.
 
-Você usa essas estruturas o dia inteiro sem ver. A pilha de chamadas do seu
+Você usa essas estruturas o dia inteiro sem perceber. A pilha de chamadas do seu
 programa, o Ctrl+Z, o botão Voltar e o *parser* de um compilador são pilhas. A
 fila de processos do sistema operacional, a fila de jobs do seu backend e a
-impressora do escritório são filas. Aqui você constrói as duas do zero, cada uma de dois
-jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
-`.c` trocado por baixo, e o programa cliente nem percebe.
+impressora do escritório são filas. Aqui você constrói as duas do zero, cada
+uma de dois jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo
+`.h`, o `.c` trocado por baixo, e o programa cliente não muda.
 
 ## O que você vai aprender
 
@@ -25,28 +25,11 @@ jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo `.h`, o
 - o **deque**, que entra e sai pelas duas pontas, e a pegadinha do resto negativo
 - uma calculadora que junta tudo: infixa → pós-fixa → resultado
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com a
-   memória por dentro.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho de uma operação.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue (e, nos desenhos de
-memória, o item que está saindo); cinza é o que ele não usa ou a gaveta que
-já virou vaga.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
+Os diagramas da ideia mostram a memória por dentro: neles, verde marca o item
+que está saindo e cinza a gaveta que já virou vaga.
 
 Você precisa estar à vontade com ponteiros, `malloc`/`free`, `struct` com
 `->` e listas encadeadas (módulos 06, 07, 08 e 11), além da ideia de TAD do
@@ -55,13 +38,13 @@ assunto 0074.
 Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
 `pilha.h` e `pilha.c`, `fila.h` e `fila.c` ou `deque.h` e `deque.c`. O
 `rodar` compila esses `.c` de apoio junto com qualquer exemplo ou exercício
-da pasta, então basta:
+da pasta:
 
 ```bash
 ~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A163.c
 ```
 
-Por isso, num exercício, **não** crie funções com os nomes do TAD
+Num exercício, então, **não** crie funções com os nomes do TAD
 (`pilha_cria`, `fila_insere`...): o ligador reclamaria de definição
 duplicada. Os exercícios que pedem uma estrutura diferente usam outros nomes
 e trazem tudo no próprio arquivo.
@@ -90,7 +73,7 @@ entrar é o primeiro a sair: **LIFO** (*last in, first out*). É a pilha de
 pratos do restaurante por quilo, o Ctrl+Z do editor, o botão Voltar do
 navegador e a pilha de chamadas que você viu no assunto 0031.
 
-As operações são poucas, e é isso que dá força à pilha:
+São poucas operações:
 
 - **empilhar** (*push*): põe um item no topo;
 - **desempilhar** (*pop*): tira o item do topo e devolve o valor;
@@ -99,7 +82,7 @@ As operações são poucas, e é isso que dá força à pilha:
 
 No Cormen, elas se chamam PUSH, POP e STACK-EMPTY.
 
-No C não existe nada pronto, então você monta a pilha como um **TAD** (assunto 0074):
+O C não traz pilha pronta, então você monta uma como **TAD** (assunto 0074):
 o `pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
 só inclui o `.h`:
 
@@ -115,8 +98,8 @@ bool pilha_desempilha(Pilha *p, int *valor); // pop: false se estava vazia
 bool pilha_topo(const Pilha *p, int *valor); // peek: olha o topo sem tirar
 ```
 
-Repare no `bool` de volta. O valor desempilhado vem pelo ponteiro, e o retorno
-só diz se deu certo. Tirar de uma pilha vazia (**underflow**) é erro de lógica
+As funções devolvem `bool`: o valor desempilhado vem pelo ponteiro, e o
+retorno só diz se deu certo. Tirar de uma pilha vazia (**underflow**) é erro de lógica
 de quem chamou. Empilhar numa pilha cheia (**overflow**) só acontece porque o
 vetor tem tamanho fixo.
 
@@ -149,14 +132,14 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 }
 ```
 
-Vamos ver na prática. Os três preços entram em centavos (2590, 800 e 1200),
-um em cima do outro. No vetor, ocupam as gavetas 0, 1 e 2, e `n` vale 3. O
+No exemplo, os três preços entram em centavos (2590, 800 e 1200), um em cima
+do outro. No vetor, ocupam as gavetas 0, 1 e 2, e `n` vale 3. O
 desfazer tira o 1200 do topo:
 
 <p align="center"><img src="12-pilhas-e-filas/0082-pilha/ideia.svg" alt="Diagrama da ideia: Pilha" width="858"></p>
 
-O programa do pedido. Ele não sabe que existe um vetor lá dentro: só conversa
-com as funções do `pilha.h`:
+O programa do pedido não sabe que existe um vetor lá dentro: só conversa com
+as funções do `pilha.h`:
 
 ```c
 #include <stdio.h>
@@ -191,18 +174,18 @@ int main(void) {
 // Itens no pedido: 2
 ```
 
-Repara no fluxograma do desfazer: a primeira coisa é perguntar se a pilha está
-vazia. Só depois `n` diminui e o valor é lido:
+O fluxograma do desfazer começa perguntando se a pilha está vazia. Só depois
+`n` diminui e o valor é lido:
 
 <p align="center"><img src="12-pilhas-e-filas/0082-pilha/fluxograma.svg" alt="Fluxograma: Pilha" width="506"></p>
 
 > [!WARNING]
-> A ordem de `n--` e da leitura é o erro clássico. Se você lê `itens[n]` antes
+> O erro mais comum é a ordem de `n--` e da leitura. Se você lê `itens[n]` antes
 > de diminuir `n`, pega a gaveta **vazia** logo acima do topo: lixo, ou um
 > valor velho que já tinha saído. Fixe a convenção e não misture: aqui `n` é a
 > próxima vaga (empilha em `itens[n]` e depois `n++`; desempilha com `n--` e
 > depois lê). Muito livro usa `topo = -1` para pilha vazia, e aí o topo é
-> `itens[topo]`. As duas funcionam. Misturar as duas não. O Cormen indexa o
+> `itens[topo]`. As duas funcionam; misturar as duas, não. O Cormen indexa o
 > vetor a partir de 1: lá, `S.top` é o índice do topo **e** a quantidade de
 > itens, e pilha vazia é `S.top = 0`.
 
@@ -211,14 +194,15 @@ vazia. Só depois `n` diminui e o valor é lido:
 > gaveta 2; ele só deixou de fazer parte da pilha porque `n` voltou para 2. O
 > próximo `push` escreve por cima. Por isso empilhar e desempilhar custam
 > **O(1)**: uma conta e uma cópia, não importa se a pilha tem 3 ou 100 itens.
-> E repare no tamanho: `sizeof(struct pilha)` dá 404 bytes (100 `int` de 4
+> Quanto ao tamanho, `sizeof(struct pilha)` dá 404 bytes (100 `int` de 4
 > bytes, mais o `n`), alocados de uma vez pelo `malloc` no `pilha_cria`, mesmo
-> com só 3 itens dentro. O vetor é a casa da pilha, não a pilha.
+> com só 3 itens dentro.
 
 > [!NOTE]
 > **Pergunta para você:** no programa do pedido, se o cliente tocar em
-> "desfazer" mais três vezes seguidas, o que cada chamada de `pilha_desempilha` devolve? E o que
-> fica em `preco` na última? Pense antes de testar.
+> "desfazer" mais três vezes seguidas, o que cada chamada de
+> `pilha_desempilha` devolve? E o que fica em `preco` na última?
+
 
 ### Hora de praticar
 
@@ -531,7 +515,7 @@ A pilha do 0082 tem um teto porque mora num vetor. A saída é guardar cada item
 num **nó** alocado com `malloc`, como na lista encadeada do módulo 11. A pilha
 cresce um nó por vez e só "enche" quando acaba a memória.
 
-A pergunta que decide tudo: **o topo fica no começo ou no fim da lista?** No
+A decisão central é **onde fica o topo: no começo ou no fim da lista?** No
 começo. Inserir e remover no início de uma lista simples custa O(1): você
 mexe só no ponteiro de entrada. No fim, para remover o último você precisaria
 achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
@@ -542,10 +526,9 @@ achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
   o nó velho;
 - **vazia** = `topo == NULL`.
 
-O melhor: o [`pilha.h`](12-pilhas-e-filas/0083-pilha-encadeada/pilha.h) é **idêntico** ao do
-0082. Só o [`pilha.c`](12-pilhas-e-filas/0083-pilha-encadeada/pilha.c) mudou. Esse é o ganho do
-TAD: o programa do delivery do 0082 roda sem mudar uma vírgula com esta
-implementação.
+O [`pilha.h`](12-pilhas-e-filas/0083-pilha-encadeada/pilha.h) é **idêntico** ao do 0082. Só o
+[`pilha.c`](12-pilhas-e-filas/0083-pilha-encadeada/pilha.c) mudou, e o programa do delivery do
+0082 roda com esta implementação sem mudar uma vírgula: é o ganho do TAD.
 Por dentro, a struct agora guarda um ponteiro:
 
 ```c
@@ -584,8 +567,7 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 }
 ```
 
-Vamos ver na prática. Antes de cada edição, o valor antigo da B2 vai para a
-pilha: 1500, depois 1800, depois 2100. O último a entrar, 2100, fica no
+Antes de cada edição, o valor antigo da B2 vai para a pilha: 1500, depois 1800, depois 2100. O último a entrar, 2100, fica no
 primeiro nó, e é ele que o primeiro Ctrl+Z devolve:
 
 <p align="center"><img src="12-pilhas-e-filas/0083-pilha-encadeada/ideia.svg" alt="Diagrama da ideia: Pilha encadeada" width="890"></p>
@@ -630,8 +612,8 @@ int main(void) {
 // Ainda dá para desfazer 1 vez(es)
 ```
 
-Repara no fluxograma do empilhar o 2100: a ordem das duas ligações importa.
-Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
+No fluxograma do empilhar o 2100, a ordem das duas ligações importa: primeiro
+o novo nó aponta para o topo antigo, só depois o topo muda:
 
 <p align="center"><img src="12-pilhas-e-filas/0083-pilha-encadeada/fluxograma.svg" alt="Fluxograma: Pilha encadeada" width="469"></p>
 
@@ -644,19 +626,19 @@ Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
 > liberada, e o AddressSanitizer acusa `heap-use-after-free`.
 
 > [!TIP]
-> **Por dentro do C:** cada nó ocupa 16 bytes: 4 do `int`, 4 de
-> **preenchimento** (*padding*) para alinhar o ponteiro e 8 do ponteiro, num
-> sistema de 64 bits. Para guardar 4 bytes de dado, você gasta 16, mais o
-> controle interno do `malloc`. O vetor do 0082 gasta 4 bytes por item, todos
-> juntos na memória, o que o cache do processador adora. A encadeada troca
-> espaço e velocidade por **não ter teto**. E todo `malloc` do empilhar
-> precisa de um `free`: é por isso que `pilha_libera` percorre a lista toda
-> antes de liberar a struct.
+> **Por dentro do C:** cada nó ocupa 16 bytes num sistema de 64 bits (4 do
+> `int`, 4 de **preenchimento** e 8 do ponteiro, como no 0076), mais o
+> controle interno do `malloc`, para guardar 4 bytes de dado. O vetor do 0082
+> gasta 4 bytes por item, todos juntos na memória, o que favorece o cache. A
+> encadeada troca espaço e velocidade por **não ter teto**. E todo `malloc` do
+> empilhar precisa de um `free`: por isso `pilha_libera` percorre a lista
+> toda antes de liberar a struct.
 
 > [!NOTE]
 > **Pergunta para você:** no programa da planilha, se o laço do Ctrl+Z
-> rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual seria o último valor de B2?
-> Siga a lista do desenho antes de rodar.
+> rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual
+> seria o último valor de B2? Siga a lista do desenho antes de rodar.
+
 
 ### Hora de praticar
 
@@ -967,8 +949,7 @@ desempilha 19 -> mínimo 22
 ## 0084 · Pilha na prática: parênteses e notação pós-fixa
 
 Você esquece de fechar um colchete no VS Code e, na hora, o editor sublinha
-de vermelho o lugar certo. Ele não está contando parênteses. Está usando uma
-pilha.
+de vermelho o lugar certo. Ele não conta parênteses: usa uma pilha.
 
 Com um tipo só de parêntese, um contador resolve: soma 1 no `(`, tira 1 no
 `)`, nunca pode ficar negativo e tem que terminar em zero. Com três tipos
@@ -976,9 +957,8 @@ Com um tipo só de parêntese, um contador resolve: soma 1 no `(`, tira 1 no
 fechamentos, a conta fecha, e a expressão está errada: o `)` chegou quando
 quem estava esperando era o `[`.
 
-A regra que você precisa é: **todo fechamento casa com a abertura mais
-recente que ainda não fechou**. "Mais recente ainda pendente" é exatamente o
-topo de uma pilha. O algoritmo:
+A regra é: **todo fechamento casa com a abertura mais recente que ainda não
+fechou**. "Mais recente ainda pendente" é o topo de uma pilha. O algoritmo:
 
 1. abriu (`(`, `[` ou `{`): **empilha**;
 2. fechou: **desempilha** e confere se é o par certo. Pilha vazia ou par
@@ -987,15 +967,15 @@ topo de uma pilha. O algoritmo:
 4. acabou a string: a pilha tem que estar **vazia**. Se sobrou alguém, faltou
    fechar.
 
-Vamos ver na prática com `{ x = v[(i + 1)] }`. Tirando o resto, sobram os
+Tome `{ x = v[(i + 1)] }`. Tirando o resto, sobram os
 delimitadores `{ [ ( ) ] }`. Os três primeiros são empilhados. Quando chega o
 `)`, o topo é `(`: casou, desempilha e segue. Depois `]` casa com `[` e `}`
 casa com `{`:
 
 <p align="center"><img src="12-pilhas-e-filas/0084-pilha-aplicacoes/ideia.svg" alt="Diagrama da ideia: Pilha na prática: parênteses e notação pós-fixa" width="858"></p>
 
-O verificador, testado com quatro expressões. O `pilha.h` e o `pilha.c` são
-os mesmos do 0083 e estão na pasta do assunto:
+O verificador abaixo é testado com quatro expressões. O `pilha.h` e o
+`pilha.c` são os mesmos do 0083 e estão na pasta do assunto:
 
 ```c
 #include <stdbool.h>
@@ -1052,8 +1032,8 @@ int main(void) {
 // { [ (                com erro
 ```
 
-Repara no fluxograma: o laço só tem duas saídas antecipadas para o erro, e a
-pergunta "pilha vazia?" só acontece quando a string acaba:
+O laço do fluxograma tem só duas saídas antecipadas para o erro, e a pergunta
+"pilha vazia?" só aparece quando a string acaba:
 
 <p align="center"><img src="12-pilhas-e-filas/0084-pilha-aplicacoes/fluxograma.svg" alt="Fluxograma: Pilha na prática: parênteses e notação pós-fixa" width="796"></p>
 
@@ -1080,7 +1060,7 @@ número só, o resultado:
 | `4` | empilha | 180 4 |
 | `/` | tira 4 e 180, empilha 180 / 4 | 45 |
 
-Cada um paga R$ 45. O exemplo A168 faz exatamente essa tabela em C, juntando
+Cada um paga R$ 45. O exemplo A168 faz essa tabela em C, juntando
 os dígitos de `35` num número só e acusando expressão inválida quando falta
 operando ou sobra número na pilha. É assim que compiladores e máquinas
 virtuais (a JVM, o WebAssembly) calculam: traduzem a sua expressão para algo
@@ -1090,13 +1070,14 @@ parecido com a pós-fixa e rodam numa pilha.
 > Na pós-fixa, o **primeiro** a sair da pilha é o operando da **direita**.
 > Em `8 3 -`, desempilha o 3 (b) e depois o 8 (a), e a conta é `a - b = 5`.
 > Inverter dá `-5`, e o erro some na soma e na multiplicação, que não ligam
-> para a ordem. Teste sempre com `-` e `/`. No verificador de parênteses, o
-> erro clássico é esquecer o passo 4: sem conferir se a pilha terminou
+> para a ordem. Teste com `-` e `/`. No verificador de parênteses, o erro
+> comum é esquecer o passo 4: sem conferir se a pilha terminou
 > vazia, `{ [ (` passa como balanceada.
 
 > [!TIP]
 > **Por dentro do C:** o `char` que entra no `pilha_empilha(p, c)` vira `int`
-> sem cast nenhum (promoção de inteiros), e `'('` é só o número 40 na tabela
+> sem cast (promoção de inteiros), e `'('` é o número 40 na tabela
+
 > ASCII. Na pós-fixa, `expr[i] - '0'` transforma o caractere `'7'` (55) no
 > número 7, porque os dígitos são consecutivos na tabela. E o tamanho da pilha
 > nunca passa do número de caracteres da string: no pior caso, `((((((`, tudo
@@ -1469,8 +1450,9 @@ antes, e ninguém fura: a senha 40, que acabou de sair da maquininha, vai
 esperar todo mundo da frente.
 
 Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
-primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*). É o
-contrário da pilha. Na computação, fila aparece onde existe ordem de chegada:
+primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*), o
+contrário da pilha. Na computação, a fila aparece sempre que há ordem de
+chegada:
 a fila de impressão, as requisições esperando um servidor web, os processos
 esperando a vez na CPU, as mensagens de um RabbitMQ.
 
@@ -1491,15 +1473,14 @@ bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem 
 Guardar uma fila num vetor tem um problema que a pilha não tinha. A pilha
 mexe numa ponta só. A fila mexe nas duas: entra à direita e sai à esquerda.
 Se, a cada atendimento, você empurrar todo mundo uma casa para a esquerda,
-cada retirada custa **O(n)**. Se não empurrar,
-a fila vai "andando" para a direita e bate no fim do vetor com as primeiras
-gavetas vazias.
+cada retirada custa **O(n)**. Se não empurrar, a fila vai "andando" para a
+direita e bate no fim do vetor com as primeiras gavetas vazias.
 
 A saída é a **fila circular**: quando o índice passa da última gaveta, volta
 para a 0. O vetor vira um anel. Basta guardar onde está o **início** e
 quantos itens tem (`n`); a próxima vaga é `(inicio + n) % CAPACIDADE`. O `%`
-faz a volta: com 8 gavetas, depois da 7 vem `(7 + 1) % 8 = 0`. O coração do
-[`fila.c`](12-pilhas-e-filas/0085-fila/fila.c):
+faz a volta: com 8 gavetas, depois da 7 vem `(7 + 1) % 8 = 0`. A parte
+principal do [`fila.c`](12-pilhas-e-filas/0085-fila/fila.c):
 
 ```c
 #define CAPACIDADE 8
@@ -1531,15 +1512,15 @@ bool fila_retira(Fila *f, int *valor) {
 }
 ```
 
-Vamos ver na prática. O painel da lotérica guarda 8 senhas. Chegam as senhas
+No exemplo, o painel da lotérica guarda 8 senhas. Chegam as senhas
 31 a 36 (gavetas 0 a 5). O caixa atende 4, e o início anda até a gaveta 4.
 Chegam 37 a 40: o 37 e o 38 ocupam as gavetas 6 e 7, e o 39 e o 40 **dão a
 volta** e caem nas gavetas 0 e 1, que já estavam livres:
 
 <p align="center"><img src="12-pilhas-e-filas/0085-fila/ideia.svg" alt="Diagrama da ideia: Fila" width="864"></p>
 
-O programa da lotérica. Ele só vê as funções do `fila.h`; a volta no vetor é
-problema do `fila.c`:
+O programa da lotérica só vê as funções do `fila.h`; a volta no vetor fica
+por conta do `fila.c`:
 
 ```c
 #include <stdio.h>
@@ -1586,7 +1567,7 @@ int main(void) {
 // Na fila (6): 35 36 37 38 39 40
 ```
 
-Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
+O fluxograma segue a entrada da senha 39. Naquela hora, `inicio = 4` e
 `n = 4`, e o `%` manda o 39 para a gaveta 0:
 
 <p align="center"><img src="12-pilhas-e-filas/0085-fila/fluxograma.svg" alt="Fluxograma: Fila" width="522"></p>
@@ -1598,24 +1579,24 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 > **sacrificar uma gaveta** e dizer que está cheia quando
 > `(fim + 1) % CAPACIDADE == inicio` (aí só cabem 7 em 8). Muito livro usa a
 > segunda, inclusive o Cormen: com `Q.head` e `Q.tail` (a próxima vaga), as
-> operações ENQUEUE e DEQUEUE e um vetor de n posições, cabem n − 1 itens. Outra armadilha: calcular o tamanho como `fim - inicio`. Com a
-> fila dando a volta (início 4, fim 2) isso dá -2.
+> operações ENQUEUE e DEQUEUE e um vetor de n posições, cabem n − 1 itens.
+> Outra armadilha é calcular o tamanho como `fim - inicio`: com a fila dando a
+> volta (início 4, fim 2), isso dá -2.
 
 > [!TIP]
 > **Por dentro do C:** o `%` é uma divisão inteira, uma das instruções mais
 > lentas do processador (dezenas de ciclos, contra 1 de uma soma). Por isso
 > filas de alto desempenho, como os *ring buffers* do kernel do Linux e das
-> placas de rede, usam capacidade **potência de 2**: com 8 gavetas e `i`
-> não negativo,
-> `i % 8` é o mesmo que `i & 7`, e o compilador já faz essa troca sozinho
-> quando a constante é potência de 2. Retirar não apaga nada: o 33 e o 34
+> placas de rede, usam capacidade **potência de 2**: com 8 gavetas e `i` não
+> negativo, `i % 8` é o mesmo que `i & 7`, e o compilador faz essa troca
+> sozinho quando a constante é potência de 2. Retirar não apaga nada: o 33 e o 34
 > continuam nas gavetas 2 e 3 até alguém escrever por cima. Inserir e retirar
 > custam **O(1)**, sem mover ninguém.
 
 > [!NOTE]
 > **Pergunta para você:** depois do último laço do programa da lotérica, a
-> fila está vazia.
-> Quanto valem `inicio` e `n` lá dentro? Em que gaveta entraria a próxima
+> fila está vazia. Quanto valem `inicio` e `n` lá dentro?
+ Em que gaveta entraria a próxima
 > senha?
 
 ### Hora de praticar
@@ -1915,22 +1896,21 @@ Leitura 6: média 62.0 km/h
 ## 0086 · Fila encadeada
 
 Sexta à noite, a cozinha da pizzaria recebe os pedidos do app. O painel de 8
-lugares do 0085 lotou às 20h, e o nono pedido foi recusado. Pedido recusado é
-cliente perdido. A fila precisa crescer o quanto for preciso.
+lugares do 0085 lotou às 20h, e o nono pedido foi recusado: cliente perdido.
+A fila precisa crescer o quanto for preciso.
 
 A solução é a mesma da pilha: trocar o vetor por **nós** encadeados. Só que a
-fila mexe nas duas pontas, e isso muda o desenho. Pense nos ponteiros de uma
-lista simples:
+fila mexe nas duas pontas, e isso muda o desenho. Nos ponteiros de uma lista
+simples:
 
 - **retirar** do começo é fácil: `inicio = inicio->prox`, O(1);
 - **inserir** no fim exigiria andar a lista até o último, O(n)... a não ser
   que você guarde um segundo ponteiro, o **fim**, sempre apontando para o
   último nó. Aí inserir também é O(1): `fim->prox = novo; fim = novo`.
 
-Repare na direção: a fila **sai pelo início e entra pelo fim**. O contrário
-(entrar pelo início, sair pelo fim) não funciona bem numa lista simples,
-porque para remover o último você precisaria do penúltimo, e o nó não sabe
-quem está antes dele.
+A direção importa: a fila **sai pelo início e entra pelo fim**. O contrário
+(entrar pelo início, sair pelo fim) não funciona bem numa lista simples:
+remover o último exige o penúltimo, e o nó não sabe quem está antes dele.
 
 O [`fila.h`](12-pilhas-e-filas/0086-fila-encadeada/fila.h) é o mesmo do 0085, palavra por
 palavra. O [`fila.c`](12-pilhas-e-filas/0086-fila-encadeada/fila.c) agora guarda dois
@@ -1976,13 +1956,13 @@ bool fila_retira(Fila *f, int *valor) {
 }
 ```
 
-Vamos ver na prática. Chegam os pedidos 501, 502 e 503. A cozinha pega o
+Chegam os pedidos 501, 502 e 503. A cozinha pega o
 501: o início anda para o 502 e o nó do 501 é liberado. Chega o 504, que é
 pendurado depois do 503, e o fim passa a apontar para ele:
 
 <p align="center"><img src="12-pilhas-e-filas/0086-fila-encadeada/ideia.svg" alt="Diagrama da ideia: Fila encadeada" width="858"></p>
 
-O programa da cozinha:
+O programa da cozinha só usa o `fila.h`:
 
 ```c
 #include <stdio.h>
@@ -2017,14 +1997,15 @@ int main(void) {
 // Próximo: 502 (3 esperando)
 ```
 
-Repara no fluxograma da entrada do 504: a fila não estava vazia, então o
-caminho passa por `fim->prox = novo`. Na fila vazia, quem recebe o novo nó é
+Na entrada do 504, a fila não estava vazia, então o caminho do fluxograma
+passa por `fim->prox = novo`. Na fila vazia, quem recebe o novo nó é
 o `inicio`:
 
 <p align="center"><img src="12-pilhas-e-filas/0086-fila-encadeada/fluxograma.svg" alt="Fluxograma: Fila encadeada" width="597"></p>
 
 > [!WARNING]
-> Os dois bugs clássicos estão nas bordas. Ao inserir na fila **vazia**,
+> Os dois bugs mais comuns estão nas bordas.
+ Ao inserir na fila **vazia**,
 > esquecer de atualizar o `inicio` deixa a fila "vazia" para sempre, mesmo
 > com nós dentro. Ao retirar o **último**, esquecer de zerar o `fim` é pior:
 > o `fim` continua apontando para o nó que acabou de levar `free`, e o
@@ -2358,8 +2339,8 @@ Depois: 502 503 504
 
 ## 0087 · Deque
 
-No app de música, você monta a fila: faixa 5, faixa 8, faixa 3. Aí lembra de
-uma que quer ouvir agora e toca em "tocar em seguida": a faixa 11 fura a fila
+No app de música, você monta a fila: faixa 5, faixa 8, faixa 3. Então lembra
+de uma que quer ouvir agora e toca em "tocar em seguida": a faixa 11 fura a fila
 e vai para a **frente**. Depois desiste da última que adicionou e a tira do
 **fim**. Nem pilha nem fila fazem isso.
 
@@ -2374,13 +2355,14 @@ O deque generaliza as duas estruturas que você já viu. Usando só uma ponta
 (insere e retira no fim), ele é uma **pilha**. Inserindo no fim e retirando
 no início, é uma **fila**. E quando quem sai não é o mais antigo nem o mais
 novo, e sim o de maior prioridade, a estrutura é a **fila de prioridade**,
-que o assunto 0102 monta com um heap. Num vetor comum, inserir ou retirar no início custa O(n),
-porque desloca todo mundo. Aqui as quatro operações custam **O(1)**.
+que o assunto 0102 monta com um heap. Num vetor comum, inserir ou retirar no
+início custa O(n), porque desloca todo mundo. Aqui as quatro operações custam
+**O(1)**.
 
 A implementação do [`deque.c`](12-pilhas-e-filas/0087-deque/deque.c) é a fila circular do 0085
 com uma novidade: o `inicio` agora também anda para **trás**. Para inserir na
 frente, ele recua uma gaveta, e da gaveta 0 ele volta para a última. A conta
-de "gaveta anterior" mora numa função auxiliar `static`, que só o `deque.c`
+de "gaveta anterior" fica numa função auxiliar `static`, que só o `deque.c`
 enxerga:
 
 ```c
@@ -2412,15 +2394,15 @@ bool deque_retira_fim(Deque *d, int *valor) {
 ```
 
 `deque_insere_fim` e `deque_retira_inicio` são iguais aos da fila. Retirar
-do fim é o mais simples de todos: basta diminuir `n`.
+do fim é o mais simples: basta diminuir `n`.
 
-Vamos ver na prática. As faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1
+No exemplo, as faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1
 e 2. A faixa 11 entra pela frente: o início, que estava na gaveta 0, recua e
 dá a volta para a gaveta 7. A ordem da fila fica 11, 5, 8, 3:
 
 <p align="center"><img src="12-pilhas-e-filas/0087-deque/ideia.svg" alt="Diagrama da ideia: Deque" width="864"></p>
 
-O programa da fila de músicas:
+O programa da fila de músicas usa as quatro operações:
 
 ```c
 #include <stdio.h>
@@ -2461,8 +2443,8 @@ int main(void) {
 // Ainda na fila: 5 8
 ```
 
-Repara no fluxograma da entrada da faixa 11: a única diferença para a fila é
-o passo que faz o início recuar com `anterior`, que soma 8 antes do `%` para
+Na entrada da faixa 11, a única diferença do fluxograma para o da fila é o
+passo que faz o início recuar com `anterior`, que soma 8 antes do `%` para
 o índice não ficar negativo:
 
 <p align="center"><img src="12-pilhas-e-filas/0087-deque/fluxograma.svg" alt="Fluxograma: Deque" width="535"></p>
@@ -2479,16 +2461,17 @@ o índice não ficar negativo:
 > **Por dentro do C:** a palavra `static` numa função fora de qualquer bloco
 > não tem nada a ver com variável estática: ela tira a função da **ligação
 > externa**. O ligador nem fica sabendo que `anterior` existe, então outro
-> arquivo pode ter a sua própria `anterior` sem conflito. É o jeito do C de
-> fazer uma função **privada** do módulo. O
-> deque com lista encadeada também é possível, mas precisa de lista **dupla**
+> arquivo pode ter a sua própria `anterior` sem conflito: é assim que o C
+> torna uma função **privada** do módulo. O deque com lista encadeada também
+> é possível, mas precisa de lista **dupla**
 > (assunto 0079): para retirar do fim, o último nó tem que saber quem é o
 > penúltimo.
 
 > [!NOTE]
 > **Pergunta para você:** se o programa da fila de músicas fizesse mais um
-> `deque_insere_inicio` logo depois do 11, em que gaveta o novo item cairia? E se o deque estivesse
-> com as 8 gavetas ocupadas?
+> `deque_insere_inicio` logo depois do 11, em que gaveta o novo item cairia?
+> E se o deque estivesse com as 8 gavetas ocupadas?
+
 
 ### Hora de praticar
 
@@ -2782,12 +2765,12 @@ Dias 6-8: máxima 23
 
 ## 0088 · Juntando tudo: a calculadora de expressões
 
-Lembra da conta do bar do 0084? Lá, você mesmo escreveu `35 25 + 3 * 4 /`
-na notação pós-fixa. Ninguém digita assim no celular. A pessoa quer digitar
-`(35 + 25) * 3 / 4` e ver 45. O programa do módulo faz o caminho inteiro, e
-usa as duas estruturas: uma **fila** e duas **pilhas**.
+Na conta do bar do 0084, você mesmo escreveu `35 25 + 3 * 4 /` na notação
+pós-fixa. Ninguém digita assim no celular: a pessoa quer digitar
+`(35 + 25) * 3 / 4` e ver 45. O programa do módulo faz o caminho inteiro com
+as duas estruturas: uma **fila** e duas **pilhas**.
 
-São duas etapas, uma linha de produção:
+São duas etapas, como numa linha de produção:
 
 1. **converter** a infixa para pós-fixa. Os números vão direto para uma
    fila de saída, na ordem em que aparecem. Os operadores esperam numa
@@ -2795,20 +2778,21 @@ São duas etapas, uma linha de produção:
    precisa passar na frente. É o algoritmo do **pátio de manobras**
    (*shunting-yard*), de Dijkstra, o mesmo do exercício E503;
 2. **avaliar** a pós-fixa. Os itens saem da fila na ordem em que entraram
-   (FIFO, exatamente o que a pós-fixa exige) e passam por uma **pilha de
+   (FIFO, o que a pós-fixa exige) e passam por uma **pilha de
    valores**, como no A168.
 
-Por que fila no meio, e não uma string? Porque a etapa 1 produz itens e a
-etapa 2 consome itens, um de cada vez, na mesma ordem. É o padrão
+A fila fica no meio, em vez de uma string, porque a etapa 1 produz itens e a
+etapa 2 os consome, um de cada vez, na mesma ordem. É o padrão
 **produtor e consumidor**, o mesmo de um *pipe* no terminal ou de uma fila de
 mensagens entre dois serviços. E a fila guarda o número 35 inteiro, sem
 precisar juntar dígitos de novo.
 
-Um detalhe: a fila e a pilha do curso só guardam `int`. Como fazer caber um
-`+` ali? Os números da calculadora são sempre `>= 0`, então os operadores
+A fila e a pilha do curso só guardam `int`. Para caber um `+` ali, o
+programa aproveita que os números da calculadora são sempre `>= 0`: os
+operadores
 viram **códigos negativos** com um `enum` (assunto 0063): `SOMA = -1`,
 `SUB = -2` e assim por diante. Na hora de avaliar, `t >= 0` é número e
-`t < 0` é operador. É um truque comum quando o tipo é fixo; a alternativa
+`t < 0` é operador. A técnica é comum quando o tipo é fixo; a alternativa
 seria uma `struct` com uma etiqueta dizendo o que o item é.
 
 As regras da conversão, para cada símbolo lido:
@@ -2820,14 +2804,14 @@ As regras da conversão, para cada símbolo lido:
   para a fila; depois empilha o operador;
 - fim: o que sobrou na pilha vai para a fila.
 
-Vamos ver na prática. Com `(35 + 25) * 3 / 4`, a fila de saída fica
+Com `(35 + 25) * 3 / 4`, a fila de saída fica
 `35 25 + 3 * 4 /`. Na avaliação, a pilha de valores chega a ter 180 e 4
 quando aparece o `/`, e a última conta dá 45:
 
 <p align="center"><img src="12-pilhas-e-filas/0088-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a calculadora de expressões" width="862"></p>
 
-O programa completo. A pasta tem o `pilha.h`/`pilha.c` do 0083 e o
-`fila.h`/`fila.c` do 0086, e o `rodar` compila os quatro junto:
+A pasta tem o `pilha.h`/`pilha.c` do 0083 e o `fila.h`/`fila.c` do 0086, e o
+`rodar` compila os quatro junto com o programa:
 
 ```c
 #include <stdbool.h>
@@ -2939,9 +2923,9 @@ int main(void) {
 // Resultado: 12
 ```
 
-Repara no fluxograma: as duas etapas ficam em sequência, e as perguntas de
-erro só aparecem na avaliação, que é onde falta de operando e divisão por
-zero se revelam:
+No fluxograma, as duas etapas ficam em sequência, e as perguntas de erro só
+aparecem na avaliação, quando a falta de operando e a divisão por zero se
+revelam:
 
 <p align="center"><img src="12-pilhas-e-filas/0088-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a calculadora de expressões" width="612"></p>
 
@@ -2964,9 +2948,11 @@ frase é um palíndromo.
 > mas, compilados separados, os dois poderiam se chamar `No`: tipo não tem
 > ligação, ele só existe dentro do arquivo que o declara, e o ligador nunca o
 > vê. Conflito haveria se os dois definissem uma **função** com o mesmo nome,
-> como `cria`: por isso cada TAD prefixa as suas (`pilha_`, `fila_`). Repare também no custo: cada
-> símbolo da expressão entra e sai da fila uma vez e de cada pilha no máximo
-> uma vez, então a calculadora inteira é **O(n)** no tamanho da expressão.
+> como `cria`: por isso cada TAD prefixa as suas (`pilha_`, `fila_`). Quanto
+> ao custo, cada símbolo da expressão entra e sai da fila uma vez e de cada
+> pilha no máximo uma vez, então a calculadora inteira é **O(n)** no tamanho
+> da expressão.
+
 
 > [!NOTE]
 > **Pergunta para você:** como fica a pós-fixa de `100 / (2 + 3) - 4`? E o
@@ -3389,8 +3375,8 @@ também com `<ul><li>a</li><li>b</li></ul>`.
 
 <details><summary>Resposta</summary>
 
-Primeiro, segundo e terceiro: certo, errado, certo. É o verificador do 0084 com palavras
-no lugar de caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
+Certo, errado, certo. É o verificador do 0084 com palavras no lugar de
+caracteres: ao ler `<nome>`, empilhe o nome (numa pilha de strings
 encadeada, como a do E495); ao ler `</nome>`, desempilhe e compare com
 `strcmp`. No fim, a pilha precisa estar vazia.
 
@@ -3411,8 +3397,8 @@ alternando 1000 vezes: 2000 empilhas (soma 500500)
 ```
 
 Dica: a soma confere que saiu tudo, na ordem certa ou não (1 + ... + 1000).
-Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída.
-É o **custo amortizado**: uma retirada pode custar O(n) (o despejo), mas a
+Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída:
+**custo amortizado**. uma retirada pode custar O(n) (o despejo), mas a
 média por operação é O(1).
 
 </details>
@@ -3506,7 +3492,7 @@ Qual é o custo?
 Gire a fila uma volta completa: retire cada item e insira de novo no fim,
 exceto o x, que é descartado. A ordem dos outros se mantém e o custo é
 **O(n)**. Com acesso aos nós seria O(n) também (precisa achar o x), mas sem
-o malloc e o free de cada volta. Remover do meio não é o forte da fila.
+o malloc e o free de cada volta. A fila não foi feita para remover do meio.
 
 </details>
 
@@ -4955,8 +4941,9 @@ printf("%d %d\n", topo, p[topo]);
 
 **C.** Aqui `topo` é o índice do topo (pilha vazia é `-1`). Os pares
 empilham e logo desempilham: o 4 sai, o 16 sai. Ficam 1, 9 e 25 nas posições
-0, 1 e 2, com `topo = 2`. Repare que o 16 foi escrito em `p[2]` e depois o 25
-escreveu por cima. Veja 0082 (as duas convenções de topo).
+0, 1 e 2, com `topo = 2`. O 16 foi escrito em `p[2]` e depois o 25 escreveu
+por cima.
+ Veja 0082 (as duas convenções de topo).
 
 </details>
 

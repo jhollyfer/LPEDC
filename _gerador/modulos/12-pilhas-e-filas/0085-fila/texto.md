@@ -5,8 +5,9 @@ antes, e ninguém fura: a senha 40, que acabou de sair da maquininha, vai
 esperar todo mundo da frente.
 
 Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
-primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*). É o
-contrário da pilha. Na computação, fila aparece onde existe ordem de chegada:
+primeiro a entrar é o primeiro a sair: **FIFO** (*first in, first out*), o
+contrário da pilha. Na computação, a fila aparece sempre que há ordem de
+chegada:
 a fila de impressão, as requisições esperando um servidor web, os processos
 esperando a vez na CPU, as mensagens de um RabbitMQ.
 
@@ -27,15 +28,14 @@ bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem 
 Guardar uma fila num vetor tem um problema que a pilha não tinha. A pilha
 mexe numa ponta só. A fila mexe nas duas: entra à direita e sai à esquerda.
 Se, a cada atendimento, você empurrar todo mundo uma casa para a esquerda,
-cada retirada custa **O(n)**. Se não empurrar,
-a fila vai "andando" para a direita e bate no fim do vetor com as primeiras
-gavetas vazias.
+cada retirada custa **O(n)**. Se não empurrar, a fila vai "andando" para a
+direita e bate no fim do vetor com as primeiras gavetas vazias.
 
 A saída é a **fila circular**: quando o índice passa da última gaveta, volta
 para a 0. O vetor vira um anel. Basta guardar onde está o **início** e
 quantos itens tem (`n`); a próxima vaga é `(inicio + n) % CAPACIDADE`. O `%`
-faz a volta: com 8 gavetas, depois da 7 vem `(7 + 1) % 8 = 0`. O coração do
-[`fila.c`](0085-fila/fila.c):
+faz a volta: com 8 gavetas, depois da 7 vem `(7 + 1) % 8 = 0`. A parte
+principal do [`fila.c`](0085-fila/fila.c):
 
 ```c
 #define CAPACIDADE 8
@@ -67,15 +67,15 @@ bool fila_retira(Fila *f, int *valor) {
 }
 ```
 
-Vamos ver na prática. O painel da lotérica guarda 8 senhas. Chegam as senhas
+No exemplo, o painel da lotérica guarda 8 senhas. Chegam as senhas
 31 a 36 (gavetas 0 a 5). O caixa atende 4, e o início anda até a gaveta 4.
 Chegam 37 a 40: o 37 e o 38 ocupam as gavetas 6 e 7, e o 39 e o 40 **dão a
 volta** e caem nas gavetas 0 e 1, que já estavam livres:
 
 {{ideia}}
 
-O programa da lotérica. Ele só vê as funções do `fila.h`; a volta no vetor é
-problema do `fila.c`:
+O programa da lotérica só vê as funções do `fila.h`; a volta no vetor fica
+por conta do `fila.c`:
 
 ```c
 #include <stdio.h>
@@ -122,7 +122,7 @@ int main(void) {
 // Na fila (6): 35 36 37 38 39 40
 ```
 
-Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
+O fluxograma segue a entrada da senha 39. Naquela hora, `inicio = 4` e
 `n = 4`, e o `%` manda o 39 para a gaveta 0:
 
 {{fluxograma}}
@@ -134,24 +134,24 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 > **sacrificar uma gaveta** e dizer que está cheia quando
 > `(fim + 1) % CAPACIDADE == inicio` (aí só cabem 7 em 8). Muito livro usa a
 > segunda, inclusive o Cormen: com `Q.head` e `Q.tail` (a próxima vaga), as
-> operações ENQUEUE e DEQUEUE e um vetor de n posições, cabem n − 1 itens. Outra armadilha: calcular o tamanho como `fim - inicio`. Com a
-> fila dando a volta (início 4, fim 2) isso dá -2.
+> operações ENQUEUE e DEQUEUE e um vetor de n posições, cabem n − 1 itens.
+> Outra armadilha é calcular o tamanho como `fim - inicio`: com a fila dando a
+> volta (início 4, fim 2), isso dá -2.
 
 > [!TIP]
 > **Por dentro do C:** o `%` é uma divisão inteira, uma das instruções mais
 > lentas do processador (dezenas de ciclos, contra 1 de uma soma). Por isso
 > filas de alto desempenho, como os *ring buffers* do kernel do Linux e das
-> placas de rede, usam capacidade **potência de 2**: com 8 gavetas e `i`
-> não negativo,
-> `i % 8` é o mesmo que `i & 7`, e o compilador já faz essa troca sozinho
-> quando a constante é potência de 2. Retirar não apaga nada: o 33 e o 34
+> placas de rede, usam capacidade **potência de 2**: com 8 gavetas e `i` não
+> negativo, `i % 8` é o mesmo que `i & 7`, e o compilador faz essa troca
+> sozinho quando a constante é potência de 2. Retirar não apaga nada: o 33 e o 34
 > continuam nas gavetas 2 e 3 até alguém escrever por cima. Inserir e retirar
 > custam **O(1)**, sem mover ninguém.
 
 > [!NOTE]
 > **Pergunta para você:** depois do último laço do programa da lotérica, a
-> fila está vazia.
-> Quanto valem `inicio` e `n` lá dentro? Em que gaveta entraria a próxima
+> fila está vazia. Quanto valem `inicio` e `n` lá dentro?
+ Em que gaveta entraria a próxima
 > senha?
 
 {{pratique}}

@@ -2,7 +2,7 @@
 
 No caixa do mercado, a placa avisa: compras a partir de R$ 200 ganham 10% de
 desconto. Sua compra deu R$ 230. A moça do caixa faz uma pergunta e, só se a
-resposta for sim, faz um passo a mais. Se for não, a vida segue sem desconto.
+resposta for sim, faz um passo a mais. Se for não, segue sem desconto.
 
 Esse "só se" é o **`if`**. No C, a sintaxe é esta:
 
@@ -34,10 +34,10 @@ chaves e ela roda sempre. Por isso o conselho do curso: **use chaves sempre**,
 mesmo com uma linha só. Abra e feche as chaves antes de escrever o miolo.
 
 Repare que o `if` sozinho não tem um "senão". Quando a condição é falsa, o
-bloco é pulado e o programa continua na linha seguinte. É o que chamamos de
+bloco é pulado e o programa continua na linha seguinte. Isso é a
 **seleção simples**: fazer um passo extra ou não fazer nada.
 
-Vamos ver na prática. Os R$ 230 entram, a pergunta responde Sim, o desconto
+No exemplo, os R$ 230 entram, a pergunta responde Sim, o desconto
 acontece e o valor final sai com R$ 207. Se a resposta fosse Não, a seta
 cinza levaria direto para o final, sem passar pelo desconto:
 
@@ -65,9 +65,8 @@ int main(void) {
 // A pagar: R$ 207.00
 ```
 
-Repara no fluxograma: o losango tem duas saídas, como sempre, mas a do Não
-não faz nada. Ela vai direto para o "Mostrar", o mesmo ponto onde o caminho do
-Sim chega depois do desconto:
+O losango tem duas saídas, como sempre, mas a do Não não faz nada: vai direto
+para o "Mostrar", o mesmo ponto a que o Sim chega depois do desconto:
 
 {{fluxograma}}
 
@@ -83,9 +82,8 @@ Sim chega depois do desconto:
 > **Por dentro do C:** o `if` vira duas instruções de máquina. Primeiro um
 > `cmp` compara `total` com 200. Depois vem um salto condicional que faz o
 > **contrário** do que você escreveu: "se for **menor**, pula o bloco". Quando
-> a condição é verdadeira, o processador simplesmente não pula e cai dentro do
-> bloco. Salve o código acima num arquivo, rode `gcc -S` nele e procure um
-> `jb`, `jl` ou parecido logo depois do `comisd` ou `cmp`. O `if` é só isso: comparar e, talvez, pular.
+> a condição é verdadeira, o processador não pula e cai dentro do bloco. Salve o código acima num arquivo, rode `gcc -S` nele e procure um
+> `jb`, `jl` ou parecido logo depois do `comisd` ou `cmp`.
 
 > [!NOTE]
 > **Pergunta para você:** e se a compra der exatamente R$ 200,00? E R$ 199,99?

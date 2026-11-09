@@ -36,7 +36,7 @@ A **precedência** é a da matemática da escola: `*`, `/` e `%` antes de `+` e
 outra coisa (assunto 0065). Para potência, use `pow` (assunto 0010) ou
 multiplique: `x * x`.
 
-Vamos ver na prática. As 24 fatias são divididas entre os cinco, quatro para
+As 24 fatias são divididas entre os cinco, quatro para
 cada um. O `/` conta as rodadas completas e o `%` conta as fatias que não
 fecham mais uma rodada:
 
@@ -70,9 +70,8 @@ int main(void) {
 // Com inteiros: R$ 31
 ```
 
-Repara no fluxograma: cada conta é um retângulo de processamento, um depois
-do outro. A ordem importa: `cada` e `sobra` só podem ser calculados depois
-que `fatias` tem valor:
+Cada conta é um retângulo de processamento, e a ordem deles importa: `cada` e
+`sobra` só podem ser calculados depois que `fatias` tem valor:
 
 {{fluxograma}}
 
@@ -91,8 +90,7 @@ que `fatias` tem valor:
 > (`Floating point exception`), e o detector do `rodar` acusa `division by
 > zero`; com `double`, o resultado vira `inf`. Dividir também custa caro: uma
 > soma leva 1 ciclo do processador, uma divisão inteira leva dezenas. Por isso
-> o compilador troca `x / 8` por um deslocamento de bits quando pode. Você
-> escreve a conta clara, e ele cuida da velocidade.
+> o compilador troca `x / 8` por um deslocamento de bits quando pode.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `2 + 3 * 4 % 5`? Resolva na mão, na

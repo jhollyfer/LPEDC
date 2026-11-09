@@ -18,7 +18,7 @@ escrever o número digitado. No `printf` não vai `&`; no `scanf`, vai em toda
 variável simples.
 
 Os especificadores quase repetem os do `printf`, com uma diferença que pega
-todo mundo: **`double` se lê com `%lf`** e se mostra com `%f`.
+muita gente: **`double` se lê com `%lf`** e se mostra com `%f`.
 
 | Tipo | Lê com | Mostra com |
 | --- | --- | --- |
@@ -40,7 +40,7 @@ itens conseguiu guardar: 1, 2, 3... ou 0 se o primeiro já falhou, ou `EOF`
 certo. No módulo 02, com o `if`, você vai usar esse número para decidir o que
 fazer; por enquanto, mostre e observe.
 
-Vamos ver na prática. Você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
+Acompanhe uma execução: você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
 `150.75` da fila e escreve no endereço de `valor`. O `%d` pula o `'\n'` que
 sobrou, tira o `12` e escreve em `dia`. O último `'\n'` continua na fila:
 
@@ -75,8 +75,8 @@ Para testar sem digitar, salve o programa como `pix.c` e mande a entrada
 por um cano: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`. O que vem antes
 do `|` vira o teclado do programa.
 
-Repara no fluxograma: as duas leituras são paralelogramos de entrada, cada
-uma guardando o valor numa caixinha, e só depois vem a saída:
+No fluxograma, as duas leituras são paralelogramos de entrada, cada uma
+guardando o valor numa caixinha. A saída vem depois:
 
 {{fluxograma}}
 

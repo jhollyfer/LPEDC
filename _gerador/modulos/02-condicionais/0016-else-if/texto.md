@@ -34,8 +34,7 @@ bloco de outro. Ele serve quando a segunda pergunta só faz sentido se a
 primeira deu Sim: "o usuário existe? Se existe, a senha confere?". O `else if`
 é um caso particular disso, só que escrito sem a escada de recuos.
 
-Vamos ver na prática. Os 80 km/h passam pelas perguntas em ordem: 80 é menor
-ou igual a 60? Não. A 72? Não. A 90? Sim, e a busca para ali:
+Os 80 km/h passam pelas perguntas em ordem: 80 é menor ou igual a 60? Não. A 72? Não. A 90? Sim, e a busca para ali:
 
 {{ideia}}
 
@@ -66,9 +65,9 @@ int main(void) {
 // Infração grave: R$ 195.23
 ```
 
-Repara no fluxograma: é uma escada de losangos, cada um pendurado no Não do
-anterior. O caminho verde desce pelos Nãos até o primeiro Sim, e os
-losangos de baixo nunca são visitados:
+O fluxograma vira uma escada de losangos, cada um pendurado no Não do
+anterior. O caminho verde desce pelos Nãos até o primeiro Sim; os losangos de
+baixo nunca são visitados:
 
 {{fluxograma}}
 
@@ -87,8 +86,8 @@ losangos de baixo nunca são visitados:
 > O recuo diz que o `else` é do primeiro `if`, mas ele é do segundo. Com 4
 > pessoas, aparece "Restaurante vazio."; com 0, não aparece nada. O `-Wall`
 > avisa ("suggest explicit braces to avoid ambiguous 'else'"). A cura é a de
-> sempre: **chaves**. Com `{ }` em volta do `if` de dentro, o `else` vai para
-> onde você quer.
+> sempre: **chaves**. Com `{ }` em volta do `if` de dentro, o `else` fica com
+> o `if` que você quer.
 
 > [!TIP]
 > **Por dentro do C:** `else if` **não é uma palavra-chave**. É um `else`
@@ -96,7 +95,7 @@ losangos de baixo nunca são visitados:
 > `if` dentro do `else` de outro `if`, dentro do `else` de outro. Só a
 > formatação é que deixa tudo alinhado. Em máquina, cada degrau é um `cmp` e um
 > salto: com 80 km/h, o processador faz três comparações; com 50 km/h, só uma.
-> Por isso, quando uma faixa é muito mais comum que as outras, testar ela
+> Por isso, quando uma faixa é muito mais comum que as outras, testá-la
 > primeiro economiza trabalho.
 
 > [!NOTE]

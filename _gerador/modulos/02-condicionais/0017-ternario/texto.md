@@ -11,8 +11,7 @@ Para isso existe o **operador ternário** (o único do C com três partes):
 condição ? valor_se_verdade : valor_se_falso
 ```
 
-A diferença para o
-`if` é que o ternário é uma **expressão**: ele **devolve um valor**. Por isso
+A diferença para o `if` é que o ternário é uma **expressão**: ele **devolve um valor**. Por isso
 cabe onde um `if` não cabe: do lado direito de uma atribuição, dentro de um
 `printf`, no meio de uma conta.
 
@@ -49,10 +48,9 @@ tipo e você não terá surpresa no `printf`.
 
 Quando usar? Para escolher **um valor** entre dois, com uma condição curta. Se
 cada lado faz várias coisas, ou se você começa a encadear ternários dentro de
-ternários, volte para o `if/else`. Código esperto que ninguém entende é pior
-que código longo.
+ternários, volte para o `if/else`.
 
-Vamos ver na prática. Os R$ 150 entram, a pergunta "passou de 199?" responde
+No carrinho do exemplo, os R$ 150 entram, a pergunta "passou de 199?" responde
 Não, e o ternário devolve 19.90, que vai direto para a caixinha `frete`:
 
 {{ideia}}
@@ -80,9 +78,8 @@ int main(void) {
 // Total: R$ 169.90
 ```
 
-Repara no fluxograma: é o mesmo desenho de um `if/else` em que cada lado só
-guarda um valor na mesma variável. Sempre que você vir esse formato, um
-ternário resolve em uma linha:
+O desenho é o de um `if/else` em que cada lado só guarda um valor na mesma
+variável. Sempre que aparecer esse formato, um ternário resolve em uma linha:
 
 {{fluxograma}}
 
@@ -96,8 +93,8 @@ ternário resolve em uma linha:
 
 > [!TIP]
 > **Por dentro do C:** um `if` vira um salto, e saltos têm um custo escondido.
-> O processador moderno tenta **adivinhar** para onde o salto vai e já vai
-> adiantando o trabalho. Quando erra, joga tudo fora. Para escolhas simples
+> O processador moderno tenta **adivinhar** para onde o salto vai e adianta o
+> trabalho. Quando erra, joga tudo fora. Para escolhas simples
 > como `x > y ? x : y`, o `gcc -O2` costuma gerar uma instrução sem salto
 > nenhum, a `cmov` ("copia se"): calcula a condição e copia o valor certo, sem
 > adivinhar nada. Ternário e `if/else` simples geram o mesmo código: escolha

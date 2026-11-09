@@ -2,21 +2,20 @@
 
 Na churrascaria de rodízio, o garçom da pizza passa de mesa em mesa: 3, 7,
 12, 15. Quando serve a última, ele não para: volta para a mesa 3 e começa
-outra rodada. Para ele, não existe "fim da fila". Existe só "a próxima mesa".
+outra rodada. Para ele, não existe "fim da fila", só "a próxima mesa".
 
 Uma **lista circular** é uma lista encadeada em que o último nó, em vez de
 apontar para `NULL`, aponta de volta para o **primeiro**. Os nós formam um
-anel. Ela serve para tudo que é rodízio: a vez de cada jogador num jogo de
+anel. Ela serve para qualquer rodízio: a vez de cada jogador num jogo de
 tabuleiro, a playlist no "repetir tudo", os programas que dividem a CPU, o
 revezamento de motoristas numa viagem. Na lista dupla, o círculo fecha nos
 dois sentidos: o `ant` do primeiro aponta para o último. É a forma que o
 Cormen usa, com uma sentinela no meio do anel (assunto 0174).
 
-Num anel, qual nó você guarda? A escolha esperta é guardar o **último**. Dele
-você chega às duas pontas em um passo: o último é `ultimo` e o primeiro é
-`ultimo->prox`. Com isso, inserir no início **e** no fim custa O(1). Inserir
-no fim é até mais curioso: é inserir no início e dizer que o novo é o
-último.
+Num anel, convém guardar o ponteiro para o **último** nó. Dele você chega às
+duas pontas em um passo: o último é `ultimo` e o primeiro é `ultimo->prox`.
+Com isso, inserir no início **e** no fim custa O(1). Inserir no fim é inserir
+no início e declarar que o novo é o último.
 
 ```c
 No *lista_insere_inicio(No *ultimo, int valor) {
@@ -34,14 +33,14 @@ No *lista_insere_fim(No *ultimo, int valor) {
 }
 ```
 
-Percorrer muda de cara. Não tem `NULL` para avisar que acabou: você para
-quando **voltar ao ponto de partida**. Como o primeiro passo já começa no
+Percorrer muda. Não há `NULL` para avisar que acabou: você para quando
+**voltar ao ponto de partida**. Como o primeiro passo já começa no
 ponto de partida, o laço certo é o **do-while** (assunto 0021): ele roda o
 corpo uma vez antes de testar. E a lista vazia (`ultimo == NULL`) precisa ser
 tratada antes, porque não tem por onde começar.
 
-Vamos ver na prática. As quatro mesas formam o anel, o ponteiro da lista
-fica na mesa 15 (a última) e a mesa 3 é `ultimo->prox`. O garçom serve 6
+No exemplo, as quatro mesas formam o anel, o ponteiro da lista fica na mesa
+15 (a última) e a mesa 3 é `ultimo->prox`. O garçom serve 6
 vezes seguidas sem testar nada, porque sempre existe uma próxima:
 
 {{ideia}}
@@ -79,14 +78,14 @@ int main(void) {
 // 3 -> 7 -> 15 -> (volta ao 3)
 ```
 
-Repara no fluxograma do `lista_imprime`: a pergunta da lista vazia vem
+O fluxograma é o do `lista_imprime`, e a pergunta da lista vazia vem
 primeiro. Depois, `p` começa na mesa 3 e o laço mostra, anda e só então
 pergunta "já voltei ao primeiro?". Com as 4 mesas, a resposta é Não três
 vezes e Sim na quarta:
 
 {{fluxograma}}
 
-O clássico da lista circular é o **problema de Josephus**: pessoas em roda, e
+O problema clássico da lista circular é o **problema de Josephus**: pessoas em roda, e
 a cada k passos uma sai. Quem sobra? O exemplo A160 resolve com a batata
 quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
@@ -101,11 +100,12 @@ quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
 > [!TIP]
 > **Por dentro do C:** o nó é o mesmo da lista simples, 16 bytes. Não há
-> custo de memória a mais: o círculo é só o último `prox` apontando para um
-> endereço em vez de `NULL`. Os truques vêm de graça: **girar** a roda é
+> custo de memória a mais: o círculo é o último `prox` apontando para um
+> endereço em vez de `NULL`. E duas operações saem de graça: **girar** a roda é
 > mudar um ponteiro (`ultimo = ultimo->prox`), sem mexer em nó nenhum; e
 > **juntar** duas listas circulares é trocar dois ponteiros, O(1). O
-> escalonador de um sistema operacional faz exatamente isso: o processo da
+> escalonador de um sistema operacional faz isso:
+ o processo da
 > frente roda um pouquinho e, se não terminou, a roda gira.
 
 > [!NOTE]

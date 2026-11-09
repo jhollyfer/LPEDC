@@ -23,11 +23,8 @@ temporária** convertida; a variável `km` continua `int` para sempre. Ele tem
 precedência alta, maior que a de `*` e `/`, então `(double) km / litros`
 converte só o `km`, e isso basta, porque aí a divisão já vira real.
 
-Resumo: no C, o tipo de cada pedaço da conta decide o resultado. Antes de
-confiar numa conta, pergunte de que tipo é cada operando.
-
-Vamos ver na prática. Pelo caminho de cima, os dois `int` se dividem, sai 12,
-e só então ele vira 12.0, tarde demais. Pelo caminho de baixo, o cast
+O desenho mostra os dois caminhos. Pelo de cima, os dois `int` se dividem, sai 12,
+e só então ele vira 12.0, tarde demais. Pelo de baixo, o cast
 transforma o 523 em 523.0 antes da divisão, e o resultado é real:
 
 {{ideia}}
@@ -60,9 +57,9 @@ int main(void) {
 // Num int:       12 km/l
 ```
 
-Repara no fluxograma: a pergunta que decide o resultado é "tem um real na
-divisão?". Ela é respondida pelo compilador, olhando os tipos, antes de o
-programa rodar. O exemplo segue pelo Sim, graças ao cast:
+A pergunta que decide o resultado é "tem um real na divisão?". Quem responde
+é o compilador, olhando os tipos, antes de o programa rodar. Graças ao cast,
+o exemplo segue pelo Sim:
 
 {{fluxograma}}
 

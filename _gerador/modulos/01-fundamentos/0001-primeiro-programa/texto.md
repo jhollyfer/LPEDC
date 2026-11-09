@@ -2,9 +2,8 @@
 
 A padaria do bairro comprou um painel de LED e pediu um aviso de três linhas:
 o nome da padaria, o horário da fornada e o preço do pão. São três linhas
-de saída, sem entrada nem conta: o menor programa útil que existe. Mesmo
-assim, antes de rodar, o arquivo passa por uma linha de montagem, e cada
-linha do código tem um motivo para estar ali.
+de saída, sem entrada nem conta. Mesmo assim, antes de rodar, o arquivo
+passa por uma linha de montagem, e cada linha do código tem um motivo.
 
 Um programa em C é um conjunto de **funções**. Uma delas é especial: a
 **`main`**. Quando você roda o executável, o sistema começa por ela. O
@@ -19,7 +18,7 @@ esqueleto que você vai escrever em todo exemplo do curso:
 | `return 0;` | termina a `main` e devolve 0 ao sistema: "deu tudo certo" |
 | `}` | fecha o **bloco** da `main` |
 
-Regras que valem para o resto da vida: toda **instrução** termina em `;` (o
+Regras que valem sempre: toda **instrução** termina em `;` (o
 `#include` não é instrução, e por isso não leva); as **chaves** `{ }` agrupam
 instruções num bloco; o C diferencia maiúsculas de minúsculas (`Main` não é
 `main`); comentário de uma linha começa com `//`, e o de várias linhas fica
@@ -30,8 +29,8 @@ entre `/*` e `*/`.
 O processador não entende C. Antes de rodar, o arquivo passa por quatro
 estações, e quem comanda tudo é o **compilador** `gcc`:
 
-1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>` é
-   literalmente **colar** o conteúdo do `stdio.h` no lugar da linha;
+1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>`
+   **cola** o conteúdo do `stdio.h` no lugar da linha;
 2. **compilador**: confere a gramática e os tipos e traduz o C para
    **assembly**, a língua do processador em forma de texto;
 3. **montador**: transforma o assembly em **código objeto** (`.o`), já em
@@ -46,7 +45,7 @@ com mais cuidado: liga todos os avisos (`-Wall -Wextra -pedantic`), usa o
 padrão C17 e ativa o **AddressSanitizer**, que vigia a memória enquanto o
 programa roda.
 
-Vamos ver na prática. O `padaria.c` entra na linha de montagem, ganha o
+O `padaria.c` entra na linha de montagem, ganha o
 `stdio.h` colado, vira assembly, vira `padaria.o`, é ligado ao `printf` e sai
 como o executável `padaria`, que mostra as três linhas no terminal:
 
@@ -70,9 +69,8 @@ int main(void) {
 // R$ 0,90 a unidade
 ```
 
-Repara no fluxograma: cada estação pode parar a linha de montagem, e cada
-uma reclama de um jeito. O caminho do exemplo passa por todas sem erro e
-termina com o programa rodando:
+Cada estação pode parar a linha de montagem, e cada uma reclama de um jeito.
+O exemplo passa por todas sem erro e termina com o programa rodando:
 
 {{fluxograma}}
 
@@ -84,8 +82,7 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 - **de ligação**: o código está certo na gramática, mas uma função não existe
   em lugar nenhum. Escreva `prinft` e o ligador para com
   `undefined reference to 'prinft'`;
-- **de execução**: compila, roda e dá errado: mostra o valor errado ou quebra
-  no meio. É o pior tipo, porque o compilador não tem como ver. Os **avisos**
+- **de execução**: compila, roda e mostra o valor errado ou quebra no meio. É o pior tipo, porque o compilador não tem como ver. Os **avisos**
   (*warnings*) do gcc e o AddressSanitizer existem para pegar parte deles.
 
 > [!WARNING]

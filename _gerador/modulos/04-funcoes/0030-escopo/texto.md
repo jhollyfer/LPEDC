@@ -28,7 +28,7 @@ local do laço. Se um bloco interno declara um nome que já existe fora, o de
 dentro **esconde** o de fora até o bloco acabar. Vale sempre a declaração mais
 próxima.
 
-Vamos ver na prática. A função `chamar` tem três contadores: a global
+A função `chamar` tem três contadores: a global
 `atendidos`, a `static` `senha` e a local `vezes`. As duas primeiras moram
 numa região da memória que dura o programa inteiro; a local mora no espaço da
 chamada e some quando a função retorna. Depois de três chamadas, fica assim:
@@ -68,13 +68,13 @@ int main(void) {
 // Última senha chamada: 103
 ```
 
-Repara no fluxograma: a cada chamada, a local é criada de novo com 0, e a
+A cada chamada, a local é criada de novo com 0, e a
 `static` já está esperando com o valor anterior. Não existe um passo
 "criar senha" dentro da repetição:
 
 {{fluxograma}}
 
-E as globais? Funcionam, mas cobram caro. **Qualquer** função do arquivo pode
+As globais funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
 qualquer lugar. A mesma chamada pode dar resultados diferentes conforme o que
 outra função fez antes. Prefira passar por parâmetro e devolver com `return`;

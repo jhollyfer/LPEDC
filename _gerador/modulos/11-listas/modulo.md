@@ -1,21 +1,21 @@
 # Módulo 11 · Listas
 
 Até aqui você guardou coleções em vetores: tamanho fixo, itens lado a lado,
-acesso instantâneo pelo índice. Mas quase nunca você sabe de antemão quantos
-itens vão chegar. Este módulo começa resolvendo isso: você constrói o vetor
-que cresce sozinho, dobrando de tamanho quando enche.
+acesso instantâneo pelo índice. Só que quase nunca você sabe de antemão
+quantos itens vão chegar. Por isso o módulo começa pelo vetor que cresce
+sozinho, dobrando de tamanho quando enche.
 
-Depois vem a primeira estrutura de dados de verdade feita só de ponteiros: a
+Depois vem a primeira estrutura de dados feita só de ponteiros: a
 **lista encadeada**. Cada item mora num pedaço separado do heap e sabe onde
 está o próximo. Você troca o acesso direto pela liberdade de inserir e
 remover sem empurrar ninguém. Vai fazer busca, remoção, inserção em ordem, a
 lista dupla (que anda para os dois lados) e a circular (que não tem fim).
 
-A mudança na cabeça é parar de pensar em posições e começar a pensar em
-**setas**. Toda operação de lista é "quem aponta para quem, antes e depois".
-Por isso o conselho do módulo inteiro é um só: desenhe os nós e as setas no
-papel antes de escrever o código. E rode tudo com o `rodar`: com ponteiros, o
-AddressSanitizer vira o seu melhor amigo.
+A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
+"quem aponta para quem, antes e depois". Por isso o conselho do módulo
+inteiro é desenhar os nós e as setas no papel antes de escrever o código. E
+rode tudo com o `rodar`: com ponteiros, o AddressSanitizer pega o que o olho
+deixa passar.
 
 ## O que você vai aprender
 
@@ -27,45 +27,25 @@ AddressSanitizer vira o seu melhor amigo.
 - usar a **lista circular** para rodízios, guardando o ponteiro para o último nó
 - juntar tudo num **TAD playlist** com arquivo, callbacks e tipo opaco
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   nós e as setas.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores. As funções da
-   estrutura ficam no `lista.h` e no `lista.c` da pasta do assunto: abra os
-   dois.
-3. Siga o **fluxograma** com o dedo: é o caminho que a operação faz.
-4. Rode os exemplos. Mude um valor, apague uma linha de propósito e veja o
-   AddressSanitizer reclamar.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, o nó que vai embora.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
+Nos desenhos, vermelho marca o nó que vai embora.
 
 Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`
 (módulo 07), structs e `->` (módulo 08) e no padrão TAD (assunto 0074). Se
 `No **inicio` ainda assusta, releia o assunto 0049 antes do 0077.
 
 Cada pasta de assunto traz um `lista.h` (a interface) e um `lista.c` (a
-implementação). O `rodar` compila o `lista.c` junto com o exemplo ou o
-exercício automaticamente, porque ele está na mesma pasta:
+implementação): abra os dois junto com o exemplo. O `rodar` compila o
+`lista.c` junto com o exemplo ou o exercício, porque ele está na mesma pasta:
 
 ```bash
 ~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
 ```
 
-Por isso, nos exercícios, não dê às suas funções o mesmo nome de uma função
-do `lista.c` (como `lista_imprime`): o ligador reclamaria de nome repetido.
+Nos exercícios, então, não dê às suas funções o mesmo nome de uma função do
+`lista.c` (como `lista_imprime`): o ligador reclamaria de nome repetido.
 Os exercícios que usam outra estrutura trazem tudo no próprio arquivo.
 
 > [!NOTE]
@@ -164,7 +144,7 @@ refez 1:     v1 v2 v3 [v5]
 Dica: no `digita`, libere todos os nós depois do cursor, faça
 `cursor->prox = NULL` e `fim = cursor`, e só então insira no fim. É o
 comportamento de todo editor: depois de editar, o "refazer" some. Esquecer os
-`free` desses nós é vazamento clássico, e o `rodar` acusa.
+`free` desses nós é vazamento, e o `rodar` acusa.
 
 </details>
 
@@ -217,7 +197,7 @@ bloco incompleto também é invertido).
 
 Aplique a inversão do E456 em pedaços: inverta 3 nós, guardando o primeiro
 do bloco (que vira o último) e o início do resto. Ligue o fim do bloco
-invertido ao resultado da inversão do resto. Fica elegante com recursão:
+invertido ao resultado da inversão do resto. Com recursão fica curto:
 `inverte_k(inicio)` inverte os 3 primeiros e faz
 `primeiro_do_bloco->prox = inverte_k(resto)`.
 
@@ -480,7 +460,8 @@ na pessoa seguinte à que saiu. Quem sobra?
 
 **C.** Saem, na ordem, 3, 6, 2, 7, 5 e 1, e sobra a pessoa 4. É o problema de
 Josephus com n = 7 e k = 3; a fórmula J(n) = (J(n − 1) + k) % n, com J(1) = 0,
-dá J(7) = 3, ou seja, a pessoa 4. Veja 0080 (exemplo A160) e o desafio 10.
+dá J(7) = 3, que é a pessoa 4.
+ Veja 0080 (exemplo A160) e o desafio 10.
 
 </details>
 

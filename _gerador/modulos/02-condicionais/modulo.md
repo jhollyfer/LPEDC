@@ -7,11 +7,10 @@ segunda das três peças de qualquer algoritmo (sequência, decisão e
 repetição).
 
 A sintaxe é curta: `if`, `else`, `switch` e o ternário. O que importa é o que
-está por baixo. No C não existe
-um tipo "verdadeiro ou falso" de nascença: a verdade é um **número**, 0 é
-falso e qualquer outra coisa é verdade. Daí vêm pegadinhas,
-como um `=` no lugar de `==` que compila, roda e estraga a variável em
-silêncio.
+está por baixo. O C não nasceu com um tipo "verdadeiro ou falso": a verdade é
+um **número**, 0 é falso e qualquer outra coisa é verdade. Daí vêm
+pegadinhas como um `=` no lugar de `==`, que compila, roda e estraga a
+variável em silêncio.
 
 Por isso o módulo tem dois focos: escrever decisões claras e **desconfiar**
 de decisões que parecem certas. Os avisos do compilador viram aliados: o
@@ -28,34 +27,16 @@ de decisões que parecem certas. Os avisos do compilador viram aliados: o
 - o **`switch`**, o `break` e o **fall-through** (o acidental e o de propósito)
 - juntar tudo num programa que lê dados, valida a entrada e decide
 
-## Como estudar cada assunto
+## Antes de começar
 
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz. Em
-   decisões, o caminho verde mostra por onde o exemplo passou.
-4. Rode os exemplos. Mude um valor para cair no outro ramo, quebre de
-   propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
+Nos fluxogramas, o caminho verde mostra por onde o exemplo passou. Responda a
+**Pergunta para você** antes de rodar.
 
 > [!TIP]
 > Para testar uma decisão de verdade, rode o programa **uma vez para cada
 > caminho** e, principalmente, nos **valores de fronteira**: se a regra é
 > "a partir de R$ 200", teste 199,99, 200 e 200,01. A maioria dos erros de
 > decisão mora na troca de um `>` por um `>=`.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
-## Antes de começar
 
 Você precisa estar à vontade com o módulo 01: variáveis, `printf`, `scanf`
 (e o valor que ele devolve), os operadores aritméticos, em especial o `%`, e

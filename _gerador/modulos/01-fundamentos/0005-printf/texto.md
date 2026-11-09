@@ -37,7 +37,7 @@ Entre o `%` e a letra cabem ajustes, nesta ordem:
 A precisão **arredonda só na tela**: `%.2f` de 7.499 mostra `7.50`, mas a
 variável continua valendo 7.499.
 
-Vamos ver na prática. A linha do arroz tem três buracos: `%-10s` reserva 10
+A linha do arroz tem três buracos: `%-10s` reserva 10
 casas para o nome, encostado à esquerda; `%3d` reserva 3 casas para a
 quantidade; `%9.2f` reserva 9 casas para o total, com 2 decimais:
 
@@ -64,15 +64,15 @@ int main(void) {
 // TOTAL             131.17
 ```
 
-Repara no fluxograma: cada `printf` é uma saída, e todas usam o mesmo
-formato. Mudar a largura de uma coluna é mudar um número só, em cada linha:
+Cada `printf` é uma saída, e todas usam o mesmo formato. Para mudar a largura
+de uma coluna, basta trocar um número em cada linha:
 
 {{fluxograma}}
 
 > [!WARNING]
 > O `printf` **confia** em você: se o especificador não combina com o tipo do
 > argumento, ele lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
-> nem 10: mostra lixo. `printf("%.2f", 5)` também. Faltar argumento é igual. O
+> nem 10: mostra lixo. `printf("%.2f", 5)` também. Faltar argumento dá no mesmo. O
 > `-Wall` do `rodar` avisa (`format '%d' expects argument of type 'int'`).
 > Nunca ignore esse aviso. E no `printf` não vai `&`: ele quer o valor, não o
 > endereço.

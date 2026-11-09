@@ -16,9 +16,8 @@ Toda decisão de um programa começa assim: uma **comparação**. O C tem seis
 | `==` | igual? (dois sinais!) | `2 == 1` vale 0 |
 | `!=` | diferente? | `2 != 1` vale 1 |
 
-Repare na última coluna. No C, uma comparação não dá um valor de tipo
-especial: dá um **`int`**: **1** quando é verdade e **0**
-quando é mentira. Dá para imprimir com `%d`, somar, multiplicar.
+Repare na última coluna. No C, uma comparação dá um **`int`**: **1** quando é
+verdade e **0** quando é mentira. Dá para imprimir com `%d`, somar, multiplicar.
 
 E o caminho de volta é ainda mais solto: para o C, **0 é falso e qualquer
 outro valor é verdadeiro**. 1, 42, -3 e 0.5 contam como verdade. Só o zero é
@@ -35,7 +34,7 @@ símbolo vem sempre antes do `=`, e diferente é `!=`); `= =` com espaço també
 não; e `=` sozinho é **atribuição**, não comparação. Leia `=` como "recebe" e
 `==` como "é igual a". O estrago que essa troca faz fica para o 0015.
 
-Vamos ver na prática. Os dois placares entram, viram três perguntas, e cada
+Os dois placares entram, viram três perguntas, e cada
 resposta é um 0 ou um 1. A tabela usa esses números direto na conta dos
 pontos:
 
@@ -70,9 +69,9 @@ int main(void) {
 // Pontos do mandante: 3
 ```
 
-Repara no fluxograma: não tem losango. Comparar não é decidir. A comparação
-só **calcula** uma resposta e guarda numa caixinha, como qualquer conta. Quem
-escolhe um caminho é o `if`, que vem daqui a dois assuntos:
+O fluxograma não tem losango, porque comparar não é decidir: a comparação só
+**calcula** uma resposta e a guarda numa caixinha, como qualquer conta. Quem
+escolhe um caminho é o `if`, daqui a dois assuntos:
 
 {{fluxograma}}
 

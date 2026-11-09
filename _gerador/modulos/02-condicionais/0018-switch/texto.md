@@ -25,7 +25,7 @@ O `switch` calcula a expressão entre parênteses uma vez e **pula direto** para
 o `case` com o mesmo valor. O **`default`** pega o que não casou com nenhum
 `case` (é opcional, mas quase sempre vale a pena tratar o inválido).
 
-As regras são mais rígidas que as do `if`, e é bom saber por quê:
+As regras são mais rígidas que as do `if`:
 
 - a expressão tem que ser **inteira**: `int`, `char` (que é número) ou
   parecido. Nada de `double`, e nada de string: `switch (nome)`
@@ -45,7 +45,7 @@ entre eles, dividem o mesmo código: `case 'S': case 's':` aceita maiúscula e
 minúscula. Quando é de propósito e tem código no meio, avise quem lê com um
 comentário `// fall through` (o `gcc` reconhece esse comentário e não reclama).
 
-Vamos ver na prática. O código 2 entra, o `switch` pula direto para o
+Acompanhe o pedido do desenho: o código 2 entra, o `switch` pula direto para o
 `case 2`, sem testar o 1 nem o 3, e o `break` sai antes do `case 3`:
 
 {{ideia}}
@@ -84,7 +84,7 @@ int main(void) {
 // Total: R$ 36.00
 ```
 
-Repara no fluxograma: o losango do `switch` tem **várias** saídas, uma para
+O losango do `switch` tem **várias** saídas, uma para
 cada `case` e uma para o `default`. Por isso as setas levam o valor no lugar
 de Sim e Não:
 
@@ -105,8 +105,8 @@ de Sim e Não:
 > vetor com o endereço do código de cada `case`. Em vez de comparar um por um,
 > ele usa o valor como índice da tabela e pula direto, em **um passo só**,
 > tenha o `switch` 3 ou 300 casos. Com valores espalhados (1, 500, 90000), ele
-> volta a comparar. E o fall-through? É só não ter um salto no fim do bloco:
-> o código do próximo `case` está logo ali embaixo na memória.
+> volta a comparar. Já o fall-through é a falta de um salto no fim do bloco:
+> o código do próximo `case` está logo embaixo na memória.
 
 > [!NOTE]
 > **Pergunta para você:** com `codigo = 7`, o que aparece? E o total? Pense

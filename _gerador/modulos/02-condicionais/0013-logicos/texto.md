@@ -29,10 +29,10 @@ mas compara o 0 ou 1 da primeira parte com 65 (lembra do 0012?).
 unário), depois os aritméticos, os relacionais (`<` `>` `<=` `>=`), a
 igualdade (`==` `!=`), o `&&` e por último o `||`. Por isso
 `x > 0 && x < 10` dispensa parênteses. Mas `a || b && c` é `a || (b && c)`:
-o E vem antes do OU. Na dúvida, ponha parênteses. Eles não custam nada e
-contam a sua intenção.
+o E vem antes do OU. Na dúvida, ponha parênteses: não custam nada e
+mostram a intenção.
 
-E tem o **curto-circuito**. O C avalia da esquerda para a
+Falta o **curto-circuito**. O C avalia da esquerda para a
 direita e **para assim que sabe a resposta**. Em `a && b`, se `a` é falso, o
 `b` nem é calculado: falso E qualquer coisa é falso. Em `a || b`, se `a` é
 verdade, o `b` é pulado. Isso protege contas perigosas:
@@ -43,7 +43,7 @@ entra nos parênteses e troca E por OU. `!(a && b)` é `!a || !b`, e
 `!(a || b)` é `!a && !b`. "Não é (estudante ou idoso)" é o mesmo que "não é
 estudante e não é idoso".
 
-Vamos ver na prática. Uma pessoa de 67 anos, que não é estudante, numa sessão
+O exemplo é uma pessoa de 67 anos, que não é estudante, numa sessão
 comum. O OU dá verdade pela idade, o NÃO da pré-estreia dá verdade, e o E
 fecha com meia-entrada:
 
@@ -72,15 +72,15 @@ int main(void) {
 // Ingresso: R$ 20.00
 ```
 
-Repara no fluxograma: é assim que o C avalia a expressão, uma pergunta de cada
-vez. Como `estudante` é falso, ele precisa olhar a idade. Se fosse verdade,
-pularia direto para a pré-estreia: isso é o curto-circuito desenhado:
+O C avalia a expressão como no fluxograma, uma pergunta de cada vez. Como
+`estudante` é falso, ele precisa olhar a idade. Se fosse verdade, pularia
+direto para a pré-estreia: é o curto-circuito desenhado.
 
 {{fluxograma}}
 
 > [!WARNING]
 > **`&` não é `&&`.** O `&` simples é o E **bit a bit** (assunto 0065): não tem
-> curto-circuito e, pior, tem precedência **menor** que o `==`. Quem escreve
+> curto-circuito e tem precedência **menor** que o `==`. Quem escreve
 > `if (x & 1 == 0)` para testar se `x` é par ganha `x & (1 == 0)`, que é
 > `x & 0`, que é **sempre 0**. O certo é `(x & 1) == 0` ou, mais claro,
 > `x % 2 == 0`. O mesmo vale para `|` e `||`. O `-Wall` avisa: "suggest
@@ -89,10 +89,10 @@ pularia direto para a pré-estreia: isso é o curto-circuito desenhado:
 > [!TIP]
 > **Por dentro do C:** o `&&` e o `||` não viram uma instrução de "E". Viram
 > **saltos**. `a && b` é compilado como "calcula `a`; se deu zero, pula para o
-> resultado 0; senão, calcula `b`". É literalmente o fluxograma acima, e é por
-> isso que o curto-circuito é garantido pelo padrão do C. Uma consequência
+> resultado 0; senão, calcula `b`". É o fluxograma acima, e por isso o
+> curto-circuito é garantido pelo padrão do C. Uma consequência
 > prática: em `a && b`, ponha à esquerda o teste mais barato ou o que mais
-> costuma dar falso. Ele poupa o resto.
+> costuma dar falso.
 
 > [!NOTE]
 > **Pergunta para você:** se a pessoa fosse estudante, a comparação

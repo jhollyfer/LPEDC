@@ -7,15 +7,14 @@ você copiaria o mesmo código dez, cem, mil vezes. Com laço, escreve uma vez e
 diz **quando parar**.
 
 O C tem cinco palavras para repetir: `while`, `do...while`, `for`, `break` e
-`continue`. Nenhuma percorre uma coleção sozinha: aqui todo laço é "na mão", com contador e condição. Isso
-obriga a pensar no que importa: onde o laço começa, o que muda a cada volta e
-qual pergunta faz ele terminar. Errar qualquer uma das três dá o laço
+`continue`. Nenhuma percorre uma coleção sozinha: todo laço é feito à mão,
+com contador e condição. Isso obriga a pensar em três coisas: como o laço
+começa, o que muda a cada volta e qual pergunta faz ele terminar. Errar qualquer uma das três dá o laço
 infinito ou a volta a mais, os dois bugs mais comuns da programação.
 
 O módulo fecha com os **padrões de laço** (contador, acumulador, maior e
-menor, flag e sentinela), que você vai usar pelo resto do curso, e com
-números **aleatórios**, para os laços terem alguma graça: jogos de dados e
-simulações.
+menor, flag e sentinela), que voltam no resto do curso, e com números
+**aleatórios**, para jogos de dados e simulações.
 
 ## O que você vai aprender
 
@@ -26,26 +25,6 @@ simulações.
 - aninhar laços: tabelas, mapas e desenhos com `*`, e o custo da multiplicação
 - os cinco **padrões de laço**: contador, acumulador, maior/menor, flag e sentinela
 - sortear números com **`rand`**, **`srand`** e **`time`**, e por que a semente importa
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo. Neste módulo, toda repetição aparece como
-   uma seta que **volta** para trás. Conte quantas vezes você passa por ela.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -61,7 +40,9 @@ mande a entrada pelo `printf` do terminal, um valor por linha:
 printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/rodar 03-repeticoes/0025-padroes-de-laco/A049.c
 ```
 
-E se um programa travar num laço infinito, `Ctrl+C` encerra.
+Se um programa travar num laço infinito, `Ctrl+C` encerra. Nos fluxogramas,
+toda repetição é uma seta que **volta**: conte quantas vezes você passa por
+ela. Responda a **Pergunta para você** antes de rodar.
 
 {{indice}}
 

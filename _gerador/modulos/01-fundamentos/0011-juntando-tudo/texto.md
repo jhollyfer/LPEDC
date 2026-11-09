@@ -5,8 +5,8 @@ pega o papel, faz a conta no celular e manda no grupo quanto cada um deve.
 Dá para fazer melhor: um programa que lê as duas leituras do relógio e o
 número de moradores e devolve a conta pronta, com o valor de cada um.
 
-Esse programa usa tudo o que o módulo ensinou, na ordem em que um programa
-de verdade usa:
+Esse programa usa tudo o que o módulo ensinou, na ordem em que aparece num
+programa real:
 
 - **constantes** (`#define`) para a tarifa e a taxa fixa: mudou a tarifa,
   muda uma linha;
@@ -19,13 +19,13 @@ de verdade usa:
   descoberta);
 - **saída** com `printf` alinhado, largura e duas casas.
 
-É o modelo **entrada → processamento → saída** do começo do módulo, agora
-com programa de verdade. E é **sequência** pura: o programa faz sempre os
+É o modelo **entrada → processamento → saída** do começo do módulo, e é
+**sequência** pura: o programa faz sempre os
 mesmos passos, na mesma ordem. Ele não pergunta nada, não confere se a
 leitura atual é maior que a anterior, não repete. Isso vem nos módulos 02
 (decisão) e 03 (repetição).
 
-Vamos ver na prática. As três leituras entram, o consumo vira 257 kWh, a
+Os três valores entram, o consumo vira 257 kWh, a
 conta vira R$ 229,24, e a divisão por três, com o centavo arredondado para
 cima, dá R$ 76,42 para cada um:
 
@@ -96,8 +96,8 @@ Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100 dá 7641,33...; o `ceil`
 sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
 dois centavos, mas a conta fica paga.
 
-Repara no fluxograma: uma leitura, quatro contas e uma saída, sem nenhum
-losango. É o retrato de todo programa deste módulo:
+Uma leitura, quatro contas e uma saída, sem nenhum losango: assim é todo
+programa deste módulo:
 
 {{fluxograma}}
 

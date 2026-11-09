@@ -5,7 +5,7 @@ põe os 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
 número de notas e moedas. Parece um programa só, mas olhe as peças: um
 **módulo** com o cardápio, funções pequenas com **parâmetros** e retorno, um
 contador **`static`** escondido, uma **macro** para a taxa e uma função
-**recursiva** para o troco. É o módulo inteiro trabalhando junto.
+**recursiva** para o troco.
 
 Antes de escrever, divida. Cada tarefa vira uma função com um nome que diz o
 que ela faz:
@@ -30,7 +30,7 @@ atual cabe, dê essa nota e resolva o resto; se não cabe, tente a nota
 seguinte". Cada chamada chega mais perto do fim, porque ou o troco diminui ou
 a nota diminui.
 
-Vamos ver na prática. Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço,
+Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço,
 a conta é R$ 42,24. Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 5 + 2 + 0,50 + 0,25 + 0,01:
 
@@ -145,7 +145,7 @@ int main(void) {
 // cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar caixa.c
 ```
 
-Repara no fluxograma: o laço dos pedidos termina com o código 0; depois vêm a
+O laço dos pedidos termina com o código 0; depois vêm a
 conta, o pagamento e a decisão "pagou o suficiente?". O troco, que parece um
 laço, é a recursão de `dar_troco`:
 

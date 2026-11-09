@@ -7,16 +7,15 @@ junto. As variáveis moram na RAM, e a RAM é esvaziada quando o processo
 termina. Para um programa **lembrar** de alguma coisa (um cadastro, uma
 configuração, o placar de ontem), ele precisa gravar em **arquivo**.
 
-No C você vê as engrenagens: o `FILE *` que representa o
-arquivo aberto, o buffer que junta os bytes antes de ir para o disco, a
-posição que anda a cada leitura. E aparece uma escolha importante:
-gravar **texto**, legível e portável, ou **binário**, a cópia exata dos bytes
-da memória, compacta e com acesso direto a qualquer registro.
+No C você vê as engrenagens: o `FILE *` que representa o arquivo aberto, o
+buffer que junta os bytes antes de ir para o disco, a posição que anda a cada
+leitura. E aparece uma escolha: gravar **texto**, legível e portável, ou
+**binário**, a cópia exata dos bytes da memória, que ocupa menos e deixa pular
+direto para qualquer registro.
 
 O módulo fecha com a outra porta de entrada de um programa: os **argumentos
-da linha de comando**. É o que transforma os seus exercícios em ferramentas de
-verdade, do tipo que você chama no terminal como chama `git` ou `grep`, e que
-encadeia com outras em scripts.
+da linha de comando**. Com eles, os seus exercícios viram ferramentas que você
+chama no terminal como chama `git` ou `grep` e encadeia com outras em scripts.
 
 ## O que você vai aprender
 
@@ -27,22 +26,10 @@ encadeia com outras em scripts.
 - receber dados pelo **`argc` e `argv`**, converter com `strtol` e `strtod` e devolver o **código de saída**
 - juntar tudo numa ferramenta de terminal com subcomandos
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
+
+No meio de cada assunto há uma **Pergunta para você**: responda antes de rodar.
+
 
 Os exemplos gravam em `/tmp`, com nomes claros (`/tmp/despesas.txt`,
 `/tmp/estoque.bin`), e quase todos apagam o arquivo no fim com `remove`.
@@ -67,8 +54,8 @@ sudo apt install strace     # Debian / Ubuntu
 ```
 
 Você vai usar structs (módulo 08), strings com `fgets` (0042) e ponteiros o
-tempo todo. Se `typedef struct`, `sizeof` e `char *` ainda dão aquela
-hesitação, revise antes.
+tempo todo. Se `typedef struct`, `sizeof` e `char *` ainda fazem você hesitar,
+revise antes.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -87,10 +74,10 @@ programa tem o mesmo problema: as variáveis moram na RAM e **somem quando ele
 termina**. Para lembrar de alguma coisa na próxima execução, ele precisa
 escrever num **arquivo**, que fica no disco.
 
-No C, esse trabalho acontece em passos que você enxerga: **abrir**, **ler ou
-escrever** e **fechar**. Tudo vem do `<stdio.h>`, o mesmo do `printf`.
+No C, o trabalho tem três passos visíveis: **abrir**, **ler ou escrever** e
+**fechar**. Tudo vem do `<stdio.h>`, o mesmo do `printf`.
 
-Para o C, um arquivo é só uma **sequência de bytes** no disco. Num **arquivo
+Para o C, um arquivo é uma **sequência de bytes** no disco. Num **arquivo
 texto**, esses bytes são caracteres que você consegue ler no editor: o número
 152.40 vira os caracteres `'1' '5' '2' '.' '4' '0'`. Quem dá sentido a eles é o
 seu programa.
@@ -115,8 +102,8 @@ Também existem `fputs(texto, arq)` (uma string, sem pôr `\n`) e
 **Ler.** Três jeitos, conforme o formato:
 
 - `fgets(linha, tamanho, arq)`: uma **linha** inteira, com o `\n` no fim.
-  Devolve `NULL` quando o arquivo acaba. É o mesmo `fgets` do assunto 0042, só
-  que lendo do arquivo em vez do teclado.
+  Devolve `NULL` quando o arquivo acaba. É o `fgets` do assunto 0042, lendo do
+  arquivo em vez do teclado.
 - `fscanf(arq, "%s %lf", ...)`: campos com formato, como o `scanf`. Devolve
   quantos campos conseguiu ler.
 - `fgetc(arq)`: um **caractere** por vez. Devolve um `int`, que vale `EOF` no
@@ -130,8 +117,8 @@ Você já usava arquivos sem saber: `stdin`, `stdout` e `stderr` são `FILE *`
 que o programa recebe abertos. `printf("oi")` é o mesmo que
 `fprintf(stdout, "oi")`.
 
-Vamos ver na prática. O programa grava as três despesas do mês. Os
-`fprintf` não vão direto para o disco: param num **buffer**, uma área na RAM.
+O programa do exemplo grava as três despesas do mês. Os `fprintf` não vão
+direto para o disco: param num **buffer**, uma área na RAM.
 O `fclose` descarrega o buffer em `despesas.txt`. Depois o programa abre o
 arquivo de novo, em modo leitura, e o `fgets` traz as linhas de volta, uma
 por vez:
@@ -180,14 +167,14 @@ int main(void) {
 // 3 linhas em /tmp/despesas.txt
 ```
 
-Repara no fluxograma: a leitura é um laço que pergunta ao próprio `fgets` se
-ele conseguiu ler. Quem diz que o arquivo acabou é a leitura que falhou, não
+No fluxograma, a leitura é um laço que pergunta ao próprio `fgets` se ele
+conseguiu ler. Quem avisa que o arquivo acabou é a leitura que falhou, e não
 uma pergunta feita antes dela:
 
 <p align="center"><img src="09-arquivos/0067-arquivos-texto/fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
 
 > [!WARNING]
-> Você vai ver `while (!feof(arq))` em muito material, inclusive livro. Não use.
+> Você vai ver `while (!feof(arq))` em muito material, até em livro. Não use.
 > O `feof` não olha adiante: ele só fica verdadeiro **depois** que uma leitura
 > tentou passar do fim e falhou. Resultado: o laço roda uma vez a mais e
 > processa a última linha duas vezes (o E401 mostra isso). Teste o retorno da
@@ -208,8 +195,10 @@ uma pergunta feita antes dela:
 > que estava no buffer se perde.
 
 > [!NOTE]
-> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O arquivo fica com
-> 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em vez de `"w"`?
+> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O
+> arquivo fica com 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em
+> vez de `"w"`?
+
 
 ### Hora de praticar
 
@@ -546,13 +535,11 @@ primeiras: mede com o dedo e puxa. Arquivo texto não deixa fazer isso, porque
 cada linha tem um tamanho ("Luz 98.75" tem 9 caracteres, "Internet 99.90" tem
 14). Para cair na linha 500, você precisa ler as 499 antes.
 
-Um **arquivo binário** resolve isso. Em vez de converter os dados em texto,
-ele grava os bytes **exatamente como estão na memória**. Um `int` sempre ocupa
+Um **arquivo binário** não converte os dados em texto: grava os bytes
+**exatamente como estão na memória**. Um `int` sempre ocupa
 4 bytes no arquivo, uma struct sempre ocupa `sizeof` da struct. Com
 **registros de tamanho fixo**, a posição de qualquer um vira conta: o
 registro `i` começa no byte `i * sizeof(registro)`.
-
-Em resumo: texto é legível e maior; binário é compacto e ilegível.
 
 | | texto (`fprintf`) | binário (`fwrite`) |
 | --- | --- | --- |
@@ -571,8 +558,8 @@ As ferramentas:
   quantidade` bytes a partir do endereço. Variável e struct vão com `&`; vetor
   já é endereço. Devolve **quantos itens** gravou.
 - **`fread(endereco, tamanho, quantidade, arq)`** faz o caminho de volta e
-  também devolve quantos itens leu. Menos que o pedido quer dizer fim do
-  arquivo ou erro. É esse retorno que vai no `while`.
+  devolve quantos itens leu. Menos que o pedido indica fim do arquivo ou erro.
+  É esse retorno que vai no `while`.
 - **`fseek(arq, deslocamento, origem)`** muda a posição de leitura e escrita.
   A origem é `SEEK_SET` (do começo), `SEEK_CUR` (de onde está) ou `SEEK_END`
   (do fim). O deslocamento é `long` e pode ser negativo.
@@ -580,8 +567,7 @@ As ferramentas:
   byte 0. `fseek` até o fim seguido de `ftell` é o jeito clássico de medir o
   arquivo.
 
-Vamos ver na prática. O estoque tem três produtos, e cada `Produto` ocupa 32
-bytes. Um `fwrite` grava os três em sequência: 96 bytes. Para ler o café, o
+No exemplo, o estoque tem três produtos, e cada `Produto` ocupa 32 bytes. Um `fwrite` grava os três em sequência: 96 bytes. Para ler o café, o
 programa pula 2 × 32 = 64 bytes desde o começo e faz um `fread` de um
 registro só:
 
@@ -640,15 +626,14 @@ int main(void) {
 // Registro 2: Café, 4 un., R$ 18.50
 ```
 
-Repara no fluxograma: não tem laço nenhum para chegar ao café. São duas
-chamadas de `fseek` e um `fread`, quer o arquivo tenha 3 registros, quer tenha
-3 milhões:
+O fluxograma não tem laço para chegar ao café. São duas chamadas de `fseek` e
+um `fread`, com 3 registros ou com 3 milhões:
 
 <p align="center"><img src="09-arquivos/0068-arquivos-binarios/fluxograma.svg" alt="Fluxograma: Arquivos binários" width="441"></p>
 
-Se os registros estiverem gravados em ordem de código, dá até para fazer
-**busca binária direto no arquivo**: `fseek` no registro do meio, `fread`,
-compara e descarta metade. São uns 20 `fread` para 1 milhão de registros,
+Com os registros gravados em ordem de código, dá para fazer **busca binária
+direto no arquivo**: `fseek` no registro do meio, `fread`, compara e descarta
+metade. São uns 20 `fread` para 1 milhão de registros,
 sem carregar o arquivo na RAM (a busca binária é o assunto 0090).
 
 > [!WARNING]
@@ -661,10 +646,11 @@ sem carregar o arquivo na RAM (a busca binária é o assunto 0090).
 > mudar. Para trocar dados entre máquinas, prefira texto (CSV, JSON).
 
 > [!TIP]
-> **Por dentro do C:** salve o código acima como `estoque.c`, tire o `remove`, rode e depois
-> `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada linha mostra 16
-> bytes, então cada produto ocupa duas linhas.
-> Você vai ver `Arroz` seguido de zeros: o `fwrite` grava os 20 bytes do vetor
+> **Por dentro do C:** salve o código acima como `estoque.c`, tire o `remove`,
+> rode e depois `od -A d -t x1 /tmp/estoque.bin` (ou `xxd`, se tiver). Cada
+> linha mostra 16 bytes, então cada produto ocupa duas linhas.
+> Aparece `Arroz` seguido de zeros:
+ o `fwrite` grava os 20 bytes do vetor
 > `nome`, usados ou não. Logo depois vem `0c 00 00 00`, o 12 da `qtd` em
 > little-endian, e os 8 bytes do `double`. Aqui 20 + 4 + 8 dá exatamente 32,
 > sem enchimento, porque o `double` já cai num endereço múltiplo de 8. E o
@@ -1026,14 +1012,14 @@ Saldo: R$ 1876.20
 
 ## 0069 · Argumentos da linha de comando
 
-Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Você poderia
-fazer um programa que pergunta "qual o total?" e "quantas pessoas?" com
-`scanf`. Mas os programas de terminal que você usa todo dia não perguntam
-nada: `git commit -m "msg"`, `cp origem destino`, `gcc -o prog prog.c`. Os dados vão
+Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Um programa
+poderia perguntar "qual o total?" e "quantas pessoas?" com `scanf`. Os
+programas de terminal que você usa todo dia não perguntam nada:
+`git commit -m "msg"`, `cp origem destino`, `gcc -o prog prog.c`. Os dados vão
 **junto do comando**, na mesma linha. São os **argumentos da linha de
 comando**.
 
-No C, eles chegam como parâmetros do `main`, que até agora você escrevia com `void`:
+No C, eles chegam como parâmetros do `main`, que até agora tinha `void`:
 
 ```c
 int main(int argc, char *argv[])
@@ -1061,21 +1047,22 @@ Tudo no `argv` é **texto**. O `4` chega como a string `"4"`, e
   `atoi("quatro")` devolve 0 em silêncio. Servem para testes rápidos, não para
   entrada de usuário.
 
-Duas convenções de todo programa de terminal. Mensagem de erro vai para
-**`stderr`** (`fprintf(stderr, ...)`), não para `stdout`. Assim, quem redireciona
-a saída para um arquivo (`./racha 10 2 > saida.txt`) continua vendo o erro na
-tela. E o valor do `return` do `main` é o **código de saída**: 0 quer dizer
-sucesso; qualquer outro, falha. O shell guarda esse valor em `$?`, e scripts e
-o `&&` decidem o que fazer com base nele.
+Todo programa de terminal segue duas convenções. Mensagem de erro vai para
+**`stderr`** (`fprintf(stderr, ...)`), não para `stdout`: quem redireciona a
+saída para um arquivo (`./racha 10 2 > saida.txt`) continua vendo o erro na
+tela. E o valor do `return` do `main` é o **código de saída**: 0 é sucesso,
+qualquer outro é falha. O shell guarda esse valor em `$?`, e scripts e o `&&`
+decidem o que fazer com base nele.
 
-Vamos ver na prática. O comando `./racha 187.40 4` chega ao programa como
+O comando `./racha 187.40 4` chega ao programa como
 `argc = 3` e um `argv` com três strings mais o `NULL`. O programa confere a
 quantidade, converte `argv[1]` e `argv[2]` em números e divide:
 
 <p align="center"><img src="09-arquivos/0069-argumentos/ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
 
-Salve o código como `racha.c`. Para passar argumentos com o `rodar`, escreva
-depois do nome do arquivo: `~/LPEDC/rodar racha.c 187.40 4`.
+Salve o código como `racha.c` e rode com o `rodar`, passando os argumentos
+depois do arquivo: `~/LPEDC/rodar racha.c 187.40 4`.
+
 
 ```c
 #include <stdio.h>
@@ -1113,9 +1100,10 @@ int main(int argc, char *argv[]) {
 // Número de pessoas inválido: quatro
 ```
 
-Repara no fluxograma: antes de qualquer conta, duas perguntas de
-desconfiança. Veio a quantidade certa de argumentos? Eles são números de
-verdade? Só no caminho verde o programa trabalha:
+Antes de qualquer conta, o fluxograma faz duas perguntas de desconfiança: veio
+a quantidade certa de argumentos, e eles são números de verdade? O programa
+só trabalha no caminho verde:
+
 
 <p align="center"><img src="09-arquivos/0069-argumentos/fluxograma.svg" alt="Fluxograma: Argumentos da linha de comando" width="634"></p>
 
@@ -1466,10 +1454,10 @@ rodar. Com aspas ('*') funciona.
 
 ## 0070 · Juntando tudo: a caderneta de gastos
 
-Fim de mês e a pergunta de sempre: para onde foi o dinheiro? Aplicativo de
-finanças resolve, mas você agora tem tudo para fazer o seu, de terminal, do
-jeito que os programas de linha de comando funcionam: um comando por
-execução, com os dados guardados em arquivo entre uma execução e outra.
+Fim de mês e a pergunta de sempre: para onde foi o dinheiro? Você já tem tudo
+para fazer o seu controle de gastos no terminal, do jeito dos programas de
+linha de comando: um comando por execução, com os dados guardados em arquivo
+entre uma execução e outra.
 
 ```bash
 gastos novo mercado 152.40     # anota um gasto
@@ -1478,7 +1466,7 @@ gastos exporta /tmp/gastos.csv # gera uma planilha
 gastos limpa                   # começa do zero
 ```
 
-O programa junta as três peças do módulo, cada uma no papel em que é melhor:
+O programa junta as três peças do módulo, cada uma no papel que faz melhor:
 
 - **argumentos** (0069): `argv[1]` diz **o que** fazer; os seguintes trazem
   os dados. É o mesmo desenho do `git` (`git commit`, `git log`): um
@@ -1488,28 +1476,27 @@ O programa junta as três peças do módulo, cada uma no papel em que é melhor:
   `Gasto` de tamanho fixo, gravado com `fwrite` em modo `"ab"`: binário e
   sempre no fim, sem precisar ler o que já existe. Como os registros têm o
   mesmo tamanho, `ftell / sizeof(Gasto)` diz quantos já existem.
-- **arquivo texto** (0067): a exportação. O binário é ótimo para o programa,
-  mas ninguém abre um `.dat` na planilha. O `exporta` lê os registros e
+- **arquivo texto** (0067): a exportação. O binário serve ao programa, mas
+  ninguém abre um `.dat` na planilha. O `exporta` lê os registros e
   escreve um **CSV** com `fprintf`, separado por `;`, que o LibreOffice e o
   Google Planilhas abrem direto.
 
-Três cuidados que valem para todo programa que guarda dados. **Valide antes de
+Todo programa que guarda dados precisa de três cuidados. **Valide antes de
 gravar**: um `strtod` com `*fim != '\0'` impede que "abc" entre na caderneta
 como R$ 0,00. **Não grave lixo**: o `memset` zera o vetor `categoria` antes
 do `strncpy`, então os bytes que sobram no arquivo são zeros, e não restos da
-pilha. **Arquivo que não existe não é erro** em toda situação: no `lista`,
-quer dizer só "nenhum gasto ainda".
+pilha. **Arquivo que não existe nem sempre é erro**: no `lista`, ele quer dizer
+"nenhum gasto ainda".
 
-Vamos ver na prática. Cada linha do terminal é uma execução separada do
-programa. O `novo` acrescenta um registro de 32 bytes em `gastos.dat`; o
+Cada linha do terminal é uma execução separada do programa. O `novo` acrescenta um registro de 32 bytes em `gastos.dat`; o
 `lista` lê os registros de volta com `fread`; o `exporta` transforma o binário
 em texto:
 
 <p align="center"><img src="09-arquivos/0070-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a caderneta de gastos" width="870"></p>
 
-O programa é longo, mas cada função cabe na cabeça:
-`novo`, `lista` e `exporta` são os exemplos dos três assuntos anteriores, e o
-`main` é só o despachante. Para rodar, salve como `gastos.c`.
+O programa é longo, mas cada função cabe na cabeça: `novo`, `lista` e
+`exporta` repetem os exemplos dos três assuntos anteriores, e o `main` só
+despacha. Para rodar, salve como `gastos.c`.
 
 ```c
 #include <stdio.h>
@@ -1640,9 +1627,9 @@ int main(int argc, char *argv[]) {
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
-Repara no fluxograma do comando `lista`: o `main` vai perguntando qual é o
-comando até achar um que ele conhece. Comando desconhecido, ou com argumentos
-de menos, cai no mesmo lugar: a mensagem de uso:
+O fluxograma segue o comando `lista`. O `main` pergunta qual é o comando até
+achar um que conhece; comando desconhecido, ou com argumentos de menos, cai na
+mensagem de uso:
 
 <p align="center"><img src="09-arquivos/0070-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a caderneta de gastos" width="749"></p>
 
@@ -1662,10 +1649,12 @@ de menos, cai no mesmo lugar: a mensagem de uso:
 > `return` do `main` vira o código de saída: rode `rodar gastos.c novo x abc;
 > echo $?` e veja o 1. É assim que scripts encadeiam comandos com `&&`.
 
+
 > [!NOTE]
 > **Pergunta para você:** a categoria tem 20 bytes. O que acontece com
 > `gastos novo supermercado-do-bairro-novo 10`? O texto aparece inteiro no
-> `lista`? Pense no `strncpy` com `sizeof g.categoria - 1` e só depois teste.
+> `lista`? Pense no `strncpy` com `sizeof g.categoria - 1` antes de testar.
+
 
 ### Hora de praticar
 
@@ -2147,11 +2136,11 @@ quantos bytes copiou. Teste copiando o próprio executável e comparando com
 
 <details><summary>Resposta</summary>
 
-Abra a origem com `"rb"` e o destino com `"wb"`; se o segundo `fopen` falhar,
+Abra a origem com `"rb"` e o destino com `"wb"`. Se o segundo `fopen` falhar,
 feche o primeiro. O laço é `while ((c = fgetc(ent)) != EOF) { fputc(c, sai);
 n++; }` com `int c`. Com `char c`, um byte 0xFF no meio do arquivo vira -1 e o
-laço para antes da hora: a cópia de um executável sai cortada. Use o modo
-`b`, para valer no Windows também.
+laço para antes da hora e a cópia de um executável sai cortada. Use o modo
+`b` para funcionar no Windows também.
 
 </details>
 
@@ -2202,9 +2191,9 @@ código 4321 lendo o mínimo possível de registros. No máximo, quantos `fread`
 
 Busca binária com `fseek`: `ini = 0`, `fim = 999`; leia o registro do `meio`
 com `fseek(f, meio * (long) sizeof(Registro), SEEK_SET)` e um `fread`; compare
-e corte metade. São no máximo **10 leituras**, porque 2¹⁰ = 1024 ≥ 1000. Só
-funciona porque os registros têm tamanho fixo: num arquivo texto, você não
-sabe onde fica o "meio".
+e corte metade. São no máximo **10 leituras**, porque 2¹⁰ = 1024 ≥ 1000. Isso
+depende de os registros terem tamanho fixo: num arquivo texto, você não sabe
+onde fica o "meio".
 
 </details>
 
@@ -2233,7 +2222,7 @@ ordem, lendo cada arquivo uma vez só. Com `1 4 9` e `2 3 10`, sai
 Leia o primeiro número de cada arquivo. Enquanto os dois tiverem número,
 grave o menor e leia o próximo **daquele** arquivo. Quando um acabar, copie o
 resto do outro. É a etapa de intercalação do merge sort (assunto 0094), e é
-assim que se ordenam arquivos maiores que a RAM.
+assim que se ordena um arquivo maior que a RAM.
 
 </details>
 
@@ -3515,7 +3504,7 @@ Saída esperada:
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
+papel, marque uma letra e só depois abra o gabarito. Todos os trechos foram
 compilados com `gcc -std=c17 -Wall -Wextra` e rodados no Linux. Nos trechos,
 a conferência de `NULL` depois do `fopen` foi omitida para encurtar; no seu
 código, ela é obrigatória.

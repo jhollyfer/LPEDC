@@ -3,8 +3,8 @@
 A recepcionista da clínica atende o telefone o dia todo. Um paciente marca
 às 14:30, outro às 9:00, outro às 16:00, outro às 10:15. As ligações chegam
 fora de ordem, mas a agenda na tela tem que estar sempre em ordem de horário.
-Ordenar tudo de novo a cada ligação seria desperdício. Melhor: cada marcação
-nova já entra no lugar certo.
+Ordenar tudo de novo a cada ligação seria desperdício: cada marcação nova já
+entra no lugar certo.
 
 Uma **lista ordenada** mantém os nós em ordem a cada inserção. A
 **inserção ordenada** anda pela lista com o par `ant`/`p` do assunto anterior,
@@ -19,7 +19,7 @@ Encaixar é religar duas setas, nesta ordem:
 
 Se `ant` for `NULL`, o novo é o menor de todos e vira o início. Não existe
 caso especial para o fim: com `p == NULL`, o passo 1 grava `NULL` no
-`novo->prox`, e é exatamente isso que o último precisa.
+`novo->prox`, que é o que o último precisa.
 
 ```c
 No *lista_insere_ordenado(No *inicio, int valor) {
@@ -43,15 +43,15 @@ A ordem também ajuda na **busca**: procurando um valor numa lista crescente,
 dá para desistir assim que passar dele. Procurando 11:00, a busca para no
 14:30, porque dali para frente só tem horário mais tarde.
 
-Vamos ver na prática. A agenda já tem 09:00, 14:30 e 16:00. Chega a ligação
-das 10:15. O laço passa pelo 09:00 (menor) e para no 14:30, porque `14:30 <
+A agenda do exemplo já tem 09:00, 14:30 e 16:00 quando chega a ligação das
+10:15. O laço passa pelo 09:00 (menor) e para no 14:30, porque `14:30 <
 10:15` é falso. O novo nó primeiro aponta para o 14:30 e depois o 09:00 passa
 a apontar para ele:
 
 {{ideia}}
 
 O horário vira um `int` no formato hhmm (1430 é 14:30), e uma função do
-próprio exemplo mostra bonito na tela:
+próprio exemplo formata a saída:
 
 ```c
 #include <stdio.h>
@@ -88,22 +88,21 @@ int main(void) {
 // 11:00 livre
 ```
 
-Repara no fluxograma: o laço roda uma vez (passa pelo 09:00) e sai pelo Não no
+No fluxograma, o laço roda uma vez (passa pelo 09:00) e sai pelo Não no
 14:30. Como `ant` aponta para o 09:00, o caminho termina em `ant->prox =
 novo`. A ligação das 9:00, lá atrás, tinha ido pelo outro lado: `ant == NULL`,
 e o novo virou o início:
 
 {{fluxograma}}
 
-O critério de ordem é só a comparação do `while`. Troque `p->valor < valor`
+O critério de ordem está todo na comparação do `while`. Troque `p->valor < valor`
 por `strcmp(p->nome, nome) < 0` e a mesma inserção monta uma lista em ordem
 alfabética (exemplo A156).
 
 > [!WARNING]
-> O caso que todo mundo esquece é o **novo menor que todos**. O laço nem
-> roda, `ant` fica `NULL`, e um `ant->prox = novo` sem o `if` derruba o
-> programa. Teste sempre três inserções: no começo, no meio e no fim. E
-> atenção ao `<` contra `<=`: com `<`, um valor repetido entra **antes** dos
+> O caso mais esquecido é o **novo menor que todos**. O laço nem roda, `ant`
+> fica `NULL`, e um `ant->prox = novo` sem o `if` derruba o programa. Teste
+> três inserções: no começo, no meio e no fim. E atenção ao `<` contra `<=`: com `<`, um valor repetido entra **antes** dos
 > iguais; com `<=`, entra **depois**, e os iguais ficam na ordem de chegada.
 
 > [!TIP]
@@ -112,7 +111,8 @@ alfabética (exemplo A156).
 > custa O(n²). E a busca, mesmo parando cedo, continua O(n): não dá para
 > fazer busca binária numa lista, porque chegar no meio exige andar n/2 nós.
 > No vetor ordenado é o contrário: a busca binária é O(log n), mas inserir
-> desloca até n itens. Cada estrutura cobra num lugar diferente.
+> desloca até n itens.
+
 
 > [!NOTE]
 > **Pergunta para você:** inserindo 50, 40, 30, 20 e 10, nesta ordem, quantas

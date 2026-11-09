@@ -4,9 +4,9 @@ Na matrícula da academia, a recepcionista preenche uma ficha: idade 25,
 altura 1,75 m, peso 72,5 kg, plano B. Um mês depois, ela apaga o peso e
 escreve 71,8. A ficha continua a mesma; só o conteúdo de um campo mudou.
 
-Uma **variável** é exatamente um campo dessa ficha: um pedaço da memória com
+Uma **variável** é um campo dessa ficha: um pedaço da memória com
 **nome**, **tipo**, **valor** e **endereço**. O nome é para você. O endereço é
-para o computador: é o número do primeiro byte onde o valor mora. O tipo diz
+para o computador: o número do primeiro byte que o valor ocupa. O tipo diz
 quantos bytes a variável ocupa e como ler esses bytes.
 
 No C, você escolhe o tipo de cada variável. Ele vem **antes** do nome e não
@@ -39,7 +39,7 @@ e sem espaço; `peso` e `Peso` são variáveis diferentes; palavras do C (`int`,
 `return`, `float`...) não valem. A convenção do curso é `snake_case`:
 `peso_atual`, `valor_total`.
 
-Vamos ver na prática. A ficha vira quatro caixinhas, cada uma com seu tipo,
+A ficha vira quatro caixinhas, cada uma com seu tipo,
 seu tamanho e seu endereço. Depois, o peso recebe um valor novo e o antigo
 desaparece:
 
@@ -76,9 +76,8 @@ int main(void) {
 // Bytes: 4, 4, 8, 1
 ```
 
-Repara no fluxograma: criar as variáveis é um passo de processamento (o
-programa reserva memória), e a troca do peso é outro. Ainda é sequência pura,
-um passo depois do outro:
+Criar as variáveis é um passo de processamento (o programa reserva memória),
+e a troca do peso é outro. Ainda é sequência pura:
 
 {{fluxograma}}
 
