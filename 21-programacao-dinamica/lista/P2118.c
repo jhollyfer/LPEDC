@@ -25,7 +25,7 @@
 //    quarteirão de saída e o de chegada.
 // 2. Reconstrução: do fim, volte para o vizinho (de cima ou da esquerda)
 //    com o menor custo, empilhando 'B' ou 'D'; inverta no fim.
-// 3. Resposta esperada: 15% da bateria. Confira o caminho na saída.
+// 3. Resposta esperada: 20% da bateria, pelo caminho BBDDDBBD.
 //
 // Escreva sua resposta abaixo:
 

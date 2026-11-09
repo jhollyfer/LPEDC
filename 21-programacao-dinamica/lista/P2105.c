@@ -2,7 +2,7 @@
 // Exercício P2105 · ★☆☆ · As fatias do bolo de rolo
 //
 // A doceira vende bolo de rolo em fatias, e o preço depende do comprimento
-// da fatia (fatias maiores saem mais em conta por cm):
+// da fatia (o preço por cm muda de um tamanho para outro):
 //
 //   cm     1   2   3   4   5   6
 //   R$     3   7  11  13  16  20
@@ -31,8 +31,8 @@
 //    e 6: preco[i] + melhor[j - i].
 // 2. Guarde em corte[j] o i que deu o máximo; para listar as fatias, ande
 //    de j = 10 tirando corte[j].
-// 3. Resposta esperada: R$ 37, com fatias de 3, 3 e 4 cm... ou outra
-//    combinação de mesmo valor, dependendo do desempate. Confira na saída.
+// 3. Resposta esperada: R$ 36, com fatias de 1, 3, 3 e 3 cm. A fatia de
+//    3 cm é a que rende mais por cm (R$ 3,67), mas 10 não é múltiplo de 3.
 //
 // Escreva sua resposta abaixo (complete o código):
 

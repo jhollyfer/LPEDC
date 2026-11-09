@@ -25,8 +25,8 @@
 //    mochila comum. menor_peso[0] = 0 e o resto "infinito".
 // 2. Para o lote i, de v = 59 até valor[i]: se menor_peso[v - valor[i]] +
 //    peso[i] < menor_peso[v], atualize e marque pegou[i][v].
-// 3. Resposta esperada: valor 30 mil reais com os lotes 1, 2 e 3... ou a
-//    combinação da saída, que é a ótima.
+// 3. Resposta esperada: 29 mil reais com os lotes 4, 5 e 6 (99000 kg). Os
+//    lotes 1, 2 e 3 valeriam 30, mas pesam 101000 kg.
 //
 // Escreva sua resposta abaixo:
 

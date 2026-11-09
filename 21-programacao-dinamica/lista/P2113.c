@@ -21,7 +21,7 @@
 // 2. Reconstrução, de (m, n, p) para trás: letras iguais e t = 1 + diagonal
 //    entra na resposta; senão, vá para o vizinho que tem o mesmo valor.
 //    Monte a string de trás para a frente.
-// 3. Resposta esperada: MAZO, 4 letras. O custo é O(m · n · p).
+// 3. Resposta esperada: MAZOA, 5 letras. O custo é O(m · n · p).
 //
 // Escreva sua resposta abaixo:
 

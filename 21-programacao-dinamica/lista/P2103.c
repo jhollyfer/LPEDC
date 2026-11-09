@@ -27,7 +27,7 @@
 //    primeira coluna, só há um vizinho de onde vir.
 // 2. Trate fora da grade como 0: if (l > 0) soma o de cima; if (c > 0)
 //    soma o da esquerda.
-// 3. Resposta esperada: 23 caminhos. Repare que a esquina (3, 0) em obra
+// 3. Resposta esperada: 10 caminhos. Repare que a esquina (3, 0) em obra
 //    zera toda a coluna 0 abaixo dela.
 //
 // Escreva sua resposta abaixo (complete o código):

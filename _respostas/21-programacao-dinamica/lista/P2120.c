@@ -29,7 +29,7 @@ int main(void) {
         memo[i] = -1;
     }
     for (int n = 1; n < MAX; n++) {
-        printf("%2d chaves: %lld árvores\n", n, arv(n));
+        printf("n = %2d: %lld\n", n, arv(n));
     }
     printf("Cálculos: %d\n", calculos);
     return 0;

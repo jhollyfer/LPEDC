@@ -18,10 +18,10 @@
 //   LCS de ARARA e ARAPUA: 4 letras
 //
 // Dicas:
-// 1. Cabeçalho: dois espaços de margem, o 0 da coluna vazia e, depois, cada
-//    letra de B com printf("%3c", b[j]).
-// 2. Cada linha i começa com a letra a[i - 1] (ou um espaço na linha 0) e
-//    segue com t[i][j] em %3d.
+// 1. Cabeçalho: printf("   %3c", '-') faz a margem e a coluna vazia; depois,
+//    cada letra de B com printf("%3c", b[j]).
+// 2. Cada linha i começa com a letra a[i - 1] (ou '-' na linha 0) e segue
+//    com t[i][j] em %3d.
 // 3. Resposta esperada: a tabela de cima, com 4 no canto (ARAA, por
 //    exemplo, é comum às duas).
 //

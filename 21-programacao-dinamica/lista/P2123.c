@@ -30,9 +30,9 @@
 //    tamanho de trecho, como na cadeia de matrizes, guardando raiz[i][j].
 // 2. pre(i, j, prof): se i > j, volte; senão mostre a chave raiz[i][j] com
 //    a profundidade e chame para os dois lados com prof + 1.
-// 3. Resposta esperada: custo 190, com jambu na raiz. A árvore de raiz
-//    cuia (açaí e boto à esquerda, jambu e tacacá à direita) custa mais:
-//    veja na saída.
+// 3. Resposta esperada: custo 180, com jambu na raiz e tacacá logo abaixo.
+//    A árvore de raiz cuia (açaí e boto à esquerda, jambu e tacacá à
+//    direita) custa 235: equilibrar não é o mesmo que otimizar.
 //
 // Escreva sua resposta abaixo:
 

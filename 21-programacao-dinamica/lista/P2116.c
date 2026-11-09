@@ -22,8 +22,9 @@
 //    - CUSTO). O pedaço inteiro entra sem custo; cada vez que você separa
 //    uma primeira fatia i < j, há um corte.
 // 2. Guarde corte[j] = j quando vender inteiro é o melhor.
-// 3. Resposta esperada: sem custo, R$ 24 com quatro pedaços de 2 m; com
-//    custo, o valor cai e o número de cortes diminui (veja a saída).
+// 3. Resposta esperada: sem custo, R$ 24 com pedaços de 2 m e 6 m (quatro
+//    de 2 m empatam); com R$ 3 por corte, o melhor é vender a barra inteira
+//    por R$ 22.
 //
 // Escreva sua resposta abaixo (estenda o código):
 

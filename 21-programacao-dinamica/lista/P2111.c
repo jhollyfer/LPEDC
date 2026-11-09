@@ -17,7 +17,7 @@
 //    pode[i - 1][s] || (s >= peso[i - 1] && pode[i - 1][s - peso[i - 1]]).
 // 2. Reconstrução: de (8, 36) para trás; se pode[i - 1][s] já era true, a
 //    caixa i - 1 não foi; senão, ela foi e s -= peso[i - 1].
-// 3. Resposta esperada: dá. Barco 1 com 8 + 6 + 15 + 7 = 36 kg (a
+// 3. Resposta esperada: dá. Barco 1 com 12 + 9 + 15 = 36 kg (a
 //    reconstrução de trás para a frente acha esta) e o resto no barco 2.
 //
 // Escreva sua resposta abaixo:

@@ -13,21 +13,21 @@
 // n de 1 a 15, contando quantas vezes a soma foi de fato calculada.
 //
 //   Saída esperada:
-//    1 chaves: 1 árvores
-//    2 chaves: 2 árvores
-//    3 chaves: 5 árvores
-//    4 chaves: 14 árvores
-//    5 chaves: 42 árvores
-//    6 chaves: 132 árvores
-//    7 chaves: 429 árvores
-//    8 chaves: 1430 árvores
-//    9 chaves: 4862 árvores
-//   10 chaves: 16796 árvores
-//   11 chaves: 58786 árvores
-//   12 chaves: 208012 árvores
-//   13 chaves: 742900 árvores
-//   14 chaves: 2674440 árvores
-//   15 chaves: 9694845 árvores
+//   n =  1: 1
+//   n =  2: 2
+//   n =  3: 5
+//   n =  4: 14
+//   n =  5: 42
+//   n =  6: 132
+//   n =  7: 429
+//   n =  8: 1430
+//   n =  9: 4862
+//   n = 10: 16796
+//   n = 11: 58786
+//   n = 12: 208012
+//   n = 13: 742900
+//   n = 14: 2674440
+//   n = 15: 9694845
 //   Cálculos: 16
 //
 // Dicas:

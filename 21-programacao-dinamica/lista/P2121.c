@@ -24,7 +24,7 @@
 // 2. mostra(i, j): se i == j, imprime "A" e i; senão, "(", mostra(i,
 //    s[i][j]), mostra(s[i][j] + 1, j), ")".
 // 3. Resposta esperada: 11875 multiplicações com ((A1(A2A3))(A4A5)),
-//    contra 17000 da esquerda para a direita... confira na saída.
+//    contra 25500 da esquerda para a direita.
 //
 // Escreva sua resposta abaixo:
 

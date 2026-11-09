@@ -16,8 +16,8 @@
 // 1. long long memo[MAX]; preencha com -1 no main antes de chamar.
 // 2. Na memoizada, conte a chamada logo na entrada (antes de olhar o memo):
 //    assim a conta inclui as chamadas que voltam na hora.
-// 3. Resposta esperada: T(25) = 755476; a ingênua faz mais de um milhão
-//    de chamadas e a memoizada, 73 (3 por valor de n, menos as bordas).
+// 3. Resposta esperada: T(25) = 755476; a ingênua faz 2700421 chamadas e
+//    a memoizada, só 70 (cada n de 3 a 25 calcula uma vez e chama 3).
 //
 // Escreva sua resposta abaixo (estenda o código):
 

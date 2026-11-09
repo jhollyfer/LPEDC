@@ -17,7 +17,7 @@
 // 1. formas[0] = 1 (a sequência vazia tem uma leitura: nenhuma letra).
 // 2. formas[i] = (s[i - 1] != '0' ? formas[i - 1] : 0) + (i >= 2 e 10 <=
 //    dois dígitos <= 26 ? formas[i - 2] : 0).
-// 3. Resposta esperada: 3 para 226, 15 para 1122612 e 0 para 301 (o 30 e o
+// 3. Resposta esperada: 3 para 226, 16 para 1122612 e 0 para 301 (o 30 e o
 //    0 sozinho não são letras).
 //
 // Escreva sua resposta abaixo:

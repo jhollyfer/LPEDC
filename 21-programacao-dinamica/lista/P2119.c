@@ -27,8 +27,7 @@
 //    a l.
 // 2. Para o caminho, comece no topo (c = 0) e, em cada linha, vá para a
 //    coluna c ou c + 1, a que tiver o maior melhor[][] embaixo.
-// 3. Resposta esperada: R$ 38, pelo caminho 7 3 8 7 5 ... confira o fim na
-//    saída.
+// 3. Resposta esperada: R$ 39, pelo caminho 7 3 8 7 5 9.
 //
 // Escreva sua resposta abaixo:
 

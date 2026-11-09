@@ -21,9 +21,8 @@
 // 1. Todo lis[i] começa em 1 (a criança sozinha).
 // 2. A resposta é o MAIOR dos lis[i], não o último: a melhor fila pode
 //    terminar em qualquer criança.
-// 3. Resposta esperada: 6 crianças (por exemplo, 121 135 140 145 150, mais
-//    uma... confira: 121 127 132 145 150 também tem 5; a de 6 é 121 127
-//    132 140... não: veja a saída).
+// 3. Resposta esperada: 5 crianças, por exemplo 121 135 140 145 150 ou
+//    121 127 132 145 150.
 //
 // Escreva sua resposta abaixo:
 
