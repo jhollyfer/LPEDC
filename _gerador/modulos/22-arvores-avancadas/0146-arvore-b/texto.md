@@ -21,7 +21,9 @@ O tamanho do nó é dado pelo **grau mínimo** `t`:
 - **todas as folhas ficam no mesmo nível**.
 
 O TAD do curso usa `t = 2`: de 1 a 3 chaves por nó, de 2 a 4 filhos (é a
-chamada árvore 2-3-4). Na vida real, `t` passa de 100.
+chamada árvore 2-3-4). Na vida real, `t` passa de 100. Como cada nó abaixo
+da raiz tem pelo menos `t` filhos, o Cormen prova que uma árvore B com `n`
+chaves tem altura `h ≤ log_t((n + 1) / 2)`.
 
 A **busca** é a da BST com um laço dentro do nó: ande pelas chaves até achar
 uma maior ou igual. Se for igual, achou; senão, desça pelo filho daquela
@@ -143,8 +145,9 @@ para a metade nova, e a chamada recursiva a põe na folha `[30]`:
 > `if (chave > x->chave[i]) i++;` põe chaves grandes na metade da esquerda: a
 > árvore perde a ordem e a busca deixa de achar chaves que estão lá dentro (é o
 > bug do E875). Outra confusão comum é de vocabulário: "árvore B de ordem m"
-> costuma querer dizer **m filhos no máximo**, e não o grau mínimo `t`. Confira
-> qual dos dois o material usa.
+> quer dizer **m filhos no máximo** em alguns livros (Knuth) e, no Ziviani,
+> páginas com **de m a 2m registros**. O curso segue o Cormen, com o grau
+> mínimo `t`. Confira qual convenção o material usa.
 
 > [!TIP]
 > **Por dentro do C:** o `NoB` do TAD tem 56 bytes: 4 do `n`, 12 das três

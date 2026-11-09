@@ -108,7 +108,9 @@ Na remoção do 31, o caminho seria o outro, `início = p->prox`:
 
 O exemplo A154 mostra um truque para sumir com o caso especial: o
 **nó-cabeça**, um nó "de mentira" no começo. Com ele, todo nó de verdade tem
-um anterior, e o primeiro deixa de ser especial.
+um anterior, e o primeiro deixa de ser especial. O Cormen leva a ideia mais
+longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
+0174 aprofunda.
 
 > [!WARNING]
 > A ordem do `&&` importa. `while (p->valor != valor && p != NULL)` lê

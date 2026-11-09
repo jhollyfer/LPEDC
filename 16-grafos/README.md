@@ -95,7 +95,8 @@ Para isso existe o **grafo**.
 Um grafo é um conjunto de **vértices** (os pontos) e de **arestas** (as
 ligações entre pares de pontos). Os vértices da ciclovia são os cinco lugares;
 as arestas, as cinco ciclovias. Toda árvore é um grafo, mas um grafo pode ter
-ciclos e partes soltas.
+ciclos e partes soltas. O Cormen escreve **G = (V, E)** e usa V e E também
+para as quantidades: é daí que vêm o Θ(V²) e o Θ(V + E) deste módulo.
 
 O vocabulário que você vai usar o módulo inteiro:
 
@@ -106,9 +107,11 @@ O vocabulário que você vai usar o módulo inteiro:
 - **conexo**: dá para ir de qualquer vértice a qualquer outro.
 
 Se a ligação tem mão única, o grafo é **dirigido** e cada aresta vira uma seta
-(seguir alguém no Instagram não obriga a pessoa a seguir de volta). Se a
-aresta carrega um número, como minutos ou reais, o grafo é **ponderado**. As
-ciclovias valem nos dois sentidos e ainda não têm peso.
+(seguir alguém no Instagram não obriga a pessoa a seguir de volta). Aí cada
+vértice tem **grau de saída** e **grau de entrada**, e a soma dos graus de
+saída é o número de arestas. Se a aresta carrega um número, como minutos ou
+reais, o grafo é **ponderado** (com peso). As ciclovias valem nos dois
+sentidos e ainda não têm peso.
 
 No C, vértice é um **número de 0 a V-1**. O nome bonito fica num vetor à parte
 (`nomes[2]` é `"Feira"`). Para guardar as arestas existem duas representações
@@ -575,6 +578,11 @@ contrário da árvore, dá para chegar no mesmo vértice por caminhos diferentes
 O vetor `pai[]` guarda quem descobriu cada vértice. Os pares (pai, filho)
 formam a **árvore da BFS**, e seguir `pai[]` a partir de Rita até chegar em
 `-1` dá o caminho mais curto, de trás para frente.
+
+O Cormen escreve a mesma BFS com **cores**: **branco** é o vértice ainda não
+descoberto (o nosso `dist == -1`), **cinza** é o que está na fila e **preto**
+o que já saiu dela. O `v.d` dele é o nosso `dist[v]`, e o `v.π` (pi), o
+`pai[v]`. Mesma busca, só outros nomes.
 
 Vamos ver na prática. As setas verdes são as arestas da árvore da BFS (cada
 uma liga um vértice a quem o descobriu); o número em cima de cada pessoa é a
@@ -1079,6 +1087,17 @@ retorno**. Num grafo não dirigido, achar uma aresta de retorno é achar um
 ciclo. Isso, junto com contar componentes, resolver labirintos e ordenar
 tarefas com pré-requisitos, é o que faz a DFS valer o assunto.
 
+O Cormen põe um **relógio** na DFS: cada vértice ganha um tempo de
+**descoberta** `v.d` (a chamada começa) e um de **término** `v.f` (ela acaba),
+e as cores branco, cinza (na pilha) e preto (terminado). Contando de 1, a Sede
+fica com 1/12 e a Bica com 5/6. O `DFS(G)` dele ainda recomeça de **todo**
+vértice branco, formando uma floresta que cobre as partes soltas. Num grafo
+**dirigido**, as arestas fora da árvore são de **retorno** (para um ancestral
+cinza: há ciclo), de **avanço** (para um descendente preto) ou de
+**cruzamento** (para outro preto). Os vértices em ordem decrescente de `v.f`
+dão a **ordenação topológica** de um grafo dirigido acíclico. Com lista de
+adjacências, tudo custa O(V + E).
+
 Vamos ver na prática. Os números mostram a ordem da visita; as arestas verdes
 são as da árvore. À direita, a pilha de chamadas no momento mais fundo, quando
 a Bica é visitada:
@@ -1540,11 +1559,15 @@ A cada passo, Dijkstra pega o vértice **não fixo de menor `dist`**, declara
 essa distância definitiva e **relaxa** as arestas que saem dele. Relaxar é
 perguntar: "passar por `u` encurta o caminho até `v`?" Em código,
 `dist[u] + peso[u][v] < dist[v]`. Se sim, atualiza `dist[v]` e `anterior[v]`.
+No Cormen, o começo se chama `INITIALIZE-SINGLE-SOURCE`, o teste é o
+`RELAX(u, v, w)`, os vetores são `v.d` e `v.π`, e os fixos formam o conjunto S.
 
 Por que dá para fixar o menor? Porque, com pesos não negativos, qualquer
 outro caminho até ele passaria por um vértice que já tem `dist` maior ou
 igual, e somar pesos só aumenta. É um algoritmo **guloso**: a melhor escolha
-de agora nunca precisa ser desfeita.
+de agora nunca precisa ser desfeita. Com uma aresta **negativa**, esse
+argumento cai e o Dijkstra pode fixar uma distância errada; aí entra o
+Bellman-Ford (assunto 0154), que relaxa todas as arestas V - 1 vezes.
 
 Vamos ver na prática. Os números nas arestas são minutos; o número em cima de
 cada lugar é a `dist` final; as arestas verdes formam a rota até a Praia, e
@@ -2954,13 +2977,228 @@ só a fila vira "o menor `dist` primeiro", com `dist[u] + custo(v)` no lugar de
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
+letra e só depois abra o gabarito. Sempre que a questão traz código, dá para
+conferir rodando.
+
+**1.** O grafo não dirigido abaixo tem os vértices A a H e as arestas A–B,
+A–D, B–C, B–E, C–F, D–E, E–F, E–G, F–H e G–H. Uma busca em largura (BFS)
+começa em A e examina os vizinhos de cada vértice em ordem alfabética. Em que
+ordem os vértices saem da fila?
+
+- (A) A, B, C, D, E, F, G, H
+- (B) A, B, D, C, E, F, G, H
+- (C) A, B, C, F, E, D, G, H
+- (D) A, D, B, E, C, G, F, H
+- (E) A, B, D, E, C, F, G, H
+
+<details><summary>Gabarito</summary>
+
+**B.** A descobre B e D (distância 1). B descobre C e E (distância 2); D não
+descobre ninguém, porque E já está na fila. C descobre F, E descobre G
+(distância 3), e F descobre H (distância 4). A ordem da fila é a ordem da
+descoberta: A, B, D, C, E, F, G, H. A alternativa (C) é a ordem da DFS no
+mesmo grafo. Veja 0110.
+
+</details>
+
+**2.** Uma DFS no estilo do Cormen percorre o grafo **dirigido** com as arestas
+A→B, A→D, B→C, C→A, C→E, D→E, E→F e F→D. O laço principal tenta os vértices
+em ordem alfabética, as listas de adjacência estão em ordem alfabética, e o
+relógio começa em 1 (cada descoberta e cada término avança o relógio). Quais
+são o tempo de descoberta e o de término de E (`E.d / E.f`)?
+
+- (A) 4 / 7
+- (B) 5 / 8
+- (C) 6 / 7
+- (D) 3 / 10
+- (E) 4 / 9
+
+<details><summary>Gabarito</summary>
+
+**E.** A desce para B (2), B para C (3). C→A leva a um vértice cinza (aresta
+de retorno), então C desce para E (4), E para F (5) e F para D (6). D→E é outra
+aresta de retorno, e D termina em 7. Na volta: F termina em 8, **E em 9**, C em
+10, B em 11 e A em 12 (A→D já encontra D preto). Tempos: A 1/12, B 2/11, C
+3/10, E 4/9, F 5/8, D 6/7. Veja 0111.
+
+</details>
+
+**3.** Um grafo não dirigido simples tem 7 vértices e 10 arestas. Seis dos
+graus são 1, 2, 2, 3, 3 e 4. Qual é o grau do sétimo vértice?
+
+- (A) 3
+- (B) 4
+- (C) 5
+- (D) 6
+- (E) não existe grafo assim
+
+<details><summary>Gabarito</summary>
+
+**C.** A soma dos graus é o dobro do número de arestas: 2 × 10 = 20. Os seis
+graus conhecidos somam 15, então falta 5. Um grau 5 cabe num grafo de 7
+vértices (o máximo é 6), e a sequência 5, 4, 3, 3, 2, 2, 1 é realizável. Veja
+0109.
+
+</details>
+
+**4.** Sobre as representações de um grafo G = (V, E), assinale a afirmação
+correta.
+
+- (A) A lista de adjacências ocupa Θ(V²) de memória, qualquer que seja E.
+- (B) Na matriz de adjacências, listar todos os vizinhos de um vértice custa
+  Θ(grau do vértice).
+- (C) Na lista de adjacências, saber se a aresta (u, v) existe custa O(1).
+- (D) A matriz ocupa Θ(V²) e responde "(u, v) é aresta?" em O(1); a lista
+  ocupa Θ(V + E) e é a escolha natural para grafos esparsos.
+- (E) Num grafo não dirigido, a lista de adjacências guarda cada aresta uma
+  vez só.
+
+<details><summary>Gabarito</summary>
+
+**D.** A matriz tem V² casas, mesmo com poucas arestas, e consultar
+`adj[u][v]` é O(1). A lista guarda só o que existe: V cabeças mais um nó por
+aresta dirigida (duas por aresta não dirigida, por isso a (E) está errada).
+Listar os vizinhos na matriz custa Θ(V), porque a linha inteira é varrida.
+Veja 0109.
+
+</details>
+
+**5.** Rode o Dijkstra a partir de `s` no grafo **dirigido** com os pesos
+s→a 4, s→b 1, b→a 2, a→c 1, b→c 5, c→d 3, b→d 8, d→t 1 e c→t 6. Qual é a
+ordem em que os vértices são extraídos da fila de prioridade e qual é o valor
+final de `t.d`?
+
+- (A) s, b, a, c, d, t; `t.d` = 8
+- (B) s, b, a, c, t, d; `t.d` = 10
+- (C) s, a, b, c, d, t; `t.d` = 9
+- (D) s, b, c, a, d, t; `t.d` = 8
+- (E) s, b, a, d, c, t; `t.d` = 7
+
+<details><summary>Gabarito</summary>
+
+**A.** Depois de `s`: a = 4, b = 1. Extrai b (1) e relaxa: a cai para 3, c = 6,
+d = 9. Extrai a (3): c cai para 4. Extrai c (4): d cai para 7, t = 10. Extrai
+d (7): t cai para 8. Por último, t. Não há empate em nenhum passo. O caminho
+é s, b, a, c, d, t, com custo 1 + 2 + 1 + 3 + 1 = 8. Veja 0112.
+
+</details>
+
+**6.** Sobre caminhos mínimos, assinale a afirmação correta.
+
+- (A) A BFS acha o caminho de menor peso em qualquer grafo ponderado.
+- (B) O Dijkstra está correto com pesos negativos, desde que não haja ciclo
+  de peso negativo.
+- (C) O Bellman-Ford roda em O(V · E), aceita pesos negativos e detecta um
+  ciclo negativo alcançável a partir da origem.
+- (D) Com heap binário e lista de adjacências, o Dijkstra custa Θ(V³).
+- (E) O Floyd-Warshall resolve só o problema de fonte única.
+
+<details><summary>Gabarito</summary>
+
+**C.** O Bellman-Ford relaxa todas as arestas V - 1 vezes e, numa passada a
+mais, qualquer relaxamento que ainda melhore uma distância denuncia um ciclo
+negativo. O Dijkstra fixa um vértice de vez e pode errar com uma aresta
+negativa que aparece depois, mesmo sem ciclo negativo. Com heap, ele custa
+O((V + E) log V). A BFS só serve quando todas as arestas custam o mesmo, e o
+Floyd-Warshall calcula **todos os pares**. Veja 0112 e 0154.
+
+</details>
+
+**7.** Qual é a complexidade da BFS abaixo, em função do número de vértices
+`n` e de arestas `m`, sabendo que cada vértice entra na fila no máximo uma vez?
+
+```c
+while (inicio < fim) {
+    int u = fila[inicio++];
+    for (int v = 0; v < n; v++) {
+        if (adj[u][v] && dist[v] == -1) {
+            dist[v] = dist[u] + 1;
+            fila[fim++] = v;
+        }
+    }
+}
+```
+
+- (A) Θ(n + m)
+- (B) Θ(n²)
+- (C) Θ(m log n)
+- (D) Θ(n · m)
+- (E) Θ(m)
+
+<details><summary>Gabarito</summary>
+
+**B.** Com matriz de adjacências, cada vértice que sai da fila varre a linha
+inteira, de `n` casas, tenha ele muitos ou poucos vizinhos. Se o grafo é
+conexo, os `n` vértices passam pela fila: n × n. O Θ(n + m) da BFS vale com
+lista de adjacências. Veja 0110.
+
+</details>
+
+**8.** Na DFS da questão 2, como fica a classificação das arestas?
+
+- (A) A→D é de árvore, e o grafo é acíclico.
+- (B) A→D é de retorno, e é ela que prova que o grafo tem ciclo.
+- (C) A→D é de cruzamento, e C→A é de avanço.
+- (D) Não há aresta de retorno, então o grafo admite ordenação topológica.
+- (E) A→D é de avanço; C→A e D→E são de retorno, então o grafo tem ciclo e
+  não admite ordenação topológica.
+
+<details><summary>Gabarito</summary>
+
+**E.** Quando A examina A→D, D já está preto e é descendente de A (A.d = 1 <
+D.d = 6): aresta de **avanço**. C→A e D→E chegam a vértices cinzas, ainda na
+pilha de chamadas: arestas de **retorno**. Um grafo dirigido tem ciclo se e
+somente se a DFS acha aresta de retorno; aqui há dois ciclos (A, B, C e D, E,
+F). Veja 0111.
+
+</details>
+
+**9.** Qual é o peso total da árvore geradora mínima do grafo não dirigido com
+as arestas A–B 4, A–C 1, B–C 3, B–D 2, C–D 5, C–E 7, D–E 6, D–F 8 e E–F 3?
+
+- (A) 13
+- (B) 14
+- (C) 16
+- (D) 15
+- (E) 18
+
+<details><summary>Gabarito</summary>
+
+**D.** No Kruskal, em ordem de peso: A–C (1), B–D (2), B–C (3) e E–F (3)
+entram; A–B (4) e C–D (5) fechariam ciclo; D–E (6) liga os dois grupos. São 5
+arestas para 6 vértices: 1 + 2 + 3 + 3 + 6 = 15. O Prim a partir de qualquer
+vértice chega à mesma soma. Veja 0113 (Prim) e, no módulo 23, 0152 e 0153.
+
+</details>
+
+**10.** Um grafo não dirigido tem 12 vértices e 3 componentes conexos, e cada
+componente é uma árvore. Quantas arestas ele tem?
+
+- (A) 9
+- (B) 10
+- (C) 11
+- (D) 12
+- (E) depende do formato das árvores
+
+<details><summary>Gabarito</summary>
+
+**A.** Uma árvore com k vértices tem k - 1 arestas. Somando as três
+componentes: (k₁ - 1) + (k₂ - 1) + (k₃ - 1) = 12 - 3 = 9, qualquer que seja o
+tamanho de cada uma. Veja 0109 e 0111 (contar componentes com DFS).
+
+</details>
+
 ## Para ler mais
 
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 8: grafos e suas aplicações.
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Cap. 5: filas e distâncias em uma rede.
 - FEOFILOFF, P. *Algoritmos para grafos*. São Paulo: IME-USP. Disponível em: <https://www.ime.usp.br/~pf/algoritmos_para_grafos/>.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, 2002. Tipos abstratos de dados, pilhas e filas.
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Parte VI: algoritmos de grafos.
+- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Parte VI: cap. 20 (BFS, DFS com tempos de descoberta e término, ordenação topológica), cap. 21 (árvore geradora mínima) e cap. 22 (caminhos mínimos de fonte única, RELAX e Dijkstra).
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 7: algoritmos em grafos.
 - DIJKSTRA, E. W. A note on two problems in connexion with graphs. *Numerische Mathematik*, v. 1, p. 269-271, 1959.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989.
 - CPPREFERENCE. *Numeric limits* (`INT_MAX`) e *Arithmetic operators* (estouro de inteiro com sinal). Disponível em: <https://en.cppreference.com/w/c/types/limits>.

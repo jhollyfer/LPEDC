@@ -8,8 +8,9 @@ para descobrir quem vem antes do vagão quebrado: ele está vendo.
 
 Na lista simples, o nó só conhece o próximo. Para remover um nó, você
 precisa do anterior, e achar o anterior custa percorrer desde o início. Na
-**lista duplamente encadeada**, cada nó guarda **dois** ponteiros: `prox`
-(o próximo) e `ant` (o anterior). Com isso:
+**lista duplamente encadeada** (no Cormen, **duplamente ligada**, com os
+campos `next` e `prev`), cada nó guarda **dois** ponteiros: `prox` (o
+próximo) e `ant` (o anterior). Com isso:
 
 - dá para andar nos **dois sentidos**: do início para o fim e do fim para o
   início;

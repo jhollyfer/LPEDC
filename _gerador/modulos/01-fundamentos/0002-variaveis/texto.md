@@ -19,6 +19,10 @@ muda nunca mais. Os quatro tipos básicos:
 | `double` | real, uns 15 dígitos | 8 bytes | `double peso = 72.5;` |
 | `char` | um caractere (um número pequeno) | 1 byte | `char plano = 'B';` |
 
+Esses são os **tipos primitivos** (os livros e a prova também dizem **tipos
+simples** ou **dados simples**): cada variável guarda um valor só. Vetores e
+structs, que juntam vários valores, são os **dados compostos** (módulos 05 e 08).
+
 **Declarar** é criar a variável: `int idade;`. **Inicializar** é dar o
 primeiro valor junto: `int idade = 25;`. Para mostrar o valor, o `printf` usa
 um código para cada tipo: `%d` para `int`, `%f` para `float` e `double`, `%c`

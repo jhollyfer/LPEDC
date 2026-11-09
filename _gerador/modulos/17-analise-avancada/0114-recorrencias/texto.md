@@ -38,7 +38,10 @@ chegar em 1, então são `log₂ n + 1` níveis. Total: `n log₂ n + n`, ou sej
 O **Θ** (teta) é novo: ele diz que a função cresce **exatamente** naquele
 ritmo, nem mais rápido nem mais devagar. O `O` do assunto 0072 é só um teto;
 o Θ é teto e piso ao mesmo tempo. Quando você resolve uma recorrência até a
-fórmula, sabe o ritmo exato, e o Θ é a palavra certa.
+fórmula, sabe o ritmo exato, e o Θ é a palavra certa (as definições formais
+de O, Ω e Θ estão no assunto 0166). O Cormen ensina três métodos para
+resolver: a **substituição** (chutar a resposta e provar por indução), a
+árvore de recursão e o teorema mestre, do próximo assunto.
 
 A forma da recorrência decide a forma da árvore. As cinco que você mais vai
 ver:

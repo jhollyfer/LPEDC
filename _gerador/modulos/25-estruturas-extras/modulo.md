@@ -57,6 +57,10 @@ pelo caminho e os cinza são os que a busca nem tocou.
 
 ## Antes de começar
 
+Este módulo é complemento: matriz esparsa, skip list e listas autoajustáveis
+não caem diretamente na prova do PPGI (o que mais cai está em `PPGI.md`, na
+raiz do curso).
+
 Este módulo é uma síntese. Você vai usar o tempo todo a **lista encadeada** com o
 par `ant` e `p` (assuntos 0076 a 0078), `malloc` e `free` (0054), **ponteiro para
 ponteiro** (0049) e a ideia de **TAD** (0074). O 0164 conversa com a busca
@@ -237,6 +241,160 @@ faixa (E974); a skip list com um código mais simples; (c) **hash**: só pergunt
 
 </details>
 
+## Questões no estilo da prova
+
+Estas estruturas não caem diretamente na prova do PPGI, mas questões no
+mesmo formato treinam o que cai: contar memória, contar comparações e
+separar custo esperado de pior caso. Uma alternativa certa em cada.
+
+**1.** Uma matriz 1000 × 1000 de `int` tem 2000 valores diferentes de zero.
+Ela é guardada como lista por linha: um vetor de 1000 ponteiros (8 bytes
+cada) e uma célula `struct { int coluna; int valor; struct Cel *prox; }`
+(16 bytes) por valor. Quanto ocupa, perto de, a versão esparsa, e quanto a
+matriz cheia?
+
+- (A) 24 KB e 4 MB
+- (B) 40 KB e 4 MB
+- (C) 40 KB e 1 MB
+- (D) 4 MB e 4 MB
+- (E) 32 KB e 8 MB
+
+<details><summary>Gabarito</summary>
+
+**(B).** 2000 × 16 + 1000 × 8 = 40.000 bytes, contra 1000 × 1000 × 4 =
+4.000.000 bytes da matriz cheia: 100 vezes menos. O ponteiro `prox` e o
+enchimento entram na conta; esquecer o vetor de linhas dá os 32 KB de (E).
+Veja 0162.
+
+</details>
+
+**2.** Na matriz esparsa por listas, o que deve acontecer quando o programa
+grava 0 numa célula que já existe na lista?
+
+- (A) A célula fica com valor 0, para manter a posição.
+- (B) A linha inteira é apagada.
+- (C) A célula é removida da lista, porque zero não se guarda.
+- (D) Nada: gravar 0 é proibido.
+- (E) A matriz é convertida para a forma cheia.
+
+<details><summary>Gabarito</summary>
+
+**(C).** Quem não está na lista vale 0. Se o zero ficasse guardado, a
+estrutura engordaria com células inúteis e cada leitura da linha andaria
+mais. Veja 0162.
+
+</details>
+
+**3.** Numa skip list em que cada nó sobe mais um andar com probabilidade
+1/2, quantos nós, em média, aparecem no andar 3 ou acima, com `n = 1024`
+chaves?
+
+- (A) 128
+- (B) 256
+- (C) 512
+- (D) 10
+- (E) 341
+
+<details><summary>Gabarito</summary>
+
+**(A).** Um nó chega ao andar `k` com probabilidade (1/2)^k: 1024 / 8 = 128.
+Somando todos os andares, o número esperado de ponteiros é 2n, e a altura
+esperada fica perto de log₂ n = 10. Veja 0163.
+
+</details>
+
+**4.** Sobre a busca numa skip list com `n` chaves, assinale a alternativa
+**correta**:
+
+- (A) O(log n) no pior caso, como na AVL.
+- (B) O(1), porque a cabeça está em todos os andares.
+- (C) O(n) esperado, porque o andar 0 tem todas as chaves.
+- (D) O(log n) esperado, na média dos sorteios; no pior caso, O(n).
+- (E) O(√n) sempre.
+
+<details><summary>Gabarito</summary>
+
+**(D).** A garantia é probabilística: um azar (todos os nós no andar 0)
+transforma a skip list numa lista comum. A AVL garante O(log n) no pior
+caso (A). Veja 0163 e 0165.
+
+</details>
+
+**5.** A lista `A B C D` usa **mover para a frente**. Ela recebe as buscas
+D, C, D, A, nessa ordem, e cada busca custa a posição do item. Qual o custo
+total e a ordem final?
+
+- (A) 10, `D C A B`
+- (B) 13, `A B D C`
+- (C) 11, `A D C B`
+- (D) 16, `A B C D`
+- (E) 13, `A D C B`
+
+<details><summary>Gabarito</summary>
+
+**(E).** D custa 4 (fica `D A B C`), C custa 4 (`C D A B`), D custa 2
+(`D C A B`), A custa 3 (`A D C B`): 4 + 4 + 2 + 3 = 13. Com
+**transposição**, o total também dá 13, mas a ordem final é `A B D C`
+(alternativa B). Sem ajuste nenhum, seriam 4 + 3 + 4 + 1 = 12. Veja 0164.
+
+</details>
+
+**6.** Três contatos são procurados com probabilidades 0,5, 0,3 e 0,2 numa
+busca sequencial. Qual o número **esperado** de comparações com a melhor
+ordem fixa?
+
+- (A) 2,3
+- (B) 2,0
+- (C) 1,0
+- (D) 1,5
+- (E) 1,7
+
+<details><summary>Gabarito</summary>
+
+**(E).** A melhor ordem fixa é a de probabilidade decrescente: 1 × 0,5 +
+2 × 0,3 + 3 × 0,2 = 1,7. Na ordem inversa, 2,3 (A). A política de
+**contagem** converge para essa ordem; mover para a frente chega perto sem
+conhecer as probabilidades. Veja 0164.
+
+</details>
+
+**7.** Mil chaves entram, em ordem crescente, numa BST sem balanceamento.
+Quantas comparações a busca pela maior chave faz, e quantas faria uma AVL
+com as mesmas chaves, no máximo, aproximadamente?
+
+- (A) 10 e 10
+- (B) 500 e 10
+- (C) 1000 e cerca de 14
+- (D) 1000 e 1000
+- (E) 1 e 10
+
+<details><summary>Gabarito</summary>
+
+**(C).** Em ordem crescente, cada chave vira filha direita da anterior, e a
+BST é uma lista de altura 999: a maior está a 1000 comparações. A altura da
+AVL é no máximo cerca de 1,44 log₂ n, uns 14 níveis para 1000 chaves (na
+prática, perto de 10). Veja 0165, 0099 e 0101.
+
+</details>
+
+**8.** Por que a lista encadeada combina melhor com **mover para a frente**
+do que um vetor?
+
+- (A) Porque no vetor a busca sequencial é mais lenta.
+- (B) Porque, achado o nó (com o anterior guardado), tirá-lo do lugar e pô-lo no início são três atribuições de ponteiro, O(1); no vetor, é preciso empurrar todos os anteriores, O(posição).
+- (C) Porque a lista ocupa menos memória que o vetor.
+- (D) Porque o vetor não permite busca sequencial.
+- (E) Porque a lista mantém as chaves ordenadas.
+
+<details><summary>Gabarito</summary>
+
+**(B).** A busca custa o mesmo nos dois, O(posição); a diferença está na
+mudança de lugar. Já a **transposição** troca dois vizinhos e funciona bem
+nas duas representações. A lista gasta **mais** memória, por causa dos
+ponteiros (C). Veja 0164.
+
+</details>
+
 ## Para ler mais
 
 - SZWARCFITER, J. L.; MARKENZON, L. *Estruturas de dados e seus algoritmos*. 3. ed. Rio de Janeiro: LTC, 2010. Capítulos sobre listas (exercícios de matriz esparsa) e listas autoajustáveis.
@@ -248,6 +406,6 @@ faixa (E974); a skip list com um código mais simples; (c) **hash**: só pergunt
 - SLEATOR, D. D.; TARJAN, R. E. Amortized efficiency of list update and paging rules. *Communications of the ACM*, v. 28, n. 2, p. 202-208, 1985.
 - MORIN, P. *Open data structures*. Edmonton: AU Press, 2013. Cap. 4: skiplists. Disponível em: <https://opendatastructures.org/>.
 - SEDGEWICK, R. *Algorithms in C*: parts 1-4. 3. ed. Reading: Addison-Wesley, 1998. Cap. 13 (skip lists) e busca sequencial auto-organizável.
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Problema 17-5 (mover para a frente e competitividade).
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 27 (algoritmos on-line: manter uma lista de busca com mover para a frente e análise competitiva).
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Seção 5.11: ponteiros para funções.
 - CPPREFERENCE. *Struct declaration: flexible array member*. Disponível em: <https://en.cppreference.com/w/c/language/struct>.

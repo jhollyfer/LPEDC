@@ -7,7 +7,9 @@ somas na mão. E se fosse o mês inteiro? Trinta variáveis. O ano? Não dá.
 
 O **vetor** (ou *array*) resolve isso: **várias variáveis do mesmo tipo, com um
 nome só**, lado a lado na memória. Cada uma é acessada por um número, o
-**índice**, entre colchetes: `passos[0]`, `passos[1]`, ..., `passos[6]`.
+**índice**, entre colchetes: `passos[0]`, `passos[1]`, ..., `passos[6]`. É um
+dado composto **homogêneo** (todos os itens do mesmo tipo); a struct do
+módulo 08, o **registro**, é o composto heterogêneo.
 
 ```c
 int passos[7];                 // 7 gavetas de int, com lixo dentro
@@ -22,7 +24,9 @@ Três regras que pegam todo iniciante:
   `passos[6]`. O "sétimo elemento" é `passos[6]`; `passos[7]` não existe.
 - **O tamanho é fixo.** Ele é
   decidido na declaração e nunca muda. Use um `#define` para ele: muda num
-  lugar só e o laço acompanha.
+  lugar só e o laço acompanha. (Desde o C99 o tamanho pode vir de uma
+  variável, `int v[n];`: é o **VLA**, assunto 0172. Ainda assim, depois de
+  criado, não cresce.)
 - **Vetor não tem `.length`.** Quem sabe o tamanho é você. Dentro do bloco onde
   ele foi declarado, `sizeof(v) / sizeof(v[0])` dá a conta (bytes do vetor
   divididos pelos bytes de um item).

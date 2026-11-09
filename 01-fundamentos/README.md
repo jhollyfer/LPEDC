@@ -546,6 +546,10 @@ muda nunca mais. Os quatro tipos básicos:
 | `double` | real, uns 15 dígitos | 8 bytes | `double peso = 72.5;` |
 | `char` | um caractere (um número pequeno) | 1 byte | `char plano = 'B';` |
 
+Esses são os **tipos primitivos** (os livros e a prova também dizem **tipos
+simples** ou **dados simples**): cada variável guarda um valor só. Vetores e
+structs, que juntam vários valores, são os **dados compostos** (módulos 05 e 08).
+
 **Declarar** é criar a variável: `int idade;`. **Inicializar** é dar o
 primeiro valor junto: `int idade = 25;`. Para mostrar o valor, o `printf` usa
 um código para cada tipo: `%d` para `int`, `%f` para `float` e `double`, `%c`
@@ -930,7 +934,9 @@ No C, hexadecimal começa com `0x`: `0xFF`, `0xFFFF`.
 Agora os tipos. Cada tipo inteiro tem um tamanho, e o tamanho decide a
 **faixa**. Os **modificadores** mudam o `int`: `short` (menor), `long` e
 `long long` (maiores) e `unsigned` (sem sinal: troca os negativos por mais
-positivos). Num PC Linux de 64 bits:
+positivos). Sem modificador, o tipo inteiro é **com sinal** (`signed`): `int`
+e `signed int` são o mesmo tipo. Só o `char` puro fica a cargo da máquina; no
+PC Linux ele tem sinal. Num PC Linux de 64 bits:
 
 | Tipo | Bytes | Faixa |
 | --- | --- | --- |
@@ -1683,7 +1689,9 @@ o **formato**.
 
 O primeiro argumento do `printf` é a **string de formato**: um texto com
 **especificadores** (os `%`) que são buracos a preencher. Os outros
-argumentos preenchem os buracos **na ordem**, um para cada `%`:
+argumentos preenchem os buracos **na ordem**, um para cada `%`. Escrever na
+tela é escrever na **saída padrão** (`stdout`); o `fprintf` do módulo 09 usa
+o mesmo formato para escrever num arquivo:
 
 | Especificador | Mostra | Exemplo | Sai |
 | --- | --- | --- | --- |
@@ -2403,7 +2411,9 @@ quantas cada um come, e quantas sobram para a disputa no par ou ímpar? E a
 conta de R$ 159, quanto cada um paga? Essa é a parte do **processamento**:
 pegar o que entrou e calcular o que vai sair.
 
-Os operadores aritméticos do C são cinco:
+Em `24 / 5`, o `/` é o **operador** e o 24 e o 5 são os **operandos**.
+Operadores, operandos e parênteses formam uma **expressão**, e toda expressão
+tem um valor. Os operadores aritméticos do C são cinco:
 
 | Operador | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -2425,7 +2435,8 @@ que separa dígitos (`2026 % 10` é 6), converte segundos em minutos e diz se um
 número é par (`n % 2` é 0).
 
 A **precedência** é a da matemática da escola: `*`, `/` e `%` antes de `+` e
-`-`. Empate se resolve da esquerda para a direita: `100 / 10 / 2` é
+`-`. Empate se resolve da esquerda para a direita (essa regra de desempate é a
+**associatividade**): `100 / 10 / 2` é
 `(100 / 10) / 2`, que dá 5. Parênteses mandam em tudo, e sobrar parêntese não
 é defeito: deixa a intenção clara. O C não tem operador de potência; `^` é
 outra coisa (assunto 0065). Para potência, use `pow` (assunto 0010) ou
@@ -3150,7 +3161,8 @@ aparece quando o valor é **usado** na mesma expressão:
 - **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
 
 E um detalhe que explica muita coisa: a atribuição também é uma expressão, e
-vale o valor guardado. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
+vale o valor guardado. E ela associa **da direita para a esquerda**, ao
+contrário dos aritméticos. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
 que vale 7, depois `b = 7` e por fim `a = 7`.
 
 Vamos ver na prática. O saldo passa por quatro valores, cada um calculado a
@@ -4458,11 +4470,199 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Resolva no papel antes de abrir o gabarito e, se ficar em
+dúvida, copie o trecho para um arquivo e rode com o `rodar`.
+
+**1.** Qual a saída do trecho abaixo?
+
+```c
+int a = 7, b = 2;
+double m = a / b;
+printf("%.1f\n", m);
+```
+
+- (A) 3.5
+- (B) 3.0
+- (C) 4.0
+- (D) 3
+- (E) o programa não compila: `int` não pode ir para `double`
+
+<details><summary>Gabarito</summary>
+
+**(B).** `a / b` é uma divisão entre dois `int`: dá 3, e só **depois** o 3
+vira `double` na atribuição. O `%.1f` mostra `3.0`. Para sair 3.5, um dos
+operandos tem que ser real antes da conta: `(double) a / b`. O (D) seria o
+`printf` com `%d`, que nem combina com `double`. Veja 0007 e 0008.
+
+</details>
+
+**2.** Quanto vale a expressão `10 - 4 - 3 * 2 % 4` em C?
+
+- (A) 0
+- (B) 9
+- (C) 3
+- (D) 4
+- (E) 6
+
+<details><summary>Gabarito</summary>
+
+**(D).** `*` e `%` têm a mesma precedência e associam da esquerda para a
+direita: `3 * 2` é 6 e `6 % 4` é 2. Os dois `-` também vão da esquerda para a
+direita: `(10 - 4) - 2` é 4. Quem faz `4 - 3` primeiro chega em 9 ou em
+outros valores. Veja 0007.
+
+</details>
+
+**3.** Num compilador que segue o C99 ou mais novo, o que mostra
+`printf("%d %d\n", -7 / 2, -7 % 3);`?
+
+- (A) -3 -1
+- (B) -4 2
+- (C) -3 2
+- (D) -4 -1
+- (E) -3 1
+
+<details><summary>Gabarito</summary>
+
+**(A).** Desde o C99, a divisão inteira corta **em direção ao zero**: -3,5
+vira -3. O resto acompanha o sinal do dividendo e mantém a identidade
+`(a / b) * b + a % b == a`: `(-7 / 3) * 3 + (-7 % 3)` é `-6 + (-1)`. O par
+(-4, 2) seria o arredondamento para baixo da matemática. Veja 0007.
+
+</details>
+
+**4.** Qual a saída?
+
+```c
+int x = 5;
+int y = x++ + 2;
+int z = ++x * 2;
+printf("%d %d %d\n", x, y, z);
+```
+
+- (A) 6 7 12
+- (B) 7 8 14
+- (C) 5 7 12
+- (D) 7 8 16
+- (E) 7 7 14
+
+<details><summary>Gabarito</summary>
+
+**(E).** O pós-incremento `x++` vale o valor **antigo** (5) e só depois `x`
+vira 6: `y = 5 + 2 = 7`. O pré-incremento `++x` aumenta primeiro (7) e vale o
+valor novo: `z = 7 * 2 = 14`. No fim, `x` é 7. Veja 0009.
+
+</details>
+
+**5.** Numa máquina em que `unsigned char` tem 8 bits, o que este trecho
+mostra?
+
+```c
+unsigned char c = 250;
+c = c + 10;
+printf("%d\n", c);
+```
+
+- (A) 260
+- (B) 255
+- (C) 4
+- (D) -6
+- (E) o comportamento é indefinido
+
+<details><summary>Gabarito</summary>
+
+**(C).** Um `unsigned char` vai de 0 a 255. Para tipos **sem sinal**, o C
+garante a volta (aritmética módulo 256): 260 - 256 = 4. Comportamento
+indefinido é o estouro de um tipo **com sinal**, como o `int`. O (B) seria
+uma saturação, que o C não faz. Veja 0003.
+
+</details>
+
+**6.** Sobre os tipos primitivos do C, é correto afirmar:
+
+- (A) `int` ocupa sempre 4 bytes, em qualquer máquina, por exigência do padrão.
+- (B) `sizeof(char)` vale 1 por definição; o tamanho dos outros tipos depende da máquina, respeitando os mínimos do padrão.
+- (C) `float` e `double` ocupam os mesmos bytes; só muda o jeito de mostrar no `printf`.
+- (D) `unsigned int` ocupa o dobro de bytes de `int`, porque não tem sinal.
+- (E) `sizeof` é uma função da biblioteca `<stdlib.h>`.
+
+<details><summary>Gabarito</summary>
+
+**(B).** O padrão só garante mínimos (o `int` tem pelo menos 16 bits) e que
+`char` tem 1 byte. `unsigned` muda a faixa, não o tamanho; `double` costuma
+ter 8 bytes contra 4 do `float`; e `sizeof` é um **operador**, resolvido na
+compilação, sem `#include` nenhum. Veja 0002 e 0003.
+
+</details>
+
+**7.** Qual o valor de `x` depois das duas linhas?
+
+```c
+int x = 10;
+x *= 2 + 3;
+```
+
+- (A) 23
+- (B) 25
+- (C) 13
+- (D) 50
+- (E) 60
+
+<details><summary>Gabarito</summary>
+
+**(D).** O operador composto age sobre a expressão inteira da direita:
+`x *= 2 + 3` é `x = x * (2 + 3)`, ou seja, 10 × 5. O 23 viria de ler
+`x * 2 + 3`. Veja 0009.
+
+</details>
+
+**8.** Qual das expressões abaixo vale **3.5**?
+
+- (A) `(double) (7 / 2)`
+- (B) `7 / 2 * 1.0`
+- (C) `(double) 7 / 2`
+- (D) `(int) 7.0 / 2`
+- (E) `7 / (int) 2.0`
+
+<details><summary>Gabarito</summary>
+
+**(C).** O cast tem precedência maior que a divisão: `(double) 7` vira 7.0
+**antes** do `/`, e real dividido por inteiro é divisão real. Em (A) e (B) a
+divisão inteira `7 / 2` acontece primeiro e o 3 vira 3.0 tarde demais. Em (D)
+e (E) os dois operandos são `int`. Veja 0008.
+
+</details>
+
+**9.** Qual a saída?
+
+```c
+char ch = 'A' + 2;
+printf("%c %d\n", ch, ch);
+```
+
+- (A) C 67
+- (B) A2 67
+- (C) C 65
+- (D) não compila: não se soma número com caractere
+- (E) B 66
+
+<details><summary>Gabarito</summary>
+
+**(A).** Um `char` é um número pequeno: `'A'` é 65 na tabela ASCII, e
+65 + 2 = 67, que é o código de `'C'`. O `%c` mostra o caractere desse código e
+o `%d` mostra o próprio número. Veja 0002 (e 0040, no módulo 05).
+
+</details>
+
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Caps. 1 a 3.
 - BACKES, A. R. *Linguagem C: descomplicada*. Apostila. Uberlândia: FACOM/UFU, [s.d.].
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Caps. 2, 3, 5 e 9.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulos iniciais: tipos, expressões, entrada e saída.
 - HARA, C.; ZOLA, W. *Linguagem C: notas de aula*. Rev. A. L. N. Delgado. Curitiba: UFPR, 2008.
 - LEAL, G. C. L. *Algoritmos e lógica de programação II*. Maringá: Unicesumar, 2016. Unidade I.
 - CARVALHO, V. A. *Lógica de programação*. Colatina: IFES / e-Tec Brasil, 2010. Aulas 5 a 7.

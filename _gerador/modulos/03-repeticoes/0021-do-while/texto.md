@@ -17,7 +17,12 @@ do {
 ```
 
 A ordem: roda o corpo, testa a condição; se der verdadeiro, volta para o
-começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero.
+começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero. É o
+laço **com teste no fim** (pós-teste).
+
+Cuidado com o pseudocódigo da prova: o `repita ... até condição` também testa
+no fim, mas a condição dele é de **parar**. `repita ... até x > 10` vira
+`do { ... } while (!(x > 10));`, ou seja, `while (x <= 10)`.
 
 O lugar natural dele é onde a primeira volta é obrigatória:
 

@@ -28,6 +28,9 @@ um cofrinho. Quando o vetor de capacidade `c` enche e vira `2c`, metade dos
 `c` elementos chegou depois da última mudança, e cada um guardou 2 moedas:
 são `c` moedas, exatamente as `c` cópias. Se o cofrinho **nunca fica
 negativo**, o preço fixo cobre o custo real, e o custo amortizado é 3.
+O Cormen chama este de **método contábil** e traz um terceiro, o do
+**potencial**: o cofrinho vira uma função Φ do estado da estrutura. Com
+Φ = 2 · n - capacidade, cada inserção custa, amortizada, os mesmos 3.
 
 Vamos ver na prática. O app do banco guarda o histórico de Pix num vetor que
 começa com 1 posição e dobra quando enche. Chegam 16 Pix. As inserções 2, 3,

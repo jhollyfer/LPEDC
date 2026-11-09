@@ -100,7 +100,10 @@ int main(void) {
 
 São `(n + 1) × (W + 1)` células, cada uma com uma comparação: **O(n × W)**.
 Para 100 itens e 10.000 kg de capacidade, um milhão de passos, contra os
-2¹⁰⁰ subconjuntos da força bruta.
+2¹⁰⁰ subconjuntos da força bruta. Mas repare: `W` é um **número** da
+entrada, escrito com uns log₂ W bits. Dobrar os bits eleva `W` ao quadrado,
+então O(n × W) é **pseudopolinomial**, não polinomial no tamanho da entrada.
+A mochila 0/1 continua NP-difícil (assunto 0186).
 
 Repara no fluxograma: é o miolo do laço duplo, a decisão de uma célula. O
 caminho marcado é o da célula `t[3][7]`, em que levar o suco ganhou:

@@ -17,7 +17,8 @@ A ordem é sempre a mesma: **pergunta**, roda o corpo, volta e **pergunta de
 novo**. Quando a resposta for falsa, o programa pula o corpo e segue na linha
 depois da `}`. Cada passada pelo corpo se chama **iteração** (ou volta).
 
-Como a pergunta vem **antes**, o corpo pode rodar **zero vezes**: se o saldo
+Como a pergunta vem **antes** (por isso o `while` é chamado de laço **com teste
+no início**, ou pré-teste), o corpo pode rodar **zero vezes**: se o saldo
 já começasse em R$ 1.200, o laço nem entraria. E vale a regra de
 sempre no C: a condição é um número, e qualquer valor
 diferente de zero conta como verdadeiro (assunto 0012).

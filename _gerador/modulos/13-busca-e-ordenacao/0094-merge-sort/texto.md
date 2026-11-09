@@ -22,6 +22,8 @@ O caso base é o pedaço com 0 ou 1 elemento: ele já está ordenado, não há o
 que fazer. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
 e `r` é uma posição depois do último. Assim, o pedaço tem `r - p` elementos e
 as metades `[p, q)` e `[q, r)` se encaixam sem sobrar nem repetir ninguém.
+O Cormen usa o intervalo fechado `A[p..r]`, com `q = ⌊(p + r)/2⌋` e as
+metades `A[p..q]` e `A[q+1..r]`: muda a conta dos índices, não o algoritmo.
 
 Por que é rápido? Dividir ao meio dá `log₂ n` níveis (8 elementos: 3 níveis).
 Em **cada** nível, as intercalações juntas passam por todos os `n` elementos

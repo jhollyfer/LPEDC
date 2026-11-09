@@ -29,6 +29,12 @@ tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
 No C, o tipo vem antes do nome e é obrigatório, tanto no retorno quanto em
 cada parâmetro.
 
+Nomes que você vai encontrar nos livros e na prova: toda função é uma
+**sub-rotina** (ou subprograma). A que devolve valor é a **função**
+propriamente dita; a `void`, que só executa uma tarefa, é o **procedimento**.
+No C as duas se escrevem igual. Dividir o programa em sub-rotinas é a
+**modularização**.
+
 Tem mais um detalhe: o compilador do C lê o arquivo **de cima para
 baixo**, uma vez só. Se o `main` chama `preco_corrida` antes de o compilador
 ter visto essa função, ele não sabe que tipo ela devolve nem quantos

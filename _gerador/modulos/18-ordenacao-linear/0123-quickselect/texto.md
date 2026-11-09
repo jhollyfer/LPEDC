@@ -28,7 +28,9 @@ custo e cuidados.
 Quanto custa? Se o pivô cai perto do meio, cada separação descarta metade:
 `n + n/2 + n/4 + ...`, que é menos que `2n`. O quickselect é **O(n) em
 média**, contra O(n log n) de ordenar. No pior caso, o pivô é sempre o
-maior ou o menor e o custo vira **O(n²)**, como no quick sort.
+maior ou o menor e o custo vira **O(n²)**, como no quick sort. O Cormen
+chama a versão com pivô sorteado de `RANDOMIZED-SELECT` e mostra também o
+`SELECT` (a mediana das medianas, de 1973), que garante O(n) no pior caso.
 
 Vamos ver na prática. A primeira separação, com pivô 1300, deixa o pivô na
 posição 2. A mediana está na posição 4, à direita: os três primeiros nunca

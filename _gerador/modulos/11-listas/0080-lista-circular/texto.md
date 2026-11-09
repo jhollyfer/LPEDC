@@ -8,7 +8,9 @@ Uma **lista circular** é uma lista encadeada em que o último nó, em vez de
 apontar para `NULL`, aponta de volta para o **primeiro**. Os nós formam um
 anel. Ela serve para tudo que é rodízio: a vez de cada jogador num jogo de
 tabuleiro, a playlist no "repetir tudo", os programas que dividem a CPU, o
-revezamento de motoristas numa viagem.
+revezamento de motoristas numa viagem. Na lista dupla, o círculo fecha nos
+dois sentidos: o `ant` do primeiro aponta para o último. É a forma que o
+Cormen usa, com uma sentinela no meio do anel (assunto 0174).
 
 Num anel, qual nó você guarda? A escolha esperta é guardar o **último**. Dele
 você chega às duas pontas em um passo: o último é `ultimo` e o primeiro é

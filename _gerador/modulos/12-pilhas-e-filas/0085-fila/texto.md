@@ -133,7 +133,8 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 > de dar a volta completa, também. Há duas saídas: guardar `n`, como aqui, ou
 > **sacrificar uma gaveta** e dizer que está cheia quando
 > `(fim + 1) % CAPACIDADE == inicio` (aí só cabem 7 em 8). Muito livro usa a
-> segunda. Outra armadilha: calcular o tamanho como `fim - inicio`. Com a
+> segunda, inclusive o Cormen: com `Q.head` e `Q.tail` (a próxima vaga), as
+> operações ENQUEUE e DEQUEUE e um vetor de n posições, cabem n − 1 itens. Outra armadilha: calcular o tamanho como `fim - inicio`. Com a
 > fila dando a volta (início 4, fim 2) isso dá -2.
 
 > [!TIP]

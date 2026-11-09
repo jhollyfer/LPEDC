@@ -33,9 +33,12 @@ nome é antigo e não tem nada a ver com memória dinâmica: "programação" aqu
 quer dizer "planejamento numa tabela".
 
 Para a PD funcionar, duas coisas precisam ser verdade. A resposta do problema
-tem que sair das respostas de problemas menores do mesmo tipo (a recorrência).
-E esses problemas menores têm que **se repetir**; se cada um aparece uma vez
-só, como nas metades do merge sort, guardar não adianta nada.
+tem que sair das respostas **ótimas** de problemas menores do mesmo tipo (a
+recorrência; o Cormen chama isso de **subestrutura ótima**). E esses problemas
+menores têm que **se repetir** (**subproblemas sobrepostos**); se cada um
+aparece uma vez só, como nas metades do merge sort, guardar não adianta nada.
+No Cormen, as duas versões aparecem como *top-down with memoization* e
+*bottom-up method*.
 
 Vamos ver na prática. Com 5 degraus, a recursão pura faria as 15 chamadas da
 árvore. Com o memo, só as coloridas acontecem: as verdes calculam e anotam,

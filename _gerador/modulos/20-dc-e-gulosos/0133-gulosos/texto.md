@@ -15,7 +15,9 @@ divisão e conquista (0131). É uma decisão por vez, e cada decisão é final.
 Você já viu um guloso famoso: o Dijkstra (assunto 0112) fixa, a cada passo, o
 vértice mais perto da origem, e nunca mais mexe nele. Os próximos assuntos
 trazem mais três: escolher reuniões numa sala, encher uma mochila e comprimir
-arquivos (Huffman).
+arquivos (Huffman). No módulo 23, Prim e Kruskal (assuntos 0152 e 0153) montam
+a árvore geradora mínima do mesmo jeito: a aresta mais barata que ainda serve
+entra e nunca mais sai.
 
 Quando funciona, o guloso é o algoritmo mais simples e rápido que existe.
 Aqui, é um laço só: O(k + número de moedas dadas), para `k` tipos de moeda. O
@@ -35,9 +37,13 @@ cada moeda, a solução ótima só pode ser a gulosa. Com {1, 3, 4}, a troca nã
 funciona: duas fichas de 3 não viram uma de 4.
 
 A lição vale para todo guloso: **um contraexemplo derruba, e só uma prova
-garante**. "Testei uns casos e deu certo" não é prova. Quando o guloso não
-serve, o caminho é testar as combinações com esperteza: a programação
-dinâmica do módulo 21 resolve o troco de qualquer sistema de moedas.
+garante**. "Testei uns casos e deu certo" não é prova. O Cormen diz o que a
+prova precisa mostrar: a **propriedade da escolha gulosa** (alguma solução
+ótima começa pela escolha que o guloso faz) e a **subestrutura ótima** (o que
+sobra é um problema do mesmo tipo, cuja solução ótima completa a do todo). A
+troca do parágrafo anterior prova a primeira. Quando o guloso não serve, o
+caminho é testar as combinações com esperteza: a programação dinâmica do
+módulo 21 resolve o troco de qualquer sistema de moedas.
 
 Vamos ver na prática. Em cima, o troco de R$ 1,90: cada moeda escolhida é a
 maior que cabe no que falta, e o guloso acerta. Embaixo, as fichas: o 4

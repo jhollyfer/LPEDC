@@ -10,9 +10,9 @@ cada um e ficar com os que dão 35. Só que isso desperdiça trabalho. Escolheu 
 atlas e o mangá? Já são R$ 50. Nenhum subconjunto que comece assim pode dar
 certo, e mesmo assim a enumeração cega vai até o fim de cada um deles.
 
-O **backtracking** (retrocesso) é a enumeração que **desiste cedo**. Ela
-constrói a solução uma escolha por vez, como antes. Mas, a cada passo,
-pergunta: "este começo ainda pode virar uma solução?". Se não pode, ela nem
+O **backtracking** (retrocesso; o Ziviani chama de **tentativa e erro**) é a
+enumeração que **desiste cedo**. Ela constrói a solução uma escolha por vez,
+como antes. Mas, a cada passo, pergunta: "este começo ainda pode virar uma solução?". Se não pode, ela nem
 desce: volta um passo e tenta a próxima opção. Cortar um galho inteiro da
 árvore de decisões assim se chama **poda**.
 

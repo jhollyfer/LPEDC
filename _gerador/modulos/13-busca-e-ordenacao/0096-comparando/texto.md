@@ -29,6 +29,7 @@ O resumo do módulo inteiro:
 | insertion | O(n) | O(n²) | O(n²) | O(1) | sim |
 | merge | O(n log n) | O(n log n) | O(n log n) | O(n) | sim |
 | quick | O(n log n) | O(n log n) | O(n²) | O(log n) a O(n) de pilha | não |
+| heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
 
 Não existe o melhor de todos. O insertion ganha em vetores pequenos ou quase
 ordenados. O merge garante n log n e estabilidade, pagando memória. O quick é
@@ -56,7 +57,9 @@ as suas trocas de longa distância, entrega R3 antes de R1:
 
 A norma do C **não promete** que o `qsort` é estável. Então, quando a ordem
 dos empatados importa, ponha o desempate na própria `compara`. É o que o
-código abaixo faz: cidade primeiro, horário depois.
+código abaixo faz: cidade primeiro, horário depois. Comparar por mais de um
+campo, em ordem de importância, é ordenar por uma **chave composta**; a
+**chave simples** é um campo só (o assunto 0180 aprofunda).
 
 ```c
 #include <stdio.h>

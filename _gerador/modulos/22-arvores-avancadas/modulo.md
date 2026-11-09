@@ -77,8 +77,10 @@ comandos são os de sempre:
 Duas convenções valem para o módulo todo. **Altura conta arestas**, como no
 módulo 14: uma folha tem altura 0. E, na árvore B, o TAD usa o **grau mínimo**
 `t` (de `t - 1` a `2t - 1` chaves por nó). Outros livros falam em "ordem m"
-querendo dizer o número máximo de filhos; confira a convenção antes de comparar
-números.
+querendo dizer o número máximo de filhos (e o Ziviani, de m a 2m chaves por
+página); confira a convenção antes de comparar números. A rubro-negra do 0145
+é a **esquerdista** (LLRB); a clássica do Cormen, que é a que a prova do PPGI
+cobra, está no assunto 0177.
 
 {{indice}}
 
@@ -250,9 +252,209 @@ altura continua 2. Confira com `ab_insere` e `ab_mostra`.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. As definições seguem o Cormen: rubro-negra **clássica**
+(cor no nó, assunto 0177) e árvore B pelo **grau mínimo** `t`.
+
+**1.** Pelo Cormen, uma árvore rubro-negra com `n` nós internos (chaves) tem
+altura no máximo 2 · lg(n + 1). Qual é esse limite para `n = 1023`?
+
+- (A) 10
+- (B) 11
+- (C) 1023
+- (D) 30
+- (E) 20
+
+<details><summary>Gabarito</summary>
+
+**(E).** lg(1024) = 10, e 2 · 10 = 20. O limite vem da altura preta: a
+subárvore de um nó com altura preta `bh` tem pelo menos 2^bh − 1 nós
+internos, e pelo menos metade dos nós de qualquer caminho até a folha é
+preta. Uma AVL com as mesmas chaves fica mais baixa (perto de 1,44 lg n),
+e lg(n + 1) = 10 é só o número de níveis de uma árvore perfeitamente
+cheia. Veja 0145 e 0177.
+
+</details>
+
+**2.** Numa árvore B de grau mínimo `t = 4` (Cormen), um nó **interno que
+não é a raiz** tem:
+
+- (A) de 4 a 8 chaves e de 5 a 9 filhos.
+- (B) de 3 a 7 chaves e de 4 a 8 filhos.
+- (C) de 2 a 4 chaves e de 3 a 5 filhos.
+- (D) de 1 a 7 chaves e de 2 a 8 filhos.
+- (E) exatamente 4 chaves e 5 filhos.
+
+<details><summary>Gabarito</summary>
+
+**(B).** De `t − 1 = 3` a `2t − 1 = 7` chaves e, sendo interno, um filho a
+mais que as chaves: de 4 a 8. Só a raiz pode ter 1 chave (alternativa D).
+Atenção à convenção: em livros que falam de "ordem m" (como o Ziviani, em que
+cada página tem de m a 2m registros), os números mudam. Veja 0146.
+
+</details>
+
+**3.** Numa árvore B com `t = 3`, a inserção desce por um filho cheio com as
+chaves `[12 18 25 31 47]`. Pelo algoritmo do Cormen, que divide na descida,
+o que acontece?
+
+- (A) O 25 sobe para o pai, e o filho vira `[12 18]` e `[31 47]`.
+- (B) O 18 sobe, e o filho vira `[12]` e `[25 31 47]`.
+- (C) O 47 sobe, e o filho fica `[12 18 25 31]`.
+- (D) Nada: o nó só se divide depois que a chave nova entra nele.
+- (E) O pai é que se divide, e o filho continua com cinco chaves.
+
+<details><summary>Gabarito</summary>
+
+**(A).** Um nó cheio tem `2t − 1 = 5` chaves; a do meio (posição `t`, o
+25) sobe, e cada metade fica com `t − 1 = 2`. A divisão na descida garante
+que o pai nunca está cheio quando recebe a chave que sobe; dividir só
+depois (D) é a variante "de baixo para cima" de outros livros. Veja 0146.
+
+</details>
+
+**4.** Qual o **menor** número de chaves de uma árvore B com grau mínimo
+`t = 3` e altura 2 (a raiz no nível 0 e as folhas no nível 2)?
+
+- (A) 7
+- (B) 9
+- (C) 17
+- (D) 26
+- (E) 53
+
+<details><summary>Gabarito</summary>
+
+**(C).** A raiz com 1 chave e 2 filhos; cada nó abaixo com o mínimo,
+`t − 1 = 2` chaves e `t = 3` filhos. Nível 1: 2 nós (4 chaves); nível 2: 6
+nós (12 chaves). Total 1 + 4 + 12 = 17 = 2t^h − 1. É daí que sai o limite
+do Cormen h ≤ log_t((n + 1) / 2). Com todos os nós cheios, o máximo seria
+5 + 30 + 180 = 215. Veja 0146.
+
+</details>
+
+**5.** Oito elementos, de 0 a 7, começam cada um no seu conjunto (posto 0).
+O `LINK(x, y)` do Cormen faz: se `x.rank > y.rank`, `y.p = x`; senão,
+`x.p = y` e, se os postos eram iguais, `y.rank` aumenta 1. Depois de
+`UNION(0, 1)`, `UNION(2, 3)`, `UNION(0, 2)`, `UNION(4, 5)`, `UNION(6, 7)`,
+`UNION(4, 6)` e `UNION(0, 4)`, com compressão de caminho no `FIND-SET`,
+quem é o representante e qual o posto dele?
+
+- (A) 0, com posto 3
+- (B) 7, com posto 2
+- (C) 4, com posto 3
+- (D) 7, com posto 3
+- (E) 0, com posto 7
+
+<details><summary>Gabarito</summary>
+
+**(D).** Nos empates, a raiz do primeiro argumento vai para baixo da do
+segundo. As raízes ficam 1 e 3 (posto 1), depois 3 (posto 2, sobre o 1);
+do outro lado, 5 e 7 (posto 1), depois 7 (posto 2, sobre o 5). A última
+união empata em 2: o 3 vai para baixo do 7, que fica com posto 3. A compressão de caminho muda
+os pais, mas nunca o posto: ele vira só um limite superior da altura (aqui
+a altura real fica 2). Com 8 elementos, o posto não passa de lg 8 = 3. Veja
+0148.
+
+</details>
+
+**6.** Com união por posto (ou por tamanho) **e** compressão de caminho,
+uma sequência de `m` operações `MAKE-SET`, `UNION` e `FIND-SET` sobre `n`
+elementos custa:
+
+- (A) O(m · α(n)), em que α é a inversa da função de Ackermann.
+- (B) O(m · n).
+- (C) O(m · log² n).
+- (D) O(n²), não importa o `m`.
+- (E) O(m) no pior caso de cada operação isolada.
+
+<details><summary>Gabarito</summary>
+
+**(A).** α(n) não passa de 4 para qualquer `n` prático, então na prática é
+quase linear. O custo é **amortizado**: uma operação isolada ainda pode
+subir O(log n) níveis (por isso E está errada). Só com a união por posto,
+sem compressão, cada operação é O(log n). Veja 0148 e 0116.
+
+</details>
+
+**7.** Qual das afirmações **não** é uma das propriedades da árvore
+rubro-negra do Cormen?
+
+- (A) Todo nó é vermelho ou preto.
+- (B) A raiz é preta, e toda folha (NIL) é preta.
+- (C) Todo nó vermelho tem pelo menos um filho vermelho.
+- (D) Todo caminho de um nó até as folhas descendentes tem o mesmo número de nós pretos.
+- (E) Os dois filhos de um nó vermelho são pretos.
+
+<details><summary>Gabarito</summary>
+
+**(C).** É o contrário: um vermelho **nunca** tem filho vermelho (E). As
+cinco propriedades são A, a raiz preta, as folhas NIL pretas, E e D. Na
+versão esquerdista do 0145 vale ainda uma regra extra, a de vermelho só à
+esquerda, que o Cormen não exige. Veja 0177 e 0145.
+
+</details>
+
+**8.** Na inserção da rubro-negra clássica (RB-INSERT-FIXUP do Cormen),
+qual o número **máximo** de rotações numa única inserção?
+
+- (A) 1
+- (B) 2
+- (C) O(log n)
+- (D) 3
+- (E) O(n)
+
+<details><summary>Gabarito</summary>
+
+**(B).** Os casos de tio vermelho só recolorem e sobem dois níveis (isso
+pode acontecer O(log n) vezes); os casos de tio preto fazem uma ou duas
+rotações e terminam. Na remoção, o máximo é 3. A LLRB do 0145 é diferente:
+ela pode girar em vários níveis na volta da recursão. Veja 0177.
+
+</details>
+
+**9.** Quantos nós, contando a raiz vazia, tem a trie com as palavras
+`bola`, `bolo`, `bom` e `sol`?
+
+- (A) 14
+- (B) 13
+- (C) 9
+- (D) 11
+- (E) 10
+
+<details><summary>Gabarito</summary>
+
+**(E).** `bola` cria b, o, l, a (4); `bolo` reaproveita "bol" e cria só o
+último o (1); `bom` reaproveita "bo" e cria o m (1); `sol` cria s, o, l (3).
+São 9 nós de letra mais a raiz. Sem compartilhar prefixos seriam 14 letras
+(alternativa A). Veja 0147.
+
+</details>
+
+**10.** Uma árvore B com `t = 100` guarda um bilhão de chaves, e cada nó
+ocupa um bloco de disco. Qual afirmação sobre a busca é correta?
+
+- (A) Ela lê cerca de lg(10⁹) ≈ 30 blocos, como uma árvore binária balanceada.
+- (B) Ela faz O(log n) comparações no total, sem depender de `t`.
+- (C) Ela lê no máximo uns 5 blocos (h ≤ log_t((n + 1) / 2) ≈ 4,3), e faz O(t) comparações dentro de cada nó.
+- (D) Ela precisa ler todas as folhas, porque as chaves só ficam nas folhas.
+- (E) Ela lê um bloco só, porque a raiz guarda todas as chaves.
+
+<details><summary>Gabarito</summary>
+
+**(C).** log₁₀₀(5 × 10⁸) ≈ 4,35, então a altura é no máximo 4 e a busca
+lê até 5 nós. O Cormen dá O(log_t n) acessos a disco e O(t log_t n) de
+processador (a busca linear dentro do nó; com busca binária no nó, cai para
+O(log n) comparações). Na árvore B do Cormen as chaves ficam em todos os
+nós; só na variante **B+** elas vão todas para as folhas. Veja 0146.
+
+</details>
+
 ## Para ler mais
 
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Caps. 10 (representação de árvores enraizadas), 13 (árvores vermelho-preto), 18 (árvores B) e 21 (estruturas de dados para conjuntos disjuntos).
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Caps. 10 (representação de árvores enraizadas), 13 (árvores vermelho-preto, as rubro-negras), 18 (árvores B) e 19 (estruturas de dados para conjuntos disjuntos).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 5 (pesquisa em memória primária: árvores binárias balanceadas e tries) e cap. 6 (pesquisa em memória secundária: árvores B e B*).
 - SZWARCFITER, J. L.; MARKENZON, L. *Estruturas de dados e seus algoritmos*. 3. ed. Rio de Janeiro: LTC, 2010. Árvores gerais, árvores rubro-negras, árvores B, árvores digitais e o problema da união de conjuntos.
 - SEDGEWICK, R.; WAYNE, K. *Algorithms*. 4. ed. Boston: Addison-Wesley, 2011. Seções 1.5 (union-find), 3.3 (árvores balanceadas: 2-3 e rubro-negras) e 5.2 (tries). Disponível em: <https://algs4.cs.princeton.edu/home/>.
 - SEDGEWICK, R. *Left-leaning red-black trees*. Princeton: Princeton University, 2008. Disponível em: <https://sedgewick.io/wp-content/themes/sedgewick/papers/2008LLRB.pdf>.

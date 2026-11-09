@@ -17,6 +17,8 @@ As operações são poucas, e é isso que dá força à pilha:
 - **olhar o topo** (*peek*): lê o topo sem tirar;
 - **vazia?**: pergunta se ainda tem alguma coisa.
 
+No Cormen, elas se chamam PUSH, POP e STACK-EMPTY.
+
 No C não existe nada pronto, então você monta a pilha como um **TAD** (assunto 0074):
 o `pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
 só inclui o `.h`:
@@ -120,7 +122,9 @@ vazia. Só depois `n` diminui e o valor é lido:
 > valor velho que já tinha saído. Fixe a convenção e não misture: aqui `n` é a
 > próxima vaga (empilha em `itens[n]` e depois `n++`; desempilha com `n--` e
 > depois lê). Muito livro usa `topo = -1` para pilha vazia, e aí o topo é
-> `itens[topo]`. As duas funcionam. Misturar as duas não.
+> `itens[topo]`. As duas funcionam. Misturar as duas não. O Cormen indexa o
+> vetor a partir de 1: lá, `S.top` é o índice do topo **e** a quantidade de
+> itens, e pilha vazia é `S.top = 0`.
 
 > [!TIP]
 > **Por dentro do C:** desempilhar **não apaga** nada. O 1200 continua na

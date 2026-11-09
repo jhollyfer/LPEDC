@@ -9,7 +9,8 @@ Esse é o **insertion sort** (ordenação por inserção). O vetor também tem u
 parte pronta à esquerda, `v[0..j-1]`, mas "pronta" aqui quer dizer **em
 ordem entre si**, não "no lugar final" como no selection. A cada passo:
 
-1. guarde a próxima carta, `x = v[j]`;
+1. guarde a próxima carta, `x = v[j]` (o `key` do pseudocódigo do Cormen,
+   que indexa o vetor a partir de 1);
 2. ande para a esquerda empurrando uma casa para a direita cada elemento
    **maior** que `x` (é um **deslocamento**, não uma troca);
 3. quando achar alguém menor ou igual (ou o começo do vetor), ponha `x` no

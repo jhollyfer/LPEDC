@@ -23,11 +23,15 @@ A cada passo, Dijkstra pega o vértice **não fixo de menor `dist`**, declara
 essa distância definitiva e **relaxa** as arestas que saem dele. Relaxar é
 perguntar: "passar por `u` encurta o caminho até `v`?" Em código,
 `dist[u] + peso[u][v] < dist[v]`. Se sim, atualiza `dist[v]` e `anterior[v]`.
+No Cormen, o começo se chama `INITIALIZE-SINGLE-SOURCE`, o teste é o
+`RELAX(u, v, w)`, os vetores são `v.d` e `v.π`, e os fixos formam o conjunto S.
 
 Por que dá para fixar o menor? Porque, com pesos não negativos, qualquer
 outro caminho até ele passaria por um vértice que já tem `dist` maior ou
 igual, e somar pesos só aumenta. É um algoritmo **guloso**: a melhor escolha
-de agora nunca precisa ser desfeita.
+de agora nunca precisa ser desfeita. Com uma aresta **negativa**, esse
+argumento cai e o Dijkstra pode fixar uma distância errada; aí entra o
+Bellman-Ford (assunto 0154), que relaxa todas as arestas V - 1 vezes.
 
 Vamos ver na prática. Os números nas arestas são minutos; o número em cima de
 cada lugar é a `dist` final; as arestas verdes formam a rota até a Praia, e

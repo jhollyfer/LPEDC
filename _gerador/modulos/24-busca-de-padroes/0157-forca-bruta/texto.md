@@ -22,7 +22,8 @@ de 1 em 1, aconteça o que acontecer.
 Quanto custa? Num texto comum, quase todo alinhamento falha na primeira ou na
 segunda letra, e o total fica perto de `n` comparações. No **pior caso**, cada
 alinhamento compara quase o padrão inteiro antes de falhar: até
-`(n - m + 1) · m` comparações, que é **O(n·m)**. Procurar `"00001"` num código
+`(n - m + 1) · m` comparações, que é **O(n·m)** (o Cormen chama cada
+alinhamento de **deslocamento**, e o algoritmo de **ingênuo**). Procurar `"00001"` num código
 de vinte zeros faz isso (veja o A314). Os próximos três assuntos são três jeitos
 de trabalhar menos que isso.
 

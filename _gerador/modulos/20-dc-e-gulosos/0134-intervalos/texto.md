@@ -27,7 +27,7 @@ junto), então não choca com nenhum dos outros escolhidos, e a escolha continua
 do mesmo tamanho. Repetindo para o resto, a escolha gulosa é tão boa quanto a
 ótima.
 
-O algoritmo fica assim:
+O algoritmo (o `GREEDY-ACTIVITY-SELECTOR` do Cormen) fica assim:
 
 1. **ordene** os pedidos pela hora de **fim**;
 2. guarde a hora em que a quadra fica livre (`livre_em`, começando em 0);

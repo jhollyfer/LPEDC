@@ -33,7 +33,8 @@ aparece quando o valor é **usado** na mesma expressão:
 - **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
 
 E um detalhe que explica muita coisa: a atribuição também é uma expressão, e
-vale o valor guardado. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
+vale o valor guardado. E ela associa **da direita para a esquerda**, ao
+contrário dos aritméticos. Por isso `a = b = c = 7` funciona: o C faz `c = 7`,
 que vale 7, depois `b = 7` e por fim `a = 7`.
 
 Vamos ver na prática. O saldo passa por quatro valores, cada um calculado a

@@ -31,6 +31,10 @@ por último na entrada ocupa a última vaga do bloco. A ordem original dos
 empates se mantém: o counting sort é **estável**. Isso parece detalhe, mas é
 o que faz dele a peça central do radix sort, no próximo assunto.
 
+O Cormen escreve `COUNTING-SORT(A, n, k)` com vetores de 1 a n e chaves de 0
+a **k**, ou seja, k + 1 contadores; aqui, em C, as chaves vão de 0 a k - 1. A
+conta é a mesma: Θ(n + k), que vira Θ(n) quando k = O(n).
+
 Vamos ver na prática. A entrada passa uma vez para contar e outra para
 distribuir. Os três pedidos de 3 estrelas (A, C e H, em verde) chegam à
 saída na mesma ordem em que estavam:

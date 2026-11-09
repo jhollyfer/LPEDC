@@ -23,7 +23,9 @@ prioridade do assunto 0102, um **heap de mínimo**. Cada item diz "dá para
 ligar `v` com `chave` metros a partir de `de`". Quando uma casa entra na
 rede, os canos que saem dela entram no heap. Ao tirar um item cuja casa já
 está na rede, é só **descartar**: ela já entrou por um cano melhor. Essa
-versão, que não atualiza itens dentro do heap, se chama **preguiçosa**.
+versão, que não atualiza itens dentro do heap, se chama **preguiçosa**. A do
+Cormen (`MST-PRIM`) põe todos os vértices no heap com chave infinita e baixa a
+chave no lugar (`DECREASE-KEY`); com heap binário, as duas custam O(E log V).
 
 Se isso lembrou o Dijkstra (assunto 0112), não é coincidência. O código é
 quase o mesmo. A diferença está numa linha só, a chave de quem entra no

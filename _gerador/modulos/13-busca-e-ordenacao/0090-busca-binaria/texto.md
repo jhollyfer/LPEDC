@@ -18,7 +18,9 @@ resposta é `-1`.
 
 Quantas voltas? Com 15 elementos sobram 15, 7, 3, 1: no máximo **4**. Com um
 milhão, no máximo 20. Com um bilhão, 30. É o **O(log n)** do assunto 0072: a
-cada vez que `n` dobra, a busca ganha só **uma** volta a mais.
+cada vez que `n` dobra, a busca ganha só **uma** volta a mais. A conta exata
+do pior caso é ⌊log₂ n⌋ + 1 voltas, cada uma comparando a chave com um
+elemento.
 
 O preço é a pré-condição: o vetor precisa estar em ordem. Num vetor bagunçado,
 a busca binária não dá erro nenhum, só responde errado. Ordenar custa caro, e

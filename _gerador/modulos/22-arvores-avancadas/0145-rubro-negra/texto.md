@@ -32,6 +32,14 @@ A raiz é sempre preta. Com essas regras, o caminho mais longo é no máximo o
 dobro do mais curto (preto, vermelho, preto, vermelho...), e a altura fica
 abaixo de 2 · log₂(n + 1).
 
+> [!NOTE]
+> Esta é a variante de Sedgewick, não a do Cormen. A rubro-negra **clássica**
+> do Cormen (e da prova do PPGI) põe a cor no **nó**, aceita vermelho dos dois
+> lados (ela equivale à árvore 2-3-4, não à 2-3), usa folhas `NIL` pretas e
+> conserta a inserção pelos casos do **tio**, com no máximo duas rotações. As
+> cinco propriedades e o limite de altura 2 · lg(n + 1) são os mesmos. Ela
+> tem assunto próprio, o 0177.
+
 A inserção começa como na BST e pendura um nó **vermelho** (a chave nova se
 cola num nó 2-3 que já existe). Isso pode quebrar uma regra. Na volta da
 recursão, cada ancestral aplica três consertos, **nesta ordem**:

@@ -222,9 +222,198 @@ vizinhos na cadeia.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
+letra e só depois abra o gabarito. Sempre que a questão traz código ou
+números, dá para conferir rodando.
+
+**1.** Com a função `potencia` do assunto 0131 (uma multiplicação quando o
+expoente é par, duas quando é ímpar, nenhuma no caso base `n == 0`), quantas
+multiplicações são feitas para calcular 3¹³?
+
+- (A) 6
+- (B) 7
+- (C) 8
+- (D) 12
+- (E) 13
+
+<details><summary>Gabarito</summary>
+
+**B.** Os expoentes visitados são 13, 6, 3, 1 e 0. O 13, o 3 e o 1 são ímpares
+(2 cada) e o 6 é par (1): 2 + 1 + 2 + 2 = 7. O laço simples faria 12. Veja
+0131.
+
+</details>
+
+**2.** Na mesma potência, alguém escreve
+`return potencia(x, n / 2) * potencia(x, n / 2);` em vez de guardar a metade
+numa variável. Qual passa a ser a recorrência e o custo?
+
+- (A) `T(n) = T(n/2) + 1`; Θ(log n)
+- (B) `T(n) = 2 T(n/2) + n`; Θ(n log n)
+- (C) `T(n) = 2 T(n - 1) + 1`; Θ(2ⁿ)
+- (D) `T(n) = 2 T(n/2) + 1`; Θ(n)
+- (E) `T(n) = T(n/2) + n`; Θ(n)
+
+<details><summary>Gabarito</summary>
+
+**D.** São duas chamadas iguais com metade do expoente e trabalho constante
+fora delas: `a = 2`, `b = 2`, `f(n) = 1`. Como `n^(log₂ 2) = n` é maior,
+caso 1 do teorema mestre: Θ(n). O resultado continua certo, mas a vantagem da
+divisão e conquista some. Veja 0131 e 0115.
+
+</details>
+
+**3.** Quantas inversões tem o vetor `4 1 3 5 2`?
+
+- (A) 5
+- (B) 4
+- (C) 6
+- (D) 3
+- (E) 10
+
+<details><summary>Gabarito</summary>
+
+**A.** Os pares `i < j` com `v[i] > v[j]` são (4, 1), (4, 3), (4, 2), (3, 2) e
+(5, 2). O máximo para 5 elementos seria 5 · 4 / 2 = 10, no vetor ao
+contrário. O merge sort conta todas em O(n log n). Veja 0132.
+
+</details>
+
+**4.** Qual é a maior soma de um subvetor contíguo (não vazio) de
+`-2 5 -1 3 -6 4 2 -3`?
+
+- (A) 6
+- (B) 8
+- (C) 5
+- (D) 14
+- (E) 7
+
+<details><summary>Gabarito</summary>
+
+**E.** `5 - 1 + 3 = 7`. Ir além custa: somar `-6 4 2` dá 7 de novo, e o `-3`
+do fim só tira. O `4 2` sozinho dá 6, e somar todos os positivos (14) não
+vale, porque o subvetor tem de ser contíguo. A divisão e conquista testa a
+melhor soma da esquerda, a da direita e a que cruza o meio. Veja 0132.
+
+</details>
+
+**5.** Um país tem moedas de 1, 5, 6 e 9 centavos. O caixa usa o guloso "a
+maior moeda que cabe". Para qual destes trocos o guloso **não** dá o menor
+número de moedas?
+
+- (A) 6
+- (B) 9
+- (C) 10
+- (D) 11
+- (E) 15
+
+<details><summary>Gabarito</summary>
+
+**D.** Para 11, o guloso dá 9 + 1 + 1 (três moedas), e o ótimo é 6 + 5 (duas).
+Nos outros, ele acerta: 6 e 9 são uma moeda; 10 = 9 + 1 e 15 = 9 + 6 são duas,
+o mínimo. Um contraexemplo basta para mostrar que o sistema não é canônico.
+Veja 0133.
+
+</details>
+
+**6.** Uma sala tem os pedidos de reserva `[9, 11)`, `[10, 12)`, `[11, 13)`,
+`[8, 10)`, `[12, 15)`, `[13, 14)`, `[14, 17)`, `[9, 16)` e `[15, 18)`. O guloso
+que aceita primeiro quem **termina** mais cedo escolhe quantos pedidos?
+
+- (A) 3
+- (B) 5
+- (C) 4
+- (D) 6
+- (E) 2
+
+<details><summary>Gabarito</summary>
+
+**C.** Em ordem de fim: `[8,10)` entra; `[9,11)` choca; `[10,12)` entra;
+`[11,13)` choca; `[13,14)` entra; `[12,15)` e `[9,16)` chocam; `[14,17)`
+entra; `[15,18)` choca. São 4, e testando os 2⁹ subconjuntos não há escolha
+com 5. É o `GREEDY-ACTIVITY-SELECTOR` do Cormen. Veja 0134.
+
+</details>
+
+**7.** Uma caminhonete leva 45 kg. Os itens são W (5 kg, R$ 40), X (10 kg,
+R$ 50), Y (25 kg, R$ 150) e Z (20 kg, R$ 80). Qual é o maior valor na
+mochila **fracionária** e na mochila **0/1**?
+
+- (A) R$ 260 e R$ 240
+- (B) R$ 260 e R$ 260
+- (C) R$ 240 e R$ 240
+- (D) R$ 320 e R$ 270
+- (E) R$ 250 e R$ 230
+
+<details><summary>Gabarito</summary>
+
+**A.** Valor por quilo: W 8, Y 6, X 5, Z 4. A fracionária leva W, Y e X
+inteiros (40 kg, R$ 240) e 5 kg de Z (um quarto, R$ 20): R$ 260. Na 0/1, Z não
+pode ser partido, e o melhor que cabe em 45 kg é W + X + Y = R$ 240. O
+guloso pela razão é ótimo só na fracionária. Veja 0135.
+
+</details>
+
+**8.** Os símbolos P, Q, R, S e T aparecem 10, 3, 6, 2 e 15 vezes. Quantos bits
+tem a mensagem codificada com o código de Huffman?
+
+- (A) 108
+- (B) 80
+- (C) 73
+- (D) 72
+- (E) 36
+
+<details><summary>Gabarito</summary>
+
+**C.** Junções: S2 + Q3 = 5; 5 + R6 = 11; P10 + 11 = 21; T15 + 21 = 36. O total
+é a soma dos nós internos: 5 + 11 + 21 + 36 = 73. As profundidades são T 1,
+P 2, R 3, Q 4 e S 4: 15 + 20 + 18 + 12 + 8 = 73. Com código fixo de 3 bits
+seriam 36 × 3 = 108. Veja 0136.
+
+</details>
+
+**9.** Sobre o método guloso, assinale a afirmação correta.
+
+- (A) Todo problema com subestrutura ótima é resolvido por um guloso.
+- (B) O Bellman-Ford é guloso: fixa um vértice por vez, como o Dijkstra.
+- (C) O guloso pela razão valor/peso resolve a mochila 0/1.
+- (D) Escolher o intervalo mais curto primeiro maximiza o número de reservas.
+- (E) Um guloso correto precisa da propriedade da escolha gulosa e de
+  subestrutura ótima; Prim, Kruskal, Dijkstra e Huffman são exemplos.
+
+<details><summary>Gabarito</summary>
+
+**E.** Os dois ingredientes do Cormen: alguma escolha gulosa faz parte de uma
+solução ótima, e o que sobra é um subproblema do mesmo tipo. Subestrutura
+ótima sozinha não basta: a mochila 0/1 tem e pede programação dinâmica. O
+Bellman-Ford relaxa todas as arestas V - 1 vezes, sem fixar ninguém. Veja 0133,
+0134 e 0135.
+
+</details>
+
+**10.** O algoritmo de Strassen multiplica matrizes `n × n` com 7
+multiplicações de matrizes `n/2 × n/2` e Θ(n²) de somas. Qual é o custo?
+
+- (A) Θ(n³)
+- (B) Θ(n^(log₂ 7)), cerca de Θ(n^2,81)
+- (C) Θ(n² log n)
+- (D) Θ(n^3,5)
+- (E) Θ(n²)
+
+<details><summary>Gabarito</summary>
+
+**B.** `T(n) = 7 T(n/2) + Θ(n²)`. Como `n^(log₂ 7) ≈ n^2,81` é polinomialmente
+maior que `n²`, vale o caso 1: Θ(n^(log₂ 7)). O método escolar, com 8
+multiplicações de metades, dá `8 T(n/2) + Θ(n²)` = Θ(n³). Veja 0115 e 0131.
+
+</details>
+
 ## Para ler mais
 
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 4 (divisão e conquista e o subvetor máximo), problema 2-4 (inversões) e cap. 16 (algoritmos gulosos: seleção de atividades, mochila fracionária e códigos de Huffman).
+- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 4 (divisão e conquista, Strassen e teorema mestre), problema 2-4 (inversões) e cap. 15 (algoritmos gulosos: seleção de atividades, elementos da estratégia gulosa, mochila fracionária e códigos de Huffman). A 3. ed. (2012) traz o subvetor máximo na seção 4.1.
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 2: paradigmas de projeto (divisão e conquista, balanceamento e algoritmos gulosos).
 - LINTZMAYER, C. N.; MOTA, G. O. *Análise de algoritmos e de estruturas de dados*. Santo André: UFABC; São Paulo: IME-USP, 2023. Rascunho. Partes sobre divisão e conquista, algoritmos gulosos e Huffman.
 - SZWARCFITER, J. L.; MARKENZON, L. *Estruturas de dados e seus algoritmos*. 3. ed. Rio de Janeiro: LTC, 2010. Capítulo sobre códigos de Huffman e compactação.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Seção 5.3: o algoritmo de Huffman.

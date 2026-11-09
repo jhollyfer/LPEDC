@@ -14,7 +14,7 @@ São três tipos que você vai usar o tempo todo:
 
 | Tipo | Onde declara | Escopo | Tempo de vida |
 | --- | --- | --- | --- |
-| **local** | dentro de `{ }` | só aquele bloco | nasce ao entrar no bloco, morre ao sair |
+| **local** (automática) | dentro de `{ }` | só aquele bloco | nasce ao entrar no bloco, morre ao sair |
 | **global** | fora de qualquer função | do ponto da declaração até o fim do arquivo | o programa todo |
 | **`static` local** | dentro de `{ }`, com `static` | só aquele bloco | o programa todo |
 

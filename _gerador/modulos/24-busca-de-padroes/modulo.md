@@ -58,6 +58,9 @@ ocorrência achada), **vermelha** é a letra que falhou (ou o falso positivo),
 
 ## Antes de começar
 
+Este módulo é complemento: busca de padrões não cai diretamente na prova do
+PPGI (o que mais cai está em `PPGI.md`, na raiz do curso).
+
 Os exemplos dos quatro primeiros assuntos cabem cada um num arquivo só: os
 algoritmos são funções curtas, e ver a função inteira junto do `main` ajuda
 mais do que separar em `.h` e `.c`. No assunto 0161 eles viram o TAD
@@ -225,12 +228,164 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 </details>
 
+## Questões no estilo da prova
+
+Busca de padrões não cai diretamente na prova do PPGI, mas questões no mesmo
+formato treinam o que cai: contar passos, reconhecer a complexidade e seguir
+uma tabela à mão. Uma alternativa certa em cada.
+
+**1.** Qual é a tabela π (função prefixo do KMP, `pi[j]` = tamanho da maior
+borda de `p[0..j]`) do padrão `aabaaab`?
+
+- (A) 0 1 0 1 2 3 3
+- (B) 0 0 0 1 2 2 3
+- (C) 0 1 0 1 2 2 3
+- (D) 0 1 2 0 1 2 3
+- (E) 0 1 0 0 1 2 3
+
+<details><summary>Gabarito</summary>
+
+**(C).** `a` (0), `aa` (borda `a`, 1), `aab` (0), `aaba` (`a`, 1), `aabaa`
+(`aa`, 2), `aabaaa` (`aa`, 2: a borda `aab` não serve, o recuo cai em
+`pi[1] = 1` e o `a` casa), `aabaaab` (`aab`, 3). Veja 0158.
+
+</details>
+
+**2.** A força bruta compara letra a letra em cada alinhamento e para no
+primeiro erro. Quantas comparações de letra ela faz para procurar `aaab`
+em `aaaaaaaa`?
+
+- (A) 20
+- (B) 8
+- (C) 32
+- (D) 5
+- (E) 11
+
+<details><summary>Gabarito</summary>
+
+**(A).** Há `n − m + 1 = 5` alinhamentos, e em cada um os três `a` casam e o
+`b` falha: 4 comparações. São 5 × 4 = 20, o pior caso `(n − m + 1) · m`, que
+é O(n · m). O KMP faria no máximo `2n = 16`. Veja 0157.
+
+</details>
+
+**3.** Qual é a complexidade de tempo do KMP no pior caso, para texto de
+tamanho `n` e padrão de tamanho `m`?
+
+- (A) O(n · m), como a força bruta.
+- (B) O(n log m).
+- (C) O(m²) para a tabela e O(n · m) para a busca.
+- (D) O(n / m), porque ele pula letras.
+- (E) O(n + m): O(m) para a tabela π e O(n) para a busca.
+
+<details><summary>Gabarito</summary>
+
+**(E).** Na busca, `k` sobe no máximo uma vez por letra do texto e cada
+recuo o diminui, então avanços e recuos somam no máximo `2n`. O mesmo
+argumento vale para montar a tabela. Pular letras (D, na média) é a marca do
+Horspool, não do KMP. Veja 0158.
+
+</details>
+
+**4.** O Rabin-Karp procura `26` em `31415926535`, com os dígitos lidos como
+números na base 10 e hash módulo `q = 11`. Quantos **falsos positivos**
+(janelas com o mesmo hash do padrão, mas diferentes dele) aparecem?
+
+- (A) 0
+- (B) 3
+- (C) 1
+- (D) 4
+- (E) 10
+
+<details><summary>Gabarito</summary>
+
+**(B).** O hash do padrão é 26 mod 11 = 4. As janelas 15, 59 e 92 também
+deixam resto 4 e são conferidas letra a letra à toa; a 26 é a única
+ocorrência de verdade. Quatro janelas batem no hash (D), mas uma delas é
+verdadeira. Veja 0160.
+
+</details>
+
+**5.** No Horspool, o salto de cada letra `c` é `m − 1 − j`, com `j` a
+última posição de `c` em `p[0..m−2]`, ou `m` se `c` não aparece ali. Para o
+padrão `banana`, quais os saltos de `a`, `n`, `b` e `x`?
+
+- (A) 1, 2, 5, 6
+- (B) 0, 1, 5, 6
+- (C) 2, 1, 5, 5
+- (D) 2, 1, 5, 6
+- (E) 1, 2, 6, 6
+
+<details><summary>Gabarito</summary>
+
+**(D).** Em `banan` (sem a última letra), o último `a` está na posição 3
+(salto 2), o último `n` na 4 (salto 1) e o `b` na 0 (salto 5). O `x` não
+aparece: salto `m = 6`. A última letra do padrão fica de fora para que
+nenhum salto seja 0 (alternativa B). Veja 0159.
+
+</details>
+
+**6.** Sobre o Rabin-Karp com módulo primo `q`, segundo o Cormen, é
+correto afirmar:
+
+- (A) ele nunca precisa comparar letra a letra, porque hashes iguais garantem janelas iguais.
+- (B) o pré-processamento é Θ(m) e o pior caso da busca é Θ((n − m + 1) · m), mas o tempo esperado é O(n + m) com poucas ocorrências e `q` grande.
+- (C) o pior caso é O(n + m), como o KMP.
+- (D) o hash de cada janela custa O(m), por isso a busca é sempre O(n · m).
+- (E) ele só funciona com alfabeto binário.
+
+<details><summary>Gabarito</summary>
+
+**(B).** Hash igual pode ser colisão, então a conferência é obrigatória
+(A está errada), e se todas as janelas colidirem cada uma custa `m`. O hash
+**rolante** atualiza a janela em O(1), o que derruba D. Veja 0160.
+
+</details>
+
+**7.** Quantas ocorrências de `aba` existem em `abababa`, contando as que se
+sobrepõem?
+
+- (A) 2
+- (B) 1
+- (C) 4
+- (D) 5
+- (E) 3
+
+<details><summary>Gabarito</summary>
+
+**(E).** Nas posições 0, 2 e 4. Para achar as sobrepostas, o KMP recua para
+`pi[m − 1]` depois de cada ocorrência, em vez de zerar o `k`; quem zera
+acharia só 2 (A). Veja 0158.
+
+</details>
+
+**8.** No hash rolante na base 10 com módulo 13, a janela `271` tem hash
+271 mod 13 = 11. Usando `h' = ((h − 2 · (100 mod 13)) · 10 + 8) mod 13`
+(tirando o resultado negativo para o intervalo 0..12), qual o hash da
+janela seguinte, `718`?
+
+- (A) 3
+- (B) 8
+- (C) 11
+- (D) 5
+- (E) 0
+
+<details><summary>Gabarito</summary>
+
+**(A).** 100 mod 13 = 9; 11 − 2 · 9 = −7, que vira 6 no intervalo 0..12;
+6 · 10 + 8 = 68, e 68 mod 13 = 3. Confere: 718 = 13 · 55 + 3. Em C, o `%`
+de número negativo dá resultado negativo, por isso o código soma `q` antes.
+Veja 0160.
+
+</details>
+
 ## Para ler mais
 
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Cap. 13 (busca de palavras em um texto: algoritmo trivial e Boyer-Moore).
 - FEOFILOFF, P. *Algoritmo de Knuth-Morris-Pratt*. São Paulo: IME-USP. Disponível em: <https://www.ime.usp.br/~pf/estruturas-de-dados/aulas/kmp.html>.
 - SZWARCFITER, J. L.; MARKENZON, L. *Estruturas de dados e seus algoritmos*. 3. ed. Rio de Janeiro: LTC, 2010. Cap. de casamento de cadeias (força bruta e KMP).
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 32 (correspondência de cadeias: ingênuo, Rabin-Karp, autômatos e KMP).
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 32 (correspondência de cadeias: ingênuo, Rabin-Karp, autômatos e KMP).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 8 (processamento de cadeias de caracteres: casamento exato, KMP, Boyer-Moore e Boyer-Moore-Horspool).
 - SEDGEWICK, R.; WAYNE, K. *Algorithms*. 4. ed. Boston: Addison-Wesley, 2011. Seção 5.3 (substring search).
 - KNUTH, D. E.; MORRIS, J. H.; PRATT, V. R. Fast pattern matching in strings. *SIAM Journal on Computing*, v. 6, n. 2, p. 323-350, 1977.
 - HORSPOOL, R. N. Practical fast searching in strings. *Software: Practice and Experience*, v. 10, n. 6, p. 501-506, 1980.

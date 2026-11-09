@@ -243,9 +243,235 @@ já faz isso).
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Resolva no papel antes de abrir o gabarito. Vários trechos
+fazem o `-Wall` reclamar de propósito: é exatamente a pegadinha.
+
+**1.** Qual a saída?
+
+```c
+int x = 0, y = 0, z;
+z = x++ && y++;
+printf("%d %d %d\n", x, y, z);
+```
+
+- (A) 1 1 0
+- (B) 0 0 0
+- (C) 1 0 0
+- (D) 1 1 1
+- (E) 0 1 0
+
+<details><summary>Gabarito</summary>
+
+**(C).** `x++` vale o valor antigo de `x`, 0 (falso), e `x` vira 1. Como o
+lado esquerdo do `&&` deu falso, o **curto-circuito** pula o lado direito: o
+`y++` nunca roda. O resultado do `&&` é 0. Veja 0013 (e 0009 para o `x++`).
+
+</details>
+
+**2.** Qual o valor de `t` no fim?
+
+```c
+int op = 2, t = 0;
+switch (op) {
+case 1: t += 1;
+case 2: t += 2;
+case 3: t += 3; break;
+default: t += 10;
+}
+```
+
+- (A) 2
+- (B) 15
+- (C) 3
+- (D) 6
+- (E) 5
+
+<details><summary>Gabarito</summary>
+
+**(E).** O `switch` pula direto para o `case 2` (o `case 1` não roda) e, sem
+`break`, **cai** no `case 3`: 2 + 3 = 5. O `break` do `case 3` sai antes do
+`default`. Veja 0018.
+
+</details>
+
+**3.** O que o trecho mostra?
+
+```c
+int a = 5, b = 3;
+if (a > 10)
+    if (b > 2) printf("X");
+else printf("Y");
+printf("Z\n");
+```
+
+- (A) YZ
+- (B) Z
+- (C) XZ
+- (D) XYZ
+- (E) Y
+
+<details><summary>Gabarito</summary>
+
+**(B).** É o **else pendurado**: o `else` pertence ao `if` mais próximo que
+ainda não tem `else`, o `if (b > 2)`, não importa o recuo. Como `a > 10` é
+falso, o `if` de fora pula tudo, inclusive o `else`. Só o `Z` aparece. O gcc
+avisa: `suggest explicit braces to avoid ambiguous 'else'`. Veja 0016.
+
+</details>
+
+**4.** Qual a saída?
+
+```c
+int n = 0;
+if (n = 5) printf("sim"); else printf("nao");
+printf(" %d\n", n);
+```
+
+- (A) sim 5
+- (B) nao 0
+- (C) sim 0
+- (D) nao 5
+- (E) não compila: `=` não pode aparecer dentro do `if`
+
+<details><summary>Gabarito</summary>
+
+**(A).** `n = 5` é uma **atribuição**, não uma comparação: guarda 5 em `n` e
+vale 5, que é diferente de zero, logo verdadeiro. Compila (com aviso
+`suggest parentheses around assignment used as truth value`). Veja 0015.
+
+</details>
+
+**5.** Com `int k = 15;`, quanto vale `10 < k < 12`?
+
+- (A) 0, porque 15 não está entre 10 e 12
+- (B) 15
+- (C) não compila
+- (D) 1
+- (E) o valor é indefinido
+
+<details><summary>Gabarito</summary>
+
+**(D).** O C lê da esquerda para a direita: `10 < k` vale 1 (verdade), e
+depois `1 < 12` também vale 1. O intervalo se escreve com um E:
+`k > 10 && k < 12`, que daria 0. Veja 0012 e 0013.
+
+</details>
+
+**6.** Qual o valor de `r`?
+
+```c
+int q = 3;
+int r = q > 2 ? 10 : 20 + 5;
+```
+
+- (A) 15
+- (B) 10
+- (C) 25
+- (D) 35
+- (E) 30
+
+<details><summary>Gabarito</summary>
+
+**(B).** O `?:` tem precedência **menor** que o `+`, então o lado falso é
+`20 + 5` inteiro e a expressão é `(q > 2) ? 10 : (20 + 5)`. Como `q > 2`,
+sai 10. O 15 viria de ler `(q > 2 ? 10 : 20) + 5`. Veja 0017.
+
+</details>
+
+**7.** Qual expressão é equivalente a `!(a > 0 && b <= 5)` para quaisquer
+inteiros `a` e `b`?
+
+- (A) `a < 0 && b > 5`
+- (B) `a <= 0 && b > 5`
+- (C) `a <= 0 || b > 5`
+- (D) `a < 0 || b >= 5`
+- (E) `!(a > 0) || b <= 5`
+
+<details><summary>Gabarito</summary>
+
+**(C).** Pela lei de De Morgan, o NÃO entra nos parênteses, nega cada
+comparação e troca `&&` por `||`: `!(a > 0)` é `a <= 0` e `!(b <= 5)` é
+`b > 5`. O (A) erra o contrário de `>` (é `<=`, não `<`); o (B) esquece de
+trocar o E pelo OU. Veja 0013.
+
+</details>
+
+**8.** Qual a saída?
+
+```c
+int p = 2, s = 4;
+printf("%d %d\n", p & s, p && s);
+```
+
+- (A) 1 1
+- (B) 6 1
+- (C) 2 4
+- (D) 0 0
+- (E) 0 1
+
+<details><summary>Gabarito</summary>
+
+**(E).** `&` é o E **bit a bit**: `010 & 100` não tem nenhum bit ligado em
+comum, dá 0. `&&` é o E **lógico**: 2 e 4 são diferentes de zero, os dois
+são verdade, dá 1. O 6 seria o `|` bit a bit. Veja 0013 (o aviso) e 0065.
+
+</details>
+
+**9.** O que o trecho mostra?
+
+```c
+char c = 'b';
+switch (c) {
+default: printf("D");
+case 'a': printf("A"); break;
+case 'c': printf("C");
+}
+```
+
+- (A) D
+- (B) nada, porque o `default` tem que ser o último
+- (C) DAC
+- (D) DA
+- (E) não compila: `char` não pode ir num `switch`
+
+<details><summary>Gabarito</summary>
+
+**(D).** Nenhum `case` vale `'b'`, então o `switch` pula para o `default`,
+**onde quer que ele esteja**. Sem `break`, cai no `case 'a'`, mostra `A` e o
+`break` sai. `char` é número, então vale no `switch`. Veja 0018.
+
+</details>
+
+**10.** O que o trecho mostra numa máquina comum (IEEE 754)?
+
+```c
+float f = 0.1f;
+if (f == 0.1) printf("igual\n"); else printf("diferente\n");
+```
+
+- (A) diferente
+- (B) igual
+- (C) depende de o `if` ter chaves
+- (D) não compila: `float` não se compara com `double`
+- (E) igual, porque o `float` vira `double` antes da comparação
+
+<details><summary>Gabarito</summary>
+
+**(A).** O 0.1 não tem representação exata em binário. O `0.1f` guarda a
+aproximação de 24 bits; o `0.1` (sem `f`) é um `double`, com 53 bits. O
+`float` é convertido para `double` sim, mas a aproximação dele continua
+diferente da do `double`. Compare reais com uma tolerância:
+`fabs(f - 0.1) < 1e-6`. Veja 0012.
+
+</details>
+
 ## Para ler mais
 
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 3 (seleção com `if` e `if...else`) e cap. 4 (`switch` e operadores lógicos).
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulo de controle de fluxo: `if`, `switch` e operadores lógicos.
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Cap. 3 (operadores) e cap. 4 (comandos de controle condicional).
 - BACKES, A. R. *Linguagem C: descomplicada*. Uberlândia: FACOM/UFU, [s.d.]. Apostila. Capítulos de operadores e de condicionais.
 - HARA, C.; ZOLA, W. *Linguagem C: notas de aula*. Curitiba: UFPR, 2008.

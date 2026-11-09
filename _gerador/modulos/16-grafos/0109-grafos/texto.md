@@ -12,7 +12,8 @@ Para isso existe o **grafo**.
 Um grafo é um conjunto de **vértices** (os pontos) e de **arestas** (as
 ligações entre pares de pontos). Os vértices da ciclovia são os cinco lugares;
 as arestas, as cinco ciclovias. Toda árvore é um grafo, mas um grafo pode ter
-ciclos e partes soltas.
+ciclos e partes soltas. O Cormen escreve **G = (V, E)** e usa V e E também
+para as quantidades: é daí que vêm o Θ(V²) e o Θ(V + E) deste módulo.
 
 O vocabulário que você vai usar o módulo inteiro:
 
@@ -23,9 +24,11 @@ O vocabulário que você vai usar o módulo inteiro:
 - **conexo**: dá para ir de qualquer vértice a qualquer outro.
 
 Se a ligação tem mão única, o grafo é **dirigido** e cada aresta vira uma seta
-(seguir alguém no Instagram não obriga a pessoa a seguir de volta). Se a
-aresta carrega um número, como minutos ou reais, o grafo é **ponderado**. As
-ciclovias valem nos dois sentidos e ainda não têm peso.
+(seguir alguém no Instagram não obriga a pessoa a seguir de volta). Aí cada
+vértice tem **grau de saída** e **grau de entrada**, e a soma dos graus de
+saída é o número de arestas. Se a aresta carrega um número, como minutos ou
+reais, o grafo é **ponderado** (com peso). As ciclovias valem nos dois
+sentidos e ainda não têm peso.
 
 No C, vértice é um **número de 0 a V-1**. O nome bonito fica num vetor à parte
 (`nomes[2]` é `"Feira"`). Para guardar as arestas existem duas representações

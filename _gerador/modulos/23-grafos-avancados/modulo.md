@@ -61,7 +61,10 @@ Este módulo usa sem cerimônia o módulo 16 inteiro: matriz de adjacência, BFS
 (0110), DFS (0111) e Dijkstra (0112). Também aparecem a fila (0085), o heap
 (0102), o `qsort` (0096), o union-find (0148), a recursão (0032), as
 permutações (0126) e a ideia de programação dinâmica (módulo 21). Se o
-Dijkstra estiver enferrujado, releia o 0112 antes do 0153.
+Dijkstra estiver enferrujado, releia o 0112 antes do 0153. Grau, trajeto,
+circuito, grafos eulerianos e hamiltonianos, pontes e vértices de
+articulação, que o edital do PPGI também cobra, estão nos assuntos 0182 a
+0184.
 
 Três convenções valem para o módulo todo:
 
@@ -231,9 +234,210 @@ fim é um contador de componentes de brinde, igual ao union-find do A300.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. As questões 1 e 2 usam o mesmo grafo **não dirigido**,
+com as arestas (peso):
+
+```text
+A-B 4   A-C 1   B-C 2   B-D 5   C-D 8
+C-E 10  D-E 2   D-F 6   E-F 3
+```
+
+**1.** Rodando o Kruskal nesse grafo, qual é a **primeira** aresta
+rejeitada e qual o peso total da árvore geradora mínima?
+
+- (A) C-D, total 13
+- (B) A-B, total 12
+- (C) D-F, total 14
+- (D) A-B, total 13
+- (E) B-D, total 13
+
+<details><summary>Gabarito</summary>
+
+**(D).** Em ordem: A-C 1, B-C 2, D-E 2 e E-F 3 entram; A-B 4 fecharia o
+ciclo A-C-B (A e B já estão no mesmo conjunto) e é a primeira rejeitada;
+B-D 5 entra e completa as V − 1 = 5 arestas. Total 1 + 2 + 2 + 3 + 5 = 13.
+B-D não pode ser rejeitada: é a única ligação barata entre {A, B, C} e
+{D, E, F}. Veja 0152.
+
+</details>
+
+**2.** No mesmo grafo, o Prim a partir de A acrescenta as arestas em que
+ordem?
+
+- (A) A-C, C-B, B-D, D-E, E-F
+- (B) A-C, B-C, D-E, E-F, B-D
+- (C) A-C, C-B, A-B, B-D, D-E
+- (D) A-B, B-C, B-D, D-E, E-F
+- (E) A-C, C-B, C-D, D-E, E-F
+
+<details><summary>Gabarito</summary>
+
+**(A).** O Prim mantém uma árvore só e sempre pega a aresta mais leve que
+sai dela: de {A}, A-C 1; de {A, C}, C-B 2; de {A, B, C}, a mais leve para
+fora é B-D 5 (C-D custa 8, C-E 10); depois D-E 2 e E-F 3. Mesmo total do
+Kruskal (13), outra ordem. A alternativa B é a ordem do **Kruskal**. Veja
+0153.
+
+</details>
+
+**3.** No grafo dirigido com as arestas A→B, A→C, B→D, C→D, D→E, C→F e
+F→E, qual sequência **não** é uma ordenação topológica?
+
+- (A) A, B, C, D, F, E
+- (B) A, C, F, B, D, E
+- (C) A, C, B, F, D, E
+- (D) A, C, B, D, F, E
+- (E) A, B, C, F, E, D
+
+<details><summary>Gabarito</summary>
+
+**(E).** A aresta D→E exige D antes de E, e em (E) o E vem antes do D. As
+outras respeitam todas as setas: a ordenação topológica raramente é única.
+No Cormen, ela sai da DFS em ordem decrescente do tempo de término; o Kahn
+dá outra ordem válida. Veja 0151.
+
+</details>
+
+**4.** O Bellman-Ford roda a partir de `s` no grafo dirigido com as arestas
+s→a (2), a→b (3), c→d (−3) e d→c (1). O que ele devolve?
+
+- (A) FALSO, porque há um ciclo de peso negativo (c, d, c).
+- (B) VERDADEIRO, com `a.d = 2`, `b.d = 5` e `c.d = d.d = ∞`.
+- (C) VERDADEIRO, com `c.d = −∞` e `d.d = −∞`.
+- (D) Ele não termina, porque as distâncias de c e d caem sem parar.
+- (E) FALSO, porque há uma aresta de peso negativo.
+
+<details><summary>Gabarito</summary>
+
+**(B).** O ciclo c→d→c pesa −2, mas não é **alcançável** a partir de `s`:
+`c.d` e `d.d` continuam ∞, nenhuma aresta melhora na rodada extra, e o
+algoritmo devolve VERDADEIRO. Ele termina sempre (são V − 1 rodadas fixas)
+e aceita pesos negativos; só devolve FALSO com ciclo negativo alcançável.
+Acrescente b→c (1) e a resposta vira FALSO. Veja 0154.
+
+</details>
+
+**5.** Sobre os algoritmos de caminhos mínimos, assinale a alternativa
+**correta**:
+
+- (A) O Dijkstra funciona com pesos negativos desde que não haja ciclo negativo.
+- (B) O Bellman-Ford custa O(V + E) com lista de adjacência.
+- (C) O Floyd-Warshall custa Θ(V³) de tempo e Θ(V²) de memória e aceita pesos negativos sem ciclo negativo.
+- (D) O Floyd-Warshall funciona com qualquer ordem dos três laços.
+- (E) Num DAG com pesos negativos, só o Bellman-Ford resolve.
+
+<details><summary>Gabarito</summary>
+
+**(C).** Três laços de V voltas e uma matriz V × V. O Dijkstra pode errar
+com qualquer peso negativo (o exemplo do motoboy no 0154); o Bellman-Ford é
+O(V · E); no Floyd-Warshall o `k` tem que ser o laço de fora; e num DAG
+basta relaxar as arestas na ordem topológica, em O(V + E). Veja 0154 e
+0155.
+
+</details>
+
+**6.** O Floyd-Warshall roda no grafo dirigido com os vértices 1 a 4 e as
+arestas 1→2 (3), 1→3 (8), 2→3 (2), 2→4 (7), 3→4 (1) e 4→1 (2). Seja
+`d14^(k)` a distância de 1 a 4 usando como passagem só os vértices 1..k.
+Quanto valem `d14^(2)` e `d14^(4)`?
+
+- (A) ∞ e 6
+- (B) 10 e 10
+- (C) 7 e 6
+- (D) 9 e 6
+- (E) 10 e 6
+
+<details><summary>Gabarito</summary>
+
+**(E).** Não há aresta 1→4, então `d14^(0) = d14^(1) = ∞`. Com o 2 liberado,
+1→2→4 = 3 + 7 = 10. Com o 3, 1→2→3→4 = 3 + 2 + 1 = 6, e liberar o 4 não
+melhora. Veja 0155.
+
+</details>
+
+**7.** Na DFS de um grafo dirigido com as cores branco, cinza e preto,
+encontrar uma aresta `(u, v)` com `v` **cinza** significa que:
+
+- (A) `v` já terminou e `(u, v)` é uma aresta de cruzamento.
+- (B) existe um ciclo: `v` é ancestral de `u` na árvore da DFS (aresta de retorno).
+- (C) `v` é descendente de `u`, e `(u, v)` é uma aresta de avanço.
+- (D) o grafo é desconexo.
+- (E) `v` nunca foi visto e a DFS vai descer por ele.
+
+<details><summary>Gabarito</summary>
+
+**(B).** Cinza é quem está na pilha da recursão, então `v` é ancestral de
+`u`, e o caminho de `v` até `u` mais a aresta `(u, v)` formam um ciclo. Seta
+para preto é avanço ou cruzamento (A, C) e não indica ciclo; para branco é
+aresta da árvore (E). Veja 0150.
+
+</details>
+
+**8.** Quantos componentes **fortemente conexos** tem o grafo dirigido com
+os vértices 1 a 8 e as arestas 1→2, 2→3, 3→1, 3→4, 4→5, 5→4, 5→6, 6→7,
+7→8 e 8→6?
+
+- (A) 1
+- (B) 2
+- (C) 4
+- (D) 3
+- (E) 8
+
+<details><summary>Gabarito</summary>
+
+**(D).** {1, 2, 3}, {4, 5} e {6, 7, 8}: dentro de cada grupo, todo mundo
+alcança todo mundo seguindo as setas. As setas 3→4 e 5→6 só vão para a
+frente, então os grupos não se fundem. Ignorando a direção, o grafo é um
+componente só (A), que é a conectividade **fraca**. Veja 0150.
+
+</details>
+
+**9.** Sobre árvores geradoras mínimas de um grafo conexo e não dirigido,
+assinale a alternativa **correta**:
+
+- (A) A MST é sempre única.
+- (B) A MST contém sempre a aresta de maior peso do grafo.
+- (C) O Kruskal e o Prim podem devolver totais diferentes no mesmo grafo.
+- (D) A aresta mais leve que cruza qualquer corte pode fazer parte de uma MST, e com todos os pesos distintos a MST é única.
+- (E) A MST dá o caminho mínimo entre quaisquer dois vértices.
+
+<details><summary>Gabarito</summary>
+
+**(D).** É a propriedade do corte (no Cormen, a aresta **leve** é
+**segura**). Com empates pode haver várias MSTs, mas o total é o mesmo
+(por isso C está errada). A aresta mais pesada de um ciclo, se for a única
+com aquele peso, nunca entra em MST nenhuma (B). E a MST não é árvore de caminhos mínimos: no 0153, a árvore do Dijkstra gasta
+21 m e a do Prim, 18 m. Veja 0152 e 0153.
+
+</details>
+
+**10.** Qual a complexidade do Kruskal (com union-find por posto e
+compressão de caminho) e do Prim com heap binário, num grafo com `V`
+vértices e `E` arestas?
+
+- (A) O(V²) e O(E²)
+- (B) O(E log V) e O(E log V)
+- (C) O(V · E) e O(V³)
+- (D) O(E) e O(V)
+- (E) O(E log E) e O(V²) obrigatoriamente
+
+<details><summary>Gabarito</summary>
+
+**(B).** O Kruskal é dominado pela ordenação, O(E log E) = O(E log V)
+porque E < V². O Prim faz até E operações no heap, cada uma O(log V). O
+Prim com vetor em vez de heap é que custa O(V²), bom para grafo denso (o
+A305); com um heap de Fibonacci, o Prim chega a O(E + V log V). Veja 0152 e
+0153.
+
+</details>
+
 ## Para ler mais
 
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 22 (busca em profundidade e ordenação topológica), cap. 23 (árvores geradoras mínimas), cap. 24 (caminhos mínimos de fonte única, Bellman-Ford) e cap. 25 (caminhos mínimos entre todos os pares, Floyd-Warshall).
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 20 (busca em profundidade, ordenação topológica e componentes fortemente conexos), cap. 21 (árvores geradoras mínimas: Kruskal e Prim), cap. 22 (caminhos mínimos de fonte única: Bellman-Ford, DAG e Dijkstra) e cap. 23 (caminhos mínimos entre todos os pares: Floyd-Warshall).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 7 (algoritmos em grafos: busca em profundidade e em largura, ordenação topológica, componentes fortemente conectados, árvore geradora mínima e caminhos mais curtos).
 - LINTZMAYER, C. N.; MOTA, G. O. *Análise de algoritmos e de estruturas de dados*. Santo André: UFABC; São Paulo: IME-USP, 2023. Rascunho. Capítulos sobre grafos, árvores geradoras mínimas e caminhos mínimos.
 - SZWARCFITER, J. L.; MARKENZON, L. *Estruturas de dados e seus algoritmos*. 3. ed. Rio de Janeiro: LTC, 2010. Seção sobre ordenação topológica.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 8: grafos e suas aplicações (fecho transitivo, Warshall, árvore geradora mínima, escalonamento por contagem).

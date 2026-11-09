@@ -97,7 +97,8 @@ A ordem é sempre a mesma: **pergunta**, roda o corpo, volta e **pergunta de
 novo**. Quando a resposta for falsa, o programa pula o corpo e segue na linha
 depois da `}`. Cada passada pelo corpo se chama **iteração** (ou volta).
 
-Como a pergunta vem **antes**, o corpo pode rodar **zero vezes**: se o saldo
+Como a pergunta vem **antes** (por isso o `while` é chamado de laço **com teste
+no início**, ou pré-teste), o corpo pode rodar **zero vezes**: se o saldo
 já começasse em R$ 1.200, o laço nem entraria. E vale a regra de
 sempre no C: a condição é um número, e qualquer valor
 diferente de zero conta como verdadeiro (assunto 0012).
@@ -479,7 +480,12 @@ do {
 ```
 
 A ordem: roda o corpo, testa a condição; se der verdadeiro, volta para o
-começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero.
+começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero. É o
+laço **com teste no fim** (pós-teste).
+
+Cuidado com o pseudocódigo da prova: o `repita ... até condição` também testa
+no fim, mas a condição dele é de **parar**. `repita ... até x > 10` vira
+`do { ... } while (!(x > 10));`, ou seja, `while (x <= 10)`.
 
 O lugar natural dele é onde a primeira volta é obrigatória:
 
@@ -3464,9 +3470,228 @@ sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Em questão de laço, faça o teste de mesa: uma linha por
+volta, com o valor de cada variável.
+
+**1.** Quantas vezes o corpo do laço executa, e quanto vale `i` no fim?
+
+```c
+int i = 10, cont = 0;
+while (i > 0) {
+    i -= 3;
+    cont++;
+}
+```
+
+- (A) 3 vezes; `i` vale 1
+- (B) 3 vezes; `i` vale 0
+- (C) 4 vezes; `i` vale 0
+- (D) 4 vezes; `i` vale -2
+- (E) 10 vezes; `i` vale 0
+
+<details><summary>Gabarito</summary>
+
+**(D).** `i` passa por 10, 7, 4 e 1, sempre positivo na pergunta: 4 voltas.
+Na última, 1 - 3 dá -2, e aí `i > 0` é falso. O `i` nunca vale 0. Veja 0020.
+
+</details>
+
+**2.** Qual a saída?
+
+```c
+int n = 5;
+do {
+    n++;
+} while (n < 3);
+printf("%d\n", n);
+```
+
+- (A) 6
+- (B) 5
+- (C) 3
+- (D) 2
+- (E) o laço nunca termina
+
+<details><summary>Gabarito</summary>
+
+**(A).** O `do...while` testa **no fim**: o corpo roda uma vez antes de
+qualquer pergunta, e `n` vira 6. Aí `6 < 3` é falso e o laço acaba. Com um
+`while` comum, a saída seria 5. Veja 0021.
+
+</details>
+
+**3.** Qual a saída?
+
+```c
+int j;
+for (j = 0; j < 5; j++);
+    printf("%d\n", j);
+```
+
+- (A) 0 1 2 3 4, um por linha
+- (B) 4
+- (C) 5
+- (D) 0 1 2 3 4 5, um por linha
+- (E) nada
+
+<details><summary>Gabarito</summary>
+
+**(C).** O `;` logo depois do `for` é um **corpo vazio**: o laço só conta de
+0 até 5 e acaba. O `printf`, apesar do recuo, está fora do laço e roda uma vez,
+com `j` valendo 5 (o valor que fez a condição falhar). Veja 0022.
+
+</details>
+
+**4.** Quantas vezes `c++` executa?
+
+```c
+int c = 0;
+for (int a = 0; a < 4; a++)
+    for (int b = a; b < 4; b++)
+        c++;
+```
+
+- (A) 16
+- (B) 4
+- (C) 6
+- (D) 8
+- (E) 10
+
+<details><summary>Gabarito</summary>
+
+**(E).** O laço de dentro começa em `a`: roda 4, 3, 2 e 1 vezes, para `a`
+igual a 0, 1, 2 e 3. A soma 4 + 3 + 2 + 1 é 10, ou `n (n + 1) / 2` com
+`n = 4`. O 16 seria com `b` começando sempre em 0. Veja 0024.
+
+</details>
+
+**5.** Qual o valor de `s` no fim?
+
+```c
+int s = 0;
+for (int k = 1; k <= 10; k++) {
+    if (k % 3 == 0) continue;
+    if (k > 7) break;
+    s += k;
+}
+```
+
+- (A) 55
+- (B) 19
+- (C) 28
+- (D) 12
+- (E) 37
+
+<details><summary>Gabarito</summary>
+
+**(B).** O `continue` pula os múltiplos de 3 (3 e 6) e vai para o `k++`. O
+`break` encerra o laço no `k = 8`. Somam 1 + 2 + 4 + 5 + 7 = 19. O 28 seria a
+soma de 1 a 7 sem o `continue`. Veja 0023.
+
+</details>
+
+**6.** Qual valor o pseudocódigo escreve?
+
+```text
+x ← 1
+repita
+    x ← x * 2
+até x > 20
+escreva x
+```
+
+- (A) 16
+- (B) 20
+- (C) 2
+- (D) 32
+- (E) 64
+
+<details><summary>Gabarito</summary>
+
+**(D).** `x` passa por 2, 4, 8, 16 e 32. O `repita ... até` testa no fim e
+**para** quando a condição fica verdadeira: só com 32 o `x > 20` vale. Em C,
+fica `do { x = x * 2; } while (!(x > 20));`. Veja 0021.
+
+</details>
+
+**7.** Qual a saída?
+
+```c
+int k = 0;
+while (k++ < 3)
+    printf("%d ", k);
+printf("| %d\n", k);
+```
+
+- (A) `1 2 3 | 4`
+- (B) `0 1 2 | 3`
+- (C) `1 2 3 | 3`
+- (D) `0 1 2 3 | 4`
+- (E) `1 2 | 3`
+
+<details><summary>Gabarito</summary>
+
+**(A).** O `k++` compara o valor **antigo** e só depois soma 1. As
+comparações são 0 < 3, 1 < 3 e 2 < 3 (verdade), e dentro do corpo o `k` já
+vale 1, 2 e 3. A quarta comparação, 3 < 3, é falsa, mas o `k++` roda mesmo
+assim: `k` termina em 4. Veja 0020 e 0009.
+
+</details>
+
+**8.** Quantas vezes o corpo do laço executa?
+
+```c
+for (unsigned u = 3; u >= 0; u--)
+    printf("%u\n", u);
+```
+
+- (A) 3
+- (B) 4
+- (C) 0
+- (D) 5
+- (E) infinitas vezes
+
+<details><summary>Gabarito</summary>
+
+**(E).** Um `unsigned` nunca é negativo, então `u >= 0` é **sempre**
+verdade. Depois do 0, `u--` dá a volta para o maior `unsigned` (4294967295
+com 32 bits) e o laço segue. O `-Wextra` avisa: `comparison of unsigned
+expression in '>= 0' is always true`. Veja 0022 e 0003.
+
+</details>
+
+**9.** Com `m = 0`, qual o valor de `t`?
+
+```c
+int m = 0, t = 0, w = 1;
+do {
+    t += w;
+    w++;
+} while (w <= m);
+```
+
+- (A) 0
+- (B) 2
+- (C) 1
+- (D) o laço nunca termina
+- (E) o valor é indefinido
+
+<details><summary>Gabarito</summary>
+
+**(C).** A ideia era somar de 1 até `m`, mas o `do...while` roda o corpo uma
+vez antes de testar: `t` recebe 1 mesmo com `m = 0`. Por isso acumulador com
+`do...while` pede cuidado com o caso de zero voltas; com `while` (ou `for`),
+`t` ficaria 0. Veja 0021 e 0025.
+
+</details>
+
 ## Para ler mais
 
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 3 e 4: estruturas de repetição; cap. 5: geração de números aleatórios e o jogo de craps.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulo de controle de fluxo: `while`, `do-while`, `for`, `break` e `continue`.
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Cap. 5: comandos de repetição.
 - BACKES, A. R. *Linguagem C: descomplicada*. Apostila. Uberlândia: FACOM/UFU. Cap. 5.
 - HARA, C.; ZOLA, W. *Linguagem C: notas de aula*. Curitiba: UFPR, 2008.

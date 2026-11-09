@@ -11,7 +11,12 @@ procura outra posição livre na tabela, seguindo uma sequência fixa de
 tentativas. Cada tentativa é uma **sondagem**.
 
 A sequência mais simples é a **sondagem linear**: começa em `h = chave % m` e
-anda uma casa por vez, dando a volta no fim: `i = (i + 1) % m`.
+anda uma casa por vez, dando a volta no fim: `i = (i + 1) % m`. O Cormen
+escreve a sequência como uma função da chave e da tentativa `i` (a partir de
+0): `h(k, i) = (h'(k) + i) mod m`. Trocando o passo, saem as outras duas do
+edital: a **sondagem quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
+**dispersão dupla** (*double hashing*), `(h₁(k) + i · h₂(k)) mod m`, que o
+assunto 0179 aprofunda.
 
 - **inserir**: sonda a partir de `h` até achar uma posição livre;
 - **buscar**: sonda a partir de `h` até achar a chave (achou) ou uma posição
@@ -22,7 +27,9 @@ Como tudo cabe no vetor, a tabela **enche**: `α = n / m` nunca passa de 1. E
 fica lenta bem antes disso. Na sondagem linear, as ocupadas formam blocos
 seguidos, e qualquer chave que cai num bloco vai parar no fim dele, deixando o
 bloco ainda maior. Isso é o **agrupamento primário**. Com α = 0,5 uma busca
-sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. A regra
+sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com
+hashing uniforme, sem agrupamento, o Cormen limita essa busca a 1/(1 − α)
+sondagens: 2 e 10.) A regra
 prática: não passe de 70% a 75% de ocupação. Passou, crie uma tabela maior e
 reinsira tudo (o exemplo A213 lota uma tabela
 de 7 vagas e mostra as sondagens crescendo).
@@ -128,7 +135,7 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 > vaga 5 volta a ser `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e
 > conclui "não está", embora ele esteja na 6. A vaga livre corta o caminho de
 > quem tinha pulado por ela. A solução é uma terceira marca, **removida**
-> (lápide, *tombstone*): a busca passa reto por ela, e a inserção pode
+> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto por ela, e a inserção pode
 > reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
 > lápides acumulam e as buscas sem sucesso ficam longas, até você reconstruir
 > a tabela.

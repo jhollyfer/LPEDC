@@ -32,7 +32,9 @@ Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
 
 A resposta fica em `c[m][n]`. Para recuperar as letras, anda-se do canto de
 volta até a borda: onde as letras batem, a letra entra e o caminho vai na
-diagonal; onde não batem, ele vai para o vizinho de onde o valor veio.
+diagonal; onde não batem, ele vai para o vizinho de onde o valor veio. O
+Cormen guarda esse "de onde veio" numa segunda tabela, `b`, com setas ↖, ↑ e
+←; aqui a seta é refeita na volta, comparando as letras e os vizinhos.
 
 Vamos ver na prática. Cada linha é uma letra de MORANGO e cada coluna uma de
 MANGA. O caminho de volta sai do canto roxo; as células verdes são as quatro

@@ -37,7 +37,17 @@ Por isso a DFS usa **três cores**:
 
 Achar uma seta para um vértice **cinza** é achar um ciclo. Seta para preto é
 só um atalho para algo já resolvido. E o vetor `pai[]` reconstrói o ciclo:
-basta subir de pai em pai até o vértice cinza.
+basta subir de pai em pai até o vértice cinza. O Cormen usa as mesmas três
+cores e chama a seta para um cinza de **aresta de retorno** (*back edge*): um
+grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
+
+> [!NOTE]
+> Num grafo **dirigido**, "conexo ignorando a direção" é ser **fracamente
+> conexo**. O Cormen também cobra os **componentes fortemente conexos**:
+> grupos em que cada um alcança cada outro **seguindo** as setas (o ciclo
+> Juros, Saldo, Parcela é um deles). Eles saem com duas DFS, a segunda no
+> grafo com as setas invertidas, em O(V + E). Pontes e vértices de
+> articulação, a conectividade "frágil", ficam para o assunto 0184.
 
 Vamos ver na prática. Os números mostram a ordem em que a DFS descobre cada
 célula. No momento do desenho, o grupo da obra já está todo preto (verde) e a

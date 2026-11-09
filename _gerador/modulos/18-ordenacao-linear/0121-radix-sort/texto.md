@@ -28,7 +28,10 @@ guarda o trabalho das passadas anteriores.
 
 O custo é de `d` passadas de counting sort, com `d` dígitos e base `b`:
 **O(d · (n + b))**. Para números de tamanho fixo, `d` é constante e o radix
-sort é linear. De novo, nenhuma comparação entre elementos.
+sort é linear. De novo, nenhuma comparação entre elementos. O Cormen
+escreve Θ(d(n + k)), com k valores por dígito, e para chaves de `b` bits
+quebradas em dígitos de `r` bits, Θ((b/r)(n + 2^r)): a melhor escolha fica
+perto de r = log₂ n.
 
 Vamos ver na prática. Oito números de pedido de um mercado online, com até
 três dígitos (escritos com zeros à esquerda para os dígitos ficarem

@@ -28,7 +28,11 @@ Uma boa função hash tem três qualidades:
 - **rápida**: custa pouco calcular, senão perde a graça do O(1);
 - **espalha bem**: chaves diferentes caem em baldes diferentes, sem amontoar.
 
-Para inteiros, a função clássica é o resto: `k % m`. Para texto, o jeito mais
+Para inteiros, a função clássica é o resto, o **método da divisão**:
+`h(k) = k mod m`, em C `k % m`. O Cormen recomenda um `m` primo e longe de
+uma potência de 2: com `m = 2^p`, o resto são só os `p` bits de baixo da
+chave, e o resto dela é ignorado. A outra receita do edital, o **método da
+multiplicação**, fica para o assunto 0178. Para texto, o jeito mais
 simples é somar os códigos das letras e tirar o resto. Só que existem mais
 chaves possíveis do que baldes, então duas chaves diferentes **vão** cair no
 mesmo balde um dia. Isso é uma **colisão**. Não dá para evitar, só deixar

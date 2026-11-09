@@ -235,12 +235,245 @@ matrizes revezam.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Nas de vetor, desenhe as gavetas com os índices embaixo;
+nas de string, não esqueça a gaveta do `'\0'`.
+
+**1.** Numa máquina de 64 bits (ponteiro de 8 bytes, `int` de 4), o que
+`tam(v)` mostra quando `v` é um `int v[10]`?
+
+```c
+void tam(int v[]) {
+    printf("%zu\n", sizeof(v) / sizeof(v[0]));
+}
+```
+
+- (A) 10
+- (B) 40
+- (C) 2
+- (D) 1
+- (E) 8
+
+<details><summary>Gabarito</summary>
+
+**(C).** Um vetor passado para função chega como o **endereço** do primeiro
+item. Dentro de `tam`, `v` é um `int *`: `sizeof(v)` é 8, e 8 / 4 = 2. A
+conta `sizeof(v) / sizeof(v[0])` só funciona no bloco onde o vetor foi
+declarado; por isso o tamanho vai como parâmetro. O gcc avisa
+(`-Wsizeof-array-argument`). Veja 0038.
+
+</details>
+
+**2.** Qual a saída?
+
+```c
+void zera(int v[], int n) {
+    for (int i = 0; i < n; i++)
+        v[i] = 0;
+}
+
+int main(void) {
+    int a[3] = {1, 2, 3};
+    zera(a, 2);
+    printf("%d %d %d\n", a[0], a[1], a[2]);
+    return 0;
+}
+```
+
+- (A) 0 0 3
+- (B) 1 2 3
+- (C) 0 0 0
+- (D) 1 0 0
+- (E) 0 2 3
+
+<details><summary>Gabarito</summary>
+
+**(A).** A passagem continua sendo por valor, mas o valor copiado é o
+**endereço** do vetor. A função escreve nas gavetas originais. Com `n = 2`,
+só `a[0]` e `a[1]` viram 0. Veja 0038.
+
+</details>
+
+**3.** Qual a saída?
+
+```c
+char s[20] = "Manaus";
+printf("%zu %zu\n", strlen(s), sizeof(s));
+```
+
+- (A) 6 6
+- (B) 7 20
+- (C) 6 7
+- (D) 6 20
+- (E) 20 20
+
+<details><summary>Gabarito</summary>
+
+**(D).** `strlen` conta os caracteres **antes** do `'\0'`: 6. `sizeof` mede
+o vetor inteiro, 20 bytes, usados ou não. O 7 seria `sizeof` de
+`char s[] = "Manaus"`, em que o compilador conta o `'\0'`. Veja 0041.
+
+</details>
+
+**4.** Em `int m[3][4];`, quantos `int` ficam na memória **antes** de
+`m[2][1]`?
+
+- (A) 6
+- (B) 9
+- (C) 5
+- (D) 3
+- (E) 8
+
+<details><summary>Gabarito</summary>
+
+**(B).** O C guarda a matriz linha após linha (*row-major*). Antes da linha
+2 vêm 2 linhas de 4, e dentro dela vem 1 item: `2 * 4 + 1 = 9`. O 5 seria a
+conta por colunas (`1 * 3 + 2`), que não é a do C. Veja 0039.
+
+</details>
+
+**5.** Depois de `int w[5] = {3, 1};`, quanto vale a soma dos 5 itens?
+
+- (A) lixo, porque três itens não foram inicializados
+- (B) 3
+- (C) 15
+- (D) 8
+- (E) 4
+
+<details><summary>Gabarito</summary>
+
+**(E).** Com inicializador, o que falta vira **zero**: o vetor é
+`{3, 1, 0, 0, 0}`. Lixo só aparece num vetor local declarado **sem** nenhum
+inicializador. Veja 0037.
+
+</details>
+
+**6.** Qual a saída?
+
+```c
+char t[10] = "ufam\0pg";
+int i = 0;
+while (t[i])
+    i++;
+printf("%d\n", i);
+```
+
+- (A) 7
+- (B) 10
+- (C) 4
+- (D) 6
+- (E) 8
+
+<details><summary>Gabarito</summary>
+
+**(C).** O laço para no primeiro byte zero, e o `\0` escrito no meio do
+texto é um zero de verdade, na posição 4. Para qualquer função de string, o
+`t` é só `"ufam"`; o `pg` continua na memória, mas ninguém enxerga. Veja 0041.
+
+</details>
+
+**7.** Qual a saída?
+
+```c
+char x[] = "PPGI", y[] = "PPGI";
+printf("%d %d\n", x == y, strcmp(x, y) == 0);
+```
+
+- (A) 1 1
+- (B) 0 1
+- (C) 1 0
+- (D) 0 0
+- (E) não compila: vetores não se comparam com `==`
+
+<details><summary>Gabarito</summary>
+
+**(B).** `x == y` compara os **endereços** dos dois vetores, que são
+diferentes: 0. Quem compara o conteúdo, letra por letra, é o `strcmp`, que
+devolve 0 quando são iguais. Compila, com o aviso
+`comparison between two arrays`. Veja 0041.
+
+</details>
+
+**8.** Sobre o trecho abaixo, é correto afirmar:
+
+```c
+int v[5] = {1, 2, 3, 4, 5};
+int s = 0;
+for (int i = 0; i <= 5; i++)
+    s += v[i];
+```
+
+- (A) `s` termina em 15, porque o C ignora índices fora do vetor.
+- (B) `s` termina em 15, porque `v[5]` vale sempre 0.
+- (C) o compilador rejeita o código, porque o laço passa do fim do vetor.
+- (D) a última volta lê `v[5]`, que não existe: é comportamento indefinido.
+- (E) o laço roda 5 vezes, de `v[0]` a `v[4]`.
+
+<details><summary>Gabarito</summary>
+
+**(D).** Num vetor de 5, os índices vão de 0 a 4. O `<=` faz uma sexta
+volta, com `i = 5`, que lê o que estiver depois do vetor. O C **não confere**
+índices: compila sem erro e o resultado pode ser qualquer coisa. O detector
+do `rodar` acusa `index 5 out of bounds`. Veja 0037.
+
+</details>
+
+**9.** Qual o valor de `s`?
+
+```c
+#define N 3
+int m[N][N] = {{2, 0, 1}, {3, 5, 4}, {6, 7, 8}};
+int s = 0;
+for (int k = 0; k < N; k++)
+    s += m[k][N - 1 - k];
+```
+
+- (A) 12
+- (B) 15
+- (C) 13
+- (D) 36
+- (E) 9
+
+<details><summary>Gabarito</summary>
+
+**(A).** `m[k][N - 1 - k]` percorre a **diagonal secundária**: `m[0][2]`,
+`m[1][1]` e `m[2][0]`, ou 1 + 5 + 6 = 12. O 15 é a diagonal principal
+(`m[k][k]`: 2 + 5 + 8); o 36, a matriz inteira. Veja 0039.
+
+</details>
+
+**10.** A pessoa digita `Manaus` e aperta Enter. O que o trecho mostra?
+
+```c
+char lin[10];
+if (fgets(lin, sizeof lin, stdin) != NULL)
+    printf("%zu\n", strlen(lin));
+```
+
+- (A) 6
+- (B) 10
+- (C) 8
+- (D) 9
+- (E) 7
+
+<details><summary>Gabarito</summary>
+
+**(E).** O `fgets` guarda a linha **com** o `'\n'` do Enter, quando cabe:
+`lin` fica `"Manaus\n"`, 7 caracteres antes do `'\0'`. Por isso o costume de
+tirar o `'\n'` com `lin[strcspn(lin, "\n")] = '\0';`. Veja 0042.
+
+</details>
+
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Caps. 6 (vetores e matrizes), 7 (strings) e 9 (passagem de vetores para funções).
 - BACKES, A. *Linguagem C: apostila*. Uberlândia: UFU, [s.d.]. Seções de vetores, matrizes e strings.
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson, 2011. Caps. 6 (arrays) e 8 (caracteres e strings).
 - DEITEL, P.; DEITEL, H. *C: how to program*. 7. ed. Boston: Pearson, 2013. Caps. 6 e 8.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulos de vetores, matrizes e cadeias de caracteres.
+- TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 1: vetores e strings em C.
 - ANTONELLO, R. *Linguagem C*. 1. ed. Disponível em: <http://www.antonello.com.br>. Cap. 8.
 - LEAL, G. C. L. *Algoritmos e lógica de programação II*. Maringá: Unicesumar, 2016. Unidades de vetores, matrizes e strings.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Caps. 1.6, 1.9 e 5.

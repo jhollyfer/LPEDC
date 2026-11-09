@@ -5,10 +5,10 @@ Pix novo entra na frente, e ninguém precisa empurrar os antigos para baixo.
 No vetor do assunto anterior, inserir na posição 0 faria todos andarem uma
 casa. Existe um jeito em que ninguém anda.
 
-Uma **lista encadeada** guarda cada item num pedaço separado de memória, o
-**nó**. Além do valor, cada nó guarda o endereço do próximo. O último aponta
+Uma **lista encadeada** (no Cormen, **lista ligada**) guarda cada item num
+pedaço separado de memória, o **nó**. Além do valor, cada nó guarda o endereço do próximo. O último aponta
 para `NULL`. Para usar a lista, você só precisa do endereço do primeiro nó, o
-**início**. Lista vazia é `inicio == NULL`.
+**início** (o `L.head` do Cormen). Lista vazia é `inicio == NULL`.
 
 O nó é uma struct que aponta para o próprio tipo, uma **struct
 autorreferenciada**:
@@ -37,6 +37,10 @@ Três operações formam a base, e todas estão no `lista.c` desta pasta:
 - **percorrer**: `for (p = inicio; p != NULL; p = p->prox)`. É o "for de
   lista", e você vai escrever ele mil vezes.
 - **liberar**: um `free` por nó, guardando o próximo **antes** do `free`.
+
+Inserir no **fim** é outra conversa: guardando só o início, é preciso andar
+até o último nó, O(n). Com um ponteiro a mais para o último, vira O(1) (o
+0079 e o 0086 fazem assim).
 
 ```c
 No *lista_insere_inicio(No *inicio, int valor) {

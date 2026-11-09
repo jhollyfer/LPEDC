@@ -24,6 +24,10 @@ ignorada neste TAD.
 
 E o bônus: a **em ordem** de uma BST sai em ordem crescente. Esquerda (todos
 menores), raiz, direita (todos maiores). Você ganha uma ordenação de graça.
+O nó que vem logo depois de outro na em ordem é o **sucessor** dele; o que
+vem logo antes, o **antecessor**. O menor de todos é o nó mais à esquerda, e
+o maior, o mais à direita (o assunto 0175 acha sucessor e antecessor sem
+percorrer a árvore toda).
 
 O custo da busca é o número de níveis que ela desce: no máximo a **altura** + 1
 comparações. Numa árvore cheinha, cada nível dobra o número de nós, e a altura

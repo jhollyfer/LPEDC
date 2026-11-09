@@ -240,8 +240,243 @@ pós-fixas ficam `A B C * +` e `A B + C *`.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado. Desenhe a pilha ou a fila
+a cada operação antes de escolher a alternativa.
+
+**1.** Numa pilha inicialmente vazia são feitas, nesta ordem: PUSH(4),
+PUSH(7), POP, PUSH(2), PUSH(9), POP, POP, PUSH(5). Quais valores saem, na
+ordem, e qual fica no topo?
+
+- (A) saem 4, 2, 9; topo 5
+- (B) saem 7, 9, 2; topo 5
+- (C) saem 7, 2, 9; topo 5
+- (D) saem 7, 9, 2; topo 4
+- (E) saem 4, 7, 2; topo 9
+
+<details><summary>Gabarito</summary>
+
+**B.** O primeiro POP tira o 7. Depois a pilha é `4 2 9` (topo à direita): sai
+o 9 e depois o 2. Entra o 5 sobre o 4, e a pilha termina `4 5`. Veja 0082.
+
+</details>
+
+**2.** Os números 1, 2, 3, 4, 5 são empilhados **nesta ordem**, mas
+desempilhamentos podem acontecer a qualquer momento entre um empilhamento e
+outro. Cada número desempilhado é impresso. Qual sequência **não** pode ser
+impressa?
+
+- (A) `1 2 3 4 5`
+- (B) `3 2 1 5 4`
+- (C) `2 4 3 5 1`
+- (D) `4 3 5 1 2`
+- (E) `5 4 3 2 1`
+
+<details><summary>Gabarito</summary>
+
+**D.** Para sair o 4 primeiro, entram 1, 2, 3, 4; saem 4 e 3; entra e sai o 5.
+Sobram 1 e 2 na pilha, com o **2 no topo**: o 1 não pode sair antes dele. As
+outras são possíveis (a (A) desempilha logo depois de cada empilhamento). Veja
+0082.
+
+</details>
+
+**3.** Uma fila circular usa um vetor de 8 posições (0 a 7) com os índices
+`head` (o primeiro da fila) e `tail` (a próxima vaga), como no Cormen: fila
+vazia é `head == tail` e, para cheia e vazia não se confundirem, uma posição
+fica sempre livre. Começando com `head = tail = 0`, são feitos 6 ENQUEUE, 4
+DEQUEUE e mais 5 ENQUEUE. Qual é o estado final?
+
+- (A) `head = 4`, `tail = 11`, com 7 elementos
+- (B) `head = 4`, `tail = 3`, com 6 elementos
+- (C) `head = 0`, `tail = 7`, com 7 elementos
+- (D) `head = 4`, `tail = 2`, e o último ENQUEUE dá *overflow*
+- (E) `head = 4`, `tail = 3`, com 7 elementos, e a fila está cheia
+
+<details><summary>Gabarito</summary>
+
+**E.** Depois dos 6 ENQUEUE, `tail = 6`; os 4 DEQUEUE levam `head` a 4. Os 5
+ENQUEUE usam as posições 6, 7, 0, 1 e 2, e `tail` dá a volta até
+`(6 + 5) % 8 = 3`. São 7 elementos, o máximo dessa convenção:
+`(tail + 1) % 8 == head`. O Cormen indexa o vetor de 1 a n, mas a conta é a
+mesma. Veja 0085 (o aviso sobre sacrificar uma gaveta).
+
+</details>
+
+**4.** Qual é o valor da expressão pós-fixa `8 2 5 * + 1 3 2 * + 4 - /`?
+
+- (A) 6
+- (B) 18
+- (C) 2
+- (D) 3
+- (E) 9
+
+<details><summary>Gabarito</summary>
+
+**A.** Com a pilha: `2 5 *` dá 10, `8 10 +` dá 18; depois `3 2 *` dá 6,
+`1 6 +` dá 7, `7 4 -` dá 3; por fim `18 3 /` dá 6. Na infixa:
+`(8 + 2 * 5) / (1 + 3 * 2 - 4)`. Veja 0084.
+
+</details>
+
+**5.** Convertendo a expressão infixa `A * (B + C) - D / E` para a notação
+pós-fixa, o resultado é:
+
+- (A) `A B * C + D E / -`
+- (B) `A B C + D E / * -`
+- (C) `A B C + * D E / -`
+- (D) `* A + B C - / D E`
+- (E) `A B C * + D E - /`
+
+<details><summary>Gabarito</summary>
+
+**C.** O parêntese obriga `B + C` antes do `*`: `A B C + *`. Depois, `D / E`
+vira `D E /`, e o `-` de menor precedência fica por último. A (D) é a forma
+prefixa (com a ordem errada). Veja 0084 e 0088.
+
+</details>
+
+**6.** Num deque inicialmente vazio são feitas: `insere_fim(1)`,
+`insere_fim(2)`, `insere_inicio(3)`, `insere_inicio(4)`, `retira_fim()`,
+`insere_fim(5)`, `retira_inicio()`. Qual é o conteúdo final, do início para o
+fim?
+
+- (A) `4 3 1`
+- (B) `3 1 5`
+- (C) `1 2 5`
+- (D) `3 1 2 5`
+- (E) `5 1 3`
+
+<details><summary>Gabarito</summary>
+
+**B.** Depois das quatro inserções: `4 3 1 2`. Sai o 2 (fim), entra o 5 no
+fim (`4 3 1 5`) e sai o 4 (início). Veja 0087.
+
+</details>
+
+**7.** Uma fila é implementada com duas pilhas, E e S. ENQUEUE empilha em E.
+DEQUEUE, se S estiver vazia, desempilha **todos** os itens de E empilhando-os
+em S, e então desempilha de S. Sobre o custo, é correto afirmar:
+
+- (A) todo DEQUEUE custa O(1) no pior caso.
+- (B) todo DEQUEUE custa Θ(n).
+- (C) todo ENQUEUE custa Θ(n).
+- (D) uma sequência de n operações pode custar Θ(n²).
+- (E) um DEQUEUE isolado pode custar Θ(n), mas n operações custam O(n) no total: O(1) amortizado.
+
+<details><summary>Gabarito</summary>
+
+**E.** Cada item é empilhado e desempilhado no máximo duas vezes (uma em E e
+uma em S), então o total de n operações é O(n), embora o DEQUEUE que faz o
+despejo custe proporcional ao que estava em E. Veja o exercício E525 (0088) e o
+custo amortizado do 0075.
+
+</details>
+
+**8.** Qual implementação de **fila de prioridade** com n elementos faz
+inserção e remoção do máximo em O(log n) **no pior caso**?
+
+- (A) heap binário
+- (B) vetor ordenado
+- (C) lista encadeada não ordenada
+- (D) fila circular em vetor
+- (E) árvore binária de busca sem balanceamento
+
+<details><summary>Gabarito</summary>
+
+**A.** O heap sobe ou desce por um único caminho de altura ⌊log₂ n⌋. No vetor
+ordenado, inserir custa O(n); na lista não ordenada, achar o máximo custa
+O(n); a fila circular é FIFO, não por prioridade; a BST degenera em O(n). Veja
+0102.
+
+</details>
+
+**9.** O que o trecho imprime?
+
+```c
+int p[10], topo = -1;
+for (int i = 1; i <= 5; i++) {
+    p[++topo] = i * i;
+    if (i % 2 == 0) {
+        topo--;
+    }
+}
+printf("%d %d\n", topo, p[topo]);
+```
+
+- (A) `4 25`
+- (B) `2 16`
+- (C) `2 25`
+- (D) `1 9`
+- (E) `3 25`
+
+<details><summary>Gabarito</summary>
+
+**C.** Aqui `topo` é o índice do topo (pilha vazia é `-1`). Os pares
+empilham e logo desempilham: o 4 sai, o 16 sai. Ficam 1, 9 e 25 nas posições
+0, 1 e 2, com `topo = 2`. Repare que o 16 foi escrito em `p[2]` e depois o 25
+escreveu por cima. Veja 0082 (as duas convenções de topo).
+
+</details>
+
+**10.** O que o programa imprime?
+
+```c
+#include <stdio.h>
+#define N 5
+
+int q[N], ini = 0, fim = 0;
+
+void enfileira(int x) {
+    if ((fim + 1) % N == ini) {
+        printf("cheia ");
+        return;
+    }
+    q[fim] = x;
+    fim = (fim + 1) % N;
+}
+
+int desenfileira(void) {
+    int x = q[ini];
+    ini = (ini + 1) % N;
+    return x;
+}
+
+int main(void) {
+    for (int i = 1; i <= 5; i++) {
+        enfileira(i * 10);
+    }
+    desenfileira();
+    desenfileira();
+    enfileira(60);
+    enfileira(70);
+    enfileira(80);
+    printf("%d %d\n", ini, fim);
+    return 0;
+}
+```
+
+- (A) `2 1`
+- (B) `cheia 2 0`
+- (C) `cheia 0 2`
+- (D) `cheia cheia 2 1`
+- (E) `cheia cheia 1 2`
+
+<details><summary>Gabarito</summary>
+
+**D.** Com uma posição sacrificada, cabem 4 em 5: o 50 é recusado. Saem 10 e
+20 (`ini = 2`). O 60 vai para `q[4]` e `fim` dá a volta para 0; o 70 vai para
+`q[0]` e `fim = 1`. O 80 encontra `(1 + 1) % 5 == 2 == ini`: cheia de novo.
+Veja 0085.
+
+</details>
+
 ## Para ler mais
 
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 10: estruturas de dados elementares (pilhas e filas).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 3: estruturas de dados básicas (pilhas e filas).
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, Departamento de Informática, 2002. Pilhas e filas.
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Capítulos de pilhas e filas. Disponível em: <https://www.ime.usp.br/~pf/algoritmos/>.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 2 (pilha) e cap. 4 (filas e listas).

@@ -15,7 +15,9 @@ O algoritmo tem duas fases:
 1. **Construir o heap** dentro do próprio vetor. Dá para inserir um por um (cada
    inserção sobe), mas existe um jeito melhor: as folhas já são heaps de um
    elemento só, então basta fazer cada **pai** descer, do último pai
-   (`n / 2 - 1`) até a raiz. Essa construção custa só O(n).
+   (`n / 2 - 1`) até a raiz. Essa construção custa só O(n). É a
+   `BUILD-MAX-HEAP` do Cormen, que, com o vetor começando em 1, vai de
+   `⌊n/2⌋` até 1.
 2. **Ordenar**: troque a raiz (o máximo) com o último elemento do heap. O máximo
    está no lugar definitivo. Diminua o heap em uma casa e faça a nova raiz
    descer. Repita até o heap ter um elemento só.

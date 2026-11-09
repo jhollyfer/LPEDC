@@ -6,7 +6,10 @@ mexeu numa **cópia**.
 
 Em C, toda chamada de função funciona assim. Quando você escreve
 `reajustar(mensalidade, 10)`, o C **calcula o valor** de cada argumento e
-**copia** esse valor para o parâmetro. Isso se chama **passagem por valor**. O
+**copia** esse valor para o parâmetro. O parâmetro da definição é o
+**parâmetro formal**; o valor da chamada é o **argumento** (ou parâmetro
+real). Isso se chama **passagem por valor**, e é a única do C: a passagem
+**por referência** dos livros se faz passando um endereço (assunto 0046). O
 parâmetro é uma variável nova, local da função, que nasce já com a cópia. A
 função pode mudar o parâmetro à vontade: a variável de quem chamou nem fica
 sabendo.

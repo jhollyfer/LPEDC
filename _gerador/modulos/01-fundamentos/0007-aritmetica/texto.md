@@ -5,7 +5,9 @@ quantas cada um come, e quantas sobram para a disputa no par ou ímpar? E a
 conta de R$ 159, quanto cada um paga? Essa é a parte do **processamento**:
 pegar o que entrou e calcular o que vai sair.
 
-Os operadores aritméticos do C são cinco:
+Em `24 / 5`, o `/` é o **operador** e o 24 e o 5 são os **operandos**.
+Operadores, operandos e parênteses formam uma **expressão**, e toda expressão
+tem um valor. Os operadores aritméticos do C são cinco:
 
 | Operador | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -27,7 +29,8 @@ que separa dígitos (`2026 % 10` é 6), converte segundos em minutos e diz se um
 número é par (`n % 2` é 0).
 
 A **precedência** é a da matemática da escola: `*`, `/` e `%` antes de `+` e
-`-`. Empate se resolve da esquerda para a direita: `100 / 10 / 2` é
+`-`. Empate se resolve da esquerda para a direita (essa regra de desempate é a
+**associatividade**): `100 / 10 / 2` é
 `(100 / 10) / 2`, que dá 5. Parênteses mandam em tudo, e sobrar parêntese não
 é defeito: deixa a intenção clara. O C não tem operador de potência; `^` é
 outra coisa (assunto 0065). Para potência, use `pow` (assunto 0010) ou

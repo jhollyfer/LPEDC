@@ -20,9 +20,13 @@ está em **juntar**. Aqui, o trabalho está em **dividir**, e juntar é de graç
 depois das chamadas recursivas, não há nada a fazer. E não precisa de
 rascunho: tudo acontece com trocas no próprio vetor.
 
-A separação usada aqui (chamada de **Lomuto**) anda com `k` pelo pedaço e
+A separação usada aqui (chamada de **Lomuto**, a `PARTITION` do Cormen) anda
+com `k` pelo pedaço e
 mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou alguém
 `<=` pivô? Troca com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`.
+A outra separação clássica, a de **Hoare** (a do Ziviani e do Tenenbaum),
+anda com dois índices vindos das pontas, que trocam os fora do lugar até se
+cruzarem.
 
 O custo depende do pivô. Se ele cai perto do meio, o vetor é cortado em
 metades, como no merge sort: **O(n log n)**. Se ele é sempre o menor ou o

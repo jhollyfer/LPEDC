@@ -20,8 +20,9 @@ passo a mais na frente: calcular o balde.
 - **remover**: calcula `i` e faz a remoção de lista, guardando o anterior.
 
 Quanto custa? Com uma função hash que espalha bem, cada lista tem, em média,
-`α = n / m` nós (o fator de carga). Buscar custa O(1 + α): o cálculo do hash
-mais uma lista curta. Se `m` cresce junto com `n`, α fica constante e a busca
+`α = n / m` nós (o fator de carga). Buscar custa Θ(1 + α) em média (o
+teorema do Cormen, supondo hashing uniforme): o cálculo do hash mais uma
+lista curta. Se `m` cresce junto com `n`, α fica constante e a busca
 fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
 só, a tabela vira uma lista única e a busca volta a ser O(n).
 

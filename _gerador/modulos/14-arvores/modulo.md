@@ -332,16 +332,208 @@ E611 em escala.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado. Desenhe a árvore no papel
+a cada passo. As medidas seguem o Cormen: altura e profundidade contadas em
+**arestas**, raiz com profundidade (nível) 0.
+
+As questões 1, 2, 3 e 9 usam a BST montada inserindo, nesta ordem, as chaves
+`45 20 60 10 30 50 70 25 35` numa árvore vazia.
+
+**1.** Qual é o percurso em **pós-ordem** dessa BST?
+
+- (A) `10 20 25 30 35 45 50 60 70`
+- (B) `10 25 35 30 20 50 70 60 45`
+- (C) `45 20 10 30 25 35 60 50 70`
+- (D) `10 25 30 35 20 50 60 70 45`
+- (E) `25 35 10 30 50 70 20 60 45`
+
+<details><summary>Gabarito</summary>
+
+**B.** A árvore tem 45 na raiz; 20 (filhos 10 e 30, e o 30 com 25 e 35) à
+esquerda; 60 (filhos 50 e 70) à direita. Pós-ordem é esquerda, direita, raiz.
+A (A) é a em ordem (crescente, como em toda BST) e a (C), a pré-ordem. Veja
+0098 e 0099.
+
+</details>
+
+**2.** Sobre a mesma BST, qual afirmação é correta?
+
+- (A) A altura da árvore é 4.
+- (B) A árvore tem 4 folhas.
+- (C) O 60 está no nível 2.
+- (D) O fator de balanceamento da raiz, `altura(esq) - altura(dir)`, é 0.
+- (E) A altura da árvore é 3, a profundidade do 25 é 3 e o grau do 20 é 2.
+
+<details><summary>Gabarito</summary>
+
+**E.** O caminho mais longo é 45, 20, 30, 25: 3 arestas. A (A) conta nós em
+vez de arestas (convenção de outros livros). Folhas são 10, 25, 35, 50 e 70:
+cinco. O 60 é filho da raiz: nível 1. A subárvore esquerda tem altura 2 e a
+direita, 1: fator +1. Veja 0097, 0101 e o assunto 0175, que aprofunda nível,
+grau e fator de balanceamento.
+
+</details>
+
+**3.** Remove-se a raiz 45 da mesma BST com o algoritmo do Cormen, que
+coloca o **sucessor** no lugar de um nó com dois filhos. Qual é a pré-ordem
+depois da remoção?
+
+- (A) `50 20 10 30 25 35 60 70`
+- (B) `35 20 10 30 25 60 50 70`
+- (C) `60 20 10 30 25 35 50 70`
+- (D) `50 20 10 30 25 35 70 60`
+- (E) `20 10 30 25 35 60 50 70`
+
+<details><summary>Gabarito</summary>
+
+**A.** O sucessor de 45 é o menor da subárvore direita: o 50, que é folha.
+Ele sobe para a raiz e o 60 fica só com o 70. A (B) é o resultado com o
+**antecessor** (o 35, maior da esquerda), a outra convenção. Veja 0100.
+
+</details>
+
+**4.** Numa AVL vazia são inseridas as chaves `50 20 80 10 30 25`, nesta
+ordem. Qual é a pré-ordem final e o que aconteceu na última inserção?
+
+- (A) `20 10 50 30 25 80`; rotação simples à direita no 50
+- (B) `50 25 20 10 30 80`; rotação simples à esquerda no 20
+- (C) `30 20 10 25 50 80`; rotação dupla (esquerda no 20, direita no 50)
+- (D) `30 20 10 25 50 80`; rotação simples à direita no 50
+- (E) `50 20 10 30 25 80`; nenhuma rotação
+
+<details><summary>Gabarito</summary>
+
+**C.** O 25 entra à esquerda do 30. O 50 fica com fator +2 e o filho
+esquerdo (20) com fator −1: caso esquerda-direita, zigue-zague. Gira à
+esquerda no 20 (o 30 sobe) e à direita no 50: o 30 vira a raiz. A (A) é o que
+uma rotação simples faria: o 20 subiria e o desequilíbrio só trocaria de lado.
+Veja 0101.
+
+</details>
+
+**5.** Num heap de máximo guardado em vetor (raiz em `v[0]`), inicialmente
+vazio, são inseridas as chaves `15 40 25 60 10 50`, nesta ordem, cada uma
+subindo enquanto for maior que o pai. Qual é o vetor final?
+
+- (A) `60 50 40 25 15 10`
+- (B) `60 40 25 15 10 50`
+- (C) `60 15 50 40 10 25`
+- (D) `60 40 50 15 10 25`
+- (E) `50 40 60 15 10 25`
+
+<details><summary>Gabarito</summary>
+
+**D.** Depois de 15, 40, 25: `40 15 25`. O 60 entra no índice 3, sobe pelo 15
+e pelo 40: `60 40 25 15`. O 10 fica no índice 4. O 50 entra no índice 5, pai
+no índice 2 (o 25): troca, e para abaixo do 60. A (B) esquece essa subida.
+Veja 0102.
+
+</details>
+
+**6.** No Cormen, o heap fica em `A[1..n]`, com `PARENT(i) = ⌊i/2⌋`,
+`LEFT(i) = 2i` e `RIGHT(i) = 2i + 1`. Para o elemento `A[7]`, quais são o pai
+e os filhos?
+
+- (A) pai `A[3]`; filhos `A[15]` e `A[16]`
+- (B) pai `A[3]`; filhos `A[14]` e `A[15]`
+- (C) pai `A[2]`; filhos `A[13]` e `A[14]`
+- (D) pai `A[4]`; filhos `A[14]` e `A[15]`
+- (E) pai `A[3]`; filhos `A[8]` e `A[9]`
+
+<details><summary>Gabarito</summary>
+
+**B.** ⌊7/2⌋ = 3, 2 · 7 = 14 e 2 · 7 + 1 = 15. A (C) mistura as fórmulas do
+vetor que começa em 0 (pai `(i − 1)/2`, filhos `2i + 1` e `2i + 2`), que dão,
+para `v[6]` (o mesmo elemento), pai `v[2]` e filhos `v[13]` e `v[14]`. Veja
+0102.
+
+</details>
+
+**7.** O `BUILD-MAX-HEAP` (fazer cada pai descer, do último pai até a raiz) é
+aplicado ao vetor `12 4 30 9 18 7 25 3`. Qual é o resultado?
+
+- (A) `30 18 25 4 9 7 12 3`
+- (B) `30 12 25 9 18 7 4 3`
+- (C) `30 4 25 9 18 7 12 3`
+- (D) `30 18 12 9 4 7 25 3`
+- (E) `30 18 25 9 4 7 12 3`
+
+<details><summary>Gabarito</summary>
+
+**E.** Os pais são os índices 3, 2, 1 e 0. O 9 já é maior que o 3; o 30 já é
+maior que 7 e 25; o 4 troca com o 18; o 12 troca com o 30 e depois com o 25.
+A (A) é o heap que se obtém **inserindo** um por um: também é um heap válido,
+mas outro. A construção de baixo para cima custa O(n). Veja 0103.
+
+</details>
+
+**8.** Uma árvore binária tem pré-ordem `M D B F K R P W` e em ordem
+`B D F K M P R W`. Qual é a pós-ordem?
+
+- (A) `B K F D P W R M`
+- (B) `B F K D P W R M`
+- (C) `K F B D W P R M`
+- (D) `B D F K P R W M`
+- (E) `W P R K F B D M`
+
+<details><summary>Gabarito</summary>
+
+**A.** A pré-ordem diz a raiz (M); a em ordem separa os lados: `B D F K` à
+esquerda e `P R W` à direita. Repetindo: D com B à esquerda e F à direita, e o
+K é filho direito do F; R com P e W. Pós-ordem: `B K F D P W R M`. Veja 0098.
+
+</details>
+
+**9.** Na BST das questões 1 a 3 (antes de qualquer remoção), quem é o
+**sucessor** (o próximo na em ordem) do 35?
+
+- (A) 30
+- (B) 25
+- (C) 50
+- (D) 45
+- (E) o 35 não tem sucessor
+
+<details><summary>Gabarito</summary>
+
+**D.** O 35 não tem filho direito. Então o sucessor é o ancestral mais baixo
+do qual o 35 está na subárvore **esquerda**: sobe 35, 30, 20 (todos filhos
+direitos) até o 20, que é filho esquerdo do 45. É a `TREE-SUCCESSOR` do
+Cormen. Veja 0099 (a em ordem) e o assunto 0175, que aprofunda sucessor e
+antecessor.
+
+</details>
+
+**10.** Sobre árvores balanceadas, assinale a afirmação **falsa**.
+
+- (A) Numa rubro-negra, todo caminho de um nó até as folhas (NIL) abaixo dele tem o mesmo número de nós pretos.
+- (B) Uma rubro-negra com n nós internos tem altura no máximo 2 lg(n + 1).
+- (C) Na AVL, uma inserção pode exigir uma rotação em cada ancestral do nó inserido, O(log n) rotações.
+- (D) Numa árvore B de grau mínimo t, todo nó, exceto a raiz, tem entre t − 1 e 2t − 1 chaves.
+- (E) Numa rubro-negra, um nó vermelho não tem filho vermelho.
+
+<details><summary>Gabarito</summary>
+
+**C.** Na inserção da AVL, a primeira rotação (simples ou dupla) devolve à
+subárvore a altura que ela tinha antes, e nenhum ancestral acima precisa mais
+de conserto: no máximo uma rotação por inserção. Quem pode girar em vários
+níveis é a **remoção**. As outras são propriedades do Cormen. Veja 0101, o
+0176 (remoção na AVL), o 0177 (rubro-negra) e o 0146 (árvore B).
+
+</details>
+
 ## Para ler mais
 
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Caps. 6 (heapsort e filas de prioridade), 12 (árvores de busca binária), 13 (árvores rubro-negras) e 18 (árvores B); problema 13-3 (árvores AVL).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Caps. 5 (pesquisa em memória primária: árvores de pesquisa) e 6 (árvores B).
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Capítulos sobre heapsort, árvores binárias e árvores binárias de busca.
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, 2002. Capítulos sobre árvores e árvores binárias de busca.
-- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. Rio de Janeiro: Elsevier, 2004.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Caps. 5 (árvores), 6 (classificação: heapsort) e 7 (busca: árvores balanceadas).
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson, 2011. Cap. 12: estruturas de dados (árvores binárias de busca).
 - LAUREANO, M. *Estrutura de dados com algoritmos e C*. Rio de Janeiro: Brasport, 2008. Capítulo sobre árvores.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro. Apostila.
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Caps. 6 (heapsort) e 12 (árvores de busca binária).
 - ADELSON-VELSKY, G. M.; LANDIS, E. M. An algorithm for the organization of information. *Soviet Mathematics Doklady*, v. 3, p. 1259-1263, 1962.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Seção 6.5: estruturas autorreferenciadas (a árvore de palavras).
 - CPPREFERENCE. *qsort, qsort_s*. Disponível em: <https://en.cppreference.com/w/c/algorithm/qsort>.

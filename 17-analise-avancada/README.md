@@ -133,7 +133,10 @@ chegar em 1, então são `log₂ n + 1` níveis. Total: `n log₂ n + n`, ou sej
 O **Θ** (teta) é novo: ele diz que a função cresce **exatamente** naquele
 ritmo, nem mais rápido nem mais devagar. O `O` do assunto 0072 é só um teto;
 o Θ é teto e piso ao mesmo tempo. Quando você resolve uma recorrência até a
-fórmula, sabe o ritmo exato, e o Θ é a palavra certa.
+fórmula, sabe o ritmo exato, e o Θ é a palavra certa (as definições formais
+de O, Ω e Θ estão no assunto 0166). O Cormen ensina três métodos para
+resolver: a **substituição** (chutar a resposta e provar por indução), a
+árvore de recursão e o teorema mestre, do próximo assunto.
 
 A forma da recorrência decide a forma da árvore. As cinco que você mais vai
 ver:
@@ -796,8 +799,18 @@ E quando o teorema **não** se aplica? Quando a recorrência não tem a forma
 `a T(n/b) + n^k`: `T(n) = T(n-1) + n` (o tamanho cai **subtraindo**, não
 dividindo), `T(n) = T(n/3) + T(2n/3) + n` (pedaços de tamanhos diferentes),
 `T(n) = 2 T(n/2) + n log n` (o trabalho fica no meio do caminho entre `n^1`
-e `n^(1+algo)`). Aí você volta para a árvore de recursão, que sempre
-funciona. O exemplo A230 resolve dois desses casos.
+e `n^(1+algo)`; a forma do Cormen, na nota abaixo, ainda pega este). Aí
+você volta para a árvore de recursão, que sempre funciona. O exemplo A230
+resolve dois desses casos.
+
+> [!NOTE]
+> **No Cormen (4ª ed.)** a forma é `T(n) = a T(n/b) + f(n)`, e `f(n)` é
+> comparada com `n^(log_b a)`. Caso 1: `f(n) = O(n^(log_b a - ε))` para algum
+> ε > 0 dá Θ(n^(log_b a)). Caso 2: `f(n) = Θ(n^(log_b a) · logᵖ n)` com p ≥ 0
+> (ele chama o p de k) dá Θ(n^(log_b a) · log^(p+1) n). Caso 3:
+> `f(n) = Ω(n^(log_b a + ε))` **e** a regularidade `a f(n/b) ≤ c f(n)` para
+> algum c < 1 dão Θ(f(n)). A tabela acima é o caso `f(n) = nᵏ`. Com p = 1,
+> `2 T(n/2) + n log n` dá Θ(n log² n), o que o A230 mede.
 
 > [!WARNING]
 > `a` e `b` são coisas diferentes e não precisam ser iguais. `a` conta as
@@ -1271,6 +1284,9 @@ um cofrinho. Quando o vetor de capacidade `c` enche e vira `2c`, metade dos
 `c` elementos chegou depois da última mudança, e cada um guardou 2 moedas:
 são `c` moedas, exatamente as `c` cópias. Se o cofrinho **nunca fica
 negativo**, o preço fixo cobre o custo real, e o custo amortizado é 3.
+O Cormen chama este de **método contábil** e traz um terceiro, o do
+**potencial**: o cofrinho vira uma função Φ do estado da estrutura. Com
+Φ = 2 · n - capacidade, cada inserção custa, amortizada, os mesmos 3.
 
 Vamos ver na prática. O app do banco guarda o histórico de Pix num vetor que
 começa com 1 posição e dobra quando enche. Chegam 16 Pix. As inserções 2, 3,
@@ -3172,9 +3188,223 @@ apenas não distinguem `n^1,5` de, digamos, `n log² n`.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
+letra e só depois abra o gabarito. O teorema mestre usado aqui é o da forma
+do Cormen (veja o [!NOTE] do assunto 0115).
+
+**1.** Qual é a solução de `T(n) = 4 T(n/2) + n²`?
+
+- (A) Θ(n²)
+- (B) Θ(n³)
+- (C) Θ(n² log n)
+- (D) Θ(n log n)
+- (E) Θ(n⁴)
+
+<details><summary>Gabarito</summary>
+
+**C.** `a = 4`, `b = 2`: `n^(log₂ 4) = n²`, igual a `f(n) = n²`. Caso 2 (o custo
+por nível não muda): Θ(n² log n). São `log₂ n + 1` níveis de custo `n²` cada.
+Veja 0115.
+
+</details>
+
+**2.** Qual é a solução de `T(n) = 2 T(n/4) + √n`?
+
+- (A) Θ(√n log n)
+- (B) Θ(√n)
+- (C) Θ(n)
+- (D) Θ(log n)
+- (E) Θ(n log n)
+
+<details><summary>Gabarito</summary>
+
+**A.** `n^(log₄ 2) = n^(1/2) = √n`, do mesmo tamanho de `f(n)`: caso 2,
+Θ(√n log n). Quem compara `f(n)` com `n` em vez de com `n^(log_b a)` marca
+(C) e erra. Veja 0115.
+
+</details>
+
+**3.** Qual é a solução de `T(n) = 5 T(n/2) + n³`?
+
+- (A) Θ(n^(log₂ 5))
+- (B) Θ(n³ log n)
+- (C) Θ(n^2,32 log n)
+- (D) Θ(n⁵)
+- (E) Θ(n³)
+
+<details><summary>Gabarito</summary>
+
+**E.** `log₂ 5 ≈ 2,32 < 3`: `f(n) = n³` é polinomialmente maior que
+`n^(log₂ 5)`. Caso 3, desde que valha a condição de regularidade:
+`5 (n/2)³ = (5/8) n³ ≤ c · n³` com `c = 5/8 < 1`. Vale, e a raiz domina:
+Θ(n³). Veja 0115.
+
+</details>
+
+**4.** Qual é o custo de tempo de cada função, em função de `n`?
+
+```c
+int f(int n) {
+    if (n <= 1) return 1;
+    return f(n - 1) + f(n - 1);
+}
+
+int g(int n) {
+    if (n <= 1) return 1;
+    return 2 * g(n - 1);
+}
+```
+
+- (A) `f` e `g` são Θ(2ⁿ).
+- (B) `f` é Θ(2ⁿ) e `g` é Θ(n).
+- (C) `f` é Θ(n) e `g` é Θ(2ⁿ).
+- (D) `f` e `g` são Θ(n).
+- (E) `f` é Θ(n²) e `g` é Θ(n).
+
+<details><summary>Gabarito</summary>
+
+**B.** As duas devolvem 2ⁿ⁻¹, mas `f` faz **duas** chamadas com `n - 1`:
+`T(n) = 2 T(n-1) + 1`, Θ(2ⁿ) (com `n = 20`, 1.048.575 chamadas). `g` faz uma
+só e multiplica o resultado: `T(n) = T(n-1) + 1`, Θ(n) (20 chamadas). O que
+conta é quantas vezes a função chama a si mesma, não o valor devolvido. Veja
+0114.
+
+</details>
+
+**5.** Quanto vale `conta` depois de `h(16)`?
+
+```c
+int conta = 0;
+
+void h(int n) {
+    if (n == 0) return;
+    conta++;
+    h(n / 2);
+    h(n / 2);
+}
+```
+
+- (A) 16
+- (B) 32
+- (C) 80
+- (D) 31
+- (E) 63
+
+<details><summary>Gabarito</summary>
+
+**D.** `C(0) = 0` e `C(n) = 1 + 2 C(n/2)`: C(1) = 1, C(2) = 3, C(4) = 7,
+C(8) = 15, **C(16) = 31**. A árvore de recursão tem 1 + 2 + 4 + 8 + 16 nós que
+contam: `2n - 1`, Θ(n). Duas chamadas com metade não é n log n quando o
+trabalho fora das chamadas é constante. Veja 0114.
+
+</details>
+
+**6.** Pela versão do teorema mestre da 4ª edição do Cormen, qual é a
+solução de `T(n) = 2 T(n/2) + n log n`?
+
+- (A) Θ(n log n)
+- (B) Θ(n log² n)
+- (C) Θ(n²)
+- (D) o teorema não se aplica
+- (E) Θ(n^1,5)
+
+<details><summary>Gabarito</summary>
+
+**B.** `n^(log₂ 2) = n` e `f(n) = n log n = Θ(n · log¹ n)`. O caso 2 do
+Cormen, na forma `f(n) = Θ(n^(log_b a) · logᵏ n)` com `k ≥ 0`, dá
+Θ(n^(log_b a) · log^(k+1) n) = Θ(n log² n). Na forma simples, com `f(n) = nᵏ`,
+o teorema não pega essa recorrência, e muito material antigo responde (D).
+Veja 0115.
+
+</details>
+
+**7.** Em qual destas recorrências o teorema mestre se aplica diretamente?
+
+- (A) `T(n) = T(n - 1) + n`
+- (B) `T(n) = T(n/3) + T(2n/3) + n`
+- (C) `T(n) = 2 T(n/2) + n / log n`
+- (D) `T(n) = 2ⁿ T(n/2) + n`
+- (E) `T(n) = 9 T(n/3) + n`
+
+<details><summary>Gabarito</summary>
+
+**E.** `a = 9`, `b = 3`: `n^(log₃ 9) = n²`, polinomialmente maior que `n`.
+Caso 1: Θ(n²). Nas outras: (A) o tamanho cai subtraindo; (B) os pedaços têm
+tamanhos diferentes; (C) `n / log n` fica abaixo de `n` só por um fator de
+log, e o caso 2 exige `k ≥ 0`; (D) `a` não é constante. Veja 0115.
+
+</details>
+
+**8.** Um vetor dinâmico começa com capacidade 1 e dobra quando enche (alocar
+o novo e copiar todos os elementos). Cada escrita e cada cópia custam 1. Qual
+é o custo total de 33 inserções seguidas, e o custo amortizado por inserção?
+
+- (A) 96; O(1)
+- (B) 63; O(log n)
+- (C) 528; O(n)
+- (D) 33; O(1)
+- (E) 96; O(log n)
+
+<details><summary>Gabarito</summary>
+
+**A.** As cópias acontecem nas inserções 2, 3, 5, 9, 17 e 33: 1 + 2 + 4 + 8 +
+16 + 32 = 63. Somadas às 33 escritas, 96, menos que 3 × 33. Pelo método
+agregado, o custo amortizado é O(1), mesmo com a 33ª inserção custando 33
+sozinha. Veja 0116.
+
+</details>
+
+**9.** Qual é o menor número de comparações que **qualquer** algoritmo de
+ordenação por comparação precisa fazer, no pior caso, para ordenar 5
+elementos distintos?
+
+- (A) 5
+- (B) 6
+- (C) 7
+- (D) 10
+- (E) 12
+
+<details><summary>Gabarito</summary>
+
+**C.** A árvore de decisão precisa de uma folha para cada uma das 5! = 120
+ordens, e uma árvore binária de altura `h` tem no máximo 2ʰ folhas. 2⁶ = 64 <
+120 ≤ 128 = 2⁷: `h ≥ ⌈log₂ 120⌉ = 7`. Veja 0117.
+
+</details>
+
+**10.** Qual é a complexidade do trecho abaixo?
+
+```c
+long passos = 0;
+for (int i = 1; i < n; i *= 2) {
+    for (int j = 0; j < i; j++) {
+        passos++;
+    }
+}
+```
+
+- (A) Θ(log n)
+- (B) Θ(n log n)
+- (C) Θ(n²)
+- (D) Θ(n)
+- (E) Θ(log² n)
+
+<details><summary>Gabarito</summary>
+
+**D.** O laço de fora roda log₂ n vezes, mas o de dentro não roda `n` vezes em
+cada uma: roda 1, 2, 4, ..., até menos que `n`. A soma geométrica fica abaixo
+de `2n` (com `n = 1024`, são 1023 passos). Multiplicar "log n voltas por n"
+dá (B), um limite superior folgado, mas não o Θ. Veja 0114 e, para somatórios,
+0167.
+
+</details>
+
 ## Para ler mais
 
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 4 (recorrências, árvore de recursão e teorema mestre), cap. 8 (limite inferior da ordenação) e cap. 17 (análise amortizada).
+- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 3 (notações O, Ω e Θ), cap. 4 (recorrências: substituição, árvore de recursão e teorema mestre), cap. 8 (limite inferior da ordenação) e cap. 16 (análise amortizada: métodos agregado, contábil e do potencial).
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 1 (análise de algoritmos e notação assintótica) e cap. 2 (recursividade e divisão e conquista).
 - LINTZMAYER, C. N.; MOTA, G. O. *Análise de algoritmos e de estruturas de dados*. Santo André: UFABC; São Paulo: IME-USP, 2023. Notas de aula. Partes sobre recorrências, teorema mestre e limite inferior para ordenação.
 - SZWARCFITER, J. L.; MARKENZON, L. *Estruturas de dados e seus algoritmos*. 3. ed. Rio de Janeiro: LTC, 2010. Caps. 1 (complexidade e limites inferiores), 7 (ordenação e árvore de decisão) e a análise amortizada.
 - FEOFILOFF, P. *Análise de algoritmos* (livrinho). São Paulo: IME-USP. Disponível em: <https://www.ime.usp.br/~pf/livrinho-AA/>.

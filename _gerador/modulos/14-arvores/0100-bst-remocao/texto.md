@@ -19,7 +19,9 @@ Os dois primeiros casos são o mesmo código: "o filho que existe sobe", e na
 folha esse filho é `NULL`. O terceiro é o interessante. Quem pode ocupar o lugar
 do 30 sem quebrar a regra? Alguém maior que tudo à esquerda e menor que tudo à
 direita. Dois candidatos servem: o **sucessor** (a menor chave da subárvore
-direita) e o **antecessor** (a maior da esquerda). Este TAD usa o sucessor.
+direita) e o **antecessor** (a maior da esquerda). Este TAD usa o sucessor,
+como o Cormen. Com o antecessor, a árvore final sai diferente, e por isso
+uma questão de prova sempre diz qual dos dois usar.
 
 Para achar o sucessor, desça **uma vez à direita** e depois **à esquerda até
 não dar mais**. Esse nó nunca tem filho esquerdo (senão não seria o menor), então
@@ -136,8 +138,8 @@ que vai terminar no caso fácil (o 35 é folha):
 > **só a chave** e libera o nó do sucessor, lá embaixo. É barato com um `int`.
 > Se o nó guardasse uma struct grande (nome, endereço, histórico), copiar
 > custaria caro e invalidaria ponteiros que alguém guardou para o nó. Aí a saída
-> é religar os ponteiros e mover o nó inteiro, sem copiar dado (o livro do
-> Feofiloff faz assim). O custo continua O(altura): uma descida para achar o nó,
+> é religar os ponteiros e mover o nó inteiro, sem copiar dado (o Cormen faz
+> assim, com a função `TRANSPLANT`, e o Feofiloff também). O custo continua O(altura): uma descida para achar o nó,
 > outra para achar o sucessor.
 
 > [!NOTE]

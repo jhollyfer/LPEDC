@@ -79,6 +79,9 @@ tamanho fixo (`#define MAX 50`). Isso é de propósito: deixa a recorrência à
 vista. Nos programas "de verdade" (o mini-diff), a tabela vai para o heap,
 num bloco só do `malloc`.
 
+A multiplicação de uma **cadeia de matrizes**, outro clássico de PD do Cormen
+e do cursinho do PPGI, tem assunto próprio, o 0185.
+
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
 AddressSanitizer (ou o UBSan) do `rodar` vai acusar ou parar o programa. É
 esperado: o enunciado avisa.
@@ -239,9 +242,226 @@ meio recursivamente), mas dá mais trabalho.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Resolva no papel, com a tabela à mão, antes de abrir o
+gabarito.
+
+**1.** Na mochila 0/1 com capacidade `W = 7` e os itens (peso, valor) = (1,
+3), (3, 4), (4, 6) e (5, 7), nessa ordem, `t[i][c]` é o maior valor usando
+só os itens `1..i` com capacidade `c`. Qual o valor de `t[4][7]`?
+
+- (A) 9
+- (B) 13
+- (C) 10
+- (D) 11
+- (E) 16
+
+<details><summary>Gabarito</summary>
+
+**(C).** A linha 4 da tabela fica `0 3 3 4 7 9 10 10`. Dois conjuntos
+empatam em 10: pesos 3 + 4 (4 + 6) e pesos 1 + 5 (3 + 7). O 13 (3 + 4 + 6)
+pesaria 8 kg, e o 16 é a soma de todos os valores, sem limite de peso. Veja
+0140.
+
+</details>
+
+**2.** Qual o tamanho da maior subsequência comum (LCS) de `AMAZONAS` e
+`MANAUS`?
+
+- (A) 5
+- (B) 4
+- (C) 6
+- (D) 3
+- (E) 8
+
+<details><summary>Gabarito</summary>
+
+**(A).** `MANAS`: M, A, N, A e S aparecem nessa ordem nas duas palavras.
+Uma subsequência não precisa ser contígua; a maior **substring** comum
+seria bem menor. O 6 seria a palavra `MANAUS` inteira, que não é
+subsequência de `AMAZONAS` (não tem U). Veja 0141.
+
+</details>
+
+**3.** Sobre a LCS de duas sequências de tamanhos `m` e `n` pela tabela de
+programação dinâmica, é correto afirmar:
+
+- (A) o tempo é Θ(m + n), porque cada letra é lida uma vez.
+- (B) o tempo é Θ(2^m), porque toda subsequência de uma das sequências é testada.
+- (C) para obter só o tamanho da LCS, a tabela inteira de Θ(m × n) posições é indispensável.
+- (D) o tempo é Θ(m × n × min(m, n)), porque cada célula percorre uma linha inteira.
+- (E) o tempo é Θ(m × n); para obter só o tamanho, duas linhas, Θ(min(m, n)) de memória, bastam.
+
+<details><summary>Gabarito</summary>
+
+**(E).** São `(m + 1) × (n + 1)` células, cada uma em O(1). Cada linha só
+lê a de cima, então duas linhas bastam para o tamanho (escolha a sequência
+menor para as colunas). Para **recuperar** a LCS, o caminho simples precisa
+da tabela inteira. Veja 0141 e o A281.
+
+</details>
+
+**4.** A mochila 0/1 por programação dinâmica roda em O(n × W), em que `W`
+é a capacidade. Por que isso **não** prova que o problema é polinomial?
+
+- (A) Porque a PD só funciona quando todos os pesos são iguais.
+- (B) Porque `W` é um número da entrada, escrito com cerca de log₂ W bits: O(n × W) é exponencial no tamanho da entrada (tempo pseudopolinomial).
+- (C) Porque a tabela tem 2ⁿ linhas.
+- (D) Porque a recuperação dos itens custa O(2ⁿ).
+- (E) Porque a PD dá só uma aproximação do ótimo.
+
+<details><summary>Gabarito</summary>
+
+**(B).** Dobrar o número de bits de `W` eleva `W` ao quadrado. O(n × W) é
+polinomial no **valor** de `W`, não no tamanho da entrada; por isso se diz
+**pseudopolinomial**. A versão de decisão da mochila é NP-completa (assunto
+0186). A tabela tem `n + 1` linhas, e a recuperação é O(n). Veja 0140.
+
+</details>
+
+**5.** A função abaixo é chamada com `memo[]` todo em `-1`. Quantas vezes
+`formas` é executada, contando a chamada inicial, em `formas(20)`?
+
+```c
+long long memo[50];
+
+long long formas(int n) {
+    if (n <= 1) {
+        return 1;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    memo[n] = formas(n - 1) + formas(n - 2);
+    return memo[n];
+}
+```
+
+- (A) 20
+- (B) 21
+- (C) 10.946
+- (D) 39
+- (E) 21.891
+
+<details><summary>Gabarito</summary>
+
+**(D).** A primeira descida, `formas(20)`, `formas(19)`, ..., `formas(1)`,
+são 20 chamadas. Na volta, cada `n` de 2 a 20 faz a segunda chamada,
+`formas(n - 2)`, que acha a resposta pronta (ou é caso base): mais 19. Em
+geral, `2n - 1`. Sem o memo seriam 21.891 chamadas, e 10.946 é o valor de
+`formas(20)`. Veja 0138.
+
+</details>
+
+**6.** Segundo o Cormen, as duas propriedades que indicam que um problema
+de otimização pode ser resolvido por programação dinâmica são:
+
+- (A) subestrutura ótima e subproblemas sobrepostos.
+- (B) propriedade da escolha gulosa e subestrutura ótima.
+- (C) subproblemas independentes e entrada ordenada.
+- (D) recorrência linear e memória O(1).
+- (E) subproblemas disjuntos e divisão ao meio.
+
+<details><summary>Gabarito</summary>
+
+**(A).** A solução ótima é feita de soluções ótimas de subproblemas
+(**subestrutura ótima**) e esses subproblemas se repetem
+(**sobrepostos**), o que torna a tabela vantajosa. Escolha gulosa é a
+marca dos gulosos (0133); subproblemas disjuntos, sem repetição, são o
+terreno da divisão e conquista, como no merge sort. Veja 0138 e 0139.
+
+</details>
+
+**7.** Com moedas de 1, 3 e 4 e troco de 6, sejam `G` o número de moedas
+do algoritmo guloso (maior moeda que cabe) e `D` o mínimo calculado pela
+programação dinâmica `dp[v] = 1 + min(dp[v - moeda])`. Então:
+
+- (A) G = 2 e D = 2.
+- (B) G = 3 e D = 3.
+- (C) G = 3 e D = 2.
+- (D) G = 2 e D = 3.
+- (E) G = 4 e D = 2.
+
+<details><summary>Gabarito</summary>
+
+**(C).** O guloso faz 4 + 1 + 1 (três moedas); a PD acha 3 + 3 (duas). A PD
+nunca perde para o guloso, porque testa todas as últimas moedas. Veja 0133
+e 0139.
+
+</details>
+
+**8.** Qual a distância de edição (Levenshtein: inserir, remover ou trocar
+uma letra, custo 1 cada) entre `TERRA` e `TORTA`?
+
+- (A) 0
+- (B) 1
+- (C) 3
+- (D) 4
+- (E) 2
+
+<details><summary>Gabarito</summary>
+
+**(E).** As palavras têm o mesmo tamanho e diferem em duas posições: troca
+o E por O e o segundo R por T. Não dá com 1, porque uma operação só muda
+uma posição (ou o tamanho). Veja 0142.
+
+</details>
+
+**9.** O trecho preenche o vetor `g` com capacidade 7 e os itens (peso,
+valor) = (2, 3) e (3, 5). Repare no sentido do laço de `c`. Qual o valor
+de `g[7]` no fim?
+
+```c
+int peso[] = {2, 3}, valor[] = {3, 5};
+int g[8] = {0};
+for (int i = 0; i < 2; i++) {
+    for (int c = peso[i]; c <= 7; c++) {
+        if (g[c - peso[i]] + valor[i] > g[c]) {
+            g[c] = g[c - peso[i]] + valor[i];
+        }
+    }
+}
+```
+
+- (A) 8
+- (B) 11
+- (C) 10
+- (D) 13
+- (E) 5
+
+<details><summary>Gabarito</summary>
+
+**(B).** Com `c` **subindo**, `g[c - peso[i]]` já pode conter o próprio
+item `i`, e cada item vale quantas vezes couber: é a mochila **ilimitada**.
+O melhor é 2 + 2 + 3 (3 + 3 + 5 = 11). Com o laço descendo (mochila 0/1),
+seria 8 (os dois itens, uma vez cada). Veja 0140 e o A279.
+
+</details>
+
+**10.** Sobre memoização (de cima para baixo) e tabela (de baixo para
+cima), assinale a alternativa **correta**:
+
+- (A) A memoização tem complexidade assintótica pior que a tabela, porque faz chamadas recursivas.
+- (B) A tabela sempre calcula menos subproblemas que a memoização.
+- (C) A memoização só serve para problemas com um parâmetro.
+- (D) As duas resolvem cada subproblema uma vez; o custo é (número de subproblemas) × (trabalho de cada um), e a memoização pode pular subproblemas que a resposta não usa.
+- (E) A tabela precisa de recursão para saber a ordem de preenchimento.
+
+<details><summary>Gabarito</summary>
+
+**(D).** As duas têm o mesmo custo assintótico. A memoização paga o frame
+de cada chamada (e pode estourar a pilha), mas só visita o que a pergunta
+precisa; a tabela enche tudo, numa ordem em que as dependências já estão
+prontas. Veja 0138.
+
+</details>
+
 ## Para ler mais
 
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 15 (programação dinâmica: corte de hastes, LCS, subestrutura ótima).
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 14 (programação dinâmica: corte de hastes, cadeia de matrizes, LCS, subestrutura ótima e subproblemas sobrepostos) e seção 15.2 (mochila 0/1 contra a fracionária).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 2 (paradigmas de projeto de algoritmos, com programação dinâmica).
 - LINTZMAYER, C. N.; MOTA, G. O. *Análise de algoritmos e de estruturas de dados*. Santo André: UFABC; São Paulo: IME-USP, 2023. Versão preliminar. Cap. de programação dinâmica (memoização, mochila, alinhamento de sequências).
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Caps. de recursão e de enumeração, base para entender o custo da recursão pura.
 - SZWARCFITER, J. L.; MARKENZON, L. *Estruturas de dados e seus algoritmos*. 3. ed. Rio de Janeiro: LTC, 2010. Seção de árvore binária de busca ótima, um exemplo clássico de programação dinâmica.

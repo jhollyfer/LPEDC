@@ -302,13 +302,210 @@ conhecido.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado. Nas de endereçamento
+aberto, desenhe a tabela e preencha posição por posição; a notação é a do
+Cormen: `h(k, i)` é a posição da tentativa `i`, começando em `i = 0`.
+
+**1.** Uma tabela com encadeamento tem `m = 7` baldes, `h(k) = k mod 7`, e cada
+chave nova entra no **início** da lista do seu balde. São inseridas
+`15 22 8 29 3 36 10`, nesta ordem. Qual é a lista do balde 1, da cabeça ao
+fim?
+
+- (A) `15 22 8 29 36`
+- (B) `8 15 22 29 36`
+- (C) `36 29 22 15 8`
+- (D) `36 29 8 22 15`
+- (E) `36 29 8 22 15 3 10`
+
+<details><summary>Gabarito</summary>
+
+**D.** 15, 22, 8, 29 e 36 dão resto 1; o 3 e o 10 vão para o balde 3. Como
+cada nova entra na cabeça, a lista fica na ordem inversa da chegada. Cinco das
+sete chaves no mesmo balde: as chaves têm um padrão (diferença múltipla de 7)
+que o método da divisão não desfaz. Veja 0106.
+
+</details>
+
+**2.** Uma tabela com `m = 11` posições usa sondagem linear,
+`h(k, i) = (k mod 11 + i) mod 11`. Inserem-se `20 31 9 42 14 53 25`, nesta
+ordem. Em que posições ficam o 53 e o 25?
+
+- (A) 9 e 3
+- (B) 2 e 4
+- (C) 2 e 3
+- (D) 1 e 4
+- (E) 4 e 5
+
+<details><summary>Gabarito</summary>
+
+**B.** 20 vai para 9; 31 (casa 9) para 10; 9 (casa 9) dá a volta até 0; 42
+(casa 9) até 1; 14 para 3; 53 (casa 9) tenta 9, 10, 0, 1 e para no 2, com 5
+sondagens; 25 (casa 3) para no 4. Repare no bloco 9, 10, 0, 1, 2 crescendo: é
+o agrupamento primário. Veja 0107.
+
+</details>
+
+**3.** Uma tabela com `m = 8` posições usa sondagem quadrática
+`h(k, i) = (k mod 8 + (i + i²)/2) mod 8` (o caso c₁ = c₂ = 1/2 do Cormen).
+Inserem-se `17 25 9 33 41`, todas com `k mod 8 = 1`. Em que posição fica o 41?
+
+- (A) 3
+- (B) 5
+- (C) 6
+- (D) 0
+- (E) nenhuma: a sondagem não encontra posição livre
+
+<details><summary>Gabarito</summary>
+
+**A.** Os deslocamentos são 0, 1, 3, 6, 10, ...: o 17 fica em 1, o 25 em 2, o
+9 em 4 e o 33 em 7. O 41 tenta 1, 2, 4, 7 e, com `i = 4`, `(1 + 10) mod 8 =
+3`. Com `m` potência de 2 e esses coeficientes, a sequência visita todas as
+posições. Veja 0107 e o assunto 0179, que aprofunda a sondagem quadrática.
+
+</details>
+
+**4.** Uma tabela com `m = 13` posições usa dispersão dupla
+`h(k, i) = (h₁(k) + i · h₂(k)) mod 13`, com `h₁(k) = k mod 13` e
+`h₂(k) = 1 + (k mod 11)`. Inserem-se `18 44 57 31`, nesta ordem. Em que
+posições ficam o 57 e o 31?
+
+- (A) 7 e 8
+- (B) 6 e 7
+- (C) 8 e 3
+- (D) 5 e 5
+- (E) 8 e 2
+
+<details><summary>Gabarito</summary>
+
+**E.** As quatro chaves têm `h₁ = 5`. O 18 fica em 5. O 44 tem `h₂ = 1` e vai
+para 6. O 57 tem `h₂ = 3`: tenta 5 e para em 8. O 31 tem `h₂ = 10`: tenta 5 e
+para em `15 mod 13 = 2`. A (A) é o que a sondagem linear faria. Cada chave anda
+com o seu próprio passo, e por isso a dispersão dupla não forma blocos. Veja o
+assunto 0179.
+
+</details>
+
+**5.** Pelo método da multiplicação, `h(k) = ⌊m · (k · A mod 1)⌋`. Com
+`m = 8` e `A = 157/256 ≈ 0,613`, quanto vale `h(21)`?
+
+- (A) 5
+- (B) 1
+- (C) 7
+- (D) 12
+- (E) 0
+
+<details><summary>Gabarito</summary>
+
+**C.** `21 · 157 = 3297 = 12 · 256 + 225`, então `21 · A = 12,879...` e a
+parte fracionária é `225/256 ≈ 0,879`. Vezes 8 dá 7,03, e o piso é 7. Em C, com
+`w = 8` bits, é o *multiply-shift* da 4. ed. do Cormen: `((21 * 157) % 256) >>
+5` também dá 7. A (A) é o `21 mod 8` da divisão. Veja 0105 e o assunto 0178,
+que aprofunda o método da multiplicação.
+
+</details>
+
+**6.** Uma tabela com endereçamento aberto tem `m = 1000` posições e
+`n = 800` chaves. Supondo hashing uniforme, qual é o limite do Cormen para o
+número esperado de sondagens numa busca **sem sucesso**?
+
+- (A) 0,8
+- (B) 5
+- (C) 1,25
+- (D) cerca de 2,01
+- (E) 800
+
+<details><summary>Gabarito</summary>
+
+**B.** O fator de carga é α = n/m = 0,8, e o limite é 1/(1 − α) = 1/0,2 = 5.
+A (D) é o limite da busca **com** sucesso, (1/α) ln(1/(1 − α)) ≈ 2,01. Com
+encadeamento, a mesma carga daria Θ(1 + α). Veja 0105, 0106 e 0107.
+
+</details>
+
+**7.** Pelo método da divisão, `h(k) = k mod m`, para cerca de mil chaves
+inteiras. Qual valor de `m` é a melhor escolha?
+
+- (A) 256
+- (B) 1000
+- (C) 389
+- (D) 512
+- (E) 1024
+
+<details><summary>Gabarito</summary>
+
+**C.** O Cormen recomenda um primo longe de potências de 2. Com `m = 2^p`
+(256, 512, 1024), `k mod m` são só os `p` bits menos significativos da chave;
+com `m = 1000`, só os três últimos dígitos decimais. O 389 é primo e fica longe
+de 256 e de 512. O fator de carga fica perto de 2,6, o que o encadeamento
+aguenta bem. Veja 0105 e 0108.
+
+</details>
+
+**8.** Sobre a **remoção** numa tabela com endereçamento aberto e sondagem
+linear, qual afirmação é correta?
+
+- (A) Marcar a posição como livre pode fazer uma busca parar cedo e não achar uma chave que está na tabela; por isso se usa uma marca de removida.
+- (B) Basta marcar a posição como livre, porque a busca sempre percorre a tabela inteira.
+- (C) A remoção é impossível: a única saída é reconstruir a tabela.
+- (D) A remoção custa O(1) e nunca afeta as buscas seguintes.
+- (E) As marcas de removida tornam as buscas sem sucesso mais curtas.
+
+<details><summary>Gabarito</summary>
+
+**A.** A busca para na primeira posição livre. Se uma chave tinha pulado a
+posição removida, a busca por ela pararia ali. A marca `DELETED` (lápide) deixa
+a busca passar e a inserção reaproveitar a posição. O preço: com muitas
+lápides, as buscas sem sucesso ficam **longas** (por isso (E) é falsa). Veja
+0107 (exemplo A214).
+
+</details>
+
+**9.** Uma tabela com encadeamento tem `m = 5`, `h(k) = k mod 5`, e insere
+cada chave no início da lista do balde. São inseridas `12 7 22 3 17 8`.
+Quantas chaves são comparadas na busca pelo 12?
+
+- (A) 1
+- (B) 2
+- (C) 3
+- (D) 6
+- (E) 4
+
+<details><summary>Gabarito</summary>
+
+**E.** 12, 7, 22 e 17 caem no balde 2, que fica `17 22 7 12`; o 3 e o 8 vão
+para o balde 3. A busca vai direto ao balde 2 e compara com 17, 22, 7 e 12.
+O 12, primeiro a chegar, é o último da lista. Veja 0106.
+
+</details>
+
+**10.** Sobre as sondagens do endereçamento aberto, qual afirmação é correta?
+
+- (A) A sondagem linear evita o agrupamento primário.
+- (B) A sondagem quadrática evita o agrupamento secundário.
+- (C) A sondagem linear gera Θ(m²) sequências de sondagem diferentes.
+- (D) A dispersão dupla gera Θ(m²) sequências diferentes e evita os agrupamentos primário e secundário.
+- (E) O encadeamento sofre de agrupamento primário.
+
+<details><summary>Gabarito</summary>
+
+**D.** Na linear e na quadrática, a primeira posição decide a sequência
+inteira: só há `m` sequências. A linear forma blocos (agrupamento primário); a
+quadrática não, mas chaves com a mesma casa seguem o mesmo caminho
+(agrupamento secundário). Na dispersão dupla, cada par `(h₁(k), h₂(k))` dá uma
+sequência. O encadeamento não sonda nada. Veja 0107 e o assunto 0179.
+
+</details>
+
 ## Para ler mais
 
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 11: tabelas de espalhamento.
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 5: pesquisa em memória primária (transformação de chave).
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, Departamento de Informática, 2002. Cap. de tabelas de dispersão.
-- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. Rio de Janeiro: Elsevier, 2004.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 7: busca (espalhamento).
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *The C programming language*. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Seção 6.6: table lookup.
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 11: tabelas de espalhamento.
 - KNUTH, D. E. *The art of computer programming*: volume 3: sorting and searching. 2. ed. Reading: Addison-Wesley, 1998. Seção 6.4: hashing.
 - CPPREFERENCE. *isalpha*. Disponível em: <https://en.cppreference.com/w/c/string/byte/isalpha>.

@@ -25,6 +25,24 @@ O C garante a ordem: primeiro avalia a condição e depois **só um** dos dois
 lados. O outro nem é calculado, como no curto-circuito do 0013. Então
 `b != 0 ? a / b : 0` nunca divide por zero.
 
+Com o ternário, você já conhece quase todos os operadores do C. A tabela
+junta todos, do que "amarra" mais forte para o mais fraco. A coluna da
+**associatividade** diz como desempatar dois operadores da mesma linha (a
+tabela completa, com os de bits e de ponteiros, está no assunto 0170):
+
+| Operadores | Associatividade |
+| --- | --- |
+| `x++` `x--` (pós) | esquerda → direita |
+| `!` `-x` `++x` `--x` `(tipo)` `sizeof` | direita → esquerda |
+| `*` `/` `%` | esquerda → direita |
+| `+` `-` | esquerda → direita |
+| `<` `<=` `>` `>=` | esquerda → direita |
+| `==` `!=` | esquerda → direita |
+| `&&` | esquerda → direita |
+| `\|\|` | esquerda → direita |
+| `?:` | direita → esquerda |
+| `=` `+=` `-=` `*=` `/=` `%=` | direita → esquerda |
+
 Os dois lados viram um **tipo comum**. Em `n > 0 ? n : 0.5`, com `n` inteiro,
 o resultado é `double` mesmo quando sai o `n`. Mantenha os dois lados do mesmo
 tipo e você não terá surpresa no `printf`.

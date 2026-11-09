@@ -995,9 +995,9 @@ cada um e ficar com os que dão 35. Só que isso desperdiça trabalho. Escolheu 
 atlas e o mangá? Já são R$ 50. Nenhum subconjunto que comece assim pode dar
 certo, e mesmo assim a enumeração cega vai até o fim de cada um deles.
 
-O **backtracking** (retrocesso) é a enumeração que **desiste cedo**. Ela
-constrói a solução uma escolha por vez, como antes. Mas, a cada passo,
-pergunta: "este começo ainda pode virar uma solução?". Se não pode, ela nem
+O **backtracking** (retrocesso; o Ziviani chama de **tentativa e erro**) é a
+enumeração que **desiste cedo**. Ela constrói a solução uma escolha por vez,
+como antes. Mas, a cada passo, pergunta: "este começo ainda pode virar uma solução?". Se não pode, ela nem
 desce: volta um passo e tenta a próxima opção. Cortar um galho inteiro da
 árvore de decisões assim se chama **poda**.
 
@@ -3150,16 +3150,247 @@ problemas como a mochila ganham, no módulo 21, um método que não testa tudo.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
+letra e só depois abra o gabarito. Todo código daqui compila: rode para
+conferir.
+
+**1.** Quantas vezes a função `gera` é chamada, contando a primeira, quando
+`n = 5` e o programa faz `gera(0)`?
+
+```c
+void gera(int i) {
+    if (i == n) {
+        mostra();
+        return;
+    }
+    gera(i + 1);   // o item i fica de fora
+    gera(i + 1);   // o item i entra
+}
+```
+
+- (A) 32
+- (B) 31
+- (C) 63
+- (D) 64
+- (E) 120
+
+<details><summary>Gabarito</summary>
+
+**C.** A árvore de decisões é binária completa com 6 níveis (i = 0 a 5): 1 +
+2 + 4 + 8 + 16 + 32 = 2⁶ - 1 = 63 chamadas, das quais 32 são folhas (os 2⁵
+subconjuntos). Veja 0125.
+
+</details>
+
+**2.** A função abaixo gera as permutações de `v[0..n-1]` por trocas. Com
+`n = 4`, quantas permutações ela mostra e quantas vezes `permuta` é chamada,
+contando a primeira?
+
+```c
+void permuta(int v[], int i) {
+    if (i == n) {
+        mostra(v);
+        return;
+    }
+    for (int j = i; j < n; j++) {
+        troca(&v[i], &v[j]);
+        permuta(v, i + 1);
+        troca(&v[i], &v[j]);
+    }
+}
+```
+
+- (A) 24 permutações e 65 chamadas
+- (B) 24 permutações e 24 chamadas
+- (C) 16 permutações e 31 chamadas
+- (D) 24 permutações e 41 chamadas
+- (E) 256 permutações e 341 chamadas
+
+<details><summary>Gabarito</summary>
+
+**A.** O nível `i` tem 4!/(4 - i)! chamadas: 1, 4, 12, 24 e 24 (o último nível
+é o das folhas, com `i == n`). Soma: 65. As folhas são as 4! = 24
+permutações. Veja 0126.
+
+</details>
+
+**3.** O que o programa mostra?
+
+```c
+#include <stdio.h>
+
+void f(int n) {
+    if (n == 0) return;
+    f(n - 1);
+    printf("%d", n);
+    f(n - 1);
+}
+
+int main(void) {
+    f(3);
+    printf("\n");
+    return 0;
+}
+```
+
+- (A) 123
+- (B) 321
+- (C) 3213121
+- (D) 1231231
+- (E) 1213121
+
+<details><summary>Gabarito</summary>
+
+**E.** `f(1)` mostra `1`; `f(2)` mostra f(1), `2`, f(1): `121`; `f(3)` mostra
+`121`, `3`, `121`. São 2³ - 1 = 7 dígitos, o mesmo padrão dos movimentos da
+Torre de Hanói. Veja 0033 e 0125.
+
+</details>
+
+**4.** Sobre o problema das N-rainhas resolvido por backtracking (uma rainha
+por linha, poda por coluna e diagonais), assinale a correta.
+
+- (A) O número de soluções cresce sempre com N.
+- (B) Há 2 soluções para N = 4, 10 para N = 5 e 4 para N = 6.
+- (C) Para N = 3 há exatamente uma solução.
+- (D) A poda deixa o algoritmo polinomial em N.
+- (E) Sem a regra "uma rainha por linha", o número de configurações testadas
+  seria o mesmo.
+
+<details><summary>Gabarito</summary>
+
+**B.** Contando com o programa do assunto: N = 4 dá 2, N = 5 dá 10, N = 6 dá
+4 (e N = 8 dá 92). O número não cresce sempre, por isso (A) erra. N = 2 e
+N = 3 não têm solução. A poda corta muito, mas a árvore continua exponencial
+no pior caso. Veja 0128.
+
+</details>
+
+**5.** O backtracking abaixo procura subconjuntos dos preços `{7, 5, 4, 3}`
+que somem exatamente 12. Quantas vezes `soma` é chamada, contando
+`soma(0, 0)`?
+
+```c
+int preco[] = {7, 5, 4, 3};
+
+void soma(int i, int s) {
+    if (s > 12) return;               // poda: passou do alvo
+    if (s == 12) { mostra(); return; }
+    if (i == 4) return;               // acabaram os itens
+    soma(i + 1, s + preco[i]);        // leva o item i
+    soma(i + 1, s);                   // não leva
+}
+```
+
+- (A) 16
+- (B) 31
+- (C) 2
+- (D) 25
+- (E) 15
+
+<details><summary>Gabarito</summary>
+
+**D.** Sem poda, seriam 31 chamadas (a árvore completa de 4 itens). A poda
+corta, por exemplo, o ramo 7 + 5 + ... (a soma bate 12 e volta) e o 7 + 4 + 3
+(passa de 12). As soluções são {7, 5} e {5, 4, 3}; contando as chamadas com
+um contador global, saem 25. Veja 0127.
+
+</details>
+
+**6.** Um programa gera e **mostra** todos os subconjuntos de `n` itens (cada
+subconjunto impresso item a item) e, em outra versão, todas as permutações.
+Quais são os custos?
+
+- (A) Θ(2ⁿ) e Θ(n!)
+- (B) Θ(n · 2ⁿ) e Θ(n · n!)
+- (C) Θ(n²) e Θ(n³)
+- (D) Θ(2ⁿ) e Θ(2ⁿ)
+- (E) Θ(n log n) e Θ(n!)
+
+<details><summary>Gabarito</summary>
+
+**B.** São 2ⁿ subconjuntos e n! permutações, e mostrar cada um custa até `n`
+passos. A recursão em si (os nós internos) não muda a classe. Veja 0125 e
+0126.
+
+</details>
+
+**7.** No N-rainhas com `N = 8`, a casa da linha 2 e coluna 5 ocupa quais
+índices nos vetores `diag1` (↗, índice `l + c`) e `diag2` (↘, índice
+`l - c + N - 1`)?
+
+- (A) `diag1[3]` e `diag2[7]`
+- (B) `diag1[7]` e `diag2[-3]`
+- (C) `diag1[10]` e `diag2[4]`
+- (D) `diag1[7]` e `diag2[10]`
+- (E) `diag1[7]` e `diag2[4]`
+
+<details><summary>Gabarito</summary>
+
+**E.** `l + c = 2 + 5 = 7` e `l - c + N - 1 = 2 - 5 + 7 = 4`. O `-3` da (B) é
+o `l - c` sem o deslocamento, que escreveria fora do vetor. Veja 0128.
+
+</details>
+
+**8.** Num labirinto em grade, assinale a afirmação correta.
+
+- (A) O backtracking em profundidade (a DFS do labirinto) acha **um** caminho
+  até a saída, não necessariamente o mais curto; o mais curto em número de
+  passos sai de uma BFS.
+- (B) A DFS sempre acha o caminho mais curto, porque visita cada casa uma vez.
+- (C) Marcar casas visitadas é opcional numa grade sem ciclos de corredores.
+- (D) A BFS precisa de backtracking para achar o caminho mais curto.
+- (E) Mudar a ordem das direções testadas não muda o caminho encontrado pela
+  DFS.
+
+<details><summary>Gabarito</summary>
+
+**A.** A DFS segue a primeira direção que funciona e para no primeiro
+caminho que dá certo; a ordem das direções decide qual é ele. A BFS explora
+por distância e acha o menor número de passos. Sem marca de visitada, a busca
+anda em círculos assim que houver dois caminhos para a mesma casa. Veja 0129
+e 0110.
+
+</details>
+
+**9.** Quantas chamadas a função faz para calcular `fib(6)`, contando a
+primeira?
+
+```c
+int fib(int n) {
+    if (n < 2) return n;
+    return fib(n - 1) + fib(n - 2);
+}
+```
+
+- (A) 6
+- (B) 13
+- (C) 15
+- (D) 25
+- (E) 64
+
+<details><summary>Gabarito</summary>
+
+**D.** Chamando de `C(n)` as chamadas: C(0) = C(1) = 1 e C(n) = 1 + C(n - 1)
++ C(n - 2). Daí C(2) = 3, C(3) = 5, C(4) = 9, C(5) = 15, **C(6) = 25**. Em
+geral, C(n) = 2 · fib(n + 1) - 1, que cresce como φⁿ (φ ≈ 1,618): a mesma
+sub-resposta é recalculada muitas vezes. A programação dinâmica do módulo 21
+resolve isso. Veja 0032.
+
+</details>
+
 ## Para ler mais
 
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Capítulo sobre enumeração (subsequências, combinações e permutações) e os exercícios de backtracking.
 - FEOFILOFF, P. *Projeto de algoritmos em C*: enumeração e backtracking. São Paulo: IME-USP. Disponível em: <https://www.ime.usp.br/~pf/algoritmos/>.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 3: recursividade (oito rainhas e labirinto com backtracking).
 - WIRTH, N. *Algoritmos e estruturas de dados*. Rio de Janeiro: LTC, 1989. Capítulo sobre algoritmos de tentativa e erro (as oito rainhas e o passeio do cavalo).
-- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2011. Paradigmas de projeto: tentativa e erro.
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 2: paradigmas de projeto (recursividade e tentativa e erro).
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson, 2011. Exercícios do passeio do cavalo, das oito rainhas e do labirinto; apêndice sobre sudoku.
 - CASTILHO, M. A.; SILVA, F.; WEINGAERTNER, D. *Algoritmos e estruturas de dados 1*. Curitiba: UFPR, 2020. Capítulos sobre matrizes e o flood fill.
 - ROVAI, K. R. *Algoritmos e estrutura de dados*. Londrina: Editora e Distribuidora Educacional, 2018. Pilhas: o labirinto e a memória de decisões.
 - KNUTH, D. E. *The art of computer programming*. v. 4A: combinatorial algorithms, part 1. Boston: Addison-Wesley, 2011. Geração de tuplas (código de Gray), permutações e combinações.
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 22: busca em profundidade e busca em largura (a base do labirinto e do flood fill).
+- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 20: busca em profundidade e busca em largura (a base do labirinto e do flood fill).
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Seção 4.10: recursividade.

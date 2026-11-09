@@ -29,6 +29,17 @@ retorno**. Num grafo não dirigido, achar uma aresta de retorno é achar um
 ciclo. Isso, junto com contar componentes, resolver labirintos e ordenar
 tarefas com pré-requisitos, é o que faz a DFS valer o assunto.
 
+O Cormen põe um **relógio** na DFS: cada vértice ganha um tempo de
+**descoberta** `v.d` (a chamada começa) e um de **término** `v.f` (ela acaba),
+e as cores branco, cinza (na pilha) e preto (terminado). Contando de 1, a Sede
+fica com 1/12 e a Bica com 5/6. O `DFS(G)` dele ainda recomeça de **todo**
+vértice branco, formando uma floresta que cobre as partes soltas. Num grafo
+**dirigido**, as arestas fora da árvore são de **retorno** (para um ancestral
+cinza: há ciclo), de **avanço** (para um descendente preto) ou de
+**cruzamento** (para outro preto). Os vértices em ordem decrescente de `v.f`
+dão a **ordenação topológica** de um grafo dirigido acíclico. Com lista de
+adjacências, tudo custa O(V + E).
+
 Vamos ver na prática. Os números mostram a ordem da visita; as arestas verdes
 são as da árvore. À direita, a pilha de chamadas no momento mais fundo, quando
 a Bica é visitada:

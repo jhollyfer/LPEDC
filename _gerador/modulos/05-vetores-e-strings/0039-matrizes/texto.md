@@ -5,7 +5,8 @@ Você abre uma planilha: uma linha por loja, uma coluna por semana. No fim de
 cada linha, o total da loja; no pé de cada coluna, o total da semana. Essa
 planilha, no C, é uma **matriz**.
 
-Uma matriz é um **vetor de vetores**. `int vendas[3][4]` são 3 linhas, e cada
+Uma matriz é um **vetor de vetores** (um vetor **bidimensional**).
+`int vendas[3][4]` são 3 linhas, e cada
 linha é um vetor de 4 `int`. Para chegar numa célula você usa dois índices,
 **primeiro a linha, depois a coluna**: `vendas[2][0]` é a loja 3 na semana 1.
 Os dois começam em 0, como em qualquer vetor.

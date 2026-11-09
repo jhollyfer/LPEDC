@@ -36,7 +36,9 @@ Existe um segundo caminho, pela DFS do assunto 0111. Quando a chamada
 `dfs(u)` termina, tudo o que depende de `u` já terminou antes. Então a ordem
 em que as chamadas **terminam** (a **pós-ordem**), lida de trás para a
 frente, é uma ordenação topológica. Na prática: empilhe `u` no fim de
-`dfs(u)` e, no final, desempilhe tudo. O exemplo A301 faz assim.
+`dfs(u)` e, no final, desempilhe tudo. O exemplo A301 faz assim. É essa a
+versão do Cormen (ordem decrescente do tempo de término `u.f`); o Kahn é a
+alternativa por graus de entrada.
 
 Vamos ver na prática. O número em cima de cada serviço é a posição dele na
 lista. Repare no Reboco, que espera três serviços e só entra em sétimo:

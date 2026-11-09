@@ -14,9 +14,12 @@ máximo 1.
 Para conferir a regra, cada nó guarda a própria altura e calcula o **fator de
 balanceamento**: `fb = altura(esq) - altura(dir)`. Na AVL, todo nó tem fator
 -1, 0 ou 1. Fator 2 quer dizer "pesado à esquerda"; -2, "pesado à direita".
+Tem livro que calcula `altura(dir) - altura(esq)`: o sinal troca, a regra não.
 
 Com essa regra, a altura de uma AVL nunca passa de uns 1,44 · log₂ n. Mil
-pedidos cabem em altura 9, e não 999.
+pedidos cabem em altura 9, e não 999. A AVL não é a única: a **rubro-negra**
+(assunto 0177, a do Cormen) e a **árvore B** (0146) também garantem altura
+O(log n), cada uma com outra regra.
 
 A inserção começa igual à da BST: desce e pendura uma folha. A diferença está
 na **volta** da recursão. Cada ancestral do nó novo, de baixo para cima,

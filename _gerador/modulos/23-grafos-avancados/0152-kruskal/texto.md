@@ -32,7 +32,9 @@ não, ela junta dois grupos: `une`.
 Por que o guloso acerta aqui? Pegue a aresta mais barata entre dois grupos
 quaisquer. Toda árvore que liga tudo precisa atravessar de um grupo para o
 outro em algum ponto, e atravessar pela mais barata nunca é pior. Esse
-argumento tem nome nos livros: **propriedade do corte**.
+argumento tem nome nos livros: **propriedade do corte**. O Cormen diz que a
+aresta **leve** (a mais barata) que cruza um corte é uma aresta **segura**:
+ela pode entrar sem estragar a árvore mínima.
 
 Vamos ver na prática. As arestas verdes são as aceitas. Embaixo, a lista
 ordenada: verde entrou, vermelho fecharia ciclo, cinza nem foi olhado porque
@@ -159,7 +161,8 @@ das melhores conexões de uma rede Wi-Fi.
 > troca blocos de 12 bytes de lugar, chamando `compara` com ponteiros para
 > dois blocos. Dentro de `compara`, a conversão de `const void *` para
 > `const Aresta *` devolve o tipo. O custo do Kruskal é dominado pela
-> ordenação, O(E log E); o union-find, com os dois truques, custa quase O(1)
+> ordenação, O(E log E), que é O(E log V) porque E < V² (é assim que o
+> Cormen escreve); o union-find, com os dois truques, custa quase O(1)
 > por operação. Para mil vilas e 100 mil trechos, uns 1,7 milhão de
 > comparações.
 

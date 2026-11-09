@@ -123,8 +123,18 @@ E quando o teorema **não** se aplica? Quando a recorrência não tem a forma
 `a T(n/b) + n^k`: `T(n) = T(n-1) + n` (o tamanho cai **subtraindo**, não
 dividindo), `T(n) = T(n/3) + T(2n/3) + n` (pedaços de tamanhos diferentes),
 `T(n) = 2 T(n/2) + n log n` (o trabalho fica no meio do caminho entre `n^1`
-e `n^(1+algo)`). Aí você volta para a árvore de recursão, que sempre
-funciona. O exemplo A230 resolve dois desses casos.
+e `n^(1+algo)`; a forma do Cormen, na nota abaixo, ainda pega este). Aí
+você volta para a árvore de recursão, que sempre funciona. O exemplo A230
+resolve dois desses casos.
+
+> [!NOTE]
+> **No Cormen (4ª ed.)** a forma é `T(n) = a T(n/b) + f(n)`, e `f(n)` é
+> comparada com `n^(log_b a)`. Caso 1: `f(n) = O(n^(log_b a - ε))` para algum
+> ε > 0 dá Θ(n^(log_b a)). Caso 2: `f(n) = Θ(n^(log_b a) · logᵖ n)` com p ≥ 0
+> (ele chama o p de k) dá Θ(n^(log_b a) · log^(p+1) n). Caso 3:
+> `f(n) = Ω(n^(log_b a + ε))` **e** a regularidade `a f(n/b) ≤ c f(n)` para
+> algum c < 1 dão Θ(f(n)). A tabela acima é o caso `f(n) = nᵏ`. Com p = 1,
+> `2 T(n/2) + n log n` dá Θ(n log² n), o que o A230 mede.
 
 > [!WARNING]
 > `a` e `b` são coisas diferentes e não precisam ser iguais. `a` conta as

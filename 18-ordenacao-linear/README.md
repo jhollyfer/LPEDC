@@ -667,6 +667,10 @@ por último na entrada ocupa a última vaga do bloco. A ordem original dos
 empates se mantém: o counting sort é **estável**. Isso parece detalhe, mas é
 o que faz dele a peça central do radix sort, no próximo assunto.
 
+O Cormen escreve `COUNTING-SORT(A, n, k)` com vetores de 1 a n e chaves de 0
+a **k**, ou seja, k + 1 contadores; aqui, em C, as chaves vão de 0 a k - 1. A
+conta é a mesma: Θ(n + k), que vira Θ(n) quando k = O(n).
+
 Vamos ver na prática. A entrada passa uma vez para contar e outra para
 distribuir. Os três pedidos de 3 estrelas (A, C e H, em verde) chegam à
 saída na mesma ordem em que estavam:
@@ -1160,7 +1164,10 @@ guarda o trabalho das passadas anteriores.
 
 O custo é de `d` passadas de counting sort, com `d` dígitos e base `b`:
 **O(d · (n + b))**. Para números de tamanho fixo, `d` é constante e o radix
-sort é linear. De novo, nenhuma comparação entre elementos.
+sort é linear. De novo, nenhuma comparação entre elementos. O Cormen
+escreve Θ(d(n + k)), com k valores por dígito, e para chaves de `b` bits
+quebradas em dígitos de `r` bits, Θ((b/r)(n + 2^r)): a melhor escolha fica
+perto de r = log₂ n.
 
 Vamos ver na prática. Oito números de pedido de um mercado online, com até
 três dígitos (escritos com zeros à esquerda para os dígitos ficarem
@@ -1669,6 +1676,8 @@ Quanto custa? Se os `n` valores estão bem **espalhados** pelo intervalo e há
 uns `n` baldes, cada balde recebe em média um elemento, e o custo total é
 **O(n)** em média. Se todos caem no mesmo balde, sobra um insertion sort de
 `n` elementos: **O(n²)**. O bucket sort aposta na distribuição dos dados.
+O Cormen apresenta a versão com valores em [0, 1) e `n` baldes: `x` vai para
+o balde ⌊n · x⌋, e o Θ(n) médio supõe valores **uniformes** no intervalo.
 
 Vamos ver na prática. Dez notas finais, dez baldes. Três notas caem no balde
 2 e entram em ordem na lista; quatro baldes ficam vazios. Ler os baldes de
@@ -2216,7 +2225,9 @@ custo e cuidados.
 Quanto custa? Se o pivô cai perto do meio, cada separação descarta metade:
 `n + n/2 + n/4 + ...`, que é menos que `2n`. O quickselect é **O(n) em
 média**, contra O(n log n) de ordenar. No pior caso, o pivô é sempre o
-maior ou o menor e o custo vira **O(n²)**, como no quick sort.
+maior ou o menor e o custo vira **O(n²)**, como no quick sort. O Cormen
+chama a versão com pivô sorteado de `RANDOMIZED-SELECT` e mostra também o
+`SELECT` (a mediana das medianas, de 1973), que garante O(n) no pior caso.
 
 Vamos ver na prática. A primeira separação, com pivô 1300, deixa o pivô na
 posição 2. A mediana está na posição 4, à direita: os três primeiros nunca
@@ -3439,9 +3450,210 @@ junto com o vetor ordenado. Num vetor decrescente de 100 mil, são
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
+letra e só depois abra o gabarito. Sempre que a questão traz código ou um
+vetor, dá para conferir rodando.
+
+**1.** O counting sort recebe `4 1 3 1 0 4 2 1`, com chaves de 0 a 4. Como
+fica o vetor de contagem `c` depois dos passos de **contar** e **acumular**
+(cada `c[x]` passa a ser quantos elementos têm chave menor ou igual a `x`)?
+
+- (A) `1 3 1 1 2`
+- (B) `0 1 4 5 6`
+- (C) `1 4 5 6 7`
+- (D) `1 4 5 6 8`
+- (E) `2 4 5 6 8`
+
+<details><summary>Gabarito</summary>
+
+**D.** A contagem dá `c = 1 3 1 1 2` (um 0, três 1, um 2, um 3, dois 4), que
+é a alternativa (A), parada um passo antes. Acumulando: 1, 1 + 3 = 4, 4 + 1 =
+5, 5 + 1 = 6, 6 + 2 = 8. O último sempre vale `n`. Veja 0120.
+
+</details>
+
+**2.** Um counting sort recebe os pares (chave, rótulo) `(3,a) (1,b) (3,c)
+(2,d) (1,e)`. Por engano, o laço de distribuir anda **da frente para trás**
+(`for (i = 0; i < n; i++)`), mantendo `saida[--c[x]] = v[i]`. Qual é a saída?
+
+- (A) `1b 1e 2d 3a 3c`
+- (B) `1e 1b 2d 3c 3a`
+- (C) `1b 1e 2d 3c 3a`
+- (D) `1e 1b 2d 3a 3c`
+- (E) o vetor não sai ordenado pela chave
+
+<details><summary>Gabarito</summary>
+
+**B.** As chaves saem em ordem, mas, com `--c[x]`, o primeiro par de cada
+chave ocupa a **última** vaga do bloco: os empates saem invertidos. Andando
+de trás para a frente, a resposta seria (A), a estável. Veja 0120.
+
+</details>
+
+**3.** Na forma usual de cada um, quais destes algoritmos são **estáveis**:
+insertion sort, merge sort, counting sort, heapsort, quicksort e selection
+sort?
+
+- (A) insertion, merge e counting
+- (B) merge, counting e heapsort
+- (C) só o counting
+- (D) insertion, merge, counting e quicksort
+- (E) todos, desde que as chaves sejam distintas
+
+<details><summary>Gabarito</summary>
+
+**A.** Insertion só passa à frente de quem é estritamente maior; merge tira
+da esquerda no empate; counting distribui de trás para a frente. Heapsort,
+quicksort e selection sort fazem trocas longas que pulam por cima de iguais.
+Com chaves distintas a estabilidade nem é observável, por isso (E) não diz
+nada. Veja 0096 e 0120.
+
+</details>
+
+**4.** O radix sort LSD, com counting sort estável em cada passada e base 10,
+ordena `512 108 371 245 903 117 650 284`. Como fica o vetor depois da
+**segunda** passada (a das dezenas)?
+
+- (A) `108 117 245 284 371 512 650 903`
+- (B) `650 371 512 903 284 245 117 108`
+- (C) `903 108 512 117 245 650 371 284`
+- (D) `108 903 117 512 245 650 371 284`
+- (E) `903 108 117 512 245 650 284 371`
+
+<details><summary>Gabarito</summary>
+
+**C.** A primeira passada (unidades) dá `650 371 512 903 284 245 117 108`, a
+alternativa (B). Na das dezenas, 903 e 108 têm dezena 0 e mantêm a ordem que
+já tinham (903 antes); 512 e 117, dezena 1, também. A alternativa (D) inverte
+esses empates, o que só acontece com uma passada instável. A (A) é o vetor
+depois da terceira passada. Veja 0121.
+
+</details>
+
+**5.** Um milhão de inteiros sem sinal de 32 bits são ordenados por radix
+sort, tomando 8 bits por "dígito" (base 256). Quantas passadas são feitas e
+qual é o custo, em termos do Cormen, com `b` bits por chave e `r` bits por
+dígito?
+
+- (A) 32 passadas; Θ(b · n)
+- (B) 10 passadas; Θ(n log n)
+- (C) 2 passadas; Θ(n + 2^r)
+- (D) 4 passadas; Θ(n log n)
+- (E) 4 passadas; Θ((b/r) · (n + 2^r))
+
+<details><summary>Gabarito</summary>
+
+**E.** São `b/r = 32/8 = 4` passadas de counting sort, cada uma Θ(n + 2^r)
+com `2^r = 256` contadores. Com `b` e `r` fixos, é linear em `n`. O limite
+Ω(n log n) não se aplica, porque nenhum elemento é comparado com outro. Veja
+0121.
+
+</details>
+
+**6.** Você precisa ordenar `n` inteiros com valores de 0 a n³ - 1. Qual é a
+melhor escolha?
+
+- (A) counting sort direto, em Θ(n)
+- (B) radix sort com base `n` (3 dígitos), em Θ(n)
+- (C) bucket sort com 10 baldes, em Θ(n) no pior caso
+- (D) nada abaixo de Θ(n log n) é possível
+- (E) counting sort direto, em Θ(n log n)
+
+<details><summary>Gabarito</summary>
+
+**B.** O counting sort direto precisa de `k = n³` contadores: Θ(n + n³) =
+Θ(n³). Escrevendo cada número em base `n`, ele tem 3 dígitos de 0 a n - 1, e
+o radix faz 3 passadas de Θ(n + n): Θ(n). Veja 0120 e 0121.
+
+</details>
+
+**7.** O bucket sort do Cormen recebe `n` valores em [0, 1), usa `n` baldes
+(o valor `x` vai para o balde ⌊n · x⌋) e ordena cada balde com insertion
+sort. Assinale a correta.
+
+- (A) Custa Θ(n) no pior caso, para qualquer entrada.
+- (B) Não é estável, qualquer que seja a inserção no balde.
+- (C) Custa Θ(n log n) em média, como os métodos por comparação.
+- (D) Custa Θ(n) em média se os valores forem uniformes no intervalo, e Θ(n²)
+  no pior caso, quando todos caem no mesmo balde.
+- (E) Só funciona com números inteiros.
+
+<details><summary>Gabarito</summary>
+
+**D.** Com distribuição uniforme, cada balde recebe O(1) elementos em média,
+e o insertion sort nos baldes custa O(n) no total. Se todos caem num balde só,
+sobra um insertion sort de `n` elementos. Ele é estável quando a inserção põe
+o novo depois dos iguais, como o `<=` do assunto. Veja 0122.
+
+</details>
+
+**8.** Sobre achar o k-ésimo menor elemento de um vetor de `n` posições,
+assinale a correta.
+
+- (A) O quickselect (o `RANDOMIZED-SELECT` do Cormen) custa Θ(n) esperado e
+  Θ(n²) no pior caso; o `SELECT` com mediana das medianas garante O(n) no pior
+  caso.
+- (B) Qualquer seleção exige ordenar antes, então custa Ω(n log n).
+- (C) O quickselect custa Θ(n log n) no pior caso.
+- (D) O quickselect faz duas chamadas recursivas, como o quicksort.
+- (E) Achar o mínimo custa Θ(log n).
+
+<details><summary>Gabarito</summary>
+
+**A.** Depois de separar, o quickselect segue **um lado só**, por isso a média
+é `n + n/2 + n/4 + ... < 2n`. Com o pivô sempre no extremo, vira
+`n + (n - 1) + ...`: Θ(n²). A mediana das medianas escolhe um pivô que
+descarta uma fração fixa do vetor a cada passo, e isso garante O(n). Veja
+0123.
+
+</details>
+
+**9.** Um sistema guarda 1 milhão de leituras de temperatura, todas inteiras
+entre 1000 e 1009 (décimos de grau). Para ordenar com counting sort (ou
+pigeonhole sort), qual é o tamanho do vetor de contagem e o custo?
+
+- (A) 1010 contadores; Θ(n log n)
+- (B) 10⁶ contadores; Θ(n)
+- (C) 1009 contadores; Θ(n + k) com k = 1009
+- (D) 10 contadores; Θ(n log n)
+- (E) 10 contadores, indexados por `x - 1000`; Θ(n + k) = Θ(n)
+
+<details><summary>Gabarito</summary>
+
+**E.** O intervalo tem `max - min + 1 = 10` valores. Subtraindo o mínimo
+(`c[x - 1000]++`), bastam 10 contadores, e o custo Θ(n + 10) é linear. Alocar
+1010 posições funcionaria, mas desperdiça memória. O pigeonhole sort, com
+uma "casa" por valor do intervalo, é o assunto 0180. Veja 0120.
+
+</details>
+
+**10.** Assinale a afirmação correta sobre o limite inferior Ω(n log n) para
+ordenar.
+
+- (A) Ele vale para qualquer algoritmo de ordenação, inclusive o counting
+  sort.
+- (B) O shell sort é o único algoritmo por comparação que o fura.
+- (C) Ele vale para algoritmos que só aprendem sobre os dados comparando pares;
+  counting, radix e bucket sort usam o valor da chave como índice e escapam
+  dele, ao custo de hipóteses sobre as chaves.
+- (D) Ele vale só para o caso médio.
+- (E) Ele mostra que o merge sort é Θ(n²) no pior caso.
+
+<details><summary>Gabarito</summary>
+
+**C.** A árvore de decisão modela só comparações: com `n!` folhas, a altura é
+pelo menos log₂ n! = Θ(n log n). Os métodos lineares não fazem comparações
+entre elementos; em troca, exigem chaves inteiras num intervalo pequeno, com
+poucos dígitos ou distribuídas de modo uniforme. Veja 0117 e 0120.
+
+</details>
+
 ## Para ler mais
 
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Cap. 8 (ordenação em tempo linear: counting, radix e bucket sort) e cap. 9 (medianas e estatísticas de ordem).
+- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 8 (limite inferior, counting, radix e bucket sort) e cap. 9 (medianas e estatísticas de ordem: `RANDOMIZED-SELECT` e `SELECT`).
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 4: ordenação (shellsort, estabilidade e ordenação parcial).
 - SEDGEWICK, R. *Algorithms in C, parts 1-4*. 3. ed. Boston: Addison-Wesley, 1998. Caps. 6 (shellsort), 7 (quicksort e seleção) e 10 (radix sort).
 - SEDGEWICK, R.; WAYNE, K. *Algorithms*. 4. ed. Boston: Addison-Wesley, 2011. Seções 2.1 (shellsort) e 5.1 (ordenação de strings). Disponível em: <https://algs4.cs.princeton.edu/>.
 - KNUTH, D. E. *The art of computer programming, volume 3: sorting and searching*. 2. ed. Boston: Addison-Wesley, 1998. Seção 5.2.1 (shellsort) e 5.2.5 (ordenação por distribuição).

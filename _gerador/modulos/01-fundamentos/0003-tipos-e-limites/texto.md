@@ -25,7 +25,9 @@ No C, hexadecimal começa com `0x`: `0xFF`, `0xFFFF`.
 Agora os tipos. Cada tipo inteiro tem um tamanho, e o tamanho decide a
 **faixa**. Os **modificadores** mudam o `int`: `short` (menor), `long` e
 `long long` (maiores) e `unsigned` (sem sinal: troca os negativos por mais
-positivos). Num PC Linux de 64 bits:
+positivos). Sem modificador, o tipo inteiro é **com sinal** (`signed`): `int`
+e `signed int` são o mesmo tipo. Só o `char` puro fica a cargo da máquina; no
+PC Linux ele tem sinal. Num PC Linux de 64 bits:
 
 | Tipo | Bytes | Faixa |
 | --- | --- | --- |

@@ -32,6 +32,10 @@ por nível, sem buracos. A raiz fica em `v[0]` e, para qualquer índice `i`:
 | filho esquerdo | `2 * i + 1` |
 | filho direito | `2 * i + 2` |
 
+O Cormen guarda o heap em `A[1..n]`, com a raiz em `A[1]`, e aí as contas
+ficam `PARENT(i) = ⌊i/2⌋`, `LEFT(i) = 2i` e `RIGHT(i) = 2i + 1`. É o mesmo
+heap deslocado de uma casa: numa questão, confira onde o vetor começa.
+
 As duas operações consertam o heap andando por um único caminho:
 
 - **inserir**: o novo entra no fim do vetor (a próxima vaga da árvore) e **sobe**:
@@ -40,7 +44,10 @@ As duas operações consertam o heap andando por um único caminho:
   dela e **desce**: enquanto for menor que algum filho, troca com o **maior**
   dos filhos.
 
-A árvore tem altura ⌊log₂ n⌋, então subir ou descer custa no máximo isso.
+A árvore tem altura ⌊log₂ n⌋, então subir ou descer custa no máximo isso. No
+Cormen, a descida é a `MAX-HEAPIFY`, e a fila de prioridade tem `INSERT`,
+`MAXIMUM`, `EXTRACT-MAX` e `INCREASE-KEY`. Invertendo as comparações, você tem
+o **heap de mínimo**, com o menor na raiz.
 
 Vamos ver na prática. Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30.
 Depois das seis chegadas, o heap é `[90 70 30 40 50 20]`. A árvore e o vetor são

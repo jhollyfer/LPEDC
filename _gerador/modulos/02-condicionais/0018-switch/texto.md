@@ -5,7 +5,8 @@ quente. Você não diz "quero um pão com hambúrguer, alface e tomate". Diz "um
 2". O atendente não testa faixa nenhuma: só procura **qual número é igual** ao
 que você falou.
 
-Quando a decisão é "qual destes valores exatos?", o C tem o **`switch`**:
+Quando a decisão é "qual destes valores exatos?", o C tem o **`switch`**, a
+**seleção múltipla** (o nome que o Deitel e a prova usam):
 
 ```c
 switch (codigo) {

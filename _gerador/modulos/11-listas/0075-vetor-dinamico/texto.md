@@ -9,8 +9,8 @@ quando a folga acaba, pede um vetor maior e copia tudo. É o que toda
 biblioteca de "lista que cresce sozinha" faz por baixo, e é o que você vai
 escrever agora.
 
-Uma **lista sequencial** guarda os itens lado a lado, num vetor contínuo, na
-ordem em que estão na lista. Para ela crescer, você controla três coisas: o
+Uma **lista sequencial** (também chamada de **lista em vetor**) guarda os
+itens lado a lado, num vetor contínuo, na ordem em que estão na lista. Para ela crescer, você controla três coisas: o
 endereço do vetor no heap (`itens`), quantos itens estão em uso (`tam`) e
 quantos cabem (`cap`). Enquanto `tam < cap`, inserir no fim é só escrever em
 `itens[tam]`.
@@ -106,7 +106,8 @@ continua inteira:
 {{fluxograma}}
 
 O preço do vetor aparece quando você insere ou remove **no meio**: todo mundo
-que vem depois precisa andar uma casa (o exemplo A150 mostra). Ler a posição
+que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
+(o exemplo A150 mostra). Ler a posição
 `i`, por outro lado, é instantâneo: `itens[i]` é uma conta de endereço.
 
 > [!WARNING]

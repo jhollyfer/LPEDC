@@ -7,7 +7,9 @@ o **formato**.
 
 O primeiro argumento do `printf` é a **string de formato**: um texto com
 **especificadores** (os `%`) que são buracos a preencher. Os outros
-argumentos preenchem os buracos **na ordem**, um para cada `%`:
+argumentos preenchem os buracos **na ordem**, um para cada `%`. Escrever na
+tela é escrever na **saída padrão** (`stdout`); o `fprintf` do módulo 09 usa
+o mesmo formato para escrever num arquivo:
 
 | Especificador | Mostra | Exemplo | Sai |
 | --- | --- | --- | --- |

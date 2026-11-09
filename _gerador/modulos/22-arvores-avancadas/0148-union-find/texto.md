@@ -37,6 +37,12 @@ uma função que cresce tão devagar que não passa de 4 para nenhum n que caiba
 num computador. Na prática, cada operação é O(1) amortizado (a ideia de custo
 amortizado é do assunto 0116).
 
+O Cormen chama as operações de `MAKE-SET`, `FIND-SET` e `UNION` e, em vez do
+tamanho, usa a **união por posto** (*rank*): cada raiz guarda um limite
+superior da altura e só ganha 1 quando duas raízes de mesmo posto se juntam.
+A garantia é a mesma, O(m · α(n)), e é essa estrutura que o Kruskal (0152)
+usa.
+
 Vamos ver na prática. Oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades. No
 fim sobram dois grupos: {Ana, Beto, Caio, Duda} e {Edu, Fia, Gui, Hugo}. Duda e
 Hugo estão a dois passos da raiz; as perguntas sobre eles comprimem o caminho e

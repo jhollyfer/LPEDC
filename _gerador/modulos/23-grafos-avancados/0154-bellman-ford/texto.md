@@ -18,7 +18,8 @@ as arestas**, uma rodada inteira de cada vez, sem escolher o menor:
 
 - `dist[origem] = 0` e INFINITO no resto;
 - repita V - 1 vezes: para cada aresta `u -> v` com custo `c`, se
-  `dist[u] + c < dist[v]`, atualize `dist[v]` e `anterior[v]`.
+  `dist[u] + c < dist[v]`, atualize `dist[v]` e `anterior[v]` (no Cormen,
+  `v.d` e `v.π`; esse teste é o `RELAX`).
 
 Por que V - 1 rodadas bastam? Um caminho mínimo não repete vértice, então
 tem no máximo V - 1 arestas. A rodada 1 garante a primeira aresta do caminho
@@ -34,7 +35,9 @@ negativo alcançável.
 
 O preço da desconfiança é o tempo: V - 1 rodadas de E arestas, **O(V · E)**,
 contra O((V + E) log V) do Dijkstra com heap. Use Bellman-Ford quando houver
-peso negativo; sem eles, Dijkstra.
+peso negativo; sem eles, Dijkstra. E se o grafo for um DAG, nem isso: relaxar
+cada aresta uma vez, na ordem topológica (0151), já dá os caminhos mínimos em
+O(V + E), mesmo com pesos negativos.
 
 Vamos ver na prática. Os números nas setas são o custo líquido; em cima de
 cada lugar, a `dist` final; verde, a rota até Casa. Embaixo, o vetor `dist`

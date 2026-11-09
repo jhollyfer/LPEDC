@@ -1,0 +1,83 @@
+// a rede de fibra: tin/low em roxo; pontes em verde; articulações em amarelo
+export const ideia = {
+  caixas: [
+    {
+      id: 'rede',
+      forma: 'grafo',
+      x: 130,
+      y: 140,
+      raio: 98,
+      vertices: [
+        ['Centro', 90, 90],
+        ['Adrianópolis', 90, 500],
+        ['Aleixo', 400, 295],
+        ['Flores', 720, 295],
+        ['Cidade Nova', 1020, 90],
+        ['Tarumã', 1020, 500],
+        ['Ponta Negra', 1280, 295],
+      ],
+      arestas: [
+        ['Centro', 'Aleixo'],
+        ['Aleixo', 'Adrianópolis'],
+        ['Adrianópolis', 'Centro'],
+        ['Aleixo', 'Flores'],
+        ['Flores', 'Cidade Nova'],
+        ['Cidade Nova', 'Tarumã'],
+        ['Tarumã', 'Flores'],
+        ['Tarumã', 'Ponta Negra'],
+      ],
+      marcadas: [
+        ['Aleixo', 'Flores'],
+        ['Tarumã', 'Ponta Negra'],
+      ],
+      estados: { Centro: 'roxo', Aleixo: 'amarelo', Flores: 'amarelo', Tarumã: 'amarelo' },
+      notas: { Centro: '1/1', Aleixo: '2/1', Flores: '4/4', 'Cidade Nova': '5/4', 'Ponta Negra': '7/7' },
+    },
+    {
+      id: 'regras',
+      x: 130,
+      y: 880,
+      w: 1360,
+      h: 230,
+      cor: 'cinza',
+      rotulo: 'aresta da árvore u - v',
+      texto: ['ponte: low[v] > tin[u]', 'articulação: low[v] >= tin[u] (fora a raiz)', 'raiz: articulação só com 2 ou mais filhos'],
+    },
+  ],
+  notas: [
+    { x: 220, y: 790, texto: '3/1', cor: 'roxo', tam: 22, ancora: 'middle' },
+    { x: 1150, y: 790, texto: '6/4', cor: 'roxo', tam: 22, ancora: 'middle' },
+    { x: 690, y: 485, texto: 'ponte', cor: 'verde', tam: 24, ancora: 'middle' },
+    { x: 1295, y: 610, texto: 'ponte', cor: 'verde', tam: 24, ancora: 'middle' },
+  ],
+}
+
+export const fluxograma = {
+  nos: [
+    ['A', 'inicio', 'dfs(u, pai)'],
+    ['B', 'proc', 'tin[u] = low[u] = ++relogio'],
+    ['C', 'dec', 'Vizinho v (não o pai)?'],
+    ['D', 'dec', 'v já visitado?'],
+    ['E', 'proc', 'low[u] = min(low[u], tin[v])'],
+    ['F', 'proc', 'dfs(v, u); low[u] = min(low[u], low[v])'],
+    ['G', 'dec', 'low[v] > tin[u]?'],
+    ['H', 'io', 'Ponte u - v'],
+    ['I', 'proc', 'Marca articulação (regras de u)'],
+    ['J', 'inicio', 'Volta'],
+  ],
+  setas: [
+    ['A', 'B'],
+    ['B', 'C'],
+    ['C', 'D', 'Sim'],
+    ['D', 'E', 'Sim'],
+    ['D', 'F', 'Não'],
+    ['E', 'C'],
+    ['F', 'G'],
+    ['G', 'H', 'Sim'],
+    ['G', 'I', 'Não'],
+    ['H', 'I'],
+    ['I', 'C', 'próximo v'],
+    ['C', 'J', 'Não'],
+  ],
+  caminho: ['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'C', 'J'],
+}

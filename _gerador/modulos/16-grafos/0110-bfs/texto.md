@@ -32,6 +32,11 @@ O vetor `pai[]` guarda quem descobriu cada vértice. Os pares (pai, filho)
 formam a **árvore da BFS**, e seguir `pai[]` a partir de Rita até chegar em
 `-1` dá o caminho mais curto, de trás para frente.
 
+O Cormen escreve a mesma BFS com **cores**: **branco** é o vértice ainda não
+descoberto (o nosso `dist == -1`), **cinza** é o que está na fila e **preto**
+o que já saiu dela. O `v.d` dele é o nosso `dist[v]`, e o `v.π` (pi), o
+`pai[v]`. Mesma busca, só outros nomes.
+
 Vamos ver na prática. As setas verdes são as arestas da árvore da BFS (cada
 uma liga um vértice a quem o descobriu); o número em cima de cada pessoa é a
 distância; embaixo, a fila na ordem em que cada um entrou:

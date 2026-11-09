@@ -251,9 +251,262 @@ volta.
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Nas de recursão, desenhe a pilha de chamadas: um quadro
+por chamada, com os parâmetros e o que cada uma devolve.
+
+**1.** Qual a saída?
+
+```c
+void dobra(int v) {
+    v = v * 2;
+}
+
+int main(void) {
+    int a = 5;
+    dobra(a);
+    printf("%d\n", a);
+    return 0;
+}
+```
+
+- (A) 10
+- (B) 5
+- (C) 0
+- (D) lixo de memória
+- (E) não compila: um procedimento não pode alterar o parâmetro
+
+<details><summary>Gabarito</summary>
+
+**(B).** A passagem é **por valor**: `v` é uma cópia do 5, local da função.
+Dobrar a cópia não mexe no `a` do `main`. Para a função alterar `a`, ela
+teria que devolver o valor (`a = dobra(a)`) ou receber o endereço (`&a`).
+Veja 0029.
+
+</details>
+
+**2.** Qual a saída?
+
+```c
+int conta(void) {
+    static int c = 0;
+    c++;
+    return c;
+}
+
+int main(void) {
+    conta();
+    conta();
+    printf("%d\n", conta() + conta());
+    return 0;
+}
+```
+
+- (A) 2
+- (B) 3
+- (C) 4
+- (D) 5
+- (E) 7
+
+<details><summary>Gabarito</summary>
+
+**(E).** A variável `static` local é inicializada **uma vez só** e guarda o
+valor entre as chamadas. As duas primeiras deixam `c` em 2; as duas do
+`printf` devolvem 3 e 4. Sem o `static`, toda chamada devolveria 1 e a saída
+seria 2. Veja 0030.
+
+</details>
+
+**3.** Qual a saída?
+
+```c
+int x = 1;
+
+void f(void) {
+    x = x + 10;
+}
+
+int main(void) {
+    int x = 5;
+    {
+        int x = 7;
+        x++;
+    }
+    f();
+    printf("%d\n", x);
+    return 0;
+}
+```
+
+- (A) 5
+- (B) 8
+- (C) 11
+- (D) 15
+- (E) 16
+
+<details><summary>Gabarito</summary>
+
+**(A).** Há três variáveis `x`. O `x` do bloco interno (7, depois 8) morre na
+`}`. O `f` mexe no `x` **global**, que vira 11. O `printf` do `main` enxerga o
+`x` local do `main`, que **esconde** o global e continua 5. Veja 0030.
+
+</details>
+
+**4.** Quanto vale `g(7)`?
+
+```c
+int g(int n) {
+    if (n <= 1)
+        return 1;
+    return n + g(n - 2);
+}
+```
+
+- (A) 28
+- (B) 15
+- (C) 16
+- (D) 13
+- (E) a recursão nunca termina
+
+<details><summary>Gabarito</summary>
+
+**(C).** `g(7) = 7 + g(5) = 7 + 5 + g(3) = 7 + 5 + 3 + g(1)`, e `g(1)` é o
+caso base, 1. Total: 16. O 15 esquece o 1 do caso base; o 28 seria a soma de
+1 a 7. Como `n` desce de 2 em 2, o `n <= 1` (e não `n == 0`) é o que garante
+a parada também para `n` par. Veja 0032.
+
+</details>
+
+**5.** O que `p(3)` mostra?
+
+```c
+void p(int n) {
+    if (n == 0)
+        return;
+    printf("%d", n);
+    p(n - 1);
+    printf("%d", n);
+}
+```
+
+- (A) 321
+- (B) 123321
+- (C) 321321
+- (D) 321123
+- (E) 3210123
+
+<details><summary>Gabarito</summary>
+
+**(D).** O primeiro `printf` roda na **ida**, antes da chamada: 3, 2, 1. O
+segundo roda na **volta**, quando cada quadro retoma depois que a chamada de
+baixo terminou, do mais fundo para o mais raso: 1, 2, 3. O `p(0)` não mostra
+nada. Veja 0031 e 0032.
+
+</details>
+
+**6.** Com a função abaixo, quantas chamadas a `fib` acontecem ao todo para
+calcular `fib(5)`, contando a primeira?
+
+```c
+int fib(int n) {
+    if (n < 2)
+        return n;
+    return fib(n - 1) + fib(n - 2);
+}
+```
+
+- (A) 5
+- (B) 15
+- (C) 8
+- (D) 9
+- (E) 32
+
+<details><summary>Gabarito</summary>
+
+**(B).** Chamando `C(n)` o número de chamadas: `C(0) = C(1) = 1` e
+`C(n) = 1 + C(n - 1) + C(n - 2)`. Fica `C(2) = 3`, `C(3) = 5`, `C(4) = 9` e
+`C(5) = 15`. O 5 é o **valor** de `fib(5)`, não o número de chamadas. Esse
+crescimento exponencial é o que a memoização resolve (assunto 0138). Veja
+0033.
+
+</details>
+
+**7.** Qual a saída?
+
+```c
+#define AREA(l) l * l
+
+int main(void) {
+    printf("%d\n", 100 / AREA(5));
+    return 0;
+}
+```
+
+- (A) 100
+- (B) 4
+- (C) 20
+- (D) 25
+- (E) não compila
+
+<details><summary>Gabarito</summary>
+
+**(A).** O pré-processador só troca texto: a linha vira `100 / 5 * 5`. Com
+`/` e `*` empatados, vale a esquerda primeiro: `(100 / 5) * 5`, que é 100. A
+macro certa leva parênteses em volta de tudo e de cada parâmetro:
+`#define AREA(l) ((l) * (l))`, e aí sairia 4. Veja 0035.
+
+</details>
+
+**8.** Sobre sub-rotinas em C, é correto afirmar:
+
+- (A) o C tem passagem por referência nativa: basta declarar o parâmetro com `&`.
+- (B) uma função recursiva sempre é mais rápida que a versão com laço.
+- (C) o protótipo é dispensável quando a função é definida depois do `main` que a chama.
+- (D) uma variável global declarada com `static` fica visível nos outros arquivos `.c` do programa.
+- (E) uma função com retorno `void` faz o papel de **procedimento**: executa uma tarefa e não devolve valor.
+
+<details><summary>Gabarito</summary>
+
+**(E).** No C, função e procedimento se escrevem igual; o `void` marca a que
+não devolve nada. (A) é falso: o C só passa por valor, e a "referência" se
+faz com ponteiro. (B) é falso: cada chamada custa um quadro na pilha. (C) é
+falso: sem protótipo, o compilador não conhece a função quando chega na
+chamada. (D) é o contrário: `static` numa global **esconde** o nome dos outros
+arquivos. Veja 0028, 0029 e 0034.
+
+</details>
+
+**9.** Qual o valor devolvido por `mdc(84, 36)` e quantas chamadas a `mdc`
+acontecem ao todo?
+
+```c
+int mdc(int a, int b) {
+    return b == 0 ? a : mdc(b, a % b);
+}
+```
+
+- (A) 6, com 3 chamadas
+- (B) 12, com 2 chamadas
+- (C) 12, com 3 chamadas
+- (D) 4, com 4 chamadas
+- (E) 12, com 4 chamadas
+
+<details><summary>Gabarito</summary>
+
+**(C).** As chamadas são `mdc(84, 36)`, `mdc(36, 12)` (porque 84 % 36 = 12)
+e `mdc(12, 0)` (porque 36 % 12 = 0), que é o caso base e devolve 12. É o
+algoritmo de Euclides. Veja 0033.
+
+</details>
+
 ## Para ler mais
 
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 5: funções, classes de armazenamento, escopo e recursão; cap. 13: o pré-processador.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulos de funções, pilha de execução, recursão e pré-processador.
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 2 e 4: algoritmos recursivos e divisão e conquista.
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 2: paradigmas de projeto de algoritmos, recursividade.
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Cap. 9: funções e recursão; cap. 13: classes de armazenamento e pré-processador.
 - BACKES, A. R. *Linguagem C: descomplicada*. Uberlândia: UFU, [s.d.]. Apostila. Funções, recursão e diretivas.
 - MARTINS, L. G. A. *Apostila de linguagem C: conceitos básicos*. Uberlândia: Faculdade de Computação, UFU, [s.d.].

@@ -14,7 +14,9 @@ principais:
 
 O deque generaliza as duas estruturas que você já viu. Usando só uma ponta
 (insere e retira no fim), ele é uma **pilha**. Inserindo no fim e retirando
-no início, é uma **fila**. Num vetor comum, inserir ou retirar no início custa O(n),
+no início, é uma **fila**. E quando quem sai não é o mais antigo nem o mais
+novo, e sim o de maior prioridade, a estrutura é a **fila de prioridade**,
+que o assunto 0102 monta com um heap. Num vetor comum, inserir ou retirar no início custa O(n),
 porque desloca todo mundo. Aqui as quatro operações custam **O(1)**.
 
 A implementação do [`deque.c`](0087-deque/deque.c) é a fila circular do 0085
