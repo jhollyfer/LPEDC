@@ -4,7 +4,7 @@ A padaria do bairro recebeu dezenas de comentários no app de entrega e quer
 saber do que os clientes mais falam. Um programa lê o texto, conta cada
 palavra e mostra o ranking.
 
-É o problema perfeito para uma tabela hash: a chave é a palavra, o valor é a
+A tabela hash resolve isso: a chave é a palavra, o valor é a
 contagem, e cada palavra do texto vira uma busca seguida de `+1`. O programa
 junta peças de vários módulos:
 
@@ -22,15 +22,14 @@ diferentes, isso custa O(N · d). Com a tabela, O(N) em média, mais
 O(d log d) do `qsort` no fim. Num livro de 100 mil palavras, 10 mil
 diferentes: um bilhão de comparações contra algumas centenas de milhares.
 
-Vamos ver na prática. O texto tem 31 palavras, 17 diferentes. A tabela tem
+O texto do exemplo tem 31 palavras, 17 diferentes. A tabela tem
 17 baldes, um fator de carga de 1. O "pão" cai no balde 2 e chega a 6; o
 "café", no balde 3, chega a 3; "estava" e "queijo" dividem o balde 4. No
 fim, a lista vai para o vetor, o `qsort` ordena e o ranking sai:
 
 {{ideia}}
 
-O programa completo. O TAD `palavras.h` fica na pasta, e o
-`main` só conhece as funções dele:
+O TAD `palavras.h` fica na pasta, e o `main` só conhece as funções dele:
 
 ```c
 #include <stdio.h>
@@ -113,7 +112,7 @@ int main(void) {
 // 5. e: 2
 ```
 
-Repara no fluxograma: o laço principal é "pega a próxima palavra e soma". A
+No fluxograma, o laço principal é "pega a próxima palavra e soma". A
 pergunta "já está no balde?" é feita 31 vezes. O Sim acontece 14 vezes; o
 Não, 17, uma para cada palavra diferente, e cria o nó com 0. Os dois caminhos
 se juntam no `vezes++`, como no `contador_soma`. Quando o texto acaba, sai o
@@ -138,7 +137,7 @@ ranking:
 > de 48 bytes, mais 136 bytes do vetor de 17 ponteiros. O vetor de
 > `Contagem` **não copia** as palavras: cada `palavra` aponta para dentro de
 > um nó da tabela. Por isso o `free(lista)` vem antes do `contador_libera`,
-> e usar a lista depois de liberar a tabela seria ponteiro solto. E um
+> e usar a lista depois de liberar a tabela seria ponteiro solto. Um
 > detalhe do hash: com base 31 e `m = 31`, `h * 31 % 31` é sempre 0, e o
 > balde passa a depender **só da última letra**. Base e `m` não podem ter
 > fator comum; por isso o exemplo usa 17.

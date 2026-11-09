@@ -5,11 +5,10 @@ No app de delivery, cinco restaurantes prometem entregar em 42, 17, 35, 8 e
 busca binária do assunto anterior, ou só para mostrar bonito, o vetor precisa
 estar **ordenado**. Como ordenar?
 
-O **bubble sort** (ordenação por bolha) é o algoritmo mais simples de
-explicar: percorra o vetor comparando **vizinhos**, `v[j]` com `v[j + 1]`. Se
+O **bubble sort** (ordenação por bolha) é o mais simples de explicar: percorra o vetor comparando **vizinhos**, `v[j]` com `v[j + 1]`. Se
 o da esquerda for maior, troque os dois. Isso é uma **passada**.
 
-Repara no que uma passada faz com o maior elemento: ele ganha todas as
+Veja o que uma passada faz com o maior elemento: ele ganha todas as
 comparações e vai sendo carregado para a direita, troca após troca, até a
 última gaveta. Ele "borbulha" até o fim (ou afunda, depende do seu ponto de
 vista). Depois da passada 1, o maior está no lugar certo. Depois da passada 2,
@@ -29,13 +28,13 @@ n(n - 1)/2` comparações, e todas viram trocas. É **O(n²)**. Com a bandeira, 
 melhor caso (vetor já em ordem) cai para uma passada só: `n - 1` comparações,
 **O(n)**.
 
-Vamos ver na prática. Na passada 1 o 42 ganha de todo mundo e afunda até o
+Com os cinco restaurantes: na passada 1 o 42 ganha de todo mundo e afunda até o
 fim (verde). Na passada 2 o 35 encontra o seu lugar. Na 3, o 8 chega à frente.
 A passada 4 não troca nada, e a bandeira encerra:
 
 {{ideia}}
 
-O mesmo exemplo em C, contando comparações e trocas:
+O código conta comparações e trocas:
 
 ```c
 #include <stdio.h>
@@ -106,9 +105,9 @@ Somando as quatro passadas: 4 + 3 + 2 + 1 = **10 comparações** e
 4 + 2 + 1 + 0 = **7 trocas**. Esse 7 não é acaso: é o número de **inversões**
 do vetor original, os pares que estão na ordem errada (42 com 17, 42 com 35,
 42 com 8, 42 com 23, 17 com 8, 35 com 8 e 35 com 23). Cada troca de vizinhos
-desfaz exatamente uma inversão.
+desfaz uma inversão, nem mais nem menos.
 
-Repara no fluxograma: são dois laços. O de dentro (`j`) faz uma passada; o de
+O fluxograma tem dois laços. O de dentro (`j`) faz uma passada; o de
 fora repete passadas enquanto a bandeira disser que houve troca:
 
 {{fluxograma}}

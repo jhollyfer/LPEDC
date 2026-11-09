@@ -3,8 +3,8 @@
 Black Friday: você tem 7 fones na lista, de R$ 35, 12, 48, 7, 29, 51 e 20 (é
 promoção, vai). Em vez de comparar todos com todos, você escolhe um deles, o
 de R$ 20, e faz dois montes: os que custam até 20 de um lado, os mais caros do
-outro. O de 20 já está no lugar certo, entre os dois montes. Agora é só fazer
-o mesmo dentro de cada monte.
+outro. O de 20 já está no lugar certo, entre os dois montes. Falta repetir a
+ideia dentro de cada monte.
 
 Esse é o **quick sort**, inventado por Tony Hoare em 1960. O elemento
 escolhido é o **pivô**, e o passo de fazer os montes é a **separação** (ou
@@ -21,8 +21,7 @@ depois das chamadas recursivas, não há nada a fazer. E não precisa de
 rascunho: tudo acontece com trocas no próprio vetor.
 
 A separação usada aqui (chamada de **Lomuto**, a `PARTITION` do Cormen) anda
-com `k` pelo pedaço e
-mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou alguém
+com `k` pelo pedaço e mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou alguém
 `<=` pivô? Troca com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`.
 A outra separação clássica, a de **Hoare** (a do Ziviani e do Tenenbaum),
 anda com dois índices vindos das pontas, que trocam os fora do lugar até se
@@ -35,13 +34,13 @@ maior, um dos montes fica vazio e o outro com `n - 1`: são `n` níveis e
 ordenado** (veja o exemplo A190). Na média, com dados embaralhados, o quick
 sort é O(n log n) e costuma ser o mais rápido na prática.
 
-Vamos ver na prática. O 20 (roxo) separa o vetor: 12 e 7 à esquerda, o resto
+Nos fones, o 20 (roxo) separa o vetor: 12 e 7 à esquerda, o resto
 à direita, e ele fica verde, no lugar. Depois, cada lado escolhe o próprio
 pivô (o último de cada pedaço):
 
 {{ideia}}
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -121,8 +120,8 @@ A primeira separação, com pivô 20. `k` anda; `j` marca onde entra o próximo
 Seis comparações, e o 20 está na posição 2 para sempre. Depois vêm `[12 7]`
 (1 comparação), `[35 29 51 48]` (3) e `[35 29]` (1): **11 comparações**.
 
-Repara no fluxograma: o pivô não entra em nenhuma das duas chamadas
-recursivas. É isso que garante que o problema sempre diminui:
+No fluxograma, o pivô fica fora das duas chamadas recursivas, e por isso o
+problema sempre diminui:
 
 {{fluxograma}}
 

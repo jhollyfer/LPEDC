@@ -5,12 +5,12 @@ horário. O pessoal da logística pede: "agrupa por cidade, mas dentro de cada
 cidade mantém a ordem em que chegaram". Qual dos cinco algoritmos você usa? E
 precisa mesmo escrever um?
 
-Primeiro, um conceito novo. Um algoritmo de ordenação é **estável** quando
+Um algoritmo de ordenação é **estável** quando
 elementos com a **mesma chave** saem na mesma ordem relativa em que entraram.
 Se três pedidos de Recife chegaram como R1, R3, R6, um algoritmo estável
 ordenando por cidade devolve R1, R3, R6, nessa ordem. Um instável pode
 devolver R3, R1, R6. Com `int` isso não importa (um 7 é igual ao outro); com
-structs, importa muito.
+structs, importa.
 
 Os outros critérios para escolher:
 
@@ -34,7 +34,7 @@ O resumo do módulo inteiro:
 Não existe o melhor de todos. O insertion ganha em vetores pequenos ou quase
 ordenados. O merge garante n log n e estabilidade, pagando memória. O quick é
 o mais rápido na média e não usa rascunho, mas tem o pior caso O(n²) e não é
-estável. O selection faz o mínimo de trocas. O bubble... ensina.
+estável. O selection faz o mínimo de trocas. O bubble serve para aprender.
 
 Na prática, você quase nunca escreve um desses: a `stdlib.h` traz o
 **`qsort`**, genérico, que apareceu no assunto 0050 (ponteiro para função):
@@ -49,7 +49,7 @@ sabe é a sua função `compara`, que recebe dois ponteiros e devolve
 **negativo** se o primeiro vem antes, **zero** se empatam e **positivo** se
 vem depois. É o mesmo contrato do `strcmp`.
 
-Vamos ver na prática. Os pedidos chegam por horário. Ordenando por cidade, um
+Os pedidos chegam por horário. Ordenando por cidade, um
 algoritmo estável (insertion, merge) mantém R1, R3, R6. O selection sort, com
 as suas trocas de longa distância, entrega R3 antes de R1:
 
@@ -113,7 +113,7 @@ int main(void) {
 
 ### Passo a passo
 
-Os números de verdade. O exemplo A192 roda os cinco algoritmos do módulo com
+O exemplo A192 roda os cinco algoritmos do módulo com
 os mesmos 1000 números e conta as comparações:
 
 | n = 1000 | aleatório | ordenado | invertido |
@@ -129,7 +129,7 @@ menos trabalho. No ordenado, o bubble e o insertion fazem uma passada só,
 enquanto o quick com pivô no fim cai no pior caso. O selection nem percebe a
 diferença entre as três colunas.
 
-Repara no fluxograma: é um guia de decisão, não um algoritmo. O caminho
+O fluxograma é um guia de decisão, não um algoritmo. O caminho
 marcado é o deste exemplo: a ordem de chegada importa, mas cabe como
 desempate na `compara` (o horário), então `qsort` resolve:
 

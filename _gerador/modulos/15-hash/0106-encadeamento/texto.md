@@ -27,10 +27,10 @@ fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
 só, a tabela vira uma lista única e a busca volta a ser O(n).
 
 No encadeamento a tabela **nunca enche**: α pode passar de 1, as listas só
-ficam mais compridas (o exemplo A211 põe 8 itens em 2 baldes). Algumas implementações, quando uma corrente fica
-comprida demais, até trocam a lista por uma árvore.
+ficam mais compridas (o exemplo A211 põe 8 itens em 2 baldes). Algumas
+implementações trocam a lista por uma árvore quando a corrente cresce demais.
 
-Vamos ver na prática. Seis frutas entram na ordem banana, uva, pera, kiwi,
+Seis frutas entram na ordem banana, uva, pera, kiwi,
 manga e caju, com o hash polinomial do assunto anterior e `m = 5`. Os índices
 saem 4, 2, 4, 1, 1 e 4. Como cada nova entra no início da corrente, o balde 4
 termina com caju, pera, banana. Para buscar "kiwi", a busca vai ao balde 1,
@@ -40,7 +40,7 @@ nenhum outro balde:
 {{ideia}}
 
 A estrutura segue o padrão TAD: `tabela.h` com a interface e o tipo opaco,
-`tabela.c` com o nó, os baldes e as operações. O coração da implementação:
+`tabela.c` com o nó, os baldes e as operações. A parte que importa:
 
 ```c
 typedef struct No {
@@ -113,8 +113,8 @@ int main(void) {
 // limao: não tem (0 comparações)
 ```
 
-Repara no fluxograma da busca: o hash leva direto ao balde, e daí em diante é
-o laço de sempre de lista encadeada. O "kiwi" dá uma volta no laço (passa pela
+No fluxograma da busca, o hash leva direto ao balde, e daí em diante vem o
+laço de sempre de lista encadeada. O "kiwi" dá uma volta no laço (passa pela
 manga) e para no Sim. O "limao" cai no balde 0, que está vazio, e sai pelo Não
 logo na primeira pergunta:
 

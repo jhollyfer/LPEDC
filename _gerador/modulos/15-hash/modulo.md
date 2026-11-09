@@ -6,16 +6,15 @@ por uma **conta**: uma função transforma a chave num índice de vetor, e o
 acesso ao vetor custa O(1). É a estrutura de dados mais usada na prática.
 
 Dicionários, conjuntos e caches de quase todo software são tabelas hash por
-baixo. No C não tem nada disso pronto, e é aí que você entende como elas
-funcionam: a função
-hash que mistura os bytes da chave, o que acontece quando duas chaves caem no
-mesmo lugar, por que a tabela cresce quando enche e por que ela não guarda
-ordem nenhuma.
+baixo. O C não traz nada disso pronto, e por isso você vai ver como elas
+funcionam: a função hash que mistura os bytes da chave, o que acontece quando
+duas chaves caem no mesmo lugar, por que a tabela cresce quando enche e por
+que ela não guarda ordem nenhuma.
 
 O módulo tem duas famílias para tratar colisão: o **encadeamento**, que
 pendura uma lista em cada balde, e o **endereçamento aberto**, que procura
 outra posição dentro do próprio vetor. Termina com um contador de palavras
-de verdade, que junta tabela, strings, `qsort` e memória dinâmica.
+que junta tabela, strings, `qsort` e memória dinâmica.
 
 ## O que você vai aprender
 
@@ -26,32 +25,16 @@ de verdade, que junta tabela, strings, `qsort` e memória dinâmica.
 - medir o custo: comparações, sondagens, agrupamento e quando crescer a tabela (**rehash**)
 - usar a tabela como contador e como conjunto, num programa completo
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro ou colisão. Nas tabelas, cada balde é uma gaveta com o
-índice à esquerda, e a corrente de nós sai dela para a direita.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa listas encadeadas (módulo 11) o tempo todo: inserir no
 início, percorrer e remover guardando o anterior. Usa também `malloc`/`free`,
 structs, ponteiro para função e `qsort`. Se algo disso estiver nebuloso,
 revise antes.
+
+Nos desenhos das tabelas, cada balde é uma gaveta com o índice à esquerda, e
+a corrente de nós sai dela para a direita; vermelho marca colisão. Responda a
+**Pergunta para você** de cada assunto antes de rodar.
 
 As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
 `aberta.h`/`aberta.c` (endereçamento aberto) e `palavras.h`/`palavras.c`
@@ -153,7 +136,7 @@ sem sucesso: 6 comparacoes / 5 = 1.20
 
 Dica: achar o k-ésimo nó de uma corrente custa k comparações, (1 + 2 + 3) +
 1 + (1 + 2) = 10. Sem sucesso, a busca percorre a corrente inteira:
-(3 + 1 + 0 + 2 + 0) / 5 = 1,2, que é exatamente o fator de carga α = 6/5.
+(3 + 1 + 0 + 2 + 0) / 5 = 1,2, o próprio fator de carga α = 6/5.
 Libere as correntes no fim.
 
 </details>
@@ -342,8 +325,8 @@ ordem. Em que posições ficam o 53 e o 25?
 
 **B.** 20 vai para 9; 31 (casa 9) para 10; 9 (casa 9) dá a volta até 0; 42
 (casa 9) até 1; 14 para 3; 53 (casa 9) tenta 9, 10, 0, 1 e para no 2, com 5
-sondagens; 25 (casa 3) para no 4. Repare no bloco 9, 10, 0, 1, 2 crescendo: é
-o agrupamento primário. Veja 0107.
+sondagens; 25 (casa 3) para no 4. O bloco 9, 10, 0, 1, 2, que cresce a cada
+inserção, é o agrupamento primário. Veja 0107.
 
 </details>
 

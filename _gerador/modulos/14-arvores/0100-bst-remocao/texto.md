@@ -16,7 +16,7 @@ filhos** ele tem. São três casos:
 | **dois filhos** | troca pelo **sucessor** e remove o sucessor | remover o 30: o 35 assume |
 
 Os dois primeiros casos são o mesmo código: "o filho que existe sobe", e na
-folha esse filho é `NULL`. O terceiro é o interessante. Quem pode ocupar o lugar
+folha esse filho é `NULL`. O terceiro pede mais cuidado. Quem pode ocupar o lugar
 do 30 sem quebrar a regra? Alguém maior que tudo à esquerda e menor que tudo à
 direita. Dois candidatos servem: o **sucessor** (a menor chave da subárvore
 direita) e o **antecessor** (a maior da esquerda). Este TAD usa o sucessor,
@@ -25,7 +25,7 @@ uma questão de prova sempre diz qual dos dois usar.
 
 Para achar o sucessor, desça **uma vez à direita** e depois **à esquerda até
 não dar mais**. Esse nó nunca tem filho esquerdo (senão não seria o menor), então
-removê-lo cai num dos casos fáceis. O truque: copie a chave do sucessor para o
+removê-lo cai num dos casos fáceis. Então copie a chave do sucessor para o
 nó do 30 e chame a remoção do 35 na subárvore direita.
 
 Como na inserção, a função devolve a raiz da subárvore depois da mudança, e o
@@ -33,7 +33,7 @@ pai faz `r->esq = bst_remove(r->esq, chave)`. É assim que o avô fica sabendo q
 o neto subiu. E quando a chave removida é a da raiz da árvore inteira, o
 `raiz = bst_remove(raiz, ...)` do cliente atualiza a raiz.
 
-Vamos ver na prática. O 30 tem dois filhos. A partir dele, a busca do sucessor
+O 30 tem dois filhos. A partir dele, a busca do sucessor
 vai para a direita (40) e depois para a esquerda até o fim (35). O 35 vai para o
 lugar do 30, e o 35 de baixo, que era folha, sai:
 
@@ -119,7 +119,7 @@ int main(void) {
 // Remove 99   pré: 50 35 45 70 60 80
 ```
 
-Repara no fluxograma: o caminho verde é a chamada que encontra o 30. Ela cai no
+O caminho verde do fluxograma é a chamada que encontra o 30. Ela cai no
 caso de dois filhos, copia o 35 e faz uma **segunda remoção**, dessa vez do 35,
 que vai terminar no caso fácil (o 35 é folha):
 

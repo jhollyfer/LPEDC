@@ -11,12 +11,12 @@ busca binária é rápida, mas exige um vetor ordenado, e inserir no meio de um
 vetor custa caro. A **árvore binária de busca** busca e insere descendo um único
 caminho. Quando ela fica torta, a **AVL** a endireita com rotações. E quando
 você só precisa do maior elemento, o **heap** faz isso morando num vetor
-comum, sem ponteiro nenhum, e de quebra ainda ordena (o **heapsort**).
+comum, sem ponteiro nenhum, e ainda serve para ordenar (o **heapsort**).
 
 Quase tudo aqui é recursivo. Uma árvore é um nó com árvores menores
 penduradas, então a função que resolve a árvore resolve cada subárvore e junta
-as respostas. Se a recursão do módulo 04 ficou meio nebulosa, este é o momento
-de ela fazer sentido.
+as respostas. Se a recursão do módulo 04 ficou nebulosa, aqui ela ganha
+sentido.
 
 ## O que você vai aprender
 
@@ -28,37 +28,19 @@ de ela fazer sentido.
 - o **heapsort**: ordenar em O(n log n) sem memória extra
 - montar um programa que junta BST e heap, cada um no que faz melhor
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
-   mesmas chaves do código.
-2. Leia o código. A partir do 0098, cada assunto tem um **TAD** na pasta
-   (`arvore.h`, `bst.h`, `avl.h`, `heap.h`, `cadastro.h`) e o exemplo só usa a
-   interface. Abra o `.c` do TAD também: é lá que mora o algoritmo.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos. Mude a ordem das inserções, remova outra chave, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Em árvore, **papel e lápis** são obrigatórios. Desenhe a árvore antes de rodar,
-a cada inserção e a cada remoção, e só depois rode o programa para conferir o
-desenho com a saída.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos desenhos de árvore, as arestas verdes marcam o caminho de uma busca, e
-o nó vermelho é o que vai sair ou o que está desequilibrado.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você precisa estar à vontade com **recursão** (assuntos 0032 e 0033),
 **ponteiros para struct** e `->` (0062), `malloc` e `free` (0054) e a ideia de
 **TAD** com `.h` e `.c` (0074). A fila do assunto 0085 aparece no percurso por
 nível, e o assunto 0090 (busca binária) é o primo da BST.
+
+A partir do 0098, cada assunto tem um TAD na pasta (`arvore.h`, `bst.h`,
+`avl.h`, `heap.h`, `cadastro.h`) e o exemplo só usa a interface: abra o `.c`
+também, porque o algoritmo está nele. Nos desenhos de árvore, as arestas
+verdes marcam o caminho de uma busca e o nó vermelho é o que vai sair ou o
+que está desequilibrado. Desenhe a árvore no papel a cada inserção e remoção
+antes de rodar, e use a saída só para conferir.
 
 O `rodar` compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
 comandos dos exemplos e exercícios são os de sempre:
@@ -69,7 +51,7 @@ comandos dos exemplos e exercícios são os de sempre:
 
 Uma convenção vale para o módulo todo: **altura conta arestas**. Uma folha tem
 altura 0 e a árvore vazia tem altura -1. Alguns livros contam nós (folha com
-altura 1). Quando for consultar outro material, confira qual é a convenção.
+altura 1): confira a convenção quando consultar outro material.
 
 {{indice}}
 
@@ -205,8 +187,8 @@ Sem o 70: 80 30 20 40
 
 Sem o 50, o sucessor 60 sobe. Sem o 60 (raiz de novo, dois filhos), o
 sucessor 70 sobe e o 80 fica à direita dele. Sem o 70, o sucessor é o 80, que
-era folha. Repare como remover sempre pelo sucessor deixa a árvore pendendo
-para a esquerda. A pré-ordem é `printf(" %d", r->chave)` antes das duas
+era folha. Remover sempre pelo sucessor deixa a árvore pendendo para a
+esquerda. A pré-ordem é `printf(" %d", r->chave)` antes das duas
 chamadas recursivas.
 
 </details>

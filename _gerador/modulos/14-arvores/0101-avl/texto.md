@@ -3,8 +3,8 @@
 A lanchonete numera os pedidos: 10, 20, 30, 40... Eles chegam **sempre em ordem
 crescente**. Se você guardar os pedidos numa BST comum, cada pedido novo vira
 filho direito do anterior, e a árvore vira uma lista com altura n - 1. Com mil
-pedidos, achar o último custa mil comparações. A BST é ótima até receber dados
-ordenados, que é justamente o que mais acontece na vida real.
+pedidos, achar o último custa mil comparações. A BST vai bem até receber dados
+ordenados, e dado ordenado é comum na prática.
 
 A saída é uma BST que se **conserta sozinha** a cada inserção. A mais antiga
 delas é a **AVL** (das iniciais de Adelson-Velsky e Landis, que a publicaram em
@@ -32,7 +32,7 @@ direito `d` sobe, `r` vira filho esquerdo de `d`, e a antiga subárvore esquerda
 de `d` (chaves entre `r` e `d`) passa a ser a direita de `r`. A em ordem
 continua igual; só a forma muda.
 
-Qual rotação usar depende de onde o peso está:
+A rotação depende do lado em que está o peso:
 
 | Caso | Fator do nó | Fator do filho pesado | Conserto |
 | --- | --- | --- | --- |
@@ -45,7 +45,7 @@ Os dois últimos são a **rotação dupla**: o caminho até o nó novo faz um
 "zigue-zague", e uma rotação só não resolve. A primeira rotação endireita o
 zigue-zague; a segunda equilibra.
 
-Vamos ver na prática. Inserir 10, 20 e 30 deixa o 10 com fator -2 e o filho com
+Nos pedidos da lanchonete, inserir 10, 20 e 30 deixa o 10 com fator -2 e o filho com
 -1: direita-direita, uma rotação à esquerda no 10 e o 20 sobe. Mais adiante,
 com a árvore 20 (10, 40 (30, 50)), inserir o 25 deixa o 20 com -2 e o filho 40
 com +1: zigue-zague, rotação dupla. O 30 acaba na raiz:
@@ -114,7 +114,7 @@ int main(void) {
 // Insere 25: pré 30 20 10 25 40 50 | altura 2 | rotações 4
 ```
 
-Repara no fluxograma: é o que cada ancestral faz na volta. O caminho verde é o
+O fluxograma mostra o que cada ancestral faz na volta. O caminho verde é o
 do nó 20 quando o 25 chega: fator -2, filho direito com fator +1, então duas
 rotações:
 

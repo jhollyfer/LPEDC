@@ -2,19 +2,17 @@
 
 Procurar e ordenar são as duas tarefas que um computador mais faz. A lista de
 contatos do celular, o extrato do banco, o resultado de uma busca na loja
-virtual, o índice de um banco de dados: tudo isso é dado sendo ordenado para
-depois ser achado rápido.
+virtual, o índice de um banco de dados: tudo isso é dado ordenado para depois
+ser achado rápido.
 
-Aqui você vai abrir as caixas pretas de buscar e ordenar. Vai ver por que uma
-busca num vetor ordenado acha qualquer coisa entre um milhão de elementos em
-20 passos, por que uma ordenação "óbvia" leva horas onde outra leva um
-segundo, e por que a comparação `a - b`, tão comum numa função de comparar,
-pode dar errado no C.
+Aqui você abre essas caixas pretas. Vai ver por que uma busca num vetor
+ordenado acha qualquer coisa entre um milhão de elementos em 20 passos, por
+que uma ordenação "óbvia" leva horas quando outra leva um segundo, e por que
+a comparação `a - b`, tão comum numa função de comparar, pode dar errado no C.
 
-O módulo junta as ferramentas dos anteriores: vetores e ponteiros, recursão,
-`malloc`, structs e, principalmente, o jeito de contar passos e pensar em
-Big-O do módulo 10. Em cada algoritmo você vai **contar comparações e
-trocas** e conferir que a teoria bate com a prática.
+O módulo usa vetores e ponteiros, recursão, `malloc`, structs e, acima de
+tudo, a contagem de passos e o Big-O do módulo 10. Em cada algoritmo você
+**conta comparações e trocas** e confere se a teoria bate com a prática.
 
 ## O que você vai aprender
 
@@ -22,50 +20,30 @@ trocas** e conferir que a teoria bate com a prática.
 - **busca binária**: O(log n) em vetor ordenado, invariantes e os famosos erros de um
 - os três algoritmos simples, O(n²): **bubble sort**, **selection sort** e **insertion sort**
 - os dois de dividir e conquistar, O(n log n): **merge sort** e **quick sort**
-- **estabilidade**, ordenação in-place e como escolher o algoritmo certo
+- **estabilidade**, ordenação in-place e como escolher o algoritmo
 - usar o **`qsort`** e o **`bsearch`** da biblioteca, com funções de comparação corretas
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: cada linha de gavetas é um
-   momento do algoritmo, com as cores contando o que acontece.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis antes de conferir a tabela.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Mude os vetores, compare as contagens.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos vetores dos diagramas da ideia, as cores contam o estado de cada gaveta:
-**amarela** é a que está sendo comparada (ou o menor achado), **roxa** é a
-posição ou o pivô da vez, **verde** é o que já está no lugar certo, **cinza**
-é o que o algoritmo descartou ou nem olhou, **vermelha** é o que deu errado.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
-Os exemplos deste módulo cabem cada um num arquivo só: os algoritmos são
-funções curtas, e ver a função inteira junto do `main` ajuda mais do que
-separar em `.h` e `.c`. Quando um exercício precisa de uma versão diferente
-do algoritmo, ele traz tudo no próprio arquivo.
+Nos diagramas da ideia, cada linha de gavetas é um momento do algoritmo:
+**amarela** é a gaveta comparada (ou o menor achado), **roxa** é a posição ou
+o pivô da vez, **verde** já está no lugar, **cinza** foi descartada ou nem
+olhada. Faça o **Passo a passo** no papel antes de conferir a tabela, e
+responda a **Pergunta para você** antes de rodar.
+
+Cada exemplo cabe num arquivo só: os algoritmos são funções curtas, e ver a
+função inteira junto do `main` ajuda mais do que separar em `.h` e `.c`.
+Exercício que precisa de outra versão do algoritmo traz tudo no próprio
+arquivo.
 
 Vários exemplos contam comparações com uma variável `static` de arquivo ou
-com um ponteiro para contador. Isso não faz parte do algoritmo: é o
+com um ponteiro para contador. Esse contador não faz parte do algoritmo: é o
 "cronômetro" que mostra o custo. Tempo de relógio varia de máquina para
 máquina; o número de comparações, não.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. É esperado: o
-enunciado avisa.
+AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. O enunciado
+avisa.
 
 {{indice}}
 
@@ -212,8 +190,8 @@ teste `L = 1, 8, 16, 32` num vetor aleatório de 10.000.
 
 As comparações quase não mudam (às vezes até sobem um pouco), mas o tempo de
 relógio costuma cair, com o melhor valor em geral entre 8 e 32: o insertion
-não tem recursão nem chamadas, e pedaços pequenos cabem inteiros no cache. É o que as bibliotecas de verdade fazem. Moral: comparações são um bom
-modelo, mas não são tudo.
+não tem recursão nem chamadas, e pedaços pequenos cabem inteiros no cache. As bibliotecas de verdade fazem
+isso. Comparações são um bom modelo, mas não medem tudo.
 
 </details>
 
@@ -383,8 +361,7 @@ partição e o índice do pivô (contando de 0)?
 
 **A.** O pivô é o 11. Só o 4 e o 8 são `<= 11`: o 4 troca com o 15 e o 8 troca
 com o 15 de novo. No fim, o pivô troca com o 23, o primeiro da parte dos
-maiores. No
-Cormen, que indexa a partir de 1, a `PARTITION` devolveria 3. A partição de
+maiores. No Cormen, que indexa a partir de 1, a `PARTITION` devolveria 3. A partição de
 Hoare (dois índices que se cruzam) daria outro vetor. Veja 0095.
 
 </details>

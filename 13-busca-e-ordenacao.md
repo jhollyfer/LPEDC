@@ -4,19 +4,17 @@
 
 Procurar e ordenar são as duas tarefas que um computador mais faz. A lista de
 contatos do celular, o extrato do banco, o resultado de uma busca na loja
-virtual, o índice de um banco de dados: tudo isso é dado sendo ordenado para
-depois ser achado rápido.
+virtual, o índice de um banco de dados: tudo isso é dado ordenado para depois
+ser achado rápido.
 
-Aqui você vai abrir as caixas pretas de buscar e ordenar. Vai ver por que uma
-busca num vetor ordenado acha qualquer coisa entre um milhão de elementos em
-20 passos, por que uma ordenação "óbvia" leva horas onde outra leva um
-segundo, e por que a comparação `a - b`, tão comum numa função de comparar,
-pode dar errado no C.
+Aqui você abre essas caixas pretas. Vai ver por que uma busca num vetor
+ordenado acha qualquer coisa entre um milhão de elementos em 20 passos, por
+que uma ordenação "óbvia" leva horas quando outra leva um segundo, e por que
+a comparação `a - b`, tão comum numa função de comparar, pode dar errado no C.
 
-O módulo junta as ferramentas dos anteriores: vetores e ponteiros, recursão,
-`malloc`, structs e, principalmente, o jeito de contar passos e pensar em
-Big-O do módulo 10. Em cada algoritmo você vai **contar comparações e
-trocas** e conferir que a teoria bate com a prática.
+O módulo usa vetores e ponteiros, recursão, `malloc`, structs e, acima de
+tudo, a contagem de passos e o Big-O do módulo 10. Em cada algoritmo você
+**conta comparações e trocas** e confere se a teoria bate com a prática.
 
 ## O que você vai aprender
 
@@ -24,50 +22,30 @@ trocas** e conferir que a teoria bate com a prática.
 - **busca binária**: O(log n) em vetor ordenado, invariantes e os famosos erros de um
 - os três algoritmos simples, O(n²): **bubble sort**, **selection sort** e **insertion sort**
 - os dois de dividir e conquistar, O(n log n): **merge sort** e **quick sort**
-- **estabilidade**, ordenação in-place e como escolher o algoritmo certo
+- **estabilidade**, ordenação in-place e como escolher o algoritmo
 - usar o **`qsort`** e o **`bsearch`** da biblioteca, com funções de comparação corretas
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: cada linha de gavetas é um
-   momento do algoritmo, com as cores contando o que acontece.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis antes de conferir a tabela.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Mude os vetores, compare as contagens.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos vetores dos diagramas da ideia, as cores contam o estado de cada gaveta:
-**amarela** é a que está sendo comparada (ou o menor achado), **roxa** é a
-posição ou o pivô da vez, **verde** é o que já está no lugar certo, **cinza**
-é o que o algoritmo descartou ou nem olhou, **vermelha** é o que deu errado.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
-Os exemplos deste módulo cabem cada um num arquivo só: os algoritmos são
-funções curtas, e ver a função inteira junto do `main` ajuda mais do que
-separar em `.h` e `.c`. Quando um exercício precisa de uma versão diferente
-do algoritmo, ele traz tudo no próprio arquivo.
+Nos diagramas da ideia, cada linha de gavetas é um momento do algoritmo:
+**amarela** é a gaveta comparada (ou o menor achado), **roxa** é a posição ou
+o pivô da vez, **verde** já está no lugar, **cinza** foi descartada ou nem
+olhada. Faça o **Passo a passo** no papel antes de conferir a tabela, e
+responda a **Pergunta para você** antes de rodar.
+
+Cada exemplo cabe num arquivo só: os algoritmos são funções curtas, e ver a
+função inteira junto do `main` ajuda mais do que separar em `.h` e `.c`.
+Exercício que precisa de outra versão do algoritmo traz tudo no próprio
+arquivo.
 
 Vários exemplos contam comparações com uma variável `static` de arquivo ou
-com um ponteiro para contador. Isso não faz parte do algoritmo: é o
+com um ponteiro para contador. Esse contador não faz parte do algoritmo: é o
 "cronômetro" que mostra o custo. Tempo de relógio varia de máquina para
 máquina; o número de comparações, não.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. É esperado: o
-enunciado avisa.
+AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. O enunciado
+avisa.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -94,7 +72,7 @@ pilha. Isso é a **busca sequencial** (ou **busca linear**). Ela não exige nada
 do vetor: pode estar em qualquer ordem.
 
 O contrato é o de sempre no C: a função recebe o vetor, o tamanho e o valor
-procurado (a **chave**), e devolve o **índice** onde achou. Se não achou,
+procurado (a **chave**), e devolve o **índice** em que achou. Se não achou,
 devolve `-1`, que nunca é um índice válido. Você escreve o laço e passa o
 tamanho, porque o vetor do C não sabe quantos elementos tem.
 
@@ -110,14 +88,14 @@ verdade:
 Em notação do assunto 0072, a busca sequencial é **O(n)**: dobrou o número de
 alunos, dobrou o tempo da catraca no pior caso.
 
-Vamos ver na prática. A academia tem 6 alunos ativos e a catraca procura a
+A academia tem 6 alunos ativos e a catraca procura a
 matrícula 1290. Ela compara com 4172, 3305 e 8821 (diferentes, em amarelo) e
 acha na quarta gaveta, a de índice 3. As duas últimas nem são olhadas:
 
 <p align="center"><img src="13-busca-e-ordenacao/0089-busca-sequencial/ideia.svg" alt="Diagrama da ideia: Busca sequencial" width="858"></p>
 
-O mesmo exemplo em C. A função conta as comparações num ponteiro, para você
-ver o custo de cada busca:
+No código, a função conta as comparações num ponteiro, para você ver o custo
+de cada busca:
 
 ```c
 #include <stdio.h>
@@ -167,7 +145,7 @@ O teste de mesa da busca por 1290. Cada linha é uma volta do laço:
 Para 9999, as 6 linhas seriam "não" e a função só devolve `-1` depois da
 última.
 
-Repara no fluxograma: são duas perguntas por volta. A primeira (`i < n?`)
+O fluxograma faz duas perguntas por volta. A primeira (`i < n?`)
 protege o vetor; a segunda (`v[i] == x?`) é a busca de fato. O caminho verde
 dá a volta três vezes antes de sair pelo Sim:
 
@@ -180,10 +158,10 @@ dá a volta três vezes antes de sair pelo Sim:
 > foram olhados. O compilador não reclama: o programa roda e responde errado.
 
 > [!TIP]
-> **Por dentro do C:** `const int v[]` no parâmetro é, na verdade, um
+> **Por dentro do C:** `const int v[]` no parâmetro é um
 > `const int *`: a função recebe só o endereço da gaveta 0, e `v[i]` é
 > `*(v + i)`. Como as gavetas são vizinhas na memória, a busca sequencial lê
-> os bytes em ordem, e o processador adora isso: ele traz da RAM blocos de 64
+> os bytes em ordem, e o processador agradece: ele traz da RAM blocos de 64
 > bytes (uma **linha de cache**, 16 `int`) de uma vez. Por isso, em vetores
 > pequenos (dezenas de elementos), a busca sequencial costuma ganhar de
 > estruturas "mais espertas". Um truque antigo é a **sentinela**: copiar a
@@ -539,15 +517,14 @@ O preço é a pré-condição: o vetor precisa estar em ordem. Num vetor bagunç
 a busca binária não dá erro nenhum, só responde errado. Ordenar custa caro, e
 é por isso que o resto do módulo existe.
 
-Vamos ver na prática. O catálogo do atacadão tem 15 códigos em ordem e você
+O catálogo do atacadão tem 15 códigos em ordem e você
 procura o 216. O meio (índice 7) tem 189, menor que 216: a metade esquerda
 inteira fica cinza. O novo meio (11) tem 245, maior: a direita dele também
 sai. Na terceira volta, o meio (9) é o 216:
 
 <p align="center"><img src="13-busca-e-ordenacao/0090-busca-binaria/ideia.svg" alt="Diagrama da ideia: Busca binária" width="864"></p>
 
-O mesmo exemplo em C. O `printf` dentro do laço mostra o intervalo de cada
-volta:
+Em C, um `printf` dentro do laço mostra o intervalo de cada volta:
 
 ```c
 #include <stdio.h>
@@ -603,8 +580,8 @@ int main(void) {
 
 ### Passo a passo
 
-A busca por 150, que não está no catálogo. Repara no intervalo encolhendo até
-ficar vazio:
+A busca por 150, que não está no catálogo. O intervalo encolhe até ficar
+vazio:
 
 | volta | ini | fim | meio | v[meio] | decisão |
 | --- | --- | --- | --- | --- | --- |
@@ -614,11 +591,11 @@ ficar vazio:
 | 4 | 4 | 4 | 4 | 152 | 152 > 150: `fim = 3` |
 | fim | 4 | 3 | | | `ini > fim`: devolve `-1` |
 
-Repara que o `ini = 4` final é exatamente onde o 150 **deveria** estar para o
-vetor continuar ordenado. Essa informação vale ouro (veja o exemplo A180).
+O `ini = 4` final é a posição em que o 150 **deveria** entrar para o vetor
+continuar ordenado. Essa informação serve para inserir em ordem (veja o
+exemplo A180).
 
-Repara no fluxograma: diferente da busca sequencial, aqui são três perguntas
-por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
+Diferente da busca sequencial, o fluxograma tem três perguntas por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 
 <p align="center"><img src="13-busca-e-ordenacao/0090-busca-binaria/fluxograma.svg" alt="Fluxograma: Busca binária" width="944"></p>
 
@@ -635,8 +612,8 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > `(ini + fim) / 2`? Num vetor com mais de 1 bilhão de elementos, `ini + fim`
 > passa de `INT_MAX` (2.147.483.647) e dá **overflow**, que no C é
 > comportamento indefinido. Esse bug ficou escondido por anos em
-> implementações famosas da busca binária e só apareceu em 2006, quando os vetores ficaram
-> grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
+> implementações famosas da busca binária e só apareceu em 2006, quando os
+> vetores ficaram grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
 > 11, depois 9), então não aproveita a linha de cache como a sequencial. Por
 > isso, para vetores bem pequenos, a sequencial pode ganhar. A `stdlib.h` traz
 > uma pronta, a `bsearch`, que você vai usar no assunto 0096.
@@ -1003,11 +980,10 @@ No app de delivery, cinco restaurantes prometem entregar em 42, 17, 35, 8 e
 busca binária do assunto anterior, ou só para mostrar bonito, o vetor precisa
 estar **ordenado**. Como ordenar?
 
-O **bubble sort** (ordenação por bolha) é o algoritmo mais simples de
-explicar: percorra o vetor comparando **vizinhos**, `v[j]` com `v[j + 1]`. Se
+O **bubble sort** (ordenação por bolha) é o mais simples de explicar: percorra o vetor comparando **vizinhos**, `v[j]` com `v[j + 1]`. Se
 o da esquerda for maior, troque os dois. Isso é uma **passada**.
 
-Repara no que uma passada faz com o maior elemento: ele ganha todas as
+Veja o que uma passada faz com o maior elemento: ele ganha todas as
 comparações e vai sendo carregado para a direita, troca após troca, até a
 última gaveta. Ele "borbulha" até o fim (ou afunda, depende do seu ponto de
 vista). Depois da passada 1, o maior está no lugar certo. Depois da passada 2,
@@ -1027,13 +1003,13 @@ n(n - 1)/2` comparações, e todas viram trocas. É **O(n²)**. Com a bandeira, 
 melhor caso (vetor já em ordem) cai para uma passada só: `n - 1` comparações,
 **O(n)**.
 
-Vamos ver na prática. Na passada 1 o 42 ganha de todo mundo e afunda até o
+Com os cinco restaurantes: na passada 1 o 42 ganha de todo mundo e afunda até o
 fim (verde). Na passada 2 o 35 encontra o seu lugar. Na 3, o 8 chega à frente.
 A passada 4 não troca nada, e a bandeira encerra:
 
 <p align="center"><img src="13-busca-e-ordenacao/0091-bubble-sort/ideia.svg" alt="Diagrama da ideia: Bubble sort" width="858"></p>
 
-O mesmo exemplo em C, contando comparações e trocas:
+O código conta comparações e trocas:
 
 ```c
 #include <stdio.h>
@@ -1104,9 +1080,9 @@ Somando as quatro passadas: 4 + 3 + 2 + 1 = **10 comparações** e
 4 + 2 + 1 + 0 = **7 trocas**. Esse 7 não é acaso: é o número de **inversões**
 do vetor original, os pares que estão na ordem errada (42 com 17, 42 com 35,
 42 com 8, 42 com 23, 17 com 8, 35 com 8 e 35 com 23). Cada troca de vizinhos
-desfaz exatamente uma inversão.
+desfaz uma inversão, nem mais nem menos.
 
-Repara no fluxograma: são dois laços. O de dentro (`j`) faz uma passada; o de
+O fluxograma tem dois laços. O de dentro (`j`) faz uma passada; o de
 fora repete passadas enquanto a bandeira disser que houve troca:
 
 <p align="center"><img src="13-busca-e-ordenacao/0091-bubble-sort/fluxograma.svg" alt="Fluxograma: Bubble sort" width="681"></p>
@@ -1485,26 +1461,26 @@ duas partes: à esquerda, a parte **pronta** (os menores, já na ordem final);
 1. procura o **índice** do menor elemento em `v[i..n-1]`;
 2. troca esse menor com `v[i]`. Pronto: a gaveta `i` nunca mais muda.
 
-Repare que a passada guarda o **índice** do menor, não o valor. É o índice
-que permite fazer a troca no fim. É a mesma ideia do padrão "maior/menor" do
-assunto 0025, rodando de novo a cada passada.
+A passada guarda o **índice** do menor, não o valor: é ele que permite fazer
+a troca no fim. É o padrão "maior/menor" do assunto 0025, repetido a cada
+passada.
 
 Custo: a passada 0 compara `n - 1` vezes, a 1 compara `n - 2` vezes... No
 total, `n(n - 1)/2` comparações, **sempre**. Vetor bagunçado, ordenado ou ao
 contrário, tanto faz: para saber qual é o menor, é preciso olhar todos os que
 sobraram. Então é **O(n²)** em todos os casos.
 
-A vantagem está nas **trocas**: no máximo **uma por passada**, ou seja, no
-máximo `n - 1`. O bubble pode fazer `n(n - 1)/2`. Quando mover um elemento é
+A vantagem está nas **trocas**: no máximo **uma por passada**, `n - 1` no
+total. O bubble pode fazer `n(n - 1)/2`. Quando mover um elemento é
 caro (structs grandes, um registro inteiro), isso pesa.
 
-Vamos ver na prática. Em cada linha, a gaveta roxa é a posição `i` que vai
+No pódio do kart, cada linha do desenho é uma passada: a gaveta roxa é a posição `i` que vai
 receber o menor, e a amarela é o menor que a passada achou. Depois da troca,
 a gaveta vira verde e não sai mais do lugar:
 
 <p align="center"><img src="13-busca-e-ordenacao/0092-selection-sort/ideia.svg" alt="Diagrama da ideia: Selection sort" width="858"></p>
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -1572,7 +1548,7 @@ vai sendo atualizado:
 Fim da passada: troca `v[0]` (58) com `v[3]` (19). Quatro comparações, uma
 troca. As passadas seguintes fazem 3, 2 e 1 comparações: 10 no total.
 
-Repara no fluxograma: a caixa "acha o menor" esconde um laço inteiro (a
+No fluxograma, a caixa "acha o menor" esconde um laço inteiro (a
 tabela acima). A troca acontece **fora** dele, uma vez por passada:
 
 <p align="center"><img src="13-busca-e-ordenacao/0092-selection-sort/fluxograma.svg" alt="Fluxograma: Selection sort" width="511"></p>
@@ -1590,7 +1566,7 @@ tabela acima). A troca acontece **fora** dele, uma vez por passada:
 > salta da gaveta 3 para a 0 de uma vez, e o 58 vai para a 3 passando por cima
 > do 31 e do 47. Esse salto é o que torna o selection **instável**: dois
 > elementos iguais podem trocar de ordem entre si (o exemplo A184 mostra a
-> Bia passando na frente da Ana). Já em custo de memória ele é ótimo: ordena
+> Bia passando na frente da Ana). Em memória ele é ótimo: ordena
 > no próprio vetor, com uma variável `aux` e dois índices. Isso se chama
 > ordenar **in-place**, com **O(1)** de memória extra.
 
@@ -1948,26 +1924,25 @@ ordem entre si**, não "no lugar final" como no selection. A cada passo:
 3. quando achar alguém menor ou igual (ou o começo do vetor), ponha `x` no
    buraco que sobrou, `v[i + 1]`.
 
-Repara que guardar `x` antes é obrigatório: o primeiro deslocamento escreve
-por cima de `v[j]`.
+Guardar `x` antes é obrigatório: o primeiro deslocamento escreve por cima de
+`v[j]`.
 
 O custo depende de **quanto** o vetor está bagunçado. Cada deslocamento
 desfaz uma inversão (como cada troca do bubble), mas custa uma escrita, não
 três. No pior caso (vetor ao contrário), cada carta anda até o começo:
 `n(n - 1)/2` comparações, **O(n²)**. No melhor (já ordenado), cada carta
-compara uma vez e fica: `n - 1` comparações, **O(n)**. E em vetor **quase**
-ordenado, ele é quase linear. Isso o torna o melhor dos três algoritmos
-simples na prática, e é por isso que bibliotecas de verdade usam insertion
-para pedaços pequenos (até umas 16 a 32 posições).
+compara uma vez e fica: `n - 1` comparações, **O(n)**. Em vetor **quase**
+ordenado, fica quase linear. Por isso ele é o melhor dos três algoritmos
+simples na prática, e as bibliotecas usam insertion para pedaços pequenos
+(até umas 16 a 32 posições).
 
-Vamos ver na prática. Em cada linha, a parte verde é a mão já arrumada e a
+No desenho, cada linha é uma carta nova: a parte verde é a mão já arrumada e a
 amarela é a carta que acabou de entrar. O 9 não anda nada; o 2 atravessa a
 mão inteira:
 
 <p align="center"><img src="13-busca-e-ordenacao/0093-insertion-sort/ideia.svg" alt="Diagrama da ideia: Insertion sort" width="858"></p>
 
-O mesmo exemplo em C. A função `maior` só existe para contar as
-comparações:
+No código, a função `maior` só existe para contar as comparações:
 
 ```c
 #include <stdio.h>
@@ -2034,13 +2009,13 @@ O encaixe do 2 (`j = 3`), o mais caro. A mão antes é `4 7 9 | 2 5`:
 | 0 | 4 | sim | `v[1] = 4` | 4 4 7 9 5 |
 | -1 | | (`i >= 0` falso: nem compara) | `v[0] = 2` | 2 4 7 9 5 |
 
-Três comparações, três deslocamentos. Repara nas linhas do meio: durante o
+Três comparações, três deslocamentos. Nas linhas do meio, durante o
 encaixe, o vetor tem um valor **repetido** e o 2 não está em lugar nenhum. Ele
 está guardado em `x`. Somando todos os encaixes: 1 + 1 + 3 + 3 = **8
 comparações** e 1 + 0 + 3 + 2 = **6 deslocamentos**.
 
-Repara no fluxograma: o laço de dentro tem uma pergunta dupla. Ele para por
-dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
+O laço de dentro do fluxograma tem uma pergunta dupla e para por dois
+motivos: acabou o vetor ou achou alguém que não é maior:
 
 <p align="center"><img src="13-busca-e-ordenacao/0093-insertion-sort/fluxograma.svg" alt="Fluxograma: Insertion sort" width="692"></p>
 
@@ -2052,9 +2027,9 @@ dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
 > direito nem é avaliado.
 
 > [!TIP]
-> **Por dentro do C:** o laço de deslocamento é praticamente um `memmove`: ele
+> **Por dentro do C:** o laço de deslocamento faz o papel de um `memmove`: ele
 > empurra um bloco contínuo de memória uma casa para a direita. Por isso o
-> insertion sort é tão rápido em vetores pequenos: acessa a memória em
+> insertion sort é rápido em vetores pequenos: acessa a memória em
 > sequência, faz uma escrita por deslocamento e não chama função nenhuma. Ele
 > também é **estável**: o `>` (e não `>=`) faz o laço parar ao encontrar um
 > igual, e `x` entra **depois** dele. E é **online**: consegue ordenar à
@@ -2391,8 +2366,7 @@ O **merge sort** (ordenação por intercalação) usa isso com a ideia de
 2. **ordene** cada metade, com o próprio merge sort (recursão, assunto 0032);
 3. **intercale** as duas metades ordenadas.
 
-O caso base é o pedaço com 0 ou 1 elemento: ele já está ordenado, não há o
-que fazer. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
+O caso base é o pedaço com 0 ou 1 elemento, que já está ordenado. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
 e `r` é uma posição depois do último. Assim, o pedaço tem `r - p` elementos e
 as metades `[p, q)` e `[q, r)` se encaixam sem sobrar nem repetir ninguém.
 O Cormen usa o intervalo fechado `A[p..r]`, com `q = ⌊(p + r)/2⌋` e as
@@ -2408,14 +2382,14 @@ O preço é memória: a intercalação precisa de um vetor auxiliar (o
 **rascunho**) do tamanho do pedaço. O merge sort usa **O(n)** de memória
 extra.
 
-Vamos ver na prática. As notas descem sendo divididas até virar pares (e,
+No desenho, as notas descem sendo divididas até virar pares (e,
 mais embaixo, pedaços de 1). Depois sobem sendo intercaladas, em verde, até
 formar o vetor inteiro:
 
 <p align="center"><img src="13-busca-e-ordenacao/0094-merge-sort/ideia.svg" alt="Diagrama da ideia: Merge sort" width="858"></p>
 
-O mesmo exemplo em C. O rascunho `w` é alocado **uma vez** no `main` e
-emprestado para todas as intercalações:
+No código, o rascunho `w` é alocado **uma vez** no `main` e emprestado para
+todas as intercalações:
 
 ```c
 #include <stdio.h>
@@ -2479,7 +2453,7 @@ int main(void) {
 // 17 comparações
 ```
 
-Repara na ordem das linhas da saída: a recursão termina **toda** a metade
+Olhe a ordem das linhas da saída: a recursão termina **toda** a metade
 esquerda (`[0, 4)`) antes de começar a direita. É a pilha de chamadas do
 assunto 0031 trabalhando.
 
@@ -2502,7 +2476,7 @@ A última intercalação, `7 18 33 52` com `12 26 41 60`. `i` anda na esquerda,
 Sete comparações para 8 elementos: o máximo, `n - 1`. Somando os níveis:
 4 + 6 + 7 = **17 comparações**.
 
-Repara no fluxograma: ele é curto porque a recursão esconde o trabalho. As
+O fluxograma é curto porque a recursão esconde o trabalho. As
 duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 
 <p align="center"><img src="13-busca-e-ordenacao/0094-merge-sort/fluxograma.svg" alt="Fluxograma: Merge sort" width="351"></p>
@@ -2520,7 +2494,7 @@ duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 > para 1 milhão de elementos), então a pilha não preocupa. A memória que pesa
 > é o rascunho: 1 milhão de `int` são 4 MB. Alocar com `malloc` uma vez e
 > passar `w` para baixo evita um `malloc`/`free` por intercalação (seriam
-> quase 1 milhão de chamadas). E o `<=` da intercalação não é detalhe: em
+> quase 1 milhão de chamadas). O `<=` da intercalação também conta: em
 > caso de empate, ele pega o da **esquerda** primeiro, mantendo a ordem
 > original dos iguais. Isso faz o merge sort ser **estável**.
 
@@ -2876,8 +2850,8 @@ de 28 pares possíveis
 Black Friday: você tem 7 fones na lista, de R$ 35, 12, 48, 7, 29, 51 e 20 (é
 promoção, vai). Em vez de comparar todos com todos, você escolhe um deles, o
 de R$ 20, e faz dois montes: os que custam até 20 de um lado, os mais caros do
-outro. O de 20 já está no lugar certo, entre os dois montes. Agora é só fazer
-o mesmo dentro de cada monte.
+outro. O de 20 já está no lugar certo, entre os dois montes. Falta repetir a
+ideia dentro de cada monte.
 
 Esse é o **quick sort**, inventado por Tony Hoare em 1960. O elemento
 escolhido é o **pivô**, e o passo de fazer os montes é a **separação** (ou
@@ -2894,8 +2868,7 @@ depois das chamadas recursivas, não há nada a fazer. E não precisa de
 rascunho: tudo acontece com trocas no próprio vetor.
 
 A separação usada aqui (chamada de **Lomuto**, a `PARTITION` do Cormen) anda
-com `k` pelo pedaço e
-mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou alguém
+com `k` pelo pedaço e mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou alguém
 `<=` pivô? Troca com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`.
 A outra separação clássica, a de **Hoare** (a do Ziviani e do Tenenbaum),
 anda com dois índices vindos das pontas, que trocam os fora do lugar até se
@@ -2908,13 +2881,13 @@ maior, um dos montes fica vazio e o outro com `n - 1`: são `n` níveis e
 ordenado** (veja o exemplo A190). Na média, com dados embaralhados, o quick
 sort é O(n log n) e costuma ser o mais rápido na prática.
 
-Vamos ver na prática. O 20 (roxo) separa o vetor: 12 e 7 à esquerda, o resto
+Nos fones, o 20 (roxo) separa o vetor: 12 e 7 à esquerda, o resto
 à direita, e ele fica verde, no lugar. Depois, cada lado escolhe o próprio
 pivô (o último de cada pedaço):
 
 <p align="center"><img src="13-busca-e-ordenacao/0095-quick-sort/ideia.svg" alt="Diagrama da ideia: Quick sort" width="858"></p>
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -2994,8 +2967,8 @@ A primeira separação, com pivô 20. `k` anda; `j` marca onde entra o próximo
 Seis comparações, e o 20 está na posição 2 para sempre. Depois vêm `[12 7]`
 (1 comparação), `[35 29 51 48]` (3) e `[35 29]` (1): **11 comparações**.
 
-Repara no fluxograma: o pivô não entra em nenhuma das duas chamadas
-recursivas. É isso que garante que o problema sempre diminui:
+No fluxograma, o pivô fica fora das duas chamadas recursivas, e por isso o
+problema sempre diminui:
 
 <p align="center"><img src="13-busca-e-ordenacao/0095-quick-sort/fluxograma.svg" alt="Fluxograma: Quick sort" width="398"></p>
 
@@ -3395,12 +3368,12 @@ horário. O pessoal da logística pede: "agrupa por cidade, mas dentro de cada
 cidade mantém a ordem em que chegaram". Qual dos cinco algoritmos você usa? E
 precisa mesmo escrever um?
 
-Primeiro, um conceito novo. Um algoritmo de ordenação é **estável** quando
+Um algoritmo de ordenação é **estável** quando
 elementos com a **mesma chave** saem na mesma ordem relativa em que entraram.
 Se três pedidos de Recife chegaram como R1, R3, R6, um algoritmo estável
 ordenando por cidade devolve R1, R3, R6, nessa ordem. Um instável pode
 devolver R3, R1, R6. Com `int` isso não importa (um 7 é igual ao outro); com
-structs, importa muito.
+structs, importa.
 
 Os outros critérios para escolher:
 
@@ -3424,7 +3397,7 @@ O resumo do módulo inteiro:
 Não existe o melhor de todos. O insertion ganha em vetores pequenos ou quase
 ordenados. O merge garante n log n e estabilidade, pagando memória. O quick é
 o mais rápido na média e não usa rascunho, mas tem o pior caso O(n²) e não é
-estável. O selection faz o mínimo de trocas. O bubble... ensina.
+estável. O selection faz o mínimo de trocas. O bubble serve para aprender.
 
 Na prática, você quase nunca escreve um desses: a `stdlib.h` traz o
 **`qsort`**, genérico, que apareceu no assunto 0050 (ponteiro para função):
@@ -3439,7 +3412,7 @@ sabe é a sua função `compara`, que recebe dois ponteiros e devolve
 **negativo** se o primeiro vem antes, **zero** se empatam e **positivo** se
 vem depois. É o mesmo contrato do `strcmp`.
 
-Vamos ver na prática. Os pedidos chegam por horário. Ordenando por cidade, um
+Os pedidos chegam por horário. Ordenando por cidade, um
 algoritmo estável (insertion, merge) mantém R1, R3, R6. O selection sort, com
 as suas trocas de longa distância, entrega R3 antes de R1:
 
@@ -3503,7 +3476,7 @@ int main(void) {
 
 ### Passo a passo
 
-Os números de verdade. O exemplo A192 roda os cinco algoritmos do módulo com
+O exemplo A192 roda os cinco algoritmos do módulo com
 os mesmos 1000 números e conta as comparações:
 
 | n = 1000 | aleatório | ordenado | invertido |
@@ -3519,7 +3492,7 @@ menos trabalho. No ordenado, o bubble e o insertion fazem uma passada só,
 enquanto o quick com pivô no fim cai no pior caso. O selection nem percebe a
 diferença entre as três colunas.
 
-Repara no fluxograma: é um guia de decisão, não um algoritmo. O caminho
+O fluxograma é um guia de decisão, não um algoritmo. O caminho
 marcado é o deste exemplo: a ordem de chegada importa, mas cabe como
 desempate na `compara` (o horário), então `qsort` resolve:
 
@@ -4135,8 +4108,8 @@ teste `L = 1, 8, 16, 32` num vetor aleatório de 10.000.
 
 As comparações quase não mudam (às vezes até sobem um pouco), mas o tempo de
 relógio costuma cair, com o melhor valor em geral entre 8 e 32: o insertion
-não tem recursão nem chamadas, e pedaços pequenos cabem inteiros no cache. É o que as bibliotecas de verdade fazem. Moral: comparações são um bom
-modelo, mas não são tudo.
+não tem recursão nem chamadas, e pedaços pequenos cabem inteiros no cache. As bibliotecas de verdade fazem
+isso. Comparações são um bom modelo, mas não medem tudo.
 
 </details>
 
@@ -5543,8 +5516,7 @@ partição e o índice do pivô (contando de 0)?
 
 **A.** O pivô é o 11. Só o 4 e o 8 são `<= 11`: o 4 troca com o 15 e o 8 troca
 com o 15 de novo. No fim, o pivô troca com o 23, o primeiro da parte dos
-maiores. No
-Cormen, que indexa a partir de 1, a `PARTITION` devolveria 3. A partição de
+maiores. No Cormen, que indexa a partir de 1, a `PARTITION` devolveria 3. A partição de
 Hoare (dois índices que se cruzam) daria outro vetor. Veja 0095.
 
 </details>

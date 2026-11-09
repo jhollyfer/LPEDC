@@ -13,7 +13,7 @@ com uma **subárvore esquerda** e uma **subárvore direita**, que também são
 
 Lado importa. Um nó `A` com filho `B` à esquerda e um nó `A` com filho `B` à
 direita são árvores **diferentes**. Isso não existia nas pastas do assunto
-anterior, onde só contava a ordem dos filhos.
+anterior, em que só contava a ordem dos filhos.
 
 Em C, o nó é uma struct com o dado e dois ponteiros. Aqui o dado é um `char`,
 que guarda um dígito ou um operador:
@@ -51,7 +51,7 @@ A pós-ordem é a ordem natural para **calcular**: você só aplica o `*` depois
 saber quanto valem as duas subárvores. É o mesmo algoritmo da pilha com notação
 pós-fixa do assunto 0084, só que agora a árvore está desenhada.
 
-Vamos ver na prática. Os operadores ficam nos nós internos (roxo) e os números
+No desenho, os operadores ficam nos nós internos (roxo) e os números
 nas folhas (azul). Cada percurso lê a mesma árvore numa ordem diferente:
 
 {{ideia}}
@@ -102,7 +102,7 @@ void arv_em_ordem(const No *r) {
 }
 ```
 
-Repara no fluxograma: o caso base é a árvore vazia. Num nó de verdade, a função
+No fluxograma, o caso base é a árvore vazia. Num nó que existe, a função
 resolve a esquerda inteira, mostra a raiz e só então resolve a direita. Troque a
 caixa azul de lugar e você tem a pré-ordem (antes) ou a pós-ordem (depois):
 

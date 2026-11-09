@@ -19,12 +19,12 @@ ponteiro sequer. Ele é uma árvore binária com duas regras:
 - **ordem**: todo pai é **maior ou igual** aos filhos. Logo, o máximo está
   sempre na raiz.
 
-Repare que a regra de ordem é mais fraca que a da BST: não importa quem fica à
+A regra de ordem é mais fraca que a da BST: não importa quem fica à
 esquerda ou à direita, nem se um primo é maior que o outro. Por isso o heap não
 serve para buscar uma chave qualquer. Ele só sabe responder "quem é o maior?".
 
-A regra de forma é o pulo do gato. Uma árvore completa cabe **num vetor**, nível
-por nível, sem buracos. A raiz fica em `v[0]` e, para qualquer índice `i`:
+É a regra de forma que permite guardar o heap **num vetor**: a árvore completa
+cabe nele nível por nível, sem buracos. A raiz fica em `v[0]` e, para qualquer índice `i`:
 
 | Quem | Índice |
 | --- | --- |
@@ -34,7 +34,7 @@ por nível, sem buracos. A raiz fica em `v[0]` e, para qualquer índice `i`:
 
 O Cormen guarda o heap em `A[1..n]`, com a raiz em `A[1]`, e aí as contas
 ficam `PARENT(i) = ⌊i/2⌋`, `LEFT(i) = 2i` e `RIGHT(i) = 2i + 1`. É o mesmo
-heap deslocado de uma casa: numa questão, confira onde o vetor começa.
+heap deslocado de uma casa: numa questão, confira em que índice o vetor começa.
 
 As duas operações consertam o heap andando por um único caminho:
 
@@ -49,7 +49,7 @@ Cormen, a descida é a `MAX-HEAPIFY`, e a fila de prioridade tem `INSERT`,
 `MAXIMUM`, `EXTRACT-MAX` e `INCREASE-KEY`. Invertendo as comparações, você tem
 o **heap de mínimo**, com o menor na raiz.
 
-Vamos ver na prática. Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30.
+Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30.
 Depois das seis chegadas, o heap é `[90 70 30 40 50 20]`. A árvore e o vetor são
 a mesma coisa: o 70 está no índice 1, e os filhos dele ficam nos índices 3 e 4:
 
@@ -121,7 +121,7 @@ int main(void) {
 // Atende 70: [50 40 30 20]
 ```
 
-Repara no fluxograma: é a subida do 30, o último a chegar. Ele entra no índice
+O fluxograma segue a subida do 30, o último a chegar. Ele entra no índice
 5, o pai dele (índice 2) é o 20, menor: troca. Agora o 30 está no índice 2 e o
 pai é o 90: para. Uma troca só:
 
@@ -150,9 +150,9 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 > têm nada a ver um com o outro. O heap do `malloc` (assunto 0053) é a região
 > da memória para alocação dinâmica; o heap deste assunto é uma estrutura de
 > dados. Aqui o heap de dados até mora no heap de memória (o `heap_cria` faz
-> `malloc` do vetor), mas é coincidência. E por morar num vetor contíguo, o
-> heap não gasta 16 bytes de ponteiros por elemento como a BST, e percorre a
-> memória em sequência, o que o cache do processador adora.
+> `malloc` do vetor), mas é coincidência. Por morar num vetor contíguo, o
+> heap não gasta 16 bytes de ponteiros por elemento como a BST e percorre a
+> memória em sequência, o que favorece o cache do processador.
 
 > [!NOTE]
 > **Pergunta para você:** o vetor `[90 70 30 40 50 20]` é um heap. E o vetor

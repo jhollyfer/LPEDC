@@ -6,18 +6,18 @@ aplica uma **regra** ao seu nome e a regra devolve o número do armário. Na
 saída, a mesma regra diz onde estão as suas coisas, sem procurar nada.
 
 Você já viu buscas de todo tipo: sequencial em O(n), binária em O(log n), na
-árvore de busca em O(log n) se ela estiver equilibrada. Existe uma busca ainda
-melhor, que você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
+árvore de busca em O(log n) se ela estiver equilibrada. Uma busca ainda melhor
+você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
 índice custa **O(1)**, não importa o tamanho.
 
 Quando a chave já é um número pequeno, dá para usá-la direto como índice. Os
 DDDs vão de 11 a 99, então `const char *estado[100]` resolve: `estado[61]` é
-"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O problema aparece quando
-a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
+"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O
+problema aparece quando a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
 bilhões de posições para guardar 50 alunos?) e um nome nem é número.
 
 A saída é uma **função hash** (função de espalhamento): ela pega a chave, seja
-qual for, e devolve um índice entre `0` e `m - 1`, onde `m` é o tamanho da
+qual for, e devolve um índice entre `0` e `m - 1`, sendo `m` o tamanho da
 tabela. O vetor que guarda os itens nessas posições é a **tabela hash**, e cada
 posição é um **balde**.
 
@@ -42,14 +42,14 @@ A conta que mede o aperto da tabela é o **fator de carga**: `α = n / m`, o
 número de itens dividido pelo número de baldes. Com 5 alunos em 7 armários,
 α ≈ 0,71. Quanto mais perto de 1 (ou acima), mais colisão.
 
-Vamos ver na prática. Os 5 alunos chegam na ordem ana, davi, lia, bia e caio.
+Os 5 alunos chegam na ordem ana, davi, lia, bia e caio.
 A regra é "soma dos códigos das letras, resto por 7". Para "caio": 99 + 97 +
 105 + 111 = 412, e 412 % 7 = 6. Só que "bia" (98 + 105 + 97 = 300) também deu
 6, e chegou antes. Os outros três caem em armários livres:
 
 {{ideia}}
 
-O mesmo guarda-volumes em C. O vetor `dono` é a tabela: `NULL` quer dizer
+No código, o vetor `dono` é a tabela: `NULL` quer dizer
 armário vazio. O programa só **detecta** a colisão; resolver fica para o
 próximo assunto:
 
@@ -90,7 +90,7 @@ int main(void) {
 // caio -> armário 6 (colisão com bia!)
 ```
 
-Repara no fluxograma: a função hash é só um laço que acumula a soma, letra por
+No fluxograma, a função hash é um laço que acumula a soma, letra por
 letra, e um resto no final. O caminho mostrado é o do "caio": quatro voltas no
 laço, índice 6, armário ocupado, colisão:
 
@@ -107,9 +107,9 @@ laço, índice 6, armário ocupado, colisão:
 > **Por dentro do C:** o C não tem "letra"; tem bytes. Em UTF-8, o "ã" ocupa
 > dois bytes, `0xC3 0xA3`, e no gcc para PC o tipo `char` tem **sinal**: esses
 > bytes valem -61 e -93. Somados num `int`, podem deixar a soma negativa, e o
-> resto de um negativo em C é negativo: `-98 % 8` dá `-2`, índice fora do vetor. Por isso a função converte
-> para `unsigned char` (0 a 255) e acumula num `unsigned`. E tem mais um
-> motivo: estourar um `unsigned` é definido (a conta dá a volta, módulo 2³²),
+> resto de um negativo em C é negativo: `-98 % 8` dá `-2`, índice fora do
+> vetor. Por isso a função converte para `unsigned char` (0 a 255) e acumula
+> num `unsigned`. Há outro motivo: estourar um `unsigned` é definido (a conta dá a volta, módulo 2³²),
 > enquanto estourar um `int` é comportamento indefinido. O polinômio estoura o
 > tempo todo, de propósito.
 

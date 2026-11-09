@@ -16,26 +16,25 @@ ordem entre si**, não "no lugar final" como no selection. A cada passo:
 3. quando achar alguém menor ou igual (ou o começo do vetor), ponha `x` no
    buraco que sobrou, `v[i + 1]`.
 
-Repara que guardar `x` antes é obrigatório: o primeiro deslocamento escreve
-por cima de `v[j]`.
+Guardar `x` antes é obrigatório: o primeiro deslocamento escreve por cima de
+`v[j]`.
 
 O custo depende de **quanto** o vetor está bagunçado. Cada deslocamento
 desfaz uma inversão (como cada troca do bubble), mas custa uma escrita, não
 três. No pior caso (vetor ao contrário), cada carta anda até o começo:
 `n(n - 1)/2` comparações, **O(n²)**. No melhor (já ordenado), cada carta
-compara uma vez e fica: `n - 1` comparações, **O(n)**. E em vetor **quase**
-ordenado, ele é quase linear. Isso o torna o melhor dos três algoritmos
-simples na prática, e é por isso que bibliotecas de verdade usam insertion
-para pedaços pequenos (até umas 16 a 32 posições).
+compara uma vez e fica: `n - 1` comparações, **O(n)**. Em vetor **quase**
+ordenado, fica quase linear. Por isso ele é o melhor dos três algoritmos
+simples na prática, e as bibliotecas usam insertion para pedaços pequenos
+(até umas 16 a 32 posições).
 
-Vamos ver na prática. Em cada linha, a parte verde é a mão já arrumada e a
+No desenho, cada linha é uma carta nova: a parte verde é a mão já arrumada e a
 amarela é a carta que acabou de entrar. O 9 não anda nada; o 2 atravessa a
 mão inteira:
 
 {{ideia}}
 
-O mesmo exemplo em C. A função `maior` só existe para contar as
-comparações:
+No código, a função `maior` só existe para contar as comparações:
 
 ```c
 #include <stdio.h>
@@ -102,13 +101,13 @@ O encaixe do 2 (`j = 3`), o mais caro. A mão antes é `4 7 9 | 2 5`:
 | 0 | 4 | sim | `v[1] = 4` | 4 4 7 9 5 |
 | -1 | | (`i >= 0` falso: nem compara) | `v[0] = 2` | 2 4 7 9 5 |
 
-Três comparações, três deslocamentos. Repara nas linhas do meio: durante o
+Três comparações, três deslocamentos. Nas linhas do meio, durante o
 encaixe, o vetor tem um valor **repetido** e o 2 não está em lugar nenhum. Ele
 está guardado em `x`. Somando todos os encaixes: 1 + 1 + 3 + 3 = **8
 comparações** e 1 + 0 + 3 + 2 = **6 deslocamentos**.
 
-Repara no fluxograma: o laço de dentro tem uma pergunta dupla. Ele para por
-dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
+O laço de dentro do fluxograma tem uma pergunta dupla e para por dois
+motivos: acabou o vetor ou achou alguém que não é maior:
 
 {{fluxograma}}
 
@@ -120,9 +119,9 @@ dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
 > direito nem é avaliado.
 
 > [!TIP]
-> **Por dentro do C:** o laço de deslocamento é praticamente um `memmove`: ele
+> **Por dentro do C:** o laço de deslocamento faz o papel de um `memmove`: ele
 > empurra um bloco contínuo de memória uma casa para a direita. Por isso o
-> insertion sort é tão rápido em vetores pequenos: acessa a memória em
+> insertion sort é rápido em vetores pequenos: acessa a memória em
 > sequência, faz uma escrita por deslocamento e não chama função nenhuma. Ele
 > também é **estável**: o `>` (e não `>=`) faz o laço parar ao encontrar um
 > igual, e `x` entra **depois** dele. E é **online**: consegue ordenar à

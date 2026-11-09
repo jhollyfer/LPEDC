@@ -10,7 +10,7 @@ pilha. Isso é a **busca sequencial** (ou **busca linear**). Ela não exige nada
 do vetor: pode estar em qualquer ordem.
 
 O contrato é o de sempre no C: a função recebe o vetor, o tamanho e o valor
-procurado (a **chave**), e devolve o **índice** onde achou. Se não achou,
+procurado (a **chave**), e devolve o **índice** em que achou. Se não achou,
 devolve `-1`, que nunca é um índice válido. Você escreve o laço e passa o
 tamanho, porque o vetor do C não sabe quantos elementos tem.
 
@@ -26,14 +26,14 @@ verdade:
 Em notação do assunto 0072, a busca sequencial é **O(n)**: dobrou o número de
 alunos, dobrou o tempo da catraca no pior caso.
 
-Vamos ver na prática. A academia tem 6 alunos ativos e a catraca procura a
+A academia tem 6 alunos ativos e a catraca procura a
 matrícula 1290. Ela compara com 4172, 3305 e 8821 (diferentes, em amarelo) e
 acha na quarta gaveta, a de índice 3. As duas últimas nem são olhadas:
 
 {{ideia}}
 
-O mesmo exemplo em C. A função conta as comparações num ponteiro, para você
-ver o custo de cada busca:
+No código, a função conta as comparações num ponteiro, para você ver o custo
+de cada busca:
 
 ```c
 #include <stdio.h>
@@ -83,7 +83,7 @@ O teste de mesa da busca por 1290. Cada linha é uma volta do laço:
 Para 9999, as 6 linhas seriam "não" e a função só devolve `-1` depois da
 última.
 
-Repara no fluxograma: são duas perguntas por volta. A primeira (`i < n?`)
+O fluxograma faz duas perguntas por volta. A primeira (`i < n?`)
 protege o vetor; a segunda (`v[i] == x?`) é a busca de fato. O caminho verde
 dá a volta três vezes antes de sair pelo Sim:
 
@@ -96,10 +96,10 @@ dá a volta três vezes antes de sair pelo Sim:
 > foram olhados. O compilador não reclama: o programa roda e responde errado.
 
 > [!TIP]
-> **Por dentro do C:** `const int v[]` no parâmetro é, na verdade, um
+> **Por dentro do C:** `const int v[]` no parâmetro é um
 > `const int *`: a função recebe só o endereço da gaveta 0, e `v[i]` é
 > `*(v + i)`. Como as gavetas são vizinhas na memória, a busca sequencial lê
-> os bytes em ordem, e o processador adora isso: ele traz da RAM blocos de 64
+> os bytes em ordem, e o processador agradece: ele traz da RAM blocos de 64
 > bytes (uma **linha de cache**, 16 `int`) de uma vez. Por isso, em vetores
 > pequenos (dezenas de elementos), a busca sequencial costuma ganhar de
 > estruturas "mais espertas". Um truque antigo é a **sentinela**: copiar a

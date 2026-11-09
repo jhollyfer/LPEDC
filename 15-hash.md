@@ -8,16 +8,15 @@ por uma **conta**: uma função transforma a chave num índice de vetor, e o
 acesso ao vetor custa O(1). É a estrutura de dados mais usada na prática.
 
 Dicionários, conjuntos e caches de quase todo software são tabelas hash por
-baixo. No C não tem nada disso pronto, e é aí que você entende como elas
-funcionam: a função
-hash que mistura os bytes da chave, o que acontece quando duas chaves caem no
-mesmo lugar, por que a tabela cresce quando enche e por que ela não guarda
-ordem nenhuma.
+baixo. O C não traz nada disso pronto, e por isso você vai ver como elas
+funcionam: a função hash que mistura os bytes da chave, o que acontece quando
+duas chaves caem no mesmo lugar, por que a tabela cresce quando enche e por
+que ela não guarda ordem nenhuma.
 
 O módulo tem duas famílias para tratar colisão: o **encadeamento**, que
 pendura uma lista em cada balde, e o **endereçamento aberto**, que procura
 outra posição dentro do próprio vetor. Termina com um contador de palavras
-de verdade, que junta tabela, strings, `qsort` e memória dinâmica.
+que junta tabela, strings, `qsort` e memória dinâmica.
 
 ## O que você vai aprender
 
@@ -28,32 +27,16 @@ de verdade, que junta tabela, strings, `qsort` e memória dinâmica.
 - medir o custo: comparações, sondagens, agrupamento e quando crescer a tabela (**rehash**)
 - usar a tabela como contador e como conjunto, num programa completo
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro ou colisão. Nas tabelas, cada balde é uma gaveta com o
-índice à esquerda, e a corrente de nós sai dela para a direita.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa listas encadeadas (módulo 11) o tempo todo: inserir no
 início, percorrer e remover guardando o anterior. Usa também `malloc`/`free`,
 structs, ponteiro para função e `qsort`. Se algo disso estiver nebuloso,
 revise antes.
+
+Nos desenhos das tabelas, cada balde é uma gaveta com o índice à esquerda, e
+a corrente de nós sai dela para a direita; vermelho marca colisão. Responda a
+**Pergunta para você** de cada assunto antes de rodar.
 
 As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
 `aberta.h`/`aberta.c` (endereçamento aberto) e `palavras.h`/`palavras.c`
@@ -83,18 +66,18 @@ aplica uma **regra** ao seu nome e a regra devolve o número do armário. Na
 saída, a mesma regra diz onde estão as suas coisas, sem procurar nada.
 
 Você já viu buscas de todo tipo: sequencial em O(n), binária em O(log n), na
-árvore de busca em O(log n) se ela estiver equilibrada. Existe uma busca ainda
-melhor, que você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
+árvore de busca em O(log n) se ela estiver equilibrada. Uma busca ainda melhor
+você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
 índice custa **O(1)**, não importa o tamanho.
 
 Quando a chave já é um número pequeno, dá para usá-la direto como índice. Os
 DDDs vão de 11 a 99, então `const char *estado[100]` resolve: `estado[61]` é
-"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O problema aparece quando
-a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
+"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O
+problema aparece quando a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
 bilhões de posições para guardar 50 alunos?) e um nome nem é número.
 
 A saída é uma **função hash** (função de espalhamento): ela pega a chave, seja
-qual for, e devolve um índice entre `0` e `m - 1`, onde `m` é o tamanho da
+qual for, e devolve um índice entre `0` e `m - 1`, sendo `m` o tamanho da
 tabela. O vetor que guarda os itens nessas posições é a **tabela hash**, e cada
 posição é um **balde**.
 
@@ -119,14 +102,14 @@ A conta que mede o aperto da tabela é o **fator de carga**: `α = n / m`, o
 número de itens dividido pelo número de baldes. Com 5 alunos em 7 armários,
 α ≈ 0,71. Quanto mais perto de 1 (ou acima), mais colisão.
 
-Vamos ver na prática. Os 5 alunos chegam na ordem ana, davi, lia, bia e caio.
+Os 5 alunos chegam na ordem ana, davi, lia, bia e caio.
 A regra é "soma dos códigos das letras, resto por 7". Para "caio": 99 + 97 +
 105 + 111 = 412, e 412 % 7 = 6. Só que "bia" (98 + 105 + 97 = 300) também deu
 6, e chegou antes. Os outros três caem em armários livres:
 
 <p align="center"><img src="15-hash/0105-hashing/ideia.svg" alt="Diagrama da ideia: A ideia e a função hash" width="858"></p>
 
-O mesmo guarda-volumes em C. O vetor `dono` é a tabela: `NULL` quer dizer
+No código, o vetor `dono` é a tabela: `NULL` quer dizer
 armário vazio. O programa só **detecta** a colisão; resolver fica para o
 próximo assunto:
 
@@ -167,7 +150,7 @@ int main(void) {
 // caio -> armário 6 (colisão com bia!)
 ```
 
-Repara no fluxograma: a função hash é só um laço que acumula a soma, letra por
+No fluxograma, a função hash é um laço que acumula a soma, letra por
 letra, e um resto no final. O caminho mostrado é o do "caio": quatro voltas no
 laço, índice 6, armário ocupado, colisão:
 
@@ -184,9 +167,9 @@ laço, índice 6, armário ocupado, colisão:
 > **Por dentro do C:** o C não tem "letra"; tem bytes. Em UTF-8, o "ã" ocupa
 > dois bytes, `0xC3 0xA3`, e no gcc para PC o tipo `char` tem **sinal**: esses
 > bytes valem -61 e -93. Somados num `int`, podem deixar a soma negativa, e o
-> resto de um negativo em C é negativo: `-98 % 8` dá `-2`, índice fora do vetor. Por isso a função converte
-> para `unsigned char` (0 a 255) e acumula num `unsigned`. E tem mais um
-> motivo: estourar um `unsigned` é definido (a conta dá a volta, módulo 2³²),
+> resto de um negativo em C é negativo: `-98 % 8` dá `-2`, índice fora do
+> vetor. Por isso a função converte para `unsigned char` (0 a 255) e acumula
+> num `unsigned`. Há outro motivo: estourar um `unsigned` é definido (a conta dá a volta, módulo 2³²),
 > enquanto estourar um `int` é comportamento indefinido. O polinômio estoura o
 > tempo todo, de propósito.
 
@@ -531,10 +514,10 @@ fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
 só, a tabela vira uma lista única e a busca volta a ser O(n).
 
 No encadeamento a tabela **nunca enche**: α pode passar de 1, as listas só
-ficam mais compridas (o exemplo A211 põe 8 itens em 2 baldes). Algumas implementações, quando uma corrente fica
-comprida demais, até trocam a lista por uma árvore.
+ficam mais compridas (o exemplo A211 põe 8 itens em 2 baldes). Algumas
+implementações trocam a lista por uma árvore quando a corrente cresce demais.
 
-Vamos ver na prática. Seis frutas entram na ordem banana, uva, pera, kiwi,
+Seis frutas entram na ordem banana, uva, pera, kiwi,
 manga e caju, com o hash polinomial do assunto anterior e `m = 5`. Os índices
 saem 4, 2, 4, 1, 1 e 4. Como cada nova entra no início da corrente, o balde 4
 termina com caju, pera, banana. Para buscar "kiwi", a busca vai ao balde 1,
@@ -544,7 +527,7 @@ nenhum outro balde:
 <p align="center"><img src="15-hash/0106-encadeamento/ideia.svg" alt="Diagrama da ideia: Encadeamento" width="858"></p>
 
 A estrutura segue o padrão TAD: `tabela.h` com a interface e o tipo opaco,
-`tabela.c` com o nó, os baldes e as operações. O coração da implementação:
+`tabela.c` com o nó, os baldes e as operações. A parte que importa:
 
 ```c
 typedef struct No {
@@ -617,8 +600,8 @@ int main(void) {
 // limao: não tem (0 comparações)
 ```
 
-Repara no fluxograma da busca: o hash leva direto ao balde, e daí em diante é
-o laço de sempre de lista encadeada. O "kiwi" dá uma volta no laço (passa pela
+No fluxograma da busca, o hash leva direto ao balde, e daí em diante vem o
+laço de sempre de lista encadeada. O "kiwi" dá uma volta no laço (passa pela
 manga) e para no Sim. O "limao" cai no balde 0, que está vazio, e sai pelo Não
 logo na primeira pergunta:
 
@@ -997,7 +980,7 @@ assunto 0179 aprofunda.
 - **inserir**: sonda a partir de `h` até achar uma posição livre;
 - **buscar**: sonda a partir de `h` até achar a chave (achou) ou uma posição
   **livre** (não está: se estivesse, teria parado ali);
-- **remover**: é aqui que mora a pegadinha (o aviso abaixo explica).
+- **remover**: tem uma pegadinha, explicada no aviso abaixo.
 
 Como tudo cabe no vetor, a tabela **enche**: `α = n / m` nunca passa de 1. E
 fica lenta bem antes disso. Na sondagem linear, as ocupadas formam blocos
@@ -1005,12 +988,11 @@ seguidos, e qualquer chave que cai num bloco vai parar no fim dele, deixando o
 bloco ainda maior. Isso é o **agrupamento primário**. Com α = 0,5 uma busca
 sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com
 hashing uniforme, sem agrupamento, o Cormen limita essa busca a 1/(1 − α)
-sondagens: 2 e 10.) A regra
-prática: não passe de 70% a 75% de ocupação. Passou, crie uma tabela maior e
-reinsira tudo (o exemplo A213 lota uma tabela
-de 7 vagas e mostra as sondagens crescendo).
+sondagens: 2 e 10.) Na prática, não passe de 70% a 75% de ocupação. Passou,
+crie uma tabela maior e reinsira tudo (o exemplo A213 lota uma tabela de 7
+vagas e mostra as sondagens crescendo).
 
-Vamos ver na prática. Entram os carros dos apartamentos 101, 202, 301, 1104
+Entram os carros dos apartamentos 101, 202, 301, 1104
 e 504. O 101 vai para a vaga 2 e o 202 para a 4. O 301 também dá 4 (301 % 11
 = 4), encontra a 4 ocupada e para na 5. O 1104 dá 4 de novo: tenta a 4, a 5,
 e para na 6. O 504 vai direto para a 9. Na busca pelo 1104, o porteiro refaz
@@ -1099,7 +1081,7 @@ int main(void) {
 // 303 não está, sondagens: 2
 ```
 
-Repara no fluxograma da busca: são duas perguntas por vaga. "Está livre?"
+O fluxograma da busca faz duas perguntas por vaga. "Está livre?"
 encerra a busca sem sucesso; "é o carro?" encerra com sucesso. Se nenhuma das
 duas, anda uma vaga. O 1104 passa duas vezes pelo laço (vagas 4 e 5) e é
 achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
@@ -1111,8 +1093,8 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 > vaga 5 volta a ser `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e
 > conclui "não está", embora ele esteja na 6. A vaga livre corta o caminho de
 > quem tinha pulado por ela. A solução é uma terceira marca, **removida**
-> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto por ela, e a inserção pode
-> reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
+> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto por ela, e
+> a inserção pode reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
 > lápides acumulam e as buscas sem sucesso ficam longas, até você reconstruir
 > a tabela.
 
@@ -1448,7 +1430,7 @@ A padaria do bairro recebeu dezenas de comentários no app de entrega e quer
 saber do que os clientes mais falam. Um programa lê o texto, conta cada
 palavra e mostra o ranking.
 
-É o problema perfeito para uma tabela hash: a chave é a palavra, o valor é a
+A tabela hash resolve isso: a chave é a palavra, o valor é a
 contagem, e cada palavra do texto vira uma busca seguida de `+1`. O programa
 junta peças de vários módulos:
 
@@ -1466,15 +1448,14 @@ diferentes, isso custa O(N · d). Com a tabela, O(N) em média, mais
 O(d log d) do `qsort` no fim. Num livro de 100 mil palavras, 10 mil
 diferentes: um bilhão de comparações contra algumas centenas de milhares.
 
-Vamos ver na prática. O texto tem 31 palavras, 17 diferentes. A tabela tem
+O texto do exemplo tem 31 palavras, 17 diferentes. A tabela tem
 17 baldes, um fator de carga de 1. O "pão" cai no balde 2 e chega a 6; o
 "café", no balde 3, chega a 3; "estava" e "queijo" dividem o balde 4. No
 fim, a lista vai para o vetor, o `qsort` ordena e o ranking sai:
 
 <p align="center"><img src="15-hash/0108-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o contador de palavras" width="858"></p>
 
-O programa completo. O TAD `palavras.h` fica na pasta, e o
-`main` só conhece as funções dele:
+O TAD `palavras.h` fica na pasta, e o `main` só conhece as funções dele:
 
 ```c
 #include <stdio.h>
@@ -1557,7 +1538,7 @@ int main(void) {
 // 5. e: 2
 ```
 
-Repara no fluxograma: o laço principal é "pega a próxima palavra e soma". A
+No fluxograma, o laço principal é "pega a próxima palavra e soma". A
 pergunta "já está no balde?" é feita 31 vezes. O Sim acontece 14 vezes; o
 Não, 17, uma para cada palavra diferente, e cria o nó com 0. Os dois caminhos
 se juntam no `vezes++`, como no `contador_soma`. Quando o texto acaba, sai o
@@ -1582,7 +1563,7 @@ ranking:
 > de 48 bytes, mais 136 bytes do vetor de 17 ponteiros. O vetor de
 > `Contagem` **não copia** as palavras: cada `palavra` aponta para dentro de
 > um nó da tabela. Por isso o `free(lista)` vem antes do `contador_libera`,
-> e usar a lista depois de liberar a tabela seria ponteiro solto. E um
+> e usar a lista depois de liberar a tabela seria ponteiro solto. Um
 > detalhe do hash: com base 31 e `m = 31`, `h * 31 % 31` é sempre 0, e o
 > balde passa a depender **só da última letra**. Base e `m` não podem ter
 > fator comum; por isso o exemplo usa 17.
@@ -2039,7 +2020,7 @@ sem sucesso: 6 comparacoes / 5 = 1.20
 
 Dica: achar o k-ésimo nó de uma corrente custa k comparações, (1 + 2 + 3) +
 1 + (1 + 2) = 10. Sem sucesso, a busca percorre a corrente inteira:
-(3 + 1 + 0 + 2 + 0) / 5 = 1,2, que é exatamente o fator de carga α = 6/5.
+(3 + 1 + 0 + 2 + 0) / 5 = 1,2, o próprio fator de carga α = 6/5.
 Libere as correntes no fim.
 
 </details>
@@ -3508,8 +3489,8 @@ ordem. Em que posições ficam o 53 e o 25?
 
 **B.** 20 vai para 9; 31 (casa 9) para 10; 9 (casa 9) dá a volta até 0; 42
 (casa 9) até 1; 14 para 3; 53 (casa 9) tenta 9, 10, 0, 1 e para no 2, com 5
-sondagens; 25 (casa 3) para no 4. Repare no bloco 9, 10, 0, 1, 2 crescendo: é
-o agrupamento primário. Veja 0107.
+sondagens; 25 (casa 3) para no 4. O bloco 9, 10, 0, 1, 2, que cresce a cada
+inserção, é o agrupamento primário. Veja 0107.
 
 </details>
 

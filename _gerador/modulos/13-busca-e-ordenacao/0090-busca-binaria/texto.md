@@ -26,15 +26,14 @@ O preço é a pré-condição: o vetor precisa estar em ordem. Num vetor bagunç
 a busca binária não dá erro nenhum, só responde errado. Ordenar custa caro, e
 é por isso que o resto do módulo existe.
 
-Vamos ver na prática. O catálogo do atacadão tem 15 códigos em ordem e você
+O catálogo do atacadão tem 15 códigos em ordem e você
 procura o 216. O meio (índice 7) tem 189, menor que 216: a metade esquerda
 inteira fica cinza. O novo meio (11) tem 245, maior: a direita dele também
 sai. Na terceira volta, o meio (9) é o 216:
 
 {{ideia}}
 
-O mesmo exemplo em C. O `printf` dentro do laço mostra o intervalo de cada
-volta:
+Em C, um `printf` dentro do laço mostra o intervalo de cada volta:
 
 ```c
 #include <stdio.h>
@@ -90,8 +89,8 @@ int main(void) {
 
 ### Passo a passo
 
-A busca por 150, que não está no catálogo. Repara no intervalo encolhendo até
-ficar vazio:
+A busca por 150, que não está no catálogo. O intervalo encolhe até ficar
+vazio:
 
 | volta | ini | fim | meio | v[meio] | decisão |
 | --- | --- | --- | --- | --- | --- |
@@ -101,11 +100,11 @@ ficar vazio:
 | 4 | 4 | 4 | 4 | 152 | 152 > 150: `fim = 3` |
 | fim | 4 | 3 | | | `ini > fim`: devolve `-1` |
 
-Repara que o `ini = 4` final é exatamente onde o 150 **deveria** estar para o
-vetor continuar ordenado. Essa informação vale ouro (veja o exemplo A180).
+O `ini = 4` final é a posição em que o 150 **deveria** entrar para o vetor
+continuar ordenado. Essa informação serve para inserir em ordem (veja o
+exemplo A180).
 
-Repara no fluxograma: diferente da busca sequencial, aqui são três perguntas
-por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
+Diferente da busca sequencial, o fluxograma tem três perguntas por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 
 {{fluxograma}}
 
@@ -122,8 +121,8 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 > `(ini + fim) / 2`? Num vetor com mais de 1 bilhão de elementos, `ini + fim`
 > passa de `INT_MAX` (2.147.483.647) e dá **overflow**, que no C é
 > comportamento indefinido. Esse bug ficou escondido por anos em
-> implementações famosas da busca binária e só apareceu em 2006, quando os vetores ficaram
-> grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
+> implementações famosas da busca binária e só apareceu em 2006, quando os
+> vetores ficaram grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
 > 11, depois 9), então não aproveita a linha de cache como a sequencial. Por
 > isso, para vetores bem pequenos, a sequencial pode ganhar. A `stdlib.h` traz
 > uma pronta, a `bsearch`, que você vai usar no assunto 0096.

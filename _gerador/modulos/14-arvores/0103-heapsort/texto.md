@@ -6,14 +6,14 @@ Você precisa do ranking em ordem crescente, no próprio vetor, sem alocar outro
 
 O heap do assunto anterior já sabe tirar o maior, um de cada vez, em O(log n).
 Tire os n elementos e eles saem em ordem decrescente. Esse é o **heapsort**:
-ordenar usando um heap. O truque que deixa tudo **no mesmo vetor** é perceber
-que, a cada máximo que sai, o heap encolhe uma casa, e essa casa livre no fim é
-exatamente onde o máximo deve ficar.
+ordenar usando um heap. Para fazer tudo **no mesmo vetor**, repare que a cada
+máximo que sai o heap encolhe uma casa, e essa casa livre no fim é a posição
+final do máximo.
 
 O algoritmo tem duas fases:
 
 1. **Construir o heap** dentro do próprio vetor. Dá para inserir um por um (cada
-   inserção sobe), mas existe um jeito melhor: as folhas já são heaps de um
+   inserção sobe), mas há um jeito mais barato: as folhas já são heaps de um
    elemento só, então basta fazer cada **pai** descer, do último pai
    (`n / 2 - 1`) até a raiz. Essa construção custa só O(n). É a
    `BUILD-MAX-HEAP` do Cormen, que, com o vetor começando em 1, vai de
@@ -32,7 +32,7 @@ níveis. Total O(n log n), e isso vale **sempre**, até no pior caso. O quick so
 merge sort (0094) garante n log n, mas precisa de um vetor extra. O heapsort
 garante n log n sem memória extra.
 
-Vamos ver na prática. Depois da fase 1, o vetor dos tempos é o heap
+Nos tempos da corrida, depois da fase 1, o vetor dos tempos é o heap
 `[91 52 73 40 18 25 66]`. No primeiro passo da fase 2, o 91 troca com o 66 e
 fica no fim, verde. O 66 vai para a raiz e desce pelo maior filho (73). O heap
 agora tem 6 elementos:
@@ -108,7 +108,7 @@ int main(void) {
 //              18 | 25 40 52 66 73 91
 ```
 
-Repara no fluxograma: a fase 1 é uma caixa só, e o laço da fase 2 faz sempre o
+No fluxograma, a fase 1 é uma caixa só, e o laço da fase 2 faz sempre o
 mesmo par de coisas, trocar e descer, até `fim` chegar a 0:
 
 {{fluxograma}}

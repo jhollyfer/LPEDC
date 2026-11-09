@@ -6,8 +6,8 @@ e `luz`, e dentro de `luz` tem a pasta `2025`, com os boletos do ano. Nenhuma
 lista, pilha ou fila desenha isso direito: uma pasta tem **várias** subpastas,
 e cada subpasta tem as suas.
 
-Essa forma de "um em cima, vários embaixo" é uma **árvore**. Você convive com
-ela o tempo todo: a árvore genealógica da família, o organograma da empresa, o
+Essa forma de "um em cima, vários embaixo" é uma **árvore**. Ela aparece em
+toda parte: a árvore genealógica da família, o organograma da empresa, o
 chaveamento da Copa, o sumário de um livro (capítulos, seções, subseções).
 
 Na computação a árvore cresce de cabeça para baixo. O vocabulário:
@@ -39,7 +39,7 @@ com zero ou mais árvores penduradas embaixo. Por isso quase toda função de
 folhas? Some as folhas de cada filho. Altura? Pegue a maior altura entre os
 filhos e some 1.
 
-Vamos ver na prática. A árvore das pastas tem 9 nós, 5 folhas (em verde) e
+A árvore das pastas tem 9 nós, 5 folhas (em verde) e
 altura 3: o caminho mais longo vai de `casa` até `2025`, passando por `contas` e
 `luz`:
 
@@ -145,7 +145,7 @@ int main(void) {
 // Altura: 3
 ```
 
-Repara no fluxograma da `altura`: não existe um caso especial para a folha. Ela
+O fluxograma da `altura` não tem caso especial para a folha. Ela
 não entra no laço, `maior` fica em -1 e a função devolve 0. Cada pasta pergunta
 a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 (`fotos`), 2 (`contas`) e 0 (`musica`), e ela devolve 2 + 1 = 3:
@@ -164,8 +164,8 @@ a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 > múltiplo de 8. Uma folha gasta os mesmos 56 bytes, com 4 ponteiros sem uso. O
 > exemplo A194 mostra a saída clássica: **primeiro filho / próximo irmão**. Cada
 > nó guarda só dois ponteiros, um para o primeiro filho e outro para o próximo
-> irmão, e aceita qualquer número de filhos. Repare que isso é, na prática, uma
-> árvore binária, o assunto seguinte.
+> irmão, e aceita qualquer número de filhos. Com dois ponteiros por nó, isso
+> já é uma árvore binária, o assunto seguinte.
 
 > [!NOTE]
 > **Pergunta para você:** se você criar a pasta `2026` dentro de `2025`, o que

@@ -13,12 +13,12 @@ busca binária é rápida, mas exige um vetor ordenado, e inserir no meio de um
 vetor custa caro. A **árvore binária de busca** busca e insere descendo um único
 caminho. Quando ela fica torta, a **AVL** a endireita com rotações. E quando
 você só precisa do maior elemento, o **heap** faz isso morando num vetor
-comum, sem ponteiro nenhum, e de quebra ainda ordena (o **heapsort**).
+comum, sem ponteiro nenhum, e ainda serve para ordenar (o **heapsort**).
 
 Quase tudo aqui é recursivo. Uma árvore é um nó com árvores menores
 penduradas, então a função que resolve a árvore resolve cada subárvore e junta
-as respostas. Se a recursão do módulo 04 ficou meio nebulosa, este é o momento
-de ela fazer sentido.
+as respostas. Se a recursão do módulo 04 ficou nebulosa, aqui ela ganha
+sentido.
 
 ## O que você vai aprender
 
@@ -30,37 +30,19 @@ de ela fazer sentido.
 - o **heapsort**: ordenar em O(n log n) sem memória extra
 - montar um programa que junta BST e heap, cada um no que faz melhor
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
-   mesmas chaves do código.
-2. Leia o código. A partir do 0098, cada assunto tem um **TAD** na pasta
-   (`arvore.h`, `bst.h`, `avl.h`, `heap.h`, `cadastro.h`) e o exemplo só usa a
-   interface. Abra o `.c` do TAD também: é lá que mora o algoritmo.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos. Mude a ordem das inserções, remova outra chave, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Em árvore, **papel e lápis** são obrigatórios. Desenhe a árvore antes de rodar,
-a cada inserção e a cada remoção, e só depois rode o programa para conferir o
-desenho com a saída.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos desenhos de árvore, as arestas verdes marcam o caminho de uma busca, e
-o nó vermelho é o que vai sair ou o que está desequilibrado.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você precisa estar à vontade com **recursão** (assuntos 0032 e 0033),
 **ponteiros para struct** e `->` (0062), `malloc` e `free` (0054) e a ideia de
 **TAD** com `.h` e `.c` (0074). A fila do assunto 0085 aparece no percurso por
 nível, e o assunto 0090 (busca binária) é o primo da BST.
+
+A partir do 0098, cada assunto tem um TAD na pasta (`arvore.h`, `bst.h`,
+`avl.h`, `heap.h`, `cadastro.h`) e o exemplo só usa a interface: abra o `.c`
+também, porque o algoritmo está nele. Nos desenhos de árvore, as arestas
+verdes marcam o caminho de uma busca e o nó vermelho é o que vai sair ou o
+que está desequilibrado. Desenhe a árvore no papel a cada inserção e remoção
+antes de rodar, e use a saída só para conferir.
 
 O `rodar` compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
 comandos dos exemplos e exercícios são os de sempre:
@@ -71,7 +53,7 @@ comandos dos exemplos e exercícios são os de sempre:
 
 Uma convenção vale para o módulo todo: **altura conta arestas**. Uma folha tem
 altura 0 e a árvore vazia tem altura -1. Alguns livros contam nós (folha com
-altura 1). Quando for consultar outro material, confira qual é a convenção.
+altura 1): confira a convenção quando consultar outro material.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -94,8 +76,8 @@ e `luz`, e dentro de `luz` tem a pasta `2025`, com os boletos do ano. Nenhuma
 lista, pilha ou fila desenha isso direito: uma pasta tem **várias** subpastas,
 e cada subpasta tem as suas.
 
-Essa forma de "um em cima, vários embaixo" é uma **árvore**. Você convive com
-ela o tempo todo: a árvore genealógica da família, o organograma da empresa, o
+Essa forma de "um em cima, vários embaixo" é uma **árvore**. Ela aparece em
+toda parte: a árvore genealógica da família, o organograma da empresa, o
 chaveamento da Copa, o sumário de um livro (capítulos, seções, subseções).
 
 Na computação a árvore cresce de cabeça para baixo. O vocabulário:
@@ -127,7 +109,7 @@ com zero ou mais árvores penduradas embaixo. Por isso quase toda função de
 folhas? Some as folhas de cada filho. Altura? Pegue a maior altura entre os
 filhos e some 1.
 
-Vamos ver na prática. A árvore das pastas tem 9 nós, 5 folhas (em verde) e
+A árvore das pastas tem 9 nós, 5 folhas (em verde) e
 altura 3: o caminho mais longo vai de `casa` até `2025`, passando por `contas` e
 `luz`:
 
@@ -233,7 +215,7 @@ int main(void) {
 // Altura: 3
 ```
 
-Repara no fluxograma da `altura`: não existe um caso especial para a folha. Ela
+O fluxograma da `altura` não tem caso especial para a folha. Ela
 não entra no laço, `maior` fica em -1 e a função devolve 0. Cada pasta pergunta
 a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 (`fotos`), 2 (`contas`) e 0 (`musica`), e ela devolve 2 + 1 = 3:
@@ -252,8 +234,8 @@ a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 > múltiplo de 8. Uma folha gasta os mesmos 56 bytes, com 4 ponteiros sem uso. O
 > exemplo A194 mostra a saída clássica: **primeiro filho / próximo irmão**. Cada
 > nó guarda só dois ponteiros, um para o primeiro filho e outro para o próximo
-> irmão, e aceita qualquer número de filhos. Repare que isso é, na prática, uma
-> árvore binária, o assunto seguinte.
+> irmão, e aceita qualquer número de filhos. Com dois ponteiros por nó, isso
+> já é uma árvore binária, o assunto seguinte.
 
 > [!NOTE]
 > **Pergunta para você:** se você criar a pasta `2026` dentro de `2025`, o que
@@ -744,7 +726,7 @@ com uma **subárvore esquerda** e uma **subárvore direita**, que também são
 
 Lado importa. Um nó `A` com filho `B` à esquerda e um nó `A` com filho `B` à
 direita são árvores **diferentes**. Isso não existia nas pastas do assunto
-anterior, onde só contava a ordem dos filhos.
+anterior, em que só contava a ordem dos filhos.
 
 Em C, o nó é uma struct com o dado e dois ponteiros. Aqui o dado é um `char`,
 que guarda um dígito ou um operador:
@@ -782,7 +764,7 @@ A pós-ordem é a ordem natural para **calcular**: você só aplica o `*` depois
 saber quanto valem as duas subárvores. É o mesmo algoritmo da pilha com notação
 pós-fixa do assunto 0084, só que agora a árvore está desenhada.
 
-Vamos ver na prática. Os operadores ficam nos nós internos (roxo) e os números
+No desenho, os operadores ficam nos nós internos (roxo) e os números
 nas folhas (azul). Cada percurso lê a mesma árvore numa ordem diferente:
 
 <p align="center"><img src="14-arvores/0098-arvore-binaria/ideia.svg" alt="Diagrama da ideia: Árvore binária e percursos" width="858"></p>
@@ -833,7 +815,7 @@ void arv_em_ordem(const No *r) {
 }
 ```
 
-Repara no fluxograma: o caso base é a árvore vazia. Num nó de verdade, a função
+No fluxograma, o caso base é a árvore vazia. Num nó que existe, a função
 resolve a esquerda inteira, mostra a raiz e só então resolve a direita. Troque a
 caixa azul de lugar e você tem a pré-ordem (antes) ou a pós-ordem (depois):
 
@@ -1201,7 +1183,7 @@ precisa achar a matrícula na hora. Num vetor ordenado, a busca binária
 vetor para abrir espaço. Numa lista encadeada, inserir é barato, mas a busca
 passa por um nó de cada vez. Dá para ter as duas coisas?
 
-Dá: a **árvore binária de busca**, ou **BST** (*binary search tree*). É uma
+A resposta é a **árvore binária de busca**, ou **BST** (*binary search tree*). É uma
 árvore binária com uma regra que vale em **todo** nó: as chaves da subárvore
 esquerda são **menores** que a do nó, e as da subárvore direita são **maiores**.
 
@@ -1210,25 +1192,25 @@ procurada com a raiz. Igual? Achou. Menor? Tudo que interessa está à esquerda,
 então a metade da direita fica para trás. Maior? Vá para a direita. Se chegar
 num `NULL`, a chave não existe.
 
-**Inserir** é a mesma descida: procure a chave e, no `NULL` onde a busca
+**Inserir** é a mesma descida: procure a chave e, no `NULL` em que a busca
 falharia, pendure um nó novo. Todo nó entra como **folha**; ninguém sai do lugar.
 Por isso a inserção recursiva devolve a raiz da subárvore e o pai faz
 `r->esq = bst_insere(r->esq, chave)`: na maioria das chamadas nada muda, e no
 `NULL` o ponteiro do pai passa a apontar para o nó novo. Chave repetida é
 ignorada neste TAD.
 
-E o bônus: a **em ordem** de uma BST sai em ordem crescente. Esquerda (todos
-menores), raiz, direita (todos maiores). Você ganha uma ordenação de graça.
+A **em ordem** de uma BST sai crescente: esquerda (todos menores), raiz,
+direita (todos maiores). A ordenação vem de graça.
 O nó que vem logo depois de outro na em ordem é o **sucessor** dele; o que
 vem logo antes, o **antecessor**. O menor de todos é o nó mais à esquerda, e
 o maior, o mais à direita (o assunto 0175 acha sucessor e antecessor sem
 percorrer a árvore toda).
 
 O custo da busca é o número de níveis que ela desce: no máximo a **altura** + 1
-comparações. Numa árvore cheinha, cada nível dobra o número de nós, e a altura
+comparações. Numa árvore cheia, cada nível dobra o número de nós, e a altura
 fica perto de log₂ n. Com 7 chaves são 3 níveis; com um milhão, uns 20.
 
-Vamos ver na prática. Sete alunos chegaram nesta ordem: 50, 30, 70, 20, 40, 60
+Sete alunos chegaram nesta ordem: 50, 30, 70, 20, 40, 60
 e 80. A busca pelo 60 compara com 50 (vai para a direita), com 70 (vai para a
 esquerda) e acha. A busca pelo 45 desce 50, 30, 40 e cai no `NULL` à direita do
 40: é ali que o 45 entraria se fosse inserido:
@@ -1302,7 +1284,7 @@ int main(void) {
 // Altura: 2
 ```
 
-Repara no fluxograma: cada volta do laço faz no máximo duas perguntas sobre o
+No fluxograma, cada volta do laço faz no máximo duas perguntas sobre o
 nó atual e desce um nível. O caminho verde é a busca do 60: direita no 50,
 esquerda no 70, achou:
 
@@ -1316,7 +1298,7 @@ esquerda no 70, achou:
 > mostra isso, e o assunto 0101 resolve.
 
 > [!TIP]
-> **Por dentro do C:** repare no `raiz = bst_insere(raiz, ...)`. A árvore começa
+> **Por dentro do C:** olhe o `raiz = bst_insere(raiz, ...)`. A árvore começa
 > como `NULL` e só o primeiro `insere` muda a raiz. Se você esquecer a
 > atribuição, o nó criado se perde: a variável `raiz` continua `NULL` e o
 > AddressSanitizer acusa vazamento no fim. Outra saída é passar o endereço da
@@ -1670,7 +1652,7 @@ filhos** ele tem. São três casos:
 | **dois filhos** | troca pelo **sucessor** e remove o sucessor | remover o 30: o 35 assume |
 
 Os dois primeiros casos são o mesmo código: "o filho que existe sobe", e na
-folha esse filho é `NULL`. O terceiro é o interessante. Quem pode ocupar o lugar
+folha esse filho é `NULL`. O terceiro pede mais cuidado. Quem pode ocupar o lugar
 do 30 sem quebrar a regra? Alguém maior que tudo à esquerda e menor que tudo à
 direita. Dois candidatos servem: o **sucessor** (a menor chave da subárvore
 direita) e o **antecessor** (a maior da esquerda). Este TAD usa o sucessor,
@@ -1679,7 +1661,7 @@ uma questão de prova sempre diz qual dos dois usar.
 
 Para achar o sucessor, desça **uma vez à direita** e depois **à esquerda até
 não dar mais**. Esse nó nunca tem filho esquerdo (senão não seria o menor), então
-removê-lo cai num dos casos fáceis. O truque: copie a chave do sucessor para o
+removê-lo cai num dos casos fáceis. Então copie a chave do sucessor para o
 nó do 30 e chame a remoção do 35 na subárvore direita.
 
 Como na inserção, a função devolve a raiz da subárvore depois da mudança, e o
@@ -1687,7 +1669,7 @@ pai faz `r->esq = bst_remove(r->esq, chave)`. É assim que o avô fica sabendo q
 o neto subiu. E quando a chave removida é a da raiz da árvore inteira, o
 `raiz = bst_remove(raiz, ...)` do cliente atualiza a raiz.
 
-Vamos ver na prática. O 30 tem dois filhos. A partir dele, a busca do sucessor
+O 30 tem dois filhos. A partir dele, a busca do sucessor
 vai para a direita (40) e depois para a esquerda até o fim (35). O 35 vai para o
 lugar do 30, e o 35 de baixo, que era folha, sai:
 
@@ -1773,7 +1755,7 @@ int main(void) {
 // Remove 99   pré: 50 35 45 70 60 80
 ```
 
-Repara no fluxograma: o caminho verde é a chamada que encontra o 30. Ela cai no
+O caminho verde do fluxograma é a chamada que encontra o 30. Ela cai no
 caso de dois filhos, copia o 35 e faz uma **segunda remoção**, dessa vez do 35,
 que vai terminar no caso fácil (o 35 é folha):
 
@@ -2105,8 +2087,8 @@ sem mexer no bst.c e rode de novo até sair a saída esperada, sem erro.
 A lanchonete numera os pedidos: 10, 20, 30, 40... Eles chegam **sempre em ordem
 crescente**. Se você guardar os pedidos numa BST comum, cada pedido novo vira
 filho direito do anterior, e a árvore vira uma lista com altura n - 1. Com mil
-pedidos, achar o último custa mil comparações. A BST é ótima até receber dados
-ordenados, que é justamente o que mais acontece na vida real.
+pedidos, achar o último custa mil comparações. A BST vai bem até receber dados
+ordenados, e dado ordenado é comum na prática.
 
 A saída é uma BST que se **conserta sozinha** a cada inserção. A mais antiga
 delas é a **AVL** (das iniciais de Adelson-Velsky e Landis, que a publicaram em
@@ -2134,7 +2116,7 @@ direito `d` sobe, `r` vira filho esquerdo de `d`, e a antiga subárvore esquerda
 de `d` (chaves entre `r` e `d`) passa a ser a direita de `r`. A em ordem
 continua igual; só a forma muda.
 
-Qual rotação usar depende de onde o peso está:
+A rotação depende do lado em que está o peso:
 
 | Caso | Fator do nó | Fator do filho pesado | Conserto |
 | --- | --- | --- | --- |
@@ -2147,7 +2129,7 @@ Os dois últimos são a **rotação dupla**: o caminho até o nó novo faz um
 "zigue-zague", e uma rotação só não resolve. A primeira rotação endireita o
 zigue-zague; a segunda equilibra.
 
-Vamos ver na prática. Inserir 10, 20 e 30 deixa o 10 com fator -2 e o filho com
+Nos pedidos da lanchonete, inserir 10, 20 e 30 deixa o 10 com fator -2 e o filho com
 -1: direita-direita, uma rotação à esquerda no 10 e o 20 sobe. Mais adiante,
 com a árvore 20 (10, 40 (30, 50)), inserir o 25 deixa o 20 com -2 e o filho 40
 com +1: zigue-zague, rotação dupla. O 30 acaba na raiz:
@@ -2216,7 +2198,7 @@ int main(void) {
 // Insere 25: pré 30 20 10 25 40 50 | altura 2 | rotações 4
 ```
 
-Repara no fluxograma: é o que cada ancestral faz na volta. O caminho verde é o
+O fluxograma mostra o que cada ancestral faz na volta. O caminho verde é o
 do nó 20 quando o 25 chega: fator -2, filho direito com fator +1, então duas
 rotações:
 
@@ -2607,12 +2589,12 @@ ponteiro sequer. Ele é uma árvore binária com duas regras:
 - **ordem**: todo pai é **maior ou igual** aos filhos. Logo, o máximo está
   sempre na raiz.
 
-Repare que a regra de ordem é mais fraca que a da BST: não importa quem fica à
+A regra de ordem é mais fraca que a da BST: não importa quem fica à
 esquerda ou à direita, nem se um primo é maior que o outro. Por isso o heap não
 serve para buscar uma chave qualquer. Ele só sabe responder "quem é o maior?".
 
-A regra de forma é o pulo do gato. Uma árvore completa cabe **num vetor**, nível
-por nível, sem buracos. A raiz fica em `v[0]` e, para qualquer índice `i`:
+É a regra de forma que permite guardar o heap **num vetor**: a árvore completa
+cabe nele nível por nível, sem buracos. A raiz fica em `v[0]` e, para qualquer índice `i`:
 
 | Quem | Índice |
 | --- | --- |
@@ -2622,7 +2604,7 @@ por nível, sem buracos. A raiz fica em `v[0]` e, para qualquer índice `i`:
 
 O Cormen guarda o heap em `A[1..n]`, com a raiz em `A[1]`, e aí as contas
 ficam `PARENT(i) = ⌊i/2⌋`, `LEFT(i) = 2i` e `RIGHT(i) = 2i + 1`. É o mesmo
-heap deslocado de uma casa: numa questão, confira onde o vetor começa.
+heap deslocado de uma casa: numa questão, confira em que índice o vetor começa.
 
 As duas operações consertam o heap andando por um único caminho:
 
@@ -2637,7 +2619,7 @@ Cormen, a descida é a `MAX-HEAPIFY`, e a fila de prioridade tem `INSERT`,
 `MAXIMUM`, `EXTRACT-MAX` e `INCREASE-KEY`. Invertendo as comparações, você tem
 o **heap de mínimo**, com o menor na raiz.
 
-Vamos ver na prática. Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30.
+Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30.
 Depois das seis chegadas, o heap é `[90 70 30 40 50 20]`. A árvore e o vetor são
 a mesma coisa: o 70 está no índice 1, e os filhos dele ficam nos índices 3 e 4:
 
@@ -2709,7 +2691,7 @@ int main(void) {
 // Atende 70: [50 40 30 20]
 ```
 
-Repara no fluxograma: é a subida do 30, o último a chegar. Ele entra no índice
+O fluxograma segue a subida do 30, o último a chegar. Ele entra no índice
 5, o pai dele (índice 2) é o 20, menor: troca. Agora o 30 está no índice 2 e o
 pai é o 90: para. Uma troca só:
 
@@ -2738,9 +2720,9 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 > têm nada a ver um com o outro. O heap do `malloc` (assunto 0053) é a região
 > da memória para alocação dinâmica; o heap deste assunto é uma estrutura de
 > dados. Aqui o heap de dados até mora no heap de memória (o `heap_cria` faz
-> `malloc` do vetor), mas é coincidência. E por morar num vetor contíguo, o
-> heap não gasta 16 bytes de ponteiros por elemento como a BST, e percorre a
-> memória em sequência, o que o cache do processador adora.
+> `malloc` do vetor), mas é coincidência. Por morar num vetor contíguo, o
+> heap não gasta 16 bytes de ponteiros por elemento como a BST e percorre a
+> memória em sequência, o que favorece o cache do processador.
 
 > [!NOTE]
 > **Pergunta para você:** o vetor `[90 70 30 40 50 20]` é um heap. E o vetor
@@ -3083,14 +3065,14 @@ Você precisa do ranking em ordem crescente, no próprio vetor, sem alocar outro
 
 O heap do assunto anterior já sabe tirar o maior, um de cada vez, em O(log n).
 Tire os n elementos e eles saem em ordem decrescente. Esse é o **heapsort**:
-ordenar usando um heap. O truque que deixa tudo **no mesmo vetor** é perceber
-que, a cada máximo que sai, o heap encolhe uma casa, e essa casa livre no fim é
-exatamente onde o máximo deve ficar.
+ordenar usando um heap. Para fazer tudo **no mesmo vetor**, repare que a cada
+máximo que sai o heap encolhe uma casa, e essa casa livre no fim é a posição
+final do máximo.
 
 O algoritmo tem duas fases:
 
 1. **Construir o heap** dentro do próprio vetor. Dá para inserir um por um (cada
-   inserção sobe), mas existe um jeito melhor: as folhas já são heaps de um
+   inserção sobe), mas há um jeito mais barato: as folhas já são heaps de um
    elemento só, então basta fazer cada **pai** descer, do último pai
    (`n / 2 - 1`) até a raiz. Essa construção custa só O(n). É a
    `BUILD-MAX-HEAP` do Cormen, que, com o vetor começando em 1, vai de
@@ -3109,7 +3091,7 @@ níveis. Total O(n log n), e isso vale **sempre**, até no pior caso. O quick so
 merge sort (0094) garante n log n, mas precisa de um vetor extra. O heapsort
 garante n log n sem memória extra.
 
-Vamos ver na prática. Depois da fase 1, o vetor dos tempos é o heap
+Nos tempos da corrida, depois da fase 1, o vetor dos tempos é o heap
 `[91 52 73 40 18 25 66]`. No primeiro passo da fase 2, o 91 troca com o 66 e
 fica no fim, verde. O 66 vai para a raiz e desce pelo maior filho (73). O heap
 agora tem 6 elementos:
@@ -3185,7 +3167,7 @@ int main(void) {
 //              18 | 25 40 52 66 73 91
 ```
 
-Repara no fluxograma: a fase 1 é uma caixa só, e o laço da fase 2 faz sempre o
+No fluxograma, a fase 1 é uma caixa só, e o laço da fase 2 faz sempre o
 mesmo par de coisas, trocar e descer, até `fim` chegar a 0:
 
 <p align="center"><img src="14-arvores/0103-heapsort/fluxograma.svg" alt="Fluxograma: Heapsort" width="593"></p>
@@ -3598,8 +3580,7 @@ pela matrícula, não pelos treinos. Para isso existe o **heap**.
 
 A diferença em relação aos assuntos anteriores é o dado. Agora o nó não guarda
 um `int` solto, e sim uma **struct** com matrícula, nome e treinos. A matrícula
-é a **chave**: é ela que decide esquerda ou direita. O resto vai junto, de
-carona. O TAD fica em `cadastro.h` e `cadastro.c`:
+é a **chave**: é ela que decide esquerda ou direita. O resto vai junto. O TAD fica em `cadastro.h` e `cadastro.c`:
 
 ```c
 typedef struct {
@@ -3631,7 +3612,7 @@ máximo **pelos treinos** nesse vetor, em O(n), e tira o máximo três vezes. É
 fase 2 do heapsort interrompida depois de três passos: para pegar os k maiores,
 não precisa ordenar tudo.
 
-Vamos ver na prática. Sete alunos se matriculam. A catraca acha o 60 (Fabio)
+Sete alunos se matriculam. A catraca acha o 60 (Fabio)
 descendo 50, 70, 60 e soma um treino. O 30 (Bruno) cancela. No fim, os treinos
 dos seis que sobraram vão para o vetor, em ordem de matrícula, e o heap entrega o
 pódio:
@@ -3723,8 +3704,8 @@ int main(void) {
 //   3º Ana (12)
 ```
 
-Repara no fluxograma: o programa é uma sequência de operações na BST e, no fim,
-um laço curto sobre o heap. Cada estrutura faz o que sabe fazer bem:
+O fluxograma é uma sequência de operações na BST e, no fim, um laço curto
+sobre o heap:
 
 <p align="center"><img src="14-arvores/0104-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="378"></p>
 
@@ -4203,8 +4184,8 @@ Sem o 70: 80 30 20 40
 
 Sem o 50, o sucessor 60 sobe. Sem o 60 (raiz de novo, dois filhos), o
 sucessor 70 sobe e o 80 fica à direita dele. Sem o 70, o sucessor é o 80, que
-era folha. Repare como remover sempre pelo sucessor deixa a árvore pendendo
-para a esquerda. A pré-ordem é `printf(" %d", r->chave)` antes das duas
+era folha. Remover sempre pelo sucessor deixa a árvore pendendo para a
+esquerda. A pré-ordem é `printf(" %d", r->chave)` antes das duas
 chamadas recursivas.
 
 </details>

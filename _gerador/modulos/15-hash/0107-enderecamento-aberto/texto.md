@@ -21,7 +21,7 @@ assunto 0179 aprofunda.
 - **inserir**: sonda a partir de `h` até achar uma posição livre;
 - **buscar**: sonda a partir de `h` até achar a chave (achou) ou uma posição
   **livre** (não está: se estivesse, teria parado ali);
-- **remover**: é aqui que mora a pegadinha (o aviso abaixo explica).
+- **remover**: tem uma pegadinha, explicada no aviso abaixo.
 
 Como tudo cabe no vetor, a tabela **enche**: `α = n / m` nunca passa de 1. E
 fica lenta bem antes disso. Na sondagem linear, as ocupadas formam blocos
@@ -29,12 +29,11 @@ seguidos, e qualquer chave que cai num bloco vai parar no fim dele, deixando o
 bloco ainda maior. Isso é o **agrupamento primário**. Com α = 0,5 uma busca
 sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com
 hashing uniforme, sem agrupamento, o Cormen limita essa busca a 1/(1 − α)
-sondagens: 2 e 10.) A regra
-prática: não passe de 70% a 75% de ocupação. Passou, crie uma tabela maior e
-reinsira tudo (o exemplo A213 lota uma tabela
-de 7 vagas e mostra as sondagens crescendo).
+sondagens: 2 e 10.) Na prática, não passe de 70% a 75% de ocupação. Passou,
+crie uma tabela maior e reinsira tudo (o exemplo A213 lota uma tabela de 7
+vagas e mostra as sondagens crescendo).
 
-Vamos ver na prática. Entram os carros dos apartamentos 101, 202, 301, 1104
+Entram os carros dos apartamentos 101, 202, 301, 1104
 e 504. O 101 vai para a vaga 2 e o 202 para a 4. O 301 também dá 4 (301 % 11
 = 4), encontra a 4 ocupada e para na 5. O 1104 dá 4 de novo: tenta a 4, a 5,
 e para na 6. O 504 vai direto para a 9. Na busca pelo 1104, o porteiro refaz
@@ -123,7 +122,7 @@ int main(void) {
 // 303 não está, sondagens: 2
 ```
 
-Repara no fluxograma da busca: são duas perguntas por vaga. "Está livre?"
+O fluxograma da busca faz duas perguntas por vaga. "Está livre?"
 encerra a busca sem sucesso; "é o carro?" encerra com sucesso. Se nenhuma das
 duas, anda uma vaga. O 1104 passa duas vezes pelo laço (vagas 4 e 5) e é
 achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
@@ -135,8 +134,8 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 > vaga 5 volta a ser `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e
 > conclui "não está", embora ele esteja na 6. A vaga livre corta o caminho de
 > quem tinha pulado por ela. A solução é uma terceira marca, **removida**
-> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto por ela, e a inserção pode
-> reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
+> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto por ela, e
+> a inserção pode reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
 > lápides acumulam e as buscas sem sucesso ficam longas, até você reconstruir
 > a tabela.
 

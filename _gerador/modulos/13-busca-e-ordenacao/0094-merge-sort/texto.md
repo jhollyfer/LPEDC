@@ -18,8 +18,7 @@ O **merge sort** (ordenação por intercalação) usa isso com a ideia de
 2. **ordene** cada metade, com o próprio merge sort (recursão, assunto 0032);
 3. **intercale** as duas metades ordenadas.
 
-O caso base é o pedaço com 0 ou 1 elemento: ele já está ordenado, não há o
-que fazer. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
+O caso base é o pedaço com 0 ou 1 elemento, que já está ordenado. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
 e `r` é uma posição depois do último. Assim, o pedaço tem `r - p` elementos e
 as metades `[p, q)` e `[q, r)` se encaixam sem sobrar nem repetir ninguém.
 O Cormen usa o intervalo fechado `A[p..r]`, com `q = ⌊(p + r)/2⌋` e as
@@ -35,14 +34,14 @@ O preço é memória: a intercalação precisa de um vetor auxiliar (o
 **rascunho**) do tamanho do pedaço. O merge sort usa **O(n)** de memória
 extra.
 
-Vamos ver na prática. As notas descem sendo divididas até virar pares (e,
+No desenho, as notas descem sendo divididas até virar pares (e,
 mais embaixo, pedaços de 1). Depois sobem sendo intercaladas, em verde, até
 formar o vetor inteiro:
 
 {{ideia}}
 
-O mesmo exemplo em C. O rascunho `w` é alocado **uma vez** no `main` e
-emprestado para todas as intercalações:
+No código, o rascunho `w` é alocado **uma vez** no `main` e emprestado para
+todas as intercalações:
 
 ```c
 #include <stdio.h>
@@ -106,7 +105,7 @@ int main(void) {
 // 17 comparações
 ```
 
-Repara na ordem das linhas da saída: a recursão termina **toda** a metade
+Olhe a ordem das linhas da saída: a recursão termina **toda** a metade
 esquerda (`[0, 4)`) antes de começar a direita. É a pilha de chamadas do
 assunto 0031 trabalhando.
 
@@ -129,7 +128,7 @@ A última intercalação, `7 18 33 52` com `12 26 41 60`. `i` anda na esquerda,
 Sete comparações para 8 elementos: o máximo, `n - 1`. Somando os níveis:
 4 + 6 + 7 = **17 comparações**.
 
-Repara no fluxograma: ele é curto porque a recursão esconde o trabalho. As
+O fluxograma é curto porque a recursão esconde o trabalho. As
 duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 
 {{fluxograma}}
@@ -147,7 +146,7 @@ duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 > para 1 milhão de elementos), então a pilha não preocupa. A memória que pesa
 > é o rascunho: 1 milhão de `int` são 4 MB. Alocar com `malloc` uma vez e
 > passar `w` para baixo evita um `malloc`/`free` por intercalação (seriam
-> quase 1 milhão de chamadas). E o `<=` da intercalação não é detalhe: em
+> quase 1 milhão de chamadas). O `<=` da intercalação também conta: em
 > caso de empate, ele pega o da **esquerda** primeiro, mantendo a ordem
 > original dos iguais. Isso faz o merge sort ser **estável**.
 

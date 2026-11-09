@@ -12,8 +12,7 @@ pela matrícula, não pelos treinos. Para isso existe o **heap**.
 
 A diferença em relação aos assuntos anteriores é o dado. Agora o nó não guarda
 um `int` solto, e sim uma **struct** com matrícula, nome e treinos. A matrícula
-é a **chave**: é ela que decide esquerda ou direita. O resto vai junto, de
-carona. O TAD fica em `cadastro.h` e `cadastro.c`:
+é a **chave**: é ela que decide esquerda ou direita. O resto vai junto. O TAD fica em `cadastro.h` e `cadastro.c`:
 
 ```c
 typedef struct {
@@ -45,7 +44,7 @@ máximo **pelos treinos** nesse vetor, em O(n), e tira o máximo três vezes. É
 fase 2 do heapsort interrompida depois de três passos: para pegar os k maiores,
 não precisa ordenar tudo.
 
-Vamos ver na prática. Sete alunos se matriculam. A catraca acha o 60 (Fabio)
+Sete alunos se matriculam. A catraca acha o 60 (Fabio)
 descendo 50, 70, 60 e soma um treino. O 30 (Bruno) cancela. No fim, os treinos
 dos seis que sobraram vão para o vetor, em ordem de matrícula, e o heap entrega o
 pódio:
@@ -137,8 +136,8 @@ int main(void) {
 //   3º Ana (12)
 ```
 
-Repara no fluxograma: o programa é uma sequência de operações na BST e, no fim,
-um laço curto sobre o heap. Cada estrutura faz o que sabe fazer bem:
+O fluxograma é uma sequência de operações na BST e, no fim, um laço curto
+sobre o heap:
 
 {{fluxograma}}
 
