@@ -32,9 +32,9 @@
 //    ini.
 // 2. Ordene por início com qsort num vetor de structs { ini, fim }; empate
 //    de início, o que termina antes vem primeiro.
-// 3. Resposta esperada: 3 salas. Às 10h30 há três palestras ao mesmo tempo
-//    ([9, 11), [10, 12) e [9, 12)... e mais [10, 11)?) — confira na saída:
-//    o máximo de palestras simultâneas é o número de salas.
+// 3. Resposta esperada: 4 salas. Entre 10h e 11h há quatro palestras ao
+//    mesmo tempo ([9, 11), [9, 12), [10, 11) e [10, 12)), então nenhum
+//    arranjo usa menos: o guloso acerta o ótimo.
 //
 // Escreva sua resposta abaixo:
 

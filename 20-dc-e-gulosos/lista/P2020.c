@@ -18,7 +18,7 @@
 // 2. Por que o mais curto primeiro? O serviço na posição i (contando de 0)
 //    entra na espera dos n - 1 - i que vêm depois: o mais curto deve ser o
 //    que "pesa" mais vezes.
-// 3. Resposta esperada: de 25.17 para 10.67 minutos.
+// 3. Resposta esperada: de 19.67 para 10.00 minutos.
 //
 // Escreva sua resposta abaixo (estenda o código):
 

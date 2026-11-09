@@ -21,8 +21,8 @@
 // 2. Cruzando: a partir de meio, ande para a esquerda guardando a maior
 //    soma e onde ela começa; a partir de meio + 1, para a direita
 //    guardando a maior soma e onde ela termina.
-// 3. Resposta esperada: dias 5 a 8, lucro de R$ 200. O trecho 1 a 3 dá só
-//    R$ 170.
+// 3. Resposta esperada: dias 1 a 8, lucro de R$ 220. Vale a pena atravessar
+//    o prejuízo de R$ 150 do dia 4: os dias 5 a 8 sozinhos dão R$ 200.
 //
 // Escreva sua resposta abaixo:
 

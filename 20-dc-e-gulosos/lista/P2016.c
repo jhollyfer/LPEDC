@@ -35,7 +35,7 @@
 //    ordem. A hora corrente começa em 0 e soma a duração de cada uma.
 // 2. Por que funciona? Trocar duas encomendas vizinhas fora da ordem de
 //    prazo nunca aumenta o maior atraso (o argumento de troca do Cormen).
-// 3. Resposta esperada: a ordem da tabela tem atraso máximo 9 (os folhetos
+// 3. Resposta esperada: a ordem da tabela tem atraso máximo 7 (os folhetos
 //    ficam prontos às 10, com prazo 3) e a ordem por prazo, só 2.
 //
 // Escreva sua resposta abaixo:

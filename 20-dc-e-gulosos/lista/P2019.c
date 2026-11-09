@@ -24,8 +24,8 @@
 //    matriz de função. A identidade é o caso base (k = 0).
 // 2. potencia(A, k): meia = potencia(A, k / 2); r = meia · meia; se k é
 //    ímpar, r = r · A. Conte cada chamada de multiplica.
-// 3. Resposta esperada: com 3 trechos são 5 rotas (por exemplo, T0 T1 T2
-//    T3); os outros valores estão na saída.
+// 3. Resposta esperada: com 3 trechos são 2 rotas (T0 T1 T2 T3 e T0 T2 T1
+//    T3); com 12 trechos, 15178, em só 6 produtos de matriz.
 //
 // Escreva sua resposta abaixo:
 

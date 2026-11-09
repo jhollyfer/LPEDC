@@ -2767,6 +2767,10 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/24-busca-de-padroes/lista/`.
+
 ## Questões no estilo da prova
 
 Busca de padrões não cai diretamente na prova do PPGI, mas questões no mesmo

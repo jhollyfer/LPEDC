@@ -40,7 +40,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-@@AVL@@
+typedef struct No {
+    int chave, alt;
+    struct No *esq, *dir;
+} No;
+
+int alt(const No *p) {
+    return p == NULL ? -1 : p->alt;
+}
+
+void atualiza(No *p) {
+    int he = alt(p->esq), hd = alt(p->dir);
+    p->alt = 1 + (he > hd ? he : hd);
+}
+
+int fator(const No *p) {
+    return alt(p->esq) - alt(p->dir);
+}
+
+No *gira_dir(No *r) {
+    No *e = r->esq;
+    r->esq = e->dir;
+    e->dir = r;
+    atualiza(r);
+    atualiza(e);
+    return e;
+}
+
+No *gira_esq(No *r) {
+    No *d = r->dir;
+    r->dir = d->esq;
+    d->esq = r;
+    atualiza(r);
+    atualiza(d);
+    return d;
+}
 
 const char *rotacao = "";
 

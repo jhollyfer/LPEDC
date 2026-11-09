@@ -25,7 +25,7 @@
 // 2. Particione em três vetores: menores, iguais e maiores que o pivô (com
 //    malloc, e free no fim). Se k < nmen, desça nos menores; se k < nmen +
 //    nig, a resposta é o pivô; senão, desça nos maiores com k - nmen - nig.
-// 3. Resposta esperada: menor 41, mediana 67 e maior 98, iguais ao qsort.
+// 3. Resposta esperada: menor 41, mediana 69 e maior 98, iguais ao qsort.
 //
 // Escreva sua resposta abaixo:
 

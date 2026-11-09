@@ -24,8 +24,9 @@
 //    (a + b)(c + d) - ac - bd no lugar de ad + bc.
 // 3. Resposta esperada: os produtos certos e, para os números de 8
 //    dígitos, 64 multiplicações de um dígito na versão de 4 produtos
-//    (8 · 8, a mesma conta da escola). Karatsuba gasta menos, e um pouco
-//    mais quando a + b ganha um dígito (o caso dos 9s).
+//    (8 · 8, a mesma conta da escola). Karatsuba gasta 33 no primeiro e 63
+//    no segundo: com os 9s, cada a + b ganha um dígito (99 + 99 = 198) e a
+//    recursão desce um nível a mais.
 //
 // Escreva sua resposta abaixo:
 

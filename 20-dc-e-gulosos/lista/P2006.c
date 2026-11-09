@@ -28,7 +28,7 @@
 // 2. Na comparação do qsort, compare as razões com < e > e devolva -1, 0
 //    ou 1; subtrair doubles e converter para int estraga a ordem.
 // 3. Resposta esperada: pirarucu, guaraná e castanha inteiros (450 kg) e
-//    50 kg de cupuaçu: R$ 10100,00.
+//    50 kg de cupuaçu: R$ 10100.00.
 //
 // Escreva sua resposta abaixo:
 

@@ -32,7 +32,7 @@
 //    compara freq e, no empate, o índice.
 // 2. Para gerar os códigos, uma recursão com um buffer char cod[32] e a
 //    profundidade: na folha, copie o buffer para a tabela do caractere.
-// 3. Resposta esperada: 15 caracteres, 45 bits (contra 120 em ASCII de 8
+// 3. Resposta esperada: 15 caracteres, 42 bits (contra 120 em ASCII de 8
 //    bits) e a frase decodificada igual à original.
 //
 // Escreva sua resposta abaixo:

@@ -18,8 +18,8 @@
 //    estoura em vetores enormes.
 // 2. Zere o contador antes de cada busca. Com 16 elementos, são no máximo
 //    lg 16 + 1 = 5 chamadas que olham o vetor, mais a do pedaço vazio.
-// 3. Resposta esperada: 64 na posição 11 (4 chamadas), 3 na posição 0 (4
-//    chamadas) e 50 não chamada (6 chamadas, a última com o pedaço vazio).
+// 3. Resposta esperada: 64 na posição 11 (2 chamadas), 3 na posição 0 (4
+//    chamadas) e 50 não chamada (5 chamadas, a última com o pedaço vazio).
 //
 // Escreva sua resposta abaixo:
 

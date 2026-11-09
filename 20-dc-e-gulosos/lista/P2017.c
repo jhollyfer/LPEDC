@@ -20,8 +20,7 @@
 //    último abastecimento (começa em 0).
 // 2. Enquanto o destino não está ao alcance (880 - ultima > 250): ande pelos
 //    postos enquanto posto[i + 1] - ultima <= 250; pare em posto[i].
-// 3. Resposta esperada: 4 paradas, nos km 240, 470, 700 e... confira na
-//    saída de cima.
+// 3. Resposta esperada: 3 paradas, nos km 240, 470 e 700.
 //
 // Escreva sua resposta abaixo:
 
