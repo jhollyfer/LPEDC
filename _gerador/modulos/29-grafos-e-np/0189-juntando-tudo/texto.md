@@ -21,7 +21,7 @@ Com 7 clientes são 5040 rotas; com 15, 87 bilhões.
 **Held-Karp** (PD sobre subconjuntos). `dp[S][j]` é o menor caminho que sai
 da farmácia, passa **exatamente** pelos pontos do conjunto S e termina em j.
 O subproblema não precisa saber a **ordem** em que S foi visitado, só o
-conjunto e o último ponto: é isso que esmaga o fatorial. A recorrência:
+conjunto e o último ponto, e por isso o fatorial some. A recorrência:
 
 ```text
 dp[{0}][0] = 0
@@ -39,11 +39,11 @@ São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e
 | 20 | 1,2 · 10¹⁷ | 4,2 · 10⁸ | 400 |
 | 30 | 8,8 · 10³⁰ | 9,7 · 10¹¹ | 900 |
 
-A regra prática que sai da tabela: até uns 20 pontos, Held-Karp resolve em
+A tabela dá a regra prática: até uns 20 pontos, Held-Karp resolve em
 segundos (e o limite é a memória); acima disso, aproximação, de preferência
 seguida de uma melhoria local como o 2-opt do A378.
 
-Vamos ver na prática. As distâncias são em quarteirões (|dx| + |dy|), que
+As distâncias são em quarteirões (|dx| + |dy|), que
 respeitam a desigualdade triangular. À esquerda a rota exata; à direita a da
 árvore mínima, que dá voltas desnecessárias no fim:
 
@@ -153,9 +153,9 @@ int main(void) {
 // O aproximado gasta 29% a mais
 ```
 
-Repara no fluxograma: é a decisão que o programa de entregas de verdade faz
-antes de calcular. Poucos pontos, exato; muitos, aproximado e melhorado. A
-fronteira não é teórica: é o tempo e a memória que você tem:
+O fluxograma é a decisão que um programa de entregas real toma antes de
+calcular: poucos pontos, exato; muitos, aproximado e melhorado. A fronteira
+é o tempo e a memória que você tem:
 
 {{fluxograma}}
 
@@ -184,6 +184,7 @@ aproximada e mostra quanto ela melhora.
 > [!NOTE]
 > **Pergunta para você:** se o Gil mudar para (3, 5), perto do Fábio, a
 > rota exata ainda começa pela farmácia indo ao Gil? E a diferença do
-> aproximado aumenta ou diminui? Responda antes de rodar.
+> aproximado aumenta ou diminui?
+
 
 {{pratique}}

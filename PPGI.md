@@ -16,9 +16,9 @@ de estudo até o dia da prova.
 | Nota final | `NF = (2 × NPC + NPT) / 3`; empate: maior NPC, depois maior NPT, depois o mais velho |
 | Vagas | 40 regulares + 8 suplementares + 2 para servidor da UFAM |
 
-Repara na conta: a prova de conhecimentos vale o dobro e é eliminatória. Mesmo
-com o Lattes zerado, a NPT é 7. Quem tira 9 na prova fica com
-`NF = (18 + 7) / 3 = 8,33`. O jogo é a prova.
+Pela conta, a prova de conhecimentos vale o dobro e é eliminatória. Mesmo com
+o Lattes zerado, a NPT é 7: quem tira 9 na prova fica com
+`NF = (18 + 7) / 3 = 8,33`. A aprovação se decide na prova.
 
 A prova usa **pseudocódigo, Python 3 e C**. Os conceitos de C listados no
 edital: seleção (`if`, `else`, `switch`), leitura e escrita na tela e em
@@ -157,8 +157,9 @@ custo de um algoritmo. Nos assuntos que você já viu, leia o texto, refaça a
 diante), faça tudo.
 
 Cada módulo tem ainda uma **lista prática** de 30 exercícios e as **Questões
-no estilo da prova**, as duas no fim do `.md` do módulo. Faça as
-questões sempre, cronometrando: o edital não fixa a duração da prova, então
+no estilo da prova**, as duas no fim do `.md` do módulo. Faça as questões
+sempre, cronometrando:
+ o edital não fixa a duração da prova, então
 confira o horário quando sair o local (24/11) e treine no mesmo ritmo.
 Da lista prática, faça pelo menos os ★★☆ dos módulos do dia; os ★★★ ficam para
 os dias de revisão.

@@ -3,8 +3,8 @@
 Você pede 3 pacotes de café a R$ 18 no app do mercado, e o frete é R$ 12. A
 conta é `18 * 3 + 12`. Ninguém pensa duas vezes: dá 66. Mas por que não
 `18 * (3 + 12)`, que dá 270? Porque o C, como a matemática da escola, tem uma
-regra fixa de quem vai primeiro. A prova adora esconder essa regra numa linha
-só.
+regra fixa de quem vai primeiro, e a prova gosta de esconder essa regra numa
+linha só.
 
 Duas regras decidem como o C **agrupa** uma expressão. A **precedência** diz
 qual operador pega os operandos primeiro: `*` antes de `+`. A
@@ -30,7 +30,7 @@ qual operador pega os operandos primeiro: `*` antes de `+`. A
 | 14 | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` | direita → esquerda |
 | 15 | `,` | esquerda → direita |
 
-Três coisas dessa tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
+Três pontos dessa tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
 **abaixo** do `==`. O `?:` fica abaixo de quase tudo, então
 `compra + compra >= 50 ? 0 : frete` é uma pergunta sobre a soma inteira. E a
 atribuição composta trata o lado direito como um bloco: `a *= 2 + 1` é
@@ -50,7 +50,7 @@ variável duas vezes, ou mudar e ler sem ordem garantida, na mesma expressão,
 `printf("%d %d", i, i++)` não têm resposta certa. O programa pode dar
 qualquer coisa.
 
-Vamos ver na prática. O desenho mostra como o C monta a árvore de cada conta:
+O desenho mostra como o C monta a árvore de cada conta:
 o operador de menor precedência fica na raiz e é o último a agir. Na
 pegadinha do frete grátis, a raiz é o `?:`, e o `+` foi parar lá embaixo:
 
@@ -94,9 +94,10 @@ int main(void) {
 // frete grátis? 1
 ```
 
-Repara no fluxograma: o `?:` é uma pergunta escondida dentro da expressão. O
-que vai dentro da pergunta depende só dos parênteses, e no `certo` ela olha
-apenas o `compra`:
+No fluxograma, o `?:` aparece como o que ele é: uma pergunta escondida dentro
+da expressão. O que entra na pergunta depende só dos parênteses, e no `certo`
+ela olha apenas o `compra`:
+
 
 {{fluxograma}}
 

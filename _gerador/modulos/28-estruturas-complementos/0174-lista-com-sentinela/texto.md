@@ -8,19 +8,18 @@ for o único?
 
 Esses `if` existem porque as pontas da lista são diferentes do meio. O nó do
 meio tem vizinho dos dois lados; o primeiro tem `NULL` à esquerda e o último
-tem `NULL` à direita. Cada `NULL` é um caso especial, e caso especial é onde
-mora o bug.
+tem `NULL` à direita. Cada `NULL` é um caso especial, e é nos casos especiais
+que o bug mora.
 
 A saída clássica é um **nó sentinela** (o Cormen chama de `L.nil`): um nó
-falso, sem dado de verdade, que fica **entre o último e o primeiro**. A lista
+falso, sem dado, que fica **entre o último e o primeiro**. A lista
 vira **dupla e circular**: `nil.prox` é o primeiro, `nil.ant` é o último, e o
 último aponta de volta para a sentinela. Não existe mais `NULL` dentro da
 lista.
 
-A lista vazia é só a sentinela apontando para ela mesma: `nil.prox == &nil` e
-`nil.ant == &nil`. A partir daí, **todo nó de verdade tem vizinho dos dois
-lados**, nem que o vizinho seja a sentinela. É isso que apaga os casos
-especiais:
+A lista vazia é a sentinela apontando para ela mesma: `nil.prox == &nil` e
+`nil.ant == &nil`. A partir daí, **todo nó real tem vizinho dos dois
+lados**, nem que o vizinho seja a sentinela, e os casos especiais somem:
 
 - **inserir depois de `y`**: quatro ponteiros, sempre os mesmos, com `y`
   podendo ser a própria sentinela (inserir no começo) ou o último (no fim);
@@ -34,7 +33,7 @@ procurada dentro da sentinela**. Assim o laço sempre para (no pior caso, na
 sentinela) e só precisa de um teste por volta, `x->chave != chave`, em vez de
 dois.
 
-Vamos ver na prática. Chegam as fichas 12, 25 e 7, nessa ordem. A ficha 25
+Chegam as fichas 12, 25 e 7, nessa ordem. A ficha 25
 desiste: o barbeiro busca a 25 e remove o nó. Depois alguém pergunta pela ficha
 40, que não existe, e a busca para na sentinela. No desenho, a sentinela é o
 nó cinza, sem valor:
@@ -42,8 +41,8 @@ nó cinza, sem valor:
 {{ideia}}
 
 O TAD é o `sentinela.h`. A sentinela fica **dentro** da struct da lista (não
-é alocada à parte), e o `n` conta só os nós de verdade. O coração do
-`sentinela.c`:
+é alocada à parte), e o `n` conta só os nós reais. As três funções centrais
+do `sentinela.c`:
 
 ```c
 NoS *sent_insere_apos(ListaS *L, NoS *y, int chave) {
@@ -118,17 +117,17 @@ int main(void) {
 // Na fila: 2
 ```
 
-Repara no fluxograma da busca: uma pergunta só por volta. Para a ficha 40, o
-laço passa pelo 12 e pelo 7 e para na sentinela, que estava com 40 guardado.
-A última pergunta, "parou na sentinela?", é o que separa "achou" de "não
-está":
+O fluxograma da busca tem uma pergunta só por volta. Para a ficha 40, o laço
+passa pelo 12 e pelo 7 e para na sentinela, que estava com 40 guardado. A
+última pergunta, "parou na sentinela?", separa "achou" de "não está":
 
 {{fluxograma}}
 
 > [!WARNING]
 > A sentinela **não é um dado**. Todo laço que percorre a lista para quando
-> volta a ela (`x != &L->nil`), e nunca começa por ela: o primeiro de verdade
-> é `L->nil.prox`. Se você escrever `for (x = &L->nil; ...)`, mostra um valor
+> volta a ela (`x != &L->nil`), e nunca começa por ela: o primeiro nó real
+> é `L->nil.prox`.
+ Se você escrever `for (x = &L->nil; ...)`, mostra um valor
 > lixo (ou a última chave buscada, por causa do truque da busca). E nunca
 > passe `&L->nil` para `sent_remove`: ela não foi alocada com `malloc`, e o
 > `free` derruba o programa.

@@ -2,8 +2,8 @@
 
 A professora do cursinho corrigiu o simulado e quer a lista da turma pela
 nota, da menor para a maior. As notas são inteiras, de 0 a 10, e a lista de
-chamada já está em ordem alfabética. Ela pede um detalhe: quem tirou a mesma
-nota continua em ordem alfabética. Com 11 notas possíveis, dá para ordenar sem
+chamada já está em ordem alfabética. E quer que quem tirou a mesma nota continue
+em ordem alfabética. Com 11 notas possíveis, dá para ordenar sem
 comparar um aluno com outro.
 
 O **pigeonhole sort** (ordenação por casas de pombo) serve quando a chave é um
@@ -47,7 +47,7 @@ ela:
   principal. A última passada manda; as anteriores só desempatam. É o
   raciocínio do radix LSD.
 
-Vamos ver na prática. A lista de chamada (Ana 7, Bruno 5, Carla 9, Diego 5,
+A lista de chamada (Ana 7, Bruno 5, Carla 9, Diego 5,
 Elisa 7, Fabio 3, Gabi 9, Hugo 5) já está em ordem de nome. Uma passada
 **estável** pela nota entrega a chave composta (nota, nome) de graça. No
 desenho, os alunos entrando nas casas 3, 5, 7 e 9 e saindo em ordem:
@@ -55,8 +55,8 @@ desenho, os alunos entrando nas casas 3, 5, 7 e 9 e saindo em ordem:
 {{ideia}}
 
 O TAD é o `pombal.h`. A casa é uma fila de **índices**, montada com três
-vetores (`primeiro`, `ultimo` e `prox`), sem um `malloc` por aluno. O coração
-do `pombal.c`:
+vetores (`primeiro`, `ultimo` e `prox`), sem um `malloc` por aluno. As duas
+passadas, no `pombal.c`:
 
 ```c
     for (int i = 0; i < n; i++) { // 1. cada aluno entra no fim da fila da sua casa
@@ -113,9 +113,9 @@ Na seleção, a Elisa passou na frente da Ana, e a Gabi na frente da Carla. Na
 primeira volta, o Fabio (posição 5) trocou com a Ana (posição 0), e a Ana foi
 parar depois da Elisa: a troca pulou por cima dela.
 
-Repara no fluxograma: as duas passadas do pigeonhole, sem nenhuma comparação
-entre alunos. A primeira coloca cada um na sua casa; a segunda esvazia as 11
-casas em ordem:
+O fluxograma tem as duas passadas do pigeonhole, sem nenhuma comparação entre
+alunos. A primeira põe cada um na sua casa; a segunda esvazia as 11 casas em
+ordem:
 
 {{fluxograma}}
 
@@ -130,10 +130,11 @@ casas em ordem:
 > [!TIP]
 > **Por dentro do C:** o pigeonhole gasta memória proporcional a `r`, o
 > tamanho do intervalo, não a `n`. Para notas, 11 casas de dois `int` são 88
-> bytes. Para CPF (11 dígitos), seriam 100 bilhões de casas: não cabe. É por
-> isso que ele só serve para intervalos pequenos, e que o radix (0121) existe:
+> bytes. Para CPF (11 dígitos), seriam 100 bilhões de casas: não cabe. Por
+> isso ele só serve para intervalos pequenos, e por isso o radix (0121) existe:
 > ele quebra a chave grande em pedaços pequenos e faz uma passada estável por
-> pedaço. Repare também que o `pb_pigeonhole` copia structs inteiras
+> pedaço. Outro custo: o `pb_pigeonhole` copia structs inteiras
+
 > (`saida[k++] = v[i]`, 24 bytes cada): com registros grandes, ordene um vetor
 > de índices ou de ponteiros e mova só eles.
 

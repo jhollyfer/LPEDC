@@ -13,8 +13,7 @@ produtos: **p · q · r** multiplicações. As colunas da primeira precisam ser
 iguais às linhas da segunda.
 
 **A ordem importa.** A multiplicação de matrizes é **associativa**:
-`(A B) C = A (B C)`. Então os parênteses não mudam o resultado, só o
-trabalho. Com quatro matrizes existem 5 parentizações; com 10, 4862; com 20,
+`(A B) C = A (B C)`. Os parênteses não mudam o resultado, só o trabalho. Com quatro matrizes existem 5 parentizações; com 10, 4862; com 20,
 mais de 1,7 bilhão (são os números de Catalan). Testar todas está fora de
 questão.
 
@@ -39,7 +38,7 @@ linha `i`: a tabela é preenchida diagonal por diagonal. São O(n²) casas,
 cada uma com até n cortes: **O(n³)** de tempo e O(n²) de espaço, contra
 o crescimento exponencial da força bruta (o A369 compara).
 
-Vamos ver na prática. A diagonal principal é zero (uma matriz sozinha não
+No desenho, a diagonal principal é zero (uma matriz sozinha não
 custa nada); cada diagonal acima usa as de baixo. A casa do canto, `m[1][4]`,
 é a resposta, e a seta mostra de onde ela veio:
 
@@ -105,8 +104,8 @@ int main(void) {
 // Custo: 5000 multiplicações
 ```
 
-Repara no fluxograma: três laços aninhados, e o de fora é o tamanho da
-cadeia. O laço de dentro testa cada corte `k` e guarda o menor; nada mais:
+O fluxograma tem três laços aninhados, e o de fora é o tamanho da cadeia. O
+de dentro testa cada corte `k` e guarda o menor:
 
 {{fluxograma}}
 
@@ -126,8 +125,9 @@ que o programa preenche; o vencedor de cada uma está em negrito:
 
 `s[1][4] = 2` corta em `(A1 A2)(A3 A4)`. A conta da esquerda para a direita,
 `((A1 A2) A3) A4`, custaria 1500 + 3000 + 6000 = 10500; a pior ordem,
-`(A1 (A2 A3)) A4`, custa 9000 + 18000 + 6000 = 33000. O A370 multiplica as
-matrizes de verdade, na ordem ótima, contando as multiplicações.
+`(A1 (A2 A3)) A4`, custa 9000 + 18000 + 6000 = 33000. O A370 multiplica
+matrizes reais na ordem ótima, contando as multiplicações.
+
 
 > [!WARNING]
 > O erro clássico é preencher a tabela linha por linha (`for i`, `for j`).
@@ -149,6 +149,7 @@ matrizes de verdade, na ordem ótima, contando as multiplicações.
 > [!NOTE]
 > **Pergunta para você:** se a última tabela tivesse 60 × 100 em vez de
 > 60 × 10 (troque o último 10 de `p` por 100), a melhor ordem continua a
-> mesma? Qual a casa da tabela que muda primeiro? Responda antes de rodar.
+> mesma? Qual a casa da tabela que muda primeiro?
+
 
 {{pratique}}

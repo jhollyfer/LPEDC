@@ -7,7 +7,7 @@ Os módulos 16 e 23 ensinaram a andar pelo grafo e a tirar dele caminhos,
 do PPGI cobra pelo nome. A primeira é sobre a **forma** do grafo: dá para
 passar por toda aresta uma vez só? E por todo vértice? Qual cabo, se
 cortado, parte a rede? A segunda é sobre o **custo** de responder: por que
-umas perguntas se resolvem em O(V + E) e outras, parecidíssimas, parecem
+umas perguntas se resolvem em O(V + E) e outras, muito parecidas, parecem
 exigir testar tudo?
 
 A primeira metade (0182 a 0185) é algoritmo puro: graus e o teorema de
@@ -19,11 +19,10 @@ tempo polinomial, P e NP, reduções, e o que fazer quando o problema é
 difícil e a resposta é para hoje: aproximar com garantia ou resolver exato
 só quando a entrada é pequena.
 
-A mudança na cabeça é parar de perguntar só "qual o algoritmo?" e começar a
-perguntar "esse problema **tem** algoritmo rápido?". Euler e Hamilton
-parecem gêmeos e moram em mundos diferentes. Conferir uma resposta e achar
-uma resposta são tarefas de custos diferentes. E quando a resposta é "não
-se conhece algoritmo rápido", ainda há muito o que fazer em C.
+A mudança na cabeça é perguntar, antes de "qual o algoritmo?", se o problema
+**tem** algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o
+outro não. Conferir uma resposta custa menos que achá-la. E quando não se
+conhece algoritmo rápido, ainda dá para aproximar ou podar em C.
 
 ## O que você vai aprender
 
@@ -49,33 +48,6 @@ se conhece algoritmo rápido", ainda há muito o que fazer em C.
 - o caixeiro viajante exato pela PD de **Held-Karp** e quando trocar o exato
   pelo aproximado
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos vértices, valores e resultados do código.
-2. Leia o código inteiro. Neste módulo nada fica escondido em TAD: cada
-   arquivo traz o algoritmo completo, porque ver o laço todo é o que mostra
-   onde mora o custo.
-3. Siga o **fluxograma** com o dedo e refaça o **passo a passo** no papel
-   quando houver: a pilha do Hierholzer, os `tin`/`low` da DFS, a tabela da
-   cadeia de matrizes.
-4. Rode os exemplos. Mude uma aresta, um peso, uma dimensão, e veja a
-   resposta e o número de passos mudarem.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, o que deu errado. Nos grafos, a origem
-fica roxa e as arestas verdes são as escolhidas (o circuito, o ciclo, as
-pontes, a clique). Nas articulações, o amarelo marca os vértices de corte.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa sem cerimônia a matriz de adjacência e a DFS (0109, 0111),
@@ -83,6 +55,15 @@ os componentes conexos (0150), o Prim (0153), a recursão e o backtracking
 (0032, 0126, 0127), a programação dinâmica (0138 a 0140), o `qsort` (0096) e
 as máscaras de bits (0065). Se a DFS recursiva estiver enferrujada, releia o
 0111 antes do 0184.
+
+Nada fica escondido em TAD: cada arquivo traz o algoritmo completo. Refaça no
+papel o **passo a passo** quando houver (a pilha do Hierholzer, os
+`tin`/`low` da DFS, a tabela da cadeia de matrizes) e responda a
+**Pergunta para você** antes de rodar.
+ Nos grafos, a origem fica roxa, as arestas verdes
+são as escolhidas (o circuito, o ciclo, as pontes, a clique) e, nas
+articulações, o amarelo marca os vértices de corte.
+
 
 Convenções que valem para o módulo todo:
 
@@ -157,9 +138,9 @@ vez** (o Cormen chama de *percurso de Euler*). Teorema de Euler, para um grafo
 - existe trajeto euleriano aberto ⇔ **exatamente dois** vértices de grau
   ímpar, e ele começa num e termina no outro.
 
-O porquê é o aperto de mãos ao vivo: toda vez que o caminhão entra numa
-esquina, sai por outra rua. As ruas de cada esquina se gastam aos pares.
-Só a saída e a chegada escapam disso. No dirigido, a condição vira "entrada
+O porquê vem do aperto de mãos: toda vez que o caminhão entra numa esquina,
+sai por outra rua, e as ruas de cada esquina se gastam aos pares. Só a saída
+e a chegada escapam disso. No dirigido, a condição vira "entrada
 = saída em todo vértice".
 
 **Hierholzer** monta o circuito em O(V + E) com lista (O(V²) com matriz). Ele
@@ -167,7 +148,7 @@ anda por ruas ainda não usadas, apagando cada uma, até travar. Com graus pares
 só se trava no ponto de partida. Aí volta pela pilha até achar uma esquina com
 rua sobrando, faz um desvio a partir dela e **encaixa** o desvio no circuito.
 
-Vamos ver na prática. O bairro tem 6 esquinas e 8 ruas. Os números em roxo são
+O bairro tem 6 esquinas e 8 ruas. Os números em roxo são
 os graus; os números nas ruas, a ordem em que o caminhão passa por elas:
 
 <p align="center"><img src="29-grafos-e-np/0182-caminhos-e-ciclos/ideia.svg" alt="Diagrama da ideia: Caminhos e ciclos" width="870"></p>
@@ -251,8 +232,8 @@ int main(void) {
 // (8 ruas, cada uma uma vez)
 ```
 
-Repara no fluxograma: cada volta do laço olha o topo da pilha. Se tem rua
-livre, avança e apaga a rua; se não tem, a esquina sai da pilha e vai para o
+No fluxograma, cada volta do laço olha o topo da pilha. Se há rua livre,
+avança e apaga a rua; se não há, a esquina sai da pilha e vai para o
 circuito. Ninguém escolhe rota, e mesmo assim nenhuma rua sobra:
 
 <p align="center"><img src="29-grafos-e-np/0182-caminhos-e-ciclos/fluxograma.svg" alt="Fluxograma: Caminhos e ciclos" width="1045"></p>
@@ -286,8 +267,9 @@ casinha "sem tirar o lápis do papel", um trajeto aberto.
 > **Por dentro do C:** apagar a rua é só `rua[u][v]--` e `rua[v][u]--`, dois
 > acessos a uma matriz de `int` que mora num bloco contínuo de 6 × 6 × 4 =
 > 144 bytes. Como cada rua é empilhada e desempilhada uma vez, a pilha nunca
-> passa de E + 1 posições, e é por isso que `pilha[MAX_RUAS + 1]` cabe na
-> pilha do programa sem `malloc`. A busca do próximo vizinho recomeça do 0
+> passa de E + 1 posições, e por isso `pilha[MAX_RUAS + 1]` cabe na pilha do
+> programa sem `malloc`.
+ A busca do próximo vizinho recomeça do 0
 > a cada volta; com lista de adjacência e um ponteiro "próxima aresta" por
 > vértice, o total cai para O(V + E).
 
@@ -654,7 +636,7 @@ duas vezes na mesma agência é perder tempo com escolta e papelada. Existe uma
 rota que passa por **cada agência exatamente uma vez** e volta para a base?
 
 Parece o problema do caminhão de lixo (0182), trocando "aresta" por
-"vértice". A diferença de dificuldade, porém, é enorme.
+"vértice", mas a dificuldade é outra.
 
 **Ciclo hamiltoniano** é um ciclo (simples, no Cormen) que passa por **todos
 os vértices**, cada um uma vez. **Caminho hamiltoniano** é o mesmo sem a
@@ -680,12 +662,12 @@ vértice, desce para `pos + 1` e, se lá na frente travar, **desfaz** a escolha
 e tenta a próxima. Quando a rota tem os V vértices, só falta conferir se o
 último liga de volta ao primeiro.
 
-Duas economias de graça. Todo ciclo pode começar em qualquer vértice, então
+Há duas economias que não custam nada. Todo ciclo pode começar em qualquer vértice, então
 fixe o primeiro (`rota[0] = 0`): isso divide o trabalho por V. E o vetor
 `usada[]` corta na hora qualquer rota que repete agência. Mesmo assim, no
 pior caso sobram (V - 1)! ordens: com 15 agências, 87 bilhões.
 
-Vamos ver na prática. A primeira tentativa, Base Centro Orla Mercado Porto
+A primeira tentativa, Base Centro Orla Mercado Porto
 Shopping, trava: não há via do Shopping para a Base. O backtracking volta ao
 Mercado, troca Porto por Shopping e fecha o ciclo pelo Porto:
 
@@ -740,7 +722,7 @@ int main(void) {
 // Chamadas da recursão: 8
 ```
 
-Repara no fluxograma: é uma chamada de `hamilton(pos)`. A pergunta "rota
+O fluxograma mostra uma chamada de `hamilton(pos)`. A pergunta "rota
 completa?" só confere a volta; o trabalho todo está no laço que escolhe o
 vizinho, e na linha que desfaz a escolha quando a descida não deu certo:
 
@@ -749,7 +731,7 @@ vizinho, e na linha que desfaz a escolha quando a descida não deu certo:
 Oito chamadas parece pouco porque a primeira tentativa quase deu certo. Mas
 este grafo não tem circuito euleriano (quatro agências têm grau ímpar), e
 mesmo assim tem ciclo hamiltoniano. O A365 mostra o contrário: um grafo com
-circuito euleriano e **sem** ciclo hamiltoniano, onde o backtracking só
+circuito euleriano e **sem** ciclo hamiltoniano, em que o backtracking só
 descobre isso depois de tentar tudo. O A366 mede o crescimento das chamadas
 quando a resposta é "não".
 
@@ -757,8 +739,7 @@ quando a resposta é "não".
 > Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico.
 > O programa continua compilando e rodando, mas cada agência visitada numa
 > tentativa que falhou fica "queimada" para as tentativas seguintes, e ele
-> responde "não existe" para grafos que têm ciclo. O E1097 é exatamente esse
-> bug. E lembre: euleriano é sobre **arestas**; hamiltoniano, sobre
+> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug. E lembre: euleriano é sobre **arestas**; hamiltoniano, sobre
 > **vértices**.
 
 > [!TIP]
@@ -766,8 +747,9 @@ quando a resposta é "não".
 > chamadas nunca passa de V frames de `hamilton`, cada um com `pos`, `v` e o
 > endereço de retorno. O que explode não é a memória, é o **tempo**: o número
 > de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
-> compartilhados por todas as chamadas; é por isso que cada uma precisa
-> desfazer o que fez antes de voltar. O `long` em `chamadas` está ali porque
+> compartilhados por todas as chamadas, e por isso cada uma precisa desfazer
+> o que fez antes de voltar.
+ O `long` em `chamadas` está ali porque
 > 13! já não cabe num `int` de 32 bits.
 
 > [!NOTE]
@@ -1148,7 +1130,7 @@ Essas são as duas perguntas de **conectividade** que o edital pede pelo nome:
   junto com as arestas dele, aumenta o número de componentes.
 
 O jeito ingênuo é tirar cada cabo, rodar uma DFS e ver se a rede partiu:
-O(E · (V + E)). O A368 faz isso para conferir. O jeito esperto faz **uma DFS
+O(E · (V + E)). O A368 faz isso para conferir. O jeito bom faz **uma DFS
 só**, O(V + E), e anota dois números por vértice.
 
 **tin[u]** é o tempo de descoberta: o relógio da DFS no momento em que ela
@@ -1159,7 +1141,7 @@ subárvore de `u` consegue alcançar usando arestas da árvore para descer e
 Numa DFS de grafo não dirigido só existem dois tipos de aresta: as da
 **árvore** (levam a um vértice novo) e as de **volta** (levam a um ancestral
 já visitado). Nenhuma aresta "cruza" para o lado. Por isso `low` mede
-exatamente quanto a subárvore consegue escapar para cima sem passar pelo pai.
+quanto a subárvore consegue escapar para cima sem passar pelo pai.
 
 As duas regras, para uma aresta da árvore `u - v` (v filho de u):
 
@@ -1172,7 +1154,7 @@ As duas regras, para uma aresta da árvore `u - v` (v filho de u):
   dela), então não serve. A raiz é articulação **só se tiver dois ou mais
   filhos** na árvore da DFS: sem ela, os filhos não têm como se falar.
 
-Vamos ver na prática. Do Centro, a DFS desce em ordem de índice. Ao lado de
+Do Centro, a DFS desce em ordem de índice. Ao lado de
 cada bairro, `tin/low`. As arestas verdes são as pontes; os bairros em
 amarelo, as articulações:
 
@@ -1236,7 +1218,7 @@ int main(void) {
 // Ponta Negra: tin 7, low 7
 ```
 
-Repara no fluxograma: as duas perguntas acontecem **na volta** da recursão,
+No fluxograma, as duas perguntas acontecem **na volta** da recursão,
 depois de `dfs(v, u)`. Só então `low[v]` está completo, porque a subárvore
 inteira de `v` já foi explorada:
 
@@ -1257,9 +1239,9 @@ inteira de `v` já foi explorada:
 | volta a Aleixo | low[Flores] = 4 | 4 > 2: **ponte** Aleixo - Flores; Aleixo é **articulação** |
 | volta ao Centro (raiz) | | um filho só: **não** é articulação |
 
-Repare em Flores: é articulação sem ser ponta de nenhuma ponte (o triângulo
-dela tem dois caminhos), e Flores - Cidade Nova não é ponte. As duas
-perguntas parecem iguais, mas o `>` e o `>=` fazem toda a diferença.
+Flores é articulação sem ser ponta de nenhuma ponte (o triângulo dela tem
+dois caminhos), e Flores - Cidade Nova não é ponte. As duas perguntas
+parecem iguais; o que as separa é o `>` contra o `>=`.
 
 > [!WARNING]
 > Dois erros clássicos. Primeiro: usar a regra `low[v] >= tin[u]` também na
@@ -1271,8 +1253,9 @@ perguntas parecem iguais, mas o `>` e o `>=` fazem toda a diferença.
 > [!TIP]
 > **Por dentro do C:** `tin`, `low` e `corte` são vetores globais, zerados
 > antes do `main`, e por isso `tin[v] == 0` serve de "não visitado". A
-> variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e é
-> por isso que a contagem da raiz não se mistura com a dos outros vértices.
+> variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e
+> por isso a contagem da raiz não se mistura com a dos outros vértices.
+
 > A recursão pode descer V níveis; numa rede com um milhão de bairros em fila
 > isso estoura a pilha (8 MB por padrão no Linux), e a versão de produção
 > troca a recursão por uma pilha explícita.
@@ -1665,8 +1648,7 @@ produtos: **p · q · r** multiplicações. As colunas da primeira precisam ser
 iguais às linhas da segunda.
 
 **A ordem importa.** A multiplicação de matrizes é **associativa**:
-`(A B) C = A (B C)`. Então os parênteses não mudam o resultado, só o
-trabalho. Com quatro matrizes existem 5 parentizações; com 10, 4862; com 20,
+`(A B) C = A (B C)`. Os parênteses não mudam o resultado, só o trabalho. Com quatro matrizes existem 5 parentizações; com 10, 4862; com 20,
 mais de 1,7 bilhão (são os números de Catalan). Testar todas está fora de
 questão.
 
@@ -1691,7 +1673,7 @@ linha `i`: a tabela é preenchida diagonal por diagonal. São O(n²) casas,
 cada uma com até n cortes: **O(n³)** de tempo e O(n²) de espaço, contra
 o crescimento exponencial da força bruta (o A369 compara).
 
-Vamos ver na prática. A diagonal principal é zero (uma matriz sozinha não
+No desenho, a diagonal principal é zero (uma matriz sozinha não
 custa nada); cada diagonal acima usa as de baixo. A casa do canto, `m[1][4]`,
 é a resposta, e a seta mostra de onde ela veio:
 
@@ -1757,8 +1739,8 @@ int main(void) {
 // Custo: 5000 multiplicações
 ```
 
-Repara no fluxograma: três laços aninhados, e o de fora é o tamanho da
-cadeia. O laço de dentro testa cada corte `k` e guarda o menor; nada mais:
+O fluxograma tem três laços aninhados, e o de fora é o tamanho da cadeia. O
+de dentro testa cada corte `k` e guarda o menor:
 
 <p align="center"><img src="29-grafos-e-np/0185-cadeia-de-matrizes/fluxograma.svg" alt="Fluxograma: Cadeia de matrizes" width="654"></p>
 
@@ -1778,8 +1760,9 @@ que o programa preenche; o vencedor de cada uma está em negrito:
 
 `s[1][4] = 2` corta em `(A1 A2)(A3 A4)`. A conta da esquerda para a direita,
 `((A1 A2) A3) A4`, custaria 1500 + 3000 + 6000 = 10500; a pior ordem,
-`(A1 (A2 A3)) A4`, custa 9000 + 18000 + 6000 = 33000. O A370 multiplica as
-matrizes de verdade, na ordem ótima, contando as multiplicações.
+`(A1 (A2 A3)) A4`, custa 9000 + 18000 + 6000 = 33000. O A370 multiplica
+matrizes reais na ordem ótima, contando as multiplicações.
+
 
 > [!WARNING]
 > O erro clássico é preencher a tabela linha por linha (`for i`, `for j`).
@@ -1801,7 +1784,8 @@ matrizes de verdade, na ordem ótima, contando as multiplicações.
 > [!NOTE]
 > **Pergunta para você:** se a última tabela tivesse 60 × 100 em vez de
 > 60 × 10 (troque o último 10 de `p` por 100), a melhor ordem continua a
-> mesma? Qual a casa da tabela que muda primeiro? Responda antes de rodar.
+> mesma? Qual a casa da tabela que muda primeiro?
+
 
 ### Hora de praticar
 
@@ -2151,12 +2135,12 @@ PD: 3400
 Você organiza o churrasco da firma e quer um grupo que respeite cinco
 condições: alguém leva a churrasqueira, dois colegas brigados não vão
 juntos, alguém sabe acender o carvão... Um amigo diz "chama a Ana e o Davi".
-Conferir o palpite leva dez segundos: é só passar condição por condição.
+Conferir o palpite leva dez segundos: basta passar condição por condição.
 Achar um grupo que funcione, sem palpite nenhum, pode exigir testar todas as
 combinações de quem vai e quem não vai.
 
-Essa assimetria entre **achar** e **conferir** é o coração da pergunta mais
-famosa da computação.
+A pergunta mais famosa da computação gira em torno dessa assimetria entre
+**achar** e **conferir**.
 
 **Problema de decisão** é um problema cuja resposta é **sim ou não**: "existe
 um grupo que satisfaz as condições?", "existe ciclo hamiltoniano?", "existe
@@ -2194,7 +2178,7 @@ pergunta: existe uma atribuição de verdadeiro e falso que deixa todas as
 cláusulas verdadeiras? **3-SAT** é o caso em que toda cláusula tem no máximo
 três literais (no Cormen, exatamente três), e continua NP-completo.
 
-Vamos ver na prática. As quatro variáveis são Ana, Beto, Caio e Davi. O
+As quatro variáveis são Ana, Beto, Caio e Davi. O
 palpite do amigo cai na quinta cláusula; a força bruta percorre as 2⁴ = 16
 atribuições como os bits de um contador e acha uma na décima primeira:
 
@@ -2267,9 +2251,10 @@ int main(void) {
 // Achei depois de 11 de 16 tentativas: Ana=não Beto=sim Caio=não Davi=sim
 ```
 
-Repara no fluxograma: é o verificador. Ele passa uma vez por cada literal,
-então custa O(tamanho da fórmula). A força bruta chama esse verificador até
-2ⁿ vezes, e é aí que mora o exponencial:
+O fluxograma é o verificador. Ele passa uma vez por cada literal e custa
+O(tamanho da fórmula). A força bruta o chama até 2ⁿ vezes, e daí vem o
+exponencial:
+
 
 <p align="center"><img src="29-grafos-e-np/0186-p-e-np/fluxograma.svg" alt="Fluxograma: P e NP" width="467"></p>
 
@@ -2702,8 +2687,8 @@ sabe resolver isso. Mas o sobrinho dela tem um programa que acha o **maior
 grupo de amigos** numa rede social. Dá para usar o programa do sobrinho no
 problema da síndica? Dá, se ela souber **traduzir** a pergunta.
 
-Traduzir um problema em outro é uma **redução**, e é a ferramenta que separa
-os problemas fáceis dos difíceis.
+Traduzir um problema em outro é uma **redução**, a ferramenta que separa os
+problemas fáceis dos difíceis.
 
 **Redução polinomial.** Reduzir A a B (escreve-se **A ≤p B**) é dar um
 algoritmo de tempo polinomial que transforma qualquer instância de A numa
@@ -2728,7 +2713,7 @@ um de tamanho k?"):
   precisa de um mediador para que toda briga tenha um lado vigiado).
 
 As duas pontes entre eles cabem numa linha cada. O **complemento** de G tem
-uma aresta exatamente onde G não tem. Então:
+aresta entre os pares que G não liga, e só entre eles. Então:
 
 - S é independente em G ⇔ S é **clique no complemento** de G;
 - S é independente em G ⇔ **V − S** é uma **cobertura** de G (se uma aresta
@@ -2739,14 +2724,15 @@ Logo, um conjunto independente de tamanho k existe ⇔ uma clique de tamanho
 k existe no complemento ⇔ uma cobertura de tamanho n − k existe em G. Montar
 o complemento custa O(V²): é uma redução polinomial.
 
-Vamos ver na prática. Seis moradores, sete brigas. À esquerda, G e a maior
-comissão; no meio, o complemento, onde a mesma comissão vira uma clique; à
+Seis moradores, sete brigas. À esquerda, G e a maior
+comissão; no meio, o complemento, em que a mesma comissão vira uma clique; à
 direita, os outros três formam a cobertura:
 
 <p align="center"><img src="29-grafos-e-np/0187-reducoes/ideia.svg" alt="Diagrama da ideia: Reduções" width="914"></p>
 
 O programa usa a força bruta de clique como uma **caixa-preta**: ele nem
-sabe que existe "conjunto independente". A redução é só a montagem de `paz`:
+sabe que existe "conjunto independente". A redução se resume à montagem de
+`paz`:
 
 ```c
 #include <stdbool.h>
@@ -2802,9 +2788,9 @@ int main(void) {
 // Mediadores (cobertura): Jorge Léo Nina (3)
 ```
 
-Repara no fluxograma: a redução tem sempre três passos, transformar a
-entrada, chamar o resolvedor do outro problema e traduzir a resposta de
-volta. Só o primeiro e o último são novos, e os dois são polinomiais:
+Toda redução segue os três passos do fluxograma: transformar a entrada,
+chamar o resolvedor do outro problema e traduzir a resposta de volta. Só o
+primeiro e o último são novos, e os dois são polinomiais:
 
 <p align="center"><img src="29-grafos-e-np/0187-reducoes/fluxograma.svg" alt="Fluxograma: Reduções" width="484"></p>
 
@@ -2817,7 +2803,7 @@ que satisfaz a fórmula. O A373 faz essa construção em C; o A374 reduz
 caminho hamiltoniano a ciclo hamiltoniano.
 
 > [!WARNING]
-> O sentido da redução é a pegadinha número um. Para provar que um problema
+> A pegadinha mais comum é o sentido da redução. Para provar que um problema
 > novo X é difícil, reduza um difícil conhecido **a X** (conhecido ≤p X),
 > nunca o contrário. Reduzir X a SAT só mostra que X não é mais difícil que
 > SAT, o que vale para qualquer problema de NP. E a redução precisa ser
@@ -2826,7 +2812,8 @@ caminho hamiltoniano a ciclo hamiltoniano.
 > [!TIP]
 > **Por dentro do C:** os conjuntos são máscaras de bits num `int`: o bit
 > `v` ligado quer dizer "v está no grupo". O complemento de um conjunto é
-> `todos & ~comissao`, onde `todos = (1 << V) - 1` tem os V bits de baixo
+> `todos & ~comissao`, em que `todos = (1 << V) - 1` tem os V bits de baixo
+
 > ligados; sem o `& todos`, o `~` ligaria também os 26 bits de cima. Já o
 > complemento do **grafo** é outra matriz, `paz[a][b] = a != b && !briga[a][b]`:
 > o `a != b` evita o laço de um vértice para ele mesmo.
@@ -2834,7 +2821,8 @@ caminho hamiltoniano a ciclo hamiltoniano.
 > [!NOTE]
 > **Pergunta para você:** se a Kátia e o Márcio também brigarem
 > (`{2, 4}`), qual o tamanho da maior comissão? E da menor cobertura? A
-> soma dos dois continua sendo 6? Responda antes de rodar.
+> soma dos dois continua sendo 6?
+
 
 ### Hora de praticar
 
@@ -3243,7 +3231,7 @@ muito pior.
 solução viável com custo no máximo **ρ vezes o ótimo** (num problema de
 minimização). O ρ é o **fator de aproximação**: um algoritmo
 2-aproximado nunca gasta mais que o dobro do ótimo, em **qualquer**
-entrada. A graça é provar isso sem conhecer o ótimo, comparando com um
+entrada. O truque é provar isso sem conhecer o ótimo, comparando com um
 **limite inferior** dele.
 
 **Bin packing.** Com capacidade C, nenhuma solução usa menos que
@@ -3271,7 +3259,7 @@ os atalhos da pré-ordem só encurtam. Total: no máximo 2 × ótimo. É o A376.
 Sem a desigualdade triangular, nenhum fator constante é possível, a menos
 que P = NP.
 
-Vamos ver na prática. Em cima, o first fit na ordem de chegada: os dois 4 e
+No desenho, em cima, está o first fit na ordem de chegada: os dois 4 e
 o 2 lotam a primeira viagem, e cada carga grande acaba sozinha. Embaixo, o
 first fit decrescente bate o limite inferior, 45 / 10 → 5 viagens: ótimo.
 
@@ -3344,7 +3332,7 @@ int main(void) {
 //   viagem 5: 6 4  (10 t)
 ```
 
-Repara no fluxograma: é o first fit para uma carga. Ele procura a primeira
+O fluxograma mostra o first fit para uma carga. Ele procura a primeira
 viagem com espaço; se chegar ao fim da lista, abre uma nova. Com n cargas,
 custa O(n²) no pior caso, nada perto do exponencial:
 
@@ -3354,7 +3342,7 @@ custa O(n²) no pior caso, nada perto do exponencial:
 > "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com
 > prova. E o fator é do pior caso; na prática o resultado costuma ser bem
 > melhor. A pegadinha inversa também cai em prova: o guloso "pega o vértice
-> de maior grau" para cobertura parece esperto, mas **não** tem fator
+> de maior grau" para cobertura parece bom, mas **não** tem fator
 > constante; pode ficar log n vezes pior que o ótimo. O 2-aproximado
 > correto é o "pega as duas pontas".
 
@@ -3370,7 +3358,8 @@ custa O(n²) no pior caso, nada perto do exponencial:
 > [!NOTE]
 > **Pergunta para você:** se chegar uma nona carga de 5 toneladas no fim
 > da fila, quantas viagens o first fit usa? E o decrescente? O limite
-> inferior muda? Responda antes de rodar.
+> inferior muda?
+
 
 ### Hora de praticar
 
@@ -3765,7 +3754,7 @@ Com 7 clientes são 5040 rotas; com 15, 87 bilhões.
 **Held-Karp** (PD sobre subconjuntos). `dp[S][j]` é o menor caminho que sai
 da farmácia, passa **exatamente** pelos pontos do conjunto S e termina em j.
 O subproblema não precisa saber a **ordem** em que S foi visitado, só o
-conjunto e o último ponto: é isso que esmaga o fatorial. A recorrência:
+conjunto e o último ponto, e por isso o fatorial some. A recorrência:
 
 ```text
 dp[{0}][0] = 0
@@ -3783,11 +3772,11 @@ São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e
 | 20 | 1,2 · 10¹⁷ | 4,2 · 10⁸ | 400 |
 | 30 | 8,8 · 10³⁰ | 9,7 · 10¹¹ | 900 |
 
-A regra prática que sai da tabela: até uns 20 pontos, Held-Karp resolve em
+A tabela dá a regra prática: até uns 20 pontos, Held-Karp resolve em
 segundos (e o limite é a memória); acima disso, aproximação, de preferência
 seguida de uma melhoria local como o 2-opt do A378.
 
-Vamos ver na prática. As distâncias são em quarteirões (|dx| + |dy|), que
+As distâncias são em quarteirões (|dx| + |dy|), que
 respeitam a desigualdade triangular. À esquerda a rota exata; à direita a da
 árvore mínima, que dá voltas desnecessárias no fim:
 
@@ -3897,9 +3886,9 @@ int main(void) {
 // O aproximado gasta 29% a mais
 ```
 
-Repara no fluxograma: é a decisão que o programa de entregas de verdade faz
-antes de calcular. Poucos pontos, exato; muitos, aproximado e melhorado. A
-fronteira não é teórica: é o tempo e a memória que você tem:
+O fluxograma é a decisão que um programa de entregas real toma antes de
+calcular: poucos pontos, exato; muitos, aproximado e melhorado. A fronteira
+é o tempo e a memória que você tem:
 
 <p align="center"><img src="29-grafos-e-np/0189-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="502"></p>
 
@@ -3928,7 +3917,8 @@ aproximada e mostra quanto ela melhora.
 > [!NOTE]
 > **Pergunta para você:** se o Gil mudar para (3, 5), perto do Fábio, a
 > rota exata ainda começa pela farmácia indo ao Gil? E a diferença do
-> aproximado aumenta ou diminui? Responda antes de rodar.
+> aproximado aumenta ou diminui?
+
 
 ### Hora de praticar
 

@@ -21,13 +21,12 @@ guarda o CPF de quem marcou, o paciente na hash guarda o horário dele, a fila
 guarda CPFs. Assim, cada uma pode mudar por dentro (uma rotação, uma
 sondagem) sem invalidar nada nas outras.
 
-Há uma decisão de projeto que vale notar. A rubro-negra do 0177 não tem
-remoção. Em vez de remover, a consulta desmarcada deixa o **horário vago**
+Uma decisão de projeto: a rubro-negra do 0177 não tem remoção. Em vez de remover, a consulta desmarcada deixa o **horário vago**
 na árvore (`cpf = 0`): o nó continua lá e pode ser reaproveitado na próxima
 marcação. É a mesma ideia da lápide da hash, numa árvore. A agenda de um dia
 tem poucas dezenas de horários; o custo de guardar os vagos é pequeno.
 
-Vamos ver na prática. Cinco pacientes se cadastram. Carla marca às 8h00, Ana
+Cinco pacientes se cadastram. Carla marca às 8h00, Ana
 às 9h00, Bruno às 10h30. Diego quer as 9h00, já ocupadas, e vai para a espera;
 Elisa também. Ana desmarca: o primeiro da fila, Diego, assume. No desenho, as
 três estruturas depois disso:
@@ -111,7 +110,7 @@ int main(void) {
 // Na fila de espera: 1
 ```
 
-Repara no fluxograma: é o cancelamento das 9h00. O horário existe e tem
+O fluxograma segue o cancelamento das 9h00. O horário existe e tem
 consulta, a Ana fica sem horário, e como a fila não está vazia, o Diego (o
 primeiro) assume e sai da fila:
 
@@ -123,8 +122,9 @@ primeiro) assume e sai da fila:
 > árvore (`x->cpf`). Se o cancelamento zerar só a árvore, a Ana continua
 > "com consulta" na hash e nunca mais consegue marcar. Toda operação da
 > agenda que mexe numa das duas mexe na outra antes de voltar. Um
-> `ag_confere` que percorre a árvore e compara com a hash é um ótimo teste
+> `ag_confere` que percorre a árvore e compara com a hash é um bom teste
 > para esse tipo de programa.
+
 
 > [!TIP]
 > **Por dentro do C:** a `struct Agenda` guarda a tabela de 101 pacientes

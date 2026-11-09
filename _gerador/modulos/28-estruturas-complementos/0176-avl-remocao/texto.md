@@ -17,22 +17,22 @@ A remoção começa igual à da BST (0100), em três casos:
 Tirar um nó **encurta** um caminho, e algum ancestral pode ficar com fator 2
 ou -2. O conserto é o mesmo da inserção: na **volta da recursão**, cada
 ancestral recalcula a altura, confere o fator e, se precisar, faz a rotação
-simples ou a dupla. As rotações são exatamente as do 0101.
+simples ou a dupla. As rotações são as do 0101.
 
-Duas coisas mudam, e é aí que a prova pega:
+Duas coisas mudam, e a prova cobra as duas:
 
 1. O filho do lado pesado pode ter **fator 0**. Na inserção isso nunca
    acontece. Na remoção acontece, e a regra é: fator 0 ou do mesmo sinal,
    **rotação simples**; sinal contrário, **dupla**. Com fator 0, a subárvore
    mantém a altura depois da rotação, e o conserto para ali.
 2. A rotação pode **não devolver a altura antiga**. Na inserção, uma rotação
-   devolve a subárvore à altura de antes, e o resto da árvore nem percebe. Na
+   devolve a subárvore à altura de antes, e o resto da árvore não percebe. Na
    remoção, a subárvore consertada pode ficar um nível mais baixa, e o
    desequilíbrio **sobe** para o avô. Por isso uma remoção pode fazer
    **várias rotações**, até a raiz: no pior caso, uma a cada dois níveis,
    O(log n) rotações.
 
-Vamos ver na prática. A cozinha tem 16 pedidos, de altura 4. O pedido 30 sai.
+A cozinha tem 16 pedidos, numa árvore de altura 4. O pedido 30 sai.
 O 28 fica pesado à esquerda, com o filho 25 pendendo para a direita: rotação
 dupla, o 26 sobe. A subárvore do 28 cai de altura 2 para 1, e agora quem
 desequilibra é a raiz, o 20: rotação simples, e o 12 vira a raiz. No desenho,
@@ -121,7 +121,7 @@ int main(void) {
 
 São 3 rotações simples: a dupla no 28 conta 2, a simples no 20 conta 1.
 
-Repara no fluxograma: é o `rebalanceia` no 28, logo depois de o 30 sair. O
+O fluxograma mostra o `rebalanceia` no 28, logo depois de o 30 sair. O
 fator é 2 (pesado à esquerda), o filho 25 tem fator -1 (pende para dentro), e
 o caminho verde passa pelas duas rotações. No 20, o mesmo fluxograma pega o
 outro ramo: filho 12 com fator 1, só a rotação à direita:
@@ -138,8 +138,8 @@ cima, cada nó da volta confere a si mesmo:
 | 28 | 1 / -1 | 2 | 25, fator -1 | dupla: esquerda no 25, direita no 28 | era 2, fica 1 (o 26 sobe) |
 | 20 | 3 / 1 | 2 | 12, fator 1 | simples: direita no 20 | era 4, fica 3 (o 12 sobe) |
 
-Repara na última coluna: o conserto no 28 **encurtou** a subárvore, e foi isso
-que levou o desequilíbrio para o 20. Se o 28 tivesse voltado à altura 2, a
+Na última coluna, o conserto no 28 **encurtou** a subárvore, e isso levou o
+desequilíbrio para o 20. Se o 28 tivesse voltado à altura 2, a
 remoção pararia ali. O 20 desce para a direita do 12 e leva junto o 16 (que
 era filho direito do 12) como filho esquerdo.
 
@@ -154,8 +154,9 @@ era filho direito do 12) como filho esquerdo.
 > [!TIP]
 > **Por dentro do C:** a remoção recursiva empilha uma chamada por nível,
 > cerca de 1,44 · log₂ n quadros no pior caso da AVL: para um milhão de chaves,
-> menos de 30 quadros, nada perto de estourar a pilha. Repara também que, no
-> caso dos dois filhos, o código **copia a chave** do sucessor e libera o nó
+> menos de 30 quadros, nada perto de estourar a pilha. No caso dos dois
+> filhos,
+ o código **copia a chave** do sucessor e libera o nó
 > dele, em vez de religar ponteiros: é mais simples, mas qualquer ponteiro
 > que alguém guardava para o nó do sucessor fica apontando para memória
 > liberada. Se o seu programa guarda `NoA *` fora da árvore, troque a cópia

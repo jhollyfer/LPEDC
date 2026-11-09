@@ -16,7 +16,7 @@ de parcelas diferentes, um **somatório**:
  i=0
 ```
 
-O `Σ` (sigma) só quer dizer "some a expressão da direita para cada valor de
+O `Σ` (sigma) quer dizer "some a expressão da direita para cada valor de
 `i`, do de baixo até o de cima". Cada laço `for` vira um `Σ`: os limites do
 laço viram os limites da soma, e o que o corpo faz vira a parcela.
 
@@ -41,9 +41,9 @@ a última parcela sozinha é maior que todas as outras juntas
 (`512 > 1 + 2 + ... + 256`). A **harmônica** é a soma `1 + 1/2 + 1/3 + ... +
 1/n`, que cresce como `ln n`; multiplicada por `n`, dá `n ln n`.
 
-Vamos ver na prática. Cada linha é um morador que chega, cada quadradinho
-roxo é um aperto de mão com quem já estava na sala. O triângulo roxo é
-metade do quadrado de 8 por 8, sem a diagonal:
+No desenho, cada linha é um morador que chega e cada quadradinho roxo é um
+aperto de mão com quem já estava na sala. O triângulo roxo é metade do
+quadrado de 8 por 8, sem a diagonal:
 
 {{ideia}}
 
@@ -80,9 +80,9 @@ int main(void) {
 //  20000  199990000  199990000
 ```
 
-Repara no fluxograma: o teste `j < i?` é o que torna o laço dependente. Na
-volta de `i = 0`, ele dá "Não" de cara; na volta de `i = 7`, dá "Sim" sete
-vezes. Somar os "Sim" de todas as voltas é exatamente o somatório:
+O teste `j < i?` do fluxograma é o que torna o laço dependente. Na volta de
+`i = 0`, ele dá "Não" de cara; na volta de `i = 7`, dá "Sim" sete vezes. A
+soma dos "Sim" de todas as voltas é o somatório:
 
 {{fluxograma}}
 
@@ -115,8 +115,9 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 > 2.147.483.647) **antes** da divisão por 2, mesmo que o resultado final
 > (2,4 bilhões) caiba num `long`. Estouro de `int` com sinal é comportamento
 > indefinido: o programa pode mostrar um número negativo ou qualquer outra
-> coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. E um
-> detalhe curioso: com `-O2`, o compilador pode reconhecer o laço que só
+> coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. Outro
+> detalhe: com `-O2`
+, o compilador pode reconhecer o laço que só
 > incrementa um contador e trocar os dois `for` pela própria fórmula
 > fechada. O laço de Θ(n²) vira uma conta de Θ(1) no código de máquina.
 

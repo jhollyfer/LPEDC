@@ -29,11 +29,11 @@ Quando uma conta mistura tipos, o C aplica duas regras antes de calcular:
    houver um `double`, tudo vira `double`.
 
 A regra 2 produz a pegadinha mais famosa de C: `-1 > 0u` é **verdadeiro**. O
-`-1` vira `unsigned`, ou seja, 4294967295, que é maior que 0. Já `-1L < 1u`
+`-1` vira `unsigned`, 4294967295, que é maior que 0. Já `-1L < 1u`
 é verdadeiro no Linux de 64 bits, porque ali o `unsigned` cabe no `long` e
 nada vira sem sinal.
 
-Vamos ver na prática. O desenho mostra os 4 bytes do saldo -1, todos com os
+O desenho mostra os 4 bytes do saldo -1, todos com os
 oito bits ligados, e as duas leituras possíveis deles. A comparação com
 `0u` escolhe a leitura sem sinal:
 
@@ -74,8 +74,8 @@ int main(void) {
 // c = 44
 ```
 
-Repara no fluxograma: a comparação não pergunta "-1 é maior que 0?". Antes da
-pergunta já houve uma conversão, e a pergunta de verdade é sobre 4294967295:
+No fluxograma, a comparação não pergunta "-1 é maior que 0?". Antes dela já
+houve uma conversão, e a pergunta real é sobre 4294967295:
 
 {{fluxograma}}
 
@@ -92,8 +92,9 @@ pergunta já houve uma conversão, e a pergunta de verdade é sobre 4294967295:
 > [!TIP]
 > **Por dentro do C:** o processador usa o **complemento de dois**: o negativo
 > de `x` é `~x + 1`. Com isso, somar com ou sem sinal é **a mesma
-> instrução** (`add`), e é por isso que a conversão entre `int` e `unsigned`
-> não custa nada, os bits ficam iguais. O que muda é a instrução que lê o
+> instrução** (`add`), e a conversão entre `int` e `unsigned` não custa
+> nada: os bits ficam iguais.
+ O que muda é a instrução que lê o
 > resultado: comparações com sinal usam `jl`/`jg`, sem sinal usam `jb`/`ja`,
 > e o deslocamento à direita vira `sar` (copia o bit de sinal: `-16 >> 2` dá
 > -4 no gcc) ou `shr` (entra zero). Deslocar um negativo para a direita é

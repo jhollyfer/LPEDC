@@ -3,22 +3,21 @@
 # Módulo 26 · Notação assintótica, somatórios e espaço
 
 No módulo 10 você aprendeu a contar passos e a dizer "isso é O(n²)" olhando
-os laços. No módulo 17, a resolver recorrências e a usar Θ e Ω. Faltava
-fechar três pontas, e é delas que este módulo trata: as **definições
-formais** de O, Ω e Θ, com as constantes `c` e `n₀`; os **somatórios** que
-dão o número exato de vezes que um laço roda; e a **complexidade
-espacial**, que mede memória do mesmo jeito que o tempo.
+os laços. No módulo 17, a resolver recorrências e a usar Θ e Ω. Este módulo
+fecha três pontas: as **definições formais** de O, Ω e Θ, com as constantes
+`c` e `n₀`; os **somatórios** que dão o número exato de vezes que um laço
+roda; e a **complexidade espacial**, que mede memória como se mede tempo.
 
-A mudança na cabeça é passar do "parece n²" para a conta. Dizer que
+A mudança na cabeça é trocar o "parece n²" pela conta. Dizer que
 `3n² + 10n + 20` é Θ(n²) vira uma afirmação que se **prova** (exibindo `c₁`,
-`c₂` e `n₀`) ou se **refuta** (mostrando que nenhum par serve). Dizer que um
-laço dependente roda "umas n²/2 vezes" vira `n(n-1)/2`, exato, conferido
-por um contador. E dizer que uma função "não usa memória" passa a exigir
-olhar a pilha da recursão, que gasta espaço mesmo sem nenhum vetor.
+`c₂` e `n₀`) ou se **refuta** (mostrando que nenhum par serve). O laço
+dependente que roda "umas n²/2 vezes" passa a rodar `n(n-1)/2` vezes, conferido
+por um contador. E a função que "não usa memória" obriga a olhar a pilha da
+recursão, que gasta espaço mesmo sem vetor nenhum.
 
-Tudo é verificado em C: cada fórmula tem um programa que conta e confere.
-O último assunto junta as três ideias numa conferência completa de cinco
-funções: passos, bytes e frames, medidos e comparados com a fórmula.
+Cada fórmula tem um programa em C que conta e confere. O último assunto junta
+as três ideias na ficha de cinco funções: passos, bytes e frames medidos e
+comparados com a fórmula.
 
 ## O que você vai aprender
 
@@ -31,37 +30,6 @@ funções: passos, bytes e frames, medidos e comparados com a fórmula.
 - a troca de **tempo por espaço**: tabelas, prefixos e memoização
 - conferir uma ficha de complexidade inteira medindo passos, bytes e frames
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: a tabela do `n₀`, o
-   triângulo dos apertos de mão, a memória extra da inversão, a ficha das
-   cinco funções. Os números são os mesmos do código.
-2. Faça as contas no papel **antes** de rodar: a desigualdade do `n₀`, o
-   somatório do laço, os bytes extras.
-3. Siga o **fluxograma** com o dedo.
-4. Rode o exemplo e confira a saída com a sua conta. Mude o `n`, dobre, e
-   veja se o contador acompanha a fórmula.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-6. No fim, resolva as **questões no estilo da prova**: elas cobram o mesmo
-   conteúdo no formato de múltipla escolha.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos diagramas da ideia, **verde** é o que vale (o teto que já segura, o
-espaço constante), **vermelho** é o que falha ou o que cresce com `n` (o teto
-que ainda perde, a cópia extra), **roxo** é trabalho sendo contado,
-**amarelo** marca o ponto de virada (o `n₀`, a razão ao dobrar `n`) e
-**cinza** é o que não entra na conta.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa: contagem de passos e notação O (0071 e 0072), pilha de
@@ -70,14 +38,21 @@ ponteiro para função (0050), busca binária (0090), insertion sort e merge
 sort (0093 e 0094), recorrências e a notação Θ (0114 a 0117), permutações
 por backtracking (0126), potência rápida (0131) e memoização (0138).
 
+Faça as contas no papel **antes** de rodar (a desigualdade do `n₀`, o
+somatório do laço, os bytes extras), inclusive a da **Pergunta para você**;
+depois mude o `n`, dobre, e veja se o contador acompanha a fórmula. Nos
+diagramas da ideia, verde é o que vale (o teto que já segura, o espaço
+constante), vermelho é o que falha ou cresce com `n`, amarelo marca o ponto de
+virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho sendo contado.
+
 Matemática: potências, logaritmos e somas. Lembre que `log₂ n` é quantas
 vezes dá para dividir `n` por 2 até chegar em 1, e que `ln n` é o logaritmo
 natural (`log` em `<math.h>`). O `rodar` já liga a biblioteca matemática.
 
 O último assunto tem um TAD na pasta, `custo.h` e `custo.c`, com cinco
 funções instrumentadas. O `rodar` compila o `custo.c` junto com qualquer
-exemplo ou exercício da pasta; por isso, nos exercícios de lá, não use os
-nomes `custo_passos`, `custo_bytes` e `custo_prof_max` para variáveis suas.
+exemplo ou exercício da pasta; por isso, nos exercícios de lá, não dê os
+nomes `custo_passos`, `custo_bytes` e `custo_prof_max` a variáveis suas.
 Os exercícios de "conserte" trazem o erro de propósito, e o enunciado
 avisa.
 
@@ -98,9 +73,9 @@ de 12 vendas". Você mediu o programa e contou exatamente
 `f(n) = 3n² + 10n + 20` operações. A promessa vale? Para 10 vendas, o
 fechamento faz 420 operações e `4 · 10² = 400`: estourou. O contrato mentiu?
 
-Não. Ele disse "a partir de 12". É exatamente isso que as definições de
-**O**, **Ω** e **Θ** dizem, com duas constantes que você escolhe: o fator
-**c** e o ponto de partida **n₀**.
+Não. Ele disse "a partir de 12", e as definições de **O**, **Ω** e **Θ**
+funcionam assim, com duas constantes que você escolhe: o fator **c** e o
+ponto de partida **n₀**.
 
 - **f(n) é O(g(n))** se existem `c > 0` e `n₀` tais que
   `f(n) ≤ c · g(n)` para todo `n ≥ n₀`. É um **teto**.
@@ -121,19 +96,18 @@ vale para `n ≥ 12` (a raiz é 11,7). Para o piso com `c = 3`: `3n² + 10n + 20
 `n₀ = 12`.
 
 **Refutar** é o contrário: mostrar que **nenhum** par serve. `f(n)` é O(n)?
-Seria preciso `3n² + 10n + 20 ≤ c · n`, ou seja, `3n + 10 + 20/n ≤ c`. Para
+Seria preciso `3n² + 10n + 20 ≤ c · n`, isto é, `3n + 10 + 20/n ≤ c`. Para
 qualquer `c` que alguém escolha, basta `n > c/3` e a desigualdade quebra. Não
 existe teto linear.
 
-Tem um terceiro eixo, que não tem nada a ver com O, Ω e Θ: **qual entrada**.
+Há ainda um terceiro eixo, independente de O, Ω e Θ: **qual entrada**.
 O **melhor caso** é a entrada de tamanho `n` que dá menos trabalho, o **pior
 caso** é a que dá mais, e o **caso médio** é a média sobre todas as entradas
 (com alguma hipótese de probabilidade). Cada caso é uma **função de n
 diferente**, e cada uma ganha o seu O, Ω ou Θ. Na busca sequencial, o melhor
 caso é Θ(1) e o pior é Θ(n).
 
-Vamos ver na prática. A tabela mostra o custo medido e o teto `4n²` para
-`n` de 6 a 15. Até 11, o teto fica abaixo do custo (vermelho); de 12 em
+A tabela mostra o custo medido e o teto `4n²` para `n` de 6 a 15. Até 11, o teto fica abaixo do custo (vermelho); de 12 em
 diante, fica acima e não cruza mais (verde). O `n₀` é a primeira coluna verde:
 
 <p align="center"><img src="26-analise-formal/0166-o-omega-theta/ideia.svg" alt="Diagrama da ideia: O, Ω e Θ de verdade" width="858"></p>
@@ -219,11 +193,12 @@ int main(void) {
 // O(n) com c = 1000: falha de n = 330 em diante
 ```
 
-Repara no fluxograma: é a função `n0_teto`. Ela não para no primeiro `n` que
-funciona; percorre tudo e **empurra** o `n₀` para depois de cada falha. É a
-tradução do "para todo `n ≥ n₀`" da definição. E repara na última parte da
-saída: com `c = 1000`, o teto linear aguenta até 329, e depois quebra para
-sempre. Com qualquer `c`, a história se repete, só que mais longe:
+O fluxograma é a função `n0_teto`. Ela não para no primeiro `n` que funciona:
+percorre tudo e **empurra** o `n₀` para depois de cada falha, que é como se
+escreve "para todo `n ≥ n₀`" num laço. Na última parte da saída, com
+`c = 1000`, o teto linear aguenta até 329 e depois quebra para sempre. Com
+qualquer `c` acontece o mesmo, só que mais longe:
+
 
 <p align="center"><img src="26-analise-formal/0166-o-omega-theta/fluxograma.svg" alt="Fluxograma: O, Ω e Θ de verdade" width="588"></p>
 
@@ -569,7 +544,7 @@ de parcelas diferentes, um **somatório**:
  i=0
 ```
 
-O `Σ` (sigma) só quer dizer "some a expressão da direita para cada valor de
+O `Σ` (sigma) quer dizer "some a expressão da direita para cada valor de
 `i`, do de baixo até o de cima". Cada laço `for` vira um `Σ`: os limites do
 laço viram os limites da soma, e o que o corpo faz vira a parcela.
 
@@ -594,9 +569,9 @@ a última parcela sozinha é maior que todas as outras juntas
 (`512 > 1 + 2 + ... + 256`). A **harmônica** é a soma `1 + 1/2 + 1/3 + ... +
 1/n`, que cresce como `ln n`; multiplicada por `n`, dá `n ln n`.
 
-Vamos ver na prática. Cada linha é um morador que chega, cada quadradinho
-roxo é um aperto de mão com quem já estava na sala. O triângulo roxo é
-metade do quadrado de 8 por 8, sem a diagonal:
+No desenho, cada linha é um morador que chega e cada quadradinho roxo é um
+aperto de mão com quem já estava na sala. O triângulo roxo é metade do
+quadrado de 8 por 8, sem a diagonal:
 
 <p align="center"><img src="26-analise-formal/0167-somatorios/ideia.svg" alt="Diagrama da ideia: Somatórios que saem de laços" width="858"></p>
 
@@ -633,9 +608,9 @@ int main(void) {
 //  20000  199990000  199990000
 ```
 
-Repara no fluxograma: o teste `j < i?` é o que torna o laço dependente. Na
-volta de `i = 0`, ele dá "Não" de cara; na volta de `i = 7`, dá "Sim" sete
-vezes. Somar os "Sim" de todas as voltas é exatamente o somatório:
+O teste `j < i?` do fluxograma é o que torna o laço dependente. Na volta de
+`i = 0`, ele dá "Não" de cara; na volta de `i = 7`, dá "Sim" sete vezes. A
+soma dos "Sim" de todas as voltas é o somatório:
 
 <p align="center"><img src="26-analise-formal/0167-somatorios/fluxograma.svg" alt="Fluxograma: Somatórios que saem de laços" width="549"></p>
 
@@ -668,8 +643,9 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 > 2.147.483.647) **antes** da divisão por 2, mesmo que o resultado final
 > (2,4 bilhões) caiba num `long`. Estouro de `int` com sinal é comportamento
 > indefinido: o programa pode mostrar um número negativo ou qualquer outra
-> coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. E um
-> detalhe curioso: com `-O2`, o compilador pode reconhecer o laço que só
+> coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. Outro
+> detalhe: com `-O2`
+, o compilador pode reconhecer o laço que só
 > incrementa um contador e trocar os dois `for` pela própria fórmula
 > fechada. O laço de Θ(n²) vira uma conta de Θ(1) no código de máquina.
 
@@ -991,17 +967,16 @@ segunda opção não gasta papel. Com 6 paradas, tanto faz. Com 1 milhão, a
 folha nova pesa 4 MB.
 
 Até aqui, a análise contou **tempo** (passos). A **complexidade espacial**
-conta **memória**: quantos bytes a função usa, em função de `n`. Usa as
-mesmas notações: O, Ω e Θ, com `c` e `n₀`.
+conta **memória**: quantos bytes a função usa, em função de `n`, com as
+mesmas notações O, Ω e Θ e as mesmas constantes `c` e `n₀`.
 
 Quase sempre interessa o **espaço extra** (também chamado de espaço
 **auxiliar**): o que a função usa **além da entrada**. A rota de `n` paradas
 já existe antes da chamada; o que conta é o que a função pede a mais. Uma
-função que usa só algumas variáveis simples, em número fixo, tem espaço
-extra **Θ(1)**: é um algoritmo **in-place** (no lugar). Uma que faz uma cópia
+função que usa um número fixo de variáveis simples tem espaço extra **Θ(1)**: é um algoritmo **in-place** (no lugar). Uma que faz uma cópia
 da entrada tem espaço extra **Θ(n)**.
 
-Três lugares onde o espaço extra aparece:
+O espaço extra aparece em três lugares:
 
 - **vetores e `malloc`**: um auxiliar de `n` posições é Θ(n), uma matriz
   `n × n` é Θ(n²);
@@ -1023,7 +998,7 @@ Três lugares onde o espaço extra aparece:
 | quick sort | Θ(n log n) em média | Θ(log n) em média, Θ(n) no pior, da pilha |
 | counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
 
-Vamos ver na prática. Em cima, a rota invertida numa folha nova: 6 gavetas a
+No desenho, em cima, está a rota invertida numa folha nova: 6 gavetas a
 mais, `6 · 4 = 24` bytes. Embaixo, a mesma inversão no lugar: só a caixinha
 `tmp`, 4 bytes, para qualquer tamanho de rota:
 
@@ -1092,17 +1067,16 @@ int main(void) {
 // bytes extras com 1 milhão: 4000000 e 4
 ```
 
-Repara no fluxograma: é a `inverte_no_lugar`. Nenhuma caixa cria memória.
+O fluxograma segue a `inverte_no_lugar`, e nenhuma caixa dele cria memória.
 O laço anda com duas marcas, `i` da esquerda e `j` da direita, e para quando
-elas se cruzam: com 6 paradas, são só 3 trocas. O tempo é Θ(n), o espaço
-extra é Θ(1):
+elas se cruzam: com 6 paradas, são 3 trocas. Tempo Θ(n), espaço extra Θ(1):
 
 <p align="center"><img src="26-analise-formal/0168-complexidade-espacial/fluxograma.svg" alt="Fluxograma: Complexidade espacial" width="528"></p>
 
 > [!WARNING]
-> Recursão **não é de graça** em espaço, mesmo sem nenhum vetor. A soma
-> recursiva `soma(v, n) = v[n-1] + soma(v, n-1)` não declara vetor nenhum e
-> tem espaço extra Θ(n): `n` frames empilhados ao mesmo tempo. Com 1 milhão
+> Recursão **custa** espaço, mesmo sem vetor. A soma recursiva
+> `soma(v, n) = v[n-1] + soma(v, n-1)` não declara vetor nenhum e tem
+> espaço extra Θ(n): `n` frames empilhados ao mesmo tempo. Com 1 milhão
 > de elementos, a pilha (8 MB por padrão no Linux) pode estourar e o
 > programa morre com *segmentation fault*. O laço equivalente usa Θ(1). Ao
 > analisar espaço, procure a **profundidade máxima** da recursão, não só os
@@ -1116,8 +1090,9 @@ extra é Θ(1):
 > RAM disponível. E o `static int grande[1000000]` do exemplo fica na área
 > de **dados estáticos**, reservada antes do `main` começar: declarar esse
 > vetor sem `static`, dentro do `main`, colocaria 4 MB na pilha, metade do
-> limite. Por isso um algoritmo Θ(n) de espaço feito com `malloc` costuma
-> funcionar, e o mesmo Θ(n) feito com recursão funda costuma quebrar.
+> limite. Por isso um Θ(n) de espaço feito com `malloc` costuma funcionar, e
+> o mesmo Θ(n) feito com recursão funda costuma quebrar.
+
 
 > [!NOTE]
 > **Pergunta para você:** quantos bytes extras a `inverte_copiando` pediria
@@ -1457,9 +1432,9 @@ A loja de material de construção vai trocar o sistema do caixa. O
 fornecedor entregou cinco funções que trabalham sobre o vetor de preços
 (em centavos) e, para cada uma, uma ficha: "tempo Θ(...), espaço extra
 Θ(...)". Antes de assinar, você quer conferir as fichas com o programa
-rodando, e não só acreditar.
+rodando.
 
-Este assunto junta o módulo inteiro num roteiro de conferência:
+O roteiro de conferência usa o módulo inteiro:
 
 1. **Leia o código** e escreva a fórmula exata de passos, com os
    somatórios do assunto 0167. Escreva também o espaço extra: vetores,
@@ -1469,7 +1444,7 @@ Este assunto junta o módulo inteiro num roteiro de conferência:
    na entrada e na saída de cada função.
 3. **Meça e compare** com a fórmula. Se bater, a ficha está certa para
    aquele `n`.
-4. **Dobre o `n`** e olhe a razão. É a forma prática da definição de Θ do
+4. **Dobre o `n`** e olhe a razão, a versão prática da definição de Θ do
    assunto 0166: se `f(n)` é Θ(n²), a razão `f(2n) / f(n)` vai para 4; se é
    Θ(n log n), fica um pouco acima de 2; se é Θ(log n), soma 1.
 
@@ -1480,7 +1455,7 @@ um passo num lugar escolhido de propósito: a soma conta por elemento, a
 busca binária por elemento olhado, os pares por par testado, o merge sort
 por elemento copiado na intercalação, e a soma recursiva por chamada.
 
-Vamos ver na prática. A tabela é a ficha conferida: passos com `n = 1024`
+A tabela é a ficha conferida: passos com `n = 1024`
 e `n = 2048`, a razão entre eles, e o espaço extra medido. Em vermelho, o
 que cresce com `n` no espaço; em verde, o que fica constante:
 
@@ -1550,9 +1525,9 @@ int main(void) {
 // soma_rec      2049     2049    2049       0
 ```
 
-Repara no fluxograma: é o roteiro, não uma função. A pergunta "a medida
-bate com a fórmula?" vem antes da pergunta sobre a classe. Uma fórmula
-errada com a classe certa ainda passa despercebida no "parece n²"; a
+Aqui o fluxograma desenha o roteiro, não uma função. A pergunta "a medida
+bate com a fórmula?" vem antes da pergunta sobre a classe: uma fórmula
+errada com a classe certa passa despercebida no "parece n²", e a
 conferência exata pega o erro na hora:
 
 <p align="center"><img src="26-analise-formal/0169-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: passos e bytes conferidos" width="657"></p>
@@ -1569,9 +1544,9 @@ Lendo a saída de `n = 1024` para `n = 2048`:
 | merge | 10.240 → 22.528 | × 2,2 | Θ(n log n) | 12 → 13 | 4096 → 8192 | Θ(n) |
 | soma_rec | 1025 → 2049 | × 2 | Θ(n) | 1025 → 2049 | 0 | Θ(n) |
 
-As cinco fichas conferem. Repara em duas coisas. A soma e a soma
-recursiva têm o **mesmo tempo** e espaços diferentes: a recursiva empilha
-um frame por elemento. E o merge sort tem dois espaços extras: o vetor
+As cinco fichas conferem. A soma e a soma recursiva têm o **mesmo tempo**
+e espaços diferentes: a recursiva empilha um frame por elemento. E o merge
+sort tem dois espaços extras: o vetor
 auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 
 > [!WARNING]
@@ -1585,9 +1560,10 @@ auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 > [!TIP]
 > **Por dentro do C:** os contadores são variáveis globais do `custo.c`.
 > `custo_passos` é declarada com `extern` no `.h` e definida uma vez só no
-> `.c`; o `prof` é `static`, invisível fora do arquivo. Repara também que os
-> bytes da pilha não aparecem em `custo_bytes`: o `malloc` mede o **heap**,
-> e a pilha só dá para medir em frames. Cada frame da `custo_soma_rec`
+> `.c`; o `prof` é `static`, invisível fora do arquivo. Os bytes da pilha
+> não aparecem em `custo_bytes`: o `malloc` mede o **heap**, e a pilha
+> só dá para medir
+ em frames. Cada frame da `custo_soma_rec`
 > guarda o endereço de retorno, o `v`, o `n` e o `s`, umas dezenas de bytes
 > (o tamanho exato depende do compilador e das opções). Com o
 > AddressSanitizer ligado, os frames ficam maiores, porque ele põe zonas de
@@ -1940,15 +1916,15 @@ com prefixos:    2000 passos,  8008 bytes, total 185862850
 
 ## Desafios do módulo
 
-Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
-sempre que der, confira com um programa em C rodado com o `rodar`.
+Problemas que misturam os assuntos do módulo. Resolva no papel e, sempre que
+der, confira com um programa rodado no `rodar`.
 
 **1. Um sanduíche cúbico.** Prove que `f(n) = 5n³ + 2n² - 7` é Θ(n³):
 encontre `c₁`, `c₂` e `n₀`.
 
 <details><summary>Resposta</summary>
 
-Piso: `5n³ + 2n² - 7 ≥ 5n³` quando `2n² ≥ 7`, ou seja, `n ≥ 2`. Teto:
+Piso: `5n³ + 2n² - 7 ≥ 5n³` quando `2n² ≥ 7`, isto é, `n ≥ 2`. Teto:
 `5n³ + 2n² - 7 ≤ 5n³ + 2n³ = 7n³` para todo `n ≥ 1`. Logo **`c₁ = 5`, `c₂ = 7`
 e `n₀ = 2`**. Confira: `f(2) = 41`, entre `40` e `56`. Com `n = 1`, `f(1) = 0`
 fica abaixo de `5`: por isso o `n₀` não pode ser 1.
@@ -3040,8 +3016,8 @@ n = 200
 
 ## Questões no estilo da prova
 
-Dez questões objetivas no formato da prova de conhecimentos do PPGI. Marque
-uma alternativa antes de abrir o gabarito.
+Dez questões no formato da prova do PPGI. Marque uma alternativa antes de
+abrir o gabarito.
 
 **1.** Seja `f(n) = 3n² + 10n + 20`. Assinale a alternativa correta.
 
@@ -3147,7 +3123,7 @@ Está correto o que se afirma em:
 
 **E.** I é a definição de Θ. II: o pior caso faz `n` comparações, logo é
 Θ(n), e portanto Ω(n). III: se `f(n) ≤ c · n`, então `f(n) ≤ c · n²` para
-`n ≥ 1`; O é só um teto, e um teto mais alto continua teto. Veja 0166.
+`n ≥ 1`. O é um teto, e um teto mais alto continua teto. Veja 0166.
 
 </details>
 

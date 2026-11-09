@@ -8,7 +8,7 @@ memória, os ponteiros, a compilação e o custo de cada escolha.
 > **Preparação para o Mestrado do PPGI/UFAM.** O curso está alinhado à Prova de
 > Conhecimentos do edital 070/2026 (prova em 27/11/2026). O guia
 > [`PPGI.md`](PPGI.md) liga cada tópico do edital e do cursinho do PPGI ao
-> assunto onde estudar e traz um roteiro dia a dia. Cada módulo termina com
+> assunto que o ensina e traz um roteiro dia a dia. Cada módulo termina com
 > uma **lista prática de 30 exercícios** e **questões no estilo da prova**,
 > com gabarito comentado.
 
@@ -81,17 +81,32 @@ questões da prova. As pastas guardam só o que você roda e os desenhos:
     └── E007.c ...     exercícios
 ```
 
-O caminho de cada assunto:
+## Como estudar cada assunto
 
-1. Leia o assunto no `.md` do módulo e tente responder a **Pergunta para
-   você** antes de rodar.
-2. Rode os exemplos e mexa neles à vontade.
-3. Faça os exercícios. Travou? As dicas estão logo abaixo do enunciado, no
-   `.md` do módulo e no topo do arquivo.
+1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
+   mesmos valores do código.
+2. Leia o código do texto. Quando o assunto tem um TAD na pasta, abra o `.c`
+   inteiro também.
+3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz. Quando
+   houver um **Passo a passo**, refaça a tabela no papel.
+4. Responda a **Pergunta para você** antes de rodar. Depois rode os exemplos e
+   mexa neles: mude um valor, quebre uma linha, rode de novo.
+5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
+   As dicas ficam logo abaixo do enunciado, no `.md` do módulo e no topo do
+   arquivo: tente antes de ler.
+6. No fim do módulo, resolva a lista prática, os desafios e as **questões no
+   estilo da prova**, que cobram o mesmo conteúdo em múltipla escolha.
 
-As formas e as cores dos desenhos:
+## As cores e as formas
+
+Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
+fazendo alguma coisa e amarela (losango) é pergunta. Verde é o caminho que o
+exemplo segue e o resultado; cinza, o que ele não usa; vermelho, erro. Os
+diagramas da ideia seguem as mesmas cores, e cada módulo avisa, em "Antes de
+começar", o que elas têm de próprio nos desenhos dele.
 
 <p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
+
 
 ## Os módulos
 

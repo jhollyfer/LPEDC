@@ -4,9 +4,9 @@ A loja de material de construção vai trocar o sistema do caixa. O
 fornecedor entregou cinco funções que trabalham sobre o vetor de preços
 (em centavos) e, para cada uma, uma ficha: "tempo Θ(...), espaço extra
 Θ(...)". Antes de assinar, você quer conferir as fichas com o programa
-rodando, e não só acreditar.
+rodando.
 
-Este assunto junta o módulo inteiro num roteiro de conferência:
+O roteiro de conferência usa o módulo inteiro:
 
 1. **Leia o código** e escreva a fórmula exata de passos, com os
    somatórios do assunto 0167. Escreva também o espaço extra: vetores,
@@ -16,7 +16,7 @@ Este assunto junta o módulo inteiro num roteiro de conferência:
    na entrada e na saída de cada função.
 3. **Meça e compare** com a fórmula. Se bater, a ficha está certa para
    aquele `n`.
-4. **Dobre o `n`** e olhe a razão. É a forma prática da definição de Θ do
+4. **Dobre o `n`** e olhe a razão, a versão prática da definição de Θ do
    assunto 0166: se `f(n)` é Θ(n²), a razão `f(2n) / f(n)` vai para 4; se é
    Θ(n log n), fica um pouco acima de 2; se é Θ(log n), soma 1.
 
@@ -27,7 +27,7 @@ um passo num lugar escolhido de propósito: a soma conta por elemento, a
 busca binária por elemento olhado, os pares por par testado, o merge sort
 por elemento copiado na intercalação, e a soma recursiva por chamada.
 
-Vamos ver na prática. A tabela é a ficha conferida: passos com `n = 1024`
+A tabela é a ficha conferida: passos com `n = 1024`
 e `n = 2048`, a razão entre eles, e o espaço extra medido. Em vermelho, o
 que cresce com `n` no espaço; em verde, o que fica constante:
 
@@ -97,9 +97,9 @@ int main(void) {
 // soma_rec      2049     2049    2049       0
 ```
 
-Repara no fluxograma: é o roteiro, não uma função. A pergunta "a medida
-bate com a fórmula?" vem antes da pergunta sobre a classe. Uma fórmula
-errada com a classe certa ainda passa despercebida no "parece n²"; a
+Aqui o fluxograma desenha o roteiro, não uma função. A pergunta "a medida
+bate com a fórmula?" vem antes da pergunta sobre a classe: uma fórmula
+errada com a classe certa passa despercebida no "parece n²", e a
 conferência exata pega o erro na hora:
 
 {{fluxograma}}
@@ -116,9 +116,9 @@ Lendo a saída de `n = 1024` para `n = 2048`:
 | merge | 10.240 → 22.528 | × 2,2 | Θ(n log n) | 12 → 13 | 4096 → 8192 | Θ(n) |
 | soma_rec | 1025 → 2049 | × 2 | Θ(n) | 1025 → 2049 | 0 | Θ(n) |
 
-As cinco fichas conferem. Repara em duas coisas. A soma e a soma
-recursiva têm o **mesmo tempo** e espaços diferentes: a recursiva empilha
-um frame por elemento. E o merge sort tem dois espaços extras: o vetor
+As cinco fichas conferem. A soma e a soma recursiva têm o **mesmo tempo**
+e espaços diferentes: a recursiva empilha um frame por elemento. E o merge
+sort tem dois espaços extras: o vetor
 auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 
 > [!WARNING]
@@ -132,9 +132,10 @@ auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 > [!TIP]
 > **Por dentro do C:** os contadores são variáveis globais do `custo.c`.
 > `custo_passos` é declarada com `extern` no `.h` e definida uma vez só no
-> `.c`; o `prof` é `static`, invisível fora do arquivo. Repara também que os
-> bytes da pilha não aparecem em `custo_bytes`: o `malloc` mede o **heap**,
-> e a pilha só dá para medir em frames. Cada frame da `custo_soma_rec`
+> `.c`; o `prof` é `static`, invisível fora do arquivo. Os bytes da pilha
+> não aparecem em `custo_bytes`: o `malloc` mede o **heap**, e a pilha
+> só dá para medir
+ em frames. Cada frame da `custo_soma_rec`
 > guarda o endereço de retorno, o `v`, o `n` e o `s`, umas dezenas de bytes
 > (o tamanho exato depende do compilador e das opções). Com o
 > AddressSanitizer ligado, os frames ficam maiores, porque ele põe zonas de

@@ -43,9 +43,9 @@ vez** (o Cormen chama de *percurso de Euler*). Teorema de Euler, para um grafo
 - existe trajeto euleriano aberto ⇔ **exatamente dois** vértices de grau
   ímpar, e ele começa num e termina no outro.
 
-O porquê é o aperto de mãos ao vivo: toda vez que o caminhão entra numa
-esquina, sai por outra rua. As ruas de cada esquina se gastam aos pares.
-Só a saída e a chegada escapam disso. No dirigido, a condição vira "entrada
+O porquê vem do aperto de mãos: toda vez que o caminhão entra numa esquina,
+sai por outra rua, e as ruas de cada esquina se gastam aos pares. Só a saída
+e a chegada escapam disso. No dirigido, a condição vira "entrada
 = saída em todo vértice".
 
 **Hierholzer** monta o circuito em O(V + E) com lista (O(V²) com matriz). Ele
@@ -53,7 +53,7 @@ anda por ruas ainda não usadas, apagando cada uma, até travar. Com graus pares
 só se trava no ponto de partida. Aí volta pela pilha até achar uma esquina com
 rua sobrando, faz um desvio a partir dela e **encaixa** o desvio no circuito.
 
-Vamos ver na prática. O bairro tem 6 esquinas e 8 ruas. Os números em roxo são
+O bairro tem 6 esquinas e 8 ruas. Os números em roxo são
 os graus; os números nas ruas, a ordem em que o caminhão passa por elas:
 
 {{ideia}}
@@ -137,8 +137,8 @@ int main(void) {
 // (8 ruas, cada uma uma vez)
 ```
 
-Repara no fluxograma: cada volta do laço olha o topo da pilha. Se tem rua
-livre, avança e apaga a rua; se não tem, a esquina sai da pilha e vai para o
+No fluxograma, cada volta do laço olha o topo da pilha. Se há rua livre,
+avança e apaga a rua; se não há, a esquina sai da pilha e vai para o
 circuito. Ninguém escolhe rota, e mesmo assim nenhuma rua sobra:
 
 {{fluxograma}}
@@ -172,8 +172,9 @@ casinha "sem tirar o lápis do papel", um trajeto aberto.
 > **Por dentro do C:** apagar a rua é só `rua[u][v]--` e `rua[v][u]--`, dois
 > acessos a uma matriz de `int` que mora num bloco contínuo de 6 × 6 × 4 =
 > 144 bytes. Como cada rua é empilhada e desempilhada uma vez, a pilha nunca
-> passa de E + 1 posições, e é por isso que `pilha[MAX_RUAS + 1]` cabe na
-> pilha do programa sem `malloc`. A busca do próximo vizinho recomeça do 0
+> passa de E + 1 posições, e por isso `pilha[MAX_RUAS + 1]` cabe na pilha do
+> programa sem `malloc`.
+ A busca do próximo vizinho recomeça do 0
 > a cada volta; com lista de adjacência e um ponteiro "próxima aresta" por
 > vértice, o total cai para O(V + E).
 

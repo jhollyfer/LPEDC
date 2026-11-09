@@ -17,11 +17,11 @@ sizeof(int)`. O VLA também tem limites: não pode ser `static` nem global, e
 não aceita inicialização (`int v[n] = {0};` é erro no C17). Preencha com um
 laço.
 
-O uso mais elegante é como **parâmetro**. Uma função comum precisa saber a
+O uso mais útil é como **parâmetro**. Uma função comum precisa saber a
 largura da matriz já ao compilar (`int m[][4]`). Com VLA, a função recebe as
 dimensões e a matriz: `void f(int l, int c, int m[l][c])`. A ordem importa:
-`l` e `c` vêm **antes**, porque o tipo `m[l][c]` usa os dois. E a mesma
-função serve para matrizes de qualquer tamanho.
+`l` e `c` vêm **antes**, porque o tipo `m[l][c]` usa os dois. Assim uma
+só função serve para matrizes de qualquer tamanho.
 
 Um detalhe de versão: no C99 o VLA é obrigatório; no C11 e no C17 virou
 **opcional**. Um compilador sem VLA define a macro `__STDC_NO_VLA__`. O gcc
@@ -34,7 +34,7 @@ escreve:
 #endif
 ```
 
-Vamos ver na prática. Com 3 alunos e 4 semanas, a planilha tem 12 `int`:
+Com 3 alunos e 4 semanas, a planilha tem 12 `int`:
 48 bytes, reservados na pilha no momento em que a linha do VLA roda. O
 desenho mostra a matriz e onde ela fica:
 
@@ -93,7 +93,7 @@ int main(void) {
 // aluno 3: 2 4 1 3  total 10
 ```
 
-Repara no fluxograma: a validação vem **antes** do VLA. Depois que a linha
+No fluxograma, a validação vem **antes** do VLA. Depois que a linha
 `int treinos[alunos][semanas];` roda, não há como desistir nem como saber se
 deu certo:
 
@@ -101,7 +101,8 @@ deu certo:
 
 > [!WARNING]
 > O VLA não avisa quando falha. O `malloc` devolve `NULL` se não houver
-> memória; o VLA simplesmente pede o espaço à pilha, e a pilha de um programa
+> memória; o VLA pede o espaço à pilha
+, e a pilha de um programa
 > no Linux tem uns **8 MB** (confira com `ulimit -s`). Um `int v[n]` com `n`
 > igual a 3 milhões pede 12 MB e derruba o programa com *segmentation
 > fault*, sem chance de tratar. E um `n` que veio do usuário pode ser 0,

@@ -24,7 +24,7 @@ módulo 14 (altura conta **arestas**):
   do 0101 mantém em -1, 0 ou 1. Alguns autores fazem a conta ao contrário
   (direita menos esquerda); o módulo do valor é o mesmo.
 
-Agora o sucessor. Em ordem, a próxima chave depois de `x` é a menor chave
+Quanto ao sucessor: em ordem, a próxima chave depois de `x` é a menor chave
 maior que `x`. Há dois casos, e os dois só precisam de ponteiros:
 
 1. `x` tem **subárvore direita**: o sucessor é o **mínimo** dela (desce uma
@@ -39,7 +39,7 @@ ponteiro **`pai`** (o Cormen chama de `x.p`). O antecessor é o espelho: troque
 esquerda por direita e mínimo por máximo. Os dois custam O(h), a altura da
 árvore.
 
-Vamos ver na prática. Os horários entram na ordem 8h00, 6h15, 10h30, 7h00,
+Os horários entram na ordem 8h00, 6h15, 10h30, 7h00,
 6h50, 9h20, 12h00, 7h30 (as chaves são `800`, `615`, e assim por diante). O
 sucessor das 8h00 é caso 1: desce para 10h30 e depois à esquerda, 9h20. O das
 7h30 é caso 2: ela é filha direita do 7h00, que é filho direito do 6h15, que é
@@ -116,8 +116,8 @@ int main(void) {
 // Depois das 8h00 sai o das 9h20; antes, o das 7h30
 ```
 
-Repara no fluxograma: é o sucessor das 7h30. Sem filho direito, ele vai para
-o caso 2 e o laço roda duas vezes (sobe para 7h00 e para 6h15, sempre vindo da
+O fluxograma segue o sucessor das 7h30. Sem filho direito, ele vai para o
+caso 2 e o laço roda duas vezes (sobe para 7h00 e para 6h15, sempre vindo da
 direita). Na terceira pergunta, o 6h15 é filho esquerdo do 8h00: o laço para e
 o 8h00 é a resposta:
 
@@ -125,9 +125,9 @@ o 8h00 é a resposta:
 
 > [!WARNING]
 > O erro clássico é trocar o lado na subida: `x == y->esq` no lugar de
-> `x == y->dir`. Com ele, o sucessor das 7h30 vira 7h00, que é **menor**. Pense
-> assim: subir vindo da direita é voltar para alguém menor que você, então não
-> serve, continue subindo. O outro cuidado é manter o `pai` em dia: toda
+> `x == y->dir`. Com ele, o sucessor das 7h30 vira 7h00, que é **menor**.
+> Subir vindo da direita é voltar para alguém menor que você: não serve,
+> continue subindo. O outro cuidado é manter o `pai` em dia: toda
 > inserção, remoção e rotação que mexe em `esq` ou `dir` tem que acertar o
 > `pai` do nó que mudou de lugar (e o da raiz fica `NULL`).
 
@@ -138,8 +138,9 @@ o 8h00 é a resposta:
 > percorrer a árvore em ordem com um `for` (mínimo, sucessor, sucessor...).
 > Um sucessor sozinho pode custar a altura, mas o passeio inteiro custa O(n):
 > cada aresta é descida uma vez e subida uma vez (o A349 conta os
-> ponteiros). As árvores balanceadas de verdade, como a rubro-negra do
-> 0177, guardam o `pai` justamente para consertar a árvore subindo.
+> ponteiros). Árvores balanceadas como a rubro-negra do 0177 guardam o `pai`
+> para consertar a árvore subindo.
+
 
 > [!NOTE]
 > **Pergunta para você:** qual é o antecessor das 6h50? E o sucessor das

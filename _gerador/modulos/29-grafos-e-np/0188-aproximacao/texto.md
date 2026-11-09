@@ -14,7 +14,7 @@ muito pior.
 solução viável com custo no máximo **ρ vezes o ótimo** (num problema de
 minimização). O ρ é o **fator de aproximação**: um algoritmo
 2-aproximado nunca gasta mais que o dobro do ótimo, em **qualquer**
-entrada. A graça é provar isso sem conhecer o ótimo, comparando com um
+entrada. O truque é provar isso sem conhecer o ótimo, comparando com um
 **limite inferior** dele.
 
 **Bin packing.** Com capacidade C, nenhuma solução usa menos que
@@ -42,7 +42,7 @@ os atalhos da pré-ordem só encurtam. Total: no máximo 2 × ótimo. É o A376.
 Sem a desigualdade triangular, nenhum fator constante é possível, a menos
 que P = NP.
 
-Vamos ver na prática. Em cima, o first fit na ordem de chegada: os dois 4 e
+No desenho, em cima, está o first fit na ordem de chegada: os dois 4 e
 o 2 lotam a primeira viagem, e cada carga grande acaba sozinha. Embaixo, o
 first fit decrescente bate o limite inferior, 45 / 10 → 5 viagens: ótimo.
 
@@ -115,7 +115,7 @@ int main(void) {
 //   viagem 5: 6 4  (10 t)
 ```
 
-Repara no fluxograma: é o first fit para uma carga. Ele procura a primeira
+O fluxograma mostra o first fit para uma carga. Ele procura a primeira
 viagem com espaço; se chegar ao fim da lista, abre uma nova. Com n cargas,
 custa O(n²) no pior caso, nada perto do exponencial:
 
@@ -125,7 +125,7 @@ custa O(n²) no pior caso, nada perto do exponencial:
 > "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com
 > prova. E o fator é do pior caso; na prática o resultado costuma ser bem
 > melhor. A pegadinha inversa também cai em prova: o guloso "pega o vértice
-> de maior grau" para cobertura parece esperto, mas **não** tem fator
+> de maior grau" para cobertura parece bom, mas **não** tem fator
 > constante; pode ficar log n vezes pior que o ótimo. O 2-aproximado
 > correto é o "pega as duas pontas".
 
@@ -141,6 +141,7 @@ custa O(n²) no pior caso, nada perto do exponencial:
 > [!NOTE]
 > **Pergunta para você:** se chegar uma nona carga de 5 toneladas no fim
 > da fila, quantas viagens o first fit usa? E o decrescente? O limite
-> inferior muda? Responda antes de rodar.
+> inferior muda?
+
 
 {{pratique}}

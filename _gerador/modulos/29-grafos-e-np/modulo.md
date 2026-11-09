@@ -5,7 +5,7 @@ Os módulos 16 e 23 ensinaram a andar pelo grafo e a tirar dele caminhos,
 do PPGI cobra pelo nome. A primeira é sobre a **forma** do grafo: dá para
 passar por toda aresta uma vez só? E por todo vértice? Qual cabo, se
 cortado, parte a rede? A segunda é sobre o **custo** de responder: por que
-umas perguntas se resolvem em O(V + E) e outras, parecidíssimas, parecem
+umas perguntas se resolvem em O(V + E) e outras, muito parecidas, parecem
 exigir testar tudo?
 
 A primeira metade (0182 a 0185) é algoritmo puro: graus e o teorema de
@@ -17,11 +17,10 @@ tempo polinomial, P e NP, reduções, e o que fazer quando o problema é
 difícil e a resposta é para hoje: aproximar com garantia ou resolver exato
 só quando a entrada é pequena.
 
-A mudança na cabeça é parar de perguntar só "qual o algoritmo?" e começar a
-perguntar "esse problema **tem** algoritmo rápido?". Euler e Hamilton
-parecem gêmeos e moram em mundos diferentes. Conferir uma resposta e achar
-uma resposta são tarefas de custos diferentes. E quando a resposta é "não
-se conhece algoritmo rápido", ainda há muito o que fazer em C.
+A mudança na cabeça é perguntar, antes de "qual o algoritmo?", se o problema
+**tem** algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o
+outro não. Conferir uma resposta custa menos que achá-la. E quando não se
+conhece algoritmo rápido, ainda dá para aproximar ou podar em C.
 
 ## O que você vai aprender
 
@@ -47,33 +46,6 @@ se conhece algoritmo rápido", ainda há muito o que fazer em C.
 - o caixeiro viajante exato pela PD de **Held-Karp** e quando trocar o exato
   pelo aproximado
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos vértices, valores e resultados do código.
-2. Leia o código inteiro. Neste módulo nada fica escondido em TAD: cada
-   arquivo traz o algoritmo completo, porque ver o laço todo é o que mostra
-   onde mora o custo.
-3. Siga o **fluxograma** com o dedo e refaça o **passo a passo** no papel
-   quando houver: a pilha do Hierholzer, os `tin`/`low` da DFS, a tabela da
-   cadeia de matrizes.
-4. Rode os exemplos. Mude uma aresta, um peso, uma dimensão, e veja a
-   resposta e o número de passos mudarem.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, o que deu errado. Nos grafos, a origem
-fica roxa e as arestas verdes são as escolhidas (o circuito, o ciclo, as
-pontes, a clique). Nas articulações, o amarelo marca os vértices de corte.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa sem cerimônia a matriz de adjacência e a DFS (0109, 0111),
@@ -81,6 +53,15 @@ os componentes conexos (0150), o Prim (0153), a recursão e o backtracking
 (0032, 0126, 0127), a programação dinâmica (0138 a 0140), o `qsort` (0096) e
 as máscaras de bits (0065). Se a DFS recursiva estiver enferrujada, releia o
 0111 antes do 0184.
+
+Nada fica escondido em TAD: cada arquivo traz o algoritmo completo. Refaça no
+papel o **passo a passo** quando houver (a pilha do Hierholzer, os
+`tin`/`low` da DFS, a tabela da cadeia de matrizes) e responda a
+**Pergunta para você** antes de rodar.
+ Nos grafos, a origem fica roxa, as arestas verdes
+são as escolhidas (o circuito, o ciclo, as pontes, a clique) e, nas
+articulações, o amarelo marca os vértices de corte.
+
 
 Convenções que valem para o módulo todo:
 

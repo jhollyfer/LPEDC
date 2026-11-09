@@ -6,17 +6,16 @@ compilador lê a expressão por regras que o olho não aplica sozinho. Uma prova
 de múltipla escolha adora esse tipo de linha: o código é curto, compila, e
 as alternativas trazem justamente o resultado que a intuição sugere.
 
-Este módulo junta as regras que decidem o valor dessas linhas. Quem pega os
+Este módulo junta as regras que decidem o valor dessas linhas: quem pega os
 operandos primeiro (precedência e associatividade), em que ordem as partes
-rodam e quando a resposta é "comportamento indefinido". O que acontece quando
-um número com sinal encontra um sem sinal, e por que `-1 > 0u` é verdadeiro.
-E o vetor de tamanho variável (VLA), o único vetor do C cujo `sizeof` é
+rodam e quando a resposta é "comportamento indefinido"; o que acontece quando
+um número com sinal encontra um sem sinal, e por que `-1 > 0u` é verdadeiro;
+e o vetor de tamanho variável (VLA), o único vetor do C cujo `sizeof` é
 calculado com o programa rodando.
 
-A mudança na cabeça é parar de ler a expressão como matemática e começar a
-ler como o compilador: primeiro os tipos (promoção e conversão), depois a
-árvore (precedência), e só então os valores. Com isso, a pegadinha vira
-conta.
+A mudança na cabeça é ler a expressão como o compilador, e não como
+matemática: primeiro os tipos (promoção e conversão), depois a árvore
+(precedência), e só então os valores. Aí a pegadinha vira conta.
 
 ## O que você vai aprender
 
@@ -26,26 +25,6 @@ conta.
 - usar `>>`, máscaras e `size_t` sem cair nas armadilhas do negativo e do laço que desce
 - criar e passar **VLAs** (`void f(int l, int c, int m[l][c])`), entender o `sizeof` em tempo de execução, o `__STDC_NO_VLA__` e o risco da pilha
 - juntar tudo num controle de acesso com struct, enum, máscaras e VLA
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Tire um parêntese, troque `unsigned` por `int`, aumente
-   o VLA, e rode de novo. Leia os avisos do gcc: neste módulo eles ensinam.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -58,10 +37,13 @@ Os valores dos comentários são os de um PC de 64 bits com Linux e gcc: `int`
 e `unsigned` de 4 bytes, `long` e `size_t` de 8. Algumas respostas (como
 `-17 >> 2`) dependem do compilador, e o texto avisa quando for o caso.
 
-O `rodar` compila com `-Wall -Wextra`, e vários erros deste módulo são
-justamente os que esses avisos pegam. Os exemplos compilam limpos; quando o
-texto mostra uma linha que o gcc avisaria, ela aparece fora do programa ou
-com a conversão escrita à vista.
+O `rodar` compila com `-Wall -Wextra`, e esses avisos pegam vários erros
+deste módulo. Os exemplos compilam limpos; quando o texto mostra uma linha
+que o gcc avisaria, ela aparece fora do programa ou com a conversão escrita
+à vista. Ao rodar, tire um parêntese, troque `unsigned` por `int`, aumente o
+VLA e leia o que o gcc diz; na **Pergunta para você**, responda antes de
+rodar.
+
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/A339.c
@@ -90,7 +72,7 @@ jeito que o C agrupa: `2 + 3 * 4 % 5`, `1 << (2 + 1)`, `(5 & 3) | 8`,
 4, 8, 9, 5, 2, -1, 0 e 15. Os que mais enganam: `%` está no nível do `*`,
 então `3 * 4 % 5` é `(3 * 4) % 5` = 2; `7 > 3 > 1` compara o **resultado**
 de `7 > 3` (que é 1) com 1, e dá 0; `-3 % 2` é -1, porque o resto tem o sinal
-do dividendo; e `~0u >> 28` desloca 32 bits ligados e sobram 4, ou seja, 15.
+do dividendo; e `~0u >> 28` desloca 32 bits ligados e sobram 4: 15.
 Algumas dessas, sem os parênteses, fazem o gcc avisar: deixe os parênteses.
 
 </details>

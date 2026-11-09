@@ -5,7 +5,7 @@
 Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
 mais direto: o que funciona e cabe numa primeira leitura. Este módulo volta
 a essas três estruturas e preenche o que ficou de fora, com o olhar do
-Cormen, o livro da prova do PPGI. Não há estrutura nova aqui; há as versões
+Cormen, o livro da prova do PPGI. Não há estrutura nova, e sim as versões
 que aparecem nos livros, nas bibliotecas e nas questões de concurso.
 
 Três ideias atravessam o módulo. A primeira é a **sentinela**: um nó falso que
@@ -19,8 +19,8 @@ O(1) para O(n) sem mudar uma linha da lógica.
 
 O que muda na cabeça é a pergunta "por quê?". Por que `m` primo e longe de
 potência de 2? Por que a dupla só quando o filho pende para dentro? Por que a
-altura da rubro-negra é no máximo 2 log₂(n + 1)? A prova cobra exatamente
-esses porquês, e o módulo termina com uma agenda de consultas que usa a lista
+altura da rubro-negra é no máximo 2 log₂(n + 1)? A prova cobra esses
+porquês, e o módulo termina com uma agenda de consultas que usa a lista
 com sentinela, a rubro-negra e a dispersão dupla no mesmo programa.
 
 ## O que você vai aprender
@@ -43,35 +43,6 @@ com sentinela, a rubro-negra e a dispersão dupla no mesmo programa.
   clássicos são o quê) e **chave composta**: comparador composto e passadas
   estáveis em sequência
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
-   mesmas chaves do código.
-2. Leia o código. Cada assunto tem um **TAD** na pasta (`sentinela.h`,
-   `arvpai.h`, `avlrem.h`, `vermelhopreto.h`, `espalha.h`, `sondagem.h`,
-   `pombal.h`, `agenda.h`); o texto mostra o pedaço do `.c` que importa. Abra
-   o `.c` inteiro também.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos A. Eles não repetem o texto: cada um mostra outra faceta
-   (um caso de borda, uma medição, um uso real).
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   Todo exercício é para codificar: a resposta é um programa que roda e mostra
-   a saída esperada. As dicas vêm logo abaixo do enunciado; tente antes de ler.
-
-Nos assuntos 0176 e 0177, o **Passo a passo** é um teste de mesa: refaça no
-papel antes de rodar. Desenhe a árvore inteira a cada rotação, com as alturas
-(na AVL) ou as cores (na rubro-negra).
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nas listas, a sentinela é o nó cinza. Na rubro-negra, o nó vermelho é
-vermelho e o preto aparece em cinza. Nas tabelas hash, amarelo marca as
-posições que uma busca olhou e verde, onde ela achou a chave.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo é uma revisão por dentro. Ele supõe que você já fez a **lista
@@ -81,7 +52,10 @@ encadeamento e com sondagem linear (0105 a 0107) e as ordenações dos módulos
 13 e 18, em especial a **estabilidade** (0096 e 0120). **Ponteiro para struct**
 (0062), `malloc`/`free` e **TAD** (0074) aparecem em todo assunto.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
+Cada assunto tem um **TAD** na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
+`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O
+texto mostra só o pedaço do `.c` que importa: abra o `.c` inteiro também. O
+`rodar` compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
 então os comandos são os de sempre:
 
 ```bash
@@ -94,6 +68,12 @@ balanceamento** é `altura(esq) - altura(dir)`. Alguns livros contam o nível a
 partir de 1 ou o fator ao contrário: na prova, leia a definição do enunciado
 antes de fazer a conta.
 
+Nos assuntos 0176 e 0177, refaça o **Passo a passo** no papel antes de rodar,
+desenhando a árvore inteira a cada rotação, com as alturas (AVL) ou as cores
+(rubro-negra). Nos desenhos, a sentinela das listas é o nó cinza; na
+rubro-negra, o nó preto aparece em cinza; nas tabelas hash, amarelo marca as
+posições que a busca olhou e verde, onde achou a chave.
+
 | # | Assunto | Pasta |
 | --- | --- | --- |
 | [0174](#0174--lista-com-sentinela) | Lista com sentinela | [`0174-lista-com-sentinela/`](28-estruturas-complementos/0174-lista-com-sentinela/) |
@@ -104,6 +84,7 @@ antes de fazer a conta.
 | [0179](#0179--sondagem-quadrática-e-dupla) | Sondagem quadrática e dupla | [`0179-sondagem-quadratica-e-dupla/`](28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/) |
 | [0180](#0180--pigeonhole-e-chave-composta) | Pigeonhole e chave composta | [`0180-pigeonhole-e-chave-composta/`](28-estruturas-complementos/0180-pigeonhole-e-chave-composta/) |
 | [0181](#0181--juntando-tudo) | Juntando tudo | [`0181-juntando-tudo/`](28-estruturas-complementos/0181-juntando-tudo/) |
+
 
 ---
 
@@ -117,19 +98,18 @@ for o único?
 
 Esses `if` existem porque as pontas da lista são diferentes do meio. O nó do
 meio tem vizinho dos dois lados; o primeiro tem `NULL` à esquerda e o último
-tem `NULL` à direita. Cada `NULL` é um caso especial, e caso especial é onde
-mora o bug.
+tem `NULL` à direita. Cada `NULL` é um caso especial, e é nos casos especiais
+que o bug mora.
 
 A saída clássica é um **nó sentinela** (o Cormen chama de `L.nil`): um nó
-falso, sem dado de verdade, que fica **entre o último e o primeiro**. A lista
+falso, sem dado, que fica **entre o último e o primeiro**. A lista
 vira **dupla e circular**: `nil.prox` é o primeiro, `nil.ant` é o último, e o
 último aponta de volta para a sentinela. Não existe mais `NULL` dentro da
 lista.
 
-A lista vazia é só a sentinela apontando para ela mesma: `nil.prox == &nil` e
-`nil.ant == &nil`. A partir daí, **todo nó de verdade tem vizinho dos dois
-lados**, nem que o vizinho seja a sentinela. É isso que apaga os casos
-especiais:
+A lista vazia é a sentinela apontando para ela mesma: `nil.prox == &nil` e
+`nil.ant == &nil`. A partir daí, **todo nó real tem vizinho dos dois
+lados**, nem que o vizinho seja a sentinela, e os casos especiais somem:
 
 - **inserir depois de `y`**: quatro ponteiros, sempre os mesmos, com `y`
   podendo ser a própria sentinela (inserir no começo) ou o último (no fim);
@@ -143,7 +123,7 @@ procurada dentro da sentinela**. Assim o laço sempre para (no pior caso, na
 sentinela) e só precisa de um teste por volta, `x->chave != chave`, em vez de
 dois.
 
-Vamos ver na prática. Chegam as fichas 12, 25 e 7, nessa ordem. A ficha 25
+Chegam as fichas 12, 25 e 7, nessa ordem. A ficha 25
 desiste: o barbeiro busca a 25 e remove o nó. Depois alguém pergunta pela ficha
 40, que não existe, e a busca para na sentinela. No desenho, a sentinela é o
 nó cinza, sem valor:
@@ -151,8 +131,8 @@ nó cinza, sem valor:
 <p align="center"><img src="28-estruturas-complementos/0174-lista-com-sentinela/ideia.svg" alt="Diagrama da ideia: Lista com sentinela" width="858"></p>
 
 O TAD é o `sentinela.h`. A sentinela fica **dentro** da struct da lista (não
-é alocada à parte), e o `n` conta só os nós de verdade. O coração do
-`sentinela.c`:
+é alocada à parte), e o `n` conta só os nós reais. As três funções centrais
+do `sentinela.c`:
 
 ```c
 NoS *sent_insere_apos(ListaS *L, NoS *y, int chave) {
@@ -227,17 +207,17 @@ int main(void) {
 // Na fila: 2
 ```
 
-Repara no fluxograma da busca: uma pergunta só por volta. Para a ficha 40, o
-laço passa pelo 12 e pelo 7 e para na sentinela, que estava com 40 guardado.
-A última pergunta, "parou na sentinela?", é o que separa "achou" de "não
-está":
+O fluxograma da busca tem uma pergunta só por volta. Para a ficha 40, o laço
+passa pelo 12 e pelo 7 e para na sentinela, que estava com 40 guardado. A
+última pergunta, "parou na sentinela?", separa "achou" de "não está":
 
 <p align="center"><img src="28-estruturas-complementos/0174-lista-com-sentinela/fluxograma.svg" alt="Fluxograma: Lista com sentinela" width="543"></p>
 
 > [!WARNING]
 > A sentinela **não é um dado**. Todo laço que percorre a lista para quando
-> volta a ela (`x != &L->nil`), e nunca começa por ela: o primeiro de verdade
-> é `L->nil.prox`. Se você escrever `for (x = &L->nil; ...)`, mostra um valor
+> volta a ela (`x != &L->nil`), e nunca começa por ela: o primeiro nó real
+> é `L->nil.prox`.
+ Se você escrever `for (x = &L->nil; ...)`, mostra um valor
 > lixo (ou a última chave buscada, por causa do truque da busca). E nunca
 > passe `&L->nil` para `sent_remove`: ela não foi alocada com `malloc`, e o
 > `free` derruba o programa.
@@ -590,7 +570,7 @@ módulo 14 (altura conta **arestas**):
   do 0101 mantém em -1, 0 ou 1. Alguns autores fazem a conta ao contrário
   (direita menos esquerda); o módulo do valor é o mesmo.
 
-Agora o sucessor. Em ordem, a próxima chave depois de `x` é a menor chave
+Quanto ao sucessor: em ordem, a próxima chave depois de `x` é a menor chave
 maior que `x`. Há dois casos, e os dois só precisam de ponteiros:
 
 1. `x` tem **subárvore direita**: o sucessor é o **mínimo** dela (desce uma
@@ -605,7 +585,7 @@ ponteiro **`pai`** (o Cormen chama de `x.p`). O antecessor é o espelho: troque
 esquerda por direita e mínimo por máximo. Os dois custam O(h), a altura da
 árvore.
 
-Vamos ver na prática. Os horários entram na ordem 8h00, 6h15, 10h30, 7h00,
+Os horários entram na ordem 8h00, 6h15, 10h30, 7h00,
 6h50, 9h20, 12h00, 7h30 (as chaves são `800`, `615`, e assim por diante). O
 sucessor das 8h00 é caso 1: desce para 10h30 e depois à esquerda, 9h20. O das
 7h30 é caso 2: ela é filha direita do 7h00, que é filho direito do 6h15, que é
@@ -682,8 +662,8 @@ int main(void) {
 // Depois das 8h00 sai o das 9h20; antes, o das 7h30
 ```
 
-Repara no fluxograma: é o sucessor das 7h30. Sem filho direito, ele vai para
-o caso 2 e o laço roda duas vezes (sobe para 7h00 e para 6h15, sempre vindo da
+O fluxograma segue o sucessor das 7h30. Sem filho direito, ele vai para o
+caso 2 e o laço roda duas vezes (sobe para 7h00 e para 6h15, sempre vindo da
 direita). Na terceira pergunta, o 6h15 é filho esquerdo do 8h00: o laço para e
 o 8h00 é a resposta:
 
@@ -691,9 +671,9 @@ o 8h00 é a resposta:
 
 > [!WARNING]
 > O erro clássico é trocar o lado na subida: `x == y->esq` no lugar de
-> `x == y->dir`. Com ele, o sucessor das 7h30 vira 7h00, que é **menor**. Pense
-> assim: subir vindo da direita é voltar para alguém menor que você, então não
-> serve, continue subindo. O outro cuidado é manter o `pai` em dia: toda
+> `x == y->dir`. Com ele, o sucessor das 7h30 vira 7h00, que é **menor**.
+> Subir vindo da direita é voltar para alguém menor que você: não serve,
+> continue subindo. O outro cuidado é manter o `pai` em dia: toda
 > inserção, remoção e rotação que mexe em `esq` ou `dir` tem que acertar o
 > `pai` do nó que mudou de lugar (e o da raiz fica `NULL`).
 
@@ -704,8 +684,9 @@ o 8h00 é a resposta:
 > percorrer a árvore em ordem com um `for` (mínimo, sucessor, sucessor...).
 > Um sucessor sozinho pode custar a altura, mas o passeio inteiro custa O(n):
 > cada aresta é descida uma vez e subida uma vez (o A349 conta os
-> ponteiros). As árvores balanceadas de verdade, como a rubro-negra do
-> 0177, guardam o `pai` justamente para consertar a árvore subindo.
+> ponteiros). Árvores balanceadas como a rubro-negra do 0177 guardam o `pai`
+> para consertar a árvore subindo.
+
 
 > [!NOTE]
 > **Pergunta para você:** qual é o antecessor das 6h50? E o sucessor das
@@ -1061,22 +1042,22 @@ A remoção começa igual à da BST (0100), em três casos:
 Tirar um nó **encurta** um caminho, e algum ancestral pode ficar com fator 2
 ou -2. O conserto é o mesmo da inserção: na **volta da recursão**, cada
 ancestral recalcula a altura, confere o fator e, se precisar, faz a rotação
-simples ou a dupla. As rotações são exatamente as do 0101.
+simples ou a dupla. As rotações são as do 0101.
 
-Duas coisas mudam, e é aí que a prova pega:
+Duas coisas mudam, e a prova cobra as duas:
 
 1. O filho do lado pesado pode ter **fator 0**. Na inserção isso nunca
    acontece. Na remoção acontece, e a regra é: fator 0 ou do mesmo sinal,
    **rotação simples**; sinal contrário, **dupla**. Com fator 0, a subárvore
    mantém a altura depois da rotação, e o conserto para ali.
 2. A rotação pode **não devolver a altura antiga**. Na inserção, uma rotação
-   devolve a subárvore à altura de antes, e o resto da árvore nem percebe. Na
+   devolve a subárvore à altura de antes, e o resto da árvore não percebe. Na
    remoção, a subárvore consertada pode ficar um nível mais baixa, e o
    desequilíbrio **sobe** para o avô. Por isso uma remoção pode fazer
    **várias rotações**, até a raiz: no pior caso, uma a cada dois níveis,
    O(log n) rotações.
 
-Vamos ver na prática. A cozinha tem 16 pedidos, de altura 4. O pedido 30 sai.
+A cozinha tem 16 pedidos, numa árvore de altura 4. O pedido 30 sai.
 O 28 fica pesado à esquerda, com o filho 25 pendendo para a direita: rotação
 dupla, o 26 sobe. A subárvore do 28 cai de altura 2 para 1, e agora quem
 desequilibra é a raiz, o 20: rotação simples, e o 12 vira a raiz. No desenho,
@@ -1165,7 +1146,7 @@ int main(void) {
 
 São 3 rotações simples: a dupla no 28 conta 2, a simples no 20 conta 1.
 
-Repara no fluxograma: é o `rebalanceia` no 28, logo depois de o 30 sair. O
+O fluxograma mostra o `rebalanceia` no 28, logo depois de o 30 sair. O
 fator é 2 (pesado à esquerda), o filho 25 tem fator -1 (pende para dentro), e
 o caminho verde passa pelas duas rotações. No 20, o mesmo fluxograma pega o
 outro ramo: filho 12 com fator 1, só a rotação à direita:
@@ -1182,8 +1163,8 @@ cima, cada nó da volta confere a si mesmo:
 | 28 | 1 / -1 | 2 | 25, fator -1 | dupla: esquerda no 25, direita no 28 | era 2, fica 1 (o 26 sobe) |
 | 20 | 3 / 1 | 2 | 12, fator 1 | simples: direita no 20 | era 4, fica 3 (o 12 sobe) |
 
-Repara na última coluna: o conserto no 28 **encurtou** a subárvore, e foi isso
-que levou o desequilíbrio para o 20. Se o 28 tivesse voltado à altura 2, a
+Na última coluna, o conserto no 28 **encurtou** a subárvore, e isso levou o
+desequilíbrio para o 20. Se o 28 tivesse voltado à altura 2, a
 remoção pararia ali. O 20 desce para a direita do 12 e leva junto o 16 (que
 era filho direito do 12) como filho esquerdo.
 
@@ -1198,8 +1179,9 @@ era filho direito do 12) como filho esquerdo.
 > [!TIP]
 > **Por dentro do C:** a remoção recursiva empilha uma chamada por nível,
 > cerca de 1,44 · log₂ n quadros no pior caso da AVL: para um milhão de chaves,
-> menos de 30 quadros, nada perto de estourar a pilha. Repara também que, no
-> caso dos dois filhos, o código **copia a chave** do sucessor e libera o nó
+> menos de 30 quadros, nada perto de estourar a pilha. No caso dos dois
+> filhos,
+ o código **copia a chave** do sucessor e libera o nó
 > dele, em vez de religar ponteiros: é mais simples, mas qualquer ponteiro
 > que alguém guardava para o nó do sucessor fica apontando para memória
 > liberada. Se o seu programa guarda `NoA *` fora da árvore, troque a cópia
@@ -1493,7 +1475,7 @@ A central de entregas do bairro registra cada pacote pelo número assim que
 ele chega, e o entregador consulta a central a toda hora. Os números chegam
 quase em ordem, o pior caso da BST. No 0145 você viu a rubro-negra
 **esquerdista** (LLRB), uma versão enxuta. A prova do PPGI, os livros de
-referência e as bibliotecas de verdade usam a versão **clássica** do Cormen:
+referência e as bibliotecas usam a versão **clássica** do Cormen:
 a mesma ideia de cores, com outras regras de conserto e com ponteiro para o
 pai.
 
@@ -1518,7 +1500,7 @@ negra** `bh(x)`. Pela propriedade 5 ele não depende do caminho. Dela sai a
 garantia: a subárvore de `x` tem pelo menos `2^bh(x) - 1` nós (por indução:
 cada filho tem altura negra de pelo menos `bh(x) - 1`). Pela propriedade 4,
 pelo menos metade dos nós de qualquer caminho da raiz até uma folha é preta,
-então `bh(raiz) >= h/2`. Juntando, `n >= 2^(h/2) - 1`, ou seja,
+então `bh(raiz) >= h/2`. Juntando, `n >= 2^(h/2) - 1`, e daí
 **h ≤ 2 log₂(n + 1)**. Busca, mínimo, sucessor: tudo O(log n).
 
 A **inserção** pendura o nó novo `z` como na BST e pinta de **vermelho** (assim
@@ -1535,7 +1517,7 @@ O caso 1 só troca cores e pode subir até a raiz (O(log n) vezes). Os casos 2 e
 3 fazem **no máximo duas rotações** e encerram. No fim, a raiz é pintada de
 preto.
 
-Vamos ver na prática. Chegam os pacotes 50, 30, 70, 20, 25, 40 e 45. O 20 tem
+Chegam os pacotes 50, 30, 70, 20, 25, 40 e 45. O 20 tem
 tio vermelho (caso 1). O 25 forma um triângulo com o 20 e o 30 (caso 2, depois
 3). O 40 tem tio vermelho de novo, e o 45 fica em linha com o 40 e o 30 (caso
 3, o espelho). No desenho, o antes e o depois de cada caso:
@@ -1578,7 +1560,7 @@ static void conserta(ArvVP *T, NoVP *z) {
 }
 ```
 
-Repare que o laço nunca testa `NULL`: o tio pode ser a sentinela, e ela é
+O laço nunca testa `NULL`: o tio pode ser a sentinela, e ela é
 preta, então cai nos casos 2 e 3 sem `if` a mais. E a raiz tem `T.nil` como
 pai, preto: quando `z` chega à raiz, o `while` para sozinho. O cliente:
 
@@ -1615,7 +1597,7 @@ int main(void) {
 // Altura 3, altura negra 2, propriedades: ok
 ```
 
-Repara no fluxograma: é o conserto do pacote 25. Pai vermelho, tio preto (a
+O fluxograma é o conserto do pacote 25. Pai vermelho, tio preto (a
 sentinela), `z` em triângulo: caso 2 e, na mesma volta, caso 3. Depois disso o
 pai de `z` é preto e o laço termina:
 
@@ -1639,8 +1621,8 @@ em 1 e só cresce quando o caso 1 chega à raiz e ela volta a ser preta: a
 
 E a **remoção**? O Cormen também a faz em O(log n), com um conserto de quatro
 casos olhando o **irmão** do nó que ficou com um "preto a mais". É bem mais
-longa que a inserção e não cabe aqui: o importante para a prova é saber que
-ela existe, que custa O(log n) e que faz no máximo **três rotações**.
+longa que a inserção e não cabe aqui. Para a prova, basta saber que ela
+existe, que custa O(log n) e que faz no máximo **três rotações**.
 
 > [!WARNING]
 > Os erros mais comuns no conserto: esquecer de **subir** no caso 1
@@ -1655,7 +1637,8 @@ ela existe, que custa O(log n) e que faz no máximo **três rotações**.
 > **Por dentro do C:** o `NoVP` tem 32 bytes: 4 da chave, 4 do `enum` da cor e
 > três ponteiros de 8. A sentinela é **um nó só** dentro da `ArvVP`, e todo
 > ponteiro "vazio" da árvore aponta para o endereço `&T->nil`: mil folhas,
-> zero bytes a mais. Como a sentinela é um nó de verdade, o código pode **ler**
+> zero bytes a mais. Como a sentinela é um nó real, o código
+ pode **ler**
 > `tio->cor` sem testar `NULL`, e a rotação pode até **escrever** no
 > `nil.pai` sem estragar nada (a remoção do Cormen usa isso). Compare com a
 > LLRB do 0145: 24 bytes por nó e nenhum `pai`, mas o conserto é recursivo e
@@ -1957,8 +1940,8 @@ de função hash para chaves inteiras, e cada uma tem a sua regra para escolher
 O **método da divisão** é o que você já conhece: **h(k) = k mod m**. É rápido
 (uma divisão), mas o `m` decide tudo:
 
-- **m = 2^p é ruim**: `k % 2^p` é exatamente os **p bits de baixo** de `k` (é o
-  mesmo que `k & (m - 1)`). A função ignora todo o resto da chave. Chaves que
+- **m = 2^p é ruim**: `k % 2^p` são os **p bits de baixo** de `k` (o mesmo
+  que `k & (m - 1)`). A função ignora todo o resto da chave. Chaves que
   só diferem nos bits de cima, como os fardos de 16 em 16 (os 4 bits de baixo
   são sempre zero), colidem todas;
 - pela mesma razão, **m = 10^d** só olha os d últimos dígitos (preços
@@ -1980,14 +1963,14 @@ ser qualquer um, inclusive uma **potência de 2**. Knuth sugere
 **A ≈ (√5 − 1) / 2 = 0,6180339887...**, a parte fracionária da razão áurea:
 com ela, chaves seguidas pulam pela tabela inteira, sem se amontoar.
 
-Com `double`, a fórmula tem erro de arredondamento e é lenta. A versão de
-verdade é em **inteiros**: com palavras de w = 32 bits e m = 2^p, troque `A`
+Com `double`, a fórmula tem erro de arredondamento e é lenta. A versão usada
+na prática é em **inteiros**: com palavras de w = 32 bits e m = 2^p, troque `A`
 por **s = ⌊A · 2^32⌋ = 2654435769**. O produto `k · s` tem 64 bits; os 32 de
 baixo são o "k·A mod 1" (a parte fracionária, em binário), e os **p bits mais
 altos** deles são o balde. Em C: `(k * s) >> (32 - p)`, com `uint32_t`, que
 já descarta os 32 bits de cima de graça.
 
-Vamos ver na prática. Os dez fardos, com três funções: divisão por 16,
+O exemplo passa os dez fardos por três funções: divisão por 16,
 divisão por 13 (primo) e multiplicação com m = 16 (p = 4). No desenho, a conta
 da multiplicação para o fardo 48:
 
@@ -2048,7 +2031,7 @@ m = 16, uma colisão (16 e 160), o que é normal para 10 chaves em 16 baldes:
 a multiplicação não garante zero colisão, garante que o padrão das chaves não
 importa.
 
-Repara no fluxograma: é a conta do fardo 48 pela multiplicação em inteiros.
+O fluxograma faz a conta do fardo 48 pela multiplicação em inteiros.
 Depois de conferir o `p` (deslocar 32 bits ou mais é indefinido em C), são
 três operações: multiplica, deixa o `uint32_t` cortar os bits de cima,
 desloca. Nenhuma divisão:
@@ -2059,7 +2042,7 @@ desloca. Nenhuma divisão:
 > Na versão em inteiros, o produto **tem que ser `unsigned`**. Com `int`,
 > `k * 2654435769` estoura, e estouro de inteiro com sinal é comportamento
 > indefinido em C (o sanitizer reclama). Com `uint32_t`, o padrão garante a
-> conta mod 2^32, que é exatamente o "mod 1" da fórmula. E pegue os bits **de
+> conta mod 2^32, que é o "mod 1" da fórmula. E pegue os bits **de
 > cima** (`>> (32 - p)`), não os de baixo (`& (m - 1)`): os de baixo do
 > produto dependem só dos bits de baixo de `k`, e você volta ao problema da
 > divisão por 2^p (é o bug do E1067).
@@ -2071,7 +2054,8 @@ desloca. Nenhuma divisão:
 > tabela tem tamanho 2^p. O compilador sabe disso: quando o `m` da divisão é
 > uma **constante**, ele troca o `%` por multiplicações e deslocamentos
 > (tente `gcc -O2 -S` com `k % 13`). Com `m` numa variável, ele não pode, e a
-> divisão de verdade acontece a cada busca.
+> divisão acontece a cada busca.
+
 
 > [!NOTE]
 > **Pergunta para você:** com m = 32 (p = 5), em que balde cai o fardo 48 pela
@@ -2382,8 +2366,7 @@ O guarda-volumes do supermercado tem 13 armários. O armário de cada cliente
 sai do número do cartão: `cartão % 13`. Se estiver ocupado, o funcionário
 tenta outro. No 0107, "outro" era sempre o **seguinte** (sondagem linear). Num
 sábado de movimento, cinco clientes chegam com os cartões 18, 31, 44, 20 e 57,
-e quatro deles caem no armário 5. A pergunta deste assunto é: qual é o
-melhor "outro"?
+e quatro deles caem no armário 5. Qual é o melhor "outro"?
 
 No endereçamento aberto, cada chave tem uma **sequência de sondagem**
 `h(k, 0), h(k, 1), h(k, 2), ...`: a ordem em que ela tenta as posições. A
@@ -2393,7 +2376,7 @@ chave ou uma posição livre. O Cormen apresenta três sequências:
 - **linear**: `h(k, i) = (h'(k) + i) mod m`. Simples e amiga da cache, mas
   sofre de **agrupamento primário**: as ocupadas formam blocos seguidos, e
   qualquer chave que cai **em qualquer ponto** do bloco vai para o fim dele e o
-  aumenta. Bloco grande atrai mais chaves, que o deixam maior;
+  aumenta. Quanto maior o bloco, mais chaves ele atrai;
 - **quadrática**: `h(k, i) = (h'(k) + c₁·i + c₂·i²) mod m`. Aqui, com c₁ = 0
   e c₂ = 1, `(h'(k) + i²) mod m`: os saltos crescem (1, 4, 9, 16...) e os blocos
   se desfazem. Sobra o **agrupamento secundário**: duas chaves com o mesmo
@@ -2416,7 +2399,7 @@ A **remoção** vale para as três: a posição vira **lápide** (*tombstone*), 
 livre. A busca passa reto pela lápide; a inserção pode reaproveitá-la. Se
 virasse livre, cortaria o caminho de quem pulou por ela.
 
-Vamos ver na prática. Os cinco cartões entram na mesma ordem em três tabelas,
+Os cinco cartões entram na mesma ordem em três tabelas,
 uma de cada tipo, e depois o funcionário procura o 57. No desenho, as três
 tabelas lado a lado e as posições que a busca do 57 olha:
 
@@ -2492,7 +2475,7 @@ Na linear, o 20 (que começa no 7, não no 5) cai no meio do bloco e vai para o
 6, 9, 1: agrupamento secundário. Na dupla, o 31 anda de 8 em 8, o 44 de 9 em 9
 e o 57 de 10 em 10: cada um sai do 5 para um lugar diferente.
 
-Repara no fluxograma: é a inserção do 57 na dispersão dupla. O 5 está
+O fluxograma segue a inserção do 57 na dispersão dupla. O 5 está
 ocupado (não é livre nem lápide), `i` vira 1, e a posição `(5 + 10) % 13 = 2`
 está livre:
 
@@ -2504,8 +2487,7 @@ está livre:
 > a chave só visita 3 das 12 posições e a inserção falha com a tabela quase
 > vazia. Por isso o `+ 1` em `1 + k % (m - 1)` e por isso `m` primo. E na
 > quadrática, com carga acima de 1/2, a inserção pode falhar **com posições
-> livres na tabela** (o E1072 mostra): a sequência simplesmente não passa por
-> elas.
+> livres na tabela** (o E1072 mostra): a sequência não passa por elas.
 
 > [!TIP]
 > **Por dentro do C:** cada `Posicao` tem 8 bytes (a chave e o estado), e a
@@ -2513,7 +2495,8 @@ está livre:
 > por vez e caem na mesma linha de cache de 64 bytes: oito sondagens custam
 > uma ida à memória. Na quadrática e na dupla, cada sondagem pula para longe e
 > costuma custar uma ida nova. É a troca de sempre: menos sondagens contra
-> sondagens mais caras. Repare também no `(long)i * i`: com `m` grande, `i * i`
+> sondagens mais caras. E o `(long)i * i` tem motivo:
+ com `m` grande, `i * i`
 > em `int` pode estourar, e estouro de `int` é comportamento indefinido.
 
 > [!NOTE]
@@ -2851,8 +2834,8 @@ fim: n = 40, m = 163, carga 0.25, média de sondagens 1.38
 
 A professora do cursinho corrigiu o simulado e quer a lista da turma pela
 nota, da menor para a maior. As notas são inteiras, de 0 a 10, e a lista de
-chamada já está em ordem alfabética. Ela pede um detalhe: quem tirou a mesma
-nota continua em ordem alfabética. Com 11 notas possíveis, dá para ordenar sem
+chamada já está em ordem alfabética. E quer que quem tirou a mesma nota continue
+em ordem alfabética. Com 11 notas possíveis, dá para ordenar sem
 comparar um aluno com outro.
 
 O **pigeonhole sort** (ordenação por casas de pombo) serve quando a chave é um
@@ -2896,7 +2879,7 @@ ela:
   principal. A última passada manda; as anteriores só desempatam. É o
   raciocínio do radix LSD.
 
-Vamos ver na prática. A lista de chamada (Ana 7, Bruno 5, Carla 9, Diego 5,
+A lista de chamada (Ana 7, Bruno 5, Carla 9, Diego 5,
 Elisa 7, Fabio 3, Gabi 9, Hugo 5) já está em ordem de nome. Uma passada
 **estável** pela nota entrega a chave composta (nota, nome) de graça. No
 desenho, os alunos entrando nas casas 3, 5, 7 e 9 e saindo em ordem:
@@ -2904,8 +2887,8 @@ desenho, os alunos entrando nas casas 3, 5, 7 e 9 e saindo em ordem:
 <p align="center"><img src="28-estruturas-complementos/0180-pigeonhole-e-chave-composta/ideia.svg" alt="Diagrama da ideia: Pigeonhole e chave composta" width="858"></p>
 
 O TAD é o `pombal.h`. A casa é uma fila de **índices**, montada com três
-vetores (`primeiro`, `ultimo` e `prox`), sem um `malloc` por aluno. O coração
-do `pombal.c`:
+vetores (`primeiro`, `ultimo` e `prox`), sem um `malloc` por aluno. As duas
+passadas, no `pombal.c`:
 
 ```c
     for (int i = 0; i < n; i++) { // 1. cada aluno entra no fim da fila da sua casa
@@ -2962,9 +2945,9 @@ Na seleção, a Elisa passou na frente da Ana, e a Gabi na frente da Carla. Na
 primeira volta, o Fabio (posição 5) trocou com a Ana (posição 0), e a Ana foi
 parar depois da Elisa: a troca pulou por cima dela.
 
-Repara no fluxograma: as duas passadas do pigeonhole, sem nenhuma comparação
-entre alunos. A primeira coloca cada um na sua casa; a segunda esvazia as 11
-casas em ordem:
+O fluxograma tem as duas passadas do pigeonhole, sem nenhuma comparação entre
+alunos. A primeira põe cada um na sua casa; a segunda esvazia as 11 casas em
+ordem:
 
 <p align="center"><img src="28-estruturas-complementos/0180-pigeonhole-e-chave-composta/fluxograma.svg" alt="Fluxograma: Pigeonhole e chave composta" width="570"></p>
 
@@ -2979,10 +2962,11 @@ casas em ordem:
 > [!TIP]
 > **Por dentro do C:** o pigeonhole gasta memória proporcional a `r`, o
 > tamanho do intervalo, não a `n`. Para notas, 11 casas de dois `int` são 88
-> bytes. Para CPF (11 dígitos), seriam 100 bilhões de casas: não cabe. É por
-> isso que ele só serve para intervalos pequenos, e que o radix (0121) existe:
+> bytes. Para CPF (11 dígitos), seriam 100 bilhões de casas: não cabe. Por
+> isso ele só serve para intervalos pequenos, e por isso o radix (0121) existe:
 > ele quebra a chave grande em pedaços pequenos e faz uma passada estável por
-> pedaço. Repare também que o `pb_pigeonhole` copia structs inteiras
+> pedaço. Outro custo: o `pb_pigeonhole` copia structs inteiras
+
 > (`saida[k++] = v[i]`, 24 bytes cada): com registros grandes, ordene um vetor
 > de índices ou de ponteiros e mova só eles.
 
@@ -3341,13 +3325,12 @@ guarda o CPF de quem marcou, o paciente na hash guarda o horário dele, a fila
 guarda CPFs. Assim, cada uma pode mudar por dentro (uma rotação, uma
 sondagem) sem invalidar nada nas outras.
 
-Há uma decisão de projeto que vale notar. A rubro-negra do 0177 não tem
-remoção. Em vez de remover, a consulta desmarcada deixa o **horário vago**
+Uma decisão de projeto: a rubro-negra do 0177 não tem remoção. Em vez de remover, a consulta desmarcada deixa o **horário vago**
 na árvore (`cpf = 0`): o nó continua lá e pode ser reaproveitado na próxima
 marcação. É a mesma ideia da lápide da hash, numa árvore. A agenda de um dia
 tem poucas dezenas de horários; o custo de guardar os vagos é pequeno.
 
-Vamos ver na prática. Cinco pacientes se cadastram. Carla marca às 8h00, Ana
+Cinco pacientes se cadastram. Carla marca às 8h00, Ana
 às 9h00, Bruno às 10h30. Diego quer as 9h00, já ocupadas, e vai para a espera;
 Elisa também. Ana desmarca: o primeiro da fila, Diego, assume. No desenho, as
 três estruturas depois disso:
@@ -3431,7 +3414,7 @@ int main(void) {
 // Na fila de espera: 1
 ```
 
-Repara no fluxograma: é o cancelamento das 9h00. O horário existe e tem
+O fluxograma segue o cancelamento das 9h00. O horário existe e tem
 consulta, a Ana fica sem horário, e como a fila não está vazia, o Diego (o
 primeiro) assume e sai da fila:
 
@@ -3443,8 +3426,9 @@ primeiro) assume e sai da fila:
 > árvore (`x->cpf`). Se o cancelamento zerar só a árvore, a Ana continua
 > "com consulta" na hash e nunca mais consegue marcar. Toda operação da
 > agenda que mexe numa das duas mexe na outra antes de voltar. Um
-> `ag_confere` que percorre a árvore e compara com a hash é um ótimo teste
+> `ag_confere` que percorre a árvore e compara com a hash é um bom teste
 > para esse tipo de programa.
+
 
 > [!TIP]
 > **Por dentro do C:** a `struct Agenda` guarda a tabela de 101 pacientes

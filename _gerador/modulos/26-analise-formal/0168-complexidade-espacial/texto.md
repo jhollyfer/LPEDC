@@ -9,17 +9,16 @@ segunda opção não gasta papel. Com 6 paradas, tanto faz. Com 1 milhão, a
 folha nova pesa 4 MB.
 
 Até aqui, a análise contou **tempo** (passos). A **complexidade espacial**
-conta **memória**: quantos bytes a função usa, em função de `n`. Usa as
-mesmas notações: O, Ω e Θ, com `c` e `n₀`.
+conta **memória**: quantos bytes a função usa, em função de `n`, com as
+mesmas notações O, Ω e Θ e as mesmas constantes `c` e `n₀`.
 
 Quase sempre interessa o **espaço extra** (também chamado de espaço
 **auxiliar**): o que a função usa **além da entrada**. A rota de `n` paradas
 já existe antes da chamada; o que conta é o que a função pede a mais. Uma
-função que usa só algumas variáveis simples, em número fixo, tem espaço
-extra **Θ(1)**: é um algoritmo **in-place** (no lugar). Uma que faz uma cópia
+função que usa um número fixo de variáveis simples tem espaço extra **Θ(1)**: é um algoritmo **in-place** (no lugar). Uma que faz uma cópia
 da entrada tem espaço extra **Θ(n)**.
 
-Três lugares onde o espaço extra aparece:
+O espaço extra aparece em três lugares:
 
 - **vetores e `malloc`**: um auxiliar de `n` posições é Θ(n), uma matriz
   `n × n` é Θ(n²);
@@ -41,7 +40,7 @@ Três lugares onde o espaço extra aparece:
 | quick sort | Θ(n log n) em média | Θ(log n) em média, Θ(n) no pior, da pilha |
 | counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
 
-Vamos ver na prática. Em cima, a rota invertida numa folha nova: 6 gavetas a
+No desenho, em cima, está a rota invertida numa folha nova: 6 gavetas a
 mais, `6 · 4 = 24` bytes. Embaixo, a mesma inversão no lugar: só a caixinha
 `tmp`, 4 bytes, para qualquer tamanho de rota:
 
@@ -110,17 +109,16 @@ int main(void) {
 // bytes extras com 1 milhão: 4000000 e 4
 ```
 
-Repara no fluxograma: é a `inverte_no_lugar`. Nenhuma caixa cria memória.
+O fluxograma segue a `inverte_no_lugar`, e nenhuma caixa dele cria memória.
 O laço anda com duas marcas, `i` da esquerda e `j` da direita, e para quando
-elas se cruzam: com 6 paradas, são só 3 trocas. O tempo é Θ(n), o espaço
-extra é Θ(1):
+elas se cruzam: com 6 paradas, são 3 trocas. Tempo Θ(n), espaço extra Θ(1):
 
 {{fluxograma}}
 
 > [!WARNING]
-> Recursão **não é de graça** em espaço, mesmo sem nenhum vetor. A soma
-> recursiva `soma(v, n) = v[n-1] + soma(v, n-1)` não declara vetor nenhum e
-> tem espaço extra Θ(n): `n` frames empilhados ao mesmo tempo. Com 1 milhão
+> Recursão **custa** espaço, mesmo sem vetor. A soma recursiva
+> `soma(v, n) = v[n-1] + soma(v, n-1)` não declara vetor nenhum e tem
+> espaço extra Θ(n): `n` frames empilhados ao mesmo tempo. Com 1 milhão
 > de elementos, a pilha (8 MB por padrão no Linux) pode estourar e o
 > programa morre com *segmentation fault*. O laço equivalente usa Θ(1). Ao
 > analisar espaço, procure a **profundidade máxima** da recursão, não só os
@@ -134,8 +132,9 @@ extra é Θ(1):
 > RAM disponível. E o `static int grande[1000000]` do exemplo fica na área
 > de **dados estáticos**, reservada antes do `main` começar: declarar esse
 > vetor sem `static`, dentro do `main`, colocaria 4 MB na pilha, metade do
-> limite. Por isso um algoritmo Θ(n) de espaço feito com `malloc` costuma
-> funcionar, e o mesmo Θ(n) feito com recursão funda costuma quebrar.
+> limite. Por isso um Θ(n) de espaço feito com `malloc` costuma funcionar, e
+> o mesmo Θ(n) feito com recursão funda costuma quebrar.
+
 
 > [!NOTE]
 > **Pergunta para você:** quantos bytes extras a `inverte_copiando` pediria

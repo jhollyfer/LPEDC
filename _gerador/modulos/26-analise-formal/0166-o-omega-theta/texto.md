@@ -6,9 +6,9 @@ de 12 vendas". Você mediu o programa e contou exatamente
 `f(n) = 3n² + 10n + 20` operações. A promessa vale? Para 10 vendas, o
 fechamento faz 420 operações e `4 · 10² = 400`: estourou. O contrato mentiu?
 
-Não. Ele disse "a partir de 12". É exatamente isso que as definições de
-**O**, **Ω** e **Θ** dizem, com duas constantes que você escolhe: o fator
-**c** e o ponto de partida **n₀**.
+Não. Ele disse "a partir de 12", e as definições de **O**, **Ω** e **Θ**
+funcionam assim, com duas constantes que você escolhe: o fator **c** e o
+ponto de partida **n₀**.
 
 - **f(n) é O(g(n))** se existem `c > 0` e `n₀` tais que
   `f(n) ≤ c · g(n)` para todo `n ≥ n₀`. É um **teto**.
@@ -29,19 +29,18 @@ vale para `n ≥ 12` (a raiz é 11,7). Para o piso com `c = 3`: `3n² + 10n + 20
 `n₀ = 12`.
 
 **Refutar** é o contrário: mostrar que **nenhum** par serve. `f(n)` é O(n)?
-Seria preciso `3n² + 10n + 20 ≤ c · n`, ou seja, `3n + 10 + 20/n ≤ c`. Para
+Seria preciso `3n² + 10n + 20 ≤ c · n`, isto é, `3n + 10 + 20/n ≤ c`. Para
 qualquer `c` que alguém escolha, basta `n > c/3` e a desigualdade quebra. Não
 existe teto linear.
 
-Tem um terceiro eixo, que não tem nada a ver com O, Ω e Θ: **qual entrada**.
+Há ainda um terceiro eixo, independente de O, Ω e Θ: **qual entrada**.
 O **melhor caso** é a entrada de tamanho `n` que dá menos trabalho, o **pior
 caso** é a que dá mais, e o **caso médio** é a média sobre todas as entradas
 (com alguma hipótese de probabilidade). Cada caso é uma **função de n
 diferente**, e cada uma ganha o seu O, Ω ou Θ. Na busca sequencial, o melhor
 caso é Θ(1) e o pior é Θ(n).
 
-Vamos ver na prática. A tabela mostra o custo medido e o teto `4n²` para
-`n` de 6 a 15. Até 11, o teto fica abaixo do custo (vermelho); de 12 em
+A tabela mostra o custo medido e o teto `4n²` para `n` de 6 a 15. Até 11, o teto fica abaixo do custo (vermelho); de 12 em
 diante, fica acima e não cruza mais (verde). O `n₀` é a primeira coluna verde:
 
 {{ideia}}
@@ -127,11 +126,12 @@ int main(void) {
 // O(n) com c = 1000: falha de n = 330 em diante
 ```
 
-Repara no fluxograma: é a função `n0_teto`. Ela não para no primeiro `n` que
-funciona; percorre tudo e **empurra** o `n₀` para depois de cada falha. É a
-tradução do "para todo `n ≥ n₀`" da definição. E repara na última parte da
-saída: com `c = 1000`, o teto linear aguenta até 329, e depois quebra para
-sempre. Com qualquer `c`, a história se repete, só que mais longe:
+O fluxograma é a função `n0_teto`. Ela não para no primeiro `n` que funciona:
+percorre tudo e **empurra** o `n₀` para depois de cada falha, que é como se
+escreve "para todo `n ≥ n₀`" num laço. Na última parte da saída, com
+`c = 1000`, o teto linear aguenta até 329 e depois quebra para sempre. Com
+qualquer `c` acontece o mesmo, só que mais longe:
+
 
 {{fluxograma}}
 

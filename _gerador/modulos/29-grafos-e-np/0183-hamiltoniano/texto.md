@@ -6,7 +6,7 @@ duas vezes na mesma agência é perder tempo com escolta e papelada. Existe uma
 rota que passa por **cada agência exatamente uma vez** e volta para a base?
 
 Parece o problema do caminhão de lixo (0182), trocando "aresta" por
-"vértice". A diferença de dificuldade, porém, é enorme.
+"vértice", mas a dificuldade é outra.
 
 **Ciclo hamiltoniano** é um ciclo (simples, no Cormen) que passa por **todos
 os vértices**, cada um uma vez. **Caminho hamiltoniano** é o mesmo sem a
@@ -32,12 +32,12 @@ vértice, desce para `pos + 1` e, se lá na frente travar, **desfaz** a escolha
 e tenta a próxima. Quando a rota tem os V vértices, só falta conferir se o
 último liga de volta ao primeiro.
 
-Duas economias de graça. Todo ciclo pode começar em qualquer vértice, então
+Há duas economias que não custam nada. Todo ciclo pode começar em qualquer vértice, então
 fixe o primeiro (`rota[0] = 0`): isso divide o trabalho por V. E o vetor
 `usada[]` corta na hora qualquer rota que repete agência. Mesmo assim, no
 pior caso sobram (V - 1)! ordens: com 15 agências, 87 bilhões.
 
-Vamos ver na prática. A primeira tentativa, Base Centro Orla Mercado Porto
+A primeira tentativa, Base Centro Orla Mercado Porto
 Shopping, trava: não há via do Shopping para a Base. O backtracking volta ao
 Mercado, troca Porto por Shopping e fecha o ciclo pelo Porto:
 
@@ -92,7 +92,7 @@ int main(void) {
 // Chamadas da recursão: 8
 ```
 
-Repara no fluxograma: é uma chamada de `hamilton(pos)`. A pergunta "rota
+O fluxograma mostra uma chamada de `hamilton(pos)`. A pergunta "rota
 completa?" só confere a volta; o trabalho todo está no laço que escolhe o
 vizinho, e na linha que desfaz a escolha quando a descida não deu certo:
 
@@ -101,7 +101,7 @@ vizinho, e na linha que desfaz a escolha quando a descida não deu certo:
 Oito chamadas parece pouco porque a primeira tentativa quase deu certo. Mas
 este grafo não tem circuito euleriano (quatro agências têm grau ímpar), e
 mesmo assim tem ciclo hamiltoniano. O A365 mostra o contrário: um grafo com
-circuito euleriano e **sem** ciclo hamiltoniano, onde o backtracking só
+circuito euleriano e **sem** ciclo hamiltoniano, em que o backtracking só
 descobre isso depois de tentar tudo. O A366 mede o crescimento das chamadas
 quando a resposta é "não".
 
@@ -109,8 +109,7 @@ quando a resposta é "não".
 > Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico.
 > O programa continua compilando e rodando, mas cada agência visitada numa
 > tentativa que falhou fica "queimada" para as tentativas seguintes, e ele
-> responde "não existe" para grafos que têm ciclo. O E1097 é exatamente esse
-> bug. E lembre: euleriano é sobre **arestas**; hamiltoniano, sobre
+> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug. E lembre: euleriano é sobre **arestas**; hamiltoniano, sobre
 > **vértices**.
 
 > [!TIP]
@@ -118,8 +117,9 @@ quando a resposta é "não".
 > chamadas nunca passa de V frames de `hamilton`, cada um com `pos`, `v` e o
 > endereço de retorno. O que explode não é a memória, é o **tempo**: o número
 > de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
-> compartilhados por todas as chamadas; é por isso que cada uma precisa
-> desfazer o que fez antes de voltar. O `long` em `chamadas` está ali porque
+> compartilhados por todas as chamadas, e por isso cada uma precisa desfazer
+> o que fez antes de voltar.
+ O `long` em `chamadas` está ali porque
 > 13! já não cabe num `int` de 32 bits.
 
 > [!NOTE]

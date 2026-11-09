@@ -1,22 +1,21 @@
 # Módulo 26 · Notação assintótica, somatórios e espaço
 
 No módulo 10 você aprendeu a contar passos e a dizer "isso é O(n²)" olhando
-os laços. No módulo 17, a resolver recorrências e a usar Θ e Ω. Faltava
-fechar três pontas, e é delas que este módulo trata: as **definições
-formais** de O, Ω e Θ, com as constantes `c` e `n₀`; os **somatórios** que
-dão o número exato de vezes que um laço roda; e a **complexidade
-espacial**, que mede memória do mesmo jeito que o tempo.
+os laços. No módulo 17, a resolver recorrências e a usar Θ e Ω. Este módulo
+fecha três pontas: as **definições formais** de O, Ω e Θ, com as constantes
+`c` e `n₀`; os **somatórios** que dão o número exato de vezes que um laço
+roda; e a **complexidade espacial**, que mede memória como se mede tempo.
 
-A mudança na cabeça é passar do "parece n²" para a conta. Dizer que
+A mudança na cabeça é trocar o "parece n²" pela conta. Dizer que
 `3n² + 10n + 20` é Θ(n²) vira uma afirmação que se **prova** (exibindo `c₁`,
-`c₂` e `n₀`) ou se **refuta** (mostrando que nenhum par serve). Dizer que um
-laço dependente roda "umas n²/2 vezes" vira `n(n-1)/2`, exato, conferido
-por um contador. E dizer que uma função "não usa memória" passa a exigir
-olhar a pilha da recursão, que gasta espaço mesmo sem nenhum vetor.
+`c₂` e `n₀`) ou se **refuta** (mostrando que nenhum par serve). O laço
+dependente que roda "umas n²/2 vezes" passa a rodar `n(n-1)/2` vezes, conferido
+por um contador. E a função que "não usa memória" obriga a olhar a pilha da
+recursão, que gasta espaço mesmo sem vetor nenhum.
 
-Tudo é verificado em C: cada fórmula tem um programa que conta e confere.
-O último assunto junta as três ideias numa conferência completa de cinco
-funções: passos, bytes e frames, medidos e comparados com a fórmula.
+Cada fórmula tem um programa em C que conta e confere. O último assunto junta
+as três ideias na ficha de cinco funções: passos, bytes e frames medidos e
+comparados com a fórmula.
 
 ## O que você vai aprender
 
@@ -29,37 +28,6 @@ funções: passos, bytes e frames, medidos e comparados com a fórmula.
 - a troca de **tempo por espaço**: tabelas, prefixos e memoização
 - conferir uma ficha de complexidade inteira medindo passos, bytes e frames
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: a tabela do `n₀`, o
-   triângulo dos apertos de mão, a memória extra da inversão, a ficha das
-   cinco funções. Os números são os mesmos do código.
-2. Faça as contas no papel **antes** de rodar: a desigualdade do `n₀`, o
-   somatório do laço, os bytes extras.
-3. Siga o **fluxograma** com o dedo.
-4. Rode o exemplo e confira a saída com a sua conta. Mude o `n`, dobre, e
-   veja se o contador acompanha a fórmula.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-6. No fim, resolva as **questões no estilo da prova**: elas cobram o mesmo
-   conteúdo no formato de múltipla escolha.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos diagramas da ideia, **verde** é o que vale (o teto que já segura, o
-espaço constante), **vermelho** é o que falha ou o que cresce com `n` (o teto
-que ainda perde, a cópia extra), **roxo** é trabalho sendo contado,
-**amarelo** marca o ponto de virada (o `n₀`, a razão ao dobrar `n`) e
-**cinza** é o que não entra na conta.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa: contagem de passos e notação O (0071 e 0072), pilha de
@@ -68,14 +36,21 @@ ponteiro para função (0050), busca binária (0090), insertion sort e merge
 sort (0093 e 0094), recorrências e a notação Θ (0114 a 0117), permutações
 por backtracking (0126), potência rápida (0131) e memoização (0138).
 
+Faça as contas no papel **antes** de rodar (a desigualdade do `n₀`, o
+somatório do laço, os bytes extras), inclusive a da **Pergunta para você**;
+depois mude o `n`, dobre, e veja se o contador acompanha a fórmula. Nos
+diagramas da ideia, verde é o que vale (o teto que já segura, o espaço
+constante), vermelho é o que falha ou cresce com `n`, amarelo marca o ponto de
+virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho sendo contado.
+
 Matemática: potências, logaritmos e somas. Lembre que `log₂ n` é quantas
 vezes dá para dividir `n` por 2 até chegar em 1, e que `ln n` é o logaritmo
 natural (`log` em `<math.h>`). O `rodar` já liga a biblioteca matemática.
 
 O último assunto tem um TAD na pasta, `custo.h` e `custo.c`, com cinco
 funções instrumentadas. O `rodar` compila o `custo.c` junto com qualquer
-exemplo ou exercício da pasta; por isso, nos exercícios de lá, não use os
-nomes `custo_passos`, `custo_bytes` e `custo_prof_max` para variáveis suas.
+exemplo ou exercício da pasta; por isso, nos exercícios de lá, não dê os
+nomes `custo_passos`, `custo_bytes` e `custo_prof_max` a variáveis suas.
 Os exercícios de "conserte" trazem o erro de propósito, e o enunciado
 avisa.
 
@@ -89,15 +64,15 @@ avisa.
 
 ## Desafios do módulo
 
-Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
-sempre que der, confira com um programa em C rodado com o `rodar`.
+Problemas que misturam os assuntos do módulo. Resolva no papel e, sempre que
+der, confira com um programa rodado no `rodar`.
 
 **1. Um sanduíche cúbico.** Prove que `f(n) = 5n³ + 2n² - 7` é Θ(n³):
 encontre `c₁`, `c₂` e `n₀`.
 
 <details><summary>Resposta</summary>
 
-Piso: `5n³ + 2n² - 7 ≥ 5n³` quando `2n² ≥ 7`, ou seja, `n ≥ 2`. Teto:
+Piso: `5n³ + 2n² - 7 ≥ 5n³` quando `2n² ≥ 7`, isto é, `n ≥ 2`. Teto:
 `5n³ + 2n² - 7 ≤ 5n³ + 2n³ = 7n³` para todo `n ≥ 1`. Logo **`c₁ = 5`, `c₂ = 7`
 e `n₀ = 2`**. Confira: `f(2) = 41`, entre `40` e `56`. Com `n = 1`, `f(1) = 0`
 fica abaixo de `5`: por isso o `n₀` não pode ser 1.
@@ -241,8 +216,8 @@ a `n` nesse tempo.
 
 ## Questões no estilo da prova
 
-Dez questões objetivas no formato da prova de conhecimentos do PPGI. Marque
-uma alternativa antes de abrir o gabarito.
+Dez questões no formato da prova do PPGI. Marque uma alternativa antes de
+abrir o gabarito.
 
 **1.** Seja `f(n) = 3n² + 10n + 20`. Assinale a alternativa correta.
 
@@ -348,7 +323,7 @@ Está correto o que se afirma em:
 
 **E.** I é a definição de Θ. II: o pior caso faz `n` comparações, logo é
 Θ(n), e portanto Ω(n). III: se `f(n) ≤ c · n`, então `f(n) ≤ c · n²` para
-`n ≥ 1`; O é só um teto, e um teto mais alto continua teto. Veja 0166.
+`n ≥ 1`. O é um teto, e um teto mais alto continua teto. Veja 0166.
 
 </details>
 

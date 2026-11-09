@@ -4,8 +4,7 @@ O guarda-volumes do supermercado tem 13 armários. O armário de cada cliente
 sai do número do cartão: `cartão % 13`. Se estiver ocupado, o funcionário
 tenta outro. No 0107, "outro" era sempre o **seguinte** (sondagem linear). Num
 sábado de movimento, cinco clientes chegam com os cartões 18, 31, 44, 20 e 57,
-e quatro deles caem no armário 5. A pergunta deste assunto é: qual é o
-melhor "outro"?
+e quatro deles caem no armário 5. Qual é o melhor "outro"?
 
 No endereçamento aberto, cada chave tem uma **sequência de sondagem**
 `h(k, 0), h(k, 1), h(k, 2), ...`: a ordem em que ela tenta as posições. A
@@ -15,7 +14,7 @@ chave ou uma posição livre. O Cormen apresenta três sequências:
 - **linear**: `h(k, i) = (h'(k) + i) mod m`. Simples e amiga da cache, mas
   sofre de **agrupamento primário**: as ocupadas formam blocos seguidos, e
   qualquer chave que cai **em qualquer ponto** do bloco vai para o fim dele e o
-  aumenta. Bloco grande atrai mais chaves, que o deixam maior;
+  aumenta. Quanto maior o bloco, mais chaves ele atrai;
 - **quadrática**: `h(k, i) = (h'(k) + c₁·i + c₂·i²) mod m`. Aqui, com c₁ = 0
   e c₂ = 1, `(h'(k) + i²) mod m`: os saltos crescem (1, 4, 9, 16...) e os blocos
   se desfazem. Sobra o **agrupamento secundário**: duas chaves com o mesmo
@@ -38,7 +37,7 @@ A **remoção** vale para as três: a posição vira **lápide** (*tombstone*), 
 livre. A busca passa reto pela lápide; a inserção pode reaproveitá-la. Se
 virasse livre, cortaria o caminho de quem pulou por ela.
 
-Vamos ver na prática. Os cinco cartões entram na mesma ordem em três tabelas,
+Os cinco cartões entram na mesma ordem em três tabelas,
 uma de cada tipo, e depois o funcionário procura o 57. No desenho, as três
 tabelas lado a lado e as posições que a busca do 57 olha:
 
@@ -114,7 +113,7 @@ Na linear, o 20 (que começa no 7, não no 5) cai no meio do bloco e vai para o
 6, 9, 1: agrupamento secundário. Na dupla, o 31 anda de 8 em 8, o 44 de 9 em 9
 e o 57 de 10 em 10: cada um sai do 5 para um lugar diferente.
 
-Repara no fluxograma: é a inserção do 57 na dispersão dupla. O 5 está
+O fluxograma segue a inserção do 57 na dispersão dupla. O 5 está
 ocupado (não é livre nem lápide), `i` vira 1, e a posição `(5 + 10) % 13 = 2`
 está livre:
 
@@ -126,8 +125,7 @@ está livre:
 > a chave só visita 3 das 12 posições e a inserção falha com a tabela quase
 > vazia. Por isso o `+ 1` em `1 + k % (m - 1)` e por isso `m` primo. E na
 > quadrática, com carga acima de 1/2, a inserção pode falhar **com posições
-> livres na tabela** (o E1072 mostra): a sequência simplesmente não passa por
-> elas.
+> livres na tabela** (o E1072 mostra): a sequência não passa por elas.
 
 > [!TIP]
 > **Por dentro do C:** cada `Posicao` tem 8 bytes (a chave e o estado), e a
@@ -135,7 +133,8 @@ está livre:
 > por vez e caem na mesma linha de cache de 64 bytes: oito sondagens custam
 > uma ida à memória. Na quadrática e na dupla, cada sondagem pula para longe e
 > costuma custar uma ida nova. É a troca de sempre: menos sondagens contra
-> sondagens mais caras. Repare também no `(long)i * i`: com `m` grande, `i * i`
+> sondagens mais caras. E o `(long)i * i` tem motivo:
+ com `m` grande, `i * i`
 > em `int` pode estourar, e estouro de `int` é comportamento indefinido.
 
 > [!NOTE]

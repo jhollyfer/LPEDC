@@ -6,8 +6,8 @@ sabe resolver isso. Mas o sobrinho dela tem um programa que acha o **maior
 grupo de amigos** numa rede social. Dá para usar o programa do sobrinho no
 problema da síndica? Dá, se ela souber **traduzir** a pergunta.
 
-Traduzir um problema em outro é uma **redução**, e é a ferramenta que separa
-os problemas fáceis dos difíceis.
+Traduzir um problema em outro é uma **redução**, a ferramenta que separa os
+problemas fáceis dos difíceis.
 
 **Redução polinomial.** Reduzir A a B (escreve-se **A ≤p B**) é dar um
 algoritmo de tempo polinomial que transforma qualquer instância de A numa
@@ -32,7 +32,7 @@ um de tamanho k?"):
   precisa de um mediador para que toda briga tenha um lado vigiado).
 
 As duas pontes entre eles cabem numa linha cada. O **complemento** de G tem
-uma aresta exatamente onde G não tem. Então:
+aresta entre os pares que G não liga, e só entre eles. Então:
 
 - S é independente em G ⇔ S é **clique no complemento** de G;
 - S é independente em G ⇔ **V − S** é uma **cobertura** de G (se uma aresta
@@ -43,14 +43,15 @@ Logo, um conjunto independente de tamanho k existe ⇔ uma clique de tamanho
 k existe no complemento ⇔ uma cobertura de tamanho n − k existe em G. Montar
 o complemento custa O(V²): é uma redução polinomial.
 
-Vamos ver na prática. Seis moradores, sete brigas. À esquerda, G e a maior
-comissão; no meio, o complemento, onde a mesma comissão vira uma clique; à
+Seis moradores, sete brigas. À esquerda, G e a maior
+comissão; no meio, o complemento, em que a mesma comissão vira uma clique; à
 direita, os outros três formam a cobertura:
 
 {{ideia}}
 
 O programa usa a força bruta de clique como uma **caixa-preta**: ele nem
-sabe que existe "conjunto independente". A redução é só a montagem de `paz`:
+sabe que existe "conjunto independente". A redução se resume à montagem de
+`paz`:
 
 ```c
 #include <stdbool.h>
@@ -106,9 +107,9 @@ int main(void) {
 // Mediadores (cobertura): Jorge Léo Nina (3)
 ```
 
-Repara no fluxograma: a redução tem sempre três passos, transformar a
-entrada, chamar o resolvedor do outro problema e traduzir a resposta de
-volta. Só o primeiro e o último são novos, e os dois são polinomiais:
+Toda redução segue os três passos do fluxograma: transformar a entrada,
+chamar o resolvedor do outro problema e traduzir a resposta de volta. Só o
+primeiro e o último são novos, e os dois são polinomiais:
 
 {{fluxograma}}
 
@@ -121,7 +122,7 @@ que satisfaz a fórmula. O A373 faz essa construção em C; o A374 reduz
 caminho hamiltoniano a ciclo hamiltoniano.
 
 > [!WARNING]
-> O sentido da redução é a pegadinha número um. Para provar que um problema
+> A pegadinha mais comum é o sentido da redução. Para provar que um problema
 > novo X é difícil, reduza um difícil conhecido **a X** (conhecido ≤p X),
 > nunca o contrário. Reduzir X a SAT só mostra que X não é mais difícil que
 > SAT, o que vale para qualquer problema de NP. E a redução precisa ser
@@ -130,7 +131,8 @@ caminho hamiltoniano a ciclo hamiltoniano.
 > [!TIP]
 > **Por dentro do C:** os conjuntos são máscaras de bits num `int`: o bit
 > `v` ligado quer dizer "v está no grupo". O complemento de um conjunto é
-> `todos & ~comissao`, onde `todos = (1 << V) - 1` tem os V bits de baixo
+> `todos & ~comissao`, em que `todos = (1 << V) - 1` tem os V bits de baixo
+
 > ligados; sem o `& todos`, o `~` ligaria também os 26 bits de cima. Já o
 > complemento do **grafo** é outra matriz, `paz[a][b] = a != b && !briga[a][b]`:
 > o `a != b` evita o laço de um vértice para ele mesmo.
@@ -138,6 +140,7 @@ caminho hamiltoniano a ciclo hamiltoniano.
 > [!NOTE]
 > **Pergunta para você:** se a Kátia e o Márcio também brigarem
 > (`{2, 4}`), qual o tamanho da maior comissão? E da menor cobertura? A
-> soma dos dois continua sendo 6? Responda antes de rodar.
+> soma dos dois continua sendo 6?
+
 
 {{pratique}}

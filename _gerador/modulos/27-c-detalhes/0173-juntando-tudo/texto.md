@@ -8,8 +8,8 @@ membro, aluga uma vaga na garagem; a Carla estourou a cota da impressora.
 Cada peça do módulo entra numa parte. As permissões são **bits** num
 `unsigned`, e o papel é um **enum** que indexa o vetor `base` com o pacote de
 cada um. A **struct** `Usuario` guarda o papel e duas máscaras de exceção:
-`extra` (o que ganhou a mais) e `bloqueio` (o que perdeu). A permissão de
-verdade sai de uma expressão só:
+`extra` (o que ganhou a mais) e `bloqueio` (o que perdeu). A permissão
+efetiva sai de uma expressão só:
 
 `(base[u->papel] | u->extra) & ~u->bloqueio`
 
@@ -21,11 +21,12 @@ inverte o bloqueio antes de tudo, e o `&` com ele apaga os bits bloqueados:
 antes do `&`.
 
 Tudo é `unsigned`, de propósito: `~` num `int` daria um negativo, e misturar
-com sinal e sem sinal é pedir o `-1 > 0u`. A planilha final, usuário × permissão, é um **VLA** `bool
-acesso[n][QTD_PERMS]`: o `n` é uma variável, então o tamanho é decidido na
-hora, e uma equipe maior não muda o código.
+com sinal e sem sinal abre a porta para o `-1 > 0u`. A planilha final,
+usuário × permissão, é um **VLA** `bool
+acesso[n][QTD_PERMS]`: o `n` é uma variável, o tamanho é decidido na hora, e
+uma equipe maior não muda o código.
 
-Vamos ver na prática. A Carla é membro (`00111`: imprimir, reunião, entrar),
+A Carla é membro (`00111`: imprimir, reunião, entrar),
 sem extras e com a impressora bloqueada. O desenho faz a conta bit a bit:
 
 {{ideia}}
@@ -113,8 +114,9 @@ int main(void) {
 // pode REUNIAO | IMPRIMIR: Ana Bruno
 ```
 
-Repara no fluxograma da pergunta "pode `REUNIAO | IMPRIMIR`?": um laço pela
-equipe e uma única comparação de bits por pessoa. A máscara pode ter uma
+O fluxograma responde "pode `REUNIAO | IMPRIMIR`?" com um laço pela equipe e
+uma única comparação de bits por pessoa.
+ A máscara pode ter uma
 permissão ou cinco, e o custo é o mesmo:
 
 {{fluxograma}}

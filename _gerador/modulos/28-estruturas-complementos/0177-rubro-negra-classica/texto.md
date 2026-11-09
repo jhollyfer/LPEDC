@@ -4,7 +4,7 @@ A central de entregas do bairro registra cada pacote pelo número assim que
 ele chega, e o entregador consulta a central a toda hora. Os números chegam
 quase em ordem, o pior caso da BST. No 0145 você viu a rubro-negra
 **esquerdista** (LLRB), uma versão enxuta. A prova do PPGI, os livros de
-referência e as bibliotecas de verdade usam a versão **clássica** do Cormen:
+referência e as bibliotecas usam a versão **clássica** do Cormen:
 a mesma ideia de cores, com outras regras de conserto e com ponteiro para o
 pai.
 
@@ -29,7 +29,7 @@ negra** `bh(x)`. Pela propriedade 5 ele não depende do caminho. Dela sai a
 garantia: a subárvore de `x` tem pelo menos `2^bh(x) - 1` nós (por indução:
 cada filho tem altura negra de pelo menos `bh(x) - 1`). Pela propriedade 4,
 pelo menos metade dos nós de qualquer caminho da raiz até uma folha é preta,
-então `bh(raiz) >= h/2`. Juntando, `n >= 2^(h/2) - 1`, ou seja,
+então `bh(raiz) >= h/2`. Juntando, `n >= 2^(h/2) - 1`, e daí
 **h ≤ 2 log₂(n + 1)**. Busca, mínimo, sucessor: tudo O(log n).
 
 A **inserção** pendura o nó novo `z` como na BST e pinta de **vermelho** (assim
@@ -46,7 +46,7 @@ O caso 1 só troca cores e pode subir até a raiz (O(log n) vezes). Os casos 2 e
 3 fazem **no máximo duas rotações** e encerram. No fim, a raiz é pintada de
 preto.
 
-Vamos ver na prática. Chegam os pacotes 50, 30, 70, 20, 25, 40 e 45. O 20 tem
+Chegam os pacotes 50, 30, 70, 20, 25, 40 e 45. O 20 tem
 tio vermelho (caso 1). O 25 forma um triângulo com o 20 e o 30 (caso 2, depois
 3). O 40 tem tio vermelho de novo, e o 45 fica em linha com o 40 e o 30 (caso
 3, o espelho). No desenho, o antes e o depois de cada caso:
@@ -89,7 +89,7 @@ static void conserta(ArvVP *T, NoVP *z) {
 }
 ```
 
-Repare que o laço nunca testa `NULL`: o tio pode ser a sentinela, e ela é
+O laço nunca testa `NULL`: o tio pode ser a sentinela, e ela é
 preta, então cai nos casos 2 e 3 sem `if` a mais. E a raiz tem `T.nil` como
 pai, preto: quando `z` chega à raiz, o `while` para sozinho. O cliente:
 
@@ -126,7 +126,7 @@ int main(void) {
 // Altura 3, altura negra 2, propriedades: ok
 ```
 
-Repara no fluxograma: é o conserto do pacote 25. Pai vermelho, tio preto (a
+O fluxograma é o conserto do pacote 25. Pai vermelho, tio preto (a
 sentinela), `z` em triângulo: caso 2 e, na mesma volta, caso 3. Depois disso o
 pai de `z` é preto e o laço termina:
 
@@ -150,8 +150,8 @@ em 1 e só cresce quando o caso 1 chega à raiz e ela volta a ser preta: a
 
 E a **remoção**? O Cormen também a faz em O(log n), com um conserto de quatro
 casos olhando o **irmão** do nó que ficou com um "preto a mais". É bem mais
-longa que a inserção e não cabe aqui: o importante para a prova é saber que
-ela existe, que custa O(log n) e que faz no máximo **três rotações**.
+longa que a inserção e não cabe aqui. Para a prova, basta saber que ela
+existe, que custa O(log n) e que faz no máximo **três rotações**.
 
 > [!WARNING]
 > Os erros mais comuns no conserto: esquecer de **subir** no caso 1
@@ -166,7 +166,8 @@ ela existe, que custa O(log n) e que faz no máximo **três rotações**.
 > **Por dentro do C:** o `NoVP` tem 32 bytes: 4 da chave, 4 do `enum` da cor e
 > três ponteiros de 8. A sentinela é **um nó só** dentro da `ArvVP`, e todo
 > ponteiro "vazio" da árvore aponta para o endereço `&T->nil`: mil folhas,
-> zero bytes a mais. Como a sentinela é um nó de verdade, o código pode **ler**
+> zero bytes a mais. Como a sentinela é um nó real, o código
+ pode **ler**
 > `tio->cor` sem testar `NULL`, e a rotação pode até **escrever** no
 > `nil.pai` sem estragar nada (a remoção do Cormen usa isso). Compare com a
 > LLRB do 0145: 24 bytes por nó e nenhum `pai`, mas o conserto é recursivo e

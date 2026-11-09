@@ -8,17 +8,16 @@ compilador lê a expressão por regras que o olho não aplica sozinho. Uma prova
 de múltipla escolha adora esse tipo de linha: o código é curto, compila, e
 as alternativas trazem justamente o resultado que a intuição sugere.
 
-Este módulo junta as regras que decidem o valor dessas linhas. Quem pega os
+Este módulo junta as regras que decidem o valor dessas linhas: quem pega os
 operandos primeiro (precedência e associatividade), em que ordem as partes
-rodam e quando a resposta é "comportamento indefinido". O que acontece quando
-um número com sinal encontra um sem sinal, e por que `-1 > 0u` é verdadeiro.
-E o vetor de tamanho variável (VLA), o único vetor do C cujo `sizeof` é
+rodam e quando a resposta é "comportamento indefinido"; o que acontece quando
+um número com sinal encontra um sem sinal, e por que `-1 > 0u` é verdadeiro;
+e o vetor de tamanho variável (VLA), o único vetor do C cujo `sizeof` é
 calculado com o programa rodando.
 
-A mudança na cabeça é parar de ler a expressão como matemática e começar a
-ler como o compilador: primeiro os tipos (promoção e conversão), depois a
-árvore (precedência), e só então os valores. Com isso, a pegadinha vira
-conta.
+A mudança na cabeça é ler a expressão como o compilador, e não como
+matemática: primeiro os tipos (promoção e conversão), depois a árvore
+(precedência), e só então os valores. Aí a pegadinha vira conta.
 
 ## O que você vai aprender
 
@@ -28,26 +27,6 @@ conta.
 - usar `>>`, máscaras e `size_t` sem cair nas armadilhas do negativo e do laço que desce
 - criar e passar **VLAs** (`void f(int l, int c, int m[l][c])`), entender o `sizeof` em tempo de execução, o `__STDC_NO_VLA__` e o risco da pilha
 - juntar tudo num controle de acesso com struct, enum, máscaras e VLA
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Tire um parêntese, troque `unsigned` por `int`, aumente
-   o VLA, e rode de novo. Leia os avisos do gcc: neste módulo eles ensinam.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -60,10 +39,13 @@ Os valores dos comentários são os de um PC de 64 bits com Linux e gcc: `int`
 e `unsigned` de 4 bytes, `long` e `size_t` de 8. Algumas respostas (como
 `-17 >> 2`) dependem do compilador, e o texto avisa quando for o caso.
 
-O `rodar` compila com `-Wall -Wextra`, e vários erros deste módulo são
-justamente os que esses avisos pegam. Os exemplos compilam limpos; quando o
-texto mostra uma linha que o gcc avisaria, ela aparece fora do programa ou
-com a conversão escrita à vista.
+O `rodar` compila com `-Wall -Wextra`, e esses avisos pegam vários erros
+deste módulo. Os exemplos compilam limpos; quando o texto mostra uma linha
+que o gcc avisaria, ela aparece fora do programa ou com a conversão escrita
+à vista. Ao rodar, tire um parêntese, troque `unsigned` por `int`, aumente o
+VLA e leia o que o gcc diz; na **Pergunta para você**, responda antes de
+rodar.
+
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/A339.c
@@ -83,8 +65,8 @@ com a conversão escrita à vista.
 Você pede 3 pacotes de café a R$ 18 no app do mercado, e o frete é R$ 12. A
 conta é `18 * 3 + 12`. Ninguém pensa duas vezes: dá 66. Mas por que não
 `18 * (3 + 12)`, que dá 270? Porque o C, como a matemática da escola, tem uma
-regra fixa de quem vai primeiro. A prova adora esconder essa regra numa linha
-só.
+regra fixa de quem vai primeiro, e a prova gosta de esconder essa regra numa
+linha só.
 
 Duas regras decidem como o C **agrupa** uma expressão. A **precedência** diz
 qual operador pega os operandos primeiro: `*` antes de `+`. A
@@ -110,7 +92,7 @@ qual operador pega os operandos primeiro: `*` antes de `+`. A
 | 14 | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` | direita → esquerda |
 | 15 | `,` | esquerda → direita |
 
-Três coisas dessa tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
+Três pontos dessa tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
 **abaixo** do `==`. O `?:` fica abaixo de quase tudo, então
 `compra + compra >= 50 ? 0 : frete` é uma pergunta sobre a soma inteira. E a
 atribuição composta trata o lado direito como um bloco: `a *= 2 + 1` é
@@ -130,7 +112,7 @@ variável duas vezes, ou mudar e ler sem ordem garantida, na mesma expressão,
 `printf("%d %d", i, i++)` não têm resposta certa. O programa pode dar
 qualquer coisa.
 
-Vamos ver na prática. O desenho mostra como o C monta a árvore de cada conta:
+O desenho mostra como o C monta a árvore de cada conta:
 o operador de menor precedência fica na raiz e é o último a agir. Na
 pegadinha do frete grátis, a raiz é o `?:`, e o `+` foi parar lá embaixo:
 
@@ -174,9 +156,10 @@ int main(void) {
 // frete grátis? 1
 ```
 
-Repara no fluxograma: o `?:` é uma pergunta escondida dentro da expressão. O
-que vai dentro da pergunta depende só dos parênteses, e no `certo` ela olha
-apenas o `compra`:
+No fluxograma, o `?:` aparece como o que ele é: uma pergunta escondida dentro
+da expressão. O que entra na pergunta depende só dos parênteses, e no `certo`
+ela olha apenas o `compra`:
+
 
 <p align="center"><img src="27-c-detalhes/0170-precedencia-e-avaliacao/fluxograma.svg" alt="Fluxograma: Precedência e ordem de avaliação" width="529"></p>
 
@@ -585,11 +568,11 @@ Quando uma conta mistura tipos, o C aplica duas regras antes de calcular:
    houver um `double`, tudo vira `double`.
 
 A regra 2 produz a pegadinha mais famosa de C: `-1 > 0u` é **verdadeiro**. O
-`-1` vira `unsigned`, ou seja, 4294967295, que é maior que 0. Já `-1L < 1u`
+`-1` vira `unsigned`, 4294967295, que é maior que 0. Já `-1L < 1u`
 é verdadeiro no Linux de 64 bits, porque ali o `unsigned` cabe no `long` e
 nada vira sem sinal.
 
-Vamos ver na prática. O desenho mostra os 4 bytes do saldo -1, todos com os
+O desenho mostra os 4 bytes do saldo -1, todos com os
 oito bits ligados, e as duas leituras possíveis deles. A comparação com
 `0u` escolhe a leitura sem sinal:
 
@@ -630,8 +613,8 @@ int main(void) {
 // c = 44
 ```
 
-Repara no fluxograma: a comparação não pergunta "-1 é maior que 0?". Antes da
-pergunta já houve uma conversão, e a pergunta de verdade é sobre 4294967295:
+No fluxograma, a comparação não pergunta "-1 é maior que 0?". Antes dela já
+houve uma conversão, e a pergunta real é sobre 4294967295:
 
 <p align="center"><img src="27-c-detalhes/0171-com-e-sem-sinal/fluxograma.svg" alt="Fluxograma: Com sinal e sem sinal" width="435"></p>
 
@@ -648,8 +631,9 @@ pergunta já houve uma conversão, e a pergunta de verdade é sobre 4294967295:
 > [!TIP]
 > **Por dentro do C:** o processador usa o **complemento de dois**: o negativo
 > de `x` é `~x + 1`. Com isso, somar com ou sem sinal é **a mesma
-> instrução** (`add`), e é por isso que a conversão entre `int` e `unsigned`
-> não custa nada, os bits ficam iguais. O que muda é a instrução que lê o
+> instrução** (`add`), e a conversão entre `int` e `unsigned` não custa
+> nada: os bits ficam iguais.
+ O que muda é a instrução que lê o
 > resultado: comparações com sinal usam `jl`/`jg`, sem sinal usam `jb`/`ja`,
 > e o deslocamento à direita vira `sar` (copia o bit de sinal: `-16 >> 2` dá
 > -4 no gcc) ou `shr` (entra zero). Deslocar um negativo para a direita é
@@ -1012,11 +996,11 @@ sizeof(int)`. O VLA também tem limites: não pode ser `static` nem global, e
 não aceita inicialização (`int v[n] = {0};` é erro no C17). Preencha com um
 laço.
 
-O uso mais elegante é como **parâmetro**. Uma função comum precisa saber a
+O uso mais útil é como **parâmetro**. Uma função comum precisa saber a
 largura da matriz já ao compilar (`int m[][4]`). Com VLA, a função recebe as
 dimensões e a matriz: `void f(int l, int c, int m[l][c])`. A ordem importa:
-`l` e `c` vêm **antes**, porque o tipo `m[l][c]` usa os dois. E a mesma
-função serve para matrizes de qualquer tamanho.
+`l` e `c` vêm **antes**, porque o tipo `m[l][c]` usa os dois. Assim uma
+só função serve para matrizes de qualquer tamanho.
 
 Um detalhe de versão: no C99 o VLA é obrigatório; no C11 e no C17 virou
 **opcional**. Um compilador sem VLA define a macro `__STDC_NO_VLA__`. O gcc
@@ -1029,7 +1013,7 @@ escreve:
 #endif
 ```
 
-Vamos ver na prática. Com 3 alunos e 4 semanas, a planilha tem 12 `int`:
+Com 3 alunos e 4 semanas, a planilha tem 12 `int`:
 48 bytes, reservados na pilha no momento em que a linha do VLA roda. O
 desenho mostra a matriz e onde ela fica:
 
@@ -1088,7 +1072,7 @@ int main(void) {
 // aluno 3: 2 4 1 3  total 10
 ```
 
-Repara no fluxograma: a validação vem **antes** do VLA. Depois que a linha
+No fluxograma, a validação vem **antes** do VLA. Depois que a linha
 `int treinos[alunos][semanas];` roda, não há como desistir nem como saber se
 deu certo:
 
@@ -1096,7 +1080,8 @@ deu certo:
 
 > [!WARNING]
 > O VLA não avisa quando falha. O `malloc` devolve `NULL` se não houver
-> memória; o VLA simplesmente pede o espaço à pilha, e a pilha de um programa
+> memória; o VLA pede o espaço à pilha
+, e a pilha de um programa
 > no Linux tem uns **8 MB** (confira com `ulimit -s`). Um `int v[n]` com `n`
 > igual a 3 milhões pede 12 MB e derruba o programa com *segmentation
 > fault*, sem chance de tratar. E um `n` que veio do usuário pode ser 0,
@@ -1447,8 +1432,8 @@ membro, aluga uma vaga na garagem; a Carla estourou a cota da impressora.
 Cada peça do módulo entra numa parte. As permissões são **bits** num
 `unsigned`, e o papel é um **enum** que indexa o vetor `base` com o pacote de
 cada um. A **struct** `Usuario` guarda o papel e duas máscaras de exceção:
-`extra` (o que ganhou a mais) e `bloqueio` (o que perdeu). A permissão de
-verdade sai de uma expressão só:
+`extra` (o que ganhou a mais) e `bloqueio` (o que perdeu). A permissão
+efetiva sai de uma expressão só:
 
 `(base[u->papel] | u->extra) & ~u->bloqueio`
 
@@ -1460,11 +1445,12 @@ inverte o bloqueio antes de tudo, e o `&` com ele apaga os bits bloqueados:
 antes do `&`.
 
 Tudo é `unsigned`, de propósito: `~` num `int` daria um negativo, e misturar
-com sinal e sem sinal é pedir o `-1 > 0u`. A planilha final, usuário × permissão, é um **VLA** `bool
-acesso[n][QTD_PERMS]`: o `n` é uma variável, então o tamanho é decidido na
-hora, e uma equipe maior não muda o código.
+com sinal e sem sinal abre a porta para o `-1 > 0u`. A planilha final,
+usuário × permissão, é um **VLA** `bool
+acesso[n][QTD_PERMS]`: o `n` é uma variável, o tamanho é decidido na hora, e
+uma equipe maior não muda o código.
 
-Vamos ver na prática. A Carla é membro (`00111`: imprimir, reunião, entrar),
+A Carla é membro (`00111`: imprimir, reunião, entrar),
 sem extras e com a impressora bloqueada. O desenho faz a conta bit a bit:
 
 <p align="center"><img src="27-c-detalhes/0173-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o controle de acesso" width="858"></p>
@@ -1552,8 +1538,9 @@ int main(void) {
 // pode REUNIAO | IMPRIMIR: Ana Bruno
 ```
 
-Repara no fluxograma da pergunta "pode `REUNIAO | IMPRIMIR`?": um laço pela
-equipe e uma única comparação de bits por pessoa. A máscara pode ter uma
+O fluxograma responde "pode `REUNIAO | IMPRIMIR`?" com um laço pela equipe e
+uma única comparação de bits por pessoa.
+ A máscara pode ter uma
 permissão ou cinco, e o custo é o mesmo:
 
 <p align="center"><img src="27-c-detalhes/0173-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o controle de acesso" width="553"></p>
@@ -1981,7 +1968,7 @@ jeito que o C agrupa: `2 + 3 * 4 % 5`, `1 << (2 + 1)`, `(5 & 3) | 8`,
 4, 8, 9, 5, 2, -1, 0 e 15. Os que mais enganam: `%` está no nível do `*`,
 então `3 * 4 % 5` é `(3 * 4) % 5` = 2; `7 > 3 > 1` compara o **resultado**
 de `7 > 3` (que é 1) com 1, e dá 0; `-3 % 2` é -1, porque o resto tem o sinal
-do dividendo; e `~0u >> 28` desloca 32 bits ligados e sobram 4, ou seja, 15.
+do dividendo; e `~0u >> 28` desloca 32 bits ligados e sobram 4: 15.
 Algumas dessas, sem os parênteses, fazem o gcc avisar: deixe os parênteses.
 
 </details>

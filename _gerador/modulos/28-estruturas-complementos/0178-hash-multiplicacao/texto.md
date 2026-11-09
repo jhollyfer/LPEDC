@@ -13,8 +13,8 @@ de função hash para chaves inteiras, e cada uma tem a sua regra para escolher
 O **método da divisão** é o que você já conhece: **h(k) = k mod m**. É rápido
 (uma divisão), mas o `m` decide tudo:
 
-- **m = 2^p é ruim**: `k % 2^p` é exatamente os **p bits de baixo** de `k` (é o
-  mesmo que `k & (m - 1)`). A função ignora todo o resto da chave. Chaves que
+- **m = 2^p é ruim**: `k % 2^p` são os **p bits de baixo** de `k` (o mesmo
+  que `k & (m - 1)`). A função ignora todo o resto da chave. Chaves que
   só diferem nos bits de cima, como os fardos de 16 em 16 (os 4 bits de baixo
   são sempre zero), colidem todas;
 - pela mesma razão, **m = 10^d** só olha os d últimos dígitos (preços
@@ -36,14 +36,14 @@ ser qualquer um, inclusive uma **potência de 2**. Knuth sugere
 **A ≈ (√5 − 1) / 2 = 0,6180339887...**, a parte fracionária da razão áurea:
 com ela, chaves seguidas pulam pela tabela inteira, sem se amontoar.
 
-Com `double`, a fórmula tem erro de arredondamento e é lenta. A versão de
-verdade é em **inteiros**: com palavras de w = 32 bits e m = 2^p, troque `A`
+Com `double`, a fórmula tem erro de arredondamento e é lenta. A versão usada
+na prática é em **inteiros**: com palavras de w = 32 bits e m = 2^p, troque `A`
 por **s = ⌊A · 2^32⌋ = 2654435769**. O produto `k · s` tem 64 bits; os 32 de
 baixo são o "k·A mod 1" (a parte fracionária, em binário), e os **p bits mais
 altos** deles são o balde. Em C: `(k * s) >> (32 - p)`, com `uint32_t`, que
 já descarta os 32 bits de cima de graça.
 
-Vamos ver na prática. Os dez fardos, com três funções: divisão por 16,
+O exemplo passa os dez fardos por três funções: divisão por 16,
 divisão por 13 (primo) e multiplicação com m = 16 (p = 4). No desenho, a conta
 da multiplicação para o fardo 48:
 
@@ -104,7 +104,7 @@ m = 16, uma colisão (16 e 160), o que é normal para 10 chaves em 16 baldes:
 a multiplicação não garante zero colisão, garante que o padrão das chaves não
 importa.
 
-Repara no fluxograma: é a conta do fardo 48 pela multiplicação em inteiros.
+O fluxograma faz a conta do fardo 48 pela multiplicação em inteiros.
 Depois de conferir o `p` (deslocar 32 bits ou mais é indefinido em C), são
 três operações: multiplica, deixa o `uint32_t` cortar os bits de cima,
 desloca. Nenhuma divisão:
@@ -115,7 +115,7 @@ desloca. Nenhuma divisão:
 > Na versão em inteiros, o produto **tem que ser `unsigned`**. Com `int`,
 > `k * 2654435769` estoura, e estouro de inteiro com sinal é comportamento
 > indefinido em C (o sanitizer reclama). Com `uint32_t`, o padrão garante a
-> conta mod 2^32, que é exatamente o "mod 1" da fórmula. E pegue os bits **de
+> conta mod 2^32, que é o "mod 1" da fórmula. E pegue os bits **de
 > cima** (`>> (32 - p)`), não os de baixo (`& (m - 1)`): os de baixo do
 > produto dependem só dos bits de baixo de `k`, e você volta ao problema da
 > divisão por 2^p (é o bug do E1067).
@@ -127,7 +127,8 @@ desloca. Nenhuma divisão:
 > tabela tem tamanho 2^p. O compilador sabe disso: quando o `m` da divisão é
 > uma **constante**, ele troca o `%` por multiplicações e deslocamentos
 > (tente `gcc -O2 -S` com `k % 13`). Com `m` numa variável, ele não pode, e a
-> divisão de verdade acontece a cada busca.
+> divisão acontece a cada busca.
+
 
 > [!NOTE]
 > **Pergunta para você:** com m = 32 (p = 5), em que balde cai o fardo 48 pela

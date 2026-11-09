@@ -13,7 +13,7 @@ Essas são as duas perguntas de **conectividade** que o edital pede pelo nome:
   junto com as arestas dele, aumenta o número de componentes.
 
 O jeito ingênuo é tirar cada cabo, rodar uma DFS e ver se a rede partiu:
-O(E · (V + E)). O A368 faz isso para conferir. O jeito esperto faz **uma DFS
+O(E · (V + E)). O A368 faz isso para conferir. O jeito bom faz **uma DFS
 só**, O(V + E), e anota dois números por vértice.
 
 **tin[u]** é o tempo de descoberta: o relógio da DFS no momento em que ela
@@ -24,7 +24,7 @@ subárvore de `u` consegue alcançar usando arestas da árvore para descer e
 Numa DFS de grafo não dirigido só existem dois tipos de aresta: as da
 **árvore** (levam a um vértice novo) e as de **volta** (levam a um ancestral
 já visitado). Nenhuma aresta "cruza" para o lado. Por isso `low` mede
-exatamente quanto a subárvore consegue escapar para cima sem passar pelo pai.
+quanto a subárvore consegue escapar para cima sem passar pelo pai.
 
 As duas regras, para uma aresta da árvore `u - v` (v filho de u):
 
@@ -37,7 +37,7 @@ As duas regras, para uma aresta da árvore `u - v` (v filho de u):
   dela), então não serve. A raiz é articulação **só se tiver dois ou mais
   filhos** na árvore da DFS: sem ela, os filhos não têm como se falar.
 
-Vamos ver na prática. Do Centro, a DFS desce em ordem de índice. Ao lado de
+Do Centro, a DFS desce em ordem de índice. Ao lado de
 cada bairro, `tin/low`. As arestas verdes são as pontes; os bairros em
 amarelo, as articulações:
 
@@ -101,7 +101,7 @@ int main(void) {
 // Ponta Negra: tin 7, low 7
 ```
 
-Repara no fluxograma: as duas perguntas acontecem **na volta** da recursão,
+No fluxograma, as duas perguntas acontecem **na volta** da recursão,
 depois de `dfs(v, u)`. Só então `low[v]` está completo, porque a subárvore
 inteira de `v` já foi explorada:
 
@@ -122,9 +122,9 @@ inteira de `v` já foi explorada:
 | volta a Aleixo | low[Flores] = 4 | 4 > 2: **ponte** Aleixo - Flores; Aleixo é **articulação** |
 | volta ao Centro (raiz) | | um filho só: **não** é articulação |
 
-Repare em Flores: é articulação sem ser ponta de nenhuma ponte (o triângulo
-dela tem dois caminhos), e Flores - Cidade Nova não é ponte. As duas
-perguntas parecem iguais, mas o `>` e o `>=` fazem toda a diferença.
+Flores é articulação sem ser ponta de nenhuma ponte (o triângulo dela tem
+dois caminhos), e Flores - Cidade Nova não é ponte. As duas perguntas
+parecem iguais; o que as separa é o `>` contra o `>=`.
 
 > [!WARNING]
 > Dois erros clássicos. Primeiro: usar a regra `low[v] >= tin[u]` também na
@@ -136,8 +136,9 @@ perguntas parecem iguais, mas o `>` e o `>=` fazem toda a diferença.
 > [!TIP]
 > **Por dentro do C:** `tin`, `low` e `corte` são vetores globais, zerados
 > antes do `main`, e por isso `tin[v] == 0` serve de "não visitado". A
-> variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e é
-> por isso que a contagem da raiz não se mistura com a dos outros vértices.
+> variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e
+> por isso a contagem da raiz não se mistura com a dos outros vértices.
+
 > A recursão pode descer V níveis; numa rede com um milhão de bairros em fila
 > isso estoura a pilha (8 MB por padrão no Linux), e a versão de produção
 > troca a recursão por uma pilha explícita.

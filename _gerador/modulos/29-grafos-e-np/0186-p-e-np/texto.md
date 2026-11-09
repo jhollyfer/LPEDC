@@ -3,12 +3,12 @@
 Você organiza o churrasco da firma e quer um grupo que respeite cinco
 condições: alguém leva a churrasqueira, dois colegas brigados não vão
 juntos, alguém sabe acender o carvão... Um amigo diz "chama a Ana e o Davi".
-Conferir o palpite leva dez segundos: é só passar condição por condição.
+Conferir o palpite leva dez segundos: basta passar condição por condição.
 Achar um grupo que funcione, sem palpite nenhum, pode exigir testar todas as
 combinações de quem vai e quem não vai.
 
-Essa assimetria entre **achar** e **conferir** é o coração da pergunta mais
-famosa da computação.
+A pergunta mais famosa da computação gira em torno dessa assimetria entre
+**achar** e **conferir**.
 
 **Problema de decisão** é um problema cuja resposta é **sim ou não**: "existe
 um grupo que satisfaz as condições?", "existe ciclo hamiltoniano?", "existe
@@ -46,7 +46,7 @@ pergunta: existe uma atribuição de verdadeiro e falso que deixa todas as
 cláusulas verdadeiras? **3-SAT** é o caso em que toda cláusula tem no máximo
 três literais (no Cormen, exatamente três), e continua NP-completo.
 
-Vamos ver na prática. As quatro variáveis são Ana, Beto, Caio e Davi. O
+As quatro variáveis são Ana, Beto, Caio e Davi. O
 palpite do amigo cai na quinta cláusula; a força bruta percorre as 2⁴ = 16
 atribuições como os bits de um contador e acha uma na décima primeira:
 
@@ -119,9 +119,10 @@ int main(void) {
 // Achei depois de 11 de 16 tentativas: Ana=não Beto=sim Caio=não Davi=sim
 ```
 
-Repara no fluxograma: é o verificador. Ele passa uma vez por cada literal,
-então custa O(tamanho da fórmula). A força bruta chama esse verificador até
-2ⁿ vezes, e é aí que mora o exponencial:
+O fluxograma é o verificador. Ele passa uma vez por cada literal e custa
+O(tamanho da fórmula). A força bruta o chama até 2ⁿ vezes, e daí vem o
+exponencial:
+
 
 {{fluxograma}}
 

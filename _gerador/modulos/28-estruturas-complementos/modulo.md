@@ -3,7 +3,7 @@
 Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
 mais direto: o que funciona e cabe numa primeira leitura. Este módulo volta
 a essas três estruturas e preenche o que ficou de fora, com o olhar do
-Cormen, o livro da prova do PPGI. Não há estrutura nova aqui; há as versões
+Cormen, o livro da prova do PPGI. Não há estrutura nova, e sim as versões
 que aparecem nos livros, nas bibliotecas e nas questões de concurso.
 
 Três ideias atravessam o módulo. A primeira é a **sentinela**: um nó falso que
@@ -17,8 +17,8 @@ O(1) para O(n) sem mudar uma linha da lógica.
 
 O que muda na cabeça é a pergunta "por quê?". Por que `m` primo e longe de
 potência de 2? Por que a dupla só quando o filho pende para dentro? Por que a
-altura da rubro-negra é no máximo 2 log₂(n + 1)? A prova cobra exatamente
-esses porquês, e o módulo termina com uma agenda de consultas que usa a lista
+altura da rubro-negra é no máximo 2 log₂(n + 1)? A prova cobra esses
+porquês, e o módulo termina com uma agenda de consultas que usa a lista
 com sentinela, a rubro-negra e a dispersão dupla no mesmo programa.
 
 ## O que você vai aprender
@@ -41,35 +41,6 @@ com sentinela, a rubro-negra e a dispersão dupla no mesmo programa.
   clássicos são o quê) e **chave composta**: comparador composto e passadas
   estáveis em sequência
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
-   mesmas chaves do código.
-2. Leia o código. Cada assunto tem um **TAD** na pasta (`sentinela.h`,
-   `arvpai.h`, `avlrem.h`, `vermelhopreto.h`, `espalha.h`, `sondagem.h`,
-   `pombal.h`, `agenda.h`); o texto mostra o pedaço do `.c` que importa. Abra
-   o `.c` inteiro também.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos A. Eles não repetem o texto: cada um mostra outra faceta
-   (um caso de borda, uma medição, um uso real).
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   Todo exercício é para codificar: a resposta é um programa que roda e mostra
-   a saída esperada. As dicas vêm logo abaixo do enunciado; tente antes de ler.
-
-Nos assuntos 0176 e 0177, o **Passo a passo** é um teste de mesa: refaça no
-papel antes de rodar. Desenhe a árvore inteira a cada rotação, com as alturas
-(na AVL) ou as cores (na rubro-negra).
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nas listas, a sentinela é o nó cinza. Na rubro-negra, o nó vermelho é
-vermelho e o preto aparece em cinza. Nas tabelas hash, amarelo marca as
-posições que uma busca olhou e verde, onde ela achou a chave.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo é uma revisão por dentro. Ele supõe que você já fez a **lista
@@ -79,7 +50,10 @@ encadeamento e com sondagem linear (0105 a 0107) e as ordenações dos módulos
 13 e 18, em especial a **estabilidade** (0096 e 0120). **Ponteiro para struct**
 (0062), `malloc`/`free` e **TAD** (0074) aparecem em todo assunto.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
+Cada assunto tem um **TAD** na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
+`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O
+texto mostra só o pedaço do `.c` que importa: abra o `.c` inteiro também. O
+`rodar` compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
 então os comandos são os de sempre:
 
 ```bash
@@ -92,7 +66,14 @@ balanceamento** é `altura(esq) - altura(dir)`. Alguns livros contam o nível a
 partir de 1 ou o fator ao contrário: na prova, leia a definição do enunciado
 antes de fazer a conta.
 
+Nos assuntos 0176 e 0177, refaça o **Passo a passo** no papel antes de rodar,
+desenhando a árvore inteira a cada rotação, com as alturas (AVL) ou as cores
+(rubro-negra). Nos desenhos, a sentinela das listas é o nó cinza; na
+rubro-negra, o nó preto aparece em cinza; nas tabelas hash, amarelo marca as
+posições que a busca olhou e verde, onde achou a chave.
+
 {{indice}}
+
 
 ---
 
