@@ -750,3 +750,233 @@ a) I e II · b) I e III · c) I, II e III · d) I, II e IV · e) Todas
 a) Full: (REAR+1) mod n == FRONT; empty: (FRONT+1) mod n == REAR · b) Full: REAR == FRONT; empty: (REAR+1) mod n == FRONT · c) Full: (FRONT+1) mod n == REAR; empty: REAR == FRONT · d) Full: REAR == FRONT; empty: (FRONT+1) mod n == REAR · e) Full: (REAR+1) mod n == FRONT; empty: REAR == FRONT
 
 Folha de respostas: veio sem as letras; 4 questões anuladas.
+
+---
+
+## Edital 057/2022 (prova de 27/01/2023)
+
+Quatro alternativas por questão. O cartão de respostas veio sem a posição das marcas.
+
+**01.** (Python) Saída de:
+```python
+class Vector():
+    def __init__(self, row: list()):
+        self.row = row
+    def dot_product(self, column):
+        return sum(self.row[i] * column.row[i] for i in range(len(self.row)))
+vec_1 = Vector([0,2,0,0,5])
+vec_2 = Vector([1,0,3,4,0])
+print(vec_1.dot_product(vec_2))
+```
+a) 15 · b) [0, 0, 0, 0, 0] · c) [1, 2, 3, 4, 5] · d) 0
+
+**02.** Árvores de pesquisa binária: 1. TODOS os nós da subárvore à esquerda são menores que o pai. 2. O nó mais à esquerda é o menor de TODOS os nós, e o mais à direita é o maior. 3. O sucessor de x (menor chave maior que a de x) está SEMPRE em um nível acima de x, mais próximo da raiz. Quais são verdadeiras?
+a) Apenas 2 e 3 · b) Todas · c) Apenas 1 e 2 · d) Apenas 1
+
+**03.** Ordenação: 1. O Quicksort tem complexidade de pior caso O(n log n). 2. Quicksort e Mergesort usam divisão e conquista. 3. O Mergesort é Θ(n log n) no caso médio. 4. Com a lista já ordenada, o Selectionsort é O(n). As afirmações são, respectivamente:
+a) V, V, V, V · b) F, V, V, F · c) V, F, F, V · d) F, F, F, F
+
+**04.** Itens inseridos numa árvore binária de busca: 8, 3, 4, 9, 5, 6, 2, 1, 7. Qual fica na raiz?
+a) 1 · b) 4 · c) 8 · d) 9
+
+**05.** Pilha O(1) com lista simplesmente encadeada: onde ficam push e pop?
+a) push depois do último, pop no último · b) push antes do primeiro, pop no primeiro · c) push antes do primeiro, pop no último · d) push depois do último, pop no primeiro
+
+**06.** (Python) Mesma classe `Vector`; `vec_1 = Vector([1,2,3,4,5])`, `vec_2 = vec_1`, `vec_2.row[2] = 15`, `print(vec_1.row)`.
+a) [ 2 15 4 5] · b) [ 0 1 2 15 4 5] · c) [ 1 2 15 4 15] · d) [ 1 2 15 4 5]
+
+**07.** f(n) = (n+1)(n−1) e g(n) = 8·log2(n) + 1, n > 0:
+a) f e g são exponenciais · b) f é quadrática e g é linear · c) g(n) = Ω(f(n)) · d) g(n) = O(f(n))
+
+**08.** (Python) `fibonacci(n)`: n == 1 → 0; n == 2 → 1; senão fibonacci(n-1) + fibonacci(n-2). Saída de `print(fibonacci(7))`:
+a) 13 · b) 5 · c) 0 · d) 8
+
+**09.** Um grafo é uma árvore se e somente se:
+a) é planar · b) é conexo, não direcionado e não contém ciclos · c) é completamente conectado · d) todo grafo é uma árvore
+
+**10.** Matrizes bidimensionais de inteiros. Alternativa INCORRETA:
+a) O produto de uma matriz m×n por uma x×y resulta numa matriz de n linhas e y colunas · b) A soma dos elementos pode ser feita com dois laços aninhados e um acumulador · c) Uma matriz pode ser representada com listas encadeadas · d) Uma matriz m×n tem m·n espaços para inteiros
+
+**11.** Pseudocódigo que insere `novo` num vetor ordenado `vetor[1..N]`: busca binária (`meio = floor((i+j)/2)`, `vetor[meio] > novo` → `j = meio-1`, senão `i = meio+1`) para achar a posição `i`; depois `vetor[N+1] = novo` e `for (k = N+1; k == i; k--) trocar(vetor, k, k-1);` (assim no original). 1. Insere com menos comparações que a ordenação por inserção. 2. Insere com o mesmo número de comparações. 3. Insere com o mesmo número de movimentações.
+a) Somente 1 · b) 2 e 3 · c) Somente 3 · d) 1 e 3
+
+**12.** Limite superior assintótico do Quick Sort no pior caso:
+a) O(n) · b) O(n log n) · c) O(n!) · d) O(n²)
+
+**13.** O que faz o código C?
+```c
+#include <stdio.h>
+#define MAX 50
+int main() {
+  int m, soma=0;
+  int mat[MAX][MAX];
+  scanf("%d", &m);
+  for (int i=0; i<m; i++)
+    for (int j=0; j<m; j++)
+      scanf("%d", &mat[i][j]);
+  for (int i=0; i<m; i++)
+    for (int j=i; j<m; j++)
+      soma += mat[i][j];
+  printf("%d\n", soma);
+}
+```
+a) Soma dos elementos iguais ou acima da diagonal principal · b) Soma de todos os elementos · c) Imprime só mat[m][m] · d) Soma dos elementos iguais ou abaixo da diagonal principal
+
+**14.** Saída do programa C:
+```c
+void func1 (int x) { x = 9 * x; }
+void func2 (int v[]) { v[0] = 3 * v[0]; }
+void main (void) {
+  int x, v[2];
+  x = 222;
+  func1(x);
+  printf("x: %d\n", x);
+  v[0] = 333;
+  func2(v);
+  printf("v[0]: %d\n", v[0]);
+}
+```
+a) x: 222 e v[0]: 999 · b) x: 222 e v[0]: 222 · c) x: 222 e v[0]: 666 · d) x: 222 e v[0]: 333
+
+**15.** O que faz?
+```c
+Lista* abracadabra (Lista* l, int v) {
+  Lista* novo = (Lista*) malloc(sizeof(Lista));
+  novo->info = v;
+  novo->prox = l;
+  novo->ant = NULL;
+  if (l) { l->ant = novo };
+  return novo;
+}
+```
+a) Insere no início de uma lista duplamente encadeada · b) Insere no final de uma lista dupla · c) Insere no início de uma lista simples · d) Insere no fim de uma lista simples
+
+**16.** Hash com m = 9, endereçamento aberto, sondagem linear, h(k) = k mod 9; chaves 73, 24, 16, 46, 28, nessa ordem. Tabela final (posições 0 a 8):
+a) ø 73 16 ø ø 28 24 46 ø · b) 28 46 73 ø ø ø ø 24 16 · c) ø 73 46 28 ø ø 24 16 · d) 73 46 ø ø ø ø 28 24 16
+
+**17.** Árvores vermelho-preto: 1. A raiz é preta. 2. Toda subárvore nula é preta. 3. Se um nó é vermelho, os filhos são pretos.
+a) Apenas 2 e 3 · b) Todas · c) Apenas 1 e 2 · d) Apenas 1
+
+**18.** Grafos: 1. Dijkstra acha o menor caminho, mas só serve para casos pequenos ou médios por ter complexidade exponencial. 2. A busca em largura normalmente usa uma fila. 3. Em grafos esparsos, a matriz de adjacências consome mais memória do que a lista de adjacências.
+a) Apenas 2 e 3 · b) Apenas 1 e 2 · c) Apenas 1 · d) Nenhuma
+
+**19.** AVL, já com a referência para o nó a remover (sem busca): melhor e pior caso da remoção:
+a) O(log n), O(log n) · b) O(1), O(log n) · c) O(1), O(n) · d) O(log n), O(n)
+
+**20.** Lista implementada com vetor: busca por um elemento, acesso por índice, inserção no início, inserção no final, remoção por índice. Pior caso, nessa ordem:
+a) O(n), O(1), O(1), O(n), O(n) · b) O(n), O(1), O(n), O(1), O(n) · c) O(1), O(n), O(n), O(n), O(1) · d) O(n), O(n), O(1), O(n), O(1)
+
+---
+
+## Edital 020/2023
+
+Dez questões, quatro alternativas. As questões 9 e 10 traziam o pseudocódigo como imagem, que não veio no texto.
+
+**01.** Vetor `10 30 50 60 70 80 90 100 120 130` (posições 0 a 9). Comparações da busca binária no pior caso:
+A) 6 · B) 10 · C) 4 · D) 1
+
+**02.** Ordenação por inserção:
+A) Fica mais rápida com o vetor quase ordenado e é mais lenta com o vetor invertido · B) O tempo independe da ordem inicial, sempre quadrático · C) O tempo independe da ordem, sempre linear · D) Não ordena chaves negativas
+
+**03.** Pilha `[4, 16, 1, 7, 8, 13]`, topo à esquerda. Três desempilhamentos, depois empilha 5 e empilha 2:
+A) [7, 8, 13, 5, 2] · B) [4, 16, 2, 5, 2] · C) [5, 2, 7, 8, 13] · D) [2, 5, 7, 8, 13]
+
+**04.** Hash por encadeamento: I. Não gera colisões secundárias. II. Tem custo O(n) no pior caso. III. Ao contrário do endereçamento aberto, aceita mais chaves que o tamanho da tabela.
+A) Nenhuma · B) Apenas II · C) Apenas I e II · D) Todas
+
+**05.** Vetor mantido ordenado × árvore binária de pesquisa balanceada: I. O vetor tem inserção e remoção mais baratas por não alocar nós. II. No pior caso, a busca custa assintoticamente o mesmo nos dois.
+A) Apenas I · B) Apenas II · C) As duas · D) Nenhuma
+
+**06.** Árvore com três nós e raiz 5 `[figura ausente]`. Alternativa correta:
+A) Pode ser rubro-negra, pois está balanceada · B) Pode representar uma árvore binária de pesquisa, com ou sem balanceamento · C) Pode representar uma heap mínima · D) É AVL, pois está balanceada
+
+**07.** Complexidade, alternativa correta:
+A) A busca binária é O(N/2) no pior caso · B) Inserir sem ordem numa lista encadeada custa constante no pior caso · C) Inserir no início de um vetor custa constante no pior caso · D) Inserir numa árvore binária de pesquisa custa constante no pior caso
+
+**08.** Código com `par` (intercala `v[inicio..meio]` e `v[meio+1..fim]` usando `vaux`), `sortR` (divide ao meio, chama a si mesma nas duas metades e depois `par`) e `sort` (aloca `vaux`, chama `sortR`, libera):
+A) Quick Sort · B) Radix Sort · C) Merge Sort · D) Não ordena o vetor
+
+**09.** Pseudocódigo recursivo com `len`, `max` e `lista[1:]` `[figura ausente]`. Saída:
+A) 13 · B) 3 · C) 11 · D) 2
+
+**10.** Pseudocódigo de produto de matrizes m×n por n×p, m = 2, n = 3, p = 2 `[figura ausente]`. Valor de resultMatrix:
+A) {{0, 0}, {0, 0}} · B) {{0, 30, 0}, {45, 0, 0}} · C) {{0, 30}, {45, 0}, {9, 8}} · D) {{0, 30}, {45, 0}}
+
+---
+
+## Edital 071/2023 (processo seletivo 2024/1)
+
+Quatro alternativas. **Gabarito definitivo oficial** (26/01/2024): 01 anulada, 02 A, 03 B, 04 C, 05 B, 06 B, 07 anulada, 08 D, 09 B, 10 anulada, 11 D, 12 B, 13 C, 14 D, 15 B, 16 A, 17 C, 18 D, 19 B, 20 B.
+
+**01.** Código que deveria ordenar por seleção, de forma crescente:
+```c
+void algoritmo(int v[], int n) {
+  int i,j,k, tmp;
+  for(i = 0; i < n-1; i++) {
+    k = i;
+    for(j = 0; j < n; j++) {
+      if(v[k] > v[j]) { k = j }
+    }
+    tmp = v[k];
+    v[k] = v[i];
+    v[i] = tmp;
+  }
+```
+A) Ordena por seleção de forma crescente · B) Não ordena e não se corrige mudando uma linha · C) Pode ser corrigido em uma única linha · D) Ordena, mas não usa seleção
+
+**02.** Heapsort: I. Custo O(n log n) no pior caso. II. Tem duas etapas: construir o heap e usá-lo para uma seleção eficiente. III. Tem custo máximo quadrático no pior caso.
+A) Apenas I e II · B) Apenas II e III · C) Apenas I · D) Apenas III
+
+**03.** Heap binário de mínimo com N elementos em vetor, mínimo na posição zero. Remover a raiz e deixar o heap correto custa, da melhor forma:
+A) N log N no pior caso · B) log N no pior caso, mesmo sabendo que deslocar todo o vetor custa N · C) N no pior caso · D) O(1), pois o elemento está na posição zero
+
+**04.** Programa Θ(n³) leva 1 minuto com n = 100. Com n = 300:
+A) 3 min · B) 9 min · C) 27 min · D) 300 min
+
+**05.** I. Todo algoritmo não vazio tem custo Ω(1). II. Todo algoritmo tem custo O(nⁿ). III. Nenhum algoritmo não vazio tem custo o(2), "ó pequeno de 2". (Os símbolos de I vieram ilegíveis no texto.)
+A) I e II · B) I e III · C) II e III · D) Todas
+
+**06.** Vetor `2 4 6 8 10 12 14 16 18` (posições 0 a 8). Busca binária pela chave 9 compara com:
+A) 2, 6, 10, 14 e 18 · B) 10, 4, 6 e 8 · C) nenhum, porque a chave não existe · D) 10, 14 e 18
+
+**07.** Busca em árvore vermelho e preto: I. Altura máxima log n. II. Altura máxima inferior a 3 log n. III. Pode degenerar no pior caso, com busca linear, em situações raras.
+A) Apenas I · B) Apenas II · C) Apenas III · D) Apenas I e II
+
+**08.** Pilha em lista encadeada com 2, 4, 6, 8 e 10 inseridos nessa ordem. Sobre uma remoção: I. Retira o 2. II. Retira o 10. III. Custo proporcional ao tamanho. IV. Custo constante.
+A) I e III · B) I e IV · C) II e III · D) II e IV
+
+**09.** Vetor mantido ordenado, com os melhores algoritmos:
+A) Inserção, remoção e busca lineares · B) Inserção e remoção lineares, busca logarítmica · C) Inserção e remoção logarítmicas, busca constante · D) Inserção linear, remoção logarítmica, busca logarítmica
+
+**10.** Quicksort, mergesort e inserção: I. O quicksort tem o melhor pior caso dos três. II. A inserção tende a ser a mais rápida quando os elementos fora de ordem são menos de um décimo de log N. III. O mergesort tem o menor custo assintótico de pior caso dos três.
+A) Apenas I · B) Apenas II · C) Apenas III · D) Nenhuma das anteriores
+
+**11.** Vetor sempre ordenado com n elementos; pior caso de inserção, remoção e busca pelo campo de ordenação:
+A) O(n log n), O(n log n), O(log n) · B) O(n log n), O(n log n), O(n) · C) O(n), O(n), O(n) · D) O(n), O(n), O(log n)
+
+**12.** Quicksort crescente; depois do primeiro particionamento o vetor está `2 5 9 1 7 2 1 9`. Pode ter sido o pivô:
+A) 2 · B) 9 · C) 1 · D) 7
+
+**13.** Hash por encadeamento, tamanho 5, h(k) = k mod 5; chaves 2, 5, 9, 20 e 7. Quantas colisões?
+A) Nenhuma · B) Uma · C) Duas · D) Três
+
+**14.** ABB sem balanceamento com 10, 5, 20, 1, 30, 7 e 15, nessa ordem. No pior caso, uma busca compara a chave com:
+A) 7 nós · B) 6 nós · C) 2 nós · D) 3 nós
+
+**15.** (Python) Busca binária recursiva em `A = [0, 100, 20, 30, 40, 50, 60, 70]` (vetor fora de ordem), procurando 100, com `meio = (esquerda + direita) // 2`. Saída de `print("Pesquisa com sucesso:", ...)`:
+A) 100 · B) -1 · C) 1 · D) 2
+
+**16.** Hash com encadeamento por lista, sem chave repetida: pior caso de inserção __ e de busca __; trocando a lista por árvore rubro-negra, inserção __ e busca __.
+A) O(n), O(n), O(log n), O(log n) · B) O(1), O(n), O(1), O(log n) · C) O(n), O(1), O(log n), O(1) · D) O(1), O(1), O(1), O(1)
+
+**17.** (Python) Mesma busca binária recursiva no mesmo vetor, agora procurando 70. Quantas vezes `pesquisa_binaria_recursiva()` é chamada?
+A) 0 · B) 3 · C) 4 · D) 5
+
+**18.** (Python) Produto de A = [[0, 2, 1], [1, 0, 0]] por B = [[7, 0], [0, 10], [11, 0]] com três laços:
+A) [[0. 2. 1.] [1. 0. 0.]] · B) [[7. 0.] [0. 10.] [11. 0.]] · C) [[7. 0.] [11. 20.]] · D) [[11. 20.] [7. 0.]]
+
+**19.** (Python) Classe `Stack` com lista; `popit` em pilha vazia imprime "empty stack". Comandos: push 1, push 3, pop, pop, pop, push 2, push 1, pop, `print(stack.stack)`.
+A) [2, 1] · B) "empty stack" e [2] · C) "empty stack" e [] · D) []
+
+**20.** (Python) `func1(fator)` devolve `func2(x)`, que retorna `x * fator`; `funcao = func1(3)`; `print(funcao(5))`.
+A) Erro, porque não passou `fator` · B) 15 · C) 3 · D) 0
