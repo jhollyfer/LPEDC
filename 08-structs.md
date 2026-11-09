@@ -58,8 +58,7 @@ módulo. Ao rodar, troque a ordem dos campos de uma struct e compare o
 ## 0059 · Struct
 
 Você pede açaí pelo app: copo M, 2 unidades, R$ 18,50 cada. Para o sistema,
-esse pedido não é um número só. É um pacote com três informações de tipos
-diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
+esse pedido é um pacote com três informações de tipos diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
 
 Até aqui, você teria três variáveis soltas: `char tamanho`, `int quantidade`,
 `double preco`. Com dez pedidos, seriam trinta variáveis, e nada no código diz
@@ -898,9 +897,8 @@ Uma linha é uma struct. A tabela inteira é um **vetor de structs**.
 
 Você já conhece as duas peças. Um vetor guarda vários valores do mesmo tipo,
 lado a lado. Uma struct é um tipo. Junte as duas: `Time tabela[4];` são quatro
-`Time` seguidos na memória. O vetor não guarda **referências** para structs
-espalhadas pela memória: os bytes das structs ficam **dentro** do vetor, um
-time colado no outro.
+`Time` seguidos na memória: os bytes das structs ficam **dentro** do vetor,
+um time colado no outro.
 
 Para chegar num campo, você primeiro escolhe a linha e depois a coluna:
 `tabela[2].nome`. O índice vem **antes** do ponto, porque `tabela[2]` é um

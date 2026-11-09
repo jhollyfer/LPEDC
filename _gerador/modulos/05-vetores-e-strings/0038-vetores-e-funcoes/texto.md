@@ -95,8 +95,7 @@ coisas lado a lado.
 > `sizeof(precos)` vale 8 num PC de 64 bits: é o tamanho de um **endereço**,
 > não do vetor. O truque `sizeof(v) / sizeof(v[0])` só funciona no bloco em
 > que o vetor foi declarado. O gcc até avisa (`-Wsizeof-array-argument`), mas quem ignora
-> o aviso ganha um laço que percorre 1 item em vez de 4. Por isso o tamanho
-> vai num parâmetro.
+> o aviso ganha um laço que percorre 1 item em vez de 4.
 
 > [!TIP]
 > **Por dentro do C:** quando o `main` chama `reajustar(cardapio, 4, 10)`, o

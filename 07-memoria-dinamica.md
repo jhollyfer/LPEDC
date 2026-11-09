@@ -544,7 +544,7 @@ double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
 Três detalhes nessa linha:
 
 - o `malloc` conta em **bytes**, não em elementos. `malloc(4)` não é espaço
-  para 4 `double`, é espaço para 4 bytes. Por isso sempre `n * sizeof(tipo)`;
+  para 4 `double`, é espaço para 4 bytes. Daí o `n * sizeof(tipo)` de sempre;
 - ele devolve `void *` (assunto 0051), que vira `double *` sozinho. Em C não
   precisa de cast; o `(double *)` que você vê em livro antigo é dispensável;
 - se não houver memória, ele devolve **`NULL`**. Sempre confira antes de usar.
@@ -1850,7 +1850,7 @@ C, quem cria esse erro é você, e quem corrige também.
 
 O pior desses erros é que o programa costuma **funcionar**: mostra a saída
 certa, termina sem reclamar e quebra só na máquina do cliente, dias depois.
-Por isso o C tem ferramentas que vigiam a memória enquanto o programa roda.
+Daí as ferramentas que vigiam a memória enquanto o programa roda.
 Primeiro, os quatro erros clássicos:
 
 | Erro | O que é | O AddressSanitizer diz |

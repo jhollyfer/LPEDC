@@ -1,8 +1,7 @@
 ## 0059 · Struct
 
 Você pede açaí pelo app: copo M, 2 unidades, R$ 18,50 cada. Para o sistema,
-esse pedido não é um número só. É um pacote com três informações de tipos
-diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
+esse pedido é um pacote com três informações de tipos diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
 
 Até aqui, você teria três variáveis soltas: `char tamanho`, `int quantidade`,
 `double preco`. Com dez pedidos, seriam trinta variáveis, e nada no código diz

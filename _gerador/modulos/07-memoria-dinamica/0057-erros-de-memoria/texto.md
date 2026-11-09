@@ -8,7 +8,7 @@ C, quem cria esse erro é você, e quem corrige também.
 
 O pior desses erros é que o programa costuma **funcionar**: mostra a saída
 certa, termina sem reclamar e quebra só na máquina do cliente, dias depois.
-Por isso o C tem ferramentas que vigiam a memória enquanto o programa roda.
+Daí as ferramentas que vigiam a memória enquanto o programa roda.
 Primeiro, os quatro erros clássicos:
 
 | Erro | O que é | O AddressSanitizer diz |

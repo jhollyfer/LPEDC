@@ -27,8 +27,7 @@ Para somar por coluna, você inverte: a coluna fica por fora e a linha por
 dentro. Os laços são os mesmos; muda quem é o "relógio das horas" e quem é
 o "dos minutos".
 
-No C, a matriz não é um punhado de linhas soltas pela memória. Ela é **um
-bloco só, contínuo**, com todas as linhas do mesmo tamanho, uma colada na
+No C, a matriz é **um bloco só, contínuo**, com todas as linhas do mesmo tamanho, uma colada na
 outra. A planilha do exemplo tem 3 linhas e 4 colunas, e as 12 células ficam
 enfileiradas: primeiro a linha 0 inteira, depois a linha 1,
 depois a 2. A célula `vendas[1][2]` (o 14) é a 7ª da fila, na posição 1 × 4 + 2

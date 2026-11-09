@@ -99,7 +99,7 @@ destino, começa a escrever ali, por cima dele, e põe um `'\0'` novo no fim. To
 > `'\0'`: custa proporcional ao tamanho, toda vez. Num laço, nunca escreva
 > `for (i = 0; i < strlen(s); i++)`: o `strlen` roda a cada volta. Calcule uma
 > vez antes. E cuidado com acento: o `strlen("Belém")` é **6**, porque o "é"
-> em UTF-8 ocupa 2 bytes. O C conta bytes, não letras.
+> em UTF-8 ocupa 2 bytes.
 
 > [!NOTE]
 > **Pergunta para você:** depois de `char s[10] = "banana";` e `s[3] = '\0';`,

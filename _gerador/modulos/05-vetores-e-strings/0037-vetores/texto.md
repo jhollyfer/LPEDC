@@ -100,8 +100,7 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > bytes). O nome `passos` marca onde o vetor começa, e o índice diz **quantos
 > itens pular**: `passos[5]` fica em início + 5 × 4 bytes. Daí o primeiro ser
 > o 0 (pula zero itens) e o acesso custar o mesmo na posição 0 ou na 999: é
-> uma conta, não uma busca. O C também não confere o limite: faz a conta e vai
-> até lá. Vetor local sem inicializar tem lixo, igual a qualquer variável local.
+> só uma conta. Vetor local sem inicializar tem lixo, igual a qualquer variável local.
 
 > [!NOTE]
 > **Pergunta para você:** se o `maior` começasse com 0 e os valores fossem

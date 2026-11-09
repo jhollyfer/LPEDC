@@ -33,8 +33,8 @@ parâmetros. Ponteiros ainda não apareceram: quando o texto disser "vai o
 endereço do vetor", guarde a ideia, que o módulo 06 mostra a sintaxe.
 
 Nos desenhos, cada gaveta do vetor tem o índice embaixo, em cinza. Quase todo
-assunto aqui é um laço: siga o fluxograma com o dedo e, ao rodar, mude um
-tamanho ou um índice de propósito.
+assunto aqui é um laço: ao rodar, mude um tamanho ou um índice de
+propósito.
 
 O **AddressSanitizer** do `rodar` confere, enquanto o programa roda, o que o
 C não confere: índice e tamanho de string. Quando aparecer
@@ -156,8 +156,7 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > bytes). O nome `passos` marca onde o vetor começa, e o índice diz **quantos
 > itens pular**: `passos[5]` fica em início + 5 × 4 bytes. Daí o primeiro ser
 > o 0 (pula zero itens) e o acesso custar o mesmo na posição 0 ou na 999: é
-> uma conta, não uma busca. O C também não confere o limite: faz a conta e vai
-> até lá. Vetor local sem inicializar tem lixo, igual a qualquer variável local.
+> só uma conta. Vetor local sem inicializar tem lixo, igual a qualquer variável local.
 
 > [!NOTE]
 > **Pergunta para você:** se o `maior` começasse com 0 e os valores fossem
@@ -564,8 +563,7 @@ coisas lado a lado.
 > `sizeof(precos)` vale 8 num PC de 64 bits: é o tamanho de um **endereço**,
 > não do vetor. O truque `sizeof(v) / sizeof(v[0])` só funciona no bloco em
 > que o vetor foi declarado. O gcc até avisa (`-Wsizeof-array-argument`), mas quem ignora
-> o aviso ganha um laço que percorre 1 item em vez de 4. Por isso o tamanho
-> vai num parâmetro.
+> o aviso ganha um laço que percorre 1 item em vez de 4.
 
 > [!TIP]
 > **Por dentro do C:** quando o `main` chama `reajustar(cardapio, 4, 10)`, o
@@ -944,8 +942,7 @@ Para somar por coluna, você inverte: a coluna fica por fora e a linha por
 dentro. Os laços são os mesmos; muda quem é o "relógio das horas" e quem é
 o "dos minutos".
 
-No C, a matriz não é um punhado de linhas soltas pela memória. Ela é **um
-bloco só, contínuo**, com todas as linhas do mesmo tamanho, uma colada na
+No C, a matriz é **um bloco só, contínuo**, com todas as linhas do mesmo tamanho, uma colada na
 outra. A planilha do exemplo tem 3 linhas e 4 colunas, e as 12 células ficam
 enfileiradas: primeiro a linha 0 inteira, depois a linha 1,
 depois a 2. A célula `vendas[1][2]` (o 14) é a 7ª da fila, na posição 1 × 4 + 2
@@ -1930,7 +1927,7 @@ destino, começa a escrever ali, por cima dele, e põe um `'\0'` novo no fim. To
 > `'\0'`: custa proporcional ao tamanho, toda vez. Num laço, nunca escreva
 > `for (i = 0; i < strlen(s); i++)`: o `strlen` roda a cada volta. Calcule uma
 > vez antes. E cuidado com acento: o `strlen("Belém")` é **6**, porque o "é"
-> em UTF-8 ocupa 2 bytes. O C conta bytes, não letras.
+> em UTF-8 ocupa 2 bytes.
 
 > [!NOTE]
 > **Pergunta para você:** depois de `char s[10] = "banana";` e `s[3] = '\0';`,

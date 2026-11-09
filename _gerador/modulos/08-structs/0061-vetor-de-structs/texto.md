@@ -6,9 +6,8 @@ Uma linha é uma struct. A tabela inteira é um **vetor de structs**.
 
 Você já conhece as duas peças. Um vetor guarda vários valores do mesmo tipo,
 lado a lado. Uma struct é um tipo. Junte as duas: `Time tabela[4];` são quatro
-`Time` seguidos na memória. O vetor não guarda **referências** para structs
-espalhadas pela memória: os bytes das structs ficam **dentro** do vetor, um
-time colado no outro.
+`Time` seguidos na memória: os bytes das structs ficam **dentro** do vetor,
+um time colado no outro.
 
 Para chegar num campo, você primeiro escolhe a linha e depois a coluna:
 `tabela[2].nome`. O índice vem **antes** do ponto, porque `tabela[2]` é um

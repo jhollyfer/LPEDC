@@ -2652,7 +2652,7 @@ int main(void) {
 ```
 
 O laço contador é o do assunto 0025. A novidade está no losango: a pergunta
-não é fixa, é a função que chegou pelo parâmetro:
+é a função que chegou pelo parâmetro:
 
 <p align="center"><img src="06-ponteiros/0050-ponteiro-para-funcao/fluxograma.svg" alt="Fluxograma: Ponteiro para função" width="543"></p>
 
@@ -2680,8 +2680,7 @@ copie o molde do A100.
 > Por isso um laço com `criterio(v[i])` pode ser mais lento que um com
 > `v[i] >= 30` escrito direto. Outro detalhe: o C não garante que um
 > endereço de função caiba num `void *`, então `printf("%p", ...)` com
-> função gera aviso no `-pedantic`. Ponteiro de dado e ponteiro de função
-> são coisas separadas.
+> função gera aviso no `-pedantic`.
 
 > [!NOTE]
 > **Pergunta para você:** como contar os dias "agradáveis" (de 19 a 29
