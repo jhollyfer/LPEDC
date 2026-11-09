@@ -126,17 +126,9 @@ A empresa registra as horas extras de 5 funcionários nos 30 dias do mês,
 mas quase ninguém faz hora extra. Escreva do zero uma matriz esparsa com
 uma lista encadeada por funcionário (em ordem de dia):
 - define(f, dia, horas): se a célula do dia já existe, troca as horas;
-
-```text
 senão, cria a célula no lugar certo da lista;
-```
-
 - o main faz os lançamentos abaixo, mostra cada funcionário com os dias
-
-```text
 e o total, conta as células e libera tudo.
-```
-
 
 
 ```text
@@ -334,11 +326,7 @@ TRANSPOSIÇÃO: o contato achado troca de lugar com o que estava logo
 antes dele. Escreva do zero:
 - poe_no_fim(nome), para montar a agenda inicial;
 - liga(nome), que procura do começo, troca o achado com o anterior
-
-```text
 (pode trocar só os nomes, sem mexer nos ponteiros) e devolve o custo;
-```
-
 - mostra(), e no fim libere todos os nós.
 
 
@@ -466,11 +454,7 @@ Estenda-o:
 - grau(i): quantos amigos i tem;
 - mostre cada pessoa com o grau e os amigos, e o total de células;
 - em_comum(a, b): os amigos em comum de a e b, andando nas duas listas
-
-```text
 ao mesmo tempo, como no merge (sem matriz e sem laço dentro de laço).
-```
-
 Pergunte por Ana e Beto, Caio e Hugo, Duda e Gabi.
 
 
@@ -619,11 +603,7 @@ O app do mercadinho mostra cinco produtos numa lista e procura do
 começo. Os 14 pedidos do dia estão no esqueleto. Compare três jeitos:
 - a ordem do cadastro, fixa: arroz feijao cafe leite pao;
 - a MELHOR ordem fixa, que só dá para montar sabendo o futuro: os mais
-
-```text
 pedidos na frente (empate: a ordem do cadastro);
-```
-
 - mover para a frente, que não sabe nada do futuro.
 Escreva do zero: mostre as frequências, a ordem ótima e o custo total
 (comparações) de cada jeito.
@@ -832,17 +812,9 @@ Custo total: 24
 O LRU com vetor gasta O(capacidade) por consulta: procurar e empurrar.
 O jeito profissional faz tudo em O(1) com DUAS estruturas juntas:
 - uma lista DUPLAMENTE encadeada, da frente (usado agora) para o fundo
-
-```text
 (usado há mais tempo): tirar um nó do meio e pôr na frente é O(1);
-```
-
 - uma tabela hash (13 baldes, cep % 13, encadeamento pelo campo irmao)
-
-```text
 que leva do CEP direto ao nó da lista.
-```
-
 Escreva do zero, com capacidade 3, consulta(cep), que devolve 1 no
 acerto. Mostre os 10 pedidos com o cache depois de cada um. Depois
 confira contra uma versão simples com vetor em 5000 consultas sorteadas
@@ -896,18 +868,10 @@ versão perfeita sem moeda: o nó da posição i (contando de 1) tem
 1 + (quantos zeros há no fim de i em binário) andares. Escreva do zero,
 com as chaves 10, 20, ..., 150 e no máximo 5 andares:
 - monte a lista numa passada, ligando cada nó no fim de cada andar dele
-
-```text
 (guarde o último nó de cada andar);
-```
-
 - mostre os andares;
 - busque cada chave contando as comparações (cada olhada em x->prox[k])
-
-```text
 e mostre a média e o pior caso.
-```
-
 
 
 ```text
@@ -994,11 +958,7 @@ num alfabeto que se reorganiza (a letra usada vai para a frente). Quem
 recebe os números consegue voltar ao texto? Sim: começa com o MESMO
 alfabeto e repete o MESMO movimento. Escreva do zero:
 - decodifica(cod, n, saida): para cada número p, a letra é alf[p], e ela
-
-```text
 vai para a frente;
-```
-
 - codifica(texto, saida), para conferir a ida.
 Decodifique a mensagem recebida, codifique o resultado e confira se dá
 os mesmos números. Por fim, codifique "aaaabbbbaaaabbbb".
@@ -1097,7 +1057,7 @@ com o tamanho exato dos andares dele (economiza memória). Ela monta e
 mostra os andares certinho, mas na hora de desmontar o AddressSanitizer
 para o programa com heap-use-after-free dentro de destroi (é de
 propósito). E, mesmo que não parasse, a memória dos vetores prox
-vazaria. Conserte destroi (duas linhas faltando, uma fora do lugar).
+vazaria. Conserte destroi (faltam duas linhas e uma precisa mudar).
 
 
 ```text

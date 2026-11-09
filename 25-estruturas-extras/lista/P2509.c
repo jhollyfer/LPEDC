@@ -6,7 +6,7 @@
 // antes dele. Escreva do zero:
 // - poe_no_fim(nome), para montar a agenda inicial;
 // - liga(nome), que procura do começo, troca o achado com o anterior
-//   (pode trocar só os nomes, sem mexer nos ponteiros) e devolve o custo;
+// (pode trocar só os nomes, sem mexer nos ponteiros) e devolve o custo;
 // - mostra(), e no fim libere todos os nós.
 //
 //   Agenda inicial: Mãe Chefe Pizzaria Dentista Vizinho

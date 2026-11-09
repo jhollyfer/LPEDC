@@ -5,7 +5,7 @@
 // começo. Os 14 pedidos do dia estão no esqueleto. Compare três jeitos:
 // - a ordem do cadastro, fixa: arroz feijao cafe leite pao;
 // - a MELHOR ordem fixa, que só dá para montar sabendo o futuro: os mais
-//   pedidos na frente (empate: a ordem do cadastro);
+// pedidos na frente (empate: a ordem do cadastro);
 // - mover para a frente, que não sabe nada do futuro.
 // Escreva do zero: mostre as frequências, a ordem ótima e o custo total
 // (comparações) de cada jeito.

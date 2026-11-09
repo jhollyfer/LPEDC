@@ -6,7 +6,7 @@
 // recebe os números consegue voltar ao texto? Sim: começa com o MESMO
 // alfabeto e repete o MESMO movimento. Escreva do zero:
 // - decodifica(cod, n, saida): para cada número p, a letra é alf[p], e ela
-//   vai para a frente;
+// vai para a frente;
 // - codifica(texto, saida), para conferir a ida.
 // Decodifique a mensagem recebida, codifique o resultado e confira se dá
 // os mesmos números. Por fim, codifique "aaaabbbbaaaabbbb".

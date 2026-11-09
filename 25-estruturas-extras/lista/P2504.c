@@ -5,9 +5,9 @@
 // mas quase ninguém faz hora extra. Escreva do zero uma matriz esparsa com
 // uma lista encadeada por funcionário (em ordem de dia):
 // - define(f, dia, horas): se a célula do dia já existe, troca as horas;
-//   senão, cria a célula no lugar certo da lista;
+// senão, cria a célula no lugar certo da lista;
 // - o main faz os lançamentos abaixo, mostra cada funcionário com os dias
-//   e o total, conta as células e libera tudo.
+// e o total, conta as células e libera tudo.
 //
 //   Lançamentos (funcionário, dia, horas):
 //   (0, 12, 2) (3, 5, 1) (0, 3, 3) (2, 28, 4) (0, 20, 1) (3, 5, 2)

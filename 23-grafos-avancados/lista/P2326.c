@@ -8,7 +8,7 @@
 // rodadas do Bellman-Ford e só mostra números. Estenda-o:
 // - na rodada extra, cada aresta que ainda melhora marca o destino;
 // - a partir de cada marcado, uma DFS espalha a marca por tudo o que ele
-//   alcança (essas salas ficam em -infinito);
+// alcança (essas salas ficam em -infinito);
 // - mostre "-infinito", "inalcançável" ou o número de cada sala.
 //
 //   Saída esperada:

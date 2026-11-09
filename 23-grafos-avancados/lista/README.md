@@ -934,18 +934,10 @@ que 1 vira soma negativa, e arbitragem vira CICLO NEGATIVO.
 
 O main já tem as 20 taxas. Escreva analisa(rotulo, t, n) do zero:
 - Bellman-Ford com todas as distâncias começando em 0 (é como ter uma
-
-```text
 origem imaginária ligada a todas as moedas) e um vetor ant[];
-```
-
 - se a M-ésima rodada (a extra) ainda melhora alguém, guarde essa moeda
-
-```text
 x, ande M passos por ant[] (assim você cai dentro do ciclo) e recolha
 o ciclo seguindo ant[] até voltar em x;
-```
-
 - mostre o ciclo na ordem das trocas e o fator (produto das taxas).
 Na terça a casa corrigiu Euro -> Real de 5.50 para 5.40.
 
@@ -1117,11 +1109,7 @@ tudo o que vem depois é -infinito. O programa abaixo já faz as V - 1
 rodadas do Bellman-Ford e só mostra números. Estenda-o:
 - na rodada extra, cada aresta que ainda melhora marca o destino;
 - a partir de cada marcado, uma DFS espalha a marca por tudo o que ele
-
-```text
 alcança (essas salas ficam em -infinito);
-```
-
 - mostre "-infinito", "inalcançável" ou o número de cada sala.
 
 

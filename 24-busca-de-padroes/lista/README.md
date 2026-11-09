@@ -488,12 +488,8 @@ V vermelha) a partir de uma conta qualquer. Dois registros são o mesmo
 colar se um é rotação do outro. Para agrupar, use a FORMA CANÔNICA: a
 menor rotação em ordem alfabética. Escreva:
 - menor_rotacao(s), que compara as n rotações letra a letra, dando a
-
-```text
 volta com (k + j) % n, sem montar nenhuma string, e devolve o início
 da menor;
-```
-
 - canonica(s, saida), que escreve essa rotação em saida.
 Mostre a forma de cada colar do main e os grupos de colares iguais.
 
@@ -764,17 +760,9 @@ meio dela (uma ocorrência que não é nem a do começo nem a do fim). Se
 não houver, não há senha. Escreva int senha(const char *s), em O(m),
 com a tabela π:
 - os candidatos são as bordas do texto inteiro: pi[m-1], depois
-
-```text
 pi[pi[m-1] - 1], e assim por diante;
-```
-
 - um candidato de tamanho L aparece no meio se algum pi[j], com
-
-```text
 1 <= j <= m - 2, é pelo menos L.
-```
-
 
 
 ```text
@@ -809,20 +797,12 @@ grande é uma saída; outra é usar DOIS hashes com módulos pequenos e
 diferentes: a janela só é conferida letra a letra se os dois baterem.
 Escreva o programa do zero:
 - gere um DNA de 3000 letras com o gerador fixo
-
-```text
 estado = estado * 1103515245u + 12345u (estado começa em 2026) e a
 letra "ACGT"[(estado >> 16) % 4];
-```
-
 - o padrão são as 6 letras a partir da posição 1500;
 - role as janelas com base 4 (A=0, C=1, G=2, T=3) e dois hashes, módulos
-
-```text
 97 e 89, e conte os falsos positivos do primeiro hash sozinho e dos
 dois juntos.
-```
-
 
 
 ```text
@@ -1051,17 +1031,9 @@ colunas:
 Escreva do zero (base 256, Q = 1000003):
 - o hash de cada linha do logotipo;
 - para cada linha da tela, o hash ROLANTE de cada trecho de 3 pixels,
-
-```text
 guardado em janela[i][j];
-```
-
 - um bloco com canto em (i, j) só é conferido pixel a pixel quando
-
-```text
 janela[i + r][j] bate com o hash da linha r do logotipo, para r = 0 e 1.
-```
-
 Mostre onde o logotipo aparece e quantos blocos foram conferidos.
 
 

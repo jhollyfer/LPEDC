@@ -6,8 +6,8 @@
 // colar se um é rotação do outro. Para agrupar, use a FORMA CANÔNICA: a
 // menor rotação em ordem alfabética. Escreva:
 // - menor_rotacao(s), que compara as n rotações letra a letra, dando a
-//   volta com (k + j) % n, sem montar nenhuma string, e devolve o início
-//   da menor;
+// volta com (k + j) % n, sem montar nenhuma string, e devolve o início
+// da menor;
 // - canonica(s, saida), que escreve essa rotação em saida.
 // Mostre a forma de cada colar do main e os grupos de colares iguais.
 //

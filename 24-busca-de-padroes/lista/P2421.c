@@ -7,9 +7,9 @@
 // não houver, não há senha. Escreva int senha(const char *s), em O(m),
 // com a tabela π:
 // - os candidatos são as bordas do texto inteiro: pi[m-1], depois
-//   pi[pi[m-1] - 1], e assim por diante;
+// pi[pi[m-1] - 1], e assim por diante;
 // - um candidato de tamanho L aparece no meio se algum pi[j], com
-//   1 <= j <= m - 2, é pelo menos L.
+// 1 <= j <= m - 2, é pelo menos L.
 //
 //   Saída esperada:
 //   fixprefixsuffix  senha "fix"

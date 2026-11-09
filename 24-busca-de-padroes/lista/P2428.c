@@ -11,9 +11,9 @@
 // Escreva do zero (base 256, Q = 1000003):
 // - o hash de cada linha do logotipo;
 // - para cada linha da tela, o hash ROLANTE de cada trecho de 3 pixels,
-//   guardado em janela[i][j];
+// guardado em janela[i][j];
 // - um bloco com canto em (i, j) só é conferido pixel a pixel quando
-//   janela[i + r][j] bate com o hash da linha r do logotipo, para r = 0 e 1.
+// janela[i + r][j] bate com o hash da linha r do logotipo, para r = 0 e 1.
 // Mostre onde o logotipo aparece e quantos blocos foram conferidos.
 //
 //   Saída esperada:

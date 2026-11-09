@@ -8,10 +8,10 @@
 // 1 + (quantos zeros há no fim de i em binário) andares. Escreva do zero,
 // com as chaves 10, 20, ..., 150 e no máximo 5 andares:
 // - monte a lista numa passada, ligando cada nó no fim de cada andar dele
-//   (guarde o último nó de cada andar);
+// (guarde o último nó de cada andar);
 // - mostre os andares;
 // - busque cada chave contando as comparações (cada olhada em x->prox[k])
-//   e mostre a média e o pior caso.
+// e mostre a média e o pior caso.
 //
 //   Saída esperada:
 //   andar 4:

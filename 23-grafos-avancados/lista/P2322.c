@@ -9,10 +9,10 @@
 //
 // O main já tem as 20 taxas. Escreva analisa(rotulo, t, n) do zero:
 // - Bellman-Ford com todas as distâncias começando em 0 (é como ter uma
-//   origem imaginária ligada a todas as moedas) e um vetor ant[];
+// origem imaginária ligada a todas as moedas) e um vetor ant[];
 // - se a M-ésima rodada (a extra) ainda melhora alguém, guarde essa moeda
-//   x, ande M passos por ant[] (assim você cai dentro do ciclo) e recolha
-//   o ciclo seguindo ant[] até voltar em x;
+// x, ande M passos por ant[] (assim você cai dentro do ciclo) e recolha
+// o ciclo seguindo ant[] até voltar em x;
 // - mostre o ciclo na ordem das trocas e o fator (produto das taxas).
 // Na terça a casa corrigiu Euro -> Real de 5.50 para 5.40.
 //

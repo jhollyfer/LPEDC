@@ -8,7 +8,7 @@
 // - grau(i): quantos amigos i tem;
 // - mostre cada pessoa com o grau e os amigos, e o total de células;
 // - em_comum(a, b): os amigos em comum de a e b, andando nas duas listas
-//   ao mesmo tempo, como no merge (sem matriz e sem laço dentro de laço).
+// ao mesmo tempo, como no merge (sem matriz e sem laço dentro de laço).
 // Pergunte por Ana e Beto, Caio e Hugo, Duda e Gabi.
 //
 //   Saída esperada:

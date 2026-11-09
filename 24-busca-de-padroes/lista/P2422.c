@@ -6,12 +6,12 @@
 // diferentes: a janela só é conferida letra a letra se os dois baterem.
 // Escreva o programa do zero:
 // - gere um DNA de 3000 letras com o gerador fixo
-//   estado = estado * 1103515245u + 12345u (estado começa em 2026) e a
-//   letra "ACGT"[(estado >> 16) % 4];
+// estado = estado * 1103515245u + 12345u (estado começa em 2026) e a
+// letra "ACGT"[(estado >> 16) % 4];
 // - o padrão são as 6 letras a partir da posição 1500;
 // - role as janelas com base 4 (A=0, C=1, G=2, T=3) e dois hashes, módulos
-//   97 e 89, e conte os falsos positivos do primeiro hash sozinho e dos
-//   dois juntos.
+// 97 e 89, e conte os falsos positivos do primeiro hash sozinho e dos
+// dois juntos.
 //
 //   Saída esperada:
 //   padrão: CGTCAA

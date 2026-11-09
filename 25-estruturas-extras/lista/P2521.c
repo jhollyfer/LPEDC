@@ -4,9 +4,9 @@
 // O LRU com vetor gasta O(capacidade) por consulta: procurar e empurrar.
 // O jeito profissional faz tudo em O(1) com DUAS estruturas juntas:
 // - uma lista DUPLAMENTE encadeada, da frente (usado agora) para o fundo
-//   (usado há mais tempo): tirar um nó do meio e pôr na frente é O(1);
+// (usado há mais tempo): tirar um nó do meio e pôr na frente é O(1);
 // - uma tabela hash (13 baldes, cep % 13, encadeamento pelo campo irmao)
-//   que leva do CEP direto ao nó da lista.
+// que leva do CEP direto ao nó da lista.
 // Escreva do zero, com capacidade 3, consulta(cep), que devolve 1 no
 // acerto. Mostre os 10 pedidos com o cache depois de cada um. Depois
 // confira contra uma versão simples com vetor em 5000 consultas sorteadas
