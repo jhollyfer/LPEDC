@@ -3470,6 +3470,10 @@ sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/03-repeticoes/lista/`.
+
 ## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
