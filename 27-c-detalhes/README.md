@@ -2106,6 +2106,10 @@ com `r = -2`.
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/27-c-detalhes/lista/`.
+
 ## Questões no estilo da prova
 
 Questões de múltipla escolha, como as da prova do PPGI. Resolva no papel,
