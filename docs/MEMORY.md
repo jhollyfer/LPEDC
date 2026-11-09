@@ -26,7 +26,8 @@ Ajustando as "Questões no estilo da prova" dos módulos aos formatos das provas
 
 ## Contexto importante
 
-- As provas antigas não têm gabarito oficial; as letras de `PROVAS.md` são do curso, conferidas rodando código.
+- Só a prova 071/2023 tem gabarito oficial; nas outras, as letras de `PROVAS.md` são do curso, conferidas rodando código.
+- Desde 2022 a prova tem 4 alternativas e trechos em Python.
 - A prova é em 2026-11-27 (`PPGI.md`, "Roteiro até a prova").
 - A branch `claude/inspiring-einstein-y1aulj` no GitHub é antiga e já está toda na `main`; o proxy
   da sessão na nuvem recusa apagá-la. O dono apaga pela página de branches.

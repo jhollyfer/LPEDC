@@ -144,7 +144,7 @@ começar", o que elas têm de próprio nos desenhos dele.
 O sumário detalhado, assunto por assunto, está em
 [`_fontes/sumario.md`](_fontes/sumario.md).
 
-As provas do PPGI de 2016 a 2019 estão resolvidas, com o gabarito comentado e o link para o
+As provas do PPGI de 2016 a 2023 estão resolvidas, com o gabarito comentado e o link para o
 módulo de cada questão, em [`PROVAS.md`](PROVAS.md).
 
 ## De onde veio o conteúdo

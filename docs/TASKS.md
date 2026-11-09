@@ -38,14 +38,14 @@ Prioridade: `Alta` · `Média` · `Baixa`.
 
 ## Fase 4 · Provas reais (2/4)
 
-Provas recebidas: 8 cadernos de 2016 a 2019 em `_fontes/provas-ppgi.md`, sem as letras do gabarito.
+Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 071/2023 tem gabarito oficial.
 
 | # | Tarefa | Prioridade | Status | Notas |
 |---|---|---|---|---|
 | 4.1 | Ajustar as "Questões no estilo da prova" dos módulos ao formato e ao nível das provas reais | Alta | Em andamento | |
-| 4.2 | Registrar no `PPGI.md` o que cai e com que frequência, ligado a módulo e assunto | Alta | Feita | `PPGI.md`, "O que caiu de 2016 a 2019" |
+| 4.2 | Registrar no `PPGI.md` o que cai e com que frequência, ligado a módulo e assunto | Alta | Feita | `PPGI.md`, "O que caiu de 2016 a 2023" |
 | 4.3 | Simulados completos de 20 questões com gabarito comentado | Alta | A fazer | depende de 4.4 |
-| 4.4 | Resolver as 160 questões das provas, com letra, justificativa e assunto do curso | Alta | Feita | `PROVAS.md`: 148 com letra, 12 sem (figura ausente) |
+| 4.4 | Resolver as 210 questões das 11 provas, com letra, justificativa e assunto do curso | Alta | Feita | `PROVAS.md`: 13 sem letra (figura ausente); 071/2023 com gabarito oficial |
 
 ---
 

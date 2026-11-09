@@ -1,20 +1,23 @@
 # Provas anteriores do PPGI/UFAM · gabarito comentado
 
-As 8 provas de conhecimento de 2016 a 2019 (editais 032/2016, 053/2016, 024/2017, 055/2017,
-023/2018, 061/2018, 033/2019 e 060/2019), resolvidas questão por questão. O enunciado de cada
-uma está em [`_fontes/provas-ppgi.md`](_fontes/provas-ppgi.md): abra a prova lá, resolva
-cronometrando e só depois confira aqui.
+As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão: editais 032/2016,
+053/2016, 024/2017, 055/2017, 023/2018, 061/2018, 033/2019, 060/2019, 057/2022, 020/2023 e
+071/2023. O enunciado de cada uma está em [`_fontes/provas-ppgi.md`](_fontes/provas-ppgi.md):
+abra a prova lá, resolva cronometrando e só depois confira aqui.
 
 > [!IMPORTANT]
-> As folhas de gabarito chegaram sem as letras marcadas, só com a contagem de anuladas. As
-> letras abaixo são do curso, não da banca: as questões de código e de simulação (pilha, fila,
-> hash, busca binária, ABB, AVL, ordenação, recursão) foram conferidas rodando um programa em
-> C. Onde duas letras se defendem, ou nenhuma, a nota "Observações" de cada prova diz qual é a
-> dúvida.
+> Só a 071/2023 tem gabarito oficial: as letras dela são da banca. Nas outras, as folhas de
+> gabarito chegaram sem as letras marcadas, e as letras abaixo são do curso. As questões de
+> código e de simulação (pilha, fila, hash, busca binária, ABB, AVL, ordenação, recursão) foram
+> conferidas rodando o programa. Onde duas letras se defendem, ou nenhuma, a nota "Observações"
+> de cada prova diz qual é a dúvida.
+
+Desde 2022 as provas têm **4 alternativas** (de 2016 a 2019 eram 5) e trazem trechos em
+Python. Aqui cada trecho em Python aponta para o assunto de C que treina a mesma ideia.
 
 Na coluna **Assuntos**, o link leva ao módulo onde aquilo se estuda. **Tópico** é o número do
 tópico do edital em [`PPGI.md`](PPGI.md#tópico-por-tópico); o resumo do que mais cai está em
-[`PPGI.md`](PPGI.md#o-que-caiu-de-2016-a-2019). **Formato** diz que tipo de questão é:
+[`PPGI.md`](PPGI.md#o-que-caiu-de-2016-a-2023). **Formato** diz que tipo de questão é:
 `afirmações` (I, II, III combinadas), `código` (ler ou achar o erro), `simulação` (executar à
 mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidade).
 
@@ -284,3 +287,86 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q11: C também é questionável (folha não tem filhos, então "sempre chaves + 1" só vale em nó interno). B é a mais provável.
 - Q12: figura parcial; B reconstruída com a interrogação no texto. D se a reconstrução estiver certa.
 - Anuladas (4, não identificadas): candidatas Q02, Q08, Q11, Q12.
+## Edital 057/2022
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | d | código | 3 | [0039](05-vetores-e-strings.md) | (Python) produto escalar 0·1+2·0+0·3+0·4+5·0 = 0; rodado. |
+| 02 | c | afirmações | 4 | [0099](14-arvores.md), [0175](28-estruturas-complementos.md) | 1 e 2 valem; 3 é falsa: com subárvore direita, o sucessor está abaixo de x. |
+| 03 | b | afirmações | 7 | [0094](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md), [0092](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | Quicksort é O(n²) no pior caso; merge é Θ(n log n); seleção é sempre Θ(n²). F, V, V, F. |
+| 04 | c | simulação | 4 | [0099](14-arvores.md) | O primeiro inserido (8) é a raiz. |
+| 05 | b | conceito | 3 | [0083](12-pilhas-e-filas.md) | Inserir e remover na cabeça da lista simples é O(1). |
+| 06 | d | código | 3 | [0044](06-ponteiros.md), [0062](08-structs.md) | (Python) `vec_2 = vec_1` é alias; a lista muda nas duas: [1, 2, 15, 4, 5]. Rodado. Em C: 0045. |
+| 07 | d | conceito | 2 | [0072](10-analise.md), [0166](26-analise-formal.md) | f = n²−1 é quadrática, g é logarítmica; log n = O(n²), então g = O(f). b erra por chamar g de linear. |
+| 08 | d | código | 1 | [0032](04-funcoes.md), [0033](04-funcoes.md) | (Python) fibonacci(7) com f(1)=0, f(2)=1 dá 0,1,1,2,3,5,8; rodado. |
+| 09 | b | conceito | 8 | [0109](16-grafos.md), [0150](23-grafos-avancados.md) | Árvore é grafo conexo, não direcionado e sem ciclos. |
+| 10 | a | conceito | 3 | [0039](05-vetores-e-strings.md) | m×n por n×y dá m linhas e y colunas, não "n linhas". |
+| 11 | d | afirmações | 6 | [0090](13-busca-e-ordenacao.md), [0093](13-busca-e-ordenacao.md) | Busca binária faz O(log n) comparações contra O(n) da inserção; os deslocamentos são os mesmos. Vale 1 e 3. |
+| 12 | d | conceito | 7 | [0095](13-busca-e-ordenacao.md) | Pior caso do Quicksort é O(n²). |
+| 13 | a | código | 3 | [0039](05-vetores-e-strings.md), [0024](03-repeticoes.md) | O laço interno começa em j = i: elementos na diagonal e acima. |
+| 14 | a | código | 1 | [0029](04-funcoes.md), [0038](05-vetores-e-strings.md) | x passa por valor (222); vetor passa por endereço: v[0] = 3·333 = 999. |
+| 15 | a | código | 3 | [0079](11-listas.md) | Novo nó com prox = l, ant = NULL e l->ant = novo: inserção no início de lista dupla. |
+| 16 | c | simulação | 5 | [0107](15-hash.md) | 73→1, 24→6, 16→7, 46→1 colide→2, 28→1 colide→3. Tabela: ø 73 46 28 ø ø 24 16 ø. |
+| 17 | b | conceito | 4 | [0177](28-estruturas-complementos.md) | As três são propriedades da rubro-negra do Cormen (raiz preta, folhas nulas pretas, vermelho tem filhos pretos). |
+| 18 | a | afirmações | 8 | [0110](16-grafos.md), [0112](16-grafos.md), [0109](16-grafos.md) | 1 falsa (Dijkstra é polinomial); 2 e 3 verdadeiras. |
+| 19 | b | cálculo | 4 | [0176](28-estruturas-complementos.md), [0101](14-arvores.md) | Melhor caso O(1) (sem rebalancear), pior O(log n) (rotações até a raiz). |
+| 20 | b | cálculo | 3 | [0075](11-listas.md), [0072](10-analise.md) | Busca O(n), índice O(1), início O(n), fim O(1), remoção por índice O(n). |
+
+
+**Observações**
+- Q16: a alternativa c vem com 8 células no texto (falta o ø final da posição 8); tratada como erro de transcrição.
+- Q19: depende do que se conta. Se a remoção do nó com dois filhos precisar achar o sucessor, o melhor caso também seria O(log n) (alternativa a). Fico com b.
+- Q11: o `for (k = N+1; k == i; k--)` está assim no original; se for erro de enunciado, a questão pode ter sido anulada.
+- Q06 e Q08 são Python mas o conteúdo é de C (alias de ponteiro, Fibonacci recursivo). Q01 também.
+
+## Edital 020/2023
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | C | cálculo | 6 | [0090](13-busca-e-ordenacao.md) | 10 elementos: ⌊log2 10⌋ + 1 = 4 comparações no pior caso. |
+| 02 | A | conceito | 7 | [0093](13-busca-e-ordenacao.md) | Inserção é O(n) quase ordenada e O(n²) invertida. |
+| 03 | D | simulação | 3 | [0082](12-pilhas-e-filas.md) | Pop 3 vezes deixa [7, 8, 13]; push 5 e 2 dá [2, 5, 7, 8, 13]. |
+| 04 | D | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | Encadeamento não tem agrupamento secundário, pior caso O(n) e aceita mais chaves que a tabela. |
+| 05 | B | afirmações | 4 | [0090](13-busca-e-ordenacao.md), [0099](14-arvores.md), [0101](14-arvores.md) | I falsa: vetor ordenado insere em O(n). II verdadeira: busca O(log n) nos dois. |
+| 06 | B | conceito | 4 | [0099](14-arvores.md), [0101](14-arvores.md), [0102](14-arvores.md) | Figura ausente. Três nós com raiz 5 é o caso mais geral para ABB; as outras dependem dos valores e cores. Inferida. |
+| 07 | B | conceito | 2 | [0072](10-analise.md), [0076](11-listas.md) | Inserir no início de lista encadeada é O(1). Busca binária é O(log n); vetor e ABB são piores. |
+| 08 | C | código | 7 | [0094](13-busca-e-ordenacao.md) | Divide ao meio, recursão nas duas metades e intercalação com vetor auxiliar: Merge Sort. |
+| 09 | sem resposta | código | 1 | [0032](04-funcoes.md) | Figura ausente, o pseudocódigo recursivo não veio. |
+| 10 | D | simulação | 3 | [0039](05-vetores-e-strings.md) | Figura ausente. m=2 e p=2 pedem resultado 2×2; só A e D têm essa forma. Palpite com baixa confiança. |
+
+
+**Observações**
+- Q09: figura ausente, sem como resolver.
+- Q10: figura ausente. D só por forma 2×2; A (todos zeros) também é possível.
+- Q06: figura ausente; B é inferência.
+- Q08: o código não veio na íntegra no resumo; assumi que está correto.
+
+## Edital 071/2023 (gabarito oficial)
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | anulada | código | 7 | [0092](13-busca-e-ordenacao.md) | O laço interno começa em j = 0 em vez de i+1 (rodado: {5,3,4,1,2} sai 3 4 5 1 2), faltam `;` e `}`. Provavelmente anulada por não compilar e ter mais de um erro. |
+| 02 | A | afirmações | 7 | [0103](14-arvores.md) | Heapsort é O(n log n) no pior caso, em duas etapas (construir heap, extrair); III é falsa. |
+| 03 | B | cálculo | 4 | [0102](14-arvores.md) | Troca a raiz com o último e desce: O(log N), sem deslocar o vetor. |
+| 04 | C | cálculo | 2 | [0072](10-analise.md), [0166](26-analise-formal.md) | (300/100)³ = 27, logo 27 minutos. |
+| 05 | B | afirmações | 2 | [0166](26-analise-formal.md) | I e III valem para algoritmo não vazio; II é falsa na prática, pois há custos acima de nⁿ (os símbolos vieram ilegíveis, conferir). |
+| 06 | B | simulação | 6 | [0090](13-busca-e-ordenacao.md) | meio=4 (10), depois 1 (4), 2 (6), 3 (8): compara com 10, 4, 6 e 8. |
+| 07 | anulada | afirmações | 4 | [0177](28-estruturas-complementos.md), [0101](14-arvores.md) | Altura máxima é 2·log(n+1), não log n (I falsa); II é defensável e III falsa; texto ambíguo. Provavelmente anulada por ambiguidade. |
+| 08 | D | afirmações | 3 | [0083](12-pilhas-e-filas.md) | Pilha retira o último inserido (10), em custo constante na cabeça da lista. |
+| 09 | B | conceito | 6 | [0090](13-busca-e-ordenacao.md), [0075](11-listas.md) | Vetor ordenado: busca binária O(log n); inserir e remover deslocam elementos, O(n). |
+| 10 | anulada | afirmações | 7 | [0093](13-busca-e-ordenacao.md), [0094](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md) | I falsa (quicksort tem pior pior caso); III é confusa por "menor custo" empatar com o heap/merge e II usa "um décimo de log N". Provavelmente anulada por redação. |
+| 11 | D | cálculo | 3 | [0075](11-listas.md), [0090](13-busca-e-ordenacao.md) | Inserir e remover deslocam elementos O(n); busca binária O(log n). |
+| 12 | B | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Só o 9 da última posição tem tudo à esquerda menor ou igual. Os outros candidatos violam a partição. |
+| 13 | C | simulação | 5 | [0106](15-hash.md) | 2→2, 5→0, 9→4, 20→0 (colide), 7→2 (colide): duas colisões. |
+| 14 | D | simulação | 4 | [0099](14-arvores.md) | Caminhos 10-5-7 e 10-20-30 têm 3 nós; altura máxima 3 comparações. |
+| 15 | B | código | 6 | [0090](13-busca-e-ordenacao.md) | (Python) busca binária em vetor desordenado procurando 100: sempre vai para a direita (30, 50, 60, 70) e devolve -1; rodado. |
+| 16 | A | cálculo | 5 | [0106](15-hash.md), [0101](14-arvores.md) | Sem chave repetida, inserir exige varrer a lista, O(n), e buscar O(n); com rubro-negra, ambos O(log n). |
+| 17 | C | simulação | 6 | [0090](13-busca-e-ordenacao.md) | (Python) busca de 70: 4 chamadas, rodado. |
+| 18 | D | código | 3 | [0039](05-vetores-e-strings.md) | (Python) produto: [[11, 20], [7, 0]], rodado. |
+| 19 | B | código | 3 | [0082](12-pilhas-e-filas.md) | (Python) pop vazio imprime "empty stack" e a pilha final é [2]; rodado. |
+| 20 | B | código | 1 | [0029](04-funcoes.md), [0050](06-ponteiros.md) | (Python) fechamento: 5·3 = 15; rodado. Em C, o equivalente é ponteiro para função (0050), sem closure. |
+
+
+**Observações**
+- Q01 anulada: o código tem erro de sintaxe e de lógica; não vejo discordância da anulação.
+- Q05: os símbolos de I vieram ilegíveis; conferir no PDF.
+- Q07 e Q10: motivos de anulação são conjectura minha.
+- Q12: concordo com B; confere com as quatro alternativas.
+- Q15, Q17 a Q20 rodadas com `python3 -I`; todas batem com o gabarito oficial. Sem discordância das letras oficiais.

@@ -8,9 +8,9 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Adicionado
 
-- `PROVAS.md`: as 8 provas do PPGI de 2016 a 2019 resolvidas, com a letra, o porquê e o link
+- `PROVAS.md`: as 11 provas do PPGI de 2016 a 2023 resolvidas (a de 2023 com o gabarito oficial), com a letra, o porquê e o link
   para o módulo de cada questão.
-- `PPGI.md`: o que caiu de 2016 a 2019, por tópico, assunto e formato de questão.
+- `PPGI.md`: o que caiu de 2016 a 2023, por tópico, assunto e formato de questão.
 
 ### Alterado
 
