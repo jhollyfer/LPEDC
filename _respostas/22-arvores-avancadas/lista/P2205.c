@@ -129,7 +129,7 @@ int main(void) {
     for (int i = 0; i < 4; i++) {
         int paginas = 0;
         int achou = busca(r, procura[i], &paginas);
-        printf("Protocolo %d: %s (%d páginas lidas)\n", procura[i], achou ? "achado" : "não existe", paginas);
+        printf("Protocolo %d: %s (páginas lidas: %d)\n", procura[i], achou ? "achado" : "não existe", paginas);
     }
     libera(r);
     return 0;

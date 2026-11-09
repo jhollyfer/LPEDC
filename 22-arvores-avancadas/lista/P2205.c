@@ -9,10 +9,10 @@
 // Procure 40, 60, 42 e 100.
 //
 //   Saída esperada:
-//   Protocolo 40: achado (1 páginas lidas)
-//   Protocolo 60: achado (2 páginas lidas)
-//   Protocolo 42: não existe (4 páginas lidas)
-//   Protocolo 100: achado (4 páginas lidas)
+//   Protocolo 40: achado (páginas lidas: 1)
+//   Protocolo 60: achado (páginas lidas: 2)
+//   Protocolo 42: não existe (páginas lidas: 4)
+//   Protocolo 100: achado (páginas lidas: 4)
 //
 // Dicas:
 // 1. Em cada nó: (*paginas)++; ache o primeiro i com k <= chave[i]. Se
@@ -143,7 +143,7 @@ int main(void) {
     for (int i = 0; i < 4; i++) {
         int paginas = 0;
         int achou = busca(r, procura[i], &paginas);
-        printf("Protocolo %d: %s (%d páginas lidas)\n", procura[i], achou ? "achado" : "não existe", paginas);
+        printf("Protocolo %d: %s (páginas lidas: %d)\n", procura[i], achou ? "achado" : "não existe", paginas);
     }
     libera(r);
     return 0;

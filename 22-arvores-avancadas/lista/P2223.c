@@ -29,7 +29,7 @@
 //    abertas (as que ainda não fecharam). Calcule de k = 7 até k = 1.
 // 2. Reabrir a estrada k: une as pontas; se eram raízes diferentes, os
 //    componentes caem 1.
-// 3. Resposta esperada: 1 1 2 2 3 5 6.
+// 3. Resposta esperada: 1 1 2 3 4 5 6.
 //
 // Escreva sua resposta abaixo:
 

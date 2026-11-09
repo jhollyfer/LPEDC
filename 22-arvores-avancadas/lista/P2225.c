@@ -23,9 +23,9 @@
 //    um). Ao pintar o nó i de vermelho, corte se o pai dele é vermelho.
 // 2. A conferência final é a altura_negra que devolve -1 quando dois
 //    caminhos discordam.
-// 3. Resposta esperada: A tem 5 colorações; B, algumas; C nenhuma (o ramo
-//    da direita é comprido demais: o caminho mais longo passaria do dobro
-//    do mais curto).
+// 3. Resposta esperada: A tem 5 colorações; B, só 1; C nenhuma (o ramo da
+//    direita é comprido demais: numa rubro-negra, o caminho mais longo até
+//    um NULL não passa do dobro do mais curto).
 //
 // Escreva sua resposta abaixo:
 
