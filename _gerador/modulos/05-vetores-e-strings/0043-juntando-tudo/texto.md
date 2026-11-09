@@ -5,7 +5,7 @@ arara, boto ou capivara. Os votos chegam do formulário, um por linha, do jeito
 que cada pessoa digitou: `boto`, `Arara`, `CAPIVARA`, `Tatu`... Você precisa
 contar, desenhar um gráfico de barras e anunciar o vencedor.
 
-O problema usa tudo o que o módulo ensinou:
+O problema usa o módulo inteiro:
 
 - **`fgets` num laço** (assunto 0042) lê um voto por linha até a entrada
   acabar, quando ele devolve `NULL`;
@@ -19,17 +19,17 @@ O problema usa tudo o que o módulo ensinou:
   `buscar` só lê.
 
 Divida assim: o `main` cuida do laço e do resultado; cada função faz uma coisa
-só. `buscar` devolve a posição ou -1, como a busca do A076: é assim que "Tatu"
-cai nos inválidos sem nenhum `if` especial. E o `(unsigned char)` dentro do
-`tolower` protege contra votos com acento (veja o assunto 0040).
+só. `buscar` devolve a posição ou -1, como a busca do A076, e assim "Tatu"
+cai nos inválidos sem nenhum `if` especial. O `(unsigned char)` dentro do
+`tolower` protege contra votos com acento (assunto 0040).
 
-Vamos ver na prática. Cada linha passa pela mesma esteira: lê, normaliza,
+Cada linha passa pela mesma esteira: lê, normaliza,
 procura na matriz de nomes e soma 1 no contador da posição certa. "Tatu" não
 está na matriz, então vai para os inválidos:
 
 {{ideia}}
 
-O programa completo. Para testar sem digitar, salve o código num arquivo `.c`
+Para testar o programa sem digitar, salve o código num arquivo `.c`
 e mande os votos com `printf 'boto\nArara\n...' | ~/LPEDC/rodar` seguido do
 caminho do arquivo:
 
@@ -105,8 +105,8 @@ int main(void) {
 // Vencedor: boto
 ```
 
-Repara no fluxograma: é um laço com sentinela (assunto 0025), só que a
-sentinela é o `NULL` do `fgets`. Dentro dele, uma decisão: achou o candidato
+É um laço com sentinela (assunto 0025), e a sentinela é o `NULL` do
+`fgets`. Dentro dele, uma decisão: achou o candidato
 ou não. O resultado só sai depois que a entrada acaba:
 
 {{fluxograma}}
@@ -127,7 +127,7 @@ da ordenação por seleção (assunto 0092).
 > **Por dentro do C:** `char nomes[3][12]` são 36 bytes contínuos, como toda
 > matriz. "arara" ocupa 6 deles na linha 0, e os 6 bytes restantes da linha
 > são zeros (as chaves da inicialização zeram o que sobra). `nomes[1]` é o
-> começo da linha 1, 12 bytes depois do começo. É por isso que o parâmetro
+> começo da linha 1, 12 bytes depois do começo. Por isso o parâmetro
 > de `buscar` precisa do `[TAM_NOME]`: para achar `nomes[i]`, a função calcula
 > início + i × 12. Uma lista de nomes de tamanhos bem diferentes desperdiça
 > espaço assim; no módulo 07 você vai guardar cada nome com o tamanho exato,

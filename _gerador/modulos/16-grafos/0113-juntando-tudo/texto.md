@@ -6,8 +6,7 @@ chegar em todos de caminhão? Qual rota passa por menos trechos (menos
 paradas, menos chance de atraso)? E qual rota roda menos quilômetros (menos
 diesel)?
 
-Cada pergunta tem o seu algoritmo, e o módulo inteiro serve para você
-escolher sem pensar duas vezes:
+Cada pergunta tem o seu algoritmo:
 
 | Pergunta | Algoritmo | Estrutura auxiliar |
 | --- | --- | --- |
@@ -23,17 +22,16 @@ muda é a **ordem** em que os vértices saem: pilha, fila ou "menor `dist`".
 O programa do módulo junta tudo num tipo `Grafo` (uma `struct` com o número
 de vértices, os nomes e a matriz de km) e numa função para cada algoritmo.
 As funções recebem `const Grafo *`: a struct passa de 300 bytes, e copiá-la
-inteira a cada chamada seria desperdício. O `const` promete
-que ninguém mexe no mapa.
+a cada chamada seria desperdício. O `const` promete que ninguém mexe no mapa.
 
-Vamos ver na prática. A Ilha só tem balsa, então a DFS a deixa de fora. A BFS
-acha a rota de 2 trechos pelo Centro, com a estrada longa de 12 km. Dijkstra
-acha a de 4 trechos, em verde, com 10 km:
+A Ilha só tem balsa, então a DFS a deixa de fora. A BFS acha a rota de 2
+trechos pelo Centro, com a estrada longa de 12 km. Dijkstra acha a de 4
+trechos, em verde, com 10 km:
 
 {{ideia}}
 
-O código completo. Repare como `bfs` e `dijkstra` preenchem o mesmo tipo de
-vetor `pai[]`, e por isso uma única `mostrar_rota` serve para os dois:
+No código, `bfs` e `dijkstra` preenchem o mesmo tipo de vetor `pai[]`, por
+isso uma única `mostrar_rota` serve para os dois:
 
 ```c
 #include <limits.h>
@@ -154,21 +152,20 @@ int main(void) {
 // Menos km:      CD -> Feira -> Morro -> Porto -> Vila (4 trechos, 10 km)
 ```
 
-Repara no fluxograma: a DFS vem primeiro, como um porteiro. Se a Vila
-estivesse fora da rede, não faria sentido procurar rota nenhuma:
+A DFS vem primeiro, como porteiro: se a Vila estivesse fora da rede, não
+faria sentido procurar rota nenhuma.
 
 {{fluxograma}}
 
-A diferença entre as duas rotas é a lição do módulo. "Menor caminho" não
-existe sozinho: menor em quê? Se toda aresta custa o mesmo, a BFS resolve em
-O(V + E) e é mais simples. Se os pesos variam, a BFS dá uma resposta errada
-com toda a confiança, como os 16 km acima.
+"Menor caminho" sozinho não diz nada: menor em quê? Se toda aresta custa o
+mesmo, a BFS resolve em O(V + E) e é mais simples. Se os pesos variam, a BFS
+devolve uma resposta errada sem nenhum aviso, como os 16 km acima.
 
 O exemplo A225 compara BFS e Dijkstra destino por destino num mapa com duas
 partes soltas, e usa a DFS para contar as partes. O A226 traz um quarto
-problema: ligar cinco cidades com fibra óptica
-gastando o mínimo. Não é caminho de A até B, é uma **árvore geradora
-mínima**: um conjunto de cabos que conecta todo mundo com a menor soma. O
+problema: ligar cinco cidades com fibra óptica gastando o mínimo. Agora não
+se busca um caminho de A até B, e sim uma **árvore geradora mínima**: um
+conjunto de cabos que conecta todo mundo com a menor soma. O
 algoritmo de **Prim** faz isso com o código do Dijkstra trocando uma linha: em
 vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 
@@ -177,7 +174,7 @@ vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 > peso real puder ser zero. Se um trecho pode custar R$ 0 (um pedágio isento,
 > uma conexão gratuita), use outra marca, como `-1`, ou uma matriz `bool`
 > separada para dizer se a aresta existe. Senão o algoritmo some com a
-> estrada sem avisar.
+> estrada sem aviso.
 
 > [!TIP]
 > **Por dentro do C:** `Grafo g` mora inteiro na pilha de `main`: 4 bytes do

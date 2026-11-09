@@ -8,18 +8,16 @@ real não é tão educado. Ruas se cruzam e fecham voltas, pessoas se seguem sem
 reciprocidade, pacotes dependem uns dos outros. Para tudo isso existe o
 **grafo**: pontos e ligações, sem regra de forma.
 
-Grafo é a estrutura que mais aparece fora da sala de aula. O GPS que acha a
-rota, a rede social que sugere amigos, o gerenciador de pacotes que descobre a ordem
-de instalar dependências e reclama de dependência circular, o roteador que escolhe
-por onde mandar o pacote: todos rodam alguma variação dos algoritmos deste
-módulo.
+Fora da sala de aula, grafo aparece em todo canto. O GPS que acha a rota, a
+rede social que sugere amigos, o gerenciador de pacotes que ordena as
+dependências e reclama de dependência circular, o roteador que escolhe por
+onde mandar o pacote: todos rodam alguma variação dos algoritmos deste módulo.
 
-A mudança na cabeça é parar de perguntar "qual é o próximo?" e começar a
-perguntar "quem são os vizinhos, e em que ordem eu visito?". Quase tudo aqui
-é a mesma ideia de **busca**, com uma estrutura auxiliar diferente: a pilha
-da recursão (DFS), a fila (BFS) ou o "menor primeiro" (Dijkstra). Este módulo
-fecha o curso juntando o que veio antes: matrizes, `malloc`, listas, filas,
-pilhas, recursão, structs e heap.
+A pergunta deixa de ser "qual é o próximo?" e passa a ser "quem são os
+vizinhos, e em que ordem eu visito?". Quase tudo aqui é a mesma **busca** com
+uma estrutura auxiliar diferente: a pilha da recursão (DFS), a fila (BFS) ou
+o "menor primeiro" (Dijkstra). O módulo usa muito do que veio antes:
+matrizes, `malloc`, listas, filas, pilhas, recursão, structs e heap.
 
 ## O que você vai aprender
 
@@ -30,41 +28,23 @@ pilhas, recursão, structs e heap.
 - o algoritmo de **Dijkstra** para o caminho mínimo com pesos, e a armadilha do INFINITO que estoura
 - escolher o algoritmo certo para cada pergunta, e um bônus: a **árvore geradora mínima** com Prim
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com o
-   grafo e a ordem da visita marcada.
-2. Leia o código. É o mesmo exemplo, com os mesmos vértices e pesos.
-3. Siga o **fluxograma** com o dedo e faça o **teste de mesa** da fila, da
-   pilha ou do vetor de distâncias. Em grafos, o teste de mesa é metade do
-   aprendizado.
-4. Rode os exemplos. Apague uma aresta, mude um peso, troque a origem, rode
-   de novo e veja a ordem mudar.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos grafos, a origem da busca fica roxa, o destino verde, e as arestas
-verdes são as que a busca usou (a árvore da busca ou a rota final).
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você vai usar sem cerimônia: matrizes (0039), structs e `typedef` (0059 e
 0060), `malloc` e `free` (0054), lista encadeada (0076), pilha (0082), fila
 (0085), recursão (0032) e, no último assunto, heap (0102). Se algum desses
-estiver enferrujado, dê uma revisada antes.
+estiver enferrujado, revise antes.
 
-Os vértices são sempre números de 0 a V-1, e o nome de cada um fica num
-vetor de strings à parte. Nos exemplos, os vizinhos são examinados em ordem
-crescente de índice. Isso decide empates e a ordem da visita: se você mudar a
-numeração, a saída muda, e não está errada.
+Nos desenhos, a origem da busca fica roxa, o destino verde, e as arestas
+verdes são as que a busca usou (a árvore da busca ou a rota final). Faça o
+teste de mesa da fila, da pilha ou do vetor de distâncias no papel (em
+grafos, ele é metade do aprendizado) e responda a **Pergunta para você**
+antes de rodar.
+
+Os vértices são números de 0 a V-1, e o nome de cada um fica num vetor de
+strings à parte. Os exemplos examinam os vizinhos em ordem crescente de
+índice, o que decide empates e a ordem da visita: mude a numeração e a saída
+muda, sem estar errada.
 
 O assunto 0109 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
 `rodar` compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
@@ -93,12 +73,12 @@ Praia **e** na Feira, e a Praia liga de volta na Feira, fechando um triângulo.
 Para isso existe o **grafo**.
 
 Um grafo é um conjunto de **vértices** (os pontos) e de **arestas** (as
-ligações entre pares de pontos). Os vértices da ciclovia são os cinco lugares;
-as arestas, as cinco ciclovias. Toda árvore é um grafo, mas um grafo pode ter
+ligações entre pares de pontos). Aqui os vértices são os cinco lugares e as
+arestas, as cinco ciclovias. Toda árvore é um grafo, mas um grafo pode ter
 ciclos e partes soltas. O Cormen escreve **G = (V, E)** e usa V e E também
 para as quantidades: é daí que vêm o Θ(V²) e o Θ(V + E) deste módulo.
 
-O vocabulário que você vai usar o módulo inteiro:
+O vocabulário do módulo:
 
 - **vizinhos** (ou adjacentes): dois vértices ligados por uma aresta;
 - **grau**: quantas arestas tocam o vértice (a Feira tem grau 3);
@@ -113,7 +93,7 @@ saída é o número de arestas. Se a aresta carrega um número, como minutos ou
 reais, o grafo é **ponderado** (com peso). As ciclovias valem nos dois
 sentidos e ainda não têm peso.
 
-No C, vértice é um **número de 0 a V-1**. O nome bonito fica num vetor à parte
+No C, vértice é um **número de 0 a V-1**. O nome fica num vetor à parte
 (`nomes[2]` é `"Feira"`). Para guardar as arestas existem duas representações
 clássicas:
 
@@ -124,11 +104,11 @@ clássicas:
   guarda só os vizinhos de `i`. Ocupa O(V + E) (E é o número de arestas) e
   listar os vizinhos custa só o grau.
 
-Uma rede social guarda, para cada usuário, a lista de quem ele segue: é uma
-lista de adjacência. No C não tem dicionário nem vetor que cresce prontos: ou
-você aloca a matriz, ou monta as listas com `malloc`.
+Uma rede social guarda, para cada usuário, a lista de quem ele segue: uma
+lista de adjacência. O C não traz nenhuma das duas pronta: ou você aloca a
+matriz, ou monta as listas com `malloc`.
 
-Vamos ver na prática. Cada ciclovia liga um 1 em **duas** casas da matriz,
+Cada ciclovia liga um 1 em **duas** casas da matriz,
 `adj[a][b]` e `adj[b][a]`, por isso a matriz de um grafo não dirigido é
 espelhada na diagonal. A Feira tem três vizinhos, e a linha 2 tem três 1:
 
@@ -181,16 +161,15 @@ int main(void) {
 // Soma dos graus: 10 = 2 x 5 ciclovias
 ```
 
-Repara no fluxograma: primeiro o programa monta a estrutura (uma volta por
-aresta, marcando os dois sentidos) e só depois responde perguntas sobre ela.
-Todo algoritmo de grafo deste módulo segue essa ordem:
+O programa primeiro monta a estrutura (uma volta por aresta, marcando os dois
+sentidos) e só depois responde perguntas sobre ela. Todo algoritmo de grafo
+deste módulo segue essa ordem:
 
 <p align="center"><img src="16-grafos/0109-grafos/fluxograma.svg" alt="Fluxograma: Grafos" width="441"></p>
 
-A última linha não é coincidência. Cada aresta encosta em dois vértices e
-soma 1 no grau de cada um, então a soma dos graus é sempre o dobro do número
-de arestas. Isso serve de teste rápido: se a soma der ímpar, você esqueceu um
-dos sentidos em algum lugar.
+Repare na última linha da saída. Cada aresta encosta em dois vértices e soma
+1 no grau de cada um, então a soma dos graus é sempre o dobro do número de
+arestas. Serve de teste rápido: soma ímpar indica um sentido esquecido.
 
 O exemplo A217 guarda na matriz o tamanho de cada estrada em vez do 1 (um
 grafo ponderado) e mostra um vértice isolado, de linha toda zerada. O A218
@@ -200,8 +179,8 @@ mostra a outra representação, a lista de adjacência, como um TAD
 > [!WARNING]
 > Em grafo não dirigido, a aresta entra **nos dois sentidos**: `adj[a][b] = 1`
 > e `adj[b][a] = 1`. Esquecer um deles cria um grafo dirigido sem querer: o
-> Centro "vai" para a Praia, mas a Praia não volta. O compilador não reclama, e
-> o erro só aparece mais tarde, quando a busca não acha um caminho que existe.
+> Centro "vai" para a Praia, mas a Praia não volta. O compilador não reclama;
+> o erro aparece mais tarde, quando a busca não acha um caminho que existe.
 
 > [!TIP]
 > **Por dentro do C:** `int adj[5][5]` são 25 `int` seguidos na memória, linha
@@ -552,8 +531,8 @@ no LinkedIn. Você não conhece a Rita. Conhece o Max e a Nina; eles conhecem
 outras pessoas, que conhecem outras. Qual é a corrente mais curta de
 apresentações até ela?
 
-Quem já reparou no "conexão de 2º grau" do LinkedIn viu essa ideia (nada a
-ver com o grau do vértice do assunto anterior: ali é a **distância**). A rede é
+O "conexão de 2º grau" do LinkedIn é essa ideia (nada a ver com o grau do
+vértice do assunto anterior: ali o grau é a **distância**). A rede é
 um grafo não dirigido: pessoas são vértices, conexões são arestas. A pergunta é
 o **menor caminho em número de arestas** de Lia (você) até Rita.
 
@@ -570,8 +549,8 @@ foi descoberto primeiro é processado primeiro. O laço é sempre o mesmo: tira
 `u` da frente da fila e, para cada vizinho `v` ainda não descoberto, anota
 `dist[v] = dist[u] + 1`, guarda `pai[v] = u` e põe `v` no fim da fila.
 
-O vetor `dist[]` faz dois papéis. Guarda a distância e, com `-1`, diz "ainda
-não descoberto". É ele que impede a busca de andar em círculos: num grafo, ao
+O vetor `dist[]` faz dois papéis: guarda a distância e, com `-1`, diz "ainda
+não descoberto". Ele impede a busca de andar em círculos: num grafo, ao
 contrário da árvore, dá para chegar no mesmo vértice por caminhos diferentes
 (Otto é vizinho de Max **e** de Nina).
 
@@ -582,11 +561,11 @@ formam a **árvore da BFS**, e seguir `pai[]` a partir de Rita até chegar em
 O Cormen escreve a mesma BFS com **cores**: **branco** é o vértice ainda não
 descoberto (o nosso `dist == -1`), **cinza** é o que está na fila e **preto**
 o que já saiu dela. O `v.d` dele é o nosso `dist[v]`, e o `v.π` (pi), o
-`pai[v]`. Mesma busca, só outros nomes.
+`pai[v]`. Mesma busca, outros nomes.
 
-Vamos ver na prática. As setas verdes são as arestas da árvore da BFS (cada
-uma liga um vértice a quem o descobriu); o número em cima de cada pessoa é a
-distância; embaixo, a fila na ordem em que cada um entrou:
+No desenho, as setas verdes são as arestas da árvore da BFS (cada uma liga um
+vértice a quem o descobriu), o número em cima de cada pessoa é a distância e,
+embaixo, está a fila na ordem em que cada um entrou:
 
 <p align="center"><img src="16-grafos/0110-bfs/ideia.svg" alt="Diagrama da ideia: BFS: busca em largura" width="858"></p>
 
@@ -651,9 +630,9 @@ int main(void) {
 // Caminho até Rita: Lia -> Max -> Otto -> Rita (distância 3)
 ```
 
-Repara no fluxograma: a pergunta "a fila esvaziou?" controla tudo. Cada volta
-tira um vértice e pode colocar vários; quando ninguém novo aparece, a fila
-seca e a busca termina:
+Quem controla tudo é a pergunta "a fila esvaziou?". Cada volta tira um
+vértice e pode colocar vários; quando ninguém novo aparece, a fila seca e a
+busca termina:
 
 <p align="center"><img src="16-grafos/0110-bfs/fluxograma.svg" alt="Fluxograma: BFS: busca em largura" width="578"></p>
 
@@ -678,9 +657,10 @@ Isso vale porque toda aresta "custa" 1. Com pesos diferentes (minutos, reais)
 a BFS erra, e é aí que entra Dijkstra (assunto 0112).
 
 O exemplo A219 agrupa as pessoas por onda e mostra quem a BFS nunca alcança
-(um grafo com uma parte solta). O A220 usa a mesma BFS numa grade: cada casa de um galpão é um
-vértice e os vizinhos são as casas de cima, de baixo, da esquerda e da direita.
-Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
+(um grafo com uma parte solta). O A220 roda a mesma BFS numa grade: cada casa
+de um galpão é um vértice, e os vizinhos são as casas de cima, de baixo, da
+esquerda e da direita. Não há matriz de adjacência; os vizinhos saem de uma
+conta.
 
 > [!WARNING]
 > Marque o vértice como descoberto **ao colocar na fila**, não ao tirar. Se
@@ -689,9 +669,9 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 > estoura, e o vértice aparece repetido na ordem de visita.
 
 > [!TIP]
-> **Por dentro do C:** a fila da BFS é só `int fila[V]` com dois índices,
-> `inicio` e `fim`. Como cada vértice entra uma vez só, `fim` nunca passa de V e
-> não precisa nem da fila circular. Tirar do início deslocando todos os
+> **Por dentro do C:** a fila da BFS é um `int fila[V]` com dois índices,
+> `inicio` e `fim`. Como cada vértice entra uma vez só, `fim` nunca passa de V,
+> e a fila circular é dispensável. Tirar do início deslocando todos os
 > elementos uma casa para trás custaria O(n) a cada saída; aqui,
 > `fila[inicio++]` é O(1). O custo total da BFS é O(V²) com matriz (para cada
 > vértice, varre a linha inteira) e O(V + E) com lista de adjacência. Os três
@@ -1066,26 +1046,26 @@ trilha nova. Só no fim, já de volta à Sede, você pega a trilha da Ponte.
 Esse jeito de explorar é a **busca em profundidade** (DFS, de *depth-first
 search*): seguir um caminho o mais fundo possível e, quando não há mais nada
 novo, **voltar** até a última escolha que ficou pendente. A volta tem nome:
-**backtracking**. É o fio de Ariadne no labirinto do Minotauro.
+**backtracking**: o fio de Ariadne no labirinto do Minotauro.
 
-A BFS do assunto anterior explora em ondas, usando uma fila. A DFS explora em
-mergulhos, usando uma **pilha**. E você já tem uma pilha de graça: a pilha de
-chamadas (assunto 0031). Por isso a DFS cabe numa função recursiva de quatro
-linhas: marca o vértice, e para cada vizinho não visitado, chama a si mesma.
+A BFS explora em ondas, com uma fila. A DFS explora em mergulhos, com uma
+**pilha**, e a pilha de chamadas (assunto 0031) já vem de graça. Por isso a
+DFS cabe numa função recursiva de quatro linhas: marca o vértice e, para cada
+vizinho não visitado, chama a si mesma.
 
 Quando a chamada de `dfs(Bica)` termina, o C volta sozinho para `dfs(Topo)`,
 que continua o laço de onde parou. Esse "continua de onde parou" é o
 backtracking, e quem guarda o ponto de parada é o frame de cada chamada.
 
-O vetor `visitado[]` continua obrigatório. Lago, Gruta e Topo formam um
+Como na BFS, o vetor `visitado[]` é obrigatório. Lago, Gruta e Topo formam um
 **ciclo**; sem a marca, `dfs(Topo)` chamaria `dfs(Lago)` de novo, que chamaria
 `dfs(Gruta)`, e a recursão nunca acabaria.
 
 As arestas por onde a DFS desce formam a **árvore da DFS**. As outras, que
 levam a um vértice que já está na pilha (como Topo–Lago), são **arestas de
 retorno**. Num grafo não dirigido, achar uma aresta de retorno é achar um
-ciclo. Isso, junto com contar componentes, resolver labirintos e ordenar
-tarefas com pré-requisitos, é o que faz a DFS valer o assunto.
+ciclo. Além disso, a DFS conta componentes, resolve labirintos e ordena
+tarefas com pré-requisitos.
 
 O Cormen põe um **relógio** na DFS: cada vértice ganha um tempo de
 **descoberta** `v.d` (a chamada começa) e um de **término** `v.f` (ela acaba),
@@ -1098,9 +1078,9 @@ cinza: há ciclo), de **avanço** (para um descendente preto) ou de
 dão a **ordenação topológica** de um grafo dirigido acíclico. Com lista de
 adjacências, tudo custa O(V + E).
 
-Vamos ver na prática. Os números mostram a ordem da visita; as arestas verdes
-são as da árvore. À direita, a pilha de chamadas no momento mais fundo, quando
-a Bica é visitada:
+No desenho, os números mostram a ordem da visita e as arestas verdes são as
+da árvore. À direita está a pilha de chamadas no momento mais fundo, quando a
+Bica é visitada:
 
 <p align="center"><img src="16-grafos/0111-dfs/ideia.svg" alt="Diagrama da ideia: DFS: busca em profundidade" width="858"></p>
 
@@ -1143,10 +1123,10 @@ int main(void) {
 //   Ponte
 ```
 
-Repara no fluxograma: não existe uma pergunta "acabou?" como na fila da BFS.
-Cada chamada pergunta só "tenho vizinho novo?". Se tem, desce; se não tem,
-volta para quem chamou. O programa termina quando a primeira chamada, a da
-Sede, não tem mais para onde descer:
+Aqui não existe a pergunta "acabou?" da fila da BFS. Cada chamada pergunta
+apenas "tenho vizinho novo?": se tem, desce; se não tem, volta para quem
+chamou. O programa termina quando a primeira chamada, a da Sede, não tem mais
+para onde descer:
 
 <p align="center"><img src="16-grafos/0111-dfs/fluxograma.svg" alt="Fluxograma: DFS: busca em profundidade" width="602"></p>
 
@@ -1157,8 +1137,8 @@ diferentes. A DFS **não** dá o caminho mais curto: ela chegou ao Topo pela
 Gruta (três trilhas), mas o Lago liga direto no Topo (duas).
 
 O exemplo A221 usa a DFS para separar as arestas de árvore das de retorno e
-contar os ciclos de uma rede de cabos. O A222 faz a mesma DFS sem recursão, com uma pilha explícita, e
-mostra a pilha a cada passo.
+contar os ciclos de uma rede de cabos. O A222 faz a mesma DFS sem recursão,
+com uma pilha explícita, e mostra a pilha a cada passo.
 
 > [!WARNING]
 > Recursão funda estoura a pilha. Cada chamada ocupa um frame, e a pilha do
@@ -1171,7 +1151,7 @@ mostra a pilha a cada passo.
 > **Por dentro do C:** cada `dfs(u, nivel)` empilha um frame com o endereço
 > de retorno, os parâmetros `u` e `nivel` e o `v` do laço: algumas dezenas de
 > bytes. No ponto mais fundo deste exemplo há cinco frames de `dfs` sobre o de
-> `main`. O `v` de cada frame é exatamente "qual trilha eu já testei nesta
+> `main`. O `v` de cada frame é o "qual trilha eu já testei nesta
 > bifurcação". Já `visitado[]` e `adj[]` são globais: ficam na área de dados,
 > fora da pilha, e todas as chamadas enxergam o mesmo vetor. Se `visitado`
 > fosse local dentro de `dfs`, cada chamada teria a sua cópia, zerada, e a
@@ -1562,16 +1542,16 @@ perguntar: "passar por `u` encurta o caminho até `v`?" Em código,
 No Cormen, o começo se chama `INITIALIZE-SINGLE-SOURCE`, o teste é o
 `RELAX(u, v, w)`, os vetores são `v.d` e `v.π`, e os fixos formam o conjunto S.
 
-Por que dá para fixar o menor? Porque, com pesos não negativos, qualquer
-outro caminho até ele passaria por um vértice que já tem `dist` maior ou
-igual, e somar pesos só aumenta. É um algoritmo **guloso**: a melhor escolha
+Dá para fixar o menor porque, com pesos não negativos, qualquer outro caminho
+até ele passaria por um vértice que já tem `dist` maior ou igual, e somar
+pesos só aumenta. É um algoritmo **guloso**: a melhor escolha
 de agora nunca precisa ser desfeita. Com uma aresta **negativa**, esse
 argumento cai e o Dijkstra pode fixar uma distância errada; aí entra o
 Bellman-Ford (assunto 0154), que relaxa todas as arestas V - 1 vezes.
 
-Vamos ver na prática. Os números nas arestas são minutos; o número em cima de
-cada lugar é a `dist` final; as arestas verdes formam a rota até a Praia, e
-embaixo está o vetor `dist` no fim:
+No mapa, os números nas arestas são minutos e o número em cima de cada lugar
+é a `dist` final. As arestas verdes formam a rota até a Praia; embaixo está o
+vetor `dist` no fim:
 
 <p align="center"><img src="16-grafos/0112-dijkstra/ideia.svg" alt="Diagrama da ideia: Dijkstra: caminho mínimo" width="858"></p>
 
@@ -1639,16 +1619,16 @@ int main(void) {
 // Rota até a Praia: Casa -> Escola -> Padaria -> Mercado -> Praia
 ```
 
-Repara no fluxograma: é a mesma estrutura da BFS, com a fila trocada por
-"escolher o menor `dist` não fixo". O laço termina quando todos estão fixos
-ou quando o menor que sobrou é INFINITO:
+A estrutura é a da BFS, com a fila trocada por "escolher o menor `dist` não
+fixo". O laço termina quando todos estão fixos ou quando o menor que sobrou é
+INFINITO:
 
 <p align="center"><img src="16-grafos/0112-dijkstra/fluxograma.svg" alt="Fluxograma: Dijkstra: caminho mínimo" width="643"></p>
 
 ### Passo a passo
 
-Cada linha fixa um vértice e relaxa os vizinhos dele. Repare na Padaria, que
-começa com 4 (rua direta) e cai para 3, e no Mercado, que cai de 9 para 8:
+Cada linha fixa um vértice e relaxa os vizinhos dele. A Padaria começa com 4
+(rua direta) e cai para 3; o Mercado cai de 9 para 8:
 
 | Fixa | Casa | Escola | Padaria | Mercado | Praia |
 | --- | --- | --- | --- | --- | --- |
@@ -1666,7 +1646,7 @@ reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 > [!WARNING]
 > `INT_MAX` como INFINITO é prático, mas `INT_MAX + 3` **estoura**: é
 > comportamento indefinido em `int` com sinal, e na prática vira um número
-> negativo que "ganha" de todo mundo no `<`. Isso acontece quando o algoritmo
+> negativo que "ganha" de todo mundo no `<`. Acontece quando o algoritmo
 > escolhe um vértice inalcançável e soma o peso das arestas dele. Por isso o
 > código só escolhe `u` com `dist[u] != INFINITO` e para quando não sobra
 > ninguém. Outra saída é usar um INFINITO folgado, como `1000000000`, que ainda
@@ -2090,8 +2070,7 @@ chegar em todos de caminhão? Qual rota passa por menos trechos (menos
 paradas, menos chance de atraso)? E qual rota roda menos quilômetros (menos
 diesel)?
 
-Cada pergunta tem o seu algoritmo, e o módulo inteiro serve para você
-escolher sem pensar duas vezes:
+Cada pergunta tem o seu algoritmo:
 
 | Pergunta | Algoritmo | Estrutura auxiliar |
 | --- | --- | --- |
@@ -2107,17 +2086,16 @@ muda é a **ordem** em que os vértices saem: pilha, fila ou "menor `dist`".
 O programa do módulo junta tudo num tipo `Grafo` (uma `struct` com o número
 de vértices, os nomes e a matriz de km) e numa função para cada algoritmo.
 As funções recebem `const Grafo *`: a struct passa de 300 bytes, e copiá-la
-inteira a cada chamada seria desperdício. O `const` promete
-que ninguém mexe no mapa.
+a cada chamada seria desperdício. O `const` promete que ninguém mexe no mapa.
 
-Vamos ver na prática. A Ilha só tem balsa, então a DFS a deixa de fora. A BFS
-acha a rota de 2 trechos pelo Centro, com a estrada longa de 12 km. Dijkstra
-acha a de 4 trechos, em verde, com 10 km:
+A Ilha só tem balsa, então a DFS a deixa de fora. A BFS acha a rota de 2
+trechos pelo Centro, com a estrada longa de 12 km. Dijkstra acha a de 4
+trechos, em verde, com 10 km:
 
 <p align="center"><img src="16-grafos/0113-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a central de entregas" width="858"></p>
 
-O código completo. Repare como `bfs` e `dijkstra` preenchem o mesmo tipo de
-vetor `pai[]`, e por isso uma única `mostrar_rota` serve para os dois:
+No código, `bfs` e `dijkstra` preenchem o mesmo tipo de vetor `pai[]`, por
+isso uma única `mostrar_rota` serve para os dois:
 
 ```c
 #include <limits.h>
@@ -2238,21 +2216,20 @@ int main(void) {
 // Menos km:      CD -> Feira -> Morro -> Porto -> Vila (4 trechos, 10 km)
 ```
 
-Repara no fluxograma: a DFS vem primeiro, como um porteiro. Se a Vila
-estivesse fora da rede, não faria sentido procurar rota nenhuma:
+A DFS vem primeiro, como porteiro: se a Vila estivesse fora da rede, não
+faria sentido procurar rota nenhuma.
 
 <p align="center"><img src="16-grafos/0113-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a central de entregas" width="569"></p>
 
-A diferença entre as duas rotas é a lição do módulo. "Menor caminho" não
-existe sozinho: menor em quê? Se toda aresta custa o mesmo, a BFS resolve em
-O(V + E) e é mais simples. Se os pesos variam, a BFS dá uma resposta errada
-com toda a confiança, como os 16 km acima.
+"Menor caminho" sozinho não diz nada: menor em quê? Se toda aresta custa o
+mesmo, a BFS resolve em O(V + E) e é mais simples. Se os pesos variam, a BFS
+devolve uma resposta errada sem nenhum aviso, como os 16 km acima.
 
 O exemplo A225 compara BFS e Dijkstra destino por destino num mapa com duas
 partes soltas, e usa a DFS para contar as partes. O A226 traz um quarto
-problema: ligar cinco cidades com fibra óptica
-gastando o mínimo. Não é caminho de A até B, é uma **árvore geradora
-mínima**: um conjunto de cabos que conecta todo mundo com a menor soma. O
+problema: ligar cinco cidades com fibra óptica gastando o mínimo. Agora não
+se busca um caminho de A até B, e sim uma **árvore geradora mínima**: um
+conjunto de cabos que conecta todo mundo com a menor soma. O
 algoritmo de **Prim** faz isso com o código do Dijkstra trocando uma linha: em
 vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 
@@ -2261,7 +2238,7 @@ vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 > peso real puder ser zero. Se um trecho pode custar R$ 0 (um pedágio isento,
 > uma conexão gratuita), use outra marca, como `-1`, ou uma matriz `bool`
 > separada para dizer se a aresta existe. Senão o algoritmo some com a
-> estrada sem avisar.
+> estrada sem aviso.
 
 > [!TIP]
 > **Por dentro do C:** `Grafo g` mora inteiro na pilha de `main`: 4 bytes do
@@ -2919,7 +2896,7 @@ tabela de todas as distâncias. Existe um jeito com três laços aninhados, o
 **Floyd-Warshall**: `para k, para i, para j: d[i][j] = min(d[i][j], d[i][k] +
 d[k][j])`. Escreva-o para o mapa do assunto 0113 (com a Ilha), começando com
 `d[i][i] = 0`, os km das estradas e `INFINITO` no resto, e mostre a tabela
-(`-` onde não há caminho) e quantas vezes o laço de dentro rodou.
+(`-` quando não há caminho) e quantas vezes o laço de dentro rodou.
 
 <details><summary>Resposta</summary>
 
@@ -2936,7 +2913,7 @@ Passos do laço de dentro: 343
 ```
 
 São V³ = 7³ = 343 passos: O(V³), igual a V execuções do Dijkstra com matriz,
-mas com código bem menor. O cuidado é o do assunto 0112: com `INT_MAX`,
+com código bem menor. O cuidado é o do assunto 0112: com `INT_MAX`,
 `d[i][k] + d[k][j]` estoura. Use `#define INFINITO 1000000000`, que somado
 duas vezes ainda cabe em `int`, e mostre `-` quando `d[i][j] >= INFINITO`.
 A linha do CD confere com o Dijkstra do assunto 0113: 10 km até a Vila.

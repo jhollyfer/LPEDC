@@ -6,17 +6,17 @@ um atlas (R$ 30), um mangá (R$ 20), um livro de poesia (R$ 15) e um marcador
 de página (R$ 5). Que combinações fecham exatamente R$ 35?
 
 Dá para resolver com o assunto 0125: gerar os 2⁴ = 16 subconjuntos, somar
-cada um e ficar com os que dão 35. Só que isso desperdiça trabalho. Escolheu o
-atlas e o mangá? Já são R$ 50. Nenhum subconjunto que comece assim pode dar
-certo, e mesmo assim a enumeração cega vai até o fim de cada um deles.
+cada um e ficar com os que dão 35. Isso desperdiça trabalho: atlas e mangá já
+somam R$ 50, nenhum subconjunto que comece assim pode dar certo, e mesmo
+assim a enumeração cega vai até o fim de cada um deles.
 
 O **backtracking** (retrocesso; o Ziviani chama de **tentativa e erro**) é a
 enumeração que **desiste cedo**. Ela constrói a solução uma escolha por vez,
-como antes. Mas, a cada passo, pergunta: "este começo ainda pode virar uma solução?". Se não pode, ela nem
-desce: volta um passo e tenta a próxima opção. Cortar um galho inteiro da
-árvore de decisões assim se chama **poda**.
+como antes, mas a cada passo pergunta: "este começo ainda pode virar uma
+solução?". Se não pode, ela nem desce: volta um passo e tenta a próxima
+opção. Cortar assim um galho inteiro da árvore de decisões se chama **poda**.
 
-O esqueleto é sempre o mesmo, e você já viu as três primeiras partes:
+O esqueleto tem três partes, e a primeira e a última você já viu:
 
 1. **caso de parada**: a solução está completa? Mostre (ou conte) e volte;
 2. **poda**: o começo já é inviável? Volte sem descer;
@@ -27,7 +27,7 @@ Neste problema, a poda é simples: os preços são positivos, então se a soma
 **exatamente** 35, também não precisa descer: os próximos itens só poderiam
 entrar com a soma passando de 35.
 
-Vamos ver na prática. Cada caixa da árvore mostra a soma até ali. O galho da
+Cada caixa da árvore mostra a soma até ali. O galho da
 esquerda leva o item do nível, o da direita não leva. As caixas vermelhas são
 podas, as verdes são soluções e as cinzas são becos sem saída (os itens
 acabaram antes de a soma chegar a 35):
@@ -87,11 +87,11 @@ int main(void) {
 
 A árvore completa de 4 itens tem 1 + 2 + 4 + 8 + 16 = 31 nós. A poda deixou
 21. Parece pouco, mas o efeito cresce com o tamanho: cada poda perto da raiz
-corta um galho com metade da árvore. Com 30 itens e um alvo pequeno, a
-diferença é entre um bilhão de chamadas e alguns milhares.
+corta um galho com metade da árvore. Com 30 itens e um alvo pequeno, são
+alguns milhares de chamadas em vez de um bilhão.
 
-Repara no fluxograma: as duas perguntas de cima mandam embora cedo, e só quem
-passa por elas chega às duas chamadas recursivas:
+As duas perguntas de cima mandam embora cedo; só quem passa por elas chega
+às duas chamadas recursivas:
 
 {{fluxograma}}
 
@@ -102,8 +102,8 @@ passa por elas chega às duas chamadas recursivas:
 > "acabaram os itens", e só `mangá poesia` apareceria. Outro clássico é
 > escrever a poda com `>=` no lugar de `>`: aí toda soma que bate o alvo é
 > cortada antes de ser mostrada, e a saída fica vazia. A poda só pode cortar
-> o que **com certeza** não leva a solução. Uma poda gananciosa demais deixa o
-> programa rápido e errado.
+> o que **com certeza** não leva a solução; uma poda ambiciosa demais deixa
+> o programa rápido e errado.
 
 > [!TIP]
 > **Por dentro do C:** a soma viaja como **parâmetro**, então cada frame tem a
@@ -111,9 +111,9 @@ passa por elas chega às duas chamadas recursivas:
 > a linha `leva[i] = false` antes do segundo caminho. O vetor ocupa `N` bytes
 > e a pilha nunca passa de `N + 1` frames, mesmo quando as chamadas somam
 > milhões. O custo no pior caso continua **O(2ⁿ)**: a poda não muda a ordem
-> de grandeza garantida, muda o quanto da árvore você visita na prática. E
-> repara que ordenar os preços do maior para o menor, como aqui, faz a soma
-> estourar mais cedo e podar mais perto da raiz.
+> de grandeza garantida, muda o quanto da árvore você visita na prática.
+> Ordenar os preços do maior para o menor, como aqui, faz a soma estourar
+> mais cedo e podar mais perto da raiz.
 
 > [!NOTE]
 > **Pergunta para você:** se o cartão fosse de R$ 50, quais combinações

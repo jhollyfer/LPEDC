@@ -6,15 +6,15 @@ O apelido ela só aponta no cartaz da parede: você lê, mas não pode
 escrever no cartaz. Em C, essas duas situações têm sintaxes quase iguais e
 comportamentos bem diferentes.
 
-Você já sabe que string é um vetor de `char` terminado em `'\0'` (assunto
-0041). E já sabe que o nome de um vetor vira o endereço do primeiro
-elemento (assunto 0047). Junte as duas coisas: toda função de string recebe
+String é um vetor de `char` terminado em `'\0'` (assunto 0041), e o nome de
+um vetor vira o endereço do primeiro elemento (assunto 0047). Juntando as
+duas coisas: toda função de string recebe
 um **`char *`**, o endereço do primeiro caractere, e anda até achar o
 `'\0'`.
 
 Um texto entre aspas, como `"bia"`, é um **literal de string**. O
 compilador guarda esse texto **uma vez só**, numa região da memória
-**somente leitura**, junto com o código do programa. Agora compare:
+**somente leitura**, junto com o código do programa. Compare:
 
 - `char nome[] = "ana";` cria um **vetor** de 4 `char` na pilha e **copia**
   o literal para dentro dele. O vetor é seu: `nome[0] = 'A'` vale;
@@ -30,8 +30,8 @@ As diferenças continuam. O ponteiro pode mudar de alvo: `apelido =
 conteúdo, `strcpy`). E `sizeof nome` dá 4 (o vetor inteiro), enquanto
 `sizeof apelido` dá 8 (o tamanho de um endereço).
 
-Vamos ver na prática. No desenho, `nome` é uma cópia na pilha, onde o laço
-passa cada letra para maiúscula. `apelido` é só uma seta para o literal
+No desenho, `nome` é uma cópia na pilha, e nela o laço passa cada letra para
+maiúscula. `apelido` é só uma seta para o literal
 `"bia"`, que fica na área só de leitura:
 
 {{ideia}}
@@ -65,12 +65,11 @@ int main(void) {
 // Novo apelido: bibi
 ```
 
-O `(unsigned char)` antes do `toupper` evita um problema com letras
-acentuadas: os bytes delas podem ser negativos num `char` (assunto 0040). O `(char)` na
-frente só deixa explícito que o resultado volta a caber num `char`.
+O `(unsigned char)` antes do `toupper` evita o problema dos bytes negativos
+das letras acentuadas (assunto 0040). O `(char)` na frente só deixa explícito que o resultado volta a caber num `char`.
 
-Repara no fluxograma: é o laço clássico de string. A pergunta não é "já
-andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
+O laço é o clássico de string. A pergunta não é "já andei `n` posições?", e
+sim "a gaveta atual é o `'\0'`?":
 
 {{fluxograma}}
 

@@ -25,7 +25,7 @@ São três argumentos: onde guardar, quantos bytes cabem e de onde ler (`stdin`
 tamanho certo (`sizeof(nome)`), ele nunca estoura o vetor. Quando a entrada
 acaba (Ctrl+D), ele devolve `NULL`.
 
-Só tem um detalhe: o `fgets` **guarda o `'\n'`** do Enter, se couber. Você
+Um detalhe: o `fgets` **guarda o `'\n'`** do Enter, se couber. Você
 digita "Maria Clara" e recebe `"Maria Clara\n"`. Para tirar, use o
 **`strcspn`** do `<string.h>`: `strcspn(s, "\n")` devolve a posição do
 primeiro `'\n'` (ou o tamanho da string, se não houver). Trocando essa posição
@@ -35,11 +35,11 @@ por `'\0'`, o texto termina antes do Enter:
 nome[strcspn(nome, "\n")] = '\0';
 ```
 
-Uma linha só, que funciona nos dois casos: com `'\n'` ele é trocado; sem
-`'\n'` o `'\0'` é trocado por ele mesmo. O `fgets` não tira o `\n`
-sozinho: essa limpeza é sua.
+A linha funciona nos dois casos: com `'\n'`, ele é trocado; sem `'\n'`, o
+`'\0'` é trocado por ele mesmo. O `fgets` não tira o `\n` sozinho: essa
+limpeza é sua.
 
-Vamos ver na prática. O vetor `nome` tem 40 bytes. O `fgets` copia os 11
+No exemplo, o vetor `nome` tem 40 bytes. O `fgets` copia os 11
 caracteres, depois o `'\n'`, depois o `'\0'`. O `strcspn` acha o `'\n'` na
 posição 11, e ele vira o novo fim:
 
@@ -74,8 +74,8 @@ int main(void) {
 // Olá, Maria Clara! Seu nome tem 11 caracteres.
 ```
 
-Repara no fluxograma: o teste do `NULL` vem antes de qualquer uso. Se a
-entrada acabou, não existe nome para limpar:
+O teste do `NULL` vem antes de qualquer uso: se a entrada acabou, não existe
+nome para limpar.
 
 {{fluxograma}}
 
@@ -92,7 +92,7 @@ entrada acabou, não existe nome para limpar:
 > **Por dentro do C:** o teclado não manda as letras direto para o seu
 > programa. O terminal junta o que você digita num **buffer** e só entrega
 > quando você aperta Enter. `scanf`, `getchar` e `fgets` tiram bytes desse
-> mesmo buffer, e o que um deixa o próximo pega. Agora, o **`gets`**: ele lia
+> mesmo buffer, e o que um deixa o próximo pega. Já o **`gets`** lia
 > uma linha sem receber o tamanho do vetor, então qualquer linha comprida
 > estourava a memória. Em 1988, o worm de Morris invadiu milhares de máquinas
 > mandando uma linha longa para um programa que usava `gets`. A função foi

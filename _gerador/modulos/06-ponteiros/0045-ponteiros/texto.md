@@ -2,8 +2,7 @@
 
 Quando você pede comida pelo app, o entregador não leva a sua casa no
 celular: leva o **endereço** dela. Com o endereço, ele chega na porta e
-entrega o pedido. Mudou o que tem dentro da casa sem nunca ter carregado a
-casa.
+entrega o pedido. Muda o que tem dentro da casa sem carregar a casa.
 
 Um **ponteiro** é isso: uma variável que guarda um **endereço** em vez de um
 valor comum. Ela também mora numa gaveta da memória (tem o próprio
@@ -30,14 +29,14 @@ E se o ponteiro ainda não aponta para nada? Use **`NULL`**: um endereço
 especial que significa "lugar nenhum". Dá para testar (`if (cartao != NULL)`)
 antes de usar.
 
-Vamos ver na prática. No caixa da farmácia, o cliente tem 120 pontos no
+No caixa da farmácia, o cliente tem 120 pontos no
 cartão fidelidade. O ponteiro `cartao` começa em `NULL` (nenhum cartão).
 Quando o cliente passa o cartão, `cartao` recebe `&pontos`. A compra de
-R$ 30 soma 30 pontos **através do ponteiro**, e `pontos` vira 150:
+R$ 30 soma 30 pontos **por meio do ponteiro**, e `pontos` vira 150:
 
 {{ideia}}
 
-No código, repare que a linha que muda `pontos` nem cita o nome `pontos`:
+No código, a linha que muda `pontos` nem cita o nome `pontos`:
 
 ```c
 #include <stdio.h>
@@ -73,9 +72,8 @@ Três números diferentes, não confunda: `cartao` é o endereço guardado (o de
 `pontos`), `*cartao` é o valor lá dentro (120, depois 150) e `&cartao` é
 onde o próprio ponteiro mora.
 
-Repara no fluxograma: antes de desreferenciar, o programa pergunta se o
-ponteiro aponta para algum lugar. Esse teste contra `NULL` é um hábito que
-você vai repetir o curso inteiro:
+Antes de desreferenciar, o programa pergunta se o ponteiro aponta para algum
+lugar. Esse teste contra `NULL` volta no curso inteiro:
 
 {{fluxograma}}
 
@@ -94,8 +92,7 @@ você vai repetir o curso inteiro:
 > buscar 4 bytes a partir do endereço e tratar como `int`. E o `NULL` vale,
 > na prática, o endereço 0. O sistema deixa essa região da memória proibida
 > de propósito: desreferenciar `NULL` derruba o programa na hora
-> (*segmentation fault*), em vez de corromper algo em silêncio. Falhar cedo
-> é bom.
+> (*segmentation fault*), em vez de corromper algo em silêncio.
 
 > [!NOTE]
 > **Pergunta para você:** depois de `int x = 5; int *p = &x; int *q = p;

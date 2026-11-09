@@ -5,8 +5,7 @@
 Muito problema real não tem fórmula. Que combinação de produtos fecha o
 crédito exato? Em que ordem o motoboy faz as entregas? Onde ficam as rainhas,
 como sair do labirinto, que dígito vai em cada casa do sudoku? Para todos
-eles, o jeito honesto é **testar as possibilidades**. A questão é testar com
-método: sem esquecer nenhuma, sem repetir nenhuma e sem perder tempo com as
+eles, o jeito honesto é **testar as possibilidades**, com método: sem esquecer nenhuma, sem repetir nenhuma e sem perder tempo com as
 que já se sabe que não servem.
 
 O módulo começa pela **enumeração**: gerar todos os subconjuntos e todas as
@@ -16,12 +15,12 @@ o caminho não dá em nada. O resto do módulo aplica a mesma ideia a
 problemas cada vez maiores: soma de subconjuntos, N-rainhas, labirintos,
 flood fill e, no fim, um resolvedor de sudoku completo.
 
-A mudança na cabeça é enxergar o problema como uma **árvore de decisões**.
-Cada nível é uma escolha; cada caminho da raiz até uma folha é uma tentativa
-completa. Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a
-árvore **podando** os galhos que não podem ter solução. E o segredo que
-separa o código que funciona do que não funciona cabe numa frase: tudo o que
-você muda antes de descer, você **desfaz** depois de voltar.
+O problema passa a ser uma **árvore de decisões**. Cada nível é uma
+escolha; cada caminho da raiz até uma folha é uma tentativa completa.
+Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a árvore
+**podando** os galhos que não podem ter solução. A regra que mais derruba
+código cabe numa frase: tudo o que você muda antes de descer, você
+**desfaz** depois de voltar.
 
 ## O que você vai aprender
 
@@ -33,34 +32,6 @@ você muda antes de descer, você **desfaz** depois de voltar.
 - achar um caminho num **labirinto** em matriz e pintar regiões com **flood fill**
 - juntar tudo num **resolvedor de sudoku**, e acelerar a busca escolhendo a casa mais apertada
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: quase sempre é a árvore de
-   decisões do exemplo, ou o tabuleiro dele, com os mesmos valores do código.
-2. Leia o código. Procure sempre as três partes: onde a função **para**, onde
-   ela **poda** e onde ela **escolhe e desfaz**.
-3. Siga o **fluxograma** com o dedo. Em backtracking ele é curto, porque a
-   recursão esconde a repetição: cada caixa de chamada recursiva é o
-   fluxograma inteiro de novo.
-4. Rode os exemplos. Mude a ordem das opções, tire a poda, esqueça o
-   desfazer de propósito e compare a saída e o número de chamadas.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Quase todo programa do módulo conta as **chamadas** da função recursiva. É o
-jeito mais simples de ver uma poda funcionando: a saída fica igual e o número
-cai.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nas árvores de decisão, amarelo é uma decisão ainda aberta, verde é uma
-solução, vermelho é um galho podado e cinza é um beco sem saída. Nos
-tabuleiros, as casas verdes são a solução e as vermelhas, as proibidas.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo é **recursão** do começo ao fim: revise os assuntos 0031 (pilha de
@@ -70,6 +41,15 @@ bits (0065) e o vetor de `bool` de `<stdbool.h>`. O labirinto é a DFS do
 assunto 0111 com a matriz no lugar do grafo, e a BFS (0110) aparece como a
 ferramenta certa para o menor caminho. A pilha (0082) é a saída quando a
 recursão ficaria funda demais.
+
+Em cada função recursiva, procure três partes: em que ponto ela **para**, em
+que ponto ela **poda** e em que ponto ela **escolhe e desfaz**. O fluxograma
+é curto, porque cada caixa de chamada recursiva é o fluxograma inteiro de
+novo. Quase todo programa conta as **chamadas**: com a poda, a saída fica
+igual e o número cai. Nas árvores de decisão, amarelo é uma decisão ainda
+aberta, verde é uma solução, vermelho é um galho podado e cinza é um beco
+sem saída; nos tabuleiros, as casas verdes são a solução e as vermelhas, as
+proibidas.
 
 Uma convenção vale para o módulo todo: **os vetores de marcação começam e
 terminam a busca do mesmo jeito**. Se, depois de um backtracking, sobrou algum
@@ -107,14 +87,14 @@ Gerar todos sem esquecer nenhum e sem repetir é **enumerar**. O jeito mais
 limpo é a recursão (assunto 0032): a função `gera(i, k)` cuida do item `i` e
 abre dois caminhos. No primeiro, o item fica **de fora** e ela chama
 `gera(i + 1, ...)`. No segundo, o item **entra** e ela chama `gera(i + 1, ...)`
-de novo. Quando `i` chega a `n`, todas as decisões foram tomadas: é hora de
-mostrar o subconjunto.
+de novo. Quando `i` chega a `n`, todas as decisões foram tomadas e o
+subconjunto é mostrado.
 
 Os itens escolhidos vão para o vetor `cesta`, e `k` diz quantos lugares dele
 estão ocupados. Como `k` é **parâmetro**, cada chamada tem a sua cópia. Quando
 uma chamada termina e a de cima continua, o `k` de cima ainda vale o que valia
-antes: a escolha se **desfaz sozinha**. Essa ideia de escolher, descer e
-desfazer é a espinha de todo o módulo.
+antes: a escolha se **desfaz sozinha**. Escolher, descer e desfazer: o
+módulo inteiro gira em torno disso.
 
 Existe um segundo jeito, sem recursão: os bits de um número (assunto 0065).
 Conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o item `i` entra". O
@@ -126,9 +106,9 @@ for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
         if (m & (1 << i)) { /* o item i está no subconjunto m */ }
 ```
 
-Vamos ver na prática. Cada nível da árvore de decisões é um complemento. O
-ramo da esquerda deixa o item de fora; o da direita põe. As 8 folhas são os 8
-copos, na mesma ordem em que o programa vai mostrar:
+Na árvore de decisões, cada nível é um complemento. O ramo da esquerda deixa
+o item de fora; o da direita põe. As 8 folhas são os 8 copos, na ordem em
+que o programa os mostra:
 
 <p align="center"><img src="19-backtracking/0125-subconjuntos/ideia.svg" alt="Diagrama da ideia: Subconjuntos" width="864"></p>
 
@@ -180,14 +160,14 @@ int main(void) {
 // 15 chamadas
 ```
 
-Por que 15 chamadas? A árvore tem 1 + 2 + 4 + 8 = 15 nós, e cada nó é uma
-chamada de `gera`. Em geral, são 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas. Cada folha
+As 15 chamadas vêm da árvore: ela tem 1 + 2 + 4 + 8 = 15 nós, e cada nó é
+uma chamada de `gera`. Em geral, são 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas. Cada folha
 ainda gasta até `n` passos para mostrar a cesta, então o custo total é
 **O(n · 2ⁿ)**. Com 20 itens já são mais de um milhão de subconjuntos; com 40,
 mais de um trilhão. Enumerar tudo só serve para `n` pequeno.
 
-Repara no fluxograma: não há laço nenhum. Quem "repete" é a recursão, que
-chama `gera` duas vezes por nó, uma por caminho:
+O fluxograma não tem laço. Quem "repete" é a recursão, que chama `gera` duas
+vezes por nó, uma por caminho:
 
 <p align="center"><img src="19-backtracking/0125-subconjuntos/fluxograma.svg" alt="Fluxograma: Subconjuntos" width="531"></p>
 
@@ -196,8 +176,8 @@ chama `gera` duas vezes por nó, uma por caminho:
 > conta `m & (1 << i)` não dá 1 quando o bit está ligado: dá o próprio
 > `1 << i`, que vale 1, 2, 4, 8... Com `== 1`, só o item 0 é reconhecido e os
 > outros nunca entram. Teste só se o resultado é diferente de zero:
-> `if (m & (1 << i))`. E sem os parênteses, `m & 1 << i == 1` nem faz o que
-> parece, porque o `==` é feito antes do `&`.
+> `if (m & (1 << i))`. Sem os parênteses, `m & 1 << i == 1` nem faz o que
+> parece, porque o `==` é avaliado antes do `&`.
 
 > [!TIP]
 > **Por dentro do C:** a pilha de chamadas nunca passa de `n + 1` frames
@@ -205,8 +185,8 @@ chama `gera` duas vezes por nó, uma por caminho:
 > de novo pelo mesmo espaço. O vetor `cesta` é global e um só para todo mundo;
 > o que muda de frame para frame é o `k`, guardado em cada frame. Depois de
 > voltar, os lugares de `cesta` a partir de `k` ficam com lixo das escolhas
-> antigas, e tudo bem: ninguém lê além de `k`, e a próxima escolha escreve por
-> cima. No jeito por bits, `1 << i` com `int` só vale até `i = 30`; para mais
+> antigas, sem problema: ninguém lê além de `k`, e a próxima escolha escreve
+> por cima. No jeito por bits, `1 << i` com `int` só vale até `i = 30`; para mais
 > itens, use `unsigned long long` e `1ULL << i`.
 
 > [!NOTE]
@@ -563,27 +543,27 @@ Cada ordem é uma **permutação** dos três grupos, e com `n` elementos há
 
 A recursão gera todas decidindo **uma posição por vez**. A função
 `permuta(v, i)` sabe que as posições `0..i-1` já estão decididas e cuida da
-posição `i`. Quem pode ir para lá? Qualquer elemento ainda não usado, e os não
-usados são justamente os que estão em `v[i..n-1]`. Então, para cada `j` de `i`
-até `n - 1`:
+posição `i`. Para lá pode ir qualquer elemento ainda não usado, e os não
+usados são os que estão em `v[i..n-1]`. Então, para cada `j` de `i` até
+`n - 1`:
 
 1. **escolhe**: troca `v[i]` com `v[j]`, levando o candidato para a posição `i`;
 2. **desce**: chama `permuta(v, i + 1)` para decidir o resto;
 3. **desfaz**: troca `v[i]` com `v[j]` de novo, devolvendo o vetor como
    estava antes da escolha.
 
-O passo 3 é o que separa a enumeração que funciona da que não funciona. No
-assunto anterior, a escolha se desfazia sozinha porque morava num parâmetro.
-Aqui a escolha mexe no **vetor**, que é um só para todas as chamadas. Se a
-chamada não arrumar a bagunça antes de voltar, a próxima volta do laço de quem
-a chamou parte de um vetor diferente do que esperava.
+Sem o passo 3, a enumeração quebra. No assunto anterior, a escolha se
+desfazia sozinha porque morava num parâmetro. Aqui a escolha mexe no
+**vetor**, que é um só para todas as chamadas. Se a chamada não arrumar a
+bagunça antes de voltar, a próxima volta do laço de quem a chamou parte de um
+vetor diferente do que esperava.
 
-Quando `i` chega a `n`, todas as posições estão decididas: é hora de mostrar a
-ordem.
+Quando `i` chega a `n`, todas as posições estão decididas e a ordem é
+mostrada.
 
-Vamos ver na prática. No primeiro nível, cada ramo leva um grupo diferente
-para a frente da fila. No segundo, o mesmo para a segunda posição. As 6 folhas
-são as 6 ordens, na ordem em que o programa mostra:
+Na árvore, cada ramo do primeiro nível leva um grupo diferente para a frente
+da fila; o segundo nível faz o mesmo com a segunda posição. As 6 folhas são
+as 6 ordens, na sequência em que o programa as mostra:
 
 <p align="center"><img src="19-backtracking/0126-permutacoes/ideia.svg" alt="Diagrama da ideia: Permutações" width="860"></p>
 
@@ -633,14 +613,14 @@ int main(void) {
 // 6 ordens; no fim: Rap, Samba, Forró
 ```
 
-Repara na última linha: depois de tudo, o vetor voltou a ser
-`Rap, Samba, Forró`. É a prova de que cada chamada desfez o que fez. Repara
-também nas linhas 5 e 6: a troca de `Rap` com `Forró` deixou o `Samba` no
-meio, então a ordem que sai **não** é a alfabética nem a "de dicionário".
-Quem precisa dessa ordem usa outro jeito (exemplo A251).
+Na última linha, depois de tudo, o vetor voltou a ser `Rap, Samba, Forró`:
+cada chamada desfez o que fez. Nas linhas 5 e 6, a troca de `Rap` com
+`Forró` deixou o `Samba` no meio, então a ordem que sai **não** é a
+alfabética nem a "de dicionário". Quem precisa dessa ordem usa outro jeito
+(exemplo A251).
 
-Repara no fluxograma: o laço do `j` é o que abre os ramos, e cada volta dele
-tem o par troca e destroca em volta da chamada recursiva:
+O laço do `j` abre os ramos, e cada volta dele tem o par troca e destroca em
+volta da chamada recursiva:
 
 <p align="center"><img src="19-backtracking/0126-permutacoes/fluxograma.svg" alt="Fluxograma: Permutações" width="520"></p>
 
@@ -991,17 +971,17 @@ um atlas (R$ 30), um mangá (R$ 20), um livro de poesia (R$ 15) e um marcador
 de página (R$ 5). Que combinações fecham exatamente R$ 35?
 
 Dá para resolver com o assunto 0125: gerar os 2⁴ = 16 subconjuntos, somar
-cada um e ficar com os que dão 35. Só que isso desperdiça trabalho. Escolheu o
-atlas e o mangá? Já são R$ 50. Nenhum subconjunto que comece assim pode dar
-certo, e mesmo assim a enumeração cega vai até o fim de cada um deles.
+cada um e ficar com os que dão 35. Isso desperdiça trabalho: atlas e mangá já
+somam R$ 50, nenhum subconjunto que comece assim pode dar certo, e mesmo
+assim a enumeração cega vai até o fim de cada um deles.
 
 O **backtracking** (retrocesso; o Ziviani chama de **tentativa e erro**) é a
 enumeração que **desiste cedo**. Ela constrói a solução uma escolha por vez,
-como antes. Mas, a cada passo, pergunta: "este começo ainda pode virar uma solução?". Se não pode, ela nem
-desce: volta um passo e tenta a próxima opção. Cortar um galho inteiro da
-árvore de decisões assim se chama **poda**.
+como antes, mas a cada passo pergunta: "este começo ainda pode virar uma
+solução?". Se não pode, ela nem desce: volta um passo e tenta a próxima
+opção. Cortar assim um galho inteiro da árvore de decisões se chama **poda**.
 
-O esqueleto é sempre o mesmo, e você já viu as três primeiras partes:
+O esqueleto tem três partes, e a primeira e a última você já viu:
 
 1. **caso de parada**: a solução está completa? Mostre (ou conte) e volte;
 2. **poda**: o começo já é inviável? Volte sem descer;
@@ -1012,7 +992,7 @@ Neste problema, a poda é simples: os preços são positivos, então se a soma
 **exatamente** 35, também não precisa descer: os próximos itens só poderiam
 entrar com a soma passando de 35.
 
-Vamos ver na prática. Cada caixa da árvore mostra a soma até ali. O galho da
+Cada caixa da árvore mostra a soma até ali. O galho da
 esquerda leva o item do nível, o da direita não leva. As caixas vermelhas são
 podas, as verdes são soluções e as cinzas são becos sem saída (os itens
 acabaram antes de a soma chegar a 35):
@@ -1072,11 +1052,11 @@ int main(void) {
 
 A árvore completa de 4 itens tem 1 + 2 + 4 + 8 + 16 = 31 nós. A poda deixou
 21. Parece pouco, mas o efeito cresce com o tamanho: cada poda perto da raiz
-corta um galho com metade da árvore. Com 30 itens e um alvo pequeno, a
-diferença é entre um bilhão de chamadas e alguns milhares.
+corta um galho com metade da árvore. Com 30 itens e um alvo pequeno, são
+alguns milhares de chamadas em vez de um bilhão.
 
-Repara no fluxograma: as duas perguntas de cima mandam embora cedo, e só quem
-passa por elas chega às duas chamadas recursivas:
+As duas perguntas de cima mandam embora cedo; só quem passa por elas chega
+às duas chamadas recursivas:
 
 <p align="center"><img src="19-backtracking/0127-backtracking/fluxograma.svg" alt="Fluxograma: Backtracking" width="588"></p>
 
@@ -1087,8 +1067,8 @@ passa por elas chega às duas chamadas recursivas:
 > "acabaram os itens", e só `mangá poesia` apareceria. Outro clássico é
 > escrever a poda com `>=` no lugar de `>`: aí toda soma que bate o alvo é
 > cortada antes de ser mostrada, e a saída fica vazia. A poda só pode cortar
-> o que **com certeza** não leva a solução. Uma poda gananciosa demais deixa o
-> programa rápido e errado.
+> o que **com certeza** não leva a solução; uma poda ambiciosa demais deixa
+> o programa rápido e errado.
 
 > [!TIP]
 > **Por dentro do C:** a soma viaja como **parâmetro**, então cada frame tem a
@@ -1096,9 +1076,9 @@ passa por elas chega às duas chamadas recursivas:
 > a linha `leva[i] = false` antes do segundo caminho. O vetor ocupa `N` bytes
 > e a pilha nunca passa de `N + 1` frames, mesmo quando as chamadas somam
 > milhões. O custo no pior caso continua **O(2ⁿ)**: a poda não muda a ordem
-> de grandeza garantida, muda o quanto da árvore você visita na prática. E
-> repara que ordenar os preços do maior para o menor, como aqui, faz a soma
-> estourar mais cedo e podar mais perto da raiz.
+> de grandeza garantida, muda o quanto da árvore você visita na prática.
+> Ordenar os preços do maior para o menor, como aqui, faz a soma estourar
+> mais cedo e podar mais perto da raiz.
 
 > [!NOTE]
 > **Pergunta para você:** se o cartão fosse de R$ 50, quais combinações
@@ -1463,13 +1443,13 @@ cada linha tem **exatamente uma** rainha. Basta decidir a coluna da rainha de
 cada linha, e a solução vira um vetor `pos`, com `pos[l]` igual à coluna da
 rainha da linha `l`.
 
-Agora é backtracking puro: a função `rainha(l)` põe a rainha da linha `l`.
+O resto é backtracking: a função `rainha(l)` põe a rainha da linha `l`.
 Ela tenta cada coluna `c` e **poda** as casas atacadas pelas rainhas das
 linhas de cima. Se a casa está livre, marca, desce para a linha `l + 1` e,
-na volta, desmarca. Se nenhuma coluna serve, a função simplesmente termina, e
-quem a chamou passa para a próxima coluna: é o retrocesso.
+na volta, desmarca. Se nenhuma coluna serve, a função termina, e quem a
+chamou passa para a próxima coluna: é o retrocesso.
 
-O segredo está em testar o ataque em O(1), sem varrer as rainhas anteriores.
+O ganho vem de testar o ataque em O(1), sem varrer as rainhas anteriores.
 Cada casa `(l, c)` pertence a uma coluna e a duas diagonais, e as diagonais
 têm um "endereço" fácil:
 
@@ -1482,7 +1462,7 @@ Três vetores de `bool` guardam o que está ocupado: `coluna[N]`,
 `diag1[2N - 1]` e `diag2[2N - 1]`. Uma casa está livre se as três posições
 dela estão `false`.
 
-Vamos ver na prática. À esquerda, a primeira solução que o programa acha. No
+O desenho mostra, à esquerda, a primeira solução que o programa acha; no
 meio, o número `l + c` de cada casa; à direita, `l - c + 3`. A rainha da
 linha 1, coluna 3, ocupa a diagonal ↗ número 4 e a diagonal ↘ número 1: as
 casas destacadas ficam proibidas para as outras rainhas:
@@ -1567,12 +1547,12 @@ cortou a casa antes de qualquer chamada:
 | 3 | colunas 0 a 3 | todas atacadas: volta; na linha 2, as colunas 2 e 3 também estão atacadas, e a linha 1 já tentou tudo: volta à linha 0 |
 | 0 | coluna 1 | livre: desce, e o caminho 3, 0, 2 fecha a solução 1 |
 
-Repara que a rainha da linha 0 na coluna 0 nunca dá certo: a busca gasta 4
-chamadas (uma na linha 1, duas na linha 2, uma na linha 3) para descobrir
-isso, e depois esquece o galho inteiro.
+A rainha da linha 0 na coluna 0 nunca dá certo: a busca gasta 4 chamadas
+(uma na linha 1, duas na linha 2, uma na linha 3) para descobrir isso, e
+depois esquece o galho inteiro.
 
-Repara no fluxograma: é o esqueleto do assunto anterior, com um laço pelas
-colunas no lugar de "leva ou não leva":
+O fluxograma é o esqueleto do assunto anterior, com um laço pelas colunas no
+lugar de "leva ou não leva":
 
 <p align="center"><img src="19-backtracking/0128-n-rainhas/fluxograma.svg" alt="Fluxograma: N-rainhas" width="757"></p>
 
@@ -1939,10 +1919,9 @@ Saída esperada:
 ## 0129 · Labirinto
 
 Festa junina na fazenda, e a atração é o labirinto de milho. Você entra pelo
-canto de cima e quer achar a saída, lá no canto de baixo. A estratégia de quem
-não tem mapa é a de sempre: anda, e quando dá num beco, volta até a última
-bifurcação e tenta outro corredor. Para não andar em círculos, vai deixando
-pedrinhas pelo caminho.
+canto de cima e quer achar a saída, no canto de baixo. Sem mapa, você anda e,
+quando dá num beco, volta até a última bifurcação e tenta outro corredor.
+Para não andar em círculos, vai deixando pedrinhas pelo caminho.
 
 Isso é backtracking numa **matriz**. O mapa é um `char lab[L][C + 1]`: `'#'`
 é parede, `'.'` é corredor, `'S'` é a entrada e `'F'` é a saída. A função
@@ -1952,21 +1931,21 @@ está no caminho. Se a casa é a saída, responde que sim. Senão, **marca** a
 casa com `'*'`, tenta os quatro vizinhos e, se nenhum deu certo, **desfaz** a
 marca.
 
-Aqui está a diferença para os assuntos anteriores: o desfazer não volta a casa
-para `'.'`, e sim para `'x'`. Uma casa da qual não se chega à saída continua
-sem saída na próxima vez que a busca passar por ali, então não vale a pena
-entrar de novo. Com o `'x'`, cada casa é visitada no máximo uma vez, e a
+A diferença para os assuntos anteriores: o desfazer não volta a casa para
+`'.'`, e sim para `'x'`. Uma casa da qual não se chega à saída continua sem
+saída na próxima vez que a busca passar por ali, então não vale entrar de
+novo. Com o `'x'`, cada casa é visitada no máximo uma vez, e a
 busca custa **O(L · C)**: é a busca em profundidade (DFS) do assunto 0111,
 com a matriz fazendo o papel do grafo e os quatro vizinhos fazendo o papel
 das arestas.
 
-Repara também no `||` encadeado do código. Pelo curto-circuito (assunto
+Atenção ao `||` encadeado do código. Pelo curto-circuito (assunto
 0013), assim que um vizinho devolve `true`, os seguintes nem são chamados. A
 ordem das direções no `if` (direita, baixo, esquerda, cima) decide qual
 caminho a busca acha primeiro.
 
-Vamos ver na prática. Os números mostram a ordem dos passos do caminho
-encontrado. A busca entrou primeiro no bolsão da direita, achou só becos
+No desenho, os números mostram a ordem dos passos do caminho encontrado. A
+busca entrou primeiro no bolsão da direita, achou só becos
 (vermelho) e voltou. Depois desceu pela coluna 1 até o corredor de baixo:
 
 <p align="center"><img src="19-backtracking/0129-labirinto/ideia.svg" alt="Diagrama da ideia: Labirinto" width="858"></p>
@@ -2044,11 +2023,11 @@ backtracking que testa todos os caminhos (exemplo A258).
 
 A mesma recursão, sem a saída e sem o desfazer, vira o **flood fill**
 (preenchimento por inundação): a partir de uma casa, pinta todas as casas
-alcançáveis. É o balde de tinta do editor de imagens, e é o assunto do
-exemplo A257.
+alcançáveis. É o balde de tinta do editor de imagens, assunto do exemplo
+A257.
 
-Repara no fluxograma: três perguntas mandam embora as casas impossíveis antes
-de qualquer marcação, e só uma casa nova chega ao `'*'`:
+Três perguntas mandam embora as casas impossíveis antes de qualquer
+marcação, e só uma casa nova chega ao `'*'`:
 
 <p align="center"><img src="19-backtracking/0129-labirinto/fluxograma.svg" alt="Fluxograma: Labirinto" width="700"></p>
 
@@ -2438,9 +2417,9 @@ menor caminho: 9 passos
 Na banca da rodoviária, a revista de passatempos traz um sudoku "difícil", e
 você empaca na terceira casa. A regra é curta: completar a grade 9 × 9 com
 dígitos de 1 a 9 sem repetir nenhum numa linha, numa coluna ou numa das nove
-caixas 3 × 3. Que tal deixar o computador resolver?
+caixas 3 × 3. O computador resolve por você.
 
-O sudoku junta tudo o que o módulo mostrou. A grade é uma **matriz**
+O sudoku junta o que o módulo mostrou. A grade é uma **matriz**
 `int g[9][9]`, com 0 nas casas vazias. Cada casa vazia é uma decisão, como as
 posições das permutações, e as opções são os dígitos de 1 a 9. A **poda** é a
 regra do jogo: um dígito que já aparece na linha, na coluna ou na caixa nem é
@@ -2459,7 +2438,7 @@ nenhum dígito serve, devolve `false` e quem chamou tenta o próximo dígito
 dele. Quando não sobra casa vazia, a grade está resolvida, e o `true` sobe
 pela pilha de chamadas até o `main`, como no exemplo A254.
 
-Vamos ver na prática. A primeira casa vazia é a (0, 1). A linha 0 já tem 2,
+A primeira casa vazia é a (0, 1). A linha 0 já tem 2,
 3 e 8; a coluna 1 tem 4, 9, 6, 3 e 1; a caixa 0 tem 2, 3, 6, 4 e 1. Sobram o
 5 e o 7. O programa tenta o 5 primeiro, e só depois de muitos retrocessos lá
 embaixo descobre que a resposta é o 7:
@@ -2555,13 +2534,13 @@ int main(void) {
 ```
 
 São 51 casas vazias e 2999 chamadas: cerca de 59 por casa. A força bruta
-pura testaria até 9⁵¹ preenchimentos, um número com 49 algarismos. A poda faz
-quase todo o trabalho. E dá para podar ainda mais escolhendo **qual** casa
+pura testaria até 9⁵¹ preenchimentos, um número com 49 algarismos. Quase
+todo o ganho vem da poda, e dá para podar ainda mais escolhendo **qual** casa
 preencher: começar pela casa com menos candidatos derruba as chamadas deste
 mesmo jogo para 64 (exemplo A260).
 
-Repara no fluxograma: é o esqueleto do módulo inteiro, com a casa no lugar
-do item e a regra do jogo no lugar da poda:
+O fluxograma repete o esqueleto do módulo, com a casa no lugar do item e a
+regra do jogo no lugar da poda:
 
 <p align="center"><img src="19-backtracking/0130-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="767"></p>
 
@@ -2573,14 +2552,14 @@ do item e a regra do jogo no lugar da poda:
 > começo de `resolve` passa a tratá-la como uma casa **dada**. Faça o teste:
 > sem essa linha, este programa termina em 64 chamadas mostrando uma grade
 > "resolvida" com três 9 seguidos na primeira linha. O retrocesso só funciona
-> se o estado volta a ser **exatamente** o de antes da escolha.
+> se o estado volta a ser o mesmo de antes da escolha.
 
 > [!TIP]
 > **Por dentro do C:** os três vetores de marcação ocupam 3 × 9 × 10 = 270
 > bytes (o índice 0 de cada linha nunca é usado: desperdiçar um byte deixa o
 > código usar o próprio dígito como índice). A grade `int g[9][9]` tem 324
 > bytes, contínuos na memória. A recursão desce no máximo 52 frames, um por
-> casa vazia mais o último, então a pilha nem percebe. A conta
+> casa vazia mais o último: nada para a pilha. A conta
 > `jogo[l][c] - '0'` transforma o caractere `'7'` (código 55) no número 7,
 > porque os dígitos são consecutivos na tabela ASCII (assunto 0040).
 

@@ -34,10 +34,10 @@ Nos livros você vai ver três nomes para isso: alocação **estática** (dados:
 tamanho e endereço fixos desde a compilação), **automática** (pilha) e
 **dinâmica** (heap, com `malloc`). São as mesmas regiões da tabela.
 
-No C não existe coletor de lixo (*garbage collector*), um mecanismo que apaga
-sozinho o que ninguém mais usa. Você é o coletor: tudo o que pegou do heap, devolve.
+Como o C não tem coletor de lixo (*garbage collector*, o mecanismo que apaga
+sozinho o que ninguém mais usa), tudo o que você pega do heap, você devolve.
 
-Vamos ver na prática. A função `abrir_comanda` monta a comanda da mesa 4 com
+A função `abrir_comanda` monta a comanda da mesa 4 com
 três itens (R$ 18, R$ 25 e R$ 7). A variável `itens` mora no frame dela, na
 pilha. Os três valores vão para um bloco no heap. O contador `pedidos_do_dia`
 mora nos dados. Quando a função retorna, o frame dela some, mas o bloco
@@ -45,8 +45,8 @@ continua lá, e `main` guarda o endereço dele:
 
 {{ideia}}
 
-O `malloc` e o `free` ganham um assunto só deles (0054). Aqui, repare só em
-onde cada coisa mora e em quanto tempo ela vive:
+O `malloc` e o `free` ganham um assunto só deles (0054). Aqui, observe em
+que região cada coisa mora e quanto tempo ela vive:
 
 ```c
 #include <stdio.h>
@@ -86,8 +86,7 @@ int main(void) {
 // Pedidos do dia: 1
 ```
 
-Repara no fluxograma: o frame de `abrir_comanda` nasce e morre no meio do
-caminho, mas o bloco do heap atravessa o `return` e só termina no `free`, lá
+O frame de `abrir_comanda` nasce e morre no meio do caminho, mas o bloco do heap atravessa o `return` e só termina no `free`, lá
 no fim de `main`:
 
 {{fluxograma}}
@@ -103,7 +102,7 @@ no fim de `main`:
 > [!TIP]
 > **Por dentro do C:** reservar espaço na pilha custa **uma instrução**: o
 > processador só diminui o registrador que marca o topo (`sub rsp, 32`). Por
-> isso locais são de graça. O `malloc` precisa procurar um pedaço livre do
+> isso locais saem quase de graça. O `malloc` precisa procurar um pedaço livre do
 > tamanho certo numa lista de blocos e anotar o tamanho num cabeçalho
 > escondido logo antes do endereço que ele te entrega. É bem mais caro. Rode
 > `size` no executável (`gcc A105.c -o bolao && size bolao`) e veja as

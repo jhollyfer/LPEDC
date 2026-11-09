@@ -19,19 +19,17 @@ capacidade. Começando em 0, ela vira 2, 4 e 8: com 6 itens, sobram 2 vagas.
 Esse trio (ponteiro, tamanho, capacidade) é a semente do **vetor dinâmico**
 que o módulo 11 transforma num tipo abstrato de dados.
 
-O filtro é a parte mais elegante. Um item passa se tem **todas** as tags da
+O filtro cabe numa linha. Um item passa se tem **todas** as tags da
 máscara: `(tags & mascara) == mascara`. O `&` apaga as tags que não estão na
 máscara; se o que sobra é a própria máscara, nenhuma faltou. Com a máscara 0,
 qualquer item passa, e o mesmo `filtrar` lista o cardápio inteiro.
 
-Vamos ver na prática. O suco de caju tem as tags `011` (vegano e sem glúten).
+O suco de caju tem as tags `011` (vegano e sem glúten).
 Contra a máscara `011`, o `&` devolve `011`, igual à máscara: passa. O burger
 de grão-de-bico tem `001`: o `&` devolve `001`, falta o sem glúten, e ele fica
 de fora:
 
 {{ideia}}
-
-O programa completo:
 
 ```c
 #include <stdio.h>
@@ -127,15 +125,15 @@ int main(void) {
 //   R$  9.00  Suco de caju (bebida) [V] [SG]
 ```
 
-Repara no fluxograma do `filtrar`: um laço sobre o vetor e uma única
-pergunta de bits por item. O mesmo desenho serve para qualquer máscara:
+O fluxograma é o do `filtrar`: um laço sobre o vetor e uma única pergunta
+de bits por item. O mesmo desenho serve para qualquer máscara:
 
 {{fluxograma}}
 
 > [!WARNING]
 > `c->itens[c->n++] = it` copia o item para **dentro** do vetor. Depois disso,
 > mexer na variável `it` (ou no vetor `itens` do `main`) não muda o cardápio.
-> O contrário também pega muita gente: um ponteiro para um item,
+> O inverso também engana: um ponteiro para um item,
 > `Item *p = &c.itens[0]`, pode ficar **solto** depois do próximo `realloc`,
 > porque o vetor inteiro pode ter mudado de endereço. Guarde índices, não
 > ponteiros, para elementos de um vetor que cresce.

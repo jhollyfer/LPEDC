@@ -21,11 +21,11 @@ O primeiro nome vale 0, e cada um vale o anterior mais 1: `RECEBIDO` é 0,
 e quem vem depois de um valor escolhido continua contando a partir dele. Os
 nomes ficam em MAIÚSCULAS por convenção, como as constantes do `#define`.
 
-Mas atenção: no C o enum é **só um inteiro com apelido**: o compilador deixa somar, comparar com
-`<` e até guardar 42 numa variável `Status`.
+No C, o enum é **só um inteiro com apelido**: o compilador deixa somar,
+comparar com `<` e até guardar 42 numa variável `Status`.
 
-Vamos ver na prática. A variável `s` começa em `RECEBIDO` e anda uma etapa
-por vez, porque um enum é um inteiro e aceita `s++`. Cada valor tem um nome
+A variável `s` começa em `RECEBIDO` e anda uma etapa por vez: como é um
+inteiro, aceita `s++`. Cada valor tem um nome
 no código e um número na memória:
 
 {{ideia}}
@@ -73,15 +73,15 @@ int main(void) {
 // [3] Pedido entregue. Bom apetite!
 ```
 
-Enum e `switch` foram feitos um para o outro. Cada `case` usa um nome, e o
-código se explica sozinho. Um truque comum é pôr um último nome que só conta
+Enum combina com `switch`: cada `case` usa um nome, e o código se explica
+sozinho. Um truque comum é pôr um último nome que só conta
 os outros: `{ RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE, QTD_STATUS }`. Como
 `QTD_STATUS` vale 4, ele serve de tamanho para um vetor de textos
 (`const char *nomes[QTD_STATUS]`) e cresce sozinho quando você acrescenta um
 status.
 
-Repara no fluxograma: é um laço comum, controlado por uma pergunta sobre o
-enum. O `s++` é o que faz o pedido andar:
+O laço é comum, controlado por uma pergunta sobre o enum, e o `s++` faz o
+pedido andar:
 
 {{fluxograma}}
 
@@ -96,7 +96,7 @@ enum. O `s++` é o que faz o pedido andar:
 > [!TIP]
 > **Por dentro do C:** o enum some na compilação. `A_CAMINHO` vira o número 2
 > no código de máquina, e uma variável `Status` ocupa o mesmo que um `int` (4
-> bytes, como mostra o A126). Então por que não usar `#define`? Porque o
+> bytes, como mostra o A126). A vantagem sobre o `#define` é que o
 > compilador **conhece** o enum. Apague o `case ENTREGUE:` do exemplo e rode:
 > o `-Wall` avisa `enumeration value 'ENTREGUE' not handled in switch`. Com
 > `#define`, ninguém avisaria. Esse aviso só aparece se o `switch` **não** tiver

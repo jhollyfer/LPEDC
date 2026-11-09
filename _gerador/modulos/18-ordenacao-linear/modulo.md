@@ -6,13 +6,13 @@ quick sort, todos decidindo a ordem com perguntas do tipo "`a` vem antes de
 compara faz menos que uns n log₂ n comparações no pior caso. Este módulo
 mostra o que existe fora desse piso.
 
-A virada é olhar para os **dados**, não só para o algoritmo. Se as chaves
+O truque é olhar para os **dados**, e não só para o algoritmo. Se as chaves
 são inteiros pequenos, o valor vira índice de vetor, e não há comparação
 nenhuma: é o **counting sort**. Se as chaves têm dígitos ou bytes, dá para
 ordenar casa por casa: **radix sort**. Se os valores estão bem espalhados num
 intervalo conhecido, baldes por faixa resolvem quase tudo: **bucket sort**. Os
-três são lineares, e os três cobram um preço: memória extra e suposições
-sobre os dados que, se forem falsas, viram escrita fora do vetor.
+três são lineares e cobram um preço: memória extra e suposições sobre os
+dados que, se forem falsas, viram escrita fora do vetor.
 
 O módulo ainda traz dois parentes. O **shell sort** continua comparando, mas
 dá ao insertion sort pulos longos e foge do n² com quase o mesmo código. E o
@@ -28,40 +28,20 @@ os k maiores) sem ordenar nada, reaproveitando a separação do quick sort.
 - **quickselect**: o k-ésimo menor, a mediana e os k maiores em O(n) médio, com pivô sorteado para fugir do pior caso
 - ordenar por **duas chaves** com passadas estáveis e medir 1 milhão de registros contra o `qsort`
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: cada linha de gavetas é um
-   momento do algoritmo, com o mesmo vetor do código.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis antes de conferir a tabela.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Eles mostram outras facetas: casos de borda, pior caso,
-   usos reais.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos vetores dos diagramas da ideia, **roxo** marca o pivô ou a posição da
-vez, **amarelo** destaca os elementos que você deve acompanhar (uma fileira,
-um empate), **verde** é o que já está no lugar certo e **cinza** é o que o
-algoritmo descartou.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa muito do que veio antes: o insertion sort (0093) e a
 separação do quick sort (0095), listas encadeadas (0076 a 0078), filas
 (0085), operadores de bits (0065), `malloc` e `calloc`, e o `qsort` com
-função de comparação (0096). Se algum desses estiver enferrujado, dê uma
-revisada rápida.
+função de comparação (0096). Se algum desses estiver enferrujado, revise
+antes.
+
+Nos vetores dos diagramas, cada linha de gavetas é um momento do algoritmo:
+**roxo** marca o pivô ou a posição da vez, **amarelo** destaca o que você deve
+acompanhar (uma fileira, um empate), **verde** é o que já está no lugar e
+**cinza** é o que o algoritmo descartou. Faça o **Passo a passo** no papel
+antes de conferir a tabela e responda a **Pergunta para você** antes de
+rodar.
 
 Os exemplos dos cinco primeiros assuntos cabem num arquivo só. O último
 assunto, que ordena 1 milhão de registros, usa um TAD: `pix.h` e `pix.c`

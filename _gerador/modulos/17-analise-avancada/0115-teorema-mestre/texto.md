@@ -2,12 +2,12 @@
 
 Na declaração do Imposto de Renda, ninguém refaz a conta do imposto do zero.
 Você acha a sua faixa na tabela progressiva e lê a alíquota. A tabela já
-embute todo o cálculo: basta saber em que linha você cai.
+embute o cálculo: basta saber em que linha você cai.
 
 O **teorema mestre** é a tabela pronta das recorrências de divisão e
 conquista. No assunto anterior, cada recorrência pedia uma árvore de
 recursão desenhada e somada nível por nível. Para a forma mais comum, essa
-soma já foi feita uma vez, de modo geral, e o resultado cabe em três linhas.
+soma já foi feita em geral, e o resultado cabe em três linhas.
 
 A forma é esta:
 
@@ -22,8 +22,8 @@ T(n) = a T(n/b) + n^k
 
 De onde vêm as três linhas? Da árvore. No nível `j` há `a^j` chamadas, cada
 uma com tamanho `n/b^j`, custando `(n/b^j)^k`. O nível inteiro custa
-`n^k · (a/b^k)^j`. Ou seja: de um nível para o seguinte, o custo é
-multiplicado sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
+`n^k · (a/b^k)^j`: de um nível para o seguinte, o custo é multiplicado
+sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
 
 | caso | comparação | o custo por nível... | quem pesa | resultado |
 | --- | --- | --- | --- | --- |
@@ -33,11 +33,12 @@ multiplicado sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
 
 Quando o custo cresce (caso 1), o último nível manda: ele tem
 `a^(log_b n) = n^(log_b a)` folhas, e os níveis de cima, somados, não
-passam de um múltiplo fixo dele. Quando fica igual (caso 2), são `log_b n + 1` níveis de `n^k`. Quando
-cai (caso 3), a raiz sozinha já é uma fração fixa do total. Comparar `a`
+passam de um múltiplo fixo dele. Quando fica igual (caso 2), são
+`log_b n + 1` níveis de `n^k`. Quando cai (caso 3), a raiz sozinha já é uma
+fração fixa do total. Comparar `a`
 com `b^k` é o mesmo que comparar o expoente `log_b a` com `k`.
 
-Vamos ver na prática. Um escritório revisa um contrato de `n` páginas: o
+Um escritório revisa um contrato de `n` páginas: o
 revisor lê tudo (`n` páginas) e repassa **metade** do contrato para `a`
 estagiários, que fazem o mesmo. Só o `a` muda: 1, 2 ou 4 estagiários. Com
 `b = 2` e `k = 1`, temos `b^k = 2`, e cada valor de `a` cai numa linha
@@ -100,12 +101,12 @@ Confira com a tabela. Com `a = 1`, `1 < 2`: caso 3, a raiz domina, Θ(n),
 e o total é `2n - 1` (dobra quando `n` dobra). Com `a = 2`, `2 = 2`: caso 2,
 empate, Θ(n log n), exatamente `n log₂ n + n` (dobra e mais um pouco). Com
 `a = 4`, `4 > 2`: caso 1, as folhas dominam, Θ(n^(log₂ 4)) = Θ(n²), e o
-total é `2n² - n` (quadruplica). Três escritórios, a mesma leitura de `n` páginas no topo, e
-uma diferença de mil vezes em `n = 1024`.
+total é `2n² - n` (quadruplica). A leitura no topo é a mesma nos três
+escritórios; em `n = 1024`, o total difere por um fator de mil.
 
-Repara no fluxograma: é o teorema como receita. Primeiro a pergunta que
-ninguém pode pular (a recorrência tem a forma certa?), depois a comparação
-de `a` com `b^k`. O caminho marcado é o de `a = 2`:
+O fluxograma é o teorema como receita. Primeiro vem a pergunta que ninguém
+pode pular (a recorrência tem a forma certa?), depois a comparação de `a`
+com `b^k`. O caminho marcado é o de `a = 2`:
 
 {{fluxograma}}
 
@@ -140,8 +141,8 @@ resolve dois desses casos.
 > `a` e `b` são coisas diferentes e não precisam ser iguais. `a` conta as
 > chamadas; `b` diz quanto cada uma encolhe. Os quatro estagiários do exemplo
 > recebem metade cada um, então é `4 T(n/2)`, e não `4 T(n/4)`: as metades se
-> sobrepõem, e é isso que faz o custo explodir. E o erro mais comum de todos:
-> aplicar o teorema em `T(n) = 2 T(n-1) + 1` (Hanói). Ali não existe `b`,
+> sobrepõem, e por isso o custo explode. O erro mais comum é aplicar o
+> teorema em `T(n) = 2 T(n-1) + 1` (Hanói). Ali não existe `b`,
 > porque `n - 1` não é `n` dividido por nada. Quem força `b = 1` chega num
 > absurdo; o certo é a árvore, que dá Θ(2ⁿ).
 

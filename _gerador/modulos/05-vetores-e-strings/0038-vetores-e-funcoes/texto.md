@@ -8,8 +8,8 @@ preços do `main` ou numa cópia?
 No assunto 0029 você viu que o C passa argumentos **por valor**: a função
 recebe uma cópia, e mexer na cópia não muda o original. Com vetor é diferente
 na prática: **a função mexe no vetor original**. Isso acontece porque o C nunca
-copia um vetor inteiro para uma função. O que vai é **o endereço onde o vetor
-começa**, e a função escreve nas mesmas gavetas.
+copia um vetor inteiro para uma função. O que vai é **o endereço em que o
+vetor começa**, e a função escreve nas mesmas gavetas.
 
 Na declaração, o parâmetro leva colchetes vazios. Na chamada, vai só o nome,
 sem colchetes:
@@ -19,10 +19,10 @@ void reajustar(double precos[], int n, double percentual); // protótipo
 reajustar(cardapio, 4, 10);                                // chamada
 ```
 
-Repare no `int n`. Como só o endereço do começo chega à função, **o tamanho
-não vai junto**. A função não tem como descobrir quantos itens existem: você
-passa o tamanho num parâmetro separado. É o par que você vai ver o curso
-inteiro: vetor + tamanho. No C, não existe `.length`.
+Daí o `int n`. Como só o endereço do começo chega à função, **o tamanho
+não vai junto** e a função não tem como descobrir quantos itens existem: você
+passa o tamanho num parâmetro separado. Vetor + tamanho é um par que aparece
+no curso inteiro, já que não existe `.length`.
 
 Um número dentro dos colchetes do parâmetro é ignorado: `double precos[4]`,
 `double precos[100]` e `double precos[]` são a mesma coisa para o compilador.
@@ -33,9 +33,8 @@ E quando a função **não deve** mexer no vetor? Marque o parâmetro com
 `precos[0] = 0;` dentro dela, o compilador dá erro. É documentação que o
 compilador confere.
 
-Vamos ver na prática. O `main` tem o vetor `cardapio`. A função recebe o
-endereço dele no parâmetro `precos`, e cada `precos[i]` é a mesma gaveta que
-`cardapio[i]`:
+O `main` guarda o vetor `cardapio`. A função recebe o endereço dele no
+parâmetro `precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
 
 {{ideia}}
 
@@ -78,7 +77,7 @@ int main(void) {
 // R$   6.05
 ```
 
-Repara no fluxograma: o `main` chama, a função percorre as 4 gavetas e volta.
+No fluxograma, o `main` chama, a função percorre as 4 gavetas e volta.
 Ela não devolve nada (`void`), e mesmo assim o `main` enxerga os preços novos,
 porque ela escreveu direto no vetor dele:
 
@@ -94,8 +93,8 @@ coisas lado a lado.
 > **`sizeof` dentro da função não dá o tamanho do vetor.** No `main`,
 > `sizeof(cardapio)` vale 32 (4 × 8 bytes). Dentro de `reajustar`,
 > `sizeof(precos)` vale 8 num PC de 64 bits: é o tamanho de um **endereço**,
-> não do vetor. O truque `sizeof(v) / sizeof(v[0])` só funciona onde o vetor
-> foi declarado. O gcc até avisa (`-Wsizeof-array-argument`), mas quem ignora
+> não do vetor. O truque `sizeof(v) / sizeof(v[0])` só funciona no bloco em
+> que o vetor foi declarado. O gcc até avisa (`-Wsizeof-array-argument`), mas quem ignora
 > o aviso ganha um laço que percorre 1 item em vez de 4. Por isso o tamanho
 > vai num parâmetro.
 
@@ -104,8 +103,8 @@ coisas lado a lado.
 > frame da função na pilha (assunto 0031) recebe três coisas: um endereço (8
 > bytes), um `int` e um `double`. Os 32 bytes do vetor ficam onde estão, no
 > frame do `main`. Para um vetor de um milhão de itens, a chamada custa o
-> mesmo: 8 bytes. É por isso que o C faz assim: copiar vetores inteiros a cada
-> chamada seria caro demais. O preço é que qualquer função que recebe o vetor
+> mesmo: 8 bytes. Copiar vetores inteiros a cada chamada sairia caro demais.
+> O preço é que qualquer função que recebe o vetor
 > pode estragá-lo; o `const` é a sua defesa. No módulo 06 você vai ver que
 > esse endereço é um **ponteiro**, e que `double precos[]` no parâmetro é só
 > outro jeito de escrever isso.

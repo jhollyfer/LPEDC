@@ -4,8 +4,8 @@ Você passa o cartão do ônibus na catraca e o validador desconta R$ 4,40. Ele
 não faz uma cópia do seu cartão para descontar dela: mexe no saldo do cartão
 **de verdade**. Se descontasse numa cópia, você andaria de graça para sempre.
 
-Com struct em função acontece a mesma coisa. Como qualquer parâmetro em C, uma
-struct vai **por valor**: a função recebe uma cópia de todos os bytes. Mudar a
+Com struct em função vale o mesmo raciocínio. Como qualquer parâmetro em C,
+uma struct vai **por valor**: a função recebe uma cópia de todos os bytes. Mudar a
 cópia não muda o original. Para a função alterar a struct de quem chamou, você
 passa o **endereço** dela: um `Cartao *`.
 
@@ -15,7 +15,7 @@ são obrigatórios, porque o ponto tem prioridade maior que o `*`: `*c.saldo`
 significaria `*(c.saldo)`, e `c` não tem campo nenhum, é um ponteiro.
 
 Como isso é escrito o tempo todo, o C tem um atalho: a **seta** `->`.
-`c->saldo` é exatamente `(*c).saldo`. A regra prática: variável struct usa
+`c->saldo` é exatamente `(*c).saldo`. Na prática: variável struct usa
 ponto (`cartao.saldo`); ponteiro para struct usa seta (`c->saldo`).
 
 O ponteiro também é o caminho para struct no **heap**. `malloc(sizeof *c)`
@@ -23,14 +23,14 @@ reserva o espaço de um `Cartao` inteiro e devolve o endereço. O `sizeof *c`
 mede o tipo apontado: se um dia o tipo de `c` mudar, a conta acompanha. E,
 como todo `malloc`, confira o `NULL` e termine com `free`.
 
-Vamos ver na prática. O cartão da Luana mora no heap com R$ 10,00. A variável
+O cartão da Luana mora no heap com R$ 10,00. A variável
 `c` no `main` guarda só o endereço dele, e a função `cobrar_passagem` recebe
 uma cópia desse **endereço**, não do cartão. As duas setas apontam para o
 mesmo lugar:
 
 {{ideia}}
 
-Três passagens seguidas. A terceira não passa:
+São três passagens seguidas, e a terceira não passa:
 
 ```c
 #include <stdbool.h>
@@ -94,7 +94,7 @@ O teste de mesa das três chamadas, olhando o cartão no heap:
 | 2ª | 5.60 | não | 1.20 | 2 |
 | 3ª | 1.20 | sim: devolve false | 1.20 | 2 |
 
-Repara no fluxograma: a pergunta do saldo fica dentro da função, mas o laço
+A pergunta do saldo fica dentro da função, mas o laço
 que chama três vezes é do `main`. Como a função mexe no original, cada volta
 do laço enxerga o saldo que a anterior deixou:
 
@@ -103,9 +103,8 @@ do laço enxerga o saldo que a anterior deixou:
 > [!WARNING]
 > O erro mais comum é esquecer que struct vai por valor. Uma função
 > `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
-> faz nada: recarrega uma cópia que morre no fim da função. Para a função
-> alterar a struct de quem chamou, passe o endereço: `Cartao *c`. O segundo erro é
-> a precedência: `*c.saldo` não compila. Escreva `c->saldo` ou `(*c).saldo`.
+> faz nada: recarrega uma cópia que morre no fim da função. Passe o
+> endereço: `Cartao *c`. O segundo erro é a precedência: `*c.saldo` não compila. Escreva `c->saldo` ou `(*c).saldo`.
 > E nunca devolva o endereço de uma struct local (`return &cartao;`): ela morre
 > quando a função termina. Para criar uma struct dentro de uma função e
 > devolvê-la, use `malloc` (ou devolva a struct por valor).

@@ -10,12 +10,12 @@ Praia **e** na Feira, e a Praia liga de volta na Feira, fechando um triângulo.
 Para isso existe o **grafo**.
 
 Um grafo é um conjunto de **vértices** (os pontos) e de **arestas** (as
-ligações entre pares de pontos). Os vértices da ciclovia são os cinco lugares;
-as arestas, as cinco ciclovias. Toda árvore é um grafo, mas um grafo pode ter
+ligações entre pares de pontos). Aqui os vértices são os cinco lugares e as
+arestas, as cinco ciclovias. Toda árvore é um grafo, mas um grafo pode ter
 ciclos e partes soltas. O Cormen escreve **G = (V, E)** e usa V e E também
 para as quantidades: é daí que vêm o Θ(V²) e o Θ(V + E) deste módulo.
 
-O vocabulário que você vai usar o módulo inteiro:
+O vocabulário do módulo:
 
 - **vizinhos** (ou adjacentes): dois vértices ligados por uma aresta;
 - **grau**: quantas arestas tocam o vértice (a Feira tem grau 3);
@@ -30,7 +30,7 @@ saída é o número de arestas. Se a aresta carrega um número, como minutos ou
 reais, o grafo é **ponderado** (com peso). As ciclovias valem nos dois
 sentidos e ainda não têm peso.
 
-No C, vértice é um **número de 0 a V-1**. O nome bonito fica num vetor à parte
+No C, vértice é um **número de 0 a V-1**. O nome fica num vetor à parte
 (`nomes[2]` é `"Feira"`). Para guardar as arestas existem duas representações
 clássicas:
 
@@ -41,11 +41,11 @@ clássicas:
   guarda só os vizinhos de `i`. Ocupa O(V + E) (E é o número de arestas) e
   listar os vizinhos custa só o grau.
 
-Uma rede social guarda, para cada usuário, a lista de quem ele segue: é uma
-lista de adjacência. No C não tem dicionário nem vetor que cresce prontos: ou
-você aloca a matriz, ou monta as listas com `malloc`.
+Uma rede social guarda, para cada usuário, a lista de quem ele segue: uma
+lista de adjacência. O C não traz nenhuma das duas pronta: ou você aloca a
+matriz, ou monta as listas com `malloc`.
 
-Vamos ver na prática. Cada ciclovia liga um 1 em **duas** casas da matriz,
+Cada ciclovia liga um 1 em **duas** casas da matriz,
 `adj[a][b]` e `adj[b][a]`, por isso a matriz de um grafo não dirigido é
 espelhada na diagonal. A Feira tem três vizinhos, e a linha 2 tem três 1:
 
@@ -98,16 +98,15 @@ int main(void) {
 // Soma dos graus: 10 = 2 x 5 ciclovias
 ```
 
-Repara no fluxograma: primeiro o programa monta a estrutura (uma volta por
-aresta, marcando os dois sentidos) e só depois responde perguntas sobre ela.
-Todo algoritmo de grafo deste módulo segue essa ordem:
+O programa primeiro monta a estrutura (uma volta por aresta, marcando os dois
+sentidos) e só depois responde perguntas sobre ela. Todo algoritmo de grafo
+deste módulo segue essa ordem:
 
 {{fluxograma}}
 
-A última linha não é coincidência. Cada aresta encosta em dois vértices e
-soma 1 no grau de cada um, então a soma dos graus é sempre o dobro do número
-de arestas. Isso serve de teste rápido: se a soma der ímpar, você esqueceu um
-dos sentidos em algum lugar.
+Repare na última linha da saída. Cada aresta encosta em dois vértices e soma
+1 no grau de cada um, então a soma dos graus é sempre o dobro do número de
+arestas. Serve de teste rápido: soma ímpar indica um sentido esquecido.
 
 O exemplo A217 guarda na matriz o tamanho de cada estrada em vez do 1 (um
 grafo ponderado) e mostra um vértice isolado, de linha toda zerada. O A218
@@ -117,8 +116,8 @@ mostra a outra representação, a lista de adjacência, como um TAD
 > [!WARNING]
 > Em grafo não dirigido, a aresta entra **nos dois sentidos**: `adj[a][b] = 1`
 > e `adj[b][a] = 1`. Esquecer um deles cria um grafo dirigido sem querer: o
-> Centro "vai" para a Praia, mas a Praia não volta. O compilador não reclama, e
-> o erro só aparece mais tarde, quando a busca não acha um caminho que existe.
+> Centro "vai" para a Praia, mas a Praia não volta. O compilador não reclama;
+> o erro aparece mais tarde, quando a busca não acha um caminho que existe.
 
 > [!TIP]
 > **Por dentro do C:** `int adj[5][5]` são 25 `int` seguidos na memória, linha

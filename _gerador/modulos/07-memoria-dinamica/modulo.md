@@ -7,15 +7,14 @@ vão chegar. Este módulo ensina a pedir memória **enquanto o programa roda**, 
 tamanho exato, e a devolvê-la quando acabar.
 
 No C, nenhum vetor cresce sozinho e nenhum coletor de lixo apaga o que
-ninguém usa. Quem faz as duas coisas é você. Isso dá poder
-(você decide quanto, quando e por quanto tempo) e dá responsabilidade: memória
-esquecida vaza, memória devolvida e usada de novo corrompe o programa.
+ninguém usa. Quem faz as duas coisas é você: decide quanto, quando e por
+quanto tempo. Memória esquecida vaza; memória devolvida e usada de novo
+corrompe o programa.
 
 O módulo é a ponte para a segunda metade do curso. Toda estrutura de dados que
 vem depois (listas, pilhas, filas, árvores, tabelas hash, grafos) é feita de
-blocos pedidos ao heap e ligados por ponteiros. Quem domina `malloc`, `free` e
-`realloc` aqui, e sabe ler um relatório do AddressSanitizer, escreve essas
-estruturas sem medo.
+blocos pedidos ao heap e ligados por ponteiros, com `malloc`, `free` e
+`realloc`.
 
 ## O que você vai aprender
 
@@ -26,38 +25,20 @@ estruturas sem medo.
 - reconhecer **vazamento, ponteiro solto, free duplo e estouro**, e caçá-los com o **AddressSanitizer** e o **valgrind**
 - juntar tudo num programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com a
-   memória à mostra.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, apague um `free`, quebre de propósito e
-   leia o que o `rodar` responde.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-> [!NOTE]
-> Neste módulo, muitos exercícios são de **achar o erro**: o arquivo vem com o
-> bug de propósito, e o enunciado avisa. Rodar e ler o relatório do
-> AddressSanitizer faz parte do exercício. A resolução de cada um roda limpa.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, erro. Nos diagramas deste módulo, o verde
-costuma ser o bloco que mora no heap.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você precisa estar à vontade com ponteiros (módulo 06): `&`, `*`, `NULL`,
 `a[i] == *(a + i)`, `char *` e `**`. Se `int **m` ainda assusta, releia os
 assuntos 0047 e 0049 antes.
+
+Nos diagramas deste módulo, o verde costuma ser o bloco que mora no heap. Ao
+rodar os exemplos, apague um `free` de propósito e leia o que o `rodar`
+responde. Responda a **Pergunta para você** de cada assunto antes de rodar.
+
+> [!NOTE]
+> Neste módulo, muitos exercícios são de **achar o erro**: o arquivo vem com o
+> bug de propósito, e o enunciado avisa. Rodar e ler o relatório do
+> AddressSanitizer faz parte do exercício. A resolução de cada um roda limpa.
 
 O `rodar` já compila com o **AddressSanitizer**, que vigia a memória enquanto
 o programa roda e avisa de vazamentos no fim. Para o assunto 0057, instale
@@ -181,7 +162,7 @@ variações de first fit com listas por tamanho.
 **5. Tem memória, mas não cabe.** Simule um heap de 1000 bytes com um
 `char heap[1000]`, todo preenchido com `'.'` (livre). Escreva
 `int aloca(char dono, int tam)`, que procura `tam` posições livres
-**seguidas** a partir do começo, marca com a letra do dono e devolve onde o
+**seguidas** a partir do começo, marca com a letra do dono e devolve o índice em que o
 bloco começa (ou -1), e `void libera(char dono)`. Escreva também um
 `relatorio` que imprime o total livre e o maior pedaço livre contíguo. Aloque
 A = 300, B = 200 e C = 400, libere B, mostre o relatório e tente alocar
@@ -359,7 +340,7 @@ void registra(int n) {
 
 **(C)**. Global e `static` moram nos **dados** (alocação estática) e duram o
 programa todo. Parâmetro e local moram na **pilha** (alocação automática).
-O bloco do `malloc` mora no **heap** (alocação dinâmica). Repare: a variável
+O bloco do `malloc` mora no **heap** (alocação dinâmica). A variável
 `v` está na pilha; o bloco para onde ela aponta, no heap. Veja 0053.
 
 </details>

@@ -5,12 +5,12 @@ temperaturas não sabe qual teste você quer (acima de 30? abaixo de 0?); uma
 rotina que ordena não sabe em que ordem você quer os itens. Você entrega o
 teste pronto, e a rotina só o chama. Em C, o mecanismo para isso é um ponteiro.
 
-O código de uma função também mora na memória: numa região própria, a área
+O código de uma função também mora na memória, numa região própria: a área
 de **código**. Então a função tem endereço, e o nome dela, sozinho, sem os
 parênteses, **já é esse endereço** (como o nome de um vetor). Uma variável
 que guarda esse endereço é um **ponteiro para função**.
 
-A declaração assusta na primeira vez:
+A declaração estranha na primeira vez:
 
 ```text
 int (*criterio)(int);
@@ -26,13 +26,13 @@ Para usar: `criterio = eh_calor;` guarda o endereço (sem `&` e sem
 parênteses) e `criterio(31)` chama a função apontada. A forma
 `(*criterio)(31)` também vale e aparece em código antigo.
 
-A graça está em passar o ponteiro como **parâmetro**. A função que recebe
+O uso típico é passar o ponteiro como **parâmetro**. A função que recebe
 fica genérica, e quem chama decide o comportamento. A função passada se
 chama **callback**. A biblioteca padrão usa isso no **`qsort`**
 (`stdlib.h`), que ordena qualquer vetor desde que você entregue a função
 que compara dois elementos (o A100 ordena a tabela do campeonato com ele).
 
-Vamos ver na prática. As máximas da semana estão num vetor. A função
+As máximas da semana estão num vetor. A função
 `conta_se` percorre o vetor e conta quantos dias passam num critério que
 ela não conhece: recebe o endereço da função `eh_calor` (ou `eh_frio`) e
 chama por ele:
@@ -71,9 +71,8 @@ int main(void) {
 // Dias de frio:  2
 ```
 
-Repara no fluxograma: é o laço contador do assunto 0025. A única novidade
-está no losango: a pergunta não é fixa, ela é a função que chegou pelo
-parâmetro:
+O laço contador é o do assunto 0025. A novidade está no losango: a pergunta
+não é fixa, é a função que chegou pelo parâmetro:
 
 {{fluxograma}}
 

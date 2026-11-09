@@ -8,15 +8,13 @@ de variáveis. Este módulo traz a primeira **estrutura de dados** do curso: o
 **vetor**, várias variáveis do mesmo tipo com um nome só, lado a lado na
 memória.
 
-No C, o vetor é só um bloco de
-bytes. Tamanho fixo, nenhum `length`, nenhuma conferência de índice. Parece
-pouco, e é justamente por isso que é rápido: acessar a posição 999 custa o
-mesmo que acessar a 0.
+No C, o vetor é um bloco de bytes. Tamanho fixo, nenhum `length`, nenhuma
+conferência de índice. Parece pouco, e é por isso que é rápido: acessar a
+posição 999 custa o mesmo que acessar a 0.
 
-E o texto? No C não existe um tipo string. Uma string é um vetor de `char`
-que termina num byte zero, o `'\0'`. Entender isso explica metade das falhas
-de segurança da história do software, e é o que separa quem "usa C" de quem
-entende o que o C faz.
+E o texto? O C não tem um tipo string. Uma string é um vetor de `char` que
+termina num byte zero, o `'\0'`. Esse detalhe explica boa parte das falhas de
+segurança da história do software.
 
 ## O que você vai aprender
 
@@ -27,27 +25,6 @@ entende o que o C faz.
 - **strings**: o `'\0'`, o `<string.h>` e o estouro de buffer
 - **ler texto** do teclado com segurança: `fgets`, o `'\n'` e por que o `gets` foi banido
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos valores do código.
-2. Leia o código e rode. Mude um valor, um tamanho, um índice. Quebre de
-   propósito e veja o que o AddressSanitizer diz.
-3. Siga o **fluxograma** com o dedo: quase todo assunto aqui é um laço.
-4. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é
-   desafio. As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, erro. Nos vetores, cada gaveta tem o
-índice embaixo, em cinza.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você vai usar tudo dos módulos anteriores, principalmente laços (`for` e
@@ -55,9 +32,14 @@ laços aninhados), os padrões contador, acumulador e maior/menor, e funções c
 parâmetros. Ponteiros ainda não apareceram: quando o texto disser "vai o
 endereço do vetor", guarde a ideia, que o módulo 06 mostra a sintaxe.
 
-Neste módulo o **AddressSanitizer** do `rodar` vira seu melhor amigo. O C não
-confere índice nem tamanho de string, mas o sanitizer confere enquanto o
-programa roda. Quando aparecer `stack-buffer-overflow` ou `index out of
+Nos desenhos, cada gaveta do vetor tem o índice embaixo, em cinza. Quase todo
+assunto aqui é um laço: siga o fluxograma com o dedo e, ao rodar, mude um
+tamanho ou um índice de propósito. Responda a **Pergunta para você** de cada
+assunto antes de rodar.
+
+O **AddressSanitizer** do `rodar` confere, enquanto o programa roda, o que o
+C não confere: índice e tamanho de string. Quando aparecer
+`stack-buffer-overflow` ou `index out of
 bounds`, leia a linha indicada: é quase sempre um `<=` no lugar de `<` ou um
 `'\0'` que ficou sem lugar.
 
@@ -97,12 +79,11 @@ Três regras que pegam todo iniciante:
 
 - **O índice começa em 0** e vai até `tamanho - 1`. Num vetor de 7, o último é
   `passos[6]`. O "sétimo elemento" é `passos[6]`; `passos[7]` não existe.
-- **O tamanho é fixo.** Ele é
-  decidido na declaração e nunca muda. Use um `#define` para ele: muda num
+- **O tamanho é fixo.** É decidido na declaração e nunca muda. Use um `#define` para ele: muda num
   lugar só e o laço acompanha. (Desde o C99 o tamanho pode vir de uma
   variável, `int v[n];`: é o **VLA**, assunto 0172. Ainda assim, depois de
   criado, não cresce.)
-- **Vetor não tem `.length`.** Quem sabe o tamanho é você. Dentro do bloco onde
+- **Vetor não tem `.length`.** Quem sabe o tamanho é você. Dentro do bloco em que
   ele foi declarado, `sizeof(v) / sizeof(v[0])` dá a conta (bytes do vetor
   divididos pelos bytes de um item).
 
@@ -115,13 +96,13 @@ Duas coisas que **não** funcionam: atribuir um vetor inteiro (`copia = passos;`
 nem compila) e inicializar com chaves depois da declaração (`passos = {1, 2};`
 também não). Vetor se copia gaveta por gaveta, num laço.
 
-Vamos ver na prática. São 7 gavetas, uma por dia. O laço passa por todas
-somando e guardando a maior. O recorde está na gaveta 5, que é o **dia 6** para
+No exemplo, são 7 gavetas, uma por dia. O laço passa por todas, somando e
+guardando a maior. O recorde está na gaveta 5, que é o **dia 6** para
 quem lê o relatório:
 
 <p align="center"><img src="05-vetores-e-strings/0037-vetores/ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
 
-O código percorre as gavetas com `i` de 0 a 6. Repare que o `maior` começa com
+O código percorre as gavetas com `i` de 0 a 6. O `maior` começa com
 `passos[0]`, e não com 0:
 
 ```c
@@ -156,8 +137,8 @@ int main(void) {
 // Recorde: 15300 passos no dia 6
 ```
 
-Repara no fluxograma: é o padrão acumulador e o padrão maior/menor do assunto
-0025, só que agora os valores vêm das gavetas do vetor, e não do teclado. A
+O caminho junta o acumulador e o maior/menor do assunto 0025, com os valores
+vindo das gavetas do vetor em vez do teclado. A
 pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 
 <p align="center"><img src="05-vetores-e-strings/0037-vetores/fluxograma.svg" alt="Fluxograma: Vetores" width="535"></p>
@@ -168,17 +149,16 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > variável sua. É **comportamento indefinido**: às vezes nada acontece, às
 > vezes outro valor muda "sozinho", às vezes o programa cai. O erro clássico é o
 > `<=` no laço: `for (i = 0; i <= 7; i++)` passa uma vez a mais. Ler
-> `v[99]` não dá erro nenhum: devolve o que estiver lá. O `rodar` usa
-> o AddressSanitizer, que pega esse erro e mostra `stack-buffer-overflow`.
+> `v[99]` devolve o que estiver lá. O `rodar` usa o AddressSanitizer, que
+> pega esse erro e mostra `stack-buffer-overflow`.
 
 > [!TIP]
 > **Por dentro do C:** as 7 gavetas são 28 bytes seguidos na memória (7 × 4
 > bytes). O nome `passos` marca onde o vetor começa, e o índice diz **quantos
-> itens pular**: `passos[5]` fica em início + 5 × 4 bytes. Por isso o primeiro
-> é o 0 (pula zero itens) e por isso acessar qualquer posição custa o mesmo,
-> seja a 0 ou a 999: é uma conta, não uma busca. E por isso o C não confere o
-> limite: ele só faz a conta e vai até lá. Vetor local sem inicializar tem lixo,
-> igual a qualquer variável local.
+> itens pular**: `passos[5]` fica em início + 5 × 4 bytes. Daí o primeiro ser
+> o 0 (pula zero itens) e o acesso custar o mesmo na posição 0 ou na 999: é
+> uma conta, não uma busca. O C também não confere o limite: faz a conta e vai
+> até lá. Vetor local sem inicializar tem lixo, igual a qualquer variável local.
 
 > [!NOTE]
 > **Pergunta para você:** se o `maior` começasse com 0 e os valores fossem
@@ -498,8 +478,8 @@ preços do `main` ou numa cópia?
 No assunto 0029 você viu que o C passa argumentos **por valor**: a função
 recebe uma cópia, e mexer na cópia não muda o original. Com vetor é diferente
 na prática: **a função mexe no vetor original**. Isso acontece porque o C nunca
-copia um vetor inteiro para uma função. O que vai é **o endereço onde o vetor
-começa**, e a função escreve nas mesmas gavetas.
+copia um vetor inteiro para uma função. O que vai é **o endereço em que o
+vetor começa**, e a função escreve nas mesmas gavetas.
 
 Na declaração, o parâmetro leva colchetes vazios. Na chamada, vai só o nome,
 sem colchetes:
@@ -509,10 +489,10 @@ void reajustar(double precos[], int n, double percentual); // protótipo
 reajustar(cardapio, 4, 10);                                // chamada
 ```
 
-Repare no `int n`. Como só o endereço do começo chega à função, **o tamanho
-não vai junto**. A função não tem como descobrir quantos itens existem: você
-passa o tamanho num parâmetro separado. É o par que você vai ver o curso
-inteiro: vetor + tamanho. No C, não existe `.length`.
+Daí o `int n`. Como só o endereço do começo chega à função, **o tamanho
+não vai junto** e a função não tem como descobrir quantos itens existem: você
+passa o tamanho num parâmetro separado. Vetor + tamanho é um par que aparece
+no curso inteiro, já que não existe `.length`.
 
 Um número dentro dos colchetes do parâmetro é ignorado: `double precos[4]`,
 `double precos[100]` e `double precos[]` são a mesma coisa para o compilador.
@@ -523,9 +503,8 @@ E quando a função **não deve** mexer no vetor? Marque o parâmetro com
 `precos[0] = 0;` dentro dela, o compilador dá erro. É documentação que o
 compilador confere.
 
-Vamos ver na prática. O `main` tem o vetor `cardapio`. A função recebe o
-endereço dele no parâmetro `precos`, e cada `precos[i]` é a mesma gaveta que
-`cardapio[i]`:
+O `main` guarda o vetor `cardapio`. A função recebe o endereço dele no
+parâmetro `precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
 
 <p align="center"><img src="05-vetores-e-strings/0038-vetores-e-funcoes/ideia.svg" alt="Diagrama da ideia: Vetores e funções" width="870"></p>
 
@@ -568,7 +547,7 @@ int main(void) {
 // R$   6.05
 ```
 
-Repara no fluxograma: o `main` chama, a função percorre as 4 gavetas e volta.
+No fluxograma, o `main` chama, a função percorre as 4 gavetas e volta.
 Ela não devolve nada (`void`), e mesmo assim o `main` enxerga os preços novos,
 porque ela escreveu direto no vetor dele:
 
@@ -584,8 +563,8 @@ coisas lado a lado.
 > **`sizeof` dentro da função não dá o tamanho do vetor.** No `main`,
 > `sizeof(cardapio)` vale 32 (4 × 8 bytes). Dentro de `reajustar`,
 > `sizeof(precos)` vale 8 num PC de 64 bits: é o tamanho de um **endereço**,
-> não do vetor. O truque `sizeof(v) / sizeof(v[0])` só funciona onde o vetor
-> foi declarado. O gcc até avisa (`-Wsizeof-array-argument`), mas quem ignora
+> não do vetor. O truque `sizeof(v) / sizeof(v[0])` só funciona no bloco em
+> que o vetor foi declarado. O gcc até avisa (`-Wsizeof-array-argument`), mas quem ignora
 > o aviso ganha um laço que percorre 1 item em vez de 4. Por isso o tamanho
 > vai num parâmetro.
 
@@ -594,8 +573,8 @@ coisas lado a lado.
 > frame da função na pilha (assunto 0031) recebe três coisas: um endereço (8
 > bytes), um `int` e um `double`. Os 32 bytes do vetor ficam onde estão, no
 > frame do `main`. Para um vetor de um milhão de itens, a chamada custa o
-> mesmo: 8 bytes. É por isso que o C faz assim: copiar vetores inteiros a cada
-> chamada seria caro demais. O preço é que qualquer função que recebe o vetor
+> mesmo: 8 bytes. Copiar vetores inteiros a cada chamada sairia caro demais.
+> O preço é que qualquer função que recebe o vetor
 > pode estragá-lo; o `const` é a sua defesa. No módulo 06 você vai ver que
 > esse endereço é um **ponteiro**, e que `double precos[]` no parâmetro é só
 > outro jeito de escrever isso.
@@ -945,8 +924,7 @@ cada linha, o total da loja; no pé de cada coluna, o total da semana. Essa
 planilha, no C, é uma **matriz**.
 
 Uma matriz é um **vetor de vetores** (um vetor **bidimensional**).
-`int vendas[3][4]` são 3 linhas, e cada
-linha é um vetor de 4 `int`. Para chegar numa célula você usa dois índices,
+`int vendas[3][4]` são 3 linhas, e cada linha é um vetor de 4 `int`. Para chegar numa célula você usa dois índices,
 **primeiro a linha, depois a coluna**: `vendas[2][0]` é a loja 3 na semana 1.
 Os dois começam em 0, como em qualquer vetor.
 
@@ -958,21 +936,19 @@ int t[][2] = {{1, 2}, {3, 4}, {5, 6}};     // só a 1ª dimensão pode sumir: 3 
 ```
 
 Dá para escrever os valores sem as chaves internas (`{1, 2, 3, 4, 5, 6}`):
-eles enchem a matriz linha por linha. Mas o gcc avisa (`-Wmissing-braces`), e
-com razão: com as chaves, quem lê vê as linhas. Use as chaves.
+eles enchem a matriz linha por linha. Mas o gcc avisa (`-Wmissing-braces`):
+com as chaves, quem lê enxerga as linhas. Use as chaves.
 
 Um índice pede um laço; dois índices pedem **dois laços aninhados** (assunto
 0024). O de fora escolhe a linha, o de dentro anda pelas colunas dessa linha.
 Para somar por coluna, você inverte: a coluna fica por fora e a linha por
-dentro. Os laços são os mesmos; muda só quem é o "relógio das horas" e quem é
+dentro. Os laços são os mesmos; muda quem é o "relógio das horas" e quem é
 o "dos minutos".
 
-No C, a matriz não é um punhado de linhas soltas, cada uma num canto da
-memória. Ela é **um bloco só, contínuo**, com todas as linhas do mesmo tamanho,
-uma colada na outra.
-
-Vamos ver na prática. A planilha tem 3 linhas e 4 colunas. Na memória, as 12
-células ficam enfileiradas: primeiro a linha 0 inteira, depois a linha 1,
+No C, a matriz não é um punhado de linhas soltas pela memória. Ela é **um
+bloco só, contínuo**, com todas as linhas do mesmo tamanho, uma colada na
+outra. A planilha do exemplo tem 3 linhas e 4 colunas, e as 12 células ficam
+enfileiradas: primeiro a linha 0 inteira, depois a linha 1,
 depois a 2. A célula `vendas[1][2]` (o 14) é a 7ª da fila, na posição 1 × 4 + 2
 = 6:
 
@@ -1027,7 +1003,7 @@ int main(void) {
 // Semana  37  39  39  49    164
 ```
 
-Repara no fluxograma: são dois laços, um dentro do outro. O de dentro dá 4
+O fluxograma mostra os dois laços, um dentro do outro. O de dentro dá 4
 voltas para **cada** volta do de fora, então o corpo roda 3 × 4 = 12 vezes,
 uma por célula:
 
@@ -1043,7 +1019,7 @@ velha.
 > [!WARNING]
 > Escreva `m[l][c]`, nunca `m[l, c]`. A vírgula, no C, é um operador que
 > descarta o da esquerda: `m[1, 2]` vira `m[2]`, a linha inteira. Às vezes
-> compila com um aviso só, e o resultado é absurdo. Outro erro comum é trocar
+> compila com um aviso só, e o resultado não faz sentido. Outro erro comum é trocar
 > os limites: com `int m[3][4]`, o laço das linhas vai até 3 e o das colunas
 > até 4. Trocou, e o laço lê `m[3][...]`, fora da matriz.
 
@@ -1051,7 +1027,7 @@ velha.
 > **Por dentro do C:** a memória não tem linhas nem colunas, só uma fila de
 > bytes. O C guarda a matriz **linha após linha** (*row-major*): `vendas[l][s]`
 > fica em início + (l × 4 + s) × 4 bytes. É essa conta que exige o número de
-> colunas no parâmetro. E isso tem custo real: percorrer linha por linha (`l`
+> colunas no parâmetro. A ordem também custa: percorrer linha por linha (`l`
 > por fora, `s` por dentro) lê bytes vizinhos, que o processador já trouxe
 > para o **cache**. Percorrer coluna por coluna pula 16 bytes a cada passo. Em
 > matrizes grandes, a ordem errada dos laços pode deixar o programa várias
@@ -1426,8 +1402,7 @@ mesmo valor.
 O que decide se você vê a letra ou o número é o `printf`: `%c` mostra o
 símbolo, `%d` mostra o código. Como é número, dá para fazer conta e comparar:
 `'a' + 1` é `'b'`, `c >= 'A' && c <= 'Z'` pergunta se é maiúscula, e
-`c - '0'` transforma o dígito `'7'` no número 7. Não há função de conversão
-nenhuma: o caractere já é o número.
+`c - '0'` transforma o dígito `'7'` no número 7, sem função de conversão.
 
 Para não decorar a tabela, o `<ctype.h>` traz funções prontas:
 
@@ -1439,12 +1414,12 @@ Para não decorar a tabela, o `<ctype.h>` traz funções prontas:
 Os testes devolvem **diferente de zero** para verdadeiro, não necessariamente
 1. Escreva `if (isdigit(c))`, nunca `if (isdigit(c) == 1)`.
 
-Para ler um caractere por vez do teclado, existe o `getchar()`. Ele devolve um
+Para ler um caractere por vez do teclado, use o `getchar()`. Ele devolve um
 **`int`**: o código do caractere ou **`EOF`**, um valor negativo que avisa que
 a entrada acabou (Ctrl+D no Linux). Guarde sempre num `int`. O exemplo A080
 conta letras e dígitos assim, até o Enter.
 
-Vamos ver na prática. A placa está num vetor de 7 `char`. O `toupper` troca
+No exemplo, a placa ocupa um vetor de 7 `char`. O `toupper` troca
 cada minúscula pela maiúscula, que fica 32 posições antes na tabela. Os
 dígitos passam sem mudar:
 
@@ -1499,11 +1474,10 @@ int main(void) {
 ```
 
 O `putchar` mostra um caractere só, sem formatação. O vetor `placa` ainda não
-é uma **string**: falta o marcador de fim que o `%s` precisa. Isso é o
+é uma **string**: falta o marcador de fim que o `%s` precisa, tema do
 próximo assunto.
 
-Repara no fluxograma: para cada posição, converte e pergunta o que ela deveria
-ser. Basta uma posição errada para a placa ficar inválida, e o laço segue até
+A cada posição, o programa converte e pergunta o que ela deveria ser. Basta uma posição errada para a placa ficar inválida, e o laço segue até
 o fim mesmo assim:
 
 <p align="center"><img src="05-vetores-e-strings/0040-caracteres/fluxograma.svg" alt="Fluxograma: Caracteres" width="617"></p>
@@ -1522,8 +1496,8 @@ o fim mesmo assim:
 > ocupa **dois** bytes (`0xC3 0xA7`) e não cabe num `char`. Num `char` com
 > sinal, esses bytes viram números negativos, e passar um negativo (que não
 > seja `EOF`) para as funções do `ctype.h` é comportamento indefinido. Por isso
-> o jeito blindado é `toupper((unsigned char) c)`. Com o `int` que vem do
-> `getchar`, você já está seguro: ele devolve o byte como valor de 0 a 255.
+> o jeito seguro é `toupper((unsigned char) c)`. O `int` que vem do
+> `getchar` não tem esse problema: ele devolve o byte como valor de 0 a 255.
 
 > [!NOTE]
 > **Pergunta para você:** o que `printf("%c %d\n", 'A' + 2, 'z' - 'a');`
@@ -1861,13 +1835,12 @@ Diferenças em 128 códigos: 0
 Na entrada de um evento de tecnologia, a recepção imprime o crachá juntando o
 nome e o sobrenome da inscrição: "Bruna" + " " + "Matos". Depois confere se o
 crachá bate com o nome cadastrado. No C, nem `+` junta textos nem `==`
-compara textos. Para entender por quê, você
-precisa saber o que é uma string no C.
+compara textos, e o motivo está no que uma string é.
 
-No C, **string é um vetor de `char` terminado pelo caractere `'\0'`** (o
-caractere nulo, código 0). Não existe um tipo "string". O `'\0'` é o marcador
-de fim: tudo o que vem depois dele no vetor é ignorado. Quem precisa saber
-onde o texto acaba (o `printf` com `%s`, as funções de texto) anda pelo vetor
+**String é um vetor de `char` terminado pelo caractere `'\0'`** (o caractere
+nulo, código 0). Não existe um tipo "string". O `'\0'` é o marcador de fim:
+tudo o que vem depois dele no vetor é ignorado. Quem precisa saber em que
+ponto o texto acaba (o `printf` com `%s`, as funções de texto) anda pelo vetor
 até achar o `'\0'`.
 
 ```c
@@ -1893,14 +1866,14 @@ são funções do **`<string.h>`**:
 | `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
 
 O `strlen` devolve um `size_t` (inteiro sem sinal para tamanhos), que se
-mostra com `%zu`. E repare na ordem dos argumentos de `strcpy` e `strcat`: o
+mostra com `%zu`. Na ordem dos argumentos de `strcpy` e `strcat`, o
 **destino vem primeiro**, como numa atribuição (`dest = orig`).
 
 E uma lista de nomes? É uma matriz de `char` (assunto 0039): cada linha é uma
 string. Em `char nomes[3][10] = {"Ana", "Bia", "Caio"};`, `nomes[1]` é a
 string "Bia", e cabem até 9 caracteres por nome.
 
-Vamos ver na prática. O vetor `cracha` tem 20 posições. Depois do `strcpy` e
+O vetor `cracha` do exemplo tem 20 posições. Depois do `strcpy` e
 dos dois `strcat`, as 11 primeiras guardam "Bruna Matos", a 12ª guarda o
 `'\0'`, e o resto não importa:
 
@@ -1938,9 +1911,8 @@ int main(void) {
 // Confere com a inscrição.
 ```
 
-Repara no fluxograma: o `strcat` não sabe onde o crachá termina; ele procura
-o `'\0'` do destino e começa a escrever ali, por cima dele, e põe um `'\0'`
-novo no fim. Toda função de string é um laço "até achar o `'\0'`":
+O `strcat` não sabe em que posição o crachá termina: ele procura o `'\0'` do
+destino, começa a escrever ali, por cima dele, e põe um `'\0'` novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
 <p align="center"><img src="05-vetores-e-strings/0041-strings/fluxograma.svg" alt="Fluxograma: Strings" width="441"></p>
 
@@ -1956,7 +1928,7 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 > [!TIP]
 > **Por dentro do C:** a string do C não guarda o próprio tamanho. Para saber
 > quantos caracteres "Bruna Matos" tem, o `strlen` anda byte a byte até o
-> `'\0'`: custa proporcional ao tamanho, toda vez. Por isso, num laço, nunca escreva
+> `'\0'`: custa proporcional ao tamanho, toda vez. Num laço, nunca escreva
 > `for (i = 0; i < strlen(s); i++)`: o `strlen` roda a cada volta. Calcule uma
 > vez antes. E cuidado com acento: o `strlen("Belém")` é **6**, porque o "é"
 > em UTF-8 ocupa 2 bytes. O C conta bytes, não letras.
@@ -2321,7 +2293,7 @@ São três argumentos: onde guardar, quantos bytes cabem e de onde ler (`stdin`
 tamanho certo (`sizeof(nome)`), ele nunca estoura o vetor. Quando a entrada
 acaba (Ctrl+D), ele devolve `NULL`.
 
-Só tem um detalhe: o `fgets` **guarda o `'\n'`** do Enter, se couber. Você
+Um detalhe: o `fgets` **guarda o `'\n'`** do Enter, se couber. Você
 digita "Maria Clara" e recebe `"Maria Clara\n"`. Para tirar, use o
 **`strcspn`** do `<string.h>`: `strcspn(s, "\n")` devolve a posição do
 primeiro `'\n'` (ou o tamanho da string, se não houver). Trocando essa posição
@@ -2331,11 +2303,11 @@ por `'\0'`, o texto termina antes do Enter:
 nome[strcspn(nome, "\n")] = '\0';
 ```
 
-Uma linha só, que funciona nos dois casos: com `'\n'` ele é trocado; sem
-`'\n'` o `'\0'` é trocado por ele mesmo. O `fgets` não tira o `\n`
-sozinho: essa limpeza é sua.
+A linha funciona nos dois casos: com `'\n'`, ele é trocado; sem `'\n'`, o
+`'\0'` é trocado por ele mesmo. O `fgets` não tira o `\n` sozinho: essa
+limpeza é sua.
 
-Vamos ver na prática. O vetor `nome` tem 40 bytes. O `fgets` copia os 11
+No exemplo, o vetor `nome` tem 40 bytes. O `fgets` copia os 11
 caracteres, depois o `'\n'`, depois o `'\0'`. O `strcspn` acha o `'\n'` na
 posição 11, e ele vira o novo fim:
 
@@ -2370,8 +2342,8 @@ int main(void) {
 // Olá, Maria Clara! Seu nome tem 11 caracteres.
 ```
 
-Repara no fluxograma: o teste do `NULL` vem antes de qualquer uso. Se a
-entrada acabou, não existe nome para limpar:
+O teste do `NULL` vem antes de qualquer uso: se a entrada acabou, não existe
+nome para limpar.
 
 <p align="center"><img src="05-vetores-e-strings/0042-lendo-strings/fluxograma.svg" alt="Fluxograma: Lendo strings" width="506"></p>
 
@@ -2388,7 +2360,7 @@ entrada acabou, não existe nome para limpar:
 > **Por dentro do C:** o teclado não manda as letras direto para o seu
 > programa. O terminal junta o que você digita num **buffer** e só entrega
 > quando você aperta Enter. `scanf`, `getchar` e `fgets` tiram bytes desse
-> mesmo buffer, e o que um deixa o próximo pega. Agora, o **`gets`**: ele lia
+> mesmo buffer, e o que um deixa o próximo pega. Já o **`gets`** lia
 > uma linha sem receber o tamanho do vetor, então qualquer linha comprida
 > estourava a memória. Em 1988, o worm de Morris invadiu milhares de máquinas
 > mandando uma linha longa para um programa que usava `gets`. A função foi
@@ -2729,7 +2701,7 @@ arara, boto ou capivara. Os votos chegam do formulário, um por linha, do jeito
 que cada pessoa digitou: `boto`, `Arara`, `CAPIVARA`, `Tatu`... Você precisa
 contar, desenhar um gráfico de barras e anunciar o vencedor.
 
-O problema usa tudo o que o módulo ensinou:
+O problema usa o módulo inteiro:
 
 - **`fgets` num laço** (assunto 0042) lê um voto por linha até a entrada
   acabar, quando ele devolve `NULL`;
@@ -2743,17 +2715,17 @@ O problema usa tudo o que o módulo ensinou:
   `buscar` só lê.
 
 Divida assim: o `main` cuida do laço e do resultado; cada função faz uma coisa
-só. `buscar` devolve a posição ou -1, como a busca do A076: é assim que "Tatu"
-cai nos inválidos sem nenhum `if` especial. E o `(unsigned char)` dentro do
-`tolower` protege contra votos com acento (veja o assunto 0040).
+só. `buscar` devolve a posição ou -1, como a busca do A076, e assim "Tatu"
+cai nos inválidos sem nenhum `if` especial. O `(unsigned char)` dentro do
+`tolower` protege contra votos com acento (assunto 0040).
 
-Vamos ver na prática. Cada linha passa pela mesma esteira: lê, normaliza,
+Cada linha passa pela mesma esteira: lê, normaliza,
 procura na matriz de nomes e soma 1 no contador da posição certa. "Tatu" não
 está na matriz, então vai para os inválidos:
 
 <p align="center"><img src="05-vetores-e-strings/0043-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
 
-O programa completo. Para testar sem digitar, salve o código num arquivo `.c`
+Para testar o programa sem digitar, salve o código num arquivo `.c`
 e mande os votos com `printf 'boto\nArara\n...' | ~/LPEDC/rodar` seguido do
 caminho do arquivo:
 
@@ -2829,8 +2801,8 @@ int main(void) {
 // Vencedor: boto
 ```
 
-Repara no fluxograma: é um laço com sentinela (assunto 0025), só que a
-sentinela é o `NULL` do `fgets`. Dentro dele, uma decisão: achou o candidato
+É um laço com sentinela (assunto 0025), e a sentinela é o `NULL` do
+`fgets`. Dentro dele, uma decisão: achou o candidato
 ou não. O resultado só sai depois que a entrada acaba:
 
 <p align="center"><img src="05-vetores-e-strings/0043-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="607"></p>
@@ -2851,7 +2823,7 @@ da ordenação por seleção (assunto 0092).
 > **Por dentro do C:** `char nomes[3][12]` são 36 bytes contínuos, como toda
 > matriz. "arara" ocupa 6 deles na linha 0, e os 6 bytes restantes da linha
 > são zeros (as chaves da inicialização zeram o que sobra). `nomes[1]` é o
-> começo da linha 1, 12 bytes depois do começo. É por isso que o parâmetro
+> começo da linha 1, 12 bytes depois do começo. Por isso o parâmetro
 > de `buscar` precisa do `[TAM_NOME]`: para achar `nomes[i]`, a função calcula
 > início + i × 12. Uma lista de nomes de tamanhos bem diferentes desperdiça
 > espaço assim; no módulo 07 você vai guardar cada nome com o tamanho exato,
@@ -3316,7 +3288,7 @@ daria um índice fora do vetor.
 </details>
 
 **7. Achar uma palavra dentro da outra.** Sem usar `strstr`, escreva
-`int posicao(const char texto[], const char busca[])` que devolve onde
+`int posicao(const char texto[], const char busca[])` que devolve a posição em que
 `busca` começa em `texto`, ou -1.
 
 <details><summary>Resposta</summary>
@@ -4742,7 +4714,7 @@ void tam(int v[]) {
 
 **(C).** Um vetor passado para função chega como o **endereço** do primeiro
 item. Dentro de `tam`, `v` é um `int *`: `sizeof(v)` é 8, e 8 / 4 = 2. A
-conta `sizeof(v) / sizeof(v[0])` só funciona no bloco onde o vetor foi
+conta `sizeof(v) / sizeof(v[0])` só funciona no bloco em que o vetor foi
 declarado; por isso o tamanho vai como parâmetro. O gcc avisa
 (`-Wsizeof-array-argument`). Veja 0038.
 

@@ -13,15 +13,14 @@ com dois asteriscos: `int **pp;` se lê "pp aponta para um `int *`".
 Com `int vagas = 40; int *p = &vagas; int **pp = &p;`:
 
 - `pp` guarda o endereço de `p`;
-- `*pp` é o próprio `p`, ou seja, o endereço de `vagas`;
+- `*pp` é o próprio `p`: o endereço de `vagas`;
 - `**pp` é `vagas`: 40. Dois saltos, dois asteriscos.
 
 A regra é contar estrelas: cada `*` na declaração é um nível, e para chegar
 no dado você usa o mesmo número de `*`. Dá para fazer `int ***`, mas acima
-de dois níveis o código vira charada. Evite.
+de dois níveis o código vira charada.
 
-Para que serve, além de quebra-cabeça? Dois usos que você vai ver o curso
-todo:
+Dois usos aparecem no curso todo:
 
 - **mudar o ponteiro de quem chamou.** Se uma função precisa mudar um `int`
   do `main`, ela recebe `int *` (assunto 0046). Se precisa mudar um `int *`
@@ -33,7 +32,7 @@ todo:
   primeiro elemento: um `const char **`. É o tipo do famoso `char **argv`
   (assunto 0069) e da matriz alocada no módulo 07.
 
-Vamos ver na prática. No estacionamento do shopping há 40 vagas. `p` aponta
+O estacionamento do shopping tem 40 vagas. `p` aponta
 para `vagas` e `pp` aponta para `p`. Quando entram 2 carros, o programa
 atualiza `vagas` sem citar o nome dela, em dois saltos:
 
@@ -73,8 +72,7 @@ int main(void) {
 Leia os pares: `&vagas` e `p` são iguais; `&p` e `pp` são iguais; `*pp` volta
 a ser o endereço de `vagas`.
 
-Repara no fluxograma: não há decisão. Primeiro a corrente é montada, elo
-por elo (`vagas`, depois `p`, depois `pp`); depois o `**pp` percorre a
+Não há decisão. Primeiro a corrente é montada, elo por elo (`vagas`, depois `p`, depois `pp`); depois o `**pp` percorre a
 corrente de volta até chegar em `vagas`:
 
 {{fluxograma}}
@@ -93,7 +91,7 @@ corrente de volta até chegar em `vagas`:
 > `**pp` custa duas leituras de memória em sequência: a primeira busca o que
 > tem em `pp` (o endereço de `p`), a segunda busca o que tem em `p` (o
 > endereço de `vagas`), e só então a terceira traz o 40. O processador não
-> consegue adiantar a segunda antes de terminar a primeira. É por isso que
+> consegue adiantar a segunda antes de terminar a primeira. Por isso
 > estruturas cheias de ponteiros (listas, árvores) são mais lentas de
 > percorrer que um vetor contíguo, assunto que volta no módulo 10.
 

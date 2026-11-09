@@ -6,15 +6,13 @@ de variáveis. Este módulo traz a primeira **estrutura de dados** do curso: o
 **vetor**, várias variáveis do mesmo tipo com um nome só, lado a lado na
 memória.
 
-No C, o vetor é só um bloco de
-bytes. Tamanho fixo, nenhum `length`, nenhuma conferência de índice. Parece
-pouco, e é justamente por isso que é rápido: acessar a posição 999 custa o
-mesmo que acessar a 0.
+No C, o vetor é um bloco de bytes. Tamanho fixo, nenhum `length`, nenhuma
+conferência de índice. Parece pouco, e é por isso que é rápido: acessar a
+posição 999 custa o mesmo que acessar a 0.
 
-E o texto? No C não existe um tipo string. Uma string é um vetor de `char`
-que termina num byte zero, o `'\0'`. Entender isso explica metade das falhas
-de segurança da história do software, e é o que separa quem "usa C" de quem
-entende o que o C faz.
+E o texto? O C não tem um tipo string. Uma string é um vetor de `char` que
+termina num byte zero, o `'\0'`. Esse detalhe explica boa parte das falhas de
+segurança da história do software.
 
 ## O que você vai aprender
 
@@ -25,27 +23,6 @@ entende o que o C faz.
 - **strings**: o `'\0'`, o `<string.h>` e o estouro de buffer
 - **ler texto** do teclado com segurança: `fgets`, o `'\n'` e por que o `gets` foi banido
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos valores do código.
-2. Leia o código e rode. Mude um valor, um tamanho, um índice. Quebre de
-   propósito e veja o que o AddressSanitizer diz.
-3. Siga o **fluxograma** com o dedo: quase todo assunto aqui é um laço.
-4. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é
-   desafio. As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, erro. Nos vetores, cada gaveta tem o
-índice embaixo, em cinza.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você vai usar tudo dos módulos anteriores, principalmente laços (`for` e
@@ -53,9 +30,14 @@ laços aninhados), os padrões contador, acumulador e maior/menor, e funções c
 parâmetros. Ponteiros ainda não apareceram: quando o texto disser "vai o
 endereço do vetor", guarde a ideia, que o módulo 06 mostra a sintaxe.
 
-Neste módulo o **AddressSanitizer** do `rodar` vira seu melhor amigo. O C não
-confere índice nem tamanho de string, mas o sanitizer confere enquanto o
-programa roda. Quando aparecer `stack-buffer-overflow` ou `index out of
+Nos desenhos, cada gaveta do vetor tem o índice embaixo, em cinza. Quase todo
+assunto aqui é um laço: siga o fluxograma com o dedo e, ao rodar, mude um
+tamanho ou um índice de propósito. Responda a **Pergunta para você** de cada
+assunto antes de rodar.
+
+O **AddressSanitizer** do `rodar` confere, enquanto o programa roda, o que o
+C não confere: índice e tamanho de string. Quando aparecer
+`stack-buffer-overflow` ou `index out of
 bounds`, leia a linha indicada: é quase sempre um `<=` no lugar de `<` ou um
 `'\0'` que ficou sem lugar.
 
@@ -148,7 +130,7 @@ daria um índice fora do vetor.
 </details>
 
 **7. Achar uma palavra dentro da outra.** Sem usar `strstr`, escreva
-`int posicao(const char texto[], const char busca[])` que devolve onde
+`int posicao(const char texto[], const char busca[])` que devolve a posição em que
 `busca` começa em `texto`, ou -1.
 
 <details><summary>Resposta</summary>
@@ -260,7 +242,7 @@ void tam(int v[]) {
 
 **(C).** Um vetor passado para função chega como o **endereço** do primeiro
 item. Dentro de `tam`, `v` é um `int *`: `sizeof(v)` é 8, e 8 / 4 = 2. A
-conta `sizeof(v) / sizeof(v[0])` só funciona no bloco onde o vetor foi
+conta `sizeof(v) / sizeof(v[0])` só funciona no bloco em que o vetor foi
 declarado; por isso o tamanho vai como parâmetro. O gcc avisa
 (`-Wsizeof-array-argument`). Veja 0038.
 

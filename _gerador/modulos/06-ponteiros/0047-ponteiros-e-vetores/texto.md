@@ -6,9 +6,9 @@ anda 3 casas e chega na 1012. Os ponteiros fazem essa conta por você.
 
 Num vetor, as gavetas ficam coladas (assunto 0044). E quase sempre que o
 nome do vetor aparece numa expressão, ele **vira** o endereço do primeiro
-elemento: `kwh` vale o mesmo que `&kwh[0]`. É por isso que você passa um
-vetor para uma função sem `&` e ela altera o original (assunto 0038): ela
-recebe esse endereço.
+elemento: `kwh` vale o mesmo que `&kwh[0]`. Por isso você passa um vetor
+para uma função sem `&` e ela altera o original (assunto 0038): ela recebe
+esse endereço.
 
 Com um ponteiro para dentro de um vetor, vale a **aritmética de ponteiros**:
 
@@ -20,10 +20,11 @@ Com um ponteiro para dentro de um vetor, vale a **aritmética de ponteiros**:
   eles;
 - `p < q` compara posições, mas só faz sentido dentro do mesmo vetor.
 
-Daí sai a regra mais importante do assunto: **`v[i]` é exatamente
-`*(v + i)`**. O colchete é só um jeito curto de escrever "ande `i`
+Daí sai a regra central do assunto: **`v[i]` é exatamente
+`*(v + i)`**. O colchete é um jeito curto de escrever "ande `i`
 elementos e pegue o que tem lá". Vale para vetor e vale para ponteiro:
-`p[2]` é `*(p + 2)`, contado a partir de onde `p` aponta **agora**.
+`p[2]` é `*(p + 2)`, contado a partir do ponto para o qual `p` aponta
+**agora**.
 
 Mas vetor **não é** ponteiro. `sizeof kwh` dá o vetor inteiro (20 bytes),
 `sizeof p` dá 8. E `kwh = outro;` ou `kwh++` não compilam: o nome do vetor
@@ -35,7 +36,7 @@ Na matriz (assunto 0039) a regra vale em dois níveis: `m[i][j]` é
 inteira, então `m + 1` anda **16 bytes** (4 `int`), enquanto `m[0] + 1` anda
 só 4. Prova adora essa diferença.
 
-Vamos ver na prática. O consumo de luz de 5 meses está em `kwh`. O ponteiro
+O consumo de luz de 5 meses está em `kwh`. O ponteiro
 `p` começa em `kwh` (gaveta `0x1000`) e anda uma gaveta de cada vez,
 somando o que encontra. Quando `p` chega em `kwh + 5`, a gaveta "um depois
 do último", o laço para:
@@ -90,8 +91,8 @@ Com os endereços fictícios do desenho (`kwh` em `0x1000`):
 
 `kwh + 5` é `0x1014`: pode ser calculado e comparado, mas nunca lido.
 
-Repara no fluxograma: é o laço de acumulador do assunto 0025, só que quem
-anda é o ponteiro, não um índice:
+O laço de acumulador é o do assunto 0025, mas quem anda é o ponteiro, não um
+índice:
 
 {{fluxograma}}
 
@@ -108,8 +109,8 @@ anda é o ponteiro, não um índice:
 > endereço calculado é `kwh + i * sizeof(int)`, uma multiplicação e uma
 > soma que o processador faz numa instrução só. Como a soma é comutativa,
 > `i[kwh]` também compila e dá o mesmo valor. É uma curiosidade famosa;
-> nunca escreva isso. E por que o laço com `p++` e o laço com `i++` dão o
-> mesmo desempenho? Porque o otimizador transforma um no outro. Escolha o
+> nunca escreva isso. O laço com `p++` e o laço com `i++` têm o mesmo
+> desempenho, porque o otimizador transforma um no outro. Escolha o
 > que deixa o código mais claro, quase sempre o índice.
 
 > [!NOTE]

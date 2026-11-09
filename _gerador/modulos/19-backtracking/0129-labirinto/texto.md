@@ -1,10 +1,9 @@
 ## 0129 · Labirinto
 
 Festa junina na fazenda, e a atração é o labirinto de milho. Você entra pelo
-canto de cima e quer achar a saída, lá no canto de baixo. A estratégia de quem
-não tem mapa é a de sempre: anda, e quando dá num beco, volta até a última
-bifurcação e tenta outro corredor. Para não andar em círculos, vai deixando
-pedrinhas pelo caminho.
+canto de cima e quer achar a saída, no canto de baixo. Sem mapa, você anda e,
+quando dá num beco, volta até a última bifurcação e tenta outro corredor.
+Para não andar em círculos, vai deixando pedrinhas pelo caminho.
 
 Isso é backtracking numa **matriz**. O mapa é um `char lab[L][C + 1]`: `'#'`
 é parede, `'.'` é corredor, `'S'` é a entrada e `'F'` é a saída. A função
@@ -14,21 +13,21 @@ está no caminho. Se a casa é a saída, responde que sim. Senão, **marca** a
 casa com `'*'`, tenta os quatro vizinhos e, se nenhum deu certo, **desfaz** a
 marca.
 
-Aqui está a diferença para os assuntos anteriores: o desfazer não volta a casa
-para `'.'`, e sim para `'x'`. Uma casa da qual não se chega à saída continua
-sem saída na próxima vez que a busca passar por ali, então não vale a pena
-entrar de novo. Com o `'x'`, cada casa é visitada no máximo uma vez, e a
+A diferença para os assuntos anteriores: o desfazer não volta a casa para
+`'.'`, e sim para `'x'`. Uma casa da qual não se chega à saída continua sem
+saída na próxima vez que a busca passar por ali, então não vale entrar de
+novo. Com o `'x'`, cada casa é visitada no máximo uma vez, e a
 busca custa **O(L · C)**: é a busca em profundidade (DFS) do assunto 0111,
 com a matriz fazendo o papel do grafo e os quatro vizinhos fazendo o papel
 das arestas.
 
-Repara também no `||` encadeado do código. Pelo curto-circuito (assunto
+Atenção ao `||` encadeado do código. Pelo curto-circuito (assunto
 0013), assim que um vizinho devolve `true`, os seguintes nem são chamados. A
 ordem das direções no `if` (direita, baixo, esquerda, cima) decide qual
 caminho a busca acha primeiro.
 
-Vamos ver na prática. Os números mostram a ordem dos passos do caminho
-encontrado. A busca entrou primeiro no bolsão da direita, achou só becos
+No desenho, os números mostram a ordem dos passos do caminho encontrado. A
+busca entrou primeiro no bolsão da direita, achou só becos
 (vermelho) e voltou. Depois desceu pela coluna 1 até o corredor de baixo:
 
 {{ideia}}
@@ -106,11 +105,11 @@ backtracking que testa todos os caminhos (exemplo A258).
 
 A mesma recursão, sem a saída e sem o desfazer, vira o **flood fill**
 (preenchimento por inundação): a partir de uma casa, pinta todas as casas
-alcançáveis. É o balde de tinta do editor de imagens, e é o assunto do
-exemplo A257.
+alcançáveis. É o balde de tinta do editor de imagens, assunto do exemplo
+A257.
 
-Repara no fluxograma: três perguntas mandam embora as casas impossíveis antes
-de qualquer marcação, e só uma casa nova chega ao `'*'`:
+Três perguntas mandam embora as casas impossíveis antes de qualquer
+marcação, e só uma casa nova chega ao `'*'`:
 
 {{fluxograma}}
 

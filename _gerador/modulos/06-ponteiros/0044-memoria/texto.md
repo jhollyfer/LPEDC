@@ -3,7 +3,7 @@
 No guarda-volumes do mercado, você entrega a mochila e recebe uma ficha com o
 número 47. Você não precisa saber em que prateleira ela foi parar: com o
 número, o funcionário acha a gaveta certa. A memória do computador funciona
-igualzinho.
+assim.
 
 A **memória** (RAM) é uma fileira enorme de gavetas de **1 byte** cada, e
 cada gaveta tem um número: o **endereço**. Quando você declara `int idade =
@@ -11,8 +11,8 @@ cada gaveta tem um número: o **endereço**. Quando você declara `int idade =
 dentro. O **endereço da variável** é o número da primeira dessas gavetas.
 
 Você pensa no **nome** (`idade`). O processador só conhece **endereços**. O
-compilador faz a ponte: troca cada nome pelo endereço da gaveta. Até agora
-isso ficou escondido; neste módulo você vai mexer direto nos números.
+compilador faz a ponte: troca cada nome pelo endereço da gaveta. Agora você
+mexe direto nos números.
 
 Para perguntar "em que gaveta você mora?", use o operador **`&`** (endereço
 de): `&idade`. É o mesmo `&` que você coloca no `scanf` desde o assunto 0006.
@@ -31,10 +31,9 @@ Dois detalhes que surpreendem no começo:
 - **cada tipo ocupa um número de gavetas**: `char` 1, `int` 4, `double` 8 (o
   `sizeof` do assunto 0002 diz quantas). O endereço é sempre o da primeira.
 
-Vamos ver na prática. No cadastro da academia, a idade (30, um `int`), a
-mensalidade (R$ 119,90, um `double`) e o plano (`'B'`, um `char`) ganham
-gavetas. Os endereços do desenho são **fictícios** e curtos, para caber na
-cabeça; os de verdade têm 12 dígitos hexa:
+No cadastro da academia, a idade (30, um `int`), a mensalidade (R$ 119,90,
+um `double`) e o plano (`'B'`, um `char`) ganham gavetas. Os endereços do
+desenho são fictícios, como avisa a abertura do módulo:
 
 {{ideia}}
 
@@ -67,9 +66,8 @@ O `%zu` é o formato certo para o resultado do `sizeof` (um `size_t`, inteiro
 sem sinal). Rode duas vezes: os valores e os tamanhos se repetem, os
 endereços não.
 
-Repara no fluxograma: não tem decisão nenhuma. Para cada variável, o
-programa faz as mesmas três perguntas: o que tem dentro, onde mora e quanto
-ocupa:
+O fluxograma não tem decisão nenhuma. Para cada variável, o programa faz as
+mesmas três perguntas: o que tem dentro, onde mora e quanto ocupa:
 
 {{fluxograma}}
 

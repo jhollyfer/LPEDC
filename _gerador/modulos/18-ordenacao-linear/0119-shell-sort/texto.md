@@ -11,15 +11,15 @@ anda **uma casa só**. Um elemento que está longe do lugar certo paga uma
 comparação e um deslocamento por casa que atravessa. Num vetor invertido, a
 conta vira n²/2.
 
-Em 1959, Donald Shell teve uma ideia simples: antes de andar de uma em uma
-casa, ande de **h em h**. O **shell sort** faz o insertion sort várias vezes,
+Em 1959, Donald Shell propôs: antes de andar de uma em uma casa, ande de
+**h em h**. O **shell sort** faz o insertion sort várias vezes,
 com saltos `h` cada vez menores:
 
 1. com um salto grande, os elementos dão pulos longos e chegam **perto** do
    lugar certo;
 2. com saltos menores, o vetor fica cada vez mais arrumado;
 3. a última rodada é sempre com `h = 1`: o insertion sort comum, só que sobre
-   um vetor **quase ordenado**, que é exatamente o caso em que ele é rápido.
+   um vetor **quase ordenado**, justamente o caso em que ele é rápido.
 
 Depois da rodada com salto `h`, o vetor está **h-ordenado**: se você pegar
 um elemento a cada `h` casas, a partir de qualquer posição, essa fileira está
@@ -27,18 +27,18 @@ em ordem. Com `h = 4`, as posições 0, 4, 8 formam uma fileira; 1, 5, 9
 formam outra; 2, 6 e 3, 7 formam mais duas. São quatro insertion sorts
 pequenos, entrelaçados no mesmo vetor.
 
-Quais saltos usar? A sequência mais conhecida é a de **Knuth**: `h = 3h + 1`,
-ou seja, 1, 4, 13, 40, 121, 364... Você começa com o maior salto abaixo de
-`n / 3` e vai dividindo por 3. Com `n = 10`, os saltos são só 4 e 1.
+A sequência de saltos mais conhecida é a de **Knuth**: `h = 3h + 1`, que dá
+1, 4, 13, 40, 121, 364... Você começa com o maior salto abaixo de `n / 3` e
+vai dividindo por 3. Com `n = 10`, os saltos são só 4 e 1.
 
-Vamos ver na prática. Na primeira linha, cada cor é uma fileira de salto 4.
-Cada fileira se ordena sozinha: o 9 troca com o 62, o 33 com o 73 e o 28 com
-o 85. Três movimentos e o vetor já está quase pronto:
+Na primeira linha do desenho, cada cor é uma fileira de salto 4. Cada fileira
+se ordena sozinha: o 9 troca com o 62, o 33 com o 73 e o 28 com o 85. Com
+três movimentos, o vetor fica quase pronto:
 
 {{ideia}}
 
-O mesmo exemplo em C. O laço de dentro é o insertion sort do assunto 0093
-com o `1` trocado por `h`:
+Em C, o laço de dentro é o insertion sort do assunto 0093 com o `1` trocado
+por `h`:
 
 ```c
 #include <stdio.h>
@@ -93,10 +93,10 @@ int main(void) {
 São 9 movimentos no total. O insertion sort comum, no mesmo vetor, faz 21:
 o 9, sozinho, gastaria 4. No shell sort ele deu **um** pulo de 4 casas.
 
-Repare que `h /= 3` desfaz a conta `3 * h + 1`: na divisão inteira, 13 / 3 é
-4 e 4 / 3 é 1. O laço de fora para quando `h` vira 0. Repara no fluxograma:
-primeiro o programa sobe até o maior salto, depois desce rodada por rodada,
-e a última rodada é sempre a do `h = 1`:
+O `h /= 3` desfaz a conta `3 * h + 1`: na divisão inteira, 13 / 3 é 4 e
+4 / 3 é 1. O laço de fora para quando `h` vira 0. O programa primeiro sobe
+até o maior salto, depois desce rodada por rodada, e a última rodada é
+sempre a do `h = 1`:
 
 {{fluxograma}}
 
@@ -119,14 +119,14 @@ quem está 4, 8, ... casas para trás:
 > garantem que cada fileira está em ordem, não o vetor todo: depois do
 > `h = 4`, o 62 ainda está antes do 33. Se você inventar sua própria
 > sequência (5, 3, 2, por exemplo) e esquecer do 1, o programa termina sem
-> erro nenhum e com o vetor fora de ordem. Outro tropeço: escrever a
+> erro e com o vetor fora de ordem. Outro tropeço: escrever a
 > condição como `j > 0` (a do insertion sort comum). Com salto `h`, o certo é
 > `j >= h`, senão `v[j - h]` lê antes do começo do vetor.
 
 > [!TIP]
-> **Por dentro do C:** o shell sort não usa memória extra nenhuma: só `h`,
-> `i`, `j` e `x`, umas poucas variáveis na pilha, qualquer que seja o tamanho
-> do vetor. É por isso que ele aparece em sistemas embarcados e no código de
+> **Por dentro do C:** o shell sort não usa memória extra: só `h`, `i`, `j` e
+> `x`, umas poucas variáveis na pilha, qualquer que seja o tamanho do vetor.
+> Por isso ele aparece em sistemas embarcados e no código de
 > bibliotecas pequenas (a uClibc, por exemplo, implementa o `qsort` com shell
 > sort). O custo depende dos saltos, e ninguém sabe a fórmula exata para a
 > maioria das sequências: com a de Knuth, o pior caso é O(n^1,5), e na

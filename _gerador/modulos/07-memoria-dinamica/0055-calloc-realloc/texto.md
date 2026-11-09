@@ -1,8 +1,8 @@
 ## 0055 · calloc e realloc
 
 Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
-R$ 120, R$ 35... Você não sabe quantos vão ser. No C, o vetor
-não cresce sozinho: quem faz ele crescer é você, com o `realloc`.
+R$ 120, R$ 35... Você não sabe quantos vão ser. O vetor não cresce sozinho:
+quem faz ele crescer é você, com o `realloc`.
 
 Antes dele, um primo do `malloc`: o **`calloc`**. Ele recebe a quantidade e o
 tamanho separados e entrega o bloco **zerado**:
@@ -14,14 +14,14 @@ int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
 Use quando o zero inicial importa: contadores, placares, tabelas de
 frequência. Com `malloc`, você teria lixo e precisaria de um laço para zerar.
 
-Agora o **`realloc(p, novo_tamanho)`**. Ele muda o tamanho de um bloco que
-veio do heap e **preserva o conteúdo** (até o menor dos dois tamanhos). Se der
-para esticar o bloco onde ele está, ótimo. Se não der, ele aloca um bloco
+O **`realloc(p, novo_tamanho)`** muda o tamanho de um bloco que veio do heap
+e **preserva o conteúdo** (até o menor dos dois tamanhos). Se der para
+esticar o bloco no lugar, ele estica. Se não der, ele aloca um bloco
 novo em outro lugar, copia tudo, libera o antigo e devolve o **endereço
 novo**. A parte que cresceu vem com lixo.
 
-Daí sai a regra mais importante do assunto: **depois do `realloc`, o endereço
-antigo pode não valer mais**. Qualquer ponteiro que apontava para dentro do
+Daí a regra central do assunto: **depois do `realloc`, o endereço antigo
+pode não valer mais**. Qualquer ponteiro que apontava para dentro do
 bloco velho virou um ponteiro solto.
 
 E se faltar memória, o `realloc` devolve `NULL` e **não mexe no bloco
@@ -34,14 +34,13 @@ duas contas: a **quantidade** (quantos elementos você usa) e a **capacidade**
 (quantos cabem). Encheu? **Dobra** a capacidade. Assim os `realloc` ficam
 raros: para guardar 1000 elementos, começando com 1, são só 10.
 
-Vamos ver na prática. Chegam 5 Pix (R$ 50, 120, 35, 80 e 15). O vetor nasce
+Chegam 5 Pix (R$ 50, 120, 35, 80 e 15). O vetor nasce
 com capacidade 2, dobra para 4 no terceiro Pix e para 8 no quinto. No fim, 5
 posições usadas e 3 livres:
 
 {{ideia}}
 
-O mesmo "vetor que cresce" em C. É a semente da lista sequencial que você vai
-transformar num TAD no assunto 0075:
+O código é a semente da lista sequencial que vira TAD no assunto 0075:
 
 ```c
 #include <stdio.h>
@@ -88,7 +87,7 @@ int main(void) {
 // Sobram 3 posições livres
 ```
 
-Repara no fluxograma: a pergunta "encheu?" é feita a cada Pix, mas o desvio
+A pergunta "encheu?" é feita a cada Pix, mas o desvio
 para o `realloc` só acontece duas vezes. Na maior parte das voltas, guardar
 custa só uma atribuição:
 

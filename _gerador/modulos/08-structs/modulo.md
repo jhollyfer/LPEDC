@@ -1,20 +1,18 @@
 # Módulo 08 · Tipos compostos
 
 Até aqui, cada variável guardava uma coisa só: um número, um caractere, um
-vetor de coisas iguais. Só que os dados do mundo real vêm em pacotes. Um
-pedido tem tamanho, quantidade e preço; um time tem nome, vitórias e empates.
-Este módulo ensina o C a guardar pacotes.
+vetor de coisas iguais. Os dados do mundo real vêm em pacotes. Um pedido tem
+tamanho, quantidade e preço; um time tem nome, vitórias e empates. Este
+módulo ensina o C a guardar pacotes.
 
-No C, você desenha o pacote byte a
-byte: decide a ordem dos campos (e paga pelas sobras de alinhamento), decide se
-ele anda por cópia ou por ponteiro (e paga pela cópia), decide se dois campos
-dividem a mesma memória. Nada é escondido, e por isso você passa a entender o
-que um objeto **custa**.
+No C, você desenha o pacote byte a byte: decide a ordem dos campos (e paga
+pelas sobras de alinhamento), decide se ele anda por cópia ou por ponteiro (e
+paga pela cópia), decide se dois campos dividem a mesma memória. Nada fica
+escondido, e você passa a saber o que um objeto **custa**.
 
-O módulo fecha descendo ao nível do bit: máscaras e flags, o jeito mais
-compacto e mais rápido de guardar sim/não. Com struct, ponteiro para struct e
-`malloc`, você tem todas as peças das estruturas de dados que começam no
-módulo 10.
+O módulo fecha no nível do bit: máscaras e flags, o jeito mais compacto de
+guardar sim/não. Com struct, ponteiro para struct e `malloc`, você tem todas
+as peças das estruturas de dados que começam no módulo 10.
 
 ## O que você vai aprender
 
@@ -26,26 +24,6 @@ módulo 10.
 - fazer campos dividirem a memória com **union**, e enxergar a **endianness** da máquina
 - ler e escrever **bits** com `& | ^ ~ << >>`, máscaras e flags (as permissões `rwx` do Linux)
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, troque a ordem dos campos, quebre de
-   propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa tudo dos anteriores: funções, vetores, strings com `fgets`,
@@ -54,8 +32,9 @@ sizeof *p);` ainda não parece natural, revise o módulo 07 antes.
 
 Vários exemplos mostram tamanhos (`sizeof`) e a ordem dos bytes. Os valores
 dos comentários são os de um PC de 64 bits com Linux (Intel, AMD ou ARM).
-Em outra máquina, os números podem mudar, e é justamente isso que o módulo
-quer que você perceba.
+Em outra máquina os números podem mudar, e perceber isso faz parte do
+módulo. Ao rodar, troque a ordem dos campos de uma struct e compare o
+`sizeof`. Responda a **Pergunta para você** de cada assunto antes de rodar.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0059-struct/A117.c
@@ -212,7 +191,7 @@ passam a vir do `malloc`.
 
 Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
 papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
-compilados com `gcc -std=c17 -Wall -Wextra`. Onde a resposta depende da
+compilados com `gcc -std=c17 -Wall -Wextra`. Quando a resposta depende da
 máquina, a questão diz qual.
 
 **Questão 1.** Em uma plataforma de 64 bits típica (`int` de 4 bytes,

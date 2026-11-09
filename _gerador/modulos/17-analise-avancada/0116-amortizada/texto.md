@@ -8,13 +8,12 @@ vida segue barata. Ninguém mede o custo de morar pela pior semana do ano.
 O vetor que cresce do assunto 0075 vive a mesma coisa. Inserir no fim custa
 uma escrita, até o dia em que o vetor enche: aí é preciso alocar um maior e
 **copiar tudo**. Olhando uma operação isolada, o pior caso de uma inserção é
-O(n). Multiplicando por `n` inserções, dá O(n²). A conta está certa, mas é
-pessimista demais: as inserções caras não acontecem uma atrás da outra.
+O(n). Multiplicando por `n` inserções, dá O(n²). A conta está certa, mas
+pessimista: as inserções caras não acontecem uma atrás da outra.
 
 A **análise amortizada** mede o custo de uma **sequência** de operações, no
 pior caso, e divide pelo número de operações. O resultado é o **custo
-amortizado** por operação: uma garantia sobre o total, sem nenhum sorteio
-envolvido.
+amortizado** por operação: uma garantia sobre o total, sem sorteio nenhum.
 
 O jeito mais direto é o **método agregado**: somar tudo. Com capacidade
 inicial 1 e dobrando quando enche, `n` inserções fazem `n` escritas mais as
@@ -32,7 +31,7 @@ O Cormen chama este de **método contábil** e traz um terceiro, o do
 **potencial**: o cofrinho vira uma função Φ do estado da estrutura. Com
 Φ = 2 · n - capacidade, cada inserção custa, amortizada, os mesmos 3.
 
-Vamos ver na prática. O app do banco guarda o histórico de Pix num vetor que
+O app do banco guarda o histórico de Pix num vetor que
 começa com 1 posição e dobra quando enche. Chegam 16 Pix. As inserções 2, 3,
 5 e 9 são as mudanças, em vermelho; o cofrinho embaixo cai nelas e se
 recupera depois:
@@ -115,12 +114,12 @@ As cópias somam `1 + 2 + 4 + 8 = 15`, mais 16 escritas: 31, menos de `2 · 16`.
 O cofrinho desce até 3 em cada mudança e nunca chega a zero. As duas contas
 dizem a mesma coisa: em média, menos de 2 por inserção, e nunca mais de 3.
 
-Repara no fluxograma: é o `insere` da 9ª inserção, a mais cara das 16. O
-vetor tem 8 de 8 ocupados, então o caminho passa pela mudança inteira:
+O fluxograma segue o `insere` da 9ª inserção, a mais cara das 16. O vetor
+tem 8 de 8 ocupados, então o caminho passa pela mudança inteira:
 
 {{fluxograma}}
 
-O vetor que dobra não é o único caso. O assunto também aparece num
+A mesma análise aparece num
 **contador binário** (somar 1 às vezes vira muitos bits, mas em média vira
 menos de 2; exemplo A231) e numa **pilha com `multipop(k)`**, que tira até
 `k` itens de uma vez (cada item só sai uma vez depois de entrar; exemplo
@@ -131,8 +130,8 @@ Duas confusões comuns. Amortizado **não** é caso médio: o caso médio supõe
 entradas sorteadas, e o amortizado vale para a **pior** sequência possível.
 E amortizado **não** garante que cada operação é rápida: a 1.048.577ª
 inserção copia mais de um milhão de elementos de uma vez. Para quem conta o
-total, tudo bem; para um sistema que não pode travar nem por um instante,
-pode não estar.
+total, tanto faz; um sistema que não pode travar nem por um instante precisa
+de outra solução.
 
 > [!WARNING]
 > Crescer de um **tamanho fixo** em vez de multiplicar estraga tudo. Com
@@ -146,7 +145,7 @@ pode não estar.
 > [!TIP]
 > **Por dentro do C:** na prática você usa `realloc` (assunto 0055), e às
 > vezes ele nem copia: se o espaço logo depois do bloco estiver livre, ele
-> só estica o bloco no lugar. Mas isso não é garantido, e a análise conta o
+> estica o bloco no lugar. Isso não é garantido, e a análise conta o
 > pior caso: copiar tudo. O preço do O(1) amortizado é memória: logo depois
 > de dobrar, metade do vetor está vazia. Com 1.048.577 inteiros, o vetor
 > ocupa espaço para 2.097.152, 8 MB em vez de 4 MB. E lembre do `realloc`

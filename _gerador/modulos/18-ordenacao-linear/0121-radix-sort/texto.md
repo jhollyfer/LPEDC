@@ -6,9 +6,9 @@ jogava cada cartão num de 10 escaninhos, do 0 ao 9. O operador juntava os
 escaninhos em ordem e passava o maço de novo, agora pela coluna seguinte.
 Depois de passar por todas as colunas, o maço estava ordenado.
 
-O truque, que parece ao contrário, é começar pela coluna **menos**
-significativa. O **radix sort** (ordenação digital, ou por raiz) faz
-exatamente isso com números:
+Parece ao contrário, mas a máquina começava pela coluna **menos**
+significativa. O **radix sort** (ordenação digital, ou por raiz) faz o mesmo
+com números:
 
 1. ordene pelo dígito das **unidades**;
 2. depois pelo das **dezenas**;
@@ -20,27 +20,27 @@ O dígito de `x` na casa `exp` (1, 10, 100...) sai com `(x / exp) % 10`. Essa
 versão, que começa pelo dígito menos significativo, se chama **LSD** (*least
 significant digit*).
 
-Por que funciona? Depois da passada das dezenas, os números estão em ordem
-pelos dois últimos dígitos. Na passada das centenas, dois números com a mesma
-centena, como 807 e 830, ficam na ordem em que já estavam, que é a ordem das
-dezenas. É por isso que cada passada **precisa ser estável**: a estabilidade
-guarda o trabalho das passadas anteriores.
+Depois da passada das dezenas, os números estão em ordem pelos dois últimos
+dígitos. Na passada das centenas, dois números com a mesma centena, como 807
+e 830, ficam na ordem em que já estavam, que é a ordem das dezenas. Por isso
+cada passada **precisa ser estável**: a estabilidade guarda o trabalho das
+passadas anteriores.
 
 O custo é de `d` passadas de counting sort, com `d` dígitos e base `b`:
 **O(d · (n + b))**. Para números de tamanho fixo, `d` é constante e o radix
-sort é linear. De novo, nenhuma comparação entre elementos. O Cormen
+sort é linear, de novo sem comparar elementos. O Cormen
 escreve Θ(d(n + k)), com k valores por dígito, e para chaves de `b` bits
 quebradas em dígitos de `r` bits, Θ((b/r)(n + 2^r)): a melhor escolha fica
 perto de r = log₂ n.
 
-Vamos ver na prática. Oito números de pedido de um mercado online, com até
-três dígitos (escritos com zeros à esquerda para os dígitos ficarem
-alinhados). Acompanhe o 807 e o 830, em amarelo: a passada das dezenas põe o
-807 na frente, e a das centenas, que vê os dois empatados no 8, respeita:
+O exemplo usa oito números de pedido de um mercado online, com até três
+dígitos (escritos com zeros à esquerda para os dígitos ficarem alinhados).
+Acompanhe o 807 e o 830, em amarelo: a passada das dezenas põe o 807 na
+frente, e a das centenas, que vê os dois empatados no 8, respeita essa ordem:
 
 {{ideia}}
 
-O mesmo exemplo em C. A `passada` é o counting sort do assunto 0120 com a
+A `passada` é o counting sort do assunto 0120 com a
 chave trocada pelo dígito; o vetor auxiliar é alocado uma vez só e
 reaproveitado em todas as passadas:
 
@@ -123,7 +123,7 @@ na saída ficam: `807 509 | 216 | 830 | 047 | 251 553 | 074`. Dentro do
 bloco do 0, o 807 vem antes do 509 porque já vinha antes: a passada não
 olhou as unidades, mas também não estragou a ordem delas.
 
-Repara no fluxograma: o laço para quando `exp` passa do maior número. Com o
+O laço para quando `exp` passa do maior número. Com o
 maior igual a 830, são três passadas (`exp` = 1, 10, 100); com `exp = 1000`,
 `830 / 1000` dá 0:
 
@@ -133,9 +133,9 @@ maior igual a 830, são três passadas (`exp` = 1, 10, 100); com `exp = 1000`,
 > Use uma ordenação **estável** em cada passada. Se o terceiro laço da
 > `passada` andar da frente para trás, cada passada inverte os empates, e o
 > resultado sai `074 047 251 216 553 509 830 807`: as centenas em ordem, o
-> resto bagunçado, sem erro nenhum. Também não
-> dá para começar pelas centenas com esse código: a última passada é a que
-> manda, então ela tem que ser a do dígito mais importante. E o número de
+> resto bagunçado, sem erro nenhum. Também não dá para começar pelas
+> centenas com esse código: a última passada é a que manda, então ela tem
+> que ser a do dígito mais importante. E o número de
 > passadas vem do **maior** elemento, não do primeiro: um número de 4 dígitos
 > escondido no meio do vetor precisa da quarta passada.
 
@@ -151,7 +151,7 @@ maior igual a 830, são três passadas (`exp` = 1, 10, 100); com `exp = 1000`,
 
 > [!NOTE]
 > **Pergunta para você:** este código funciona com números negativos? Pense
-> no que `(-47 / 1) % 10` dá em C (o resto tem o sinal do dividendo) e onde
-> isso cairia no vetor `c`.
+> no que `(-47 / 1) % 10` dá em C (o resto tem o sinal do dividendo) e em
+> que posição do vetor `c` isso cairia.
 
 {{pratique}}

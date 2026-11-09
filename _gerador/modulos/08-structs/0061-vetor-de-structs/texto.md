@@ -24,18 +24,18 @@ Time tabela[] = {
 };
 ```
 
-Sem o tamanho entre colchetes, o compilador conta os elementos. E o truque de
+Sem o tamanho entre colchetes, o compilador conta os elementos. O truque de
 sempre para saber quantos são continua valendo: `sizeof tabela / sizeof
 tabela[0]`.
 
-Vamos ver na prática. Quatro times, cada um com seus números. O programa
+São quatro times, cada um com seus números. O programa
 percorre o vetor, calcula os pontos de cada um (3 por vitória, 1 por empate) e
 guarda o **índice** do melhor até agora. Palmeiras, no índice 2, termina na
 frente:
 
 {{ideia}}
 
-O código faz exatamente esse passeio:
+O código faz esse passeio:
 
 ```c
 #include <stdio.h>
@@ -84,14 +84,14 @@ Guardar o índice, e não uma cópia do time, é de propósito: com o índice vo
 sabe **onde** está o líder e pode mexer nele (`tabela[lider].vitorias++`).
 Uma cópia seria um time solto, desligado da tabela.
 
-Repara no fluxograma: é o padrão "maior até agora" do módulo de laços, só que
-a comparação olha um campo calculado de cada struct:
+É o padrão "maior até agora" do módulo de laços, mas a comparação olha um
+valor calculado de cada struct:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `tabela[i] = tabela[j]` copia o time **inteiro**, todos os campos. Isso é
-> ótimo para trocar dois times de lugar ao ordenar: troque as structs, não os
+> `tabela[i] = tabela[j]` copia o time **inteiro**, todos os campos. Isso
+> serve para trocar dois times de lugar ao ordenar: troque as structs, não os
 > campos um por um. O erro clássico é trocar só o nome e esquecer os números,
 > deixando a tabela com nomes e pontos embaralhados. E lembre que o C não
 > confere limites: `tabela[4]` num vetor de 4 times lê lixo (ou derruba o

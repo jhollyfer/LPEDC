@@ -2,8 +2,8 @@
 
 No mercadinho, alguém digitou as etiquetas trocadas: o arroz saiu por
 R$ 8 e o feijão por R$ 25. Você quer uma função `troca` que conserte isso.
-Parece fácil, mas a versão óbvia não funciona, e entender por que é entender
-como o C chama funções.
+A versão óbvia não funciona, e o motivo está no jeito como o C chama
+funções.
 
 No C, **todo argumento é passado por valor** (assunto 0029): a função recebe
 uma **cópia**. `troca_copias(arroz, feijao)` cria duas variáveis novas, `a`
@@ -19,25 +19,25 @@ copiado, mas a cópia de um endereço aponta para **a mesma gaveta**. Dentro
 da função, `*a` é o próprio `arroz` do `main`. Isso se chama **passagem por
 referência** (no C, simulada com ponteiros).
 
-Agora o mistério do `scanf` está resolvido. `scanf("%d", &total)` precisa
+Isso explica o `&` do `scanf`. `scanf("%d", &total)` precisa
 **escrever** na sua variável, então pede o endereço dela. Sem o `&`, ele
 receberia uma cópia do lixo que está em `total` e tentaria escrever num
-endereço inventado. E por que `scanf("%s", nome)` vai sem `&`? Porque o nome
-de um vetor já vira o endereço do primeiro elemento (assunto 0038; o 0047
-mostra os detalhes).
+endereço inventado. Já `scanf("%s", nome)` vai sem `&` porque o nome de um
+vetor já vira o endereço do primeiro elemento (assunto 0038; o 0047 mostra
+os detalhes).
 
 O mesmo truque resolve outro problema: o `return` devolve **um** valor só.
 Quando a função precisa entregar dois ou mais resultados, ela recebe
 ponteiros e escreve neles (o A092 racha a conta e devolve o valor de cada
 um e a sobra).
 
-Vamos ver na prática. A função `troca` recebe os endereços `0x1000` e
+A função `troca` recebe os endereços `0x1000` e
 `0x1004`, guarda o 8 numa variável `tmp` e mexe direto nas gavetas do
 `main`:
 
 {{ideia}}
 
-No código, as duas versões lado a lado. Repare que só a segunda conserta as
+O código põe as duas versões lado a lado, e só a segunda conserta as
 etiquetas:
 
 ```c
@@ -89,8 +89,7 @@ fictícios do desenho:
 `a` e `b` nunca mudam: o que muda é o que está nas gavetas para onde eles
 apontam.
 
-Repara no fluxograma: o `main` só chama a troca se os preços estão fora de
-ordem. A troca em si são três passos, sempre com a variável auxiliar:
+O `main` só chama a troca se os preços estão fora de ordem. A troca em si são três passos, sempre com a variável auxiliar:
 
 {{fluxograma}}
 

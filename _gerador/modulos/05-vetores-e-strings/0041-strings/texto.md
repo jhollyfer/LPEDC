@@ -3,13 +3,12 @@
 Na entrada de um evento de tecnologia, a recepção imprime o crachá juntando o
 nome e o sobrenome da inscrição: "Bruna" + " " + "Matos". Depois confere se o
 crachá bate com o nome cadastrado. No C, nem `+` junta textos nem `==`
-compara textos. Para entender por quê, você
-precisa saber o que é uma string no C.
+compara textos, e o motivo está no que uma string é.
 
-No C, **string é um vetor de `char` terminado pelo caractere `'\0'`** (o
-caractere nulo, código 0). Não existe um tipo "string". O `'\0'` é o marcador
-de fim: tudo o que vem depois dele no vetor é ignorado. Quem precisa saber
-onde o texto acaba (o `printf` com `%s`, as funções de texto) anda pelo vetor
+**String é um vetor de `char` terminado pelo caractere `'\0'`** (o caractere
+nulo, código 0). Não existe um tipo "string". O `'\0'` é o marcador de fim:
+tudo o que vem depois dele no vetor é ignorado. Quem precisa saber em que
+ponto o texto acaba (o `printf` com `%s`, as funções de texto) anda pelo vetor
 até achar o `'\0'`.
 
 ```c
@@ -35,14 +34,14 @@ são funções do **`<string.h>`**:
 | `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
 
 O `strlen` devolve um `size_t` (inteiro sem sinal para tamanhos), que se
-mostra com `%zu`. E repare na ordem dos argumentos de `strcpy` e `strcat`: o
+mostra com `%zu`. Na ordem dos argumentos de `strcpy` e `strcat`, o
 **destino vem primeiro**, como numa atribuição (`dest = orig`).
 
 E uma lista de nomes? É uma matriz de `char` (assunto 0039): cada linha é uma
 string. Em `char nomes[3][10] = {"Ana", "Bia", "Caio"};`, `nomes[1]` é a
 string "Bia", e cabem até 9 caracteres por nome.
 
-Vamos ver na prática. O vetor `cracha` tem 20 posições. Depois do `strcpy` e
+O vetor `cracha` do exemplo tem 20 posições. Depois do `strcpy` e
 dos dois `strcat`, as 11 primeiras guardam "Bruna Matos", a 12ª guarda o
 `'\0'`, e o resto não importa:
 
@@ -80,9 +79,8 @@ int main(void) {
 // Confere com a inscrição.
 ```
 
-Repara no fluxograma: o `strcat` não sabe onde o crachá termina; ele procura
-o `'\0'` do destino e começa a escrever ali, por cima dele, e põe um `'\0'`
-novo no fim. Toda função de string é um laço "até achar o `'\0'`":
+O `strcat` não sabe em que posição o crachá termina: ele procura o `'\0'` do
+destino, começa a escrever ali, por cima dele, e põe um `'\0'` novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
 {{fluxograma}}
 
@@ -98,7 +96,7 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 > [!TIP]
 > **Por dentro do C:** a string do C não guarda o próprio tamanho. Para saber
 > quantos caracteres "Bruna Matos" tem, o `strlen` anda byte a byte até o
-> `'\0'`: custa proporcional ao tamanho, toda vez. Por isso, num laço, nunca escreva
+> `'\0'`: custa proporcional ao tamanho, toda vez. Num laço, nunca escreva
 > `for (i = 0; i < strlen(s); i++)`: o `strlen` roda a cada volta. Calcule uma
 > vez antes. E cuidado com acento: o `strlen("Belém")` é **6**, porque o "é"
 > em UTF-8 ocupa 2 bytes. O C conta bytes, não letras.

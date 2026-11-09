@@ -3,8 +3,7 @@
 Muito problema real não tem fórmula. Que combinação de produtos fecha o
 crédito exato? Em que ordem o motoboy faz as entregas? Onde ficam as rainhas,
 como sair do labirinto, que dígito vai em cada casa do sudoku? Para todos
-eles, o jeito honesto é **testar as possibilidades**. A questão é testar com
-método: sem esquecer nenhuma, sem repetir nenhuma e sem perder tempo com as
+eles, o jeito honesto é **testar as possibilidades**, com método: sem esquecer nenhuma, sem repetir nenhuma e sem perder tempo com as
 que já se sabe que não servem.
 
 O módulo começa pela **enumeração**: gerar todos os subconjuntos e todas as
@@ -14,12 +13,12 @@ o caminho não dá em nada. O resto do módulo aplica a mesma ideia a
 problemas cada vez maiores: soma de subconjuntos, N-rainhas, labirintos,
 flood fill e, no fim, um resolvedor de sudoku completo.
 
-A mudança na cabeça é enxergar o problema como uma **árvore de decisões**.
-Cada nível é uma escolha; cada caminho da raiz até uma folha é uma tentativa
-completa. Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a
-árvore **podando** os galhos que não podem ter solução. E o segredo que
-separa o código que funciona do que não funciona cabe numa frase: tudo o que
-você muda antes de descer, você **desfaz** depois de voltar.
+O problema passa a ser uma **árvore de decisões**. Cada nível é uma
+escolha; cada caminho da raiz até uma folha é uma tentativa completa.
+Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a árvore
+**podando** os galhos que não podem ter solução. A regra que mais derruba
+código cabe numa frase: tudo o que você muda antes de descer, você
+**desfaz** depois de voltar.
 
 ## O que você vai aprender
 
@@ -31,34 +30,6 @@ você muda antes de descer, você **desfaz** depois de voltar.
 - achar um caminho num **labirinto** em matriz e pintar regiões com **flood fill**
 - juntar tudo num **resolvedor de sudoku**, e acelerar a busca escolhendo a casa mais apertada
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: quase sempre é a árvore de
-   decisões do exemplo, ou o tabuleiro dele, com os mesmos valores do código.
-2. Leia o código. Procure sempre as três partes: onde a função **para**, onde
-   ela **poda** e onde ela **escolhe e desfaz**.
-3. Siga o **fluxograma** com o dedo. Em backtracking ele é curto, porque a
-   recursão esconde a repetição: cada caixa de chamada recursiva é o
-   fluxograma inteiro de novo.
-4. Rode os exemplos. Mude a ordem das opções, tire a poda, esqueça o
-   desfazer de propósito e compare a saída e o número de chamadas.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Quase todo programa do módulo conta as **chamadas** da função recursiva. É o
-jeito mais simples de ver uma poda funcionando: a saída fica igual e o número
-cai.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nas árvores de decisão, amarelo é uma decisão ainda aberta, verde é uma
-solução, vermelho é um galho podado e cinza é um beco sem saída. Nos
-tabuleiros, as casas verdes são a solução e as vermelhas, as proibidas.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo é **recursão** do começo ao fim: revise os assuntos 0031 (pilha de
@@ -68,6 +39,15 @@ bits (0065) e o vetor de `bool` de `<stdbool.h>`. O labirinto é a DFS do
 assunto 0111 com a matriz no lugar do grafo, e a BFS (0110) aparece como a
 ferramenta certa para o menor caminho. A pilha (0082) é a saída quando a
 recursão ficaria funda demais.
+
+Em cada função recursiva, procure três partes: em que ponto ela **para**, em
+que ponto ela **poda** e em que ponto ela **escolhe e desfaz**. O fluxograma
+é curto, porque cada caixa de chamada recursiva é o fluxograma inteiro de
+novo. Quase todo programa conta as **chamadas**: com a poda, a saída fica
+igual e o número cai. Nas árvores de decisão, amarelo é uma decisão ainda
+aberta, verde é uma solução, vermelho é um galho podado e cinza é um beco
+sem saída; nos tabuleiros, as casas verdes são a solução e as vermelhas, as
+proibidas.
 
 Uma convenção vale para o módulo todo: **os vetores de marcação começam e
 terminam a busca do mesmo jeito**. Se, depois de um backtracking, sobrou algum

@@ -5,14 +5,13 @@ de entregas. Cada pedido recebeu de 0 a 4 estrelas, e ela quer a lista em
 ordem de nota para responder primeiro os clientes insatisfeitos. São 8
 pedidos, de A a H, com 3, 1, 3, 2, 1, 4, 0 e 3 estrelas.
 
-Ela nem pensa em comparar pedido com pedido. Faz cinco montes, um para cada
-nota, e joga cada pedido no seu monte. Depois é só juntar os montes, do 0 ao
-4. Ninguém foi comparado com ninguém.
+Ela não compara pedido com pedido. Faz cinco montes, um para cada nota, joga
+cada pedido no seu monte e depois junta os montes, do 0 ao 4.
 
 No assunto 0117 você viu que nenhuma ordenação **por comparação** faz menos
 que uns n log₂ n testes no pior caso. O **counting sort** (ordenação por
-contagem) não fura esse limite: ele simplesmente não compara. Ele usa o
-**valor** da chave como **índice** de um vetor. Para isso, as chaves precisam
+contagem) não fura esse limite, porque não compara: usa o **valor** da chave
+como **índice** de um vetor. Para isso, as chaves precisam
 ser inteiros num intervalo pequeno, de 0 a k - 1.
 
 O algoritmo tem três passos, cada um um laço simples:
@@ -26,23 +25,23 @@ O algoritmo tem três passos, cada um um laço simples:
    cada elemento na última vaga livre do seu bloco: `c[x]--` e
    `saida[c[x]] = v[i]`.
 
-Por que de trás para a frente? Porque assim, entre chaves iguais, quem vem
-por último na entrada ocupa a última vaga do bloco. A ordem original dos
-empates se mantém: o counting sort é **estável**. Isso parece detalhe, mas é
-o que faz dele a peça central do radix sort, no próximo assunto.
+De trás para a frente, entre chaves iguais, quem vem por último na entrada
+ocupa a última vaga do bloco. A ordem original dos empates se mantém: o
+counting sort é **estável**. Essa propriedade faz dele a peça central do
+radix sort, no próximo assunto.
 
 O Cormen escreve `COUNTING-SORT(A, n, k)` com vetores de 1 a n e chaves de 0
-a **k**, ou seja, k + 1 contadores; aqui, em C, as chaves vão de 0 a k - 1. A
+a **k**, portanto k + 1 contadores; aqui, em C, as chaves vão de 0 a k - 1. A
 conta é a mesma: Θ(n + k), que vira Θ(n) quando k = O(n).
 
-Vamos ver na prática. A entrada passa uma vez para contar e outra para
-distribuir. Os três pedidos de 3 estrelas (A, C e H, em verde) chegam à
-saída na mesma ordem em que estavam:
+A entrada passa uma vez para contar e outra para distribuir. Os três pedidos
+de 3 estrelas (A, C e H, em verde) chegam à saída na mesma ordem em que
+estavam:
 
 {{ideia}}
 
-O mesmo exemplo em C. A saída vai para outro vetor: o counting sort não
-ordena no lugar.
+No código, a saída vai para outro vetor: o counting sort não ordena no
+lugar.
 
 ```c
 #include <stdio.h>
@@ -118,17 +117,16 @@ vaga e diminui o contador daquela nota:
 
 No fim, cada `c[x]` aponta para o **começo** do bloco de `x`.
 
-Repara no fluxograma: são três laços em sequência, nenhum dentro do outro.
-Dois andam pelos n elementos e um pelas k chaves, então o custo é
-**O(n + k)**:
+São três laços em sequência, nenhum dentro do outro. Dois andam pelos n
+elementos e um pelas k chaves, então o custo é **O(n + k)**:
 
 {{fluxograma}}
 
 > [!WARNING]
 > Se o terceiro laço for da frente para trás (`for (int i = 0; i < n; i++)`)
 > com o mesmo `c[x]--`, o vetor sai ordenado pelas estrelas, mas os empates
-> saem **invertidos**: H3 C3 A3 em vez de A3 C3 H3. O programa não dá erro
-> nenhum, e o estrago só aparece quando a ordem dos empates importa (no radix
+> saem **invertidos**: H3 C3 A3 em vez de A3 C3 H3. O programa não dá erro,
+> e o estrago só aparece quando a ordem dos empates importa (no radix
 > sort, ela importa sempre). Outro cuidado: a chave tem que caber no vetor.
 > Uma nota 5, ou uma nota negativa, vira `c[5]` ou `c[-1]`: escrita fora do
 > vetor, que o AddressSanitizer pega e um programa sem ele ignora.

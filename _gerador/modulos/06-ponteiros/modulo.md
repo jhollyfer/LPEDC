@@ -1,21 +1,18 @@
 # Módulo 06 · Ponteiros
 
-Este é o coração do curso. Até aqui você usou variáveis pelo **nome**: o
-compilador trocava cada nome por um endereço e escondia isso de você. Neste
-módulo a cortina abre. Você vai ver que toda variável mora numa gaveta
-numerada da memória, que dá para guardar o número dessa gaveta numa outra
-variável e que, com esse número na mão, dá para ler e mudar o dado de
+Até aqui você usou variáveis pelo **nome**: o compilador trocava cada nome
+por um endereço e escondia isso de você. Neste módulo a cortina abre. Toda
+variável mora numa gaveta numerada da memória, dá para guardar o número dessa
+gaveta numa outra variável e, com esse número na mão, ler e mudar o dado de
 qualquer lugar do programa.
 
-No C, nada acontece por baixo dos panos: se uma função
-precisa mudar uma variável sua, você entrega o endereço dela. Parece
-trabalho a mais, e é. Em troca, você entende exatamente o que cada linha
-custa e por que o `scanf` pedia aquele `&` desde o módulo 01.
+No C, se uma função precisa mudar uma variável sua, você entrega o endereço
+dela. Dá trabalho, mas em troca você sabe o que cada linha custa e entende
+por que o `scanf` pedia aquele `&` desde o módulo 01.
 
-Ponteiro é o assunto que separa quem "escreve C" de quem entende C. Tudo o
-que vem depois depende dele: memória dinâmica (módulo 07), structs
-encadeadas (módulo 08), listas, pilhas, filas, árvores e grafos. Vá devagar,
-desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
+Tudo o que vem depois depende de ponteiro: memória dinâmica (módulo 07),
+structs encadeadas (módulo 08), listas, pilhas, filas, árvores e grafos. Vá
+devagar, desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
 
 ## O que você vai aprender
 
@@ -28,44 +25,28 @@ desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
 - **ponteiro para função**: callbacks e o `qsort`
 - **`void *`**: o ponteiro genérico, o cast e funções que servem para qualquer tipo
 
-## Como estudar cada assunto
+## Antes de começar
 
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado,
-   quase sempre como um gaveteiro com endereços e setas.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, quebre de propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
+Você precisa estar à vontade com vetores, strings e funções (módulos 04 e
+05). Os erros de ponteiro raramente aparecem na compilação: aparecem quando
+o programa roda, às vezes bem longe da linha culpada. Por isso, rode
+**sempre** com o `rodar`, que liga o AddressSanitizer. Quando ele acusar
+algo, leia o relatório de cima para baixo: o tipo do erro
+(`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável
+envolvida.
 
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
+O diagrama da ideia deste módulo é quase sempre um gaveteiro com endereços e
+setas; nele, roxo marca os ponteiros. Responda a **Pergunta para você** de
+cada assunto antes de rodar.
 
 > [!NOTE]
 > Os endereços dos desenhos são **fictícios** e curtos (`0x1000`, `0x1004`)
 > para caber na cabeça. Os de verdade têm 12 dígitos hexa e **mudam a cada
-> execução**. Por isso, nas saídas dos exemplos, os endereços que aparecem
-> nos comentários são de uma execução qualquer: os seus vão ser outros. O
-> que importa são as relações entre eles (iguais, 4 bytes depois etc.).
+> execução**: os endereços nos comentários dos exemplos são de uma execução
+> qualquer, e os seus vão ser outros. O que importa são as relações entre
+> eles (iguais, 4 bytes depois etc.).
 
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa
-(no gaveteiro, roxo marca os ponteiros), amarela é pergunta. Verde é o
-caminho que o exemplo segue e o resultado; cinza, o que ele não usa;
-vermelho, erro.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
-## Antes de começar
-
-Você precisa dominar vetores, strings e funções (módulos 04 e 05). Os erros
-de ponteiro raramente aparecem na compilação: aparecem quando o programa
-roda, às vezes bem longe da linha culpada. Por isso, rode **sempre** com o
-`rodar`, que liga o AddressSanitizer. Quando ele acusar algo, leia o
-relatório de cima para baixo: o tipo do erro (`stack-buffer-overflow`,
-`SEGV on unknown address`), a linha onde aconteceu e a variável envolvida.
-
-Para seguir um ponteiro passo a passo, o `gdb` ajuda muito
+Para seguir um ponteiro passo a passo, use o `gdb`
 (`print p`, `print *p`, `print &x`):
 
 ```bash
@@ -224,7 +205,7 @@ no assunto 0052, usando `p - mesa` para achar o minuto.
 
 **9. Endianness na prática.** Escreva `bool little_endian(void)` que
 descobre a ordem dos bytes da máquina olhando o primeiro byte de um `int`
-que vale 1 (através de um `unsigned char *`). Depois escreva
+que vale 1 (por meio de um `unsigned char *`). Depois escreva
 `unsigned int inverte_bytes(unsigned int x)` que troca a ordem dos 4 bytes
 usando a `troca_generica` do assunto 0051 nos bytes certos.
 

@@ -1,18 +1,18 @@
 ## 0052 · Juntando tudo: o ranking da feira
 
 Sábado, fim de feira. A associação dos feirantes quer o ranking das
-barracas pelo faturamento do dia e o nome da campeã. Mas tem uma condição:
-a planilha original não pode mudar de ordem, porque outras contas usam a
+barracas pelo faturamento do dia e o nome da campeã, com uma condição: a
+planilha original não pode mudar de ordem, porque outras contas usam a
 posição de cada barraca.
 
-O problema junta tudo o que o módulo ensinou:
+O problema junta o módulo inteiro:
 
 - **vetores paralelos** com o nome, a quantidade e o preço de cada barraca,
   e o faturamento calculado (`fat[i] = qtd[i] * preco[i]`);
 - um **vetor de ponteiros** `const double *ordem[N]`, em que cada posição
-  aponta para um elemento de `fat` (assunto 0049). É ele que vai ser
-  ordenado, não `fat`. Como num índice de livro: as páginas não mudam de
-  lugar, só a lista que aponta para elas;
+  aponta para um elemento de `fat` (assunto 0049). Ele é ordenado, e `fat`
+  não. Como num índice de livro: as páginas não mudam de lugar, só a lista
+  que aponta para elas;
 - o **`qsort`** com uma função de comparação (assunto 0050). Cada elemento
   de `ordem` é um `const double *`, então o `qsort` entrega o endereço de um
   ponteiro, que chega como `const void *` (assunto 0051). Dois saltos
@@ -24,14 +24,12 @@ O problema junta tudo o que o módulo ensinou:
   duas respostas, o total (num `double *`) e **onde** está o maior (num
   `const double **`, porque ela precisa mudar um ponteiro do `main`).
 
-Vamos ver na prática. São 4 barracas: tomate (30 × R$ 6,50), alface (45 ×
+São 4 barracas: tomate (30 × R$ 6,50), alface (45 ×
 R$ 3,00), queijo (8 × R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`,
 `ordem[0]` aponta para o pastel e `ordem[3]` para a alface, enquanto `fat`
 continua na ordem de sempre:
 
 {{ideia}}
-
-O programa completo:
 
 ```c
 #include <stdio.h>
@@ -95,8 +93,8 @@ ponteiro para um ponteiro constante para um `double` constante. Os dois
 `const` só prometem que a comparação não muda nada, nem o ponteiro do
 vetor, nem o faturamento.
 
-Repara no fluxograma: três fases. Calcula e aponta, ordena os ponteiros,
-percorre a ordem nova traduzindo cada ponteiro para um índice:
+O programa tem três fases: calcula e aponta, ordena os ponteiros e percorre
+a ordem nova traduzindo cada ponteiro para um índice:
 
 {{fluxograma}}
 
@@ -109,8 +107,8 @@ percorre a ordem nova traduzindo cada ponteiro para um índice:
 > tamanho do elemento do próprio vetor que você está ordenando.
 
 > [!TIP]
-> **Por dentro do C:** ordenar ponteiros em vez dos dados é um truque
-> clássico. Cada troca do `qsort` move 8 bytes, não importa o tamanho do
+> **Por dentro do C:** ordenar ponteiros em vez dos dados é uma técnica
+> clássica. Cada troca do `qsort` move 8 bytes, não importa o tamanho do
 > dado apontado. Com structs de 200 bytes (módulo 08), a diferença é
 > enorme. E várias "visões" ordenadas podem conviver: um vetor de ponteiros
 > por faturamento, outro por nome, todos apontando para os mesmos dados. É

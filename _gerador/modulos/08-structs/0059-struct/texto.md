@@ -6,8 +6,8 @@ diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
 
 Até aqui, você teria três variáveis soltas: `char tamanho`, `int quantidade`,
 `double preco`. Com dez pedidos, seriam trinta variáveis, e nada no código diz
-que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso
-com uma **struct**.
+que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso com uma
+**struct**.
 
 Uma struct **agrupa variáveis de tipos diferentes sob um nome só**. Cada
 variável de dentro é um **campo** (ou membro). Nos livros e na prova ela
@@ -39,10 +39,10 @@ Para ler ou mudar um campo, use o **ponto**: `p1.quantidade`,
 `p1.preco = 20.0`. Cada campo é uma variável comum, do seu tipo: `p1.tamanho`
 é um `char`, `&p1.quantidade` é um `int *`, e assim por diante.
 
-Vamos ver na prática. A variável `p1` é um bloco de memória com os três campos
-em sequência. O programa multiplica dois deles, chega a R$ 37,00 e decide o
-frete. Repare no buraco cinza entre `tamanho` e `quantidade`: ele é explicado
-no "Por dentro do C" logo abaixo:
+A variável `p1` é um bloco de memória com os três campos em sequência. O
+programa multiplica dois deles, chega a R$ 37,00 e decide o frete. O buraco
+cinza entre `tamanho` e `quantidade` é explicado no "Por dentro do C" logo
+abaixo:
 
 {{ideia}}
 
@@ -82,12 +82,11 @@ int main(void) {
 
 Uma struct pode ter vetores e até outras structs dentro (`cliente.end.cidade`,
 com o ponto encadeado). E a atribuição `b = a` funciona entre structs do
-**mesmo tipo**: ela copia todos os bytes, inclusive os vetores de dentro. Isso
-é curioso, porque vetor sozinho não se copia com `=`. Dentro de uma struct,
-copia.
+**mesmo tipo**: ela copia todos os bytes, inclusive os vetores de dentro.
+Vetor sozinho não se copia com `=`; dentro de uma struct, copia.
 
-Repara no fluxograma: a struct não muda o jeito de pensar o programa. Os
-passos são os de sempre; a diferença é que os dados viajam num pacote só:
+A struct não muda o jeito de pensar o programa. Os passos são os de sempre,
+e os dados viajam num pacote só:
 
 {{fluxograma}}
 

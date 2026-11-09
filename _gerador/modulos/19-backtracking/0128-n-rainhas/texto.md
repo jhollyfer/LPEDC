@@ -11,13 +11,13 @@ cada linha tem **exatamente uma** rainha. Basta decidir a coluna da rainha de
 cada linha, e a solução vira um vetor `pos`, com `pos[l]` igual à coluna da
 rainha da linha `l`.
 
-Agora é backtracking puro: a função `rainha(l)` põe a rainha da linha `l`.
+O resto é backtracking: a função `rainha(l)` põe a rainha da linha `l`.
 Ela tenta cada coluna `c` e **poda** as casas atacadas pelas rainhas das
 linhas de cima. Se a casa está livre, marca, desce para a linha `l + 1` e,
-na volta, desmarca. Se nenhuma coluna serve, a função simplesmente termina, e
-quem a chamou passa para a próxima coluna: é o retrocesso.
+na volta, desmarca. Se nenhuma coluna serve, a função termina, e quem a
+chamou passa para a próxima coluna: é o retrocesso.
 
-O segredo está em testar o ataque em O(1), sem varrer as rainhas anteriores.
+O ganho vem de testar o ataque em O(1), sem varrer as rainhas anteriores.
 Cada casa `(l, c)` pertence a uma coluna e a duas diagonais, e as diagonais
 têm um "endereço" fácil:
 
@@ -30,7 +30,7 @@ Três vetores de `bool` guardam o que está ocupado: `coluna[N]`,
 `diag1[2N - 1]` e `diag2[2N - 1]`. Uma casa está livre se as três posições
 dela estão `false`.
 
-Vamos ver na prática. À esquerda, a primeira solução que o programa acha. No
+O desenho mostra, à esquerda, a primeira solução que o programa acha; no
 meio, o número `l + c` de cada casa; à direita, `l - c + 3`. A rainha da
 linha 1, coluna 3, ocupa a diagonal ↗ número 4 e a diagonal ↘ número 1: as
 casas destacadas ficam proibidas para as outras rainhas:
@@ -115,12 +115,12 @@ cortou a casa antes de qualquer chamada:
 | 3 | colunas 0 a 3 | todas atacadas: volta; na linha 2, as colunas 2 e 3 também estão atacadas, e a linha 1 já tentou tudo: volta à linha 0 |
 | 0 | coluna 1 | livre: desce, e o caminho 3, 0, 2 fecha a solução 1 |
 
-Repara que a rainha da linha 0 na coluna 0 nunca dá certo: a busca gasta 4
-chamadas (uma na linha 1, duas na linha 2, uma na linha 3) para descobrir
-isso, e depois esquece o galho inteiro.
+A rainha da linha 0 na coluna 0 nunca dá certo: a busca gasta 4 chamadas
+(uma na linha 1, duas na linha 2, uma na linha 3) para descobrir isso, e
+depois esquece o galho inteiro.
 
-Repara no fluxograma: é o esqueleto do assunto anterior, com um laço pelas
-colunas no lugar de "leva ou não leva":
+O fluxograma é o esqueleto do assunto anterior, com um laço pelas colunas no
+lugar de "leva ou não leva":
 
 {{fluxograma}}
 

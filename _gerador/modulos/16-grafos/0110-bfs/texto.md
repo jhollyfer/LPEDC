@@ -5,8 +5,8 @@ no LinkedIn. Você não conhece a Rita. Conhece o Max e a Nina; eles conhecem
 outras pessoas, que conhecem outras. Qual é a corrente mais curta de
 apresentações até ela?
 
-Quem já reparou no "conexão de 2º grau" do LinkedIn viu essa ideia (nada a
-ver com o grau do vértice do assunto anterior: ali é a **distância**). A rede é
+O "conexão de 2º grau" do LinkedIn é essa ideia (nada a ver com o grau do
+vértice do assunto anterior: ali o grau é a **distância**). A rede é
 um grafo não dirigido: pessoas são vértices, conexões são arestas. A pergunta é
 o **menor caminho em número de arestas** de Lia (você) até Rita.
 
@@ -23,8 +23,8 @@ foi descoberto primeiro é processado primeiro. O laço é sempre o mesmo: tira
 `u` da frente da fila e, para cada vizinho `v` ainda não descoberto, anota
 `dist[v] = dist[u] + 1`, guarda `pai[v] = u` e põe `v` no fim da fila.
 
-O vetor `dist[]` faz dois papéis. Guarda a distância e, com `-1`, diz "ainda
-não descoberto". É ele que impede a busca de andar em círculos: num grafo, ao
+O vetor `dist[]` faz dois papéis: guarda a distância e, com `-1`, diz "ainda
+não descoberto". Ele impede a busca de andar em círculos: num grafo, ao
 contrário da árvore, dá para chegar no mesmo vértice por caminhos diferentes
 (Otto é vizinho de Max **e** de Nina).
 
@@ -35,11 +35,11 @@ formam a **árvore da BFS**, e seguir `pai[]` a partir de Rita até chegar em
 O Cormen escreve a mesma BFS com **cores**: **branco** é o vértice ainda não
 descoberto (o nosso `dist == -1`), **cinza** é o que está na fila e **preto**
 o que já saiu dela. O `v.d` dele é o nosso `dist[v]`, e o `v.π` (pi), o
-`pai[v]`. Mesma busca, só outros nomes.
+`pai[v]`. Mesma busca, outros nomes.
 
-Vamos ver na prática. As setas verdes são as arestas da árvore da BFS (cada
-uma liga um vértice a quem o descobriu); o número em cima de cada pessoa é a
-distância; embaixo, a fila na ordem em que cada um entrou:
+No desenho, as setas verdes são as arestas da árvore da BFS (cada uma liga um
+vértice a quem o descobriu), o número em cima de cada pessoa é a distância e,
+embaixo, está a fila na ordem em que cada um entrou:
 
 {{ideia}}
 
@@ -104,9 +104,9 @@ int main(void) {
 // Caminho até Rita: Lia -> Max -> Otto -> Rita (distância 3)
 ```
 
-Repara no fluxograma: a pergunta "a fila esvaziou?" controla tudo. Cada volta
-tira um vértice e pode colocar vários; quando ninguém novo aparece, a fila
-seca e a busca termina:
+Quem controla tudo é a pergunta "a fila esvaziou?". Cada volta tira um
+vértice e pode colocar vários; quando ninguém novo aparece, a fila seca e a
+busca termina:
 
 {{fluxograma}}
 
@@ -131,9 +131,10 @@ Isso vale porque toda aresta "custa" 1. Com pesos diferentes (minutos, reais)
 a BFS erra, e é aí que entra Dijkstra (assunto 0112).
 
 O exemplo A219 agrupa as pessoas por onda e mostra quem a BFS nunca alcança
-(um grafo com uma parte solta). O A220 usa a mesma BFS numa grade: cada casa de um galpão é um
-vértice e os vizinhos são as casas de cima, de baixo, da esquerda e da direita.
-Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
+(um grafo com uma parte solta). O A220 roda a mesma BFS numa grade: cada casa
+de um galpão é um vértice, e os vizinhos são as casas de cima, de baixo, da
+esquerda e da direita. Não há matriz de adjacência; os vizinhos saem de uma
+conta.
 
 > [!WARNING]
 > Marque o vértice como descoberto **ao colocar na fila**, não ao tirar. Se
@@ -142,9 +143,9 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 > estoura, e o vértice aparece repetido na ordem de visita.
 
 > [!TIP]
-> **Por dentro do C:** a fila da BFS é só `int fila[V]` com dois índices,
-> `inicio` e `fim`. Como cada vértice entra uma vez só, `fim` nunca passa de V e
-> não precisa nem da fila circular. Tirar do início deslocando todos os
+> **Por dentro do C:** a fila da BFS é um `int fila[V]` com dois índices,
+> `inicio` e `fim`. Como cada vértice entra uma vez só, `fim` nunca passa de V,
+> e a fila circular é dispensável. Tirar do início deslocando todos os
 > elementos uma casa para trás custaria O(n) a cada saída; aqui,
 > `fila[inicio++]` é O(1). O custo total da BFS é O(V²) com matriz (para cada
 > vértice, varre a linha inteira) e O(V + E) com lista de adjacência. Os três

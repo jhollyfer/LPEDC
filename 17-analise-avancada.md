@@ -4,21 +4,19 @@
 
 No módulo 10 você aprendeu a contar passos e a ler a classe de um código
 pelos laços: um laço é O(n), dois aninhados são O(n²), um laço que divide por
-2 é O(log n). Funciona muito bem até aparecer uma função que chama a si
+2 é O(log n). Isso funciona até aparecer uma função que chama a si
 mesma. Quanto custa o merge sort? O "n log n" que você leu no módulo 13 veio
 de um desenho e de um pouco de fé. Aqui ele vira conta.
 
-Este módulo traz as ferramentas que faltavam para medir de verdade. A
-**recorrência** transforma o código recursivo numa equação, e a **árvore de
+Este módulo traz as ferramentas que faltavam. A **recorrência** transforma o código recursivo numa equação, e a **árvore de
 recursão** resolve a equação somando nível por nível. O **teorema mestre**
 resolve de uma vez as recorrências de divisão e conquista mais comuns. A
 **análise amortizada** explica por que o vetor que dobra é barato, mesmo
-copiando tudo de vez em quando. E o **limite inferior** responde a uma
-pergunta nova: não "quanto custa este algoritmo?", mas "dá para fazer
-melhor?". Para ordenar comparando, não dá: n log n é o piso.
+copiando tudo de vez em quando. E o **limite inferior** troca a pergunta
+"quanto custa este algoritmo?" por "dá para fazer melhor?". Para ordenar
+comparando, não dá: n log n é o piso.
 
-A mudança na cabeça é olhar para o custo como um objeto que se calcula, se
-prevê e se confere. No último assunto, você usa tudo isso para prever quanto
+O custo passa a ser algo que você calcula, prevê e confere. No último assunto, você usa tudo isso para prever quanto
 tempo quatro ordenações levam com 1 milhão de elementos, a partir de uma
 medida com 16 mil, e confere a previsão no computador.
 
@@ -31,35 +29,6 @@ medida com 16 mil, e confere a previsão no computador.
 - a **árvore de decisão** e o limite **Ω(n log n)** para ordenar por comparação
 - as notações **Θ** e **Ω**, ao lado do **O** que você já conhece
 - **medir** com `clock()` e contadores, e **prever** o tempo para entradas grandes
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: a árvore de recursão, a tabela
-   de níveis ou a árvore de decisão do exemplo, com os mesmos números do código.
-2. Leia o código. Quase todo exemplo deste módulo conta alguma coisa
-   (chamadas, cópias, comparações) e confere a contagem com a fórmula.
-3. Faça o **Passo a passo** com papel e lápis: abrir uma recorrência à mão é
-   o melhor jeito de entender o que ela diz.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Mude o `n`, dobre, quadruplique, e veja se a contagem
-   cresce como a teoria manda.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos diagramas da ideia, **roxo** é trabalho sendo feito (uma chamada, um
-nível), **verde** é o que domina o custo ou o resultado, **amarelo** marca
-um empate ou uma pergunta, **vermelho** é o caro demais ou o que deu errado,
-e **cinza** é o que o exemplo não percorreu.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -83,6 +52,13 @@ os números de tempo mudam de máquina para máquina e de uma execução para
 outra; os de comparações, não. Os exercícios de "ache o erro" trazem o bug de
 propósito, e o enunciado avisa.
 
+Nos diagramas da ideia, **roxo** é trabalho sendo feito (uma chamada, um
+nível), **verde** é o que domina o custo ou o resultado, **amarelo** marca um
+empate e **vermelho** é o caro demais ou o que deu errado. Abra cada
+recorrência à mão no **Passo a passo** e responda a **Pergunta para você**
+antes de rodar: quase todo exemplo conta algo (chamadas, cópias,
+comparações) e confere a contagem com a fórmula.
+
 | # | Assunto | Pasta |
 | --- | --- | --- |
 | [0114](#0114--recorrências-e-árvore-de-recursão) | Recorrências e árvore de recursão | [`0114-recorrencias/`](17-analise-avancada/0114-recorrencias/) |
@@ -101,9 +77,8 @@ notas), divide em dois lotes iguais e entrega cada metade para um auditor.
 Cada auditor faz a mesma coisa: confere o seu lote, divide, repassa. Quando
 um lote fica com uma nota só, quem recebeu confere essa nota e pronto.
 
-Quantas notas são olhadas no total? Não dá para responder contando laços,
-como no módulo 10: o trabalho está escondido nas chamadas. É hora de uma
-ferramenta nova.
+Quantas notas são olhadas no total? Contar laços, como no módulo 10, não
+resolve: o trabalho está escondido nas chamadas.
 
 Uma **recorrência** é uma equação que dá o custo de uma função recursiva em
 termos do custo dela mesma com entradas menores. Chamando de `T(n)` o custo
@@ -127,19 +102,18 @@ dois lados), o jeito mais visual é a **árvore de recursão**: cada chamada
 vira um nó com o trabalho que ela faz sozinha, e você soma **nível por
 nível**. O nível `k` tem `2^k` chamadas, cada uma com um lote de `n/2^k`
 notas: o nível inteiro custa `2^k · n/2^k = n`. Os lotes caem pela metade até
-chegar em 1, então são `log₂ n + 1` níveis. Total: `n log₂ n + n`, ou seja,
+chegar em 1, então são `log₂ n + 1` níveis. Total: `n log₂ n + n`, que é
 **Θ(n log n)**.
 
 O **Θ** (teta) é novo: ele diz que a função cresce **exatamente** naquele
-ritmo, nem mais rápido nem mais devagar. O `O` do assunto 0072 é só um teto;
+ritmo, nem mais rápido nem mais devagar. O `O` do assunto 0072 é um teto;
 o Θ é teto e piso ao mesmo tempo. Quando você resolve uma recorrência até a
 fórmula, sabe o ritmo exato, e o Θ é a palavra certa (as definições formais
 de O, Ω e Θ estão no assunto 0166). O Cormen ensina três métodos para
 resolver: a **substituição** (chutar a resposta e provar por indução), a
 árvore de recursão e o teorema mestre, do próximo assunto.
 
-A forma da recorrência decide a forma da árvore. As cinco que você mais vai
-ver:
+A forma da recorrência decide a forma da árvore. As cinco mais comuns:
 
 | recorrência | árvore | resultado | exemplo |
 | --- | --- | --- | --- |
@@ -149,9 +123,8 @@ ver:
 | `T(n) = 2 T(n/2) + n` | binária, log n níveis de custo n | Θ(n log n) | merge sort, a auditoria |
 | `T(n) = 2 T(n-1) + 1` | binária, n níveis que dobram | Θ(2ⁿ) | Hanói (assunto 0033) |
 
-Vamos ver na prática. Um lote de 8 notas. Cada caixa é uma chamada, com o
-tamanho do lote que ela confere. Some cada linha: dá 8 em todas, e são 4
-linhas:
+Tome um lote de 8 notas. Cada caixa é uma chamada, com o tamanho do lote que
+ela confere. Some cada linha: dá 8 em todas, e são 4 linhas:
 
 <p align="center"><img src="17-analise-avancada/0114-recorrencias/ideia.svg" alt="Diagrama da ideia: Recorrências e árvore de recursão" width="858"></p>
 
@@ -219,10 +192,10 @@ int main(void) {
 // 1048576     22020096     22020096
 ```
 
-Repara no fluxograma: é a função `audita` inteira, e ele não tem laço. A
-repetição está escondida nas duas caixas `audita`: cada uma é o fluxograma
-inteiro de novo, para uma metade. Duas caixas com metade do lote: é isso que
-o `2 T(n/2)` da recorrência conta. A caixa `custo_nivel += n` é o `+ n`:
+O fluxograma é a função `audita` inteira, e não tem laço. A repetição está
+nas duas caixas `audita`: cada uma é o fluxograma inteiro de novo, para uma
+metade. Essas duas caixas são o `2 T(n/2)` da recorrência; a caixa
+`custo_nivel += n` é o `+ n`:
 
 <p align="center"><img src="17-analise-avancada/0114-recorrencias/fluxograma.svg" alt="Fluxograma: Recorrências e árvore de recursão" width="350"></p>
 
@@ -243,19 +216,18 @@ Bate com a árvore (4 níveis de 8) e com o programa.
 > "Duas chamadas recursivas" não diz nada sozinho: o que decide é **o
 > tamanho** que cada chamada recebe. `2 T(n/2) + 1` (achar o máximo dividindo
 > o vetor ao meio) dá Θ(n): umas `2n` chamadas. `2 T(n-1) + 1` (Hanói) dá
-> Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas. A diferença entre `n/2` e `n-1`
-> na chamada é a diferença entre um programa instantâneo e um que não termina
-> hoje. Leia com cuidado os argumentos de cada chamada antes de escrever a
-> recorrência.
+> Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas. Entre `n/2` e `n-1`
+> está a diferença entre um programa instantâneo e um que não termina hoje.
+> Leia os argumentos de cada chamada antes de escrever a recorrência.
 
 > [!TIP]
 > **Por dentro do C:** a árvore de recursão é o **filme** da pilha de
 > chamadas (assunto 0031). Cada nó é um frame que nasce, trabalha e morre; a
 > ordem em que o programa visita os nós é a de uma DFS na árvore. Por isso o
 > **tempo** é a soma de todos os nós (`2n - 1 = 15` chamadas para 8 notas),
-> mas a **memória** da pilha é só a altura: no máximo `log₂ n + 1 = 4` frames
+> mas a **memória** da pilha é a altura: no máximo `log₂ n + 1 = 4` frames
 > vivos ao mesmo tempo. Para 1 milhão de notas, são 2 milhões de chamadas e
-> só 21 frames empilhados. A pilha só estoura quando a árvore é **funda**,
+> 21 frames empilhados. A pilha só estoura quando a árvore é **funda**,
 > como na linha de `n` nós de `T(n-1) + 1`.
 
 > [!NOTE]
@@ -678,12 +650,12 @@ C(40) / C(39) = 1.6180
 
 Na declaração do Imposto de Renda, ninguém refaz a conta do imposto do zero.
 Você acha a sua faixa na tabela progressiva e lê a alíquota. A tabela já
-embute todo o cálculo: basta saber em que linha você cai.
+embute o cálculo: basta saber em que linha você cai.
 
 O **teorema mestre** é a tabela pronta das recorrências de divisão e
 conquista. No assunto anterior, cada recorrência pedia uma árvore de
 recursão desenhada e somada nível por nível. Para a forma mais comum, essa
-soma já foi feita uma vez, de modo geral, e o resultado cabe em três linhas.
+soma já foi feita em geral, e o resultado cabe em três linhas.
 
 A forma é esta:
 
@@ -698,8 +670,8 @@ T(n) = a T(n/b) + n^k
 
 De onde vêm as três linhas? Da árvore. No nível `j` há `a^j` chamadas, cada
 uma com tamanho `n/b^j`, custando `(n/b^j)^k`. O nível inteiro custa
-`n^k · (a/b^k)^j`. Ou seja: de um nível para o seguinte, o custo é
-multiplicado sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
+`n^k · (a/b^k)^j`: de um nível para o seguinte, o custo é multiplicado
+sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
 
 | caso | comparação | o custo por nível... | quem pesa | resultado |
 | --- | --- | --- | --- | --- |
@@ -709,11 +681,12 @@ multiplicado sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
 
 Quando o custo cresce (caso 1), o último nível manda: ele tem
 `a^(log_b n) = n^(log_b a)` folhas, e os níveis de cima, somados, não
-passam de um múltiplo fixo dele. Quando fica igual (caso 2), são `log_b n + 1` níveis de `n^k`. Quando
-cai (caso 3), a raiz sozinha já é uma fração fixa do total. Comparar `a`
+passam de um múltiplo fixo dele. Quando fica igual (caso 2), são
+`log_b n + 1` níveis de `n^k`. Quando cai (caso 3), a raiz sozinha já é uma
+fração fixa do total. Comparar `a`
 com `b^k` é o mesmo que comparar o expoente `log_b a` com `k`.
 
-Vamos ver na prática. Um escritório revisa um contrato de `n` páginas: o
+Um escritório revisa um contrato de `n` páginas: o
 revisor lê tudo (`n` páginas) e repassa **metade** do contrato para `a`
 estagiários, que fazem o mesmo. Só o `a` muda: 1, 2 ou 4 estagiários. Com
 `b = 2` e `k = 1`, temos `b^k = 2`, e cada valor de `a` cai numa linha
@@ -776,12 +749,12 @@ Confira com a tabela. Com `a = 1`, `1 < 2`: caso 3, a raiz domina, Θ(n),
 e o total é `2n - 1` (dobra quando `n` dobra). Com `a = 2`, `2 = 2`: caso 2,
 empate, Θ(n log n), exatamente `n log₂ n + n` (dobra e mais um pouco). Com
 `a = 4`, `4 > 2`: caso 1, as folhas dominam, Θ(n^(log₂ 4)) = Θ(n²), e o
-total é `2n² - n` (quadruplica). Três escritórios, a mesma leitura de `n` páginas no topo, e
-uma diferença de mil vezes em `n = 1024`.
+total é `2n² - n` (quadruplica). A leitura no topo é a mesma nos três
+escritórios; em `n = 1024`, o total difere por um fator de mil.
 
-Repara no fluxograma: é o teorema como receita. Primeiro a pergunta que
-ninguém pode pular (a recorrência tem a forma certa?), depois a comparação
-de `a` com `b^k`. O caminho marcado é o de `a = 2`:
+O fluxograma é o teorema como receita. Primeiro vem a pergunta que ninguém
+pode pular (a recorrência tem a forma certa?), depois a comparação de `a`
+com `b^k`. O caminho marcado é o de `a = 2`:
 
 <p align="center"><img src="17-analise-avancada/0115-teorema-mestre/fluxograma.svg" alt="Fluxograma: Teorema mestre" width="963"></p>
 
@@ -816,8 +789,8 @@ resolve dois desses casos.
 > `a` e `b` são coisas diferentes e não precisam ser iguais. `a` conta as
 > chamadas; `b` diz quanto cada uma encolhe. Os quatro estagiários do exemplo
 > recebem metade cada um, então é `4 T(n/2)`, e não `4 T(n/4)`: as metades se
-> sobrepõem, e é isso que faz o custo explodir. E o erro mais comum de todos:
-> aplicar o teorema em `T(n) = 2 T(n-1) + 1` (Hanói). Ali não existe `b`,
+> sobrepõem, e por isso o custo explode. O erro mais comum é aplicar o
+> teorema em `T(n) = 2 T(n-1) + 1` (Hanói). Ali não existe `b`,
 > porque `n - 1` não é `n` dividido por nada. Quem força `b = 1` chega num
 > absurdo; o certo é a árvore, que dá Θ(2ⁿ).
 
@@ -1264,13 +1237,12 @@ vida segue barata. Ninguém mede o custo de morar pela pior semana do ano.
 O vetor que cresce do assunto 0075 vive a mesma coisa. Inserir no fim custa
 uma escrita, até o dia em que o vetor enche: aí é preciso alocar um maior e
 **copiar tudo**. Olhando uma operação isolada, o pior caso de uma inserção é
-O(n). Multiplicando por `n` inserções, dá O(n²). A conta está certa, mas é
-pessimista demais: as inserções caras não acontecem uma atrás da outra.
+O(n). Multiplicando por `n` inserções, dá O(n²). A conta está certa, mas
+pessimista: as inserções caras não acontecem uma atrás da outra.
 
 A **análise amortizada** mede o custo de uma **sequência** de operações, no
 pior caso, e divide pelo número de operações. O resultado é o **custo
-amortizado** por operação: uma garantia sobre o total, sem nenhum sorteio
-envolvido.
+amortizado** por operação: uma garantia sobre o total, sem sorteio nenhum.
 
 O jeito mais direto é o **método agregado**: somar tudo. Com capacidade
 inicial 1 e dobrando quando enche, `n` inserções fazem `n` escritas mais as
@@ -1288,7 +1260,7 @@ O Cormen chama este de **método contábil** e traz um terceiro, o do
 **potencial**: o cofrinho vira uma função Φ do estado da estrutura. Com
 Φ = 2 · n - capacidade, cada inserção custa, amortizada, os mesmos 3.
 
-Vamos ver na prática. O app do banco guarda o histórico de Pix num vetor que
+O app do banco guarda o histórico de Pix num vetor que
 começa com 1 posição e dobra quando enche. Chegam 16 Pix. As inserções 2, 3,
 5 e 9 são as mudanças, em vermelho; o cofrinho embaixo cai nelas e se
 recupera depois:
@@ -1371,12 +1343,12 @@ As cópias somam `1 + 2 + 4 + 8 = 15`, mais 16 escritas: 31, menos de `2 · 16`.
 O cofrinho desce até 3 em cada mudança e nunca chega a zero. As duas contas
 dizem a mesma coisa: em média, menos de 2 por inserção, e nunca mais de 3.
 
-Repara no fluxograma: é o `insere` da 9ª inserção, a mais cara das 16. O
-vetor tem 8 de 8 ocupados, então o caminho passa pela mudança inteira:
+O fluxograma segue o `insere` da 9ª inserção, a mais cara das 16. O vetor
+tem 8 de 8 ocupados, então o caminho passa pela mudança inteira:
 
 <p align="center"><img src="17-analise-avancada/0116-amortizada/fluxograma.svg" alt="Fluxograma: Análise amortizada" width="378"></p>
 
-O vetor que dobra não é o único caso. O assunto também aparece num
+A mesma análise aparece num
 **contador binário** (somar 1 às vezes vira muitos bits, mas em média vira
 menos de 2; exemplo A231) e numa **pilha com `multipop(k)`**, que tira até
 `k` itens de uma vez (cada item só sai uma vez depois de entrar; exemplo
@@ -1387,8 +1359,8 @@ Duas confusões comuns. Amortizado **não** é caso médio: o caso médio supõe
 entradas sorteadas, e o amortizado vale para a **pior** sequência possível.
 E amortizado **não** garante que cada operação é rápida: a 1.048.577ª
 inserção copia mais de um milhão de elementos de uma vez. Para quem conta o
-total, tudo bem; para um sistema que não pode travar nem por um instante,
-pode não estar.
+total, tanto faz; um sistema que não pode travar nem por um instante precisa
+de outra solução.
 
 > [!WARNING]
 > Crescer de um **tamanho fixo** em vez de multiplicar estraga tudo. Com
@@ -1402,7 +1374,7 @@ pode não estar.
 > [!TIP]
 > **Por dentro do C:** na prática você usa `realloc` (assunto 0055), e às
 > vezes ele nem copia: se o espaço logo depois do bloco estiver livre, ele
-> só estica o bloco no lugar. Mas isso não é garantido, e a análise conta o
+> estica o bloco no lugar. Isso não é garantido, e a análise conta o
 > pior caso: copiar tudo. O preço do O(1) amortizado é memória: logo depois
 > de dobrar, metade do vetor está vazia. Com 1.048.577 inteiros, o vetor
 > ocupa espaço para 2.097.152, 8 MB em vez de 4 MB. E lembre do `realloc`
@@ -1841,10 +1813,10 @@ método possível?
 
 Até aqui, toda análise media **um algoritmo**: o merge sort faz tantas
 comparações, o insertion sort faz tantas. A pergunta agora é sobre o
-**problema**: existe algum jeito de ordenar com menos? Responder isso para
-todos os algoritmos de uma vez, inclusive os que ninguém inventou ainda,
-parece impossível. Não é, desde que eles só aprendam sobre os dados
-**comparando** dois elementos, como a balança. Esses são os algoritmos de
+**problema**: existe algum jeito de ordenar com menos? Dá para responder
+isso para todos os algoritmos de uma vez, inclusive os que ninguém inventou
+ainda, desde que eles só aprendam sobre os dados **comparando** dois
+elementos, como a balança. Esses são os algoritmos de
 **ordenação por comparação**: todos os do módulo 13, o heapsort e o `qsort`.
 
 A ferramenta é a **árvore de decisão**. Cada nó interno é uma pergunta
@@ -1853,7 +1825,7 @@ folha é uma resposta final: a ordem das encomendas. Rodar o algoritmo numa
 entrada é descer da raiz até uma folha. O número de comparações no pior caso
 é a **altura** da árvore.
 
-Agora o argumento, em três passos:
+O argumento tem três passos:
 
 1. Com 3 encomendas há `3! = 6` ordens possíveis, e cada uma precisa ter a
    sua folha: se duas entradas com ordens diferentes chegassem à mesma
@@ -1864,17 +1836,16 @@ Agora o argumento, em três passos:
 
 Nenhum método, por mais esperto, ordena 3 encomendas com menos de 3
 pesagens no pior caso. Para `n` elementos, o mesmo raciocínio dá
-`2^h ≥ n!`, ou seja, **`h ≥ log₂(n!)`**.
+`2^h ≥ n!`, isto é, **`h ≥ log₂(n!)`**.
 
-Vamos ver na prática. Este é o insertion sort de 3 elementos desenhado como
-árvore de decisão. O caminho em verde é o da entrada A = 5 kg, B = 9 kg e
+O desenho mostra o insertion sort de 3 elementos como árvore de decisão. O caminho em verde é o da entrada A = 5 kg, B = 9 kg e
 C = 2 kg, que termina na folha C A B depois de 3 pesagens:
 
 <p align="center"><img src="17-analise-avancada/0117-limite-inferior/ideia.svg" alt="Diagrama da ideia: Limite inferior da ordenação" width="884"></p>
 
 O programa passa as 6 ordens possíveis pela balança. A função
-`mais_pesada` é a única forma de o algoritmo olhar os pesos, e ela anota
-cada pergunta:
+`mais_pesada` é o único acesso do algoritmo aos pesos, e ela anota cada
+pergunta:
 
 ```c
 #include <stdio.h>
@@ -1936,11 +1907,11 @@ int main(void) {
 ```
 
 Cada linha da saída é um caminho da raiz até uma folha, e as 6 folhas são
-diferentes. Duas entradas têm sorte e param com 2 pesagens, mas o pior caso
-é 3: exatamente o limite. Para 3 elementos, o insertion sort é **ótimo**.
+diferentes. Duas entradas param com 2 pesagens, mas o pior caso é 3, igual
+ao limite. Para 3 elementos, o insertion sort é **ótimo**.
 
-Repara no fluxograma: é o argumento inteiro, sem nenhum algoritmo
-específico. Ele vale para qualquer método que só compara:
+O fluxograma traz o argumento inteiro, sem algoritmo específico. Ele vale
+para qualquer método que só compara:
 
 <p align="center"><img src="17-analise-avancada/0117-limite-inferior/fluxograma.svg" alt="Fluxograma: Limite inferior da ordenação" width="442"></p>
 
@@ -1960,7 +1931,7 @@ O limite inferior se escreve com **Ω** (ômega): ordenar por comparação é
 **Ω(n log n)** no pior caso. É o piso, o contrário do teto `O`. Como o merge
 sort e o heapsort fazem O(n log n), eles encostam no piso: são
 **assintoticamente ótimos**. Ninguém vai inventar uma ordenação por
-comparação O(n) ou O(n log log n). O que dá para ganhar é constante.
+comparação O(n) ou O(n log log n); dá para ganhar só na constante.
 
 > [!WARNING]
 > O limite fala do **pior caso** de **qualquer** algoritmo que só compara.
@@ -1972,8 +1943,8 @@ comparação O(n) ou O(n log log n). O que dá para ganhar é constante.
 > precisa só de `n - 1` comparações, e não de `n log n`.
 
 > [!TIP]
-> **Por dentro do C:** o `qsort` da biblioteca é o modelo de comparação em
-> pessoa. Ele recebe o vetor como `void *` e uma função `compara`, e nunca
+> **Por dentro do C:** o `qsort` da biblioteca segue à risca o modelo de
+> comparação. Ele recebe o vetor como `void *` e uma função `compara`, e nunca
 > olha os bytes dos elementos por conta própria: tudo o que ele sabe sobre a
 > ordem vem das respostas da sua função, uma de cada vez. Por isso nenhuma
 > implementação de `qsort`, em nenhuma biblioteca, consegue fazer menos de
@@ -2470,12 +2441,10 @@ pior caso: 5 comparações (limite: 5)
 
 A loja virtual vai mudar o relatório do fim do dia: em vez de 16 mil pedidos,
 agora ele vai ordenar **1 milhão**. O programador testou com 16 mil e mediu
-alguns milissegundos. A pergunta da gerente é simples: "e com 1 milhão,
-quanto tempo vai levar?". Rodar para ver pode demorar meia hora. Dá para
-**prever** antes?
+alguns milissegundos. A gerente pergunta: "e com 1 milhão, quanto tempo vai
+levar?". Rodar para ver pode demorar meia hora. Dá para **prever** antes?
 
-Dá, e é para isso que serve tudo o que veio neste módulo. A receita tem
-quatro passos:
+Dá, com o que veio neste módulo. A receita tem quatro passos:
 
 1. **Conhecer a classe.** Pela recorrência ou pela contagem: o insertion
    sort é `T(n) = T(n-1) + n`, Θ(n²); o merge sort é `2 T(n/2) + n`,
@@ -2510,7 +2479,7 @@ long ord_contagem(void);
 int ord_confere(const int v[], int n);
 ```
 
-Vamos ver na prática. Os pedidos são números sorteados com um gerador
+Os pedidos são números sorteados com um gerador
 próprio, para a entrada ser a mesma em qualquer máquina. Cada algoritmo
 ordena 8 mil e 16 mil; da razão sai a confirmação da classe, e da medida de
 16 mil sai a previsão para 1 milhão. Em verde, o que a previsão acertou; em
@@ -2613,15 +2582,15 @@ int main(void) {
 //   medido para 1 milhão:       25.0 milhões de comparações,    0.26 s
 ```
 
-Leia a saída em três camadas. As **razões** confirmam as classes: ×4,00 no
+A saída tem três camadas. As **razões** confirmam as classes: ×4,00 no
 insertion, ×2,17 a ×2,29 nos outros três. As **previsões** de comparações
 ficaram a menos de 4% do medido: o modelo `n log n` ignora termos menores,
 então erra um pouco para baixo. E o **tempo** do insertion para 1 milhão,
 1.600 segundos, é uns 27 minutos, contra um terço de segundo do merge sort:
 a mesma tarefa, mais de 5 mil vezes mais lenta.
 
-Repara no fluxograma: é a receita, para um algoritmo. O caminho marcado é o
-do merge sort, que passa pela previsão e pela conferência:
+O fluxograma aplica a receita a um algoritmo. O caminho marcado é o do merge
+sort, que passa pela previsão e pela conferência:
 
 <p align="center"><img src="17-analise-avancada/0118-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="527"></p>
 
@@ -2640,7 +2609,7 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 > [!WARNING]
 > Na classe n log n, dobrar `n` **não** dá ×2 exato. De 8 mil para 16 mil, a
 > conta é `2 · log₂ 16.000 / log₂ 8.000 = 2,15`, e quem espera ×2 acha que o
-> algoritmo "está piorando". E o contrário também engana: com `n` pequeno
+> algoritmo "está piorando". O contrário também engana: com `n` pequeno
 > (algumas centenas), o tempo é dominado por constantes, chamadas de função e
 > cache, e as razões saem malucas. Meça com tamanhos grandes o bastante para
 > o tempo passar de alguns milissegundos, e sempre a partir da **mesma
@@ -2656,8 +2625,8 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 > converte para `double` antes de dividir. E lembre que o `rodar` compila sem
 > otimização e com o AddressSanitizer, que vigia cada acesso à memória: os
 > tempos aqui são várias vezes maiores que os de um `gcc -O2` sem
-> sanitizador. As **razões**, porém, continuam valendo, e é com elas que a
-> previsão trabalha.
+> sanitizador. As **razões** continuam valendo, e a previsão trabalha com
+> elas.
 
 > [!NOTE]
 > **Pergunta para você:** o quick sort daqui usa o elemento do meio como
@@ -3123,10 +3092,9 @@ um incremento por vez. Quantas trocas de bit acontecem no total?
 <details><summary>Resposta</summary>
 
 O bit 0 troca 1023 vezes, o bit 1, 511, o bit 2, 255... o bit 9, 1 vez. A
-soma é `(1024 - 1) + (512 - 1) + ... + (2 - 1) = 2046 - 10`, ou seja,
-**2036 trocas**. Em
-geral, `n` incrementos a partir do zero fazem `2n` menos a quantidade de bits
-1 de `n`: aqui, `2 · 1023 - 10`. Menos de 2 por incremento, como no A231.
+soma é `(1024 - 1) + (512 - 1) + ... + (2 - 1) = 2046 - 10`:
+**2036 trocas**. Em geral, `n` incrementos a partir do zero fazem `2n` menos
+a quantidade de bits 1 de `n`: aqui, `2 · 1023 - 10`. Menos de 2 por incremento, como no A231.
 
 </details>
 
@@ -3154,8 +3122,8 @@ Um **torneio**: os 16 jogam em pares, os vencedores jogam em pares, até
 sobrar o campeão. São 15 comparações (todo mundo, menos o campeão, perde uma
 vez). O segundo maior só pode ter perdido **para o campeão**, e o campeão
 jogou `log₂ 16 = 4` vezes. O máximo entre esses 4 adversários sai com 3
-comparações: `15 + 3`, **18 comparações**. Em geral, `n + ⌈log₂ n⌉ - 2`. Guarde, para
-cada vencedor, a lista de quem ele derrotou.
+comparações: `15 + 3`, **18 comparações**. Em geral, `n + ⌈log₂ n⌉ - 2`.
+Guarde, para cada vencedor, a lista de quem ele derrotou.
 
 </details>
 
@@ -3181,7 +3149,7 @@ expoente provável do custo? Quanto deve levar com 400 mil?
 <details><summary>Resposta</summary>
 
 A razão é `3,4 / 1,2 ≈ 2,83`. Se o custo é `n^p`, dobrar `n` multiplica por
-`2^p`: `p = log₂ 2,83`, ou seja, **p ≈ 1,5**. De 100 mil para 400 mil, o tamanho
+`2^p`: `p = log₂ 2,83`, logo **p ≈ 1,5**. De 100 mil para 400 mil, o tamanho
 multiplica por 4 e o tempo por `4^1,5 = 8`: **uns 27 segundos**. Antes de
 confiar, meça mais um ponto (200 mil deve dar uns 9,6 s): duas medidas
 apenas não distinguem `n^1,5` de, digamos, `n log² n`.

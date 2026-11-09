@@ -22,12 +22,11 @@ Três regras que pegam todo iniciante:
 
 - **O índice começa em 0** e vai até `tamanho - 1`. Num vetor de 7, o último é
   `passos[6]`. O "sétimo elemento" é `passos[6]`; `passos[7]` não existe.
-- **O tamanho é fixo.** Ele é
-  decidido na declaração e nunca muda. Use um `#define` para ele: muda num
+- **O tamanho é fixo.** É decidido na declaração e nunca muda. Use um `#define` para ele: muda num
   lugar só e o laço acompanha. (Desde o C99 o tamanho pode vir de uma
   variável, `int v[n];`: é o **VLA**, assunto 0172. Ainda assim, depois de
   criado, não cresce.)
-- **Vetor não tem `.length`.** Quem sabe o tamanho é você. Dentro do bloco onde
+- **Vetor não tem `.length`.** Quem sabe o tamanho é você. Dentro do bloco em que
   ele foi declarado, `sizeof(v) / sizeof(v[0])` dá a conta (bytes do vetor
   divididos pelos bytes de um item).
 
@@ -40,13 +39,13 @@ Duas coisas que **não** funcionam: atribuir um vetor inteiro (`copia = passos;`
 nem compila) e inicializar com chaves depois da declaração (`passos = {1, 2};`
 também não). Vetor se copia gaveta por gaveta, num laço.
 
-Vamos ver na prática. São 7 gavetas, uma por dia. O laço passa por todas
-somando e guardando a maior. O recorde está na gaveta 5, que é o **dia 6** para
+No exemplo, são 7 gavetas, uma por dia. O laço passa por todas, somando e
+guardando a maior. O recorde está na gaveta 5, que é o **dia 6** para
 quem lê o relatório:
 
 {{ideia}}
 
-O código percorre as gavetas com `i` de 0 a 6. Repare que o `maior` começa com
+O código percorre as gavetas com `i` de 0 a 6. O `maior` começa com
 `passos[0]`, e não com 0:
 
 ```c
@@ -81,8 +80,8 @@ int main(void) {
 // Recorde: 15300 passos no dia 6
 ```
 
-Repara no fluxograma: é o padrão acumulador e o padrão maior/menor do assunto
-0025, só que agora os valores vêm das gavetas do vetor, e não do teclado. A
+O caminho junta o acumulador e o maior/menor do assunto 0025, com os valores
+vindo das gavetas do vetor em vez do teclado. A
 pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 
 {{fluxograma}}
@@ -93,17 +92,16 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > variável sua. É **comportamento indefinido**: às vezes nada acontece, às
 > vezes outro valor muda "sozinho", às vezes o programa cai. O erro clássico é o
 > `<=` no laço: `for (i = 0; i <= 7; i++)` passa uma vez a mais. Ler
-> `v[99]` não dá erro nenhum: devolve o que estiver lá. O `rodar` usa
-> o AddressSanitizer, que pega esse erro e mostra `stack-buffer-overflow`.
+> `v[99]` devolve o que estiver lá. O `rodar` usa o AddressSanitizer, que
+> pega esse erro e mostra `stack-buffer-overflow`.
 
 > [!TIP]
 > **Por dentro do C:** as 7 gavetas são 28 bytes seguidos na memória (7 × 4
 > bytes). O nome `passos` marca onde o vetor começa, e o índice diz **quantos
-> itens pular**: `passos[5]` fica em início + 5 × 4 bytes. Por isso o primeiro
-> é o 0 (pula zero itens) e por isso acessar qualquer posição custa o mesmo,
-> seja a 0 ou a 999: é uma conta, não uma busca. E por isso o C não confere o
-> limite: ele só faz a conta e vai até lá. Vetor local sem inicializar tem lixo,
-> igual a qualquer variável local.
+> itens pular**: `passos[5]` fica em início + 5 × 4 bytes. Daí o primeiro ser
+> o 0 (pula zero itens) e o acesso custar o mesmo na posição 0 ou na 999: é
+> uma conta, não uma busca. O C também não confere o limite: faz a conta e vai
+> até lá. Vetor local sem inicializar tem lixo, igual a qualquer variável local.
 
 > [!NOTE]
 > **Pergunta para você:** se o `maior` começasse com 0 e os valores fossem

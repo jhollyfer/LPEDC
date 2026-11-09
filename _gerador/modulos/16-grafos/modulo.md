@@ -6,18 +6,16 @@ real não é tão educado. Ruas se cruzam e fecham voltas, pessoas se seguem sem
 reciprocidade, pacotes dependem uns dos outros. Para tudo isso existe o
 **grafo**: pontos e ligações, sem regra de forma.
 
-Grafo é a estrutura que mais aparece fora da sala de aula. O GPS que acha a
-rota, a rede social que sugere amigos, o gerenciador de pacotes que descobre a ordem
-de instalar dependências e reclama de dependência circular, o roteador que escolhe
-por onde mandar o pacote: todos rodam alguma variação dos algoritmos deste
-módulo.
+Fora da sala de aula, grafo aparece em todo canto. O GPS que acha a rota, a
+rede social que sugere amigos, o gerenciador de pacotes que ordena as
+dependências e reclama de dependência circular, o roteador que escolhe por
+onde mandar o pacote: todos rodam alguma variação dos algoritmos deste módulo.
 
-A mudança na cabeça é parar de perguntar "qual é o próximo?" e começar a
-perguntar "quem são os vizinhos, e em que ordem eu visito?". Quase tudo aqui
-é a mesma ideia de **busca**, com uma estrutura auxiliar diferente: a pilha
-da recursão (DFS), a fila (BFS) ou o "menor primeiro" (Dijkstra). Este módulo
-fecha o curso juntando o que veio antes: matrizes, `malloc`, listas, filas,
-pilhas, recursão, structs e heap.
+A pergunta deixa de ser "qual é o próximo?" e passa a ser "quem são os
+vizinhos, e em que ordem eu visito?". Quase tudo aqui é a mesma **busca** com
+uma estrutura auxiliar diferente: a pilha da recursão (DFS), a fila (BFS) ou
+o "menor primeiro" (Dijkstra). O módulo usa muito do que veio antes:
+matrizes, `malloc`, listas, filas, pilhas, recursão, structs e heap.
 
 ## O que você vai aprender
 
@@ -28,41 +26,23 @@ pilhas, recursão, structs e heap.
 - o algoritmo de **Dijkstra** para o caminho mínimo com pesos, e a armadilha do INFINITO que estoura
 - escolher o algoritmo certo para cada pergunta, e um bônus: a **árvore geradora mínima** com Prim
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com o
-   grafo e a ordem da visita marcada.
-2. Leia o código. É o mesmo exemplo, com os mesmos vértices e pesos.
-3. Siga o **fluxograma** com o dedo e faça o **teste de mesa** da fila, da
-   pilha ou do vetor de distâncias. Em grafos, o teste de mesa é metade do
-   aprendizado.
-4. Rode os exemplos. Apague uma aresta, mude um peso, troque a origem, rode
-   de novo e veja a ordem mudar.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Nos grafos, a origem da busca fica roxa, o destino verde, e as arestas
-verdes são as que a busca usou (a árvore da busca ou a rota final).
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você vai usar sem cerimônia: matrizes (0039), structs e `typedef` (0059 e
 0060), `malloc` e `free` (0054), lista encadeada (0076), pilha (0082), fila
 (0085), recursão (0032) e, no último assunto, heap (0102). Se algum desses
-estiver enferrujado, dê uma revisada antes.
+estiver enferrujado, revise antes.
 
-Os vértices são sempre números de 0 a V-1, e o nome de cada um fica num
-vetor de strings à parte. Nos exemplos, os vizinhos são examinados em ordem
-crescente de índice. Isso decide empates e a ordem da visita: se você mudar a
-numeração, a saída muda, e não está errada.
+Nos desenhos, a origem da busca fica roxa, o destino verde, e as arestas
+verdes são as que a busca usou (a árvore da busca ou a rota final). Faça o
+teste de mesa da fila, da pilha ou do vetor de distâncias no papel (em
+grafos, ele é metade do aprendizado) e responda a **Pergunta para você**
+antes de rodar.
+
+Os vértices são números de 0 a V-1, e o nome de cada um fica num vetor de
+strings à parte. Os exemplos examinam os vizinhos em ordem crescente de
+índice, o que decide empates e a ordem da visita: mude a numeração e a saída
+muda, sem estar errada.
 
 O assunto 0109 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
 `rodar` compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
@@ -271,7 +251,7 @@ tabela de todas as distâncias. Existe um jeito com três laços aninhados, o
 **Floyd-Warshall**: `para k, para i, para j: d[i][j] = min(d[i][j], d[i][k] +
 d[k][j])`. Escreva-o para o mapa do assunto 0113 (com a Ilha), começando com
 `d[i][i] = 0`, os km das estradas e `INFINITO` no resto, e mostre a tabela
-(`-` onde não há caminho) e quantas vezes o laço de dentro rodou.
+(`-` quando não há caminho) e quantas vezes o laço de dentro rodou.
 
 <details><summary>Resposta</summary>
 
@@ -288,7 +268,7 @@ Passos do laço de dentro: 343
 ```
 
 São V³ = 7³ = 343 passos: O(V³), igual a V execuções do Dijkstra com matriz,
-mas com código bem menor. O cuidado é o do assunto 0112: com `INT_MAX`,
+com código bem menor. O cuidado é o do assunto 0112: com `INT_MAX`,
 `d[i][k] + d[k][j]` estoura. Use `#define INFINITO 1000000000`, que somado
 duas vezes ainda cabe em `int`, e mostre `-` quando `d[i][j] >= INFINITO`.
 A linha do CD confere com o Dijkstra do assunto 0113: 10 km até a Vila.

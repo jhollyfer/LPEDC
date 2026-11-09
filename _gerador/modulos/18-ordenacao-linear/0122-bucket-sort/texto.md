@@ -15,30 +15,30 @@ valores em **faixas** de mesmo tamanho, uma por **balde**, e:
 3. **concatena** os baldes, do primeiro ao último.
 
 Funciona porque a função que escolhe o balde **preserva a ordem**: tudo que
-está no balde 2 é menor que tudo que está no balde 4. É quase uma tabela hash
-(assunto 0105), só que ao contrário: o hash quer espalhar sem ordem, o
+está no balde 2 é menor que tudo que está no balde 4. Lembra uma tabela hash
+(assunto 0105) com o objetivo oposto: o hash quer espalhar sem ordem, o
 bucket sort quer espalhar **em ordem**.
 
 Cada balde é uma **lista encadeada** (assunto 0076): não dá para saber de
 antemão quantos elementos caem em cada um. E em vez de ordenar a lista
 depois, cada elemento já entra **no lugar certo** da lista, como na lista
-ordenada do assunto 0078. Isso é o insertion sort feito na lista.
+ordenada do assunto 0078: o insertion sort feito na lista.
 
-Quanto custa? Se os `n` valores estão bem **espalhados** pelo intervalo e há
+Se os `n` valores estão bem **espalhados** pelo intervalo e há
 uns `n` baldes, cada balde recebe em média um elemento, e o custo total é
 **O(n)** em média. Se todos caem no mesmo balde, sobra um insertion sort de
 `n` elementos: **O(n²)**. O bucket sort aposta na distribuição dos dados.
 O Cormen apresenta a versão com valores em [0, 1) e `n` baldes: `x` vai para
 o balde ⌊n · x⌋, e o Θ(n) médio supõe valores **uniformes** no intervalo.
 
-Vamos ver na prática. Dez notas finais, dez baldes. Três notas caem no balde
-2 e entram em ordem na lista; quatro baldes ficam vazios. Ler os baldes de
-cima para baixo já dá o vetor ordenado:
+No exemplo, dez notas finais vão para dez baldes. Três notas caem no balde 2
+e entram em ordem na lista; quatro baldes ficam vazios. Ler os baldes de cima
+para baixo já dá o vetor ordenado:
 
 {{ideia}}
 
-O mesmo exemplo em C. Os baldes são um vetor de 10 ponteiros para lista,
-todos começando em `NULL`:
+Em C, os baldes são um vetor de 10 ponteiros para lista, todos começando em
+`NULL`:
 
 ```c
 #include <stdio.h>
@@ -117,10 +117,9 @@ int main(void) {
 // ordenadas: 0.8 2.2 2.7 2.9 4.1 4.5 6.4 6.9 8.1 9.6
 ```
 
-Repara no fluxograma: o laço de espalhar passa uma vez pelo vetor, e o de
-juntar passa uma vez por cada balde e cada nó. O trabalho escondido está no
-`insere_ordenado`, que anda pela lista do balde: com baldes curtos, é quase
-nada:
+O laço de espalhar passa uma vez pelo vetor, e o de juntar passa uma vez por
+cada balde e cada nó. O trabalho escondido está no `insere_ordenado`, que
+anda pela lista do balde; com baldes curtos, ele quase não pesa:
 
 {{fluxograma}}
 
@@ -138,8 +137,8 @@ nada:
 > junto. Para 10 notas tanto faz, mas para 1 milhão são 1 milhão de chamadas
 > ao alocador e nós espalhados pelo heap, o que o cache detesta. Por isso
 > implementações rápidas fazem uma **contagem** antes (quantos vão para cada
-> balde) e usam um vetor só, dividido em pedaços, sem lista nenhuma. É o
-> counting sort do assunto 0120 com chaves que são faixas. E cada `malloc`
+> balde) e usam um vetor só, dividido em pedaços, sem lista: o counting sort
+> do assunto 0120 com chaves que são faixas. E cada `malloc`
 > pede o seu `free`: este código libera cada nó logo depois de copiar o
 > valor.
 

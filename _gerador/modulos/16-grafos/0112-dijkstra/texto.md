@@ -26,16 +26,16 @@ perguntar: "passar por `u` encurta o caminho até `v`?" Em código,
 No Cormen, o começo se chama `INITIALIZE-SINGLE-SOURCE`, o teste é o
 `RELAX(u, v, w)`, os vetores são `v.d` e `v.π`, e os fixos formam o conjunto S.
 
-Por que dá para fixar o menor? Porque, com pesos não negativos, qualquer
-outro caminho até ele passaria por um vértice que já tem `dist` maior ou
-igual, e somar pesos só aumenta. É um algoritmo **guloso**: a melhor escolha
+Dá para fixar o menor porque, com pesos não negativos, qualquer outro caminho
+até ele passaria por um vértice que já tem `dist` maior ou igual, e somar
+pesos só aumenta. É um algoritmo **guloso**: a melhor escolha
 de agora nunca precisa ser desfeita. Com uma aresta **negativa**, esse
 argumento cai e o Dijkstra pode fixar uma distância errada; aí entra o
 Bellman-Ford (assunto 0154), que relaxa todas as arestas V - 1 vezes.
 
-Vamos ver na prática. Os números nas arestas são minutos; o número em cima de
-cada lugar é a `dist` final; as arestas verdes formam a rota até a Praia, e
-embaixo está o vetor `dist` no fim:
+No mapa, os números nas arestas são minutos e o número em cima de cada lugar
+é a `dist` final. As arestas verdes formam a rota até a Praia; embaixo está o
+vetor `dist` no fim:
 
 {{ideia}}
 
@@ -103,16 +103,16 @@ int main(void) {
 // Rota até a Praia: Casa -> Escola -> Padaria -> Mercado -> Praia
 ```
 
-Repara no fluxograma: é a mesma estrutura da BFS, com a fila trocada por
-"escolher o menor `dist` não fixo". O laço termina quando todos estão fixos
-ou quando o menor que sobrou é INFINITO:
+A estrutura é a da BFS, com a fila trocada por "escolher o menor `dist` não
+fixo". O laço termina quando todos estão fixos ou quando o menor que sobrou é
+INFINITO:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-Cada linha fixa um vértice e relaxa os vizinhos dele. Repare na Padaria, que
-começa com 4 (rua direta) e cai para 3, e no Mercado, que cai de 9 para 8:
+Cada linha fixa um vértice e relaxa os vizinhos dele. A Padaria começa com 4
+(rua direta) e cai para 3; o Mercado cai de 9 para 8:
 
 | Fixa | Casa | Escola | Padaria | Mercado | Praia |
 | --- | --- | --- | --- | --- | --- |
@@ -130,7 +130,7 @@ reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 > [!WARNING]
 > `INT_MAX` como INFINITO é prático, mas `INT_MAX + 3` **estoura**: é
 > comportamento indefinido em `int` com sinal, e na prática vira um número
-> negativo que "ganha" de todo mundo no `<`. Isso acontece quando o algoritmo
+> negativo que "ganha" de todo mundo no `<`. Acontece quando o algoritmo
 > escolhe um vértice inalcançável e soma o peso das arestas dele. Por isso o
 > código só escolhe `u` com `dist[u] != INFINITO` e para quando não sobra
 > ninguém. Outra saída é usar um INFINITO folgado, como `1000000000`, que ainda

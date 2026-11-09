@@ -8,9 +8,9 @@ mesmo segundo do menor para o maior valor.
 
 O caminho de sempre é o `qsort` (assunto 0096): ele ordena qualquer coisa,
 desde que você dê uma função de comparação. Para 1 milhão de registros, são
-uns 20 milhões de comparações, e cada uma é uma **chamada de função** por
-ponteiro. Mas aqui as chaves são inteiros: o horário vai de 0 a 86399, e o
-valor cabe em 4 bytes. É território das ordenações lineares deste módulo.
+uns 20 milhões de comparações, cada uma uma **chamada de função** por
+ponteiro. Só que aqui as chaves são inteiros: o horário vai de 0 a 86399, e
+o valor cabe em 4 bytes. Cabem as ordenações lineares deste módulo.
 
 O TAD `pix.h` junta as peças. O registro tem 12 bytes:
 
@@ -22,7 +22,7 @@ typedef struct {
 } Pix;
 ```
 
-E as funções que importam:
+As funções principais:
 
 - `pix_por_valor`: **radix sort** em base 256 (assunto 0121) sobre o campo
   `centavos`. Quatro passadas, cada uma um counting sort estável pelo byte da
@@ -34,12 +34,12 @@ E as funções que importam:
   comparação de tempo.
 
 O segundo relatório tem **duas chaves**: horário e, no empate, valor. Não
-precisa de uma função de comparação composta. É a ideia do radix sort LSD:
+precisa de função de comparação composta; basta a ideia do radix sort LSD:
 ordene pela chave **menos** importante (valor) e depois, com um método
 **estável**, pela mais importante (horário). A estabilidade do counting
 sort preserva a ordem de valor dentro de cada segundo.
 
-Vamos ver na prática. Os mesmos dados vão para dois vetores: um é ordenado
+Os mesmos dados vão para dois vetores: um é ordenado
 pelo `qsort`, o outro pelo radix. Os dois têm que terminar com os valores na
 mesma ordem. Depois, o counting sort reorganiza o vetor do radix pelo
 horário:
@@ -123,15 +123,14 @@ int main(void) {
 
 O radix ordenou o milhão de valores em bem menos tempo que o `qsort`
 (nesta execução, menos de um terço), e o counting pelo horário levou menos
-ainda. Sem o AddressSanitizer
-e com `gcc -O2`, os números caem para uns 0,18 s, 0,03 s e 0,01 s: a
-proporção fica até maior. Os quatro primeiros do dia são todos de
-00:00:00, e estão em ordem de valor: a primeira ordenação sobreviveu à
-segunda.
+ainda. Sem o AddressSanitizer e com `gcc -O2`, os números caem para uns
+0,18 s, 0,03 s e 0,01 s: a proporção fica até maior. Os quatro primeiros do
+dia são todos de 00:00:00 e estão em ordem de valor: a primeira ordenação
+sobreviveu à segunda.
 
-Repara no fluxograma: a conferência entre os dois vetores vem antes do
-segundo relatório. Comparar com uma implementação confiável (o `qsort`) é o
-jeito mais simples de testar uma ordenação escrita à mão:
+A conferência entre os dois vetores vem antes do segundo relatório. Comparar
+com uma implementação confiável (o `qsort`) é o jeito mais simples de testar
+uma ordenação escrita à mão:
 
 {{fluxograma}}
 
@@ -149,8 +148,7 @@ O resumo do módulo, com os algoritmos do módulo 13 de referência:
 | qsort | O(n log n) | depende da biblioteca | não garantido | qualquer tipo, qualquer critério |
 
 > [!WARNING]
-> Ordenação linear não é mágica: ela troca a comparação por **suposições
-> sobre os dados**. O counting sort pelo horário só funciona porque o
+> Ordenação linear troca a comparação por **suposições sobre os dados**. O counting sort pelo horário só funciona porque o
 > horário vai de 0 a 86399; se um registro chegar com `segundo = 86400` (um
 > bug na origem dos dados), `c[86400]` escreve fora do vetor. Antes de usar
 > o valor como índice, confira a faixa, ou confie numa fonte que garanta.
@@ -160,13 +158,13 @@ O resumo do módulo, com os algoritmos do módulo 13 de referência:
 > [!TIP]
 > **Por dentro do C:** cada passada do radix lê o vetor inteiro em
 > sequência, do fim para o começo, e escreve espalhado em 256 regiões do
-> auxiliar. 12 MB não cabem no cache, mas a leitura sequencial é a que o
-> processador mais gosta: ele adivinha os próximos endereços e busca antes.
+> auxiliar. 12 MB não cabem no cache, mas a leitura sequencial é a preferida
+> do processador: ele adivinha os próximos endereços e busca antes.
 > Já o `qsort` não sabe nada sobre o `Pix`: move cada registro como um
 > bloco genérico de 12 bytes (só conhece o tamanho) e chama
 > `pix_compara_valor` por ponteiro, sem poder colocar o código dela no
-> lugar da chamada. Saber o tipo e a
-> faixa da chave é a vantagem que as ordenações lineares exploram.
+> lugar da chamada. As ordenações lineares exploram justamente o que o `qsort`
+> ignora: o tipo e a faixa da chave.
 
 > [!NOTE]
 > **Pergunta para você:** o radix fez 4 passadas, mas nenhum Pix passa de

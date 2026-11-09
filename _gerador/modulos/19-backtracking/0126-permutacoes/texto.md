@@ -11,27 +11,27 @@ Cada ordem é uma **permutação** dos três grupos, e com `n` elementos há
 
 A recursão gera todas decidindo **uma posição por vez**. A função
 `permuta(v, i)` sabe que as posições `0..i-1` já estão decididas e cuida da
-posição `i`. Quem pode ir para lá? Qualquer elemento ainda não usado, e os não
-usados são justamente os que estão em `v[i..n-1]`. Então, para cada `j` de `i`
-até `n - 1`:
+posição `i`. Para lá pode ir qualquer elemento ainda não usado, e os não
+usados são os que estão em `v[i..n-1]`. Então, para cada `j` de `i` até
+`n - 1`:
 
 1. **escolhe**: troca `v[i]` com `v[j]`, levando o candidato para a posição `i`;
 2. **desce**: chama `permuta(v, i + 1)` para decidir o resto;
 3. **desfaz**: troca `v[i]` com `v[j]` de novo, devolvendo o vetor como
    estava antes da escolha.
 
-O passo 3 é o que separa a enumeração que funciona da que não funciona. No
-assunto anterior, a escolha se desfazia sozinha porque morava num parâmetro.
-Aqui a escolha mexe no **vetor**, que é um só para todas as chamadas. Se a
-chamada não arrumar a bagunça antes de voltar, a próxima volta do laço de quem
-a chamou parte de um vetor diferente do que esperava.
+Sem o passo 3, a enumeração quebra. No assunto anterior, a escolha se
+desfazia sozinha porque morava num parâmetro. Aqui a escolha mexe no
+**vetor**, que é um só para todas as chamadas. Se a chamada não arrumar a
+bagunça antes de voltar, a próxima volta do laço de quem a chamou parte de um
+vetor diferente do que esperava.
 
-Quando `i` chega a `n`, todas as posições estão decididas: é hora de mostrar a
-ordem.
+Quando `i` chega a `n`, todas as posições estão decididas e a ordem é
+mostrada.
 
-Vamos ver na prática. No primeiro nível, cada ramo leva um grupo diferente
-para a frente da fila. No segundo, o mesmo para a segunda posição. As 6 folhas
-são as 6 ordens, na ordem em que o programa mostra:
+Na árvore, cada ramo do primeiro nível leva um grupo diferente para a frente
+da fila; o segundo nível faz o mesmo com a segunda posição. As 6 folhas são
+as 6 ordens, na sequência em que o programa as mostra:
 
 {{ideia}}
 
@@ -81,14 +81,14 @@ int main(void) {
 // 6 ordens; no fim: Rap, Samba, Forró
 ```
 
-Repara na última linha: depois de tudo, o vetor voltou a ser
-`Rap, Samba, Forró`. É a prova de que cada chamada desfez o que fez. Repara
-também nas linhas 5 e 6: a troca de `Rap` com `Forró` deixou o `Samba` no
-meio, então a ordem que sai **não** é a alfabética nem a "de dicionário".
-Quem precisa dessa ordem usa outro jeito (exemplo A251).
+Na última linha, depois de tudo, o vetor voltou a ser `Rap, Samba, Forró`:
+cada chamada desfez o que fez. Nas linhas 5 e 6, a troca de `Rap` com
+`Forró` deixou o `Samba` no meio, então a ordem que sai **não** é a
+alfabética nem a "de dicionário". Quem precisa dessa ordem usa outro jeito
+(exemplo A251).
 
-Repara no fluxograma: o laço do `j` é o que abre os ramos, e cada volta dele
-tem o par troca e destroca em volta da chamada recursiva:
+O laço do `j` abre os ramos, e cada volta dele tem o par troca e destroca em
+volta da chamada recursiva:
 
 {{fluxograma}}
 

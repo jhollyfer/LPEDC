@@ -15,14 +15,14 @@ Gerar todos sem esquecer nenhum e sem repetir é **enumerar**. O jeito mais
 limpo é a recursão (assunto 0032): a função `gera(i, k)` cuida do item `i` e
 abre dois caminhos. No primeiro, o item fica **de fora** e ela chama
 `gera(i + 1, ...)`. No segundo, o item **entra** e ela chama `gera(i + 1, ...)`
-de novo. Quando `i` chega a `n`, todas as decisões foram tomadas: é hora de
-mostrar o subconjunto.
+de novo. Quando `i` chega a `n`, todas as decisões foram tomadas e o
+subconjunto é mostrado.
 
 Os itens escolhidos vão para o vetor `cesta`, e `k` diz quantos lugares dele
 estão ocupados. Como `k` é **parâmetro**, cada chamada tem a sua cópia. Quando
 uma chamada termina e a de cima continua, o `k` de cima ainda vale o que valia
-antes: a escolha se **desfaz sozinha**. Essa ideia de escolher, descer e
-desfazer é a espinha de todo o módulo.
+antes: a escolha se **desfaz sozinha**. Escolher, descer e desfazer: o
+módulo inteiro gira em torno disso.
 
 Existe um segundo jeito, sem recursão: os bits de um número (assunto 0065).
 Conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o item `i` entra". O
@@ -34,9 +34,9 @@ for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
         if (m & (1 << i)) { /* o item i está no subconjunto m */ }
 ```
 
-Vamos ver na prática. Cada nível da árvore de decisões é um complemento. O
-ramo da esquerda deixa o item de fora; o da direita põe. As 8 folhas são os 8
-copos, na mesma ordem em que o programa vai mostrar:
+Na árvore de decisões, cada nível é um complemento. O ramo da esquerda deixa
+o item de fora; o da direita põe. As 8 folhas são os 8 copos, na ordem em
+que o programa os mostra:
 
 {{ideia}}
 
@@ -88,14 +88,14 @@ int main(void) {
 // 15 chamadas
 ```
 
-Por que 15 chamadas? A árvore tem 1 + 2 + 4 + 8 = 15 nós, e cada nó é uma
-chamada de `gera`. Em geral, são 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas. Cada folha
+As 15 chamadas vêm da árvore: ela tem 1 + 2 + 4 + 8 = 15 nós, e cada nó é
+uma chamada de `gera`. Em geral, são 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas. Cada folha
 ainda gasta até `n` passos para mostrar a cesta, então o custo total é
 **O(n · 2ⁿ)**. Com 20 itens já são mais de um milhão de subconjuntos; com 40,
 mais de um trilhão. Enumerar tudo só serve para `n` pequeno.
 
-Repara no fluxograma: não há laço nenhum. Quem "repete" é a recursão, que
-chama `gera` duas vezes por nó, uma por caminho:
+O fluxograma não tem laço. Quem "repete" é a recursão, que chama `gera` duas
+vezes por nó, uma por caminho:
 
 {{fluxograma}}
 
@@ -104,8 +104,8 @@ chama `gera` duas vezes por nó, uma por caminho:
 > conta `m & (1 << i)` não dá 1 quando o bit está ligado: dá o próprio
 > `1 << i`, que vale 1, 2, 4, 8... Com `== 1`, só o item 0 é reconhecido e os
 > outros nunca entram. Teste só se o resultado é diferente de zero:
-> `if (m & (1 << i))`. E sem os parênteses, `m & 1 << i == 1` nem faz o que
-> parece, porque o `==` é feito antes do `&`.
+> `if (m & (1 << i))`. Sem os parênteses, `m & 1 << i == 1` nem faz o que
+> parece, porque o `==` é avaliado antes do `&`.
 
 > [!TIP]
 > **Por dentro do C:** a pilha de chamadas nunca passa de `n + 1` frames
@@ -113,8 +113,8 @@ chama `gera` duas vezes por nó, uma por caminho:
 > de novo pelo mesmo espaço. O vetor `cesta` é global e um só para todo mundo;
 > o que muda de frame para frame é o `k`, guardado em cada frame. Depois de
 > voltar, os lugares de `cesta` a partir de `k` ficam com lixo das escolhas
-> antigas, e tudo bem: ninguém lê além de `k`, e a próxima escolha escreve por
-> cima. No jeito por bits, `1 << i` com `int` só vale até `i = 30`; para mais
+> antigas, sem problema: ninguém lê além de `k`, e a próxima escolha escreve
+> por cima. No jeito por bits, `1 << i` com `int` só vale até `i = 30`; para mais
 > itens, use `unsigned long long` e `1ULL << i`.
 
 > [!NOTE]

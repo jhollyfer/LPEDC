@@ -9,15 +9,14 @@ vão chegar. Este módulo ensina a pedir memória **enquanto o programa roda**, 
 tamanho exato, e a devolvê-la quando acabar.
 
 No C, nenhum vetor cresce sozinho e nenhum coletor de lixo apaga o que
-ninguém usa. Quem faz as duas coisas é você. Isso dá poder
-(você decide quanto, quando e por quanto tempo) e dá responsabilidade: memória
-esquecida vaza, memória devolvida e usada de novo corrompe o programa.
+ninguém usa. Quem faz as duas coisas é você: decide quanto, quando e por
+quanto tempo. Memória esquecida vaza; memória devolvida e usada de novo
+corrompe o programa.
 
 O módulo é a ponte para a segunda metade do curso. Toda estrutura de dados que
 vem depois (listas, pilhas, filas, árvores, tabelas hash, grafos) é feita de
-blocos pedidos ao heap e ligados por ponteiros. Quem domina `malloc`, `free` e
-`realloc` aqui, e sabe ler um relatório do AddressSanitizer, escreve essas
-estruturas sem medo.
+blocos pedidos ao heap e ligados por ponteiros, com `malloc`, `free` e
+`realloc`.
 
 ## O que você vai aprender
 
@@ -28,38 +27,20 @@ estruturas sem medo.
 - reconhecer **vazamento, ponteiro solto, free duplo e estouro**, e caçá-los com o **AddressSanitizer** e o **valgrind**
 - juntar tudo num programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com a
-   memória à mostra.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, apague um `free`, quebre de propósito e
-   leia o que o `rodar` responde.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-> [!NOTE]
-> Neste módulo, muitos exercícios são de **achar o erro**: o arquivo vem com o
-> bug de propósito, e o enunciado avisa. Rodar e ler o relatório do
-> AddressSanitizer faz parte do exercício. A resolução de cada um roda limpa.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o resultado;
-cinza, o que ele não usa; vermelho, erro. Nos diagramas deste módulo, o verde
-costuma ser o bloco que mora no heap.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você precisa estar à vontade com ponteiros (módulo 06): `&`, `*`, `NULL`,
 `a[i] == *(a + i)`, `char *` e `**`. Se `int **m` ainda assusta, releia os
 assuntos 0047 e 0049 antes.
+
+Nos diagramas deste módulo, o verde costuma ser o bloco que mora no heap. Ao
+rodar os exemplos, apague um `free` de propósito e leia o que o `rodar`
+responde. Responda a **Pergunta para você** de cada assunto antes de rodar.
+
+> [!NOTE]
+> Neste módulo, muitos exercícios são de **achar o erro**: o arquivo vem com o
+> bug de propósito, e o enunciado avisa. Rodar e ler o relatório do
+> AddressSanitizer faz parte do exercício. A resolução de cada um roda limpa.
 
 O `rodar` já compila com o **AddressSanitizer**, que vigia a memória enquanto
 o programa roda e avisa de vazamentos no fim. Para o assunto 0057, instale
@@ -127,10 +108,10 @@ Nos livros você vai ver três nomes para isso: alocação **estática** (dados:
 tamanho e endereço fixos desde a compilação), **automática** (pilha) e
 **dinâmica** (heap, com `malloc`). São as mesmas regiões da tabela.
 
-No C não existe coletor de lixo (*garbage collector*), um mecanismo que apaga
-sozinho o que ninguém mais usa. Você é o coletor: tudo o que pegou do heap, devolve.
+Como o C não tem coletor de lixo (*garbage collector*, o mecanismo que apaga
+sozinho o que ninguém mais usa), tudo o que você pega do heap, você devolve.
 
-Vamos ver na prática. A função `abrir_comanda` monta a comanda da mesa 4 com
+A função `abrir_comanda` monta a comanda da mesa 4 com
 três itens (R$ 18, R$ 25 e R$ 7). A variável `itens` mora no frame dela, na
 pilha. Os três valores vão para um bloco no heap. O contador `pedidos_do_dia`
 mora nos dados. Quando a função retorna, o frame dela some, mas o bloco
@@ -138,8 +119,8 @@ continua lá, e `main` guarda o endereço dele:
 
 <p align="center"><img src="07-memoria-dinamica/0053-pilha-e-heap/ideia.svg" alt="Diagrama da ideia: Pilha e heap" width="998"></p>
 
-O `malloc` e o `free` ganham um assunto só deles (0054). Aqui, repare só em
-onde cada coisa mora e em quanto tempo ela vive:
+O `malloc` e o `free` ganham um assunto só deles (0054). Aqui, observe em
+que região cada coisa mora e quanto tempo ela vive:
 
 ```c
 #include <stdio.h>
@@ -179,8 +160,7 @@ int main(void) {
 // Pedidos do dia: 1
 ```
 
-Repara no fluxograma: o frame de `abrir_comanda` nasce e morre no meio do
-caminho, mas o bloco do heap atravessa o `return` e só termina no `free`, lá
+O frame de `abrir_comanda` nasce e morre no meio do caminho, mas o bloco do heap atravessa o `return` e só termina no `free`, lá
 no fim de `main`:
 
 <p align="center"><img src="07-memoria-dinamica/0053-pilha-e-heap/fluxograma.svg" alt="Fluxograma: Pilha e heap" width="429"></p>
@@ -196,7 +176,7 @@ no fim de `main`:
 > [!TIP]
 > **Por dentro do C:** reservar espaço na pilha custa **uma instrução**: o
 > processador só diminui o registrador que marca o topo (`sub rsp, 32`). Por
-> isso locais são de graça. O `malloc` precisa procurar um pedaço livre do
+> isso locais saem quase de graça. O `malloc` precisa procurar um pedaço livre do
 > tamanho certo numa lista de blocos e anotar o tamanho num cabeçalho
 > escondido logo antes do endereço que ele te entrega. É bem mais caro. Rode
 > `size` no executável (`gcc A105.c -o bolao && size bolao`) e veja as
@@ -555,7 +535,7 @@ aparece quando o programa já está rodando.
 Para isso existe o `malloc` (*memory allocation*), de `<stdlib.h>`. Você diz
 **quantos bytes** quer e ele devolve o **endereço** de um bloco desse tamanho
 no heap. Esse endereço vai para um ponteiro, e o ponteiro passa a se comportar
-como um vetor: `corridas[i]` funciona igualzinho (assunto 0047).
+como um vetor: `corridas[i]` funciona do mesmo jeito (assunto 0047).
 
 ```c
 double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
@@ -578,18 +558,17 @@ o próprio `malloc` anotou isso num cabeçalho escondido antes do bloco. Depois
 do `free`, o ponteiro continua guardando o endereço antigo, só que agora ele
 aponta para um bloco que não é mais seu. Por isso o hábito: `corridas = NULL;`.
 
-A regra de ouro é simples de dizer: **todo `malloc` tem um `free`**. Nada some
-sozinho: o bloco que você esquece de liberar fica ocupado até o programa acabar. Isso é
-um **vazamento** (*memory leak*), tema do assunto 0057.
+A regra: **todo `malloc` tem um `free`**. O bloco que você esquece de liberar
+fica ocupado até o programa acabar. Isso é um **vazamento** (*memory leak*),
+tema do assunto 0057.
 
-Vamos ver na prática. O programa pergunta quantas corridas foram (4), pede ao
+O programa pergunta quantas corridas foram (4), pede ao
 heap `4 * 8 = 32` bytes, guarda os valores (R$ 12,50, R$ 18,00, R$ 25,90 e
 R$ 9,60), soma tudo e devolve o bloco:
 
 <p align="center"><img src="07-memoria-dinamica/0054-malloc-free/ideia.svg" alt="Diagrama da ideia: malloc e free" width="870"></p>
 
-O código completo. Para testar sem digitar, use o comando que está no fim do
-arquivo:
+Para testar sem digitar, use o comando que está no fim do arquivo:
 
 ```c
 #include <stdio.h>
@@ -640,9 +619,8 @@ int main(void) {
 // Média: R$ 16.50
 ```
 
-Repara no fluxograma: toda saída do programa depois do `malloc` passa por um
-`free`, até a saída de erro no meio da leitura. É fácil esquecer justamente
-esse caminho:
+Toda saída do programa depois do `malloc` passa por um `free`, até a saída
+de erro no meio da leitura, que é o caminho mais fácil de esquecer:
 
 <p align="center"><img src="07-memoria-dinamica/0054-malloc-free/fluxograma.svg" alt="Fluxograma: malloc e free" width="472"></p>
 
@@ -657,9 +635,9 @@ esse caminho:
 > **Por dentro do C:** o `malloc` pede memória ao sistema operacional em
 > pedaços grandes (chamadas `brk` e `mmap`) e depois fatia esses pedaços para
 > você. Cada bloco ganha um cabeçalho de uns 8 a 16 bytes, logo antes do
-> endereço que você recebe, com o tamanho dele. É por isso que `free(p)` sabe
-> quanto liberar, e é por isso que `free(p + 1)` é um desastre: ele vai ler um
-> "cabeçalho" que não existe. Pedir 1 byte custa, na prática, uns 32: pedidos
+> endereço que você recebe, com o tamanho dele. Assim o `free(p)` sabe
+> quanto liberar, e `free(p + 1)` dá errado: ele vai ler um "cabeçalho" que
+> não existe. Pedir 1 byte custa, na prática, uns 32: pedidos
 > pequenos demais desperdiçam memória.
 
 > [!NOTE]
@@ -974,8 +952,8 @@ Crachá: Maria Clara Fonseca (19 caracteres)
 ## 0055 · calloc e realloc
 
 Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
-R$ 120, R$ 35... Você não sabe quantos vão ser. No C, o vetor
-não cresce sozinho: quem faz ele crescer é você, com o `realloc`.
+R$ 120, R$ 35... Você não sabe quantos vão ser. O vetor não cresce sozinho:
+quem faz ele crescer é você, com o `realloc`.
 
 Antes dele, um primo do `malloc`: o **`calloc`**. Ele recebe a quantidade e o
 tamanho separados e entrega o bloco **zerado**:
@@ -987,14 +965,14 @@ int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
 Use quando o zero inicial importa: contadores, placares, tabelas de
 frequência. Com `malloc`, você teria lixo e precisaria de um laço para zerar.
 
-Agora o **`realloc(p, novo_tamanho)`**. Ele muda o tamanho de um bloco que
-veio do heap e **preserva o conteúdo** (até o menor dos dois tamanhos). Se der
-para esticar o bloco onde ele está, ótimo. Se não der, ele aloca um bloco
+O **`realloc(p, novo_tamanho)`** muda o tamanho de um bloco que veio do heap
+e **preserva o conteúdo** (até o menor dos dois tamanhos). Se der para
+esticar o bloco no lugar, ele estica. Se não der, ele aloca um bloco
 novo em outro lugar, copia tudo, libera o antigo e devolve o **endereço
 novo**. A parte que cresceu vem com lixo.
 
-Daí sai a regra mais importante do assunto: **depois do `realloc`, o endereço
-antigo pode não valer mais**. Qualquer ponteiro que apontava para dentro do
+Daí a regra central do assunto: **depois do `realloc`, o endereço antigo
+pode não valer mais**. Qualquer ponteiro que apontava para dentro do
 bloco velho virou um ponteiro solto.
 
 E se faltar memória, o `realloc` devolve `NULL` e **não mexe no bloco
@@ -1007,14 +985,13 @@ duas contas: a **quantidade** (quantos elementos você usa) e a **capacidade**
 (quantos cabem). Encheu? **Dobra** a capacidade. Assim os `realloc` ficam
 raros: para guardar 1000 elementos, começando com 1, são só 10.
 
-Vamos ver na prática. Chegam 5 Pix (R$ 50, 120, 35, 80 e 15). O vetor nasce
+Chegam 5 Pix (R$ 50, 120, 35, 80 e 15). O vetor nasce
 com capacidade 2, dobra para 4 no terceiro Pix e para 8 no quinto. No fim, 5
 posições usadas e 3 livres:
 
 <p align="center"><img src="07-memoria-dinamica/0055-calloc-realloc/ideia.svg" alt="Diagrama da ideia: calloc e realloc" width="870"></p>
 
-O mesmo "vetor que cresce" em C. É a semente da lista sequencial que você vai
-transformar num TAD no assunto 0075:
+O código é a semente da lista sequencial que vira TAD no assunto 0075:
 
 ```c
 #include <stdio.h>
@@ -1061,7 +1038,7 @@ int main(void) {
 // Sobram 3 posições livres
 ```
 
-Repara no fluxograma: a pergunta "encheu?" é feita a cada Pix, mas o desvio
+A pergunta "encheu?" é feita a cada Pix, mas o desvio
 para o `realloc` só acontece duas vezes. Na maior parte das voltas, guardar
 custa só uma atribuição:
 
@@ -1382,7 +1359,7 @@ e o trimestre tem 13 semanas. Uma matriz `int vendas[3][4]` não serve: as
 dimensões só aparecem quando o programa roda.
 
 O C só sabe alocar dinamicamente **vetores**, blocos de uma dimensão. Para ter
-uma matriz, você monta uma com vetores. Tem dois jeitos clássicos.
+uma matriz, você monta uma com vetores, de dois jeitos clássicos.
 
 **1. Um bloco só.** Aloque `linhas * colunas` elementos e calcule a posição na
 mão: o elemento `(i, j)` fica em `v[i * colunas + j]`. É a mesma conta que o
@@ -1409,10 +1386,9 @@ elas ficam presas no heap para sempre.
 
 E se o `malloc` da terceira linha falhar? As duas primeiras já foram
 alocadas. A função de criação precisa desfazer o que já fez antes de devolver
-`NULL`: é o tipo de cuidado que separa um programa de brinquedo de um
-programa de verdade.
+`NULL`.
 
-Vamos ver na prática. A matriz de 3 lojas por 4 semanas é um vetor de 3
+A matriz de 3 lojas por 4 semanas é um vetor de 3
 ponteiros, cada um apontando para uma linha de 4 inteiros. As linhas podem
 estar em qualquer lugar do heap, nem precisam ficar juntas:
 
@@ -1483,8 +1459,7 @@ int main(void) {
 // Loja 3: R$ 78 mil
 ```
 
-Repara no fluxograma da criação: é um laço com uma saída de emergência. Se
-uma linha falhar, o caminho de erro passa pela liberação do que já existe:
+A criação é um laço com uma saída de emergência: se uma linha falhar, o caminho de erro passa pela liberação do que já existe:
 
 <p align="center"><img src="07-memoria-dinamica/0056-matriz-dinamica/fluxograma.svg" alt="Fluxograma: Matriz dinâmica" width="623"></p>
 
@@ -1867,11 +1842,11 @@ A * A: dimensões incompatíveis
 
 ## 0057 · Erros de memória
 
-O sistema do caixa da padaria funciona perfeitamente de manhã. Às seis da
+O sistema do caixa da padaria funciona bem de manhã. Às seis da
 tarde está lento, e no sábado trava. Ninguém mexeu no código. O que aconteceu
 foi um **vazamento**: a cada venda, um pedacinho de memória ficava para trás,
-e depois de milhares de vendas o heap acabou. Em inglês, *memory
-leak*. No C, quem cria essa doença é você mesmo, e quem cura também.
+e depois de milhares de vendas o heap acabou (*memory leak*, em inglês). No
+C, quem cria esse erro é você, e quem corrige também.
 
 O pior desses erros é que o programa costuma **funcionar**: mostra a saída
 certa, termina sem reclamar e quebra só na máquina do cliente, dias depois.
@@ -1891,7 +1866,7 @@ o valor antigo, porque ninguém apagou os bytes. Funciona por sorte, até o
 `malloc` entregar aquele pedaço para outra parte do programa.
 
 O **estouro** no heap é ainda mais traiçoeiro: logo depois do seu bloco mora
-o cabeçalho do bloco vizinho (lembra do 0054?). Escrever um byte a mais pode
+o cabeçalho do bloco vizinho (assunto 0054). Escrever um byte a mais pode
 estragar a contabilidade do `malloc`, e o programa quebra muito depois, num
 `free` que não tem culpa nenhuma.
 
@@ -1908,7 +1883,7 @@ As ferramentas:
   Instale com `sudo pacman -S valgrind` no Arch Linux ou `sudo apt install
   valgrind` no Debian/Ubuntu e rode com `~/LPEDC/rodar --valgrind arquivo.c`.
 
-Vamos ver na prática. A função `total_do_pedido` copia os 4 preços de um
+A função `total_do_pedido` copia os 4 preços de um
 pedido (R$ 30, 12, 45 e 8) para um bloco temporário de 16 bytes e soma tudo.
 Na primeira versão, ela esquecia o `free`. Cada um dos 3 pedidos deixava 16
 bytes perdidos: o endereço morria com o frame, mas o bloco ficava. O ASan
@@ -1931,7 +1906,7 @@ Direct leak of 48 byte(s) in 3 object(s) allocated from:
 SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
 ```
 
-A versão corrigida tem uma linha a mais, e é ela que importa:
+A versão corrigida tem uma linha a mais:
 
 ```c
 #include <stdio.h>
@@ -1964,7 +1939,7 @@ int main(void) {
 // Pedido 3: R$ 95
 ```
 
-Repara no fluxograma: o `free` precisa estar no caminho antes do `return`,
+O `free` precisa estar no caminho antes do `return`,
 porque o `return` destrói a única variável que sabia onde o bloco estava:
 
 <p align="center"><img src="07-memoria-dinamica/0057-erros-de-memoria/fluxograma.svg" alt="Fluxograma: Erros de memória" width="610"></p>
@@ -1980,8 +1955,8 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 > **Por dentro do C:** o ASan reserva 1 byte de "memória sombra" para cada 8
 > bytes do programa. Em volta de cada bloco do `malloc` ele deixa uma zona
 > envenenada (*redzone*); todo acesso confere a sombra antes. Os blocos
-> liberados ficam um tempo de quarentena sem ser reaproveitados, e é por isso
-> que ele consegue dizer "isto foi liberado lá na linha 31". O custo: o
+> liberados ficam um tempo de quarentena sem ser reaproveitados, e assim ele
+> consegue dizer "isto foi liberado lá na linha 31". O custo: o
 > programa fica uns 2 vezes mais lento e usa mais memória. Por isso o ASan é
 > ferramenta de desenvolvimento, não de produção.
 
@@ -2323,9 +2298,7 @@ Média por rodada: 1.2
 O mercadinho da esquina ainda anota o fiado num caderno: nome do cliente e
 quanto ele deve. Cliente novo ganha uma linha; cliente antigo soma na conta
 dele; quem paga zera. O caderno nunca tem um número fixo de páginas, e cada
-nome tem um tamanho. É um ótimo programa para juntar o módulo inteiro.
-
-O programa usa tudo o que você viu:
+nome tem um tamanho. O programa do caderno junta o módulo inteiro:
 
 - **heap** (0053): o caderno precisa durar o programa todo e crescer, então
   mora no heap, não na pilha;
@@ -2339,8 +2312,8 @@ O programa usa tudo o que você viu:
 - **erros de memória** (0057): para liberar, primeiro cada nome, depois os
   dois vetores. Nada sobra no heap.
 
-Uma novidade: `crescer` recebe `char ***nomes`. Parece assustador, mas é a
-mesma regra do E341 do assunto anterior. A função precisa **mudar** o
+Uma novidade: `crescer` recebe `char ***nomes`. É a mesma regra do E341 do
+assunto anterior. A função precisa **mudar** o
 ponteiro `nomes` do `main` (o `realloc` pode trocar o endereço), então recebe
 o endereço dele. `nomes` é `char **`; o endereço de `nomes` é `char ***`. O
 mesmo vale para `int **centavos`.
@@ -2348,15 +2321,15 @@ mesmo vale para `int **centavos`.
 Valores em centavos, como fazem os sistemas de pagamento: `int` não tem erro
 de arredondamento, e R$ 12,50 vira `1250`.
 
-Vamos ver na prática. Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge
+Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge
 (R$ 8,30), Dona Cida de novo (R$ 4,70), Bia (R$ 20,00), Tonho (R$ 3,15) e
 Rosa (R$ 5,60). São 5 clientes diferentes, então o caderno cresce de 2 para
 4 e de 4 para 8. Depois Seu Jorge paga tudo:
 
 <p align="center"><img src="07-memoria-dinamica/0058-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
-O programa completo. Leia função por função: cada uma cuida de uma coisa e
-nenhuma esquece um `free`:
+Leia função por função: cada uma cuida de uma coisa e nenhuma esquece um
+`free`:
 
 ```c
 #include <stdio.h>
@@ -2474,7 +2447,7 @@ int main(void) {
 // Total na rua: R$ 45.95
 ```
 
-Repara no fluxograma: cada anotação passa por uma busca. Achou, soma; não
+Cada anotação passa por uma busca. Achou, soma; não
 achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 `liberar`:
 
@@ -2489,8 +2462,8 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 
 > [!TIP]
 > **Por dentro do C:** os dois vetores paralelos são um remendo para a falta
-> de um jeito de agrupar "nome e saldo" numa coisa só. É exatamente o que a
-> `struct` resolve no módulo 08: um vetor de `struct cliente` com um `realloc`
+> de um jeito de agrupar "nome e saldo" numa coisa só, que a `struct`
+> resolve no módulo 08: um vetor de `struct cliente` com um `realloc`
 > só. Mesmo assim, o desenho na memória continua parecido: o nome é um
 > `char *` que aponta para um bloco do heap, e a struct guarda só os 8 bytes
 > do ponteiro.
@@ -2975,7 +2948,7 @@ variações de first fit com listas por tamanho.
 **5. Tem memória, mas não cabe.** Simule um heap de 1000 bytes com um
 `char heap[1000]`, todo preenchido com `'.'` (livre). Escreva
 `int aloca(char dono, int tam)`, que procura `tam` posições livres
-**seguidas** a partir do começo, marca com a letra do dono e devolve onde o
+**seguidas** a partir do começo, marca com a letra do dono e devolve o índice em que o
 bloco começa (ou -1), e `void libera(char dono)`. Escreva também um
 `relatorio` que imprime o total livre e o maior pedaço livre contíguo. Aloque
 A = 300, B = 200 e C = 400, libere B, mostre o relatório e tente alocar
@@ -4449,7 +4422,7 @@ void registra(int n) {
 
 **(C)**. Global e `static` moram nos **dados** (alocação estática) e duram o
 programa todo. Parâmetro e local moram na **pilha** (alocação automática).
-O bloco do `malloc` mora no **heap** (alocação dinâmica). Repare: a variável
+O bloco do `malloc` mora no **heap** (alocação dinâmica). A variável
 `v` está na pilha; o bloco para onde ela aponta, no heap. Veja 0053.
 
 </details>

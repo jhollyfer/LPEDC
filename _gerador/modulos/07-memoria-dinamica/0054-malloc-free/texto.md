@@ -8,7 +8,7 @@ aparece quando o programa já está rodando.
 Para isso existe o `malloc` (*memory allocation*), de `<stdlib.h>`. Você diz
 **quantos bytes** quer e ele devolve o **endereço** de um bloco desse tamanho
 no heap. Esse endereço vai para um ponteiro, e o ponteiro passa a se comportar
-como um vetor: `corridas[i]` funciona igualzinho (assunto 0047).
+como um vetor: `corridas[i]` funciona do mesmo jeito (assunto 0047).
 
 ```c
 double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
@@ -31,18 +31,17 @@ o próprio `malloc` anotou isso num cabeçalho escondido antes do bloco. Depois
 do `free`, o ponteiro continua guardando o endereço antigo, só que agora ele
 aponta para um bloco que não é mais seu. Por isso o hábito: `corridas = NULL;`.
 
-A regra de ouro é simples de dizer: **todo `malloc` tem um `free`**. Nada some
-sozinho: o bloco que você esquece de liberar fica ocupado até o programa acabar. Isso é
-um **vazamento** (*memory leak*), tema do assunto 0057.
+A regra: **todo `malloc` tem um `free`**. O bloco que você esquece de liberar
+fica ocupado até o programa acabar. Isso é um **vazamento** (*memory leak*),
+tema do assunto 0057.
 
-Vamos ver na prática. O programa pergunta quantas corridas foram (4), pede ao
+O programa pergunta quantas corridas foram (4), pede ao
 heap `4 * 8 = 32` bytes, guarda os valores (R$ 12,50, R$ 18,00, R$ 25,90 e
 R$ 9,60), soma tudo e devolve o bloco:
 
 {{ideia}}
 
-O código completo. Para testar sem digitar, use o comando que está no fim do
-arquivo:
+Para testar sem digitar, use o comando que está no fim do arquivo:
 
 ```c
 #include <stdio.h>
@@ -93,9 +92,8 @@ int main(void) {
 // Média: R$ 16.50
 ```
 
-Repara no fluxograma: toda saída do programa depois do `malloc` passa por um
-`free`, até a saída de erro no meio da leitura. É fácil esquecer justamente
-esse caminho:
+Toda saída do programa depois do `malloc` passa por um `free`, até a saída
+de erro no meio da leitura, que é o caminho mais fácil de esquecer:
 
 {{fluxograma}}
 
@@ -110,9 +108,9 @@ esse caminho:
 > **Por dentro do C:** o `malloc` pede memória ao sistema operacional em
 > pedaços grandes (chamadas `brk` e `mmap`) e depois fatia esses pedaços para
 > você. Cada bloco ganha um cabeçalho de uns 8 a 16 bytes, logo antes do
-> endereço que você recebe, com o tamanho dele. É por isso que `free(p)` sabe
-> quanto liberar, e é por isso que `free(p + 1)` é um desastre: ele vai ler um
-> "cabeçalho" que não existe. Pedir 1 byte custa, na prática, uns 32: pedidos
+> endereço que você recebe, com o tamanho dele. Assim o `free(p)` sabe
+> quanto liberar, e `free(p + 1)` dá errado: ele vai ler um "cabeçalho" que
+> não existe. Pedir 1 byte custa, na prática, uns 32: pedidos
 > pequenos demais desperdiçam memória.
 
 > [!NOTE]

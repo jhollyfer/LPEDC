@@ -8,10 +8,10 @@ método possível?
 
 Até aqui, toda análise media **um algoritmo**: o merge sort faz tantas
 comparações, o insertion sort faz tantas. A pergunta agora é sobre o
-**problema**: existe algum jeito de ordenar com menos? Responder isso para
-todos os algoritmos de uma vez, inclusive os que ninguém inventou ainda,
-parece impossível. Não é, desde que eles só aprendam sobre os dados
-**comparando** dois elementos, como a balança. Esses são os algoritmos de
+**problema**: existe algum jeito de ordenar com menos? Dá para responder
+isso para todos os algoritmos de uma vez, inclusive os que ninguém inventou
+ainda, desde que eles só aprendam sobre os dados **comparando** dois
+elementos, como a balança. Esses são os algoritmos de
 **ordenação por comparação**: todos os do módulo 13, o heapsort e o `qsort`.
 
 A ferramenta é a **árvore de decisão**. Cada nó interno é uma pergunta
@@ -20,7 +20,7 @@ folha é uma resposta final: a ordem das encomendas. Rodar o algoritmo numa
 entrada é descer da raiz até uma folha. O número de comparações no pior caso
 é a **altura** da árvore.
 
-Agora o argumento, em três passos:
+O argumento tem três passos:
 
 1. Com 3 encomendas há `3! = 6` ordens possíveis, e cada uma precisa ter a
    sua folha: se duas entradas com ordens diferentes chegassem à mesma
@@ -31,17 +31,16 @@ Agora o argumento, em três passos:
 
 Nenhum método, por mais esperto, ordena 3 encomendas com menos de 3
 pesagens no pior caso. Para `n` elementos, o mesmo raciocínio dá
-`2^h ≥ n!`, ou seja, **`h ≥ log₂(n!)`**.
+`2^h ≥ n!`, isto é, **`h ≥ log₂(n!)`**.
 
-Vamos ver na prática. Este é o insertion sort de 3 elementos desenhado como
-árvore de decisão. O caminho em verde é o da entrada A = 5 kg, B = 9 kg e
+O desenho mostra o insertion sort de 3 elementos como árvore de decisão. O caminho em verde é o da entrada A = 5 kg, B = 9 kg e
 C = 2 kg, que termina na folha C A B depois de 3 pesagens:
 
 {{ideia}}
 
 O programa passa as 6 ordens possíveis pela balança. A função
-`mais_pesada` é a única forma de o algoritmo olhar os pesos, e ela anota
-cada pergunta:
+`mais_pesada` é o único acesso do algoritmo aos pesos, e ela anota cada
+pergunta:
 
 ```c
 #include <stdio.h>
@@ -103,11 +102,11 @@ int main(void) {
 ```
 
 Cada linha da saída é um caminho da raiz até uma folha, e as 6 folhas são
-diferentes. Duas entradas têm sorte e param com 2 pesagens, mas o pior caso
-é 3: exatamente o limite. Para 3 elementos, o insertion sort é **ótimo**.
+diferentes. Duas entradas param com 2 pesagens, mas o pior caso é 3, igual
+ao limite. Para 3 elementos, o insertion sort é **ótimo**.
 
-Repara no fluxograma: é o argumento inteiro, sem nenhum algoritmo
-específico. Ele vale para qualquer método que só compara:
+O fluxograma traz o argumento inteiro, sem algoritmo específico. Ele vale
+para qualquer método que só compara:
 
 {{fluxograma}}
 
@@ -127,7 +126,7 @@ O limite inferior se escreve com **Ω** (ômega): ordenar por comparação é
 **Ω(n log n)** no pior caso. É o piso, o contrário do teto `O`. Como o merge
 sort e o heapsort fazem O(n log n), eles encostam no piso: são
 **assintoticamente ótimos**. Ninguém vai inventar uma ordenação por
-comparação O(n) ou O(n log log n). O que dá para ganhar é constante.
+comparação O(n) ou O(n log log n); dá para ganhar só na constante.
 
 > [!WARNING]
 > O limite fala do **pior caso** de **qualquer** algoritmo que só compara.
@@ -139,8 +138,8 @@ comparação O(n) ou O(n log log n). O que dá para ganhar é constante.
 > precisa só de `n - 1` comparações, e não de `n log n`.
 
 > [!TIP]
-> **Por dentro do C:** o `qsort` da biblioteca é o modelo de comparação em
-> pessoa. Ele recebe o vetor como `void *` e uma função `compara`, e nunca
+> **Por dentro do C:** o `qsort` da biblioteca segue à risca o modelo de
+> comparação. Ele recebe o vetor como `void *` e uma função `compara`, e nunca
 > olha os bytes dos elementos por conta própria: tudo o que ele sabe sobre a
 > ordem vem das respostas da sua função, uma de cada vez. Por isso nenhuma
 > implementação de `qsort`, em nenhuma biblioteca, consegue fazer menos de

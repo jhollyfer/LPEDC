@@ -20,8 +20,7 @@ mesmo valor.
 O que decide se você vê a letra ou o número é o `printf`: `%c` mostra o
 símbolo, `%d` mostra o código. Como é número, dá para fazer conta e comparar:
 `'a' + 1` é `'b'`, `c >= 'A' && c <= 'Z'` pergunta se é maiúscula, e
-`c - '0'` transforma o dígito `'7'` no número 7. Não há função de conversão
-nenhuma: o caractere já é o número.
+`c - '0'` transforma o dígito `'7'` no número 7, sem função de conversão.
 
 Para não decorar a tabela, o `<ctype.h>` traz funções prontas:
 
@@ -33,12 +32,12 @@ Para não decorar a tabela, o `<ctype.h>` traz funções prontas:
 Os testes devolvem **diferente de zero** para verdadeiro, não necessariamente
 1. Escreva `if (isdigit(c))`, nunca `if (isdigit(c) == 1)`.
 
-Para ler um caractere por vez do teclado, existe o `getchar()`. Ele devolve um
+Para ler um caractere por vez do teclado, use o `getchar()`. Ele devolve um
 **`int`**: o código do caractere ou **`EOF`**, um valor negativo que avisa que
 a entrada acabou (Ctrl+D no Linux). Guarde sempre num `int`. O exemplo A080
 conta letras e dígitos assim, até o Enter.
 
-Vamos ver na prática. A placa está num vetor de 7 `char`. O `toupper` troca
+No exemplo, a placa ocupa um vetor de 7 `char`. O `toupper` troca
 cada minúscula pela maiúscula, que fica 32 posições antes na tabela. Os
 dígitos passam sem mudar:
 
@@ -93,11 +92,10 @@ int main(void) {
 ```
 
 O `putchar` mostra um caractere só, sem formatação. O vetor `placa` ainda não
-é uma **string**: falta o marcador de fim que o `%s` precisa. Isso é o
+é uma **string**: falta o marcador de fim que o `%s` precisa, tema do
 próximo assunto.
 
-Repara no fluxograma: para cada posição, converte e pergunta o que ela deveria
-ser. Basta uma posição errada para a placa ficar inválida, e o laço segue até
+A cada posição, o programa converte e pergunta o que ela deveria ser. Basta uma posição errada para a placa ficar inválida, e o laço segue até
 o fim mesmo assim:
 
 {{fluxograma}}
@@ -116,8 +114,8 @@ o fim mesmo assim:
 > ocupa **dois** bytes (`0xC3 0xA7`) e não cabe num `char`. Num `char` com
 > sinal, esses bytes viram números negativos, e passar um negativo (que não
 > seja `EOF`) para as funções do `ctype.h` é comportamento indefinido. Por isso
-> o jeito blindado é `toupper((unsigned char) c)`. Com o `int` que vem do
-> `getchar`, você já está seguro: ele devolve o byte como valor de 0 a 255.
+> o jeito seguro é `toupper((unsigned char) c)`. O `int` que vem do
+> `getchar` não tem esse problema: ele devolve o byte como valor de 0 a 255.
 
 > [!NOTE]
 > **Pergunta para você:** o que `printf("%c %d\n", 'A' + 2, 'z' - 'a');`

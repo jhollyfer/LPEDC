@@ -8,13 +8,13 @@ quick sort, todos decidindo a ordem com perguntas do tipo "`a` vem antes de
 compara faz menos que uns n log₂ n comparações no pior caso. Este módulo
 mostra o que existe fora desse piso.
 
-A virada é olhar para os **dados**, não só para o algoritmo. Se as chaves
+O truque é olhar para os **dados**, e não só para o algoritmo. Se as chaves
 são inteiros pequenos, o valor vira índice de vetor, e não há comparação
 nenhuma: é o **counting sort**. Se as chaves têm dígitos ou bytes, dá para
 ordenar casa por casa: **radix sort**. Se os valores estão bem espalhados num
 intervalo conhecido, baldes por faixa resolvem quase tudo: **bucket sort**. Os
-três são lineares, e os três cobram um preço: memória extra e suposições
-sobre os dados que, se forem falsas, viram escrita fora do vetor.
+três são lineares e cobram um preço: memória extra e suposições sobre os
+dados que, se forem falsas, viram escrita fora do vetor.
 
 O módulo ainda traz dois parentes. O **shell sort** continua comparando, mas
 dá ao insertion sort pulos longos e foge do n² com quase o mesmo código. E o
@@ -30,40 +30,20 @@ os k maiores) sem ordenar nada, reaproveitando a separação do quick sort.
 - **quickselect**: o k-ésimo menor, a mediana e os k maiores em O(n) médio, com pivô sorteado para fugir do pior caso
 - ordenar por **duas chaves** com passadas estáveis e medir 1 milhão de registros contra o `qsort`
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: cada linha de gavetas é um
-   momento do algoritmo, com o mesmo vetor do código.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis antes de conferir a tabela.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Eles mostram outras facetas: casos de borda, pior caso,
-   usos reais.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos vetores dos diagramas da ideia, **roxo** marca o pivô ou a posição da
-vez, **amarelo** destaca os elementos que você deve acompanhar (uma fileira,
-um empate), **verde** é o que já está no lugar certo e **cinza** é o que o
-algoritmo descartou.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa muito do que veio antes: o insertion sort (0093) e a
 separação do quick sort (0095), listas encadeadas (0076 a 0078), filas
 (0085), operadores de bits (0065), `malloc` e `calloc`, e o `qsort` com
-função de comparação (0096). Se algum desses estiver enferrujado, dê uma
-revisada rápida.
+função de comparação (0096). Se algum desses estiver enferrujado, revise
+antes.
+
+Nos vetores dos diagramas, cada linha de gavetas é um momento do algoritmo:
+**roxo** marca o pivô ou a posição da vez, **amarelo** destaca o que você deve
+acompanhar (uma fileira, um empate), **verde** é o que já está no lugar e
+**cinza** é o que o algoritmo descartou. Faça o **Passo a passo** no papel
+antes de conferir a tabela e responda a **Pergunta para você** antes de
+rodar.
 
 Os exemplos dos cinco primeiros assuntos cabem num arquivo só. O último
 assunto, que ordena 1 milhão de registros, usa um TAD: `pix.h` e `pix.c`
@@ -103,15 +83,15 @@ anda **uma casa só**. Um elemento que está longe do lugar certo paga uma
 comparação e um deslocamento por casa que atravessa. Num vetor invertido, a
 conta vira n²/2.
 
-Em 1959, Donald Shell teve uma ideia simples: antes de andar de uma em uma
-casa, ande de **h em h**. O **shell sort** faz o insertion sort várias vezes,
+Em 1959, Donald Shell propôs: antes de andar de uma em uma casa, ande de
+**h em h**. O **shell sort** faz o insertion sort várias vezes,
 com saltos `h` cada vez menores:
 
 1. com um salto grande, os elementos dão pulos longos e chegam **perto** do
    lugar certo;
 2. com saltos menores, o vetor fica cada vez mais arrumado;
 3. a última rodada é sempre com `h = 1`: o insertion sort comum, só que sobre
-   um vetor **quase ordenado**, que é exatamente o caso em que ele é rápido.
+   um vetor **quase ordenado**, justamente o caso em que ele é rápido.
 
 Depois da rodada com salto `h`, o vetor está **h-ordenado**: se você pegar
 um elemento a cada `h` casas, a partir de qualquer posição, essa fileira está
@@ -119,18 +99,18 @@ em ordem. Com `h = 4`, as posições 0, 4, 8 formam uma fileira; 1, 5, 9
 formam outra; 2, 6 e 3, 7 formam mais duas. São quatro insertion sorts
 pequenos, entrelaçados no mesmo vetor.
 
-Quais saltos usar? A sequência mais conhecida é a de **Knuth**: `h = 3h + 1`,
-ou seja, 1, 4, 13, 40, 121, 364... Você começa com o maior salto abaixo de
-`n / 3` e vai dividindo por 3. Com `n = 10`, os saltos são só 4 e 1.
+A sequência de saltos mais conhecida é a de **Knuth**: `h = 3h + 1`, que dá
+1, 4, 13, 40, 121, 364... Você começa com o maior salto abaixo de `n / 3` e
+vai dividindo por 3. Com `n = 10`, os saltos são só 4 e 1.
 
-Vamos ver na prática. Na primeira linha, cada cor é uma fileira de salto 4.
-Cada fileira se ordena sozinha: o 9 troca com o 62, o 33 com o 73 e o 28 com
-o 85. Três movimentos e o vetor já está quase pronto:
+Na primeira linha do desenho, cada cor é uma fileira de salto 4. Cada fileira
+se ordena sozinha: o 9 troca com o 62, o 33 com o 73 e o 28 com o 85. Com
+três movimentos, o vetor fica quase pronto:
 
 <p align="center"><img src="18-ordenacao-linear/0119-shell-sort/ideia.svg" alt="Diagrama da ideia: Shell sort" width="858"></p>
 
-O mesmo exemplo em C. O laço de dentro é o insertion sort do assunto 0093
-com o `1` trocado por `h`:
+Em C, o laço de dentro é o insertion sort do assunto 0093 com o `1` trocado
+por `h`:
 
 ```c
 #include <stdio.h>
@@ -185,10 +165,10 @@ int main(void) {
 São 9 movimentos no total. O insertion sort comum, no mesmo vetor, faz 21:
 o 9, sozinho, gastaria 4. No shell sort ele deu **um** pulo de 4 casas.
 
-Repare que `h /= 3` desfaz a conta `3 * h + 1`: na divisão inteira, 13 / 3 é
-4 e 4 / 3 é 1. O laço de fora para quando `h` vira 0. Repara no fluxograma:
-primeiro o programa sobe até o maior salto, depois desce rodada por rodada,
-e a última rodada é sempre a do `h = 1`:
+O `h /= 3` desfaz a conta `3 * h + 1`: na divisão inteira, 13 / 3 é 4 e
+4 / 3 é 1. O laço de fora para quando `h` vira 0. O programa primeiro sobe
+até o maior salto, depois desce rodada por rodada, e a última rodada é
+sempre a do `h = 1`:
 
 <p align="center"><img src="18-ordenacao-linear/0119-shell-sort/fluxograma.svg" alt="Fluxograma: Shell sort" width="437"></p>
 
@@ -211,14 +191,14 @@ quem está 4, 8, ... casas para trás:
 > garantem que cada fileira está em ordem, não o vetor todo: depois do
 > `h = 4`, o 62 ainda está antes do 33. Se você inventar sua própria
 > sequência (5, 3, 2, por exemplo) e esquecer do 1, o programa termina sem
-> erro nenhum e com o vetor fora de ordem. Outro tropeço: escrever a
+> erro e com o vetor fora de ordem. Outro tropeço: escrever a
 > condição como `j > 0` (a do insertion sort comum). Com salto `h`, o certo é
 > `j >= h`, senão `v[j - h]` lê antes do começo do vetor.
 
 > [!TIP]
-> **Por dentro do C:** o shell sort não usa memória extra nenhuma: só `h`,
-> `i`, `j` e `x`, umas poucas variáveis na pilha, qualquer que seja o tamanho
-> do vetor. É por isso que ele aparece em sistemas embarcados e no código de
+> **Por dentro do C:** o shell sort não usa memória extra: só `h`, `i`, `j` e
+> `x`, umas poucas variáveis na pilha, qualquer que seja o tamanho do vetor.
+> Por isso ele aparece em sistemas embarcados e no código de
 > bibliotecas pequenas (a uClibc, por exemplo, implementa o `qsort` com shell
 > sort). O custo depende dos saltos, e ninguém sabe a fórmula exata para a
 > maioria das sequências: com a de Knuth, o pior caso é O(n^1,5), e na
@@ -641,14 +621,13 @@ de entregas. Cada pedido recebeu de 0 a 4 estrelas, e ela quer a lista em
 ordem de nota para responder primeiro os clientes insatisfeitos. São 8
 pedidos, de A a H, com 3, 1, 3, 2, 1, 4, 0 e 3 estrelas.
 
-Ela nem pensa em comparar pedido com pedido. Faz cinco montes, um para cada
-nota, e joga cada pedido no seu monte. Depois é só juntar os montes, do 0 ao
-4. Ninguém foi comparado com ninguém.
+Ela não compara pedido com pedido. Faz cinco montes, um para cada nota, joga
+cada pedido no seu monte e depois junta os montes, do 0 ao 4.
 
 No assunto 0117 você viu que nenhuma ordenação **por comparação** faz menos
 que uns n log₂ n testes no pior caso. O **counting sort** (ordenação por
-contagem) não fura esse limite: ele simplesmente não compara. Ele usa o
-**valor** da chave como **índice** de um vetor. Para isso, as chaves precisam
+contagem) não fura esse limite, porque não compara: usa o **valor** da chave
+como **índice** de um vetor. Para isso, as chaves precisam
 ser inteiros num intervalo pequeno, de 0 a k - 1.
 
 O algoritmo tem três passos, cada um um laço simples:
@@ -662,23 +641,23 @@ O algoritmo tem três passos, cada um um laço simples:
    cada elemento na última vaga livre do seu bloco: `c[x]--` e
    `saida[c[x]] = v[i]`.
 
-Por que de trás para a frente? Porque assim, entre chaves iguais, quem vem
-por último na entrada ocupa a última vaga do bloco. A ordem original dos
-empates se mantém: o counting sort é **estável**. Isso parece detalhe, mas é
-o que faz dele a peça central do radix sort, no próximo assunto.
+De trás para a frente, entre chaves iguais, quem vem por último na entrada
+ocupa a última vaga do bloco. A ordem original dos empates se mantém: o
+counting sort é **estável**. Essa propriedade faz dele a peça central do
+radix sort, no próximo assunto.
 
 O Cormen escreve `COUNTING-SORT(A, n, k)` com vetores de 1 a n e chaves de 0
-a **k**, ou seja, k + 1 contadores; aqui, em C, as chaves vão de 0 a k - 1. A
+a **k**, portanto k + 1 contadores; aqui, em C, as chaves vão de 0 a k - 1. A
 conta é a mesma: Θ(n + k), que vira Θ(n) quando k = O(n).
 
-Vamos ver na prática. A entrada passa uma vez para contar e outra para
-distribuir. Os três pedidos de 3 estrelas (A, C e H, em verde) chegam à
-saída na mesma ordem em que estavam:
+A entrada passa uma vez para contar e outra para distribuir. Os três pedidos
+de 3 estrelas (A, C e H, em verde) chegam à saída na mesma ordem em que
+estavam:
 
 <p align="center"><img src="18-ordenacao-linear/0120-counting-sort/ideia.svg" alt="Diagrama da ideia: Counting sort" width="858"></p>
 
-O mesmo exemplo em C. A saída vai para outro vetor: o counting sort não
-ordena no lugar.
+No código, a saída vai para outro vetor: o counting sort não ordena no
+lugar.
 
 ```c
 #include <stdio.h>
@@ -754,17 +733,16 @@ vaga e diminui o contador daquela nota:
 
 No fim, cada `c[x]` aponta para o **começo** do bloco de `x`.
 
-Repara no fluxograma: são três laços em sequência, nenhum dentro do outro.
-Dois andam pelos n elementos e um pelas k chaves, então o custo é
-**O(n + k)**:
+São três laços em sequência, nenhum dentro do outro. Dois andam pelos n
+elementos e um pelas k chaves, então o custo é **O(n + k)**:
 
 <p align="center"><img src="18-ordenacao-linear/0120-counting-sort/fluxograma.svg" alt="Fluxograma: Counting sort" width="459"></p>
 
 > [!WARNING]
 > Se o terceiro laço for da frente para trás (`for (int i = 0; i < n; i++)`)
 > com o mesmo `c[x]--`, o vetor sai ordenado pelas estrelas, mas os empates
-> saem **invertidos**: H3 C3 A3 em vez de A3 C3 H3. O programa não dá erro
-> nenhum, e o estrago só aparece quando a ordem dos empates importa (no radix
+> saem **invertidos**: H3 C3 A3 em vez de A3 C3 H3. O programa não dá erro,
+> e o estrago só aparece quando a ordem dos empates importa (no radix
 > sort, ela importa sempre). Outro cuidado: a chave tem que caber no vetor.
 > Uma nota 5, ou uma nota negativa, vira `c[5]` ou `c[-1]`: escrita fora do
 > vetor, que o AddressSanitizer pega e um programa sem ele ignora.
@@ -1142,9 +1120,9 @@ jogava cada cartão num de 10 escaninhos, do 0 ao 9. O operador juntava os
 escaninhos em ordem e passava o maço de novo, agora pela coluna seguinte.
 Depois de passar por todas as colunas, o maço estava ordenado.
 
-O truque, que parece ao contrário, é começar pela coluna **menos**
-significativa. O **radix sort** (ordenação digital, ou por raiz) faz
-exatamente isso com números:
+Parece ao contrário, mas a máquina começava pela coluna **menos**
+significativa. O **radix sort** (ordenação digital, ou por raiz) faz o mesmo
+com números:
 
 1. ordene pelo dígito das **unidades**;
 2. depois pelo das **dezenas**;
@@ -1156,27 +1134,27 @@ O dígito de `x` na casa `exp` (1, 10, 100...) sai com `(x / exp) % 10`. Essa
 versão, que começa pelo dígito menos significativo, se chama **LSD** (*least
 significant digit*).
 
-Por que funciona? Depois da passada das dezenas, os números estão em ordem
-pelos dois últimos dígitos. Na passada das centenas, dois números com a mesma
-centena, como 807 e 830, ficam na ordem em que já estavam, que é a ordem das
-dezenas. É por isso que cada passada **precisa ser estável**: a estabilidade
-guarda o trabalho das passadas anteriores.
+Depois da passada das dezenas, os números estão em ordem pelos dois últimos
+dígitos. Na passada das centenas, dois números com a mesma centena, como 807
+e 830, ficam na ordem em que já estavam, que é a ordem das dezenas. Por isso
+cada passada **precisa ser estável**: a estabilidade guarda o trabalho das
+passadas anteriores.
 
 O custo é de `d` passadas de counting sort, com `d` dígitos e base `b`:
 **O(d · (n + b))**. Para números de tamanho fixo, `d` é constante e o radix
-sort é linear. De novo, nenhuma comparação entre elementos. O Cormen
+sort é linear, de novo sem comparar elementos. O Cormen
 escreve Θ(d(n + k)), com k valores por dígito, e para chaves de `b` bits
 quebradas em dígitos de `r` bits, Θ((b/r)(n + 2^r)): a melhor escolha fica
 perto de r = log₂ n.
 
-Vamos ver na prática. Oito números de pedido de um mercado online, com até
-três dígitos (escritos com zeros à esquerda para os dígitos ficarem
-alinhados). Acompanhe o 807 e o 830, em amarelo: a passada das dezenas põe o
-807 na frente, e a das centenas, que vê os dois empatados no 8, respeita:
+O exemplo usa oito números de pedido de um mercado online, com até três
+dígitos (escritos com zeros à esquerda para os dígitos ficarem alinhados).
+Acompanhe o 807 e o 830, em amarelo: a passada das dezenas põe o 807 na
+frente, e a das centenas, que vê os dois empatados no 8, respeita essa ordem:
 
 <p align="center"><img src="18-ordenacao-linear/0121-radix-sort/ideia.svg" alt="Diagrama da ideia: Radix sort" width="858"></p>
 
-O mesmo exemplo em C. A `passada` é o counting sort do assunto 0120 com a
+A `passada` é o counting sort do assunto 0120 com a
 chave trocada pelo dígito; o vetor auxiliar é alocado uma vez só e
 reaproveitado em todas as passadas:
 
@@ -1259,7 +1237,7 @@ na saída ficam: `807 509 | 216 | 830 | 047 | 251 553 | 074`. Dentro do
 bloco do 0, o 807 vem antes do 509 porque já vinha antes: a passada não
 olhou as unidades, mas também não estragou a ordem delas.
 
-Repara no fluxograma: o laço para quando `exp` passa do maior número. Com o
+O laço para quando `exp` passa do maior número. Com o
 maior igual a 830, são três passadas (`exp` = 1, 10, 100); com `exp = 1000`,
 `830 / 1000` dá 0:
 
@@ -1269,9 +1247,9 @@ maior igual a 830, são três passadas (`exp` = 1, 10, 100); com `exp = 1000`,
 > Use uma ordenação **estável** em cada passada. Se o terceiro laço da
 > `passada` andar da frente para trás, cada passada inverte os empates, e o
 > resultado sai `074 047 251 216 553 509 830 807`: as centenas em ordem, o
-> resto bagunçado, sem erro nenhum. Também não
-> dá para começar pelas centenas com esse código: a última passada é a que
-> manda, então ela tem que ser a do dígito mais importante. E o número de
+> resto bagunçado, sem erro nenhum. Também não dá para começar pelas
+> centenas com esse código: a última passada é a que manda, então ela tem
+> que ser a do dígito mais importante. E o número de
 > passadas vem do **maior** elemento, não do primeiro: um número de 4 dígitos
 > escondido no meio do vetor precisa da quarta passada.
 
@@ -1287,8 +1265,8 @@ maior igual a 830, são três passadas (`exp` = 1, 10, 100); com `exp = 1000`,
 
 > [!NOTE]
 > **Pergunta para você:** este código funciona com números negativos? Pense
-> no que `(-47 / 1) % 10` dá em C (o resto tem o sinal do dividendo) e onde
-> isso cairia no vetor `c`.
+> no que `(-47 / 1) % 10` dá em C (o resto tem o sinal do dividendo) e em
+> que posição do vetor `c` isso cairia.
 
 ### Hora de praticar
 
@@ -1663,30 +1641,30 @@ valores em **faixas** de mesmo tamanho, uma por **balde**, e:
 3. **concatena** os baldes, do primeiro ao último.
 
 Funciona porque a função que escolhe o balde **preserva a ordem**: tudo que
-está no balde 2 é menor que tudo que está no balde 4. É quase uma tabela hash
-(assunto 0105), só que ao contrário: o hash quer espalhar sem ordem, o
+está no balde 2 é menor que tudo que está no balde 4. Lembra uma tabela hash
+(assunto 0105) com o objetivo oposto: o hash quer espalhar sem ordem, o
 bucket sort quer espalhar **em ordem**.
 
 Cada balde é uma **lista encadeada** (assunto 0076): não dá para saber de
 antemão quantos elementos caem em cada um. E em vez de ordenar a lista
 depois, cada elemento já entra **no lugar certo** da lista, como na lista
-ordenada do assunto 0078. Isso é o insertion sort feito na lista.
+ordenada do assunto 0078: o insertion sort feito na lista.
 
-Quanto custa? Se os `n` valores estão bem **espalhados** pelo intervalo e há
+Se os `n` valores estão bem **espalhados** pelo intervalo e há
 uns `n` baldes, cada balde recebe em média um elemento, e o custo total é
 **O(n)** em média. Se todos caem no mesmo balde, sobra um insertion sort de
 `n` elementos: **O(n²)**. O bucket sort aposta na distribuição dos dados.
 O Cormen apresenta a versão com valores em [0, 1) e `n` baldes: `x` vai para
 o balde ⌊n · x⌋, e o Θ(n) médio supõe valores **uniformes** no intervalo.
 
-Vamos ver na prática. Dez notas finais, dez baldes. Três notas caem no balde
-2 e entram em ordem na lista; quatro baldes ficam vazios. Ler os baldes de
-cima para baixo já dá o vetor ordenado:
+No exemplo, dez notas finais vão para dez baldes. Três notas caem no balde 2
+e entram em ordem na lista; quatro baldes ficam vazios. Ler os baldes de cima
+para baixo já dá o vetor ordenado:
 
 <p align="center"><img src="18-ordenacao-linear/0122-bucket-sort/ideia.svg" alt="Diagrama da ideia: Bucket sort" width="858"></p>
 
-O mesmo exemplo em C. Os baldes são um vetor de 10 ponteiros para lista,
-todos começando em `NULL`:
+Em C, os baldes são um vetor de 10 ponteiros para lista, todos começando em
+`NULL`:
 
 ```c
 #include <stdio.h>
@@ -1765,10 +1743,9 @@ int main(void) {
 // ordenadas: 0.8 2.2 2.7 2.9 4.1 4.5 6.4 6.9 8.1 9.6
 ```
 
-Repara no fluxograma: o laço de espalhar passa uma vez pelo vetor, e o de
-juntar passa uma vez por cada balde e cada nó. O trabalho escondido está no
-`insere_ordenado`, que anda pela lista do balde: com baldes curtos, é quase
-nada:
+O laço de espalhar passa uma vez pelo vetor, e o de juntar passa uma vez por
+cada balde e cada nó. O trabalho escondido está no `insere_ordenado`, que
+anda pela lista do balde; com baldes curtos, ele quase não pesa:
 
 <p align="center"><img src="18-ordenacao-linear/0122-bucket-sort/fluxograma.svg" alt="Fluxograma: Bucket sort" width="529"></p>
 
@@ -1786,8 +1763,8 @@ nada:
 > junto. Para 10 notas tanto faz, mas para 1 milhão são 1 milhão de chamadas
 > ao alocador e nós espalhados pelo heap, o que o cache detesta. Por isso
 > implementações rápidas fazem uma **contagem** antes (quantos vão para cada
-> balde) e usam um vetor só, dividido em pedaços, sem lista nenhuma. É o
-> counting sort do assunto 0120 com chaves que são faixas. E cada `malloc`
+> balde) e usam um vetor só, dividido em pedaços, sem lista: o counting sort
+> do assunto 0120 com chaves que são faixas. E cada `malloc`
 > pede o seu `free`: este código libera cada nó logo depois de copiar o
 > valor.
 
@@ -2203,7 +2180,7 @@ puxada para cima pela cobertura de R$ 3100. O número que diz quanto custa um
 aluguel "típico" é a **mediana**: o valor do meio se a lista estivesse em
 ordem. Metade dos anúncios custa menos, metade custa mais.
 
-O jeito óbvio é ordenar e pegar `v[n / 2]`. Funciona, mas é trabalho demais:
+O jeito óbvio é ordenar e pegar `v[n / 2]`. Funciona, mas sobra trabalho:
 para saber quem fica na posição 4, você arrumou as outras 8 posições também.
 O problema geral se chama **seleção**: achar o **k-ésimo menor** elemento
 (a mediana é o caso `k = n / 2`; o mínimo é `k = 0`).
@@ -2222,20 +2199,20 @@ de recursão: um `while` que encolhe o intervalo `[p, r]` resolve. Você já viu
 essa ideia de relance no exercício E569, do módulo 13; aqui ela ganha nome,
 custo e cuidados.
 
-Quanto custa? Se o pivô cai perto do meio, cada separação descarta metade:
+Se o pivô cai perto do meio, cada separação descarta metade:
 `n + n/2 + n/4 + ...`, que é menos que `2n`. O quickselect é **O(n) em
 média**, contra O(n log n) de ordenar. No pior caso, o pivô é sempre o
 maior ou o menor e o custo vira **O(n²)**, como no quick sort. O Cormen
 chama a versão com pivô sorteado de `RANDOMIZED-SELECT` e mostra também o
 `SELECT` (a mediana das medianas, de 1973), que garante O(n) no pior caso.
 
-Vamos ver na prática. A primeira separação, com pivô 1300, deixa o pivô na
-posição 2. A mediana está na posição 4, à direita: os três primeiros nunca
-mais são olhados. Duas separações depois, o pivô cai exatamente na posição 4:
+Nos aluguéis, a primeira separação, com pivô 1300, deixa o pivô na posição
+2. A mediana está na posição 4, à direita: os três primeiros nunca mais são
+olhados. Duas separações depois, o pivô cai na posição 4:
 
 <p align="center"><img src="18-ordenacao-linear/0123-quickselect/ideia.svg" alt="Diagrama da ideia: Quickselect" width="858"></p>
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -2304,8 +2281,8 @@ quick sort completo faz 18 neste vetor), mas ela cresce com `n`. A conta
 achar a mediana fica em torno de 3,4 `n`. Para um milhão de elementos, uns
 3,4 milhões de comparações, contra mais de 20 milhões para ordenar.
 
-Repara no fluxograma: diferente do quick sort, não há duas chamadas. Cada
-volta do laço escolhe um lado e joga o outro fora:
+Ao contrário do quick sort, não há duas chamadas. Cada volta do laço escolhe
+um lado e joga o outro fora:
 
 <p align="center"><img src="18-ordenacao-linear/0123-quickselect/fluxograma.svg" alt="Fluxograma: Quickselect" width="778"></p>
 
@@ -2317,11 +2294,11 @@ volta do laço escolhe um lado e joga o outro fora:
 > original (a ordem dos anúncios, por exemplo), passe uma cópia.
 
 > [!TIP]
-> **Por dentro do C:** a versão com `while` usa memória extra O(1): só `p`,
+> **Por dentro do C:** a versão com `while` usa memória extra O(1): `p`,
 > `r`, `j` e as variáveis do `separa`, na pilha. Uma versão recursiva, que
 > chama `quickselect` num dos lados, é **recursão de cauda** (a chamada é a
 > última coisa que a função faz), e o gcc com `-O2` costuma transformá-la
-> num laço sozinho. Mas sem otimização (o `rodar` compila sem `-O2`), cada
+> num laço sozinho. Sem otimização (o `rodar` compila sem `-O2`), cada
 > chamada é um frame novo, e no pior caso são `n` frames. Escrever o laço à
 > mão não depende da boa vontade do compilador.
 
@@ -2743,9 +2720,9 @@ mesmo segundo do menor para o maior valor.
 
 O caminho de sempre é o `qsort` (assunto 0096): ele ordena qualquer coisa,
 desde que você dê uma função de comparação. Para 1 milhão de registros, são
-uns 20 milhões de comparações, e cada uma é uma **chamada de função** por
-ponteiro. Mas aqui as chaves são inteiros: o horário vai de 0 a 86399, e o
-valor cabe em 4 bytes. É território das ordenações lineares deste módulo.
+uns 20 milhões de comparações, cada uma uma **chamada de função** por
+ponteiro. Só que aqui as chaves são inteiros: o horário vai de 0 a 86399, e
+o valor cabe em 4 bytes. Cabem as ordenações lineares deste módulo.
 
 O TAD `pix.h` junta as peças. O registro tem 12 bytes:
 
@@ -2757,7 +2734,7 @@ typedef struct {
 } Pix;
 ```
 
-E as funções que importam:
+As funções principais:
 
 - `pix_por_valor`: **radix sort** em base 256 (assunto 0121) sobre o campo
   `centavos`. Quatro passadas, cada uma um counting sort estável pelo byte da
@@ -2769,12 +2746,12 @@ E as funções que importam:
   comparação de tempo.
 
 O segundo relatório tem **duas chaves**: horário e, no empate, valor. Não
-precisa de uma função de comparação composta. É a ideia do radix sort LSD:
+precisa de função de comparação composta; basta a ideia do radix sort LSD:
 ordene pela chave **menos** importante (valor) e depois, com um método
 **estável**, pela mais importante (horário). A estabilidade do counting
 sort preserva a ordem de valor dentro de cada segundo.
 
-Vamos ver na prática. Os mesmos dados vão para dois vetores: um é ordenado
+Os mesmos dados vão para dois vetores: um é ordenado
 pelo `qsort`, o outro pelo radix. Os dois têm que terminar com os valores na
 mesma ordem. Depois, o counting sort reorganiza o vetor do radix pelo
 horário:
@@ -2858,15 +2835,14 @@ int main(void) {
 
 O radix ordenou o milhão de valores em bem menos tempo que o `qsort`
 (nesta execução, menos de um terço), e o counting pelo horário levou menos
-ainda. Sem o AddressSanitizer
-e com `gcc -O2`, os números caem para uns 0,18 s, 0,03 s e 0,01 s: a
-proporção fica até maior. Os quatro primeiros do dia são todos de
-00:00:00, e estão em ordem de valor: a primeira ordenação sobreviveu à
-segunda.
+ainda. Sem o AddressSanitizer e com `gcc -O2`, os números caem para uns
+0,18 s, 0,03 s e 0,01 s: a proporção fica até maior. Os quatro primeiros do
+dia são todos de 00:00:00 e estão em ordem de valor: a primeira ordenação
+sobreviveu à segunda.
 
-Repara no fluxograma: a conferência entre os dois vetores vem antes do
-segundo relatório. Comparar com uma implementação confiável (o `qsort`) é o
-jeito mais simples de testar uma ordenação escrita à mão:
+A conferência entre os dois vetores vem antes do segundo relatório. Comparar
+com uma implementação confiável (o `qsort`) é o jeito mais simples de testar
+uma ordenação escrita à mão:
 
 <p align="center"><img src="18-ordenacao-linear/0124-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="374"></p>
 
@@ -2884,8 +2860,7 @@ O resumo do módulo, com os algoritmos do módulo 13 de referência:
 | qsort | O(n log n) | depende da biblioteca | não garantido | qualquer tipo, qualquer critério |
 
 > [!WARNING]
-> Ordenação linear não é mágica: ela troca a comparação por **suposições
-> sobre os dados**. O counting sort pelo horário só funciona porque o
+> Ordenação linear troca a comparação por **suposições sobre os dados**. O counting sort pelo horário só funciona porque o
 > horário vai de 0 a 86399; se um registro chegar com `segundo = 86400` (um
 > bug na origem dos dados), `c[86400]` escreve fora do vetor. Antes de usar
 > o valor como índice, confira a faixa, ou confie numa fonte que garanta.
@@ -2895,13 +2870,13 @@ O resumo do módulo, com os algoritmos do módulo 13 de referência:
 > [!TIP]
 > **Por dentro do C:** cada passada do radix lê o vetor inteiro em
 > sequência, do fim para o começo, e escreve espalhado em 256 regiões do
-> auxiliar. 12 MB não cabem no cache, mas a leitura sequencial é a que o
-> processador mais gosta: ele adivinha os próximos endereços e busca antes.
+> auxiliar. 12 MB não cabem no cache, mas a leitura sequencial é a preferida
+> do processador: ele adivinha os próximos endereços e busca antes.
 > Já o `qsort` não sabe nada sobre o `Pix`: move cada registro como um
 > bloco genérico de 12 bytes (só conhece o tamanho) e chama
 > `pix_compara_valor` por ponteiro, sem poder colocar o código dela no
-> lugar da chamada. Saber o tipo e a
-> faixa da chave é a vantagem que as ordenações lineares exploram.
+> lugar da chamada. As ordenações lineares exploram justamente o que o `qsort`
+> ignora: o tipo e a faixa da chave.
 
 > [!NOTE]
 > **Pergunta para você:** o radix fez 4 passadas, mas nenhum Pix passa de

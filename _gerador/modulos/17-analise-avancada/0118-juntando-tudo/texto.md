@@ -2,12 +2,10 @@
 
 A loja virtual vai mudar o relatório do fim do dia: em vez de 16 mil pedidos,
 agora ele vai ordenar **1 milhão**. O programador testou com 16 mil e mediu
-alguns milissegundos. A pergunta da gerente é simples: "e com 1 milhão,
-quanto tempo vai levar?". Rodar para ver pode demorar meia hora. Dá para
-**prever** antes?
+alguns milissegundos. A gerente pergunta: "e com 1 milhão, quanto tempo vai
+levar?". Rodar para ver pode demorar meia hora. Dá para **prever** antes?
 
-Dá, e é para isso que serve tudo o que veio neste módulo. A receita tem
-quatro passos:
+Dá, com o que veio neste módulo. A receita tem quatro passos:
 
 1. **Conhecer a classe.** Pela recorrência ou pela contagem: o insertion
    sort é `T(n) = T(n-1) + n`, Θ(n²); o merge sort é `2 T(n/2) + n`,
@@ -42,7 +40,7 @@ long ord_contagem(void);
 int ord_confere(const int v[], int n);
 ```
 
-Vamos ver na prática. Os pedidos são números sorteados com um gerador
+Os pedidos são números sorteados com um gerador
 próprio, para a entrada ser a mesma em qualquer máquina. Cada algoritmo
 ordena 8 mil e 16 mil; da razão sai a confirmação da classe, e da medida de
 16 mil sai a previsão para 1 milhão. Em verde, o que a previsão acertou; em
@@ -145,15 +143,15 @@ int main(void) {
 //   medido para 1 milhão:       25.0 milhões de comparações,    0.26 s
 ```
 
-Leia a saída em três camadas. As **razões** confirmam as classes: ×4,00 no
+A saída tem três camadas. As **razões** confirmam as classes: ×4,00 no
 insertion, ×2,17 a ×2,29 nos outros três. As **previsões** de comparações
 ficaram a menos de 4% do medido: o modelo `n log n` ignora termos menores,
 então erra um pouco para baixo. E o **tempo** do insertion para 1 milhão,
 1.600 segundos, é uns 27 minutos, contra um terço de segundo do merge sort:
 a mesma tarefa, mais de 5 mil vezes mais lenta.
 
-Repara no fluxograma: é a receita, para um algoritmo. O caminho marcado é o
-do merge sort, que passa pela previsão e pela conferência:
+O fluxograma aplica a receita a um algoritmo. O caminho marcado é o do merge
+sort, que passa pela previsão e pela conferência:
 
 {{fluxograma}}
 
@@ -172,7 +170,7 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 > [!WARNING]
 > Na classe n log n, dobrar `n` **não** dá ×2 exato. De 8 mil para 16 mil, a
 > conta é `2 · log₂ 16.000 / log₂ 8.000 = 2,15`, e quem espera ×2 acha que o
-> algoritmo "está piorando". E o contrário também engana: com `n` pequeno
+> algoritmo "está piorando". O contrário também engana: com `n` pequeno
 > (algumas centenas), o tempo é dominado por constantes, chamadas de função e
 > cache, e as razões saem malucas. Meça com tamanhos grandes o bastante para
 > o tempo passar de alguns milissegundos, e sempre a partir da **mesma
@@ -188,8 +186,8 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 > converte para `double` antes de dividir. E lembre que o `rodar` compila sem
 > otimização e com o AddressSanitizer, que vigia cada acesso à memória: os
 > tempos aqui são várias vezes maiores que os de um `gcc -O2` sem
-> sanitizador. As **razões**, porém, continuam valendo, e é com elas que a
-> previsão trabalha.
+> sanitizador. As **razões** continuam valendo, e a previsão trabalha com
+> elas.
 
 > [!NOTE]
 > **Pergunta para você:** o quick sort daqui usa o elemento do meio como

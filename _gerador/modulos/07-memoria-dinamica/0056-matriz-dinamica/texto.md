@@ -6,7 +6,7 @@ e o trimestre tem 13 semanas. Uma matriz `int vendas[3][4]` não serve: as
 dimensões só aparecem quando o programa roda.
 
 O C só sabe alocar dinamicamente **vetores**, blocos de uma dimensão. Para ter
-uma matriz, você monta uma com vetores. Tem dois jeitos clássicos.
+uma matriz, você monta uma com vetores, de dois jeitos clássicos.
 
 **1. Um bloco só.** Aloque `linhas * colunas` elementos e calcule a posição na
 mão: o elemento `(i, j)` fica em `v[i * colunas + j]`. É a mesma conta que o
@@ -33,10 +33,9 @@ elas ficam presas no heap para sempre.
 
 E se o `malloc` da terceira linha falhar? As duas primeiras já foram
 alocadas. A função de criação precisa desfazer o que já fez antes de devolver
-`NULL`: é o tipo de cuidado que separa um programa de brinquedo de um
-programa de verdade.
+`NULL`.
 
-Vamos ver na prática. A matriz de 3 lojas por 4 semanas é um vetor de 3
+A matriz de 3 lojas por 4 semanas é um vetor de 3
 ponteiros, cada um apontando para uma linha de 4 inteiros. As linhas podem
 estar em qualquer lugar do heap, nem precisam ficar juntas:
 
@@ -107,8 +106,7 @@ int main(void) {
 // Loja 3: R$ 78 mil
 ```
 
-Repara no fluxograma da criação: é um laço com uma saída de emergência. Se
-uma linha falhar, o caminho de erro passa pela liberação do que já existe:
+A criação é um laço com uma saída de emergência: se uma linha falhar, o caminho de erro passa pela liberação do que já existe:
 
 {{fluxograma}}
 

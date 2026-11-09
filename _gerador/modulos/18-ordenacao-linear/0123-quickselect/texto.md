@@ -6,7 +6,7 @@ puxada para cima pela cobertura de R$ 3100. O número que diz quanto custa um
 aluguel "típico" é a **mediana**: o valor do meio se a lista estivesse em
 ordem. Metade dos anúncios custa menos, metade custa mais.
 
-O jeito óbvio é ordenar e pegar `v[n / 2]`. Funciona, mas é trabalho demais:
+O jeito óbvio é ordenar e pegar `v[n / 2]`. Funciona, mas sobra trabalho:
 para saber quem fica na posição 4, você arrumou as outras 8 posições também.
 O problema geral se chama **seleção**: achar o **k-ésimo menor** elemento
 (a mediana é o caso `k = n / 2`; o mínimo é `k = 0`).
@@ -25,20 +25,20 @@ de recursão: um `while` que encolhe o intervalo `[p, r]` resolve. Você já viu
 essa ideia de relance no exercício E569, do módulo 13; aqui ela ganha nome,
 custo e cuidados.
 
-Quanto custa? Se o pivô cai perto do meio, cada separação descarta metade:
+Se o pivô cai perto do meio, cada separação descarta metade:
 `n + n/2 + n/4 + ...`, que é menos que `2n`. O quickselect é **O(n) em
 média**, contra O(n log n) de ordenar. No pior caso, o pivô é sempre o
 maior ou o menor e o custo vira **O(n²)**, como no quick sort. O Cormen
 chama a versão com pivô sorteado de `RANDOMIZED-SELECT` e mostra também o
 `SELECT` (a mediana das medianas, de 1973), que garante O(n) no pior caso.
 
-Vamos ver na prática. A primeira separação, com pivô 1300, deixa o pivô na
-posição 2. A mediana está na posição 4, à direita: os três primeiros nunca
-mais são olhados. Duas separações depois, o pivô cai exatamente na posição 4:
+Nos aluguéis, a primeira separação, com pivô 1300, deixa o pivô na posição
+2. A mediana está na posição 4, à direita: os três primeiros nunca mais são
+olhados. Duas separações depois, o pivô cai na posição 4:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+Em C:
 
 ```c
 #include <stdio.h>
@@ -107,8 +107,8 @@ quick sort completo faz 18 neste vetor), mas ela cresce com `n`. A conta
 achar a mediana fica em torno de 3,4 `n`. Para um milhão de elementos, uns
 3,4 milhões de comparações, contra mais de 20 milhões para ordenar.
 
-Repara no fluxograma: diferente do quick sort, não há duas chamadas. Cada
-volta do laço escolhe um lado e joga o outro fora:
+Ao contrário do quick sort, não há duas chamadas. Cada volta do laço escolhe
+um lado e joga o outro fora:
 
 {{fluxograma}}
 
@@ -120,11 +120,11 @@ volta do laço escolhe um lado e joga o outro fora:
 > original (a ordem dos anúncios, por exemplo), passe uma cópia.
 
 > [!TIP]
-> **Por dentro do C:** a versão com `while` usa memória extra O(1): só `p`,
+> **Por dentro do C:** a versão com `while` usa memória extra O(1): `p`,
 > `r`, `j` e as variáveis do `separa`, na pilha. Uma versão recursiva, que
 > chama `quickselect` num dos lados, é **recursão de cauda** (a chamada é a
 > última coisa que a função faz), e o gcc com `-O2` costuma transformá-la
-> num laço sozinho. Mas sem otimização (o `rodar` compila sem `-O2`), cada
+> num laço sozinho. Sem otimização (o `rodar` compila sem `-O2`), cada
 > chamada é um frame novo, e no pior caso são `n` frames. Escrever o laço à
 > mão não depende da boa vontade do compilador.
 

@@ -1,10 +1,10 @@
 ## 0057 · Erros de memória
 
-O sistema do caixa da padaria funciona perfeitamente de manhã. Às seis da
+O sistema do caixa da padaria funciona bem de manhã. Às seis da
 tarde está lento, e no sábado trava. Ninguém mexeu no código. O que aconteceu
 foi um **vazamento**: a cada venda, um pedacinho de memória ficava para trás,
-e depois de milhares de vendas o heap acabou. Em inglês, *memory
-leak*. No C, quem cria essa doença é você mesmo, e quem cura também.
+e depois de milhares de vendas o heap acabou (*memory leak*, em inglês). No
+C, quem cria esse erro é você, e quem corrige também.
 
 O pior desses erros é que o programa costuma **funcionar**: mostra a saída
 certa, termina sem reclamar e quebra só na máquina do cliente, dias depois.
@@ -24,7 +24,7 @@ o valor antigo, porque ninguém apagou os bytes. Funciona por sorte, até o
 `malloc` entregar aquele pedaço para outra parte do programa.
 
 O **estouro** no heap é ainda mais traiçoeiro: logo depois do seu bloco mora
-o cabeçalho do bloco vizinho (lembra do 0054?). Escrever um byte a mais pode
+o cabeçalho do bloco vizinho (assunto 0054). Escrever um byte a mais pode
 estragar a contabilidade do `malloc`, e o programa quebra muito depois, num
 `free` que não tem culpa nenhuma.
 
@@ -41,7 +41,7 @@ As ferramentas:
   Instale com `sudo pacman -S valgrind` no Arch Linux ou `sudo apt install
   valgrind` no Debian/Ubuntu e rode com `~/LPEDC/rodar --valgrind arquivo.c`.
 
-Vamos ver na prática. A função `total_do_pedido` copia os 4 preços de um
+A função `total_do_pedido` copia os 4 preços de um
 pedido (R$ 30, 12, 45 e 8) para um bloco temporário de 16 bytes e soma tudo.
 Na primeira versão, ela esquecia o `free`. Cada um dos 3 pedidos deixava 16
 bytes perdidos: o endereço morria com o frame, mas o bloco ficava. O ASan
@@ -64,7 +64,7 @@ Direct leak of 48 byte(s) in 3 object(s) allocated from:
 SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
 ```
 
-A versão corrigida tem uma linha a mais, e é ela que importa:
+A versão corrigida tem uma linha a mais:
 
 ```c
 #include <stdio.h>
@@ -97,7 +97,7 @@ int main(void) {
 // Pedido 3: R$ 95
 ```
 
-Repara no fluxograma: o `free` precisa estar no caminho antes do `return`,
+O `free` precisa estar no caminho antes do `return`,
 porque o `return` destrói a única variável que sabia onde o bloco estava:
 
 {{fluxograma}}
@@ -113,8 +113,8 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 > **Por dentro do C:** o ASan reserva 1 byte de "memória sombra" para cada 8
 > bytes do programa. Em volta de cada bloco do `malloc` ele deixa uma zona
 > envenenada (*redzone*); todo acesso confere a sombra antes. Os blocos
-> liberados ficam um tempo de quarentena sem ser reaproveitados, e é por isso
-> que ele consegue dizer "isto foi liberado lá na linha 31". O custo: o
+> liberados ficam um tempo de quarentena sem ser reaproveitados, e assim ele
+> consegue dizer "isto foi liberado lá na linha 31". O custo: o
 > programa fica uns 2 vezes mais lento e usa mais memória. Por isso o ASan é
 > ferramenta de desenvolvimento, não de produção.
 

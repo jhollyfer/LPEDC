@@ -3,9 +3,9 @@
 Na banca da rodoviária, a revista de passatempos traz um sudoku "difícil", e
 você empaca na terceira casa. A regra é curta: completar a grade 9 × 9 com
 dígitos de 1 a 9 sem repetir nenhum numa linha, numa coluna ou numa das nove
-caixas 3 × 3. Que tal deixar o computador resolver?
+caixas 3 × 3. O computador resolve por você.
 
-O sudoku junta tudo o que o módulo mostrou. A grade é uma **matriz**
+O sudoku junta o que o módulo mostrou. A grade é uma **matriz**
 `int g[9][9]`, com 0 nas casas vazias. Cada casa vazia é uma decisão, como as
 posições das permutações, e as opções são os dígitos de 1 a 9. A **poda** é a
 regra do jogo: um dígito que já aparece na linha, na coluna ou na caixa nem é
@@ -24,7 +24,7 @@ nenhum dígito serve, devolve `false` e quem chamou tenta o próximo dígito
 dele. Quando não sobra casa vazia, a grade está resolvida, e o `true` sobe
 pela pilha de chamadas até o `main`, como no exemplo A254.
 
-Vamos ver na prática. A primeira casa vazia é a (0, 1). A linha 0 já tem 2,
+A primeira casa vazia é a (0, 1). A linha 0 já tem 2,
 3 e 8; a coluna 1 tem 4, 9, 6, 3 e 1; a caixa 0 tem 2, 3, 6, 4 e 1. Sobram o
 5 e o 7. O programa tenta o 5 primeiro, e só depois de muitos retrocessos lá
 embaixo descobre que a resposta é o 7:
@@ -120,13 +120,13 @@ int main(void) {
 ```
 
 São 51 casas vazias e 2999 chamadas: cerca de 59 por casa. A força bruta
-pura testaria até 9⁵¹ preenchimentos, um número com 49 algarismos. A poda faz
-quase todo o trabalho. E dá para podar ainda mais escolhendo **qual** casa
+pura testaria até 9⁵¹ preenchimentos, um número com 49 algarismos. Quase
+todo o ganho vem da poda, e dá para podar ainda mais escolhendo **qual** casa
 preencher: começar pela casa com menos candidatos derruba as chamadas deste
 mesmo jogo para 64 (exemplo A260).
 
-Repara no fluxograma: é o esqueleto do módulo inteiro, com a casa no lugar
-do item e a regra do jogo no lugar da poda:
+O fluxograma repete o esqueleto do módulo, com a casa no lugar do item e a
+regra do jogo no lugar da poda:
 
 {{fluxograma}}
 
@@ -138,14 +138,14 @@ do item e a regra do jogo no lugar da poda:
 > começo de `resolve` passa a tratá-la como uma casa **dada**. Faça o teste:
 > sem essa linha, este programa termina em 64 chamadas mostrando uma grade
 > "resolvida" com três 9 seguidos na primeira linha. O retrocesso só funciona
-> se o estado volta a ser **exatamente** o de antes da escolha.
+> se o estado volta a ser o mesmo de antes da escolha.
 
 > [!TIP]
 > **Por dentro do C:** os três vetores de marcação ocupam 3 × 9 × 10 = 270
 > bytes (o índice 0 de cada linha nunca é usado: desperdiçar um byte deixa o
 > código usar o próprio dígito como índice). A grade `int g[9][9]` tem 324
 > bytes, contínuos na memória. A recursão desce no máximo 52 frames, um por
-> casa vazia mais o último, então a pilha nem percebe. A conta
+> casa vazia mais o último: nada para a pilha. A conta
 > `jogo[l][c] - '0'` transforma o caractere `'7'` (código 55) no número 7,
 > porque os dígitos são consecutivos na tabela ASCII (assunto 0040).
 

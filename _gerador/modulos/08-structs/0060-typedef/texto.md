@@ -4,12 +4,12 @@ No grupo da família, ninguém chama o seu tio de "José Carlos da Silva". É
 "Zé". O apelido não cria outra pessoa: é o mesmo tio, com um nome mais curto.
 
 No assunto anterior, todo pedido era declarado como `struct pedido p1;`, com
-as duas palavras, toda vez. Em programa grande isso cansa e polui. O C tem um
-jeito de dar apelido a um tipo: o **typedef**. Struct, union e enum, com ou sem
+as duas palavras, toda vez. Em programa grande isso cansa. O C dá apelido a um
+tipo com o **typedef**. Struct, union e enum, com ou sem
 `typedef`, são o que os livros e o edital chamam de **tipos definidos pelo
 programador**.
 
-A regra é: escreva uma declaração de variável normal e ponha `typedef` na
+A regra: escreva uma declaração de variável normal e ponha `typedef` na
 frente. O nome que seria a variável vira o **nome do tipo**:
 
 ```c
@@ -18,7 +18,7 @@ typedef double Reais;  // um apelido: Reais agora é o mesmo que double
 ```
 
 O uso mais comum é com struct. Dá para batizar uma struct que já existe
-(`typedef struct pix Pix;`) ou fazer tudo de uma vez, sem nem dar nome à
+(`typedef struct pix Pix;`) ou fazer tudo de uma vez, sem dar nome à
 struct:
 
 ```c
@@ -29,12 +29,13 @@ typedef struct {
 } Pix;
 ```
 
-A partir daí você escreve só `Pix p;`, sem o `struct` na frente. Nomes de tipo com inicial maiúscula são uma convenção comum (e
-a deste curso) para não confundir tipo com variável.
+A partir daí você escreve só `Pix p;`, sem o `struct` na frente. Nome de
+tipo com inicial maiúscula é uma convenção comum (e a deste curso) para não
+confundir tipo com variável.
 
-Vamos ver na prática. Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno
-de R$ 1.000,00 que os bancos aplicam entre 20h e 6h. Repare que `Pix` e
-`Reais` são só etiquetas novas coladas em coisas que já existiam:
+Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno de R$ 1.000,00 que os
+bancos aplicam entre 20h e 6h. No desenho, `Pix` e `Reais` são só etiquetas
+novas coladas em coisas que já existiam:
 
 {{ideia}}
 
@@ -80,15 +81,15 @@ o `FILE` que vem no módulo 09 são apelidos definidos nos cabeçalhos da
 biblioteca. O `uint8_t` existe para você dizer "quero exatamente 8 bits sem
 sinal" sem depender do nome do tipo em cada máquina.
 
-Repara no fluxograma: são duas perguntas em sequência. Só bloqueia se for
-horário noturno **e** o valor passar do limite:
+São duas perguntas em sequência: o Pix só é bloqueado se for horário
+noturno **e** o valor passar do limite:
 
 {{fluxograma}}
 
 > [!WARNING]
 > `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
 > e `typedef double Dolares;`, o compilador aceita `Reais r = dolares;` sem
-> piscar: para ele, os dois são `double`. Se você quer que o compilador
+> reclamar: para ele, os dois são `double`. Se você quer que o compilador
 > barre a mistura, embrulhe numa struct: `typedef struct { double v; } Reais;`.
 > Structs diferentes não se misturam. E cuidado com typedef que esconde
 > demais: `typedef int *PInt;` faz `PInt a, b;` parecer inocente, mas esconde

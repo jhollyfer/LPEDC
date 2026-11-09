@@ -3,20 +3,18 @@
 # Módulo 08 · Tipos compostos
 
 Até aqui, cada variável guardava uma coisa só: um número, um caractere, um
-vetor de coisas iguais. Só que os dados do mundo real vêm em pacotes. Um
-pedido tem tamanho, quantidade e preço; um time tem nome, vitórias e empates.
-Este módulo ensina o C a guardar pacotes.
+vetor de coisas iguais. Os dados do mundo real vêm em pacotes. Um pedido tem
+tamanho, quantidade e preço; um time tem nome, vitórias e empates. Este
+módulo ensina o C a guardar pacotes.
 
-No C, você desenha o pacote byte a
-byte: decide a ordem dos campos (e paga pelas sobras de alinhamento), decide se
-ele anda por cópia ou por ponteiro (e paga pela cópia), decide se dois campos
-dividem a mesma memória. Nada é escondido, e por isso você passa a entender o
-que um objeto **custa**.
+No C, você desenha o pacote byte a byte: decide a ordem dos campos (e paga
+pelas sobras de alinhamento), decide se ele anda por cópia ou por ponteiro (e
+paga pela cópia), decide se dois campos dividem a mesma memória. Nada fica
+escondido, e você passa a saber o que um objeto **custa**.
 
-O módulo fecha descendo ao nível do bit: máscaras e flags, o jeito mais
-compacto e mais rápido de guardar sim/não. Com struct, ponteiro para struct e
-`malloc`, você tem todas as peças das estruturas de dados que começam no
-módulo 10.
+O módulo fecha no nível do bit: máscaras e flags, o jeito mais compacto de
+guardar sim/não. Com struct, ponteiro para struct e `malloc`, você tem todas
+as peças das estruturas de dados que começam no módulo 10.
 
 ## O que você vai aprender
 
@@ -28,26 +26,6 @@ módulo 10.
 - fazer campos dividirem a memória com **union**, e enxergar a **endianness** da máquina
 - ler e escrever **bits** com `& | ^ ~ << >>`, máscaras e flags (as permissões `rwx` do Linux)
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Siga o **fluxograma** com o dedo: é o caminho que o programa faz.
-4. Rode os exemplos. Mude um valor, troque a ordem dos campos, quebre de
-   propósito, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa; vermelho, erro.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa tudo dos anteriores: funções, vetores, strings com `fgets`,
@@ -56,8 +34,9 @@ sizeof *p);` ainda não parece natural, revise o módulo 07 antes.
 
 Vários exemplos mostram tamanhos (`sizeof`) e a ordem dos bytes. Os valores
 dos comentários são os de um PC de 64 bits com Linux (Intel, AMD ou ARM).
-Em outra máquina, os números podem mudar, e é justamente isso que o módulo
-quer que você perceba.
+Em outra máquina os números podem mudar, e perceber isso faz parte do
+módulo. Ao rodar, troque a ordem dos campos de uma struct e compare o
+`sizeof`. Responda a **Pergunta para você** de cada assunto antes de rodar.
 
 ```bash
 ~/LPEDC/rodar 08-structs/0059-struct/A117.c
@@ -84,8 +63,8 @@ diferentes: um caractere, um inteiro e um preço. E elas andam sempre juntas.
 
 Até aqui, você teria três variáveis soltas: `char tamanho`, `int quantidade`,
 `double preco`. Com dez pedidos, seriam trinta variáveis, e nada no código diz
-que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso
-com uma **struct**.
+que `tamanho3` e `preco3` são do mesmo pedido. O C resolve isso com uma
+**struct**.
 
 Uma struct **agrupa variáveis de tipos diferentes sob um nome só**. Cada
 variável de dentro é um **campo** (ou membro). Nos livros e na prova ela
@@ -117,10 +96,10 @@ Para ler ou mudar um campo, use o **ponto**: `p1.quantidade`,
 `p1.preco = 20.0`. Cada campo é uma variável comum, do seu tipo: `p1.tamanho`
 é um `char`, `&p1.quantidade` é um `int *`, e assim por diante.
 
-Vamos ver na prática. A variável `p1` é um bloco de memória com os três campos
-em sequência. O programa multiplica dois deles, chega a R$ 37,00 e decide o
-frete. Repare no buraco cinza entre `tamanho` e `quantidade`: ele é explicado
-no "Por dentro do C" logo abaixo:
+A variável `p1` é um bloco de memória com os três campos em sequência. O
+programa multiplica dois deles, chega a R$ 37,00 e decide o frete. O buraco
+cinza entre `tamanho` e `quantidade` é explicado no "Por dentro do C" logo
+abaixo:
 
 <p align="center"><img src="08-structs/0059-struct/ideia.svg" alt="Diagrama da ideia: Struct" width="916"></p>
 
@@ -160,12 +139,11 @@ int main(void) {
 
 Uma struct pode ter vetores e até outras structs dentro (`cliente.end.cidade`,
 com o ponto encadeado). E a atribuição `b = a` funciona entre structs do
-**mesmo tipo**: ela copia todos os bytes, inclusive os vetores de dentro. Isso
-é curioso, porque vetor sozinho não se copia com `=`. Dentro de uma struct,
-copia.
+**mesmo tipo**: ela copia todos os bytes, inclusive os vetores de dentro.
+Vetor sozinho não se copia com `=`; dentro de uma struct, copia.
 
-Repara no fluxograma: a struct não muda o jeito de pensar o programa. Os
-passos são os de sempre; a diferença é que os dados viajam num pacote só:
+A struct não muda o jeito de pensar o programa. Os passos são os de sempre,
+e os dados viajam num pacote só:
 
 <p align="center"><img src="08-structs/0059-struct/fluxograma.svg" alt="Fluxograma: Struct" width="462"></p>
 
@@ -502,12 +480,12 @@ No grupo da família, ninguém chama o seu tio de "José Carlos da Silva". É
 "Zé". O apelido não cria outra pessoa: é o mesmo tio, com um nome mais curto.
 
 No assunto anterior, todo pedido era declarado como `struct pedido p1;`, com
-as duas palavras, toda vez. Em programa grande isso cansa e polui. O C tem um
-jeito de dar apelido a um tipo: o **typedef**. Struct, union e enum, com ou sem
+as duas palavras, toda vez. Em programa grande isso cansa. O C dá apelido a um
+tipo com o **typedef**. Struct, union e enum, com ou sem
 `typedef`, são o que os livros e o edital chamam de **tipos definidos pelo
 programador**.
 
-A regra é: escreva uma declaração de variável normal e ponha `typedef` na
+A regra: escreva uma declaração de variável normal e ponha `typedef` na
 frente. O nome que seria a variável vira o **nome do tipo**:
 
 ```c
@@ -516,7 +494,7 @@ typedef double Reais;  // um apelido: Reais agora é o mesmo que double
 ```
 
 O uso mais comum é com struct. Dá para batizar uma struct que já existe
-(`typedef struct pix Pix;`) ou fazer tudo de uma vez, sem nem dar nome à
+(`typedef struct pix Pix;`) ou fazer tudo de uma vez, sem dar nome à
 struct:
 
 ```c
@@ -527,12 +505,13 @@ typedef struct {
 } Pix;
 ```
 
-A partir daí você escreve só `Pix p;`, sem o `struct` na frente. Nomes de tipo com inicial maiúscula são uma convenção comum (e
-a deste curso) para não confundir tipo com variável.
+A partir daí você escreve só `Pix p;`, sem o `struct` na frente. Nome de
+tipo com inicial maiúscula é uma convenção comum (e a deste curso) para não
+confundir tipo com variável.
 
-Vamos ver na prática. Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno
-de R$ 1.000,00 que os bancos aplicam entre 20h e 6h. Repare que `Pix` e
-`Reais` são só etiquetas novas coladas em coisas que já existiam:
+Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno de R$ 1.000,00 que os
+bancos aplicam entre 20h e 6h. No desenho, `Pix` e `Reais` são só etiquetas
+novas coladas em coisas que já existiam:
 
 <p align="center"><img src="08-structs/0060-typedef/ideia.svg" alt="Diagrama da ideia: Typedef" width="858"></p>
 
@@ -578,15 +557,15 @@ o `FILE` que vem no módulo 09 são apelidos definidos nos cabeçalhos da
 biblioteca. O `uint8_t` existe para você dizer "quero exatamente 8 bits sem
 sinal" sem depender do nome do tipo em cada máquina.
 
-Repara no fluxograma: são duas perguntas em sequência. Só bloqueia se for
-horário noturno **e** o valor passar do limite:
+São duas perguntas em sequência: o Pix só é bloqueado se for horário
+noturno **e** o valor passar do limite:
 
 <p align="center"><img src="08-structs/0060-typedef/fluxograma.svg" alt="Fluxograma: Typedef" width="403"></p>
 
 > [!WARNING]
 > `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
 > e `typedef double Dolares;`, o compilador aceita `Reais r = dolares;` sem
-> piscar: para ele, os dois são `double`. Se você quer que o compilador
+> reclamar: para ele, os dois são `double`. Se você quer que o compilador
 > barre a mistura, embrulhe numa struct: `typedef struct { double v; } Reais;`.
 > Structs diferentes não se misturam. E cuidado com typedef que esconde
 > demais: `typedef int *PInt;` faz `PInt a, b;` parecer inocente, mas esconde
@@ -937,18 +916,18 @@ Time tabela[] = {
 };
 ```
 
-Sem o tamanho entre colchetes, o compilador conta os elementos. E o truque de
+Sem o tamanho entre colchetes, o compilador conta os elementos. O truque de
 sempre para saber quantos são continua valendo: `sizeof tabela / sizeof
 tabela[0]`.
 
-Vamos ver na prática. Quatro times, cada um com seus números. O programa
+São quatro times, cada um com seus números. O programa
 percorre o vetor, calcula os pontos de cada um (3 por vitória, 1 por empate) e
 guarda o **índice** do melhor até agora. Palmeiras, no índice 2, termina na
 frente:
 
 <p align="center"><img src="08-structs/0061-vetor-de-structs/ideia.svg" alt="Diagrama da ideia: Vetor de structs" width="858"></p>
 
-O código faz exatamente esse passeio:
+O código faz esse passeio:
 
 ```c
 #include <stdio.h>
@@ -997,14 +976,14 @@ Guardar o índice, e não uma cópia do time, é de propósito: com o índice vo
 sabe **onde** está o líder e pode mexer nele (`tabela[lider].vitorias++`).
 Uma cópia seria um time solto, desligado da tabela.
 
-Repara no fluxograma: é o padrão "maior até agora" do módulo de laços, só que
-a comparação olha um campo calculado de cada struct:
+É o padrão "maior até agora" do módulo de laços, mas a comparação olha um
+valor calculado de cada struct:
 
 <p align="center"><img src="08-structs/0061-vetor-de-structs/fluxograma.svg" alt="Fluxograma: Vetor de structs" width="575"></p>
 
 > [!WARNING]
-> `tabela[i] = tabela[j]` copia o time **inteiro**, todos os campos. Isso é
-> ótimo para trocar dois times de lugar ao ordenar: troque as structs, não os
+> `tabela[i] = tabela[j]` copia o time **inteiro**, todos os campos. Isso
+> serve para trocar dois times de lugar ao ordenar: troque as structs, não os
 > campos um por um. O erro clássico é trocar só o nome e esquecer os números,
 > deixando a tabela com nomes e pontos embaralhados. E lembre que o C não
 > confere limites: `tabela[4]` num vetor de 4 times lê lixo (ou derruba o
@@ -1378,8 +1357,8 @@ Você passa o cartão do ônibus na catraca e o validador desconta R$ 4,40. Ele
 não faz uma cópia do seu cartão para descontar dela: mexe no saldo do cartão
 **de verdade**. Se descontasse numa cópia, você andaria de graça para sempre.
 
-Com struct em função acontece a mesma coisa. Como qualquer parâmetro em C, uma
-struct vai **por valor**: a função recebe uma cópia de todos os bytes. Mudar a
+Com struct em função vale o mesmo raciocínio. Como qualquer parâmetro em C,
+uma struct vai **por valor**: a função recebe uma cópia de todos os bytes. Mudar a
 cópia não muda o original. Para a função alterar a struct de quem chamou, você
 passa o **endereço** dela: um `Cartao *`.
 
@@ -1389,7 +1368,7 @@ são obrigatórios, porque o ponto tem prioridade maior que o `*`: `*c.saldo`
 significaria `*(c.saldo)`, e `c` não tem campo nenhum, é um ponteiro.
 
 Como isso é escrito o tempo todo, o C tem um atalho: a **seta** `->`.
-`c->saldo` é exatamente `(*c).saldo`. A regra prática: variável struct usa
+`c->saldo` é exatamente `(*c).saldo`. Na prática: variável struct usa
 ponto (`cartao.saldo`); ponteiro para struct usa seta (`c->saldo`).
 
 O ponteiro também é o caminho para struct no **heap**. `malloc(sizeof *c)`
@@ -1397,14 +1376,14 @@ reserva o espaço de um `Cartao` inteiro e devolve o endereço. O `sizeof *c`
 mede o tipo apontado: se um dia o tipo de `c` mudar, a conta acompanha. E,
 como todo `malloc`, confira o `NULL` e termine com `free`.
 
-Vamos ver na prática. O cartão da Luana mora no heap com R$ 10,00. A variável
+O cartão da Luana mora no heap com R$ 10,00. A variável
 `c` no `main` guarda só o endereço dele, e a função `cobrar_passagem` recebe
 uma cópia desse **endereço**, não do cartão. As duas setas apontam para o
 mesmo lugar:
 
 <p align="center"><img src="08-structs/0062-ponteiro-para-struct/ideia.svg" alt="Diagrama da ideia: Ponteiro para struct" width="858"></p>
 
-Três passagens seguidas. A terceira não passa:
+São três passagens seguidas, e a terceira não passa:
 
 ```c
 #include <stdbool.h>
@@ -1468,7 +1447,7 @@ O teste de mesa das três chamadas, olhando o cartão no heap:
 | 2ª | 5.60 | não | 1.20 | 2 |
 | 3ª | 1.20 | sim: devolve false | 1.20 | 2 |
 
-Repara no fluxograma: a pergunta do saldo fica dentro da função, mas o laço
+A pergunta do saldo fica dentro da função, mas o laço
 que chama três vezes é do `main`. Como a função mexe no original, cada volta
 do laço enxerga o saldo que a anterior deixou:
 
@@ -1477,9 +1456,8 @@ do laço enxerga o saldo que a anterior deixou:
 > [!WARNING]
 > O erro mais comum é esquecer que struct vai por valor. Uma função
 > `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
-> faz nada: recarrega uma cópia que morre no fim da função. Para a função
-> alterar a struct de quem chamou, passe o endereço: `Cartao *c`. O segundo erro é
-> a precedência: `*c.saldo` não compila. Escreva `c->saldo` ou `(*c).saldo`.
+> faz nada: recarrega uma cópia que morre no fim da função. Passe o
+> endereço: `Cartao *c`. O segundo erro é a precedência: `*c.saldo` não compila. Escreva `c->saldo` ou `(*c).saldo`.
 > E nunca devolva o endereço de uma struct local (`return &cartao;`): ela morre
 > quando a função termina. Para criar uma struct dentro de uma função e
 > devolvê-la, use `malloc` (ou devolva a struct por valor).
@@ -1885,11 +1863,11 @@ O primeiro nome vale 0, e cada um vale o anterior mais 1: `RECEBIDO` é 0,
 e quem vem depois de um valor escolhido continua contando a partir dele. Os
 nomes ficam em MAIÚSCULAS por convenção, como as constantes do `#define`.
 
-Mas atenção: no C o enum é **só um inteiro com apelido**: o compilador deixa somar, comparar com
-`<` e até guardar 42 numa variável `Status`.
+No C, o enum é **só um inteiro com apelido**: o compilador deixa somar,
+comparar com `<` e até guardar 42 numa variável `Status`.
 
-Vamos ver na prática. A variável `s` começa em `RECEBIDO` e anda uma etapa
-por vez, porque um enum é um inteiro e aceita `s++`. Cada valor tem um nome
+A variável `s` começa em `RECEBIDO` e anda uma etapa por vez: como é um
+inteiro, aceita `s++`. Cada valor tem um nome
 no código e um número na memória:
 
 <p align="center"><img src="08-structs/0063-enum/ideia.svg" alt="Diagrama da ideia: Enum" width="870"></p>
@@ -1937,15 +1915,15 @@ int main(void) {
 // [3] Pedido entregue. Bom apetite!
 ```
 
-Enum e `switch` foram feitos um para o outro. Cada `case` usa um nome, e o
-código se explica sozinho. Um truque comum é pôr um último nome que só conta
+Enum combina com `switch`: cada `case` usa um nome, e o código se explica
+sozinho. Um truque comum é pôr um último nome que só conta
 os outros: `{ RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE, QTD_STATUS }`. Como
 `QTD_STATUS` vale 4, ele serve de tamanho para um vetor de textos
 (`const char *nomes[QTD_STATUS]`) e cresce sozinho quando você acrescenta um
 status.
 
-Repara no fluxograma: é um laço comum, controlado por uma pergunta sobre o
-enum. O `s++` é o que faz o pedido andar:
+O laço é comum, controlado por uma pergunta sobre o enum, e o `s++` faz o
+pedido andar:
 
 <p align="center"><img src="08-structs/0063-enum/fluxograma.svg" alt="Fluxograma: Enum" width="503"></p>
 
@@ -1960,7 +1938,7 @@ enum. O `s++` é o que faz o pedido andar:
 > [!TIP]
 > **Por dentro do C:** o enum some na compilação. `A_CAMINHO` vira o número 2
 > no código de máquina, e uma variável `Status` ocupa o mesmo que um `int` (4
-> bytes, como mostra o A126). Então por que não usar `#define`? Porque o
+> bytes, como mostra o A126). A vantagem sobre o `#define` é que o
 > compilador **conhece** o enum. Apague o `case ENTREGUE:` do exemplo e rode:
 > o `-Wall` avisa `enumeration value 'ENTREGUE' not handled in switch`. Com
 > `#define`, ninguém avisaria. Esse aviso só aparece se o `switch` **não** tiver
@@ -2316,8 +2294,8 @@ No coworking, a mesma mesa é usada de manhã por uma designer e à tarde por um
 programador. O espaço é um só. Quem chega usa a mesa inteira, e o que estava
 em cima dela antes some (ou fica bagunçado).
 
-Uma **union** (união) é isso na memória. Ela se declara igual a uma struct, mas com
-uma diferença radical: na struct, cada campo tem o seu pedaço de memória, um
+Uma **union** (união) é isso na memória. Ela se declara igual a uma struct,
+com uma diferença grande: na struct, cada campo tem o seu pedaço de memória, um
 depois do outro; na union, **todos os campos começam no mesmo endereço** e
 dividem os mesmos bytes. O tamanho da union é o do maior campo (arredondado
 para o alinhamento), e só um campo "vale" de cada vez.
@@ -2329,16 +2307,16 @@ typedef union {
 } Endereco;
 ```
 
-Para que serve? Para dois usos bem diferentes. O primeiro é **economizar
+A union tem dois usos bem diferentes. O primeiro é **economizar
 espaço** quando um dado pode ser uma coisa **ou** outra, nunca as duas: um
 pagamento é Pix **ou** cartão **ou** boleto. O segundo é **olhar os mesmos
 bytes de dois jeitos**: escrever um número de 4 bytes e ler byte a byte, sem
 fazer conta nenhuma.
 
-Vamos ver na prática com o segundo uso. Um endereço IP como 192.168.0.10 é,
+O exemplo mostra o segundo uso. Um endereço IP como 192.168.0.10 é,
 por baixo, um número de 32 bits: `0xC0A8000A` (C0 = 192, A8 = 168, 00 = 0,
 0A = 10). O programa grava o número em `ip.numero` e lê os bytes por
-`ip.bytes`. Repare na ordem em que eles aparecem na memória:
+`ip.bytes`. Observe a ordem em que eles aparecem na memória:
 
 <p align="center"><img src="08-structs/0064-union/ideia.svg" alt="Diagrama da ideia: Union" width="882"></p>
 
@@ -2388,11 +2366,10 @@ Essa ordem tem nome: **endianness**. Num processador **little-endian**
 (Intel, AMD e praticamente todo ARM de celular), o byte **menos**
 significativo fica no endereço menor: o `0A` do final do número vem primeiro.
 Num **big-endian**, a ordem é a de leitura humana: `C0 A8 00 0A`. Nenhum é
-"certo"; é uma escolha de quem projetou o processador. A union deixa você
+"certo": é uma escolha de quem projetou o processador, e a union deixa você
 **ver** essa escolha.
 
-Repara no fluxograma: a pergunta sobre o primeiro byte é um detector de
-endianness. O mesmo programa, compilado numa máquina big-endian, seguiria pelo
+A pergunta sobre o primeiro byte é um detector de endianness. O mesmo programa, compilado numa máquina big-endian, seguiria pelo
 outro lado:
 
 <p align="center"><img src="08-structs/0064-union/fluxograma.svg" alt="Fluxograma: Union" width="426"></p>
@@ -2403,16 +2380,14 @@ outro lado:
 > union usada para economizar espaço, ler um campo diferente do último que
 > você gravou dá lixo, e o C não avisa: ele não sabe qual campo está valendo.
 > Por isso a union quase sempre vem acompanhada de um **enum** que diz qual
-> campo vale agora (a union "etiquetada" do A128). Quem confere a etiqueta é você, não
-> o compilador. E lembre: o
-> resultado de ler os bytes depende da endianness, então esse código não dá a
-> mesma saída em todas as máquinas.
+> campo vale agora (a union "etiquetada" do A128). Quem confere a etiqueta é
+> você, não o compilador. E o resultado de ler os bytes depende da
+> endianness: esse código não dá a mesma saída em todas as máquinas.
 
 > [!TIP]
 > **Por dentro do C:** uma union não gera código nenhum. `ip.numero` e
 > `ip.bytes[0]` são o mesmo endereço; muda só o tipo com que o compilador lê o
-> que está lá. Em C, ler um campo diferente do último
-> gravado é permitido: os bytes são reinterpretados no tipo novo. É assim que
+> que está lá. Em C, ler um campo diferente do último gravado é permitido: os bytes são reinterpretados no tipo novo. É assim que
 > se inspeciona um `float` bit a bit, por exemplo. Na rede, a convenção é
 > big-endian (a "ordem de rede"); por isso programas de rede usam `htonl` e
 > `ntohl`, de `<arpa/inet.h>`, para converter números antes de enviar e depois
@@ -2776,7 +2751,7 @@ escrever um decimal em binário, tire a maior casa que cabe e repita: 13 =
 8 + 4 + 1 = `1101`. Os bits se numeram da direita para a esquerda, a partir do
 **bit 0** (o que vale 1).
 
-Binário é comprido, então usamos atalhos. Na **base 16** (hexadecimal), cada
+Binário é comprido, e há atalhos. Na **base 16** (hexadecimal), cada
 dígito, de 0 a 9 e de A (10) a F (15), vale **exatamente 4 bits**: `1110 1101`
 = `0xED` = 237. Na **base 8** (octal), cada dígito vale **3 bits**, e é por
 isso que ele aparece nas permissões: 3 bits por grupo. No C, `0x` começa um
@@ -2805,7 +2780,7 @@ Deslocar 1 casa para a esquerda multiplica por 2; para a direita, divide por
 Uma **flag** é um bit que diz sim ou não. Várias flags cabem num inteiro só,
 cada uma no seu bit: `LER` = 4 (`100`), `ESCREVER` = 2 (`010`), `EXECUTAR` = 1
 (`001`). Um valor que escolhe certos bits é uma **máscara**. Com ela, quatro
-receitas resolvem tudo:
+receitas bastam:
 
 - **ligar** um bit: `p |= ESCREVER;`
 - **desligar**: `p &= ~ESCREVER;` (o `~` faz uma máscara com todos os bits
@@ -2813,7 +2788,7 @@ receitas resolvem tudo:
 - **testar**: `if (p & ESCREVER)` (sobra 0 se o bit estava desligado)
 - **inverter**: `p ^= ESCREVER;`
 
-Vamos ver na prática. Um arquivo começa com `rw-` (110). Para ligar a
+Um arquivo começa com `rw-` (110). Para ligar a
 execução, o OU com a máscara `001` acende só o último bit, e os outros ficam
 como estavam:
 
@@ -2870,8 +2845,8 @@ O `(p >> 2) & 1u` é o jeito de ler o bit 2: empurra ele para a casa 0 e apaga
 o resto com a máscara `1`. O `chmod 755` completo, no A130, é a mesma ideia
 com três grupos de 3 bits: dono `111`, grupo `101`, outros `101`.
 
-Repara no fluxograma: a pergunta "pode escrever?" é só um `&` com a máscara.
-Sobrou algum bit, a resposta é Sim:
+A pergunta "pode escrever?" é só um `&` com a máscara. Se sobrou algum bit,
+a resposta é Sim:
 
 <p align="center"><img src="08-structs/0065-bits/fluxograma.svg" alt="Fluxograma: Bits, máscaras e flags" width="488"></p>
 
@@ -2890,7 +2865,7 @@ Sobrou algum bit, a resposta é Sim:
 > barata que existe. Por isso flags estão em toda parte: o Linux abre arquivos
 > com `open("log.txt", O_WRONLY | O_CREAT | O_APPEND, 0644)`, flags no segundo
 > argumento e permissões `rw-r--r--` no terceiro. E 32 flags cabem num
-> `unsigned` de 4 bytes, onde 32 `bool` ocupariam 32 bytes. O C também tem
+> `unsigned` de 4 bytes, enquanto 32 `bool` ocupariam 32 bytes. O C também tem
 > **campos de bits** numa struct (`unsigned ler : 1;` usa um bit só), mas a
 > ordem dos bits dentro do inteiro depende do compilador. Para formatos de
 > arquivo e protocolos, máscaras explícitas são mais previsíveis.
@@ -3235,19 +3210,17 @@ capacidade. Começando em 0, ela vira 2, 4 e 8: com 6 itens, sobram 2 vagas.
 Esse trio (ponteiro, tamanho, capacidade) é a semente do **vetor dinâmico**
 que o módulo 11 transforma num tipo abstrato de dados.
 
-O filtro é a parte mais elegante. Um item passa se tem **todas** as tags da
+O filtro cabe numa linha. Um item passa se tem **todas** as tags da
 máscara: `(tags & mascara) == mascara`. O `&` apaga as tags que não estão na
 máscara; se o que sobra é a própria máscara, nenhuma faltou. Com a máscara 0,
 qualquer item passa, e o mesmo `filtrar` lista o cardápio inteiro.
 
-Vamos ver na prática. O suco de caju tem as tags `011` (vegano e sem glúten).
+O suco de caju tem as tags `011` (vegano e sem glúten).
 Contra a máscara `011`, o `&` devolve `011`, igual à máscara: passa. O burger
 de grão-de-bico tem `001`: o `&` devolve `001`, falta o sem glúten, e ele fica
 de fora:
 
 <p align="center"><img src="08-structs/0066-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o cardápio" width="957"></p>
-
-O programa completo:
 
 ```c
 #include <stdio.h>
@@ -3343,15 +3316,15 @@ int main(void) {
 //   R$  9.00  Suco de caju (bebida) [V] [SG]
 ```
 
-Repara no fluxograma do `filtrar`: um laço sobre o vetor e uma única
-pergunta de bits por item. O mesmo desenho serve para qualquer máscara:
+O fluxograma é o do `filtrar`: um laço sobre o vetor e uma única pergunta
+de bits por item. O mesmo desenho serve para qualquer máscara:
 
 <p align="center"><img src="08-structs/0066-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o cardápio" width="504"></p>
 
 > [!WARNING]
 > `c->itens[c->n++] = it` copia o item para **dentro** do vetor. Depois disso,
 > mexer na variável `it` (ou no vetor `itens` do `main`) não muda o cardápio.
-> O contrário também pega muita gente: um ponteiro para um item,
+> O inverso também engana: um ponteiro para um item,
 > `Item *p = &c.itens[0]`, pode ficar **solto** depois do próximo `realloc`,
 > porque o vetor inteiro pode ter mudado de endereço. Guarde índices, não
 > ponteiros, para elementos de um vetor que cresce.
@@ -5369,7 +5342,7 @@ Atende Téo
 
 Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
 papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
-compilados com `gcc -std=c17 -Wall -Wextra`. Onde a resposta depende da
+compilados com `gcc -std=c17 -Wall -Wextra`. Quando a resposta depende da
 máquina, a questão diz qual.
 
 **Questão 1.** Em uma plataforma de 64 bits típica (`int` de 4 bytes,

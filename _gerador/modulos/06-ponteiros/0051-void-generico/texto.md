@@ -19,11 +19,11 @@ Duas regras saem disso:
   não existe no C padrão (o `gcc` aceita como extensão, e o `-pedantic`
   avisa).
 
-O cast é uma promessa sua: o compilador acredita. Se
-você disser `(double *)` para um endereço onde mora um `int`, ele lê 8
-bytes onde só tinha 4 e mostra lixo. Ninguém confere por você.
+O cast é uma promessa sua, e o compilador acredita. Se você disser
+`(double *)` para um endereço em que mora um `int`, ele lê 8 bytes onde só
+tinha 4 e mostra lixo.
 
-Para que serve uma caixa fechada? Para escrever funções que trabalham com
+A caixa fechada serve para escrever funções que trabalham com
 **qualquer tipo**. Elas recebem `void *` e, como não sabem o tamanho do
 dado, recebem também o tamanho em bytes. Lá dentro, tratam a memória como
 uma fileira de bytes, com um `unsigned char *`, o único tipo que o C deixa
@@ -31,7 +31,7 @@ olhar byte a byte qualquer objeto. É assim que funcionam `memcpy`,
 `memset`, o `qsort` (assunto 0050) e o `malloc` do módulo 07, que devolve
 `void *` porque não sabe o que você vai guardar.
 
-Vamos ver na prática. A `troca` do assunto 0046 só troca `int`. A
+A `troca` do assunto 0046 só troca `int`. A
 `troca_generica` recebe dois endereços sem tipo e o tamanho: com 4, troca
 duas senhas `int`; com 8, troca dois preços `double`. Byte a byte, ela nem
 sabe o que está trocando:
@@ -71,12 +71,11 @@ int main(void) {
 // preços: 8.50 e 12.90
 ```
 
-Repare que `&senha_a` (um `int *`) entra no parâmetro `void *` sem cast
-nenhum, e que o `sizeof` na chamada é quem conta à função o tamanho do
-dado.
+`&senha_a` (um `int *`) entra no parâmetro `void *` sem cast nenhum, e o
+`sizeof` na chamada conta à função o tamanho do dado.
 
-Repara no fluxograma: a função não pergunta "que tipo é?", porque não tem
-como saber. Ela só pergunta "ainda tem byte para trocar?":
+A função não pergunta "que tipo é?", porque não tem como saber. Ela só
+pergunta "ainda tem byte para trocar?":
 
 {{fluxograma}}
 
@@ -96,7 +95,7 @@ como saber. Ela só pergunta "ainda tem byte para trocar?":
 > **little-endian** dos processadores Intel, AMD e ARM. O `-1` vira `ff ff ff
 > ff` (complemento de dois) e a string `"Pix"` vira `50 69 78 00`, os
 > códigos ASCII com o `'\0'` no fim. Olhar a memória como bytes só é
-> garantido com tipos `char`; ler um `float` através de um `int *`, por
+> garantido com tipos `char`; ler um `float` por meio de um `int *`, por
 > exemplo, quebra uma regra do C (a de *strict aliasing*) e o otimizador
 > pode gerar código errado.
 

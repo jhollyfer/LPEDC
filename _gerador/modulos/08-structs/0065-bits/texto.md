@@ -19,7 +19,7 @@ escrever um decimal em binário, tire a maior casa que cabe e repita: 13 =
 8 + 4 + 1 = `1101`. Os bits se numeram da direita para a esquerda, a partir do
 **bit 0** (o que vale 1).
 
-Binário é comprido, então usamos atalhos. Na **base 16** (hexadecimal), cada
+Binário é comprido, e há atalhos. Na **base 16** (hexadecimal), cada
 dígito, de 0 a 9 e de A (10) a F (15), vale **exatamente 4 bits**: `1110 1101`
 = `0xED` = 237. Na **base 8** (octal), cada dígito vale **3 bits**, e é por
 isso que ele aparece nas permissões: 3 bits por grupo. No C, `0x` começa um
@@ -48,7 +48,7 @@ Deslocar 1 casa para a esquerda multiplica por 2; para a direita, divide por
 Uma **flag** é um bit que diz sim ou não. Várias flags cabem num inteiro só,
 cada uma no seu bit: `LER` = 4 (`100`), `ESCREVER` = 2 (`010`), `EXECUTAR` = 1
 (`001`). Um valor que escolhe certos bits é uma **máscara**. Com ela, quatro
-receitas resolvem tudo:
+receitas bastam:
 
 - **ligar** um bit: `p |= ESCREVER;`
 - **desligar**: `p &= ~ESCREVER;` (o `~` faz uma máscara com todos os bits
@@ -56,7 +56,7 @@ receitas resolvem tudo:
 - **testar**: `if (p & ESCREVER)` (sobra 0 se o bit estava desligado)
 - **inverter**: `p ^= ESCREVER;`
 
-Vamos ver na prática. Um arquivo começa com `rw-` (110). Para ligar a
+Um arquivo começa com `rw-` (110). Para ligar a
 execução, o OU com a máscara `001` acende só o último bit, e os outros ficam
 como estavam:
 
@@ -113,8 +113,8 @@ O `(p >> 2) & 1u` é o jeito de ler o bit 2: empurra ele para a casa 0 e apaga
 o resto com a máscara `1`. O `chmod 755` completo, no A130, é a mesma ideia
 com três grupos de 3 bits: dono `111`, grupo `101`, outros `101`.
 
-Repara no fluxograma: a pergunta "pode escrever?" é só um `&` com a máscara.
-Sobrou algum bit, a resposta é Sim:
+A pergunta "pode escrever?" é só um `&` com a máscara. Se sobrou algum bit,
+a resposta é Sim:
 
 {{fluxograma}}
 
@@ -133,7 +133,7 @@ Sobrou algum bit, a resposta é Sim:
 > barata que existe. Por isso flags estão em toda parte: o Linux abre arquivos
 > com `open("log.txt", O_WRONLY | O_CREAT | O_APPEND, 0644)`, flags no segundo
 > argumento e permissões `rw-r--r--` no terceiro. E 32 flags cabem num
-> `unsigned` de 4 bytes, onde 32 `bool` ocupariam 32 bytes. O C também tem
+> `unsigned` de 4 bytes, enquanto 32 `bool` ocupariam 32 bytes. O C também tem
 > **campos de bits** numa struct (`unsigned ler : 1;` usa um bit só), mas a
 > ordem dos bits dentro do inteiro depende do compilador. Para formatos de
 > arquivo e protocolos, máscaras explícitas são mais previsíveis.

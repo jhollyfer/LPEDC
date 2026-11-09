@@ -2,21 +2,19 @@
 
 No módulo 10 você aprendeu a contar passos e a ler a classe de um código
 pelos laços: um laço é O(n), dois aninhados são O(n²), um laço que divide por
-2 é O(log n). Funciona muito bem até aparecer uma função que chama a si
+2 é O(log n). Isso funciona até aparecer uma função que chama a si
 mesma. Quanto custa o merge sort? O "n log n" que você leu no módulo 13 veio
 de um desenho e de um pouco de fé. Aqui ele vira conta.
 
-Este módulo traz as ferramentas que faltavam para medir de verdade. A
-**recorrência** transforma o código recursivo numa equação, e a **árvore de
+Este módulo traz as ferramentas que faltavam. A **recorrência** transforma o código recursivo numa equação, e a **árvore de
 recursão** resolve a equação somando nível por nível. O **teorema mestre**
 resolve de uma vez as recorrências de divisão e conquista mais comuns. A
 **análise amortizada** explica por que o vetor que dobra é barato, mesmo
-copiando tudo de vez em quando. E o **limite inferior** responde a uma
-pergunta nova: não "quanto custa este algoritmo?", mas "dá para fazer
-melhor?". Para ordenar comparando, não dá: n log n é o piso.
+copiando tudo de vez em quando. E o **limite inferior** troca a pergunta
+"quanto custa este algoritmo?" por "dá para fazer melhor?". Para ordenar
+comparando, não dá: n log n é o piso.
 
-A mudança na cabeça é olhar para o custo como um objeto que se calcula, se
-prevê e se confere. No último assunto, você usa tudo isso para prever quanto
+O custo passa a ser algo que você calcula, prevê e confere. No último assunto, você usa tudo isso para prever quanto
 tempo quatro ordenações levam com 1 milhão de elementos, a partir de uma
 medida com 16 mil, e confere a previsão no computador.
 
@@ -29,35 +27,6 @@ medida com 16 mil, e confere a previsão no computador.
 - a **árvore de decisão** e o limite **Ω(n log n)** para ordenar por comparação
 - as notações **Θ** e **Ω**, ao lado do **O** que você já conhece
 - **medir** com `clock()` e contadores, e **prever** o tempo para entradas grandes
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: a árvore de recursão, a tabela
-   de níveis ou a árvore de decisão do exemplo, com os mesmos números do código.
-2. Leia o código. Quase todo exemplo deste módulo conta alguma coisa
-   (chamadas, cópias, comparações) e confere a contagem com a fórmula.
-3. Faça o **Passo a passo** com papel e lápis: abrir uma recorrência à mão é
-   o melhor jeito de entender o que ela diz.
-4. Siga o **fluxograma** com o dedo.
-5. Rode os exemplos. Mude o `n`, dobre, quadruplique, e veja se a contagem
-   cresce como a teoria manda.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nos diagramas da ideia, **roxo** é trabalho sendo feito (uma chamada, um
-nível), **verde** é o que domina o custo ou o resultado, **amarelo** marca
-um empate ou uma pergunta, **vermelho** é o caro demais ou o que deu errado,
-e **cinza** é o que o exemplo não percorreu.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -80,6 +49,13 @@ com qualquer exemplo ou exercício da pasta. Alguns programas medem **tempo**:
 os números de tempo mudam de máquina para máquina e de uma execução para
 outra; os de comparações, não. Os exercícios de "ache o erro" trazem o bug de
 propósito, e o enunciado avisa.
+
+Nos diagramas da ideia, **roxo** é trabalho sendo feito (uma chamada, um
+nível), **verde** é o que domina o custo ou o resultado, **amarelo** marca um
+empate e **vermelho** é o caro demais ou o que deu errado. Abra cada
+recorrência à mão no **Passo a passo** e responda a **Pergunta para você**
+antes de rodar: quase todo exemplo conta algo (chamadas, cópias,
+comparações) e confere a contagem com a fórmula.
 
 {{indice}}
 
@@ -168,10 +144,9 @@ um incremento por vez. Quantas trocas de bit acontecem no total?
 <details><summary>Resposta</summary>
 
 O bit 0 troca 1023 vezes, o bit 1, 511, o bit 2, 255... o bit 9, 1 vez. A
-soma é `(1024 - 1) + (512 - 1) + ... + (2 - 1) = 2046 - 10`, ou seja,
-**2036 trocas**. Em
-geral, `n` incrementos a partir do zero fazem `2n` menos a quantidade de bits
-1 de `n`: aqui, `2 · 1023 - 10`. Menos de 2 por incremento, como no A231.
+soma é `(1024 - 1) + (512 - 1) + ... + (2 - 1) = 2046 - 10`:
+**2036 trocas**. Em geral, `n` incrementos a partir do zero fazem `2n` menos
+a quantidade de bits 1 de `n`: aqui, `2 · 1023 - 10`. Menos de 2 por incremento, como no A231.
 
 </details>
 
@@ -199,8 +174,8 @@ Um **torneio**: os 16 jogam em pares, os vencedores jogam em pares, até
 sobrar o campeão. São 15 comparações (todo mundo, menos o campeão, perde uma
 vez). O segundo maior só pode ter perdido **para o campeão**, e o campeão
 jogou `log₂ 16 = 4` vezes. O máximo entre esses 4 adversários sai com 3
-comparações: `15 + 3`, **18 comparações**. Em geral, `n + ⌈log₂ n⌉ - 2`. Guarde, para
-cada vencedor, a lista de quem ele derrotou.
+comparações: `15 + 3`, **18 comparações**. Em geral, `n + ⌈log₂ n⌉ - 2`.
+Guarde, para cada vencedor, a lista de quem ele derrotou.
 
 </details>
 
@@ -226,7 +201,7 @@ expoente provável do custo? Quanto deve levar com 400 mil?
 <details><summary>Resposta</summary>
 
 A razão é `3,4 / 1,2 ≈ 2,83`. Se o custo é `n^p`, dobrar `n` multiplica por
-`2^p`: `p = log₂ 2,83`, ou seja, **p ≈ 1,5**. De 100 mil para 400 mil, o tamanho
+`2^p`: `p = log₂ 2,83`, logo **p ≈ 1,5**. De 100 mil para 400 mil, o tamanho
 multiplica por 4 e o tempo por `4^1,5 = 8`: **uns 27 segundos**. Antes de
 confiar, meça mais um ponto (200 mil deve dar uns 9,6 s): duas medidas
 apenas não distinguem `n^1,5` de, digamos, `n log² n`.
