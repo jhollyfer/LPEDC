@@ -4179,6 +4179,10 @@ ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/13-busca-e-ordenacao/lista/`.
+
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do mestrado. Nas de ordenação, escreva
