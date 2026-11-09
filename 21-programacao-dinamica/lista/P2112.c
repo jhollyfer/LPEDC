@@ -10,7 +10,7 @@
 //   kg          4        3       5       2
 //   R$         40       27      45      16
 //
-// O programa compila sem aviso e roda, mas responde R$ 108, mais do que é
+// O programa compila sem aviso e roda, mas responde R$ 96, mais do que é
 // possível: ele está levando o mesmo produto mais de uma vez. Conserte.
 //
 //   Saída esperada:
@@ -22,9 +22,8 @@
 //    produto quando você chega em melhor[w].
 // 2. De trás para a frente, melhor[w - kg] ainda é o valor da linha
 //    anterior (sem o produto atual).
-// 3. Resposta esperada: for (int w = CAP; w >= kg[i]; w--). Ótimo de R$ 101
-//    (queijo + doce + ... confira com a tabela: 4 + 5 = 9 kg dá R$ 85; 4 + 3
-//    + 2 = 9 kg dá R$ 83; o melhor é o da saída).
+// 3. Resposta esperada: for (int w = CAP; w >= kg[i]; w--). O ótimo é R$ 88:
+//    manteiga + doce + requeijão, exatamente 10 kg.
 //
 // Escreva sua resposta abaixo (conserte o código):
 
