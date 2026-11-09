@@ -6,9 +6,10 @@ No vetor do assunto anterior, inserir na posição 0 faria todos andarem uma
 casa. Existe um jeito em que ninguém anda.
 
 Uma **lista encadeada** (no Cormen, **lista ligada**) guarda cada item num
-pedaço separado de memória, o **nó**. Além do valor, cada nó guarda o endereço do próximo. O último aponta
-para `NULL`. Para usar a lista, você só precisa do endereço do primeiro nó, o
-**início** (o `L.head` do Cormen). Lista vazia é `inicio == NULL`.
+pedaço separado de memória, o **nó**. Além do valor, cada nó guarda o endereço
+do próximo. O último aponta para `NULL`. Para usar a lista, você só precisa do
+endereço do primeiro nó, o **início** (o `L.head` do Cormen). Lista vazia é
+`inicio == NULL`.
 
 O nó é uma struct que aponta para o próprio tipo, uma **struct
 autorreferenciada**:

@@ -13,15 +13,15 @@ export const ideia = {
     },
     { id: 'int', x: 140, y: 330, w: 520, h: 130, cor: 'azul', rotulo: 'lido como int', texto: ['-1'] },
     { id: 'uns', x: 860, y: 330, w: 520, h: 130, cor: 'roxo', rotulo: 'lido como unsigned', texto: ['4294967295'] },
-    { id: 'p', x: 120, y: 540, w: 560, h: 200, forma: 'losango', cor: 'amarelo', texto: ['saldo > 0u ?'] },
-    { id: 'res', x: 860, y: 570, w: 520, h: 140, cor: 'vermelho', texto: ['4294967295 > 0', 'verdadeiro!'] },
+    { id: 'p', x: 100, y: 540, w: 500, h: 200, forma: 'losango', cor: 'amarelo', texto: ['saldo > 0u ?'] },
+    { id: 'res', x: 900, y: 570, w: 520, h: 140, cor: 'vermelho', texto: ['4294967295 > 0', 'verdadeiro!'] },
   ],
   setas: [
     { de: 'bits', para: 'int', lados: 'bc' },
     { de: 'bits', para: 'uns', lados: 'bc' },
     { de: 'p', para: 'res', rotulo: 'int vira unsigned', cor: 'vermelho' },
   ],
-  notas: [{ x: 160, y: 300, texto: 'complemento de dois', cor: 'cinza' }],
+  notas: [{ x: 720, y: 290, texto: 'complemento de dois', cor: 'cinza', ancora: 'middle' }],
 }
 
 export const fluxograma = {

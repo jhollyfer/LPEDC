@@ -99,11 +99,11 @@ quando a folga acaba, pede um vetor maior e copia tudo. É o que toda
 biblioteca de "lista que cresce sozinha" faz por baixo, e é o que você vai
 escrever agora.
 
-Uma **lista sequencial** guarda os itens lado a lado, num vetor contínuo, na
-ordem em que estão na lista. Para ela crescer, você controla três coisas: o
-endereço do vetor no heap (`itens`), quantos itens estão em uso (`tam`) e
-quantos cabem (`cap`). Enquanto `tam < cap`, inserir no fim é só escrever em
-`itens[tam]`.
+Uma **lista sequencial** (também chamada de **lista em vetor**) guarda os
+itens lado a lado, num vetor contínuo, na ordem em que estão na lista. Para
+ela crescer, você controla três coisas: o endereço do vetor no heap (`itens`),
+quantos itens estão em uso (`tam`) e quantos cabem (`cap`). Enquanto
+`tam < cap`, inserir no fim é só escrever em `itens[tam]`.
 
 Quando `tam == cap`, o vetor está cheio. Aí entra o `realloc` (assunto 0055):
 ele pede um bloco maior, copia os itens e devolve o bloco antigo. A pergunta
@@ -196,7 +196,8 @@ continua inteira:
 <p align="center"><img src="0075-vetor-dinamico/fluxograma.svg" alt="Fluxograma: Vetor dinâmico" width="510"></p>
 
 O preço do vetor aparece quando você insere ou remove **no meio**: todo mundo
-que vem depois precisa andar uma casa (o exemplo A150 mostra). Ler a posição
+que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
+(o exemplo A150 mostra). Ler a posição
 `i`, por outro lado, é instantâneo: `itens[i]` é uma conta de endereço.
 
 > [!WARNING]
@@ -565,10 +566,11 @@ Pix novo entra na frente, e ninguém precisa empurrar os antigos para baixo.
 No vetor do assunto anterior, inserir na posição 0 faria todos andarem uma
 casa. Existe um jeito em que ninguém anda.
 
-Uma **lista encadeada** guarda cada item num pedaço separado de memória, o
-**nó**. Além do valor, cada nó guarda o endereço do próximo. O último aponta
-para `NULL`. Para usar a lista, você só precisa do endereço do primeiro nó, o
-**início**. Lista vazia é `inicio == NULL`.
+Uma **lista encadeada** (no Cormen, **lista ligada**) guarda cada item num
+pedaço separado de memória, o **nó**. Além do valor, cada nó guarda o endereço
+do próximo. O último aponta para `NULL`. Para usar a lista, você só precisa do
+endereço do primeiro nó, o **início** (o `L.head` do Cormen). Lista vazia é
+`inicio == NULL`.
 
 O nó é uma struct que aponta para o próprio tipo, uma **struct
 autorreferenciada**:
@@ -597,6 +599,10 @@ Três operações formam a base, e todas estão no `lista.c` desta pasta:
 - **percorrer**: `for (p = inicio; p != NULL; p = p->prox)`. É o "for de
   lista", e você vai escrever ele mil vezes.
 - **liberar**: um `free` por nó, guardando o próximo **antes** do `free`.
+
+Inserir no **fim** é outra conversa: guardando só o início, é preciso andar
+até o último nó, O(n). Com um ponteiro a mais para o último, vira O(1) (o
+0079 e o 0086 fazem assim).
 
 ```c
 No *lista_insere_inicio(No *inicio, int valor) {
@@ -1086,7 +1092,9 @@ Na remoção do 31, o caminho seria o outro, `início = p->prox`:
 
 O exemplo A154 mostra um truque para sumir com o caso especial: o
 **nó-cabeça**, um nó "de mentira" no começo. Com ele, todo nó de verdade tem
-um anterior, e o primeiro deixa de ser especial.
+um anterior, e o primeiro deixa de ser especial. O Cormen leva a ideia mais
+longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
+0174 aprofunda.
 
 > [!WARNING]
 > A ordem do `&&` importa. `while (p->valor != valor && p != NULL)` lê
@@ -1918,8 +1926,9 @@ para descobrir quem vem antes do vagão quebrado: ele está vendo.
 
 Na lista simples, o nó só conhece o próximo. Para remover um nó, você
 precisa do anterior, e achar o anterior custa percorrer desde o início. Na
-**lista duplamente encadeada**, cada nó guarda **dois** ponteiros: `prox`
-(o próximo) e `ant` (o anterior). Com isso:
+**lista duplamente encadeada** (no Cormen, **duplamente ligada**, com os
+campos `next` e `prev`), cada nó guarda **dois** ponteiros: `prox` (o
+próximo) e `ant` (o anterior). Com isso:
 
 - dá para andar nos **dois sentidos**: do início para o fim e do fim para o
   início;
@@ -2371,7 +2380,9 @@ Uma **lista circular** é uma lista encadeada em que o último nó, em vez de
 apontar para `NULL`, aponta de volta para o **primeiro**. Os nós formam um
 anel. Ela serve para tudo que é rodízio: a vez de cada jogador num jogo de
 tabuleiro, a playlist no "repetir tudo", os programas que dividem a CPU, o
-revezamento de motoristas numa viagem.
+revezamento de motoristas numa viagem. Na lista dupla, o círculo fecha nos
+dois sentidos: o `ant` do primeiro aponta para o último. É a forma que o
+Cormen usa, com uma sentinela no meio do anel (assunto 0174).
 
 Num anel, qual nó você guarda? A escolha esperta é guardar o **último**. Dele
 você chega às duas pontas em um passo: o último é `ultimo` e o primeiro é
@@ -3484,10 +3495,235 @@ entrando no meio).
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado: leia, decida e só depois
+abra o gabarito. Nas que têm código, simule à mão com os nós e as setas
+desenhados.
+
+**1.** Uma lista simplesmente encadeada com `n` nós é acessada só pelo
+ponteiro para o primeiro nó (`inicio`). Qual é o custo, no pior caso, de
+inserir um nó novo no **fim** da lista?
+
+- (A) O(1)
+- (B) O(log n)
+- (C) O(n)
+- (D) O(n log n)
+- (E) O(n²)
+
+<details><summary>Gabarito</summary>
+
+**C.** Sem um ponteiro para o último, é preciso andar do início até o nó cujo
+`prox` é `NULL`: `n` passos. Guardando também um ponteiro `fim`, a inserção no
+fim cai para O(1), como na fila encadeada. Veja 0076 e 0086.
+
+</details>
+
+**2.** Considere que `insere_inicio(l, v)` cria um nó com `v` no começo e
+devolve o novo início, e que `remove(&l, v)` tira a **primeira** ocorrência de
+`v`. O que o trecho imprime?
+
+```c
+No *l = NULL;
+int v[] = {3, 8, 5, 8, 2};
+for (int i = 0; i < 5; i++) {
+    l = insere_inicio(l, v[i]);
+}
+remove(&l, 8);
+imprime(l);
+```
+
+- (A) `3 5 8 2`
+- (B) `3 8 5 2`
+- (C) `2 8 5 3`
+- (D) `2 5 3`
+- (E) `2 5 8 3`
+
+<details><summary>Gabarito</summary>
+
+**E.** Inserindo sempre no início, a lista fica `2 8 5 8 3` (ao contrário da
+ordem do vetor). A primeira ocorrência de 8, contando do início, é a segunda
+posição: sai ela, e sobra `2 5 8 3`. Veja 0076 e 0077.
+
+</details>
+
+**3.** Compare uma lista em vetor (lista sequencial) com `n` itens e uma lista
+simplesmente encadeada com `n` nós. Qual afirmação é correta?
+
+- (A) Acessar o k-ésimo item custa O(1) no vetor e O(k) na lista encadeada.
+- (B) Inserir na posição 0 custa O(1) no vetor e O(n) na lista encadeada.
+- (C) Remover o último item custa O(n) no vetor e O(1) na lista encadeada.
+- (D) Com os itens em ordem, a busca binária roda em O(log n) nas duas.
+- (E) A lista encadeada gasta menos memória por item que o vetor.
+
+<details><summary>Gabarito</summary>
+
+**A.** No vetor, `v[k]` é uma conta de endereço; na lista, é preciso seguir
+`k` setas. (B) está invertida: no vetor todos andam uma casa. (C) também: no
+vetor basta diminuir o tamanho. (D) falha porque chegar ao meio da lista custa
+O(n). (E) falha porque cada nó carrega um ponteiro. Veja 0075 e 0078.
+
+</details>
+
+**4.** Numa lista duplamente encadeada, `p` aponta para um nó que **não** é o
+primeiro nem o último. Qual par de comandos tira esse nó da lista (antes do
+`free(p)`)?
+
+- (A) `p->prox = p->ant; p->ant = p->prox;`
+- (B) `p->ant->prox = p->ant; p->prox->ant = p->prox;`
+- (C) `p->ant->ant = p->prox; p->prox->prox = p->ant;`
+- (D) `p->ant->prox = p->prox; p->prox->ant = p->ant;`
+- (E) `p->ant->prox = p; p->prox->ant = p;`
+
+<details><summary>Gabarito</summary>
+
+**D.** O anterior passa a apontar para o seguinte e o seguinte passa a apontar
+de volta para o anterior: as duas setas que chegavam em `p` desviam dele. O(1),
+sem procurar ninguém. Veja 0079.
+
+</details>
+
+**5.** Uma lista circular simplesmente encadeada é guardada por um ponteiro
+para o seu **último** nó (`ultimo`). Qual afirmação é correta?
+
+- (A) Inserir no início custa O(1), mas inserir no fim custa O(n).
+- (B) Inserir no início e no fim custam O(1), e o primeiro nó é `ultimo->prox`.
+- (C) Remover o último custa O(1), porque o anterior dele é `ultimo->prox`.
+- (D) Para percorrer a lista, o laço termina quando `p == NULL`.
+- (E) Numa lista com um nó só, `ultimo->prox == NULL`.
+
+<details><summary>Gabarito</summary>
+
+**B.** Do último se chega ao primeiro em um passo. Inserir no fim é inserir
+depois do último e mover `ultimo` para o novo. (C) falha: para remover o último
+é preciso o penúltimo, O(n). (D) falha: não há `NULL` no anel. (E) falha: o
+único nó aponta para si mesmo. Veja 0080.
+
+</details>
+
+**6.** O Cormen implementa a lista duplamente ligada como uma lista
+**circular com sentinela**: um nó `L.nil` sem dado, em que `L.nil.next` é o
+primeiro nó e `L.nil.prev` é o último. Qual afirmação é correta?
+
+- (A) Na lista vazia, `L.nil.next` e `L.nil.prev` apontam para o próprio `L.nil`.
+- (B) Na lista vazia, `L.nil` vale `NIL`.
+- (C) A sentinela torna a busca de uma chave O(1).
+- (D) Para remover um nó `x`, ainda é preciso testar se `x` é o primeiro ou o último.
+- (E) A sentinela fica entre o primeiro e o segundo nó da lista.
+
+<details><summary>Gabarito</summary>
+
+**A.** A sentinela sempre existe; vazia, ela aponta para si mesma nos dois
+sentidos. A vantagem é sumir com os casos de borda (por isso (D) é falsa): a
+remoção é sempre `x.prev.next = x.next; x.next.prev = x.prev`. A busca continua
+O(n), porque ainda percorre os nós. Veja 0077 (nó-cabeça), o desafio 7 acima e
+o assunto 0174, que aprofunda a sentinela.
+
+</details>
+
+**7.** O que o trecho imprime, se a lista `l` contém `40 30 20 10` (o 40 é o
+primeiro)?
+
+```c
+No *f(No *l) {
+    No *r = NULL;
+    while (l != NULL) {
+        No *t = l->prox;
+        l->prox = r;
+        r = l;
+        l = t;
+    }
+    return r;
+}
+
+l = f(l);
+imprime(l);
+```
+
+- (A) `40 30 20 10`
+- (B) `40`
+- (C) `10`
+- (D) `10 20 30 40`
+- (E) nada: o laço nunca termina
+
+<details><summary>Gabarito</summary>
+
+**D.** `f` inverte a lista só mexendo nos ponteiros: cada nó tirado da frente
+de `l` é posto na frente de `r`. Ela gasta O(n) de tempo e O(1) de memória
+extra. Veja 0076 (exercício E456).
+
+</details>
+
+**8.** Uma lista **simplesmente** encadeada guarda ponteiros para o primeiro e
+para o último nó. Qual operação continua custando O(n) no pior caso?
+
+- (A) inserir no início
+- (B) remover o último nó
+- (C) inserir no fim
+- (D) remover o primeiro nó
+- (E) ler o valor do último nó
+
+<details><summary>Gabarito</summary>
+
+**B.** Depois de remover o último, o penúltimo vira o novo último, e para
+achá-lo é preciso andar desde o início: o nó não sabe quem vem antes dele. É
+por isso que a fila encadeada sai pelo início e entra pelo fim, e o deque
+encadeado pede lista dupla. Veja 0079, 0086 e 0087.
+
+</details>
+
+**9.** A lista `l` contém `1 2 3 4 5 6 7`. O que `imprime(l)` mostra depois de
+`g(l)`?
+
+```c
+void g(No *l) {
+    while (l != NULL && l->prox != NULL) {
+        No *t = l->prox;
+        l->prox = t->prox;
+        free(t);
+        l = l->prox;
+    }
+}
+```
+
+- (A) `2 4 6`
+- (B) `1 2 3 4`
+- (C) `1 4 7`
+- (D) `1`
+- (E) `1 3 5 7`
+
+<details><summary>Gabarito</summary>
+
+**E.** Cada volta remove o nó **seguinte** ao atual (religa antes do `free`) e
+anda para o próximo que sobrou: saem 2, 4 e 6. O teste `l->prox != NULL`
+protege o fim da lista. Veja 0077.
+
+</details>
+
+**10.** Sete pessoas, numeradas de 1 a 7, formam uma lista circular. Começando
+pela pessoa 1, conta-se 1, 2, 3, e a terceira sai da roda; a contagem recomeça
+na pessoa seguinte à que saiu. Quem sobra?
+
+- (A) 1
+- (B) 3
+- (C) 4
+- (D) 6
+- (E) 7
+
+<details><summary>Gabarito</summary>
+
+**C.** Saem, na ordem, 3, 6, 2, 7, 5 e 1, e sobra a pessoa 4. É o problema de
+Josephus com n = 7 e k = 3; a fórmula J(n) = (J(n − 1) + k) % n, com J(1) = 0,
+dá J(7) = 3, ou seja, a pessoa 4. Veja 0080 (exemplo A160) e o desafio 10.
+
+</details>
+
 ## Para ler mais
 
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 10: estruturas de dados elementares (listas ligadas e sentinelas).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 3: estruturas de dados básicas (listas lineares).
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, Departamento de Informática, 2002. Cap. 10: listas encadeadas.
-- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. Rio de Janeiro: Elsevier, 2004.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016.
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Cap. 4: listas encadeadas. Disponível em: <https://www.ime.usp.br/~pf/algoritmos/>.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 4: filas e listas.
 - LAUREANO, M. *Estrutura de dados com algoritmos e C*. Rio de Janeiro: Brasport, 2008. Cap. 6: lista.

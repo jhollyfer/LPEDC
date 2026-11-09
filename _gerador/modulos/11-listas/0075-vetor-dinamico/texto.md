@@ -10,10 +10,10 @@ biblioteca de "lista que cresce sozinha" faz por baixo, e é o que você vai
 escrever agora.
 
 Uma **lista sequencial** (também chamada de **lista em vetor**) guarda os
-itens lado a lado, num vetor contínuo, na ordem em que estão na lista. Para ela crescer, você controla três coisas: o
-endereço do vetor no heap (`itens`), quantos itens estão em uso (`tam`) e
-quantos cabem (`cap`). Enquanto `tam < cap`, inserir no fim é só escrever em
-`itens[tam]`.
+itens lado a lado, num vetor contínuo, na ordem em que estão na lista. Para
+ela crescer, você controla três coisas: o endereço do vetor no heap (`itens`),
+quantos itens estão em uso (`tam`) e quantos cabem (`cap`). Enquanto
+`tam < cap`, inserir no fim é só escrever em `itens[tam]`.
 
 Quando `tam == cap`, o vetor está cheio. Aí entra o `realloc` (assunto 0055):
 ele pede um bloco maior, copia os itens e devolve o bloco antigo. A pergunta

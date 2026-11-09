@@ -28,7 +28,7 @@ nome="$(basename "$alvo" .c)"
 apoio=()
 for f in "$pasta"/*.c; do
   base="$(basename "$f")"
-  [[ "$base" =~ ^[AE][0-9]{3,4}\.c$ ]] && continue
+  [[ "$base" =~ ^[AEP][0-9]{3,4}\.c$ ]] && continue
   [[ "$f" == "$pasta/$(basename "$alvo")" ]] && continue
   apoio+=("$f")
 done

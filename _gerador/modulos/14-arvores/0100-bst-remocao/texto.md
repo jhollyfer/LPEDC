@@ -139,8 +139,8 @@ que vai terminar no caso fácil (o 35 é folha):
 > Se o nó guardasse uma struct grande (nome, endereço, histórico), copiar
 > custaria caro e invalidaria ponteiros que alguém guardou para o nó. Aí a saída
 > é religar os ponteiros e mover o nó inteiro, sem copiar dado (o Cormen faz
-> assim, com a função `TRANSPLANT`, e o Feofiloff também). O custo continua O(altura): uma descida para achar o nó,
-> outra para achar o sucessor.
+> assim, com a função `TRANSPLANT`, e o Feofiloff também). O custo continua
+> O(altura): uma descida para achar o nó, outra para achar o sucessor.
 
 > [!NOTE]
 > **Pergunta para você:** na árvore do início, se você remover o **50** (a raiz),

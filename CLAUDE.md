@@ -205,6 +205,38 @@ int main(void) {
   é código que roda (se precisar de um TAD, traga uma cópia do `.h`/`.c` na
   pasta `_respostas/<modulo>/`).
 
+## Lista prática do módulo (lista/P????.c)
+
+Além dos 6 exercícios de cada assunto, todo módulo tem uma **lista prática**
+com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
+(e dos anteriores) no estilo dos problemas da prova do PPGI.
+
+- Nome: `P` + número do módulo (2 dígitos) + índice (2 dígitos): o módulo 14
+  tem `P1401.c` a `P1430.c`.
+- Níveis: P01–P10 ★☆☆, P11–P20 ★★☆, P21–P30 ★★★.
+- Cabeçalho (o gerador exige):
+
+```c
+// Lista · Módulo 14 · Árvores
+// Exercício P1407 · ★☆☆ · Altura da árvore de categorias
+//
+// Enunciado... (mesmas regras dos exercícios E: cenário, valores, saída
+// esperada com 2 espaços de recuo, Dicas: terminando na resposta esperada)
+//
+// Escreva sua resposta abaixo:
+```
+
+- Mesmas regras dos exercícios E: sempre de codificar, esqueleto que compila
+  com `./rodar`, variedade (do zero, completar, consertar, estender), só o que
+  já foi ensinado até o fim do módulo. Exercício que precisa de TAD traz tudo
+  no próprio arquivo.
+- Resolução em `_respostas/<modulo>/lista/P1407.c` (mesmo cabeçalho + código),
+  rodada e conferida. Respostas autocontidas: nada de `.c` de apoio na pasta.
+- O gerador cria `<modulo>/lista/README.md` e põe no README do módulo uma
+  seção com o link, antes das "Questões no estilo da prova". Não edite o
+  `modulo.md` para isso.
+- Confira com `_gerador/conferir.sh <modulo>` (ele já inclui a lista).
+
 ## modulo.md
 
 ```md

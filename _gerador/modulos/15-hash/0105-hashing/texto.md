@@ -31,7 +31,7 @@ Uma boa função hash tem três qualidades:
 Para inteiros, a função clássica é o resto, o **método da divisão**:
 `h(k) = k mod m`, em C `k % m`. O Cormen recomenda um `m` primo e longe de
 uma potência de 2: com `m = 2^p`, o resto são só os `p` bits de baixo da
-chave, e o resto dela é ignorado. A outra receita do edital, o **método da
+chave, e os outros bits nem contam. A outra receita do edital, o **método da
 multiplicação**, fica para o assunto 0178. Para texto, o jeito mais
 simples é somar os códigos das letras e tirar o resto. Só que existem mais
 chaves possíveis do que baldes, então duas chaves diferentes **vão** cair no

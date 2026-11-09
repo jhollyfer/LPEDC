@@ -531,7 +531,9 @@ resposta é `-1`.
 
 Quantas voltas? Com 15 elementos sobram 15, 7, 3, 1: no máximo **4**. Com um
 milhão, no máximo 20. Com um bilhão, 30. É o **O(log n)** do assunto 0072: a
-cada vez que `n` dobra, a busca ganha só **uma** volta a mais.
+cada vez que `n` dobra, a busca ganha só **uma** volta a mais. A conta exata
+do pior caso é ⌊log₂ n⌋ + 1 voltas, cada uma comparando a chave com um
+elemento.
 
 O preço é a pré-condição: o vetor precisa estar em ordem. Num vetor bagunçado,
 a busca binária não dá erro nenhum, só responde errado. Ordenar custa caro, e
@@ -1939,7 +1941,8 @@ Esse é o **insertion sort** (ordenação por inserção). O vetor também tem u
 parte pronta à esquerda, `v[0..j-1]`, mas "pronta" aqui quer dizer **em
 ordem entre si**, não "no lugar final" como no selection. A cada passo:
 
-1. guarde a próxima carta, `x = v[j]`;
+1. guarde a próxima carta, `x = v[j]` (o `key` do pseudocódigo do Cormen,
+   que indexa o vetor a partir de 1);
 2. ande para a esquerda empurrando uma casa para a direita cada elemento
    **maior** que `x` (é um **deslocamento**, não uma troca);
 3. quando achar alguém menor ou igual (ou o começo do vetor), ponha `x` no
@@ -2392,6 +2395,8 @@ O caso base é o pedaço com 0 ou 1 elemento: ele já está ordenado, não há o
 que fazer. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
 e `r` é uma posição depois do último. Assim, o pedaço tem `r - p` elementos e
 as metades `[p, q)` e `[q, r)` se encaixam sem sobrar nem repetir ninguém.
+O Cormen usa o intervalo fechado `A[p..r]`, com `q = ⌊(p + r)/2⌋` e as
+metades `A[p..q]` e `A[q+1..r]`: muda a conta dos índices, não o algoritmo.
 
 Por que é rápido? Dividir ao meio dá `log₂ n` níveis (8 elementos: 3 níveis).
 Em **cada** nível, as intercalações juntas passam por todos os `n` elementos
@@ -2888,9 +2893,13 @@ está em **juntar**. Aqui, o trabalho está em **dividir**, e juntar é de graç
 depois das chamadas recursivas, não há nada a fazer. E não precisa de
 rascunho: tudo acontece com trocas no próprio vetor.
 
-A separação usada aqui (chamada de **Lomuto**) anda com `k` pelo pedaço e
+A separação usada aqui (chamada de **Lomuto**, a `PARTITION` do Cormen) anda
+com `k` pelo pedaço e
 mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou alguém
 `<=` pivô? Troca com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`.
+A outra separação clássica, a de **Hoare** (a do Ziviani e do Tenenbaum),
+anda com dois índices vindos das pontas, que trocam os fora do lugar até se
+cruzarem.
 
 O custo depende do pivô. Se ele cai perto do meio, o vetor é cortado em
 metades, como no merge sort: **O(n log n)**. Se ele é sempre o menor ou o
@@ -3410,6 +3419,7 @@ O resumo do módulo inteiro:
 | insertion | O(n) | O(n²) | O(n²) | O(1) | sim |
 | merge | O(n log n) | O(n log n) | O(n log n) | O(n) | sim |
 | quick | O(n log n) | O(n log n) | O(n²) | O(log n) a O(n) de pilha | não |
+| heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
 
 Não existe o melhor de todos. O insertion ganha em vetores pequenos ou quase
 ordenados. O merge garante n log n e estabilidade, pagando memória. O quick é
@@ -3437,7 +3447,9 @@ as suas trocas de longa distância, entrega R3 antes de R1:
 
 A norma do C **não promete** que o `qsort` é estável. Então, quando a ordem
 dos empatados importa, ponha o desempate na própria `compara`. É o que o
-código abaixo faz: cidade primeiro, horário depois.
+código abaixo faz: cidade primeiro, horário depois. Comparar por mais de um
+campo, em ordem de importância, é ordenar por uma **chave composta**; a
+**chave simples** é um campo só (o assunto 0180 aprofunda).
 
 ```c
 #include <stdio.h>
@@ -4167,8 +4179,201 @@ ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
 
 </details>
 
+## Questões no estilo da prova
+
+Questões objetivas no formato da prova do mestrado. Nas de ordenação, escreva
+o vetor depois de cada passada, como nos testes de mesa dos assuntos.
+
+**1.** Uma busca binária (a do assunto 0090, com intervalo fechado e
+`meio = ini + (fim - ini) / 2`) roda num vetor ordenado de 1000 elementos.
+No pior caso, quantos elementos do vetor ela compara com a chave?
+
+- (A) 9
+- (B) 500
+- (C) 11
+- (D) 10
+- (E) 1000
+
+<details><summary>Gabarito</summary>
+
+**D.** No pior caso são ⌊log₂ n⌋ + 1 voltas: ⌊log₂ 1000⌋ = 9, mais 1. Os
+pedaços examinados, sempre indo para a direita, têm 1000, 500, 250, 125, 62,
+31, 15, 7, 3 e 1 elementos. Veja 0090.
+
+</details>
+
+**2.** Com a mesma busca binária, procura-se o 50 no vetor de 15 posições
+abaixo. Quais elementos são examinados, na ordem?
+
+```c
+int v[] = {3, 9, 14, 21, 27, 33, 40, 46, 52, 58, 65, 71, 77, 84, 90};
+```
+
+- (A) 46, 71, 58, 52
+- (B) 46, 58, 52
+- (C) 40, 58, 52
+- (D) 46, 71, 52
+- (E) 46, 65, 58, 52
+
+<details><summary>Gabarito</summary>
+
+**A.** Meio 7 (46 < 50, `ini = 8`), meio 11 (71 > 50, `fim = 10`), meio 9
+(58 > 50, `fim = 8`), meio 8 (52 > 50, `fim = 7`). O intervalo fica vazio e a
+busca devolve `-1` depois de 4 comparações, o máximo para n = 15. Veja 0090.
+
+</details>
+
+**3.** O bubble sort (vizinhos trocados quando `v[j] > v[j + 1]`) roda no
+vetor `29 10 14 37 13 5`. Como fica o vetor depois de **duas** passadas?
+
+- (A) `10 13 14 5 29 37`
+- (B) `5 10 14 13 29 37`
+- (C) `10 14 13 5 29 37`
+- (D) `10 14 29 13 5 37`
+- (E) `5 10 13 14 29 37`
+
+<details><summary>Gabarito</summary>
+
+**C.** A passada 1 leva o 37 até o fim: `10 14 29 13 5 37` (a alternativa D).
+A passada 2 leva o 29 até a penúltima: `10 14 13 5 29 37`. Veja 0091.
+
+</details>
+
+**4.** O insertion sort roda no vetor `18 7 25 3 12 30 9`. Como fica o vetor
+depois de inserir os **três** primeiros elementos depois do `v[0]` (ou seja,
+ao fim da volta `j = 3` do laço externo)?
+
+- (A) `7 18 25 3 12 30 9`
+- (B) `3 7 12 18 25 30 9`
+- (C) `3 7 9 25 12 30 18`
+- (D) `7 18 3 25 12 30 9`
+- (E) `3 7 18 25 12 30 9`
+
+<details><summary>Gabarito</summary>
+
+**E.** O 7 entra antes do 18, o 25 fica, o 3 atravessa a mão inteira. A parte
+`v[0..3]` está em ordem entre si; o resto ainda não foi tocado. A (A) é o
+estado depois de `j = 2`. Veja 0093.
+
+</details>
+
+**5.** O selection sort (acha o menor de `v[i..n-1]` e troca com `v[i]`) roda
+no vetor `44 12 35 8 27 19`. Como fica o vetor depois de **três** passadas?
+
+- (A) `8 12 19 27 35 44`
+- (B) `8 12 19 44 27 35`
+- (C) `8 12 35 44 27 19`
+- (D) `8 12 19 35 27 44`
+- (E) `12 8 19 44 27 35`
+
+<details><summary>Gabarito</summary>
+
+**B.** Passada 0: o 8 troca com o 44. Passada 1: o 12 já está no lugar.
+Passada 2: o 19 troca com o 35, que salta para a última gaveta. Repare nesse
+salto: é ele que faz o selection ser instável. Veja 0092.
+
+</details>
+
+**6.** Qual conjunto tem **só** algoritmos de ordenação estáveis, nas versões
+clássicas vistas no módulo?
+
+- (A) quick sort, merge sort e insertion sort
+- (B) selection sort, bubble sort e merge sort
+- (C) heap sort, insertion sort e bubble sort
+- (D) insertion sort, merge sort e bubble sort
+- (E) quick sort, heap sort e selection sort
+
+<details><summary>Gabarito</summary>
+
+**D.** Bubble e insertion só movem um elemento por cima de vizinhos
+estritamente maiores; o merge pega o da esquerda no empate (`<=`). Quick,
+selection e heap fazem trocas de longa distância e podem inverter iguais.
+Veja 0096 e 0103.
+
+</details>
+
+**7.** A partição de Lomuto (a `PARTITION` do Cormen, com o último elemento
+como pivô) é aplicada ao vetor `15 4 23 8 42 16 11`. Qual é o vetor depois da
+partição e o índice do pivô (contando de 0)?
+
+- (A) `4 8 11 15 42 16 23`, índice 2
+- (B) `4 8 11 23 42 16 15`, índice 2
+- (C) `8 4 11 15 42 16 23`, índice 2
+- (D) `4 8 11 15 16 23 42`, índice 2
+- (E) `11 4 8 15 42 16 23`, índice 0
+
+<details><summary>Gabarito</summary>
+
+**A.** O pivô é o 11. Só o 4 e o 8 são `<= 11`: o 4 troca com o 15 e o 8 troca
+com o 15 de novo. No fim, o pivô troca com o 23, o primeiro da parte dos
+maiores. No
+Cormen, que indexa a partir de 1, a `PARTITION` devolveria 3. A partição de
+Hoare (dois índices que se cruzam) daria outro vetor. Veja 0095.
+
+</details>
+
+**8.** O quick sort com pivô no último elemento ordena um vetor de 8
+elementos **já ordenado**. Quantas comparações com o pivô são feitas no total,
+e qual é a ordem de crescimento desse caso?
+
+- (A) 8, Θ(n)
+- (B) 24, Θ(n log n)
+- (C) 16, Θ(n log n)
+- (D) 7, Θ(n)
+- (E) 28, Θ(n²)
+
+<details><summary>Gabarito</summary>
+
+**E.** Cada partição deixa um lado vazio e o outro com um elemento a menos:
+7 + 6 + 5 + 4 + 3 + 2 + 1 = 28 = n(n − 1)/2. É o pior caso do quick sort,
+Θ(n²). Veja 0095 e o exemplo A190.
+
+</details>
+
+**9.** Quantas comparações a intercalação (merge) faz para juntar as listas
+ordenadas `6 11 20 24` e `1 3 15 22`?
+
+- (A) 4
+- (B) 7
+- (C) 8
+- (D) 6
+- (E) 16
+
+<details><summary>Gabarito</summary>
+
+**B.** Saem 1, 3, 6, 11, 15, 20 e 22, cada um depois de uma comparação. Aí a
+segunda lista acaba e o 24 vai sem comparar. Juntar m + n elementos custa no
+máximo m + n − 1 comparações (aqui, 7) e no mínimo min(m, n). Veja 0094.
+
+</details>
+
+**10.** Uma lista de alunos deve sair ordenada por **turma** e, dentro de cada
+turma, por **nota** (uma chave composta). Você só pode usar duas passadas de
+um algoritmo que ordena por uma chave simples. Qual estratégia funciona?
+
+- (A) ordenar primeiro por turma e depois por nota, com um algoritmo estável
+- (B) ordenar primeiro por nota e depois por turma, com o selection sort
+- (C) ordenar primeiro por nota e depois por turma, com um algoritmo estável
+- (D) qualquer uma das duas ordens, desde que o algoritmo seja estável
+- (E) qualquer uma das duas ordens, com qualquer algoritmo
+
+<details><summary>Gabarito</summary>
+
+**C.** A última passada é a da chave principal (turma), e a estabilidade
+preserva, dentro de cada turma, a ordem por nota deixada pela primeira. Na
+(A), a passada por nota destrói o agrupamento por turma. Na (B), o selection
+pode bagunçar as notas de uma mesma turma. É a ideia por trás do radix sort.
+A alternativa com uma passada só é comparar a chave composta (turma, depois
+nota) na `compara` do `qsort`. Veja 0096 e o assunto 0180, que aprofunda chave
+composta.
+
+</details>
+
 ## Para ler mais
 
+- CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024. Caps. 2 (insertion sort e merge sort), 7 (quicksort) e 8 (estabilidade e ordenação em tempo linear).
+- ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Caps. 4 (ordenação) e 5 (pesquisa sequencial e binária).
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016.
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Caps. de busca em vetor ordenado, ordenação elementar, mergesort e quicksort.
 - TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. *Estruturas de dados usando C*. São Paulo: Makron Books, 1995. Cap. 6 (classificação) e cap. 7 (busca).
 - CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. Rio de Janeiro: PUC-Rio, 2002. Parte III: ordenação e busca.
@@ -4176,7 +4381,6 @@ ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro. Cap. de pesquisa e ordenação.
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 6 (classificação e pesquisa em arrays).
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Seções 4.10 (recursão e quicksort) e 5.11 (ponteiros para funções).
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 3. ed. Rio de Janeiro: Elsevier, 2012. Caps. 2 (insertion sort e merge sort) e 7 (quicksort).
 - BLOCH, J. Extra, extra: read all about it: nearly all binary searches and mergesorts are broken. *Google Research Blog*, 2006. Disponível em: <https://research.google/blog/extra-extra-read-all-about-it-nearly-all-binary-searches-and-mergesorts-are-broken/>.
 - CPPREFERENCE. *qsort, qsort_s* e *bsearch, bsearch_s*. Disponível em: <https://en.cppreference.com/w/c/algorithm>.
 - LINUX MAN-PAGES. *qsort(3)* e *bsearch(3)*. Disponível em: <https://man7.org/linux/man-pages/man3/qsort.3.html>.
