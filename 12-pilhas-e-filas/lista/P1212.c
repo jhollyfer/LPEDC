@@ -16,7 +16,7 @@
 //   Saída esperada:
 //   desempilha: 3
 //   desempilha até o fim: 4 2 1
-//   itens movidos entre as filas: 4
+//   itens movidos entre as filas: 5
 //
 // Dicas:
 // 1. Com a regra acima, desempilhar é só retirar da frente de a: O(1).
@@ -24,8 +24,7 @@
 // 2. Para trocar os papéis, troque as duas structs inteiras (Fila t = p->a;
 //    p->a = p->b; p->b = t;).
 // 3. Movidos: empilha 1 move 0, empilha 2 move 1, empilha 3 move 2; depois
-//    de tirar o 3 sobram dois, então empilha 4 move 1 a mais... confira com
-//    o programa: são 4 no total (0 + 1 + 2 + 1).
+//    de tirar o 3 sobram dois, então empilha 4 move 2: 0 + 1 + 2 + 2 = 5.
 // 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:
