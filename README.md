@@ -8,7 +8,8 @@ memória, os ponteiros, a compilação e o custo de cada escolha.
 > **Preparação para o Mestrado do PPGI/UFAM.** O curso está alinhado à Prova de
 > Conhecimentos do edital 070/2026 (prova em 27/11/2026). O guia
 > [`PPGI.md`](PPGI.md) liga cada tópico do edital e do cursinho do PPGI ao
-> assunto que o ensina e traz um roteiro dia a dia.
+> assunto que o ensina. Para estudar até a prova, comece pelo
+> [plano dia a dia](PPGI.md#comece-aqui).
 
 Segue a filosofia do [LPPOO](https://github.com/jhollyfer/LPPOO). Cada assunto
 conta **um exemplo só**, em quatro partes que batem entre si: o texto, o

@@ -8,6 +8,8 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Adicionado
 
+- `PPGI.md`, "Comece aqui": plano de estudo dia a dia de 09/11 até a prova (27/11), com
+  assuntos e treino (provas antigas e simulados) em cada dia.
 - `PROVAS.md`: as 11 provas do PPGI de 2016 a 2023 resolvidas (a de 2023 com o gabarito oficial), com a letra, o porquê e o link
   para o módulo de cada questão.
 - `SIMULADOS.md`: 3 simulados de 20 questões, com 4 alternativas como nas provas de 2022 e

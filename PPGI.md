@@ -2,8 +2,8 @@
 
 Este guia liga o **Edital n.º 070/2026-PROPESP/UFAM** (Mestrado em Informática,
 ingresso 2027/1) e o **cursinho preparatório do PPGI** (Colabweb) aos assuntos do
-LPEDC. Para cada tópico da prova você encontra onde estudar, e no fim um roteiro
-de estudo até o dia da prova.
+LPEDC. Para cada tópico da prova você encontra onde estudar. O plano de estudo dia a dia
+está em [Comece aqui](#comece-aqui).
 
 ## O que o edital pede
 
@@ -186,33 +186,42 @@ pilha, a inserção de X e Y numa lista dupla, as afirmações sobre hash por en
 "qual sequência de busca não pode ser de uma ABB", a AVL montada com chaves em ordem crescente
 e a busca binária contando comparações.
 
-## Roteiro até a prova (27/11/2026)
+## Comece aqui
 
-A prova é objetiva e cobra **reconhecer** o comportamento de um código e o
-custo de um algoritmo. Nos assuntos que você já viu, leia o texto, refaça a
-**Pergunta para você** e faça só os exercícios ★★☆ e ★★★. Nos novos (0166 em
-diante), faça tudo.
+Plano de hoje, 09/11, até a prova, em 27/11. A ordem segue o peso de cada tópico nas
+provas de 2016 a 2023 ([o que caiu](#o-que-caiu-de-2016-a-2023)): árvores primeiro, depois
+listas, pilhas e filas, busca, ordenação e hash. Cada dia tem um bloco de assuntos e um
+treino no formato da prova.
 
-Faça sempre as **Questões no estilo da prova** do fim de cada módulo,
-cronometrando: o edital não fixa a duração da prova, então confira o
-horário quando sair o local (24/11) e treine no mesmo ritmo. A cada dois dias,
-resolva uma prova antiga de [`PROVAS.md`](PROVAS.md) inteira, também cronometrada. Na última semana, faça os três
-simulados de [`SIMULADOS.md`](SIMULADOS.md), um por dia.
-Da lista prática, faça pelo menos os ★★☆ dos módulos do dia; os ★★★ ficam para
-os dias de revisão.
+Como estudar cada assunto do dia: leia o texto, refaça a **Pergunta para você** e faça os
+exercícios ★★☆ e ★★★. Feche o dia com as **Questões no estilo da prova** do módulo,
+cronometrando (3 minutos por questão), e os ★★☆ da lista prática. Para cada questão errada,
+volte ao assunto indicado no gabarito.
 
-| Dias | Foco | Assuntos |
-| --- | --- | --- |
-| 1–2 | C que vira pegadinha | 0007, 0008, 0013, 0018, 0030, 0046, 0047, 0064, 0065, 0170–0173 |
-| 3–4 | custo de algoritmos | 0071, 0072, 0114, 0115, 0166–0169 |
-| 5–6 | listas, pilhas, filas | 0075–0087, 0174 |
-| 7–9 | árvores | 0097–0103, 0175–0177, 0146 |
-| 10 | hash | 0105–0107, 0178, 0179 |
-| 11–12 | busca e ordenação | 0089–0096, 0119–0122, 0180 |
-| 13–14 | grafos | 0109–0112, 0150, 0152–0155, 0182–0184 |
-| 15 | PD, gulosos, NP | 0133, 0138–0141, 0185–0189 |
-| 16–17 | revisão | os **Desafios do módulo** de 10, 13, 14, 15 e 16 |
-| 18 | descanso | revise só os `[!WARNING]` dos assuntos |
+| Dia | Foco | Assuntos | Treino no formato da prova |
+| --- | --- | --- | --- |
+| seg 09/11 | diagnóstico | nenhum | a prova 071/2023 inteira, a única com gabarito oficial; confira em [`PROVAS.md`](PROVAS.md) e anote os tópicos que errou. Inscrição até 11/11 |
+| ter 10/11 | ABB | 0097–0100 | questões do módulo 14 |
+| qua 11/11 | AVL, o assunto que mais cai | 0101, 0176 | prova 032/2016 |
+| qui 12/11 | heap, heapsort, árvore B, rubro-negra | 0102, 0103, 0146, 0145, 0175, 0177 | questões dos módulos 22 e 28 |
+| sex 13/11 | listas encadeadas e `**prim` | 0075–0081, 0174 | questões do módulo 11; prova 053/2016 |
+| sáb 14/11 | pilha e fila, fila circular | 0082–0087 | questões do módulo 12; prova 024/2017 |
+| dom 15/11 | busca e custo | 0071, 0072, 0089, 0090 | questões do módulo 10 |
+| seg 16/11 | ordenação passo a passo | 0091–0093 | prova 055/2017 |
+| ter 17/11 | merge, quick (partição), radix; estabilidade e espaço | 0094–0096, 0119–0121 | questões dos módulos 13 e 18 |
+| qua 18/11 | hash | 0105–0107, 0178, 0179 | questões do módulo 15; prova 023/2018 |
+| qui 19/11 | grafos | 0109–0112 | questões do módulo 16 |
+| sex 20/11 | C que vira pegadinha | 0007, 0008, 0030, 0046, 0047, 0170–0173 | prova 061/2018 |
+| sáb 21/11 | simulado | erros dos dias anteriores | simulado 1 de [`SIMULADOS.md`](SIMULADOS.md) |
+| dom 22/11 | provas antigas | erros do simulado | provas 033/2019 e 060/2019 |
+| seg 23/11 | simulado | erros das provas | simulado 2 |
+| ter 24/11 | Python e provas recentes | [Python 3](#python-3) | provas 057/2022 e 020/2023; confira o local da prova |
+| qua 25/11 | simulado | erros das provas | simulado 3 |
+| qui 26/11 | descanso | só os `[!WARNING]` de 0090, 0095, 0099, 0101, 0102 e 0106 | nenhum |
+| sex 27/11 | **prova** | | |
+
+Se um dia atrasar, corte o treino, não o assunto: árvores, listas e busca somam mais da
+metade das questões.
 
 Outras datas: homologação preliminar em 18/11, local da prova em 24/11 e
 gabarito preliminar no dia da prova. Leve caneta azul ou preta e documento com
