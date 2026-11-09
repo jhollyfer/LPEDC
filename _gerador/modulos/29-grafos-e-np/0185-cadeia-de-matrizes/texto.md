@@ -138,8 +138,9 @@ matrizes reais na ordem ótima, contando as multiplicações.
 > números. É o bug do E1109.
 
 > [!TIP]
-> **Por dentro do C:** `m` e `s` usam só a metade de cima da matriz; a outra
-> metade são 4 × 4 casas desperdiçadas, que para n pequeno não importam. O
+> **Por dentro do C:** `m` e `s` usam só a metade de cima da matriz, sem a
+> linha e a coluna 0: 10 das 25 casas. As outras 15 ficam desperdiçadas, o que
+> para n pequeno não importa. O
 > `(long)` antes de `p[i - 1] * p[k] * p[j]` está ali porque o produto de
 > três `int` é calculado em `int`: com dimensões de 2000 já passa de 2³¹ e
 > estoura **antes** de ser guardado no `long`. Converter o primeiro fator

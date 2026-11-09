@@ -5,8 +5,8 @@ no LinkedIn. Você não conhece a Rita. Conhece o Max e a Nina; eles conhecem
 outras pessoas, que conhecem outras. Qual é a corrente mais curta de
 apresentações até ela?
 
-O "conexão de 2º grau" do LinkedIn é essa ideia (nada a ver com o grau do
-vértice do assunto anterior: ali o grau é a **distância**). A rede é
+O "conexão de 2º grau" do LinkedIn é essa ideia. Lá, o grau é a **distância**,
+sem relação com o grau do vértice do assunto anterior. A rede é
 um grafo não dirigido: pessoas são vértices, conexões são arestas. A pergunta é
 o **menor caminho em número de arestas** de Lia (você) até Rita.
 
