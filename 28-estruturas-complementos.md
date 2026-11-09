@@ -2959,10 +2959,9 @@ ordem:
 > **Por dentro do C:** o pigeonhole gasta memória proporcional a `r`, o
 > tamanho do intervalo, não a `n`. Para notas, 11 casas de dois `int` são 88
 > bytes. Para CPF (11 dígitos), seriam 100 bilhões de casas: não cabe. Por
-> isso ele só serve para intervalos pequenos, e por isso o radix (0121) existe:
-> ele quebra a chave grande em pedaços pequenos e faz uma passada estável por
-> pedaço. Outro custo: o `pb_pigeonhole` copia structs inteiras
-
+> isso ele só serve para intervalos pequenos. O radix (0121) existe para esse
+> caso: ele quebra a chave grande em pedaços pequenos e faz uma passada estável
+> por pedaço. Outro custo: o `pb_pigeonhole` copia structs inteiras
 > (`saida[k++] = v[i]`, 24 bytes cada): com registros grandes, ordene um vetor
 > de índices ou de ponteiros e mova só eles.
 
