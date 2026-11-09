@@ -1,0 +1,35 @@
+# Plano de testes
+
+**LPEDC** · o que se confere antes de dar uma mudança como pronta
+
+## 1. Código C
+
+| O quê | Como | Passa quando |
+|---|---|---|
+| um arquivo | `./rodar caminho/A013.c` (C17, `-Wall -Wextra -pedantic`, ASan e UBSan) | compila sem aviso, roda sem erro do sanitizer, e a saída bate com o comentário |
+| arquivo que lê do teclado | `printf '25\n' \| ./rodar caminho.c` | idem |
+| vazamento difícil | `./rodar --valgrind caminho.c` | sem bloco perdido |
+
+## 2. Módulo inteiro
+
+`_gerador/conferir.sh <modulo>` compila e roda os exemplos, os exercícios, a lista e as respostas
+do módulo. Exercício "conserte o bug" fica de fora (o esqueleto vem quebrado de propósito; a
+resposta é conferida). Passa com `<modulo>: 0 com problema`.
+
+## 3. Texto
+
+| O quê | Como | Passa quando |
+|---|---|---|
+| revisão não mexeu no que não pode | `python3 _gerador/conferir-texto.py <modulo> ...` (compara com o `HEAD`: blocos de código, código inline, `{{...}}`, títulos de assunto, callouts, gabaritos) | `0 problema(s)` |
+| humanizer | skill `humanizer-pt` e o script `auditoria_pos_edicao.py antes.txt depois.txt` | valores, força da norma, certeza e corte OK; o BLOQUEIO em "vestígios de ferramenta" é falso positivo se o arquivo do `HEAD` contra ele mesmo der o mesmo |
+| `.md` gerado | `cd _gerador && npm run gerar -- 03-` | sem erro, e o `git diff` do `.md` mostra só o que mudou na fonte |
+| links | links e imagens relativos dos `.md` da raiz apontam para arquivo que existe | nenhum quebrado |
+| desenho | `node ver.mjs ../<modulo>/<assunto>/ideia.svg` e abrir o PNG | sem sobreposição, texto cortado ou seta solta (`DESIGN.md`) |
+
+## 4. Definição de pronto
+
+- [ ] `conferir.sh` do módulo tocado com 0 problema, rodado no `HEAD` atual.
+- [ ] `conferir-texto.py` com 0 problema quando o texto mudou.
+- [ ] `.md` do módulo gerado de novo no mesmo commit da fonte.
+- [ ] Gabarito de questão nova conferido rodando o código.
+- [ ] `docs/` atualizado no mesmo commit (`AGENTS.md`, "Ao terminar").

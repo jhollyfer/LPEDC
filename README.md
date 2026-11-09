@@ -171,7 +171,7 @@ referência os fichamentos em [`_fontes/`](_fontes/) dos materiais abaixo:
 ## Para quem for mexer no material
 
 Os `.md` dos módulos (na raiz) e os SVGs são gerados. O guia de escrita está em
-[`CLAUDE.md`](CLAUDE.md) e o gerador em [`_gerador/`](_gerador/):
+[`docs/RULES.md`](docs/RULES.md) (o ponto de partida para agentes é o [`AGENTS.md`](AGENTS.md)) e o gerador em [`_gerador/`](_gerador/):
 
 ```bash
 cd _gerador && npm install
