@@ -15,6 +15,14 @@ entrada → processamento → saída (a estrutura sequencial); depois vêm
 decisões, laços, funções e assim por diante. Instalação: Arch Linux primeiro
 (`pacman`), depois Debian/Ubuntu (`apt`) e Windows (WSL).
 
+**Objetivo principal:** preparar para a Prova de Conhecimentos do Mestrado do
+PPGI/UFAM (edital 070/2026): 20 questões objetivas sobre algoritmos, C,
+estruturas de dados, análise, ordenação, hash, árvores e grafos, com
+bibliografia Cormen, Ziviani e Deitel. O mapa edital → assuntos e o roteiro de
+estudo estão em [`PPGI.md`](PPGI.md). Quando um livro divergir, siga as
+definições e os nomes do **Cormen** e cite o nome alternativo ("também chamado
+de...").
+
 O sumário completo (módulos, assuntos e números) está em
 [`_fontes/sumario.md`](_fontes/sumario.md). Os fichamentos dos livros estão em
 `_fontes/*.md`.
@@ -51,7 +59,7 @@ Assunto `N` (ex.: 0002 → N = 2):
 - exemplos: `A(2N-1)` e `A(2N)` → 0002 tem `A003.c` e `A004.c`
 - exercícios: `E(6N-5)` até `E(6N)` → 0002 tem `E007.c` até `E012.c`
 
-Sempre 3 dígitos. Sempre 2 exemplos e 6 exercícios por assunto.
+Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 6 exercícios por assunto.
 
 ## Cada assunto (texto.md)
 
@@ -228,6 +236,14 @@ int main(void) {
 (8 a 12 problemas extras, só no markdown, misturando os assuntos do módulo,
 do médio ao difícil. Cada um com enunciado e, num <details>, a resposta
 esperada e uma dica de caminho.)
+
+## Questões no estilo da prova
+(8 a 10 questões objetivas originais, no formato da prova do PPGI: enunciado
+curto, trecho de código C ou pseudocódigo quando couber, alternativas (A) a
+(E). Cada uma termina com um <details><summary>Gabarito</summary> com a letra
+e a justificativa, citando o assunto onde estudar (ex.: "veja 0095"). Cubra os
+tópicos do edital que o módulo toca. Rode todo código de questão antes de
+fixar o gabarito.)
 
 ## Para ler mais
 (referências em ABNT: os livros dos fichamentos que serviram de base para o

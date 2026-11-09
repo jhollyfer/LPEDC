@@ -4,6 +4,13 @@ Material de estudo pessoal para **relembrar lógica de programação**, **aprend
 estrutura de dados** e **entender de verdade como a linguagem C funciona**: a
 memória, os ponteiros, a compilação e o custo de cada escolha.
 
+> [!IMPORTANT]
+> **Preparação para o Mestrado do PPGI/UFAM.** O curso está alinhado à Prova de
+> Conhecimentos do edital 070/2026 (prova em 27/11/2026). O guia
+> [`PPGI.md`](PPGI.md) liga cada tópico do edital e do cursinho do PPGI ao
+> assunto onde estudar e traz um roteiro dia a dia. Cada módulo termina com
+> **questões no estilo da prova**, com gabarito comentado.
+
 Segue a filosofia do [LPPOO](https://github.com/jhollyfer/LPPOO). Cada assunto
 conta **um exemplo só**, em quatro partes que batem entre si: o texto, o
 **diagrama da ideia**, o código e o **fluxograma**. Depois vêm os exemplos para
@@ -103,6 +110,10 @@ As formas e as cores dos desenhos:
 | [23 · Grafos avançados](23-grafos-avancados/README.md) | 0150–0156 | componentes, ordenação topológica, Kruskal, Prim, Bellman-Ford, Floyd-Warshall |
 | [24 · Busca de padrões](24-busca-de-padroes/README.md) | 0157–0161 | força bruta, KMP, Horspool, Rabin-Karp |
 | [25 · Estruturas extras](25-estruturas-extras/README.md) | 0162–0165 | matriz esparsa, skip list, listas autoajustáveis |
+| [26 · Análise formal](26-analise-formal/README.md) | 0166–0169 | O, Ω e Θ com c e n₀, somatórios, complexidade espacial |
+| [27 · Detalhes de C](27-c-detalhes/README.md) | 0170–0173 | precedência e avaliação, com e sem sinal, VLA |
+| [28 · Estruturas: o que faltava](28-estruturas-complementos/README.md) | 0174–0181 | sentinela, sucessor, remoção AVL, rubro-negra clássica, hash por multiplicação, sondagem quadrática e dupla, pigeonhole |
+| [29 · Grafos e NP](29-grafos-e-np/README.md) | 0182–0189 | euleriano, hamiltoniano, pontes e articulações, cadeia de matrizes, P e NP, reduções, aproximação |
 
 O sumário detalhado, assunto por assunto, está em
 [`_fontes/sumario.md`](_fontes/sumario.md).
@@ -112,6 +123,9 @@ O sumário detalhado, assunto por assunto, está em
 O texto, os exemplos e os exercícios foram escritos do zero, tomando como
 referência os fichamentos em [`_fontes/`](_fontes/) dos materiais abaixo:
 
+- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. GEN LTC, 2024 (referência principal do edital do PPGI).
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. Cengage Learning, 2010.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados*. 2. ed. Elsevier, 2016.
 - BACKES, A. *Linguagem C: completa e descomplicada*. Elsevier, 2013 (e a apostila *Linguagem C: descomplicada*).
 - DEITEL, P.; DEITEL, H. *C: como programar*. Pearson.
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Elsevier, 2009.
