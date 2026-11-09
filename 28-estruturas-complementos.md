@@ -4909,215 +4909,251 @@ sem 1415 e 640: pré 1600 905 1120 1000 1830 2210
 
 ## Questões no estilo da prova
 
-**1.** Numa lista duplamente encadeada circular com nó sentinela `L.nil`, a
-lista contém apenas o nó `x`. Executa-se:
+Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Onde o enunciado não disser outra coisa, a raiz fica no
+nível 1 e a folha tem altura 1.
+
+**1.** A lista duplamente encadeada abaixo é circular, com nó sentinela
+(`nil`). A função remove o nó `x`, que é um nó real da lista:
 
 ```c
-x->ant->prox = x->prox;
-x->prox->ant = x->ant;
-```
+typedef struct No {
+    int chave;
+    struct No *ant, *prox;
+} No;
 
-Logo depois dessas duas linhas, é correto afirmar que:
-
-(A) `L.nil.prox == NULL` e `L.nil.ant == NULL`.
-(B) `L.nil.prox == &L.nil` e `L.nil.ant == &L.nil`.
-(C) `L.nil.prox == x`, porque `x` ainda não foi liberado.
-(D) o código acessa `NULL`, pois `x` não tem vizinhos.
-(E) é preciso um `if` para o caso de `x` ser o único nó.
-
-<details><summary>Gabarito</summary>
-
-**(B).** Com um nó só, os dois vizinhos de `x` são a própria sentinela: a
-primeira linha faz `nil.prox = nil` e a segunda, `nil.ant = nil`. É o estado
-da lista vazia, sem nenhum caso especial. (A) e (D) supõem `NULL`, que não
-existe dentro dessa lista. Estude o 0174.
-
-</details>
-
-**2.** Insere-se, nesta ordem, as chaves 50, 30, 80, 20, 40, 70, 90, 35, 45 e
-42 numa árvore binária de busca sem balanceamento. Usando o algoritmo
-`TREE-SUCCESSOR` (com ponteiro para o pai), o sucessor de 45 e o sucessor
-de 40 são, respectivamente:
-
-(A) 42 e 45.
-(B) 50 e 42.
-(C) 50 e 45.
-(D) 80 e 42.
-(E) 42 e 35.
-
-<details><summary>Gabarito</summary>
-
-**(B).** O 45 não tem filho direito (só o 42, à esquerda): sobe pelo 40 e
-pelo 30, ambos alcançados pela direita, até o 50, alcançado pela esquerda.
-O 40 tem subárvore direita (45 com 42): o sucessor é o mínimo dela, 42.
-Estude o 0175.
-
-</details>
-
-**3.** Na mesma árvore da questão 2, com altura medida em arestas e a raiz no
-nível 0, assinale a afirmativa correta.
-
-(A) A altura da árvore é 3.
-(B) O nó 42 está no nível 3.
-(C) O fator de balanceamento da raiz é 2, logo a árvore não é AVL.
-(D) O grau da árvore é 3.
-(E) O nó 40 é uma folha.
-
-<details><summary>Gabarito</summary>
-
-**(C).** A subárvore do 30 tem altura 3 (30, 40, 45, 42) e a do 80, altura
-1: fator 3 - 1 = 2. A altura da árvore é 4 e o 42 está no nível 4 (A e B
-erradas); a árvore é binária, então o grau é no máximo 2 (D); o 40 tem dois
-filhos (E). Estude o 0175.
-
-</details>
-
-**4.** Numa árvore AVL, insere-se 50, 30, 70, 20, 40, 80 e 10, nesta ordem
-(nenhuma rotação acontece). Em seguida remove-se o 70 e depois o 80 (na
-remoção de nó com dois filhos, usa-se o sucessor). Ao final:
-
-(A) a raiz é 50 e não houve rotação.
-(B) a raiz é 30, depois de uma rotação simples à direita.
-(C) a raiz é 40, depois de uma rotação dupla.
-(D) a raiz é 30, depois de duas rotações duplas.
-(E) a árvore deixa de ser AVL, pois a remoção não rebalanceia.
-
-<details><summary>Gabarito</summary>
-
-**(B).** Tirar o 70 (que só tem o 80) põe o 80 no lugar, e o 50 fica com
-altura 2 à esquerda e 0 à direita: fator 2. O filho 30 tem fator 1 (o 20,
-com o 10 embaixo, contra o 40): rotação simples à direita no 50, e o 30 vira
-a raiz. Tirar o 80 depois não desequilibra nada (pré-ordem final
-30 20 10 50 40). Estude o 0176.
-
-</details>
-
-**5.** Sobre as árvores rubro-negras, na definição de Cormen et al., é
-**incorreto** afirmar:
-
-(A) A raiz é preta.
-(B) Toda folha (`T.nil`) é preta.
-(C) Se um nó é vermelho, seus dois filhos são pretos.
-(D) Para cada nó, todos os caminhos dele até as folhas descendentes têm o
-mesmo número de nós pretos.
-(E) Todos os caminhos da raiz até as folhas têm o mesmo número de nós.
-
-<details><summary>Gabarito</summary>
-
-**(E).** O que é igual em todos os caminhos é o número de nós **pretos** (a
-propriedade 5, em D). O total de nós pode variar: um caminho pode ter até o
-dobro de nós de outro, alternando vermelhos e pretos. É por isso que a altura
-fica em até 2 log₂(n + 1), e não em log₂(n + 1). Estude o 0177.
-
-</details>
-
-**6.** Uma árvore rubro-negra armazena 1023 chaves. O maior valor possível
-para a sua altura é, no máximo:
-
-(A) 9
-(B) 10
-(C) 20
-(D) 512
-(E) 1022
-
-<details><summary>Gabarito</summary>
-
-**(C).** h ≤ 2 log₂(n + 1) = 2 log₂(1024) = 20. A prova: a subárvore de um
-nó x tem pelo menos 2^bh(x) - 1 nós, e pela propriedade 4 a altura negra da
-raiz é pelo menos h/2. (B) seria o limite de uma árvore perfeitamente
-balanceada; (E), o de uma BST degenerada. Estude o 0177.
-
-</details>
-
-**7.** Uma tabela hash com encadeamento vai guardar cerca de 2000 chaves
-inteiras, com uns 3 elementos por lista, usando o método da divisão,
-h(k) = k mod m. Pelo critério de Cormen et al., a melhor escolha para m é:
-
-(A) 512
-(B) 1024
-(C) 701
-(D) 1000
-(E) 64
-
-<details><summary>Gabarito</summary>
-
-**(C).** O ideal é um primo perto de n/α ≈ 667 e longe de potências de 2.
-Com m = 2^p (A, B, E), h(k) é só os p bits de baixo da chave; com m = 10³
-(D), só os três últimos dígitos. 701 é primo, perto de 667 e longe de 512 e
-de 1024. Estude o 0178.
-
-</details>
-
-**8.** Considere a função a seguir, em C:
-
-```c
-#include <stdint.h>
-#include <stdio.h>
-
-uint32_t h(uint32_t k, int p) {
-    return (k * 2654435769u) >> (32 - p);
-}
-
-int main(void) {
-    printf("%u %u\n", h(48, 4), h(48, 5));
-    return 0;
+void remover(No *x) {
+    free(x);
+    x->ant->prox = x->prox;
+    x->prox->ant = x->ant;
 }
 ```
 
-Sabendo que 48 × 2654435769 = 0x1DAA66D2B0, o programa imprime:
+Qual é o defeito?
 
-(A) 0 0
-(B) 10 21
-(C) 10 20
-(D) 13 27
-(E) 48 48
+- (A) Falta tratar o caso de `x` ser o único nó da lista.
+- (B) Falta testar se `x` é a sentinela, que nunca pode sair.
+- (C) As duas linhas de religação estão na ordem trocada.
+- (D) Lê `x->ant` e `x->prox` depois do `free(x)`; o `free` deveria vir depois das duas atribuições.
+- (E) Falta zerar `x->ant` e `x->prox` para a lista não ficar com ponteiros soltos.
 
 <details><summary>Gabarito</summary>
 
-**(B).** O `uint32_t` guarda só os 32 bits de baixo: 0xAA66D2B0, que começa
-com os bits 1010 1... Com p = 4, os 4 bits mais altos: 1010 = 10. Com p = 5,
-10101 = 21. É o método da multiplicação em inteiros, com s = ⌊A · 2³²⌋ e A de
-Knuth. Estude o 0178.
+**D.** O `free` devolve o bloco, e as três linhas seguintes leem e usam o
+conteúdo dele: é uso depois de liberar, comportamento indefinido (o valgrind
+acusa "Invalid read", e o gcc avisa com `-Wall`). A ordem certa é religar os
+vizinhos e só então liberar. Com a sentinela, o único nó não pede caso
+especial (A), e a ordem das duas religações tanto faz (C). Veja 0174.
 
 </details>
 
-**9.** Numa tabela de endereçamento aberto com m = 7, usa-se dispersão dupla:
-h(k, i) = (h₁(k) + i · h₂(k)) mod 7, com h₁(k) = k mod 7 e
-h₂(k) = 1 + (k mod 6). Inserindo-se 14, 21 e 28, nesta ordem, numa tabela
-vazia, as posições ocupadas são:
+**2.** Numa ABB sem balanceamento são inseridas as chaves
+`60 35 85 20 45 75 95 40 55 50`, nesta ordem. Usando o `TREE-SUCCESSOR` do
+Cormen (com ponteiro para o pai), quais são o sucessor do 45 e o sucessor do
+60, respectivamente?
 
-(A) 0, 1 e 2
-(B) 0, 4 e 5
-(C) 0, 3 e 6
-(D) 0, 2 e 4
-(E) 0, 4 e 1
+- (A) 50 e 75
+- (B) 55 e 85
+- (C) 50 e 85
+- (D) 55 e 75
+- (E) 40 e 75
 
 <details><summary>Gabarito</summary>
 
-**(B).** As três chaves têm h₁ = 0. O 14 fica no 0. O 21 tem passo
-1 + 21 mod 6 = 4: tenta 0 (ocupado) e fica no 4. O 28 tem passo
-1 + 28 mod 6 = 5: tenta 0 e fica no 5. Com sondagem linear, seriam 0, 1 e 2
-(A): agrupamento primário. Estude o 0179.
+**A.** Se o nó tem filho direito, o sucessor é o mínimo dessa subárvore. O 45
+tem o 55 à direita, e o mínimo a partir dele, descendo pela esquerda, é o 50
+(o 55 é só o filho direito, não o mínimo). O 60 tem o 85 à direita, e o 85
+tem o 75 à esquerda. Sem filho direito, sobe-se até o primeiro ancestral
+de quem o nó descende pela esquerda. Veja 0175.
 
 </details>
 
-**10.** Considere, em suas implementações usuais, os métodos de ordenação:
-I. inserção; II. seleção; III. merge sort; IV. heapsort; V. counting sort;
-VI. quicksort. São estáveis apenas:
+**3.** Uma árvore binária perfeita (todos os níveis completos) tem 63 nós.
+Qual é a altura dela e quantas folhas ela tem?
 
-(A) I, II e III
-(B) I, III e V
-(C) II, IV e VI
-(D) I, III, IV e V
-(E) todos, desde que as chaves sejam inteiras
+- (A) altura 5; 31 folhas
+- (B) altura 6; 31 folhas
+- (C) altura 6; 32 folhas
+- (D) altura 7; 32 folhas
+- (E) altura 7; 64 folhas
 
 <details><summary>Gabarito</summary>
 
-**(B).** Inserção (desloca só quem é estritamente maior), merge (no empate,
-pega da esquerda) e counting (percorre a entrada de trás para a frente, ou
-usa filas) preservam a ordem dos empates. Seleção, heapsort e quicksort fazem
-trocas a distância, que pulam por cima de elementos iguais. Estude o 0180 e o
-0096.
+**C.** O nível `k` tem 2^(k-1) nós: 1 + 2 + 4 + 8 + 16 + 32 = 63, seis níveis,
+logo a altura é 6 (folha com altura 1). As folhas são o último nível: 32,
+que é (n + 1)/2. A (A) usaria altura em arestas (5) e erraria as folhas. Se a
+prova trocasse para a altura em arestas, a resposta mudaria para 5: leia a
+convenção do enunciado. Veja 0175.
+
+</details>
+
+**4.** Numa AVL vazia são inseridas as chaves `60 30 80 20 40 70 90 10 50 65`,
+nesta ordem (nenhuma rotação acontece). Em seguida remove-se o 90. Qual é a
+pré-ordem depois da remoção e do rebalanceamento?
+
+- (A) `60 30 20 10 40 50 80 70 65`; nenhuma rotação
+- (B) `60 30 20 10 40 50 70 65 80`; rotação simples à direita no 80
+- (C) `60 30 20 10 40 50 65 70 80`; rotação dupla (esquerda no 70, direita no 80)
+- (D) `60 30 20 10 40 50 70 65 80`; rotação dupla (esquerda no 70, direita no 80)
+- (E) `30 20 10 60 40 50 80 70 65`; rotação simples à direita na raiz 60
+
+<details><summary>Gabarito</summary>
+
+**B.** O 90 é folha e sai. O 80 fica com o 70 (e o 65 embaixo) à esquerda e
+nada à direita: fator 2. O filho esquerdo, 70, tem fator 1 (o 65 à esquerda
+dele): caso esquerda-esquerda, uma rotação simples à direita no 80 faz o 70
+subir, com o 65 e o 80 de filhos. A (A) deixa a árvore desequilibrada. A (C)
+e a (D) seriam o caso zigue-zague, que exigiria o 65 à direita do 70. A raiz
+continua com fator 1, sem rotação (E). Veja 0176.
+
+</details>
+
+**5.** Considere as afirmações:
+
+I. Na rubro-negra clássica, uma inserção faz no máximo 2 rotações.\
+II. Na rubro-negra clássica, uma remoção faz no máximo 3 rotações.\
+III. Na AVL, uma remoção faz no máximo 1 rotação, com certeza.
+
+Está(ão) correta(s):
+
+- (A) Apenas I.
+- (B) Apenas II e III.
+- (C) Apenas III.
+- (D) Apenas I e III.
+- (E) Apenas I e II.
+
+<details><summary>Gabarito</summary>
+
+**E.** São os limites do Cormen: `RB-INSERT-FIXUP` rotaciona no máximo duas
+vezes (o recolorir é que pode subir pela árvore) e `RB-DELETE-FIXUP`, no
+máximo três. Na III, "com certeza" derruba: numa AVL, depois de rotacionar, a
+subárvore pode encolher e o desequilíbrio subir, até uma rotação por nível. É
+a diferença entre as duas árvores na remoção. Veja 0176 e 0177.
+
+</details>
+
+**6.** Uma tabela hash com `m = 1000` posições usa o método da multiplicação,
+`h(k) = ⌊m · (k · A mod 1)⌋`, com `A = (√5 - 1)/2 ≈ 0,6180339887`. Para a
+chave `k = 350`, o valor de `h(k)` é:
+
+- (A) 311
+- (B) 216
+- (C) 618
+- (D) 688
+- (E) 350
+
+<details><summary>Gabarito</summary>
+
+**A.** 350 · 0,6180339887 = 216,3119...; o `mod 1` fica só com a parte
+fracionária, 0,3119...; multiplicando por 1000 dá 311,9..., e o piso é 311.
+A (B) é a parte inteira, que o `mod 1` descarta; a (D), o complemento
+1 - 0,3119; a (C), o próprio `A · 1000`. Veja 0178.
+
+</details>
+
+**7.** Uma tabela de endereçamento aberto tem `m = 11` e usa sondagem
+quadrática, `h(k, i) = (k mod 11 + i²) mod 11`. Inserem-se, nesta ordem, as
+chaves `14 25 36 47 5 16 27` numa tabela vazia. Conte uma colisão cada vez que
+a sondagem cai numa posição ocupada. Em que posição fica o 27 e quantas
+colisões houve ao todo?
+
+- (A) posição 7; 9 colisões
+- (B) posição 6; 15 colisões
+- (C) posição 9; 15 colisões
+- (D) posição 9; 9 colisões
+- (E) posição 8; 10 colisões
+
+<details><summary>Gabarito</summary>
+
+**D.** O 14 vai para a posição 3. O 25 (também 3): tenta 3 e 4, 1 colisão. O
+36: 3, 4 e 3 + 4 = 7, 2 colisões. O 47: 3, 4, 7 e 3 + 9 = 12 mod 11 = 1, 3
+colisões. O 5 cai livre na 5. O 16 (também 5): 5 e 6, 1 colisão. O 27
+(também 5): 5, 6 e 5 + 4 = 9, 2 colisões. Total 0 + 1 + 2 + 3 + 0 + 1 + 2 = 9.
+Com sondagem linear, o total seria 15: a quadrática desfaz os blocos. Veja
+0179.
+
+</details>
+
+**8.** Considere as afirmações sobre endereçamento aberto:
+
+I. Na sondagem linear, chaves com `h'(k)` diferentes podem passar a seguir a
+mesma trilha: é o agrupamento primário.\
+II. Na dispersão dupla, duas chaves com o mesmo `h₁(k)` seguem
+necessariamente a mesma sequência de sondagem.\
+III. Na sondagem quadrática `(h'(k) + i²) mod m`, com `m` primo, a sequência
+de uma chave visita só cerca de metade das posições.\
+IV. Ao remover uma chave, a posição deve virar lápide, e não livre.
+
+Estão corretas:
+
+- (A) Apenas I e II.
+- (B) Apenas I, III e IV.
+- (C) Apenas II e IV.
+- (D) Apenas I e III.
+- (E) I, II, III e IV.
+
+<details><summary>Gabarito</summary>
+
+**B.** A I descreve o bloco da linear: quem cai em qualquer ponto dele vai
+para o fim. A II cai no "necessariamente": o passo `h₂(k)` depende da chave,
+então chaves com o mesmo `h₁` costumam andar com passos diferentes (na
+quadrática, sim, a trilha é a mesma: colisão secundária). Na III, os
+quadrados módulo um primo `m` assumem só (m + 1)/2 valores. Na IV, uma posição
+livre cortaria o caminho de quem passou por ali. Veja 0179.
+
+</details>
+
+**9.** A lista de chamada, em ordem alfabética, traz (nome, turma, nota): Ana
+(2, 7), Bia (1, 9), Caio (2, 5), Duda (3, 7), Edu (1, 5), Fabi (3, 9), Gil
+(2, 9), Hana (1, 7) e Ivo (2, 7). Quer-se ordenar por turma crescente e, dentro
+da turma, por nota crescente, com empates na ordem original. Fazem-se duas
+passadas estáveis de pigeonhole: primeiro pela nota, depois pela turma. Qual é
+a ordem final?
+
+- (A) `Bia Edu Hana Ana Caio Gil Ivo Duda Fabi`
+- (B) `Edu Caio Hana Ana Ivo Duda Bia Gil Fabi`
+- (C) `Edu Hana Bia Caio Ivo Ana Gil Duda Fabi`
+- (D) `Bia Hana Edu Gil Ana Ivo Caio Fabi Duda`
+- (E) `Edu Hana Bia Caio Ana Ivo Gil Duda Fabi`
+
+<details><summary>Gabarito</summary>
+
+**E.** Depois da passada pela nota: Caio Edu Ana Duda Hana Ivo Bia Fabi Gil
+(a Ana antes do Ivo, empatados). A passada estável pela turma separa nas
+turmas 1 (Edu, Hana, Bia), 2 (Caio, Ana, Ivo, Gil) e 3 (Duda, Fabi), mantendo
+dentro de cada uma a ordem anterior. A (A) é só a passada pela turma, sem
+ordenar a nota; a (B) inverte as passadas (a turma vira o critério
+secundário); a (C) troca Ana e Ivo, o que um método não estável pode fazer; a
+(D) usa nota decrescente. Veja 0180.
+
+</details>
+
+**10.** Considere as afirmações:
+
+I. O pigeonhole sort é estável quando cada casa é uma fila.\
+II. O custo O(n + r), com r o número de valores possíveis, faz dele sempre
+mais rápido que o merge sort.\
+III. Para ordenar por chave composta com passadas estáveis, ordena-se
+primeiro pela chave menos importante e por último pela mais importante.\
+IV. O selection sort é estável, pois só troca quando acha um elemento
+estritamente menor.
+
+Estão corretas:
+
+- (A) Apenas I.
+- (B) Apenas II e IV.
+- (C) Apenas I e III.
+- (D) Apenas I, III e IV.
+- (E) Apenas II, III e IV.
+
+<details><summary>Gabarito</summary>
+
+**C.** A I vale: a fila devolve quem entrou primeiro. A II cai no "sempre":
+se `r` for muito maior que `n` (chaves de 0 a 10^9 para mil registros), o
+n + r é pior que n log n. A III é a regra do radix LSD: a última passada manda
+e as anteriores só desempatam. Na IV, a troca é a distância e pula por cima de
+iguais: em `2a 2b 1`, o 1 troca com o `2a` e o `2a` termina depois do `2b`.
+Veja 0180 e 0096.
 
 </details>
 

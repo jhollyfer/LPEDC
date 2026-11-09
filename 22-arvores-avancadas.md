@@ -4543,198 +4543,258 @@ Embaralhadas: comum 24, rubro-negra 13, B 8 níveis
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. As definições seguem o Cormen: rubro-negra **clássica**
-(cor no nó, assunto 0177) e árvore B pelo **grau mínimo** `t`.
+(cor no nó, assunto 0177), árvore B pelo **grau mínimo** `t` (a raiz no
+nível 0 quando o enunciado falar em altura da B) e união por posto com
+compressão de caminho.
 
-**1.** Pelo Cormen, uma árvore rubro-negra com `n` nós internos (chaves) tem
-altura no máximo 2 · lg(n + 1). Qual é esse limite para `n = 1023`?
+**1.** Considere as afirmações sobre árvores rubro-negras (Cormen):
 
-- (A) 10
-- (B) 11
-- (C) 1023
-- (D) 30
-- (E) 20
+I. Um nó vermelho nunca tem filho vermelho.\
+II. Todos os nós da árvore têm a mesma altura negra.\
+III. Com `n` nós internos, a altura é no máximo 2 · lg(n + 1).\
+IV. Toda inserção exige pelo menos uma rotação, com certeza.
+
+Estão corretas:
+
+- (A) Apenas I.
+- (B) Apenas I e III.
+- (C) Apenas II e IV.
+- (D) Apenas I, III e IV.
+- (E) Apenas III e IV.
 
 <details><summary>Gabarito</summary>
 
-**(E).** lg(1024) = 10, e 2 · 10 = 20. O limite vem da altura preta: a
-subárvore de um nó com altura preta `bh` tem pelo menos 2^bh − 1 nós
-internos, e pelo menos metade dos nós de qualquer caminho até a folha é
-preta. Uma AVL com as mesmas chaves fica mais baixa (perto de 1,44 lg n),
-e lg(n + 1) = 10 é só o número de níveis de uma árvore perfeitamente
-cheia. Veja 0145 e 0177.
+**B.** A I é uma das propriedades. A II confunde: é todo **caminho a partir de
+um mesmo nó** que tem o mesmo número de nós pretos; a raiz tem altura negra
+maior que a dos filhos pretos. A III é o teorema do Cormen. Na IV, "com
+certeza" derruba: o nó novo entra vermelho, e se o pai é preto nada muda; se
+o tio é vermelho, só há recoloração. Veja 0145 e 0177.
 
 </details>
 
-**2.** Numa árvore B de grau mínimo `t = 4` (Cormen), um nó **interno que
-não é a raiz** tem:
+**2.** Pelo Cormen, a altura negra `bh(x)` não conta o próprio `x` e conta a
+folha `NIL`. Qual o menor número de nós internos de uma subárvore rubro-negra
+cuja raiz tem `bh = 5`?
 
-- (A) de 4 a 8 chaves e de 5 a 9 filhos.
-- (B) de 3 a 7 chaves e de 4 a 8 filhos.
-- (C) de 2 a 4 chaves e de 3 a 5 filhos.
-- (D) de 1 a 7 chaves e de 2 a 8 filhos.
-- (E) exatamente 4 chaves e 5 filhos.
+- (A) 5
+- (B) 10
+- (C) 32
+- (D) 31
+- (E) 63
 
 <details><summary>Gabarito</summary>
 
-**(B).** De `t − 1 = 3` a `2t − 1 = 7` chaves e, sendo interno, um filho a
-mais que as chaves: de 4 a 8. Só a raiz pode ter 1 chave (alternativa D).
-Atenção à convenção: em livros que falam de "ordem m" (como o Ziviani, em que
-cada página tem de m a 2m registros), os números mudam. Veja 0146.
+**D.** A subárvore de um nó `x` tem pelo menos 2^bh(x) - 1 nós internos, e o
+mínimo vem da árvore toda preta e perfeita: 2^5 - 1 = 31. O 32 erra por um, e
+o 63 usa `bh = 6`. É esse limite que leva à altura de até 2 lg(n + 1): pelo
+menos metade dos nós de um caminho é preta. Veja 0145 e 0177.
 
 </details>
 
-**3.** Numa árvore B com `t = 3`, a inserção desce por um filho cheio com as
-chaves `[12 18 25 31 47]`. Pelo algoritmo do Cormen, que divide na descida,
-o que acontece?
+**3.** Insere-se, nesta ordem, as chaves `15 8 23 4 42 16 31 12 27 19` numa
+árvore B de grau mínimo `t = 2` (cada nó guarda de 1 a 3 chaves), pelo
+algoritmo do Cormen, que divide na descida todo nó cheio que encontra. Depois
+das dez inserções, quais são a raiz, o número de folhas e o número de divisões
+de nó que aconteceram?
 
-- (A) O 25 sobe para o pai, e o filho vira `[12 18]` e `[31 47]`.
-- (B) O 18 sobe, e o filho vira `[12]` e `[25 31 47]`.
-- (C) O 47 sobe, e o filho fica `[12 18 25 31]`.
-- (D) Nada: o nó só se divide depois que a chave nova entra nele.
-- (E) O pai é que se divide, e o filho continua com cinco chaves.
+- (A) raiz `15 23`; 3 folhas; 2 divisões
+- (B) raiz `15 23`; 3 folhas; 3 divisões
+- (C) raiz `15`; 2 folhas; 2 divisões
+- (D) raiz `15 23`; 4 folhas; 3 divisões
+- (E) raiz `15`; 3 folhas; 3 divisões
 
 <details><summary>Gabarito</summary>
 
-**(A).** Um nó cheio tem `2t − 1 = 5` chaves; a do meio (posição `t`, o
-25) sobe, e cada metade fica com `t − 1 = 2`. A divisão na descida garante
-que o pai nunca está cheio quando recebe a chave que sobe; dividir só
-depois (D) é a variante "de baixo para cima" de outros livros. Veja 0146.
+**A.** As três primeiras chaves enchem a raiz `8 15 23`. O 4 encontra a raiz
+cheia: divisão 1, o 15 sobe e a raiz fica `15` com filhos `4 8` e `23`. A
+seguir entram 42 e 16 (o filho `23` vira `16 23 42`). O 31 encontra esse
+filho cheio: divisão 2, o 23 sobe, e a raiz fica `15 23`. O 12, o 27 e o 19
+só entram nas folhas, que terminam em `4 8 12`, `16 19` e `27 31 42`. A altura
+não passou de 1. Veja 0146.
 
 </details>
 
-**4.** Qual o **menor** número de chaves de uma árvore B com grau mínimo
-`t = 3` e altura 2 (a raiz no nível 0 e as folhas no nível 2)?
+**4.** Uma árvore B de grau mínimo `t = 5` tem altura 3 (a raiz no nível 0 e
+as folhas no nível 3). Cada nó guarda no máximo `2t - 1 = 9` chaves. Qual o
+número máximo de chaves da árvore?
 
-- (A) 7
-- (B) 9
-- (C) 17
-- (D) 26
-- (E) 53
+- (A) 1 111
+- (B) 999
+- (C) 4 999
+- (D) 10 000
+- (E) 9 999
 
 <details><summary>Gabarito</summary>
 
-**(C).** A raiz com 1 chave e 2 filhos; cada nó abaixo com o mínimo,
-`t − 1 = 2` chaves e `t = 3` filhos. Nível 1: 2 nós (4 chaves); nível 2: 6
-nós (12 chaves). Total 1 + 4 + 12 = 17 = 2t^h − 1. É daí que sai o limite
-do Cormen h ≤ log_t((n + 1) / 2). Com todos os nós cheios, o máximo seria
-5 + 30 + 180 = 215. Veja 0146.
+**E.** Cada nó cheio tem 9 chaves e 10 filhos. Os níveis 0 a 3 têm 1, 10, 100
+e 1000 nós: 1 111 nós, e 1 111 · 9 = 9 999 chaves, que é (2t)^(h+1) - 1. A
+(A) conta nós em vez de chaves e a (B), só o último nível de uma árvore de
+altura 2. Veja 0146.
 
 </details>
 
-**5.** Oito elementos, de 0 a 7, começam cada um no seu conjunto (posto 0).
-O `LINK(x, y)` do Cormen faz: se `x.rank > y.rank`, `y.p = x`; senão,
-`x.p = y` e, se os postos eram iguais, `y.rank` aumenta 1. Depois de
-`UNION(0, 1)`, `UNION(2, 3)`, `UNION(0, 2)`, `UNION(4, 5)`, `UNION(6, 7)`,
-`UNION(4, 6)` e `UNION(0, 4)`, com compressão de caminho no `FIND-SET`,
-quem é o representante e qual o posto dele?
+**5.** Os elementos de 0 a 9 começam cada um no seu conjunto, com posto 0. O
+`UNION(a, b)` chama `LINK(FIND-SET(a), FIND-SET(b))`, e o `LINK(x, y)` faz:
+se `x.rank > y.rank`, `y.p = x`; senão `x.p = y`, e se os postos eram iguais,
+`y.rank` aumenta 1. Executam-se `UNION(1, 2)`, `UNION(3, 4)`, `UNION(1, 3)`,
+`UNION(5, 6)`, `UNION(7, 8)`, `UNION(5, 7)`, `UNION(9, 5)` e `UNION(2, 9)`, e
+depois `FIND-SET(1)` com compressão de caminho. Qual o representante, o posto
+dele e quais nós mudam de pai nesse `FIND-SET`?
 
-- (A) 0, com posto 3
-- (B) 7, com posto 2
-- (C) 4, com posto 3
-- (D) 7, com posto 3
-- (E) 0, com posto 7
+- (A) representante 4; mudam de pai o 1 e o 2
+- (B) representante 8, posto 3; muda de pai só o 1
+- (C) representante 8, posto 3; mudam de pai o 1 e o 2
+- (D) representante 8, posto 2, pois a compressão reduz o posto; mudam de pai o 1 e o 2
+- (E) representante 9; mudam de pai o 1, o 2 e o 4
 
 <details><summary>Gabarito</summary>
 
-**(D).** Nos empates, a raiz do primeiro argumento vai para baixo da do
-segundo. As raízes ficam 1 e 3 (posto 1), depois 3 (posto 2, sobre o 1);
-do outro lado, 5 e 7 (posto 1), depois 7 (posto 2, sobre o 5). A última
-união empata em 2: o 3 vai para baixo do 7, que fica com posto 3. A compressão de caminho muda
-os pais, mas nunca o posto: ele vira só um limite superior da altura (aqui
-a altura real fica 2). Com 8 elementos, o posto não passa de lg 8 = 3. Veja
-0148.
+**C.** Os conjuntos crescem assim: `2` sobre o 1 (posto 1), `4` sobre o 3,
+depois `4` sobre o 2 (posto 2); `6` sobre o 5, `8` sobre o 7, depois `8`
+sobre o 6 (posto 2); o 9, de posto 0, vai para baixo do 8. Na última união
+as raízes 4 e 8 têm posto 2: o 4 vai para baixo do 8, que ganha posto 3. O
+caminho do 1 é 1, 2, 4, 8: a compressão liga o 1 e o 2 direto ao 8, e o 4 já
+estava. A compressão nunca altera o posto. Veja 0148.
 
 </details>
 
-**6.** Com união por posto (ou por tamanho) **e** compressão de caminho,
-uma sequência de `m` operações `MAKE-SET`, `UNION` e `FIND-SET` sobre `n`
-elementos custa:
+**6.** As palavras `rio rios rima rimar pia pio piano rio`, nesta ordem
+(a última é repetida), são inseridas numa trie de letras minúsculas, cada nó
+com um vetor de 26 filhos. Sem contar a raiz, que não guarda letra, quantos
+nós a trie tem?
 
-- (A) O(m · α(n)), em que α é a inversa da função de Ackermann.
-- (B) O(m · n).
-- (C) O(m · log² n).
-- (D) O(n²), não importa o `m`.
-- (E) O(m) no pior caso de cada operação isolada.
+- (A) 12
+- (B) 14
+- (C) 27
+- (D) 13
+- (E) 8
 
 <details><summary>Gabarito</summary>
 
-**(A).** α(n) não passa de 4 para qualquer `n` prático, então na prática é
-quase linear. O custo é **amortizado**: uma operação isolada ainda pode
-subir O(log n) níveis (por isso E está errada). Só com a união por posto,
-sem compressão, cada operação é O(log n). Veja 0148 e 0116.
+**D.** Cada nó é uma letra nova num prefixo novo. De `rio` saem `r`, `i`, `o`
+(3); `rios` acrescenta o `s` (4); `rima` aproveita `ri` e cria `m`, `a` (6);
+`rimar`, o `r` (7); `pia` cria `p`, `i`, `a` (10); `pio` só o `o` (11);
+`piano` aproveita `pia` e cria `n`, `o` (13); o `rio` repetido não cria nada,
+só reafirma a marca de fim. A (C) soma as letras de todas as palavras
+distintas, como se não houvesse prefixo comum. Veja 0147.
 
 </details>
 
-**7.** Qual das afirmações **não** é uma das propriedades da árvore
-rubro-negra do Cormen?
+**7.** Considere as afirmações sobre a trie:
 
-- (A) Todo nó é vermelho ou preto.
-- (B) A raiz é preta, e toda folha (NIL) é preta.
-- (C) Todo nó vermelho tem pelo menos um filho vermelho.
-- (D) Todo caminho de um nó até as folhas descendentes tem o mesmo número de nós pretos.
-- (E) Os dois filhos de um nó vermelho são pretos.
+I. A busca de uma chave de tamanho `m` custa O(m), com os filhos em vetor de
+tamanho fixo, qualquer que seja o número de chaves guardadas.\
+II. A trie sempre ocupa menos memória do que uma tabela hash com as mesmas
+chaves.\
+III. Percorrer a trie em pré-ordem, visitando os filhos em ordem alfabética e
+anotando os nós que fecham uma palavra, entrega as palavras em ordem
+lexicográfica.
+
+Estão corretas:
+
+- (A) Apenas I e III.
+- (B) Apenas II.
+- (C) Apenas I e II.
+- (D) Apenas II e III.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**(C).** É o contrário: um vermelho **nunca** tem filho vermelho (E). As
-cinco propriedades são A, a raiz preta, as folhas NIL pretas, E e D. Na
-versão esquerdista do 0145 vale ainda uma regra extra, a de vermelho só à
-esquerda, que o Cormen não exige. Veja 0177 e 0145.
+**A.** A I vale: a busca anda uma letra por nível. A II cai no "sempre": com
+vetor de 26 ponteiros por nó, e chaves que quase não dividem prefixo, a trie
+gasta muito mais que o hash. A III vale: um prefixo é visitado antes das
+palavras que o estendem (`rio` antes de `rios`), e os irmãos saem em ordem
+alfabética. Veja 0147.
 
 </details>
 
-**8.** Na inserção da rubro-negra clássica (RB-INSERT-FIXUP do Cormen),
-qual o número **máximo** de rotações numa única inserção?
+**8.** O trecho abaixo monta e consulta uma trie de letras minúsculas. Em
+`main`, `ins(r, "rio")` e depois `busca(r, "rio")` deveriam dar 1, mas o
+resultado depende do que havia na memória. Qual é o defeito?
 
-- (A) 1
-- (B) 2
-- (C) O(log n)
-- (D) 3
-- (E) O(n)
+```c
+typedef struct T {
+    struct T *f[26];
+    int fim;
+} T;
+
+T *novo(void) {
+    T *t = malloc(sizeof *t);
+    t->fim = 0;
+    return t;
+}
+
+void ins(T *r, const char *s) {
+    for (; *s; s++) {
+        int c = *s - 'a';
+        if (!r->f[c]) r->f[c] = novo();
+        r = r->f[c];
+    }
+    r->fim = 1;
+}
+```
+
+- (A) `ins` deveria receber `T **r`, pois altera a raiz.
+- (B) `novo` devolve o endereço de uma variável local.
+- (C) `malloc` não zera o vetor `f`: o teste `!r->f[c]` lê ponteiros indeterminados. Falta `calloc` (ou `memset`).
+- (D) Falta um `free(r)` no fim de `ins`.
+- (E) O índice `*s - 'a'` sai do vetor para a letra `z`.
 
 <details><summary>Gabarito</summary>
 
-**(B).** Os casos de tio vermelho só recolorem e sobem dois níveis (isso
-pode acontecer O(log n) vezes); os casos de tio preto fazem uma ou duas
-rotações e terminam. Na remoção, o máximo é 3. A LLRB do 0145 é diferente:
-ela pode girar em vários níveis na volta da recursão. Veja 0177.
+**C.** O `malloc` devolve memória com lixo: só o `fim` é inicializado, e os 26
+ponteiros de `f` ficam indeterminados. Então `!r->f[c]` pode ser falso para um
+filho que nunca existiu, e o código anda por um endereço inválido. No
+valgrind, aparece "Conditional jump depends on uninitialised value". A
+correção é `calloc(1, sizeof(T))`, que deixa tudo em `NULL` e `0`. A raiz não
+muda dentro de `ins` (A), o `malloc` devolve memória do heap (B), e `'z' - 'a'`
+é 25, dentro do vetor (E). Veja 0147.
 
 </details>
 
-**9.** Quantos nós, contando a raiz vazia, tem a trie com as palavras
-`bola`, `bolo`, `bom` e `sol`?
+**9.** Uma árvore geral com 20 nós é guardada com a representação
+filho-esquerdo, irmão-direito: cada nó tem dois ponteiros, o do primeiro
+filho e o do próximo irmão. Quantos desses ponteiros valem `NULL`?
 
-- (A) 14
-- (B) 13
-- (C) 9
-- (D) 11
-- (E) 10
+- (A) 19
+- (B) 20
+- (C) 39
+- (D) 40
+- (E) 21
 
 <details><summary>Gabarito</summary>
 
-**(E).** `bola` cria b, o, l, a (4); `bolo` reaproveita "bol" e cria só o
-último o (1); `bom` reaproveita "bo" e cria o m (1); `sol` cria s, o, l (3).
-São 9 nós de letra mais a raiz. Sem compartilhar prefixos seriam 14 letras
-(alternativa A). Veja 0147.
+**E.** São 2n = 40 ponteiros. Os não nulos apontam cada um para um nó
+diferente, e todo nó, menos a raiz, é apontado exatamente uma vez: 19
+ponteiros. Sobram 40 - 19 = 21 nulos, o que dá n + 1 para qualquer n. É a
+mesma conta da árvore binária de n nós, que tem n + 1 subárvores vazias. Veja
+0144.
 
 </details>
 
-**10.** Uma árvore B com `t = 100` guarda um bilhão de chaves, e cada nó
-ocupa um bloco de disco. Qual afirmação sobre a busca é correta?
+**10.** Considere as afirmações sobre a árvore B (Cormen):
 
-- (A) Ela lê cerca de lg(10⁹) ≈ 30 blocos, como uma árvore binária balanceada.
-- (B) Ela faz O(log n) comparações no total, sem depender de `t`.
-- (C) Ela lê no máximo uns 5 blocos (h ≤ log_t((n + 1) / 2) ≈ 4,3), e faz O(t) comparações dentro de cada nó.
-- (D) Ela precisa ler todas as folhas, porque as chaves só ficam nas folhas.
-- (E) Ela lê um bloco só, porque a raiz guarda todas as chaves.
+I. Todas as folhas ficam no mesmo nível.\
+II. A altura só cresce quando a raiz está cheia e se divide.\
+III. A remoção nunca diminui a altura da árvore.\
+IV. Com `t = 3`, um nó interno que não é a raiz pode ter apenas 1 chave.
+
+Estão corretas:
+
+- (A) Apenas I.
+- (B) Apenas I e II.
+- (C) Apenas II e III.
+- (D) Apenas I, II e IV.
+- (E) Apenas III e IV.
 
 <details><summary>Gabarito</summary>
 
-**(C).** log₁₀₀(5 × 10⁸) ≈ 4,35, então a altura é no máximo 4 e a busca
-lê até 5 nós. O Cormen dá O(log_t n) acessos a disco e O(t log_t n) de
-processador (a busca linear dentro do nó; com busca binária no nó, cai para
-O(log n) comparações). Na árvore B do Cormen as chaves ficam em todos os
-nós; só na variante **B+** elas vão todas para as folhas. Veja 0146.
+**B.** A I é a razão de a busca ter sempre o mesmo custo no pior caso. A II
+vale: dividir uma folha ou um nó interno só passa uma chave ao pai, e a
+altura sobe apenas quando é a raiz que se divide. Na III, "nunca" derruba: se
+a raiz fica sem chave depois de uma fusão dos dois únicos filhos, o filho
+vira a raiz e a altura diminui. Na IV, um nó que não é raiz tem de 2 a 5
+chaves para `t = 3`. Veja 0146.
 
 </details>
 

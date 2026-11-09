@@ -316,192 +316,258 @@ E611 em escala.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado. Desenhe a árvore no papel
-a cada passo. As medidas seguem o Cormen: altura e profundidade contadas em
-**arestas**, raiz com profundidade (nível) 0.
+Questões objetivas no formato da prova do mestrado: uma alternativa certa, e
+a convenção de altura vem no enunciado, como na prova. Desenhe a árvore no
+papel a cada passo. Onde o enunciado não disser outra coisa, vale a regra
+destas questões: a raiz fica no nível 1 e a folha tem altura 1.
 
-As questões 1, 2, 3 e 9 usam a BST montada inserindo, nesta ordem, as chaves
-`45 20 60 10 30 50 70 25 35` numa árvore vazia.
+As questões 1 e 2 usam a ABB montada inserindo, nesta ordem, as chaves
+`38 15 52 8 27 44 60 21 33` numa árvore vazia.
 
-**1.** Qual é o percurso em **pós-ordem** dessa BST?
+**1.** Qual é o percurso em **pós-ordem** dessa ABB?
 
-- (A) `10 20 25 30 35 45 50 60 70`
-- (B) `10 25 35 30 20 50 70 60 45`
-- (C) `45 20 10 30 25 35 60 50 70`
-- (D) `10 25 30 35 20 50 60 70 45`
-- (E) `25 35 10 30 50 70 20 60 45`
+- (A) `8 15 21 27 33 38 44 52 60`
+- (B) `38 15 8 27 21 33 52 44 60`
+- (C) `8 21 27 33 15 44 52 60 38`
+- (D) `8 21 33 27 15 44 60 52 38`
+- (E) `21 33 27 8 15 44 60 52 38`
 
 <details><summary>Gabarito</summary>
 
-**B.** A árvore tem 45 na raiz; 20 (filhos 10 e 30, e o 30 com 25 e 35) à
-esquerda; 60 (filhos 50 e 70) à direita. Pós-ordem é esquerda, direita, raiz.
-A (A) é a em ordem (crescente, como em toda BST) e a (C), a pré-ordem. Veja
-0098 e 0099.
+**D.** A raiz é 38; à esquerda ficam 15 (filhos 8 e 27, e o 27 com 21 e 33) e,
+à direita, 52 (filhos 44 e 60). Pós-ordem é esquerda, direita, raiz. A (A) é a
+em ordem, que sai crescente em toda ABB, e a (B) é a pré-ordem. A (C) visita o
+27 antes dos filhos dele. Veja 0098 e 0099.
 
 </details>
 
-**2.** Sobre a mesma BST, qual afirmação é correta?
+**2.** Sobre a mesma ABB, considere as afirmações:
 
-- (A) A altura da árvore é 4.
-- (B) A árvore tem 4 folhas.
-- (C) O 60 está no nível 2.
-- (D) O fator de balanceamento da raiz, `altura(esq) - altura(dir)`, é 0.
-- (E) A altura da árvore é 3, a profundidade do 25 é 3 e o grau do 20 é 2.
+I. A altura da árvore é 4 e o nó 33 está no nível 4.\
+II. Todas as folhas estão no mesmo nível.\
+III. A árvore é uma AVL, pois o fator de balanceamento de todo nó é -1, 0 ou 1.
+
+Está(ão) correta(s):
+
+- (A) Apenas I.
+- (B) Apenas II.
+- (C) Apenas I e III.
+- (D) Apenas II e III.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**E.** O caminho mais longo é 45, 20, 30, 25: 3 arestas. A (A) conta nós em
-vez de arestas (convenção de outros livros). Folhas são 10, 25, 35, 50 e 70:
-cinco. O 60 é filho da raiz: nível 1. A subárvore esquerda tem altura 2 e a
-direita, 1: fator +1. Veja 0097, 0101 e o assunto 0175, que aprofunda nível,
-grau e fator de balanceamento.
+**C.** A afirmação I vale: o caminho 38, 15, 27, 33 tem 4 nós. A II é falsa:
+o 8 é folha no nível 3 e o 21, no nível 4. Na III, o 38 tem subárvore esquerda
+de altura 3 e direita de altura 2 (fator 1), o 15 tem fator -1 e o 27 e o 52
+têm fator 0: é AVL. Ser AVL não exige folhas no mesmo nível. Veja 0097 e 0101.
 
 </details>
 
-**3.** Remove-se a raiz 45 da mesma BST com o algoritmo do Cormen, que
-coloca o **sucessor** no lugar de um nó com dois filhos. Qual é a pré-ordem
-depois da remoção?
+**3.** Um heap de máximo com 45 elementos fica no vetor `A[1..45]`, com
+`PARENT(i) = ⌊i/2⌋`. Quantas folhas ele tem e qual é o índice do último nó que
+**não** é folha?
 
-- (A) `50 20 10 30 25 35 60 70`
-- (B) `35 20 10 30 25 60 50 70`
-- (C) `60 20 10 30 25 35 50 70`
-- (D) `50 20 10 30 25 35 70 60`
-- (E) `20 10 30 25 35 60 50 70`
+- (A) 22 folhas; último pai `A[23]`
+- (B) 23 folhas; último pai `A[22]`
+- (C) 23 folhas; último pai `A[23]`
+- (D) 22 folhas; último pai `A[22]`
+- (E) 24 folhas; último pai `A[21]`
 
 <details><summary>Gabarito</summary>
 
-**A.** O sucessor de 45 é o menor da subárvore direita: o 50, que é folha.
-Ele sobe para a raiz e o 60 fica só com o 70. A (B) é o resultado com o
-**antecessor** (o 35, maior da esquerda), a outra convenção. Veja 0100.
+**B.** O último elemento, `A[45]`, tem pai `A[⌊45/2⌋] = A[22]`, e todo índice
+depois do 22 é folha: de 23 a 45, são 23 folhas. O `A[22]` tem os filhos
+`A[44]` e `A[45]`; o `A[23]` teria filhos nos índices 46 e 47, que não existem.
+É por isso que o `BUILD-MAX-HEAP` começa em `⌊n/2⌋`. Veja 0102 e 0103.
 
 </details>
 
-**4.** Numa AVL vazia são inseridas as chaves `50 20 80 10 30 25`, nesta
-ordem. Qual é a pré-ordem final e o que aconteceu na última inserção?
+**4.** Numa AVL vazia são inseridas as chaves `30 10 50 5 20 40 60 25 22`,
+nesta ordem. Qual é a pré-ordem final e o que aconteceu na última inserção?
 
-- (A) `20 10 50 30 25 80`; rotação simples à direita no 50
-- (B) `50 25 20 10 30 80`; rotação simples à esquerda no 20
-- (C) `30 20 10 25 50 80`; rotação dupla (esquerda no 20, direita no 50)
-- (D) `30 20 10 25 50 80`; rotação simples à direita no 50
-- (E) `50 20 10 30 25 80`; nenhuma rotação
+- (A) `30 10 5 22 20 25 50 40 60`; rotação dupla (direita no 25, esquerda no 20)
+- (B) `30 10 5 25 20 22 50 40 60`; rotação simples à esquerda no 20
+- (C) `30 10 5 20 25 22 50 40 60`; nenhuma rotação
+- (D) `30 10 5 22 20 25 50 40 60`; rotação simples à esquerda no 20
+- (E) `30 10 5 22 25 20 50 40 60`; rotação dupla (esquerda no 25, direita no 20)
 
 <details><summary>Gabarito</summary>
 
-**C.** O 25 entra à esquerda do 30. O 50 fica com fator +2 e o filho
-esquerdo (20) com fator −1: caso esquerda-direita, zigue-zague. Gira à
-esquerda no 20 (o 30 sobe) e à direita no 50: o 30 vira a raiz. A (A) é o que
-uma rotação simples faria: o 20 subiria e o desequilíbrio só trocaria de lado.
-Veja 0101.
+**A.** Até o 25 nada desequilibra. O 22 entra à esquerda do 25, que está à
+direita do 20: o 20 fica com fator -2 e o filho direito (25) com fator +1.
+É o caso direita-esquerda, zigue-zague. Gira à direita no 25 (o 22 sobe) e à
+esquerda no 20 (o 22 sobe de novo): fica `22` com `20` e `25`. A (C) é a
+árvore sem rebalancear. A (D) traz a pré-ordem certa com a rotação errada: uma
+rotação simples à esquerda no 20 faria o 25 subir e deixaria o 22 pendurado à
+esquerda dele, que é a pré-ordem da (B), com a subárvore ainda torta. A (E)
+viola a regra da ABB (o 25 à esquerda do 20). Veja 0101.
 
 </details>
 
-**5.** Num heap de máximo guardado em vetor (raiz em `v[0]`), inicialmente
-vazio, são inseridas as chaves `15 40 25 60 10 50`, nesta ordem, cada uma
-subindo enquanto for maior que o pai. Qual é o vetor final?
+**5.** O vetor `90 70 80 40 50 60 30 10 20` é um heap de máximo com a raiz em
+`v[0]` (filhos de `i` em `2i + 1` e `2i + 2`). Executam-se duas extrações do
+máximo, cada uma movendo o último elemento para a raiz e fazendo-o descer
+trocando sempre com o **maior** filho. Como fica o vetor?
 
-- (A) `60 50 40 25 15 10`
-- (B) `60 40 25 15 10 50`
-- (C) `60 15 50 40 10 25`
-- (D) `60 40 50 15 10 25`
-- (E) `50 40 60 15 10 25`
+- (A) `70 60 50 40 20 30 10`
+- (B) `70 50 60 10 40 20 30`
+- (C) `70 50 60 40 20 10 30`
+- (D) `70 50 60 40 10 30 20`
+- (E) `70 50 60 40 10 20 30`
 
 <details><summary>Gabarito</summary>
 
-**D.** Depois de 15, 40, 25: `40 15 25`. O 60 entra no índice 3, sobe pelo 15
-e pelo 40: `60 40 25 15`. O 10 fica no índice 4. O 50 entra no índice 5, pai
-no índice 2 (o 25): troca, e para abaixo do 60. A (B) esquece essa subida.
-Veja 0102.
+**E.** Primeira extração: o 20 vai para a raiz, troca com o 80 e depois com o
+60: `80 70 60 40 50 20 30 10`. Segunda: o 10 vai para a raiz, troca com o 70 e
+depois com o 50 (o maior entre 40 e 50): `70 50 60 40 10 20 30`. A (A) é o
+vetor ordenado, que não é o que o heap guarda. Veja 0102 e 0103.
 
 </details>
 
-**6.** No Cormen, o heap fica em `A[1..n]`, com `PARENT(i) = ⌊i/2⌋`,
-`LEFT(i) = 2i` e `RIGHT(i) = 2i + 1`. Para o elemento `A[7]`, quais são o pai
-e os filhos?
+**6.** Sobre o heapsort, considere as afirmações:
 
-- (A) pai `A[3]`; filhos `A[15]` e `A[16]`
-- (B) pai `A[3]`; filhos `A[14]` e `A[15]`
-- (C) pai `A[2]`; filhos `A[13]` e `A[14]`
-- (D) pai `A[4]`; filhos `A[14]` e `A[15]`
-- (E) pai `A[3]`; filhos `A[8]` e `A[9]`
+I. É estável.\
+II. Ordena no próprio vetor, com O(1) de espaço extra.\
+III. Quando o vetor já está ordenado, ele faz O(n) operações, com certeza.\
+IV. Construir o heap com `BUILD-MAX-HEAP` custa O(n).
+
+Estão corretas:
+
+- (A) Apenas II.
+- (B) Apenas II e IV.
+- (C) Apenas I e III.
+- (D) Apenas I, II e IV.
+- (E) Apenas II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**B.** ⌊7/2⌋ = 3, 2 · 7 = 14 e 2 · 7 + 1 = 15. A (C) mistura as fórmulas do
-vetor que começa em 0 (pai `(i − 1)/2`, filhos `2i + 1` e `2i + 2`), que dão,
-para `v[6]` (o mesmo elemento), pai `v[2]` e filhos `v[13]` e `v[14]`. Veja
-0102.
+**B.** O heapsort troca o topo com o último, pulando por cima de chaves
+iguais, então não é estável (I falsa). A II é verdadeira. Na III, "com certeza"
+derruba: depois de construir o heap, as n - 1 extrações fazem cada uma uma
+descida de O(log n), mesmo com a entrada ordenada, e o custo fica O(n log n).
+A IV vale porque a maioria dos nós está perto das folhas e desce pouco. Veja
+0103.
 
 </details>
 
-**7.** O `BUILD-MAX-HEAP` (fazer cada pai descer, do último pai até a raiz) é
-aplicado ao vetor `12 4 30 9 18 7 25 3`. Qual é o resultado?
+**7.** Observe o código e escolha a alternativa correta.
 
-- (A) `30 18 25 4 9 7 12 3`
-- (B) `30 12 25 9 18 7 4 3`
-- (C) `30 4 25 9 18 7 12 3`
-- (D) `30 18 12 9 4 7 25 3`
-- (E) `30 18 25 9 4 7 12 3`
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int chave;
+    struct No *esq, *dir;
+} No;
+
+void inserir(No *raiz, int v) {
+    if (raiz == NULL) {
+        raiz = malloc(sizeof(No));
+        raiz->chave = v;
+        raiz->esq = raiz->dir = NULL;
+        return;
+    }
+    if (v < raiz->chave) inserir(raiz->esq, v);
+    else inserir(raiz->dir, v);
+}
+
+int main(void) {
+    No *r = NULL;
+    inserir(r, 40);
+    inserir(r, 20);
+    printf("%s\n", r == NULL ? "NULL" : "ok");
+    return 0;
+}
+```
+
+- (A) Imprime `ok`: a primeira chamada cria a raiz e a segunda põe o 20 à esquerda.
+- (B) Falha de segmentação na segunda chamada, ao ler `raiz->chave`.
+- (C) Imprime `NULL` e não há vazamento, pois a função devolve sem usar os nós.
+- (D) Imprime `NULL`: `raiz` é uma cópia do ponteiro, então `r` não muda, e cada chamada vaza um nó.
+- (E) Não compila, porque `inserir` muda um parâmetro.
 
 <details><summary>Gabarito</summary>
 
-**E.** Os pais são os índices 3, 2, 1 e 0. O 9 já é maior que o 3; o 30 já é
-maior que 7 e 25; o 4 troca com o 18; o 12 troca com o 30 e depois com o 25.
-A (A) é o heap que se obtém **inserindo** um por um: também é um heap válido,
-mas outro. A construção de baixo para cima custa O(n). Veja 0103.
+**D.** O C passa tudo por valor, ponteiro inclusive. O `malloc` atribui ao
+`raiz` local, e o `r` do `main` continua `NULL` nas duas chamadas: não há
+segunda chamada com raiz válida (então nada de falha, B), e os dois blocos
+ficam sem dono (no valgrind aparecem 2 blocos perdidos). Nada é lido de
+memória inválida, então não há falha de segmentação (B). A correção é
+receber `No **raiz` (e chamar `inserir(&r, 40)`) ou devolver o novo ponteiro
+e atribuir `r = inserir(r, 40)`. É o mesmo erro do `*prim` contra `**prim` da
+lista encadeada. Veja 0099 e 0076.
 
 </details>
 
-**8.** Uma árvore binária tem pré-ordem `M D B F K R P W` e em ordem
-`B D F K M P R W`. Qual é a pós-ordem?
+**8.** Busca-se a chave 63 numa ABB. Qual das sequências abaixo, com as chaves
+visitadas na ordem, **não** pode ter sido percorrida?
 
-- (A) `B K F D P W R M`
-- (B) `B F K D P W R M`
-- (C) `K F B D W P R M`
-- (D) `B D F K P R W M`
-- (E) `W P R K F B D M`
+- (A) `50 80 70 60 65 63`
+- (B) `40 90 55 70 62 63`
+- (C) `75 30 60 45 58 63`
+- (D) `20 90 30 80 40 63`
+- (E) `10 100 50 99 60 63`
 
 <details><summary>Gabarito</summary>
 
-**A.** A pré-ordem diz a raiz (M); a em ordem separa os lados: `B D F K` à
-esquerda e `P R W` à direita. Repetindo: D com B à esquerda e F à direita, e o
-K é filho direito do F; R com P e W. Pós-ordem: `B K F D P W R M`. Veja 0098.
+**C.** A cada comparação, a chave procurada fixa um limite: tudo que vier
+depois tem de ficar entre o maior limite inferior e o menor superior já
+visto. Na (C), depois do 75 (63 menor, vai à esquerda) e do 30 (63 maior, vai
+à direita), o 60 manda ir à direita: o próximo precisa ser maior que 60, e o
+45 não é. As outras respeitam os limites o tempo todo (na (B), o 62 fica entre
+55 e 70; na (E), o 60 entre 50 e 99). Veja 0099.
 
 </details>
 
-**9.** Na BST das questões 1 a 3 (antes de qualquer remoção), quem é o
-**sucessor** (o próximo na em ordem) do 35?
+**9.** Sobre ABB e AVL, considere as afirmações:
 
-- (A) 30
-- (B) 25
-- (C) 50
-- (D) 45
-- (E) o 35 não tem sucessor
+I. Inserir n chaves distintas em ordem crescente numa ABB sem balanceamento
+gera, com certeza, uma árvore de altura n (folha com altura 1).\
+II. Na remoção de uma AVL, pode ser preciso rotacionar em mais de um nó no
+caminho até a raiz.\
+III. Numa AVL com n nós, a busca é O(log n) no pior caso.\
+IV. Na AVL, a remoção, assim como a inserção, exige no máximo uma rotação.
+
+Estão corretas:
+
+- (A) Apenas I, II e III.
+- (B) Apenas I e II.
+- (C) Apenas II e III.
+- (D) Apenas I, III e IV.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**D.** O 35 não tem filho direito. Então o sucessor é o ancestral mais baixo
-do qual o 35 está na subárvore **esquerda**: sobe 35, 30, 20 (todos filhos
-direitos) até o 20, que é filho esquerdo do 45. É a `TREE-SUCCESSOR` do
-Cormen. Veja 0099 (a em ordem) e o assunto 0175, que aprofunda sucessor e
-antecessor.
+**A.** Na I, cada chave nova é maior que todas e vai para a direita da
+última: vira uma lista, de altura n. Na II, depois de uma rotação a altura da
+subárvore pode ter diminuído, e o desequilíbrio sobe: no pior caso, uma
+rotação por nível. A III vale porque a altura da AVL é no máximo cerca de
+1,44 lg n. A IV mistura: a inserção exige no máximo uma rotação (simples ou
+dupla), a remoção não. Veja 0099 e 0101.
 
 </details>
 
-**10.** Sobre árvores balanceadas, assinale a afirmação **falsa**.
+**10.** Numa AVL, o número mínimo de nós de uma árvore de altura `h` (folha
+com altura 1, árvore vazia com altura 0) é `N(h) = N(h - 1) + N(h - 2) + 1`,
+com `N(1) = 1` e `N(2) = 2`. Qual o menor número de nós de uma AVL de
+altura 7?
 
-- (A) Numa rubro-negra, todo caminho de um nó até as folhas (NIL) abaixo dele tem o mesmo número de nós pretos.
-- (B) Uma rubro-negra com n nós internos tem altura no máximo 2 lg(n + 1).
-- (C) Na AVL, uma inserção pode exigir uma rotação em cada ancestral do nó inserido, O(log n) rotações.
-- (D) Numa árvore B de grau mínimo t, todo nó, exceto a raiz, tem entre t − 1 e 2t − 1 chaves.
-- (E) Numa rubro-negra, um nó vermelho não tem filho vermelho.
+- (A) 20
+- (B) 54
+- (C) 64
+- (D) 127
+- (E) 33
 
 <details><summary>Gabarito</summary>
 
-**C.** Na inserção da AVL, a primeira rotação (simples ou dupla) devolve à
-subárvore a altura que ela tinha antes, e nenhum ancestral acima precisa mais
-de conserto: no máximo uma rotação por inserção. Quem pode girar em vários
-níveis é a **remoção**. As outras são propriedades do Cormen. Veja 0101, o
-0176 (remoção na AVL), o 0177 (rubro-negra) e o 0146 (árvore B).
+**E.** A sequência é 1, 2, 4, 7, 12, 20, 33: a raiz mais uma subárvore de
+altura h - 1 e outra de h - 2, a menor possível. A (B) é o valor para altura
+7 **em arestas** (folha com altura 0), convenção que o enunciado não usa. A
+(C) e a (D) são potências de 2, que valem para a árvore perfeita (o máximo de
+nós), não para a AVL mais esparsa. Como N(h) cresce como Fibonacci, a altura
+fica em O(log n). Veja 0101.
 
 </details>
 
