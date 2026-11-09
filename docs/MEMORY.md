@@ -7,7 +7,7 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-09 | 4 · Provas reais | 12/15 tarefas | conteúdo completo, revisão feita |
+| 2026-11-09 | 4 · Provas reais (concluída) | 16/16 tarefas | curso pronto para a prova de 2026-11-27 |
 
 ## Já feito
 
@@ -17,12 +17,12 @@
 
 ## Parou em
 
-Ajustando as "Questões no estilo da prova" dos módulos aos formatos das provas reais (`TASKS.md` 4.1).
+Fase 4 concluída: `PROVAS.md` (11 provas), frequência em `PPGI.md`, questões dos 29 módulos ajustadas e `SIMULADOS.md`.
 
 ## Próximos passos
 
-1. Ajustar as questões dos módulos ao formato real (4.1).
-2. Montar os simulados de 20 questões (4.3), com o peso de tópicos de `PPGI.md`.
+1. Se chegarem provas novas ou o gabarito oficial de outras, gravar em `_fontes/provas-ppgi.md` e atualizar `PROVAS.md` e a frequência do `PPGI.md`.
+2. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4. Os simulados já usam 4.
 
 ## Contexto importante
 

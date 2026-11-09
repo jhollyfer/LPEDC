@@ -10,10 +10,15 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 - `PROVAS.md`: as 11 provas do PPGI de 2016 a 2023 resolvidas (a de 2023 com o gabarito oficial), com a letra, o porquê e o link
   para o módulo de cada questão.
+- `SIMULADOS.md`: 3 simulados de 20 questões, com 4 alternativas como nas provas de 2022 e
+  2023, e gabarito comentado.
 - `PPGI.md`: o que caiu de 2016 a 2023, por tópico, assunto e formato de questão.
 
 ### Alterado
 
+- "Questões no estilo da prova" dos 29 módulos no formato da prova real: afirmações I, II e III
+  combinadas, simulação, cálculo e código C com erro; árvores, listas, ordenação e hash
+  reescritos por inteiro.
 - Texto de todos os módulos, do `README.md` e do `PPGI.md` revisado: menos repetição entre
   assuntos, sem vícios de linguagem e sem marcas de texto gerado.
 - Enunciados e dicas dos exercícios e da lista prática revisados no mesmo critério.

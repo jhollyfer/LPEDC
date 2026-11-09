@@ -197,7 +197,8 @@ Cada módulo tem ainda uma **lista prática** de 30 exercícios e as **Questões
 no estilo da prova**, as duas no fim do `.md` do módulo. Faça as questões
 sempre, cronometrando: o edital não fixa a duração da prova, então confira o
 horário quando sair o local (24/11) e treine no mesmo ritmo. A cada dois dias,
-resolva uma prova antiga de [`PROVAS.md`](PROVAS.md) inteira, também cronometrada.
+resolva uma prova antiga de [`PROVAS.md`](PROVAS.md) inteira, também cronometrada. Na última semana, faça os três
+simulados de [`SIMULADOS.md`](SIMULADOS.md), um por dia.
 Da lista prática, faça pelo menos os ★★☆ dos módulos do dia; os ★★★ ficam para
 os dias de revisão.
 

@@ -145,7 +145,8 @@ O sumário detalhado, assunto por assunto, está em
 [`_fontes/sumario.md`](_fontes/sumario.md).
 
 As provas do PPGI de 2016 a 2023 estão resolvidas, com o gabarito comentado e o link para o
-módulo de cada questão, em [`PROVAS.md`](PROVAS.md).
+módulo de cada questão, em [`PROVAS.md`](PROVAS.md). Para treinar no formato atual (4 alternativas), há
+3 simulados de 20 questões com gabarito comentado em [`SIMULADOS.md`](SIMULADOS.md).
 
 ## De onde veio o conteúdo
 
