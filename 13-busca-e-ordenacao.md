@@ -5390,190 +5390,245 @@ Saída esperada:
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado. Nas de ordenação, escreva
-o vetor depois de cada passada, como nos testes de mesa dos assuntos.
+Questões objetivas no formato da prova do mestrado: conceito, afirmações
+combinadas, simulação à mão, cálculo e código com erro. Resolva no papel,
+marque a letra e só depois abra o gabarito. Nas de ordenação, escreva o vetor
+depois de cada passada, como nos testes de mesa dos assuntos.
 
-**1.** Uma busca binária (a do assunto 0090, com intervalo fechado e
-`meio = ini + (fim - ini) / 2`) roda num vetor ordenado de 1000 elementos.
-No pior caso, quantos elementos do vetor ela compara com a chave?
+**1.** Considere as afirmações sobre busca em vetores.
 
-- (A) 9
-- (B) 500
-- (C) 11
-- (D) 10
-- (E) 1000
+I. Numa busca sequencial por uma chave que está no vetor, o melhor caso faz
+uma única comparação.
+II. Se o vetor ordenado tem chaves repetidas, a busca binária devolve sempre a
+posição da primeira ocorrência.
+III. Dobrar o tamanho de um vetor ordenado aumenta em no máximo uma unidade o
+número máximo de comparações da busca binária.
+
+Marque a alternativa CORRETA.
+
+- (A) Apenas I.
+- (B) Apenas I e II.
+- (C) Apenas I e III.
+- (D) Apenas II e III.
+- (E) I, II e III.
 
 <details><summary>Gabarito</summary>
 
-**D.** No pior caso são ⌊log₂ n⌋ + 1 voltas: ⌊log₂ 1000⌋ = 9, mais 1. Os
-pedaços examinados, sempre indo para a direita, têm 1000, 500, 250, 125, 62,
-31, 15, 7, 3 e 1 elementos. Veja 0090.
+**C.** I é verdadeira: a chave na primeira posição custa 1 comparação. II é
+falsa: com repetidas, a busca binária para na primeira que o `meio` encontrar,
+e essa pode ser qualquer uma; o "sempre" derruba a afirmação. III é verdadeira:
+o máximo é ⌊log₂ n⌋ + 1, e ⌊log₂ 2n⌋ = ⌊log₂ n⌋ + 1 (conferi rodando: 1000
+elementos dão 10, 2000 dão 11). Veja 0089 e 0090.
 
 </details>
 
-**2.** Com a mesma busca binária, procura-se o 50 no vetor de 15 posições
-abaixo. Quais elementos são examinados, na ordem?
+**2.** Um vetor ordenado tem 5000 elementos. Usando a busca binária do assunto
+0090 (intervalo fechado, uma comparação de igualdade por volta), qual é o
+número máximo de elementos comparados com a chave, entre chave presente e
+ausente?
+
+- (A) 12
+- (B) 13
+- (C) 14
+- (D) 2500
+- (E) 5000
+
+<details><summary>Gabarito</summary>
+
+**B.** O máximo é ⌊log₂ n⌋ + 1 = ⌊12,29⌋ + 1 = 13. A (12) esquece o "+ 1"; D e E
+são os custos da busca sequencial no pior caso (E) e no caso médio (D, quando
+a chave está no vetor). Rodei a busca para todas as chaves e para as ausentes:
+nenhuma passou de 13. Veja 0090.
+
+</details>
+
+**3.** A busca binária do assunto 0090 procura a chave 53 no vetor abaixo,
+com `ini = 0` e `fim = 11`, e `meio = ini + (fim - ini) / 2`.
 
 ```c
-int v[] = {3, 9, 14, 21, 27, 33, 40, 46, 52, 58, 65, 71, 77, 84, 90};
+int v[] = {4, 9, 13, 18, 22, 27, 31, 36, 42, 47, 53, 61};
 ```
 
-- (A) 46, 71, 58, 52
-- (B) 46, 58, 52
-- (C) 40, 58, 52
-- (D) 46, 71, 52
-- (E) 46, 65, 58, 52
+Quantos elementos do vetor são comparados com a chave até ela ser encontrada?
+
+- (A) 3
+- (B) 4
+- (C) 6
+- (D) 11
+- (E) 12
 
 <details><summary>Gabarito</summary>
 
-**A.** Meio 7 (46 < 50, `ini = 8`), meio 11 (71 > 50, `fim = 10`), meio 9
-(58 > 50, `fim = 8`), meio 8 (52 > 50, `fim = 7`). O intervalo fica vazio e a
-busca devolve `-1` depois de 4 comparações, o máximo para n = 15. Veja 0090.
+**A.** Meio 5 (27 < 53, `ini = 6`), meio 8 (42 < 53, `ini = 9`), meio 10 (53,
+achou). São 3 comparações, contra 11 da busca sequencial. Rodei o programa
+contando: o 53 sai com 3. Veja 0090.
 
 </details>
 
-**3.** O bubble sort (vizinhos trocados quando `v[j] > v[j + 1]`) roda no
-vetor `29 10 14 37 13 5`. Como fica o vetor depois de **duas** passadas?
+**4.** O selection sort do assunto 0092 escolhe o menor de `v[i..n-1]` com a
+comparação `v[j] < v[menor]` (estrita) e troca com `v[i]`. Ele roda em
+`9 4 7 4 1 8`. Como fica o vetor depois de **três** passadas (`i = 0, 1, 2`)?
 
-- (A) `10 13 14 5 29 37`
-- (B) `5 10 14 13 29 37`
-- (C) `10 14 13 5 29 37`
-- (D) `10 14 29 13 5 37`
-- (E) `5 10 13 14 29 37`
+- (A) `1 4 7 4 9 8`
+- (B) `1 4 4 7 8 9`
+- (C) `1 4 4 9 7 8`
+- (D) `4 1 7 4 9 8`
+- (E) `1 4 4 7 9 8`
 
 <details><summary>Gabarito</summary>
 
-**C.** A passada 1 leva o 37 até o fim: `10 14 29 13 5 37` (a alternativa D).
-A passada 2 leva o 29 até a penúltima: `10 14 13 5 29 37`. Veja 0091.
+**E.** Passada 0: o menor é o 1 (posição 4), que troca com o 9: `1 4 7 4 9 8`.
+Passada 1: com `<` estrito, o menor continua sendo o 4 da posição 1 (o outro 4
+não é *menor*), então não há troca. Passada 2: o menor de `7 4 9 8` é o 4, que
+troca com o 7: `1 4 4 7 9 8`. A alternativa (A) é o estado depois de duas passadas. Veja
+0092.
 
 </details>
 
-**4.** O insertion sort roda no vetor `18 7 25 3 12 30 9`. Como fica o vetor
-depois de inserir os **três** primeiros elementos depois do `v[0]` (ou seja,
-ao fim da volta `j = 3` do laço externo)?
+**5.** O insertion sort do assunto 0093 ordena `6 2 9 4 1`. Cada avaliação de
+`v[i] > x` conta uma comparação, inclusive a que interrompe o laço. Quantas
+comparações são feitas no total?
 
-- (A) `7 18 25 3 12 30 9`
-- (B) `3 7 12 18 25 30 9`
-- (C) `3 7 9 25 12 30 18`
-- (D) `7 18 3 25 12 30 9`
-- (E) `3 7 18 25 12 30 9`
-
-<details><summary>Gabarito</summary>
-
-**E.** O 7 entra antes do 18, o 25 fica, o 3 atravessa a mão inteira. A parte
-`v[0..3]` está em ordem entre si; o resto ainda não foi tocado. A (A) é o
-estado depois de `j = 2`. Veja 0093.
-
-</details>
-
-**5.** O selection sort (acha o menor de `v[i..n-1]` e troca com `v[i]`) roda
-no vetor `44 12 35 8 27 19`. Como fica o vetor depois de **três** passadas?
-
-- (A) `8 12 19 27 35 44`
-- (B) `8 12 19 44 27 35`
-- (C) `8 12 35 44 27 19`
-- (D) `8 12 19 35 27 44`
-- (E) `12 8 19 44 27 35`
-
-<details><summary>Gabarito</summary>
-
-**B.** Passada 0: o 8 troca com o 44. Passada 1: o 12 já está no lugar.
-Passada 2: o 19 troca com o 35, que salta para a última gaveta. Repare nesse
-salto: é ele que faz o selection ser instável. Veja 0092.
-
-</details>
-
-**6.** Qual conjunto tem **só** algoritmos de ordenação estáveis, nas versões
-clássicas vistas no módulo?
-
-- (A) quick sort, merge sort e insertion sort
-- (B) selection sort, bubble sort e merge sort
-- (C) heap sort, insertion sort e bubble sort
-- (D) insertion sort, merge sort e bubble sort
-- (E) quick sort, heap sort e selection sort
-
-<details><summary>Gabarito</summary>
-
-**D.** Bubble e insertion só movem um elemento por cima de vizinhos
-estritamente maiores; o merge pega o da esquerda no empate (`<=`). Quick,
-selection e heap fazem trocas de longa distância e podem inverter iguais.
-Veja 0096 e 0103.
-
-</details>
-
-**7.** A partição de Lomuto (a `PARTITION` do Cormen, com o último elemento
-como pivô) é aplicada ao vetor `15 4 23 8 42 16 11`. Qual é o vetor depois da
-partição e o índice do pivô (contando de 0)?
-
-- (A) `4 8 11 15 42 16 23`, índice 2
-- (B) `4 8 11 23 42 16 15`, índice 2
-- (C) `8 4 11 15 42 16 23`, índice 2
-- (D) `4 8 11 15 16 23 42`, índice 2
-- (E) `11 4 8 15 42 16 23`, índice 0
-
-<details><summary>Gabarito</summary>
-
-**A.** O pivô é o 11. Só o 4 e o 8 são `<= 11`: o 4 troca com o 15 e o 8 troca
-com o 15 de novo. No fim, o pivô troca com o 23, o primeiro da parte dos
-maiores. No Cormen, que indexa a partir de 1, a `PARTITION` devolveria 3. A partição de
-Hoare (dois índices que se cruzam) daria outro vetor. Veja 0095.
-
-</details>
-
-**8.** O quick sort com pivô no último elemento ordena um vetor de 8
-elementos **já ordenado**. Quantas comparações com o pivô são feitas no total,
-e qual é a ordem de crescimento desse caso?
-
-- (A) 8, Θ(n)
-- (B) 24, Θ(n log n)
-- (C) 16, Θ(n log n)
-- (D) 7, Θ(n)
-- (E) 28, Θ(n²)
-
-<details><summary>Gabarito</summary>
-
-**E.** Cada partição deixa um lado vazio e o outro com um elemento a menos:
-7 + 6 + 5 + 4 + 3 + 2 + 1 = 28 = n(n − 1)/2. É o pior caso do quick sort,
-Θ(n²). Veja 0095 e o exemplo A190.
-
-</details>
-
-**9.** Quantas comparações a intercalação (merge) faz para juntar as listas
-ordenadas `6 11 20 24` e `1 3 15 22`?
-
-- (A) 4
+- (A) 6
 - (B) 7
 - (C) 8
-- (D) 6
-- (E) 16
+- (D) 9
+- (E) 10
 
 <details><summary>Gabarito</summary>
 
-**B.** Saem 1, 3, 6, 11, 15, 20 e 22, cada um depois de uma comparação. Aí a
-segunda lista acaba e o 24 vai sem comparar. Juntar m + n elementos custa no
-máximo m + n − 1 comparações (aqui, 7) e no mínimo min(m, n). Veja 0094.
+**D.** Inserir o 2: 1 comparação. Inserir o 9: 1 (o 6 é menor, para). Inserir
+o 4: 3 (9, 6, e o 2 que interrompe). Inserir o 1: 4 (9, 6, 4 e 2; o laço acaba
+porque `i` chega a -1, sem comparação extra). Total 1 + 1 + 3 + 4 = 9, que
+confere com a contagem rodando o código. Num vetor já ordenado seriam só
+n - 1 = 4. Veja 0093.
 
 </details>
 
-**10.** Uma lista de alunos deve sair ordenada por **turma** e, dentro de cada
-turma, por **nota** (uma chave composta). Você só pode usar duas passadas de
-um algoritmo que ordena por uma chave simples. Qual estratégia funciona?
+**6.** Considere as afirmações sobre algoritmos de ordenação, nas versões
+clássicas vistas no módulo.
 
-- (A) ordenar primeiro por turma e depois por nota, com um algoritmo estável
-- (B) ordenar primeiro por nota e depois por turma, com o selection sort
-- (C) ordenar primeiro por nota e depois por turma, com um algoritmo estável
-- (D) qualquer uma das duas ordens, desde que o algoritmo seja estável
-- (E) qualquer uma das duas ordens, com qualquer algoritmo
+I. O insertion sort faz cerca de n comparações quando o vetor já está
+ordenado.
+II. O quick sort é estável.
+III. O merge sort precisa de um vetor auxiliar de tamanho proporcional a n.
+IV. O selection sort faz no máximo n - 1 trocas.
+
+Marque a alternativa CORRETA.
+
+- (A) Apenas I, III e IV.
+- (B) Apenas I e III.
+- (C) Apenas II e IV.
+- (D) Apenas I, II e III.
+- (E) I, II, III e IV.
 
 <details><summary>Gabarito</summary>
 
-**C.** A última passada é a da chave principal (turma), e a estabilidade
-preserva, dentro de cada turma, a ordem por nota deixada pela primeira. Na
-(A), a passada por nota destrói o agrupamento por turma. Na (B), o selection
-pode bagunçar as notas de uma mesma turma. É a ideia por trás do radix sort.
-A alternativa com uma passada só é comparar a chave composta (turma, depois
-nota) na `compara` do `qsort`. Veja 0096 e o assunto 0180, que aprofunda chave
-composta.
+**A.** I é verdadeira (o laço interno para na primeira comparação de cada
+elemento). II é falsa: a partição troca elementos distantes e pode inverter
+iguais. III é verdadeira: a intercalação grava num vetor auxiliar, Θ(n) de
+espaço extra. IV é verdadeira: cada passada troca no máximo uma vez, e a
+última passada nem acontece. Veja 0093, 0094, 0095, 0092 e 0096.
+
+</details>
+
+**7.** A partição de Lomuto (pivô no último elemento, como no assunto 0095) é
+aplicada ao vetor `14 3 21 9 17 6 12`. Considere as afirmações sobre o
+resultado.
+
+I. O pivô termina no índice 3 (contando de 0).
+II. Todos os elementos à esquerda do pivô são menores ou iguais a ele.
+III. Os elementos à direita do pivô ficam na mesma ordem relativa que tinham
+no vetor original.
+
+Marque a alternativa CORRETA.
+
+- (A) Apenas I.
+- (B) Apenas II.
+- (C) Apenas I e II.
+- (D) Apenas II e III.
+- (E) I, II e III.
+
+<details><summary>Gabarito</summary>
+
+**C.** Os elementos `<= 12` são 3, 9 e 6, então o pivô vai para o índice 3 e o
+vetor fica `3 9 6 12 17 21 14` (conferido rodando). I e II são verdadeiras. III
+é falsa: no original, os maiores aparecem como 14, 21, 17 e, depois da
+partição, como 17, 21, 14: a troca final do pivô com o primeiro dos maiores
+(o 14) bagunça a ordem. É por isso que o quick sort não é estável. Veja 0095.
+
+</details>
+
+**8.** O código abaixo deveria devolver a posição de `x` em `v` (ordenado) ou
+-1, mas tem um erro.
+
+```c
+int busca(int v[], int n, int x) {
+    int ini = 0, fim = n - 1;
+    while (ini < fim) {
+        int meio = ini + (fim - ini) / 2;
+        if (v[meio] == x) return meio;
+        if (v[meio] < x) ini = meio + 1;
+        else fim = meio - 1;
+    }
+    return -1;
+}
+```
+
+Com `int v[] = {10, 20, 30, 40, 50, 60};` e `n = 6`, marque a alternativa
+CORRETA.
+
+- (A) A função devolve -1 apenas para chaves que não estão no vetor.
+- (B) A função acha todas as chaves, mas faz uma comparação a mais que a versão correta.
+- (C) A função falha só para `v[n - 1]`, a última posição.
+- (D) A função lê `v[n]`, fora do vetor, para alguma chave.
+- (E) `busca(v, 6, 20)` devolve -1 embora o 20 esteja no vetor.
+
+<details><summary>Gabarito</summary>
+
+**E.** Com `ini < fim`, o intervalo de um só elemento (`ini == fim`) nunca é
+examinado. Para o 20: meio 2 (30 > 20, `fim = 1`), meio 0 (10 < 20,
+`ini = 1`), e o laço acaba com `ini == fim`, sem olhar o 20. Rodando, o código
+devolve -1 para 20, 40 e 60, e acerta 10, 30 e 50; por isso C é falsa. `meio`
+nunca chega a `n`, então D também é falsa. A condição correta é `ini <= fim`.
+Veja 0090.
+
+</details>
+
+**9.** O quick sort com pivô no último elemento (partição de Lomuto) ordena um
+vetor de 12 elementos **já ordenado**. Quantas comparações de um elemento com
+o pivô são feitas no total?
+
+- (A) 11
+- (B) 36
+- (C) 78
+- (D) 66
+- (E) 144
+
+<details><summary>Gabarito</summary>
+
+**D.** Cada partição de um trecho de `m` elementos faz `m - 1` comparações com
+o pivô e deixa um lado vazio, então o trecho seguinte tem `m - 1` elementos:
+11 + 10 + ... + 1 = 66 = n(n - 1)/2, o pior caso Θ(n²). A (C) é a soma até 12,
+que conta uma comparação do pivô consigo mesmo. Rodei a contagem para n = 12:
+66. Veja 0095.
+
+</details>
+
+**10.** Sobre o merge sort, marque a alternativa INCORRETA.
+
+- (A) Faz Θ(n log n) comparações no melhor, no médio e no pior caso.
+- (B) É sempre mais rápido que o insertion sort, para qualquer vetor.
+- (C) Precisa de espaço extra proporcional a n na versão com vetor auxiliar.
+- (D) É estável se, no empate, a intercalação tira o elemento da metade esquerda.
+- (E) Divide o vetor ao meio, ordena cada metade e intercala os resultados.
+
+<details><summary>Gabarito</summary>
+
+**B.** O "sempre" entrega a pegadinha: num vetor já ordenado, o insertion sort
+faz só n - 1 comparações, menos que o merge sort. As demais são verdadeiras: o
+merge sort não depende da ordem inicial (A), usa o vetor auxiliar (C) e é
+estável com `<=` na intercalação (D). Veja 0094, 0093 e 0096.
 
 </details>
 
