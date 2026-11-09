@@ -217,3 +217,35 @@ exercícios `E(6N-5)` a `E(6N)`. Ex.: assunto 0002 → A003, A004, E007 a E012.
 - 0163-skip-list · lista com andares aleatórios
 - 0164-listas-autoajustaveis · mover para a frente, transposição, contagem
 - 0165-juntando-tudo · comparar BST, AVL, skip list e lista autoajustável no mesmo teste
+
+## 26-analise-formal · Notação assintótica, somatórios e espaço
+- 0166-o-omega-theta · definições de O, Ω e Θ com c e n₀; melhor, pior e caso médio; provar e refutar um limite
+- 0167-somatorios · somatórios que saem de laços: aritmética, geométrica, harmônica, laços dependentes
+- 0168-complexidade-espacial · espaço extra, pilha da recursão, in-place, trocar tempo por espaço
+- 0169-juntando-tudo · medir passos e bytes de cinco funções e conferir com a fórmula
+
+## 27-c-detalhes · Detalhes de C que caem em prova
+- 0170-precedencia-e-avaliacao · tabela de precedência e associatividade, efeito colateral, ponto de sequência
+- 0171-com-e-sem-sinal · signed e unsigned misturados, -1 > 0u, deslocamentos e máscaras
+- 0172-vla · vetor de tamanho variável (VLA), matriz VLA como parâmetro, o risco da pilha
+- 0173-juntando-tudo · calculadora de expressões com bits sobre registros de permissão
+
+## 28-estruturas-complementos · Estruturas: o que faltava
+- 0174-lista-com-sentinela · lista dupla circular com nó sentinela (sem caso especial)
+- 0175-conceitos-e-sucessor · grau, nível, profundidade, fator de balanceamento; sucessor e antecessor com ponteiro para o pai
+- 0176-avl-remocao · remoção na AVL e as rotações na volta
+- 0177-rubro-negra-classica · rubro-negra das cinco propriedades: inserção e os casos do tio
+- 0178-hash-multiplicacao · método da divisão e método da multiplicação (constante de Knuth)
+- 0179-sondagem-quadratica-e-dupla · sondagem linear, quadrática e dispersão dupla; agrupamento e remoção com lápide
+- 0180-pigeonhole-e-chave-composta · pigeonhole sort, ordenação estável e chave composta
+- 0181-juntando-tudo · agenda de consultas com sentinela, rubro-negra e hash duplo
+
+## 29-grafos-e-np · Grafos: ciclos e cortes; problemas difíceis
+- 0182-caminhos-e-ciclos · grau, caminho, trajeto, circuito, ciclo; circuito euleriano (Hierholzer)
+- 0183-hamiltoniano · ciclo hamiltoniano por backtracking e o custo exponencial
+- 0184-pontes-e-articulacoes · tempos de descoberta e low; pontes e vértices de articulação
+- 0185-cadeia-de-matrizes · multiplicação de cadeia de matrizes por programação dinâmica
+- 0186-p-e-np · problema de decisão, verificação polinomial, P, NP, NP-completo; verificador de SAT
+- 0187-reducoes · redução polinomial: conjunto independente, clique e cobertura de vértices
+- 0188-aproximacao · cobertura de vértices 2-aproximada, bin packing (first fit), caixeiro viajante métrico
+- 0189-juntando-tudo · roteiro de entregas: exato para poucos pontos, aproximado para muitos

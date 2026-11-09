@@ -6,7 +6,7 @@
 # entrada vazia, então podem terminar cedo: isso não é falha.
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
 mod="$1"; falhas=0
-for f in "$RAIZ/$mod"/*/[AE][0-9][0-9][0-9].c "$RAIZ/_respostas/$mod"/E[0-9][0-9][0-9].c; do
+for f in "$RAIZ/$mod"/*/[AE][0-9][0-9][0-9].c "$RAIZ/$mod"/*/[AE][0-9][0-9][0-9][0-9].c "$RAIZ/_respostas/$mod"/E[0-9][0-9][0-9].c "$RAIZ/_respostas/$mod"/E[0-9][0-9][0-9][0-9].c; do
   [ -f "$f" ] || continue
   grep -q "main" "$f" || continue   # resposta só em comentário
   saida=$(timeout 10 "$RAIZ/rodar" "$f" </dev/null 2>&1); cod=$?

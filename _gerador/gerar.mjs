@@ -47,10 +47,10 @@ const comando = (caminho) => ['```bash', `~/LPEDC/rodar ${caminho}`, '```']
 // exemplo: a 1ª linha "// A001 · título" é o título, o resto é o código
 const exemplo = (caminho, nome) => {
   const [cabeca, ...resto] = readFileSync(join(RAIZ, caminho), 'utf8').trimEnd().split('\n')
-  if (!/^\/\/ A\d{3} · /.test(cabeca)) throw new Error(`${caminho}: a 1ª linha precisa ser "// ${nome.slice(0, 4)} · título"`)
+  if (!/^\/\/ A\d{3,4} · /.test(cabeca)) throw new Error(`${caminho}: a 1ª linha precisa ser "// ${nome.replace(/\.c$/, '')} · título"`)
   while (resto[0]?.trim() === '') resto.shift()
-  const titulo = cabeca.replace(/^\/\/\s*/, '').replace(/^A\d{3}\s*·\s*/, '')
-  return [`**Exemplo ${nome.slice(0, 4)} · ${titulo}**`, '', '```c', ...resto, '```', '', ...comando(caminho)]
+  const titulo = cabeca.replace(/^\/\/\s*/, '').replace(/^A\d{3,4}\s*·\s*/, '')
+  return [`**Exemplo ${nome.replace(/\.c$/, '')} · ${titulo}**`, '', '```c', ...resto, '```', '', ...comando(caminho)]
 }
 
 // exercício: o bloco de comentários do começo do arquivo traz o enunciado
@@ -63,8 +63,8 @@ const exercicio = (caminho, nome) => {
     const i = linhas.findIndex((l) => l.startsWith(rotulo))
     return i < 0 ? linhas.length : i
   }
-  const iCabeca = linhas.findIndex((l) => /^Exercício E\d{3}/.test(l))
-  if (iCabeca < 0) throw new Error(`${caminho}: falta a linha "// Exercício ${nome.slice(0, 4)} · ★☆☆"`)
+  const iCabeca = linhas.findIndex((l) => /^Exercício E\d{3,4}/.test(l))
+  if (iCabeca < 0) throw new Error(`${caminho}: falta a linha "// Exercício ${nome.replace(/\.c$/, '')} · ★☆☆"`)
   const nivel = linhas[iCabeca].split(' · ')[1] ?? ''
   const fimEnunciado = Math.min(fim('Dicas:'), fim('Escreva sua resposta'))
   const enunciado = linhas.slice(iCabeca + 1, fimEnunciado)
@@ -81,7 +81,7 @@ const exercicio = (caminho, nome) => {
   if (corpo.at(-1) === 'CODIGO') corpo.splice(-1, 1, '```')
   const listaDicas = dicas.filter((l) => l.trim())
   return [
-    `**Exercício ${nome.slice(0, 4)}**${nivel ? ` · ${nivel}` : ''}`,
+    `**Exercício ${nome.replace(/\.c$/, '')}**${nivel ? ` · ${nivel}` : ''}`,
     '',
     ...corpo.join('\n').trim().split('\n'),
     '',
@@ -93,9 +93,9 @@ const exercicio = (caminho, nome) => {
 }
 
 const pratique = (modulo, pasta) => {
-  const arquivos = readdirSync(join(RAIZ, modulo, pasta)).sort()
-  const exemplos = arquivos.filter((a) => /^A\d{3}\.c$/.test(a))
-  const exercicios = arquivos.filter((a) => /^E\d{3}\.c$/.test(a))
+  const arquivos = readdirSync(join(RAIZ, modulo, pasta)).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
+  const exemplos = arquivos.filter((a) => /^A\d{3,4}\.c$/.test(a))
+  const exercicios = arquivos.filter((a) => /^E\d{3,4}\.c$/.test(a))
   return [
     '### Hora de praticar',
     '',
