@@ -21,7 +21,8 @@
 // 2. Os 8 vizinhos cabem em dois laços: for dl de -1 a 1, for dc de -1 a 1,
 //    pulando dl == 0 && dc == 0.
 // 3. Resposta esperada: 20 casas queimadas. Com só 4 vizinhos, o fogo
-//    pararia nas 4 do canto; as 2 casas do canto de baixo escapam mesmo assim.
+//    pararia nas 4 do canto. As 2 casas de mato do canto de baixo à
+//    esquerda escapam mesmo com o vento.
 //
 // Escreva sua resposta abaixo:
 

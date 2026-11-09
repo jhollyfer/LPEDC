@@ -20,7 +20,7 @@
 //    índice menor em diante, e pode escolher o mesmo de novo (chama com
 //    menor = j, não j + 1).
 // 2. Corte quando o pacote não cabe no que falta. Com falta == 0, mostre.
-// 3. Resposta esperada: 6 jeitos.
+// 3. Resposta esperada: 4 jeitos.
 //
 // Escreva sua resposta abaixo:
 

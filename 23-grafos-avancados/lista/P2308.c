@@ -27,7 +27,7 @@
 //    ordem, o caminho Casa -> Terminal -> Shopping -> Faculdade -> Estágio,
 //    de 4 trechos, precisa das 4 rodadas.
 // 3. Resposta esperada: no fim, Shopping R$ 3, Terminal 5, Faculdade 7 e
-//    Estágio 10, todos na rodada 4.
+//    Estágio 10; o Estágio só chega no valor certo na rodada 4.
 //
 // Escreva sua resposta abaixo:
 

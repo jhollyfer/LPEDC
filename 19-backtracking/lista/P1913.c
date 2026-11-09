@@ -21,7 +21,7 @@
 //    os índices se cruzarem.
 // 2. Guarde onde cada pedaço termina num vetor fimp[] e o número de pedaços
 //    em np. Quando ini == tamanho, mostre os pedaços.
-// 3. Resposta esperada: 6 jeitos, do A|R|A|R|A até o ARARA inteiro.
+// 3. Resposta esperada: 5 jeitos, do A|R|A|R|A até o ARARA inteiro.
 //
 // Escreva sua resposta abaixo:
 

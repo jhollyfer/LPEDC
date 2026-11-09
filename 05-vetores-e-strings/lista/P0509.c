@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-int conta(const char s[], char letra) {
+int conta(char s[], char letra) {
     int total = 0;
     for (size_t i = 0; i < sizeof s; i++) {
         if (s[i] = letra) {

@@ -2300,6 +2300,10 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/09-arquivos/lista/`.
+
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no

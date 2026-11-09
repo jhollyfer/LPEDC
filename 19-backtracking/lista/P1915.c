@@ -19,8 +19,8 @@
 // 2. Os dois cortes vêm antes do teste i == N. O teste soma == ALVO pode
 //    contar a solução na hora e voltar: os boletos que faltam só aumentariam
 //    a soma.
-// 3. Resposta esperada: as duas acham 9 soluções; sem poda são 8191
-//    chamadas, com poda bem menos (a saída de cima).
+// 3. Resposta esperada: as duas acham 50 soluções; sem poda são 8191
+//    chamadas (2^13 - 1), com poda só 745.
 //
 // Escreva sua resposta abaixo (estenda o código):
 

@@ -19,8 +19,8 @@
 // 2. Senão: saia se a casa está fora, é parede ou já foi visitada; marque,
 //    tente os 4 vizinhos com passos + 1 e DESMARQUE ao voltar. Sem
 //    desmarcar, um caminho bloqueia os outros e a conta sai menor.
-// 3. Resposta esperada: 4 caminhos, o mais curto com 8 passos e o mais
-//    longo com 12.
+// 3. Resposta esperada: 12 caminhos, o mais curto com 7 passos e o mais
+//    longo com 13.
 //
 // Escreva sua resposta abaixo (complete o código):
 
