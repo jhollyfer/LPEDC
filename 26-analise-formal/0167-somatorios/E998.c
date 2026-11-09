@@ -2,7 +2,7 @@
 // Exercício E998 · ★☆☆
 //
 // A função abaixo compara cada produto da prateleira com ele mesmo e com
-// os que vêm depois. Repare que o laço de dentro começa em j = i. Conte os
+// os que vêm depois. O laço de dentro começa em j = i. Conte os
 // passos com um contador global (passos++ dentro do laço de dentro) e
 // mostre a contagem ao lado da fórmula n(n+1)/2 para n = 10, 100 e 1000:
 //

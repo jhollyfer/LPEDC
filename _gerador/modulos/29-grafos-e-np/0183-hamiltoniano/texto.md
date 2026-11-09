@@ -109,17 +109,15 @@ quando a resposta é "não".
 > Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico.
 > O programa continua compilando e rodando, mas cada agência visitada numa
 > tentativa que falhou fica "queimada" para as tentativas seguintes, e ele
-> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug. E lembre: euleriano é sobre **arestas**; hamiltoniano, sobre
-> **vértices**.
+> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug.
 
 > [!TIP]
 > **Por dentro do C:** a recursão desce no máximo V níveis, então a pilha de
 > chamadas nunca passa de V frames de `hamilton`, cada um com `pos`, `v` e o
-> endereço de retorno. O que explode não é a memória, é o **tempo**: o número
-> de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
+> endereço de retorno. A memória fica pequena; o que explode é o
+> **tempo**: o número de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
 > compartilhados por todas as chamadas, e por isso cada uma precisa desfazer
-> o que fez antes de voltar.
- O `long` em `chamadas` está ali porque
+> o que fez antes de voltar. O `long` em `chamadas` está ali porque
 > 13! já não cabe num `int` de 32 bits.
 
 > [!NOTE]

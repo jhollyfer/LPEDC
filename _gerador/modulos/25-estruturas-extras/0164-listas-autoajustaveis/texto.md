@@ -2,7 +2,7 @@
 
 Na cozinha, o sal e o óleo ficam na frente do armário, e o cravo que você usa uma
 vez por ano fica lá no fundo. Ninguém planejou isso: cada vez que você usa um
-pote, ele volta para a frente. Com o tempo, o armário se arruma sozinho pelo uso.
+pote, ele volta para a frente.
 
 A busca sequencial (assunto 0089) custa a **posição** do item: o primeiro sai com
 1 comparação, o décimo com 10. Se todo item fosse procurado com a mesma
@@ -12,8 +12,8 @@ estivessem na frente, a busca média cairia muito.
 
 Só que você não sabe de antemão quem são os mais procurados, e isso muda com
 o tempo. A **lista autoajustável** descobre sozinha: a cada busca
-bem-sucedida, ela muda a ordem para aproximar o item achado do começo. A busca
-deixa de ser só leitura; ela também arruma. Há três políticas clássicas:
+bem-sucedida, ela muda a ordem para aproximar o item achado do começo, então a
+busca também escreve na lista. Há três políticas clássicas:
 
 - **mover para a frente** (*move-to-front*): o item achado vira o primeiro.
   Reage rápido, mas um item procurado uma única vez também vai parar na frente;

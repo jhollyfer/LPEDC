@@ -6,7 +6,7 @@ a mais de turno. A pergunta da prefeitura: existe um roteiro que passa por
 cada rua **exatamente uma vez** e termina na garagem?
 
 Leonhard Euler respondeu essa pergunta em 1736, sobre as pontes de
-Königsberg, e a resposta não depende de testar roteiros. Depende de contar.
+Königsberg, e a resposta sai de uma contagem, sem testar roteiro nenhum.
 
 **Grau.** O **grau** de um vértice é quantas arestas tocam nele (um laço, aresta
 de um vértice para ele mesmo, conta 2). Num grafo dirigido o grau se divide em
@@ -173,8 +173,7 @@ casinha "sem tirar o lápis do papel", um trajeto aberto.
 > acessos a uma matriz de `int` que mora num bloco contínuo de 6 × 6 × 4 =
 > 144 bytes. Como cada rua é empilhada e desempilhada uma vez, a pilha nunca
 > passa de E + 1 posições, e por isso `pilha[MAX_RUAS + 1]` cabe na pilha do
-> programa sem `malloc`.
- A busca do próximo vizinho recomeça do 0
+> programa sem `malloc`. A busca do próximo vizinho recomeça do 0
 > a cada volta; com lista de adjacência e um ponteiro "próxima aresta" por
 > vértice, o total cai para O(V + E).
 

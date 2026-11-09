@@ -644,8 +644,7 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 > (2,4 bilhões) caiba num `long`. Estouro de `int` com sinal é comportamento
 > indefinido: o programa pode mostrar um número negativo ou qualquer outra
 > coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. Outro
-> detalhe: com `-O2`
-, o compilador pode reconhecer o laço que só
+> detalhe: com `-O2`, o compilador pode reconhecer o laço que só
 > incrementa um contador e trocar os dois `for` pela própria fórmula
 > fechada. O laço de Θ(n²) vira uma conta de Θ(1) no código de máquina.
 
@@ -796,7 +795,7 @@ pela fórmula: R$ 66795
 **Exercício E998** · ★☆☆
 
 A função abaixo compara cada produto da prateleira com ele mesmo e com
-os que vêm depois. Repare que o laço de dentro começa em j = i. Conte os
+os que vêm depois. O laço de dentro começa em j = i. Conte os
 passos com um contador global (passos++ dentro do laço de dentro) e
 mostre a contagem ao lado da fórmula n(n+1)/2 para n = 10, 100 e 1000:
 
@@ -1562,8 +1561,7 @@ auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 > `custo_passos` é declarada com `extern` no `.h` e definida uma vez só no
 > `.c`; o `prof` é `static`, invisível fora do arquivo. Os bytes da pilha
 > não aparecem em `custo_bytes`: o `malloc` mede o **heap**, e a pilha
-> só dá para medir
- em frames. Cada frame da `custo_soma_rec`
+> só dá para medir em frames. Cada frame da `custo_soma_rec`
 > guarda o endereço de retorno, o `v`, o `n` e o `s`, umas dezenas de bytes
 > (o tamanho exato depende do compilador e das opções). Com o
 > AddressSanitizer ligado, os frames ficam maiores, porque ele põe zonas de

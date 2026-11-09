@@ -3,8 +3,8 @@
 Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
 mais direto: o que funciona e cabe numa primeira leitura. Este módulo volta
 a essas três estruturas e preenche o que ficou de fora, com o olhar do
-Cormen, o livro da prova do PPGI. Não há estrutura nova, e sim as versões
-que aparecem nos livros, nas bibliotecas e nas questões de concurso.
+Cormen, o livro da prova do PPGI. As estruturas são as mesmas, agora nas
+versões que aparecem nos livros, nas bibliotecas e nas questões de concurso.
 
 Três ideias atravessam o módulo. A primeira é a **sentinela**: um nó falso que
 fica onde estaria o `NULL` e apaga os casos especiais do código, na lista

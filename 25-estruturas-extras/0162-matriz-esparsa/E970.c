@@ -19,7 +19,7 @@
 // Ache a linha errada, conserte e rode de novo.
 //
 // Dicas:
-// 1. Repare quem sumiu: 30, 20 e 40. Os valores 20, 15 e 12 entram ANTES de
+// 1. Veja quem sumiu: 30, 20 e 40. Os valores 20, 15 e 12 entram ANTES de
 //    todas as células que já estavam na linha. Siga o caso ant == NULL.
 // 2. Quando a célula nova vira a primeira da linha, para onde aponta
 //    nova->prox? E o que acontece com as células que já estavam lá?

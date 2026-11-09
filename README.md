@@ -91,9 +91,8 @@ questões da prova. As pastas guardam só o que você roda e os desenhos:
    houver um **Passo a passo**, refaça a tabela no papel.
 4. Responda a **Pergunta para você** antes de rodar. Depois rode os exemplos e
    mexa neles: mude um valor, quebre uma linha, rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas ficam logo abaixo do enunciado, no `.md` do módulo e no topo do
-   arquivo: tente antes de ler.
+5. Faça os exercícios. As dicas ficam logo abaixo do enunciado, no `.md` do
+   módulo e no topo do arquivo: tente antes de ler.
 6. No fim do módulo, resolva a lista prática, os desafios e as **questões no
    estilo da prova**, que cobram o mesmo conteúdo em múltipla escolha.
 

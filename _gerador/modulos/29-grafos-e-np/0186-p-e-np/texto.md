@@ -132,9 +132,8 @@ exatamente o valor de um Pix.
 
 > [!WARNING]
 > **NP não quer dizer "não polinomial".** Quer dizer *polinomial não
-> determinístico*: um "chute" certo verificado em tempo polinomial. Todo
-> problema de P está em NP. Outro tropeço de prova: NP-completo não é
-> "impossível", é "não se conhece algoritmo polinomial". E reduzir A a B
+> determinístico*: um "chute" certo verificado em tempo polinomial. Outro
+> tropeço de prova: NP-completo não é "impossível", é "não se conhece algoritmo polinomial". E reduzir A a B
 > mostra que B é **pelo menos tão difícil** quanto A, não o contrário (0187).
 
 > [!TIP]

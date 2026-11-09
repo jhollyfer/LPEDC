@@ -101,8 +101,7 @@ deu certo:
 
 > [!WARNING]
 > O VLA não avisa quando falha. O `malloc` devolve `NULL` se não houver
-> memória; o VLA pede o espaço à pilha
-, e a pilha de um programa
+> memória; o VLA pede o espaço à pilha, e a pilha de um programa
 > no Linux tem uns **8 MB** (confira com `ulimit -s`). Um `int v[n]` com `n`
 > igual a 3 milhões pede 12 MB e derruba o programa com *segmentation
 > fault*, sem chance de tratar. E um `n` que veio do usuário pode ser 0,

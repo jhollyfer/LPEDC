@@ -37,7 +37,6 @@ typedef struct {
 Ler `m[i][j]` é percorrer a lista da linha `i` até passar da coluna `j`. Se a
 célula não aparecer, a resposta é 0. Gravar é uma **inserção ordenada** (assunto
 0078) com uma regra a mais: gravar 0 numa célula que existe **remove** a célula.
-Se o zero ficasse guardado, a matriz ia engordando com nada dentro.
 
 Uma locadora pequena tem 4 clientes (Ana, Bruno, Carla e
 Davi, linhas 0 a 3) e 8 filmes (colunas 0 a 7). Chegam seis notas; depois Bruno

@@ -115,9 +115,8 @@ int main(void) {
 ```
 
 O fluxograma responde "pode `REUNIAO | IMPRIMIR`?" com um laço pela equipe e
-uma única comparação de bits por pessoa.
- A máscara pode ter uma
-permissão ou cinco, e o custo é o mesmo:
+uma única comparação de bits por pessoa. A máscara pode ter uma permissão ou
+cinco, e o custo é o mesmo:
 
 {{fluxograma}}
 

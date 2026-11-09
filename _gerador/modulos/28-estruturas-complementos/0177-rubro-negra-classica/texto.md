@@ -166,8 +166,7 @@ existe, que custa O(log n) e que faz no máximo **três rotações**.
 > **Por dentro do C:** o `NoVP` tem 32 bytes: 4 da chave, 4 do `enum` da cor e
 > três ponteiros de 8. A sentinela é **um nó só** dentro da `ArvVP`, e todo
 > ponteiro "vazio" da árvore aponta para o endereço `&T->nil`: mil folhas,
-> zero bytes a mais. Como a sentinela é um nó real, o código
- pode **ler**
+> zero bytes a mais. Como a sentinela é um nó real, o código pode **ler**
 > `tio->cor` sem testar `NULL`, e a rotação pode até **escrever** no
 > `nil.pai` sem estragar nada (a remoção do Cormen usa isso). Compare com a
 > LLRB do 0145: 24 bytes por nó e nenhum `pai`, mas o conserto é recursivo e

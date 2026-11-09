@@ -137,8 +137,7 @@ parecem iguais; o que as separa é o `>` contra o `>=`.
 > **Por dentro do C:** `tin`, `low` e `corte` são vetores globais, zerados
 > antes do `main`, e por isso `tin[v] == 0` serve de "não visitado". A
 > variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e
-> por isso a contagem da raiz não se mistura com a dos outros vértices.
-
+> assim a contagem da raiz não se mistura com a dos outros vértices.
 > A recursão pode descer V níveis; numa rede com um milhão de bairros em fila
 > isso estoura a pilha (8 MB por padrão no Linux), e a versão de produção
 > troca a recursão por uma pilha explícita.

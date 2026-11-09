@@ -170,7 +170,7 @@ aproximada e mostra quanto ela melhora.
 > atalho da pré-ordem pode sair muito mais caro que a volta pela árvore, e
 > nenhum algoritmo polinomial tem fator constante, a menos que P = NP. E não
 > confunda: Held-Karp é **exato** e exponencial; a árvore é **aproximada**
-> e polinomial. Nenhum dos dois é "rápido e exato".
+> e polinomial.
 
 > [!TIP]
 > **Por dentro do C:** `dp[1 << N][N]` e `ant[1 << N][N]` são globais: 256 × 8

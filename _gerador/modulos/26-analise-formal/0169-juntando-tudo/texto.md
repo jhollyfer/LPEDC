@@ -134,8 +134,7 @@ auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 > `custo_passos` é declarada com `extern` no `.h` e definida uma vez só no
 > `.c`; o `prof` é `static`, invisível fora do arquivo. Os bytes da pilha
 > não aparecem em `custo_bytes`: o `malloc` mede o **heap**, e a pilha
-> só dá para medir
- em frames. Cada frame da `custo_soma_rec`
+> só dá para medir em frames. Cada frame da `custo_soma_rec`
 > guarda o endereço de retorno, o `v`, o `n` e o `s`, umas dezenas de bytes
 > (o tamanho exato depende do compilador e das opções). Com o
 > AddressSanitizer ligado, os frames ficam maiores, porque ele põe zonas de

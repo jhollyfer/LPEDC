@@ -100,7 +100,7 @@ a mais de turno. A pergunta da prefeitura: existe um roteiro que passa por
 cada rua **exatamente uma vez** e termina na garagem?
 
 Leonhard Euler respondeu essa pergunta em 1736, sobre as pontes de
-Königsberg, e a resposta não depende de testar roteiros. Depende de contar.
+Königsberg, e a resposta sai de uma contagem, sem testar roteiro nenhum.
 
 **Grau.** O **grau** de um vértice é quantas arestas tocam nele (um laço, aresta
 de um vértice para ele mesmo, conta 2). Num grafo dirigido o grau se divide em
@@ -267,8 +267,7 @@ casinha "sem tirar o lápis do papel", um trajeto aberto.
 > acessos a uma matriz de `int` que mora num bloco contínuo de 6 × 6 × 4 =
 > 144 bytes. Como cada rua é empilhada e desempilhada uma vez, a pilha nunca
 > passa de E + 1 posições, e por isso `pilha[MAX_RUAS + 1]` cabe na pilha do
-> programa sem `malloc`.
- A busca do próximo vizinho recomeça do 0
+> programa sem `malloc`. A busca do próximo vizinho recomeça do 0
 > a cada volta; com lista de adjacência e um ponteiro "próxima aresta" por
 > vértice, o total cai para O(V + E).
 
@@ -738,17 +737,15 @@ quando a resposta é "não".
 > Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico.
 > O programa continua compilando e rodando, mas cada agência visitada numa
 > tentativa que falhou fica "queimada" para as tentativas seguintes, e ele
-> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug. E lembre: euleriano é sobre **arestas**; hamiltoniano, sobre
-> **vértices**.
+> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug.
 
 > [!TIP]
 > **Por dentro do C:** a recursão desce no máximo V níveis, então a pilha de
 > chamadas nunca passa de V frames de `hamilton`, cada um com `pos`, `v` e o
-> endereço de retorno. O que explode não é a memória, é o **tempo**: o número
-> de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
+> endereço de retorno. A memória fica pequena; o que explode é o
+> **tempo**: o número de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
 > compartilhados por todas as chamadas, e por isso cada uma precisa desfazer
-> o que fez antes de voltar.
- O `long` em `chamadas` está ali porque
+> o que fez antes de voltar. O `long` em `chamadas` está ali porque
 > 13! já não cabe num `int` de 32 bits.
 
 > [!NOTE]
@@ -1253,8 +1250,7 @@ parecem iguais; o que as separa é o `>` contra o `>=`.
 > **Por dentro do C:** `tin`, `low` e `corte` são vetores globais, zerados
 > antes do `main`, e por isso `tin[v] == 0` serve de "não visitado". A
 > variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e
-> por isso a contagem da raiz não se mistura com a dos outros vértices.
-
+> assim a contagem da raiz não se mistura com a dos outros vértices.
 > A recursão pode descer V níveis; numa rede com um milhão de bairros em fila
 > isso estoura a pilha (8 MB por padrão no Linux), e a versão de produção
 > troca a recursão por uma pilha explícita.
@@ -2263,9 +2259,8 @@ exatamente o valor de um Pix.
 
 > [!WARNING]
 > **NP não quer dizer "não polinomial".** Quer dizer *polinomial não
-> determinístico*: um "chute" certo verificado em tempo polinomial. Todo
-> problema de P está em NP. Outro tropeço de prova: NP-completo não é
-> "impossível", é "não se conhece algoritmo polinomial". E reduzir A a B
+> determinístico*: um "chute" certo verificado em tempo polinomial. Outro
+> tropeço de prova: NP-completo não é "impossível", é "não se conhece algoritmo polinomial". E reduzir A a B
 > mostra que B é **pelo menos tão difícil** quanto A, não o contrário (0187).
 
 > [!TIP]
@@ -2812,7 +2807,6 @@ caminho hamiltoniano a ciclo hamiltoniano.
 > **Por dentro do C:** os conjuntos são máscaras de bits num `int`: o bit
 > `v` ligado quer dizer "v está no grupo". O complemento de um conjunto é
 > `todos & ~comissao`, em que `todos = (1 << V) - 1` tem os V bits de baixo
-
 > ligados; sem o `& todos`, o `~` ligaria também os 26 bits de cima. Já o
 > complemento do **grafo** é outra matriz, `paz[a][b] = a != b && !briga[a][b]`:
 > o `a != b` evita o laço de um vértice para ele mesmo.
@@ -3902,7 +3896,7 @@ aproximada e mostra quanto ela melhora.
 > atalho da pré-ordem pode sair muito mais caro que a volta pela árvore, e
 > nenhum algoritmo polinomial tem fator constante, a menos que P = NP. E não
 > confunda: Held-Karp é **exato** e exponencial; a árvore é **aproximada**
-> e polinomial. Nenhum dos dois é "rápido e exato".
+> e polinomial.
 
 > [!TIP]
 > **Por dentro do C:** `dp[1 << N][N]` e `ant[1 << N][N]` são globais: 256 × 8

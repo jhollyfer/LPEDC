@@ -631,8 +631,7 @@ houve uma conversão, e a pergunta real é sobre 4294967295:
 > **Por dentro do C:** o processador usa o **complemento de dois**: o negativo
 > de `x` é `~x + 1`. Com isso, somar com ou sem sinal é **a mesma
 > instrução** (`add`), e a conversão entre `int` e `unsigned` não custa
-> nada: os bits ficam iguais.
- O que muda é a instrução que lê o
+> nada: os bits ficam iguais. O que muda é a instrução que lê o
 > resultado: comparações com sinal usam `jl`/`jg`, sem sinal usam `jb`/`ja`,
 > e o deslocamento à direita vira `sar` (copia o bit de sinal: `-16 >> 2` dá
 > -4 no gcc) ou `shr` (entra zero). Deslocar um negativo para a direita é
@@ -1079,8 +1078,7 @@ deu certo:
 
 > [!WARNING]
 > O VLA não avisa quando falha. O `malloc` devolve `NULL` se não houver
-> memória; o VLA pede o espaço à pilha
-, e a pilha de um programa
+> memória; o VLA pede o espaço à pilha, e a pilha de um programa
 > no Linux tem uns **8 MB** (confira com `ulimit -s`). Um `int v[n]` com `n`
 > igual a 3 milhões pede 12 MB e derruba o programa com *segmentation
 > fault*, sem chance de tratar. E um `n` que veio do usuário pode ser 0,
@@ -1300,7 +1298,7 @@ transposta (3 x 2):
 **Dicas:**
 
 1. Um VLA não aceita "= {...}": preencha com a[i][j] = i * c + j + 1.
-2. Repare que t tem as dimensões trocadas: t[c][l].
+2. Cuidado: t tem as dimensões trocadas, t[c][l].
 3. Cada número com %3d.
 4. Resposta esperada: a saída acima.
 
@@ -1538,9 +1536,8 @@ int main(void) {
 ```
 
 O fluxograma responde "pode `REUNIAO | IMPRIMIR`?" com um laço pela equipe e
-uma única comparação de bits por pessoa.
- A máscara pode ter uma
-permissão ou cinco, e o custo é o mesmo:
+uma única comparação de bits por pessoa. A máscara pode ter uma permissão ou
+cinco, e o custo é o mesmo:
 
 <p align="center"><img src="27-c-detalhes/0173-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o controle de acesso" width="553"></p>
 

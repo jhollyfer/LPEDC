@@ -5,8 +5,8 @@
 Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
 mais direto: o que funciona e cabe numa primeira leitura. Este módulo volta
 a essas três estruturas e preenche o que ficou de fora, com o olhar do
-Cormen, o livro da prova do PPGI. Não há estrutura nova, e sim as versões
-que aparecem nos livros, nas bibliotecas e nas questões de concurso.
+Cormen, o livro da prova do PPGI. As estruturas são as mesmas, agora nas
+versões que aparecem nos livros, nas bibliotecas e nas questões de concurso.
 
 Três ideias atravessam o módulo. A primeira é a **sentinela**: um nó falso que
 fica onde estaria o `NULL` e apaga os casos especiais do código, na lista
@@ -216,8 +216,7 @@ passa pelo 12 e pelo 7 e para na sentinela, que estava com 40 guardado. A
 > [!WARNING]
 > A sentinela **não é um dado**. Todo laço que percorre a lista para quando
 > volta a ela (`x != &L->nil`), e nunca começa por ela: o primeiro nó real
-> é `L->nil.prox`.
- Se você escrever `for (x = &L->nil; ...)`, mostra um valor
+> é `L->nil.prox`. Se você escrever `for (x = &L->nil; ...)`, mostra um valor
 > lixo (ou a última chave buscada, por causa do truque da busca). E nunca
 > passe `&L->nil` para `sent_remove`: ela não foi alocada com `malloc`, e o
 > `free` derruba o programa.
@@ -435,7 +434,7 @@ chama 3: [ ]
 A agenda do dentista guarda os horários do dia (em HHMM) em ordem. Escreva
 insere_ordenado(L, h), que anda a partir de L->nil.prox enquanto não voltou
 à sentinela e a chave é menor que h, e então insere antes do nó onde
-parou, com sent_insere_apos(L, p->ant, h). Repare que vale para a lista
+parou, com sent_insere_apos(L, p->ant, h). Isso vale para a lista
 vazia, para o começo e para o fim, sem nenhum caso especial. Insira 1400,
 900, 1630, 800 e 1100 e mostre a lista depois de cada um.
 
@@ -1180,8 +1179,7 @@ era filho direito do 12) como filho esquerdo.
 > **Por dentro do C:** a remoção recursiva empilha uma chamada por nível,
 > cerca de 1,44 · log₂ n quadros no pior caso da AVL: para um milhão de chaves,
 > menos de 30 quadros, nada perto de estourar a pilha. No caso dos dois
-> filhos,
- o código **copia a chave** do sucessor e libera o nó
+> filhos, o código **copia a chave** do sucessor e libera o nó
 > dele, em vez de religar ponteiros: é mais simples, mas qualquer ponteiro
 > que alguém guardava para o nó do sucessor fica apontando para memória
 > liberada. Se o seu programa guarda `NoA *` fora da árvore, troque a cópia
@@ -1637,8 +1635,7 @@ existe, que custa O(log n) e que faz no máximo **três rotações**.
 > **Por dentro do C:** o `NoVP` tem 32 bytes: 4 da chave, 4 do `enum` da cor e
 > três ponteiros de 8. A sentinela é **um nó só** dentro da `ArvVP`, e todo
 > ponteiro "vazio" da árvore aponta para o endereço `&T->nil`: mil folhas,
-> zero bytes a mais. Como a sentinela é um nó real, o código
- pode **ler**
+> zero bytes a mais. Como a sentinela é um nó real, o código pode **ler**
 > `tio->cor` sem testar `NULL`, e a rotação pode até **escrever** no
 > `nil.pai` sem estragar nada (a remoção do Cormen usa isso). Compare com a
 > LLRB do 0145: 24 bytes por nó e nenhum `pai`, mas o conserto é recursivo e
@@ -1748,7 +1745,7 @@ int main(void) {
 
 Insira os pacotes 1 a 10, em ordem, numa rubro-negra (vermelhopreto.h) e
 escreva conta_vermelhos(T, x), que percorre a subárvore de x e conta os
-nós vermelhos. Repare que a recursão para na sentinela (x == &T->nil), e
+nós vermelhos. A recursão para na sentinela (x == &T->nil), e
 não em NULL. Mostre a pré-ordem, os vermelhos, os pretos e a altura negra.
 
 
@@ -1933,7 +1930,7 @@ os fardos numa tabela hash de 16 baldes com `k % 16`, a função do 0105. Result
 os dez fardos caem **todos no balde 0**. A tabela virou uma lista, e a busca
 voltou a ser O(n).
 
-A culpa não é das chaves, é do `m`. O Cormen descreve duas famílias clássicas
+O problema está no `m`. O Cormen descreve duas famílias clássicas
 de função hash para chaves inteiras, e cada uma tem a sua regra para escolher
 `m`.
 
@@ -2233,7 +2230,7 @@ k = 8: k*A = 4.9443 | fração 0.9443 | balde 9
 
 1. "mod 1" é tirar a parte inteira: produto - floor(produto).
 2. A conversão (int) do m * fração já faz o floor (o valor é positivo).
-3. Resposta esperada: a saída acima. Repare como chaves seguidas pulam
+3. Resposta esperada: a saída acima. Veja como chaves seguidas pulam
    pela tabela inteira.
 
 ```bash
@@ -2495,8 +2492,7 @@ está livre:
 > por vez e caem na mesma linha de cache de 64 bytes: oito sondagens custam
 > uma ida à memória. Na quadrática e na dupla, cada sondagem pula para longe e
 > costuma custar uma ida nova. É a troca de sempre: menos sondagens contra
-> sondagens mais caras. E o `(long)i * i` tem motivo:
- com `m` grande, `i * i`
+> sondagens mais caras. E o `(long)i * i` tem motivo: com `m` grande, `i * i`
 > em `int` pode estourar, e estouro de `int` é comportamento indefinido.
 
 > [!NOTE]

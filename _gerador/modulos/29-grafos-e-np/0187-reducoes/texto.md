@@ -132,7 +132,6 @@ caminho hamiltoniano a ciclo hamiltoniano.
 > **Por dentro do C:** os conjuntos são máscaras de bits num `int`: o bit
 > `v` ligado quer dizer "v está no grupo". O complemento de um conjunto é
 > `todos & ~comissao`, em que `todos = (1 << V) - 1` tem os V bits de baixo
-
 > ligados; sem o `& todos`, o `~` ligaria também os 26 bits de cima. Já o
 > complemento do **grafo** é outra matriz, `paz[a][b] = a != b && !briga[a][b]`:
 > o `a != b` evita o laço de um vértice para ele mesmo.

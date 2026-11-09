@@ -126,8 +126,7 @@ passa pelo 12 e pelo 7 e para na sentinela, que estava com 40 guardado. A
 > [!WARNING]
 > A sentinela **não é um dado**. Todo laço que percorre a lista para quando
 > volta a ela (`x != &L->nil`), e nunca começa por ela: o primeiro nó real
-> é `L->nil.prox`.
- Se você escrever `for (x = &L->nil; ...)`, mostra um valor
+> é `L->nil.prox`. Se você escrever `for (x = &L->nil; ...)`, mostra um valor
 > lixo (ou a última chave buscada, por causa do truque da busca). E nunca
 > passe `&L->nil` para `sent_remove`: ela não foi alocada com `malloc`, e o
 > `free` derruba o programa.

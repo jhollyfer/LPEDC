@@ -19,7 +19,7 @@
 // Dicas:
 // 1. "mod 1" é tirar a parte inteira: produto - floor(produto).
 // 2. A conversão (int) do m * fração já faz o floor (o valor é positivo).
-// 3. Resposta esperada: a saída acima. Repare como chaves seguidas pulam
+// 3. Resposta esperada: a saída acima. Veja como chaves seguidas pulam
 //    pela tabela inteira.
 //
 // Escreva sua resposta abaixo:

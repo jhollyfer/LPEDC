@@ -17,8 +17,8 @@ a lista um pouco para a próxima.
 
 O assunto final coloca tudo na mesma bancada: BST, AVL, skip list e lista com
 mover para a frente respondem ao mesmo teste, atrás da mesma interface de
-ponteiros para função. Não existe estrutura melhor em abstrato, só a melhor
-**para aquele padrão de uso**, e o jeito honesto de descobrir é medir.
+ponteiros para função. A melhor estrutura depende do padrão de uso, e para
+descobrir qual é, o jeito honesto é medir.
 
 ## O que você vai aprender
 
@@ -109,7 +109,6 @@ typedef struct {
 Ler `m[i][j]` é percorrer a lista da linha `i` até passar da coluna `j`. Se a
 célula não aparecer, a resposta é 0. Gravar é uma **inserção ordenada** (assunto
 0078) com uma regra a mais: gravar 0 numa célula que existe **remove** a célula.
-Se o zero ficasse guardado, a matriz ia engordando com nada dentro.
 
 Uma locadora pequena tem 4 clientes (Ana, Bruno, Carla e
 Davi, linhas 0 a 3) e 8 filmes (colunas 0 a 7). Chegam seis notas; depois Bruno
@@ -502,7 +501,7 @@ Ache a linha errada, conserte e rode de novo.
 
 **Dicas:**
 
-1. Repare quem sumiu: 30, 20 e 40. Os valores 20, 15 e 12 entram ANTES de
+1. Veja quem sumiu: 30, 20 e 40. Os valores 20, 15 e 12 entram ANTES de
    todas as células que já estavam na linha. Siga o caso ant == NULL.
 2. Quando a célula nova vira a primeira da linha, para onde aponta
    nova->prox? E o que acontece com as células que já estavam lá?
@@ -1086,7 +1085,7 @@ Memória dos nós: 176 bytes
 
 Na cozinha, o sal e o óleo ficam na frente do armário, e o cravo que você usa uma
 vez por ano fica lá no fundo. Ninguém planejou isso: cada vez que você usa um
-pote, ele volta para a frente. Com o tempo, o armário se arruma sozinho pelo uso.
+pote, ele volta para a frente.
 
 A busca sequencial (assunto 0089) custa a **posição** do item: o primeiro sai com
 1 comparação, o décimo com 10. Se todo item fosse procurado com a mesma
@@ -1096,8 +1095,8 @@ estivessem na frente, a busca média cairia muito.
 
 Só que você não sabe de antemão quem são os mais procurados, e isso muda com
 o tempo. A **lista autoajustável** descobre sozinha: a cada busca
-bem-sucedida, ela muda a ordem para aproximar o item achado do começo. A busca
-deixa de ser só leitura; ela também arruma. Há três políticas clássicas:
+bem-sucedida, ela muda a ordem para aproximar o item achado do começo, então a
+busca também escreve na lista. Há três políticas clássicas:
 
 - **mover para a frente** (*move-to-front*): o item achado vira o primeiro.
   Reage rápido, mas um item procurado uma única vez também vai parar na frente;
@@ -1538,7 +1537,7 @@ Acertos: 3, faltas: 7
 2. Na falta, crie o nó no início e some 1 no tamanho. Se o tamanho passar
    de 3, ande até o penúltimo nó, libere o último e ponha NULL no prox do
    penúltimo.
-3. Resposta esperada: a saída acima. Repare na foto 3 do sexto pedido:
+3. Resposta esperada: a saída acima. Olhe a foto 3 do sexto pedido:
    ela já tinha estado no cache, mas saiu antes de ser pedida de novo.
 
 ```bash

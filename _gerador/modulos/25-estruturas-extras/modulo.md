@@ -15,8 +15,8 @@ a lista um pouco para a próxima.
 
 O assunto final coloca tudo na mesma bancada: BST, AVL, skip list e lista com
 mover para a frente respondem ao mesmo teste, atrás da mesma interface de
-ponteiros para função. Não existe estrutura melhor em abstrato, só a melhor
-**para aquele padrão de uso**, e o jeito honesto de descobrir é medir.
+ponteiros para função. A melhor estrutura depende do padrão de uso, e para
+descobrir qual é, o jeito honesto é medir.
 
 ## O que você vai aprender
 

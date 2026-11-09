@@ -33,7 +33,7 @@
 // 2. Na falta, crie o nó no início e some 1 no tamanho. Se o tamanho passar
 //    de 3, ande até o penúltimo nó, libere o último e ponha NULL no prox do
 //    penúltimo.
-// 3. Resposta esperada: a saída acima. Repare na foto 3 do sexto pedido:
+// 3. Resposta esperada: a saída acima. Olhe a foto 3 do sexto pedido:
 //    ela já tinha estado no cache, mas saiu antes de ser pedida de novo.
 //
 // Escreva sua resposta abaixo:

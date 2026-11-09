@@ -116,8 +116,7 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 > (2,4 bilhões) caiba num `long`. Estouro de `int` com sinal é comportamento
 > indefinido: o programa pode mostrar um número negativo ou qualquer outra
 > coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. Outro
-> detalhe: com `-O2`
-, o compilador pode reconhecer o laço que só
+> detalhe: com `-O2`, o compilador pode reconhecer o laço que só
 > incrementa um contador e trocar os dois `for` pela própria fórmula
 > fechada. O laço de Θ(n²) vira uma conta de Θ(1) no código de máquina.
 

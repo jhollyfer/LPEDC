@@ -155,8 +155,7 @@ era filho direito do 12) como filho esquerdo.
 > **Por dentro do C:** a remoção recursiva empilha uma chamada por nível,
 > cerca de 1,44 · log₂ n quadros no pior caso da AVL: para um milhão de chaves,
 > menos de 30 quadros, nada perto de estourar a pilha. No caso dos dois
-> filhos,
- o código **copia a chave** do sucessor e libera o nó
+> filhos, o código **copia a chave** do sucessor e libera o nó
 > dele, em vez de religar ponteiros: é mais simples, mas qualquer ponteiro
 > que alguém guardava para o nó do sucessor fica apontando para memória
 > liberada. Se o seu programa guarda `NoA *` fora da árvore, troque a cópia

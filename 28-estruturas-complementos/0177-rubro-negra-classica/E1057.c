@@ -3,7 +3,7 @@
 //
 // Insira os pacotes 1 a 10, em ordem, numa rubro-negra (vermelhopreto.h) e
 // escreva conta_vermelhos(T, x), que percorre a subárvore de x e conta os
-// nós vermelhos. Repare que a recursão para na sentinela (x == &T->nil), e
+// nós vermelhos. A recursão para na sentinela (x == &T->nil), e
 // não em NULL. Mostre a pré-ordem, os vermelhos, os pretos e a altura negra.
 //
 //   Saída esperada:

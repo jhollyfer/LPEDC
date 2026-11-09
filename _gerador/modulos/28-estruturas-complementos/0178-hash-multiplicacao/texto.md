@@ -6,7 +6,7 @@ os fardos numa tabela hash de 16 baldes com `k % 16`, a função do 0105. Result
 os dez fardos caem **todos no balde 0**. A tabela virou uma lista, e a busca
 voltou a ser O(n).
 
-A culpa não é das chaves, é do `m`. O Cormen descreve duas famílias clássicas
+O problema está no `m`. O Cormen descreve duas famílias clássicas
 de função hash para chaves inteiras, e cada uma tem a sua regra para escolher
 `m`.
 

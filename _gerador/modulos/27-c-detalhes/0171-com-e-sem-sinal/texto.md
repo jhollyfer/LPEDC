@@ -93,8 +93,7 @@ houve uma conversão, e a pergunta real é sobre 4294967295:
 > **Por dentro do C:** o processador usa o **complemento de dois**: o negativo
 > de `x` é `~x + 1`. Com isso, somar com ou sem sinal é **a mesma
 > instrução** (`add`), e a conversão entre `int` e `unsigned` não custa
-> nada: os bits ficam iguais.
- O que muda é a instrução que lê o
+> nada: os bits ficam iguais. O que muda é a instrução que lê o
 > resultado: comparações com sinal usam `jl`/`jg`, sem sinal usam `jb`/`ja`,
 > e o deslocamento à direita vira `sar` (copia o bit de sinal: `-16 >> 2` dá
 > -4 no gcc) ou `shr` (entra zero). Deslocar um negativo para a direita é
