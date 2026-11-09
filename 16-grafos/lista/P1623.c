@@ -37,7 +37,7 @@
 //    enquanto o pai tiver dist maior.
 // 4. Ao contrário do heap "preguiçoso" (que empurra cópias), aqui o heap
 //    nunca passa de V itens e cada vértice sai uma vez só: V extrações.
-// 5. Resposta esperada: 8 extrações e 9 diminuir-chave; Itacoatiara a 250
+// 5. Resposta esperada: 8 extrações e 10 diminuir-chave; Itacoatiara a 250
 //    km, por Rio Preto da Eva.
 //
 // Escreva sua resposta abaixo:

@@ -13,7 +13,7 @@
 // - o trajeto completo Loja -> ... -> Farmácia -> ... -> Cliente e o tempo;
 // - quantos minutos a parada custou a mais;
 // - o tempo de volta da Farmácia para a Loja, que NÃO é igual ao de ida
-//   (mão única).
+// (mão única).
 //
 //   Saída esperada:
 //   Direto: Loja -> Praca -> Igreja -> Cliente (14 min)

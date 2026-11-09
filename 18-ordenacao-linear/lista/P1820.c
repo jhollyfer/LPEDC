@@ -20,11 +20,11 @@
 //
 // Dicas:
 // 1. O vetor C com 1 milhão de int ocupa 4 MB: deixe-o static.
-// 2. O merge sort faz por volta de n lg n ≈ 10 mil comparações para n = 1000,
-//    qualquer que seja k.
-// 3. O ponto de virada fica onde 2n + k ≈ n lg n: com n = 1000, k na casa de
-//    8 mil. Para chaves grandes (CPF, telefone), use radix sort, que quebra a
-//    chave em dígitos pequenos.
+// 2. O merge sort faz pouco menos que n lg n ≈ 10 mil comparações para
+//    n = 1000 (perto de 8700), qualquer que seja k.
+// 3. O ponto de virada fica onde 2n + k ≈ comparações do merge: com n = 1000,
+//    k na casa de 7 mil. Para chaves grandes (CPF, telefone), use radix sort,
+//    que quebra a chave em dígitos pequenos.
 // 4. Resposta esperada: counting ganha com k = 10 e k = 1000 (2010 e 3000
 //    operações); merge ganha com k = 100000 e 1000000.
 //

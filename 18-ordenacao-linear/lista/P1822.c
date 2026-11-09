@@ -6,17 +6,21 @@
 // counting sort e, dentro de cada grupo, resolve RECURSIVAMENTE pela segunda
 // letra, e assim por diante. Uma string que já acabou (o '\0' na posição d)
 // vai para o grupo 0 e fica antes de todas as que continuam: é por isso que
-// "manaus" vem antes de "manausmoderna".
+// "mana" viria antes de "manaus".
 //
 // Escreva msd(v, ini, fim, d), que ordena os ponteiros v[ini..fim] olhando a
 // posição d (grupos de 0 a 256, com o caractere + 1 e 0 para o fim da string),
-// com um vetor auxiliar de ponteiros. Ordene os 15 municípios do esqueleto,
-// conte as chamadas recursivas, mostre os grupos do primeiro nível (a letra e
-// quantos nomes) e o vetor final, e confira com strcmp que ficou em ordem.
+// com um vetor auxiliar de ponteiros (pode acrescentar um parâmetro que diga
+// se a chamada mostra os grupos, para só a primeira mostrar). Ordene os 15 municípios do esqueleto,
+// conte as chamadas, mostre os grupos do primeiro nível (a letra e quantos
+// nomes) e o vetor final (5 por linha), e confira com strcmp que ficou em
+// ordem.
 //
 //   Saída esperada:
 //   Primeiro nível: b(2) c(3) h(1) i(2) m(4) p(1) t(2)
-//   barcelos borba careiro coari codajas humaita iranduba itacoatiara manacapuru manaus manicore maues parintins tabatinga tefe
+//   barcelos borba careiro coari codajas
+//   humaita iranduba itacoatiara manacapuru manaus
+//   manicore maues parintins tabatinga tefe
 //   Chamadas: 10 | em ordem pelo strcmp: sim
 //
 // Dicas:

@@ -15,11 +15,11 @@
 // Escreva:
 //
 // 1. mult_blocos(), recursiva com as 8 chamadas (trabalhe com deslocamentos
-//    de linha e coluna nas matrizes globais, sem copiar blocos), contando as
-//    multiplicações escalares;
+// de linha e coluna nas matrizes globais, sem copiar blocos), contando as
+// multiplicações escalares;
 // 2. a conferência com o laço triplo para n = 2, 4, 8 e 16;
 // 3. a tabela de n³ e 7^(lg n) para n = 2, 4, ..., 1024, calculada pelas
-//    recorrências, com a razão entre elas.
+// recorrências, com a razão entre elas.
 //
 //   Saída esperada:
 //   n =  2:    8 multiplicações (n³ =    8), igual ao laço triplo: sim

@@ -21,9 +21,9 @@
 //    na árvore da DFS. Subir de u por pai[] até v percorre o ciclo.
 // 3. Use uma variável global achou para parar a DFS assim que o ciclo for
 //    mostrado.
-// 4. Resposta esperada: o ciclo Valvula -> Caixa -> Escola -> Posto -> Valvula
-//    (mostrado a partir de quem fecha o ciclo, subindo até Valvula) e, sem o
-//    cano, "sem ciclo".
+// 4. Resposta esperada: Posto -> Escola -> Caixa -> Valvula -> Posto (a DFS
+//    desce Reservatorio, Valvula, Caixa, Escola, Posto, e Posto enxerga
+//    Valvula) e, sem o cano, "sem ciclo".
 //
 // Escreva sua resposta abaixo:
 

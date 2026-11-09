@@ -9,9 +9,9 @@
 // Dois jeitos de achar quem sobra:
 //
 // - SIMULAR com uma lista circular encadeada (malloc): n - 1 remoções, cada
-//   uma com um passo de ponteiro: Θ(n) passos.
+// uma com um passo de ponteiro: Θ(n) passos.
 // - RECORRER: J(1) = 1, J(2m) = 2 J(m) - 1 e J(2m + 1) = 2 J(m) + 1. Uma
-//   chamada com n/2: C(n) = C(n/2) + 1 = ⌊lg n⌋ + 1 chamadas.
+// chamada com n/2: C(n) = C(n/2) + 1 = ⌊lg n⌋ + 1 chamadas.
 //
 // Escreva os dois, contando passos e chamadas, e confira com a fórmula
 // fechada J(n) = 2(n - 2^⌊lg n⌋) + 1. Rode para n = 5, 10, 41, 1000 e

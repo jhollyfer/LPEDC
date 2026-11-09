@@ -6,12 +6,12 @@
 // coisas:
 //
 // 1. Acrescente um contador global consultas que soma 1 a cada vez que a BFS
-//    OLHA uma posição adj[u][v] da matriz.
+// OLHA uma posição adj[u][v] da matriz.
 // 2. Escreva bfs_lista(), a mesma BFS sobre uma lista de adjacência com
-//    malloc, contando 1 a cada nó de lista visitado.
+// malloc, contando 1 a cada nó de lista visitado.
 // 3. Rode as duas num "grafo caminho" (a linha de ônibus que vai parando:
-//    0-1, 1-2, ..., (n-2)-(n-1)) com n = 10, 100 e 1000, conferindo que as
-//    duas BFS dão o mesmo d[n - 1].
+// 0-1, 1-2, ..., (n-2)-(n-1)) com n = 10, 100 e 1000, conferindo que as
+// duas BFS dão o mesmo d[n - 1].
 //
 //   Saída esperada:
 //   n =   10: matriz d =   9,     100 consultas | lista d =   9,   18 consultas

@@ -3,11 +3,12 @@
 //
 // Um app de geografia quer mostrar os rios do esqueleto agrupados pelo
 // NÚMERO DE LETRAS do nome, do mais curto para o mais longo, e, dentro de
-// cada tamanho, na ordem em que estão na lista (que é por extensão do rio).
+// cada tamanho, na ordem em que estão na lista.
 //
 // Ordene o vetor de strings (const char *) com counting sort estável pela
 // chave strlen(nome). Os nomes têm até 12 letras. Mostre os grupos com o
-// tamanho na frente e, depois, o vetor C acumulado.
+// tamanho na frente e, depois, o vetor C como fica no fim da colocação:
+// com os decrementos, cada C[x] passa a apontar o INÍCIO do bloco x.
 //
 //   Saída esperada:
 //   3 letras: Ica

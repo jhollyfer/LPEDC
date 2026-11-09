@@ -34,8 +34,8 @@
 // 3. A média ponderada minimiza a soma dos QUADRADOS das distâncias, não a
 //    soma das distâncias: aqui ela perde.
 // 4. Resposta esperada: mediana ponderada no km 21, com custo 206; a força
-//    bruta concorda; a mediana simples (km 12) custa 248 e a média (km 17),
-//    226.
+//    bruta concorda; a mediana simples (km 12) custa 245 e a média (km 17),
+//    220.
 //
 // Escreva sua resposta abaixo:
 

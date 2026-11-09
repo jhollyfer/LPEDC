@@ -19,9 +19,9 @@
 // 2. Cada passada tem de ser ESTÁVEL. Com --c[d], a colocação precisa andar
 //    de trás para frente; da frente para trás, os empates de cada dígito
 //    saem invertidos e a ordem das passadas anteriores se perde.
-// 3. Para achar o erro 2, rode à mão uma passada com dois números de mesmo
-//    dígito: 120 e 340 na passada das dezenas... não, das unidades (os dois
-//    terminam em 0).
+// 3. Para ver o erro 2, faça à mão a passada das unidades: 870, 12400, 120,
+//    9800 e 340 terminam em 0. Da frente para trás com --c[0], o 870 vai para
+//    a última vaga do bloco, e eles saem na ordem inversa.
 // 4. Resposta esperada: 45 120 340 870 1250 3005 9800 12400.
 //
 // Escreva sua resposta abaixo:
@@ -45,7 +45,7 @@ int main(void) {
     for (int x = peso[0]; x > 0; x /= 10) digitos++;
     for (int k = 0, div = 1; k < digitos; k++, div *= 10) passada(peso, N, div);
 
-    for (int i = 0; i < N; i++) printf("%d ", peso[i]);
+    for (int i = 0; i < N; i++) printf("%s%d", i ? " " : "", peso[i]);
     printf("\n");
     return 0;
 }

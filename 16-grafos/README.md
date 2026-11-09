@@ -2977,6 +2977,10 @@ só a fila vira "o menor `dist` primeiro", com `dist[u] + custo(v)` no lugar de
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/16-grafos/lista/`.
+
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a

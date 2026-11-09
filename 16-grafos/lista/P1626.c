@@ -14,9 +14,9 @@
 // - a expressão de parênteses;
 // - d/f de cada vértice;
 // - quantos pares {u, v} têm intervalos aninhados, quantos disjuntos e
-//   quantos se cruzam "pela metade" (tem de dar 0);
+// quantos se cruzam "pela metade" (tem de dar 0);
 // - os descendentes de B pelo teste dos intervalos e, para conferir, subindo
-//   por pi[] de cada vértice até achar (ou não) o B.
+// por pi[] de cada vértice até achar (ou não) o B.
 //
 //   Saída esperada:
 //   (A (B (C (D (E E) D) C) B) A) (F F) (G (H H) G)

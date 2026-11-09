@@ -39,7 +39,7 @@ int main(void) {
     msd(mun, 0, N - 1, 0, 1);
     int ok = 1;
     for (int i = 0; i < N; i++) {
-        printf("%s%s", i ? " " : "", mun[i]);
+        printf("%s%s", i % 5 ? " " : (i ? "\n" : ""), mun[i]); // 5 por linha
         if (i > 0 && strcmp(mun[i - 1], mun[i]) > 0) ok = 0;
     }
     printf("\nChamadas: %ld | em ordem pelo strcmp: %s\n", chamadas, ok ? "sim" : "não");

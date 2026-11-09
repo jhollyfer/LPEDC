@@ -15,7 +15,7 @@
 // - T(n) e T(n) / (n lg n) para n = 10, 100, ..., 1000000;
 // - o maior valor de T(n) / (n lg n) para 2 <= n <= 1000000, e em que n;
 // - a conferência da fórmula exata do pior caso do merge sort:
-//   T(n) = n ⌈lg n⌉ - 2^⌈lg n⌉ + 1, para todo n de 1 a 1000000.
+// T(n) = n ⌈lg n⌉ - 2^⌈lg n⌉ + 1, para todo n de 1 a 1000000.
 //
 //   Saída esperada:
 //         n          T(n)  T/(n lg n)

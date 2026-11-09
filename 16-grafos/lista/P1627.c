@@ -5,12 +5,12 @@
 // (grafo DIRIGIDO). A prefeitura quer duas respostas:
 //
 // 1. O FECHO TRANSITIVO: alc[u][v] == 1 se dá para ir de u até v (u sempre
-//    alcança a si mesmo). Calcule rodando uma BFS a partir de CADA vértice:
-//    V buscas de O(V + E) cada, com lista de adjacência. Use a matriz só
-//    para guardar o resultado.
+// alcança a si mesmo). Calcule rodando uma BFS a partir de CADA vértice:
+// V buscas de O(V + E) cada, com lista de adjacência. Use a matriz só
+// para guardar o resultado.
 // 2. Os GRUPOS DE IDA E VOLTA: u e v estão no mesmo grupo quando alc[u][v] e
-//    alc[v][u]. Mostre cada grupo uma vez (rotule com o menor índice) e diga
-//    quantos pares (u, v), u != v, têm caminho de u para v.
+// alc[v][u]. Mostre cada grupo uma vez (rotule com o menor índice) e diga
+// quantos pares (u, v), u != v, têm caminho de u para v.
 //
 //   Saída esperada:
 //   de \ para    0 1 2 3 4 5 6

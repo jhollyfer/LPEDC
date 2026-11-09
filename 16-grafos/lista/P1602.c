@@ -9,7 +9,7 @@
 //
 // - monte a matriz de adjacência m[V][V] a partir de voos[];
 // - mostre, para cada capital, o grau de SAÍDA (voos que partem) e o grau de
-//   ENTRADA (voos que chegam);
+// ENTRADA (voos que chegam);
 // - confira que as duas somas dão o número de voos;
 // - mostre o "hub" (a capital com o maior grau de entrada);
 // - conte os pares de capitais com voo nos DOIS sentidos.

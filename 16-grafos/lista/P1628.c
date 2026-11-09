@@ -11,7 +11,7 @@
 // - V, E e o número de componentes;
 // - cada cabo que fecha ciclo (aresta de retorno, mostrada uma vez só);
 // - se é árvore; se não for, quantos cabos sobram (E - (V - componentes)) e
-//   quantos faltam para ligar tudo (componentes - 1).
+// quantos faltam para ligar tudo (componentes - 1).
 //
 // Rode nas três redes do esqueleto.
 //
@@ -39,8 +39,8 @@
 // 3. A rede B é a pegadinha: tem 5 cabos (V - 1), mas um ciclo e dois
 //    componentes.
 // 4. Resposta esperada: A é árvore; B tem 2 componentes e o ciclo fechado por
-//    ICE-Reitoria; C tem 2 cabos sobrando (Hospital-Reitoria e
-//    Restaurante-Biblioteca, pela ordem da DFS).
+//    ICE-Reitoria; C tem 2 cabos sobrando (Restaurante-Biblioteca e
+//    Hospital-Reitoria, nessa ordem da DFS).
 //
 // Escreva sua resposta abaixo:
 

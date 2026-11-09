@@ -9,12 +9,12 @@
 //
 // 1. gere a LISTA DE ARESTAS da grade (cada rua uma vez, como par u-v);
 // 2. converta a lista de arestas em MATRIZ de adjacência e em LISTA de
-//    adjacência (malloc);
+// adjacência (malloc);
 // 3. rode a BFS a partir da esquina 0 nas duas representações, contando as
-//    consultas (posições da matriz olhadas / nós de lista visitados), e
-//    confira que o d[] de todos os 900 vértices bate;
+// consultas (posições da matriz olhadas / nós de lista visitados), e
+// confira que o d[] de todos os 900 vértices bate;
 // 4. mostre a memória de cada representação, calculada com sizeof, e quanto
-//    a matriz ocuparia numa grade de 1000 × 1000.
+// a matriz ocuparia numa grade de 1000 × 1000.
 //
 //   Saída esperada:
 //   V = 900, E = 1740

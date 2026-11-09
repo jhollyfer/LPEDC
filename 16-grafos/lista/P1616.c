@@ -30,9 +30,8 @@
 // 2. Na matriz, peso 0 quer dizer "não há aresta". Um relaxamento que não
 //    testa isso acha que existe uma balsa de 0 horas entre quaisquer duas
 //    cidades.
-// 3. Um bom teste: Tefe não tem balsa direta de Manaus. Se aparecer com o
-//    mesmo tempo de alguma vizinha, o relaxamento está usando arestas que não
-//    existem.
+// 3. Um bom teste: Tefe não tem balsa direta de Manaus. Se aparecer com 0 h,
+//    o relaxamento está usando uma aresta que não existe.
 // 4. Resposta esperada: Manacapuru 3 h, Itacoatiara 6 h, Parintins 16 h,
 //    Coari 23 h, Tefe 35 h.
 //

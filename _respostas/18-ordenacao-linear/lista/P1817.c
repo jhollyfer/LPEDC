@@ -23,7 +23,7 @@ int main(void) {
     for (int x = maior; x > 0; x /= 10) digitos++; // erro 1: os dígitos do MAIOR
     for (int k = 0, div = 1; k < digitos; k++, div *= 10) passada(peso, N, div);
 
-    for (int i = 0; i < N; i++) printf("%d ", peso[i]);
+    for (int i = 0; i < N; i++) printf("%s%d", i ? " " : "", peso[i]);
     printf("\n");
     return 0;
 }

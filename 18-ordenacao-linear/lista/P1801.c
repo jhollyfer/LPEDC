@@ -8,7 +8,7 @@
 // 1. C depois da contagem (C[x] = quantas crianças têm x anos);
 // 2. C depois das somas acumuladas (C[x] = quantas têm idade <= x);
 // 3. cada passo da colocação, de trás para frente: o valor, a posição em que
-//    ele entra na saída B e o vetor C logo depois;
+// ele entra na saída B e o vetor C logo depois;
 // 4. o vetor B no fim.
 //
 // Use posições de 0 a n - 1 (em C, decremente antes de usar).

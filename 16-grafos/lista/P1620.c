@@ -23,8 +23,9 @@
 //    candidato, c[candidato][i] == 0 e c[i][candidato] == 1. Mais 2(V - 1)
 //    consultas, no máximo.
 // 3. Faça a consulta passar por uma função que soma 1 num contador global.
-// 4. Resposta esperada: na festa 1 a celebridade é Rubem, com 13 consultas
-//    (de 36 da matriz inteira); na festa 2 não há celebridade.
+// 4. Resposta esperada: na festa 1 a celebridade é Rubem, com 15 consultas
+//    (5 na eliminação + 10 na conferência, de 36 da matriz inteira);
+//    na festa 2 não há celebridade.
 //
 // Escreva sua resposta abaixo:
 

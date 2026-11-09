@@ -23,7 +23,7 @@
 // 3. Com n = 10, os saltos são 5, 2 e 1. Na última passada, o vetor já está
 //    quase ordenado e o insertion sort trabalha pouco.
 // 4. Resposta esperada: o vetor final 168 172 175 178 181 183 186 190 194
-//    201, com 5, 13 e 11 comparações nas três passadas.
+//    201, com 5, 11 e 10 comparações nas três passadas.
 //
 // Escreva sua resposta abaixo:
 

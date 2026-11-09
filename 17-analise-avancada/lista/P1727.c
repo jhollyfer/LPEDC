@@ -5,10 +5,10 @@
 // de um heap MÍNIMO pela gravidade (1 é o mais grave). Há dois jeitos:
 //
 // - inserir um por um: cada inserção sobe o novo item, até lg i trocas. Total
-//   O(n lg n);
+// O(n lg n);
 // - BUILD-HEAP (Floyd): põe tudo no vetor e chama "desce" para i de n/2 - 1
-//   até 0. Um nó de altura h desce no máximo h níveis, e só ~n/2^(h+1) nós
-//   têm altura h: a soma Σ h · n/2^(h+1) é menor que n. Total O(n).
+// até 0. Um nó de altura h desce no máximo h níveis, e só ~n/2^(h+1) nós
+// têm altura h: a soma Σ h · n/2^(h+1) é menor que n. Total O(n).
 //
 // Implemente os dois, contando as TROCAS, e teste no pior caso de cada um:
 // gravidades em ordem DECRESCENTE (n, n - 1, ..., 1), com n = 2^k - 1 para

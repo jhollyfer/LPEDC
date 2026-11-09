@@ -9,7 +9,7 @@
 // Escreva um programa que rode uma BFS a partir de a1 e mostre:
 //
 // - o tabuleiro com o número mínimo de lances até cada casa (linha 8 em
-//   cima, coluna a à esquerda);
+// cima, coluna a à esquerda);
 // - quantas casas ficam à distância máxima, e qual é essa distância;
 // - um caminho mínimo de a1 até h8, com as casas na notação do xadrez.
 //
@@ -35,7 +35,8 @@
 // 2. Para imprimir com a linha 8 em cima, percorra as linhas de 7 até 0.
 // 3. A BFS dá UM caminho mínimo, e qual ele é depende da ordem dos saltos;
 //    o número de lances não depende.
-// 4. Resposta esperada: h8 a 6 lances de a1; a distância máxima é 6.
+// 4. Resposta esperada: h8 a 6 lances de a1, e é a única casa tão longe:
+//    o canto oposto.
 //
 // Escreva sua resposta abaixo:
 

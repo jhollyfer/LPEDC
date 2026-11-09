@@ -7,12 +7,12 @@
 // buscas e conte as comparações com elementos da tabela:
 //
 // - ESCADA: comece no canto de cima à direita. Se o valor é menor, vá para a
-//   esquerda; se é maior, desça. No máximo 2n - 1 passos: Θ(n).
+// esquerda; se é maior, desça. No máximo 2n - 1 passos: Θ(n).
 // - QUADRANTES: compare com o elemento do meio m = frete[mi][mj]. Se o valor
-//   é menor, ele não está no quadrante de baixo à direita (linhas >= mi e
-//   colunas >= mj); se é maior, não está no de cima à esquerda (linhas <= mi
-//   e colunas <= mj). Procure recursivamente nos TRÊS pedaços que sobram. A
-//   recorrência é T(n) = 3 T(n/2) + 1, caso 1: Θ(n^(lg 3)) ≈ Θ(n^1,585).
+// é menor, ele não está no quadrante de baixo à direita (linhas >= mi e
+// colunas >= mj); se é maior, não está no de cima à esquerda (linhas <= mi
+// e colunas <= mj). Procure recursivamente nos TRÊS pedaços que sobram. A
+// recorrência é T(n) = 3 T(n/2) + 1, caso 1: Θ(n^(lg 3)) ≈ Θ(n^1,585).
 //
 // Para n = 8, 16, 32 e 64, procure TODOS os valores de 0 até o maior da
 // tabela e mostre o pior caso de cada busca, 2n - 1 e n^(lg 3). Confira que as

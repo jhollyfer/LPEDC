@@ -34,7 +34,7 @@ int main(void) {
     for (int x = 0; x <= K; x++) c[x] += c[x - 1];
     for (int i = N - 1; i >= 0; i--) saida[--c[nota[i]]] = nota[i];
 
-    for (int i = 0; i < N; i++) printf("%d ", saida[i]);
+    for (int i = 0; i < N; i++) printf("%s%d", i ? " " : "", saida[i]);
     printf("\n");
     return 0;
 }

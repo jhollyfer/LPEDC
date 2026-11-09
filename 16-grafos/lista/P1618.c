@@ -25,7 +25,7 @@
 // 2. A fila guarda o número da casa; l = casa / C e c = casa % C.
 // 3. Para marcar o caminho, ande de E para trás por pai[] até chegar em S,
 //    trocando cada '.' por '*'.
-// 4. Resposta esperada: 13 passos e o mapa acima.
+// 4. Resposta esperada: 16 passos e o mapa acima.
 //
 // Escreva sua resposta abaixo:
 

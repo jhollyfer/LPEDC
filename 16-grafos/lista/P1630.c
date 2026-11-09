@@ -10,7 +10,7 @@
 // São duas BFS em grade:
 //
 // 1. uma BFS com VÁRIAS origens (todas as casas F entram na fila no tempo 0)
-//    calcula fogo[casa], o minuto em que o fogo chega;
+// calcula fogo[casa], o minuto em que o fogo chega;
 // 2. uma BFS a partir de P anda só por casas com passo < fogo[casa].
 //
 // Escreva int fuga(char mapa[][C + 1]), que devolve o número de minutos até

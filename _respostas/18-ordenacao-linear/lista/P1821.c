@@ -58,7 +58,7 @@ int main(void) {
     counting(v, N, ch_dia, 31);
     numeros("por dia:", v, N);
 
-    printf("Dia  Hora   Voo   Destino\n");
+    printf("Data  Hora    Voo  Destino\n");
     for (int i = 0; i < N; i++)
         printf("%02d/11 %02d:%02d %5d  %s\n", v[i].dia, v[i].hora, v[i].minuto, v[i].numero, v[i].destino);
 

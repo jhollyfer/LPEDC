@@ -25,8 +25,7 @@
 //    procurada, achou; senão continue só no lado que contém a posição.
 // 2. Com o vetor ordenado, o pivô no último é sempre o maior do pedaço: cada
 //    partição tira poucos elementos (os iguais ao pivô), e o quickselect
-//    vira quadrático. O pivô
-//    sorteado (ou a mediana das medianas) evita isso.
+//    vira quadrático. O pivô sorteado (ou a mediana das medianas) evita isso.
 // 3. O merge sort quase não liga para a ordem da entrada: ordenado ou não,
 //    fica em Θ(n lg n).
 // 4. Resposta esperada: a mesma mediana (118) nos quatro casos; no vetor
