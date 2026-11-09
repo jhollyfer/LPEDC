@@ -10,7 +10,7 @@ Esse jeito de pensar tem nome: **algoritmo guloso** (em inglês, *greedy*). A
 cada passo ele faz a escolha que parece a **melhor agora**, sem pensar no
 futuro, e **nunca volta atrás**. Não existe "desfazer", como no backtracking
 (assunto 0127), nem dividir em subproblemas para depois combinar, como na
-divisão e conquista (0131). É uma decisão por vez, e cada decisão é final.
+divisão e conquista (0131).
 
 Você já viu um guloso famoso: o Dijkstra (assunto 0112) fixa, a cada passo, o
 vértice mais perto da origem, e nunca mais mexe nele. Os próximos assuntos

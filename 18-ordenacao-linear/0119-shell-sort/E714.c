@@ -22,8 +22,8 @@
 //   h =   1:     0 inversões,  288 movimentos
 //   total: 837 movimentos (o insertion sort faria 9775)
 //
-// Repare na primeira rodada: 12 movimentos desfizeram 2416 inversões. E na
-// última: os movimentos são exatamente as inversões que sobraram.
+// Na primeira rodada, 12 movimentos desfizeram 2416 inversões. Na última,
+// os movimentos são exatamente as inversões que sobraram.
 //
 // Dicas:
 // 1. Guarde as inversões do início numa variável: o insertion sort comum

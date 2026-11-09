@@ -17,7 +17,7 @@
 // 1. Marcar: coluna[c], diag1[l + c] e diag2[l - c + N - 1] recebem true,
 //    logo antes da chamada rainha(l + 1).
 // 2. Desmarcar: as mesmas três posições recebem false, logo depois.
-// 3. Repare que as soluções vêm em pares espelhados: trocando cada c de
+// 3. As soluções vêm em pares espelhados: trocando cada c de
 //    1 3 5 0 2 4 por 5 - c, sai 4 2 0 5 3 1.
 // 4. Resposta esperada: as 5 linhas acima.
 //

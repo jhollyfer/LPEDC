@@ -21,8 +21,7 @@ subconjunto é mostrado.
 Os itens escolhidos vão para o vetor `cesta`, e `k` diz quantos lugares dele
 estão ocupados. Como `k` é **parâmetro**, cada chamada tem a sua cópia. Quando
 uma chamada termina e a de cima continua, o `k` de cima ainda vale o que valia
-antes: a escolha se **desfaz sozinha**. Escolher, descer e desfazer: o
-módulo inteiro gira em torno disso.
+antes: a escolha se **desfaz sozinha**.
 
 Existe um segundo jeito, sem recursão: os bits de um número (assunto 0065).
 Conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o item `i` entra". O

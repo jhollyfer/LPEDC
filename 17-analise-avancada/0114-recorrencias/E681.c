@@ -22,8 +22,8 @@
 //   32  2016  2016
 //   64  8128  8128
 //
-// Repare: aqui o custo CAI pela metade a cada nível. É o oposto da
-// auditoria do texto, em que todo nível custava igual.
+// Aqui o custo CAI pela metade a cada nível, ao contrário da auditoria do
+// texto, em que todo nível custava igual.
 //
 // Dicas:
 // 1. Troque o contador único por um vetor long custo_nivel[32] e passe o

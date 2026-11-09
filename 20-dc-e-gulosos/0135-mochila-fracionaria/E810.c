@@ -25,7 +25,7 @@
 //    kg de cada grão vai diminuir conforme ele é carregado.
 // 2. Um índice i do grão da vez, que só avança quando o grão acaba
 //    (kg[i] == 0). Para cada caminhão, um while (livre > 0 && i < n).
-// 3. Resposta esperada: a saída acima. Repare que o cacau e o café ficaram
+// 3. Resposta esperada: a saída acima. O cacau e o café ficaram
 //    partidos entre dois caminhões; o total é o mesmo de uma mochila só de
 //    85 kg.
 //

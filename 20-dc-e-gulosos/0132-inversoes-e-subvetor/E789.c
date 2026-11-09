@@ -7,7 +7,7 @@
 //   Bia:  Moqueca, Coxinha, Feijoada, Pão de queijo, Acarajé, Pastel
 //
 // Mostre cada par de pratos em que vocês discordam (no formato "A x B", com
-// A antes de B no SEU ranking) e o total. O truque: monte um vetor v em que
+// A antes de B no SEU ranking) e o total. Monte um vetor v em que
 // v[i] é a posição, no ranking da Bia, do seu i-ésimo prato. Os pares em
 // desacordo são exatamente as inversões de v.
 //

@@ -137,8 +137,7 @@ regra do jogo no lugar da poda:
 > serve, a casa fica com o último que foi tentado e, na volta, o `while` do
 > começo de `resolve` passa a tratá-la como uma casa **dada**. Faça o teste:
 > sem essa linha, este programa termina em 64 chamadas mostrando uma grade
-> "resolvida" com três 9 seguidos na primeira linha. O retrocesso só funciona
-> se o estado volta a ser o mesmo de antes da escolha.
+> "resolvida" com três 9 seguidos na primeira linha.
 
 > [!TIP]
 > **Por dentro do C:** os três vetores de marcação ocupam 3 × 9 × 10 = 270

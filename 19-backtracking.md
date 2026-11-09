@@ -18,9 +18,9 @@ flood fill e, no fim, um resolvedor de sudoku completo.
 O problema passa a ser uma **árvore de decisões**. Cada nível é uma
 escolha; cada caminho da raiz até uma folha é uma tentativa completa.
 Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a árvore
-**podando** os galhos que não podem ter solução. A regra que mais derruba
-código cabe numa frase: tudo o que você muda antes de descer, você
-**desfaz** depois de voltar.
+**podando** os galhos que não podem ter solução. Tudo o que você muda antes
+de descer, você **desfaz** depois de voltar: é a regra que mais derruba
+código.
 
 ## O que você vai aprender
 
@@ -93,8 +93,7 @@ subconjunto é mostrado.
 Os itens escolhidos vão para o vetor `cesta`, e `k` diz quantos lugares dele
 estão ocupados. Como `k` é **parâmetro**, cada chamada tem a sua cópia. Quando
 uma chamada termina e a de cima continua, o `k` de cima ainda vale o que valia
-antes: a escolha se **desfaz sozinha**. Escolher, descer e desfazer: o
-módulo inteiro gira em torno disso.
+antes: a escolha se **desfaz sozinha**.
 
 Existe um segundo jeito, sem recursão: os bits de um número (assunto 0065).
 Conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o item `i` entra". O
@@ -406,7 +405,7 @@ café frutas frango
    de somar decida se a linha aparece.
 2. Guarde os nomes e os preços em dois vetores paralelos (ou num vetor de
    structs, assunto 0061).
-3. Repare que muitos subconjuntos passam de 30 logo nos primeiros itens e
+3. Muitos subconjuntos passam de 30 logo nos primeiros itens e
    mesmo assim são somados até o fim. No assunto 0127 você vai cortar
    esse desperdício.
 4. Resposta esperada: as 4 linhas acima.
@@ -521,7 +520,7 @@ Saída esperada:
    laço que testa cada bit (assunto 0065).
 3. Se o bit mudou e agora está ligado em g, a lâmpada acendeu; senão,
    apagou.
-4. Resposta esperada: as 8 linhas acima. Repare que também é uma
+4. Resposta esperada: as 8 linhas acima. Também é uma
    enumeração de todos os subconjuntos de {0, 1, 2}, só que em outra ordem.
 
 ```bash
@@ -1773,7 +1772,7 @@ Saída esperada:
 1. Marcar: coluna[c], diag1[l + c] e diag2[l - c + N - 1] recebem true,
    logo antes da chamada rainha(l + 1).
 2. Desmarcar: as mesmas três posições recebem false, logo depois.
-3. Repare que as soluções vêm em pares espelhados: trocando cada c de
+3. As soluções vêm em pares espelhados: trocando cada c de
    1 3 5 0 2 4 por 5 - c, sai 4 2 0 5 3 1.
 4. Resposta esperada: as 5 linhas acima.
 
@@ -2551,8 +2550,7 @@ regra do jogo no lugar da poda:
 > serve, a casa fica com o último que foi tentado e, na volta, o `while` do
 > começo de `resolve` passa a tratá-la como uma casa **dada**. Faça o teste:
 > sem essa linha, este programa termina em 64 chamadas mostrando uma grade
-> "resolvida" com três 9 seguidos na primeira linha. O retrocesso só funciona
-> se o estado volta a ser o mesmo de antes da escolha.
+> "resolvida" com três 9 seguidos na primeira linha.
 
 > [!TIP]
 > **Por dentro do C:** os três vetores de marcação ocupam 3 × 9 × 10 = 270
@@ -3124,8 +3122,8 @@ subconjuntos de 30 itens, sem poda nenhuma? E de 40?
 
 A árvore tem 2ⁿ⁺¹ - 1 nós. Com 30 itens, uns **2,1 bilhões** de chamadas:
 cerca de 21 segundos. Com 40, uns **2,2 trilhões**: mais de 6 horas. Cada
-item a mais dobra o tempo. É por isso que a poda importa, e é por isso que
-problemas como a mochila ganham, no módulo 21, um método que não testa tudo.
+item a mais dobra o tempo. Por isso a poda importa, e problemas como a
+mochila ganham, no módulo 21, um método que não testa tudo.
 
 </details>
 
@@ -3469,8 +3467,8 @@ Saída esperada:
    Os dois índices cabem em 0..2n-2.
 2. if (lin == n) { solucoes++; return; } e, no laço, pule a coluna se
    col_ocup, d1 ou d2 estiver marcado.
-3. Resposta esperada: 1, 0, 0, 2, 10, 4, 40, 92, 352. Repare que 6 tem
-   menos soluções que 5.
+3. Resposta esperada: 1, 0, 0, 2, 10, 4, 40, 92, 352. O 6 tem
+   menos soluções que o 5.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/lista/P1909.c

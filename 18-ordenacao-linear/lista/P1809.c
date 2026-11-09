@@ -5,7 +5,7 @@
 // A tabela tem de sair por PONTOS, do maior para o menor, e os empatados
 // continuam em ordem alfabética. Os pontos vão de 0 a 15.
 //
-// Complete o counting sort decrescente e estável. O truque: ordene pela chave
+// Complete o counting sort decrescente e estável. Para isso, ordene pela chave
 // invertida, MAX - pontos, em ordem crescente. Quem tem mais pontos tem chave
 // menor e vai para o começo, e a estabilidade do counting sort preserva a
 // ordem alfabética dos empates.

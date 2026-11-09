@@ -31,7 +31,7 @@
 // Dicas:
 // 1. Os dois "2/3" se sobrepõem: primeiros vão de i até j - t, últimos de
 //    i + t até j. É essa sobreposição que garante que o maior chega ao fim.
-// 2. Repare que as chamadas são sempre (3^p - 1)/2, com p a profundidade: a
+// 2. As chamadas são sempre (3^p - 1)/2, com p a profundidade: a
 //    árvore é ternária e cheia. Cada fator 3/2 no tamanho acrescenta um
 //    nível, então p ≈ log_{3/2} n e as chamadas ≈ 3^(log_{3/2} n) =
 //    n^(log_{3/2} 3).

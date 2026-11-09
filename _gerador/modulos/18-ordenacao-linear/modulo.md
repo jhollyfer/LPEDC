@@ -6,7 +6,7 @@ quick sort, todos decidindo a ordem com perguntas do tipo "`a` vem antes de
 compara faz menos que uns n log₂ n comparações no pior caso. Este módulo
 mostra o que existe fora desse piso.
 
-O truque é olhar para os **dados**, e não só para o algoritmo. Se as chaves
+A saída é olhar para os **dados**, e não só para o algoritmo. Se as chaves
 são inteiros pequenos, o valor vira índice de vetor, e não há comparação
 nenhuma: é o **counting sort**. Se as chaves têm dígitos ou bytes, dá para
 ordenar casa por casa: **radix sort**. Se os valores estão bem espalhados num

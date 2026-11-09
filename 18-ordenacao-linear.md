@@ -8,7 +8,7 @@ quick sort, todos decidindo a ordem com perguntas do tipo "`a` vem antes de
 compara faz menos que uns n log₂ n comparações no pior caso. Este módulo
 mostra o que existe fora desse piso.
 
-O truque é olhar para os **dados**, e não só para o algoritmo. Se as chaves
+A saída é olhar para os **dados**, e não só para o algoritmo. Se as chaves
 são inteiros pequenos, o valor vira índice de vetor, e não há comparação
 nenhuma: é o **counting sort**. Se as chaves têm dígitos ou bytes, dá para
 ordenar casa por casa: **radix sort**. Se os valores estão bem espalhados num
@@ -524,7 +524,7 @@ h =  1: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? sim
 ```
 
 
-Repare na coluna do 13: a rodada com h = 4 mexe no vetor, mas não desfaz o
+Na coluna do 13, a rodada com h = 4 mexe no vetor, mas não desfaz o
 que a rodada h = 13 arrumou. É isso que faz cada rodada aproveitar o
 trabalho da anterior.
 
@@ -595,8 +595,8 @@ total: 837 movimentos (o insertion sort faria 9775)
 ```
 
 
-Repare na primeira rodada: 12 movimentos desfizeram 2416 inversões. E na
-última: os movimentos são exatamente as inversões que sobraram.
+Na primeira rodada, 12 movimentos desfizeram 2416 inversões. Na última,
+os movimentos são exatamente as inversões que sobraram.
 
 **Dicas:**
 
@@ -1652,7 +1652,7 @@ ordenada do assunto 0078: o insertion sort feito na lista.
 Se os `n` valores estão bem **espalhados** pelo intervalo e há
 uns `n` baldes, cada balde recebe em média um elemento, e o custo total é
 **O(n)** em média. Se todos caem no mesmo balde, sobra um insertion sort de
-`n` elementos: **O(n²)**. O bucket sort aposta na distribuição dos dados.
+`n` elementos: **O(n²)**.
 O Cormen apresenta a versão com valores em [0, 1) e `n` baldes: `x` vai para
 o balde ⌊n · x⌋, e o Θ(n) médio supõe valores **uniformes** no intervalo.
 
@@ -2686,7 +2686,7 @@ vetor embaralhado:
 ```
 
 
-Repare na última linha: a garantia tem preço. Em dados comuns, o pivô
+A última linha mostra o preço da garantia: em dados comuns, o pivô
 simples ganha.
 
 **Dicas:**
@@ -3750,7 +3750,7 @@ No campeonato de futsal do bairro, os times já estão em ordem alfabética.
 A tabela tem de sair por PONTOS, do maior para o menor, e os empatados
 continuam em ordem alfabética. Os pontos vão de 0 a 15.
 
-Complete o counting sort decrescente e estável. O truque: ordene pela chave
+Complete o counting sort decrescente e estável. Para isso, ordene pela chave
 invertida, MAX - pontos, em ordem crescente. Quem tem mais pontos tem chave
 menor e vai para o começo, e a estabilidade do counting sort preserva a
 ordem alfabética dos empates.
@@ -4564,7 +4564,7 @@ Total: 40 números
 
 Exercício clássico do Cormen (8.3-4): ordenar n inteiros no intervalo
 [0, n² - 1] em tempo O(n). O counting sort direto pagaria k = n². O radix
-sort em base 10 faria lg₁₀(n²) passadas. O truque: use BASE n. Todo número
+sort em base 10 faria lg₁₀(n²) passadas. Use BASE n: todo número
 x < n² tem só dois "dígitos" nessa base, x % n e x / n, e cada passada
 custa Θ(n + n) = Θ(n).
 

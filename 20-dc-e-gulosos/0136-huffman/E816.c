@@ -3,7 +3,7 @@
 //
 // Huffman sem heap. Quando as frequências já chegam ORDENADAS, dá para
 // trocar o heap por duas filas: a das folhas (o vetor ordenado) e a dos nós
-// internos (um vetor que você vai enchendo). O truque: os internos nascem em
+// internos (um vetor que você vai enchendo). Os internos nascem em
 // ordem crescente, então a fila deles também fica ordenada. A cada junção,
 // o menor de todos está na frente de uma das duas filas: compare as duas
 // frentes, tire o menor, e repita para o segundo. O custo cai para O(k).

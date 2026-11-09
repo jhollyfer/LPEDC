@@ -27,7 +27,7 @@ ordenada do assunto 0078: o insertion sort feito na lista.
 Se os `n` valores estão bem **espalhados** pelo intervalo e há
 uns `n` baldes, cada balde recebe em média um elemento, e o custo total é
 **O(n)** em média. Se todos caem no mesmo balde, sobra um insertion sort de
-`n` elementos: **O(n²)**. O bucket sort aposta na distribuição dos dados.
+`n` elementos: **O(n²)**.
 O Cormen apresenta a versão com valores em [0, 1) e `n` baldes: `x` vai para
 o balde ⌊n · x⌋, e o Θ(n) médio supõe valores **uniformes** no intervalo.
 

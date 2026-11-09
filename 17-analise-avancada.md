@@ -16,7 +16,7 @@ copiando tudo de vez em quando. E o **limite inferior** troca a pergunta
 "quanto custa este algoritmo?" por "dá para fazer melhor?". Para ordenar
 comparando, não dá: n log n é o piso.
 
-O custo passa a ser algo que você calcula, prevê e confere. No último assunto, você usa tudo isso para prever quanto
+No último assunto, você usa tudo isso para prever quanto
 tempo quatro ordenações levam com 1 milhão de elementos, a partir de uma
 medida com 16 mil, e confere a previsão no computador.
 
@@ -498,8 +498,8 @@ total: 120
 ```
 
 
-Repare: aqui o custo CAI pela metade a cada nível. É o oposto da
-auditoria do texto, em que todo nível custava igual.
+Aqui o custo CAI pela metade a cada nível, ao contrário da auditoria do
+texto, em que todo nível custava igual.
 
 **Dicas:**
 
@@ -2956,7 +2956,7 @@ L = 256: 11917965 comparações,   97.4 ms
    r - 1 e o while para em j >= p (e não em j >= 0).
 2. Use a função menor() nas comparações do insertion também, para a
    contagem ser justa.
-3. Resposta esperada: as comparações acima. Repare: as comparações SOBEM
+3. Resposta esperada: as comparações acima. As comparações SOBEM
    com o limiar (o insertion compara mais que o merge), mas o tempo
    costuma CAIR até uns 16 ou 32, porque cada comparação do insertion
    sai mais barata que a recursão e a cópia do merge. Com 256, o Θ(n²)
@@ -4283,7 +4283,7 @@ Expoente estimado: 2.642 | teoria log(3) / log(1,5) = 2.7095
 
 1. Os dois "2/3" se sobrepõem: primeiros vão de i até j - t, últimos de
    i + t até j. É essa sobreposição que garante que o maior chega ao fim.
-2. Repare que as chamadas são sempre (3^p - 1)/2, com p a profundidade: a
+2. As chamadas são sempre (3^p - 1)/2, com p a profundidade: a
    árvore é ternária e cheia. Cada fator 3/2 no tamanho acrescenta um
    nível, então p ≈ log_{3/2} n e as chamadas ≈ 3^(log_{3/2} n) =
    n^(log_{3/2} 3).

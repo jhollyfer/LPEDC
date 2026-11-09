@@ -24,8 +24,8 @@
 //    Os dois índices cabem em 0..2n-2.
 // 2. if (lin == n) { solucoes++; return; } e, no laço, pule a coluna se
 //    col_ocup, d1 ou d2 estiver marcado.
-// 3. Resposta esperada: 1, 0, 0, 2, 10, 4, 40, 92, 352. Repare que 6 tem
-//    menos soluções que 5.
+// 3. Resposta esperada: 1, 0, 0, 2, 10, 4, 40, 92, 352. O 6 tem
+//    menos soluções que o 5.
 //
 // Escreva sua resposta abaixo (complete o código):
 

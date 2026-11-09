@@ -26,7 +26,7 @@
 //     pivô no fim:           mediana 5001,     28403 comparações
 //     mediana das medianas:  mediana 5001,     39964 comparações
 //
-// Repare na última linha: a garantia tem preço. Em dados comuns, o pivô
+// A última linha mostra o preço da garantia: em dados comuns, o pivô
 // simples ganha.
 //
 // Dicas:

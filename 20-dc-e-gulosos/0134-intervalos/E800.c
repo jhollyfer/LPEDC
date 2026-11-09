@@ -18,7 +18,7 @@
 // 1. Converta os ponteiros: const Horario *x = a; const Horario *y = b;
 // 2. Devolva negativo se x termina antes, positivo se termina depois e 0 se
 //    empatam: (x->fim > y->fim) - (x->fim < y->fim).
-// 3. Resposta esperada: a saída acima. Repare que a Duda (45 a 100) encosta
+// 3. Resposta esperada: a saída acima. A Duda (45 a 100) encosta
 //    na Lia, e a Nina (100 a 120) encosta na Duda.
 //
 // Escreva sua resposta abaixo (complete o código):

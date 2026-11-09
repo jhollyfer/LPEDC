@@ -35,7 +35,7 @@ O algoritmo (o `GREEDY-ACTIVITY-SELECTOR` do Cormen) fica assim:
    **aceite** e mova `livre_em` para o fim dele; senão, recuse.
 
 O custo é o da ordenação, O(n log n), mais uma passada O(n). Cada pedido é
-olhado uma vez e a decisão é final: aceitou, aceitou; recusou, recusou.
+olhado uma vez, e a decisão é final.
 
 No desenho, cada barra é um pedido, na ordem em que o
 algoritmo olha para eles (por hora de fim). As verdes foram aceitas; as

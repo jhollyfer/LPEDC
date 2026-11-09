@@ -12,7 +12,7 @@
 //   h =  4: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? não
 //   h =  1: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? sim
 //
-// Repare na coluna do 13: a rodada com h = 4 mexe no vetor, mas não desfaz o
+// Na coluna do 13, a rodada com h = 4 mexe no vetor, mas não desfaz o
 // que a rodada h = 13 arrumou. É isso que faz cada rodada aproveitar o
 // trabalho da anterior.
 //

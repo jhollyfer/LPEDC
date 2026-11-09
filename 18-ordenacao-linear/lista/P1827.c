@@ -3,7 +3,7 @@
 //
 // Exercício clássico do Cormen (8.3-4): ordenar n inteiros no intervalo
 // [0, n² - 1] em tempo O(n). O counting sort direto pagaria k = n². O radix
-// sort em base 10 faria lg₁₀(n²) passadas. O truque: use BASE n. Todo número
+// sort em base 10 faria lg₁₀(n²) passadas. Use BASE n: todo número
 // x < n² tem só dois "dígitos" nessa base, x % n e x / n, e cada passada
 // custa Θ(n + n) = Θ(n).
 //

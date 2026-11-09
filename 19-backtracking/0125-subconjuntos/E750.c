@@ -26,7 +26,7 @@
 //    laço que testa cada bit (assunto 0065).
 // 3. Se o bit mudou e agora está ligado em g, a lâmpada acendeu; senão,
 //    apagou.
-// 4. Resposta esperada: as 8 linhas acima. Repare que também é uma
+// 4. Resposta esperada: as 8 linhas acima. Também é uma
 //    enumeração de todos os subconjuntos de {0, 1, 2}, só que em outra ordem.
 //
 // Escreva sua resposta abaixo:

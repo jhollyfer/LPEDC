@@ -16,9 +16,9 @@ flood fill e, no fim, um resolvedor de sudoku completo.
 O problema passa a ser uma **árvore de decisões**. Cada nível é uma
 escolha; cada caminho da raiz até uma folha é uma tentativa completa.
 Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a árvore
-**podando** os galhos que não podem ter solução. A regra que mais derruba
-código cabe numa frase: tudo o que você muda antes de descer, você
-**desfaz** depois de voltar.
+**podando** os galhos que não podem ter solução. Tudo o que você muda antes
+de descer, você **desfaz** depois de voltar: é a regra que mais derruba
+código.
 
 ## O que você vai aprender
 
@@ -201,8 +201,8 @@ subconjuntos de 30 itens, sem poda nenhuma? E de 40?
 
 A árvore tem 2ⁿ⁺¹ - 1 nós. Com 30 itens, uns **2,1 bilhões** de chamadas:
 cerca de 21 segundos. Com 40, uns **2,2 trilhões**: mais de 6 horas. Cada
-item a mais dobra o tempo. É por isso que a poda importa, e é por isso que
-problemas como a mochila ganham, no módulo 21, um método que não testa tudo.
+item a mais dobra o tempo. Por isso a poda importa, e problemas como a
+mochila ganham, no módulo 21, um método que não testa tudo.
 
 </details>
 

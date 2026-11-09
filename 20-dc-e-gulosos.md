@@ -939,7 +939,7 @@ Bia:  Moqueca, Coxinha, Feijoada, Pão de queijo, Acarajé, Pastel
 
 
 Mostre cada par de pratos em que vocês discordam (no formato "A x B", com
-A antes de B no SEU ranking) e o total. O truque: monte um vetor v em que
+A antes de B no SEU ranking) e o total. Monte um vetor v em que
 v[i] é a posição, no ranking da Bia, do seu i-ésimo prato. Os pares em
 desacordo são exatamente as inversões de v.
 
@@ -1097,7 +1097,7 @@ Esse jeito de pensar tem nome: **algoritmo guloso** (em inglês, *greedy*). A
 cada passo ele faz a escolha que parece a **melhor agora**, sem pensar no
 futuro, e **nunca volta atrás**. Não existe "desfazer", como no backtracking
 (assunto 0127), nem dividir em subproblemas para depois combinar, como na
-divisão e conquista (0131). É uma decisão por vez, e cada decisão é final.
+divisão e conquista (0131).
 
 Você já viu um guloso famoso: o Dijkstra (assunto 0112) fixa, a cada passo, o
 vértice mais perto da origem, e nunca mais mexe nele. Os próximos assuntos
@@ -1587,7 +1587,7 @@ O algoritmo (o `GREEDY-ACTIVITY-SELECTOR` do Cormen) fica assim:
    **aceite** e mova `livre_em` para o fim dele; senão, recuse.
 
 O custo é o da ordenação, O(n log n), mais uma passada O(n). Cada pedido é
-olhado uma vez e a decisão é final: aceitou, aceitou; recusou, recusou.
+olhado uma vez, e a decisão é final.
 
 No desenho, cada barra é um pedido, na ordem em que o
 algoritmo olha para eles (por hora de fim). As verdes foram aceitas; as
@@ -1895,7 +1895,7 @@ Gabi (150 a 180)
 1. Converta os ponteiros: const Horario *x = a; const Horario *y = b;
 2. Devolva negativo se x termina antes, positivo se termina depois e 0 se
    empatam: (x->fim > y->fim) - (x->fim < y->fim).
-3. Resposta esperada: a saída acima. Repare que a Duda (45 a 100) encosta
+3. Resposta esperada: a saída acima. A Duda (45 a 100) encosta
    na Lia, e a Nina (100 a 120) encosta na Duda.
 
 ```bash
@@ -2586,7 +2586,7 @@ Total: R$ 3040.00
    kg de cada grão vai diminuir conforme ele é carregado.
 2. Um índice i do grão da vez, que só avança quando o grão acaba
    (kg[i] == 0). Para cada caminhão, um while (livre > 0 && i < n).
-3. Resposta esperada: a saída acima. Repare que o cacau e o café ficaram
+3. Resposta esperada: a saída acima. O cacau e o café ficaram
    partidos entre dois caminhões; o total é o mesmo de uma mochila só de
    85 kg.
 
@@ -3116,7 +3116,7 @@ Saída esperada:
 
 Huffman sem heap. Quando as frequências já chegam ORDENADAS, dá para
 trocar o heap por duas filas: a das folhas (o vetor ordenado) e a dos nós
-internos (um vetor que você vai enchendo). O truque: os internos nascem em
+internos (um vetor que você vai enchendo). Os internos nascem em
 ordem crescente, então a fila deles também fica ordenada. A cada junção,
 o menor de todos está na frente de uma das duas filas: compare as duas
 frentes, tire o menor, e repita para o segundo. O custo cai para O(k).

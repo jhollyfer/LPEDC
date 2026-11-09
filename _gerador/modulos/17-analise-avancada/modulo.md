@@ -14,7 +14,7 @@ copiando tudo de vez em quando. E o **limite inferior** troca a pergunta
 "quanto custa este algoritmo?" por "dá para fazer melhor?". Para ordenar
 comparando, não dá: n log n é o piso.
 
-O custo passa a ser algo que você calcula, prevê e confere. No último assunto, você usa tudo isso para prever quanto
+No último assunto, você usa tudo isso para prever quanto
 tempo quatro ordenações levam com 1 milhão de elementos, a partir de uma
 medida com 16 mil, e confere a previsão no computador.
 

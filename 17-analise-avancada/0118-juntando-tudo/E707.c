@@ -22,7 +22,7 @@
 //    r - 1 e o while para em j >= p (e não em j >= 0).
 // 2. Use a função menor() nas comparações do insertion também, para a
 //    contagem ser justa.
-// 3. Resposta esperada: as comparações acima. Repare: as comparações SOBEM
+// 3. Resposta esperada: as comparações acima. As comparações SOBEM
 //    com o limiar (o insertion compara mais que o merge), mas o tempo
 //    costuma CAIR até uns 16 ou 32, porque cada comparação do insertion
 //    sai mais barata que a recursão e a cópia do merge. Com 256, o Θ(n²)
