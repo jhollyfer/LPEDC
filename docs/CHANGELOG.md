@@ -6,6 +6,12 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ## [Não lançado]
 
+### Adicionado
+
+- `PROVAS.md`: as 8 provas do PPGI de 2016 a 2019 resolvidas, com a letra, o porquê e o link
+  para o módulo de cada questão.
+- `PPGI.md`: o que caiu de 2016 a 2019, por tópico, assunto e formato de questão.
+
 ### Alterado
 
 - Texto de todos os módulos, do `README.md` e do `PPGI.md` revisado: menos repetição entre

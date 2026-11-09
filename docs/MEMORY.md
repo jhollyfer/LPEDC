@@ -17,16 +17,16 @@
 
 ## Parou em
 
-Resolvendo as 8 provas de 2016 a 2019 (`_fontes/provas-ppgi.md`, `TASKS.md` 4.4).
+Ajustando as "Questões no estilo da prova" dos módulos aos formatos das provas reais (`TASKS.md` 4.1).
 
 ## Próximos passos
 
-1. Quando as provas chegarem: mapear tópicos e frequência no `PPGI.md` (4.2).
-2. Ajustar as questões dos módulos ao formato real (4.1).
-3. Montar os simulados de 20 questões (4.3).
+1. Ajustar as questões dos módulos ao formato real (4.1).
+2. Montar os simulados de 20 questões (4.3), com o peso de tópicos de `PPGI.md`.
 
 ## Contexto importante
 
+- As provas antigas não têm gabarito oficial; as letras de `PROVAS.md` são do curso, conferidas rodando código.
 - A prova é em 2026-11-27 (`PPGI.md`, "Roteiro até a prova").
 - A branch `claude/inspiring-einstein-y1aulj` no GitHub é antiga e já está toda na `main`; o proxy
   da sessão na nuvem recusa apagá-la. O dono apaga pela página de branches.

@@ -149,6 +149,39 @@ o último, circular, dupla), filas, pilhas, arquivos texto e binários (inclusiv
 busca binária em arquivo, que junta o `fseek` do 0068 com o 0090), BST com ponteiro para o pai (0175),
 rubro-negra (0177) e hash por encadeamento (0106).
 
+## O que caiu de 2016 a 2019
+
+As 8 provas de 2016 a 2019 somam 160 questões. O gabarito comentado de cada uma, com o link
+para o módulo, está em [`PROVAS.md`](PROVAS.md).
+
+| Tópico do edital | Questões | Parte da prova |
+| --- | --- | --- |
+| 4 · Árvores (ABB, AVL, heap, árvore B, rubro-negra) | 61 | 38% |
+| 3 · Estruturas elementares (lista, pilha, fila) | 41 | 26% |
+| 7 · Ordenação | 26 | 16% |
+| 5 · Hash | 18 | 11% |
+| 6 · Busca | 13 | 8% |
+| 1, 2 e 8 · Fundamentos, eficiência e grafos | 8 | 5% |
+
+Os assuntos que mais aparecem: AVL (0101, em 28 questões), busca e inserção em ABB (0099, 17),
+lista encadeada (0076, 16), pilha (0082, 13), hash por encadeamento (0106, 13), busca binária
+(0090, 12) e insertion sort (0093, 10). Grafo caiu uma vez em quatro anos, mas o edital de 2026
+lista o tópico: não pule o módulo 16.
+
+Os formatos se repetem de uma prova para outra:
+
+| Formato | Questões | Como treinar |
+| --- | --- | --- |
+| conceito (definição direta) | 47 | os `[!WARNING]` de cada assunto |
+| afirmações I, II, III combinadas | 44 | julgue cada afirmação sozinha antes de olhar as letras |
+| simulação (pilha, fila, hash, ABB, AVL, heap, ordenação passo a passo) | 39 | refaça no papel o fluxograma e o `### Passo a passo` |
+| cálculo (altura, comparações da busca binária, complexidade) | 17 | conte à mão e confira rodando o exemplo |
+| código C com erro (lista encadeada, `**prim`, `malloc` sobrando) | 13 | a lista prática de 11, 12 e 14 |
+
+Várias questões voltam quase iguais em anos diferentes: a pilha que vira fila e volta a ser
+pilha, a inserção de X e Y numa lista dupla, as afirmações sobre hash por encadeamento, o
+"qual sequência de busca não pode ser de uma ABB" e a AVL montada com chaves em ordem crescente.
+
 ## Roteiro até a prova (27/11/2026)
 
 A prova é objetiva e cobra **reconhecer** o comportamento de um código e o
@@ -158,8 +191,9 @@ diante), faça tudo.
 
 Cada módulo tem ainda uma **lista prática** de 30 exercícios e as **Questões
 no estilo da prova**, as duas no fim do `.md` do módulo. Faça as questões
-sempre, cronometrando: o edital não fixa a duração da prova, então
-confira o horário quando sair o local (24/11) e treine no mesmo ritmo.
+sempre, cronometrando: o edital não fixa a duração da prova, então confira o
+horário quando sair o local (24/11) e treine no mesmo ritmo. A cada dois dias,
+resolva uma prova antiga de [`PROVAS.md`](PROVAS.md) inteira, também cronometrada.
 Da lista prática, faça pelo menos os ★★☆ dos módulos do dia; os ★★★ ficam para
 os dias de revisão.
 
