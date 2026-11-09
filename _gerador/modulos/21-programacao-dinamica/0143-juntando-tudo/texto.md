@@ -6,8 +6,8 @@ linha 1 com linha 1, linha 2 com linha 2 não serve: basta ela inserir uma
 linha no começo para **todas** as outras parecerem diferentes.
 
 A ferramenta que responde isso existe em todo sistema Unix e se chama
-`diff`. É ela que mostra as mudanças num controle de versão. E o coração
-dela é a **LCS** do assunto 0141, só que de **linhas** em vez de letras: as
+`diff`. É ela que mostra as mudanças num controle de versão. Por dentro, ela
+usa a **LCS** do assunto 0141, só que de **linhas** em vez de letras: as
 linhas da LCS ficaram iguais; as que só estão na versão antiga foram
 **removidas** (`-`); as que só estão na nova foram **adicionadas** (`+`).
 Duas linhas são "a mesma letra" quando `strcmp` dá 0.
@@ -27,7 +27,7 @@ certa. Em cada passo: linhas iguais saem com dois espaços e as duas
 avançam; se não, o vizinho com a LCS maior decide se a linha de `a` sai com
 `-` ou a de `b` entra com `+`.
 
-Vamos ver na prática. A lista antiga à esquerda, a nova à direita. Os
+No desenho, a lista antiga fica à esquerda e a nova à direita. Os
 traços ligam as cinco linhas da LCS; o que sobra de cada lado vira `-` ou
 `+`:
 
@@ -123,11 +123,11 @@ int main(int argc, char *argv[]) {
 // (5 iguais, 2 removidas, 2 adicionadas)
 ```
 
-Repare na linha do leite: "leite" e "leite sem lactose" são linhas
+Veja a linha do leite: "leite" e "leite sem lactose" são linhas
 diferentes, então viram uma remoção e uma adição. O A286 usa a distância de
 edição do assunto 0142 para perceber que a linha foi só **alterada**.
 
-Repara no fluxograma: é a volta do diff, que imprime enquanto anda. O
+O fluxograma é a volta do diff, que imprime enquanto anda. O
 caminho marcado é o das duas primeiras linhas, iguais nas duas versões:
 
 {{fluxograma}}

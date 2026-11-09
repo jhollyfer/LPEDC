@@ -11,8 +11,8 @@ e `n` itens, cada um com peso e valor; você pode levar qualquer fração de
 cada item, e o valor acompanha a fração (metade do café vale metade do
 preço). O objetivo é o maior valor total sem passar de `W`.
 
-O que importa não é o valor de cada saco, nem o peso: é o **valor por quilo**.
-Cada quilo de espaço da caminhonete é igual aos outros, então ele deve ir para
+O que decide é o **valor por quilo**, e não o valor do saco nem o peso. Cada
+quilo de espaço da caminhonete é igual aos outros, então ele deve ir para
 o produto que paga mais por quilo. O guloso fica assim:
 
 1. calcule a **razão** `valor / peso` de cada item;
@@ -27,17 +27,17 @@ Por que o guloso acerta aqui? Pelo argumento de troca, de novo. Suponha uma
 carga que leva 1 kg de feijão (R$ 9/kg) e deixa de fora 1 kg de castanha
 (R$ 50/kg). Trocar esse quilo de feijão pelo de castanha aumenta o valor em
 R$ 41 e não muda o peso. Então uma carga ótima nunca deixa de fora um quilo
-que paga mais enquanto leva um que paga menos, e é exatamente isso que a
-ordem pela razão garante.
+que paga mais enquanto leva um que paga menos, e a ordem pela razão garante
+isso.
 
-Vamos ver na prática. Ordenados pela razão, o açafrão paga R$ 80/kg, a
+Ordenados pela razão, o açafrão paga R$ 80/kg, a
 castanha R$ 50, o café R$ 30, o feijão R$ 9 e o arroz R$ 5. Os três primeiros
 cabem inteiros (5 + 15 + 20 = 40 kg). Sobram 20 kg, e o feijão tem 30: vão
 dois terços do saco. O arroz nem entra:
 
 {{ideia}}
 
-O mesmo exemplo em C. A função de comparação calcula a razão de cada lado e
+No código, a função de comparação calcula a razão de cada lado e
 ordena do maior para o menor:
 
 ```c
@@ -92,7 +92,7 @@ O nome vai no fim da linha de propósito: `%-10s` conta **bytes**, e em UTF-8
 o "ç" e o "ã" ocupam dois bytes cada. Com o nome no começo, as colunas
 ficariam tortas.
 
-Repara no fluxograma: o laço tem duas saídas para cada item. O caminho marcado
+O laço do fluxograma tem duas saídas para cada item. O caminho marcado
 passa pelo "leva tudo" três vezes (açafrão, castanha, café) e uma vez pelo
 "leva a fração" (feijão), que zera o espaço e encerra o laço:
 

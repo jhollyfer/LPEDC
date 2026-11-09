@@ -11,8 +11,8 @@ bancos de dados). Pode ter arestas que **são letras** (a trie do autocompletar)
 E pode até ter as setas ao contrário, do filho para o pai, para responder "estes
 dois estão no mesmo grupo?" quase de graça (o union-find).
 
-O que muda na cabeça é a pergunta que você faz antes de escolher a estrutura.
-Não é mais "qual árvore eu sei programar?", e sim "**qual operação vai rodar
+O que muda na cabeça é a pergunta que você faz antes de escolher a estrutura:
+em vez de "qual árvore eu sei programar?", vem "**qual operação vai rodar
 milhões de vezes?**". Busca exata, busca por prefixo, leitura em disco, união de
 grupos: cada uma pede um formato de nó diferente, e o formato do nó decide o
 custo.
@@ -32,35 +32,6 @@ no mesmo dicionário.
 - o **union-find**: conjuntos disjuntos com **união por tamanho** e **compressão de caminho**
 - montar um **corretor ortográfico** e comparar trie, tabela hash e BST com números de verdade
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
-   mesmas chaves e palavras do código.
-2. Leia o código. Cada assunto tem um **TAD** na pasta (`arvgen.h`,
-   `rubronegra.h`, `arvoreb.h`, `trie.h`, `uniao.h`, `corretor.h`); o texto
-   mostra o pedaço do `.c` que importa. Abra o `.c` inteiro também.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos A. Eles não repetem o texto: cada um mostra outra faceta
-   (um caso de borda, uma medição, um uso real). Mude a ordem das inserções e
-   rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   Todo exercício é para codificar: a resposta é um programa que roda e mostra
-   a saída esperada. As dicas vêm logo abaixo do enunciado; tente antes de ler.
-
-Papel e lápis continuam obrigatórios. Na rubro-negra, desenhe a árvore 2-3
-junto; na árvore B, desenhe cada divisão; no union-find, desenhe as setas para o
-pai antes e depois de cada busca.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Na rubro-negra, o nó vermelho é vermelho e o preto aparece em cinza. Na
-trie, os nós verdes são os que terminam uma palavra; no union-find, a raiz
-verde é o representante do grupo.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa muito do que veio antes: **recursão** (0032 e 0033),
@@ -69,8 +40,10 @@ Este módulo usa muito do que veio antes: **recursão** (0032 e 0033),
 hash** (0105 a 0108) e a **distância de edição** (0142). A análise amortizada do
 0116 explica o "quase O(1)" do union-find.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `trie.c`), então os
-comandos são os de sempre:
+Cada assunto tem um **TAD** na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
+`trie.h`, `uniao.h`, `corretor.h`). O texto mostra o pedaço do `.c` que
+importa; abra o `.c` inteiro também. O `rodar` compila junto os `.c` de apoio
+da pasta (como `trie.c`):
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0147-trie/A293.c
@@ -83,6 +56,12 @@ querendo dizer o número máximo de filhos (e o Ziviani, de m a 2m chaves por
 página); confira a convenção antes de comparar números. A rubro-negra do 0145
 é a **esquerdista** (LLRB); a clássica do Cormen, que é a que a prova do PPGI
 cobra, está no assunto 0177.
+
+Papel e lápis continuam obrigatórios. Na rubro-negra, desenhe a árvore 2-3
+junto; na árvore B, cada divisão; no union-find, as setas para o pai antes e
+depois de cada busca. Nos desenhos, o nó vermelho da rubro-negra é vermelho e
+o preto aparece em cinza; na trie, os nós verdes terminam uma palavra; no
+union-find, a raiz verde é o representante do grupo.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -114,8 +93,7 @@ aponta para o primeiro filho, e `irmao` aponta para o próximo filho do mesmo
 pai. Os filhos de um nó formam uma **lista encadeada** que começa em `filho` e
 segue pelos `irmao`.
 
-Repare no que isso quer dizer: com dois ponteiros por nó, é uma **árvore
-binária** disfarçada. Leia `filho` como "esquerdo" e `irmao` como "direito" e
+Com dois ponteiros por nó, isso é uma **árvore binária** disfarçada. Leia `filho` como "esquerdo" e `irmao` como "direito" e
 qualquer árvore geral vira uma binária, sem perder nada. O nó tem o mesmo
 tamanho tenha ele zero ou cinquenta filhos.
 
@@ -129,7 +107,7 @@ E as funções recursivas seguem o molde da árvore: resolva o próprio nó, pe�
 resposta de cada filho e junte. O total do orçamento é o valor do nó mais o
 total de cada filho, uma **pós-ordem**: os filhos ficam prontos antes do pai.
 
-Vamos ver na prática. O orçamento da reforma tem 10 nós. Os tópicos que só
+O orçamento da reforma tem 10 nós. Os tópicos que só
 agrupam (reforma, cozinha, banheiro, louças) têm valor 0; os itens têm preço.
 No desenho, em cima a árvore como você pensa nela; embaixo, como ela fica na
 memória, com as setas verdes descendo para o primeiro filho e as roxas andando
@@ -204,7 +182,7 @@ int main(void) {
 // Itens: 10 | altura: 3 | grau da raiz: 3
 ```
 
-Repara no fluxograma: é o `ag_total` chamado no banheiro. A soma começa no
+O fluxograma acompanha o `ag_total` chamado no banheiro. A soma começa no
 valor próprio (0), o laço visita o box (900) e as louças (que devolvem 700 depois
 de somar vaso e cuba) e para quando `p` chega em `NULL`, no fim da fila de
 irmãos. O banheiro devolve 1600:
@@ -645,10 +623,10 @@ A **inversão de cores** pinta os dois filhos de preto e `h` de vermelho: o
 vermelho que sobe é a chave do meio indo para o pai. Lá em cima, ele pode
 disparar os consertos de novo, como a divisão que sobe na 2-3.
 
-Vamos ver na prática. O síndico cadastra as tags 30, 10 e 20. A 20 entra à
+No desenho, o síndico cadastra as tags 30, 10 e 20. A 20 entra à
 direita do 10 e forma um zigue-zague: os três consertos acontecem um atrás do
 outro. Depois, com as tags 50 e 40, a árvore fica com o 20 vermelho colado no
-40, que é exatamente o nó 2-3 `[20 40]`:
+40, que é o nó 2-3 `[20 40]`:
 
 <p align="center"><img src="22-arvores-avancadas/0145-rubro-negra/ideia.svg" alt="Diagrama da ideia: Rubro-negra esquerdista (LLRB): inserção" width="858"></p>
 
@@ -726,7 +704,7 @@ int main(void) {
 // Altura 2, altura preta 2
 ```
 
-Repara no fluxograma: são os três `if` da volta, em sequência, e não um
+No fluxograma estão os três `if` da volta, em sequência, e não um
 `else if`. O caminho verde é o do nó 30 quando a tag 20 chega: o primeiro
 conserto já foi feito lá embaixo, no 10; no 30 entram o segundo e o terceiro:
 
@@ -764,8 +742,8 @@ todas as folhas no mesmo nível.
 > começa num endereço múltiplo de 4, os dois bits mais baixos de um ponteiro
 > para nó são sempre 0, e ele guarda a cor no bit mais baixo do ponteiro para o
 > pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas é
-> um truque de sistema operacional, não de curso. A grande vantagem prática é
-> outra: a inserção faz no máximo um punhado de trocas de ponteiros por nível
+> um truque de sistema operacional, não de curso. Na prática, a vantagem está
+> em outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
 > e não recalcula alturas.
 
 > [!NOTE]
@@ -1100,7 +1078,7 @@ guardadas no disco, porque não cabem na memória. Ler do disco é lento: um HD
 leva uns 10 milissegundos para buscar um bloco, tempo em que o processador faz
 milhões de comparações. Numa AVL com 2 milhões de livros, a busca desce uns 21
 nós, e se cada nó estiver num bloco diferente são 21 idas ao disco. Para o
-disco, o que importa não é comparar pouco: é **ler poucos nós**.
+disco, **ler poucos nós** importa mais do que comparar pouco.
 
 A **árvore B** resolve isso com nós gordos. Cada nó guarda **várias chaves em
 ordem** e tem um filho a mais do que chaves: com as chaves `[40 70]`, o filho
@@ -1130,9 +1108,9 @@ solução é a **divisão**: um nó com `2t - 1` chaves se parte em dois nós de
 cheio nessa hora, o TAD divide **na descida**: todo nó cheio que aparece no
 caminho é dividido antes de a chave descer por ele. Quando a raiz está cheia,
 ela se divide e a chave do meio vira uma raiz nova. A árvore B cresce por
-cima, nunca por baixo: é por isso que as folhas continuam todas no mesmo nível.
+cima, nunca por baixo, e por isso as folhas continuam todas no mesmo nível.
 
-Vamos ver na prática. O bibliotecário cadastra 11 livros, nesta ordem: 40, 10,
+No exemplo, o bibliotecário cadastra 11 livros, nesta ordem: 40, 10,
 70, 20, 50, 80, 30, 60, 90, 25 e 85. Quando o 25 chega, a raiz é `[40 70]` e a
 folha do caminho, `[10 20 30]`, está cheia: ela se divide, o 20 sobe e o 25
 entra na metade da direita. Quando o 85 chega, a raiz `[20 40 70]` é que está
@@ -1188,7 +1166,7 @@ NoB *ab_insere(NoB *raiz, int chave) {
 }
 ```
 
-Repare que `divide` não apaga nada de `y`: só diminui `y->n`. As chaves do fim
+A `divide` não apaga nada de `y`: só diminui `y->n`. As chaves do fim
 continuam no vetor, mas ficam fora da parte em uso. O cliente:
 
 ```c
@@ -1226,7 +1204,7 @@ int main(void) {
 // Livro 65: não tem, 3 nós lidos
 ```
 
-Repara no fluxograma: é o `insere_nao_cheio` chamado na raiz `[40 70]` quando
+O fluxograma segue o `insere_nao_cheio` chamado na raiz `[40 70]` quando
 o 25 chega. A raiz não é folha; o 25 desce pelo filho 0, que está cheio; o
 filho se divide e o 20 sobe. Como 25 é maior que o 20, o `i++` manda a chave
 para a metade nova, e a chamada recursiva a põe na folha `[30]`:
@@ -1234,7 +1212,7 @@ para a metade nova, e a chamada recursiva a põe na folha `[30]`:
 <p align="center"><img src="22-arvores-avancadas/0146-arvore-b/fluxograma.svg" alt="Fluxograma: Árvore B: busca, divisão e inserção" width="608"></p>
 
 > [!WARNING]
-> Depois de `divide(x, i)`, o nó por onde a chave ia descer virou **dois**, e
+> Depois de `divide(x, i)`, o nó pelo qual a chave ia descer virou **dois**, e
 > a chave que subiu está em `x->chave[i]`. Se a chave nova for maior que ela,
 > o caminho certo é o filho `i + 1`, a metade nova. Esquecer o
 > `if (chave > x->chave[i]) i++;` põe chaves grandes na metade da esquerda: a
@@ -1577,7 +1555,7 @@ busca 31: não achou, 3 blocos lidos
 Você digita `bol` no celular e o teclado já oferece "bola", "boleto", "bolo" e
 "bolsa". Ele não compara o que você digitou com cada palavra do dicionário,
 uma por uma: são dezenas de milhares de palavras, e a sugestão aparece a cada
-letra. O truque é guardar as palavras de um jeito em que **o prefixo é o
+letra. A saída é guardar as palavras de um jeito em que **o prefixo é o
 endereço**.
 
 Esse jeito é a **trie** (do inglês *retrieval*; também chamada de **árvore de
@@ -1606,10 +1584,10 @@ O custo de inserir e de buscar é **O(L)**, em que L é o tamanho da palavra, e
 buscar "bolsa" desce 5 nós. Numa BST de 100 mil palavras seriam umas 17
 comparações de strings inteiras.
 
-Vamos ver na prática. O teclado guarda oito palavras: bolo, bola, bolsa,
+No exemplo, o teclado guarda oito palavras: bolo, bola, bolsa,
 boleto, bom, bombom, pão e pastel (sem acento: `pao`). No desenho, o ramo do
 `b`: o caminho verde é o prefixo "bol", que tem nó mas não é palavra; os nós
-verdes são onde alguma palavra termina:
+verdes marcam o fim de alguma palavra:
 
 <p align="center"><img src="22-arvores-avancadas/0147-trie/ideia.svg" alt="Diagrama da ideia: Trie: árvore de prefixos e autocompletar" width="876"></p>
 
@@ -1676,7 +1654,7 @@ As sugestões saem em ordem alfabética sem ordenar nada: a função que percorr
 a subárvore visita os filhos de `a` a `z`, então "bola" (`a`) vem antes de
 "boleto" (`e`), que vem antes de "bolo" (`o`).
 
-Repara no fluxograma: é a inserção de "bom", que chega depois das quatro
+O fluxograma mostra a inserção de "bom", que chega depois das quatro
 palavras com "bol". O `b` e o `o` já existem (o caminho segue pelo "Não" duas
 vezes); o `m` é novo e ganha um nó. Acabaram as letras, e o `m` recebe
 `fim = true`:
@@ -2064,8 +2042,8 @@ grupos que não se misturam, e só existem duas operações:
 A estrutura que faz isso é o **union-find**. Cada grupo é uma árvore, e a
 floresta inteira cabe num vetor: `pai[x]` é o pai de x, e a raiz é quem aponta
 para si mesmo (`pai[x] == x`). A raiz é o representante. `acha` sobe pelos
-pais até a raiz; `une` acha as duas raízes e pendura uma na outra. Repare que
-aqui as setas vão do filho para o pai: ninguém precisa descer na árvore.
+pais até a raiz; `une` acha as duas raízes e pendura uma na outra. Aqui as
+setas vão do filho para o pai: ninguém precisa descer na árvore.
 
 Do jeito ingênuo, a árvore pode virar uma fila indiana, e `acha` passa a custar
 O(n). Dois truques resolvem:
@@ -2090,7 +2068,7 @@ superior da altura e só ganha 1 quando duas raízes de mesmo posto se juntam.
 A garantia é a mesma, O(m · α(n)), e é essa estrutura que o Kruskal (0152)
 usa.
 
-Vamos ver na prática. Oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades. No
+No exemplo, são oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades. No
 fim sobram dois grupos: {Ana, Beto, Caio, Duda} e {Edu, Fia, Gui, Hugo}. Duda e
 Hugo estão a dois passos da raiz; as perguntas sobre eles comprimem o caminho e
 os deixam pendurados direto no representante:
@@ -2177,7 +2155,7 @@ Empate: a raiz de a continua raiz, e o Caio vai para baixo da Ana, levando a
 Duda junto. A Duda fica a dois passos da raiz até a pergunta "Ana e Duda?"
 subir por ela e comprimir o caminho.
 
-Repara no fluxograma: é o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
+O fluxograma acompanha o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
 (Gui), diferentes; os dois grupos têm tamanho 2, então não há troca, e o Gui
 (com o Hugo embaixo) vira filho do Edu:
 
@@ -2194,7 +2172,7 @@ Repara no fluxograma: é o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
 > [!TIP]
 > **Por dentro do C:** a floresta inteira são dois vetores de `int`, sem um
 > ponteiro sequer: 8 bytes por elemento, 8 MB para um milhão de pessoas, tudo
-> contíguo na memória (o cache do processador agradece). Repare na assinatura
+> contíguo na memória, o que favorece o cache do processador. Veja a assinatura
 > `int uf_acha(UF *u, int x)`: sem `const`, porque **consultar modifica** a
 > estrutura (a compressão reescreve `pai`). Até `uf_juntos`, que parece só uma
 > pergunta, mexe no vetor. O A295 mede o efeito dos truques: com 10 mil
@@ -2600,13 +2578,13 @@ O TAD fica em `corretor.h` e `corretor.c`: `cor_carrega_basico` monta um
 dicionário com 84 palavras comuns, `cor_proxima` separa o texto em palavras,
 `cor_contem` faz a busca exata e `cor_sugere` gera e filtra os candidatos.
 
-Vamos ver na prática. O aviso desta semana tem 18 palavras e cinco problemas:
+O aviso desta semana tem 18 palavras e cinco problemas:
 três erros de digitação com uma sugestão só, um "caa" que pode ser três
 palavras e um "esquina" que está certo, mas não está no dicionário:
 
 <p align="center"><img src="22-arvores-avancadas/0149-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: corretor ortográfico" width="887"></p>
 
-O coração do `cor_sugere`. Cada candidato vai para `anota`, que confere na
+O miolo do `cor_sugere`. Cada candidato vai para `anota`, que confere na
 trie, descarta repetidos e mantém a lista em ordem alfabética:
 
 ```c
@@ -2692,7 +2670,7 @@ int main(void) {
 // 18 palavras, 5 para revisar
 ```
 
-Repara no fluxograma: o programa é um laço sobre as palavras. A maioria passa
+No fluxograma, o programa é um laço sobre as palavras. A maioria passa
 direto pela pergunta "está no dicionário?"; só as desconhecidas pagam o preço
 dos candidatos. O caminho verde é o de uma palavra como "fiera", seguido do
 fim do texto:

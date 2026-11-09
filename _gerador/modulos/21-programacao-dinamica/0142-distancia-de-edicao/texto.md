@@ -31,14 +31,14 @@ letras custa `j` inserções, `d[0][j] = j`.
 | `a[i-1] == b[j-1]` | `d[i-1][j-1]` (diagonal, de graça) |
 | letras diferentes | `1 +` o menor entre `d[i-1][j-1]` (troca), `d[i-1][j]` (remove) e `d[i][j-1]` (insere) |
 
-Vamos ver na prática com CARTA e ARTES. A resposta é 3, e a volta pela
+Tome CARTA e ARTES. A resposta é 3, e a volta pela
 tabela mostra quais edições: remover o C, inserir um E e trocar o último A
 por S (CARTA, ARTA, ARTEA, ARTES). As setas mostram de onde cada célula do
 caminho veio:
 
 {{ideia}}
 
-O mesmo exemplo em C. A volta mostra as edições do fim da palavra para o
+No código, a volta mostra as edições do fim da palavra para o
 começo (o E852 monta o alinhamento na ordem certa):
 
 ```c
@@ -131,7 +131,7 @@ digitada com 300 mil palavras do dicionário faz 300 mil tabelas pequenas;
 por isso os de verdade primeiro descartam as palavras de tamanho muito
 diferente (a distância é pelo menos a diferença dos tamanhos).
 
-Repara no fluxograma: é a decisão de uma célula do miolo, com o caminho da
+O fluxograma mostra a decisão de uma célula do miolo, com o caminho da
 célula `d[5][5]` (o último A contra o S), em que a troca ganhou:
 
 {{fluxograma}}
@@ -161,8 +161,8 @@ vizinho eu vim?":
 > [!TIP]
 > **Por dentro do C:** `menor3` é chamada `m × n` vezes. Com otimização
 > (`gcc -O2`), o compilador costuma colocar o corpo dela direto no laço
-> (*inline*), sem o custo de empilhar um frame por célula. Repare também que
-> a tabela de `int` é um desperdício para palavras: a distância nunca passa
+> (*inline*), sem o custo de empilhar um frame por célula. E a tabela de
+> `int` é um desperdício para palavras: a distância nunca passa
 > do tamanho da maior palavra, então um `unsigned char` (até 255) bastaria
 > para palavras de até 255 letras, e a tabela de 51 × 51 cairia de 10.404
 > para 2.601 bytes.

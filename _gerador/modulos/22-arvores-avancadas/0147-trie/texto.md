@@ -3,7 +3,7 @@
 Você digita `bol` no celular e o teclado já oferece "bola", "boleto", "bolo" e
 "bolsa". Ele não compara o que você digitou com cada palavra do dicionário,
 uma por uma: são dezenas de milhares de palavras, e a sugestão aparece a cada
-letra. O truque é guardar as palavras de um jeito em que **o prefixo é o
+letra. A saída é guardar as palavras de um jeito em que **o prefixo é o
 endereço**.
 
 Esse jeito é a **trie** (do inglês *retrieval*; também chamada de **árvore de
@@ -32,10 +32,10 @@ O custo de inserir e de buscar é **O(L)**, em que L é o tamanho da palavra, e
 buscar "bolsa" desce 5 nós. Numa BST de 100 mil palavras seriam umas 17
 comparações de strings inteiras.
 
-Vamos ver na prática. O teclado guarda oito palavras: bolo, bola, bolsa,
+No exemplo, o teclado guarda oito palavras: bolo, bola, bolsa,
 boleto, bom, bombom, pão e pastel (sem acento: `pao`). No desenho, o ramo do
 `b`: o caminho verde é o prefixo "bol", que tem nó mas não é palavra; os nós
-verdes são onde alguma palavra termina:
+verdes marcam o fim de alguma palavra:
 
 {{ideia}}
 
@@ -102,7 +102,7 @@ As sugestões saem em ordem alfabética sem ordenar nada: a função que percorr
 a subárvore visita os filhos de `a` a `z`, então "bola" (`a`) vem antes de
 "boleto" (`e`), que vem antes de "bolo" (`o`).
 
-Repara no fluxograma: é a inserção de "bom", que chega depois das quatro
+O fluxograma mostra a inserção de "bom", que chega depois das quatro
 palavras com "bol". O `b` e o `o` já existem (o caminho segue pelo "Não" duas
 vezes); o `m` é novo e ganha um nó. Acabaram as letras, e o `m` recebe
 `fim = true`:

@@ -3,9 +3,9 @@
 Uma corrente começa no grupo da família: quem recebe repassa para 3 contatos
 novos. Na primeira rodada saem 3 mensagens; na segunda, 9; na terceira, 27.
 Quantas mensagens saem na rodada 20? A conta é 3²⁰. O jeito óbvio é um laço
-que multiplica por 3 vinte vezes. Funciona, mas dá para fazer bem melhor.
+que multiplica por 3 vinte vezes. Funciona, mas gasta multiplicação demais.
 
-Repare que 3²⁰ = 3¹⁰ · 3¹⁰. Quem sabe 3¹⁰ resolve 3²⁰ com **uma**
+Note que 3²⁰ = 3¹⁰ · 3¹⁰. Quem sabe 3¹⁰ resolve 3²⁰ com **uma**
 multiplicação. E 3¹⁰ = 3⁵ · 3⁵. E 3⁵ = 3² · 3² · 3 (expoente ímpar: sobra um
 3). O problema grande vira um problema do mesmo tipo com a metade do tamanho.
 
@@ -20,7 +20,7 @@ Ela tem três passos, e você já viu os três no merge sort (assunto 0094):
 A busca binária (0090) divide e descarta uma das metades. O merge sort divide
 em duas metades e gasta o trabalho na combinação (a intercalação). O quick
 sort (0095) gasta o trabalho na divisão (o particionamento) e não tem nada a
-combinar. A técnica é a mesma; muda onde mora o esforço.
+combinar. A técnica é a mesma; muda a etapa que carrega o esforço.
 
 Na potência, a divisão é cortar o expoente ao meio, e a combinação é elevar
 ao quadrado (mais um `x` quando o expoente é ímpar). O caso base é `n == 0`,
@@ -31,13 +31,13 @@ uns `log₂ n` níveis, e cada nível faz uma ou duas multiplicações. A
 recorrência é T(n) = T(n/2) + O(1), e pelo assunto 0115 isso dá **O(log n)**.
 Para n = 1 milhão, são uns 20 níveis contra 1 milhão de voltas do laço.
 
-Vamos ver na prática. A recursão desce dividindo o expoente (20, 10, 5, 2, 1,
-0) e sobe combinando: o 1 do caso base vira 3, que vira 9, que vira 243, e
-assim até 3²⁰. Repare que o 3⁴ nem aparece: o caminho até 20 não passa por ele.
+No desenho, a recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
+combinando: o 1 do caso base vira 3, que vira 9, que vira 243, e assim até 3²⁰.
+O 3⁴ nem aparece, porque o caminho até 20 não passa por ele.
 
 {{ideia}}
 
-O mesmo exemplo em C. O `printf` dentro da função mostra cada resultado
+Em C, o `printf` dentro da função mostra cada resultado
 parcial na hora em que a chamada termina, e o contador `mult` soma as
 multiplicações:
 
@@ -83,9 +83,9 @@ int main(void) {
 Os resultados saem de baixo para cima: a chamada de 3²⁰ é a primeira a
 começar e a última a terminar. É a pilha de chamadas do assunto 0031.
 
-Repara no fluxograma: é a chamada de cima, com `n = 20`. Ela não é o caso
-base, chama a si mesma com 10, recebe 59049 e, como 20 é par, só eleva ao
-quadrado. Cada chamada de dentro percorre o mesmo fluxograma com o seu `n`:
+O fluxograma segue a chamada de cima, com `n = 20`. Ela não é o caso base:
+chama a si mesma com 10, recebe 59049 e, como 20 é par, só eleva ao quadrado.
+Cada chamada de dentro percorre o mesmo caminho com o seu `n`:
 
 {{fluxograma}}
 
@@ -100,8 +100,8 @@ quadrado. Cada chamada de dentro percorre o mesmo fluxograma com o seu `n`:
 > [!TIP]
 > **Por dentro do C:** a recursão empilha um frame para cada bit do
 > expoente, mais o do caso base: para n = 20 (5 bits) são 6 frames na pilha,
-> para n = 1 bilhão (30 bits) seriam 31. O perigo aqui
-> não é a pilha, é o **estouro do `long long`**: ele guarda até
+> para n = 1 bilhão (30 bits) seriam 31. O perigo aqui está no
+> **estouro do `long long`**, e não na pilha: ele guarda até
 > 9 223 372 036 854 775 807, e 3³⁹ ainda cabe, mas 3⁴⁰ não. Estouro de inteiro
 > com sinal é comportamento indefinido, e o `rodar` acusa com `runtime error`.
 > Quando só interessam os últimos dígitos, faça cada multiplicação seguida de

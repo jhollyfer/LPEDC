@@ -31,13 +31,13 @@ O TAD fica em `corretor.h` e `corretor.c`: `cor_carrega_basico` monta um
 dicionário com 84 palavras comuns, `cor_proxima` separa o texto em palavras,
 `cor_contem` faz a busca exata e `cor_sugere` gera e filtra os candidatos.
 
-Vamos ver na prática. O aviso desta semana tem 18 palavras e cinco problemas:
+O aviso desta semana tem 18 palavras e cinco problemas:
 três erros de digitação com uma sugestão só, um "caa" que pode ser três
 palavras e um "esquina" que está certo, mas não está no dicionário:
 
 {{ideia}}
 
-O coração do `cor_sugere`. Cada candidato vai para `anota`, que confere na
+O miolo do `cor_sugere`. Cada candidato vai para `anota`, que confere na
 trie, descarta repetidos e mantém a lista em ordem alfabética:
 
 ```c
@@ -123,7 +123,7 @@ int main(void) {
 // 18 palavras, 5 para revisar
 ```
 
-Repara no fluxograma: o programa é um laço sobre as palavras. A maioria passa
+No fluxograma, o programa é um laço sobre as palavras. A maioria passa
 direto pela pergunta "está no dicionário?"; só as desconhecidas pagam o preço
 dos candidatos. O caminho verde é o de uma palavra como "fiera", seguido do
 fim do texto:

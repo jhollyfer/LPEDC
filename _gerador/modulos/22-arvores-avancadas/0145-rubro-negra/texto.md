@@ -54,10 +54,10 @@ A **inversão de cores** pinta os dois filhos de preto e `h` de vermelho: o
 vermelho que sobe é a chave do meio indo para o pai. Lá em cima, ele pode
 disparar os consertos de novo, como a divisão que sobe na 2-3.
 
-Vamos ver na prática. O síndico cadastra as tags 30, 10 e 20. A 20 entra à
+No desenho, o síndico cadastra as tags 30, 10 e 20. A 20 entra à
 direita do 10 e forma um zigue-zague: os três consertos acontecem um atrás do
 outro. Depois, com as tags 50 e 40, a árvore fica com o 20 vermelho colado no
-40, que é exatamente o nó 2-3 `[20 40]`:
+40, que é o nó 2-3 `[20 40]`:
 
 {{ideia}}
 
@@ -135,7 +135,7 @@ int main(void) {
 // Altura 2, altura preta 2
 ```
 
-Repara no fluxograma: são os três `if` da volta, em sequência, e não um
+No fluxograma estão os três `if` da volta, em sequência, e não um
 `else if`. O caminho verde é o do nó 30 quando a tag 20 chega: o primeiro
 conserto já foi feito lá embaixo, no 10; no 30 entram o segundo e o terceiro:
 
@@ -173,8 +173,8 @@ todas as folhas no mesmo nível.
 > começa num endereço múltiplo de 4, os dois bits mais baixos de um ponteiro
 > para nó são sempre 0, e ele guarda a cor no bit mais baixo do ponteiro para o
 > pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas é
-> um truque de sistema operacional, não de curso. A grande vantagem prática é
-> outra: a inserção faz no máximo um punhado de trocas de ponteiros por nível
+> um truque de sistema operacional, não de curso. Na prática, a vantagem está
+> em outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
 > e não recalcula alturas.
 
 > [!NOTE]

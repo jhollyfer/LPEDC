@@ -14,12 +14,12 @@ Aqui ela calcula potências em O(log n), conta inversões e acha o melhor
 trecho de um vetor em O(n log n).
 
 A segunda é a **estratégia gulosa**: escolher, a cada passo, o que parece
-melhor agora, e nunca desfazer. Quando funciona, dá os algoritmos mais simples
-e rápidos que existem; quando não funciona, erra com toda a confiança. Por
-isso o módulo insiste em duas habilidades: achar um **contraexemplo** e
+melhor agora, e nunca desfazer. Quando funciona, dá algoritmos curtos e
+rápidos; quando não funciona, erra sem dar nenhum sinal. Por isso o módulo
+insiste em duas habilidades: achar um **contraexemplo** e
 entender o argumento de **troca** que prova que um guloso está certo.
 
-O módulo termina com um projeto de verdade: um compactador de arquivos com o
+O módulo termina com um projeto: um compactador de arquivos com o
 código de Huffman, que junta heap, árvore binária, bits, arquivos binários e
 TAD num programa só.
 
@@ -33,29 +33,6 @@ TAD num programa só.
 - o **código de Huffman**: códigos livres de prefixo montados com um heap de mínimo
 - um **compactador e descompactador** de arquivos que grava bits de verdade
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos valores do código.
-2. Leia o código. Nos dois últimos assuntos há um **TAD** na pasta
-   (`huffman.h`, `compactador.h`): o exemplo usa só a interface, mas abra o
-   `.c` para ver o algoritmo.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos. Troque os valores, procure um caso em que o guloso erra.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Nos gulosos, desconfie sempre. Antes de acreditar num critério, gaste cinco
-minutos tentando quebrá-lo com três ou quatro casos pequenos no papel.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o que foi
-escolhido; cinza, o que ficou de fora; vermelho, a escolha que deu errado.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você vai precisar de **recursão** (assuntos 0032 e 0033), do **merge sort**
@@ -64,8 +41,9 @@ Você vai precisar de **recursão** (assuntos 0032 e 0033), do **merge sort**
 17 (0114 e 0115) explica os custos da divisão e conquista, mas dá para seguir
 sem ela.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `huffman.c`). Os
-comandos são os de sempre:
+Os dois últimos assuntos têm um **TAD** na pasta (`huffman.h`,
+`compactador.h`): o exemplo usa só a interface, então abra o `.c` para ver o
+algoritmo. O `rodar` compila junto esses `.c` de apoio (como `huffman.c`):
 
 ```bash
 ~/LPEDC/rodar 20-dc-e-gulosos/0136-huffman/A271.c
@@ -74,6 +52,10 @@ comandos são os de sempre:
 Alguns programas do último assunto criam arquivos de teste na pasta em que
 você está no terminal e os apagam no fim. Rode de uma pasta em que você possa
 escrever (a `~/LPEDC` serve).
+
+Nos gulosos, desconfie: antes de aceitar um critério, tente quebrá-lo com três
+ou quatro casos pequenos no papel. Nos desenhos, verde marca o que foi
+escolhido, cinza o que ficou de fora e vermelho a escolha que deu errado.
 
 {{indice}}
 

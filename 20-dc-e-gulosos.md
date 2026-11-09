@@ -16,12 +16,12 @@ Aqui ela calcula potências em O(log n), conta inversões e acha o melhor
 trecho de um vetor em O(n log n).
 
 A segunda é a **estratégia gulosa**: escolher, a cada passo, o que parece
-melhor agora, e nunca desfazer. Quando funciona, dá os algoritmos mais simples
-e rápidos que existem; quando não funciona, erra com toda a confiança. Por
-isso o módulo insiste em duas habilidades: achar um **contraexemplo** e
+melhor agora, e nunca desfazer. Quando funciona, dá algoritmos curtos e
+rápidos; quando não funciona, erra sem dar nenhum sinal. Por isso o módulo
+insiste em duas habilidades: achar um **contraexemplo** e
 entender o argumento de **troca** que prova que um guloso está certo.
 
-O módulo termina com um projeto de verdade: um compactador de arquivos com o
+O módulo termina com um projeto: um compactador de arquivos com o
 código de Huffman, que junta heap, árvore binária, bits, arquivos binários e
 TAD num programa só.
 
@@ -35,29 +35,6 @@ TAD num programa só.
 - o **código de Huffman**: códigos livres de prefixo montados com um heap de mínimo
 - um **compactador e descompactador** de arquivos que grava bits de verdade
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos valores do código.
-2. Leia o código. Nos dois últimos assuntos há um **TAD** na pasta
-   (`huffman.h`, `compactador.h`): o exemplo usa só a interface, mas abra o
-   `.c` para ver o algoritmo.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos. Troque os valores, procure um caso em que o guloso erra.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-Nos gulosos, desconfie sempre. Antes de acreditar num critério, gaste cinco
-minutos tentando quebrá-lo com três ou quatro casos pequenos no papel.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue e o que foi
-escolhido; cinza, o que ficou de fora; vermelho, a escolha que deu errado.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Você vai precisar de **recursão** (assuntos 0032 e 0033), do **merge sort**
@@ -66,8 +43,9 @@ Você vai precisar de **recursão** (assuntos 0032 e 0033), do **merge sort**
 17 (0114 e 0115) explica os custos da divisão e conquista, mas dá para seguir
 sem ela.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `huffman.c`). Os
-comandos são os de sempre:
+Os dois últimos assuntos têm um **TAD** na pasta (`huffman.h`,
+`compactador.h`): o exemplo usa só a interface, então abra o `.c` para ver o
+algoritmo. O `rodar` compila junto esses `.c` de apoio (como `huffman.c`):
 
 ```bash
 ~/LPEDC/rodar 20-dc-e-gulosos/0136-huffman/A271.c
@@ -76,6 +54,10 @@ comandos são os de sempre:
 Alguns programas do último assunto criam arquivos de teste na pasta em que
 você está no terminal e os apagam no fim. Rode de uma pasta em que você possa
 escrever (a `~/LPEDC` serve).
+
+Nos gulosos, desconfie: antes de aceitar um critério, tente quebrá-lo com três
+ou quatro casos pequenos no papel. Nos desenhos, verde marca o que foi
+escolhido, cinza o que ficou de fora e vermelho a escolha que deu errado.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -94,9 +76,9 @@ escrever (a `~/LPEDC` serve).
 Uma corrente começa no grupo da família: quem recebe repassa para 3 contatos
 novos. Na primeira rodada saem 3 mensagens; na segunda, 9; na terceira, 27.
 Quantas mensagens saem na rodada 20? A conta é 3²⁰. O jeito óbvio é um laço
-que multiplica por 3 vinte vezes. Funciona, mas dá para fazer bem melhor.
+que multiplica por 3 vinte vezes. Funciona, mas gasta multiplicação demais.
 
-Repare que 3²⁰ = 3¹⁰ · 3¹⁰. Quem sabe 3¹⁰ resolve 3²⁰ com **uma**
+Note que 3²⁰ = 3¹⁰ · 3¹⁰. Quem sabe 3¹⁰ resolve 3²⁰ com **uma**
 multiplicação. E 3¹⁰ = 3⁵ · 3⁵. E 3⁵ = 3² · 3² · 3 (expoente ímpar: sobra um
 3). O problema grande vira um problema do mesmo tipo com a metade do tamanho.
 
@@ -111,7 +93,7 @@ Ela tem três passos, e você já viu os três no merge sort (assunto 0094):
 A busca binária (0090) divide e descarta uma das metades. O merge sort divide
 em duas metades e gasta o trabalho na combinação (a intercalação). O quick
 sort (0095) gasta o trabalho na divisão (o particionamento) e não tem nada a
-combinar. A técnica é a mesma; muda onde mora o esforço.
+combinar. A técnica é a mesma; muda a etapa que carrega o esforço.
 
 Na potência, a divisão é cortar o expoente ao meio, e a combinação é elevar
 ao quadrado (mais um `x` quando o expoente é ímpar). O caso base é `n == 0`,
@@ -122,13 +104,13 @@ uns `log₂ n` níveis, e cada nível faz uma ou duas multiplicações. A
 recorrência é T(n) = T(n/2) + O(1), e pelo assunto 0115 isso dá **O(log n)**.
 Para n = 1 milhão, são uns 20 níveis contra 1 milhão de voltas do laço.
 
-Vamos ver na prática. A recursão desce dividindo o expoente (20, 10, 5, 2, 1,
-0) e sobe combinando: o 1 do caso base vira 3, que vira 9, que vira 243, e
-assim até 3²⁰. Repare que o 3⁴ nem aparece: o caminho até 20 não passa por ele.
+No desenho, a recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
+combinando: o 1 do caso base vira 3, que vira 9, que vira 243, e assim até 3²⁰.
+O 3⁴ nem aparece, porque o caminho até 20 não passa por ele.
 
 <p align="center"><img src="20-dc-e-gulosos/0131-divisao-e-conquista/ideia.svg" alt="Diagrama da ideia: Divisão e conquista" width="858"></p>
 
-O mesmo exemplo em C. O `printf` dentro da função mostra cada resultado
+Em C, o `printf` dentro da função mostra cada resultado
 parcial na hora em que a chamada termina, e o contador `mult` soma as
 multiplicações:
 
@@ -174,9 +156,9 @@ int main(void) {
 Os resultados saem de baixo para cima: a chamada de 3²⁰ é a primeira a
 começar e a última a terminar. É a pilha de chamadas do assunto 0031.
 
-Repara no fluxograma: é a chamada de cima, com `n = 20`. Ela não é o caso
-base, chama a si mesma com 10, recebe 59049 e, como 20 é par, só eleva ao
-quadrado. Cada chamada de dentro percorre o mesmo fluxograma com o seu `n`:
+O fluxograma segue a chamada de cima, com `n = 20`. Ela não é o caso base:
+chama a si mesma com 10, recebe 59049 e, como 20 é par, só eleva ao quadrado.
+Cada chamada de dentro percorre o mesmo caminho com o seu `n`:
 
 <p align="center"><img src="20-dc-e-gulosos/0131-divisao-e-conquista/fluxograma.svg" alt="Fluxograma: Divisão e conquista" width="584"></p>
 
@@ -191,8 +173,8 @@ quadrado. Cada chamada de dentro percorre o mesmo fluxograma com o seu `n`:
 > [!TIP]
 > **Por dentro do C:** a recursão empilha um frame para cada bit do
 > expoente, mais o do caso base: para n = 20 (5 bits) são 6 frames na pilha,
-> para n = 1 bilhão (30 bits) seriam 31. O perigo aqui
-> não é a pilha, é o **estouro do `long long`**: ele guarda até
+> para n = 1 bilhão (30 bits) seriam 31. O perigo aqui está no
+> **estouro do `long long`**, e não na pilha: ele guarda até
 > 9 223 372 036 854 775 807, e 3³⁹ ainda cabe, mas 3⁴⁰ não. Estouro de inteiro
 > com sinal é comportamento indefinido, e o `rodar` acusa com `runtime error`.
 > Quando só interessam os últimos dígitos, faça cada multiplicação seguida de
@@ -611,7 +593,7 @@ Divida o vetor ao meio. Toda inversão é de um destes três tipos:
 2. os dois estão na metade **direita**;
 3. um em cada metade: a inversão **cruza** o meio.
 
-Os tipos 1 e 2 são o mesmo problema, menor: a recursão resolve. O pulo do gato
+Os tipos 1 e 2 são o mesmo problema, menor: a recursão resolve. A ideia nova
 está no tipo 3. Se as duas metades já estiverem **ordenadas**, a intercalação
 conta as inversões cruzadas de graça: quando um elemento da direita sai antes,
 ele é menor que **todos** os que ainda sobram na esquerda. Se sobram `q - i`
@@ -621,14 +603,14 @@ Por isso a função faz duas coisas ao mesmo tempo: devolve a contagem **e**
 deixa o pedaço ordenado, pronto para a intercalação de cima. A recorrência é a
 do merge sort, T(n) = 2T(n/2) + O(n), que dá O(n log n).
 
-Vamos ver na prática. No vetor do Caio, a metade esquerda tem 3 inversões
+No vetor do Caio, a metade esquerda tem 3 inversões
 dentro dela e a direita tem 4. Depois de ordenadas, a intercalação das duas
 acha mais 6 cruzadas: o 2 passa na frente de 3 elementos da esquerda, o 4 de
 2 e o 6 de 1:
 
 <p align="center"><img src="20-dc-e-gulosos/0132-inversoes-e-subvetor/ideia.svg" alt="Diagrama da ideia: Inversões e subvetor de soma máxima" width="858"></p>
 
-O mesmo exemplo em C. É o merge sort com um contador; o `printf` mostra, para
+Em C, é o merge sort com um contador; o `printf` mostra, para
 cada pedaço, as inversões da esquerda, da direita e as cruzadas:
 
 ```c
@@ -709,9 +691,8 @@ direita, ele soma os que ainda sobram na esquerda:
 | 7 | esquerda | | 6 |
 | 8 | direita | (nenhum) | 6 |
 
-Repara no fluxograma: é a chamada de cima, com o vetor inteiro. As duas
-chamadas recursivas contam dentro de cada metade, e a intercalação conta o
-que cruza:
+No fluxograma está a chamada de cima, com o vetor inteiro. As duas chamadas
+recursivas contam dentro de cada metade, e a intercalação conta o que cruza:
 
 <p align="center"><img src="20-dc-e-gulosos/0132-inversoes-e-subvetor/fluxograma.svg" alt="Fluxograma: Inversões e subvetor de soma máxima" width="478"></p>
 
@@ -737,7 +718,7 @@ A264 mostra um jeito ainda mais rápido, em O(n).
 > Na intercalação, a soma é `inv += q - i`, e não `inv++`. Quando o `v[j]` da
 > direita sai, ele está fora de ordem com **todos** os elementos de `v[i]` até
 > `v[q - 1]`, porque a esquerda está ordenada. Somar 1 contaria só o par com
-> `v[i]`. E repare no `<=`: em caso de empate, sai o da esquerda, porque dois
+> `v[i]`. E note o `<=`: em caso de empate, sai o da esquerda, porque dois
 > valores iguais **não** são uma inversão. Com `<`, cada empate viraria uma
 > inversão falsa.
 
@@ -746,7 +727,7 @@ A264 mostra um jeito ainda mais rápido, em O(n).
 > 100 000 elementos ao contrário tem 100 000 · 99 999 / 2 = 4 999 950 000
 > inversões, e um `int` de 32 bits vai só até 2 147 483 647. O estouro de
 > `int` com sinal é comportamento indefinido; com o `rodar`, o sanitizer
-> avisa com `runtime error: signed integer overflow`. Repare também que contar
+> avisa com `runtime error: signed integer overflow`. Contar também
 > **ordena** o vetor: se você ainda precisar da ordem original, conte numa
 > cópia (`memcpy` para um vetor alocado antes).
 
@@ -1110,7 +1091,7 @@ Na padaria, o pão deu R$ 3,10 e você pagou com uma nota de 5. O caixa precisa
 devolver R$ 1,90 com o **menor número de moedas**. Ninguém ali testa
 combinações. O caixa pega a maior moeda que cabe (R$ 1), depois a maior que
 cabe no que falta (50 centavos), e assim por diante: 100 + 50 + 25 + 10 + 5,
-cinco moedas. Rápido e certo.
+cinco moedas, o mínimo possível.
 
 Esse jeito de pensar tem nome: **algoritmo guloso** (em inglês, *greedy*). A
 cada passo ele faz a escolha que parece a **melhor agora**, sem pensar no
@@ -1125,8 +1106,7 @@ arquivos (Huffman). No módulo 23, Prim e Kruskal (assuntos 0152 e 0153) montam
 a árvore geradora mínima do mesmo jeito: a aresta mais barata que ainda serve
 entra e nunca mais sai.
 
-Quando funciona, o guloso é o algoritmo mais simples e rápido que existe.
-Aqui, é um laço só: O(k + número de moedas dadas), para `k` tipos de moeda. O
+Quando funciona, o guloso sai curto e barato. Aqui, é um laço só: O(k + número de moedas dadas), para `k` tipos de moeda. O
 problema é o "quando funciona". Uma escolha boa agora pode estragar o resto, e
 o guloso não tem como perceber.
 
@@ -1137,7 +1117,7 @@ causa da primeira escolha: o 4 parecia ótimo e fechou o caminho bom.
 
 Então por que no Real dá certo? Porque o sistema do Real é **canônico**: para
 ele, dá para provar que o guloso sempre acha o mínimo. A prova é do tipo
-"troca": se um troco usasse, por exemplo, duas moedas de 25 onde cabe uma de
+"troca": se um troco usasse, por exemplo, duas moedas de 25 no lugar de uma de
 50, trocar as duas pela de 50 diminuiria a conta. Repetindo o argumento para
 cada moeda, a solução ótima só pode ser a gulosa. Com {1, 3, 4}, a troca não
 funciona: duas fichas de 3 não viram uma de 4.
@@ -1151,15 +1131,14 @@ troca do parágrafo anterior prova a primeira. Quando o guloso não serve, o
 caminho é testar as combinações com esperteza: a programação dinâmica do
 módulo 21 resolve o troco de qualquer sistema de moedas.
 
-Vamos ver na prática. Em cima, o troco de R$ 1,90: cada moeda escolhida é a
+O desenho põe os dois casos lado a lado. Em cima, o troco de R$ 1,90: cada moeda escolhida é a
 maior que cabe no que falta, e o guloso acerta. Embaixo, as fichas: o 4
 parece a melhor escolha, mas deixa um resto de 2 que custa duas fichas, e o
 ótimo (3 + 3) nunca é visto:
 
 <p align="center"><img src="20-dc-e-gulosos/0133-gulosos/ideia.svg" alt="Diagrama da ideia: Algoritmos gulosos" width="858"></p>
 
-O mesmo exemplo em C. A função recebe as moedas em ordem **decrescente** e
-anda por elas: se a moeda cabe, dá a moeda e continua nela (pode precisar de
+Em C, a função recebe as moedas em ordem **decrescente** e anda por elas: se a moeda cabe, dá a moeda e continua nela (pode precisar de
 outra igual); se não cabe, passa para a próxima menor:
 
 ```c
@@ -1197,11 +1176,10 @@ int main(void) {
 // Troco de 6: 4 1 1 (3 moedas)
 ```
 
-O código não tem como saber que errou: ele devolve 3 com a mesma confiança
-com que devolve 5. Quem sabe que 3 não é o mínimo é você, que achou o
-contraexemplo.
+O código não tem como saber que errou: devolve 3 com a mesma confiança com que
+devolve 5. Só o contraexemplo mostra que 3 não é o mínimo.
 
-Repara no fluxograma: as duas perguntas fazem todo o trabalho. "Ainda falta
+No fluxograma, duas perguntas fazem todo o trabalho. "Ainda falta
 troco?" controla o laço, e "a moeda da vez cabe?" decide entre dar a moeda ou
 descer para a próxima. Não há caminho de volta para uma moeda maior:
 
@@ -1211,7 +1189,7 @@ descer para a próxima. Não há caminho de volta para uma moeda maior:
 > O guloso do troco **depende da ordem** do vetor. Com as moedas em ordem
 > crescente (`{5, 10, 25, 50, 100}`), a função dá 38 moedas de 5 centavos para
 > o troco de R$ 1,90: ela pega a primeira que cabe, e a primeira é a menor.
-> Se as moedas chegam fora de ordem, ordene antes, de forma decrescente (com o
+> Se as moedas chegam fora de ordem, ordene antes, da maior para a menor (com o
 > `qsort`, assunto 0096). E lembre: mesmo ordenado, o guloso só garante o
 > mínimo em sistema canônico.
 
@@ -1611,15 +1589,15 @@ O algoritmo (o `GREEDY-ACTIVITY-SELECTOR` do Cormen) fica assim:
 O custo é o da ordenação, O(n log n), mais uma passada O(n). Cada pedido é
 olhado uma vez e a decisão é final: aceitou, aceitou; recusou, recusou.
 
-Vamos ver na prática. No desenho, cada barra é um pedido, na ordem em que o
+No desenho, cada barra é um pedido, na ordem em que o
 algoritmo olha para eles (por hora de fim). As verdes foram aceitas; as
-cinzas chocaram com alguém já aceito. Repare na Iara: o pedido dela começa
+cinzas chocaram com alguém já aceito. Veja a Iara: o pedido dela começa
 antes de todos, às 7h, e é o primeiro que o critério "quem começa antes"
 aceitaria, bloqueando a quadra até as 17h:
 
 <p align="center"><img src="20-dc-e-gulosos/0134-intervalos/ideia.svg" alt="Diagrama da ideia: Seleção de intervalos" width="858"></p>
 
-O mesmo exemplo em C. Os pedidos são structs, ordenados com `qsort` (assunto
+No código, os pedidos são structs, ordenados com `qsort` (assunto
 0096) por uma função que compara os fins:
 
 ```c
@@ -1675,11 +1653,11 @@ int main(void) {
 // Reservas aceitas: 5 de 9
 ```
 
-Repare que a Carla (10h às 11h) foi aceita logo depois da Ana (8h às 10h): os
+A Carla (10h às 11h) foi aceita logo depois da Ana (8h às 10h): os
 intervalos são **semiabertos**, e a Ana libera a quadra exatamente às 10h. Por
 isso o teste é `ini >= livre_em`, com o igual.
 
-Repara no fluxograma: depois da ordenação, é um laço com uma pergunta só. O
+Depois da ordenação, o fluxograma é um laço com uma pergunta só. O
 caminho marcado mostra a Ana sendo aceita e o Bruno sendo recusado; o resto
 repete esses dois trajetos:
 
@@ -2113,8 +2091,8 @@ e `n` itens, cada um com peso e valor; você pode levar qualquer fração de
 cada item, e o valor acompanha a fração (metade do café vale metade do
 preço). O objetivo é o maior valor total sem passar de `W`.
 
-O que importa não é o valor de cada saco, nem o peso: é o **valor por quilo**.
-Cada quilo de espaço da caminhonete é igual aos outros, então ele deve ir para
+O que decide é o **valor por quilo**, e não o valor do saco nem o peso. Cada
+quilo de espaço da caminhonete é igual aos outros, então ele deve ir para
 o produto que paga mais por quilo. O guloso fica assim:
 
 1. calcule a **razão** `valor / peso` de cada item;
@@ -2129,17 +2107,17 @@ Por que o guloso acerta aqui? Pelo argumento de troca, de novo. Suponha uma
 carga que leva 1 kg de feijão (R$ 9/kg) e deixa de fora 1 kg de castanha
 (R$ 50/kg). Trocar esse quilo de feijão pelo de castanha aumenta o valor em
 R$ 41 e não muda o peso. Então uma carga ótima nunca deixa de fora um quilo
-que paga mais enquanto leva um que paga menos, e é exatamente isso que a
-ordem pela razão garante.
+que paga mais enquanto leva um que paga menos, e a ordem pela razão garante
+isso.
 
-Vamos ver na prática. Ordenados pela razão, o açafrão paga R$ 80/kg, a
+Ordenados pela razão, o açafrão paga R$ 80/kg, a
 castanha R$ 50, o café R$ 30, o feijão R$ 9 e o arroz R$ 5. Os três primeiros
 cabem inteiros (5 + 15 + 20 = 40 kg). Sobram 20 kg, e o feijão tem 30: vão
 dois terços do saco. O arroz nem entra:
 
 <p align="center"><img src="20-dc-e-gulosos/0135-mochila-fracionaria/ideia.svg" alt="Diagrama da ideia: Mochila fracionária" width="858"></p>
 
-O mesmo exemplo em C. A função de comparação calcula a razão de cada lado e
+No código, a função de comparação calcula a razão de cada lado e
 ordena do maior para o menor:
 
 ```c
@@ -2194,7 +2172,7 @@ O nome vai no fim da linha de propósito: `%-10s` conta **bytes**, e em UTF-8
 o "ç" e o "ã" ocupam dois bytes cada. Com o nome no começo, as colunas
 ficariam tortas.
 
-Repara no fluxograma: o laço tem duas saídas para cada item. O caminho marcado
+O laço do fluxograma tem duas saídas para cada item. O caminho marcado
 passa pelo "leva tudo" três vezes (açafrão, castanha, café) e uma vez pelo
 "leva a fração" (feijão), que zera o espaço e encerra o laço:
 
@@ -2625,12 +2603,12 @@ texto, cada uma dessas 16 letras ocupa um byte, 8 bits: 128 bits ao todo. Só
 que a frase usa **5 símbolos** diferentes (A, N, B, C e o espaço), e o A
 aparece 7 vezes enquanto o C aparece uma. Gastar 8 bits com cada um é
 desperdício. Com 3 bits por símbolo já daria (2³ = 8 combinações): 48 bits.
-Dá para fazer melhor ainda?
+E dá para gastar menos ainda.
 
-Dá, se cada símbolo tiver um código de tamanho **diferente**: curto para o
+Basta cada símbolo ter um código de tamanho **diferente**: curto para o
 que aparece muito, comprido para o raro. É a ideia do código Morse, em que
 o E (a letra mais comum do inglês) é um ponto só. Mas tamanho variável traz
-um problema: onde termina um código e começa o próximo? Se A = `0` e
+um problema: em que ponto termina um código e começa o próximo? Se A = `0` e
 N = `01`, a sequência `001` pode ser "A A ..." ou "A N".
 
 A saída é um **código livre de prefixo**: nenhum código é o começo de outro.
@@ -2656,7 +2634,7 @@ compridos; os frequentes entram por último, perto da raiz. Para `k` símbolos
 são `k - 1` junções, cada uma com operações de heap de O(log k): o total é
 **O(k log k)**.
 
-Vamos ver na prática. As frequências são A = 7, N = 4, B = 2, espaço = 2 e
+No exemplo, as frequências são A = 7, N = 4, B = 2, espaço = 2 e
 C = 1. O C e o espaço (os menores) se juntam num nó 3; o B junta com o 3
 num 5; o N com o 5 num 9; e o A com o 9 na raiz, 16. Lendo os caminhos: A
 ganha o código `0`, de 1 bit, e o C ganha `1110`, de 4:
@@ -2676,8 +2654,8 @@ byte (o espaço, 32, vem antes do B, 66):
 | 4 | A:7, 9 | A:7 e 9 | 16 (a raiz) |
 
 O TAD fica em `huffman.h` e `huffman.c`. O nó guarda o símbolo, a frequência
-e os dois filhos. O coração do `huffman.c` é o laço do guloso, usando um heap
-de mínimo de ponteiros para nó:
+e os dois filhos. A parte central do `huffman.c` é o laço do guloso, com um
+heap de mínimo de ponteiros para nó:
 
 ```c
 NoHuf *huf_constroi(const long freq[256]) {
@@ -2703,7 +2681,7 @@ NoHuf *huf_constroi(const long freq[256]) {
 O campo `ordem` (o terceiro argumento de `novo_no`) desempata frequências
 iguais: as folhas usam o próprio byte e os nós internos, 256 em diante, na
 ordem de criação. Sem ele, a árvore dependeria de detalhes do heap. Os
-códigos saem de uma descida recursiva que vai acumulando `0` e `1`. O
+códigos saem de uma descida recursiva que acumula `0` e `1`. O
 cliente conta as frequências, monta a árvore e mostra os códigos:
 
 ```c
@@ -2751,7 +2729,7 @@ int main(void) {
 São 7·1 + 4·2 + 2·3 + 1·4 + 2·4 = 33 bits: um quarto do texto original e
 menos que os 48 do código fixo de 3 bits.
 
-Repara no fluxograma: é o laço do `huf_constroi`. Cada volta tira dois nós e
+O fluxograma mostra o laço do `huf_constroi`. Cada volta tira dois nós e
 põe um, então o heap encolhe um por volta. Com 5 folhas, são 4 voltas:
 
 <p align="center"><img src="20-dc-e-gulosos/0136-huffman/fluxograma.svg" alt="Fluxograma: Código de Huffman" width="588"></p>
@@ -2770,8 +2748,8 @@ põe um, então o heap encolhe um por volta. Com 5 folhas, são 4 voltas:
 > por `*p`. Em muitos compiladores, `char` tem sinal, e os bytes de
 > acentos em UTF-8 (como o `ã`, que vira `0xC3 0xA3`) são negativos:
 > `freq[*p]` leria fora do vetor, antes do começo. A tabela `cod` tem
-> 256 × 256 bytes = 64 KB e é `static` para não ocupar a pilha do `main`. E
-> repare que a árvore tem `2k - 1` nós (k folhas e k - 1 internos): 9
+> 256 × 256 bytes = 64 KB e é `static` para não ocupar a pilha do `main`. A
+> árvore tem `2k - 1` nós (k folhas e k - 1 internos): 9
 > `malloc` aqui, e `huf_libera` devolve todos em pós-ordem, os filhos antes
 > do pai.
 
@@ -3188,9 +3166,9 @@ O Huffman do assunto 0136 trabalhava com uma string na memória e códigos
 escritos como texto (`"1110"`). Num arquivo de verdade, cada código vira
 **bits de verdade**, e aparecem três problemas novos:
 
-- **o arquivo é feito de bytes**, não de bits. É preciso juntar os bits dos
-  códigos, 8 de cada vez, num `unsigned char`, e gravar o byte quando ele
-  enche. No fim, o último byte quase nunca está cheio: completa-se com zeros;
+- **o arquivo é feito de bytes**, não de bits. Você junta os bits dos
+  códigos, 8 de cada vez, num `unsigned char`, e grava o byte quando ele
+  enche. O último byte quase nunca fica cheio: o resto vai com zeros;
 - **o descompactador precisa da mesma árvore**. O arquivo compactado começa
   com um **cabeçalho**: uma assinatura (`HUF1`), o tamanho original e as 256
   frequências. Com elas, o descompactador monta a árvore idêntica, porque o
@@ -3205,20 +3183,20 @@ código. O descompactador lê o cabeçalho, monta a árvore e anda nela bit a
 bit: `0` para a esquerda, `1` para a direita, e na folha escreve o byte e
 volta para a raiz.
 
-Tudo junto, o projeto usa quase o curso inteiro: arquivos binários com
+O projeto usa boa parte do curso: arquivos binários com
 `fread`/`fwrite` (assunto 0068), bits e máscaras (0065), a árvore binária
 (0098), o heap (0102), o guloso de Huffman (0136) e TADs em `.h` e `.c`
 (0074). O TAD `compactador.h` usa o `huffman.h` por dentro e oferece duas
 funções: `huf_compacta` e `huf_descompacta`.
 
-Vamos ver na prática. A lista da feira tem 6 linhas, repetidas 40 vezes:
+A lista da feira tem 6 linhas, repetidas 40 vezes:
 9560 bytes. Compactada, fica com 6156 bytes, dos quais 1036 são o cabeçalho
 e 5120 são os bits dos códigos. O descompactador lê o cabeçalho, refaz a
 árvore e devolve os 9560 bytes:
 
 <p align="center"><img src="20-dc-e-gulosos/0137-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
-O coração do `compactador.c` é a dupla que escreve bits soltos. A struct
+A peça central do `compactador.c` é a dupla de funções que escreve bits soltos. A struct
 `Bits` guarda o byte em construção e quantos bits ele já tem:
 
 ```c
@@ -3315,7 +3293,7 @@ poucos símbolos diferentes e alguns muito frequentes (o ponto e o espaço).
 O cabeçalho de 1036 bytes é um custo fixo, que pesa muito em arquivos
 pequenos e quase nada em arquivos grandes.
 
-Repara no fluxograma: é o laço do `huf_descompacta`. Para cada byte do
+O fluxograma segue o laço do `huf_descompacta`. Para cada byte do
 original, ele começa na raiz e lê bits até cair numa folha. O laço de fora
 conta os bytes escritos e para no tamanho do cabeçalho, deixando os zeros de
 enchimento sem ler:

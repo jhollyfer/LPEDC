@@ -2,8 +2,8 @@
 
 A escada rolante da estação quebrou e você vai subir os 35 degraus a pé. Dá
 para subir de um em um ou pular de dois em dois. De quantos jeitos diferentes
-dá para chegar lá em cima? A pergunta parece de almanaque, mas ela esconde a
-ideia mais poderosa deste módulo.
+dá para chegar lá em cima? A pergunta parece de almanaque, mas esconde a
+ideia central deste módulo.
 
 Pense no **último passo**. Para chegar no degrau `n`, você veio do degrau
 `n - 1` (passo simples) ou do `n - 2` (passo duplo). Então:
@@ -12,13 +12,12 @@ Pense no **último passo**. Para chegar no degrau `n`, você veio do degrau
 
 É a recursão de Fibonacci do assunto 0033, e lá você viu o problema: a
 recursão pura é **exponencial**. Para `formas(35)`, ela faz quase 30 milhões
-de chamadas. Não porque o problema é difícil, mas porque ela calcula as
-**mesmas** coisas de novo e de novo. `formas(33)` é calculado 2 vezes,
+de chamadas. O problema nem é difícil: ela é que calcula as **mesmas** coisas
+de novo e de novo. `formas(33)` é calculado 2 vezes,
 `formas(32)` 3 vezes, `formas(31)` 5 vezes...
 
-Só existem 36 perguntas diferentes (`formas(0)` até `formas(35)`). A saída é
-óbvia depois que alguém fala: **anote cada resposta na primeira vez e consulte
-nas próximas**. Isso tem nome:
+Só existem 36 perguntas diferentes (`formas(0)` até `formas(35)`). A saída:
+**anote cada resposta na primeira vez e consulte nas próximas**. Isso tem nome:
 
 - **memoização** (de *memo*, lembrete): a recursão continua igual, mas antes
   de calcular ela olha num vetor `memo[]` se a resposta já está lá. Resolve de
@@ -40,7 +39,7 @@ aparece uma vez só, como nas metades do merge sort, guardar não adianta nada.
 No Cormen, as duas versões aparecem como *top-down with memoization* e
 *bottom-up method*.
 
-Vamos ver na prática. Com 5 degraus, a recursão pura faria as 15 chamadas da
+Com 5 degraus, a recursão pura faria as 15 chamadas da
 árvore. Com o memo, só as coloridas acontecem: as verdes calculam e anotam,
 as amarelas encontram a resposta pronta e voltam na hora. Tudo que está cinza
 deixa de existir:
@@ -120,8 +119,8 @@ conta do custo de qualquer PD é sempre esta: **número de subproblemas ×
 trabalho de cada um**. Aqui são uns 35 subproblemas, cada um com uma soma:
 O(n), contra O(1,6ⁿ) da recursão pura.
 
-Repara no fluxograma: a única diferença para a recursão pura é o losango do
-meio. Ele corta a árvore: quem já está no memo volta sem chamar ninguém:
+No fluxograma, a única diferença para a recursão pura é o losango do meio.
+Ele corta a árvore: quem já está no memo volta sem chamar ninguém.
 
 {{fluxograma}}
 
@@ -157,8 +156,8 @@ São 8 jeitos de subir 5 degraus. Confira à mão: 11111, 2111, 1211, 1121,
 > chamada: `formas_memo(35)` desce 35 níveis na pilha antes de anotar a
 > primeira resposta, e `formas_memo(100000)` estouraria a pilha. A tabela é um
 > laço sobre um vetor contíguo, sem chamada nenhuma, que o cache do processador
-> adora. Em troca, a memoização só calcula os subproblemas que a pergunta
-> realmente usa, o que vale ouro quando eles são poucos dentro de uma tabela
+> aproveita bem. Em troca, a memoização só calcula os subproblemas que a
+> pergunta usa, o que compensa quando eles são poucos dentro de uma tabela
 > enorme.
 
 > [!NOTE]

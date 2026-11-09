@@ -13,7 +13,7 @@ melhor agora estraga o resto.
 A programação dinâmica não aposta em escolha nenhuma: ela **testa todas**, mas
 sem repetir trabalho. Olhe de novo para o **último selo** colado. Ele foi de
 R$ 1, de R$ 4 ou de R$ 5. Se foi de R$ 4, antes dele você já tinha montado
-R$ 4 da melhor forma possível. Então:
+R$ 4 com o mínimo de selos. Então:
 
 `dp[v] = 1 + o menor entre dp[v - 1], dp[v - 4] e dp[v - 5]`
 
@@ -30,7 +30,7 @@ Para saber **quais** selos usar, não basta `dp`. Um segundo vetor,
 `ultimo[v]`, anota o selo que deu o mínimo em `v`. Depois é só andar para
 trás: `v`, `v - ultimo[v]`, e assim por diante, até chegar em 0.
 
-Vamos ver na prática. `dp[8]` olha para três vizinhos à esquerda, um para
+No desenho, `dp[8]` olha para três vizinhos à esquerda, um para
 cada selo, e escolhe o menor deles, o `dp[4]`:
 
 {{ideia}}
@@ -92,7 +92,7 @@ O custo é o de toda PD: `total` subproblemas, cada um testando `k` selos.
 **O(total × k)** de tempo e O(total) de memória. Para um troco de R$ 1.000
 com 6 valores de selo, são 6 mil passos.
 
-Repara no fluxograma: dois laços, um dentro do outro. O de fora anda pelos
+O fluxograma tem dois laços, um dentro do outro. O de fora anda pelos
 valores, do menor para o maior; o de dentro testa cada selo como "o último":
 
 {{fluxograma}}
@@ -125,7 +125,7 @@ fica o primeiro que achou o mínimo. As duas soluções têm 2 selos: tanto faz.
 > `main`: 101 `int` cada, 808 bytes no total. Para um troco de R$ 1 milhão,
 > seriam 8 MB, e a pilha padrão do Linux tem 8 MB: o programa morreria com
 > *stack overflow* antes da primeira conta. Para tabelas grandes, use
-> `malloc` (assunto 0054). Repare também que `minimo_selos` recebe `dp` e
+> `malloc` (assunto 0054). E `minimo_selos` recebe `dp` e
 > `ultimo` como ponteiros: ela escreve direto nos vetores do `main`, sem
 > copiar nada.
 

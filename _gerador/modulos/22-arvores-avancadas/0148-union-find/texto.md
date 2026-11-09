@@ -17,8 +17,8 @@ grupos que não se misturam, e só existem duas operações:
 A estrutura que faz isso é o **union-find**. Cada grupo é uma árvore, e a
 floresta inteira cabe num vetor: `pai[x]` é o pai de x, e a raiz é quem aponta
 para si mesmo (`pai[x] == x`). A raiz é o representante. `acha` sobe pelos
-pais até a raiz; `une` acha as duas raízes e pendura uma na outra. Repare que
-aqui as setas vão do filho para o pai: ninguém precisa descer na árvore.
+pais até a raiz; `une` acha as duas raízes e pendura uma na outra. Aqui as
+setas vão do filho para o pai: ninguém precisa descer na árvore.
 
 Do jeito ingênuo, a árvore pode virar uma fila indiana, e `acha` passa a custar
 O(n). Dois truques resolvem:
@@ -43,7 +43,7 @@ superior da altura e só ganha 1 quando duas raízes de mesmo posto se juntam.
 A garantia é a mesma, O(m · α(n)), e é essa estrutura que o Kruskal (0152)
 usa.
 
-Vamos ver na prática. Oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades. No
+No exemplo, são oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades. No
 fim sobram dois grupos: {Ana, Beto, Caio, Duda} e {Edu, Fia, Gui, Hugo}. Duda e
 Hugo estão a dois passos da raiz; as perguntas sobre eles comprimem o caminho e
 os deixam pendurados direto no representante:
@@ -130,7 +130,7 @@ Empate: a raiz de a continua raiz, e o Caio vai para baixo da Ana, levando a
 Duda junto. A Duda fica a dois passos da raiz até a pergunta "Ana e Duda?"
 subir por ela e comprimir o caminho.
 
-Repara no fluxograma: é o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
+O fluxograma acompanha o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
 (Gui), diferentes; os dois grupos têm tamanho 2, então não há troca, e o Gui
 (com o Hugo embaixo) vira filho do Edu:
 
@@ -147,7 +147,7 @@ Repara no fluxograma: é o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
 > [!TIP]
 > **Por dentro do C:** a floresta inteira são dois vetores de `int`, sem um
 > ponteiro sequer: 8 bytes por elemento, 8 MB para um milhão de pessoas, tudo
-> contíguo na memória (o cache do processador agradece). Repare na assinatura
+> contíguo na memória, o que favorece o cache do processador. Veja a assinatura
 > `int uf_acha(UF *u, int x)`: sem `const`, porque **consultar modifica** a
 > estrutura (a compressão reescreve `pai`). Até `uf_juntos`, que parece só uma
 > pergunta, mexe no vetor. O A295 mede o efeito dos truques: com 10 mil

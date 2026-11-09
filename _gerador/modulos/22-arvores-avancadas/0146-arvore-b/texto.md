@@ -5,7 +5,7 @@ guardadas no disco, porque não cabem na memória. Ler do disco é lento: um HD
 leva uns 10 milissegundos para buscar um bloco, tempo em que o processador faz
 milhões de comparações. Numa AVL com 2 milhões de livros, a busca desce uns 21
 nós, e se cada nó estiver num bloco diferente são 21 idas ao disco. Para o
-disco, o que importa não é comparar pouco: é **ler poucos nós**.
+disco, **ler poucos nós** importa mais do que comparar pouco.
 
 A **árvore B** resolve isso com nós gordos. Cada nó guarda **várias chaves em
 ordem** e tem um filho a mais do que chaves: com as chaves `[40 70]`, o filho
@@ -35,9 +35,9 @@ solução é a **divisão**: um nó com `2t - 1` chaves se parte em dois nós de
 cheio nessa hora, o TAD divide **na descida**: todo nó cheio que aparece no
 caminho é dividido antes de a chave descer por ele. Quando a raiz está cheia,
 ela se divide e a chave do meio vira uma raiz nova. A árvore B cresce por
-cima, nunca por baixo: é por isso que as folhas continuam todas no mesmo nível.
+cima, nunca por baixo, e por isso as folhas continuam todas no mesmo nível.
 
-Vamos ver na prática. O bibliotecário cadastra 11 livros, nesta ordem: 40, 10,
+No exemplo, o bibliotecário cadastra 11 livros, nesta ordem: 40, 10,
 70, 20, 50, 80, 30, 60, 90, 25 e 85. Quando o 25 chega, a raiz é `[40 70]` e a
 folha do caminho, `[10 20 30]`, está cheia: ela se divide, o 20 sobe e o 25
 entra na metade da direita. Quando o 85 chega, a raiz `[20 40 70]` é que está
@@ -93,7 +93,7 @@ NoB *ab_insere(NoB *raiz, int chave) {
 }
 ```
 
-Repare que `divide` não apaga nada de `y`: só diminui `y->n`. As chaves do fim
+A `divide` não apaga nada de `y`: só diminui `y->n`. As chaves do fim
 continuam no vetor, mas ficam fora da parte em uso. O cliente:
 
 ```c
@@ -131,7 +131,7 @@ int main(void) {
 // Livro 65: não tem, 3 nós lidos
 ```
 
-Repara no fluxograma: é o `insere_nao_cheio` chamado na raiz `[40 70]` quando
+O fluxograma segue o `insere_nao_cheio` chamado na raiz `[40 70]` quando
 o 25 chega. A raiz não é folha; o 25 desce pelo filho 0, que está cheio; o
 filho se divide e o 20 sobe. Como 25 é maior que o 20, o `i++` manda a chave
 para a metade nova, e a chamada recursiva a põe na folha `[30]`:
@@ -139,7 +139,7 @@ para a metade nova, e a chamada recursiva a põe na folha `[30]`:
 {{fluxograma}}
 
 > [!WARNING]
-> Depois de `divide(x, i)`, o nó por onde a chave ia descer virou **dois**, e
+> Depois de `divide(x, i)`, o nó pelo qual a chave ia descer virou **dois**, e
 > a chave que subiu está em `x->chave[i]`. Se a chave nova for maior que ela,
 > o caminho certo é o filho `i + 1`, a metade nova. Esquecer o
 > `if (chave > x->chave[i]) i++;` põe chaves grandes na metade da esquerda: a

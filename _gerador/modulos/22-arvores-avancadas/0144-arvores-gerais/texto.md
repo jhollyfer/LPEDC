@@ -17,8 +17,7 @@ aponta para o primeiro filho, e `irmao` aponta para o próximo filho do mesmo
 pai. Os filhos de um nó formam uma **lista encadeada** que começa em `filho` e
 segue pelos `irmao`.
 
-Repare no que isso quer dizer: com dois ponteiros por nó, é uma **árvore
-binária** disfarçada. Leia `filho` como "esquerdo" e `irmao` como "direito" e
+Com dois ponteiros por nó, isso é uma **árvore binária** disfarçada. Leia `filho` como "esquerdo" e `irmao` como "direito" e
 qualquer árvore geral vira uma binária, sem perder nada. O nó tem o mesmo
 tamanho tenha ele zero ou cinquenta filhos.
 
@@ -32,7 +31,7 @@ E as funções recursivas seguem o molde da árvore: resolva o próprio nó, pe�
 resposta de cada filho e junte. O total do orçamento é o valor do nó mais o
 total de cada filho, uma **pós-ordem**: os filhos ficam prontos antes do pai.
 
-Vamos ver na prática. O orçamento da reforma tem 10 nós. Os tópicos que só
+O orçamento da reforma tem 10 nós. Os tópicos que só
 agrupam (reforma, cozinha, banheiro, louças) têm valor 0; os itens têm preço.
 No desenho, em cima a árvore como você pensa nela; embaixo, como ela fica na
 memória, com as setas verdes descendo para o primeiro filho e as roxas andando
@@ -107,7 +106,7 @@ int main(void) {
 // Itens: 10 | altura: 3 | grau da raiz: 3
 ```
 
-Repara no fluxograma: é o `ag_total` chamado no banheiro. A soma começa no
+O fluxograma acompanha o `ag_total` chamado no banheiro. A soma começa no
 valor próprio (0), o laço visita o box (900) e as louças (que devolvem 700 depois
 de somar vaso e cuba) e para quando `p` chega em `NULL`, no fim da fila de
 irmãos. O banheiro devolve 1600:

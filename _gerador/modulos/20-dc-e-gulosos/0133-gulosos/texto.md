@@ -4,7 +4,7 @@ Na padaria, o pão deu R$ 3,10 e você pagou com uma nota de 5. O caixa precisa
 devolver R$ 1,90 com o **menor número de moedas**. Ninguém ali testa
 combinações. O caixa pega a maior moeda que cabe (R$ 1), depois a maior que
 cabe no que falta (50 centavos), e assim por diante: 100 + 50 + 25 + 10 + 5,
-cinco moedas. Rápido e certo.
+cinco moedas, o mínimo possível.
 
 Esse jeito de pensar tem nome: **algoritmo guloso** (em inglês, *greedy*). A
 cada passo ele faz a escolha que parece a **melhor agora**, sem pensar no
@@ -19,8 +19,7 @@ arquivos (Huffman). No módulo 23, Prim e Kruskal (assuntos 0152 e 0153) montam
 a árvore geradora mínima do mesmo jeito: a aresta mais barata que ainda serve
 entra e nunca mais sai.
 
-Quando funciona, o guloso é o algoritmo mais simples e rápido que existe.
-Aqui, é um laço só: O(k + número de moedas dadas), para `k` tipos de moeda. O
+Quando funciona, o guloso sai curto e barato. Aqui, é um laço só: O(k + número de moedas dadas), para `k` tipos de moeda. O
 problema é o "quando funciona". Uma escolha boa agora pode estragar o resto, e
 o guloso não tem como perceber.
 
@@ -31,7 +30,7 @@ causa da primeira escolha: o 4 parecia ótimo e fechou o caminho bom.
 
 Então por que no Real dá certo? Porque o sistema do Real é **canônico**: para
 ele, dá para provar que o guloso sempre acha o mínimo. A prova é do tipo
-"troca": se um troco usasse, por exemplo, duas moedas de 25 onde cabe uma de
+"troca": se um troco usasse, por exemplo, duas moedas de 25 no lugar de uma de
 50, trocar as duas pela de 50 diminuiria a conta. Repetindo o argumento para
 cada moeda, a solução ótima só pode ser a gulosa. Com {1, 3, 4}, a troca não
 funciona: duas fichas de 3 não viram uma de 4.
@@ -45,15 +44,14 @@ troca do parágrafo anterior prova a primeira. Quando o guloso não serve, o
 caminho é testar as combinações com esperteza: a programação dinâmica do
 módulo 21 resolve o troco de qualquer sistema de moedas.
 
-Vamos ver na prática. Em cima, o troco de R$ 1,90: cada moeda escolhida é a
+O desenho põe os dois casos lado a lado. Em cima, o troco de R$ 1,90: cada moeda escolhida é a
 maior que cabe no que falta, e o guloso acerta. Embaixo, as fichas: o 4
 parece a melhor escolha, mas deixa um resto de 2 que custa duas fichas, e o
 ótimo (3 + 3) nunca é visto:
 
 {{ideia}}
 
-O mesmo exemplo em C. A função recebe as moedas em ordem **decrescente** e
-anda por elas: se a moeda cabe, dá a moeda e continua nela (pode precisar de
+Em C, a função recebe as moedas em ordem **decrescente** e anda por elas: se a moeda cabe, dá a moeda e continua nela (pode precisar de
 outra igual); se não cabe, passa para a próxima menor:
 
 ```c
@@ -91,11 +89,10 @@ int main(void) {
 // Troco de 6: 4 1 1 (3 moedas)
 ```
 
-O código não tem como saber que errou: ele devolve 3 com a mesma confiança
-com que devolve 5. Quem sabe que 3 não é o mínimo é você, que achou o
-contraexemplo.
+O código não tem como saber que errou: devolve 3 com a mesma confiança com que
+devolve 5. Só o contraexemplo mostra que 3 não é o mínimo.
 
-Repara no fluxograma: as duas perguntas fazem todo o trabalho. "Ainda falta
+No fluxograma, duas perguntas fazem todo o trabalho. "Ainda falta
 troco?" controla o laço, e "a moeda da vez cabe?" decide entre dar a moeda ou
 descer para a próxima. Não há caminho de volta para uma moeda maior:
 
@@ -105,7 +102,7 @@ descer para a próxima. Não há caminho de volta para uma moeda maior:
 > O guloso do troco **depende da ordem** do vetor. Com as moedas em ordem
 > crescente (`{5, 10, 25, 50, 100}`), a função dá 38 moedas de 5 centavos para
 > o troco de R$ 1,90: ela pega a primeira que cabe, e a primeira é a menor.
-> Se as moedas chegam fora de ordem, ordene antes, de forma decrescente (com o
+> Se as moedas chegam fora de ordem, ordene antes, da maior para a menor (com o
 > `qsort`, assunto 0096). E lembre: mesmo ordenado, o guloso só garante o
 > mínimo em sistema canônico.
 

@@ -10,9 +10,9 @@ O Huffman do assunto 0136 trabalhava com uma string na memória e códigos
 escritos como texto (`"1110"`). Num arquivo de verdade, cada código vira
 **bits de verdade**, e aparecem três problemas novos:
 
-- **o arquivo é feito de bytes**, não de bits. É preciso juntar os bits dos
-  códigos, 8 de cada vez, num `unsigned char`, e gravar o byte quando ele
-  enche. No fim, o último byte quase nunca está cheio: completa-se com zeros;
+- **o arquivo é feito de bytes**, não de bits. Você junta os bits dos
+  códigos, 8 de cada vez, num `unsigned char`, e grava o byte quando ele
+  enche. O último byte quase nunca fica cheio: o resto vai com zeros;
 - **o descompactador precisa da mesma árvore**. O arquivo compactado começa
   com um **cabeçalho**: uma assinatura (`HUF1`), o tamanho original e as 256
   frequências. Com elas, o descompactador monta a árvore idêntica, porque o
@@ -27,20 +27,20 @@ código. O descompactador lê o cabeçalho, monta a árvore e anda nela bit a
 bit: `0` para a esquerda, `1` para a direita, e na folha escreve o byte e
 volta para a raiz.
 
-Tudo junto, o projeto usa quase o curso inteiro: arquivos binários com
+O projeto usa boa parte do curso: arquivos binários com
 `fread`/`fwrite` (assunto 0068), bits e máscaras (0065), a árvore binária
 (0098), o heap (0102), o guloso de Huffman (0136) e TADs em `.h` e `.c`
 (0074). O TAD `compactador.h` usa o `huffman.h` por dentro e oferece duas
 funções: `huf_compacta` e `huf_descompacta`.
 
-Vamos ver na prática. A lista da feira tem 6 linhas, repetidas 40 vezes:
+A lista da feira tem 6 linhas, repetidas 40 vezes:
 9560 bytes. Compactada, fica com 6156 bytes, dos quais 1036 são o cabeçalho
 e 5120 são os bits dos códigos. O descompactador lê o cabeçalho, refaz a
 árvore e devolve os 9560 bytes:
 
 {{ideia}}
 
-O coração do `compactador.c` é a dupla que escreve bits soltos. A struct
+A peça central do `compactador.c` é a dupla de funções que escreve bits soltos. A struct
 `Bits` guarda o byte em construção e quantos bits ele já tem:
 
 ```c
@@ -137,7 +137,7 @@ poucos símbolos diferentes e alguns muito frequentes (o ponto e o espaço).
 O cabeçalho de 1036 bytes é um custo fixo, que pesa muito em arquivos
 pequenos e quase nada em arquivos grandes.
 
-Repara no fluxograma: é o laço do `huf_descompacta`. Para cada byte do
+O fluxograma segue o laço do `huf_descompacta`. Para cada byte do
 original, ele começa na raiz e lê bits até cair numa folha. O laço de fora
 conta os bytes escritos e para no tamanho do cabeçalho, deixando os zeros de
 enchimento sem ler:

@@ -37,15 +37,15 @@ O algoritmo (o `GREEDY-ACTIVITY-SELECTOR` do Cormen) fica assim:
 O custo é o da ordenação, O(n log n), mais uma passada O(n). Cada pedido é
 olhado uma vez e a decisão é final: aceitou, aceitou; recusou, recusou.
 
-Vamos ver na prática. No desenho, cada barra é um pedido, na ordem em que o
+No desenho, cada barra é um pedido, na ordem em que o
 algoritmo olha para eles (por hora de fim). As verdes foram aceitas; as
-cinzas chocaram com alguém já aceito. Repare na Iara: o pedido dela começa
+cinzas chocaram com alguém já aceito. Veja a Iara: o pedido dela começa
 antes de todos, às 7h, e é o primeiro que o critério "quem começa antes"
 aceitaria, bloqueando a quadra até as 17h:
 
 {{ideia}}
 
-O mesmo exemplo em C. Os pedidos são structs, ordenados com `qsort` (assunto
+No código, os pedidos são structs, ordenados com `qsort` (assunto
 0096) por uma função que compara os fins:
 
 ```c
@@ -101,11 +101,11 @@ int main(void) {
 // Reservas aceitas: 5 de 9
 ```
 
-Repare que a Carla (10h às 11h) foi aceita logo depois da Ana (8h às 10h): os
+A Carla (10h às 11h) foi aceita logo depois da Ana (8h às 10h): os
 intervalos são **semiabertos**, e a Ana libera a quadra exatamente às 10h. Por
 isso o teste é `ini >= livre_em`, com o igual.
 
-Repara no fluxograma: depois da ordenação, é um laço com uma pergunta só. O
+Depois da ordenação, o fluxograma é um laço com uma pergunta só. O
 caminho marcado mostra a Ana sendo aceita e o Bruno sendo recusado; o resto
 repete esses dois trajetos:
 

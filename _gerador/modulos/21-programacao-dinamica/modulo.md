@@ -7,7 +7,7 @@ resposta é que ela resolve as **mesmas** perguntas de novo e de novo. Este
 módulo é sobre o remédio: anotar cada resposta na primeira vez e consultar
 nas próximas.
 
-Essa ideia simples, a **programação dinâmica**, resolve problemas que
+Essa ideia, a **programação dinâmica**, resolve problemas que
 pareciam exigir testar todas as combinações: o menor número de moedas para
 um troco qualquer, o que levar na mochila sem passar do peso, o que duas
 sequências de DNA têm em comum, quantas edições separam a palavra digitada
@@ -16,12 +16,12 @@ o último passo, uma **tabela** que guarda os subproblemas e uma **volta**
 pela tabela que reconstrói a solução.
 
 No módulo 20 você viu os gulosos, que acertam quando a melhor escolha de
-agora nunca atrapalha o futuro, e viu também onde eles erram. A PD é o que
+agora nunca atrapalha o futuro, e viu também em que casos eles erram. A PD é o que
 se usa quando o guloso não serve: ela considera todas as escolhas, mas
 paga cada subproblema uma vez só. A troca é memória por tempo, e o "Por
 dentro do C" de cada assunto mostra quanto essa memória custa.
 
-O módulo fecha com um programa de verdade: um **mini-diff**, a ferramenta
+O módulo fecha com um **mini-diff**, a ferramenta
 que mostra o que mudou entre duas versões de um arquivo de texto.
 
 ## O que você vai aprender
@@ -38,34 +38,6 @@ que mostra o que mudou entre duas versões de um arquivo de texto.
 - **distância de edição** (Levenshtein): inserir, remover e trocar
 - juntar tudo num **mini-diff** entre dois arquivos, com leitura de linhas,
   vetor que cresce e tabela no heap
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: quase sempre é a própria
-   tabela da PD, com as cores contando de onde cada célula veio.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis: encha a tabela (ou o trecho
-   dela) antes de conferir. PD se aprende preenchendo tabela.
-4. Siga o **fluxograma** com o dedo: ele é a decisão de uma célula.
-5. Rode os exemplos. Mude os valores, compare as tabelas.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nas tabelas dos diagramas da ideia, **roxa** é a célula que está sendo
-calculada (ou de onde a volta parte), **verde** é a célula escolhida ou o
-caminho da solução, **amarela** é a opção comparada que perdeu (ou um passo
-da volta que não entra na resposta) e **cinza** é o que não chega a ser
-usado.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -85,6 +57,13 @@ e do cursinho do PPGI, tem assunto próprio, o 0185.
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
 AddressSanitizer (ou o UBSan) do `rodar` vai acusar ou parar o programa. É
 esperado: o enunciado avisa.
+
+PD se aprende preenchendo tabela: faça o **Passo a passo** com papel e lápis
+antes de conferir, e responda cada **Pergunta para você** antes de rodar. O diagrama da ideia quase sempre é a própria tabela, e o
+fluxograma é a decisão de uma célula. Nas tabelas, **roxa** é a célula que está
+sendo calculada (ou de onde a volta parte), **verde** é a escolhida ou o
+caminho da solução, **amarela** é a opção que perdeu (ou um passo da volta
+que não entra na resposta) e **cinza** é o que não chega a ser usado.
 
 {{indice}}
 

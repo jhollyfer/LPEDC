@@ -30,19 +30,19 @@ Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
 | `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
 | letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
 
-A resposta fica em `c[m][n]`. Para recuperar as letras, anda-se do canto de
-volta até a borda: onde as letras batem, a letra entra e o caminho vai na
-diagonal; onde não batem, ele vai para o vizinho de onde o valor veio. O
+A resposta fica em `c[m][n]`. Para recuperar as letras, a volta anda do canto
+até a borda: quando as letras batem, a letra entra e o caminho vai na
+diagonal; quando não batem, ele vai para o vizinho de que o valor veio. O
 Cormen guarda esse "de onde veio" numa segunda tabela, `b`, com setas ↖, ↑ e
 ←; aqui a seta é refeita na volta, comparando as letras e os vizinhos.
 
-Vamos ver na prática. Cada linha é uma letra de MORANGO e cada coluna uma de
+No desenho, cada linha é uma letra de MORANGO e cada coluna uma de
 MANGA. O caminho de volta sai do canto roxo; as células verdes são as quatro
 letras da resposta, e as amarelas, os passos sem letra:
 
 {{ideia}}
 
-O mesmo exemplo em C:
+O código enche a tabela e faz a volta:
 
 ```c
 #include <stdio.h>
@@ -120,7 +120,7 @@ A tabela tem `(m + 1) × (n + 1)` células e cada uma custa O(1): **O(m × n)**
 de tempo e de memória. Duas strings de 1.000 letras dão um milhão de
 células, uns 4 MB de `int`; a força bruta nem começaria.
 
-Repara no fluxograma: é a decisão de uma célula. O caminho marcado é o da
+O fluxograma é a decisão de uma célula. O caminho marcado é o da
 célula da linha G com a coluna G (`c[6][4]`), em que as letras batem e o
 valor vem da diagonal, `3 + 1`:
 
@@ -128,7 +128,7 @@ valor vem da diagonal, `3 + 1`:
 
 ### Passo a passo
 
-A volta, partindo de `c[7][5]`. Repare que a recuperação monta a resposta
+A volta, partindo de `c[7][5]`. A recuperação monta a resposta
 **de trás para a frente**: G sai primeiro e M por último:
 
 | posição | letras | iguais? | `c[i-1][j]` / `c[i][j-1]` | movimento | resposta até aqui |
@@ -153,8 +153,7 @@ A volta, partindo de `c[7][5]`. Repare que a recuperação monta a resposta
 > [!TIP]
 > **Por dentro do C:** `int c[51][51]` mora na pilha e ocupa 51 × 51 × 4 =
 > 10.404 bytes, mesmo que as palavras sejam curtas. Para comparar dois textos
-> de 10 mil caracteres, seriam 400 MB: não cabe na pilha nem com muita
-> vontade. Se você só precisa do **tamanho** da LCS, cada linha só usa a de
+> de 10 mil caracteres, seriam 400 MB, que não cabem na pilha. Se você só precisa do **tamanho** da LCS, cada linha só usa a de
 > cima, e duas linhas de `n + 1` posições bastam (o A281 faz isso). Para
 > **recuperar** as letras, a tabela inteira, alocada com `malloc`, é o jeito
 > simples.

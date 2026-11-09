@@ -23,7 +23,7 @@ Divida o vetor ao meio. Toda inversão é de um destes três tipos:
 2. os dois estão na metade **direita**;
 3. um em cada metade: a inversão **cruza** o meio.
 
-Os tipos 1 e 2 são o mesmo problema, menor: a recursão resolve. O pulo do gato
+Os tipos 1 e 2 são o mesmo problema, menor: a recursão resolve. A ideia nova
 está no tipo 3. Se as duas metades já estiverem **ordenadas**, a intercalação
 conta as inversões cruzadas de graça: quando um elemento da direita sai antes,
 ele é menor que **todos** os que ainda sobram na esquerda. Se sobram `q - i`
@@ -33,14 +33,14 @@ Por isso a função faz duas coisas ao mesmo tempo: devolve a contagem **e**
 deixa o pedaço ordenado, pronto para a intercalação de cima. A recorrência é a
 do merge sort, T(n) = 2T(n/2) + O(n), que dá O(n log n).
 
-Vamos ver na prática. No vetor do Caio, a metade esquerda tem 3 inversões
+No vetor do Caio, a metade esquerda tem 3 inversões
 dentro dela e a direita tem 4. Depois de ordenadas, a intercalação das duas
 acha mais 6 cruzadas: o 2 passa na frente de 3 elementos da esquerda, o 4 de
 2 e o 6 de 1:
 
 {{ideia}}
 
-O mesmo exemplo em C. É o merge sort com um contador; o `printf` mostra, para
+Em C, é o merge sort com um contador; o `printf` mostra, para
 cada pedaço, as inversões da esquerda, da direita e as cruzadas:
 
 ```c
@@ -121,9 +121,8 @@ direita, ele soma os que ainda sobram na esquerda:
 | 7 | esquerda | | 6 |
 | 8 | direita | (nenhum) | 6 |
 
-Repara no fluxograma: é a chamada de cima, com o vetor inteiro. As duas
-chamadas recursivas contam dentro de cada metade, e a intercalação conta o
-que cruza:
+No fluxograma está a chamada de cima, com o vetor inteiro. As duas chamadas
+recursivas contam dentro de cada metade, e a intercalação conta o que cruza:
 
 {{fluxograma}}
 
@@ -149,7 +148,7 @@ A264 mostra um jeito ainda mais rápido, em O(n).
 > Na intercalação, a soma é `inv += q - i`, e não `inv++`. Quando o `v[j]` da
 > direita sai, ele está fora de ordem com **todos** os elementos de `v[i]` até
 > `v[q - 1]`, porque a esquerda está ordenada. Somar 1 contaria só o par com
-> `v[i]`. E repare no `<=`: em caso de empate, sai o da esquerda, porque dois
+> `v[i]`. E note o `<=`: em caso de empate, sai o da esquerda, porque dois
 > valores iguais **não** são uma inversão. Com `<`, cada empate viraria uma
 > inversão falsa.
 
@@ -158,7 +157,7 @@ A264 mostra um jeito ainda mais rápido, em O(n).
 > 100 000 elementos ao contrário tem 100 000 · 99 999 / 2 = 4 999 950 000
 > inversões, e um `int` de 32 bits vai só até 2 147 483 647. O estouro de
 > `int` com sinal é comportamento indefinido; com o `rodar`, o sanitizer
-> avisa com `runtime error: signed integer overflow`. Repare também que contar
+> avisa com `runtime error: signed integer overflow`. Contar também
 > **ordena** o vetor: se você ainda precisar da ordem original, conte numa
 > cópia (`memcpy` para um vetor alocado antes).
 

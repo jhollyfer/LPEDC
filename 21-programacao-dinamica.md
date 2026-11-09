@@ -9,7 +9,7 @@ resposta é que ela resolve as **mesmas** perguntas de novo e de novo. Este
 módulo é sobre o remédio: anotar cada resposta na primeira vez e consultar
 nas próximas.
 
-Essa ideia simples, a **programação dinâmica**, resolve problemas que
+Essa ideia, a **programação dinâmica**, resolve problemas que
 pareciam exigir testar todas as combinações: o menor número de moedas para
 um troco qualquer, o que levar na mochila sem passar do peso, o que duas
 sequências de DNA têm em comum, quantas edições separam a palavra digitada
@@ -18,12 +18,12 @@ o último passo, uma **tabela** que guarda os subproblemas e uma **volta**
 pela tabela que reconstrói a solução.
 
 No módulo 20 você viu os gulosos, que acertam quando a melhor escolha de
-agora nunca atrapalha o futuro, e viu também onde eles erram. A PD é o que
+agora nunca atrapalha o futuro, e viu também em que casos eles erram. A PD é o que
 se usa quando o guloso não serve: ela considera todas as escolhas, mas
 paga cada subproblema uma vez só. A troca é memória por tempo, e o "Por
 dentro do C" de cada assunto mostra quanto essa memória custa.
 
-O módulo fecha com um programa de verdade: um **mini-diff**, a ferramenta
+O módulo fecha com um **mini-diff**, a ferramenta
 que mostra o que mudou entre duas versões de um arquivo de texto.
 
 ## O que você vai aprender
@@ -40,34 +40,6 @@ que mostra o que mudou entre duas versões de um arquivo de texto.
 - **distância de edição** (Levenshtein): inserir, remover e trocar
 - juntar tudo num **mini-diff** entre dois arquivos, com leitura de linhas,
   vetor que cresce e tabela no heap
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: quase sempre é a própria
-   tabela da PD, com as cores contando de onde cada célula veio.
-2. Leia o código. É o mesmo exemplo, com os mesmos valores.
-3. Faça o **Passo a passo** com papel e lápis: encha a tabela (ou o trecho
-   dela) antes de conferir. PD se aprende preenchendo tabela.
-4. Siga o **fluxograma** com o dedo: ele é a decisão de uma célula.
-5. Rode os exemplos. Mude os valores, compare as tabelas.
-6. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   As dicas vêm logo abaixo do enunciado: tente antes de ler.
-
-No meio de cada assunto tem uma **Pergunta para você**. Responda antes de rodar.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa, amarela é pergunta. Verde é o caminho que o exemplo
-segue; cinza, o que ele não usa.
-
-Nas tabelas dos diagramas da ideia, **roxa** é a célula que está sendo
-calculada (ou de onde a volta parte), **verde** é a célula escolhida ou o
-caminho da solução, **amarela** é a opção comparada que perdeu (ou um passo
-da volta que não entra na resposta) e **cinza** é o que não chega a ser
-usado.
-
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 ## Antes de começar
 
@@ -88,6 +60,13 @@ Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
 AddressSanitizer (ou o UBSan) do `rodar` vai acusar ou parar o programa. É
 esperado: o enunciado avisa.
 
+PD se aprende preenchendo tabela: faça o **Passo a passo** com papel e lápis
+antes de conferir, e responda cada **Pergunta para você** antes de rodar. O diagrama da ideia quase sempre é a própria tabela, e o
+fluxograma é a decisão de uma célula. Nas tabelas, **roxa** é a célula que está
+sendo calculada (ou de onde a volta parte), **verde** é a escolhida ou o
+caminho da solução, **amarela** é a opção que perdeu (ou um passo da volta
+que não entra na resposta) e **cinza** é o que não chega a ser usado.
+
 | # | Assunto | Pasta |
 | --- | --- | --- |
 | [0138](#0138--memoização) | Memoização | [`0138-memoizacao/`](21-programacao-dinamica/0138-memoizacao/) |
@@ -103,8 +82,8 @@ esperado: o enunciado avisa.
 
 A escada rolante da estação quebrou e você vai subir os 35 degraus a pé. Dá
 para subir de um em um ou pular de dois em dois. De quantos jeitos diferentes
-dá para chegar lá em cima? A pergunta parece de almanaque, mas ela esconde a
-ideia mais poderosa deste módulo.
+dá para chegar lá em cima? A pergunta parece de almanaque, mas esconde a
+ideia central deste módulo.
 
 Pense no **último passo**. Para chegar no degrau `n`, você veio do degrau
 `n - 1` (passo simples) ou do `n - 2` (passo duplo). Então:
@@ -113,13 +92,12 @@ Pense no **último passo**. Para chegar no degrau `n`, você veio do degrau
 
 É a recursão de Fibonacci do assunto 0033, e lá você viu o problema: a
 recursão pura é **exponencial**. Para `formas(35)`, ela faz quase 30 milhões
-de chamadas. Não porque o problema é difícil, mas porque ela calcula as
-**mesmas** coisas de novo e de novo. `formas(33)` é calculado 2 vezes,
+de chamadas. O problema nem é difícil: ela é que calcula as **mesmas** coisas
+de novo e de novo. `formas(33)` é calculado 2 vezes,
 `formas(32)` 3 vezes, `formas(31)` 5 vezes...
 
-Só existem 36 perguntas diferentes (`formas(0)` até `formas(35)`). A saída é
-óbvia depois que alguém fala: **anote cada resposta na primeira vez e consulte
-nas próximas**. Isso tem nome:
+Só existem 36 perguntas diferentes (`formas(0)` até `formas(35)`). A saída:
+**anote cada resposta na primeira vez e consulte nas próximas**. Isso tem nome:
 
 - **memoização** (de *memo*, lembrete): a recursão continua igual, mas antes
   de calcular ela olha num vetor `memo[]` se a resposta já está lá. Resolve de
@@ -141,7 +119,7 @@ aparece uma vez só, como nas metades do merge sort, guardar não adianta nada.
 No Cormen, as duas versões aparecem como *top-down with memoization* e
 *bottom-up method*.
 
-Vamos ver na prática. Com 5 degraus, a recursão pura faria as 15 chamadas da
+Com 5 degraus, a recursão pura faria as 15 chamadas da
 árvore. Com o memo, só as coloridas acontecem: as verdes calculam e anotam,
 as amarelas encontram a resposta pronta e voltam na hora. Tudo que está cinza
 deixa de existir:
@@ -221,8 +199,8 @@ conta do custo de qualquer PD é sempre esta: **número de subproblemas ×
 trabalho de cada um**. Aqui são uns 35 subproblemas, cada um com uma soma:
 O(n), contra O(1,6ⁿ) da recursão pura.
 
-Repara no fluxograma: a única diferença para a recursão pura é o losango do
-meio. Ele corta a árvore: quem já está no memo volta sem chamar ninguém:
+No fluxograma, a única diferença para a recursão pura é o losango do meio.
+Ele corta a árvore: quem já está no memo volta sem chamar ninguém.
 
 <p align="center"><img src="21-programacao-dinamica/0138-memoizacao/fluxograma.svg" alt="Fluxograma: Memoização" width="730"></p>
 
@@ -258,8 +236,8 @@ São 8 jeitos de subir 5 degraus. Confira à mão: 11111, 2111, 1211, 1121,
 > chamada: `formas_memo(35)` desce 35 níveis na pilha antes de anotar a
 > primeira resposta, e `formas_memo(100000)` estouraria a pilha. A tabela é um
 > laço sobre um vetor contíguo, sem chamada nenhuma, que o cache do processador
-> adora. Em troca, a memoização só calcula os subproblemas que a pergunta
-> realmente usa, o que vale ouro quando eles são poucos dentro de uma tabela
+> aproveita bem. Em troca, a memoização só calcula os subproblemas que a
+> pergunta usa, o que compensa quando eles são poucos dentro de uma tabela
 > enorme.
 
 > [!NOTE]
@@ -626,7 +604,7 @@ melhor agora estraga o resto.
 A programação dinâmica não aposta em escolha nenhuma: ela **testa todas**, mas
 sem repetir trabalho. Olhe de novo para o **último selo** colado. Ele foi de
 R$ 1, de R$ 4 ou de R$ 5. Se foi de R$ 4, antes dele você já tinha montado
-R$ 4 da melhor forma possível. Então:
+R$ 4 com o mínimo de selos. Então:
 
 `dp[v] = 1 + o menor entre dp[v - 1], dp[v - 4] e dp[v - 5]`
 
@@ -643,7 +621,7 @@ Para saber **quais** selos usar, não basta `dp`. Um segundo vetor,
 `ultimo[v]`, anota o selo que deu o mínimo em `v`. Depois é só andar para
 trás: `v`, `v - ultimo[v]`, e assim por diante, até chegar em 0.
 
-Vamos ver na prática. `dp[8]` olha para três vizinhos à esquerda, um para
+No desenho, `dp[8]` olha para três vizinhos à esquerda, um para
 cada selo, e escolhe o menor deles, o `dp[4]`:
 
 <p align="center"><img src="21-programacao-dinamica/0139-troco-pd/ideia.svg" alt="Diagrama da ideia: Troco com programação dinâmica" width="858"></p>
@@ -705,7 +683,7 @@ O custo é o de toda PD: `total` subproblemas, cada um testando `k` selos.
 **O(total × k)** de tempo e O(total) de memória. Para um troco de R$ 1.000
 com 6 valores de selo, são 6 mil passos.
 
-Repara no fluxograma: dois laços, um dentro do outro. O de fora anda pelos
+O fluxograma tem dois laços, um dentro do outro. O de fora anda pelos
 valores, do menor para o maior; o de dentro testa cada selo como "o último":
 
 <p align="center"><img src="21-programacao-dinamica/0139-troco-pd/fluxograma.svg" alt="Fluxograma: Troco com programação dinâmica" width="535"></p>
@@ -738,7 +716,7 @@ fica o primeiro que achou o mínimo. As duas soluções têm 2 selos: tanto faz.
 > `main`: 101 `int` cada, 808 bytes no total. Para um troco de R$ 1 milhão,
 > seriam 8 MB, e a pilha padrão do Linux tem 8 MB: o programa morreria com
 > *stack overflow* antes da primeira conta. Para tabelas grandes, use
-> `malloc` (assunto 0054). Repare também que `minimo_selos` recebe `dp` e
+> `malloc` (assunto 0054). E `minimo_selos` recebe `dp` e
 > `ultimo` como ponteiros: ela escreve direto nos vetores do `main`, sem
 > copiar nada.
 
@@ -1118,13 +1096,13 @@ A tabela dá o **valor**, mas o ambulante quer saber **o que levar**. A
 o item `i` não fez diferença e ficou de fora; se mudou, ele foi junto, e a
 busca continua na linha de cima com `c - peso[i]`.
 
-Vamos ver na prática. A célula `t[3][7] = 54` (roxo) escolheu entre não
+No desenho, a célula `t[3][7] = 54` (roxo) escolheu entre não
 levar o suco (`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde).
 As células verdes de baixo para cima são a recuperação:
 
 <p align="center"><img src="21-programacao-dinamica/0140-mochila-01/ideia.svg" alt="Diagrama da ideia: Mochila 0/1" width="858"></p>
 
-O mesmo exemplo em C. Os vetores começam no índice 1 para casar com a
+No código, os vetores começam no índice 1 para casar com a
 tabela, em que a linha 0 é "nenhum item":
 
 ```c
@@ -1185,12 +1163,12 @@ int main(void) {
 
 São `(n + 1) × (W + 1)` células, cada uma com uma comparação: **O(n × W)**.
 Para 100 itens e 10.000 kg de capacidade, um milhão de passos, contra os
-2¹⁰⁰ subconjuntos da força bruta. Mas repare: `W` é um **número** da
+2¹⁰⁰ subconjuntos da força bruta. Só que `W` é um **número** da
 entrada, escrito com uns log₂ W bits. Dobrar os bits eleva `W` ao quadrado,
 então O(n × W) é **pseudopolinomial**, não polinomial no tamanho da entrada.
 A mochila 0/1 continua NP-difícil (assunto 0186).
 
-Repara no fluxograma: é o miolo do laço duplo, a decisão de uma célula. O
+O fluxograma mostra o miolo do laço duplo, a decisão de uma célula. O
 caminho marcado é o da célula `t[3][7]`, em que levar o suco ganhou:
 
 <p align="center"><img src="21-programacao-dinamica/0140-mochila-01/fluxograma.svg" alt="Fluxograma: Mochila 0/1" width="451"></p>
@@ -1637,19 +1615,19 @@ Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
 | `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
 | letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
 
-A resposta fica em `c[m][n]`. Para recuperar as letras, anda-se do canto de
-volta até a borda: onde as letras batem, a letra entra e o caminho vai na
-diagonal; onde não batem, ele vai para o vizinho de onde o valor veio. O
+A resposta fica em `c[m][n]`. Para recuperar as letras, a volta anda do canto
+até a borda: quando as letras batem, a letra entra e o caminho vai na
+diagonal; quando não batem, ele vai para o vizinho de que o valor veio. O
 Cormen guarda esse "de onde veio" numa segunda tabela, `b`, com setas ↖, ↑ e
 ←; aqui a seta é refeita na volta, comparando as letras e os vizinhos.
 
-Vamos ver na prática. Cada linha é uma letra de MORANGO e cada coluna uma de
+No desenho, cada linha é uma letra de MORANGO e cada coluna uma de
 MANGA. O caminho de volta sai do canto roxo; as células verdes são as quatro
 letras da resposta, e as amarelas, os passos sem letra:
 
 <p align="center"><img src="21-programacao-dinamica/0141-lcs/ideia.svg" alt="Diagrama da ideia: Maior subsequência comum (LCS)" width="858"></p>
 
-O mesmo exemplo em C:
+O código enche a tabela e faz a volta:
 
 ```c
 #include <stdio.h>
@@ -1727,7 +1705,7 @@ A tabela tem `(m + 1) × (n + 1)` células e cada uma custa O(1): **O(m × n)**
 de tempo e de memória. Duas strings de 1.000 letras dão um milhão de
 células, uns 4 MB de `int`; a força bruta nem começaria.
 
-Repara no fluxograma: é a decisão de uma célula. O caminho marcado é o da
+O fluxograma é a decisão de uma célula. O caminho marcado é o da
 célula da linha G com a coluna G (`c[6][4]`), em que as letras batem e o
 valor vem da diagonal, `3 + 1`:
 
@@ -1735,7 +1713,7 @@ valor vem da diagonal, `3 + 1`:
 
 ### Passo a passo
 
-A volta, partindo de `c[7][5]`. Repare que a recuperação monta a resposta
+A volta, partindo de `c[7][5]`. A recuperação monta a resposta
 **de trás para a frente**: G sai primeiro e M por último:
 
 | posição | letras | iguais? | `c[i-1][j]` / `c[i][j-1]` | movimento | resposta até aqui |
@@ -1760,8 +1738,7 @@ A volta, partindo de `c[7][5]`. Repare que a recuperação monta a resposta
 > [!TIP]
 > **Por dentro do C:** `int c[51][51]` mora na pilha e ocupa 51 × 51 × 4 =
 > 10.404 bytes, mesmo que as palavras sejam curtas. Para comparar dois textos
-> de 10 mil caracteres, seriam 400 MB: não cabe na pilha nem com muita
-> vontade. Se você só precisa do **tamanho** da LCS, cada linha só usa a de
+> de 10 mil caracteres, seriam 400 MB, que não cabem na pilha. Se você só precisa do **tamanho** da LCS, cada linha só usa a de
 > cima, e duas linhas de `n + 1` posições bastam (o A281 faz isso). Para
 > **recuperar** as letras, a tabela inteira, alocada com `malloc`, é o jeito
 > simples.
@@ -2196,14 +2173,14 @@ letras custa `j` inserções, `d[0][j] = j`.
 | `a[i-1] == b[j-1]` | `d[i-1][j-1]` (diagonal, de graça) |
 | letras diferentes | `1 +` o menor entre `d[i-1][j-1]` (troca), `d[i-1][j]` (remove) e `d[i][j-1]` (insere) |
 
-Vamos ver na prática com CARTA e ARTES. A resposta é 3, e a volta pela
+Tome CARTA e ARTES. A resposta é 3, e a volta pela
 tabela mostra quais edições: remover o C, inserir um E e trocar o último A
 por S (CARTA, ARTA, ARTEA, ARTES). As setas mostram de onde cada célula do
 caminho veio:
 
 <p align="center"><img src="21-programacao-dinamica/0142-distancia-de-edicao/ideia.svg" alt="Diagrama da ideia: Distância de edição" width="858"></p>
 
-O mesmo exemplo em C. A volta mostra as edições do fim da palavra para o
+No código, a volta mostra as edições do fim da palavra para o
 começo (o E852 monta o alinhamento na ordem certa):
 
 ```c
@@ -2296,7 +2273,7 @@ digitada com 300 mil palavras do dicionário faz 300 mil tabelas pequenas;
 por isso os de verdade primeiro descartam as palavras de tamanho muito
 diferente (a distância é pelo menos a diferença dos tamanhos).
 
-Repara no fluxograma: é a decisão de uma célula do miolo, com o caminho da
+O fluxograma mostra a decisão de uma célula do miolo, com o caminho da
 célula `d[5][5]` (o último A contra o S), em que a troca ganhou:
 
 <p align="center"><img src="21-programacao-dinamica/0142-distancia-de-edicao/fluxograma.svg" alt="Fluxograma: Distância de edição" width="542"></p>
@@ -2326,8 +2303,8 @@ vizinho eu vim?":
 > [!TIP]
 > **Por dentro do C:** `menor3` é chamada `m × n` vezes. Com otimização
 > (`gcc -O2`), o compilador costuma colocar o corpo dela direto no laço
-> (*inline*), sem o custo de empilhar um frame por célula. Repare também que
-> a tabela de `int` é um desperdício para palavras: a distância nunca passa
+> (*inline*), sem o custo de empilhar um frame por célula. E a tabela de
+> `int` é um desperdício para palavras: a distância nunca passa
 > do tamanho da maior palavra, então um `unsigned char` (até 255) bastaria
 > para palavras de até 255 letras, e a tabela de 51 × 51 cairia de 10.404
 > para 2.601 bytes.
@@ -2715,8 +2692,8 @@ linha 1 com linha 1, linha 2 com linha 2 não serve: basta ela inserir uma
 linha no começo para **todas** as outras parecerem diferentes.
 
 A ferramenta que responde isso existe em todo sistema Unix e se chama
-`diff`. É ela que mostra as mudanças num controle de versão. E o coração
-dela é a **LCS** do assunto 0141, só que de **linhas** em vez de letras: as
+`diff`. É ela que mostra as mudanças num controle de versão. Por dentro, ela
+usa a **LCS** do assunto 0141, só que de **linhas** em vez de letras: as
 linhas da LCS ficaram iguais; as que só estão na versão antiga foram
 **removidas** (`-`); as que só estão na nova foram **adicionadas** (`+`).
 Duas linhas são "a mesma letra" quando `strcmp` dá 0.
@@ -2736,7 +2713,7 @@ certa. Em cada passo: linhas iguais saem com dois espaços e as duas
 avançam; se não, o vizinho com a LCS maior decide se a linha de `a` sai com
 `-` ou a de `b` entra com `+`.
 
-Vamos ver na prática. A lista antiga à esquerda, a nova à direita. Os
+No desenho, a lista antiga fica à esquerda e a nova à direita. Os
 traços ligam as cinco linhas da LCS; o que sobra de cada lado vira `-` ou
 `+`:
 
@@ -2832,11 +2809,11 @@ int main(int argc, char *argv[]) {
 // (5 iguais, 2 removidas, 2 adicionadas)
 ```
 
-Repare na linha do leite: "leite" e "leite sem lactose" são linhas
+Veja a linha do leite: "leite" e "leite sem lactose" são linhas
 diferentes, então viram uma remoção e uma adição. O A286 usa a distância de
 edição do assunto 0142 para perceber que a linha foi só **alterada**.
 
-Repara no fluxograma: é a volta do diff, que imprime enquanto anda. O
+O fluxograma é a volta do diff, que imprime enquanto anda. O
 caminho marcado é o das duas primeiras linhas, iguais nas duas versões:
 
 <p align="center"><img src="21-programacao-dinamica/0143-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: um mini-diff" width="796"></p>

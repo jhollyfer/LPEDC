@@ -9,8 +9,8 @@ bancos de dados). Pode ter arestas que **são letras** (a trie do autocompletar)
 E pode até ter as setas ao contrário, do filho para o pai, para responder "estes
 dois estão no mesmo grupo?" quase de graça (o union-find).
 
-O que muda na cabeça é a pergunta que você faz antes de escolher a estrutura.
-Não é mais "qual árvore eu sei programar?", e sim "**qual operação vai rodar
+O que muda na cabeça é a pergunta que você faz antes de escolher a estrutura:
+em vez de "qual árvore eu sei programar?", vem "**qual operação vai rodar
 milhões de vezes?**". Busca exata, busca por prefixo, leitura em disco, união de
 grupos: cada uma pede um formato de nó diferente, e o formato do nó decide o
 custo.
@@ -30,35 +30,6 @@ no mesmo dicionário.
 - o **union-find**: conjuntos disjuntos com **união por tamanho** e **compressão de caminho**
 - montar um **corretor ortográfico** e comparar trie, tabela hash e BST com números de verdade
 
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com as
-   mesmas chaves e palavras do código.
-2. Leia o código. Cada assunto tem um **TAD** na pasta (`arvgen.h`,
-   `rubronegra.h`, `arvoreb.h`, `trie.h`, `uniao.h`, `corretor.h`); o texto
-   mostra o pedaço do `.c` que importa. Abra o `.c` inteiro também.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz.
-4. Rode os exemplos A. Eles não repetem o texto: cada um mostra outra faceta
-   (um caso de borda, uma medição, um uso real). Mude a ordem das inserções e
-   rode de novo.
-5. Faça os exercícios. ★☆☆ é aquecimento, ★★☆ pede raciocínio, ★★★ é desafio.
-   Todo exercício é para codificar: a resposta é um programa que roda e mostra
-   a saída esperada. As dicas vêm logo abaixo do enunciado; tente antes de ler.
-
-Papel e lápis continuam obrigatórios. Na rubro-negra, desenhe a árvore 2-3
-junto; na árvore B, desenhe cada divisão; no union-find, desenhe as setas para o
-pai antes e depois de cada busca.
-
-## As cores e as formas
-
-Caixa azul é dado entrando ou saindo, roxa é o programa fazendo alguma coisa,
-amarela é pergunta. Verde é o caminho que o exemplo segue; cinza, o que ele não
-usa. Na rubro-negra, o nó vermelho é vermelho e o preto aparece em cinza. Na
-trie, os nós verdes são os que terminam uma palavra; no union-find, a raiz
-verde é o representante do grupo.
-
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
 
 Este módulo usa muito do que veio antes: **recursão** (0032 e 0033),
@@ -67,8 +38,10 @@ Este módulo usa muito do que veio antes: **recursão** (0032 e 0033),
 hash** (0105 a 0108) e a **distância de edição** (0142). A análise amortizada do
 0116 explica o "quase O(1)" do union-find.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `trie.c`), então os
-comandos são os de sempre:
+Cada assunto tem um **TAD** na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
+`trie.h`, `uniao.h`, `corretor.h`). O texto mostra o pedaço do `.c` que
+importa; abra o `.c` inteiro também. O `rodar` compila junto os `.c` de apoio
+da pasta (como `trie.c`):
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/0147-trie/A293.c
@@ -81,6 +54,12 @@ querendo dizer o número máximo de filhos (e o Ziviani, de m a 2m chaves por
 página); confira a convenção antes de comparar números. A rubro-negra do 0145
 é a **esquerdista** (LLRB); a clássica do Cormen, que é a que a prova do PPGI
 cobra, está no assunto 0177.
+
+Papel e lápis continuam obrigatórios. Na rubro-negra, desenhe a árvore 2-3
+junto; na árvore B, cada divisão; no union-find, as setas para o pai antes e
+depois de cada busca. Nos desenhos, o nó vermelho da rubro-negra é vermelho e
+o preto aparece em cinza; na trie, os nós verdes terminam uma palavra; no
+union-find, a raiz verde é o representante do grupo.
 
 {{indice}}
 

@@ -33,13 +33,13 @@ A tabela dá o **valor**, mas o ambulante quer saber **o que levar**. A
 o item `i` não fez diferença e ficou de fora; se mudou, ele foi junto, e a
 busca continua na linha de cima com `c - peso[i]`.
 
-Vamos ver na prática. A célula `t[3][7] = 54` (roxo) escolheu entre não
+No desenho, a célula `t[3][7] = 54` (roxo) escolheu entre não
 levar o suco (`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde).
 As células verdes de baixo para cima são a recuperação:
 
 {{ideia}}
 
-O mesmo exemplo em C. Os vetores começam no índice 1 para casar com a
+No código, os vetores começam no índice 1 para casar com a
 tabela, em que a linha 0 é "nenhum item":
 
 ```c
@@ -100,12 +100,12 @@ int main(void) {
 
 São `(n + 1) × (W + 1)` células, cada uma com uma comparação: **O(n × W)**.
 Para 100 itens e 10.000 kg de capacidade, um milhão de passos, contra os
-2¹⁰⁰ subconjuntos da força bruta. Mas repare: `W` é um **número** da
+2¹⁰⁰ subconjuntos da força bruta. Só que `W` é um **número** da
 entrada, escrito com uns log₂ W bits. Dobrar os bits eleva `W` ao quadrado,
 então O(n × W) é **pseudopolinomial**, não polinomial no tamanho da entrada.
 A mochila 0/1 continua NP-difícil (assunto 0186).
 
-Repara no fluxograma: é o miolo do laço duplo, a decisão de uma célula. O
+O fluxograma mostra o miolo do laço duplo, a decisão de uma célula. O
 caminho marcado é o da célula `t[3][7]`, em que levar o suco ganhou:
 
 {{fluxograma}}
