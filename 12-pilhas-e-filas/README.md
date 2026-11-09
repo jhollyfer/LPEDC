@@ -3523,6 +3523,10 @@ pós-fixas ficam `A B C * +` e `A B + C *`.
 
 </details>
 
+## Lista de exercícios práticos
+
+Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **30 exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em `_respostas/12-pilhas-e-filas/lista/`.
+
 ## Questões no estilo da prova
 
 Questões objetivas no formato da prova do mestrado. Desenhe a pilha ou a fila

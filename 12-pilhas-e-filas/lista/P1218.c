@@ -80,7 +80,7 @@ int main(void) {
     printf("\n");
     entram(&f, 4, 6);
     printf("saem até esvaziar:");
-    while (retira(&f, &x)) {
+    for (int voltas = 0; voltas < 10 && retira(&f, &x); voltas++) { // trava de segurança
         printf(" %d", x);
     }
     printf("\n");
