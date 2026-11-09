@@ -33,16 +33,18 @@ O sumário completo (módulos, assuntos e números) está em
 LPEDC/
 ├── rodar                      compila (gcc + AddressSanitizer) e roda um .c
 ├── legenda.svg                formas e cores (gerado)
-├── 01-fundamentos/            SAÍDA: o que a pessoa estuda
-│   ├── README.md              gerado: o módulo inteiro
+├── README.md                  guia do curso e índice (escrito à mão)
+├── 01-fundamentos.md          gerado: o módulo inteiro (texto, exercícios, lista, questões)
+├── 01-fundamentos/            os arquivos que se rodam e os desenhos (nenhum .md aqui)
+│   ├── lista/P0101.c ...      a lista prática
 │   └── 0002-variaveis/
 │       ├── ideia.svg          gerado
 │       ├── fluxograma.svg     gerado
 │       ├── A003.c  A004.c     exemplos resolvidos
 │       └── E007.c ... E012.c  exercícios (a resposta vai dentro do arquivo)
 ├── _respostas/01-fundamentos/E007.c ...   uma resolução de cada exercício
-├── _gerador/modulos/01-fundamentos/       FONTE do README e dos desenhos
-│   ├── modulo.md              começo e fim do README ({{indice}}, {{assuntos}})
+├── _gerador/modulos/01-fundamentos/       FONTE dos .md dos módulos e dos desenhos
+│   ├── modulo.md              começo e fim do .md do módulo ({{indice}}, {{assuntos}})
 │   └── 0002-variaveis/
 │       ├── texto.md           o texto do assunto ({{ideia}}, {{fluxograma}}, {{pratique}})
 │       └── desenhos.mjs       export const ideia e fluxograma
@@ -50,7 +52,10 @@ LPEDC/
 ```
 
 Gerar: `cd _gerador && npm run gerar -- 01-` (só o módulo 01). Nunca edite o
-`README.md` de um módulo à mão: ele é sobrescrito.
+`01-fundamentos.md` (ou outro `.md` de módulo na raiz) à mão: ele é
+sobrescrito. **Nenhum markdown fica em subdiretório**: todo o texto mora na raiz.
+Escreva os links como se o texto estivesse dentro da pasta do módulo
+(`0002-variaveis/ideia.svg`, `../legenda.svg`); o gerador acerta o caminho.
 
 ## Numeração (fixa, não mude)
 
@@ -161,7 +166,7 @@ int main(void) {
 // Exercício E007 · ★☆☆
 //
 // Enunciado claro, com cenário e valores concretos. Linhas com 2 espaços de
-// recuo viram bloco de código/saída no README:
+// recuo viram bloco de código/saída no .md do módulo:
 //
 //   Saída esperada:
 //   Produto: Arroz
@@ -232,9 +237,8 @@ com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
   no próprio arquivo.
 - Resolução em `_respostas/<modulo>/lista/P1407.c` (mesmo cabeçalho + código),
   rodada e conferida. Respostas autocontidas: nada de `.c` de apoio na pasta.
-- O gerador cria `<modulo>/lista/README.md` e põe no README do módulo uma
-  seção com o link, antes das "Questões no estilo da prova". Não edite o
-  `modulo.md` para isso.
+- O gerador põe a lista inteira no `.md` do módulo, numa seção antes das
+  "Questões no estilo da prova". Não edite o `modulo.md` para isso.
 - Confira com `_gerador/conferir.sh <modulo>` (ele já inclui a lista).
 
 ## modulo.md

@@ -1,22 +1,23 @@
-// Gera o README de cada módulo e os desenhos de cada assunto, tudo a partir de
-// modulos/<NN-nome>/:
+// Gera o arquivo de cada módulo (na raiz: 01-fundamentos.md, ...) e os desenhos
+// de cada assunto, tudo a partir de modulos/<NN-nome>/:
 //
-//   modulos/01-fundamentos/modulo.md                 começo e fim do README do módulo
+//   modulos/01-fundamentos/modulo.md                 começo e fim do .md do módulo
 //   modulos/01-fundamentos/0007-.../texto.md         o texto do assunto
 //   modulos/01-fundamentos/0007-.../desenhos.mjs     o diagrama da ideia e o fluxograma
 //
-// Saída: 01-fundamentos/README.md, legenda.svg (na raiz) e, em cada pasta de
-// assunto, ideia.svg e fluxograma.svg.
+// Saída: 01-fundamentos.md e legenda.svg (na raiz) e, em cada pasta de assunto,
+// ideia.svg e fluxograma.svg. Nenhum markdown fica em subdiretório: o .md do
+// módulo traz o módulo inteiro, com a lista prática (<modulo>/lista/P????.c).
 //
 //   npm run gerar            tudo
-//   npm run gerar -- 03-     só o módulo 03 (README e desenhos)
+//   npm run gerar -- 03-     só o módulo 03 (o .md e os desenhos)
 //   npm run gerar -- 0016    só o módulo do assunto 0016, redesenhando só a 0016
 //
 // No texto.md, {{ideia}}, {{fluxograma}} e {{pratique}} viram a imagem ou o
 // rodapé do assunto. No modulo.md, {{indice}} e {{assuntos}} viram a lista e os
 // assuntos.
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs'
-import { join, dirname } from 'node:path'
+import { join, dirname, posix } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { desenharIdeia } from './tipos/ideia.mjs'
 import { desenharFluxograma } from './tipos/fluxograma.mjs'
@@ -110,9 +111,9 @@ const pratique = (modulo, pasta) => {
   ].join('\n')
 }
 
-// Lista prática do módulo: <modulo>/lista/P????.c vira <modulo>/lista/README.md,
-// e o README do módulo ganha uma seção com o link (antes das questões da prova).
-const lista = (modulo, tituloModulo) => {
+// Lista prática do módulo: <modulo>/lista/P????.c vira uma seção do .md do
+// módulo, antes das questões da prova.
+const lista = (modulo) => {
   const pasta = join(RAIZ, modulo, 'lista')
   if (!existsSync(pasta)) return null
   const arquivos = readdirSync(pasta)
@@ -120,29 +121,44 @@ const lista = (modulo, tituloModulo) => {
     .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
   if (!arquivos.length) return null
   const niveis = [['★☆☆', 'Aquecimento'], ['★★☆', 'Para pensar'], ['★★★', 'Desafio']]
-  const blocos = arquivos.map((a) => ({ a, md: exercicio(`${modulo}/lista/${a}`, a) }))
+  const blocos = arquivos.map((a) => exercicio(`${modulo}/lista/${a}`, a))
   const partes = [
-    `<!-- Gerado por _gerador a partir dos arquivos P????.c desta pasta. -->`,
-    '',
-    `# Lista prática · ${tituloModulo}`,
-    '',
-    `${arquivos.length} exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](../../PPGI.md)). Cada arquivo \`P????.c\` desta pasta é um exercício: a resposta vai dentro dele, embaixo de \`// Escreva sua resposta abaixo:\`. Uma resolução de cada um está em \`_respostas/${modulo}/lista/\`. Só olhe depois de tentar.`,
-    '',
-    '[Voltar ao módulo](../README.md)',
-  ]
-  for (const [estrelas, nomeNivel] of niveis) {
-    const doNivel = blocos.filter((b) => b.md[0].includes(estrelas))
-    if (!doNivel.length) continue
-    partes.push('', `## ${estrelas} ${nomeNivel}`, '', doNivel.map((b) => b.md.join('\n')).join('\n\n---\n\n'))
-  }
-  writeFileSync(join(pasta, 'README.md'), partes.join('\n') + '\n')
-  console.log(`ok  ${modulo}/lista/README.md`)
-  return [
     '## Lista de exercícios práticos',
     '',
-    `Depois dos assuntos, treine com a [lista prática do módulo](lista/README.md): **${arquivos.length} exercícios de codificar**, do aquecimento ao desafio, que misturam tudo o que o módulo ensinou. As resoluções ficam em \`_respostas/${modulo}/lista/\`.`,
-    '',
-  ].join('\n')
+    `${arquivos.length} exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](../PPGI.md)). Os arquivos ficam em [\`lista/\`](lista/): a resposta vai dentro de cada \`P????.c\`, embaixo de \`// Escreva sua resposta abaixo:\`. Uma resolução de cada um está em \`_respostas/${modulo}/lista/\`. Só olhe depois de tentar.`,
+  ]
+  for (const [estrelas, nomeNivel] of niveis) {
+    const doNivel = blocos.filter((md) => md[0].includes(estrelas))
+    if (!doNivel.length) continue
+    partes.push('', `### ${estrelas} ${nomeNivel}`, '', doNivel.map((md) => md.join('\n')).join('\n\n---\n\n'))
+  }
+  return partes.join('\n') + '\n'
+}
+
+// O texto é escrito como se estivesse dentro da pasta do módulo (0002-x/ideia.svg,
+// ../legenda.svg); como o .md mora na raiz, cada link relativo ganha o prefixo.
+const linksDaRaiz = (md, modulo) => {
+  const ajusta = (alvo) => (/^(https?:|mailto:|#|\/|~)/.test(alvo) ? alvo : posix.normalize(`${modulo}/${alvo}`))
+  const trecho = (t) =>
+    t
+      .replace(/\]\(([^)\s]+)\)/g, (_, alvo) => `](${ajusta(alvo)})`)
+      .replace(/src="([^"]+)"/g, (_, alvo) => `src="${ajusta(alvo)}"`)
+  // código (bloco ``` ou `inline`) fica intacto: f[0](3) não é link
+  let emBloco = false
+  return md
+    .split('\n')
+    .map((linha) => {
+      if (/^\s*```/.test(linha)) {
+        emBloco = !emBloco
+        return linha
+      }
+      if (emBloco) return linha
+      return linha
+        .split('`')
+        .map((parte, i) => (i % 2 ? parte : trecho(parte)))
+        .join('`')
+    })
+    .join('\n')
 }
 
 const pastaModulos = join(AQUI, 'modulos')
@@ -187,8 +203,7 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
   }
 
   let texto = readFileSync(join(origem, 'modulo.md'), 'utf8')
-  const tituloModulo = texto.match(/^# (.+)$/m)?.[1] ?? modulo
-  const secaoLista = lista(modulo, tituloModulo)
+  const secaoLista = lista(modulo)
   if (secaoLista) {
     const alvo = ['## Questões no estilo da prova', '## Para ler mais'].find((t) => texto.includes(t))
     texto = alvo ? texto.replace(alvo, `${secaoLista}\n${alvo}`) : `${texto.trimEnd()}\n\n${secaoLista}`
@@ -197,7 +212,7 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
     .replace('{{indice}}', () => ['| # | Assunto | Pasta |', '| --- | --- | --- |', ...indice].join('\n'))
     .replace('{{assuntos}}', () => partes.join('\n\n---\n\n'))
   const aviso = `<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/${modulo}/ e rode: cd _gerador && npm run gerar -->\n\n`
-  writeFileSync(join(destino, 'README.md'), aviso + texto)
-  console.log(`ok  ${modulo}/README.md`)
+  writeFileSync(join(RAIZ, `${modulo}.md`), linksDaRaiz(aviso + texto, modulo))
+  console.log(`ok  ${modulo}.md`)
 }
 writeFileSync(join(RAIZ, 'legenda.svg'), desenharLegenda())

@@ -65,9 +65,15 @@ práticas e cerca de 280 questões objetivas.
 
 ## Como cada módulo funciona
 
+Todo o texto fica na raiz: este `README.md` é o guia, e cada módulo é um
+arquivo só (`01-fundamentos.md`, `02-condicionais.md`...), com todos os
+assuntos, os exemplos, os exercícios, a lista prática, os desafios e as
+questões da prova. As pastas guardam só o que você roda e os desenhos:
+
 ```
+01-fundamentos.md      o módulo inteiro: é por ele que você estuda
 01-fundamentos/
-├── README.md          o módulo inteiro: é por ele que você estuda
+├── lista/             P0101.c ... P0130.c: a lista prática
 └── 0002-variaveis/    um assunto
     ├── ideia.svg      o diagrama da ideia
     ├── fluxograma.svg o caminho que o programa faz
@@ -77,11 +83,11 @@ práticas e cerca de 280 questões objetivas.
 
 O caminho de cada assunto:
 
-1. Leia o assunto no `README.md` do módulo e tente responder a **Pergunta para
+1. Leia o assunto no `.md` do módulo e tente responder a **Pergunta para
    você** antes de rodar.
 2. Rode os exemplos e mexa neles à vontade.
 3. Faça os exercícios. Travou? As dicas estão logo abaixo do enunciado, no
-   README e no topo do arquivo.
+   `.md` do módulo e no topo do arquivo.
 
 As formas e as cores dos desenhos:
 
@@ -91,35 +97,35 @@ As formas e as cores dos desenhos:
 
 | Módulo | Assuntos | O que você sai sabendo |
 | --- | --- | --- |
-| [01 · Fundamentos de C](01-fundamentos/README.md) | 0001–0011 | algoritmo, compilação, variáveis, tipos, limites, `printf`, `scanf`, operadores, conversão |
-| [02 · Decisões](02-condicionais/README.md) | 0012–0019 | relacionais, lógicos, `if`, `else if`, ternário, `switch` |
-| [03 · Laços](03-repeticoes/README.md) | 0020–0027 | `while`, `do...while`, `for`, `break`, padrões de laço, aleatórios |
-| [04 · Funções](04-funcoes/README.md) | 0028–0036 | funções, escopo, pilha de chamadas, recursão, módulos `.h`/`.c`, macros |
-| [05 · Vetores e strings](05-vetores-e-strings/README.md) | 0037–0043 | vetores, matrizes, caracteres, strings, leitura segura |
-| [06 · Ponteiros](06-ponteiros/README.md) | 0044–0052 | endereços, `*` e `&`, aritmética, ponteiro para ponteiro e para função |
-| [07 · Memória dinâmica](07-memoria-dinamica/README.md) | 0053–0058 | stack e heap, `malloc`, `realloc`, `free`, valgrind e ASan |
-| [08 · Tipos compostos](08-structs/README.md) | 0059–0066 | `struct`, `typedef`, `enum`, `union`, operações com bits |
-| [09 · Arquivos](09-arquivos/README.md) | 0067–0070 | arquivos texto e binários, `argc` e `argv` |
-| [10 · Análise de algoritmos](10-analise/README.md) | 0071–0074 | contar passos, Big-O, invariantes, tipo abstrato de dado |
-| [11 · Listas](11-listas/README.md) | 0075–0081 | vetor dinâmico, listas encadeadas simples, dupla e circular |
-| [12 · Pilhas e filas](12-pilhas-e-filas/README.md) | 0082–0088 | pilha, fila circular, deque e suas aplicações |
-| [13 · Busca e ordenação](13-busca-e-ordenacao/README.md) | 0089–0096 | busca binária, bubble, selection, insertion, merge, quick |
-| [14 · Árvores](14-arvores/README.md) | 0097–0104 | árvore binária, BST, AVL, heap, heapsort |
-| [15 · Tabelas hash](15-hash/README.md) | 0105–0108 | função hash, encadeamento, endereçamento aberto |
-| [16 · Grafos](16-grafos/README.md) | 0109–0113 | representação, BFS, DFS, Dijkstra |
-| [17 · Análise avançada](17-analise-avancada/README.md) | 0114–0118 | recorrências, teorema mestre, análise amortizada, limite inferior |
-| [18 · Ordenação linear](18-ordenacao-linear/README.md) | 0119–0124 | shell, counting, radix e bucket sort, quickselect |
-| [19 · Backtracking](19-backtracking/README.md) | 0125–0130 | subconjuntos, permutações, poda, N-rainhas, labirinto, sudoku |
-| [20 · Divisão e conquista e gulosos](20-dc-e-gulosos/README.md) | 0131–0137 | potência rápida, inversões, troco, intervalos, mochila fracionária, Huffman |
-| [21 · Programação dinâmica](21-programacao-dinamica/README.md) | 0138–0143 | memoização, troco, mochila 0/1, LCS, distância de edição |
-| [22 · Árvores avançadas](22-arvores-avancadas/README.md) | 0144–0149 | árvores gerais, rubro-negra, árvore B, trie, union-find |
-| [23 · Grafos avançados](23-grafos-avancados/README.md) | 0150–0156 | componentes, ordenação topológica, Kruskal, Prim, Bellman-Ford, Floyd-Warshall |
-| [24 · Busca de padrões](24-busca-de-padroes/README.md) | 0157–0161 | força bruta, KMP, Horspool, Rabin-Karp |
-| [25 · Estruturas extras](25-estruturas-extras/README.md) | 0162–0165 | matriz esparsa, skip list, listas autoajustáveis |
-| [26 · Análise formal](26-analise-formal/README.md) | 0166–0169 | O, Ω e Θ com c e n₀, somatórios, complexidade espacial |
-| [27 · Detalhes de C](27-c-detalhes/README.md) | 0170–0173 | precedência e avaliação, com e sem sinal, VLA |
-| [28 · Estruturas: o que faltava](28-estruturas-complementos/README.md) | 0174–0181 | sentinela, sucessor, remoção AVL, rubro-negra clássica, hash por multiplicação, sondagem quadrática e dupla, pigeonhole |
-| [29 · Grafos e NP](29-grafos-e-np/README.md) | 0182–0189 | euleriano, hamiltoniano, pontes e articulações, cadeia de matrizes, P e NP, reduções, aproximação |
+| [01 · Fundamentos de C](01-fundamentos.md) | 0001–0011 | algoritmo, compilação, variáveis, tipos, limites, `printf`, `scanf`, operadores, conversão |
+| [02 · Decisões](02-condicionais.md) | 0012–0019 | relacionais, lógicos, `if`, `else if`, ternário, `switch` |
+| [03 · Laços](03-repeticoes.md) | 0020–0027 | `while`, `do...while`, `for`, `break`, padrões de laço, aleatórios |
+| [04 · Funções](04-funcoes.md) | 0028–0036 | funções, escopo, pilha de chamadas, recursão, módulos `.h`/`.c`, macros |
+| [05 · Vetores e strings](05-vetores-e-strings.md) | 0037–0043 | vetores, matrizes, caracteres, strings, leitura segura |
+| [06 · Ponteiros](06-ponteiros.md) | 0044–0052 | endereços, `*` e `&`, aritmética, ponteiro para ponteiro e para função |
+| [07 · Memória dinâmica](07-memoria-dinamica.md) | 0053–0058 | stack e heap, `malloc`, `realloc`, `free`, valgrind e ASan |
+| [08 · Tipos compostos](08-structs.md) | 0059–0066 | `struct`, `typedef`, `enum`, `union`, operações com bits |
+| [09 · Arquivos](09-arquivos.md) | 0067–0070 | arquivos texto e binários, `argc` e `argv` |
+| [10 · Análise de algoritmos](10-analise.md) | 0071–0074 | contar passos, Big-O, invariantes, tipo abstrato de dado |
+| [11 · Listas](11-listas.md) | 0075–0081 | vetor dinâmico, listas encadeadas simples, dupla e circular |
+| [12 · Pilhas e filas](12-pilhas-e-filas.md) | 0082–0088 | pilha, fila circular, deque e suas aplicações |
+| [13 · Busca e ordenação](13-busca-e-ordenacao.md) | 0089–0096 | busca binária, bubble, selection, insertion, merge, quick |
+| [14 · Árvores](14-arvores.md) | 0097–0104 | árvore binária, BST, AVL, heap, heapsort |
+| [15 · Tabelas hash](15-hash.md) | 0105–0108 | função hash, encadeamento, endereçamento aberto |
+| [16 · Grafos](16-grafos.md) | 0109–0113 | representação, BFS, DFS, Dijkstra |
+| [17 · Análise avançada](17-analise-avancada.md) | 0114–0118 | recorrências, teorema mestre, análise amortizada, limite inferior |
+| [18 · Ordenação linear](18-ordenacao-linear.md) | 0119–0124 | shell, counting, radix e bucket sort, quickselect |
+| [19 · Backtracking](19-backtracking.md) | 0125–0130 | subconjuntos, permutações, poda, N-rainhas, labirinto, sudoku |
+| [20 · Divisão e conquista e gulosos](20-dc-e-gulosos.md) | 0131–0137 | potência rápida, inversões, troco, intervalos, mochila fracionária, Huffman |
+| [21 · Programação dinâmica](21-programacao-dinamica.md) | 0138–0143 | memoização, troco, mochila 0/1, LCS, distância de edição |
+| [22 · Árvores avançadas](22-arvores-avancadas.md) | 0144–0149 | árvores gerais, rubro-negra, árvore B, trie, union-find |
+| [23 · Grafos avançados](23-grafos-avancados.md) | 0150–0156 | componentes, ordenação topológica, Kruskal, Prim, Bellman-Ford, Floyd-Warshall |
+| [24 · Busca de padrões](24-busca-de-padroes.md) | 0157–0161 | força bruta, KMP, Horspool, Rabin-Karp |
+| [25 · Estruturas extras](25-estruturas-extras.md) | 0162–0165 | matriz esparsa, skip list, listas autoajustáveis |
+| [26 · Análise formal](26-analise-formal.md) | 0166–0169 | O, Ω e Θ com c e n₀, somatórios, complexidade espacial |
+| [27 · Detalhes de C](27-c-detalhes.md) | 0170–0173 | precedência e avaliação, com e sem sinal, VLA |
+| [28 · Estruturas: o que faltava](28-estruturas-complementos.md) | 0174–0181 | sentinela, sucessor, remoção AVL, rubro-negra clássica, hash por multiplicação, sondagem quadrática e dupla, pigeonhole |
+| [29 · Grafos e NP](29-grafos-e-np.md) | 0182–0189 | euleriano, hamiltoniano, pontes e articulações, cadeia de matrizes, P e NP, reduções, aproximação |
 
 O sumário detalhado, assunto por assunto, está em
 [`_fontes/sumario.md`](_fontes/sumario.md).
@@ -150,7 +156,7 @@ referência os fichamentos em [`_fontes/`](_fontes/) dos materiais abaixo:
 
 ## Para quem for mexer no material
 
-Os READMEs dos módulos e os SVGs são gerados. O guia de escrita está em
+Os `.md` dos módulos (na raiz) e os SVGs são gerados. O guia de escrita está em
 [`CLAUDE.md`](CLAUDE.md) e o gerador em [`_gerador/`](_gerador/):
 
 ```bash

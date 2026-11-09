@@ -34,58 +34,58 @@ prova fica fora daqui (veja o fim deste guia).
 
 | Edital | Onde estudar |
 | --- | --- |
-| sequência | [01 · Fundamentos](01-fundamentos/README.md) (0001–0011) |
-| seleção: `if`/`else`, `switch` | [02 · Decisões](02-condicionais/README.md) (0012–0019) |
-| repetição: `while`, `do/while` | [03 · Laços](03-repeticoes/README.md) (0020–0027) |
-| modularização, procedimentos, funções | [04 · Funções](04-funcoes/README.md) 0028–0031, 0034 |
-| recursão | 0032, 0033 e [19 · Backtracking](19-backtracking/README.md) |
-| expressões, operadores, **precedência** | 0007, 0009, 0013 e **0170** ([27 · Detalhes de C](27-c-detalhes/README.md)) |
+| sequência | [01 · Fundamentos](01-fundamentos.md) (0001–0011) |
+| seleção: `if`/`else`, `switch` | [02 · Decisões](02-condicionais.md) (0012–0019) |
+| repetição: `while`, `do/while` | [03 · Laços](03-repeticoes.md) (0020–0027) |
+| modularização, procedimentos, funções | [04 · Funções](04-funcoes.md) 0028–0031, 0034 |
+| recursão | 0032, 0033 e [19 · Backtracking](19-backtracking.md) |
+| expressões, operadores, **precedência** | 0007, 0009, 0013 e **0170** ([27 · Detalhes de C](27-c-detalhes.md)) |
 
 ### 2. Eficiência computacional
 
 | Edital | Onde estudar |
 | --- | --- |
-| função de custo, contar passos | 0071 ([10 · Análise](10-analise/README.md)) |
+| função de custo, contar passos | 0071 ([10 · Análise](10-analise.md)) |
 | complexidade assintótica, O | 0072 |
-| **O, Ω e Θ** (definições formais) | **0166** ([26 · Análise formal](26-analise-formal/README.md)), 0117 |
+| **O, Ω e Θ** (definições formais) | **0166** ([26 · Análise formal](26-analise-formal.md)), 0117 |
 | somatórios (cursinho, aula 3) | **0167** |
 | complexidade **espacial** | **0168** |
-| algoritmos recursivos: recorrências, teorema mestre | [17 · Análise avançada](17-analise-avancada/README.md) (0114–0118) |
+| algoritmos recursivos: recorrências, teorema mestre | [17 · Análise avançada](17-analise-avancada.md) (0114–0118) |
 | precisão e boas práticas | 0008, 0057, 0073 |
 
 ### 3. Estruturas de dados elementares
 
 | Edital | Onde estudar |
 | --- | --- |
-| tipos definidos pelo programador, struct, union, enum | [08 · Tipos compostos](08-structs/README.md) (0059–0065) |
+| tipos definidos pelo programador, struct, union, enum | [08 · Tipos compostos](08-structs.md) (0059–0065) |
 | TAD | 0074 e todo módulo a partir do 11 |
-| vetores, matrizes | [05 · Vetores](05-vetores-e-strings/README.md) (0037–0039), 0056 |
+| vetores, matrizes | [05 · Vetores](05-vetores-e-strings.md) (0037–0039), 0056 |
 | **VLA** | **0172** |
 | tipos com e sem sinal, bits | 0003, 0065 e **0171** |
 | lista em vetor | 0075 |
-| lista ligada, circular, dupla | [11 · Listas](11-listas/README.md) (0076–0080) |
-| lista **com sentinela** | **0174** ([28 · Complementos](28-estruturas-complementos/README.md)) |
-| pilhas, filas, filas circulares, deques | [12 · Pilhas e filas](12-pilhas-e-filas/README.md) (0082–0087) |
+| lista ligada, circular, dupla | [11 · Listas](11-listas.md) (0076–0080) |
+| lista **com sentinela** | **0174** ([28 · Complementos](28-estruturas-complementos.md)) |
+| pilhas, filas, filas circulares, deques | [12 · Pilhas e filas](12-pilhas-e-filas.md) (0082–0087) |
 | fila de prioridade | 0102 |
-| arquivos texto e binários | [09 · Arquivos](09-arquivos/README.md) (0067–0068) |
+| arquivos texto e binários | [09 · Arquivos](09-arquivos.md) (0067–0068) |
 
 ### 4. Árvores
 
 | Edital | Onde estudar |
 | --- | --- |
-| altura, profundidade, raiz, pai, filho | 0097, 0098 ([14 · Árvores](14-arvores/README.md)) |
+| altura, profundidade, raiz, pai, filho | 0097, 0098 ([14 · Árvores](14-arvores.md)) |
 | **nível, grau, fator de balanceamento, sucessor, antecessor** | **0175** |
 | árvore binária de busca: busca, inserção, remoção | 0099, 0100 |
 | AVL | 0101 e **0176** (remoção) |
 | rubro-negra | **0177** (versão clássica do Cormen) e 0145 (esquerdista) |
-| árvore B | 0146 ([22 · Árvores avançadas](22-arvores-avancadas/README.md)) |
+| árvore B | 0146 ([22 · Árvores avançadas](22-arvores-avancadas.md)) |
 | heap binário | 0102, 0103 |
 
 ### 5. Tabelas de espalhamento
 
 | Edital | Onde estudar |
 | --- | --- |
-| conceito e função hash | 0105 ([15 · Hash](15-hash/README.md)) |
+| conceito e função hash | 0105 ([15 · Hash](15-hash.md)) |
 | método da divisão e **da multiplicação** | **0178** |
 | encadeamento | 0106 |
 | endereçamento aberto: sondagem linear | 0107 |
@@ -95,7 +95,7 @@ prova fica fora daqui (veja o fim deste guia).
 
 | Edital | Onde estudar |
 | --- | --- |
-| busca sequencial e binária | 0089, 0090 ([13 · Busca e ordenação](13-busca-e-ordenacao/README.md)) |
+| busca sequencial e binária | 0089, 0090 ([13 · Busca e ordenação](13-busca-e-ordenacao.md)) |
 | busca em árvores | 0099, 0146, 0147 |
 
 ### 7. Ordenação
@@ -106,17 +106,17 @@ prova fica fora daqui (veja o fim deste guia).
 | merge, quick, heap | 0094, 0095, 0103 |
 | estável e não estável | 0096, 0120 |
 | **chave simples e composta, pigeonhole sort** | **0180** |
-| counting, bucket, radix | [18 · Ordenação linear](18-ordenacao-linear/README.md) (0120–0122) |
+| counting, bucket, radix | [18 · Ordenação linear](18-ordenacao-linear.md) (0120–0122) |
 
 ### 8. Grafos
 
 | Edital | Onde estudar |
 | --- | --- |
-| vértice, aresta, dirigido, com peso | 0109 ([16 · Grafos](16-grafos/README.md)) |
+| vértice, aresta, dirigido, com peso | 0109 ([16 · Grafos](16-grafos.md)) |
 | matriz e lista de adjacências | 0109 |
-| **grau, caminho, trajeto, circuito, ciclo, euleriano** | **0182** ([29 · Grafos e NP](29-grafos-e-np/README.md)) |
+| **grau, caminho, trajeto, circuito, ciclo, euleriano** | **0182** ([29 · Grafos e NP](29-grafos-e-np.md)) |
 | **hamiltoniano** | **0183** |
-| conectividade | 0150 ([23 · Grafos avançados](23-grafos-avancados/README.md)) |
+| conectividade | 0150 ([23 · Grafos avançados](23-grafos-avancados.md)) |
 | **ponte e vértice de articulação** | **0184** |
 | busca em largura e em profundidade | 0110, 0111 |
 | caminhos mínimos | 0112 (Dijkstra), 0154 (Bellman-Ford), 0155 (Floyd-Warshall) |
@@ -156,8 +156,8 @@ custo de um algoritmo. Nos assuntos que você já viu, leia o texto, refaça a
 **Pergunta para você** e faça só os exercícios ★★☆ e ★★★. Nos novos (0166 em
 diante), faça tudo.
 
-Cada módulo tem ainda uma **lista prática** de 30 exercícios (`<modulo>/lista/`)
-e as **Questões no estilo da prova**, no fim do README do módulo. Faça as
+Cada módulo tem ainda uma **lista prática** de 30 exercícios e as **Questões
+no estilo da prova**, as duas no fim do `.md` do módulo. Faça as
 questões sempre, cronometrando: o edital não fixa a duração da prova, então
 confira o horário quando sair o local (24/11) e treine no mesmo ritmo.
 Da lista prática, faça pelo menos os ★★☆ dos módulos do dia; os ★★★ ficam para
