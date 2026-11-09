@@ -200,7 +200,7 @@ função que só calcula serve para a tela, para um arquivo ou para outra conta.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0028-funcoes/`](04-funcoes/0028-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0028-funcoes/`](04-funcoes/0028-funcoes/).
 
 **Exemplo A055 · A conta de luz: funções que chamam funções**
 
@@ -582,7 +582,7 @@ Mais três regras sobre parâmetros:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0029-parametros/`](04-funcoes/0029-parametros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0029-parametros/`](04-funcoes/0029-parametros/).
 
 **Exemplo A057 · O parâmetro casa pela posição, não pelo nome**
 
@@ -982,7 +982,7 @@ tiver mais de um `.c`.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0030-escopo/`](04-funcoes/0030-escopo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0030-escopo/`](04-funcoes/0030-escopo/).
 
 **Exemplo A059 · A função que lembra o recorde**
 
@@ -1425,7 +1425,7 @@ no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0031-pilha-de-chamadas/`](04-funcoes/0031-pilha-de-chamadas/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0031-pilha-de-chamadas/`](04-funcoes/0031-pilha-de-chamadas/).
 
 **Exemplo A061 · O valor que desce a pilha, quadro por quadro**
 
@@ -1864,7 +1864,7 @@ resolve cada metade".
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0032-recursao/`](04-funcoes/0032-recursao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0032-recursao/`](04-funcoes/0032-recursao/).
 
 **Exemplo A063 · Em quantos meses a dívida dobra**
 
@@ -2224,7 +2224,7 @@ Euclides é recursão com **uma** chamada só e que encolhe depressa: barata.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0033-recursao-na-pratica/`](04-funcoes/0033-recursao-na-pratica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0033-recursao-na-pratica/`](04-funcoes/0033-recursao-na-pratica/).
 
 **Exemplo A065 · Fibonacci sem recalcular: a recursão que carrega o par**
 
@@ -2622,7 +2622,7 @@ Três peças fecham o assunto:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0034-modulos/`](04-funcoes/0034-modulos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0034-modulos/`](04-funcoes/0034-modulos/).
 
 **Exemplo A067 · O .h incluído duas vezes e o protótipo que converte**
 
@@ -3042,7 +3042,7 @@ Ferramentas que o exemplo A070 usa:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0035-preprocessador/`](04-funcoes/0035-preprocessador/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0035-preprocessador/`](04-funcoes/0035-preprocessador/).
 
 **Exemplo A069 · A macro não tem tipo nem é função**
 
@@ -3519,7 +3519,7 @@ precisa de biblioteca de testes: uma macro de dez linhas resolve.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0036-juntando-tudo/`](04-funcoes/0036-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0036-juntando-tudo/`](04-funcoes/0036-juntando-tudo/).
 
 **Exemplo A071 · Rachando a conta da mesa sem perder centavo**
 
@@ -4075,7 +4075,7 @@ volta.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](04-funcoes/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/04-funcoes/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](04-funcoes/lista/); resoluções em `_respostas/04-funcoes/lista/`.
 
 ### ★☆☆ Aquecimento
 

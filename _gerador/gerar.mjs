@@ -101,7 +101,7 @@ const pratique = (modulo, pasta) => {
   return [
     '### Hora de praticar',
     '',
-    `Os arquivos ficam em [\`${pasta}/\`](${pasta}/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.`,
+    `Arquivos em [\`${pasta}/\`](${pasta}/).`,
     '',
     exemplos.map((a) => exemplo(`${modulo}/${pasta}/${a}`, a).join('\n')).join('\n\n'),
     '',
@@ -125,7 +125,7 @@ const lista = (modulo) => {
   const partes = [
     '## Lista de exercícios práticos',
     '',
-    `${arquivos.length} exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](../PPGI.md)). Os arquivos ficam em [\`lista/\`](lista/): a resposta vai dentro de cada \`P????.c\`, embaixo de \`// Escreva sua resposta abaixo:\`. Uma resolução de cada um está em \`_respostas/${modulo}/lista/\`. Só olhe depois de tentar.`,
+    `${arquivos.length} exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [\`lista/\`](lista/); resoluções em \`_respostas/${modulo}/lista/\`.`,
   ]
   for (const [estrelas, nomeNivel] of niveis) {
     const doNivel = blocos.filter((md) => md[0].includes(estrelas))

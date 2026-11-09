@@ -209,7 +209,7 @@ apenas o `compra`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0170-precedencia-e-avaliacao/`](27-c-detalhes/0170-precedencia-e-avaliacao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0170-precedencia-e-avaliacao/`](27-c-detalhes/0170-precedencia-e-avaliacao/).
 
 **Exemplo A339 · O lado direito que nem roda**
 
@@ -663,7 +663,7 @@ pergunta já houve uma conversão, e a pergunta de verdade é sobre 4294967295:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0171-com-e-sem-sinal/`](27-c-detalhes/0171-com-e-sem-sinal/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0171-com-e-sem-sinal/`](27-c-detalhes/0171-com-e-sem-sinal/).
 
 **Exemplo A341 · Descendo com size_t sem cair do zero**
 
@@ -1120,7 +1120,7 @@ deu certo:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0172-vla/`](27-c-detalhes/0172-vla/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0172-vla/`](27-c-detalhes/0172-vla/).
 
 **Exemplo A343 · O sizeof que é calculado na hora**
 
@@ -1580,7 +1580,7 @@ permissão ou cinco, e o custo é o mesmo:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0173-juntando-tudo/`](27-c-detalhes/0173-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0173-juntando-tudo/`](27-c-detalhes/0173-juntando-tudo/).
 
 **Exemplo A345 · Auditoria: quem fugiu do pacote do papel**
 
@@ -2108,7 +2108,7 @@ com `r = -2`.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](27-c-detalhes/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/27-c-detalhes/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](27-c-detalhes/lista/); resoluções em `_respostas/27-c-detalhes/lista/`.
 
 ### ★☆☆ Aquecimento
 

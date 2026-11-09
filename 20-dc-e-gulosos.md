@@ -205,7 +205,7 @@ quadrado. Cada chamada de dentro percorre o mesmo fluxograma com o seu `n`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0131-divisao-e-conquista/`](20-dc-e-gulosos/0131-divisao-e-conquista/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0131-divisao-e-conquista/`](20-dc-e-gulosos/0131-divisao-e-conquista/).
 
 **Exemplo A261 · Potência rápida sem recursão: os bits do expoente**
 
@@ -757,7 +757,7 @@ A264 mostra um jeito ainda mais rápido, em O(n).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0132-inversoes-e-subvetor/`](20-dc-e-gulosos/0132-inversoes-e-subvetor/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0132-inversoes-e-subvetor/`](20-dc-e-gulosos/0132-inversoes-e-subvetor/).
 
 **Exemplo A263 · A melhor sequência de dias, dividindo ao meio**
 
@@ -1230,7 +1230,7 @@ descer para a próxima. Não há caminho de volta para uma moeda maior:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0133-gulosos/`](20-dc-e-gulosos/0133-gulosos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0133-gulosos/`](20-dc-e-gulosos/0133-gulosos/).
 
 **Exemplo A265 · Postos na estrada: parar o mínimo de vezes**
 
@@ -1709,7 +1709,7 @@ repete esses dois trajetos:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0134-intervalos/`](20-dc-e-gulosos/0134-intervalos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0134-intervalos/`](20-dc-e-gulosos/0134-intervalos/).
 
 **Exemplo A267 · Quantas salas? Todas as aulas, o mínimo de salas**
 
@@ -2225,7 +2225,7 @@ passa pelo "leva tudo" três vezes (açafrão, castanha, café) e uma vez pelo
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0135-mochila-fracionaria/`](20-dc-e-gulosos/0135-mochila-fracionaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0135-mochila-fracionaria/`](20-dc-e-gulosos/0135-mochila-fracionaria/).
 
 **Exemplo A269 · Três critérios para a mesma carga**
 
@@ -2782,7 +2782,7 @@ põe um, então o heap encolhe um por volta. Com 5 folhas, são 4 voltas:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0136-huffman/`](20-dc-e-gulosos/0136-huffman/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0136-huffman/`](20-dc-e-gulosos/0136-huffman/).
 
 **Exemplo A271 · Decodificar descendo a árvore (e o estrago de um bit errado)**
 
@@ -3349,7 +3349,7 @@ enchimento sem ler:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0137-juntando-tudo/`](20-dc-e-gulosos/0137-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0137-juntando-tudo/`](20-dc-e-gulosos/0137-juntando-tudo/).
 
 **Exemplo A273 · O compactador na linha de comando**
 
@@ -3849,7 +3849,7 @@ vizinhos na cadeia.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](20-dc-e-gulosos/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/20-dc-e-gulosos/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](20-dc-e-gulosos/lista/); resoluções em `_respostas/20-dc-e-gulosos/lista/`.
 
 ### ★☆☆ Aquecimento
 

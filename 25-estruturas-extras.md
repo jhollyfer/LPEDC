@@ -246,7 +246,7 @@ apagando a nota: a coluna 3 existe e o valor novo é 0, então a célula sai:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0162-matriz-esparsa/`](25-estruturas-extras/0162-matriz-esparsa/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0162-matriz-esparsa/`](25-estruturas-extras/0162-matriz-esparsa/).
 
 **Exemplo A323 · As entregas em triplas**
 
@@ -762,7 +762,7 @@ andar; o de fora desce. O caminho verde é a busca do 47: avança uma vez no and
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0163-skip-list/`](25-estruturas-extras/0163-skip-list/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0163-skip-list/`](25-estruturas-extras/0163-skip-list/).
 
 **Exemplo A325 · A moeda decide os andares**
 
@@ -1247,7 +1247,7 @@ O caminho verde é a chamada para Caio, achado na quarta volta:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0164-listas-autoajustaveis/`](25-estruturas-extras/0164-listas-autoajustaveis/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0164-listas-autoajustaveis/`](25-estruturas-extras/0164-listas-autoajustaveis/).
 
 **Exemplo A327 · A gaveta de temperos num vetor**
 
@@ -1750,7 +1750,7 @@ os produtos da promoção para trás. O exemplo A329 mostra quando o jogo vira.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0165-juntando-tudo/`](25-estruturas-extras/0165-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0165-juntando-tudo/`](25-estruturas-extras/0165-juntando-tudo/).
 
 **Exemplo A329 · Quando a lista MTF ganha**
 
@@ -2328,7 +2328,7 @@ faixa (E974); a skip list com um código mais simples; (c) **hash**: só pergunt
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](25-estruturas-extras/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/25-estruturas-extras/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](25-estruturas-extras/lista/); resoluções em `_respostas/25-estruturas-extras/lista/`.
 
 ### ★☆☆ Aquecimento
 

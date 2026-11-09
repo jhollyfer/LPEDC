@@ -253,7 +253,7 @@ sempre. Com qualquer `c`, a história se repete, só que mais longe:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0166-o-omega-theta/`](26-analise-formal/0166-o-omega-theta/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0166-o-omega-theta/`](26-analise-formal/0166-o-omega-theta/).
 
 **Exemplo A331 · Melhor, pior e médio na busca sequencial**
 
@@ -681,7 +681,7 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0167-somatorios/`](26-analise-formal/0167-somatorios/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0167-somatorios/`](26-analise-formal/0167-somatorios/).
 
 **Exemplo A333 · Dois laços e mesmo assim linear: a soma geométrica**
 
@@ -1127,7 +1127,7 @@ extra é Θ(1):
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0168-complexidade-espacial/`](26-analise-formal/0168-complexidade-espacial/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0168-complexidade-espacial/`](26-analise-formal/0168-complexidade-espacial/).
 
 **Exemplo A335 · Quanto a recursão empilha**
 
@@ -1601,7 +1601,7 @@ auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0169-juntando-tudo/`](26-analise-formal/0169-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0169-juntando-tudo/`](26-analise-formal/0169-juntando-tudo/).
 
 **Exemplo A337 · Prever antes de medir**
 
@@ -2092,7 +2092,7 @@ a `n` nesse tempo.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](26-analise-formal/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/26-analise-formal/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](26-analise-formal/lista/); resoluções em `_respostas/26-analise-formal/lista/`.
 
 ### ★☆☆ Aquecimento
 

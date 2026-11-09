@@ -219,7 +219,7 @@ mostra a outra representação, a lista de adjacência, como um TAD
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0109-grafos/`](16-grafos/0109-grafos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0109-grafos/`](16-grafos/0109-grafos/).
 
 **Exemplo A217 · Quilômetros na matriz e a vila isolada**
 
@@ -704,7 +704,7 @@ Ninguém monta matriz de adjacência; os vizinhos saem de uma conta.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0110-bfs/`](16-grafos/0110-bfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0110-bfs/`](16-grafos/0110-bfs/).
 
 **Exemplo A219 · As ondas da BFS e quem fica de fora**
 
@@ -1184,7 +1184,7 @@ mostra a pilha a cada passo.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0111-dfs/`](16-grafos/0111-dfs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0111-dfs/`](16-grafos/0111-dfs/).
 
 **Exemplo A221 · Cabos do escritório: arestas de árvore e de retorno**
 
@@ -1688,7 +1688,7 @@ reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0112-dijkstra/`](16-grafos/0112-dijkstra/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0112-dijkstra/`](16-grafos/0112-dijkstra/).
 
 **Exemplo A223 · O entregador que para quando chega**
 
@@ -2280,7 +2280,7 @@ vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0113-juntando-tudo/`](16-grafos/0113-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0113-juntando-tudo/`](16-grafos/0113-juntando-tudo/).
 
 **Exemplo A225 · Mudanças: BFS ou Dijkstra, destino por destino**
 
@@ -2979,7 +2979,7 @@ só a fila vira "o menor `dist` primeiro", com `dist[u] + custo(v)` no lugar de
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](16-grafos/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/16-grafos/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](16-grafos/lista/); resoluções em `_respostas/16-grafos/lista/`.
 
 ### ★☆☆ Aquecimento
 

@@ -238,7 +238,7 @@ irmãos. O banheiro devolve 1600:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0144-arvores-gerais/`](22-arvores-avancadas/0144-arvores-gerais/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0144-arvores-gerais/`](22-arvores-avancadas/0144-arvores-gerais/).
 
 **Exemplo A287 · O sumário numerado da apostila**
 
@@ -775,7 +775,7 @@ todas as folhas no mesmo nível.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0145-rubro-negra/`](22-arvores-avancadas/0145-rubro-negra/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0145-rubro-negra/`](22-arvores-avancadas/0145-rubro-negra/).
 
 **Exemplo A289 · Mil chaves em ordem, mil ao contrário**
 
@@ -1261,7 +1261,7 @@ para a metade nova, e a chamada recursiva a põe na folha `[30]`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0146-arvore-b/`](22-arvores-avancadas/0146-arvore-b/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0146-arvore-b/`](22-arvores-avancadas/0146-arvore-b/).
 
 **Exemplo A291 · Quantas idas ao disco**
 
@@ -1710,7 +1710,7 @@ vezes); o `m` é novo e ganha um nó. Acabaram as letras, e o `m` recebe
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0147-trie/`](22-arvores-avancadas/0147-trie/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0147-trie/`](22-arvores-avancadas/0147-trie/).
 
 **Exemplo A293 · Quanto custa uma trie**
 
@@ -2209,7 +2209,7 @@ Repara no fluxograma: é o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0148-union-find/`](22-arvores-avancadas/0148-union-find/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0148-union-find/`](22-arvores-avancadas/0148-union-find/).
 
 **Exemplo A295 · Sem os dois truques, a árvore vira lista**
 
@@ -2742,7 +2742,7 @@ coisas, e muitas vezes troca o nó de 26 ponteiros por um nó mais enxuto.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0149-juntando-tudo/`](22-arvores-avancadas/0149-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0149-juntando-tudo/`](22-arvores-avancadas/0149-juntando-tudo/).
 
 **Exemplo A297 · Trie, hash e BST no mesmo dicionário**
 
@@ -3366,7 +3366,7 @@ altura continua 2. Confira com `ab_insere` e `ab_mostra`.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](22-arvores-avancadas/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/22-arvores-avancadas/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](22-arvores-avancadas/lista/); resoluções em `_respostas/22-arvores-avancadas/lista/`.
 
 ### ★☆☆ Aquecimento
 

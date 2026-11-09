@@ -269,7 +269,7 @@ São 8 jeitos de subir 5 degraus. Confira à mão: 11111, 2111, 1211, 1121,
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0138-memoizacao/`](21-programacao-dinamica/0138-memoizacao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0138-memoizacao/`](21-programacao-dinamica/0138-memoizacao/).
 
 **Exemplo A275 · Quantas rotas o entregador tem até o cliente**
 
@@ -749,7 +749,7 @@ fica o primeiro que achou o mínimo. As duas soluções têm 2 selos: tanto faz.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0139-troco-pd/`](21-programacao-dinamica/0139-troco-pd/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0139-troco-pd/`](21-programacao-dinamica/0139-troco-pd/).
 
 **Exemplo A277 · De quantos jeitos dá para pagar R$ 1,00 em moedas**
 
@@ -1232,7 +1232,7 @@ A recuperação, partindo do canto `t[4][7]`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0140-mochila-01/`](21-programacao-dinamica/0140-mochila-01/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0140-mochila-01/`](21-programacao-dinamica/0140-mochila-01/).
 
 **Exemplo A279 · O pen drive com uma linha só de tabela**
 
@@ -1773,7 +1773,7 @@ A volta, partindo de `c[7][5]`. Repare que a recuperação monta a resposta
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0141-lcs/`](21-programacao-dinamica/0141-lcs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0141-lcs/`](21-programacao-dinamica/0141-lcs/).
 
 **Exemplo A281 · DNA comparado com duas linhas de tabela**
 
@@ -2339,7 +2339,7 @@ vizinho eu vim?":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0142-distancia-de-edicao/`](21-programacao-dinamica/0142-distancia-de-edicao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0142-distancia-de-edicao/`](21-programacao-dinamica/0142-distancia-de-edicao/).
 
 **Exemplo A283 · O corretor que sugere a palavra mais perto**
 
@@ -2865,7 +2865,7 @@ caminho marcado é o das duas primeiras linhas, iguais nas duas versões:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0143-juntando-tudo/`](21-programacao-dinamica/0143-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0143-juntando-tudo/`](21-programacao-dinamica/0143-juntando-tudo/).
 
 **Exemplo A285 · Diff palavra por palavra**
 
@@ -3462,7 +3462,7 @@ meio recursivamente), mas dá mais trabalho.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](21-programacao-dinamica/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/21-programacao-dinamica/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](21-programacao-dinamica/lista/); resoluções em `_respostas/21-programacao-dinamica/lista/`.
 
 ### ★☆☆ Aquecimento
 

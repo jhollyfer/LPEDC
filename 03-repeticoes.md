@@ -195,7 +195,7 @@ pelo Sim várias vezes e só uma vez pelo Não:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0020-while/`](03-repeticoes/0020-while/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0020-while/`](03-repeticoes/0020-while/).
 
 **Exemplo A039 · Dividindo pizzas sem usar a divisão**
 
@@ -564,7 +564,7 @@ Não:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0021-do-while/`](03-repeticoes/0021-do-while/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0021-do-while/`](03-repeticoes/0021-do-while/).
 
 **Exemplo A041 · Quantos dígitos tem o zero?**
 
@@ -975,7 +975,7 @@ seta sai dele e volta para o losango:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0022-for/`](03-repeticoes/0022-for/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0022-for/`](03-repeticoes/0022-for/).
 
 **Exemplo A043 · Postes e vãos: o erro por um na cerca**
 
@@ -1356,7 +1356,7 @@ A outra sai do fim normal do corpo. E tem **uma** saída, o Sim de
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0023-break-continue/`](03-repeticoes/0023-break-continue/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0023-break-continue/`](03-repeticoes/0023-break-continue/).
 
 **Exemplo A045 · Poltronas da excursão: continue com o passo no topo**
 
@@ -1735,7 +1735,7 @@ fora vem `poltrona = 1`: é ali que o laço de dentro recomeça:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0024-lacos-aninhados/`](03-repeticoes/0024-lacos-aninhados/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0024-lacos-aninhados/`](03-repeticoes/0024-lacos-aninhados/).
 
 **Exemplo A047 · As horas capicua do relógio digital**
 
@@ -2132,7 +2132,7 @@ olha para o valor que acabou de chegar:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0025-padroes-de-laco/`](03-repeticoes/0025-padroes-de-laco/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0025-padroes-de-laco/`](03-repeticoes/0025-padroes-de-laco/).
 
 **Exemplo A049 · Inverno na serra: maior e menor com INT_MIN e INT_MAX**
 
@@ -2565,7 +2565,7 @@ No exemplo, o caminho passa três vezes pelo Sim e, na quarta jogada, pelo Não:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0026-aleatorios/`](03-repeticoes/0026-aleatorios/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0026-aleatorios/`](03-repeticoes/0026-aleatorios/).
 
 **Exemplo A051 · Mesma semente, mesmo sorteio**
 
@@ -2947,7 +2947,7 @@ volta sai do Não de "soma == 7?". As duas saídas do laço vão para os mesmos
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0027-juntando-tudo/`](03-repeticoes/0027-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0027-juntando-tudo/`](03-repeticoes/0027-juntando-tudo/).
 
 **Exemplo A053 · As 36 jogadas do primeiro lançamento, sem sortear**
 
@@ -3472,7 +3472,7 @@ sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](03-repeticoes/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/03-repeticoes/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](03-repeticoes/lista/); resoluções em `_respostas/03-repeticoes/lista/`.
 
 ### ★☆☆ Aquecimento
 

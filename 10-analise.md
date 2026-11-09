@@ -196,7 +196,7 @@ passo a mais no contador:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0071-eficiencia/`](10-analise/0071-eficiencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0071-eficiencia/`](10-analise/0071-eficiencia/).
 
 **Exemplo A141 · Contar tudo: a busca com sentinela**
 
@@ -688,7 +688,7 @@ responde Sim só 10 vezes, porque cada volta joga metade fora:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0072-big-o/`](10-analise/0072-big-o/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0072-big-o/`](10-analise/0072-big-o/).
 
 **Exemplo A143 · A base do log não importa**
 
@@ -1183,7 +1183,7 @@ Repara no fluxograma: o invariante mora na seta que volta para o losango
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0073-invariantes/`](10-analise/0073-invariantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0073-invariantes/`](10-analise/0073-invariantes/).
 
 **Exemplo A145 · Dois invariantes no mesmo extrato**
 
@@ -1689,7 +1689,7 @@ grafo) segue este molde. Para um TAD `x`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0074-tad/`](10-analise/0074-tad/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0074-tad/`](10-analise/0074-tad/).
 
 **Exemplo A147 · Duas salas, dois contadores**
 
@@ -2239,7 +2239,7 @@ lembrete do assunto 0071: a constante importa quando n é fixo.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](10-analise/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/10-analise/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](10-analise/lista/); resoluções em `_respostas/10-analise/lista/`.
 
 ### ★☆☆ Aquecimento
 

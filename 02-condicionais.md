@@ -188,7 +188,7 @@ escolhe um caminho é o `if`, que vem daqui a dois assuntos:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0012-relacionais/`](02-condicionais/0012-relacionais/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0012-relacionais/`](02-condicionais/0012-relacionais/).
 
 **Exemplo A023 · A nota no limite e a contagem sem if**
 
@@ -528,7 +528,7 @@ pularia direto para a pré-estreia: isso é o curto-circuito desenhado:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0013-logicos/`](02-condicionais/0013-logicos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0013-logicos/`](02-condicionais/0013-logicos/).
 
 **Exemplo A025 · Dentro, fora e "só um dos dois"**
 
@@ -858,7 +858,7 @@ Sim chega depois do desconto:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0014-if/`](02-condicionais/0014-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0014-if/`](02-condicionais/0014-if/).
 
 **Exemplo A027 · Avisos independentes no painel do carro**
 
@@ -1172,7 +1172,7 @@ dois:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0015-if-else/`](02-condicionais/0015-if-else/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0015-if-else/`](02-condicionais/0015-if-else/).
 
 **Exemplo A029 · O estacionamento e a constante à esquerda**
 
@@ -1490,7 +1490,7 @@ losangos de baixo nunca são visitados:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0016-else-if/`](02-condicionais/0016-else-if/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0016-else-if/`](02-condicionais/0016-else-if/).
 
 **Exemplo A031 · FizzBuzz e a ordem que importa**
 
@@ -1837,7 +1837,7 @@ ternário resolve em uma linha:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0017-ternario/`](02-condicionais/0017-ternario/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0017-ternario/`](02-condicionais/0017-ternario/).
 
 **Exemplo A033 · O ternário que protege a divisão**
 
@@ -2168,7 +2168,7 @@ de Sim e Não:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0018-switch/`](02-condicionais/0018-switch/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0018-switch/`](02-condicionais/0018-switch/).
 
 **Exemplo A035 · Faixas de nota com a divisão inteira**
 
@@ -2584,7 +2584,7 @@ parece por fora:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0019-juntando-tudo/`](02-condicionais/0019-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0019-juntando-tudo/`](02-condicionais/0019-juntando-tudo/).
 
 **Exemplo A037 · A situação no fim do semestre**
 
@@ -3013,7 +3013,7 @@ já faz isso).
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](02-condicionais/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/02-condicionais/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](02-condicionais/lista/); resoluções em `_respostas/02-condicionais/lista/`.
 
 ### ★☆☆ Aquecimento
 

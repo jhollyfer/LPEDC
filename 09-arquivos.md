@@ -213,7 +213,7 @@ uma pergunta feita antes dela:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0067-arquivos-texto/`](09-arquivos/0067-arquivos-texto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0067-arquivos-texto/`](09-arquivos/0067-arquivos-texto/).
 
 **Exemplo A133 · A linha maior que o buffer**
 
@@ -679,7 +679,7 @@ sem carregar o arquivo na RAM (a busca binária é o assunto 0090).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0068-arquivos-binarios/`](09-arquivos/0068-arquivos-binarios/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0068-arquivos-binarios/`](09-arquivos/0068-arquivos-binarios/).
 
 **Exemplo A135 · Ler em lotes: o retorno do fread**
 
@@ -1144,7 +1144,7 @@ verdade? Só no caminho verde o programa trabalha:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0069-argumentos/`](09-arquivos/0069-argumentos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0069-argumentos/`](09-arquivos/0069-argumentos/).
 
 **Exemplo A137 · Opções com hífen**
 
@@ -1669,7 +1669,7 @@ de menos, cai no mesmo lugar: a mensagem de uso:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0070-juntando-tudo/`](09-arquivos/0070-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0070-juntando-tudo/`](09-arquivos/0070-juntando-tudo/).
 
 **Exemplo A139 · Apagar um registro do meio**
 
@@ -2302,7 +2302,7 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](09-arquivos/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/09-arquivos/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](09-arquivos/lista/); resoluções em `_respostas/09-arquivos/lista/`.
 
 ### ★☆☆ Aquecimento
 

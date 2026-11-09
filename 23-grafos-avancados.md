@@ -276,7 +276,7 @@ de amigos à medida que as amizades chegam, com o union-find do assunto 0148.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0150-componentes-e-ciclos/`](23-grafos-avancados/0150-componentes-e-ciclos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0150-componentes-e-ciclos/`](23-grafos-avancados/0150-componentes-e-ciclos/).
 
 **Exemplo A299 · O laço de cabos na rede do escritório**
 
@@ -768,7 +768,7 @@ tudo que já está liberado.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0151-ordenacao-topologica/`](23-grafos-avancados/0151-ordenacao-topologica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0151-ordenacao-topologica/`](23-grafos-avancados/0151-ordenacao-topologica/).
 
 **Exemplo A301 · Ordem de compilação pela DFS**
 
@@ -1313,7 +1313,7 @@ das melhores conexões de uma rede Wi-Fi.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0152-kruskal/`](23-grafos-avancados/0152-kruskal/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0152-kruskal/`](23-grafos-avancados/0152-kruskal/).
 
 **Exemplo A303 · Kruskal parado no meio: três regiões de entrega**
 
@@ -1874,7 +1874,7 @@ no mesmo mapa e mostra as duas árvores.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0153-prim/`](23-grafos-avancados/0153-prim/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0153-prim/`](23-grafos-avancados/0153-prim/).
 
 **Exemplo A305 · Prim sem heap: fiação dos postes de um loteamento**
 
@@ -2416,7 +2416,7 @@ verdade, numa tabela de câmbio entre moedas, e mostra o ciclo.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0154-bellman-ford/`](23-grafos-avancados/0154-bellman-ford/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0154-bellman-ford/`](23-grafos-avancados/0154-bellman-ford/).
 
 **Exemplo A307 · Ciclo negativo no câmbio: dinheiro que se multiplica**
 
@@ -2911,7 +2911,7 @@ imprime o caminho entre quaisquer dois bairros. O A310 troca `+` e `min` por
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0155-floyd-warshall/`](23-grafos-avancados/0155-floyd-warshall/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0155-floyd-warshall/`](23-grafos-avancados/0155-floyd-warshall/).
 
 **Exemplo A309 · Floyd-Warshall com rota: o mapa do metrô**
 
@@ -3448,7 +3448,7 @@ ordem certa, com a DFS em pós-ordem.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0156-juntando-tudo/`](23-grafos-avancados/0156-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0156-juntando-tudo/`](23-grafos-avancados/0156-juntando-tudo/).
 
 **Exemplo A311 · O planejador escolhe: Dijkstra ou Bellman-Ford**
 
@@ -4036,7 +4036,7 @@ fim é um contador de componentes de brinde, igual ao union-find do A300.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](23-grafos-avancados/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/23-grafos-avancados/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](23-grafos-avancados/lista/); resoluções em `_respostas/23-grafos-avancados/lista/`.
 
 ### ★☆☆ Aquecimento
 

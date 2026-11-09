@@ -229,7 +229,7 @@ novo a partir de `p + 1` (o exemplo A313 mostra a diferença entre recomeçar em
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0157-forca-bruta/`](24-busca-de-padroes/0157-forca-bruta/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0157-forca-bruta/`](24-busca-de-padroes/0157-forca-bruta/).
 
 **Exemplo A313 · O strstr e as risadas do grupo**
 
@@ -716,7 +716,7 @@ argumento.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0158-kmp/`](24-busca-de-padroes/0158-kmp/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0158-kmp/`](24-busca-de-padroes/0158-kmp/).
 
 **Exemplo A315 · Todas as bordas de uma palavra**
 
@@ -1199,7 +1199,7 @@ em cada alinhamento (é o exercício E952).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0159-horspool/`](24-busca-de-padroes/0159-horspool/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0159-horspool/`](24-busca-de-padroes/0159-horspool/).
 
 **Exemplo A317 · Padrão comprido, busca mais rápida**
 
@@ -1692,7 +1692,7 @@ quando `q` é grande:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0160-rabin-karp/`](24-busca-de-padroes/0160-rabin-karp/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0160-rabin-karp/`](24-busca-de-padroes/0160-rabin-karp/).
 
 **Exemplo A319 · O tamanho do primo e os alarmes falsos**
 
@@ -2199,7 +2199,7 @@ em textos de 2 milhões de letras.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0161-juntando-tudo/`](24-busca-de-padroes/0161-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0161-juntando-tudo/`](24-busca-de-padroes/0161-juntando-tudo/).
 
 **Exemplo A321 · O cronômetro: 2 milhões de letras, quatro algoritmos**
 
@@ -2769,7 +2769,7 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](24-busca-de-padroes/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/24-busca-de-padroes/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](24-busca-de-padroes/lista/); resoluções em `_respostas/24-busca-de-padroes/lista/`.
 
 ### ★☆☆ Aquecimento
 

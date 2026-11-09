@@ -197,7 +197,7 @@ laço, índice 6, armário ocupado, colisão:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0105-hashing/`](15-hash/0105-hashing/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0105-hashing/`](15-hash/0105-hashing/).
 
 **Exemplo A209 · DDD direto no vetor**
 
@@ -651,7 +651,7 @@ logo na primeira pergunta:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0106-encadeamento/`](15-hash/0106-encadeamento/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0106-encadeamento/`](15-hash/0106-encadeamento/).
 
 **Exemplo A211 · Poucos baldes: a tabela não enche**
 
@@ -1134,7 +1134,7 @@ achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0107-enderecamento-aberto/`](15-hash/0107-enderecamento-aberto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0107-enderecamento-aberto/`](15-hash/0107-enderecamento-aberto/).
 
 **Exemplo A213 · Garagem lotando: a volta no fim e a tabela cheia**
 
@@ -1595,7 +1595,7 @@ ranking:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0108-juntando-tudo/`](15-hash/0108-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0108-juntando-tudo/`](15-hash/0108-juntando-tudo/).
 
 **Exemplo A215 · Enquete da pizzaria: contar e consultar**
 
@@ -2190,7 +2190,7 @@ conhecido.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](15-hash/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/15-hash/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](15-hash/lista/); resoluções em `_respostas/15-hash/lista/`.
 
 ### ★☆☆ Aquecimento
 

@@ -199,7 +199,7 @@ dá a volta três vezes antes de sair pelo Sim:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0089-busca-sequencial/`](13-busca-e-ordenacao/0089-busca-sequencial/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0089-busca-sequencial/`](13-busca-e-ordenacao/0089-busca-sequencial/).
 
 **Exemplo A177 · Quantas vezes o aluno passou na catraca**
 
@@ -649,7 +649,7 @@ por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0090-busca-binaria/`](13-busca-e-ordenacao/0090-busca-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0090-busca-binaria/`](13-busca-e-ordenacao/0090-busca-binaria/).
 
 **Exemplo A179 · Um milhão de notas fiscais**
 
@@ -1134,7 +1134,7 @@ fora repete passadas enquanto a bandeira disser que houve troca:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0091-bubble-sort/`](13-busca-e-ordenacao/0091-bubble-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0091-bubble-sort/`](13-busca-e-ordenacao/0091-bubble-sort/).
 
 **Exemplo A181 · Anagramas: borbulhando as letras**
 
@@ -1601,7 +1601,7 @@ tabela acima). A troca acontece **fora** dele, uma vez por passada:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0092-selection-sort/`](13-busca-e-ordenacao/0092-selection-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0092-selection-sort/`](13-busca-e-ordenacao/0092-selection-sort/).
 
 **Exemplo A183 · Selection não se importa com a ordem de entrada**
 
@@ -2068,7 +2068,7 @@ dois motivos diferentes: acabou o vetor, ou achou alguém que não é maior:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0093-insertion-sort/`](13-busca-e-ordenacao/0093-insertion-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0093-insertion-sort/`](13-busca-e-ordenacao/0093-insertion-sort/).
 
 **Exemplo A185 · A triagem que respeita a ordem de chegada**
 
@@ -2532,7 +2532,7 @@ duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0094-merge-sort/`](13-busca-e-ordenacao/0094-merge-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0094-merge-sort/`](13-busca-e-ordenacao/0094-merge-sort/).
 
 **Exemplo A187 · Merge sort sem recursão, de baixo para cima**
 
@@ -3025,7 +3025,7 @@ recursivas. É isso que garante que o problema sempre diminui:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0095-quick-sort/`](13-busca-e-ordenacao/0095-quick-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0095-quick-sort/`](13-busca-e-ordenacao/0095-quick-sort/).
 
 **Exemplo A189 · Duas pontas que se encontram: a separação de Hoare**
 
@@ -3551,7 +3551,7 @@ desempate na `compara` (o horário), então `qsort` resolve:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0096-comparando/`](13-busca-e-ordenacao/0096-comparando/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0096-comparando/`](13-busca-e-ordenacao/0096-comparando/).
 
 **Exemplo A191 · Duas vitrines do mesmo cardápio com qsort**
 
@@ -4181,7 +4181,7 @@ ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](13-busca-e-ordenacao/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/13-busca-e-ordenacao/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](13-busca-e-ordenacao/lista/); resoluções em `_respostas/13-busca-e-ordenacao/lista/`.
 
 ### ★☆☆ Aquecimento
 

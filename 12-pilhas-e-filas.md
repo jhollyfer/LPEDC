@@ -222,7 +222,7 @@ vazia. Só depois `n` diminui e o valor é lido:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0082-pilha/`](12-pilhas-e-filas/0082-pilha/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0082-pilha/`](12-pilhas-e-filas/0082-pilha/).
 
 **Exemplo A163 · As bordas da pilha: cheia e vazia**
 
@@ -660,7 +660,7 @@ Primeiro o novo nó aponta para o topo antigo, só depois o topo muda:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0083-pilha-encadeada/`](12-pilhas-e-filas/0083-pilha-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0083-pilha-encadeada/`](12-pilhas-e-filas/0083-pilha-encadeada/).
 
 **Exemplo A165 · Desfazer e refazer com duas pilhas**
 
@@ -1110,7 +1110,7 @@ parecido com a pós-fixa e rodam numa pilha.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0084-pilha-aplicacoes/`](12-pilhas-e-filas/0084-pilha-aplicacoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0084-pilha-aplicacoes/`](12-pilhas-e-filas/0084-pilha-aplicacoes/).
 
 **Exemplo A167 · Parênteses dentro de aspas não contam**
 
@@ -1620,7 +1620,7 @@ Repara no fluxograma da entrada da senha 39: naquela hora, `inicio = 4` e
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0085-fila/`](12-pilhas-e-filas/0085-fila/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0085-fila/`](12-pilhas-e-filas/0085-fila/).
 
 **Exemplo A169 · Só as 8 últimas corridas: a mais antiga dá lugar**
 
@@ -2049,7 +2049,7 @@ o `inicio`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0086-fila-encadeada/`](12-pilhas-e-filas/0086-fila-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0086-fila-encadeada/`](12-pilhas-e-filas/0086-fila-encadeada/).
 
 **Exemplo A171 · Pedágio na sexta: a fila cresce, esvazia e recomeça**
 
@@ -2492,7 +2492,7 @@ o índice não ficar negativo:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0087-deque/`](12-pilhas-e-filas/0087-deque/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0087-deque/`](12-pilhas-e-filas/0087-deque/).
 
 **Exemplo A173 · Desfazer com limite: o deque esquece o mais antigo**
 
@@ -2975,7 +2975,7 @@ frase é um palíndromo.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0088-juntando-tudo/`](12-pilhas-e-filas/0088-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0088-juntando-tudo/`](12-pilhas-e-filas/0088-juntando-tudo/).
 
 **Exemplo A175 · A calculadora que explica o erro**
 
@@ -3525,7 +3525,7 @@ pós-fixas ficam `A B C * +` e `A B + C *`.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](12-pilhas-e-filas/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/12-pilhas-e-filas/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](12-pilhas-e-filas/lista/); resoluções em `_respostas/12-pilhas-e-filas/lista/`.
 
 ### ★☆☆ Aquecimento
 

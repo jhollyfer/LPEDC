@@ -260,7 +260,7 @@ está":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0174-lista-com-sentinela/`](28-estruturas-complementos/0174-lista-com-sentinela/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0174-lista-com-sentinela/`](28-estruturas-complementos/0174-lista-com-sentinela/).
 
 **Exemplo A347 · Vazia, um nó, vários: o mesmo código**
 
@@ -714,7 +714,7 @@ o 8h00 é a resposta:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0175-conceitos-e-sucessor/`](28-estruturas-complementos/0175-conceitos-e-sucessor/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0175-conceitos-e-sucessor/`](28-estruturas-complementos/0175-conceitos-e-sucessor/).
 
 **Exemplo A349 · Em ordem sem recursão e sem pilha**
 
@@ -1212,7 +1212,7 @@ era filho direito do 12) como filho esquerdo.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0176-avl-remocao/`](28-estruturas-complementos/0176-avl-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0176-avl-remocao/`](28-estruturas-complementos/0176-avl-remocao/).
 
 **Exemplo A351 · Esvaziando pela esquerda**
 
@@ -1669,7 +1669,7 @@ ela existe, que custa O(log n) e que faz no máximo **três rotações**.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0177-rubro-negra-classica/`](28-estruturas-complementos/0177-rubro-negra-classica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0177-rubro-negra-classica/`](28-estruturas-complementos/0177-rubro-negra-classica/).
 
 **Exemplo A353 · A altura que a rubro-negra garante**
 
@@ -2080,7 +2080,7 @@ desloca. Nenhuma divisão:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0178-hash-multiplicacao/`](28-estruturas-complementos/0178-hash-multiplicacao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0178-hash-multiplicacao/`](28-estruturas-complementos/0178-hash-multiplicacao/).
 
 **Exemplo A355 · Potência de 2 só enxerga os bits de baixo**
 
@@ -2523,7 +2523,7 @@ está livre:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0179-sondagem-quadratica-e-dupla/`](28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0179-sondagem-quadratica-e-dupla/`](28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/).
 
 **Exemplo A357 · Medindo os agrupamentos**
 
@@ -2993,7 +2993,7 @@ casas em ordem:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0180-pigeonhole-e-chave-composta/`](28-estruturas-complementos/0180-pigeonhole-e-chave-composta/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0180-pigeonhole-e-chave-composta/`](28-estruturas-complementos/0180-pigeonhole-e-chave-composta/).
 
 **Exemplo A359 · A tabela do campeonato com qsort**
 
@@ -3463,7 +3463,7 @@ primeiro) assume e sai da fila:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0181-juntando-tudo/`](28-estruturas-complementos/0181-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0181-juntando-tudo/`](28-estruturas-complementos/0181-juntando-tudo/).
 
 **Exemplo A361 · Um dia cheio, marcado em ordem**
 
@@ -3947,7 +3947,7 @@ O(1) + a marcação do primeiro da fila. Intervalo: **O(log c + k)**.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](28-estruturas-complementos/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/28-estruturas-complementos/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](28-estruturas-complementos/lista/); resoluções em `_respostas/28-estruturas-complementos/lista/`.
 
 ### ★☆☆ Aquecimento
 

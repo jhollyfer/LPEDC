@@ -262,7 +262,7 @@ a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0097-arvores/`](14-arvores/0097-arvores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0097-arvores/`](14-arvores/0097-arvores/).
 
 **Exemplo A193 · Os mesmos nós, alturas diferentes**
 
@@ -876,7 +876,7 @@ que um `printf` acontece:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0098-arvore-binaria/`](14-arvores/0098-arvore-binaria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0098-arvore-binaria/`](14-arvores/0098-arvore-binaria/).
 
 **Exemplo A195 · Duas árvores com a mesma em ordem**
 
@@ -1330,7 +1330,7 @@ esquerda no 70, achou:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0099-bst-busca-insercao/`](14-arvores/0099-bst-busca-insercao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0099-bst-busca-insercao/`](14-arvores/0099-bst-busca-insercao/).
 
 **Exemplo A197 · Onde cada pedido vai morar**
 
@@ -1803,7 +1803,7 @@ que vai terminar no caso fácil (o 35 é folha):
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0100-bst-remocao/`](14-arvores/0100-bst-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0100-bst-remocao/`](14-arvores/0100-bst-remocao/).
 
 **Exemplo A199 · Quando o sucessor também tem filho**
 
@@ -2259,7 +2259,7 @@ fila, com o 25 pendurado no 30).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0101-avl/`](14-arvores/0101-avl/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0101-avl/`](14-arvores/0101-avl/).
 
 **Exemplo A201 · Os quatro casos, três chaves cada**
 
@@ -2749,7 +2749,7 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0102-heap/`](14-arvores/0102-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0102-heap/`](14-arvores/0102-heap/).
 
 **Exemplo A203 · O leilão com vagas contadas**
 
@@ -3225,7 +3225,7 @@ A fase 1 nos tempos da corrida. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0103-heapsort/`](14-arvores/0103-heapsort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0103-heapsort/`](14-arvores/0103-heapsort/).
 
 **Exemplo A205 · Empate na chegada: o heapsort não é estável**
 
@@ -3755,7 +3755,7 @@ para listar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0104-juntando-tudo/`](14-arvores/0104-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0104-juntando-tudo/`](14-arvores/0104-juntando-tudo/).
 
 **Exemplo A207 · Trocar a matrícula não é editar o campo**
 
@@ -4332,7 +4332,7 @@ E611 em escala.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](14-arvores/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/14-arvores/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](14-arvores/lista/); resoluções em `_respostas/14-arvores/lista/`.
 
 ### ★☆☆ Aquecimento
 

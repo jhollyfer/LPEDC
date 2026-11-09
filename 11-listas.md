@@ -223,7 +223,7 @@ que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0075-vetor-dinamico/`](11-listas/0075-vetor-dinamico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0075-vetor-dinamico/`](11-listas/0075-vetor-dinamico/).
 
 **Exemplo A149 · Quantas vezes o vetor mudou de casa**
 
@@ -689,7 +689,7 @@ de cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0076-lista-encadeada/`](11-listas/0076-lista-encadeada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0076-lista-encadeada/`](11-listas/0076-lista-encadeada/).
 
 **Exemplo A151 · Andando pelas setas: o terceiro nó e a lista vazia**
 
@@ -1121,7 +1121,7 @@ longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0077-lista-busca-remocao/`](11-listas/0077-lista-busca-remocao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0077-lista-busca-remocao/`](11-listas/0077-lista-busca-remocao/).
 
 **Exemplo A153 · Buscar por condição e tirar o último**
 
@@ -1595,7 +1595,7 @@ alfabética (exemplo A156).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0078-lista-ordenada/`](11-listas/0078-lista-ordenada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0078-lista-ordenada/`](11-listas/0078-lista-ordenada/).
 
 **Exemplo A155 · Tabela do campeonato: maior primeiro**
 
@@ -2048,7 +2048,7 @@ fazer um controle remoto com "canal seguinte" e "canal anterior".
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0079-lista-dupla/`](11-listas/0079-lista-dupla/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0079-lista-dupla/`](11-listas/0079-lista-dupla/).
 
 **Exemplo A157 · Mexendo nas duas pontas: a fila do pronto-socorro**
 
@@ -2487,7 +2487,7 @@ quente, tirando nós do anel até sobrar um que aponta para si mesmo.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0080-lista-circular/`](11-listas/0080-lista-circular/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0080-lista-circular/`](11-listas/0080-lista-circular/).
 
 **Exemplo A159 · A playlist no repetir: um nó só, as duas pontas e o meio**
 
@@ -2940,7 +2940,7 @@ contar as músicas longas.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0081-juntando-tudo/`](11-listas/0081-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0081-juntando-tudo/`](11-listas/0081-juntando-tudo/).
 
 **Exemplo A161 · A trilha do trajeto até o trabalho**
 
@@ -3497,7 +3497,7 @@ entrando no meio).
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](11-listas/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/11-listas/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](11-listas/lista/); resoluções em `_respostas/11-listas/lista/`.
 
 ### ★☆☆ Aquecimento
 

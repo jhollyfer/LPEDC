@@ -216,7 +216,7 @@ chama `gera` duas vezes por nó, uma por caminho:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0125-subconjuntos/`](19-backtracking/0125-subconjuntos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0125-subconjuntos/`](19-backtracking/0125-subconjuntos/).
 
 **Exemplo A249 · Quem vai na carona: subconjuntos pelos bits**
 
@@ -667,7 +667,7 @@ tem o par troca e destroca em volta da chamada recursiva:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0126-permutacoes/`](19-backtracking/0126-permutacoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0126-permutacoes/`](19-backtracking/0126-permutacoes/).
 
 **Exemplo A251 · Os anagramas de AMOR em ordem de dicionário**
 
@@ -1106,7 +1106,7 @@ passa por elas chega às duas chamadas recursivas:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0127-backtracking/`](19-backtracking/0127-backtracking/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0127-backtracking/`](19-backtracking/0127-backtracking/).
 
 **Exemplo A253 · Lote de 40 kg: a segunda poda, "o que falta não alcança"**
 
@@ -1599,7 +1599,7 @@ colunas no lugar de "leva ou não leva":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0128-n-rainhas/`](19-backtracking/0128-n-rainhas/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0128-n-rainhas/`](19-backtracking/0128-n-rainhas/).
 
 **Exemplo A255 · Quantas soluções de 1 a 12 rainhas: o tabuleiro em bits**
 
@@ -2077,7 +2077,7 @@ de qualquer marcação, e só uma casa nova chega ao `'*'`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0129-labirinto/`](19-backtracking/0129-labirinto/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0129-labirinto/`](19-backtracking/0129-labirinto/).
 
 **Exemplo A257 · Balde de tinta: o flood fill pinta a sala inteira**
 
@@ -2592,7 +2592,7 @@ do item e a regra do jogo no lugar da poda:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0130-juntando-tudo/`](19-backtracking/0130-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0130-juntando-tudo/`](19-backtracking/0130-juntando-tudo/).
 
 **Exemplo A259 · Quantas grades de sudoku 4 × 4 existem?**
 
@@ -3152,7 +3152,7 @@ problemas como a mochila ganham, no módulo 21, um método que não testa tudo.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](19-backtracking/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/19-backtracking/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](19-backtracking/lista/); resoluções em `_respostas/19-backtracking/lista/`.
 
 ### ★☆☆ Aquecimento
 

@@ -266,7 +266,7 @@ Bate com a árvore (4 níveis de 8) e com o programa.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0114-recorrencias/`](17-analise-avancada/0114-recorrencias/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0114-recorrencias/`](17-analise-avancada/0114-recorrencias/).
 
 **Exemplo A227 · Duas chamadas, destinos diferentes**
 
@@ -838,7 +838,7 @@ resolve dois desses casos.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0115-teorema-mestre/`](17-analise-avancada/0115-teorema-mestre/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0115-teorema-mestre/`](17-analise-avancada/0115-teorema-mestre/).
 
 **Exemplo A229 · A tabela do teorema mestre em código**
 
@@ -1417,7 +1417,7 @@ pode não estar.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0116-amortizada/`](17-analise-avancada/0116-amortizada/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0116-amortizada/`](17-analise-avancada/0116-amortizada/).
 
 **Exemplo A231 · O contador binário da catraca**
 
@@ -1987,7 +1987,7 @@ comparação O(n) ou O(n log log n). O que dá para ganhar é constante.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0117-limite-inferior/`](17-analise-avancada/0117-limite-inferior/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0117-limite-inferior/`](17-analise-avancada/0117-limite-inferior/).
 
 **Exemplo A233 · Quem encosta no limite**
 
@@ -2667,7 +2667,7 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0118-juntando-tudo/`](17-analise-avancada/0118-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0118-juntando-tudo/`](17-analise-avancada/0118-juntando-tudo/).
 
 **Exemplo A235 · A entrada também decide: quatro vetores, quatro ordenações**
 
@@ -3190,7 +3190,7 @@ apenas não distinguem `n^1,5` de, digamos, `n log² n`.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](17-analise-avancada/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/17-analise-avancada/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](17-analise-avancada/lista/); resoluções em `_respostas/17-analise-avancada/lista/`.
 
 ### ★☆☆ Aquecimento
 

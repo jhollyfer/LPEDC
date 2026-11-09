@@ -187,7 +187,7 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0037-vetores/`](05-vetores-e-strings/0037-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0037-vetores/`](05-vetores-e-strings/0037-vetores/).
 
 **Exemplo A073 · O hidrômetro e a gaveta vizinha**
 
@@ -607,7 +607,7 @@ coisas lado a lado.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0038-vetores-e-funcoes/`](05-vetores-e-strings/0038-vetores-e-funcoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0038-vetores-e-funcoes/`](05-vetores-e-strings/0038-vetores-e-funcoes/).
 
 **Exemplo A075 · Um vetor entra, outro sai cheio**
 
@@ -1063,7 +1063,7 @@ velha.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0039-matrizes/`](05-vetores-e-strings/0039-matrizes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0039-matrizes/`](05-vetores-e-strings/0039-matrizes/).
 
 **Exemplo A077 · O primeiro horário livre da agenda**
 
@@ -1531,7 +1531,7 @@ o fim mesmo assim:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0040-caracteres/`](05-vetores-e-strings/0040-caracteres/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0040-caracteres/`](05-vetores-e-strings/0040-caracteres/).
 
 **Exemplo A079 · O dígito '7' não vale 7**
 
@@ -1968,7 +1968,7 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0041-strings/`](05-vetores-e-strings/0041-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0041-strings/`](05-vetores-e-strings/0041-strings/).
 
 **Exemplo A081 · A etiqueta que não pode estourar**
 
@@ -2401,7 +2401,7 @@ entrada acabou, não existe nome para limpar:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0042-lendo-strings/`](05-vetores-e-strings/0042-lendo-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0042-lendo-strings/`](05-vetores-e-strings/0042-lendo-strings/).
 
 **Exemplo A083 · O recado que termina numa linha vazia**
 
@@ -2864,7 +2864,7 @@ da ordenação por seleção (assunto 0092).
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0043-juntando-tudo/`](05-vetores-e-strings/0043-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0043-juntando-tudo/`](05-vetores-e-strings/0043-juntando-tudo/).
 
 **Exemplo A085 · Os logins da empresa nova**
 
@@ -3405,7 +3405,7 @@ matrizes revezam.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](05-vetores-e-strings/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/05-vetores-e-strings/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](05-vetores-e-strings/lista/); resoluções em `_respostas/05-vetores-e-strings/lista/`.
 
 ### ★☆☆ Aquecimento
 

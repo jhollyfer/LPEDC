@@ -298,7 +298,7 @@ casinha "sem tirar o lápis do papel", um trajeto aberto.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0182-caminhos-e-ciclos/`](29-grafos-e-np/0182-caminhos-e-ciclos/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0182-caminhos-e-ciclos/`](29-grafos-e-np/0182-caminhos-e-ciclos/).
 
 **Exemplo A363 · Seguidores: grau de entrada e de saída**
 
@@ -777,7 +777,7 @@ quando a resposta é "não".
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0183-hamiltoniano/`](29-grafos-e-np/0183-hamiltoniano/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0183-hamiltoniano/`](29-grafos-e-np/0183-hamiltoniano/).
 
 **Exemplo A365 · Euleriano sim, hamiltoniano não**
 
@@ -1284,7 +1284,7 @@ perguntas parecem iguais, mas o `>` e o `>=` fazem toda a diferença.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0184-pontes-e-articulacoes/`](29-grafos-e-np/0184-pontes-e-articulacoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0184-pontes-e-articulacoes/`](29-grafos-e-np/0184-pontes-e-articulacoes/).
 
 **Exemplo A367 · A raiz da DFS é um caso à parte**
 
@@ -1805,7 +1805,7 @@ matrizes de verdade, na ordem ótima, contando as multiplicações.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0185-cadeia-de-matrizes/`](29-grafos-e-np/0185-cadeia-de-matrizes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0185-cadeia-de-matrizes/`](29-grafos-e-np/0185-cadeia-de-matrizes/).
 
 **Exemplo A369 · Quantas ordens existem e quanto custa testar todas**
 
@@ -2300,7 +2300,7 @@ exatamente o valor de um Pix.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0186-p-e-np/`](29-grafos-e-np/0186-p-e-np/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0186-p-e-np/`](29-grafos-e-np/0186-p-e-np/).
 
 **Exemplo A371 · Quanto 2^n cresce**
 
@@ -2838,7 +2838,7 @@ caminho hamiltoniano a ciclo hamiltoniano.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0187-reducoes/`](29-grafos-e-np/0187-reducoes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0187-reducoes/`](29-grafos-e-np/0187-reducoes/).
 
 **Exemplo A373 · De 3-SAT para clique: a construção em C**
 
@@ -3374,7 +3374,7 @@ custa O(n²) no pior caso, nada perto do exponencial:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0188-aproximacao/`](29-grafos-e-np/0188-aproximacao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0188-aproximacao/`](29-grafos-e-np/0188-aproximacao/).
 
 **Exemplo A375 · Cobertura de vértices: as duas pontas contra o ótimo**
 
@@ -3932,7 +3932,7 @@ aproximada e mostra quanto ela melhora.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0189-juntando-tudo/`](29-grafos-e-np/0189-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0189-juntando-tudo/`](29-grafos-e-np/0189-juntando-tudo/).
 
 **Exemplo A377 · Até onde o exato aguenta**
 
@@ -4436,7 +4436,7 @@ O E1132 reconstrói a rota sem a segunda tabela.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](29-grafos-e-np/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/29-grafos-e-np/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](29-grafos-e-np/lista/); resoluções em `_respostas/29-grafos-e-np/lista/`.
 
 ### ★☆☆ Aquecimento
 

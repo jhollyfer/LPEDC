@@ -77,11 +77,11 @@ valores**. Roteiro:
    mercado, Pix, academia, futebol...). Cenários brasileiros, valores em R$.
 3. O conceito em parágrafos curtos (2 a 4 linhas cada). Termos novos em
    **negrito**. Código inline com crase.
-4. "Vamos ver na prática..." e o parágrafo termina apontando para o desenho →
-   `{{ideia}}`.
+4. Um parágrafo que apresenta o exemplo e termina apontando para o desenho →
+   `{{ideia}}`. Varie a abertura: nada de repetir a mesma frase em todo assunto.
 5. O código do mesmo exemplo, em bloco ```` ```c ````, completo e compilável,
    com a saída em comentário (`// Saída: ...`).
-6. Um parágrafo que puxa o fluxograma ("Repara no fluxograma: ...") →
+6. Um parágrafo que puxa o fluxograma (o caminho que o exemplo faz) →
    `{{fluxograma}}`.
 7. `> [!WARNING]` com a pegadinha principal (o erro que todo mundo comete).
 8. `> [!TIP]` começando com **Por dentro do C:** — o que acontece por baixo:
@@ -96,7 +96,13 @@ Assunto difícil (ponteiros, recursão, árvores) pode ter uma seção extra
 `### Passo a passo` com um teste de mesa em tabela markdown.
 
 Estilo de escrita: frases curtas, voz ativa, sem enrolação, sem emoji, sem
-"Neste assunto veremos". Explique o **porquê**, não só o como.
+"Neste assunto veremos". Explique o **porquê**, não só o como. Sem vícios de
+linguagem ("onde" como coringa, "de forma X", "através de" no lugar de "por
+meio de", "realizar" no lugar de "fazer", "possuir" no lugar de "ter", "vale
+ressaltar", "é importante notar", "basicamente", "na verdade", "ou seja" em
+série) e sem marcas de texto gerado ("não é só X, é Y", trios forçados,
+"crucial", "fundamental" a cada parágrafo, conclusão genérica, travessão em
+excesso). Não repita o que outro assunto ou o README já disse: aponte para ele.
 
 ## Desenhos (desenhos.mjs)
 
@@ -251,14 +257,10 @@ com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
 ## O que você vai aprender
 - ...
 
-## Como estudar cada assunto
-(o roteiro: ideia → código → fluxograma → rodar → exercícios; ★ níveis)
-
-## As cores e as formas
-<p align="center"><img src="../legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
 ## Antes de começar
-(o que precisa saber/instalar; avisos)
+(o que precisa saber/instalar; avisos; o que os desenhos deste módulo têm de
+próprio. O roteiro de estudo e a legenda de cores ficam só no README.md: não
+repita aqui.)
 
 {{indice}}
 

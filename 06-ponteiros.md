@@ -191,7 +191,7 @@ ocupa:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0044-memoria/`](06-ponteiros/0044-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0044-memoria/`](06-ponteiros/0044-memoria/).
 
 **Exemplo A087 · O valor muda, a gaveta não**
 
@@ -597,7 +597,7 @@ você vai repetir o curso inteiro:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0045-ponteiros/`](06-ponteiros/0045-ponteiros/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0045-ponteiros/`](06-ponteiros/0045-ponteiros/).
 
 **Exemplo A089 · Duas cancelas, um contador**
 
@@ -1018,7 +1018,7 @@ ordem. A troca em si são três passos, sempre com a variável auxiliar:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0046-passagem-por-referencia/`](06-ponteiros/0046-passagem-por-referencia/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0046-passagem-por-referencia/`](06-ponteiros/0046-passagem-por-referencia/).
 
 **Exemplo A091 · O plantão que vira o relógio**
 
@@ -1422,7 +1422,7 @@ anda é o ponteiro, não um índice:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0047-ponteiros-e-vetores/`](06-ponteiros/0047-ponteiros-e-vetores/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0047-ponteiros-e-vetores/`](06-ponteiros/0047-ponteiros-e-vetores/).
 
 **Exemplo A093 · De trás para frente, um passo por tipo**
 
@@ -1850,7 +1850,7 @@ andei `n` posições?", e sim "a gaveta atual é o `'\0'`?":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0048-ponteiros-e-strings/`](06-ponteiros/0048-ponteiros-e-strings/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0048-ponteiros-e-strings/`](06-ponteiros/0048-ponteiros-e-strings/).
 
 **Exemplo A095 · A string começa onde o ponteiro aponta**
 
@@ -2264,7 +2264,7 @@ corrente de volta até chegar em `vagas`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0049-ponteiro-para-ponteiro/`](06-ponteiros/0049-ponteiro-para-ponteiro/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0049-ponteiro-para-ponteiro/`](06-ponteiros/0049-ponteiro-para-ponteiro/).
 
 **Exemplo A097 · A lista de chamada termina em NULL**
 
@@ -2718,7 +2718,7 @@ copie o molde do A100.
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0050-ponteiro-para-funcao/`](06-ponteiros/0050-ponteiro-para-funcao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0050-ponteiro-para-funcao/`](06-ponteiros/0050-ponteiro-para-funcao/).
 
 **Exemplo A099 · A promoção do dia é um parâmetro**
 
@@ -3128,7 +3128,7 @@ como saber. Ela só pergunta "ainda tem byte para trocar?":
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0051-void-generico/`](06-ponteiros/0051-void-generico/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0051-void-generico/`](06-ponteiros/0051-void-generico/).
 
 **Exemplo A101 · O backup que copia qualquer coisa**
 
@@ -3580,7 +3580,7 @@ percorre a ordem nova traduzindo cada ponteiro para um índice:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0052-juntando-tudo/`](06-ponteiros/0052-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0052-juntando-tudo/`](06-ponteiros/0052-juntando-tudo/).
 
 **Exemplo A103 · A lista de compras picada no lugar**
 
@@ -4105,7 +4105,7 @@ achou. A busca binária em si é o assunto 0090.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](06-ponteiros/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/06-ponteiros/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](06-ponteiros/lista/); resoluções em `_respostas/06-ponteiros/lista/`.
 
 ### ★☆☆ Aquecimento
 

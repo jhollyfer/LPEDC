@@ -210,7 +210,7 @@ no fim de `main`:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0053-pilha-e-heap/`](07-memoria-dinamica/0053-pilha-e-heap/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0053-pilha-e-heap/`](07-memoria-dinamica/0053-pilha-e-heap/).
 
 **Exemplo A105 · Um bloco, três funções**
 
@@ -669,7 +669,7 @@ esse caminho:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0054-malloc-free/`](07-memoria-dinamica/0054-malloc-free/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0054-malloc-free/`](07-memoria-dinamica/0054-malloc-free/).
 
 **Exemplo A107 · A foto que não cabe na pilha**
 
@@ -1091,7 +1091,7 @@ custa só uma atribuição:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0055-calloc-realloc/`](07-memoria-dinamica/0055-calloc-realloc/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0055-calloc-realloc/`](07-memoria-dinamica/0055-calloc-realloc/).
 
 **Exemplo A109 · A lista que nasce do NULL**
 
@@ -1511,7 +1511,7 @@ uma linha falhar, o caminho de erro passa pela liberação do que já existe:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0056-matriz-dinamica/`](07-memoria-dinamica/0056-matriz-dinamica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0056-matriz-dinamica/`](07-memoria-dinamica/0056-matriz-dinamica/).
 
 **Exemplo A111 · Trocar linhas sem copiar**
 
@@ -1992,7 +1992,7 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0057-erros-de-memoria/`](07-memoria-dinamica/0057-erros-de-memoria/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0057-erros-de-memoria/`](07-memoria-dinamica/0057-erros-de-memoria/).
 
 **Exemplo A113 · Todo caminho de saída libera**
 
@@ -2502,7 +2502,7 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0058-juntando-tudo/`](07-memoria-dinamica/0058-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0058-juntando-tudo/`](07-memoria-dinamica/0058-juntando-tudo/).
 
 **Exemplo A115 · A agenda em que cada linha cresce sozinha**
 
@@ -3124,7 +3124,7 @@ pedaços, o vetor deles e a frase nova.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](07-memoria-dinamica/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/07-memoria-dinamica/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](07-memoria-dinamica/lista/); resoluções em `_respostas/07-memoria-dinamica/lista/`.
 
 ### ★☆☆ Aquecimento
 

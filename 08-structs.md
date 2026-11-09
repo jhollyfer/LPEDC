@@ -195,7 +195,7 @@ passos são os de sempre; a diferença é que os dados viajam num pacote só:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0059-struct/`](08-structs/0059-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0059-struct/`](08-structs/0059-struct/).
 
 **Exemplo A117 · A matrícula na academia**
 
@@ -607,7 +607,7 @@ horário noturno **e** o valor passar do limite:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0060-typedef/`](08-structs/0060-typedef/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0060-typedef/`](08-structs/0060-typedef/).
 
 **Exemplo A119 · A frota de ônibus**
 
@@ -1027,7 +1027,7 @@ a comparação olha um campo calculado de cada struct:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0061-vetor-de-structs/`](08-structs/0061-vetor-de-structs/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0061-vetor-de-structs/`](08-structs/0061-vetor-de-structs/).
 
 **Exemplo A121 · O estoque da farmácia**
 
@@ -1500,7 +1500,7 @@ do laço enxerga o saldo que a anterior deixou:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0062-ponteiro-para-struct/`](08-structs/0062-ponteiro-para-struct/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0062-ponteiro-para-struct/`](08-structs/0062-ponteiro-para-struct/).
 
 **Exemplo A123 · As comandas do bar**
 
@@ -1974,7 +1974,7 @@ enum. O `s++` é o que faz o pedido andar:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0063-enum/`](08-structs/0063-enum/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0063-enum/`](08-structs/0063-enum/).
 
 **Exemplo A125 · As formas de pagamento**
 
@@ -2425,7 +2425,7 @@ outro lado:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0064-union/`](08-structs/0064-union/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0064-union/`](08-structs/0064-union/).
 
 **Exemplo A127 · A balança da feira**
 
@@ -2902,7 +2902,7 @@ Sobrou algum bit, a resposta é Sim:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0065-bits/`](08-structs/0065-bits/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0065-bits/`](08-structs/0065-bits/).
 
 **Exemplo A129 · Os ingredientes da pizza**
 
@@ -3372,7 +3372,7 @@ pergunta de bits por item. O mesmo desenho serve para qualquer máscara:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0066-juntando-tudo/`](08-structs/0066-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0066-juntando-tudo/`](08-structs/0066-juntando-tudo/).
 
 **Exemplo A131 · Os alunos da academia**
 
@@ -3951,7 +3951,7 @@ passam a vir do `malloc`.
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](08-structs/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/08-structs/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](08-structs/lista/); resoluções em `_respostas/08-structs/lista/`.
 
 ### ★☆☆ Aquecimento
 

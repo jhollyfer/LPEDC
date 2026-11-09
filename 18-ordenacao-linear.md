@@ -233,7 +233,7 @@ quem está 4, 8, ... casas para trás:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0119-shell-sort/`](18-ordenacao-linear/0119-shell-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0119-shell-sort/`](18-ordenacao-linear/0119-shell-sort/).
 
 **Exemplo A237 · A escolha dos saltos muda tudo**
 
@@ -787,7 +787,7 @@ Dois andam pelos n elementos e um pelas k chaves, então o custo é
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0120-counting-sort/`](18-ordenacao-linear/0120-counting-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0120-counting-sort/`](18-ordenacao-linear/0120-counting-sort/).
 
 **Exemplo A239 · Temperaturas abaixo de zero**
 
@@ -1292,7 +1292,7 @@ maior igual a 830, são três passadas (`exp` = 1, 10, 100); com `exp = 1000`,
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0121-radix-sort/`](18-ordenacao-linear/0121-radix-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0121-radix-sort/`](18-ordenacao-linear/0121-radix-sort/).
 
 **Exemplo A241 · Placas de carro, letra por letra**
 
@@ -1799,7 +1799,7 @@ nada:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0122-bucket-sort/`](18-ordenacao-linear/0122-bucket-sort/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0122-bucket-sort/`](18-ordenacao-linear/0122-bucket-sort/).
 
 **Exemplo A243 · Quando todo mundo cai no mesmo balde**
 
@@ -2333,7 +2333,7 @@ volta do laço escolhe um lado e joga o outro fora:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0123-quickselect/`](18-ordenacao-linear/0123-quickselect/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0123-quickselect/`](18-ordenacao-linear/0123-quickselect/).
 
 **Exemplo A245 · O pódio sem ordenar a tabela**
 
@@ -2911,7 +2911,7 @@ O resumo do módulo, com os algoritmos do módulo 13 de referência:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0124-juntando-tudo/`](18-ordenacao-linear/0124-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0124-juntando-tudo/`](18-ordenacao-linear/0124-juntando-tudo/).
 
 **Exemplo A247 · Os maiores Pix do dia, sem ordenar o dia**
 
@@ -3452,7 +3452,7 @@ junto com o vetor ordenado. Num vetor decrescente de 100 mil, são
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](18-ordenacao-linear/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/18-ordenacao-linear/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](18-ordenacao-linear/lista/); resoluções em `_respostas/18-ordenacao-linear/lista/`.
 
 ### ★☆☆ Aquecimento
 

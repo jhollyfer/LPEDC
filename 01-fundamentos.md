@@ -243,7 +243,7 @@ Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0001-primeiro-programa/`](01-fundamentos/0001-primeiro-programa/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0001-primeiro-programa/`](01-fundamentos/0001-primeiro-programa/).
 
 **Exemplo A001 · Quem separa as instruções é o ponto e vírgula**
 
@@ -633,7 +633,7 @@ um passo depois do outro:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0002-variaveis/`](01-fundamentos/0002-variaveis/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0002-variaveis/`](01-fundamentos/0002-variaveis/).
 
 **Exemplo A003 · A cópia que não acompanha e o float que arredonda**
 
@@ -1017,7 +1017,7 @@ baixo, sem avisar ninguém:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0003-tipos-e-limites/`](01-fundamentos/0003-tipos-e-limites/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0003-tipos-e-limites/`](01-fundamentos/0003-tipos-e-limites/).
 
 **Exemplo A005 · O mesmo byte lido de dois jeitos**
 
@@ -1405,7 +1405,7 @@ os números:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0004-constantes/`](01-fundamentos/0004-constantes/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0004-constantes/`](01-fundamentos/0004-constantes/).
 
 **Exemplo A007 · Uma constante feita de outras**
 
@@ -1774,7 +1774,7 @@ formato. Mudar a largura de uma coluna é mudar um número só, em cada linha:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0005-printf/`](01-fundamentos/0005-printf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0005-printf/`](01-fundamentos/0005-printf/).
 
 **Exemplo A009 · O extrato que corta o nome comprido**
 
@@ -2149,7 +2149,7 @@ uma guardando o valor numa caixinha, e só depois vem a saída:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0006-scanf/`](01-fundamentos/0006-scanf/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0006-scanf/`](01-fundamentos/0006-scanf/).
 
 **Exemplo A011 · Dois valores numa linha e a sobra que atrapalha**
 
@@ -2506,7 +2506,7 @@ que `fatias` tem valor:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0007-aritmetica/`](01-fundamentos/0007-aritmetica/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0007-aritmetica/`](01-fundamentos/0007-aritmetica/).
 
 **Exemplo A013 · O final da placa e o rodízio**
 
@@ -2871,7 +2871,7 @@ programa rodar. O exemplo segue pelo Sim, graças ao cast:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0008-conversao/`](01-fundamentos/0008-conversao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0008-conversao/`](01-fundamentos/0008-conversao/).
 
 **Exemplo A015 · O cast que corta de propósito**
 
@@ -3226,7 +3226,7 @@ repetição; o `+=` e o `++` são o coração de todo contador e acumulador:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0009-atribuicao/`](01-fundamentos/0009-atribuicao/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0009-atribuicao/`](01-fundamentos/0009-atribuicao/).
 
 **Exemplo A017 · Vagas que descem, senhas que sobem (até de letra)**
 
@@ -3594,7 +3594,7 @@ expressão, como num processamento comum:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0010-math/`](01-fundamentos/0010-math/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0010-math/`](01-fundamentos/0010-math/).
 
 **Exemplo A019 · A escada no muro e o posto na estrada**
 
@@ -3993,7 +3993,7 @@ losango. É o retrato de todo programa deste módulo:
 
 ### Hora de praticar
 
-Os arquivos ficam em [`0011-juntando-tudo/`](01-fundamentos/0011-juntando-tudo/). Os comandos funcionam de qualquer pasta do terminal. Nos exemplos, rode, mude, quebre e rode de novo. Nos exercícios, a resposta vai dentro do próprio arquivo. ★☆☆ é aquecimento, ★★☆ pede raciocínio e ★★★ é desafio.
+Arquivos em [`0011-juntando-tudo/`](01-fundamentos/0011-juntando-tudo/).
 
 **Exemplo A021 · Quantas caixas de piso comprar**
 
@@ -4472,7 +4472,7 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 ## Lista de exercícios práticos
 
-30 exercícios de codificar que treinam o módulo inteiro, misturando os assuntos, no ritmo da prova do PPGI (veja [PPGI.md](PPGI.md)). Os arquivos ficam em [`lista/`](01-fundamentos/lista/): a resposta vai dentro de cada `P????.c`, embaixo de `// Escreva sua resposta abaixo:`. Uma resolução de cada um está em `_respostas/01-fundamentos/lista/`. Só olhe depois de tentar.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](01-fundamentos/lista/); resoluções em `_respostas/01-fundamentos/lista/`.
 
 ### ★☆☆ Aquecimento
 
