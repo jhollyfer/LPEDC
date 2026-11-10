@@ -19,8 +19,8 @@
 //    o '\0' e não esqueça o free.
 // 2. Use um vetor Busca buscas[4] e um vetor long comp[4], zerado antes de
 //    cada busca.
-// 3. Repare no Horspool: com só 4 letras, todas aparecem perto do fim do
-//    padrão, e os saltos ficam curtos. Padrão maior não garante ganho aqui,
+// 3. No Horspool, com só 4 letras, todas aparecem perto do fim do padrão,
+//    e os saltos ficam curtos. Padrão maior não garante ganho aqui,
 //    ao contrário da prosa do A321. E a força bruta fica perto de 1,33 n:
 //    a chance de a 1ª letra bater é 1/4.
 // 4. Resposta esperada: a tabela acima (o Rabin-Karp quase só confere as

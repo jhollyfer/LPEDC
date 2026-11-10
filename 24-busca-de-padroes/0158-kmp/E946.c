@@ -16,8 +16,8 @@
 // 1. Um jeito limpo de contar: para cada i, um laço while (1) que compara
 //    (comp++) t[i] com p[k]; se bateu, k++ e sai; se k == 0, sai; senão,
 //    k = pi[k - 1] e compara de novo.
-// 2. Repare que o KMP nunca passa de 2n = 60 comparações: cada recuo gasta
-//    um k que algum avanço criou antes.
+// 2. O KMP nunca passa de 2n = 60 comparações: cada recuo gasta um k que
+//    algum avanço criou antes.
 // 3. Em "baaaa" o KMP faz MAIS comparações que a força bruta: em texto sem
 //    repetição, a força bruta já falha na primeira letra. O ganho do KMP é
 //    a garantia no pior caso.

@@ -26,9 +26,9 @@
 //    depois de escolher todas. Se descontar na hora, uma disciplina e o
 //    pré-requisito dela podem cair no mesmo semestre.
 // 2. "Sem limite" é a mesma função com limite = V.
-// 3. Resposta esperada: a saída acima. Repare que escolher pelo índice não
-//    é o melhor: com Cálculo II e Estruturas no 2º semestre, daria para
-//    terminar em 4. Priorizar quem tem a corrente mais longa pela frente é a
+// 3. Resposta esperada: a saída acima. Escolher pelo índice não é o melhor:
+//    com Cálculo II e Estruturas no 2º semestre, daria para terminar em 4.
+//    Priorizar quem tem a corrente mais longa pela frente é a
 //    regra usada na prática (e um bom desafio para depois).
 //
 // Escreva sua resposta abaixo (escreva planeja):

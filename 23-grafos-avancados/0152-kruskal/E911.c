@@ -3,9 +3,9 @@
 //
 // Ache o bug. O parque de diversões vai ligar seis atrações com os trilhos
 // de um trenzinho, gastando o mínimo (custos em R$ mil). O programa abaixo
-// tem um erro de lógica numa linha só. Rode e repare: Entrada-Roda (7)
-// entra, mas Entrada, Carrossel, Lago e Roda já estavam ligados, ou seja,
-// fechou um ciclo. E a Montanha ficou sem trilho nenhum.
+// tem um erro de lógica numa linha só. Na saída, Entrada-Roda (7) entra,
+// mas Entrada, Carrossel, Lago e Roda já estavam ligados: fechou um ciclo.
+// E a Montanha ficou sem trilho nenhum.
 //
 //   Saída que aparece:
 //   Entrada-Carrossel (4)

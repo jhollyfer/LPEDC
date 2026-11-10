@@ -5,8 +5,8 @@
 // circular. Complete a função visita(u), a DFS com três cores: ela devolve
 // true se, a partir de u, achar uma seta que chega num vértice CINZA. A
 // função tem_ciclo já pinta todo mundo de BRANCO e chama visita para cada
-// vértice ainda branco. Repare que na versão 1 o pacote util é alcançado por
-// três caminhos diferentes, e isso NÃO é ciclo.
+// vértice ainda branco. Na versão 1, o pacote util é alcançado por três
+// caminhos diferentes, e isso NÃO é ciclo.
 //
 //   Saída esperada:
 //   Versão 1: pode instalar

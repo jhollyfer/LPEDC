@@ -25,7 +25,7 @@
 // 2. Na função recursiva, receba a linha do pai (const int ant[]), monte a
 //    sua num vetor local e passe para os filhos. Se o nó tem fim e lin[m] <= 2,
 //    mostre a palavra do buffer. Se o menor valor de lin passar de 2, volte.
-// 3. Resposta esperada: a saída acima. Repare em "jnaela": trocar duas letras
+// 3. Resposta esperada: a saída acima. Em "jnaela", trocar duas letras
 //    vizinhas de lugar custa 2 na distância de Levenshtein, mas é UMA edição no
 //    cor_sugere (que testa a troca de vizinhas à parte).
 //

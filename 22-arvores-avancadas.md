@@ -3165,7 +3165,7 @@ mercadorias: nenhuma
 2. Na função recursiva, receba a linha do pai (const int ant[]), monte a
    sua num vetor local e passe para os filhos. Se o nó tem fim e lin[m] <= 2,
    mostre a palavra do buffer. Se o menor valor de lin passar de 2, volte.
-3. Repare em "jnaela": trocar duas letras
+3. Em "jnaela", trocar duas letras
    vizinhas de lugar custa 2 na distância de Levenshtein, mas é UMA edição no
    cor_sugere (que testa a troca de vizinhas à parte).
 
@@ -3674,8 +3674,8 @@ Altura: 4 nós
    inverte.
 2. altura(r) = 0 para NULL; senão 1 + o maior entre os dois lados.
 3. Resposta esperada: altura 4 (uma árvore de busca comum teria 15) e os
-   contadores da saída; repare que em ordem crescente nenhuma rotação à
-   direita acontece.
+   contadores da saída. Em ordem crescente, nenhuma rotação à direita
+   acontece.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/lista/P2209.c
@@ -4528,7 +4528,6 @@ Embaralhadas: comum 24, rubro-negra 13, B 8 níveis
    dir contando; para o caso geral, a recursão desce no máximo a altura.
 3. Resposta esperada: a árvore comum tem altura 1000 em ordem e 24
    embaralhada; a rubro-negra fica com 10 e 13, e a B com 9 e 8 níveis.
-   Balancear é garantir o pior caso, não melhorar o caso médio.
 
 ```bash
 ~/LPEDC/rodar 22-arvores-avancadas/lista/P2230.c

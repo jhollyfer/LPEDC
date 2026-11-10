@@ -24,8 +24,8 @@
 // Dicas:
 // 1. Escreva mostra_chaves(chave, na_rede) e chame-a no fim de cada volta
 //    do laço "passo".
-// 2. Repare na Santa Luzia: a chave dela cai de 7 para 2 quando Boa Vista
-//    entra. A chave é o cabo mais barato até a REDE, não até a Usina.
+// 2. A chave da Santa Luzia cai de 7 para 2 quando Boa Vista entra. A
+//    chave é o cabo mais barato até a REDE, não até a Usina.
 // 3. Resposta esperada: total de 14 km; a última linha de chaves é
 //    0* 4* 3* 2* 5*.
 //

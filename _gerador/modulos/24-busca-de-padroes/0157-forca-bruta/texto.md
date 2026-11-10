@@ -123,8 +123,8 @@ novo a partir de `p + 1` (o exemplo A313 mostra a diferença entre recomeçar em
 > dentro lê bytes vizinhos, o que favorece o cache do processador. A força
 > bruta não gasta memória extra: O(1). O `strstr` da glibc não é a força bruta
 > deste assunto: para padrões maiores ele usa o algoritmo **Two-Way**, que é
-> linear no pior caso, e instruções que comparam vários bytes de uma vez. Note
-> que `strstr` recebe `const char *` e devolve `char *` sem `const`: se
+> linear no pior caso, e instruções que comparam vários bytes de uma vez. E
+> `strstr` recebe `const char *` e devolve `char *` sem `const`: se
 > o texto era um literal, escrever pelo ponteiro devolvido é comportamento
 > indefinido (assunto 0048).
 

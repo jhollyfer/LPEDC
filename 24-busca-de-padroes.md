@@ -194,8 +194,8 @@ novo a partir de `p + 1` (o exemplo A313 mostra a diferença entre recomeçar em
 > dentro lê bytes vizinhos, o que favorece o cache do processador. A força
 > bruta não gasta memória extra: O(1). O `strstr` da glibc não é a força bruta
 > deste assunto: para padrões maiores ele usa o algoritmo **Two-Way**, que é
-> linear no pior caso, e instruções que comparam vários bytes de uma vez. Note
-> que `strstr` recebe `const char *` e devolve `char *` sem `const`: se
+> linear no pior caso, e instruções que comparam vários bytes de uma vez. E
+> `strstr` recebe `const char *` e devolve `char *` sem `const`: se
 > o texto era um literal, escrever pelo ponteiro devolvido é comportamento
 > indefinido (assunto 0048).
 
@@ -930,8 +930,8 @@ aaaaa: força bruta 130, KMP 34 (achou 25 e 25)
 1. Um jeito limpo de contar: para cada i, um laço while (1) que compara
    (comp++) t[i] com p[k]; se bateu, k++ e sai; se k == 0, sai; senão,
    k = pi[k - 1] e compara de novo.
-2. Repare que o KMP nunca passa de 2n = 60 comparações: cada recuo gasta
-   um k que algum avanço criou antes.
+2. O KMP nunca passa de 2n = 60 comparações: cada recuo gasta um k que
+   algum avanço criou antes.
 3. Em "baaaa" o KMP faz MAIS comparações que a força bruta: em texto sem
    repetição, a força bruta já falha na primeira letra. O ganho do KMP é
    a garantia no pior caso.
@@ -2537,8 +2537,8 @@ Saída esperada:
    o '\0' e não esqueça o free.
 2. Use um vetor Busca buscas[4] e um vetor long comp[4], zerado antes de
    cada busca.
-3. Repare no Horspool: com só 4 letras, todas aparecem perto do fim do
-   padrão, e os saltos ficam curtos. Padrão maior não garante ganho aqui,
+3. No Horspool, com só 4 letras, todas aparecem perto do fim do padrão,
+   e os saltos ficam curtos. Padrão maior não garante ganho aqui,
    ao contrário da prosa do A321. E a força bruta fica perto de 1,33 n:
    a chance de a 1ª letra bater é 1/4.
 4. Resposta esperada: a tabela acima (o Rabin-Karp quase só confere as

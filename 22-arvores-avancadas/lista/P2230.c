@@ -23,7 +23,6 @@
 //    dir contando; para o caso geral, a recursão desce no máximo a altura.
 // 3. Resposta esperada: a árvore comum tem altura 1000 em ordem e 24
 //    embaralhada; a rubro-negra fica com 10 e 13, e a B com 9 e 8 níveis.
-//    Balancear é garantir o pior caso, não melhorar o caso médio.
 //
 // Escreva sua resposta abaixo:
 

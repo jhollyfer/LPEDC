@@ -3530,8 +3530,8 @@ Caminhos: 10
    primeira coluna, só há um vizinho de onde vir.
 2. Trate fora da grade como 0: if (l > 0) soma o de cima; if (c > 0)
    soma o da esquerda.
-3. Resposta esperada: 10 caminhos. Repare que a esquina (3, 0) em obra
-   zera toda a coluna 0 abaixo dela.
+3. Resposta esperada: 10 caminhos. A esquina (3, 0) em obra zera toda a
+   coluna 0 abaixo dela.
 
 ```bash
 ~/LPEDC/rodar 21-programacao-dinamica/lista/P2103.c

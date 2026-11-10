@@ -34,7 +34,7 @@
 // 2. A aresta que entrou é a que está na árvore nova e não estava na
 //    mínima. Se uma tentativa não ligar todo mundo, devolva -1 e ignore.
 // 3. Resposta esperada: mínima 20; segunda melhor 21, trocando
-//    Boa Esperança-Cajual (5) por Aldeia Nova-Cajual (6). Repare que tirar
+//    Boa Esperança-Cajual (5) por Aldeia Nova-Cajual (6). Tirar
 //    Cajual-Extrema também dá 21: o plano B nem sempre é único.
 //
 // Escreva sua resposta abaixo:

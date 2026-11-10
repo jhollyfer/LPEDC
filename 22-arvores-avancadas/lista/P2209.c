@@ -20,8 +20,8 @@
 //    inverte.
 // 2. altura(r) = 0 para NULL; senão 1 + o maior entre os dois lados.
 // 3. Resposta esperada: altura 4 (uma árvore de busca comum teria 15) e os
-//    contadores da saída; repare que em ordem crescente nenhuma rotação à
-//    direita acontece.
+//    contadores da saída. Em ordem crescente, nenhuma rotação à direita
+//    acontece.
 //
 // Escreva sua resposta abaixo (estenda o código):
 

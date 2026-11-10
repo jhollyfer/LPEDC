@@ -49,7 +49,7 @@ grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
 > grafo com as setas invertidas, em O(V + E). Pontes e vértices de
 > articulação, a conectividade "frágil", ficam para o assunto 0184.
 
-No desenho, os números dão a ordem em que a DFS descobre cada célula. No momento do desenho, o grupo da obra já está todo preto (verde) e a
+No desenho, os números dão a ordem em que a DFS descobre cada célula. Nesse instante, o grupo da obra já está todo preto (verde) e a
 DFS do financiamento está no fundo da pilha, com os três em cinza (amarelo).
 A seta de Parcela para Juros aponta para um cinza:
 

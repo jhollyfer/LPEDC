@@ -120,7 +120,7 @@ grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
 > grafo com as setas invertidas, em O(V + E). Pontes e vértices de
 > articulação, a conectividade "frágil", ficam para o assunto 0184.
 
-No desenho, os números dão a ordem em que a DFS descobre cada célula. No momento do desenho, o grupo da obra já está todo preto (verde) e a
+No desenho, os números dão a ordem em que a DFS descobre cada célula. Nesse instante, o grupo da obra já está todo preto (verde) e a
 DFS do financiamento está no fundo da pilha, com os três em cinza (amarelo).
 A seta de Parcela para Juros aponta para um cinza:
 
@@ -428,8 +428,8 @@ Um gerenciador de pacotes só instala um programa se não houver dependência
 circular. Complete a função visita(u), a DFS com três cores: ela devolve
 true se, a partir de u, achar uma seta que chega num vértice CINZA. A
 função tem_ciclo já pinta todo mundo de BRANCO e chama visita para cada
-vértice ainda branco. Repare que na versão 1 o pacote util é alcançado por
-três caminhos diferentes, e isso NÃO é ciclo.
+vértice ainda branco. Na versão 1, o pacote util é alcançado por três
+caminhos diferentes, e isso NÃO é ciclo.
 
 
 ```text
@@ -1576,9 +1576,9 @@ Sem travessia: 2 redes separadas, 6 cabos, 16 km
 
 Ache o bug. O parque de diversões vai ligar seis atrações com os trilhos
 de um trenzinho, gastando o mínimo (custos em R$ mil). O programa abaixo
-tem um erro de lógica numa linha só. Rode e repare: Entrada-Roda (7)
-entra, mas Entrada, Carrossel, Lago e Roda já estavam ligados, ou seja,
-fechou um ciclo. E a Montanha ficou sem trilho nenhum.
+tem um erro de lógica numa linha só. Na saída, Entrada-Roda (7) entra,
+mas Entrada, Carrossel, Lago e Roda já estavam ligados: fechou um ciclo.
+E a Montanha ficou sem trilho nenhum.
 
 
 ```text
@@ -3752,9 +3752,9 @@ Com no máximo 2 por semestre:
    depois de escolher todas. Se descontar na hora, uma disciplina e o
    pré-requisito dela podem cair no mesmo semestre.
 2. "Sem limite" é a mesma função com limite = V.
-3. Repare que escolher pelo índice não
-   é o melhor: com Cálculo II e Estruturas no 2º semestre, daria para
-   terminar em 4. Priorizar quem tem a corrente mais longa pela frente é a
+3. Escolher pelo índice não é o melhor:
+   com Cálculo II e Estruturas no 2º semestre, daria para terminar em 4.
+   Priorizar quem tem a corrente mais longa pela frente é a
    regra usada na prática (e um bom desafio para depois).
 
 ```bash
@@ -4288,8 +4288,8 @@ Total: 14 km
 
 1. Escreva mostra_chaves(chave, na_rede) e chame-a no fim de cada volta
    do laço "passo".
-2. Repare na Santa Luzia: a chave dela cai de 7 para 2 quando Boa Vista
-   entra. A chave é o cabo mais barato até a REDE, não até a Usina.
+2. A chave da Santa Luzia cai de 7 para 2 quando Boa Vista entra. A
+   chave é o cabo mais barato até a REDE, não até a Usina.
 3. Resposta esperada: total de 14 km; a última linha de chaves é
    0* 4* 3* 2* 5*.
 
@@ -4914,7 +4914,7 @@ Segunda melhor: 21, trocando Boa Esperança-Cajual (5) por Aldeia Nova-Cajual (6
 2. A aresta que entrou é a que está na árvore nova e não estava na
    mínima. Se uma tentativa não ligar todo mundo, devolva -1 e ignore.
 3. Resposta esperada: mínima 20; segunda melhor 21, trocando
-   Boa Esperança-Cajual (5) por Aldeia Nova-Cajual (6). Repare que tirar
+   Boa Esperança-Cajual (5) por Aldeia Nova-Cajual (6). Tirar
    Cajual-Extrema também dá 21: o plano B nem sempre é único.
 
 ```bash
