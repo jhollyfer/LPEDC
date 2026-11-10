@@ -19,8 +19,8 @@
 // 1. Um "while (tab[i] != -1)" sozinho roda para sempre numa tabela cheia.
 // 2. Limite as tentativas: um for de no máximo 5 passos. Se nenhum passo
 //    achou vaga livre, devolva -1.
-// 3. Resposta esperada: a saída acima. Repare que o 9 e o 15 só entram
-//    dando a volta no fim do vetor.
+// 3. Resposta esperada: a saída acima. O 9 e o 15 só entram dando a volta
+//    no fim do vetor.
 //
 // Escreva sua resposta abaixo:
 

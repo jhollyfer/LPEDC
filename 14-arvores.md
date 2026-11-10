@@ -99,8 +99,8 @@ longo dele até uma folha. A altura da árvore é a altura da raiz. O **nível**
 de um nó é a profundidade dele: a raiz fica no nível 0, os filhos dela no 1.
 
 Neste curso, altura se mede em **arestas**: uma folha tem altura 0 e uma árvore
-vazia tem altura -1. É a convenção do Cormen: uma árvore com um nó só tem
-altura 0. Tem livro que conta nós em vez de arestas (folha com altura 1) e
+vazia tem altura -1. É a convenção do Cormen. Tem livro que conta nós em vez
+de arestas (folha com altura 1) e
 põe a raiz no nível 1. Nenhum está errado; só não misture.
 
 A definição mais útil de árvore é **recursiva**: uma árvore é um nó (a raiz)
@@ -1061,8 +1061,8 @@ Depois: 2 + 4 * 3 - 8
 1. Árvore vazia: nada a fazer.
 2. Troque r->esq com r->dir usando um ponteiro auxiliar e chame espelha
    nas duas subárvores (antes ou depois da troca, tanto faz).
-3. Resposta esperada: Antes: 8 - 3 * 4 + 2 e Depois: 2 + 4 * 3 - 8. Repare
-   que a em ordem do espelho é a em ordem original de trás para frente.
+3. Resposta esperada: Antes: 8 - 3 * 4 + 2 e Depois: 2 + 4 * 3 - 8. A em
+   ordem do espelho é a em ordem original de trás para frente.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E585.c
@@ -1623,8 +1623,8 @@ Altura: 3
 
 1. Antes de inserir, pergunte com bst_busca se o número já está na árvore.
 2. Conte os distintos ao inserir (ou escreva uma função que conta nós).
-3. Repare que cada número repetido custa
-   só uma descida pela árvore, e não uma varredura do caderno inteiro.
+3. Cada número repetido custa só
+   uma descida pela árvore, e não uma varredura do caderno inteiro.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E594.c
@@ -3060,9 +3060,9 @@ Você precisa do ranking em ordem crescente, no próprio vetor, sem alocar outro
 
 O heap do assunto anterior já sabe tirar o maior, um de cada vez, em O(log n).
 Tire os n elementos e eles saem em ordem decrescente. Esse é o **heapsort**:
-ordenar usando um heap. Para fazer tudo **no mesmo vetor**, repare que a cada
-máximo que sai o heap encolhe uma casa, e essa casa livre no fim é a posição
-final do máximo.
+ordenar usando um heap. Para fazer tudo **no mesmo vetor**, use o fato de que
+a cada máximo que sai o heap encolhe uma casa, e essa casa livre no fim é a
+posição final do máximo.
 
 O algoritmo tem duas fases:
 
@@ -4670,8 +4670,8 @@ Saída esperada:
 1. Para o sucessor: se x < r->chave, r é um candidato (guarde) e talvez
    exista um menor que ainda sirva, à esquerda; senão, vá para a direita.
 2. O antecessor é o espelho: guarde quando x > r->chave e vá para a direita.
-3. Repare no 45: ele é folha, então o sucessor é um ANCESTRAL (o 50, o
-   primeiro de quem o 45 está à esquerda). É o caso que a prova adora.
+3. O 45 é folha, então o sucessor dele é um ANCESTRAL (o 50, o primeiro de
+   quem o 45 está à esquerda). É o caso que a prova adora.
 
 ```bash
 ~/LPEDC/rodar 14-arvores/lista/P1411.c
@@ -5477,7 +5477,7 @@ tempo, ordem: #104(35) #107(35) #102(38) #105(38) #101(42) #103(42) #106(42)
 **Dicas:**
 
 1. O heapsort NÃO é estável: a troca da raiz com o fim joga elementos para
-   longe, por cima dos iguais. Repare nos três de 42 minutos.
+   longe, por cima dos iguais. Os três de 42 minutos mostram o efeito.
 2. Com o desempate pelo campo ordem, não existem mais chaves iguais, e a
    estabilidade deixa de importar. É o mesmo truque que se usa com o qsort.
 3. Use printf(" #%d(%d)", ...) para cada corredor.

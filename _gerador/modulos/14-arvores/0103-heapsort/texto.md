@@ -6,9 +6,9 @@ Você precisa do ranking em ordem crescente, no próprio vetor, sem alocar outro
 
 O heap do assunto anterior já sabe tirar o maior, um de cada vez, em O(log n).
 Tire os n elementos e eles saem em ordem decrescente. Esse é o **heapsort**:
-ordenar usando um heap. Para fazer tudo **no mesmo vetor**, repare que a cada
-máximo que sai o heap encolhe uma casa, e essa casa livre no fim é a posição
-final do máximo.
+ordenar usando um heap. Para fazer tudo **no mesmo vetor**, use o fato de que
+a cada máximo que sai o heap encolhe uma casa, e essa casa livre no fim é a
+posição final do máximo.
 
 O algoritmo tem duas fases:
 

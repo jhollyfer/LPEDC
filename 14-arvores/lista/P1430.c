@@ -20,7 +20,7 @@
 //
 // Dicas:
 // 1. O heapsort NÃO é estável: a troca da raiz com o fim joga elementos para
-//    longe, por cima dos iguais. Repare nos três de 42 minutos.
+//    longe, por cima dos iguais. Os três de 42 minutos mostram o efeito.
 // 2. Com o desempate pelo campo ordem, não existem mais chaves iguais, e a
 //    estabilidade deixa de importar. É o mesmo truque que se usa com o qsort.
 // 3. Use printf(" #%d(%d)", ...) para cada corredor.

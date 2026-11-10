@@ -29,8 +29,8 @@ longo dele até uma folha. A altura da árvore é a altura da raiz. O **nível**
 de um nó é a profundidade dele: a raiz fica no nível 0, os filhos dela no 1.
 
 Neste curso, altura se mede em **arestas**: uma folha tem altura 0 e uma árvore
-vazia tem altura -1. É a convenção do Cormen: uma árvore com um nó só tem
-altura 0. Tem livro que conta nós em vez de arestas (folha com altura 1) e
+vazia tem altura -1. É a convenção do Cormen. Tem livro que conta nós em vez
+de arestas (folha com altura 1) e
 põe a raiz no nível 1. Nenhum está errado; só não misture.
 
 A definição mais útil de árvore é **recursiva**: uma árvore é um nó (a raiz)

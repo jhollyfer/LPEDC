@@ -122,12 +122,11 @@ ranking:
 
 > [!WARNING]
 > `isalpha`, `tolower` e companhia recebem um `int` que precisa ser um valor
-> de `unsigned char` (0 a 255) ou `EOF`. Num texto UTF-8, o "ã" chega como
-> os bytes `0xC3 0xA3`, que num `char` com sinal valem -61 e -93. Passar
+> de `unsigned char` (0 a 255) ou `EOF`. Num texto UTF-8, os bytes `0xC3 0xA3` do "ã"
+> são negativos num `char` com sinal (assunto 0105). Passar
 > `isalpha(s[i])` com valor negativo é **comportamento indefinido**: muitas
 > bibliotecas usam o valor como índice de uma tabela interna e leem fora
-> dela. Converta sempre: `isalpha((unsigned char)s[i])`. O mesmo byte
-> negativo, somado num `int`, dá índice negativo na sua tabela hash. Aqui o
+> dela. Converta sempre: `isalpha((unsigned char)s[i])`. Aqui o
 > `eh_letra` trata todo byte de 128 para cima como parte da palavra, e assim
 > "pão" e "café" ficam inteiras.
 

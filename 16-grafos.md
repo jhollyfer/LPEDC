@@ -166,8 +166,8 @@ deste módulo segue essa ordem:
 
 <p align="center"><img src="16-grafos/0109-grafos/fluxograma.svg" alt="Fluxograma: Grafos" width="441"></p>
 
-Repare na última linha da saída. Cada aresta encosta em dois vértices e soma
-1 no grau de cada um, então a soma dos graus é sempre o dobro do número de
+Na última linha da saída, cada aresta encosta em dois vértices e soma 1 no
+grau de cada um, então a soma dos graus é sempre o dobro do número de
 arestas. Serve de teste rápido: soma ímpar indica um sentido esquecido.
 
 O exemplo A217 guarda na matriz o tamanho de cada estrada em vez do 1 (um
@@ -833,8 +833,8 @@ Tatuape: descoberto por Penha
 
 1. int pai[V], todos começando com -1 (a origem continua com -1).
 2. Anote pai[v] = u no mesmo lugar em que o código anota dist[v].
-3. Repare na Saude: ela é vizinha de Moema e de Tatuape, mas quem a
-   descobre é quem sai primeiro da fila.
+3. A Saude é vizinha de Moema e de Tatuape, mas quem a descobre é quem sai
+   primeiro da fila.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0110-bfs/E655.c
@@ -1038,8 +1038,8 @@ trilha nova. Só no fim, já de volta à Sede, você pega a trilha da Ponte.
 
 Esse jeito de explorar é a **busca em profundidade** (DFS, de *depth-first
 search*): seguir um caminho o mais fundo possível e, quando não há mais nada
-novo, **voltar** até a última escolha que ficou pendente. A volta tem nome:
-**backtracking**: o fio de Ariadne no labirinto do Minotauro.
+novo, **voltar** até a última escolha que ficou pendente. A volta tem nome,
+**backtracking**, e é o fio de Ariadne no labirinto do Minotauro.
 
 A BFS explora em ondas, com uma fila. A DFS explora em mergulhos, com uma
 **pilha**, e a pilha de chamadas (assunto 0031) já vem de graça. Por isso a
@@ -1057,8 +1057,8 @@ Como na BFS, o vetor `visitado[]` é obrigatório. Lago, Gruta e Topo formam um
 As arestas por onde a DFS desce formam a **árvore da DFS**. As outras, que
 levam a um vértice que já está na pilha (como Topo–Lago), são **arestas de
 retorno**. Num grafo não dirigido, achar uma aresta de retorno é achar um
-ciclo. Além disso, a DFS conta componentes, resolve labirintos e ordena
-tarefas com pré-requisitos.
+ciclo. A DFS também conta componentes, resolve labirintos e ordena tarefas
+com pré-requisitos.
 
 O Cormen põe um **relógio** na DFS: cada vértice ganha um tempo de
 **descoberta** `v.d` (a chamada começa) e um de **término** `v.f` (ela acaba),
@@ -1300,8 +1300,8 @@ Mais fundo: Saída (nível 4)
 1. Um contador global, somado no começo de dfs, dá o número da visita.
 2. Duas globais guardam o maior nível visto e quem estava nele; atualize
    dentro de dfs, comparando com o parâmetro nivel.
-3. Repare no Banco: ele é vizinho direto do Hall, mas a DFS chega nele
-   pela Praça e pela Loja, no nível 3.
+3. O Banco é vizinho direto do Hall, mas a DFS chega nele pela Praça e
+   pela Loja, no nível 3.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0111-dfs/E661.c
@@ -1842,8 +1842,8 @@ Caminho até D: CD -> B -> A -> C -> D (8 km)
    que relaxa. Um laço interno imprime dist[v] ou "-".
 2. O caminho sai de trás para frente: guarde num vetor seguindo
    anterior[] a partir de D e imprima do fim para o começo.
-3. Repare no A, que cai de 7 para 5
-   quando o B é fixado, e no D, que cai de 11 para 8.
+3. O A cai de 7 para 5 quando o B é
+   fixado, e o D cai de 11 para 8.
 
 ```bash
 ~/LPEDC/rodar 16-grafos/0112-dijkstra/E667.c

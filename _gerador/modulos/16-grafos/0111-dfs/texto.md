@@ -7,8 +7,8 @@ trilha nova. Só no fim, já de volta à Sede, você pega a trilha da Ponte.
 
 Esse jeito de explorar é a **busca em profundidade** (DFS, de *depth-first
 search*): seguir um caminho o mais fundo possível e, quando não há mais nada
-novo, **voltar** até a última escolha que ficou pendente. A volta tem nome:
-**backtracking**: o fio de Ariadne no labirinto do Minotauro.
+novo, **voltar** até a última escolha que ficou pendente. A volta tem nome,
+**backtracking**, e é o fio de Ariadne no labirinto do Minotauro.
 
 A BFS explora em ondas, com uma fila. A DFS explora em mergulhos, com uma
 **pilha**, e a pilha de chamadas (assunto 0031) já vem de graça. Por isso a
@@ -26,8 +26,8 @@ Como na BFS, o vetor `visitado[]` é obrigatório. Lago, Gruta e Topo formam um
 As arestas por onde a DFS desce formam a **árvore da DFS**. As outras, que
 levam a um vértice que já está na pilha (como Topo–Lago), são **arestas de
 retorno**. Num grafo não dirigido, achar uma aresta de retorno é achar um
-ciclo. Além disso, a DFS conta componentes, resolve labirintos e ordena
-tarefas com pré-requisitos.
+ciclo. A DFS também conta componentes, resolve labirintos e ordena tarefas
+com pré-requisitos.
 
 O Cormen põe um **relógio** na DFS: cada vértice ganha um tempo de
 **descoberta** `v.d` (a chamada começa) e um de **término** `v.f` (ela acaba),

@@ -33,8 +33,8 @@
 // 2. O printf da volta fica: printf("ini=%d fim=%d meio=%d (%d)\n", ...).
 // 3. O laço para quando ini fica maior que fim: é isso que o "não achou"
 //    vai mostrar.
-// 4. Resposta esperada: a saída acima. Repare que o 62 custa 4 voltas, o
-//    máximo para 9 elementos.
+// 4. Resposta esperada: a saída acima. O 62 custa 4 voltas, o máximo para
+//    9 elementos.
 //
 // Escreva sua resposta abaixo (modifique o código):
 

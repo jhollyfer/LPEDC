@@ -25,8 +25,8 @@
 //    que relaxa. Um laço interno imprime dist[v] ou "-".
 // 2. O caminho sai de trás para frente: guarde num vetor seguindo
 //    anterior[] a partir de D e imprima do fim para o começo.
-// 3. Resposta esperada: a saída acima. Repare no A, que cai de 7 para 5
-//    quando o B é fixado, e no D, que cai de 11 para 8.
+// 3. Resposta esperada: a saída acima. O A cai de 7 para 5 quando o B é
+//    fixado, e o D cai de 11 para 8.
 //
 // Escreva sua resposta abaixo (complete o código):
 

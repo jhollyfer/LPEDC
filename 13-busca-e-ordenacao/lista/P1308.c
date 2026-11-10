@@ -14,8 +14,8 @@
 // Dicas:
 // 1. A compara recebe const void *; decrescente(a, b) pode só devolver
 //    crescente(b, a).
-// 2. Repare que a crescente usa (x > y) - (x < y) em vez de x - y: a
-//    subtração pode estourar o int com valores grandes.
+// 2. A crescente usa (x > y) - (x < y) em vez de x - y: a subtração pode
+//    estourar o int com valores grandes.
 // 3. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo (estenda o programa):

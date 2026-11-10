@@ -104,8 +104,8 @@ deste módulo segue essa ordem:
 
 {{fluxograma}}
 
-Repare na última linha da saída. Cada aresta encosta em dois vértices e soma
-1 no grau de cada um, então a soma dos graus é sempre o dobro do número de
+Na última linha da saída, cada aresta encosta em dois vértices e soma 1 no
+grau de cada um, então a soma dos graus é sempre o dobro do número de
 arestas. Serve de teste rápido: soma ímpar indica um sentido esquecido.
 
 O exemplo A217 guarda na matriz o tamanho de cada estrada em vez do 1 (um

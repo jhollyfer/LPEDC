@@ -1335,8 +1335,8 @@ Saída esperada:
 1. Um "while (tab[i] != -1)" sozinho roda para sempre numa tabela cheia.
 2. Limite as tentativas: um for de no máximo 5 passos. Se nenhum passo
    achou vaga livre, devolva -1.
-3. Repare que o 9 e o 15 só entram
-   dando a volta no fim do vetor.
+3. O 9 e o 15 só entram dando a volta
+   no fim do vetor.
 
 ```bash
 ~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E640.c
@@ -1547,12 +1547,11 @@ ranking:
 
 > [!WARNING]
 > `isalpha`, `tolower` e companhia recebem um `int` que precisa ser um valor
-> de `unsigned char` (0 a 255) ou `EOF`. Num texto UTF-8, o "ã" chega como
-> os bytes `0xC3 0xA3`, que num `char` com sinal valem -61 e -93. Passar
+> de `unsigned char` (0 a 255) ou `EOF`. Num texto UTF-8, os bytes `0xC3 0xA3` do "ã"
+> são negativos num `char` com sinal (assunto 0105). Passar
 > `isalpha(s[i])` com valor negativo é **comportamento indefinido**: muitas
 > bibliotecas usam o valor como índice de uma tabela interna e leem fora
-> dela. Converta sempre: `isalpha((unsigned char)s[i])`. O mesmo byte
-> negativo, somado num `int`, dá índice negativo na sua tabela hash. Aqui o
+> dela. Converta sempre: `isalpha((unsigned char)s[i])`. Aqui o
 > `eh_letra` trata todo byte de 128 para cima como parte da palavra, e assim
 > "pão" e "café" ficam inteiras.
 
@@ -2278,9 +2277,9 @@ tabela: 21 _ 35 46 13 24 57 2 _ _ 10
 
 1. pos = (h + i) % M: o % faz a sondagem dar a volta (o 21 cai em 10,
    ocupado, e vai para 0).
-2. Repare no 2: ele chega por último e paga 6 sondagens, porque o bloco
-   2..7 já está todo ocupado. É o agrupamento primário: quanto maior o
-   bloco, mais chaves caem nele e mais ele cresce.
+2. O 2 chega por último e paga 6 sondagens, porque o bloco 2..7 já está
+   todo ocupado. É o agrupamento primário: quanto maior o bloco, mais
+   chaves caem nele e mais ele cresce.
 
 ```bash
 ~/LPEDC/rodar 15-hash/lista/P1503.c

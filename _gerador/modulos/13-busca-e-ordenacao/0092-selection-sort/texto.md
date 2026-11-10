@@ -10,7 +10,7 @@ duas partes: à esquerda, a parte **pronta** (os menores, já na ordem final);
 à direita, o resto. Cada passada `i`:
 
 1. procura o **índice** do menor elemento em `v[i..n-1]`;
-2. troca esse menor com `v[i]`. Pronto: a gaveta `i` nunca mais muda.
+2. troca esse menor com `v[i]`. A gaveta `i` nunca mais muda.
 
 A passada guarda o **índice** do menor, não o valor: é ele que permite fazer
 a troca no fim. É o padrão "maior/menor" do assunto 0025, repetido a cada

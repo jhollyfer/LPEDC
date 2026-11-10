@@ -21,9 +21,9 @@
 // Dicas:
 // 1. pos = (h + i) % M: o % faz a sondagem dar a volta (o 21 cai em 10,
 //    ocupado, e vai para 0).
-// 2. Repare no 2: ele chega por último e paga 6 sondagens, porque o bloco
-//    2..7 já está todo ocupado. É o agrupamento primário: quanto maior o
-//    bloco, mais chaves caem nele e mais ele cresce.
+// 2. O 2 chega por último e paga 6 sondagens, porque o bloco 2..7 já está
+//    todo ocupado. É o agrupamento primário: quanto maior o bloco, mais
+//    chaves caem nele e mais ele cresce.
 // 3. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

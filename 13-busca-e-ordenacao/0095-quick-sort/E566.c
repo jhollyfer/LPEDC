@@ -16,7 +16,7 @@
 // 1. É o separa trocando "v[k] <= pivo" por "v[k] < 0", e sem a troca final
 //    do pivô.
 // 2. O zero não é negativo: fica do lado direito.
-// 3. Repare que a ordem dentro de cada lado muda (o -80 vem depois do -10).
+// 3. A ordem dentro de cada lado muda (o -80 vem depois do -10).
 // 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

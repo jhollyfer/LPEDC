@@ -613,9 +613,8 @@ Diferente da busca sequencial, o fluxograma tem três perguntas por volta. A vol
 > comportamento indefinido. Esse bug ficou escondido por anos em
 > implementações famosas da busca binária e só apareceu em 2006, quando os
 > vetores ficaram grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
-> 11, depois 9), então não aproveita a linha de cache como a sequencial. Por
-> isso, para vetores bem pequenos, a sequencial pode ganhar. A `stdlib.h` traz
-> uma pronta, a `bsearch`, que você vai usar no assunto 0096.
+> 11, depois 9), então não aproveita a linha de cache como a sequencial. A
+> `stdlib.h` traz uma pronta, a `bsearch`, que você vai usar no assunto 0096.
 
 > [!NOTE]
 > **Pergunta para você:** quantas voltas o código acima dá para achar o 103, o
@@ -787,8 +786,8 @@ achou na posição 8 em 4 voltas
 2. O printf da volta fica: printf("ini=%d fim=%d meio=%d (%d)\n", ...).
 3. O laço para quando ini fica maior que fim: é isso que o "não achou"
    vai mostrar.
-4. Repare que o 62 custa 4 voltas, o
-   máximo para 9 elementos.
+4. O 62 custa 4 voltas, o máximo para
+   9 elementos.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E535.c
@@ -1458,7 +1457,7 @@ duas partes: à esquerda, a parte **pronta** (os menores, já na ordem final);
 à direita, o resto. Cada passada `i`:
 
 1. procura o **índice** do menor elemento em `v[i..n-1]`;
-2. troca esse menor com `v[i]`. Pronto: a gaveta `i` nunca mais muda.
+2. troca esse menor com `v[i]`. A gaveta `i` nunca mais muda.
 
 A passada guarda o **índice** do menor, não o valor: é ele que permite fazer
 a troca no fim. É o padrão "maior/menor" do assunto 0025, repetido a cada
@@ -1712,7 +1711,7 @@ fim = 1: 30 45 60 75 89 120
 **Dicas:**
 
 1. O laço de fora: for (int fim = n - 1; fim > 0; fim--).
-2. O de dentro procura o índice do maior em v[0..fim] (repare no <=).
+2. O de dentro procura o índice do maior em v[0..fim], inclusive o fim (<=).
 3. Depois do laço de dentro, troque v[fim] com v[maior].
 4. O vetor fica pronto em fim = 3, mas o
    selection não tem como saber disso e continua.
@@ -3214,7 +3213,7 @@ Saída esperada:
 1. É o separa trocando "v[k] <= pivo" por "v[k] < 0", e sem a troca final
    do pivô.
 2. O zero não é negativo: fica do lado direito.
-3. Repare que a ordem dentro de cada lado muda (o -80 vem depois do -10).
+3. A ordem dentro de cada lado muda (o -80 vem depois do -10).
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E566.c
@@ -4377,8 +4376,8 @@ as 3 mais quentes: 38 36 34
 
 1. A compara recebe const void *; decrescente(a, b) pode só devolver
    crescente(b, a).
-2. Repare que a crescente usa (x > y) - (x < y) em vez de x - y: a
-   subtração pode estourar o int com valores grandes.
+2. A crescente usa (x > y) - (x < y) em vez de x - y: a subtração pode
+   estourar o int com valores grandes.
 
 ```bash
 ~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1308.c

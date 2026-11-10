@@ -123,9 +123,8 @@ Diferente da busca sequencial, o fluxograma tem três perguntas por volta. A vol
 > comportamento indefinido. Esse bug ficou escondido por anos em
 > implementações famosas da busca binária e só apareceu em 2006, quando os
 > vetores ficaram grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
-> 11, depois 9), então não aproveita a linha de cache como a sequencial. Por
-> isso, para vetores bem pequenos, a sequencial pode ganhar. A `stdlib.h` traz
-> uma pronta, a `bsearch`, que você vai usar no assunto 0096.
+> 11, depois 9), então não aproveita a linha de cache como a sequencial. A
+> `stdlib.h` traz uma pronta, a `bsearch`, que você vai usar no assunto 0096.
 
 > [!NOTE]
 > **Pergunta para você:** quantas voltas o código acima dá para achar o 103, o

@@ -21,8 +21,8 @@
 // 1. Para o sucessor: se x < r->chave, r é um candidato (guarde) e talvez
 //    exista um menor que ainda sirva, à esquerda; senão, vá para a direita.
 // 2. O antecessor é o espelho: guarde quando x > r->chave e vá para a direita.
-// 3. Repare no 45: ele é folha, então o sucessor é um ANCESTRAL (o 50, o
-//    primeiro de quem o 45 está à esquerda). É o caso que a prova adora.
+// 3. O 45 é folha, então o sucessor dele é um ANCESTRAL (o 50, o primeiro de
+//    quem o 45 está à esquerda). É o caso que a prova adora.
 // 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

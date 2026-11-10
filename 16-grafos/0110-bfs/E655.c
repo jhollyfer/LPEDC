@@ -19,8 +19,8 @@
 // Dicas:
 // 1. int pai[V], todos começando com -1 (a origem continua com -1).
 // 2. Anote pai[v] = u no mesmo lugar em que o código anota dist[v].
-// 3. Repare na Saude: ela é vizinha de Moema e de Tatuape, mas quem a
-//    descobre é quem sai primeiro da fila.
+// 3. A Saude é vizinha de Moema e de Tatuape, mas quem a descobre é quem sai
+//    primeiro da fila.
 // 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo (estenda o código):
