@@ -3025,6 +3025,20 @@ volta.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2019 | 24 | Definição de procedimento recursivo | C | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+| 2019 | 38 | Programação descendente e modularização | E | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+| 2024 | 34 | Função recursiva sobre string em C | A | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+| 2025 | 16 | Definição recursiva de fatorial, valor de f(4) | a conferir no gabarito oficial | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf) |
+
+O gabarito oficial de 2025 não estava disponível quando este material foi montado.
+
+
 ## Lista de exercícios práticos
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0401.c a P0430.c, em `material/`; resoluções em `_respostas/04-funcoes/lista/`.

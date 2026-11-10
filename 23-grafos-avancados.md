@@ -3137,6 +3137,18 @@ fim, o Kruskal também conta componentes, como o union-find do A300.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2019 | 36 | Modelagem de mapa rodoviário, caminho mínimo | C | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+| 2025 | 49 | Ordenação topológica de grafo acíclico dirigido | a conferir no gabarito oficial | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf) |
+
+O gabarito oficial de 2025 não estava disponível quando este material foi montado.
+
+
 ## Lista de exercícios práticos
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2301.c a P2330.c, em `material/`; resoluções em `_respostas/23-grafos-avancados/lista/`.

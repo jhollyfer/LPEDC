@@ -215,6 +215,18 @@ altura continua 2. Confira com `ab_insere` e `ab_mostra`.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2023 | 41 | Uso de árvores trie para busca de palavras | E | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf) |
+| 2024 | 53 | Árvores B e B+, nós com ponteiros de dados | B | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+
+O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
+
+
 ## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma

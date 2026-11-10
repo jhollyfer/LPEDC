@@ -270,6 +270,22 @@ assunto 0071, a constante importa quando n é fixo.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2019 | 25 | Complexidade de função em C | B | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+| 2023 | 21 | Conceitos de complexidade de algoritmos | E | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf) |
+| 2023 | 22 | Análise de algoritmos recursivos versus iterativos | E | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf) |
+| 2023 | 23 | Complexidade assintótica de laços aninhados | E | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf) |
+| 2024 | 21 | Custo da busca sequencial em arquivo, casos | A | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+| 2025 | 22 | Custo de tempo e espaço de Fibonacci recursivo | a conferir no gabarito oficial | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf) |
+
+O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC. O gabarito oficial de 2025 não estava disponível quando este material foi montado.
+
+
 ## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra

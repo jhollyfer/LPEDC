@@ -2985,6 +2985,17 @@ achou. A busca binária em si é o assunto 0090.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2023 | 33 | Saída de código C com ponteiros e printf | E | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf) |
+
+O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
+
+
 ## Lista de exercícios práticos
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0601.c a P0630.c, em `material/`; resoluções em `_respostas/06-ponteiros/lista/`.

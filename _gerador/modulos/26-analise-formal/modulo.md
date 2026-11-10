@@ -204,6 +204,19 @@ a `n` nesse tempo.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2019 | 22 | Relações entre funções com O e Ômega | D | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+| 2024 | 22 | Objetivo da análise assintótica de algoritmos | E | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+| 2025 | 23 | Notação assintótica O, alternativa incorreta | a conferir no gabarito oficial | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf) |
+
+O gabarito oficial de 2025 não estava disponível quando este material foi montado.
+
+
 ## Questões no estilo da prova
 
 Dez questões no formato da prova do PPGI. Marque uma alternativa antes de

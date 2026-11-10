@@ -2431,6 +2431,19 @@ já faz isso).
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2019 | 33 | Estruturas de seleção em programação | A | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+| 2024 | 47 | Escolha de instrução condicional encadeada | D | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+| 2025 | 45 | Comando de seleção simples if | a conferir no gabarito oficial | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf) |
+
+O gabarito oficial de 2025 não estava disponível quando este material foi montado.
+
+
 ## Lista de exercícios práticos
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0201.c a P0230.c, em `material/`; resoluções em `_respostas/02-condicionais/lista/`.

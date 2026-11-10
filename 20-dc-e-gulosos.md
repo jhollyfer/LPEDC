@@ -2789,6 +2789,18 @@ vizinhos na cadeia.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2024 | 40 | Compressão de dados e código de Huffman | A | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+| 2025 | 21 | Estratégia gulosa: melhor escolha local a cada passo | a conferir no gabarito oficial | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf) |
+
+O gabarito oficial de 2025 não estava disponível quando este material foi montado.
+
+
 ## Lista de exercícios práticos
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2001.c a P2030.c, em `material/`; resoluções em `_respostas/20-dc-e-gulosos/lista/`.

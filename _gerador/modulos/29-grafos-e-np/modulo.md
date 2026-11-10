@@ -207,6 +207,16 @@ O E1132 reconstrói a rota sem a segunda tabela.
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2019 | 40 | Classes P, NP e NP-completo | E | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+| 2024 | 37 | Autômatos, Turing e NP-completo (assertivas) | E | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+
+
 ## Questões no estilo da prova
 
 Questões objetivas como as da prova do PPGI. Todo código foi compilado e

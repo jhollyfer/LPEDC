@@ -3252,6 +3252,15 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2024 | 45 | Tipos de dados básicos de linguagem | A | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
+
+
 ## Lista de exercícios práticos
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0101.c a P0130.c, em `material/`; resoluções em `_respostas/01-fundamentos/lista/`.

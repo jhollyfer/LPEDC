@@ -206,6 +206,15 @@ faixa; a skip list com um código mais simples; (c) **hash**: só pergunta
 
 </details>
 
+## Questões do POSCOMP
+
+Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
+
+| Ano | Questão | Assunto | Gabarito | Prova |
+| --- | --- | --- | --- | --- |
+| 2019 | 35 | Tabela de símbolos na compressão LZW | D | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
+
+
 ## Questões no estilo da prova
 
 Estas estruturas não caem direto na prova do PPGI, mas questões no
