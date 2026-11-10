@@ -1,40 +1,37 @@
 ## 0058 · Juntando tudo
 
-O mercadinho da esquina ainda anota o fiado num caderno: nome do cliente e
-quanto ele deve. Cliente novo ganha uma linha; cliente antigo soma na conta
-dele; quem paga zera. O caderno nunca tem um número fixo de páginas, e cada
-nome tem um tamanho. O programa do caderno junta o módulo inteiro:
+O mercadinho anota o fiado num caderno: nome do cliente e quanto ele deve.
+Cliente novo ganha uma linha; cliente antigo soma na conta; quem paga zera. O
+caderno não tem número fixo de páginas, e cada nome tem um tamanho. O programa
+junta o módulo inteiro:
 
-- **heap** (0053): o caderno precisa durar o programa todo e crescer, então
-  mora no heap, não na pilha;
-- **malloc e free** (0054): cada nome é copiado para um bloco do tamanho
-  exato com `duplicar`, o `strlen + 1` de sempre;
+- **heap** (0053): o caderno dura o programa todo e cresce, então mora no
+  heap;
+- **malloc e free** (0054): `duplicar` copia cada nome para um bloco do
+  tamanho exato (`strlen + 1`);
 - **realloc** (0055): dois vetores paralelos (`nomes` e `centavos`) dobram de
-  capacidade juntos quando enchem, sempre com ponteiro temporário;
-- **vetor de ponteiros** (0056): `char **nomes` é um vetor de `char *`, cada
-  um apontando para o seu bloco, como as linhas de uma matriz dinâmica com
-  tamanhos diferentes;
+  capacidade juntos quando enchem, com ponteiro temporário;
+- **vetor de ponteiros** (0056): `char **nomes` é um vetor de `char *`, como
+  as linhas de uma matriz dinâmica de tamanhos diferentes;
 - **erros de memória** (0057): para liberar, primeiro cada nome, depois os
   dois vetores. Nada sobra no heap.
 
-Uma novidade: `crescer` recebe `char ***nomes`. É a mesma regra do E341 do
-assunto anterior. A função precisa **mudar** o
-ponteiro `nomes` do `main` (o `realloc` pode trocar o endereço), então recebe
-o endereço dele. `nomes` é `char **`; o endereço de `nomes` é `char ***`. O
-mesmo vale para `int **centavos`.
+Novidade: `crescer` recebe `char ***nomes`, mesma regra do E341 do assunto
+anterior. A função precisa **mudar** o ponteiro `nomes` do `main` (o
+`realloc` pode trocar o endereço), então recebe o endereço dele: `nomes` é
+`char **`, logo seu endereço é `char ***`. Vale o mesmo para `int **centavos`.
 
-Valores em centavos, como fazem os sistemas de pagamento: `int` não tem erro
-de arredondamento, e R$ 12,50 vira `1250`.
+Os valores ficam em centavos: `int` não tem erro de arredondamento, e R$ 12,50
+vira `1250`.
 
-Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge
-(R$ 8,30), Dona Cida de novo (R$ 4,70), Bia (R$ 20,00), Tonho (R$ 3,15) e
-Rosa (R$ 5,60). São 5 clientes diferentes, então o caderno cresce de 2 para
-4 e de 4 para 8. Depois Seu Jorge paga tudo:
+Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge (R$ 8,30), Dona Cida
+de novo (R$ 4,70), Bia (R$ 20,00), Tonho (R$ 3,15) e Rosa (R$ 5,60). São 5
+clientes diferentes, então o caderno cresce de 2 para 4 e de 4 para 8. Depois
+Seu Jorge paga tudo:
 
 {{ideia}}
 
-Leia função por função: cada uma cuida de uma coisa e nenhuma esquece um
-`free`:
+Cada função cuida de uma coisa e nenhuma esquece um `free`:
 
 ```c
 #include <stdio.h>
@@ -152,26 +149,22 @@ int main(void) {
 // Total na rua: R$ 45.95
 ```
 
-Cada anotação passa por uma busca. Achou, soma; não
-achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
-`liberar`:
+Cada anotação passa por uma busca. Achou, soma; não achou, talvez cresça e
+cria a linha. Todo caminho de erro termina em `liberar`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` é um bloco
-> separado, com o seu `malloc` (dentro de `duplicar`). Conte os `malloc` do
-> programa: 2 no começo, 5 nomes e os `realloc`, que trocam um bloco por
-> outro. No fim, `liberar` faz 5 + 2 `free`. Rode com `valgrind ./programa` e
-> confira a linha `All heap blocks were freed`.
+> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` é um bloco com seu
+> `malloc` (dentro de `duplicar`). Os `malloc` do programa: 2 no começo e 5
+> nomes (os `realloc` só trocam um bloco por outro). Por isso `liberar` faz
+> 5 + 2 `free`. Confira com `valgrind ./programa` a linha `All heap blocks
+> were freed`.
 
 > [!TIP]
-> **Por dentro do C:** os dois vetores paralelos são um remendo para a falta
-> de um jeito de agrupar "nome e saldo" numa coisa só, que a `struct`
-> resolve no módulo 08: um vetor de `struct cliente` com um `realloc`
-> só. Mesmo assim, o desenho na memória continua parecido: o nome é um
-> `char *` que aponta para um bloco do heap, e a struct guarda só os 8 bytes
-> do ponteiro.
+> Os dois vetores paralelos são um remendo: a `struct` do módulo 08 agrupa
+> "nome e saldo" numa coisa só, e um vetor de `struct cliente` precisa de um
+> `realloc` só.
 
 > [!NOTE]
 > **Pergunta para você:** se Dona Cida pagar e você quiser **apagar** a linha

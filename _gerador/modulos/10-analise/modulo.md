@@ -1,52 +1,47 @@
 # Módulo 10 · Pensar como cientista da computação
 
-Até aqui a pergunta foi "como escrevo isso em C?". Daqui para a frente, com
-listas, pilhas, árvores e grafos, ela muda para "**qual** jeito de escrever é o
-certo?". Para listar pedidos dá para usar um vetor ou uma lista encadeada, e
-para achar um cliente, uma busca sequencial, uma binária ou uma tabela hash.
-Todas funcionam com 10 itens. Com 1 milhão, umas respondem na hora e outras
-travam o servidor.
+Até aqui a pergunta foi "como escrevo isso em C?". Daqui em diante, com
+listas, pilhas, árvores e grafos, passa a ser "**qual** jeito de escrever é o
+certo?". Vetor ou lista encadeada, busca sequencial, binária ou hash: todos
+funcionam com 10 itens. Com 1 milhão, uns respondem na hora e outros travam o
+servidor.
 
-Este módulo traz as ferramentas para decidir, em três ideias que atravessam o
-resto do curso: **medir o custo** contando passos e resumindo o
-crescimento na notação O; **ter certeza de que está certo** com invariantes de
-laço, em vez de confiar em meia dúzia de testes; e **esconder os detalhes**
-atrás de um tipo abstrato de dado, para poder trocar a implementação sem
-quebrar quem usa.
+Três ideias, que atravessam o resto do curso: **medir o custo** contando
+passos e resumindo o crescimento na notação O; **ter certeza de que está
+certo** com invariantes de laço, em vez de meia dúzia de testes; e **esconder
+os detalhes** atrás de um tipo abstrato de dado, para trocar a implementação
+sem quebrar quem usa.
 
-Você provavelmente já esbarrou nisso sem dar nome: a busca dentro de um laço
-que deixou o programa lento, o módulo que esconde a implementação atrás de
-funções. Aqui essas coisas ganham nome, e o C mostra o custo de cada escolha.
+Usa o que veio antes: funções, vetores, ponteiros, `malloc`/`free` e `struct`
+(os arquivos do módulo 09 já mostraram o ganho do acesso direto, que aqui vira
+a notação O). Prepara os módulos 11 a 16: cada estrutura será medida em O e
+construída como TAD.
 
 ## O que você vai aprender
 
-- medir a **eficiência** de um algoritmo contando passos: melhor, pior e caso médio
+- medir a **eficiência** contando passos: melhor, pior e caso médio
 - ler e escrever a **notação O**: O(1), O(log n), O(n), O(n log n) e O(n²), e por que constantes somem
-- enunciar **invariantes de laço** e usá-los para provar que um laço está certo (e achar bugs)
-- montar um **tipo abstrato de dado** com interface (`.h`), implementação (`.c`) e tipo opaco: o padrão de todos os próximos módulos
+- enunciar **invariantes de laço** e usá-los para provar um laço (e achar bugs)
+- montar um **tipo abstrato de dado** com interface (`.h`), implementação (`.c`) e tipo opaco: o padrão dos próximos módulos
 
 ## Antes de começar
 
 Nos exemplos, mude o n, troque os dados, quebre um invariante de propósito e
 veja o `assert` disparar. Nos desenhos de custo, verde é o que continua leve e
-vermelho é o custo que explodiu.
+vermelho, o que explodiu. Os contadores de passos medem trabalho, não
+segundos: os números saem iguais aos do texto na sua máquina.
 
-Você vai usar tudo dos módulos anteriores, em especial funções, vetores,
-ponteiros, `malloc`/`free` e `struct`. Duas novidades pequenas:
+Novidades pequenas:
 
 - `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
   falsa. É assim que um invariante vira código.
-- **arquivos de apoio**: no assunto 0074, a pasta tem `contador.h`,
-  `contador.c`, `conta.h` e `conta.c` além dos exemplos. O comando do exemplo compila
-  junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então basta
-  rodar o exemplo, como sempre:
+- **arquivos de apoio**: no 0074, a pasta tem `contador.h`, `contador.c`,
+  `conta.h` e `conta.c`. O comando do exemplo compila junto todo `.c` da pasta
+  que não se chama `A000.c`/`E000.c`:
 
 ```bash
 gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A147 && ~/LPEDC/10-analise/0074-tad/A147
 ```
-
-Os contadores de passos dos exemplos não medem segundos, medem trabalho: na
-sua máquina, os números saem iguais aos do texto.
 
 {{indice}}
 
@@ -58,8 +53,8 @@ sua máquina, os números saem iguais aos do texto.
 
 ## Desafios do módulo
 
-Problemas que misturam os quatro assuntos, do médio ao difícil. Todos pedem
-código: escreva num arquivo seu e rode com as flags de estudo.
+Problemas dos quatro assuntos, do médio ao difícil. Todos pedem código:
+escreva num arquivo seu e compile com as flags de estudo.
 
 **1. Convidados em comum.** A sua lista de convidados é `{"Ana", "Bia",
 "Caio", "Davi", "Edu", "Fabi"}` e a do seu amigo é `{"Bia", "Davi", "Edu",
@@ -277,11 +272,11 @@ assunto 0071, a constante importa quando n é fixo.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só depois abra o gabarito. Nas questões de contagem,
-o resultado foi conferido rodando o trecho em C (`gcc -std=c17 -Wall`) com um
-contador. As definições de O, Ω e Θ seguem o Cormen. Cuidado com as palavras
-"sempre", "com certeza" e "nunca": quase sempre derrubam a afirmação.
+Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só depois abra o gabarito. Nas questões de contagem, o resultado foi
+conferido rodando o trecho em C (`gcc -std=c17 -Wall`) com um contador. As
+definições de O, Ω e Θ seguem o Cormen. Desconfie de "sempre", "com certeza"
+e "nunca": quase sempre derrubam a afirmação.
 
 **Questão 1.** Seja f(n) = 3n² + 40n + 7. Marque a alternativa **INCORRETA**.
 

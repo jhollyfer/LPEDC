@@ -1,40 +1,38 @@
 # Módulo 08 · Tipos compostos
 
 Até aqui, cada variável guardava uma coisa só: um número, um caractere, um
-vetor de coisas iguais. Os dados do mundo real vêm em pacotes. Um pedido tem
-tamanho, quantidade e preço; um time tem nome, vitórias e empates. Este
-módulo ensina o C a guardar pacotes.
+vetor de itens iguais. Os dados reais vêm em pacotes: um pedido tem tamanho,
+quantidade e preço; um time tem nome, vitórias e empates. Este módulo ensina o
+C a guardar pacotes.
 
-No C, você desenha o pacote byte a byte: decide a ordem dos campos (e paga
-pelas sobras de alinhamento), decide se ele anda por cópia ou por ponteiro (e
-paga pela cópia), decide se dois campos dividem a mesma memória. Você passa a
-saber o que um objeto **custa**.
+No C, você desenha o pacote byte a byte: decide a ordem dos campos (e paga as
+sobras de alinhamento), se ele anda por cópia ou por ponteiro (e paga a
+cópia) e se dois campos dividem a mesma memória. Você passa a saber o que um
+objeto **custa**.
 
 O módulo fecha no nível do bit: máscaras e flags, o jeito mais compacto de
-guardar sim/não. Com struct, ponteiro para struct e `malloc`, você tem todas
-as peças das estruturas de dados que começam no módulo 10.
+guardar sim/não. Struct, ponteiro para struct e `malloc` são as peças das
+estruturas de dados que começam no módulo 10.
 
 ## O que você vai aprender
 
-- agrupar dados de tipos diferentes numa **struct**, com o ponto, a cópia por atribuição e o alinhamento
-- dar nomes curtos aos tipos com **typedef**, e por que ele não cria um tipo novo
-- montar, percorrer e ordenar **vetores de structs**
-- usar **ponteiro para struct**: a seta `->`, struct no heap com `malloc` e o custo de passar por valor
-- dar nome a estados e opções com **enum**
-- fazer campos dividirem a memória com **union**, e enxergar a **endianness** da máquina
-- ler e escrever **bits** com `& | ^ ~ << >>`, máscaras e flags (as permissões `rwx` do Linux)
+- **struct**: campos, ponto, cópia por atribuição e alinhamento
+- **typedef**, e por que não cria um tipo novo
+- **vetores de structs**: montar, percorrer e ordenar
+- **ponteiro para struct**: seta `->`, struct no heap e custo de passar por valor
+- **enum** para estados e opções
+- **union** e **endianness**
+- **bits** com `& | ^ ~ << >>`, máscaras e flags (as permissões `rwx` do Linux)
 
 ## Antes de começar
 
-Este módulo usa tudo dos anteriores: funções, vetores, strings com `fgets`,
-ponteiros, `malloc`/`realloc`/`free` e `qsort`. Se `int *p = malloc(n *
-sizeof *p);` ainda não parece natural, revise o módulo 07 antes.
+Este módulo usa os anteriores: funções, vetores, strings com `fgets`,
+ponteiros, `malloc`/`realloc`/`free` (módulo 07) e `qsort`. Se `int *p =
+malloc(n * sizeof *p);` não parece natural, revise o 07.
 
-Vários exemplos mostram tamanhos (`sizeof`) e a ordem dos bytes. Os valores
-dos comentários são os de um PC de 64 bits com Linux (Intel, AMD ou ARM).
-Em outra máquina os números podem mudar, e perceber isso faz parte do
-módulo. Ao rodar, troque a ordem dos campos de uma struct e compare o
-`sizeof`.
+Os comentários com `sizeof` e ordem de bytes valem para um PC de 64 bits com
+Linux (Intel, AMD ou ARM); em outra máquina os números podem mudar. Ao rodar,
+troque a ordem dos campos de uma struct e compare o `sizeof`.
 
 ```bash
 gcc ~/LPEDC/08-structs/0059-struct/A117.c -o ~/LPEDC/08-structs/0059-struct/A117 && ~/LPEDC/08-structs/0059-struct/A117
@@ -50,8 +48,8 @@ gcc ~/LPEDC/08-structs/0059-struct/A117.c -o ~/LPEDC/08-structs/0059-struct/A117
 
 ## Desafios do módulo
 
-Problemas para resolver num arquivo seu, misturando os assuntos do módulo. Do
-médio ao difícil.
+Resolva num arquivo seu, misturando os assuntos do módulo, do médio ao
+difícil.
 
 **1. Agenda com busca.** Monte uma agenda com 5 contatos (nome, telefone,
 aniversário como struct `Data`). Leia um nome com `fgets` e mostre o contato,
@@ -189,10 +187,10 @@ passam a vir do `malloc`.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
-compilados com `gcc -std=c17 -Wall -Wextra`. Quando a resposta depende da
-máquina, a questão diz qual.
+Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só então abra o gabarito. Os trechos foram compilados com
+`gcc -std=c17 -Wall -Wextra`. Quando a resposta depende da máquina, a questão
+diz qual.
 
 **Questão 1.** Em uma plataforma de 64 bits típica (`int` de 4 bytes,
 alinhado em 4), quanto valem `sizeof(struct a)` e `sizeof(struct b)`?

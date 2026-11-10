@@ -1,44 +1,38 @@
 ## 0051 · void * e cast
 
-Nos Correios, o funcionário carimba e despacha qualquer caixa sem abrir:
-para ele, uma caixa tem um endereço de entrega e um peso, e só. Quem
-recebe é que abre e sabe se dentro tem um livro ou um tênis. O **`void *`**
-é essa caixa fechada.
+Nos Correios, o funcionário carimba e despacha qualquer caixa sem abrir: para
+ele, a caixa tem endereço e peso, e só. Quem recebe abre e sabe se é um livro
+ou um tênis. O **`void *`** é essa caixa fechada.
 
 Um `void *` é um **ponteiro genérico**: guarda o endereço de qualquer dado
-(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. Antes
-de usar o dado, você precisa dizer o tipo.
+(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. Antes de
+usar o dado, você diz o tipo. Duas regras:
 
-Duas regras saem disso:
+- **conversão livre.** Em C, qualquer ponteiro de dado vira `void *` e volta sem
+  cast: `void *p = &senha;` e `int *q = p;` compilam limpo;
+- **não dá para desreferenciar.** `*p` com `p` do tipo `void *` não compila: o
+  compilador não sabe quantos bytes ler nem como interpretá-los. Converta antes,
+  com um **cast**: `*(int *)p`. Pelo mesmo motivo, `p + 1` não existe no C
+  padrão (o `gcc` aceita como extensão; o `-pedantic` avisa).
 
-- **conversão livre.** Em C, qualquer ponteiro de dado vira `void *` e
-  volta sem cast: `void *p = &senha;` e `int *q = p;` compilam limpo;
-- **não dá para desreferenciar.** `*p` com `p` do tipo `void *` não
-  compila: o compilador não sabe quantos bytes ler nem como interpretar.
-  Converta antes, com um **cast**: `*(int *)p`. Pelo mesmo motivo, `p + 1`
-  não existe no C padrão (o `gcc` aceita como extensão, e o `-pedantic`
-  avisa).
+O cast é uma promessa sua. Se você diz `(double *)` para um endereço onde mora
+um `int`, ele lê 8 bytes onde só havia 4 e mostra lixo.
 
-O cast é uma promessa sua, e o compilador acredita. Se você disser
-`(double *)` para um endereço em que mora um `int`, ele lê 8 bytes onde só
-tinha 4 e mostra lixo.
+A caixa fechada permite funções que trabalham com **qualquer tipo**. Elas
+recebem `void *` e, sem saber o tamanho do dado, recebem também o tamanho em
+bytes. Por dentro, tratam a memória como fileira de bytes, com um
+`unsigned char *`, o único tipo que o C deixa olhar byte a byte qualquer
+objeto. Assim funcionam `memcpy`, `memset`, o `qsort` (assunto 0050) e o
+`malloc` do módulo 07, que devolve `void *` porque não sabe o que você vai
+guardar.
 
-A caixa fechada serve para escrever funções que trabalham com
-**qualquer tipo**. Elas recebem `void *` e, como não sabem o tamanho do
-dado, recebem também o tamanho em bytes. Lá dentro, tratam a memória como
-uma fileira de bytes, com um `unsigned char *`, o único tipo que o C deixa
-olhar byte a byte qualquer objeto. É assim que funcionam `memcpy`,
-`memset`, o `qsort` (assunto 0050) e o `malloc` do módulo 07, que devolve
-`void *` porque não sabe o que você vai guardar.
-
-A `troca` do assunto 0046 só troca `int`. A
-`troca_generica` recebe dois endereços sem tipo e o tamanho: com 4, troca
-duas senhas `int`; com 8, troca dois preços `double`. Byte a byte, ela nem
-sabe o que está trocando:
+A `troca` do assunto 0046 só troca `int`. A `troca_generica` recebe dois
+endereços sem tipo e o tamanho: com 4, troca duas senhas `int`; com 8, dois
+preços `double`. Byte a byte, ela nem sabe o que troca:
 
 {{ideia}}
 
-O código chama a mesma função para os dois tipos:
+A mesma função serve aos dois tipos:
 
 ```c
 #include <stdio.h>
@@ -71,37 +65,32 @@ int main(void) {
 // preços: 8.50 e 12.90
 ```
 
-`&senha_a` (um `int *`) entra no parâmetro `void *` sem cast nenhum, e o
-`sizeof` na chamada conta à função o tamanho do dado.
+`&senha_a` (um `int *`) entra no parâmetro `void *` sem cast, e o `sizeof` na
+chamada informa o tamanho do dado.
 
-A função não pergunta "que tipo é?", porque não tem como saber. Ela só
-pergunta "ainda tem byte para trocar?":
+A função não pergunta "que tipo é?", só "ainda tem byte para trocar?":
 
 {{fluxograma}}
 
 > [!WARNING]
 > O `void *` desliga a conferência de tipos. `troca_generica(&senha_a,
-> &preco_a, sizeof preco_a)` compila sem aviso e troca 8 bytes a partir de
-> uma variável que só tem 4: o AddressSanitizer acusa
-> `stack-buffer-overflow`. O mesmo vale para o cast errado na leitura:
-> `*(double *)p` com `p` apontando para um `int`. Com `void *`, você é o
-> responsável por lembrar o tipo e o tamanho de verdade. Use `sizeof` da
-> própria variável, nunca um número digitado à mão.
+> &preco_a, sizeof preco_a)` compila sem aviso e troca 8 bytes a partir de uma
+> variável de 4: o AddressSanitizer acusa `stack-buffer-overflow`. O mesmo vale
+> para o cast errado, `*(double *)p` com `p` apontando para um `int`. Você é
+> responsável pelo tipo e pelo tamanho: use o `sizeof` da própria variável,
+> nunca um número digitado à mão.
 
 > [!TIP]
-> **Por dentro do C:** o A102 usa um `const unsigned char *` para espiar os
-> bytes de qualquer variável. O `int` 1000 (`0x000003E8`) aparece como `e8 03
-> 00 00`: o byte menos significativo vem primeiro, no endereço menor. É o
-> **little-endian** dos processadores Intel, AMD e ARM. O `-1` vira `ff ff ff
-> ff` (complemento de dois) e a string `"Pix"` vira `50 69 78 00`, os
-> códigos ASCII com o `'\0'` no fim. Olhar a memória como bytes só é
-> garantido com tipos `char`; ler um `float` por meio de um `int *`, por
-> exemplo, quebra uma regra do C (a de *strict aliasing*) e o otimizador
-> pode gerar código errado.
+> **Por dentro do C:** o A102 espia os bytes de uma variável com
+> `const unsigned char *`. O `int` 1000 (`0x000003E8`) aparece como `e8 03 00
+> 00`: o byte menos significativo vem primeiro, no endereço menor
+> (**little-endian**, de Intel, AMD e ARM). O `-1` vira `ff ff ff ff` e a string
+> `"Pix"` vira `50 69 78 00`. Só tipos `char` podem olhar bytes com segurança;
+> ler um `float` por um `int *` quebra a regra de *strict aliasing*.
 
 > [!NOTE]
-> **Pergunta para você:** por que `troca_generica` precisa do parâmetro
-> `tam` e a `troca` do assunto 0046 não precisa? O que aconteceria se você
-> passasse `sizeof(int)` para trocar dois `double`?
+> **Pergunta para você:** por que `troca_generica` precisa do parâmetro `tam` e
+> a `troca` do assunto 0046 não precisa? O que aconteceria se você passasse
+> `sizeof(int)` para trocar dois `double`?
 
 {{pratique}}

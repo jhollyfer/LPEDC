@@ -1,10 +1,10 @@
 ## 0014 · if
 
 No caixa do mercado, a placa avisa: compras a partir de R$ 200 ganham 10% de
-desconto. Sua compra deu R$ 230. A moça do caixa faz uma pergunta e, só se a
-resposta for sim, faz um passo a mais. Se for não, segue sem desconto.
+desconto. Sua compra deu R$ 230. Só se a resposta for sim, a moça faz um
+passo a mais.
 
-Esse "só se" é o **`if`**. No C, a sintaxe é esta:
+Esse "só se" é o **`if`**:
 
 ```c
 if (condição) {
@@ -13,14 +13,14 @@ if (condição) {
 // daqui em diante roda sempre
 ```
 
-A **condição** vai sempre entre parênteses. Ela pode ser qualquer expressão
-que dê um número: uma comparação (`total >= 200`), uma combinação lógica
-(`idade >= 18 && tem_cnh`) ou até uma variável sozinha. Vale a regra do 0012:
-**zero é falso, o resto é verdade**. `if (saldo)` é o mesmo que
-`if (saldo != 0)`, e `if (!saldo)` é o mesmo que `if (saldo == 0)`.
+A **condição** fica entre parênteses e pode ser qualquer expressão numérica:
+uma comparação (`total >= 200`), uma combinação lógica
+(`idade >= 18 && tem_cnh`) ou uma variável sozinha. Vale a regra do 0012:
+**zero é falso, o resto é verdade**. `if (saldo)` equivale a
+`if (saldo != 0)`, e `if (!saldo)` a `if (saldo == 0)`.
 
-O **bloco** entre chaves pode ter quantas instruções você quiser. Sem chaves, o
-`if` manda em **uma** instrução só, a primeira depois dele:
+O **bloco** entre chaves aceita quantas instruções quiser. Sem chaves, o `if`
+controla **uma** instrução só, a primeira depois dele:
 
 ```c
 if (total >= 200)
@@ -28,22 +28,19 @@ if (total >= 200)
 printf("Pronto\n");        // NÃO depende, apesar de qualquer recuo
 ```
 
-O recuo (indentação) é só para quem lê. O compilador ignora espaços. Isso
-engana muita gente quando acrescenta uma segunda linha "dentro" do `if` sem
-chaves e ela roda sempre. Por isso o conselho do curso: **use chaves sempre**,
-mesmo com uma linha só. Abra e feche as chaves antes de escrever o miolo.
+O recuo é só para quem lê; o compilador o ignora. Uma segunda linha "dentro"
+do `if` sem chaves roda sempre. Por isso o curso manda **usar chaves sempre**,
+mesmo com uma linha só.
 
-O `if` sozinho não tem um "senão". Quando a condição é falsa, o
-bloco é pulado e o programa continua na linha seguinte. Isso é a
-**seleção simples**: fazer um passo extra ou não fazer nada.
+O `if` sozinho não tem "senão": com a condição falsa, o bloco é pulado e o
+programa segue. É a **seleção simples**: um passo extra ou nada.
 
-No exemplo, os R$ 230 entram, a pergunta responde Sim, o desconto
-acontece e o valor final sai com R$ 207. Se a resposta fosse Não, a seta
-cinza levaria direto para o final, sem passar pelo desconto:
+No exemplo, entram R$ 230, a resposta é Sim, o desconto acontece e o valor
+final é R$ 207. Se fosse Não, a seta cinza iria direto ao final:
 
 {{ideia}}
 
-O desconto em C. O `%%` dentro do `printf` mostra um `%`:
+O desconto em C (`%%` mostra um `%` no `printf`):
 
 ```c
 #include <stdio.h>
@@ -65,25 +62,17 @@ int main(void) {
 // A pagar: R$ 207.00
 ```
 
-O losango tem duas saídas, como sempre, mas a do Não não faz nada: vai direto
-para o "Mostrar", o mesmo ponto a que o Sim chega depois do desconto:
+A saída Não do losango não faz nada: vai direto ao "Mostrar", onde o Sim chega
+depois do desconto:
 
 {{fluxograma}}
 
 > [!WARNING]
-> **O `;` depois do `if` mata a condição.** Em `if (total >= 200);` o
-> ponto e vírgula é uma **instrução vazia**: ela é o corpo do `if`. O bloco
-> `{ ... }` que vem embaixo vira um bloco solto, que roda **sempre**. Compila
-> sem erro, e todo mundo ganha desconto. O `-Wextra` do gcc com as flags de estudo avisa
-> ("suggest braces around empty body"). No fim da linha do `if` nunca vai
-> `;`: ou vem `{`, ou vem a instrução.
-
-> [!TIP]
-> **Por dentro do C:** o `if` vira duas instruções de máquina. Primeiro um
-> `cmp` compara `total` com 200. Depois vem um salto condicional que faz o
-> **contrário** do que você escreveu: "se for **menor**, pula o bloco". Quando
-> a condição é verdadeira, o processador não pula e cai dentro do bloco. Salve o código acima num arquivo, rode `gcc -S` nele e procure um
-> `jb`, `jl` ou parecido logo depois do `comisd` ou `cmp`.
+> **O `;` depois do `if` mata a condição.** Em `if (total >= 200);`, o ponto e
+> vírgula é uma **instrução vazia** e vira o corpo do `if`. O bloco `{ ... }`
+> seguinte fica solto e roda **sempre**: compila sem erro e todo mundo ganha
+> desconto. O `-Wextra` avisa ("suggest braces around empty body"). No fim da
+> linha do `if` nunca vai `;`.
 
 > [!NOTE]
 > **Pergunta para você:** e se a compra der exatamente R$ 200,00? E R$ 199,99?

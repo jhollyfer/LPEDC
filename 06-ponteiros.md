@@ -2,53 +2,48 @@
 
 # Módulo 06 · Ponteiros
 
-Até aqui você usou variáveis pelo **nome**: o compilador trocava cada nome
-por um endereço e escondia isso de você. Neste módulo a cortina abre. Toda
-variável mora numa gaveta numerada da memória, dá para guardar o número dessa
-gaveta numa outra variável e, com esse número na mão, ler e mudar o dado de
-qualquer lugar do programa.
+Até aqui você usou variáveis pelo **nome**; o compilador trocava cada nome por
+um endereço e escondia isso. Neste módulo a cortina abre: toda variável mora
+numa gaveta numerada da memória, e guardar o número dessa gaveta em outra
+variável permite ler e mudar o dado de qualquer lugar do programa.
 
-No C, se uma função precisa mudar uma variável sua, você entrega o endereço
-dela. Dá trabalho, mas em troca você sabe o que cada linha custa e entende
-por que o `scanf` pedia aquele `&` desde o módulo 01.
-
-Tudo o que vem depois depende de ponteiro: memória dinâmica (módulo 07),
-structs encadeadas (módulo 08), listas, pilhas, filas, árvores e grafos. Vá
-devagar, desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
+No C, para uma função mudar uma variável sua, você entrega o endereço dela. Dá
+trabalho, mas mostra o que cada linha custa e por que o `scanf` pedia o `&`
+desde o módulo 01. Memória dinâmica (módulo 07), structs encadeadas, listas,
+pilhas, filas, árvores e grafos dependem disso. Vá devagar, desenhe as gavetas.
 
 ## O que você vai aprender
 
-- a memória como um **gaveteiro numerado**: endereço, `&` e `%p`
-- declarar e usar **ponteiros**: `*`, desreferência e `NULL`
-- **passagem por referência**: a troca (swap), funções que devolvem vários resultados e o `&` do `scanf` explicado
-- **aritmética de ponteiros** e por que `v[i]` é o mesmo que `*(v + i)`
-- a diferença entre `char *` e `char []`, e por que um literal de string é **só leitura**
+- a memória como **gaveteiro numerado**: endereço, `&` e `%p`
+- **ponteiros**: `*`, desreferência e `NULL`
+- **passagem por referência**: a troca (swap), vários resultados e o `&` do `scanf`
+- **aritmética de ponteiros**: `v[i]` é `*(v + i)`
+- `char *` contra `char []`, e o literal de string **só leitura**
 - **ponteiro para ponteiro** (`**`) e vetor de ponteiros
-- **ponteiro para função**: callbacks e o `qsort`
-- **`void *`**: o ponteiro genérico, o cast e funções que servem para qualquer tipo
+- **ponteiro para função**: callbacks e `qsort`
+- **`void *`**: ponteiro genérico, cast e funções para qualquer tipo
 
 ## Antes de começar
 
-Você precisa estar à vontade com vetores, strings e funções (módulos 04 e
-05). Os erros de ponteiro raramente aparecem na compilação: aparecem quando
-o programa roda, às vezes bem longe da linha culpada. Por isso, rode
-**sempre** com as flags de estudo, que liga o AddressSanitizer. Quando ele acusar
-algo, leia o relatório de cima para baixo: o tipo do erro
-(`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável
-envolvida.
+Este módulo usa vetores, strings e funções (módulos 04 e 05): o nome do vetor
+já era um endereço, e agora ele ganha sintaxe. Ele prepara a memória dinâmica
+(módulo 07) e as structs (módulo 08).
 
-O diagrama da ideia deste módulo é quase sempre um gaveteiro com endereços e
-setas; nele, roxo marca os ponteiros.
+Erros de ponteiro raramente aparecem na compilação: surgem na execução, às
+vezes longe da linha culpada. Rode **sempre** com as flags de estudo, que ligam
+o AddressSanitizer, e leia o relatório de cima para baixo: o tipo do erro
+(`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável.
+
+Nos diagramas, gaveteiros e setas; o roxo marca os ponteiros.
 
 > [!NOTE]
-> Os endereços dos desenhos são **fictícios** e curtos (`0x1000`, `0x1004`)
-> para caber na cabeça. Os de verdade têm 12 dígitos hexa e **mudam a cada
-> execução**: os endereços nos comentários dos exemplos são de uma execução
-> qualquer, e os seus vão ser outros. O que importa são as relações entre
-> eles (iguais, 4 bytes depois etc.).
+> Os endereços dos desenhos são **fictícios** e curtos (`0x1000`, `0x1004`).
+> Os de verdade têm 12 dígitos hexa e **mudam a cada execução**; os dos
+> comentários dos exemplos são de uma execução qualquer. O que importa são as
+> relações entre eles (iguais, 4 bytes depois etc.).
 
-Para seguir um ponteiro passo a passo, use o `gdb`
-(`print p`, `print *p`, `print &x`):
+Para seguir um ponteiro passo a passo, use o `gdb` (`print p`, `print *p`,
+`print &x`):
 
 ```bash
 sudo pacman -S gdb          # Arch Linux
@@ -71,43 +66,39 @@ sudo apt install gdb        # Debian / Ubuntu
 
 ## 0044 · Memória e endereços
 
-No guarda-volumes do mercado, você entrega a mochila e recebe uma ficha com o
-número 47. Você não precisa saber em que prateleira ela foi parar: com o
-número, o funcionário acha a gaveta certa. A memória do computador funciona
-assim.
+No guarda-volumes do mercado, você entrega a mochila e recebe a ficha 47. Não
+precisa saber em que prateleira ela está: com o número, o funcionário acha a
+gaveta. A memória do computador funciona assim.
 
-A **memória** (RAM) é uma fileira enorme de gavetas de **1 byte** cada, e
-cada gaveta tem um número: o **endereço**. Quando você declara `int idade =
-30;`, o compilador separa 4 gavetas seguidas para `idade` e guarda o 30 lá
-dentro. O **endereço da variável** é o número da primeira dessas gavetas.
+A **memória** (RAM) é uma fileira de gavetas de **1 byte**, cada uma com um
+número: o **endereço**. Ao declarar `int idade = 30;`, o compilador separa 4
+gavetas seguidas para `idade` e guarda o 30 nelas. O **endereço da variável**
+é o número da primeira gaveta.
 
-Você pensa no **nome** (`idade`). O processador só conhece **endereços**. O
-compilador faz a ponte: troca cada nome pelo endereço da gaveta.
+Você pensa no **nome** (`idade`); o processador só conhece **endereços**, e o
+compilador troca um pelo outro.
 
-Para perguntar "em que gaveta você mora?", use o operador **`&`** (endereço
-de): `&idade`. É o mesmo `&` que você coloca no `scanf` desde o assunto 0006.
-O `scanf` precisa saber **onde** guardar o que leu, e o `&` entrega a ficha
-do guarda-volumes. O assunto 0046 conta essa história inteira.
+O operador **`&`** (endereço de) pergunta "em que gaveta você mora?": `&idade`.
+É o `&` do `scanf` desde o assunto 0006: o `scanf` precisa saber **onde**
+guardar o que leu. O assunto 0046 conta essa história.
 
-Para mostrar um endereço, o `printf` tem o **`%p`**, que imprime em
-hexadecimal. O `%p` espera um "endereço genérico", do tipo
-`void *`, então escreva `(void *)&idade`. Esse `(void *)` é um cast, e o
-assunto 0051 explica o tipo `void *` com calma.
+O `printf` mostra um endereço com **`%p`**, em hexadecimal. O `%p` espera um
+`void *`, então escreva `(void *)&idade`. O assunto 0051 explica esse tipo.
 
-Dois detalhes que surpreendem no começo:
+Dois detalhes que surpreendem:
 
-- **o endereço muda a cada execução.** O sistema sorteia onde o programa
-  vai morar, por segurança. Não decore endereço nenhum;
+- **o endereço muda a cada execução**: o sistema sorteia onde o programa mora,
+  por segurança. Não decore endereços;
 - **cada tipo ocupa um número de gavetas**: `char` 1, `int` 4, `double` 8 (o
-  `sizeof` do assunto 0002 diz quantas). O endereço é sempre o da primeira.
+  `sizeof` do assunto 0002 diz). O endereço é sempre o da primeira.
 
-No cadastro da academia, a idade (30, um `int`), a mensalidade (R$ 119,90,
-um `double`) e o plano (`'B'`, um `char`) ganham gavetas. Os endereços do
-desenho são fictícios, como avisa a abertura do módulo:
+No cadastro da academia, a idade (30, `int`), a mensalidade (R$ 119,90,
+`double`) e o plano (`'B'`, `char`) ganham gavetas. Os endereços do desenho são
+fictícios:
 
 <p align="center"><img src="06-ponteiros/0044-memoria/ideia.svg" alt="Diagrama da ideia: Memória e endereços" width="858"></p>
 
-O programa mostra, para cada variável, o valor, o endereço e o tamanho:
+O programa mostra, de cada variável, o valor, o endereço e o tamanho:
 
 ```c
 #include <stdio.h>
@@ -132,33 +123,27 @@ int main(void) {
 // plano:       B, mora em 0x7f0440e00020, ocupa 1 byte
 ```
 
-O `%zu` é o formato certo para o resultado do `sizeof` (um `size_t`, inteiro
-sem sinal). Rode duas vezes: os valores e os tamanhos se repetem, os
-endereços não.
+O `%zu` é o formato do resultado do `sizeof` (`size_t`, inteiro sem sinal).
+Rode duas vezes: valores e tamanhos se repetem, endereços não.
 
-O fluxograma não tem decisão nenhuma. Para cada variável, o programa faz as
-mesmas três perguntas: o que tem dentro, onde mora e quanto ocupa:
+O fluxograma não tem decisão. Para cada variável, o programa faz as mesmas três
+perguntas: o que tem dentro, onde mora e quanto ocupa:
 
 <p align="center"><img src="06-ponteiros/0044-memoria/fluxograma.svg" alt="Fluxograma: Memória e endereços" width="1566"></p>
 
 > [!WARNING]
-> Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes num
-> sistema de 64 bits, e o `%d` lê só 4: você vê um número cortado, às vezes
-> negativo. O gcc com as flags de estudo avisa (`format '%d' expects argument of type 'int', but
-> argument 2 has type 'int *'`). O certo é sempre `%p` com `(void *)`. E não
-> conclua nada da ordem dos endereços de variáveis soltas: o compilador
-> arruma as gavetas como quiser (na saída acima, `plano` ficou **antes** de
-> `idade`). Só num vetor a ordem é garantida.
+> Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes em 64 bits e
+> o `%d` lê só 4: o número sai cortado, às vezes negativo. O gcc com as flags de
+> estudo avisa (`format '%d' expects argument of type 'int', but argument 2 has
+> type 'int *'`). Use `%p` com `(void *)`. E não deduza nada da ordem dos
+> endereços de variáveis soltas: o compilador arruma como quiser (acima,
+> `plano` ficou **antes** de `idade`). Só num vetor a ordem é garantida.
 
 > [!TIP]
-> **Por dentro do C:** o endereço `0x7f0440e00030` tem 12 dígitos hexa, ou
-> seja, 48 bits. O ponteiro ocupa 8 bytes (64 bits), mas os processadores de
-> hoje só usam 48 deles para endereçar: dá 256 TB, sobra. O sorteio do
-> endereço a cada execução se chama **ASLR** (*Address Space Layout
-> Randomization*): se o atacante não sabe onde as coisas moram, fica bem
-> mais difícil explorar uma falha. E as variáveis locais moram numa região
-> chamada **pilha**, a mesma pilha de chamadas do assunto 0031; o módulo 07
-> mostra o mapa completo.
+> **Por dentro do C:** o sorteio do endereço a cada execução se chama **ASLR**;
+> dificulta explorar falhas, pois o atacante não sabe onde as coisas moram. As
+> variáveis locais ficam na **pilha** do assunto 0031; o módulo 07 mostra o
+> mapa completo.
 
 > [!NOTE]
 > **Pergunta para você:** se `idade` começa na gaveta `0x1000` e ocupa 4
@@ -341,9 +326,9 @@ gcc ~/LPEDC/06-ponteiros/0044-memoria/E261.c -o ~/LPEDC/06-ponteiros/0044-memori
 **Exercício E262** · ★★☆
 
 Este programa da pizzaria tenta mostrar o endereço da variável pedidos de
-três jeitos, e os três estão errados DE PROPÓSITO. Rode com as flags de estudo e leia
+três jeitos, e os três estão errados DE PROPÓSITO. Rode com o rodar e leia
 os avisos do compilador. Conserte as três linhas para mostrarem o
-endereço do jeito certo, rode de novo e confira que o gcc com as flags de estudo não reclama
+endereço do jeito certo, rode de novo e confira que o rodar não reclama
 mais e que as três linhas mostram o mesmo endereço.
 
 
@@ -382,7 +367,7 @@ int v[3] = {1, 2, 3};
 
 e mostre o endereço de a, b e c (uma linha cada) e depois, com um for, o
 endereço de v[0], v[1] e v[2]. No fim, mostre sizeof v e a soma
-sizeof a + sizeof b + sizeof c. Rode com as flags de estudo. Depois compile SEM o
+sizeof a + sizeof b + sizeof c. Rode com o rodar. Depois compile SEM o
 sanitizer e rode de novo, para comparar as duas saídas:
 
 
@@ -393,7 +378,7 @@ gcc -std=c17 E263.c -o e263 && ./e263
 
 
 ```text
-Saída esperada (endereços mudam a cada execução; com as flags de estudo):
+Saída esperada (endereços mudam a cada execução; com o rodar):
 a em 0x7f...30
 b em 0x7f...40
 c em 0x7f...50
@@ -409,7 +394,7 @@ sizeof v = 12, a + b + c = 12
 2. O AddressSanitizer coloca "zonas proibidas" entre as variáveis para
    pegar estouros; sem ele, o compilador arruma do jeito que quiser.
 3. Resposta esperada: v[0], v[1] e v[2] sobem de 4 em 4 nas duas
-   compilações; a, b e c ficam a 16 bytes um do outro com as flags de estudo e
+   compilações; a, b e c ficam a 16 bytes um do outro com o rodar e
    costumam ficar a 4 bytes sem ele, em qualquer ordem. Os dois tamanhos
    dão 12: o mesmo espaço, mas só o vetor tem ordem garantida.
 
@@ -470,43 +455,40 @@ gcc ~/LPEDC/06-ponteiros/0044-memoria/E264.c -o ~/LPEDC/06-ponteiros/0044-memori
 
 ## 0045 · Ponteiros
 
-Quando você pede comida pelo app, o entregador não leva a sua casa no
-celular: leva o **endereço** dela. Com o endereço, ele chega na porta e
-entrega o pedido. Muda o que tem dentro da casa sem carregar a casa.
+Pelo app de comida, o entregador não leva a sua casa no celular: leva o
+**endereço**. Com ele, chega à porta e entrega o pedido.
 
-Um **ponteiro** é isso: uma variável que guarda um **endereço** em vez de um
-valor comum. Ela também mora numa gaveta da memória (tem o próprio
-endereço), mas o que está dentro dela é o número de **outra** gaveta.
-Alguns livros (o Ziviani, a tradução do K&R) dizem **apontador**: é a mesma
-coisa.
+Um **ponteiro** é uma variável que guarda um **endereço** em vez de um valor
+comum. Ele também mora numa gaveta (tem endereço próprio), mas o que guarda é o
+número de **outra** gaveta. Alguns livros (Ziviani, a tradução do K&R) dizem
+**apontador**: é a mesma coisa.
 
-Declarar tem um `*` antes do nome: `int *cartao;` se lê "cartao é um
-ponteiro para int". O tipo importa: diz **o que** mora no endereço apontado,
-e portanto quantos bytes ler lá (4 para `int`, 8 para `double`).
+A declaração leva um `*` antes do nome: `int *cartao;` lê-se "cartao é um
+ponteiro para int". O tipo diz **o que** mora no endereço apontado, e portanto
+quantos bytes ler (4 para `int`, 8 para `double`).
 
 Dois operadores fazem todo o serviço:
 
-- **`&x`** dá o endereço de `x` (assunto 0044). É o que você guarda no
-  ponteiro: `cartao = &pontos;`;
-- **`*cartao`** vai até o endereço guardado e mexe no que está lá. Isso se
-  chama **desreferenciar**. Ler `*cartao` dá o valor de `pontos`; escrever
+- **`&x`** dá o endereço de `x` (assunto 0044), que você guarda no ponteiro:
+  `cartao = &pontos;`;
+- **`*cartao`** vai ao endereço guardado e mexe no que está lá: é
+  **desreferenciar**. Ler `*cartao` dá o valor de `pontos`; escrever
   `*cartao = 150;` muda `pontos`.
 
-O `*` tem três papéis e só o contexto separa: multiplicação (`a * b`),
-declaração (`int *p`) e desreferência (`*p = 5`). Leia devagar no começo.
+O `*` tem três papéis, separados só pelo contexto: multiplicação (`a * b`),
+declaração (`int *p`) e desreferência (`*p = 5`).
 
-E se o ponteiro ainda não aponta para nada? Use **`NULL`**: um endereço
-especial que significa "lugar nenhum". Dá para testar (`if (cartao != NULL)`)
-antes de usar.
+Ponteiro que ainda não aponta para nada recebe **`NULL`**, endereço especial
+que significa "lugar nenhum". Teste com `if (cartao != NULL)` antes de usar.
 
-No caixa da farmácia, o cliente tem 120 pontos no
-cartão fidelidade. O ponteiro `cartao` começa em `NULL` (nenhum cartão).
-Quando o cliente passa o cartão, `cartao` recebe `&pontos`. A compra de
-R$ 30 soma 30 pontos **por meio do ponteiro**, e `pontos` vira 150:
+No caixa da farmácia, o cliente tem 120 pontos no cartão fidelidade. O ponteiro
+`cartao` começa em `NULL`. Quando o cliente passa o cartão, `cartao` recebe
+`&pontos`. A compra de R$ 30 soma 30 pontos **por meio do ponteiro**, e
+`pontos` vira 150:
 
 <p align="center"><img src="06-ponteiros/0045-ponteiros/ideia.svg" alt="Diagrama da ideia: Ponteiros" width="858"></p>
 
-No código, a linha que muda `pontos` nem cita o nome `pontos`:
+A linha que muda `pontos` nem cita o nome `pontos`:
 
 ```c
 #include <stdio.h>
@@ -538,31 +520,28 @@ int main(void) {
 // &cartao = 0x7f631f200040
 ```
 
-Três números diferentes, não confunda: `cartao` é o endereço guardado (o de
-`pontos`), `*cartao` é o valor lá dentro (120, depois 150) e `&cartao` é
-onde o próprio ponteiro mora.
+Três números diferentes: `cartao` é o endereço guardado (o de `pontos`),
+`*cartao` é o valor lá dentro (120, depois 150) e `&cartao` é onde o próprio
+ponteiro mora.
 
-Antes de desreferenciar, o programa pergunta se o ponteiro aponta para algum
+Antes de desreferenciar, o programa testa se o ponteiro aponta para algum
 lugar. Esse teste contra `NULL` volta no curso inteiro:
 
 <p align="center"><img src="06-ponteiros/0045-ponteiros/fluxograma.svg" alt="Fluxograma: Ponteiros" width="522"></p>
 
 > [!WARNING]
-> Ponteiro declarado e não inicializado (`int *p;`) guarda **lixo**: um
-> endereço qualquer. `*p = 10;` escreve 10 numa gaveta desconhecida. Pode
-> travar na hora, pode corromper outra variável e só dar problema bem
-> depois. Sempre inicialize: com um endereço válido ou com `NULL`. E cuidado
-> com `int *a, b;`: o `*` vale só para `a`. Aqui `b` é um `int` comum. Para
-> dois ponteiros, `int *a, *b;`.
+> Ponteiro não inicializado (`int *p;`) guarda **lixo**: um endereço qualquer.
+> `*p = 10;` escreve numa gaveta desconhecida: pode travar na hora ou corromper
+> outra variável e dar problema só depois. Inicialize sempre, com um endereço
+> válido ou `NULL`. E em `int *a, b;` o `*` vale só para `a`; `b` é um `int`
+> comum. Para dois ponteiros, `int *a, *b;`.
 
 > [!TIP]
-> **Por dentro do C:** todo ponteiro de dado tem o mesmo tamanho, 8 bytes
-> num sistema de 64 bits, aponte ele para `char` ou para `double`. O tipo
-> não muda o ponteiro: muda a **leitura**. `*cartao` manda o processador
-> buscar 4 bytes a partir do endereço e tratar como `int`. E o `NULL` vale,
-> na prática, o endereço 0. O sistema deixa essa região da memória proibida
-> de propósito: desreferenciar `NULL` derruba o programa na hora
-> (*segmentation fault*), em vez de corromper algo em silêncio.
+> **Por dentro do C:** todo ponteiro de dado tem o mesmo tamanho (8 bytes em
+> 64 bits); o tipo muda a **leitura**: `*cartao` busca 4 bytes e os trata como
+> `int`. O `NULL` é, na prática, o endereço 0, região proibida de propósito:
+> desreferenciá-lo derruba o programa na hora (*segmentation fault*), em vez de
+> corromper algo em silêncio.
 
 > [!NOTE]
 > **Pergunta para você:** depois de `int x = 5; int *p = &x; int *q = p;
@@ -740,7 +719,7 @@ Meta: 78
 ```
 
 
-Rode com as flags de estudo e conserte um erro de cada vez: primeiro o compilador
+Rode com o rodar e conserte um erro de cada vez: primeiro o compilador
 recusa o código; depois avisa; por fim o AddressSanitizer reclama quando
 roda. Ache os três erros e conserte.
 
@@ -875,45 +854,37 @@ gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E270.c -o ~/LPEDC/06-ponteiros/0045-pont
 
 ## 0046 · Passagem por referência
 
-No mercadinho, alguém digitou as etiquetas trocadas: o arroz saiu por
-R$ 8 e o feijão por R$ 25. Você quer uma função `troca` que conserte isso.
-A versão óbvia não funciona, e o motivo está no jeito como o C chama
-funções.
+No mercadinho, as etiquetas saíram trocadas: o arroz a R$ 8 e o feijão a
+R$ 25. Você quer uma função `troca` que conserte isso. A versão óbvia não
+funciona, por causa do jeito como o C chama funções.
 
 No C, **todo argumento é passado por valor** (assunto 0029): a função recebe
-uma **cópia**. `troca_copias(arroz, feijao)` cria duas variáveis novas, `a`
-e `b`, com 8 e 25 dentro. A função troca as cópias, termina, e as cópias
-somem junto com o frame dela (assunto 0031). O `arroz` do `main` nem ficou
-sabendo.
+uma **cópia**. `troca_copias(arroz, feijao)` cria `a` e `b`, com 8 e 25, troca
+as cópias e termina; elas somem com o frame (assunto 0031). O `arroz` do
+`main` nem fica sabendo.
 
-A saída é mudar o que se entrega: em vez do valor, passe o **endereço**.
+A saída é entregar o **endereço** em vez do valor. A função recebe ponteiros,
+`void troca(int *a, int *b)`, e quem chama passa os endereços:
+`troca(&arroz, &feijao)`. O endereço também é copiado, mas a cópia aponta para
+**a mesma gaveta**. Dentro da função, `*a` é o próprio `arroz` do `main`. É a
+**passagem por referência** (no C, simulada com ponteiros).
 
-A função passa a receber ponteiros, `void troca(int *a, int *b)`, e quem
-chama entrega os endereços: `troca(&arroz, &feijao)`. O endereço também é
-copiado, mas a cópia de um endereço aponta para **a mesma gaveta**. Dentro
-da função, `*a` é o próprio `arroz` do `main`. Isso se chama **passagem por
-referência** (no C, simulada com ponteiros).
+Isso explica o `&` do `scanf`: `scanf("%d", &total)` precisa **escrever** na
+variável, então pede o endereço. Sem o `&`, receberia uma cópia do lixo de
+`total` e escreveria num endereço inventado. Já `scanf("%s", nome)` vai sem `&`
+porque o nome de um vetor já é o endereço do primeiro elemento (assunto 0038;
+o 0047 detalha).
 
-Isso explica o `&` do `scanf`. `scanf("%d", &total)` precisa
-**escrever** na sua variável, então pede o endereço dela. Sem o `&`, ele
-receberia uma cópia do lixo que está em `total` e tentaria escrever num
-endereço inventado. Já `scanf("%s", nome)` vai sem `&` porque o nome de um
-vetor já vira o endereço do primeiro elemento (assunto 0038; o 0047 mostra
-os detalhes).
+O mesmo truque resolve outro limite: o `return` devolve **um** valor só. Para
+entregar dois ou mais resultados, a função recebe ponteiros e escreve neles (o
+A092 racha a conta e devolve o valor de cada um e a sobra).
 
-O mesmo truque resolve outro problema: o `return` devolve **um** valor só.
-Quando a função precisa entregar dois ou mais resultados, ela recebe
-ponteiros e escreve neles (o A092 racha a conta e devolve o valor de cada
-um e a sobra).
-
-A função `troca` recebe os endereços `0x1000` e
-`0x1004`, guarda o 8 numa variável `tmp` e mexe direto nas gavetas do
-`main`:
+A `troca` recebe os endereços `0x1000` e `0x1004`, guarda o 8 em `tmp` e mexe
+direto nas gavetas do `main`:
 
 <p align="center"><img src="06-ponteiros/0046-passagem-por-referencia/ideia.svg" alt="Diagrama da ideia: Passagem por referência" width="858"></p>
 
-O código põe as duas versões lado a lado, e só a segunda conserta as
-etiquetas:
+As duas versões lado a lado; só a segunda conserta as etiquetas:
 
 ```c
 #include <stdio.h>
@@ -951,8 +922,8 @@ int main(void) {
 
 ### Passo a passo
 
-Teste de mesa da chamada `troca(&arroz, &feijao)`, com os endereços
-fictícios do desenho:
+Teste de mesa de `troca(&arroz, &feijao)`, com os endereços fictícios do
+desenho:
 
 | linha | `a` | `b` | `tmp` | `arroz` (0x1000) | `feijao` (0x1004) |
 | --- | --- | --- | --- | --- | --- |
@@ -961,29 +932,25 @@ fictícios do desenho:
 | `*a = *b` | 0x1000 | 0x1004 | 8 | **25** | 25 |
 | `*b = tmp` | 0x1000 | 0x1004 | 8 | 25 | **8** |
 
-`a` e `b` nunca mudam: o que muda é o que está nas gavetas para onde eles
-apontam.
+`a` e `b` nunca mudam: muda o que está nas gavetas para onde apontam.
 
-O `main` só chama a troca se os preços estão fora de ordem. A troca em si são três passos, sempre com a variável auxiliar:
+O `main` só chama a troca se os preços estão fora de ordem. A troca são três
+passos, sempre com a variável auxiliar:
 
 <p align="center"><img src="06-ponteiros/0046-passagem-por-referencia/fluxograma.svg" alt="Fluxograma: Passagem por referência" width="370"></p>
 
 > [!WARNING]
-> Dois erros clássicos. Esquecer o `&` na chamada: `troca(arroz, feijao)`
-> manda o número 8 onde a função espera um endereço. O compilador avisa
-> (`makes pointer from integer without a cast`) e, se rodar, o programa
-> tenta escrever na "gaveta 8" e cai. E esquecer o `*` dentro da função:
-> `tmp = a; a = b;` troca os **ponteiros** locais, que são cópias; nada muda
-> lá fora. Dentro da função, quem mexe no dado do chamador é sempre `*a`.
+> Dois erros clássicos. Esquecer o `&` na chamada: `troca(arroz, feijao)` manda
+> o número 8 onde se espera um endereço; o compilador avisa (`makes pointer from
+> integer without a cast`) e, se rodar, o programa escreve na "gaveta 8" e cai.
+> Esquecer o `*` na função: `tmp = a; a = b;` troca os **ponteiros** locais, que
+> são cópias, e nada muda lá fora. Quem mexe no dado do chamador é sempre `*a`.
 
 > [!TIP]
-> **Por dentro do C:** no x86-64, os primeiros argumentos viajam em
-> registradores do processador. Passar `&arroz` é copiar 8 bytes, o tamanho
-> de um endereço, não importa o tamanho do dado apontado. Por isso, no
-> módulo 08, struct grande vai por ponteiro: copiar 8 bytes é mais barato
-> que copiar 200. Quando a função só precisa **ler**, use `const int *p`: o
-> compilador recusa qualquer `*p = ...` lá dentro, e quem lê o protótipo sabe
-> que o dado volta intacto.
+> **Por dentro do C:** passar `&arroz` copia 8 bytes, seja qual for o tamanho do
+> dado apontado; por isso, no módulo 08, struct grande vai por ponteiro. Quando
+> a função só precisa **ler**, use `const int *p`: o compilador recusa `*p = ...`
+> lá dentro.
 
 > [!NOTE]
 > **Pergunta para você:** o que acontece em `troca(&arroz, &arroz)`? Os dois
@@ -1278,49 +1245,42 @@ gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E276.c -o ~/LPEDC/06-ponte
 ## 0047 · Ponteiros e vetores
 
 Numa rua de loteamento, os números das casas sobem de 4 em 4: 1000, 1004,
-1008. Se alguém diz "três casas depois da 1000", você não anda 3 números:
-anda 3 casas e chega na 1012. Os ponteiros fazem essa conta por você.
+1008. "Três casas depois da 1000" é a 1012, não a 1003. Os ponteiros fazem essa
+conta por você.
 
-Num vetor, as gavetas ficam coladas (assunto 0044). E quase sempre que o
-nome do vetor aparece numa expressão, ele **vira** o endereço do primeiro
-elemento: `kwh` vale o mesmo que `&kwh[0]`. Por isso você passa um vetor
-para uma função sem `&` e ela altera o original (assunto 0038): ela recebe
-esse endereço.
+Num vetor, as gavetas ficam coladas (assunto 0044). E o nome do vetor, numa
+expressão, quase sempre **vira** o endereço do primeiro elemento: `kwh` vale
+`&kwh[0]`. Por isso você passa um vetor sem `&` e a função altera o original
+(assunto 0038): ela recebe esse endereço.
 
-Com um ponteiro para dentro de um vetor, vale a **aritmética de ponteiros**:
+Com um ponteiro dentro de um vetor vale a **aritmética de ponteiros**:
 
-- `p + 1` é o endereço do **próximo elemento**, não do próximo byte. O C
-  multiplica pelo tamanho do tipo: num `int *`, `p + 1` anda 4 bytes; num
-  `double *`, anda 8;
-- `p++` avança o ponteiro um elemento; `p--` volta um;
-- `q - p` (dois ponteiros do mesmo vetor) dá **quantos elementos** há entre
-  eles;
-- `p < q` compara posições, mas só faz sentido dentro do mesmo vetor.
+- `p + 1` é o endereço do **próximo elemento**, não do próximo byte: o C
+  multiplica pelo tamanho do tipo (4 bytes num `int *`, 8 num `double *`);
+- `p++` avança um elemento; `p--` volta um;
+- `q - p` (mesmo vetor) dá **quantos elementos** há entre eles;
+- `p < q` compara posições, só com sentido dentro do mesmo vetor.
 
-Daí sai a regra central do assunto: **`v[i]` é exatamente
-`*(v + i)`**. O colchete é um jeito curto de escrever "ande `i`
-elementos e pegue o que tem lá". Vale para vetor e vale para ponteiro:
-`p[2]` é `*(p + 2)`, contado a partir do ponto para o qual `p` aponta
-**agora**.
+Daí a regra central: **`v[i]` é exatamente `*(v + i)`**, ou seja, "ande `i`
+elementos e pegue o que tem lá". Vale para ponteiro também: `p[2]` é
+`*(p + 2)`, contado de onde `p` aponta **agora**.
 
 Mas vetor **não é** ponteiro. `sizeof kwh` dá o vetor inteiro (20 bytes),
-`sizeof p` dá 8. E `kwh = outro;` ou `kwh++` não compilam: o nome do vetor
-é um endereço fixo, não uma variável que guarda endereço. O certo é dizer
-que o vetor **decai** para ponteiro.
+`sizeof p` dá 8. E `kwh = outro;` ou `kwh++` não compilam: o nome do vetor é
+um endereço fixo. Diz-se que o vetor **decai** para ponteiro.
 
 Na matriz (assunto 0039) a regra vale em dois níveis: `m[i][j]` é
-`*(*(m + i) + j)`. Numa `int m[3][4]`, cada elemento de `m` é uma linha
-inteira, então `m + 1` anda **16 bytes** (4 `int`), enquanto `m[0] + 1` anda
-só 4. Prova adora essa diferença.
+`*(*(m + i) + j)`. Em `int m[3][4]`, cada elemento de `m` é uma linha inteira,
+então `m + 1` anda **16 bytes** (4 `int`) e `m[0] + 1` anda só 4. Prova adora
+essa diferença.
 
-O consumo de luz de 5 meses está em `kwh`. O ponteiro
-`p` começa em `kwh` (gaveta `0x1000`) e anda uma gaveta de cada vez,
-somando o que encontra. Quando `p` chega em `kwh + 5`, a gaveta "um depois
-do último", o laço para:
+O consumo de luz de 5 meses está em `kwh`. O ponteiro `p` começa em `kwh`
+(gaveta `0x1000`) e anda uma gaveta por vez, somando. Quando chega a `kwh + 5`,
+"um depois do último", o laço para:
 
 <p align="center"><img src="06-ponteiros/0047-ponteiros-e-vetores/ideia.svg" alt="Diagrama da ideia: Ponteiros e vetores" width="858"></p>
 
-O mesmo percurso no código, mostrando o endereço a cada passo:
+O mesmo percurso no código, com o endereço a cada passo:
 
 ```c
 #include <stdio.h>
@@ -1350,8 +1310,8 @@ int main(void) {
 // kwh[3] = 198  *(kwh + 3) = 198
 ```
 
-O `const int *p` diz que o laço só **lê** pelo ponteiro: `*p = 0` ali dentro
-não compilaria. O ponteiro em si pode andar à vontade.
+O `const int *p` diz que o laço só **lê** pelo ponteiro: `*p = 0` não
+compilaria. O ponteiro em si pode andar.
 
 ### Passo a passo
 
@@ -1366,29 +1326,24 @@ Com os endereços fictícios do desenho (`kwh` em `0x1000`):
 | 5 | 0x1010 | 225 | 1058 | sim |
 | fim | 0x1014 | (não lê) | 1058 | **não**: para |
 
-`kwh + 5` é `0x1014`: pode ser calculado e comparado, mas nunca lido.
+`kwh + 5` é `0x1014`: pode ser calculado e comparado, nunca lido.
 
-O laço de acumulador é o do assunto 0025, mas quem anda é o ponteiro, não um
-índice:
+É o acumulador do assunto 0025, mas quem anda é o ponteiro, não um índice:
 
 <p align="center"><img src="06-ponteiros/0047-ponteiros-e-vetores/fluxograma.svg" alt="Fluxograma: Ponteiros e vetores" width="532"></p>
 
 > [!WARNING]
-> `*p + 1` e `*(p + 1)` são coisas diferentes. O `*` vem antes do `+`, então
-> `*p + 1` pega o valor e soma 1 (211); `*(p + 1)` anda uma gaveta e pega o
-> valor dela (185). Na mesma família: `*p++` lê o valor e **depois** avança o
-> ponteiro (o `++` vale para `p`), enquanto `(*p)++` soma 1 no valor. E
-> passar do fim (`p <= kwh + 5`) lê a gaveta de outra variável: o C não
-> confere, o AddressSanitizer acusa `stack-buffer-overflow`.
+> `*p + 1` e `*(p + 1)` diferem. O `*` vem antes do `+`: `*p + 1` pega o valor e
+> soma 1 (211); `*(p + 1)` anda uma gaveta e pega o valor dela (185). Do mesmo
+> tipo: `*p++` lê o valor e **depois** avança o ponteiro, enquanto `(*p)++` soma 1
+> no valor. E passar do fim (`p <= kwh + 5`) lê a gaveta de outra variável: o
+> AddressSanitizer acusa `stack-buffer-overflow`.
 
 > [!TIP]
-> **Por dentro do C:** para o compilador, `kwh[i]` é `*(kwh + i)`, e o
-> endereço calculado é `kwh + i * sizeof(int)`, uma multiplicação e uma
-> soma que o processador faz numa instrução só. Como a soma é comutativa,
-> `i[kwh]` também compila e dá o mesmo valor. É uma curiosidade famosa;
-> nunca escreva isso. O laço com `p++` e o laço com `i++` têm o mesmo
-> desempenho, porque o otimizador transforma um no outro. Escolha o
-> que deixa o código mais claro, quase sempre o índice.
+> **Por dentro do C:** `kwh[i]` é `*(kwh + i)`, no endereço
+> `kwh + i * sizeof(int)`. Como a soma é comutativa, `i[kwh]` também compila;
+> nunca escreva isso. Os laços com `p++` e com `i++` têm o mesmo desempenho;
+> prefira o índice, quase sempre mais claro.
 
 > [!NOTE]
 > **Pergunta para você:** com `int *p = &kwh[1];` e depois `p += 2;`, quanto
@@ -1620,7 +1575,7 @@ Saída esperada:
 ```
 
 
-Rode com as flags de estudo: um erro só aparece no resultado, o outro o
+Rode com o rodar: um erro só aparece no resultado, o outro o
 AddressSanitizer denuncia. Conserte os dois e rode de novo até a saída
 ficar igual à esperada, sem aviso do sanitizer.
 
@@ -1724,43 +1679,40 @@ gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E282.c -o ~/LPEDC/06-ponteiros
 
 ## 0048 · Ponteiros e strings
 
-Na recepção do evento, a moça imprime os crachás. O seu nome ela digita
-numa ficha que é sua: dá para corrigir, passar para maiúsculas, riscar.
-O apelido ela só aponta no cartaz da parede: você lê, mas não pode
-escrever no cartaz. Em C, essas duas situações têm sintaxes quase iguais e
-comportamentos bem diferentes.
+Na recepção do evento, o nome do crachá é digitado numa ficha sua: dá para
+corrigir, passar para maiúsculas. O apelido só aparece num cartaz na parede:
+você lê, mas não escreve nele. Em C, essas duas situações têm sintaxes quase
+iguais e comportamentos bem diferentes.
 
-String é um vetor de `char` terminado em `'\0'` (assunto 0041), e o nome de
-um vetor vira o endereço do primeiro elemento (assunto 0047). Juntando as
-duas coisas: toda função de string recebe
-um **`char *`**, o endereço do primeiro caractere, e anda até achar o
-`'\0'`.
+String é um vetor de `char` terminado em `'\0'` (assunto 0041), e o nome de um
+vetor vira o endereço do primeiro elemento (assunto 0047). Por isso toda função
+de string recebe um **`char *`**, o endereço do primeiro caractere, e anda até
+achar o `'\0'`.
 
-Um texto entre aspas, como `"bia"`, é um **literal de string**. O
-compilador guarda esse texto **uma vez só**, numa região da memória
-**somente leitura**, junto com o código do programa. Compare:
+Um texto entre aspas, como `"bia"`, é um **literal de string**: o compilador o
+guarda **uma vez só**, numa região **somente leitura**, junto com o código.
+Compare:
 
-- `char nome[] = "ana";` cria um **vetor** de 4 `char` na pilha e **copia**
-  o literal para dentro dele. O vetor é seu: `nome[0] = 'A'` vale;
-- `char *apelido = "bia";` cria só um **ponteiro** (8 bytes) que guarda o
-  endereço do literal. Não há cópia. `apelido[0] = 'B'` tenta escrever na
-  região só de leitura e o programa cai.
+- `char nome[] = "ana";` cria um **vetor** de 4 `char` na pilha e **copia** o
+  literal para ele. O vetor é seu: `nome[0] = 'A'` vale;
+- `char *apelido = "bia";` cria só um **ponteiro** (8 bytes) com o endereço do
+  literal, sem cópia. `apelido[0] = 'B'` tenta escrever na região só de leitura
+  e o programa cai.
 
-Por isso, quando o ponteiro aponta para literal, declare **`const char
-*`**. Aí o compilador recusa `apelido[0] = 'B'` antes de rodar.
+Por isso, ao apontar para literal, declare **`const char *`**: o compilador
+recusa `apelido[0] = 'B'` antes de rodar.
 
-As diferenças continuam. O ponteiro pode mudar de alvo: `apelido =
-"bibi";` vale. O vetor não: `nome = "joana";` nem compila (para trocar o
-conteúdo, `strcpy`). E `sizeof nome` dá 4 (o vetor inteiro), enquanto
-`sizeof apelido` dá 8 (o tamanho de um endereço).
+O ponteiro pode mudar de alvo: `apelido = "bibi";` vale. O vetor não:
+`nome = "joana";` não compila (para trocar o conteúdo, use `strcpy`). E
+`sizeof nome` dá 4 (o vetor), enquanto `sizeof apelido` dá 8 (um endereço).
 
-No desenho, `nome` é uma cópia na pilha, e nela o laço passa cada letra para
-maiúscula. `apelido` é só uma seta para o literal
-`"bia"`, que fica na área só de leitura:
+No desenho, `nome` é uma cópia na pilha, e o laço passa cada letra para
+maiúscula. `apelido` é só uma seta para o literal `"bia"`, na área só de
+leitura:
 
 <p align="center"><img src="06-ponteiros/0048-ponteiros-e-strings/ideia.svg" alt="Diagrama da ideia: Ponteiros e strings" width="858"></p>
 
-No código, o ponteiro `p` percorre `nome` até o `'\0'`, trocando cada letra:
+O ponteiro `p` percorre `nome` até o `'\0'`, trocando cada letra:
 
 ```c
 #include <stdio.h>
@@ -1789,32 +1741,28 @@ int main(void) {
 // Novo apelido: bibi
 ```
 
-O `(unsigned char)` antes do `toupper` evita o problema dos bytes negativos
-das letras acentuadas (assunto 0040). O `(char)` na frente só deixa explícito que o resultado volta a caber num `char`.
+O `(unsigned char)` antes do `toupper` evita os bytes negativos das letras
+acentuadas (assunto 0040). O `(char)` só deixa explícito que o resultado volta a
+caber num `char`.
 
-O laço é o clássico de string e não conta `n` posições: a pergunta é "a gaveta
+É o laço clássico de string: em vez de contar `n` posições, pergunta "a gaveta
 atual é o `'\0'`?":
 
 <p align="center"><img src="06-ponteiros/0048-ponteiros-e-strings/fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
 
 > [!WARNING]
-> `char *s = "ola"; s[0] = 'O';` compila **sem aviso** no C,
-> e derruba o programa quando roda: `segmentation fault`, porque a página do
-> literal é só de leitura. Você vai ver muito `char *p = "..."` em material
-> antigo. Escreva `const char *` sempre que apontar para literal, ou use
-> `char s[] = "..."` quando precisar mudar o texto. Outro clássico:
-> comparar strings com `==` compara **endereços**, não letras. Para o
-> conteúdo, `strcmp`.
+> `char *s = "ola"; s[0] = 'O';` compila **sem aviso** e derruba o programa na
+> execução (`segmentation fault`): a página do literal é só de leitura. Em
+> material antigo é comum `char *p = "..."`; escreva `const char *` para apontar
+> para literal, ou `char s[] = "..."` quando precisar mudar o texto. Outro
+> clássico: `==` entre strings compara **endereços**, não letras; use `strcmp`.
 
 > [!TIP]
-> **Por dentro do C:** os literais vão para uma seção do executável chamada
-> `.rodata` (*read-only data*). Quando o programa carrega, o sistema marca
-> essas páginas da memória como só leitura, e o processador barra qualquer
-> escrita. Como o literal não muda, o compilador pode guardar **uma cópia
-> só** para literais iguais: dois `"bia"` no programa podem ter o mesmo
-> endereço. E o vetor de ponteiros do A096 (`const char *dias[]`) gasta 8
-> bytes por nome mais o texto de cada um, enquanto a matriz `char[4][10]`
-> reserva 10 bytes por linha mesmo para "sexta".
+> **Por dentro do C:** os literais ficam na seção `.rodata` (*read-only data*),
+> e o sistema barra qualquer escrita nelas. Literais iguais podem compartilhar
+> um endereço só. O vetor de ponteiros do A096 (`const char *dias[]`) gasta 8
+> bytes por nome mais o texto; a matriz `char[4][10]` reserva 10 bytes por
+> linha, até para "sexta".
 
 > [!NOTE]
 > **Pergunta para você:** com `char a[] = "oi";` e `const char *b = "oi";`,
@@ -2045,7 +1993,7 @@ Mesmo morador
 ```
 
 
-Rode com as flags de estudo, leia o relatório e conserte os três erros, um de cada
+Rode com o rodar, leia o relatório e conserte os três erros, um de cada
 vez, rodando de novo até a saída ficar igual à esperada.
 
 **Dicas:**
@@ -2134,15 +2082,14 @@ gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E288.c -o ~/LPEDC/06-ponteiros
 
 ## 0049 · Ponteiro para ponteiro
 
-Você pergunta ao porteiro onde fica o salão de festas. Ele não sabe, mas
-aponta para um quadro de avisos: "o mapa do condomínio está no quadro". No
-quadro, o mapa mostra o salão. Você chegou lá em **dois saltos**: porteiro →
-quadro → salão.
+Você pergunta ao porteiro onde fica o salão de festas. Ele aponta para o
+quadro de avisos, onde o mapa do condomínio mostra o salão. Você chegou em
+**dois saltos**: porteiro, quadro, salão.
 
-Um ponteiro é uma variável como outra qualquer: mora numa gaveta e tem
-endereço (assunto 0045). Então dá para guardar **o endereço de um
-ponteiro** em outra variável. Ela é um **ponteiro para ponteiro**, declarado
-com dois asteriscos: `int **pp;` se lê "pp aponta para um `int *`".
+Um ponteiro é uma variável comum: mora numa gaveta e tem endereço (assunto
+0045). Dá para guardar **o endereço de um ponteiro** em outra variável, um
+**ponteiro para ponteiro**, declarado com dois asteriscos: `int **pp;` lê-se
+"pp aponta para um `int *`".
 
 Com `int vagas = 40; int *p = &vagas; int **pp = &p;`:
 
@@ -2150,25 +2097,23 @@ Com `int vagas = 40; int *p = &vagas; int **pp = &p;`:
 - `*pp` é o próprio `p`: o endereço de `vagas`;
 - `**pp` é `vagas`: 40. Dois saltos, dois asteriscos.
 
-A regra é contar estrelas: cada `*` na declaração é um nível, e para chegar
-no dado você usa o mesmo número de `*`. Dá para fazer `int ***`, mas acima
-de dois níveis o código vira charada.
+Conte as estrelas: cada `*` na declaração é um nível, e para chegar ao dado
+usa-se o mesmo número de `*`. Acima de dois níveis o código vira charada.
 
 Dois usos aparecem no curso todo:
 
-- **mudar o ponteiro de quem chamou.** Se uma função precisa mudar um `int`
-  do `main`, ela recebe `int *` (assunto 0046). Se precisa mudar um `int *`
-  do `main`, fazer ele apontar para outro lugar, recebe `int **`. É a mesma
-  regra, um nível acima. O A098 escolhe o posto mais barato assim, e as
-  listas encadeadas do módulo 11 usam isso para mudar o início da lista;
-- **vetor de ponteiros.** `const char *dias[]` (assunto 0048) é um vetor
-  cujos elementos são `const char *`. O nome dele decai para o endereço do
-  primeiro elemento: um `const char **`. É o tipo do famoso `char **argv`
-  (assunto 0069) e da matriz alocada no módulo 07.
+- **mudar o ponteiro de quem chamou.** Para mudar um `int` do `main`, a função
+  recebe `int *` (assunto 0046); para mudar um `int *` do `main`, fazendo-o
+  apontar para outro lugar, recebe `int **`. É a mesma regra, um nível acima. O
+  A098 escolhe o posto mais barato assim, e as listas encadeadas do módulo 11
+  mudam o início da lista assim;
+- **vetor de ponteiros.** `const char *dias[]` (assunto 0048) é um vetor de
+  `const char *`; o nome dele decai para um `const char **`. É o tipo do
+  `char **argv` (assunto 0069) e da matriz alocada no módulo 07.
 
-O estacionamento do shopping tem 40 vagas. `p` aponta
-para `vagas` e `pp` aponta para `p`. Quando entram 2 carros, o programa
-atualiza `vagas` sem citar o nome dela, em dois saltos:
+O estacionamento do shopping tem 40 vagas. `p` aponta para `vagas` e `pp`
+aponta para `p`. Quando entram 2 carros, o programa atualiza `vagas` sem citar
+o nome dela, em dois saltos:
 
 <p align="center"><img src="06-ponteiros/0049-ponteiro-para-ponteiro/ideia.svg" alt="Diagrama da ideia: Ponteiro para ponteiro" width="858"></p>
 
@@ -2203,31 +2148,27 @@ int main(void) {
 // vagas  = 38
 ```
 
-Leia os pares: `&vagas` e `p` são iguais; `&p` e `pp` são iguais; `*pp` volta
-a ser o endereço de `vagas`.
+Leia os pares: `&vagas` e `p` são iguais; `&p` e `pp` são iguais; `*pp` volta a
+ser o endereço de `vagas`.
 
-Não há decisão. Primeiro a corrente é montada, elo por elo (`vagas`, depois `p`, depois `pp`); depois o `**pp` percorre a
-corrente de volta até chegar em `vagas`:
+Não há decisão. Primeiro a corrente é montada, elo por elo (`vagas`, `p`,
+`pp`); depois o `**pp` a percorre de volta até `vagas`:
 
 <p align="center"><img src="06-ponteiros/0049-ponteiro-para-ponteiro/fluxograma.svg" alt="Fluxograma: Ponteiro para ponteiro" width="1235"></p>
 
 > [!WARNING]
-> Estrela a menos é o erro clássico. `*pp = 38;` não muda `vagas`: tenta
-> guardar o número 38 **em `p`**, como se fosse um endereço (o compilador
-> avisa: `assignment to 'int *' from 'int' makes pointer from integer`).
-> Depois disso, `p` aponta para a "gaveta 38" e o próximo `*p` derruba o
-> programa. E na função: se ela precisa mudar o seu ponteiro, passe `&posto`
-> (um `double **`). Passar `posto` entrega uma cópia, e a função muda só a
-> cópia, como o `troca_copias` do assunto 0046.
+> Estrela a menos é o erro clássico. `*pp = 38;` não muda `vagas`: guarda o
+> número 38 **em `p`**, como endereço (o compilador avisa: `assignment to 'int
+> *' from 'int' makes pointer from integer`), e o próximo `*p` derruba o
+> programa. Na função, para mudar o seu ponteiro, passe `&posto` (um
+> `double **`); passar `posto` entrega uma cópia, como no `troca_copias` do
+> assunto 0046.
 
 > [!TIP]
-> **Por dentro do C:** cada nível é uma variável de 8 bytes de verdade. Ler
-> `**pp` custa três leituras de memória em sequência: a primeira busca o que
-> tem em `pp` (o endereço de `p`), a segunda busca o que tem em `p` (o
-> endereço de `vagas`), e só então a terceira traz o 40. O processador não
-> consegue adiantar uma leitura antes de terminar a anterior. Por isso
-> estruturas cheias de ponteiros (listas, árvores) são mais lentas de
-> percorrer que um vetor contíguo, assunto que volta no módulo 10.
+> **Por dentro do C:** cada nível é uma variável de 8 bytes. Ler `**pp` são
+> três leituras de memória em sequência, cada uma dependendo da anterior. Por
+> isso estruturas cheias de ponteiros (listas, árvores) percorrem mais devagar
+> que um vetor contíguo, tema do módulo 10.
 
 > [!NOTE]
 > **Pergunta para você:** com `int outra = 5;`, o que muda depois de
@@ -2580,16 +2521,16 @@ gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E294.c -o ~/LPEDC/06-pontei
 ## 0050 · Ponteiro para função
 
 Às vezes uma função precisa receber **outra função**. Uma rotina que filtra
-temperaturas não sabe qual teste você quer (acima de 30? abaixo de 0?); uma
-rotina que ordena não sabe em que ordem você quer os itens. Você entrega o
-teste pronto, e a rotina só o chama. Em C, o mecanismo para isso é um ponteiro.
+temperaturas não sabe o teste que você quer (acima de 30? abaixo de 0?); uma
+que ordena não sabe a ordem. Você entrega o teste pronto e ela só o chama. Em
+C, o mecanismo é um ponteiro.
 
-O código de uma função também mora na memória, numa região própria: a área
-de **código**. Então a função tem endereço, e o nome dela, sozinho, sem os
-parênteses, **já é esse endereço** (como o nome de um vetor). Uma variável
-que guarda esse endereço é um **ponteiro para função**.
+O código de uma função fica na memória, na área de **código**. Logo, a função
+tem endereço, e o nome dela, sem parênteses, **já é esse endereço** (como o
+nome de um vetor). Uma variável que guarda esse endereço é um **ponteiro para
+função**.
 
-A declaração estranha na primeira vez:
+A declaração estranha:
 
 ```text
 int (*criterio)(int);
@@ -2598,27 +2539,25 @@ int (*criterio)(int);
 Leia de dentro para fora: `criterio` é um ponteiro (`*criterio`) para uma
 função que recebe um `int` e devolve `int`. Os parênteses em volta de
 `*criterio` são obrigatórios: sem eles, `int *criterio(int);` declara uma
-função que devolve `int *`. O ponteiro só aceita funções com essa mesma
-assinatura.
+função que devolve `int *`. O ponteiro só aceita funções com essa assinatura.
 
-Para usar: `criterio = eh_calor;` guarda o endereço (sem `&` e sem
-parênteses) e `criterio(31)` chama a função apontada. A forma
-`(*criterio)(31)` também vale e aparece em código antigo.
+`criterio = eh_calor;` guarda o endereço (sem `&` nem parênteses) e
+`criterio(31)` chama a função apontada. `(*criterio)(31)` também vale e
+aparece em código antigo.
 
-O uso típico é passar o ponteiro como **parâmetro**. A função que recebe
-fica genérica, e quem chama decide o comportamento. A função passada se
-chama **callback**. A biblioteca padrão usa isso no **`qsort`**
-(`stdlib.h`), que ordena qualquer vetor desde que você entregue a função
-que compara dois elementos (o A100 ordena a tabela do campeonato com ele).
+O uso típico é passar o ponteiro como **parâmetro**: a função fica genérica e
+quem chama decide o comportamento. A função passada é um **callback**. A
+biblioteca padrão usa isso no **`qsort`** (`stdlib.h`), que ordena qualquer
+vetor se você entregar a função que compara dois elementos (o A100 ordena a
+tabela do campeonato com ele).
 
-As máximas da semana estão num vetor. A função
-`conta_se` percorre o vetor e conta quantos dias passam num critério que
-ela não conhece: recebe o endereço da função `eh_calor` (ou `eh_frio`) e
-chama por ele:
+As máximas da semana estão num vetor. A função `conta_se` conta quantos dias
+passam num critério que ela não conhece: recebe o endereço de `eh_calor` (ou
+`eh_frio`) e chama por ele:
 
 <p align="center"><img src="06-ponteiros/0050-ponteiro-para-funcao/ideia.svg" alt="Diagrama da ideia: Ponteiro para função" width="858"></p>
 
-No código, a mesma `conta_se` responde duas perguntas diferentes:
+A mesma `conta_se` responde duas perguntas:
 
 ```c
 #include <stdio.h>
@@ -2650,36 +2589,28 @@ int main(void) {
 // Dias de frio:  2
 ```
 
-O laço contador é o do assunto 0025. A novidade está no losango: a pergunta
-é a função que chegou pelo parâmetro:
+É o contador do assunto 0025. A novidade está no losango: a pergunta é a função
+que chegou pelo parâmetro:
 
 <p align="center"><img src="06-ponteiros/0050-ponteiro-para-funcao/fluxograma.svg" alt="Fluxograma: Ponteiro para função" width="543"></p>
 
-O `qsort` segue a mesma ideia, com uma diferença: como ele ordena vetores
-de qualquer tipo, a função de comparação recebe os endereços de dois
-elementos como `const void *` ("endereço de qualquer coisa"). Você converte
-para o tipo certo e devolve um número negativo (a vem antes), zero (tanto
-faz) ou positivo (b vem antes). O `void *` é o assunto 0051; por enquanto,
-copie o molde do A100.
+O `qsort` segue a mesma ideia, mas, como ordena qualquer tipo, a função de
+comparação recebe dois endereços como `const void *`. Você converte para o tipo
+certo e devolve negativo (a vem antes), zero (tanto faz) ou positivo (b vem
+antes). O `void *` é o assunto 0051; por ora, copie o molde do A100.
 
 > [!WARNING]
-> A comparação "esperta" `return *(const int *)a - *(const int *)b;`
-> aparece em todo canto e tem um bug: com números grandes de sinais
-> opostos, a subtração estoura o `int` (assunto 0003), o sinal vira e a
-> ordem sai errada. O gcc com as flags de estudo acusa `signed integer overflow`. Use
-> `return (x > y) - (x < y);`, que só compara e nunca estoura. E não
-> esqueça os parênteses da declaração: `int *f(int)` é uma função, não um
-> ponteiro.
+> A comparação "esperta" `return *(const int *)a - *(const int *)b;` tem um bug:
+> com números grandes de sinais opostos, a subtração estoura o `int` (assunto
+> 0003) e a ordem sai errada. O gcc com as flags de estudo acusa `signed integer
+> overflow`. Use `return (x > y) - (x < y);`. E não esqueça os parênteses da
+> declaração: `int *f(int)` é uma função, não um ponteiro.
 
 > [!TIP]
 > **Por dentro do C:** chamar por ponteiro é uma **chamada indireta**: o
-> processador lê o endereço na variável e salta para ele, em vez de saltar
-> para um endereço fixo gravado na instrução. Custa pouco, mas impede o
-> compilador de copiar o corpo da função no lugar da chamada (*inline*).
-> Por isso um laço com `criterio(v[i])` pode ser mais lento que um com
-> `v[i] >= 30` escrito direto. Outro detalhe: o C não garante que um
-> endereço de função caiba num `void *`, então `printf("%p", ...)` com
-> função gera aviso no `-pedantic`.
+> processador lê o endereço na variável e salta para ele. Isso impede o
+> compilador de copiar o corpo da função no lugar da chamada (*inline*), então
+> `criterio(v[i])` pode ser mais lento que `v[i] >= 30` direto.
 
 > [!NOTE]
 > **Pergunta para você:** como contar os dias "agradáveis" (de 19 a 29
@@ -2928,7 +2859,7 @@ gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E298.c -o ~/LPEDC/06-ponteiro
 
 Este programa ordena os saldos de uma corretora (em centavos) e tem um
 bug de propósito na função de comparação. Ele compila sem aviso, mas o
-gcc com as flags de estudo acusa um erro quando roda, e a ordem pode sair errada. Rode, leia a
+rodar acusa um erro quando roda, e a ordem pode sair errada. Rode, leia a
 mensagem "runtime error" e conserte a função compara. Rode de novo: a
 mensagem tem que sumir e a ordem tem que ficar certa.
 
@@ -2990,45 +2921,39 @@ gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E300.c -o ~/LPEDC/06-ponteiro
 
 ## 0051 · void * e cast
 
-Nos Correios, o funcionário carimba e despacha qualquer caixa sem abrir:
-para ele, uma caixa tem um endereço de entrega e um peso, e só. Quem
-recebe é que abre e sabe se dentro tem um livro ou um tênis. O **`void *`**
-é essa caixa fechada.
+Nos Correios, o funcionário carimba e despacha qualquer caixa sem abrir: para
+ele, a caixa tem endereço e peso, e só. Quem recebe abre e sabe se é um livro
+ou um tênis. O **`void *`** é essa caixa fechada.
 
 Um `void *` é um **ponteiro genérico**: guarda o endereço de qualquer dado
-(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. Antes
-de usar o dado, você precisa dizer o tipo.
+(`int`, `double`, vetor, outro ponteiro), mas não diz o que mora lá. Antes de
+usar o dado, você diz o tipo. Duas regras:
 
-Duas regras saem disso:
+- **conversão livre.** Em C, qualquer ponteiro de dado vira `void *` e volta sem
+  cast: `void *p = &senha;` e `int *q = p;` compilam limpo;
+- **não dá para desreferenciar.** `*p` com `p` do tipo `void *` não compila: o
+  compilador não sabe quantos bytes ler nem como interpretá-los. Converta antes,
+  com um **cast**: `*(int *)p`. Pelo mesmo motivo, `p + 1` não existe no C
+  padrão (o `gcc` aceita como extensão; o `-pedantic` avisa).
 
-- **conversão livre.** Em C, qualquer ponteiro de dado vira `void *` e
-  volta sem cast: `void *p = &senha;` e `int *q = p;` compilam limpo;
-- **não dá para desreferenciar.** `*p` com `p` do tipo `void *` não
-  compila: o compilador não sabe quantos bytes ler nem como interpretar.
-  Converta antes, com um **cast**: `*(int *)p`. Pelo mesmo motivo, `p + 1`
-  não existe no C padrão (o `gcc` aceita como extensão, e o `-pedantic`
-  avisa).
+O cast é uma promessa sua. Se você diz `(double *)` para um endereço onde mora
+um `int`, ele lê 8 bytes onde só havia 4 e mostra lixo.
 
-O cast é uma promessa sua, e o compilador acredita. Se você disser
-`(double *)` para um endereço em que mora um `int`, ele lê 8 bytes onde só
-tinha 4 e mostra lixo.
+A caixa fechada permite funções que trabalham com **qualquer tipo**. Elas
+recebem `void *` e, sem saber o tamanho do dado, recebem também o tamanho em
+bytes. Por dentro, tratam a memória como fileira de bytes, com um
+`unsigned char *`, o único tipo que o C deixa olhar byte a byte qualquer
+objeto. Assim funcionam `memcpy`, `memset`, o `qsort` (assunto 0050) e o
+`malloc` do módulo 07, que devolve `void *` porque não sabe o que você vai
+guardar.
 
-A caixa fechada serve para escrever funções que trabalham com
-**qualquer tipo**. Elas recebem `void *` e, como não sabem o tamanho do
-dado, recebem também o tamanho em bytes. Lá dentro, tratam a memória como
-uma fileira de bytes, com um `unsigned char *`, o único tipo que o C deixa
-olhar byte a byte qualquer objeto. É assim que funcionam `memcpy`,
-`memset`, o `qsort` (assunto 0050) e o `malloc` do módulo 07, que devolve
-`void *` porque não sabe o que você vai guardar.
-
-A `troca` do assunto 0046 só troca `int`. A
-`troca_generica` recebe dois endereços sem tipo e o tamanho: com 4, troca
-duas senhas `int`; com 8, troca dois preços `double`. Byte a byte, ela nem
-sabe o que está trocando:
+A `troca` do assunto 0046 só troca `int`. A `troca_generica` recebe dois
+endereços sem tipo e o tamanho: com 4, troca duas senhas `int`; com 8, dois
+preços `double`. Byte a byte, ela nem sabe o que troca:
 
 <p align="center"><img src="06-ponteiros/0051-void-generico/ideia.svg" alt="Diagrama da ideia: void * e cast" width="858"></p>
 
-O código chama a mesma função para os dois tipos:
+A mesma função serve aos dois tipos:
 
 ```c
 #include <stdio.h>
@@ -3061,38 +2986,33 @@ int main(void) {
 // preços: 8.50 e 12.90
 ```
 
-`&senha_a` (um `int *`) entra no parâmetro `void *` sem cast nenhum, e o
-`sizeof` na chamada conta à função o tamanho do dado.
+`&senha_a` (um `int *`) entra no parâmetro `void *` sem cast, e o `sizeof` na
+chamada informa o tamanho do dado.
 
-A função não pergunta "que tipo é?", porque não tem como saber. Ela só
-pergunta "ainda tem byte para trocar?":
+A função não pergunta "que tipo é?", só "ainda tem byte para trocar?":
 
 <p align="center"><img src="06-ponteiros/0051-void-generico/fluxograma.svg" alt="Fluxograma: void * e cast" width="560"></p>
 
 > [!WARNING]
 > O `void *` desliga a conferência de tipos. `troca_generica(&senha_a,
-> &preco_a, sizeof preco_a)` compila sem aviso e troca 8 bytes a partir de
-> uma variável que só tem 4: o AddressSanitizer acusa
-> `stack-buffer-overflow`. O mesmo vale para o cast errado na leitura:
-> `*(double *)p` com `p` apontando para um `int`. Com `void *`, você é o
-> responsável por lembrar o tipo e o tamanho de verdade. Use `sizeof` da
-> própria variável, nunca um número digitado à mão.
+> &preco_a, sizeof preco_a)` compila sem aviso e troca 8 bytes a partir de uma
+> variável de 4: o AddressSanitizer acusa `stack-buffer-overflow`. O mesmo vale
+> para o cast errado, `*(double *)p` com `p` apontando para um `int`. Você é
+> responsável pelo tipo e pelo tamanho: use o `sizeof` da própria variável,
+> nunca um número digitado à mão.
 
 > [!TIP]
-> **Por dentro do C:** o A102 usa um `const unsigned char *` para espiar os
-> bytes de qualquer variável. O `int` 1000 (`0x000003E8`) aparece como `e8 03
-> 00 00`: o byte menos significativo vem primeiro, no endereço menor. É o
-> **little-endian** dos processadores Intel, AMD e ARM. O `-1` vira `ff ff ff
-> ff` (complemento de dois) e a string `"Pix"` vira `50 69 78 00`, os
-> códigos ASCII com o `'\0'` no fim. Olhar a memória como bytes só é
-> garantido com tipos `char`; ler um `float` por meio de um `int *`, por
-> exemplo, quebra uma regra do C (a de *strict aliasing*) e o otimizador
-> pode gerar código errado.
+> **Por dentro do C:** o A102 espia os bytes de uma variável com
+> `const unsigned char *`. O `int` 1000 (`0x000003E8`) aparece como `e8 03 00
+> 00`: o byte menos significativo vem primeiro, no endereço menor
+> (**little-endian**, de Intel, AMD e ARM). O `-1` vira `ff ff ff ff` e a string
+> `"Pix"` vira `50 69 78 00`. Só tipos `char` podem olhar bytes com segurança;
+> ler um `float` por um `int *` quebra a regra de *strict aliasing*.
 
 > [!NOTE]
-> **Pergunta para você:** por que `troca_generica` precisa do parâmetro
-> `tam` e a `troca` do assunto 0046 não precisa? O que aconteceria se você
-> passasse `sizeof(int)` para trocar dois `double`?
+> **Pergunta para você:** por que `troca_generica` precisa do parâmetro `tam` e
+> a `troca` do assunto 0046 não precisa? O que aconteceria se você passasse
+> `sizeof(int)` para trocar dois `double`?
 
 ### Hora de praticar
 
@@ -3225,7 +3145,8 @@ gcc ~/LPEDC/06-ponteiros/0051-void-generico/E301.c -o ~/LPEDC/06-ponteiros/0051-
 
 O programa abaixo tem quatro linhas, de L1 a L4, e cada comentário diz o
 que a linha QUERIA fazer. A L2 está certa e já roda. As outras três
-estão comentadas porque têm erro: descomente UMA de cada vez, rode com as flags de estudo, leia a mensagem e conserte a linha para que ela faça o que
+estão comentadas porque têm erro: descomente UMA de cada vez, rode com o
+rodar, leia a mensagem e conserte a linha para que ela faça o que
 promete. No fim, as quatro devem ficar descomentadas e rodando limpo.
 
 
@@ -3423,34 +3344,30 @@ gcc ~/LPEDC/06-ponteiros/0051-void-generico/E306.c -o ~/LPEDC/06-ponteiros/0051-
 
 ## 0052 · Juntando tudo: o ranking da feira
 
-Sábado, fim de feira. A associação dos feirantes quer o ranking das
-barracas pelo faturamento do dia e o nome da campeã, com uma condição: a
-planilha original não pode mudar de ordem, porque outras contas usam a
-posição de cada barraca.
+Sábado, fim de feira. A associação dos feirantes quer o ranking das barracas
+pelo faturamento do dia e o nome da campeã, sem mudar a ordem da planilha
+original, porque outras contas usam a posição de cada barraca.
 
 O problema junta o módulo inteiro:
 
-- **vetores paralelos** com o nome, a quantidade e o preço de cada barraca,
-  e o faturamento calculado (`fat[i] = qtd[i] * preco[i]`);
-- um **vetor de ponteiros** `const double *ordem[N]`, em que cada posição
-  aponta para um elemento de `fat` (assunto 0049). Ele é ordenado, e `fat`
-  não. Como num índice de livro: as páginas não mudam de lugar, só a lista
-  que aponta para elas;
-- o **`qsort`** com uma função de comparação (assunto 0050). Cada elemento
-  de `ordem` é um `const double *`, então o `qsort` entrega o endereço de um
-  ponteiro, que chega como `const void *` (assunto 0051). Dois saltos
-  depois, `**`, chega-se ao faturamento;
-- **subtração de ponteiros** (assunto 0047): `ordem[i] - fat` diz em que
-  posição de `fat` aquele ponteiro aponta, e a mesma posição dá o nome em
-  `produtos`;
-- **passagem por referência** (assunto 0046): a função `resumo` devolve
-  duas respostas, o total (num `double *`) e **onde** está o maior (num
-  `const double **`, porque ela precisa mudar um ponteiro do `main`).
+- **vetores paralelos** com nome, quantidade e preço de cada barraca, e o
+  faturamento calculado (`fat[i] = qtd[i] * preco[i]`);
+- um **vetor de ponteiros** `const double *ordem[N]`, cada posição apontando
+  para um elemento de `fat` (assunto 0049). Ele é ordenado, `fat` não, como num
+  índice de livro: as páginas não mudam, só a lista que aponta para elas;
+- o **`qsort`** com função de comparação (assunto 0050). Cada elemento de
+  `ordem` é um `const double *`, então o `qsort` entrega o endereço de um
+  ponteiro, que chega como `const void *` (assunto 0051). Dois saltos, `**`,
+  levam ao faturamento;
+- **subtração de ponteiros** (assunto 0047): `ordem[i] - fat` dá a posição em
+  `fat`, a mesma que dá o nome em `produtos`;
+- **passagem por referência** (assunto 0046): `resumo` devolve duas respostas,
+  o total (num `double *`) e **onde** está o maior (num `const double **`, pois
+  ela muda um ponteiro do `main`).
 
-São 4 barracas: tomate (30 × R$ 6,50), alface (45 ×
-R$ 3,00), queijo (8 × R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`,
-`ordem[0]` aponta para o pastel e `ordem[3]` para a alface, enquanto `fat`
-continua na ordem de sempre:
+São 4 barracas: tomate (30 × R$ 6,50), alface (45 × R$ 3,00), queijo (8 ×
+R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`, `ordem[0]` aponta para o
+pastel e `ordem[3]` para a alface, e `fat` segue na ordem de sempre:
 
 <p align="center"><img src="06-ponteiros/0052-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o ranking da feira" width="858"></p>
 
@@ -3511,36 +3428,32 @@ int main(void) {
 // Total: R$ 1126.00  Campeão: pastel
 ```
 
-O `const double * const *` da comparação se lê da direita para a esquerda:
-ponteiro para um ponteiro constante para um `double` constante. Os dois
-`const` só prometem que a comparação não muda nada, nem o ponteiro do
-vetor, nem o faturamento.
+O `const double * const *` da comparação lê-se da direita para a esquerda:
+ponteiro para um ponteiro constante para um `double` constante. Os `const` só
+prometem que a comparação não muda nada.
 
-O programa tem três fases: calcula e aponta, ordena os ponteiros e percorre
-a ordem nova traduzindo cada ponteiro para um índice:
+Três fases: calcula e aponta, ordena os ponteiros e percorre a ordem nova,
+traduzindo cada ponteiro em índice:
 
 <p align="center"><img src="06-ponteiros/0052-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o ranking da feira" width="548"></p>
 
 > [!WARNING]
-> Ordenar `ordem` com `sizeof(double)` no terceiro argumento do `qsort`
-> parece certo e está errado: os elementos de `ordem` são **ponteiros**
-> (8 bytes), não `double`. Aqui os dois têm 8 bytes e o erro fica
-> escondido, mas com `int *ordem[]` e `sizeof(int)` o `qsort` embaralharia
-> meio ponteiro com meio ponteiro. Escreva sempre `sizeof ordem[0]`: o
-> tamanho do elemento do próprio vetor que você está ordenando.
+> Passar `sizeof(double)` ao `qsort` para ordenar `ordem` parece certo e está
+> errado: os elementos de `ordem` são **ponteiros** (8 bytes). Aqui os dois têm
+> 8 bytes e o erro fica escondido, mas com `int *ordem[]` e `sizeof(int)` o
+> `qsort` embaralharia meio ponteiro com meio ponteiro. Escreva sempre
+> `sizeof ordem[0]`.
 
 > [!TIP]
-> **Por dentro do C:** ordenar ponteiros em vez dos dados é uma técnica
-> clássica. Cada troca do `qsort` move 8 bytes, não importa o tamanho do
-> dado apontado. Com structs de 200 bytes (módulo 08), a diferença é
-> enorme. E várias "visões" ordenadas podem conviver: um vetor de ponteiros
-> por faturamento, outro por nome, todos apontando para os mesmos dados. É
-> a ideia por trás dos índices de um banco de dados.
+> **Por dentro do C:** ordenar ponteiros em vez dos dados é técnica clássica:
+> cada troca do `qsort` move 8 bytes, mesmo com structs de 200 bytes (módulo 08),
+> e vários vetores de ponteiros (por faturamento, por nome) podem coexistir sobre
+> os mesmos dados, a ideia dos índices de banco de dados.
 
 > [!NOTE]
 > **Pergunta para você:** se você trocar `maior_primeiro` por uma função que
-> ordena pelo **nome** do produto, o que muda no programa? A comparação
-> ainda recebe endereços de `const double *`; como ela chegaria ao nome?
+> ordena pelo **nome** do produto, o que muda no programa? A comparação ainda
+> recebe endereços de `const double *`; como ela chegaria ao nome?
 
 ### Hora de praticar
 
@@ -3824,8 +3737,8 @@ Mercadinho: total 125, desconto 15%
 ```
 
 
-Rode com as flags de estudo, leia os avisos e os relatórios e conserte um erro de
-cada vez, rodando de novo, até a saída ficar igual à esperada e o gcc com as flags de estudo
+Rode com o rodar, leia os avisos e os relatórios e conserte um erro de
+cada vez, rodando de novo, até a saída ficar igual à esperada e o rodar
 não reclamar de nada.
 
 **Dicas:**
@@ -3895,8 +3808,8 @@ gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E312.c -o ~/LPEDC/06-ponteiros/0052-
 
 ## Desafios do módulo
 
-Problemas extras, misturando os assuntos do módulo. Resolva num arquivo seu
-e rode com as flags de estudo.
+Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
+compile com as flags de estudo.
 
 **1. O gaveteiro de três níveis.** Ponha num `main` as linhas
 `int x = 7; int *p = &x; int **pp = &p; **pp = 9; *pp = NULL;` e, depois
@@ -4807,7 +4720,7 @@ Abaixo da média: treino 2 (27.9) treino 4 (26.8) treino 6 (27.5)
 **Dicas:**
 
 1. Desvio padrão = raiz da média dos quadrados das diferenças:
-   sqrt(soma de (v[i] - media)² / n). sqrt está no math.h (o gcc com as flags de estudo já
+   sqrt(soma de (v[i] - media)² / n). sqrt está no math.h (o rodar já
    liga a biblioteca com -lm).
 2. São duas passadas: a primeira acha a média; a segunda usa a média.
 3. Atenção: dentro da função, media é um ponteiro. A conta usa *media.
@@ -5050,7 +4963,7 @@ gcc ~/LPEDC/06-ponteiros/lista/P0624.c -o ~/LPEDC/06-ponteiros/lista/P0624 && ~/
 O programa da escala de folgas tem TRÊS erros de propósito, e o gcc não
 avisa de nenhum. Ele deveria: trocar o primeiro e o último da equipe de
 lugar, ordenar a equipe em ordem alfabética e montar o crachá do primeiro
-da lista. Rode com as flags de estudo e compare com a saída esperada: a troca não
+da lista. Rode com o rodar e compare com a saída esperada: a troca não
 troca e a ordem sai errada. Conserte esses dois; aí o AddressSanitizer
 passa a acusar o terceiro (é comum um erro esconder o outro). No fim, o
 programa mostra:
@@ -5303,9 +5216,9 @@ gcc ~/LPEDC/06-ponteiros/lista/P0630.c -o ~/LPEDC/06-ponteiros/lista/P0630 && ~/
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, sem rodar, marque uma letra e só então abra o gabarito. Todos os
-trechos foram compilados com `gcc -std=c17 -Wall -Wextra`.
+Questões no formato da prova do PPGI/UFAM. Resolva no papel, marque uma letra e
+só então abra o gabarito. Os trechos foram compilados com
+`gcc -std=c17 -Wall -Wextra`.
 
 **Questão 1.** O que o programa imprime?
 

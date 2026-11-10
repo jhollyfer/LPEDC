@@ -1,13 +1,10 @@
 ## 0001 · O primeiro programa
 
 A padaria do bairro comprou um painel de LED e pediu um aviso de três linhas:
-o nome da padaria, o horário da fornada e o preço do pão. São três linhas
-de saída, sem entrada nem conta. Mesmo assim, antes de rodar, o arquivo
-passa por uma linha de montagem, e cada linha do código tem um motivo.
+nome, horário da fornada e preço do pão. É só saída, sem entrada nem conta.
 
-Um programa em C é um conjunto de **funções**. Uma delas é especial: a
-**`main`**. Quando você roda o executável, o sistema começa por ela. O
-esqueleto que você vai escrever em todo exemplo do curso:
+Um programa em C é um conjunto de **funções**. A função **`main`** é onde o
+sistema começa a execução. Este esqueleto aparece em todo exemplo do curso:
 
 | Linha | O que faz |
 | --- | --- |
@@ -18,16 +15,14 @@ esqueleto que você vai escrever em todo exemplo do curso:
 | `return 0;` | termina a `main` e devolve 0 ao sistema: "deu tudo certo" |
 | `}` | fecha o **bloco** da `main` |
 
-Regras que valem sempre: toda **instrução** termina em `;` (o
-`#include` não é instrução, e por isso não leva); as **chaves** `{ }` agrupam
-instruções num bloco; o C diferencia maiúsculas de minúsculas (`Main` não é
-`main`); comentário de uma linha começa com `//`, e o de várias linhas fica
-entre `/*` e `*/`.
+Regras fixas: toda **instrução** termina em `;` (o `#include` não é
+instrução e não leva); as **chaves** `{ }` agrupam instruções num bloco; o C
+diferencia maiúsculas de minúsculas (`Main` não é `main`); comentário de uma
+linha começa com `//` e o de várias linhas fica entre `/*` e `*/`.
 
 ### Do .c ao executável
 
-O processador não entende C. A linha de montagem tem quatro estações, e quem
-comanda tudo é o **compilador** `gcc`:
+O processador não entende C. O `gcc` comanda quatro estações:
 
 1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>`
    **cola** o conteúdo do `stdio.h` no lugar da linha;
@@ -39,14 +34,13 @@ comanda tudo é o **compilador** `gcc`:
 4. **ligador** (*linker*): junta o `.o` com a **biblioteca padrão**, onde mora
    o código do `printf`, tapa os buracos e grava o **executável**.
 
-Na mão, as quatro estações saem de um comando só: `gcc padaria.c -o padaria`
-e depois `./padaria`. Com as flags de estudo (`-Wall -Wextra -pedantic`, C17 e o
-**AddressSanitizer**, que vigia a memória enquanto o programa roda), o mesmo
-comando confere mais coisas; as flags estão em "Antes de começar", acima.
+Um comando só percorre as quatro: `gcc padaria.c -o padaria`, e depois
+`./padaria`. Com as flags de estudo (`-Wall -Wextra -pedantic`, C17 e o
+**AddressSanitizer**, que vigia a memória durante a execução), o gcc confere
+mais coisas; veja "Antes de começar", acima.
 
-O `padaria.c` entra na linha de montagem, ganha o
-`stdio.h` colado, vira assembly, vira `padaria.o`, é ligado ao `printf` e sai
-como o executável `padaria`, que mostra as três linhas no terminal:
+O `padaria.c` ganha o `stdio.h`, vira assembly, vira `padaria.o`, é ligado ao
+`printf` e sai como o executável `padaria`:
 
 {{ideia}}
 
@@ -68,39 +62,26 @@ int main(void) {
 // R$ 0,90 a unidade
 ```
 
-Cada estação pode parar a linha de montagem, e cada uma reclama de um jeito.
-O exemplo passa por todas sem erro e termina com o programa rodando:
+Cada estação pode parar o processo. O exemplo passa por todas sem erro:
 
 {{fluxograma}}
 
-Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
+Saber **quem reclamou** ajuda a consertar. Há três tipos de erro:
 
-- **de compilação**: arquivo do `#include` que não existe (pré-processador),
-  falta de `;`, `Int` no lugar de `int`. O gcc mostra o arquivo, a linha e a
-  coluna, e não gera executável;
-- **de ligação**: o código está certo na gramática, mas uma função não existe
-  em lugar nenhum. Escreva `prinft` e o ligador para com
-  `undefined reference to 'prinft'`;
-- **de execução**: compila, roda e mostra o valor errado ou quebra no meio. É o pior tipo, porque o compilador não tem como ver. Os **avisos**
-  (*warnings*) do gcc e o AddressSanitizer existem para pegar parte deles.
+- **de compilação**: `#include` de arquivo inexistente (pré-processador),
+  falta de `;`, `Int` no lugar de `int`. O gcc mostra arquivo, linha e coluna
+  e não gera executável;
+- **de ligação**: a gramática está certa, mas a função não existe em lugar
+  nenhum. Com `prinft`, o ligador para com `undefined reference to 'prinft'`;
+- **de execução**: compila e roda, mas mostra o valor errado ou quebra no
+  meio. É o pior tipo, porque o compilador não o vê. Os **avisos**
+  (*warnings*) do gcc e o AddressSanitizer pegam parte deles.
 
 > [!WARNING]
-> O `printf` **não pula linha sozinho**. Sem o
-> `\n`, o próximo `printf` continua de onde o cursor parou:
-> `printf("Pão"); printf("Quente");` mostra `PãoQuente`. E quando faltar um
-> `;`, o gcc avisa `expected ';' before ...` apontando para a linha
-> **seguinte**, porque só lá ele percebe que faltou alguma coisa.
-
-> [!TIP]
-> **Por dentro do C:** salve o programa da padaria como `padaria.c`, rode
-> `gcc -E padaria.c | wc -l` e veja o seu programa de poucas linhas virar
-> centenas: é o `stdio.h` colado. Rode `gcc -S padaria.c`, abra o
-> `padaria.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
-> que era só texto fixo com `\n` e trocou por uma função mais simples. Dentro
-> do executável, cada texto entre aspas fica guardado byte a byte, seguido de
-> um byte zero que marca o fim. Acento custa mais: no UTF-8, `ã` ocupa 2
-> bytes, então `"Pão"` ocupa 5 (`P`, os dois do `ã`, `o` e o zero). E o
-> `return 0` chega ao sistema: logo depois de rodar, `echo $?` mostra 0.
+> O `printf` **não pula linha sozinho**. Sem `\n`, o próximo `printf`
+> continua na mesma linha: `printf("Pão"); printf("Quente");` mostra
+> `PãoQuente`. Se faltar um `;`, o gcc avisa `expected ';' before ...` na
+> linha **seguinte**, onde ele percebe a falta.
 
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `\n` do segundo `printf`, quantas

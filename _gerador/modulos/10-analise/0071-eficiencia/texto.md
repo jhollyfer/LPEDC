@@ -1,45 +1,43 @@
 ## 0071 · Eficiência: contar passos
 
-Sexta à noite, padaria cheia. Você entrega a comanda 70 no caixa e a moça
-procura no bolo de comandas, uma por uma. Se a sua for a primeira, você sai
-na hora. Se for a última, espera o bolo inteiro. Com 8 comandas, tanto faz.
-Com 800, faz muita diferença.
+Sexta à noite, padaria cheia. Você entrega a comanda 70 e a moça procura no
+bolo de comandas, uma por uma. Se a sua for a primeira, você sai na hora; se
+for a última, espera o bolo inteiro. Com 8 comandas, tanto faz. Com 800, faz
+diferença.
 
-Até aqui a pergunta era "o programa está **certo**?". Agora entra outra: "ele
-é **rápido** o bastante?". E "rápido" não se mede em segundos.
-O mesmo código leva 2 ms no seu notebook, 9 ms num Raspberry Pi e 40 ms se o
-Chrome estiver aberto com 30 abas.
+Até aqui a pergunta era "o programa está **certo**?". Agora é "ele é
+**rápido** o bastante?". E isso não se mede em segundos: o mesmo código leva
+2 ms no notebook, 9 ms num Raspberry Pi e 40 ms com o Chrome aberto em 30
+abas.
 
-O que não muda de máquina para máquina é **quantos passos** o algoritmo dá.
-Você escolhe a operação que domina o trabalho (a **operação dominante**) e
-conta quantas vezes ela acontece. Numa busca, é a comparação `v[i] == alvo`.
-O `i++` e o `i < n` também rodam, mas andam junto com a comparação: contar um
-ou outro dá a mesma ideia de custo.
+O que não muda de máquina é **quantos passos** o algoritmo dá. Escolha a
+operação que domina o trabalho (a **operação dominante**) e conte quantas
+vezes ela ocorre. Numa busca, é a comparação `v[i] == alvo`: o `i++` e o
+`i < n` andam junto com ela e dão a mesma ideia de custo.
 
-A conta depende da entrada, e não só do tamanho dela. Por isso se fala em três
-casos:
+A conta depende da entrada, não só do tamanho. Daí três casos:
 
-- **melhor caso**: a entrada mais camarada (a comanda está na frente): 1 passo;
-- **pior caso**: a mais azarada (está no fim ou nem está lá): n passos;
-- **caso médio**: a média de todas as posições possíveis: (n + 1) / 2 passos.
+- **melhor caso**: a entrada mais favorável (a comanda está na frente): 1
+  passo;
+- **pior caso**: a mais desfavorável (está no fim ou não está): n passos;
+- **caso médio**: a média de todas as posições: (n + 1) / 2 passos.
 
-Escrita como fórmula de n, essa contagem é a **função de custo** (o Ziviani
-diz **função de complexidade**): aqui, f(n) = n no pior caso. Quando se
-conta tempo (passos), é a **complexidade temporal**; quando se conta memória
-extra, é a **complexidade espacial** (assunto 0168).
+Escrita como fórmula de n, a contagem é a **função de custo** (o Ziviani diz
+**função de complexidade**): aqui, f(n) = n no pior caso. Contar passos dá a
+**complexidade temporal**; contar memória extra, a **complexidade espacial**
+(assunto 0168).
 
-O pior caso é o que permite prometer alguma coisa: "nunca passa de n passos".
-O melhor caso não promete nada, como dizer que a Marginal nunca tem trânsito
-porque às 4 da manhã ela estava livre.
+Só o pior caso permite prometer algo: "nunca passa de n passos". O melhor caso
+não promete nada, como dizer que a Marginal nunca tem trânsito porque às 4 da
+manhã estava livre.
 
-No exemplo, a comanda 70 está na posição 6. A busca compara com as 6
-primeiras, erra todas, e acerta na 7ª comparação. A 41 sai em 1 passo; a 99,
-que não está no bolo, custa as 8:
+No exemplo, a comanda 70 está na posição 6: a busca erra as 6 primeiras e
+acerta na 7ª comparação. A 41 sai em 1 passo; a 99, que não está no bolo,
+custa as 8:
 
 {{ideia}}
 
-O contador é uma variável global que a função soma a cada comparação: um
-medidor que você acopla ao código só para estudar o custo.
+O contador é uma variável global somada a cada comparação, só para estudar o custo.
 
 ```c
 #include <stdio.h>
@@ -74,8 +72,7 @@ int main(void) {
 // comanda 99: posição -1, passos: 8
 ```
 
-Com o bolo crescendo, a contagem para vários tamanhos de entrada vira uma
-tabela, e é com ela que se comparam algoritmos:
+Para vários tamanhos de entrada, a contagem vira uma tabela que compara algoritmos:
 
 | comandas (n) | melhor caso | caso médio | pior caso |
 | --- | --- | --- | --- |
@@ -84,30 +81,24 @@ tabela, e é com ela que se comparam algoritmos:
 | 80.000 | 1 | 40.000,5 | 80.000 |
 
 Multiplicou n por 100, o pior caso também multiplicou por 100. O próximo
-assunto parte dessa observação.
+assunto parte disso.
 
-O laço do fluxograma tem só duas saídas: a pergunta "achou?" responde Sim, ou
-as comandas acabam. Cada volta pelo losango de baixo soma um passo no
-contador:
+O laço do fluxograma tem duas saídas: "achou?" responde Sim, ou as comandas
+acabam. Cada volta pelo losango de baixo soma um passo:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Contar a coisa errada engana. Se você puser o `passos++` **depois** do `if`
-> que dá `return`, a comparação que acertou não entra na conta e a busca da
-> comanda 41 aparece com 0 passos. E se esquecer de zerar o contador entre uma
-> busca e outra, ele acumula: 1, 8, 16. Confira o caso mais simples à mão
-> (achar na primeira posição custa 1).
+> Contar a coisa errada engana. Com o `passos++` **depois** do `if` que dá
+> `return`, a comparação que acertou fica fora e a comanda 41 aparece com 0
+> passos. Sem zerar o contador entre buscas, ele acumula: 1, 8, 16. Confira o
+> caso mais simples à mão (achar na primeira posição custa 1).
 
 > [!TIP]
-> **Por dentro do C:** medir tempo com `clock()` de `<time.h>` funciona, mas
-> engana fácil com entradas pequenas: numa busca de microssegundos, o ruído
-> (outros programas, cache, o próprio sistema) é maior que o tempo medido, e
-> cada execução dá um número diferente. E compilado com `-O2`, o
-> `gcc` pode **apagar** um laço inteiro cujo resultado ninguém usa, e o tempo
-> medido vira zero. Contar passos não tem esses problemas: o contador é usado
-> no `printf`, então o compilador é obrigado a manter o laço, e o número sai
-> igual em qualquer máquina.
+> **Por dentro do C:** medir tempo com `clock()` engana com entradas pequenas
+> (o ruído do sistema supera o tempo medido), e com `-O2` o `gcc` pode apagar
+> um laço cujo resultado ninguém usa. O contador, usado no `printf`, mantém o
+> laço e dá o mesmo número em qualquer máquina.
 
 > [!NOTE]
 > **Pergunta para você:** se o bolo tivesse 8 comandas **em ordem crescente**

@@ -1,11 +1,11 @@
 ## 0012 · Relacionais e a verdade em C
 
-Domingo, fim de jogo: mandante 2 x 1 visitante. A tabela do campeonato não
-quer saber de lances bonitos. Ela faz três perguntas de sim ou não: o mandante
-fez mais gols? Empatou? Fez menos? E soma 3, 1 ou 0 ponto.
+Domingo, fim de jogo: mandante 2 x 1 visitante. A tabela do campeonato faz
+três perguntas de sim ou não: o mandante fez mais gols? Empatou? Fez menos?
+E soma 3, 1 ou 0 ponto.
 
-Toda decisão de um programa começa assim: uma **comparação**. O C tem seis
-**operadores relacionais**:
+Toda decisão começa numa **comparação**. O C tem seis **operadores
+relacionais**:
 
 | Operador | Pergunta | Com o placar 2 x 1 |
 | --- | --- | --- |
@@ -16,32 +16,28 @@ Toda decisão de um programa começa assim: uma **comparação**. O C tem seis
 | `==` | igual? (dois sinais!) | `2 == 1` vale 0 |
 | `!=` | diferente? | `2 != 1` vale 1 |
 
-Repare na última coluna. No C, uma comparação dá um **`int`**: **1** quando é
-verdade e **0** quando é mentira. Dá para imprimir com `%d`, somar, multiplicar.
+No C, uma comparação dá um **`int`**: **1** se é verdade e **0** se é mentira.
+Dá para imprimir com `%d`, somar e multiplicar.
 
-E o caminho de volta é ainda mais solto: para o C, **0 é falso e qualquer
-outro valor é verdadeiro**. 1, 42, -3 e 0.5 contam como verdade. Só o zero é
-falso. Você vai usar isso o tempo todo a partir do `if` (assunto 0014).
+No sentido inverso, **0 é falso e qualquer outro valor é verdadeiro**: 1, 42,
+-3 e 0.5 contam como verdade. Isso será usado a partir do `if` (0014).
 
-Durante muito tempo o C não teve um tipo para verdadeiro e falso: usava `int`
-mesmo. O C99 criou o `_Bool` e o cabeçalho **`<stdbool.h>`**, que dá os nomes
-amigáveis **`bool`**, **`true`** (vale 1) e **`false`** (vale 0). Use `bool`
-sempre que a variável for uma resposta de sim ou não: o nome do tipo já conta
-a intenção.
+O C99 criou o `_Bool` e o cabeçalho **`<stdbool.h>`**, com os nomes
+**`bool`**, **`true`** (vale 1) e **`false`** (vale 0). Use `bool` para
+respostas de sim ou não. Ele é rígido: `bool b = 42;` guarda **1**, porque
+todo valor diferente de zero vira `true`.
 
-Cuidado com três detalhes de escrita: `=<`, `=>` e `<>` não existem (o
-símbolo vem sempre antes do `=`, e diferente é `!=`); `= =` com espaço também
-não; e `=` sozinho é **atribuição**, não comparação. Leia `=` como "recebe" e
-`==` como "é igual a". O estrago que essa troca faz fica para o 0015.
+Três erros de escrita: `=<`, `=>` e `<>` não existem (o símbolo vem antes do
+`=`, e diferente é `!=`); `= =` com espaço também não; e `=` sozinho é
+**atribuição**, não comparação. Leia `=` como "recebe" e `==` como "é igual
+a". O estrago dessa troca fica para o 0015.
 
-Os dois placares entram, viram três perguntas, e cada
-resposta é um 0 ou um 1. A tabela usa esses números direto na conta dos
-pontos:
+Os dois placares viram três perguntas, e cada resposta é 0 ou 1. A tabela usa
+esses números direto na conta dos pontos:
 
 {{ideia}}
 
-O placar em C. Não tem nenhum `if`: a verdade vira número e entra na
-conta:
+O placar em C não tem nenhum `if`: a verdade vira número e entra na conta:
 
 ```c
 #include <stdbool.h>
@@ -69,28 +65,17 @@ int main(void) {
 // Pontos do mandante: 3
 ```
 
-O fluxograma não tem losango, porque comparar não é decidir: a comparação só
-**calcula** uma resposta e a guarda numa caixinha, como qualquer conta. Quem
-escolhe um caminho é o `if`, daqui a dois assuntos:
+O fluxograma não tem losango: comparar não é decidir, apenas **calcula** uma
+resposta e a guarda numa caixinha. Quem escolhe o caminho é o `if` (0014):
 
 {{fluxograma}}
 
 > [!WARNING]
-> **Não compare `float` ou `double` com `==`.** Rode `printf("%d", 0.1 + 0.2
-> == 0.3);` e veja um **0**. O motivo: 0,1 não tem representação exata em
-> binário, e a soma fica em 0.30000000000000004. Para números
-> com vírgula, pergunte se estão **perto o bastante**:
-> `fabs(a - b) < 1e-9`. Para dinheiro, a saída mais segura é guardar
-> **centavos** num `int`.
-
-> [!TIP]
-> **Por dentro do C:** o processador não tem uma instrução "maior que" que
-> devolve verdadeiro. Ele faz uma subtração de mentira (`cmp`), que só acende
-> umas chavinhas de estado (deu zero? deu negativo?). Para guardar a resposta
-> num `bool`, o compilador usa uma instrução como `setg`, que escreve 1 ou 0
-> num byte. Por isso `sizeof(bool)` é 1. E o `bool` é rígido: `bool b = 42;`
-> guarda **1**, porque qualquer valor diferente de zero vira `true` na
-> conversão. Num `int`, o 42 ficaria 42.
+> **Não compare `float` ou `double` com `==`.** `printf("%d", 0.1 + 0.2 ==
+> 0.3);` mostra **0**: 0,1 não tem representação exata em binário, e a soma
+> dá 0.30000000000000004. Pergunte se os valores estão **perto o bastante**:
+> `fabs(a - b) < 1e-9`. Para dinheiro, o mais seguro é guardar **centavos**
+> num `int`.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `7 > 3 > 1`? Lembre que o C avalia da

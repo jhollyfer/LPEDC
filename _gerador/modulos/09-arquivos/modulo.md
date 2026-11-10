@@ -1,56 +1,51 @@
 # Módulo 09 · Arquivos e linha de comando
 
 Até aqui, todo programa do curso nasce, faz a conta e morre levando tudo
-junto. As variáveis moram na RAM, e a RAM é esvaziada quando o processo
-termina. Para um programa **lembrar** de alguma coisa (um cadastro, uma
-configuração, o placar de ontem), ele precisa gravar em **arquivo**.
+junto: as variáveis moram na RAM, esvaziada quando o processo termina. Para
+**lembrar** de algo (cadastro, configuração, placar), o programa grava em
+**arquivo**.
 
-No C você vê as engrenagens: o `FILE *` que representa o arquivo aberto, o
-buffer que junta os bytes antes de ir para o disco, a posição que anda a cada
-leitura. E aparece uma escolha: gravar **texto**, legível e portável, ou
-**binário**, a cópia exata dos bytes da memória, que ocupa menos e deixa pular
-direto para qualquer registro.
+No C você vê as engrenagens: o `FILE *` do arquivo aberto, o buffer que junta
+os bytes antes do disco, a posição que anda a cada leitura. E há uma escolha:
+**texto**, legível e portável, ou **binário**, cópia exata dos bytes da
+memória, menor e com acesso direto a qualquer registro.
 
-O módulo fecha com a outra porta de entrada de um programa: os **argumentos
-da linha de comando**. Com eles, os seus exercícios viram ferramentas que você
-chama no terminal como chama `git` ou `grep` e encadeia com outras em scripts.
+O módulo fecha com os **argumentos da linha de comando**, que transformam seus
+exercícios em ferramentas de terminal, como `git` ou `grep`.
+
+Usa o que veio antes: structs (módulo 08), `fgets` (0042), ponteiros e
+`sizeof`. Prepara o módulo 10, que mede o custo dos programas: o acesso direto
+ao registro `i` é a base da busca binária em disco (0090).
 
 ## O que você vai aprender
 
-- abrir, escrever, ler e fechar **arquivos texto** com `fopen`, `fprintf`, `fgets`, `fscanf`, `fgetc` e `fclose`
+- abrir, escrever, ler e fechar **arquivos texto** (`fopen`, `fprintf`, `fgets`, `fscanf`, `fgetc`, `fclose`)
 - os modos `"r"`, `"w"` e `"a"`, o **buffer** e por que nunca usar `while (!feof(f))`
-- gravar e ler **arquivos binários** com `fwrite` e `fread`, e pular direto para um registro com `fseek` e `ftell`
+- **arquivos binários** com `fwrite` e `fread`, e acesso direto a um registro com `fseek` e `ftell`
 - quando escolher texto e quando escolher binário
-- receber dados pelo **`argc` e `argv`**, converter com `strtol` e `strtod` e devolver o **código de saída**
+- receber dados por `argc` e `argv`, converter com `strtol` e `strtod` e devolver o **código de saída**
 - juntar tudo numa ferramenta de terminal com subcomandos
 
 ## Antes de começar
 
-Os exemplos gravam em `/tmp`, com nomes claros (`/tmp/despesas.txt`,
-`/tmp/estoque.bin`), e quase todos apagam o arquivo no fim com `remove`.
-Quando um deixa o arquivo lá de propósito, o comentário avisa, para você
-abrir com `cat`. Nenhum exemplo depende de um arquivo que já exista: cada um
-cria o que vai ler.
+Os exemplos gravam em `/tmp` (`/tmp/despesas.txt`, `/tmp/estoque.bin`) e quase
+todos apagam o arquivo no fim com `remove`. Quando um o deixa lá, o comentário
+avisa, para você abrir com `cat`. Nenhum depende de arquivo pré-existente.
 
-Para passar argumentos a um programa, escreva-os depois do caminho, no
-executável: ele repassa tudo para o programa.
+Para passar argumentos, escreva-os depois do executável:
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137 -r 7 -a 4
 ```
 
-Duas ferramentas ajudam a enxergar o que os programas gravam: `od -A d -t x1
-arquivo` mostra os bytes em hexadecimal (já vem no sistema), e o `strace`
-mostra as chamadas ao sistema operacional, como cada `write` no disco:
+Duas ferramentas mostram o que os programas gravam: `od -A d -t x1 arquivo`
+(bytes em hexadecimal, já vem no sistema) e o `strace` (chamadas ao sistema,
+como cada `write`):
 
 ```bash
 sudo pacman -S strace       # Arch Linux
 sudo apt install strace     # Debian / Ubuntu
 ```
-
-Você vai usar structs (módulo 08), strings com `fgets` (0042) e ponteiros o
-tempo todo. Se `typedef struct`, `sizeof` e `char *` ainda fazem você hesitar,
-revise antes.
 
 {{indice}}
 
@@ -62,8 +57,8 @@ revise antes.
 
 ## Desafios do módulo
 
-Problemas para resolver com o que você viu no módulo, do médio ao difícil.
-Crie os arquivos de teste no terminal com `printf '...' > /tmp/teste.txt`.
+Problemas do médio ao difícil. Crie os arquivos de teste com
+`printf '...' > /tmp/teste.txt`.
 
 **1. O seu `cp`.** Escreva `copia <origem> <destino>`, que copia qualquer
 arquivo (texto ou não) byte a byte. Confira o `argc`, os dois `fopen` e mostre
@@ -227,11 +222,10 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só depois abra o gabarito. Todos os trechos foram
-compilados com `gcc -std=c17 -Wall -Wextra` e rodados no Linux. Nos trechos,
-a conferência de `NULL` depois do `fopen` foi omitida para encurtar; no seu
-código, ela é obrigatória.
+Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só depois abra o gabarito. Os trechos foram compilados com
+`gcc -std=c17 -Wall -Wextra` e rodados no Linux. Neles, a conferência de `NULL`
+depois do `fopen` foi omitida para encurtar; no seu código, é obrigatória.
 
 **Questão 1.** Sobre arquivos em C, considere as afirmações e marque a alternativa CORRETA.
 

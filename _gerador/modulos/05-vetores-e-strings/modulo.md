@@ -1,44 +1,38 @@
 # Módulo 05 · Vetores, matrizes e strings
 
-Até aqui, cada variável guardava um valor. Para guardar as notas de uma turma,
-os passos de um mês ou as poltronas de um cinema, você precisaria de dezenas
-de variáveis. Este módulo traz a primeira **estrutura de dados** do curso: o
-**vetor**, várias variáveis do mesmo tipo com um nome só, lado a lado na
-memória.
+Até aqui, cada variável guardava um valor. Para as notas de uma turma ou os
+passos de um mês, seriam dezenas de variáveis. Este módulo traz a primeira
+**estrutura de dados** do curso: o **vetor**, várias variáveis do mesmo tipo
+com um nome só, lado a lado na memória.
 
-No C, o vetor é um bloco de bytes. Tamanho fixo, nenhum `length`, nenhuma
-conferência de índice. Parece pouco, e é por isso que é rápido: acessar a
-posição 999 custa o mesmo que acessar a 0.
-
-E o texto? O C não tem um tipo string. Uma string é um vetor de `char` que
-termina num byte zero, o `'\0'`. Esse detalhe explica boa parte das falhas de
-segurança da história do software.
+No C, o vetor é um bloco de bytes: tamanho fixo, sem `length`, sem conferência
+de índice. Por isso é rápido: a posição 999 custa o mesmo que a 0. O C também
+não tem tipo string: uma string é um vetor de `char` que termina no byte zero,
+o `'\0'`, detalhe por trás de muitas falhas de segurança.
 
 ## O que você vai aprender
 
-- declarar, inicializar e percorrer **vetores**, e por que o índice começa em 0
-- passar vetores para **funções** (vai o endereço, não uma cópia) e proteger com `const`
+- **vetores**: declarar, inicializar, percorrer, e por que o índice começa em 0
+- **funções com vetores**: vai o endereço, não uma cópia; `const` protege
 - **matrizes**: linhas, colunas e a memória contínua por baixo
-- **caracteres** como números: a tabela ASCII e o `<ctype.h>`
+- **caracteres** como números: tabela ASCII e `<ctype.h>`
 - **strings**: o `'\0'`, o `<string.h>` e o estouro de buffer
-- **ler texto** do teclado com segurança: `fgets`, o `'\n'` e por que o `gets` foi banido
+- **ler texto** com segurança: `fgets`, o `'\n'` e por que o `gets` foi banido
 
 ## Antes de começar
 
-Você vai usar tudo dos módulos anteriores, principalmente laços (`for` e
-laços aninhados), os padrões contador, acumulador e maior/menor, e funções com
-parâmetros. Ponteiros ainda não apareceram: quando o texto disser "vai o
-endereço do vetor", guarde a ideia, que o módulo 06 mostra a sintaxe.
+Este módulo usa os laços (inclusive aninhados), os padrões contador,
+acumulador e maior/menor, e as funções com parâmetros dos módulos anteriores.
+Ele prepara o módulo 06: quando o texto disser "vai o endereço do vetor",
+guarde a ideia, que lá ganha sintaxe. Ponteiros ainda não apareceram.
 
-Nos desenhos, cada gaveta do vetor tem o índice embaixo, em cinza. Quase todo
-assunto aqui é um laço: ao rodar, mude um tamanho ou um índice de
-propósito.
+Nos desenhos, o índice de cada gaveta fica embaixo, em cinza. Ao rodar, mude
+um tamanho ou um índice de propósito.
 
-O **AddressSanitizer** do gcc com as flags de estudo confere, enquanto o programa roda, o que o
-C não confere: índice e tamanho de string. Quando aparecer
-`stack-buffer-overflow` ou `index out of
-bounds`, leia a linha indicada: é quase sempre um `<=` no lugar de `<` ou um
-`'\0'` que ficou sem lugar.
+O **AddressSanitizer** do gcc, ativo nas flags de estudo, confere o que o C
+não confere: índice e tamanho de string. Diante de `stack-buffer-overflow` ou
+`index out of bounds`, leia a linha indicada: quase sempre é um `<=` no lugar
+de `<` ou um `'\0'` sem lugar.
 
 {{indice}}
 
@@ -50,8 +44,8 @@ bounds`, leia a linha indicada: é quase sempre um `<=` no lugar de `<` ou um
 
 ## Desafios do módulo
 
-Problemas extras para treinar, misturando os assuntos do módulo. Resolva num
-arquivo seu e rode com as flags de estudo.
+Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
+compile com as flags de estudo.
 
 **1. Segundo maior.** Dado `int v[] = {14, 9, 27, 3, 27, 18};`, ache o segundo
 maior valor **diferente** do maior, numa passada só, sem ordenar.
@@ -218,9 +212,9 @@ matrizes revezam.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
-alternativa certa. Nas de vetor, desenhe as gavetas com os índices embaixo;
-nas de string, não esqueça a gaveta do `'\0'`.
+Questões no formato da Prova de Conhecimentos do PPGI, com uma alternativa
+certa. Nas de vetor, desenhe as gavetas com os índices; nas de string, inclua
+a gaveta do `'\0'`.
 
 **1.** Numa máquina de 64 bits (ponteiro de 8 bytes, `int` de 4), o que
 `tam(v)` mostra quando `v` é um `int v[10]`?

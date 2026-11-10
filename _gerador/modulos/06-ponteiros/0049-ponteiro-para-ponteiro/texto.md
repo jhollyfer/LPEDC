@@ -1,14 +1,13 @@
 ## 0049 · Ponteiro para ponteiro
 
-Você pergunta ao porteiro onde fica o salão de festas. Ele não sabe, mas
-aponta para um quadro de avisos: "o mapa do condomínio está no quadro". No
-quadro, o mapa mostra o salão. Você chegou lá em **dois saltos**: porteiro →
-quadro → salão.
+Você pergunta ao porteiro onde fica o salão de festas. Ele aponta para o
+quadro de avisos, onde o mapa do condomínio mostra o salão. Você chegou em
+**dois saltos**: porteiro, quadro, salão.
 
-Um ponteiro é uma variável como outra qualquer: mora numa gaveta e tem
-endereço (assunto 0045). Então dá para guardar **o endereço de um
-ponteiro** em outra variável. Ela é um **ponteiro para ponteiro**, declarado
-com dois asteriscos: `int **pp;` se lê "pp aponta para um `int *`".
+Um ponteiro é uma variável comum: mora numa gaveta e tem endereço (assunto
+0045). Dá para guardar **o endereço de um ponteiro** em outra variável, um
+**ponteiro para ponteiro**, declarado com dois asteriscos: `int **pp;` lê-se
+"pp aponta para um `int *`".
 
 Com `int vagas = 40; int *p = &vagas; int **pp = &p;`:
 
@@ -16,25 +15,23 @@ Com `int vagas = 40; int *p = &vagas; int **pp = &p;`:
 - `*pp` é o próprio `p`: o endereço de `vagas`;
 - `**pp` é `vagas`: 40. Dois saltos, dois asteriscos.
 
-A regra é contar estrelas: cada `*` na declaração é um nível, e para chegar
-no dado você usa o mesmo número de `*`. Dá para fazer `int ***`, mas acima
-de dois níveis o código vira charada.
+Conte as estrelas: cada `*` na declaração é um nível, e para chegar ao dado
+usa-se o mesmo número de `*`. Acima de dois níveis o código vira charada.
 
 Dois usos aparecem no curso todo:
 
-- **mudar o ponteiro de quem chamou.** Se uma função precisa mudar um `int`
-  do `main`, ela recebe `int *` (assunto 0046). Se precisa mudar um `int *`
-  do `main`, fazer ele apontar para outro lugar, recebe `int **`. É a mesma
-  regra, um nível acima. O A098 escolhe o posto mais barato assim, e as
-  listas encadeadas do módulo 11 usam isso para mudar o início da lista;
-- **vetor de ponteiros.** `const char *dias[]` (assunto 0048) é um vetor
-  cujos elementos são `const char *`. O nome dele decai para o endereço do
-  primeiro elemento: um `const char **`. É o tipo do famoso `char **argv`
-  (assunto 0069) e da matriz alocada no módulo 07.
+- **mudar o ponteiro de quem chamou.** Para mudar um `int` do `main`, a função
+  recebe `int *` (assunto 0046); para mudar um `int *` do `main`, fazendo-o
+  apontar para outro lugar, recebe `int **`. É a mesma regra, um nível acima. O
+  A098 escolhe o posto mais barato assim, e as listas encadeadas do módulo 11
+  mudam o início da lista assim;
+- **vetor de ponteiros.** `const char *dias[]` (assunto 0048) é um vetor de
+  `const char *`; o nome dele decai para um `const char **`. É o tipo do
+  `char **argv` (assunto 0069) e da matriz alocada no módulo 07.
 
-O estacionamento do shopping tem 40 vagas. `p` aponta
-para `vagas` e `pp` aponta para `p`. Quando entram 2 carros, o programa
-atualiza `vagas` sem citar o nome dela, em dois saltos:
+O estacionamento do shopping tem 40 vagas. `p` aponta para `vagas` e `pp`
+aponta para `p`. Quando entram 2 carros, o programa atualiza `vagas` sem citar
+o nome dela, em dois saltos:
 
 {{ideia}}
 
@@ -69,31 +66,27 @@ int main(void) {
 // vagas  = 38
 ```
 
-Leia os pares: `&vagas` e `p` são iguais; `&p` e `pp` são iguais; `*pp` volta
-a ser o endereço de `vagas`.
+Leia os pares: `&vagas` e `p` são iguais; `&p` e `pp` são iguais; `*pp` volta a
+ser o endereço de `vagas`.
 
-Não há decisão. Primeiro a corrente é montada, elo por elo (`vagas`, depois `p`, depois `pp`); depois o `**pp` percorre a
-corrente de volta até chegar em `vagas`:
+Não há decisão. Primeiro a corrente é montada, elo por elo (`vagas`, `p`,
+`pp`); depois o `**pp` a percorre de volta até `vagas`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Estrela a menos é o erro clássico. `*pp = 38;` não muda `vagas`: tenta
-> guardar o número 38 **em `p`**, como se fosse um endereço (o compilador
-> avisa: `assignment to 'int *' from 'int' makes pointer from integer`).
-> Depois disso, `p` aponta para a "gaveta 38" e o próximo `*p` derruba o
-> programa. E na função: se ela precisa mudar o seu ponteiro, passe `&posto`
-> (um `double **`). Passar `posto` entrega uma cópia, e a função muda só a
-> cópia, como o `troca_copias` do assunto 0046.
+> Estrela a menos é o erro clássico. `*pp = 38;` não muda `vagas`: guarda o
+> número 38 **em `p`**, como endereço (o compilador avisa: `assignment to 'int
+> *' from 'int' makes pointer from integer`), e o próximo `*p` derruba o
+> programa. Na função, para mudar o seu ponteiro, passe `&posto` (um
+> `double **`); passar `posto` entrega uma cópia, como no `troca_copias` do
+> assunto 0046.
 
 > [!TIP]
-> **Por dentro do C:** cada nível é uma variável de 8 bytes de verdade. Ler
-> `**pp` custa três leituras de memória em sequência: a primeira busca o que
-> tem em `pp` (o endereço de `p`), a segunda busca o que tem em `p` (o
-> endereço de `vagas`), e só então a terceira traz o 40. O processador não
-> consegue adiantar uma leitura antes de terminar a anterior. Por isso
-> estruturas cheias de ponteiros (listas, árvores) são mais lentas de
-> percorrer que um vetor contíguo, assunto que volta no módulo 10.
+> **Por dentro do C:** cada nível é uma variável de 8 bytes. Ler `**pp` são
+> três leituras de memória em sequência, cada uma dependendo da anterior. Por
+> isso estruturas cheias de ponteiros (listas, árvores) percorrem mais devagar
+> que um vetor contíguo, tema do módulo 10.
 
 > [!NOTE]
 > **Pergunta para você:** com `int outra = 5;`, o que muda depois de

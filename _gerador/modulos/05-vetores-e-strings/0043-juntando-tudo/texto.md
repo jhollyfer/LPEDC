@@ -1,37 +1,34 @@
 ## 0043 · Juntando tudo
 
-A escola do bairro abriu uma enquete para escolher o mascote da festa junina:
-arara, boto ou capivara. Os votos chegam do formulário, um por linha, do jeito
-que cada pessoa digitou: `boto`, `Arara`, `CAPIVARA`, `Tatu`... Você precisa
-contar, desenhar um gráfico de barras e anunciar o vencedor.
+A escola do bairro abriu uma enquete para o mascote da festa junina: arara,
+boto ou capivara. Os votos chegam um por linha, como cada pessoa digitou:
+`boto`, `Arara`, `CAPIVARA`, `Tatu`... Você precisa contar, desenhar um
+gráfico de barras e anunciar o vencedor.
 
 O problema usa o módulo inteiro:
 
-- **`fgets` num laço** (assunto 0042) lê um voto por linha até a entrada
-  acabar, quando ele devolve `NULL`;
-- **caracteres** (0040): `tolower` em cada letra deixa "BOTO" e "boto" iguais;
+- **`fgets` num laço** (0042) lê um voto por linha até devolver `NULL`;
+- **caracteres** (0040): `tolower` iguala "BOTO" e "boto";
 - **strings** (0041): `strcspn` tira o `'\n'` e `strcmp` compara o voto com
   cada candidato;
 - **matriz de `char`** (0039): os nomes dos candidatos, um por linha;
-- **vetor de contadores** (0037): `votos[i]` conta os votos do candidato `i`.
-  A posição do nome na matriz é a mesma do contador no vetor;
+- **vetor de contadores** (0037): `votos[i]` conta os votos do candidato `i`,
+  na mesma posição do nome na matriz;
 - **funções que recebem vetores** (0038): `normalizar` altera a linha lida,
   `buscar` só lê.
 
-Divida assim: o `main` cuida do laço e do resultado; cada função faz uma coisa
-só. `buscar` devolve a posição ou -1, como a busca do A076, e assim "Tatu"
-cai nos inválidos sem nenhum `if` especial. O `(unsigned char)` dentro do
-`tolower` protege contra votos com acento (assunto 0040).
+O `main` cuida do laço e do resultado; cada função faz uma coisa só. `buscar`
+devolve a posição ou -1, como no A076, e assim "Tatu" cai nos inválidos sem
+`if` especial. O `(unsigned char)` no `tolower` protege contra votos com acento
+(assunto 0040).
 
-Cada linha passa pela mesma esteira: lê, normaliza,
-procura na matriz de nomes e soma 1 no contador da posição certa. "Tatu" não
-está na matriz, então vai para os inválidos:
+Cada linha passa pela mesma esteira: lê, normaliza, procura na matriz de nomes
+e soma 1 no contador. "Tatu" não está na matriz e vai para os inválidos:
 
 {{ideia}}
 
-Para testar o programa sem digitar, salve o código num arquivo `.c`
-e mande os votos com `printf 'boto\nArara\n...' | ./programa` seguido do
-caminho do arquivo:
+Para testar sem digitar, salve o código num `.c`, compile com o gcc e mande os
+votos com `printf 'boto\nArara\n...' | ./programa`:
 
 ```c
 #include <stdio.h>
@@ -105,32 +102,29 @@ int main(void) {
 // Vencedor: boto
 ```
 
-É um laço com sentinela (assunto 0025), e a sentinela é o `NULL` do
-`fgets`. Dentro dele, uma decisão: achou o candidato
-ou não. O resultado só sai depois que a entrada acaba:
+É um laço com sentinela (assunto 0025), e a sentinela é o `NULL` do `fgets`.
+Dentro dele, uma decisão: achou o candidato ou não. O resultado só sai quando a
+entrada acaba:
 
 {{fluxograma}}
 
-E se a lista de nomes precisasse sair em ordem alfabética? Como string não se
-atribui com `=`, trocar dois nomes de lugar é um `strcpy` triplo, com uma
-string auxiliar. O exemplo A086 ordena uma lista de chamada assim, uma prévia
-da ordenação por seleção (assunto 0092).
+Para ordenar os nomes em ordem alfabética, como string não se atribui com `=`,
+trocar dois nomes é um `strcpy` triplo, com uma string auxiliar. O exemplo A086
+ordena uma lista de chamada assim, prévia da ordenação por seleção (assunto
+0092).
 
 > [!WARNING]
-> **Empate.** Com `votos[i] > votos[vencedor]`, um empate fica com quem
-> aparece primeiro na matriz. Isso é uma regra de negócio escondida no `>`:
-> troque por `>=` e o empate passa a ir para o último. Decida de propósito e,
-> se o empate importa, detecte e avise. E `"boto "`, com espaço no fim, é
-> inválido para o `strcmp`: a `normalizar` não corta espaços.
+> **Empate.** Com `votos[i] > votos[vencedor]`, o empate fica com quem aparece
+> primeiro na matriz; com `>=`, com o último. É uma regra de negócio escondida
+> no operador: decida de propósito. E `"boto "`, com espaço no fim, é inválido
+> para o `strcmp`: `normalizar` não corta espaços.
 
 > [!TIP]
-> **Por dentro do C:** `char nomes[3][12]` são 36 bytes contínuos, como toda
-> matriz. "arara" ocupa 6 deles na linha 0, e os 6 bytes restantes da linha
-> são zeros (as chaves da inicialização zeram o que sobra). `nomes[1]` é o
-> começo da linha 1, 12 bytes depois do começo. É essa conta
-> (início + i × 12) que exige o `[TAM_NOME]` no parâmetro de `buscar`, para achar `nomes[i]`. Uma lista de nomes de tamanhos bem diferentes desperdiça
-> espaço assim; no módulo 07 você vai guardar cada nome com o tamanho exato,
-> usando memória dinâmica.
+> **Por dentro do C:** `char nomes[3][12]` são 36 bytes contínuos; "arara"
+> usa 6 da linha 0 e o resto da linha é zero. `nomes[i]` fica em início +
+> i × 12, e é essa conta que exige `[TAM_NOME]` no parâmetro de `buscar`. Nomes
+> de tamanhos muito diferentes desperdiçam espaço; no módulo 07, a memória
+> dinâmica guarda cada nome com o tamanho exato.
 
 > [!NOTE]
 > **Pergunta para você:** se a entrada tivesse uma linha em branco no meio, o

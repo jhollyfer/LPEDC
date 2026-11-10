@@ -1,18 +1,15 @@
 ## 0061 · Vetor de structs
 
-Abra qualquer app de futebol e olhe a tabela do campeonato. Cada linha é um
-time, e toda linha tem as mesmas colunas: nome, vitórias, empates, derrotas.
-Uma linha é uma struct. A tabela inteira é um **vetor de structs**.
+Na tabela do campeonato, cada linha é um time e todas têm as mesmas colunas:
+nome, vitórias, empates, derrotas. Uma linha é uma struct. A tabela inteira é
+um **vetor de structs**.
 
-Você já conhece as duas peças. Um vetor guarda vários valores do mesmo tipo,
-lado a lado. Uma struct é um tipo. Junte as duas: `Time tabela[4];` são quatro
-`Time` seguidos na memória: os bytes das structs ficam **dentro** do vetor,
-um time colado no outro.
+`Time tabela[4];` são quatro `Time` seguidos na memória: os bytes das structs
+ficam **dentro** do vetor, um time colado no outro.
 
-Para chegar num campo, você primeiro escolhe a linha e depois a coluna:
-`tabela[2].nome`. O índice vem **antes** do ponto, porque `tabela[2]` é um
-`Time`, e um `Time` tem o campo `nome`. Já `tabela.nome[2]` não faz sentido:
-o vetor não tem campo nenhum.
+Para chegar a um campo, escolha a linha e depois a coluna: `tabela[2].nome`. O
+índice vem **antes** do ponto, porque `tabela[2]` é um `Time`, e um `Time` tem
+o campo `nome`. `tabela.nome[2]` não faz sentido: o vetor não tem campos.
 
 A inicialização junta as duas sintaxes, chaves dentro de chaves:
 
@@ -24,13 +21,11 @@ Time tabela[] = {
 ```
 
 Sem o tamanho entre colchetes, o compilador conta os elementos. O truque de
-sempre para saber quantos são continua valendo: `sizeof tabela / sizeof
-tabela[0]`.
+sempre dá a quantidade: `sizeof tabela / sizeof tabela[0]`.
 
-São quatro times, cada um com seus números. O programa
-percorre o vetor, calcula os pontos de cada um (3 por vitória, 1 por empate) e
-guarda o **índice** do melhor até agora. Palmeiras, no índice 2, termina na
-frente:
+São quatro times. O programa percorre o vetor, calcula os pontos de cada um (3
+por vitória, 1 por empate) e guarda o **índice** do melhor até agora.
+Palmeiras, no índice 2, termina na frente:
 
 {{ideia}}
 
@@ -79,31 +74,20 @@ int main(void) {
 // A tabela ocupa 128 bytes (4 x 32)
 ```
 
-Guardar o índice, e não uma cópia do time, é de propósito: com o índice você
-sabe **onde** está o líder e pode mexer nele (`tabela[lider].vitorias++`).
-Uma cópia seria um time solto, desligado da tabela.
+Guardar o índice, e não uma cópia, é de propósito: com ele você sabe **onde**
+está o líder e pode mexer nele (`tabela[lider].vitorias++`). Uma cópia seria
+um time solto, desligado da tabela.
 
-É o padrão "maior até agora" do módulo de laços, mas a comparação olha um
-valor calculado de cada struct:
+É o padrão "maior até agora" do módulo de laços, comparando um valor
+calculado de cada struct:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `tabela[i] = tabela[j]` copia o time **inteiro**, todos os campos. Isso
-> serve para trocar dois times de lugar ao ordenar: troque as structs, não os
-> campos um por um. O erro clássico é trocar só o nome e esquecer os números,
-> deixando a tabela com nomes e pontos embaralhados. E lembre que o C não
-> confere limites: `tabela[4]` num vetor de 4 times lê lixo (ou derruba o
-> programa) do mesmo jeito que num vetor de `int`.
-
-> [!TIP]
-> **Por dentro do C:** cada `Time` ocupa 32 bytes (20 do nome + 3 inteiros de
-> 4), e os quatro ficam colados: 128 bytes seguidos. Para achar
-> `tabela[2].vitorias`, o compilador faz uma conta só: início do vetor
-> + 2 × 32 (pula dois times) + 20 (pula o nome). Por isso percorrer um vetor de
-> structs é rápido: os dados estão em sequência, e o processador traz vários
-> de uma vez para o cache. Dados espalhados pela memória não têm essa
-> vantagem.
+> `tabela[i] = tabela[j]` copia o time **inteiro**. Use para trocar dois times
+> ao ordenar: troque as structs, não campo a campo (trocar só o nome embaralha
+> nomes e pontos). O C não confere limites: `tabela[4]` num vetor de 4 times
+> lê lixo ou derruba o programa, como num vetor de `int`.
 
 > [!NOTE]
 > **Pergunta para você:** se o Vasco tivesse 9 vitórias, 7 empates e 0

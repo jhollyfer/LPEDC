@@ -7,8 +7,8 @@ aparece quando o programa já está rodando.
 
 Para isso existe o `malloc` (*memory allocation*), de `<stdlib.h>`. Você diz
 **quantos bytes** quer e ele devolve o **endereço** de um bloco desse tamanho
-no heap. Esse endereço vai para um ponteiro, e o ponteiro passa a se comportar
-como um vetor: `corridas[i]` funciona do mesmo jeito (assunto 0047).
+no heap. Esse endereço vai para um ponteiro, que age como vetor:
+`corridas[i]` funciona igual (assunto 0047).
 
 ```c
 double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
@@ -16,28 +16,26 @@ double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
 
 Três detalhes nessa linha:
 
-- o `malloc` conta em **bytes**, não em elementos. `malloc(4)` não é espaço
-  para 4 `double`, é espaço para 4 bytes. Daí o `n * sizeof(tipo)` de sempre;
-- ele devolve `void *` (assunto 0051), que vira `double *` sozinho. Em C não
-  precisa de cast; o `(double *)` que você vê em livro antigo é dispensável;
-- se não houver memória, ele devolve **`NULL`**. Sempre confira antes de usar.
+- o `malloc` conta em **bytes**, não em elementos. `malloc(4)` dá 4 bytes, não
+  4 `double`. Daí o `n * sizeof(tipo)`;
+- ele devolve `void *` (assunto 0051), que vira `double *` sozinho. Em C o
+  cast `(double *)` é dispensável;
+- se não houver memória, devolve **`NULL`**. Sempre confira antes de usar.
 
-O bloco vem com **lixo**: o que estava naqueles bytes antes. O `malloc` não
-zera nada. Preencha antes de ler.
+O bloco vem com **lixo**: o `malloc` não zera nada. Preencha antes de ler.
 
-Quando terminar, devolva com **`free(corridas)`**. O `free` recebe exatamente
-o endereço que o `malloc` deu, nem um byte a mais. Ele não precisa do tamanho:
-o próprio `malloc` anotou isso num cabeçalho escondido antes do bloco. Depois
-do `free`, o ponteiro continua guardando o endereço antigo, só que agora ele
-aponta para um bloco que não é mais seu. Por isso o hábito: `corridas = NULL;`.
+Para devolver, use **`free(corridas)`**, com exatamente o endereço que o
+`malloc` deu. O `free` não precisa do tamanho: o `malloc` o anotou num
+cabeçalho escondido antes do bloco (por isso `free(p + 1)` dá errado). Depois
+do `free`, o ponteiro guarda o endereço antigo, que não é mais seu. Por isso o
+hábito: `corridas = NULL;`.
 
-A regra: **todo `malloc` tem um `free`**. O bloco que você esquece de liberar
-fica ocupado até o programa acabar. Isso é um **vazamento** (*memory leak*),
-tema do assunto 0057.
+A regra: **todo `malloc` tem um `free`**. O bloco esquecido fica ocupado até o
+programa acabar: é um **vazamento** (*memory leak*), tema do assunto 0057.
 
-O programa pergunta quantas corridas foram (4), pede ao
-heap `4 * 8 = 32` bytes, guarda os valores (R$ 12,50, R$ 18,00, R$ 25,90 e
-R$ 9,60), soma tudo e devolve o bloco:
+O programa pergunta quantas corridas foram (4), pede ao heap `4 * 8 = 32`
+bytes, guarda os valores (R$ 12,50, R$ 18,00, R$ 25,90 e R$ 9,60), soma tudo e
+devolve o bloco:
 
 {{ideia}}
 
@@ -92,26 +90,16 @@ int main(void) {
 // Média: R$ 16.50
 ```
 
-Toda saída do programa depois do `malloc` passa por um `free`, até a saída
-de erro no meio da leitura, que é o caminho mais fácil de esquecer:
+Toda saída depois do `malloc` passa por um `free`, até a de erro no meio da
+leitura, a mais fácil de esquecer:
 
 {{fluxograma}}
 
 > [!WARNING]
 > O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
-> inteiros reserva só um quarto do necessário, e o programa escreve além do
-> fim do bloco. Um jeito à prova de distração é tirar o tipo do próprio
-> ponteiro: `int *v = malloc(n * sizeof *v);`. Se um dia `v` virar `double *`,
-> a conta acompanha sozinha.
-
-> [!TIP]
-> **Por dentro do C:** o `malloc` pede memória ao sistema operacional em
-> pedaços grandes (chamadas `brk` e `mmap`) e depois fatia esses pedaços para
-> você. Cada bloco ganha um cabeçalho de uns 8 a 16 bytes, logo antes do
-> endereço que você recebe, com o tamanho dele. Assim o `free(p)` sabe
-> quanto liberar, e `free(p + 1)` dá errado: ele vai ler um "cabeçalho" que
-> não existe. Pedir 1 byte custa, na prática, uns 32: pedidos
-> pequenos demais desperdiçam memória.
+> inteiros reserva um quarto do necessário. Tire o tipo do próprio ponteiro:
+> `int *v = malloc(n * sizeof *v);`. Se `v` virar `double *`, a conta
+> acompanha.
 
 > [!NOTE]
 > **Pergunta para você:** se você tirar a linha `free(corridas);` o programa

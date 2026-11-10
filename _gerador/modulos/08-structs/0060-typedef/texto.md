@@ -1,13 +1,12 @@
 ## 0060 · Typedef
 
 No grupo da família, ninguém chama o seu tio de "José Carlos da Silva". É
-"Zé". O apelido não cria outra pessoa: é o mesmo tio, com um nome mais curto.
+"Zé". O apelido não cria outra pessoa: é o mesmo tio, com nome mais curto.
 
-No assunto anterior, todo pedido era declarado como `struct pedido p1;`, com
-as duas palavras, toda vez. Em programa grande isso cansa. O C dá apelido a um
-tipo com o **typedef**. Struct, union e enum, com ou sem
-`typedef`, são o que os livros e o edital chamam de **tipos definidos pelo
-programador**.
+No assunto anterior, todo pedido era declarado como `struct pedido p1;`. Em
+programa grande isso cansa. O **typedef** dá apelido a um tipo. Struct, union
+e enum, com ou sem `typedef`, são os **tipos definidos pelo programador** dos
+livros e do edital.
 
 A regra: escreva uma declaração de variável normal e ponha `typedef` na
 frente. O nome que seria a variável vira o **nome do tipo**:
@@ -17,9 +16,8 @@ double Reais;          // uma variável chamada Reais
 typedef double Reais;  // um apelido: Reais agora é o mesmo que double
 ```
 
-O uso mais comum é com struct. Dá para batizar uma struct que já existe
-(`typedef struct pix Pix;`) ou fazer tudo de uma vez, sem dar nome à
-struct:
+O uso mais comum é com struct. Dá para batizar uma struct existente
+(`typedef struct pix Pix;`) ou fazer tudo de uma vez, sem nome para a struct:
 
 ```c
 typedef struct {
@@ -29,13 +27,12 @@ typedef struct {
 } Pix;
 ```
 
-A partir daí você escreve só `Pix p;`, sem o `struct` na frente. Nome de
-tipo com inicial maiúscula é uma convenção comum (e a deste curso) para não
-confundir tipo com variável.
+A partir daí você escreve só `Pix p;`. Inicial maiúscula em nome de tipo é
+convenção deste curso, para não confundir tipo com variável.
 
 Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno de R$ 1.000,00 que os
 bancos aplicam entre 20h e 6h. No desenho, `Pix` e `Reais` são só etiquetas
-novas coladas em coisas que já existiam:
+coladas em coisas que já existiam:
 
 {{ideia}}
 
@@ -76,33 +73,21 @@ int main(void) {
 // Bloqueado: o limite noturno é R$ 1000.00
 ```
 
-Você já usou vários typedefs sem saber: `size_t`, `uint8_t`, `int32_t` e até
-o `FILE` que vem no módulo 09 são apelidos definidos nos cabeçalhos da
-biblioteca. O `uint8_t` existe para você dizer "quero exatamente 8 bits sem
-sinal" sem depender do nome do tipo em cada máquina.
+Você já usou typedefs: `size_t`, `uint8_t`, `int32_t` e o `FILE` do módulo 09
+são apelidos definidos nos cabeçalhos. O `uint8_t` diz "exatamente 8 bits sem
+sinal", sem depender do nome do tipo em cada máquina.
 
-São duas perguntas em sequência: o Pix só é bloqueado se for horário
-noturno **e** o valor passar do limite:
+São duas perguntas: o Pix só é bloqueado se for horário noturno **e** o valor
+passar do limite:
 
 {{fluxograma}}
 
 > [!WARNING]
 > `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
-> e `typedef double Dolares;`, o compilador aceita `Reais r = dolares;` sem
-> reclamar: para ele, os dois são `double`. Se você quer que o compilador
-> barre a mistura, embrulhe numa struct: `typedef struct { double v; } Reais;`.
-> Structs diferentes não se misturam. E cuidado com typedef que esconde
-> demais: `typedef int *PInt;` faz `PInt a, b;` parecer inocente, mas esconde
-> que são ponteiros.
-
-> [!TIP]
-> **Por dentro do C:** o typedef não existe no executável. Ele é resolvido
-> pelo compilador e some, sem custo nenhum. Para ver de onde vem um apelido da
-> biblioteca, rode `gcc -E A119.c | grep "typedef.* size_t;"`: no Linux de 64
-> bits aparece `typedef long unsigned int size_t;`. Diferente do `#define`, que
-> o pré-processador troca como texto, o typedef entende a gramática do C:
-> `typedef char *Texto; Texto a, b;` faz **os dois** serem ponteiros, enquanto
-> `#define Texto char *` deixaria `b` como um `char` comum.
+> e `typedef double Dolares;`, `Reais r = dolares;` compila: os dois são
+> `double`. Para o compilador barrar a mistura, embrulhe numa struct:
+> `typedef struct { double v; } Reais;`. E `typedef int *PInt;` esconde que
+> `PInt a, b;` são ponteiros.
 
 > [!NOTE]
 > **Pergunta para você:** e se o mesmo Pix de R$ 1.500,00 fosse feito às 6h

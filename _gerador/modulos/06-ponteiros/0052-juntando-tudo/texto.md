@@ -1,33 +1,29 @@
 ## 0052 · Juntando tudo: o ranking da feira
 
-Sábado, fim de feira. A associação dos feirantes quer o ranking das
-barracas pelo faturamento do dia e o nome da campeã, com uma condição: a
-planilha original não pode mudar de ordem, porque outras contas usam a
-posição de cada barraca.
+Sábado, fim de feira. A associação dos feirantes quer o ranking das barracas
+pelo faturamento do dia e o nome da campeã, sem mudar a ordem da planilha
+original, porque outras contas usam a posição de cada barraca.
 
 O problema junta o módulo inteiro:
 
-- **vetores paralelos** com o nome, a quantidade e o preço de cada barraca,
-  e o faturamento calculado (`fat[i] = qtd[i] * preco[i]`);
-- um **vetor de ponteiros** `const double *ordem[N]`, em que cada posição
-  aponta para um elemento de `fat` (assunto 0049). Ele é ordenado, e `fat`
-  não. Como num índice de livro: as páginas não mudam de lugar, só a lista
-  que aponta para elas;
-- o **`qsort`** com uma função de comparação (assunto 0050). Cada elemento
-  de `ordem` é um `const double *`, então o `qsort` entrega o endereço de um
-  ponteiro, que chega como `const void *` (assunto 0051). Dois saltos
-  depois, `**`, chega-se ao faturamento;
-- **subtração de ponteiros** (assunto 0047): `ordem[i] - fat` diz em que
-  posição de `fat` aquele ponteiro aponta, e a mesma posição dá o nome em
-  `produtos`;
-- **passagem por referência** (assunto 0046): a função `resumo` devolve
-  duas respostas, o total (num `double *`) e **onde** está o maior (num
-  `const double **`, porque ela precisa mudar um ponteiro do `main`).
+- **vetores paralelos** com nome, quantidade e preço de cada barraca, e o
+  faturamento calculado (`fat[i] = qtd[i] * preco[i]`);
+- um **vetor de ponteiros** `const double *ordem[N]`, cada posição apontando
+  para um elemento de `fat` (assunto 0049). Ele é ordenado, `fat` não, como num
+  índice de livro: as páginas não mudam, só a lista que aponta para elas;
+- o **`qsort`** com função de comparação (assunto 0050). Cada elemento de
+  `ordem` é um `const double *`, então o `qsort` entrega o endereço de um
+  ponteiro, que chega como `const void *` (assunto 0051). Dois saltos, `**`,
+  levam ao faturamento;
+- **subtração de ponteiros** (assunto 0047): `ordem[i] - fat` dá a posição em
+  `fat`, a mesma que dá o nome em `produtos`;
+- **passagem por referência** (assunto 0046): `resumo` devolve duas respostas,
+  o total (num `double *`) e **onde** está o maior (num `const double **`, pois
+  ela muda um ponteiro do `main`).
 
-São 4 barracas: tomate (30 × R$ 6,50), alface (45 ×
-R$ 3,00), queijo (8 × R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`,
-`ordem[0]` aponta para o pastel e `ordem[3]` para a alface, enquanto `fat`
-continua na ordem de sempre:
+São 4 barracas: tomate (30 × R$ 6,50), alface (45 × R$ 3,00), queijo (8 ×
+R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`, `ordem[0]` aponta para o
+pastel e `ordem[3]` para a alface, e `fat` segue na ordem de sempre:
 
 {{ideia}}
 
@@ -88,35 +84,31 @@ int main(void) {
 // Total: R$ 1126.00  Campeão: pastel
 ```
 
-O `const double * const *` da comparação se lê da direita para a esquerda:
-ponteiro para um ponteiro constante para um `double` constante. Os dois
-`const` só prometem que a comparação não muda nada, nem o ponteiro do
-vetor, nem o faturamento.
+O `const double * const *` da comparação lê-se da direita para a esquerda:
+ponteiro para um ponteiro constante para um `double` constante. Os `const` só
+prometem que a comparação não muda nada.
 
-O programa tem três fases: calcula e aponta, ordena os ponteiros e percorre
-a ordem nova traduzindo cada ponteiro para um índice:
+Três fases: calcula e aponta, ordena os ponteiros e percorre a ordem nova,
+traduzindo cada ponteiro em índice:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Ordenar `ordem` com `sizeof(double)` no terceiro argumento do `qsort`
-> parece certo e está errado: os elementos de `ordem` são **ponteiros**
-> (8 bytes), não `double`. Aqui os dois têm 8 bytes e o erro fica
-> escondido, mas com `int *ordem[]` e `sizeof(int)` o `qsort` embaralharia
-> meio ponteiro com meio ponteiro. Escreva sempre `sizeof ordem[0]`: o
-> tamanho do elemento do próprio vetor que você está ordenando.
+> Passar `sizeof(double)` ao `qsort` para ordenar `ordem` parece certo e está
+> errado: os elementos de `ordem` são **ponteiros** (8 bytes). Aqui os dois têm
+> 8 bytes e o erro fica escondido, mas com `int *ordem[]` e `sizeof(int)` o
+> `qsort` embaralharia meio ponteiro com meio ponteiro. Escreva sempre
+> `sizeof ordem[0]`.
 
 > [!TIP]
-> **Por dentro do C:** ordenar ponteiros em vez dos dados é uma técnica
-> clássica. Cada troca do `qsort` move 8 bytes, não importa o tamanho do
-> dado apontado. Com structs de 200 bytes (módulo 08), a diferença é
-> enorme. E várias "visões" ordenadas podem conviver: um vetor de ponteiros
-> por faturamento, outro por nome, todos apontando para os mesmos dados. É
-> a ideia por trás dos índices de um banco de dados.
+> **Por dentro do C:** ordenar ponteiros em vez dos dados é técnica clássica:
+> cada troca do `qsort` move 8 bytes, mesmo com structs de 200 bytes (módulo 08),
+> e vários vetores de ponteiros (por faturamento, por nome) podem coexistir sobre
+> os mesmos dados, a ideia dos índices de banco de dados.
 
 > [!NOTE]
 > **Pergunta para você:** se você trocar `maior_primeiro` por uma função que
-> ordena pelo **nome** do produto, o que muda no programa? A comparação
-> ainda recebe endereços de `const double *`; como ela chegaria ao nome?
+> ordena pelo **nome** do produto, o que muda no programa? A comparação ainda
+> recebe endereços de `const double *`; como ela chegaria ao nome?
 
 {{pratique}}

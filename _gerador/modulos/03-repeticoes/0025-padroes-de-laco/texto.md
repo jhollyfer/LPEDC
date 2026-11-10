@@ -1,13 +1,12 @@
 ## 0025 · Padrões de laço
 
-Fim de semana de calor e você anotou a temperatura máxima de cada dia: 28, 31,
-36, 25 e 30 °C. Quantos dias foram? Qual a média? Qual foi o dia mais quente,
-e o mais frio? Teve algum dia de 35 °C ou mais?
+Fim de semana de calor e você anotou a máxima de cada dia: 28, 31, 36, 25 e
+30 °C. Quantos dias foram? Qual a média? Qual o dia mais quente e o mais frio?
+Teve algum dia de 35 °C ou mais?
 
-Cada pergunta dessas é um **padrão de laço**: um jeito de usar uma variável
-que já foi resolvido milhares de vezes. São cinco, e todos seguem o mesmo roteiro: a
-variável ganha um valor **antes** do laço, é atualizada **dentro** e usada
-**depois**.
+Cada pergunta é um **padrão de laço**: um uso de variável já resolvido
+milhares de vezes. São cinco, com o mesmo roteiro: a variável ganha valor
+**antes** do laço, é atualizada **dentro** e usada **depois**.
 
 | Padrão | Antes do laço | Dentro do laço | Depois |
 | --- | --- | --- | --- |
@@ -20,21 +19,20 @@ variável ganha um valor **antes** do laço, é atualizada **dentro** e usada
 Detalhes que separam o código certo do quase certo:
 
 - o acumulador de **produto** começa em **1**: começar em 0 zera tudo;
-- a **flag** só sobe. Ninguém escreve `else calorao = false`, senão um dia de
-  25 °C depois do de 36 apagaria a resposta;
-- a **sentinela** é um valor que **não pode** ser um dado de verdade. Temperatura
-  pode ser 0 ou negativa, então a sentinela aqui é 999. E ela não entra em
-  conta nenhuma: o laço testa antes de contar;
-- para a sentinela funcionar, a leitura acontece em dois lugares: uma vez
-  **antes** do laço e uma vez no **fim** do corpo. É a **leitura antecipada**:
-  a pergunta do `while` sempre olha para um valor recém-lido;
-- a média é `(double) soma / dias`, com cast (assunto 0008), e só se `dias >
-  0`. Se a primeira coisa digitada for a sentinela, a conta vira 0 / 0: com
+- a **flag** só sobe. Sem `else calorao = false`, senão um dia de 25 °C depois
+  do de 36 apagaria a resposta;
+- a **sentinela** é um valor que **não pode** ser dado real. Temperatura pode
+  ser 0 ou negativa, então a sentinela aqui é 999. Ela não entra em conta
+  nenhuma: o laço testa antes de contar;
+- a leitura acontece em dois lugares: **antes** do laço e no **fim** do corpo.
+  É a **leitura antecipada**: a pergunta do `while` sempre olha um valor
+  recém-lido;
+- a média é `(double) soma / dias`, com cast (assunto 0008), e só se
+  `dias > 0`. Se a primeira entrada for a sentinela, a conta vira 0 / 0: com
   `double`, sai `nan` (*not a number*); com `int`, o programa quebra.
 
-Acompanhe as cinco temperaturas: elas entram uma a uma e cada uma
-atualiza as caixinhas. O 999 não muda nada: só manda parar. No fim, as
-caixinhas guardam as respostas:
+As cinco temperaturas entram uma a uma e cada uma atualiza as caixinhas. O 999
+não muda nada: só manda parar. No fim, as caixinhas guardam as respostas:
 
 {{ideia}}
 
@@ -96,33 +94,29 @@ int main(void) {
 // Teve dia de 35 °C ou mais? sim
 ```
 
-Há **duas** caixas de leitura. "Ler temp" fica antes do
-losango e roda uma vez; "Ler a próxima temp" fica no fim do corpo e é dela que
-sai a seta de volta para o losango. Assim, a pergunta "temp != 999?" sempre
-olha para o valor que acabou de chegar:
+Há **duas** caixas de leitura. "Ler temp" fica antes do losango e roda uma vez;
+"Ler a próxima temp" fica no fim do corpo, e dela sai a seta de volta ao
+losango. Assim "temp != 999?" sempre olha o valor que acabou de chegar:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `maior = 0` parece inofensivo, até chegar o inverno na serra catarinense:
-> com máximas de -3, -1 e -4 °C, nenhuma passa de 0, e o programa jura que o
-> dia mais quente teve 0 °C, um dia que nunca existiu. O maior (e o menor)
-> começa com o **primeiro valor lido**, como no código acima (`dias == 1 ||
-> ...`). Outra saída é começar com o pior valor possível: `INT_MIN` para o
-> maior e `INT_MAX` para o menor, de `<limits.h>` (assunto 0003).
+> `maior = 0` parece inofensivo, até o inverno: com máximas de -3, -1 e -4 °C,
+> nenhuma passa de 0, e o programa afirma que o dia mais quente teve 0 °C, um
+> dia que nunca existiu. O maior (e o menor) começa com o **primeiro valor
+> lido**, como no código (`dias == 1 || ...`). Outra saída é começar com o pior
+> valor possível: `INT_MIN` para o maior e `INT_MAX` para o menor, de
+> `<limits.h>` (assunto 0003).
 
 > [!TIP]
-> **Por dentro do C:** o acumulador tem os limites do tipo dele. Some salários
-> num `int` e, passando de 2.147.483.647, a soma dá a volta e vira negativa
-> (*overflow*, assunto 0003). Com `double`, o perigo é outro: 0,1 não tem
-> representação exata em binário, então somar 0,1 dez vezes dá
-> 0,9999999999999999, não 1. Para dinheiro, sistemas reais acumulam
-> **centavos** num inteiro grande (`long long`) e só dividem por 100 na
-> hora de mostrar.
+> O acumulador tem os limites do tipo: um `int` que passa de 2.147.483.647 dá a
+> volta e fica negativo (*overflow*, assunto 0003), e somar 0,1 dez vezes em
+> `double` dá 0,9999999999999999. Para dinheiro, acumule **centavos** num
+> inteiro grande (`long long`) e divida por 100 só ao mostrar.
 
 > [!NOTE]
 > **Pergunta para você:** se a primeira coisa digitada for 999, o que o A049
 > mostra? E se você apagar o `if (dias == 0)`, o que aconteceria na média?
-> Preveja e teste com `printf '999\n' | ./programa`.
+> Preveja e teste: compile com o gcc e rode `printf '999\n' | ./programa`.
 
 {{pratique}}

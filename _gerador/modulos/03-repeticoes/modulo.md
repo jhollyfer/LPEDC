@@ -1,20 +1,18 @@
 # Módulo 03 · Laços
 
-Sequência e decisão você já tem. Falta a terceira peça, a que dá trabalho de
-verdade ao computador: a **repetição**. Somar 10 preços, validar uma senha
-até acertar, desenhar uma tabela, sortear dados até sair dupla. Sem laço,
-você copiaria o mesmo código dez, cem, mil vezes. Com laço, escreve uma vez e
-diz **quando parar**.
+Sequência e decisão você já tem. Falta a **repetição**: somar 10 preços,
+validar uma senha até acertar, desenhar uma tabela, sortear dados até sair
+dupla. Sem laço, você copiaria o mesmo código cem vezes. Com laço, escreve uma
+vez e diz **quando parar**.
 
 O C tem cinco palavras para repetir: `while`, `do...while`, `for`, `break` e
-`continue`. Nenhuma percorre uma coleção sozinha: todo laço é feito à mão,
-com contador e condição. Isso obriga a pensar em três coisas: como o laço
-começa, o que muda a cada volta e qual pergunta faz ele terminar. Errar qualquer uma das três dá o laço
-infinito ou a volta a mais, os dois bugs mais comuns da programação.
+`continue`. Todo laço é feito à mão, com contador e condição, e exige três
+decisões: como começa, o que muda a cada volta e qual pergunta o termina. Errar
+uma delas dá o laço infinito ou a volta a mais, os bugs mais comuns da
+programação.
 
-O módulo fecha com os **padrões de laço** (contador, acumulador, maior e
-menor, flag e sentinela), que voltam no resto do curso, e com números
-**aleatórios**, para jogos de dados e simulações.
+O módulo fecha com os **padrões de laço** (contador, acumulador, maior e menor,
+flag e sentinela), que voltam no resto do curso, e com números **aleatórios**.
 
 ## O que você vai aprender
 
@@ -28,13 +26,14 @@ menor, flag e sentinela), que voltam no resto do curso, e com números
 
 ## Antes de começar
 
-Você vai usar `scanf` com o retorno conferido (assunto 0006), `if`, `switch`
-e o ternário (módulo 02) e `bool` de `<stdbool.h>` (assunto 0012). Os
-exercícios só usam o que já foi visto: ainda não há funções (módulo 04) nem
-vetores (módulo 05), então tudo cabe no `main`.
+Este módulo usa o que você viu antes: `scanf` com o retorno conferido (assunto
+0006), `if`, `switch` e o ternário (módulo 02) e `bool` (assunto 0012). Ele
+prepara o módulo 04: o sorteio repetido do craps (0027) vira função lá. Por
+ora não há funções (módulo 04) nem vetores (módulo 05), então tudo cabe no
+`main`.
 
-Vários exemplos leem do teclado. Para não digitar tudo de novo a cada teste,
-mande a entrada pelo `printf` do terminal, um valor por linha:
+Para não digitar a entrada a cada teste, mande-a pelo `printf` do terminal,
+um valor por linha:
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049 && printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049
@@ -54,8 +53,8 @@ ela.
 
 ## Desafios do módulo
 
-Problemas extras, misturando os assuntos do módulo, do médio ao difícil. Crie
-um arquivo seu para cada um e rode com as flags de estudo.
+Problemas extras, do médio ao difícil. Crie um arquivo seu para cada um e
+compile com as flags de estudo.
 
 **1. Os primos até 100.** Mostre todos os números primos de 2 a 100 e quantos
 são. Para cada candidato, teste os divisores com um laço de dentro e saia dele
@@ -214,9 +213,8 @@ sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
-alternativa certa. Em questão de laço, faça o teste de mesa: uma linha por
-volta, com o valor de cada variável.
+Questões objetivas no formato da prova do PPGI: uma alternativa certa. Faça o
+teste de mesa: uma linha por volta, com o valor de cada variável.
 
 **1.** Quantas vezes o corpo do laço executa, e quanto vale `i` no fim?
 

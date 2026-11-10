@@ -1,13 +1,12 @@
 ## 0010 · math.h
 
 Na pizzaria, a grande de 35 cm custa R$ 59,90 e a média de 25 cm, R$ 39,90.
-Duas médias dão mais pizza que uma grande? A intuição diz que não ("35 é bem
-maior que 25"), mas a área cresce com o **quadrado** do raio. Para tirar a
-dúvida você precisa de potência, de raiz e de arredondamento, e o C não tem
-operador para nada disso.
+Duas médias dão mais pizza que uma grande? A intuição diz que não, mas a área
+cresce com o **quadrado** do raio. Para tirar a dúvida, são necessários
+potência, raiz e arredondamento, e o C não tem operador para isso.
 
-Quem tem é a biblioteca de matemática, declarada no **`<math.h>`**. Quase todas
-as funções recebem e devolvem `double`:
+A biblioteca de matemática, declarada no **`<math.h>`**, tem funções para
+isso. Quase todas recebem e devolvem `double`:
 
 | Função | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -20,19 +19,19 @@ as funções recebem e devolvem `double`:
 | `fmod(x, y)` | resto de divisão real | `fmod(7.5, 2)` | 1.5 |
 | `sin`, `cos`, `tan` | trigonometria, em **radianos** | `cos(0)` | 1 |
 
-Dois avisos. O C padrão não define o pi: o `M_PI` que você vai achar por aí
-é extensão e não existe com `-std=c17`; crie o seu com `#define`. E o `abs`
-dos inteiros mora em outro lugar, no `<stdlib.h>`; para real, é `fabs`.
+Dois avisos. O C padrão não define o pi: o `M_PI` é extensão e não existe com
+`-std=c17`; crie o seu com `#define`. E o `abs` dos inteiros fica no
+`<stdlib.h>`; para real, use `fabs`.
 
-Arredondar tem três sabores e eles divergem nos negativos: `floor` sempre
-desce na reta (`floor(-2.3)` é -3), `ceil` sempre sobe (`ceil(-2.7)` é -2), e
-`round` vai para o inteiro mais perto. E nenhum deles é o cast: `(int) -2.7`
-**corta** e dá -2. O `ceil` é o das contas de "quantos preciso comprar": 2,78
-latas de tinta viram 3 latas.
+Os três arredondamentos divergem nos negativos: `floor` sempre desce
+(`floor(-2.3)` é -3), `ceil` sempre sobe (`ceil(-2.7)` é -2) e `round` vai
+para o inteiro mais perto. O cast é outra coisa: `(int) -2.7` **corta** e dá
+-2. O `ceil` serve para "quantos preciso comprar": 2,78 latas de tinta viram
+3.
 
-Na conta da grande, o diâmetro de 35 vira raio 17,5; `pow` eleva ao
-quadrado; vezes pi, dá a área da grande. A mesma conta para as médias, vezes
-dois, dá 981,75 cm², um pouco mais que a grande:
+Na grande, o diâmetro 35 vira raio 17,5; `pow` eleva ao quadrado; vezes pi,
+dá a área. Nas médias, a mesma conta vezes dois dá 981,75 cm², um pouco mais
+que a grande:
 
 {{ideia}}
 
@@ -73,27 +72,23 @@ int main(void) {
 Duas médias dão um pouco mais de pizza, mas cada 100 cm² da grande sai quase
 R$ 2 mais barato.
 
-No fluxograma, as funções entram no meio das contas como qualquer valor:
-`pow(...)` e `sqrt(...)` são calculados e o resultado segue na expressão:
+No fluxograma, `pow(...)` e `sqrt(...)` entram nas contas como qualquer
+valor:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e
-> qualquer número elevado a 0 é 1. Escreva `1.0 / 3`. Pelo mesmo motivo,
-> `ceil(7 / 2)` dá 3, não 4: o `ceil` recebe o 3 já cortado. E `abs(-2.75)`
-> com o `abs` dos inteiros dá 2; o `-Wextra` avisa
-> (`using integer absolute value function 'abs'`). Para real, `fabs`.
+> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e todo
+> número elevado a 0 é 1. Escreva `1.0 / 3`. Do mesmo modo, `ceil(7 / 2)` dá
+> 3, não 4: o `ceil` recebe o 3 já cortado. E o `abs` dos inteiros dá 2 em
+> `abs(-2.75)`; o `-Wextra` avisa (`using integer absolute value function
+> 'abs'`). Para real, `fabs`.
 
 > [!TIP]
-> **Por dentro do C:** o `math.h` só **declara** as funções: diz que
-> `double sqrt(double)` existe, e é por isso que `sqrt(144)` funciona com um
-> `int`: o compilador converte para `double` antes de chamar. O código mora
-> na biblioteca `libm`, e quem junta é o ligador com a opção `-lm` (o
-> `-lm` entra nas flags de estudo). Sem ela, pode aparecer `undefined reference to 'pow'`.
-> E o compilador otimiza: `sqrt(x)` vira uma instrução só do processador
-> (`sqrtsd`), `pow(x, 2)` vira `x * x`, e `sqrt(2.0)` é calculado na
-> compilação, sem chamada nenhuma.
+> O `math.h` só **declara** as funções (por isso `sqrt(144)` funciona com
+> `int`: o compilador converte para `double`). O código está na biblioteca
+> `libm`, que o ligador junta com `-lm` (já nas flags de estudo). Sem ela,
+> aparece `undefined reference to 'pow'`.
 
 > [!NOTE]
 > **Pergunta para você:** quanto dão `round(-2.5)`, `floor(-0.5)` e

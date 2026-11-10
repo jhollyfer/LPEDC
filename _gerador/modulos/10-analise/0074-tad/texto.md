@@ -1,44 +1,84 @@
 ## 0074 · TAD: interface (.h) e implementação (.c)
 
-Na entrada do estacionamento do shopping tem um painel: "VAGAS LIVRES: 3". A
-cancela só abre se houver vaga. Você não sabe se o sistema conta com sensor no
-chão, câmera ou planilha, e nem precisa saber. Você usa três "botões":
-entrar, sair e ver quantas vagas sobram.
+Na entrada do estacionamento do shopping, um painel: "VAGAS LIVRES: 3". A
+cancela só abre se houver vaga. Você não sabe se o sistema usa sensor, câmera
+ou planilha, e nem precisa. Usa três "botões": entrar, sair e ver quantas
+vagas sobram.
 
-Um **tipo abstrato de dado** (TAD) leva isso para o código: um tipo definido pelas
-**operações** que ele oferece, não pelo jeito como guarda os dados. Quem usa (o
+Um **tipo abstrato de dado** (TAD) leva isso ao código: um tipo definido pelas
+**operações** que oferece, não pelo modo como guarda os dados. Quem usa (o
 **cliente**) conhece só as operações. Quem implementa pode trocar tudo por
-dentro sem avisar ninguém, desde que as operações continuem cumprindo o
-prometido.
+dentro, desde que as operações cumpram o prometido.
 
 No C, a divisão é física, em dois arquivos:
 
 - **`contador.h`, a interface**: o contrato. Declara o tipo e os protótipos,
-  cada um com um comentário dizendo o que entra, o que sai e o que pode dar
-  errado. É o que o cliente inclui.
-- **`contador.c`, a implementação**: define a `struct` com os campos e escreve
-  as funções. O cliente nunca inclui este arquivo; ele só é compilado junto.
+  cada um com um comentário sobre o que entra, o que sai e o que pode dar
+  errado. O cliente o inclui.
+- **`contador.c`, a implementação**: define a `struct` e escreve as funções.
+  O cliente nunca o inclui; ele só é compilado junto.
 
-Quem fecha a porta é o **tipo opaco**. O `.h` diz apenas
-`typedef struct contador Contador;`, sem os campos. Para o compilador, no
-cliente, `struct contador` é um **tipo incompleto**: dá para ter um ponteiro
-`Contador *`, mas não dá para criar uma variável `Contador`, nem usar
-`sizeof`, nem acessar `->valor`. Por isso todo TAD opaco tem uma função
+O **tipo opaco** fecha a porta. O `.h` diz só `typedef struct contador
+Contador;`, sem os campos. No cliente, `struct contador` é um **tipo
+incompleto**: dá para ter um ponteiro `Contador *`, mas não uma variável
+`Contador`, nem `sizeof`, nem `->valor`. Por isso todo TAD opaco tem uma
 `_cria`, que faz o `malloc` lá dentro, e uma `_libera`, que faz o `free`.
 
-Fechar a porta permite ao TAD garantir um **invariante**, como no assunto
-anterior. O contador promete
-`0 <= valor <= limite`. Se o cliente pudesse escrever `vagas->valor = 99`, a
-promessa não valeria nada.
+Isso permite ao TAD garantir um **invariante**, como no 0073. O contador
+promete `0 <= valor <= limite`. Se o cliente pudesse escrever
+`vagas->valor = 99`, a promessa não valeria nada.
 
-No exemplo, o cliente (o arquivo com o `main`) inclui só o contrato. O `contador.c` também inclui o contrato e guarda a `struct`
-escondida. Na memória, o cliente tem só um ponteiro para um bloco no heap que
-ele não consegue abrir:
+No exemplo, o cliente (o arquivo do `main`) inclui só o contrato; o
+`contador.c` também o inclui e guarda a `struct` escondida. Na memória, o
+cliente tem só um ponteiro para um bloco no heap que não consegue abrir:
 
 {{ideia}}
 
-O contrato, completo, está em `contador.h` na pasta do assunto. O cliente
-estaciona 4 carros num lugar com 3 vagas:
+O contrato completo está em `contador.h`, na pasta do assunto. O cliente estaciona 4 carros em 3 vagas:
+
+```c
+#include <stdio.h>
+
+#include "contador.h" // só a interface: a struct está escondida em contador.c
+
+int main(void) {
+    Contador *vagas = contador_cria(3); // estacionamento com 3 vagas
+    if (vagas == NULL) {
+        printf("Sem memória\n");
+        return 1;
+    }
+
+    const char *placas[4] = {"RIO2A18", "SPX3B45", "BHZ7C09", "CWB1D77"};
+    for (int i = 0; i < 4; i++) {
+        if (contador_incrementa(vagas)) {
+            printf("%s entrou (%d/%d)\n", placas[i], contador_valor(vagas),
+                   contador_limite(vagas));
+        } else {
+            printf("%s: lotado, espere\n", placas[i]);
+        }
+    }
+
+    contador_decrementa(vagas); // um carro sai
+    printf("Um carro saiu (%d/%d)\n", contador_valor(vagas), contador_limite(vagas));
+
+    if (contador_incrementa(vagas)) {
+        printf("CWB1D77 entrou (%d/%d)\n", contador_valor(vagas), contador_limite(vagas));
+    }
+
+    contador_libera(vagas);
+    return 0;
+}
+// Saída:
+// RIO2A18 entrou (1/3)
+// SPX3B45 entrou (2/3)
+// BHZ7C09 entrou (3/3)
+// CWB1D77: lotado, espere
+// Um carro saiu (2/3)
+// CWB1D77 entrou (3/3)
+```
+
+O lado escondido fica em `contador.c`, que inclui o próprio `.h` para o
+compilador conferir cada função contra o protótipo.
 
 ```c
 #include <stdio.h>
@@ -119,54 +159,49 @@ bool contador_incrementa(Contador *c) {
 //     contador_valor e contador_limite seguem o mesmo estilo
 ```
 
-No fluxograma, o cliente conversa com o TAD só pelas funções. Quem decide
-"lotado" é o `contador_incrementa`, que devolve `false`; o cliente reage à
-resposta:
+No fluxograma, o cliente fala com o TAD só pelas funções. Quem decide
+"lotado" é o `contador_incrementa`, que devolve `false`:
 
 {{fluxograma}}
 
 ### O padrão dos próximos módulos
 
-Toda estrutura de dados dos módulos 11 a 16 (lista, pilha, fila, árvore, hash,
-grafo) segue este molde. Para um TAD `x`:
+Toda estrutura dos módulos 11 a 16 (lista, pilha, fila, árvore, hash, grafo)
+segue este molde. Para um TAD `x`:
 
-1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do exemplo
-   compila junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`. À mão:
-   `gcc A147.c contador.c -o a147`.
-2. **`x.h`**: comentário dizendo o que o TAD é; *include guard*
-   (`#ifndef X_H`); só os `#include` de que a interface precisa (em geral
-   `<stdbool.h>`); `typedef struct x X;`; protótipos com prefixo `x_`, cada um
-   com o seu contrato em comentário.
+1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do
+   exemplo compila junto todo `.c` da pasta que não se chama
+   `A000.c`/`E000.c`. À mão: `gcc A147.c contador.c -o a147`.
+2. **`x.h`**: comentário sobre o que o TAD é; *include guard* (`#ifndef X_H`);
+   só os `#include` de que a interface precisa (em geral `<stdbool.h>`);
+   `typedef struct x X;`; protótipos com prefixo `x_`, cada um com seu
+   contrato em comentário.
 3. **`x.c`**: inclui as bibliotecas e o próprio `"x.h"`; define a `struct x`
    com o invariante comentado em cima; funções auxiliares internas são
-   `static` (ficam invisíveis fora do arquivo).
-4. **Nomes das operações**: `x_cria` (devolve `NULL` se faltar memória),
-   `x_libera` (aceita `NULL`), e verbos no presente para o resto:
-   `x_insere`, `x_remove`, `x_valor`. Leitura recebe `const X *`.
+   `static` (invisíveis fora do arquivo).
+4. **Nomes**: `x_cria` (devolve `NULL` se faltar memória), `x_libera` (aceita
+   `NULL`) e verbos no presente para o resto: `x_insere`, `x_remove`,
+   `x_valor`. Leitura recebe `const X *`.
 5. **Erros**: operação que pode falhar devolve `bool`; valor de saída vai por
    ponteiro (`bool pilha_desempilha(Pilha *p, int *valor)`). O TAD não
-   imprime mensagem de erro: quem decide o que mostrar é o cliente.
+   imprime erro: o cliente decide o que mostrar.
 6. **Cliente**: `#include "x.h"` com aspas, guarda só `X *`, confere o `NULL`
    do `_cria` e chama `_libera` no fim. Nunca usa `->` num `X`.
 
 > [!WARNING]
 > Se o cliente tentar `vagas->valor = 0;` ou `Contador c;`, o erro é de
 > **compilação**: `invalid use of incomplete typedef 'Contador'`. É o tipo
-> opaco funcionando. Não "conserte" movendo a `struct` para o
-> `.h`: aí qualquer cliente volta a poder quebrar o invariante. Se falta uma
-> operação, acrescente uma função na interface. O outro tropeço clássico é
-> esquecer o `contador.c` na hora de compilar à mão: o erro vira
-> `undefined reference to 'contador_cria'`, que é do **ligador**.
+> opaco funcionando. Não "conserte" movendo a `struct` para o `.h`: qualquer
+> cliente voltaria a quebrar o invariante. Se falta uma operação, acrescente
+> uma função na interface. Outro tropeço: esquecer o `contador.c` ao compilar
+> à mão. O erro `undefined reference to 'contador_cria'` é do **ligador**.
 
 > [!TIP]
-> **Por dentro do C:** o `#include "contador.h"` apenas cola texto. Depois do
-> pré-processador, o cliente tem os protótipos e a frase "existe uma
-> `struct contador`", mais nada. O compilador gera `A147.o` sem saber o
-> tamanho da struct (nem precisa: ponteiro tem sempre 8 bytes numa máquina de
-> 64 bits). O `contador.o` sabe o tamanho e os deslocamentos dos campos
-> (`valor` no byte 0, `limite` no byte 4). O ligador junta os dois. Por isso
-> mudar a struct exige recompilar só o `contador.c`: o binário do cliente nem
-> muda.
+> **Por dentro do C:** o `#include "contador.h"` só cola texto: o cliente
+> recebe os protótipos e a frase "existe uma `struct contador`". O `A147.o`
+> nasce sem saber o tamanho da struct (ponteiro tem sempre 8 bytes em 64
+> bits); só o `contador.o` conhece os campos. O ligador junta os dois. Por
+> isso mudar a struct exige recompilar só o `contador.c`.
 
 > [!NOTE]
 > **Pergunta para você:** no exemplo A148, a conta guarda o saldo em

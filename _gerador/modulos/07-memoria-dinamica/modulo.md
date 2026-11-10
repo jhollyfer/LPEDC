@@ -1,63 +1,57 @@
 # Módulo 07 · Memória dinâmica
 
-Até aqui, todo vetor do curso tinha tamanho decidido na hora de escrever o
-código. `int notas[50]` é uma aposta: se a turma tiver 12 alunos, você
-desperdiça; se tiver 51, estoura. Programas de verdade não sabem quantos dados
-vão chegar. Este módulo ensina a pedir memória **enquanto o programa roda**, do
-tamanho exato, e a devolvê-la quando acabar.
+Até aqui, todo vetor tinha tamanho fixo no código. `int notas[50]` é uma
+aposta: com 12 alunos desperdiça, com 51 estoura. Este módulo ensina a pedir
+memória **enquanto o programa roda**, do tamanho exato, e a devolvê-la ao
+acabar.
 
 No C, nenhum vetor cresce sozinho e nenhum coletor de lixo apaga o que
-ninguém usa. Quem faz as duas coisas é você: decide quanto, quando e por
-quanto tempo. Memória esquecida vaza; memória devolvida e usada de novo
-corrompe o programa.
+ninguém usa: você decide quanto, quando e por quanto tempo. Memória esquecida
+vaza; memória devolvida e usada de novo corrompe o programa.
 
-O módulo é a ponte para a segunda metade do curso. Toda estrutura de dados que
-vem depois (listas, pilhas, filas, árvores, tabelas hash, grafos) é feita de
-blocos pedidos ao heap e ligados por ponteiros, com `malloc`, `free` e
-`realloc`.
+O módulo usa os ponteiros do 06 e prepara a segunda metade do curso: listas,
+pilhas, filas, árvores, tabelas hash e grafos são blocos do heap ligados por
+ponteiros. O módulo 08 (structs) agrupa esses dados em blocos com campos.
 
 ## O que você vai aprender
 
-- as quatro regiões da memória de um programa: **código, dados, heap e pilha**, e quanto tempo vive cada coisa
-- pedir e devolver memória com **`malloc`** e **`free`**, sempre conferindo o `NULL`
-- **`calloc`** (memória zerada) e **`realloc`**, para fazer um vetor crescer conforme os dados chegam
-- montar **matrizes dinâmicas**: bloco único com `i * colunas + j` ou vetor de ponteiros com `m[i][j]`
-- reconhecer **vazamento, ponteiro solto, free duplo e estouro**, e caçá-los com o **AddressSanitizer** e o **valgrind**
-- juntar tudo num programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás
+- as quatro regiões da memória: **código, dados, heap e pilha**, e quanto tempo vive cada coisa
+- **`malloc`** e **`free`**, sempre conferindo o `NULL`
+- **`calloc`** (memória zerada) e **`realloc`**, para o vetor crescer conforme os dados chegam
+- **matrizes dinâmicas**: bloco único com `i * colunas + j` ou vetor de ponteiros com `m[i][j]`
+- **vazamento, ponteiro solto, free duplo e estouro**, caçados com o **AddressSanitizer** e o **valgrind**
+- um programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás
 
 ## Antes de começar
 
-Você precisa estar à vontade com ponteiros (módulo 06): `&`, `*`, `NULL`,
+Você precisa dominar ponteiros (módulo 06): `&`, `*`, `NULL`,
 `a[i] == *(a + i)`, `char *` e `**`. Se `int **m` ainda assusta, releia os
-assuntos 0047 e 0049 antes.
+assuntos 0047 e 0049.
 
-Nos diagramas deste módulo, o verde costuma ser o bloco que mora no heap. Ao
-rodar os exemplos, apague um `free` de propósito e leia o que o gcc com as flags de estudo
-responde.
+Nos diagramas, o verde costuma ser o bloco do heap. Ao rodar os exemplos,
+apague um `free` de propósito e leia a resposta do gcc com as flags de estudo.
 
 > [!NOTE]
-> Neste módulo, muitos exercícios são de **achar o erro**: o arquivo vem com o
-> bug de propósito, e o enunciado avisa. Rodar e ler o relatório do
-> AddressSanitizer faz parte do exercício. A resolução de cada um roda limpa.
+> Muitos exercícios são de **achar o erro**: o arquivo vem com o bug de
+> propósito, e o enunciado avisa. Ler o relatório do AddressSanitizer faz
+> parte do exercício. A resolução de cada um roda limpa.
 
-O gcc com as flags de estudo já compila com o **AddressSanitizer**, que vigia a memória enquanto
-o programa roda e avisa de vazamentos no fim. Para o assunto 0057, instale
-também o **valgrind**:
+O gcc com as flags de estudo já compila com o **AddressSanitizer**, que avisa
+de vazamentos no fim. Para o assunto 0057, instale também o **valgrind**:
 
 ```bash
 sudo pacman -S valgrind        # Arch Linux
 sudo apt install valgrind      # Debian / Ubuntu
 ```
 
-E rode qualquer arquivo com ele assim (sem AddressSanitizer, dentro do
-valgrind):
+Rode qualquer arquivo com ele assim (sem AddressSanitizer):
 
 ```bash
 gcc -g ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114 && valgrind ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114
 ```
 
-A regra do módulo inteiro cabe numa linha: **todo `malloc` tem um `free`, e
-nenhum ponteiro é usado depois dele**.
+A regra do módulo: **todo `malloc` tem um `free`, e nenhum ponteiro é usado
+depois dele**.
 
 {{indice}}
 
@@ -69,9 +63,8 @@ nenhum ponteiro é usado depois dele**.
 
 ## Desafios do módulo
 
-Problemas para resolver num arquivo seu, rodando com as flags de estudo (e com
-`valgrind ./programa` quando quiser a segunda opinião). A versão final de cada
-um precisa terminar sem nenhum relatório de erro.
+Resolva num arquivo seu, com as flags de estudo (e `valgrind ./programa` como
+segunda opinião). A versão final não pode gerar relatório de erro.
 
 **1. Apagar do caderno.** No caderninho de fiado do texto do assunto 0058,
 escreva `int remover(char **nomes, int *centavos, int *qtd, const char *nome)`,
@@ -311,10 +304,10 @@ pedaços, o vetor deles e a frase nova.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só então abra o gabarito. Todos os trechos foram
-compilados com `gcc -std=c17 -Wall -Wextra` (e rodados com o
-AddressSanitizer quando o assunto é vazamento).
+Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só então abra o gabarito. Os trechos foram compilados com
+`gcc -std=c17 -Wall -Wextra` (e rodados com o AddressSanitizer nos casos de
+vazamento).
 
 **Questão 1.** No programa abaixo, em que região da memória fica cada coisa:
 `total`, `chamadas`, `n` e o bloco apontado por `v`?

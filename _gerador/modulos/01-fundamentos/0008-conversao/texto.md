@@ -1,31 +1,29 @@
 ## 0008 · Conversão e cast
 
-Você zerou o hodômetro parcial no último tanque. Agora rodou 523 km e
-precisou de 41 litros para encher de novo. Quantos km por litro o carro faz?
-A conta é 523 ÷ 41 ≈ 12,76. O C, com dois `int`, responde 12.
+Você zerou o hodômetro parcial no último tanque. Agora rodou 523 km e gastou
+41 litros para encher de novo. Quantos km por litro? A conta é 523 ÷ 41 ≈
+12,76. O C, com dois `int`, responde 12.
 
-Toda expressão em C tem um **valor** e um **tipo**. Com operandos do mesmo
-tipo, o resultado tem esse tipo: `int / int` é `int`. Com tipos diferentes,
-o C faz uma **conversão automática**: o operando "menor" sobe para o tipo do
-"maior" antes da conta. A escada é
-`char` → `short` → `int` → `long` → `long long` → `float` → `double`.
-`523 / 41.0` vira `523.0 / 41.0` e dá 12,756...
+Toda expressão tem um **valor** e um **tipo**. Com operandos do mesmo tipo, o
+resultado tem esse tipo: `int / int` é `int`. Com tipos diferentes, o C faz a
+**conversão automática**: o operando "menor" sobe para o tipo do "maior".
+A escada é `char` → `short` → `int` → `long` → `long long` → `float` →
+`double`. `523 / 41.0` vira `523.0 / 41.0` e dá 12,756...
 
 Na **atribuição** é o contrário: o valor vira o tipo da variável da
-**esquerda**, caiba ou não. `double d = 12;` guarda 12.0, sem problema.
-`int i = 12.76;` guarda 12: a parte fracionária é **cortada**, não
-arredondada (e `-9.99` vira -9). Um valor grande demais num tipo pequeno
-perde bits. O compilador, com as opções do curso, não avisa nada disso.
+**esquerda**, caiba ou não. `double d = 12;` guarda 12.0. `int i = 12.76;`
+guarda 12: a parte fracionária é **cortada**, não arredondada (`-9.99` vira
+-9). Valor grande demais num tipo pequeno perde bits. Com as opções do curso,
+o compilador não avisa.
 
-Quando você quer escolher a conversão, usa o **cast**: o tipo entre
-parênteses na frente do valor, `(double) km`. O cast cria uma **cópia
-temporária** convertida; a variável `km` continua `int` para sempre. Ele tem
-precedência alta, maior que a de `*` e `/`, então `(double) km / litros`
-converte só o `km`, e isso basta, porque aí a divisão já vira real.
+O **cast** escolhe a conversão: o tipo entre parênteses antes do valor,
+`(double) km`. Ele cria uma **cópia temporária** convertida; `km` continua
+`int`. Sua precedência é maior que a de `*` e `/`, então `(double) km /
+litros` converte só o `km`, o que basta para a divisão ser real.
 
-O desenho mostra os dois caminhos. Pelo de cima, os dois `int` se dividem, sai 12,
-e só então ele vira 12.0, tarde demais. Pelo de baixo, o cast
-transforma o 523 em 523.0 antes da divisão, e o resultado é real:
+No desenho, pelo caminho de cima os dois `int` se dividem, sai 12 e só então
+vira 12.0, tarde demais. Pelo de baixo, o cast transforma 523 em 523.0 antes
+da divisão:
 
 {{ideia}}
 
@@ -57,28 +55,24 @@ int main(void) {
 // Num int:       12 km/l
 ```
 
-A pergunta que decide o resultado é "tem um real na divisão?". Quem responde
-é o compilador, olhando os tipos, antes de o programa rodar. Graças ao cast,
-o exemplo segue pelo Sim:
+A pergunta "tem um real na divisão?" é respondida pelo compilador, pelos
+tipos. Com o cast, o exemplo segue pelo Sim:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O cast precisa chegar **antes** da divisão. `(double) (km / litros)` parece
-> certo, mas os parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast
-> só transforma o 12 em 12.0. O mesmo vale para guardar num `double`:
-> `double media = soma / n;` com `soma` e `n` inteiros já perdeu os decimais
-> antes do `=`. Converta um dos operandos: `(double) soma / n`.
+> O cast precisa chegar **antes** da divisão. Em `(double) (km / litros)`, os
+> parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast só o
+> transforma em 12.0. Igualmente, `double media = soma / n;` com `soma` e `n`
+> inteiros perde os decimais antes do `=`. Converta um operando:
+> `(double) soma / n`.
 
 > [!TIP]
-> **Por dentro do C:** um `int` e um `double` com o "mesmo" valor têm bits
-> completamente diferentes. O 12 num `int` são 4 bytes `0C 00 00 00`; o 12.0
-> num `double` são 8 bytes no formato sinal, expoente e mantissa. Converter
-> é uma instrução do processador (`cvtsi2sd` nos PCs), não um rótulo novo. O
-> `double` guarda inteiros exatos até 2⁵³; o `float`, só até 2²⁴ = 16.777.216,
-> e por isso `float f = 16777217;` vira 16777216. E converter um `double`
-> grande demais para `int` é comportamento indefinido: não confie no
-> resultado.
+> Um `int` e um `double` de mesmo valor têm bits diferentes: converter é uma
+> operação real do processador. O `float` guarda inteiros exatos só até
+> 2²⁴ = 16.777.216 (`float f = 16777217;` vira 16777216), e o `double`, até
+> 2⁵³. Converter um `double` grande demais para `int` é comportamento
+> indefinido.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `int x = 7 / 2 * 2.0;`? Faça passo a

@@ -2,43 +2,43 @@
 
 # Módulo 01 · Fundamentos de C
 
-Programar é quebrar um problema em passos tão claros que uma máquina, que não
-pensa nada, consegue seguir. Essa sequência finita de passos sem ambiguidade
-tem nome: **algoritmo**. A receita do bolo, o roteiro do GPS e o passo a passo
-para mandar um Pix são algoritmos; um programa é um algoritmo escrito numa
-língua que o computador entende.
+Programar é quebrar um problema em passos tão claros que uma máquina consegue
+segui-los. Essa sequência finita de passos sem ambiguidade é um
+**algoritmo**: a receita do bolo, o roteiro do GPS, o passo a passo de um Pix.
+Um programa é um algoritmo escrito numa língua que o computador entende.
 
-Quase todo programa segue o mesmo modelo: **entrada → processamento →
-saída**. Os dados chegam (o valor da conta, as leituras do relógio de luz), o
-programa faz contas com eles e mostra o resultado. E todo algoritmo, por mais
-complicado, é montado com só três peças: **sequência** (um passo depois do
-outro), **decisão** ("se o saldo cobre, envia") e **repetição** ("enquanto a
-senha estiver errada, pergunte de novo"). Este módulo é a primeira peça: a
-**estrutura sequencial**. Decisão e repetição vêm nos módulos 02 e 03.
+Quase todo programa segue o modelo **entrada → processamento → saída**: os
+dados chegam, o programa calcula e mostra o resultado. Todo algoritmo usa só
+três peças: **sequência** (um passo depois do outro), **decisão** ("se o
+saldo cobre, envia") e **repetição** ("enquanto a senha estiver errada,
+pergunte de novo"). Este módulo é a primeira peça, a **estrutura
+sequencial**.
 
-Em C nada fica escondido: cada variável é um pedaço de memória com endereço
-e tamanho, cada número tem um limite, e o seu `.c` passa por uma linha de
-montagem antes de virar programa. No fim do módulo você escreve programas
-completos de entrada, processamento e saída e sabe o que cada linha faz na
-memória.
+Em C, cada variável é um pedaço de memória com endereço e tamanho, e cada
+número tem um limite. Ao final, você escreve programas completos de entrada,
+processamento e saída.
+
+Progressão: este é o ponto de partida e não depende de nenhum módulo. O
+módulo 02 usa estas variáveis, expressões e a leitura com `scanf` para
+decidir o que o programa faz; o 03 acrescenta a repetição.
 
 ## O que você vai aprender
 
-- o esqueleto de um programa em C e o caminho do `.c` até o executável (pré-processador, compilador, montador, ligador)
-- os três tipos de erro: de compilação, de ligação e de execução
-- **variáveis**: nome, tipo, valor e endereço; `int`, `float`, `double`, `char` e o `sizeof`
-- bit, byte, binário, hexadecimal, os limites de cada tipo e o **overflow**
-- constantes com `#define` e `const`, literais e sequências de escape
-- mostrar dados com `printf` (largura, precisão, alinhamento) e ler com `scanf` (o `&`, o `%lf`, a sobra no buffer)
+- o esqueleto de um programa em C e o caminho do `.c` ao executável
+- os três tipos de erro: compilação, ligação e execução
+- **variáveis**: nome, tipo, valor e endereço; `int`, `float`, `double`, `char` e `sizeof`
+- bit, byte, binário, hexadecimal, limites dos tipos e **overflow**
+- constantes (`#define`, `const`), literais e sequências de escape
+- `printf` (largura, precisão, alinhamento) e `scanf` (o `&`, o `%lf`, o buffer)
 - aritmética, divisão inteira, resto e precedência
 - conversão automática e **cast**
 - operadores compostos, `++` e `--`
-- a biblioteca de matemática: `pow`, `sqrt`, `round`, `floor`, `ceil`, `fabs`
+- `math.h`: `pow`, `sqrt`, `round`, `floor`, `ceil`, `fabs`
 
 ## Antes de começar
 
-Você precisa do compilador `gcc` e, para os módulos de memória, do `gdb` e do
-`valgrind`. Cada exercício tem uma resolução em `_respostas/01-fundamentos/`.
+Você precisa do `gcc` e, para os módulos de memória, do `gdb` e do
+`valgrind`. Cada exercício tem resolução em `_respostas/01-fundamentos/`.
 
 **Arch Linux** (e derivados, como Manjaro e EndeavourOS):
 
@@ -52,34 +52,40 @@ sudo pacman -S --needed base-devel gdb valgrind
 sudo apt install build-essential gdb valgrind
 ```
 
-**Windows**: use o **WSL** com Ubuntu. No PowerShell como administrador,
-rode `wsl --install`, reinicie, abra o Ubuntu e instale com o comando do
-Debian/Ubuntu acima. Clone o curso dentro do Linux do WSL (em `~/LPEDC`),
-não numa pasta do Windows.
+**Windows**: use o **WSL** com Ubuntu. No PowerShell como administrador, rode
+`wsl --install`, reinicie, abra o Ubuntu e use o comando do Debian/Ubuntu.
+Clone o curso dentro do Linux do WSL (`~/LPEDC`), não numa pasta do Windows.
 
-Confira com `gcc --version`. Se aparecer a versão, está pronto.
-
-Para rodar um arquivo do curso, compile com o `gcc` e execute o resultado:
+Confira com `gcc --version`. Para rodar um arquivo do curso, compile e
+execute:
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
 ```
 
-O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser absoluto, como acima, ou relativo à pasta atual.
+O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser
+absoluto ou relativo.
 
-Esse comando compila sem conferir nada. Nas **flags de estudo** o compilador também vigia o programa: acrescente `-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do `-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer**, que flagra erros de memória, o detector de **comportamento indefinido**, que flagra coisas como estouro de inteiro, e a biblioteca matemática. Com elas, um programa com problema desses para com um relatório que aponta a linha. Os avisos e relatórios citados nos módulos aparecem com essas flags. Os exercícios devem compilar **sem nenhum aviso**.
+Esse comando compila sem conferir nada. As **flags de estudo** fazem o
+compilador vigiar o programa; acrescente
+`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do
+`-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer** (erros
+de memória), o detector de **comportamento indefinido** (como estouro de
+inteiro) e a biblioteca matemática. Um programa com esses problemas para com
+um relatório que aponta a linha. Os avisos citados nos módulos aparecem com
+essas flags, e os exercícios devem compilar **sem nenhum aviso**.
 
-Programas que leem do teclado esperam você digitar. Para testar sem digitar,
-mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
+Programas que leem do teclado esperam a digitação. Para testar sem digitar,
+use um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '3 4.99\n2\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
 ```
 
 > [!NOTE]
-> Material antigo de C (e muita apostila por aí) usa `void main`, `conio.h`,
-> `getch()`, `system("pause")`, `fflush(stdin)` e `gets`. Nada disso é C
-> padrão ou seguro. Quando aparecer, o curso avisa e mostra a alternativa.
+> Material antigo de C usa `void main`, `conio.h`, `getch()`,
+> `system("pause")`, `fflush(stdin)` e `gets`. Nada disso é C padrão ou
+> seguro; quando aparecer, o curso mostra a alternativa.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -100,13 +106,10 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scan
 ## 0001 · O primeiro programa
 
 A padaria do bairro comprou um painel de LED e pediu um aviso de três linhas:
-o nome da padaria, o horário da fornada e o preço do pão. São três linhas
-de saída, sem entrada nem conta. Mesmo assim, antes de rodar, o arquivo
-passa por uma linha de montagem, e cada linha do código tem um motivo.
+nome, horário da fornada e preço do pão. É só saída, sem entrada nem conta.
 
-Um programa em C é um conjunto de **funções**. Uma delas é especial: a
-**`main`**. Quando você roda o executável, o sistema começa por ela. O
-esqueleto que você vai escrever em todo exemplo do curso:
+Um programa em C é um conjunto de **funções**. A função **`main`** é onde o
+sistema começa a execução. Este esqueleto aparece em todo exemplo do curso:
 
 | Linha | O que faz |
 | --- | --- |
@@ -117,16 +120,14 @@ esqueleto que você vai escrever em todo exemplo do curso:
 | `return 0;` | termina a `main` e devolve 0 ao sistema: "deu tudo certo" |
 | `}` | fecha o **bloco** da `main` |
 
-Regras que valem sempre: toda **instrução** termina em `;` (o
-`#include` não é instrução, e por isso não leva); as **chaves** `{ }` agrupam
-instruções num bloco; o C diferencia maiúsculas de minúsculas (`Main` não é
-`main`); comentário de uma linha começa com `//`, e o de várias linhas fica
-entre `/*` e `*/`.
+Regras fixas: toda **instrução** termina em `;` (o `#include` não é
+instrução e não leva); as **chaves** `{ }` agrupam instruções num bloco; o C
+diferencia maiúsculas de minúsculas (`Main` não é `main`); comentário de uma
+linha começa com `//` e o de várias linhas fica entre `/*` e `*/`.
 
 ### Do .c ao executável
 
-O processador não entende C. A linha de montagem tem quatro estações, e quem
-comanda tudo é o **compilador** `gcc`:
+O processador não entende C. O `gcc` comanda quatro estações:
 
 1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>`
    **cola** o conteúdo do `stdio.h` no lugar da linha;
@@ -138,14 +139,13 @@ comanda tudo é o **compilador** `gcc`:
 4. **ligador** (*linker*): junta o `.o` com a **biblioteca padrão**, onde mora
    o código do `printf`, tapa os buracos e grava o **executável**.
 
-Na mão, as quatro estações saem de um comando só: `gcc padaria.c -o padaria`
-e depois `./padaria`. Com as flags de estudo (`-Wall -Wextra -pedantic`, C17 e o
-**AddressSanitizer**, que vigia a memória enquanto o programa roda), o mesmo
-comando confere mais coisas; as flags estão em "Antes de começar", acima.
+Um comando só percorre as quatro: `gcc padaria.c -o padaria`, e depois
+`./padaria`. Com as flags de estudo (`-Wall -Wextra -pedantic`, C17 e o
+**AddressSanitizer**, que vigia a memória durante a execução), o gcc confere
+mais coisas; veja "Antes de começar", acima.
 
-O `padaria.c` entra na linha de montagem, ganha o
-`stdio.h` colado, vira assembly, vira `padaria.o`, é ligado ao `printf` e sai
-como o executável `padaria`, que mostra as três linhas no terminal:
+O `padaria.c` ganha o `stdio.h`, vira assembly, vira `padaria.o`, é ligado ao
+`printf` e sai como o executável `padaria`:
 
 <p align="center"><img src="01-fundamentos/0001-primeiro-programa/ideia.svg" alt="Diagrama da ideia: O primeiro programa" width="866"></p>
 
@@ -167,39 +167,26 @@ int main(void) {
 // R$ 0,90 a unidade
 ```
 
-Cada estação pode parar a linha de montagem, e cada uma reclama de um jeito.
-O exemplo passa por todas sem erro e termina com o programa rodando:
+Cada estação pode parar o processo. O exemplo passa por todas sem erro:
 
 <p align="center"><img src="01-fundamentos/0001-primeiro-programa/fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
 
-Saber **quem reclamou** é meio caminho para consertar. Há três tipos de erro:
+Saber **quem reclamou** ajuda a consertar. Há três tipos de erro:
 
-- **de compilação**: arquivo do `#include` que não existe (pré-processador),
-  falta de `;`, `Int` no lugar de `int`. O gcc mostra o arquivo, a linha e a
-  coluna, e não gera executável;
-- **de ligação**: o código está certo na gramática, mas uma função não existe
-  em lugar nenhum. Escreva `prinft` e o ligador para com
-  `undefined reference to 'prinft'`;
-- **de execução**: compila, roda e mostra o valor errado ou quebra no meio. É o pior tipo, porque o compilador não tem como ver. Os **avisos**
-  (*warnings*) do gcc e o AddressSanitizer existem para pegar parte deles.
+- **de compilação**: `#include` de arquivo inexistente (pré-processador),
+  falta de `;`, `Int` no lugar de `int`. O gcc mostra arquivo, linha e coluna
+  e não gera executável;
+- **de ligação**: a gramática está certa, mas a função não existe em lugar
+  nenhum. Com `prinft`, o ligador para com `undefined reference to 'prinft'`;
+- **de execução**: compila e roda, mas mostra o valor errado ou quebra no
+  meio. É o pior tipo, porque o compilador não o vê. Os **avisos**
+  (*warnings*) do gcc e o AddressSanitizer pegam parte deles.
 
 > [!WARNING]
-> O `printf` **não pula linha sozinho**. Sem o
-> `\n`, o próximo `printf` continua de onde o cursor parou:
-> `printf("Pão"); printf("Quente");` mostra `PãoQuente`. E quando faltar um
-> `;`, o gcc avisa `expected ';' before ...` apontando para a linha
-> **seguinte**, porque só lá ele percebe que faltou alguma coisa.
-
-> [!TIP]
-> **Por dentro do C:** salve o programa da padaria como `padaria.c`, rode
-> `gcc -E padaria.c | wc -l` e veja o seu programa de poucas linhas virar
-> centenas: é o `stdio.h` colado. Rode `gcc -S padaria.c`, abra o
-> `padaria.s` e procure `call`: você acha `puts`, não `printf`. O compilador viu
-> que era só texto fixo com `\n` e trocou por uma função mais simples. Dentro
-> do executável, cada texto entre aspas fica guardado byte a byte, seguido de
-> um byte zero que marca o fim. Acento custa mais: no UTF-8, `ã` ocupa 2
-> bytes, então `"Pão"` ocupa 5 (`P`, os dois do `ã`, `o` e o zero). E o
-> `return 0` chega ao sistema: logo depois de rodar, `echo $?` mostra 0.
+> O `printf` **não pula linha sozinho**. Sem `\n`, o próximo `printf`
+> continua na mesma linha: `printf("Pão"); printf("Quente");` mostra
+> `PãoQuente`. Se faltar um `;`, o gcc avisa `expected ';' before ...` na
+> linha **seguinte**, onde ele percebe a falta.
 
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `\n` do segundo `printf`, quantas
@@ -295,7 +282,7 @@ gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A002.c -o ~/LPEDC/01-fundament
 **Exercício E001** · ★☆☆
 
 Escreva um programa que mostre o letreiro do ônibus, exatamente assim.
-Rode de dois jeitos: com as flags de estudo e na mão, com gcc, gerando um executável
+Rode de dois jeitos: com o rodar e na mão, com gcc, gerando um executável
 chamado "letreiro".
 
 
@@ -356,7 +343,7 @@ gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E002.c -o ~/LPEDC/01-fundament
 **Exercício E003** · ★★☆
 
 Este programa tem QUATRO erros e não compila de propósito. Conserte o
-código: rode com as flags de estudo, leia a primeira mensagem, conserte, rode de novo
+código: rode com o rodar, leia a primeira mensagem, conserte, rode de novo
 e repita até sair a saída esperada. A cada rodada, repare qual estação
 reclamou: compilador ou ligador.
 
@@ -422,7 +409,7 @@ de dentro desta pasta, e confira as três linhas da saída esperada:
 
 
 ```text
-./programa ; echo "código: $?"
+~/LPEDC/rodar E005.c; echo "código: $?"
 ```
 
 
@@ -435,7 +422,7 @@ código: 2
 ```
 
 
-Depois rode ./programa && echo "pode seguir" e confira que o
+Depois rode ~/LPEDC/rodar E005.c && echo "pode seguir" e confira que o
 "pode seguir" NÃO aparece. Por fim, troque para return 258 e rode a
 primeira linha de novo: o terminal tem de mostrar "código: 2" outra vez.
 
@@ -493,16 +480,16 @@ gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E006.c -o ~/LPEDC/01-fundament
 ## 0002 · Variáveis
 
 Na matrícula da academia, a recepcionista preenche uma ficha: idade 25,
-altura 1,75 m, peso 72,5 kg, plano B. Um mês depois, ela apaga o peso e
-escreve 71,8. A ficha continua a mesma; só o conteúdo de um campo mudou.
+altura 1,75 m, peso 72,5 kg, plano B. Um mês depois, apaga o peso e escreve
+71,8. A ficha é a mesma; só o conteúdo de um campo mudou.
 
-Uma **variável** é um campo dessa ficha: um pedaço da memória com
-**nome**, **tipo**, **valor** e **endereço**. O nome é para você. O endereço é
-para o computador: o número do primeiro byte que o valor ocupa. O tipo diz
-quantos bytes a variável ocupa e como ler esses bytes.
+Uma **variável** é um campo dessa ficha: um pedaço da memória com **nome**,
+**tipo**, **valor** e **endereço**. O nome é para você. O endereço é o número
+do primeiro byte que o valor ocupa. O tipo diz quantos bytes a variável ocupa
+e como lê-los.
 
-No C, você escolhe o tipo de cada variável. Ele vem **antes** do nome e não
-muda nunca mais. Os quatro tipos básicos:
+O tipo vem **antes** do nome e não muda. Os quatro tipos básicos (tamanhos de
+um PC de 64 bits; o padrão do C só garante mínimos):
 
 | Tipo | Guarda | Tamanho típico | Exemplo |
 | --- | --- | --- | --- |
@@ -511,29 +498,26 @@ muda nunca mais. Os quatro tipos básicos:
 | `double` | real, uns 15 dígitos | 8 bytes | `double peso = 72.5;` |
 | `char` | um caractere (um número pequeno) | 1 byte | `char plano = 'B';` |
 
-Esses são os **tipos primitivos** (os livros e a prova também dizem **tipos
-simples** ou **dados simples**): cada variável guarda um valor só. Vetores e
-structs, que juntam vários valores, são os **dados compostos** (módulos 05 e 08).
+Esses são os **tipos primitivos** (também chamados **tipos simples** ou
+**dados simples**): cada variável guarda um valor só. Vetores e structs, que
+juntam vários valores, são os **dados compostos** (módulos 05 e 08).
 
 **Declarar** é criar a variável: `int idade;`. **Inicializar** é dar o
-primeiro valor junto: `int idade = 25;`. Para mostrar o valor, o `printf` usa
-um código para cada tipo: `%d` para `int`, `%f` para `float` e `double`, `%c`
-para `char`. O `%.1f` limita a uma casa decimal (o `printf` completo vem no
-0005).
+primeiro valor junto: `int idade = 25;`. O `printf` usa `%d` para `int`, `%f`
+para `float` e `double`, `%c` para `char`; `%.1f` limita a uma casa decimal
+(o `printf` completo vem no 0005).
 
-Guardar um valor novo **apaga** o antigo: depois de `peso = 71.8;`, o 72,5
-sumiu para sempre. Ler a variável, ao contrário, não muda nada. E o operador
-**`sizeof`** diz quantos bytes um tipo ou uma variável ocupa; para mostrar o
-resultado, use `%zu`.
+Guardar um valor novo **apaga** o antigo; ler a variável não muda nada. O
+operador **`sizeof`** dá o tamanho em bytes de um tipo ou variável; o
+`printf` o mostra com `%zu`. O `&peso` é o endereço da variável (`%p`
+mostra endereços).
 
-Regras para o nome: letras, dígitos e `_`, sem começar por dígito, sem acento
-e sem espaço; `peso` e `Peso` são variáveis diferentes; palavras do C (`int`,
-`return`, `float`...) não valem. A convenção do curso é `snake_case`:
-`peso_atual`, `valor_total`.
+Nome de variável: letras, dígitos e `_`, sem começar por dígito, sem acento e
+sem espaço; `peso` e `Peso` são diferentes; palavras do C (`int`, `return`...)
+não valem. O curso usa `snake_case`: `peso_atual`, `valor_total`.
 
-A ficha vira quatro caixinhas, cada uma com seu tipo,
-seu tamanho e seu endereço. Depois, o peso recebe um valor novo e o antigo
-desaparece:
+A ficha vira quatro caixinhas, cada uma com tipo, tamanho e endereço. Depois,
+o peso recebe um valor novo e o antigo desaparece:
 
 <p align="center"><img src="01-fundamentos/0002-variaveis/ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
 
@@ -568,28 +552,16 @@ int main(void) {
 // Bytes: 4, 4, 8, 1
 ```
 
-Criar as variáveis é um passo de processamento (o programa reserva memória),
-e a troca do peso é outro. Ainda é sequência pura:
+Criar as variáveis (reservar memória) é um passo; trocar o peso é outro.
+Ainda é sequência pura:
 
 <p align="center"><img src="01-fundamentos/0002-variaveis/fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
 
 > [!WARNING]
-> Variável criada sem valor não vale zero: vale **lixo**, o que já estava
-> naqueles bytes. `int total; printf("%d", total);` pode mostrar 0, 32767 ou
-> -1294; o gcc avisa `'total' is used uninitialized`. Inicialize sempre. E o
-> separador decimal do C é o **ponto**: `double peso = 72,5;` nem compila, porque
-> para o C a vírgula separa duas coisas diferentes.
-
-> [!TIP]
-> **Por dentro do C:** `&peso` é o endereço da variável, e o `printf` mostra
-> endereços com `%p` (o `(void *)` na frente é exigência do `%p`; você entende
-> no módulo de ponteiros). Rode o A004 sem o AddressSanitizer
-> (`gcc A004.c -o a && ./a`) e repare: as variáveis ficam **coladas** na
-> memória, e a distância entre um endereço e o próximo é o tamanho da
-> variável. O `sizeof` não roda nada: o compilador já sabe o tamanho de cada
-> tipo e escreve o número direto no executável. Os tamanhos da tabela são os
-> de um PC de 64 bits; o padrão do C só garante mínimos, por isso o `sizeof`
-> existe.
+> Variável sem valor não vale zero: vale **lixo**, o que já estava naqueles
+> bytes. `int total; printf("%d", total);` pode mostrar 0, 32767 ou -1294; o
+> gcc avisa `'total' is used uninitialized`. Inicialize sempre. E o separador
+> decimal do C é o **ponto**: `double peso = 72,5;` nem compila.
 
 > [!NOTE]
 > **Pergunta para você:** o `char` guarda um número pequeno. O que você acha
@@ -662,7 +634,7 @@ int main(void) {
 // peso:  8 bytes em 0x7f2e53c00040
 // int: 4, float: 4, double: 8, char: 1
 //
-// Com o gcc com as flags de estudo, o AddressSanitizer deixa uma folga entre as variáveis para
+// Com o rodar, o AddressSanitizer deixa uma folga entre as variáveis para
 // flagrar quem escreve fora do lugar. Sem ele, elas ficam coladas:
 //   gcc A004.c -o a && ./a
 //   plano: 1 byte  em 0x7ffccb532f1b
@@ -873,33 +845,30 @@ gcc ~/LPEDC/01-fundamentos/0002-variaveis/E012.c -o ~/LPEDC/01-fundamentos/0002-
 ## 0003 · Tipos e limites
 
 A catraca do estádio conta os torcedores num contador de 16 bits. No clássico
-de domingo, o Maracanã recebeu 78.838 pessoas. Quando o torcedor número 65.536
-passou, o painel voltou a mostrar **zero**. Ninguém errou a conta: o número
-não cabia.
+de domingo, o Maracanã recebeu 78.838 pessoas. Quando passou o torcedor número
+65.536, o painel voltou a **zero**. Ninguém errou a conta: o número não cabia.
 
-Por baixo de tudo, a memória é feita de **bits**: chavinhas que valem 0 ou 1.
-Oito bits formam um **byte**. Um número inteiro é guardado em **binário** (base
-2), em que cada casa vale o dobro da casa da direita:
+A memória é feita de **bits**, chavinhas que valem 0 ou 1. Oito bits formam um
+**byte**. O inteiro é guardado em **binário** (base 2), em que cada casa vale
+o dobro da casa da direita:
 
 | casa | 2⁷ | 2⁶ | 2⁵ | 2⁴ | 2³ | 2² | 2¹ | 2⁰ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | vale | 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
 
-Para ler um binário, some as casas que têm 1: `00001101` é 8 + 4 + 1 = 13.
-Com 8 bits todos ligados, `11111111`, você chega a 255. Por isso **um byte vai
-de 0 a 255**: são 2⁸ = 256 combinações. Com `n` bits, cabem 2ⁿ valores.
+Para ler um binário, some as casas com 1: `00001101` é 8 + 4 + 1 = 13. Com os
+8 bits ligados, `11111111`, o total é 255. Logo **um byte vai de 0 a 255**:
+2⁸ = 256 combinações. Com `n` bits, cabem 2ⁿ valores.
 
-Escrever 16 ou 32 zeros e uns cansa. O atalho é o **hexadecimal** (base 16),
-com os dígitos 0 a 9 e A a F (A = 10, ..., F = 15). Cada dígito hexa vale
-exatamente 4 bits, então um byte são dois dígitos: `1111 1111` = `FF` = 255.
-No C, hexadecimal começa com `0x`: `0xFF`, `0xFFFF`.
+O **hexadecimal** (base 16) abrevia o binário, com dígitos 0 a 9 e A a F
+(A = 10, ..., F = 15). Cada dígito hexa vale 4 bits, então um byte são dois
+dígitos: `1111 1111` = `FF` = 255. No C, hexadecimal começa com `0x`: `0xFF`.
 
-Agora os tipos. Cada tipo inteiro tem um tamanho, e o tamanho decide a
-**faixa**. Os **modificadores** mudam o `int`: `short` (menor), `long` e
-`long long` (maiores) e `unsigned` (sem sinal: troca os negativos por mais
-positivos). Sem modificador, o tipo inteiro é **com sinal** (`signed`): `int`
-e `signed int` são o mesmo tipo. Só o `char` puro fica a cargo da máquina; no
-PC Linux ele tem sinal. Num PC Linux de 64 bits:
+O tamanho de cada tipo inteiro decide sua **faixa**. Os **modificadores**
+mudam o `int`: `short` (menor), `long` e `long long` (maiores) e `unsigned`
+(sem sinal: troca os negativos por mais positivos). Sem modificador, o tipo é
+**com sinal** (`signed`): `int` e `signed int` são o mesmo tipo. O `char`
+puro depende da máquina; no PC Linux ele tem sinal. Num PC Linux de 64 bits:
 
 | Tipo | Bytes | Faixa |
 | --- | --- | --- |
@@ -912,17 +881,15 @@ PC Linux ele tem sinal. Num PC Linux de 64 bits:
 | `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
 
 O padrão do C só garante mínimos (o `int` pode ter 2 bytes num
-microcontrolador, e o `long` tem 4 bytes no Windows). Então não decore a
-tabela: o **`<limits.h>`** traz os limites reais da máquina (`INT_MAX`,
-`SHRT_MIN`, `USHRT_MAX`...). E quando o tamanho exato importa, o
-**`<stdint.h>`** tem tipos com o número de bits no nome: `int8_t`, `uint16_t`,
-`int32_t`, `int64_t`.
+microcontrolador, e o `long` tem 4 bytes no Windows). Por isso, o
+**`<limits.h>`** traz os limites reais da máquina (`INT_MAX`, `SHRT_MIN`,
+`USHRT_MAX`...). Para tamanho exato, o **`<stdint.h>`** tem tipos com os bits
+no nome: `int8_t`, `uint16_t`, `int32_t`, `int64_t`.
 
-Passar do limite é **overflow** (estouro). Num tipo `unsigned`, o C garante o
-comportamento: o número dá a volta, como o odômetro do carro passando de 99999
-para 00000. A catraca é um `unsigned short` com 65.535,
-os 16 bits ligados. Somar 1 dá 65.536, que precisa de 17 bits; o bit de cima
-não cabe e some:
+Passar do limite é **overflow** (estouro). Num `unsigned`, o C garante que o
+número dá a volta, como o odômetro que passa de 99999 para 00000. A catraca é
+um `unsigned short` em 65.535, com os 16 bits ligados. Somar 1 dá 65.536, que
+precisa de 17 bits; o bit de cima não cabe e some:
 
 <p align="center"><img src="01-fundamentos/0003-tipos-e-limites/ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
 
@@ -951,27 +918,23 @@ int main(void) {
 // Público: 78838 (o int vai até 2147483647)
 ```
 
-No fluxograma, quem faz a pergunta "cabe em 16 bits?" é o hardware, e não o
-seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
+No fluxograma, quem pergunta "cabe em 16 bits?" é o hardware. Se não cabe, ele
+guarda só os 16 bits de baixo, sem avisar:
 
 <p align="center"><img src="01-fundamentos/0003-tipos-e-limites/fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
 
 > [!WARNING]
 > Com `unsigned`, o estouro dá a volta. Com tipos **com sinal** (`int`,
-> `long`...), estourar é **comportamento indefinido**: o padrão não diz o que
-> acontece, e o compilador pode assumir que nunca acontece.
-> `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não conte com
-> isso. O gcc com as flags de estudo liga o detector de comportamento indefinido, que acusa
+> `long`...), é **comportamento indefinido**: o padrão não diz o que
+> acontece. `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não
+> conte com isso. Com as flags de estudo, o gcc acusa
 > `runtime error: signed integer overflow`. Escolha um tipo que caiba.
 
 > [!TIP]
-> **Por dentro do C:** os negativos são guardados em **complemento de dois**:
-> o bit mais à esquerda pesa negativo. Num byte com sinal, ele vale -128, e
-> `11111111` é -128 + 127 = -1. Por isso a faixa é assimétrica (-128 a 127):
-> não existe "-0". O byte `0xFF` é 255 num `unsigned char` e
-> -1 num `char`: os bits são iguais, o tipo decide como ler. A ordem dos bytes
-> na memória também é curiosa: nos PCs, o byte menos significativo vem
-> primeiro (**little-endian**). O 13 num `int` fica como `0D 00 00 00`.
+> Os negativos usam **complemento de dois**: o bit mais à esquerda pesa
+> negativo (-128 num byte). Por isso a faixa é assimétrica (-128 a 127) e o
+> byte `0xFF` é 255 num `unsigned char` e -1 num `char`: os bits são iguais,
+> o tipo decide como ler.
 
 > [!NOTE]
 > **Pergunta para você:** se a catraca começasse em 65.530 e passassem 10
@@ -1091,7 +1054,7 @@ Saída esperada:
 ```
 
 
-(Binário escrito como 0b10110 só virou padrão no C23; o gcc com as flags de estudo, que segue o
+(Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
 C17, avisa se você usar.)
 
 **Dicas:**
@@ -1192,7 +1155,7 @@ Saída esperada (depois de consertar):
 **Dicas:**
 
 1. Quanto vale INT_MAX? E 6227020800?
-2. O detector de comportamento indefinido do gcc com as flags de estudo pegou um estouro de
+2. O detector de comportamento indefinido do rodar pegou um estouro de
    int, que é um tipo com sinal.
 3. Resposta esperada: 13! não cabe em int (máximo 2147483647): "signed
    integer overflow". Sem o detector, o programa mostraria um número
@@ -1224,7 +1187,7 @@ int64_t vai até 9223372036854775807
 1. INT32_MAX e INT64_MAX vêm do stdint.h. Para mostrar o de 64 bits,
    converta para long long e use %lld: (long long)INT64_MAX.
 2. Um ano tem 365 * 24 * 60 * 60 = 31536000 segundos, que cabe num int.
-   Mas 69 anos já não cabem: se a conta for feita em int, o gcc com as flags de estudo acusa
+   Mas 69 anos já não cabem: se a conta for feita em int, o rodar acusa
    "signed integer overflow". Guarde os segundos de um ano numa variável
    long long: aí a multiplicação por 68 ou 69 já é feita em long long.
 3. 2147483647 é 2^31 - 1 (31
@@ -1273,13 +1236,13 @@ gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E018.c -o ~/LPEDC/01-fundamentos
 
 ## 0004 · Constantes
 
-A tarifa do ônibus aparece em dez lugares do sistema da empresa: no letreiro,
-no cálculo da ida e volta, no recibo, no relatório... Em janeiro ela sobe de
-R$ 4,40 para R$ 4,90. Se o valor estiver escrito à mão em cada lugar, alguém
-vai esquecer um. O certo é escrever o número **uma vez só**, com um nome.
+A tarifa do ônibus aparece em dez lugares do sistema: letreiro, ida e volta,
+recibo, relatório. Em janeiro ela sobe de R$ 4,40 para R$ 4,90. Com o valor
+escrito à mão em cada lugar, alguém esquece um. O certo é escrevê-lo **uma
+vez só**, com um nome.
 
-Todo valor escrito direto no código é um **literal**, e todo literal tem um
-tipo, decidido pelo jeito de escrever:
+Todo valor escrito direto no código é um **literal**, e o jeito de escrever
+decide seu tipo:
 
 | Literal | Tipo | Observação |
 | --- | --- | --- |
@@ -1292,24 +1255,22 @@ tipo, decidido pelo jeito de escrever:
 | `'A'` | `int` | um caractere: vale o código, 65 |
 | `"A"` | texto | aspas duplas: `'A'` seguido do byte zero |
 
-Para dar nome a um valor, o C tem dois jeitos. O **`#define`** é uma ordem
-para o pré-processador: `#define TARIFA 4.90` faz um "localizar e substituir"
-no arquivo antes de o compilador ver o código. O nome `TARIFA` nunca chega ao
-compilador; ele só vê `4.90`. A convenção é escrever em MAIÚSCULAS. Sem `=` e
-sem `;`.
+O C tem dois jeitos de dar nome a um valor. O **`#define`** é uma ordem para o
+pré-processador: `#define TARIFA 4.90` faz um "localizar e substituir" antes de
+o compilador ver o código, que só enxerga `4.90`. Por convenção, o nome vai em
+MAIÚSCULAS, sem `=` e sem `;`.
 
-O outro jeito é o **`const`**: `const int linha = 101;` cria uma variável de
-verdade, com tipo, endereço e tamanho, mas **só de leitura**. Tentar mudar dá
-erro de compilação, e por isso o valor precisa vir na própria declaração.
+O **`const`** cria uma variável de verdade (tipo, endereço, tamanho), mas
+**só de leitura**: `const int linha = 101;`. Mudá-la dá erro de compilação, e
+por isso o valor vem na declaração.
 
-Dentro das aspas, a barra invertida avisa que o próximo caractere não é ele
-mesmo: é uma **sequência de escape**. `\n` pula linha, `\t` é tabulação, `\"`
-põe aspas dentro do texto, `\\` é a própria barra e `\0` é o byte zero. Para
-mostrar `%` no `printf`, escreva `%%` (isso é regra do `printf`, não escape).
+Dentro das aspas, a barra invertida inicia uma **sequência de escape**: `\n`
+pula linha, `\t` é tabulação, `\"` põe aspas no texto, `\\` é a barra e `\0`
+é o byte zero. Para mostrar `%` no `printf`, escreva `%%` (regra do
+`printf`, não escape).
 
-Antes da compilação, o pré-processador troca `TARIFA` por `4.90` e `EMPRESA`
-pelo nome da viação. A `linha` é uma caixinha com cadeado: tem endereço, mas
-ninguém escreve nela:
+O pré-processador troca `TARIFA` por `4.90` e `EMPRESA` pelo nome da viação.
+A `linha` é uma caixinha com cadeado: tem endereço, mas ninguém escreve nela:
 
 <p align="center"><img src="01-fundamentos/0004-constantes/ideia.svg" alt="Diagrama da ideia: Constantes" width="858"></p>
 
@@ -1337,8 +1298,8 @@ int main(void) {
 // Ida e volta: R$ 9.80
 ```
 
-O primeiro passo do fluxograma acontece antes de o programa existir: a troca
-de texto é feita na compilação, e o executável já nasce só com os números:
+A troca de texto acontece na compilação; o executável já nasce só com os
+números:
 
 <p align="center"><img src="01-fundamentos/0004-constantes/fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
 
@@ -1346,18 +1307,14 @@ de texto é feita na compilação, e o executável já nasce só com os números
 > O `#define` cola **exatamente** o texto que vem depois do nome. Com
 > `#define TARIFA 4.90;`, a linha `printf("%.2f\n", 2 * TARIFA);` vira
 > `printf("%.2f\n", 2 * 4.90;);` e não compila. Com `#define TARIFA = 4.90`,
-> vira `2 * = 4.90`. Nada de `=` nem de `;` no `#define`. E o erro aparece na
-> linha em que o nome é **usado**, não na do `#define`, o que confunde.
+> vira `2 * = 4.90`. O erro aparece na linha em que o nome é **usado**, não na
+> do `#define`.
 
 > [!TIP]
-> **Por dentro do C:** salve o programa acima como `tarifa.c`, rode
-> `gcc -E tarifa.c | tail -12` e veja: não sobrou nenhum `TARIFA`, só
-> `4.90`. Por isso um `#define` não ocupa memória, não tem
-> tipo e não aparece no depurador. A `const int linha`, ao contrário, mora na memória:
-> `&linha` tem endereço e `sizeof linha` vale 4. E os literais têm tamanho:
-> `sizeof(4.90)` é 8 (`double`), `sizeof(4.90f)` é 4 e `sizeof('A')` é 4,
-> porque no C um caractere entre aspas simples é um `int`. Já `sizeof("A")`
-> é 2: a letra e o byte zero que marca o fim do texto.
+> O `#define` não ocupa memória e não tem tipo; a `const int linha` tem
+> endereço (`&linha`) e `sizeof linha` vale 4. Literais também têm tamanho:
+> `sizeof(4.90)` é 8, `sizeof(4.90f)` é 4, `sizeof('A')` é 4 (no C, `'A'` é
+> `int`) e `sizeof("A")` é 2 (a letra e o byte zero).
 
 > [!NOTE]
 > **Pergunta para você:** o pré-processador troca `TARIFA` dentro das aspas?
@@ -1642,16 +1599,15 @@ gcc ~/LPEDC/01-fundamentos/0004-constantes/E024.c -o ~/LPEDC/01-fundamentos/0004
 
 ## 0005 · printf
 
-O cupom do mercado sai da impressora com as colunas certinhas: o nome do
-produto encostado à esquerda, a quantidade e o preço encostados à direita,
-sempre com duas casas decimais. Ninguém conta espaços à mão. Quem faz isso é
-o **formato**.
+O cupom do mercado sai com as colunas alinhadas: produto à esquerda,
+quantidade e preço à direita, sempre com duas casas decimais. Ninguém conta
+espaços à mão: quem faz isso é o **formato**.
 
 O primeiro argumento do `printf` é a **string de formato**: um texto com
-**especificadores** (os `%`) que são buracos a preencher. Os outros
-argumentos preenchem os buracos **na ordem**, um para cada `%`. Escrever na
-tela é escrever na **saída padrão** (`stdout`); o `fprintf` do módulo 09 usa
-o mesmo formato para escrever num arquivo:
+**especificadores** (os `%`), que são buracos a preencher. Os outros
+argumentos os preenchem **na ordem**, um para cada `%`. O `printf` escreve na
+**saída padrão** (`stdout`); o `fprintf` do módulo 09 usa o mesmo formato
+para escrever num arquivo:
 
 | Especificador | Mostra | Exemplo | Sai |
 | --- | --- | --- | --- |
@@ -1670,18 +1626,18 @@ Entre o `%` e a letra cabem ajustes, nesta ordem:
 `%[flags][largura][.precisão]letra`.
 
 - **largura** é o **mínimo** de caracteres: `%6d` de 42 dá `    42`
-  (alinhado à direita). Se o valor for maior, sai inteiro, nada é cortado;
+  (à direita). Valor maior sai inteiro, nada é cortado;
 - **flags**: `-` alinha à esquerda (`%-6d` dá `42    `), `0` completa com
   zeros (`%06d` dá `000042`), `+` mostra o sinal sempre;
-- **precisão**: em real, o número de casas decimais (`%.2f`); em texto, o
-  máximo de caracteres (`%.3s` de `"Brasil"` dá `Bra`).
+- **precisão**: em real, as casas decimais (`%.2f`); em texto, o máximo de
+  caracteres (`%.3s` de `"Brasil"` dá `Bra`).
 
 A precisão **arredonda só na tela**: `%.2f` de 7.499 mostra `7.50`, mas a
 variável continua valendo 7.499.
 
-A linha do arroz tem três buracos: `%-10s` reserva 10
-casas para o nome, encostado à esquerda; `%3d` reserva 3 casas para a
-quantidade; `%9.2f` reserva 9 casas para o total, com 2 decimais:
+A linha do arroz tem três buracos: `%-10s` reserva 10 casas para o nome, à
+esquerda; `%3d` reserva 3 para a quantidade; `%9.2f` reserva 9 para o total,
+com 2 decimais:
 
 <p align="center"><img src="01-fundamentos/0005-printf/ideia.svg" alt="Diagrama da ideia: printf" width="858"></p>
 
@@ -1706,27 +1662,23 @@ int main(void) {
 // TOTAL             131.17
 ```
 
-Cada `printf` é uma saída, e todas usam o mesmo formato. Para mudar a largura
-de uma coluna, basta trocar um número em cada linha:
+Cada `printf` é uma saída com o mesmo formato. Para mudar a largura de uma
+coluna, troque um número em cada linha:
 
 <p align="center"><img src="01-fundamentos/0005-printf/fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
 
 > [!WARNING]
 > O `printf` **confia** em você: se o especificador não combina com o tipo do
-> argumento, ele lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
-> nem 10: mostra lixo. `printf("%.2f", 5)` também. Faltar argumento dá no mesmo. O
-> `-Wall` do gcc com as flags de estudo avisa (`format '%d' expects argument of type 'int'`).
-> Nunca ignore esse aviso. E no `printf` não vai `&`: ele quer o valor, não o
-> endereço.
+> argumento, lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
+> nem 10: mostra lixo. `printf("%.2f", 5)` também, e faltar argumento dá no
+> mesmo. O `-Wall` avisa (`format '%d' expects argument of type 'int'`); nunca
+> ignore. E no `printf` não vai `&`: ele quer o valor, não o endereço.
 
 > [!TIP]
-> **Por dentro do C:** o `printf` aceita qualquer número de argumentos, mas
-> não sabe os tipos deles: só o formato diz como ler cada um. Nessa passagem,
-> todo `float` é convertido em `double`, e por isso o `%f` serve para os dois.
-> A largura conta **bytes**, não letras: `"Feijão"` tem 6 letras e 7 bytes
-> (o `ã` ocupa 2 no UTF-8), então `%-10s` deixa a coluna dele uma casa mais
-> curta. E o `printf` devolve quantos bytes escreveu: `printf("Olá\n")` devolve
-> 5. O A010 mostra isso.
+> O `printf` não sabe os tipos dos argumentos: só o formato diz como lê-los.
+> Todo `float` vira `double` nessa passagem, por isso `%f` serve para os dois.
+> A largura conta **bytes**: `"Feijão"` tem 6 letras e 7 bytes (o `ã` ocupa 2
+> no UTF-8), então `%-10s` deixa a coluna dele uma casa mais curta.
 
 > [!NOTE]
 > **Pergunta para você:** o que `printf("[%5.1f]\n", 3456.78);` mostra? A
@@ -2006,24 +1958,23 @@ gcc ~/LPEDC/01-fundamentos/0005-printf/E030.c -o ~/LPEDC/01-fundamentos/0005-pri
 ## 0006 · scanf
 
 No app do banco, você agenda um Pix: digita o valor, R$ 150,75, e o dia do
-mês, 12. O app lê o que você digitou, guarda e confirma. Até aqui os
-programas só falavam; agora eles vão **ouvir**. A **entrada** do modelo
-entrada → processamento → saída vem do teclado.
+mês, 12. O app lê, guarda e confirma. Até aqui os programas só falavam; agora
+vão **ouvir**: a **entrada** do modelo entrada → processamento → saída vem do
+teclado.
 
-Quem lê é o **`scanf`**, o espelho do `printf`. O formato diz o que esperar,
-e os outros argumentos dizem **onde guardar**:
+Quem lê é o **`scanf`**, o espelho do `printf`. O formato diz o que esperar e
+os outros argumentos dizem **onde guardar**:
 
 ```c
 scanf("%d", &dia);
 ```
 
 O `&` é obrigatório: `&dia` é o **endereço** da variável. O `scanf` não quer o
-valor de `dia` (que ainda é lixo); ele quer saber em que bytes da memória
-escrever o número digitado. No `printf` não vai `&`; no `scanf`, vai em toda
-variável simples.
+valor de `dia` (ainda lixo), e sim os bytes onde escrever o número digitado.
+No `printf` não vai `&`; no `scanf`, vai em toda variável simples.
 
-Os especificadores quase repetem os do `printf`, com uma diferença que pega
-muita gente: **`double` se lê com `%lf`** e se mostra com `%f`.
+Os especificadores quase repetem os do `printf`, com uma diferença: **`double`
+se lê com `%lf`** e se mostra com `%f`.
 
 | Tipo | Lê com | Mostra com |
 | --- | --- | --- |
@@ -2032,22 +1983,21 @@ muita gente: **`double` se lê com `%lf`** e se mostra com `%f`.
 | `double` | `%lf` | `%f` |
 | `char` | `%c` (ou `" %c"`) | `%c` |
 
-O que você digita não vai direto para a variável. Vai para um **buffer**, uma
-fila de caracteres, e só chega ao programa quando você aperta Enter. O `scanf`
-tira da fila só o que o formato pede. `%d` e `%lf` pulam espaços e Enters
-antes do número e param no primeiro caractere que não serve. O que sobra
-**fica na fila** para a próxima leitura, inclusive o `'\n'` do Enter.
+O que você digita vai para um **buffer**, uma fila de caracteres, e só chega
+ao programa no Enter. O `scanf` tira da fila só o que o formato pede. `%d` e
+`%lf` pulam espaços e Enters antes do número e param no primeiro caractere
+inválido. O resto **fica na fila** para a próxima leitura, inclusive o `'\n'`
+do Enter.
 
 Caracteres comuns no formato precisam aparecer na entrada:
-`scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026`. E o `scanf` **devolve** quantos
-itens conseguiu guardar: 1, 2, 3... ou 0 se o primeiro já falhou, ou `EOF`
-(-1) se a entrada acabou. É assim que um programa descobre se a leitura deu
-certo. No módulo 02, com o `if`, você vai usar esse número para decidir o que
-fazer; por enquanto, mostre e observe.
+`scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026`. O `scanf` **devolve** quantos
+itens guardou: 1, 2, 3..., 0 se o primeiro já falhou, ou `EOF` (-1) se a
+entrada acabou. É assim que o programa sabe se a leitura deu certo; no módulo
+02, o `if` vai usar esse número. Por enquanto, apenas mostre e observe.
 
-Acompanhe uma execução: você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
-`150.75` da fila e escreve no endereço de `valor`. O `%d` pula o `'\n'` que
-sobrou, tira o `12` e escreve em `dia`. O último `'\n'` continua na fila:
+Você digita `150.75`, Enter, `12`, Enter. O `%lf` tira `150.75` da fila e
+escreve em `valor`. O `%d` pula o `'\n'` que sobrou, tira o `12` e escreve em
+`dia`. O último `'\n'` continua na fila:
 
 <p align="center"><img src="01-fundamentos/0006-scanf/ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
 
@@ -2076,30 +2026,27 @@ int main(void) {
 // O último scanf leu 1 item
 ```
 
-Para testar sem digitar, salve o programa como `pix.c` e use o cano (`|`)
-apresentado no começo do módulo: `printf '150.75\n12\n' | ./programa pix.c`.
+Para testar sem digitar, salve como `pix.c`, compile com o gcc e use o cano
+(`|`) apresentado no começo do módulo: `printf '150.75\n12\n' | ./pix`.
 
-No fluxograma, as duas leituras são paralelogramos de entrada, e cada uma
-guarda o valor numa caixinha. A saída vem depois:
+No fluxograma, as duas leituras são paralelogramos de entrada; cada uma guarda
+o valor numa caixinha. A saída vem depois:
 
 <p align="center"><img src="01-fundamentos/0006-scanf/fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
 
 > [!WARNING]
-> Esquecer o `&` é o erro clássico: `scanf("%d", dia)` entrega ao `scanf` o
-> lixo que está em `dia` como se fosse um endereço, e ele escreve num lugar
-> qualquer da memória. O programa quebra (`Segmentation fault`) ou, pior,
-> estraga outra variável. O gcc avisa: `format '%d' expects argument of type
-> 'int *', but argument 2 has type 'int'`. Outro clássico: `%f` para ler um
-> `double`. Compila com aviso e o número sai errado.
+> Esquecer o `&` é o erro clássico: `scanf("%d", dia)` entrega o lixo de `dia`
+> como se fosse um endereço, e o `scanf` escreve num lugar qualquer da
+> memória. O programa quebra (`Segmentation fault`) ou estraga outra variável.
+> O gcc avisa: `format '%d' expects argument of type 'int *', but argument 2
+> has type 'int'`. Outro erro comum: `%f` para ler um `double`. Compila com
+> aviso e o número sai errado.
 
 > [!TIP]
-> **Por dentro do C:** o `&valor` é um número como `0x7ffe...050`: o
-> endereço do primeiro dos 8 bytes do `double`. Com `%lf`, o `scanf` escreve
-> 8 bytes ali; com `%f`, escreve só 4, no formato de `float`, e o `double`
-> fica com metade dos bytes errada. No `printf` não tem esse problema porque
-> todo `float` vira `double` na passagem; no `scanf` vão endereços, e endereço
-> não se converte. E o buffer é por linha: enquanto você não aperta Enter, o
-> programa nem sabe que você está digitando.
+> Com `%lf`, o `scanf` escreve 8 bytes no endereço; com `%f`, escreve só 4, no
+> formato de `float`, e o `double` fica errado. No `printf` não há esse
+> problema porque todo `float` vira `double`; no `scanf` vão endereços, e
+> endereço não se converte.
 
 > [!NOTE]
 > **Pergunta para você:** se no dia você digitar `doze`, quanto vale `lidos`?
@@ -2139,10 +2086,10 @@ int main(void) {
 // Itens lidos: 1
 // 3 unidade(s) de R$ 4.99 em 2 parcela(s)
 //
-// Teste: printf '3 4.99\n2\n' | ./programa
+// Teste: printf '3 4.99\n2\n' | ~/LPEDC/rodar <este arquivo>
 //
 // Agora digite "3 4.99 reais" na primeira pergunta:
-//   printf '3 4.99 reais\n2\n' | ./programa
+//   printf '3 4.99 reais\n2\n' | ~/LPEDC/rodar <este arquivo>
 // O " reais" fica na fila. O %d das parcelas tropeça no 'r', devolve 0
 // ("Itens lidos: 0") e parcelas continua com 1. O 2 nem chega a ser lido.
 ```
@@ -2179,7 +2126,7 @@ int main(void) {
 // Tamanho (P, M ou G): G
 // Entrega em 07/09/2026, camiseta G
 //
-// Teste: printf '7/9/2026\nG\n' | ./programa
+// Teste: printf '7/9/2026\nG\n' | ~/LPEDC/rodar <este arquivo>
 // Agora digite a data com traços (7-9-2026): o scanf para no primeiro "-" e
 // lê só 1 item. O "-" fica no buffer, e o %c seguinte pega ele: a saída
 // vira "Entrega em 07/00/0, camiseta -".
@@ -2205,7 +2152,7 @@ Você tem 30 anos e 1.75 m de altura.
 ```
 
 
-Teste sem digitar: printf '30\n1.75\n' | ./programa
+Teste sem digitar: printf '30\n1.75\n' | ~/LPEDC/rodar E031.c
 
 **Dicas:**
 
@@ -2221,7 +2168,7 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/E031.c -o ~/LPEDC/01-fundamentos/0006-scan
 **Exercício E032** · ★☆☆
 
 Este programa compila com DOIS avisos e, quando roda, quebra ou mostra
-lixo. Rode com printf '42\n80.5\n' | ./programa, leia os avisos
+lixo. Rode com printf '42\n80.5\n' | ~/LPEDC/rodar E032.c, leia os avisos
 e o relatório do AddressSanitizer, e conserte.
 
 
@@ -2263,7 +2210,7 @@ Alarme para 06:05
 
 
 Depois rode com "6 05" (espaço no lugar dos dois pontos):
-printf '6 05\n' | ./programa. O seu programa tem de mostrar
+printf '6 05\n' | ~/LPEDC/rodar E033.c. O seu programa tem de mostrar
 "Itens lidos: 1" e os minutos zerados: "Alarme para 6h00".
 
 **Dicas:**
@@ -2283,7 +2230,7 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/E033.c -o ~/LPEDC/01-fundamentos/0006-scan
 
 A lanchonete pergunta quantos lanches e se é para viagem (V) ou para comer
 aqui (A). Este programa compila sem aviso, mas não funciona: rode com
-printf '3\nV\n' | ./programa e veja a opção sair vazia.
+printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia.
 Conserte o código mudando UM caractere e rode de novo com a mesma
 entrada.
 
@@ -2314,11 +2261,11 @@ resposta esperada (a última dica):
 
 
 ```text
-printf '7 9\n'   | ./programa
-printf '7 x\n'   | ./programa
-printf 'x 7\n'   | ./programa
-printf '7\n\n9\n' | ./programa
-printf ''        | ./programa
+printf '7 9\n'   | ~/LPEDC/rodar E035.c
+printf '7 x\n'   | ~/LPEDC/rodar E035.c
+printf 'x 7\n'   | ~/LPEDC/rodar E035.c
+printf '7\n\n9\n' | ~/LPEDC/rodar E035.c
+printf ''        | ~/LPEDC/rodar E035.c
 ```
 
 **Dicas:**
@@ -2366,13 +2313,12 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/E036.c -o ~/LPEDC/01-fundamentos/0006-scan
 ## 0007 · Aritmética
 
 Sexta à noite, cinco amigos pedem três pizzas de 8 fatias. São 24 fatias:
-quantas cada um come, e quantas sobram para a disputa no par ou ímpar? E a
-conta de R$ 159, quanto cada um paga? Essa é a parte do **processamento**:
-pegar o que entrou e calcular o que vai sair.
+quantas cada um come e quantas sobram? E a conta de R$ 159, quanto cada um
+paga? Isso é **processamento**: calcular, com o que entrou, o que vai sair.
 
-Em `24 / 5`, o `/` é o **operador** e o 24 e o 5 são os **operandos**.
-Operadores, operandos e parênteses formam uma **expressão**, e toda expressão
-tem um valor. Os operadores aritméticos do C são cinco:
+Em `24 / 5`, o `/` é o **operador** e 24 e 5 são os **operandos**. Operadores,
+operandos e parênteses formam uma **expressão**, e toda expressão tem um
+valor. Os operadores aritméticos:
 
 | Operador | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -2381,29 +2327,25 @@ tem um valor. Os operadores aritméticos do C são cinco:
 | `/` | divisão | `24 / 5` | `4` (!) |
 | `%` | resto da divisão | `24 % 5` | `4` |
 
-A pegadinha está no `/`. Quando os **dois** lados são inteiros, a divisão é
+A pegadinha está no `/`. Com **dois** operandos inteiros, a divisão é
 **inteira**: o resultado é inteiro e a parte fracionária é jogada fora, sem
-arredondar. `24 / 5` dá 4, `7 / 2` dá 3, `2 / 3` dá 0. A conta é feita como na
-divisão com resto da escola: 7 dividido por 2 dá 3 e sobra 1. Basta **um** lado ser
+arredondar. `24 / 5` dá 4, `7 / 2` dá 3, `2 / 3` dá 0. Basta **um** lado ser
 real para a divisão ser real: `159.0 / 5` dá 31,8.
 
 O **`%`** (módulo) devolve o resto da divisão inteira e só funciona com
-inteiros. Os dois andam juntos: `24 / 5` diz quantas vezes o 5 cabe no 24, e
-`24 % 5` diz o que sobrou. Sempre vale `(a / b) * b + a % b == a`. É o par
-que separa dígitos (`2026 % 10` é 6), converte segundos em minutos e diz se um
-número é par (`n % 2` é 0).
+inteiros. `24 / 5` diz quantas vezes o 5 cabe no 24, e `24 % 5` diz o que
+sobrou; sempre vale `(a / b) * b + a % b == a`. Serve para separar dígitos
+(`2026 % 10` é 6), converter segundos em minutos e testar paridade (`n % 2` é
+0 se `n` é par).
 
-A **precedência** é a da matemática da escola: `*`, `/` e `%` antes de `+` e
-`-`. Empate se resolve da esquerda para a direita (essa regra de desempate é a
-**associatividade**): `100 / 10 / 2` é
-`(100 / 10) / 2`, que dá 5. Parênteses mandam em tudo, e sobrar parêntese não
-é defeito: deixa a intenção clara. O C não tem operador de potência; `^` é
-outra coisa (assunto 0065). Para potência, use `pow` (assunto 0010) ou
-multiplique: `x * x`.
+A **precedência** é a da escola: `*`, `/` e `%` antes de `+` e `-`. O empate
+se resolve da esquerda para a direita (**associatividade**): `100 / 10 / 2` é
+`(100 / 10) / 2`, que dá 5. Parênteses mandam em tudo e deixam a intenção
+clara. O C não tem operador de potência (`^` é outra coisa, assunto 0065); use
+`pow` (assunto 0010) ou multiplique: `x * x`.
 
-As 24 fatias são divididas entre os cinco, quatro para
-cada um. O `/` conta as rodadas completas e o `%` conta as fatias que não
-fecham mais uma rodada:
+As 24 fatias são divididas entre os cinco, quatro para cada um. O `/` conta
+as rodadas completas e o `%` as fatias que sobram:
 
 <p align="center"><img src="01-fundamentos/0007-aritmetica/ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
 
@@ -2435,27 +2377,23 @@ int main(void) {
 // Com inteiros: R$ 31
 ```
 
-Cada conta é um retângulo de processamento, e a ordem deles importa: `cada` e
-`sobra` só podem ser calculados depois que `fatias` tem valor:
+Cada conta é um retângulo de processamento, e a ordem importa: `cada` e
+`sobra` dependem de `fatias`:
 
 <p align="center"><img src="01-fundamentos/0007-aritmetica/fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
 
 > [!WARNING]
-> A média que dá errado: com `int a = 7, b = 8;`, a linha
-> `double media = (a + b) / 2;` guarda **7.0**, não 7,5. A divisão acontece
-> entre dois `int` **antes** de o resultado ir para o `double`, e aí os
-> decimais já foram embora. Escreva `(a + b) / 2.0`. E cuidado com a
-> precedência: `a + b / 2` divide só o `b`. A versão campeã de erro é
-> `1 / 2 * x`, que dá sempre zero.
+> Com `int a = 7, b = 8;`, a linha `double media = (a + b) / 2;` guarda
+> **7.0**, não 7,5. A divisão é entre dois `int` **antes** de ir para o
+> `double`, e os decimais já se perderam. Escreva `(a + b) / 2.0`. Cuidado
+> também com a precedência: `a + b / 2` divide só o `b`, e `1 / 2 * x` dá
+> sempre zero.
 
 > [!TIP]
-> **Por dentro do C:** desde o C99, a divisão inteira corta em direção ao
-> zero: `-7 / 2` dá -3 (não -4), e o resto fica com o sinal de quem é
-> dividido: `-7 % 3` dá -1. Dividir **inteiro por zero** derruba o programa
-> (`Floating point exception`), e o detector do gcc com as flags de estudo acusa `division by
-> zero`; com `double`, o resultado vira `inf`. Dividir também custa caro: uma
-> soma leva 1 ciclo do processador, uma divisão inteira leva dezenas. Por isso
-> o compilador troca `x / 8` por um deslocamento de bits quando pode.
+> Desde o C99, a divisão inteira corta em direção ao zero: `-7 / 2` dá -3, e o
+> resto tem o sinal do dividendo: `-7 % 3` dá -1. Dividir **inteiro por zero**
+> derruba o programa (`Floating point exception`); com `double`, o resultado
+> é `inf`.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `2 + 3 * 4 % 5`? Resolva na mão, na
@@ -2631,7 +2569,7 @@ Cada um: R$ 65.31
 ```
 
 
-Teste: printf '237.50\n4\n' | ./programa
+Teste: printf '237.50\n4\n' | ~/LPEDC/rodar E039.c
 
 **Dicas:**
 
@@ -2720,7 +2658,7 @@ Ao contrário: 021
 ```
 
 
-Teste: printf '472\n' | ./programa e depois com '120\n'.
+Teste: printf '472\n' | ~/LPEDC/rodar E042.c e depois com '120\n'.
 
 **Dicas:**
 
@@ -2739,32 +2677,30 @@ gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E042.c -o ~/LPEDC/01-fundamentos/0007
 
 ## 0008 · Conversão e cast
 
-Você zerou o hodômetro parcial no último tanque. Agora rodou 523 km e
-precisou de 41 litros para encher de novo. Quantos km por litro o carro faz?
-A conta é 523 ÷ 41 ≈ 12,76. O C, com dois `int`, responde 12.
+Você zerou o hodômetro parcial no último tanque. Agora rodou 523 km e gastou
+41 litros para encher de novo. Quantos km por litro? A conta é 523 ÷ 41 ≈
+12,76. O C, com dois `int`, responde 12.
 
-Toda expressão em C tem um **valor** e um **tipo**. Com operandos do mesmo
-tipo, o resultado tem esse tipo: `int / int` é `int`. Com tipos diferentes,
-o C faz uma **conversão automática**: o operando "menor" sobe para o tipo do
-"maior" antes da conta. A escada é
-`char` → `short` → `int` → `long` → `long long` → `float` → `double`.
-`523 / 41.0` vira `523.0 / 41.0` e dá 12,756...
+Toda expressão tem um **valor** e um **tipo**. Com operandos do mesmo tipo, o
+resultado tem esse tipo: `int / int` é `int`. Com tipos diferentes, o C faz a
+**conversão automática**: o operando "menor" sobe para o tipo do "maior".
+A escada é `char` → `short` → `int` → `long` → `long long` → `float` →
+`double`. `523 / 41.0` vira `523.0 / 41.0` e dá 12,756...
 
 Na **atribuição** é o contrário: o valor vira o tipo da variável da
-**esquerda**, caiba ou não. `double d = 12;` guarda 12.0, sem problema.
-`int i = 12.76;` guarda 12: a parte fracionária é **cortada**, não
-arredondada (e `-9.99` vira -9). Um valor grande demais num tipo pequeno
-perde bits. O compilador, com as opções do curso, não avisa nada disso.
+**esquerda**, caiba ou não. `double d = 12;` guarda 12.0. `int i = 12.76;`
+guarda 12: a parte fracionária é **cortada**, não arredondada (`-9.99` vira
+-9). Valor grande demais num tipo pequeno perde bits. Com as opções do curso,
+o compilador não avisa.
 
-Quando você quer escolher a conversão, usa o **cast**: o tipo entre
-parênteses na frente do valor, `(double) km`. O cast cria uma **cópia
-temporária** convertida; a variável `km` continua `int` para sempre. Ele tem
-precedência alta, maior que a de `*` e `/`, então `(double) km / litros`
-converte só o `km`, e isso basta, porque aí a divisão já vira real.
+O **cast** escolhe a conversão: o tipo entre parênteses antes do valor,
+`(double) km`. Ele cria uma **cópia temporária** convertida; `km` continua
+`int`. Sua precedência é maior que a de `*` e `/`, então `(double) km /
+litros` converte só o `km`, o que basta para a divisão ser real.
 
-O desenho mostra os dois caminhos. Pelo de cima, os dois `int` se dividem, sai 12,
-e só então ele vira 12.0, tarde demais. Pelo de baixo, o cast
-transforma o 523 em 523.0 antes da divisão, e o resultado é real:
+No desenho, pelo caminho de cima os dois `int` se dividem, sai 12 e só então
+vira 12.0, tarde demais. Pelo de baixo, o cast transforma 523 em 523.0 antes
+da divisão:
 
 <p align="center"><img src="01-fundamentos/0008-conversao/ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
 
@@ -2796,28 +2732,24 @@ int main(void) {
 // Num int:       12 km/l
 ```
 
-A pergunta que decide o resultado é "tem um real na divisão?". Quem responde
-é o compilador, olhando os tipos, antes de o programa rodar. Graças ao cast,
-o exemplo segue pelo Sim:
+A pergunta "tem um real na divisão?" é respondida pelo compilador, pelos
+tipos. Com o cast, o exemplo segue pelo Sim:
 
 <p align="center"><img src="01-fundamentos/0008-conversao/fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
 
 > [!WARNING]
-> O cast precisa chegar **antes** da divisão. `(double) (km / litros)` parece
-> certo, mas os parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast
-> só transforma o 12 em 12.0. O mesmo vale para guardar num `double`:
-> `double media = soma / n;` com `soma` e `n` inteiros já perdeu os decimais
-> antes do `=`. Converta um dos operandos: `(double) soma / n`.
+> O cast precisa chegar **antes** da divisão. Em `(double) (km / litros)`, os
+> parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast só o
+> transforma em 12.0. Igualmente, `double media = soma / n;` com `soma` e `n`
+> inteiros perde os decimais antes do `=`. Converta um operando:
+> `(double) soma / n`.
 
 > [!TIP]
-> **Por dentro do C:** um `int` e um `double` com o "mesmo" valor têm bits
-> completamente diferentes. O 12 num `int` são 4 bytes `0C 00 00 00`; o 12.0
-> num `double` são 8 bytes no formato sinal, expoente e mantissa. Converter
-> é uma instrução do processador (`cvtsi2sd` nos PCs), não um rótulo novo. O
-> `double` guarda inteiros exatos até 2⁵³; o `float`, só até 2²⁴ = 16.777.216,
-> e por isso `float f = 16777217;` vira 16777216. E converter um `double`
-> grande demais para `int` é comportamento indefinido: não confie no
-> resultado.
+> Um `int` e um `double` de mesmo valor têm bits diferentes: converter é uma
+> operação real do processador. O `float` guarda inteiros exatos só até
+> 2²⁴ = 16.777.216 (`float f = 16777217;` vira 16777216), e o `double`, até
+> 2⁵³. Converter um `double` grande demais para `int` é comportamento
+> indefinido.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `int x = 7 / 2 * 2.0;`? Faça passo a
@@ -3082,17 +3014,15 @@ gcc ~/LPEDC/01-fundamentos/0008-conversao/E048.c -o ~/LPEDC/01-fundamentos/0008-
 ## 0009 · Atribuição, ++ e --
 
 O bilhete único tem R$ 20,00. Você recarrega R$ 30,00, pega dois ônibus de
-R$ 4,40 e o validador conta as viagens. O saldo não é recalculado do zero a
-cada passo: ele é **atualizado**, somando ou tirando do valor que já está lá.
+R$ 4,40 e o validador conta as viagens. O saldo não é recalculado do zero:
+é **atualizado** a partir do valor que já está lá.
 
-No C, `=` quer dizer "guarde o valor da direita na variável da esquerda", e
-não o "igual" da matemática. Por isso `saldo = saldo + 30.00` faz sentido: calcula
-com o valor antigo e escreve o novo por cima. Do lado esquerdo só pode ficar
-algo que tem endereço, uma variável; `30 = saldo` e `saldo + 1 = 5` não
-compilam.
+No C, `=` significa "guarde o valor da direita na variável da esquerda", não
+o "igual" da matemática. Por isso `saldo = saldo + 30.00` faz sentido: calcula
+com o valor antigo e escreve o novo por cima. À esquerda só pode ficar algo
+com endereço, uma variável; `30 = saldo` e `saldo + 1 = 5` não compilam.
 
-Atualizar uma variável é tão comum que tem atalho, os **operadores
-compostos**:
+Os **operadores compostos** são atalhos para atualizar uma variável:
 
 | Atalho | Quer dizer | Com `x = 10` |
 | --- | --- | --- |
@@ -3102,23 +3032,22 @@ compostos**:
 | `x /= 3` | `x = x / 3` | 3 (divisão inteira!) |
 | `x %= 3` | `x = x % 3` | 1 |
 
-O operador composto age sobre **toda** a expressão da direita, como se ela
-estivesse entre parênteses: `x *= y + 1` é `x = x * (y + 1)`, e não
-`x * y + 1`.
+O composto age sobre **toda** a expressão da direita, como se estivesse entre
+parênteses: `x *= y + 1` é `x = x * (y + 1)`, não `x * y + 1`.
 
-Para somar ou tirar 1 há atalhos ainda menores: **`++`** e **`--`**. Numa
-linha sozinha, `viagens++` e `++viagens` fazem a mesma coisa. A diferença
-aparece quando o valor é **usado** na mesma expressão:
+Para somar ou tirar 1, há **`++`** e **`--`**. Sozinhos na linha, `viagens++` e
+`++viagens` são iguais. A diferença aparece quando o valor é **usado** na
+mesma expressão:
 
-- **pós** (`x++`): a expressão vale o valor **antigo**, e depois `x` aumenta;
+- **pós** (`x++`): a expressão vale o valor **antigo**, depois `x` aumenta;
 - **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
 
-A atribuição também é uma expressão, e vale o valor guardado. Ela associa **da direita para a esquerda**, ao
-contrário dos aritméticos: em `a = b = c = 7`, o C faz `c = 7`,
-que vale 7, depois `b = 7` e por fim `a = 7`.
+A atribuição também é uma expressão e vale o valor guardado. Ela associa **da
+direita para a esquerda**: em `a = b = c = 7`, o C faz `c = 7` (que vale 7),
+depois `b = 7` e por fim `a = 7`.
 
-O saldo passa por quatro valores, cada um calculado a
-partir do anterior, na mesma caixinha. As viagens sobem de um em um:
+O saldo passa por quatro valores, cada um calculado a partir do anterior, na
+mesma caixinha. As viagens sobem de um em um:
 
 <p align="center"><img src="01-fundamentos/0009-atribuicao/ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
 
@@ -3149,9 +3078,8 @@ int main(void) {
 // antes = 2, depois = 4, viagens = 4
 ```
 
-Cada atualização é um retângulo, e todos mexem nas mesmas duas variáveis. No
-módulo 03 esses passos repetidos viram um laço, e o `+=` e o `++` passam a
-fazer o papel de contador e acumulador:
+Cada atualização é um retângulo sobre as mesmas duas variáveis. No módulo 03,
+esses passos viram um laço, com `+=` e `++` como acumulador e contador:
 
 <p align="center"><img src="01-fundamentos/0009-atribuicao/fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
 
@@ -3159,18 +3087,9 @@ fazer o papel de contador e acumulador:
 > Nunca altere a mesma variável duas vezes na mesma expressão, nem altere e
 > leia ao mesmo tempo. `i = i++;`, `x = x++ + ++x;` e
 > `printf("%d %d", n++, n);` são **comportamento indefinido**: o padrão não
-> diz em que ordem as partes acontecem, e cada compilador faz de um jeito. O
-> `-Wall` avisa
-> (`operation on 'i' may be undefined`). Regra prática: use `++` e `--`
-> sozinhos na linha, ou num lugar onde a variável apareça uma vez só.
-
-> [!TIP]
-> **Por dentro do C:** `x = x + 1`, `x += 1`, `x++` e `++x`, sozinhos numa
-> linha, viram **a mesma instrução** de máquina (`add` ou `inc`). Os atalhos
-> não deixam o programa mais rápido; eles existem para você escrever o nome
-> da variável uma vez só, o que evita errar quando o nome é comprido. A
-> diferença entre pré e pós é só qual valor a expressão entrega: no pós, o
-> compilador guarda uma cópia do valor antigo antes de somar.
+> define a ordem e cada compilador faz de um jeito. O `-Wall` avisa
+> (`operation on 'i' may be undefined`). Use `++` e `--` sozinhos na linha ou
+> com a variável aparecendo uma vez só.
 
 > [!NOTE]
 > **Pergunta para você:** com `int x = 5;`, quanto valem `y` e `x` depois de
@@ -3444,13 +3363,12 @@ gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E054.c -o ~/LPEDC/01-fundamentos/0009
 ## 0010 · math.h
 
 Na pizzaria, a grande de 35 cm custa R$ 59,90 e a média de 25 cm, R$ 39,90.
-Duas médias dão mais pizza que uma grande? A intuição diz que não ("35 é bem
-maior que 25"), mas a área cresce com o **quadrado** do raio. Para tirar a
-dúvida você precisa de potência, de raiz e de arredondamento, e o C não tem
-operador para nada disso.
+Duas médias dão mais pizza que uma grande? A intuição diz que não, mas a área
+cresce com o **quadrado** do raio. Para tirar a dúvida, são necessários
+potência, raiz e arredondamento, e o C não tem operador para isso.
 
-Quem tem é a biblioteca de matemática, declarada no **`<math.h>`**. Quase todas
-as funções recebem e devolvem `double`:
+A biblioteca de matemática, declarada no **`<math.h>`**, tem funções para
+isso. Quase todas recebem e devolvem `double`:
 
 | Função | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -3463,19 +3381,19 @@ as funções recebem e devolvem `double`:
 | `fmod(x, y)` | resto de divisão real | `fmod(7.5, 2)` | 1.5 |
 | `sin`, `cos`, `tan` | trigonometria, em **radianos** | `cos(0)` | 1 |
 
-Dois avisos. O C padrão não define o pi: o `M_PI` que você vai achar por aí
-é extensão e não existe com `-std=c17`; crie o seu com `#define`. E o `abs`
-dos inteiros mora em outro lugar, no `<stdlib.h>`; para real, é `fabs`.
+Dois avisos. O C padrão não define o pi: o `M_PI` é extensão e não existe com
+`-std=c17`; crie o seu com `#define`. E o `abs` dos inteiros fica no
+`<stdlib.h>`; para real, use `fabs`.
 
-Arredondar tem três sabores e eles divergem nos negativos: `floor` sempre
-desce na reta (`floor(-2.3)` é -3), `ceil` sempre sobe (`ceil(-2.7)` é -2), e
-`round` vai para o inteiro mais perto. E nenhum deles é o cast: `(int) -2.7`
-**corta** e dá -2. O `ceil` é o das contas de "quantos preciso comprar": 2,78
-latas de tinta viram 3 latas.
+Os três arredondamentos divergem nos negativos: `floor` sempre desce
+(`floor(-2.3)` é -3), `ceil` sempre sobe (`ceil(-2.7)` é -2) e `round` vai
+para o inteiro mais perto. O cast é outra coisa: `(int) -2.7` **corta** e dá
+-2. O `ceil` serve para "quantos preciso comprar": 2,78 latas de tinta viram
+3.
 
-Na conta da grande, o diâmetro de 35 vira raio 17,5; `pow` eleva ao
-quadrado; vezes pi, dá a área da grande. A mesma conta para as médias, vezes
-dois, dá 981,75 cm², um pouco mais que a grande:
+Na grande, o diâmetro 35 vira raio 17,5; `pow` eleva ao quadrado; vezes pi,
+dá a área. Nas médias, a mesma conta vezes dois dá 981,75 cm², um pouco mais
+que a grande:
 
 <p align="center"><img src="01-fundamentos/0010-math/ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
 
@@ -3516,27 +3434,23 @@ int main(void) {
 Duas médias dão um pouco mais de pizza, mas cada 100 cm² da grande sai quase
 R$ 2 mais barato.
 
-No fluxograma, as funções entram no meio das contas como qualquer valor:
-`pow(...)` e `sqrt(...)` são calculados e o resultado segue na expressão:
+No fluxograma, `pow(...)` e `sqrt(...)` entram nas contas como qualquer
+valor:
 
 <p align="center"><img src="01-fundamentos/0010-math/fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
 
 > [!WARNING]
-> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e
-> qualquer número elevado a 0 é 1. Escreva `1.0 / 3`. Pelo mesmo motivo,
-> `ceil(7 / 2)` dá 3, não 4: o `ceil` recebe o 3 já cortado. E `abs(-2.75)`
-> com o `abs` dos inteiros dá 2; o `-Wextra` avisa
-> (`using integer absolute value function 'abs'`). Para real, `fabs`.
+> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e todo
+> número elevado a 0 é 1. Escreva `1.0 / 3`. Do mesmo modo, `ceil(7 / 2)` dá
+> 3, não 4: o `ceil` recebe o 3 já cortado. E o `abs` dos inteiros dá 2 em
+> `abs(-2.75)`; o `-Wextra` avisa (`using integer absolute value function
+> 'abs'`). Para real, `fabs`.
 
 > [!TIP]
-> **Por dentro do C:** o `math.h` só **declara** as funções: diz que
-> `double sqrt(double)` existe, e é por isso que `sqrt(144)` funciona com um
-> `int`: o compilador converte para `double` antes de chamar. O código mora
-> na biblioteca `libm`, e quem junta é o ligador com a opção `-lm` (o
-> `-lm` entra nas flags de estudo). Sem ela, pode aparecer `undefined reference to 'pow'`.
-> E o compilador otimiza: `sqrt(x)` vira uma instrução só do processador
-> (`sqrtsd`), `pow(x, 2)` vira `x * x`, e `sqrt(2.0)` é calculado na
-> compilação, sem chamada nenhuma.
+> O `math.h` só **declara** as funções (por isso `sqrt(144)` funciona com
+> `int`: o compilador converte para `double`). O código está na biblioteca
+> `libm`, que o ligador junta com `-lm` (já nas flags de estudo). Sem ela,
+> aparece `undefined reference to 'pow'`.
 
 > [!NOTE]
 > **Pergunta para você:** quanto dão `round(-2.5)`, `floor(-0.5)` e
@@ -3818,34 +3732,27 @@ gcc ~/LPEDC/01-fundamentos/0010-math/E060.c -o ~/LPEDC/01-fundamentos/0010-math/
 
 ## 0011 · Juntando tudo
 
-Chegou a conta de luz da república. São três moradores, e todo mês alguém
-pega o papel, faz a conta no celular e manda no grupo quanto cada um deve.
-Dá para fazer melhor: um programa que lê as duas leituras do relógio e o
-número de moradores e devolve a conta pronta, com o valor de cada um.
+Chegou a conta de luz da república, com três moradores. Todo mês alguém faz a
+divisão no celular e manda no grupo. Um programa pode ler as duas leituras do
+relógio e o número de moradores e devolver o valor de cada um.
 
-Esse programa usa tudo o que o módulo ensinou, na ordem em que aparece num
-programa real:
+Ele reúne tudo o que o módulo ensinou:
 
-- **constantes** (`#define`) para a tarifa e a taxa fixa: mudou a tarifa,
-  muda uma linha;
-- **variáveis** com o tipo certo: leituras do relógio são inteiras (`int`),
-  dinheiro é `double`;
-- **entrada** com `scanf`, com `&` em cada variável, e o retorno guardado;
+- **constantes** (`#define`) para a tarifa e a taxa fixa;
+- **variáveis** com o tipo certo: leituras em `int`, dinheiro em `double`;
+- **entrada** com `scanf`, `&` em cada variável e o retorno guardado;
 - **processamento** com aritmética, um operador composto (`+=`), um **cast**
   para a média não virar divisão inteira e o `ceil` para arredondar o
   centavo para cima (ninguém quer pagar um centavo a menos e deixar a conta
   descoberta);
 - **saída** com `printf` alinhado, largura e duas casas.
 
-É o modelo **entrada → processamento → saída** do começo do módulo, e é
-**sequência** pura: o programa faz sempre os
-mesmos passos, na mesma ordem. Ele não pergunta nada, não confere se a
-leitura atual é maior que a anterior, não repete. Isso vem nos módulos 02
-(decisão) e 03 (repetição).
+É o modelo **entrada → processamento → saída** e **sequência** pura: os mesmos
+passos, na mesma ordem. Ele não confere se a leitura atual é maior que a
+anterior nem repete nada. Isso vem nos módulos 02 (decisão) e 03 (repetição).
 
-Os três valores entram, o consumo vira 257 kWh, a
-conta vira R$ 229,24, e a divisão por três, com o centavo arredondado para
-cima, dá R$ 76,42 para cada um:
+Entram três valores; o consumo é 257 kWh, a conta é R$ 229,24 e a divisão por
+três, com o centavo para cima, dá R$ 76,42 para cada um:
 
 <p align="center"><img src="01-fundamentos/0011-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
@@ -3899,8 +3806,8 @@ int main(void) {
 
 ### Passo a passo
 
-O teste de mesa com a entrada 45230, 45487 e 3. Cada linha é uma instrução
-do processamento; as colunas mostram o valor de cada variável depois dela:
+Teste de mesa com a entrada 45230, 45487 e 3. Cada linha é uma instrução; as
+colunas mostram as variáveis depois dela:
 
 | Instrução | consumo | total | por_dia | cada |
 | --- | --- | --- | --- | --- |
@@ -3914,26 +3821,17 @@ Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100 dá 7641,33...; o `ceil`
 sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
 dois centavos, mas a conta fica paga.
 
-Uma leitura, quatro contas e uma saída, sem nenhum losango: assim é todo
-programa deste módulo:
+Entrada, quatro contas e saída, sem nenhum losango, como todo programa deste
+módulo:
 
 <p align="center"><img src="01-fundamentos/0011-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
 
 > [!WARNING]
-> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8, e
-> a média por dia sairia 8.00. E a ordem das contas importa: se o `ceil`
-> viesse antes da multiplicação por 100, `ceil(76.4133)` arredondaria para
-> R$ 77, e cada um pagaria 58 centavos a mais. Faça o teste de mesa antes de
-> confiar numa fórmula.
-
-> [!TIP]
-> **Por dentro do C:** este programa ocupa poucas dezenas de bytes de
-> variáveis: cinco `int` (4 bytes cada) e três `double` (8 cada), todos na
-> mesma região da memória, a **pilha**, que você vai estudar no módulo de
-> funções. As constantes do `#define` nem estão lá: viraram números dentro
-> das instruções. E o `ceil` vem da `libm`, ligada pelo `-lm`: rode
-> `nm -D` no executável e procure `ceil`, `printf` e `scanf`, as funções que o
-> ligador deixou para buscar nas bibliotecas na hora de rodar.
+> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8 e a
+> média por dia sairia 8.00. A ordem das contas também importa: com o `ceil`
+> antes da multiplicação por 100, `ceil(76.4133)` daria R$ 77, e cada um
+> pagaria 58 centavos a mais. Faça o teste de mesa antes de confiar numa
+> fórmula.
 
 > [!NOTE]
 > **Pergunta para você:** e se alguém digitar a leitura atual menor que a
@@ -3994,8 +3892,8 @@ int main(void) {
 // Total (R$):         629.30
 // (leituras certas: 3 de 3)
 //
-// Teste: printf '3.2\n4.5\n89.90\n' | ./programa
-// Com uma letra no preço, printf '3.2\n4.5\nabc\n' | ./programa
+// Teste: printf '3.2\n4.5\n89.90\n' | ~/LPEDC/rodar <este arquivo>
+// Com uma letra no preço, printf '3.2\n4.5\nabc\n' | ~/LPEDC/rodar <este arquivo>
 // mostra "(leituras certas: 2 de 3)" e o total sai 0.00: o preço ficou com
 // o valor inicial. No módulo 02, com o if, o programa vai poder parar ali.
 ```
@@ -4050,7 +3948,7 @@ int main(void) {
 // Cada um manda um Pix de R$ 66
 // Tempo a 80 km/h: 5h23
 //
-// Teste: printf '430\n12.5\n47.80\n4\n' | ./programa
+// Teste: printf '430\n12.5\n47.80\n4\n' | ~/LPEDC/rodar <este arquivo>
 ```
 
 ```bash
@@ -4074,7 +3972,7 @@ IMC: 23.7
 ```
 
 
-Teste: printf '72.5\n1.75\n' | ./programa
+Teste: printf '72.5\n1.75\n' | ~/LPEDC/rodar E061.c
 
 **Dicas:**
 
@@ -4102,7 +4000,7 @@ Celsius: 36.5
 ```
 
 
-Teste: printf '36.5\n' | ./programa
+Teste: printf '36.5\n' | ~/LPEDC/rodar E062.c
 
 **Dicas:**
 
@@ -4130,7 +4028,7 @@ Tempo: 376 s = 6 min 16 s
 ```
 
 
-Teste: printf '4.7\n100\n' | ./programa
+Teste: printf '4.7\n100\n' | ~/LPEDC/rodar E063.c
 
 **Dicas:**
 
@@ -4193,7 +4091,7 @@ Acima da meta em 0.90 ponto
 ```
 
 
-Teste: printf '172.5\n25\n' | ./programa
+Teste: printf '172.5\n25\n' | ~/LPEDC/rodar E065.c
 
 **Dicas:**
 
@@ -4248,9 +4146,9 @@ gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066.c -o ~/LPEDC/01-fundamentos/0
 
 ## Desafios do módulo
 
-Problemas para resolver com o que o módulo ensinou: variáveis, `scanf`,
-aritmética, conversões, `math.h` e `printf`. Nenhum precisa de `if` nem de
-laço. Escreva cada um num arquivo seu e rode com as flags de estudo.
+Problemas com variáveis, `scanf`, aritmética, conversões, `math.h` e
+`printf`. Nenhum precisa de `if` nem de laço. Escreva cada um num arquivo seu
+e compile com as flags de estudo.
 
 **1. Troco em moedas.** O caixa da padaria só tem moedas de R$ 1, R$ 0,50,
 R$ 0,25, R$ 0,10 e R$ 0,05. Leia um troco em reais (`double`) e mostre quantas
@@ -5245,9 +5143,9 @@ gcc ~/LPEDC/01-fundamentos/lista/P0130.c -o ~/LPEDC/01-fundamentos/lista/P0130 &
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
-alternativa certa. Resolva no papel antes de abrir o gabarito e, se ficar em
-dúvida, copie o trecho para um arquivo e rode com as flags de estudo.
+Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
+Resolva no papel antes do gabarito e, na dúvida, rode o trecho com as flags
+de estudo.
 
 **1.** Qual a saída do trecho abaixo?
 

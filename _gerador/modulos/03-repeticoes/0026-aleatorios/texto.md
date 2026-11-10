@@ -1,52 +1,45 @@
 ## 0026 · Aleatórios
 
 No jogo de tabuleiro, você caiu na prisão. Para sair, precisa tirar **dupla**
-nos dois dados: os dois com o mesmo número. Joga, não sai, joga de novo. É um
-`do...while` (assunto 0021) com um ingrediente novo: o resultado de cada volta
-é sorteado.
+nos dois dados. Joga, não sai, joga de novo. É um `do...while` (assunto 0021)
+com um ingrediente novo: o resultado de cada volta é sorteado.
 
-Computador não sorteia de verdade. Ele é uma máquina determinística: a mesma
-entrada dá sempre a mesma saída. Ele gera números
-**pseudoaleatórios**: uma sequência calculada por uma conta fixa, em que cada
-número sai do anterior, e que parece aleatória para quem olha.
+O computador não sorteia de verdade: é determinístico, e a mesma entrada dá
+sempre a mesma saída. Ele gera números **pseudoaleatórios**: uma sequência
+calculada por uma conta fixa, em que cada número sai do anterior, e que parece
+aleatória.
 
 Em C, as peças ficam em `<stdlib.h>`:
 
 - **`rand()`** devolve o próximo número da sequência, de 0 até **`RAND_MAX`**.
-  O padrão garante `RAND_MAX` de pelo menos 32767; na glibc (Linux), ele vale
+  O padrão garante `RAND_MAX` de pelo menos 32767; na glibc (Linux), vale
   2147483647;
-- **`srand(semente)`** escolhe por onde a sequência começa. A mesma
-  **semente** dá sempre a mesma sequência.
+- **`srand(semente)`** escolhe onde a sequência começa. A mesma **semente** dá
+  sempre a mesma sequência.
 
-Para trazer o número para a faixa que você quer, use o resto da divisão
-(assunto 0007): `rand() % 6` dá de 0 a 5, e `1 + rand() % 6` dá de 1 a 6.
-Para uma faixa qualquer de `a` até `b`, a fórmula é
-`a + rand() % (b - a + 1)`.
+Para trazer o número à faixa desejada, use o resto da divisão (assunto 0007):
+`rand() % 6` dá de 0 a 5, e `1 + rand() % 6` dá de 1 a 6. Para uma faixa de `a`
+até `b`: `a + rand() % (b - a + 1)`.
 
-A semente depende do que você quer:
+A semente depende do objetivo:
 
-- **semente fixa** (`srand(2022)`): o programa sorteia sempre os mesmos
-  números. Parece inútil, mas ajuda muito a **testar** e **depurar**: o erro que
-  apareceu volta a aparecer. Os exemplos deste curso usam semente fixa para a
-  saída do comentário bater com a sua;
+- **semente fixa** (`srand(2022)`): sorteia sempre os mesmos números, o que
+  ajuda a **testar** e **depurar**, pois o erro volta a aparecer. Os exemplos
+  do curso usam semente fixa para a saída do comentário bater com a sua;
 - **semente do relógio** (`srand(time(NULL))`, com `<time.h>`): `time(NULL)`
-  devolve quantos segundos se passaram desde 1º de janeiro de 1970. Cada
-  execução começa num segundo diferente e sorteia números diferentes. É o que
-  um jogo real usa.
+  devolve os segundos desde 1º de janeiro de 1970. Cada execução começa num
+  segundo diferente e sorteia números diferentes. Um jogo real usa este.
 
-Sem nenhum `srand`, é como se o programa tivesse chamado `srand(1)`: a mesma
-sequência sempre.
+Sem nenhum `srand`, vale `srand(1)`: a mesma sequência sempre.
 
-A semente 2022 entra no gerador, que cospe números enormes, cada um
-calculado a partir do anterior. O `% 6 + 1`
-transforma cada número numa face, e os pares de faces são as jogadas. Na
-quarta, sai 4 e 4:
+A semente 2022 entra no gerador, que produz números enormes, cada um calculado
+a partir do anterior. O `% 6 + 1` transforma cada número numa face, e os pares
+de faces são as jogadas. Na quarta, sai 4 e 4:
 
 {{ideia}}
 
-O mesmo jogo em C. Atenção: a sequência exata depende da biblioteca. A saída
-abaixo é a da glibc (Linux); no macOS ou no Windows, a semente 2022 dá outros
-números:
+O mesmo jogo em C. A sequência exata depende da biblioteca: a saída abaixo é a
+da glibc (Linux); no macOS ou no Windows, a semente 2022 dá outros números:
 
 ```c
 #include <stdio.h>
@@ -76,31 +69,23 @@ int main(void) {
 // Dupla de 4 na jogada 4. Saiu da prisão!
 ```
 
-O `srand` fica **fora** do laço, antes de tudo, e roda
-uma vez só. O sorteio fica dentro, e a seta do Sim volta do losango para ele.
-No exemplo, o caminho passa três vezes pelo Sim e, na quarta jogada, pelo Não:
+O `srand` fica **fora** do laço, antes de tudo, e roda uma vez. O sorteio fica
+dentro, e a seta do Sim volta do losango para ele. No exemplo, o caminho passa
+três vezes pelo Sim e, na quarta jogada, pelo Não:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O erro clássico é chamar `srand(time(NULL))` **dentro** do laço. O laço
-> inteiro roda em milissegundos, dentro do mesmo segundo, então toda volta
-> reinicia a sequência com a **mesma** semente, e o `rand()` devolve sempre o
-> mesmo primeiro número: o dado "sorteia" 4, 4, 4, 4... O `srand` vai uma vez
-> só, no começo do `main`. Outro tropeço: `srand` não devolve nada (é `void`).
-> Quem sorteia é o `rand`.
+> O erro clássico é chamar `srand(time(NULL))` **dentro** do laço. O laço roda
+> em milissegundos, no mesmo segundo, então toda volta reinicia a sequência com
+> a **mesma** semente, e o `rand()` devolve sempre o mesmo primeiro número: o
+> dado "sorteia" 4, 4, 4, 4... O `srand` vai uma vez, no começo do `main`.
+> Outro tropeço: `srand` não devolve nada (é `void`). Quem sorteia é o `rand`.
 
 > [!TIP]
-> **Por dentro do C:** o padrão do C mostra, como exemplo, um gerador que é só
-> uma conta: `proximo = proximo * 1103515245 + 12345`, e o resultado é um
-> pedaço desse número. Cada `rand()` faz a conta uma vez, e a semente é o
-> primeiro `proximo`. A glibc usa uma receita um pouco mais elaborada, mas a
-> ideia é a mesma, e por isso a sequência se repete com a mesma semente. Dois
-> avisos: o `%` favorece um pouquinho os números baixos quando `RAND_MAX + 1`
-> não é múltiplo da faixa (o **viés do módulo**, desprezível para dados e
-> jogos); e `rand` **nunca** serve para senha, token ou criptografia, porque
-> quem descobre a semente prevê tudo. Para isso existe `getrandom` (Linux) ou
-> uma biblioteca de criptografia.
+> O `rand` **nunca** serve para senha, token ou criptografia: quem descobre a
+> semente prevê tudo. Para isso existe `getrandom` (Linux) ou uma biblioteca de
+> criptografia.
 
 > [!NOTE]
 > **Pergunta para você:** rode o A051 duas vezes. A saída muda? Agora troque

@@ -1,14 +1,14 @@
 ## 0036 · Juntando tudo: o caixa da lanchonete
 
 Sexta à noite, fila no food truck. O caixa lança os pedidos pelo código, soma,
-põe os 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
-número de notas e moedas. Parece um programa só, mas olhe as peças: um
-**módulo** com o cardápio, funções pequenas com **parâmetros** e retorno, um
-contador **`static`** escondido, uma **macro** para a taxa e uma função
-**recursiva** para o troco.
+põe 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
+número de notas e moedas. Parece um programa só, mas tem um **módulo** com o
+cardápio, funções pequenas com **parâmetros** e retorno, um contador
+**`static`** escondido, uma **macro** para a taxa e uma função **recursiva**
+para o troco.
 
-Antes de escrever, divida. Cada tarefa vira uma função com um nome que diz o
-que ela faz:
+Antes de escrever, divida: cada tarefa vira uma função com um nome que diz o
+que ela faz.
 
 | Peça | Onde | O que usa do módulo |
 | --- | --- | --- |
@@ -19,19 +19,18 @@ que ela faz:
 | `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
 | `TAXA_SERVICO` | `caixa.c` | `#define` |
 
-Uma decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira
-`790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e o troco de
-centavos pode sair errado. Na hora de mostrar, `%d.%02d` com `total / 100` e
-`total % 100` monta o "42.24". O único `double` é o valor pago, lido do
-teclado e convertido com `lround(pago * 100)`.
+Decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira `790`.
+Com `double`, `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e o troco
+pode sair errado. Para mostrar, `%d.%02d` com `total / 100` e `total % 100`
+monta o "42.24". O único `double` é o valor pago, lido do teclado e convertido
+com `lround(pago * 100)`.
 
-O troco é recursivo e lê como uma frase: "se o troco zerou, acabou; se a nota
-atual cabe, dê essa nota e resolva o resto; se não cabe, tente a nota
-seguinte". Cada chamada chega mais perto do fim, porque ou o troco diminui ou
-a nota diminui.
+O troco recursivo lê como uma frase: "se o troco zerou, acabou; se a nota atual
+cabe, dê essa nota e resolva o resto; se não cabe, tente a nota seguinte". Cada
+chamada chega mais perto do fim, pois o troco ou a nota diminui.
 
-Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço,
-a conta é R$ 42,24. Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
+Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço, a conta é R$ 42,24.
+Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 5 + 2 + 0,50 + 0,25 + 0,01:
 
 {{ideia}}
@@ -142,37 +141,27 @@ int main(void) {
 //   0.25
 //   0.01
 // Para testar sem digitar, salve como caixa.c numa pasta sua, com cópias do
-// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ./programa caixa.c
+// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ./caixa
 ```
 
-O laço dos pedidos termina com o código 0; depois vêm a
-conta, o pagamento e a decisão "pagou o suficiente?". O troco, que parece um
-laço, é a recursão de `dar_troco`:
+O laço dos pedidos termina com o código 0; depois vêm a conta, o pagamento e a
+decisão "pagou o suficiente?". O troco, que parece um laço, é a recursão de
+`dar_troco`:
 
 {{fluxograma}}
 
-O exemplo A072 mostra o outro lado de dividir em funções: dá para **testar
-cada peça sozinha**. Com a macro `CONFERIR` (a do exercício E210), ele confere
-o preço, o contador `static` e a contagem de notas sem digitar nada. Não
-precisa de biblioteca de testes: uma macro de dez linhas resolve.
+O exemplo A072 mostra a outra vantagem de dividir em funções: **testar cada
+peça sozinha**. Com a macro `CONFERIR` (a do exercício E210), ele confere o
+preço, o contador `static` e a contagem de notas sem digitar nada. Não precisa
+de biblioteca de testes: uma macro de dez linhas resolve.
 
 > [!WARNING]
 > Efeito colateral escondido. `preco_centavos` parece só consultar um preço,
-> mas também soma 1 no contador de itens vendidos. Se alguém chamar a função
-> duas vezes para o mesmo pedido (uma para somar, outra para mostrar o
-> preço), o item é contado em dobro, e nada no nome avisa. É a armadilha das
-> globais em escala menor. Quando uma função muda estado, deixe isso no nome
-> (`registrar_pedido`) ou separe em duas: uma que consulta e outra que
-> registra.
-
-> [!TIP]
-> **Por dentro do C:** no troco de R$ 7,76, a pilha chega a 17 quadros de
-> `dar_troco` ao mesmo tempo: 1 da primeira chamada, 5 das notas dadas, 11
-> das trocas de nota (de 100 para 50, de 50 para 20...). Nenhum sai antes
-> do caso base. A chamada recursiva é a última coisa que cada
-> `dar_troco` faz: isso se chama **recursão de cauda**, e com `-O2` o `gcc`
-> transforma tudo num laço, com um quadro só. Já o `cardapio.o` exporta 4 símbolos (`T`) e esconde o
-> `vendidos` (`b`): confira com `nm`.
+> mas também soma 1 no contador de itens vendidos. Chamá-la duas vezes para o
+> mesmo pedido (uma para somar, outra para mostrar o preço) conta o item em
+> dobro, e nada no nome avisa. É a armadilha das globais em escala menor.
+> Quando uma função muda estado, deixe isso no nome (`registrar_pedido`) ou
+> separe em duas: uma que consulta e outra que registra.
 
 > [!NOTE]
 > **Pergunta para você:** se o cliente pagar exatamente R$ 42,24, quantas

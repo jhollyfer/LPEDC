@@ -1,33 +1,30 @@
 ## 0003 · Tipos e limites
 
 A catraca do estádio conta os torcedores num contador de 16 bits. No clássico
-de domingo, o Maracanã recebeu 78.838 pessoas. Quando o torcedor número 65.536
-passou, o painel voltou a mostrar **zero**. Ninguém errou a conta: o número
-não cabia.
+de domingo, o Maracanã recebeu 78.838 pessoas. Quando passou o torcedor número
+65.536, o painel voltou a **zero**. Ninguém errou a conta: o número não cabia.
 
-Por baixo de tudo, a memória é feita de **bits**: chavinhas que valem 0 ou 1.
-Oito bits formam um **byte**. Um número inteiro é guardado em **binário** (base
-2), em que cada casa vale o dobro da casa da direita:
+A memória é feita de **bits**, chavinhas que valem 0 ou 1. Oito bits formam um
+**byte**. O inteiro é guardado em **binário** (base 2), em que cada casa vale
+o dobro da casa da direita:
 
 | casa | 2⁷ | 2⁶ | 2⁵ | 2⁴ | 2³ | 2² | 2¹ | 2⁰ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | vale | 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
 
-Para ler um binário, some as casas que têm 1: `00001101` é 8 + 4 + 1 = 13.
-Com 8 bits todos ligados, `11111111`, você chega a 255. Por isso **um byte vai
-de 0 a 255**: são 2⁸ = 256 combinações. Com `n` bits, cabem 2ⁿ valores.
+Para ler um binário, some as casas com 1: `00001101` é 8 + 4 + 1 = 13. Com os
+8 bits ligados, `11111111`, o total é 255. Logo **um byte vai de 0 a 255**:
+2⁸ = 256 combinações. Com `n` bits, cabem 2ⁿ valores.
 
-Escrever 16 ou 32 zeros e uns cansa. O atalho é o **hexadecimal** (base 16),
-com os dígitos 0 a 9 e A a F (A = 10, ..., F = 15). Cada dígito hexa vale
-exatamente 4 bits, então um byte são dois dígitos: `1111 1111` = `FF` = 255.
-No C, hexadecimal começa com `0x`: `0xFF`, `0xFFFF`.
+O **hexadecimal** (base 16) abrevia o binário, com dígitos 0 a 9 e A a F
+(A = 10, ..., F = 15). Cada dígito hexa vale 4 bits, então um byte são dois
+dígitos: `1111 1111` = `FF` = 255. No C, hexadecimal começa com `0x`: `0xFF`.
 
-Agora os tipos. Cada tipo inteiro tem um tamanho, e o tamanho decide a
-**faixa**. Os **modificadores** mudam o `int`: `short` (menor), `long` e
-`long long` (maiores) e `unsigned` (sem sinal: troca os negativos por mais
-positivos). Sem modificador, o tipo inteiro é **com sinal** (`signed`): `int`
-e `signed int` são o mesmo tipo. Só o `char` puro fica a cargo da máquina; no
-PC Linux ele tem sinal. Num PC Linux de 64 bits:
+O tamanho de cada tipo inteiro decide sua **faixa**. Os **modificadores**
+mudam o `int`: `short` (menor), `long` e `long long` (maiores) e `unsigned`
+(sem sinal: troca os negativos por mais positivos). Sem modificador, o tipo é
+**com sinal** (`signed`): `int` e `signed int` são o mesmo tipo. O `char`
+puro depende da máquina; no PC Linux ele tem sinal. Num PC Linux de 64 bits:
 
 | Tipo | Bytes | Faixa |
 | --- | --- | --- |
@@ -40,17 +37,15 @@ PC Linux ele tem sinal. Num PC Linux de 64 bits:
 | `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
 
 O padrão do C só garante mínimos (o `int` pode ter 2 bytes num
-microcontrolador, e o `long` tem 4 bytes no Windows). Então não decore a
-tabela: o **`<limits.h>`** traz os limites reais da máquina (`INT_MAX`,
-`SHRT_MIN`, `USHRT_MAX`...). E quando o tamanho exato importa, o
-**`<stdint.h>`** tem tipos com o número de bits no nome: `int8_t`, `uint16_t`,
-`int32_t`, `int64_t`.
+microcontrolador, e o `long` tem 4 bytes no Windows). Por isso, o
+**`<limits.h>`** traz os limites reais da máquina (`INT_MAX`, `SHRT_MIN`,
+`USHRT_MAX`...). Para tamanho exato, o **`<stdint.h>`** tem tipos com os bits
+no nome: `int8_t`, `uint16_t`, `int32_t`, `int64_t`.
 
-Passar do limite é **overflow** (estouro). Num tipo `unsigned`, o C garante o
-comportamento: o número dá a volta, como o odômetro do carro passando de 99999
-para 00000. A catraca é um `unsigned short` com 65.535,
-os 16 bits ligados. Somar 1 dá 65.536, que precisa de 17 bits; o bit de cima
-não cabe e some:
+Passar do limite é **overflow** (estouro). Num `unsigned`, o C garante que o
+número dá a volta, como o odômetro que passa de 99999 para 00000. A catraca é
+um `unsigned short` em 65.535, com os 16 bits ligados. Somar 1 dá 65.536, que
+precisa de 17 bits; o bit de cima não cabe e some:
 
 {{ideia}}
 
@@ -79,27 +74,23 @@ int main(void) {
 // Público: 78838 (o int vai até 2147483647)
 ```
 
-No fluxograma, quem faz a pergunta "cabe em 16 bits?" é o hardware, e não o
-seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
+No fluxograma, quem pergunta "cabe em 16 bits?" é o hardware. Se não cabe, ele
+guarda só os 16 bits de baixo, sem avisar:
 
 {{fluxograma}}
 
 > [!WARNING]
 > Com `unsigned`, o estouro dá a volta. Com tipos **com sinal** (`int`,
-> `long`...), estourar é **comportamento indefinido**: o padrão não diz o que
-> acontece, e o compilador pode assumir que nunca acontece.
-> `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não conte com
-> isso. O gcc com as flags de estudo liga o detector de comportamento indefinido, que acusa
+> `long`...), é **comportamento indefinido**: o padrão não diz o que
+> acontece. `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não
+> conte com isso. Com as flags de estudo, o gcc acusa
 > `runtime error: signed integer overflow`. Escolha um tipo que caiba.
 
 > [!TIP]
-> **Por dentro do C:** os negativos são guardados em **complemento de dois**:
-> o bit mais à esquerda pesa negativo. Num byte com sinal, ele vale -128, e
-> `11111111` é -128 + 127 = -1. Por isso a faixa é assimétrica (-128 a 127):
-> não existe "-0". O byte `0xFF` é 255 num `unsigned char` e
-> -1 num `char`: os bits são iguais, o tipo decide como ler. A ordem dos bytes
-> na memória também é curiosa: nos PCs, o byte menos significativo vem
-> primeiro (**little-endian**). O 13 num `int` fica como `0D 00 00 00`.
+> Os negativos usam **complemento de dois**: o bit mais à esquerda pesa
+> negativo (-128 num byte). Por isso a faixa é assimétrica (-128 a 127) e o
+> byte `0xFF` é 255 num `unsigned char` e -1 num `char`: os bits são iguais,
+> o tipo decide como ler.
 
 > [!NOTE]
 > **Pergunta para você:** se a catraca começasse em 65.530 e passassem 10

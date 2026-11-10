@@ -1,19 +1,18 @@
 # Módulo 04 · Funções e modularização
 
-Até aqui, todo programa foi um `main` só, de cima para baixo. Funciona para
-vinte linhas. Com duzentas, o mesmo cálculo aparece copiado em três lugares,
-um conserto esquece uma das cópias e ninguém mais acha nada. Este módulo é
-sobre **dividir**: dar nome a cada tarefa, escrever uma vez e chamar quantas
-vezes precisar.
+Até aqui, todo programa foi um `main` só. Com duzentas linhas, o mesmo cálculo
+aparece copiado em três lugares, um conserto esquece uma cópia e ninguém acha
+mais nada. Este módulo ensina a **dividir**: dar nome a cada tarefa, escrever
+uma vez e chamar quantas vezes precisar.
 
-No C, isso se faz com funções e com módulos (`.h` e `.c`). E dá para ver **o
-que acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
-nasce na pilha, o endereço de volta, a variável que some no `return`. Com essa
-imagem na cabeça, a **recursão** vira só mais uma chamada.
+O C faz isso com funções e módulos (`.h` e `.c`). Você também vê **o que
+acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro na
+pilha, o endereço de volta, a variável que some no `return`. Com essa imagem, a
+**recursão** é só mais uma chamada.
 
-No fim, o programa sai de um arquivo só: você monta **módulos** com `.h` e
-`.c`, compila cada parte separada e deixa o ligador juntar tudo. É o mesmo
-formato das estruturas de dados da segunda metade do curso.
+No fim, o programa deixa de ser um arquivo só: você monta **módulos**, compila
+cada parte separada e deixa o ligador juntar tudo. É o formato das estruturas de
+dados da segunda metade do curso.
 
 ## O que você vai aprender
 
@@ -31,12 +30,12 @@ formato das estruturas de dados da segunda metade do curso.
 Nos desenhos de pilha e recursão, cada caixa empilhada é o quadro de uma
 chamada, e a de cima é a que está rodando.
 
-Você precisa dos módulos 01 a 03: tipos, `printf` e `scanf`, `if`, `switch` e
-laços. Vetores ainda **não** aparecem aqui (são o módulo 05), então todos os
-exemplos trabalham com números soltos.
+Este módulo usa os módulos 01 a 03: tipos, `printf` e `scanf`, `if`, `switch` e
+laços (o craps do 0027 ganha a função `lancar()`). Ele prepara o módulo 05:
+vetores ainda **não** aparecem aqui, então os exemplos usam números soltos.
 
-Dois assuntos ficam melhores com o depurador `gdb`, que mostra a pilha de
-chamadas com o comando `bt`:
+Dois assuntos ficam melhores com o depurador `gdb`, que mostra a pilha com o
+comando `bt`:
 
 ```bash
 sudo pacman -S gdb          # Arch Linux
@@ -44,9 +43,8 @@ sudo apt install gdb        # Debian / Ubuntu
 ```
 
 Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
-`conversao.c`, `cardapio.h` e `cardapio.c`). O comando do exemplo compila esses `.c`
-junto com o exemplo; o texto mostra também o comando `gcc` para fazer isso à
-mão.
+`conversao.c`, `cardapio.h` e `cardapio.c`). O comando do exemplo compila esses
+`.c` junto; o texto mostra também o `gcc` para fazer isso à mão.
 
 {{indice}}
 
@@ -58,8 +56,7 @@ mão.
 
 ## Desafios do módulo
 
-Problemas para resolver num arquivo seu, misturando os assuntos do módulo. Do
-médio ao difícil.
+Problemas do médio ao difícil, para resolver num arquivo seu.
 
 **1. Dígito verificador.** Escreva `int digito_mod11(int numero)` para números
 de até 9 dígitos: multiplique os dígitos, do último para o primeiro, por 2, 3,
@@ -235,9 +232,9 @@ volta.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
-alternativa certa. Nas de recursão, desenhe a pilha de chamadas: um quadro
-por chamada, com os parâmetros e o que cada uma devolve.
+Questões objetivas no formato da prova do PPGI: uma alternativa certa. Nas de
+recursão, desenhe a pilha: um quadro por chamada, com os parâmetros e o que
+cada uma devolve.
 
 **1.** Sobre funções e escopo em C, considere as afirmações e marque a alternativa CORRETA.
 

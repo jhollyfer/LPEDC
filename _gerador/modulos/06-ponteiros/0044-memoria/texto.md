@@ -1,42 +1,38 @@
 ## 0044 · Memória e endereços
 
-No guarda-volumes do mercado, você entrega a mochila e recebe uma ficha com o
-número 47. Você não precisa saber em que prateleira ela foi parar: com o
-número, o funcionário acha a gaveta certa. A memória do computador funciona
-assim.
+No guarda-volumes do mercado, você entrega a mochila e recebe a ficha 47. Não
+precisa saber em que prateleira ela está: com o número, o funcionário acha a
+gaveta. A memória do computador funciona assim.
 
-A **memória** (RAM) é uma fileira enorme de gavetas de **1 byte** cada, e
-cada gaveta tem um número: o **endereço**. Quando você declara `int idade =
-30;`, o compilador separa 4 gavetas seguidas para `idade` e guarda o 30 lá
-dentro. O **endereço da variável** é o número da primeira dessas gavetas.
+A **memória** (RAM) é uma fileira de gavetas de **1 byte**, cada uma com um
+número: o **endereço**. Ao declarar `int idade = 30;`, o compilador separa 4
+gavetas seguidas para `idade` e guarda o 30 nelas. O **endereço da variável**
+é o número da primeira gaveta.
 
-Você pensa no **nome** (`idade`). O processador só conhece **endereços**. O
-compilador faz a ponte: troca cada nome pelo endereço da gaveta.
+Você pensa no **nome** (`idade`); o processador só conhece **endereços**, e o
+compilador troca um pelo outro.
 
-Para perguntar "em que gaveta você mora?", use o operador **`&`** (endereço
-de): `&idade`. É o mesmo `&` que você coloca no `scanf` desde o assunto 0006.
-O `scanf` precisa saber **onde** guardar o que leu, e o `&` entrega a ficha
-do guarda-volumes. O assunto 0046 conta essa história inteira.
+O operador **`&`** (endereço de) pergunta "em que gaveta você mora?": `&idade`.
+É o `&` do `scanf` desde o assunto 0006: o `scanf` precisa saber **onde**
+guardar o que leu. O assunto 0046 conta essa história.
 
-Para mostrar um endereço, o `printf` tem o **`%p`**, que imprime em
-hexadecimal. O `%p` espera um "endereço genérico", do tipo
-`void *`, então escreva `(void *)&idade`. Esse `(void *)` é um cast, e o
-assunto 0051 explica o tipo `void *` com calma.
+O `printf` mostra um endereço com **`%p`**, em hexadecimal. O `%p` espera um
+`void *`, então escreva `(void *)&idade`. O assunto 0051 explica esse tipo.
 
-Dois detalhes que surpreendem no começo:
+Dois detalhes que surpreendem:
 
-- **o endereço muda a cada execução.** O sistema sorteia onde o programa
-  vai morar, por segurança. Não decore endereço nenhum;
+- **o endereço muda a cada execução**: o sistema sorteia onde o programa mora,
+  por segurança. Não decore endereços;
 - **cada tipo ocupa um número de gavetas**: `char` 1, `int` 4, `double` 8 (o
-  `sizeof` do assunto 0002 diz quantas). O endereço é sempre o da primeira.
+  `sizeof` do assunto 0002 diz). O endereço é sempre o da primeira.
 
-No cadastro da academia, a idade (30, um `int`), a mensalidade (R$ 119,90,
-um `double`) e o plano (`'B'`, um `char`) ganham gavetas. Os endereços do
-desenho são fictícios, como avisa a abertura do módulo:
+No cadastro da academia, a idade (30, `int`), a mensalidade (R$ 119,90,
+`double`) e o plano (`'B'`, `char`) ganham gavetas. Os endereços do desenho são
+fictícios:
 
 {{ideia}}
 
-O programa mostra, para cada variável, o valor, o endereço e o tamanho:
+O programa mostra, de cada variável, o valor, o endereço e o tamanho:
 
 ```c
 #include <stdio.h>
@@ -61,33 +57,27 @@ int main(void) {
 // plano:       B, mora em 0x7f0440e00020, ocupa 1 byte
 ```
 
-O `%zu` é o formato certo para o resultado do `sizeof` (um `size_t`, inteiro
-sem sinal). Rode duas vezes: os valores e os tamanhos se repetem, os
-endereços não.
+O `%zu` é o formato do resultado do `sizeof` (`size_t`, inteiro sem sinal).
+Rode duas vezes: valores e tamanhos se repetem, endereços não.
 
-O fluxograma não tem decisão nenhuma. Para cada variável, o programa faz as
-mesmas três perguntas: o que tem dentro, onde mora e quanto ocupa:
+O fluxograma não tem decisão. Para cada variável, o programa faz as mesmas três
+perguntas: o que tem dentro, onde mora e quanto ocupa:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes num
-> sistema de 64 bits, e o `%d` lê só 4: você vê um número cortado, às vezes
-> negativo. O gcc com as flags de estudo avisa (`format '%d' expects argument of type 'int', but
-> argument 2 has type 'int *'`). O certo é sempre `%p` com `(void *)`. E não
-> conclua nada da ordem dos endereços de variáveis soltas: o compilador
-> arruma as gavetas como quiser (na saída acima, `plano` ficou **antes** de
-> `idade`). Só num vetor a ordem é garantida.
+> Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes em 64 bits e
+> o `%d` lê só 4: o número sai cortado, às vezes negativo. O gcc com as flags de
+> estudo avisa (`format '%d' expects argument of type 'int', but argument 2 has
+> type 'int *'`). Use `%p` com `(void *)`. E não deduza nada da ordem dos
+> endereços de variáveis soltas: o compilador arruma como quiser (acima,
+> `plano` ficou **antes** de `idade`). Só num vetor a ordem é garantida.
 
 > [!TIP]
-> **Por dentro do C:** o endereço `0x7f0440e00030` tem 12 dígitos hexa, ou
-> seja, 48 bits. O ponteiro ocupa 8 bytes (64 bits), mas os processadores de
-> hoje só usam 48 deles para endereçar: dá 256 TB, sobra. O sorteio do
-> endereço a cada execução se chama **ASLR** (*Address Space Layout
-> Randomization*): se o atacante não sabe onde as coisas moram, fica bem
-> mais difícil explorar uma falha. E as variáveis locais moram numa região
-> chamada **pilha**, a mesma pilha de chamadas do assunto 0031; o módulo 07
-> mostra o mapa completo.
+> **Por dentro do C:** o sorteio do endereço a cada execução se chama **ASLR**;
+> dificulta explorar falhas, pois o atacante não sabe onde as coisas moram. As
+> variáveis locais ficam na **pilha** do assunto 0031; o módulo 07 mostra o
+> mapa completo.
 
 > [!NOTE]
 > **Pergunta para você:** se `idade` começa na gaveta `0x1000` e ocupa 4

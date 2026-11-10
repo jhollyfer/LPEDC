@@ -1,11 +1,10 @@
 ## 0016 · else if, if aninhado e o else pendurado
 
 Radar na avenida, limite de 60 km/h, e você passou a 80. O Código de Trânsito
-não tem só "multou ou não multou". Ele tem **faixas**: até 20% acima do limite
-é infração média, de 20% a 50% é grave, acima de 50% é gravíssima. São quatro
-caminhos possíveis, e só um vale.
+tem **faixas**: até 20% acima do limite é infração média, de 20% a 50% é
+grave, acima de 50% é gravíssima. São quatro caminhos, e só um vale.
 
-Para mais de dois caminhos, você encadeia perguntas com **`else if`**:
+Para mais de dois caminhos, encadeie perguntas com **`else if`**:
 
 ```c
 if (velocidade <= 60) {
@@ -19,27 +18,27 @@ if (velocidade <= 60) {
 }
 ```
 
-O C testa **de cima para baixo** e **para no primeiro Sim**. Os outros testes
-nem são feitos. Isso simplifica cada condição: quando o programa chega no
-`velocidade <= 72`, ele já sabe que a velocidade passou de 60, porque senão
-teria parado antes. Não precisa escrever `velocidade > 60 && velocidade <= 72`.
+O C testa **de cima para baixo** e **para no primeiro Sim**; os demais testes
+não são feitos. Por isso, ao chegar em `velocidade <= 72`, já se sabe que a
+velocidade passou de 60: não precisa escrever
+`velocidade > 60 && velocidade <= 72`.
 
-A consequência é que **a ordem importa**. Se o primeiro teste fosse
-`velocidade <= 90`, os 65 km/h cairiam lá e virariam "grave". Comece pela
-faixa mais restrita, ou percorra as faixas em ordem, sempre num sentido só. O
-`else` do final é opcional e pega "tudo o que sobrou".
+Logo, **a ordem importa**. Se o primeiro teste fosse `velocidade <= 90`, os 65
+km/h cairiam lá e virariam "grave". Percorra as faixas sempre num sentido, da
+menor para a maior. O `else` final é opcional e pega "o que sobrou".
 
-Existe outro jeito de montar decisões: o **`if` aninhado**, um `if` dentro do
-bloco de outro. Ele serve quando a segunda pergunta só faz sentido se a
-primeira deu Sim: "o usuário existe? Se existe, a senha confere?". O `else if`
-é um caso particular disso, só que escrito sem a escada de recuos.
+O **`if` aninhado** é um `if` dentro do bloco de outro. Serve quando a segunda
+pergunta só faz sentido se a primeira deu Sim: "o usuário existe? Se existe,
+a senha confere?". O `else if` é um caso particular dele, sem a escada de
+recuos; não é palavra-chave, é um `else` cuja única instrução é um `if`.
 
-Os 80 km/h passam pelas perguntas em ordem: 80 é menor ou igual a 60? Não. A 72? Não. A 90? Sim, e a busca para ali:
+Os 80 km/h passam em ordem: 80 <= 60? Não. <= 72? Não. <= 90? Sim, e a busca
+para ali:
 
 {{ideia}}
 
-O radar em C. Os limites das faixas são calculados a partir do limite
-da via, para valerem em qualquer avenida:
+O radar em C. As faixas são calculadas a partir do limite da via, para valer
+em qualquer avenida:
 
 ```c
 #include <stdio.h>
@@ -65,15 +64,14 @@ int main(void) {
 // Infração grave: R$ 195.23
 ```
 
-O fluxograma vira uma escada de losangos, cada um pendurado no Não do
-anterior. O caminho verde desce pelos Nãos até o primeiro Sim; os losangos de
-baixo nunca são visitados:
+O fluxograma é uma escada de losangos, cada um no Não do anterior. O caminho
+verde desce pelos Nãos até o primeiro Sim; os de baixo não são visitados:
 
 {{fluxograma}}
 
 > [!WARNING]
 > **O `else` pendurado.** Sem chaves, um `else` pertence ao `if` **mais
-> próximo** que ainda não tem `else`, não importa o recuo. Veja:
+> próximo** que ainda não tem `else`, não importa o recuo:
 >
 > ```c
 > if (pessoas > 0)
@@ -83,20 +81,10 @@ baixo nunca são visitados:
 >     printf("Restaurante vazio.\n");
 > ```
 >
-> O recuo diz que o `else` é do primeiro `if`, mas ele é do segundo. Com 4
-> pessoas, aparece "Restaurante vazio."; com 0, não aparece nada. O `-Wall`
-> avisa ("suggest explicit braces to avoid ambiguous 'else'"). A cura é a de
-> sempre: **chaves**. Com `{ }` em volta do `if` de dentro, o `else` fica com
-> o `if` que você quer.
-
-> [!TIP]
-> **Por dentro do C:** `else if` **não é uma palavra-chave**. É um `else`
-> comum cuja única instrução é um `if`. Para o compilador, a escada acima é um
-> `if` dentro do `else` de outro `if`, dentro do `else` de outro. Só a
-> formatação é que deixa tudo alinhado. Em máquina, cada degrau é um `cmp` e um
-> salto: com 80 km/h, o processador faz três comparações; com 50 km/h, só uma.
-> Por isso, quando uma faixa é muito mais comum que as outras, testá-la
-> primeiro economiza trabalho.
+> O recuo sugere que o `else` é do primeiro `if`, mas ele é do segundo. Com 4
+> pessoas, aparece "Restaurante vazio."; com 0, nada aparece. O `-Wall` avisa
+> ("suggest explicit braces to avoid ambiguous 'else'"). A cura: **chaves**
+> em volta do `if` de dentro.
 
 > [!NOTE]
 > **Pergunta para você:** a 72 km/h, qual mensagem aparece? E a 90 km/h?

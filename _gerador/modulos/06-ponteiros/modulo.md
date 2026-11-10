@@ -1,52 +1,47 @@
 # Módulo 06 · Ponteiros
 
-Até aqui você usou variáveis pelo **nome**: o compilador trocava cada nome
-por um endereço e escondia isso de você. Neste módulo a cortina abre. Toda
-variável mora numa gaveta numerada da memória, dá para guardar o número dessa
-gaveta numa outra variável e, com esse número na mão, ler e mudar o dado de
-qualquer lugar do programa.
+Até aqui você usou variáveis pelo **nome**; o compilador trocava cada nome por
+um endereço e escondia isso. Neste módulo a cortina abre: toda variável mora
+numa gaveta numerada da memória, e guardar o número dessa gaveta em outra
+variável permite ler e mudar o dado de qualquer lugar do programa.
 
-No C, se uma função precisa mudar uma variável sua, você entrega o endereço
-dela. Dá trabalho, mas em troca você sabe o que cada linha custa e entende
-por que o `scanf` pedia aquele `&` desde o módulo 01.
-
-Tudo o que vem depois depende de ponteiro: memória dinâmica (módulo 07),
-structs encadeadas (módulo 08), listas, pilhas, filas, árvores e grafos. Vá
-devagar, desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
+No C, para uma função mudar uma variável sua, você entrega o endereço dela. Dá
+trabalho, mas mostra o que cada linha custa e por que o `scanf` pedia o `&`
+desde o módulo 01. Memória dinâmica (módulo 07), structs encadeadas, listas,
+pilhas, filas, árvores e grafos dependem disso. Vá devagar, desenhe as gavetas.
 
 ## O que você vai aprender
 
-- a memória como um **gaveteiro numerado**: endereço, `&` e `%p`
-- declarar e usar **ponteiros**: `*`, desreferência e `NULL`
-- **passagem por referência**: a troca (swap), funções que devolvem vários resultados e o `&` do `scanf` explicado
-- **aritmética de ponteiros** e por que `v[i]` é o mesmo que `*(v + i)`
-- a diferença entre `char *` e `char []`, e por que um literal de string é **só leitura**
+- a memória como **gaveteiro numerado**: endereço, `&` e `%p`
+- **ponteiros**: `*`, desreferência e `NULL`
+- **passagem por referência**: a troca (swap), vários resultados e o `&` do `scanf`
+- **aritmética de ponteiros**: `v[i]` é `*(v + i)`
+- `char *` contra `char []`, e o literal de string **só leitura**
 - **ponteiro para ponteiro** (`**`) e vetor de ponteiros
-- **ponteiro para função**: callbacks e o `qsort`
-- **`void *`**: o ponteiro genérico, o cast e funções que servem para qualquer tipo
+- **ponteiro para função**: callbacks e `qsort`
+- **`void *`**: ponteiro genérico, cast e funções para qualquer tipo
 
 ## Antes de começar
 
-Você precisa estar à vontade com vetores, strings e funções (módulos 04 e
-05). Os erros de ponteiro raramente aparecem na compilação: aparecem quando
-o programa roda, às vezes bem longe da linha culpada. Por isso, rode
-**sempre** com as flags de estudo, que liga o AddressSanitizer. Quando ele acusar
-algo, leia o relatório de cima para baixo: o tipo do erro
-(`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável
-envolvida.
+Este módulo usa vetores, strings e funções (módulos 04 e 05): o nome do vetor
+já era um endereço, e agora ele ganha sintaxe. Ele prepara a memória dinâmica
+(módulo 07) e as structs (módulo 08).
 
-O diagrama da ideia deste módulo é quase sempre um gaveteiro com endereços e
-setas; nele, roxo marca os ponteiros.
+Erros de ponteiro raramente aparecem na compilação: surgem na execução, às
+vezes longe da linha culpada. Rode **sempre** com as flags de estudo, que ligam
+o AddressSanitizer, e leia o relatório de cima para baixo: o tipo do erro
+(`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável.
+
+Nos diagramas, gaveteiros e setas; o roxo marca os ponteiros.
 
 > [!NOTE]
-> Os endereços dos desenhos são **fictícios** e curtos (`0x1000`, `0x1004`)
-> para caber na cabeça. Os de verdade têm 12 dígitos hexa e **mudam a cada
-> execução**: os endereços nos comentários dos exemplos são de uma execução
-> qualquer, e os seus vão ser outros. O que importa são as relações entre
-> eles (iguais, 4 bytes depois etc.).
+> Os endereços dos desenhos são **fictícios** e curtos (`0x1000`, `0x1004`).
+> Os de verdade têm 12 dígitos hexa e **mudam a cada execução**; os dos
+> comentários dos exemplos são de uma execução qualquer. O que importa são as
+> relações entre eles (iguais, 4 bytes depois etc.).
 
-Para seguir um ponteiro passo a passo, use o `gdb`
-(`print p`, `print *p`, `print &x`):
+Para seguir um ponteiro passo a passo, use o `gdb` (`print p`, `print *p`,
+`print &x`):
 
 ```bash
 sudo pacman -S gdb          # Arch Linux
@@ -63,8 +58,8 @@ sudo apt install gdb        # Debian / Ubuntu
 
 ## Desafios do módulo
 
-Problemas extras, misturando os assuntos do módulo. Resolva num arquivo seu
-e rode com as flags de estudo.
+Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
+compile com as flags de estudo.
 
 **1. O gaveteiro de três níveis.** Ponha num `main` as linhas
 `int x = 7; int *p = &x; int **pp = &p; **pp = 9; *pp = NULL;` e, depois
@@ -235,9 +230,9 @@ achou. A busca binária em si é o assunto 0090.
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, sem rodar, marque uma letra e só então abra o gabarito. Todos os
-trechos foram compilados com `gcc -std=c17 -Wall -Wextra`.
+Questões no formato da prova do PPGI/UFAM. Resolva no papel, marque uma letra e
+só então abra o gabarito. Os trechos foram compilados com
+`gcc -std=c17 -Wall -Wextra`.
 
 **Questão 1.** O que o programa imprime?
 

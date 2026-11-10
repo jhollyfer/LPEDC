@@ -1,16 +1,16 @@
 ## 0030 · Escopo e tempo de vida
 
-No banco, o painel chama a senha 101, depois a 102, depois a 103. Ele
-**lembra** onde parou. Já o atendente que te chama zera a conversa a cada
-cliente: não guarda nada da pessoa anterior. Programa precisa das duas
-coisas, e o C dá ferramentas diferentes para cada uma.
+No banco, o painel chama a senha 101, depois a 102, depois a 103: ele
+**lembra** onde parou. O atendente zera a conversa a cada cliente: não guarda
+nada do anterior. Programa precisa das duas coisas, e o C tem uma ferramenta
+para cada.
 
-Toda variável tem duas propriedades que é bom separar na cabeça:
+Toda variável tem duas propriedades:
 
 - **escopo**: **onde** no código o nome pode ser usado;
 - **tempo de vida**: **quando** a variável existe na memória.
 
-São três tipos que você vai usar o tempo todo:
+São três tipos:
 
 | Tipo | Onde declara | Escopo | Tempo de vida |
 | --- | --- | --- | --- |
@@ -18,25 +18,24 @@ São três tipos que você vai usar o tempo todo:
 | **global** | fora de qualquer função | do ponto da declaração até o fim do arquivo | o programa todo |
 | **`static` local** | dentro de `{ }`, com `static` | só aquele bloco | o programa todo |
 
-A `static` local é a mais curiosa: o **escopo** é de local (ninguém de fora
-enxerga), mas o **tempo de vida** é de global. A linha `static int senha =
-100;` roda **uma vez só**, antes de o programa começar. Nas chamadas
-seguintes, a variável continua lá, com o valor que tinha.
+A `static` local tem escopo de local (ninguém de fora a enxerga) e tempo de
+vida de global. A linha `static int senha = 100;` roda **uma vez**, antes de o
+programa começar. Nas chamadas seguintes, a variável continua com o valor que
+tinha.
 
 Parâmetros são locais da função, e a variável do `for (int i = 0; ...)` é
 local do laço. Se um bloco interno declara um nome que já existe fora, o de
-dentro **esconde** o de fora até o bloco acabar. Vale sempre a declaração mais
+dentro **esconde** o de fora até o bloco acabar: vale a declaração mais
 próxima.
 
-A função `chamar` tem três contadores: a global
-`atendidos`, a `static` `senha` e a local `vezes`. As duas primeiras moram
-numa região da memória que dura o programa inteiro; a local mora no espaço da
-chamada e some quando a função retorna. Depois de três chamadas, fica assim:
+A função `chamar` tem três contadores: a global `atendidos`, a `static`
+`senha` e a local `vezes`. As duas primeiras ficam numa região da memória que
+dura o programa inteiro; a local fica no espaço da chamada e some quando a
+função retorna. Depois de três chamadas:
 
 {{ideia}}
 
-No código, `vezes` mostra 1 sempre, enquanto os outros dois
-avançam:
+No código, `vezes` mostra sempre 1, enquanto os outros dois avançam:
 
 ```c
 #include <stdio.h>
@@ -68,44 +67,37 @@ int main(void) {
 // Última senha chamada: 103
 ```
 
-A cada chamada, a local é criada de novo com 0, e a
-`static` já está esperando com o valor anterior. Não existe um passo
-"criar senha" dentro da repetição:
+A cada chamada, a local nasce de novo com 0, e a `static` já espera com o
+valor anterior. Não existe passo "criar senha" dentro da repetição:
 
 {{fluxograma}}
 
 As globais funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
-qualquer lugar. A mesma chamada pode dar resultados diferentes conforme o que
-outra função fez antes. Prefira passar por parâmetro e devolver com `return`;
-use global só para algo que é de fato do programa todo.
+qualquer lugar, e a mesma chamada pode dar resultados diferentes conforme o
+que outra função fez antes. Prefira parâmetro e `return`; use global só para o
+que é do programa todo.
 
-Uma última peça: `static` **fora** de função muda outra coisa. Uma global
-`static int total;` continua vivendo o programa todo, mas só pode ser usada
-**naquele arquivo**. Isso vai fazer sentido no assunto 0034, quando o programa
-tiver mais de um `.c`.
+`static` **fora** de função muda outra coisa: uma global `static int total;`
+vive o programa todo, mas só pode ser usada **naquele arquivo**. Isso faz
+sentido no assunto 0034, com mais de um `.c`.
 
 > [!WARNING]
-> Achar que `static int senha = 100;` volta a valer 100 a cada chamada. Não
-> volta: a inicialização acontece uma vez, antes do `main`. O oposto também
-> engana: uma local **sem** inicialização (`int total;`) não começa em 0, começa
-> com o lixo que estava naquele pedaço da memória. Globais e `static` sem
-> valor começam em 0; locais, não. E esconder nomes (`int nivel` dentro e
-> fora) compila sem nenhum aviso com `-Wall`: só o `-Wshadow` reclama.
+> `static int senha = 100;` não volta a valer 100 a cada chamada: a
+> inicialização acontece uma vez, antes do `main`. O oposto também engana: uma
+> local **sem** inicialização (`int total;`) começa com lixo, não com 0.
+> Globais e `static` sem valor começam em 0; locais, não. E esconder nomes
+> (`int nivel` dentro e fora) compila sem aviso com `-Wall`: só o `-Wshadow`
+> reclama.
 
 > [!TIP]
-> **Por dentro do C:** a memória do programa tem regiões. Globais e `static`
-> com valor inicial ficam na seção **`.data`**, gravada dentro do próprio
-> executável; as que começam em zero ficam na **`.bss`**, que o sistema zera ao
-> carregar o programa. As locais ficam na **pilha**, um espaço reaproveitado a
-> cada chamada (o próximo assunto). Salve o código acima como `senhas.c`, rode
-> `gcc -c senhas.c` e depois `nm senhas.o`:
-> aparecem `atendidos` (B, na `.bss`) e `senha.0` (d, na `.data`). A `vezes`
-> nem aparece: ela não tem lugar fixo.
+> Globais e `static` ficam numa região fixa da memória, gravada no executável
+> (`.data`) ou zerada ao carregar (`.bss`). As locais ficam na **pilha**, que
+> é o próximo assunto.
 
 > [!NOTE]
 > **Pergunta para você:** se você tirar o `static` de `senha`, quais números
-> aparecem nas três linhas? E se, em vez disso, você mover `int vezes = 0;` para
-> fora da função?
+> aparecem nas três linhas? E se, em vez disso, você mover `int vezes = 0;`
+> para fora da função?
 
 {{pratique}}

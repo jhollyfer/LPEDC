@@ -1,32 +1,31 @@
 ## 0029 · Parâmetros e passagem por valor
 
-Você tira foto do boleto e manda no grupo da família. Sua tia rabisca a foto,
-escreve "pago!" em cima. O boleto de papel, na sua gaveta, continua igual: ela
-mexeu numa **cópia**.
+Você fotografa o boleto e manda no grupo da família. Sua tia rabisca "pago!" na
+foto. O boleto de papel, na sua gaveta, continua igual: ela mexeu numa
+**cópia**.
 
-Em C, toda chamada de função funciona assim. Quando você escreve
-`reajustar(mensalidade, 10)`, o C **calcula o valor** de cada argumento e
-**copia** esse valor para o parâmetro. O parâmetro da definição é o
-**parâmetro formal**; o valor da chamada é o **argumento** (ou parâmetro
-real). Isso se chama **passagem por valor**, e é a única do C: a passagem
-**por referência** dos livros se faz passando um endereço (assunto 0046). O
-parâmetro é uma variável nova, local da função, que nasce já com a cópia. A
-função pode mudar o parâmetro à vontade: a variável de quem chamou nem fica
-sabendo.
+Toda chamada de função em C funciona assim. Em `reajustar(mensalidade, 10)`, o
+C **calcula o valor** de cada argumento e **copia** esse valor para o
+parâmetro. O parâmetro da definição é o **parâmetro formal**; o valor da
+chamada é o **argumento** (ou parâmetro real). Isso é a **passagem por valor**,
+a única do C: a passagem **por referência** dos livros se faz passando um
+endereço (assunto 0046). O parâmetro é uma variável nova, local da função, que
+nasce com a cópia. A função pode mudá-lo à vontade: a variável de quem chamou
+não é afetada.
 
-A função recebe **só o número**. Para ela, `reajustar(mensalidade,
-10)`, `reajustar(120.00, 10)` e `reajustar(100 + 20, 5 * 2)` são idênticas: chega
-120.00 e chega 10. Ela não sabe de onde o valor veio nem onde mora a variável
-original. Por isso não tem como alterá-la.
+A função recebe **só o número**. `reajustar(mensalidade, 10)`,
+`reajustar(120.00, 10)` e `reajustar(100 + 20, 5 * 2)` são idênticas para ela:
+chega 120.00 e chega 10. Ela não sabe de onde o valor veio e não tem como
+alterar a variável original.
 
-Se a função precisa mandar um resultado de volta, o caminho é o `return`. E
-quem chamou tem que **guardar** o retorno: `mensalidade = reajustar(...)`.
-Chamar e ignorar o retorno é permitido (você faz isso com o `printf`, que
-devolve quantos caracteres escreveu), mas aí o resultado se perde.
+Para mandar um resultado de volta, use o `return`, e quem chamou tem que
+**guardar** o retorno: `mensalidade = reajustar(...)`. Ignorar o retorno é
+permitido (você faz isso com o `printf`, que devolve quantos caracteres
+escreveu), mas o resultado se perde.
 
-No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%.
-Há duas caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a
-do `main` e a cópia da função. A função muda só a dela para 132.00:
+No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%. Há duas
+caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a do
+`main` e a cópia da função. A função muda só a dela para 132.00:
 
 {{ideia}}
 
@@ -64,40 +63,29 @@ double reajustar(double mensalidade, double percentual) {
 // Guardando o retorno: 132.00
 ```
 
-O valor sai do `main` por cópia e só volta pelo
-`return`. A pergunta "guardou o retorno?" decide se o `main` fica sabendo do
-reajuste:
+O valor sai do `main` por cópia e só volta pelo `return`. A pergunta "guardou
+o retorno?" decide se o `main` fica sabendo do reajuste:
 
 {{fluxograma}}
 
 Mais três regras sobre parâmetros:
 
 - **conversão automática**: se o tipo do argumento não bate, o C converte para
-  o tipo do parâmetro, como numa atribuição. Um `int` vira `double` sem
-  problema; um `2.9` passado para um `int` vira `2`, sem aviso;
-- **`void` na lista**: `void linha(void)` diz "não recebe nada", e
-  `linha(5)` vira erro de compilação. Já `void linha()`, com os parênteses
-  vazios, no C17 quer dizer "não vou dizer o que recebe": o compilador aceita
-  `linha(5)` calado. Escreva sempre `(void)`. (No C23 os dois viraram a mesma
-  coisa, mas você vai ver muito código C17.)
-- **um tipo por parâmetro**: `double total, int vezes`. E a ordem importa: o
-  primeiro argumento vai para o primeiro parâmetro, sempre.
+  o do parâmetro, como numa atribuição. Um `int` vira `double` sem problema;
+  um `2.9` passado a um `int` vira `2`, sem aviso;
+- **`void` na lista**: `void linha(void)` diz "não recebe nada", e `linha(5)`
+  é erro de compilação. Já `void linha()`, no C17, quer dizer "não declaro o
+  que recebe": o compilador aceita `linha(5)` calado. Escreva sempre `(void)`.
+  (No C23 os dois são iguais, mas há muito código C17.)
+- **um tipo por parâmetro** (`double total, int vezes`), e a ordem importa: o
+  primeiro argumento vai para o primeiro parâmetro.
 
 > [!WARNING]
-> A função que "deveria" mudar a variável e não muda. O exemplo clássico é
-> `void trocar(int a, int b)` que troca `a` e `b` lá dentro: no `main`, nada
-> acontece, porque a troca foi entre as cópias. Da
-> mesma forma, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
-> mexer numa variável sua, você precisa passar o **endereço** dela. É o que o
-> `&` do `scanf` faz, e você vai entender de vez no assunto 0046.
-
-> [!TIP]
-> **Por dentro do C:** a cópia é literal. O `main` põe o valor 120.00 num
-> registrador (`xmm0`) e a função começa copiando esse registrador para o
-> seu próprio espaço na memória, num endereço diferente do da variável do
-> `main`. Copiar um `double` custa quase nada: são 8 bytes. Mais para a
-> frente, quando você passar uma `struct` grande por valor, a cópia inteira
-> vai acontecer a cada chamada, e aí vale a pena passar o endereço.
+> A função que "deveria" mudar a variável e não muda. Em
+> `void trocar(int a, int b)`, a troca ocorre entre as cópias e nada acontece
+> no `main`. Do mesmo modo, `void f(int n) { n++; }` não muda o seu `n`. Para a
+> função mexer numa variável sua, passe o **endereço** dela. É o que o `&` do
+> `scanf` faz, e o assunto 0046 explica.
 
 > [!NOTE]
 > **Pergunta para você:** se você trocar o nome do parâmetro de `mensalidade`

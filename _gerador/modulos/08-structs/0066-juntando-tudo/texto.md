@@ -1,33 +1,31 @@
 ## 0066 · Juntando tudo: o cardápio
 
-A lanchonete do bairro quer um cardápio no app. Cada item tem nome, preço,
-uma categoria (lanche, bebida ou sobremesa) e algumas marcações: vegano, sem
-glúten, picante. O cliente quer filtrar: "só o que é vegano **e** sem glúten".
-E o dono quer cadastrar itens novos sem mexer no código toda vez.
+A lanchonete quer um cardápio no app. Cada item tem nome, preço, categoria
+(lanche, bebida ou sobremesa) e marcações: vegano, sem glúten, picante. O
+cliente quer filtrar "só o que é vegano **e** sem glúten", e o dono quer
+cadastrar itens sem mexer no código.
 
-Cada peça do módulo resolve uma parte. A struct `Item` junta os dados de
-um item, e o typedef dá nomes curtos aos tipos. O enum `Categoria`
-nomeia as categorias, e o truque do `QTD_CATEGORIAS` dimensiona o vetor de
-nomes. As marcações são flags num `unsigned tags`, e o filtro é uma
-máscara. Os itens moram num vetor de structs no heap, que cresce com
-`realloc`, e as funções recebem ponteiros para struct: `Cardapio *c` para
-mexer no cardápio, `const Item *it` para só ler um item sem copiá-lo.
+Cada peça do módulo resolve uma parte. A struct `Item` junta os dados e o
+typedef encurta os tipos. O enum `Categoria` nomeia as categorias, e o
+`QTD_CATEGORIAS` dimensiona o vetor de nomes. As marcações são flags num
+`unsigned tags`, e o filtro é uma máscara. Os itens moram num vetor de structs
+no heap, que cresce com `realloc`. As funções recebem ponteiros: `Cardapio *c`
+para mexer no cardápio e `const Item *it` para só ler um item sem copiá-lo.
 
-O `Cardapio` é uma struct que administra um vetor: guarda o ponteiro para
-os itens, quantos existem (`n`) e quantos cabem (`cap`). Quando enche, dobra a
-capacidade. Começando em 0, ela vira 2, 4 e 8: com 6 itens, sobram 2 vagas.
-Esse trio (ponteiro, tamanho, capacidade) é a semente do **vetor dinâmico**
-que o módulo 11 transforma num tipo abstrato de dados.
+O `Cardapio` é uma struct que administra um vetor: guarda o ponteiro para os
+itens, quantos existem (`n`) e quantos cabem (`cap`). Quando enche, dobra a
+capacidade: de 0 vai a 2, 4 e 8, e com 6 itens sobram 2 vagas. Esse trio
+(ponteiro, tamanho, capacidade) é a semente do **vetor dinâmico** que o
+módulo 11 transforma em tipo abstrato de dados.
 
-O filtro cabe numa linha. Um item passa se tem **todas** as tags da
-máscara: `(tags & mascara) == mascara`. O `&` apaga as tags que não estão na
-máscara; se o que sobra é a própria máscara, nenhuma faltou. Com a máscara 0,
-qualquer item passa, e o mesmo `filtrar` lista o cardápio inteiro.
+O filtro cabe numa linha. O item passa se tem **todas** as tags da máscara:
+`(tags & mascara) == mascara`. O `&` apaga as tags fora da máscara; se sobra a
+própria máscara, nenhuma faltou. Com máscara 0, todo item passa, e o mesmo
+`filtrar` lista o cardápio inteiro.
 
-O suco de caju tem as tags `011` (vegano e sem glúten).
-Contra a máscara `011`, o `&` devolve `011`, igual à máscara: passa. O burger
-de grão-de-bico tem `001`: o `&` devolve `001`, falta o sem glúten, e ele fica
-de fora:
+O suco de caju tem as tags `011` (vegano e sem glúten). Contra a máscara
+`011`, o `&` devolve `011`: passa. O burger de grão-de-bico tem `001`: o `&`
+devolve `001`, falta o sem glúten, e ele fica de fora:
 
 {{ideia}}
 
@@ -125,27 +123,23 @@ int main(void) {
 //   R$  9.00  Suco de caju (bebida) [V] [SG]
 ```
 
-O fluxograma é o do `filtrar`: um laço sobre o vetor e uma única pergunta
-de bits por item. O mesmo desenho serve para qualquer máscara:
+O fluxograma é o do `filtrar`: um laço sobre o vetor e uma pergunta de bits
+por item, para qualquer máscara:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `c->itens[c->n++] = it` copia o item para **dentro** do vetor. Depois disso,
-> mexer na variável `it` (ou no vetor `itens` do `main`) não muda o cardápio.
-> O inverso também engana: um ponteiro para um item,
-> `Item *p = &c.itens[0]`, pode ficar **solto** depois do próximo `realloc`,
-> porque o vetor inteiro pode ter mudado de endereço. Guarde índices, não
-> ponteiros, para elementos de um vetor que cresce.
+> `c->itens[c->n++] = it` copia o item para **dentro** do vetor: mexer depois
+> em `it` (ou no vetor `itens` do `main`) não muda o cardápio. O inverso
+> também engana: `Item *p = &c.itens[0]` fica **solto** após o próximo
+> `realloc`, porque o vetor pode ter mudado de endereço. Em vetor que cresce,
+> guarde índices, não ponteiros.
 
 > [!TIP]
-> **Por dentro do C:** um `Item` ocupa 56 bytes: 32 do nome, 4 da categoria
-> (um enum é um `int`), 4 de sobra para alinhar o `double`, 8 do preço, 4 das
-> tags e mais 4 de sobra no fim, para o próximo item do vetor também começar
-> alinhado. As três marcações, como três `bool`, custariam 3 bytes e três
-> `if` no filtro. Como flags, custam 4 bytes para até 32 marcações, e o teste
-> de "tem todas" é um `and` e uma comparação, qualquer que seja a máscara.
-> Confira com `printf("%zu\n", sizeof(Item))`.
+> Um `Item` ocupa 56 bytes: 32 do nome, 4 da categoria, 4 de preenchimento
+> para alinhar o `double`, 8 do preço, 4 das tags e 4 de preenchimento no fim,
+> para o próximo item também começar alinhado. Confira com
+> `printf("%zu\n", sizeof(Item))`.
 
 > [!NOTE]
 > **Pergunta para você:** que máscara lista os itens que são sem glúten **e**

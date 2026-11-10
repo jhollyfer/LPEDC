@@ -1,42 +1,42 @@
 # Módulo 01 · Fundamentos de C
 
-Programar é quebrar um problema em passos tão claros que uma máquina, que não
-pensa nada, consegue seguir. Essa sequência finita de passos sem ambiguidade
-tem nome: **algoritmo**. A receita do bolo, o roteiro do GPS e o passo a passo
-para mandar um Pix são algoritmos; um programa é um algoritmo escrito numa
-língua que o computador entende.
+Programar é quebrar um problema em passos tão claros que uma máquina consegue
+segui-los. Essa sequência finita de passos sem ambiguidade é um
+**algoritmo**: a receita do bolo, o roteiro do GPS, o passo a passo de um Pix.
+Um programa é um algoritmo escrito numa língua que o computador entende.
 
-Quase todo programa segue o mesmo modelo: **entrada → processamento →
-saída**. Os dados chegam (o valor da conta, as leituras do relógio de luz), o
-programa faz contas com eles e mostra o resultado. E todo algoritmo, por mais
-complicado, é montado com só três peças: **sequência** (um passo depois do
-outro), **decisão** ("se o saldo cobre, envia") e **repetição** ("enquanto a
-senha estiver errada, pergunte de novo"). Este módulo é a primeira peça: a
-**estrutura sequencial**. Decisão e repetição vêm nos módulos 02 e 03.
+Quase todo programa segue o modelo **entrada → processamento → saída**: os
+dados chegam, o programa calcula e mostra o resultado. Todo algoritmo usa só
+três peças: **sequência** (um passo depois do outro), **decisão** ("se o
+saldo cobre, envia") e **repetição** ("enquanto a senha estiver errada,
+pergunte de novo"). Este módulo é a primeira peça, a **estrutura
+sequencial**.
 
-Em C nada fica escondido: cada variável é um pedaço de memória com endereço
-e tamanho, cada número tem um limite, e o seu `.c` passa por uma linha de
-montagem antes de virar programa. No fim do módulo você escreve programas
-completos de entrada, processamento e saída e sabe o que cada linha faz na
-memória.
+Em C, cada variável é um pedaço de memória com endereço e tamanho, e cada
+número tem um limite. Ao final, você escreve programas completos de entrada,
+processamento e saída.
+
+Progressão: este é o ponto de partida e não depende de nenhum módulo. O
+módulo 02 usa estas variáveis, expressões e a leitura com `scanf` para
+decidir o que o programa faz; o 03 acrescenta a repetição.
 
 ## O que você vai aprender
 
-- o esqueleto de um programa em C e o caminho do `.c` até o executável (pré-processador, compilador, montador, ligador)
-- os três tipos de erro: de compilação, de ligação e de execução
-- **variáveis**: nome, tipo, valor e endereço; `int`, `float`, `double`, `char` e o `sizeof`
-- bit, byte, binário, hexadecimal, os limites de cada tipo e o **overflow**
-- constantes com `#define` e `const`, literais e sequências de escape
-- mostrar dados com `printf` (largura, precisão, alinhamento) e ler com `scanf` (o `&`, o `%lf`, a sobra no buffer)
+- o esqueleto de um programa em C e o caminho do `.c` ao executável
+- os três tipos de erro: compilação, ligação e execução
+- **variáveis**: nome, tipo, valor e endereço; `int`, `float`, `double`, `char` e `sizeof`
+- bit, byte, binário, hexadecimal, limites dos tipos e **overflow**
+- constantes (`#define`, `const`), literais e sequências de escape
+- `printf` (largura, precisão, alinhamento) e `scanf` (o `&`, o `%lf`, o buffer)
 - aritmética, divisão inteira, resto e precedência
 - conversão automática e **cast**
 - operadores compostos, `++` e `--`
-- a biblioteca de matemática: `pow`, `sqrt`, `round`, `floor`, `ceil`, `fabs`
+- `math.h`: `pow`, `sqrt`, `round`, `floor`, `ceil`, `fabs`
 
 ## Antes de começar
 
-Você precisa do compilador `gcc` e, para os módulos de memória, do `gdb` e do
-`valgrind`. Cada exercício tem uma resolução em `_respostas/01-fundamentos/`.
+Você precisa do `gcc` e, para os módulos de memória, do `gdb` e do
+`valgrind`. Cada exercício tem resolução em `_respostas/01-fundamentos/`.
 
 **Arch Linux** (e derivados, como Manjaro e EndeavourOS):
 
@@ -50,34 +50,40 @@ sudo pacman -S --needed base-devel gdb valgrind
 sudo apt install build-essential gdb valgrind
 ```
 
-**Windows**: use o **WSL** com Ubuntu. No PowerShell como administrador,
-rode `wsl --install`, reinicie, abra o Ubuntu e instale com o comando do
-Debian/Ubuntu acima. Clone o curso dentro do Linux do WSL (em `~/LPEDC`),
-não numa pasta do Windows.
+**Windows**: use o **WSL** com Ubuntu. No PowerShell como administrador, rode
+`wsl --install`, reinicie, abra o Ubuntu e use o comando do Debian/Ubuntu.
+Clone o curso dentro do Linux do WSL (`~/LPEDC`), não numa pasta do Windows.
 
-Confira com `gcc --version`. Se aparecer a versão, está pronto.
-
-Para rodar um arquivo do curso, compile com o `gcc` e execute o resultado:
+Confira com `gcc --version`. Para rodar um arquivo do curso, compile e
+execute:
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
 ```
 
-O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser absoluto, como acima, ou relativo à pasta atual.
+O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser
+absoluto ou relativo.
 
-Esse comando compila sem conferir nada. Nas **flags de estudo** o compilador também vigia o programa: acrescente `-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do `-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer**, que flagra erros de memória, o detector de **comportamento indefinido**, que flagra coisas como estouro de inteiro, e a biblioteca matemática. Com elas, um programa com problema desses para com um relatório que aponta a linha. Os avisos e relatórios citados nos módulos aparecem com essas flags. Os exercícios devem compilar **sem nenhum aviso**.
+Esse comando compila sem conferir nada. As **flags de estudo** fazem o
+compilador vigiar o programa; acrescente
+`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do
+`-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer** (erros
+de memória), o detector de **comportamento indefinido** (como estouro de
+inteiro) e a biblioteca matemática. Um programa com esses problemas para com
+um relatório que aponta a linha. Os avisos citados nos módulos aparecem com
+essas flags, e os exercícios devem compilar **sem nenhum aviso**.
 
-Programas que leem do teclado esperam você digitar. Para testar sem digitar,
-mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
+Programas que leem do teclado esperam a digitação. Para testar sem digitar,
+use um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '3 4.99\n2\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
 ```
 
 > [!NOTE]
-> Material antigo de C (e muita apostila por aí) usa `void main`, `conio.h`,
-> `getch()`, `system("pause")`, `fflush(stdin)` e `gets`. Nada disso é C
-> padrão ou seguro. Quando aparecer, o curso avisa e mostra a alternativa.
+> Material antigo de C usa `void main`, `conio.h`, `getch()`,
+> `system("pause")`, `fflush(stdin)` e `gets`. Nada disso é C padrão ou
+> seguro; quando aparecer, o curso mostra a alternativa.
 
 {{indice}}
 
@@ -89,9 +95,9 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scan
 
 ## Desafios do módulo
 
-Problemas para resolver com o que o módulo ensinou: variáveis, `scanf`,
-aritmética, conversões, `math.h` e `printf`. Nenhum precisa de `if` nem de
-laço. Escreva cada um num arquivo seu e rode com as flags de estudo.
+Problemas com variáveis, `scanf`, aritmética, conversões, `math.h` e
+`printf`. Nenhum precisa de `if` nem de laço. Escreva cada um num arquivo seu
+e compile com as flags de estudo.
 
 **1. Troco em moedas.** O caixa da padaria só tem moedas de R$ 1, R$ 0,50,
 R$ 0,25, R$ 0,10 e R$ 0,05. Leia um troco em reais (`double`) e mostre quantas
@@ -262,9 +268,9 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
-alternativa certa. Resolva no papel antes de abrir o gabarito e, se ficar em
-dúvida, copie o trecho para um arquivo e rode com as flags de estudo.
+Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
+Resolva no papel antes do gabarito e, na dúvida, rode o trecho com as flags
+de estudo.
 
 **1.** Qual a saída do trecho abaixo?
 

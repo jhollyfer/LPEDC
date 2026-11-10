@@ -1,9 +1,8 @@
 ## 0070 · Juntando tudo: a caderneta de gastos
 
-Fim de mês e a pergunta de sempre: para onde foi o dinheiro? Você já tem tudo
-para fazer o seu controle de gastos no terminal, do jeito dos programas de
-linha de comando: um comando por execução, com os dados guardados em arquivo
-entre uma execução e outra.
+Fim de mês: para onde foi o dinheiro? Você já sabe fazer o controle de gastos
+no terminal: um comando por execução, com os dados guardados em arquivo entre
+uma execução e outra.
 
 ```bash
 gastos novo mercado 152.40     # anota um gasto
@@ -12,37 +11,33 @@ gastos exporta /tmp/gastos.csv # gera uma planilha
 gastos limpa                   # começa do zero
 ```
 
-O programa junta as três peças do módulo, cada uma no papel que faz melhor:
+O programa junta as três peças do módulo:
 
-- **argumentos** (0069): `argv[1]` diz **o que** fazer; os seguintes trazem
-  os dados. É o mesmo desenho do `git` (`git commit`, `git log`): um
-  programa, vários subcomandos. O `main` só confere o `argc` de cada comando e
-  chama a função certa.
-- **arquivo binário** (0068): a caderneta em si. Cada gasto é um registro
-  `Gasto` de tamanho fixo, gravado com `fwrite` em modo `"ab"`: binário e
-  sempre no fim, sem precisar ler o que já existe. Como os registros têm o
-  mesmo tamanho, `ftell / sizeof(Gasto)` diz quantos já existem.
-- **arquivo texto** (0067): a exportação. O binário serve ao programa, mas
-  ninguém abre um `.dat` na planilha. O `exporta` lê os registros e
-  escreve um **CSV** com `fprintf`, separado por `;`, que o LibreOffice e o
-  Google Planilhas abrem direto.
+- **argumentos** (0069): `argv[1]` diz **o que** fazer; os seguintes trazem os
+  dados, como no `git` (`git commit`, `git log`): um programa, vários
+  subcomandos. O `main` confere o `argc` e chama a função certa.
+- **arquivo binário** (0068): a caderneta. Cada gasto é um registro `Gasto` de
+  tamanho fixo, gravado com `fwrite` em modo `"ab"` (sempre no fim, sem ler o
+  que existe). Como os registros têm o mesmo tamanho, `ftell / sizeof(Gasto)`
+  diz quantos já existem.
+- **arquivo texto** (0067): a exportação. Ninguém abre um `.dat` na planilha.
+  O `exporta` lê os registros e escreve com `fprintf` um **CSV** separado por
+  `;`, que o LibreOffice e o Google Planilhas abrem direto.
 
-Todo programa que guarda dados precisa de três cuidados. **Valide antes de
-gravar**: um `strtod` com `*fim != '\0'` impede que "abc" entre na caderneta
-como R$ 0,00. **Não grave lixo**: o `memset` zera o vetor `categoria` antes
-do `strncpy`, então os bytes que sobram no arquivo são zeros, e não restos da
-pilha. **Arquivo que não existe nem sempre é erro**: no `lista`, ele quer dizer
-"nenhum gasto ainda".
+Três cuidados para quem guarda dados. **Valide antes de gravar**: `strtod`
+com `*fim != '\0'` impede que "abc" entre como R$ 0,00. **Não grave lixo**: o
+`memset` zera `categoria` antes do `strncpy`, então os bytes que sobram são
+zeros, não restos da pilha. **Arquivo inexistente nem sempre é erro**: no
+`lista`, significa "nenhum gasto ainda".
 
-Cada linha do terminal é uma execução separada do programa. O `novo` acrescenta um registro de 32 bytes em `gastos.dat`; o
-`lista` lê os registros de volta com `fread`; o `exporta` transforma o binário
-em texto:
+Cada linha do terminal é uma execução separada. O `novo` acrescenta um
+registro de 32 bytes em `gastos.dat`; o `lista` o lê de volta com `fread`; o
+`exporta` transforma o binário em texto:
 
 {{ideia}}
 
-O programa é longo, mas cada função cabe na cabeça: `novo`, `lista` e
-`exporta` repetem os exemplos dos três assuntos anteriores, e o `main` só
-despacha. Para rodar, salve como `gastos.c`.
+Cada função repete os exemplos dos três assuntos anteriores, e o `main` só
+despacha. Salve como `gastos.c`.
 
 ```c
 #include <stdio.h>
@@ -173,28 +168,25 @@ int main(int argc, char *argv[]) {
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
-O fluxograma segue o comando `lista`. O `main` pergunta qual é o comando até
-achar um que conhece; comando desconhecido, ou com argumentos de menos, cai na
-mensagem de uso:
+O fluxograma segue o comando `lista`. O `main` testa o comando até achar um
+conhecido; comando desconhecido, ou com argumentos faltando, cai na mensagem
+de uso:
 
 {{fluxograma}}
 
 > [!WARNING]
 > Trocar `"ab"` por `"wb"` no `novo` é o erro mais caro do módulo: cada gasto
-> novo apagaria todos os anteriores, sem aviso. E não leia o que acabou de
-> escrever pelo mesmo caminho com outro `FILE *` antes do `fclose` (ou
-> `fflush`): os bytes ainda estão no buffer, e a leitura acha o arquivo vazio
-> ou pela metade. O E419 junta os dois erros num programa só.
+> novo apagaria os anteriores, sem aviso. E não leia, por outro `FILE *`, o que
+> acabou de escrever antes do `fclose` (ou `fflush`): os bytes ainda estão no
+> buffer e a leitura acha o arquivo vazio ou pela metade. O E419 junta os dois
+> erros.
 
 > [!TIP]
-> **Por dentro do C:** em `"ab"` (ou `"a"`), **toda** escrita vai para o fim do
-> arquivo, mesmo que você chame `fseek` antes. No Linux, o `fopen` pede ao
-> sistema o modo `O_APPEND`, e o próprio núcleo posiciona no fim a cada
-> `write`. Por isso dois programas anotando gastos ao mesmo tempo não
-> sobrescrevem um ao outro (desde que cada registro saia num `write` só). Já o
-> `return` do `main` vira o código de saída: rode `./programa novo x abc;
-> echo $?` e veja o 1. É assim que scripts encadeiam comandos com `&&`.
-
+> **Por dentro do C:** em `"ab"` (ou `"a"`), **toda** escrita vai para o fim,
+> mesmo depois de um `fseek`: o `fopen` pede `O_APPEND` ao sistema. Por isso
+> dois programas anotando gastos ao mesmo tempo não se sobrescrevem (se cada
+> registro sair num `write` só). E o `return` do `main` vira o código de
+> saída: `./programa novo x abc; echo $?` mostra 1.
 
 > [!NOTE]
 > **Pergunta para você:** a categoria tem 20 bytes. O que acontece com

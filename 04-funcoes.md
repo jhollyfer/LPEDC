@@ -2,20 +2,19 @@
 
 # Módulo 04 · Funções e modularização
 
-Até aqui, todo programa foi um `main` só, de cima para baixo. Funciona para
-vinte linhas. Com duzentas, o mesmo cálculo aparece copiado em três lugares,
-um conserto esquece uma das cópias e ninguém mais acha nada. Este módulo é
-sobre **dividir**: dar nome a cada tarefa, escrever uma vez e chamar quantas
-vezes precisar.
+Até aqui, todo programa foi um `main` só. Com duzentas linhas, o mesmo cálculo
+aparece copiado em três lugares, um conserto esquece uma cópia e ninguém acha
+mais nada. Este módulo ensina a **dividir**: dar nome a cada tarefa, escrever
+uma vez e chamar quantas vezes precisar.
 
-No C, isso se faz com funções e com módulos (`.h` e `.c`). E dá para ver **o
-que acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro que
-nasce na pilha, o endereço de volta, a variável que some no `return`. Com essa
-imagem na cabeça, a **recursão** vira só mais uma chamada.
+O C faz isso com funções e módulos (`.h` e `.c`). Você também vê **o que
+acontece por baixo** de cada chamada: a cópia dos argumentos, o quadro na
+pilha, o endereço de volta, a variável que some no `return`. Com essa imagem, a
+**recursão** é só mais uma chamada.
 
-No fim, o programa sai de um arquivo só: você monta **módulos** com `.h` e
-`.c`, compila cada parte separada e deixa o ligador juntar tudo. É o mesmo
-formato das estruturas de dados da segunda metade do curso.
+No fim, o programa deixa de ser um arquivo só: você monta **módulos**, compila
+cada parte separada e deixa o ligador juntar tudo. É o formato das estruturas de
+dados da segunda metade do curso.
 
 ## O que você vai aprender
 
@@ -33,12 +32,12 @@ formato das estruturas de dados da segunda metade do curso.
 Nos desenhos de pilha e recursão, cada caixa empilhada é o quadro de uma
 chamada, e a de cima é a que está rodando.
 
-Você precisa dos módulos 01 a 03: tipos, `printf` e `scanf`, `if`, `switch` e
-laços. Vetores ainda **não** aparecem aqui (são o módulo 05), então todos os
-exemplos trabalham com números soltos.
+Este módulo usa os módulos 01 a 03: tipos, `printf` e `scanf`, `if`, `switch` e
+laços (o craps do 0027 ganha a função `lancar()`). Ele prepara o módulo 05:
+vetores ainda **não** aparecem aqui, então os exemplos usam números soltos.
 
-Dois assuntos ficam melhores com o depurador `gdb`, que mostra a pilha de
-chamadas com o comando `bt`:
+Dois assuntos ficam melhores com o depurador `gdb`, que mostra a pilha com o
+comando `bt`:
 
 ```bash
 sudo pacman -S gdb          # Arch Linux
@@ -46,9 +45,8 @@ sudo apt install gdb        # Debian / Ubuntu
 ```
 
 Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
-`conversao.c`, `cardapio.h` e `cardapio.c`). O comando do exemplo compila esses `.c`
-junto com o exemplo; o texto mostra também o comando `gcc` para fazer isso à
-mão.
+`conversao.c`, `cardapio.h` e `cardapio.c`). O comando do exemplo compila esses
+`.c` junto; o texto mostra também o `gcc` para fazer isso à mão.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -66,15 +64,13 @@ mão.
 
 ## 0028 · Funções
 
-Você abre o app de corrida e ele mostra o preço antes de você confirmar: R$
-5,00 de bandeirada mais R$ 2,50 por quilômetro. O app faz essa conta para
-cada corrida pedida, o dia inteiro. Ninguém escreveu a fórmula mil vezes:
-escreveu **uma vez**, deu um nome, e chama sempre que precisa.
+O app de corrida mostra o preço antes de você confirmar: R$ 5,00 de bandeirada
+mais R$ 2,50 por quilômetro. Ninguém escreveu a fórmula mil vezes: escreveu
+**uma vez**, deu um nome e chama quando precisa.
 
 Isso é uma **função**: um pedaço de código com nome, que recebe dados, faz uma
-tarefa e devolve um resultado. Você já usa funções desde o primeiro dia:
-`printf`, `scanf` e `sqrt` foram escritas por outra pessoa. Agora você escreve
-as suas.
+tarefa e devolve um resultado. Você já usa funções (`printf`, `scanf`, `sqrt`),
+escritas por outras pessoas. Agora escreve as suas.
 
 A forma geral em C:
 
@@ -86,31 +82,26 @@ tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
 ```
 
 - o **tipo de retorno** diz o que a função devolve (`int`, `double`...). Se
-  ela não devolve nada, o tipo é `void`;
-- os **parâmetros** são as variáveis que recebem os dados de quem chama. Cada
-  um com o seu tipo: `double a, double b`, nunca `double a, b`;
+  não devolve nada, é `void`;
+- os **parâmetros** são as variáveis que recebem os dados de quem chama, cada
+  uma com seu tipo: `double a, double b`, nunca `double a, b`;
 - o **`return`** devolve o valor e **encerra a função na hora**. O que vem
-  depois dele, naquele caminho, não roda.
+  depois, naquele caminho, não roda.
 
-No C, o tipo vem antes do nome e é obrigatório, tanto no retorno quanto em
-cada parâmetro.
+Termos dos livros e da prova: toda função é uma **sub-rotina** (ou
+subprograma). A que devolve valor é a **função**; a `void`, que só executa uma
+tarefa, é o **procedimento**. No C as duas se escrevem igual. Dividir o
+programa em sub-rotinas é a **modularização**.
 
-Nomes que você vai encontrar nos livros e na prova: toda função é uma
-**sub-rotina** (ou subprograma). A que devolve valor é a **função**
-propriamente dita; a `void`, que só executa uma tarefa, é o **procedimento**.
-No C as duas se escrevem igual. Dividir o programa em sub-rotinas é a
-**modularização**.
+O compilador lê o arquivo **de cima para baixo**, uma vez. Se o `main` chama
+`preco_corrida` antes de ele ver a função, não sabe o tipo de retorno nem os
+parâmetros. A solução é o **protótipo**: o cabeçalho da função com `;` no fim,
+antes do `main`. É uma promessa: "essa função existe, recebe um `double` e
+devolve um `double`; a definição vem depois".
 
-Falta um detalhe: o compilador do C lê o arquivo **de cima para
-baixo**, uma vez só. Se o `main` chama `preco_corrida` antes de o compilador
-ter visto essa função, ele não sabe que tipo ela devolve nem quantos
-parâmetros recebe. A solução é o **protótipo**: o cabeçalho da função com `;`
-no fim, colocado antes do `main`. É uma promessa: "essa função existe, recebe
-um `double` e devolve um `double`; a definição vem depois".
-
-Quando o `main` chama `preco_corrida(4.0)`, o valor 4.0 é
-copiado para o parâmetro `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve
-15.00, e o `main` continua de onde parou, já com o resultado na mão:
+Quando o `main` chama `preco_corrida(4.0)`, o 4.0 é copiado para o parâmetro
+`km`, a função calcula `5.00 + 2.50 * 4.0`, devolve 15.00, e o `main` continua
+de onde parou, com o resultado:
 
 <p align="center"><img src="04-funcoes/0028-funcoes/ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
 
@@ -140,40 +131,29 @@ double preco_corrida(double km) {
 // Corrida 3: R$ 11.25
 ```
 
-A chamada é um desvio: o programa sai do `main`, executa
-o corpo da função e **volta para o mesmo ponto**, trazendo o valor. Isso se
-repete a cada corrida:
+A chamada é um desvio: o programa sai do `main`, executa o corpo da função e
+**volta ao mesmo ponto**, trazendo o valor. Isso se repete a cada corrida:
 
 <p align="center"><img src="04-funcoes/0028-funcoes/fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
 
-Três termos que aparecem o tempo todo: a **definição** é o corpo
-inteiro (`double preco_corrida(double km) { ... }`); a **chamada** é o uso
-(`preco_corrida(4.0)`); o **protótipo** é só o cabeçalho com `;`. O valor que
-você passa na chamada (`4.0`) se chama **argumento**; a variável que o recebe
-(`km`) é o **parâmetro**.
+Três termos: a **definição** é o corpo inteiro
+(`double preco_corrida(double km) { ... }`); a **chamada** é o uso
+(`preco_corrida(4.0)`); o **protótipo** é só o cabeçalho com `;`. O valor
+passado na chamada (`4.0`) é o **argumento**; a variável que o recebe (`km`) é
+o **parâmetro**.
 
-Uma função boa faz **uma** tarefa, e o nome diz qual. Se você não acha um nome
-curto, ela está fazendo coisas demais: quebre em duas. E
-`preco_corrida` não usa `printf`: quem mostra o resultado é o `main`. Uma
-função que só calcula serve para a tela, para um arquivo ou para outra conta.
+Uma função boa faz **uma** tarefa, e o nome diz qual. Se não acha um nome
+curto, ela faz coisas demais: quebre em duas. `preco_corrida` não usa
+`printf`: quem mostra o resultado é o `main`. Assim a função serve para a tela,
+para um arquivo ou para outra conta.
 
 > [!WARNING]
 > Chamar a função antes de ela aparecer no arquivo, sem protótipo. O gcc 13
-> avisa `implicit declaration of function 'preco_corrida'`, e o gcc 14 já
-> recusa compilar. No C antigo, o compilador **inventava** que a função
-> devolvia `int`: o `double` voltava como lixo. Outro erro clássico é
-> esquecer o `return` numa função que não é `void`: o `-Wall` avisa
-> `control reaches end of non-void function`, e quem chamou recebe um valor
-> qualquer. Leve os dois avisos a sério.
-
-> [!TIP]
-> **Por dentro do C:** o código de `preco_corrida` existe **uma vez só** na
-> memória, não importa quantas vezes você chama. A chamada vira a instrução
-> `call` do processador, que guarda o endereço de volta e pula para a função;
-> o `return` vira `ret`, que pula de volta. No Linux de 64 bits, o argumento
-> `double` vai num registrador do processador (`xmm0`) e o resultado volta
-> pelo mesmo registrador. Salve o código acima como `corrida.c`, rode
-> `gcc -S corrida.c` e procure `call preco_corrida` no arquivo `corrida.s`.
+> avisa `implicit declaration of function 'preco_corrida'`, e o gcc 14 recusa
+> compilar. No C antigo, o compilador **supunha** retorno `int`, e o `double`
+> voltava como lixo. Outro erro clássico: esquecer o `return` numa função que
+> não é `void`. O `-Wall` avisa `control reaches end of non-void function`, e
+> quem chamou recebe um valor qualquer.
 
 > [!NOTE]
 > **Pergunta para você:** o que mostra
@@ -458,33 +438,32 @@ gcc ~/LPEDC/04-funcoes/0028-funcoes/E168.c -o ~/LPEDC/04-funcoes/0028-funcoes/E1
 
 ## 0029 · Parâmetros e passagem por valor
 
-Você tira foto do boleto e manda no grupo da família. Sua tia rabisca a foto,
-escreve "pago!" em cima. O boleto de papel, na sua gaveta, continua igual: ela
-mexeu numa **cópia**.
+Você fotografa o boleto e manda no grupo da família. Sua tia rabisca "pago!" na
+foto. O boleto de papel, na sua gaveta, continua igual: ela mexeu numa
+**cópia**.
 
-Em C, toda chamada de função funciona assim. Quando você escreve
-`reajustar(mensalidade, 10)`, o C **calcula o valor** de cada argumento e
-**copia** esse valor para o parâmetro. O parâmetro da definição é o
-**parâmetro formal**; o valor da chamada é o **argumento** (ou parâmetro
-real). Isso se chama **passagem por valor**, e é a única do C: a passagem
-**por referência** dos livros se faz passando um endereço (assunto 0046). O
-parâmetro é uma variável nova, local da função, que nasce já com a cópia. A
-função pode mudar o parâmetro à vontade: a variável de quem chamou nem fica
-sabendo.
+Toda chamada de função em C funciona assim. Em `reajustar(mensalidade, 10)`, o
+C **calcula o valor** de cada argumento e **copia** esse valor para o
+parâmetro. O parâmetro da definição é o **parâmetro formal**; o valor da
+chamada é o **argumento** (ou parâmetro real). Isso é a **passagem por valor**,
+a única do C: a passagem **por referência** dos livros se faz passando um
+endereço (assunto 0046). O parâmetro é uma variável nova, local da função, que
+nasce com a cópia. A função pode mudá-lo à vontade: a variável de quem chamou
+não é afetada.
 
-A função recebe **só o número**. Para ela, `reajustar(mensalidade,
-10)`, `reajustar(120.00, 10)` e `reajustar(100 + 20, 5 * 2)` são idênticas: chega
-120.00 e chega 10. Ela não sabe de onde o valor veio nem onde mora a variável
-original. Por isso não tem como alterá-la.
+A função recebe **só o número**. `reajustar(mensalidade, 10)`,
+`reajustar(120.00, 10)` e `reajustar(100 + 20, 5 * 2)` são idênticas para ela:
+chega 120.00 e chega 10. Ela não sabe de onde o valor veio e não tem como
+alterar a variável original.
 
-Se a função precisa mandar um resultado de volta, o caminho é o `return`. E
-quem chamou tem que **guardar** o retorno: `mensalidade = reajustar(...)`.
-Chamar e ignorar o retorno é permitido (você faz isso com o `printf`, que
-devolve quantos caracteres escreveu), mas aí o resultado se perde.
+Para mandar um resultado de volta, use o `return`, e quem chamou tem que
+**guardar** o retorno: `mensalidade = reajustar(...)`. Ignorar o retorno é
+permitido (você faz isso com o `printf`, que devolve quantos caracteres
+escreveu), mas o resultado se perde.
 
-No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%.
-Há duas caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a
-do `main` e a cópia da função. A função muda só a dela para 132.00:
+No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%. Há duas
+caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a do
+`main` e a cópia da função. A função muda só a dela para 132.00:
 
 <p align="center"><img src="04-funcoes/0029-parametros/ideia.svg" alt="Diagrama da ideia: Parâmetros e passagem por valor" width="858"></p>
 
@@ -522,40 +501,29 @@ double reajustar(double mensalidade, double percentual) {
 // Guardando o retorno: 132.00
 ```
 
-O valor sai do `main` por cópia e só volta pelo
-`return`. A pergunta "guardou o retorno?" decide se o `main` fica sabendo do
-reajuste:
+O valor sai do `main` por cópia e só volta pelo `return`. A pergunta "guardou
+o retorno?" decide se o `main` fica sabendo do reajuste:
 
 <p align="center"><img src="04-funcoes/0029-parametros/fluxograma.svg" alt="Fluxograma: Parâmetros e passagem por valor" width="471"></p>
 
 Mais três regras sobre parâmetros:
 
 - **conversão automática**: se o tipo do argumento não bate, o C converte para
-  o tipo do parâmetro, como numa atribuição. Um `int` vira `double` sem
-  problema; um `2.9` passado para um `int` vira `2`, sem aviso;
-- **`void` na lista**: `void linha(void)` diz "não recebe nada", e
-  `linha(5)` vira erro de compilação. Já `void linha()`, com os parênteses
-  vazios, no C17 quer dizer "não vou dizer o que recebe": o compilador aceita
-  `linha(5)` calado. Escreva sempre `(void)`. (No C23 os dois viraram a mesma
-  coisa, mas você vai ver muito código C17.)
-- **um tipo por parâmetro**: `double total, int vezes`. E a ordem importa: o
-  primeiro argumento vai para o primeiro parâmetro, sempre.
+  o do parâmetro, como numa atribuição. Um `int` vira `double` sem problema;
+  um `2.9` passado a um `int` vira `2`, sem aviso;
+- **`void` na lista**: `void linha(void)` diz "não recebe nada", e `linha(5)`
+  é erro de compilação. Já `void linha()`, no C17, quer dizer "não declaro o
+  que recebe": o compilador aceita `linha(5)` calado. Escreva sempre `(void)`.
+  (No C23 os dois são iguais, mas há muito código C17.)
+- **um tipo por parâmetro** (`double total, int vezes`), e a ordem importa: o
+  primeiro argumento vai para o primeiro parâmetro.
 
 > [!WARNING]
-> A função que "deveria" mudar a variável e não muda. O exemplo clássico é
-> `void trocar(int a, int b)` que troca `a` e `b` lá dentro: no `main`, nada
-> acontece, porque a troca foi entre as cópias. Da
-> mesma forma, `void f(int n) { n++; }` não muda o seu `n`. No C, para a função
-> mexer numa variável sua, você precisa passar o **endereço** dela. É o que o
-> `&` do `scanf` faz, e você vai entender de vez no assunto 0046.
-
-> [!TIP]
-> **Por dentro do C:** a cópia é literal. O `main` põe o valor 120.00 num
-> registrador (`xmm0`) e a função começa copiando esse registrador para o
-> seu próprio espaço na memória, num endereço diferente do da variável do
-> `main`. Copiar um `double` custa quase nada: são 8 bytes. Mais para a
-> frente, quando você passar uma `struct` grande por valor, a cópia inteira
-> vai acontecer a cada chamada, e aí vale a pena passar o endereço.
+> A função que "deveria" mudar a variável e não muda. Em
+> `void trocar(int a, int b)`, a troca ocorre entre as cópias e nada acontece
+> no `main`. Do mesmo modo, `void f(int n) { n++; }` não muda o seu `n`. Para a
+> função mexer numa variável sua, passe o **endereço** dela. É o que o `&` do
+> `scanf` faz, e o assunto 0046 explica.
 
 > [!NOTE]
 > **Pergunta para você:** se você trocar o nome do parâmetro de `mensalidade`
@@ -854,17 +822,17 @@ gcc ~/LPEDC/04-funcoes/0029-parametros/E174.c -o ~/LPEDC/04-funcoes/0029-paramet
 
 ## 0030 · Escopo e tempo de vida
 
-No banco, o painel chama a senha 101, depois a 102, depois a 103. Ele
-**lembra** onde parou. Já o atendente que te chama zera a conversa a cada
-cliente: não guarda nada da pessoa anterior. Programa precisa das duas
-coisas, e o C dá ferramentas diferentes para cada uma.
+No banco, o painel chama a senha 101, depois a 102, depois a 103: ele
+**lembra** onde parou. O atendente zera a conversa a cada cliente: não guarda
+nada do anterior. Programa precisa das duas coisas, e o C tem uma ferramenta
+para cada.
 
-Toda variável tem duas propriedades que é bom separar na cabeça:
+Toda variável tem duas propriedades:
 
 - **escopo**: **onde** no código o nome pode ser usado;
 - **tempo de vida**: **quando** a variável existe na memória.
 
-São três tipos que você vai usar o tempo todo:
+São três tipos:
 
 | Tipo | Onde declara | Escopo | Tempo de vida |
 | --- | --- | --- | --- |
@@ -872,25 +840,24 @@ São três tipos que você vai usar o tempo todo:
 | **global** | fora de qualquer função | do ponto da declaração até o fim do arquivo | o programa todo |
 | **`static` local** | dentro de `{ }`, com `static` | só aquele bloco | o programa todo |
 
-A `static` local é a mais curiosa: o **escopo** é de local (ninguém de fora
-enxerga), mas o **tempo de vida** é de global. A linha `static int senha =
-100;` roda **uma vez só**, antes de o programa começar. Nas chamadas
-seguintes, a variável continua lá, com o valor que tinha.
+A `static` local tem escopo de local (ninguém de fora a enxerga) e tempo de
+vida de global. A linha `static int senha = 100;` roda **uma vez**, antes de o
+programa começar. Nas chamadas seguintes, a variável continua com o valor que
+tinha.
 
 Parâmetros são locais da função, e a variável do `for (int i = 0; ...)` é
 local do laço. Se um bloco interno declara um nome que já existe fora, o de
-dentro **esconde** o de fora até o bloco acabar. Vale sempre a declaração mais
+dentro **esconde** o de fora até o bloco acabar: vale a declaração mais
 próxima.
 
-A função `chamar` tem três contadores: a global
-`atendidos`, a `static` `senha` e a local `vezes`. As duas primeiras moram
-numa região da memória que dura o programa inteiro; a local mora no espaço da
-chamada e some quando a função retorna. Depois de três chamadas, fica assim:
+A função `chamar` tem três contadores: a global `atendidos`, a `static`
+`senha` e a local `vezes`. As duas primeiras ficam numa região da memória que
+dura o programa inteiro; a local fica no espaço da chamada e some quando a
+função retorna. Depois de três chamadas:
 
 <p align="center"><img src="04-funcoes/0030-escopo/ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
 
-No código, `vezes` mostra 1 sempre, enquanto os outros dois
-avançam:
+No código, `vezes` mostra sempre 1, enquanto os outros dois avançam:
 
 ```c
 #include <stdio.h>
@@ -922,45 +889,38 @@ int main(void) {
 // Última senha chamada: 103
 ```
 
-A cada chamada, a local é criada de novo com 0, e a
-`static` já está esperando com o valor anterior. Não existe um passo
-"criar senha" dentro da repetição:
+A cada chamada, a local nasce de novo com 0, e a `static` já espera com o
+valor anterior. Não existe passo "criar senha" dentro da repetição:
 
 <p align="center"><img src="04-funcoes/0030-escopo/fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
 
 As globais funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
-qualquer lugar. A mesma chamada pode dar resultados diferentes conforme o que
-outra função fez antes. Prefira passar por parâmetro e devolver com `return`;
-use global só para algo que é de fato do programa todo.
+qualquer lugar, e a mesma chamada pode dar resultados diferentes conforme o
+que outra função fez antes. Prefira parâmetro e `return`; use global só para o
+que é do programa todo.
 
-Uma última peça: `static` **fora** de função muda outra coisa. Uma global
-`static int total;` continua vivendo o programa todo, mas só pode ser usada
-**naquele arquivo**. Isso vai fazer sentido no assunto 0034, quando o programa
-tiver mais de um `.c`.
+`static` **fora** de função muda outra coisa: uma global `static int total;`
+vive o programa todo, mas só pode ser usada **naquele arquivo**. Isso faz
+sentido no assunto 0034, com mais de um `.c`.
 
 > [!WARNING]
-> Achar que `static int senha = 100;` volta a valer 100 a cada chamada. Não
-> volta: a inicialização acontece uma vez, antes do `main`. O oposto também
-> engana: uma local **sem** inicialização (`int total;`) não começa em 0, começa
-> com o lixo que estava naquele pedaço da memória. Globais e `static` sem
-> valor começam em 0; locais, não. E esconder nomes (`int nivel` dentro e
-> fora) compila sem nenhum aviso com `-Wall`: só o `-Wshadow` reclama.
+> `static int senha = 100;` não volta a valer 100 a cada chamada: a
+> inicialização acontece uma vez, antes do `main`. O oposto também engana: uma
+> local **sem** inicialização (`int total;`) começa com lixo, não com 0.
+> Globais e `static` sem valor começam em 0; locais, não. E esconder nomes
+> (`int nivel` dentro e fora) compila sem aviso com `-Wall`: só o `-Wshadow`
+> reclama.
 
 > [!TIP]
-> **Por dentro do C:** a memória do programa tem regiões. Globais e `static`
-> com valor inicial ficam na seção **`.data`**, gravada dentro do próprio
-> executável; as que começam em zero ficam na **`.bss`**, que o sistema zera ao
-> carregar o programa. As locais ficam na **pilha**, um espaço reaproveitado a
-> cada chamada (o próximo assunto). Salve o código acima como `senhas.c`, rode
-> `gcc -c senhas.c` e depois `nm senhas.o`:
-> aparecem `atendidos` (B, na `.bss`) e `senha.0` (d, na `.data`). A `vezes`
-> nem aparece: ela não tem lugar fixo.
+> Globais e `static` ficam numa região fixa da memória, gravada no executável
+> (`.data`) ou zerada ao carregar (`.bss`). As locais ficam na **pilha**, que
+> é o próximo assunto.
 
 > [!NOTE]
 > **Pergunta para você:** se você tirar o `static` de `senha`, quais números
-> aparecem nas três linhas? E se, em vez disso, você mover `int vezes = 0;` para
-> fora da função?
+> aparecem nas três linhas? E se, em vez disso, você mover `int vezes = 0;`
+> para fora da função?
 
 ### Hora de praticar
 
@@ -1292,33 +1252,31 @@ assim:
 #2  main () at pedido.c:5
 ```
 
-Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** impressa no
-momento do erro. A função de cima estava rodando; ela foi chamada pela de
-baixo, que foi chamada pela de baixo dela.
+Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** no momento
+do erro. A função de cima estava rodando; foi chamada pela de baixo, que foi
+chamada pela de baixo dela.
 
-Cada vez que uma função é chamada, o programa reserva um pedaço de memória só
-para aquela chamada: o **quadro** (em inglês, *stack frame*, ou registro de
-ativação). Nele ficam:
+A cada chamada, o programa reserva um pedaço de memória só para ela: o
+**quadro** (*stack frame*, ou registro de ativação). Nele ficam:
 
 - os **parâmetros**, com as cópias dos argumentos;
 - as **variáveis locais** da função;
-- o **endereço de retorno**: em que ponto de quem chamou o programa continua
-  quando a função acabar.
+- o **endereço de retorno**: o ponto de quem chamou onde o programa continua
+  quando a função acaba.
 
 Os quadros se empilham como pratos. Chamou, empilha um quadro no **topo**.
 Retornou, o quadro do topo sai, e o de baixo continua de onde parou. A última
-função a começar é sempre a primeira a terminar: **último a entrar, primeiro a
-sair** (LIFO, de *last in, first out*). Só o quadro do topo está rodando; os
-outros estão parados, esperando um retorno.
+função a começar é a primeira a terminar: **último a entrar, primeiro a sair**
+(LIFO, de *last in, first out*). Só o quadro do topo roda; os outros esperam um
+retorno.
 
-É por isso que local "some" no `return`: o quadro dela foi desempilhado. Pelo
-mesmo motivo, uma função não enxerga as variáveis de quem a chamou: elas estão
-noutro quadro, mais embaixo.
+Por isso a local "some" no `return`: seu quadro foi desempilhado. Pelo mesmo
+motivo, uma função não enxerga as variáveis de quem a chamou: estão noutro
+quadro, mais embaixo.
 
-Num pedido de R$ 50,00, o `main` chama
-`total_com_entrega`, que chama `taxa_entrega`. No momento mais fundo há três
-quadros na pilha. Quando `taxa_entrega` devolve 7.90, o quadro dela sai, e
-`total_com_entrega` volta a rodar, já com o valor:
+Num pedido de R$ 50,00, o `main` chama `total_com_entrega`, que chama
+`taxa_entrega`. No ponto mais fundo há três quadros. Quando `taxa_entrega`
+devolve 7.90, seu quadro sai, e `total_com_entrega` volta a rodar com o valor:
 
 <p align="center"><img src="04-funcoes/0031-pilha-de-chamadas/ideia.svg" alt="Diagrama da ideia: A pilha de chamadas" width="928"></p>
 
@@ -1359,9 +1317,9 @@ int main(void) {
 // Total: R$ 57.90
 ```
 
-No fluxograma, as chamadas empilham na descida, e os retornos
-desempilham na ordem contrária. A decisão da taxa acontece lá no topo, dentro
-de `taxa_entrega`, enquanto as outras duas funções esperam paradas:
+No fluxograma, as chamadas empilham na descida e os retornos desempilham na
+ordem contrária. A decisão da taxa ocorre no topo, dentro de `taxa_entrega`,
+enquanto as outras duas funções esperam:
 
 <p align="center"><img src="04-funcoes/0031-pilha-de-chamadas/fluxograma.svg" alt="Fluxograma: A pilha de chamadas" width="359"></p>
 
@@ -1377,28 +1335,21 @@ A pilha em cada momento, de baixo para cima (o topo é o último):
 | `taxa_entrega` devolveu 7.90 | `main` → `total_com_entrega` (total = 57.90) | `total_com_entrega` |
 | `total_com_entrega` devolveu 57.90 | `main` (total = 57.90) | `main` |
 
-Existem **dois** `valor`, um em cada quadro, e cada função mexe só
-no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
+Há **dois** `valor`, um em cada quadro, e cada função mexe só no seu. E dois
+`total`: o do `main` e o de `total_com_entrega`.
 
 > [!WARNING]
-> Usar uma local sem inicializar e achar que ela "começa limpa". O quadro
-> novo ocupa o mesmo pedaço de memória que um quadro antigo acabou de
-> liberar, e ninguém apaga nada. Uma `int soma;` pode nascer com o valor que
-> uma local de outra função deixou ali. Às vezes o programa até "funciona",
-> por sorte, e quebra quando você muda outra coisa. O `-Wall` avisa
-> `may be used uninitialized`: não ignore.
+> Usar uma local sem inicializar e achar que "começa limpa". O quadro novo
+> ocupa o pedaço de memória que um quadro antigo acabou de liberar, e ninguém o
+> apaga. Uma `int soma;` pode nascer com o valor que uma local de outra função
+> deixou ali. Às vezes o programa "funciona" por sorte e quebra quando você
+> muda outra coisa. O `-Wall` avisa `may be used uninitialized`.
 
 > [!TIP]
-> **Por dentro do C:** a pilha é uma região de memória de tamanho fixo (no
-> Linux, 8 MB por padrão; confira com `ulimit -s`) e cresce **para baixo**,
-> dos endereços altos para os baixos. Um registrador do processador, o `rsp`,
-> aponta para o topo. Empilhar um quadro é só subtrair do `rsp`; desempilhar
-> é somar. Por isso chamar função é tão barato. Se a pilha passar do limite,
-> o sistema mata o programa: é o **stack overflow** (no Linux, aparece como
-> `Segmentation fault`). Com 8 MB e quadros de algumas dezenas de bytes, dá
-> para empilhar centenas de milhares de chamadas, mas não infinitas. No
-> `gdb`, o comando `bt` (*backtrace*) imprime a pilha, como no começo deste
-> assunto.
+> A pilha tem tamanho fixo (no Linux, 8 MB por padrão; confira com
+> `ulimit -s`). Se passar do limite, o sistema mata o programa: é o **stack
+> overflow** (no Linux, `Segmentation fault`). Dá para empilhar centenas de
+> milhares de chamadas, mas não infinitas.
 
 > [!NOTE]
 > **Pergunta para você:** mude o subtotal para 95.00. Quantos quadros a pilha
@@ -1737,39 +1688,37 @@ gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186.c -o ~/LPEDC/04-funcoes/0031-
 
 ## 0032 · Recursão
 
-Cinco amigos vão ao cinema e querem saber de quantos jeitos dá para sentar nas
-cinco cadeiras. O primeiro tem 5 escolhas. Depois que ele senta, o problema
-virou outro, **igual mas menor**: de quantos jeitos 4 pessoas sentam em 4
-cadeiras? E assim vai, até sobrar 1 pessoa, que só tem 1 jeito. A resposta é
-5 × 4 × 3 × 2 × 1 = 120, o **fatorial** de 5.
+Cinco amigos vão ao cinema e querem saber de quantos jeitos podem sentar nas
+cinco cadeiras. O primeiro tem 5 escolhas. Depois que ele senta, o problema é
+**igual, mas menor**: de quantos jeitos 4 pessoas sentam em 4 cadeiras? E assim
+até sobrar 1 pessoa, com 1 jeito. A resposta é 5 × 4 × 3 × 2 × 1 = 120, o
+**fatorial** de 5.
 
-O raciocínio foi: "para resolver o de 5, eu resolvo o de 4 e multiplico
-por 5". Uma função que resolve o problema chamando **a si mesma** com uma
-versão menor do problema é uma **função recursiva**. Ela tem sempre duas
-partes:
+O raciocínio foi: "para resolver o de 5, resolvo o de 4 e multiplico por 5".
+Uma função que resolve o problema chamando **a si mesma** com uma versão menor
+dele é uma **função recursiva**. Ela tem duas partes:
 
 - o **caso base**: o problema pequeno o bastante para responder direto, sem
   chamar ninguém (1 pessoa: 1 jeito);
 - o **caso recursivo**: reduz o problema a um menor e usa a resposta dele
   (`n * fatorial(n - 1)`).
 
-E uma regra que não pode falhar: cada chamada tem que chegar **mais perto** do
-caso base. Se não chega, a função chama a si mesma para sempre.
+Regra que não pode falhar: cada chamada tem que chegar **mais perto** do caso
+base. Senão a função chama a si mesma para sempre.
 
-Um jeito bom de pensar é **confiar na função**. Ao escrever o caso recursivo,
-não tente seguir as chamadas de cabeça. Suponha que `fatorial(n - 1)` já
-funciona e pergunte só: com essa resposta na mão, como eu monto a de `n`?
-Depois confira o caso base. Se os dois estão certos, a função está certa.
+**Confie na função.** Ao escrever o caso recursivo, não siga as chamadas de
+cabeça. Suponha que `fatorial(n - 1)` já funciona e pergunte: com essa resposta
+na mão, como monto a de `n`? Depois confira o caso base. Com os dois certos, a
+função está certa.
 
-Cada chamada recursiva é uma chamada comum, com o **seu próprio quadro**
-na pilha (assunto 0031). `fatorial(5)` empilha `fatorial(4)`, que empilha
-`fatorial(3)`... São cinco quadros de `fatorial` ao mesmo tempo, cada um com o
-seu `n`, e todos parados esperando, menos o do topo.
+Cada chamada recursiva é comum, com **seu próprio quadro** na pilha (assunto
+0031). `fatorial(5)` empilha `fatorial(4)`, que empilha `fatorial(3)`... São
+cinco quadros de `fatorial` ao mesmo tempo, cada um com seu `n`, todos
+parados, menos o do topo.
 
-Na **ida**, a pilha cresce até `fatorial(1)`, que é o
-caso base e devolve 1 sem chamar ninguém. Na **volta**, cada quadro recebe a
-resposta de cima, faz a sua multiplicação e devolve para o de baixo: 1, 2, 6,
-24, 120:
+Na **ida**, a pilha cresce até `fatorial(1)`, o caso base, que devolve 1 sem
+chamar ninguém. Na **volta**, cada quadro recebe a resposta de cima, multiplica
+e devolve ao de baixo: 1, 2, 6, 24, 120:
 
 <p align="center"><img src="04-funcoes/0032-recursao/ideia.svg" alt="Diagrama da ideia: Recursão" width="858"></p>
 
@@ -1795,9 +1744,9 @@ int main(void) {
 // 12 amigos: 479001600 jeitos
 ```
 
-Não existe `for` nem `while` no código, mas o fluxograma tem duas voltas. A primeira é a ida (empilha de novo com `n - 1` até o caso
-base); a segunda é a volta (cada quadro esperando faz a sua multiplicação e
-sai):
+Não há `for` nem `while`, mas o fluxograma tem duas voltas. A primeira é a ida
+(empilha de novo com `n - 1` até o caso base); a segunda é a volta (cada quadro
+em espera multiplica e sai):
 
 <p align="center"><img src="04-funcoes/0032-recursao/fluxograma.svg" alt="Fluxograma: Recursão" width="620"></p>
 
@@ -1815,27 +1764,24 @@ baixo para cima da tabela:
 | `fatorial(1)` | 1 | Sim | nada | 1 |
 
 Recursão e laço resolvem os mesmos problemas: todo `for` vira recursão e toda
-recursão vira laço (às vezes com bastante trabalho). O fatorial com `for` é
-até mais simples e mais barato. A recursão compensa quando o problema **é**
-recursivo por natureza: pastas dentro de pastas, árvores, "divide ao meio e
-resolve cada metade".
+recursão vira laço (às vezes com muito trabalho). O fatorial com `for` é mais
+simples e mais barato. A recursão compensa quando o problema **é** recursivo
+por natureza: pastas dentro de pastas, árvores, "divide ao meio e resolve cada
+metade".
 
 > [!WARNING]
 > Caso base que nunca chega. Com `if (n == 1)` no lugar de `if (n <= 1)`,
-> `fatorial(0)` chama `fatorial(-1)`, que chama `fatorial(-2)`... e nunca para.
-> O mesmo acontece se você esquecer de diminuir (`fatorial(n)` em vez de
+> `fatorial(0)` chama `fatorial(-1)`, `fatorial(-2)`... e nunca para. O mesmo
+> ocorre se você esquecer de diminuir (`fatorial(n)` em vez de
 > `fatorial(n - 1)`). Cada chamada empilha um quadro, a pilha acaba e o
 > programa morre com **stack overflow**: o AddressSanitizer mostra
 > `stack-overflow`, e sem ele aparece só `Segmentation fault`.
 
 > [!TIP]
-> **Por dentro do C:** cada `fatorial` empilha um quadro com o `n`, o
-> endereço de retorno e espaço para a conta pendente. Por isso a recursão
-> gasta memória proporcional à **profundidade**: `fatorial(5)` usa 5 quadros
-> de uma vez; um laço usaria um só. Outro limite é o tipo: 12! = 479.001.600
-> cabe num `int` de 32 bits, mas 13! = 6.227.020.800 já não cabe e dá
-> overflow (o `-fsanitize=undefined` do gcc com as flags de estudo acusa). Curiosidade: com
-> `gcc -O2`, o compilador às vezes transforma a recursão em laço sozinho.
+> A recursão gasta memória proporcional à **profundidade**: `fatorial(5)` usa
+> 5 quadros de uma vez; um laço usaria um. Outro limite é o tipo: 12! =
+> 479.001.600 cabe num `int` de 32 bits, mas 13! = 6.227.020.800 dá overflow (o
+> `-fsanitize=undefined`, nas flags de estudo, acusa).
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `fatorial(0)` com o código acima? E
@@ -2028,7 +1974,7 @@ gcc ~/LPEDC/04-funcoes/0032-recursao/E190.c -o ~/LPEDC/04-funcoes/0032-recursao/
 **Exercício E191** · ★★★
 
 Esta função deveria somar os dígitos de um número (2026 -> 10), mas tem
-DOIS erros. O gcc com as flags de estudo mostra dois avisos, um para cada erro; leia os dois.
+DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois.
 Se você rodar mesmo assim, o programa morre com stack-overflow. Conserte
 os dois erros e rode até aparecer "2026 -> 10" e "99999 -> 45", sem
 nenhum aviso.
@@ -2079,32 +2025,29 @@ gcc ~/LPEDC/04-funcoes/0032-recursao/E192.c -o ~/LPEDC/04-funcoes/0032-recursao/
 
 ## 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
 
-A escada do prédio tem 4 degraus, e você sobe de 1 em 1 ou pulando 2 de uma
-vez. De quantos jeitos dá para subir? Pense no último passo: ou você chegou
-vindo do degrau 3 (com um passo de 1), ou do degrau 2 (com um pulo de 2).
-Então os jeitos de chegar ao 4 são os jeitos de chegar ao 3 **mais** os
-jeitos de chegar ao 2. Cada resposta é a soma das duas anteriores: 1, 2, 3,
-5... São 5 jeitos.
+A escada do prédio tem 4 degraus, e você sobe de 1 em 1 ou pulando 2. De
+quantos jeitos dá para subir? Pense no último passo: você veio do degrau 3 (um
+passo) ou do 2 (um pulo). Os jeitos de chegar ao 4 são os do 3 **mais** os do
+2. Cada resposta é a soma das duas anteriores: 1, 2, 3, 5... São 5 jeitos.
 
-Essa é a sequência de **Fibonacci**: 0, 1, 1, 2, 3, 5, 8, 13, 21... Cada
-termo é a soma dos dois anteriores, e os dois primeiros são dados. A definição
-já vem recursiva:
+Essa é a sequência de **Fibonacci**: 0, 1, 1, 2, 3, 5, 8, 13, 21... Cada termo
+é a soma dos dois anteriores, e os dois primeiros são dados. A definição já é
+recursiva:
 
 - `fib(0) = 0` e `fib(1) = 1` (dois casos base);
 - `fib(n) = fib(n - 1) + fib(n - 2)` (o caso recursivo, com **duas**
   chamadas).
 
-A escada de 4 degraus é `fib(5) = 5`. O código sai em três linhas e funciona.
-O problema é o custo. Cada chamada de `fib` gera mais duas, e elas não
-conversam entre si: `fib(5)` calcula `fib(3)` duas vezes, `fib(2)` três
-vezes, e o trabalho se repete do zero cada vez. O número de chamadas cresce
-quase dobrando a cada `n` a mais: é **exponencial**.
+A escada de 4 degraus é `fib(5) = 5`. O código tem três linhas e funciona, mas
+custa caro. Cada chamada de `fib` gera mais duas, que não se comunicam:
+`fib(5)` calcula `fib(3)` duas vezes e `fib(2)` três, refazendo o trabalho do
+zero. As chamadas quase dobram a cada `n` a mais: o crescimento é
+**exponencial**.
 
-A **árvore de chamadas** de `fib(5)` tem 15 nós, um para
-cada chamada (o número no círculo é o `n`). Os dois nós amarelos são
-`fib(3)`: o mesmo cálculo, com tudo o que vem embaixo dele, feito duas vezes.
-Já a pilha nunca passa de 5 quadros de `fib`, porque o programa desce um
-galho de cada vez:
+A **árvore de chamadas** de `fib(5)` tem 15 nós, um por chamada (o número no
+círculo é o `n`). Os dois nós amarelos são `fib(3)`: o mesmo cálculo, com tudo
+o que vem embaixo, feito duas vezes. A pilha nunca passa de 5 quadros de `fib`,
+porque o programa desce um galho de cada vez:
 
 <p align="center"><img src="04-funcoes/0033-recursao-na-pratica/ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
 
@@ -2140,39 +2083,38 @@ int main(void) {
 // fib(30) = 832040, com 2692537 chamadas
 ```
 
-Quase 2,7 milhões de chamadas para achar `fib(30)`. Um laço com duas variáveis
-(`anterior` e `atual`) faz a mesma conta em 30 passos. Para `fib(50)`, a
-versão recursiva levaria minutos; o laço, microssegundos. Quando as chamadas
-**repetem trabalho**, desconfie.
+Quase 2,7 milhões de chamadas para `fib(30)`. Um laço com duas variáveis
+(`anterior` e `atual`) faz a conta em 30 passos. Para `fib(50)`, a versão
+recursiva levaria minutos; o laço, microssegundos. Quando as chamadas **repetem
+trabalho**, desconfie.
 
-No fluxograma, o caso recursivo tem duas chamadas, uma depois da outra.
-A segunda só começa quando a primeira voltou com a resposta inteira:
+No fluxograma, o caso recursivo tem duas chamadas em sequência. A segunda só
+começa quando a primeira voltou com a resposta inteira:
 
 <p align="center"><img src="04-funcoes/0033-recursao-na-pratica/fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
 
 ### Quando a recursão é a melhor ideia: Hanói
 
 A **Torre de Hanói** tem três estacas (A, B e C) e discos de tamanhos
-diferentes empilhados em A, o maior embaixo. Leve todos para C, movendo um
-disco por vez e nunca pondo um maior sobre um menor. Parece difícil até você
-pensar recursivamente. Para mover `n` discos de A para C:
+diferentes em A, o maior embaixo. Leve todos para C, um disco por vez, sem pôr
+um maior sobre um menor. Parece difícil até você pensar recursivamente. Para
+mover `n` discos de A para C:
 
 1. mova os `n - 1` de cima de A para B (usando C de apoio);
 2. mova o disco maior de A para C;
 3. mova os `n - 1` de B para C (usando A de apoio).
 
-Os passos 1 e 3 são o mesmo problema com um disco a menos, e com os papéis das
-estacas trocados. Por isso a função recebe as três estacas como parâmetro. O
+Os passos 1 e 3 são o mesmo problema com um disco a menos e com as estacas
+trocadas de papel. Por isso a função recebe as três estacas como parâmetro. O
 exemplo A066 resolve 3 discos em 7 movimentos. Com `n` discos são `2ⁿ - 1`
 movimentos, e não existe jeito mais curto: aqui a recursão não desperdiça
 nada.
 
 ### Passo a passo: o MDC de Euclides
 
-O **máximo divisor comum** de dois números tem uma recursão de 2.300 anos: o
-MDC de `a` e `b` é o mesmo que o MDC de `b` e `a % b`; quando o segundo vira
-0, o primeiro é a resposta. Em C: `return b == 0 ? a : mdc(b, a % b);`. O
-teste de mesa de `mdc(1071, 462)`:
+O **máximo divisor comum** tem uma recursão de 2.300 anos: o MDC de `a` e `b` é
+o MDC de `b` e `a % b`; quando o segundo vira 0, o primeiro é a resposta. Em C:
+`return b == 0 ? a : mdc(b, a % b);`. O teste de mesa de `mdc(1071, 462)`:
 
 | Chamada | a | b | a % b |
 | --- | --- | --- | --- |
@@ -2182,20 +2124,19 @@ teste de mesa de `mdc(1071, 462)`:
 | `mdc(21, 0)` | 21 | 0 | caso base: devolve **21** |
 
 Quatro chamadas para números na casa do milhar: o resto cai muito rápido.
-Euclides faz **uma** chamada só por vez e encolhe depressa, por isso sai barato.
+Euclides faz **uma** chamada por vez e encolhe depressa, por isso sai barato.
 
 > [!WARNING]
-> Usar Fibonacci recursivo "de verdade" num programa. Ele serve para aprender
-> recursão e custo, não para calcular. Outra pegadinha: `fib(47)` já não cabe
-> num `int` de 32 bits (dá 2.971.215.073, acima de 2.147.483.647). Com
-> `unsigned` vai até `fib(47)`, com `long long` até `fib(92)`.
+> Fibonacci recursivo serve para aprender recursão e custo, não para calcular.
+> Outra pegadinha: `fib(47)` não cabe num `int` de 32 bits (dá 2.971.215.073,
+> acima de 2.147.483.647). Com `unsigned` vai até `fib(47)`, com `long long`
+> até `fib(92)`.
 
 > [!TIP]
-> **Por dentro do C:** a árvore mostra o **tempo** e a pilha mostra a
-> **memória**. O tempo de `fib(n)` é proporcional ao número de nós da árvore,
-> que cresce como 1,618ⁿ (a razão áurea aparece aqui). A memória é só a
-> altura da árvore: no máximo `n` quadros ao mesmo tempo, porque quando um
-> galho termina, os quadros dele saem da pilha e o espaço é reaproveitado
+> A árvore mostra o **tempo** e a pilha mostra a **memória**. O tempo de
+> `fib(n)` é proporcional ao número de nós da árvore, que cresce como 1,618ⁿ.
+> A memória é a altura da árvore: no máximo `n` quadros ao mesmo tempo, porque
+> quando um galho termina, seus quadros saem da pilha e o espaço é reaproveitado
 > pelo galho seguinte. Por isso `fib(40)` demora, mas não estoura a pilha.
 
 > [!NOTE]
@@ -2482,27 +2423,26 @@ gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E198.c -o ~/LPEDC/04-funcoes/003
 ## 0034 · Módulos: .h, .c e compilação separada
 
 Quando várias partes de um programa precisam converter quilômetros em milhas,
-ninguém cola o código da conversão em cada uma delas. Ele mora num lugar só, e
-quem precisa usa. No C, esse lugar é um **módulo**: um par de arquivos.
+ninguém cola a conversão em cada uma. Ela mora num lugar só, e quem precisa a
+usa. No C, esse lugar é um **módulo**: um par de arquivos.
 
 - **`conversao.h`** (o *header*, cabeçalho): a **interface**. Diz **o que** o
-  módulo oferece: os protótipos das funções, as constantes, os tipos. É o
-  contrato que quem usa precisa conhecer.
+  módulo oferece: protótipos das funções, constantes, tipos. É o contrato que
+  quem usa precisa conhecer.
 - **`conversao.c`**: a **implementação**. Diz **como**: o corpo das funções e
-  tudo o que é interno do módulo. Ele inclui o próprio `.h`, para o
-  compilador conferir que a implementação bate com o contrato.
+  tudo o que é interno. Inclui o próprio `.h`, para o compilador conferir que a
+  implementação bate com o contrato.
 
-Quem quer usar escreve `#include "conversao.h"`. O `#include` só
-**cola** o texto do arquivo ali. Com o `.h` colado, o compilador conhece os
-protótipos e confere cada chamada. Com aspas, o arquivo é procurado primeiro
-na pasta do seu `.c`; com `< >`, só nas pastas do sistema.
+Quem quer usar escreve `#include "conversao.h"`. O `#include` só **cola** o
+texto do arquivo ali, e com ele o compilador conhece os protótipos e confere
+cada chamada. Com aspas, o arquivo é procurado primeiro na pasta do seu `.c`;
+com `< >`, só nas pastas do sistema.
 
-Cada `.c` é compilado **sozinho**, sem saber que os outros existem. O
-compilador transforma cada um num **arquivo objeto** (`.o`). Quando ele vê a
-chamada `km_para_milhas(100)` em `viagem.c`, só sabe que a função existe (o
-protótipo prometeu), e deixa um buraco com o nome dela. Quem tapa o buraco é o
-**ligador** (*linker*), que junta os `.o` e procura cada nome. Isso é a
-**compilação separada**:
+Cada `.c` é compilado **sozinho**, sem saber dos outros, e vira um **arquivo
+objeto** (`.o`). Ao ver `km_para_milhas(100)` em `viagem.c`, o compilador só
+sabe que a função existe (o protótipo prometeu) e deixa um buraco com o nome
+dela. Quem tapa o buraco é o **ligador** (*linker*), que junta os `.o` e
+procura cada nome. Isso é a **compilação separada**:
 
 ```bash
 gcc -std=c17 -Wall -Wextra -c conversao.c       # gera conversao.o
@@ -2511,12 +2451,12 @@ gcc viagem.o conversao.o -o viagem                # o ligador junta
 gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
 ```
 
-Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
-recompilar tudo. O gcc com as flags de estudo do curso compila junto todo `.c` de apoio que
-estiver na pasta (todo arquivo que não se chama `A000.c` ou `E000.c`).
+Num projeto grande, mudar um `.c` recompila só ele e liga de novo. No curso, o
+gcc com as flags de estudo compila junto todo `.c` de apoio da pasta (todo
+arquivo que não se chama `A000.c` ou `E000.c`).
 
-O `conversao.h` é incluído pelos dois `.c`. Cada um vira
-um `.o` separado, e o ligador junta os dois no executável `viagem`:
+O `conversao.h` é incluído pelos dois `.c`. Cada um vira um `.o`, e o ligador
+junta os dois no executável `viagem`:
 
 <p align="center"><img src="04-funcoes/0034-modulos/ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
 
@@ -2536,8 +2476,8 @@ int conversoes_feitas(void);
 ```
 
 O `conversao.c` tem o corpo das quatro funções, um contador `static` e uma
-função auxiliar `static` (abra o arquivo na pasta). E o programa que usa só
-precisa do `.h` (chame este arquivo de `viagem.c`):
+função auxiliar `static` (abra o arquivo na pasta). O programa que usa só
+precisa do `.h` (chame-o de `viagem.c`):
 
 ```c
 #include <stdio.h>
@@ -2558,41 +2498,32 @@ int main(void) {
 // R$ 1000.00 = US$ 185.19
 ```
 
-Cada `.c` passa pelo compilador separado, e o erro de
-"função que não existe" só aparece no fim, no ligador:
+Cada `.c` passa pelo compilador separado, e o erro de "função que não existe"
+só aparece no fim, no ligador:
 
 <p align="center"><img src="04-funcoes/0034-modulos/fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
 
 Três peças fecham o assunto:
 
-- **include guard**: o trio `#ifndef CONVERSAO_H` / `#define CONVERSAO_H` /
-  `#endif` faz o conteúdo do `.h` entrar **uma vez só** por `.c`, mesmo que
-  ele seja incluído duas vezes (direto e por dentro de outro `.h`). Na
-  primeira vez, `CONVERSAO_H` não existe: o texto entra e o nome é definido.
-  Na segunda, o nome já existe e o texto é pulado. Use o nome do arquivo em
-  maiúsculas.
+- **include guard**: `#ifndef CONVERSAO_H` / `#define CONVERSAO_H` / `#endif`
+  faz o conteúdo do `.h` entrar **uma vez** por `.c`, mesmo incluído duas vezes
+  (direto e por dentro de outro `.h`). Na primeira vez, `CONVERSAO_H` não
+  existe: o texto entra e o nome é definido. Na segunda, o nome já existe e o
+  texto é pulado. Use o nome do arquivo em maiúsculas.
 - **`static` fora de função** esconde do resto do programa: o `contador` e a
-  `contar` de `conversao.c` não existem para os outros arquivos. Assim o
-  módulo pode mudar por dentro sem quebrar quem usa.
-- **`extern`** declara uma global que foi **definida** noutro arquivo:
-  `extern int limite;` no `.h`, `int limite = 10;` em **um** `.c` só. Use com
-  moderação: global compartilhada entre arquivos é global de novo.
+  `contar` de `conversao.c` não existem para os outros arquivos. Assim o módulo
+  muda por dentro sem quebrar quem o usa.
+- **`extern`** declara uma global **definida** noutro arquivo: `extern int
+  limite;` no `.h`, `int limite = 10;` em **um** `.c` só. Use com moderação:
+  global compartilhada entre arquivos é global de novo.
 
 > [!WARNING]
 > Pôr o **corpo** de uma função no `.h`. Se dois `.c` incluem esse `.h`, a
 > função existe duas vezes e o ligador reclama `multiple definition of`. O
-> include guard **não** salva: ele evita repetição dentro de um mesmo `.c`,
-> não entre arquivos diferentes. No `.h` vão protótipos, `#define` e, mais
-> para a frente, tipos. E nunca escreva `#include "conversao.c"`: funciona
-> por acaso no começo e quebra assim que o projeto cresce.
-
-> [!TIP]
-> **Por dentro do C:** rode `gcc -c conversao.c` e depois `nm conversao.o`. As
-> funções públicas aparecem com `T` (maiúsculo: visível para os outros); a
-> `contar`, com `t`, e o `contador`, com `b` (minúsculos: `static`, só deste
-> arquivo). Agora `gcc -c viagem.c` e `nm viagem.o`: as três conversões aparecem
-> com `U`, de *undefined*. São os buracos que o ligador tapa. O `.h` não gera
-> nada sozinho: ele só existe para o compilador.
+> include guard **não** salva: ele evita repetição dentro de um `.c`, não entre
+> arquivos. No `.h` vão protótipos, `#define` e, mais adiante, tipos. E nunca
+> escreva `#include "conversao.c"`: funciona por acaso no começo e quebra
+> quando o projeto cresce.
 
 > [!NOTE]
 > **Pergunta para você:** se você apagar o `#include "conversao.h"` do
@@ -2722,7 +2653,7 @@ gcc ~/LPEDC/04-funcoes/0034-modulos/E199.c ~/LPEDC/04-funcoes/0034-modulos/conve
 Use o módulo conversao.h, que está nesta pasta, para mostrar uma tabela de
 temperaturas de 0 °C a 40 °C, de 10 em 10. Não escreva nenhuma fórmula: use
 celsius_para_fahrenheit. No fim, mostre quantas conversões o módulo contou.
-O comando do exemplo compila o conversao.c junto, sozinho.
+O rodar compila o conversao.c junto, sozinho.
 
 
 ```text
@@ -2777,7 +2708,7 @@ Conversões do módulo: 1
 
 **Dicas:**
 
-1. O include do módulo já está aí embaixo; o comando do exemplo compila o conversao.c
+1. O include do módulo já está aí embaixo; o rodar compila o conversao.c
    junto, sozinho.
 2. O contador é static dentro do conversao.c: o seu arquivo não enxerga
    esse nome ('contador' undeclared). Só as funções do módulo contam.
@@ -2908,34 +2839,32 @@ gcc ~/LPEDC/04-funcoes/0034-modulos/E204.c ~/LPEDC/04-funcoes/0034-modulos/conve
 
 ## 0035 · Pré-processador: macros e #ifdef
 
-O "localizar e substituir" do editor troca todo `TAXA` por `0.05` no arquivo
-inteiro, sem entender nada do que está escrito. O **pré-processador** do C faz
-o mesmo, e roda **antes** do compilador. Toda linha que começa
-com `#` é para ele: `#include` cola um arquivo, `#define` cria uma
-substituição. Quando o compilador recebe o código, as diretivas já sumiram.
+O "localizar e substituir" do editor troca todo `TAXA` por `0.05` no arquivo,
+sem entender nada do texto. O **pré-processador** do C faz o mesmo e roda
+**antes** do compilador. Toda linha que começa com `#` é para ele: `#include`
+cola um arquivo, `#define` cria uma substituição. Quando o compilador recebe o
+código, as diretivas já sumiram.
 
-Você já usa `#define TAXA 0.05` para constantes. Mas o `#define` também aceita
-parâmetros, e aí vira uma **macro**:
+Você já usa `#define TAXA 0.05` para constantes. Com parâmetros, o `#define`
+vira uma **macro**:
 
 ```c
 #define QUAD(x) ((x) * (x))
 ```
 
-Cada vez que aparece `QUAD(alguma coisa)`, o pré-processador escreve
-`((alguma coisa) * (alguma coisa))`. Parece uma função, mas não é: não tem
-tipo, não tem chamada, não tem pilha. É **troca de texto**. O nome e o `(`
-ficam colados: `QUAD (x)` com espaço já é outra coisa (uma constante que vale
-`(x) ((x) * (x))`).
+Cada `QUAD(alguma coisa)` vira `((alguma coisa) * (alguma coisa))`. Parece
+função, mas não é: não tem tipo, chamada nem pilha. É **troca de texto**. O
+nome e o `(` ficam colados: `QUAD (x)`, com espaço, é uma constante que vale
+`(x) ((x) * (x))`.
 
-E troca de texto não respeita a precedência dos operadores. Sem parênteses,
+Troca de texto não respeita a precedência dos operadores. Sem parênteses,
 `QUAD_RUIM(lado + 3)` vira `lado + 3 * lado + 3`, e a multiplicação vem
-primeiro. A regra que resolve: **parênteses em volta de cada parâmetro e em
-volta da expressão inteira**.
+primeiro. A regra: **parênteses em volta de cada parâmetro e da expressão
+inteira**.
 
 No exemplo, o terreno tem `lado + 3` metros de lado, com `lado = 2`.
-O texto `QUAD_RUIM(lado + 3)` passa pelo pré-processador e chega ao compilador
-como `lado + 3 * lado + 3`, que dá 11. A versão com parênteses chega como
-`((lado + 3) * (lado + 3))` e dá 25:
+`QUAD_RUIM(lado + 3)` chega ao compilador como `lado + 3 * lado + 3`, que dá
+11. A versão com parênteses chega como `((lado + 3) * (lado + 3))` e dá 25:
 
 <p align="center"><img src="04-funcoes/0035-preprocessador/ideia.svg" alt="Diagrama da ideia: Pré-processador: macros e #ifdef" width="858"></p>
 
@@ -2966,9 +2895,9 @@ int main(void) {
 // 100 / QUAD(5)       = 4
 ```
 
-O pré-processador não pergunta nada sobre o C. Ele só
-procura o nome da macro e troca. Quem descobre o erro (quando descobre) é o
-compilador, olhando um código que você nem escreveu:
+O pré-processador não sabe nada de C: só procura o nome da macro e troca. Quem
+descobre o erro (quando descobre) é o compilador, olhando um código que você
+não escreveu:
 
 <p align="center"><img src="04-funcoes/0035-preprocessador/fluxograma.svg" alt="Fluxograma: Pré-processador: macros e #ifdef" width="365"></p>
 
@@ -2981,38 +2910,32 @@ O pré-processador também decide **o que entra** no programa, com a
 #endif
 ```
 
-Com `#define DEPURAR` no topo, a linha entra. Sem ele, ela nem chega ao
-compilador: o executável fica sem nenhum vestígio dela. Existem também
-`#ifndef` (se **não** foi definido, o mesmo do include guard), `#if`, `#elif`,
-`#else` e `#undef`. Dá para definir o nome pela linha de comando, sem mexer no
-código: `gcc -DDEPURAR programa.c`. Um truque útil: `#if 0` ... `#endif` desliga
-um trecho inteiro, mesmo que ele tenha comentários `/* */` dentro.
+Com `#define DEPURAR` no topo, a linha entra. Sem ele, nem chega ao
+compilador: o executável não guarda vestígio dela. Existem também `#ifndef`
+(se **não** foi definido, o do include guard), `#if`, `#elif`, `#else` e
+`#undef`. Dá para definir o nome pela linha de comando: `gcc -DDEPURAR
+programa.c`. E `#if 0` ... `#endif` desliga um trecho inteiro, mesmo com
+comentários `/* */` dentro.
 
-Ferramentas que o exemplo A070 usa:
+O exemplo A070 usa:
 
-- `__LINE__` vira o número da linha, e `__func__` o nome da função atual. Os
-  dois são ótimos em mensagens de depuração.
-- `#x` dentro de uma macro transforma o argumento em texto: `MOSTRAR(7 * 6)`
-  mostra `7 * 6 = 42`: a expressão e o valor numa linha só, sem repetir nada.
+- `__LINE__`, o número da linha, e `__func__`, o nome da função atual: úteis
+  em mensagens de depuração;
+- `#x` dentro de uma macro, que transforma o argumento em texto:
+  `MOSTRAR(7 * 6)` mostra `7 * 6 = 42`, a expressão e o valor numa linha.
 
 > [!WARNING]
 > A macro avalia o argumento **cada vez que ele aparece**. Com
-> `#define MAIOR(a, b) ((a) > (b) ? (a) : (b))`, a chamada `MAIOR(x++, y)`
-> pode incrementar `x` **duas vezes**. E não ponha `;` no fim do `#define`:
+> `#define MAIOR(a, b) ((a) > (b) ? (a) : (b))`, `MAIOR(x++, y)` pode
+> incrementar `x` **duas vezes**. E não ponha `;` no fim do `#define`:
 > `#define TAXA 0.05;` faz `preco * TAXA + 1` virar `preco * 0.05; + 1`. Às
-> vezes compila e faz a conta errada; às vezes dá um erro que aponta para uma
-> linha que parece perfeita.
+> vezes compila e erra a conta; às vezes o erro aponta para uma linha
+> aparentemente perfeita.
 
 > [!TIP]
-> **Por dentro do C:** salve o código acima como `terreno.c`, rode
-> `gcc -E terreno.c | tail -12` e veja o que o compilador recebe de verdade:
-> `printf(..., lado + 3 * lado + 3)`, sem
-> nenhuma macro. Por isso macro não aparece no depurador e não tem endereço.
-> Para cálculos, o C moderno prefere funções pequenas: com `gcc -O2`, o
-> compilador costuma copiar o corpo de uma função curta direto no lugar da
-> chamada (isso se chama *inlining*), e você ganha a mesma velocidade com
-> conferência de tipos e sem as armadilhas. Macro fica para o que só ela
-> faz: constantes, `#ifdef`, `__LINE__` e `#x`.
+> Para cálculos, o C moderno prefere funções pequenas: têm checagem de tipos e
+> não têm essas armadilhas. Macro fica para o que só ela faz: constantes,
+> `#ifdef`, `__LINE__` e `#x`.
 
 > [!NOTE]
 > **Pergunta para você:** com `#define DOBRO(x) (x) + (x)`, quanto vale
@@ -3317,14 +3240,14 @@ gcc ~/LPEDC/04-funcoes/0035-preprocessador/E210.c -o ~/LPEDC/04-funcoes/0035-pre
 ## 0036 · Juntando tudo: o caixa da lanchonete
 
 Sexta à noite, fila no food truck. O caixa lança os pedidos pelo código, soma,
-põe os 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
-número de notas e moedas. Parece um programa só, mas olhe as peças: um
-**módulo** com o cardápio, funções pequenas com **parâmetros** e retorno, um
-contador **`static`** escondido, uma **macro** para a taxa e uma função
-**recursiva** para o troco.
+põe 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
+número de notas e moedas. Parece um programa só, mas tem um **módulo** com o
+cardápio, funções pequenas com **parâmetros** e retorno, um contador
+**`static`** escondido, uma **macro** para a taxa e uma função **recursiva**
+para o troco.
 
-Antes de escrever, divida. Cada tarefa vira uma função com um nome que diz o
-que ela faz:
+Antes de escrever, divida: cada tarefa vira uma função com um nome que diz o
+que ela faz.
 
 | Peça | Onde | O que usa do módulo |
 | --- | --- | --- |
@@ -3335,19 +3258,18 @@ que ela faz:
 | `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
 | `TAXA_SERVICO` | `caixa.c` | `#define` |
 
-Uma decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira
-`790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e o troco de
-centavos pode sair errado. Na hora de mostrar, `%d.%02d` com `total / 100` e
-`total % 100` monta o "42.24". O único `double` é o valor pago, lido do
-teclado e convertido com `lround(pago * 100)`.
+Decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira `790`.
+Com `double`, `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e o troco
+pode sair errado. Para mostrar, `%d.%02d` com `total / 100` e `total % 100`
+monta o "42.24". O único `double` é o valor pago, lido do teclado e convertido
+com `lround(pago * 100)`.
 
-O troco é recursivo e lê como uma frase: "se o troco zerou, acabou; se a nota
-atual cabe, dê essa nota e resolva o resto; se não cabe, tente a nota
-seguinte". Cada chamada chega mais perto do fim, porque ou o troco diminui ou
-a nota diminui.
+O troco recursivo lê como uma frase: "se o troco zerou, acabou; se a nota atual
+cabe, dê essa nota e resolva o resto; se não cabe, tente a nota seguinte". Cada
+chamada chega mais perto do fim, pois o troco ou a nota diminui.
 
-Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço,
-a conta é R$ 42,24. Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
+Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço, a conta é R$ 42,24.
+Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 5 + 2 + 0,50 + 0,25 + 0,01:
 
 <p align="center"><img src="04-funcoes/0036-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
@@ -3458,37 +3380,27 @@ int main(void) {
 //   0.25
 //   0.01
 // Para testar sem digitar, salve como caixa.c numa pasta sua, com cópias do
-// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ./programa caixa.c
+// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ./caixa
 ```
 
-O laço dos pedidos termina com o código 0; depois vêm a
-conta, o pagamento e a decisão "pagou o suficiente?". O troco, que parece um
-laço, é a recursão de `dar_troco`:
+O laço dos pedidos termina com o código 0; depois vêm a conta, o pagamento e a
+decisão "pagou o suficiente?". O troco, que parece um laço, é a recursão de
+`dar_troco`:
 
 <p align="center"><img src="04-funcoes/0036-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
 
-O exemplo A072 mostra o outro lado de dividir em funções: dá para **testar
-cada peça sozinha**. Com a macro `CONFERIR` (a do exercício E210), ele confere
-o preço, o contador `static` e a contagem de notas sem digitar nada. Não
-precisa de biblioteca de testes: uma macro de dez linhas resolve.
+O exemplo A072 mostra a outra vantagem de dividir em funções: **testar cada
+peça sozinha**. Com a macro `CONFERIR` (a do exercício E210), ele confere o
+preço, o contador `static` e a contagem de notas sem digitar nada. Não precisa
+de biblioteca de testes: uma macro de dez linhas resolve.
 
 > [!WARNING]
 > Efeito colateral escondido. `preco_centavos` parece só consultar um preço,
-> mas também soma 1 no contador de itens vendidos. Se alguém chamar a função
-> duas vezes para o mesmo pedido (uma para somar, outra para mostrar o
-> preço), o item é contado em dobro, e nada no nome avisa. É a armadilha das
-> globais em escala menor. Quando uma função muda estado, deixe isso no nome
-> (`registrar_pedido`) ou separe em duas: uma que consulta e outra que
-> registra.
-
-> [!TIP]
-> **Por dentro do C:** no troco de R$ 7,76, a pilha chega a 17 quadros de
-> `dar_troco` ao mesmo tempo: 1 da primeira chamada, 5 das notas dadas, 11
-> das trocas de nota (de 100 para 50, de 50 para 20...). Nenhum sai antes
-> do caso base. A chamada recursiva é a última coisa que cada
-> `dar_troco` faz: isso se chama **recursão de cauda**, e com `-O2` o `gcc`
-> transforma tudo num laço, com um quadro só. Já o `cardapio.o` exporta 4 símbolos (`T`) e esconde o
-> `vendidos` (`b`): confira com `nm`.
+> mas também soma 1 no contador de itens vendidos. Chamá-la duas vezes para o
+> mesmo pedido (uma para somar, outra para mostrar o preço) conta o item em
+> dobro, e nada no nome avisa. É a armadilha das globais em escala menor.
+> Quando uma função muda estado, deixe isso no nome (`registrar_pedido`) ou
+> separe em duas: uma que consulta e outra que registra.
 
 > [!NOTE]
 > **Pergunta para você:** se o cliente pagar exatamente R$ 42,24, quantas
@@ -3679,7 +3591,7 @@ Nota 8, quantidade 3
 Para testar sem digitar:
 
 ```text
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E211.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E211 && printf '15\n8\n0\n3\n' | ~/LPEDC/04-funcoes/0036-juntando-tudo/E211
+printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E211.c
 ```
 
 **Dicas:**
@@ -3876,8 +3788,7 @@ gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E216.c ~/LPEDC/04-funcoes/0036-juntand
 
 ## Desafios do módulo
 
-Problemas para resolver num arquivo seu, misturando os assuntos do módulo. Do
-médio ao difícil.
+Problemas do médio ao difícil, para resolver num arquivo seu.
 
 **1. Dígito verificador.** Escreva `int digito_mod11(int numero)` para números
 de até 9 dígitos: multiplique os dígitos, do último para o primeiro, por 2, 3,
@@ -4998,9 +4909,9 @@ gcc ~/LPEDC/04-funcoes/lista/P0430.c -o ~/LPEDC/04-funcoes/lista/P0430 && ~/LPED
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
-alternativa certa. Nas de recursão, desenhe a pilha de chamadas: um quadro
-por chamada, com os parâmetros e o que cada uma devolve.
+Questões objetivas no formato da prova do PPGI: uma alternativa certa. Nas de
+recursão, desenhe a pilha: um quadro por chamada, com os parâmetros e o que
+cada uma devolve.
 
 **1.** Sobre funções e escopo em C, considere as afirmações e marque a alternativa CORRETA.
 

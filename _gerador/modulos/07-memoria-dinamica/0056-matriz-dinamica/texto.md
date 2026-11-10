@@ -5,44 +5,40 @@ por semana. Este mês são 3 lojas e 4 semanas. Mês que vem abre a quarta loja,
 e o trimestre tem 13 semanas. Uma matriz `int vendas[3][4]` não serve: as
 dimensões só aparecem quando o programa roda.
 
-O C só sabe alocar dinamicamente **vetores**, blocos de uma dimensão. Para ter
-uma matriz, você monta uma com vetores, de dois jeitos clássicos.
+O C só aloca **vetores** (uma dimensão). Para ter uma matriz, você monta uma
+com vetores, de dois jeitos.
 
-**1. Um bloco só.** Aloque `linhas * colunas` elementos e calcule a posição na
-mão: o elemento `(i, j)` fica em `v[i * colunas + j]`. É a mesma conta que o
-compilador faz por baixo numa matriz fixa (assunto 0039). Um `malloc`, um
-`free`, tudo contíguo. O preço: a notação `v[i][j]` não funciona.
+**1. Um bloco só.** Aloque `linhas * colunas` elementos e calcule a posição: o
+elemento `(i, j)` fica em `v[i * colunas + j]`, a conta que o compilador faz
+numa matriz fixa (assunto 0039). Um `malloc`, um `free`, tudo contíguo. O
+preço: `v[i][j]` não funciona.
 
-**2. Vetor de ponteiros.** Primeiro um vetor de `linhas` ponteiros
-(`int **m`), um para cada linha. Depois, um `malloc` por linha, cada uma com
-`colunas` inteiros. Agora `m[i][j]` funciona: `m[i]` é o endereço da linha i,
-e `[j]` anda dentro dela (é o `**` do assunto 0049 em ação).
+**2. Vetor de ponteiros.** Um vetor de `linhas` ponteiros (`int **m`), um por
+linha, e um `malloc` por linha com `colunas` inteiros. Agora `m[i][j]`
+funciona: `m[i]` é o endereço da linha i e `[j]` anda dentro dela (o `**` do
+assunto 0049).
 
-Uma regra ajuda a não errar o `sizeof`: **o que você aloca tem um `*` a menos
-que o ponteiro que recebe**. `int **m` recebe um vetor de `int *`; `m[i]`, que
-é `int *`, recebe um vetor de `int`. Com `sizeof *m` e `sizeof *m[i]`, a conta
-sai certa sozinha.
+Regra para o `sizeof`: **o que você aloca tem um `*` a menos que o ponteiro
+que recebe**. `int **m` recebe um vetor de `int *`; `m[i]` (`int *`) recebe um
+vetor de `int`. Com `sizeof *m` e `sizeof *m[i]`, a conta sai certa.
 
-Desde o C99 existe um atalho, o **VLA**: `int vendas[lojas][semanas];` com
-as dimensões em variáveis. Só que ele mora na **pilha**, que é pequena e não
-avisa quando estoura; o assunto 0172 mostra quando vale a pena.
+O C99 tem um atalho, o **VLA**: `int vendas[lojas][semanas];`. Ele mora na
+**pilha**, que é pequena e não avisa quando estoura; o assunto 0172 mostra
+quando vale a pena.
 
 Para liberar, a ordem importa: **primeiro cada linha, depois o vetor de
-ponteiros**. Se você der `free(m)` antes, perde os endereços das linhas, e
-elas ficam presas no heap para sempre.
+ponteiros**. Com `free(m)` antes, você perde os endereços das linhas, que
+ficam presas no heap.
 
-E se o `malloc` da terceira linha falhar? As duas primeiras já foram
-alocadas. A função de criação precisa desfazer o que já fez antes de devolver
-`NULL`.
+Se o `malloc` da terceira linha falhar, as duas primeiras já foram alocadas. A
+função de criação precisa desfazê-las antes de devolver `NULL`.
 
-A matriz de 3 lojas por 4 semanas é um vetor de 3
-ponteiros, cada um apontando para uma linha de 4 inteiros. As linhas podem
-estar em qualquer lugar do heap, nem precisam ficar juntas:
+A matriz de 3 lojas por 4 semanas é um vetor de 3 ponteiros, cada um para uma
+linha de 4 inteiros. As linhas podem estar em qualquer lugar do heap:
 
 {{ideia}}
 
-O código separa criar e liberar em funções, como você faria num projeto. As
-vendas estão em R$ mil:
+O código separa criar e liberar em funções. As vendas estão em R$ mil:
 
 ```c
 #include <stdio.h>
@@ -106,26 +102,21 @@ int main(void) {
 // Loja 3: R$ 78 mil
 ```
 
-A criação é um laço com uma saída de emergência: se uma linha falhar, o caminho de erro passa pela liberação do que já existe:
+A criação é um laço com saída de emergência: se uma linha falhar, o caminho de
+erro libera o que já existe:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O `sizeof` errado no vetor de ponteiros é um bug que muitos livros trazem:
-> `int **m = malloc(linhas * sizeof(int));`. Num PC de 64 bits, `int` tem 4
-> bytes e `int *` tem 8: você aloca metade do necessário e as últimas linhas
-> são gravadas fora do bloco. Funciona "às vezes" e corrompe o heap. Escreva
-> `sizeof *m` e esse erro some.
+> `int **m = malloc(linhas * sizeof(int));` é um bug comum. Num PC de 64 bits,
+> `int` tem 4 bytes e `int *` tem 8: você aloca metade do necessário e as
+> últimas linhas são gravadas fora do bloco. Escreva `sizeof *m`.
 
 > [!TIP]
-> **Por dentro do C:** `m[i][j]` com `int **` faz **dois** acessos à memória:
-> lê o ponteiro `m[i]` e depois o inteiro. Numa matriz fixa ou no bloco único,
-> é um acesso só, com uma conta. As linhas soltas no heap também não ficam
-> vizinhas, o que piora o uso do cache do processador. Em troca, você ganha
-> `m[i][j]` e linhas de **tamanhos diferentes**: num triângulo de Pascal, a
-> linha i tem i + 1 elementos. Existe ainda um meio-termo: um bloco único com
-> os dados e um vetor de ponteiros com `m[i] = bloco + i * colunas`. São só
-> dois `malloc`, os dados ficam contíguos e `m[i][j]` continua valendo.
+> `m[i][j]` com `int **` faz **dois** acessos à memória (o ponteiro `m[i]` e
+> o inteiro); numa matriz fixa ou no bloco único é um só. Em troca, as linhas
+> podem ter **tamanhos diferentes** (no triângulo de Pascal, a linha i tem
+> i + 1 elementos).
 
 > [!NOTE]
 > **Pergunta para você:** quantos `malloc` e quantos `free` o código acima faz

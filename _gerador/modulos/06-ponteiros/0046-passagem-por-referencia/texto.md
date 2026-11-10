@@ -1,44 +1,36 @@
 ## 0046 · Passagem por referência
 
-No mercadinho, alguém digitou as etiquetas trocadas: o arroz saiu por
-R$ 8 e o feijão por R$ 25. Você quer uma função `troca` que conserte isso.
-A versão óbvia não funciona, e o motivo está no jeito como o C chama
-funções.
+No mercadinho, as etiquetas saíram trocadas: o arroz a R$ 8 e o feijão a
+R$ 25. Você quer uma função `troca` que conserte isso. A versão óbvia não
+funciona, por causa do jeito como o C chama funções.
 
 No C, **todo argumento é passado por valor** (assunto 0029): a função recebe
-uma **cópia**. `troca_copias(arroz, feijao)` cria duas variáveis novas, `a`
-e `b`, com 8 e 25 dentro. A função troca as cópias, termina, e as cópias
-somem junto com o frame dela (assunto 0031). O `arroz` do `main` nem ficou
-sabendo.
+uma **cópia**. `troca_copias(arroz, feijao)` cria `a` e `b`, com 8 e 25, troca
+as cópias e termina; elas somem com o frame (assunto 0031). O `arroz` do
+`main` nem fica sabendo.
 
-A saída é mudar o que se entrega: em vez do valor, passe o **endereço**.
+A saída é entregar o **endereço** em vez do valor. A função recebe ponteiros,
+`void troca(int *a, int *b)`, e quem chama passa os endereços:
+`troca(&arroz, &feijao)`. O endereço também é copiado, mas a cópia aponta para
+**a mesma gaveta**. Dentro da função, `*a` é o próprio `arroz` do `main`. É a
+**passagem por referência** (no C, simulada com ponteiros).
 
-A função passa a receber ponteiros, `void troca(int *a, int *b)`, e quem
-chama entrega os endereços: `troca(&arroz, &feijao)`. O endereço também é
-copiado, mas a cópia de um endereço aponta para **a mesma gaveta**. Dentro
-da função, `*a` é o próprio `arroz` do `main`. Isso se chama **passagem por
-referência** (no C, simulada com ponteiros).
+Isso explica o `&` do `scanf`: `scanf("%d", &total)` precisa **escrever** na
+variável, então pede o endereço. Sem o `&`, receberia uma cópia do lixo de
+`total` e escreveria num endereço inventado. Já `scanf("%s", nome)` vai sem `&`
+porque o nome de um vetor já é o endereço do primeiro elemento (assunto 0038;
+o 0047 detalha).
 
-Isso explica o `&` do `scanf`. `scanf("%d", &total)` precisa
-**escrever** na sua variável, então pede o endereço dela. Sem o `&`, ele
-receberia uma cópia do lixo que está em `total` e tentaria escrever num
-endereço inventado. Já `scanf("%s", nome)` vai sem `&` porque o nome de um
-vetor já vira o endereço do primeiro elemento (assunto 0038; o 0047 mostra
-os detalhes).
+O mesmo truque resolve outro limite: o `return` devolve **um** valor só. Para
+entregar dois ou mais resultados, a função recebe ponteiros e escreve neles (o
+A092 racha a conta e devolve o valor de cada um e a sobra).
 
-O mesmo truque resolve outro problema: o `return` devolve **um** valor só.
-Quando a função precisa entregar dois ou mais resultados, ela recebe
-ponteiros e escreve neles (o A092 racha a conta e devolve o valor de cada
-um e a sobra).
-
-A função `troca` recebe os endereços `0x1000` e
-`0x1004`, guarda o 8 numa variável `tmp` e mexe direto nas gavetas do
-`main`:
+A `troca` recebe os endereços `0x1000` e `0x1004`, guarda o 8 em `tmp` e mexe
+direto nas gavetas do `main`:
 
 {{ideia}}
 
-O código põe as duas versões lado a lado, e só a segunda conserta as
-etiquetas:
+As duas versões lado a lado; só a segunda conserta as etiquetas:
 
 ```c
 #include <stdio.h>
@@ -76,8 +68,8 @@ int main(void) {
 
 ### Passo a passo
 
-Teste de mesa da chamada `troca(&arroz, &feijao)`, com os endereços
-fictícios do desenho:
+Teste de mesa de `troca(&arroz, &feijao)`, com os endereços fictícios do
+desenho:
 
 | linha | `a` | `b` | `tmp` | `arroz` (0x1000) | `feijao` (0x1004) |
 | --- | --- | --- | --- | --- | --- |
@@ -86,29 +78,25 @@ fictícios do desenho:
 | `*a = *b` | 0x1000 | 0x1004 | 8 | **25** | 25 |
 | `*b = tmp` | 0x1000 | 0x1004 | 8 | 25 | **8** |
 
-`a` e `b` nunca mudam: o que muda é o que está nas gavetas para onde eles
-apontam.
+`a` e `b` nunca mudam: muda o que está nas gavetas para onde apontam.
 
-O `main` só chama a troca se os preços estão fora de ordem. A troca em si são três passos, sempre com a variável auxiliar:
+O `main` só chama a troca se os preços estão fora de ordem. A troca são três
+passos, sempre com a variável auxiliar:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Dois erros clássicos. Esquecer o `&` na chamada: `troca(arroz, feijao)`
-> manda o número 8 onde a função espera um endereço. O compilador avisa
-> (`makes pointer from integer without a cast`) e, se rodar, o programa
-> tenta escrever na "gaveta 8" e cai. E esquecer o `*` dentro da função:
-> `tmp = a; a = b;` troca os **ponteiros** locais, que são cópias; nada muda
-> lá fora. Dentro da função, quem mexe no dado do chamador é sempre `*a`.
+> Dois erros clássicos. Esquecer o `&` na chamada: `troca(arroz, feijao)` manda
+> o número 8 onde se espera um endereço; o compilador avisa (`makes pointer from
+> integer without a cast`) e, se rodar, o programa escreve na "gaveta 8" e cai.
+> Esquecer o `*` na função: `tmp = a; a = b;` troca os **ponteiros** locais, que
+> são cópias, e nada muda lá fora. Quem mexe no dado do chamador é sempre `*a`.
 
 > [!TIP]
-> **Por dentro do C:** no x86-64, os primeiros argumentos viajam em
-> registradores do processador. Passar `&arroz` é copiar 8 bytes, o tamanho
-> de um endereço, não importa o tamanho do dado apontado. Por isso, no
-> módulo 08, struct grande vai por ponteiro: copiar 8 bytes é mais barato
-> que copiar 200. Quando a função só precisa **ler**, use `const int *p`: o
-> compilador recusa qualquer `*p = ...` lá dentro, e quem lê o protótipo sabe
-> que o dado volta intacto.
+> **Por dentro do C:** passar `&arroz` copia 8 bytes, seja qual for o tamanho do
+> dado apontado; por isso, no módulo 08, struct grande vai por ponteiro. Quando
+> a função só precisa **ler**, use `const int *p`: o compilador recusa `*p = ...`
+> lá dentro.
 
 > [!NOTE]
 > **Pergunta para você:** o que acontece em `troca(&arroz, &arroz)`? Os dois

@@ -9,33 +9,31 @@ assim:
 #2  main () at pedido.c:5
 ```
 
-Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** impressa no
-momento do erro. A função de cima estava rodando; ela foi chamada pela de
-baixo, que foi chamada pela de baixo dela.
+Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** no momento
+do erro. A função de cima estava rodando; foi chamada pela de baixo, que foi
+chamada pela de baixo dela.
 
-Cada vez que uma função é chamada, o programa reserva um pedaço de memória só
-para aquela chamada: o **quadro** (em inglês, *stack frame*, ou registro de
-ativação). Nele ficam:
+A cada chamada, o programa reserva um pedaço de memória só para ela: o
+**quadro** (*stack frame*, ou registro de ativação). Nele ficam:
 
 - os **parâmetros**, com as cópias dos argumentos;
 - as **variáveis locais** da função;
-- o **endereço de retorno**: em que ponto de quem chamou o programa continua
-  quando a função acabar.
+- o **endereço de retorno**: o ponto de quem chamou onde o programa continua
+  quando a função acaba.
 
 Os quadros se empilham como pratos. Chamou, empilha um quadro no **topo**.
 Retornou, o quadro do topo sai, e o de baixo continua de onde parou. A última
-função a começar é sempre a primeira a terminar: **último a entrar, primeiro a
-sair** (LIFO, de *last in, first out*). Só o quadro do topo está rodando; os
-outros estão parados, esperando um retorno.
+função a começar é a primeira a terminar: **último a entrar, primeiro a sair**
+(LIFO, de *last in, first out*). Só o quadro do topo roda; os outros esperam um
+retorno.
 
-É por isso que local "some" no `return`: o quadro dela foi desempilhado. Pelo
-mesmo motivo, uma função não enxerga as variáveis de quem a chamou: elas estão
-noutro quadro, mais embaixo.
+Por isso a local "some" no `return`: seu quadro foi desempilhado. Pelo mesmo
+motivo, uma função não enxerga as variáveis de quem a chamou: estão noutro
+quadro, mais embaixo.
 
-Num pedido de R$ 50,00, o `main` chama
-`total_com_entrega`, que chama `taxa_entrega`. No momento mais fundo há três
-quadros na pilha. Quando `taxa_entrega` devolve 7.90, o quadro dela sai, e
-`total_com_entrega` volta a rodar, já com o valor:
+Num pedido de R$ 50,00, o `main` chama `total_com_entrega`, que chama
+`taxa_entrega`. No ponto mais fundo há três quadros. Quando `taxa_entrega`
+devolve 7.90, seu quadro sai, e `total_com_entrega` volta a rodar com o valor:
 
 {{ideia}}
 
@@ -76,9 +74,9 @@ int main(void) {
 // Total: R$ 57.90
 ```
 
-No fluxograma, as chamadas empilham na descida, e os retornos
-desempilham na ordem contrária. A decisão da taxa acontece lá no topo, dentro
-de `taxa_entrega`, enquanto as outras duas funções esperam paradas:
+No fluxograma, as chamadas empilham na descida e os retornos desempilham na
+ordem contrária. A decisão da taxa ocorre no topo, dentro de `taxa_entrega`,
+enquanto as outras duas funções esperam:
 
 {{fluxograma}}
 
@@ -94,28 +92,21 @@ A pilha em cada momento, de baixo para cima (o topo é o último):
 | `taxa_entrega` devolveu 7.90 | `main` → `total_com_entrega` (total = 57.90) | `total_com_entrega` |
 | `total_com_entrega` devolveu 57.90 | `main` (total = 57.90) | `main` |
 
-Existem **dois** `valor`, um em cada quadro, e cada função mexe só
-no seu. E dois `total`: o do `main` e o de `total_com_entrega`.
+Há **dois** `valor`, um em cada quadro, e cada função mexe só no seu. E dois
+`total`: o do `main` e o de `total_com_entrega`.
 
 > [!WARNING]
-> Usar uma local sem inicializar e achar que ela "começa limpa". O quadro
-> novo ocupa o mesmo pedaço de memória que um quadro antigo acabou de
-> liberar, e ninguém apaga nada. Uma `int soma;` pode nascer com o valor que
-> uma local de outra função deixou ali. Às vezes o programa até "funciona",
-> por sorte, e quebra quando você muda outra coisa. O `-Wall` avisa
-> `may be used uninitialized`: não ignore.
+> Usar uma local sem inicializar e achar que "começa limpa". O quadro novo
+> ocupa o pedaço de memória que um quadro antigo acabou de liberar, e ninguém o
+> apaga. Uma `int soma;` pode nascer com o valor que uma local de outra função
+> deixou ali. Às vezes o programa "funciona" por sorte e quebra quando você
+> muda outra coisa. O `-Wall` avisa `may be used uninitialized`.
 
 > [!TIP]
-> **Por dentro do C:** a pilha é uma região de memória de tamanho fixo (no
-> Linux, 8 MB por padrão; confira com `ulimit -s`) e cresce **para baixo**,
-> dos endereços altos para os baixos. Um registrador do processador, o `rsp`,
-> aponta para o topo. Empilhar um quadro é só subtrair do `rsp`; desempilhar
-> é somar. Por isso chamar função é tão barato. Se a pilha passar do limite,
-> o sistema mata o programa: é o **stack overflow** (no Linux, aparece como
-> `Segmentation fault`). Com 8 MB e quadros de algumas dezenas de bytes, dá
-> para empilhar centenas de milhares de chamadas, mas não infinitas. No
-> `gdb`, o comando `bt` (*backtrace*) imprime a pilha, como no começo deste
-> assunto.
+> A pilha tem tamanho fixo (no Linux, 8 MB por padrão; confira com
+> `ulimit -s`). Se passar do limite, o sistema mata o programa: é o **stack
+> overflow** (no Linux, `Segmentation fault`). Dá para empilhar centenas de
+> milhares de chamadas, mas não infinitas.
 
 > [!NOTE]
 > **Pergunta para você:** mude o subtotal para 95.00. Quantos quadros a pilha

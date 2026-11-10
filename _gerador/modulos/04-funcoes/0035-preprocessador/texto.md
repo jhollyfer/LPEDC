@@ -1,33 +1,31 @@
 ## 0035 · Pré-processador: macros e #ifdef
 
-O "localizar e substituir" do editor troca todo `TAXA` por `0.05` no arquivo
-inteiro, sem entender nada do que está escrito. O **pré-processador** do C faz
-o mesmo, e roda **antes** do compilador. Toda linha que começa
-com `#` é para ele: `#include` cola um arquivo, `#define` cria uma
-substituição. Quando o compilador recebe o código, as diretivas já sumiram.
+O "localizar e substituir" do editor troca todo `TAXA` por `0.05` no arquivo,
+sem entender nada do texto. O **pré-processador** do C faz o mesmo e roda
+**antes** do compilador. Toda linha que começa com `#` é para ele: `#include`
+cola um arquivo, `#define` cria uma substituição. Quando o compilador recebe o
+código, as diretivas já sumiram.
 
-Você já usa `#define TAXA 0.05` para constantes. Mas o `#define` também aceita
-parâmetros, e aí vira uma **macro**:
+Você já usa `#define TAXA 0.05` para constantes. Com parâmetros, o `#define`
+vira uma **macro**:
 
 ```c
 #define QUAD(x) ((x) * (x))
 ```
 
-Cada vez que aparece `QUAD(alguma coisa)`, o pré-processador escreve
-`((alguma coisa) * (alguma coisa))`. Parece uma função, mas não é: não tem
-tipo, não tem chamada, não tem pilha. É **troca de texto**. O nome e o `(`
-ficam colados: `QUAD (x)` com espaço já é outra coisa (uma constante que vale
-`(x) ((x) * (x))`).
+Cada `QUAD(alguma coisa)` vira `((alguma coisa) * (alguma coisa))`. Parece
+função, mas não é: não tem tipo, chamada nem pilha. É **troca de texto**. O
+nome e o `(` ficam colados: `QUAD (x)`, com espaço, é uma constante que vale
+`(x) ((x) * (x))`.
 
-E troca de texto não respeita a precedência dos operadores. Sem parênteses,
+Troca de texto não respeita a precedência dos operadores. Sem parênteses,
 `QUAD_RUIM(lado + 3)` vira `lado + 3 * lado + 3`, e a multiplicação vem
-primeiro. A regra que resolve: **parênteses em volta de cada parâmetro e em
-volta da expressão inteira**.
+primeiro. A regra: **parênteses em volta de cada parâmetro e da expressão
+inteira**.
 
 No exemplo, o terreno tem `lado + 3` metros de lado, com `lado = 2`.
-O texto `QUAD_RUIM(lado + 3)` passa pelo pré-processador e chega ao compilador
-como `lado + 3 * lado + 3`, que dá 11. A versão com parênteses chega como
-`((lado + 3) * (lado + 3))` e dá 25:
+`QUAD_RUIM(lado + 3)` chega ao compilador como `lado + 3 * lado + 3`, que dá
+11. A versão com parênteses chega como `((lado + 3) * (lado + 3))` e dá 25:
 
 {{ideia}}
 
@@ -58,9 +56,9 @@ int main(void) {
 // 100 / QUAD(5)       = 4
 ```
 
-O pré-processador não pergunta nada sobre o C. Ele só
-procura o nome da macro e troca. Quem descobre o erro (quando descobre) é o
-compilador, olhando um código que você nem escreveu:
+O pré-processador não sabe nada de C: só procura o nome da macro e troca. Quem
+descobre o erro (quando descobre) é o compilador, olhando um código que você
+não escreveu:
 
 {{fluxograma}}
 
@@ -73,38 +71,32 @@ O pré-processador também decide **o que entra** no programa, com a
 #endif
 ```
 
-Com `#define DEPURAR` no topo, a linha entra. Sem ele, ela nem chega ao
-compilador: o executável fica sem nenhum vestígio dela. Existem também
-`#ifndef` (se **não** foi definido, o mesmo do include guard), `#if`, `#elif`,
-`#else` e `#undef`. Dá para definir o nome pela linha de comando, sem mexer no
-código: `gcc -DDEPURAR programa.c`. Um truque útil: `#if 0` ... `#endif` desliga
-um trecho inteiro, mesmo que ele tenha comentários `/* */` dentro.
+Com `#define DEPURAR` no topo, a linha entra. Sem ele, nem chega ao
+compilador: o executável não guarda vestígio dela. Existem também `#ifndef`
+(se **não** foi definido, o do include guard), `#if`, `#elif`, `#else` e
+`#undef`. Dá para definir o nome pela linha de comando: `gcc -DDEPURAR
+programa.c`. E `#if 0` ... `#endif` desliga um trecho inteiro, mesmo com
+comentários `/* */` dentro.
 
-Ferramentas que o exemplo A070 usa:
+O exemplo A070 usa:
 
-- `__LINE__` vira o número da linha, e `__func__` o nome da função atual. Os
-  dois são ótimos em mensagens de depuração.
-- `#x` dentro de uma macro transforma o argumento em texto: `MOSTRAR(7 * 6)`
-  mostra `7 * 6 = 42`: a expressão e o valor numa linha só, sem repetir nada.
+- `__LINE__`, o número da linha, e `__func__`, o nome da função atual: úteis
+  em mensagens de depuração;
+- `#x` dentro de uma macro, que transforma o argumento em texto:
+  `MOSTRAR(7 * 6)` mostra `7 * 6 = 42`, a expressão e o valor numa linha.
 
 > [!WARNING]
 > A macro avalia o argumento **cada vez que ele aparece**. Com
-> `#define MAIOR(a, b) ((a) > (b) ? (a) : (b))`, a chamada `MAIOR(x++, y)`
-> pode incrementar `x` **duas vezes**. E não ponha `;` no fim do `#define`:
+> `#define MAIOR(a, b) ((a) > (b) ? (a) : (b))`, `MAIOR(x++, y)` pode
+> incrementar `x` **duas vezes**. E não ponha `;` no fim do `#define`:
 > `#define TAXA 0.05;` faz `preco * TAXA + 1` virar `preco * 0.05; + 1`. Às
-> vezes compila e faz a conta errada; às vezes dá um erro que aponta para uma
-> linha que parece perfeita.
+> vezes compila e erra a conta; às vezes o erro aponta para uma linha
+> aparentemente perfeita.
 
 > [!TIP]
-> **Por dentro do C:** salve o código acima como `terreno.c`, rode
-> `gcc -E terreno.c | tail -12` e veja o que o compilador recebe de verdade:
-> `printf(..., lado + 3 * lado + 3)`, sem
-> nenhuma macro. Por isso macro não aparece no depurador e não tem endereço.
-> Para cálculos, o C moderno prefere funções pequenas: com `gcc -O2`, o
-> compilador costuma copiar o corpo de uma função curta direto no lugar da
-> chamada (isso se chama *inlining*), e você ganha a mesma velocidade com
-> conferência de tipos e sem as armadilhas. Macro fica para o que só ela
-> faz: constantes, `#ifdef`, `__LINE__` e `#x`.
+> Para cálculos, o C moderno prefere funções pequenas: têm checagem de tipos e
+> não têm essas armadilhas. Macro fica para o que só ela faz: constantes,
+> `#ifdef`, `__LINE__` e `#x`.
 
 > [!NOTE]
 > **Pergunta para você:** com `#define DOBRO(x) (x) + (x)`, quanto vale

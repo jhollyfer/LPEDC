@@ -1,53 +1,52 @@
 # Módulo 02 · Decisões
 
-Até aqui, todo programa do curso descia de cima para baixo, linha por linha,
-sempre pelo mesmo caminho. Agora ele passa a **escolher**: cobrar ou não o
-frete, liberar ou barrar a catraca, achar a faixa certa da multa. Essa é a
-segunda das três peças de qualquer algoritmo.
+Até aqui, todo programa descia de cima para baixo, sempre pelo mesmo caminho.
+Agora ele **escolhe**: cobrar ou não o frete, liberar ou barrar a catraca,
+achar a faixa da multa. É a segunda das três peças de qualquer algoritmo.
 
-A sintaxe é curta: `if`, `else`, `switch` e o ternário. O que importa é o que
-está por baixo. O C não nasceu com um tipo "verdadeiro ou falso": a verdade é
-um **número**, 0 é falso e qualquer outra coisa é verdade. Daí vêm
-pegadinhas como um `=` no lugar de `==`, que compila, roda e estraga a
-variável em silêncio.
+A sintaxe é curta: `if`, `else`, `switch` e o ternário. O importante é o que
+está por baixo: no C, a verdade é um **número**, 0 é falso e todo o resto é
+verdade. Daí vêm pegadinhas como `=` no lugar de `==`, que compila, roda e
+estraga a variável em silêncio.
 
-Por isso o módulo tem dois focos: escrever decisões claras e **desconfiar**
-de decisões que parecem certas. Os avisos do compilador viram aliados: o
-gcc com as flags de estudo liga todos, e quase toda pegadinha deste módulo dispara um.
+Os focos do módulo são escrever decisões claras e **desconfiar** das que
+parecem certas. Os avisos do compilador ajudam: com as flags de estudo, quase
+toda pegadinha deste módulo dispara um.
+
+Progressão: o módulo usa do 01 as variáveis, o `scanf` e seu retorno, a
+aritmética (em especial o `%`) e o `math.h`. Ele prepara o 03, em que uma
+decisão passa a controlar uma repetição.
 
 ## O que você vai aprender
 
-- os **operadores relacionais** e a verdade em C: comparação vale 0 ou 1, e `bool` de `<stdbool.h>`
-- os **operadores lógicos** `&&`, `||` e `!`, a tabela-verdade, o **curto-circuito** e as leis de De Morgan
+- **operadores relacionais** e a verdade em C: comparação vale 0 ou 1; `bool` de `<stdbool.h>`
+- **operadores lógicos** `&&`, `||` e `!`, tabela-verdade, **curto-circuito** e De Morgan
 - o **`if`**, as chaves e a armadilha do `;` depois da condição
-- o **`if/else`** e a pegadinha mais famosa do C: `=` no lugar de `==`
+- o **`if/else`** e a pegadinha do `=` no lugar de `==`
 - **`else if`**, `if` aninhado e o **else pendurado**
 - o **operador ternário**, a decisão que devolve um valor
-- o **`switch`**, o `break` e o **fall-through** (o acidental e o de propósito)
-- juntar tudo num programa que lê dados, valida a entrada e decide
+- o **`switch`**, o `break` e o **fall-through**
+- um programa que lê dados, valida a entrada e decide
 
 ## Antes de começar
 
 Nos fluxogramas, o caminho verde mostra por onde o exemplo passou.
 
 > [!TIP]
-> Para testar uma decisão de verdade, rode o programa **uma vez para cada
-> caminho** e, principalmente, nos **valores de fronteira**: se a regra é
-> "a partir de R$ 200", teste 199,99, 200 e 200,01. A maioria dos erros de
-> decisão mora na troca de um `>` por um `>=`.
+> Teste **cada caminho** e, principalmente, os **valores de fronteira**: se a
+> regra é "a partir de R$ 200", teste 199,99, 200 e 200,01. A maioria dos
+> erros de decisão é a troca de `>` por `>=`.
 
-Você precisa estar à vontade com o módulo 01: variáveis, `printf`, `scanf`
-(e o valor que ele devolve), os operadores aritméticos, em especial o `%`, e
-o `math.h`. Os exercícios que leem do teclado aceitam a entrada por um pipe,
-o que facilita testar vários casos seguidos:
+Você precisa conhecer o módulo 01: variáveis, `printf`, `scanf` (e seu
+retorno), operadores aritméticos (em especial o `%`) e `math.h`. Os exercícios
+com teclado aceitam entrada por pipe, o que facilita testar vários casos:
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0014-if/A028.c -o ~/LPEDC/02-condicionais/0014-if/A028 && printf '12.90 8.50\n' | ~/LPEDC/02-condicionais/0014-if/A028
 ```
 
-Alguns exercícios do tipo "ache o erro" trazem o código quebrado **de
-propósito** e por isso mostram avisos ao compilar. O enunciado sempre diz
-quando é o caso. Fora deles, a regra do curso vale: código bom compila com
+Os exercícios "ache o erro" trazem o código quebrado **de propósito** e mostram
+avisos ao compilar; o enunciado diz quando é o caso. Nos demais, vale a regra:
 **zero avisos**.
 
 {{indice}}
@@ -60,8 +59,8 @@ quando é o caso. Fora deles, a regra do curso vale: código bom compila com
 
 ## Desafios do módulo
 
-Problemas extras para fechar o módulo. Escreva cada um num arquivo seu, rode
-com as flags de estudo e teste todos os caminhos. Nada de laços ainda: só decisões.
+Problemas extras, só com decisões (sem laços). Escreva cada um num arquivo
+seu, compile com as flags de estudo e teste todos os caminhos.
 
 **1. Maior e menor de quatro.** Leia quatro números inteiros e mostre o maior
 e o menor, usando só `if` (sem `else`). Conte as comparações com uma variável
@@ -223,9 +222,9 @@ já faz isso).
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
-alternativa certa. Resolva no papel antes de abrir o gabarito. Vários trechos
-fazem o `-Wall` reclamar de propósito: é exatamente a pegadinha.
+Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
+Resolva no papel antes do gabarito. Vários trechos fazem o `-Wall` reclamar de
+propósito: é a pegadinha.
 
 **1.** Qual a saída?
 

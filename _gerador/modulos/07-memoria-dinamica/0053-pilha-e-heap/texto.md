@@ -5,12 +5,12 @@ bloquinho, arranca a folha e prende a comanda no balcão da cozinha. O
 bloquinho volta limpo para o bolso; a comanda fica lá até alguém pagar a conta
 e jogá-la fora.
 
-O seu programa faz a mesma coisa com a memória. Tem rascunho que dura só
-enquanto uma função trabalha e tem coisa que precisa sobreviver a ela. Até
-agora você só usou o primeiro tipo. Para o segundo, existe o **heap**.
+O seu programa faz o mesmo com a memória. Tem rascunho que dura só enquanto
+uma função trabalha e tem coisa que precisa sobreviver a ela. Até agora você
+só usou o primeiro tipo. Para o segundo, existe o **heap**.
 
-Quando o programa roda, o sistema operacional entrega a ele uma faixa de
-endereços dividida em quatro regiões:
+O sistema operacional entrega ao programa uma faixa de endereços dividida em
+quatro regiões:
 
 | Região | O que guarda | Quem cria e quem apaga | Dura |
 | --- | --- | --- | --- |
@@ -19,34 +19,33 @@ endereços dividida em quatro regiões:
 | **heap** | blocos pedidos com `malloc` | **você** pede e **você** devolve | até o `free` |
 | **pilha** | locais e parâmetros (os frames) | a chamada e o `return` | enquanto a função roda |
 
-A **pilha** (*stack*) você já conhece do assunto 0031: cada chamada empilha um
-**frame** com as locais, cada `return` desempilha. É automática e rapidíssima,
-mas tem duas limitações. A primeira: o frame some no `return`, então nada que
-mora nele sobrevive à função. A segunda: ela é pequena. No Linux, o padrão é
-8 MiB (`ulimit -s` mostra `8192`, em KiB).
+A **pilha** (*stack*), do assunto 0031, empilha um **frame** com as locais a
+cada chamada e o desempilha no `return`. É automática e rápida, mas tem duas
+limitações: o frame some no `return`, então nada que mora nele sobrevive à
+função; e ela é pequena (no Linux, 8 MiB: `ulimit -s` mostra `8192`, em KiB).
 
-O **heap** é um depósito grande, do tamanho da memória livre da máquina. Você
-pede um bloco de N bytes, recebe o **endereço** dele e usa como vetor. O bloco
-não pertence a função nenhuma: fica vivo até você devolvê-lo com `free`. Por
-isso dá para criar numa função e usar em outra.
+O **heap** é um depósito do tamanho da memória livre da máquina. Você pede um
+bloco de N bytes, recebe o **endereço** dele e usa como vetor. O bloco não
+pertence a função nenhuma: fica vivo até o `free`. Por isso dá para criar
+numa função e usar em outra.
 
-Nos livros você vai ver três nomes para isso: alocação **estática** (dados:
-tamanho e endereço fixos desde a compilação), **automática** (pilha) e
-**dinâmica** (heap, com `malloc`). São as mesmas regiões da tabela.
+Os livros chamam as regiões de alocação **estática** (dados: tamanho e
+endereço fixos desde a compilação), **automática** (pilha) e **dinâmica**
+(heap).
 
-Como o C não tem coletor de lixo (*garbage collector*, o mecanismo que apaga
-sozinho o que ninguém mais usa), tudo o que você pega do heap, você devolve.
+O C não tem coletor de lixo (*garbage collector*, que apaga sozinho o que
+ninguém mais usa). Tudo o que você pega do heap, você devolve.
 
-A função `abrir_comanda` monta a comanda da mesa 4 com
-três itens (R$ 18, R$ 25 e R$ 7). A variável `itens` mora no frame dela, na
-pilha. Os três valores vão para um bloco no heap. O contador `pedidos_do_dia`
-mora nos dados. Quando a função retorna, o frame dela some, mas o bloco
-continua lá, e `main` guarda o endereço dele:
+A função `abrir_comanda` monta a comanda da mesa 4 com três itens (R$ 18,
+R$ 25 e R$ 7). A variável `itens` mora no frame dela, na pilha. Os três
+valores vão para um bloco no heap. O contador `pedidos_do_dia` mora nos dados.
+Quando a função retorna, o frame some, mas o bloco continua lá e `main` guarda
+o endereço dele:
 
 {{ideia}}
 
-O `malloc` e o `free` ganham um assunto só deles (0054). Aqui, observe em
-que região cada coisa mora e quanto tempo ela vive:
+O `malloc` e o `free` têm assunto próprio (0054). Aqui, observe em que região
+cada coisa mora e quanto tempo vive:
 
 ```c
 #include <stdio.h>
@@ -86,28 +85,17 @@ int main(void) {
 // Pedidos do dia: 1
 ```
 
-O frame de `abrir_comanda` nasce e morre no meio do caminho, mas o bloco do heap atravessa o `return` e só termina no `free`, lá
-no fim de `main`:
+O frame de `abrir_comanda` nasce e morre no meio do caminho, mas o bloco do
+heap atravessa o `return` e só termina no `free`, no fim de `main`:
 
 {{fluxograma}}
 
 > [!WARNING]
 > Nunca devolva o endereço de uma variável local. `char senha[8]; ... return
-> senha;` devolve um endereço que deixa de valer no exato momento do `return`:
-> o próximo frame vai escrever por cima. O gcc avisa (`function returns address
-> of local variable`) e, de propósito, devolve `NULL` no lugar. As saídas são
-> três: quem chama empresta o vetor (parâmetro), a variável vira `static` ou o
-> bloco vem do heap.
-
-> [!TIP]
-> **Por dentro do C:** reservar espaço na pilha custa **uma instrução**: o
-> processador só diminui o registrador que marca o topo (`sub rsp, 32`). Por
-> isso locais saem quase de graça. O `malloc` precisa procurar um pedaço livre do
-> tamanho certo numa lista de blocos e anotar o tamanho num cabeçalho
-> escondido logo antes do endereço que ele te entrega. É bem mais caro. Rode
-> `size` no executável (`gcc A105.c -o bolao && size bolao`) e veja as
-> colunas `text` (código), `data` (globais com valor) e `bss` (globais
-> zeradas). Heap e pilha não aparecem: eles só existem quando o programa roda.
+> senha;` devolve um endereço que deixa de valer no `return`. O gcc avisa
+> (`function returns address of local variable`) e devolve `NULL` no lugar.
+> Saídas: quem chama empresta o vetor (parâmetro), a variável vira `static`
+> ou o bloco vem do heap.
 
 > [!NOTE]
 > **Pergunta para você:** um vetor local `int leituras[5000000];` (20 MB)

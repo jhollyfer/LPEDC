@@ -1,8 +1,8 @@
 ## 0024 · Laços aninhados
 
-Uma sala de cinema pequena tem 4 fileiras (A a D) com 5 poltronas cada. Para
-imprimir o mapa, você percorre a fileira A da poltrona 1 à 5, desce para a B e
-faz tudo de novo, e assim por diante. É uma repetição **dentro** de outra.
+Uma sala de cinema tem 4 fileiras (A a D) com 5 poltronas cada. Para imprimir
+o mapa, você percorre a fileira A da poltrona 1 à 5, desce para a B e repete.
+É uma repetição **dentro** de outra.
 
 Isso é um **laço aninhado**: o corpo de um laço contém outro laço inteiro. A
 regra:
@@ -10,27 +10,25 @@ regra:
 > a cada volta do laço **de fora**, o laço **de dentro** roda **do começo ao
 > fim**.
 
-É como no relógio: o ponteiro dos minutos dá uma volta completa a cada hora
-que passa. O de fora é o das horas, e o de dentro é o dos minutos.
+Como no relógio: o ponteiro dos minutos dá uma volta completa a cada hora. O
+de fora é o das horas, o de dentro é o dos minutos.
 
-Três consequências práticas:
+Três consequências:
 
-- o contador de dentro **recomeça** a cada volta de fora. No `for`, isso é
-  automático: o `int poltrona = 1` do cabeçalho roda de novo a cada vez. Com
-  `while`, você precisa zerar à mão (o exercício E142 mostra o estrago quando
-  esquece);
-- o corpo de dentro roda **(voltas de fora) x (voltas de dentro)** vezes: 4 x
-  5 = 20 no cinema;
+- o contador de dentro **recomeça** a cada volta de fora. No `for`, é
+  automático: o `int poltrona = 1` do cabeçalho roda de novo. No `while`, você
+  zera à mão (o exercício E142 mostra o estrago quando esquece);
+- o corpo de dentro roda **(voltas de fora) x (voltas de dentro)** vezes: 4 x 5
+  = 20 no cinema;
 - o limite de dentro pode **depender** do contador de fora. Com
-  `for (int col = 1; col <= linha; col++)`, a linha 1 tem 1 asterisco, a
-  linha 2 tem 2, e sai um triângulo (exemplo A048).
+  `for (int col = 1; col <= linha; col++)`, a linha 1 tem 1 asterisco, a linha
+  2 tem 2, e sai um triângulo (exemplo A048).
 
 Use nomes que digam quem é quem: `fileira` e `poltrona`, `linha` e `coluna`.
-Com `i` e `j`, a troca de um pelo outro é um erro difícil de ver.
+Com `i` e `j`, é fácil trocar um pelo outro sem perceber.
 
-O desenho congela o mapa no meio do caminho: a fileira A
-já saiu inteira (o laço de dentro deu suas 5 voltas), a B está na poltrona 3, e
-a C e a D ainda esperam a vez do laço de fora:
+O desenho congela o mapa no meio do caminho: a fileira A já saiu inteira, a B
+está na poltrona 3, e a C e a D esperam a vez do laço de fora:
 
 {{ideia}}
 
@@ -61,28 +59,25 @@ int main(void) {
 // Total: 20 lugares
 ```
 
-No fluxograma, são dois losangos, cada um com a sua seta de volta. A
-volta pequena (de "Mostrar e poltrona++" para "poltrona <= 5?") fica **dentro** da
-volta grande (de "pula linha" para "fileira <= 'D'?"). E logo depois do Sim de
-fora vem `poltrona = 1`: é ali que o laço de dentro recomeça:
+No fluxograma, são dois losangos, cada um com sua seta de volta. A volta
+pequena (de "Mostrar e poltrona++" para "poltrona <= 5?") fica **dentro** da
+grande (de "pula linha" para "fileira <= 'D'?"). Logo depois do Sim de fora vem
+`poltrona = 1`: ali o laço de dentro recomeça:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O `printf("\n")` no lugar errado muda o desenho inteiro. Dentro do laço de
-> dentro, sai uma poltrona por linha (20 linhas). Fora dos dois laços, sai tudo
-> numa linha só. Antes de escrever, pergunte: isto acontece **uma vez por
-> poltrona**, **uma vez por fileira** ou **uma vez no programa todo**? A
-> resposta diz em qual nível o comando fica. Lembre também que `break` sai só
+> O `printf("\n")` no lugar errado muda o desenho. Dentro do laço de dentro,
+> sai uma poltrona por linha (20 linhas). Fora dos dois, sai tudo numa linha.
+> Pergunte: isto acontece **uma vez por poltrona**, **uma vez por fileira** ou
+> **uma vez no programa**? A resposta diz o nível do comando. E o `break` sai só
 > do laço **mais interno** (assunto 0023).
 
 > [!TIP]
-> **Por dentro do C:** o custo de um laço aninhado é a **multiplicação**. Com 4
-> x 5 são 20 voltas, nada. Mas compare uma lista de 1.000 clientes com outra de
-> 1.000 pedidos, cada um contra cada um: 1.000 x 1.000 = 1 milhão de
-> comparações. Com 100 mil de cada lado, 10 bilhões, e o programa que levava um
-> segundo passa a levar horas. É o que o módulo de análise vai chamar de
-> **O(n²)**. Sempre que vir um laço dentro de outro, faça a conta.
+> O custo de um laço aninhado é a **multiplicação**: 4 x 5 = 20 voltas é nada,
+> mas comparar 1.000 clientes com 1.000 pedidos, cada um contra cada um, dá 1
+> milhão de comparações. É o **O(n²)** do módulo de análise. Ao ver um laço
+> dentro de outro, faça a conta.
 
 > [!NOTE]
 > **Pergunta para você:** se o laço de dentro fosse

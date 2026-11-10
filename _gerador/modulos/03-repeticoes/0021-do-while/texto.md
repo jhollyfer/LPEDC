@@ -1,13 +1,11 @@
 ## 0021 · Do-while
 
 A geladeira custa R$ 1.200 e o app pergunta: "em quantas parcelas (1 a 12)?".
-Você digita 15, ele recusa e pergunta de novo. Antes da primeira resposta,
-não há nada para conferir. A pergunta **tem** que aparecer
+Você digita 15, ele recusa e pergunta de novo. A pergunta **tem** que aparecer
 pelo menos uma vez.
 
-Com o `while`, a pergunta vem antes do corpo. Para usá-lo aqui, você teria que
-inventar um valor inválido só para entrar no laço (`parcelas = 0`). Funciona,
-mas é um truque. O **`do...while`** resolve sem truque: ele **faz primeiro e
+Com o `while`, você precisaria inventar um valor inválido só para entrar no
+laço (`parcelas = 0`). O **`do...while`** evita o truque: **faz primeiro e
 pergunta depois**.
 
 ```c
@@ -16,34 +14,32 @@ do {
 } while (condição);   // o ; no fim é obrigatório
 ```
 
-A ordem: roda o corpo, testa a condição; se der verdadeiro, volta para o
-começo do corpo. Por isso o corpo roda **uma ou mais vezes**, nunca zero. É o
-laço **com teste no fim** (pós-teste).
+Roda o corpo e testa a condição; se verdadeira, volta ao começo do corpo. O
+corpo roda **uma ou mais vezes**, nunca zero. É o laço **com teste no fim**
+(pós-teste).
 
-Cuidado com o pseudocódigo da prova: o `repita ... até condição` também testa
-no fim, mas a condição dele é de **parar**. `repita ... até x > 10` vira
+No pseudocódigo da prova, `repita ... até condição` também testa no fim, mas a
+condição é de **parar**: `repita ... até x > 10` vira
 `do { ... } while (!(x > 10));`, ou seja, `while (x <= 10)`.
 
-Ele serve para os casos em que a primeira volta é obrigatória:
+Use quando a primeira volta é obrigatória:
 
-- **validação de entrada**: pergunte, e repita enquanto a resposta for
+- **validação de entrada**: pergunte e repita enquanto a resposta for
   inválida;
-- **menu**: mostre as opções, execute a escolhida e repita até a pessoa
-  escolher "sair" (o exemplo A042 faz um caixa eletrônico);
+- **menu**: mostre as opções, execute a escolhida e repita até "sair" (o
+  exemplo A042 faz um caixa eletrônico);
 - **"jogar de novo?"**: a primeira partida sempre acontece.
 
-A condição do `do...while` descreve quando **repetir**, não quando parar.
-Numa validação, ela descreve o valor **inválido**: `parcelas < 1 || parcelas >
-12`.
+A condição descreve quando **repetir**. Numa validação, descreve o valor
+**inválido**: `parcelas < 1 || parcelas > 12`.
 
-No exemplo, a pessoa digita 0, depois 15, depois 4. As duas
-primeiras respostas caem fora da faixa, a pergunta "fora de 1 a 12?" responde
-Sim e o programa volta para pedir de novo. O 4 está dentro, a resposta é Não e
-o programa segue:
+No exemplo, a pessoa digita 0, 15 e 4. Os dois primeiros caem fora da faixa:
+"fora de 1 a 12?" responde Sim e o programa pergunta de novo. O 4 está dentro,
+a resposta é Não e o programa segue:
 
 {{ideia}}
 
-O mesmo app em C. O `if` em volta do `scanf` confere se chegou mesmo um número
+O mesmo app em C. O `if` em volta do `scanf` confere se chegou um número
 (assunto 0006):
 
 ```c
@@ -70,28 +66,19 @@ int main(void) {
 // 4x de R$ 300.00
 ```
 
-Aqui a leitura vem **antes** do losango. A seta do Sim sai do
-losango e volta para o começo do corpo, "Mostrar a pergunta". No `while` (assunto
-0020) a seta voltava para o losango porque a pergunta abria o laço; aqui ela
-fecha. O caminho verde passa três vezes pelo losango: duas pelo Sim e uma pelo
-Não:
+A leitura vem **antes** do losango. A seta do Sim sai do losango e volta ao
+começo do corpo, "Mostrar a pergunta". No `while` (assunto 0020) a seta
+voltava ao losango, que abria o laço; aqui ele fecha. O caminho verde passa
+três vezes pelo losango: duas pelo Sim e uma pelo Não:
 
 {{fluxograma}}
 
 > [!WARNING]
-> A condição é de **continuar**, não de parar. Quem pensa "o laço termina
-> quando as parcelas estiverem certas" escreve `while (parcelas >= 1 &&
-> parcelas <= 12)`, e o programa fica ao contrário: repete com o 4 e aceita o
-> 15. Leia sempre em voz alta: "faça isso **enquanto** ...". Para inverter uma
-> condição com `&&`, use De Morgan (assunto 0013): o contrário de `a && b` é
-> `!a || !b`.
-
-> [!TIP]
-> **Por dentro do C:** o `do...while` é o laço mais barato para a máquina: o
-> corpo, uma comparação e **um** salto condicional para trás. Tanto que o gcc,
-> com otimização ligada, costuma reescrever o seu `while` como "um `if` na
-> entrada e um `do...while` dentro" (*loop rotation*). A pergunta do topo vira
-> um teste único, e cada volta economiza um salto.
+> A condição é de **continuar**, não de parar. Quem escreve
+> `while (parcelas >= 1 && parcelas <= 12)` inverte o programa: repete com o 4
+> e aceita o 15. Leia em voz alta: "faça isso **enquanto** ...". Para inverter
+> uma condição com `&&`, use De Morgan (assunto 0013): o contrário de `a && b`
+> é `!a || !b`.
 
 > [!NOTE]
 > **Pergunta para você:** e se você apagar o `if` em volta do `scanf` e digitar

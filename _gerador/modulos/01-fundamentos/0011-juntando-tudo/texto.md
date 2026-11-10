@@ -1,33 +1,26 @@
 ## 0011 · Juntando tudo
 
-Chegou a conta de luz da república. São três moradores, e todo mês alguém
-pega o papel, faz a conta no celular e manda no grupo quanto cada um deve.
-Dá para fazer melhor: um programa que lê as duas leituras do relógio e o
-número de moradores e devolve a conta pronta, com o valor de cada um.
+Chegou a conta de luz da república, com três moradores. Todo mês alguém faz a
+divisão no celular e manda no grupo. Um programa pode ler as duas leituras do
+relógio e o número de moradores e devolver o valor de cada um.
 
-Esse programa usa tudo o que o módulo ensinou, na ordem em que aparece num
-programa real:
+Ele reúne tudo o que o módulo ensinou:
 
-- **constantes** (`#define`) para a tarifa e a taxa fixa: mudou a tarifa,
-  muda uma linha;
-- **variáveis** com o tipo certo: leituras do relógio são inteiras (`int`),
-  dinheiro é `double`;
-- **entrada** com `scanf`, com `&` em cada variável, e o retorno guardado;
+- **constantes** (`#define`) para a tarifa e a taxa fixa;
+- **variáveis** com o tipo certo: leituras em `int`, dinheiro em `double`;
+- **entrada** com `scanf`, `&` em cada variável e o retorno guardado;
 - **processamento** com aritmética, um operador composto (`+=`), um **cast**
   para a média não virar divisão inteira e o `ceil` para arredondar o
   centavo para cima (ninguém quer pagar um centavo a menos e deixar a conta
   descoberta);
 - **saída** com `printf` alinhado, largura e duas casas.
 
-É o modelo **entrada → processamento → saída** do começo do módulo, e é
-**sequência** pura: o programa faz sempre os
-mesmos passos, na mesma ordem. Ele não pergunta nada, não confere se a
-leitura atual é maior que a anterior, não repete. Isso vem nos módulos 02
-(decisão) e 03 (repetição).
+É o modelo **entrada → processamento → saída** e **sequência** pura: os mesmos
+passos, na mesma ordem. Ele não confere se a leitura atual é maior que a
+anterior nem repete nada. Isso vem nos módulos 02 (decisão) e 03 (repetição).
 
-Os três valores entram, o consumo vira 257 kWh, a
-conta vira R$ 229,24, e a divisão por três, com o centavo arredondado para
-cima, dá R$ 76,42 para cada um:
+Entram três valores; o consumo é 257 kWh, a conta é R$ 229,24 e a divisão por
+três, com o centavo para cima, dá R$ 76,42 para cada um:
 
 {{ideia}}
 
@@ -81,8 +74,8 @@ int main(void) {
 
 ### Passo a passo
 
-O teste de mesa com a entrada 45230, 45487 e 3. Cada linha é uma instrução
-do processamento; as colunas mostram o valor de cada variável depois dela:
+Teste de mesa com a entrada 45230, 45487 e 3. Cada linha é uma instrução; as
+colunas mostram as variáveis depois dela:
 
 | Instrução | consumo | total | por_dia | cada |
 | --- | --- | --- | --- | --- |
@@ -96,26 +89,17 @@ Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100 dá 7641,33...; o `ceil`
 sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
 dois centavos, mas a conta fica paga.
 
-Uma leitura, quatro contas e uma saída, sem nenhum losango: assim é todo
-programa deste módulo:
+Entrada, quatro contas e saída, sem nenhum losango, como todo programa deste
+módulo:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8, e
-> a média por dia sairia 8.00. E a ordem das contas importa: se o `ceil`
-> viesse antes da multiplicação por 100, `ceil(76.4133)` arredondaria para
-> R$ 77, e cada um pagaria 58 centavos a mais. Faça o teste de mesa antes de
-> confiar numa fórmula.
-
-> [!TIP]
-> **Por dentro do C:** este programa ocupa poucas dezenas de bytes de
-> variáveis: cinco `int` (4 bytes cada) e três `double` (8 cada), todos na
-> mesma região da memória, a **pilha**, que você vai estudar no módulo de
-> funções. As constantes do `#define` nem estão lá: viraram números dentro
-> das instruções. E o `ceil` vem da `libm`, ligada pelo `-lm`: rode
-> `nm -D` no executável e procure `ceil`, `printf` e `scanf`, as funções que o
-> ligador deixou para buscar nas bibliotecas na hora de rodar.
+> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8 e a
+> média por dia sairia 8.00. A ordem das contas também importa: com o `ceil`
+> antes da multiplicação por 100, `ceil(76.4133)` daria R$ 77, e cada um
+> pagaria 58 centavos a mais. Faça o teste de mesa antes de confiar numa
+> fórmula.
 
 > [!NOTE]
 > **Pergunta para você:** e se alguém digitar a leitura atual menor que a

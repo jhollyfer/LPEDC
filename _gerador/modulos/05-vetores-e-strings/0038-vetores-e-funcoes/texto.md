@@ -1,45 +1,40 @@
 ## 0038 · Vetores e funções
 
 A lanchonete da esquina vai reajustar o cardápio em 10%. A coxinha de R$ 12,50
-passa a R$ 13,75, o suco de R$ 8,00 vai para R$ 8,80. Você escreve uma função
-`reajustar` e chama passando o vetor de preços. Pergunta: a função mexe nos
-preços do `main` ou numa cópia?
+passa a R$ 13,75, o suco de R$ 8,00 vai para R$ 8,80. Você escreve a função
+`reajustar` e passa o vetor de preços. Ela mexe nos preços do `main` ou numa
+cópia?
 
-No assunto 0029 você viu que o C passa argumentos **por valor**: a função
-recebe uma cópia, e mexer na cópia não muda o original. Com vetor é diferente
-na prática: **a função mexe no vetor original**. Isso acontece porque o C nunca
-copia um vetor inteiro para uma função. O que vai é **o endereço em que o
-vetor começa**, e a função escreve nas mesmas gavetas.
+No assunto 0029, o C passa argumentos **por valor**: a função recebe uma cópia.
+Com vetor é diferente: **a função mexe no vetor original**. O C nunca copia um
+vetor inteiro para a função. Vai **o endereço onde o vetor começa**, e a função
+escreve nas mesmas gavetas.
 
-Na declaração, o parâmetro leva colchetes vazios. Na chamada, vai só o nome,
-sem colchetes:
+No parâmetro, os colchetes ficam vazios. Na chamada, vai só o nome:
 
 ```c
 void reajustar(double precos[], int n, double percentual); // protótipo
 reajustar(cardapio, 4, 10);                                // chamada
 ```
 
-Daí o `int n`. Como só o endereço do começo chega à função, **o tamanho
-não vai junto** e a função não tem como descobrir quantos itens existem: você
-passa o tamanho num parâmetro separado. Vetor + tamanho é um par que aparece
-no curso inteiro, já que não existe `.length`.
+Por isso o `int n`: como só o endereço chega, **o tamanho não vai junto** e a
+função não tem como descobri-lo. Vetor + tamanho é um par que aparece no curso
+inteiro.
 
 Um número dentro dos colchetes do parâmetro é ignorado: `double precos[4]`,
-`double precos[100]` e `double precos[]` são a mesma coisa para o compilador.
-Prefira os colchetes vazios, que não fingem uma informação que não existe.
+`double precos[100]` e `double precos[]` são iguais para o compilador. Prefira
+os colchetes vazios.
 
-E quando a função **não deve** mexer no vetor? Marque o parâmetro com
+Quando a função **não deve** mexer no vetor, marque o parâmetro com
 **`const`**: `void mostrar(const double precos[], int n)`. Se alguém escrever
-`precos[0] = 0;` dentro dela, o compilador dá erro. É documentação que o
-compilador confere.
+`precos[0] = 0;` dentro dela, o compilador dá erro.
 
-O `main` guarda o vetor `cardapio`. A função recebe o endereço dele no
-parâmetro `precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
+O `main` guarda o vetor `cardapio`. A função recebe o endereço dele em
+`precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
 
 {{ideia}}
 
-O código separa as duas tarefas: `reajustar` escreve (sem `const`), `mostrar`
-só lê (com `const`):
+`reajustar` escreve (sem `const`) e `mostrar` só lê (com `const`):
 
 ```c
 #include <stdio.h>
@@ -77,36 +72,31 @@ int main(void) {
 // R$   6.05
 ```
 
-No fluxograma, o `main` chama, a função percorre as 4 gavetas e volta.
-Ela não devolve nada (`void`), e mesmo assim o `main` enxerga os preços novos,
-porque ela escreveu direto no vetor dele:
+No fluxograma, o `main` chama e a função percorre as 4 gavetas. Ela é `void`,
+mas o `main` enxerga os preços novos, porque ela escreveu direto no vetor dele:
 
 {{fluxograma}}
 
-Já **um elemento** passado sozinho vai por valor, como
-qualquer `double`. Uma função `reajustar_um(double preco)` chamada com
-`cardapio[0]` recebe uma cópia do 12.50 e não muda nada. É o vetor inteiro (o
-nome sem colchetes) que vai pelo endereço. O exemplo A076 mostra as duas
-coisas lado a lado.
+Um **elemento** passado sozinho vai por valor, como qualquer `double`:
+`reajustar_um(double preco)` chamada com `cardapio[0]` recebe uma cópia do
+12.50 e não muda nada. Só o vetor inteiro (o nome sem colchetes) vai pelo
+endereço. O exemplo A076 mostra as duas coisas lado a lado.
 
 > [!WARNING]
 > **`sizeof` dentro da função não dá o tamanho do vetor.** No `main`,
 > `sizeof(cardapio)` vale 32 (4 × 8 bytes). Dentro de `reajustar`,
-> `sizeof(precos)` vale 8 num PC de 64 bits: é o tamanho de um **endereço**,
-> não do vetor. O truque `sizeof(v) / sizeof(v[0])` só funciona no bloco em
-> que o vetor foi declarado. O gcc até avisa (`-Wsizeof-array-argument`), mas quem ignora
-> o aviso ganha um laço que percorre 1 item em vez de 4.
+> `sizeof(precos)` vale 8 num PC de 64 bits: é o tamanho de um **endereço**. O
+> truque `sizeof(v) / sizeof(v[0])` só funciona onde o vetor foi declarado. O
+> gcc avisa (`-Wsizeof-array-argument`); quem ignora ganha um laço que percorre
+> 1 item em vez de 4.
 
 > [!TIP]
-> **Por dentro do C:** quando o `main` chama `reajustar(cardapio, 4, 10)`, o
-> frame da função na pilha (assunto 0031) recebe três coisas: um endereço (8
-> bytes), um `int` e um `double`. Os 32 bytes do vetor ficam onde estão, no
-> frame do `main`. Para um vetor de um milhão de itens, a chamada custa o
-> mesmo: 8 bytes. Copiar vetores inteiros a cada chamada sairia caro demais.
-> O preço é que qualquer função que recebe o vetor
-> pode estragá-lo; o `const` é a sua defesa. No módulo 06 você vai ver que
-> esse endereço é um **ponteiro**, e que `double precos[]` no parâmetro é só
-> outro jeito de escrever isso.
+> **Por dentro do C:** a chamada passa ao frame da função (assunto 0031) um
+> endereço (8 bytes), um `int` e um `double`; os 32 bytes do vetor ficam no
+> frame do `main`. Por isso passar um vetor custa 8 bytes, seja de 4 itens ou
+> de um milhão, e por isso a função pode estragá-lo (o `const` protege). No
+> módulo 06 esse endereço será um **ponteiro**, e `double precos[]` é só outro
+> jeito de escrevê-lo.
 
 > [!NOTE]
 > **Pergunta para você:** e se você chamasse `reajustar(cardapio, ITENS, 10)`

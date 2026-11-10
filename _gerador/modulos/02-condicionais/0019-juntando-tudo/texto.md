@@ -1,11 +1,11 @@
 ## 0019 · Juntando tudo: a conta de luz
 
-A conta de luz do módulo 01 voltou, agora cheia de decisões. O valor depende do
-consumo, da **bandeira** do mês (verde, amarela ou vermelha), de você ter ou
-não **tarifa social**, de uma taxa de iluminação que muda com o consumo, e
-ainda vem um carimbo dizendo se o seu consumo foi baixo, médio ou alto.
+A conta de luz do módulo 01 voltou, agora com decisões. O valor depende do
+consumo, da **bandeira** do mês (verde, amarela ou vermelha), da **tarifa
+social**, de uma taxa de iluminação que muda com o consumo, e um carimbo diz
+se o consumo foi baixo, médio ou alto.
 
-Cada pedaço pede uma ferramenta diferente do módulo:
+Cada decisão pede uma ferramenta do módulo:
 
 | Decisão | Ferramenta | Por quê |
 | --- | --- | --- |
@@ -15,25 +15,22 @@ Cada pedaço pede uma ferramenta diferente do módulo:
 | consumo baixo, médio ou alto? | `else if` | faixas, testadas em ordem |
 | a leitura deu certo e o consumo não é negativo? | `if` com `\|\|` | barra a entrada ruim logo no começo |
 
-A última linha cuida da entrada: um programa que lê do teclado precisa
-desconfiar de quem digita. O `scanf` devolve **quantos valores conseguiu ler** (assunto
-0006): se você pediu um número e a pessoa digitou "abc", ele devolve 0. A
-primeira decisão do programa é essa: se a entrada não presta, avisa e sai com
-`return 1` (o código de erro que o terminal enxerga). Esse padrão tem nome:
-**cláusula de guarda**. Trate o caso ruim primeiro e o resto do código fica
-reto, sem um `else` gigante.
+A última linha cuida da entrada: quem lê do teclado precisa desconfiar de
+quem digita. O `scanf` devolve **quantos valores leu** (0006): se pediu um
+número e veio "abc", devolve 0. A primeira decisão do programa é essa: com
+entrada inválida, avisa e sai com `return 1` (o código de erro que o terminal
+enxerga; `echo $?` o mostra). Esse padrão é a **cláusula de guarda**: trate o
+caso ruim primeiro e o resto fica reto, sem um `else` gigante.
 
-As tarifas do exemplo são simplificadas, mas a estrutura é a de uma conta de
-verdade: energia a R$ 0,80 por kWh, bandeira amarela com R$ 0,02 a mais por
-kWh, vermelha com R$ 0,05, desconto social de 40%.
+As tarifas são simplificadas: energia a R$ 0,80 por kWh, bandeira amarela com
+R$ 0,02 a mais por kWh, vermelha com R$ 0,05, desconto social de 40%.
 
-O exemplo: consumo de 230 kWh, bandeira amarela, sem tarifa social.
-Cada decisão do módulo entra em cena uma vez, e o total sai no terminal:
+No exemplo, consumo de 230 kWh, bandeira amarela, sem tarifa social. Cada
+decisão do módulo entra uma vez, e o total sai no terminal:
 
 {{ideia}}
 
-O programa completo. Ele lê os três dados, e o comentário no fim mostra uma
-execução:
+O programa lê os três dados; o comentário no fim mostra uma execução:
 
 ```c
 #include <stdbool.h>
@@ -115,28 +112,17 @@ int main(void) {
 // Total: R$ 203.60
 ```
 
-A primeira decisão é a guarda, com uma saída direta para o Fim. Depois dela,
-o caminho é quase uma linha reta, com um único desvio opcional para o
-desconto:
+A guarda tem uma saída direta para o Fim. Depois dela, o caminho é quase reto,
+com um único desvio opcional para o desconto:
 
 {{fluxograma}}
 
 > [!WARNING]
 > **A ordem dos passos é parte da regra.** O desconto social vale sobre a
-> energia **e** a bandeira, mas não sobre a iluminação. Se você somar a
-> iluminação antes de calcular os 40%, a conta muda e ninguém percebe, porque
-> o programa compila e roda. Antes de escrever, faça um **teste de mesa** com
-> um caso que passa por todos os ramos (150 kWh, verde, com tarifa social:
+> energia **e** a bandeira, não sobre a iluminação. Somar a iluminação antes
+> dos 40% muda a conta sem erro algum. Faça um **teste de mesa** com um caso
+> que passe por todos os ramos (150 kWh, verde, com tarifa social:
 > 120 + 0 - 48 + 15 = **R$ 87.00**) e confira com a saída.
-
-> [!TIP]
-> **Por dentro do C:** o `return 1` da guarda tem destino: o valor que o
-> `main` devolve vira o **código de saída** do processo. No terminal,
-> `echo $?` logo depois de rodar mostra 0 (deu certo) ou 1 (deu erro). Scripts
-> e ferramentas como o `make` usam esse número para decidir se continuam.
-> No `switch`, o `default` também tem um `return`: assim o
-> compilador sabe que `adicional` sempre recebe um valor antes de ser usado.
-> Tire o `return` e o `gcc -O2 -Wall` avisa que ela pode ser usada sem valor.
 
 > [!NOTE]
 > **Pergunta para você:** com 400 kWh, bandeira vermelha e tarifa social,

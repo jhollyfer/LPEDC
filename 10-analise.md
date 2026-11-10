@@ -2,53 +2,48 @@
 
 # Módulo 10 · Pensar como cientista da computação
 
-Até aqui a pergunta foi "como escrevo isso em C?". Daqui para a frente, com
-listas, pilhas, árvores e grafos, ela muda para "**qual** jeito de escrever é o
-certo?". Para listar pedidos dá para usar um vetor ou uma lista encadeada, e
-para achar um cliente, uma busca sequencial, uma binária ou uma tabela hash.
-Todas funcionam com 10 itens. Com 1 milhão, umas respondem na hora e outras
-travam o servidor.
+Até aqui a pergunta foi "como escrevo isso em C?". Daqui em diante, com
+listas, pilhas, árvores e grafos, passa a ser "**qual** jeito de escrever é o
+certo?". Vetor ou lista encadeada, busca sequencial, binária ou hash: todos
+funcionam com 10 itens. Com 1 milhão, uns respondem na hora e outros travam o
+servidor.
 
-Este módulo traz as ferramentas para decidir, em três ideias que atravessam o
-resto do curso: **medir o custo** contando passos e resumindo o
-crescimento na notação O; **ter certeza de que está certo** com invariantes de
-laço, em vez de confiar em meia dúzia de testes; e **esconder os detalhes**
-atrás de um tipo abstrato de dado, para poder trocar a implementação sem
-quebrar quem usa.
+Três ideias, que atravessam o resto do curso: **medir o custo** contando
+passos e resumindo o crescimento na notação O; **ter certeza de que está
+certo** com invariantes de laço, em vez de meia dúzia de testes; e **esconder
+os detalhes** atrás de um tipo abstrato de dado, para trocar a implementação
+sem quebrar quem usa.
 
-Você provavelmente já esbarrou nisso sem dar nome: a busca dentro de um laço
-que deixou o programa lento, o módulo que esconde a implementação atrás de
-funções. Aqui essas coisas ganham nome, e o C mostra o custo de cada escolha.
+Usa o que veio antes: funções, vetores, ponteiros, `malloc`/`free` e `struct`
+(os arquivos do módulo 09 já mostraram o ganho do acesso direto, que aqui vira
+a notação O). Prepara os módulos 11 a 16: cada estrutura será medida em O e
+construída como TAD.
 
 ## O que você vai aprender
 
-- medir a **eficiência** de um algoritmo contando passos: melhor, pior e caso médio
+- medir a **eficiência** contando passos: melhor, pior e caso médio
 - ler e escrever a **notação O**: O(1), O(log n), O(n), O(n log n) e O(n²), e por que constantes somem
-- enunciar **invariantes de laço** e usá-los para provar que um laço está certo (e achar bugs)
-- montar um **tipo abstrato de dado** com interface (`.h`), implementação (`.c`) e tipo opaco: o padrão de todos os próximos módulos
+- enunciar **invariantes de laço** e usá-los para provar um laço (e achar bugs)
+- montar um **tipo abstrato de dado** com interface (`.h`), implementação (`.c`) e tipo opaco: o padrão dos próximos módulos
 
 ## Antes de começar
 
 Nos exemplos, mude o n, troque os dados, quebre um invariante de propósito e
 veja o `assert` disparar. Nos desenhos de custo, verde é o que continua leve e
-vermelho é o custo que explodiu.
+vermelho, o que explodiu. Os contadores de passos medem trabalho, não
+segundos: os números saem iguais aos do texto na sua máquina.
 
-Você vai usar tudo dos módulos anteriores, em especial funções, vetores,
-ponteiros, `malloc`/`free` e `struct`. Duas novidades pequenas:
+Novidades pequenas:
 
 - `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
   falsa. É assim que um invariante vira código.
-- **arquivos de apoio**: no assunto 0074, a pasta tem `contador.h`,
-  `contador.c`, `conta.h` e `conta.c` além dos exemplos. O comando do exemplo compila
-  junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então basta
-  rodar o exemplo, como sempre:
+- **arquivos de apoio**: no 0074, a pasta tem `contador.h`, `contador.c`,
+  `conta.h` e `conta.c`. O comando do exemplo compila junto todo `.c` da pasta
+  que não se chama `A000.c`/`E000.c`:
 
 ```bash
 gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A147 && ~/LPEDC/10-analise/0074-tad/A147
 ```
-
-Os contadores de passos dos exemplos não medem segundos, medem trabalho: na
-sua máquina, os números saem iguais aos do texto.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -61,46 +56,44 @@ sua máquina, os números saem iguais aos do texto.
 
 ## 0071 · Eficiência: contar passos
 
-Sexta à noite, padaria cheia. Você entrega a comanda 70 no caixa e a moça
-procura no bolo de comandas, uma por uma. Se a sua for a primeira, você sai
-na hora. Se for a última, espera o bolo inteiro. Com 8 comandas, tanto faz.
-Com 800, faz muita diferença.
+Sexta à noite, padaria cheia. Você entrega a comanda 70 e a moça procura no
+bolo de comandas, uma por uma. Se a sua for a primeira, você sai na hora; se
+for a última, espera o bolo inteiro. Com 8 comandas, tanto faz. Com 800, faz
+diferença.
 
-Até aqui a pergunta era "o programa está **certo**?". Agora entra outra: "ele
-é **rápido** o bastante?". E "rápido" não se mede em segundos.
-O mesmo código leva 2 ms no seu notebook, 9 ms num Raspberry Pi e 40 ms se o
-Chrome estiver aberto com 30 abas.
+Até aqui a pergunta era "o programa está **certo**?". Agora é "ele é
+**rápido** o bastante?". E isso não se mede em segundos: o mesmo código leva
+2 ms no notebook, 9 ms num Raspberry Pi e 40 ms com o Chrome aberto em 30
+abas.
 
-O que não muda de máquina para máquina é **quantos passos** o algoritmo dá.
-Você escolhe a operação que domina o trabalho (a **operação dominante**) e
-conta quantas vezes ela acontece. Numa busca, é a comparação `v[i] == alvo`.
-O `i++` e o `i < n` também rodam, mas andam junto com a comparação: contar um
-ou outro dá a mesma ideia de custo.
+O que não muda de máquina é **quantos passos** o algoritmo dá. Escolha a
+operação que domina o trabalho (a **operação dominante**) e conte quantas
+vezes ela ocorre. Numa busca, é a comparação `v[i] == alvo`: o `i++` e o
+`i < n` andam junto com ela e dão a mesma ideia de custo.
 
-A conta depende da entrada, e não só do tamanho dela. Por isso se fala em três
-casos:
+A conta depende da entrada, não só do tamanho. Daí três casos:
 
-- **melhor caso**: a entrada mais camarada (a comanda está na frente): 1 passo;
-- **pior caso**: a mais azarada (está no fim ou nem está lá): n passos;
-- **caso médio**: a média de todas as posições possíveis: (n + 1) / 2 passos.
+- **melhor caso**: a entrada mais favorável (a comanda está na frente): 1
+  passo;
+- **pior caso**: a mais desfavorável (está no fim ou não está): n passos;
+- **caso médio**: a média de todas as posições: (n + 1) / 2 passos.
 
-Escrita como fórmula de n, essa contagem é a **função de custo** (o Ziviani
-diz **função de complexidade**): aqui, f(n) = n no pior caso. Quando se
-conta tempo (passos), é a **complexidade temporal**; quando se conta memória
-extra, é a **complexidade espacial** (assunto 0168).
+Escrita como fórmula de n, a contagem é a **função de custo** (o Ziviani diz
+**função de complexidade**): aqui, f(n) = n no pior caso. Contar passos dá a
+**complexidade temporal**; contar memória extra, a **complexidade espacial**
+(assunto 0168).
 
-O pior caso é o que permite prometer alguma coisa: "nunca passa de n passos".
-O melhor caso não promete nada, como dizer que a Marginal nunca tem trânsito
-porque às 4 da manhã ela estava livre.
+Só o pior caso permite prometer algo: "nunca passa de n passos". O melhor caso
+não promete nada, como dizer que a Marginal nunca tem trânsito porque às 4 da
+manhã estava livre.
 
-No exemplo, a comanda 70 está na posição 6. A busca compara com as 6
-primeiras, erra todas, e acerta na 7ª comparação. A 41 sai em 1 passo; a 99,
-que não está no bolo, custa as 8:
+No exemplo, a comanda 70 está na posição 6: a busca erra as 6 primeiras e
+acerta na 7ª comparação. A 41 sai em 1 passo; a 99, que não está no bolo,
+custa as 8:
 
 <p align="center"><img src="10-analise/0071-eficiencia/ideia.svg" alt="Diagrama da ideia: Eficiência: contar passos" width="858"></p>
 
-O contador é uma variável global que a função soma a cada comparação: um
-medidor que você acopla ao código só para estudar o custo.
+O contador é uma variável global somada a cada comparação, só para estudar o custo.
 
 ```c
 #include <stdio.h>
@@ -135,8 +128,7 @@ int main(void) {
 // comanda 99: posição -1, passos: 8
 ```
 
-Com o bolo crescendo, a contagem para vários tamanhos de entrada vira uma
-tabela, e é com ela que se comparam algoritmos:
+Para vários tamanhos de entrada, a contagem vira uma tabela que compara algoritmos:
 
 | comandas (n) | melhor caso | caso médio | pior caso |
 | --- | --- | --- | --- |
@@ -145,30 +137,24 @@ tabela, e é com ela que se comparam algoritmos:
 | 80.000 | 1 | 40.000,5 | 80.000 |
 
 Multiplicou n por 100, o pior caso também multiplicou por 100. O próximo
-assunto parte dessa observação.
+assunto parte disso.
 
-O laço do fluxograma tem só duas saídas: a pergunta "achou?" responde Sim, ou
-as comandas acabam. Cada volta pelo losango de baixo soma um passo no
-contador:
+O laço do fluxograma tem duas saídas: "achou?" responde Sim, ou as comandas
+acabam. Cada volta pelo losango de baixo soma um passo:
 
 <p align="center"><img src="10-analise/0071-eficiencia/fluxograma.svg" alt="Fluxograma: Eficiência: contar passos" width="869"></p>
 
 > [!WARNING]
-> Contar a coisa errada engana. Se você puser o `passos++` **depois** do `if`
-> que dá `return`, a comparação que acertou não entra na conta e a busca da
-> comanda 41 aparece com 0 passos. E se esquecer de zerar o contador entre uma
-> busca e outra, ele acumula: 1, 8, 16. Confira o caso mais simples à mão
-> (achar na primeira posição custa 1).
+> Contar a coisa errada engana. Com o `passos++` **depois** do `if` que dá
+> `return`, a comparação que acertou fica fora e a comanda 41 aparece com 0
+> passos. Sem zerar o contador entre buscas, ele acumula: 1, 8, 16. Confira o
+> caso mais simples à mão (achar na primeira posição custa 1).
 
 > [!TIP]
-> **Por dentro do C:** medir tempo com `clock()` de `<time.h>` funciona, mas
-> engana fácil com entradas pequenas: numa busca de microssegundos, o ruído
-> (outros programas, cache, o próprio sistema) é maior que o tempo medido, e
-> cada execução dá um número diferente. E compilado com `-O2`, o
-> `gcc` pode **apagar** um laço inteiro cujo resultado ninguém usa, e o tempo
-> medido vira zero. Contar passos não tem esses problemas: o contador é usado
-> no `printf`, então o compilador é obrigado a manter o laço, e o número sai
-> igual em qualquer máquina.
+> **Por dentro do C:** medir tempo com `clock()` engana com entradas pequenas
+> (o ruído do sistema supera o tempo medido), e com `-O2` o `gcc` pode apagar
+> um laço cujo resultado ninguém usa. O contador, usado no `printf`, mantém o
+> laço e dá o mesmo número em qualquer máquina.
 
 > [!NOTE]
 > **Pergunta para você:** se o bolo tivesse 8 comandas **em ordem crescente**
@@ -529,24 +515,23 @@ gcc ~/LPEDC/10-analise/0071-eficiencia/E426.c -o ~/LPEDC/10-analise/0071-eficien
 
 ## 0072 · Notação O: como o custo cresce
 
-Você fez o app da hamburgueria. Testou com 8 pedidos: voou. Uma semana depois,
-64 pedidos por noite: tudo bem. Aí veio a Black Friday com 1024 pedidos e uma
-tela travou. O código não mudou, mas o **n** sim, e cada parte do
-programa reagiu de um jeito diferente a ele.
+Você fez o app da hamburgueria. Com 8 pedidos, voou; com 64 por noite, tudo
+bem; na Black Friday, com 1024, uma tela travou. O código não mudou, o **n**
+sim, e cada parte reagiu de um jeito.
 
 O assunto anterior contou passos. Agora a pergunta é **como a contagem cresce
-quando n cresce**, e a **notação O** (fala-se "ó grande") resume a resposta
-numa expressão curta. Ela ignora duas coisas de propósito:
+quando n cresce**, e a **notação O** (fala-se "ó grande") responde com uma
+expressão curta. Ela ignora de propósito:
 
-- **constantes multiplicativas**: 3n e 100n são os dois O(n). A constante
-  depende da máquina e de detalhes; o formato do crescimento, não;
-- **termos menores**: em n² + 50n + 7, o n² engole o resto quando n cresce.
-  Com n = 1000, ele vale 1.000.000 e o 50n só 50.000. Fica O(n²).
+- **constantes multiplicativas**: 3n e 100n são ambos O(n). A constante
+  depende da máquina; o formato do crescimento, não;
+- **termos menores**: em n² + 50n + 7, o n² domina quando n cresce. Com
+  n = 1000, ele vale 1.000.000 e o 50n só 50.000. Fica O(n²).
 
-A definição formal (a do Cormen): f(n) é **O(g(n))** se existem c > 0 e
-n₀ com 0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto**: "nunca cresce mais
-rápido que g". **Ω** é o piso (f ≥ c · g) e **Θ**, teto e piso juntos:
-n² + 50n + 7 é Θ(n²) (assunto 0166). As cinco classes do curso, da melhor para a pior:
+Definição formal (Cormen): f(n) é **O(g(n))** se existem c > 0 e n₀ com
+0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto**: "nunca cresce mais rápido
+que g". **Ω** é o piso (f ≥ c · g) e **Θ**, teto e piso juntos: n² + 50n + 7
+é Θ(n²) (assunto 0166). As cinco classes do curso, da melhor para a pior:
 
 | classe | nome | n dobra, o custo... | exemplo |
 | --- | --- | --- | --- |
@@ -556,17 +541,17 @@ n² + 50n + 7 é Θ(n²) (assunto 0166). As cinco classes do curso, da melhor pa
 | O(n log n) | "n log n" | pouco mais que dobra | merge sort |
 | O(n²) | quadrática | **quadruplica** | comparar todos os pares |
 
-Para ler a classe de um código, olhe os laços. Um laço que anda de 1 em 1 até
-n é O(n). Dois laços aninhados até n, O(n²). Um laço que **divide** n por 2 a
-cada volta é O(log n): de 1024 até 1 são só 10 cortes, porque 2¹⁰ = 1024. E a
-base do log não importa: trocar log₂ por log₁₀ só muda uma constante.
+Para ler a classe de um código, olhe os laços. Um laço de 1 em 1 até n é
+O(n). Dois aninhados até n, O(n²). Um laço que **divide** n por 2 a cada
+volta é O(log n): de 1024 até 1 são 10 cortes, porque 2¹⁰ = 1024. A base do
+log não importa: trocar log₂ por log₁₀ só muda uma constante.
 
-O exemplo faz cinco perguntas sobre os mesmos pedidos, cada uma com o seu
-ritmo. Em verde, o que continua leve em 1024; em vermelho, o que explodiu:
+O exemplo faz cinco perguntas sobre os mesmos pedidos, cada uma com seu ritmo.
+Em verde, o que continua leve em 1024; em vermelho, o que explodiu:
 
 <p align="center"><img src="10-analise/0072-big-o/ideia.svg" alt="Diagrama da ideia: Notação O: como o custo cresce" width="858"></p>
 
-Cada função conta os passos de uma pergunta. Rode e veja a tabela se formar:
+Cada função conta os passos de uma pergunta:
 
 ```c
 #include <stdio.h>
@@ -634,33 +619,28 @@ int main(void) {
 //   1024     1     10   1024    10240   523776
 ```
 
-Na última coluna, comparar todos os pares dá n(n − 1)/2, mais ou menos n²/2.
-A metade é uma constante e some na notação: continua O(n²). De 64 para 1024 o
-n cresceu 16 vezes e essa coluna cresceu 260 vezes, enquanto a do log ganhou
-4 passos.
+Na última coluna, comparar todos os pares dá n(n − 1)/2, cerca de n²/2. A
+metade é constante e some: continua O(n²). De 64 para 1024, n cresceu 16
+vezes, essa coluna 260 vezes, e a do log ganhou 4 passos.
 
-O fluxograma mostra o laço do O(log n) com n = 1024. A pergunta "n > 1?"
-responde Sim só 10 vezes, porque cada volta joga metade fora:
+O fluxograma mostra o laço do O(log n) com n = 1024. "n > 1?" responde Sim só
+10 vezes, porque cada volta joga metade fora:
 
 <p align="center"><img src="10-analise/0072-big-o/fluxograma.svg" alt="Fluxograma: Notação O: como o custo cresce" width="531"></p>
 
 > [!WARNING]
-> O(n) não é "sempre mais rápido" que O(n²). A notação fala do **crescimento**,
-> não do tempo para um n específico. Um algoritmo de 100n passos perde de um de
-> n² até n = 100 (o exemplo A144 mostra a virada). Para 10 itens, o simples
-> costuma ganhar. A segunda pegadinha é a inversa: um laço O(n) que chama, a
-> cada volta, uma função O(n) dá **O(n²)**, mesmo parecendo um laço só. O
-> exemplo clássico no C é o `strlen(s)` na condição do `for`.
+> O(n) não é "sempre mais rápido" que O(n²): a notação fala do
+> **crescimento**, não do tempo para um n específico. Um algoritmo de 100n
+> passos perde de um de n² só a partir de n = 100 (o A144 mostra a virada).
+> Para 10 itens, o simples costuma ganhar. A pegadinha inversa: um laço O(n)
+> que chama a cada volta uma função O(n) dá **O(n²)**. Exemplo clássico: o
+> `strlen(s)` na condição do `for`.
 
 > [!TIP]
-> **Por dentro do C:** `v[i]` é O(1) com i valendo 3 ou 3 milhões porque o
-> vetor é contínuo na memória e o endereço sai de uma conta só:
-> `endereço de v + i * sizeof(int)`. O processador faz isso numa instrução.
-> Numa lista encadeada (módulo 11) não existe essa conta: para chegar no
-> elemento i é preciso seguir i ponteiros, um por um: a mesma pergunta custa
-> O(n). A estrutura de dados decide a classe antes de você escrever o
-> algoritmo.
-
+> **Por dentro do C:** `v[i]` é O(1) porque o vetor é contínuo e o endereço
+> sai de uma conta: `endereço de v + i * sizeof(int)`. Numa lista encadeada
+> (módulo 11) não há essa conta: chegar ao elemento i exige seguir i
+> ponteiros, O(n). A estrutura de dados decide a classe antes do algoritmo.
 
 > [!NOTE]
 > **Pergunta para você:** se um algoritmo O(n²) leva 1 segundo com 10.000
@@ -854,7 +834,7 @@ f) O(n^2)          0.5500     0.5005     0.5000
 
 **Dicas:**
 
-1. log2() está em <math.h> (o gcc com as flags de estudo já liga com -lm).
+1. log2() está em <math.h> (o rodar já liga com -lm).
 2. Para não repetir 18 printf, escreva uma função que recebe o rótulo, a
    fórmula e a aposta como ponteiros para função (assunto 0050):
    void linha(const char *rotulo, double (*f)(double), double (*g)(double)).
@@ -964,7 +944,7 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
 
 **Dicas:**
 
-1. log2() está em <math.h> (o gcc com as flags de estudo já liga com -lm). Faça as contas em
+1. log2() está em <math.h> (o rodar já liga com -lm). Faça as contas em
    double.
 2. Um laço n = 2, 3, 4, ... que para (break) no primeiro n em que
    50 * n * log2(n) < 2.0 * n * n.
@@ -1022,48 +1002,44 @@ gcc ~/LPEDC/10-analise/0072-big-o/E432.c -o ~/LPEDC/10-analise/0072-big-o/E432 &
 
 ## 0073 · Invariantes de laço e corretude
 
-Fim do expediente na lanchonete. Você confere o caixa: troco inicial mais as
-vendas do dia tem que bater com o que está na gaveta. E essa conta não vale
-só no fim: depois de **cada** cliente atendido, "gaveta = troco + vendas até
-agora" continua verdadeiro. Se em algum momento não bater, você sabe que o
-erro aconteceu ali.
+Fim do expediente na lanchonete: troco inicial mais vendas tem que bater com
+a gaveta. E a conta vale depois de **cada** cliente: "gaveta = troco + vendas
+até agora". Se em algum momento não bater, o erro foi ali.
 
-Um laço funciona igual. Testar com alguns valores mostra que ele acertou
-**naqueles** valores. Para ter certeza de que acerta sempre, você procura uma
-frase que fica verdadeira volta após volta. Essa frase é o **invariante de
-laço**: uma relação entre as variáveis que vale **no começo de cada
-iteração**, logo antes do teste do laço.
+Um laço funciona igual. Testar alguns valores mostra que ele acertou
+**naqueles** valores. Para ter certeza de que acerta sempre, procure uma frase
+que fica verdadeira volta após volta: o **invariante de laço**, uma relação
+entre as variáveis que vale **no começo de cada iteração**, antes do teste do
+laço.
 
-Para falar de pedaços de vetor, use a notação `v[0..i-1]`: os elementos de
-índice 0 até i − 1. Quando i vale 0, o pedaço está vazio. Com ela, o
-invariante de "achar o maior" fica assim: **`maior` é um máximo de
-`v[0..i-1]`**. Diz o que o laço já sabe, não como ele anda.
+Para falar de pedaços de vetor, use `v[0..i-1]`: os elementos de índice 0 até
+i − 1 (vazio quando i vale 0). O invariante de "achar o maior" fica: **`maior`
+é um máximo de `v[0..i-1]`**. Diz o que o laço já sabe, não como ele anda.
 
-Mostrar que um laço está certo com um invariante tem quatro passos, como uma
-prova por indução:
+Mostrar que um laço está certo tem quatro passos, como numa prova por
+indução:
 
 1. **Início**: o invariante vale antes da primeira volta.
-2. **Manutenção**: se vale no começo de uma volta, vale no começo da
-   seguinte.
+2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
 3. **Término**: quando o teste falha, invariante + condição de parada dão o
-   resultado que você queria.
-4. **Parada**: alguma quantidade inteira diminui a cada volta e não pode
-   diminuir para sempre (é a **variante**). Garante que o laço acaba.
+   resultado desejado.
+4. **Parada**: uma quantidade inteira diminui a cada volta e não pode diminuir
+   para sempre (é a **variante**). Garante que o laço acaba.
 
-Pensar assim também melhora a documentação. A função promete "recebe
-n ≥ 1 e v; devolve o valor de **um** elemento máximo de `v[0..n-1]`". Fala de
-todos os parâmetros, diz a restrição (n ≥ 1) e usa "um" porque pode haver
-empate. É o contrato, sem contar o "como".
+Isso também melhora a documentação. A função promete "recebe n ≥ 1 e v;
+devolve o valor de **um** elemento máximo de `v[0..n-1]`". Cobre todos os
+parâmetros, diz a restrição (n ≥ 1) e usa "um" por causa do empate. É o
+contrato, sem o "como".
 
-Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No
-começo da volta com i = 4, a parte verde já foi vista e o invariante garante
-que `maior` (300) é o maior dela. A parte cinza ainda não importa:
+Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No começo da volta com i = 4,
+a parte verde já foi vista e `maior` (300) é o maior dela. A parte cinza ainda
+não importa:
 
 <p align="center"><img src="10-analise/0073-invariantes/ideia.svg" alt="Diagrama da ideia: Invariantes de laço e corretude" width="893"></p>
 
 O `assert` de `<assert.h>` transforma o invariante em código: se a condição
-for falsa, o programa para na hora e diz a linha. A função `eh_maximo` é lenta
-de propósito: confere o invariante pelo caminho mais ingênuo, só para testar.
+for falsa, o programa para e mostra a linha. A `eh_maximo` é lenta de
+propósito: confere o invariante pelo caminho ingênuo, só para testar.
 
 ```c
 #include <assert.h>
@@ -1119,7 +1095,7 @@ int main(void) {
 
 ### Passo a passo
 
-Os quatro passos aplicados a esse laço, com o teste de mesa do lado:
+Os quatro passos neste laço, com o teste de mesa:
 
 | começo da volta | i | `v[0..i-1]` | maior | invariante vale? |
 | --- | --- | --- | --- | --- |
@@ -1131,31 +1107,28 @@ Os quatro passos aplicados a esse laço, com o teste de mesa do lado:
 | teste falha | 6 | o vetor todo | 300 | sim, e i == n: é a resposta (**término**) |
 
 **Manutenção**: se `maior` é o máximo de `v[0..i-1]`, a volta compara com
-`v[i]` e fica com o maior dos dois. Então `maior` passa a ser o máximo de
-`v[0..i]`, e o `i++` faz disso "o máximo de `v[0..i-1]`" de novo. **Parada**:
-n − i diminui 1 por volta e o laço acaba quando chega a 0.
+`v[i]` e fica com o maior dos dois: `maior` passa a ser o máximo de `v[0..i]`,
+e o `i++` devolve a forma "máximo de `v[0..i-1]`". **Parada**: n − i diminui 1
+por volta e o laço acaba em 0.
 
-No fluxograma, o invariante fica na seta que volta para o losango "i < 6?".
-Toda vez que o caminho passa por ali, a frase é verdadeira:
+No fluxograma, o invariante fica na seta que volta ao losango "i < 6?". Toda
+vez que o caminho passa ali, a frase é verdadeira:
 
 <p align="center"><img src="10-analise/0073-invariantes/fluxograma.svg" alt="Fluxograma: Invariantes de laço e corretude" width="593"></p>
 
 > [!WARNING]
-> O erro clássico é o **início**: `int maior = 0;` parece inofensivo e passa
-> em todos os testes com valores positivos. Com saldos todos negativos (−120,
-> −45, −300), a função devolve 0, um valor que nem está no vetor. O invariante
-> denuncia na hora: antes da primeira volta, 0 não é um máximo de `v[0..0]`.
-> Comece com `maior = v[0]` e i = 1, e escreva a restrição n ≥ 1 no contrato.
+> O erro clássico é o **início**: `int maior = 0;` passa em todos os testes
+> com valores positivos. Com saldos negativos (−120, −45, −300), devolve 0,
+> que nem está no vetor. O invariante denuncia: antes da primeira volta, 0 não
+> é um máximo de `v[0..0]`. Comece com `maior = v[0]` e i = 1, e escreva n ≥ 1
+> no contrato.
 
 > [!TIP]
-> **Por dentro do C:** `assert(cond)` é uma macro. Se `cond` for falsa, ela
-> imprime arquivo, linha e a condição, e chama `abort()`. Compilando com
-> `-DNDEBUG`, o pré-processador troca cada `assert` por **nada**: nem a
-> condição é calculada. Por isso o `eh_maximo`, que é O(n) dentro de um laço
-> O(n), deixa o teste O(n²) mas não custa nada na versão final. Daí a regra:
-> nunca ponha dentro do `assert` algo que o programa precisa fazer, como
-> `assert(fp = fopen(...))`. Com `NDEBUG`, o arquivo nem abre.
-
+> **Por dentro do C:** `assert(cond)` é uma macro: se `cond` for falsa, imprime
+> arquivo, linha e condição e chama `abort()`. Com `-DNDEBUG`, vira **nada**,
+> nem a condição é calculada. Por isso o `eh_maximo` (O(n) dentro de um laço
+> O(n)) não custa nada na versão final. Nunca ponha dentro do `assert` algo
+> que o programa precisa fazer, como `assert(fp = fopen(...))`.
 
 > [!NOTE]
 > **Pergunta para você:** no exemplo A146 (fichas de R$ 5 com R$ 47), o
@@ -1493,45 +1466,85 @@ gcc ~/LPEDC/10-analise/0073-invariantes/E438.c -o ~/LPEDC/10-analise/0073-invari
 
 ## 0074 · TAD: interface (.h) e implementação (.c)
 
-Na entrada do estacionamento do shopping tem um painel: "VAGAS LIVRES: 3". A
-cancela só abre se houver vaga. Você não sabe se o sistema conta com sensor no
-chão, câmera ou planilha, e nem precisa saber. Você usa três "botões":
-entrar, sair e ver quantas vagas sobram.
+Na entrada do estacionamento do shopping, um painel: "VAGAS LIVRES: 3". A
+cancela só abre se houver vaga. Você não sabe se o sistema usa sensor, câmera
+ou planilha, e nem precisa. Usa três "botões": entrar, sair e ver quantas
+vagas sobram.
 
-Um **tipo abstrato de dado** (TAD) leva isso para o código: um tipo definido pelas
-**operações** que ele oferece, não pelo jeito como guarda os dados. Quem usa (o
+Um **tipo abstrato de dado** (TAD) leva isso ao código: um tipo definido pelas
+**operações** que oferece, não pelo modo como guarda os dados. Quem usa (o
 **cliente**) conhece só as operações. Quem implementa pode trocar tudo por
-dentro sem avisar ninguém, desde que as operações continuem cumprindo o
-prometido.
+dentro, desde que as operações cumpram o prometido.
 
 No C, a divisão é física, em dois arquivos:
 
 - **`contador.h`, a interface**: o contrato. Declara o tipo e os protótipos,
-  cada um com um comentário dizendo o que entra, o que sai e o que pode dar
-  errado. É o que o cliente inclui.
-- **`contador.c`, a implementação**: define a `struct` com os campos e escreve
-  as funções. O cliente nunca inclui este arquivo; ele só é compilado junto.
+  cada um com um comentário sobre o que entra, o que sai e o que pode dar
+  errado. O cliente o inclui.
+- **`contador.c`, a implementação**: define a `struct` e escreve as funções.
+  O cliente nunca o inclui; ele só é compilado junto.
 
-Quem fecha a porta é o **tipo opaco**. O `.h` diz apenas
-`typedef struct contador Contador;`, sem os campos. Para o compilador, no
-cliente, `struct contador` é um **tipo incompleto**: dá para ter um ponteiro
-`Contador *`, mas não dá para criar uma variável `Contador`, nem usar
-`sizeof`, nem acessar `->valor`. Por isso todo TAD opaco tem uma função
+O **tipo opaco** fecha a porta. O `.h` diz só `typedef struct contador
+Contador;`, sem os campos. No cliente, `struct contador` é um **tipo
+incompleto**: dá para ter um ponteiro `Contador *`, mas não uma variável
+`Contador`, nem `sizeof`, nem `->valor`. Por isso todo TAD opaco tem uma
 `_cria`, que faz o `malloc` lá dentro, e uma `_libera`, que faz o `free`.
 
-Fechar a porta permite ao TAD garantir um **invariante**, como no assunto
-anterior. O contador promete
-`0 <= valor <= limite`. Se o cliente pudesse escrever `vagas->valor = 99`, a
-promessa não valeria nada.
+Isso permite ao TAD garantir um **invariante**, como no 0073. O contador
+promete `0 <= valor <= limite`. Se o cliente pudesse escrever
+`vagas->valor = 99`, a promessa não valeria nada.
 
-No exemplo, o cliente (o arquivo com o `main`) inclui só o contrato. O `contador.c` também inclui o contrato e guarda a `struct`
-escondida. Na memória, o cliente tem só um ponteiro para um bloco no heap que
-ele não consegue abrir:
+No exemplo, o cliente (o arquivo do `main`) inclui só o contrato; o
+`contador.c` também o inclui e guarda a `struct` escondida. Na memória, o
+cliente tem só um ponteiro para um bloco no heap que não consegue abrir:
 
 <p align="center"><img src="10-analise/0074-tad/ideia.svg" alt="Diagrama da ideia: TAD: interface (.h) e implementação (.c)" width="870"></p>
 
-O contrato, completo, está em `contador.h` na pasta do assunto. O cliente
-estaciona 4 carros num lugar com 3 vagas:
+O contrato completo está em `contador.h`, na pasta do assunto. O cliente estaciona 4 carros em 3 vagas:
+
+```c
+#include <stdio.h>
+
+#include "contador.h" // só a interface: a struct está escondida em contador.c
+
+int main(void) {
+    Contador *vagas = contador_cria(3); // estacionamento com 3 vagas
+    if (vagas == NULL) {
+        printf("Sem memória\n");
+        return 1;
+    }
+
+    const char *placas[4] = {"RIO2A18", "SPX3B45", "BHZ7C09", "CWB1D77"};
+    for (int i = 0; i < 4; i++) {
+        if (contador_incrementa(vagas)) {
+            printf("%s entrou (%d/%d)\n", placas[i], contador_valor(vagas),
+                   contador_limite(vagas));
+        } else {
+            printf("%s: lotado, espere\n", placas[i]);
+        }
+    }
+
+    contador_decrementa(vagas); // um carro sai
+    printf("Um carro saiu (%d/%d)\n", contador_valor(vagas), contador_limite(vagas));
+
+    if (contador_incrementa(vagas)) {
+        printf("CWB1D77 entrou (%d/%d)\n", contador_valor(vagas), contador_limite(vagas));
+    }
+
+    contador_libera(vagas);
+    return 0;
+}
+// Saída:
+// RIO2A18 entrou (1/3)
+// SPX3B45 entrou (2/3)
+// BHZ7C09 entrou (3/3)
+// CWB1D77: lotado, espere
+// Um carro saiu (2/3)
+// CWB1D77 entrou (3/3)
+```
+
+O lado escondido fica em `contador.c`, que inclui o próprio `.h` para o
+compilador conferir cada função contra o protótipo.
 
 ```c
 #include <stdio.h>
@@ -1612,54 +1625,49 @@ bool contador_incrementa(Contador *c) {
 //     contador_valor e contador_limite seguem o mesmo estilo
 ```
 
-No fluxograma, o cliente conversa com o TAD só pelas funções. Quem decide
-"lotado" é o `contador_incrementa`, que devolve `false`; o cliente reage à
-resposta:
+No fluxograma, o cliente fala com o TAD só pelas funções. Quem decide
+"lotado" é o `contador_incrementa`, que devolve `false`:
 
 <p align="center"><img src="10-analise/0074-tad/fluxograma.svg" alt="Fluxograma: TAD: interface (.h) e implementação (.c)" width="679"></p>
 
 ### O padrão dos próximos módulos
 
-Toda estrutura de dados dos módulos 11 a 16 (lista, pilha, fila, árvore, hash,
-grafo) segue este molde. Para um TAD `x`:
+Toda estrutura dos módulos 11 a 16 (lista, pilha, fila, árvore, hash, grafo)
+segue este molde. Para um TAD `x`:
 
-1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do exemplo
-   compila junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`. À mão:
-   `gcc A147.c contador.c -o a147`.
-2. **`x.h`**: comentário dizendo o que o TAD é; *include guard*
-   (`#ifndef X_H`); só os `#include` de que a interface precisa (em geral
-   `<stdbool.h>`); `typedef struct x X;`; protótipos com prefixo `x_`, cada um
-   com o seu contrato em comentário.
+1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do
+   exemplo compila junto todo `.c` da pasta que não se chama
+   `A000.c`/`E000.c`. À mão: `gcc A147.c contador.c -o a147`.
+2. **`x.h`**: comentário sobre o que o TAD é; *include guard* (`#ifndef X_H`);
+   só os `#include` de que a interface precisa (em geral `<stdbool.h>`);
+   `typedef struct x X;`; protótipos com prefixo `x_`, cada um com seu
+   contrato em comentário.
 3. **`x.c`**: inclui as bibliotecas e o próprio `"x.h"`; define a `struct x`
    com o invariante comentado em cima; funções auxiliares internas são
-   `static` (ficam invisíveis fora do arquivo).
-4. **Nomes das operações**: `x_cria` (devolve `NULL` se faltar memória),
-   `x_libera` (aceita `NULL`), e verbos no presente para o resto:
-   `x_insere`, `x_remove`, `x_valor`. Leitura recebe `const X *`.
+   `static` (invisíveis fora do arquivo).
+4. **Nomes**: `x_cria` (devolve `NULL` se faltar memória), `x_libera` (aceita
+   `NULL`) e verbos no presente para o resto: `x_insere`, `x_remove`,
+   `x_valor`. Leitura recebe `const X *`.
 5. **Erros**: operação que pode falhar devolve `bool`; valor de saída vai por
    ponteiro (`bool pilha_desempilha(Pilha *p, int *valor)`). O TAD não
-   imprime mensagem de erro: quem decide o que mostrar é o cliente.
+   imprime erro: o cliente decide o que mostrar.
 6. **Cliente**: `#include "x.h"` com aspas, guarda só `X *`, confere o `NULL`
    do `_cria` e chama `_libera` no fim. Nunca usa `->` num `X`.
 
 > [!WARNING]
 > Se o cliente tentar `vagas->valor = 0;` ou `Contador c;`, o erro é de
 > **compilação**: `invalid use of incomplete typedef 'Contador'`. É o tipo
-> opaco funcionando. Não "conserte" movendo a `struct` para o
-> `.h`: aí qualquer cliente volta a poder quebrar o invariante. Se falta uma
-> operação, acrescente uma função na interface. O outro tropeço clássico é
-> esquecer o `contador.c` na hora de compilar à mão: o erro vira
-> `undefined reference to 'contador_cria'`, que é do **ligador**.
+> opaco funcionando. Não "conserte" movendo a `struct` para o `.h`: qualquer
+> cliente voltaria a quebrar o invariante. Se falta uma operação, acrescente
+> uma função na interface. Outro tropeço: esquecer o `contador.c` ao compilar
+> à mão. O erro `undefined reference to 'contador_cria'` é do **ligador**.
 
 > [!TIP]
-> **Por dentro do C:** o `#include "contador.h"` apenas cola texto. Depois do
-> pré-processador, o cliente tem os protótipos e a frase "existe uma
-> `struct contador`", mais nada. O compilador gera `A147.o` sem saber o
-> tamanho da struct (nem precisa: ponteiro tem sempre 8 bytes numa máquina de
-> 64 bits). O `contador.o` sabe o tamanho e os deslocamentos dos campos
-> (`valor` no byte 0, `limite` no byte 4). O ligador junta os dois. Por isso
-> mudar a struct exige recompilar só o `contador.c`: o binário do cliente nem
-> muda.
+> **Por dentro do C:** o `#include "contador.h"` só cola texto: o cliente
+> recebe os protótipos e a frase "existe uma `struct contador`". O `A147.o`
+> nasce sem saber o tamanho da struct (ponteiro tem sempre 8 bytes em 64
+> bits); só o `contador.o` conhece os campos. O ligador junta os dois. Por
+> isso mudar a struct exige recompilar só o `contador.c`.
 
 > [!NOTE]
 > **Pergunta para você:** no exemplo A148, a conta guarda o saldo em
@@ -1722,7 +1730,7 @@ int main(void) {
 // Saíram 3 do spinning; sair da sala vazia: negado
 // Spinning 0/3 | Piscina 1/2
 //
-// Compilando à mão, sem as flags de estudo: gcc A147.c contador.c -o a147
+// Compilando à mão, sem o rodar: gcc A147.c contador.c -o a147
 ```
 
 ```bash
@@ -1798,7 +1806,7 @@ Na garagem: 0 a bordo
 **Dicas:**
 
 1. #include "contador.h", com aspas: o arquivo está na pasta, não no
-   sistema. O comando do exemplo compila o contador.c junto.
+   sistema. O rodar compila o contador.c junto.
 2. contador_incrementa devolve false quando a van está cheia: use isso
    para contar quem ficou no ponto.
 3. Você não precisou saber
@@ -1872,7 +1880,7 @@ A -> B: 10.00 km
 1. Distância: sqrt(dx * dx + dy * dy), com sqrt de <math.h>.
 2. typedef struct ponto Ponto; em cima, a struct ponto { double x, y; }
    só na parte "ponto.c".
-3. São 4 pontos criados: 4 ponto_libera no fim (o gcc com as flags de estudo acusa vazamento).
+3. São 4 pontos criados: 4 ponto_libera no fim (o rodar acusa vazamento).
 4. Resposta esperada: a saída acima (os triângulos 3-4-5 e 6-8-10).
 
 ```bash
@@ -1999,8 +2007,8 @@ gcc ~/LPEDC/10-analise/0074-tad/E444.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPE
 
 ## Desafios do módulo
 
-Problemas que misturam os quatro assuntos, do médio ao difícil. Todos pedem
-código: escreva num arquivo seu e rode com as flags de estudo.
+Problemas dos quatro assuntos, do médio ao difícil. Todos pedem código:
+escreva num arquivo seu e compile com as flags de estudo.
 
 **1. Convidados em comum.** A sua lista de convidados é `{"Ana", "Bia",
 "Caio", "Davi", "Edu", "Fabi"}` e a do seu amigo é `{"Bia", "Davi", "Edu",
@@ -2910,7 +2918,7 @@ Desvio: 2.36 min
 **Dicas:**
 
 1. Variância = (soma dos quadrados / n) - média². O desvio é a raiz
-   (sqrt, de math.h; o gcc com as flags de estudo já liga a biblioteca com -lm).
+   (sqrt, de math.h; o rodar já liga a biblioteca com -lm).
 2. A interface não muda se um dia você trocar a implementação para
    guardar todos os tempos (para ter a mediana, por exemplo): o cliente
    continua compilando igual. Só o custo muda.
@@ -3443,11 +3451,11 @@ gcc ~/LPEDC/10-analise/lista/P1030.c -o ~/LPEDC/10-analise/lista/P1030 && ~/LPED
 
 ## Questões no estilo da prova
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, marque uma letra e só depois abra o gabarito. Nas questões de contagem,
-o resultado foi conferido rodando o trecho em C (`gcc -std=c17 -Wall`) com um
-contador. As definições de O, Ω e Θ seguem o Cormen. Cuidado com as palavras
-"sempre", "com certeza" e "nunca": quase sempre derrubam a afirmação.
+Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só depois abra o gabarito. Nas questões de contagem, o resultado foi
+conferido rodando o trecho em C (`gcc -std=c17 -Wall`) com um contador. As
+definições de O, Ω e Θ seguem o Cormen. Desconfie de "sempre", "com certeza"
+e "nunca": quase sempre derrubam a afirmação.
 
 **Questão 1.** Seja f(n) = 3n² + 40n + 7. Marque a alternativa **INCORRETA**.
 

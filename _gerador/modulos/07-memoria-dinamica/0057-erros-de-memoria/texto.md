@@ -1,15 +1,15 @@
 ## 0057 · Erros de memória
 
-O sistema do caixa da padaria funciona bem de manhã. Às seis da
-tarde está lento, e no sábado trava. Ninguém mexeu no código. O que aconteceu
-foi um **vazamento**: a cada venda, um pedacinho de memória ficava para trás,
-e depois de milhares de vendas o heap acabou (*memory leak*, em inglês). No
-C, quem cria esse erro é você, e quem corrige também.
+O sistema do caixa da padaria funciona de manhã. Às seis da tarde está lento,
+e no sábado trava. Ninguém mexeu no código. Foi um **vazamento** (*memory
+leak*): a cada venda, um pedacinho de memória ficava para trás, e depois de
+milhares de vendas o heap acabou. No C, quem cria esse erro e quem o corrige
+é você.
 
-O pior desses erros é que o programa costuma **funcionar**: mostra a saída
-certa, termina sem reclamar e quebra só na máquina do cliente, dias depois.
-Daí as ferramentas que vigiam a memória enquanto o programa roda.
-Primeiro, os quatro erros clássicos:
+O pior é que o programa costuma **funcionar**: mostra a saída certa, termina
+sem reclamar e quebra só na máquina do cliente, dias depois. Por isso existem
+ferramentas que vigiam a memória durante a execução. Primeiro, os quatro
+erros clássicos:
 
 | Erro | O que é | O AddressSanitizer diz |
 | --- | --- | --- |
@@ -18,39 +18,36 @@ Primeiro, os quatro erros clássicos:
 | **free duplo** | liberar o mesmo bloco duas vezes | `attempting double-free` |
 | **estouro** | passar do fim (ou do começo) de um bloco | `heap-buffer-overflow` |
 
-O **ponteiro solto** (*dangling pointer*) é a raiz de dois deles. Depois de
-`free(p)`, `p` continua com o mesmo endereço. Se alguém usa `p`, pode até ler
-o valor antigo, porque ninguém apagou os bytes. Funciona por sorte, até o
-`malloc` entregar aquele pedaço para outra parte do programa.
+O **ponteiro solto** (*dangling pointer*) está na raiz de dois deles. Depois
+de `free(p)`, `p` guarda o mesmo endereço. Usar `p` pode até ler o valor
+antigo, porque ninguém apagou os bytes. Funciona por sorte, até o `malloc`
+entregar aquele pedaço a outra parte do programa.
 
-O **estouro** no heap é ainda mais traiçoeiro: logo depois do seu bloco mora
-o cabeçalho do bloco vizinho (assunto 0054). Escrever um byte a mais pode
-estragar a contabilidade do `malloc`, e o programa quebra muito depois, num
-`free` que não tem culpa nenhuma.
+O **estouro** no heap é mais traiçoeiro: logo depois do bloco mora o
+cabeçalho do vizinho (assunto 0054). Um byte a mais estraga a contabilidade do
+`malloc`, e o programa quebra depois, num `free` sem culpa.
 
 As ferramentas:
 
-- **AddressSanitizer** (ASan): entra com `-fsanitize=address -g` no `gcc`. O
-  compilador põe vigias em volta de cada bloco e cada acesso é conferido.
-  Para no primeiro erro e mostra três coisas: onde o erro aconteceu, onde o
-  bloco foi alocado e onde foi liberado. No fim, o **LeakSanitizer** lista o
-  que vazou;
-- **valgrind**: roda o executável normal dentro de uma máquina virtual que
-  vigia cada byte. É uns 20 a 50 vezes mais lento, não precisa recompilar e
-  pega uma coisa que o ASan não pega: ler memória que nunca recebeu valor.
-  Instale com `sudo pacman -S valgrind` no Arch Linux ou `sudo apt install
-  valgrind` no Debian/Ubuntu e rode com `valgrind ./programa`.
+- **AddressSanitizer** (ASan): use `-fsanitize=address -g` no `gcc`. O
+  compilador põe vigias em volta de cada bloco e confere cada acesso. Para no
+  primeiro erro e mostra onde ele aconteceu, onde o bloco foi alocado e onde
+  foi liberado. No fim, o **LeakSanitizer** lista o que vazou;
+- **valgrind**: roda o executável normal numa máquina virtual que vigia cada
+  byte. É 20 a 50 vezes mais lento, não exige recompilar e pega o que o ASan
+  não pega: ler memória que nunca recebeu valor. Instale com `sudo pacman -S
+  valgrind` (Arch) ou `sudo apt install valgrind` (Debian/Ubuntu) e rode
+  `valgrind ./programa`.
 
-A função `total_do_pedido` copia os 4 preços de um
-pedido (R$ 30, 12, 45 e 8) para um bloco temporário de 16 bytes e soma tudo.
-Na primeira versão, ela esquecia o `free`. Cada um dos 3 pedidos deixava 16
-bytes perdidos: o endereço morria com o frame, mas o bloco ficava. O ASan
-mostra isso no fim da execução:
+A função `total_do_pedido` copia os 4 preços de um pedido (R$ 30, 12, 45 e 8)
+para um bloco temporário de 16 bytes e soma tudo. Na primeira versão, esquecia
+o `free`. Cada um dos 3 pedidos deixava 16 bytes perdidos: o endereço morria
+com o frame, mas o bloco ficava. O ASan mostra isso no fim da execução:
 
 {{ideia}}
 
 O relatório da versão quebrada, sem o `free` (salva como `pedido.c`). Leia de
-cima para baixo: o tipo do erro, quanto vazou e a pilha de chamadas que fez o
+cima para baixo: o tipo do erro, quanto vazou e a pilha de chamadas do
 `malloc`:
 
 ```text
@@ -97,26 +94,16 @@ int main(void) {
 // Pedido 3: R$ 95
 ```
 
-O `free` precisa estar no caminho antes do `return`,
-porque o `return` destrói a única variável que sabia onde o bloco estava:
+O `free` precisa vir antes do `return`, que destrói a única variável que sabia
+onde o bloco estava:
 
 {{fluxograma}}
 
 > [!WARNING]
 > "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
 > estouro de um byte e leitura de lixo são **comportamento indefinido**: o
-> programa pode funcionar hoje, mostrar outro valor amanhã e quebrar só com
-> outro compilador. Rode sempre com o ASan (o gcc com as flags de estudo já faz isso) e, quando
-> desconfiar, com `valgrind ./programa`. Saída certa e relatório limpo.
-
-> [!TIP]
-> **Por dentro do C:** o ASan reserva 1 byte de "memória sombra" para cada 8
-> bytes do programa. Em volta de cada bloco do `malloc` ele deixa uma zona
-> envenenada (*redzone*); todo acesso confere a sombra antes. Os blocos
-> liberados ficam um tempo de quarentena sem ser reaproveitados, e assim ele
-> consegue dizer "isto foi liberado lá na linha 31". O custo: o
-> programa fica uns 2 vezes mais lento e usa mais memória. Por isso o ASan é
-> ferramenta de desenvolvimento, não de produção.
+> programa pode funcionar hoje e quebrar com outro compilador. Rode sempre com
+> o ASan (flags de estudo) e, na dúvida, com `valgrind ./programa`.
 
 > [!NOTE]
 > **Pergunta para você:** se `free(p); p = NULL;` vira hábito, o que acontece

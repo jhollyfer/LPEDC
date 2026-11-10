@@ -1,14 +1,13 @@
 ## 0064 · Union
 
-No coworking, a mesma mesa é usada de manhã por uma designer e à tarde por um
-programador. O espaço é um só. Quem chega usa a mesa inteira, e o que estava
-em cima dela antes some (ou fica bagunçado).
+No coworking, a mesma mesa serve a uma designer de manhã e a um programador à
+tarde. O espaço é um só, e o que estava em cima some (ou fica bagunçado).
 
-Uma **union** (união) é isso na memória. Ela se declara igual a uma struct,
-com uma diferença grande: na struct, cada campo tem o seu pedaço de memória, um
-depois do outro; na union, **todos os campos começam no mesmo endereço** e
-dividem os mesmos bytes. O tamanho da union é o do maior campo (arredondado
-para o alinhamento), e só um campo "vale" de cada vez.
+A **union** (união) é isso na memória. Declara-se como a struct, com uma
+diferença: na struct, cada campo tem seu pedaço, um depois do outro; na union,
+**todos os campos começam no mesmo endereço** e dividem os mesmos bytes. O
+tamanho é o do maior campo (arredondado ao alinhamento), e só um campo "vale"
+por vez.
 
 ```c
 typedef union {
@@ -17,16 +16,14 @@ typedef union {
 } Endereco;
 ```
 
-A union tem dois usos bem diferentes. O primeiro é **economizar
-espaço** quando um dado pode ser uma coisa **ou** outra, nunca as duas: um
-pagamento é Pix **ou** cartão **ou** boleto. O segundo é **olhar os mesmos
-bytes de dois jeitos**: escrever um número de 4 bytes e ler byte a byte, sem
-fazer conta nenhuma.
+A union tem dois usos. O primeiro é **economizar espaço** quando o dado é uma
+coisa **ou** outra: um pagamento é Pix **ou** cartão **ou** boleto. O segundo
+é **olhar os mesmos bytes de dois jeitos**: escrever um número de 4 bytes e
+lê-lo byte a byte, sem conta.
 
-O exemplo mostra o segundo uso. Um endereço IP como 192.168.0.10 é,
-por baixo, um número de 32 bits: `0xC0A8000A` (C0 = 192, A8 = 168, 00 = 0,
-0A = 10). O programa grava o número em `ip.numero` e lê os bytes por
-`ip.bytes`. Observe a ordem em que eles aparecem na memória:
+O exemplo mostra o segundo. O IP 192.168.0.10 é, por baixo, um número de 32
+bits: `0xC0A8000A` (C0 = 192, A8 = 168, 00 = 0, 0A = 10). O programa grava em
+`ip.numero` e lê por `ip.bytes`. Observe a ordem dos bytes na memória:
 
 {{ideia}}
 
@@ -72,36 +69,30 @@ int main(void) {
 // depois de bytes[3] = 10: 0x0AA8000A
 ```
 
-Essa ordem tem nome: **endianness**. Num processador **little-endian**
-(Intel, AMD e praticamente todo ARM de celular), o byte **menos**
-significativo fica no endereço menor: o `0A` do final do número vem primeiro.
-Num **big-endian**, a ordem é a de leitura humana: `C0 A8 00 0A`. Nenhum é
-"certo": é uma escolha de quem projetou o processador, e a union deixa você
-ver essa escolha.
+Essa ordem é a **endianness**. No **little-endian** (Intel, AMD e quase todo
+ARM de celular), o byte **menos** significativo fica no endereço menor: o `0A`
+do final vem primeiro. No **big-endian**, a ordem é a de leitura humana:
+`C0 A8 00 0A`. Nenhum é "certo": é escolha de quem projetou o processador, e a
+union deixa você vê-la.
 
-A pergunta sobre o primeiro byte é um detector de endianness. O mesmo programa, compilado numa máquina big-endian, seguiria pelo
-outro lado:
+A pergunta sobre o primeiro byte detecta a endianness. Numa máquina
+big-endian, o mesmo programa seguiria pelo outro lado:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Numa union, escrever num campo **estraga** os outros. Se você grava
-> `ip.numero` e depois lê `ip.bytes`, tudo bem: era essa a intenção. Mas numa
-> union usada para economizar espaço, ler um campo diferente do último que
-> você gravou dá lixo, e o C não avisa: ele não sabe qual campo está valendo.
-> Por isso a union quase sempre vem acompanhada de um **enum** que diz qual
-> campo vale agora (a union "etiquetada" do A128). Quem confere a etiqueta é
-> você, não o compilador. E o resultado de ler os bytes depende da
-> endianness: esse código não dá a mesma saída em todas as máquinas.
+> Numa union, escrever num campo **estraga** os outros. Gravar `ip.numero` e
+> ler `ip.bytes` é a intenção. Mas numa union para economizar espaço, ler um
+> campo diferente do último gravado dá lixo, e o C não avisa. Por isso a union
+> costuma vir com um **enum** que diz qual campo vale (a union "etiquetada" do
+> A128); quem confere a etiqueta é você. E ler os bytes depende da
+> endianness: a saída muda entre máquinas.
 
 > [!TIP]
-> **Por dentro do C:** uma union não gera código nenhum. `ip.numero` e
-> `ip.bytes[0]` são o mesmo endereço; muda só o tipo com que o compilador lê o
-> que está lá. Em C, ler um campo diferente do último gravado é permitido: os bytes são reinterpretados no tipo novo. É assim que
-> se inspeciona um `float` bit a bit, por exemplo. Na rede, a convenção é
-> big-endian (a "ordem de rede"); por isso programas de rede usam `htonl` e
-> `ntohl`, de `<arpa/inet.h>`, para converter números antes de enviar e depois
-> de receber.
+> A union não gera código: `ip.numero` e `ip.bytes[0]` são o mesmo endereço, e
+> muda só o tipo de leitura. Em C, ler outro campo reinterpreta os bytes (é
+> como se inspeciona um `float` bit a bit). Na rede a ordem é big-endian;
+> `htonl` e `ntohl`, de `<arpa/inet.h>`, convertem os números.
 
 > [!NOTE]
 > **Pergunta para você:** se a union tivesse um terceiro campo,

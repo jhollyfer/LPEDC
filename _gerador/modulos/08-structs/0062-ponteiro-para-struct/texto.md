@@ -1,32 +1,29 @@
 ## 0062 · Ponteiro para struct
 
 Você passa o cartão do ônibus na catraca e o validador desconta R$ 4,40. Ele
-não faz uma cópia do seu cartão para descontar dela: mexe no saldo do cartão
-**de verdade**. Se descontasse numa cópia, você andaria de graça para sempre.
+mexe no saldo do cartão **de verdade**, não de uma cópia. Se descontasse numa
+cópia, você andaria de graça para sempre.
 
-Com struct em função vale o mesmo raciocínio. Como qualquer parâmetro em C,
-uma struct vai **por valor**: a função recebe uma cópia de todos os bytes. Mudar a
-cópia não muda o original. Para a função alterar a struct de quem chamou, você
-passa o **endereço** dela: um `Cartao *`.
+Com struct em função vale o mesmo. Como todo parâmetro em C, a struct vai
+**por valor**: a função recebe uma cópia de todos os bytes, e mudar a cópia
+não muda o original. Para a função alterar a struct de quem chamou, passe o
+**endereço** dela: um `Cartao *`.
 
 Com um ponteiro `c` para struct, o campo se acessa assim: `(*c).saldo`.
-Primeiro `*c` chega na struct, depois `.saldo` chega no campo. Os parênteses
-são obrigatórios, porque o ponto tem prioridade maior que o `*`: `*c.saldo`
-significaria `*(c.saldo)`, e `c` não tem campo nenhum, é um ponteiro.
+Primeiro `*c` chega à struct, depois `.saldo` ao campo. Os parênteses são
+obrigatórios: o ponto tem prioridade maior que o `*`, e `*c.saldo` seria
+`*(c.saldo)`, mas `c` é ponteiro e não tem campo.
 
-Como isso é escrito o tempo todo, o C tem um atalho: a **seta** `->`.
-`c->saldo` é exatamente `(*c).saldo`. Na prática: variável struct usa
-ponto (`cartao.saldo`); ponteiro para struct usa seta (`c->saldo`).
+O atalho é a **seta** `->`: `c->saldo` é igual a `(*c).saldo`. Variável struct
+usa ponto (`cartao.saldo`); ponteiro para struct usa seta (`c->saldo`).
 
-O ponteiro também é o caminho para struct no **heap**. `malloc(sizeof *c)`
-reserva o espaço de um `Cartao` inteiro e devolve o endereço. O `sizeof *c`
-mede o tipo apontado: se um dia o tipo de `c` mudar, a conta acompanha. E,
-como todo `malloc`, confira o `NULL` e termine com `free`.
+O ponteiro também leva a struct para o **heap**. `malloc(sizeof *c)` reserva
+um `Cartao` inteiro e devolve o endereço; `sizeof *c` mede o tipo apontado e
+acompanha mudanças. Como todo `malloc`, confira o `NULL` e termine com `free`.
 
-O cartão da Luana mora no heap com R$ 10,00. A variável
-`c` no `main` guarda só o endereço dele, e a função `cobrar_passagem` recebe
-uma cópia desse **endereço**, não do cartão. As duas setas apontam para o
-mesmo lugar:
+O cartão da Luana mora no heap com R$ 10,00. A variável `c` no `main` guarda
+só o endereço dele, e `cobrar_passagem` recebe uma cópia desse **endereço**,
+não do cartão. As duas setas apontam para o mesmo lugar:
 
 {{ideia}}
 
@@ -94,29 +91,23 @@ O teste de mesa das três chamadas, olhando o cartão no heap:
 | 2ª | 5.60 | não | 1.20 | 2 |
 | 3ª | 1.20 | sim: devolve false | 1.20 | 2 |
 
-A pergunta do saldo fica dentro da função, mas o laço
-que chama três vezes é do `main`. Como a função mexe no original, cada volta
-do laço enxerga o saldo que a anterior deixou:
+A pergunta do saldo fica na função, mas o laço das três chamadas é do `main`.
+Como a função mexe no original, cada volta enxerga o saldo da anterior:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O erro mais comum é esquecer que struct vai por valor. Uma função
-> `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
-> faz nada: recarrega uma cópia que morre no fim da função. Passe o
-> endereço: `Cartao *c`. O segundo erro é a precedência: `*c.saldo` não compila. Escreva `c->saldo` ou `(*c).saldo`.
-> E nunca devolva o endereço de uma struct local (`return &cartao;`): ela morre
-> quando a função termina. Para criar uma struct dentro de uma função e
-> devolvê-la, use `malloc` (ou devolva a struct por valor).
+> Struct vai por valor. `void recarregar(Cartao c, double v) { c.saldo += v; }`
+> compila, roda e não faz nada: recarrega uma cópia. Passe `Cartao *c`. Outros
+> erros: `*c.saldo` não compila (use `c->saldo`) e `return &cartao;` de uma
+> struct local devolve endereço que morre no `return` (use `malloc` ou devolva
+> a struct por valor).
 
 > [!TIP]
-> **Por dentro do C:** passar por valor custa uma cópia do tamanho da struct
-> **a cada chamada**. Um `Cartao` tem 48 bytes, então tanto faz. Mas uma struct
-> com `double leituras[1000]` tem mais de 8 KB, e o exemplo A124 mostra o
-> `sizeof` dentro da função: 8016 bytes copiados na pilha a cada chamada,
-> contra 8 bytes do ponteiro. Por isso, em C, struct grande quase sempre anda
-> por ponteiro, mesmo quando a função só lê. Para deixar claro que ela só lê,
-> e para o compilador barrar uma alteração por engano, use `const Cartao *c`.
+> Passar por valor copia a struct **a cada chamada**. Um `Cartao` tem 48 bytes,
+> tanto faz; uma struct com `double leituras[1000]` copia 8016 bytes (A124),
+> contra 8 do ponteiro. Struct grande anda por ponteiro, e `const Cartao *c`
+> deixa claro que a função só lê e faz o compilador barrar alterações.
 
 > [!NOTE]
 > **Pergunta para você:** se `cobrar_passagem` recebesse `Cartao c` (sem o
