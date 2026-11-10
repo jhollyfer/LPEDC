@@ -1,46 +1,37 @@
 ## 0144 · Árvores gerais: primeiro filho, próximo irmão
 
-Você vai reformar o apartamento e o empreiteiro mandou o orçamento em tópicos:
-a reforma tem cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro
-tem box e louças; as louças têm vaso e cuba. Quanto custa o banheiro? E a obra
-toda? Cada tópico tem quantos subtópicos quiser, e o total de um tópico é a soma
-do que está embaixo dele.
+O empreiteiro mandou o orçamento da reforma em tópicos: a reforma tem
+cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro tem box e
+louças; as louças têm vaso e cuba. O total de um tópico é a soma do que está
+embaixo dele.
 
 Isso é uma **árvore geral** (ou n-ária): cada nó pode ter qualquer número de
-filhos. No módulo 14, o A193 guardou as pastas num vetor fixo de filhos
-(`filhos[4]`). Funciona até a pasta ganhar o quinto filho, e cada folha carrega
-quatro ponteiros que nunca usa.
+filhos. No módulo 14, o A193 usou um vetor fixo (`filhos[4]`), que trava no
+quinto filho e desperdiça ponteiros nas folhas.
 
-A saída clássica é a representação **primeiro filho / próximo irmão** (em
-inglês, *left-child right-sibling*). Cada nó guarda só dois ponteiros: `filho`
-aponta para o primeiro filho, e `irmao` aponta para o próximo filho do mesmo
-pai. Os filhos de um nó formam uma **lista encadeada** que começa em `filho` e
-segue pelos `irmao`.
+A saída é a representação **primeiro filho / próximo irmão** (*left-child
+right-sibling*). Cada nó guarda dois ponteiros: `filho`, para o primeiro filho,
+e `irmao`, para o próximo filho do mesmo pai. Os filhos formam uma **lista
+encadeada** que começa em `filho` e segue pelos `irmao`.
 
-Com dois ponteiros por nó, isso é uma **árvore binária** disfarçada. Leia `filho` como "esquerdo" e `irmao` como "direito" e
-qualquer árvore geral vira uma binária, sem perder nada. O nó tem o mesmo
-tamanho tenha ele zero ou cinquenta filhos.
-
-Visitar os filhos de um nó vira o laço de sempre da lista:
+Com dois ponteiros por nó, é uma **árvore binária**: `filho` faz o papel do
+esquerdo e `irmao`, do direito. Visitar os filhos é o laço da lista:
 
 ```c
 for (const NoG *p = r->filho; p != NULL; p = p->irmao) { ... }
 ```
 
-E as funções recursivas seguem o molde da árvore: resolva o próprio nó, peça a
-resposta de cada filho e junte. O total do orçamento é o valor do nó mais o
-total de cada filho, uma **pós-ordem**: os filhos ficam prontos antes do pai.
+As funções recursivas resolvem o nó, pedem a resposta de cada filho e juntam. O
+total do orçamento é o valor do nó mais o total de cada filho: uma
+**pós-ordem**, porque os filhos ficam prontos antes do pai.
 
-O orçamento da reforma tem 10 nós. Os tópicos que só
-agrupam (reforma, cozinha, banheiro, louças) têm valor 0; os itens têm preço.
-No desenho, em cima a árvore como você pensa nela; embaixo, como ela fica na
-memória, com as setas verdes descendo para o primeiro filho e as roxas andando
-para o irmão:
+O orçamento tem 10 nós; os tópicos que só agrupam valem 0. No desenho, em cima a
+árvore e embaixo a memória: setas verdes para o primeiro filho, roxas para o
+irmão:
 
 {{ideia}}
 
-O TAD fica em `arvgen.h` e `arvgen.c`. O nó e as duas funções recursivas que
-interessam aqui:
+O TAD está em `arvgen.h` e `arvgen.c`. O nó e as funções recursivas:
 
 ```c
 typedef struct NoG {
@@ -66,8 +57,8 @@ static void mostra(const NoG *r, int nivel) {
 }
 ```
 
-O cliente monta o orçamento com `ag_adiciona(pai, nome, valor)`, que pendura o
-filho novo no fim da fila de irmãos e devolve o ponteiro dele:
+`ag_adiciona(pai, nome, valor)` pendura o filho novo no fim da fila de
+irmãos e devolve o ponteiro dele:
 
 ```c
 #include <stdio.h>
@@ -106,36 +97,26 @@ int main(void) {
 // Itens: 10 | altura: 3 | grau da raiz: 3
 ```
 
-O fluxograma acompanha o `ag_total` chamado no banheiro. A soma começa no
-valor próprio (0), o laço visita o box (900) e as louças (que devolvem 700 depois
-de somar vaso e cuba) e para quando `p` chega em `NULL`, no fim da fila de
-irmãos. O banheiro devolve 1600:
+O fluxograma acompanha `ag_total` no banheiro. A soma começa em 0, o laço
+visita o box (900) e as louças (700) e para quando `p` chega a `NULL`. O
+banheiro devolve 1600:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O irmão está no **mesmo nível**, não embaixo. Quem escreve a altura no
-> estilo da árvore binária, `1 + maior(altura(r->filho), altura(r->irmao))`,
-> conta cada irmão como mais um andar. No orçamento, o caminho reforma,
-> cozinha, banheiro, box, louças, vaso, cuba vira uma escada de 6 degraus, e a
-> resposta sai 6 em vez de 3. Na árvore geral, só o `filho` desce um nível; o
-> `irmao` anda para o lado. O mesmo
-> cuidado vale para o total: `total(p->filho) + total(p->irmao)` soma também os
-> irmãos de `p`, que não são da subárvore dele.
+> O irmão está no **mesmo nível**. Na altura escrita como na binária,
+> `1 + maior(altura(r->filho), altura(r->irmao))`, cada irmão conta como um
+> andar: no orçamento, a resposta sai 6 em vez de 3. Só `filho` desce um nível.
+> Do mesmo modo, `total(p->filho) + total(p->irmao)` soma irmãos que não são da
+> subárvore de `p`.
 
 > [!TIP]
-> **Por dentro do C:** o `NoG` tem 40 bytes: 20 do nome, 4 do `int` e dois
-> ponteiros de 8 bytes (os 20 + 4 = 24 já caem num múltiplo de 8, então não
-> sobra enchimento). A reforma inteira cabe em 400 bytes, e uma pasta com 50
-> filhos usaria os mesmos 40. Com um vetor fixo de 10 filhos, cada nó teria 104
-> bytes e travaria no 11º filho. O preço dos dois ponteiros é o acesso: achar o
-> k-ésimo filho custa k passos pela lista de irmãos, e `ag_adiciona` anda até o
-> último irmão antes de pendurar o novo (inserir no começo seria O(1), mas
-> inverteria a ordem dos filhos).
+> O `NoG` tem 40 bytes, com qualquer número de filhos. O preço é o acesso:
+> achar o k-ésimo filho custa k passos pela lista de irmãos.
 
 > [!NOTE]
 > **Pergunta para você:** se o empreiteiro acrescentar `ag_adiciona(loucas,
-> "torneira", 150)`, quais linhas da saída mudam? E se a torneira for
-> pendurada na `pintura`? Pense na altura e no grau da raiz nos dois casos.
+> "torneira", 150)`, quais linhas da saída mudam? E se a torneira for pendurada
+> na `pintura`? Pense na altura e no grau da raiz nos dois casos.
 
 {{pratique}}

@@ -1,58 +1,27 @@
 // 0128 · N-rainhas
 // Exercício E766 · ★★☆
 //
-// Na sala de prova, as carteiras formam uma grade n × n. O fiscal vai
-// sentar n alunos: um em cada fileira (linha) e um em cada coluna. A regra
-// contra cola é mais fraca que a da rainha: dois alunos de fileiras VIZINHAS
-// não podem estar em colunas vizinhas (aí um enxerga a prova do outro na
-// diagonal). Alunos em fileiras mais distantes podem estar na diagonal sem
-// problema.
+// Na sala de prova, as carteiras formam uma grade n × n e o fiscal senta n
+// alunos: um em cada fileira e um em cada coluna. Alunos de fileiras
+// VIZINHAS não podem estar em colunas vizinhas (um enxergaria a prova do
+// outro na diagonal); em fileiras mais distantes, a diagonal é livre.
 //
-// O programa abaixo conta as soluções das n-rainhas para n = 4, 5 e 6.
-// Estenda-o (mudando a poda e o que for preciso) para contar as arrumações
-// da sala de prova e mostrar a primeira de cada n.
+// Escreva um backtracking, fileira por fileira, que conte as arrumações da
+// sala de prova para n = 4, 5 e 6 e mostre a primeira de cada n (a coluna
+// de cada fileira, de cima para baixo).
 //
 //   Saída esperada:
 //   n = 4: 2 arrumações, primeira: 1 3 0 2
 //   n = 5: 14 arrumações, primeira: 0 2 4 1 3
 //   n = 6: 90 arrumações, primeira: 0 2 4 1 3 5
 //
-// Escreva sua resposta abaixo (estenda o programa):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 10
-
-int n;
-int pos[MAX];
-bool coluna[MAX];
-bool diag1[2 * MAX - 1];
-bool diag2[2 * MAX - 1];
-int solucoes;
-
-void rainha(int l) {
-    if (l == n) {
-        solucoes++;
-        return;
-    }
-    for (int c = 0; c < n; c++) {
-        if (coluna[c] || diag1[l + c] || diag2[l - c + n - 1]) {
-            continue;
-        }
-        pos[l] = c;
-        coluna[c] = diag1[l + c] = diag2[l - c + n - 1] = true;
-        rainha(l + 1);
-        coluna[c] = diag1[l + c] = diag2[l - c + n - 1] = false;
-    }
-}
-
 int main(void) {
-    for (n = 4; n <= 6; n++) {
-        solucoes = 0;
-        rainha(0);
-        printf("n = %d: %d soluções das rainhas\n", n, solucoes);
-    }
+
     return 0;
 }

@@ -1,50 +1,43 @@
 # Módulo 15 · Tabelas hash
 
-Até aqui, achar uma coisa sempre custou alguma procura: O(n) na lista, O(log
-n) na busca binária e na árvore equilibrada. A tabela hash troca a procura
-por uma **conta**: uma função transforma a chave num índice de vetor, e o
-acesso ao vetor custa O(1). É a estrutura de dados mais usada na prática.
+Achar um item custou até aqui O(n) na lista e O(log n) na busca binária e na
+árvore equilibrada. A tabela hash troca a procura por uma **conta**: uma
+função transforma a chave num índice de vetor, e o acesso custa O(1).
+Dicionários, conjuntos e caches de quase todo software são tabelas hash.
 
-Dicionários, conjuntos e caches de quase todo software são tabelas hash por
-baixo. O C não traz nada disso pronto, e por isso você vai ver como elas
-funcionam: a função hash que mistura os bytes da chave, o que acontece quando
-duas chaves caem no mesmo lugar, por que a tabela cresce quando enche e por
-que ela não guarda ordem nenhuma.
-
-O módulo tem duas famílias para tratar colisão: o **encadeamento**, que
-pendura uma lista em cada balde, e o **endereçamento aberto**, que procura
-outra posição dentro do próprio vetor. Termina com um contador de palavras
-que junta tabela, strings, `qsort` e memória dinâmica.
+O módulo cobre a função hash, a colisão (tratada por **encadeamento**, com uma
+lista em cada balde, ou por **endereçamento aberto**, que procura outra
+posição no vetor), o crescimento da tabela e a falta de ordem. Termina com um
+contador de palavras.
 
 ## O que você vai aprender
 
-- o que é **endereçamento direto**, **função hash**, **colisão** e **fator de carga**
-- escrever funções hash boas para inteiros (`k % m`, com `m` primo) e para texto (polinômio de base 31, em `unsigned`)
-- montar uma tabela com **encadeamento**: inserir, buscar, remover e liberar cada corrente
-- montar uma tabela com **endereçamento aberto** e sondagem linear, com a marca de **removida**
-- medir o custo: comparações, sondagens, agrupamento e quando crescer a tabela (**rehash**)
-- usar a tabela como contador e como conjunto, num programa completo
+- **função hash**, **colisão**, **fator de carga** e endereçamento direto
+- hash para inteiros (`k % m`, `m` primo) e para texto (polinômio de base 31, em `unsigned`)
+- **encadeamento**: inserir, buscar, remover e liberar cada corrente
+- **endereçamento aberto**: sondagem linear e marca de **removida**
+- custo (comparações, sondagens, agrupamento) e **rehash**
+- a tabela como contador e como conjunto
 
 ## Antes de começar
 
-Este módulo usa listas encadeadas (módulo 11) o tempo todo: inserir no
-início, percorrer e remover guardando o anterior. Usa também `malloc`/`free`,
-structs, ponteiro para função e `qsort`. Se algo disso estiver nebuloso,
-revise antes.
-
-Nos desenhos das tabelas, cada balde é uma gaveta com o índice à esquerda, e
-a corrente de nós sai dela para a direita; vermelho marca colisão.
-
-As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
-`aberta.h`/`aberta.c` (endereçamento aberto) e `palavras.h`/`palavras.c`
-(o contador) ficam na pasta de cada assunto, e o comando do exemplo compila tudo junto:
+Este módulo usa listas encadeadas (módulo 11), `malloc`/`free`, structs,
+ponteiro para função e `qsort`. As tabelas seguem o padrão TAD: `tabela.h` e
+`tabela.c` (encadeamento), `aberta.h` e `aberta.c` (endereçamento aberto),
+`palavras.h` e `palavras.c` (contador) ficam na pasta de cada assunto, e o
+comando compila tudo junto:
 
 ```bash
 gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
 ```
 
-Os exercícios trazem a própria implementação dentro do arquivo, para você
-escrever cada pedaço com as mãos.
+Nos desenhos, cada balde é uma gaveta com o índice à esquerda e a corrente de
+nós à direita; vermelho marca colisão.
+
+**Progressão.** Do módulo 11 vem a lista encadeada, que vira a corrente de
+cada balde; dos módulos 13 e 14 vem o O(log n) da busca binária e da árvore,
+contra o qual o O(1) esperado da tabela é comparado. O módulo 16 reaproveita
+a lista de vizinhos nos grafos, e o 17 dá o rigor formal para provar custos.
 
 {{indice}}
 
@@ -56,8 +49,8 @@ escrever cada pedaço com as mãos.
 
 ## Desafios do módulo
 
-Problemas extras, misturando os assuntos do módulo. Todos pedem código:
-resolva num arquivo seu e rode com as flags de estudo.
+Problemas extras que misturam os assuntos do módulo. Todos pedem código:
+resolva num arquivo seu e compile com as flags de estudo.
 
 **1. Base e tamanho brigando.** Um colega usou o hash polinomial de base 31
 (`h = h * 31 + c`) com uma tabela de `m = 31` baldes, e quase todas as
@@ -73,11 +66,6 @@ com `m = 37`.
 m = 31: 4 4 4 18 18 18 18 18 18 18 4 4 -> 2 baldes usados
 m = 37: 15 34 0 27 10 2 32 14 32 33 27 21 -> 10 baldes usados
 ```
-
-Dica: marque os baldes usados num vetor de flags. Com `m = 31`, o resto de
-`h * 31` por 31 é sempre 0: sobra só `c % 31`, o código da **última letra**
-(`'a'` dá 4, `'o'` dá 18). Use um `m` sem fator comum com a base: um primo
-diferente de 31, como 37, 101 ou 1009.
 
 </details>
 
@@ -107,11 +95,6 @@ total: 11
 busca 36: nao esta com 6 sondagens
 ```
 
-Dica: o laço anda com `i = (i + 1) % M` e soma 1 a cada posição olhada; na
-busca, limite a `M` voltas para não girar para sempre numa tabela cheia. O
-29 (hash 1) tenta 1, 2, 3, 4 e 5; o 36 olha de 1 a 5 e para na 6, livre. Um
-bloco de 5 ocupadas seguidas é o agrupamento primário em ação.
-
 </details>
 
 **3. Média de comparações.** Monte uma tabela com encadeamento de 5 baldes
@@ -133,11 +116,6 @@ com sucesso: 10 comparacoes / 6 = 1.67
 sem sucesso: 6 comparacoes / 5 = 1.20
 ```
 
-Dica: achar o k-ésimo nó de uma corrente custa k comparações, (1 + 2 + 3) +
-1 + (1 + 2) = 10. Sem sucesso, a busca percorre a corrente inteira:
-(3 + 1 + 0 + 2 + 0) / 5 = 1,2, o próprio fator de carga α = 6/5.
-Libere as correntes no fim.
-
 </details>
 
 **4. A remoção que quebra tudo.** Tabela aberta com `m = 5`,
@@ -154,12 +132,6 @@ marcando livre: 20 nao encontrado (2 sondagens)
 marcando removida: 20 na posicao 2 (3 sondagens)
 ```
 
-Dica: escreva uma função `rodada(int marca, const char *nome)` que zera a
-tabela, insere os três, remove o 15 com a marca dada e busca o 20. Com
-`LIVRE`, a busca vê o buraco na 1 e conclui que o 20 não está, embora ele
-esteja na 2. Uma inserção nova com hash 0 pode reaproveitar a posição
-`REMOVIDA`, depois de conferir que a chave não existe adiante.
-
 </details>
 
 **5. Hash de número negativo.** Escreva `int h_errado(int k)`, que devolve
@@ -174,11 +146,6 @@ esteja na 2. Uma inserção nova com hash 0 pode reaproveitar a posição
  -10: errado   0, certo 0
   -5: errado  -5, certo 5
 ```
-
-Dica: em C, o resto tem o sinal do dividendo, então `-37 % 10` é -7, um
-índice fora do vetor. O conserto é `((k % m) + m) % m`, que soma `m` a um
-resto negativo e não estraga os positivos. Outro caminho é converter antes
-para `unsigned` (o valor muda, mas fica sempre no intervalo certo).
 
 </details>
 
@@ -198,10 +165,6 @@ Imprima cada passo.
 19: 31 ja esta -> par 31 + 19
 ```
 
-Dica: pare no primeiro par achado e imprima "nenhum par" se o laço terminar.
-Cuidado com `50 - p` negativo (um preço maior que o vale): não procure. É
-O(n) em média, contra O(n²) de testar todos os pares.
-
 </details>
 
 **7. Hash ou árvore?** A agenda precisa listar os contatos em ordem
@@ -218,13 +181,6 @@ hash (balde a balde): Beto Caio Alice Davi Ana Bia Bruno
 arvore (em ordem): Alice Ana Beto Bia Bruno Caio Davi
 entre Ana e Bia: Ana Beto Bia
 ```
-
-Dica: o intervalo é um percurso em ordem com poda: só desça à esquerda se
-"Ana" for menor que o nó, e à direita se o nó for menor que "Bia". A tabela
-espalha as chaves de propósito e não guarda ordem: para listar em ordem ou
-por intervalo, ela teria que ordenar tudo a cada consulta. Para só perguntar
-"existe?" (palavras reservadas de um compilador, cache de sessões), a hash
-ganha com O(1) médio.
 
 </details>
 
@@ -243,12 +199,6 @@ velha (m = 7): 52 - - 10 24 31 45
 copiando posicao por posicao: 10(?) 24(?) 31(?) 45(?) 52(?) -> acha 0 de 5
 reinserindo: 10 24 31 45 52 -> acha 5 de 5
 ```
-
-Dica: as cinco chaves têm `k % 7 == 3` e se amontoam a partir da posição 3
-(o 52 dá a volta até a 0). Com `m = 17`, `k % 17` aponta para outras
-posições, que na cópia estão vazias, e a busca desiste. Reinserir custa O(n),
-mas como acontece só quando a tabela dobra, o custo diluído por inserção
-continua O(1), igual ao vetor que cresce com `realloc` (módulo 07).
 
 </details>
 
@@ -275,247 +225,322 @@ z: 1
 mais comum: a (10 vezes)
 ```
 
-Dica: só conte os caracteres entre `'a'` e `'z'` (o espaço fica de fora) e
-troque a mais comum só quando a contagem for **maior**, para o empate ficar
-com a primeira letra. A "função hash" `c - 'a'` leva as 26 chaves possíveis
-em 26 posições diferentes: zero colisões. É o endereçamento direto, uma
-tabela hash perfeita, possível porque o universo de chaves é pequeno e
-conhecido.
-
 </details>
 
-## Questões no estilo da prova
+## Questões de provas do PPGI
 
-Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
-letra e só depois abra o gabarito. Nas de simulação, desenhe a tabela e
-preencha posição por posição; nas de encadeamento, desenhe cada balde. Em
-todas, `h(k) = k mod m` e as posições começam em 0.
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 
-**1.** Considere as afirmações sobre uma tabela hash com encadeamento:
+**Edital 032/2016 · Questão 09**
 
-I. Com hashing uniforme, a busca sem sucesso examina em média Θ(1 + α)
-posições e chaves, onde α = n/m é o fator de carga.
-II. A tabela aceita mais chaves do que o seu número de posições, pois cada
-balde guarda uma lista.
-III. O pior caso da busca é sempre O(1), porque a função hash leva direto ao
-balde certo.
+Considere as afirmações sobre um hash por encadeamento:
 
-Marque a alternativa **CORRETA**.
+I) Suas colisões secundárias podem prejudicar seu desempenho\
+II) Não funciona com número de chaves maior que o tamanho da tabela hash\
+III) O número médio de operações esperado para realizar uma inserção é constante quando computado em função do tamanho da tabela se o hash for bem projetado\
 
-- (A) Apenas I.
-- (B) Apenas II.
-- (C) Apenas I e II.
-- (D) Apenas II e III.
-- (E) I, II e III.
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas III é verdadeira
+- e) Apenas I e II são verdadeiras
 
 <details><summary>Gabarito</summary>
 
-**C.** I e II são verdadeiras. A III é falsa por causa do "sempre": se todas as
-chaves caírem no mesmo balde, a busca percorre uma lista de `n` nós e custa
-Θ(n). O O(1) é o custo **esperado** sob hashing uniforme, não o pior caso. Veja
-0106.
+**D.** I é falsa (colisão secundária é do endereçamento aberto), II é falsa (encadeamento aceita mais chaves que a tabela), III é verdadeira. Assunto 0105.
 
 </details>
 
-**2.** Considere as afirmações sobre endereçamento aberto com sondagem linear:
+**Edital 053/2016 · Questão 10**
 
-I. Um bloco contínuo de posições ocupadas torna mais prováveis as colisões
-nas inserções seguintes que caem sobre ele (agrupamento primário).
-II. A busca com sucesso sempre examina uma única posição.
-III. A tabela não comporta mais chaves do que o seu número de posições.
-IV. Chaves com posições iniciais diferentes podem disputar a mesma posição:
-é a colisão secundária.
+Considere as afirmações sobre um hash linear (sem encadeamento):
 
-Marque a alternativa **CORRETA**.
+I) É obrigatório o uso de várias funções de hash\
+II) Não funciona com número de chaves maior que o tamanho da tabela hash\
+III) Quando acontece uma colisão, o valor a ser inserido é colocado no local no lugar do já existente.\
 
-- (A) Apenas I, III e IV.
-- (B) Apenas II e III.
-- (C) Apenas I, II e III.
-- (D) Apenas I e IV.
-- (E) I, II, III e IV.
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas II é verdadeira
+- e) Apenas I e II são verdadeiras
 
 <details><summary>Gabarito</summary>
 
-**A.** A II é falsa: a chave pode estar depois de várias posições ocupadas por
-outras, e a busca percorre a sequência de sondagem até achá-la. As outras três
-são verdadeiras. A tabela guarda no máximo `m` chaves (III), e a colisão
-secundária pertence ao endereçamento aberto, não ao encadeamento (IV). Veja
-0107.
+**D.** I falsa, II verdadeira (endereçamento aberto não passa de M chaves), III falsa (vai para a próxima posição livre). Assunto 0107.
 
 </details>
 
-**3.** Considere as afirmações sobre funções hash:
+**Edital 053/2016 · Questão 12**
 
-I. Uma boa função distribui as chaves de modo aproximadamente uniforme pelas
-posições da tabela.
-II. No método da divisão, se `m` é uma potência de 2, `k mod m` depende só dos
-bits menos significativos de `k`.
-III. A função hash precisa ser injetora, ou a tabela não funciona.
+Considere as afirmações sobre hash linear e hash encadeado
 
-Marque a alternativa **CORRETA**.
+I) Hash encadeado funciona melhor em disco, pois as chaves sempre ficam próximas uma das outras, facilitando a varredura.\
+II) Para uma tabela hash de tamanho M, tanto o hash linear quanto o hash encadeado podem receber uma quantidade de chaves C, onde C > M.\
+III) Quanto acontece uma colisão no hash encadeado, a chave é inserida na posição livre mais próxima da chave original.\
 
-- (A) Apenas I.
-- (B) Apenas I e III.
-- (C) Apenas II e III.
-- (D) Apenas III.
-- (E) Apenas I e II.
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas II é verdadeira
+- e) Apenas I e II são verdadeiras
 
 <details><summary>Gabarito</summary>
 
-**E.** A III é falsa: como há mais chaves possíveis do que posições, a
-colisão é inevitável, e as tabelas existem justamente para tratá-la (por
-encadeamento ou por sondagem). Na II, `k mod 2^p` são os `p` últimos bits, e por
-isso se prefere um primo longe de potências de 2. Veja 0105.
+**B.** I falsa (disco), II falsa (o linear não aceita C>M), III falsa (colisão no encadeado entra na lista). Assunto 0106.
 
 </details>
 
-**4.** Uma tabela com encadeamento tem `m = 7` baldes e cada chave nova entra
-no **início** da lista do seu balde. São inseridas, nesta ordem,
-`50 23 14 36 9 29 44 7`. Quantas chaves são comparadas numa busca pelo 50?
+**Edital 024/2017 · Questão 07**
 
-- (A) 5
-- (B) 2
-- (C) 4
-- (D) 3
-- (E) 1
+Considere as seguintes afirmações:
+
+I. Hash por encadeamento nunca apresenta colisões secundárias\
+II. Hash por encadeamento jamais permite que o número de comparações entre chaves em uma operação de busca passe de log n, onde n é o número de chaves inseridas no hash.\
+III. Hash por encadeamento realiza sempre menos comparações entre chaves do que qualquer hash por endereçamento aberto.\
+
+Marque a alternativa CORRETA:
+
+- a) Apenas a afirmação I é verdadeira
+- b) Apenas a afirmação II é verdadeira
+- c) Apenas a afirmação III é verdadeira
+- d) Apenas as afirmações II e III são verdadeiras
+- e) Nenhuma das alternativas anteriores está correta
 
 <details><summary>Gabarito</summary>
 
-**D.** `50 mod 7 = 1`, assim como 36 e 29: o balde 1 recebe 50, depois 36, depois
-29, e como cada uma entra na cabeça a lista fica `29 36 50`. A busca compara
-29, 36 e 50. O 50, a primeira chave a chegar, é a última da lista. As demais
-chaves ficam nos baldes 0 (`7 14`) e 2 (`44 9 23`). Veja 0106.
+**A.** colisão secundária é de endereçamento aberto, então I é verdadeira; II e III falsas (pior caso é n, e aberto pode ganhar do encadeado) Assunto 0106.
 
 </details>
 
-**5.** Uma tabela com endereçamento aberto tem `m = 8` posições e sondagem
-linear, `h(k, i) = (k mod 8 + i) mod 8`, com a volta ao início do vetor.
-Inserem-se `13 21 5 29 6 14`, nesta ordem. Conte como colisão cada tentativa
-numa posição já ocupada. Quantas colisões ocorrem no total?
+**Edital 024/2017 · Questão 14**
 
-- (A) 12
-- (B) 13
-- (C) 11
-- (D) 15
-- (E) 6
+Considere as afirmações sobre um hash linear (sem encadeamento):
+
+I. No evento de uma colisão, o valor a ser inserido é sempre colocado no início do array;\
+II. A busca pela chave é realizada utilizando busca binária (mais eficiente)\
+III. É obrigatório o uso de funções diferentes para inserção e remoção de chaves\
+IV. É projetado para funcionar com arrays de tamanho previamente definido.\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas II e IV são verdadeiras
+- d) Apenas IV é verdadeira
+- e) Apenas I e II são verdadeiras
 
 <details><summary>Gabarito</summary>
 
-**B.** Todas as chaves têm `k mod 8` entre 5 e 6. O 13 vai para 5 (0 colisões);
-o 21 tenta 5 e fica em 6 (1); o 5 tenta 5 e 6 e fica em 7 (2); o 29 tenta 5, 6
-e 7 e dá a volta até 0 (3); o 6 tenta 6, 7 e 0 e fica em 1 (3); o 14 tenta 6, 7,
-0 e 1 e fica em 2 (4). Total: 0 + 1 + 2 + 3 + 3 + 4 = 13. A tabela termina
-`29 6 14 _ _ 13 21 5`. A (E) é o erro de contar uma colisão por chave. Veja
-0107.
+**D.** só IV: tamanho fixo; sondagem linear não usa busca binária nem coloca no início Assunto 0107.
 
 </details>
 
-**6.** Uma tabela com `m = 10` posições usa sondagem linear. Inserem-se
-`14 24 34 5 44 15`, nesta ordem, e depois remove-se o 24 **marcando a posição
-como removida** (lápide, que a busca atravessa). Quantas posições a busca pelo
-44 examina, contando a da lápide?
+**Edital 024/2017 · Questão 15**
 
-- (A) 2
-- (B) 3
-- (C) 4
-- (D) 8
-- (E) 5
+Considere as afirmações sobre hash linear vs hash encadeado
+
+I. Para uma tabela hash de tamanho M, tanto o hash linear quanto o hash encadeado podem receber uma quantidade de chaves C, onde C > M.\
+II. Quanto acontece uma colisão no hash encadeado, a chave é inserida na posição livre mais próxima da chave original.\
+III. Hash linear funciona melhor em disco, pois as chaves obrigatoriamente ficam em espaços separados de memória, facilitando a varredura.\
+IV. O uso de uma segunda função de hash (no hash encadeado), garante um melhor espalhamento das chaves pela tabela hash\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas III é verdadeira
+- e) Apenas I e II são verdadeiras
 
 <details><summary>Gabarito</summary>
 
-**E.** Antes da remoção a tabela é `_ _ _ _ 14 24 34 5 44 15` (posições 0 a 9).
-A busca começa em 4 e examina 4 (14), 5 (lápide), 6 (34), 7 (5) e 8 (44):
-cinco posições. A (A) é o que ocorreria se a posição 5 fosse marcada como
-**livre**: a busca pararia ali e não encontraria o 44, que está na tabela. A
-lápide existe para evitar isso. Veja 0107.
+**B.** I falsa (linear não passa de M), II descreve o linear, III sem sentido, IV é dispersão dupla, não encadeamento Assunto 0106.
 
 </details>
 
-**7.** Uma tabela com encadeamento tem `m = 400` baldes e guarda `n = 1200`
-chaves, com hashing uniforme. Em média, quantas chaves são comparadas numa
-busca **sem sucesso**?
+**Edital 055/2017 · Questão 05**
 
-- (A) 1,5
-- (B) 2,5
-- (C) 3
-- (D) 4
-- (E) 400
+Quando um algoritmo de hash produz um endereço para uma chave e esse endereço já está ocupado, isso é chamado de __________.
+
+- A) Sinônimo
+- B) Inicial
+- C) Prospecção
+- D) Colisão
+- E) Overflow
 
 <details><summary>Gabarito</summary>
 
-**C.** O fator de carga é α = 1200/400 = 3, e a busca sem sucesso percorre a
-lista inteira do balde, de tamanho médio α: 3 chaves. A (B) é a busca **com**
-sucesso, que para no meio da lista, em média 1 + α/2 = 2,5. Veja 0106 e 0108.
+**D.** endereço já ocupado é colisão Assunto 0105.
 
 </details>
 
-**8.** O trecho abaixo implementa a busca numa tabela com encadeamento. Qual
-alternativa descreve corretamente o defeito dele?
+**Edital 055/2017 · Questão 06**
 
-```c
-#define M 5
-typedef struct no { int chave; struct no *prox; } No;
-No *tabela[M];
+Considere uma tabela hash com resolução de colisões por encadeamento com as seguintes características:
 
-int buscar(int k) {
-    No *p = tabela[k % M];
-    while (p->chave != k)
-        p = p->prox;
-    return 1;
-}
-```
+- As chaves são as letras A,B,C,D,H,J,K,M,N,O,P,R,S,T,U;
+- A tabela possui 11 posições, referenciadas pelos índices de 0 até 10;
+- A função de hash é definida como hash(x)=posição(x) mod 11, onde x é a chave, e posição(x) é a posição da chave no alfabeto ABCDEFGHIJKLMNOPQRSTUVWXYZ, tal que posição("A") retorna 1 e posição("Z") retorna 26.
 
-- (A) `k % M` pode dar resultado negativo e sempre sai do vetor.
-- (B) Falta um `free` no fim da função.
-- (C) A tabela deveria ser `No tabela[M]`, sem ponteiros.
-- (D) Se a chave não está na lista (ou o balde está vazio), `p` chega a `NULL` e o laço lê `p->chave`: comportamento indefinido.
-- (E) O laço deveria percorrer os `M` baldes, não só um.
+Analise as afirmativas sobre a tabela após seu preenchimento com as chaves listadas acima.
+
+I. Nenhuma chave foi alocada à posição 6;\
+II. A chave "K" foi alocada à posição zero;\
+III. As chaves "B" e "N" colidiram na posição 3;\
+IV. Apenas uma letra foi alocada à posição 9.\
+
+Com base nessas afirmativas, marque a alternativa CORRETA:
+
+- A) Apenas as afirmativas I e II estão corretas.
+- B) Apenas as afirmativas I e IV estão corretas.
+- C) Apenas as afirmativas I, II e IV estão corretas.
+- D) Apenas as afirmativas II e III.
+- E) Apenas as afirmativas II, III e IV estão corretas.
 
 <details><summary>Gabarito</summary>
 
-**D.** O laço só termina quando acha a chave. Numa busca sem sucesso `p` vira
-`NULL` e `p->chave` desreferencia um ponteiro nulo (a busca por uma
-chave ausente termina em falha de segmentação). O certo é
-`while (p != NULL && p->chave != k)` e devolver 0 se `p` terminar nulo. A (A)
-só vale para chave negativa, e mesmo assim não "sempre". Veja 0106.
+**C.** posições: K=0, N=3 (não B), T=9 sozinho, nada em 6; I, II e IV verdadeiras, III falsa Assunto 0106.
 
 </details>
 
-**9.** Sobre endereçamento aberto com sondagem linear, marque a alternativa
-**INCORRETA**.
+**Edital 055/2017 · Questão 15**
 
-- (A) O número de chaves armazenadas nunca passa do tamanho da tabela.
-- (B) Para remover uma chave, basta marcar a posição como livre: as buscas das outras chaves continuam corretas.
-- (C) Chaves com a mesma posição inicial seguem a mesma sequência de sondagem.
-- (D) Uma inserção pode ficar mais cara depois que outras chaves formaram um bloco contínuo.
-- (E) Quanto maior o fator de carga, maior o custo médio de uma busca sem sucesso.
+Considere as seguintes afirmações:
+
+I. Hash por encadeamento pode apresentar colisões secundárias.\
+II. Hash por encadeamento pode permitir que o número de comparações entre chaves em uma operação de busca passe de √n, onde n é o número de chaves inseridas no hash.\
+III. Hash por endereçamento aberto realiza sempre menos comparações entre chaves do que qualquer hash por encadeamento.\
+
+Marque a alternativa CORRETA:
+
+- A) Apenas a afirmação I é verdadeira.
+- B) Apenas a afirmação II é verdadeira.
+- C) Apenas a afirmação III é verdadeira.
+- D) Apenas as afirmações II e III são verdadeiras.
+- E) Apenas as afirmações I e III são verdadeiras.
 
 <details><summary>Gabarito</summary>
 
-**B.** Marcar como livre quebra a busca: se outra chave tinha pulado aquela
-posição, a busca por ela para ali e conclui, por engano, que a chave não existe.
-Usa-se uma marca de removida (lápide). As demais são verdadeiras: no máximo `m`
-chaves (A), uma única sequência por posição inicial (C), agrupamento primário
-(D) e custo crescente com α (E). Veja 0107.
+**B.** Assunto 0106.
 
 </details>
 
-**10.** Sobre o **pior caso** de uma tabela hash com encadeamento, marque a
-alternativa **CORRETA**.
+**Edital 023/2018 · Questão 18**
 
-- (A) Se as `n` chaves caírem no mesmo balde, a busca custa Θ(n), mesmo que o custo esperado seja Θ(1 + α).
-- (B) É O(log n), porque as listas são mantidas ordenadas.
-- (C) É O(1), pois a função hash calcula o balde sem comparar chaves.
-- (D) É Θ(m), independentemente das chaves inseridas.
-- (E) É sempre melhor que o do endereçamento aberto.
+Considere uma tabela de espalhamento (hash table) de comprimento igual a 11, na qual a técnica de resolução de colisões utilizada é a de encadeamento. Nessa tabela, as posições são numeradas (indexadas) com os valores 0, 1, 2, ..., 10, o mapeamento de chaves para posições usa a função hash definida por h(k) = k mod 11, onde k é o valor da chave, e mod é o operador de módulo, e os números 1, 5, 18, 20, 4, 12, 10, 34, 15, 28 e 17 foram as chaves inseridas, nessa ordem, nessa tabela de espalhamento que estava inicialmente vazia. Qual a quantidade de posições em que houve colisão durante as inserções das chaves?
+
+- a) 0
+- b) 1
+- c) 2
+- d) 3
+- e) 4
 
 <details><summary>Gabarito</summary>
 
-**A.** Uma função hash ruim (ou chaves escolhidas de propósito) pode jogar tudo
-num balde só, e a tabela degenera numa lista encadeada. O custo esperado
-Θ(1 + α) vale sob hashing uniforme. As listas do encadeamento não são
-ordenadas (B), e nenhuma das duas técnicas vence a outra em todos os casos (E).
-Veja 0106.
+**D.** Rodado em C: colidem as posições 1 (1, 12, 34), 4 (4, 15) e 6 (28, 17): três posições. Assunto 0105.
+
+</details>
+
+**Edital 061/2018 · Questão 01**
+
+Considere um arquivo sequencial com 10.000 registros, cujas chaves identificadoras são números inteiros de até 8 dígitos. Para criar um índice tipo hashing para esse arquivo, contendo endereços de 0 até 11.999, a mais adequada definição para uma função de hashing f(x), onde x é uma chave e (a mod b) é o resto da divisão de a por b, seria:
+
+- a) f = x mod 1000 + 12
+- b) f = x mod 12000
+- c) f = x / 10000
+- d) f = x / 11999
+- e) f = (x – 11999) /10000
+
+<details><summary>Gabarito</summary>
+
+**B.** `x mod 12000` cobre exatamente 0 a 11.999; a A só gera 1000 endereços. Assunto 0105.
+
+</details>
+
+**Edital 061/2018 · Questão 16**
+
+Considere as seguintes afirmações:
+
+I. Hash por encadeamento nunca apresenta colisões secundárias\
+II. Hash por encadeamento jamais permite que o número de comparações entre chaves em uma operação de busca passe de log n, onde n é o número de chaves inseridas no hash.\
+III. Hash por encadeamento realiza sempre menos comparações entre chaves do que qualquer hash por endereçamento aberto.\
+
+Agora marque a alternativa CORRETA:
+
+- a) Apenas a afirmação I é verdadeira
+- b) Apenas a afirmação II é verdadeira
+- c) Apenas a afirmação III é verdadeira
+- d) Apenas as afirmações II e III são verdadeiras
+- e) Nenhuma das alternativas anteriores está correta
+
+<details><summary>Gabarito</summary>
+
+**A.** Só a I é verdadeira (colisão secundária é conceito de endereçamento aberto); II e III são falsas. Assunto 0106.
+
+</details>
+
+**Edital 061/2018 · Questão 18**
+
+Considere as afirmações sobre um hash por encadeamento:
+
+I. Tem como desvantagem o fato de não ordenar as chaves inseridas\
+II. O número médio de operações esperado para realizar uma busca é constante se o hash for bem projetado\
+III. Mesmo quando bem implementado, ocupa mais espaço extra do que uma árvore B em memória.\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas as afirmações são verdadeiras
+- b) Todas as afirmações são falsas
+- c) Apenas as afirmações I e III são verdadeiras
+- d) Apenas a afirmação III é verdadeira
+- e) Apenas as afirmações I e II são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**E.** I e II são verdadeiras; a III é duvidosa. Ver observação. Assunto 0106.
+
+</details>
+
+**Edital 060/2019 · Questão 01**
+
+Suponha que você tenha a seguinte tabela hash implementada utilizando endereçamento aberto com sondagem linear (linear probing). A função hash que você está usando é uma função modular, h(x) = x MOD 9.
+
+![Questão 01 - tabela hash](_fontes/provas-figuras/2019-060/q01-tabela-hash.png)
+
+Qual das ordens abaixo pode ser a ordem em que os elementos foram adicionados à hash? Assuma que a hash nunca tenha sido redimensionada e que nenhum elemento tenha sido excluído ainda.
+
+- a) 9, 14, 4, 18, 21, 3, 12
+- b) 12, 3, 14, 18, 4, 9, 21
+- c) 12, 14, 3, 9, 4, 18, 21
+- d) 9, 12, 14, 3, 21, 18, 4
+- e) 18, 9, 12, 3, 14, 4, 21
+
+<details><summary>Gabarito</summary>
+
+**C.** Rodado em C: só a ordem de C gera 9 18 _ 12 3 14 4 21 (as de b e e trocam 9 e 18). Assunto 0107.
+
+</details>
+
+**Edital 060/2019 · Questão 06**
+
+Marque a alternativa CORRETA. Sobre um hash com encadeamento e com tabela de tamanho 100, pode-se dizer que:
+
+- a) Para casos em que se insere um número n muito grande de chaves, o tempo no caso médio de busca será O(1)
+- b) Para casos em que se insere um número n muito grande de chaves, o tempo de busca no pior caso será O(1)
+- c) Para casos em que se insere um número n muito grande de chaves, o tempo no caso médio de busca será O(n)
+- d) Para casos em que se insere um número n muito grande de chaves, o tempo de busca no pior caso será O(log n)
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**C.** Com m fixo, a cadeia média tem n/100 nós, que é O(n). Assunto 0106.
 
 </details>
 

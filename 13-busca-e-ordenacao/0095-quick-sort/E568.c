@@ -1,51 +1,23 @@
 // 0095 · Quick sort
 // Exercício E568 · ★★☆
 //
-// Este quick sort deveria ordenar os andares das entregas do prédio: 4, 9, 2,
-// 7. Ele tem UM erro, de propósito, numa única linha. Rode: o programa morre
-// e o AddressSanitizer fala em "stack-overflow". Ache a linha que faz a
-// recursão nunca terminar, conserte e rode de novo.
+// Os andares das entregas do prédio são 4, 9, 2, 7, 5 e 1. Escreva
+// void quick_sort(int v[], int n, int p, int r), recursivo, com separação de
+// Lomuto (pivô em v[r]). A cada separação, imprima o intervalo, a posição
+// final do pivô e o vetor. Chame as duas metades SEM o pivô (j - 1 e j + 1).
 //
-//   Saída esperada (depois de consertar):
-//   2 4 7 9
+//   Saída esperada:
+//   separa [0..5]: pivô na posição 0 -> 1 9 2 7 5 4
+//   separa [1..5]: pivô na posição 2 -> 1 2 4 7 5 9
+//   separa [3..5]: pivô na posição 5 -> 1 2 4 7 5 9
+//   separa [3..4]: pivô na posição 3 -> 1 2 4 5 7 9
+//   Final: 1 2 4 5 7 9
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-void troca(int *a, int *b) {
-    int aux = *a;
-    *a = *b;
-    *b = aux;
-}
-
-int separa(int v[], int p, int r) {
-    int pivo = v[r], j = p;
-    for (int k = p; k < r; k++) {
-        if (v[k] <= pivo) {
-            troca(&v[j], &v[k]);
-            j++;
-        }
-    }
-    troca(&v[j], &v[r]);
-    return j;
-}
-
-void quick_sort(int v[], int p, int r) {
-    if (p >= r) {
-        return;
-    }
-    int j = separa(v, p, r);
-    quick_sort(v, p, j);
-    quick_sort(v, j + 1, r);
-}
-
 int main(void) {
-    int andares[] = {4, 9, 2, 7};
-    quick_sort(andares, 0, 3);
-    for (int i = 0; i < 4; i++) {
-        printf("%d ", andares[i]);
-    }
-    printf("\n");
+
     return 0;
 }

@@ -1,46 +1,39 @@
 ## 0140 · Mochila 0/1
 
-Sábado de praia. Um vendedor ambulante leva o isopor nas costas, e o isopor
-aguenta no máximo 7 kg. Ele pode levar um fardo de água (2 kg, lucro de
-R$ 18), uma caixa de refrigerante (3 kg, R$ 24), uma caixa de suco (4 kg,
-R$ 30) e um pote de açaí (5 kg, R$ 35). Cada coisa vai inteira ou não vai:
-não dá para levar meio pote de açaí. O que ele leva para lucrar o máximo?
+Um vendedor ambulante tem um isopor de 7 kg e quatro opções: fardo de água
+(2 kg, lucro R$ 18), caixa de refrigerante (3 kg, R$ 24), caixa de suco
+(4 kg, R$ 30) e pote de açaí (5 kg, R$ 35). Cada coisa vai inteira ou não
+vai. O que levar para lucrar o máximo?
 
-Na mochila **fracionária** do assunto 0135, o guloso resolvia: ordenar por
-lucro por quilo e ir enchendo, cortando o último item. Aqui ele erra. Água
-(R$ 9/kg) e refrigerante (R$ 8/kg) vêm primeiro: 5 kg, R$ 42. Sobram 2 kg, e
-nada mais cabe. Mas refrigerante e suco juntos pesam 7 kg e dão **R$ 54**.
+Na mochila **fracionária** (assunto 0135), o guloso por lucro por quilo
+resolvia. Aqui erra: água (R$ 9/kg) e refrigerante (R$ 8/kg) dão R$ 42 com
+5 kg e nada mais cabe, mas refrigerante e suco pesam 7 kg e dão **R$ 54**.
 
-Esta é a **mochila 0/1** (0 = não leva, 1 = leva). Com `n` itens há `2ⁿ`
-escolhas possíveis; com 60 itens, mais de um quintilhão. A PD resolve olhando
-para **um item de cada vez**: o último item, o `i`, vai ou não vai?
+Esta é a **mochila 0/1** (0 = não leva, 1 = leva), com `2ⁿ` escolhas. A PD
+olha **um item de cada vez**: o último item, `i`, vai ou não?
 
-- **não vai**: o melhor é o que os itens `1..i-1` conseguem com a mesma
-  capacidade `c`;
-- **vai** (se `peso[i] <= c`): ganha `lucro[i]`, e os itens `1..i-1` dividem o
-  que sobrou, `c - peso[i]`.
+- **não vai**: vale o melhor dos itens `1..i-1` com a mesma capacidade `c`;
+- **vai** (se `peso[i] <= c`): ganha `lucro[i]`, e os itens `1..i-1` dividem
+  `c - peso[i]`.
 
-Com dois "parâmetros" mudando, a tabela vira uma matriz: `t[i][c]` é o maior
-lucro usando só os itens `1..i` com capacidade `c`.
+A tabela é uma matriz: `t[i][c]` é o maior lucro usando só os itens `1..i`
+com capacidade `c`.
 
 `t[i][c] = o maior entre t[i-1][c] e lucro[i] + t[i-1][c - peso[i]]`
 
-A linha 0 (nenhum item) é toda zero. Cada linha só depende da de cima, então
-a matriz se enche linha por linha, e a resposta fica no canto: `t[n][W]`.
+A linha 0 é toda zero, e a resposta fica no canto: `t[n][W]`.
 
-A tabela dá o **valor**, mas o ambulante quer saber **o que levar**. A
-**recuperação** anda de baixo para cima: se `t[i][c]` é igual a `t[i-1][c]`,
-o item `i` não fez diferença e ficou de fora; se mudou, ele foi junto, e a
-busca continua na linha de cima com `c - peso[i]`.
+A **recuperação** dá **o que levar**, de baixo para cima: se `t[i][c]` é igual
+a `t[i-1][c]`, o item `i` ficou de fora; se mudou, ele foi junto, e a busca
+segue na linha de cima com `c - peso[i]`.
 
-No desenho, a célula `t[3][7] = 54` (roxo) escolheu entre não
-levar o suco (`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde).
-As células verdes de baixo para cima são a recuperação:
+No desenho, `t[3][7] = 54` (roxo) escolheu entre não levar o suco
+(`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde). As células
+verdes são a recuperação:
 
 {{ideia}}
 
-No código, os vetores começam no índice 1 para casar com a
-tabela, em que a linha 0 é "nenhum item":
+Os vetores começam no índice 1, para casar com a linha 0 da tabela:
 
 ```c
 #include <stdio.h>
@@ -98,15 +91,12 @@ int main(void) {
 // Leva: suco (4 kg) refri (3 kg)
 ```
 
-São `(n + 1) × (W + 1)` células, cada uma com uma comparação: **O(n × W)**.
-Para 100 itens e 10.000 kg de capacidade, um milhão de passos, contra os
-2¹⁰⁰ subconjuntos da força bruta. Só que `W` é um **número** da
-entrada, escrito com uns log₂ W bits. Dobrar os bits eleva `W` ao quadrado,
-então O(n × W) é **pseudopolinomial**, não polinomial no tamanho da entrada.
-A mochila 0/1 continua NP-difícil (assunto 0186).
+São `(n + 1) × (W + 1)` células: **O(n × W)**. Como `W` é um **número**
+escrito com uns log₂ W bits, o custo é **pseudopolinomial**: dobrar os bits
+eleva `W` ao quadrado. A mochila 0/1 continua NP-difícil (assunto 0186).
 
-O fluxograma mostra o miolo do laço duplo, a decisão de uma célula. O
-caminho marcado é o da célula `t[3][7]`, em que levar o suco ganhou:
+O fluxograma mostra a decisão de uma célula; o caminho marcado é o de
+`t[3][7]`:
 
 {{fluxograma}}
 
@@ -122,23 +112,14 @@ A recuperação, partindo do canto `t[4][7]`:
 | 1 (água) | 0 | 0 | 0 | não | fica | 0 |
 
 > [!WARNING]
-> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?".
-> Olhar só se `peso[i] <= c` levaria o açaí, que cabe em 7 kg, mas não faz
-> parte da solução ótima. E nunca leia `t[i - 1][c - peso[i]]` sem antes
-> conferir `peso[i] <= c`: com o `c` menor que o peso, o índice fica
-> negativo, e `t[i - 1][-2]` lê, sem erro de compilação nenhum, o fim de
-> outra linha da tabela.
+> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?": o
+> açaí cabe, mas não está na solução. Confira `peso[i] <= c` antes de ler
+> `t[i - 1][c - peso[i]]`: com índice negativo, o C lê outra linha sem avisar.
 
 > [!TIP]
-> **Por dentro do C:** `int t[5][8]` são 40 `int` seguidos na memória, linha
-> após linha: `t[i][c]` mora no deslocamento `i * 8 + c`. Por isso
-> `t[2][-2]` não derruba o programa: ele cai em `t[1][6]`, um valor errado e
-> silencioso. O gcc com as flags de estudo acusa (`index -2 out of bounds for type 'int [8]'`,
-> do UBSan), mas compilado sem sanitizer o programa segue em frente com a
-> resposta errada. E como cada linha só usa a de cima, dá para guardar uma
-> linha só, de `W + 1` posições, desde que o laço de `c` ande **do maior para
-> o menor**. O A279 mostra esse truque e o que acontece quando ele é
-> esquecido.
+> **Por dentro do C:** `t[i][c]` mora no deslocamento `i * 8 + c`, e
+> `t[2][-2]` cai em `t[1][6]` sem erro. Uma linha só de `W + 1` posições basta
+> se o laço de `c` andar do maior para o menor (A279).
 
 > [!NOTE]
 > **Pergunta para você:** se o isopor aguentasse 9 kg, o que o ambulante

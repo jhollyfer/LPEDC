@@ -1,15 +1,19 @@
 // 0156 · Juntando tudo: o assistente do calouro
 // Exercício E934 · ★★☆
 //
-// A faculdade só deixa cursar DUAS disciplinas por semestre. Escreva
-// planeja(limite, mostrar): a cada semestre, escolhe até "limite"
-// disciplinas liberadas (grau de entrada 0 e ainda não feitas), as de menor
-// índice primeiro, e só depois do semestre desconta os graus das que
-// dependem delas. Devolve o número de semestres (ou -1 se travar). As
-// regras de pré-requisito:
+// A faculdade tem oito disciplinas (índices 0 a 7: Algoritmos, Cálculo I,
+// Inglês, Física, Cálculo II, Estruturas, Redes e TCC), com estes
+// pré-requisitos:
 //
 //   Algoritmos -> Estruturas   Cálculo I -> Cálculo II   Cálculo I -> Física
 //   Estruturas -> Redes        Cálculo II -> TCC         Redes -> TCC
+//
+// Só dá para cursar DUAS por semestre. Escreva planeja(limite, mostrar): a cada
+// semestre, escolhe até "limite" disciplinas liberadas (grau de entrada 0 e
+// ainda não feitas), as de menor índice primeiro, e só depois do semestre
+// desconta os graus das que dependem delas. Devolve o número de semestres (ou
+// -1 se travar) e mostra os semestres quando mostrar for true. Compare sem
+// limite e com limite 2.
 //
 //   Saída esperada:
 //   Sem limite: 4 semestres
@@ -21,30 +25,12 @@
 //     5º: TCC
 //     total: 5 semestres
 //
-// Escreva sua resposta abaixo (escreva planeja):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 
-#define V 8
-
-const char *disc[V] = {"Algoritmos", "Cálculo I", "Inglês", "Física",
-                       "Cálculo II", "Estruturas", "Redes", "TCC"};
-int pre[V][V];
-
-int planeja(int limite, bool mostrar) {
-    (void)limite; // apague estas duas linhas
-    (void)mostrar;
-    return 0;
-}
-
 int main(void) {
-    int regras[][2] = {{0, 5}, {1, 4}, {1, 3}, {5, 6}, {4, 7}, {6, 7}};
-    for (int k = 0; k < 6; k++) pre[regras[k][0]][regras[k][1]] = 1;
 
-    printf("Sem limite: %d semestres\n", planeja(V, false));
-    printf("Com no máximo 2 por semestre:\n");
-    int s = planeja(2, true);
-    printf("  total: %d semestres\n", s);
     return 0;
 }

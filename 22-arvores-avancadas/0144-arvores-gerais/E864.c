@@ -1,14 +1,23 @@
 // 0144 · Árvores gerais
 // Exercício E864 · ★★★
 //
-// Monte a árvore pela entrada. Cada linha tem "pai nome valor"; na primeira,
-// o pai é "-" e o nome é a raiz. Um filho novo entra no fim da fila de
-// irmãos do pai. Se o pai não existir, avise e ignore a linha. No fim,
-// mostre a árvore (ag_mostra), o número de nós, a altura e qual filho da raiz
-// tem o maior total. Sem nenhuma linha, mostre "Árvore vazia".
+// Monte uma árvore geral (arvgen.h) pela entrada. Cada linha tem "pai nome
+// valor"; na primeira, o pai é "-" e o nome é a raiz. Um filho novo entra no
+// fim da fila de irmãos do pai. Se o pai não existir, avise e ignore a linha.
+// No fim, mostre a árvore (ag_mostra), o número de nós, a altura e qual filho
+// da raiz tem o maior total. Sem nenhuma linha, mostre "Árvore vazia".
 //
-// Teste com:
-//   printf -- '- casamento 0\ncasamento buffet 0\nbuffet salgados 1800\nbuffet bolo 950\ncasamento decoracao 0\ndecoracao flores 1200\nigreja padre 300\ndecoracao luzes 400\ncasamento musica 2500\nbuffet doces 700\n' | ~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E864.c
+//   Entrada:
+//   - casamento 0
+//   casamento buffet 0
+//   buffet salgados 1800
+//   buffet bolo 950
+//   casamento decoracao 0
+//   decoracao flores 1200
+//   igreja padre 300
+//   decoracao luzes 400
+//   casamento musica 2500
+//   buffet doces 700
 //
 //   Saída esperada:
 //   pai igreja não existe: linha ignorada

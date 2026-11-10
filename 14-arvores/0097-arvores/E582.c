@@ -13,9 +13,9 @@
 //           ├── lata
 //           └── 2 litros
 //
-// Escreva do zero (struct, montagem, função e liberação) um programa que
-// imprime o caminho da raiz até cada folha, com "/" entre os nomes, como um
-// endereço de pasta, e no fim conta os caminhos:
+// Escreva um programa (struct, montagem, função e liberação) que imprime o
+// caminho da raiz até cada folha, com "/" entre os nomes, como um endereço
+// de pasta, e no fim conta os caminhos.
 //
 //   Saída esperada:
 //   app/lanches/x-salada

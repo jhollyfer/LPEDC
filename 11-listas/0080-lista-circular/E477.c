@@ -2,11 +2,10 @@
 // Exercício E477 · ★★☆
 //
 // Rita, Davi e Lia vão de carro de Belo Horizonte a Vitória e voltam: são
-// 1000 km de estrada.
-// Eles revezam ao volante, nesta ordem, cada um dirigindo um trecho de
-// 150 km (o último trecho é o que sobrar). Escreva o programa com uma lista
-// circular de structs (nome e km dirigidos) e mostre cada trecho e, no fim,
-// quanto cada um dirigiu.
+// 1000 km de estrada. Eles revezam ao volante, nesta ordem, cada um
+// dirigindo um trecho de 150 km (o último trecho é o que sobrar). Com uma
+// lista circular de structs (nome e km dirigidos), mostre cada trecho e, no
+// fim, quanto cada um dirigiu.
 //
 //   Saída esperada:
 //   trecho 1: Rita dirige 150 km
@@ -19,9 +18,6 @@
 //   Rita: 400 km
 //   Davi: 300 km
 //   Lia: 300 km
-//
-// Escreva tudo neste arquivo, com uma struct sua (por exemplo
-// struct motorista { char nome[20]; int km; struct motorista *prox; }).
 //
 // Escreva sua resposta abaixo:
 

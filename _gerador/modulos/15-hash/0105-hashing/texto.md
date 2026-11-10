@@ -1,57 +1,39 @@
 ## 0105 · A ideia e a função hash
 
 Na academia, o guarda-volumes tem 7 armários. A recepcionista não procura um
-armário vago de porta em porta, nem anota numa lista quem ficou onde. Ela
-aplica uma **regra** ao seu nome e a regra devolve o número do armário. Na
-saída, a mesma regra diz onde estão as suas coisas, sem procurar nada.
+vago de porta em porta: aplica uma **regra** ao seu nome, e a regra devolve o
+número do armário. Na saída, a mesma regra diz onde estão as suas coisas.
 
-Você já viu buscas de todo tipo: sequencial em O(n), binária em O(log n), na
-árvore de busca em O(log n) se ela estiver equilibrada. Uma busca ainda melhor
-você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
-índice custa **O(1)**, não importa o tamanho.
+Acessar `v[i]` custa **O(1)**. Quando a chave é um número pequeno, ela serve
+de índice: com `const char *estado[100]`, `estado[61]` é "DF" em um passo. É o
+**endereçamento direto** (exemplo A209). Falha se a chave é grande (um CPF tem
+11 dígitos) ou não é número (um nome).
 
-Quando a chave já é um número pequeno, dá para usá-la direto como índice. Os
-DDDs vão de 11 a 99, então `const char *estado[100]` resolve: `estado[61]` é
-"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O
-problema aparece quando a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
-bilhões de posições para guardar 50 alunos?) e um nome nem é número.
+A saída é uma **função hash**: ela recebe a chave e devolve um índice entre
+`0` e `m - 1`, sendo `m` o tamanho da tabela. O vetor com os itens é a
+**tabela hash**, e cada posição é um **balde**. Uma boa função é
+**determinística** (mesma chave, mesmo índice), **rápida** e **espalhadora**
+(chaves diferentes caem em baldes diferentes).
 
-A saída é uma **função hash** (função de espalhamento): ela pega a chave, seja
-qual for, e devolve um índice entre `0` e `m - 1`, sendo `m` o tamanho da
-tabela. O vetor que guarda os itens nessas posições é a **tabela hash**, e cada
-posição é um **balde**.
+Para inteiros, vale o **método da divisão**: `h(k) = k mod m`, em C `k % m`.
+O Cormen recomenda `m` primo e longe de uma potência de 2, porque com
+`m = 2^p` o resto guarda só os `p` bits de baixo da chave. O **método da
+multiplicação** fica para o assunto 0178. Para texto, o mais simples é somar
+os códigos das letras e tirar o resto.
 
-Uma boa função hash tem três qualidades:
+Há mais chaves possíveis do que baldes, então duas chaves diferentes **vão**
+cair no mesmo balde: é a **colisão**. Ela não se evita; trata-se nos próximos
+dois assuntos. O **fator de carga** `α = n / m` mede o aperto: 5 alunos em 7
+armários dão α ≈ 0,71. Perto de 1 ou acima, a colisão aumenta.
 
-- **determinística**: a mesma chave dá sempre o mesmo índice, senão você não
-  acha mais o que guardou;
-- **rápida**: custa pouco calcular, senão perde a graça do O(1);
-- **espalha bem**: chaves diferentes caem em baldes diferentes, sem amontoar.
-
-Para inteiros, a função clássica é o resto, o **método da divisão**:
-`h(k) = k mod m`, em C `k % m`. O Cormen recomenda um `m` primo e longe de
-uma potência de 2: com `m = 2^p`, o resto são só os `p` bits de baixo da
-chave, e os outros bits nem contam. A outra receita do edital, o **método da
-multiplicação**, fica para o assunto 0178. Para texto, o jeito mais
-simples é somar os códigos das letras e tirar o resto. Só que existem mais
-chaves possíveis do que baldes, então duas chaves diferentes **vão** cair no
-mesmo balde um dia. Isso é uma **colisão**. Não dá para evitar, só deixar
-rara e saber tratar (os próximos dois assuntos).
-
-A conta que mede o aperto da tabela é o **fator de carga**: `α = n / m`, o
-número de itens dividido pelo número de baldes. Com 5 alunos em 7 armários,
-α ≈ 0,71. Quanto mais perto de 1 (ou acima), mais colisão.
-
-Os 5 alunos chegam na ordem ana, davi, lia, bia e caio.
-A regra é "soma dos códigos das letras, resto por 7". Para "caio": 99 + 97 +
-105 + 111 = 412, e 412 % 7 = 6. Só que "bia" (98 + 105 + 97 = 300) também deu
-6, e chegou antes. Os outros três caem em armários livres:
+Os alunos ana, davi, lia, bia e caio chegam nessa ordem; a regra é "soma dos
+códigos das letras, resto por 7". "caio" soma 412, e 412 % 7 = 6; "bia" soma
+300 e também dá 6, e chegou antes. Os outros três caem em armários livres:
 
 {{ideia}}
 
-No código, o vetor `dono` é a tabela: `NULL` quer dizer
-armário vazio. O programa só **detecta** a colisão; resolver fica para o
-próximo assunto:
+No código, o vetor `dono` é a tabela e `NULL` é armário vazio. O programa só
+**detecta** a colisão:
 
 ```c
 #include <stdio.h>
@@ -90,32 +72,26 @@ int main(void) {
 // caio -> armário 6 (colisão com bia!)
 ```
 
-No fluxograma, a função hash é um laço que acumula a soma, letra por
-letra, e um resto no final. O caminho mostrado é o do "caio": quatro voltas no
-laço, índice 6, armário ocupado, colisão:
+
+O fluxograma mostra o caminho do "caio": quatro voltas no laço, índice 6,
+armário ocupado, colisão:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Somar os códigos é fácil, mas a soma **não vê a ordem das letras**. "amor",
-> "roma", "mora" e "ramo" têm as mesmas letras, então dão a mesma soma (431) e
-> caem todos no mesmo balde. Anagramas são comuns em nomes e códigos ("AB12" e
-> "BA21"). Use o **polinômio**: `h = h * 31 + letra`. Cada letra é
-> multiplicada pela sua posição, e a ordem passa a contar (exemplo A210).
+> A soma **não vê a ordem das letras**: "amor", "roma", "mora" e "ramo" somam
+> 431 e caem no mesmo balde. Use o **polinômio** `h = h * 31 + letra`, que
+> multiplica cada letra pela sua posição (exemplo A210).
 
 > [!TIP]
-> **Por dentro do C:** o C não tem "letra"; tem bytes. Em UTF-8, o "ã" ocupa
-> dois bytes, `0xC3 0xA3`, e no gcc para PC o tipo `char` tem **sinal**: esses
-> bytes valem -61 e -93. Somados num `int`, podem deixar a soma negativa, e o
-> resto de um negativo em C é negativo: `-98 % 8` dá `-2`, índice fora do
-> vetor. Por isso a função converte para `unsigned char` (0 a 255) e acumula
-> num `unsigned`. Há outro motivo: estourar um `unsigned` é definido (a conta dá a volta, módulo 2³²),
-> enquanto estourar um `int` é comportamento indefinido. O polinômio estoura o
-> tempo todo, de propósito.
+> **Por dentro do C:** `char` tem sinal no gcc de PC, e o "ã" em UTF-8 vira
+> bytes negativos, o que gera resto negativo (`-98 % 8` dá `-2`). Por isso a
+> função usa `unsigned char` e acumula em `unsigned`, cujo estouro é definido
+> (módulo 2³²); o de `int` é indefinido.
 
 > [!NOTE]
-> **Pergunta para você:** se a tabela tivesse 10 armários em vez de 7, quais
-> alunos colidiriam? Faça as contas com as somas (ana 304, davi 420, lia 310,
-> bia 300, caio 412) antes de trocar `7` por `10` no código acima e rodar.
+> **Pergunta para você:** com 10 armários em vez de 7, quais alunos colidiriam?
+> Use as somas (ana 304, davi 420, lia 310, bia 300, caio 412) antes de
+> trocar `7` por `10` no código.
 
 {{pratique}}

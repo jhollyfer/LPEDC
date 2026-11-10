@@ -1,51 +1,41 @@
 ## 0151 · Ordenação topológica
 
-O mestre de obras tem oito serviços para encaixar no cronograma da casa. Não
-dá para levantar parede sem fundação, nem rebocar antes de passar os canos e
-os fios, nem pintar com o reboco molhado. Ele precisa de uma lista, em fila
-indiana, em que **todo serviço apareça depois dos que ele espera**.
+O mestre de obras tem oito serviços para encaixar no cronograma: não dá para
+levantar parede sem fundação, nem pintar com o reboco molhado. Ele precisa de
+uma lista em que **todo serviço apareça depois dos que ele espera**.
 
-Cada regra "a antes de b" é uma seta `a -> b`, e o conjunto vira um grafo
-dirigido. A lista pedida é a **ordenação topológica**: uma ordem dos
-vértices em que toda seta aponta para a frente. Ela só existe se o grafo não
-tem ciclo. Se a pintura espera o reboco e o reboco espera a pintura, ninguém
-começa. Um grafo dirigido sem ciclos tem até sigla: **DAG** (*directed
-acyclic graph*).
+Cada regra "a antes de b" é uma seta `a -> b`. A lista é a **ordenação
+topológica**: uma ordem dos vértices em que toda seta aponta para a frente.
+Ela só existe se o grafo não tem ciclo. Um grafo dirigido sem ciclos é um
+**DAG** (*directed acyclic graph*).
 
-O jeito mais natural é o **algoritmo de Kahn**, que faz o que o mestre de
-obras faria:
+O **algoritmo de Kahn** faz o que o mestre de obras faria:
 
 1. conte, para cada serviço, quantos ele espera: o **grau de entrada**;
-2. ponha numa fila (assunto 0085) todos com grau 0, os que já podem começar;
-3. tire um da fila e escreva na lista. Ele terminou, então cada serviço que
-   esperava por ele espera **um a menos**: `grau[v]--`. Quem chegar a 0 entra
-   na fila;
+2. ponha numa fila (assunto 0085) todos com grau 0;
+3. tire um da fila e escreva na lista. Quem esperava por ele passa a esperar
+   **um a menos**: `grau[v]--`. Quem chegar a 0 entra na fila;
 4. repita até a fila esvaziar.
 
-Se a lista terminar com menos de V serviços, sobrou gente esperando para
-sempre: os que estão num ciclo, ou depois de um. O Kahn detecta o ciclo sem
-custo extra. Cada vértice entra e sai da fila uma vez e cada seta é descontada uma
-vez: O(V + E) com lista de adjacência, O(V²) com matriz.
+Se a lista terminar com menos de V serviços, sobraram os que estão num ciclo
+ou depois dele: o Kahn detecta o ciclo sem custo extra. Cada vértice e cada
+seta são tratados uma vez: O(V + E) com lista de adjacência, O(V²) com
+matriz.
 
-A resposta **não é única**. Elétrica, Hidráulica e Telhado ficam livres ao
-mesmo tempo, e qualquer ordem entre eles serve. A fila e a ordem de índice
-dos vizinhos decidem o empate; mude a numeração e a lista muda, sem estar
-errada.
+A resposta **não é única**: Elétrica, Hidráulica e Telhado ficam livres
+juntos, e a fila e a ordem de índice decidem o empate.
 
-Existe um segundo caminho, pela DFS do assunto 0111. Quando a chamada
-`dfs(u)` termina, tudo o que depende de `u` já terminou antes. Então a ordem
-em que as chamadas **terminam** (a **pós-ordem**), lida de trás para a
-frente, é uma ordenação topológica: empilhe `u` no fim de `dfs(u)` e, no
-final, desempilhe tudo, como faz o exemplo A301. Essa é a versão do Cormen (ordem decrescente do tempo de término `u.f`); o Kahn é a
-alternativa por graus de entrada.
+O segundo caminho usa a DFS (assunto 0111). Quando `dfs(u)` termina, tudo o
+que depende de `u` já terminou. A ordem de término (**pós-ordem**), de trás
+para a frente, é uma ordenação topológica: empilhe `u` no fim de `dfs(u)` e
+desempilhe tudo no final, como no A301. É a versão do Cormen (tempo de
+término `u.f` decrescente).
 
-No desenho, o número em cima de cada serviço é a posição dele na lista. O
-Reboco espera três serviços e só entra em sétimo:
+No desenho, o número em cada serviço é a posição dele na lista:
 
 {{ideia}}
 
-O código guarda as regras numa matriz, conta os graus e roda Kahn com uma
-fila num vetor (cada vértice entra uma vez, então V posições bastam):
+A fila é um vetor: cada vértice entra uma vez, então V posições bastam.
 
 ```c
 #include <stdio.h>
@@ -92,14 +82,12 @@ int main(void) {
 // 8. Pintura
 ```
 
-No fluxograma, o laço só pergunta "a fila tem alguém?". O teste do ciclo
-fica para o fim, comparando quantos saíram com V:
+O laço do fluxograma só pergunta "a fila tem alguém?". O ciclo vem no fim:
+quantos saíram, comparado com V.
 
 {{fluxograma}}
 
 ### Passo a passo
-
-Cada linha tira um serviço da fila e desconta os que esperavam por ele:
 
 | Sai | Graus que caem | Entram na fila | Fila depois |
 | --- | --- | --- | --- |
@@ -113,26 +101,14 @@ Cada linha tira um serviço da fila e desconta os que esperavam por ele:
 | Reboco | Pintura 1 → 0 | Pintura | Pintura |
 | Pintura | | | (vazia) |
 
-O A302 aproveita o mesmo Kahn para outra pergunta: em vez de uma fila
-indiana, quantos semestres no mínimo um curso precisa, cursando em paralelo
-tudo que já está liberado.
+O A302 reaproveita o Kahn: quantos semestres, no mínimo, um curso precisa,
+cursando em paralelo tudo que já está liberado.
 
 > [!WARNING]
-> O grau que importa é o de **entrada** (quantas setas **chegam**), e a conta
-> é `grau[b] += antes[a][b]`, somando pela coluna. Somar pela linha dá o grau
-> de saída, e aí "grau 0" passa a querer dizer "ninguém depende de mim": só
-> a Pintura começa na fila, ela sai, não libera ninguém, e o programa acusa
-> um ciclo que não existe. E não esqueça o teste `feitas < V` no fim: sem
-> ele, um ciclo de verdade produz uma lista incompleta que parece certa.
-
-> [!TIP]
-> **Por dentro do C:** a fila daqui nunca dá a volta, por isso não precisa ser
-> circular como a do assunto 0085: cada vértice entra uma vez só,
-> então `fim` nunca passa de V. No fim do laço, `fila[0..fim-1]` é a própria
-> ordenação, guardada em ordem. O vetor `grau[]` é a única coisa que o
-> algoritmo destrói: depois de rodar, ele está todo zerado (ou com sobras nos
-> vértices do ciclo). Se precisar dos graus de novo, conte outra vez ou
-> trabalhe numa cópia.
+> O grau que importa é o de **entrada**: `grau[b] += antes[a][b]`, somando
+> pela coluna. Somar pela linha dá o grau de saída, e o programa acusa um
+> ciclo que não existe. Sem `feitas < V`, um ciclo de verdade gera uma lista
+> incompleta que parece certa.
 
 > [!NOTE]
 > **Pergunta para você:** se o Piso também passar a esperar o Telhado

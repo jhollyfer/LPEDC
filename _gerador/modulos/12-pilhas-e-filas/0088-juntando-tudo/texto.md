@@ -1,36 +1,28 @@
 ## 0088 · Juntando tudo: a calculadora de expressões
 
-Na conta do bar do 0084, você mesmo escreveu `35 25 + 3 * 4 /` na notação
-pós-fixa. Ninguém digita assim no celular: a pessoa quer digitar
-`(35 + 25) * 3 / 4` e ver 45. O programa do módulo faz o caminho inteiro com
-as duas estruturas: uma **fila** e duas **pilhas**.
+No bar do 0084 você escreveu `35 25 + 3 * 4 /` em pós-fixa. Ninguém digita
+assim: a pessoa digita `(35 + 25) * 3 / 4` e quer ver 45. O programa deste
+assunto faz o caminho inteiro com uma **fila** e duas **pilhas**, em duas
+etapas:
 
-São duas etapas, como numa linha de produção:
+1. **converter** a infixa em pós-fixa. Os números vão direto para uma fila de
+   saída. Os operadores esperam numa **pilha** e só vão para a fila quando
+   nenhum operador mais forte precisa passar na frente. É o algoritmo do
+   **pátio de manobras** (*shunting-yard*), de Dijkstra, o mesmo do E503;
+2. **avaliar** a pós-fixa: os itens saem da fila na ordem de entrada (FIFO) e
+   passam por uma **pilha de valores**, como no A168.
 
-1. **converter** a infixa para pós-fixa. Os números vão direto para uma
-   fila de saída, na ordem em que aparecem. Os operadores esperam numa
-   **pilha**: um operador só pode ir para a fila quando ninguém mais forte
-   precisa passar na frente. É o algoritmo do **pátio de manobras**
-   (*shunting-yard*), de Dijkstra, o mesmo do exercício E503;
-2. **avaliar** a pós-fixa. Os itens saem da fila na ordem em que entraram
-   (FIFO, o que a pós-fixa exige) e passam por uma **pilha de
-   valores**, como no A168.
+A fila fica no meio porque a etapa 1 produz itens e a etapa 2 os consome na
+mesma ordem: o padrão **produtor e consumidor**. Ela também guarda o 35
+inteiro, sem juntar dígitos de novo.
 
-A fila fica no meio, em vez de uma string, porque a etapa 1 produz itens e a
-etapa 2 os consome, um de cada vez, na mesma ordem. É o padrão
-**produtor e consumidor**, o mesmo de um *pipe* no terminal ou de uma fila de
-mensagens entre dois serviços. E a fila guarda o número 35 inteiro, sem
-precisar juntar dígitos de novo.
+A fila e a pilha do curso só guardam `int`. Como os números são sempre
+`>= 0`, os operadores viram **códigos negativos** com um `enum` (assunto 0063):
+`SOMA = -1`, `SUB = -2` e assim por diante. Na avaliação, `t >= 0` é número e
+`t < 0` é operador. A alternativa seria uma `struct` com uma etiqueta do tipo
+do item.
 
-A fila e a pilha do curso só guardam `int`. Para caber um `+` ali, o
-programa aproveita que os números da calculadora são sempre `>= 0`: os
-operadores
-viram **códigos negativos** com um `enum` (assunto 0063): `SOMA = -1`,
-`SUB = -2` e assim por diante. Na hora de avaliar, `t >= 0` é número e
-`t < 0` é operador. A técnica é comum quando o tipo é fixo; a alternativa
-seria uma `struct` com uma etiqueta dizendo o que o item é.
-
-As regras da conversão, para cada símbolo lido:
+Regras da conversão, para cada símbolo lido:
 
 - número: vai para a **fila**;
 - `(`: empilha;
@@ -39,14 +31,13 @@ As regras da conversão, para cada símbolo lido:
   para a fila; depois empilha o operador;
 - fim: o que sobrou na pilha vai para a fila.
 
-Com `(35 + 25) * 3 / 4`, a fila de saída fica
-`35 25 + 3 * 4 /`. Na avaliação, a pilha de valores chega a ter 180 e 4
-quando aparece o `/`, e a última conta dá 45:
+Com `(35 + 25) * 3 / 4`, a fila de saída fica `35 25 + 3 * 4 /`. Quando chega
+o `/`, a pilha de valores tem 180 e 4, e a última conta dá 45:
 
 {{ideia}}
 
-A pasta tem o `pilha.h`/`pilha.c` do 0083 e o `fila.h`/`fila.c` do 0086, e o
-comando do exemplo compila os quatro junto com o programa:
+A pasta tem o `pilha.c` do 0083 e o `fila.c` do 0086; o comando do exemplo
+compila os quatro com o programa:
 
 ```c
 #include <stdbool.h>
@@ -158,36 +149,28 @@ int main(void) {
 // Resultado: 12
 ```
 
-No fluxograma, as duas etapas ficam em sequência, e as perguntas de erro só
-aparecem na avaliação, quando a falta de operando e a divisão por zero se
-revelam:
+No fluxograma, as perguntas de erro só aparecem na avaliação, onde a falta de
+operando e a divisão por zero se revelam:
 
 {{fluxograma}}
 
-O segundo exemplo, A176, junta fila e pilha de outro jeito: as letras de uma
-frase entram nas duas ao mesmo tempo. A fila devolve na ordem original, a
-pilha devolve ao contrário. Se as duas sequências baterem letra por letra, a
-frase é um palíndromo.
+O A176 junta fila e pilha de outro jeito: as letras de uma frase entram nas
+duas. A fila devolve a ordem original e a pilha, a invertida; se as duas
+sequências coincidirem letra a letra, a frase é um palíndromo.
 
 > [!WARNING]
-> O "maior **ou igual**" da conversão muda o resultado. Com só "maior", `8 - 3 -
-> 2` vira `8 3 2 - -`, que calcula `8 - (3 - 2) = 7`. O certo é
-> `(8 - 3) - 2 = 3`: operadores de mesma precedência associam **à esquerda**,
-> então o que já está na pilha sai antes do novo. (A potência é a exceção que
-> associa à direita, e por isso este programa não tem `^`.) Esse é o bug do
-> E526.
+> O "maior **ou igual**" da conversão muda o resultado. Só com "maior",
+> `8 - 3 - 2` vira `8 3 2 - -`, que dá `8 - (3 - 2) = 7`; o certo é
+> `(8 - 3) - 2 = 3`. Operadores de mesma precedência associam **à esquerda**,
+> então o que já está na pilha sai antes do novo. (A potência associa à
+> direita, por isso o programa não tem `^`.) É o bug do E526.
 
 > [!TIP]
-> **Por dentro do C:** os quatro `.c` da pasta são compilados separados e
-> juntados pelo ligador. O nó da pilha se chama `No` e o da fila, `NoFila`,
-> mas, compilados separados, os dois poderiam se chamar `No`: tipo não tem
-> ligação, ele só existe dentro do arquivo que o declara, e o ligador nunca o
-> vê. Conflito haveria se os dois definissem uma **função** com o mesmo nome,
-> como `cria`: por isso cada TAD prefixa as suas (`pilha_`, `fila_`). Quanto
-> ao custo, cada símbolo da expressão entra e sai da fila uma vez e de cada
-> pilha no máximo uma vez, então a calculadora inteira é **O(n)** no tamanho
-> da expressão.
-
+> Tipos não têm ligação: `No` (pilha) e `NoFila` poderiam ter o mesmo nome em
+> arquivos separados. O conflito só ocorre entre **funções** de mesmo nome, por
+> isso cada TAD prefixa as suas (`pilha_`, `fila_`). Cada símbolo entra e sai
+> da fila uma vez e de cada pilha no máximo uma, então a calculadora é
+> **O(n)**.
 
 > [!NOTE]
 > **Pergunta para você:** como fica a pós-fixa de `100 / (2 + 3) - 4`? E o

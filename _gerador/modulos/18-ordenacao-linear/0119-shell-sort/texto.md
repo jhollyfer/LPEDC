@@ -1,39 +1,25 @@
 ## 0119 · Shell sort
 
-O motorista da van de entregas recebe 10 pacotes jogados no banco de trás, com
-os números de rota 62, 17, 85, 40, 9, 73, 28, 51, 94 e 33. Ele quer os
-pacotes em ordem de rota. Se fizer como no insertion sort, pegando um por vez
-e escorregando para a esquerda casa a casa, o pacote 9, que está na quinta
-posição, vai precisar de quatro empurrões para chegar na frente.
+O motorista da van recebe 10 pacotes fora da ordem de rota. No insertion sort,
+o pacote 9, na quinta posição, precisa de quatro empurrões para chegar à
+frente.
 
-Esse é o ponto fraco do **insertion sort** (assunto 0093): cada movimento
-anda **uma casa só**. Um elemento que está longe do lugar certo paga uma
-comparação e um deslocamento por casa que atravessa. Num vetor invertido, a
-conta vira n²/2.
+O **insertion sort** (assunto 0093) anda **uma casa por movimento**: num vetor
+invertido, a conta vira n²/2. Em 1959, Donald Shell propôs andar de **h em
+h**. O **shell sort** repete o insertion sort com saltos `h` cada vez
+menores. A última rodada é sempre com `h = 1`, sobre um vetor **quase
+ordenado**, caso em que o insertion sort é rápido.
 
-Em 1959, Donald Shell propôs: antes de andar de uma em uma casa, ande de
-**h em h**. O **shell sort** faz o insertion sort várias vezes,
-com saltos `h` cada vez menores:
+Depois da rodada com salto `h`, o vetor está **h-ordenado**: cada fileira de
+um elemento a cada `h` casas está em ordem. Com `h = 4`, são quatro insertion
+sorts entrelaçados (posições 0, 4, 8; 1, 5, 9; 2, 6; 3, 7).
 
-1. com um salto grande, os elementos dão pulos longos e chegam **perto** do
-   lugar certo;
-2. com saltos menores, o vetor fica cada vez mais arrumado;
-3. a última rodada é sempre com `h = 1`: o insertion sort comum, só que sobre
-   um vetor **quase ordenado**, justamente o caso em que ele é rápido.
+A sequência de **Knuth** é `h = 3h + 1`: 1, 4, 13, 40, 121, 364... Comece com o
+maior salto abaixo de `n / 3` e divida por 3 a cada rodada. Com `n = 10`, os
+saltos são 4 e 1.
 
-Depois da rodada com salto `h`, o vetor está **h-ordenado**: se você pegar
-um elemento a cada `h` casas, a partir de qualquer posição, essa fileira está
-em ordem. Com `h = 4`, as posições 0, 4, 8 formam uma fileira; 1, 5, 9
-formam outra; 2, 6 e 3, 7 formam mais duas. São quatro insertion sorts
-pequenos, entrelaçados no mesmo vetor.
-
-A sequência de saltos mais conhecida é a de **Knuth**: `h = 3h + 1`, que dá
-1, 4, 13, 40, 121, 364... Você começa com o maior salto abaixo de `n / 3` e
-vai dividindo por 3. Com `n = 10`, os saltos são só 4 e 1.
-
-Na primeira linha do desenho, cada cor é uma fileira de salto 4. Cada fileira
-se ordena sozinha: o 9 troca com o 62, o 33 com o 73 e o 28 com o 85. Com
-três movimentos, o vetor fica quase pronto:
+Na primeira linha do desenho, cada cor é uma fileira de salto 4: três
+movimentos deixam o vetor quase pronto.
 
 {{ideia}}
 
@@ -90,20 +76,15 @@ int main(void) {
 // h = 1: 9 17 28 33 40 51 62 73 85 94  (6 movimentos)
 ```
 
-São 9 movimentos no total. O insertion sort comum, no mesmo vetor, faz 21:
-o 9, sozinho, gastaria 4. No shell sort ele deu **um** pulo de 4 casas.
-
-O `h /= 3` desfaz a conta `3 * h + 1`: na divisão inteira, 13 / 3 é 4 e
-4 / 3 é 1. O laço de fora para quando `h` vira 0. O programa primeiro sobe
-até o maior salto, depois desce rodada por rodada, e a última rodada é
-sempre a do `h = 1`:
+São 9 movimentos; o insertion sort comum faria 21. O `h /= 3` desfaz o
+`3 * h + 1`: 13 / 3 é 4 e 4 / 3 é 1. O laço para quando `h` vira 0.
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A rodada com `h = 4`. O `i` anda de 4 até 9, e cada `v[i]` só se compara com
-quem está 4, 8, ... casas para trás:
+A rodada com `h = 4`; cada `v[i]` se compara só com quem está 4, 8, ... casas
+para trás:
 
 | i | x | compara com | ação | vetor depois |
 | --- | --- | --- | --- | --- |
@@ -115,28 +96,17 @@ quem está 4, 8, ... casas para trás:
 | 9 | 33 | v[5] = 73, depois v[1] = 17 | 73 pula para v[9]; 33 vai para v[5] | 9 17 28 40 62 33 85 51 94 73 |
 
 > [!WARNING]
-> A última rodada **tem** que ser com `h = 1`. As rodadas com salto grande só
-> garantem que cada fileira está em ordem, não o vetor todo: depois do
-> `h = 4`, o 62 ainda está antes do 33. Se você inventar sua própria
-> sequência (5, 3, 2, por exemplo) e esquecer do 1, o programa termina sem
-> erro e com o vetor fora de ordem. Outro tropeço: escrever a
-> condição como `j > 0` (a do insertion sort comum). Com salto `h`, o certo é
-> `j >= h`, senão `v[j - h]` lê antes do começo do vetor.
+> A última rodada **tem** que ser com `h = 1`: depois do `h = 4`, o 62 ainda
+> está antes do 33. Sem o 1, o programa termina sem erro e com o vetor fora de
+> ordem. Use `j >= h`, não `j > 0`, senão `v[j - h]` lê antes do vetor.
 
 > [!TIP]
-> **Por dentro do C:** o shell sort não usa memória extra: só `h`, `i`, `j` e
-> `x`, umas poucas variáveis na pilha, qualquer que seja o tamanho do vetor.
-> Por isso ele aparece em sistemas embarcados e no código de
-> bibliotecas pequenas (a uClibc, por exemplo, implementa o `qsort` com shell
-> sort). O custo depende dos saltos, e ninguém sabe a fórmula exata para a
-> maioria das sequências: com a de Knuth, o pior caso é O(n^1,5), e na
-> prática fica perto de n^1,25. Já os saltos `n/2, n/4, ..., 1` (os de Shell)
-> têm pior caso O(n²): quando `n` é potência de 2, todos são pares menos o
-> último, e posições pares e ímpares só se comparam na rodada final.
+> **Por dentro do C:** o shell sort não usa memória extra. Com os saltos de
+> Knuth, o pior caso é O(n^1,5); com `n/2, n/4, ..., 1` (os de Shell), é
+> O(n²), porque posições pares e ímpares só se comparam na rodada final.
 
 > [!NOTE]
-> **Pergunta para você:** o shell sort é estável? Pense em `5 3a 3b 1` (dois
-> 3 iguais, o `a` antes do `b`) com saltos 2 e 1. Faça as duas rodadas no
-> papel e veja em que ordem os dois 3 terminam.
+> **Pergunta para você:** o shell sort é estável? Faça `5 3a 3b 1` (dois 3
+> iguais) com saltos 2 e 1 no papel e veja em que ordem os 3 terminam.
 
 {{pratique}}

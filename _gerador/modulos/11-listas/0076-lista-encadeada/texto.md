@@ -1,18 +1,14 @@
 ## 0076 · Lista encadeada
 
-Abra o extrato do Pix no app do banco: o mais recente aparece em cima. Cada
-Pix novo entra na frente, e ninguém precisa empurrar os antigos para baixo.
-No vetor do assunto anterior, inserir na posição 0 faria todos andarem uma
-casa. A lista encadeada evita isso.
+No extrato do Pix, cada Pix novo entra na frente sem empurrar os antigos. No
+vetor, inserir na posição 0 move todo mundo. A lista encadeada evita isso.
 
 Uma **lista encadeada** (no Cormen, **lista ligada**) guarda cada item num
-pedaço separado de memória, o **nó**. Além do valor, cada nó guarda o endereço
-do próximo. O último aponta para `NULL`. Para usar a lista, basta o
-endereço do primeiro nó, o **início** (o `L.head` do Cormen). Lista vazia é
-`inicio == NULL`.
+pedaço separado de memória, o **nó**: o valor e o endereço do próximo. O
+último aponta para `NULL`. A lista inteira é o endereço do primeiro nó, o
+**início** (o `L.head` do Cormen). Lista vazia é `inicio == NULL`.
 
-O nó é uma struct que aponta para o próprio tipo, uma **struct
-autorreferenciada**:
+O nó é uma **struct autorreferenciada**:
 
 ```c
 typedef struct no {
@@ -21,27 +17,22 @@ typedef struct no {
 } No;
 ```
 
-O `struct no *prox` fica dentro da própria `struct no`. Uma struct não pode
-conter a si mesma (teria tamanho infinito), mas pode conter um **ponteiro**
-para si mesma: um ponteiro tem sempre 8 bytes, aponte para o que apontar.
+Uma struct não pode conter a si mesma (teria tamanho infinito), mas pode
+conter um **ponteiro** para si mesma: ele tem sempre 8 bytes.
 
-Os nós não ficam lado a lado na memória. Cada um nasce de um `malloc`
-diferente e cai onde o heap tiver espaço. A ordem da lista não está nas
-posições: está nas **setas**. Por isso não existe `lista[2]`: para chegar no
-terceiro nó, você segue duas setas a partir do início.
+Cada nó vem de um `malloc` e cai onde o heap tiver espaço: a ordem está nas
+**setas**. Não existe `lista[2]`; para chegar ao terceiro nó, siga duas setas
+a partir do início.
 
-Três operações formam a base, e todas estão no `lista.c` desta pasta:
+Três operações formam a base (no `lista.c` desta pasta):
 
-- **inserir no início**: cria o nó, aponta o `prox` dele para o antigo
-  início e devolve o novo nó, que passa a ser o início. É O(1): não importa o
-  tamanho da lista.
-- **percorrer**: `for (p = inicio; p != NULL; p = p->prox)`. É o "for de
-  lista", que aparece em quase toda função daqui em diante.
+- **inserir no início**: cria o nó, aponta o `prox` dele para o antigo início
+  e devolve o novo nó como início. É O(1).
+- **percorrer**: `for (p = inicio; p != NULL; p = p->prox)`, o "for de lista".
 - **liberar**: um `free` por nó, guardando o próximo **antes** do `free`.
 
-Inserir no **fim** é outra conversa: guardando só o início, é preciso andar
-até o último nó, O(n). Com um ponteiro a mais para o último, vira O(1) (o
-0079 e o 0086 fazem assim).
+Inserir no **fim** com só o início guardado exige andar até o último nó,
+O(n). Com um ponteiro para o último, vira O(1) (0079 e 0086).
 
 ```c
 No *lista_insere_inicio(No *inicio, int valor) {
@@ -56,14 +47,10 @@ No *lista_insere_inicio(No *inicio, int valor) {
 }
 ```
 
-Aqui a struct do nó fica no `lista.h`, à vista, de propósito: o assunto é
-mexer em `p->valor` e `p->prox`. Na pilha e na fila (módulo 12) ela
-volta a ficar escondida no `.c`.
+Aqui o nó fica à vista no `lista.h`; no módulo 12 volta a ficar escondido.
 
-No exemplo, chegam quatro Pix: R$ 20, 45, 10 e 80. Cada um entra na
-frente, então o extrato mostra o 80 primeiro. Embaixo, a mesma lista como ela
-está de verdade no heap: endereços fora de ordem, com outros dados no meio, e
-cada nó guardando o endereço do próximo:
+Chegam quatro Pix: R$ 20, 45, 10 e 80, e o 80 aparece primeiro. Embaixo, a
+lista no heap: endereços fora de ordem, cada nó com o endereço do próximo:
 
 {{ideia}}
 
@@ -96,30 +83,22 @@ int main(void) {
 // 4 Pix, total R$ 155
 ```
 
-Percorrer, no fluxograma, é um laço que pergunta "ainda tem nó?" antes de
-cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
-`NULL`. Aí o laço para, com o total em R$ 155:
+No fluxograma, o laço pergunta "ainda tem nó?" antes de cada passo. O `p` vai
+do 80 ao 10, ao 45 e ao 20, vira `NULL` e o laço para, com total R$ 155:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `lista_insere_inicio(extrato, 20);` sozinho, sem o `extrato =` na frente,
-> compila sem aviso e está errado. A função devolve o novo início, e ele foi
-> jogado fora. O `extrato` continua apontando para o nó antigo (ou para
-> `NULL`), e o nó novo vira vazamento. Toda função que pode mudar o início
-> devolve o início novo, e você **sempre** guarda: `extrato =
-> lista_insere_inicio(extrato, 20);`. No `libera`, o erro comum é outro: ler
-> `p->prox` depois de `free(p)`.
+> `lista_insere_inicio(extrato, 20);` sem o `extrato =` compila sem aviso e
+> está errado: o novo início se perde e o nó vira vazamento. No `libera`, o
+> erro comum é ler `p->prox` depois de `free(p)`.
 
 > [!TIP]
-> **Por dentro do C:** num PC de 64 bits, `sizeof(No)` é 16: 4 bytes do `int`,
-> 4 de **preenchimento** (o ponteiro precisa começar num endereço múltiplo de
-> 8) e 8 do ponteiro. E cada `malloc` ainda gasta uns 16 bytes de controle.
-> Guardar 4 inteiros numa lista custa umas 8 vezes mais memória que num
-> vetor. E há o **cache**: o processador lê a memória em blocos de 64 bytes.
-> No vetor, ler `itens[0]` já traz os vizinhos de brinde. Na lista, cada nó
-> pode estar longe do anterior. Percorrer a lista é O(n), igual ao vetor, mas
-> na prática bem mais lento.
+> **Por dentro do C:** em 64 bits, `sizeof(No)` é 16: 4 bytes do `int`, 4 de
+> **preenchimento** (o ponteiro começa em múltiplo de 8) e 8 do ponteiro. Cada
+> `malloc` ainda gasta uns 16 bytes de controle. Percorrer é O(n) como no
+> vetor, mas mais lento: o **cache** lê blocos de 64 bytes e os nós ficam
+> espalhados.
 
 > [!NOTE]
 > **Pergunta para você:** se você inserir no início o 5, depois o 6 e depois

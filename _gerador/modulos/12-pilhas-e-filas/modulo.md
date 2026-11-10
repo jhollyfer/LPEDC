@@ -1,50 +1,51 @@
 # Módulo 12 · Pilhas e filas
 
-A lista encadeada do módulo 11 deixa você inserir e remover em qualquer
-lugar. Este módulo faz o contrário: **proíbe**. Uma pilha só mexe no topo;
-uma fila só entra por um lado e sai pelo outro. Parece perda, mas a restrição
-traz uma garantia: o desfazer sempre desfaz o último passo, e quem chegou
-primeiro é atendido primeiro.
+A lista encadeada do módulo 11 deixa inserir e remover em qualquer lugar.
+Este módulo **proíbe**: a pilha só mexe no topo, e a fila entra por um lado e
+sai pelo outro. A restrição dá uma garantia: o desfazer desfaz o último
+passo, e quem chegou primeiro é atendido primeiro.
 
-Você usa essas estruturas o dia inteiro sem perceber. A pilha de chamadas do seu
-programa, o Ctrl+Z, o botão Voltar e o *parser* de um compilador são pilhas. A
-fila de processos do sistema operacional, a fila de jobs do seu backend e a
-impressora do escritório são filas. Aqui você constrói as duas do zero, cada
-uma de dois jeitos (vetor e lista encadeada), sempre como **TAD**: o mesmo
-`.h`, o `.c` trocado por baixo, e o programa cliente não muda.
+Você já usa essas estruturas: a pilha de chamadas, o Ctrl+Z e o botão Voltar
+são pilhas; a fila de processos do sistema operacional e a impressora são
+filas. Aqui você constrói as duas, cada uma em vetor e em lista encadeada,
+sempre como **TAD**: o mesmo `.h`, o `.c` trocado por baixo, e o programa
+cliente não muda.
 
 ## O que você vai aprender
 
-- o TAD **pilha** (LIFO) sobre vetor: empilhar, desempilhar, topo, *overflow* e *underflow*
+- a **pilha** (LIFO) em vetor: empilhar, desempilhar, topo, *overflow* e *underflow*
 - a **pilha encadeada**: por que o topo fica no começo da lista
-- duas aplicações clássicas: **parênteses balanceados** e **notação pós-fixa**
-- o TAD **fila** (FIFO) e a **fila circular** sobre vetor, com o `%` dando a volta
+- **parênteses balanceados** e **notação pós-fixa**
+- a **fila** (FIFO) e a **fila circular**, com o `%` dando a volta
 - a **fila encadeada** com ponteiros de início e fim, e os bugs das bordas
-- o **deque**, que entra e sai pelas duas pontas, e a pegadinha do resto negativo
-- uma calculadora que junta tudo: infixa → pós-fixa → resultado
+- o **deque**, que usa as duas pontas, e a pegadinha do resto negativo
+- uma calculadora que junta tudo: infixa, pós-fixa, resultado
 
 ## Antes de começar
 
-Os diagramas da ideia mostram a memória por dentro: neles, verde marca o item
-que está saindo e cinza a gaveta que já virou vaga.
+Nos diagramas da ideia, verde marca o item que está saindo e cinza a gaveta
+que virou vaga.
 
-Você precisa estar à vontade com ponteiros, `malloc`/`free`, `struct` com
-`->` e listas encadeadas (módulos 06, 07, 08 e 11), além da ideia de TAD do
-assunto 0074.
+Você precisa de ponteiros, `malloc`/`free`, `struct` com `->` e listas
+encadeadas (módulos 06, 07, 08 e 11) e da ideia de TAD (assunto 0074).
 
-Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
-`pilha.h` e `pilha.c`, `fila.h` e `fila.c` ou `deque.h` e `deque.c`. O
-comando do exemplo compila esses `.c` de apoio junto com qualquer exemplo ou exercício
-da pasta:
+Cada pasta traz os arquivos do TAD (`pilha.h` e `pilha.c`, `fila.h` e
+`fila.c` ou `deque.h` e `deque.c`) ao lado dos exemplos. Compile com o `gcc`
+esses `.c` de apoio junto com o exemplo ou exercício:
 
 ```bash
 gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163
 ```
 
-Num exercício, **não** crie funções com os nomes do TAD
-(`pilha_cria`, `fila_insere`...): o ligador reclamaria de definição
-duplicada. Os exercícios que pedem uma estrutura diferente usam outros nomes
-e trazem tudo no próprio arquivo.
+Num exercício, **não** crie funções com os nomes do TAD (`pilha_cria`,
+`fila_insere`...): o ligador acusa definição duplicada. Exercícios que pedem
+outra estrutura usam outros nomes e trazem tudo no próprio arquivo.
+
+**Progressão.** Do módulo 11 você usa o nó com `prox`, a inserção e a
+remoção no início da lista e a lista dupla. Este módulo prepara o 13, onde a
+pilha de chamadas explica a recursão do merge sort e do quick sort, e o 16,
+onde a fila conduz a busca em largura (0110) e a pilha apoia a busca em
+profundidade (0111).
 
 {{indice}}
 
@@ -75,11 +76,6 @@ sequência de `E` (empilha) e `D` (desempilha) usada. Teste com (a) 3 2 1 5 4;
 (d) 5 4 3 2 1: possivel com EEEEEDDDDD
 ```
 
-Dica: para cada número da saída, empilhe os próximos que chegam enquanto o
-topo não for ele (e ainda houver números); se mesmo assim o topo não for
-ele, é impossível. Em (b), quando o 3 sai, o 2 está por cima do 1, então o 2
-teria que sair antes. Libere a pilha nos dois caminhos.
-
 </details>
 
 **2. Tags HTML balanceadas.** Escreva um verificador para tags simples, sem
@@ -108,11 +104,6 @@ casos.
 1000 insercoes e depois 1000 retiradas: 2000 empilhas (soma 500500)
 alternando 1000 vezes: 2000 empilhas (soma 500500)
 ```
-
-Dica: a soma confere que saiu tudo, na ordem certa ou não (1 + ... + 1000).
-Nos dois casos cada item é empilhado uma vez na entrada e uma vez na saída:
-**custo amortizado**. Uma retirada pode custar O(n) (o despejo), mas a
-média por operação é O(1).
 
 </details>
 
@@ -174,13 +165,6 @@ impossivel: 4 2 3 1
 2 de 24 ordens sao impossiveis
 ```
 
-Dica: guarde o deque num vetor com `ini` e `fim` e a função recursiva recebe
-o próximo número a chegar e quantos já saíram; só tire de uma ponta se o
-número dela for o próximo esperado, e desfaça a mudança ao voltar da
-recursão. As 24 ordens saem de quatro `for` aninhados que pulam valores
-repetidos. Em 4 2 1 3, para o 4 sair primeiro o deque precisa estar
-1 2 3 4, e aí o 2 está no meio.
-
 </details>
 
 **8. Palíndromo de números.** Sem converter para string, use uma fila e uma
@@ -222,263 +206,312 @@ pós-fixas ficam `A B C * +` e `A B + C *`.
 
 </details>
 
-## Questões no estilo da prova
+## Questões de provas do PPGI
 
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Resolva no
-papel, desenhando a pilha ou a fila a cada operação, e só depois abra o
-gabarito. As simulações e os trechos de código foram conferidos rodando
-programas em C (`gcc -std=c17 -Wall`, com AddressSanitizer). Nos trechos, o nó
-é `typedef struct no { int valor; struct no *prox; } No;`. Atenção a "sempre",
-"com certeza" e "nunca".
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 
-**Questão 1.** Uma pilha de inteiros começa vazia. Qual é a sequência de
-valores devolvidos pelas operações `desempilha`, na ordem em que elas
-ocorrem?
+**Edital 032/2016 · Questão 06**
 
-```text
-empilha(5)  empilha(2)  desempilha  empilha(7)  empilha(1)  desempilha
-desempilha  empilha(9)  desempilha  empilha(3)  desempilha
-```
+Uma estrutura de dados bastante útil quando deseja-se armazenar elementos para recupera-los posteriormente em ordem reversa a de inserção:
 
-- (A) 2 1 7 9 3
-- (B) 2 7 1 9 3
-- (C) 5 2 7 9 3
-- (D) 2 1 7 3 9
-- (E) 5 2 7 1 9
+- a) A árvore é uma árvore AVL
+- b) Um hash
+- c) Uma fila de prioridades com ordenação reversa de prioridade
+- d) Uma pilha
+- e) Uma árvore vermelho e preto
 
 <details><summary>Gabarito</summary>
 
-**(A)**. Acompanhando o topo: `[5]`, `[5 2]`, sai 2, `[5 7]`, `[5 7 1]`, sai
-1, sai 7, `[5 9]`, sai 9, `[5 3]`, sai 3. Saídas: 2 1 7 9 3, e o 5 fica no
-fundo. A (C) e a (E) são o raciocínio de fila (sai o mais antigo). Veja 0082.
+**D.** Pilha é LIFO. Assunto 0082.
 
 </details>
 
-**Questão 2.** Uma fila de inteiros começa vazia. As operações são
-`enfileira(x)` e `desenfileira`. Depois da sequência abaixo, a fila, do
-início para o fim, contém:
+**Edital 053/2016 · Questão 05**
 
-```text
-enfileira(4)  enfileira(8)  desenfileira  enfileira(6)  desenfileira
-enfileira(2)  enfileira(9)  desenfileira  enfileira(5)
-```
+Considere uma estrutura de fila (disciplina FIFO) de números inteiros com duas operações: INSERE(n) e RETIRA( ). Considere, também, que a representação do estado da fila em um instante qualquer é realizada listando os elementos, de forma que o primeiro elemento, da esquerda para a direita, é o mais antigo presente na fila.
 
-- (A) 5 9 2
-- (B) 9 2 5
-- (C) 6 2 9 5
-- (D) 2 9 5
-- (E) 8 6 2 9 5
+Se a fila começa vazia, a sequência:
+
+INSERE(2) → INSERE(3) → RETIRA() → INSERE(1) → RETIRA() → INSERE(4) → INSERE(5) → RETIRA() → RETIRA()
+
+O estado final da fila será:
+
+- a) 1 2 3 4 5
+- b) 2 3 1 4 5
+- c) 3 1 4
+- d) 4 5
+- e) 5
 
 <details><summary>Gabarito</summary>
 
-**(D)**. Os três `desenfileira` tiram, nessa ordem, o 4, o 8 e o 6 (sempre o
-que está há mais tempo). Sobram, na ordem de chegada, 2, 9 e 5. A (A) é a
-fila lida ao contrário (visão de pilha). Veja 0085.
+**E.** Fila: [3], [3 1], [1], [1 4 5], [4 5], [5]. Assunto 0085.
 
 </details>
 
-**Questão 3.** Uma fila circular em vetor de capacidade `C = 6` guarda
-`inicio` (posição do próximo a sair) e `n` (quantos itens há). Enfileirar
-grava em `(inicio + n) % C` e depois faz `n++`; desenfileirar faz
-`inicio = (inicio + 1) % C` e `n--`. Partindo da fila vazia com
-`inicio = 0`, ocorrem 5 enfileiramentos, 3 desenfileiramentos, 3
-enfileiramentos e 2 desenfileiramentos, nessa ordem. Qual é o valor de
-`inicio` agora e em que posição do vetor entra o próximo item?
+**Edital 053/2016 · Questão 08**
 
-- (A) `inicio` = 5, próximo item na posição 8.
-- (B) `inicio` = 5, próximo item na posição 2.
-- (C) `inicio` = 3, próximo item na posição 2.
-- (D) `inicio` = 2, próximo item na posição 5.
-- (E) `inicio` = 0, próximo item na posição 3.
+Sabendo que as seguintes operações foram realizadas:
+
+1. Dados foram inseridos numa PILHA na seguinte ordem: 11, 12, 23, 14, 25, 50, 8, 18, 29, 10.
+2. Repetiu-se 10 vezes o par de operações: retirada da PILHA; inserção na FILA.
+3. A FILA foi exibida (impressa).
+4. Repetiu-se 10 vezes o par de operações: retirada da FILA; inserção na PILHA.
+5. A PILHA foi exibida (impressa).
+
+As possíveis estruturas exibidas nas operações 3 e 5 são:
+
+I) FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)\
+II) PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10\
+III) PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11\
+IV) FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)\
+V) A PILHA mostrada fica com os elementos em ordem invertida dos dados de entrada\
+
+As estruturas exibidas CORRETAMENTE nas operações 3 e 5 são:
+
+- a) I e II
+- b) I e
+- c) II e III
+- d) III e IV
+- e) III e IV
 
 <details><summary>Gabarito</summary>
 
-**(B)**. Estados `(inicio, n)`: depois dos 5 primeiros, `(0, 5)`; depois dos
-3 desenfileiramentos, `(3, 2)`; depois dos 3 enfileiramentos, `(3, 5)`
-(o último ocupou a posição `(3 + 4) % 6 = 1`, dando a volta); depois de
-2 desenfileiramentos, `(5, 3)`. O próximo item vai para
-`(5 + 3) % 6 = 2`. A (A) esqueceu o `% C`: a posição 8 nem existe. Veja
-0085.
+**A.** Pilha → fila: 10 29 18 8 50 25 14 23 12 11 (I). Fila → pilha: topo 11 12 23 ... 10 (II). Assunto 0082.
 
 </details>
 
-**Questão 4.** Considere as afirmações sobre pilhas e filas:
+**Edital 024/2017 · Questão 06**
 
-I. Numa pilha, o próximo elemento a ser removido é sempre o último que foi
-inserido e ainda não foi removido.
-II. Numa fila, o próximo elemento a ser removido é o último que foi inserido.
-III. Se os valores 1, 2 e 3 entram, nessa ordem, numa pilha (com remoções
-intercaladas permitidas), a saída 3 1 2 é possível.
-IV. Se os valores 1, 2 e 3 entram, nessa ordem, numa fila, eles só podem sair
-na ordem 1, 2, 3.
+Após a inserção da sequencia de números 3, 4, 6, 8 e 9 em uma pilha, o resultado CORRETO de 3 remoções sucessivas seria:
 
-- (A) Apenas I.
-- (B) Apenas II e III.
-- (C) Apenas I, III e IV.
-- (D) Apenas II e IV.
-- (E) Apenas I e IV.
+- a) 3, 4 e 6, nesta ordem
+- b) 6, 3 e 4, nesta ordem
+- c) 6, 8 e 9, nesta ordem
+- d) 9, 8 e 6, nesta ordem
+- e) Nenhuma das alternativas anteriores
 
 <details><summary>Gabarito</summary>
 
-**(E)**. I é a definição de pilha (LIFO). II é falsa: na fila sai o primeiro
-que entrou (FIFO). III é falsa: para o 3 sair primeiro, o 1 e o 2 já estão
-empilhados, com o 2 acima do 1, então o 2 sai antes do 1: as saídas
-possíveis com a entrada 1 2 3 são 123, 132, 213, 231 e 321, e a 312 não está
-entre elas. IV é verdadeira: a fila nunca troca a ordem. Veja 0082 e 0085.
+**D.** LIFO: sai 9, 8, 6 Assunto 0082.
 
 </details>
 
-**Questão 5.** Considere as afirmações sobre aplicações de pilhas e filas:
+**Edital 024/2017 · Questão 13**
 
-I. A chamada de funções recursivas usa, na memória, uma pilha.
-II. Para verificar se os parênteses de uma expressão estão balanceados, a
-pilha pode chegar a ter um tamanho proporcional ao da expressão (por exemplo,
-com `((((`).
-III. O "desfazer" (Ctrl+Z) de um editor é uma aplicação típica de fila.
-IV. Uma expressão pós-fixa nunca precisa de pilha para ser avaliada.
+Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.
 
-- (A) Apenas I.
-- (B) Apenas II e III.
-- (C) Apenas I e II.
-- (D) Apenas III e IV.
-- (E) Todas estão corretas.
-
-<details><summary>Gabarito</summary>
-
-**(C)**. I é verdadeira: cada chamada empilha seu registro, e a volta
-desempilha. II é verdadeira: cada `(` espera na pilha o seu `)`. III é falsa:
-o "desfazer" desfaz primeiro a **última** ação, que é o comportamento de pilha.
-IV é falsa ("nunca"): os operandos esperam numa pilha até chegar o operador.
-Veja 0082 e 0084.
-
-</details>
-
-**Questão 6.** Considere as afirmações sobre implementações:
-
-I. Numa pilha em vetor com `n` itens e espaço livre, empilhar custa O(1).
-II. Numa fila encadeada com ponteiros `inicio` e `fim`, enfileirar e
-desenfileirar custam O(1).
-III. Numa fila circular em vetor de capacidade `C`, com `inicio` e `n`, a
-próxima posição livre é `(inicio + n) % C`.
-IV. Num deque feito com lista simplesmente encadeada com `inicio` e `fim`,
-remover do fim custa O(1).
-
-- (A) Apenas I e II.
-- (B) Apenas I, II e III.
-- (C) Apenas II, III e IV.
-- (D) Apenas I e IV.
-- (E) Todas estão corretas.
-
-<details><summary>Gabarito</summary>
-
-**(B)**. I, II e III são verdadeiras. IV é falsa: remover o último nó de uma
-lista simples exige mudar o `prox` do penúltimo, e achar o penúltimo custa
-O(n). Por isso o deque encadeado usa lista **dupla**. Veja 0083, 0086 e
-0087.
-
-</details>
-
-**Questão 7.** A pilha encadeada tem os valores 7 (topo), 5 e 2. Qual
-afirmação sobre o trecho é **correta**?
+Marque a alternativa CORRETA sobre as funções função I e função II
 
 ```c
-int desempilha(No *topo) {
-    int v = topo->valor;
-    No *aux = topo;
-    topo = topo->prox;
-    free(aux);
-    return v;
+/* função I */
+void funcaoI(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux ->chave = chave;
+  aux->prox = prim;
+  prim = aux;
 }
 
-/* no main, com topo apontando para o nó do 7: */
-int x = desempilha(topo);
-int y = desempilha(topo);
-```
-
-- (A) `x` vale 7 e `y` vale 5.
-- (B) `x` e `y` valem 7, porque a pilha não é alterada.
-- (C) O código não compila: `topo` é reatribuído dentro da função.
-- (D) `x` vale 7, mas o `topo` do `main` continua no nó liberado, e a segunda chamada lê memória já devolvida.
-- (E) `x` vale 7 e `y` vale 5, mas o nó do 5 é perdido na memória.
-
-<details><summary>Gabarito</summary>
-
-**(D)**. `topo` é recebido **por valor**: `topo = topo->prox` muda só a
-cópia local. O `main` continua apontando para o nó do 7, que já passou pelo
-`free`. A segunda chamada lê `topo->valor` de memória liberada (o
-AddressSanitizer acusa `heap-use-after-free`), e o `y` é lixo. Para a função mexer no `topo` do chamador, ela recebe
-`No **topo`. Veja 0083 e 0049.
-
-</details>
-
-**Questão 8.** Na fila encadeada abaixo, `insere` pendura o nó novo atrás de
-`fim`, ou o torna `inicio` quando `fim` é `NULL`. Depois de `insere(1)`,
-`insere(2)`, `retira`, `retira` e `insere(3)`, o que acontece?
-
-```c
-int retira(Fila *f, int *v) {
-    if (f->inicio == NULL) return 0;
-    No *velho = f->inicio;
-    *v = velho->valor;
-    f->inicio = velho->prox;
-    free(velho);
-    return 1;
+/* função II */
+void funcaoI(No **prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux ->chave = chave;
+  aux->prox = *prim;
+  *prim = aux;
 }
 ```
 
-- (A) A fila fica com um único nó, o 3, como esperado.
-- (B) A fila fica com os nós 2 e 3.
-- (C) O programa não compila, porque `retira` não atualiza `fim`.
-- (D) A fila fica com o 3, mas o segundo `retira` devolve 0.
-- (E) `insere(3)` escreve em um nó já liberado (via `f->fim`), e `inicio` continua `NULL`: o 3 se perde.
+- a) Apenas a função função I pode ser usada para inserir corretamente elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.
+- b) Apenas a função função II pode ser usada para inserir corretamente elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.
+- c) Ambas as funções podem ser usadas para inserir elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.
+- d) Apenas a função função I serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma pilha.
+- e) Apenas a função função II serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma pilha.
 
 <details><summary>Gabarito</summary>
 
-**(E)**. Quando o segundo `retira` esvazia a fila, `inicio` vira `NULL`, mas
-`fim` continua apontando para o nó do 2, que acabou de ser liberado. Em
-`insere(3)`, `fim` não é `NULL`, então o código faz
-`f->fim->prox = novo`, escrevendo num bloco liberado, e `inicio` nunca é
-atualizado: o 3 fica solto. O AddressSanitizer reporta `heap-use-after-free`
-na escrita. A correção é, em `retira`, fazer `if (f->inicio == NULL)
-f->fim = NULL;` antes do `free`. Veja 0086.
+**B.** a função I altera cópia de `prim`; a II usa `No **` e empilha certo Assunto 0083.
 
 </details>
 
-**Questão 9.** A expressão pós-fixa `20 4 2 + 3 * -` é avaliada com uma
-pilha: números são empilhados, e cada operador desempilha dois operandos
-(primeiro o `b`, depois o `a`), calcula `a op b` e empilha o resultado.
-Qual o valor final?
+**Edital 055/2017 · Questão 02**
 
-- (A) 2
-- (B) -2
-- (C) 18
-- (D) 6
-- (E) 26
+Marque a alternativa INCORRETA.
+Estrutura de Dados básicas como Fila são tipicamente usadas em uma gama variada de aplicações computacionais, EXCETO:
+
+- A) Sequência de trabalhos submetidas à impressora compartilhada em rede de computadores, onde o primeiro trabalho recebido será o primeiro trabalho a ter sua solicitação atendida.
+- B) Fila de processos de comunicação em redes de computadores.
+- C) Estruturas hierárquicas de diretórios e subdiretórios.
+- D) Buffer para gravação de dados em mídia.
+- E) Atendimento de processos requisitados ao um sistema operacional.
 
 <details><summary>Gabarito</summary>
 
-**(A)**. Pilha: `[20 4 2]`; o `+` dá `4 + 2 = 6`, `[20 6]`; empilha 3,
-`[20 6 3]`; o `*` dá `6 * 3 = 18`, `[20 18]`; o `-` calcula `a - b` com
-`a = 20` e `b = 18`, resultado 2. A (B) troca a ordem dos operandos
-(`18 - 20`), erro comum em operador não comutativo. Em infixa, é
-`20 - (4 + 2) * 3`. A pilha chega a 3 itens. Veja 0084.
+**C.** hierarquia de diretórios é árvore, não fila Assunto 0085.
 
 </details>
 
-**Questão 10.** Marque a alternativa **INCORRETA**.
+**Edital 055/2017 · Questão 17**
 
-- (A) Desempilhar de uma pilha vazia deve ser tratado como erro (*underflow*), e não pode devolver um valor qualquer.
-- (B) Na fila circular em vetor, guardar `inicio` e `n` evita confundir fila cheia com fila vazia.
-- (C) Numa pilha encadeada em que o topo é o primeiro nó da lista, empilhar custa O(n), pois é preciso achar o último nó.
-- (D) Um deque permite inserir e remover nas duas extremidades.
-- (E) Uma recursão profunda demais pode estourar a pilha de chamadas.
+Após a inserção da sequencia de números 10, 1, 3, 4, 6, 8 e 9 em uma pilha, o resultado de três (3) remoções sucessivas seria:
+
+- A) 10, 1 e 3 nessa ordem
+- B) 4, 3 e 1 nessa ordem
+- C) 6, 8 e 9 nessa ordem
+- D) 3, 1 e 10 nessa ordem
+- E) Nenhuma das alternativas anteriores (A, B, C ou D) está correta
 
 <details><summary>Gabarito</summary>
 
-**(C)**. Com o topo no primeiro nó, empilhar é criar o nó, apontar o `prox`
-dele para o topo antigo e mover o topo: O(1), sem percorrer nada. A (A), a
-(B) e a (D) são definições, e a (E) é o estouro de pilha (*stack overflow*) da
-recursão sem parada ou funda demais. Veja 0083 e 0087.
+**E.** Assunto 0082.
+
+</details>
+
+**Edital 055/2017 · Questão 18**
+
+Considere uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Considere que a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista. Considere que todos os tipos de dados foram previamente declarados no programa. Considere que a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.
+
+```c
+/* funcaoI */
+void funcaoI(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux->chave = chave;
+  aux->prox = prim;
+  prim = aux;
+}
+
+/* funcaoII */
+void funcaoII(No **prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux->chave = chave;
+  aux->prox = *prim;
+  *prim = aux;
+}
+```
+
+Dadas as considerações, pode-se dizer sobre as funções funcaoI e funcaoII que:
+
+- A) Apenas a função funcaoI pode ser usada para inserir corretamente elementos em uma fila sem gerar qualquer problema de alocação de memória ou erro na fila.
+- B) Apenas a função funcaoII pode ser usada para inserir corretamente elementos em uma fila sem gerar qualquer problema de alocação de memória ou erro na fila.
+- C) Ambas as funções podem ser usadas para inserir elementos em uma fila sem gerar qualquer problema de alocação de memória ou erro na fila.
+- D) Apenas a função funcaoI serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma fila.
+- E) Apenas a função funcaoII serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma fila.
+
+<details><summary>Gabarito</summary>
+
+**E.** a funcaoII (`No **`) insere no início, serve para lista e pilha, mas fila insere no fim Assunto 0086.
+
+</details>
+
+**Edital 061/2018 · Questão 07**
+
+Avaliando as sentenças seguintes a respeito de estrutura de dados,
+
+I. A diferença entre árvore binária simples e árvores AVL é o fato de que a segunda pode se reconfigurar dinamicamente, com o intuito de manter um bom nível de balanceamento.\
+II. Uma pilha garante que o último elemento inserido seja localizado no seu topo.\
+III. Do ponto de vista conceitual, não há diferença alguma entre uma estrutura de array e uma lista encadeada.\
+IV. Tabelas hash são estruturas de dados indicadas para armazenar grande volume de dados.\
+
+Verifica-se que:
+
+- a) As sentenças I e IV são verdadeiras.
+- b) Apenas a sentença I é verdadeira.
+- c) As sentenças III e IV são verdadeiras
+- d) As sentenças II e III são verdadeiras.
+- e) Apenas I, II e IV são verdadeiras.
+
+<details><summary>Gabarito</summary>
+
+**E.** I, II e IV verdadeiras; III falsa (acesso por índice contra encadeamento). Assunto 0082.
+
+</details>
+
+**Edital 061/2018 · Questão 10**
+
+Dois vetores, v1 e v2, capazes de armazenar N inteiros cada um, estão ordenados de forma crescente e têm a propriedade de que o último elemento de v1 (v1[N-1]) é menor que o primeiro elemento de v2 (v2[0]). É retirado um elemento de cada vez de cada um desses vetores alternadamente, e cada elemento retirado é colocado em uma fila. Posteriormente, os elementos são retirados da fila e inseridos em uma árvore binária de busca. A árvore é percorrida em ordem simétrica, e os elementos são inseridos, assim que retirados, em uma pilha. Depois, cada elemento é retirado da pilha e inserido alternadamente em um dos vetores, começando por v1. Diante do exposto, conclui-se que:
+
+- a) v1[i] ≥ v2[i], ∀ i = 0,1,...,N-1
+- b) v1[i] ≤ v2[i], ∀ i = 0,1,...,N-1
+- c) v1[N-1] > v2[0]
+- d) As listas não estão mais ordenadas.
+- e) Todos os elementos de v1 estão armazenados em v2 e vice-versa.
+
+<details><summary>Gabarito</summary>
+
+**A.** A ABB em ordem dá v1 e v2 crescentes. Empilhar e desempilhar inverte; alternando começando por v1, v1[i] fica com a posição 2i e v2[i] com a 2i+1 da sequência decrescente: v1[i] ≥ v2[i]. Assunto 0082.
+
+</details>
+
+**Edital 061/2018 · Questão 20**
+
+Dados os seguinte valores de entrada - 11, 12, 23, 14, 25, 50, 8, 18, 29, 10 -, insira-os em uma PILHA. Em seguida retire cada um dos valores da PILHA e insira numa FILA. Mostre a FILA. Depois retire os dados da FILA e insira na PILHA. Mostre a PILHA.
+
+As valores MOSTRADOS ficam
+
+I. FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)\
+II. PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10\
+III. PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11\
+IV. FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)\
+
+Está CORRETO o que se afirma APENAS em:
+
+- a) I e II
+- b) I e IV
+- c) II e III
+- d) III e IV
+- e) III e IV
+
+<details><summary>Gabarito</summary>
+
+**A.** Fila exibida: 10-29-...-11 (I). Pilha final: topo 11-12-...-10 (II). III e IV são falsas. Assunto 0082.
+
+</details>
+
+**Edital 033/2019 · Questão 03**
+
+Considere a seguinte operação em uma pilha de tamanho 5:
+Push(1); Pop(); Push(2); Push(3); Pop(); Push(4); Pop(); Pop(); Push(5);
+Após a todos as operações serem realizadas, o número de elementos presentes na pilha é:
+
+- a) 1
+- b) 2
+- c) 3
+- d) 4
+- e) 5
+
+<details><summary>Gabarito</summary>
+
+**A.** 5 push menos 4 pop deixa 1 elemento (o 1). Assunto 0082.
+
+</details>
+
+**Edital 033/2019 · Questão 17**
+
+Quantas pilhas são necessárias para implementar uma fila. Considere a situação em que nenhuma outra estrutura de dados, como matrizes, lista encadeada está disponível.
+
+- a) 0
+- b) 1
+- c) 2
+- d) 3
+- e) 4
+
+<details><summary>Gabarito</summary>
+
+**C.** Fila com duas pilhas. Assunto 0085.
+
+</details>
+
+**Edital 060/2019 · Questão 20**
+
+Suponha que uma fila circular de elementos com capacidade (n - 1) seja implementada com um vetor de n elementos. Suponha que a operação de inserção e exclusão seja realizada usando REAR (último elemento da fila) e FRONT (primeiro elemento da fila) como variáveis de índice do vetor, respectivamente. Inicialmente, REAR = FRONT = 0. As condições para detectar a fila cheia e a fila vazia são:
+
+- a) Full: (REAR+1) mod n == FRONT, empty: (FRONT+1) mod n == REAR
+- b) Full: REAR == FRONT, empty: (REAR+1) mod n == FRONT
+- c) Full: (FRONT+1) mod n == REAR, empty: REAR == FRONT
+- d) Full: REAR == FRONT, empty: (FRONT+1) mod n == REAR
+- e) Full: (REAR+1) mod n == FRONT, empty: REAR == FRONT
+
+<details><summary>Gabarito</summary>
+
+**E.** Vazia: REAR == FRONT; cheia: (REAR+1) mod n == FRONT. Assunto 0085.
 
 </details>
 

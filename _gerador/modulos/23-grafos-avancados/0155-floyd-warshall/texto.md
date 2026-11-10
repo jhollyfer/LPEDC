@@ -1,22 +1,17 @@
 ## 0155 · Floyd-Warshall: todos os pares
 
-Todo guia rodoviário antigo tinha, na última página, uma tabela triangular:
-a distância de cada cidade para cada outra. Um aplicativo de corrida
-precisa da mesma tabela, em minutos, para estimar o preço antes de chamar o
-motorista. São cinco bairros com ruas de **mão única**: Centro, Porto, Vila,
-Alto e Feira. A pergunta agora é "**de todo mundo para todo mundo**", e não
-"de A até os outros".
+Um aplicativo de corrida precisa do tempo de cada bairro a cada outro, para
+estimar o preço. São cinco bairros com ruas de **mão única**: Centro, Porto,
+Vila, Alto e Feira. A pergunta é "**de todo mundo para todo mundo**".
 
-Dá para rodar o Dijkstra uma vez a partir de cada bairro. O
-**Floyd-Warshall** faz a tabela inteira de outro jeito, com uma matriz e
-três laços aninhados. A ideia vem da programação dinâmica (módulo 21):
-pense nos bairros que um caminho pode usar **como passagem**, e não em
-caminhos inteiros.
+Dá para rodar o Dijkstra a partir de cada bairro. O **Floyd-Warshall** monta
+a tabela inteira com uma matriz e três laços aninhados. A ideia é da
+programação dinâmica (módulo 21): pense nos bairros que um caminho pode usar
+**como passagem**, não em caminhos inteiros.
 
 Comece com `d[i][j]` = tempo da rua direta de `i` para `j` (INFINITO se não
-existe, 0 na diagonal). Libere o Centro como passagem: para cada par
-`i`, `j`, vale a pena ir de `i` ao Centro e do Centro a `j`? Depois libere
-também o Porto, depois a Vila, e assim por diante:
+existe, 0 na diagonal). Libere o Centro como passagem: vale ir de `i` ao
+Centro e do Centro a `j`? Depois libere o Porto, a Vila, e assim por diante:
 
 ```text
 para cada k:            (o bairro que passa a valer como passagem)
@@ -25,22 +20,19 @@ para cada k:            (o bairro que passa a valer como passagem)
 ```
 
 Depois da rodada `k`, `d[i][j]` é o melhor tempo de `i` a `j` usando como
-passagem só os bairros de 0 a `k`. Depois da última, todos valem, e a tabela
-está pronta. O `k` **tem** que ser o laço de fora: ele é a "rodada"; `i` e
-`j` só percorrem a matriz.
+passagem só os bairros de 0 a `k`. O `k` **tem** que ser o laço de fora: ele
+é a rodada.
 
-São V³ passos: **O(V³)**, com memória O(V²). Para 5 bairros, 125 passos.
-Para 400, 64 milhões, coisa de décimos de segundo. Para 100 mil esquinas,
-esqueça: aí é Dijkstra com heap, de cada origem que interessar. E o
-Floyd-Warshall aceita pesos negativos (sem ciclo negativo); se houver um,
-ele aparece como `d[i][i] < 0` no fim.
+O custo é **O(V³)**, com memória O(V²): 125 passos para 5 bairros, 64
+milhões para 400. Para 100 mil esquinas, use Dijkstra com heap. O
+Floyd-Warshall aceita pesos negativos (sem ciclo negativo); com ciclo, aparece
+`d[i][i] < 0` no fim.
 
-No desenho, as setas são as ruas com os minutos; em verde, o melhor caminho de Centro até Alto, que passa por três bairros. Embaixo, a
-tabela final, com a mesma linha do Centro destacada:
+No desenho, as setas são as ruas com os minutos, e o melhor caminho de
+Centro até Alto, em verde, passa por três bairros. Embaixo, a tabela final,
+com a linha do Centro destacada:
 
 {{ideia}}
-
-O código monta a matriz, roda os três laços e imprime a tabela:
 
 ```c
 #include <stdio.h>
@@ -83,15 +75,14 @@ int main(void) {
 // Feira         6     11      8      1      0
 ```
 
-O fluxograma não tem fila, heap nem "escolher o menor": três contadores e
-uma comparação no miolo, repetida V³ vezes:
+O fluxograma tem três contadores e uma comparação no miolo, repetida V³
+vezes:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-Siga uma casa só, `d[Centro][Alto]`, rodada a rodada. Não existe rua direta,
-então ela começa em ∞:
+A casa `d[Centro][Alto]`, rodada a rodada:
 
 | Rodada (passagem liberada) | `d[Centro][Alto]` | Caminho por trás do número |
 | --- | --- | --- |
@@ -102,30 +93,18 @@ então ela começa em ∞:
 | k = Alto | 9 | passar pelo próprio destino não ajuda |
 | k = Feira | 8 | Centro → Vila → Porto → Feira → Alto: 2 + 3 + 2 + 1 |
 
-Na rodada da Vila, o programa não "sabe" o caminho inteiro: ele só soma
-`d[Centro][Vila]` (2) com `d[Vila][Alto]` (7, que a rodada do Porto já tinha
-calculado). Cada rodada aproveita o trabalho das anteriores, como uma tabela
-de programação dinâmica preenchida no lugar.
+Na rodada da Vila, o programa soma `d[Centro][Vila]` (2) com
+`d[Vila][Alto]` (7, da rodada do Porto): cada rodada aproveita as anteriores.
 
-O A309 guarda, junto com a distância, o próximo passo de cada rota, e
-imprime o caminho entre quaisquer dois bairros. O A310 troca `+` e `min` por
-`&&` e `||` e responde só "existe caminho?", o **fecho transitivo**.
+O A309 guarda o próximo passo de cada rota e imprime o caminho entre dois
+bairros. O A310 troca `+` e `min` por `&&` e `||` e responde "existe
+caminho?", o **fecho transitivo**.
 
 > [!WARNING]
-> Pôr o `k` no laço de **dentro** (`for i, for j, for k`) compila, roda e dá
-> resposta errada sem aviso: quando o par `i`, `j` é calculado, os pedaços
-> `d[i][k]` e `d[k][j]` ainda não estão prontos. E a soma
-> `d[i][k] + d[k][j]` precisa do teste de INFINITO (ou de um INFINITO
+> Pôr o `k` no laço de **dentro** compila, roda e dá resposta errada sem
+> aviso: `d[i][k]` e `d[k][j]` ainda não estão prontos. A soma
+> `d[i][k] + d[k][j]` também precisa do teste de INFINITO (ou de um INFINITO
 > folgado como o daqui): com `INT_MAX`, ela estoura.
-
-> [!TIP]
-> **Por dentro do C:** `int d[5][5]` são 25 `int` seguidos na memória, linha
-> por linha: `d[i][j]` mora em `d + (i * 5 + j)`. No miolo, `j` é o laço
-> mais rápido, então `d[i][j]` e `d[k][j]` andam de 4 em 4 bytes, em
-> sequência, e o cache aproveita cada linha que busca. Trocar a ordem para
-> `j` por fora e `i` por dentro daria o mesmo resultado (a rodada continua
-> sendo o `k`), só que pulando 20 bytes a cada passo. Numa matriz de 2000 ×
-> 2000, o programa fica várias vezes mais lento.
 
 > [!NOTE]
 > **Pergunta para você:** se a prefeitura abrir uma rua Alto → Porto de 2

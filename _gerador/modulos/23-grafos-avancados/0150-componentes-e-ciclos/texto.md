@@ -1,62 +1,53 @@
 ## 0150 · Componentes e ciclos
 
-Você monta a planilha da reforma do apartamento. A célula Total soma Obra e
-Frete; Obra soma Tinta e Piso; Piso inclui o Frete. Numa outra aba, o
-financiamento: Juros usa o Saldo, Saldo usa a Parcela, e alguém fez a Parcela
-usar os Juros. Ao apertar Enter, a planilha reclama: **referência circular**.
-Ela não tem como calcular um valor que depende dele mesmo.
+Na planilha da reforma, o Total soma Obra e Frete, a Obra soma Tinta e Piso, e
+o Piso inclui o Frete. Em outra aba, os Juros usam o Saldo, o Saldo usa a
+Parcela, e alguém fez a Parcela usar os Juros. A planilha reclama:
+**referência circular**.
 
 A planilha é um **grafo dirigido**: cada célula é um vértice, e a seta
-`a -> b` diz "a fórmula de `a` usa `b`". Ela faz duas perguntas sobre esse
-grafo, e as duas se respondem com a DFS do assunto 0111:
+`a -> b` diz "a fórmula de `a` usa `b`". Duas perguntas sobre ele se
+respondem com a DFS do assunto 0111:
 
 - **quais pedaços são independentes?** São os **componentes conexos**: grupos
-  em que todo mundo está ligado a todo mundo por algum caminho, sem olhar a
-  direção das setas. Mudar o Frete nunca mexe nos Juros.
-- **existe um ciclo?** Um caminho que sai de uma célula e volta para ela,
-  seguindo as setas.
+  em que todo vértice se liga a todo outro por algum caminho, sem olhar a
+  direção das setas;
+- **existe um ciclo?** Um caminho que volta à célula de partida, seguindo as
+  setas.
 
-**Componentes.** Uma DFS a partir de um vértice marca tudo que ele alcança.
-Num grafo não dirigido, isso é o componente dele. Para achar todos,
-um **laço externo** passa por cada vértice e, se ele ainda não tem grupo,
-começa uma DFS nova com um número de grupo novo. Cada recomeço é um
-componente. Custa O(V + E) com lista de adjacência: cada vértice é marcado uma
-vez só.
+**Componentes.** Uma DFS marca tudo que o vértice alcança: esse é o
+componente dele. Um **laço externo** começa uma DFS nova, com número de grupo
+novo, em cada vértice ainda sem grupo. Custa O(V + E) com lista de
+adjacência.
 
-**Ciclo num grafo dirigido.** Aqui o `visitado[]` simples engana. Veja o
-Frete: Total chega nele direto e também por Obra, Piso. Quando a DFS volta a
-Total e olha o Frete, ele já foi visitado, mas isso não é ciclo: são dois
-caminhos que se encontram. Ciclo é voltar a um vértice que **ainda está na
-pilha** da recursão, um ancestral de quem está sendo explorado.
-
-Por isso a DFS usa **três cores**:
+**Ciclo num grafo dirigido.** O `visitado[]` simples engana: Total chega ao
+Frete direto e por Obra e Piso. O Frete já visitado são dois caminhos que se
+encontram, não um ciclo. Ciclo é voltar a um vértice que **ainda está na
+pilha** da recursão. Por isso a DFS usa **três cores**:
 
 - **branco**: nunca visto;
-- **cinza**: a chamada dele começou e não terminou (está na pilha);
+- **cinza**: a chamada começou e não terminou (está na pilha);
 - **preto**: terminado, tudo abaixo dele já foi explorado.
 
-Achar uma seta para um vértice **cinza** é achar um ciclo. Seta para preto
-leva a algo já resolvido. O vetor `pai[]` reconstrói o ciclo: suba de pai em
-pai até o vértice cinza. O Cormen usa as mesmas três
-cores e chama a seta para um cinza de **aresta de retorno** (*back edge*): um
-grafo dirigido é acíclico se e só se a DFS não encontra nenhuma.
+Seta para **cinza** é ciclo; seta para preto leva a algo já resolvido. O
+`pai[]` reconstrói o ciclo, subindo até o cinza. O Cormen chama essa seta de
+**aresta de retorno** (*back edge*): um grafo dirigido é acíclico se e só se
+a DFS não encontra nenhuma.
 
 > [!NOTE]
-> Num grafo **dirigido**, "conexo ignorando a direção" é ser **fracamente
-> conexo**. O Cormen também cobra os **componentes fortemente conexos**:
-> grupos em que cada um alcança cada outro **seguindo** as setas (o ciclo
-> Juros, Saldo, Parcela é um deles). Eles saem com duas DFS, a segunda no
-> grafo com as setas invertidas, em O(V + E). Pontes e vértices de
-> articulação, a conectividade "frágil", ficam para o assunto 0184.
+> "Conexo ignorando a direção" é ser **fracamente conexo**. Os
+> **componentes fortemente conexos** são grupos em que cada vértice alcança
+> cada outro **seguindo** as setas (Juros, Saldo e Parcela formam um). Saem
+> com duas DFS, a segunda no grafo com as setas invertidas, em O(V + E).
+> Pontes e vértices de articulação: assunto 0184.
 
-No desenho, os números dão a ordem em que a DFS descobre cada célula. Nesse instante, o grupo da obra já está todo preto (verde) e a
-DFS do financiamento está no fundo da pilha, com os três em cinza (amarelo).
-A seta de Parcela para Juros aponta para um cinza:
+No desenho, os números dão a ordem de descoberta: a obra está preta (verde),
+o financiamento está cinza (amarelo), e a seta de Parcela para Juros aponta
+para um cinza:
 
 {{ideia}}
 
-O código usa uma DFS para cada pergunta. Os grupos ignoram a direção
-(`usa[u][v] || usa[v][u]`); o ciclo respeita a direção e usa as cores:
+Os grupos ignoram a direção; o ciclo a respeita e usa as cores:
 
 ```c
 #include <stdbool.h>
@@ -130,17 +121,14 @@ int main(void) {
 // Referência circular: Juros -> Saldo -> Parcela -> Juros
 ```
 
-O fluxograma é a chamada `acha_ciclo(u)`. Cada vizinho cai numa de três
-situações. Cinza encerra tudo com o ciclo; branco desce na recursão;
-preto é ignorado. Quando os vizinhos acabam, `u` fica preto e a chamada
-volta para quem a chamou:
+No fluxograma, cada vizinho de `u` é cinza (ciclo), branco (desce) ou preto
+(ignorado). Sem vizinhos novos, `u` fica preto:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-As cores no fim de cada chamada ou descoberta. Na linha do Frete visto de
-Total, ele já está preto, e a DFS segue em frente sem alarme:
+O Frete visto de Total já está preto: sem alarme.
 
 | Evento | Cinza (na pilha) | Preto |
 | --- | --- | --- |
@@ -153,30 +141,18 @@ Total, ele já está preto, e a DFS segue em frente sem alarme:
 | entra em Juros, Saldo, Parcela | Juros, Saldo, Parcela | os 5 da obra |
 | Parcela olha Juros: **cinza**, ciclo | | |
 
-O exemplo A299 faz o mesmo num grafo **não dirigido** (a rede de cabos de um
-escritório), que dispensa as cores: basta ignorar o pai. O A300 conta os grupos
-de amigos à medida que as amizades chegam, com o union-find do assunto 0148.
+O A299 faz o mesmo num grafo **não dirigido**, ignorando o pai. O A300 conta
+grupos de amigos com o union-find do assunto 0148 (módulo 22).
 
 > [!WARNING]
-> Usar só `visitado[]` para achar ciclo num grafo dirigido dá **alarme
-> falso**, como o do Frete visto de Total. Pergunte "ele ainda está na
-> pilha?", e não "já vi?". No grafo **não dirigido** o erro é o oposto: toda
-> aresta aparece nos dois sentidos, e o vizinho que é o pai sempre parece um
-> ciclo. Lá, ignore o pai.
-
-> [!TIP]
-> **Por dentro do C:** a cor cinza é a pilha de chamadas escrita num vetor.
-> Os vértices cinza são os que têm um frame de `acha_ciclo` vivo
-> na pilha do programa, e o `enum` deixa isso legível: `BRANCO`, `CINZA` e
-> `PRETO` são as constantes inteiras 0, 1 e 2. Os vetores são globais e
-> começam zerados: todo mundo nasce `BRANCO` e com `grupo` 0, sem laço de
-> inicialização. O vetor `volta[V]` é
-> local: só existe durante a chamada que achou o ciclo.
+> Só com `visitado[]`, o ciclo dá **alarme falso** (o Frete). Pergunte
+> "ainda está na pilha?", não "já vi?". No grafo **não dirigido**, o pai
+> sempre parece um ciclo: ignore-o.
 
 > [!NOTE]
 > **Pergunta para você:** se a fórmula da Parcela deixar de usar os Juros e
 > passar a usar o Frete (troque `{6, 5}` por `{6, 4}`), quantos grupos
 > independentes sobram e ainda existe referência circular? Responda antes de
-> rodar.
+> compilar.
 
 {{pratique}}

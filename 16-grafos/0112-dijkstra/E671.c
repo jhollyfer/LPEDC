@@ -1,20 +1,19 @@
 // 0112 · Dijkstra: caminho mínimo
 // Exercício E671 · ★★★
 //
-// Este programa tem um erro de propósito. Ele calcula o voo mais barato
-// saindo de São Paulo. Manaus e Belém têm voo entre si, mas nenhum voo liga
-// as duas ao resto do mapa. Rode com o rodar: o UndefinedBehaviorSanitizer
-// acusa "signed integer overflow" e aponta a linha da conta que estoura.
-// Conserte sem trocar o valor de INFINITO e rode de novo até a saída bater
-// com a esperada, sem nenhum aviso do sanitizer.
+// Escreva o voo mais barato saindo de São Paulo (SP 0, Rio 1, BH 2, Manaus 3 e
+// Belém 4). Os voos são de ida e volta, em reais: SP-Rio 200, SP-BH 250,
+// Rio-BH 180 e Manaus-Belém 300. Nenhum voo liga Manaus e Belém ao resto do
+// mapa. Use Dijkstra com INFINITO = INT_MAX e nunca some com o INFINITO (a
+// conta estoura o int). Mostre o preço até cada cidade ou "sem voo".
 //
-//   Saída esperada depois do conserto:
+//   Saída esperada:
 //   Rio: R$ 200
 //   BH: R$ 250
 //   Manaus: sem voo
 //   Belém: sem voo
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <limits.h>
 #include <stdbool.h>
@@ -24,35 +23,6 @@
 #define INFINITO INT_MAX
 
 int main(void) {
-    const char *nomes[V] = {"SP", "Rio", "BH", "Manaus", "Belém"};
-    int preco[V][V] = {0};
-    int voos[][3] = {{0, 1, 200}, {0, 2, 250}, {1, 2, 180}, {3, 4, 300}};
-    for (int k = 0; k < 4; k++) {
-        preco[voos[k][0]][voos[k][1]] = voos[k][2];
-        preco[voos[k][1]][voos[k][0]] = voos[k][2];
-    }
 
-    int dist[V];
-    bool fixo[V];
-    for (int v = 0; v < V; v++) {
-        dist[v] = INFINITO;
-        fixo[v] = false;
-    }
-    dist[0] = 0;
-
-    for (int passo = 0; passo < V; passo++) {
-        int u = -1;
-        for (int v = 0; v < V; v++)
-            if (!fixo[v] && (u == -1 || dist[v] < dist[u])) u = v;
-        fixo[u] = true;
-        for (int v = 0; v < V; v++)
-            if (preco[u][v] && !fixo[v] && dist[u] + preco[u][v] < dist[v])
-                dist[v] = dist[u] + preco[u][v];
-    }
-
-    for (int v = 1; v < V; v++) {
-        if (dist[v] == INFINITO) printf("%s: sem voo\n", nomes[v]);
-        else printf("%s: R$ %d\n", nomes[v], dist[v]);
-    }
     return 0;
 }

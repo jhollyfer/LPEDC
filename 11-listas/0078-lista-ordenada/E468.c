@@ -1,12 +1,13 @@
 // 0078 · Lista ordenada
 // Exercício E468 · ★★★
 //
-// Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4.
-// Escreva No *ordena(No *inicio, int *passos), que deixa a lista em ordem
-// crescente pelo método da inserção, SÓ RELIGANDO os nós: nada de malloc,
-// nada de free, nada de trocar valores entre nós. Para medir o custo, some
-// 1 em *passos cada vez que o laço de encaixe anda um nó. O main já testa a
-// lista dos pedidos e o pior caso, uma lista que já chega crescente.
+// Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4 (monte
+// inserindo no início 4, 9, 1, 7 e 3). Escreva No *ordena(No *inicio, int
+// *passos), que deixa a lista em ordem crescente pelo método da inserção,
+// SÓ RELIGANDO os nós: nada de malloc, nada de free, nada de trocar valores
+// entre nós. Para medir o custo, some 1 em *passos cada vez que o laço de
+// encaixe anda um nó. Mostre antes, depois e os passos para a lista dos
+// pedidos e para o pior caso, uma lista que já chega crescente 1 a 5.
 //
 //   Saída esperada:
 //   antes:  3 -> 7 -> 1 -> 9 -> 4 -> NULL
@@ -14,38 +15,12 @@
 //   antes:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
 //   depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
 //
-// Escreva sua resposta abaixo (troque o corpo de ordena):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "lista.h"
 
-No *ordena(No *inicio, int *passos) {
-    *passos = 0;
-    return inicio; // por enquanto não ordena nada
-}
-
-// mostra antes e depois de ordenar, com os passos
-static No *testa(No *l) {
-    int passos;
-    printf("antes:  ");
-    lista_imprime(l);
-    l = ordena(l, &passos);
-    printf("depois: ");
-    for (const No *p = l; p != NULL; p = p->prox) printf("%d -> ", p->valor);
-    printf("NULL  (%d passos)\n", passos);
-    return l;
-}
-
 int main(void) {
-    int pedidos[] = {4, 9, 1, 7, 3}; // inseridos no início: ficam ao contrário
-    No *l = NULL;
-    for (int i = 0; i < 5; i++) l = lista_insere_inicio(l, pedidos[i]);
-    l = testa(l);
-    lista_libera(l);
 
-    No *crescente = NULL;
-    for (int i = 5; i >= 1; i--) crescente = lista_insere_inicio(crescente, i);
-    crescente = testa(crescente);
-    lista_libera(crescente);
     return 0;
 }

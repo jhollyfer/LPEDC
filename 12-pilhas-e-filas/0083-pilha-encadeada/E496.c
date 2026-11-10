@@ -1,19 +1,18 @@
 // 0083 · Pilha encadeada
 // Exercício E496 · ★★☆
 //
-// Pilha de pratos do restaurante, cada prato com um número. Este programa
-// compila (o gcc 13 até solta um aviso: leia com atenção) e, sem o
-// sanitizer, às vezes mostra os números certos. Mesmo assim está errado.
-// Rode com o rodar, ache no relatório do AddressSanitizer o nome do erro e
-// a linha, conserte mudando a ordem de duas linhas e rode de novo: a saída
-// tem que bater e o relatório tem que sumir.
+// Pilha de pratos do restaurante, cada prato com um número, feita com nós
+// alocados. Com os tipos abaixo, escreva bool poe_prato(Prato **topo, int numero)
+// e bool tira_prato(Prato **topo, int *numero), que devolve o número e libera o
+// nó. No main, ponha os pratos 10, 20 e 30 (nessa ordem) e tire todos mostrando
+// cada um.
 //
-//   Saída esperada depois do conserto:
+//   Saída esperada:
 //   Tirou o prato 30
 //   Tirou o prato 20
 //   Tirou o prato 10
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -24,36 +23,7 @@ typedef struct prato {
     struct prato *baixo;
 } Prato;
 
-bool poe_prato(Prato **topo, int numero) {
-    Prato *novo = malloc(sizeof *novo);
-    if (novo == NULL) {
-        return false;
-    }
-    novo->numero = numero;
-    novo->baixo = *topo;
-    *topo = novo;
-    return true;
-}
-
-bool tira_prato(Prato **topo, int *numero) {
-    if (*topo == NULL) {
-        return false;
-    }
-    Prato *velho = *topo;
-    *topo = velho->baixo;
-    free(velho);
-    *numero = velho->numero;
-    return true;
-}
-
 int main(void) {
-    Prato *topo = NULL;
-    for (int n = 10; n <= 30; n += 10) {
-        poe_prato(&topo, n);
-    }
-    int numero;
-    while (tira_prato(&topo, &numero)) {
-        printf("Tirou o prato %d\n", numero);
-    }
+
     return 0;
 }

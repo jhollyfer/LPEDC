@@ -1,13 +1,11 @@
 ## 0156 · Juntando tudo: o assistente do calouro
 
-Primeira semana na faculdade. O calouro tem duas dúvidas que não saem da
-cabeça. A primeira é de calendário: com esses pré-requisitos, em quantos
-semestres dá para se formar, e o que cursar em cada um? A segunda é de
-geografia: o campus é enorme, e a aula de Laboratório começa cinco minutos
-depois do almoço no Bandejão. Qual o caminho mais rápido entre os prédios?
+O calouro tem duas dúvidas. A de calendário: com esses pré-requisitos, em
+quantos semestres ele se forma, e o que cursa em cada um? A de geografia:
+qual o caminho mais rápido entre os prédios do campus?
 
-São dois grafos diferentes, e cada pergunta tem o seu algoritmo. A tabela
-resume o módulo: bata o olho na pergunta e escolha:
+São dois grafos, e cada pergunta tem o seu algoritmo. A tabela resume o
+módulo:
 
 | Pergunta | Algoritmo | Custo |
 | --- | --- | --- |
@@ -19,30 +17,24 @@ resume o módulo: bata o olho na pergunta e escolha:
 | Menor caminho de uma origem, com pesos negativos | Bellman-Ford | O(V · E) |
 | Menor caminho entre todos os pares | Floyd-Warshall | O(V³) |
 
-A grade de disciplinas é um **DAG**: setas "antes de", sem peso. A pergunta
-"quantos semestres" é o Kahn por rodadas do exemplo A302: cada rodada pega
-tudo que já está liberado. Ele também avisa se a coordenação criou um
+A grade é um **DAG** (assunto 0151): setas "antes de", sem peso. "Quantos
+semestres" é o Kahn por rodadas do A302, que também avisa de um
 pré-requisito circular.
 
-O mapa do campus é um grafo **não dirigido** e ponderado, com seis prédios.
-O calouro vai perguntar rotas entre pares variados ao longo do semestre, então
-vale calcular a tabela inteira uma vez com o **Floyd-Warshall**, guardando o
-próximo passo de cada rota (como no A309), e depois responder qualquer
-pergunta só consultando a matriz.
+O campus é um grafo **não dirigido** e ponderado, com seis prédios. Como as
+rotas pedidas variam, compensa calcular a tabela uma vez com o
+**Floyd-Warshall**, guardando o próximo passo de cada rota (A309), e
+consultar a matriz.
 
-O programa usa um único tipo `Grafo` para os dois mapas: o número de
-vértices, os nomes e uma matriz de pesos. A função `liga` recebe se a aresta
-é de mão dupla. Na grade, o peso só marca a seta (vale 1); no campus, são os
-minutos de caminhada. As funções recebem `const Grafo *` para não copiar a
-struct, que passa de 300 bytes.
+Um tipo `Grafo` serve aos dois mapas: número de vértices, nomes e matriz de
+pesos. `liga` recebe se a aresta é de mão dupla. Na grade, o peso (1) só
+marca a seta; no campus, são minutos a pé. As funções recebem
+`const Grafo *` para não copiar a struct, que passa de 300 bytes.
 
-O desenho mostra em cima a grade com o semestre de cada disciplina e,
-embaixo, o campus com as duas rotas que o programa calcula, em verde:
+O desenho mostra a grade, com o semestre de cada disciplina, e o campus, com
+as duas rotas em verde:
 
 {{ideia}}
-
-Cada algoritmo fica numa função, e o `main` só monta os dois grafos e faz
-as perguntas:
 
 ```c
 #include <stdio.h>
@@ -152,40 +144,25 @@ int main(void) {
 //   8 min: Lab -> Reitoria -> Ginásio
 ```
 
-O fluxograma é o `main`, com as duas perguntas independentes. A grade passa pelo Kahn e por um teste de ciclo; o campus passa pelo
-Floyd-Warshall uma vez e depois só consulta a tabela:
+O fluxograma é o `main`: a grade passa pelo Kahn, e o campus passa uma vez
+pelo Floyd-Warshall e depois só consulta a tabela:
 
 {{fluxograma}}
 
-O exemplo A311 é um planejador de entregas que escolhe sozinho entre
-Dijkstra e Bellman-Ford, olhando se existe peso negativo. O A312 é um mini
-gerenciador de pacotes: instala só as dependências do pacote pedido, na
-ordem certa, com a DFS em pós-ordem.
+O A311 escolhe entre Dijkstra e Bellman-Ford conforme exista peso negativo.
+O A312 é um mini gerenciador de pacotes: instala as dependências do pacote
+pedido, na ordem certa, com a DFS em pós-ordem.
 
 > [!WARNING]
-> Usar a matriz de pesos com "0 = sem aresta" tem um preço: uma aresta de peso
-> **zero** de verdade some. Na grade isso não importa (o peso é sempre 1), mas
-> um mapa com uma passarela "de graça" entre dois prédios precisaria de outra
-> marca para "sem aresta", como o próprio INFINITO. E não misture as
-> perguntas: Floyd-Warshall num grafo de 100 mil vértices é inviável (10¹⁵
-> passos), e Kruskal não responde caminho mínimo (veja os 21 m contra 18 m
-> no 0153).
-
-> [!TIP]
-> **Por dentro do C:** cada `Grafo` tem o `n` (4 bytes), 4 bytes de
-> alinhamento para o vetor de ponteiros começar num múltiplo de 8, os 8
-> ponteiros para os nomes (64 bytes numa máquina de 64 bits) e `int
-> peso[8][8]` (256 bytes): `sizeof(Grafo)` dá 328, no frame de `main`. Os
-> nomes em si são literais de string, que moram numa área só de leitura do
-> programa; a struct guarda só os endereços. Passar `&campus` copia 8 bytes;
-> passar `campus` por valor copiaria os 328 a cada chamada. Já `int d[][MAX]`
-> como parâmetro é um ponteiro para linhas de `MAX` inteiros: o compilador precisa
-> saber o `MAX` para calcular onde fica `d[i][j]`.
+> Na matriz com "0 = sem aresta", uma aresta de peso **zero** de verdade
+> some; esse mapa precisaria de outra marca, como o INFINITO. Não misture as
+> perguntas: Floyd-Warshall com 100 mil vértices é inviável (10¹⁵ passos), e
+> a árvore mínima não dá caminho mínimo (21 m contra 18 m no 0153).
 
 > [!NOTE]
 > **Pergunta para você:** se a coordenação colocar Projeto como pré-requisito
 > de Cálculo (`liga(&grade, 6, 1, 1, 0)`), o que o programa mostra? E se a
-> trilha Lab–Reitoria fechar para obra, qual passa a ser a rota do Lab ao
+> trilha Lab-Reitoria fechar para obra, qual passa a ser a rota do Lab ao
 > Ginásio, e quantos minutos leva?
 
 {{pratique}}

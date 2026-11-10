@@ -35,15 +35,6 @@ typedef struct {
 } Jogo;
 
 int main(void) {
-    Jogo j[] = {
-        {"Leões", 8, 10},   {"Tubarões", 8, 11}, {"Águias", 9, 12},
-        {"Lobos", 10, 12},  {"Falcões", 11, 13}, {"Panteras", 12, 14},
-        {"Touros", 10, 15}, {"Corujas", 13, 16}, {"Raposas", 14, 16},
-        {"Ursos", 15, 17},
-    };
-    int n = 10;
-    (void)j;
-    (void)n;
 
     return 0;
 }

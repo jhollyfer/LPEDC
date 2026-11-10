@@ -1,12 +1,12 @@
 // 0086 · Fila encadeada
 // Exercício E513 · ★★☆
 //
-// A fila do caixa da padaria guarda o NOME de cada cliente, então o programa
-// traz a própria fila encadeada, com um texto em cada nó. Complete:
-//
-// - entra: cria um nó com o nome e pendura no fim (cuidado com a fila vazia);
-// - sai: copia o nome do primeiro para destino, tira o nó e libera (cuidado
-// com a fila que fica vazia). Devolve false se não tinha ninguém.
+// A fila do caixa da padaria guarda o NOME de cada cliente, com um texto em cada
+// nó. Com os tipos abaixo, escreva bool entra(FilaPadaria *f, const char *nome),
+// que pendura o cliente no fim, e bool sai(FilaPadaria *f, char *destino), que
+// copia o nome do primeiro para destino, tira o nó e o libera (false se não
+// tinha ninguém). No main, entrem Ana, Bruno e Carla; atenda um; entre Davi; e
+// atenda todos até esvaziar, mostrando "Atendendo NOME" e, no fim, "Fila vazia".
 //
 //   Saída esperada:
 //   Atendendo Ana
@@ -15,7 +15,7 @@
 //   Atendendo Davi
 //   Fila vazia
 //
-// Escreva sua resposta abaixo (complete entra e sai):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -32,32 +32,7 @@ typedef struct {
     Cliente *fim;
 } FilaPadaria;
 
-bool entra(FilaPadaria *f, const char *nome) {
-    (void)f; // apague estas linhas
-    (void)nome;
-    return false;
-}
-
-bool sai(FilaPadaria *f, char *destino) {
-    (void)f; // apague estas linhas
-    (void)destino;
-    return false;
-}
-
 int main(void) {
-    FilaPadaria f = {NULL, NULL};
-    char nome[30];
 
-    entra(&f, "Ana");
-    entra(&f, "Bruno");
-    entra(&f, "Carla");
-    if (sai(&f, nome)) {
-        printf("Atendendo %s\n", nome);
-    }
-    entra(&f, "Davi");
-    while (sai(&f, nome)) {
-        printf("Atendendo %s\n", nome);
-    }
-    printf("Fila vazia\n");
     return 0;
 }

@@ -3,10 +3,10 @@
 //
 // Na banca, os pacotes de figurinhas vêm com quantidades diferentes: 25,
 // 20, 15, 12, 10, 8 e 5 figurinhas (um pacote de cada). Você precisa de
-// exatamente 60 figurinhas para completar o álbum. O programa abaixo já
-// mostra todas as combinações. Estenda-o para, no fim, mostrar também a
-// combinação com MENOS pacotes (se houver empate, fique com a primeira
-// encontrada).
+// exatamente 60 figurinhas para completar o álbum. Escreva um backtracking
+// que mostre todas as combinações (tentando levar o pacote antes de não
+// levar) e, no fim, a combinação com MENOS pacotes (se houver empate, fique
+// com a primeira encontrada).
 //
 //   Saída esperada:
 //   25 20 15
@@ -16,46 +16,12 @@
 //   20 15 12 8 5
 //   menos pacotes: 25 20 15 (3 pacotes)
 //
-// Escreva sua resposta abaixo (estenda o programa):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 
-#define N 7
-#define ALVO 60
-
-const int pacotes[N] = {25, 20, 15, 12, 10, 8, 5};
-bool leva[N];
-
-void mostra(const bool escolha[], int ate) {
-    int primeiro = 1;
-    for (int j = 0; j < ate; j++) {
-        if (escolha[j]) {
-            printf(primeiro ? "%d" : " %d", pacotes[j]);
-            primeiro = 0;
-        }
-    }
-}
-
-void tenta(int i, int soma) {
-    if (soma > ALVO) {
-        return;
-    }
-    if (soma == ALVO) {
-        mostra(leva, i);
-        printf("\n");
-        return;
-    }
-    if (i == N) {
-        return;
-    }
-    leva[i] = true;
-    tenta(i + 1, soma + pacotes[i]);
-    leva[i] = false;
-    tenta(i + 1, soma);
-}
-
 int main(void) {
-    tenta(0, 0);
+
     return 0;
 }

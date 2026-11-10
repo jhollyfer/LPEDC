@@ -2,62 +2,49 @@
 
 # Módulo 19 · Enumeração e backtracking
 
-Muito problema real não tem fórmula. Que combinação de produtos fecha o
-crédito exato? Em que ordem o motoboy faz as entregas? Onde ficam as rainhas,
-como sair do labirinto, que dígito vai em cada casa do sudoku? Para todos
-eles, o jeito honesto é **testar as possibilidades**, com método: sem esquecer nenhuma, sem repetir nenhuma e sem perder tempo com as
-que já se sabe que não servem.
+Muito problema não tem fórmula: que produtos fecham o crédito exato, onde
+ficam as rainhas, como sair do labirinto. É preciso **testar as
+possibilidades** sem esquecer, sem repetir e sem perder tempo com as que já
+não servem.
 
-O módulo começa pela **enumeração**: gerar todos os subconjuntos e todas as
-permutações com recursão. Daí nasce o **backtracking**, a técnica que
-constrói a solução uma escolha por vez e **volta atrás** assim que percebe que
-o caminho não dá em nada. O resto do módulo aplica a mesma ideia a
-problemas cada vez maiores: soma de subconjuntos, N-rainhas, labirintos,
-flood fill e, no fim, um resolvedor de sudoku completo.
+O módulo começa pela **enumeração** de subconjuntos e permutações com
+recursão. Daí vem o **backtracking**, que constrói a solução uma escolha por
+vez e **volta atrás** quando o caminho falha: soma de subconjuntos,
+N-rainhas, labirinto, flood fill e sudoku.
 
-O problema passa a ser uma **árvore de decisões**. Cada nível é uma
-escolha; cada caminho da raiz até uma folha é uma tentativa completa.
-Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a árvore
-**podando** os galhos que não podem ter solução. Tudo o que você muda antes
-de descer, você **desfaz** depois de voltar: é a regra que mais derruba
-código.
+O problema vira uma **árvore de decisões**: cada nível é uma escolha e cada
+caminho da raiz a uma folha é uma tentativa. Enumerar visita a árvore
+inteira; o backtracking **poda** os galhos sem solução. Tudo o que você muda
+antes de descer, **desfaça** depois de voltar.
 
 ## O que você vai aprender
 
-- gerar todos os **subconjuntos** de um conjunto, pela recursão e pelos **bits** de um número
-- gerar todas as **permutações** com troca, recursão e desfazer, e o vetor de **usados**
-- o esqueleto do **backtracking**: caso de parada, **poda** e escolha com desfazer
-- a **soma de subconjuntos** e o efeito da poda no número de chamadas
-- as **N-rainhas** com vetores de colunas e diagonais, testando o ataque em O(1)
-- achar um caminho num **labirinto** em matriz e pintar regiões com **flood fill**
-- juntar tudo num **resolvedor de sudoku**, e acelerar a busca escolhendo a casa mais apertada
+- **subconjuntos**, pela recursão e pelos **bits** de um número
+- **permutações** com troca, recursão e desfazer
+- o esqueleto do **backtracking**: parada, **poda** e escolha com desfazer
+- a **soma de subconjuntos** e o efeito da poda
+- as **N-rainhas**, com o ataque testado em O(1)
+- **labirinto** em matriz e **flood fill**
+- um **resolvedor de sudoku**
 
 ## Antes de começar
 
-Este módulo é **recursão** do começo ao fim: revise os assuntos 0031 (pilha de
-chamadas), 0032 e 0033 se ainda precisar pensar muito para seguir uma função
-que chama a si mesma. Você também vai usar matrizes (0039), operadores de
-bits (0065) e o vetor de `bool` de `<stdbool.h>`. O labirinto é a DFS do
-assunto 0111 com a matriz no lugar do grafo, e a BFS (0110) aparece como a
-ferramenta certa para o menor caminho. A pilha (0082) é a saída quando a
-recursão ficaria funda demais.
+Revise a recursão (0031 a 0033), as matrizes (0039), os operadores de bits
+(0065) e o vetor de `bool` de `<stdbool.h>`. O labirinto é a DFS do 0111 com
+uma matriz no lugar do grafo; a BFS (0110) dá o menor caminho.
 
-Em cada função recursiva, procure três partes: em que ponto ela **para**, em
-que ponto ela **poda** e em que ponto ela **escolhe e desfaz**. O fluxograma
-é curto, porque cada caixa de chamada recursiva é o fluxograma inteiro de
-novo. Quase todo programa conta as **chamadas**: com a poda, a saída fica
-igual e o número cai. Nas árvores de decisão, amarelo é uma decisão ainda
-aberta, verde é uma solução, vermelho é um galho podado e cinza é um beco
-sem saída; nos tabuleiros, as casas verdes são a solução e as vermelhas, as
-proibidas.
+**Progressão.** O módulo 18 ordenou sem enumerar; aqui você enumera e poda,
+com a recursão dos módulos 4 e 13 e a DFS do 16. O 20 retoma a recursão como
+divisão e conquista e troca a busca exaustiva por escolhas gulosas.
 
-Uma convenção vale para o módulo todo: **os vetores de marcação começam e
-terminam a busca do mesmo jeito**. Se, depois de um backtracking, sobrou algum
-`true` que não estava lá no começo, faltou um desfazer.
+Em cada função recursiva, ache onde ela **para**, onde **poda** e onde
+**escolhe e desfaz**. Os programas contam as **chamadas**: com a poda, a
+saída é a mesma e o número cai. Nas árvores de decisão, amarelo é uma decisão
+aberta, verde uma solução, vermelho um galho podado e cinza um beco sem
+saída; nos tabuleiros, verde é a solução e vermelho, casa proibida.
 
-Um aviso: o exercício E773 é um "ache o bug" cujo código, de propósito,
-derruba o programa com estouro de pilha. O AddressSanitizer vai acusar
-`stack-overflow` até você consertar.
+Se sobrou um `true` no vetor de marcação ao fim da busca, faltou um
+desfazer.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -72,32 +59,26 @@ derruba o programa com estouro de pilha. O AddressSanitizer vai acusar
 
 ## 0125 · Subconjuntos
 
-Fila do açaí. A moça do caixa avisa: além da base, você pode pôr qualquer
-combinação dos três complementos do dia, granola (R$ 2), banana (R$ 3) e
-paçoca (R$ 4). Pode ser nenhum, um, dois ou os três. Quantos copos diferentes
-dá para montar, e quanto custa cada um?
+Na fila do açaí, você pode pôr qualquer combinação de três complementos:
+granola (R$ 2), banana (R$ 3) e paçoca (R$ 4). Quantos copos existem e quanto
+custa cada um?
 
-Cada complemento é uma decisão de sim ou não. Três decisões independentes dão
-2 × 2 × 2 = **8** copos. Cada copo é um **subconjunto** do conjunto
-{granola, banana, paçoca}, e a lista de todos eles é o **conjunto das
-partes**. Com `n` itens, são **2ⁿ** subconjuntos, contando o vazio e o
-conjunto inteiro.
+Cada complemento é um sim ou não: 2 × 2 × 2 = **8** copos. Cada copo é um
+**subconjunto** de {granola, banana, paçoca}, e a lista de todos é o
+**conjunto das partes**: com `n` itens, **2ⁿ** subconjuntos, contando o vazio
+e o conjunto inteiro.
 
-Gerar todos sem esquecer nenhum e sem repetir é **enumerar**. O jeito mais
-limpo é a recursão (assunto 0032): a função `gera(i, k)` cuida do item `i` e
-abre dois caminhos. No primeiro, o item fica **de fora** e ela chama
-`gera(i + 1, ...)`. No segundo, o item **entra** e ela chama `gera(i + 1, ...)`
-de novo. Quando `i` chega a `n`, todas as decisões foram tomadas e o
-subconjunto é mostrado.
+**Enumerar** é gerar todos sem esquecer nem repetir. Na recursão (assunto
+0032), `gera(i, k)` cuida do item `i` e abre dois caminhos: com o item **de
+fora** e com o item **dentro**, ambos chamando `gera(i + 1, ...)`. Quando `i`
+chega a `n`, o subconjunto é mostrado.
 
-Os itens escolhidos vão para o vetor `cesta`, e `k` diz quantos lugares dele
-estão ocupados. Como `k` é **parâmetro**, cada chamada tem a sua cópia. Quando
-uma chamada termina e a de cima continua, o `k` de cima ainda vale o que valia
-antes: a escolha se **desfaz sozinha**.
+Os itens escolhidos ficam em `cesta`, e `k` conta os lugares ocupados. Como `k`
+é **parâmetro**, a escolha se **desfaz sozinha** quando a chamada termina.
 
-Existe um segundo jeito, sem recursão: os bits de um número (assunto 0065).
-Conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o item `i` entra". O
-número 5 é `101` em binário: bits 0 e 2 ligados, granola e paçoca.
+Sem recursão, use os bits de um número (assunto 0065): conte `m` de 0 a
+2ⁿ - 1 e leia o bit `i` de `m` como "o item `i` entra". O 5 é `101`: granola
+e paçoca.
 
 ```c
 for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
@@ -105,13 +86,13 @@ for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
         if (m & (1 << i)) { /* o item i está no subconjunto m */ }
 ```
 
-Na árvore de decisões, cada nível é um complemento. O ramo da esquerda deixa
-o item de fora; o da direita põe. As 8 folhas são os 8 copos, na ordem em
-que o programa os mostra:
+Na árvore de decisões, cada nível é um complemento: o ramo da esquerda deixa o
+item de fora e o da direita o põe. As 8 folhas são os 8 copos, na ordem em que
+o programa os mostra:
 
 <p align="center"><img src="19-backtracking/0125-subconjuntos/ideia.svg" alt="Diagrama da ideia: Subconjuntos" width="864"></p>
 
-O programa segue a árvore da esquerda para a direita e conta as chamadas:
+O programa percorre a árvore da esquerda para a direita:
 
 ```c
 #include <stdio.h>
@@ -159,39 +140,28 @@ int main(void) {
 // 15 chamadas
 ```
 
-As 15 chamadas vêm da árvore: ela tem 1 + 2 + 4 + 8 = 15 nós, e cada nó é
-uma chamada de `gera`. Em geral, são 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas. Cada folha
-ainda gasta até `n` passos para mostrar a cesta, então o custo total é
-**O(n · 2ⁿ)**. Com 20 itens já são mais de um milhão de subconjuntos; com 40,
-mais de um trilhão. Enumerar tudo só serve para `n` pequeno.
-
-O fluxograma não tem laço. Quem "repete" é a recursão, que chama `gera` duas
-vezes por nó, uma por caminho:
+A árvore tem 1 + 2 + 4 + 8 = 15 nós, um por chamada: em geral, 2ⁿ⁺¹ - 1
+chamadas e 2ⁿ folhas. Cada folha gasta até `n` passos para mostrar a cesta: o
+custo é **O(n · 2ⁿ)**, e com 40 itens passa de um trilhão de subconjuntos.
+Enumerar tudo só serve para `n` pequeno. O fluxograma não tem laço: quem
+repete é a recursão:
 
 <p align="center"><img src="19-backtracking/0125-subconjuntos/fluxograma.svg" alt="Fluxograma: Subconjuntos" width="531"></p>
 
 > [!WARNING]
-> No jeito por bits, o erro clássico é testar `if ((m & (1 << i)) == 1)`. A
-> conta `m & (1 << i)` não dá 1 quando o bit está ligado: dá o próprio
-> `1 << i`, que vale 1, 2, 4, 8... Com `== 1`, só o item 0 é reconhecido e os
-> outros nunca entram. Teste só se o resultado é diferente de zero:
-> `if (m & (1 << i))`. Sem os parênteses, `m & 1 << i == 1` nem faz o que
-> parece, porque o `==` é avaliado antes do `&`.
+> No jeito por bits, `m & (1 << i)` não dá 1 quando o bit está ligado: dá o
+> próprio `1 << i` (1, 2, 4, 8...). Com `== 1`, só o item 0 é reconhecido.
+> Teste `if (m & (1 << i))`, com os parênteses: o `==` é avaliado antes do `&`.
 
 > [!TIP]
-> **Por dentro do C:** a pilha de chamadas nunca passa de `n + 1` frames
-> (aqui, 4), mesmo com 15 chamadas no total: a recursão desce, volta e desce
-> de novo pelo mesmo espaço. O vetor `cesta` é global e um só para todo mundo;
-> o que muda de frame para frame é o `k`, guardado em cada frame. Depois de
-> voltar, os lugares de `cesta` a partir de `k` ficam com lixo das escolhas
-> antigas, sem problema: ninguém lê além de `k`, e a próxima escolha escreve
-> por cima. No jeito por bits, `1 << i` com `int` só vale até `i = 30`; para mais
-> itens, use `unsigned long long` e `1ULL << i`.
+> **Por dentro do C:** a pilha nunca passa de `n + 1` frames (aqui, 4), mesmo
+> com 15 chamadas. Com `int`, `1 << i` só vale até `i = 30`; para mais itens,
+> use `1ULL << i`.
 
 > [!NOTE]
-> **Pergunta para você:** se a moça acrescentar um quarto complemento, leite
-> em pó (R$ 1), no fim da lista, quantas linhas o programa mostra e quantas
-> chamadas faz? Qual é a segunda linha da saída?
+> **Pergunta para você:** com um quarto complemento, leite em pó (R$ 1), no
+> fim da lista, quantas linhas o programa mostra e quantas chamadas faz? Qual
+> é a segunda linha da saída?
 
 ### Hora de praticar
 
@@ -330,47 +300,8 @@ Saída esperada:
 7: arroz feijão salada
 ```
 
-**Dicas:**
-
-1. Com 3 itens, o laço de fora vai de 0 até (1 << 3) - 1.
-2. O item i entra quando m & (1 << i) é diferente de zero.
-3. Use uma variável para saber se algum item entrou; se nenhum entrou,
-   escreva "só a carne".
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E745.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E745 && ~/LPEDC/19-backtracking/0125-subconjuntos/E745
-```
-
-**Exercício E746** · ★☆☆
-
-No bolso há três moedas: R$ 1,00, R$ 0,50 e R$ 0,25. O programa abaixo
-quer mostrar todos os valores que dá para pagar escolhendo um subconjunto
-delas. Ele usa um vetor de bool, pega[i], em vez da cesta do texto, e
-decide o caminho "com a moeda" ANTES do caminho "sem a moeda". Complete a
-função gera nos pontos marcados (quatro linhas).
-
-
-```text
-Saída esperada:
-R$ 1.75: 100 50 25
-R$ 1.50: 100 50
-R$ 1.25: 100 25
-R$ 1.00: 100
-R$ 0.75: 50 25
-R$ 0.50: 50
-R$ 0.25: 25
-R$ 0.00:
-```
-
-**Dicas:**
-
-1. Caminho 1: marque pega[i] como true e chame gera(i + 1).
-2. Caminho 2: marque pega[i] como false e chame gera(i + 1) de novo.
-3. Com o "com" primeiro, a ordem sai do maior valor para o menor. Por
-   quê? Pense na moeda de 100: todas as escolhas com ela vêm antes.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E746.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E746 && ~/LPEDC/19-backtracking/0125-subconjuntos/E746
 ```
 
 **Exercício E747** · ★★☆
@@ -397,16 +328,6 @@ café frutas frango
 3 combinações de 64
 ```
 
-**Dicas:**
-
-1. Para cada m, some os preços dos itens cujo bit está ligado. Só depois
-   de somar decida se a linha aparece.
-2. Guarde os nomes e os preços em dois vetores paralelos (ou num vetor de
-   structs, assunto 0061).
-3. Muitos subconjuntos passam de 30 logo nos primeiros itens e
-   mesmo assim são somados até o fim. No assunto 0127 você vai cortar
-   esse desperdício.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E747.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E747 && ~/LPEDC/19-backtracking/0125-subconjuntos/E747
 ```
@@ -422,11 +343,12 @@ patins R$ 200      bola R$ 150       livro R$ 100
 ```
 
 
-O programa abaixo já mostra TODAS as 64 divisões: cada subconjunto vai
-para a Ana e o resto (o complemento) vai para o Beto. Rode e veja. Depois
-estenda o programa para mostrar só as divisões JUSTAS (os dois recebem o
-mesmo valor) e, no fim, quantas são. Para não mostrar a mesma divisão duas
-vezes (com os nomes trocados), mostre só as que dão a bicicleta para a Ana.
+Escreva um programa que teste TODAS as 64 divisões: cada subconjunto vai
+para a Ana e o resto (o complemento) vai para o Beto. Mostre só as divisões
+JUSTAS (os dois recebem o mesmo valor) e, no fim, quantas são. Para não
+mostrar a mesma divisão duas vezes (com os nomes trocados), mostre só as
+que dão a bicicleta para a Ana. Em cada linha, liste os brinquedos de cada
+um na ordem acima.
 
 
 ```text
@@ -436,53 +358,8 @@ Ana: bicicleta bola livro | Beto: patinete skate patins
 2 divisões justas
 ```
 
-**Dicas:**
-
-1. O total dos seis é R$ 1500, então cada um precisa de R$ 750.
-2. Na folha da recursão (i == N), some o valor da Ana antes de mostrar.
-   Se não der 750, ou se da_ana[0] for false, volte sem mostrar.
-3. Use um contador global para o total de divisões justas.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E748.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E748 && ~/LPEDC/19-backtracking/0125-subconjuntos/E748
-```
-
-**Exercício E749** · ★★★
-
-Ache o bug. A pizzaria cobra à parte quatro adicionais: bacon (R$ 6),
-cheddar (R$ 4), catupiry (R$ 5) e cebola (R$ 2). O programa abaixo devia
-listar todas as combinações de adicionais que custam no máximo R$ 10 e
-contá-las. Ele compila sem aviso e roda, mas a lista sai errada: aparecem
-as 16 combinações, quase todas de graça. Ache a linha com erro, conserte e
-rode de novo.
-
-
-```text
-Saída esperada:
-R$ 0: nenhum
-R$ 6: bacon
-R$ 4: cheddar
-R$ 10: bacon cheddar
-R$ 5: catupiry
-R$ 9: cheddar catupiry
-R$ 2: cebola
-R$ 8: bacon cebola
-R$ 6: cheddar cebola
-R$ 7: catupiry cebola
-10 combinações até R$ 10
-```
-
-**Dicas:**
-
-1. Acrescente um printf que mostre m & (1 << i) para m = 6. Quais valores
-   aparecem quando o bit está ligado?
-2. O resultado de m & (1 << i) é 0 ou o próprio 1 << i (1, 2, 4 ou 8).
-   Ele só vale 1 para o bit 0.
-3. Resposta esperada: o teste certo é if (m & (1 << i)), sem o == 1. Com
-   ele consertado, a saída é a de cima.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E749.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E749 && ~/LPEDC/19-backtracking/0125-subconjuntos/E749
 ```
 
 **Exercício E750** · ★★★
@@ -508,17 +385,6 @@ Saída esperada:
 100 desliga a lâmpada 0
 ```
 
-**Dicas:**
-
-1. O m-ésimo estado do código de Gray é g = m ^ (m >> 1). Confira no
-   papel para m = 0 a 7.
-2. O bit que mudou é o único ligado em anterior ^ g. Ache qual é com um
-   laço que testa cada bit (assunto 0065).
-3. Se o bit mudou e agora está ligado em g, a lâmpada acendeu; senão,
-   apagou.
-4. Também é uma
-   enumeração de todos os subconjuntos de {0, 1, 2}, só que em outra ordem.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E750.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E750 && ~/LPEDC/19-backtracking/0125-subconjuntos/E750
 ```
@@ -527,43 +393,27 @@ gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E750.c -o ~/LPEDC/19-backtracking/
 
 ## 0126 · Permutações
 
-Sarau na praça. Três grupos confirmaram, um de rap, um de samba e um de
-forró, e a organização precisa decidir a ordem das apresentações. Antes de
-votar, alguém pede a lista de todas as ordens possíveis.
+Num sarau, três grupos (rap, samba e forró) se apresentam, e a organização quer
+todas as ordens possíveis: 3 × 2 × 1 = **6**. Cada ordem é uma
+**permutação**, e `n` elementos têm **n!** delas.
 
-Para a primeira apresentação há 3 escolhas. Escolhida a primeira, sobram 2
-para a segunda, e a última fica com quem sobrou: 3 × 2 × 1 = **6** ordens.
-Cada ordem é uma **permutação** dos três grupos, e com `n` elementos há
-**n!** permutações (fatorial de `n`).
+A recursão decide **uma posição por vez**. `permuta(v, i)` sabe que `0..i-1`
+já estão decididas, e os candidatos à posição `i` são os de `v[i..n-1]`. Para
+cada `j` de `i` até `n - 1`:
 
-A recursão gera todas decidindo **uma posição por vez**. A função
-`permuta(v, i)` sabe que as posições `0..i-1` já estão decididas e cuida da
-posição `i`. Para lá pode ir qualquer elemento ainda não usado, e os não
-usados são os que estão em `v[i..n-1]`. Então, para cada `j` de `i` até
-`n - 1`:
+1. **escolhe**: troca `v[i]` com `v[j]`;
+2. **desce**: chama `permuta(v, i + 1)`;
+3. **desfaz**: troca `v[i]` com `v[j]` de novo.
 
-1. **escolhe**: troca `v[i]` com `v[j]`, levando o candidato para a posição `i`;
-2. **desce**: chama `permuta(v, i + 1)` para decidir o resto;
-3. **desfaz**: troca `v[i]` com `v[j]` de novo, devolvendo o vetor como
-   estava antes da escolha.
-
-Sem o passo 3, a enumeração quebra. No assunto anterior, a escolha se
-desfazia sozinha porque morava num parâmetro. Aqui a escolha mexe no
-**vetor**, que é um só para todas as chamadas. Se a chamada não arrumar a
-bagunça antes de voltar, a próxima volta do laço de quem a chamou parte de um
-vetor diferente do que esperava.
-
-Quando `i` chega a `n`, todas as posições estão decididas e a ordem é
-mostrada.
-
-Na árvore, cada ramo do primeiro nível leva um grupo diferente para a frente
-da fila; o segundo nível faz o mesmo com a segunda posição. As 6 folhas são
-as 6 ordens, na sequência em que o programa as mostra:
+O passo 3 é indispensável: no assunto anterior, a escolha se desfazia sozinha
+por estar num parâmetro; aqui ela mexe no **vetor**, que é um só para todas as
+chamadas. Quando `i` chega a `n`, a ordem é mostrada. As 6 folhas da árvore
+são as 6 ordens, na sequência em que o programa as mostra:
 
 <p align="center"><img src="19-backtracking/0126-permutacoes/ideia.svg" alt="Diagrama da ideia: Permutações" width="860"></p>
 
-O vetor guarda ponteiros para os nomes (assunto 0048). Trocar dois elementos
-é trocar dois ponteiros: os textos não saem do lugar.
+O vetor guarda ponteiros para os nomes (assunto 0048): trocar dois elementos
+é trocar dois ponteiros, e os textos não saem do lugar.
 
 ```c
 #include <stdio.h>
@@ -608,37 +458,30 @@ int main(void) {
 // 6 ordens; no fim: Rap, Samba, Forró
 ```
 
-Na última linha, depois de tudo, o vetor voltou a ser `Rap, Samba, Forró`:
-cada chamada desfez o que fez. Nas linhas 5 e 6, a troca de `Rap` com
-`Forró` deixou o `Samba` no meio, então a ordem que sai **não** é a
-alfabética nem a "de dicionário". Quem precisa dessa ordem usa outro jeito
-(exemplo A251).
+Na última linha, o vetor voltou a ser `Rap, Samba, Forró`: cada chamada
+desfez o que fez. A ordem de saída **não** é a de dicionário (quem precisa
+dela usa o exemplo A251).
 
-O laço do `j` abre os ramos, e cada volta dele tem o par troca e destroca em
-volta da chamada recursiva:
+O laço do `j` abre os ramos, e cada volta tem o par troca e destroca em volta
+da chamada recursiva:
 
 <p align="center"><img src="19-backtracking/0126-permutacoes/fluxograma.svg" alt="Fluxograma: Permutações" width="520"></p>
 
 > [!WARNING]
-> Esquecer o **desfaz** é o erro clássico. Sem a segunda troca, este mesmo
-> programa mostra `Rap, Samba, Forró` e `Rap, Forró, Samba` duas vezes cada, e
-> o `Samba` nunca abre o sarau: ainda saem 6 linhas, só que erradas, e no fim o
-> vetor fica `Rap, Forró, Samba`. Toda alteração feita antes da chamada
-> recursiva precisa ser desfeita depois dela, na ordem inversa.
+> Sem o **desfaz**, o programa ainda mostra 6 linhas, mas com ordens repetidas
+> e outras faltando, e o vetor termina bagunçado. Toda alteração feita antes
+> da chamada recursiva precisa ser desfeita depois dela, na ordem inversa.
 
 > [!TIP]
-> **Por dentro do C:** a recursão desce só `n + 1` níveis, mas o número de
-> folhas é `n!`, e cada folha gasta `n` passos para mostrar: o custo é
-> **O(n · n!)**, pior que os 2ⁿ dos subconjuntos. 10! já passa de 3,6 milhões,
-> 13! (6.227.020.800) não cabe num `int` de 32 bits, e 20! fica perto de
-> 2,4 · 10¹⁸, no limite de um `long long`. Trocar ponteiros é barato: 8 bytes
-> por elemento, não importa o tamanho do nome. Trocar structs grandes ou
-> strings inteiras com `strcpy` custaria muito mais em cada uma das `n!`
-> folhas.
+> **Por dentro do C:** são `n!` folhas, e cada uma gasta `n` passos para
+> mostrar: o custo é **O(n · n!)**, pior que os 2ⁿ dos subconjuntos. 13!
+> (6.227.020.800) não cabe num `int` de 32 bits, e 20! (cerca de 2,4 · 10¹⁸)
+> fica no limite de um `long long`. Trocar ponteiros custa 8 bytes por
+> elemento, qualquer que seja o tamanho do nome.
 
 > [!NOTE]
 > **Pergunta para você:** com um quarto grupo, de pagode, no fim do vetor,
-> quantas linhas saem? Qual grupo abre o sarau na linha 7? E na linha 19?
+> quantas linhas saem? Qual grupo abre o sarau na linha 7? E na 19?
 
 ### Hora de praticar
 
@@ -778,47 +621,8 @@ Saída esperada:
 soma: 4440
 ```
 
-**Dicas:**
-
-1. Guarde os dígitos num vetor de int: {4, 7, 9}. A troca é a de int do
-   assunto 0046.
-2. Na folha, monte o número com numero = numero * 10 + v[k].
-3. Por que 4440? Cada dígito aparece 2 vezes em cada casa: (4 + 7 + 9)
-   × 2 × 111.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0126-permutacoes/E751.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E751 && ~/LPEDC/19-backtracking/0126-permutacoes/E751
-```
-
-**Exercício E752** · ★☆☆
-
-Lia, Max e Nina vão tirar uma foto lado a lado e querem ver todas as
-ordens possíveis. O programa abaixo usa o vetor usado[] (como no exemplo
-A251) em vez de trocas, mas faltam três linhas dentro do laço: marcar a
-pessoa como usada, colocá-la na posição pos da foto e desmarcar depois da
-chamada recursiva. Complete.
-
-
-```text
-Saída esperada:
-Lia Max Nina
-Lia Nina Max
-Max Lia Nina
-Max Nina Lia
-Nina Lia Max
-Nina Max Lia
-```
-
-**Dicas:**
-
-1. A posição pos da foto guarda o ÍNDICE da pessoa: foto[pos] = p.
-2. Marque usado[p] = true antes de chamar fotos(pos + 1) e volte para
-   false depois. Se esquecer de desmarcar, só a primeira linha aparece.
-3. Resposta esperada: as 6 linhas acima (ao contrário das trocas do
-   texto, esta saída está em ordem alfabética).
-
-```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/E752.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E752 && ~/LPEDC/19-backtracking/0126-permutacoes/E752
 ```
 
 **Exercício E753** · ★★☆
@@ -838,29 +642,19 @@ menor: 16 km
 rota: Pizzaria -> Lagoa -> Centro -> Jardim -> Vila -> Pizzaria
 ```
 
-**Dicas:**
-
-1. Permute o vetor {1, 2, 3, 4} com trocas, como no texto. Na folha, some
-   dist[0][v[0]], depois dist[v[k]][v[k + 1]] e, no fim, dist[v[3]][0].
-2. Guarde a melhor rota num segundo vetor, copiando v quando achar uma
-   distância MENOR (estritamente) que a melhor até agora.
-3. A rota de trás para frente (Vila, Jardim, Centro, Lagoa) também dá
-   16 km, mas aparece depois. Por que toda rota empata com a inversa?
-4. Este é o problema do caixeiro
-   viajante: com 15 bairros seriam mais de um trilhão de ordens.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0126-permutacoes/E753.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E753 && ~/LPEDC/19-backtracking/0126-permutacoes/E753
 ```
 
 **Exercício E754** · ★★☆
 
-Cinco atletas correm a final: Ana, Bia, Cris, Dani e Edu. O programa abaixo
-conta todas as ordens de chegada (5! = 120). Mas a premiação só liga para
-o PÓDIO: ouro, prata e bronze, nessa ordem. Estenda o programa para contar
-os pódios possíveis e quantos deles têm a Bia (em qualquer dos três
-lugares). Não gere as 120 ordens e depois filtre: pare a recursão quando
-as 3 primeiras posições estiverem decididas.
+Cinco atletas correm a final: Ana, Bia, Cris, Dani e Edu. Escreva um
+programa que conte todas as ordens de chegada (5! = 120) com a recursão
+por trocas do texto. Mas a premiação só liga para o PÓDIO: ouro, prata e
+bronze, nessa ordem. Conte também os pódios possíveis e quantos deles têm
+a Bia (em qualquer dos três lugares). Não gere as 120 ordens e depois
+filtre: pare a recursão quando as 3 primeiras posições estiverem
+decididas.
 
 
 ```text
@@ -870,46 +664,8 @@ Saída esperada:
 Bia aparece em 36
 ```
 
-**Dicas:**
-
-1. Escreva uma segunda função, podios(v, i), igual a ordens, mas com a
-   folha em i == 3 em vez de i == N. Isso é um ARRANJO: 5 × 4 × 3 = 60.
-2. Na folha, olhe só v[0], v[1] e v[2] para saber se a Bia está lá.
-3. Confira a conta: pódios sem a Bia são 4 × 3 × 2 = 24, e 60 - 24 = 36.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0126-permutacoes/E754.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E754 && ~/LPEDC/19-backtracking/0126-permutacoes/E754
-```
-
-**Exercício E755** · ★★★
-
-Ache o bug. Um mágico quer listar todas as ordens das cartas A, 2, 3 e 4
-para ensaiar um truque. Devem sair 4! = 24 ordens, todas diferentes, seis
-por linha. O programa compila sem aviso e roda, mas mostra menos ordens do
-que devia. O erro está numa linha só. Ache, conserte e rode de novo.
-
-
-```text
-Saída esperada:
-A234 A243 A324 A342 A432 A423
-2A34 2A43 23A4 234A 243A 24A3
-32A4 324A 3A24 3A42 34A2 342A
-423A 42A3 432A 43A2 4A32 4A23
-24 ordens
-```
-
-**Dicas:**
-
-1. Acrescente um printf no começo de embaralha mostrando i. Algum nível é
-   pulado?
-2. A chamada recursiva decide a PRÓXIMA posição. Depois de escolher quem
-   fica na posição i, a próxima é a i + 1, não importa de onde veio a
-   carta escolhida.
-3. Resposta esperada: a chamada era embaralha(v, j + 1); o certo é
-   embaralha(v, i + 1). Com o erro saem só 8 ordens.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/E755.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E755 && ~/LPEDC/19-backtracking/0126-permutacoes/E755
 ```
 
 **Exercício E756** · ★★★
@@ -940,15 +696,6 @@ depois de 1 3 5 4 2 vem 1 4 2 3 5
 5 4 3 2 1 é a última
 ```
 
-**Dicas:**
-
-1. Ande da direita para a esquerda e ache o maior i com v[i] < v[i + 1]
-   (o "pivô"). Se não existe, v é a última. Em 1 3 5 4 2, o pivô é o 3.
-2. Ache o maior j > i com v[j] > v[i] (o 4), troque v[i] com v[j] e
-   inverta o trecho v[i + 1..n - 1]: 1 4 5 3 2 vira 1 4 2 3 5.
-3. Para listar todas: comece da ordem crescente e use
-   do { mostra(v); } while (proxima(v, n));
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0126-permutacoes/E756.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E756 && ~/LPEDC/19-backtracking/0126-permutacoes/E756
 ```
@@ -957,42 +704,32 @@ gcc ~/LPEDC/19-backtracking/0126-permutacoes/E756.c -o ~/LPEDC/19-backtracking/0
 
 ## 0127 · Backtracking
 
-Você ganhou um cartão-presente de R$ 35 da livraria do bairro, e o cartão não
-dá troco: ou você gasta o valor exato, ou o resto fica perdido. Na vitrine há
-um atlas (R$ 30), um mangá (R$ 20), um livro de poesia (R$ 15) e um marcador
-de página (R$ 5). Que combinações fecham exatamente R$ 35?
+Um cartão-presente de R$ 35 não dá troco: ou você gasta o valor exato, ou o
+resto se perde. Na vitrine há um atlas (R$ 30), um mangá (R$ 20), um livro de
+poesia (R$ 15) e um marcador (R$ 5). Que combinações fecham R$ 35?
 
-Dá para resolver com o assunto 0125: gerar os 2⁴ = 16 subconjuntos, somar
-cada um e ficar com os que dão 35. Isso desperdiça trabalho: atlas e mangá já
-somam R$ 50, nenhum subconjunto que comece assim pode dar certo, e mesmo
-assim a enumeração cega vai até o fim de cada um deles.
+Pelo assunto 0125, bastaria somar os 2⁴ = 16 subconjuntos. Mas atlas e mangá
+já somam R$ 50, e a enumeração cega continua até o fim de cada subconjunto que
+começa assim.
 
 O **backtracking** (retrocesso; o Ziviani chama de **tentativa e erro**) é a
-enumeração que **desiste cedo**. Ela constrói a solução uma escolha por vez,
-como antes, mas a cada passo pergunta: "este começo ainda pode virar uma
-solução?". Se não pode, ela nem desce: volta um passo e tenta a próxima
-opção. Cortar assim um galho inteiro da árvore de decisões se chama **poda**.
-
-O esqueleto tem três partes, e a primeira e a última você já viu:
+enumeração que **desiste cedo**: a cada escolha, pergunta se o começo ainda
+pode virar solução e, se não, volta um passo. Cortar um galho inteiro da
+árvore de decisões se chama **poda**. O esqueleto tem três partes:
 
 1. **caso de parada**: a solução está completa? Mostre (ou conte) e volte;
 2. **poda**: o começo já é inviável? Volte sem descer;
 3. **escolha**: para cada opção, escolha, desça e **desfaça**.
 
-Neste problema, a poda é simples: os preços são positivos, então se a soma
-**passou** de 35, acrescentar mais itens só piora. E quando a soma bate
-**exatamente** 35, também não precisa descer: os próximos itens só poderiam
-entrar com a soma passando de 35.
-
-Cada caixa da árvore mostra a soma até ali. O galho da
-esquerda leva o item do nível, o da direita não leva. As caixas vermelhas são
-podas, as verdes são soluções e as cinzas são becos sem saída (os itens
-acabaram antes de a soma chegar a 35):
+Aqui os preços são positivos: se a soma **passou** de 35, acrescentar itens só
+piora, e se bateu **exatamente** 35, também não precisa descer. Na árvore, a
+esquerda leva o item e a direita não. As caixas vermelhas são podas, as verdes
+são soluções e as cinzas são becos sem saída (os itens acabaram antes de a soma
+chegar a 35):
 
 <p align="center"><img src="19-backtracking/0127-backtracking/ideia.svg" alt="Diagrama da ideia: Backtracking" width="858"></p>
 
-No código, a poda é o primeiro `if` da função. A chamada que passou do alvo
-começa, percebe o problema e volta na hora:
+A poda é o primeiro `if`: a chamada que passou do alvo volta na hora:
 
 ```c
 #include <stdbool.h>
@@ -1042,35 +779,24 @@ int main(void) {
 // 21 chamadas (sem poda seriam 31)
 ```
 
-A árvore completa de 4 itens tem 1 + 2 + 4 + 8 + 16 = 31 nós. A poda deixou
-21. Parece pouco, mas o efeito cresce com o tamanho: cada poda perto da raiz
-corta um galho com metade da árvore. Com 30 itens e um alvo pequeno, são
-alguns milhares de chamadas em vez de um bilhão.
-
-As duas perguntas de cima mandam embora cedo; só quem passa por elas chega
-às duas chamadas recursivas:
+A árvore completa de 4 itens tem 31 nós, e a poda deixou 21. O ganho cresce
+com `n`: uma poda perto da raiz corta metade da árvore, e com 30 itens e um
+alvo pequeno são alguns milhares de chamadas em vez de um bilhão:
 
 <p align="center"><img src="19-backtracking/0127-backtracking/fluxograma.svg" alt="Fluxograma: Backtracking" width="588"></p>
 
 > [!WARNING]
-> A ordem dos testes importa. Se o `if (i == N) return;` viesse **antes** do
-> `if (soma == ALVO)`, a solução que fecha justo com o último item
-> (`atlas marcador`, que chega a 35 com `i` valendo 4) seria descartada como
-> "acabaram os itens", e só `mangá poesia` apareceria. Outro clássico é
-> escrever a poda com `>=` no lugar de `>`: aí toda soma que bate o alvo é
-> cortada antes de ser mostrada, e a saída fica vazia. A poda só pode cortar
-> o que **com certeza** não leva a solução; uma poda ambiciosa demais deixa
-> o programa rápido e errado.
+> A ordem dos testes importa. Com `if (i == N) return;` **antes** de
+> `if (soma == ALVO)`, a solução que fecha com o último item (`atlas
+> marcador`, com `i` valendo 4) seria descartada. Poda com `>=` no lugar de
+> `>` corta toda soma que bate o alvo, e a saída fica vazia. A poda só pode
+> cortar o que **com certeza** não leva a solução.
 
 > [!TIP]
-> **Por dentro do C:** a soma viaja como **parâmetro**, então cada frame tem a
-> sua e voltar desfaz a soma de graça. Já `leva[]` é global e um só: por isso
-> a linha `leva[i] = false` antes do segundo caminho. O vetor ocupa `N` bytes
-> e a pilha nunca passa de `N + 1` frames, mesmo quando as chamadas somam
-> milhões. O custo no pior caso continua **O(2ⁿ)**: a poda não muda a ordem
-> de grandeza garantida, muda o quanto da árvore você visita na prática.
-> Ordenar os preços do maior para o menor, como aqui, faz a soma estourar
-> mais cedo e podar mais perto da raiz.
+> **Por dentro do C:** a soma é **parâmetro**, e voltar a desfaz de graça;
+> `leva[]` é global, por isso `leva[i] = false` antes do segundo caminho. O
+> pior caso continua **O(2ⁿ)**: a poda muda o quanto da árvore você visita, não
+> a garantia.
 
 > [!NOTE]
 > **Pergunta para você:** se o cartão fosse de R$ 50, quais combinações
@@ -1233,11 +959,11 @@ gcc ~/LPEDC/19-backtracking/0127-backtracking/A254.c -o ~/LPEDC/19-backtracking/
 
 Para a trilha do fim de semana, a mochila tem que pesar exatamente 12 kg
 (nem mais, para não cansar, nem menos, para não faltar nada). Os itens
-pesam: barraca 7, comida 5, água 4, saco de dormir 3 e fogareiro 2. O
-programa abaixo enumera todas as escolhas, mas ainda não poda nada: ele
-mostra as soluções certas e faz 63 chamadas. Complete os dois testes do
-começo da função tenta (a poda e a solução) para que ele faça só o
-necessário.
+pesam: barraca 7, comida 5, água 4, saco 3 e fogareiro 2. Escreva o
+backtracking tenta(i, soma), que decide o item i (leva ou não leva) e
+conta as chamadas no começo da função. Volte quando a soma passar de 12
+(poda). Quando a soma for 12, mostre os itens levados e volte, sem decidir
+os itens que sobram.
 
 
 ```text
@@ -1248,46 +974,8 @@ comida água saco
 45 chamadas
 ```
 
-**Dicas:**
-
-1. Primeiro teste: se soma passou de ALVO, volte.
-2. Segundo teste: se soma é igual a ALVO, mostre leva[0..i-1] e volte.
-   Esse teste precisa vir ANTES do if (i == N), senão "barraca saco
-   fogareiro" (que fecha com o último item) se perde.
-3. Quando tudo estiver certo, apague o bloco do if (i == N) que mostra a
-   solução: com o seu segundo teste, ele vira só "return;".
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0127-backtracking/E757.c -o ~/LPEDC/19-backtracking/0127-backtracking/E757 && ~/LPEDC/19-backtracking/0127-backtracking/E757
-```
-
-**Exercício E758** · ★☆☆
-
-Sobrou um vão de 100 cm na estante, e você quer preenchê-lo exatamente
-com caixas organizadoras. As caixas disponíveis têm larguras de 45, 35,
-30, 25, 20 e 10 cm (uma de cada). Escreva do zero um backtracking que
-mostre todas as combinações que dão 100 cm exatos, com a poda "passou de
-100, volte", e no fim quantas são.
-
-
-```text
-Saída esperada:
-45 35 20
-45 30 25
-45 25 20 10
-35 30 25 10
-4 combinações
-```
-
-**Dicas:**
-
-1. Use o esqueleto do texto: tenta(i, soma), com a poda, o teste de
-   solução, o teste de fim e os dois caminhos (leva e não leva).
-2. Leve o item ANTES de tentar sem ele: é isso que faz o 45 aparecer
-   primeiro.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/E758.c -o ~/LPEDC/19-backtracking/0127-backtracking/E758 && ~/LPEDC/19-backtracking/0127-backtracking/E758
 ```
 
 **Exercício E759** · ★★☆
@@ -1305,17 +993,6 @@ melhor carga: 98 kg
 caixas: 47 28 23
 ```
 
-**Dicas:**
-
-1. A poda continua: se a soma passou de 100, volte.
-2. Em toda chamada que não foi podada, compare soma com a melhor até
-   agora. Se for maior, guarde a soma e copie leva[0..i-1] para um vetor
-   melhor[] (e zere melhor[i..N-1]).
-3. Não pare quando achar uma carga boa: só no fim da busca você sabe que
-   ela é a melhor.
-4. Bônus: uma segunda poda corta os ramos em que soma + (tudo o que
-   ainda falta decidir) não passa da melhor carga até agora.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0127-backtracking/E759.c -o ~/LPEDC/19-backtracking/0127-backtracking/E759 && ~/LPEDC/19-backtracking/0127-backtracking/E759
 ```
@@ -1324,10 +1001,10 @@ gcc ~/LPEDC/19-backtracking/0127-backtracking/E759.c -o ~/LPEDC/19-backtracking/
 
 Na banca, os pacotes de figurinhas vêm com quantidades diferentes: 25,
 20, 15, 12, 10, 8 e 5 figurinhas (um pacote de cada). Você precisa de
-exatamente 60 figurinhas para completar o álbum. O programa abaixo já
-mostra todas as combinações. Estenda-o para, no fim, mostrar também a
-combinação com MENOS pacotes (se houver empate, fique com a primeira
-encontrada).
+exatamente 60 figurinhas para completar o álbum. Escreva um backtracking
+que mostre todas as combinações (tentando levar o pacote antes de não
+levar) e, no fim, a combinação com MENOS pacotes (se houver empate, fique
+com a primeira encontrada).
 
 
 ```text
@@ -1340,46 +1017,8 @@ Saída esperada:
 menos pacotes: 25 20 15 (3 pacotes)
 ```
 
-**Dicas:**
-
-1. Passe a quantidade de pacotes escolhidos como parâmetro (k), do mesmo
-   jeito que a soma: assim ela se desfaz sozinha na volta.
-2. Na solução, se k for menor que o melhor até agora, copie leva[0..i-1]
-   para um vetor melhor[] (e zere o resto dele).
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0127-backtracking/E760.c -o ~/LPEDC/19-backtracking/0127-backtracking/E760 && ~/LPEDC/19-backtracking/0127-backtracking/E760
-```
-
-**Exercício E761** · ★★★
-
-Ache o bug. No buffet a quilo, você quer montar um prato de sobremesas com
-exatamente 500 g. As porções pesam: pudim 250 g, mousse 200 g, torta
-150 g, gelatina 100 g e brigadeiro 50 g. Para economizar parâmetros, o
-autor guardou a soma numa variável GLOBAL. O programa compila sem aviso e
-roda, mas não mostra nenhuma combinação. Ache o erro, conserte (sem
-transformar a soma em parâmetro) e rode de novo.
-
-
-```text
-Saída esperada:
-pudim mousse brigadeiro
-pudim torta gelatina
-mousse torta gelatina brigadeiro
-```
-
-**Dicas:**
-
-1. Mostre soma no começo de cada chamada. Depois de voltar do caminho
-   "com o item", quanto ela vale?
-2. Com a soma em parâmetro, voltar desfaz a escolha de graça. Global, ela
-   é uma só para todas as chamadas: quem soma precisa subtrair na volta.
-3. Resposta esperada: falta soma -= porcoes[i]; logo depois da primeira
-   chamada recursiva (antes de tentar sem o item). Com isso, a saída é a
-   de cima.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/E761.c -o ~/LPEDC/19-backtracking/0127-backtracking/E761 && ~/LPEDC/19-backtracking/0127-backtracking/E761
 ```
 
 **Exercício E762** · ★★★
@@ -1402,15 +1041,6 @@ Saída esperada:
 4 expressões, 83 chamadas
 ```
 
-**Dicas:**
-
-1. A função tenta(k, soma) decide o sinal do número k; a primeira chamada
-   é tenta(2, 1). Guarde os sinais num vetor de char.
-2. Os números que faltam são k, k + 1, ..., 7. Se a distância
-   abs(10 - soma) for maior que a soma deles, nenhuma escolha de sinais
-   fecha a conta. Pré-calcule essas somas num vetor resto[].
-3. Sem a poda seriam 127 chamadas (a árvore completa de 6 decisões).
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0127-backtracking/E762.c -o ~/LPEDC/19-backtracking/0127-backtracking/E762 && ~/LPEDC/19-backtracking/0127-backtracking/E762
 ```
@@ -1419,44 +1049,30 @@ gcc ~/LPEDC/19-backtracking/0127-backtracking/E762.c -o ~/LPEDC/19-backtracking/
 
 ## 0128 · N-rainhas
 
-No clube de xadrez da praça, o desafio da semana está no quadro: pôr 4
-rainhas num tabuleiro 4 × 4 sem que nenhuma ataque outra. A rainha ataca na
-linha, na coluna e nas duas diagonais, até onde o tabuleiro for. Quantas
-arrumações existem?
+No clube de xadrez, o desafio é pôr 4 rainhas num tabuleiro 4 × 4 sem que uma
+ataque outra (linha, coluna ou diagonal). Quantas arrumações existem?
 
-A força bruta escolheria 4 das 16 casas: 1820 jeitos, quase todos absurdos.
-O primeiro corte vem de graça: duas rainhas na mesma linha se atacam, então
-cada linha tem **exatamente uma** rainha. Basta decidir a coluna da rainha de
-cada linha, e a solução vira um vetor `pos`, com `pos[l]` igual à coluna da
-rainha da linha `l`.
+A força bruta escolheria 4 das 16 casas: 1820 jeitos. Mas duas rainhas na
+mesma linha se atacam, então cada linha tem **exatamente uma**, e a solução é
+um vetor `pos` com a coluna da rainha de cada linha.
 
-O resto é backtracking: a função `rainha(l)` põe a rainha da linha `l`.
-Ela tenta cada coluna `c` e **poda** as casas atacadas pelas rainhas das
-linhas de cima. Se a casa está livre, marca, desce para a linha `l + 1` e,
-na volta, desmarca. Se nenhuma coluna serve, a função termina, e quem a
-chamou passa para a próxima coluna: é o retrocesso.
+`rainha(l)` tenta cada coluna `c` e **poda** as casas atacadas pelas rainhas
+de cima; se a casa está livre, marca, desce para a linha `l + 1` e desmarca na
+volta. Para testar o ataque em O(1), cada casa `(l, c)` tem um índice de
+coluna e de diagonais:
 
-O ganho vem de testar o ataque em O(1), sem varrer as rainhas anteriores.
-Cada casa `(l, c)` pertence a uma coluna e a duas diagonais, e as diagonais
-têm um "endereço" fácil:
+- na diagonal **↗**, `l + c` é igual em todas as casas, de 0 a `2N - 2`;
+- na diagonal **↘**, `l - c` é igual, de `-(N - 1)` a `N - 1`; somar `N - 1`
+  dá um índice válido.
 
-- na diagonal **↗** (sobe para a direita), `l + c` é o mesmo em todas as casas;
-  vai de 0 a `2N - 2`;
-- na diagonal **↘** (desce para a direita), `l - c` é o mesmo; vai de
-  `-(N - 1)` a `N - 1`, então somamos `N - 1` para virar um índice válido.
-
-Três vetores de `bool` guardam o que está ocupado: `coluna[N]`,
-`diag1[2N - 1]` e `diag2[2N - 1]`. Uma casa está livre se as três posições
-dela estão `false`.
-
-O desenho mostra, à esquerda, a primeira solução que o programa acha; no
-meio, o número `l + c` de cada casa; à direita, `l - c + 3`. A rainha da
-linha 1, coluna 3, ocupa a diagonal ↗ número 4 e a diagonal ↘ número 1: as
-casas destacadas ficam proibidas para as outras rainhas:
+Três vetores de `bool` guardam o que está ocupado: `coluna[N]`, `diag1[2N - 1]`
+e `diag2[2N - 1]`. No desenho, à esquerda está a primeira solução; no meio,
+`l + c` de cada casa; à direita, `l - c + 3`. A rainha da linha 1, coluna 3,
+ocupa a diagonal ↗ 4 e a ↘ 1, e as casas destacadas ficam proibidas:
 
 <p align="center"><img src="19-backtracking/0128-n-rainhas/ideia.svg" alt="Diagrama da ideia: N-rainhas" width="858"></p>
 
-O programa mostra cada solução como um tabuleiro e conta as chamadas:
+O programa mostra cada solução como tabuleiro e conta as chamadas:
 
 ```c
 #include <stdbool.h>
@@ -1534,35 +1150,26 @@ cortou a casa antes de qualquer chamada:
 | 3 | colunas 0 a 3 | todas atacadas: volta; na linha 2, as colunas 2 e 3 também estão atacadas, e a linha 1 já tentou tudo: volta à linha 0 |
 | 0 | coluna 1 | livre: desce, e o caminho 3, 0, 2 fecha a solução 1 |
 
-A rainha da linha 0 na coluna 0 nunca dá certo: a busca gasta 4 chamadas
-(uma na linha 1, duas na linha 2, uma na linha 3) para descobrir isso, e
-depois esquece o galho inteiro.
-
-O fluxograma é o esqueleto do assunto anterior, com um laço pelas colunas no
-lugar de "leva ou não leva":
+A rainha em (0, 0) nunca dá certo: a busca gasta 4 chamadas para descobrir e
+esquece o galho. O fluxograma é o do assunto anterior, com um laço pelas
+colunas no lugar de "leva ou não leva":
 
 <p align="center"><img src="19-backtracking/0128-n-rainhas/fluxograma.svg" alt="Fluxograma: N-rainhas" width="757"></p>
 
 > [!WARNING]
-> O índice da diagonal ↘ é `l - c + N - 1`, e não `l - c`. Para a casa
-> (0, 3), `l - c` vale -3, e `diag2[-3]` escreve **fora** do vetor: o C não
-> confere, o AddressSanitizer acusa e, sem ele, o programa estraga outra
-> variável em silêncio. O outro erro comum é desmarcar só a coluna e esquecer
-> as diagonais: o programa não trava, só acha menos soluções do que devia.
+> O índice da diagonal ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`
+> escreve **fora** do vetor. Outro erro é desmarcar só a coluna e esquecer as
+> diagonais: o programa acha menos soluções do que devia.
 
 > [!TIP]
-> **Por dentro do C:** os três vetores ocupam `N + 2(2N - 1)` bytes, 46 bytes
-> para `N = 8`, e cada teste de ataque são três leituras de memória, em vez de
-> um laço pelas rainhas anteriores. A expressão
-> `coluna[c] = diag1[l + c] = diag2[...] = true` funciona porque a atribuição
-> em C devolve o valor atribuído e é feita da direita para a esquerda. A
-> pilha desce só `N + 1` frames. O que cresce é o número de nós da árvore,
-> mas a poda é tão forte que o 8-rainhas acha as 92 soluções com 2057
-> chamadas, contra 8⁸ = 16.777.216 tabuleiros da força bruta por linha.
+> **Por dentro do C:** cada teste de ataque são três leituras, sem laço pelas
+> rainhas anteriores. A atribuição em cadeia funciona porque, em C, ela devolve
+> o valor atribuído, da direita para a esquerda. O 8-rainhas acha as 92
+> soluções com 2057 chamadas.
 
 > [!NOTE]
-> **Pergunta para você:** troque `N` para 5 e para 6 antes de rodar. Quantas
-> soluções você espera? O número sobe quando o tabuleiro cresce?
+> **Pergunta para você:** com `N` igual a 5 e a 6, quantas soluções você
+> espera? O número sobe sempre que o tabuleiro cresce?
 
 ### Hora de praticar
 
@@ -1712,7 +1319,13 @@ bool ataca(int l1, int c1, int l2, int c2)
 
 que diz se duas rainhas, nas casas (l1, c1) e (l2, c2) de um tabuleiro
 8 × 8, se atacam (mesma linha, mesma coluna ou mesma diagonal). Escreva a
-função do zero e teste com os seis pares do programa.
+função do zero e teste com os pares (l1, c1, l2, c2) abaixo:
+
+
+```text
+0 0 3 3    1 2 3 1    2 5 2 0    4 1 1 4    0 3 5 3    6 2 3 0
+```
+
 
 
 ```text
@@ -1725,45 +1338,8 @@ Saída esperada:
 (6, 2) e (3, 0): não ataca
 ```
 
-**Dicas:**
-
-1. Linha e coluna são comparações diretas.
-2. Nas diagonais, a distância entre as linhas é igual à distância entre
-   as colunas: abs(l1 - l2) == abs(c1 - c2) (abs vem de stdlib.h).
-3. Outro jeito: mesma diagonal ↗ quando l1 + c1 == l2 + c2, e mesma ↘
-   quando l1 - c1 == l2 - c2. Os dois jeitos dão o mesmo resultado.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E763.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E763 && ~/LPEDC/19-backtracking/0128-n-rainhas/E763
-```
-
-**Exercício E764** · ★☆☆
-
-O programa abaixo resolve as 6-rainhas e mostra cada solução como o vetor
-pos (a coluna da rainha de cada linha). Faltam as linhas que marcam e
-desmarcam a coluna e as duas diagonais. Complete usando os índices do
-texto (l + c para a diagonal ↗ e l - c + N - 1 para a ↘).
-
-
-```text
-Saída esperada:
-1 3 5 0 2 4
-2 5 1 4 0 3
-3 0 4 1 5 2
-4 2 0 5 3 1
-4 soluções
-```
-
-**Dicas:**
-
-1. Marcar: coluna[c], diag1[l + c] e diag2[l - c + N - 1] recebem true,
-   logo antes da chamada rainha(l + 1).
-2. Desmarcar: as mesmas três posições recebem false, logo depois.
-3. As soluções vêm em pares espelhados: trocando cada c de
-   1 3 5 0 2 4 por 5 - c, sai 4 2 0 5 3 1.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E764.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E764 && ~/LPEDC/19-backtracking/0128-n-rainhas/E764
 ```
 
 **Exercício E765** · ★★☆
@@ -1780,32 +1356,20 @@ primeira: 3 0 4 7 1 6 2 5
 18 soluções com a rainha em (0, 3)
 ```
 
-**Dicas:**
-
-1. Jeito simples: na linha 0, só deixe passar c == 3 (um continue a
-   mais no laço).
-2. Jeito melhor: marque a coluna 3 e as diagonais da casa (0, 3) no main,
-   ponha pos[0] = 3 e comece a busca em rainha(1). Os dois jeitos dão o
-   mesmo resultado; o segundo nem visita as outras colunas da linha 0.
-3. Para mostrar só a primeira, guarde uma cópia de pos quando o contador
-   de soluções passar de 0 para 1.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E765.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E765 && ~/LPEDC/19-backtracking/0128-n-rainhas/E765
 ```
 
 **Exercício E766** · ★★☆
 
-Na sala de prova, as carteiras formam uma grade n × n. O fiscal vai
-sentar n alunos: um em cada fileira (linha) e um em cada coluna. A regra
-contra cola é mais fraca que a da rainha: dois alunos de fileiras VIZINHAS
-não podem estar em colunas vizinhas (aí um enxerga a prova do outro na
-diagonal). Alunos em fileiras mais distantes podem estar na diagonal sem
-problema.
+Na sala de prova, as carteiras formam uma grade n × n e o fiscal senta n
+alunos: um em cada fileira e um em cada coluna. Alunos de fileiras
+VIZINHAS não podem estar em colunas vizinhas (um enxergaria a prova do
+outro na diagonal); em fileiras mais distantes, a diagonal é livre.
 
-O programa abaixo conta as soluções das n-rainhas para n = 4, 5 e 6.
-Estenda-o (mudando a poda e o que for preciso) para contar as arrumações
-da sala de prova e mostrar a primeira de cada n.
+Escreva um backtracking, fileira por fileira, que conte as arrumações da
+sala de prova para n = 4, 5 e 6 e mostre a primeira de cada n (a coluna
+de cada fileira, de cima para baixo).
 
 
 ```text
@@ -1815,23 +1379,17 @@ n = 5: 14 arrumações, primeira: 0 2 4 1 3
 n = 6: 90 arrumações, primeira: 0 2 4 1 3 5
 ```
 
-**Dicas:**
-
-1. A coluna continua proibida de repetir. As diagonais saem: o único
-   teste novo compara c com pos[l - 1], e só quando l > 0.
-2. "Colunas vizinhas" quer dizer abs(c - pos[l - 1]) == 1.
-3. Guarde a primeira arrumação de cada n num vetor separado.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E766.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E766 && ~/LPEDC/19-backtracking/0128-n-rainhas/E766
 ```
 
 **Exercício E767** · ★★★
 
-Ache o bug. Este programa conta as soluções do 8-rainhas e devia mostrar
-92, mas mostra 0. Ele compila sem aviso e roda sem erro do sanitizer: os
-índices nunca saem dos vetores. O erro está numa linha só. Ache,
-conserte e rode de novo.
+Escreva o 8-rainhas com três vetores de marcas: colunas, diagonais ↗ e
+diagonais ↘ (cada casa tem a sua marca em cada um, e a recursão desfaz
+com o MESMO índice com que marcou). Conte as soluções e, no fim, confira
+que os três vetores voltaram a ficar limpos (todos false): se algum
+desfazer errar o índice, sobra marca e a contagem sai errada.
 
 
 ```text
@@ -1840,101 +1398,40 @@ Saída esperada:
 vetores limpos no fim: sim
 ```
 
-**Dicas:**
-
-1. Uma regra do backtracking: depois que a busca termina, todo vetor de
-   marcação volta a ser o que era no começo (tudo false). A função limpos
-   confere isso. O que ela diz antes do conserto?
-2. Compare, letra por letra, a linha que marca com a linha que desmarca.
-   Um índice errado no desmarcar não dá erro: só deixa uma diagonal
-   marcada para sempre e libera outra que estava ocupada.
-3. Resposta esperada: o desmarcar usava diag2[c - l + N - 1]; o certo é
-   diag2[l - c + N - 1], o mesmo índice da marcação. Consertado, a saída é
-   a de cima.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E767.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E767 && ~/LPEDC/19-backtracking/0128-n-rainhas/E767
-```
-
-**Exercício E768** · ★★★
-
-O passeio do cavalo: num tabuleiro 5 × 5, o cavalo começa no canto (0, 0)
-e precisa visitar as 25 casas, cada uma uma vez só, saltando em L. Escreva
-do zero um backtracking que ache o primeiro passeio, numerando as casas na
-ordem da visita (o canto é 1), e conte as chamadas da função recursiva.
-Tente os 8 saltos sempre nesta ordem (linha, coluna):
-
-
-```text
-(+2, +1) (+1, +2) (-1, +2) (-2, +1) (-2, -1) (-1, -2) (+1, -2) (+2, -1)
-```
-
-
-
-```text
-Saída esperada:
-  1  6 15 10 21
- 14  9 20  5 16
- 19  2  7 22 11
-  8 13 24 17  4
- 25 18  3 12 23
-8840 chamadas
-```
-
-**Dicas:**
-
-1. Guarde os saltos em dois vetores, dl[8] e dc[8]. A matriz casa[5][5]
-   começa com 0 (livre) e recebe o número do salto.
-2. salta(l, c, k): o cavalo está em (l, c), a casa de número k. Se k é 25,
-   achou. Senão, para cada salto que cai dentro do tabuleiro numa casa
-   livre: numere com k + 1, desça, e se não deu certo, volte a casa para 0.
-3. Pare na primeira solução devolvendo bool, como no exemplo A256. Cada
-   número sai com printf("%3d", ...).
-4. Resposta esperada: o tabuleiro e a contagem acima. Confira no papel
-   que cada passo de k para k + 1 é mesmo um L.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E768.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E768 && ~/LPEDC/19-backtracking/0128-n-rainhas/E768
 ```
 
 ---
 
 ## 0129 · Labirinto
 
-Festa junina na fazenda, e a atração é o labirinto de milho. Você entra pelo
-canto de cima e quer achar a saída, no canto de baixo. Sem mapa, você anda e,
-quando dá num beco, volta até a última bifurcação e tenta outro corredor.
-Para não andar em círculos, vai deixando pedrinhas pelo caminho.
+Num labirinto de milho, você volta até a última bifurcação a cada beco e tenta
+outro corredor, deixando pedrinhas para não andar em círculos.
 
-Isso é backtracking numa **matriz**. O mapa é um `char lab[L][C + 1]`: `'#'`
-é parede, `'.'` é corredor, `'S'` é a entrada e `'F'` é a saída. A função
-`anda(l, c)` responde "dá para chegar à saída a partir da casa (l, c)?". Ela
-recusa na hora as casas impossíveis: fora do mapa, parede, ou casa que já
-está no caminho. Se a casa é a saída, responde que sim. Senão, **marca** a
-casa com `'*'`, tenta os quatro vizinhos e, se nenhum deu certo, **desfaz** a
+Isso é backtracking numa **matriz**: `char lab[L][C + 1]`, com `'#'` de parede,
+`'.'` de corredor, `'S'` de entrada e `'F'` de saída. `anda(l, c)` responde "dá
+para chegar à saída a partir daqui?". Ela recusa fora do mapa, parede e casa
+que já está no caminho; se a casa é a saída, responde sim; senão **marca** a
+casa com `'*'`, tenta os quatro vizinhos e, se nenhum serviu, **desfaz** a
 marca.
 
-A diferença para os assuntos anteriores: o desfazer não volta a casa para
-`'.'`, e sim para `'x'`. Uma casa da qual não se chega à saída continua sem
-saída na próxima vez que a busca passar por ali, então não vale entrar de
-novo. Com o `'x'`, cada casa é visitada no máximo uma vez, e a
-busca custa **O(L · C)**: é a busca em profundidade (DFS) do assunto 0111,
-com a matriz fazendo o papel do grafo e os quatro vizinhos fazendo o papel
-das arestas.
+O desfazer volta a casa para `'x'`, não para `'.'`: quem não leva à saída
+continua sem levar, então não vale entrar de novo. Assim cada casa é visitada
+no máximo uma vez, e o custo é **O(L · C)**. É a busca em profundidade (DFS)
+do assunto 0111, com a matriz no papel do grafo e os quatro vizinhos no das
+arestas.
 
-Atenção ao `||` encadeado do código. Pelo curto-circuito (assunto
-0013), assim que um vizinho devolve `true`, os seguintes nem são chamados. A
-ordem das direções no `if` (direita, baixo, esquerda, cima) decide qual
-caminho a busca acha primeiro.
+Pelo curto-circuito do `||` (assunto 0013), quando um vizinho devolve `true`,
+os seguintes não são chamados. A ordem das direções (direita, baixo, esquerda,
+cima) decide qual caminho sai primeiro.
 
-No desenho, os números mostram a ordem dos passos do caminho encontrado. A
-busca entrou primeiro no bolsão da direita, achou só becos
-(vermelho) e voltou. Depois desceu pela coluna 1 até o corredor de baixo:
+No desenho, os números mostram a ordem dos passos: a busca tentou o bolsão da
+direita, achou só becos (vermelho), voltou e desceu pela coluna 1:
 
 <p align="center"><img src="19-backtracking/0129-labirinto/ideia.svg" alt="Diagrama da ideia: Labirinto" width="858"></p>
 
-No fim, as casas com `*` são o caminho, e as com `x` são os becos que a
-busca visitou e abandonou:
+No fim, `*` marca o caminho e `x` os becos abandonados:
 
 ```c
 #include <stdbool.h>
@@ -1999,43 +1496,31 @@ int main(void) {
 // 13 passos até a saída, 41 chamadas
 ```
 
-O caminho tem 13 passos, mas existe um de 11: descer direto pela coluna 1,
-sem o desvio por (0, 2) e (1, 2). O backtracking acha **um** caminho, não o
-**menor**. Para o menor, a ferramenta é a BFS (assunto 0110), ou um
-backtracking que testa todos os caminhos (exemplo A258).
+O caminho tem 13 passos, mas existe um de 11 (descer direto pela coluna 1). O
+backtracking acha **um** caminho, não o **menor**: para o menor, use a BFS
+(assunto 0110) ou um backtracking que testa todos os caminhos (exemplo A258).
 
-A mesma recursão, sem a saída e sem o desfazer, vira o **flood fill**
-(preenchimento por inundação): a partir de uma casa, pinta todas as casas
-alcançáveis. É o balde de tinta do editor de imagens, assunto do exemplo
-A257.
-
-Três perguntas mandam embora as casas impossíveis antes de qualquer
-marcação, e só uma casa nova chega ao `'*'`:
+Sem a saída e sem o desfazer, a mesma recursão vira o **flood fill**
+(preenchimento por inundação): o balde de tinta do editor de imagens (exemplo
+A257). Três perguntas descartam as casas impossíveis, e só uma casa nova chega
+ao `'*'`:
 
 <p align="center"><img src="19-backtracking/0129-labirinto/fluxograma.svg" alt="Fluxograma: Labirinto" width="700"></p>
 
 > [!WARNING]
-> Sem a marca de visitada, a busca anda em círculos. Da casa (0, 0) ela vai
-> para (0, 1), que tenta a direita e o resto e, em algum momento, tenta a
-> esquerda: volta para (0, 0), que tenta (0, 1) de novo, e assim para
-> sempre. Não há laço infinito no código, mas a recursão não tem fim: a
-> pilha estoura (*stack overflow*) e o programa morre. Marque a casa **antes**
-> de chamar os vizinhos, não depois.
+> Sem a marca de visitada, a busca anda em círculos: (0, 0) chama (0, 1), que
+> volta para (0, 0), e a recursão não tem fim até a pilha estourar (*stack
+> overflow*). Marque a casa **antes** de chamar os vizinhos.
 
 > [!TIP]
-> **Por dentro do C:** a matriz `lab` é contínua na memória (assunto 0039):
-> `lab[l][c]` fica no byte `l * (C + 1) + c` a partir do começo, e o `+ 1`
-> existe porque cada linha foi escrita como uma string, com o `'\0'` no fim.
-> A profundidade da recursão é o tamanho do caminho atual, que pode chegar a
-> `L · C` casas. Um mapa 1000 × 1000 pede até um milhão de frames, bem mais
-> que os 8 MB de pilha que o Linux costuma dar. Para mapas grandes, troque a
-> recursão por uma pilha explícita de coordenadas (assunto 0082): é o mesmo
-> algoritmo, com a pilha no heap.
+> **Por dentro do C:** a profundidade da recursão é o tamanho do caminho
+> atual, até `L · C` casas. Um mapa 1000 × 1000 pede até um milhão de frames,
+> mais que os 8 MB de pilha que o Linux costuma dar. Para mapas grandes, use
+> uma pilha explícita de coordenadas (assunto 0082).
 
 > [!NOTE]
-> **Pergunta para você:** troque a ordem das direções para baixo, direita,
-> esquerda, cima. Quantos passos tem o caminho encontrado agora? Ainda
-> aparece algum `x`?
+> **Pergunta para você:** com as direções em ordem baixo, direita, esquerda,
+> cima, quantos passos tem o caminho? Ainda aparece algum `x`?
 
 ### Hora de praticar
 
@@ -2181,9 +1666,10 @@ gcc ~/LPEDC/19-backtracking/0129-labirinto/A258.c -o ~/LPEDC/19-backtracking/012
 
 No mapa do sítio, # é cerca e . é grama. A vaca está na casa (2, 3) e
 anda livre pela grama, mas não pula cerca. O sitiante quer saber quantas
-casas de grama ela alcança (a área do pasto dela). A função pasto abaixo
-faz um flood fill, mas falta a linha que soma as casas: complete o return
-com as quatro chamadas recursivas.
+casas de grama ela alcança (a área do pasto dela). Escreva int pasto(int
+l, int c), um flood fill recursivo nas quatro direções (direita, baixo,
+esquerda, cima) que marca com 'v' cada casa alcançada e devolve quantas
+são. Mostre o mapa e a área.
 
 
 ```text
@@ -2197,52 +1683,8 @@ Saída esperada:
 a vaca alcança 12 casas
 ```
 
-**Dicas:**
-
-1. A casa atual vale 1. Some a ela o que cada vizinho alcança: direita,
-   baixo, esquerda e cima.
-2. A marca 'v' é posta ANTES das chamadas, senão dois vizinhos ficariam
-   se chamando para sempre.
-3. Resposta esperada: o mapa e a contagem acima. O pasto da direita não
-   entra: a cerca separa os dois.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0129-labirinto/E769.c -o ~/LPEDC/19-backtracking/0129-labirinto/E769 && ~/LPEDC/19-backtracking/0129-labirinto/E769
-```
-
-**Exercício E770** · ★☆☆
-
-O ratinho do laboratório entra pelo canto (0, 0) de cada labirinto e o
-queijo está no canto oposto, marcado com Q. Escreva do zero a função
-
-
-```text
-bool chega(int l, int c)
-```
-
-
-que diz se o rato alcança o queijo (andando para cima, baixo, esquerda e
-direita, sem atravessar paredes #), e use-a nos dois labirintos do
-programa. Copie o labirinto da vez para a matriz global lab antes de
-chamar a função (strcpy em cada linha).
-
-
-```text
-Saída esperada:
-labirinto 1: o rato chega ao queijo
-labirinto 2: sem caminho até o queijo
-```
-
-**Dicas:**
-
-1. É a função anda do texto, sem a marca de beco: aqui não interessa o
-   caminho, só a resposta. Marque as casas visitadas com qualquer letra.
-2. Recuse fora do mapa, parede e casa já visitada; aceite o Q.
-3. No labirinto 2, uma parede fecha o caminho na coluna 3: confira no
-   papel antes de rodar.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/E770.c -o ~/LPEDC/19-backtracking/0129-labirinto/E770 && ~/LPEDC/19-backtracking/0129-labirinto/E770
 ```
 
 **Exercício E771** · ★★☆
@@ -2264,27 +1706,18 @@ lago 5: começa em (5, 6), tamanho 1
 5 lagos
 ```
 
-**Dicas:**
-
-1. Varra a matriz com dois laços. Achou um ~? É um lago novo: conte e
-   chame um flood fill a partir dali.
-2. O flood fill troca cada ~ do lago por outro caractere (pode ser '.') e
-   devolve quantas casas trocou. Assim o mesmo lago não é contado de novo
-   quando a varredura passar pelas outras casas dele.
-3. É a contagem de componentes conexos do assunto 0111, com a matriz no
-   lugar do grafo.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0129-labirinto/E771.c -o ~/LPEDC/19-backtracking/0129-labirinto/E771 && ~/LPEDC/19-backtracking/0129-labirinto/E771
 ```
 
 **Exercício E772** · ★★☆
 
-O robô aspirador precisa ir da base (S) até a tomada (F), e o programa
-abaixo já acha um caminho e desenha a planta com ele marcado. Mas o robô não
-entende desenho: ele precisa da lista de casas, na ordem. Estenda o
-programa para guardar o caminho enquanto a busca anda e mostrar as
-coordenadas, da base até a tomada, e o número de passos.
+O robô aspirador precisa ir da base (S) até a tomada (F) na planta abaixo.
+Escreva um backtracking que ande pelas casas '.', tentando os vizinhos na
+ordem direita, baixo, esquerda, cima. Marque o caminho com '*' (e as casas
+sem saída com 'x') e guarde as coordenadas enquanto anda. Mostre a planta
+com o caminho, com um espaço entre as casas, depois a lista de casas, da
+base até a tomada, e o número de passos.
 
 
 ```text
@@ -2298,57 +1731,8 @@ caminho: (0,0) (0,1) (1,1) (2,1) (2,2) (2,3) (3,3) (3,4) (3,5) (4,5)
 9 passos
 ```
 
-**Dicas:**
-
-1. Acrescente um parâmetro k em anda: é a posição da casa (l, c) no
-   caminho. A base é a posição 0. Quem chama os vizinhos passa k + 1.
-2. Guarde a casa em dois vetores globais, cl[k] = l e cc[k] = c, logo
-   quando ela for marcada com '*'. Ao chegar na tomada, guarde-a também e
-   anote o tamanho (k + 1 casas, k passos).
-3. Não precisa apagar nada na volta: quando a busca recua e tenta outro
-   vizinho, ele escreve por cima da mesma posição k.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0129-labirinto/E772.c -o ~/LPEDC/19-backtracking/0129-labirinto/E772 && ~/LPEDC/19-backtracking/0129-labirinto/E772
-```
-
-**Exercício E773** · ★★★
-
-Ache o bug. Este é o balde de tinta de um editor de pixel art: balde(l, c,
-nova) troca pela cor nova toda a região da cor que está em (l, c). O
-primeiro clique funciona. O segundo, que pinta a mesma região com a MESMA
-cor que ela já tem, derruba o programa: o AddressSanitizer acusa
-stack-overflow. (Este erro é de propósito: rode, veja a falha, conserte e
-rode de novo.)
-
-
-```text
-Saída esperada:
-1º clique: 9 pixels
-..oo....
-.oooo.##
-..oo..##
-..o.....
-2º clique: 0 pixels
-3º clique: 4 pixels
-..oo....
-.oooo.++
-..oo..++
-..o.....
-```
-
-**Dicas:**
-
-1. Siga o 2º clique no papel: velha e nova são 'o'. A casa (1, 2) é
-   pintada de 'o'... e continua sendo da cor velha. O que acontece quando
-   o vizinho volta a ela?
-2. No flood fill, pintar é o que marca a casa como visitada. Se a cor
-   nova é igual à velha, a marca não marca nada.
-3. Resposta esperada: em balde, antes de começar, se velha == nova,
-   devolva 0 (não há nada a fazer). Consertado, a saída é a de cima.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/E773.c -o ~/LPEDC/19-backtracking/0129-labirinto/E773 && ~/LPEDC/19-backtracking/0129-labirinto/E773
 ```
 
 **Exercício E774** · ★★★
@@ -2373,18 +1757,6 @@ menor caminho: 9 passos
 177 chamadas
 ```
 
-**Dicas:**
-
-1. anda(l, c, passos): o primeiro teste da função é a poda,
-   passos >= menor. Comece menor com um valor maior que qualquer caminho
-   possível (L * C + 1 serve).
-2. Ao chegar em F, a poda garante que passos < menor: atualize menor e
-   copie o mapa inteiro (com os '*') para uma matriz melhor.
-3. Sem a poda, testando todos os caminhos e comparando só na chegada,
-   seriam 449 chamadas, e a diferença cresce muito com o mapa. Mesmo
-   assim, para menor caminho em mapa grande, a BFS (assunto 0110) é a
-   ferramenta certa: O(L · C), sem retrocesso.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0129-labirinto/E774.c -o ~/LPEDC/19-backtracking/0129-labirinto/E774 && ~/LPEDC/19-backtracking/0129-labirinto/E774
 ```
@@ -2393,39 +1765,28 @@ gcc ~/LPEDC/19-backtracking/0129-labirinto/E774.c -o ~/LPEDC/19-backtracking/012
 
 ## 0130 · Juntando tudo
 
-Na banca da rodoviária, a revista de passatempos traz um sudoku "difícil", e
-você empaca na terceira casa. A regra é curta: completar a grade 9 × 9 com
-dígitos de 1 a 9 sem repetir nenhum numa linha, numa coluna ou numa das nove
-caixas 3 × 3. O computador resolve por você.
-
-O sudoku junta o que o módulo mostrou. A grade é uma **matriz**
-`int g[9][9]`, com 0 nas casas vazias. Cada casa vazia é uma decisão, como as
-posições das permutações, e as opções são os dígitos de 1 a 9. A **poda** é a
-regra do jogo: um dígito que já aparece na linha, na coluna ou na caixa nem é
-tentado. E, como nas N-rainhas, o teste é O(1) com **vetores de marcação**:
+No sudoku, completa-se a grade 9 × 9 com dígitos de 1 a 9 sem repetir numa
+linha, numa coluna ou numa das nove caixas 3 × 3. Ele junta o que o módulo
+mostrou: a grade é uma **matriz** `int g[9][9]` (0 é casa vazia), cada casa
+vazia é uma decisão com 9 opções, e a **poda** é a regra do jogo, testada em
+O(1) com **vetores de marcação**, como nas N-rainhas:
 
 - `na_linha[l][d]` diz se o dígito `d` já está na linha `l`;
-- `na_coluna[c][d]`, o mesmo para a coluna `c`;
-- `na_caixa[b][d]`, para a caixa `b`, numerada de 0 a 8 por
-  `b = (l / 3) * 3 + c / 3`.
+- `na_coluna[c][d]`, para a coluna `c`;
+- `na_caixa[b][d]`, para a caixa `b = (l / 3) * 3 + c / 3`, de 0 a 8.
 
-A função `resolve(k)` olha as casas na ordem de leitura (casa `k` é a linha
+`resolve(k)` percorre as casas em ordem de leitura (a casa `k` é a linha
 `k / 9`, coluna `k % 9`), pula as preenchidas e, na primeira vazia, tenta os
-dígitos que passam pela poda. Para cada um: **escreve e marca**, desce para
-`resolve(k + 1)`, e se lá embaixo não deu certo, **apaga e desmarca**. Se
-nenhum dígito serve, devolve `false` e quem chamou tenta o próximo dígito
-dele. Quando não sobra casa vazia, a grade está resolvida, e o `true` sobe
-pela pilha de chamadas até o `main`, como no exemplo A254.
+dígitos que passam pela poda: **escreve e marca**, desce para `resolve(k + 1)`
+e, se não deu certo, **apaga e desmarca**. Sem casa vazia, o `true` sobe até o
+`main`, como no exemplo A254.
 
-A primeira casa vazia é a (0, 1). A linha 0 já tem 2,
-3 e 8; a coluna 1 tem 4, 9, 6, 3 e 1; a caixa 0 tem 2, 3, 6, 4 e 1. Sobram o
-5 e o 7. O programa tenta o 5 primeiro, e só depois de muitos retrocessos lá
-embaixo descobre que a resposta é o 7:
+Na casa (0, 1), a poda deixa só o 5 e o 7. O programa tenta o 5 e, só depois
+de muitos retrocessos, descobre que é o 7:
 
 <p align="center"><img src="19-backtracking/0130-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
-O programa completo, com o jogo da revista escrito como texto (`.` é casa
-vazia):
+O programa, com o jogo escrito como texto (`.` é casa vazia):
 
 ```c
 #include <stdbool.h>
@@ -2512,40 +1873,28 @@ int main(void) {
 // 2999 chamadas
 ```
 
-São 51 casas vazias e 2999 chamadas: cerca de 59 por casa. A força bruta
-pura testaria até 9⁵¹ preenchimentos, um número com 49 algarismos. Quase
-todo o ganho vem da poda, e dá para podar ainda mais escolhendo **qual** casa
-preencher: começar pela casa com menos candidatos derruba as chamadas deste
-mesmo jogo para 64 (exemplo A260).
-
-O fluxograma repete o esqueleto do módulo, com a casa no lugar do item e a
-regra do jogo no lugar da poda:
+São 51 casas vazias e 2999 chamadas; a força bruta testaria até 9⁵¹
+preenchimentos. Escolher **qual** casa preencher (a com menos candidatos)
+derruba este jogo para 64 chamadas (exemplo A260). O fluxograma é o esqueleto
+do módulo, com a casa no lugar do item e a regra do jogo no da poda:
 
 <p align="center"><img src="19-backtracking/0130-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="767"></p>
 
 > [!WARNING]
-> No desfazer, as duas coisas precisam voltar: o `g[l][c] = 0` **e** o
-> `marca(..., false)`. Esquecer o `g[l][c] = 0` parece inofensivo, porque a
-> próxima tentativa escreve outro dígito por cima. Mas, se nenhum dígito
-> serve, a casa fica com o último que foi tentado e, na volta, o `while` do
-> começo de `resolve` passa a tratá-la como uma casa **dada**. Faça o teste:
-> sem essa linha, este programa termina em 64 chamadas mostrando uma grade
-> "resolvida" com três 9 seguidos na primeira linha.
+> No desfazer, as duas coisas precisam voltar: `g[l][c] = 0` **e**
+> `marca(..., false)`. Sem o `g[l][c] = 0`, uma casa sem dígito possível fica
+> com o último tentado e, na volta, o `while` de `resolve` a trata como casa
+> **dada**: o programa termina em 64 chamadas com uma grade "resolvida" errada.
 
 > [!TIP]
-> **Por dentro do C:** os três vetores de marcação ocupam 3 × 9 × 10 = 270
-> bytes (o índice 0 de cada linha nunca é usado: desperdiçar um byte deixa o
-> código usar o próprio dígito como índice). A grade `int g[9][9]` tem 324
-> bytes, contínuos na memória. A recursão desce no máximo 52 frames, um por
-> casa vazia mais o último: nada para a pilha. A conta
-> `jogo[l][c] - '0'` transforma o caractere `'7'` (código 55) no número 7,
-> porque os dígitos são consecutivos na tabela ASCII (assunto 0040).
+> **Por dentro do C:** o índice 0 de cada linha dos vetores de marcação fica
+> sem uso para o dígito servir de índice. `jogo[l][c] - '0'` dá o número do
+> caractere porque os dígitos são consecutivos na tabela ASCII (assunto 0040).
 
 > [!NOTE]
-> **Pergunta para você:** apague o 5 da última casa da linha 5 (troque
-> `"164.9...5"` por `"164.9...."`). O programa ainda mostra a mesma grade? O
-> número de chamadas sobe ou desce? E o jogo continua com uma solução só?
-> (Para responder a última, faça o exercício E778.)
+> **Pergunta para você:** troque `"164.9...5"` por `"164.9...."`. O programa
+> mostra a mesma grade? As chamadas sobem ou descem? O jogo continua com uma
+> solução só? (Para a última, faça o exercício E778.)
 
 ### Hora de praticar
 
@@ -2714,51 +2063,28 @@ gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/A260.c -o ~/LPEDC/19-backtracking
 
 #### Exercícios
 
-**Exercício E775** · ★☆☆
-
-Antes de confiar num resolvedor, você precisa de um conferente. Escreva a
-função
-
-
-```text
-bool confere(int g[9][9], char *onde, int *qual)
-```
-
-
-que diz se uma grade COMPLETA de sudoku está certa. Se não estiver, ela
-guarda em *onde o tipo do primeiro problema ('L' linha, 'C' coluna, 'X'
-caixa) e em *qual o número dele. Confira nessa ordem: todas as linhas,
-depois todas as colunas, depois todas as caixas. Teste com as duas grades
-do programa: a primeira é a solução do texto; na segunda, alguém trocou
-dois números de lugar.
-
-
-```text
-Saída esperada:
-grade 1: certa
-grade 2: errada (coluna 0)
-```
-
-**Dicas:**
-
-1. Para cada linha, use um vetor bool visto[10] zerado: se um dígito já
-   foi visto, a linha está errada.
-2. A caixa b (0 a 8) começa na linha (b / 3) * 3 e na coluna (b % 3) * 3.
-   A i-ésima casa dela (i de 0 a 8) está em (+ i / 3, + i % 3).
-3. Na grade 2, a troca foi dentro da linha 4: as linhas continuam certas,
-   por isso o primeiro problema aparece nas colunas.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E775.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E775 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E775
-```
-
 **Exercício E776** · ★☆☆
 
 Um aplicativo de sudoku mostra, em letra miúda, os candidatos de cada
-casa vazia: os dígitos que ainda podem entrar ali. O programa abaixo tem
-o jogo do texto e a função candidatos, que deve marcar em usado[] os
-dígitos que já aparecem na linha, na coluna e na caixa da casa (l, c).
-Falta o laço que faz essa marcação. Complete.
+casa vazia: os dígitos que ainda podem entrar ali. Escreva
+void candidatos(int l, int c), que mostra os dígitos de 1 a 9 que não
+aparecem na linha l, na coluna c nem na caixa 3 × 3 da casa (l, c). Use
+o jogo abaixo (um ponto é casa vazia) e mostre os candidatos das casas
+(0, 1), (3, 1), (4, 0), (6, 0), (8, 8) e (3, 8).
+
+
+```text
+2.3.8....
+6......7.
+.412.3.86
+5........
+.97.28...
+164.9...5
+.3...6...
+4.....2..
+.1.832.5.
+```
+
 
 
 ```text
@@ -2770,16 +2096,6 @@ Saída esperada:
 (8, 8): 4 7 9
 (3, 8): 1 2 3 4 7 8 9
 ```
-
-**Dicas:**
-
-1. Um laço só, com i de 0 a 8, marca três casas por volta: g[l][i] (a
-   linha), g[i][c] (a coluna) e uma casa da caixa.
-2. A caixa começa em (l / 3 * 3, c / 3 * 3); a i-ésima casa dela fica i / 3
-   linhas abaixo e i % 3 colunas à direita.
-3. Casas vazias valem 0 e marcam usado[0], que ninguém olha.
-4. A casa (4, 0) tem candidato
-   único: um humano escreveria o 3 sem chutar nada.
 
 ```bash
 gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E776.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E776 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E776
@@ -2817,15 +2133,6 @@ Saída esperada:
 73 chamadas
 ```
 
-**Dicas:**
-
-1. Troque os 9 por constantes: N = 6, BL = 2 (linhas do bloco) e BC = 3
-   (colunas do bloco). Os vetores de marcação ficam [N][N + 1].
-2. O número do bloco muda: (l / BL) * (N / BC) + c / BC. Confira no papel
-   que ele vai de 0 a 5.
-3. Teste os dígitos de 1 a N em ordem crescente, na ordem de leitura das
-   casas, para a contagem de chamadas bater.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E777.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E777 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E777
 ```
@@ -2833,9 +2140,8 @@ gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E777.c -o ~/LPEDC/19-backtracking
 **Exercício E778** · ★★☆
 
 Um sudoku bem feito tem UMA solução só. A editora da revista quer
-conferir os jogos antes de imprimir. O programa abaixo prepara e resolve
-dois jogos: o do texto e o mesmo jogo sem o 5 do fim da linha 5. Estenda o
-programa com uma função
+conferir os jogos antes de imprimir. Escreva um resolvedor de sudoku
+(pode adaptar o do texto) com a função
 
 
 ```text
@@ -2845,8 +2151,24 @@ int conta(int k, int limite)
 
 que conta as soluções a partir da casa k, mas para assim que a contagem
 chegar a limite. Com limite 2, ela responde o que a editora quer saber:
-1 é solução única, 2 é "mais de uma". No main, troque a chamada de
-resolve por conta(0, 2) e mostre o veredito.
+1 é solução única, 2 é "mais de uma". Confira dois jogos: o jogo 1
+abaixo e o jogo 2, que é o jogo 1 sem o 5 do fim da linha 5 (contando
+de 0).
+
+
+```text
+Jogo 1:
+2.3.8....
+6......7.
+.412.3.86
+5........
+.97.28...
+164.9...5
+.3...6...
+4.....2..
+.1.832.5.
+```
+
 
 
 ```text
@@ -2855,56 +2177,8 @@ jogo 1: solução única
 jogo 2: mais de uma solução
 ```
 
-**Dicas:**
-
-1. conta é o resolve com duas mudanças: na folha (k == 81) devolve 1, e
-   no laço SOMA o que cada chamada devolve, em vez de parar no primeiro
-   true.
-2. Depois de cada chamada, se a soma já chegou ao limite, desfaça a
-   marcação e devolva. Sem isso, um jogo com milhares de soluções faria a
-   busca rodar por muito tempo.
-3. Não esqueça de desfazer antes de qualquer return dentro do laço: a
-   grade e os vetores precisam voltar como estavam.
-
 ```bash
 gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E778.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E778 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E778
-```
-
-**Exercício E779** · ★★★
-
-Ache o bug. Este resolvedor recebeu um jogo novo da revista, que tem
-solução, mas responde "sem solução". Ele compila sem aviso e roda sem
-erro do sanitizer. O erro está numa linha que FALTA. Ache, conserte e rode
-de novo.
-
-
-```text
-Saída esperada:
-354617892
-987523146
-162894753
-493165278
-725438619
-618279435
-549782361
-231946587
-876351924
-```
-
-**Dicas:**
-
-1. Depois que resolve(0) devolve false, mostre quantos true sobraram nos
-   três vetores de marcação. Quantos deviam sobrar? (Só os das 30 casas
-   dadas: 30 em cada vetor.)
-2. Compare o que o programa faz antes da chamada recursiva com o que ele
-   desfaz depois. Uma das duas ações não é desfeita.
-3. Resposta esperada: falta marca(l, c, d, false); logo depois da chamada
-   recursiva que falhou (junto do g[l][c] = 0). Sem ela, um dígito
-   tentado e abandonado continua "ocupando" a linha, a coluna e a caixa, e
-   a poda corta dígitos que eram a resposta.
-
-```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E779.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E779 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E779
 ```
 
 **Exercício E780** · ★★★
@@ -2944,17 +2218,6 @@ Saída esperada:
 diagonais: 251796348 e 526394871
 4171 chamadas
 ```
-
-**Dicas:**
-
-1. Acrescente dois vetores bool[10]: um para a diagonal principal (casas
-   com l == c) e outro para a secundária (l + c == 8).
-2. A poda e a marcação só mexem nesses vetores quando a casa está na
-   diagonal. A casa do centro, (4, 4), está nas duas.
-3. Teste os dígitos de 1 a 9 em ordem crescente, na ordem de leitura das
-   casas, para a contagem de chamadas bater.
-4. Este jogo depende da regra nova: sem as diagonais, ele tem mais de uma
-   solução (confira com o conta do E778, se quiser).
 
 ```bash
 gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E780.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E780 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E780

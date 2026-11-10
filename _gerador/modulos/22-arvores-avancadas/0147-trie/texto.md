@@ -1,46 +1,38 @@
 ## 0147 · Trie: árvore de prefixos e autocompletar
 
-Você digita `bol` no celular e o teclado já oferece "bola", "boleto", "bolo" e
-"bolsa". Ele não compara o que você digitou com cada palavra do dicionário,
-uma por uma: são dezenas de milhares de palavras, e a sugestão aparece a cada
-letra. A saída é guardar as palavras de um jeito em que **o prefixo é o
-endereço**.
+Você digita `bol` e o teclado oferece "bola", "boleto", "bolo" e "bolsa" sem
+comparar com o dicionário inteiro: nele, **o prefixo é o endereço**.
 
-Esse jeito é a **trie** (do inglês *retrieval*; também chamada de **árvore de
-prefixos** ou árvore digital). Cada nó tem um filho para cada letra possível, e
-cada aresta **é** uma letra. O caminho da raiz até um nó soletra um prefixo:
-raiz, `b`, `o`, `l` é o nó do prefixo "bol". Todas as palavras que começam com
-"bol" moram embaixo dele.
+Esse modo é a **trie** (de *retrieval*; ou **árvore de prefixos**). Cada nó tem
+um filho por letra, e cada aresta **é** uma letra. O caminho da raiz até um nó
+soletra um prefixo: raiz, `b`, `o`, `l` é o nó de "bol", e as palavras que
+começam com "bol" moram embaixo dele.
 
-Um prefixo não é necessariamente uma palavra: "bol" tem nó, mas não está no
-dicionário. Por isso cada nó guarda um `bool fim`, que diz se alguma palavra
-**termina** ali. "bolo" termina no `o` depois do `l`; "bom", no `m` depois do
-`o`.
+"bol" tem nó, mas não é palavra. Por isso cada nó guarda um `bool fim`, que diz
+se alguma palavra **termina** ali: "bolo" termina no `o` depois do `l`.
 
-Com letras minúsculas sem acento, o nó é um vetor de 26 ponteiros. O filho da
-letra `c` fica em `filho[c - 'a']`: a letra vira o índice, sem busca nenhuma.
+Com letras minúsculas sem acento, o nó é um vetor de 26 ponteiros, e o filho da
+letra `c` fica em `filho[c - 'a']`.
 
-- **inserir**: para cada letra, desça pelo filho dela; se ele não existir,
-  crie. No fim, `fim = true`;
-- **buscar**: desça letra por letra. Faltou um filho, a palavra não existe.
-  Chegou ao fim do texto, a resposta é o `fim` daquele nó;
+- **inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
+  `fim = true`;
+- **buscar**: desça letra por letra; faltou um filho, a palavra não existe; no
+  fim do texto, a resposta é o `fim` do nó;
 - **autocompletar**: desça até o nó do prefixo e percorra a subárvore dele,
   imprimindo cada caminho que termina num `fim`.
 
-O custo de inserir e de buscar é **O(L)**, em que L é o tamanho da palavra, e
-**não depende de quantas palavras existem**. Com 10 ou com 100 mil palavras,
-buscar "bolsa" desce 5 nós. Numa BST de 100 mil palavras seriam umas 17
-comparações de strings inteiras.
+Inserir e buscar custam **O(L)**, com L o tamanho da palavra, **sem depender do
+número de palavras**: "bolsa" desce 5 nós com 10 ou com 100 mil palavras. Numa
+BST de 100 mil palavras, seriam umas 17 comparações de strings.
 
-No exemplo, o teclado guarda oito palavras: bolo, bola, bolsa,
-boleto, bom, bombom, pão e pastel (sem acento: `pao`). No desenho, o ramo do
-`b`: o caminho verde é o prefixo "bol", que tem nó mas não é palavra; os nós
-verdes marcam o fim de alguma palavra:
+O teclado do exemplo guarda bolo, bola, bolsa, boleto, bom, bombom, pão e
+pastel (sem acento: `pao`). No ramo do `b`, o caminho verde é o prefixo "bol";
+os nós verdes marcam o fim de uma palavra:
 
 {{ideia}}
 
-O nó e a inserção, no `trie.c`. O `calloc` zera o nó inteiro: os 26 ponteiros
-começam `NULL` e o `fim`, `false`:
+O nó e a inserção, em `trie.c` (o `calloc` deixa os ponteiros `NULL` e `fim`
+falso):
 
 ```c
 typedef struct NoTrie {
@@ -66,7 +58,7 @@ bool trie_insere(NoTrie *r, const char *palavra) {
 }
 ```
 
-O cliente monta o dicionário e testa três textos digitados:
+O cliente monta o dicionário e testa três textos:
 
 ```c
 #include <stdio.h>
@@ -98,40 +90,28 @@ int main(void) {
 // Nós: 22 (216 bytes cada)
 ```
 
-As sugestões saem em ordem alfabética sem ordenar nada: a função que percorre
-a subárvore visita os filhos de `a` a `z`, então "bola" (`a`) vem antes de
-"boleto" (`e`), que vem antes de "bolo" (`o`).
+As sugestões saem em ordem alfabética porque a subárvore é percorrida de `a` a
+`z`.
 
-O fluxograma mostra a inserção de "bom", que chega depois das quatro
-palavras com "bol". O `b` e o `o` já existem (o caminho segue pelo "Não" duas
-vezes); o `m` é novo e ganha um nó. Acabaram as letras, e o `m` recebe
-`fim = true`:
+O fluxograma mostra a inserção de "bom". O `b` e o `o` já existem; o `m` é novo
+e recebe `fim = true`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Achar o nó não quer dizer achar a palavra. `trie_prefixo(t, "bol")` devolve
-> um nó válido, mas "bol" não foi inserida: a busca tem que olhar o `fim`
-> (`return n != NULL && n->fim;`). O erro oposto também acontece: inserir só
-> criando os nós e esquecer o `r->fim = true` do final. Aí a palavra fica
-> "meio dentro": as mais compridas que passam por ela aparecem, ela não. E
-> cuidado com o índice: `'B' - 'a'` dá -31 e `'ã'` nem é um `char` só em UTF-8.
-> Por isso `trie_insere` recusa tudo o que não for de `'a'` a `'z'` antes de
-> mexer na árvore.
+> Achar o nó não é achar a palavra: `trie_prefixo(t, "bol")` devolve um nó, mas
+> a busca precisa olhar o `fim` (`return n != NULL && n->fim;`). Esquecer o
+> `r->fim = true` na inserção faz a palavra sumir. No índice, `'B' - 'a'` dá -31 e `'ã'` não é um `char` só em UTF-8;
+> por isso `trie_insere` recusa o que não for de `'a'` a `'z'`.
 
 > [!TIP]
-> **Por dentro do C:** cada `NoTrie` tem 216 bytes: 26 ponteiros de 8 bytes
-> (208), 1 do `bool` e 7 de enchimento. As 8 palavras do exemplo somam 37 letras
-> e cabem em 45 bytes como strings, mas a trie usa 22 nós, 4752 bytes, cem vezes
-> mais. Quase todos os ponteiros estão em `NULL` (o A293 mede: mais de 95%). É
-> o preço da velocidade: o filho certo está a um índice de distância, sem
-> laço. Quando a memória aperta, as alternativas guardam só os filhos que
-> existem: uma lista encadeada de filhos (a ideia do primeiro filho/próximo
-> irmão do assunto 0144) ou uma pequena BST por nó (a árvore ternária de busca).
+> Cada `NoTrie` tem 216 bytes. As 8 palavras cabem em 45 bytes como strings, mas
+> a trie usa 22 nós, 4752 bytes, quase todos ponteiros `NULL`. Alternativas:
+> lista de filhos (0144) ou BST por nó (árvore ternária).
 
 > [!NOTE]
-> **Pergunta para você:** se você inserir "bolota" no teclado, quantos nós novos
-> aparecem? E se inserir "bo"? Em cada caso, o que muda na lista de sugestões
-> para "bo"? Responda antes de acrescentar as palavras no vetor do exemplo.
+> **Pergunta para você:** se você inserir "bolota", quantos nós novos aparecem?
+> E se inserir "bo"? Em cada caso, o que muda nas sugestões para "bo"? Responda
+> antes de acrescentar as palavras no vetor do exemplo.
 
 {{pratique}}

@@ -2,70 +2,46 @@
 
 # Módulo 21 · Programação dinâmica
 
-No módulo 04, o Fibonacci recursivo ficou famoso por ser lento: `fib(40)`
-leva centenas de milhões de chamadas para chegar num número que um laço
-calcula em 40 passos. Lá ficou a pergunta: por que a recursão é tão cara? A
-resposta é que ela resolve as **mesmas** perguntas de novo e de novo. Este
-módulo é sobre o remédio: anotar cada resposta na primeira vez e consultar
-nas próximas.
+No módulo 04, `fib(40)` recursivo levou centenas de milhões de chamadas
+porque resolve as **mesmas** perguntas várias vezes. A **programação
+dinâmica** (PD) corrige isso: anota cada resposta na primeira vez e consulta
+nas seguintes.
 
-Essa ideia, a **programação dinâmica**, resolve problemas que
-pareciam exigir testar todas as combinações: o menor número de moedas para
-um troco qualquer, o que levar na mochila sem passar do peso, o que duas
-sequências de DNA têm em comum, quantas edições separam a palavra digitada
-da palavra certa. Todos têm a mesma cara: uma **recorrência** que olha para
-o último passo, uma **tabela** que guarda os subproblemas e uma **volta**
-pela tabela que reconstrói a solução.
+Todo problema de PD tem a mesma cara: uma **recorrência** que olha para o
+último passo, uma **tabela** de subproblemas e uma **volta** pela tabela que
+reconstrói a solução. Serve para troco, mochila, LCS e distância de edição.
 
-No módulo 20 você viu os gulosos, que acertam quando a melhor escolha de
-agora nunca atrapalha o futuro, e viu também em que casos eles erram. A PD é o que
-se usa quando o guloso não serve: ela considera todas as escolhas, mas
-paga cada subproblema uma vez só. A troca é memória por tempo, e o "Por
-dentro do C" de cada assunto mostra quanto essa memória custa.
-
-O módulo fecha com um **mini-diff**, a ferramenta
-que mostra o que mudou entre duas versões de um arquivo de texto.
+Vem depois dos gulosos (módulo 20): quando o guloso erra, a PD considera
+todas as escolhas e paga cada subproblema uma vez só. A troca é memória por
+tempo. O módulo fecha com um **mini-diff**, que mostra o que mudou entre duas
+versões de um arquivo.
 
 ## O que você vai aprender
 
-- **memoização** (de cima para baixo) e **tabela** (de baixo para cima), e
-  como contar o custo de uma PD: subproblemas × trabalho de cada um
-- reconhecer quando a PD se aplica: **subproblemas que se repetem** e
-  **subestrutura ótima**
-- **troco**: o menor número de moedas para qualquer sistema e quantas
-  combinações existem (e a diferença entre combinação e sequência)
-- **mochila 0/1**: a tabela n × W, a recuperação dos itens e o truque de uma
-  linha só com o laço descendo
-- **LCS**: a maior subsequência comum e a volta pela tabela
+- **memoização** (de cima para baixo), **tabela** (de baixo para cima) e o
+  custo de uma PD: subproblemas × trabalho de cada um
+- quando a PD se aplica: **subproblemas repetidos** e **subestrutura ótima**
+- **troco**: menor número de moedas e quantas combinações existem
+- **mochila 0/1**: tabela n × W, recuperação dos itens e o truque de uma
+  linha só
+- **LCS** e a volta pela tabela
 - **distância de edição** (Levenshtein): inserir, remover e trocar
-- juntar tudo num **mini-diff** entre dois arquivos, com leitura de linhas,
-  vetor que cresce e tabela no heap
+- o **mini-diff**, com leitura de linhas, vetor que cresce e tabela no heap
 
 ## Antes de começar
 
-Você vai precisar da recursão (assuntos 0032 e 0033), de matrizes (0039),
-de strings (0041 e 0042) e de memória dinâmica (0054 e 0055). O assunto
-0133, do troco guloso, é o ponto de partida do 0139, e a mochila
-fracionária do 0135 é a prima fácil da mochila 0/1.
+Você precisa de recursão (0032 e 0033), matrizes (0039), strings (0041 e
+0042) e memória dinâmica (0054 e 0055). O 0133 (troco guloso) é o ponto de
+partida do 0139, e a mochila fracionária (0135) é a prima fácil da 0/1.
 
-Quase todos os exemplos cabem num arquivo só, com a tabela numa matriz de
-tamanho fixo (`#define MAX 50`). Isso é de propósito: deixa a recorrência à
-vista. Nos programas "de verdade" (o mini-diff), a tabela vai para o heap,
-num bloco só do `malloc`.
+Os exemplos usam tabela em matriz fixa (`#define MAX 50`) para deixar a
+recorrência à vista; o mini-diff põe a tabela no heap. A cadeia de matrizes,
+outro clássico de PD, tem assunto próprio: o 0185.
 
-A multiplicação de uma **cadeia de matrizes**, outro clássico de PD do Cormen
-e do cursinho do PPGI, tem assunto próprio, o 0185.
-
-Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do gcc com as flags de estudo vai acusar ou parar o programa. É
-esperado: o enunciado avisa.
-
-PD se aprende preenchendo tabela: faça o **Passo a passo** com papel e lápis
-antes de conferir. O diagrama da ideia quase sempre é a própria tabela, e o
-fluxograma é a decisão de uma célula. Nas tabelas, **roxa** é a célula que está
-sendo calculada (ou de onde a volta parte), **verde** é a escolhida ou o
-caminho da solução, **amarela** é a opção que perdeu (ou um passo da volta
-que não entra na resposta) e **cinza** é o que não chega a ser usado.
+Faça o **Passo a passo** com papel e lápis antes de conferir. Nas tabelas,
+**roxa** é a célula calculada (ou de onde a volta parte), **verde** é a
+escolhida ou o caminho da solução, **amarela** é a opção que perdeu e
+**cinza** é o que não chega a ser usado.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -80,52 +56,42 @@ que não entra na resposta) e **cinza** é o que não chega a ser usado.
 
 ## 0138 · Memoização
 
-A escada rolante da estação quebrou e você vai subir os 35 degraus a pé. Dá
-para subir de um em um ou pular de dois em dois. De quantos jeitos diferentes
-dá para chegar lá em cima? A pergunta parece de almanaque, mas esconde a
-ideia central deste módulo.
+Você vai subir 35 degraus a pé, de um em um ou de dois em dois. De quantos
+jeitos dá para chegar ao topo? A pergunta esconde a ideia central deste
+módulo.
 
-Pense no **último passo**. Para chegar no degrau `n`, você veio do degrau
-`n - 1` (passo simples) ou do `n - 2` (passo duplo). Então:
+Pense no **último passo**. Para chegar ao degrau `n`, você veio do `n - 1`
+(passo simples) ou do `n - 2` (passo duplo):
 
 `formas(n) = formas(n - 1) + formas(n - 2)`, com `formas(0) = formas(1) = 1`.
 
-É a recursão de Fibonacci do assunto 0033, e lá você viu o problema: a
-recursão pura é **exponencial**. Para `formas(35)`, ela faz quase 30 milhões
-de chamadas, porque calcula as **mesmas** coisas de novo e de novo. `formas(33)` é calculado 2 vezes,
-`formas(32)` 3 vezes, `formas(31)` 5 vezes...
+É o Fibonacci do assunto 0033: a recursão pura é **exponencial** e faz quase
+30 milhões de chamadas para `formas(35)`, porque repete as mesmas contas.
+Existem só 36 perguntas diferentes. A saída é **anotar cada resposta na
+primeira vez e consultar nas próximas**, de duas formas:
 
-Só existem 36 perguntas diferentes (`formas(0)` até `formas(35)`). A saída:
-**anote cada resposta na primeira vez e consulte nas próximas**. Isso tem nome:
+- **memoização** (de *memo*, lembrete): a recursão consulta o vetor `memo[]`
+  antes de calcular. Resolve de **cima para baixo**;
+- **tabela**: sem recursão, enche um vetor do menor subproblema para o maior.
+  Resolve de **baixo para cima**.
 
-- **memoização** (de *memo*, lembrete): a recursão continua igual, mas antes
-  de calcular ela olha num vetor `memo[]` se a resposta já está lá. Resolve de
-  **cima para baixo**: começa pela pergunta grande e desce até as pequenas;
-- **tabela** (de **baixo para cima**): esquece a recursão e enche um vetor do
-  menor subproblema para o maior. Quando chega em `t[i]`, os valores de que
-  ele depende já estão prontos.
+As duas são **programação dinâmica** (PD): combinar respostas de
+**subproblemas que se repetem**, cada um calculado uma vez. "Programação"
+aqui quer dizer planejamento numa tabela.
 
-As duas são **programação dinâmica** (PD): resolver um problema combinando
-respostas de **subproblemas que se repetem**, cada um calculado uma vez só. O
-nome é antigo e não tem nada a ver com memória dinâmica: "programação" aqui
-quer dizer "planejamento numa tabela".
+A PD exige duas condições: a resposta sai das respostas **ótimas** de
+problemas menores do mesmo tipo (**subestrutura ótima**), e esses problemas
+**se repetem** (**subproblemas sobrepostos**). Nas metades do merge sort, que
+não se repetem, guardar não ajuda. O Cormen chama as versões de
+*top-down with memoization* e *bottom-up method*.
 
-Para a PD funcionar, duas coisas precisam ser verdade. A resposta do problema
-tem que sair das respostas **ótimas** de problemas menores do mesmo tipo (a
-recorrência; o Cormen chama isso de **subestrutura ótima**). E esses problemas
-menores têm que **se repetir** (**subproblemas sobrepostos**); se cada um
-aparece uma vez só, como nas metades do merge sort, guardar não adianta nada.
-No Cormen, as duas versões aparecem como *top-down with memoization* e
-*bottom-up method*.
-
-Com 5 degraus, a recursão pura faria as 15 chamadas da
-árvore. Com o memo, só as coloridas acontecem: as verdes calculam e anotam,
-as amarelas encontram a resposta pronta e voltam na hora. Tudo que está cinza
-deixa de existir:
+Com 5 degraus, a recursão pura faria 15 chamadas. Com o memo, as verdes
+calculam e anotam, as amarelas acham a resposta pronta e o cinza deixa de
+existir:
 
 <p align="center"><img src="21-programacao-dinamica/0138-memoizacao/ideia.svg" alt="Diagrama da ideia: Memoização" width="858"></p>
 
-O código mede as três versões para os 35 degraus da estação:
+O código mede as três versões para 35 degraus:
 
 ```c
 #include <stdio.h>
@@ -193,20 +159,18 @@ int main(void) {
 // tabela:        14930352 formas, 34 voltas no laço
 ```
 
-De 29.860.703 para 69 chamadas, com a mesma recursão e três linhas a mais. A
-conta do custo de qualquer PD é sempre esta: **número de subproblemas ×
-trabalho de cada um**. Aqui são uns 35 subproblemas, cada um com uma soma:
-O(n), contra O(1,6ⁿ) da recursão pura.
+De 29.860.703 para 69 chamadas. O custo de toda PD é **número de
+subproblemas × trabalho de cada um**: aqui, 35 somas, O(n), contra O(1,6ⁿ)
+da recursão pura.
 
-No fluxograma, a única diferença para a recursão pura é o losango do meio.
-Ele corta a árvore: quem já está no memo volta sem chamar ninguém.
+No fluxograma, a diferença é o losango do meio: quem já está no memo volta
+sem chamar ninguém.
 
 <p align="center"><img src="21-programacao-dinamica/0138-memoizacao/fluxograma.svg" alt="Fluxograma: Memoização" width="730"></p>
 
 ### Passo a passo
 
-A versão de baixo para cima, para os 5 degraus do desenho. Cada linha usa as
-duas anteriores:
+Versão de baixo para cima, para 5 degraus. Cada linha usa as duas anteriores:
 
 | i | t[i - 2] | t[i - 1] | t[i] |
 | --- | --- | --- | --- |
@@ -217,31 +181,21 @@ duas anteriores:
 | 4 | 2 | 3 | 5 |
 | 5 | 3 | 5 | 8 |
 
-São 8 jeitos de subir 5 degraus. Confira à mão: 11111, 2111, 1211, 1121,
-1112, 221, 212, 122.
+São 8 jeitos: 11111, 2111, 1211, 1121, 1112, 221, 212, 122.
 
 > [!WARNING]
-> O valor que marca "ainda não calculei" precisa ser **impossível** como
-> resposta. Aqui, `-1` serve porque nenhuma contagem é negativa. O erro comum
-> é inicializar o memo com `0` (o que um vetor global já tem de graça) num
-> problema em que 0 é resposta válida, como "quantos caminhos chegam aqui"
-> numa grade com obstáculos. O programa continua dando a resposta certa, mas
-> toda célula que vale 0 é recalculada a cada visita, e o tempo volta a ser
-> exponencial sem nenhum aviso.
+> O valor de "ainda não calculei" deve ser **impossível** como resposta (aqui,
+> `-1`). Com `0` e 0 sendo resposta válida, a resposta sai certa, mas cada
+> célula 0 é recalculada e o tempo volta a ser exponencial.
 
 > [!TIP]
-> **Por dentro do C:** as duas versões de PD fazem as mesmas contas, mas
-> custam diferente para a máquina. A memoização ainda empilha um frame por
-> chamada: `formas_memo(35)` desce 35 níveis na pilha antes de anotar a
-> primeira resposta, e `formas_memo(100000)` estouraria a pilha. A tabela é um
-> laço sobre um vetor contíguo, sem chamada nenhuma, que o cache do processador
-> aproveita bem. Em troca, a memoização só calcula os subproblemas que a
-> pergunta usa, o que compensa quando eles são poucos dentro de uma tabela
-> enorme.
+> **Por dentro do C:** a memoização empilha um frame por chamada
+> (`formas_memo(100000)` estouraria a pilha). A tabela é um laço, sem
+> chamadas.
 
 > [!NOTE]
 > **Pergunta para você:** a tabela guarda 36 valores, mas cada `t[i]` só
-> olha para os dois anteriores. Quanta memória a versão de baixo para cima
+> olha os dois anteriores. Quanta memória a versão de baixo para cima
 > precisa de verdade? Pense antes de abrir o A276.
 
 ### Hora de praticar
@@ -369,45 +323,8 @@ t: 1 1 2 4 7 13 24 44 81 149 274
 Jeitos de subir 10 degraus: 274
 ```
 
-**Dicas:**
-
-1. O último passo foi de 1, de 2 ou de 3 degraus: t[i] = t[i - 1] +
-   t[i - 2] + t[i - 3].
-2. Os casos base são t[0] = 1, t[1] = 1 e t[2] = 2 (11 ou 2).
-3. Comece o laço em i = 3: assim nenhum índice fica negativo.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E823.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E823 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E823
-```
-
-**Exercício E824** · ★☆☆
-
-A prefeitura vai refazer uma calçada com lajotas de 2 m e de 3 m, uma atrás
-da outra. Quantas sequências diferentes de lajotas cobrem exatamente n
-metros? Pensando na última lajota: c(n) = c(n - 2) + c(n - 3), com c(0) = 1
-(nada a fazer), c(1) = 0 (impossível) e c(2) = 1.
-
-O programa abaixo já calcula c(40) com a recursão pura e conta as chamadas.
-Complete a função calcada_memo() nos lugares marcados com COMPLETE AQUI,
-para ela guardar cada resposta no vetor memo[], e use-a para calcular c(40)
-e c(120). Não mexa na versão recursiva.
-
-
-```text
-Saída esperada:
-recursão pura: c(40) = 31572 com 110809 chamadas
-memoização:    c(40) = 31572 com 75 chamadas
-memoização:    c(120) = 185855747875876
-```
-
-**Dicas:**
-
-1. Antes de calcular, olhe memo[n]; se já tem resposta, devolva ela.
-2. Use -1 como "não calculado": 0 é uma resposta válida aqui (c(1) = 0)!
-3. Lembre de encher o memo com -1 antes de usar (o laço já está no main).
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E824.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E824 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E824
 ```
 
 **Exercício E825** · ★★☆
@@ -438,16 +355,6 @@ Menor custo: R$ 18
 Caminho: DDBBDBD
 ```
 
-**Dicas:**
-
-1. custo[i][j] = pedagio[i][j] + o menor entre custo[i - 1][j] (veio de
-   cima) e custo[i][j - 1] (veio da esquerda).
-2. Na linha 0 só dá para vir da esquerda; na coluna 0, só de cima.
-3. Para o caminho, comece em (3, 4) e vá sempre para o vizinho (cima ou
-   esquerda) de menor custo, guardando a letra num vetor; no fim, mostre o
-   vetor de trás para a frente. Num empate, prefira cima.
-4. Resposta esperada: a saída acima (3 + 1 + 4 + 1 + 3 + 2 + 1 + 3 = 18).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E825.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E825 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E825
 ```
@@ -477,63 +384,8 @@ Lucro máximo: R$ 175
 Barracas: 0 2 5 7
 ```
 
-**Dicas:**
-
-1. Na vaga i há duas escolhas: não montar (fica melhor[i - 1]) ou montar
-   (lucro[i] + melhor[i - 2], porque a i - 1 tem que ficar vazia).
-2. Bases: melhor[0] = lucro[0]; melhor[1] = o maior entre lucro[0] e
-   lucro[1].
-3. Para achar as vagas, ande de trás para a frente: se melhor[i] é
-   diferente de melhor[i - 1], a vaga i foi usada e você pula para i - 2;
-   senão, vai para i - 1. A vaga 0, se você chegar nela, é usada.
-4. Resposta esperada: a saída acima (40 + 60 + 55 + 20 = 175).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E826.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E826 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E826
-```
-
-**Exercício E827** · ★★★
-
-Um robô de armazém anda numa grade de 16 x 16 corredores, só para baixo ou
-para a direita, da posição (0, 0) até (15, 15). Uma fileira de prateleiras
-ocupa a linha 8 inteira, menos a coluna 0, que é a única passagem. A função
-caminhos(i, j) conta, com memoização, de quantos jeitos o robô vai de
-(i, j) até o destino.
-
-O programa dá a resposta certa, mas faz quase 1,5 milhão de chamadas
-para uma grade de 256 posições, e com uma grade de 30 x 30 ele não
-termina nunca. Há UM erro de propósito, e ele não é de sintaxe: a
-memoização "funciona" para umas posições e não para outras. Ache e
-conserte.
-
-
-```text
-Saída hoje:
-54264 caminhos, 1471165 chamadas
-```
-
-
-
-```text
-Saída esperada (depois de consertar):
-54264 caminhos, 481 chamadas
-```
-
-**Dicas:**
-
-1. Quantos caminhos saem de (3, 5) e chegam ao destino? Lembre que o robô
-   não anda para a esquerda nem para cima.
-2. Para essas posições, o que fica guardado em memo[i][j]? E o que o teste
-   "já calculei?" conclui ao ver esse valor?
-3. Um vetor global começa zerado. O "não calculado" precisa ser um valor
-   que nunca é resposta.
-4. Resposta esperada: o memo usa 0 como "não calculado", mas 0 é a
-   resposta de toda posição acima das prateleiras fora da coluna 0; essas
-   são recalculadas a cada visita. Encha o memo com -1 no main e teste
-   memo[i][j] != -1.
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E827.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E827 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E827
 ```
 
 **Exercício E828** · ★★★
@@ -570,15 +422,6 @@ C(60, 30) = 118264581564861424 (1441 chamadas novas)
 subproblemas guardados no memo: 1044
 ```
 
-**Dicas:**
-
-1. Encha a matriz memo com -1 no começo do main (dois laços).
-2. O teste do caso base vem antes da consulta ao memo, e o contador sobe
-   na primeira linha da função, em toda chamada.
-3. C(60, 30) passa de 10^17: use long long e %lld.
-4. A segunda conta reaproveita o que a primeira guardou (os subproblemas
-   com k pequeno); se você limpar o memo entre as duas, o número muda.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E828.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E828 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E828
 ```
@@ -587,43 +430,36 @@ gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E828.c -o ~/LPEDC/21-program
 
 ## 0139 · Troco com programação dinâmica
 
-Na agência dos Correios da cidadezinha, o balcão só tem selos de R$ 1, R$ 4 e
-R$ 5. A sua carta custa R$ 8 de porte, e o envelope é pequeno: você quer
-colar o **menor número de selos** possível.
+Nos Correios, o balcão só tem selos de R$ 1, R$ 4 e R$ 5, e sua carta custa
+R$ 8 de porte. Você quer o **menor número de selos**.
 
-O atendente faz o que todo mundo faz: pega o maior selo que cabe, R$ 5, e
-completa com três de R$ 1. São 4 selos. Mas dois selos de R$ 4 também dão
-R$ 8. O guloso do assunto 0133 errou de novo, e o motivo é o mesmo do
-contraexemplo `{1, 3, 4}` de lá: com esses valores, a escolha que parece
-melhor agora estraga o resto.
+O guloso do assunto 0133 pega o maior selo que cabe, R$ 5, e completa com
+três de R$ 1: 4 selos. Dois selos de R$ 4 resolvem com 2. É o mesmo
+contraexemplo `{1, 3, 4}` de lá: a escolha que parece melhor agora estraga o
+resto.
 
-A programação dinâmica não aposta em escolha nenhuma: ela **testa todas**, mas
-sem repetir trabalho. Olhe de novo para o **último selo** colado. Ele foi de
-R$ 1, de R$ 4 ou de R$ 5. Se foi de R$ 4, antes dele você já tinha montado
-R$ 4 com o mínimo de selos. Então:
+A PD não aposta: **testa todas as escolhas sem repetir trabalho**. O **último
+selo** colado foi de R$ 1, R$ 4 ou R$ 5, e antes dele sobrou um troco menor,
+já resolvido com o mínimo de selos:
 
 `dp[v] = 1 + o menor entre dp[v - 1], dp[v - 4] e dp[v - 5]`
 
-só com os selos que cabem em `v` (`selo <= v`), e com `dp[0] = 0`: para
-R$ 0 não precisa de selo nenhum. `dp[v]` é o menor número de selos que somam
-**exatamente** `v` reais.
+só com os selos que cabem em `v`, e `dp[0] = 0`. `dp[v]` é o menor número de
+selos que somam **exatamente** `v` reais.
 
-O que garante que isso dá certo é a **subestrutura ótima**: tire o último selo
-de uma solução ótima para R$ 8, e o que sobra é uma solução ótima para o
-resto. Se não fosse, você trocaria o resto por uma solução melhor e teria uma
-solução para R$ 8 melhor que a ótima, o que é absurdo.
+Isso vale pela **subestrutura ótima**: tirando o último selo de uma solução
+ótima, o resto continua ótimo (senão daria para melhorar a solução inteira).
 
-Para saber **quais** selos usar, não basta `dp`. Um segundo vetor,
-`ultimo[v]`, anota o selo que deu o mínimo em `v`. Depois é só andar para
-trás: `v`, `v - ultimo[v]`, e assim por diante, até chegar em 0.
+Para saber **quais** selos usar, `ultimo[v]` guarda o selo que deu o mínimo
+em `v`. Depois anda-se para trás: `v`, `v - ultimo[v]`, até 0.
 
-No desenho, `dp[8]` olha para três vizinhos à esquerda, um para
-cada selo, e escolhe o menor deles, o `dp[4]`:
+No desenho, `dp[8]` olha três vizinhos, um por selo, e escolhe o menor, o
+`dp[4]`:
 
 <p align="center"><img src="21-programacao-dinamica/0139-troco-pd/ideia.svg" alt="Diagrama da ideia: Troco com programação dinâmica" width="858"></p>
 
-O código enche a tabela de 1 até o porte. Se um valor não pode ser montado,
-`dp[v]` fica num "infinito" (o A278 mostra quando isso acontece):
+O código enche a tabela de 1 até o porte. Valor impossível fica em
+"infinito" (o A278 mostra quando):
 
 ```c
 #include <stdio.h>
@@ -675,19 +511,18 @@ int main(void) {
 // 2 selos para R$ 8: 4 4
 ```
 
-O custo é o de toda PD: `total` subproblemas, cada um testando `k` selos.
-**O(total × k)** de tempo e O(total) de memória. Para um troco de R$ 1.000
-com 6 valores de selo, são 6 mil passos.
+Custo: `total` subproblemas, cada um testando `k` selos, **O(total × k)** de
+tempo e O(total) de memória.
 
-O fluxograma tem dois laços, um dentro do outro. O de fora anda pelos
-valores, do menor para o maior; o de dentro testa cada selo como "o último":
+No fluxograma, o laço de fora anda pelos valores e o de dentro testa cada
+selo como "o último":
 
 <p align="center"><img src="21-programacao-dinamica/0139-troco-pd/fluxograma.svg" alt="Fluxograma: Troco com programação dinâmica" width="535"></p>
 
 ### Passo a passo
 
-As três últimas células da tabela. Cada coluna é um selo testado como
-último; o mínimo da linha vira `dp[v]`:
+As três últimas células. Cada coluna é um selo testado como último; o mínimo
+da linha vira `dp[v]`:
 
 | v | selo 1: dp[v - 1] + 1 | selo 4: dp[v - 4] + 1 | selo 5: dp[v - 5] + 1 | dp[v] | ultimo[v] |
 | --- | --- | --- | --- | --- | --- |
@@ -695,26 +530,19 @@ As três últimas células da tabela. Cada coluna é um selo testado como
 | 7 | dp[6] + 1 = 3 | dp[3] + 1 = 4 | dp[2] + 1 = 3 | 3 | 1 |
 | 8 | dp[7] + 1 = 4 | dp[4] + 1 = **2** | dp[3] + 1 = 4 | 2 | 4 |
 
-No `v = 6` deu empate entre os selos 1 e 5. Como o teste é `<` (e não `<=`),
-fica o primeiro que achou o mínimo. As duas soluções têm 2 selos: tanto faz.
+Em `v = 6` os selos 1 e 5 empatam. Como o teste é `<`, fica o primeiro que
+achou o mínimo.
 
 > [!WARNING]
-> O "infinito" precisa sobreviver a um `+ 1`. Se você usar `INT_MAX` de
-> `<limits.h>`, a conta `dp[v - selo[s]] + 1` com `dp[...] == INT_MAX`
-> **estoura** um `int` com sinal: é comportamento indefinido, o gcc com as flags de estudo acusa
-> `signed integer overflow`, e sem o sanitizer o resultado vira um número
-> negativo que "ganha" de todo mundo no `<`. Use um infinito folgado, como
-> `1000000` ou `total + 1` (nunca se usa mais que `total` selos), ou teste
-> `dp[v - selo[s]] != INF` antes de somar.
+> O "infinito" precisa sobreviver a um `+ 1`. Com `INT_MAX`, a conta
+> `dp[v - selo[s]] + 1` **estoura** o `int` (comportamento indefinido: o gcc
+> com as flags de estudo acusa `signed integer overflow`). Use `1000000`,
+> `total + 1` ou teste `dp[v - selo[s]] != INF` antes de somar.
 
 > [!TIP]
-> **Por dentro do C:** os vetores `dp` e `ultimo` ficam na pilha, no frame do
-> `main`: 101 `int` cada, 808 bytes no total. Para um troco de R$ 1 milhão,
-> seriam 8 MB, e a pilha padrão do Linux tem 8 MB: o programa morreria com
-> *stack overflow* antes da primeira conta. Para tabelas grandes, use
-> `malloc` (assunto 0054). E `minimo_selos` recebe `dp` e
-> `ultimo` como ponteiros: ela escreve direto nos vetores do `main`, sem
-> copiar nada.
+> **Por dentro do C:** `dp` e `ultimo` ficam na pilha. Para troco de R$ 1
+> milhão, seriam 8 MB e estouraria a pilha padrão do Linux: use `malloc`
+> (assunto 0054).
 
 > [!NOTE]
 > **Pergunta para você:** com selos de R$ 1, R$ 4 e R$ 5, qual é o primeiro
@@ -851,62 +679,20 @@ Impossíveis até 25: 1 2 4 5 8
 Menor número de pacotes para 25 parafusos: 3
 ```
 
-**Dicas:**
-
-1. dp[0] = 0; para cada v, comece com dp[v] = "infinito" e teste cada
-   pacote p <= v como o último: dp[v - p] + 1.
-2. Um infinito seguro aqui é 26: ninguém precisa de mais que 25 pacotes, e
-   26 + 1 ainda cabe folgado num int.
-3. Quem continuou com o infinito no fim é impossível.
-4. Resposta esperada: a saída acima (25 = 11 + 7 + 7, ou 11 + 11 + 3).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E829.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E829 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E829
 ```
 
-**Exercício E830** · ★☆☆
-
-No basquete, cada cesta vale 1 (lance livre), 2 ou 3 pontos. Um time fez
-10 pontos num quarto. Quantas COMBINAÇÕES de cestas dão 10 pontos? Aqui a
-ordem não importa: "3 + 3 + 2 + 2" e "2 + 3 + 2 + 3" são a mesma
-combinação (duas de três e duas de dois).
-
-Escreva um programa com um vetor jeitos[0..10] e mostre o vetor inteiro e
-a resposta.
-
-
-```text
-Saída esperada:
-jeitos: 1 1 2 3 4 5 7 8 10 12 14
-Combinações de cestas que dão 10 pontos: 14
-```
-
-**Dicas:**
-
-1. jeitos[0] = 1 (zero pontos: nenhuma cesta) e o resto começa em 0.
-2. Laço de FORA no tipo de cesta, laço de dentro nos pontos, de c até 10:
-   jeitos[v] += jeitos[v - c].
-3. Com os laços na ordem trocada, você contaria sequências (a ordem das
-   cestas no jogo), e o resultado seria bem maior.
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E830.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E830 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E830
-```
-
 **Exercício E831** · ★★☆
 
-Num jogo de celular, a loja vende pacotes de 1, 6 e 10 gemas, e você quer
-comprar exatamente 12 gemas com o menor número de pacotes. O programa
-abaixo já calcula o MÍNIMO, mas não diz QUAIS pacotes. Estenda-o:
+Num jogo de celular, a loja vende pacotes de 1, 6 e 10 gemas. Escreva um
+programa que calcula dp[v], o menor número de pacotes para cada total v de 1
+a 20 gemas, e guarda em ultimo[v] o último pacote usado. Mostre os pacotes da
+solução de 12 gemas.
 
-1. acrescente o vetor ultimo[] e mostre os pacotes da solução de 12;
-2. escreva int guloso(int v), que sempre pega o maior pacote que cabe, e
-
-```text
- mostre, para v de 1 a 20, os valores em que o guloso usa MAIS pacotes
- que a PD, no formato "v: guloso g, PD d".
-```
-
+Escreva também int guloso(int v), que sempre pega o maior pacote que cabe, e
+mostre, para v de 1 a 20, os totais em que o guloso usa MAIS pacotes que a
+PD, no formato "v: guloso g, PD d".
 
 
 ```text
@@ -919,14 +705,6 @@ Saída esperada:
 18: guloso 4, PD 3
 19: guloso 5, PD 4
 ```
-
-**Dicas:**
-
-1. ultimo[v] recebe pacote[p] dentro do mesmo if que atualiza dp[v].
-2. Para mostrar os pacotes: for (v = 12; v > 0; v -= ultimo[v]).
-3. O guloso: para cada pacote, do maior para o menor, enquanto couber,
-   some 1 e desconte o pacote.
-4. Resposta esperada: a saída acima (12 = 6 + 6; o guloso faz 10 + 1 + 1).
 
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E831.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E831 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E831
@@ -957,62 +735,8 @@ combinações: 6
 sequências:  26
 ```
 
-**Dicas:**
-
-1. As duas começam com w[0] = 1 e fazem w[v] += w[v - valor].
-2. A diferença é só a ordem dos laços. Combinações: valor do dinheiro por
-   fora, total por dentro. Sequências: total por fora (w[v] = soma de
-   w[v - valor] para cada valor <= v, "qual foi a última inserção?").
-3. Confira a) à mão: 5+2, 5+1+1, 2+2+2+1, 2+2+1+1+1, 2+1+1+1+1+1 e
-   sete moedas de 1.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E832.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E832 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E832
-```
-
-**Exercício E833** · ★★★
-
-A loja de tintas vende uma cor especial só em latas de 4 L e de 7 L. O
-programa abaixo deveria mostrar, para cada quantidade de 1 a 15 litros, o
-menor número de latas que dá EXATAMENTE aquela quantidade, ou
-"impossível". Ele compila sem aviso, mas o gcc com as flags de estudo acusa várias vezes
-"runtime error: signed integer overflow", e a tabela que sai não é
-confiável. Há UM erro de propósito. Ache, conserte e rode até a saída
-ficar limpa.
-
-
-```text
-Saída esperada (depois de consertar):
- 1 L: impossível
- 2 L: impossível
- 3 L: impossível
- 4 L: 1 lata
- 5 L: impossível
- 6 L: impossível
- 7 L: 1 lata
- 8 L: 2 latas
- 9 L: impossível
-10 L: impossível
-11 L: 2 latas
-12 L: 3 latas
-13 L: impossível
-14 L: 2 latas
-15 L: 3 latas
-```
-
-**Dicas:**
-
-1. Leia a mensagem do sanitizer: ela diz a linha e os dois números da
-   soma que estourou.
-2. Quanto vale dp[1]? E o que acontece quando o laço calcula dp[5] e
-   olha para dp[5 - 4]?
-3. Há dois jeitos de consertar: um infinito que aguenta o + 1 (como
-   TOTAL + 1) ou testar se o resto tem solução antes de somar.
-4. Resposta esperada: o INF é INT_MAX, e dp[v - lata[c]] + 1 com
-   dp[...] == INT_MAX estoura. Teste dp[v - lata[c]] != INF antes de somar.
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E833.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E833 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E833
 ```
 
 **Exercício E834** · ★★★
@@ -1038,16 +762,6 @@ exatamente 6 moedas: 3
 até 6 moedas: 7 combinações
 ```
 
-**Dicas:**
-
-1. Base: w[0][0] = 1 (nenhuma moeda soma zero); o resto começa em 0.
-2. Mantenha a estrutura das combinações (moeda no laço de fora, valor v
-   crescente por dentro) e acrescente um terceiro laço em q:
-   w[q][v] += w[q - 1][v - moeda].
-3. Ao usar mais uma moeda, o valor cai de moeda e a contagem cai de 1.
-4. Confira as 3 de seis moedas: 50+10+10+10+10+10, 50+25+10+5+5+5 e
-   25+25+25+10+10+5.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E834.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E834 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E834
 ```
@@ -1056,47 +770,40 @@ gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E834.c -o ~/LPEDC/21-programac
 
 ## 0140 · Mochila 0/1
 
-Sábado de praia. Um vendedor ambulante leva o isopor nas costas, e o isopor
-aguenta no máximo 7 kg. Ele pode levar um fardo de água (2 kg, lucro de
-R$ 18), uma caixa de refrigerante (3 kg, R$ 24), uma caixa de suco (4 kg,
-R$ 30) e um pote de açaí (5 kg, R$ 35). Cada coisa vai inteira ou não vai:
-não dá para levar meio pote de açaí. O que ele leva para lucrar o máximo?
+Um vendedor ambulante tem um isopor de 7 kg e quatro opções: fardo de água
+(2 kg, lucro R$ 18), caixa de refrigerante (3 kg, R$ 24), caixa de suco
+(4 kg, R$ 30) e pote de açaí (5 kg, R$ 35). Cada coisa vai inteira ou não
+vai. O que levar para lucrar o máximo?
 
-Na mochila **fracionária** do assunto 0135, o guloso resolvia: ordenar por
-lucro por quilo e ir enchendo, cortando o último item. Aqui ele erra. Água
-(R$ 9/kg) e refrigerante (R$ 8/kg) vêm primeiro: 5 kg, R$ 42. Sobram 2 kg, e
-nada mais cabe. Mas refrigerante e suco juntos pesam 7 kg e dão **R$ 54**.
+Na mochila **fracionária** (assunto 0135), o guloso por lucro por quilo
+resolvia. Aqui erra: água (R$ 9/kg) e refrigerante (R$ 8/kg) dão R$ 42 com
+5 kg e nada mais cabe, mas refrigerante e suco pesam 7 kg e dão **R$ 54**.
 
-Esta é a **mochila 0/1** (0 = não leva, 1 = leva). Com `n` itens há `2ⁿ`
-escolhas possíveis; com 60 itens, mais de um quintilhão. A PD resolve olhando
-para **um item de cada vez**: o último item, o `i`, vai ou não vai?
+Esta é a **mochila 0/1** (0 = não leva, 1 = leva), com `2ⁿ` escolhas. A PD
+olha **um item de cada vez**: o último item, `i`, vai ou não?
 
-- **não vai**: o melhor é o que os itens `1..i-1` conseguem com a mesma
-  capacidade `c`;
-- **vai** (se `peso[i] <= c`): ganha `lucro[i]`, e os itens `1..i-1` dividem o
-  que sobrou, `c - peso[i]`.
+- **não vai**: vale o melhor dos itens `1..i-1` com a mesma capacidade `c`;
+- **vai** (se `peso[i] <= c`): ganha `lucro[i]`, e os itens `1..i-1` dividem
+  `c - peso[i]`.
 
-Com dois "parâmetros" mudando, a tabela vira uma matriz: `t[i][c]` é o maior
-lucro usando só os itens `1..i` com capacidade `c`.
+A tabela é uma matriz: `t[i][c]` é o maior lucro usando só os itens `1..i`
+com capacidade `c`.
 
 `t[i][c] = o maior entre t[i-1][c] e lucro[i] + t[i-1][c - peso[i]]`
 
-A linha 0 (nenhum item) é toda zero. Cada linha só depende da de cima, então
-a matriz se enche linha por linha, e a resposta fica no canto: `t[n][W]`.
+A linha 0 é toda zero, e a resposta fica no canto: `t[n][W]`.
 
-A tabela dá o **valor**, mas o ambulante quer saber **o que levar**. A
-**recuperação** anda de baixo para cima: se `t[i][c]` é igual a `t[i-1][c]`,
-o item `i` não fez diferença e ficou de fora; se mudou, ele foi junto, e a
-busca continua na linha de cima com `c - peso[i]`.
+A **recuperação** dá **o que levar**, de baixo para cima: se `t[i][c]` é igual
+a `t[i-1][c]`, o item `i` ficou de fora; se mudou, ele foi junto, e a busca
+segue na linha de cima com `c - peso[i]`.
 
-No desenho, a célula `t[3][7] = 54` (roxo) escolheu entre não
-levar o suco (`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde).
-As células verdes de baixo para cima são a recuperação:
+No desenho, `t[3][7] = 54` (roxo) escolheu entre não levar o suco
+(`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde). As células
+verdes são a recuperação:
 
 <p align="center"><img src="21-programacao-dinamica/0140-mochila-01/ideia.svg" alt="Diagrama da ideia: Mochila 0/1" width="858"></p>
 
-No código, os vetores começam no índice 1 para casar com a
-tabela, em que a linha 0 é "nenhum item":
+Os vetores começam no índice 1, para casar com a linha 0 da tabela:
 
 ```c
 #include <stdio.h>
@@ -1154,15 +861,12 @@ int main(void) {
 // Leva: suco (4 kg) refri (3 kg)
 ```
 
-São `(n + 1) × (W + 1)` células, cada uma com uma comparação: **O(n × W)**.
-Para 100 itens e 10.000 kg de capacidade, um milhão de passos, contra os
-2¹⁰⁰ subconjuntos da força bruta. Só que `W` é um **número** da
-entrada, escrito com uns log₂ W bits. Dobrar os bits eleva `W` ao quadrado,
-então O(n × W) é **pseudopolinomial**, não polinomial no tamanho da entrada.
-A mochila 0/1 continua NP-difícil (assunto 0186).
+São `(n + 1) × (W + 1)` células: **O(n × W)**. Como `W` é um **número**
+escrito com uns log₂ W bits, o custo é **pseudopolinomial**: dobrar os bits
+eleva `W` ao quadrado. A mochila 0/1 continua NP-difícil (assunto 0186).
 
-O fluxograma mostra o miolo do laço duplo, a decisão de uma célula. O
-caminho marcado é o da célula `t[3][7]`, em que levar o suco ganhou:
+O fluxograma mostra a decisão de uma célula; o caminho marcado é o de
+`t[3][7]`:
 
 <p align="center"><img src="21-programacao-dinamica/0140-mochila-01/fluxograma.svg" alt="Fluxograma: Mochila 0/1" width="451"></p>
 
@@ -1178,23 +882,14 @@ A recuperação, partindo do canto `t[4][7]`:
 | 1 (água) | 0 | 0 | 0 | não | fica | 0 |
 
 > [!WARNING]
-> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?".
-> Olhar só se `peso[i] <= c` levaria o açaí, que cabe em 7 kg, mas não faz
-> parte da solução ótima. E nunca leia `t[i - 1][c - peso[i]]` sem antes
-> conferir `peso[i] <= c`: com o `c` menor que o peso, o índice fica
-> negativo, e `t[i - 1][-2]` lê, sem erro de compilação nenhum, o fim de
-> outra linha da tabela.
+> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?": o
+> açaí cabe, mas não está na solução. Confira `peso[i] <= c` antes de ler
+> `t[i - 1][c - peso[i]]`: com índice negativo, o C lê outra linha sem avisar.
 
 > [!TIP]
-> **Por dentro do C:** `int t[5][8]` são 40 `int` seguidos na memória, linha
-> após linha: `t[i][c]` mora no deslocamento `i * 8 + c`. Por isso
-> `t[2][-2]` não derruba o programa: ele cai em `t[1][6]`, um valor errado e
-> silencioso. O gcc com as flags de estudo acusa (`index -2 out of bounds for type 'int [8]'`,
-> do UBSan), mas compilado sem sanitizer o programa segue em frente com a
-> resposta errada. E como cada linha só usa a de cima, dá para guardar uma
-> linha só, de `W + 1` posições, desde que o laço de `c` ande **do maior para
-> o menor**. O A279 mostra esse truque e o que acontece quando ele é
-> esquecido.
+> **Por dentro do C:** `t[i][c]` mora no deslocamento `i * 8 + c`, e
+> `t[2][-2]` cai em `t[1][6]` sem erro. Uma linha só de `W + 1` posições basta
+> se o laço de `c` andar do maior para o menor (A279).
 
 > [!NOTE]
 > **Pergunta para você:** se o isopor aguentasse 9 kg, o que o ambulante
@@ -1369,50 +1064,8 @@ Saída esperada:
 Retorno máximo com R$ 10 mil: R$ 22 mil por ano
 ```
 
-**Dicas:**
-
-1. Use vetores com índice começando em 1 (custo[0] e retorno[0] sem uso) e
-   a matriz int t[6][11].
-2. Linha 0 toda zero. Depois, para cada célula: t[i][c] = t[i - 1][c] e,
-   se custo[i] <= c, tente retorno[i] + t[i - 1][c - custo[i]].
-3. A última linha diz o melhor retorno para cada orçamento de 0 a 10.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E835.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E835 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E835
-```
-
-**Exercício E836** · ★☆☆
-
-Você vai fazer uma trilha de dois dias e a mochila aguenta 9 kg. O
-programa abaixo já monta a tabela da mochila 0/1 com a "importância" de
-cada item e mostra o valor máximo. Falta a RECUPERAÇÃO: complete o trecho
-marcado com COMPLETE AQUI para mostrar quais itens levar (do último item
-para o primeiro, como sai naturalmente da volta pela tabela) e o peso
-total usado.
-
-
-```text
-Saída esperada:
-Valor máximo: 32
-Leva:
-  câmera (1 kg)
-  comida (3 kg)
-  fogareiro (3 kg)
-  saco de dormir (2 kg)
-Peso usado: 9 kg
-```
-
-**Dicas:**
-
-1. Comece com c = W e ande com i de N até 1.
-2. Se t[i][c] != t[i - 1][c], o item i entrou: mostre, desconte o peso de
-   c e some ao peso total.
-3. A barraca é o item mais "importante" sozinho (12), mas fica de fora: os
-   4 kg dela rendem mais em outros itens.
-4. Resposta esperada: a saída acima (5 + 10 + 9 + 8 = 32).
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E836.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E836 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E836
 ```
 
 **Exercício E837** · ★★☆
@@ -1446,15 +1099,6 @@ Estudar: Física Português Matemática
 Horas usadas: 6.0
 ```
 
-**Dicas:**
-
-1. Meia hora vira 1 unidade: 2.5 h são 5 unidades e as 6 h são 12.
-2. Converta com (int) (horas * 2 + 0.5). Só o cast trunca, e um double
-   que deveria ser 5.0 pode estar guardado como 4.99999...
-3. Daí em diante é a tabela t[i][c] do texto, com c de 0 a 12, e a volta
-   pela tabela somando horas[i] de quem entrou.
-4. Resposta esperada: a saída acima (30 + 18 + 25 = 73).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E837.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E837 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E837
 ```
@@ -1477,52 +1121,8 @@ PD: 7 jeitos de separar R$ 30
 força bruta: 7 jeitos (256 subconjuntos testados)
 ```
 
-**Dicas:**
-
-1. jeitos[0] = 1 (o subconjunto vazio soma 0); o resto começa em 0.
-2. Para cada cédula, percorra s de 30 DESCENDO até o valor dela e faça
-   jeitos[s] += jeitos[s - cedula]. Subindo, a mesma cédula seria usada
-   duas vezes.
-3. Na força bruta, o bit i da máscara diz se a cédula i entra.
-4. Resposta esperada: a saída acima (20 + 10 de 4 jeitos, 20 + 5 + 5 de 2
-   jeitos e 10 + 10 + 5 + 5 de 1).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E838.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E838 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E838
-```
-
-**Exercício E839** · ★★★
-
-Numa mudança, você pode despachar só 10 kg no bagageiro do ônibus e quer
-levar os objetos de maior valor (os outros vão de transportadora, mais
-tarde). O programa abaixo monta a tabela certa e acha o valor máximo, mas
-a RECUPERAÇÃO tem um erro de propósito: o AddressSanitizer para o
-programa com "stack-buffer-overflow" (e o UBSan antes avisa de um índice
--1). Ache, conserte e rode até a saída ficar limpa.
-
-
-```text
-Saída esperada (depois de consertar):
-Valor máximo: R$ 97
-Leva: micro-ondas bicicleta notebook
-Sobrou: 0 kg
-```
-
-**Dicas:**
-
-1. A mensagem do UBSan diz a linha e o índice. Em que linha da tabela
-   (que i) e com que c isso acontece?
-2. A volta começa no item 5 com c = 10. Depois de levar o micro-ondas e
-   a bicicleta, o c chegou a quanto? E quanto pesa o violão, o próximo a
-   ser testado?
-3. O teste "t[i][c] == valor[i] + t[i - 1][c - peso[i]]" só faz sentido
-   quando o item cabe. Na montagem da tabela, esse cuidado existe.
-4. Resposta esperada: falta conferir peso[i] <= c antes de ler
-   t[i - 1][c - peso[i]]. Com c = 3 e o violão de 4 kg, o índice fica -1.
-   Conserto: if (peso[i] <= c && t[i][c] == ...).
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E839.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E839 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E839
 ```
 
 **Exercício E840** · ★★★
@@ -1558,16 +1158,6 @@ Usa 10 kg e 7 L
 Força bruta: R$ 79
 ```
 
-**Dicas:**
-
-1. static int t[7][11][9]; começa toda zerada, o que já resolve a "linha"
-   i = 0.
-2. Três laços (i, p, v). O pacote i só pode entrar se peso[i] <= p E
-   volume[i] <= v; aí a outra opção é frete[i] + t[i - 1][p - peso[i]]
-   [v - volume[i]].
-3. A recuperação é a mesma de antes, descontando peso e volume juntos.
-4. A tabela tem 7 x 11 x 9 = 693 células: o custo é O(n x P x V).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E840.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E840 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E840
 ```
@@ -1576,29 +1166,21 @@ gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E840.c -o ~/LPEDC/21-program
 
 ## 0141 · Maior subsequência comum (LCS)
 
-Seu sobrinho está aprendendo a escrever. Você ditou **MORANGO**, ele escreveu
-**MANGA**. Quantas letras ele acertou na ordem certa? Não vale contar letra
-fora de ordem nem pular para trás: o que importa é o maior pedaço da palavra
-ditada que aparece, **na mesma ordem**, na palavra escrita. Aqui é **MANG**:
-4 letras.
+Você ditou **MORANGO** e seu sobrinho escreveu **MANGA**. Quantas letras ele
+acertou na ordem certa? **MANG**: 4.
 
-Uma **subsequência** de uma string é o que sobra depois de apagar algumas
-letras, sem mudar a ordem das outras. `MNG` é subsequência de `MORANGO`
-(apagando O, R, A e o último O); `GNA` não é. A **maior subsequência comum**
-(em inglês, *longest common subsequence*, LCS) de duas strings é a mais
-comprida que é subsequência das duas.
+Uma **subsequência** é o que sobra depois de apagar letras, sem mudar a ordem:
+`MNG` é subsequência de `MORANGO`; `GNA` não é. A **maior subsequência comum**
+(*longest common subsequence*, LCS) é a mais comprida que é subsequência das
+duas strings. Uma palavra de 30 letras tem mais de um bilhão delas.
 
-Força bruta é inviável: uma palavra de 30 letras tem 2³⁰, mais de um bilhão,
-de subsequências. A PD de novo olha para o **fim**. Compare a última letra
-de cada uma:
+A PD compara a última letra de cada string:
 
-- **iguais**: essa letra fecha a LCS. Some 1 à LCS das duas sem a última
-  letra;
-- **diferentes**: pelo menos uma das duas não está na LCS. Teste as duas
-  hipóteses (tirar a última de `a` ou a última de `b`) e fique com a melhor.
+- **iguais**: a letra fecha a LCS; some 1 à LCS das duas sem ela;
+- **diferentes**: tire a última de `a` ou a de `b` e fique com a melhor.
 
 Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
-`b[0..j-1]` (os `i` primeiros caracteres de `a` e os `j` primeiros de `b`):
+`b[0..j-1]`:
 
 | caso | `c[i][j]` |
 | --- | --- |
@@ -1606,14 +1188,12 @@ Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
 | `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
 | letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
 
-A resposta fica em `c[m][n]`. Para recuperar as letras, a volta anda do canto
-até a borda: quando as letras batem, a letra entra e o caminho vai na
-diagonal; quando não batem, ele vai para o vizinho de que o valor veio. O
-Cormen guarda esse "de onde veio" numa segunda tabela, `b`, com setas ↖, ↑ e
-←; aqui a seta é refeita na volta, comparando as letras e os vizinhos.
+A resposta fica em `c[m][n]`. A volta anda do canto até a borda: letras
+iguais entram na resposta e o caminho vai na diagonal; senão, vai para o
+vizinho de onde o valor veio (o Cormen guarda isso numa tabela de setas; aqui
+refazemos na volta).
 
-No desenho, cada linha é uma letra de MORANGO e cada coluna uma de
-MANGA. O caminho de volta sai do canto roxo; as células verdes são as quatro
+No desenho, o caminho sai do canto roxo; as células verdes são as quatro
 letras da resposta, e as amarelas, os passos sem letra:
 
 <p align="center"><img src="21-programacao-dinamica/0141-lcs/ideia.svg" alt="Diagrama da ideia: Maior subsequência comum (LCS)" width="858"></p>
@@ -1692,20 +1272,17 @@ int main(void) {
 // LCS de MORANGO e MANGA: MANG (4 letras)
 ```
 
-A tabela tem `(m + 1) × (n + 1)` células e cada uma custa O(1): **O(m × n)**
-de tempo e de memória. Duas strings de 1.000 letras dão um milhão de
-células, uns 4 MB de `int`; a força bruta nem começaria.
+A tabela tem `(m + 1) × (n + 1)` células de O(1): **O(m × n)** de tempo e de
+memória.
 
-O fluxograma é a decisão de uma célula. O caminho marcado é o da
-célula da linha G com a coluna G (`c[6][4]`), em que as letras batem e o
-valor vem da diagonal, `3 + 1`:
+No fluxograma, o caminho marcado é o de `c[6][4]` (G com G): as letras batem
+e o valor vem da diagonal, `3 + 1`:
 
 <p align="center"><img src="21-programacao-dinamica/0141-lcs/fluxograma.svg" alt="Fluxograma: Maior subsequência comum (LCS)" width="706"></p>
 
 ### Passo a passo
 
-A volta, partindo de `c[7][5]`. A recuperação monta a resposta
-**de trás para a frente**: G sai primeiro e M por último:
+A volta, partindo de `c[7][5]`, monta a resposta **de trás para a frente**:
 
 | posição | letras | iguais? | `c[i-1][j]` / `c[i][j-1]` | movimento | resposta até aqui |
 | --- | --- | --- | --- | --- | --- |
@@ -1719,20 +1296,14 @@ A volta, partindo de `c[7][5]`. A recuperação monta a resposta
 | (1, 1) | M, M | sim | | diagonal | MANG |
 
 > [!WARNING]
-> Subsequência não é **substring**. Uma substring é um pedaço **contíguo**:
-> em MORANGO e MANGA, a maior substring comum é `ANG`, com 3 letras,
-> enquanto a LCS tem 4. A outra pegadinha são os índices: a tabela tem uma
-> linha e uma coluna a mais (a do prefixo vazio), então a linha `i` fala da
-> letra `a[i - 1]`. Escrever `a[i] == b[j]` compila, roda sem reclamar do
-> sanitizer (no fim, compara com o `'\0'`) e dá a resposta errada.
+> Subsequência não é **substring** (pedaço contíguo): a maior substring comum
+> de MORANGO e MANGA é `ANG` (3), e a LCS tem 4. A linha `i` fala de
+> `a[i - 1]`: escrever `a[i] == b[j]` compila e dá a resposta errada.
 
 > [!TIP]
-> **Por dentro do C:** `int c[51][51]` mora na pilha e ocupa 51 × 51 × 4 =
-> 10.404 bytes, mesmo que as palavras sejam curtas. Para comparar dois textos
-> de 10 mil caracteres, seriam 400 MB, que não cabem na pilha. Se você só precisa do **tamanho** da LCS, cada linha só usa a de
-> cima, e duas linhas de `n + 1` posições bastam (o A281 faz isso). Para
-> **recuperar** as letras, a tabela inteira, alocada com `malloc`, é o jeito
-> simples.
+> **Por dentro do C:** para dois textos de 10 mil caracteres a tabela passa de
+> 400 MB: use `malloc`. Só o **tamanho** pede duas linhas de `n + 1` posições
+> (A281); **recuperar** as letras pede a tabela inteira.
 
 > [!NOTE]
 > **Pergunta para você:** a LCS de MORANGO e MANGA é única? Troque o `>=` das
@@ -1912,45 +1483,8 @@ Saída esperada:
 "ABC" x "DEF": 0
 ```
 
-**Dicas:**
-
-1. Tabela int c[51][51]; c[i][j] fala dos prefixos a[0..i-1] e b[0..j-1].
-2. Linha 0 e coluna 0 valem 0. Letras iguais (a[i - 1] == b[j - 1]):
-   diagonal + 1. Diferentes: o maior entre cima e esquerda.
-3. Para mostrar as aspas dentro do printf, use \".
-4. Resposta esperada: a saída acima (na primeira, B C E G H, por exemplo).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E841.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E841 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E841
-```
-
-**Exercício E842** · ★☆☆
-
-O programa abaixo monta a tabela da LCS de "PROGRAMAR" e "PAGAR" e mostra
-o tamanho. Complete o trecho marcado com COMPLETE AQUI: faça a volta pela
-tabela, de c[m][n] até a borda, preenchendo o vetor lcs de trás para a
-frente, e conte quantos passos (voltas do while) a volta deu.
-
-
-```text
-Saída esperada:
-Tamanho da LCS: 4
-LCS: PGAR
-Passos na volta: 10
-```
-
-**Dicas:**
-
-1. Letras iguais: a letra vai para lcs[--k] e você anda na diagonal
-   (i-- e j--).
-2. Diferentes: se c[i - 1][j] >= c[i][j - 1], suba (i--); senão, vá para
-   a esquerda (j--). Use o mesmo >= da tabela.
-3. O laço é while (i > 0 && j > 0); some 1 em passos a cada volta.
-4. PAAR também tem 4 letras e é comum
-   às duas: a regra de desempate escolheu PGAR.
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E842.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E842 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E842
 ```
 
 **Exercício E843** · ★★☆
@@ -1982,14 +1516,6 @@ o tamanho dela. Mostre o resultado.
 Saída esperada:
 5 músicas em comum, na mesma ordem: 7 5 21 40 17
 ```
-
-**Dicas:**
-
-1. É o código do texto trocando char por int: a comparação a[i - 1] ==
-   b[j - 1] continua igual, e não há '\0' no fim.
-2. A volta grava em saida[--k], começando com k = c[m][n].
-3. A música 12 está nas duas, mas é a primeira da Ana e a última do Beto:
-   ela não cabe na mesma ordem junto com as outras.
 
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E843.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E843 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E843
@@ -2023,65 +1549,8 @@ BANANA está nela? sim
 CABANA está nela? sim
 ```
 
-**Dicas:**
-
-1. A volta é a da LCS, mas TODO passo grava uma letra em sup[--k]: na
-   diagonal, a letra comum; subindo, a[i - 1]; indo para a esquerda,
-   b[j - 1]. Comece com k = m + n - c[m][n] e sup[k] = '\0'.
-2. Quando i ou j chega a 0, ainda sobra o começo da outra palavra: copie
-   o que sobrou com mais dois while.
-3. eh_subsequencia: ande em t e avance em p só quando a letra bate; no
-   fim, p tem que ter chegado ao '\0'.
-4. Use o mesmo desempate do texto (>= sobe), senão a supersequência pode
-   sair diferente (com as mesmas 8 letras).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E844.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E844 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E844
-```
-
-**Exercício E845** · ★★★
-
-Num jogo de anagramas, a nota de "parecido" entre duas palavras é o
-tamanho da LCS: quantas letras ficam na mesma ordem. O programa abaixo
-compila sem aviso e roda sem reclamação do sanitizer, mas algumas notas
-estão erradas. Hoje ele mostra:
-
-
-```text
-AMOR x ROMA: 2
-AMOR x MORA: 3
-AMOR x RAMO: 3
-AMOR x OMAR: 3
-AMOR x AMOR: 4
-```
-
-
-Em ROMA, nenhum par de letras de AMOR aparece na mesma ordem, então a
-nota certa é 1. Há UM erro de propósito, numa linha só. Ache e conserte.
-
-
-```text
-Saída esperada (depois de consertar):
-AMOR x ROMA: 1
-AMOR x MORA: 3
-AMOR x RAMO: 3
-AMOR x OMAR: 2
-AMOR x AMOR: 4
-```
-
-**Dicas:**
-
-1. Acrescente um printf que mostre a tabela inteira de AMOR x ROMA, com a
-   letra de cada linha, e confira a última célula.
-2. A linha i da tabela fala do prefixo de tamanho i. Qual é a ÚLTIMA
-   letra desse prefixo?
-3. Com i = m e j = n, o que valem a[i] e b[j]? Por que isso sempre "bate"?
-4. Resposta esperada: a comparação usa a[i] == b[j], que olha uma letra
-   adiante (e, no fim, compara '\0' com '\0', ganhando 1 de graça). O
-   certo é a[i - 1] == b[j - 1].
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E845.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E845 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E845
 ```
 
 **Exercício E846** · ★★★
@@ -2095,14 +1564,12 @@ O fechamento de uma ação em 13 pregões foi, em reais:
 
 
 Qual é a maior sequência de pregões (não precisam ser seguidos) em que o
-preço SEMPRE sobe? É a maior subsequência crescente, e existe um truque
-para resolvê-la com o que você já tem: ela é a LCS entre o vetor original
-e uma cópia dele ORDENADA e SEM REPETIDOS. (Pense: uma subsequência comum
-às duas está na ordem dos pregões e, ao mesmo tempo, em ordem crescente.)
+preço SEMPRE sobe? Ela é a LCS entre o vetor original e uma cópia dele
+ORDENADA e SEM REPETIDOS.
 
-Escreva o programa: copie o vetor, ordene a cópia com qsort (assunto
-0050), tire os repetidos, rode a LCS de vetores de int com recuperação e
-mostre o tamanho e os preços.
+Escreva o programa: copie o vetor, ordene a cópia com qsort, tire os
+repetidos, rode a LCS de vetores de int com recuperação e mostre o
+tamanho e os preços.
 
 
 ```text
@@ -2110,17 +1577,6 @@ Saída esperada:
 Maior sequência de altas: 6 dias
 Preços: 28 30 33 36 40 41
 ```
-
-**Dicas:**
-
-1. A compara do qsort: return (a > b) - (a < b); (sem a - b, que pode
-   estourar).
-2. Para tirar repetidos de um vetor ordenado, copie ord[i] para ord[u++]
-   só quando ele for diferente do último copiado.
-3. Sem tirar os repetidos, o 33 (que aparece duas vezes) poderia entrar
-   duas vezes, e "33 33" não é subir.
-4. Use o desempate do texto (>= sobe). Há outras respostas com 6 preços,
-   como 28 30 33 34 38 41.
 
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E846.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E846 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E846
@@ -2130,46 +1586,38 @@ gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E846.c -o ~/LPEDC/21-programacao-di
 
 ## 0142 · Distância de edição
 
-Você digita "pesoa" no celular e o corretor oferece "pessoa". Como ele sabe
-que "pessoa" está mais perto do que você digitou do que "pescoço" ou
-"lagoa"? Ele mede quantas **edições** de uma letra separam as duas palavras.
-De "pesoa" para "pessoa" falta só inserir um `s`.
+Você digita "pesoa" e o corretor oferece "pessoa": falta inserir um `s`. Ele
+ranqueia as sugestões pelo número de **edições** entre as palavras.
 
-A **distância de edição** (ou **distância de Levenshtein**) entre duas
-strings é o menor número de operações que transforma uma na outra. São
-três operações, cada uma custando 1: **inserir** uma letra, **remover** uma
-letra ou **trocar** uma letra por outra.
+A **distância de edição** (ou **de Levenshtein**) é o menor número de
+operações que transforma uma string em outra. Cada uma custa 1: **inserir**,
+**remover** ou **trocar** uma letra.
 
-É a prima da LCS do assunto 0141, e a PD olha de novo para o fim das duas
-palavras. Se as últimas letras são **iguais**, elas já combinam: o custo é o
-das palavras sem elas. Se são **diferentes**, a última operação foi uma das
-três, e você fica com a mais barata:
+Como na LCS (assunto 0141), a PD olha o fim das palavras. Últimas letras
+**iguais**: o custo é o das palavras sem elas. **Diferentes**: vale a mais
+barata das três operações:
 
 - **trocar** a última de `a` pela última de `b`: 1 + resolver as duas sem a
   última letra;
-- **remover** a última de `a`: 1 + transformar `a` sem ela em `b` inteira;
-- **inserir** no fim a última de `b`: 1 + transformar `a` inteira em `b` sem
-  ela.
+- **remover** a última de `a`: 1 + transformar `a` sem ela em `b`;
+- **inserir** a última de `b`: 1 + transformar `a` em `b` sem ela.
 
 Na tabela, `d[i][j]` é a distância entre os prefixos `a[0..i-1]` e
-`b[0..j-1]`. A diferença para a LCS está na **borda**: transformar `i` letras
-em nada custa `i` remoções, então `d[i][0] = i`; e transformar nada em `j`
-letras custa `j` inserções, `d[0][j] = j`.
+`b[0..j-1]`. A **borda** difere da LCS: `d[i][0] = i` (`i` remoções) e
+`d[0][j] = j` (`j` inserções).
 
 | caso | `d[i][j]` |
 | --- | --- |
 | `a[i-1] == b[j-1]` | `d[i-1][j-1]` (diagonal, de graça) |
 | letras diferentes | `1 +` o menor entre `d[i-1][j-1]` (troca), `d[i-1][j]` (remove) e `d[i][j-1]` (insere) |
 
-Tome CARTA e ARTES. A resposta é 3, e a volta pela
-tabela mostra quais edições: remover o C, inserir um E e trocar o último A
-por S (CARTA, ARTA, ARTEA, ARTES). As setas mostram de onde cada célula do
-caminho veio:
+CARTA e ARTES distam 3: remover o C, inserir um E e trocar o último A por S
+(CARTA, ARTA, ARTEA, ARTES). As setas mostram de onde cada célula veio:
 
 <p align="center"><img src="21-programacao-dinamica/0142-distancia-de-edicao/ideia.svg" alt="Diagrama da ideia: Distância de edição" width="858"></p>
 
-No código, a volta mostra as edições do fim da palavra para o
-começo (o E852 monta o alinhamento na ordem certa):
+A volta mostra as edições do fim para o começo (o E852 monta o alinhamento na
+ordem certa):
 
 ```c
 #include <stdio.h>
@@ -2255,21 +1703,18 @@ int main(void) {
 //   remove C
 ```
 
-O custo é o mesmo da LCS: `(m + 1) × (n + 1)` células, cada uma com três
-comparações, **O(m × n)**. Um corretor ortográfico que compara a palavra
-digitada com 300 mil palavras do dicionário faz 300 mil tabelas pequenas;
-por isso os de verdade primeiro descartam as palavras de tamanho muito
-diferente (a distância é pelo menos a diferença dos tamanhos).
+O custo é **O(m × n)**. Um corretor que compara a palavra com 300 mil do
+dicionário descarta antes as de tamanho muito diferente: a distância é pelo
+menos a diferença dos tamanhos.
 
-O fluxograma mostra a decisão de uma célula do miolo, com o caminho da
-célula `d[5][5]` (o último A contra o S), em que a troca ganhou:
+No fluxograma, o caminho marcado é o de `d[5][5]` (A contra S), em que a
+troca ganhou:
 
 <p align="center"><img src="21-programacao-dinamica/0142-distancia-de-edicao/fluxograma.svg" alt="Fluxograma: Distância de edição" width="542"></p>
 
 ### Passo a passo
 
-A volta, partindo de `d[5][5] = 3`. Em cada célula, a pergunta é "de qual
-vizinho eu vim?":
+A volta, partindo de `d[5][5] = 3`. Em cada célula: "de qual vizinho eu vim?"
 
 | posição | letras | candidatos: troca / remove / insere | veio de | operação |
 | --- | --- | --- | --- | --- |
@@ -2281,21 +1726,13 @@ vizinho eu vim?":
 | (1, 0) | C, - | borda | cima | remove C |
 
 > [!WARNING]
-> A borda **não** é zero, como era na LCS. Esquecer `d[i][0] = i` e
-> `d[0][j] = j` (ou copiar a inicialização da LCS) faz a tabela achar que
-> apagar ou escrever o começo da palavra é de graça: "CARTA" e "ARTES"
-> dariam 2, e "SOL" contra a palavra vazia daria 0. E na volta, confira
-> `i > 0` e `j > 0` antes de ler `d[i - 1][...]` ou `a[i - 1]`: na borda,
-> só uma das direções existe.
+> A borda **não** é zero, como na LCS: sem `d[i][0] = i` e `d[0][j] = j`,
+> CARTA e ARTES dariam 2. Na volta, confira `i > 0` e `j > 0` antes de ler
+> `d[i - 1][...]` ou `a[i - 1]`.
 
 > [!TIP]
-> **Por dentro do C:** `menor3` é chamada `m × n` vezes. Com otimização
-> (`gcc -O2`), o compilador costuma colocar o corpo dela direto no laço
-> (*inline*), sem o custo de empilhar um frame por célula. E a tabela de
-> `int` é um desperdício para palavras: a distância nunca passa
-> do tamanho da maior palavra, então um `unsigned char` (até 255) bastaria
-> para palavras de até 255 letras, e a tabela de 51 × 51 cairia de 10.404
-> para 2.601 bytes.
+> **Por dentro do C:** com `gcc -O2`, o compilador costuma embutir `menor3`
+> no laço (*inline*), sem empilhar um frame por célula.
 
 > [!NOTE]
 > **Pergunta para você:** a distância de A para B é sempre igual à de B para
@@ -2474,46 +1911,8 @@ Saída esperada:
 "FUTEBOL" -> "BASQUETE": 8
 ```
 
-**Dicas:**
-
-1. Tabela int d[31][31]. Borda: d[i][0] = i e d[0][j] = j.
-2. Letras iguais: d[i][j] = d[i - 1][j - 1]. Diferentes: 1 + o menor
-   entre diagonal, cima e esquerda. Uma função menor3 ajuda.
-3. A distância nunca passa do tamanho da maior palavra (troque tudo e
-   insira o que faltar): FUTEBOL x BASQUETE bate nesse teto.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E847.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E847 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E847
-```
-
-**Exercício E848** · ★☆☆
-
-O programa abaixo calcula a distância de edição de PATO para SAPATO e
-mostra a tabela inteira, mas a BORDA da tabela não foi preenchida: hoje
-ele lê lixo da pilha (ou mostra números sem sentido). Complete os dois
-laços marcados com COMPLETE AQUI e rode.
-
-
-```text
-Saída esperada:
-   - S A P A T O
--  0 1 2 3 4 5 6
-P  1 1 2 2 3 4 5
-A  2 2 1 2 2 3 4
-T  3 3 2 2 3 2 3
-O  4 4 3 3 3 3 2
-distância: 2
-```
-
-**Dicas:**
-
-1. A coluna 0 responde "quanto custa transformar a[0..i-1] em nada?".
-2. A linha 0 responde "quanto custa transformar nada em b[0..j-1]?".
-3. Na linha do O, o 2 do canto é a resposta: inserir S e A no começo.
-4. Resposta esperada: d[i][0] = i e d[0][j] = j, e a saída acima.
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E848.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E848 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E848
 ```
 
 **Exercício E849** · ★★☆
@@ -2536,13 +1935,6 @@ CARTA     ARTES      PD:  4   m + n - 2 x LCS = 5 + 5 - 2 x 3 =  4
 BOLO      BOLA       PD:  2   m + n - 2 x LCS = 4 + 4 - 2 x 3 =  2
 RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
 ```
-
-**Dicas:**
-
-1. Na distância sem troca, letras diferentes têm só duas saídas:
-   1 + o menor entre d[i - 1][j] (remove) e d[i][j - 1] (insere).
-2. A borda é a mesma da distância comum: d[i][0] = i, d[0][j] = j.
-3. Para alinhar as colunas, use %-9s nas palavras e %2d nos números.
 
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E849.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E849 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E849
@@ -2575,51 +1967,8 @@ XYZ0000: nenhuma
 tabelas montadas: 28 de 32
 ```
 
-**Dicas:**
-
-1. Reaproveite a distancia() do texto com um contador global que sobe a
-   cada chamada.
-2. abs() de <stdlib.h> dá o valor absoluto da diferença dos strlen
-   (converta para int antes de subtrair: strlen devolve size_t, sem sinal).
-3. Uma flag "achou" decide se no fim da linha vai " nenhuma".
-4. Uma leitura exata também tem
-   "parentes" a distância 1: é por isso que o sistema precisa confirmar
-   com uma pessoa.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E850.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E850 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E850
-```
-
-**Exercício E851** · ★★★
-
-Esta versão calcula a distância de edição DE CIMA PARA BAIXO: a recursão
-natural com memoização (assunto 0138), guardando cada dist(i, j) numa
-matriz global memo. Ela foi feita para palavras de até 16 letras. Com
-CONSTITUCIONAL (14 letras) funciona; com INCONSTITUCIONAL (16 letras), o
-gcc com as flags de estudo acusa "index 16 out of bounds" e o AddressSanitizer para o programa
-com "global-buffer-overflow". Há UM erro de propósito. Ache, conserte e
-rode até a saída ficar limpa.
-
-
-```text
-Saída esperada (depois de consertar):
-CONSTITUCIONAL -> INSTITUCIONAL: 2 (19 chamadas)
-INCONSTITUCIONAL -> CONSTITUCIONAL: 2 (15 chamadas)
-```
-
-**Dicas:**
-
-1. Na primeira chamada, dist(i, j) recebe i = strlen(a). Para uma palavra
-   de 16 letras, que índice de memo ela usa?
-2. Quantas linhas e colunas tem a tabela de uma palavra de m letras
-   contra uma de n? (Lembre da linha e da coluna do prefixo vazio.)
-3. O memset preenche todos os bytes com 0xFF; num int, isso é -1. O
-   sizeof memo faz o memset acompanhar o tamanho da matriz sozinho.
-4. Resposta esperada: a matriz precisa de MAX + 1 linhas e colunas
-   (índices 0 a 16): int memo[MAX + 1][MAX + 1];.
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E851.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E851 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E851
 ```
 
 **Exercício E852** · ★★★
@@ -2652,17 +2001,6 @@ ESTRELA -> ESTERIL: distância 3
  = = = I = T = R
 ```
 
-**Dicas:**
-
-1. A volta é a do texto, mas cada passo grava uma coluna em três vetores
-   (cima, baixo e marca). Na remoção, embaixo vai '-'; na inserção, em
-   cima vai '-'.
-2. As colunas saem de trás para a frente: mostre os vetores do índice
-   k - 1 até 0.
-3. Teste os vizinhos na ordem do texto (igual, troca, remove, insere): com
-   outra ordem, um alinhamento diferente, com a mesma distância, pode
-   aparecer.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E852.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E852 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E852
 ```
@@ -2671,41 +2009,31 @@ gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E852.c -o ~/LPEDC/2
 
 ## 0143 · Juntando tudo: um mini-diff
 
-Você e sua mãe dividem a lista de compras do mês num arquivo de texto, uma
-coisa por linha. Ela abriu o arquivo, mexeu e salvou. O que mudou? Comparar
-linha 1 com linha 1, linha 2 com linha 2 não serve: basta ela inserir uma
-linha no começo para **todas** as outras parecerem diferentes.
+Você e sua mãe dividem a lista de compras num arquivo, uma coisa por linha.
+O que mudou depois que ela salvou? Comparar linha com linha não serve: uma
+linha nova no começo faz **todas** parecerem diferentes.
 
-A ferramenta que responde isso existe em todo sistema Unix e se chama
-`diff`. É ela que mostra as mudanças num controle de versão. Por dentro, ela
-usa a **LCS** do assunto 0141, só que de **linhas** em vez de letras: as
-linhas da LCS ficaram iguais; as que só estão na versão antiga foram
-**removidas** (`-`); as que só estão na nova foram **adicionadas** (`+`).
-Duas linhas são "a mesma letra" quando `strcmp` dá 0.
+O `diff` resolve com a **LCS** do assunto 0141, de **linhas** em vez de
+letras (duas linhas casam quando `strcmp` dá 0). As linhas da LCS ficaram
+iguais; as que só estão na versão antiga foram **removidas** (`-`); as que só
+estão na nova foram **adicionadas** (`+`).
 
-A leitura dos arquivos fica num módulo pequeno (assunto 0034), `linhas.h` e
-`linhas.c`, na pasta do assunto. `le_linhas` lê com `fgets`, tira o `'\n'`
-e guarda cada linha num `malloc` do tamanho exato, dentro de um `char **`
-que dobra com `realloc` (assunto 0055). `grava_linhas` escreve um vetor de
-strings num arquivo, e `libera_linhas` devolve tudo.
+`linhas.h` e `linhas.c` (assunto 0034) leem com `fgets`, tiram o `'\n'` e
+guardam cada linha num `malloc` exato, num `char **` que dobra com `realloc`
+(assunto 0055).
 
-Uma mudança em relação ao 0141 deixa a saída mais simples. Lá, a volta
-começava no **fim** das strings e a resposta saía de trás para a frente.
-Aqui a tabela é dos **sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e
-`b[j..n-1]`, cheia de baixo para cima. A resposta fica em `c[0][0]`, e a
-volta anda do **começo** para o fim, imprimindo cada linha já na ordem
-certa. Em cada passo: linhas iguais saem com dois espaços e as duas
-avançam; se não, o vizinho com a LCS maior decide se a linha de `a` sai com
-`-` ou a de `b` entra com `+`.
+A tabela é dos **sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
+resposta fica em `c[0][0]` e a volta anda do **começo** para o fim. Linhas
+iguais saem com dois espaços; se não, o vizinho com a LCS maior decide se a
+linha de `a` sai com `-` ou a de `b` com `+`.
 
-No desenho, a lista antiga fica à esquerda e a nova à direita. Os
-traços ligam as cinco linhas da LCS; o que sobra de cada lado vira `-` ou
-`+`:
+No desenho, a lista antiga fica à esquerda, a nova à direita, e os traços
+ligam as cinco linhas da LCS:
 
 <p align="center"><img src="21-programacao-dinamica/0143-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: um mini-diff" width="858"></p>
 
-O programa: sem argumentos, ele grava as duas listas em `/tmp` e compara;
-com dois nomes de arquivo (assunto 0069), compara os seus:
+Sem argumentos, o programa compara duas listas gravadas em `/tmp`; com dois
+nomes de arquivo (assunto 0069), compara os seus:
 
 ```c
 #include <stdio.h>
@@ -2794,36 +2122,30 @@ int main(int argc, char *argv[]) {
 // (5 iguais, 2 removidas, 2 adicionadas)
 ```
 
-Veja a linha do leite: "leite" e "leite sem lactose" são linhas
-diferentes, então viram uma remoção e uma adição. O A286 usa a distância de
-edição do assunto 0142 para perceber que a linha foi só **alterada**.
+"leite" e "leite sem lactose" viram uma remoção e uma adição. O A286 usa a
+distância de edição (0142) para perceber que a linha só foi **alterada**.
 
-O fluxograma é a volta do diff, que imprime enquanto anda. O
-caminho marcado é o das duas primeiras linhas, iguais nas duas versões:
+No fluxograma, o caminho marcado é o das duas primeiras linhas, iguais:
 
 <p align="center"><img src="21-programacao-dinamica/0143-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: um mini-diff" width="796"></p>
 
 > [!WARNING]
-> `fgets` guarda o `'\n'` no fim da linha, e a última linha de um arquivo
-> pode vir **sem** ele (quando ninguém deu Enter no final). Sem tirar o
-> `'\n'`, "banana\n" e "banana" ficam diferentes no `strcmp`, e o diff
-> acusa uma mudança invisível na última linha. O
-> `buf[strcspn(buf, "\n")] = '\0'` do `linhas.c` corta o `'\n'` se ele
-> existir e não faz nada se não existir.
+> `fgets` guarda o `'\n'`, e a última linha do arquivo pode vir **sem** ele.
+> Sem tirá-lo, "banana\n" e "banana" diferem no `strcmp` e o diff acusa uma
+> mudança invisível. O `buf[strcspn(buf, "\n")] = '\0'` do `linhas.c` corta o
+> `'\n'` se existir e não faz nada se não existir.
 
 > [!TIP]
-> **Por dentro do C:** a tabela não pode ser um `int c[m + 1][n + 1]` na
-> pilha: dois arquivos de 2.000 linhas pediriam 16 MB, o dobro da pilha. Ela
-> é um bloco só do `malloc`, e a célula `(i, j)` mora em `c[i * w + j]`, com
-> `w = n + 1`: a mesma conta que o compilador faz por baixo numa matriz de
-> verdade. Para arquivos de 100 mil linhas, seriam 40 GB, e nem o heap
-> aguenta. Por isso o `diff` de verdade usa o algoritmo de Myers, que gasta
-> O((m + n) × D), em que D é o número de diferenças, quase sempre pequeno.
+> **Por dentro do C:** a tabela não pode ser `int c[m + 1][n + 1]` na pilha:
+> dois arquivos de 2.000 linhas pediriam 16 MB, o dobro da pilha. Ela é um
+> bloco só do `malloc`, e a célula `(i, j)` mora em `c[i * w + j]`, com
+> `w = n + 1`. Com 100 mil linhas seriam 40 GB; por isso o `diff` real usa o
+> algoritmo de Myers, O((m + n) × D), com D o número de diferenças.
 
 > [!NOTE]
 > **Pergunta para você:** se sua mãe só tivesse trocado a ordem de "pão" e
-> "banana", quantas linhas sairiam com `-` e quantas com `+`? E qual das duas
-> o diff escolheria manter como "igual"? Troque a ordem em `v2` e confira.
+> "banana", quantas linhas sairiam com `-` e com `+`? Troque a ordem em `v2` e
+> confira.
 
 ### Hora de praticar
 
@@ -3046,65 +2368,33 @@ Saída esperada:
 semelhança: 70.6%
 ```
 
-**Dicas:**
-
-1. É a LCS do assunto 0141 com strcmp(a[i], b[j]) == 0 no lugar de
-   a[i] == b[j]. A tabela dos sufixos (texto) ou dos prefixos (0141): tanto
-   faz, só o tamanho importa.
-2. Removidas = m - LCS; adicionadas = n - LCS.
-3. Para mostrar o %, use %% no printf; e faça a conta em double
-   (100.0 * 2 * l / (m + n)), senão a divisão é inteira.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E853.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E853 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E853
 ```
 
-**Exercício E854** · ★☆☆
-
-Alguém abriu o arquivo de configuração da loja num editor que mudou
-maiúsculas e deixou espaços sobrando no fim das linhas. O diff abaixo
-acusa as 5 linhas como trocadas, mas só duas mudaram de verdade. Complete
-a função iguais() (marcada com COMPLETE AQUI) para ela considerar iguais
-as linhas que só diferem em maiúsculas/minúsculas ou em espaços no FIM
-da linha, como faz o "diff -i -Z". O resto do programa já usa iguais().
-
-
-```text
-Saída esperada:
-  Nome: Loja do Zé
-  Cidade: Fortaleza
-- Horario: 8h as 18h
-+ Horario: 8h as 20h
-  Pix: sim
-- Entrega: nao
-+ Entrega: sim
-```
-
-**Dicas:**
-
-1. Calcule o tamanho "útil" de cada linha: comece em strlen e recue
-   enquanto o último caractere for ' '.
-2. Tamanhos úteis diferentes: não são iguais. Senão, compare letra a letra
-   com tolower de <ctype.h>, passando (unsigned char) x[k] (um char
-   negativo, como os bytes do "é", é proibido no tolower).
-3. As linhas iguais saem como estão na versão antiga.
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E854.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E854 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E854
-```
-
 **Exercício E855** · ★★☆
 
-O programa abaixo é o mini-diff do texto, comparando duas versões de um
-programa em C. Estenda-o para mostrar, antes de cada linha, o número dela
-na versão antiga e na nova, como as ferramentas de revisão de código:
-linha igual mostra os dois números; linha removida, só o antigo; linha
-adicionada, só o novo. Use exatamente estes formatos:
+Duas versões de um programa em C estão em vetores de strings, uma linha por
+posição:
 
 
 ```text
-igual:     "%3d %3d   %s\n"
-removida:  "%3d     - %s\n"
+antiga: "#include <stdio.h>", "// versão 1", "int main(void) {",
+        "    printf(\"oi\\n\");", "    return 0;", "}"
+nova:   "#include <stdio.h>", "// versão 2", "int main(void) {",
+        "    int x = 2;", "    printf(\"%d\\n\", x);", "    return 0;", "}"
+```
+
+
+Escreva o mini-diff: monte a tabela da LCS dos sufixos e percorra-a do começo
+ao fim. Antes de cada linha, mostre o número dela na versão antiga e na nova
+(igual: os dois; removida: só o antigo; adicionada: só o novo), com estes
+formatos de printf:
+
+
+```text
+igual:      "%3d %3d   %s\n"
+removida:   "%3d     - %s\n"
 adicionada: "    %3d + %s\n"
 ```
 
@@ -3124,24 +2414,14 @@ Saída esperada:
 (4 iguais, 2 removidas, 3 adicionadas)
 ```
 
-**Dicas:**
-
-1. Os números saem dos próprios índices: a linha a[i] é a de número
-   i + 1 na versão antiga, e b[j] é a j + 1 na nova.
-2. Só os três printf da volta mudam; o resto fica igual.
-3. Rode também com dois arquivos seus: ./programa a.txt b.txt
-   (o comando do exemplo compila junto o linhas.c da pasta).
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E855.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E855 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E855
 ```
 
 **Exercício E856** · ★★☆
 
-A saída do diff serve para mais do que olhar: é um PATCH, a receita para
-transformar a versão antiga na nova. Quem recebe o patch aplica no seu
-arquivo e fica com a versão nova, sem precisar do arquivo inteiro. Este é
-o patch da lista de compras do texto:
+A saída do diff é um PATCH: a receita para transformar a versão antiga na
+nova. Este é o patch da lista de compras do texto:
 
 
 ```text
@@ -3172,69 +2452,22 @@ v1: arroz, feijão, açúcar, café, leite sem lactose, pão, banana
 outra lista: o patch não se aplica (linha 3)
 ```
 
-**Dicas:**
-
-1. Um índice i anda no original. Para cada linha do patch, olhe o 1º
-   caractere; o texto da linha começa em patch[k] + 2.
-2. '+': o texto entra em novo. ' ': confere com orig[i], entra e i++.
-   '-': confere com orig[i] e só faz i++.
-3. novo[] pode guardar os próprios ponteiros (const char *), sem copiar
-   as strings.
-
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E856.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E856 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E856
-```
-
-**Exercício E857** · ★★★
-
-A empresa de ônibus mudou o itinerário da linha 42 e quer mostrar o que
-mudou. O programa abaixo é o mini-diff do texto adaptado para vetores de
-strings, mas o AddressSanitizer para o programa com
-"heap-buffer-overflow" logo na montagem da tabela. Há UM erro de
-propósito. Ache, conserte e rode até a saída ficar limpa.
-
-
-```text
-Saída esperada (depois de consertar):
-Itinerário da linha 42:
-  Terminal
-+ Mercado
-  Centro
-- Hospital
-  Universidade
-  Praia
-+ Aeroporto
-```
-
-**Dicas:**
-
-1. Leia o relatório do ASan: quantos bytes o bloco tem ("120-byte
-   region") e quantos int isso dá?
-2. Quantas células tem a tabela de m = 5 contra n = 6, contando a linha e
-   a coluna dos sufixos vazios? E qual é o maior índice que o laço usa?
-3. A conta do índice usa w = n + 1 colunas por linha; a conta do malloc
-   precisa usar o mesmo formato.
-4. Resposta esperada: o malloc reserva m * n = 30 int, mas a tabela tem
-   (m + 1) * (n + 1) = 42 células (índices 0 a 41). Conserto:
-   malloc((size_t) (m + 1) * w * sizeof *c).
-
-```bash
-gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E857.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E857 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E857
 ```
 
 **Exercício E858** · ★★★
 
 Quando dois arquivos têm centenas de linhas e só duas mudaram, o diff
-completo é inútil: ninguém acha as mudanças no meio de tudo. O "diff -u"
-mostra só as linhas mudadas e algumas linhas iguais em volta, o
-CONTEXTO, e troca cada trecho pulado por "...".
+completo é inútil. O "diff -u" mostra só as linhas mudadas e algumas iguais
+em volta, o CONTEXTO, e troca cada trecho pulado por "...".
 
-As duas versões de uma receita de bolo já estão no main. Escreva o diff
-com 1 linha de contexto (#define CONTEXTO 1): uma linha igual só aparece
-se estiver a no máximo 1 posição de uma mudança na sequência de
-operações; cada trecho escondido (inclusive no começo e no fim) vira
-uma linha "...". As mudanças saem como "- texto" e "+ texto"; as linhas de
-contexto, como "  texto".
+As duas versões de uma receita de bolo estão nos vetores a[] (12 passos) e
+b[] (13 passos), declarados abaixo. Escreva o diff com 1 linha de contexto
+(#define CONTEXTO 1): uma linha igual só aparece se estiver a no máximo 1
+posição de uma mudança na sequência de operações. Cada trecho escondido
+(inclusive no começo e no fim) vira uma linha "...". Mudanças saem como "-
+texto" e "+ texto"; contexto, como "  texto".
 
 
 ```text
@@ -3250,18 +2483,6 @@ Saída esperada:
 + 12. Cubra com calda de chocolate.
 + 13. Sirva.
 ```
-
-**Dicas:**
-
-1. Faça em duas passadas. Na 1ª, a volta do texto, mas em vez de imprimir,
-   guarde cada operação num vetor op[] (' ', '-' ou '+') e o texto num
-   vetor de ponteiros.
-2. Na 2ª, a operação t aparece se alguma operação entre t - CONTEXTO e
-   t + CONTEXTO não for ' '.
-3. Guarde o índice da última operação mostrada: se a próxima a aparecer
-   não for a seguinte, imprima "..." antes. No fim, se sobrou alguma
-   escondida, mais um "...".
-4. Teste com CONTEXTO 0 e 2 também.
 
 ```bash
 gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E858.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E858 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E858

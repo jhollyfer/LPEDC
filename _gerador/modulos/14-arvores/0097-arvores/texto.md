@@ -1,16 +1,12 @@
 ## 0097 · Árvores
 
-Abra o gerenciador de arquivos. Dentro de `casa` tem `fotos`, `contas` e
-`musica`. Dentro de `fotos` tem `praia` e `natal`. Dentro de `contas` tem `agua`
-e `luz`, e dentro de `luz` tem a pasta `2025`, com os boletos do ano. Nenhuma
-lista, pilha ou fila desenha isso direito: uma pasta tem **várias** subpastas,
-e cada subpasta tem as suas.
+No gerenciador de arquivos, `casa` tem `fotos`, `contas` e `musica`. `fotos`
+tem `praia` e `natal`. `contas` tem `agua` e `luz`, e `luz` tem a pasta `2025`.
+Nenhuma lista, pilha ou fila desenha isso: uma pasta tem **várias** subpastas.
 
-Essa forma de "um em cima, vários embaixo" é uma **árvore**. Ela aparece em
-toda parte: a árvore genealógica da família, o organograma da empresa, o
-chaveamento da Copa, o sumário de um livro (capítulos, seções, subseções).
-
-Na computação a árvore cresce de cabeça para baixo. O vocabulário:
+Essa forma de "um em cima, vários embaixo" é uma **árvore**, como o
+organograma e o sumário de um livro. Na computação ela cresce de cabeça para
+baixo. O vocabulário:
 
 | Termo | O que é | Nas pastas |
 | --- | --- | --- |
@@ -22,31 +18,26 @@ Na computação a árvore cresce de cabeça para baixo. O vocabulário:
 | **subárvore** | um nó com tudo que está embaixo dele | `contas` com `agua`, `luz` e `2025` |
 | **grau** | quantos filhos o nó tem; o da árvore é o maior deles | `casa` tem grau 3 |
 
-Duas medidas aparecem em tudo daqui para a frente. A **profundidade** de um nó
-é quantas arestas (ligações) existem entre ele e a raiz: `casa` tem
-profundidade 0, `luz` tem 2. A **altura** de um nó é o tamanho do caminho mais
-longo dele até uma folha. A altura da árvore é a altura da raiz. O **nível**
-de um nó é a profundidade dele: a raiz fica no nível 0, os filhos dela no 1.
+A **profundidade** de um nó é o número de arestas (ligações) até a raiz: `casa`
+tem profundidade 0, `luz` tem 2. O **nível** é a profundidade. A **altura** de
+um nó é o caminho mais longo dele até uma folha, e a altura da árvore é a da
+raiz.
 
-Neste curso, altura se mede em **arestas**: uma folha tem altura 0 e uma árvore
-vazia tem altura -1. É a convenção do Cormen. Tem livro que conta nós em vez
-de arestas (folha com altura 1) e
-põe a raiz no nível 1. Nenhum está errado; só não misture.
+Aqui, altura se mede em **arestas**: folha tem altura 0 e árvore vazia tem
+altura -1 (convenção do Cormen). Há livros que contam nós; não misture.
 
-A definição mais útil de árvore é **recursiva**: uma árvore é um nó (a raiz)
-com zero ou mais árvores penduradas embaixo. Por isso quase toda função de
-árvore é recursiva: resolva para cada filho e combine as respostas. Contar
-folhas? Some as folhas de cada filho. Altura? Pegue a maior altura entre os
-filhos e some 1.
+A definição mais útil é **recursiva**: uma árvore é um nó (a raiz) com zero ou
+mais árvores penduradas embaixo. Por isso quase toda função de árvore é
+recursiva: resolve cada filho e combina as respostas. Folhas: some as folhas
+dos filhos. Altura: maior altura dos filhos, mais 1.
 
-A árvore das pastas tem 9 nós, 5 folhas (em verde) e
-altura 3: o caminho mais longo vai de `casa` até `2025`, passando por `contas` e
-`luz`:
+A árvore das pastas tem 9 nós, 5 folhas (em verde) e altura 3: o caminho mais
+longo vai de `casa` até `2025`, por `contas` e `luz`:
 
 {{ideia}}
 
-Em C, cada pasta vira um nó com um nome e um vetor de ponteiros para os filhos.
-Cada nó é criado com `malloc`, igual aos nós da lista encadeada:
+Em C, cada pasta é um nó com um nome e um vetor de ponteiros para os filhos,
+criado com `malloc` como os nós da lista encadeada:
 
 ```c
 #include <stdio.h>
@@ -145,31 +136,23 @@ int main(void) {
 // Altura: 3
 ```
 
-O fluxograma da `altura` não tem caso especial para a folha. Ela
-não entra no laço, `maior` fica em -1 e a função devolve 0. Cada pasta pergunta
-a altura dos filhos e soma 1 à maior resposta. Em `casa`, os filhos respondem 1
-(`fotos`), 2 (`contas`) e 0 (`musica`), e ela devolve 2 + 1 = 3:
+A `altura` não trata a folha à parte: ela não entra no laço, `maior` fica em -1
+e a função devolve 0. Em `casa`, os filhos respondem 1, 2 e 0, e ela devolve
+2 + 1 = 3:
 
 {{fluxograma}}
 
 > [!WARNING]
-> A ordem do `free` importa. Se `libera` fizer `free(n)` **antes** de visitar os
-> filhos, o laço seguinte lê `n->qtd` e `n->filhos[i]` de memória já devolvida:
-> é uso depois de liberar, e o AddressSanitizer acusa na hora. Numa árvore,
-> libere de baixo para cima: primeiro as subárvores, por último o nó.
+> Libere de baixo para cima: primeiro as subárvores, por último o nó. Com
+> `free(n)` **antes** dos filhos, o laço lê memória já devolvida.
 
 > [!TIP]
-> **Por dentro do C:** este nó ocupa 56 bytes: 16 do nome, 4 ponteiros de 8
-> bytes (32), 4 do `int` e mais 4 de enchimento (*padding*) para o tamanho ficar
-> múltiplo de 8. Uma folha gasta os mesmos 56 bytes, com 4 ponteiros sem uso. O
-> exemplo A194 mostra a saída clássica: **primeiro filho / próximo irmão**. Cada
-> nó guarda só dois ponteiros, um para o primeiro filho e outro para o próximo
-> irmão, e aceita qualquer número de filhos. Com dois ponteiros por nó, isso
-> já é uma árvore binária, o assunto seguinte.
+> A alternativa **primeiro filho / próximo irmão** usa só dois ponteiros por nó
+> e aceita qualquer número de filhos (exemplo A194).
 
 > [!NOTE]
 > **Pergunta para você:** se você criar a pasta `2026` dentro de `2025`, o que
 > muda na saída? Quantas folhas e qual altura? E se criar `2026` dentro de
-> `musica`? Responda antes de mudar o código e rodar.
+> `musica`?
 
 {{pratique}}

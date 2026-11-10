@@ -1,52 +1,40 @@
 ## 0134 · Seleção de intervalos
 
-A quadra de futsal do condomínio só tem uma reserva por vez, e no sábado
-chegaram nove pedidos, cada um com hora de início e de fim. Não dá para
-atender todo mundo, porque alguns horários se chocam. O síndico quer aceitar
-o **maior número possível** de pedidos. Qual escolher?
+A quadra do condomínio atende uma reserva por vez, e no sábado chegaram nove
+pedidos, cada um com início e fim. Alguns horários se chocam. O síndico quer
+aceitar o **maior número possível** de pedidos. Quais?
 
-Esse é o problema da **seleção de atividades** (ou de intervalos): dado um
-conjunto de intervalos `[início, fim)`, escolher o maior subconjunto sem
-nenhum par que se sobreponha. Ele aparece em sala de reunião, agenda de
-consultório, uso de um equipamento caro, horários de uma emissora.
+É a **seleção de atividades**: dado um conjunto de intervalos `[início, fim)`,
+achar o maior subconjunto sem sobreposição.
 
-Testar todos os subconjuntos (assunto 0125) daria a resposta, mas são 2⁹ = 512
-para nove pedidos e mais de um bilhão para trinta. Um **guloso** resolve
-ordenando uma vez. A pergunta é: guloso por qual critério? Três parecem
-razoáveis:
+Testar todos os subconjuntos (0125) dá 512 casos para nove pedidos e mais de
+um bilhão para trinta. Um **guloso** ordena uma vez, mas por qual critério?
 
 - aceitar primeiro quem **começa** mais cedo;
 - aceitar primeiro o pedido mais **curto**;
 - aceitar primeiro quem **termina** mais cedo.
 
-Só o terceiro funciona sempre. A ideia: o pedido que termina primeiro é o que
-**devolve a quadra mais cedo**, e quadra livre cedo é o que deixa mais espaço
-para os outros. Dá para provar com uma troca: pegue qualquer escolha ótima e
-troque o primeiro pedido dela pelo que termina primeiro. Ele termina antes (ou
-junto), então não choca com nenhum dos outros escolhidos, e a escolha continua
-do mesmo tamanho. Repetindo para o resto, a escolha gulosa é tão boa quanto a
-ótima.
+Só o terceiro funciona sempre: o pedido que termina primeiro **devolve a
+quadra mais cedo** e deixa mais espaço. A prova é uma troca: numa escolha
+ótima, troque o primeiro pedido pelo que termina primeiro. Ele termina antes
+(ou junto), não choca com os outros e a escolha mantém o tamanho.
 
-O algoritmo (o `GREEDY-ACTIVITY-SELECTOR` do Cormen) fica assim:
+O algoritmo (`GREEDY-ACTIVITY-SELECTOR`, do Cormen):
 
 1. **ordene** os pedidos pela hora de **fim**;
 2. guarde a hora em que a quadra fica livre (`livre_em`, começando em 0);
-3. percorra os pedidos em ordem: se o pedido começa em `livre_em` ou depois,
-   **aceite** e mova `livre_em` para o fim dele; senão, recuse.
+3. percorra os pedidos: se começa em `livre_em` ou depois, **aceite** e mova
+   `livre_em` para o fim dele; senão, recuse.
 
-O custo é o da ordenação, O(n log n), mais uma passada O(n). Cada pedido é
-olhado uma vez, e a decisão é final.
+O custo é a ordenação, O(n log n), mais uma passada O(n).
 
-No desenho, cada barra é um pedido, na ordem em que o
-algoritmo olha para eles (por hora de fim). As verdes foram aceitas; as
-cinzas chocaram com alguém já aceito. Veja a Iara: o pedido dela começa
-antes de todos, às 7h, e é o primeiro que o critério "quem começa antes"
-aceitaria, bloqueando a quadra até as 17h:
+No desenho, verdes foram aceitas e cinzas chocaram com alguém aceito. O pedido
+da Iara (7h às 17h) seria o primeiro pelo critério "começa antes":
 
 {{ideia}}
 
-No código, os pedidos são structs, ordenados com `qsort` (assunto
-0096) por uma função que compara os fins:
+Os pedidos são structs, ordenados com `qsort` (0096) por uma função que
+compara os fins:
 
 ```c
 #include <stdio.h>
@@ -101,33 +89,25 @@ int main(void) {
 // Reservas aceitas: 5 de 9
 ```
 
-A Carla (10h às 11h) foi aceita logo depois da Ana (8h às 10h): os
-intervalos são **semiabertos**, e a Ana libera a quadra exatamente às 10h. Por
-isso o teste é `ini >= livre_em`, com o igual.
+A Carla (10h às 11h) entra logo depois da Ana (8h às 10h): os intervalos são
+**semiabertos** e a Ana libera a quadra às 10h. Por isso o teste é
+`ini >= livre_em`, com o igual.
 
-Depois da ordenação, o fluxograma é um laço com uma pergunta só. O
-caminho marcado mostra a Ana sendo aceita e o Bruno sendo recusado; o resto
-repete esses dois trajetos:
+No fluxograma, depois da ordenação, o laço tem uma pergunta só. O caminho
+marcado mostra a Ana aceita e o Bruno recusado:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Os outros dois critérios parecem bons e falham. "Começa primeiro" aceita a
-> Iara (7h às 17h) e depois só o Hugo cabe: 1 pedido em vez de 5. "Mais curto
-> primeiro" falha com três pedidos: 8h às 12h, 11h às 13h e 12h às 16h. O mais
-> curto (11h às 13h) choca com os outros dois e fica sozinho, quando os dois
-> compridos cabem juntos. Ordenar pelo campo errado é o erro mais comum, e o
-> programa roda sem reclamar: só a resposta fica pior.
+> Os outros critérios falham. "Começa primeiro" aceita a Iara (7h às 17h) e
+> depois só o Hugo cabe: 1 pedido em vez de 5. "Mais curto primeiro" falha com
+> 8h às 12h, 11h às 13h e 12h às 16h: o mais curto (11h às 13h) choca com os
+> outros dois, que cabem juntos. O programa roda sem reclamar; só a resposta
+> piora.
 
 > [!TIP]
-> **Por dentro do C:** o `qsort` move os elementos do vetor copiando bytes, e
-> cada `Reserva` tem 16 bytes (um ponteiro de 8 e dois `int` de 4). Para
-> structs grandes, vale ordenar um vetor de **ponteiros** para as structs: o
-> `qsort` passa a mover 8 bytes por troca, e a comparação recebe um
-> `const void *` que aponta para um ponteiro (`*(const Reserva * const *)a`).
-> E a comparação devolve `(x > y) - (x < y)`, e não `x->fim - y->fim`: com
-> horários tanto faz, mas com valores grandes a subtração pode estourar o
-> `int`.
+> **Por dentro do C:** compare com `(x > y) - (x < y)`, e não
+> `x->fim - y->fim`: a subtração pode estourar o `int`.
 
 > [!NOTE]
 > **Pergunta para você:** se o pedido do Hugo fosse das 14h às 18h, quantas

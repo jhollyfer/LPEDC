@@ -2,66 +2,51 @@
 
 # Módulo 22 · Árvores e conjuntos avançados
 
-No módulo 14, a árvore era quase sempre binária, morava na memória e guardava
-números. Este módulo tira as três rodinhas. Uma árvore pode ter **qualquer
-número de filhos** (o orçamento de uma obra, o sumário de uma apostila). Pode
-ser equilibrada com **um bit por nó** em vez de uma altura (a rubro-negra). Pode
-ter nós **gordos**, com centenas de chaves, para morar no disco (a árvore B dos
-bancos de dados). Pode ter arestas que **são letras** (a trie do autocompletar).
-E pode até ter as setas ao contrário, do filho para o pai, para responder "estes
-dois estão no mesmo grupo?" quase de graça (o union-find).
+No módulo 14, a árvore era binária e guardava números. Aqui o formato do nó
+muda conforme a operação que vai rodar milhões de vezes: **qualquer número de
+filhos** (orçamento de obra), **um bit por nó** (rubro-negra), **nós gordos**
+para o disco (árvore B), **arestas que são letras** (trie do autocompletar)
+ou **setas do filho para o pai** (union-find, "estes dois estão no mesmo
+grupo?").
 
-O que muda na cabeça é a pergunta que você faz antes de escolher a estrutura:
-em vez de "qual árvore eu sei programar?", vem "**qual operação vai rodar
-milhões de vezes?**". Busca exata, busca por prefixo, leitura em disco, união de
-grupos: cada uma pede um formato de nó diferente, e o formato do nó decide o
-custo.
-
-Quase tudo continua recursivo, e a árvore 2-3 aparece como o elo escondido entre
-duas delas: a rubro-negra é uma árvore 2-3 escrita com nós binários, e a árvore
-B é a mesma ideia com nós ainda maiores. No fim, um corretor ortográfico junta a
-trie com a distância de edição do módulo 21 e compara a trie com a hash e a BST
-no mesmo dicionário.
+A rubro-negra é uma árvore 2-3 escrita com nós binários, e a árvore B é a
+mesma ideia com nós maiores. O fim do módulo junta a trie com a distância de
+edição do módulo 21 num corretor ortográfico e compara trie, hash e BST.
 
 ## O que você vai aprender
 
-- representar **árvores gerais** com primeiro filho / próximo irmão e ver nelas uma árvore binária
-- a **rubro-negra esquerdista** (LLRB): as três regras, os três consertos e a árvore 2-3 por trás
-- a **árvore B**: nós com várias chaves, busca, **divisão** do nó cheio e inserção que cresce pela raiz
-- a **trie**: o prefixo como endereço, busca em O(tamanho da palavra) e **autocompletar**
-- o **union-find**: conjuntos disjuntos com **união por tamanho** e **compressão de caminho**
-- montar um **corretor ortográfico** e comparar trie, tabela hash e BST com números de verdade
+- **árvores gerais** com primeiro filho / próximo irmão
+- a **rubro-negra esquerdista** (LLRB): três regras, três consertos e a
+  árvore 2-3 por trás
+- a **árvore B**: busca, **divisão** do nó cheio e crescimento pela raiz
+- a **trie**: prefixo como endereço e **autocompletar**
+- o **union-find**: **união por tamanho** e **compressão de caminho**
+- um **corretor ortográfico** comparando trie, hash e BST
 
 ## Antes de começar
 
-Este módulo usa muito do que veio antes: **recursão** (0032 e 0033),
-**ponteiros para struct** (0062), `malloc`, `calloc` e `free` (0054 e 0055),
-**TAD** (0074), a **BST** e as **rotações da AVL** (0099 a 0101), a **tabela
-hash** (0105 a 0108) e a **distância de edição** (0142). A análise amortizada do
-0116 explica o "quase O(1)" do union-find.
+Você precisa de recursão (0032 e 0033), ponteiros para struct (0062),
+`malloc`, `calloc` e `free` (0054 e 0055), TAD (0074), BST e rotações da AVL
+(0099 a 0101), hash (0105 a 0108) e distância de edição (0142). A análise
+amortizada do 0116 explica o "quase O(1)" do union-find.
 
-Cada assunto tem um **TAD** na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
-`trie.h`, `uniao.h`, `corretor.h`). O texto mostra o pedaço do `.c` que
-importa; abra o `.c` inteiro também. O comando do exemplo compila junto os `.c` de apoio
-da pasta (como `trie.c`):
+Cada assunto tem um TAD na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
+`trie.h`, `uniao.h`, `corretor.h`). Compile junto os `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0147-trie/A293.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/A293 && ~/LPEDC/22-arvores-avancadas/0147-trie/A293
 ```
 
-Duas convenções valem para o módulo todo. **Altura conta arestas**, como no
-módulo 14: uma folha tem altura 0. E, na árvore B, o TAD usa o **grau mínimo**
-`t` (de `t - 1` a `2t - 1` chaves por nó). Outros livros falam em "ordem m"
-querendo dizer o número máximo de filhos (e o Ziviani, de m a 2m chaves por
-página); confira a convenção antes de comparar números. A rubro-negra do 0145
-é a **esquerdista** (LLRB); a clássica do Cormen, que é a que a prova do PPGI
-cobra, está no assunto 0177.
+Duas convenções valem para o módulo. **Altura conta arestas**, como no
+módulo 14: folha tem altura 0. Na árvore B, o TAD usa o **grau mínimo** `t`
+(de `t - 1` a `2t - 1` chaves por nó); outros livros usam "ordem m" (máximo
+de filhos) e o Ziviani usa m a 2m chaves por página, então confira a
+convenção. A rubro-negra do 0145 é a esquerdista; a clássica do Cormen, que
+a prova do PPGI cobra, está no 0177.
 
-Papel e lápis continuam obrigatórios. Na rubro-negra, desenhe a árvore 2-3
-junto; na árvore B, cada divisão; no union-find, as setas para o pai antes e
-depois de cada busca. Nos desenhos, o nó vermelho da rubro-negra é vermelho e
-o preto aparece em cinza; na trie, os nós verdes terminam uma palavra; no
-union-find, a raiz verde é o representante do grupo.
+Nos desenhos, o nó
+vermelho da rubro-negra é vermelho e o preto é cinza; na trie, nós verdes
+terminam palavra; no union-find, a raiz verde representa o grupo.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -76,47 +61,38 @@ union-find, a raiz verde é o representante do grupo.
 
 ## 0144 · Árvores gerais: primeiro filho, próximo irmão
 
-Você vai reformar o apartamento e o empreiteiro mandou o orçamento em tópicos:
-a reforma tem cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro
-tem box e louças; as louças têm vaso e cuba. Quanto custa o banheiro? E a obra
-toda? Cada tópico tem quantos subtópicos quiser, e o total de um tópico é a soma
-do que está embaixo dele.
+O empreiteiro mandou o orçamento da reforma em tópicos: a reforma tem
+cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro tem box e
+louças; as louças têm vaso e cuba. O total de um tópico é a soma do que está
+embaixo dele.
 
 Isso é uma **árvore geral** (ou n-ária): cada nó pode ter qualquer número de
-filhos. No módulo 14, o A193 guardou as pastas num vetor fixo de filhos
-(`filhos[4]`). Funciona até a pasta ganhar o quinto filho, e cada folha carrega
-quatro ponteiros que nunca usa.
+filhos. No módulo 14, o A193 usou um vetor fixo (`filhos[4]`), que trava no
+quinto filho e desperdiça ponteiros nas folhas.
 
-A saída clássica é a representação **primeiro filho / próximo irmão** (em
-inglês, *left-child right-sibling*). Cada nó guarda só dois ponteiros: `filho`
-aponta para o primeiro filho, e `irmao` aponta para o próximo filho do mesmo
-pai. Os filhos de um nó formam uma **lista encadeada** que começa em `filho` e
-segue pelos `irmao`.
+A saída é a representação **primeiro filho / próximo irmão** (*left-child
+right-sibling*). Cada nó guarda dois ponteiros: `filho`, para o primeiro filho,
+e `irmao`, para o próximo filho do mesmo pai. Os filhos formam uma **lista
+encadeada** que começa em `filho` e segue pelos `irmao`.
 
-Com dois ponteiros por nó, isso é uma **árvore binária** disfarçada. Leia `filho` como "esquerdo" e `irmao` como "direito" e
-qualquer árvore geral vira uma binária, sem perder nada. O nó tem o mesmo
-tamanho tenha ele zero ou cinquenta filhos.
-
-Visitar os filhos de um nó vira o laço de sempre da lista:
+Com dois ponteiros por nó, é uma **árvore binária**: `filho` faz o papel do
+esquerdo e `irmao`, do direito. Visitar os filhos é o laço da lista:
 
 ```c
 for (const NoG *p = r->filho; p != NULL; p = p->irmao) { ... }
 ```
 
-E as funções recursivas seguem o molde da árvore: resolva o próprio nó, peça a
-resposta de cada filho e junte. O total do orçamento é o valor do nó mais o
-total de cada filho, uma **pós-ordem**: os filhos ficam prontos antes do pai.
+As funções recursivas resolvem o nó, pedem a resposta de cada filho e juntam. O
+total do orçamento é o valor do nó mais o total de cada filho: uma
+**pós-ordem**, porque os filhos ficam prontos antes do pai.
 
-O orçamento da reforma tem 10 nós. Os tópicos que só
-agrupam (reforma, cozinha, banheiro, louças) têm valor 0; os itens têm preço.
-No desenho, em cima a árvore como você pensa nela; embaixo, como ela fica na
-memória, com as setas verdes descendo para o primeiro filho e as roxas andando
-para o irmão:
+O orçamento tem 10 nós; os tópicos que só agrupam valem 0. No desenho, em cima a
+árvore e embaixo a memória: setas verdes para o primeiro filho, roxas para o
+irmão:
 
 <p align="center"><img src="22-arvores-avancadas/0144-arvores-gerais/ideia.svg" alt="Diagrama da ideia: Árvores gerais: primeiro filho, próximo irmão" width="893"></p>
 
-O TAD fica em `arvgen.h` e `arvgen.c`. O nó e as duas funções recursivas que
-interessam aqui:
+O TAD está em `arvgen.h` e `arvgen.c`. O nó e as funções recursivas:
 
 ```c
 typedef struct NoG {
@@ -142,8 +118,8 @@ static void mostra(const NoG *r, int nivel) {
 }
 ```
 
-O cliente monta o orçamento com `ag_adiciona(pai, nome, valor)`, que pendura o
-filho novo no fim da fila de irmãos e devolve o ponteiro dele:
+`ag_adiciona(pai, nome, valor)` pendura o filho novo no fim da fila de
+irmãos e devolve o ponteiro dele:
 
 ```c
 #include <stdio.h>
@@ -182,37 +158,27 @@ int main(void) {
 // Itens: 10 | altura: 3 | grau da raiz: 3
 ```
 
-O fluxograma acompanha o `ag_total` chamado no banheiro. A soma começa no
-valor próprio (0), o laço visita o box (900) e as louças (que devolvem 700 depois
-de somar vaso e cuba) e para quando `p` chega em `NULL`, no fim da fila de
-irmãos. O banheiro devolve 1600:
+O fluxograma acompanha `ag_total` no banheiro. A soma começa em 0, o laço
+visita o box (900) e as louças (700) e para quando `p` chega a `NULL`. O
+banheiro devolve 1600:
 
 <p align="center"><img src="22-arvores-avancadas/0144-arvores-gerais/fluxograma.svg" alt="Fluxograma: Árvores gerais: primeiro filho, próximo irmão" width="481"></p>
 
 > [!WARNING]
-> O irmão está no **mesmo nível**, não embaixo. Quem escreve a altura no
-> estilo da árvore binária, `1 + maior(altura(r->filho), altura(r->irmao))`,
-> conta cada irmão como mais um andar. No orçamento, o caminho reforma,
-> cozinha, banheiro, box, louças, vaso, cuba vira uma escada de 6 degraus, e a
-> resposta sai 6 em vez de 3. Na árvore geral, só o `filho` desce um nível; o
-> `irmao` anda para o lado. O mesmo
-> cuidado vale para o total: `total(p->filho) + total(p->irmao)` soma também os
-> irmãos de `p`, que não são da subárvore dele.
+> O irmão está no **mesmo nível**. Na altura escrita como na binária,
+> `1 + maior(altura(r->filho), altura(r->irmao))`, cada irmão conta como um
+> andar: no orçamento, a resposta sai 6 em vez de 3. Só `filho` desce um nível.
+> Do mesmo modo, `total(p->filho) + total(p->irmao)` soma irmãos que não são da
+> subárvore de `p`.
 
 > [!TIP]
-> **Por dentro do C:** o `NoG` tem 40 bytes: 20 do nome, 4 do `int` e dois
-> ponteiros de 8 bytes (os 20 + 4 = 24 já caem num múltiplo de 8, então não
-> sobra enchimento). A reforma inteira cabe em 400 bytes, e uma pasta com 50
-> filhos usaria os mesmos 40. Com um vetor fixo de 10 filhos, cada nó teria 104
-> bytes e travaria no 11º filho. O preço dos dois ponteiros é o acesso: achar o
-> k-ésimo filho custa k passos pela lista de irmãos, e `ag_adiciona` anda até o
-> último irmão antes de pendurar o novo (inserir no começo seria O(1), mas
-> inverteria a ordem dos filhos).
+> O `NoG` tem 40 bytes, com qualquer número de filhos. O preço é o acesso:
+> achar o k-ésimo filho custa k passos pela lista de irmãos.
 
 > [!NOTE]
 > **Pergunta para você:** se o empreiteiro acrescentar `ag_adiciona(loucas,
-> "torneira", 150)`, quais linhas da saída mudam? E se a torneira for
-> pendurada na `pintura`? Pense na altura e no grau da raiz nos dois casos.
+> "torneira", 150)`, quais linhas da saída mudam? E se a torneira for pendurada
+> na `pintura`? Pense na altura e no grau da raiz nos dois casos.
 
 ### Hora de praticar
 
@@ -366,9 +332,21 @@ gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/A288.c ~/LPEDC/22-arvores-a
 
 **Exercício E859** · ★☆☆
 
-A lista de compras do churrasco está numa árvore geral (arvgen.h). Complete
-folhas(r), que conta os nós sem filhos (os itens que vão para o carrinho),
-e grupos(r), que conta os nós com pelo menos um filho (a raiz entra).
+A lista de compras do churrasco é uma árvore geral (arvgen.h). Monte-a no
+main com ag_cria e ag_adiciona:
+
+
+```text
+churrasco
+  carnes: picanha 120, linguica 35, frango 28
+  bebidas: refri 24, cerveja 60
+  carvao 30
+```
+
+
+Os grupos (churrasco, carnes e bebidas) valem 0. Escreva folhas(r), que conta
+os nós sem filhos (os itens do carrinho), e grupos(r), que conta os nós com
+pelo menos um filho (a raiz entra). Mostre também o total com ag_total.
 
 
 ```text
@@ -378,48 +356,26 @@ Grupos (nós com filhos): 3
 Total: R$ 297
 ```
 
-**Dicas:**
-
-1. Um nó é folha quando r->filho == NULL. Não olhe para r->irmao: o irmão
-   não diz nada sobre r ter ou não filhos.
-2. Siga o molde de ag_conta no arvgen.c: some a resposta de cada filho com
-   o laço for (p = r->filho; p != NULL; p = p->irmao).
-3. Resposta esperada: a saída acima (picanha, linguica, frango, refri,
-   cerveja e carvao são as folhas; churrasco, carnes e bebidas, os grupos).
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E859.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E859 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E859
 ```
 
-**Exercício E860** · ★☆☆
+**Exercício E861** · ★★☆
 
-A lista de material escolar está numa árvore geral (arvgen.h). Escreva
-mais_caro(r): devolve um ponteiro para a FOLHA de maior valor da subárvore
-de r. Depois use a mesma função em duas subárvores, achadas com ag_busca.
+O orçamento de uma reforma é uma árvore geral (arvgen.h). Monte-a no main:
 
 
 ```text
-Saída esperada:
-Mais caro da lista: mochila (R$ 120)
-Mais caro em livros: gramatica (R$ 89)
-Mais caro em papelaria: estojo (R$ 25)
+reforma
+  cozinha: piso 1800, pia 650
+  banheiro: box 900, loucas (vaso 420, cuba 280)
+  pintura 1200
 ```
 
-**Dicas:**
 
-1. Se r não tem filho, a resposta é o próprio r.
-2. Senão, comece com melhor = NULL e, para cada filho p, pegue
-   c = mais_caro(p); se melhor for NULL ou c->valor > melhor->valor, troque.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E860.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E860 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E860
-```
-
-**Exercício E861** · ★★☆
-
-No orçamento da reforma (a árvore do texto), escreva caminho(r, nome): ela
-mostra a trilha da raiz até o item, separada por " > ", e a profundidade
-do item. Se o item não existir, avisa.
+Escreva caminho(r, nome): mostra a trilha da raiz até o item, separada por "
+> ", e a profundidade do item. Se o item não existir, avisa. Teste com vaso,
+pia, reforma e janela.
 
 
 ```text
@@ -430,27 +386,28 @@ reforma: reforma (profundidade 0)
 janela: não encontrado
 ```
 
-**Dicas:**
-
-1. Use um vetor de ponteiros como pilha: const NoG *trilha[32]. Uma função
-   recursiva acha(r, nome, trilha, nivel) põe r em trilha[nivel]; se r é o
-   item, devolve nivel; senão tenta cada filho com nivel + 1.
-2. Se nenhum filho achou, devolva -1. O que ficou em trilha[0..nivel] na
-   volta é exatamente o caminho (as posições de quem falhou são
-   sobrescritas pelos próximos irmãos).
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E861.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E861 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E861
 ```
 
 **Exercício E862** · ★★☆
 
-A árvore genealógica de seu Joaquim está numa árvore geral (arvgen.h). Para
-a foto da festa, os netos querem a família arrumada por geração. Escreva:
-- conta_nivel(r, alvo): quantas pessoas estão na profundidade alvo;
-- mostra_nivel(r, alvo): imprime os nomes dessa profundidade, da esquerda
- para a direita.
-No main, use ag_altura para saber quantas gerações existem.
+A árvore genealógica de seu Joaquim é uma árvore geral (arvgen.h). Monte-a no
+main:
+
+
+```text
+Joaquim
+  Rosa: Paulo, Rita (Leo)
+  Jorge: Nina, Otto, Pedro
+  Vera
+```
+
+
+Para a foto da festa, escreva conta_nivel(r, alvo), que conta as pessoas na
+profundidade alvo, e mostra_nivel(r, alvo), que imprime os nomes dessa
+profundidade, da esquerda para a direita. No main, use ag_altura para saber
+quantas gerações existem.
 
 
 ```text
@@ -461,74 +418,31 @@ Geração 2 (5): Paulo Rita Nina Otto Pedro
 Geração 3 (1): Leo
 ```
 
-**Dicas:**
-
-1. Desça subtraindo: se alvo == 0, r é da geração procurada. Senão, peça
-   a cada filho a geração alvo - 1.
-2. As gerações vão de 0 até ag_altura(r).
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E862.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E862 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E862
 ```
 
-**Exercício E863** · ★★★
-
-Ache o bug. A lanchonete tira itens do cardápio com remove_filho(pai,
-nome): a função acha o filho na fila de irmãos, solta esse filho da fila
-e libera a subárvore dele inteira. Este código tem UM erro: rode e veja o
-AddressSanitizer acusar heap-use-after-free. Conserte a função e rode de
-novo até sair limpo.
-
-
-```text
-Saída esperada:
-cardapio: 76
-  lanches: 54
-    xburguer: 22
-    xsalada: 20
-    misto: 12
-  bebidas: 14
-    suco: 9
-    cafe: 5
-  sobremesas: 8
-    pudim: 8
-Tirou bebidas: sim
-Tirou misto: não (não é filho direto do cardapio)
-Tirou misto de lanches: sim
-cardapio: 50
-  lanches: 42
-    xburguer: 22
-    xsalada: 20
-  sobremesas: 8
-    pudim: 8
-```
-
-**Dicas:**
-
-1. Leia o relatório do sanitizer: ele mostra a linha do acesso proibido e
-   a linha do free que devolveu aquela memória.
-2. Depois de ag_libera(p), o nó p não existe mais. Quais campos de p o
-   código ainda lê depois disso?
-3. Resposta esperada: o religamento (pai->filho = p->irmao ou
-   ant->irmao = p->irmao) tem que vir ANTES de ag_libera(p). Com a ordem
-   trocada, a saída é a de cima.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E863.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E863 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E863
-```
-
 **Exercício E864** · ★★★
 
-Monte a árvore pela entrada. Cada linha tem "pai nome valor"; na primeira,
-o pai é "-" e o nome é a raiz. Um filho novo entra no fim da fila de
-irmãos do pai. Se o pai não existir, avise e ignore a linha. No fim,
-mostre a árvore (ag_mostra), o número de nós, a altura e qual filho da raiz
-tem o maior total. Sem nenhuma linha, mostre "Árvore vazia".
+Monte uma árvore geral (arvgen.h) pela entrada. Cada linha tem "pai nome
+valor"; na primeira, o pai é "-" e o nome é a raiz. Um filho novo entra no
+fim da fila de irmãos do pai. Se o pai não existir, avise e ignore a linha.
+No fim, mostre a árvore (ag_mostra), o número de nós, a altura e qual filho
+da raiz tem o maior total. Sem nenhuma linha, mostre "Árvore vazia".
 
-Teste com:
 
 ```text
-gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864 && printf -- '- casamento 0\ncasamento buffet 0\nbuffet salgados 1800\nbuffet bolo 950\ncasamento decoracao 0\ndecoracao flores 1200\nigreja padre 300\ndecoracao luzes 400\ncasamento musica 2500\nbuffet doces 700\n' | ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864
+Entrada:
+- casamento 0
+casamento buffet 0
+buffet salgados 1800
+buffet bolo 950
+casamento decoracao 0
+decoracao flores 1200
+igreja padre 300
+decoracao luzes 400
+casamento musica 2500
+buffet doces 700
 ```
 
 
@@ -549,15 +463,6 @@ Itens: 9 | altura: 2
 Maior gasto: buffet (R$ 3450)
 ```
 
-**Dicas:**
-
-1. Leia cada linha com fgets e separe com sscanf(linha, "%19s %19s %d",
-   pai, nome, &valor) == 3. Linha que não casa, ignore.
-2. A primeira linha válida cria a raiz com ag_cria. Nas outras, ag_busca
-   acha o pai e ag_adiciona pendura o filho.
-3. Para o maior gasto, ande pelos filhos da raiz comparando ag_total.
-   Resposta esperada: a saída acima. Não esqueça do ag_libera no fim.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864
 ```
@@ -566,49 +471,38 @@ gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864.c ~/LPEDC/22-arvores-a
 
 ## 0145 · Rubro-negra esquerdista (LLRB): inserção
 
-A cancela do condomínio abre pela tag do carro. O síndico cadastra tags novas a
-qualquer hora (morador novo, carro trocado, visita frequente), e a consulta tem
-que ser instantânea quando o carro encosta. Uma BST comum degenera se as tags
-chegarem em ordem. A AVL resolve, mas guarda a altura em cada nó e tem quatro
-casos de rotação para lembrar. Existe uma árvore equilibrada mais enxuta: a
-**rubro-negra**, a que mais aparece em sistemas reais (o escalonador de
-processos do Linux usa uma).
+O síndico cadastra as tags da cancela do condomínio a qualquer hora. Uma BST
+degenera se as tags chegarem em ordem; a AVL resolve, mas guarda alturas e tem
+quatro casos de rotação. A **rubro-negra** é mais simples.
 
-A ideia por trás dela é outra árvore, a **árvore 2-3**. Nela, um nó guarda **uma
-chave** (e tem 2 filhos) ou **duas chaves** (e tem 3 filhos). Toda chave nova
-entra numa folha; se a folha ficar com três chaves, ela estoura: a do meio sobe
-para o pai e as outras duas viram nós separados. Como a árvore só cresce quando
-a raiz estoura, **todas as folhas ficam sempre no mesmo nível**. Equilíbrio
-perfeito, mas nós de dois tamanhos são chatos de programar.
+Ela se apoia na **árvore 2-3**: um nó tem **uma chave** (2 filhos) ou **duas**
+(3 filhos). Toda chave entra numa folha; com três chaves, a folha estoura: a do
+meio sobe e as outras duas viram nós separados. A árvore só cresce quando a raiz
+estoura, então **todas as folhas ficam no mesmo nível**.
 
-A **rubro-negra esquerdista** (em inglês, *left-leaning red-black*, LLRB) guarda
-a árvore 2-3 em nós binários comuns. Um nó de duas chaves `[a b]` vira o `b`
-com o `a` pendurado à esquerda por um **link vermelho**. Os outros links são
-**pretos**. Cada nó guarda a cor do link que chega nele: um `bool vermelho`, um
-bit de informação.
+A **rubro-negra esquerdista** (*left-leaning red-black*, LLRB) guarda a árvore
+2-3 em nós binários. Um nó `[a b]` vira o `b` com o `a` pendurado à esquerda por
+um **link vermelho**; os outros links são **pretos**. Cada nó guarda a cor do
+link que chega nele (`bool vermelho`).
 
 As regras da LLRB são a árvore 2-3 escrita em cores:
 
 1. link vermelho **só à esquerda**;
-2. nunca **dois vermelhos seguidos** (um nó de três chaves não existe na 2-3);
+2. nunca **dois vermelhos seguidos** (nó de três chaves não existe na 2-3);
 3. todo caminho da raiz até um `NULL` passa pelo **mesmo número de nós pretos**
    (a **altura preta**), porque na 2-3 todas as folhas estão no mesmo nível.
 
-A raiz é sempre preta. Com essas regras, o caminho mais longo é no máximo o
-dobro do mais curto (preto, vermelho, preto, vermelho...), e a altura fica
-abaixo de 2 · log₂(n + 1).
+A raiz é sempre preta. O caminho mais longo tem no máximo o dobro do mais curto,
+e a altura fica abaixo de 2 · log₂(n + 1).
 
 > [!NOTE]
-> Esta é a variante de Sedgewick, não a do Cormen. A rubro-negra **clássica**
-> do Cormen (e da prova do PPGI) põe a cor no **nó**, aceita vermelho dos dois
-> lados (ela equivale à árvore 2-3-4, não à 2-3), usa folhas `NIL` pretas e
-> conserta a inserção pelos casos do **tio**, com no máximo duas rotações. As
-> cinco propriedades e o limite de altura 2 · lg(n + 1) são os mesmos. Ela
-> tem assunto próprio, o 0177.
+> Esta é a de Sedgewick. A rubro-negra **clássica** do Cormen (a da
+> prova do PPGI) põe a cor no **nó**, aceita vermelho dos dois lados (equivale à
+> árvore 2-3-4), usa folhas `NIL` pretas e conserta a inserção pelos casos do
+> **tio**, com no máximo duas rotações. Veja o assunto 0177.
 
-A inserção começa como na BST e pendura um nó **vermelho** (a chave nova se
-cola num nó 2-3 que já existe). Isso pode quebrar uma regra. Na volta da
-recursão, cada ancestral aplica três consertos, **nesta ordem**:
+A inserção pendura um nó **vermelho**, como na BST. Na volta da recursão, cada
+ancestral aplica três consertos, **nesta ordem**:
 
 | Situação em `h` | Conserto | Na árvore 2-3 |
 | --- | --- | --- |
@@ -616,19 +510,16 @@ recursão, cada ancestral aplica três consertos, **nesta ordem**:
 | filho esquerdo e neto esquerdo vermelhos | rotação à direita | arruma um nó de 3 chaves temporário |
 | os dois filhos vermelhos | inverte as cores | o nó de 3 chaves estoura e a do meio sobe |
 
-A **inversão de cores** pinta os dois filhos de preto e `h` de vermelho: o
-vermelho que sobe é a chave do meio indo para o pai. Lá em cima, ele pode
-disparar os consertos de novo, como a divisão que sobe na 2-3.
+A **inversão de cores** pinta os dois filhos de preto e `h` de vermelho: a chave
+do meio sobe para o pai, onde pode disparar os consertos de novo.
 
-No desenho, o síndico cadastra as tags 30, 10 e 20. A 20 entra à
-direita do 10 e forma um zigue-zague: os três consertos acontecem um atrás do
-outro. Depois, com as tags 50 e 40, a árvore fica com o 20 vermelho colado no
-40, que é o nó 2-3 `[20 40]`:
+No desenho, as tags 30, 10 e 20 formam um zigue-zague e disparam os três
+consertos. Com as tags 50 e 40, o 20 vermelho fica colado no 40, o nó 2-3
+`[20 40]`:
 
 <p align="center"><img src="22-arvores-avancadas/0145-rubro-negra/ideia.svg" alt="Diagrama da ideia: Rubro-negra esquerdista (LLRB): inserção" width="858"></p>
 
-A inserção do `rubronegra.c`. A rotação é a mesma da AVL, com uma novidade: a
-cor do link vai junto com quem sobe:
+A inserção de `rubronegra.c`. A rotação é a da AVL, e a cor do link sobe junto:
 
 ```c
 static NoRN *gira_esquerda(NoRN *h) {
@@ -670,8 +561,8 @@ NoRN *rn_insere(NoRN *raiz, int chave) {
 }
 ```
 
-`eh_vermelho(NULL)` devolve `false`: o `NULL` conta como preto. O cliente
-cadastra as tags e mostra a árvore em pré-ordem, com `*` nos nós vermelhos:
+`eh_vermelho(NULL)` devolve `false`: `NULL` conta como preto. O cliente
+cadastra as tags e mostra a árvore em pré-ordem, com `*` nos vermelhos:
 
 ```c
 #include <stdio.h>
@@ -701,16 +592,16 @@ int main(void) {
 // Altura 2, altura preta 2
 ```
 
-No fluxograma estão os três `if` da volta, em sequência, e não um
-`else if`. O caminho verde é o do nó 30 quando a tag 20 chega: o primeiro
-conserto já foi feito lá embaixo, no 10; no 30 entram o segundo e o terceiro:
+O fluxograma mostra os três `if` da volta. O caminho verde é o do nó 30 quando
+a tag 20 chega: o 10 já fez o primeiro conserto, e o 30 faz o segundo e o
+terceiro:
 
 <p align="center"><img src="22-arvores-avancadas/0145-rubro-negra/fluxograma.svg" alt="Fluxograma: Rubro-negra esquerdista (LLRB): inserção" width="412"></p>
 
 ### Passo a passo
 
-A tag 40 mostra o vermelho subindo. Ela desce 20, 50, 30 e vira filha direita
-(vermelha) do 30, que também é vermelho:
+A tag 40 desce 20, 50, 30 e vira filha direita vermelha do 30, que também é
+vermelho:
 
 | Nó na volta | O que encontra | Conserto | Como fica a subárvore |
 | --- | --- | --- | --- |
@@ -719,34 +610,21 @@ A tag 40 mostra o vermelho subindo. Ela desce 20, 50, 30 e vira filha direita
 | 40 | dois filhos vermelhos | inverte as cores | 40* com 30 e 50 pretos |
 | 20 | filho direito 40 vermelho | rotação à esquerda | 40 com 20* (10, 30) e 50 |
 
-Três rotações e uma inversão para uma inserção: é o pior caso deste exemplo. Na
-média, a LLRB faz bem menos trabalho, e a árvore 2-3 por trás dela continua com
-todas as folhas no mesmo nível.
+Três rotações e uma inversão neste exemplo.
 
 > [!WARNING]
-> A cor é do **link**, não do nó em si. Na rotação, quem sobe ocupa o lugar de
-> quem desce e tem que herdar a cor dele (`x->vermelho = h->vermelho`). Sem
-> essa linha, um nó vermelho vira raiz de subárvore no lugar de um preto, a
-> altura preta se desencontra e a árvore volta a crescer torta (é o bug do
-> E869). O outro esquecimento clássico é a raiz: depois de uma inversão de
-> cores no topo, ela fica vermelha. Por isso `rn_insere` pinta a raiz de preto
-> no fim de **toda** inserção.
+> Na rotação, quem sobe herda a cor de quem desce (`x->vermelho = h->vermelho`);
+> sem essa linha, a altura preta se desencontra. Outro erro: a raiz fica
+> vermelha após uma inversão no topo, por isso `rn_insere` a pinta de preto em
+> **toda** inserção.
 
 > [!TIP]
-> **Por dentro do C:** um `bool` ocupa 1 byte, mas o `NoRN` tem 24 bytes, os
-> mesmos da AVL: 4 da chave, 1 da cor, 3 de enchimento e dois ponteiros de 8.
-> A cor só precisa de 1 bit, e o kernel do Linux aproveita isso: como todo nó
-> começa num endereço múltiplo de 4, os dois bits mais baixos de um ponteiro
-> para nó são sempre 0, e ele guarda a cor no bit mais baixo do ponteiro para o
-> pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas
-> esse truque fica para o sistema operacional. A vantagem da LLRB está em
-> outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
-> e não recalcula alturas.
+> O `NoRN` tem 24 bytes, como o da AVL.
 
 > [!NOTE]
-> **Pergunta para você:** se o síndico cadastrar as tags 10, 20, 30, 40, 50, 60
-> e 70, nesta ordem, qual tag fica na raiz e quantos nós vermelhos sobram no
-> fim? Desenhe a árvore 2-3 de cada passo e confira com o `rn_pre_ordem`.
+> **Pergunta para você:** com as tags 10, 20, 30, 40, 50, 60 e 70, nesta ordem,
+> qual fica na raiz e quantos nós vermelhos sobram? Desenhe a árvore 2-3 de cada
+> passo e confira com o `rn_pre_ordem`.
 
 ### Hora de praticar
 
@@ -877,9 +755,9 @@ gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/A290.c ~/LPEDC/22-arvores-avan
 **Exercício E865** · ★☆☆
 
 Insira os códigos de 1 a 10, em ordem, numa rubro-negra (rubronegra.h) e
-escreva conta_vermelhos(r), que devolve quantos nós vermelhos a árvore
-tem. Mostre também quantos são pretos (use o total de nós, que você conta
-com outra função curta, conta_nos).
+escreva conta_vermelhos(r), que devolve quantos nós vermelhos a árvore tem.
+Escreva também conta_nos(r) e mostre quantos nós são pretos. Mostre ainda a
+pré-ordem (rn_pre_ordem) numa linha que começa com "pré:".
 
 
 ```text
@@ -888,51 +766,16 @@ pré: 4 2 1 3 8 6* 5 7 10 9*
 nós: 10 | vermelhos: 2 | pretos: 8
 ```
 
-**Dicas:**
-
-1. conta_vermelhos: vazia dá 0; senão, (r->vermelho ? 1 : 0) mais a
-   contagem das duas subárvores.
-2. Cada vermelho é a "segunda chave" de um nó 2-3. Com 10 chaves e 8 nós
-   pretos, a árvore 2-3 equivalente tem 8 nós.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E865.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E865 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E865
 ```
 
-**Exercício E866** · ★☆☆
-
-O estoque guarda os códigos de produto de 1 a 100 numa rubro-negra
-(rubronegra.h), inseridos em ordem crescente. Escreva passos(r, chave):
-quantos nós a busca visita até achar a chave ou cair num NULL. Teste com
-1, 50, 64, 100 e 101 e, no fim, descubra o pior caso entre os 100 códigos.
-
-
-```text
-Saída esperada:
-busca   1: achou (passos: 7)
-busca  50: achou (passos: 6)
-busca  64: achou (passos: 1)
-busca 100: achou (passos: 6)
-busca 101: não achou (passos: 6)
-pior caso entre as 100: 7 passos (altura 6)
-```
-
-**Dicas:**
-
-1. É a busca da BST com um contador: a cor não muda nada na busca.
-2. Some 1 a cada nó visitado; pare quando achar ou quando r ficar NULL.
-3. O 64 é a raiz: inserindo em ordem
-   crescente, a raiz cai numa potência de 2 (teste com 10 e com 1000).
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E866.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E866 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E866
-```
-
 **Exercício E867** · ★★☆
 
-Escreva confere(r), o fiscal da rubro-negra esquerdista. Ela devolve a
-altura preta (quantos nós pretos há da raiz até um NULL) se as três regras
-valerem, ou um código negativo dizendo a primeira regra quebrada que achar:
+Escreva confere(r), o fiscal da rubro-negra esquerdista. Ela devolve a altura
+preta (quantos nós pretos há da raiz até um NULL) se as três regras valerem,
+ou um código negativo com a primeira regra quebrada que achar:
+
 
 ```text
 -1: um link vermelho à direita;
@@ -940,7 +783,20 @@ valerem, ou um código negativo dizendo a primeira regra quebrada que achar:
 -3: dois caminhos com quantidades diferentes de nós pretos.
 ```
 
-O main já monta quatro árvores: uma pelo TAD e três à mão, com no().
+
+Teste com quatro árvores: a do TAD (rubronegra.h) com as chaves de 1 a 20 e
+três montadas à mão com malloc (escreva uma função no(chave, vermelho, esq,
+dir)), cada nó dado como chave/cor:
+
+
+```text
+A: 20 preto, filho esquerdo 10 preto, filho direito 30 vermelho
+B: 30 preto, esquerdo 20 vermelho (com filho esquerdo 10 vermelho),
+   direito 40 preto
+C: 20 preto, esquerdo 10 preto (com filho esquerdo 5 preto),
+   direito 30 preto sem filhos
+```
+
 
 
 ```text
@@ -951,27 +807,25 @@ TAD (1 a 20): ok, altura preta 4
 Árvore C: quebra a regra 3
 ```
 
-**Dicas:**
-
-1. NULL devolve 0 (é preto, mas não conta). Se r->dir é vermelho, -1. Se
-   r e r->esq são vermelhos, -2.
-2. Peça confere das duas subárvores; se alguma for negativa, repasse. Se
-   forem diferentes, -3. Senão, devolva o valor + (r é preto ? 1 : 0).
-3. Cada nó é visitado uma vez só: O(n).
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E867.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E867 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E867
 ```
 
 **Exercício E868** · ★★☆
 
-Estenda o programa. A eleição do síndico usa uma rubro-negra para guardar
-os números votados, mas a inserção abaixo IGNORA número repetido, e a
-apuração precisa contar. Faça três mudanças:
-1. em insere, quando o número já existir, some 1 em qtd;
-2. escreva apura(r): mostra cada número votado, em ordem crescente, com a
- quantidade de votos ("voto" no singular quando for 1);
-3. escreva vencedor(r): devolve o nó com mais votos.
+A eleição do síndico guarda os números votados numa rubro-negra esquerdista
+que você escreve do zero. Cada nó tem numero e qtd (quantos votos): número
+repetido não cria nó novo, só soma 1 em qtd. Escreva insere, apura(r), que
+mostra cada número em ordem crescente com a quantidade ("voto" no singular
+quando for 1), e vencedor(r), que devolve o nó com mais votos.
+
+A urna tem estes 12 votos, na ordem:
+
+
+```text
+45 12 45 13 30 12 45 13 45 30 12 99
+```
+
 
 
 ```text
@@ -984,47 +838,8 @@ Saída esperada:
 Vencedor: 45 com 4 de 12 votos
 ```
 
-**Dicas:**
-
-1. A contagem cabe no else que hoje não faz nada (chave igual). O
-   novo() já começa qtd em 1.
-2. apura é um percurso em ordem. vencedor compara o nó com o melhor de
-   cada lado (cuidado com os NULL).
-3. A árvore guarda 5 nós, não 12: o
-   tamanho dela depende dos números diferentes, não do total de votos.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E868.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E868 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E868
-```
-
-**Exercício E869** · ★★★
-
-Ache o bug. O cartório guarda as senhas do dia numa rubro-negra escrita à
-mão, sem o TAD. Ela tem UM erro numa das rotações. O programa insere as
-senhas 101 a 112, em ordem, e chama um fiscal que confere as regras. Rode,
-veja o fiscal reclamar e a árvore crescer demais, conserte e rode de novo.
-
-
-```text
-Saída esperada:
-pré: 108 104* 102 101 103 106 105 107 110 109 112 111*
-altura 3, altura preta 3
-fiscal: regras ok
-```
-
-**Dicas:**
-
-1. Desenhe a árvore depois de inserir 101, 102, 103 e 104 com o código como
-   está, e depois com o que a rotação deveria fazer.
-2. Na rotação, o nó que sobe passa a receber o link que chegava no nó que
-   desce. Esse link pode ser preto ou vermelho: a cor tem que ir junto.
-3. Resposta esperada: falta "x->vermelho = h->vermelho;" em vira_esq
-   (compare com vira_dir). Sem ela, o nó que sobe continua vermelho
-   mesmo quando ocupa o lugar de um nó preto, e o vermelho fica à direita.
-   Com a linha de volta, a saída é a de cima.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E869.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E869 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E869
 ```
 
 **Exercício E870** · ★★★
@@ -1051,16 +866,6 @@ Altura 3, altura preta 3
 Lia: na lista | Rafa: fora
 ```
 
-**Dicas:**
-
-1. Struct com char nome[20], bool vermelho, esq e dir. As rotações e a
-   inversão de cores não olham a chave: copie a lógica do texto.
-2. Na inserção, guarde int cmp = strcmp(nome, h->nome) e decida pelo sinal.
-   Para copiar o nome para o nó, use snprintf(n->nome, sizeof n->nome,
-   "%s", nome).
-3. Não esqueça de pintar a raiz de preto
-   depois de cada inserção e de liberar tudo no fim.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E870.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E870 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E870
 ```
@@ -1069,54 +874,44 @@ gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E870.c ~/LPEDC/22-arvores-avan
 
 ## 0146 · Árvore B: busca, divisão e inserção
 
-A biblioteca municipal pôs o acervo inteiro no computador: milhões de fichas,
-guardadas no disco, porque não cabem na memória. Ler do disco é lento: um HD
-leva uns 10 milissegundos para buscar um bloco, tempo em que o processador faz
-milhões de comparações. Numa AVL com 2 milhões de livros, a busca desce uns 21
-nós, e se cada nó estiver num bloco diferente são 21 idas ao disco. Para o
-disco, **ler poucos nós** importa mais do que comparar pouco.
+O acervo de uma biblioteca tem milhões de fichas no disco. Um HD leva uns 10
+milissegundos por bloco. Numa AVL com 2 milhões de livros, a busca desce uns 21
+nós, e cada nó pode ser uma ida ao disco. Importa **ler poucos nós**.
 
-A **árvore B** resolve isso com nós gordos. Cada nó guarda **várias chaves em
-ordem** e tem um filho a mais do que chaves: com as chaves `[40 70]`, o filho
-0 tem as menores que 40, o filho 1 as que ficam entre 40 e 70, e o filho 2 as
-maiores que 70. É uma BST em que cada nó decide entre muitos caminhos de uma
-vez. Num banco de dados, um nó ocupa um bloco do disco e guarda centenas de
-chaves; a árvore fica com altura 3 ou 4 mesmo com bilhões de registros.
+A **árvore B** usa nós gordos. Cada nó guarda **várias chaves em ordem** e tem
+um filho a mais do que chaves: com `[40 70]`, o filho 0 tem as chaves menores
+que 40, o filho 1 as entre 40 e 70, e o filho 2 as maiores que 70. Num banco de
+dados, um nó ocupa um bloco do disco.
 
-O tamanho do nó é dado pelo **grau mínimo** `t`:
+O **grau mínimo** `t` define o tamanho do nó:
 
 - todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves (a raiz pode ter 1);
 - um nó com `k` chaves que não é folha tem `k + 1` filhos;
 - **todas as folhas ficam no mesmo nível**.
 
-O TAD do curso usa `t = 2`: de 1 a 3 chaves por nó, de 2 a 4 filhos (é a
-chamada árvore 2-3-4). Na vida real, `t` passa de 100. Como cada nó abaixo
-da raiz tem pelo menos `t` filhos, o Cormen prova que uma árvore B com `n`
-chaves tem altura `h ≤ log_t((n + 1) / 2)`.
+O TAD usa `t = 2`: de 1 a 3 chaves por nó, de 2 a 4 filhos (a árvore 2-3-4).
+Como cada nó abaixo da raiz tem pelo menos `t` filhos, a altura de uma árvore B
+com `n` chaves é `h ≤ log_t((n + 1) / 2)` (Cormen).
 
-A **busca** é a da BST com um laço dentro do nó: ande pelas chaves até achar
-uma maior ou igual. Se for igual, achou; senão, desça pelo filho daquela
-posição. Lê um nó por nível: altura + 1 nós no total.
+A **busca** é a da BST com um laço dentro do nó: ande até achar uma chave maior
+ou igual. Se for igual, achou; senão, desça pelo filho daquela posição. Lê um nó
+por nível: altura + 1 nós.
 
-A **inserção** sempre põe a chave numa folha. O problema é a folha cheia. A
-solução é a **divisão**: um nó com `2t - 1` chaves se parte em dois nós de
-`t - 1` chaves, e a **chave do meio sobe** para o pai. Para o pai nunca estar
-cheio nessa hora, o TAD divide **na descida**: todo nó cheio que aparece no
-caminho é dividido antes de a chave descer por ele. Quando a raiz está cheia,
-ela se divide e a chave do meio vira uma raiz nova. A árvore B cresce por
-cima, nunca por baixo, e por isso as folhas continuam todas no mesmo nível.
+A **inserção** põe a chave numa folha. Se a folha está cheia, ocorre a
+**divisão**: o nó com `2t - 1` chaves vira dois nós de `t - 1` chaves, e a
+**chave do meio sobe** para o pai. Para o pai nunca estar cheio, o TAD divide
+**na descida** todo nó cheio do caminho; a raiz cheia se divide e a chave do
+meio vira a raiz nova. A árvore cresce por cima, e as folhas ficam no mesmo
+nível.
 
-No exemplo, o bibliotecário cadastra 11 livros, nesta ordem: 40, 10,
-70, 20, 50, 80, 30, 60, 90, 25 e 85. Quando o 25 chega, a raiz é `[40 70]` e a
-folha do caminho, `[10 20 30]`, está cheia: ela se divide, o 20 sobe e o 25
-entra na metade da direita. Quando o 85 chega, a raiz `[20 40 70]` é que está
-cheia: ela se divide, o 40 vira raiz nova e a árvore ganha um nível. No fim, a
-busca pelo 60 lê três nós:
+Exemplo: 11 livros, na ordem 40, 10, 70, 20, 50, 80, 30, 60, 90, 25 e 85. O 25
+encontra a folha `[10 20 30]` cheia: ela se divide e o 20 sobe. O 85 encontra a
+raiz `[20 40 70]` cheia: ela se divide e o 40 vira a raiz nova. A busca pelo 60
+lê três nós:
 
 <p align="center"><img src="22-arvores-avancadas/0146-arvore-b/ideia.svg" alt="Diagrama da ideia: Árvore B: busca, divisão e inserção" width="899"></p>
 
-A divisão e a inserção na raiz, no `arvoreb.c` (`AB_T` é o `t`, e `AB_MAX`,
-`2t - 1`):
+A divisão e a inserção na raiz, em `arvoreb.c` (`AB_T` é o `t`; `AB_MAX`, `2t - 1`):
 
 ```c
 static void divide(NoB *pai, int i) {
@@ -1162,8 +957,8 @@ NoB *ab_insere(NoB *raiz, int chave) {
 }
 ```
 
-A `divide` não apaga nada de `y`: só diminui `y->n`. As chaves do fim
-continuam no vetor, mas ficam fora da parte em uso. O cliente:
+A `divide` só diminui `y->n`: as chaves do fim ficam no vetor, fora da parte em uso.
+O cliente:
 
 ```c
 #include <stdio.h>
@@ -1200,38 +995,27 @@ int main(void) {
 // Livro 65: não tem, 3 nós lidos
 ```
 
-O fluxograma segue o `insere_nao_cheio` chamado na raiz `[40 70]` quando
-o 25 chega. A raiz não é folha; o 25 desce pelo filho 0, que está cheio; o
-filho se divide e o 20 sobe. Como 25 é maior que o 20, o `i++` manda a chave
-para a metade nova, e a chamada recursiva a põe na folha `[30]`:
+O fluxograma segue `insere_nao_cheio` na raiz `[40 70]` quando o 25 chega. O
+filho 0, cheio, se divide e o 20 sobe. Como 25 > 20, o `i++` leva a chave à
+metade nova, folha `[30]`:
 
 <p align="center"><img src="22-arvores-avancadas/0146-arvore-b/fluxograma.svg" alt="Fluxograma: Árvore B: busca, divisão e inserção" width="608"></p>
 
 > [!WARNING]
-> Depois de `divide(x, i)`, o nó pelo qual a chave ia descer virou **dois**, e
-> a chave que subiu está em `x->chave[i]`. Se a chave nova for maior que ela,
-> o caminho certo é o filho `i + 1`, a metade nova. Esquecer o
-> `if (chave > x->chave[i]) i++;` põe chaves grandes na metade da esquerda: a
-> árvore perde a ordem e a busca deixa de achar chaves que estão lá dentro (é o
-> bug do E875). Outra confusão comum é de vocabulário: "árvore B de ordem m"
-> quer dizer **m filhos no máximo** em alguns livros (Knuth) e, no Ziviani,
-> páginas com **de m a 2m registros**. O curso segue o Cormen, com o grau
-> mínimo `t`. Confira qual convenção o material usa.
+> Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem
+> `if (chave > x->chave[i]) i++;`, chaves grandes vão para a metade da esquerda
+> e a busca não as acha. Cuidado também com "ordem m": são **m filhos no
+> máximo** em alguns livros (Knuth) e **de m a 2m registros** no Ziviani. O curso
+> usa o grau mínimo `t` do Cormen.
 
 > [!TIP]
-> **Por dentro do C:** o `NoB` do TAD tem 56 bytes: 4 do `n`, 12 das três
-> chaves, 32 dos quatro ponteiros, 1 do `bool` e 7 de enchimento. Num banco de
-> dados, o nó é dimensionado para caber num bloco do disco, por exemplo 4096
-> bytes. Com chaves `int` e ponteiros de 8 bytes, `24t` bytes ficam por volta de
-> 4096, o que dá `t = 170`: até 339 chaves por nó, e um bilhão de chaves em
-> altura 3 (4 blocos lidos por busca). Dentro do nó, as chaves estão num vetor
-> ordenado e contíguo: dá para usar até busca binária ali, e a leitura
-> sequencial aproveita bem o cache do processador.
+> Com chaves `int` e ponteiros de 8 bytes, `t = 170` (nó de `24t` bytes) cabe num
+> bloco de 4096 bytes: um bilhão de chaves em altura 3, 4 blocos lidos por busca.
 
 > [!NOTE]
-> **Pergunta para você:** na árvore final, insira o 87. Qual nó se divide,
-> qual chave sobe e como fica o nível 1? Depois insira o 95 e veja se a raiz
-> muda. Confira acrescentando as duas chaves no vetor do exemplo.
+> **Pergunta para você:** na árvore final, insira o 87. Qual nó se divide, qual
+> chave sobe e como fica o nível 1? Depois insira o 95: a raiz muda? Confira
+> acrescentando as chaves no vetor do exemplo.
 
 ### Hora de praticar
 
@@ -1378,46 +1162,8 @@ Saída esperada:
 chaves: 20 | nós: 17 | média: 1.18 chaves por nó
 ```
 
-**Dicas:**
-
-1. Um nó com n chaves tem n + 1 filhos, de filho[0] a filho[n]. Folha não
-   tem filho nenhum: confira r->folha antes de descer.
-2. conta_chaves começa com r->n; conta_nos começa com 1.
-3. A inserção em ordem deixa
-   quase todo nó com uma chave só, de três possíveis.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E871.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E871 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E871
-```
-
-**Exercício E872** · ★☆☆
-
-A estação meteorológica guardou as máximas de 15 dias numa árvore B
-(arvoreb.h). Escreva minimo(r, &lidos) e maximo(r, &lidos): elas devolvem
-a menor e a maior chave e contam, em lidos, quantos nós foram visitados.
-Não percorra a árvore inteira: cada uma desce um caminho só.
-
-
-```text
-Saída esperada:
-  nível 0: [27]
-  nível 1: [19 22] [31]
-  nível 2: [17 18] [21] [24 25 26] [29 30] [33 35 36]
-mínima: 17 graus (3 nós lidos)
-máxima: 36 graus (3 nós lidos)
-```
-
-**Dicas:**
-
-1. A menor chave está na folha mais à esquerda: desça por filho[0] até
-   r->folha ser verdadeiro e devolva chave[0].
-2. A maior está na folha mais à direita: desça por filho[r->n] e devolva
-   chave[r->n - 1].
-3. Como todas as folhas estão no mesmo
-   nível, os dois caminhos leem altura + 1 nós.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E872.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E872 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E872
 ```
 
 **Exercício E873** · ★★☆
@@ -1437,26 +1183,24 @@ crescente:   nós 195 | altura 6 | ocupação 34.2%
 embaralhada: nós 127 | altura 5 | ocupação 52.5%
 ```
 
-**Dicas:**
-
-1. mede é um percurso: some r->n em *chaves, 1 em *nos e desça pelos
-   filhos de 0 a r->n se não for folha.
-2. Faça a conta em double: 100.0 * chaves / (nos * AB_MAX). Para imprimir
-   o símbolo de porcentagem no printf, escreva %%.
-3. Na ordem crescente, todo nó que se
-   divide deixa a metade esquerda com 1 chave para sempre: ninguém mais
-   insere ali.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E873.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E873 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E873
 ```
 
 **Exercício E874** · ★★☆
 
-A contabilidade quer as notas fiscais de uma faixa de números. Escreva
-intervalo(r, a, b, &visitados): mostra, em ordem crescente, as chaves de
-a até b e conta quantos nós foram lidos. Não leia subárvores que não podem
-ter chave na faixa. A árvore é a mesma do exemplo A292 (9 nós).
+A contabilidade quer as notas fiscais de uma faixa de números. Insira estas
+15 notas numa árvore B (arvoreb.h, que fica com 9 nós), na ordem:
+
+
+```text
+512 87 340 905 23 678 150 401 799 266 33 960 610 445 118
+```
+
+
+Escreva intervalo(r, a, b, &visitados): mostra, em ordem crescente, as chaves
+de a até b e conta quantos nós foram lidos. Não leia subárvores que não podem
+ter chave na faixa. Teste com as faixas 300-700, 100-160 e 970-999.
 
 
 ```text
@@ -1466,48 +1210,8 @@ notas de 100 a 160: 118 150 (3 nós lidos de 9)
 notas de 970 a 999: (3 nós lidos de 9)
 ```
 
-**Dicas:**
-
-1. Comece pelo em_ordem do A292: filho 0, chave 0, filho 1, chave 1, ...,
-   filho n.
-2. Duas podas: só desça em filho[i] se a < chave[i] (lá só há chaves
-   menores que chave[i]); e, se chave[i] > b, pare o laço e não desça mais
-   nada à direita (com return).
-3. Some 1 em *visitados logo na entrada
-   da função.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E874.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E874 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E874
-```
-
-**Exercício E875** · ★★★
-
-Ache o bug. Esta árvore B escrita à mão (páginas de até 3 chaves, como no
-TAD) recebe os protocolos de 10 a 120, de 10 em 10. Ela tem UM erro na
-descida da inserção. Rode: o percurso em ordem sai fora de ordem e a busca
-por chaves que foram inseridas falha. Conserte e rode de novo.
-
-
-```text
-Saída esperada:
-em ordem: 10 20 30 40 50 60 70 80 90 100 110 120
-em ordem? sim
-achou 10, 60 e 120? sim sim sim
-```
-
-**Dicas:**
-
-1. Desenhe a árvore com 10, 20 e 30 e insira o 40: a raiz cheia se divide
-   e o 20 sobe. Por qual filho do 20 o 40 deveria descer?
-2. Depois de dividir o filho i, a chave que subiu fica em p->chave[i], e
-   o filho i + 1 é a metade nova, com as chaves maiores que ela.
-3. Resposta esperada: em poe_em_nao_cheia, logo depois de
-   "parte(p, i);" falta "if (chave > p->chave[i]) { i++; }". Sem ele, a
-   chave sempre desce pela metade da esquerda, mesmo sendo maior que a que
-   subiu. Com a linha, a saída é a de cima.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E875.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E875 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E875
 ```
 
 **Exercício E876** · ★★★
@@ -1529,17 +1233,6 @@ busca 23: achou, 3 blocos lidos
 busca 31: não achou, 3 blocos lidos
 ```
 
-**Dicas:**
-
-1. Struct com int n, int chave[MAX], ponteiros filho[MAX + 1] e bool
-   folha, com #define T 3 e #define MAX (2 * T - 1). Nenhuma linha da
-   divisão depende de T valer 2: escreva tudo com T e MAX.
-2. Na divisão, a chave do meio é a de índice T - 1; o nó novo recebe as
-   T - 1 chaves dos índices T a MAX - 1 e, se não for folha, os T filhos
-   dos índices T a MAX.
-3. Com 3 chaves por nó (T = 2), as
-   mesmas 30 chaves precisariam de mais um nível.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E876.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E876 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E876
 ```
@@ -1548,47 +1241,39 @@ gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E876.c ~/LPEDC/22-arvores-avancad
 
 ## 0147 · Trie: árvore de prefixos e autocompletar
 
-Você digita `bol` no celular e o teclado já oferece "bola", "boleto", "bolo" e
-"bolsa". Ele não compara o que você digitou com cada palavra do dicionário,
-uma por uma: são dezenas de milhares de palavras, e a sugestão aparece a cada
-letra. A saída é guardar as palavras de um jeito em que **o prefixo é o
-endereço**.
+Você digita `bol` e o teclado oferece "bola", "boleto", "bolo" e "bolsa" sem
+comparar com o dicionário inteiro: nele, **o prefixo é o endereço**.
 
-Esse jeito é a **trie** (do inglês *retrieval*; também chamada de **árvore de
-prefixos** ou árvore digital). Cada nó tem um filho para cada letra possível, e
-cada aresta **é** uma letra. O caminho da raiz até um nó soletra um prefixo:
-raiz, `b`, `o`, `l` é o nó do prefixo "bol". Todas as palavras que começam com
-"bol" moram embaixo dele.
+Esse modo é a **trie** (de *retrieval*; ou **árvore de prefixos**). Cada nó tem
+um filho por letra, e cada aresta **é** uma letra. O caminho da raiz até um nó
+soletra um prefixo: raiz, `b`, `o`, `l` é o nó de "bol", e as palavras que
+começam com "bol" moram embaixo dele.
 
-Um prefixo não é necessariamente uma palavra: "bol" tem nó, mas não está no
-dicionário. Por isso cada nó guarda um `bool fim`, que diz se alguma palavra
-**termina** ali. "bolo" termina no `o` depois do `l`; "bom", no `m` depois do
-`o`.
+"bol" tem nó, mas não é palavra. Por isso cada nó guarda um `bool fim`, que diz
+se alguma palavra **termina** ali: "bolo" termina no `o` depois do `l`.
 
-Com letras minúsculas sem acento, o nó é um vetor de 26 ponteiros. O filho da
-letra `c` fica em `filho[c - 'a']`: a letra vira o índice, sem busca nenhuma.
+Com letras minúsculas sem acento, o nó é um vetor de 26 ponteiros, e o filho da
+letra `c` fica em `filho[c - 'a']`.
 
-- **inserir**: para cada letra, desça pelo filho dela; se ele não existir,
-  crie. No fim, `fim = true`;
-- **buscar**: desça letra por letra. Faltou um filho, a palavra não existe.
-  Chegou ao fim do texto, a resposta é o `fim` daquele nó;
+- **inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
+  `fim = true`;
+- **buscar**: desça letra por letra; faltou um filho, a palavra não existe; no
+  fim do texto, a resposta é o `fim` do nó;
 - **autocompletar**: desça até o nó do prefixo e percorra a subárvore dele,
   imprimindo cada caminho que termina num `fim`.
 
-O custo de inserir e de buscar é **O(L)**, em que L é o tamanho da palavra, e
-**não depende de quantas palavras existem**. Com 10 ou com 100 mil palavras,
-buscar "bolsa" desce 5 nós. Numa BST de 100 mil palavras seriam umas 17
-comparações de strings inteiras.
+Inserir e buscar custam **O(L)**, com L o tamanho da palavra, **sem depender do
+número de palavras**: "bolsa" desce 5 nós com 10 ou com 100 mil palavras. Numa
+BST de 100 mil palavras, seriam umas 17 comparações de strings.
 
-No exemplo, o teclado guarda oito palavras: bolo, bola, bolsa,
-boleto, bom, bombom, pão e pastel (sem acento: `pao`). No desenho, o ramo do
-`b`: o caminho verde é o prefixo "bol", que tem nó mas não é palavra; os nós
-verdes marcam o fim de alguma palavra:
+O teclado do exemplo guarda bolo, bola, bolsa, boleto, bom, bombom, pão e
+pastel (sem acento: `pao`). No ramo do `b`, o caminho verde é o prefixo "bol";
+os nós verdes marcam o fim de uma palavra:
 
 <p align="center"><img src="22-arvores-avancadas/0147-trie/ideia.svg" alt="Diagrama da ideia: Trie: árvore de prefixos e autocompletar" width="876"></p>
 
-O nó e a inserção, no `trie.c`. O `calloc` zera o nó inteiro: os 26 ponteiros
-começam `NULL` e o `fim`, `false`:
+O nó e a inserção, em `trie.c` (o `calloc` deixa os ponteiros `NULL` e `fim`
+falso):
 
 ```c
 typedef struct NoTrie {
@@ -1614,7 +1299,7 @@ bool trie_insere(NoTrie *r, const char *palavra) {
 }
 ```
 
-O cliente monta o dicionário e testa três textos digitados:
+O cliente monta o dicionário e testa três textos:
 
 ```c
 #include <stdio.h>
@@ -1646,41 +1331,29 @@ int main(void) {
 // Nós: 22 (216 bytes cada)
 ```
 
-As sugestões saem em ordem alfabética sem ordenar nada: a função que percorre
-a subárvore visita os filhos de `a` a `z`, então "bola" (`a`) vem antes de
-"boleto" (`e`), que vem antes de "bolo" (`o`).
+As sugestões saem em ordem alfabética porque a subárvore é percorrida de `a` a
+`z`.
 
-O fluxograma mostra a inserção de "bom", que chega depois das quatro
-palavras com "bol". O `b` e o `o` já existem (o caminho segue pelo "Não" duas
-vezes); o `m` é novo e ganha um nó. Acabaram as letras, e o `m` recebe
-`fim = true`:
+O fluxograma mostra a inserção de "bom". O `b` e o `o` já existem; o `m` é novo
+e recebe `fim = true`:
 
 <p align="center"><img src="22-arvores-avancadas/0147-trie/fluxograma.svg" alt="Fluxograma: Trie: árvore de prefixos e autocompletar" width="650"></p>
 
 > [!WARNING]
-> Achar o nó não quer dizer achar a palavra. `trie_prefixo(t, "bol")` devolve
-> um nó válido, mas "bol" não foi inserida: a busca tem que olhar o `fim`
-> (`return n != NULL && n->fim;`). O erro oposto também acontece: inserir só
-> criando os nós e esquecer o `r->fim = true` do final. Aí a palavra fica
-> "meio dentro": as mais compridas que passam por ela aparecem, ela não. E
-> cuidado com o índice: `'B' - 'a'` dá -31 e `'ã'` nem é um `char` só em UTF-8.
-> Por isso `trie_insere` recusa tudo o que não for de `'a'` a `'z'` antes de
-> mexer na árvore.
+> Achar o nó não é achar a palavra: `trie_prefixo(t, "bol")` devolve um nó, mas
+> a busca precisa olhar o `fim` (`return n != NULL && n->fim;`). Esquecer o
+> `r->fim = true` na inserção faz a palavra sumir. No índice, `'B' - 'a'` dá -31 e `'ã'` não é um `char` só em UTF-8;
+> por isso `trie_insere` recusa o que não for de `'a'` a `'z'`.
 
 > [!TIP]
-> **Por dentro do C:** cada `NoTrie` tem 216 bytes: 26 ponteiros de 8 bytes
-> (208), 1 do `bool` e 7 de enchimento. As 8 palavras do exemplo somam 37 letras
-> e cabem em 45 bytes como strings, mas a trie usa 22 nós, 4752 bytes, cem vezes
-> mais. Quase todos os ponteiros estão em `NULL` (o A293 mede: mais de 95%). É
-> o preço da velocidade: o filho certo está a um índice de distância, sem
-> laço. Quando a memória aperta, as alternativas guardam só os filhos que
-> existem: uma lista encadeada de filhos (a ideia do primeiro filho/próximo
-> irmão do assunto 0144) ou uma pequena BST por nó (a árvore ternária de busca).
+> Cada `NoTrie` tem 216 bytes. As 8 palavras cabem em 45 bytes como strings, mas
+> a trie usa 22 nós, 4752 bytes, quase todos ponteiros `NULL`. Alternativas:
+> lista de filhos (0144) ou BST por nó (árvore ternária).
 
 > [!NOTE]
-> **Pergunta para você:** se você inserir "bolota" no teclado, quantos nós novos
-> aparecem? E se inserir "bo"? Em cada caso, o que muda na lista de sugestões
-> para "bo"? Responda antes de acrescentar as palavras no vetor do exemplo.
+> **Pergunta para você:** se você inserir "bolota", quantos nós novos aparecem?
+> E se inserir "bo"? Em cada caso, o que muda nas sugestões para "bo"? Responda
+> antes de acrescentar as palavras no vetor do exemplo.
 
 ### Hora de praticar
 
@@ -1814,40 +1487,19 @@ gcc ~/LPEDC/22-arvores-avancadas/0147-trie/A294.c ~/LPEDC/22-arvores-avancadas/0
 
 #### Exercícios
 
-**Exercício E877** · ★☆☆
+**Exercício E878** · ★☆☆
 
-O cartório quer saber quantos nomes da lista de registros começam com um
-prefixo. Escreva conta_com_prefixo(r, prefixo) usando a trie do TAD
-(trie.h): ache o nó do prefixo com trie_prefixo e conte quantas palavras
-terminam nele ou abaixo dele.
+O terminal completa comandos com a tecla Tab. Guarde estes comandos numa trie
+(trie.h): cd, cat, chmod, chown, ls, less, mkdir, man. Escreva classifica(r,
+texto), que devolve uma de três mensagens: "comando" (o texto é um comando
+inteiro), "só começo de comando" (algum comando começa assim, mas o texto não
+é um) ou "não está". Teste, nesta ordem, com:
 
 
 ```text
-Saída esperada:
-começam com "an": 5
-começam com "ana": 3
-começam com "br": 2
-começam com "c": 0
-começam com "": 8
+cat ch le less rm c mkdirs
 ```
 
-**Dicas:**
-
-1. Escreva antes conta_palavras(n): NULL dá 0; senão, (n->fim ? 1 : 0)
-   mais a contagem de cada um dos 26 filhos.
-2. trie_prefixo devolve NULL quando nenhum nome começa com o prefixo, e
-   a raiz quando o prefixo é "".
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E877.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E877 && ~/LPEDC/22-arvores-avancadas/0147-trie/E877
-```
-
-**Exercício E878** · ★☆☆
-
-O terminal completa comandos com a tecla Tab. Com os comandos guardados
-numa trie (trie.h), escreva classifica(r, texto), que devolve uma de três
-mensagens: "comando" (o texto é um comando inteiro), "só começo de comando"
-(algum comando começa assim, mas o texto não é um) ou "não está".
 
 
 ```text
@@ -1861,26 +1513,30 @@ c       só começo de comando
 mkdirs  não está
 ```
 
-**Dicas:**
-
-1. Use trie_prefixo: NULL quer dizer que nenhum comando começa assim.
-2. Achou o nó? O campo fim decide entre as outras duas mensagens.
-3. Imprima com printf("%-7s %s\n", ...).
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E878.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E878 && ~/LPEDC/22-arvores-avancadas/0147-trie/E878
 ```
 
 **Exercício E879** · ★★☆
 
-Conte quantas vezes cada palavra aparece num texto usando uma trie em que
-o nó guarda um contador (int qtd) no lugar do bool fim. O struct e o main
-já estão prontos; escreva:
-- conta(r, p, tam): soma 1 na palavra de tam letras que começa em p
- (o texto não tem '\0' depois de cada palavra, por isso o tam);
+Conte quantas vezes cada palavra aparece num texto com uma trie em que o nó
+guarda um contador (int qtd) no lugar do bool fim. Defina o struct NoFreq (26
+filhos e qtd) e escreva: - conta(r, p, tam): soma 1 na palavra de tam letras
+que começa em p (o texto
+
+```text
+não tem '\0' depois de cada palavra, por isso o tam);
+```
+
 - lista(n, buf, nivel, &distintas): mostra as palavras em ordem alfabética
- com a contagem e conta quantas palavras diferentes existem;
+
+```text
+com a contagem e conta quantas palavras diferentes existem;
+```
+
 - libera(n).
+
+O texto é "o rato roeu a roupa do rei de roma o rei riu da roupa".
 
 
 ```text
@@ -1899,27 +1555,30 @@ roupa  2
 14 palavras, 11 diferentes
 ```
 
-**Dicas:**
-
-1. conta é a trie_insere do TAD com duas mudanças: o laço vai de 0 a
-   tam - 1 e, no fim, r->qtd++ em vez de r->fim = true.
-2. lista é a coleta do trie.c: se n->qtd > 0, termine buf com '\0' na
-   posição nivel e imprima com printf("%-6s %d\n", buf, n->qtd).
-3. A ordem alfabética sai de
-   graça: os filhos são visitados de 'a' a 'z'.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E879.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E879 && ~/LPEDC/22-arvores-avancadas/0147-trie/E879
 ```
 
 **Exercício E880** · ★★☆
 
-Os bichos do zoológico estão numa trie (trie.h). Escreva duas funções que
-percorrem a trie montando a palavra num buffer, como a coleta do trie.c:
-- maior_palavra(n, buf, nivel, maior): copia para maior a palavra mais
- comprida (no empate, a primeira em ordem alfabética);
+Guarde estes bichos do zoológico numa trie (trie.h): gato, girafa, guaxinim,
+hipopotamo, jacare, onca, ornitorrinco, rinoceronte, tatu, tamandua,
+orangotango. Escreva duas funções que percorrem a trie montando a palavra num
+buffer: - maior_palavra(n, buf, nivel, maior): copia para maior a palavra
+mais
+
+```text
+comprida (no empate, a primeira em ordem alfabética);
+```
+
 - por_tamanho(n, buf, nivel, alvo): mostra as palavras com exatamente alvo
- letras, sem descer além do nível alvo.
+
+```text
+letras, sem descer além do nível alvo.
+```
+
+
+Mostre a maior palavra e as de 4, 6 e 11 letras.
 
 
 ```text
@@ -1930,65 +1589,21 @@ com 6 letras: girafa jacare
 com 11 letras: orangotango rinoceronte
 ```
 
-**Dicas:**
-
-1. Em cada nó, nivel é quantas letras já estão em buf. Quando n->fim é
-   verdadeiro, buf[nivel] = '\0' fecha a palavra.
-2. Em maior_palavra, troque só quando nivel > strlen(maior): com >=, o
-   empate ficaria com a última em ordem alfabética.
-3. Em por_tamanho, quando nivel == alvo,
-   confira o fim e volte (return) sem olhar os filhos.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E880.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E880 && ~/LPEDC/22-arvores-avancadas/0147-trie/E880
 ```
 
-**Exercício E881** · ★★★
-
-Ache o bug. O teclado do celular sugere palavras com a função sugere(),
-escrita à mão sobre o struct do trie.h. Para o prefixo "bol", ela deveria
-mostrar bola, boleto, bolo e bolsa, mas mostra palavras que nem existem:
-
-
-```text
-Saída que aparece:
-bol: bola boleto boloto bolsao
-bo: bola boleto boloto bolsao bomsao bombom
-```
-
-
-
-```text
-Saída esperada:
-bol: bola boleto bolo bolsa
-bo: bola boleto bolo bolsa bom bombom
-```
-
-
-Não há erro de memória: o programa roda limpo e mesmo assim erra. Ache a
-linha que falta, conserte e rode de novo.
-
-**Dicas:**
-
-1. Acompanhe o conteúdo de buf: depois de imprimir "boleto", a recursão
-   volta para o nível 3 e escreve 'o' em buf[3]. O que ainda está em
-   buf[4] e buf[5]?
-2. O buffer começou zerado, por isso "bola" e "boleto" saíram certas: o
-   '\0' que as termina estava lá por acaso.
-3. Resposta esperada: falta "buf[nivel] = '\0';" logo antes do printf, em
-   sugere. Cada palavra precisa ser fechada no comprimento dela, e não
-   no da maior palavra que passou antes pelo buffer.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E881.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E881 && ~/LPEDC/22-arvores-avancadas/0147-trie/E881
-```
-
 **Exercício E882** · ★★★
 
-O TAD não sabe tirar palavras. Escreva remove_palavra(n, p, &tirou) com
-poda: desmarque o fim da palavra e libere os nós que ficarem inúteis (sem
-fim e sem filhos), de baixo para cima. Os nós que outra palavra ainda usa
-ficam. O main tira palavras uma a uma e mostra o tamanho da trie.
+O TAD (trie.h) não sabe tirar palavras. Escreva bool remove_palavra(NoTrie
+*n, const char *p, bool *tirou), que desmarca o fim da palavra e libera, de
+baixo para cima, os nós que ficarem inúteis (sem fim e sem filhos); os nós
+que outra palavra ainda usa ficam. Em *tirou, diz se a palavra estava lá.
+Devolve true se n ficou inútil.
+
+Insira sol, sola, solado, solteiro e sal. Mostre o início e, depois de tirar
+cada palavra de solado, so, sol, solteiro, sal e sola, o tamanho da trie
+(trie_nos) e as palavras que sobram (trie_autocompleta com prefixo "").
 
 
 ```text
@@ -2002,16 +1617,6 @@ tira sal: tirou | nós: 5 | sobram: sola
 tira sola: tirou | nós: 1 | sobram:
 ```
 
-**Dicas:**
-
-1. Recursão pela palavra. Se *p == '\0', você chegou ao nó dela: guarde
-   n->fim em *tirou e ponha false. Senão, desça pelo filho da letra *p
-   (se ele não existir, a palavra não está: *tirou = false, devolva false).
-2. Na volta, se a chamada do filho devolveu true, faça free no filho e ponha
-   NULL no ponteiro. No fim, devolva !n->fim && (n não tem filho nenhum).
-3. Tirar "sol" não libera nada (o nó do
-   l continua no caminho de sola e solteiro); tirar "solteiro" libera 5.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E882.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E882 && ~/LPEDC/22-arvores-avancadas/0147-trie/E882
 ```
@@ -2020,57 +1625,46 @@ gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E882.c ~/LPEDC/22-arvores-avancadas/0
 
 ## 0148 · Union-find: conjuntos disjuntos
 
-A turma do cursinho vai fazer amigo secreto, mas por panelinha: quem se conhece
-fica no mesmo sorteio, e "amigo de amigo" também conta. As amizades chegam aos
-poucos no grupo de mensagens: Ana conhece Beto, Caio conhece Duda, Beto conhece
-Duda... A cada nova amizade, dois grupos podem virar um só. E a qualquer
-momento alguém pergunta: "Ana e Duda caem no mesmo sorteio?".
+Numa turma, quem se conhece (ou é "amigo de amigo") cai no mesmo sorteio de amigo
+secreto. As amizades chegam aos poucos, e alguém pergunta: "Ana e Duda caem no
+mesmo sorteio?".
 
-O problema tem nome: **conjuntos disjuntos**. Os elementos estão divididos em
-grupos que não se misturam, e só existem duas operações:
+São **conjuntos disjuntos**: grupos que não se misturam, com duas operações:
 
 - **acha(x)**: devolve o **representante** do grupo de x, um elemento que
-  responde pelo grupo inteiro. Dois elementos estão juntos se têm o mesmo
-  representante;
+  responde pelo grupo. Dois elementos estão juntos se têm o mesmo representante;
 - **une(a, b)**: junta o grupo de a com o grupo de b.
 
-A estrutura que faz isso é o **union-find**. Cada grupo é uma árvore, e a
-floresta inteira cabe num vetor: `pai[x]` é o pai de x, e a raiz é quem aponta
-para si mesmo (`pai[x] == x`). A raiz é o representante. `acha` sobe pelos
-pais até a raiz; `une` acha as duas raízes e pendura uma na outra. Aqui as
-setas vão do filho para o pai: ninguém precisa descer na árvore.
+O **union-find** guarda cada grupo como uma árvore, e a floresta cabe num vetor:
+`pai[x]` é o pai de x, e a raiz aponta para si mesma (`pai[x] == x`). A raiz é o
+representante. `acha` sobe até a raiz; `une` acha as duas raízes e pendura uma
+na outra.
 
-Do jeito ingênuo, a árvore pode virar uma fila indiana, e `acha` passa a custar
-O(n). Dois truques resolvem:
+Do jeito ingênuo, a árvore vira uma fila e `acha` custa O(n). Dois truques
+resolvem:
 
-1. **união por tamanho**: guarde o tamanho de cada grupo (`tam[raiz]`) e
-   pendure sempre a raiz do grupo **menor** na do maior. Um elemento só desce um
-   nível quando o grupo dele se junta a outro pelo menos do mesmo tamanho, ou
-   seja, quando o grupo pelo menos **dobra**. Isso só acontece log₂ n vezes:
-   a altura nunca passa de log₂ n;
-2. **compressão de caminho**: depois de achar a raiz, `acha` faz todo mundo do
-   caminho apontar **direto** para ela. A próxima busca por qualquer um deles
-   sobe um passo só.
+1. **união por tamanho**: guarde o tamanho de cada grupo (`tam[raiz]`) e pendure
+   a raiz do grupo **menor** na do maior. Um elemento só desce um nível quando o
+   grupo dele pelo menos **dobra**, o que acontece log₂ n vezes no máximo: a
+   altura nunca passa de log₂ n;
+2. **compressão de caminho**: depois de achar a raiz, `acha` faz todo o caminho
+   apontar **direto** para ela.
 
-Com os dois juntos, uma sequência de m operações custa O(m · α(n)), em que α é
-uma função que cresce tão devagar que não passa de 4 para nenhum n que caiba
-num computador. Na prática, cada operação é O(1) amortizado (a ideia de custo
-amortizado é do assunto 0116).
+Com os dois, m operações custam O(m · α(n)), em que α não passa de 4 para nenhum
+n realista: na prática, O(1) amortizado (assunto 0116).
 
-O Cormen chama as operações de `MAKE-SET`, `FIND-SET` e `UNION` e, em vez do
-tamanho, usa a **união por posto** (*rank*): cada raiz guarda um limite
-superior da altura e só ganha 1 quando duas raízes de mesmo posto se juntam.
-A garantia é a mesma, O(m · α(n)), e é essa estrutura que o Kruskal (0152)
-usa.
+O Cormen chama as operações de `MAKE-SET`, `FIND-SET` e `UNION` e usa a **união
+por posto** (*rank*): cada raiz guarda um limite superior da altura, que só
+ganha 1 quando duas raízes de mesmo posto se juntam. A garantia é a mesma, e o
+Kruskal (0152) usa essa estrutura.
 
-No exemplo, são oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades. No
-fim sobram dois grupos: {Ana, Beto, Caio, Duda} e {Edu, Fia, Gui, Hugo}. Duda e
-Hugo estão a dois passos da raiz; as perguntas sobre eles comprimem o caminho e
-os deixam pendurados direto no representante:
+No exemplo, oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades deixam dois
+grupos: {Ana, Beto, Caio, Duda} e {Edu, Fia, Gui, Hugo}. Duda e Hugo estão a dois
+passos da raiz até as perguntas comprimirem o caminho:
 
 <p align="center"><img src="22-arvores-avancadas/0148-union-find/ideia.svg" alt="Diagrama da ideia: Union-find: conjuntos disjuntos" width="879"></p>
 
-O `acha` e o `une` do `uniao.c`:
+`uf_acha` e `uf_une`, em `uniao.c`:
 
 ```c
 int uf_acha(UF *u, int x) {
@@ -2104,7 +1698,7 @@ bool uf_une(UF *u, int a, int b) {
 }
 ```
 
-O cliente registra as amizades e mostra o vetor `pai` depois de cada uma:
+O cliente registra as amizades e mostra `pai` depois de cada uma:
 
 ```c
 #include <stdio.h>
@@ -2145,40 +1739,28 @@ int main(void) {
 // Depois das buscas, pai: 0 0 0 0 4 4 4 4
 ```
 
-Em "Beto e Duda", as raízes são 0 (Ana, grupo de 2) e 2 (Caio, grupo de 2).
-Empate: a raiz de a continua raiz, e o Caio vai para baixo da Ana, levando a
-Duda junto. A Duda fica a dois passos da raiz até a pergunta "Ana e Duda?"
-subir por ela e comprimir o caminho.
+Em "Beto e Duda", as raízes são 0 (Ana) e 2 (Caio), ambos com grupo de 2. No
+empate, a raiz de a continua raiz: Caio vai para baixo da Ana, com a Duda.
 
-O fluxograma acompanha o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
-(Gui), diferentes; os dois grupos têm tamanho 2, então não há troca, e o Gui
-(com o Hugo embaixo) vira filho do Edu:
+O fluxograma acompanha `uf_une` em "Fia e Hugo". As raízes são 4 (Edu) e 6
+(Gui), com grupos de tamanho 2: sem troca, o Gui (com o Hugo) vira filho do Edu:
 
 <p align="center"><img src="22-arvores-avancadas/0148-union-find/fluxograma.svg" alt="Fluxograma: Union-find: conjuntos disjuntos" width="665"></p>
 
 > [!WARNING]
-> O representante é a **raiz**, não o elemento. Três erros vêm daí. Unir com
-> `pai[a] = b` arranca o `a` do grupo dele e leva só os descendentes de `a`
-> junto (é o bug do E887); o certo é `pai[acha(a)] = acha(b)`. Testar `a == b`
-> ou `pai[a] == pai[b]` para saber se estão juntos falha assim que as árvores
-> têm mais de um nível; o teste é `acha(a) == acha(b)`. E `tam[x]` só vale na
-> raiz: num elemento que já foi raiz, ele guarda o tamanho antigo do grupo.
+> O representante é a **raiz**, não o elemento. Unir com `pai[a] = b` arranca o
+> `a` do grupo e leva só os descendentes dele; o certo é
+> `pai[acha(a)] = acha(b)`. Testar `a == b` ou `pai[a] == pai[b]` falha com mais
+> de um nível; o teste é `acha(a) == acha(b)`. E `tam[x]` só vale na raiz.
 
 > [!TIP]
-> **Por dentro do C:** a floresta inteira são dois vetores de `int`, sem um
-> ponteiro sequer: 8 bytes por elemento, 8 MB para um milhão de pessoas, tudo
-> contíguo na memória, o que favorece o cache do processador. Veja a assinatura
-> `int uf_acha(UF *u, int x)`: sem `const`, porque **consultar modifica** a
-> estrutura (a compressão reescreve `pai`). Até `uf_juntos`, que parece só uma
-> pergunta, mexe no vetor. O A295 mede o efeito dos truques: com 10 mil
-> elementos, a versão ingênua sobe 50 milhões de vezes pelos pais; com união por
-> tamanho, nenhuma vez durante as uniões.
+> `uf_acha` não tem `const`: **consultar modifica** a estrutura, porque a
+> compressão reescreve `pai`.
 
 > [!NOTE]
 > **Pergunta para você:** depois de tudo, Ana e Hugo ficam amigos:
-> `uf_une(turma, 0, 7)`. Os dois grupos têm 4 pessoas. Quem vira a raiz do
-> grupo único e como fica o vetor `pai`? Acrescente a linha no exemplo e
-> confira.
+> `uf_une(turma, 0, 7)`. Os dois grupos têm 4 pessoas. Quem vira a raiz do grupo
+> único e como fica o vetor `pai`? Acrescente a linha no exemplo e confira.
 
 ### Hora de praticar
 
@@ -2353,10 +1935,12 @@ gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/A296.c ~/LPEDC/22-arvores-avanc
 
 **Exercício E883** · ★☆☆
 
-Depois da enchente, só algumas estradas entre sete cidades continuam
-abertas. Use o TAD (uniao.h): una as cidades de cada estrada aberta, mostre
-quantos grupos de cidades ligadas existem e mostre, para cada pergunta,
-se dá para ir de uma cidade à outra (passando por outras, se preciso).
+Depois da enchente, só algumas estradas entre sete cidades continuam abertas.
+Use o TAD (uniao.h). As cidades, de 0 a 6, são Araras, Bauru, Catanduva,
+Dourado, Embu, Franca e Garça. As estradas abertas ligam os pares 0-2, 1-5,
+2-3, 5-6 e 0-3. Una as cidades de cada estrada, mostre quantos grupos de
+cidades ligadas existem e responda se dá para ir (passando por outras, se
+preciso) de 0 a 3, de 1 a 6, de 3 a 5 e de 4 a 4.
 
 
 ```text
@@ -2368,52 +1952,24 @@ Dourado -> Franca: não dá para ir
 Embu -> Embu: dá para ir
 ```
 
-**Dicas:**
-
-1. uf_cria(7), um uf_une por estrada e uf_grupos no fim.
-2. Para cada pergunta, uf_juntos(u, a, b). A pergunta não é se existe uma
-   estrada DIRETA: Araras e Dourado também se ligam pela Catanduva.
-3. Os grupos são {Araras, Catanduva,
-   Dourado}, {Bauru, Franca, Garça} e {Embu}.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E883.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E883 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E883
 ```
 
-**Exercício E884** · ★☆☆
+**Exercício E885** · ★★☆
 
-O condomínio tem 12 apartamentos (0 a 11) e um aplicativo de mensagens em
-que cada morador entra por convite de outro. Depois dos convites, escreva
-duas funções que leem os campos do UF (uniao.h):
-- maior_grupo(u): quantos apartamentos tem o maior grupo;
-- sozinhos(u): quantos apartamentos não estão com ninguém.
+O técnico ligou os 7 computadores do escritório (0 a 6) com 9 cabos, nesta
+ordem:
 
 
 ```text
-Saída esperada:
-grupos: 5 | maior: 5 apartamentos | sozinhos: 2
+0-1 1-2 3-4 2-0 4-5 5-6 1-4 6-3 2-5
 ```
 
-**Dicas:**
 
-1. Só a raiz de cada grupo (pai[x] == x) guarda o tamanho certo em tam[x].
-   Nos outros elementos, tam é um valor antigo, de quando eram raiz.
-2. Percorra x de 0 a u->n - 1 olhando só as raízes. Nenhuma das duas
-   funções precisa chamar uf_acha.
-3. Os grupos são {0, 3, 7, 9, 11},
-   {1, 2, 6}, {4, 5}, {8} e {10}.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E884.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E884 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E884
-```
-
-**Exercício E885** · ★★☆
-
-O técnico ligou os 7 computadores do escritório (0 a 6) com 9 cabos, na
-ordem do vetor. Um cabo é redundante quando liga dois computadores que JÁ
-conversavam por outros cabos (ele fecha um ciclo). Com o TAD (uniao.h),
-mostre cada cabo redundante, quantos cabos bastariam e se a rede ficou toda
-ligada.
+Um cabo é redundante quando liga dois computadores que JÁ conversavam por
+outros cabos (ele fecha um ciclo). Com o TAD (uniao.h), mostre cada cabo
+redundante, quantos cabos bastariam e se a rede ficou toda ligada.
 
 
 ```text
@@ -2424,15 +1980,6 @@ cabo 9 (2-5) é redundante
 3 cabos redundantes; 6 cabos bastam; rede toda ligada
 ```
 
-**Dicas:**
-
-1. uf_une devolve false quando os dois já estavam no mesmo grupo. É
-   exatamente o teste do cabo redundante.
-2. Os cabos são numerados a partir de 1 na saída (i + 1).
-3. Com 7 computadores, 6 cabos sem ciclo
-   ligam tudo: é uma árvore. A mesma ideia vai aparecer no algoritmo de
-   Kruskal, no módulo 23.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E885.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E885 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E885
 ```
@@ -2440,10 +1987,18 @@ gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E885.c ~/LPEDC/22-arvores-avanc
 **Exercício E886** · ★★☆
 
 Na pelada de quinta, quem já jogou junto fica no mesmo time, e "jogou com
-quem jogou com" também conta. Com o TAD (uniao.h), una as duplas e liste
-cada time com seus jogadores. Os times saem na ordem do seu primeiro
-jogador (o de menor número), e os jogadores de cada time, em ordem de
-número. Mostre também o tamanho de cada time.
+quem jogou com" também conta. Os nove jogadores, de 0 a 8, são Alex, Bia,
+Cadu, Davi, Eli, Fabi, Gabo, Hana e Ivo. As duplas que já jogaram juntas:
+
+
+```text
+0-4 2-7 4-8 1-5 7-3 8-0
+```
+
+
+Com o TAD (uniao.h), una as duplas e liste cada time com seus jogadores e o
+tamanho. Os times saem na ordem do seu primeiro jogador (o de menor número),
+e os jogadores de cada time, em ordem de número.
 
 
 ```text
@@ -2454,52 +2009,8 @@ Time 3 (3): Cadu Davi Hana
 Time 4 (1): Gabo
 ```
 
-**Dicas:**
-
-1. Percorra x de 0 a n - 1. x abre um time novo quando nenhum y < x tem o
-   mesmo representante (uf_acha) que ele.
-2. Para listar o time de x, percorra y de x até n - 1 e mostre quem tem o
-   mesmo representante. O tamanho vem de uf_tamanho.
-3. O representante do time 3 é o Cadu?
-   Não importa: a ordem de saída é pelos números, não pelas raízes.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E886.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E886 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E886
-```
-
-**Exercício E887** · ★★★
-
-Ache o bug. A escola forma grupos de estudo: quem estuda com quem fica no
-mesmo grupo. O programa abaixo tem um union-find escrito à mão, sem o TAD,
-com UM erro na união. Rode e compare: o contador diz 1 grupo, mas a
-conferência final (que conta as raízes de verdade) acha 2, e a Lia aparece
-fora do grupo da Ana, com quem ela estudou primeiro.
-
-
-```text
-Saída esperada:
-grupos (contador): 1
-grupos (raízes):   1
-Ana e Lia juntas? sim
-Ana e Rui juntos? sim
-```
-
-
-Conserte a função une e rode de novo.
-
-**Dicas:**
-
-1. Desenhe as árvores (cada elemento com uma seta para o pai) depois de
-   cada união. Na última, a Lia já tem pai (a Ana): o que acontece com o
-   grupo antigo dela quando pai[a] é sobrescrito?
-2. Quem representa o grupo é a raiz. Unir dois grupos é pendurar uma RAIZ
-   na outra, e não um elemento qualquer.
-3. Resposta esperada: troque "pai[a] = b;" por "pai[acha(a)] = acha(b);"
-   (ou guarde as duas raízes em variáveis antes). Ligando o próprio a, ele
-   abandona o grupo em que estava e leva só os seus descendentes.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E887.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E887 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E887
 ```
 
 **Exercício E888** · ★★★
@@ -2522,18 +2033,6 @@ A água passou no passo 13 (13 de 25 abertas)
 #.#..
 ```
 
-**Dicas:**
-
-1. Use o TAD (uniao.h) com 25 + 2 elementos: além dos quadradinhos, um
-   TOPO virtual (25), unido a todo furo da linha 0, e um FUNDO virtual
-   (26), unido a todo furo da linha 4. A água passou quando
-   uf_juntos(u, TOPO, FUNDO).
-2. A cada furo, una o quadradinho com cada vizinho que já esteja furado
-   (guarde isso num bool aberta[25]). Cuidado com as bordas.
-3. O caminho da água é (0,2), (1,2),
-   (1,1), (2,1), (3,1), (3,0), (4,0). Sem o TOPO e o FUNDO, você teria que
-   testar os 25 pares de quadradinhos de cima e de baixo a cada furo.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E888.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E888 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E888
 ```
@@ -2542,45 +2041,37 @@ gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E888.c ~/LPEDC/22-arvores-avanc
 
 ## 0149 · Juntando tudo: corretor ortográfico
 
-A associação do bairro manda um aviso por semana no grupo de mensagens, e quem
-digita é sempre com pressa: "o onibus pasou", "a fiera da rua". O secretário
-quer um programa que leia o aviso, aponte as palavras que não existem e
-sugira a correção, como o sublinhado vermelho do editor de texto.
+O secretário da associação do bairro quer um programa que leia o aviso da
+semana ("o onibus pasou", "a fiera da rua"), aponte as palavras que não existem
+e sugira a correção.
 
-Um corretor faz duas perguntas ao dicionário, milhares de vezes por texto. A
-primeira é **"esta palavra existe?"**, uma busca exata. A segunda é **"quais
-palavras de verdade estão perto desta?"**, e "perto" quer dizer a poucas
-**edições** de distância, a ideia da distância de edição do assunto 0142. Uma
-edição é tirar uma letra, pôr uma letra, trocar uma letra por outra ou trocar
-duas letras vizinhas de lugar (o erro de digitação mais comum de todos).
+Um corretor faz duas perguntas ao dicionário, milhares de vezes por texto:
+**"esta palavra existe?"** (busca exata) e **"quais palavras de verdade estão
+perto desta?"**. "Perto" é a poucas **edições** (assunto 0142): tirar, pôr ou
+trocar uma letra, ou trocar duas letras vizinhas.
 
-O jeito simples de sugerir é **gerar os candidatos**: aplicar à palavra errada
-todas as edições possíveis e perguntar ao dicionário quais deles existem. Para
-"fiera", com 5 letras, são 5 jeitos de tirar, 4 de trocar vizinhas, 5 · 25 de
-trocar uma letra e 6 · 26 de pôr uma letra: 290 candidatos. Quase todos são
-lixo ("iera", "fxera"); só "feira" está no dicionário. O corretor faz 290
-buscas exatas para cada palavra errada, e a estrutura do dicionário decide
-quanto isso custa.
+Sugerir é **gerar candidatos**: aplicar à palavra errada todas as edições e ver
+quais existem. Para "fiera", são 5 jeitos de tirar, 4 de trocar vizinhas,
+5 · 25 de trocar uma letra e 6 · 26 de pôr uma letra: 290 candidatos, e só
+"feira" existe. O custo de 290 buscas depende da estrutura do dicionário.
 
-O dicionário fica numa **trie** (assunto 0147). Cada busca custa O(L), o tamanho
-da palavra, não importa se o dicionário tem 80 ou 300 mil palavras, e um
-candidato que nem começa como palavra nenhuma ("fx...") morre no segundo nó.
-Uma tabela hash também responderia a busca exata em O(1) na média, e uma BST
-em O(log n) comparações de strings. A comparação completa está no fim do
-assunto.
+O dicionário fica numa **trie** (assunto 0147): cada busca custa O(L), e um
+candidato que não começa como palavra nenhuma ("fx...") morre no segundo nó.
+Uma hash também faria a busca exata em O(1) na média, e uma BST em O(log n)
+comparações; a comparação está no fim do assunto.
 
-O TAD fica em `corretor.h` e `corretor.c`: `cor_carrega_basico` monta um
-dicionário com 84 palavras comuns, `cor_proxima` separa o texto em palavras,
+O TAD está em `corretor.h` e `corretor.c`: `cor_carrega_basico` monta um
+dicionário de 84 palavras, `cor_proxima` separa o texto em palavras,
 `cor_contem` faz a busca exata e `cor_sugere` gera e filtra os candidatos.
 
-O aviso desta semana tem 18 palavras e cinco problemas:
-três erros de digitação com uma sugestão só, um "caa" que pode ser três
-palavras e um "esquina" que está certo, mas não está no dicionário:
+O aviso tem 18 palavras e cinco problemas: três erros com uma sugestão só, um
+"caa" que pode ser três palavras e um "esquina" que está certo, mas fora do
+dicionário:
 
 <p align="center"><img src="22-arvores-avancadas/0149-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: corretor ortográfico" width="887"></p>
 
-O miolo do `cor_sugere`. Cada candidato vai para `anota`, que confere na
-trie, descarta repetidos e mantém a lista em ordem alfabética:
+No miolo de `cor_sugere`, `anota` confere cada candidato na trie, descarta
+repetidos e mantém a lista em ordem alfabética:
 
 ```c
 int cor_sugere(const NoC *d, const char *palavra, char sug[][COR_MAX], int max) {
@@ -2665,17 +2156,15 @@ int main(void) {
 // 18 palavras, 5 para revisar
 ```
 
-No fluxograma, o programa é um laço sobre as palavras. A maioria passa
-direto pela pergunta "está no dicionário?"; só as desconhecidas pagam o preço
-dos candidatos. O caminho verde é o de uma palavra como "fiera", seguido do
-fim do texto:
+O fluxograma é um laço sobre as palavras: só as desconhecidas pagam o preço dos
+candidatos. O caminho verde é o de "fiera", seguido do fim do texto:
 
 <p align="center"><img src="22-arvores-avancadas/0149-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: corretor ortográfico" width="615"></p>
 
 ### Trie, hash ou BST?
 
-O exemplo A297 monta as três estruturas com o mesmo dicionário de 2500
-palavras de duas sílabas e faz 5000 buscas (metade acha, metade não):
+O A297 monta as três estruturas com o mesmo dicionário de 2500 palavras de duas
+sílabas e faz 5000 buscas (metade acha, metade não):
 
 | | BST | Tabela hash | Trie |
 | --- | --- | --- | --- |
@@ -2685,33 +2174,24 @@ palavras de duas sílabas e faz 5000 buscas (metade acha, metade não):
 | ordem alfabética | percurso em ordem | não dá | percurso por letra |
 | depende de n? | sim, log n | não (com fator de carga bom) | não |
 
-A hash ganha na busca exata e a trie perde feio na memória. A trie ganha em
-tudo que envolve **prefixo**: autocompletar, "maior prefixo em comum", cortar
-candidatos que já nascem errados. Um corretor de verdade combina as duas
-coisas, e muitas vezes troca o nó de 26 ponteiros por um nó mais enxuto.
+A hash ganha na busca exata e a trie perde na memória, mas a trie ganha em tudo
+que envolve **prefixo**: autocompletar e cortar candidatos que já nascem
+errados. Um corretor de verdade combina as duas.
 
 > [!WARNING]
-> `cor_proxima` só reconhece letras de `'a'` a `'z'`. Maiúscula e acento viram
-> separadores: "Hoje" sai como "oje", e "pão" sai como "p" e "o". Antes de
-> conferir um texto de verdade, normalize as maiúsculas (exercício E890) e
-> decida o que fazer com os acentos: em UTF-8, `'ã'` ocupa 2 bytes e não cabe
-> num índice de 0 a 25. A outra pegadinha é de tamanho: `cor_sugere` monta os
-> candidatos num vetor de `COR_MAX + 1` posições, porque pôr uma letra deixa a
-> palavra uma letra maior que a original.
+> `cor_proxima` só reconhece `'a'` a `'z'`: maiúscula e acento viram
+> separadores ("Hoje" sai "oje"; "pão" sai "p" e "o"). Em UTF-8, `'ã'` ocupa
+> 2 bytes e não cabe num índice de 0 a 25. Além disso, `cor_sugere` usa um
+> vetor de `COR_MAX + 1` posições, porque pôr uma letra aumenta a palavra.
 
 > [!TIP]
-> **Por dentro do C:** a trie de 84 palavras tem 239 nós de 216 bytes, cerca de
-> 51 KB, para guardar 351 letras. Cada busca de candidato custa no máximo
-> L acessos a nós, mas cada nó fica num lugar diferente do heap (um `calloc` por
-> nó), e cada acesso pode ser uma falta de cache. A tabela hash calcula o
-> hash, vai a um balde e compara uma string: poucos acessos, quase sempre
-> vizinhos. Por isso, em medição de tempo, a hash costuma vencer a trie na busca
-> exata mesmo com o mesmo O(L).
+> A trie de 84 palavras tem 239 nós de 216 bytes (cerca de 51 KB). Cada nó fica
+> num ponto do heap, e cada acesso pode ser uma falta de cache; por isso a hash
+> costuma vencer a trie na busca exata.
 
 > [!NOTE]
 > **Pergunta para você:** se o aviso tivesse "onibu", quais sugestões
-> apareceriam? E "aa"? Pense em quais palavras do dicionário estão a uma edição
-> de cada uma e confira trocando o texto do exemplo.
+> apareceriam? E "aa"? Confira trocando o texto do exemplo.
 
 ### Hora de praticar
 
@@ -2919,7 +2399,7 @@ gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A297.c ~/LPEDC/22-arvores-av
 // Lê o texto linha por linha. Uma linha que começa com '+' ensina palavras
 // novas ao dicionário; as outras são conferidas.
 //
-//   gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298 && printf 'hoje tem fieira na rua\n+ pastel esquina\na fiera da esquina tem pastel\n' | ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298
+//   printf 'hoje tem fieira na rua\n+ pastel esquina\na fiera da esquina tem pastel\n' | ~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/A298.c
 
 int main(void) {
     NoC *dic = cor_cria();
@@ -2979,9 +2459,17 @@ gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298.c ~/LPEDC/22-arvores-av
 
 **Exercício E889** · ★☆☆
 
-Use o TAD do corretor (corretor.h) para conferir o recado da escola:
-separe o texto em palavras com cor_proxima, mostre as que não estão no
-dicionário básico e conte quantas são, de quantas no total.
+Use o TAD do corretor (corretor.h) para conferir este recado da escola:
+
+
+```text
+a escola da cidade tem muitos alunos e um onibus amarelo na porta
+```
+
+
+Separe o texto em palavras com cor_proxima, mostre as que não estão no
+dicionário básico (cor_carrega_basico) e conte quantas são, de quantas no
+total.
 
 
 ```text
@@ -2990,54 +2478,18 @@ desconhecidas: muitos alunos
 2 de 13 palavras fora do dicionário
 ```
 
-**Dicas:**
-
-1. Carregue o dicionário com cor_cria e cor_carrega_basico.
-2. O laço é while (cor_proxima(&texto, palavra)) { ... }: a função avança
-   o ponteiro texto a cada chamada (por isso o &) e devolve false no fim.
-3. O dicionário tem "muito" e "aluno",
-   mas não os plurais: um corretor de verdade trata as flexões à parte.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E889.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E889 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E889
 ```
 
-**Exercício E890** · ★☆☆
-
-O cor_proxima só entende letras de 'a' a 'z': maiúscula vira separador, e
-"Hoje" sai como "oje". Escreva normaliza(s), que troca as maiúsculas por
-minúsculas no próprio vetor. O main confere o recado antes e depois.
-
-
-```text
-Saída esperada:
-palavras: oje a da ua tem ao e afe
-  8 palavras, 4 fora do dicionário
-palavras: hoje a feira da rua tem pao e cafe
-  9 palavras, 0 fora do dicionário
-```
-
-**Dicas:**
-
-1. Use tolower, de <ctype.h>, em cada caractere até o '\0'. Converta para
-   unsigned char antes: tolower((unsigned char)s[i]).
-2. O recado é um vetor (char recado[]), e não um ponteiro para literal:
-   por isso dá para alterá-lo. A pontuação não precisa sair: cor_proxima já
-   pula o que não é letra.
-3. "FEIRA" inteira some na primeira
-   conferência: nenhuma letra dela está entre 'a' e 'z'.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E890.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E890 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E890
-```
-
 **Exercício E891** · ★★☆
 
-Quando uma palavra está longe demais de tudo, as sugestões a uma edição
-de distância não acham nada. Outra pista é o começo da palavra. Escreva
-pelo_prefixo(d, palavra, max): desça na trie do dicionário enquanto as
-letras da palavra existirem, mostre o maior prefixo em comum e sugira até
-max palavras do dicionário que começam com ele, em ordem alfabética.
+Quando uma palavra está longe demais de tudo, as sugestões a uma edição de
+distância não acham nada. Outra pista é o começo da palavra. Com o dicionário
+básico (corretor.h), escreva pelo_prefixo(d, palavra, max): desça na trie
+enquanto as letras da palavra existirem, mostre o maior prefixo em comum e
+sugira até max palavras do dicionário que começam com ele, em ordem
+alfabética. Teste com esquina, cafezinho, mercadinho, portaria e xis.
 
 
 ```text
@@ -3049,27 +2501,26 @@ portaria: prefixo "porta" | porta portao
 xis: prefixo "" | nenhuma
 ```
 
-**Dicas:**
-
-1. A descida para quando acaba a palavra ou quando d->filho[letra - 'a'] é
-   NULL. Vá copiando as letras para um buffer: ele é o prefixo.
-2. Para listar, escreva uma função recursiva como a coleta do trie.c
-   (0147), começando no nó onde a descida parou, com nivel = tamanho do
-   prefixo. Use um contador para parar em max.
-3. Se a descida não andou nenhuma letra,
-   não sugira nada: o prefixo vazio casaria com o dicionário inteiro.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E891.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E891 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E891
 ```
 
 **Exercício E892** · ★★☆
 
-O revisor quer um relatório: cada palavra fora do dicionário, em ordem
-alfabética, com quantas vezes ela apareceu no texto. Guarde as palavras
-desconhecidas numa BST de strings (assunto 0099) com um contador no nó:
-palavra repetida soma 1 em vezes. No fim, um percurso em ordem imprime o
-relatório e conta as palavras diferentes e as ocorrências.
+O revisor quer um relatório das palavras fora do dicionário básico
+(corretor.h) deste texto, em ordem alfabética, com quantas vezes cada uma
+apareceu:
+
+
+```text
+hoje a fiera tem pao barato e cafe barato mas ontem a fiera tinha pao
+caro e o onibus pasou cedo
+```
+
+
+Guarde as desconhecidas numa BST de strings (assunto 0099) com um contador no
+nó: palavra repetida soma 1. No fim, um percurso em ordem imprime o relatório
+e conta as palavras diferentes e as ocorrências.
 
 
 ```text
@@ -3081,71 +2532,20 @@ pasou: 1
 4 palavras diferentes, 5 ocorrências
 ```
 
-**Dicas:**
-
-1. O nó: char palavra[COR_MAX], int vezes, esq e dir. Na inserção, compare
-   com strcmp; se der 0, é repetida: vezes++.
-2. O dicionário é o do TAD (cor_carrega_basico) e as palavras saem do
-   texto com cor_proxima. Só vão para a BST as que cor_contem rejeita.
-3. Libere a BST e o dicionário no fim.
-
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E892.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E892 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E892
 ```
 
-**Exercício E893** · ★★★
-
-Ache o bug. Esta versão enxuta do sugeridor testa só duas edições: tirar
-uma letra e pôr uma letra. Ela acerta "pasou" e "baratoo", mas não sugere
-nada para "barat" e "cas", que estão a uma letra de distância de palavras do
-dicionário:
-
-
-```text
-Saída que aparece:
-pasou: passou
-baratoo: barato
-barat: nenhuma
-cas: nenhuma
-```
-
-
-
-```text
-Saída esperada:
-pasou: passou
-baratoo: barato
-barat: barato
-cas: casa caso
-```
-
-
-Ache a linha errada, conserte e rode de novo.
-
-**Dicas:**
-
-1. "barat" vira "barato" pondo uma letra em qual posição? Quais posições o
-   laço da inserção experimenta numa palavra de 5 letras?
-2. Numa palavra de n letras existem n + 1 lugares para pôr uma letra nova:
-   antes da primeira, entre cada par e DEPOIS da última.
-3. Resposta esperada: no laço "pôr uma letra", a condição é i <= n, e não
-   i < n. Com i < n, a posição depois da última letra nunca é testada.
-
-```bash
-gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E893.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E893 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E893
-```
-
 **Exercício E894** · ★★★
 
-Sugestões a até DUAS edições, com a distância de Levenshtein do assunto
-0142, sem calcular a distância contra cada palavra do dicionário. A ideia:
-desça na trie com DFS levando a última linha da tabela da distância. Cada
-nó acrescenta uma linha (a letra dele contra a palavra procurada), e todas
-as palavras que passam por aquele prefixo aproveitam as linhas de cima. Se
-o menor valor da linha nova já passar de 2, nada embaixo daquele nó chega a
-2: pode cortar o ramo inteiro. Escreva parecidas(d, alvo), que mostra, em
-ordem alfabética, as palavras do dicionário básico a distância 2 ou menos,
-com a distância entre parênteses.
+Sugira palavras a até DUAS edições (distância de Levenshtein, assunto 0142)
+sem calcular a distância contra cada palavra do dicionário. Desça na trie do
+dicionário básico (corretor.h) com uma DFS que leva a última linha da tabela
+da distância: cada nó acrescenta uma linha (a letra dele contra a palavra
+procurada). Se o menor valor da linha nova já passar de 2, corte o ramo.
+Escreva parecidas(d, alvo), que mostra, em ordem alfabética, as palavras a
+distância 2 ou menos, com a distância entre parênteses. Teste com carrro,
+jnaela, bolsa e mercadorias.
 
 
 ```text
@@ -3155,19 +2555,6 @@ jnaela: janela(2)
 bolsa: boa(2) bola(1) bolo(2)
 mercadorias: nenhuma
 ```
-
-**Dicas:**
-
-1. A linha da raiz (prefixo vazio) é 0, 1, 2, ..., m (m = strlen(alvo)).
-   Para o filho com a letra c, a linha nova é lin[0] = ant[0] + 1 e, para
-   j de 1 a m, lin[j] = o menor entre ant[j - 1] + (alvo[j - 1] != c),
-   ant[j] + 1 e lin[j - 1] + 1.
-2. Na função recursiva, receba a linha do pai (const int ant[]), monte a
-   sua num vetor local e passe para os filhos. Se o nó tem fim e lin[m] <= 2,
-   mostre a palavra do buffer. Se o menor valor de lin passar de 2, volte.
-3. Em "jnaela", trocar duas letras
-   vizinhas de lugar custa 2 na distância de Levenshtein, mas é UMA edição no
-   cor_sugere (que testa a troca de vizinhas à parte).
 
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E894.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E894 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E894
@@ -4791,6 +4178,74 @@ vira a raiz e a altura diminui. Na IV, um nó que não é raiz tem de 2 a 5
 chaves para `t = 3`. Veja 0146.
 
 </details>
+
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 023/2018 · Questão 02**
+
+Dadas as seguintes afirmações a respeito de árvores B,
+
+I. Em uma árvore B de ordem "m" cada nó tem, no máximo, "m" filhos.\
+II. Em uma árvore B de ordem "m" cada nó (exceto a raíz e as folhas) tem pelo menos "m/2" filhos.\
+III. Árvores B precisam ser rebalanceadas frequentemente.\
+IV. Um nó não-folha com "k" filhos deve ter k chaves.\
+V. Todas as folhas aparecem no mesmo nível e carregam informação.\
+
+estão CORRETOS os itens
+
+- a) I e III, apenas.
+- b) I, III, IV e V.
+- c) I, II e V, apenas.
+- d) III, IV e V, apenas.
+- e) II, III e IV, apenas.
+
+<details><summary>Gabarito</summary>
+
+**C.** I, II e V são as propriedades da árvore B; III é falsa (balanceia pouco) e IV é falsa (k filhos têm k-1 chaves). Assunto 0146.
+
+</details>
+
+**Edital 061/2018 · Questão 11**
+
+Para remoção de uma chave cuja página esteja com o número mínimo, em árvore B, é CORRETO afirmar que:
+
+- a) Deve-se fazer o processo de SPLIT sempre na página onde se encontrar a chave.
+- b) Deve-se fazer o processo de SPLIT na página onde se encontrar a chave, exceto quanto é um elemento da raiz da árvore.
+- c) Se a página onde se encontrar a chave não é folha, deve-se fazer procedimento de concatenação ou redistribuição, considerando os irmãos.
+- d) Remove-se a chave, e a substitui por uma chave do nó irmão.
+- e) No caso de só haver uma única página, a remoção não causa a necessidade de balanceamento.
+
+<details><summary>Gabarito</summary>
+
+**E.** Com uma só página (raiz folha), remover não pede balanceamento. As outras confundem split com remoção. Assunto 0146.
+
+</details>
+
+**Edital 061/2018 · Questão 14**
+
+Analise as afirmativas a seguir sobre árvores B e árvores binárias
+
+I. Diferente das árvores binárias, cada nó de uma árvore B deverá sempre ter mais de dois filhos.\
+II. Um nó de árvore B tem um campo ou um método para indicar se é um nó folha ou não. Característica esta herdada da AVL.\
+III. As folhas da árvore B são dispostas mais flexivelmente que as da árvore binária: suas folhas poderão estar em níveis diferentes, desde zero até o valor da altura da árvore.\
+IV. A árvore B tem um método de balanceamento muito custoso, por isso, sua indicação para trabalhar com dispositivos de armazenamento secundário, deve ser avaliada com muita cautela.\
+
+e assinale a alternativa CORRETA.
+
+- a) Todas as afirmativas estão corretas.
+- b) Somente as afirmativas II e III estão corretas
+- c) Somente as afirmativas I, II e IV estão corretas.
+- d) Somente as afirmativas I, III e IV estão corretas.
+- e) Todas as afirmativas estão incorretas
+
+<details><summary>Gabarito</summary>
+
+**E.** I, II, III e IV são falsas: nó com 2 filhos é possível, não vem da AVL, folhas no mesmo nível, árvore B serve justamente para armazenamento secundário. Assunto 0146.
+
+</details>
+
 
 ## Para ler mais
 

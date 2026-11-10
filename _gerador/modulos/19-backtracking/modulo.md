@@ -1,61 +1,48 @@
 # Módulo 19 · Enumeração e backtracking
 
-Muito problema real não tem fórmula. Que combinação de produtos fecha o
-crédito exato? Em que ordem o motoboy faz as entregas? Onde ficam as rainhas,
-como sair do labirinto, que dígito vai em cada casa do sudoku? Para todos
-eles, o jeito honesto é **testar as possibilidades**, com método: sem esquecer nenhuma, sem repetir nenhuma e sem perder tempo com as
-que já se sabe que não servem.
+Muito problema não tem fórmula: que produtos fecham o crédito exato, onde
+ficam as rainhas, como sair do labirinto. É preciso **testar as
+possibilidades** sem esquecer, sem repetir e sem perder tempo com as que já
+não servem.
 
-O módulo começa pela **enumeração**: gerar todos os subconjuntos e todas as
-permutações com recursão. Daí nasce o **backtracking**, a técnica que
-constrói a solução uma escolha por vez e **volta atrás** assim que percebe que
-o caminho não dá em nada. O resto do módulo aplica a mesma ideia a
-problemas cada vez maiores: soma de subconjuntos, N-rainhas, labirintos,
-flood fill e, no fim, um resolvedor de sudoku completo.
+O módulo começa pela **enumeração** de subconjuntos e permutações com
+recursão. Daí vem o **backtracking**, que constrói a solução uma escolha por
+vez e **volta atrás** quando o caminho falha: soma de subconjuntos,
+N-rainhas, labirinto, flood fill e sudoku.
 
-O problema passa a ser uma **árvore de decisões**. Cada nível é uma
-escolha; cada caminho da raiz até uma folha é uma tentativa completa.
-Enumerar é visitar a árvore inteira. Fazer backtracking é visitar a árvore
-**podando** os galhos que não podem ter solução. Tudo o que você muda antes
-de descer, você **desfaz** depois de voltar: é a regra que mais derruba
-código.
+O problema vira uma **árvore de decisões**: cada nível é uma escolha e cada
+caminho da raiz a uma folha é uma tentativa. Enumerar visita a árvore
+inteira; o backtracking **poda** os galhos sem solução. Tudo o que você muda
+antes de descer, **desfaça** depois de voltar.
 
 ## O que você vai aprender
 
-- gerar todos os **subconjuntos** de um conjunto, pela recursão e pelos **bits** de um número
-- gerar todas as **permutações** com troca, recursão e desfazer, e o vetor de **usados**
-- o esqueleto do **backtracking**: caso de parada, **poda** e escolha com desfazer
-- a **soma de subconjuntos** e o efeito da poda no número de chamadas
-- as **N-rainhas** com vetores de colunas e diagonais, testando o ataque em O(1)
-- achar um caminho num **labirinto** em matriz e pintar regiões com **flood fill**
-- juntar tudo num **resolvedor de sudoku**, e acelerar a busca escolhendo a casa mais apertada
+- **subconjuntos**, pela recursão e pelos **bits** de um número
+- **permutações** com troca, recursão e desfazer
+- o esqueleto do **backtracking**: parada, **poda** e escolha com desfazer
+- a **soma de subconjuntos** e o efeito da poda
+- as **N-rainhas**, com o ataque testado em O(1)
+- **labirinto** em matriz e **flood fill**
+- um **resolvedor de sudoku**
 
 ## Antes de começar
 
-Este módulo é **recursão** do começo ao fim: revise os assuntos 0031 (pilha de
-chamadas), 0032 e 0033 se ainda precisar pensar muito para seguir uma função
-que chama a si mesma. Você também vai usar matrizes (0039), operadores de
-bits (0065) e o vetor de `bool` de `<stdbool.h>`. O labirinto é a DFS do
-assunto 0111 com a matriz no lugar do grafo, e a BFS (0110) aparece como a
-ferramenta certa para o menor caminho. A pilha (0082) é a saída quando a
-recursão ficaria funda demais.
+Revise a recursão (0031 a 0033), as matrizes (0039), os operadores de bits
+(0065) e o vetor de `bool` de `<stdbool.h>`. O labirinto é a DFS do 0111 com
+uma matriz no lugar do grafo; a BFS (0110) dá o menor caminho.
 
-Em cada função recursiva, procure três partes: em que ponto ela **para**, em
-que ponto ela **poda** e em que ponto ela **escolhe e desfaz**. O fluxograma
-é curto, porque cada caixa de chamada recursiva é o fluxograma inteiro de
-novo. Quase todo programa conta as **chamadas**: com a poda, a saída fica
-igual e o número cai. Nas árvores de decisão, amarelo é uma decisão ainda
-aberta, verde é uma solução, vermelho é um galho podado e cinza é um beco
-sem saída; nos tabuleiros, as casas verdes são a solução e as vermelhas, as
-proibidas.
+**Progressão.** O módulo 18 ordenou sem enumerar; aqui você enumera e poda,
+com a recursão dos módulos 4 e 13 e a DFS do 16. O 20 retoma a recursão como
+divisão e conquista e troca a busca exaustiva por escolhas gulosas.
 
-Uma convenção vale para o módulo todo: **os vetores de marcação começam e
-terminam a busca do mesmo jeito**. Se, depois de um backtracking, sobrou algum
-`true` que não estava lá no começo, faltou um desfazer.
+Em cada função recursiva, ache onde ela **para**, onde **poda** e onde
+**escolhe e desfaz**. Os programas contam as **chamadas**: com a poda, a
+saída é a mesma e o número cai. Nas árvores de decisão, amarelo é uma decisão
+aberta, verde uma solução, vermelho um galho podado e cinza um beco sem
+saída; nos tabuleiros, verde é a solução e vermelho, casa proibida.
 
-Um aviso: o exercício E773 é um "ache o bug" cujo código, de propósito,
-derruba o programa com estouro de pilha. O AddressSanitizer vai acusar
-`stack-overflow` até você consertar.
+Se sobrou um `true` no vetor de marcação ao fim da busca, faltou um
+desfazer.
 
 {{indice}}
 

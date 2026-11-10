@@ -1,30 +1,25 @@
 ## 0087 · Deque
 
-No app de música, você monta a fila: faixa 5, faixa 8, faixa 3. Então lembra
-de uma que quer ouvir agora e toca em "tocar em seguida": a faixa 11 fura a fila
-e vai para a **frente**. Depois desiste da última que adicionou e a tira do
-**fim**. Nem pilha nem fila fazem isso.
+No app de música, a fila tem as faixas 5, 8 e 3. Você toca em "tocar em
+seguida" e a faixa 11 vai para a **frente**; depois tira a última adicionada,
+pelo **fim**. Nem pilha nem fila fazem isso.
 
-Essa estrutura é o **deque** (*double-ended queue*, fala-se "deck"): uma
-**fila dupla**, que entra e sai pelas **duas** pontas. São quatro operações
-principais:
+É o **deque** (*double-ended queue*, pronuncia-se "deck"): uma **fila dupla**,
+que entra e sai pelas **duas** pontas. Quatro operações:
 
 - `deque_insere_inicio` e `deque_retira_inicio`: mexem na frente;
 - `deque_insere_fim` e `deque_retira_fim`: mexem no fundo.
 
-O deque generaliza as duas estruturas que você já viu. Usando só uma ponta
-(insere e retira no fim), ele é uma **pilha**. Inserindo no fim e retirando
-no início, é uma **fila**. E quando quem sai não é o mais antigo nem o mais
-novo, e sim o de maior prioridade, a estrutura é a **fila de prioridade**,
-que o assunto 0102 monta com um heap. Num vetor comum, inserir ou retirar no
-início custa O(n), porque desloca todo mundo. Aqui as quatro operações custam
-**O(1)**.
+O deque generaliza as duas estruturas anteriores. Com uma ponta só (insere e
+retira no fim), é uma **pilha**; inserindo no fim e retirando no início, uma
+**fila**. Se sai o de maior prioridade, é a **fila de prioridade** (assunto
+0102, com heap). Aqui as quatro operações custam **O(1)**, enquanto num vetor
+comum mexer no início custa O(n).
 
-A implementação do [`deque.c`](0087-deque/deque.c) é a fila circular do 0085
-com uma novidade: o `inicio` agora também anda para **trás**. Para inserir na
-frente, ele recua uma gaveta, e da gaveta 0 ele volta para a última. A conta
-de "gaveta anterior" fica numa função auxiliar `static`, que só o `deque.c`
-enxerga:
+O [`deque.c`](0087-deque/deque.c) é a fila circular do 0085 com o `inicio`
+andando também para **trás**: para inserir na frente, ele recua uma gaveta, e
+da 0 volta para a última. A conta fica numa função auxiliar `static`, visível
+só no `deque.c`:
 
 ```c
 #define CAPACIDADE 8
@@ -54,16 +49,16 @@ bool deque_retira_fim(Deque *d, int *valor) {
 }
 ```
 
-`deque_insere_fim` e `deque_retira_inicio` são iguais aos da fila. Retirar
-do fim é o mais simples: basta diminuir `n`.
+`deque_insere_fim` e `deque_retira_inicio` são iguais aos da fila. Retirar do
+fim só diminui `n`.
 
-No exemplo, as faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1
-e 2. A faixa 11 entra pela frente: o início, que estava na gaveta 0, recua e
-dá a volta para a gaveta 7. A ordem da fila fica 11, 5, 8, 3:
+As faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1 e 2. A 11 entra pela
+frente: o início recua da gaveta 0 e dá a volta para a 7. A ordem fica 11, 5,
+8, 3:
 
 {{ideia}}
 
-O programa da fila de músicas usa as quatro operações:
+Programa da fila de músicas:
 
 ```c
 #include <stdio.h>
@@ -104,34 +99,27 @@ int main(void) {
 // Ainda na fila: 5 8
 ```
 
-Na entrada da faixa 11, a única diferença do fluxograma para o da fila é o
-passo que faz o início recuar com `anterior`, que soma 8 antes do `%` para
-o índice não ficar negativo:
+Na entrada da faixa 11, o fluxograma difere do da fila só no recuo do início
+com `anterior`, que soma 8 antes do `%` para o índice não ficar negativo:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Em C, o resto de um número negativo é **negativo**: `-1 % 8` vale `-1`, não
-> 7. (A matemática diria 7; o C17 manda a divisão truncar em direção ao zero,
-> e o resto acompanha o sinal do dividendo.) Então `(inicio - 1) %
-> CAPACIDADE`, com `inicio = 0`, dá `-1`, e `itens[-1]` escreve **fora** do
-> vetor. Some a capacidade antes do `%`: `(inicio - 1 + CAPACIDADE) %
-> CAPACIDADE`.
+> Em C, o resto de número negativo é **negativo**: `-1 % 8` vale `-1`, não 7.
+> O C17 trunca a divisão em direção ao zero, e o resto acompanha o sinal do
+> dividendo. Assim, `(inicio - 1) % CAPACIDADE` com `inicio = 0` dá `-1`, e
+> `itens[-1]` escreve **fora** do vetor. Some a capacidade antes do `%`:
+> `(inicio - 1 + CAPACIDADE) % CAPACIDADE`.
 
 > [!TIP]
-> **Por dentro do C:** a palavra `static` numa função fora de qualquer bloco
-> não tem nada a ver com variável estática: ela tira a função da **ligação
-> externa**. O ligador nem fica sabendo que `anterior` existe, então outro
-> arquivo pode ter a sua própria `anterior` sem conflito: é assim que o C
-> torna uma função **privada** do módulo. O deque com lista encadeada também
-> é possível, mas precisa de lista **dupla**
-> (assunto 0079): para retirar do fim, o último nó tem que saber quem é o
-> penúltimo.
+> `static` numa função fora de bloco não cria variável estática: tira a função
+> da **ligação externa** e a torna **privada** do arquivo. O deque encadeado
+> exige lista **dupla** (assunto 0079): para retirar do fim, o último nó
+> precisa conhecer o penúltimo.
 
 > [!NOTE]
 > **Pergunta para você:** se o programa da fila de músicas fizesse mais um
 > `deque_insere_inicio` logo depois do 11, em que gaveta o novo item cairia?
 > E se o deque estivesse com as 8 gavetas ocupadas?
-
 
 {{pratique}}

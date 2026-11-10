@@ -1,22 +1,17 @@
 ## 0098 · Árvore binária e percursos
 
-Churrasco no sábado: vão 8 pessoas, 3 não bebem, e quem bebe paga R$ 4 de
-cerveja mais R$ 2 de gelo. Na planilha você digita `=(8-3)*(4+2)` e ela
-responde 30. Como a planilha sabe que a subtração e a soma vêm antes da
-multiplicação? Ela monta uma **árvore** com a fórmula.
+No churrasco, vão 8 pessoas, 3 não bebem, e quem bebe paga R$ 4 de cerveja mais
+R$ 2 de gelo. A planilha calcula `=(8-3)*(4+2)` = 30 montando uma **árvore** com
+a fórmula, para saber o que vem antes.
 
-Uma **árvore binária** é uma árvore em que cada nó tem **no máximo dois
-filhos**, e cada filho tem lado: o da **esquerda** ou o da **direita**. A
-definição recursiva é curta: uma árvore binária é **vazia** (`NULL`) ou é um nó
-com uma **subárvore esquerda** e uma **subárvore direita**, que também são
-árvores binárias.
+Uma **árvore binária** tem em cada nó **no máximo dois filhos**, um à
+**esquerda** e outro à **direita**. Recursivamente: é **vazia** (`NULL`) ou é
+um nó com uma **subárvore esquerda** e uma **subárvore direita**. O lado
+importa: `A` com filho `B` à esquerda e `A` com filho `B` à direita são árvores
+**diferentes**.
 
-Lado importa. Um nó `A` com filho `B` à esquerda e um nó `A` com filho `B` à
-direita são árvores **diferentes**. Isso não existia nas pastas do assunto
-anterior, em que só contava a ordem dos filhos.
-
-Em C, o nó é uma struct com o dado e dois ponteiros. Aqui o dado é um `char`,
-que guarda um dígito ou um operador:
+Em C, o nó é uma struct com o dado (um `char`: dígito ou operador) e dois
+ponteiros:
 
 ```c
 typedef struct No {
@@ -26,14 +21,11 @@ typedef struct No {
 } No;
 ```
 
-O resto vira um **TAD**: `arvore.h` com os protótipos, `arvore.c` com a
-implementação, como no assunto 0074. Diferente da pilha e da fila, a struct fica
-à mostra no `.h`, porque os exercícios precisam andar pelos nós. A função
-`arv_cria(info, esq, dir)` monta um nó com as duas subárvores prontas, então
-dá para construir a árvore de baixo para cima.
+O resto vira um **TAD** (assunto 0074): `arvore.h` com os protótipos e
+`arvore.c` com a implementação. `arv_cria(info, esq, dir)` monta um nó com as
+duas subárvores prontas, então a árvore se constrói de baixo para cima.
 
-Montada a árvore, como visitar todos os nós? Existem quatro ordens clássicas, os
-**percursos**:
+Visitar todos os nós tem quatro ordens, os **percursos**:
 
 | Percurso | Ordem | Na fórmula |
 | --- | --- | --- |
@@ -43,20 +35,15 @@ Montada a árvore, como visitar todos os nós? Existem quatro ordens clássicas,
 | **por nível** | linha por linha, de cima para baixo | `* - + 8 3 4 2` |
 
 Os três primeiros são recursivos e mudam só a posição do `printf` em relação às
-duas chamadas. O por nível não desce por um lado e depois pelo outro: ele usa
-uma **fila** (assunto 0085). Tira um nó da frente, mostra, põe os filhos dele no
-fim, e repete até a fila esvaziar.
+duas chamadas. O por nível usa uma **fila** (assunto 0085): tira um nó da
+frente, mostra e põe os filhos no fim. A pós-ordem é a ordem de **calcular**:
+o `*` só se aplica depois das duas subárvores (assunto 0084).
 
-A pós-ordem é a ordem natural para **calcular**: você só aplica o `*` depois de
-saber quanto valem as duas subárvores. É o mesmo algoritmo da pilha com notação
-pós-fixa do assunto 0084, só que agora a árvore está desenhada.
-
-No desenho, os operadores ficam nos nós internos (roxo) e os números
-nas folhas (azul). Cada percurso lê a mesma árvore numa ordem diferente:
+Os operadores ficam nos nós internos (roxo) e os números nas folhas (azul):
 
 {{ideia}}
 
-O cliente do TAD monta a árvore de baixo para cima e chama os percursos:
+O cliente monta a árvore de baixo para cima e chama os percursos:
 
 ```c
 #include <stdio.h>
@@ -102,16 +89,16 @@ void arv_em_ordem(const No *r) {
 }
 ```
 
-No fluxograma, o caso base é a árvore vazia. Num nó que existe, a função
-resolve a esquerda inteira, mostra a raiz e só então resolve a direita. Troque a
-caixa azul de lugar e você tem a pré-ordem (antes) ou a pós-ordem (depois):
+O caso base é a árvore vazia. Num nó que existe, a função resolve a esquerda,
+mostra a raiz e resolve a direita. Mover o `printf` dá a pré-ordem ou a
+pós-ordem:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A pilha de chamadas da em ordem, a partir da raiz `*`. Cada linha é o momento em
-que um `printf` acontece:
+A pilha de chamadas da em ordem, a partir da raiz `*`. Cada linha é um
+`printf`:
 
 | Pilha de chamadas (topo à direita) | Mostra | Na tela até aqui |
 | --- | --- | --- |
@@ -124,23 +111,17 @@ que um `printf` acontece:
 | `*` → `+` → `2` | 2 | `8 - 3 * 4 + 2` |
 
 > [!WARNING]
-> A em ordem **perde os parênteses**. `8 - 3 * 4 + 2`, lido por uma pessoa (ou
-> pelo C), dá `8 - 12 + 2 = -2`, e não 30. A árvore não precisa de parênteses
-> porque a forma dela já diz o que vem primeiro. Para mostrar a fórmula certa,
-> a em ordem precisa abrir um `(` antes de cada subárvore e fechar depois. O
-> exemplo A196 faz isso e calcula o valor em pós-ordem.
+> A em ordem **perde os parênteses**: `8 - 3 * 4 + 2` dá `8 - 12 + 2 = -2`, e
+> não 30. Para mostrar a fórmula certa, a em ordem abre `(` antes de
+> cada subárvore e fecha depois (exemplo A196).
 
 > [!TIP]
-> **Por dentro do C:** cada nó ocupa 24 bytes: 1 do `char`, 7 de enchimento para
-> alinhar os ponteiros e 2 ponteiros de 8 bytes. Uma árvore com `n` nós tem
-> `n + 1` ponteiros `NULL` (aqui, 7 nós e 8 `NULL`, todos nas folhas). A
-> recursão usa a pilha de chamadas: a profundidade máxima é a altura + 1 frames.
-> Numa árvore equilibrada de um milhão de nós são uns 20 frames; numa árvore
-> "torta", em fila indiana, seria um milhão, e a pilha estoura.
+> Uma árvore com `n` nós tem `n + 1` ponteiros `NULL`. A recursão usa altura +
+> 1 frames: uns 20 numa árvore equilibrada de um milhão de nós, mas um milhão
+> numa árvore em fila indiana, e a pilha estoura.
 
 > [!NOTE]
-> **Pergunta para você:** se a em ordem de uma árvore é `B A C` e a pré-ordem é
-> `A B C`, quem é a raiz? Quem fica à esquerda? Desenhe. E com em ordem `A B C`
-> e pré-ordem `A B C`, como fica a árvore?
+> **Pergunta para você:** se a em ordem é `B A C` e a pré-ordem é `A B C`, quem
+> é a raiz? E com em ordem `A B C` e pré-ordem `A B C`, como fica a árvore?
 
 {{pratique}}

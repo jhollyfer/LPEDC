@@ -44,7 +44,7 @@ Assunto `N` (ex.: 0002 → N = 2):
 - exemplos: `A(2N-1)` e `A(2N)` → 0002 tem `A003.c` e `A004.c`
 - exercícios: `E(6N-5)` até `E(6N)` → 0002 tem `E007.c` até `E012.c`
 
-Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 6 exercícios por assunto.
+Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 4 exercícios por assunto; a numeração dos exercícios tem buracos.
 
 ## 3. Do texto ao `.md`
 
@@ -62,7 +62,7 @@ Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 6 exercí
 | módulo | uma pasta numerada (`01-fundamentos`) e o `.md` dela na raiz |
 | assunto | uma seção `## NNNN · Título`, com um exemplo contado em texto, ideia, código e fluxograma |
 | exemplo (A) | programa resolvido que mostra outra faceta do assunto |
-| exercício (E) | esqueleto para a pessoa codificar, com dicas e resposta esperada |
+| exercício (E) | esqueleto vazio para a pessoa codificar, com enunciado e saída esperada |
 | lista prática (P) | 30 exercícios por módulo no estilo da prova |
 | pratique | bloco gerado com os exemplos e exercícios do assunto |
 | prova | Prova de Conhecimentos do Mestrado do PPGI/UFAM (`PRD.md`) |

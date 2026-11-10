@@ -1,70 +1,24 @@
 // 0137 · Juntando tudo
 // Exercício E820 · ★★☆
 //
-// Ache o bug. Este programa grava 10 bits soltos num arquivo, 8 por byte,
-// e depois lê o arquivo de volta mostrando os bits de cada byte. Ele roda
-// sem aviso, mas os 2 últimos bits somem:
-//
-//   Saída que aparece:
-//   Lido: 10110011
-//   1 byte(s) no arquivo
+// Escreva um programa que grave os 10 bits 1011001110 num arquivo
+// "bits.bin", 8 por byte, e leia o arquivo de volta mostrando os bits de
+// cada byte. Use struct Saida (arquivo, byte em formação e quantos bits já
+// entraram) e duas funções: poe_bit(Saida *s, int bit), que acrescenta um
+// bit e grava o byte quando juntar 8, e fecha_bits(Saida *s), que grava o
+// byte incompleto. Os bits que sobram devem ir para a ESQUERDA do último
+// byte, completados com zeros à direita (por isso 10 vira 10000000). Apague
+// o arquivo no fim.
 //
 //   Saída esperada:
 //   Lido: 10110011 10000000
 //   2 byte(s) no arquivo
 //
-// Conserte escrevendo a função que falta e chamando-a no lugar certo. Os
-// bits que sobram devem ir para a ESQUERDA do último byte, completados com
-// zeros à direita (por isso 10 vira 10000000).
-//
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-typedef struct {
-    FILE *f;
-    unsigned char byte;
-    int n;
-} Saida;
-
-void poe_bit(Saida *s, int bit) {
-    s->byte = (unsigned char)((s->byte << 1) | bit);
-    s->n++;
-    if (s->n == 8) {
-        fputc(s->byte, s->f);
-        s->byte = 0;
-        s->n = 0;
-    }
-}
-
 int main(void) {
-    const char *bits = "1011001110"; // 10 bits: um byte e mais 2 bits
-    FILE *f = fopen("bits.bin", "wb");
-    if (f == NULL) {
-        return 1;
-    }
-    Saida s = {f, 0, 0};
-    for (const char *p = bits; *p != '\0'; p++) {
-        poe_bit(&s, *p - '0');
-    }
-    fclose(f);
 
-    // lê de volta e mostra os bits de cada byte
-    f = fopen("bits.bin", "rb");
-    if (f == NULL) {
-        return 1;
-    }
-    int c, bytes = 0;
-    printf("Lido:");
-    while ((c = fgetc(f)) != EOF) {
-        printf(" ");
-        for (int b = 7; b >= 0; b--) {
-            putchar((c >> b) & 1 ? '1' : '0');
-        }
-        bytes++;
-    }
-    printf("\n%d byte(s) no arquivo\n", bytes);
-    fclose(f);
-    remove("bits.bin");
     return 0;
 }

@@ -30,11 +30,9 @@ int ordena(int v[], int n, bool maior_ou_igual, bool mostrar) {
 }
 
 int main(void) {
-    int preparo[] = {6, 3, 8, 3, 1};
-    int copia[] = {6, 3, 8, 3, 1};
-    int n = 5;
-
-    printf("total com >: %d\n", ordena(preparo, n, false, true));
-    printf("total com >=: %d\n", ordena(copia, n, true, false));
+    int a[] = {6, 3, 8, 3, 1};
+    int b[] = {6, 3, 8, 3, 1};
+    printf("total com >: %d\n", ordena(a, 5, false, true) );
+    printf("total com >=: %d\n", ordena(b, 5, true, false));
     return 0;
 }

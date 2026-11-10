@@ -1,15 +1,23 @@
 // 0097 · Árvores
 // Exercício E580 · ★★☆
 //
-// Cada pasta guarda alguns arquivos soltos (o campo mb, em megabytes). A
-// função tamanho, já pronta, soma a pasta com tudo que está dentro dela, sem
-// imprimir nada. Escreva duas funções que mostram as pastas com o tamanho
-// total de cada uma, em ordens diferentes:
+// Cada pasta guarda arquivos soltos (campo mb, em megabytes):
 //
-// - du(n): imprime "<total> MB  <nome>" como o comando du do Linux, com cada
-//   pasta aparecendo DEPOIS de todas as subpastas dela (a raiz por último);
-// - arvore(n, prof): imprime como o gerenciador de arquivos, a pasta ANTES
-//   das subpastas, recuada 2 espaços por nível.
+//   casa (5)
+//   ├── fotos (10)
+//   │   ├── praia (300)
+//   │   └── natal (120)
+//   └── contas (2)
+//       ├── agua (5)
+//       └── luz (8)
+//
+// Escreva tamanho(n), que soma a pasta com tudo que está dentro dela, e duas
+// funções que mostram o tamanho total de cada pasta:
+//
+// - du(n): imprime "<total> MB  <nome>", com cada pasta DEPOIS de todas as
+//   subpastas dela (a raiz por último);
+// - arvore(n, prof): imprime "nome (total MB)", a pasta ANTES das
+//   subpastas, recuada 2 espaços por nível.
 //
 //   Saída esperada:
 //   -- du --
@@ -29,7 +37,7 @@
 //       agua (5 MB)
 //       luz (8 MB)
 //
-// Escreva sua resposta abaixo (complete du e arvore):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,61 +52,7 @@ typedef struct No {
     int qtd;
 } No;
 
-No *novo(const char *nome, int mb) {
-    No *n = malloc(sizeof(No));
-    if (n == NULL) {
-        exit(1);
-    }
-    strcpy(n->nome, nome);
-    n->mb = mb;
-    n->qtd = 0;
-    return n;
-}
-
-No *adiciona(No *pai, const char *nome, int mb) {
-    No *filho = novo(nome, mb);
-    pai->filhos[pai->qtd++] = filho;
-    return filho;
-}
-
-void libera(No *n) {
-    for (int i = 0; i < n->qtd; i++) {
-        libera(n->filhos[i]);
-    }
-    free(n);
-}
-
-int tamanho(const No *n) {
-    int total = n->mb;
-    for (int i = 0; i < n->qtd; i++) {
-        total += tamanho(n->filhos[i]);
-    }
-    return total;
-}
-
-int du(const No *n) {
-    (void)n; // apague esta linha quando escrever a função
-    return 0;
-}
-
-void arvore(const No *n, int prof) {
-    (void)n; // apague estas duas linhas quando escrever a função
-    (void)prof;
-}
-
 int main(void) {
-    No *casa = novo("casa", 5);
-    No *fotos = adiciona(casa, "fotos", 10);
-    No *contas = adiciona(casa, "contas", 2);
-    adiciona(fotos, "praia", 300);
-    adiciona(fotos, "natal", 120);
-    adiciona(contas, "agua", 5);
-    adiciona(contas, "luz", 8);
 
-    printf("-- du --\n");
-    du(casa);
-    printf("-- arvore --\n");
-    arvore(casa, 0);
-    libera(casa);
     return 0;
 }

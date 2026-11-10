@@ -33,7 +33,7 @@ int main(void) {
     ordena(precos, n);
     printf("total: %ld = 8 · 7 / 2\n", total);
     for (int i = 0; i < n; i++) {
-        printf("%d ", precos[i]);
+        printf(i == 0 ? "%d" : " %d", precos[i]);
     }
     printf("\n");
     return 0;

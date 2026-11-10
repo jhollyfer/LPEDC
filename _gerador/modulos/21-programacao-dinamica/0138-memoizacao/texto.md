@@ -1,51 +1,41 @@
 ## 0138 · Memoização
 
-A escada rolante da estação quebrou e você vai subir os 35 degraus a pé. Dá
-para subir de um em um ou pular de dois em dois. De quantos jeitos diferentes
-dá para chegar lá em cima? A pergunta parece de almanaque, mas esconde a
-ideia central deste módulo.
+Você vai subir 35 degraus a pé, de um em um ou de dois em dois. De quantos
+jeitos dá para chegar ao topo? A pergunta esconde a ideia central deste
+módulo.
 
-Pense no **último passo**. Para chegar no degrau `n`, você veio do degrau
-`n - 1` (passo simples) ou do `n - 2` (passo duplo). Então:
+Pense no **último passo**. Para chegar ao degrau `n`, você veio do `n - 1`
+(passo simples) ou do `n - 2` (passo duplo):
 
 `formas(n) = formas(n - 1) + formas(n - 2)`, com `formas(0) = formas(1) = 1`.
 
-É a recursão de Fibonacci do assunto 0033, e lá você viu o problema: a
-recursão pura é **exponencial**. Para `formas(35)`, ela faz quase 30 milhões
-de chamadas, porque calcula as **mesmas** coisas de novo e de novo. `formas(33)` é calculado 2 vezes,
-`formas(32)` 3 vezes, `formas(31)` 5 vezes...
+É o Fibonacci do assunto 0033: a recursão pura é **exponencial** e faz quase
+30 milhões de chamadas para `formas(35)`, porque repete as mesmas contas.
+Existem só 36 perguntas diferentes. A saída é **anotar cada resposta na
+primeira vez e consultar nas próximas**, de duas formas:
 
-Só existem 36 perguntas diferentes (`formas(0)` até `formas(35)`). A saída:
-**anote cada resposta na primeira vez e consulte nas próximas**. Isso tem nome:
+- **memoização** (de *memo*, lembrete): a recursão consulta o vetor `memo[]`
+  antes de calcular. Resolve de **cima para baixo**;
+- **tabela**: sem recursão, enche um vetor do menor subproblema para o maior.
+  Resolve de **baixo para cima**.
 
-- **memoização** (de *memo*, lembrete): a recursão continua igual, mas antes
-  de calcular ela olha num vetor `memo[]` se a resposta já está lá. Resolve de
-  **cima para baixo**: começa pela pergunta grande e desce até as pequenas;
-- **tabela** (de **baixo para cima**): esquece a recursão e enche um vetor do
-  menor subproblema para o maior. Quando chega em `t[i]`, os valores de que
-  ele depende já estão prontos.
+As duas são **programação dinâmica** (PD): combinar respostas de
+**subproblemas que se repetem**, cada um calculado uma vez. "Programação"
+aqui quer dizer planejamento numa tabela.
 
-As duas são **programação dinâmica** (PD): resolver um problema combinando
-respostas de **subproblemas que se repetem**, cada um calculado uma vez só. O
-nome é antigo e não tem nada a ver com memória dinâmica: "programação" aqui
-quer dizer "planejamento numa tabela".
+A PD exige duas condições: a resposta sai das respostas **ótimas** de
+problemas menores do mesmo tipo (**subestrutura ótima**), e esses problemas
+**se repetem** (**subproblemas sobrepostos**). Nas metades do merge sort, que
+não se repetem, guardar não ajuda. O Cormen chama as versões de
+*top-down with memoization* e *bottom-up method*.
 
-Para a PD funcionar, duas coisas precisam ser verdade. A resposta do problema
-tem que sair das respostas **ótimas** de problemas menores do mesmo tipo (a
-recorrência; o Cormen chama isso de **subestrutura ótima**). E esses problemas
-menores têm que **se repetir** (**subproblemas sobrepostos**); se cada um
-aparece uma vez só, como nas metades do merge sort, guardar não adianta nada.
-No Cormen, as duas versões aparecem como *top-down with memoization* e
-*bottom-up method*.
-
-Com 5 degraus, a recursão pura faria as 15 chamadas da
-árvore. Com o memo, só as coloridas acontecem: as verdes calculam e anotam,
-as amarelas encontram a resposta pronta e voltam na hora. Tudo que está cinza
-deixa de existir:
+Com 5 degraus, a recursão pura faria 15 chamadas. Com o memo, as verdes
+calculam e anotam, as amarelas acham a resposta pronta e o cinza deixa de
+existir:
 
 {{ideia}}
 
-O código mede as três versões para os 35 degraus da estação:
+O código mede as três versões para 35 degraus:
 
 ```c
 #include <stdio.h>
@@ -113,20 +103,18 @@ int main(void) {
 // tabela:        14930352 formas, 34 voltas no laço
 ```
 
-De 29.860.703 para 69 chamadas, com a mesma recursão e três linhas a mais. A
-conta do custo de qualquer PD é sempre esta: **número de subproblemas ×
-trabalho de cada um**. Aqui são uns 35 subproblemas, cada um com uma soma:
-O(n), contra O(1,6ⁿ) da recursão pura.
+De 29.860.703 para 69 chamadas. O custo de toda PD é **número de
+subproblemas × trabalho de cada um**: aqui, 35 somas, O(n), contra O(1,6ⁿ)
+da recursão pura.
 
-No fluxograma, a única diferença para a recursão pura é o losango do meio.
-Ele corta a árvore: quem já está no memo volta sem chamar ninguém.
+No fluxograma, a diferença é o losango do meio: quem já está no memo volta
+sem chamar ninguém.
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A versão de baixo para cima, para os 5 degraus do desenho. Cada linha usa as
-duas anteriores:
+Versão de baixo para cima, para 5 degraus. Cada linha usa as duas anteriores:
 
 | i | t[i - 2] | t[i - 1] | t[i] |
 | --- | --- | --- | --- |
@@ -137,31 +125,21 @@ duas anteriores:
 | 4 | 2 | 3 | 5 |
 | 5 | 3 | 5 | 8 |
 
-São 8 jeitos de subir 5 degraus. Confira à mão: 11111, 2111, 1211, 1121,
-1112, 221, 212, 122.
+São 8 jeitos: 11111, 2111, 1211, 1121, 1112, 221, 212, 122.
 
 > [!WARNING]
-> O valor que marca "ainda não calculei" precisa ser **impossível** como
-> resposta. Aqui, `-1` serve porque nenhuma contagem é negativa. O erro comum
-> é inicializar o memo com `0` (o que um vetor global já tem de graça) num
-> problema em que 0 é resposta válida, como "quantos caminhos chegam aqui"
-> numa grade com obstáculos. O programa continua dando a resposta certa, mas
-> toda célula que vale 0 é recalculada a cada visita, e o tempo volta a ser
-> exponencial sem nenhum aviso.
+> O valor de "ainda não calculei" deve ser **impossível** como resposta (aqui,
+> `-1`). Com `0` e 0 sendo resposta válida, a resposta sai certa, mas cada
+> célula 0 é recalculada e o tempo volta a ser exponencial.
 
 > [!TIP]
-> **Por dentro do C:** as duas versões de PD fazem as mesmas contas, mas
-> custam diferente para a máquina. A memoização ainda empilha um frame por
-> chamada: `formas_memo(35)` desce 35 níveis na pilha antes de anotar a
-> primeira resposta, e `formas_memo(100000)` estouraria a pilha. A tabela é um
-> laço sobre um vetor contíguo, sem chamada nenhuma, que o cache do processador
-> aproveita bem. Em troca, a memoização só calcula os subproblemas que a
-> pergunta usa, o que compensa quando eles são poucos dentro de uma tabela
-> enorme.
+> **Por dentro do C:** a memoização empilha um frame por chamada
+> (`formas_memo(100000)` estouraria a pilha). A tabela é um laço, sem
+> chamadas.
 
 > [!NOTE]
 > **Pergunta para você:** a tabela guarda 36 valores, mas cada `t[i]` só
-> olha para os dois anteriores. Quanta memória a versão de baixo para cima
+> olha os dois anteriores. Quanta memória a versão de baixo para cima
 > precisa de verdade? Pense antes de abrir o A276.
 
 {{pratique}}

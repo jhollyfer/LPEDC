@@ -2,18 +2,17 @@
 // Exercício E457 · ★☆☆
 //
 // A fila do açougue tem as senhas 33 -> 40 -> 7 -> 25 -> 12 (monte inserindo
-// no início 12, 25, 7, 40 e 33). Escreva
+// no início 12, 25, 7, 40 e 33). Escreva int posicao(const No *inicio, int
+// valor), que devolve a posição do valor contando a partir de 1, ou 0 se ele
+// não está na lista. O programa lê duas senhas do teclado (sem mostrar
+// perguntas), confere o retorno do scanf e responde sobre cada uma.
 //
-//   int posicao(const No *inicio, int valor)
+//   Entrada:
+//   7
+//   50
 //
-// que devolve a posição do valor contando a partir de 1, ou 0 se ele não
-// está na lista. O programa lê uma senha do teclado e responde. Confira o
-// retorno do scanf.
-//
-//   Digite a senha: 7
+//   Saída esperada:
 //   senha 7 está na posição 3
-//
-//   Digite a senha: 50
 //   senha 50 não está na fila
 //
 // Escreva sua resposta abaixo:

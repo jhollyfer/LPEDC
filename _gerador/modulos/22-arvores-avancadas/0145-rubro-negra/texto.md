@@ -1,48 +1,37 @@
 ## 0145 · Rubro-negra esquerdista (LLRB): inserção
 
-A cancela do condomínio abre pela tag do carro. O síndico cadastra tags novas a
-qualquer hora (morador novo, carro trocado, visita frequente), e a consulta tem
-que ser instantânea quando o carro encosta. Uma BST comum degenera se as tags
-chegarem em ordem. A AVL resolve, mas guarda a altura em cada nó e tem quatro
-casos de rotação para lembrar. Existe uma árvore equilibrada mais enxuta: a
-**rubro-negra**, a que mais aparece em sistemas reais (o escalonador de
-processos do Linux usa uma).
+O síndico cadastra as tags da cancela do condomínio a qualquer hora. Uma BST
+degenera se as tags chegarem em ordem; a AVL resolve, mas guarda alturas e tem
+quatro casos de rotação. A **rubro-negra** é mais simples.
 
-A ideia por trás dela é outra árvore, a **árvore 2-3**. Nela, um nó guarda **uma
-chave** (e tem 2 filhos) ou **duas chaves** (e tem 3 filhos). Toda chave nova
-entra numa folha; se a folha ficar com três chaves, ela estoura: a do meio sobe
-para o pai e as outras duas viram nós separados. Como a árvore só cresce quando
-a raiz estoura, **todas as folhas ficam sempre no mesmo nível**. Equilíbrio
-perfeito, mas nós de dois tamanhos são chatos de programar.
+Ela se apoia na **árvore 2-3**: um nó tem **uma chave** (2 filhos) ou **duas**
+(3 filhos). Toda chave entra numa folha; com três chaves, a folha estoura: a do
+meio sobe e as outras duas viram nós separados. A árvore só cresce quando a raiz
+estoura, então **todas as folhas ficam no mesmo nível**.
 
-A **rubro-negra esquerdista** (em inglês, *left-leaning red-black*, LLRB) guarda
-a árvore 2-3 em nós binários comuns. Um nó de duas chaves `[a b]` vira o `b`
-com o `a` pendurado à esquerda por um **link vermelho**. Os outros links são
-**pretos**. Cada nó guarda a cor do link que chega nele: um `bool vermelho`, um
-bit de informação.
+A **rubro-negra esquerdista** (*left-leaning red-black*, LLRB) guarda a árvore
+2-3 em nós binários. Um nó `[a b]` vira o `b` com o `a` pendurado à esquerda por
+um **link vermelho**; os outros links são **pretos**. Cada nó guarda a cor do
+link que chega nele (`bool vermelho`).
 
 As regras da LLRB são a árvore 2-3 escrita em cores:
 
 1. link vermelho **só à esquerda**;
-2. nunca **dois vermelhos seguidos** (um nó de três chaves não existe na 2-3);
+2. nunca **dois vermelhos seguidos** (nó de três chaves não existe na 2-3);
 3. todo caminho da raiz até um `NULL` passa pelo **mesmo número de nós pretos**
    (a **altura preta**), porque na 2-3 todas as folhas estão no mesmo nível.
 
-A raiz é sempre preta. Com essas regras, o caminho mais longo é no máximo o
-dobro do mais curto (preto, vermelho, preto, vermelho...), e a altura fica
-abaixo de 2 · log₂(n + 1).
+A raiz é sempre preta. O caminho mais longo tem no máximo o dobro do mais curto,
+e a altura fica abaixo de 2 · log₂(n + 1).
 
 > [!NOTE]
-> Esta é a variante de Sedgewick, não a do Cormen. A rubro-negra **clássica**
-> do Cormen (e da prova do PPGI) põe a cor no **nó**, aceita vermelho dos dois
-> lados (ela equivale à árvore 2-3-4, não à 2-3), usa folhas `NIL` pretas e
-> conserta a inserção pelos casos do **tio**, com no máximo duas rotações. As
-> cinco propriedades e o limite de altura 2 · lg(n + 1) são os mesmos. Ela
-> tem assunto próprio, o 0177.
+> Esta é a de Sedgewick. A rubro-negra **clássica** do Cormen (a da
+> prova do PPGI) põe a cor no **nó**, aceita vermelho dos dois lados (equivale à
+> árvore 2-3-4), usa folhas `NIL` pretas e conserta a inserção pelos casos do
+> **tio**, com no máximo duas rotações. Veja o assunto 0177.
 
-A inserção começa como na BST e pendura um nó **vermelho** (a chave nova se
-cola num nó 2-3 que já existe). Isso pode quebrar uma regra. Na volta da
-recursão, cada ancestral aplica três consertos, **nesta ordem**:
+A inserção pendura um nó **vermelho**, como na BST. Na volta da recursão, cada
+ancestral aplica três consertos, **nesta ordem**:
 
 | Situação em `h` | Conserto | Na árvore 2-3 |
 | --- | --- | --- |
@@ -50,19 +39,16 @@ recursão, cada ancestral aplica três consertos, **nesta ordem**:
 | filho esquerdo e neto esquerdo vermelhos | rotação à direita | arruma um nó de 3 chaves temporário |
 | os dois filhos vermelhos | inverte as cores | o nó de 3 chaves estoura e a do meio sobe |
 
-A **inversão de cores** pinta os dois filhos de preto e `h` de vermelho: o
-vermelho que sobe é a chave do meio indo para o pai. Lá em cima, ele pode
-disparar os consertos de novo, como a divisão que sobe na 2-3.
+A **inversão de cores** pinta os dois filhos de preto e `h` de vermelho: a chave
+do meio sobe para o pai, onde pode disparar os consertos de novo.
 
-No desenho, o síndico cadastra as tags 30, 10 e 20. A 20 entra à
-direita do 10 e forma um zigue-zague: os três consertos acontecem um atrás do
-outro. Depois, com as tags 50 e 40, a árvore fica com o 20 vermelho colado no
-40, que é o nó 2-3 `[20 40]`:
+No desenho, as tags 30, 10 e 20 formam um zigue-zague e disparam os três
+consertos. Com as tags 50 e 40, o 20 vermelho fica colado no 40, o nó 2-3
+`[20 40]`:
 
 {{ideia}}
 
-A inserção do `rubronegra.c`. A rotação é a mesma da AVL, com uma novidade: a
-cor do link vai junto com quem sobe:
+A inserção de `rubronegra.c`. A rotação é a da AVL, e a cor do link sobe junto:
 
 ```c
 static NoRN *gira_esquerda(NoRN *h) {
@@ -104,8 +90,8 @@ NoRN *rn_insere(NoRN *raiz, int chave) {
 }
 ```
 
-`eh_vermelho(NULL)` devolve `false`: o `NULL` conta como preto. O cliente
-cadastra as tags e mostra a árvore em pré-ordem, com `*` nos nós vermelhos:
+`eh_vermelho(NULL)` devolve `false`: `NULL` conta como preto. O cliente
+cadastra as tags e mostra a árvore em pré-ordem, com `*` nos vermelhos:
 
 ```c
 #include <stdio.h>
@@ -135,16 +121,16 @@ int main(void) {
 // Altura 2, altura preta 2
 ```
 
-No fluxograma estão os três `if` da volta, em sequência, e não um
-`else if`. O caminho verde é o do nó 30 quando a tag 20 chega: o primeiro
-conserto já foi feito lá embaixo, no 10; no 30 entram o segundo e o terceiro:
+O fluxograma mostra os três `if` da volta. O caminho verde é o do nó 30 quando
+a tag 20 chega: o 10 já fez o primeiro conserto, e o 30 faz o segundo e o
+terceiro:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A tag 40 mostra o vermelho subindo. Ela desce 20, 50, 30 e vira filha direita
-(vermelha) do 30, que também é vermelho:
+A tag 40 desce 20, 50, 30 e vira filha direita vermelha do 30, que também é
+vermelho:
 
 | Nó na volta | O que encontra | Conserto | Como fica a subárvore |
 | --- | --- | --- | --- |
@@ -153,33 +139,20 @@ A tag 40 mostra o vermelho subindo. Ela desce 20, 50, 30 e vira filha direita
 | 40 | dois filhos vermelhos | inverte as cores | 40* com 30 e 50 pretos |
 | 20 | filho direito 40 vermelho | rotação à esquerda | 40 com 20* (10, 30) e 50 |
 
-Três rotações e uma inversão para uma inserção: é o pior caso deste exemplo. Na
-média, a LLRB faz bem menos trabalho, e a árvore 2-3 por trás dela continua com
-todas as folhas no mesmo nível.
+Três rotações e uma inversão neste exemplo.
 
 > [!WARNING]
-> A cor é do **link**, não do nó em si. Na rotação, quem sobe ocupa o lugar de
-> quem desce e tem que herdar a cor dele (`x->vermelho = h->vermelho`). Sem
-> essa linha, um nó vermelho vira raiz de subárvore no lugar de um preto, a
-> altura preta se desencontra e a árvore volta a crescer torta (é o bug do
-> E869). O outro esquecimento clássico é a raiz: depois de uma inversão de
-> cores no topo, ela fica vermelha. Por isso `rn_insere` pinta a raiz de preto
-> no fim de **toda** inserção.
+> Na rotação, quem sobe herda a cor de quem desce (`x->vermelho = h->vermelho`);
+> sem essa linha, a altura preta se desencontra. Outro erro: a raiz fica
+> vermelha após uma inversão no topo, por isso `rn_insere` a pinta de preto em
+> **toda** inserção.
 
 > [!TIP]
-> **Por dentro do C:** um `bool` ocupa 1 byte, mas o `NoRN` tem 24 bytes, os
-> mesmos da AVL: 4 da chave, 1 da cor, 3 de enchimento e dois ponteiros de 8.
-> A cor só precisa de 1 bit, e o kernel do Linux aproveita isso: como todo nó
-> começa num endereço múltiplo de 4, os dois bits mais baixos de um ponteiro
-> para nó são sempre 0, e ele guarda a cor no bit mais baixo do ponteiro para o
-> pai. Em C dá para fazer isso convertendo o ponteiro para `uintptr_t`, mas
-> esse truque fica para o sistema operacional. A vantagem da LLRB está em
-> outro ponto: a inserção faz no máximo um punhado de trocas de ponteiros por nível
-> e não recalcula alturas.
+> O `NoRN` tem 24 bytes, como o da AVL.
 
 > [!NOTE]
-> **Pergunta para você:** se o síndico cadastrar as tags 10, 20, 30, 40, 50, 60
-> e 70, nesta ordem, qual tag fica na raiz e quantos nós vermelhos sobram no
-> fim? Desenhe a árvore 2-3 de cada passo e confira com o `rn_pre_ordem`.
+> **Pergunta para você:** com as tags 10, 20, 30, 40, 50, 60 e 70, nesta ordem,
+> qual fica na raiz e quantos nós vermelhos sobram? Desenhe a árvore 2-3 de cada
+> passo e confira com o `rn_pre_ordem`.
 
 {{pratique}}

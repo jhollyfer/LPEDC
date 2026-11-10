@@ -1,60 +1,47 @@
 # Módulo 18 · Ordenação além da comparação e seleção
 
-No módulo 13 você ordenou comparando: bubble, selection, insertion, merge e
-quick sort, todos decidindo a ordem com perguntas do tipo "`a` vem antes de
-`b`?". No módulo 17 viu que esse jeito tem um piso: nenhuma ordenação que só
-compara faz menos que uns n log₂ n comparações no pior caso. Este módulo
-mostra o que existe fora desse piso.
+No módulo 13 você ordenou comparando, e o módulo 17 mostrou o piso: quem só
+compara faz uns n log₂ n comparações no pior caso. Este módulo sai desse piso
+olhando para os **dados**.
 
-A saída é olhar para os **dados**, e não só para o algoritmo. Se as chaves
-são inteiros pequenos, o valor vira índice de vetor, e não há comparação
-nenhuma: é o **counting sort**. Se as chaves têm dígitos ou bytes, dá para
-ordenar casa por casa: **radix sort**. Se os valores estão bem espalhados num
-intervalo conhecido, baldes por faixa resolvem quase tudo: **bucket sort**. Os
-três são lineares e cobram um preço: memória extra e suposições sobre os
-dados que, se forem falsas, viram escrita fora do vetor.
+Chaves inteiras pequenas viram índice de vetor: **counting sort**. Chaves com
+dígitos ou bytes se ordenam casa por casa: **radix sort**. Valores espalhados
+num intervalo conhecido vão para baldes por faixa: **bucket sort**. Os três
+são lineares, gastam memória extra e supõem algo sobre os dados; se a suposição
+falha, o programa escreve fora do vetor.
 
-O módulo ainda traz dois parentes. O **shell sort** continua comparando, mas
-dá ao insertion sort pulos longos e foge do n² com quase o mesmo código. E o
-**quickselect** responde "quem é o k-ésimo menor?" (a mediana, o percentil,
-os k maiores) sem ordenar nada, reaproveitando a separação do quick sort.
+Dois parentes completam o módulo. O **shell sort** ainda compara, mas dá
+pulos longos ao insertion sort. O **quickselect** acha o k-ésimo menor (a
+mediana, o percentil) sem ordenar, reaproveitando a separação do quick sort.
 
 ## O que você vai aprender
 
-- **shell sort**: insertion sort com saltos, a sequência de Knuth e por que os saltos importam
-- **counting sort**: contar, acumular e distribuir; a **estabilidade** e por que ela depende de um laço de trás para a frente
-- **radix sort**: ordenar dígito a dígito (LSD), em base 10 e em base 256 com operadores de bits
-- **bucket sort**: baldes por faixa com listas encadeadas, o caso médio O(n) e o pior caso O(n²)
-- **quickselect**: o k-ésimo menor, a mediana e os k maiores em O(n) médio, com pivô sorteado para fugir do pior caso
-- ordenar por **duas chaves** com passadas estáveis e medir 1 milhão de registros contra o `qsort`
+- **shell sort**: insertion sort com saltos e a sequência de Knuth
+- **counting sort**: contar, acumular e distribuir, e a **estabilidade**
+- **radix sort**: dígito a dígito (LSD), em base 10 e em base 256
+- **bucket sort**: baldes com listas encadeadas, O(n) médio e O(n²) no pior caso
+- **quickselect**: o k-ésimo menor em O(n) médio, com pivô sorteado
+- ordenar por **duas chaves** e medir 1 milhão de registros contra o `qsort`
 
 ## Antes de começar
 
-Este módulo usa muito do que veio antes: o insertion sort (0093) e a
-separação do quick sort (0095), listas encadeadas (0076 a 0078), filas
-(0085), operadores de bits (0065), `malloc` e `calloc`, e o `qsort` com
-função de comparação (0096). Se algum desses estiver enferrujado, revise
-antes.
+Revise o insertion sort (0093), a separação do quick sort (0095), listas
+encadeadas (0076 a 0078), filas (0085), operadores de bits (0065), `malloc` e
+`calloc` e o `qsort` (0096).
 
-Nos vetores dos diagramas, cada linha de gavetas é um momento do algoritmo:
-**roxo** marca o pivô ou a posição da vez, **amarelo** destaca o que você deve
-acompanhar (uma fileira, um empate), **verde** é o que já está no lugar e
-**cinza** é o que o algoritmo descartou. Faça o **Passo a passo** no papel
-antes de conferir a tabela.
+**Progressão.** Do módulo 13 vêm o insertion sort e a separação do quick sort
+(base do shell sort e do quickselect); do 17, o piso de n log₂ n. O 19
+enumera escolhas com recursão e o 20 usa a ordenação como primeiro passo dos
+gulosos.
 
-Os exemplos dos cinco primeiros assuntos cabem num arquivo só. O último
-assunto, que ordena 1 milhão de registros, usa um TAD: `pix.h` e `pix.c`
-ficam na pasta do assunto, e o comando do exemplo compila os dois junto com o exemplo.
+Nos diagramas, **roxo** marca o pivô ou a posição da vez, **amarelo** o que
+acompanhar, **verde** o que já está no lugar e **cinza** o descartado. Faça o
+**Passo a passo** no papel antes de conferir a tabela.
 
-Vários exemplos geram dados com um gerador de números pseudoaleatórios
-escrito à mão (uma conta com `unsigned` que dá a volta), em vez do `rand`:
-assim a saída é a mesma em qualquer computador. Os exemplos que medem
-**tempo** com `clock()` são a exceção: os números mudam a cada execução, e
-o AddressSanitizer do gcc com as flags de estudo deixa tudo mais lento. Compare as proporções,
-não os valores.
-
-Alguns exercícios de "ache o erro" trazem o bug de propósito: o programa
-roda até o fim, mas a saída sai errada. O enunciado avisa.
+O último assunto usa o TAD `pix.h`/`pix.c`, na pasta do assunto e compilado
+junto com o exemplo. Os dados vêm de um gerador `unsigned` próprio, para a
+saída não depender do computador. Os tempos medidos com `clock()` variam:
+compare proporções.
 
 {{indice}}
 
@@ -66,7 +53,7 @@ roda até o fim, mas a saída sai errada. O enunciado avisa.
 
 ## Desafios do módulo
 
-Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
+Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
 com as flags de estudo.
 
 **1. Quantas passadas?** Você vai ordenar 50 milhões de CPFs (11 dígitos,

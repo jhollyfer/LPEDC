@@ -10,7 +10,8 @@
 // - int digito(int x, int pos): pos 0 é a unidade, 1 a dezena, e assim por
 // diante. digito(5082, 1) é 8.
 //
-// O main já mostra a tabela para quatro números.
+// No main, mostre a tabela para 5082, 7, 340 e 19000, com o nome de cada
+// casa (unidade, dezena, centena, milhar, dezena de milhar).
 //
 //   Saída esperada:
 //   5082: 4 dígitos; unidade 2, dezena 8, centena 0, milhar 5
@@ -18,30 +19,11 @@
 //   340: 3 dígitos; unidade 0, dezena 4, centena 3
 //   19000: 5 dígitos; unidade 0, dezena 0, centena 0, milhar 9, dezena de milhar 1
 //
-// Escreva sua resposta abaixo (escreva as duas funções):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-int quantos_digitos(int x) {
-    (void) x; // apague esta linha
-    return 1;
-}
-
-int digito(int x, int pos) {
-    (void) x; // apague estas duas linhas
-    (void) pos;
-    return 0;
-}
-
 int main(void) {
-    int numeros[] = {5082, 7, 340, 19000};
-    const char *casas[] = {"unidade", "dezena", "centena", "milhar", "dezena de milhar"};
-    for (int i = 0; i < 4; i++) {
-        int d = quantos_digitos(numeros[i]);
-        printf("%d: %d dígito%s;", numeros[i], d, d > 1 ? "s" : "");
-        for (int pos = 0; pos < d; pos++) {
-            printf(" %s %d%s", casas[pos], digito(numeros[i], pos), pos < d - 1 ? "," : "\n");
-        }
-    }
+
     return 0;
 }

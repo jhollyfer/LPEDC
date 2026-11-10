@@ -1,13 +1,10 @@
 ## 0100 · BST: remoção
 
-Fim do mês na academia: três alunos cancelaram o plano, e as matrículas 30, 40
-e 20 precisam sair da árvore. Inserir era fácil porque todo nó novo entra como
-folha. Remover é mais delicado: o nó que sai pode estar no meio da árvore, com
-filhos pendurados que não podem se perder, e a regra da BST tem que continuar
-valendo depois.
+Três alunos cancelaram o plano, e as matrículas 30, 40 e 20 saem da árvore.
+Inserir era fácil porque todo nó novo entra como folha. Remover é mais
+delicado: o nó pode ter filhos, e a regra da BST precisa continuar valendo.
 
-Primeiro, a busca de sempre acha o nó. Depois, tudo depende de **quantos
-filhos** ele tem. São três casos:
+A busca acha o nó. Depois, tudo depende de **quantos filhos** ele tem:
 
 | Caso | O que fazer | No exemplo |
 | --- | --- | --- |
@@ -15,27 +12,22 @@ filhos** ele tem. São três casos:
 | **um filho** | o filho sobe para o lugar dele; o avô "pula" o nó | remover o 40: o 45 sobe |
 | **dois filhos** | troca pelo **sucessor** e remove o sucessor | remover o 30: o 35 assume |
 
-Os dois primeiros casos são o mesmo código: "o filho que existe sobe", e na
-folha esse filho é `NULL`. O terceiro pede mais cuidado. Quem pode ocupar o lugar
-do 30 sem quebrar a regra? Alguém maior que tudo à esquerda e menor que tudo à
-direita. Dois candidatos servem: o **sucessor** (a menor chave da subárvore
-direita) e o **antecessor** (a maior da esquerda). Este TAD usa o sucessor,
-como o Cormen. Com o antecessor, a árvore final sai diferente, e por isso
-uma questão de prova sempre diz qual dos dois usar.
+Os dois primeiros casos são um código só: "o filho que existe sobe", e na folha
+esse filho é `NULL`. No terceiro, o lugar do 30 é de alguém maior que tudo à
+esquerda e menor que tudo à direita: o **sucessor** (a menor chave da subárvore
+direita) ou o **antecessor** (a maior da esquerda). Este TAD usa o sucessor,
+como o Cormen; com o antecessor a árvore final sai diferente.
 
 Para achar o sucessor, desça **uma vez à direita** e depois **à esquerda até
-não dar mais**. Esse nó nunca tem filho esquerdo (senão não seria o menor), então
-removê-lo cai num dos casos fáceis. Então copie a chave do sucessor para o
-nó do 30 e chame a remoção do 35 na subárvore direita.
+não dar mais**. Esse nó não tem filho esquerdo, então removê-lo cai num caso
+fácil. Copie a chave dele para o nó do 30 e remova o 35 da subárvore direita.
 
-Como na inserção, a função devolve a raiz da subárvore depois da mudança, e o
-pai faz `r->esq = bst_remove(r->esq, chave)`. É assim que o avô fica sabendo que
-o neto subiu. E quando a chave removida é a da raiz da árvore inteira, o
-`raiz = bst_remove(raiz, ...)` do cliente atualiza a raiz.
+Como na inserção, a função devolve a raiz da subárvore e o pai faz
+`r->esq = bst_remove(r->esq, chave)`. Para a raiz, o cliente faz
+`raiz = bst_remove(raiz, ...)`.
 
-O 30 tem dois filhos. A partir dele, a busca do sucessor
-vai para a direita (40) e depois para a esquerda até o fim (35). O 35 vai para o
-lugar do 30, e o 35 de baixo, que era folha, sai:
+O 30 tem dois filhos. O sucessor sai indo para a direita (40) e depois para a
+esquerda (35). O 35 ocupa o lugar do 30, e o 35 de baixo, que era folha, sai:
 
 {{ideia}}
 
@@ -68,9 +60,8 @@ No *bst_remove(No *r, int chave) {
 }
 ```
 
-O cliente remove as três matrículas e mostra a pré-ordem depois de cada passo.
-A pré-ordem começa pela raiz e desce, então ela revela a **forma** da árvore (a em
-ordem sairia sempre crescente e não mostraria nada):
+O cliente remove as três matrículas e mostra a pré-ordem, que revela a
+**forma** da árvore (a em ordem sairia sempre crescente):
 
 ```c
 #include <stdio.h>
@@ -119,32 +110,22 @@ int main(void) {
 // Remove 99   pré: 50 35 45 70 60 80
 ```
 
-O caminho verde do fluxograma é a chamada que encontra o 30. Ela cai no
-caso de dois filhos, copia o 35 e faz uma **segunda remoção**, dessa vez do 35,
-que vai terminar no caso fácil (o 35 é folha):
+O caminho verde é a chamada que encontra o 30: cai no caso de dois filhos,
+copia o 35 e faz uma **segunda remoção**, do 35, que termina no caso fácil:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Esquecer de atribuir o retorno é o erro clássico. Com `bst_remove(raiz->esq,
-> 20);` solto, a função dá `free` no 20, mas o pai continua apontando para o
-> endereço antigo: um **ponteiro solto**. A próxima em ordem lê memória
-> devolvida e o AddressSanitizer acusa `heap-use-after-free`. A mesma coisa na
-> raiz: remover a última chave sem `raiz = ...` deixa `raiz` apontando para o
-> nada.
+> `bst_remove(raiz->esq, 20);` sem atribuir o retorno dá `free` no 20 mas deixa
+> o pai apontando para o endereço antigo: **ponteiro solto**, que o
+> AddressSanitizer acusa como `heap-use-after-free`. Vale também para `raiz`.
 
 > [!TIP]
-> **Por dentro do C:** a remoção com dois filhos não move nó nenhum: ela copia
-> **só a chave** e libera o nó do sucessor, lá embaixo. É barato com um `int`.
-> Se o nó guardasse uma struct grande (nome, endereço, histórico), copiar
-> custaria caro e invalidaria ponteiros que alguém guardou para o nó. Aí a saída
-> é religar os ponteiros e mover o nó inteiro, sem copiar dado (o Cormen faz
-> assim, com a função `TRANSPLANT`, e o Feofiloff também). O custo continua
-> O(altura): uma descida para achar o nó, outra para achar o sucessor.
+> A remoção com dois filhos copia **só a chave**. Com uma struct grande, é
+> melhor religar ponteiros (a `TRANSPLANT` do Cormen). O custo é O(altura).
 
 > [!NOTE]
-> **Pergunta para você:** na árvore do início, se você remover o **50** (a raiz),
-> quem assume o lugar? E se depois remover a nova raiz, quem assume? Confira
-> com o exemplo A200.
+> **Pergunta para você:** se você remover o **50** (a raiz), quem assume o
+> lugar? E se depois remover a nova raiz? Confira com o exemplo A200.
 
 {{pratique}}

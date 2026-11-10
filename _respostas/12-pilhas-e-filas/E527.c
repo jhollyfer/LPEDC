@@ -2,9 +2,7 @@
 // Exercício E527 · ★★★
 
 #include <stdio.h>
-// Na pasta do assunto basta incluir os .h (o rodar compila o pilha.c e o
-// fila.c junto). Aqui a resolução inclui as implementações para compilar
-// sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0088-juntando-tudo/fila.c"
 #include "../../12-pilhas-e-filas/0088-juntando-tudo/pilha.c"
 

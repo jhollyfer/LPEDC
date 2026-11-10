@@ -10,7 +10,10 @@ void distribui(const int codigos[], int n, int m) {
     }
     printf("m = %d\n", m);
     for (int b = 0; b < m; b++) {
-        printf("%2d: ", b);
+        printf("%2d:", b);
+        if (conta[b] > 0) {
+            printf(" ");
+        }
         for (int k = 0; k < conta[b]; k++) {
             printf("*");
         }

@@ -517,6 +517,27 @@ extremos; a média fica no meio. Veja 0071.
 
 </details>
 
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 060/2019 · Questão 03**
+
+Qual a alternativa que completa corretamente a seguinte frase: Um algoritmo que possui número de operações _______________ em função de uma entrada de tamanho n é linear.
+
+- a) n³ + 9
+- b) 3n² + 3n + 2
+- c) 6
+- d) 2n + 1
+- e) n² + 1
+
+<details><summary>Gabarito</summary>
+
+**D.** 2n+1 é linear. Assunto 0071.
+
+</details>
+
+
 ## Para ler mais
 
 - FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Partes sobre documentação, invariantes e análise de algoritmos. Disponível em: <https://www.ime.usp.br/~pf/algoritmos/>.

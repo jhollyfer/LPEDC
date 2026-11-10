@@ -7,6 +7,9 @@
 // três passadas de counting sort estável: primeiro pelo dia, depois pelo
 // mês, por fim pelo ano. Mostre o vetor depois de cada passada.
 //
+//   Vencimentos (dia/mês/ano): 15/03/2025 05/11/2024 15/01/2025 28/02/2024
+//   05/03/2025 10/11/2024 28/01/2025
+//
 //   Saída esperada:
 //   início: 15/03/2025 05/11/2024 15/01/2025 28/02/2024 05/03/2025 10/11/2024 28/01/2025
 //   dia:    05/11/2024 05/03/2025 10/11/2024 15/03/2025 15/01/2025 28/02/2024 28/01/2025
@@ -22,9 +25,6 @@ typedef struct {
 } Data;
 
 int main(void) {
-    Data boletos[] = {{15, 3, 2025}, {5, 11, 2024}, {15, 1, 2025}, {28, 2, 2024},
-                      {5, 3, 2025}, {10, 11, 2024}, {28, 1, 2025}};
-    (void) boletos; // apague esta linha
 
     return 0;
 }

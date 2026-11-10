@@ -1,26 +1,23 @@
 ## 0082 · Pilha
 
-Você monta o pedido no app de delivery: pizza, refrigerante, pudim. Bateu o
-arrependimento e você toca em "desfazer". Sai o pudim, o último que entrou.
-Ninguém espera que o desfazer apague a pizza lá do começo.
+Você monta o pedido no app de delivery: pizza, refrigerante, pudim. Toca em
+"desfazer" e sai o pudim, o último que entrou.
 
-Esse comportamento tem nome: **pilha** (*stack*). Só uma ponta está ao seu
-alcance, o **topo**. Tudo entra por cima e sai por cima, então o último a
-entrar é o primeiro a sair: **LIFO** (*last in, first out*). É a pilha de
-pratos do restaurante por quilo e a pilha de chamadas que você viu no
-assunto 0031.
+Esse comportamento é a **pilha** (*stack*). Só o **topo** está ao alcance:
+o último a entrar é o primeiro a sair, **LIFO** (*last in, first out*). A
+pilha de pratos e a pilha de chamadas (assunto 0031) funcionam assim.
 
-São poucas operações:
+Quatro operações:
 
 - **empilhar** (*push*): põe um item no topo;
 - **desempilhar** (*pop*): tira o item do topo e devolve o valor;
 - **olhar o topo** (*peek*): lê o topo sem tirar;
 - **vazia?**: pergunta se ainda tem alguma coisa.
 
-No Cormen, elas se chamam PUSH, POP e STACK-EMPTY.
+No Cormen, são PUSH, POP e STACK-EMPTY.
 
-O C não traz pilha pronta, então você monta uma como **TAD** (assunto 0074):
-o `pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
+O C não traz pilha pronta. Você monta uma como **TAD** (assunto 0074): o
+`pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
 só inclui o `.h`:
 
 ```c
@@ -35,14 +32,13 @@ bool pilha_desempilha(Pilha *p, int *valor); // pop: false se estava vazia
 bool pilha_topo(const Pilha *p, int *valor); // peek: olha o topo sem tirar
 ```
 
-As funções devolvem `bool`: o valor desempilhado vem pelo ponteiro, e o
-retorno só diz se deu certo. Tirar de uma pilha vazia (**underflow**) é erro de lógica
-de quem chamou. Empilhar numa pilha cheia (**overflow**) só acontece porque o
-vetor tem tamanho fixo.
+O valor desempilhado vem pelo ponteiro; o `bool` diz se deu certo. Tirar de
+pilha vazia é **underflow**; empilhar em pilha cheia é **overflow**, possível
+porque o vetor tem tamanho fixo.
 
-Por dentro, a versão deste assunto usa um **vetor** e um contador `n`. O fundo
-fica em `itens[0]`, o topo em `itens[n - 1]`, e `n` é a próxima vaga. O trecho
-que importa do [`pilha.c`](0082-pilha/pilha.c):
+Esta versão usa um **vetor** e um contador `n`: o fundo fica em `itens[0]`, o
+topo em `itens[n - 1]` e `n` é a próxima vaga. Trecho do
+[`pilha.c`](0082-pilha/pilha.c):
 
 ```c
 struct pilha {
@@ -69,14 +65,12 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 }
 ```
 
-No exemplo, os três preços entram em centavos (2590, 800 e 1200), um em cima
-do outro. No vetor, ocupam as gavetas 0, 1 e 2, e `n` vale 3. O
-desfazer tira o 1200 do topo:
+Os preços entram em centavos (2590, 800 e 1200) nas gavetas 0, 1 e 2, com `n`
+igual a 3. O desfazer tira o 1200:
 
 {{ideia}}
 
-O programa do pedido não sabe que existe um vetor lá dentro: só conversa com
-as funções do `pilha.h`:
+O programa só usa as funções do `pilha.h`:
 
 ```c
 #include <stdio.h>
@@ -111,34 +105,24 @@ int main(void) {
 // Itens no pedido: 2
 ```
 
-O fluxograma do desfazer começa perguntando se a pilha está vazia. Só depois
-`n` diminui e o valor é lido:
+O fluxograma do desfazer testa se a pilha está vazia antes de diminuir `n`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O erro mais comum é a ordem de `n--` e da leitura. Se você lê `itens[n]` antes
-> de diminuir `n`, pega a gaveta **vazia** logo acima do topo: lixo, ou um
-> valor velho que já tinha saído. Fixe a convenção e não misture: aqui `n` é a
-> próxima vaga (empilha em `itens[n]` e depois `n++`; desempilha com `n--` e
-> depois lê). Muito livro usa `topo = -1` para pilha vazia, e aí o topo é
-> `itens[topo]`. As duas funcionam; misturar as duas, não. O Cormen indexa o
-> vetor a partir de 1: lá, `S.top` é o índice do topo **e** a quantidade de
-> itens, e pilha vazia é `S.top = 0`.
+> Ler `itens[n]` antes de diminuir `n` pega a gaveta **vazia** acima do topo
+> (lixo). Aqui `n` é a próxima vaga: empilha em `itens[n]` e depois `n++`;
+> desempilha com `n--` e depois lê. Muito livro usa `topo = -1` para pilha
+> vazia; não misture as convenções. O Cormen indexa a partir de 1: pilha vazia
+> é `S.top = 0`.
 
 > [!TIP]
-> **Por dentro do C:** desempilhar **não apaga** nada. O 1200 continua na
-> gaveta 2; ele só deixou de fazer parte da pilha porque `n` voltou para 2. O
-> próximo `push` escreve por cima. Por isso empilhar e desempilhar custam
-> **O(1)**: uma conta e uma cópia, não importa se a pilha tem 3 ou 100 itens.
-> Quanto ao tamanho, `sizeof(struct pilha)` dá 404 bytes (100 `int` de 4
-> bytes, mais o `n`), alocados de uma vez pelo `malloc` no `pilha_cria`, mesmo
-> com só 3 itens dentro.
+> Desempilhar não apaga: o 1200 continua na gaveta 2 e o próximo `push`
+> escreve por cima. Por isso as duas operações custam **O(1)**.
 
 > [!NOTE]
 > **Pergunta para você:** no programa do pedido, se o cliente tocar em
 > "desfazer" mais três vezes seguidas, o que cada chamada de
 > `pilha_desempilha` devolve? E o que fica em `preco` na última?
-
 
 {{pratique}}

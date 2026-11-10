@@ -1,33 +1,27 @@
 ## 0092 · Selection sort
 
-Final da bateria de kart com os amigos. Os tempos da melhor volta, em
-segundos, foram 58, 31, 47, 19 e 26. Para montar o pódio, você faz o óbvio:
-procura o **menor** tempo e chama o primeiro lugar. Depois procura o menor
-entre os que **sobraram** e chama o segundo. E assim por diante.
+Final da bateria de kart: os tempos da melhor volta, em segundos, foram 58, 31,
+47, 19 e 26. Para montar o pódio, você procura o **menor** tempo, que é o
+primeiro lugar.
+Depois procura o menor entre os que **sobraram**, e assim por diante.
 
-Isso é o **selection sort** (ordenação por seleção). O vetor fica dividido em
-duas partes: à esquerda, a parte **pronta** (os menores, já na ordem final);
-à direita, o resto. Cada passada `i`:
+Esse é o **selection sort** (ordenação por seleção). O vetor tem uma parte
+**pronta** à esquerda (os menores, na ordem final) e o resto à direita. Cada
+passada `i`:
 
 1. procura o **índice** do menor elemento em `v[i..n-1]`;
 2. troca esse menor com `v[i]`. A gaveta `i` nunca mais muda.
 
-A passada guarda o **índice** do menor, não o valor: é ele que permite fazer
-a troca no fim. É o padrão "maior/menor" do assunto 0025, repetido a cada
-passada.
+Guarda-se o **índice**, não o valor, para poder trocar no fim (padrão
+"maior/menor" do assunto 0025).
 
-Custo: a passada 0 compara `n - 1` vezes, a 1 compara `n - 2` vezes... No
-total, `n(n - 1)/2` comparações, **sempre**. Vetor bagunçado, ordenado ou ao
-contrário, tanto faz: para saber qual é o menor, é preciso olhar todos os que
-sobraram. Então é **O(n²)** em todos os casos.
+São `n(n - 1)/2` comparações em **todos** os casos, porque achar o menor exige
+olhar todos os que sobraram: **O(n²)**, mesmo com o vetor em ordem. A
+vantagem são as **trocas**: no máximo **uma por passada**, `n - 1` no total,
+contra até `n(n - 1)/2` do bubble. Pesa quando mover um elemento é caro.
 
-A vantagem está nas **trocas**: no máximo **uma por passada**, `n - 1` no
-total. O bubble pode fazer `n(n - 1)/2`. Quando mover um elemento é
-caro (structs grandes, um registro inteiro), isso pesa.
-
-No pódio do kart, cada linha do desenho é uma passada: a gaveta roxa é a posição `i` que vai
-receber o menor, e a amarela é o menor que a passada achou. Depois da troca,
-a gaveta vira verde e não sai mais do lugar:
+Cada linha é uma passada: a gaveta roxa é a posição `i`, a amarela é o menor
+achado. Depois da troca, a gaveta vira verde e fica:
 
 {{ideia}}
 
@@ -85,8 +79,7 @@ int main(void) {
 
 ### Passo a passo
 
-A passada `i = 0` por dentro. O `menor` começa apontando para a gaveta 0 e
-vai sendo atualizado:
+A passada `i = 0`. O `menor` começa na gaveta 0:
 
 | j | v[j] | v[menor] antes | `v[j] < v[menor]`? | menor |
 | --- | --- | --- | --- | --- |
@@ -96,34 +89,26 @@ vai sendo atualizado:
 | 3 | 19 | 31 | sim | 3 (19) |
 | 4 | 26 | 19 | não | 3 |
 
-Fim da passada: troca `v[0]` (58) com `v[3]` (19). Quatro comparações, uma
-troca. As passadas seguintes fazem 3, 2 e 1 comparações: 10 no total.
+Fim da passada: troca `v[0]` (58) com `v[3]` (19), depois de quatro comparações.
+As passadas seguintes fazem 3, 2 e 1 comparações: 10 no total.
 
-No fluxograma, a caixa "acha o menor" esconde um laço inteiro (a
-tabela acima). A troca acontece **fora** dele, uma vez por passada:
+No fluxograma, a caixa "acha o menor" esconde um laço inteiro (a tabela). A
+troca fica **fora** dele:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O erro mais comum é trocar **dentro** do laço que procura o menor: toda vez
-> que acha alguém menor, já troca. O vetor até sai ordenado, mas você perdeu a
-> única vantagem do algoritmo e passou a fazer trocas como o bubble. Outro
-> clássico: esquecer de reiniciar `menor = i` a cada passada. Aí `menor`
-> continua apontando para uma gaveta da parte pronta, e a troca bagunça o que
-> já estava certo.
+> Trocar **dentro** do laço que procura o menor ordena o vetor, mas perde a
+> vantagem das poucas trocas. Esquecer de reiniciar `menor = i` a cada passada
+> faz `menor` apontar para a parte pronta.
 
 > [!TIP]
-> **Por dentro do C:** a troca do selection é de **longa distância**: o 19
-> salta da gaveta 3 para a 0 de uma vez, e o 58 vai para a 3 passando por cima
-> do 31 e do 47. Esse salto é o que torna o selection **instável**: dois
-> elementos iguais podem trocar de ordem entre si (o exemplo A184 mostra a
-> Bia passando na frente da Ana). Em memória ele é ótimo: ordena
-> no próprio vetor, com uma variável `aux` e dois índices. Isso se chama
-> ordenar **in-place**, com **O(1)** de memória extra.
+> A troca é de **longa distância** (o 19 salta da gaveta 3 para a 0), por isso
+> o selection é **instável**: iguais podem trocar de ordem (exemplo A184). Ele
+> ordena **in-place**, com **O(1)** de memória extra.
 
 > [!NOTE]
 > **Pergunta para você:** quantas comparações e quantas trocas o selection faz
-> no vetor `19 26 31 47 58`, que já está ordenado? E o bubble com bandeira, do
-> assunto anterior? Responda antes de rodar.
+> no vetor `19 26 31 47 58`, que já está ordenado? E o bubble com bandeira?
 
 {{pratique}}

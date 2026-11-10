@@ -1,14 +1,13 @@
 // 0095 · Quick sort
 // Exercício E565 · ★☆☆
 //
-// As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. O programa abaixo faz
-// UMA separação (só o separa, sem recursão), com o pivô no fim, e mostra cada
-// troca. Dê o próximo passo do quick sort à mão, no código:
-//
-// a) conte as comparações (v[k] <= pivo) numa variável static;
-// b) depois da primeira separação, chame separa de novo só no lado DIREITO
-//    do pivô e mostre outra vez o vetor e a nova posição do pivô;
-// c) no fim, mostre o total de comparações das duas separações.
+// As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. Escreva
+// int separa(int v[], int p, int r), a separação com o pivô no fim (v[r]),
+// que imprime "troca v[a] e v[b]" a cada troca, conta as comparações
+// (v[k] <= pivo) numa variável static e devolve a posição final do pivô. No
+// main, separe o vetor inteiro, mostre o vetor e a posição do pivô; depois
+// separe só o lado DIREITO do pivô, mostre de novo e, no fim, o total de
+// comparações.
 //
 //   Saída esperada:
 //   troca v[0] e v[1]
@@ -21,37 +20,11 @@
 //   pivô na posição 3
 //   comparações: 7
 //
-// Escreva sua resposta abaixo (modifique o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-void troca(int v[], int a, int b) {
-    printf("troca v[%d] e v[%d]\n", a, b);
-    int aux = v[a];
-    v[a] = v[b];
-    v[b] = aux;
-}
-
-int separa(int v[], int p, int r) {
-    int pivo = v[r], j = p;
-    for (int k = p; k < r; k++) {
-        if (v[k] <= pivo) {
-            troca(v, j, k);
-            j++;
-        }
-    }
-    troca(v, j, r);
-    return j;
-}
-
 int main(void) {
-    int senhas[] = {9, 2, 6, 4, 8, 5};
-    int j = separa(senhas, 0, 5);
 
-    printf("vetor:");
-    for (int i = 0; i < 6; i++) {
-        printf(" %d", senhas[i]);
-    }
-    printf("\npivô na posição %d\n", j);
     return 0;
 }

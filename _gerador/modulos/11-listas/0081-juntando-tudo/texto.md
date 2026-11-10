@@ -1,34 +1,26 @@
 ## 0081 · Juntando tudo
 
-Viagem de carro, celular no painel, a playlist tocando. Alguém pula duas
-músicas, outra pessoa tira aquela que ninguém aguenta mais, e quando a última
-acaba, o modo "repetir tudo" volta para a primeira. Por trás desse player está
-quase tudo deste módulo: uma lista dupla (anterior e próxima), busca e
-remoção pelo título, um cursor que anda e, no repetir, a volta da lista
-circular.
+Num player, você pula faixas, remove uma e, no "repetir tudo", a última volta à
+primeira. Ele reúne o módulo: lista dupla, busca e remoção, um cursor e a
+volta da lista circular.
 
-O programa do módulo é um **TAD playlist** completo, em `playlist.h` e
-`playlist.c`. Desta vez os nós ficam **escondidos** de novo: quem usa a
-playlist vê só a struct `Musica` (título, artista, segundos) e as operações.
-Lá dentro, no `.c`, cada nó (`Faixa`) guarda uma `Musica` e os ponteiros
-`ant` e `prox`, e a `struct playlist` guarda `inicio`, `fim`, `atual` (a
-música que está tocando), `tamanho` e o `bool repetir`.
-
+O **TAD playlist** (`playlist.h` e `playlist.c`) esconde os nós: quem o usa vê
+a struct `Musica` (título, artista, segundos) e as operações. No `.c`, cada nó
+(`Faixa`) guarda uma `Musica`, `ant` e `prox`; a `struct playlist` guarda
+`inicio`, `fim`, `atual` (a música que toca), `tamanho` e o `bool repetir`.
 Cada peça do módulo aparece num lugar:
 
-- **adicionar** é a inserção no fim da lista dupla (0079), com o `fim`
-  guardado para custar O(1);
-- **remover pelo título** é a busca com `strcmp` (0077) seguida da remoção
-  dupla, com um cuidado novo: se a música removida era a que tocava, o
-  `atual` passa para a seguinte (ou para a anterior, se era a última);
-- **próxima** e **anterior** andam com `prox` e `ant`; na ponta, com repetir
-  ligado, dão a volta como numa lista circular (0080);
-- **salvar** e **carregar** usam arquivo texto (módulo 09): uma música por
-  linha, no formato `titulo;artista;segundos`, lida com `fgets` e `sscanf`;
-- **para cada** recebe um ponteiro para função e um `void *` (0050 e 0051),
-  e assim quem usa a playlist percorre as músicas sem ver os nós.
+- **adicionar**: inserção no fim da lista dupla (0079), O(1) com `fim`;
+- **remover pelo título**: busca com `strcmp` (0077) e remoção dupla. Se era
+  a atual, o `atual` vai para a seguinte (ou a anterior, se era a última);
+- **próxima** e **anterior**: `prox` e `ant`; com repetir ligado, dão a volta
+  nas pontas como numa lista circular (0080);
+- **salvar** e **carregar**: arquivo texto (módulo 09), uma música por linha,
+  `titulo;artista;segundos`, com `fgets` e `sscanf`;
+- **para cada**: recebe um ponteiro para função e um `void *` (0050 e 0051),
+  sem expor os nós.
 
-O "repetir" mora numa função só:
+O "repetir" mora numa função:
 
 ```c
 const Musica *playlist_proxima(Playlist *p) {
@@ -40,13 +32,12 @@ const Musica *playlist_proxima(Playlist *p) {
 }
 ```
 
-A lista **não** é circular de verdade: o último `prox` continua `NULL`. A volta é uma decisão da função, ligada ou desligada por um `bool`.
-Assim o resto do código (imprimir, liberar, salvar) continua com o `for` de
-sempre, sem risco de laço infinito.
+A lista **não** é circular: o último `prox` continua `NULL`. A volta é decisão
+da função, então imprimir, liberar e salvar seguem com o `for` de sempre.
 
-A playlist do exemplo começa com cinco músicas e 20:01 no total.
-Pulando duas, toca a terceira. Depois a "Asa Branca" sai, a playlist chega na
-última e, com o repetir ligado, a próxima volta para "Aquarela":
+A playlist do exemplo tem cinco músicas, 20:01 no total. Pulando duas, toca a
+terceira. Depois a "Asa Branca" sai, a playlist chega à última e, com repetir
+ligado, a próxima volta para "Aquarela":
 
 {{ideia}}
 
@@ -94,37 +85,27 @@ int main(void) {
 // anterior: Tempo Perdido
 ```
 
-O fluxograma segue a `playlist_proxima`. Tocando "Tempo Perdido", não há
-próxima. Na primeira tentativa o repetir está desligado e a função devolve
-`NULL` ("fim da playlist"). Na segunda, ligado, o caminho é o verde: o
-`atual` volta para o início:
+No fluxograma, em "Tempo Perdido" não há próxima: com repetir desligado a
+função devolve `NULL`; ligado, o `atual` volta ao início:
 
 {{fluxograma}}
 
-O exemplo A162 grava a playlist em `playlist.txt`, libera tudo, carrega de
-volta numa playlist nova e usa `playlist_para_cada` com um callback para
-contar as músicas longas.
+O exemplo A162 grava a playlist em `playlist.txt`, carrega numa nova e usa
+`playlist_para_cada` com um callback para contar as músicas longas.
 
 > [!WARNING]
-> `playlist_proxima(viagem)->titulo` só é seguro quando você **sabe** que a
-> função não vai devolver `NULL`, como no exemplo, com o repetir ligado e a
-> playlist cheia. Com o repetir desligado na última música, o mesmo código
-> acessa `NULL`. Em código de verdade, guarde o ponteiro e teste. E copie
-> texto com `snprintf(destino, sizeof destino, "%s", origem)`: um título
-> maior que 39 caracteres é cortado em vez de estourar o vetor, como faria o
-> `strcpy`.
+> `playlist_proxima(viagem)->titulo` acessa `NULL` se a função devolver
+> `NULL`, o que ocorre com repetir desligado na última música: guarde o
+> ponteiro e teste. Copie texto com `snprintf(destino, sizeof destino, "%s",
+> origem)`: um título maior que 39 caracteres é cortado, em vez de estourar o
+> vetor como no `strcpy`.
 
 > [!TIP]
 > **Por dentro do C:** a `Musica` tem 40 + 30 bytes de texto, 2 de
-> preenchimento e 4 do `int`: 76 bytes. A `Faixa` soma mais 4 de
-> preenchimento (para o ponteiro começar num múltiplo de 8) e dois ponteiros:
-> `sizeof(Faixa)` dá 96 bytes. O
-> `const Musica *` que as funções devolvem aponta para **dentro** da faixa,
-> no heap. Ele vale enquanto a música existir: depois de
-> `playlist_remove` daquela música, é um ponteiro solto. Vale a regra do
-> vetor dinâmico (0075): quem empresta um endereço de dentro da estrutura
-> precisa dizer até quando ele vale.
-
+> preenchimento e 4 do `int`: 76 bytes. A `Faixa` soma 4 de preenchimento e
+> dois ponteiros: `sizeof(Faixa)` dá 96. O `const Musica *` devolvido aponta
+> para **dentro** da faixa e fica solto após o `playlist_remove` dela, como no
+> vetor dinâmico (0075).
 
 > [!NOTE]
 > **Pergunta para você:** se o exemplo chamasse `playlist_remove(viagem,

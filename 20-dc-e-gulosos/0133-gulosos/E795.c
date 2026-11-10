@@ -25,12 +25,6 @@
 #include <stdlib.h>
 
 int main(void) {
-    int peso[] = {60, 95, 80, 120, 45, 70, 100, 55};
-    int n = 8;
-    int limite = 150;
-    (void)peso;
-    (void)n;
-    (void)limite;
 
     return 0;
 }

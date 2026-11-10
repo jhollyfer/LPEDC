@@ -1,53 +1,44 @@
 ## 0154 · Bellman-Ford: pesos negativos
 
-Fim de turno. O motoboy de aplicativo está na Base e quer chegar em Casa
-gastando o mínimo. Cada trecho custa gasolina, mas alguns trechos coincidem
-com uma corrida aceita no caminho, e a corrida paga mais do que a gasolina.
-Do Shopping até o Centro, por exemplo, ele gasta R$ 2 e recebe R$ 6: o
-**custo líquido** do trecho é **R$ -4**.
+O motoboy sai da Base para chegar em Casa gastando o mínimo. Alguns trechos
+coincidem com uma corrida que paga mais que a gasolina: do Shopping ao
+Centro ele gasta R$ 2 e recebe R$ 6, um **custo líquido** de **R$ -4**.
 
-O grafo é dirigido (a corrida só paga num sentido) e tem **pesos
-negativos**. É aqui que o Dijkstra do assunto 0112 quebra. Ele fixa o Centro
-com R$ 4 (indo direto da Base) antes de olhar o Shopping, e nunca mais volta
-atrás. Mas Base, Shopping, Centro custa 6 - 4 = **R$ 2**. A promessa do
-Dijkstra ("somar pesos só aumenta") deixou de valer, e ele termina dizendo
-que Casa custa R$ 12, quando custa R$ 10.
+O grafo é dirigido e tem **pesos negativos**, onde o Dijkstra (assunto 0112)
+quebra. Ele fixa o Centro com R$ 4 (direto da Base) antes de olhar o
+Shopping, mas Base, Shopping, Centro custa 6 - 4 = **R$ 2**. A premissa
+"somar pesos só aumenta" falha, e ele diz que Casa custa R$ 12, quando custa
+R$ 10.
 
-O algoritmo de **Bellman-Ford** não fixa ninguém cedo. Ele **relaxa todas
-as arestas**, uma rodada inteira de cada vez, sem escolher o menor:
+O **Bellman-Ford** não fixa ninguém cedo. Ele **relaxa todas as arestas**,
+uma rodada inteira por vez, sem escolher o menor:
 
 - `dist[origem] = 0` e INFINITO no resto;
 - repita V - 1 vezes: para cada aresta `u -> v` com custo `c`, se
   `dist[u] + c < dist[v]`, atualize `dist[v]` e `anterior[v]` (no Cormen,
   `v.d` e `v.π`; esse teste é o `RELAX`).
 
-Por que V - 1 rodadas bastam? Um caminho mínimo não repete vértice, então
-tem no máximo V - 1 arestas. A rodada 1 garante a primeira aresta do caminho
-certa; a rodada 2, a segunda; e assim por diante. Se uma rodada inteira
-passa sem mudar nada, as próximas também não mudariam, e dá para parar
-antes.
+V - 1 rodadas bastam: um caminho mínimo não repete vértice e tem no máximo
+V - 1 arestas, e a rodada `i` acerta a `i`-ésima. Uma rodada sem mudança
+permite parar antes.
 
-E se existir um **ciclo negativo**, um circuito cuja soma é menor que zero?
-Aí não existe caminho mínimo: dar mais uma volta sempre diminui o custo, e a
-`dist` cairia para sempre. Bellman-Ford **detecta** isso com uma rodada
-extra: se depois das V - 1 rodadas alguma aresta ainda melhora, há ciclo
-negativo alcançável.
+Um **ciclo negativo** (circuito de soma menor que zero) elimina o caminho
+mínimo: cada volta diminui o custo. Uma rodada extra **detecta** o ciclo: se
+depois das V - 1 rodadas alguma aresta ainda melhora, há ciclo negativo
+alcançável.
 
-O preço é o tempo: V - 1 rodadas de E arestas, **O(V · E)**,
-contra O((V + E) log V) do Dijkstra com heap. Use Bellman-Ford quando houver
-peso negativo; sem eles, Dijkstra. Num DAG, nem isso: relaxar
-cada aresta uma vez, na ordem topológica (0151), já dá os caminhos mínimos em
-O(V + E), mesmo com pesos negativos.
+O custo é **O(V · E)**, contra O((V + E) log V) do Dijkstra com heap: com
+peso negativo, Bellman-Ford; sem ele, Dijkstra. Num DAG, relaxar cada aresta
+uma vez na ordem topológica (0151) dá os mínimos em O(V + E), mesmo com
+pesos negativos.
 
-No desenho, os números nas setas são o custo líquido; em cima de cada
-lugar, a `dist` final; verde, a rota até Casa. Embaixo, o vetor `dist`
-rodada a rodada:
+No desenho, as setas mostram o custo líquido, cada lugar mostra a `dist`
+final, e a rota até Casa é verde. Embaixo, o vetor `dist` a cada rodada:
 
 {{ideia}}
 
-O código guarda as arestas numa lista: ele percorre todas, então não precisa
-de matriz. A lista começa de propósito pelas arestas que chegam em Casa, para
-as rodadas aparecerem.
+A lista de arestas começa de propósito pelas que chegam em Casa, para as
+rodadas aparecerem.
 
 ```c
 #include <stdbool.h>
@@ -114,15 +105,14 @@ int main(void) {
 // Até Casa (R$ 10): Base -> Shopping -> Centro -> Hospital -> Casa
 ```
 
-O fluxograma não tem "escolher o menor". São dois laços cegos, rodadas por
-fora e arestas por dentro, com duas saídas: uma rodada sem mudança ou as
-V - 1 rodadas completas. Depois vem a rodada extra, que só pergunta:
+O fluxograma não escolhe o menor: rodadas por fora, arestas por dentro, com
+saída sem mudança ou após V - 1 rodadas. Depois vem a rodada extra:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-Cada rodada passa pela lista inteira, na ordem dela. A Casa aparece com 12 na rodada 3 (o mesmo valor errado do Dijkstra) e cai para 10
+A Casa aparece com 12 na rodada 3 (o valor errado do Dijkstra) e cai para 10
 na rodada 4, quando a melhora do Centro chega até ela:
 
 | Rodada | O que muda | Base | Shopping | Centro | Faculdade | Hospital | Casa |
@@ -134,27 +124,15 @@ na rodada 4, quando a melhora do Centro chega até ela:
 | 4 | Casa via Hospital: 7 + 3 | 0 | 6 | 2 | 11 | 7 | 10 |
 | 5 | nada muda: para | 0 | 6 | 2 | 11 | 7 | 10 |
 
-Com a lista na ordem "natural" (as arestas da Base primeiro), uma rodada só
-já chegaria ao resultado. O A308 mede isso. O A307 caça um ciclo negativo de
-verdade, numa tabela de câmbio entre moedas, e mostra o ciclo.
+Com a lista na ordem "natural" (arestas da Base primeiro), uma rodada já
+bastaria; o A308 mede isso. O A307 caça um ciclo negativo numa tabela de
+câmbio.
 
 > [!WARNING]
-> Com `INT_MAX` como INFINITO e peso negativo, o teste `dist[u] != INFINITO`
-> é obrigatório por outro motivo além do estouro: `INT_MAX + (-4)` **não**
-> estoura, dá `INT_MAX - 4`, que é menor que `INT_MAX`. Sem o teste, um
-> vértice inalcançável "melhora" outro vértice inalcançável, e o programa
-> mostra uma distância gigante e falsa no lugar de "sem caminho". Em grafo
-> **não dirigido**, uma aresta negativa já é um ciclo negativo (ir e
-> voltar por ela).
-
-> [!TIP]
-> **Por dentro do C:** a lista de arestas é um vetor de `Trecho` contíguo, 12
-> bytes por aresta, e cada rodada o percorre em sequência, do primeiro ao
-> último byte. É o melhor caso para o cache do processador, um dos motivos
-> de o Bellman-Ford ser usado em roteadores (o protocolo
-> RIP espalha distâncias assim, vizinho a vizinho). O `INFINITO` de um bilhão
-> deixa folga: `1000000000 + 1000000000` ainda cabe num `int` de 32 bits
-> (até 2147483647), então nem a soma de dois "infinitos" estoura.
+> Com `INT_MAX` como INFINITO, o teste `dist[u] != INFINITO` é obrigatório:
+> `INT_MAX + (-4)` **não** estoura, dá `INT_MAX - 4`, e um vértice
+> inalcançável "melhora" outro com uma distância gigante e falsa. Em grafo
+> **não dirigido**, uma aresta negativa já é um ciclo negativo (ir e voltar).
 
 > [!NOTE]
 > **Pergunta para você:** se a corrida da Faculdade para o Hospital passar a

@@ -1,14 +1,10 @@
 // 0085 · Fila
 // Exercício E509 · ★★★
 //
-// Batata quente: 7 pessoas numeradas de 1 a 7 estão em roda. A batata passa
-// de mão em mão, e quem estiver com ela na 3ª passada sai. A contagem
-// recomeça de quem estava ao lado, até sobrar uma pessoa. (É o famoso
-// problema de Josephus.)
-//
-// Resolva com o fila.h: a roda é a fila. "Passar a batata" é tirar do
-// início e pôr de novo no fim. Na 3ª pessoa, tire e não devolva. Mostre a
-// ordem de saída e quem sobrou.
+// Batata quente: 7 pessoas numeradas de 1 a 7 estão em roda. A batata passa de
+// mão em mão, e quem estiver com ela na 3ª passada sai. A contagem recomeça de
+// quem estava ao lado, até sobrar uma pessoa (o problema de Josephus). Resolva
+// com uma fila do fila.h e mostre a ordem de saída e quem sobrou.
 //
 //   Saída esperada:
 //   Saíram: 3 6 2 7 5 1

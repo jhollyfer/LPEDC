@@ -2,15 +2,15 @@
 // Exercício E556 · ★★☆
 //
 // Os pedidos de uma lanchonete chegam com o tempo de preparo, em minutos:
-// 6, 3, 8, 3, 1. O programa abaixo ordena com insertion sort e mostra cada
-// encaixe. Transforme-o:
+// 6, 3, 8, 3, 1. Escreva
 //
-// a) leve a ordenação para int ordena(int v[], int n, bool maior_ou_igual,
-//    bool mostrar), que devolve o total de deslocamentos. Com maior_ou_igual
-//    falso, o while usa preparo[i] > x (como agora); com verdadeiro, usa >=;
-// b) na linha de cada encaixe, mostre também x e a posição onde ele entrou;
-// c) no main, ordene o vetor com > (mostrando os encaixes) e uma cópia dele
-//    com >= (sem mostrar), e imprima os dois totais.
+//   int ordena(int v[], int n, bool maior_ou_igual, bool mostrar)
+//
+// com insertion sort crescente. Ela devolve o total de deslocamentos. Com
+// maior_ou_igual falso, o while desloca quando v[i] > x; com verdadeiro,
+// quando v[i] >= x. Com mostrar verdadeiro, imprime uma linha por encaixe.
+// No main, ordene o vetor com > (mostrando) e uma cópia com >= (sem
+// mostrar), e imprima os dois totais.
 //
 //   Saída esperada:
 //   j = 1 (x = 3 entrou na posição 0): 3 6 8 3 1 (deslocou 1)
@@ -20,32 +20,12 @@
 //   total com >: 7
 //   total com >=: 8
 //
-// Escreva sua resposta abaixo (modifique o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdbool.h>
 
 int main(void) {
-    int preparo[] = {6, 3, 8, 3, 1};
-    int n = 5, total = 0;
 
-    for (int j = 1; j < n; j++) {
-        int x = preparo[j];
-        int i = j - 1;
-        int d = 0;
-        while (i >= 0 && preparo[i] > x) {
-            preparo[i + 1] = preparo[i];
-            i--;
-            d++;
-        }
-        preparo[i + 1] = x;
-        total += d;
-        printf("j = %d:", j);
-        for (int k = 0; k < n; k++) {
-            printf(" %d", preparo[k]);
-        }
-        printf(" (deslocou %d)\n", d);
-    }
-    printf("total: %d\n", total);
     return 0;
 }

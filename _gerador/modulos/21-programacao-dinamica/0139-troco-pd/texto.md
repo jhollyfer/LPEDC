@@ -1,42 +1,35 @@
 ## 0139 · Troco com programação dinâmica
 
-Na agência dos Correios da cidadezinha, o balcão só tem selos de R$ 1, R$ 4 e
-R$ 5. A sua carta custa R$ 8 de porte, e o envelope é pequeno: você quer
-colar o **menor número de selos** possível.
+Nos Correios, o balcão só tem selos de R$ 1, R$ 4 e R$ 5, e sua carta custa
+R$ 8 de porte. Você quer o **menor número de selos**.
 
-O atendente faz o que todo mundo faz: pega o maior selo que cabe, R$ 5, e
-completa com três de R$ 1. São 4 selos. Mas dois selos de R$ 4 também dão
-R$ 8. O guloso do assunto 0133 errou de novo, e o motivo é o mesmo do
-contraexemplo `{1, 3, 4}` de lá: com esses valores, a escolha que parece
-melhor agora estraga o resto.
+O guloso do assunto 0133 pega o maior selo que cabe, R$ 5, e completa com
+três de R$ 1: 4 selos. Dois selos de R$ 4 resolvem com 2. É o mesmo
+contraexemplo `{1, 3, 4}` de lá: a escolha que parece melhor agora estraga o
+resto.
 
-A programação dinâmica não aposta em escolha nenhuma: ela **testa todas**, mas
-sem repetir trabalho. Olhe de novo para o **último selo** colado. Ele foi de
-R$ 1, de R$ 4 ou de R$ 5. Se foi de R$ 4, antes dele você já tinha montado
-R$ 4 com o mínimo de selos. Então:
+A PD não aposta: **testa todas as escolhas sem repetir trabalho**. O **último
+selo** colado foi de R$ 1, R$ 4 ou R$ 5, e antes dele sobrou um troco menor,
+já resolvido com o mínimo de selos:
 
 `dp[v] = 1 + o menor entre dp[v - 1], dp[v - 4] e dp[v - 5]`
 
-só com os selos que cabem em `v` (`selo <= v`), e com `dp[0] = 0`: para
-R$ 0 não precisa de selo nenhum. `dp[v]` é o menor número de selos que somam
-**exatamente** `v` reais.
+só com os selos que cabem em `v`, e `dp[0] = 0`. `dp[v]` é o menor número de
+selos que somam **exatamente** `v` reais.
 
-O que garante que isso dá certo é a **subestrutura ótima**: tire o último selo
-de uma solução ótima para R$ 8, e o que sobra é uma solução ótima para o
-resto. Se não fosse, você trocaria o resto por uma solução melhor e teria uma
-solução para R$ 8 melhor que a ótima, o que é absurdo.
+Isso vale pela **subestrutura ótima**: tirando o último selo de uma solução
+ótima, o resto continua ótimo (senão daria para melhorar a solução inteira).
 
-Para saber **quais** selos usar, não basta `dp`. Um segundo vetor,
-`ultimo[v]`, anota o selo que deu o mínimo em `v`. Depois é só andar para
-trás: `v`, `v - ultimo[v]`, e assim por diante, até chegar em 0.
+Para saber **quais** selos usar, `ultimo[v]` guarda o selo que deu o mínimo
+em `v`. Depois anda-se para trás: `v`, `v - ultimo[v]`, até 0.
 
-No desenho, `dp[8]` olha para três vizinhos à esquerda, um para
-cada selo, e escolhe o menor deles, o `dp[4]`:
+No desenho, `dp[8]` olha três vizinhos, um por selo, e escolhe o menor, o
+`dp[4]`:
 
 {{ideia}}
 
-O código enche a tabela de 1 até o porte. Se um valor não pode ser montado,
-`dp[v]` fica num "infinito" (o A278 mostra quando isso acontece):
+O código enche a tabela de 1 até o porte. Valor impossível fica em
+"infinito" (o A278 mostra quando):
 
 ```c
 #include <stdio.h>
@@ -88,19 +81,18 @@ int main(void) {
 // 2 selos para R$ 8: 4 4
 ```
 
-O custo é o de toda PD: `total` subproblemas, cada um testando `k` selos.
-**O(total × k)** de tempo e O(total) de memória. Para um troco de R$ 1.000
-com 6 valores de selo, são 6 mil passos.
+Custo: `total` subproblemas, cada um testando `k` selos, **O(total × k)** de
+tempo e O(total) de memória.
 
-O fluxograma tem dois laços, um dentro do outro. O de fora anda pelos
-valores, do menor para o maior; o de dentro testa cada selo como "o último":
+No fluxograma, o laço de fora anda pelos valores e o de dentro testa cada
+selo como "o último":
 
 {{fluxograma}}
 
 ### Passo a passo
 
-As três últimas células da tabela. Cada coluna é um selo testado como
-último; o mínimo da linha vira `dp[v]`:
+As três últimas células. Cada coluna é um selo testado como último; o mínimo
+da linha vira `dp[v]`:
 
 | v | selo 1: dp[v - 1] + 1 | selo 4: dp[v - 4] + 1 | selo 5: dp[v - 5] + 1 | dp[v] | ultimo[v] |
 | --- | --- | --- | --- | --- | --- |
@@ -108,26 +100,19 @@ As três últimas células da tabela. Cada coluna é um selo testado como
 | 7 | dp[6] + 1 = 3 | dp[3] + 1 = 4 | dp[2] + 1 = 3 | 3 | 1 |
 | 8 | dp[7] + 1 = 4 | dp[4] + 1 = **2** | dp[3] + 1 = 4 | 2 | 4 |
 
-No `v = 6` deu empate entre os selos 1 e 5. Como o teste é `<` (e não `<=`),
-fica o primeiro que achou o mínimo. As duas soluções têm 2 selos: tanto faz.
+Em `v = 6` os selos 1 e 5 empatam. Como o teste é `<`, fica o primeiro que
+achou o mínimo.
 
 > [!WARNING]
-> O "infinito" precisa sobreviver a um `+ 1`. Se você usar `INT_MAX` de
-> `<limits.h>`, a conta `dp[v - selo[s]] + 1` com `dp[...] == INT_MAX`
-> **estoura** um `int` com sinal: é comportamento indefinido, o gcc com as flags de estudo acusa
-> `signed integer overflow`, e sem o sanitizer o resultado vira um número
-> negativo que "ganha" de todo mundo no `<`. Use um infinito folgado, como
-> `1000000` ou `total + 1` (nunca se usa mais que `total` selos), ou teste
-> `dp[v - selo[s]] != INF` antes de somar.
+> O "infinito" precisa sobreviver a um `+ 1`. Com `INT_MAX`, a conta
+> `dp[v - selo[s]] + 1` **estoura** o `int` (comportamento indefinido: o gcc
+> com as flags de estudo acusa `signed integer overflow`). Use `1000000`,
+> `total + 1` ou teste `dp[v - selo[s]] != INF` antes de somar.
 
 > [!TIP]
-> **Por dentro do C:** os vetores `dp` e `ultimo` ficam na pilha, no frame do
-> `main`: 101 `int` cada, 808 bytes no total. Para um troco de R$ 1 milhão,
-> seriam 8 MB, e a pilha padrão do Linux tem 8 MB: o programa morreria com
-> *stack overflow* antes da primeira conta. Para tabelas grandes, use
-> `malloc` (assunto 0054). E `minimo_selos` recebe `dp` e
-> `ultimo` como ponteiros: ela escreve direto nos vetores do `main`, sem
-> copiar nada.
+> **Por dentro do C:** `dp` e `ultimo` ficam na pilha. Para troco de R$ 1
+> milhão, seriam 8 MB e estouraria a pilha padrão do Linux: use `malloc`
+> (assunto 0054).
 
 > [!NOTE]
 > **Pergunta para você:** com selos de R$ 1, R$ 4 e R$ 5, qual é o primeiro

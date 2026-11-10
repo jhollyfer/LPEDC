@@ -2,10 +2,12 @@
 // Exercício E487 · ★☆☆
 //
 // O garçom empilha as comandas no espeto do balcão, e a cozinha sempre pega a
-// de cima. O programa abaixo já mexe na pilha. Complete o final: depois que o
-// laço esvazia a pilha, chame pilha_desempilha(p, &x) mais uma vez, guarde o
-// retorno numa variável bool e mostre o que a função devolveu e quanto x
-// ficou valendo.
+// de cima. Com o pilha.h, empilhe 4 e 7; desempilhe e mostre o valor; empilhe 2
+// e 9; mostre o topo sem tirar; desempilhe duas vezes e mostre o último valor
+// tirado e o tamanho da pilha; esvazie a pilha mostrando um valor por linha e
+// mostre "vazia? " com o resultado de pilha_vazia (1 ou 0). Por fim, chame
+// pilha_desempilha mais uma vez, guarde o retorno num bool e mostre o que a
+// função devolveu e quanto x ficou valendo.
 //
 //   Saída esperada:
 //   7
@@ -15,40 +17,13 @@
 //   vazia? 1
 //   mais um desempilha: devolveu 0, x = 4
 //
-// Escreva sua resposta abaixo (complete o fim do main):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 #include "pilha.h"
 
 int main(void) {
-    Pilha *p = pilha_cria();
-    if (p == NULL) {
-        return 1;
-    }
-    int x;
 
-    pilha_empilha(p, 4);
-    pilha_empilha(p, 7);
-    pilha_desempilha(p, &x);
-    printf("%d\n", x);
-
-    pilha_empilha(p, 2);
-    pilha_empilha(p, 9);
-    pilha_topo(p, &x);
-    printf("%d\n", x);
-
-    pilha_desempilha(p, &x);
-    pilha_desempilha(p, &x);
-    printf("%d %d\n", x, pilha_tamanho(p));
-
-    while (pilha_desempilha(p, &x)) {
-        printf("%d ", x);
-    }
-    printf("\nvazia? %d\n", pilha_vazia(p));
-
-    // sua parte: mais um pilha_desempilha e o printf do resultado
-
-    pilha_libera(p);
     return 0;
 }

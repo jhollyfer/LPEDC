@@ -2,61 +2,43 @@
 
 # Módulo 17 · Medindo algoritmos recursivos
 
-No módulo 10 você aprendeu a contar passos e a ler a classe de um código
-pelos laços: um laço é O(n), dois aninhados são O(n²), um laço que divide por
-2 é O(log n). Isso funciona até aparecer uma função que chama a si
-mesma. Quanto custa o merge sort? O "n log n" que você leu no módulo 13 veio
-de um desenho e de um pouco de fé. Aqui ele vira conta.
+O módulo 10 contou passos e leu a classe pelos laços. Isso falha numa função
+que chama a si mesma: quanto custa o merge sort? O "n log n" do módulo 13 veio
+de um desenho; aqui vira conta.
 
-Este módulo traz as ferramentas que faltavam. A **recorrência** transforma o código recursivo numa equação, e a **árvore de
-recursão** resolve a equação somando nível por nível. O **teorema mestre**
-resolve de uma vez as recorrências de divisão e conquista mais comuns. A
-**análise amortizada** explica por que o vetor que dobra é barato, mesmo
-copiando tudo de vez em quando. E o **limite inferior** troca a pergunta
-"quanto custa este algoritmo?" por "dá para fazer melhor?". Para ordenar
-comparando, não dá: n log n é o piso.
-
-No último assunto, você usa tudo isso para prever quanto
-tempo quatro ordenações levam com 1 milhão de elementos, a partir de uma
-medida com 16 mil, e confere a previsão no computador.
+A **recorrência** transforma o código recursivo numa equação, e a **árvore de
+recursão** a resolve somando nível por nível. O **teorema mestre** resolve de
+uma vez as de divisão e conquista. A **análise amortizada** explica por que o
+vetor que dobra é barato. O **limite inferior** pergunta se dá para fazer
+melhor: para ordenar comparando, não dá. O último assunto prevê o tempo de
+quatro ordenações com 1 milhão de elementos a partir de uma medida com 16 mil.
 
 ## O que você vai aprender
 
-- escrever a **recorrência** de uma função recursiva lendo o código, e resolvê-la com a **árvore de recursão**
-- a diferença entre `T(n-1)` e `T(n/2)`, e por que "duas chamadas" pode ser Θ(n) ou Θ(2ⁿ)
-- o **teorema mestre**: os três casos, como reconhecer cada um e quando ele **não** se aplica
-- a **análise amortizada**: método agregado e método do banqueiro no vetor que dobra, no contador binário e na pilha com multipop
-- a **árvore de decisão** e o limite **Ω(n log n)** para ordenar por comparação
-- as notações **Θ** e **Ω**, ao lado do **O** que você já conhece
-- **medir** com `clock()` e contadores, e **prever** o tempo para entradas grandes
+- a **recorrência** de uma função recursiva e a **árvore de recursão**
+- `T(n-1)` contra `T(n/2)`: "duas chamadas" pode ser Θ(n) ou Θ(2ⁿ)
+- o **teorema mestre**: os três casos e quando ele **não** se aplica
+- a **análise amortizada**: método agregado e do banqueiro
+- a **árvore de decisão** e o limite **Ω(n log n)** da ordenação por comparação
+- as notações **Θ** e **Ω**, ao lado do **O**
+- **medir** com `clock()` e contadores, e **prever** o tempo
 
 ## Antes de começar
 
-Este módulo usa sem cerimônia: **recursão** e pilha de chamadas (0031 a
-0033), **Big-O** e contagem de passos (0071 e 0072), o **vetor que cresce**
-(0055 e 0075), **pilha** (0082) e **fila** (0085), as ordenações do módulo 13
-(merge sort e quick sort, principalmente) e o **heap** (0102 e 0103). Também
-aparecem ponteiros para função (0050), para guardar várias ordenações num
-vetor.
+Usa recursão (0031 a 0033), Big-O (0071 e 0072), vetor que cresce (0055 e
+0075), pilha (0082), fila (0085), merge sort e quick sort (módulo 13), heap
+(0102 e 0103) e ponteiros para função (0050). Matemática: `log₂ n` é quantas
+vezes dá para dividir n por 2 até chegar em 1 (`log₂ 1024 = 10`), e `log_b a`
+é o expoente que leva `b` a `a` (`log₃ 9 = 2`). `log2` e `log` ficam em
+`<math.h>`; as flags de estudo já ligam `-lm`.
 
-Matemática: só potências e logaritmos. Lembre que `log₂ n` é "quantas vezes
-dá para dividir n por 2 até chegar em 1" (`log₂ 1024 = 10`), e que
-`log_b a` é o expoente que leva `b` a `a` (`log₂ 8 = 3`, `log₃ 9 = 2`). No C,
-`log2` e `log` ficam em `<math.h>`, e o gcc com as flags de estudo já liga a biblioteca
-matemática (`-lm`).
+O último assunto traz o TAD `ordena.h` e `ordena.c`, com as quatro ordenações e
+um contador de comparações; o comando do exemplo compila o `ordena.c` junto. Os
+tempos variam entre execuções; as comparações, não.
 
-O último assunto tem um TAD na pasta, `ordena.h` e `ordena.c`, com as quatro
-ordenações e um contador de comparações. O comando do exemplo compila o `ordena.c` junto
-com qualquer exemplo ou exercício da pasta. Alguns programas medem **tempo**:
-os números de tempo mudam de máquina para máquina e de uma execução para
-outra; os de comparações, não. Os exercícios de "ache o erro" trazem o bug de
-propósito, e o enunciado avisa.
-
-Nos diagramas da ideia, **roxo** é trabalho sendo feito (uma chamada, um
-nível), **verde** é o que domina o custo ou o resultado, **amarelo** marca um
-empate e **vermelho** é o caro demais ou o que deu errado. Abra cada
-recorrência à mão no **Passo a passo**: quase todo exemplo conta algo (chamadas, cópias,
-comparações) e confere a contagem com a fórmula.
+**Progressão.** Dá prova aos "n log n" do merge sort, do quick sort (módulo 13)
+e do heap (módulo 14) e às estimativas dos módulos 15 e 16 (O(1) esperado da
+hash; custo de BFS, DFS e Dijkstra). Prepara a divisão e conquista.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -70,49 +52,40 @@ comparações) e confere a contagem com a fórmula.
 
 ## 0114 · Recorrências e árvore de recursão
 
-Fim de ano na contabilidade de uma rede de farmácias: chegou um lote de notas
-fiscais para auditar. A chefe confere o lote inteiro (passa o olho em todas as
-notas), divide em dois lotes iguais e entrega cada metade para um auditor.
-Cada auditor faz a mesma coisa: confere o seu lote, divide, repassa. Quando
-um lote fica com uma nota só, quem recebeu confere essa nota e pronto.
+Na contabilidade de uma rede de farmácias chegou um lote de notas fiscais. A
+chefe confere o lote inteiro, divide em dois lotes iguais e entrega cada metade
+a um auditor, que faz o mesmo. Com uma nota só, o auditor confere e para.
 
-Quantas notas são olhadas no total? Contar laços, como no módulo 10, não
-resolve: o trabalho está escondido nas chamadas.
+Quantas notas são olhadas no total? Contar laços (módulo 10) não resolve: o
+trabalho está nas chamadas.
 
 Uma **recorrência** é uma equação que dá o custo de uma função recursiva em
-termos do custo dela mesma com entradas menores. Chamando de `T(n)` o custo
-para um lote de `n` notas:
+termos do custo dela com entradas menores. Para um lote de `n` notas:
 
 ```text
 T(1) = 1                  (caso base: confere a nota e para)
 T(n) = 2 T(n/2) + n       (duas chamadas com metade, mais n de trabalho)
 ```
 
-Você escreve a recorrência **lendo o código**, em três perguntas:
+Leia a recorrência no código com três perguntas:
 
-1. **Quantas chamadas recursivas** a função faz, e com que tamanho? Aqui, 2
-   chamadas de tamanho `n/2`: o termo `2 T(n/2)`.
-2. **Quanto trabalho** ela faz fora das chamadas? Aqui, olhar as `n` notas:
-   o termo `n`.
-3. **Qual é o caso base**, e quanto ele custa? Aqui, `T(1) = 1`.
+1. **Quantas chamadas recursivas**, e de que tamanho? Aqui, 2 de tamanho
+   `n/2`: o termo `2 T(n/2)`.
+2. **Quanto trabalho** fora das chamadas? Aqui, olhar `n` notas: o termo `n`.
+3. **Qual o caso base** e seu custo? Aqui, `T(1) = 1`.
 
-Escrever é a parte fácil. Para **resolver** (chegar numa fórmula sem `T` dos
-dois lados), o jeito mais visual é a **árvore de recursão**: cada chamada
-vira um nó com o trabalho que ela faz sozinha, e você soma **nível por
-nível**. O nível `k` tem `2^k` chamadas, cada uma com um lote de `n/2^k`
-notas: o nível inteiro custa `2^k · n/2^k = n`. Os lotes caem pela metade até
-chegar em 1, então são `log₂ n + 1` níveis. Total: `n log₂ n + n`, que é
-**Θ(n log n)**.
+Para **resolver** (chegar numa fórmula sem `T` dos dois lados), use a **árvore
+de recursão**: cada chamada vira um nó com o trabalho que faz sozinha, e você
+soma **nível por nível**. O nível `k` tem `2^k` chamadas de `n/2^k` notas cada:
+custa `n`. Os lotes caem pela metade até 1, então há `log₂ n + 1` níveis.
+Total: `n log₂ n + n`, ou **Θ(n log n)**.
 
-O **Θ** (teta) é novo: ele diz que a função cresce **exatamente** naquele
-ritmo, nem mais rápido nem mais devagar. O `O` do assunto 0072 é um teto;
-o Θ é teto e piso ao mesmo tempo. Quando você resolve uma recorrência até a
-fórmula, sabe o ritmo exato, e o Θ é a palavra certa (as definições formais
-de O, Ω e Θ estão no assunto 0166). O Cormen ensina três métodos para
-resolver: a **substituição** (chutar a resposta e provar por indução), a
-árvore de recursão e o teorema mestre, do próximo assunto.
+O **Θ** (teta) diz que a função cresce **exatamente** naquele ritmo: o `O` do
+assunto 0072 é um teto, o Θ é teto e piso (definições formais no assunto
+0166). Além da árvore, o Cormen ensina a **substituição** (chutar a resposta e
+provar por indução) e o teorema mestre, do próximo assunto.
 
-A forma da recorrência decide a forma da árvore. As cinco mais comuns:
+A forma da recorrência decide a forma da árvore:
 
 | recorrência | árvore | resultado | exemplo |
 | --- | --- | --- | --- |
@@ -122,13 +95,13 @@ A forma da recorrência decide a forma da árvore. As cinco mais comuns:
 | `T(n) = 2 T(n/2) + n` | binária, log n níveis de custo n | Θ(n log n) | merge sort, a auditoria |
 | `T(n) = 2 T(n-1) + 1` | binária, n níveis que dobram | Θ(2ⁿ) | Hanói (assunto 0033) |
 
-Tome um lote de 8 notas. Cada caixa é uma chamada, com o tamanho do lote que
-ela confere. Some cada linha: dá 8 em todas, e são 4 linhas:
+Num lote de 8 notas, cada caixa é uma chamada com o tamanho do lote que ela
+confere. Cada linha soma 8, e são 4 linhas:
 
 <p align="center"><img src="17-analise-avancada/0114-recorrencias/ideia.svg" alt="Diagrama da ideia: Recorrências e árvore de recursão" width="858"></p>
 
-O código conta as notas de cada nível num vetor indexado pela profundidade
-da chamada. Depois confere a fórmula `n log₂ n + n` para lotes maiores:
+O código soma as notas de cada nível num vetor indexado pela profundidade e
+confere `n log₂ n + n` para lotes maiores:
 
 ```c
 #include <stdio.h>
@@ -191,16 +164,14 @@ int main(void) {
 // 1048576     22020096     22020096
 ```
 
-O fluxograma é a função `audita` inteira, e não tem laço. A repetição está
-nas duas caixas `audita`: cada uma é o fluxograma inteiro de novo, para uma
-metade. Essas duas caixas são o `2 T(n/2)` da recorrência; a caixa
-`custo_nivel += n` é o `+ n`:
+O fluxograma é a função `audita` e não tem laço: as duas caixas `audita` são
+o `2 T(n/2)` e a caixa `custo_nivel += n` é o `+ n`:
 
 <p align="center"><img src="17-analise-avancada/0114-recorrencias/fluxograma.svg" alt="Fluxograma: Recorrências e árvore de recursão" width="350"></p>
 
 ### Passo a passo
 
-A recorrência também se resolve "abrindo" o `T` até o caso base, com `n = 8`:
+Abrir o `T` até o caso base, com `n = 8`:
 
 | passo | conta | valor |
 | --- | --- | --- |
@@ -212,28 +183,19 @@ A recorrência também se resolve "abrindo" o `T` até o caso base, com `n = 8`:
 Bate com a árvore (4 níveis de 8) e com o programa.
 
 > [!WARNING]
-> "Duas chamadas recursivas" não diz nada sozinho: o que decide é **o
-> tamanho** que cada chamada recebe. `2 T(n/2) + 1` (achar o máximo dividindo
-> o vetor ao meio) dá Θ(n): umas `2n` chamadas. `2 T(n-1) + 1` (Hanói) dá
-> Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas. Entre `n/2` e `n-1`
-> está a diferença entre um programa instantâneo e um que não termina hoje.
-> Leia os argumentos de cada chamada antes de escrever a recorrência.
+> "Duas chamadas recursivas" não diz nada sozinho: decide o **tamanho** de cada
+> chamada. `2 T(n/2) + 1` (máximo dividindo o vetor) dá Θ(n); `2 T(n-1) + 1`
+> (Hanói) dá Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas.
 
 > [!TIP]
-> **Por dentro do C:** a árvore de recursão é o **filme** da pilha de
-> chamadas (assunto 0031). Cada nó é um frame que nasce, trabalha e morre; a
-> ordem em que o programa visita os nós é a de uma DFS na árvore. Por isso o
-> **tempo** é a soma de todos os nós (`2n - 1 = 15` chamadas para 8 notas),
-> mas a **memória** da pilha é a altura: no máximo `log₂ n + 1 = 4` frames
-> vivos ao mesmo tempo. Para 1 milhão de notas, são 2 milhões de chamadas e
-> 21 frames empilhados. A pilha só estoura quando a árvore é **funda**,
-> como na linha de `n` nós de `T(n-1) + 1`.
+> **Por dentro do C:** a árvore é o filme da pilha de chamadas (assunto 0031).
+> O **tempo** é a soma dos nós (`2n - 1 = 15` chamadas para 8 notas); a
+> **memória** é a altura, no máximo `log₂ n + 1 = 4` frames vivos.
 
 > [!NOTE]
-> **Pergunta para você:** e se a chefe, em vez de dividir ao meio, tirasse uma
-> nota só do lote e repassasse as outras `n - 1` para um único auditor? A
-> recorrência vira `T(n) = T(n-1) + n`. Quanto dá para 8 notas? E para 1024?
-> Compare com 32 e 11.264.
+> **Pergunta para você:** e se a chefe tirasse uma nota só e repassasse as
+> outras `n - 1` a um único auditor? A recorrência vira `T(n) = T(n-1) + n`.
+> Quanto dá para 8 notas? E para 1024? Compare com 32 e 11.264.
 
 ### Hora de praticar
 
@@ -396,12 +358,12 @@ gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/A228.c -o ~/LPEDC/17-analise-a
 
 **Exercício E679** · ★☆☆
 
-A busca binária recursiva abaixo segue a recorrência T(n) = T(n/2) + 1.
-Confira isso no computador: acrescente um contador global de chamadas e
-troque o main para buscar o valor 5 (menor que todos os CPFs, o pior caso
-quando n é potência de 2) em pedaços de tamanho n = 1, 2, 4, ..., 1024 do
-vetor, sempre a partir do índice 0, mostrando quantas chamadas cada busca
-fez:
+A busca binária recursiva segue T(n) = T(n/2) + 1. Confira no computador:
+escreva "int busca(const int v[], int ini, int fim, int x)", que procura x
+em v[ini..fim-1] (ordenado) e conta as chamadas num contador global. Com
+cpfs[i] = 10 * (i + 1) para 1024 posições, busque 5 (menor que todos: pior
+caso) nos primeiros n elementos, para n = 1, 2, 4, ..., 1024, e mostre as
+chamadas de cada busca.
 
 
 ```text
@@ -410,76 +372,29 @@ Saída esperada:
    1  2
    2  3
    4  4
- ...
+   8  5
+  16  6
+  32  7
+  64  8
+ 128  9
+ 256  10
  512  11
 1024  12
 ```
-
-**Dicas:**
-
-1. Declare long chamadas = 0; fora das funções e faça chamadas++ na
-   primeira linha de busca, antes de qualquer return.
-2. Zere o contador antes de cada busca. O laço de fora pode ser
-   for (int n = 1; n <= 1024; n *= 2), chamando busca(cpfs, 0, n, 5).
-3. Resposta esperada: a tabela acima, chamadas = log2(n) + 2. Um nível
-   por divisão ao meio, mais a chamada com 1 elemento e a chamada com o
-   pedaço vazio, que é quem devolve -1.
 
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E679.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E679 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E679
 ```
 
-**Exercício E680** · ★☆☆
-
-Uma recorrência também é um programa: dá para calcular T(n) com uma função
-recursiva que é a própria equação. Complete as três funções abaixo, todas
-com caso base 1 quando n = 1:
-
-
-```text
-A(n) = A(n/2) + 1          (busca binária)
-B(n) = 2 B(n/2) + 1        (máximo dividindo ao meio)
-C(n) = 2 C(n/2) + n        (a auditoria do texto)
-```
-
-
-O main já mostra, ao lado de cada uma, a fórmula fechada que a árvore de
-recursão dá. Se as colunas baterem, suas funções estão certas:
-
-
-```text
-Saída esperada:
- n | A(n) log+1 | B(n) 2n-1 | C(n) n log n + n
- 1 |    1     1 |    1    1 |    1     1
- 2 |    2     2 |    3    3 |    4     4
- 4 |    3     3 |    7    7 |   12    12
- 8 |    4     4 |   15   15 |   32    32
-16 |    5     5 |   31   31 |   80    80
-32 |    6     6 |   63   63 |  192   192
-64 |    7     7 |  127  127 |  448   448
-```
-
-**Dicas:**
-
-1. Cada função tem duas linhas de verdade: if (n == 1) return 1; e o
-   return com a equação.
-2. B não precisa de duas chamadas: 2 * rec_b(n / 2) + 1 calcula o mesmo
-   valor com uma só (aqui você calcula o custo, não roda o algoritmo).
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E680.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E680 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E680
-```
-
 **Exercício E681** · ★★☆
 
-Um comparador de preços confere um lote de produtos assim: compara cada
-preço do lote com TODOS os preços do lote (n² comparações), procurando
-pares suspeitos, depois divide o lote ao meio e confere cada metade do
-mesmo jeito. A recorrência é T(n) = 2 T(n/2) + n², com T(1) = 1.
-
-O programa abaixo só mostra o total. Mude-o para contar as comparações
-POR NÍVEL da recursão (como o custo_nivel do texto), mostrar os níveis
-para n = 8 e depois os totais para n = 16, 32 e 64 ao lado de 2n² - n:
+Um comparador de preços confere um lote assim: compara cada preço com todos
+os do lote (n² comparações), divide o lote ao meio e confere cada metade do
+mesmo jeito: T(n) = 2 T(n/2) + n², T(1) = 1. Escreva a função recursiva
+que conta as comparações POR NÍVEL da recursão e mostre os níveis para n = 8
+e, depois, o total para n = 16, 32 e 64 ao lado de 2n² - n. Preços:
+preco[i] = 5 + (i * 13) % 40, e um par é suspeito quando um preço passa do
+dobro do outro (conte também os suspeitos, sem mostrar).
 
 
 ```text
@@ -489,25 +404,11 @@ nível 1: 32 comparações
 nível 2: 16 comparações
 nível 3: 8 comparações
 total: 120
-
  n  T(n)  2n² - n
 16   496   496
 32  2016  2016
 64  8128  8128
 ```
-
-
-Aqui o custo CAI pela metade a cada nível, ao contrário da auditoria do
-texto, em que todo nível custava igual.
-
-**Dicas:**
-
-1. Troque o contador único por um vetor long custo_nivel[32] e passe o
-   nível como parâmetro (a raiz é o nível 0; os filhos, nível + 1).
-2. Antes de cada medição, zere o vetor inteiro.
-3. Por que 2n² - n? Os níveis custam n², n²/2, n²/4, ..., n: a soma de
-   uma progressão geométrica de razão 1/2 fica abaixo do dobro do
-   primeiro termo. A raiz sozinha já é metade de tudo: Θ(n²).
 
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E681.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E681 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E681
@@ -540,80 +441,17 @@ total: 28 = 8 · 7 / 2
 5 10 17 29 42 63 71 88
 ```
 
-**Dicas:**
-
-1. Caso base: com n <= 1 não há o que fazer.
-2. A recorrência é T(n) = T(n-1) + (n - 1), com T(1) = 0. A árvore de
-   recursão vira uma linha: 7 + 6 + ... + 1.
-3. Some as comparações num contador global para o total.
-4. Para n = 1000 seriam 499.500
-   comparações: Θ(n²), mesmo sem nenhum laço aninhado no código. A
-   recursão faz o papel do laço de fora.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E682.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E682 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E682
 ```
 
-**Exercício E683** · ★★★
-
-Conserte o programa. Ele acha a maior temperatura de 20 dias e a resposta
-está certa, mas ele é lento demais para o que faz:
-
-
-```text
-Saída que aparece:
-maior: 35 graus, 1048575 chamadas
-```
-
-
-Com 30 dias, o mesmo programa faria mais de um bilhão de chamadas. Leia
-os argumentos das duas chamadas recursivas, escreva (num comentário) a
-recorrência que o código segue de verdade, e conserte a divisão para que
-cada chamada receba METADE do pedaço. Depois acrescente a medição para
-30 dias:
-
-
-```text
-Saída esperada:
-maior: 35 graus, 39 chamadas
-30 dias: maior 35 graus, 59 chamadas
-```
-
-**Dicas:**
-
-1. Com fim - ini = n, quantos elementos tem [ini, fim - 1)? E
-   [ini + 1, fim)? Os dois pedaços quase inteiros se sobrepõem.
-2. O código segue T(n) = 2 T(n-1) + 1, a recorrência de Hanói: 2^n - 1
-   chamadas. Para n = 20, 2^20 - 1 = 1.048.575.
-3. Use meio = ini + (fim - ini) / 2 e as chamadas [ini, meio) e
-   [meio, fim). Agora é T(n) = 2 T(n/2) + 1: 2n - 1 chamadas.
-4. Resposta esperada: 39 chamadas para 20 dias e 59 para 30.
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E683.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E683 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E683
-```
-
 **Exercício E684** · ★★★
 
-Quantas chamadas o fib ingênuo faz? A própria contagem segue uma
-recorrência: fib(n) é 1 chamada mais as chamadas de fib(n-1) e de
-fib(n-2). Com C(n) = número de chamadas:
-
-
-```text
-C(0) = C(1) = 1
-C(n) = C(n-1) + C(n-2) + 1
-```
-
-
-Escreva um programa com três funções:
-- fib(n), a recursiva ingênua, com um contador global de chamadas;
-- conta_chamadas(n), que calcula C(n) com um LAÇO (sem recursão);
-- fib_laco(n), que calcula o Fibonacci F(n) com um laço.
-
-Mostre, para n = 5, 10, ..., 25, as chamadas contadas de verdade, C(n) e a
-fórmula 2F(n+1) - 1. No fim, use só o laço para mostrar C(40) (rodar o
-fib(40) levaria muito tempo) e a razão C(40) / C(39):
+O fib ingênuo faz C(n) chamadas: C(0) = C(1) = 1 e C(n) = C(n-1) + C(n-2) +
+1. Escreva fib(n), recursiva, com contador global de chamadas;
+conta_chamadas(n), que calcula C(n) com laço; e fib_laco(n), que calcula
+F(n) com laço. Para n = 5, 10, ..., 25, mostre as chamadas contadas, C(n) e
+2F(n+1) - 1. No fim, só com laço, mostre C(40) e a razão C(40) / C(39).
 
 
 ```text
@@ -628,14 +466,6 @@ C(40) = 331160281
 C(40) / C(39) = 1.6180
 ```
 
-**Dicas:**
-
-1. O laço de conta_chamadas guarda só os dois últimos valores, como o
-   Fibonacci iterativo: proximo = atual + anterior + 1.
-2. Zere o contador antes de cada fib(n).
-3. A razão tende a 1,618... (o número de ouro): cada n a mais multiplica
-   as chamadas por 1,6. É isso que quer dizer Θ(1,618ⁿ).
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E684.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E684 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E684
 ```
@@ -644,30 +474,24 @@ gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E684.c -o ~/LPEDC/17-analise-a
 
 ## 0115 · Teorema mestre
 
-Na declaração do Imposto de Renda, ninguém refaz a conta do imposto do zero.
-Você acha a sua faixa na tabela progressiva e lê a alíquota. A tabela já
-embute o cálculo: basta saber em que linha você cai.
+Na declaração do Imposto de Renda, você acha a sua faixa na tabela e lê a
+alíquota, sem refazer a conta.
 
 O **teorema mestre** é a tabela pronta das recorrências de divisão e
-conquista. No assunto anterior, cada recorrência pedia uma árvore de
-recursão desenhada e somada nível por nível. Para a forma mais comum, essa
-soma já foi feita em geral, e o resultado cabe em três linhas.
-
-A forma é esta:
+conquista: a soma da árvore do assunto 0114 já foi feita em geral, e o
+resultado cabe em três linhas. A forma é:
 
 ```text
 T(n) = a T(n/b) + n^k
 ```
 
-- `a` (pelo menos 1) é **quantas chamadas** recursivas cada chamada faz;
+- `a` (pelo menos 1) é **quantas chamadas** cada chamada faz;
 - `b` (maior que 1) é **quanto o tamanho encolhe**: cada chamada recebe `n/b`;
-- `n^k` é o **trabalho fora das chamadas**: `k = 0` é constante, `k = 1` é
-  linear, `k = 2` é quadrático.
+- `n^k` é o **trabalho fora das chamadas** (`k = 0` constante, `k = 1` linear).
 
-De onde vêm as três linhas? Da árvore. No nível `j` há `a^j` chamadas, cada
-uma com tamanho `n/b^j`, custando `(n/b^j)^k`. O nível inteiro custa
-`n^k · (a/b^k)^j`: de um nível para o seguinte, o custo é multiplicado
-sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
+Na árvore, o nível `j` tem `a^j` chamadas de tamanho `n/b^j`, e o nível custa
+`n^k · (a/b^k)^j`: de um nível ao seguinte, o custo é multiplicado pela razão
+`a/b^k`. Há três possibilidades:
 
 | caso | comparação | o custo por nível... | quem pesa | resultado |
 | --- | --- | --- | --- | --- |
@@ -675,23 +499,18 @@ sempre pela mesma razão, `a/b^k`. Só há três possibilidades:
 | 2 | `a = b^k` | fica **igual** | todos os níveis | Θ(n^k log n) |
 | 3 | `a < b^k` | **cai** a cada nível | a raiz | Θ(n^k) |
 
-Quando o custo cresce (caso 1), o último nível manda: ele tem
-`a^(log_b n) = n^(log_b a)` folhas, e os níveis de cima, somados, não
-passam de um múltiplo fixo dele. Quando fica igual (caso 2), são
-`log_b n + 1` níveis de `n^k`. Quando cai (caso 3), a raiz sozinha já é uma
-fração fixa do total. Comparar `a`
-com `b^k` é o mesmo que comparar o expoente `log_b a` com `k`.
+No caso 1, o último nível manda: tem `a^(log_b n) = n^(log_b a)` folhas e os
+de cima somam um múltiplo fixo dele. No caso 2, são `log_b n + 1` níveis de
+`n^k`. No caso 3, a raiz já é uma fração fixa do total.
 
-Um escritório revisa um contrato de `n` páginas: o
-revisor lê tudo (`n` páginas) e repassa **metade** do contrato para `a`
-estagiários, que fazem o mesmo. Só o `a` muda: 1, 2 ou 4 estagiários. Com
-`b = 2` e `k = 1`, temos `b^k = 2`, e cada valor de `a` cai numa linha
-diferente da tabela. O desenho mostra a árvore de cada um para `n = 16`:
+Um escritório revisa um contrato de `n` páginas: o revisor lê tudo e repassa
+**metade** a `a` estagiários, que fazem o mesmo. Com `b = 2` e `k = 1`, `b^k =
+2`, e `a = 1`, 2 ou 4 cai numa linha diferente. O desenho mostra a árvore de
+cada um para `n = 16`:
 
 <p align="center"><img src="17-analise-avancada/0115-teorema-mestre/ideia.svg" alt="Diagrama da ideia: Teorema mestre" width="858"></p>
 
-O código calcula o total de páginas lidas fazendo as `a` chamadas de
-verdade. A última parte faz o teste prático do teorema: dobra o `n` e vê por
+O código faz as `a` chamadas de verdade e, no fim, dobra o `n` para ver por
 quanto o total é multiplicado:
 
 ```c
@@ -741,20 +560,17 @@ int main(void) {
 // a = 4: 4.00
 ```
 
-Confira com a tabela. Com `a = 1`, `1 < 2`: caso 3, a raiz domina, Θ(n),
-e o total é `2n - 1` (dobra quando `n` dobra). Com `a = 2`, `2 = 2`: caso 2,
-empate, Θ(n log n), exatamente `n log₂ n + n` (dobra e mais um pouco). Com
-`a = 4`, `4 > 2`: caso 1, as folhas dominam, Θ(n^(log₂ 4)) = Θ(n²), e o
-total é `2n² - n` (quadruplica). A leitura no topo é a mesma nos três
-escritórios; em `n = 1024`, o total difere por um fator de mil.
+Confira com a tabela. Com `a = 1`, `1 < 2`: caso 3, a raiz domina, Θ(n), total
+`2n - 1`. Com `a = 2`, `2 = 2`: caso 2, Θ(n log n), exatamente `n log₂ n + n`.
+Com `a = 4`, `4 > 2`: caso 1, as folhas dominam, Θ(n²), total `2n² - n`.
 
-O fluxograma é o teorema como receita. Primeiro vem a pergunta que ninguém
-pode pular (a recorrência tem a forma certa?), depois a comparação de `a`
-com `b^k`. O caminho marcado é o de `a = 2`:
+
+O fluxograma é o teorema como receita: forma certa? depois `a` contra `b^k`.
+O caminho marcado é o de `a = 2`:
 
 <p align="center"><img src="17-analise-avancada/0115-teorema-mestre/fluxograma.svg" alt="Fluxograma: Teorema mestre" width="963"></p>
 
-A mesma receita resolve os algoritmos que você já conhece:
+A mesma receita resolve algoritmos conhecidos:
 
 | algoritmo | a | b | k | b^k | resultado |
 | --- | --- | --- | --- | --- | --- |
@@ -764,46 +580,34 @@ A mesma receita resolve os algoritmos que você já conhece:
 | multiplicar polinômios com 3 produtos (Karatsuba) | 3 | 2 | 1 | 2 | caso 1: Θ(n^1,585) |
 | algo que lê tudo e segue numa metade | 1 | 2 | 1 | 2 | caso 3: Θ(n) |
 
-E quando o teorema **não** se aplica? Quando a recorrência não tem a forma
-`a T(n/b) + n^k`: `T(n) = T(n-1) + n` (o tamanho cai **subtraindo**, não
-dividindo), `T(n) = T(n/3) + T(2n/3) + n` (pedaços de tamanhos diferentes),
-`T(n) = 2 T(n/2) + n log n` (o trabalho fica no meio do caminho entre `n^1`
-e `n^(1+algo)`; a forma do Cormen, na nota abaixo, ainda pega este). Aí
-você volta para a árvore de recursão, que sempre funciona. O exemplo A230
-resolve dois desses casos.
+O teorema **não** se aplica quando a recorrência foge de `a T(n/b) + n^k`:
+`T(n) = T(n-1) + n` (o tamanho cai subtraindo), `T(n) = T(n/3) + T(2n/3) + n`
+(pedaços diferentes) ou `T(n) = 2 T(n/2) + n log n` (a forma do Cormen, na
+nota abaixo, ainda pega este). Volte à árvore, que sempre funciona; o exemplo
+A230 resolve dois desses casos.
 
 > [!NOTE]
-> **No Cormen (4ª ed.)** a forma é `T(n) = a T(n/b) + f(n)`, e `f(n)` é
-> comparada com `n^(log_b a)`. Caso 1: `f(n) = O(n^(log_b a - ε))` para algum
-> ε > 0 dá Θ(n^(log_b a)). Caso 2: `f(n) = Θ(n^(log_b a) · logᵖ n)` com p ≥ 0
-> (ele chama o p de k) dá Θ(n^(log_b a) · log^(p+1) n). Caso 3:
-> `f(n) = Ω(n^(log_b a + ε))` **e** a regularidade `a f(n/b) ≤ c f(n)` para
-> algum c < 1 dão Θ(f(n)). A tabela acima é o caso `f(n) = nᵏ`. Com p = 1,
-> `2 T(n/2) + n log n` dá Θ(n log² n), o que o A230 mede.
+> **No Cormen (4ª ed.)** a forma é `T(n) = a T(n/b) + f(n)`, com `f(n)`
+> comparada a `n^(log_b a)`. Caso 1: `f(n) = O(n^(log_b a - ε))` dá
+> Θ(n^(log_b a)). Caso 2: `f(n) = Θ(n^(log_b a) · logᵖ n)`, p ≥ 0, dá
+> Θ(n^(log_b a) · log^(p+1) n). Caso 3: `f(n) = Ω(n^(log_b a + ε))` **e**
+> `a f(n/b) ≤ c f(n)` (c < 1) dão Θ(f(n)). Com p = 1, `2 T(n/2) + n log n` dá
+> Θ(n log² n), o que o A230 mede.
 
 > [!WARNING]
-> `a` e `b` são coisas diferentes e não precisam ser iguais. `a` conta as
-> chamadas; `b` diz quanto cada uma encolhe. Os quatro estagiários do exemplo
-> recebem metade cada um, então é `4 T(n/2)`, e não `4 T(n/4)`: as metades se
-> sobrepõem, e por isso o custo explode. O erro mais comum é aplicar o
-> teorema em `T(n) = 2 T(n-1) + 1` (Hanói). Ali não existe `b`,
-> porque `n - 1` não é `n` dividido por nada. Quem força `b = 1` chega num
-> absurdo; o certo é a árvore, que dá Θ(2ⁿ).
+> Os quatro estagiários recebem metade cada um: é `4 T(n/2)`, não
+> `4 T(n/4)`, e por isso o custo explode. Em `T(n) = 2 T(n-1) + 1` (Hanói) não existe `b`, pois `n - 1`
+> não é `n` dividido por nada: use a árvore, que dá Θ(2ⁿ).
 
 > [!TIP]
-> **Por dentro do C:** o `n / 2` do código é divisão inteira. Com `n` ímpar,
-> as metades de um merge sort ficam com `⌊n/2⌋` e `⌈n/2⌉` elementos, e o
-> teorema continua valendo: arredondar para cima ou para baixo não muda o
-> Θ. O que muda tudo é o **caso base**. Se a função pode receber `n = 0`
-> (um vetor vazio, um `n / 2` a partir de `n = 1`), um teste `if (n == 1)`
-> deixa passar o zero, `0 / 2` dá 0 de novo, e a recursão nunca termina: a
-> pilha estoura. Por isso o caso base mais seguro é `if (n <= 1)`.
+> **Por dentro do C:** o `n / 2` é divisão inteira; arredondar para cima ou
+> para baixo não muda o Θ. Muda o **caso base**: com `if (n == 1)`, um `n = 0`
+> passa, `0 / 2` dá 0 e a pilha estoura. Prefira `if (n <= 1)`.
 
 > [!NOTE]
-> **Pergunta para você:** e com `a = 3`? Antes de mudar o laço do `main`
-> para `a = 1, 2, 3, 4`, diga em que linha da tabela o 3 cai e por quanto o
-> total deve multiplicar quando `n` dobra. Uma pista: `log₂ 3 ≈ 1,585` e
-> `2^1,585 = 3`.
+> **Pergunta para você:** e com `a = 3`? Antes de mudar o laço do `main`, diga
+> em que linha da tabela o 3 cai e por quanto o total multiplica quando `n`
+> dobra. Pista: `log₂ 3 ≈ 1,585`.
 
 ### Hora de praticar
 
@@ -992,11 +796,12 @@ gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A230.c -o ~/LPEDC/17-analise
 
 **Exercício E685** · ★☆☆
 
-Complete a função caso(a, b, k): ela recebe uma recorrência
-T(n) = a T(n/b) + n^k e devolve o número do caso do teorema mestre
-(1 se a > b^k, 2 se a = b^k, 3 se a < b^k). Calcule b^k com inteiros,
-numa função potencia(b, k) com um laço. O main já testa sete
-recorrências:
+Escreva "int caso(int a, int b, int k)": recebe T(n) = a T(n/b) + n^k e
+devolve o caso do teorema mestre (1 se a > b^k, 2 se a = b^k, 3 se a < b^k),
+com b^k calculado em inteiros por uma função potencia(b, k) com laço. Teste
+as recorrências (a, b, k) = (2,2,1), (4,2,1), (1,2,1), (9,3,2), (5,4,1),
+(2,4,1) e (16,4,2), mostrando o caso e a classe: folhas Θ(n^(log_b a)),
+empate Θ(n^k log n) ou raiz Θ(n^k).
 
 
 ```text
@@ -1010,62 +815,19 @@ Saída esperada:
 16 T(n/4) + n^2 -> caso 2, empate: Θ(n^k log n)
 ```
 
-**Dicas:**
-
-1. potencia(b, k) começa com p = 1 e multiplica por b, k vezes. Use long.
-2. Depois são dois if: a > bk devolve 1; a == bk devolve 2; senão, 3.
-3. Em 9 T(n/3) + n², 9 = 3²,
-   então é empate, Θ(n² log n).
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685
 ```
 
-**Exercício E686** · ★☆☆
-
-A função trabalho(n) abaixo segue T(n) = 3 T(n/2) + n. Pelo teorema
-(a = 3 > b^k = 2, caso 1), T(n) = Θ(n^(log₂ 3)) = Θ(n^1,585): quando n
-dobra, o total deve ser multiplicado por 2^1,585 = 3. Confira no
-computador: complete o main para mostrar T(n) e a razão T(n) / T(n/2)
-para n = 64, 128, ..., 4096:
-
-
-```text
-Saída esperada:
-    n     T(n)  T(n)/T(n/2)
-   64     2059    3.096
-  128     6305    3.062
-  256    19171    3.041
-  512    58025    3.027
- 1024   175099    3.018
- 2048   527345    3.012
- 4096  1586131    3.008
-```
-
-**Dicas:**
-
-1. Guarde o valor anterior numa variável: comece com anterior =
-   trabalho(32) e, a cada volta, atualize anterior = t.
-2. A divisão precisa de um cast: (double)t / anterior.
-3. A razão começa um pouco acima de 3
-   (o "+ n" ainda pesa com n pequeno) e vai chegando em 3.
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E686.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E686 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E686
-```
-
 **Exercício E687** · ★★☆
 
-As 1024 notas de um concurso (de 0 a 10) estão em ordem crescente. A
-função conta_lento conta quantas notas 7 existem dividindo o vetor ao
-meio, mas olha SEMPRE as duas metades: T(n) = 2 T(n/2) + 1, caso 1 do
-teorema, Θ(n). Ela não aproveita que o vetor está ordenado.
-
-Escreva primeira(v, ini, fim, x), recursiva, que devolve a primeira
-posição de v[ini..fim-1] com valor >= x (ou fim, se não houver),
-seguindo só UMA metade a cada chamada: T(n) = T(n/2) + 1, caso 2,
-Θ(log n). Conte as chamadas no mesmo contador global. As notas 7 são as
-que ficam entre primeira(..., 7) e primeira(..., 8):
+As 1024 notas de um concurso (0 a 10) estão em ordem crescente:
+notas[i] = i * 11 / 1024. Escreva duas funções recursivas, com um contador
+global de chamadas. conta_lento(v, ini, fim, x) conta as notas x olhando
+SEMPRE as duas metades (T(n) = 2 T(n/2) + 1, caso 1, Θ(n)). primeira(v, ini,
+fim, x) devolve a primeira posição de v[ini..fim-1] com valor >= x (ou fim),
+seguindo só UMA metade (T(n) = T(n/2) + 1, caso 2, Θ(log n)). As notas 7 são
+primeira(..., 8) - primeira(..., 7).
 
 
 ```text
@@ -1074,35 +836,19 @@ lento:  93 notas 7 em 2047 chamadas
 rápido: 93 notas 7 em 22 chamadas
 ```
 
-**Dicas:**
-
-1. Caso base: com ini == fim, o pedaço está vazio; devolva ini.
-2. Se v[meio] < x, a resposta está à direita: [meio + 1, fim). Senão,
-   o próprio meio pode ser a resposta: [ini, meio).
-3. Quantidade = primeira(notas, 0, 1024, 8) - primeira(notas, 0, 1024, 7).
-4. Resposta esperada: a saída acima (11 chamadas em cada busca). Com um
-   milhão de notas, o lento faria 2 milhões de chamadas; o rápido, uns 42.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687
 ```
 
 **Exercício E688** · ★★☆
 
-Se dividir ao meio dá log₂ n, dividir em três não seria melhor? Teste.
-Escreva duas buscas RECURSIVAS num vetor ordenado v[0..N-1] com os
-números pares 0, 2, 4, ..., contando cada comparação com um elemento do
-vetor (cada == , < ou > com v[...]):
-
-- binaria(ini, fim, x): compara x == v[meio]; depois x < v[meio] e segue
-numa metade. T(n) = T(n/2) + 2.
-- ternaria(ini, fim, x): com terco = (fim - ini) / 3, m1 = ini + terco e
-m2 = fim - 1 - terco, compara x == v[m1], x == v[m2], x < v[m1] e
-x > v[m2], e segue num dos três pedaços. T(n) = T(n/3) + 4.
-
-Pelo teorema, as duas são caso 2, Θ(log n). Mas a constante importa.
-Faça 1000 buscas por números ÍMPARES (que não estão no vetor), com
-x = 2 * ((i * 7919) % N) + 1 para i de 0 a 999, e mostre a média:
+Escreva duas buscas recursivas em v[0..N-1] = 0, 2, 4, ... (N = 1000000),
+contando cada comparação com v[...]. binaria(ini, fim, x): compara x ==
+v[meio] e depois x < v[meio]. ternaria(ini, fim, x): com terco = (fim -
+ini) / 3, m1 = ini + terco e m2 = fim - 1 - terco, compara x == v[m1], x ==
+v[m2], x < v[m1] e x > v[m2]. Faça 1000 buscas por números ímpares, x = 2 *
+((i * 7919) % N) + 1 (i de 0 a 999), e mostre a média de comparações de
+cada uma.
 
 
 ```text
@@ -1111,38 +857,20 @@ binária: 39.9 comparações por busca
 ternária: 47.3 comparações por busca
 ```
 
-**Dicas:**
-
-1. Use intervalo semiaberto [ini, fim): o pedaço vazio (ini >= fim)
-   devolve -1. Os três pedaços da ternária são [ini, m1), [m1 + 1, m2) e
-   [m2 + 1, fim).
-2. (long)i * 7919 evita estouro? Aqui não estoura, mas é bom hábito.
-3. Por que perde? A binária gasta 2 comparações para dividir por 2
-   (2 · log₂ n ≈ 40). A ternária gasta até 4 para dividir por 3
-   (4 · log₃ n ≈ 4 · 12,6 ≈ 50; um pouco menos, porque às vezes para
-   na terceira). Θ igual não quer dizer tempo igual.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688
 ```
 
 **Exercício E689** · ★★★
 
-Multiplicar dois polinômios de n coeficientes (n potência de 2) dividindo
-cada um em duas metades, a(x) = a0 + a1·x^h e b(x) = b0 + b1·x^h, com
-h = n/2, pede os produtos a0·b0, a0·b1, a1·b0 e a1·b1. A função
-multiplica4 faz isso: T(n) = 4 T(n/2) + n, caso 1, Θ(n²) multiplicações.
-
-O truque de Karatsuba precisa de só TRÊS produtos:
-
-
-```text
-p0 = a0·b0     p2 = a1·b1     p1 = (a0 + a1)·(b0 + b1) - p0 - p2
-```
-
-
-e o resultado é p0 + p1·x^h + p2·x^(2h). Agora T(n) = 3 T(n/2) + n:
-ainda caso 1, mas Θ(n^(log₂ 3)) = Θ(n^1,585). Escreva multiplica3 e rode:
+Escreva multiplica4 (quatro produtos de metades) e multiplica3 (Karatsuba:
+p0 = a0·b0, p2 = a1·b1, p1 = (a0 + a1)·(b0 + b1) - p0 - p2, resultado p0 +
+p1·x^h + p2·x^(2h), h = n/2), recursivas, "void f(const long a[], const
+long b[], int n, long r[])", com n potência de 2, r com 2n - 1
+coeficientes, n = 1 multiplicando direto e um contador global de
+multiplicações. Teste a = 1 2 3 4 e b = 5 6 7 8; depois n = 64, 128 e 256
+com x[i] = i % 10 e y[i] = (3 * i) % 7, conferindo que os resultados são
+iguais.
 
 
 ```text
@@ -1154,115 +882,44 @@ n = 128:  16384 contra  2187 multiplicações, mesmo resultado
 n = 256:  65536 contra  6561 multiplicações, mesmo resultado
 ```
 
-**Dicas:**
-
-1. Copie a estrutura de multiplica4: caso base n == 1 (conta 1
-   multiplicação) e, no caso geral, um bloco de rascunho com malloc.
-2. O rascunho precisa de 3 produtos de 2h - 1 coeficientes e das somas
-   sa = a0 + a1 e sb = b0 + b1, de h coeficientes cada.
-3. Monte o resultado como em multiplica4: r[i] += p0[i];
-   r[i + h] += p1[i]; r[i + 2h] += p2[i]. Não esqueça do free.
-4. 16 = 4², 729 = 3⁶, 6561 = 3⁸: com
-   n = 2^j, são 4^j contra 3^j multiplicações.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689
-```
-
-**Exercício E690** · ★★★
-
-Ache o bug. Este classificador do teorema mestre calcula o expoente
-c = log_b a com double e compara com k. Ele acerta quase tudo, mas erra
-três das sete recorrências do teste:
-
-
-```text
-Saída que aparece:
-   2 T(n/2)  + n^1 -> empate
-   4 T(n/2)  + n^1 -> folhas
-   1 T(n/2)  + n^1 -> raiz
- 125 T(n/5)  + n^3 -> folhas
-1000 T(n/10) + n^3 -> raiz
- 216 T(n/6)  + n^3 -> folhas
-   8 T(n/2)  + n^3 -> empate
-```
-
-
-
-```text
-Saída esperada:
-   2 T(n/2)  + n^1 -> empate
-   4 T(n/2)  + n^1 -> folhas
-   1 T(n/2)  + n^1 -> raiz
- 125 T(n/5)  + n^3 -> empate
-1000 T(n/10) + n^3 -> empate
- 216 T(n/6)  + n^3 -> empate
-   8 T(n/2)  + n^3 -> empate
-```
-
-
-Descubra por que (mostre c com %.17g para conferir) e conserte a função
-para que ela nunca dependa da precisão do double.
-
-**Dicas:**
-
-1. 125 = 5³, 1000 = 10³ e 216 = 6³: nos três, log_b a deveria ser 3
-   exatamente. O que o printf com %.17g mostra?
-2. log(125) / log(5) dá 3.0000000000000004. Os logaritmos são
-   arredondados para caber no double, e o == entre doubles quase nunca
-   é o que você quer.
-3. O conserto mais limpo nem usa log: compare a com b^k, calculado com
-   inteiros num laço. a > b^k é folhas; a == b^k, empate; senão, raiz.
-   (Outra saída, pior: considerar iguais se fabs(c - k) < 1e-9.)
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E690.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E690 -lm && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E690
 ```
 
 ---
 
 ## 0116 · Análise amortizada
 
-Uma família mora num apartamento de um quarto. Nasce o primeiro filho: muda
-para um de dois quartos. Depois para um de quatro. Cada mudança é um dia
-inteiro carregando **todos** os móveis, mas é rara: entre uma e outra, a
-vida segue barata. Ninguém mede o custo de morar pela pior semana do ano.
+Mudar de apartamento custa um dia carregando **todos** os móveis, mas é raro:
+ninguém mede o custo de morar pela pior semana do ano.
 
-O vetor que cresce do assunto 0075 vive a mesma coisa. Inserir no fim custa
-uma escrita, até o dia em que o vetor enche: aí é preciso alocar um maior e
-**copiar tudo**. Olhando uma operação isolada, o pior caso de uma inserção é
-O(n). Multiplicando por `n` inserções, dá O(n²). A conta está certa, mas
-pessimista: as inserções caras não acontecem uma atrás da outra.
+No vetor que cresce (assunto 0075), inserir no fim custa uma escrita, até o
+vetor encher: aí é preciso alocar um maior e **copiar tudo**. Isolada, a
+inserção é O(n) no pior caso, e `n` inserções dariam O(n²). A conta é
+pessimista: as caras não vêm em sequência.
 
-A **análise amortizada** mede o custo de uma **sequência** de operações, no
-pior caso, e divide pelo número de operações. O resultado é o **custo
-amortizado** por operação: uma garantia sobre o total, sem sorteio nenhum.
+A **análise amortizada** mede uma **sequência** de operações no pior caso e
+divide pelo número de operações: o **custo amortizado** é uma garantia sobre o
+total, sem sorteio.
 
-O jeito mais direto é o **método agregado**: somar tudo. Com capacidade
-inicial 1 e dobrando quando enche, `n` inserções fazem `n` escritas mais as
-cópias das mudanças: `1 + 2 + 4 + ... + (a última potência de 2 menor que
-n)`. Essa soma é sempre menor que `2n`. O total fica abaixo de `3n`: **O(1)
-amortizado** por inserção.
+No **método agregado**, some tudo. Com capacidade inicial 1, dobrando ao
+encher, `n` inserções fazem `n` escritas mais as cópias `1 + 2 + 4 + ...`, que
+somam menos de `2n`. O total fica abaixo de `3n`: **O(1) amortizado**.
 
-O outro jeito é o **método do banqueiro** (ou contábil). Cada inserção paga
-um preço fixo, digamos **3 moedas**: 1 paga a própria escrita e 2 vão para
-um cofrinho. Quando o vetor de capacidade `c` enche e vira `2c`, metade dos
-`c` elementos chegou depois da última mudança, e cada um guardou 2 moedas:
-são `c` moedas, exatamente as `c` cópias. Se o cofrinho **nunca fica
-negativo**, o preço fixo cobre o custo real, e o custo amortizado é 3.
-O Cormen chama este de **método contábil** e traz um terceiro, o do
-**potencial**: o cofrinho vira uma função Φ do estado da estrutura. Com
-Φ = 2 · n - capacidade, cada inserção custa, amortizada, os mesmos 3.
+No **método do banqueiro** (contábil), cada inserção paga **3 moedas**: 1 pela
+escrita e 2 para um cofrinho. Quando a capacidade `c` enche e vira `2c`, os `c`
+elementos mais novos guardaram 2 moedas cada: são as `c` cópias. Com o cofrinho
+**sempre não negativo**, o custo amortizado é 3. O Cormen traz ainda o **potencial**: o
+cofrinho vira uma função Φ do estado (aqui, Φ = 2 · n - capacidade).
 
-O app do banco guarda o histórico de Pix num vetor que
-começa com 1 posição e dobra quando enche. Chegam 16 Pix. As inserções 2, 3,
-5 e 9 são as mudanças, em vermelho; o cofrinho embaixo cai nelas e se
-recupera depois:
+O app do banco guarda o histórico de Pix num vetor de 1 posição que dobra ao
+encher. Chegam 16 Pix; as inserções 2, 3, 5 e 9 são as mudanças, em vermelho, e
+o cofrinho cai nelas e se recupera:
 
 <p align="center"><img src="17-analise-avancada/0116-amortizada/ideia.svg" alt="Diagrama da ideia: Análise amortizada" width="870"></p>
 
-O `insere` devolve o custo real de cada inserção. O vetor cresce com
-`malloc`, cópia e `free` feitos à mão, para dar para contar cada cópia:
+O `insere` devolve o custo real. O vetor cresce com `malloc`, cópia e `free`
+à mão, para contar cada cópia:
 
 ```c
 #include <stdio.h>
@@ -1334,52 +991,40 @@ int main(void) {
 ```
 
 As cópias somam `1 + 2 + 4 + 8 = 15`, mais 16 escritas: 31, menos de `2 · 16`.
-O cofrinho desce até 3 em cada mudança e nunca chega a zero. As duas contas
-dizem a mesma coisa: em média, menos de 2 por inserção, e nunca mais de 3.
+O cofrinho nunca chega a zero.
 
-O fluxograma segue o `insere` da 9ª inserção, a mais cara das 16. O vetor
-tem 8 de 8 ocupados, então o caminho passa pela mudança inteira:
+O fluxograma segue o `insere` da 9ª inserção, a mais cara: o vetor tem 8 de 8
+ocupados, então o caminho passa pela mudança inteira:
 
 <p align="center"><img src="17-analise-avancada/0116-amortizada/fluxograma.svg" alt="Fluxograma: Análise amortizada" width="378"></p>
 
-A mesma análise aparece num
-**contador binário** (somar 1 às vezes vira muitos bits, mas em média vira
-menos de 2; exemplo A231) e numa **pilha com `multipop(k)`**, que tira até
-`k` itens de uma vez (cada item só sai uma vez depois de entrar; exemplo
-A232). Nos três, o argumento é o mesmo: a operação cara "gasta" um trabalho
-que as baratas acumularam antes.
+A mesma análise vale para o **contador binário** (somar 1 às vezes vira muitos
+bits, em média menos de 2; exemplo A231) e para a **pilha com `multipop(k)`**,
+que tira até `k` itens (cada item sai uma vez; exemplo A232).
 
-Duas confusões comuns. Amortizado **não** é caso médio: o caso médio supõe
-entradas sorteadas, e o amortizado vale para a **pior** sequência possível.
-E amortizado **não** garante que cada operação é rápida: a 1.048.577ª
-inserção copia mais de um milhão de elementos de uma vez. Para quem conta o
-total, tanto faz; um sistema que não pode travar nem por um instante precisa
-de outra solução.
+Amortizado **não** é caso médio: o médio supõe entradas sorteadas; o
+amortizado vale para a **pior** sequência. E não garante que cada operação é
+rápida: a 1.048.577ª inserção copia mais de um milhão de elementos. Sistema que
+não pode travar precisa de outra solução.
 
 > [!WARNING]
-> Crescer de um **tamanho fixo** em vez de multiplicar estraga tudo. Com
-> `nova = cap + 10`, as mudanças acontecem a cada 10 inserções e copiam 10,
-> 20, 30... elementos: para 100.000 inserções, quase **500 milhões** de
-> cópias, contra 131.071 dobrando. A soma `10 + 20 + ... ` é uma progressão
-> aritmética, Θ(n²) no total: O(n) amortizado por inserção. Qualquer fator
-> multiplicativo maior que 1 (1,5 ou 2) dá O(1) amortizado; somar uma
-> constante, por maior que seja, não dá.
+> Crescer por **tamanho fixo** estraga tudo. Com `nova = cap + 10`, as mudanças
+> copiam 10, 20, 30... elementos: para 100.000 inserções, quase **500 milhões**
+> de cópias, contra 131.071 dobrando. É uma progressão aritmética, Θ(n²) no
+> total e O(n) amortizado. Qualquer fator maior que 1 (1,5 ou 2) dá O(1)
+> amortizado; somar uma constante, não.
 
 > [!TIP]
-> **Por dentro do C:** na prática você usa `realloc` (assunto 0055), e às
-> vezes ele nem copia: se o espaço logo depois do bloco estiver livre, ele
-> estica o bloco no lugar. Isso não é garantido, e a análise conta o
-> pior caso: copiar tudo. O preço do O(1) amortizado é memória: logo depois
-> de dobrar, metade do vetor está vazia. Com 1.048.577 inteiros, o vetor
-> ocupa espaço para 2.097.152, 8 MB em vez de 4 MB. E lembre do `realloc`
-> seguro: `int *novo = realloc(v, ...)` num ponteiro à parte, conferindo
-> `NULL` antes de jogar fora o antigo.
+> **Por dentro do C:** na prática se usa `realloc` (assunto 0055), que às vezes
+> estica o bloco no lugar; a análise conta o pior caso, copiar tudo. O preço
+> é memória: logo após dobrar, metade do vetor está vazia.
+> Use o `realloc` seguro, com ponteiro à parte e `NULL` conferido.
 
 > [!NOTE]
-> **Pergunta para você:** e na volta? Suponha que o vetor também **encolhe
-> pela metade** quando fica com metade das posições ocupadas. Com 16
-> elementos e capacidade 16, o que acontece se o programa alternar "insere,
-> remove, insere, remove..." mil vezes? Quantas cópias cada operação faz?
+> **Pergunta para você:** e na volta? Suponha que o vetor **encolhe pela
+> metade** quando fica com metade das posições ocupadas. Com 16 elementos e
+> capacidade 16, quantas cópias cada operação faz se o programa alternar
+> "insere, remove" mil vezes?
 
 ### Hora de praticar
 
@@ -1570,11 +1215,11 @@ gcc ~/LPEDC/17-analise-avancada/0116-amortizada/A232.c -o ~/LPEDC/17-analise-ava
 
 **Exercício E691** · ★☆☆
 
-O vetor abaixo começa com capacidade 1 e dobra quando enche. Acrescente
-à struct um campo long copias, que o insere aumenta a cada elemento
-copiado numa mudança. Depois troque o main: para n = 10, 100, 1000 e
-1000000, crie um vetor novo, insira n números, mostre as cópias e a
-média de cópias por inserção, e libere o vetor:
+Escreva um vetor dinâmico de int (struct Vetor com dados, n, cap e
+"long copias") que começa com capacidade 1 e dobra ao encher; cada elemento
+copiado numa mudança soma 1 em copias. Para n = 10, 100, 1000 e 1000000,
+crie um vetor novo, insira n números, mostre as cópias e a média de cópias
+por inserção, e libere o vetor.
 
 
 ```text
@@ -1586,67 +1231,20 @@ Saída esperada:
 1000000   1048575      1.05
 ```
 
-**Dicas:**
-
-1. Comece cada vetor com Vetor v = {malloc(sizeof(int)), 0, 1, 0};
-   (confira o NULL) e copias = 0.
-2. As cópias são 1 + 2 + 4 + ... até a última potência de 2 menor que
-   n. Para n = 10: 1 + 2 + 4 + 8 = 15.
-3. A média nunca passa de 2: é o
-   O(1) amortizado na prática.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E691.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E691 && ~/LPEDC/17-analise-avancada/0116-amortizada/E691
 ```
 
-**Exercício E692** · ★☆☆
-
-Para comparar estratégias de crescimento, nem precisa alocar memória:
-basta simular. Escreva duas funções que recebem o número de inserções n
-e devolvem quantas cópias as mudanças fariam:
-
-- copias_soma(n, passo): a capacidade começa em passo e, quando enche,
-cresce somando passo (10, 20, 30...);
-- copias_dobra(n): a capacidade começa em 1 e dobra quando enche.
-
-Em cada inserção, se tam == cap, a mudança copia os tam elementos e a
-capacidade cresce; depois tam aumenta. Mostre n = 1000, 10000, 100000
-com passo 10:
-
-
-```text
-Saída esperada:
-     n      soma 10     dobra
-  1000        49500      1023
- 10000      4995000     16383
-100000    499950000    131071
-```
-
-**Dicas:**
-
-1. As variáveis da simulação são só cap, tam e copias, todas long.
-2. Multiplicar n por 10 multiplica as cópias do "soma 10" por 100: é a
-   marca do Θ(n²) no total.
-3. Com +10, cada inserção custa em
-   média n/20 cópias (O(n) amortizado); dobrando, menos de 2 (O(1)).
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E692.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E692 && ~/LPEDC/17-analise-avancada/0116-amortizada/E692
-```
-
 **Exercício E693** · ★★☆
 
-Muitas bibliotecas crescem o vetor por 1,5 em vez de 2: gastam menos
-memória sobrando. Mas continua O(1) amortizado? Estenda o programa:
-
-- o insere passa a receber o fator como fração (num, den): a nova
-capacidade é cap * num / den (3 e 2 para 1,5; 2 e 1 para 2);
-- a struct ganha os campos copias (long) e mudancas (int);
-- uma função testa(nome, num, den, n) cria um vetor com capacidade 1,
-insere n números, mostra mudanças, cópias, cópias por inserção e a
-sobra (cap - n) no fim, e libera tudo.
-
-Rode com n = 1000000:
+Muitas bibliotecas crescem o vetor por 1,5, e não por 2, para sobrar menos
+memória. Continua O(1) amortizado? Escreva o vetor dinâmico de int (struct
+Vetor com dados, n, cap, "long copias" e "int mudancas", capacidade inicial
+1) com insere(v, valor, num, den): a nova capacidade é cap * num / den. Escreva
+testa(nome, num, den, n), que insere n números e mostra mudanças, cópias,
+cópias por inserção e a sobra (cap - n). Rode com n = 1000000 para 3/2 e 2/1.
+Atenção: com cap = 1, a conta 1 * 3 / 2 dá 1; a nova capacidade tem de ser
+sempre maior que a antiga.
 
 
 ```text
@@ -1656,22 +1254,6 @@ x 1,5        34    2099753     2.10     49869
 x 2          20    1048575     1.05     48576
 ```
 
-
-Cuidado: com cap = 1, a conta 1 * 3 / 2 dá 1 em divisão inteira. O
-vetor "cresce" para o mesmo tamanho, e a próxima escrita cai fora dele
-(o AddressSanitizer do gcc com as flags de estudo acusa heap-buffer-overflow). Garanta que a
-nova capacidade seja sempre maior que a antiga.
-
-**Dicas:**
-
-1. Calcule com long para não estourar: (int)((long)v->cap * num / den).
-2. Se a conta não passar de cap, use cap + 1.
-3. printf("%-6s %8d %10ld %8.2f %9d\n", ...) dá as colunas da saída.
-4. O fator 1,5 copia o dobro (cada
-   elemento é copiado, em média, umas 2 vezes), mas continua O(1)
-   amortizado. A sobra parecida aqui é coincidência deste n: no pior
-   caso, o x 2 deixa metade vazia; o x 1,5, só um terço.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E693.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E693 && ~/LPEDC/17-analise-avancada/0116-amortizada/E693
 ```
@@ -1679,15 +1261,12 @@ gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E693.c -o ~/LPEDC/17-analise-ava
 **Exercício E694** · ★★☆
 
 O contador binário tem custo amortizado menor que 2 por incremento. E se
-ele também puder DIMINUIR? Escreva:
-
-- decrementa(b): subtrai 1 do contador e devolve quantos bits mudaram
-(os 0 do fim viram 1, porque o empréstimo passa por eles, e o primeiro
-1 vira 0);
-- carrega(b, x): coloca o número x nos bits (b[i] é o bit i de x);
-- um main que faz dois testes com um contador de 10 bits: 100
-incrementos a partir de 0, e 100 operações alternando incrementa e
-decrementa a partir de 511 (0111111111).
+também puder DIMINUIR? Com um contador de 10 bits (b[i] é o bit i), escreva
+incrementa(b) e decrementa(b), que devolvem quantos bits mudaram (no
+decremento, os 0 do fim viram 1 e o primeiro 1 vira 0), e carrega(b, x), que
+coloca o número x nos bits. No main, faça 100 incrementos a partir de 0 e
+100 operações alternando incrementa e decrementa (começando por incrementa)
+a partir de 511 (0111111111).
 
 
 ```text
@@ -1696,37 +1275,20 @@ Saída esperada:
 inc/dec alternados a partir de 511: 1000 trocas (10.00 por operação)
 ```
 
-**Dicas:**
-
-1. decrementa é o espelho de incrementa: troque os papéis de 0 e 1.
-2. Em carrega, o bit i de x é (x >> i) & 1 (assunto 0065).
-3. 511 + 1 = 512 = 1000000000: os 10 bits mudam. 512 - 1 volta a 511:
-   os 10 mudam de novo. Cada operação custa 10, para sempre.
-4. O argumento amortizado só vale
-   para a sequência de operações que ele analisou. Com o decremento, o
-   cofrinho que os incrementos baratos enchiam nunca chega a encher.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E694.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E694 && ~/LPEDC/17-analise-avancada/0116-amortizada/E694
 ```
 
 **Exercício E695** · ★★★
 
-A gráfica do bairro só tem pilhas no sistema, mas precisa de uma FILA de
-pedidos (o primeiro a chegar é o primeiro a sair). Monte a fila com duas
-pilhas, entrada e saida:
-
-- enfileira(x): empilha x na entrada;
-- desenfileira(): se a saida estiver vazia, passa TODOS os itens da
-entrada para a saida (um por um, desempilhando de uma e empilhando na
-outra: isso inverte a ordem); depois desempilha da saida.
-
-Conte as transferências num contador global. Faça desenfileira devolver
-também o custo da operação (1 + transferências feitas nela), por um
-ponteiro. Rode esta sequência: enfileira 1 a 5, atende 2, enfileira 6 e
-7, atende 4, enfileira 8, atende 2. Depois, com as pilhas zeradas, faça
-1 milhão de operações: na operação i (de 1 a 1000000), se i for múltiplo
-de 3 e a fila não estiver vazia, atenda; senão, enfileire i.
+Monte uma fila de pedidos com duas pilhas, entrada e saida. enfileira(x)
+empilha x na entrada; desenfileira() passa TODOS os itens da entrada para a
+saida se esta estiver vazia e desempilha da saida, devolvendo o custo (1 +
+transferências) por um ponteiro. Conte as transferências num contador
+global. Sequência: enfileira 1 a 5, atende 2, enfileira 6 e 7, atende 4,
+enfileira 8, atende 2. Depois, com as pilhas zeradas, faça 1 milhão de
+operações: na operação i, se i for múltiplo de 3 e a fila não estiver
+vazia, atenda; senão, enfileire i.
 
 
 ```text
@@ -1736,109 +1298,43 @@ atendidos: 1 2 3 4 5 6 7 8
 666667 enfileirados, 524286 transferências, pior atendimento: 262145
 ```
 
-**Dicas:**
-
-1. Pilhas de 1 milhão de int ocupam 4 MB cada: declare-as como
-   variáveis globais, não dentro do main (a pilha de chamadas tem uns
-   8 MB e estouraria).
-2. Cada pedido é transferido no máximo UMA vez: entra na entrada, passa
-   para a saida, sai. Por isso as transferências nunca passam do número
-   de enfileirados, e cada operação custa O(1) amortizado.
-3. O "pior atendimento" mostra o outro lado: uma única operação chegou a
-   mover 262.144 pedidos de uma vez.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E695.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E695 && ~/LPEDC/17-analise-avancada/0116-amortizada/E695
-```
-
-**Exercício E696** · ★★★
-
-Conserte o programa. O carrinho de compras do app guarda os itens num
-vetor que dobra quando enche e, para não desperdiçar memória, encolhe
-pela metade quando fica com metade das posições ocupadas. Parece justo,
-mas olhe o que acontece quando o cliente põe e tira o mesmo item várias
-vezes com o carrinho cheio:
-
-
-```text
-Saída que aparece:
-16 inserções: 15 cópias (cap 16)
-1000 operações alternadas: 16000 cópias (cap 16)
-esvaziar: 15 cópias (cap 1)
-```
-
-
-Cada operação da fase do meio copia 16 elementos. Mude SÓ a regra de
-encolher, para que o vetor encolha pela metade apenas quando ficar com
-UM QUARTO da capacidade ocupada:
-
-
-```text
-Saída esperada:
-16 inserções: 15 cópias (cap 16)
-1000 operações alternadas: 16 cópias (cap 32)
-esvaziar: 15 cópias (cap 1)
-```
-
-**Dicas:**
-
-1. Siga à mão: com n = 16 e cap = 16, insere dobra para 32 (16 cópias);
-   remove deixa n = 16 = 32 / 2 e encolhe para 16 (16 cópias). E de novo.
-2. A operação cara precisa de "folga" dos dois lados. Depois de encolher
-   de cap para cap/2 com n = cap/4, o vetor fica meio cheio: faltam cap/4
-   inserções para dobrar e cap/8 remoções para encolher de novo.
-3. A condição vira
-   v->n == v->cap / 4.
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E696.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E696 && ~/LPEDC/17-analise-avancada/0116-amortizada/E696
 ```
 
 ---
 
 ## 0117 · Limite inferior da ordenação
 
-Na agência dos Correios chegaram três encomendas, A, B e C, e a única
-ferramenta é uma balança de dois pratos. Ela não mostra quilos: só diz qual
-lado é mais pesado. Você quer enfileirar as três da mais leve para a mais
-pesada. Quantas pesagens são necessárias, no pior caso, com o **melhor**
-método possível?
+Nos Correios chegaram três encomendas, A, B e C, e a única ferramenta é uma
+balança de dois pratos, que só diz qual lado pesa mais. Quantas pesagens são
+necessárias, no pior caso, com o **melhor** método possível?
 
-Até aqui, toda análise media **um algoritmo**: o merge sort faz tantas
-comparações, o insertion sort faz tantas. A pergunta agora é sobre o
-**problema**: existe algum jeito de ordenar com menos? Dá para responder
-isso para todos os algoritmos de uma vez, inclusive os que ninguém inventou
-ainda, desde que eles só aprendam sobre os dados **comparando** dois
-elementos, como a balança. Esses são os algoritmos de
-**ordenação por comparação**: todos os do módulo 13, o heapsort e o `qsort`.
+Até aqui, a análise media **um algoritmo**. Agora a pergunta é sobre o
+**problema**: existe jeito de ordenar com menos? A resposta vale para todo
+algoritmo que só **compara** dois elementos, como a balança: a **ordenação
+por comparação** (módulo 13, heapsort, `qsort`).
 
-A ferramenta é a **árvore de decisão**. Cada nó interno é uma pergunta
-("A é mais pesada que B?"), cada aresta é uma resposta (sim ou não), e cada
-folha é uma resposta final: a ordem das encomendas. Rodar o algoritmo numa
-entrada é descer da raiz até uma folha. O número de comparações no pior caso
-é a **altura** da árvore.
+A ferramenta é a **árvore de decisão**: cada nó interno é uma pergunta ("A é
+mais pesada que B?"), cada aresta é uma resposta e cada folha é a ordem final.
+Rodar o algoritmo é descer da raiz a uma folha; o pior caso é a **altura**.
 
-O argumento tem três passos:
+1. Com 3 encomendas há `3! = 6` ordens, e cada uma precisa da sua folha: duas
+   ordens diferentes na mesma folha receberiam a mesma resposta, e uma estaria
+   errada.
+2. Cada pergunta tem 2 respostas, então a árvore de altura `h` tem no máximo
+   `2^h` folhas.
+3. Logo `2^h ≥ 6`. Com `h = 2` cabem 4 folhas; precisa de `h ≥ 3`.
 
-1. Com 3 encomendas há `3! = 6` ordens possíveis, e cada uma precisa ter a
-   sua folha: se duas entradas com ordens diferentes chegassem à mesma
-   folha, o algoritmo daria a mesma resposta para as duas e erraria uma.
-2. Cada pergunta tem 2 respostas, então uma árvore de altura `h` tem no
-   máximo `2^h` folhas.
-3. Logo `2^h ≥ 6`. Com `h = 2`, só cabem 4 folhas. Precisa de `h ≥ 3`.
+Nenhum método ordena 3 encomendas com menos de 3 pesagens. Para `n`
+elementos, `2^h ≥ n!`, ou seja, **`h ≥ log₂(n!)`**.
 
-Nenhum método, por mais esperto, ordena 3 encomendas com menos de 3
-pesagens no pior caso. Para `n` elementos, o mesmo raciocínio dá
-`2^h ≥ n!`, isto é, **`h ≥ log₂(n!)`**.
-
-O desenho mostra o insertion sort de 3 elementos como árvore de decisão. O caminho em verde é o da entrada A = 5 kg, B = 9 kg e
-C = 2 kg, que termina na folha C A B depois de 3 pesagens:
+O desenho é o insertion sort de 3 elementos como árvore de decisão. O
+caminho verde, A = 5 kg, B = 9 kg e C = 2 kg, acaba na folha C A B:
 
 <p align="center"><img src="17-analise-avancada/0117-limite-inferior/ideia.svg" alt="Diagrama da ideia: Limite inferior da ordenação" width="884"></p>
 
-O programa passa as 6 ordens possíveis pela balança. A função
-`mais_pesada` é o único acesso do algoritmo aos pesos, e ela anota cada
-pergunta:
+O programa passa as 6 ordens pela balança; `mais_pesada` anota cada pergunta:
 
 ```c
 #include <stdio.h>
@@ -1899,18 +1395,15 @@ int main(void) {
 // pior caso: 3 pesagens
 ```
 
-Cada linha da saída é um caminho da raiz até uma folha, e as 6 folhas são
-diferentes. Duas entradas param com 2 pesagens, mas o pior caso é 3, igual
-ao limite. Para 3 elementos, o insertion sort é **ótimo**.
+Cada linha é um caminho da raiz a uma folha, e as 6 folhas são diferentes. O
+pior caso, 3, iguala o limite: para 3 elementos, o insertion sort é **ótimo**.
 
-O fluxograma traz o argumento inteiro, sem algoritmo específico. Ele vale
-para qualquer método que só compara:
+O fluxograma é o argumento inteiro, para qualquer método que só compara:
 
 <p align="center"><img src="17-analise-avancada/0117-limite-inferior/fluxograma.svg" alt="Fluxograma: Limite inferior da ordenação" width="442"></p>
 
-E para `n` grande? `log₂(n!)` cresce como `n log₂ n` (um pouco menos: a
-diferença é perto de `1,44 n`). A tabela compara o limite com o pior caso do
-merge sort:
+`log₂(n!)` cresce como `n log₂ n` (menos cerca de `1,44 n`). Contra o merge
+sort:
 
 | n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |
 | --- | --- | --- | --- |
@@ -1920,34 +1413,26 @@ merge sort:
 | 10 | 3.628.800 | 22 | 25 |
 | 1000 | (2.568 dígitos) | 8.530 | 8.977 |
 
-O limite inferior se escreve com **Ω** (ômega): ordenar por comparação é
-**Ω(n log n)** no pior caso. É o piso, o contrário do teto `O`. Como o merge
-sort e o heapsort fazem O(n log n), eles encostam no piso: são
-**assintoticamente ótimos**. Ninguém vai inventar uma ordenação por
-comparação O(n) ou O(n log log n); dá para ganhar só na constante.
+O limite se escreve com **Ω** (ômega), o piso, contrário do teto `O`: ordenar
+por comparação é **Ω(n log n)** no pior caso. Merge sort e heapsort fazem
+O(n log n): são **assintoticamente ótimos**.
 
 > [!WARNING]
-> O limite fala do **pior caso** de **qualquer** algoritmo que só compara.
-> Ele não diz que toda entrada custa `n log n`: o insertion sort ordena um
-> vetor que já está em ordem com `n - 1` comparações. E não vale para quem
-> não compara: o counting sort do módulo 18 usa o valor como **índice** de
-> um vetor e ordena inteiros pequenos em O(n), sem contradição nenhuma. Ele
-> também não vale para outros problemas: achar o **maior** de `n` elementos
-> precisa só de `n - 1` comparações, e não de `n log n`.
+> O limite vale para o **pior caso** de **qualquer** algoritmo que só compara.
+> O insertion sort ordena um vetor já em ordem com `n - 1` comparações. Quem
+> não compara escapa: o counting sort (módulo 18) usa o valor como **índice** e
+> ordena inteiros pequenos em O(n). O **maior** de `n` elementos
+> precisa só de `n - 1` comparações.
 
 > [!TIP]
-> **Por dentro do C:** o `qsort` da biblioteca segue à risca o modelo de
-> comparação. Ele recebe o vetor como `void *` e uma função `compara`, e nunca
-> olha os bytes dos elementos por conta própria: tudo o que ele sabe sobre a
-> ordem vem das respostas da sua função, uma de cada vez. Por isso nenhuma
-> implementação de `qsort`, em nenhuma biblioteca, consegue fazer menos de
-> `⌈log₂ n!⌉` chamadas à `compara` no pior caso. Para `n = 1000`, sempre existe
-> alguma ordem de entrada que faz o contador da `compara` passar de 8.530.
+> **Por dentro do C:** o `qsort` recebe o vetor como `void *` e uma `compara`,
+> e só sabe da ordem pelas respostas dela. Logo nenhuma implementação faz menos
+> de `⌈log₂ n!⌉` chamadas à `compara` no pior caso: para `n = 1000`, alguma
+> entrada passa de 8.530.
 
 > [!NOTE]
-> **Pergunta para você:** com 4 encomendas, quantas pesagens são o mínimo
-> no pior caso? E o insertion sort de 4 elementos, quantas faz no pior caso?
-> Ele ainda é ótimo?
+> **Pergunta para você:** com 4 encomendas, quantas pesagens são o mínimo no
+> pior caso? E o insertion sort de 4 elementos faz quantas? Ainda é ótimo?
 
 ### Hora de praticar
 
@@ -2187,10 +1672,9 @@ gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/A234.c -o ~/LPEDC/17-analis
 
 **Exercício E697** · ★☆☆
 
-Escreva teto_log2(x): o menor h tal que 2^h >= x, calculado só com
-inteiros (um laço que dobra uma variável até alcançar x). Use-a para
-mostrar o limite inferior ⌈log₂ n!⌉ de comparações para ordenar n
-elementos, com n de 1 a 20:
+Escreva teto_log2(x): o menor h tal que 2^h >= x, só com inteiros (um laço
+que dobra uma variável até alcançar x). Use-a para mostrar o limite inferior
+⌈log₂ n!⌉ de comparações para ordenar n elementos, com n de 1 a 20.
 
 
 ```text
@@ -2202,70 +1686,36 @@ Saída esperada:
  4                   24       5
  5                  120       7
  6                  720      10
-...
+ 7                 5040      13
+ 8                40320      16
+ 9               362880      19
+10              3628800      22
+11             39916800      26
 12            479001600      29
-...
+13           6227020800      33
+14          87178291200      37
+15        1307674368000      41
+16       20922789888000      45
+17      355687428096000      49
+18     6402373705728000      53
+19   121645100408832000      57
 20  2432902008176640000      62
 ```
-
-**Dicas:**
-
-1. 20! não cabe em int nem em long de 32 bits: use unsigned long long e
-   %llu no printf.
-2. teto_log2 começa com h = 0 e folhas = 1; enquanto folhas < x,
-   dobra folhas e soma 1 em h.
-3. Calcule o fatorial acumulando no próprio laço do main (fat *= n).
-4. Nas linhas que não aparecem, o
-   limite é 13, 16, 19, 22 e 26 (n = 7 a 11) e 33, 37, 41, 45, 49, 53 e
-   57 (n = 13 a 19). Por que inteiros? Com log2 em double, um valor que
-   devia dar 3 exato pode sair 3.0000000000000004, e o teto erra por 1.
 
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697
 ```
 
-**Exercício E698** · ★☆☆
-
-Com 4 elementos, o limite é ⌈log₂ 24⌉ = 5 comparações no pior caso. O
-insertion sort chega lá? Teste nas 24 ordens possíveis de 4 preços
-(10, 20, 30 e 40): gere as ordens com quatro laços aninhados (a, b, c, d
-de 0 a 3, todos diferentes), monte v = {precos[a], precos[b], precos[c],
-precos[d]}, ordene com o insertion sort abaixo contando as comparações e
-mostre o melhor caso, o pior, em quantas ordens o pior acontece e a
-média:
-
-
-```text
-Saída esperada:
-24 ordens testadas
-melhor: 3, pior: 6 (em 8 ordens), média: 4.92
-limite inferior: 5
-```
-
-**Dicas:**
-
-1. Para pular as combinações com índices repetidos, use continue quando
-   a == b || a == c || ... (são 6 pares para testar).
-2. Conte as comparações dentro de uma função maior(a, b) que soma 1 num
-   contador global e devolve a > b; use-a no while do insertion.
-3. Ao achar um pior novo, zere o contador de "quantas no pior".
-4. O insertion de 4 não é ótimo: faz
-   6 no pior caso, um a mais que o limite (o exercício E702 mostra um
-   método com 5). A média 4,92 abaixo de 5 não contradiz nada: o limite
-   é de pior caso.
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E698.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E698 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E698
-```
-
 **Exercício E699** · ★★☆
 
-Para achar o mínimo E o máximo de n temperaturas, o jeito óbvio compara
-cada uma com o mínimo e com o máximo: 2(n - 1) comparações. Dá para
-fazer com bem menos. Complete pares(): ande de DOIS em dois; compare os
-dois entre si (1 comparação), e só o menor do par disputa o mínimo e só
-o maior disputa o máximo (mais 2). São 3 comparações para cada 2
-elementos, em vez de 4. Use a função menor() para contar.
+Para achar o mínimo E o máximo de n temperaturas, o jeito ingênuo compara
+cada uma com o mínimo e com o máximo: 2(n - 1) comparações. Escreva também
+a versão "de dois em dois": compare os dois do par entre si (1 comparação);
+só o menor disputa o mínimo e só o maior disputa o máximo (mais 2). Com n
+ímpar, o primeiro elemento começa sozinho como mínimo e máximo. Faça todas
+as comparações pela função "int menor(int a, int b)", que conta num
+contador global. Teste com as 10 primeiras e com as 11 temperaturas de
+{23, 31, 18, 27, 35, 22, 19, 30, 26, 21, 33}.
 
 
 ```text
@@ -2274,38 +1724,18 @@ Saída esperada:
 11 dias: mín 18, máx 35 | ingênuo 20 comparações | pares 15
 ```
 
-**Dicas:**
-
-1. O começo depende da paridade. Com n par, compare v[0] com v[1] para
-   iniciar mínimo e máximo e comece os pares em i = 2. Com n ímpar, o
-   v[0] sozinho é mínimo e máximo, e os pares começam em i = 1.
-2. O laço é for (; i + 1 < n; i += 2), com a = v[i] e b = v[i + 1];
-   troque a e b se b for menor.
-3. São ⌈3n/2⌉ - 2 comparações, e dá
-   para provar (com um argumento de adversário, como no exemplo A234)
-   que nenhum método faz menos.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699
 ```
 
 **Exercício E700** · ★★☆
 
-O pior caso do merge sort tem a sua própria recorrência: as duas metades
-têm ⌈n/2⌉ e ⌊n/2⌋ elementos, e intercalar n elementos custa no máximo
-n - 1 comparações:
-
-
-```text
-W(1) = 0
-W(n) = W(⌈n/2⌉) + W(⌊n/2⌋) + (n - 1)
-```
-
-
-Escreva pior_merge(n) recursiva, que é a própria recorrência (não
-precisa ordenar nada), e teto_log2(x) com inteiros, como no E697. Mostre
-para n de 1 a 16 o limite ⌈log₂ n!⌉, o pior caso do merge sort e o do
-insertion sort, n(n - 1)/2:
+O pior caso do merge sort tem recorrência própria: as metades têm ⌈n/2⌉ e
+⌊n/2⌋ elementos e intercalar custa no máximo n - 1 comparações:
+W(1) = 0 e W(n) = W(⌈n/2⌉) + W(⌊n/2⌋) + (n - 1). Escreva pior_merge(n),
+recursiva (a própria recorrência, sem ordenar nada), e teto_log2(x) com
+inteiros, como no E697. Mostre para n de 1 a 16 o limite ⌈log₂ n!⌉, o pior
+caso do merge sort e o do insertion sort, n(n - 1)/2.
 
 
 ```text
@@ -2317,94 +1747,31 @@ Saída esperada:
  4       5      5          6
  5       7      8         10
  6      10     11         15
-...
+ 7      13     14         21
+ 8      16     17         28
+ 9      19     21         36
+10      22     25         45
+11      26     29         55
 12      29     33         66
-...
+13      33     37         78
+14      37     41         91
+15      41     45        105
 16      45     49        120
 ```
-
-**Dicas:**
-
-1. Em C, ⌈n/2⌉ é (n + 1) / 2 e ⌊n/2⌋ é n / 2 (divisão inteira).
-2. O fatorial cabe em unsigned long long até n = 20.
-3. O merge sort é ótimo até n = 4 e
-   depois fica a poucas comparações do limite (4 a mais em n = 16). O
-   insertion se afasta cada vez mais: Θ(n²) contra Θ(n log n).
 
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700
 ```
 
-**Exercício E701** · ★★★
-
-Ache os bugs. A função podio() recebe os tempos (em segundos) de três
-corredores e escreve em r[] os tempos do mais rápido para o mais lento.
-Ela foi escrita como uma árvore de decisão "na mão": cada if é um nó, e
-cada folha monta uma ordem. O limite é 3 comparações no pior caso, e uma
-árvore bem feita para 3 elementos tem 6 folhas e altura 3.
-
-O main testa as 6 ordens possíveis e mostra:
-
-
-```text
-Saída que aparece:
-10 20 30 -> 10 20 30 (2 comparações) ok
-10 30 20 -> 20 10 30 (3 comparações) ERRADO
-20 10 30 -> 10 20 30 (3 comparações) ok
-20 30 10 -> 10 20 30 (3 comparações) ok
-30 10 20 -> 10 20 30 (4 comparações) ok
-30 20 10 -> 10 20 30 (4 comparações) ok
-pior caso: 4 comparações
-```
-
-
-Há dois problemas: uma folha monta a ordem errada, e um ramo faz uma
-pergunta cuja resposta ele já sabe. Conserte os dois sem mudar a ideia
-da função:
-
-
-```text
-Saída esperada:
-10 20 30 -> 10 20 30 (2 comparações) ok
-10 30 20 -> 10 20 30 (3 comparações) ok
-20 10 30 -> 10 20 30 (2 comparações) ok
-20 30 10 -> 10 20 30 (3 comparações) ok
-30 10 20 -> 10 20 30 (3 comparações) ok
-30 20 10 -> 10 20 30 (3 comparações) ok
-pior caso: 3 comparações
-```
-
-**Dicas:**
-
-1. Para a folha errada: siga a entrada 10 30 20 pela árvore. Quais
-   respostas levam até a folha? O que elas dizem sobre x, y e z?
-2. Para a pergunta repetida: no ramo do else de menor(x, y), o que você
-   já sabe sobre x e y? Alguma pergunta ali tem resposta garantida?
-3. A folha do "x < y, y > z,
-   x < z" é x z y; e, com tempos diferentes, o menor(y, x) dentro do
-   else é sempre verdadeiro: pode sair.
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E701.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E701 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E701
-```
-
 **Exercício E702** · ★★★
 
-O limite para 4 elementos é 5 comparações, e o insertion sort faz 6 no
-pior caso (E698). Escreva ordena4(v), que ordena 4 valores com NO
-MÁXIMO 5 comparações, todas pela função menor(). A estratégia:
-
-
-```text
-1. compare v[0] com v[1]: fica um par (menor1, maior1);
-2. compare v[2] com v[3]: outro par (menor2, maior2);
-3. o menor de menor1 e menor2 é o mínimo de todos;
-4. o maior de maior1 e maior2 é o máximo de todos;
-5. sobram dois elementos: compare os dois para pôr o meio em ordem.
-```
-
-
-O main já testa as 24 ordens possíveis:
+O limite para 4 elementos é 5 comparações, e o insertion sort faz 6 no pior
+caso. Escreva "void ordena4(int v[])", que ordena 4 valores com NO MÁXIMO 5
+comparações, todas pela função "int menor(int a, int b)" (conta num
+contador global). Compare v[0] com v[1] e v[2] com v[3]; o menor dos dois
+menores é o mínimo e o maior dos dois maiores é o máximo; compare os dois que
+sobraram. No main, teste as 24 ordens de {10, 20, 30, 40} e mostre quantas
+ficaram certas e o pior caso de comparações.
 
 
 ```text
@@ -2412,17 +1779,6 @@ Saída esperada:
 24 ordens testadas, 24 certas
 pior caso: 5 comparações (limite: 5)
 ```
-
-**Dicas:**
-
-1. Copie os quatro valores para variáveis locais (lo1, hi1, lo2, hi2) e
-   troque dentro de cada par quando precisar.
-2. No passo 3, quem perde (o maior dos dois "menores") é um dos do meio.
-   No passo 4, quem perde (o menor dos dois "maiores") é o outro.
-3. No fim, escreva mínimo, meio, meio e máximo de volta em v[0..3].
-4. Esse método atinge o limite: é
-   ótimo. Para 5 elementos o limite é 7, e também existe um método com
-   7 (bem mais chato de escrever).
 
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702
@@ -2432,33 +1788,24 @@ gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702.c -o ~/LPEDC/17-analis
 
 ## 0118 · Juntando tudo
 
-A loja virtual vai mudar o relatório do fim do dia: em vez de 16 mil pedidos,
-agora ele vai ordenar **1 milhão**. O programador testou com 16 mil e mediu
-alguns milissegundos. A gerente pergunta: "e com 1 milhão, quanto tempo vai
-levar?". Rodar para ver pode demorar meia hora. Dá para **prever** antes?
+O relatório da loja virtual vai ordenar **1 milhão** de pedidos em vez de 16
+mil, e o programador só mediu com 16 mil. Rodar para ver pode levar meia hora.
+Dá para **prever** antes, com os quatro passos deste módulo:
 
-Dá, com o que veio neste módulo. A receita tem quatro passos:
-
-1. **Conhecer a classe.** Pela recorrência ou pela contagem: o insertion
-   sort é `T(n) = T(n-1) + n`, Θ(n²); o merge sort é `2 T(n/2) + n`,
-   Θ(n log n) pelo teorema mestre; o heapsort faz `n` descidas de
-   O(log n); o quick sort é Θ(n log n) em média. E o limite inferior diz que
-   nenhum deles pode fazer menos de `log₂ n!` comparações no pior caso.
-2. **Medir em dois tamanhos, um o dobro do outro.** Se a classe está certa,
-   dobrar `n` multiplica o custo por 4 (n²) ou por um pouco mais de 2
-   (n log n). Se a razão não bater, a análise ou o código têm problema.
-3. **Extrapolar.** Do tamanho medido `n` para o tamanho `N`, o custo é
-   multiplicado por `(N/n)²` na classe n², ou por `(N log N)/(n log n)` na
-   classe n log n.
+1. **Conhecer a classe.** Insertion sort: `T(n) = T(n-1) + n`, Θ(n²). Merge
+   sort: `2 T(n/2) + n`, Θ(n log n) pelo teorema mestre. Heapsort: `n` descidas
+   de O(log n). Quick sort: Θ(n log n) em média.
+2. **Medir em dois tamanhos, um o dobro do outro.** Dobrar `n` multiplica o
+   custo por 4 (n²) ou por pouco mais de 2 (n log n).
+3. **Extrapolar.** De `n` para `N`, o custo é multiplicado por `(N/n)²` na
+   classe n², ou por `(N log N)/(n log n)` na classe n log n.
 4. **Conferir**, quando der para rodar o tamanho grande.
 
-Medir tem duas réguas. A **contagem de comparações** sai igual em qualquer
-computador e é a que confere a teoria. O **tempo** (com `clock()`, de
-`<time.h>`) é o que a gerente quer saber, mas muda de máquina para máquina e
-até de uma execução para outra. O programa usa as duas.
+Há duas réguas: a **contagem de comparações**, igual em qualquer computador, e
+o **tempo** (`clock()`, de `<time.h>`), que varia entre máquinas.
 
-As quatro ordenações ficam num TAD, `ordena.h` e `ordena.c`, na pasta do
-assunto. Toda comparação passa por uma função `menor` escondida no `.c`, que
+As quatro ordenações ficam no TAD `ordena.h` e `ordena.c`, na pasta do
+assunto. Toda comparação passa por uma função `menor`, escondida no `.c`, que
 conta:
 
 ```c
@@ -2472,16 +1819,14 @@ long ord_contagem(void);
 int ord_confere(const int v[], int n);
 ```
 
-Os pedidos são números sorteados com um gerador
-próprio, para a entrada ser a mesma em qualquer máquina. Cada algoritmo
-ordena 8 mil e 16 mil; da razão sai a confirmação da classe, e da medida de
-16 mil sai a previsão para 1 milhão. Em verde, o que a previsão acertou; em
-vermelho, o que nem dá para rodar:
+Os pedidos vêm de um gerador próprio, igual em qualquer máquina. Cada
+algoritmo ordena 8 mil e 16 mil; a razão confirma a classe e a medida de 16 mil
+prevê o milhão. Verde acertou; vermelho nem dá para rodar:
 
 <p align="center"><img src="17-analise-avancada/0118-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
-O programa mede, prevê e confere. O `insertion` só ganha previsão: rodar de
-verdade levaria quase meia hora:
+O programa mede, prevê e confere; o `insertion` só ganha previsão, pois rodar
+levaria quase meia hora:
 
 ```c
 #include <math.h>
@@ -2576,14 +1921,12 @@ int main(void) {
 ```
 
 A saída tem três camadas. As **razões** confirmam as classes: ×4,00 no
-insertion, ×2,17 a ×2,29 nos outros três. As **previsões** de comparações
-ficaram a menos de 4% do medido: o modelo `n log n` ignora termos menores,
-então erra um pouco para baixo. E o **tempo** do insertion para 1 milhão,
-1.600 segundos, é uns 27 minutos, contra um terço de segundo do merge sort:
-a mesma tarefa, mais de 5 mil vezes mais lenta.
+insertion e ×2,17 a ×2,29 nos outros. As **previsões** de comparações ficaram a
+menos de 4% do medido (o modelo `n log n` ignora termos menores). O **tempo**
+do insertion para 1 milhão, 1.600 segundos (uns 27 minutos), é mais de 5 mil
+vezes o do merge sort, um terço de segundo.
 
-O fluxograma aplica a receita a um algoritmo. O caminho marcado é o do merge
-sort, que passa pela previsão e pela conferência:
+O fluxograma aplica a receita ao merge sort:
 
 <p align="center"><img src="17-analise-avancada/0118-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="527"></p>
 
@@ -2600,32 +1943,23 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 | comparações previstas | 64.831.293 · 3.906 | 253 bilhões |
 
 > [!WARNING]
-> Na classe n log n, dobrar `n` **não** dá ×2 exato. De 8 mil para 16 mil, a
-> conta é `2 · log₂ 16.000 / log₂ 8.000 = 2,15`, e quem espera ×2 acha que o
-> algoritmo "está piorando". O contrário também engana: com `n` pequeno
-> (algumas centenas), o tempo é dominado por constantes, chamadas de função e
-> cache, e as razões saem malucas. Meça com tamanhos grandes o bastante para
-> o tempo passar de alguns milissegundos, e sempre a partir da **mesma
-> entrada**: o `memcpy` do `mede` restaura o vetor original antes de cada
-> ordenação. Sem ele, o segundo algoritmo receberia o vetor já ordenado.
+> Na classe n log n, dobrar `n` **não** dá ×2 exato: de 8 mil para 16 mil, é
+> `2 · log₂ 16.000 / log₂ 8.000 = 2,15`. Com `n` pequeno, constantes, chamadas
+> e cache distorcem as razões. Meça com tamanhos grandes e da **mesma
+> entrada**: o `memcpy` do `mede` restaura o vetor antes de cada ordenação.
 
 > [!TIP]
-> **Por dentro do C:** `clock()` devolve o tempo de processador gasto pelo
-> programa, em "tiques"; `CLOCKS_PER_SEC` diz quantos tiques há num segundo
-> (no Linux, 1.000.000). As duas coisas são inteiras: escrever
-> `(clock() - ini) / CLOCKS_PER_SEC` faz divisão inteira e dá **0** para
-> tudo que dura menos de um segundo. Por isso o `1000.0 *` na frente, que
-> converte para `double` antes de dividir. E lembre que o comando do exemplo compila sem
-> otimização e com o AddressSanitizer, que vigia cada acesso à memória: os
-> tempos aqui são várias vezes maiores que os de um `gcc -O2` sem
-> sanitizador. As **razões** continuam valendo, e a previsão trabalha com
-> elas.
+> **Por dentro do C:** `clock()` devolve tiques de processador, e
+> `CLOCKS_PER_SEC` é quantos cabem num segundo (1.000.000 no Linux). Os dois
+> são inteiros: `(clock() - ini) / CLOCKS_PER_SEC` dá **0** abaixo de um
+> segundo, por isso o `1000.0 *` na frente. O exemplo compila sem
+> otimização e com AddressSanitizer: os tempos são maiores, as **razões** não.
 
 > [!NOTE]
-> **Pergunta para você:** o quick sort daqui usa o elemento do meio como
-> pivô. Ele continuaria rápido se o vetor de entrada já estivesse em ordem?
-> E se os 1 milhão de pedidos tivessem só 10 valores diferentes (as notas de
-> 0 a 9 de uma avaliação)? Pense na partição antes de rodar o exemplo A235.
+> **Pergunta para você:** o quick sort daqui usa o elemento do meio como pivô.
+> Ele continuaria rápido com o vetor já em ordem? E com 1 milhão de pedidos de
+> só 10 valores diferentes (notas de 0 a 9)? Pense na partição antes de rodar
+> o exemplo A235.
 
 ### Hora de praticar
 
@@ -2775,81 +2109,36 @@ gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A236.c ~/LPEDC/17-analise-ava
 
 **Exercício E703** · ★☆☆
 
-Meça o tempo de verdade. Escreva cronometra(ordena, n), que copia os n
-primeiros números de original[] para v[], ordena v com a função recebida
-e devolve o tempo em milissegundos, medido com clock(). Depois mostre o
-tempo do ord_insertion e do ord_merge (do TAD ordena.h, que está na
-pasta) para n = 1000, 2000, 4000 e 8000, com a razão em relação à linha
-anterior. Os números do original vêm do gerador já escrito no main.
+Escreva cronometra(ordena, n): copia os n primeiros números de original[]
+para v[], ordena v com a função recebida (void (*)(int[], int)) e devolve o
+tempo em ms, medido com clock(). Com ordena.h e ordena.c da pasta, mostre o
+tempo de ord_insertion e de ord_merge para n = 1000, 2000, 4000 e 8000, com
+a razão sobre a linha anterior. original: s = 1 e, a cada posição, s = s *
+1103515245u + 12345u e original[i] = (int)(s >> 8). Os tempos variam; as
+razões, pouco.
 
 
 ```text
-Saída esperada (os tempos variam; o formato e as razões, não muito):
+Saída esperada:
     n   insertion (ms)        merge (ms)
- 1000      1.53            0.184
- 2000      6.08  x4.0      0.327  x1.8
- 4000     24.19  x4.0      0.746  x2.3
- 8000     97.76  x4.0      1.513  x2.0
+ 1000      0.66            0.089
+ 2000      2.62  x4.0      0.183  x2.1
+ 4000     10.55  x4.0      0.408  x2.2
+ 8000     42.45  x4.0      0.887  x2.2
 ```
-
-**Dicas:**
-
-1. O parâmetro da função de ordenar é um ponteiro para função:
-   void (*ordena)(int[], int). Passe ord_insertion ou ord_merge.
-2. Tempo em ms: 1000.0 * (clock() - ini) / CLOCKS_PER_SEC. O 1000.0
-   precisa vir antes da divisão (veja o TIP do texto).
-3. Copie com memcpy(v, original, n * sizeof v[0]) antes de cada medida.
-4. Resposta esperada: a razão do insertion fica em 4,0 (Θ(n²)). A do
-   merge oscila em volta de 2,1 (Θ(n log n)): com tempos de menos de
-   1 ms, o ruído pesa. Rode duas ou três vezes e compare.
 
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703
 ```
 
-**Exercício E704** · ★☆☆
-
-Complete prever(t0, n0, n1, quadratico): a partir do tempo t0 medido
-com n0 elementos, devolve o tempo previsto para n1 elementos. Se
-quadratico for 1, o fator é (n1/n0)²; se for 0, é
-(n1 log₂ n1) / (n0 log₂ n0). O main já faz quatro previsões com medidas
-de um computador de escritório: o insertion levou 0,8 s para 20 mil
-pedidos e o merge sort, 0,004 s:
-
-
-```text
-Saída esperada:
-insertion, 20 mil -> 100 mil:    20.0000 s
-insertion, 20 mil -> 1 milhão: 2000.0000 s
-merge,     20 mil -> 100 mil:     0.0233 s
-merge,     20 mil -> 1 milhão:    0.2790 s
-```
-
-**Dicas:**
-
-1. log2 está em <math.h> (o gcc com as flags de estudo já liga a biblioteca matemática).
-2. Use double em tudo: n1 * n1 com int estoura para n1 = 1 milhão.
-3. 2000 s são mais de 33 minutos,
-   contra um quarto de segundo. Entrada 50 vezes maior: o insertion fica
-   2500 vezes mais lento, o merge, só 70.
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E704.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E704 -lm && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E704
-```
-
 **Exercício E705** · ★★☆
 
-O cadastro de 10 mil clientes da loja fica em ordem de código, mas todo
-dia umas poucas alterações bagunçam alguns vizinhos. Qual das quatro
-ordenações do ordena.h é a melhor para reordenar esse vetor QUASE
-ordenado? Escreva o programa:
-
-- monte base[i] = i para i de 0 a 9999;
-- faça 50 trocas de vizinhos: sorteie i = sorteia() % (N - 1) e troque
-base[i] com base[i + 1];
-- para cada algoritmo, copie base para v, zere a contagem, ordene, e
-mostre as comparações (confira com ord_confere que ordenou);
-- no fim, diga qual comparou menos.
+O cadastro de 10 mil clientes está em ordem de código, mas poucas
+alterações bagunçam alguns vizinhos. Com o ordena.h, descubra qual das
+quatro ordenações é a melhor para esse vetor quase ordenado: base[i] = i (0
+a 9999); 50 trocas de base[i] com base[i + 1], i = sorteia() % (N - 1);
+para cada algoritmo, copie base para v, zere a contagem, ordene, confira
+com ord_confere e mostre as comparações. No fim, diga qual comparou menos.
 
 
 ```text
@@ -2861,39 +2150,20 @@ quick      113650 comparações
 vencedor: insertion
 ```
 
-**Dicas:**
-
-1. Guarde as funções num vetor de ponteiros para função:
-   void (*ordena[])(int[], int) = {ord_insertion, ord_merge, ...};
-2. Vetores de 10 mil int dentro do main ocupam 40 KB cada: funciona,
-   mas static int base[N], v[N]; os tira da pilha.
-3. Use o sorteia() já escrito, sem mudar a semente, para dar os mesmos
-   números da saída esperada.
-4. O insertion faz n - 1 comparações
-   mais uma por inversão: Θ(n) num vetor quase ordenado. O pior caso
-   Θ(n²) não conta a história toda; o heapsort, ótimo no pior caso, é o
-   pior aqui.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705
 ```
 
 **Exercício E706** · ★★☆
 
-Às vezes você recebe uma função pronta e quer saber a classe dela sem
-fazer a análise. Dá para descobrir no experimento: dobre n e veja por
-quanto o custo é multiplicado. Complete classe(f, &razao): ela calcula
-razao = f(128) / f(64) (cada mistério devolve quantos passos deu) e
-devolve o nome da classe pela razão:
-
-
-```text
-abaixo de 2,15  -> Θ(n)
-abaixo de 3     -> Θ(n log n)
-abaixo de 6     -> Θ(n²)
-a partir de 6   -> Θ(n³)
-```
-
+Descubra a classe de uma função dobrando n. Escreva quatro "long
+misterio_x(long n)" que devolvem os passos (um passos++ no laço mais
+interno) e "const char *classe(long (*f)(long), double *razao)", que guarda
+f(128) / f(64) em *razao e devolve a classe: razão abaixo de 2,15, Θ(n);
+abaixo de 3, Θ(n log n); abaixo de 6, Θ(n²); senão Θ(n³). a: i de 0 a n-1,
+j de i+1 a n-1. b: recursiva, 1 se n <= 1, senão b(n/2) + b(n - n/2) + 1.
+c: i de 0 a n-1, j de 1 a n-1 dobrando (j *= 2). d: i e j de 0 a n-1, k de
+j a n-1 de 2 em 2.
 
 
 ```text
@@ -2904,104 +2174,32 @@ misterio_c: dobrou n, custo x2.33 -> Θ(n log n)
 misterio_d: dobrou n, custo x7.88 -> Θ(n³)
 ```
 
-
-Depois de rodar, confira cada resposta lendo o código: qual é a
-recorrência do misterio_b? Por que o misterio_d dá n³ se o laço de dentro
-anda de 2 em 2?
-
-**Dicas:**
-
-1. Chame f como uma função comum: f(128). O cast (double) evita a
-   divisão inteira.
-2. Para n log n, dobrar n dá 2 · log(2n) / log n: com n = 64, 2 · 7 / 6 =
-   2,33. Por isso o limite do Θ(n) é 2,15, e não 2,5.
-3. O misterio_b é T(n) = 2 T(n/2) + 1
-   (caso 1 do teorema mestre, Θ(n)); o passo 2 do misterio_d só divide
-   o custo por uma constante.
-
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706
 ```
 
 **Exercício E707** · ★★★
 
-As bibliotecas de verdade não usam merge sort "puro": quando o pedaço
-fica pequeno, trocam para o insertion sort, que não tem recursão nem
-cópia para o rascunho. Estenda a função hibrido (hoje um merge sort
-comum): escreva insertion_trecho(v, p, r), que ordena só v[p..r-1], e
-faça hibrido chamá-la quando o pedaço tiver menos de limiar elementos.
-O main já mede comparações e tempo para vários limiares, com 200 mil
-números sorteados:
+Escreva o merge sort híbrido hibrido(v, w, p, r) sobre v[p..r-1] (w é o
+rascunho) que, para pedaços com menos de limiar elementos, chama
+insertion_trecho(v, p, r), também sua. Conte as comparações numa função
+menor(a, b) global e cronometre com clock(). Ordene 200 mil números (s =
+11; s = s * 1103515245u + 12345u; (int)(s >> 8)) com limiar 1, 8, 16, 32,
+64 e 256, conferindo o resultado. Os tempos variam; as comparações, não.
 
 
 ```text
-Saída esperada (os tempos variam; as comparações, não):
-L =   1:  3272603 comparações,   54.5 ms
-L =   8:  3315173 comparações,   51.0 ms
-L =  16:  3478137 comparações,   49.7 ms
-L =  32:  3925760 comparações,   49.8 ms
-L =  64:  4963872 comparações,   54.2 ms
-L = 256: 11917965 comparações,   97.4 ms
+Saída esperada:
+L =   1:  3272603 comparações,   29.2 ms
+L =   8:  3315173 comparações,   27.2 ms
+L =  16:  3478137 comparações,   26.8 ms
+L =  32:  3925760 comparações,   26.5 ms
+L =  64:  4963872 comparações,   28.2 ms
+L = 256: 11917965 comparações,   45.1 ms
 ```
-
-**Dicas:**
-
-1. insertion_trecho é o insertion de sempre, mas o laço vai de p + 1 até
-   r - 1 e o while para em j >= p (e não em j >= 0).
-2. Use a função menor() nas comparações do insertion também, para a
-   contagem ser justa.
-3. Resposta esperada: as comparações acima. As comparações SOBEM
-   com o limiar (o insertion compara mais que o merge), mas o tempo
-   costuma CAIR até uns 16 ou 32, porque cada comparação do insertion
-   sai mais barata que a recursão e a cópia do merge. Com 256, o Θ(n²)
-   dos pedaços já pesa.
 
 ```bash
 gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707
-```
-
-**Exercício E708** · ★★★
-
-Conserte o programa. Ele devia comparar as quatro ordenações do
-ordena.h com os MESMOS 20 mil números sorteados, mas os resultados não
-fazem sentido:
-
-
-```text
-Saída que aparece:
-insertion: 99529734 comparações, 0.000 s
-merge:     99668950 comparações, 0.000 s
-heap:      100198011 comparações, 0.000 s
-quick:     100445261 comparações, 0.000 s
-```
-
-
-Há três erros, um em cada medida: o tempo sai sempre zero, as
-comparações vão se acumulando de um algoritmo para o outro, e os três
-últimos algoritmos não recebem a mesma entrada que o primeiro.
-
-
-```text
-Saída esperada (os tempos variam; as comparações, não):
-insertion: 99529734 comparações, 0.658 s
-merge:       260882 comparações, 0.004 s
-heap:        510606 comparações, 0.007 s
-quick:       331546 comparações, 0.004 s
-```
-
-**Dicas:**
-
-1. clock() e CLOCKS_PER_SEC são inteiros. O que dá 658000 / 1000000 em
-   divisão inteira?
-2. Onde a contagem é zerada? Uma vez só, antes do laço?
-3. Depois do insertion, como está o vetor v? O que o merge recebe?
-4. Os consertos: dividir em
-   double ((double)(clock() - ini) / CLOCKS_PER_SEC), chamar
-   ord_zera_contagem() antes de cada ordenação e copiar o original para
-   v (memcpy) também antes de cada uma.
-
-```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E708.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E708 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E708
 ```
 
 ---
@@ -3009,7 +2207,7 @@ gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E708.c ~/LPEDC/17-analise-ava
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
-sempre que der, confira com um programa em C rodado com as flags de estudo.
+sempre que der, confira com um programa em C compilado com as flags de estudo.
 
 **1. O pior quick sort.** Com o pivô sempre no último elemento, um vetor já
 ordenado faz o quick sort particionar em pedaços de tamanho `n - 1` e 0.

@@ -1,59 +1,48 @@
 # Módulo 23 · Grafos: estrutura e caminhos
 
-O módulo 16 apresentou os grafos e as três buscas que mais aparecem: BFS,
-DFS e Dijkstra. Aqui a pergunta muda de "como eu ando por ele?" para
-"**o que esse grafo esconde?**". Ele tem pedaços soltos? Tem um ciclo que
-trava tudo? Em que ordem as tarefas cabem? Qual o jeito mais barato de ligar todo mundo? E quando o peso é negativo, ou
-quando a pergunta é "de todos para todos"?
+O módulo 16 ensinou BFS, DFS e Dijkstra: "como eu ando pelo grafo?". Aqui a
+pergunta é "**o que ele esconde?**": pedaços soltos, ciclos, ordem das
+tarefas, o jeito mais barato de ligar todos, pesos negativos e caminhos de
+todos para todos.
 
-Cada assunto responde uma dessas perguntas com um algoritmo clássico, e
-quase todos reaproveitam peças que você já tem. A DFS vira detector de
-ciclos e ordenação topológica. A fila vira o algoritmo de Kahn. O `qsort` e
-o union-find viram o Kruskal. O heap vira o Prim. A tabela da programação
-dinâmica vira o Floyd-Warshall. O trabalho novo é enxergar qual peça
-encaixa em qual pergunta.
-
-Aqui o grafo é um **modelo** de coisas que não são mapas. Uma planilha com
-fórmulas, uma grade de disciplinas, a fiação de um loteamento, uma tabela de
-câmbio: tudo isso é grafo, e a pergunta que você faz decide o algoritmo.
+Cada assunto reaproveita uma peça conhecida: a DFS vira detector de ciclos e
+ordenação topológica, a fila vira o Kahn, `qsort` e union-find viram o
+Kruskal, o heap vira o Prim e a tabela da PD vira o Floyd-Warshall.
 
 ## O que você vai aprender
 
-- contar os **componentes conexos** e achar **ciclos**, com a DFS de três cores nos grafos dirigidos
-- a **ordenação topológica**: o algoritmo de **Kahn** (com fila) e a versão pela DFS (pós-ordem invertida)
-- a **árvore geradora mínima** com **Kruskal** (ordenação + union-find) e com **Prim** (heap)
-- a diferença entre Prim e Dijkstra, que mora numa linha de código
-- caminho mínimo com **pesos negativos** e detecção de **ciclo negativo** com **Bellman-Ford**
-- a tabela de distâncias entre **todos os pares** com **Floyd-Warshall**, e como reconstruir as rotas
-- escolher o algoritmo pela pergunta, num programa que planeja semestres e rotas
+- **componentes conexos** e **ciclos**, com a DFS de três cores nos grafos
+  dirigidos
+- **ordenação topológica**: **Kahn** (fila) e pós-ordem invertida da DFS
+- **árvore geradora mínima**: **Kruskal** (ordenação + union-find) e **Prim**
+  (heap), e a diferença entre Prim e Dijkstra, que mora numa linha
+- **pesos negativos** e **ciclo negativo** com **Bellman-Ford**
+- **todos os pares** com **Floyd-Warshall** e a reconstrução das rotas
+- escolher o algoritmo pela pergunta, num programa que planeja semestres e
+  rotas
 
 ## Antes de começar
 
-Cada assunto traz o algoritmo inteiro num arquivo, sem TAD escondendo o
-laço. Refaça no papel o passo a passo: a fila do Kahn, os grupos do
-union-find, o heap do Prim, as rodadas do Bellman-Ford. Nos desenhos, a
-origem fica roxa e as arestas verdes são as escolhidas; na DFS de três
-cores, amarelo faz o papel do cinza (na pilha) e verde, do preto (terminado).
+Cada assunto traz o algoritmo inteiro num arquivo, sem TAD. Nos desenhos, a
+origem é roxa e as arestas verdes são as escolhidas; na DFS de três cores,
+amarelo é o cinza (na pilha) e verde é o preto (terminado).
 
-Este módulo usa o módulo 16 inteiro: matriz de adjacência, BFS
-(0110), DFS (0111) e Dijkstra (0112). Também aparecem a fila (0085), o heap
-(0102), o `qsort` (0096), o union-find (0148), a recursão (0032), as
-permutações (0126) e a ideia de programação dinâmica (módulo 21). Se o
-Dijkstra estiver enferrujado, releia o 0112 antes do 0153. Grau, trajeto,
-circuito, grafos eulerianos e hamiltonianos, pontes e vértices de
-articulação, que o edital do PPGI também cobra, estão nos assuntos 0182 a
+Você precisa do módulo 16 (matriz de adjacência, BFS 0110, DFS 0111 e
+Dijkstra 0112, a reler antes do 0153), fila (0085), heap (0102), `qsort`
+(0096), union-find (0148), recursão (0032), permutações (0126) e PD (módulo
+21). Grau, circuitos, grafos eulerianos e hamiltonianos, pontes e
+articulações, que o edital do PPGI também cobra, estão nos assuntos 0182 a
 0184.
 
-Três convenções valem para o módulo todo:
+Três convenções valem para o módulo:
 
-- os vértices são números de 0 a V-1, com os nomes num vetor de strings à
-  parte, e os vizinhos são examinados em **ordem crescente de índice**. Isso
-  decide os empates: mude a numeração e a saída pode mudar, sem estar errada;
-- na matriz de pesos, **0 quer dizer "sem aresta"**, exceto quando o texto
-  avisa o contrário (o A311 mostra por que isso pode ser um problema);
-- quando o algoritmo soma distâncias, o INFINITO é `1000000000` (um bilhão),
-  que somado com outro INFINITO ainda cabe num `int`. Quando o código usa
-  `INT_MAX`, ele testa antes de somar.
+- vértices são números de 0 a V-1, com os nomes num vetor de strings à parte,
+  e os vizinhos são examinados em **ordem crescente de índice**; isso decide
+  os empates, e mudar a numeração pode mudar a saída sem errar;
+- na matriz de pesos, **0 quer dizer "sem aresta"**, salvo aviso (o A311
+  mostra o problema disso);
+- ao somar distâncias, o INFINITO é `1000000000`, que somado a outro INFINITO
+  ainda cabe num `int`; quando o código usa `INT_MAX`, testa antes de somar.
 
 {{indice}}
 

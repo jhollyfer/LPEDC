@@ -1,53 +1,27 @@
 // 0150 · Componentes e ciclos
 // Exercício E898 · ★★☆
 //
-// O programa abaixo já separa os pontos de três parques (cada parque é um
-// componente do grafo de trilhas) e lista os pontos de cada um. Estenda o
-// programa: para cada parque, mostre quantos pontos e quantas trilhas ele
-// tem e se existe um circuito (dá para sair de um ponto e voltar a ele sem
-// repetir trilha), sem escrever outra DFS.
+// Um parque nacional tem três parques menores, e o mapa de trilhas (mão dupla)
+// liga 11 pontos, numerados de 0 a 10: Portaria, Mirante, Cachoeira, Lago,
+// Bosque, Pico, Gruta, Rio, Ponte, Ninho e Toca. As trilhas são:
+//
+//   0-1 1-2 2-0 | 3-4 4-5 4-6 | 7-8 8-9 9-7 7-10
+//
+// Escreva o programa do zero: separe os pontos em grupos (os parques) com uma
+// DFS e mostre, para cada parque, seus pontos em ordem de índice, quantos
+// pontos e quantas trilhas ele tem e se existe um circuito (dá para sair de um
+// ponto e voltar a ele sem repetir trilha), sem escrever outra DFS.
 //
 //   Saída esperada:
 //   Parque 1: Portaria Mirante Cachoeira | 3 pontos, 3 trilhas, tem circuito
 //   Parque 2: Lago Bosque Pico Gruta | 4 pontos, 3 trilhas, sem circuito
 //   Parque 3: Rio Ponte Ninho Toca | 4 pontos, 4 trilhas, tem circuito
 //
-// Escreva sua resposta abaixo (estenda o programa):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-#define V 11
-
-const char *pontos[V] = {"Portaria", "Mirante", "Cachoeira", "Lago", "Bosque", "Pico",
-                         "Gruta", "Rio", "Ponte", "Ninho", "Toca"};
-int trilha[V][V];
-int grupo[V];
-
-void marca(int u, int g) {
-    grupo[u] = g;
-    for (int v = 0; v < V; v++)
-        if (trilha[u][v] && grupo[v] == 0) marca(v, g);
-}
-
 int main(void) {
-    int trilhas[][2] = {{0, 1}, {1, 2}, {2, 0},          // parque 1
-                        {3, 4}, {4, 5}, {4, 6},          // parque 2
-                        {7, 8}, {8, 9}, {9, 7}, {7, 10}}; // parque 3
-    int n_trilhas = 10;
-    for (int k = 0; k < n_trilhas; k++) {
-        trilha[trilhas[k][0]][trilhas[k][1]] = 1;
-        trilha[trilhas[k][1]][trilhas[k][0]] = 1;
-    }
 
-    int grupos = 0;
-    for (int u = 0; u < V; u++)
-        if (grupo[u] == 0) marca(u, ++grupos);
-
-    for (int g = 1; g <= grupos; g++) {
-        printf("Parque %d:", g);
-        for (int v = 0; v < V; v++)
-            if (grupo[v] == g) printf(" %s", pontos[v]);
-        printf("\n");
-    }
     return 0;
 }

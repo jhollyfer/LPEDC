@@ -1,44 +1,34 @@
 ## 0135 · Mochila fracionária
 
-Um feirante vai vender produtos a granel na cidade vizinha. A caminhonete
-leva **60 kg**, e o estoque dele tem mais do que isso: café, castanha,
-feijão, açafrão e arroz, cada um com um peso disponível e um valor de venda.
-Como é tudo a granel, ele pode levar **parte** de um saco. O que levar para
-voltar com o máximo de dinheiro?
+Um feirante leva **60 kg** na caminhonete e tem café, castanha, feijão,
+açafrão e arroz a granel, então pode levar **parte** de um saco. O que levar
+para voltar com o máximo de dinheiro?
 
-Esse é o problema da **mochila fracionária**: uma mochila com capacidade `W`
-e `n` itens, cada um com peso e valor; você pode levar qualquer fração de
-cada item, e o valor acompanha a fração (metade do café vale metade do
-preço). O objetivo é o maior valor total sem passar de `W`.
+É a **mochila fracionária**: capacidade `W`, `n` itens com peso e valor e
+qualquer fração de cada um, com valor proporcional. O objetivo é o maior
+valor total sem passar de `W`.
 
-O que decide é o **valor por quilo**, e não o valor do saco nem o peso. Cada
-quilo de espaço da caminhonete é igual aos outros, então ele deve ir para
-o produto que paga mais por quilo. O guloso fica assim:
+Decide o **valor por quilo**: cada quilo de espaço deve ir para quem paga
+mais. O guloso:
 
 1. calcule a **razão** `valor / peso` de cada item;
 2. **ordene** os itens pela razão, da maior para a menor;
 3. leve cada item **inteiro** enquanto couber; no primeiro que não couber,
    leve **só a fração** que preenche o espaço que sobrou, e pare.
 
-No máximo um item fica partido: o último. O custo é o da ordenação, O(n log n),
-mais uma passada.
+No máximo um item fica partido, o último. O custo é a ordenação, O(n log n).
 
-Por que o guloso acerta aqui? Pelo argumento de troca, de novo. Suponha uma
-carga que leva 1 kg de feijão (R$ 9/kg) e deixa de fora 1 kg de castanha
-(R$ 50/kg). Trocar esse quilo de feijão pelo de castanha aumenta o valor em
-R$ 41 e não muda o peso. Então uma carga ótima nunca deixa de fora um quilo
-que paga mais enquanto leva um que paga menos, e a ordem pela razão garante
-isso.
+A prova é por troca: levar 1 kg de feijão (R$ 9/kg) e deixar 1 kg de castanha
+(R$ 50/kg) perde R$ 41 sem ganhar peso. Uma carga ótima nunca deixa de fora um
+quilo que paga mais enquanto leva um que paga menos.
 
-Ordenados pela razão, o açafrão paga R$ 80/kg, a
-castanha R$ 50, o café R$ 30, o feijão R$ 9 e o arroz R$ 5. Os três primeiros
-cabem inteiros (5 + 15 + 20 = 40 kg). Sobram 20 kg, e o feijão tem 30: vão
-dois terços do saco. O arroz nem entra:
+Por razão: açafrão R$ 80/kg, castanha R$ 50, café R$ 30, feijão R$ 9, arroz
+R$ 5. Os três primeiros cabem inteiros (5 + 15 + 20 = 40 kg). Sobram 20 kg e
+o feijão tem 30: vão dois terços do saco. O arroz nem entra:
 
 {{ideia}}
 
-No código, a função de comparação calcula a razão de cada lado e
-ordena do maior para o menor:
+A comparação calcula a razão de cada lado e ordena do maior para o menor:
 
 ```c
 #include <stdio.h>
@@ -89,33 +79,23 @@ int main(void) {
 ```
 
 O nome vai no fim da linha de propósito: `%-10s` conta **bytes**, e em UTF-8
-o "ç" e o "ã" ocupam dois bytes cada. Com o nome no começo, as colunas
-ficariam tortas.
+o "ç" e o "ã" ocupam dois bytes cada.
 
-O laço do fluxograma tem duas saídas para cada item. O caminho marcado
-passa pelo "leva tudo" três vezes (açafrão, castanha, café) e uma vez pelo
-"leva a fração" (feijão), que zera o espaço e encerra o laço:
+No fluxograma, o caminho marcado leva tudo três vezes (açafrão, castanha, café)
+e a fração uma vez (feijão), que zera o espaço e encerra o laço:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Esse guloso só vale para a mochila **fracionária**. Se os itens forem
-> indivisíveis (uma geladeira, um notebook: leva inteiro ou não leva), é a
-> **mochila 0/1**, e ordenar pela razão pode errar feio. Com capacidade 10 e
-> itens (peso 6, R$ 30), (5, R$ 20) e (5, R$ 20), a maior razão é a do
-> primeiro (R$ 5/kg): o guloso leva ele, os outros não cabem, e o total é
-> R$ 30. Levar os dois de 5 dá R$ 40. A mochila 0/1 se resolve com
-> programação dinâmica, no módulo 21.
+> Esse guloso só vale para a mochila **fracionária**. Com itens indivisíveis é
+> a **mochila 0/1**, e ordenar pela razão pode errar: com capacidade 10 e
+> itens (peso 6, R$ 30), (5, R$ 20) e (5, R$ 20), o guloso leva o primeiro
+> (R$ 5/kg) e o total é R$ 30, mas os dois de 5 dão R$ 40. A mochila 0/1 se
+> resolve com programação dinâmica (módulo 21).
 
 > [!TIP]
-> **Por dentro do C:** comparar razões com `double` funciona, mas a divisão
-> arredonda. Quando os pesos e valores são inteiros, dá para comparar sem
-> dividir: `x->valor / x->peso > y->valor / y->peso` é o mesmo que
-> `x->valor * y->peso > y->valor * x->peso` (os pesos são positivos), e a
-> conta com inteiros é exata. Só confira se o produto cabe no tipo: com
-> `long long`, valores e pesos até uns 3 bilhões são seguros. E nunca devolva
-> `(int)(ry - rx)` na comparação: razões 4,7 e 4,2 viram 0 depois do corte, e
-> o `qsort` passa a tratar as duas como iguais.
+> **Por dentro do C:** nunca devolva `(int)(ry - rx)` na comparação: razões
+> 4,7 e 4,2 viram 0 e o `qsort` as trata como iguais.
 
 > [!NOTE]
 > **Pergunta para você:** se a caminhonete levasse 100 kg, quanto o feirante

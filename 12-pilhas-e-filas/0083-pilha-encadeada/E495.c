@@ -1,14 +1,13 @@
 // 0083 · Pilha encadeada
 // Exercício E495 · ★★☆
 //
-// O botão Voltar do navegador é uma pilha de páginas. Este programa monta a
-// própria pilha encadeada, com um texto em cada nó (por isso não usa o
-// pilha.h, que guarda int). Complete as funções:
-//
-// - visita: cria um nó com a url e põe no topo (devolve false se faltar
-// memória);
-// - voltar: tira a página do topo, mas só se ela não for a única (da
-// primeira página não se volta). Devolve false se não deu para voltar.
+// O botão Voltar do navegador é uma pilha de páginas. Com os tipos abaixo (pilha
+// encadeada com um texto em cada nó), escreva bool visita(Historico *h, const
+// char *url), que põe a página no topo, e bool voltar(Historico *h), que tira a
+// página do topo, mas só se ela não for a única (da primeira página não se
+// volta). No main, visite g1.globo.com, ge.globo.com e receitas.com, mostre a
+// página atual, tente voltar, visite cifraclub.com.br, mostre a página atual,
+// tente voltar três vezes e libere a memória.
 //
 //   Saída esperada:
 //   Agora em: receitas.com
@@ -18,7 +17,7 @@
 //   Voltar -> g1.globo.com
 //   Não dá para voltar de g1.globo.com
 //
-// Escreva sua resposta abaixo (complete visita e voltar):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -34,51 +33,7 @@ typedef struct {
     Pagina *topo; // a página aberta agora
 } Historico;
 
-bool visita(Historico *h, const char *url) {
-    (void)h; // apague estas linhas quando usar h e url
-    (void)url;
-    return false;
-}
-
-bool voltar(Historico *h) {
-    (void)h;
-    return false;
-}
-
-void historico_libera(Historico *h) {
-    while (h->topo != NULL) {
-        Pagina *ant = h->topo->ant;
-        free(h->topo);
-        h->topo = ant;
-    }
-}
-
-void tenta_voltar(Historico *h) {
-    if (voltar(h)) {
-        printf("Voltar -> %s\n", h->topo->url);
-    } else if (h->topo != NULL) {
-        printf("Não dá para voltar de %s\n", h->topo->url);
-    }
-}
-
 int main(void) {
-    Historico h = {NULL};
 
-    visita(&h, "g1.globo.com");
-    visita(&h, "ge.globo.com");
-    visita(&h, "receitas.com");
-    if (h.topo != NULL) {
-        printf("Agora em: %s\n", h.topo->url);
-    }
-    tenta_voltar(&h);
-    visita(&h, "cifraclub.com.br");
-    if (h.topo != NULL) {
-        printf("Agora em: %s\n", h.topo->url);
-    }
-    tenta_voltar(&h);
-    tenta_voltar(&h);
-    tenta_voltar(&h);
-
-    historico_libera(&h);
     return 0;
 }

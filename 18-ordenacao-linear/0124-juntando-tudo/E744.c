@@ -1,19 +1,20 @@
 // 0124 · Juntando tudo
 // Exercício E744 · ★★★
 //
-// A pergunta do texto: nenhum Pix passa de R$ 9999,99, então o byte 3 de
-// todos os valores é zero, e a quarta passada do radix copia 12 MB à toa.
-// Escreva int radix_esperto(Pix v[], Pix aux[], int n), um radix em base
-// 256 pelo valor que, em cada passada, conta os bytes e, se TODOS caírem no
-// mesmo balde (algum c[x] == n), pula a passada. Devolva quantas passadas
-// fez. O programa compara com o pix_por_valor (os ids têm que sair na mesma
-// ordem, porque os dois são estáveis) em dois casos.
+// Nenhum Pix passa de R$ 9999,99: o byte 3 do valor é sempre zero e a
+// quarta passada do radix copia 12 MB à toa. Escreva int radix_esperto(Pix
+// v[], Pix aux[], int n), radix em base 256 pelo valor que pula a passada
+// quando TODOS os bytes caem no mesmo balde (algum c[x] == n) e devolve
+// quantas passadas fez, com o resultado em v. No main (pix.h), com N =
+// 1000000 e pix_gera com a semente 2024, rode radix_esperto numa cópia e
+// pix_por_valor em outra e compare os ids (os dois são estáveis), para os
+// valores do dia e para valores até R$ 2,55 (centavos %= 256).
 //
 //   Saída esperada:
 //   valores do dia:      3 passadas de 4, igual ao pix_por_valor? sim
 //   valores até R$ 2,55: 1 passada de 4, igual ao pix_por_valor? sim
 //
-// Escreva sua resposta abaixo (escreva radix_esperto):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,53 +22,7 @@
 #include <stdbool.h>
 #include "pix.h"
 
-#define N 1000000
-
-// radix pelo valor que pula as passadas inúteis. Devolve quantas fez
-int radix_esperto(Pix v[], Pix aux[], int n) {
-    (void) v; // apague estas três linhas e escreva a função
-    (void) aux;
-    (void) n;
-    return 0;
-}
-
-bool mesmos_ids(const Pix a[], const Pix b[], int n) {
-    for (int i = 0; i < n; i++) {
-        if (a[i].id != b[i].id) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void testa(const char *nome, Pix a[], Pix b[], Pix aux[], int n) {
-    memcpy(b, a, n * sizeof(Pix));
-    int feitas = radix_esperto(a, aux, n);
-    pix_por_valor(b, aux, n);
-    printf("%s %d passada%s de 4, igual ao pix_por_valor? %s\n", nome, feitas,
-           feitas == 1 ? "" : "s", mesmos_ids(a, b, n) ? "sim" : "não");
-}
-
 int main(void) {
-    Pix *a = malloc(N * sizeof(Pix));
-    Pix *b = malloc(N * sizeof(Pix));
-    Pix *aux = malloc(N * sizeof(Pix));
-    if (a == NULL || b == NULL || aux == NULL) {
-        free(a);
-        free(b);
-        free(aux);
-        return 1;
-    }
-    pix_gera(a, N, 2024);
-    testa("valores do dia:     ", a, b, aux, N);
 
-    pix_gera(a, N, 2024);
-    for (int i = 0; i < N; i++) {
-        a[i].centavos %= 256;   // só até R$ 2,55: cabe num byte
-    }
-    testa("valores até R$ 2,55:", a, b, aux, N);
-    free(a);
-    free(b);
-    free(aux);
     return 0;
 }

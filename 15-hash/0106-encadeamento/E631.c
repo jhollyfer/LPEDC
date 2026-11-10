@@ -1,11 +1,10 @@
 // 0106 · Encadeamento
 // Exercício E631 · ★☆☆
 //
-// Uma tabela com encadeamento tem 5 baldes e usa h(k) = k % 5. Cada número
-// novo entra no INÍCIO da corrente do seu balde. O programa abaixo já insere
-// 12, 7, 20, 17, 3 e 25, nessa ordem, e já libera a memória. Escreva a
-// função mostra: ela imprime um balde por linha, com os números na ordem em
-// que aparecem na corrente, e no fim mostra quantos baldes ficaram vazios e
+// Escreva uma tabela com encadeamento de 5 baldes (h(k) = k % 5; cada número
+// novo entra no INÍCIO da corrente) com as funções insere, mostra e libera.
+// Insira 12, 7, 20, 17, 3 e 25, nessa ordem. A função mostra imprime um balde
+// por linha, com os números na ordem da corrente, e no fim os baldes vazios e
 // o tamanho da corrente mais comprida.
 //
 //   Saída esperada:
@@ -16,54 +15,12 @@
 //   [4]
 //   vazios: 2, maior corrente: 3
 //
-// Escreva sua resposta abaixo (complete o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define M 5
-
-typedef struct No {
-    int chave;
-    struct No *prox;
-} No;
-
-void insere(No *baldes[], int chave) {
-    No *novo = malloc(sizeof *novo);
-    if (novo == NULL) {
-        return;
-    }
-    novo->chave = chave;
-    novo->prox = baldes[chave % M]; // entra no início da corrente
-    baldes[chave % M] = novo;
-}
-
-void mostra(No *baldes[]) {
-    (void)baldes; // apague esta linha quando usar baldes
-
-    // complete aqui
-
-}
-
-void libera(No *baldes[]) {
-    for (int b = 0; b < M; b++) {
-        No *p = baldes[b];
-        while (p != NULL) {
-            No *prox = p->prox;
-            free(p);
-            p = prox;
-        }
-        baldes[b] = NULL;
-    }
-}
-
 int main(void) {
-    No *baldes[M] = {NULL};
-    int chaves[] = {12, 7, 20, 17, 3, 25};
-    for (int i = 0; i < 6; i++) {
-        insere(baldes, chaves[i]);
-    }
-    mostra(baldes);
-    libera(baldes);
+
     return 0;
 }

@@ -1,9 +1,9 @@
 // 0098 · Árvore binária e percursos
 // Exercício E583 · ★☆☆
 //
-// Monte esta árvore com arv_cria, do TAD arvore.h, e imprima os quatro
+// Com arv_cria, do TAD arvore.h, monte esta árvore, imprima os quatro
 // percursos (pré-ordem, em ordem, pós-ordem e por nível), a quantidade de
-// nós e a altura. Depois libere a árvore com arv_libera.
+// nós e a altura, e libere com arv_libera.
 //
 //   M
 //   ├── esq: G

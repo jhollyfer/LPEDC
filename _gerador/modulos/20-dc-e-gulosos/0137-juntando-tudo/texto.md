@@ -1,47 +1,36 @@
 ## 0137 · Juntando tudo
 
-A feira do bairro manda todo dia, por um rádio de dados lento, a lista de
-preços para as bancas. Cada byte economizado é tempo de transmissão a menos.
-A ideia é a do assunto anterior, agora de verdade: um **compactador** que
-recebe um arquivo qualquer e grava uma versão menor, e um
-**descompactador** que devolve o arquivo original, byte por byte.
+A feira do bairro manda a lista de preços por um rádio lento, e cada byte
+economizado conta. Um **compactador** grava uma versão menor de um arquivo e
+um **descompactador** devolve o original, byte por byte.
 
-O Huffman do assunto 0136 trabalhava com uma string na memória e códigos
-escritos como texto (`"1110"`). Num arquivo de verdade, cada código vira
-**bits de verdade**, e aparecem três problemas novos:
+O Huffman do 0136 usava códigos em texto (`"1110"`). Num arquivo, o código
+vira **bits de verdade**, e surgem três problemas:
 
-- **o arquivo é feito de bytes**, não de bits. Você junta os bits dos
-  códigos, 8 de cada vez, num `unsigned char`, e grava o byte quando ele
-  enche. O último byte quase nunca fica cheio: o resto vai com zeros;
-- **o descompactador precisa da mesma árvore**. O arquivo compactado começa
-  com um **cabeçalho**: uma assinatura (`HUF1`), o tamanho original e as 256
-  frequências. Com elas, o descompactador monta a árvore idêntica, porque o
-  `huf_constroi` desempata sempre do mesmo jeito;
-- **os zeros do fim não são dados**. Por isso o tamanho original vai no
-  cabeçalho: o descompactador para quando escreveu esse número de bytes, e
-  ignora o enchimento.
+- **o arquivo é feito de bytes**: junte os bits, 8 por vez, num `unsigned
+  char` e grave-o quando enche. O último quase nunca enche e vai com zeros;
+- **o descompactador precisa da mesma árvore**: o arquivo começa com um
+  **cabeçalho** (assinatura `HUF1`, tamanho original e 256 frequências), e o
+  `huf_constroi` desempata sempre igual;
+- **os zeros do fim não são dados**: o descompactador para ao escrever o
+  tamanho original.
 
-O compactador lê o arquivo **duas vezes**: a primeira passada conta as
-frequências; a segunda, depois de montar a árvore, troca cada byte pelo
-código. O descompactador lê o cabeçalho, monta a árvore e anda nela bit a
-bit: `0` para a esquerda, `1` para a direita, e na folha escreve o byte e
-volta para a raiz.
+O compactador lê o arquivo **duas vezes**: conta as frequências e, com a
+árvore pronta, troca cada byte pelo código. O descompactador monta a árvore
+do cabeçalho e anda nela bit a bit (`0` esquerda, `1` direita); na folha,
+escreve o byte e volta à raiz.
 
-O projeto usa boa parte do curso: arquivos binários com
-`fread`/`fwrite` (assunto 0068), bits e máscaras (0065), a árvore binária
-(0098), o heap (0102), o guloso de Huffman (0136) e TADs em `.h` e `.c`
-(0074). O TAD `compactador.h` usa o `huffman.h` por dentro e oferece duas
-funções: `huf_compacta` e `huf_descompacta`.
+O projeto reúne `fread`/`fwrite` (0068), bits (0065), árvore binária (0098),
+heap (0102), Huffman (0136) e TADs (0074). O `compactador.h` oferece
+`huf_compacta` e `huf_descompacta`.
 
-A lista da feira tem 6 linhas, repetidas 40 vezes:
-9560 bytes. Compactada, fica com 6156 bytes, dos quais 1036 são o cabeçalho
-e 5120 são os bits dos códigos. O descompactador lê o cabeçalho, refaz a
-árvore e devolve os 9560 bytes:
+A lista da feira (6 linhas repetidas 40 vezes) tem 9560 bytes e compactada,
+6156: 1036 de cabeçalho e 5120 de bits:
 
 {{ideia}}
 
-A peça central do `compactador.c` é a dupla de funções que escreve bits soltos. A struct
-`Bits` guarda o byte em construção e quantos bits ele já tem:
+A peça central do `compactador.c` escreve bits soltos; a struct `Bits` guarda
+o byte em construção e quantos bits ele já tem:
 
 ```c
 static void escreve_bit(Bits *b, int bit) {
@@ -63,8 +52,8 @@ static void descarrega(Bits *b) {
 }
 ```
 
-O programa cria o arquivo da feira, compacta, descompacta, confere se o
-resultado é igual ao original e apaga os arquivos de teste:
+O programa cria o arquivo da feira, compacta, descompacta, compara com o
+original e apaga os arquivos de teste:
 
 ```c
 #include <stdio.h>
@@ -132,37 +121,26 @@ int main(void) {
 // feira2.txt: 9560 bytes, igual ao original
 ```
 
-Sem o cabeçalho, os bits ocupam 5120 bytes, 53,6% do original: o texto tem
-poucos símbolos diferentes e alguns muito frequentes (o ponto e o espaço).
-O cabeçalho de 1036 bytes é um custo fixo, que pesa muito em arquivos
-pequenos e quase nada em arquivos grandes.
+Os bits ocupam 53,6% do original, porque há poucos símbolos e alguns muito
+frequentes. O cabeçalho é um custo fixo: pesado em arquivos pequenos,
+irrelevante nos grandes.
 
-O fluxograma segue o laço do `huf_descompacta`. Para cada byte do
-original, ele começa na raiz e lê bits até cair numa folha. O laço de fora
-conta os bytes escritos e para no tamanho do cabeçalho, deixando os zeros de
-enchimento sem ler:
+No fluxograma do `huf_descompacta`, cada byte começa na raiz e lê bits até uma
+folha; o laço de fora para no tamanho original:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Esquecer o `descarrega` no fim da compactação é o erro clássico. Os bits
-> que sobraram no byte incompleto (até 7) nunca são gravados, e o
-> descompactador perde o finalzinho do arquivo, ou devolve lixo nos últimos
-> bytes. O teste que pega esse erro é o de ida e volta: compactar,
-> descompactar e comparar **byte a byte** com o original, como o `iguais`
-> faz. E abra os arquivos sempre em modo binário (`"rb"`, `"wb"`): o
-> compactado tem bytes de todo tipo, inclusive o 26, que no Windows, em modo
-> texto, é lido como fim de arquivo.
+> Sem o `descarrega` no fim, os bits do byte incompleto (até 7) se perdem. O
+> teste de ida e volta pega o erro: compare **byte a byte**, como o `iguais`.
+> Abra os arquivos em modo binário (`"rb"`, `"wb"`): no Windows, em modo texto,
+> o byte 26 é lido como fim de arquivo.
 
 > [!TIP]
-> **Por dentro do C:** o cabeçalho usa `uint64_t` e `uint32_t` (de
-> `stdint.h`) porque o tamanho de `long` muda de sistema para sistema (8 bytes
-> no Linux de 64 bits, 4 no Windows). Com tipos de largura fixa, o arquivo
-> tem sempre 4 + 8 + 1024 = 1036 bytes de cabeçalho. Ainda falta um detalhe:
-> o `fwrite` grava os bytes na ordem da máquina (*little-endian* no x86 e no
-> ARM comum). Um formato portátil escolhe uma ordem e grava byte a byte com
-> `>>` e `& 0xFF`. E o arquivo é lido duas vezes sem reabrir: o `rewind`
-> volta para o começo.
+> **Por dentro do C:** o cabeçalho usa `uint64_t` e `uint32_t` (`stdint.h`)
+> porque o tamanho de `long` varia (8 bytes no Linux de 64 bits, 4 no
+> Windows): são sempre 4 + 8 + 1024 = 1036 bytes. O `rewind` volta ao começo
+> para a segunda leitura.
 
 > [!NOTE]
 > **Pergunta para você:** um arquivo tem as 26 letras maiúsculas, cada uma

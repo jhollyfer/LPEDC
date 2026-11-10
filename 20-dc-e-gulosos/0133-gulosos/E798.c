@@ -23,13 +23,7 @@
 
 #include <stdio.h>
 
-#define N 6
-
 int main(void) {
-    const char *nome[N] = {"Ana", "Bruno", "Carla", "Davi", "Eva", "Fábio"};
-    int pagou[N] = {18000, 0, 6000, 12000, 0, 9000}; // centavos
-    (void)nome;
-    (void)pagou;
 
     return 0;
 }

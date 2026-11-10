@@ -1,19 +1,20 @@
 // 0118 · Juntando tudo
 // Exercício E703 · ★☆☆
 //
-// Meça o tempo de verdade. Escreva cronometra(ordena, n), que copia os n
-// primeiros números de original[] para v[], ordena v com a função recebida
-// e devolve o tempo em milissegundos, medido com clock(). Depois mostre o
-// tempo do ord_insertion e do ord_merge (do TAD ordena.h, que está na
-// pasta) para n = 1000, 2000, 4000 e 8000, com a razão em relação à linha
-// anterior. Os números do original vêm do gerador já escrito no main.
+// Escreva cronometra(ordena, n): copia os n primeiros números de original[]
+// para v[], ordena v com a função recebida (void (*)(int[], int)) e devolve o
+// tempo em ms, medido com clock(). Com ordena.h e ordena.c da pasta, mostre o
+// tempo de ord_insertion e de ord_merge para n = 1000, 2000, 4000 e 8000, com
+// a razão sobre a linha anterior. original: s = 1 e, a cada posição, s = s *
+// 1103515245u + 12345u e original[i] = (int)(s >> 8). Os tempos variam; as
+// razões, pouco.
 //
-//   Saída esperada (os tempos variam; o formato e as razões, não muito):
+//   Saída esperada:
 //       n   insertion (ms)        merge (ms)
-//    1000      1.53            0.184
-//    2000      6.08  x4.0      0.327  x1.8
-//    4000     24.19  x4.0      0.746  x2.3
-//    8000     97.76  x4.0      1.513  x2.0
+//    1000      0.66            0.089
+//    2000      2.62  x4.0      0.183  x2.1
+//    4000     10.55  x4.0      0.408  x2.2
+//    8000     42.45  x4.0      0.887  x2.2
 //
 // Escreva sua resposta abaixo:
 
@@ -27,11 +28,6 @@
 int original[MAX], v[MAX];
 
 int main(void) {
-    unsigned s = 1;
-    for (int i = 0; i < MAX; i++) {
-        s = s * 1103515245u + 12345u;
-        original[i] = (int)(s >> 8);
-    }
 
     return 0;
 }

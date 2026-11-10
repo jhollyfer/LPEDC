@@ -1,15 +1,17 @@
 // 0087 · Deque
 // Exercício E520 · ★★☆
 //
-// Embarque no avião: quem viaja com criança de colo entra na frente da fila;
-// o resto entra no fim. Este programa traz o próprio deque circular e
-// compila sem aviso, mas o sanitizer reclama logo no primeiro passageiro
-// com criança. Rode, leia a mensagem ("index -1 out of bounds") e conserte.
+// No embarque do avião, quem viaja com criança de colo entra na frente da fila e
+// o resto entra no fim. Com a fila circular abaixo (TAM 5, campos poltronas,
+// inicio e n), escreva bool entra_no_fim(Embarque *e, int poltrona), bool
+// entra_na_frente(Embarque *e, int poltrona) e bool embarca(Embarque *e, int
+// *poltrona). No main, entrem no fim as poltronas 10, 20 e 30, entre na frente a
+// 40 e embarque todos, mostrando a ordem.
 //
-//   Saída esperada depois do conserto:
+//   Saída esperada:
 //   Embarcando: 40 10 20 30
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -22,48 +24,7 @@ typedef struct {
     int n;
 } Embarque;
 
-bool entra_no_fim(Embarque *e, int poltrona) {
-    if (e->n == TAM) {
-        return false;
-    }
-    e->poltronas[(e->inicio + e->n) % TAM] = poltrona;
-    e->n++;
-    return true;
-}
-
-bool entra_na_frente(Embarque *e, int poltrona) {
-    if (e->n == TAM) {
-        return false;
-    }
-    e->inicio = (e->inicio - 1) % TAM;
-    e->poltronas[e->inicio] = poltrona;
-    e->n++;
-    return true;
-}
-
-bool embarca(Embarque *e, int *poltrona) {
-    if (e->n == 0) {
-        return false;
-    }
-    *poltrona = e->poltronas[e->inicio];
-    e->inicio = (e->inicio + 1) % TAM;
-    e->n--;
-    return true;
-}
-
 int main(void) {
-    Embarque e = {.inicio = 0, .n = 0};
 
-    entra_no_fim(&e, 10);
-    entra_no_fim(&e, 20);
-    entra_no_fim(&e, 30);
-    entra_na_frente(&e, 40); // passageiro com criança de colo
-
-    printf("Embarcando:");
-    int p;
-    while (embarca(&e, &p)) {
-        printf(" %d", p);
-    }
-    printf("\n");
     return 0;
 }

@@ -1,9 +1,5 @@
 // 0087 · Deque
 // Exercício E520 · ★★☆
-//
-// Resposta: em entra_na_frente, (e->inicio - 1) % TAM dava -1 com inicio 0,
-// porque em C o resto acompanha o sinal do dividendo. Somar TAM antes do %
-// mantém o índice entre 0 e TAM - 1.
 
 #include <stdbool.h>
 #include <stdio.h>

@@ -1,48 +1,25 @@
 // 0126 · Permutações
 // Exercício E754 · ★★☆
 //
-// Cinco atletas correm a final: Ana, Bia, Cris, Dani e Edu. O programa abaixo
-// conta todas as ordens de chegada (5! = 120). Mas a premiação só liga para
-// o PÓDIO: ouro, prata e bronze, nessa ordem. Estenda o programa para contar
-// os pódios possíveis e quantos deles têm a Bia (em qualquer dos três
-// lugares). Não gere as 120 ordens e depois filtre: pare a recursão quando
-// as 3 primeiras posições estiverem decididas.
+// Cinco atletas correm a final: Ana, Bia, Cris, Dani e Edu. Escreva um
+// programa que conte todas as ordens de chegada (5! = 120) com a recursão
+// por trocas do texto. Mas a premiação só liga para o PÓDIO: ouro, prata e
+// bronze, nessa ordem. Conte também os pódios possíveis e quantos deles têm
+// a Bia (em qualquer dos três lugares). Não gere as 120 ordens e depois
+// filtre: pare a recursão quando as 3 primeiras posições estiverem
+// decididas.
 //
 //   Saída esperada:
 //   120 ordens de chegada
 //   60 pódios possíveis
 //   Bia aparece em 36
 //
-// Escreva sua resposta abaixo (estenda o programa):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <string.h>
 
-#define N 5
-
-int contagem = 0;
-
-void troca(const char **a, const char **b) {
-    const char *t = *a;
-    *a = *b;
-    *b = t;
-}
-
-void ordens(const char *v[], int i) {
-    if (i == N) {
-        contagem++;
-        return;
-    }
-    for (int j = i; j < N; j++) {
-        troca(&v[i], &v[j]);
-        ordens(v, i + 1);
-        troca(&v[i], &v[j]);
-    }
-}
-
 int main(void) {
-    const char *atletas[N] = {"Ana", "Bia", "Cris", "Dani", "Edu"};
-    ordens(atletas, 0);
-    printf("%d ordens de chegada\n", contagem);
+
     return 0;
 }

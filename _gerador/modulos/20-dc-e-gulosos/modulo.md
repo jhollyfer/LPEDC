@@ -1,61 +1,49 @@
 # Módulo 20 · Divisão e conquista e algoritmos gulosos
 
-Até aqui, cada algoritmo do curso resolvia um problema específico: buscar,
-ordenar, achar caminho. Este módulo muda o foco para as **técnicas** que estão
-por trás deles. Saber o nome de uma técnica é ganhar um jeito de atacar
-problemas novos: em vez de inventar do zero, você pergunta "isso se divide em
-pedaços iguais menores?" ou "dá para decidir um passo de cada vez, sem voltar
-atrás?".
+Este módulo trata de **técnicas**. Diante de um problema novo, pergunte: "isso
+se divide em pedaços iguais menores?" ou "dá para decidir um passo de cada vez,
+sem voltar atrás?".
 
-A primeira técnica é a **divisão e conquista**: quebrar o problema em pedaços
-do mesmo tipo, resolver cada um com a própria função e combinar as respostas.
-Você já a usou sem esse nome na busca binária, no merge sort e no quick sort.
-Aqui ela calcula potências em O(log n), conta inversões e acha o melhor
-trecho de um vetor em O(n log n).
+A **divisão e conquista** quebra o problema em pedaços do mesmo tipo, resolve
+cada um e combina as respostas, como no merge sort. Aqui ela calcula
+potências em O(log n), conta inversões e acha o melhor trecho de um vetor.
 
-A segunda é a **estratégia gulosa**: escolher, a cada passo, o que parece
-melhor agora, e nunca desfazer. Quando funciona, dá algoritmos curtos e
-rápidos; quando não funciona, erra sem dar nenhum sinal. Por isso o módulo
-insiste em duas habilidades: achar um **contraexemplo** e
-entender o argumento de **troca** que prova que um guloso está certo.
-
-O módulo termina com um projeto: um compactador de arquivos com o
-código de Huffman, que junta heap, árvore binária, bits, arquivos binários e
-TAD num programa só.
+A **estratégia gulosa** escolhe, a cada passo, o que parece melhor e nunca
+desfaz. Quando falha, erra sem avisar; por isso o módulo treina o
+**contraexemplo** e o argumento de **troca**, que prova o critério.
 
 ## O que você vai aprender
 
-- a técnica de **divisão e conquista** (dividir, conquistar, combinar) e a **potência rápida**
-- contar **inversões** pegando carona no merge sort e achar o **subvetor de soma máxima**
-- a ideia dos **algoritmos gulosos**, o **troco** e o contraexemplo das fichas {1, 3, 4}
-- a **seleção de intervalos**: por que "termina primeiro" funciona e os outros critérios falham
-- a **mochila fracionária** e por que o guloso não serve para a mochila 0/1
-- o **código de Huffman**: códigos livres de prefixo montados com um heap de mínimo
-- um **compactador e descompactador** de arquivos que grava bits de verdade
+- **divisão e conquista** e a **potência rápida**
+- **inversões** pelo merge sort e o **subvetor de soma máxima**
+- **algoritmos gulosos**, o **troco** e o contraexemplo das fichas {1, 3, 4}
+- **seleção de intervalos**: "termina primeiro" funciona, outros critérios falham
+- **mochila fracionária** e por que o guloso não serve para a 0/1
+- **código de Huffman**: códigos livres de prefixo com um heap de mínimo
+- um **compactador** de arquivos que grava bits de verdade
 
 ## Antes de começar
 
-Você vai precisar de **recursão** (assuntos 0032 e 0033), do **merge sort**
-(0094), do **`qsort`** com funções de comparação (0050 e 0096), do **heap**
-(0102) e de **arquivos binários** (0068). A análise por recorrência do módulo
-17 (0114 e 0115) explica os custos da divisão e conquista, mas dá para seguir
-sem ela.
+Revise recursão (0032 e 0033), merge sort (0094), `qsort` (0050 e 0096), heap
+(0102) e arquivos binários (0068). Os custos usam as recorrências do módulo
+17 (0114 e 0115).
 
-Os dois últimos assuntos têm um **TAD** na pasta (`huffman.h`,
-`compactador.h`): o exemplo usa só a interface, então abra o `.c` para ver o
-algoritmo. O comando do exemplo compila junto esses `.c` de apoio (como `huffman.c`):
+**Progressão.** Do módulo 18 vem a ordenação, primeiro passo dos gulosos; do
+19, a recursão, aqui sem enumerar tudo. O 21 apresenta a programação
+dinâmica.
+
+Os dois últimos assuntos trazem um TAD na pasta (`huffman.h`,
+`compactador.h`); o comando compila junto o `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/20-dc-e-gulosos/0136-huffman/A271.c ~/LPEDC/20-dc-e-gulosos/0136-huffman/huffman.c -o ~/LPEDC/20-dc-e-gulosos/0136-huffman/A271 && ~/LPEDC/20-dc-e-gulosos/0136-huffman/A271
 ```
 
-Alguns programas do último assunto criam arquivos de teste na pasta em que
-você está no terminal e os apagam no fim. Rode de uma pasta em que você possa
-escrever (a `~/LPEDC` serve).
+O último assunto cria arquivos de teste na pasta atual e os apaga no fim.
 
-Nos gulosos, desconfie: antes de aceitar um critério, tente quebrá-lo com três
-ou quatro casos pequenos no papel. Nos desenhos, verde marca o que foi
-escolhido, cinza o que ficou de fora e vermelho a escolha que deu errado.
+Nos gulosos, tente quebrar o critério com casos pequenos no papel. Nos
+desenhos, verde é o escolhido, cinza o que ficou de fora e vermelho a escolha
+errada.
 
 {{indice}}
 
@@ -187,7 +175,7 @@ Com k símbolos, a árvore pode virar uma "escada" de altura k - 1: para 5
 símbolos, **4 bits**. Frequências como **1, 1, 2, 3, 5** (Fibonacci) fazem
 isso: 1 + 1 = 2; os dois 2 (o nó novo e a folha) se juntam em 4, seja qual
 for o desempate; 3 + 4 = 7; 5 + 7 = 12. Os dois símbolos de frequência 1
-ficam a 4 arestas da raiz. É o caso do E816 em tamanho menor.
+ficam a 4 arestas da raiz. É o caso do exercício E815, em tamanho menor.
 
 </details>
 

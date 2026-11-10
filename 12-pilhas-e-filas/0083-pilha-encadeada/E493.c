@@ -1,10 +1,12 @@
 // 0083 · Pilha encadeada
 // Exercício E493 · ★☆☆
 //
-// Você não enxerga os nós da pilha (o tipo é opaco), mas dá para acompanhar
-// o que acontece com as funções do pilha.h. Complete a função estado: ela
-// mostra quantos itens a pilha tem e quem está no topo, ou "[vazia]". O main
-// já chama estado depois de cada operação.
+// Escreva void estado(const Pilha *p), que mostra a pilha do pilha.h só com a
+// interface: "[N itens, topo X]" (com "item" no singular quando N é 1) ou
+// "[vazia]". No main, empilhe 3 e mostre o estado; empilhe 8 e mostre; desempilhe
+// e mostre "saiu X -> " seguido do estado; empilhe 5 e mostre; empilhe 9 e
+// mostre; e então esvazie a pilha num laço, mostrando "saiu X -> " e o estado a
+// cada passo.
 //
 //   Saída esperada:
 //   [1 item, topo 3]
@@ -16,39 +18,12 @@
 //   saiu 5 -> [1 item, topo 3]
 //   saiu 3 -> [vazia]
 //
-// Escreva sua resposta abaixo (complete estado):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "pilha.h"
 
-void estado(const Pilha *p) {
-    (void)p; // apague esta linha quando usar p
-    printf("\n");
-}
-
 int main(void) {
-    Pilha *p = pilha_cria();
-    if (p == NULL) {
-        return 1;
-    }
-    int x;
 
-    pilha_empilha(p, 3);
-    estado(p);
-    pilha_empilha(p, 8);
-    estado(p);
-    pilha_desempilha(p, &x);
-    printf("saiu %d -> ", x);
-    estado(p);
-    pilha_empilha(p, 5);
-    estado(p);
-    pilha_empilha(p, 9);
-    estado(p);
-    while (pilha_desempilha(p, &x)) {
-        printf("saiu %d -> ", x);
-        estado(p);
-    }
-
-    pilha_libera(p);
     return 0;
 }

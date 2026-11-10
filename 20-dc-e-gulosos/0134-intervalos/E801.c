@@ -28,10 +28,6 @@ typedef struct {
 } Pedido;
 
 int main(void) {
-    Pedido p[] = {{0, 10}, {1, 4}, {4, 7}, {7, 10}, {3, 5}, {6, 8}, {10, 12}};
-    int n = 7;
-    (void)p;
-    (void)n;
 
     return 0;
 }

@@ -1,42 +1,25 @@
 // 0104 · Juntando tudo
 // Exercício E619 · ★☆☆
 //
-// A academia dá um brinde para quem treinou pelo menos 10 vezes no mês.
-// Complete conta_brinde(r), que percorre o cadastro e conta esses alunos, e
-// mostra_brinde(r), que imprime o nome deles em ordem de matrícula.
+// A academia dá um brinde a quem treinou pelo menos 10 vezes no mês. Com o
+// TAD cadastro.h, insira estes alunos (matrícula, nome, treinos):
+//
+//   {50, "Ana", 12}, {30, "Bruno", 8}, {70, "Carla", 15}, {20, "Davi", 4},
+//   {40, "Eva", 20}, {60, "Fabio", 9}, {80, "Gil", 11}
+//
+// Escreva conta_brinde(r), que conta esses alunos, e mostra_brinde(r), que
+// imprime o nome deles em ordem de matrícula.
 //
 //   Saída esperada:
 //   Ganham brinde: Eva Ana Carla Gil
 //   Total: 4
 //
-// Escreva sua resposta abaixo (complete as duas funções):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "cadastro.h"
 
-int conta_brinde(const NoAluno *r) {
-    (void)r; // apague esta linha
-    return 0;
-}
-
-void mostra_brinde(const NoAluno *r) {
-    (void)r; // apague esta linha
-}
-
 int main(void) {
-    Aluno turma[] = {
-        {50, "Ana", 12}, {30, "Bruno", 8}, {70, "Carla", 15}, {20, "Davi", 4},
-        {40, "Eva", 20}, {60, "Fabio", 9}, {80, "Gil", 11},
-    };
-    NoAluno *cad = NULL;
-    for (int i = 0; i < 7; i++) {
-        cad = cad_insere(cad, turma[i]);
-    }
 
-    printf("Ganham brinde:");
-    mostra_brinde(cad);
-    printf("\nTotal: %d\n", conta_brinde(cad));
-
-    cad = cad_libera(cad);
     return 0;
 }

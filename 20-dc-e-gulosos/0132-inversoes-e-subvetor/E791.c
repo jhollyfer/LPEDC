@@ -19,10 +19,6 @@
 #include <stdio.h>
 
 int main(void) {
-    int preco[] = {40, 18, 25, 9, 30, 12, 50, 20};
-    int n = 8;
-    (void)preco;
-    (void)n;
 
     return 0;
 }

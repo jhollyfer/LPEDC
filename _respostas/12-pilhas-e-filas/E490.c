@@ -1,10 +1,5 @@
 // 0082 · Pilha
 // Exercício E490 · ★★☆
-//
-// Resposta: o teste de cheia comparava topo com CAPACIDADE. Com a convenção
-// topo = -1 para vazia, o topo é o índice do último item, então a pilha
-// enche quando topo == CAPACIDADE - 1. Com o bug, a quinta bandeja ia para
-// itens[4], fora do vetor, em cima do campo topo (que virava 5).
 
 #include <stdbool.h>
 #include <stdio.h>

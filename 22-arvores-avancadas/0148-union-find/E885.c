@@ -1,11 +1,14 @@
 // 0148 · Union-find
 // Exercício E885 · ★★☆
 //
-// O técnico ligou os 7 computadores do escritório (0 a 6) com 9 cabos, na
-// ordem do vetor. Um cabo é redundante quando liga dois computadores que JÁ
-// conversavam por outros cabos (ele fecha um ciclo). Com o TAD (uniao.h),
-// mostre cada cabo redundante, quantos cabos bastariam e se a rede ficou toda
-// ligada.
+// O técnico ligou os 7 computadores do escritório (0 a 6) com 9 cabos, nesta
+// ordem:
+//
+//   0-1 1-2 3-4 2-0 4-5 5-6 1-4 6-3 2-5
+//
+// Um cabo é redundante quando liga dois computadores que JÁ conversavam por
+// outros cabos (ele fecha um ciclo). Com o TAD (uniao.h), mostre cada cabo
+// redundante, quantos cabos bastariam e se a rede ficou toda ligada.
 //
 //   Saída esperada:
 //   cabo 4 (2-0) é redundante
@@ -19,11 +22,6 @@
 #include "uniao.h"
 
 int main(void) {
-    // cabos do escritório: cada par liga dois computadores (0 a 6)
-    int cabos[][2] = {{0, 1}, {1, 2}, {3, 4}, {2, 0}, {4, 5}, {5, 6}, {1, 4}, {6, 3}, {2, 5}};
-    int n = 9;
-    (void)cabos; // apague estas duas linhas
-    (void)n;
 
     return 0;
 }

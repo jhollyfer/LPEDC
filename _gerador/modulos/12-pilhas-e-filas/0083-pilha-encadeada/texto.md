@@ -1,18 +1,16 @@
 ## 0083 · Pilha encadeada
 
-Na planilha do orçamento, a célula B2 começou em R$ 1500 e você mudou para
-1800, 2100 e 2500. Agora aperta Ctrl+Z duas vezes. A planilha não sabe quantas
-vezes você vai editar: pode ser 3, pode ser 3 mil. Uma pilha com
-`CAPACIDADE 100` fixa não serve.
+Na planilha, a célula B2 foi de R$ 1500 para 1800, 2100 e 2500, e você aperta
+Ctrl+Z duas vezes. Ninguém sabe quantas edições virão: uma pilha com
+`CAPACIDADE 100` não serve.
 
-A pilha do 0082 tem um teto porque mora num vetor. A saída é guardar cada item
-num **nó** alocado com `malloc`, como na lista encadeada do módulo 11. A pilha
-cresce um nó por vez e só "enche" quando acaba a memória.
+A pilha do 0082 tem teto porque mora num vetor. Aqui cada item fica num **nó**
+alocado com `malloc`, como na lista do módulo 11, e a pilha só "enche" quando
+acaba a memória.
 
-A decisão central é **onde fica o topo: no começo ou no fim da lista?** No
-começo. Inserir e remover no início de uma lista simples custa O(1): você
-mexe só no ponteiro de entrada. No fim, para remover o último você precisaria
-achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
+O topo fica no **começo** da lista: inserir e remover no início custa O(1),
+pois só o ponteiro de entrada muda. Remover do fim exigiria achar o
+**penúltimo**, e isso percorre a lista inteira, O(n).
 
 - **empilhar** = inserir no início: o novo nó aponta para o antigo topo, e o
   topo passa a ser o novo;
@@ -20,10 +18,9 @@ achar o **penúltimo**, e isso exige percorrer a lista inteira, O(n). Então:
   o nó velho;
 - **vazia** = `topo == NULL`.
 
-O [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do 0082. Só o
-[`pilha.c`](0083-pilha-encadeada/pilha.c) mudou, e o programa do delivery do
-0082 roda com esta implementação sem mudar uma vírgula: é o ganho do TAD.
-Por dentro, a struct agora guarda um ponteiro:
+O [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do 0082; só o
+[`pilha.c`](0083-pilha-encadeada/pilha.c) muda, e o programa do delivery roda
+sem alteração. A struct agora guarda um ponteiro:
 
 ```c
 typedef struct no {
@@ -61,8 +58,8 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 }
 ```
 
-Antes de cada edição, o valor antigo da B2 vai para a pilha: 1500, depois 1800, depois 2100. O último a entrar, 2100, fica no
-primeiro nó, e é ele que o primeiro Ctrl+Z devolve:
+Antes de cada edição, o valor antigo da B2 vai para a pilha: 1500, 1800 e
+2100. O 2100 fica no primeiro nó e o primeiro Ctrl+Z o devolve:
 
 {{ideia}}
 
@@ -106,32 +103,26 @@ int main(void) {
 // Ainda dá para desfazer 1 vez(es)
 ```
 
-No fluxograma do empilhar o 2100, a ordem das duas ligações importa: primeiro
-o novo nó aponta para o topo antigo, só depois o topo muda:
+Ao empilhar o 2100, o novo nó aponta primeiro para o topo antigo; só depois o
+topo muda:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Troque a ordem e você perde a pilha inteira. Se fizer `p->topo = novo`
-> antes de `novo->prox = p->topo`, o novo nó aponta para **ele mesmo**, e os
-> nós 1800 e 1500 ficam sem ninguém apontando para eles: vazamento de memória
-> e uma pilha que só tem o 2100 em loop. No desempilhar, o perigo é o
-> contrário: ler `velho->valor` **depois** do `free(velho)` é usar memória
-> liberada, e o AddressSanitizer acusa `heap-use-after-free`.
+> Trocar a ordem destrói a pilha. Com `p->topo = novo` antes de
+> `novo->prox = p->topo`, o novo nó aponta para **ele mesmo** e os nós 1800 e
+> 1500 ficam inalcançáveis (vazamento de memória). No desempilhar, ler
+> `velho->valor` **depois** do `free(velho)` usa memória liberada, e o
+> AddressSanitizer acusa `heap-use-after-free`.
 
 > [!TIP]
-> **Por dentro do C:** cada nó ocupa 16 bytes num sistema de 64 bits (4 do
-> `int`, 4 de **preenchimento** e 8 do ponteiro, como no 0076), mais o
-> controle interno do `malloc`, para guardar 4 bytes de dado. O vetor do 0082
-> gasta 4 bytes por item, todos juntos na memória, o que favorece o cache. A
-> encadeada troca espaço e velocidade por **não ter teto**. E todo `malloc` do
-> empilhar precisa de um `free`: por isso `pilha_libera` percorre a lista
-> toda antes de liberar a struct.
+> Cada nó ocupa 16 bytes em 64 bits (4 do `int`, 4 de preenchimento e 8 do
+> ponteiro, como no 0076), contra 4 por item no vetor. A encadeada troca
+> espaço por não ter teto.
 
 > [!NOTE]
 > **Pergunta para você:** no programa da planilha, se o laço do Ctrl+Z
 > rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual
 > seria o último valor de B2? Siga a lista do desenho antes de rodar.
-
 
 {{pratique}}

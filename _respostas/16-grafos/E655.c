@@ -15,7 +15,7 @@ int main(void) {
         {0, 0, 1, 0, 0, 1},
         {0, 0, 0, 1, 1, 0},
     };
-    int dist[V], pai[V], fila[V], inicio = 0, fim = 0;
+    int dist[V], pai[V], fila[V], inicio = 0, fim = 0, primeiro = 1;
     for (int v = 0; v < V; v++) {
         dist[v] = -1;
         pai[v] = -1;
@@ -25,7 +25,8 @@ int main(void) {
     fila[fim++] = 3;
     while (inicio < fim) {
         int u = fila[inicio++];
-        printf("%s(%d) ", nomes[u], dist[u]);
+        printf("%s%s(%d)", primeiro ? "" : " ", nomes[u], dist[u]);
+        primeiro = 0;
         for (int v = 0; v < V; v++) {
             if (adj[u][v] && dist[v] == -1) {
                 dist[v] = dist[u] + 1;

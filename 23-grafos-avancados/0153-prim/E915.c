@@ -1,11 +1,17 @@
 // 0153 · Prim: a árvore que cresce
 // Exercício E915 · ★★☆
 //
-// Mesmas seis estações de bicicleta do E914. A pergunta agora é: começar o
-// Prim por outra estação muda alguma coisa? Escreva a função
-// prim(origem), na versão sem heap (O(V²)), que mostra a origem, a ordem
-// em que as estações entram na rede e o total, e chame-a para cada uma das
-// seis origens.
+// Seis estações de bicicleta (índices 0 a 5: Rodoviária, Praça, Museu, Orla,
+// Feira e Estádio) podem ser ligadas por ciclovias de mão dupla, com a
+// distância em km:
+//
+//   Rodoviária-Praça 5   Rodoviária-Feira 3   Praça-Museu 4   Praça-Feira 6
+//   Museu-Orla 2         Feira-Orla 7         Orla-Estádio 8  Museu-Estádio 9
+//   Feira-Estádio 10
+//
+// Começar o Prim por outra estação muda alguma coisa? Escreva prim(origem), na
+// versão sem heap (O(V²)), que mostra a origem, a ordem em que as estações
+// entram na rede e o total, e chame-a para cada uma das seis origens.
 //
 //   Saída esperada:
 //   Rodoviária: Rodoviária Feira Praça Museu Orla Estádio | 22
@@ -15,30 +21,15 @@
 //   Feira: Feira Rodoviária Praça Museu Orla Estádio | 22
 //   Estádio: Estádio Orla Museu Praça Rodoviária Feira | 22
 //
-// Escreva sua resposta abaixo (escreva prim):
+// Escreva sua resposta abaixo:
 
 #include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 
-#define V 6
 #define INFINITO INT_MAX
 
-const char *estacoes[V] = {"Rodoviária", "Praça", "Museu", "Orla", "Feira", "Estádio"};
-int dist[V][V];
-
-int prim(int origem) {
-    (void)origem; // apague esta linha
-    return 0;
-}
-
 int main(void) {
-    int trechos[][3] = {{0, 1, 5}, {0, 4, 3}, {1, 2, 4}, {1, 4, 6}, {2, 3, 2},
-                        {4, 3, 7}, {3, 5, 8}, {2, 5, 9}, {4, 5, 10}};
-    for (int k = 0; k < 9; k++) {
-        dist[trechos[k][0]][trechos[k][1]] = trechos[k][2];
-        dist[trechos[k][1]][trechos[k][0]] = trechos[k][2];
-    }
-    for (int origem = 0; origem < V; origem++) prim(origem);
+
     return 0;
 }

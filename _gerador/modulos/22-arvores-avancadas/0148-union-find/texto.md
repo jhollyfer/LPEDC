@@ -1,56 +1,45 @@
 ## 0148 · Union-find: conjuntos disjuntos
 
-A turma do cursinho vai fazer amigo secreto, mas por panelinha: quem se conhece
-fica no mesmo sorteio, e "amigo de amigo" também conta. As amizades chegam aos
-poucos no grupo de mensagens: Ana conhece Beto, Caio conhece Duda, Beto conhece
-Duda... A cada nova amizade, dois grupos podem virar um só. E a qualquer
-momento alguém pergunta: "Ana e Duda caem no mesmo sorteio?".
+Numa turma, quem se conhece (ou é "amigo de amigo") cai no mesmo sorteio de amigo
+secreto. As amizades chegam aos poucos, e alguém pergunta: "Ana e Duda caem no
+mesmo sorteio?".
 
-O problema tem nome: **conjuntos disjuntos**. Os elementos estão divididos em
-grupos que não se misturam, e só existem duas operações:
+São **conjuntos disjuntos**: grupos que não se misturam, com duas operações:
 
 - **acha(x)**: devolve o **representante** do grupo de x, um elemento que
-  responde pelo grupo inteiro. Dois elementos estão juntos se têm o mesmo
-  representante;
+  responde pelo grupo. Dois elementos estão juntos se têm o mesmo representante;
 - **une(a, b)**: junta o grupo de a com o grupo de b.
 
-A estrutura que faz isso é o **union-find**. Cada grupo é uma árvore, e a
-floresta inteira cabe num vetor: `pai[x]` é o pai de x, e a raiz é quem aponta
-para si mesmo (`pai[x] == x`). A raiz é o representante. `acha` sobe pelos
-pais até a raiz; `une` acha as duas raízes e pendura uma na outra. Aqui as
-setas vão do filho para o pai: ninguém precisa descer na árvore.
+O **union-find** guarda cada grupo como uma árvore, e a floresta cabe num vetor:
+`pai[x]` é o pai de x, e a raiz aponta para si mesma (`pai[x] == x`). A raiz é o
+representante. `acha` sobe até a raiz; `une` acha as duas raízes e pendura uma
+na outra.
 
-Do jeito ingênuo, a árvore pode virar uma fila indiana, e `acha` passa a custar
-O(n). Dois truques resolvem:
+Do jeito ingênuo, a árvore vira uma fila e `acha` custa O(n). Dois truques
+resolvem:
 
-1. **união por tamanho**: guarde o tamanho de cada grupo (`tam[raiz]`) e
-   pendure sempre a raiz do grupo **menor** na do maior. Um elemento só desce um
-   nível quando o grupo dele se junta a outro pelo menos do mesmo tamanho, ou
-   seja, quando o grupo pelo menos **dobra**. Isso só acontece log₂ n vezes:
-   a altura nunca passa de log₂ n;
-2. **compressão de caminho**: depois de achar a raiz, `acha` faz todo mundo do
-   caminho apontar **direto** para ela. A próxima busca por qualquer um deles
-   sobe um passo só.
+1. **união por tamanho**: guarde o tamanho de cada grupo (`tam[raiz]`) e pendure
+   a raiz do grupo **menor** na do maior. Um elemento só desce um nível quando o
+   grupo dele pelo menos **dobra**, o que acontece log₂ n vezes no máximo: a
+   altura nunca passa de log₂ n;
+2. **compressão de caminho**: depois de achar a raiz, `acha` faz todo o caminho
+   apontar **direto** para ela.
 
-Com os dois juntos, uma sequência de m operações custa O(m · α(n)), em que α é
-uma função que cresce tão devagar que não passa de 4 para nenhum n que caiba
-num computador. Na prática, cada operação é O(1) amortizado (a ideia de custo
-amortizado é do assunto 0116).
+Com os dois, m operações custam O(m · α(n)), em que α não passa de 4 para nenhum
+n realista: na prática, O(1) amortizado (assunto 0116).
 
-O Cormen chama as operações de `MAKE-SET`, `FIND-SET` e `UNION` e, em vez do
-tamanho, usa a **união por posto** (*rank*): cada raiz guarda um limite
-superior da altura e só ganha 1 quando duas raízes de mesmo posto se juntam.
-A garantia é a mesma, O(m · α(n)), e é essa estrutura que o Kruskal (0152)
-usa.
+O Cormen chama as operações de `MAKE-SET`, `FIND-SET` e `UNION` e usa a **união
+por posto** (*rank*): cada raiz guarda um limite superior da altura, que só
+ganha 1 quando duas raízes de mesmo posto se juntam. A garantia é a mesma, e o
+Kruskal (0152) usa essa estrutura.
 
-No exemplo, são oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades. No
-fim sobram dois grupos: {Ana, Beto, Caio, Duda} e {Edu, Fia, Gui, Hugo}. Duda e
-Hugo estão a dois passos da raiz; as perguntas sobre eles comprimem o caminho e
-os deixam pendurados direto no representante:
+No exemplo, oito colegas, de 0 (Ana) a 7 (Hugo), e sete amizades deixam dois
+grupos: {Ana, Beto, Caio, Duda} e {Edu, Fia, Gui, Hugo}. Duda e Hugo estão a dois
+passos da raiz até as perguntas comprimirem o caminho:
 
 {{ideia}}
 
-O `acha` e o `une` do `uniao.c`:
+`uf_acha` e `uf_une`, em `uniao.c`:
 
 ```c
 int uf_acha(UF *u, int x) {
@@ -84,7 +73,7 @@ bool uf_une(UF *u, int a, int b) {
 }
 ```
 
-O cliente registra as amizades e mostra o vetor `pai` depois de cada uma:
+O cliente registra as amizades e mostra `pai` depois de cada uma:
 
 ```c
 #include <stdio.h>
@@ -125,39 +114,27 @@ int main(void) {
 // Depois das buscas, pai: 0 0 0 0 4 4 4 4
 ```
 
-Em "Beto e Duda", as raízes são 0 (Ana, grupo de 2) e 2 (Caio, grupo de 2).
-Empate: a raiz de a continua raiz, e o Caio vai para baixo da Ana, levando a
-Duda junto. A Duda fica a dois passos da raiz até a pergunta "Ana e Duda?"
-subir por ela e comprimir o caminho.
+Em "Beto e Duda", as raízes são 0 (Ana) e 2 (Caio), ambos com grupo de 2. No
+empate, a raiz de a continua raiz: Caio vai para baixo da Ana, com a Duda.
 
-O fluxograma acompanha o `uf_une` de "Fia e Hugo". As raízes são 4 (Edu) e 6
-(Gui), diferentes; os dois grupos têm tamanho 2, então não há troca, e o Gui
-(com o Hugo embaixo) vira filho do Edu:
+O fluxograma acompanha `uf_une` em "Fia e Hugo". As raízes são 4 (Edu) e 6
+(Gui), com grupos de tamanho 2: sem troca, o Gui (com o Hugo) vira filho do Edu:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O representante é a **raiz**, não o elemento. Três erros vêm daí. Unir com
-> `pai[a] = b` arranca o `a` do grupo dele e leva só os descendentes de `a`
-> junto (é o bug do E887); o certo é `pai[acha(a)] = acha(b)`. Testar `a == b`
-> ou `pai[a] == pai[b]` para saber se estão juntos falha assim que as árvores
-> têm mais de um nível; o teste é `acha(a) == acha(b)`. E `tam[x]` só vale na
-> raiz: num elemento que já foi raiz, ele guarda o tamanho antigo do grupo.
+> O representante é a **raiz**, não o elemento. Unir com `pai[a] = b` arranca o
+> `a` do grupo e leva só os descendentes dele; o certo é
+> `pai[acha(a)] = acha(b)`. Testar `a == b` ou `pai[a] == pai[b]` falha com mais
+> de um nível; o teste é `acha(a) == acha(b)`. E `tam[x]` só vale na raiz.
 
 > [!TIP]
-> **Por dentro do C:** a floresta inteira são dois vetores de `int`, sem um
-> ponteiro sequer: 8 bytes por elemento, 8 MB para um milhão de pessoas, tudo
-> contíguo na memória, o que favorece o cache do processador. Veja a assinatura
-> `int uf_acha(UF *u, int x)`: sem `const`, porque **consultar modifica** a
-> estrutura (a compressão reescreve `pai`). Até `uf_juntos`, que parece só uma
-> pergunta, mexe no vetor. O A295 mede o efeito dos truques: com 10 mil
-> elementos, a versão ingênua sobe 50 milhões de vezes pelos pais; com união por
-> tamanho, nenhuma vez durante as uniões.
+> `uf_acha` não tem `const`: **consultar modifica** a estrutura, porque a
+> compressão reescreve `pai`.
 
 > [!NOTE]
 > **Pergunta para você:** depois de tudo, Ana e Hugo ficam amigos:
-> `uf_une(turma, 0, 7)`. Os dois grupos têm 4 pessoas. Quem vira a raiz do
-> grupo único e como fica o vetor `pai`? Acrescente a linha no exemplo e
-> confira.
+> `uf_une(turma, 0, 7)`. Os dois grupos têm 4 pessoas. Quem vira a raiz do grupo
+> único e como fica o vetor `pai`? Acrescente a linha no exemplo e confira.
 
 {{pratique}}

@@ -1,17 +1,17 @@
 // 0155 · Floyd-Warshall: todos os pares
 // Exercício E927 · ★★☆
 //
-// A prefeitura vai construir um posto de saúde num dos seis bairros. O
-// critério: o morador que fica mais longe do posto deve ficar o mais perto
-// possível. As ruas são de mão dupla (km):
+// A prefeitura vai construir um posto de saúde num dos seis bairros (índices 0
+// a 5: Vila Rica, Jardim, Centro, Lagoa, Bosque e Porto). O morador que fica
+// mais longe do posto deve ficar o mais perto possível. As ruas são de mão
+// dupla (km):
 //
 //   Vila Rica-Jardim 4, Jardim-Centro 3, Centro-Lagoa 5, Lagoa-Bosque 2,
 //   Centro-Bosque 6, Bosque-Porto 7, Jardim-Lagoa 9, Vila Rica-Porto 20
 //
-// Escreva o programa: rode o Floyd-Warshall e, para cada bairro, mostre
-// qual bairro fica mais longe dele e a que distância (a primeira maior, em
-// ordem de índice). No fim, mostre o bairro em que essa pior distância é a
-// menor.
+// Rode o Floyd-Warshall e, para cada bairro, mostre qual bairro fica mais longe
+// dele e a que distância (o primeiro com a maior, em ordem de índice). No fim,
+// mostre o bairro em que essa pior distância é a menor.
 //
 //   Saída esperada:
 //   Vila Rica: o mais longe é Porto, a 20 km
@@ -26,15 +26,9 @@
 
 #include <stdio.h>
 
-#define V 6
 #define INFINITO 1000000000
 
 int main(void) {
-    const char *bairros[V] = {"Vila Rica", "Jardim", "Centro", "Lagoa", "Bosque", "Porto"};
-    int ruas[][3] = {{0, 1, 4}, {1, 2, 3}, {2, 3, 5}, {3, 4, 2},
-                     {2, 4, 6}, {4, 5, 7}, {1, 3, 9}, {0, 5, 20}};
-    (void)bairros; // apague estas duas linhas
-    (void)ruas;
 
     return 0;
 }

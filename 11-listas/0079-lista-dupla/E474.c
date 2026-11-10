@@ -10,13 +10,11 @@
 // onde letra insere na posição do cursor, '<' anda uma letra para a
 // esquerda, '>' anda para a direita e '#' apaga a letra à esquerda do
 // cursor (o backspace). Nas pontas, '<', '>' e '#' não fazem nada. No fim,
-// mostre o texto com uma '|' onde está o cursor.
+// mostre o texto com uma '|' onde está o cursor. Use uma lista dupla de
+// letras, com a struct escrita por você.
 //
 //   Saída esperada:
 //   texto: programa|
-//
-// Escreva tudo neste arquivo, com uma struct sua (por exemplo
-// struct letra { char c; struct letra *ant, *prox; }).
 //
 // Escreva sua resposta abaixo:
 

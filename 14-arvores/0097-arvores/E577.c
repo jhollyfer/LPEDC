@@ -1,8 +1,7 @@
 // 0097 · Árvores
 // Exercício E577 · ★☆☆
 //
-// O site de uma loja organiza os produtos em categorias, e o main já monta
-// esta árvore:
+// O site de uma loja organiza os produtos em categorias:
 //
 //   loja
 //   ├── eletronicos
@@ -14,10 +13,10 @@
 //   │   └── cozinha
 //   └── moda
 //
-// Complete a função ficha, que imprime uma linha por categoria, recuada 2
-// espaços por nível, com a profundidade, o grau e a palavra "folha" quando o
-// nó não tem filhos. Depois o main imprime a altura da árvore (a função
-// altura já está pronta):
+// Escreva as funções novo, adiciona(pai, nome), altura e libera, monte a
+// árvore no main e escreva ficha(n, prof), que imprime uma linha por
+// categoria, recuada 2 espaços por nível, com a profundidade, o grau e a
+// palavra "folha" quando o nó não tem filhos. Por fim, imprima a altura.
 //
 //   Saída esperada:
 //   loja: prof 0, grau 3
@@ -31,7 +30,7 @@
 //     moda: prof 1, grau 0, folha
 //   Altura: 3
 //
-// Escreva sua resposta abaixo (complete ficha):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,58 +44,7 @@ typedef struct No {
     int qtd;
 } No;
 
-No *novo(const char *nome) {
-    No *n = malloc(sizeof(No));
-    if (n == NULL) {
-        exit(1);
-    }
-    strcpy(n->nome, nome);
-    n->qtd = 0;
-    return n;
-}
-
-No *adiciona(No *pai, const char *nome) {
-    No *filho = novo(nome);
-    pai->filhos[pai->qtd++] = filho;
-    return filho;
-}
-
-int altura(const No *n) {
-    int maior = -1;
-    for (int i = 0; i < n->qtd; i++) {
-        int h = altura(n->filhos[i]);
-        if (h > maior) {
-            maior = h;
-        }
-    }
-    return maior + 1;
-}
-
-void libera(No *n) {
-    for (int i = 0; i < n->qtd; i++) {
-        libera(n->filhos[i]);
-    }
-    free(n);
-}
-
-void ficha(const No *n, int prof) {
-    (void)n; // apague estas duas linhas quando escrever a função
-    (void)prof;
-}
-
 int main(void) {
-    No *loja = novo("loja");
-    No *eletronicos = adiciona(loja, "eletronicos");
-    No *casa = adiciona(loja, "casa");
-    adiciona(loja, "moda");
-    adiciona(eletronicos, "celulares");
-    No *tvs = adiciona(eletronicos, "tvs");
-    adiciona(tvs, "oled");
-    adiciona(tvs, "led");
-    adiciona(casa, "cozinha");
 
-    ficha(loja, 0);
-    printf("Altura: %d\n", altura(loja));
-    libera(loja);
     return 0;
 }

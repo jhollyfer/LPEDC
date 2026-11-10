@@ -1,11 +1,16 @@
 // 0149 · Juntando tudo
 // Exercício E892 · ★★☆
 //
-// O revisor quer um relatório: cada palavra fora do dicionário, em ordem
-// alfabética, com quantas vezes ela apareceu no texto. Guarde as palavras
-// desconhecidas numa BST de strings (assunto 0099) com um contador no nó:
-// palavra repetida soma 1 em vezes. No fim, um percurso em ordem imprime o
-// relatório e conta as palavras diferentes e as ocorrências.
+// O revisor quer um relatório das palavras fora do dicionário básico
+// (corretor.h) deste texto, em ordem alfabética, com quantas vezes cada uma
+// apareceu:
+//
+//   hoje a fiera tem pao barato e cafe barato mas ontem a fiera tinha pao
+//   caro e o onibus pasou cedo
+//
+// Guarde as desconhecidas numa BST de strings (assunto 0099) com um contador no
+// nó: palavra repetida soma 1. No fim, um percurso em ordem imprime o relatório
+// e conta as palavras diferentes e as ocorrências.
 //
 //   Saída esperada:
 //   cedo: 1
@@ -22,9 +27,6 @@
 #include "corretor.h"
 
 int main(void) {
-    const char *texto = "hoje a fiera tem pao barato e cafe barato mas ontem a fiera "
-                        "tinha pao caro e o onibus pasou cedo";
-    (void)texto; // apague esta linha
 
     return 0;
 }

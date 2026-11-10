@@ -23,13 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define N 6
-
 int main(void) {
-    const char *meu[N] = {"Feijoada", "Moqueca", "Coxinha", "Acarajé", "Pastel", "Pão de queijo"};
-    const char *dela[N] = {"Moqueca", "Coxinha", "Feijoada", "Pão de queijo", "Acarajé", "Pastel"};
-    (void)meu;
-    (void)dela;
 
     return 0;
 }

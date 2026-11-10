@@ -1,11 +1,9 @@
 // 0103 · Heapsort
 // Exercício E618 · ★★★
 //
-// A organização da corrida quer a lista dos inscritos em ordem alfabética.
-// Escreva do zero um heapsort para um vetor de strings (const char *),
-// comparando com strcmp, e ordene:
-//
-//   Nomes: Paula Bruno Zeca Ana Marcos Carla Igor Beatriz
+// A organização da corrida quer os inscritos em ordem alfabética. Escreva um
+// heapsort para um vetor de strings (const char *), comparando com strcmp, e
+// ordene: Paula, Bruno, Zeca, Ana, Marcos, Carla, Igor, Beatriz.
 //
 //   Saída esperada:
 //   Ana
@@ -23,8 +21,6 @@
 #include <string.h>
 
 int main(void) {
-    const char *nomes[] = {"Paula", "Bruno", "Zeca", "Ana", "Marcos", "Carla", "Igor", "Beatriz"};
-    (void)nomes; // apague esta linha
 
     return 0;
 }

@@ -1,57 +1,43 @@
 ## 0109 · Grafos
 
 A prefeitura inaugurou cinco ciclovias ligando Centro, Praia, Feira, Parque e
-Estádio. Você quer um app que responda: de onde dá para ir direto para onde?
-Qual ponto tem mais ligações? Dá para chegar no Estádio saindo da Praia?
+Estádio. De onde dá para ir direto para onde? Qual ponto tem mais ligações?
 
-Lista não serve: ela é uma fila indiana, cada item tem um próximo. Árvore
-também não: cada nó tem um pai só e não existe volta. Aqui o Centro liga na
-Praia **e** na Feira, e a Praia liga de volta na Feira, fechando um triângulo.
-Para isso existe o **grafo**.
+Lista é fila indiana, e árvore tem um pai só e nenhuma volta. Aqui o Centro
+liga na Praia **e** na Feira, e a Praia liga na Feira, fechando um triângulo.
+Para isso existe o **grafo**: **vértices** (os pontos) e **arestas** (as
+ligações entre pares de pontos). Toda árvore é um grafo, mas um grafo pode
+ter ciclos e partes soltas. O Cormen escreve **G = (V, E)** e usa V e E também
+para as quantidades, de onde vêm o Θ(V²) e o Θ(V + E) deste módulo.
 
-Um grafo é um conjunto de **vértices** (os pontos) e de **arestas** (as
-ligações entre pares de pontos). Aqui os vértices são os cinco lugares e as
-arestas, as cinco ciclovias. Toda árvore é um grafo, mas um grafo pode ter
-ciclos e partes soltas. O Cormen escreve **G = (V, E)** e usa V e E também
-para as quantidades: é daí que vêm o Θ(V²) e o Θ(V + E) deste módulo.
+Vocabulário:
 
-O vocabulário do módulo:
-
-- **vizinhos** (ou adjacentes): dois vértices ligados por uma aresta;
+- **vizinhos** (adjacentes): vértices ligados por uma aresta;
 - **grau**: quantas arestas tocam o vértice (a Feira tem grau 3);
-- **caminho**: uma sequência de vértices vizinhos (Praia, Feira, Parque);
-- **ciclo**: um caminho que volta ao começo (Centro, Praia, Feira, Centro);
+- **caminho**: sequência de vértices vizinhos (Praia, Feira, Parque);
+- **ciclo**: caminho que volta ao começo (Centro, Praia, Feira, Centro);
 - **conexo**: dá para ir de qualquer vértice a qualquer outro.
 
-Se a ligação tem mão única, o grafo é **dirigido** e cada aresta vira uma seta
-(seguir alguém no Instagram não obriga a pessoa a seguir de volta). Aí cada
-vértice tem **grau de saída** e **grau de entrada**, e a soma dos graus de
-saída é o número de arestas. Se a aresta carrega um número, como minutos ou
-reais, o grafo é **ponderado** (com peso). As ciclovias valem nos dois
-sentidos e ainda não têm peso.
+Com mão única, o grafo é **dirigido**: cada aresta é uma seta, e cada vértice
+tem **grau de saída** e **grau de entrada** (a soma dos graus de saída é o
+número de arestas). Com um número na aresta (minutos, reais), é **ponderado**.
+As ciclovias valem nos dois sentidos e não têm peso.
 
-No C, vértice é um **número de 0 a V-1**. O nome fica num vetor à parte
-(`nomes[2]` é `"Feira"`). Para guardar as arestas existem duas representações
-clássicas:
+No C, vértice é um **número de 0 a V-1**, e os nomes ficam num vetor à parte
+(`nomes[2]` é `"Feira"`). Há duas representações clássicas:
 
-- **matriz de adjacência**: `int adj[V][V]`, com `adj[i][j] = 1` quando existe
-  aresta de `i` para `j`. Perguntar "i e j são vizinhos?" custa O(1). Listar os
-  vizinhos de `i` custa O(V), porque você varre a linha inteira.
-- **lista de adjacência**: um vetor de V listas encadeadas; a lista de `i`
-  guarda só os vizinhos de `i`. Ocupa O(V + E) (E é o número de arestas) e
-  listar os vizinhos custa só o grau.
+- **matriz de adjacência**: `int adj[V][V]`, com `adj[i][j] = 1` quando há
+  aresta de `i` para `j`. Perguntar "i e j são vizinhos?" custa O(1); listar
+  os vizinhos de `i` custa O(V), a linha inteira.
+- **lista de adjacência**: um vetor de V listas encadeadas, a de `i` com só os
+  vizinhos de `i`. Ocupa O(V + E) e listar os vizinhos custa o grau.
 
-Uma rede social guarda, para cada usuário, a lista de quem ele segue: uma
-lista de adjacência. O C não traz nenhuma das duas pronta: ou você aloca a
-matriz, ou monta as listas com `malloc`.
-
-Cada ciclovia liga um 1 em **duas** casas da matriz,
-`adj[a][b]` e `adj[b][a]`, por isso a matriz de um grafo não dirigido é
-espelhada na diagonal. A Feira tem três vizinhos, e a linha 2 tem três 1:
+Cada ciclovia marca `adj[a][b]` e `adj[b][a]`: a matriz de um grafo não
+dirigido é simétrica. A Feira tem três vizinhos, e a linha 2 tem três 1:
 
 {{ideia}}
 
-No código, as arestas entram como pares e o grau sai somando cada linha:
+As arestas entram como pares, e o grau sai da soma de cada linha:
 
 ```c
 #include <stdio.h>
@@ -98,39 +84,30 @@ int main(void) {
 // Soma dos graus: 10 = 2 x 5 ciclovias
 ```
 
-O programa primeiro monta a estrutura (uma volta por aresta, marcando os dois
-sentidos) e só depois responde perguntas sobre ela. Todo algoritmo de grafo
-deste módulo segue essa ordem:
+Primeiro monta-se a estrutura, depois respondem-se as perguntas; todo
+algoritmo do módulo segue essa ordem:
 
 {{fluxograma}}
 
-Na última linha da saída, cada aresta encosta em dois vértices e soma 1 no
-grau de cada um, então a soma dos graus é sempre o dobro do número de
-arestas. Serve de teste rápido: soma ímpar indica um sentido esquecido.
+Cada aresta soma 1 no grau de dois vértices: a soma dos graus é o dobro do
+número de arestas, e soma ímpar indica um sentido esquecido.
 
-O exemplo A217 guarda na matriz o tamanho de cada estrada em vez do 1 (um
-grafo ponderado) e mostra um vértice isolado, de linha toda zerada. O A218
-mostra a outra representação, a lista de adjacência, como um TAD
-(`grafo.h` + `grafo.c`) e com arestas dirigidas: quem segue quem.
+O exemplo A217 guarda o tamanho de cada estrada na matriz (grafo ponderado); o
+A218 usa a lista de adjacência como TAD (`grafo.h` e `grafo.c`), com arestas
+dirigidas.
 
 > [!WARNING]
 > Em grafo não dirigido, a aresta entra **nos dois sentidos**: `adj[a][b] = 1`
-> e `adj[b][a] = 1`. Esquecer um deles cria um grafo dirigido sem querer: o
-> Centro "vai" para a Praia, mas a Praia não volta. O compilador não reclama;
-> o erro aparece mais tarde, quando a busca não acha um caminho que existe.
+> e `adj[b][a] = 1`. Esquecer um deles cria um grafo dirigido sem querer, e o
+> erro só aparece quando a busca não acha um caminho que existe.
 
 > [!TIP]
-> **Por dentro do C:** `int adj[5][5]` são 25 `int` seguidos na memória, linha
-> após linha: 100 bytes. Com 100 mil vértices seriam 10¹⁰ casas, 40 GB, quase
-> todas com zero, porque um mapa de ruas real tem poucos vizinhos por esquina.
-> Na lista de adjacência cada aresta vira um nó `{ int destino; No *prox; }`
-> de 16 bytes (4 do `int`, 4 de alinhamento e 8 do ponteiro): com 300 mil
-> arestas, uns 5 MB. Regra prática: grafo pequeno ou denso, matriz; grafo
-> grande e esparso, lista.
+> **Por dentro do C:** `int adj[5][5]` são 25 `int` seguidos (100 bytes). Com
+> 100 mil vértices, a matriz teria 10¹⁰ casas (40 GB), quase todas zero. Regra
+> prática: grafo pequeno ou denso, matriz; grande e esparso, lista.
 
 > [!NOTE]
-> **Pergunta para você:** se a prefeitura abrir uma ciclovia entre Praia e
-> Estádio, quais números da saída mudam? Preveja a nova matriz e a soma dos
-> graus antes de mudar o programa acima.
+> **Pergunta para você:** com uma ciclovia entre Praia e Estádio, quais números
+> da saída mudam?
 
 {{pratique}}

@@ -3,8 +3,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-// Na pasta do assunto basta incluir fila.h e pilha.h (o rodar compila os .c
-// junto). Aqui a resolução inclui as implementações para compilar sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0088-juntando-tudo/fila.c"
 #include "../../12-pilhas-e-filas/0088-juntando-tudo/pilha.c"
 
@@ -19,12 +18,12 @@ bool avalia(Fila *posfixa, int *resultado) {
     int t, a, b;
     while (ok && fila_retira(posfixa, &t)) {
         if (t >= 0) {
-            printf(" %d", t);
+            printf("%d ", t);
             pilha_empilha(val, t);
         } else if (!pilha_desempilha(val, &b) || !pilha_desempilha(val, &a) || (t == DIV && b == 0)) {
             ok = false;
         } else {
-            printf(" %c", t == SOMA ? '+' : t == SUB ? '-' : t == MULT ? '*' : '/');
+            printf("%c ", t == SOMA ? '+' : t == SUB ? '-' : t == MULT ? '*' : '/');
             pilha_empilha(val, t == SOMA ? a + b : t == SUB ? a - b : t == MULT ? a * b : a / b);
         }
     }
@@ -35,11 +34,11 @@ bool avalia(Fila *posfixa, int *resultado) {
 
 void calcula(const char *infixa, Fila *posfixa) {
     int r;
-    printf("%-11s -> ", infixa);
+    printf("%s -> ", infixa);
     if (avalia(posfixa, &r)) {
-        printf(" = %d\n", r);
+        printf("= %d\n", r);
     } else {
-        printf(" fila vazia ou inválida\n");
+        printf("inválida\n");
     }
 }
 

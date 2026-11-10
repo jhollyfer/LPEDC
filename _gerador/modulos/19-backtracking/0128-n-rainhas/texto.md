@@ -1,43 +1,29 @@
 ## 0128 · N-rainhas
 
-No clube de xadrez da praça, o desafio da semana está no quadro: pôr 4
-rainhas num tabuleiro 4 × 4 sem que nenhuma ataque outra. A rainha ataca na
-linha, na coluna e nas duas diagonais, até onde o tabuleiro for. Quantas
-arrumações existem?
+No clube de xadrez, o desafio é pôr 4 rainhas num tabuleiro 4 × 4 sem que uma
+ataque outra (linha, coluna ou diagonal). Quantas arrumações existem?
 
-A força bruta escolheria 4 das 16 casas: 1820 jeitos, quase todos absurdos.
-O primeiro corte vem de graça: duas rainhas na mesma linha se atacam, então
-cada linha tem **exatamente uma** rainha. Basta decidir a coluna da rainha de
-cada linha, e a solução vira um vetor `pos`, com `pos[l]` igual à coluna da
-rainha da linha `l`.
+A força bruta escolheria 4 das 16 casas: 1820 jeitos. Mas duas rainhas na
+mesma linha se atacam, então cada linha tem **exatamente uma**, e a solução é
+um vetor `pos` com a coluna da rainha de cada linha.
 
-O resto é backtracking: a função `rainha(l)` põe a rainha da linha `l`.
-Ela tenta cada coluna `c` e **poda** as casas atacadas pelas rainhas das
-linhas de cima. Se a casa está livre, marca, desce para a linha `l + 1` e,
-na volta, desmarca. Se nenhuma coluna serve, a função termina, e quem a
-chamou passa para a próxima coluna: é o retrocesso.
+`rainha(l)` tenta cada coluna `c` e **poda** as casas atacadas pelas rainhas
+de cima; se a casa está livre, marca, desce para a linha `l + 1` e desmarca na
+volta. Para testar o ataque em O(1), cada casa `(l, c)` tem um índice de
+coluna e de diagonais:
 
-O ganho vem de testar o ataque em O(1), sem varrer as rainhas anteriores.
-Cada casa `(l, c)` pertence a uma coluna e a duas diagonais, e as diagonais
-têm um "endereço" fácil:
+- na diagonal **↗**, `l + c` é igual em todas as casas, de 0 a `2N - 2`;
+- na diagonal **↘**, `l - c` é igual, de `-(N - 1)` a `N - 1`; somar `N - 1`
+  dá um índice válido.
 
-- na diagonal **↗** (sobe para a direita), `l + c` é o mesmo em todas as casas;
-  vai de 0 a `2N - 2`;
-- na diagonal **↘** (desce para a direita), `l - c` é o mesmo; vai de
-  `-(N - 1)` a `N - 1`, então somamos `N - 1` para virar um índice válido.
-
-Três vetores de `bool` guardam o que está ocupado: `coluna[N]`,
-`diag1[2N - 1]` e `diag2[2N - 1]`. Uma casa está livre se as três posições
-dela estão `false`.
-
-O desenho mostra, à esquerda, a primeira solução que o programa acha; no
-meio, o número `l + c` de cada casa; à direita, `l - c + 3`. A rainha da
-linha 1, coluna 3, ocupa a diagonal ↗ número 4 e a diagonal ↘ número 1: as
-casas destacadas ficam proibidas para as outras rainhas:
+Três vetores de `bool` guardam o que está ocupado: `coluna[N]`, `diag1[2N - 1]`
+e `diag2[2N - 1]`. No desenho, à esquerda está a primeira solução; no meio,
+`l + c` de cada casa; à direita, `l - c + 3`. A rainha da linha 1, coluna 3,
+ocupa a diagonal ↗ 4 e a ↘ 1, e as casas destacadas ficam proibidas:
 
 {{ideia}}
 
-O programa mostra cada solução como um tabuleiro e conta as chamadas:
+O programa mostra cada solução como tabuleiro e conta as chamadas:
 
 ```c
 #include <stdbool.h>
@@ -115,34 +101,25 @@ cortou a casa antes de qualquer chamada:
 | 3 | colunas 0 a 3 | todas atacadas: volta; na linha 2, as colunas 2 e 3 também estão atacadas, e a linha 1 já tentou tudo: volta à linha 0 |
 | 0 | coluna 1 | livre: desce, e o caminho 3, 0, 2 fecha a solução 1 |
 
-A rainha da linha 0 na coluna 0 nunca dá certo: a busca gasta 4 chamadas
-(uma na linha 1, duas na linha 2, uma na linha 3) para descobrir isso, e
-depois esquece o galho inteiro.
-
-O fluxograma é o esqueleto do assunto anterior, com um laço pelas colunas no
-lugar de "leva ou não leva":
+A rainha em (0, 0) nunca dá certo: a busca gasta 4 chamadas para descobrir e
+esquece o galho. O fluxograma é o do assunto anterior, com um laço pelas
+colunas no lugar de "leva ou não leva":
 
 {{fluxograma}}
 
 > [!WARNING]
-> O índice da diagonal ↘ é `l - c + N - 1`, e não `l - c`. Para a casa
-> (0, 3), `l - c` vale -3, e `diag2[-3]` escreve **fora** do vetor: o C não
-> confere, o AddressSanitizer acusa e, sem ele, o programa estraga outra
-> variável em silêncio. O outro erro comum é desmarcar só a coluna e esquecer
-> as diagonais: o programa não trava, só acha menos soluções do que devia.
+> O índice da diagonal ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`
+> escreve **fora** do vetor. Outro erro é desmarcar só a coluna e esquecer as
+> diagonais: o programa acha menos soluções do que devia.
 
 > [!TIP]
-> **Por dentro do C:** os três vetores ocupam `N + 2(2N - 1)` bytes, 46 bytes
-> para `N = 8`, e cada teste de ataque são três leituras de memória, em vez de
-> um laço pelas rainhas anteriores. A expressão
-> `coluna[c] = diag1[l + c] = diag2[...] = true` funciona porque a atribuição
-> em C devolve o valor atribuído e é feita da direita para a esquerda. A
-> pilha desce só `N + 1` frames. O que cresce é o número de nós da árvore,
-> mas a poda é tão forte que o 8-rainhas acha as 92 soluções com 2057
-> chamadas, contra 8⁸ = 16.777.216 tabuleiros da força bruta por linha.
+> **Por dentro do C:** cada teste de ataque são três leituras, sem laço pelas
+> rainhas anteriores. A atribuição em cadeia funciona porque, em C, ela devolve
+> o valor atribuído, da direita para a esquerda. O 8-rainhas acha as 92
+> soluções com 2057 chamadas.
 
 > [!NOTE]
-> **Pergunta para você:** troque `N` para 5 e para 6 antes de rodar. Quantas
-> soluções você espera? O número sobe quando o tabuleiro cresce?
+> **Pergunta para você:** com `N` igual a 5 e a 6, quantas soluções você
+> espera? O número sobe sempre que o tabuleiro cresce?
 
 {{pratique}}

@@ -2,8 +2,7 @@
 // Exercício E515 · ★★★
 
 #include <stdio.h>
-// Na pasta do assunto basta #include "fila.h" (o rodar compila o fila.c
-// junto). Aqui a resolução inclui a implementação para compilar sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0086-fila-encadeada/fila.c"
 
 int main(void) {

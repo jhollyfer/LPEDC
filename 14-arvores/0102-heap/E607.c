@@ -1,11 +1,10 @@
 // 0102 · Heap e fila de prioridade
 // Exercício E607 · ★☆☆
 //
-// No heap, a árvore mora no vetor e ninguém guarda ponteiro: os filhos de i
-// estão em 2i + 1 e 2i + 2. Complete a função mostra_filhos(v, n), que, para
-// cada posição do vetor, mostra o valor e quem são os filhos dele (só os que
-// existem, isto é, com índice menor que n). Teste com o heap da triagem
-// depois das seis chegadas:
+// No heap, a árvore mora no vetor: os filhos de i estão em 2i + 1 e 2i + 2.
+// Escreva mostra_filhos(v, n), que, para cada posição, mostra o valor e quem
+// são os filhos (só os que existem, com índice menor que n). Teste com o
+// heap da triagem {90, 70, 30, 40, 50, 20}.
 //
 //   Saída esperada:
 //   v[0] = 90: filhos 70 e 30
@@ -15,17 +14,11 @@
 //   v[4] = 50: folha
 //   v[5] = 20: folha
 //
-// Escreva sua resposta abaixo (complete mostra_filhos):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-void mostra_filhos(const int v[], int n) {
-    (void)v; // apague estas duas linhas quando escrever a função
-    (void)n;
-}
-
 int main(void) {
-    int heap[] = {90, 70, 30, 40, 50, 20};
-    mostra_filhos(heap, 6);
+
     return 0;
 }

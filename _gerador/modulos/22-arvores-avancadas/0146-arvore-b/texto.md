@@ -1,53 +1,43 @@
 ## 0146 · Árvore B: busca, divisão e inserção
 
-A biblioteca municipal pôs o acervo inteiro no computador: milhões de fichas,
-guardadas no disco, porque não cabem na memória. Ler do disco é lento: um HD
-leva uns 10 milissegundos para buscar um bloco, tempo em que o processador faz
-milhões de comparações. Numa AVL com 2 milhões de livros, a busca desce uns 21
-nós, e se cada nó estiver num bloco diferente são 21 idas ao disco. Para o
-disco, **ler poucos nós** importa mais do que comparar pouco.
+O acervo de uma biblioteca tem milhões de fichas no disco. Um HD leva uns 10
+milissegundos por bloco. Numa AVL com 2 milhões de livros, a busca desce uns 21
+nós, e cada nó pode ser uma ida ao disco. Importa **ler poucos nós**.
 
-A **árvore B** resolve isso com nós gordos. Cada nó guarda **várias chaves em
-ordem** e tem um filho a mais do que chaves: com as chaves `[40 70]`, o filho
-0 tem as menores que 40, o filho 1 as que ficam entre 40 e 70, e o filho 2 as
-maiores que 70. É uma BST em que cada nó decide entre muitos caminhos de uma
-vez. Num banco de dados, um nó ocupa um bloco do disco e guarda centenas de
-chaves; a árvore fica com altura 3 ou 4 mesmo com bilhões de registros.
+A **árvore B** usa nós gordos. Cada nó guarda **várias chaves em ordem** e tem
+um filho a mais do que chaves: com `[40 70]`, o filho 0 tem as chaves menores
+que 40, o filho 1 as entre 40 e 70, e o filho 2 as maiores que 70. Num banco de
+dados, um nó ocupa um bloco do disco.
 
-O tamanho do nó é dado pelo **grau mínimo** `t`:
+O **grau mínimo** `t` define o tamanho do nó:
 
 - todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves (a raiz pode ter 1);
 - um nó com `k` chaves que não é folha tem `k + 1` filhos;
 - **todas as folhas ficam no mesmo nível**.
 
-O TAD do curso usa `t = 2`: de 1 a 3 chaves por nó, de 2 a 4 filhos (é a
-chamada árvore 2-3-4). Na vida real, `t` passa de 100. Como cada nó abaixo
-da raiz tem pelo menos `t` filhos, o Cormen prova que uma árvore B com `n`
-chaves tem altura `h ≤ log_t((n + 1) / 2)`.
+O TAD usa `t = 2`: de 1 a 3 chaves por nó, de 2 a 4 filhos (a árvore 2-3-4).
+Como cada nó abaixo da raiz tem pelo menos `t` filhos, a altura de uma árvore B
+com `n` chaves é `h ≤ log_t((n + 1) / 2)` (Cormen).
 
-A **busca** é a da BST com um laço dentro do nó: ande pelas chaves até achar
-uma maior ou igual. Se for igual, achou; senão, desça pelo filho daquela
-posição. Lê um nó por nível: altura + 1 nós no total.
+A **busca** é a da BST com um laço dentro do nó: ande até achar uma chave maior
+ou igual. Se for igual, achou; senão, desça pelo filho daquela posição. Lê um nó
+por nível: altura + 1 nós.
 
-A **inserção** sempre põe a chave numa folha. O problema é a folha cheia. A
-solução é a **divisão**: um nó com `2t - 1` chaves se parte em dois nós de
-`t - 1` chaves, e a **chave do meio sobe** para o pai. Para o pai nunca estar
-cheio nessa hora, o TAD divide **na descida**: todo nó cheio que aparece no
-caminho é dividido antes de a chave descer por ele. Quando a raiz está cheia,
-ela se divide e a chave do meio vira uma raiz nova. A árvore B cresce por
-cima, nunca por baixo, e por isso as folhas continuam todas no mesmo nível.
+A **inserção** põe a chave numa folha. Se a folha está cheia, ocorre a
+**divisão**: o nó com `2t - 1` chaves vira dois nós de `t - 1` chaves, e a
+**chave do meio sobe** para o pai. Para o pai nunca estar cheio, o TAD divide
+**na descida** todo nó cheio do caminho; a raiz cheia se divide e a chave do
+meio vira a raiz nova. A árvore cresce por cima, e as folhas ficam no mesmo
+nível.
 
-No exemplo, o bibliotecário cadastra 11 livros, nesta ordem: 40, 10,
-70, 20, 50, 80, 30, 60, 90, 25 e 85. Quando o 25 chega, a raiz é `[40 70]` e a
-folha do caminho, `[10 20 30]`, está cheia: ela se divide, o 20 sobe e o 25
-entra na metade da direita. Quando o 85 chega, a raiz `[20 40 70]` é que está
-cheia: ela se divide, o 40 vira raiz nova e a árvore ganha um nível. No fim, a
-busca pelo 60 lê três nós:
+Exemplo: 11 livros, na ordem 40, 10, 70, 20, 50, 80, 30, 60, 90, 25 e 85. O 25
+encontra a folha `[10 20 30]` cheia: ela se divide e o 20 sobe. O 85 encontra a
+raiz `[20 40 70]` cheia: ela se divide e o 40 vira a raiz nova. A busca pelo 60
+lê três nós:
 
 {{ideia}}
 
-A divisão e a inserção na raiz, no `arvoreb.c` (`AB_T` é o `t`, e `AB_MAX`,
-`2t - 1`):
+A divisão e a inserção na raiz, em `arvoreb.c` (`AB_T` é o `t`; `AB_MAX`, `2t - 1`):
 
 ```c
 static void divide(NoB *pai, int i) {
@@ -93,8 +83,8 @@ NoB *ab_insere(NoB *raiz, int chave) {
 }
 ```
 
-A `divide` não apaga nada de `y`: só diminui `y->n`. As chaves do fim
-continuam no vetor, mas ficam fora da parte em uso. O cliente:
+A `divide` só diminui `y->n`: as chaves do fim ficam no vetor, fora da parte em uso.
+O cliente:
 
 ```c
 #include <stdio.h>
@@ -131,37 +121,26 @@ int main(void) {
 // Livro 65: não tem, 3 nós lidos
 ```
 
-O fluxograma segue o `insere_nao_cheio` chamado na raiz `[40 70]` quando
-o 25 chega. A raiz não é folha; o 25 desce pelo filho 0, que está cheio; o
-filho se divide e o 20 sobe. Como 25 é maior que o 20, o `i++` manda a chave
-para a metade nova, e a chamada recursiva a põe na folha `[30]`:
+O fluxograma segue `insere_nao_cheio` na raiz `[40 70]` quando o 25 chega. O
+filho 0, cheio, se divide e o 20 sobe. Como 25 > 20, o `i++` leva a chave à
+metade nova, folha `[30]`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Depois de `divide(x, i)`, o nó pelo qual a chave ia descer virou **dois**, e
-> a chave que subiu está em `x->chave[i]`. Se a chave nova for maior que ela,
-> o caminho certo é o filho `i + 1`, a metade nova. Esquecer o
-> `if (chave > x->chave[i]) i++;` põe chaves grandes na metade da esquerda: a
-> árvore perde a ordem e a busca deixa de achar chaves que estão lá dentro (é o
-> bug do E875). Outra confusão comum é de vocabulário: "árvore B de ordem m"
-> quer dizer **m filhos no máximo** em alguns livros (Knuth) e, no Ziviani,
-> páginas com **de m a 2m registros**. O curso segue o Cormen, com o grau
-> mínimo `t`. Confira qual convenção o material usa.
+> Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem
+> `if (chave > x->chave[i]) i++;`, chaves grandes vão para a metade da esquerda
+> e a busca não as acha. Cuidado também com "ordem m": são **m filhos no
+> máximo** em alguns livros (Knuth) e **de m a 2m registros** no Ziviani. O curso
+> usa o grau mínimo `t` do Cormen.
 
 > [!TIP]
-> **Por dentro do C:** o `NoB` do TAD tem 56 bytes: 4 do `n`, 12 das três
-> chaves, 32 dos quatro ponteiros, 1 do `bool` e 7 de enchimento. Num banco de
-> dados, o nó é dimensionado para caber num bloco do disco, por exemplo 4096
-> bytes. Com chaves `int` e ponteiros de 8 bytes, `24t` bytes ficam por volta de
-> 4096, o que dá `t = 170`: até 339 chaves por nó, e um bilhão de chaves em
-> altura 3 (4 blocos lidos por busca). Dentro do nó, as chaves estão num vetor
-> ordenado e contíguo: dá para usar até busca binária ali, e a leitura
-> sequencial aproveita bem o cache do processador.
+> Com chaves `int` e ponteiros de 8 bytes, `t = 170` (nó de `24t` bytes) cabe num
+> bloco de 4096 bytes: um bilhão de chaves em altura 3, 4 blocos lidos por busca.
 
 > [!NOTE]
-> **Pergunta para você:** na árvore final, insira o 87. Qual nó se divide,
-> qual chave sobe e como fica o nível 1? Depois insira o 95 e veja se a raiz
-> muda. Confira acrescentando as duas chaves no vetor do exemplo.
+> **Pergunta para você:** na árvore final, insira o 87. Qual nó se divide, qual
+> chave sobe e como fica o nível 1? Depois insira o 95: a raiz muda? Confira
+> acrescentando as chaves no vetor do exemplo.
 
 {{pratique}}

@@ -1,40 +1,30 @@
 ## 0143 · Juntando tudo: um mini-diff
 
-Você e sua mãe dividem a lista de compras do mês num arquivo de texto, uma
-coisa por linha. Ela abriu o arquivo, mexeu e salvou. O que mudou? Comparar
-linha 1 com linha 1, linha 2 com linha 2 não serve: basta ela inserir uma
-linha no começo para **todas** as outras parecerem diferentes.
+Você e sua mãe dividem a lista de compras num arquivo, uma coisa por linha.
+O que mudou depois que ela salvou? Comparar linha com linha não serve: uma
+linha nova no começo faz **todas** parecerem diferentes.
 
-A ferramenta que responde isso existe em todo sistema Unix e se chama
-`diff`. É ela que mostra as mudanças num controle de versão. Por dentro, ela
-usa a **LCS** do assunto 0141, só que de **linhas** em vez de letras: as
-linhas da LCS ficaram iguais; as que só estão na versão antiga foram
-**removidas** (`-`); as que só estão na nova foram **adicionadas** (`+`).
-Duas linhas são "a mesma letra" quando `strcmp` dá 0.
+O `diff` resolve com a **LCS** do assunto 0141, de **linhas** em vez de
+letras (duas linhas casam quando `strcmp` dá 0). As linhas da LCS ficaram
+iguais; as que só estão na versão antiga foram **removidas** (`-`); as que só
+estão na nova foram **adicionadas** (`+`).
 
-A leitura dos arquivos fica num módulo pequeno (assunto 0034), `linhas.h` e
-`linhas.c`, na pasta do assunto. `le_linhas` lê com `fgets`, tira o `'\n'`
-e guarda cada linha num `malloc` do tamanho exato, dentro de um `char **`
-que dobra com `realloc` (assunto 0055). `grava_linhas` escreve um vetor de
-strings num arquivo, e `libera_linhas` devolve tudo.
+`linhas.h` e `linhas.c` (assunto 0034) leem com `fgets`, tiram o `'\n'` e
+guardam cada linha num `malloc` exato, num `char **` que dobra com `realloc`
+(assunto 0055).
 
-Uma mudança em relação ao 0141 deixa a saída mais simples. Lá, a volta
-começava no **fim** das strings e a resposta saía de trás para a frente.
-Aqui a tabela é dos **sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e
-`b[j..n-1]`, cheia de baixo para cima. A resposta fica em `c[0][0]`, e a
-volta anda do **começo** para o fim, imprimindo cada linha já na ordem
-certa. Em cada passo: linhas iguais saem com dois espaços e as duas
-avançam; se não, o vizinho com a LCS maior decide se a linha de `a` sai com
-`-` ou a de `b` entra com `+`.
+A tabela é dos **sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
+resposta fica em `c[0][0]` e a volta anda do **começo** para o fim. Linhas
+iguais saem com dois espaços; se não, o vizinho com a LCS maior decide se a
+linha de `a` sai com `-` ou a de `b` com `+`.
 
-No desenho, a lista antiga fica à esquerda e a nova à direita. Os
-traços ligam as cinco linhas da LCS; o que sobra de cada lado vira `-` ou
-`+`:
+No desenho, a lista antiga fica à esquerda, a nova à direita, e os traços
+ligam as cinco linhas da LCS:
 
 {{ideia}}
 
-O programa: sem argumentos, ele grava as duas listas em `/tmp` e compara;
-com dois nomes de arquivo (assunto 0069), compara os seus:
+Sem argumentos, o programa compara duas listas gravadas em `/tmp`; com dois
+nomes de arquivo (assunto 0069), compara os seus:
 
 ```c
 #include <stdio.h>
@@ -123,35 +113,29 @@ int main(int argc, char *argv[]) {
 // (5 iguais, 2 removidas, 2 adicionadas)
 ```
 
-Veja a linha do leite: "leite" e "leite sem lactose" são linhas
-diferentes, então viram uma remoção e uma adição. O A286 usa a distância de
-edição do assunto 0142 para perceber que a linha foi só **alterada**.
+"leite" e "leite sem lactose" viram uma remoção e uma adição. O A286 usa a
+distância de edição (0142) para perceber que a linha só foi **alterada**.
 
-O fluxograma é a volta do diff, que imprime enquanto anda. O
-caminho marcado é o das duas primeiras linhas, iguais nas duas versões:
+No fluxograma, o caminho marcado é o das duas primeiras linhas, iguais:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `fgets` guarda o `'\n'` no fim da linha, e a última linha de um arquivo
-> pode vir **sem** ele (quando ninguém deu Enter no final). Sem tirar o
-> `'\n'`, "banana\n" e "banana" ficam diferentes no `strcmp`, e o diff
-> acusa uma mudança invisível na última linha. O
-> `buf[strcspn(buf, "\n")] = '\0'` do `linhas.c` corta o `'\n'` se ele
-> existir e não faz nada se não existir.
+> `fgets` guarda o `'\n'`, e a última linha do arquivo pode vir **sem** ele.
+> Sem tirá-lo, "banana\n" e "banana" diferem no `strcmp` e o diff acusa uma
+> mudança invisível. O `buf[strcspn(buf, "\n")] = '\0'` do `linhas.c` corta o
+> `'\n'` se existir e não faz nada se não existir.
 
 > [!TIP]
-> **Por dentro do C:** a tabela não pode ser um `int c[m + 1][n + 1]` na
-> pilha: dois arquivos de 2.000 linhas pediriam 16 MB, o dobro da pilha. Ela
-> é um bloco só do `malloc`, e a célula `(i, j)` mora em `c[i * w + j]`, com
-> `w = n + 1`: a mesma conta que o compilador faz por baixo numa matriz de
-> verdade. Para arquivos de 100 mil linhas, seriam 40 GB, e nem o heap
-> aguenta. Por isso o `diff` de verdade usa o algoritmo de Myers, que gasta
-> O((m + n) × D), em que D é o número de diferenças, quase sempre pequeno.
+> **Por dentro do C:** a tabela não pode ser `int c[m + 1][n + 1]` na pilha:
+> dois arquivos de 2.000 linhas pediriam 16 MB, o dobro da pilha. Ela é um
+> bloco só do `malloc`, e a célula `(i, j)` mora em `c[i * w + j]`, com
+> `w = n + 1`. Com 100 mil linhas seriam 40 GB; por isso o `diff` real usa o
+> algoritmo de Myers, O((m + n) × D), com D o número de diferenças.
 
 > [!NOTE]
 > **Pergunta para você:** se sua mãe só tivesse trocado a ordem de "pão" e
-> "banana", quantas linhas sairiam com `-` e quantas com `+`? E qual das duas
-> o diff escolheria manter como "igual"? Troque a ordem em `v2` e confira.
+> "banana", quantas linhas sairiam com `-` e com `+`? Troque a ordem em `v2` e
+> confira.
 
 {{pratique}}

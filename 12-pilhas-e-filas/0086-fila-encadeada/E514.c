@@ -1,18 +1,20 @@
 // 0086 · Fila encadeada
 // Exercício E514 · ★★☆
 //
-// A fila de pedidos da cozinha funciona bem no começo da noite. Mas o
-// sanitizer explode quando a fila esvazia e chega um pedido novo. Rode, leia
-// o relatório (procure "heap-use-after-free" e a linha), conserte e rode de
-// novo: as quatro linhas têm que aparecer sem nenhum relatório do sanitizer.
+// A fila de pedidos da cozinha é encadeada, com ponteiros para o início e para o
+// fim. Com os tipos abaixo, escreva bool cozinha_entra(Cozinha *f, int numero) e
+// bool cozinha_sai(Cozinha *f, int *numero), que libera o nó. A fila tem que
+// continuar funcionando depois de esvaziar e receber pedidos novos. No main,
+// entrem os pedidos 11 e 12 e saiam todos; entrem 13 e 14 e saiam todos,
+// mostrando "Pronto: N" a cada saída.
 //
-//   Saída esperada depois do conserto:
+//   Saída esperada:
 //   Pronto: 11
 //   Pronto: 12
 //   Pronto: 13
 //   Pronto: 14
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -28,47 +30,7 @@ typedef struct {
     Pedido *fim;
 } Cozinha;
 
-bool cozinha_entra(Cozinha *f, int numero) {
-    Pedido *novo = malloc(sizeof *novo);
-    if (novo == NULL) {
-        return false;
-    }
-    novo->numero = numero;
-    novo->prox = NULL;
-    if (f->fim == NULL) {
-        f->inicio = novo;
-    } else {
-        f->fim->prox = novo;
-    }
-    f->fim = novo;
-    return true;
-}
-
-bool cozinha_sai(Cozinha *f, int *numero) {
-    if (f->inicio == NULL) {
-        return false;
-    }
-    Pedido *velho = f->inicio;
-    *numero = velho->numero;
-    f->inicio = velho->prox;
-    free(velho);
-    return true;
-}
-
 int main(void) {
-    Cozinha f = {NULL, NULL};
-    int n;
 
-    cozinha_entra(&f, 11);
-    cozinha_entra(&f, 12);
-    while (cozinha_sai(&f, &n)) {
-        printf("Pronto: %d\n", n);
-    }
-
-    cozinha_entra(&f, 13); // a fila tinha esvaziado
-    cozinha_entra(&f, 14);
-    while (cozinha_sai(&f, &n)) {
-        printf("Pronto: %d\n", n);
-    }
     return 0;
 }

@@ -6,7 +6,7 @@
 // int balde_de(double x, double max, int nb), que devolve o balde (de 0 a
 // nb - 1) de um valor x entre 0 e max, com nb baldes de mesma largura. O
 // preço máximo, R$ 50,00, vai para o último balde. Mostre o balde de cada
-// preço.
+// preço: 12.50, 49.99, 50.00, 0.00, 10.00, 37.20 e 9.99.
 //
 //   Saída esperada:
 //   R$ 12.50 -> balde 1
@@ -22,8 +22,6 @@
 #include <stdio.h>
 
 int main(void) {
-    double precos[] = {12.50, 49.99, 50.00, 0.00, 10.00, 37.20, 9.99};
-    (void) precos; // apague esta linha
 
     return 0;
 }

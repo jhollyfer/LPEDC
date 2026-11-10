@@ -1,52 +1,39 @@
 # Módulo 16 · Grafos
 
-Lista, pilha, fila, árvore, hash: até aqui toda estrutura tinha uma forma
-bem comportada. Cada nó tinha um próximo, ou um pai, ou um balde. O mundo
-real não é tão educado. Ruas se cruzam e fecham voltas, pessoas se seguem sem
-reciprocidade, pacotes dependem uns dos outros. Para tudo isso existe o
-**grafo**: pontos e ligações, sem regra de forma.
+Ruas se cruzam, pessoas se seguem sem reciprocidade, pacotes dependem uns dos
+outros. Para isso existe o **grafo**: pontos e ligações, sem regra de forma.
+GPS, rede social e gerenciador de pacotes rodam os algoritmos deste módulo.
 
-Fora da sala de aula, grafo aparece em todo canto. O GPS que acha a rota, a
-rede social que sugere amigos, o gerenciador de pacotes que ordena as
-dependências e reclama de dependência circular, o roteador que escolhe por
-onde mandar o pacote: todos rodam alguma variação dos algoritmos deste módulo.
-
-A pergunta deixa de ser "qual é o próximo?" e passa a ser "quem são os
-vizinhos, e em que ordem eu visito?". Quase tudo aqui é a mesma **busca** com
-uma estrutura auxiliar diferente: a pilha da recursão (DFS), a fila (BFS) ou
-o "menor primeiro" (Dijkstra). O módulo usa muito do que veio antes:
-matrizes, `malloc`, listas, filas, pilhas, recursão, structs e heap.
+A pergunta passa a ser "quem são os vizinhos e em que ordem visito?". Quase
+tudo é a mesma **busca** com uma estrutura auxiliar diferente: fila (BFS),
+pilha da recursão (DFS) ou "menor primeiro" (Dijkstra).
 
 ## O que você vai aprender
 
-- o vocabulário de **grafos**: vértice, aresta, grau, caminho, ciclo, grafo dirigido e ponderado
-- as duas representações: **matriz de adjacência** e **lista de adjacência**, e quando usar cada uma
-- a **busca em largura** (BFS) com fila, e o menor caminho em número de arestas
-- a **busca em profundidade** (DFS) com recursão ou pilha: componentes, ciclos e ordenação topológica
-- o algoritmo de **Dijkstra** para o caminho mínimo com pesos, e a armadilha do INFINITO que estoura
-- escolher o algoritmo certo para cada pergunta, e um bônus: a **árvore geradora mínima** com Prim
+- vocabulário: vértice, aresta, grau, caminho, ciclo, grafo dirigido e ponderado
+- **matriz** e **lista de adjacência**, e quando usar cada uma
+- **BFS**: menor caminho em número de arestas
+- **DFS**: componentes, ciclos e ordenação topológica
+- **Dijkstra**: caminho mínimo com pesos
+- escolher o algoritmo para cada pergunta e, de bônus, a **árvore geradora
+  mínima** com Prim
 
 ## Antes de começar
 
-Você vai usar sem cerimônia: matrizes (0039), structs e `typedef` (0059 e
-0060), `malloc` e `free` (0054), lista encadeada (0076), pilha (0082), fila
-(0085), recursão (0032) e, no último assunto, heap (0102). Se algum desses
-estiver enferrujado, revise antes.
+Usa matrizes (0039), structs (0059 e 0060), `malloc` e `free` (0054), lista
+(0076), pilha (0082), fila (0085), recursão (0032) e heap (0102).
 
-Nos desenhos, a origem da busca fica roxa, o destino verde, e as arestas
-verdes são as que a busca usou (a árvore da busca ou a rota final). Faça o
-teste de mesa da fila, da pilha ou do vetor de distâncias no papel (em
-grafos, ele é metade do aprendizado).
+Os vértices são números de 0 a V-1, com os nomes num vetor de strings à
+parte. Os exemplos examinam os vizinhos em ordem crescente de índice, o que
+decide empates: mudar a numeração muda a saída, sem estar errada.
 
-Os vértices são números de 0 a V-1, e o nome de cada um fica num vetor de
-strings à parte. Os exemplos examinam os vizinhos em ordem crescente de
-índice, o que decide empates e a ordem da visita: mude a numeração e a saída
-muda, sem estar errada.
+O assunto 0109 traz o TAD `grafo.h` e `grafo.c`, com lista de adjacência; o
+comando do exemplo compila o `grafo.c` junto. Nos demais, cada arquivo é
+completo, com matriz.
 
-O assunto 0109 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
-comando do exemplo compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
-assuntos, cada arquivo traz tudo dentro dele, com matriz de adjacência, para
-o algoritmo ficar inteiro na tela.
+**Progressão.** A lista de adjacência do 0109 é a lista encadeada do balde
+(módulo 15), com um balde por vértice. Fila e pilha (módulo 12) viram BFS e
+DFS, e o heap (módulo 14) acelera o Dijkstra. O módulo 17 mede o custo.
 
 {{indice}}
 

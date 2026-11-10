@@ -1,41 +1,22 @@
 // 0082 · Pilha
 // Exercício E489 · ★★☆
 //
-// Complete a função soma_pedido: ela devolve a soma de todos os preços da
-// pilha (em centavos), usando só as funções do pilha.h. A pilha tem que
-// voltar exatamente como estava, na mesma ordem: o cliente ainda pode
-// querer desfazer.
+// Escreva int soma_pedido(Pilha *p), que devolve a soma de todos os preços (em
+// centavos) de uma pilha do pilha.h, usando só as funções da interface. A pilha
+// tem que voltar exatamente como estava, na mesma ordem: o cliente ainda pode
+// querer desfazer. No main, empilhe 2590, 800 e 1200 (nessa ordem), mostre o
+// total em reais e, depois, o topo e o tamanho da pilha.
 //
 //   Saída esperada:
 //   Total: R$ 45,90
 //   Topo continua: R$ 12,00 (3 itens)
 //
-// Escreva sua resposta abaixo (complete soma_pedido):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "pilha.h"
 
-int soma_pedido(Pilha *p) {
-    (void)p; // apague esta linha quando usar p
-    return 0;
-}
-
 int main(void) {
-    Pilha *pedido = pilha_cria();
-    if (pedido == NULL) {
-        return 1;
-    }
-    pilha_empilha(pedido, 2590);
-    pilha_empilha(pedido, 800);
-    pilha_empilha(pedido, 1200);
 
-    int total = soma_pedido(pedido);
-    printf("Total: R$ %d,%02d\n", total / 100, total % 100);
-
-    int topo;
-    if (pilha_topo(pedido, &topo)) {
-        printf("Topo continua: R$ %d,%02d (%d itens)\n", topo / 100, topo % 100, pilha_tamanho(pedido));
-    }
-    pilha_libera(pedido);
     return 0;
 }

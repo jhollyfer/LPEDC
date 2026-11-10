@@ -1,12 +1,12 @@
 // 0086 · Fila encadeada
 // Exercício E511 · ★☆☆
 //
-// Os nós da fila ficam escondidos no fila.c, mas dá para mostrar a fila
-// inteira só com o fila.h: retire o primeiro, mostre e insira de novo no
-// fim, fila_tamanho vezes. No fim da volta, a fila está igual. Escreva a
-// função mostra assim, do início para o fim (7 -> 4), e acrescente
-// "(um nó só: início e fim apontam para ele)" quando a fila tiver 1 item.
-// O main já chama mostra depois de cada operação.
+// Escreva void mostra(Fila *f), que mostra a fila encadeada do fila.h do início
+// para o fim, separando por " -> " (ou "vazia"), usando só a interface, e
+// deixando a fila como estava. Quando houver um item só, acrescente "(um nó só:
+// início e fim apontam para ele)". No main, insira 7, 4, 9 e 1, mostrando
+// "insere X: " e a fila a cada inserção; a partir da segunda, retire um logo
+// depois mostrando "retira X: " e a fila; no fim, retire mais um e mostre.
 //
 //   Saída esperada:
 //   insere 7: 7 (um nó só: início e fim apontam para ele)
@@ -18,37 +18,12 @@
 //   retira 9: 1 (um nó só: início e fim apontam para ele)
 //   retira 1: vazia
 //
-// Escreva sua resposta abaixo (escreva mostra):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "fila.h"
 
-void mostra(Fila *f) {
-    (void)f; // apague esta linha quando usar f
-    printf("\n");
-}
-
 int main(void) {
-    Fila *f = fila_cria();
-    if (f == NULL) {
-        return 1;
-    }
-    int entram[] = {7, 4, 9, 1};
-    int x;
 
-    for (int i = 0; i < 4; i++) {
-        fila_insere(f, entram[i]);
-        printf("insere %d: ", entram[i]);
-        mostra(f);
-        if (i > 0 && fila_retira(f, &x)) { // a partir do segundo, sai um
-            printf("retira %d: ", x);
-            mostra(f);
-        }
-    }
-    if (fila_retira(f, &x)) {
-        printf("retira %d: ", x);
-        mostra(f);
-    }
-    fila_libera(f);
     return 0;
 }

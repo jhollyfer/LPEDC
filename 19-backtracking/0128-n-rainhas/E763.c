@@ -7,7 +7,9 @@
 //
 // que diz se duas rainhas, nas casas (l1, c1) e (l2, c2) de um tabuleiro
 // 8 × 8, se atacam (mesma linha, mesma coluna ou mesma diagonal). Escreva a
-// função do zero e teste com os seis pares do programa.
+// função do zero e teste com os pares (l1, c1, l2, c2) abaixo:
+//
+//   0 0 3 3    1 2 3 1    2 5 2 0    4 1 1 4    0 3 5 3    6 2 3 0
 //
 //   Saída esperada:
 //   (0, 0) e (3, 3): ataca
@@ -24,11 +26,6 @@
 #include <stdlib.h>
 
 int main(void) {
-    int pares[6][4] = {
-        {0, 0, 3, 3}, {1, 2, 3, 1}, {2, 5, 2, 0},
-        {4, 1, 1, 4}, {0, 3, 5, 3}, {6, 2, 3, 0},
-    };
-    (void)pares; // apague esta linha quando usar o vetor
 
     return 0;
 }

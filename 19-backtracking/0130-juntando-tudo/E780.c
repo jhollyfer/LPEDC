@@ -36,12 +36,6 @@
 #include <stdio.h>
 
 int main(void) {
-    const char *jogo[9] = {
-        "24.3..7.5", "....7..2.", "...54..3.",
-        "....8.49.", "....9.2.3", "8........",
-        "...6...5.", "675.3.1..", ".......68",
-    };
-    (void)jogo; // apague esta linha quando usar o vetor
 
     return 0;
 }

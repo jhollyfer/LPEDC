@@ -5,7 +5,9 @@
 // quantidades: "porta" e "tropa". Um jeito de conferir: ordene as letras de
 // cada uma e compare. Escreva void ordena_letras(char s[]), um counting sort
 // das letras da própria string, com um contador para cada valor possível de
-// char (256), e use no programa abaixo.
+// char (256). No main, teste os pares alegria/regalia, porta/tropa,
+// mesa/seta e carro/corra, copiando cada palavra para um vetor local antes
+// de ordenar.
 //
 //   Saída esperada:
 //   alegria -> aaegilr | regalia -> aaegilr: anagramas
@@ -18,21 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// escreva ordena_letras aqui
-
-void testa(const char *a, const char *b) {
-    char x[32], y[32];
-    strcpy(x, a);
-    strcpy(y, b);
-    // chame ordena_letras(x) e ordena_letras(y) aqui
-    printf("%s -> %s | %s -> %s: %s\n", a, x, b, y,
-           strcmp(x, y) == 0 ? "anagramas" : "não são anagramas");
-}
-
 int main(void) {
-    testa("alegria", "regalia");
-    testa("porta", "tropa");
-    testa("mesa", "seta");
-    testa("carro", "corra");
+
     return 0;
 }

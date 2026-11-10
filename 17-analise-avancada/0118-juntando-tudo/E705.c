@@ -1,17 +1,12 @@
 // 0118 · Juntando tudo
 // Exercício E705 · ★★☆
 //
-// O cadastro de 10 mil clientes da loja fica em ordem de código, mas todo
-// dia umas poucas alterações bagunçam alguns vizinhos. Qual das quatro
-// ordenações do ordena.h é a melhor para reordenar esse vetor QUASE
-// ordenado? Escreva o programa:
-//
-// - monte base[i] = i para i de 0 a 9999;
-// - faça 50 trocas de vizinhos: sorteie i = sorteia() % (N - 1) e troque
-// base[i] com base[i + 1];
-// - para cada algoritmo, copie base para v, zere a contagem, ordene, e
-// mostre as comparações (confira com ord_confere que ordenou);
-// - no fim, diga qual comparou menos.
+// O cadastro de 10 mil clientes está em ordem de código, mas poucas
+// alterações bagunçam alguns vizinhos. Com o ordena.h, descubra qual das
+// quatro ordenações é a melhor para esse vetor quase ordenado: base[i] = i (0
+// a 9999); 50 trocas de base[i] com base[i + 1], i = sorteia() % (N - 1);
+// para cada algoritmo, copie base para v, zere a contagem, ordene, confira
+// com ord_confere e mostre as comparações. No fim, diga qual comparou menos.
 //
 //   Saída esperada:
 //   insertion   10049 comparações

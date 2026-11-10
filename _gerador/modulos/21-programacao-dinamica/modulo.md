@@ -1,69 +1,45 @@
 # Módulo 21 · Programação dinâmica
 
-No módulo 04, o Fibonacci recursivo ficou famoso por ser lento: `fib(40)`
-leva centenas de milhões de chamadas para chegar num número que um laço
-calcula em 40 passos. Lá ficou a pergunta: por que a recursão é tão cara? A
-resposta é que ela resolve as **mesmas** perguntas de novo e de novo. Este
-módulo é sobre o remédio: anotar cada resposta na primeira vez e consultar
-nas próximas.
+No módulo 04, `fib(40)` recursivo levou centenas de milhões de chamadas
+porque resolve as **mesmas** perguntas várias vezes. A **programação
+dinâmica** (PD) corrige isso: anota cada resposta na primeira vez e consulta
+nas seguintes.
 
-Essa ideia, a **programação dinâmica**, resolve problemas que
-pareciam exigir testar todas as combinações: o menor número de moedas para
-um troco qualquer, o que levar na mochila sem passar do peso, o que duas
-sequências de DNA têm em comum, quantas edições separam a palavra digitada
-da palavra certa. Todos têm a mesma cara: uma **recorrência** que olha para
-o último passo, uma **tabela** que guarda os subproblemas e uma **volta**
-pela tabela que reconstrói a solução.
+Todo problema de PD tem a mesma cara: uma **recorrência** que olha para o
+último passo, uma **tabela** de subproblemas e uma **volta** pela tabela que
+reconstrói a solução. Serve para troco, mochila, LCS e distância de edição.
 
-No módulo 20 você viu os gulosos, que acertam quando a melhor escolha de
-agora nunca atrapalha o futuro, e viu também em que casos eles erram. A PD é o que
-se usa quando o guloso não serve: ela considera todas as escolhas, mas
-paga cada subproblema uma vez só. A troca é memória por tempo, e o "Por
-dentro do C" de cada assunto mostra quanto essa memória custa.
-
-O módulo fecha com um **mini-diff**, a ferramenta
-que mostra o que mudou entre duas versões de um arquivo de texto.
+Vem depois dos gulosos (módulo 20): quando o guloso erra, a PD considera
+todas as escolhas e paga cada subproblema uma vez só. A troca é memória por
+tempo. O módulo fecha com um **mini-diff**, que mostra o que mudou entre duas
+versões de um arquivo.
 
 ## O que você vai aprender
 
-- **memoização** (de cima para baixo) e **tabela** (de baixo para cima), e
-  como contar o custo de uma PD: subproblemas × trabalho de cada um
-- reconhecer quando a PD se aplica: **subproblemas que se repetem** e
-  **subestrutura ótima**
-- **troco**: o menor número de moedas para qualquer sistema e quantas
-  combinações existem (e a diferença entre combinação e sequência)
-- **mochila 0/1**: a tabela n × W, a recuperação dos itens e o truque de uma
-  linha só com o laço descendo
-- **LCS**: a maior subsequência comum e a volta pela tabela
+- **memoização** (de cima para baixo), **tabela** (de baixo para cima) e o
+  custo de uma PD: subproblemas × trabalho de cada um
+- quando a PD se aplica: **subproblemas repetidos** e **subestrutura ótima**
+- **troco**: menor número de moedas e quantas combinações existem
+- **mochila 0/1**: tabela n × W, recuperação dos itens e o truque de uma
+  linha só
+- **LCS** e a volta pela tabela
 - **distância de edição** (Levenshtein): inserir, remover e trocar
-- juntar tudo num **mini-diff** entre dois arquivos, com leitura de linhas,
-  vetor que cresce e tabela no heap
+- o **mini-diff**, com leitura de linhas, vetor que cresce e tabela no heap
 
 ## Antes de começar
 
-Você vai precisar da recursão (assuntos 0032 e 0033), de matrizes (0039),
-de strings (0041 e 0042) e de memória dinâmica (0054 e 0055). O assunto
-0133, do troco guloso, é o ponto de partida do 0139, e a mochila
-fracionária do 0135 é a prima fácil da mochila 0/1.
+Você precisa de recursão (0032 e 0033), matrizes (0039), strings (0041 e
+0042) e memória dinâmica (0054 e 0055). O 0133 (troco guloso) é o ponto de
+partida do 0139, e a mochila fracionária (0135) é a prima fácil da 0/1.
 
-Quase todos os exemplos cabem num arquivo só, com a tabela numa matriz de
-tamanho fixo (`#define MAX 50`). Isso é de propósito: deixa a recorrência à
-vista. Nos programas "de verdade" (o mini-diff), a tabela vai para o heap,
-num bloco só do `malloc`.
+Os exemplos usam tabela em matriz fixa (`#define MAX 50`) para deixar a
+recorrência à vista; o mini-diff põe a tabela no heap. A cadeia de matrizes,
+outro clássico de PD, tem assunto próprio: o 0185.
 
-A multiplicação de uma **cadeia de matrizes**, outro clássico de PD do Cormen
-e do cursinho do PPGI, tem assunto próprio, o 0185.
-
-Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do gcc com as flags de estudo vai acusar ou parar o programa. É
-esperado: o enunciado avisa.
-
-PD se aprende preenchendo tabela: faça o **Passo a passo** com papel e lápis
-antes de conferir. O diagrama da ideia quase sempre é a própria tabela, e o
-fluxograma é a decisão de uma célula. Nas tabelas, **roxa** é a célula que está
-sendo calculada (ou de onde a volta parte), **verde** é a escolhida ou o
-caminho da solução, **amarela** é a opção que perdeu (ou um passo da volta
-que não entra na resposta) e **cinza** é o que não chega a ser usado.
+Faça o **Passo a passo** com papel e lápis antes de conferir. Nas tabelas,
+**roxa** é a célula calculada (ou de onde a volta parte), **verde** é a
+escolhida ou o caminho da solução, **amarela** é a opção que perdeu e
+**cinza** é o que não chega a ser usado.
 
 {{indice}}
 

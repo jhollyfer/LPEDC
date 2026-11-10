@@ -3,11 +3,11 @@
 //
 // Para a trilha do fim de semana, a mochila tem que pesar exatamente 12 kg
 // (nem mais, para não cansar, nem menos, para não faltar nada). Os itens
-// pesam: barraca 7, comida 5, água 4, saco de dormir 3 e fogareiro 2. O
-// programa abaixo enumera todas as escolhas, mas ainda não poda nada: ele
-// mostra as soluções certas e faz 63 chamadas. Complete os dois testes do
-// começo da função tenta (a poda e a solução) para que ele faça só o
-// necessário.
+// pesam: barraca 7, comida 5, água 4, saco 3 e fogareiro 2. Escreva o
+// backtracking tenta(i, soma), que decide o item i (leva ou não leva) e
+// conta as chamadas no começo da função. Volte quando a soma passar de 12
+// (poda). Quando a soma for 12, mostre os itens levados e volte, sem decidir
+// os itens que sobram.
 //
 //   Saída esperada:
 //   barraca comida
@@ -15,48 +15,12 @@
 //   comida água saco
 //   45 chamadas
 //
-// Escreva sua resposta abaixo (complete o código):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 
-#define N 5
-#define ALVO 12
-
-const char *itens[N] = {"barraca", "comida", "água", "saco", "fogareiro"};
-const int pesos[N] = {7, 5, 4, 3, 2};
-bool leva[N];
-int chamadas = 0;
-
-void mostra(int ate) {
-    int primeiro = 1;
-    for (int j = 0; j < ate; j++) {
-        if (leva[j]) {
-            printf(primeiro ? "%s" : " %s", itens[j]);
-            primeiro = 0;
-        }
-    }
-    printf("\n");
-}
-
-void tenta(int i, int soma) {
-    chamadas++;
-    // complete aqui: a poda e a solução
-
-    if (i == N) {
-        if (soma == ALVO) {
-            mostra(N);
-        }
-        return;
-    }
-    leva[i] = true;
-    tenta(i + 1, soma + pesos[i]);
-    leva[i] = false;
-    tenta(i + 1, soma);
-}
-
 int main(void) {
-    tenta(0, 0);
-    printf("%d chamadas\n", chamadas);
+
     return 0;
 }

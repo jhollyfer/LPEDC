@@ -1,65 +1,50 @@
 # Módulo 22 · Árvores e conjuntos avançados
 
-No módulo 14, a árvore era quase sempre binária, morava na memória e guardava
-números. Este módulo tira as três rodinhas. Uma árvore pode ter **qualquer
-número de filhos** (o orçamento de uma obra, o sumário de uma apostila). Pode
-ser equilibrada com **um bit por nó** em vez de uma altura (a rubro-negra). Pode
-ter nós **gordos**, com centenas de chaves, para morar no disco (a árvore B dos
-bancos de dados). Pode ter arestas que **são letras** (a trie do autocompletar).
-E pode até ter as setas ao contrário, do filho para o pai, para responder "estes
-dois estão no mesmo grupo?" quase de graça (o union-find).
+No módulo 14, a árvore era binária e guardava números. Aqui o formato do nó
+muda conforme a operação que vai rodar milhões de vezes: **qualquer número de
+filhos** (orçamento de obra), **um bit por nó** (rubro-negra), **nós gordos**
+para o disco (árvore B), **arestas que são letras** (trie do autocompletar)
+ou **setas do filho para o pai** (union-find, "estes dois estão no mesmo
+grupo?").
 
-O que muda na cabeça é a pergunta que você faz antes de escolher a estrutura:
-em vez de "qual árvore eu sei programar?", vem "**qual operação vai rodar
-milhões de vezes?**". Busca exata, busca por prefixo, leitura em disco, união de
-grupos: cada uma pede um formato de nó diferente, e o formato do nó decide o
-custo.
-
-Quase tudo continua recursivo, e a árvore 2-3 aparece como o elo escondido entre
-duas delas: a rubro-negra é uma árvore 2-3 escrita com nós binários, e a árvore
-B é a mesma ideia com nós ainda maiores. No fim, um corretor ortográfico junta a
-trie com a distância de edição do módulo 21 e compara a trie com a hash e a BST
-no mesmo dicionário.
+A rubro-negra é uma árvore 2-3 escrita com nós binários, e a árvore B é a
+mesma ideia com nós maiores. O fim do módulo junta a trie com a distância de
+edição do módulo 21 num corretor ortográfico e compara trie, hash e BST.
 
 ## O que você vai aprender
 
-- representar **árvores gerais** com primeiro filho / próximo irmão e ver nelas uma árvore binária
-- a **rubro-negra esquerdista** (LLRB): as três regras, os três consertos e a árvore 2-3 por trás
-- a **árvore B**: nós com várias chaves, busca, **divisão** do nó cheio e inserção que cresce pela raiz
-- a **trie**: o prefixo como endereço, busca em O(tamanho da palavra) e **autocompletar**
-- o **union-find**: conjuntos disjuntos com **união por tamanho** e **compressão de caminho**
-- montar um **corretor ortográfico** e comparar trie, tabela hash e BST com números de verdade
+- **árvores gerais** com primeiro filho / próximo irmão
+- a **rubro-negra esquerdista** (LLRB): três regras, três consertos e a
+  árvore 2-3 por trás
+- a **árvore B**: busca, **divisão** do nó cheio e crescimento pela raiz
+- a **trie**: prefixo como endereço e **autocompletar**
+- o **union-find**: **união por tamanho** e **compressão de caminho**
+- um **corretor ortográfico** comparando trie, hash e BST
 
 ## Antes de começar
 
-Este módulo usa muito do que veio antes: **recursão** (0032 e 0033),
-**ponteiros para struct** (0062), `malloc`, `calloc` e `free` (0054 e 0055),
-**TAD** (0074), a **BST** e as **rotações da AVL** (0099 a 0101), a **tabela
-hash** (0105 a 0108) e a **distância de edição** (0142). A análise amortizada do
-0116 explica o "quase O(1)" do union-find.
+Você precisa de recursão (0032 e 0033), ponteiros para struct (0062),
+`malloc`, `calloc` e `free` (0054 e 0055), TAD (0074), BST e rotações da AVL
+(0099 a 0101), hash (0105 a 0108) e distância de edição (0142). A análise
+amortizada do 0116 explica o "quase O(1)" do union-find.
 
-Cada assunto tem um **TAD** na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
-`trie.h`, `uniao.h`, `corretor.h`). O texto mostra o pedaço do `.c` que
-importa; abra o `.c` inteiro também. O comando do exemplo compila junto os `.c` de apoio
-da pasta (como `trie.c`):
+Cada assunto tem um TAD na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
+`trie.h`, `uniao.h`, `corretor.h`). Compile junto os `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/22-arvores-avancadas/0147-trie/A293.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/A293 && ~/LPEDC/22-arvores-avancadas/0147-trie/A293
 ```
 
-Duas convenções valem para o módulo todo. **Altura conta arestas**, como no
-módulo 14: uma folha tem altura 0. E, na árvore B, o TAD usa o **grau mínimo**
-`t` (de `t - 1` a `2t - 1` chaves por nó). Outros livros falam em "ordem m"
-querendo dizer o número máximo de filhos (e o Ziviani, de m a 2m chaves por
-página); confira a convenção antes de comparar números. A rubro-negra do 0145
-é a **esquerdista** (LLRB); a clássica do Cormen, que é a que a prova do PPGI
-cobra, está no assunto 0177.
+Duas convenções valem para o módulo. **Altura conta arestas**, como no
+módulo 14: folha tem altura 0. Na árvore B, o TAD usa o **grau mínimo** `t`
+(de `t - 1` a `2t - 1` chaves por nó); outros livros usam "ordem m" (máximo
+de filhos) e o Ziviani usa m a 2m chaves por página, então confira a
+convenção. A rubro-negra do 0145 é a esquerdista; a clássica do Cormen, que
+a prova do PPGI cobra, está no 0177.
 
-Papel e lápis continuam obrigatórios. Na rubro-negra, desenhe a árvore 2-3
-junto; na árvore B, cada divisão; no union-find, as setas para o pai antes e
-depois de cada busca. Nos desenhos, o nó vermelho da rubro-negra é vermelho e
-o preto aparece em cinza; na trie, os nós verdes terminam uma palavra; no
-union-find, a raiz verde é o representante do grupo.
+Nos desenhos, o nó
+vermelho da rubro-negra é vermelho e o preto é cinza; na trie, nós verdes
+terminam palavra; no union-find, a raiz verde representa o grupo.
 
 {{indice}}
 
@@ -488,6 +473,74 @@ vira a raiz e a altura diminui. Na IV, um nó que não é raiz tem de 2 a 5
 chaves para `t = 3`. Veja 0146.
 
 </details>
+
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 023/2018 · Questão 02**
+
+Dadas as seguintes afirmações a respeito de árvores B,
+
+I. Em uma árvore B de ordem "m" cada nó tem, no máximo, "m" filhos.\
+II. Em uma árvore B de ordem "m" cada nó (exceto a raíz e as folhas) tem pelo menos "m/2" filhos.\
+III. Árvores B precisam ser rebalanceadas frequentemente.\
+IV. Um nó não-folha com "k" filhos deve ter k chaves.\
+V. Todas as folhas aparecem no mesmo nível e carregam informação.\
+
+estão CORRETOS os itens
+
+- a) I e III, apenas.
+- b) I, III, IV e V.
+- c) I, II e V, apenas.
+- d) III, IV e V, apenas.
+- e) II, III e IV, apenas.
+
+<details><summary>Gabarito</summary>
+
+**C.** I, II e V são as propriedades da árvore B; III é falsa (balanceia pouco) e IV é falsa (k filhos têm k-1 chaves). Assunto 0146.
+
+</details>
+
+**Edital 061/2018 · Questão 11**
+
+Para remoção de uma chave cuja página esteja com o número mínimo, em árvore B, é CORRETO afirmar que:
+
+- a) Deve-se fazer o processo de SPLIT sempre na página onde se encontrar a chave.
+- b) Deve-se fazer o processo de SPLIT na página onde se encontrar a chave, exceto quanto é um elemento da raiz da árvore.
+- c) Se a página onde se encontrar a chave não é folha, deve-se fazer procedimento de concatenação ou redistribuição, considerando os irmãos.
+- d) Remove-se a chave, e a substitui por uma chave do nó irmão.
+- e) No caso de só haver uma única página, a remoção não causa a necessidade de balanceamento.
+
+<details><summary>Gabarito</summary>
+
+**E.** Com uma só página (raiz folha), remover não pede balanceamento. As outras confundem split com remoção. Assunto 0146.
+
+</details>
+
+**Edital 061/2018 · Questão 14**
+
+Analise as afirmativas a seguir sobre árvores B e árvores binárias
+
+I. Diferente das árvores binárias, cada nó de uma árvore B deverá sempre ter mais de dois filhos.\
+II. Um nó de árvore B tem um campo ou um método para indicar se é um nó folha ou não. Característica esta herdada da AVL.\
+III. As folhas da árvore B são dispostas mais flexivelmente que as da árvore binária: suas folhas poderão estar em níveis diferentes, desde zero até o valor da altura da árvore.\
+IV. A árvore B tem um método de balanceamento muito custoso, por isso, sua indicação para trabalhar com dispositivos de armazenamento secundário, deve ser avaliada com muita cautela.\
+
+e assinale a alternativa CORRETA.
+
+- a) Todas as afirmativas estão corretas.
+- b) Somente as afirmativas II e III estão corretas
+- c) Somente as afirmativas I, II e IV estão corretas.
+- d) Somente as afirmativas I, III e IV estão corretas.
+- e) Todas as afirmativas estão incorretas
+
+<details><summary>Gabarito</summary>
+
+**E.** I, II, III e IV são falsas: nó com 2 filhos é possível, não vem da AVL, folhas no mesmo nível, árvore B serve justamente para armazenamento secundário. Assunto 0146.
+
+</details>
+
 
 ## Para ler mais
 

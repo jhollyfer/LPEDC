@@ -1,58 +1,43 @@
 ## 0133 · Algoritmos gulosos
 
-Na padaria, o pão deu R$ 3,10 e você pagou com uma nota de 5. O caixa precisa
-devolver R$ 1,90 com o **menor número de moedas**. Ninguém ali testa
-combinações. O caixa pega a maior moeda que cabe (R$ 1), depois a maior que
-cabe no que falta (50 centavos), e assim por diante: 100 + 50 + 25 + 10 + 5,
-cinco moedas, o mínimo possível.
+Na padaria, o pão deu R$ 3,10 e você pagou com uma nota de 5. O caixa devolve
+R$ 1,90 com o **menor número de moedas** pegando sempre a maior que cabe no
+que falta: 100 + 50 + 25 + 10 + 5, cinco moedas, o mínimo possível.
 
-Esse jeito de pensar tem nome: **algoritmo guloso** (em inglês, *greedy*). A
-cada passo ele faz a escolha que parece a **melhor agora**, sem pensar no
-futuro, e **nunca volta atrás**. Não existe "desfazer", como no backtracking
-(assunto 0127), nem dividir em subproblemas para depois combinar, como na
-divisão e conquista (0131).
+Isso é um **algoritmo guloso** (*greedy*): a cada passo faz a escolha que
+parece a **melhor agora** e **nunca volta atrás**. Não desfaz, como o
+backtracking (0127), nem divide em subproblemas, como a divisão e conquista
+(0131).
 
-Você já viu um guloso famoso: o Dijkstra (assunto 0112) fixa, a cada passo, o
-vértice mais perto da origem, e nunca mais mexe nele. Os próximos assuntos
-trazem mais três: escolher reuniões numa sala, encher uma mochila e comprimir
-arquivos (Huffman). No módulo 23, Prim e Kruskal (assuntos 0152 e 0153) montam
-a árvore geradora mínima do mesmo jeito: a aresta mais barata que ainda serve
-entra e nunca mais sai.
+O Dijkstra (0112) é guloso: fixa o vértice mais perto da origem e nunca mais
+mexe nele. Os próximos assuntos trazem reuniões numa sala, mochila e Huffman.
 
-Quando funciona, o guloso sai curto e barato. Aqui, é um laço só: O(k + número de moedas dadas), para `k` tipos de moeda. O
-problema é o "quando funciona". Uma escolha boa agora pode estragar o resto, e
-o guloso não tem como perceber.
+Quando funciona, o guloso é curto e barato: um laço, O(k + moedas dadas) para
+`k` tipos de moeda. Mas uma escolha boa agora pode estragar o resto, e ele
+não percebe.
 
-Imagine um fliperama que só tem fichas de **1, 3 e 4 créditos**. O troco é de
-6 créditos. O guloso pega a maior que cabe, 4, e sobram 2, que só saem com
-1 + 1: **três fichas**. Mas 3 + 3 dá **duas**. O guloso errou, e errou por
-causa da primeira escolha: o 4 parecia ótimo e fechou o caminho bom.
+Num fliperama com fichas de **1, 3 e 4 créditos**, o troco de 6 créditos pelo
+guloso é 4 + 1 + 1, **três fichas**. Mas 3 + 3 dá **duas**: o 4 parecia ótimo
+e fechou o caminho bom.
 
-Então por que no Real dá certo? Porque o sistema do Real é **canônico**: para
-ele, dá para provar que o guloso sempre acha o mínimo. A prova é do tipo
-"troca": se um troco usasse, por exemplo, duas moedas de 25 no lugar de uma de
-50, trocar as duas pela de 50 diminuiria a conta. Repetindo o argumento para
-cada moeda, a solução ótima só pode ser a gulosa. Com {1, 3, 4}, a troca não
-funciona: duas fichas de 3 não viram uma de 4.
+No Real dá certo porque o sistema é **canônico**: dá para provar que o guloso
+acha o mínimo. A prova é por "troca": se um troco usasse duas moedas de 25 no
+lugar de uma de 50, trocá-las pela de 50 diminuiria a conta. Com {1, 3, 4}, a
+troca falha: duas fichas de 3 não viram uma de 4.
 
-A lição vale para todo guloso: **um contraexemplo derruba, e só uma prova
-garante**. "Testei uns casos e deu certo" não é prova. O Cormen diz o que a
-prova precisa mostrar: a **propriedade da escolha gulosa** (alguma solução
-ótima começa pela escolha que o guloso faz) e a **subestrutura ótima** (o que
-sobra é um problema do mesmo tipo, cuja solução ótima completa a do todo). A
-troca do parágrafo anterior prova a primeira. Quando o guloso não serve, o
-caminho é testar as combinações com esperteza: a programação dinâmica do
-módulo 21 resolve o troco de qualquer sistema de moedas.
+Vale para todo guloso: **um contraexemplo derruba, e só uma prova garante**.
+O Cormen pede a **propriedade da escolha gulosa** (alguma solução ótima começa
+pela escolha do guloso) e a **subestrutura ótima** (o que sobra é um problema
+do mesmo tipo); a troca prova a primeira. Quando o guloso não serve, a
+programação dinâmica (módulo 21) resolve o troco de qualquer sistema.
 
-O desenho põe os dois casos lado a lado. Em cima, o troco de R$ 1,90: cada moeda escolhida é a
-maior que cabe no que falta, e o guloso acerta. Embaixo, as fichas: o 4
-parece a melhor escolha, mas deixa um resto de 2 que custa duas fichas, e o
-ótimo (3 + 3) nunca é visto:
+No desenho, em cima o troco de R$ 1,90 (o guloso acerta); embaixo, as fichas:
+o 4 deixa um resto de 2 que custa duas fichas, e o 3 + 3 nunca é visto:
 
 {{ideia}}
 
-Em C, a função recebe as moedas em ordem **decrescente** e anda por elas: se a moeda cabe, dá a moeda e continua nela (pode precisar de
-outra igual); se não cabe, passa para a próxima menor:
+A função recebe as moedas em ordem **decrescente**: se a moeda cabe, dá e
+continua nela; se não, passa para a próxima menor:
 
 ```c
 #include <stdio.h>
@@ -89,30 +74,24 @@ int main(void) {
 // Troco de 6: 4 1 1 (3 moedas)
 ```
 
-O código não tem como saber que errou: devolve 3 com a mesma confiança com que
-devolve 5. Só o contraexemplo mostra que 3 não é o mínimo.
+O código não sabe que errou: só o contraexemplo mostra que 3 não é o mínimo.
 
-No fluxograma, duas perguntas fazem todo o trabalho. "Ainda falta
-troco?" controla o laço, e "a moeda da vez cabe?" decide entre dar a moeda ou
-descer para a próxima. Não há caminho de volta para uma moeda maior:
+No fluxograma, "ainda falta troco?" controla o laço e "a moeda da vez cabe?"
+decide entre dar a moeda ou descer para a próxima. Não há volta a uma moeda
+maior:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O guloso do troco **depende da ordem** do vetor. Com as moedas em ordem
-> crescente (`{5, 10, 25, 50, 100}`), a função dá 38 moedas de 5 centavos para
-> o troco de R$ 1,90: ela pega a primeira que cabe, e a primeira é a menor.
-> Se as moedas chegam fora de ordem, ordene antes, da maior para a menor (com o
-> `qsort`, assunto 0096). E lembre: mesmo ordenado, o guloso só garante o
+> O guloso do troco **depende da ordem** do vetor: com `{5, 10, 25, 50, 100}`,
+> a função dá 38 moedas de 5 centavos para R$ 1,90. Ordene da maior para a
+> menor (`qsort`, 0096), e lembre que, mesmo ordenado, o guloso só garante o
 > mínimo em sistema canônico.
 
 > [!TIP]
-> **Por dentro do C:** o troco é feito em **centavos**, num `int`, e não em
-> reais num `double`. O valor 0,10 não tem representação exata em binário:
-> `1.90 - 1.00 - 0.50 - 0.25 - 0.10` dá `0.049999999999999906` num `double`, e
-> aí a moeda de 5 centavos "não cabe" (`0.05 <= 0.0499...` é falso). O laço
-> termina devendo troco. Todo programa que lida com dinheiro guarda centavos
-> num inteiro e só divide por 100 na hora de mostrar.
+> **Por dentro do C:** use **centavos** em `int`, não reais em `double`:
+> `1.90 - 1.00 - 0.50 - 0.25 - 0.10` dá `0.049999999999999906`, e a moeda de 5
+> centavos "não cabe" (`0.05 <= 0.0499...` é falso).
 
 > [!NOTE]
 > **Pergunta para você:** com moedas de 1, 10 e 25 centavos (sem a de 5), o

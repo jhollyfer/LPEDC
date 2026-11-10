@@ -22,15 +22,6 @@
 #include <string.h>
 
 int main(void) {
-    // a tabela de códigos que veio junto com a mensagem
-    char simbolo[] = {'E', 'S', 'T', 'O', 'U', ' ', 'B', 'M'};
-    const char *codigo[] = {"00", "01", "100", "101", "1100", "1101", "1110", "1111"};
-    int k = 8;
-    const char *bits = "0001100101110011011110001111";
-    (void)simbolo;
-    (void)codigo;
-    (void)k;
-    (void)bits;
 
     return 0;
 }

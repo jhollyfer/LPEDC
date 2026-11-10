@@ -1,21 +1,11 @@
 // 0114 · Recorrências e árvore de recursão
 // Exercício E684 · ★★★
 //
-// Quantas chamadas o fib ingênuo faz? A própria contagem segue uma
-// recorrência: fib(n) é 1 chamada mais as chamadas de fib(n-1) e de
-// fib(n-2). Com C(n) = número de chamadas:
-//
-//   C(0) = C(1) = 1
-//   C(n) = C(n-1) + C(n-2) + 1
-//
-// Escreva um programa com três funções:
-// - fib(n), a recursiva ingênua, com um contador global de chamadas;
-// - conta_chamadas(n), que calcula C(n) com um LAÇO (sem recursão);
-// - fib_laco(n), que calcula o Fibonacci F(n) com um laço.
-//
-// Mostre, para n = 5, 10, ..., 25, as chamadas contadas de verdade, C(n) e a
-// fórmula 2F(n+1) - 1. No fim, use só o laço para mostrar C(40) (rodar o
-// fib(40) levaria muito tempo) e a razão C(40) / C(39):
+// O fib ingênuo faz C(n) chamadas: C(0) = C(1) = 1 e C(n) = C(n-1) + C(n-2) +
+// 1. Escreva fib(n), recursiva, com contador global de chamadas;
+// conta_chamadas(n), que calcula C(n) com laço; e fib_laco(n), que calcula
+// F(n) com laço. Para n = 5, 10, ..., 25, mostre as chamadas contadas, C(n) e
+// 2F(n+1) - 1. No fim, só com laço, mostre C(40) e a razão C(40) / C(39).
 //
 //   Saída esperada:
 //    n  contadas    C(n)  2F(n+1)-1

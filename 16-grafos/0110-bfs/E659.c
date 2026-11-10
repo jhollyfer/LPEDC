@@ -1,19 +1,12 @@
 // 0110 · BFS: busca em largura
 // Exercício E659 · ★★★
 //
-// A prefeitura quer saber, para cada quarteirão do bairro, a quantos
-// quarteirões de distância fica o posto de saúde MAIS PRÓXIMO. No mapa, P é
-// posto, # é área sem passagem (rio, linha de trem) e . é quarteirão. Anda-se
-// só para cima, baixo, esquerda e direita.
-//
-//   P...#...
-//   .##.#.#.
-//   ....#.#P
-//   .#......
-//   ...#..#.
-//
-// Mostre o mapa com a distância de cada quarteirão (0 nos postos, # onde não
-// passa):
+// Para cada quarteirão do mapa, ache a distância até o posto de saúde mais
+// próximo com uma BFS que começa com todos os postos na fila. P é posto, # é
+// área sem passagem e . é quarteirão; anda-se para cima, baixo, esquerda e
+// direita. Mapa: "P...#...", ".##.#.#.", "....#.#P", ".#......", "...#..#.".
+// Mostre o mapa com as distâncias (0 nos postos, # onde não passa) e a pior
+// distância.
 //
 //   Saída esperada:
 //   0123#432

@@ -1,10 +1,5 @@
 // 0128 · N-rainhas
 // Exercício E767 · ★★★
-//
-// Resposta: o desmarcar da diagonal ↘ usava c - l em vez de l - c. O índice
-// continuava dentro do vetor, mas apontava para a diagonal espelhada: a
-// diagonal certa ficava marcada para sempre (podando casas livres) e outra
-// era liberada sem nunca ter sido ocupada.
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -40,7 +35,7 @@ void rainha(int l) {
         rainha(l + 1);
         coluna[c] = false;
         diag1[l + c] = false;
-        diag2[l - c + N - 1] = false; // o mesmo índice da marcação
+        diag2[l - c + N - 1] = false;
     }
 }
 

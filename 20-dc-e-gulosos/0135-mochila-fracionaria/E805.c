@@ -23,17 +23,6 @@
 #include <stdio.h>
 
 int main(void) {
-    // já em ordem decrescente de R$/kg
-    const char *material[] = {"PET", "papelão", "vidro"};
-    double peso[] = {300, 500, 800};  // kg no depósito
-    double valor[] = {750, 400, 160}; // R$ pelo lote inteiro
-    int n = 3;
-    double livre = 1000;              // kg que o caminhão leva
-    (void)material;
-    (void)peso;
-    (void)valor;
-    (void)n;
-    (void)livre;
 
     return 0;
 }

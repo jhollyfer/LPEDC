@@ -1,34 +1,24 @@
 // 0093 · Insertion sort
 // Exercício E557 · ★★★
 //
-// Este insertion sort deveria ordenar as idades do grupo de corrida:
-// 31, 12, 45, 27, 8, 19. Ele tem DOIS erros, de propósito. O primeiro faz o
-// sanitizer parar o programa; o segundo só aparece depois que você
-// consertar o primeiro. Conserte os dois e rode de novo.
+// As idades do grupo de corrida são 31, 12, 45, 27, 8 e 19. Escreva um
+// insertion sort crescente que mostra o vetor depois de cada encaixe e, no
+// fim, conta as comparações e os deslocamentos. Cuidado com o limite: teste
+// i >= 0 ANTES de ler v[i]. Conte uma comparação a cada v[i] <= x testado.
 //
-//   Saída esperada (depois de consertar):
-//   8 12 19 27 31 45
+//   Saída esperada:
+//   j = 1: 12 31 45 27 8 19
+//   j = 2: 12 31 45 27 8 19
+//   j = 3: 12 27 31 45 8 19
+//   j = 4: 8 12 27 31 45 19
+//   j = 5: 8 12 19 27 31 45
+//   13 comparações, 10 deslocamentos
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
 int main(void) {
-    int idades[] = {31, 12, 45, 27, 8, 19};
-    int n = 6;
 
-    for (int j = 1; j < n; j++) {
-        int x = idades[j];
-        int i = j - 1;
-        while (idades[i] > x && i >= 0) {
-            idades[i + 1] = idades[i];
-            i--;
-        }
-        idades[i] = x;
-    }
-    for (int k = 0; k < n; k++) {
-        printf("%d ", idades[k]);
-    }
-    printf("\n");
     return 0;
 }

@@ -118,11 +118,6 @@ int main(void) {
 //   Produto: Arroz
 //   Preço: R$ 25.90
 //
-// Dicas:
-// 1. Primeira dica, a mais leve.
-// 2. Segunda dica.
-// 3. Resposta esperada: ...
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>
@@ -134,22 +129,19 @@ int main(void) {
 ```
 
 - O bloco de comentários do topo é lido pelo gerador até a primeira linha que
-  não começa com `//`. Respeite as linhas `Exercício E007 · ★☆☆`, `Dicas:` e
+  não começa com `//`. Respeite as linhas `Exercício E007 · ★☆☆`, `Saída esperada:` e
   `Escreva sua resposta abaixo:`.
-- **Todo exercício é para codificar**: a pessoa escreve, completa ou conserta
-  código C que compila, roda e mostra um resultado conferível. Nada de
+- **Todo exercício é para codificar**: a pessoa escreve código C que compila, roda e mostra um resultado conferível. Nada de
   "preveja a saída", "explique", "responda" ou pseudocódigo como resposta.
   Quer treinar leitura de código? Peça para modificar o programa e mostrar o
   resultado ("acrescente um printf que mostre o valor de x em cada volta").
-- Dificuldade dos 6: **E1 e E2 ★☆☆** (aplicar direto), **E3 e E4 ★★☆**
-  (combinar com assuntos anteriores, pensar), **E5 e E6 ★★★** (desafio de
-  verdade: um probleminha completo, um "conserte o bug" ou uma variação
-  esperta). Varie os tipos: escrever do zero, completar código, consertar o
-  erro, estender um programa pronto, refatorar.
+- Dificuldade dos 4: **E1 ★☆☆** (aplicar direto), **E2 e E3 ★★☆** (combinar com assuntos
+  anteriores, pensar), **E4 ★★★** (desafio de verdade: um probleminha completo ou uma variação
+  esperta). Todos pedem escrever o código do zero.
 - Exercício só usa o que já foi ensinado até aquele assunto (siga o sumário).
-- Sempre termine as dicas com a resposta esperada (valor final ou saída). Quando a saída
-  esperada já está no enunciado, a última dica pode ser "Resposta esperada: a saída acima.": o
-  gerador tira essa linha do `.md`, porque ela só repete o que está logo acima.
+- Exercício de assunto não tem dicas: só enunciado e "Saída esperada" (com "Entrada:" quando o
+  programa lê do teclado). Todo exercício manda escrever código do zero; nada de "conserte" ou
+  código pronto para completar.
 - O esqueleto (includes + main vazio) **compila** com `gcc`. Inclua os
   `#include` que a solução vai precisar.
 - Escreva uma resolução de cada exercício em
@@ -160,7 +152,7 @@ int main(void) {
 
 ## 6. Lista prática do módulo (lista/P????.c)
 
-Além dos 6 exercícios de cada assunto, todo módulo tem uma **lista prática**
+Além dos 4 exercícios de cada assunto, todo módulo tem uma **lista prática**
 com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
 (e dos anteriores) no estilo dos problemas da prova do PPGI.
 
@@ -174,7 +166,7 @@ com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
 // Exercício P1407 · ★☆☆ · Altura da árvore de categorias
 //
 // Enunciado... (mesmas regras dos exercícios E: cenário, valores, saída
-// esperada com 2 espaços de recuo, Dicas: terminando na resposta esperada)
+// esperada com 2 espaços de recuo)
 //
 // Escreva sua resposta abaixo:
 ```
@@ -254,8 +246,12 @@ ou exercícios literalmente: escreva do zero, com outro cenário e outros
 valores. Ideias, conceitos e algoritmos clássicos são livres; o texto deles
 não.
 
+Exceção: as questões das provas do PPGI/UFAM entram na íntegra, por decisão do dono
+(`DECISIONS.md` #7), com o edital e o gabarito oficial indicados.
+
 ## Histórico
 
 | Data | Mudança |
 |---|---|
 | 2026-11-09 | Regras saem do `CLAUDE.md` para cá, no formato do `maiyu-pattern` |
+| 2026-11-10 | 4 exercícios por assunto, só de escrever código, com enunciado e saída esperada; sem dicas |

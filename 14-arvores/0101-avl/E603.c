@@ -1,18 +1,20 @@
 // 0101 · AVL: balanceamento e rotações
 // Exercício E603 · ★★☆
 //
-// Escreva altura_se_avl(r): ela devolve a altura da árvore se ela respeitar a
-// regra da AVL em todos os nós, ou -2 se algum nó tiver fator fora de
-// -1..1. A árvore aqui é uma árvore binária simples, sem campo de altura (o
-// struct Arv do próprio arquivo). Regra extra: visite cada nó UMA vez só.
+// Use o struct Arv do E601 (chave, esq, dir, sem campo de altura). Escreva
+// altura_se_avl(r): devolve a altura da árvore se ela respeitar a regra da
+// AVL em todos os nós, ou -2 se algum nó tiver fator fora de -1..1. Visite
+// cada nó UMA vez só. Teste duas árvores:
 //
-// O main testa a árvore do E601 e a versão consertada dela:
+//   Árvore 1: a do E601.
+//   Árvore 2: a mesma, mas com a subárvore direita da raiz trocada por
+//             80 (filhos 70 e 90).
 //
 //   Saída esperada:
 //   Árvore 1: não é AVL
 //   Árvore 2: é AVL, altura 3
 //
-// Escreva sua resposta abaixo (complete altura_se_avl):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,47 +24,7 @@ typedef struct Arv {
     struct Arv *esq, *dir;
 } Arv;
 
-Arv *no(int chave, Arv *esq, Arv *dir) {
-    Arv *n = malloc(sizeof(Arv));
-    if (n == NULL) {
-        exit(1);
-    }
-    n->chave = chave;
-    n->esq = esq;
-    n->dir = dir;
-    return n;
-}
-
-void libera(Arv *r) {
-    if (r != NULL) {
-        libera(r->esq);
-        libera(r->dir);
-        free(r);
-    }
-}
-
-int altura_se_avl(const Arv *r) {
-    (void)r; // apague esta linha
-    return -2;
-}
-
-void testa(const char *nome, const Arv *r) {
-    int h = altura_se_avl(r);
-    if (h == -2) {
-        printf("%s: não é AVL\n", nome);
-    } else {
-        printf("%s: é AVL, altura %d\n", nome, h);
-    }
-}
-
 int main(void) {
-    Arv *a1 = no(50, no(30, no(20, no(10, NULL, NULL), NULL), no(40, NULL, NULL)),
-                 no(70, NULL, no(80, NULL, no(90, NULL, NULL))));
-    Arv *a2 = no(50, no(30, no(20, no(10, NULL, NULL), NULL), no(40, NULL, NULL)),
-                 no(80, no(70, NULL, NULL), no(90, NULL, NULL)));
-    testa("Árvore 1", a1);
-    testa("Árvore 2", a2);
-    libera(a1);
-    libera(a2);
+
     return 0;
 }

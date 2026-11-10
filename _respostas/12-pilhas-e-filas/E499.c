@@ -3,8 +3,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-// Na pasta do assunto basta #include "pilha.h" (o rodar compila o pilha.c
-// junto). Aqui a resolução inclui a implementação para compilar sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c"
 
 // números inteiros não negativos separados por espaço e + - * /

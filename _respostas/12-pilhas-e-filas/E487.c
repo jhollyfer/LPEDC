@@ -3,8 +3,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-// Na pasta do assunto basta #include "pilha.h" (o rodar compila o pilha.c
-// junto). Aqui a resolução inclui a implementação para compilar sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0082-pilha/pilha.c"
 
 int main(void) {
@@ -29,9 +28,9 @@ int main(void) {
     printf("%d %d\n", x, pilha_tamanho(p));
 
     while (pilha_desempilha(p, &x)) {
-        printf("%d ", x);
+        printf("%d\n", x);
     }
-    printf("\nvazia? %d\n", pilha_vazia(p));
+    printf("vazia? %d\n", pilha_vazia(p));
 
     bool ok = pilha_desempilha(p, &x); // vazia: devolve false e não mexe em x
     printf("mais um desempilha: devolveu %d, x = %d\n", ok, x);

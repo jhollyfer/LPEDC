@@ -1,32 +1,23 @@
 ## 0118 · Juntando tudo
 
-A loja virtual vai mudar o relatório do fim do dia: em vez de 16 mil pedidos,
-agora ele vai ordenar **1 milhão**. O programador testou com 16 mil e mediu
-alguns milissegundos. A gerente pergunta: "e com 1 milhão, quanto tempo vai
-levar?". Rodar para ver pode demorar meia hora. Dá para **prever** antes?
+O relatório da loja virtual vai ordenar **1 milhão** de pedidos em vez de 16
+mil, e o programador só mediu com 16 mil. Rodar para ver pode levar meia hora.
+Dá para **prever** antes, com os quatro passos deste módulo:
 
-Dá, com o que veio neste módulo. A receita tem quatro passos:
-
-1. **Conhecer a classe.** Pela recorrência ou pela contagem: o insertion
-   sort é `T(n) = T(n-1) + n`, Θ(n²); o merge sort é `2 T(n/2) + n`,
-   Θ(n log n) pelo teorema mestre; o heapsort faz `n` descidas de
-   O(log n); o quick sort é Θ(n log n) em média. E o limite inferior diz que
-   nenhum deles pode fazer menos de `log₂ n!` comparações no pior caso.
-2. **Medir em dois tamanhos, um o dobro do outro.** Se a classe está certa,
-   dobrar `n` multiplica o custo por 4 (n²) ou por um pouco mais de 2
-   (n log n). Se a razão não bater, a análise ou o código têm problema.
-3. **Extrapolar.** Do tamanho medido `n` para o tamanho `N`, o custo é
-   multiplicado por `(N/n)²` na classe n², ou por `(N log N)/(n log n)` na
-   classe n log n.
+1. **Conhecer a classe.** Insertion sort: `T(n) = T(n-1) + n`, Θ(n²). Merge
+   sort: `2 T(n/2) + n`, Θ(n log n) pelo teorema mestre. Heapsort: `n` descidas
+   de O(log n). Quick sort: Θ(n log n) em média.
+2. **Medir em dois tamanhos, um o dobro do outro.** Dobrar `n` multiplica o
+   custo por 4 (n²) ou por pouco mais de 2 (n log n).
+3. **Extrapolar.** De `n` para `N`, o custo é multiplicado por `(N/n)²` na
+   classe n², ou por `(N log N)/(n log n)` na classe n log n.
 4. **Conferir**, quando der para rodar o tamanho grande.
 
-Medir tem duas réguas. A **contagem de comparações** sai igual em qualquer
-computador e é a que confere a teoria. O **tempo** (com `clock()`, de
-`<time.h>`) é o que a gerente quer saber, mas muda de máquina para máquina e
-até de uma execução para outra. O programa usa as duas.
+Há duas réguas: a **contagem de comparações**, igual em qualquer computador, e
+o **tempo** (`clock()`, de `<time.h>`), que varia entre máquinas.
 
-As quatro ordenações ficam num TAD, `ordena.h` e `ordena.c`, na pasta do
-assunto. Toda comparação passa por uma função `menor` escondida no `.c`, que
+As quatro ordenações ficam no TAD `ordena.h` e `ordena.c`, na pasta do
+assunto. Toda comparação passa por uma função `menor`, escondida no `.c`, que
 conta:
 
 ```c
@@ -40,16 +31,14 @@ long ord_contagem(void);
 int ord_confere(const int v[], int n);
 ```
 
-Os pedidos são números sorteados com um gerador
-próprio, para a entrada ser a mesma em qualquer máquina. Cada algoritmo
-ordena 8 mil e 16 mil; da razão sai a confirmação da classe, e da medida de
-16 mil sai a previsão para 1 milhão. Em verde, o que a previsão acertou; em
-vermelho, o que nem dá para rodar:
+Os pedidos vêm de um gerador próprio, igual em qualquer máquina. Cada
+algoritmo ordena 8 mil e 16 mil; a razão confirma a classe e a medida de 16 mil
+prevê o milhão. Verde acertou; vermelho nem dá para rodar:
 
 {{ideia}}
 
-O programa mede, prevê e confere. O `insertion` só ganha previsão: rodar de
-verdade levaria quase meia hora:
+O programa mede, prevê e confere; o `insertion` só ganha previsão, pois rodar
+levaria quase meia hora:
 
 ```c
 #include <math.h>
@@ -144,14 +133,12 @@ int main(void) {
 ```
 
 A saída tem três camadas. As **razões** confirmam as classes: ×4,00 no
-insertion, ×2,17 a ×2,29 nos outros três. As **previsões** de comparações
-ficaram a menos de 4% do medido: o modelo `n log n` ignora termos menores,
-então erra um pouco para baixo. E o **tempo** do insertion para 1 milhão,
-1.600 segundos, é uns 27 minutos, contra um terço de segundo do merge sort:
-a mesma tarefa, mais de 5 mil vezes mais lenta.
+insertion e ×2,17 a ×2,29 nos outros. As **previsões** de comparações ficaram a
+menos de 4% do medido (o modelo `n log n` ignora termos menores). O **tempo**
+do insertion para 1 milhão, 1.600 segundos (uns 27 minutos), é mais de 5 mil
+vezes o do merge sort, um terço de segundo.
 
-O fluxograma aplica a receita a um algoritmo. O caminho marcado é o do merge
-sort, que passa pela previsão e pela conferência:
+O fluxograma aplica a receita ao merge sort:
 
 {{fluxograma}}
 
@@ -168,31 +155,22 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 | comparações previstas | 64.831.293 · 3.906 | 253 bilhões |
 
 > [!WARNING]
-> Na classe n log n, dobrar `n` **não** dá ×2 exato. De 8 mil para 16 mil, a
-> conta é `2 · log₂ 16.000 / log₂ 8.000 = 2,15`, e quem espera ×2 acha que o
-> algoritmo "está piorando". O contrário também engana: com `n` pequeno
-> (algumas centenas), o tempo é dominado por constantes, chamadas de função e
-> cache, e as razões saem malucas. Meça com tamanhos grandes o bastante para
-> o tempo passar de alguns milissegundos, e sempre a partir da **mesma
-> entrada**: o `memcpy` do `mede` restaura o vetor original antes de cada
-> ordenação. Sem ele, o segundo algoritmo receberia o vetor já ordenado.
+> Na classe n log n, dobrar `n` **não** dá ×2 exato: de 8 mil para 16 mil, é
+> `2 · log₂ 16.000 / log₂ 8.000 = 2,15`. Com `n` pequeno, constantes, chamadas
+> e cache distorcem as razões. Meça com tamanhos grandes e da **mesma
+> entrada**: o `memcpy` do `mede` restaura o vetor antes de cada ordenação.
 
 > [!TIP]
-> **Por dentro do C:** `clock()` devolve o tempo de processador gasto pelo
-> programa, em "tiques"; `CLOCKS_PER_SEC` diz quantos tiques há num segundo
-> (no Linux, 1.000.000). As duas coisas são inteiras: escrever
-> `(clock() - ini) / CLOCKS_PER_SEC` faz divisão inteira e dá **0** para
-> tudo que dura menos de um segundo. Por isso o `1000.0 *` na frente, que
-> converte para `double` antes de dividir. E lembre que o comando do exemplo compila sem
-> otimização e com o AddressSanitizer, que vigia cada acesso à memória: os
-> tempos aqui são várias vezes maiores que os de um `gcc -O2` sem
-> sanitizador. As **razões** continuam valendo, e a previsão trabalha com
-> elas.
+> **Por dentro do C:** `clock()` devolve tiques de processador, e
+> `CLOCKS_PER_SEC` é quantos cabem num segundo (1.000.000 no Linux). Os dois
+> são inteiros: `(clock() - ini) / CLOCKS_PER_SEC` dá **0** abaixo de um
+> segundo, por isso o `1000.0 *` na frente. O exemplo compila sem
+> otimização e com AddressSanitizer: os tempos são maiores, as **razões** não.
 
 > [!NOTE]
-> **Pergunta para você:** o quick sort daqui usa o elemento do meio como
-> pivô. Ele continuaria rápido se o vetor de entrada já estivesse em ordem?
-> E se os 1 milhão de pedidos tivessem só 10 valores diferentes (as notas de
-> 0 a 9 de uma avaliação)? Pense na partição antes de rodar o exemplo A235.
+> **Pergunta para você:** o quick sort daqui usa o elemento do meio como pivô.
+> Ele continuaria rápido com o vetor já em ordem? E com 1 milhão de pedidos de
+> só 10 valores diferentes (notas de 0 a 9)? Pense na partição antes de rodar
+> o exemplo A235.
 
 {{pratique}}

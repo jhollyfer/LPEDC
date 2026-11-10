@@ -1,14 +1,16 @@
 // 0147 · Trie
 // Exercício E879 · ★★☆
 //
-// Conte quantas vezes cada palavra aparece num texto usando uma trie em que
-// o nó guarda um contador (int qtd) no lugar do bool fim. O struct e o main
-// já estão prontos; escreva:
-// - conta(r, p, tam): soma 1 na palavra de tam letras que começa em p
-//  (o texto não tem '\0' depois de cada palavra, por isso o tam);
+// Conte quantas vezes cada palavra aparece num texto com uma trie em que o nó
+// guarda um contador (int qtd) no lugar do bool fim. Defina o struct NoFreq (26
+// filhos e qtd) e escreva: - conta(r, p, tam): soma 1 na palavra de tam letras
+// que começa em p (o texto
+//   não tem '\0' depois de cada palavra, por isso o tam);
 // - lista(n, buf, nivel, &distintas): mostra as palavras em ordem alfabética
-//  com a contagem e conta quantas palavras diferentes existem;
+//   com a contagem e conta quantas palavras diferentes existem;
 // - libera(n).
+//
+// O texto é "o rato roeu a roupa do rei de roma o rei riu da roupa".
 //
 //   Saída esperada:
 //   a      1
@@ -24,44 +26,12 @@
 //   roupa  2
 //   14 palavras, 11 diferentes
 //
-// Escreva sua resposta abaixo (escreva conta, lista e libera):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct NoFreq {
-    struct NoFreq *filho[26];
-    int qtd; // quantas vezes a palavra que termina aqui apareceu (0: nenhuma)
-} NoFreq;
-
-NoFreq *novo(void) {
-    NoFreq *n = calloc(1, sizeof(NoFreq));
-    if (n == NULL) {
-        exit(1);
-    }
-    return n;
-}
-
 int main(void) {
-    const char *texto = "o rato roeu a roupa do rei de roma o rei riu da roupa";
-    NoFreq *r = novo();
-    int total = 0;
-    int i = 0;
-    while (texto[i] != '\0') {
-        if (texto[i] == ' ') {
-            i++;
-            continue;
-        }
-        int ini = i;
-        while (texto[i] >= 'a' && texto[i] <= 'z') {
-            i++;
-        }
-        // conta(r, texto + ini, i - ini);
-        (void)ini; // apague esta linha
-        total++;
-    }
-    printf("%d palavras\n", total); // troque pela lista e pelas diferentes
 
-    free(r); // troque por libera(r)
     return 0;
 }

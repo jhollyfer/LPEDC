@@ -115,18 +115,19 @@ int main(void) {
     No *fila = NULL;
     for (int i = 0; i < 5; i++) fila = lista_insere_inicio(fila, senhas[i]);
 
-    int senha;
-    printf("Digite a senha: ");
-    if (scanf("%d", &senha) != 1) {
-        printf("entrada inválida\n");
-        lista_libera(fila);
-        return 1;
-    }
-    int pos = posicao(fila, senha);
-    if (pos > 0) {
-        printf("senha %d está na posição %d\n", senha, pos);
-    } else {
-        printf("senha %d não está na fila\n", senha);
+    for (int k = 0; k < 2; k++) {
+        int senha;
+        if (scanf("%d", &senha) != 1) {
+            printf("entrada inválida\n");
+            lista_libera(fila);
+            return 1;
+        }
+        int pos = posicao(fila, senha);
+        if (pos > 0) {
+            printf("senha %d está na posição %d\n", senha, pos);
+        } else {
+            printf("senha %d não está na fila\n", senha);
+        }
     }
 
     lista_libera(fila);

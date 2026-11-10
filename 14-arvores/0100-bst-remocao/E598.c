@@ -1,58 +1,31 @@
 // 0100 · BST: remoção
 // Exercício E598 · ★★☆
 //
-// Ache o bug. Esta é uma cópia da remoção do TAD com UMA linha diferente.
-// Ela deveria remover o 30 da árvore das matrículas, mas depois da remoção
-// o 35 aparece duas vezes:
+// A academia chama os alunos pela ordem de matrícula, sempre o menor número
+// primeiro. Com o TAD bst.h, insira as matrículas 50 30 70 20 40 60 80 35 45
+// e escreva No *remove_menor(No *r, int *menor): remove o nó mais à esquerda
+// (que tem no máximo um filho), guarda a chave em *menor e devolve a nova
+// raiz. Chame-a até a árvore esvaziar, numerando as chamadas.
 //
 //   Saída esperada:
-//   Em ordem: 20 35 40 45 50 60 70 80
+//   Chamada 1: matrícula 20
+//   Chamada 2: matrícula 30
+//   Chamada 3: matrícula 35
+//   Chamada 4: matrícula 40
+//   Chamada 5: matrícula 45
+//   Chamada 6: matrícula 50
+//   Chamada 7: matrícula 60
+//   Chamada 8: matrícula 70
+//   Chamada 9: matrícula 80
+//   Árvore vazia: sim
 //
-//   Saída que aparece:
-//   Em ordem: 20 35 35 40 45 50 60 70 80
-//
-// Ache a linha, conserte e rode até aparecer a saída esperada.
-//
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "bst.h"
 
-No *remove_errado(No *r, int chave) {
-    if (r == NULL) {
-        return NULL;
-    }
-    if (chave < r->chave) {
-        r->esq = remove_errado(r->esq, chave);
-    } else if (chave > r->chave) {
-        r->dir = remove_errado(r->dir, chave);
-    } else if (r->esq == NULL || r->dir == NULL) {
-        No *filho = r->esq != NULL ? r->esq : r->dir;
-        free(r);
-        return filho;
-    } else {
-        No *suc = r->dir;
-        while (suc->esq != NULL) {
-            suc = suc->esq;
-        }
-        r->chave = suc->chave;
-        r->dir = remove_errado(r->dir, chave);
-    }
-    return r;
-}
-
 int main(void) {
-    int matriculas[] = {50, 30, 70, 20, 40, 60, 80, 35, 45};
-    No *raiz = NULL;
-    for (int i = 0; i < 9; i++) {
-        raiz = bst_insere(raiz, matriculas[i]);
-    }
-    raiz = remove_errado(raiz, 30);
-    printf("Em ordem:");
-    bst_em_ordem(raiz);
-    printf("\n");
 
-    raiz = bst_libera(raiz);
     return 0;
 }

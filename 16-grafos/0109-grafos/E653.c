@@ -1,15 +1,11 @@
 // 0109 · Grafos
 // Exercício E653 · ★★★
 //
-// Pegue a matriz das ciclovias do texto do assunto (já está no esqueleto) e
-// converta para LISTA de adjacência alocada com malloc: um vetor de 5
-// ponteiros, cada um apontando para a lista encadeada dos vizinhos daquele
-// ponto. Regras:
-//
-// - os vizinhos de cada lista aparecem em ordem crescente de índice;
-// - cada nó custa O(1) para inserir (nada de percorrer a lista até o fim);
-// - conte quantos nós foram alocados;
-// - libere tudo no final (o rodar não pode acusar vazamento).
+// Converta a matriz das ciclovias (no esqueleto) para uma LISTA de adjacência
+// com malloc: um vetor de 5 ponteiros, cada um para a lista encadeada dos
+// vizinhos do ponto. Regras: os vizinhos de cada lista saem em ordem crescente
+// de índice; inserir um nó custa O(1) (sem percorrer a lista até o fim); conte
+// os nós alocados; libere tudo no final, sem vazamento.
 //
 //   Saída esperada:
 //   Centro  -> Praia Feira

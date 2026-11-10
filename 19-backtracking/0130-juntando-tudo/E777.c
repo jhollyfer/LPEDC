@@ -30,8 +30,6 @@
 #include <stdio.h>
 
 int main(void) {
-    const char *jogo[6] = {"..2..3", "1..2..", ".1....", "6..3..", "24.6..", ".6.5.."};
-    (void)jogo; // apague esta linha quando usar o vetor
 
     return 0;
 }

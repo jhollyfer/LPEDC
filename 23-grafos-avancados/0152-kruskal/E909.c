@@ -1,11 +1,17 @@
 // 0152 · Kruskal: árvore geradora mínima
 // Exercício E909 · ★★☆
 //
-// Voltando às seis vilas do texto: o prefeito prometeu na campanha
-// asfaltar a estrada Sede-Ponte (R$ 6 mil), que o Kruskal descartou. Ela
-// vai entrar de qualquer jeito. Escreva o programa (pode partir do código
-// do texto) que monte a árvore mais barata que CONTENHA essa estrada e
-// mostre quanto a promessa custou a mais.
+// Seis vilas (Sede, Ponte, Brejo, Serra, Lagoa e Vale, índices 0 a 5) podem ser
+// ligadas por estas estradas, com o custo em R$ mil:
+//
+//   Sede-Brejo 4   Ponte-Brejo 3   Sede-Ponte 6   Brejo-Serra 8
+//   Ponte-Serra 5  Ponte-Lagoa 9   Serra-Lagoa 2  Serra-Vale 7
+//   Lagoa-Vale 7
+//
+// O prefeito prometeu asfaltar a estrada Sede-Ponte, que o Kruskal descartaria.
+// Escreva o Kruskal que monte a árvore mais barata que CONTENHA essa estrada
+// (no empate de custo, vale a ordem da lista) e mostre quanto a promessa custou
+// a mais que a árvore mínima sem a exigência.
 //
 //   Saída esperada:
 //   Sede-Ponte (6) obrigatória
@@ -21,19 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define V 6
-#define E 9
-
-typedef struct {
-    int a, b, custo;
-} Aresta;
-
-const char *vilas[V] = {"Sede", "Ponte", "Brejo", "Serra", "Lagoa", "Vale"};
-
 int main(void) {
-    Aresta estradas[E] = {{0, 2, 4}, {1, 2, 3}, {0, 1, 6}, {2, 3, 8}, {1, 3, 5},
-                          {1, 4, 9}, {3, 4, 2}, {3, 5, 7}, {4, 5, 7}};
-    (void)estradas; // apague esta linha
 
     return 0;
 }

@@ -1,11 +1,12 @@
 // 0110 · BFS: busca em largura
 // Exercício E655 · ★☆☆
 //
-// O mapa abaixo liga seis bairros por linhas de ônibus diretas (grafo não
-// dirigido). O programa já roda uma BFS a partir da Penha e mostra a ordem
-// da visita com a distância de cada bairro. Estenda o programa: acrescente
-// o vetor pai[] (quem descobriu cada bairro) e, depois da linha da ordem,
-// mostre uma linha por bairro, em ordem de índice, dizendo quem o descobriu.
+// O mapa liga seis bairros por linhas de ônibus diretas (grafo não dirigido):
+// Centro (0), Lapa (1), Moema (2), Penha (3), Saude (4) e Tatuape (5). As
+// linhas são Centro-Lapa, Centro-Moema, Lapa-Penha, Moema-Penha, Moema-Saude,
+// Penha-Tatuape e Saude-Tatuape. Escreva uma BFS a partir da Penha que mostra,
+// numa linha, a ordem da visita com a distância de cada bairro e, depois, uma
+// linha por bairro (em ordem de índice) dizendo quem o descobriu (vetor pai[]).
 //
 //   Saída esperada:
 //   Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
@@ -16,37 +17,13 @@
 //   Saude: descoberto por Moema
 //   Tatuape: descoberto por Penha
 //
-// Escreva sua resposta abaixo (estenda o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
 #define V 6
 
 int main(void) {
-    const char *nomes[V] = {"Centro", "Lapa", "Moema", "Penha", "Saude", "Tatuape"};
-    int adj[V][V] = {
-        {0, 1, 1, 0, 0, 0},
-        {1, 0, 0, 1, 0, 0},
-        {1, 0, 0, 1, 1, 0},
-        {0, 1, 1, 0, 0, 1},
-        {0, 0, 1, 0, 0, 1},
-        {0, 0, 0, 1, 1, 0},
-    };
-    int dist[V], fila[V], inicio = 0, fim = 0;
-    for (int v = 0; v < V; v++) dist[v] = -1;
 
-    dist[3] = 0;
-    fila[fim++] = 3;
-    while (inicio < fim) {
-        int u = fila[inicio++];
-        printf("%s(%d) ", nomes[u], dist[u]);
-        for (int v = 0; v < V; v++) {
-            if (adj[u][v] && dist[v] == -1) {
-                dist[v] = dist[u] + 1;
-                fila[fim++] = v;
-            }
-        }
-    }
-    printf("\n");
     return 0;
 }

@@ -1,41 +1,31 @@
 ## 0127 · Backtracking
 
-Você ganhou um cartão-presente de R$ 35 da livraria do bairro, e o cartão não
-dá troco: ou você gasta o valor exato, ou o resto fica perdido. Na vitrine há
-um atlas (R$ 30), um mangá (R$ 20), um livro de poesia (R$ 15) e um marcador
-de página (R$ 5). Que combinações fecham exatamente R$ 35?
+Um cartão-presente de R$ 35 não dá troco: ou você gasta o valor exato, ou o
+resto se perde. Na vitrine há um atlas (R$ 30), um mangá (R$ 20), um livro de
+poesia (R$ 15) e um marcador (R$ 5). Que combinações fecham R$ 35?
 
-Dá para resolver com o assunto 0125: gerar os 2⁴ = 16 subconjuntos, somar
-cada um e ficar com os que dão 35. Isso desperdiça trabalho: atlas e mangá já
-somam R$ 50, nenhum subconjunto que comece assim pode dar certo, e mesmo
-assim a enumeração cega vai até o fim de cada um deles.
+Pelo assunto 0125, bastaria somar os 2⁴ = 16 subconjuntos. Mas atlas e mangá
+já somam R$ 50, e a enumeração cega continua até o fim de cada subconjunto que
+começa assim.
 
 O **backtracking** (retrocesso; o Ziviani chama de **tentativa e erro**) é a
-enumeração que **desiste cedo**. Ela constrói a solução uma escolha por vez,
-como antes, mas a cada passo pergunta: "este começo ainda pode virar uma
-solução?". Se não pode, ela nem desce: volta um passo e tenta a próxima
-opção. Cortar assim um galho inteiro da árvore de decisões se chama **poda**.
-
-O esqueleto tem três partes, e a primeira e a última você já viu:
+enumeração que **desiste cedo**: a cada escolha, pergunta se o começo ainda
+pode virar solução e, se não, volta um passo. Cortar um galho inteiro da
+árvore de decisões se chama **poda**. O esqueleto tem três partes:
 
 1. **caso de parada**: a solução está completa? Mostre (ou conte) e volte;
 2. **poda**: o começo já é inviável? Volte sem descer;
 3. **escolha**: para cada opção, escolha, desça e **desfaça**.
 
-Neste problema, a poda é simples: os preços são positivos, então se a soma
-**passou** de 35, acrescentar mais itens só piora. E quando a soma bate
-**exatamente** 35, também não precisa descer: os próximos itens só poderiam
-entrar com a soma passando de 35.
-
-Cada caixa da árvore mostra a soma até ali. O galho da
-esquerda leva o item do nível, o da direita não leva. As caixas vermelhas são
-podas, as verdes são soluções e as cinzas são becos sem saída (os itens
-acabaram antes de a soma chegar a 35):
+Aqui os preços são positivos: se a soma **passou** de 35, acrescentar itens só
+piora, e se bateu **exatamente** 35, também não precisa descer. Na árvore, a
+esquerda leva o item e a direita não. As caixas vermelhas são podas, as verdes
+são soluções e as cinzas são becos sem saída (os itens acabaram antes de a soma
+chegar a 35):
 
 {{ideia}}
 
-No código, a poda é o primeiro `if` da função. A chamada que passou do alvo
-começa, percebe o problema e volta na hora:
+A poda é o primeiro `if`: a chamada que passou do alvo volta na hora:
 
 ```c
 #include <stdbool.h>
@@ -85,35 +75,24 @@ int main(void) {
 // 21 chamadas (sem poda seriam 31)
 ```
 
-A árvore completa de 4 itens tem 1 + 2 + 4 + 8 + 16 = 31 nós. A poda deixou
-21. Parece pouco, mas o efeito cresce com o tamanho: cada poda perto da raiz
-corta um galho com metade da árvore. Com 30 itens e um alvo pequeno, são
-alguns milhares de chamadas em vez de um bilhão.
-
-As duas perguntas de cima mandam embora cedo; só quem passa por elas chega
-às duas chamadas recursivas:
+A árvore completa de 4 itens tem 31 nós, e a poda deixou 21. O ganho cresce
+com `n`: uma poda perto da raiz corta metade da árvore, e com 30 itens e um
+alvo pequeno são alguns milhares de chamadas em vez de um bilhão:
 
 {{fluxograma}}
 
 > [!WARNING]
-> A ordem dos testes importa. Se o `if (i == N) return;` viesse **antes** do
-> `if (soma == ALVO)`, a solução que fecha justo com o último item
-> (`atlas marcador`, que chega a 35 com `i` valendo 4) seria descartada como
-> "acabaram os itens", e só `mangá poesia` apareceria. Outro clássico é
-> escrever a poda com `>=` no lugar de `>`: aí toda soma que bate o alvo é
-> cortada antes de ser mostrada, e a saída fica vazia. A poda só pode cortar
-> o que **com certeza** não leva a solução; uma poda ambiciosa demais deixa
-> o programa rápido e errado.
+> A ordem dos testes importa. Com `if (i == N) return;` **antes** de
+> `if (soma == ALVO)`, a solução que fecha com o último item (`atlas
+> marcador`, com `i` valendo 4) seria descartada. Poda com `>=` no lugar de
+> `>` corta toda soma que bate o alvo, e a saída fica vazia. A poda só pode
+> cortar o que **com certeza** não leva a solução.
 
 > [!TIP]
-> **Por dentro do C:** a soma viaja como **parâmetro**, então cada frame tem a
-> sua e voltar desfaz a soma de graça. Já `leva[]` é global e um só: por isso
-> a linha `leva[i] = false` antes do segundo caminho. O vetor ocupa `N` bytes
-> e a pilha nunca passa de `N + 1` frames, mesmo quando as chamadas somam
-> milhões. O custo no pior caso continua **O(2ⁿ)**: a poda não muda a ordem
-> de grandeza garantida, muda o quanto da árvore você visita na prática.
-> Ordenar os preços do maior para o menor, como aqui, faz a soma estourar
-> mais cedo e podar mais perto da raiz.
+> **Por dentro do C:** a soma é **parâmetro**, e voltar a desfaz de graça;
+> `leva[]` é global, por isso `leva[i] = false` antes do segundo caminho. O
+> pior caso continua **O(2ⁿ)**: a poda muda o quanto da árvore você visita, não
+> a garantia.
 
 > [!NOTE]
 > **Pergunta para você:** se o cartão fosse de R$ 50, quais combinações

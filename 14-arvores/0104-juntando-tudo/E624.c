@@ -3,13 +3,18 @@
 //
 // Lista de espera do posto de saúde. Cada linha da entrada traz um nome e
 // uma prioridade (maior = mais urgente). Um nome que já está na lista é
-// recusado. No fim da entrada, o programa chama todos, do mais urgente ao
-// menos urgente. Escreva do zero, usando:
+// recusado. No fim da entrada, chame todos, do mais urgente ao menos
+// urgente. Use:
 // - uma BST de nomes (compare com strcmp) para saber se o nome já entrou;
 // - um heap de máximo de structs {prioridade, nome} para a ordem de chamada.
 //
-// Teste com:
-//   printf 'Ana 3\nBeto 5\nCaio 1\nAna 4\nDani 4\nEdu 2\n' | ~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E624.c
+//   Entrada:
+//   Ana 3
+//   Beto 5
+//   Caio 1
+//   Ana 4
+//   Dani 4
+//   Edu 2
 //
 //   Saída esperada:
 //   Ana já está na lista

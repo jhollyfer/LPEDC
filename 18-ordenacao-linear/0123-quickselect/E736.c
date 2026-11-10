@@ -1,11 +1,15 @@
 // 0123 · Quickselect
 // Exercício E736 · ★★☆
 //
-// Quem cuida de servidores não olha a média do tempo de resposta, olha os
-// PERCENTIS: o p90 é o tempo que 90% das requisições não ultrapassam. O
-// programa abaixo gera 50 tempos (com alguns picos). Escreva
-// int percentil(int v[], int n, int pct) com o quickselect e mostre p50,
-// p90 e p99. Depois ordene com qsort e confira as posições 24, 44 e 49.
+// Quem cuida de servidores olha os PERCENTIS: o p90 é o tempo que 90% das
+// requisições não ultrapassam. Gere 50 tempos de resposta, em ms, com
+//
+//   t[i] = 30 + (i * 37) % 50 * 4 + (i % 9 == 0 ? 600 : 0)
+//
+// Escreva o quickselect (Lomuto, pivô v[r]) e int percentil(int v[], int n,
+// int pct), que devolve o valor da posição teto(pct * n / 100) - 1 da ordem
+// crescente. Mostre p50, p90 e p99. Depois ordene com qsort e confira as
+// posições 24, 44 e 49.
 //
 //   Saída esperada:
 //   p50: 138 ms
@@ -18,53 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N 50
-
-void troca(int *a, int *b) {
-    int aux = *a;
-    *a = *b;
-    *b = aux;
-}
-
-int separa(int v[], int p, int r) {
-    int pivo = v[r], j = p;
-    for (int k = p; k < r; k++) {
-        if (v[k] <= pivo) {
-            troca(&v[j], &v[k]);
-            j++;
-        }
-    }
-    troca(&v[j], &v[r]);
-    return j;
-}
-
-int quickselect(int v[], int n, int k) {
-    int p = 0, r = n - 1;
-    while (p < r) {
-        int j = separa(v, p, r);
-        if (j == k) {
-            return v[j];
-        }
-        if (k < j) {
-            r = j - 1;
-        } else {
-            p = j + 1;
-        }
-    }
-    return v[p];
-}
-
-int compara(const void *a, const void *b) {
-    int x = *(const int *) a, y = *(const int *) b;
-    return (x > y) - (x < y);
-}
-
 int main(void) {
-    int t[N]; // tempo de resposta do site, em milissegundos
-    for (int i = 0; i < N; i++) {
-        t[i] = 30 + (i * 37) % 50 * 4 + (i % 9 == 0 ? 600 : 0); // alguns picos
-    }
-    printf("primeiro tempo: %d ms\n", t[0]); // apague esta linha
 
     return 0;
 }

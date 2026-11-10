@@ -1,15 +1,14 @@
 // 0149 · Juntando tudo
 // Exercício E894 · ★★★
 //
-// Sugestões a até DUAS edições, com a distância de Levenshtein do assunto
-// 0142, sem calcular a distância contra cada palavra do dicionário. A ideia:
-// desça na trie com DFS levando a última linha da tabela da distância. Cada
-// nó acrescenta uma linha (a letra dele contra a palavra procurada), e todas
-// as palavras que passam por aquele prefixo aproveitam as linhas de cima. Se
-// o menor valor da linha nova já passar de 2, nada embaixo daquele nó chega a
-// 2: pode cortar o ramo inteiro. Escreva parecidas(d, alvo), que mostra, em
-// ordem alfabética, as palavras do dicionário básico a distância 2 ou menos,
-// com a distância entre parênteses.
+// Sugira palavras a até DUAS edições (distância de Levenshtein, assunto 0142)
+// sem calcular a distância contra cada palavra do dicionário. Desça na trie do
+// dicionário básico (corretor.h) com uma DFS que leva a última linha da tabela
+// da distância: cada nó acrescenta uma linha (a letra dele contra a palavra
+// procurada). Se o menor valor da linha nova já passar de 2, corte o ramo.
+// Escreva parecidas(d, alvo), que mostra, em ordem alfabética, as palavras a
+// distância 2 ou menos, com a distância entre parênteses. Teste com carrro,
+// jnaela, bolsa e mercadorias.
 //
 //   Saída esperada:
 //   carrro: bairro(2) caro(2) carro(1)
@@ -24,11 +23,6 @@
 #include "corretor.h"
 
 int main(void) {
-    NoC *dic = cor_cria();
-    cor_carrega_basico(dic);
-    const char *testes[] = {"carrro", "jnaela", "bolsa", "mercadorias"};
-    (void)testes; // apague esta linha
 
-    cor_libera(dic);
     return 0;
 }

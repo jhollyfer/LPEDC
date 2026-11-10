@@ -1,47 +1,35 @@
 ## 0094 · Merge sort
 
-Fim de semestre: duas monitoras corrigiram as provas da turma, cada uma
-metade, e cada uma entregou a sua pilha já em ordem de nota. Para montar uma
-pilha só, ninguém reordena tudo do zero. Você olha o topo das duas pilhas,
-pega a menor nota, e repete. Quando uma pilha acaba, a outra vai inteira para
-o fim.
+Duas monitoras entregam pilhas de provas, cada uma já em ordem de nota. Para
+montar uma pilha só, você olha o topo das duas, pega a menor nota e repete.
+Quando uma acaba, a outra vai inteira para o fim.
 
-Juntar duas sequências ordenadas numa só é a **intercalação** (em inglês,
-*merge*). Ela é barata: cada comparação manda **um** elemento para o
-resultado, então juntar `n` elementos custa no máximo `n - 1` comparações.
-O exemplo A188 mostra a intercalação sozinha.
+Juntar duas sequências ordenadas numa só é a **intercalação** (*merge*). Cada
+comparação manda **um** elemento para o resultado, então juntar `n` elementos
+custa no máximo `n - 1` comparações (exemplo A188).
 
-O **merge sort** (ordenação por intercalação) usa isso com a ideia de
-**dividir e conquistar**:
+O **merge sort** (ordenação por intercalação) usa **dividir e conquistar**:
 
 1. **divida** o vetor ao meio;
 2. **ordene** cada metade, com o próprio merge sort (recursão, assunto 0032);
 3. **intercale** as duas metades ordenadas.
 
-O caso base é o pedaço com 0 ou 1 elemento, que já está ordenado. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
-e `r` é uma posição depois do último. Assim, o pedaço tem `r - p` elementos e
-as metades `[p, q)` e `[q, r)` se encaixam sem sobrar nem repetir ninguém.
-O Cormen usa o intervalo fechado `A[p..r]`, com `q = ⌊(p + r)/2⌋` e as
-metades `A[p..q]` e `A[q+1..r]`: muda a conta dos índices, não o algoritmo.
+O caso base é o pedaço com 0 ou 1 elemento. O código usa o intervalo
+**semiaberto** `[p, r)`: o pedaço tem `r - p` elementos e as metades `[p, q)`
+e `[q, r)` se encaixam sem repetir ninguém. O Cormen usa o intervalo fechado
+`A[p..r]`: muda a conta dos índices, não o algoritmo.
 
-Por que é rápido? Dividir ao meio dá `log₂ n` níveis (8 elementos: 3 níveis).
-Em **cada** nível, as intercalações juntas passam por todos os `n` elementos
-uma vez. Total: `n log₂ n`, ou **O(n log n)**, e isso em **todos** os casos,
-inclusive o pior. Para 1 milhão de elementos, são uns 20 milhões de passos,
-contra 500 bilhões de um algoritmo O(n²).
-
-O preço é memória: a intercalação precisa de um vetor auxiliar (o
-**rascunho**) do tamanho do pedaço. O merge sort usa **O(n)** de memória
+Dividir ao meio dá `log₂ n` níveis (8 elementos: 3 níveis), e em **cada**
+nível as intercalações passam pelos `n` elementos: **O(n log n)** em **todos**
+os casos. O preço é um vetor auxiliar (o **rascunho**): **O(n)** de memória
 extra.
 
-No desenho, as notas descem sendo divididas até virar pares (e,
-mais embaixo, pedaços de 1). Depois sobem sendo intercaladas, em verde, até
-formar o vetor inteiro:
+As notas descem divididas até pedaços de 1 e sobem intercaladas (verde):
 
 {{ideia}}
 
-No código, o rascunho `w` é alocado **uma vez** no `main` e emprestado para
-todas as intercalações:
+O rascunho `w` é alocado **uma vez** no `main` e serve a todas as
+intercalações:
 
 ```c
 #include <stdio.h>
@@ -105,9 +93,8 @@ int main(void) {
 // 17 comparações
 ```
 
-Olhe a ordem das linhas da saída: a recursão termina **toda** a metade
-esquerda (`[0, 4)`) antes de começar a direita. É a pilha de chamadas do
-assunto 0031 trabalhando.
+A recursão termina a metade esquerda (`[0, 4)`) antes da direita (assunto
+0031).
 
 ### Passo a passo
 
@@ -125,35 +112,26 @@ A última intercalação, `7 18 33 52` com `12 26 41 60`. `i` anda na esquerda,
 | 7 | 52 | 60 | 52 (esquerda) | ... 41 52 |
 | | (esquerda acabou) | 60 | 60, sem comparar | ... 52 60 |
 
-Sete comparações para 8 elementos: o máximo, `n - 1`. Somando os níveis:
-4 + 6 + 7 = **17 comparações**.
-
-O fluxograma é curto porque a recursão esconde o trabalho. As
-duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
+Sete comparações para 8 elementos, o máximo (`n - 1`). Somando os níveis:
+4 + 6 + 7 = **17 comparações**. No fluxograma, cada caixa `merge_sort` repete
+o fluxograma inteiro para uma metade:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Com o intervalo semiaberto, o caso base é `r - p < 2`, e não `p < r` virado
-> ao contrário. Se você escrever `if (p >= r) return;`, um pedaço de 1
-> elemento (`r = p + 1`) passa direto, `q` vira `p`, e a chamada
-> `merge_sort(v, w, q, r)` recebe **o mesmo** pedaço de novo, para sempre.
-> O programa morre com **estouro de pilha** (*stack overflow*). Misturar
-> intervalo fechado num lugar e semiaberto em outro dá o mesmo resultado.
+> Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
+> `if (p >= r) return;`, um pedaço de 1 elemento passa direto e
+> `merge_sort(v, w, q, r)` recebe o mesmo pedaço para sempre: **estouro de
+> pilha**. Misturar intervalo fechado e semiaberto dá o mesmo erro.
 
 > [!TIP]
-> **Por dentro do C:** a profundidade da recursão é só `log₂ n` (20 frames
-> para 1 milhão de elementos), então a pilha não preocupa. A memória que pesa
-> é o rascunho: 1 milhão de `int` são 4 MB. Alocar com `malloc` uma vez e
-> passar `w` para baixo evita um `malloc`/`free` por intercalação (seriam
-> quase 1 milhão de chamadas). O `<=` da intercalação também conta: em
-> caso de empate, ele pega o da **esquerda** primeiro, mantendo a ordem
-> original dos iguais. Isso faz o merge sort ser **estável**.
+> O `<=` da intercalação pega o da **esquerda** em caso de empate: o merge
+> sort é **estável**. A memória que pesa é o rascunho (1 milhão de `int` são
+> 4 MB).
 
 > [!NOTE]
-> **Pergunta para você:** quantas comparações o código acima faria se as
-> notas já estivessem em ordem, `7 12 18 26 33 41 52 60`? Pista: na
-> intercalação, o que acontece quando a metade esquerda inteira é menor que a
-> direita?
+> **Pergunta para você:** quantas comparações o código faria com as notas já em
+> ordem, `7 12 18 26 33 41 52 60`? Pense na intercalação em que a metade
+> esquerda inteira é menor que a direita.
 
 {{pratique}}

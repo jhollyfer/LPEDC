@@ -2,8 +2,7 @@
 // Exercício E519 · ★★☆
 
 #include <stdio.h>
-// Na pasta do assunto basta #include "deque.h" (o rodar compila o deque.c
-// junto). Aqui a resolução inclui a implementação para compilar sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0087-deque/deque.c"
 
 void mostra(Deque *d) {

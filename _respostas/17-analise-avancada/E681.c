@@ -50,7 +50,7 @@ int main(void) {
         preco[i] = 5 + (i * 13) % 40;
     }
 
-    printf("total: %ld\n\n", total(preco, 8, 1));
+    printf("total: %ld\n", total(preco, 8, 1));
     printf(" n  T(n)  2n² - n\n");
     for (int n = 16; n <= 64; n *= 2) {
         printf("%2d  %4ld  %4d\n", n, total(preco, n, 0), 2 * n * n - n);

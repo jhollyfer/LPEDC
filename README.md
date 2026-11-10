@@ -60,14 +60,16 @@ Os arquivos têm nome curto e numeração única no curso inteiro:
 - `_respostas/` tem uma resolução de cada exercício. Só olhe **depois** de
   tentar de verdade.
 
-Cada assunto tem 2 exemplos e 6 exercícios: ★☆☆ é aquecimento, ★★☆ pede
-raciocínio e ★★★ é desafio. Cada módulo termina com uma **lista prática** de
-30 exercícios de codificar (pasta `lista/`, arquivos `P????.c`, resoluções em
-`_respostas/<modulo>/lista/`), uma lista de **desafios** que misturam tudo e
-**questões no estilo da prova** do PPGI, com gabarito comentado.
+Cada assunto tem 2 exemplos e 4 exercícios, todos de escrever código na mão:
+um ★☆☆ (aquecimento), dois ★★☆ (raciocínio) e um ★★★ (desafio). O enunciado
+traz só o que escrever e a saída esperada. Cada módulo termina com uma
+**lista prática** de 30 exercícios de codificar (pasta `lista/`, arquivos
+`P????.c`, resoluções em `_respostas/<modulo>/lista/`), uma lista de
+**desafios** que misturam tudo e **questões reais das provas do PPGI**, com
+gabarito oficial.
 
-No total: 378 exemplos, 1134 exercícios por assunto, 870 exercícios nas listas
-práticas e cerca de 280 questões objetivas.
+No total: 378 exemplos, 756 exercícios por assunto e 870 exercícios nas listas
+práticas.
 
 ## Como cada módulo funciona
 
@@ -90,10 +92,10 @@ cada uma, a `lista/` (`P0101.c` a `P0130.c`) e uma subpasta por assunto, com
    houver um **Passo a passo**, refaça a tabela no papel.
 4. Responda a **Pergunta para você** antes de rodar. Depois rode os exemplos e
    mexa neles: mude um valor, quebre uma linha, rode de novo.
-5. Faça os exercícios. As dicas ficam logo abaixo do enunciado, no `.md` do
-   módulo e no topo do arquivo: tente antes de ler.
-6. No fim do módulo, resolva a lista prática, os desafios e as **questões no
-   estilo da prova**, que cobram o mesmo conteúdo em múltipla escolha.
+5. Faça os exercícios: o enunciado e a saída esperada estão no `.md` do módulo e
+   no topo do arquivo. Escreva o código sozinho e compare a saída.
+6. No fim do módulo, resolva a lista prática, os desafios e as **questões das
+   provas do PPGI**, que cobram o mesmo conteúdo em múltipla escolha.
 
 ## As cores e as formas
 

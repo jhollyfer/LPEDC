@@ -1,11 +1,13 @@
 // 0084 · Pilha na prática: parênteses e notação pós-fixa
 // Exercício E501 · ★★☆
 //
-// Este verificador é mais educado que o do texto: além de dizer que deu
-// errado, diz onde. Melhore ainda mais: em vez de empilhar o caractere,
-// empilhe a POSIÇÃO dele na string (o caractere você recupera com s[pos]).
-// Assim as mensagens também podem dizer onde a abertura estava. A primeira
-// posição da string é 0.
+// Escreva void diagnostico(const char *s), que confere os parênteses (), [] e {}
+// de s com uma pilha do pilha.h e diz onde está o problema. Empilhe a POSIÇÃO de
+// cada abertura na string (o caractere é s[pos]); a primeira posição é 0. As
+// mensagens possíveis estão na saída esperada: ok, fecha sem abrir, fechamento
+// trocado (dizendo onde a abertura estava) e abertura sem fechar (dizendo
+// quantas faltam e qual o de cima). No main, teste "[1, (2, 3)]", "{a: [1, 2}]",
+// "f(x))" e "if (a[0] {".
 //
 //   Saída esperada:
 //   [1, (2, 3)]: ok
@@ -13,57 +15,12 @@
 //   f(x)): fecha sem abrir na posição 4
 //   if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
 //
-// Escreva sua resposta abaixo (modifique diagnostico):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "pilha.h"
 
-char fechamento_de(int abre) {
-    if (abre == '(') {
-        return ')';
-    }
-    if (abre == '[') {
-        return ']';
-    }
-    return '}';
-}
-
-void diagnostico(const char *s) {
-    Pilha *p = pilha_cria();
-    if (p == NULL) {
-        return;
-    }
-    printf("%s: ", s);
-    for (int i = 0; s[i] != '\0'; i++) {
-        char c = s[i];
-        if (c == '(' || c == '[' || c == '{') {
-            pilha_empilha(p, c);
-        } else if (c == ')' || c == ']' || c == '}') {
-            int topo;
-            if (!pilha_desempilha(p, &topo)) {
-                printf("fecha sem abrir na posição %d\n", i);
-                pilha_libera(p);
-                return;
-            }
-            if (fechamento_de(topo) != c) {
-                printf("esperava %c e veio %c na posição %d\n", fechamento_de(topo), c, i);
-                pilha_libera(p);
-                return;
-            }
-        }
-    }
-    if (pilha_vazia(p)) {
-        printf("ok\n");
-    } else {
-        printf("faltou fechar %d\n", pilha_tamanho(p));
-    }
-    pilha_libera(p);
-}
-
 int main(void) {
-    diagnostico("[1, (2, 3)]");
-    diagnostico("{a: [1, 2}]");
-    diagnostico("f(x))");
-    diagnostico("if (a[0] {");
+
     return 0;
 }

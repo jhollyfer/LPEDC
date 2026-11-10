@@ -1,39 +1,33 @@
 ## 0089 · Busca sequencial
 
-Você passa a carteirinha na catraca da academia. Em meio segundo ela responde
-"liberado" ou "bloqueado". Por trás, o sistema procurou a sua matrícula numa
-lista de alunos ativos. Como?
+Você passa a carteirinha na catraca da academia e ela responde "liberado" ou
+"bloqueado": o sistema procurou a sua matrícula numa lista de alunos ativos.
 
-O jeito mais simples de procurar é o que você faria com uma pilha de fichas:
-olhar a primeira, depois a segunda, depois a terceira, até achar ou acabar a
-pilha. Isso é a **busca sequencial** (ou **busca linear**). Ela não exige nada
-do vetor: pode estar em qualquer ordem.
+A **busca sequencial** (ou **busca linear**) olha a primeira posição, depois a
+segunda, e assim por diante, até achar ou acabar o vetor. Não exige ordem.
 
-O contrato é o de sempre no C: a função recebe o vetor, o tamanho e o valor
-procurado (a **chave**), e devolve o **índice** em que achou. Se não achou,
-devolve `-1`, que nunca é um índice válido. Você escreve o laço e passa o
-tamanho, porque o vetor do C não sabe quantos elementos tem.
+A função recebe o vetor, o tamanho e o valor procurado (a **chave**) e devolve
+o **índice** em que achou. Se não achou, devolve `-1`, que nunca é um índice
+válido. O tamanho vai como parâmetro porque o vetor do C não o guarda.
 
-Quanto custa? Conte as **comparações** com a chave, que é o trabalho de
-verdade:
+O custo é o número de **comparações** com a chave:
 
 - **melhor caso**: a chave está na posição 0. Uma comparação.
 - **pior caso**: a chave está no fim ou não está no vetor. São `n`
-  comparações. Para responder "não tem", a busca precisa olhar **todos**.
+  comparações, porque responder "não tem" exige olhar **todos**.
 - **caso médio** (chave presente, em posição sorteada): `(n + 1) / 2`
-  comparações, mais ou menos metade do vetor.
+  comparações.
 
-Em notação do assunto 0072, a busca sequencial é **O(n)**: dobrou o número de
-alunos, dobrou o tempo da catraca no pior caso.
+No assunto 0072, isso é **O(n)**: dobrou o número de alunos, dobrou o tempo
+no pior caso.
 
-A academia tem 6 alunos ativos e a catraca procura a
-matrícula 1290. Ela compara com 4172, 3305 e 8821 (diferentes, em amarelo) e
-acha na quarta gaveta, a de índice 3. As duas últimas nem são olhadas:
+A academia tem 6 alunos ativos e a catraca procura a matrícula 1290. Ela
+compara com 4172, 3305 e 8821 (diferentes, em amarelo) e acha na quarta gaveta,
+a de índice 3. As duas últimas nem são olhadas:
 
 {{ideia}}
 
-No código, a função conta as comparações num ponteiro, para você ver o custo
-de cada busca:
+A função conta as comparações num ponteiro:
 
 ```c
 #include <stdio.h>
@@ -69,7 +63,7 @@ int main(void) {
 
 ### Passo a passo
 
-O teste de mesa da busca por 1290. Cada linha é uma volta do laço:
+Teste de mesa da busca por 1290, uma linha por volta do laço:
 
 | i | v[i] | `v[i] == 1290`? | comparações | estado da gaveta |
 | --- | --- | --- | --- | --- |
@@ -83,34 +77,23 @@ O teste de mesa da busca por 1290. Cada linha é uma volta do laço:
 Para 9999, as 6 linhas seriam "não" e a função só devolve `-1` depois da
 última.
 
-O fluxograma faz duas perguntas por volta. A primeira (`i < n?`)
-protege o vetor; a segunda (`v[i] == x?`) é a busca de fato. O caminho verde
-dá a volta três vezes antes de sair pelo Sim:
+O fluxograma faz duas perguntas por volta: `i < n?` protege o vetor e
+`v[i] == x?` é a busca de fato. O caminho verde dá a volta três vezes antes de
+sair pelo Sim:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O erro clássico é decidir cedo demais. Com `if (v[i] == x) return i; else
-> return -1;` dentro do laço, a função olha **só o primeiro** elemento e
-> desiste. "Não achei" só pode ser dito **depois** do laço, quando todos já
-> foram olhados. O compilador não reclama: o programa roda e responde errado.
+> Com `if (v[i] == x) return i; else return -1;` dentro do laço, a função olha
+> só o primeiro elemento e desiste. "Não achei" só vale **depois** do laço.
 
 > [!TIP]
-> **Por dentro do C:** `const int v[]` no parâmetro é um
-> `const int *`: a função recebe só o endereço da gaveta 0, e `v[i]` é
-> `*(v + i)`. Como as gavetas são vizinhas na memória, a busca sequencial lê
-> os bytes em ordem, e o processador agradece: ele traz da RAM blocos de 64
-> bytes (uma **linha de cache**, 16 `int`) de uma vez. Por isso, em vetores
-> pequenos (dezenas de elementos), a busca sequencial costuma ganhar de
-> estruturas "mais espertas". Um truque antigo é a **sentinela**: copiar a
-> chave para uma gaveta extra no fim. Aí o laço não precisa mais perguntar
-> `i < n`, porque sempre vai achar. É uma pergunta a menos por volta (veja o
-> exemplo A178).
+> A **sentinela** copia a chave para uma gaveta extra no fim do vetor, e o laço
+> deixa de testar `i < n`: uma pergunta a menos por volta (exemplo A178).
 
 > [!NOTE]
-> **Pergunta para você:** se a matrícula 3305 aparecesse duas vezes no vetor,
-> nas posições 1 e 4, qual posição a função devolveria? E quantas comparações
-> ela faria para achar 7034? Responda e confira rodando o código acima com o
-> vetor alterado. O exemplo A177 mostra como achar todas as ocorrências.
+> **Pergunta para você:** se a matrícula 3305 aparecesse nas posições 1 e 4,
+> qual posição a função devolveria? E quantas comparações ela faria para achar
+> 7034? O exemplo A177 mostra como achar todas as ocorrências.
 
 {{pratique}}

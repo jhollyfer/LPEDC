@@ -1,48 +1,39 @@
 ## 0114 · Recorrências e árvore de recursão
 
-Fim de ano na contabilidade de uma rede de farmácias: chegou um lote de notas
-fiscais para auditar. A chefe confere o lote inteiro (passa o olho em todas as
-notas), divide em dois lotes iguais e entrega cada metade para um auditor.
-Cada auditor faz a mesma coisa: confere o seu lote, divide, repassa. Quando
-um lote fica com uma nota só, quem recebeu confere essa nota e pronto.
+Na contabilidade de uma rede de farmácias chegou um lote de notas fiscais. A
+chefe confere o lote inteiro, divide em dois lotes iguais e entrega cada metade
+a um auditor, que faz o mesmo. Com uma nota só, o auditor confere e para.
 
-Quantas notas são olhadas no total? Contar laços, como no módulo 10, não
-resolve: o trabalho está escondido nas chamadas.
+Quantas notas são olhadas no total? Contar laços (módulo 10) não resolve: o
+trabalho está nas chamadas.
 
 Uma **recorrência** é uma equação que dá o custo de uma função recursiva em
-termos do custo dela mesma com entradas menores. Chamando de `T(n)` o custo
-para um lote de `n` notas:
+termos do custo dela com entradas menores. Para um lote de `n` notas:
 
 ```text
 T(1) = 1                  (caso base: confere a nota e para)
 T(n) = 2 T(n/2) + n       (duas chamadas com metade, mais n de trabalho)
 ```
 
-Você escreve a recorrência **lendo o código**, em três perguntas:
+Leia a recorrência no código com três perguntas:
 
-1. **Quantas chamadas recursivas** a função faz, e com que tamanho? Aqui, 2
-   chamadas de tamanho `n/2`: o termo `2 T(n/2)`.
-2. **Quanto trabalho** ela faz fora das chamadas? Aqui, olhar as `n` notas:
-   o termo `n`.
-3. **Qual é o caso base**, e quanto ele custa? Aqui, `T(1) = 1`.
+1. **Quantas chamadas recursivas**, e de que tamanho? Aqui, 2 de tamanho
+   `n/2`: o termo `2 T(n/2)`.
+2. **Quanto trabalho** fora das chamadas? Aqui, olhar `n` notas: o termo `n`.
+3. **Qual o caso base** e seu custo? Aqui, `T(1) = 1`.
 
-Escrever é a parte fácil. Para **resolver** (chegar numa fórmula sem `T` dos
-dois lados), o jeito mais visual é a **árvore de recursão**: cada chamada
-vira um nó com o trabalho que ela faz sozinha, e você soma **nível por
-nível**. O nível `k` tem `2^k` chamadas, cada uma com um lote de `n/2^k`
-notas: o nível inteiro custa `2^k · n/2^k = n`. Os lotes caem pela metade até
-chegar em 1, então são `log₂ n + 1` níveis. Total: `n log₂ n + n`, que é
-**Θ(n log n)**.
+Para **resolver** (chegar numa fórmula sem `T` dos dois lados), use a **árvore
+de recursão**: cada chamada vira um nó com o trabalho que faz sozinha, e você
+soma **nível por nível**. O nível `k` tem `2^k` chamadas de `n/2^k` notas cada:
+custa `n`. Os lotes caem pela metade até 1, então há `log₂ n + 1` níveis.
+Total: `n log₂ n + n`, ou **Θ(n log n)**.
 
-O **Θ** (teta) é novo: ele diz que a função cresce **exatamente** naquele
-ritmo, nem mais rápido nem mais devagar. O `O` do assunto 0072 é um teto;
-o Θ é teto e piso ao mesmo tempo. Quando você resolve uma recorrência até a
-fórmula, sabe o ritmo exato, e o Θ é a palavra certa (as definições formais
-de O, Ω e Θ estão no assunto 0166). O Cormen ensina três métodos para
-resolver: a **substituição** (chutar a resposta e provar por indução), a
-árvore de recursão e o teorema mestre, do próximo assunto.
+O **Θ** (teta) diz que a função cresce **exatamente** naquele ritmo: o `O` do
+assunto 0072 é um teto, o Θ é teto e piso (definições formais no assunto
+0166). Além da árvore, o Cormen ensina a **substituição** (chutar a resposta e
+provar por indução) e o teorema mestre, do próximo assunto.
 
-A forma da recorrência decide a forma da árvore. As cinco mais comuns:
+A forma da recorrência decide a forma da árvore:
 
 | recorrência | árvore | resultado | exemplo |
 | --- | --- | --- | --- |
@@ -52,13 +43,13 @@ A forma da recorrência decide a forma da árvore. As cinco mais comuns:
 | `T(n) = 2 T(n/2) + n` | binária, log n níveis de custo n | Θ(n log n) | merge sort, a auditoria |
 | `T(n) = 2 T(n-1) + 1` | binária, n níveis que dobram | Θ(2ⁿ) | Hanói (assunto 0033) |
 
-Tome um lote de 8 notas. Cada caixa é uma chamada, com o tamanho do lote que
-ela confere. Some cada linha: dá 8 em todas, e são 4 linhas:
+Num lote de 8 notas, cada caixa é uma chamada com o tamanho do lote que ela
+confere. Cada linha soma 8, e são 4 linhas:
 
 {{ideia}}
 
-O código conta as notas de cada nível num vetor indexado pela profundidade
-da chamada. Depois confere a fórmula `n log₂ n + n` para lotes maiores:
+O código soma as notas de cada nível num vetor indexado pela profundidade e
+confere `n log₂ n + n` para lotes maiores:
 
 ```c
 #include <stdio.h>
@@ -121,16 +112,14 @@ int main(void) {
 // 1048576     22020096     22020096
 ```
 
-O fluxograma é a função `audita` inteira, e não tem laço. A repetição está
-nas duas caixas `audita`: cada uma é o fluxograma inteiro de novo, para uma
-metade. Essas duas caixas são o `2 T(n/2)` da recorrência; a caixa
-`custo_nivel += n` é o `+ n`:
+O fluxograma é a função `audita` e não tem laço: as duas caixas `audita` são
+o `2 T(n/2)` e a caixa `custo_nivel += n` é o `+ n`:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A recorrência também se resolve "abrindo" o `T` até o caso base, com `n = 8`:
+Abrir o `T` até o caso base, com `n = 8`:
 
 | passo | conta | valor |
 | --- | --- | --- |
@@ -142,27 +131,18 @@ A recorrência também se resolve "abrindo" o `T` até o caso base, com `n = 8`:
 Bate com a árvore (4 níveis de 8) e com o programa.
 
 > [!WARNING]
-> "Duas chamadas recursivas" não diz nada sozinho: o que decide é **o
-> tamanho** que cada chamada recebe. `2 T(n/2) + 1` (achar o máximo dividindo
-> o vetor ao meio) dá Θ(n): umas `2n` chamadas. `2 T(n-1) + 1` (Hanói) dá
-> Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas. Entre `n/2` e `n-1`
-> está a diferença entre um programa instantâneo e um que não termina hoje.
-> Leia os argumentos de cada chamada antes de escrever a recorrência.
+> "Duas chamadas recursivas" não diz nada sozinho: decide o **tamanho** de cada
+> chamada. `2 T(n/2) + 1` (máximo dividindo o vetor) dá Θ(n); `2 T(n-1) + 1`
+> (Hanói) dá Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas.
 
 > [!TIP]
-> **Por dentro do C:** a árvore de recursão é o **filme** da pilha de
-> chamadas (assunto 0031). Cada nó é um frame que nasce, trabalha e morre; a
-> ordem em que o programa visita os nós é a de uma DFS na árvore. Por isso o
-> **tempo** é a soma de todos os nós (`2n - 1 = 15` chamadas para 8 notas),
-> mas a **memória** da pilha é a altura: no máximo `log₂ n + 1 = 4` frames
-> vivos ao mesmo tempo. Para 1 milhão de notas, são 2 milhões de chamadas e
-> 21 frames empilhados. A pilha só estoura quando a árvore é **funda**,
-> como na linha de `n` nós de `T(n-1) + 1`.
+> **Por dentro do C:** a árvore é o filme da pilha de chamadas (assunto 0031).
+> O **tempo** é a soma dos nós (`2n - 1 = 15` chamadas para 8 notas); a
+> **memória** é a altura, no máximo `log₂ n + 1 = 4` frames vivos.
 
 > [!NOTE]
-> **Pergunta para você:** e se a chefe, em vez de dividir ao meio, tirasse uma
-> nota só do lote e repassasse as outras `n - 1` para um único auditor? A
-> recorrência vira `T(n) = T(n-1) + n`. Quanto dá para 8 notas? E para 1024?
-> Compare com 32 e 11.264.
+> **Pergunta para você:** e se a chefe tirasse uma nota só e repassasse as
+> outras `n - 1` a um único auditor? A recorrência vira `T(n) = T(n-1) + n`.
+> Quanto dá para 8 notas? E para 1024? Compare com 32 e 11.264.
 
 {{pratique}}

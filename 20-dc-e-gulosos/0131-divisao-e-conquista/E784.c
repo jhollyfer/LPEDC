@@ -23,10 +23,6 @@
 #include <stdio.h>
 
 int main(void) {
-    int altitude[] = {820, 905, 1010, 1180, 1340, 1415, 1390, 1250, 1100, 960, 870};
-    int n = 11;
-    (void)altitude;
-    (void)n;
 
     return 0;
 }

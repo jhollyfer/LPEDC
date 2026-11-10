@@ -5,7 +5,7 @@
 // round-robin: cada processo roda no máximo um QUANTUM de tempo e vai para
 // o fim da fila; quem termina sai da roda. Simule com uma lista circular de
 // processos (id e tempo que falta), quantum 2, e os processos P1 (precisa de
-// 5 unidades), P2 (2) e P3 (4), chegando nessa ordem no tempo 0.
+// 5 unidades), P2 (2) e P3 (4), chegando nessa ordem no tempo 0. A struct é sua.
 //
 //   Saída esperada:
 //   t=0..2: P1 (falta 3)
@@ -14,8 +14,6 @@
 //   t=6..8: P1 (falta 1)
 //   t=8..10: P3 (terminou)
 //   t=10..11: P1 (terminou)
-//
-// Escreva tudo neste arquivo, com uma struct sua.
 //
 // Escreva sua resposta abaixo:
 

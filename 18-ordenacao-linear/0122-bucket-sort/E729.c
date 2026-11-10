@@ -7,6 +7,9 @@
 // em ordem alfabética (compare com strcmp). Mostre cada balde que não está
 // vazio, devolva os nomes ao vetor em ordem e libere todos os nós.
 //
+//   Contatos: Marcos Ana Bruno Mariana Carla Alberto Beatriz Marta Caio
+//   Amanda Mauro
+//
 //   Saída esperada:
 //   A: Alberto Amanda Ana
 //   B: Beatriz Bruno
@@ -21,9 +24,6 @@
 #include <string.h>
 
 int main(void) {
-    const char *contatos[] = {"Marcos", "Ana", "Bruno", "Mariana", "Carla", "Alberto",
-                              "Beatriz", "Marta", "Caio", "Amanda", "Mauro"};
-    (void) contatos; // apague esta linha
 
     return 0;
 }

@@ -13,8 +13,9 @@
 // Mostre os produtos do mais barato ao mais caro SEM mexer no vetor loja.
 // Truque: crie int ordem[5] = {0, 1, 2, 3, 4} e ordene ESSE vetor com
 // selection sort, comparando loja[ordem[j]].preco. É a ORDENAÇÃO INDIRETA.
+// (O 216 é o tamanho do Produto numa máquina de 64 bits comum.)
 //
-//   Saída esperada (o 216 é de uma máquina de 64 bits comum):
+//   Saída esperada:
 //   Do mais barato ao mais caro:
 //   15 Mousepad      R$   49.90
 //   12 Mouse         R$   89.90

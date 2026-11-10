@@ -1,35 +1,29 @@
 ## 0108 · Juntando tudo: o contador de palavras
 
-A padaria do bairro recebeu dezenas de comentários no app de entrega e quer
-saber do que os clientes mais falam. Um programa lê o texto, conta cada
-palavra e mostra o ranking.
-
-A tabela hash resolve isso: a chave é a palavra, o valor é a
-contagem, e cada palavra do texto vira uma busca seguida de `+1`. O programa
-junta peças de vários módulos:
+A padaria quer saber do que os clientes mais falam nos comentários do app.
+O programa lê o texto, conta cada palavra e mostra o ranking. A chave da
+tabela é a palavra e o valor é a contagem: cada palavra vira uma busca e um
+`+1`. Ele junta:
 
 - **strings e `ctype.h`**: quebrar o texto em palavras e passar para
   minúsculas, para "Pão" e "pão" contarem juntas;
-- **a tabela com encadeamento** (assunto 0106), agora como o TAD
-  `palavras.h`: `contador_soma` procura a palavra no seu balde e soma 1, ou
-  cria o nó com a palavra **copiada**;
-- **vetor + `qsort`** (assuntos 0050 e 0096): a tabela não tem ordem nenhuma,
-  então, para o ranking, as contagens vão para um vetor, que é ordenado por
-  número de vezes e, no empate, em ordem alfabética.
+- **tabela com encadeamento** (assunto 0106), como o TAD `palavras.h`:
+  `contador_soma` soma 1 à palavra do balde ou cria o nó com a palavra
+  **copiada**;
+- **vetor + `qsort`** (assuntos 0050 e 0096): a tabela não tem ordem, então as
+  contagens vão para um vetor, ordenado por vezes e, no empate, por ordem
+  alfabética.
 
-Por que não um vetor com busca sequencial? Com `N` palavras no texto e `d`
-diferentes, isso custa O(N · d). Com a tabela, O(N) em média, mais
-O(d log d) do `qsort` no fim. Num livro de 100 mil palavras, 10 mil
-diferentes: um bilhão de comparações contra algumas centenas de milhares.
+Com `N` palavras e `d` diferentes, a busca sequencial custa O(N · d); a
+tabela custa O(N) em média, mais O(d log d) do `qsort`.
 
-O texto do exemplo tem 31 palavras, 17 diferentes. A tabela tem
-17 baldes, um fator de carga de 1. O "pão" cai no balde 2 e chega a 6; o
-"café", no balde 3, chega a 3; "estava" e "queijo" dividem o balde 4. No
-fim, a lista vai para o vetor, o `qsort` ordena e o ranking sai:
+O exemplo tem 31 palavras, 17 diferentes, em 17 baldes (carga 1). O "pão" cai
+no balde 2 e chega a 6; o "café", no 3, chega a 3; "estava" e "queijo" dividem
+o balde 4. A tabela vai para o vetor, o `qsort` ordena e o ranking sai:
 
 {{ideia}}
 
-O TAD `palavras.h` fica na pasta, e o `main` só conhece as funções dele:
+O `main` conhece só as funções do TAD `palavras.h`:
 
 ```c
 #include <stdio.h>
@@ -112,39 +106,28 @@ int main(void) {
 // 5. e: 2
 ```
 
-No fluxograma, o laço principal é "pega a próxima palavra e soma". A
-pergunta "já está no balde?" é feita 31 vezes. O Sim acontece 14 vezes; o
-Não, 17, uma para cada palavra diferente, e cria o nó com 0. Os dois caminhos
-se juntam no `vezes++`, como no `contador_soma`. Quando o texto acaba, sai o
-ranking:
+No fluxograma, "já está no balde?" ocorre 31 vezes: 14 Sim e 17 Não (uma por
+palavra diferente, que cria o nó com 0). Os dois caminhos se juntam no
+`vezes++`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `isalpha`, `tolower` e companhia recebem um `int` que precisa ser um valor
-> de `unsigned char` (0 a 255) ou `EOF`. Num texto UTF-8, os bytes `0xC3 0xA3` do "ã"
-> são negativos num `char` com sinal (assunto 0105). Passar
-> `isalpha(s[i])` com valor negativo é **comportamento indefinido**: muitas
-> bibliotecas usam o valor como índice de uma tabela interna e leem fora
-> dela. Converta sempre: `isalpha((unsigned char)s[i])`. Aqui o
-> `eh_letra` trata todo byte de 128 para cima como parte da palavra, e assim
-> "pão" e "café" ficam inteiras.
+> `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
+> do "ã" em UTF-8 são negativos num `char` com sinal (assunto 0105), e
+> `isalpha(s[i])` com negativo é **comportamento indefinido**. Converta:
+> `isalpha((unsigned char)s[i])`. O `eh_letra` trata todo byte a partir de 128
+> como parte da palavra, e "pão" e "café" ficam inteiras.
 
 > [!TIP]
-> **Por dentro do C:** cada nó tem 32 bytes de palavra, 4 da contagem, 4 de
-> preenchimento e 8 do `prox`: 48 bytes. As 17 palavras ocupam 17 `malloc`
-> de 48 bytes, mais 136 bytes do vetor de 17 ponteiros. O vetor de
-> `Contagem` **não copia** as palavras: cada `palavra` aponta para dentro de
-> um nó da tabela. Por isso o `free(lista)` vem antes do `contador_libera`,
-> e usar a lista depois de liberar a tabela seria ponteiro solto. Um
-> detalhe do hash: com base 31 e `m = 31`, `h * 31 % 31` é sempre 0, e o
-> balde passa a depender **só da última letra**. Base e `m` não podem ter
-> fator comum; por isso o exemplo usa 17.
+> **Por dentro do C:** o vetor de `Contagem` **não copia** as palavras: cada
+> `palavra` aponta para um nó da tabela, e por isso o `free(lista)` vem antes
+> do `contador_libera`. Base e `m` não podem ter fator comum (com 31 e 31, o
+> balde depende só da última letra); o exemplo usa 17.
 
 > [!NOTE]
-> **Pergunta para você:** o ranking tem "o", "de" e "e" logo no topo, que não
-> dizem nada sobre a padaria. Como você ignoraria essas palavras (as
-> *stopwords*) usando a própria tabela hash? E que palavra seria a 3ª do
-> ranking depois disso?
+> **Pergunta para você:** "o", "de" e "e" lideram o ranking e não dizem nada
+> sobre a padaria. Como ignorar essas palavras (as *stopwords*) com a própria
+> tabela hash? Qual seria a 3ª do ranking depois disso?
 
 {{pratique}}

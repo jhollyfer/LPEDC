@@ -1,18 +1,19 @@
 // 0085 · Fila
 // Exercício E508 · ★★☆
 //
-// O drive-thru da lanchonete usa uma fila circular com inicio, fim (próxima
-// vaga) e uma gaveta sacrificada. O programa compila sem aviso, nenhum
-// sanitizer reclama, e mesmo assim o telão mostra que há -2 carros na fila.
-// Ache o erro, conserte e rode até as três linhas baterem com a saída
-// esperada.
+// O drive-thru da lanchonete usa uma fila circular com inicio, fim (a próxima
+// vaga) e uma gaveta sacrificada (TAM 6, cabem 5 carros). Com o tipo abaixo,
+// escreva void entra(DriveThru *f, int placa) (ignora o carro se não couber),
+// void sai(DriveThru *f) e int tamanho(const DriveThru *f), que tem que acertar
+// mesmo depois que a fila deu a volta no vetor. No main, entre os carros 1 a 5 e
+// mostre "Carros na fila: N"; saiam 4 e mostre; entrem 6, 7 e 8 e mostre.
 //
-//   Saída esperada depois do conserto:
+//   Saída esperada:
 //   Carros na fila: 5
 //   Carros na fila: 1
 //   Carros na fila: 4
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
@@ -24,39 +25,7 @@ typedef struct {
     int fim;
 } DriveThru;
 
-void entra(DriveThru *f, int placa) {
-    if ((f->fim + 1) % TAM != f->inicio) {
-        f->carros[f->fim] = placa;
-        f->fim = (f->fim + 1) % TAM;
-    }
-}
-
-void sai(DriveThru *f) {
-    if (f->inicio != f->fim) {
-        f->inicio = (f->inicio + 1) % TAM;
-    }
-}
-
-int tamanho(const DriveThru *f) {
-    return f->fim - f->inicio;
-}
-
 int main(void) {
-    DriveThru f = {.inicio = 0, .fim = 0};
 
-    for (int placa = 1; placa <= 5; placa++) {
-        entra(&f, placa);
-    }
-    printf("Carros na fila: %d\n", tamanho(&f));
-
-    for (int i = 0; i < 4; i++) {
-        sai(&f);
-    }
-    printf("Carros na fila: %d\n", tamanho(&f));
-
-    for (int placa = 6; placa <= 8; placa++) {
-        entra(&f, placa);
-    }
-    printf("Carros na fila: %d\n", tamanho(&f));
     return 0;
 }

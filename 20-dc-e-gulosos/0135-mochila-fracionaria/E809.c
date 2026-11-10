@@ -25,20 +25,12 @@
 
 #include <stdio.h>
 
-#define N 8
-
 typedef struct {
     const char *carga;
     double peso, valor;
 } Frete;
 
 int main(void) {
-    Frete v[N] = {
-        {"móveis", 400, 2000},   {"eletrônicos", 150, 4500}, {"roupas", 200, 3000},
-        {"cimento", 900, 900},   {"remédios", 50, 2500},     {"livros", 300, 1800},
-        {"brinquedos", 250, 2750}, {"areia", 1000, 300},
-    };
-    (void)v;
 
     return 0;
 }

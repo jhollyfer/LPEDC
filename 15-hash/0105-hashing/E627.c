@@ -1,10 +1,11 @@
 // 0105 · A ideia e a função hash
 // Exercício E627 · ★★☆
 //
-// Complete a função hash_pol, que calcula o hash polinomial de base 31 de uma
-// string e devolve o resto por M (13). A regra: começa com h = 0 e, para cada
-// byte da string, faz h = h * 31 + byte. Use unsigned para h e converta
-// cada char para unsigned char antes de somar.
+// Escreva a função "unsigned hash_pol(const char *s)", o hash polinomial de
+// base 31: começa com h = 0 e, para cada byte da string, faz h = h * 31 + byte
+// (h unsigned; converta cada char para unsigned char). Ela devolve h % 13.
+// Mostre o hash de "pix", "ted", "doc" e "boleto", com o nome alinhado à
+// esquerda em 6 colunas.
 //
 //   Saída esperada:
 //   pix    -> 0
@@ -12,25 +13,11 @@
 //   doc    -> 8
 //   boleto -> 1
 //
-// Escreva sua resposta abaixo (complete o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-#define M 13
-
-unsigned hash_pol(const char *s) {
-    unsigned h = 0;
-    (void)s; // apague esta linha quando usar s
-
-    // complete aqui
-
-    return h % M;
-}
-
 int main(void) {
-    const char *meios[] = {"pix", "ted", "doc", "boleto"};
-    for (int i = 0; i < 4; i++) {
-        printf("%-6s -> %u\n", meios[i], hash_pol(meios[i]));
-    }
+
     return 0;
 }

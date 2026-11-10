@@ -1,60 +1,42 @@
 # Módulo 17 · Medindo algoritmos recursivos
 
-No módulo 10 você aprendeu a contar passos e a ler a classe de um código
-pelos laços: um laço é O(n), dois aninhados são O(n²), um laço que divide por
-2 é O(log n). Isso funciona até aparecer uma função que chama a si
-mesma. Quanto custa o merge sort? O "n log n" que você leu no módulo 13 veio
-de um desenho e de um pouco de fé. Aqui ele vira conta.
+O módulo 10 contou passos e leu a classe pelos laços. Isso falha numa função
+que chama a si mesma: quanto custa o merge sort? O "n log n" do módulo 13 veio
+de um desenho; aqui vira conta.
 
-Este módulo traz as ferramentas que faltavam. A **recorrência** transforma o código recursivo numa equação, e a **árvore de
-recursão** resolve a equação somando nível por nível. O **teorema mestre**
-resolve de uma vez as recorrências de divisão e conquista mais comuns. A
-**análise amortizada** explica por que o vetor que dobra é barato, mesmo
-copiando tudo de vez em quando. E o **limite inferior** troca a pergunta
-"quanto custa este algoritmo?" por "dá para fazer melhor?". Para ordenar
-comparando, não dá: n log n é o piso.
-
-No último assunto, você usa tudo isso para prever quanto
-tempo quatro ordenações levam com 1 milhão de elementos, a partir de uma
-medida com 16 mil, e confere a previsão no computador.
+A **recorrência** transforma o código recursivo numa equação, e a **árvore de
+recursão** a resolve somando nível por nível. O **teorema mestre** resolve de
+uma vez as de divisão e conquista. A **análise amortizada** explica por que o
+vetor que dobra é barato. O **limite inferior** pergunta se dá para fazer
+melhor: para ordenar comparando, não dá. O último assunto prevê o tempo de
+quatro ordenações com 1 milhão de elementos a partir de uma medida com 16 mil.
 
 ## O que você vai aprender
 
-- escrever a **recorrência** de uma função recursiva lendo o código, e resolvê-la com a **árvore de recursão**
-- a diferença entre `T(n-1)` e `T(n/2)`, e por que "duas chamadas" pode ser Θ(n) ou Θ(2ⁿ)
-- o **teorema mestre**: os três casos, como reconhecer cada um e quando ele **não** se aplica
-- a **análise amortizada**: método agregado e método do banqueiro no vetor que dobra, no contador binário e na pilha com multipop
-- a **árvore de decisão** e o limite **Ω(n log n)** para ordenar por comparação
-- as notações **Θ** e **Ω**, ao lado do **O** que você já conhece
-- **medir** com `clock()` e contadores, e **prever** o tempo para entradas grandes
+- a **recorrência** de uma função recursiva e a **árvore de recursão**
+- `T(n-1)` contra `T(n/2)`: "duas chamadas" pode ser Θ(n) ou Θ(2ⁿ)
+- o **teorema mestre**: os três casos e quando ele **não** se aplica
+- a **análise amortizada**: método agregado e do banqueiro
+- a **árvore de decisão** e o limite **Ω(n log n)** da ordenação por comparação
+- as notações **Θ** e **Ω**, ao lado do **O**
+- **medir** com `clock()` e contadores, e **prever** o tempo
 
 ## Antes de começar
 
-Este módulo usa sem cerimônia: **recursão** e pilha de chamadas (0031 a
-0033), **Big-O** e contagem de passos (0071 e 0072), o **vetor que cresce**
-(0055 e 0075), **pilha** (0082) e **fila** (0085), as ordenações do módulo 13
-(merge sort e quick sort, principalmente) e o **heap** (0102 e 0103). Também
-aparecem ponteiros para função (0050), para guardar várias ordenações num
-vetor.
+Usa recursão (0031 a 0033), Big-O (0071 e 0072), vetor que cresce (0055 e
+0075), pilha (0082), fila (0085), merge sort e quick sort (módulo 13), heap
+(0102 e 0103) e ponteiros para função (0050). Matemática: `log₂ n` é quantas
+vezes dá para dividir n por 2 até chegar em 1 (`log₂ 1024 = 10`), e `log_b a`
+é o expoente que leva `b` a `a` (`log₃ 9 = 2`). `log2` e `log` ficam em
+`<math.h>`; as flags de estudo já ligam `-lm`.
 
-Matemática: só potências e logaritmos. Lembre que `log₂ n` é "quantas vezes
-dá para dividir n por 2 até chegar em 1" (`log₂ 1024 = 10`), e que
-`log_b a` é o expoente que leva `b` a `a` (`log₂ 8 = 3`, `log₃ 9 = 2`). No C,
-`log2` e `log` ficam em `<math.h>`, e o gcc com as flags de estudo já liga a biblioteca
-matemática (`-lm`).
+O último assunto traz o TAD `ordena.h` e `ordena.c`, com as quatro ordenações e
+um contador de comparações; o comando do exemplo compila o `ordena.c` junto. Os
+tempos variam entre execuções; as comparações, não.
 
-O último assunto tem um TAD na pasta, `ordena.h` e `ordena.c`, com as quatro
-ordenações e um contador de comparações. O comando do exemplo compila o `ordena.c` junto
-com qualquer exemplo ou exercício da pasta. Alguns programas medem **tempo**:
-os números de tempo mudam de máquina para máquina e de uma execução para
-outra; os de comparações, não. Os exercícios de "ache o erro" trazem o bug de
-propósito, e o enunciado avisa.
-
-Nos diagramas da ideia, **roxo** é trabalho sendo feito (uma chamada, um
-nível), **verde** é o que domina o custo ou o resultado, **amarelo** marca um
-empate e **vermelho** é o caro demais ou o que deu errado. Abra cada
-recorrência à mão no **Passo a passo**: quase todo exemplo conta algo (chamadas, cópias,
-comparações) e confere a contagem com a fórmula.
+**Progressão.** Dá prova aos "n log n" do merge sort, do quick sort (módulo 13)
+e do heap (módulo 14) e às estimativas dos módulos 15 e 16 (O(1) esperado da
+hash; custo de BFS, DFS e Dijkstra). Prepara a divisão e conquista.
 
 {{indice}}
 
@@ -67,7 +49,7 @@ comparações) e confere a contagem com a fórmula.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
-sempre que der, confira com um programa em C rodado com as flags de estudo.
+sempre que der, confira com um programa em C compilado com as flags de estudo.
 
 **1. O pior quick sort.** Com o pivô sempre no último elemento, um vetor já
 ordenado faz o quick sort particionar em pedaços de tamanho `n - 1` e 0.

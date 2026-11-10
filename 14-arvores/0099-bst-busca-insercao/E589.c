@@ -1,14 +1,11 @@
 // 0099 · BST: busca e inserção
 // Exercício E589 · ★☆☆
 //
-// O posto de saúde guarda as senhas de atendimento numa BST. O main insere,
-// nesta ordem:
-//
-//   45 20 70 10 30 60 90 25
-//
-// Complete a função nivel_de(r, chave), que desce pela árvore como a busca e
-// devolve a profundidade da chave (a raiz tem nível 0), ou -1 se a chave não
-// estiver lá. O main mostra a em ordem, a altura e o nível de algumas senhas:
+// O posto de saúde guarda as senhas de atendimento numa BST. Com o TAD
+// bst.h, insira, nesta ordem, 45 20 70 10 30 60 90 25. Escreva
+// nivel_de(r, chave), que desce pela árvore como a busca e devolve a
+// profundidade da chave (a raiz tem nível 0), ou -1 se a chave não estiver
+// lá. Mostre a em ordem, a altura e o nível das senhas 45, 70, 30, 25 e 65.
 //
 //   Saída esperada:
 //   Em ordem: 10 20 25 30 45 60 70 90
@@ -19,33 +16,12 @@
 //   Senha 25: nível 3
 //   Senha 65: nível -1
 //
-// Escreva sua resposta abaixo (complete nivel_de):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "bst.h"
 
-int nivel_de(const No *r, int chave) {
-    (void)r; // apague estas duas linhas quando escrever a função
-    (void)chave;
-    return -1;
-}
-
 int main(void) {
-    int senhas[] = {45, 20, 70, 10, 30, 60, 90, 25};
-    No *raiz = NULL;
-    for (int i = 0; i < 8; i++) {
-        raiz = bst_insere(raiz, senhas[i]);
-    }
 
-    printf("Em ordem:");
-    bst_em_ordem(raiz);
-    printf("\nAltura: %d\n", bst_altura(raiz));
-
-    int testes[] = {45, 70, 30, 25, 65};
-    for (int i = 0; i < 5; i++) {
-        printf("Senha %d: nível %d\n", testes[i], nivel_de(raiz, testes[i]));
-    }
-
-    raiz = bst_libera(raiz);
     return 0;
 }

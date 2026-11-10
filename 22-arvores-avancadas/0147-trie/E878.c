@@ -1,10 +1,13 @@
 // 0147 · Trie
 // Exercício E878 · ★☆☆
 //
-// O terminal completa comandos com a tecla Tab. Com os comandos guardados
-// numa trie (trie.h), escreva classifica(r, texto), que devolve uma de três
-// mensagens: "comando" (o texto é um comando inteiro), "só começo de comando"
-// (algum comando começa assim, mas o texto não é um) ou "não está".
+// O terminal completa comandos com a tecla Tab. Guarde estes comandos numa trie
+// (trie.h): cd, cat, chmod, chown, ls, less, mkdir, man. Escreva classifica(r,
+// texto), que devolve uma de três mensagens: "comando" (o texto é um comando
+// inteiro), "só começo de comando" (algum comando começa assim, mas o texto não
+// é um) ou "não está". Teste, nesta ordem, com:
+//
+//   cat ch le less rm c mkdirs
 //
 //   Saída esperada:
 //   cat     comando
@@ -21,14 +24,6 @@
 #include "trie.h"
 
 int main(void) {
-    const char *comandos[] = {"cd", "cat", "chmod", "chown", "ls", "less", "mkdir", "man"};
-    NoTrie *t = trie_cria();
-    for (int i = 0; i < 8; i++) {
-        trie_insere(t, comandos[i]);
-    }
-    const char *digitado[] = {"cat", "ch", "le", "less", "rm", "c", "mkdirs"};
-    (void)digitado; // apague esta linha
 
-    trie_libera(t);
     return 0;
 }

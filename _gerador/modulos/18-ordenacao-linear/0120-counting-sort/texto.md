@@ -1,47 +1,31 @@
 ## 0120 · Counting sort
 
-No fim do expediente, a dona da lanchonete olha as avaliações do dia no app
-de entregas. Cada pedido recebeu de 0 a 4 estrelas, e ela quer a lista em
-ordem de nota para responder primeiro os clientes insatisfeitos. São 8
-pedidos, de A a H, com 3, 1, 3, 2, 1, 4, 0 e 3 estrelas.
+A dona da lanchonete quer 8 avaliações (A a H, com 3, 1, 3, 2, 1, 4, 0 e 3
+estrelas) em ordem de nota. Ela faz cinco montes, um por nota, e junta os
+montes do 0 ao 4, sem comparar pedido com pedido.
 
-Ela não compara pedido com pedido. Faz cinco montes, um para cada nota, joga
-cada pedido no seu monte e depois junta os montes, do 0 ao 4.
-
-No assunto 0117 você viu que nenhuma ordenação **por comparação** faz menos
-que uns n log₂ n testes no pior caso. O **counting sort** (ordenação por
-contagem) não fura esse limite, porque não compara: usa o **valor** da chave
-como **índice** de um vetor. Para isso, as chaves precisam
-ser inteiros num intervalo pequeno, de 0 a k - 1.
-
-O algoritmo tem três passos, cada um um laço simples:
+O assunto 0117 mostrou que a ordenação **por comparação** faz uns n log₂ n
+testes no pior caso. O **counting sort** (ordenação por contagem) escapa desse
+piso porque usa o **valor** da chave como **índice** de um vetor. As chaves
+precisam ser inteiros num intervalo pequeno, de 0 a k - 1. São três laços:
 
 1. **contar**: `c[x]` recebe quantos elementos têm a chave `x`;
-2. **acumular**: cada `c[x]` passa a valer quantos têm chave **menor ou
-   igual** a `x`. Isso diz onde termina o bloco de cada valor na saída: as
-   três avaliações de 3 estrelas ocupam as posições 4, 5 e 6, porque há 7
-   avaliações com até 3 estrelas;
-3. **distribuir**: percorra a entrada **de trás para a frente** e coloque
-   cada elemento na última vaga livre do seu bloco: `c[x]--` e
+2. **acumular**: `c[x]` passa a valer quantos têm chave **menor ou igual** a
+   `x`, ou seja, onde termina o bloco de `x` na saída (as três avaliações de
+   3 estrelas ocupam as posições 4, 5 e 6, porque 7 têm até 3 estrelas);
+3. **distribuir**: percorra a entrada **de trás para a frente** e ponha cada
+   elemento na última vaga livre do seu bloco: `c[x]--` e
    `saida[c[x]] = v[i]`.
 
-De trás para a frente, entre chaves iguais, quem vem por último na entrada
-ocupa a última vaga do bloco. A ordem original dos empates se mantém: o
-counting sort é **estável**. Essa propriedade faz dele a peça central do
-radix sort, no próximo assunto.
-
-O Cormen escreve `COUNTING-SORT(A, n, k)` com vetores de 1 a n e chaves de 0
-a **k**, portanto k + 1 contadores; aqui, em C, as chaves vão de 0 a k - 1. A
-conta é a mesma: Θ(n + k), que vira Θ(n) quando k = O(n).
-
-A entrada passa uma vez para contar e outra para distribuir. Os três pedidos
-de 3 estrelas (A, C e H, em verde) chegam à saída na mesma ordem em que
-estavam:
+Entre chaves iguais, quem vem por último na entrada ocupa a última vaga: a
+ordem dos empates se mantém e o método é **estável**, o que o radix sort
+(próximo assunto) aproveita. O custo é Θ(n + k), ou Θ(n) quando k = O(n). No
+desenho, os pedidos de 3 estrelas (A, C e H, em verde) chegam à saída na ordem
+original:
 
 {{ideia}}
 
-No código, a saída vai para outro vetor: o counting sort não ordena no
-lugar.
+O counting sort não ordena no lugar: a saída vai para outro vetor.
 
 ```c
 #include <stdio.h>
@@ -102,7 +86,7 @@ int main(void) {
 ### Passo a passo
 
 O terceiro laço, com o acumulado `1 3 4 7 8` no começo. Cada linha usa uma
-vaga e diminui o contador daquela nota:
+vaga e diminui o contador da nota:
 
 | i | pedido | c[x] antes | vai para | c depois |
 | --- | --- | --- | --- | --- |
@@ -115,36 +99,26 @@ vaga e diminui o contador daquela nota:
 | 1 | B1 | c[1] = 2 | saida[1] | 0 1 3 5 7 |
 | 0 | A3 | c[3] = 5 | saida[4] | 0 1 3 4 7 |
 
-No fim, cada `c[x]` aponta para o **começo** do bloco de `x`.
-
-São três laços em sequência, nenhum dentro do outro. Dois andam pelos n
-elementos e um pelas k chaves, então o custo é **O(n + k)**:
+No fim, cada `c[x]` aponta para o **começo** do bloco de `x`. Os três laços
+são sequenciais: dois andam pelos n elementos e um pelas k chaves, então o
+custo é **O(n + k)**:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Se o terceiro laço for da frente para trás (`for (int i = 0; i < n; i++)`)
-> com o mesmo `c[x]--`, o vetor sai ordenado pelas estrelas, mas os empates
-> saem **invertidos**: H3 C3 A3 em vez de A3 C3 H3. O programa não dá erro,
-> e o estrago só aparece quando a ordem dos empates importa (no radix
-> sort, ela importa sempre). Outro cuidado: a chave tem que caber no vetor.
-> Uma nota 5, ou uma nota negativa, vira `c[5]` ou `c[-1]`: escrita fora do
-> vetor, que o AddressSanitizer pega e um programa sem ele ignora.
+> Com o terceiro laço da frente para trás, os empates saem **invertidos**
+> (H3 C3 A3), sem erro algum. A chave também tem que caber no vetor: a nota 5
+> ou -1 vira `c[5]` ou `c[-1]`, escrita fora do vetor.
 
 > [!TIP]
-> **Por dentro do C:** o counting sort troca tempo por memória. Ele precisa
-> de `k` contadores e de um vetor de saída com `n` elementos, além da
-> entrada. Com notas de 0 a 4, `c` tem 20 bytes e mora na pilha. Com chaves
-> de 0 a 1 bilhão, `c` teria 4 GB: aí o O(n + k) deixa de ser linear na
-> prática, porque o `k` domina. A regra é usar counting sort quando `k` é da
-> ordem de `n` ou menor. E o laço `c[v[i].estrelas]++` acessa a memória de
-> `c` fora de ordem, pulando de contador em contador: com `c` pequeno, tudo
-> cabe no cache e cada acesso é quase de graça.
+> **Por dentro do C:** o counting sort troca memória por tempo: `k`
+> contadores mais um vetor de saída com `n` elementos. Com chaves de 0 a 1
+> bilhão, `c` teria 4 GB e o `k` domina o custo. Use-o quando `k` for da ordem
+> de `n` ou menor.
 
 > [!NOTE]
-> **Pergunta para você:** e se você só precisasse dos números, sem o código
-> do pedido? Dá para pular o vetor de saída e o acumulado: basta escrever
-> cada nota `c[x]` vezes, em ordem. Por que essa versão curta não serve para
-> ordenar as avaliações com o código junto?
+> **Pergunta para você:** sem o código do pedido, dá para pular a saída e o
+> acumulado e escrever cada nota `c[x]` vezes. Por que essa versão curta não
+> serve para ordenar as avaliações com o código junto?
 
 {{pratique}}

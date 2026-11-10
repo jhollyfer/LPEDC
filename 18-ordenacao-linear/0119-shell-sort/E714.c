@@ -2,16 +2,12 @@
 // Exercício E714 · ★★★
 //
 // Uma INVERSÃO é um par de posições i < j com v[i] > v[j]: um par fora de
-// ordem. Vetor ordenado tem 0 inversões. Estenda o programa abaixo para
-// medir o que cada rodada do shell sort faz:
-//
-// a) escreva long inversoes(const int v[], int n) (dois laços, O(n²));
-//
-// b) conte os movimentos (v[j] = v[j - h]) de cada rodada;
-//
-// c) depois de cada rodada, mostre as inversões que sobraram e os
-// movimentos da rodada; no fim, o total de movimentos comparado com as
-// inversões do início.
+// ordem. Vetor ordenado tem 0 inversões. Escreva long inversoes(const int
+// v[], int n) (dois laços, O(n²)). No main, gere 200 números com
+// v[i] = (i * 73 + 11) % 200 e rode o shell sort com os saltos de Knuth,
+// contando os movimentos (v[j] = v[j - h]) de cada rodada. Depois de cada
+// rodada, mostre as inversões que sobraram e os movimentos dela. No fim,
+// mostre o total de movimentos e as inversões do início.
 //
 //   Saída esperada:
 //   início:  9775 inversões
@@ -22,34 +18,11 @@
 //   h =   1:     0 inversões,  288 movimentos
 //   total: 837 movimentos (o insertion sort faria 9775)
 //
-// Na primeira rodada, 12 movimentos desfizeram 2416 inversões. Na última,
-// os movimentos são exatamente as inversões que sobraram.
-//
-// Escreva sua resposta abaixo (estenda o programa):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
 int main(void) {
-    int v[200];
-    int n = 200;
-    for (int i = 0; i < n; i++) {
-        v[i] = (i * 73 + 11) % 200; // os números de 0 a 199, embaralhados
-    }
 
-    int h = 1;
-    while (h < n / 3) {
-        h = 3 * h + 1;
-    }
-    for (; h >= 1; h /= 3) {
-        for (int i = h; i < n; i++) {
-            int x = v[i];
-            int j = i;
-            while (j >= h && v[j - h] > x) {
-                v[j] = v[j - h];
-                j -= h;
-            }
-            v[j] = x;
-        }
-    }
     return 0;
 }

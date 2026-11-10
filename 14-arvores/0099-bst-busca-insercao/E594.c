@@ -1,15 +1,14 @@
 // 0099 · BST: busca e inserção
 // Exercício E594 · ★★★
 //
-// Na rifa da festa junina, cada bilhete vendido foi anotado num caderno, mas
-// alguns números foram vendidos duas (ou três!) vezes. Os números anotados,
-// na ordem da venda:
+// Na rifa da festa junina, alguns números de bilhete foram vendidos mais de
+// uma vez. Os números anotados, na ordem da venda:
 //
 //   23 8 41 15 8 30 23 4 41 12 41
 //
-// Escreva do zero um programa que usa o TAD bst.h para: avisar cada número
-// repetido no momento em que ele aparece, mostrar os números distintos em
-// ordem crescente, quantos são e a altura da árvore.
+// Com o TAD bst.h, escreva um programa que avisa cada número repetido no
+// momento em que ele aparece, e depois mostra os números distintos em ordem
+// crescente, quantos são e a altura da árvore.
 //
 //   Saída esperada:
 //   Repetido: 8

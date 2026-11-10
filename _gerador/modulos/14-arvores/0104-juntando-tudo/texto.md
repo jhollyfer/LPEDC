@@ -1,18 +1,15 @@
 ## 0104 · Juntando tudo
 
-A academia do bairro quer largar a planilha. O sistema novo precisa de três
-coisas: achar um aluno pela matrícula na hora em que ele passa na catraca,
-cadastrar e cancelar matrículas a qualquer momento, e, no fim do mês, mostrar o
-pódio de quem mais treinou.
+A academia quer largar a planilha. O sistema novo precisa achar um aluno pela
+matrícula, cadastrar, cancelar e mostrar, no fim do mês, o pódio de quem mais
+treinou.
 
-Cada pedido combina com uma estrutura deste módulo. Achar, inserir e remover
-pela matrícula é trabalho de **BST**: cada operação desce um caminho só, O(altura).
-O pódio pede "os maiores" por outro critério, os treinos, e a BST está ordenada
-pela matrícula, não pelos treinos. Para isso existe o **heap**.
+Achar, inserir e remover pela matrícula é trabalho de **BST**: O(altura). O
+pódio pede "os maiores" por outro critério, os treinos, e a BST está ordenada
+pela matrícula. Para isso existe o **heap**.
 
-A diferença em relação aos assuntos anteriores é o dado. Agora o nó não guarda
-um `int` solto, e sim uma **struct** com matrícula, nome e treinos. A matrícula
-é a **chave**: é ela que decide esquerda ou direita. O resto vai junto. O TAD fica em `cadastro.h` e `cadastro.c`:
+O nó agora guarda uma **struct** com matrícula, nome e treinos. A matrícula é
+a **chave**; o resto vai junto. O TAD fica em `cadastro.h` e `cadastro.c`:
 
 ```c
 typedef struct {
@@ -28,31 +25,28 @@ typedef struct NoAluno {
 } NoAluno;
 ```
 
-As funções são as da BST (`cad_insere`, `cad_busca`, `cad_remove`, `cad_lista`),
-trocando `r->chave` por `r->a.matricula`. Dois detalhes mudam:
+As funções são as da BST (`cad_insere`, `cad_busca`, `cad_remove`,
+`cad_lista`), com `r->a.matricula` no lugar de `r->chave`. Dois detalhes:
 
-- `cad_busca` devolve um `Aluno *`, um ponteiro para o aluno **dentro** da
-  árvore. Quem chama pode alterar os treinos direto, sem remover e inserir de
-  novo. Só não pode alterar a matrícula: isso quebraria a regra da BST;
+- `cad_busca` devolve um `Aluno *` para o aluno **dentro** da árvore. Quem
+  chama altera os treinos sem reinserir, mas não a matrícula, que quebraria a
+  regra da BST;
 - na remoção com dois filhos, `r->a = suc->a` copia a struct inteira do
-  sucessor, com nome e tudo.
+  sucessor.
 
-E o pódio? A árvore não pode ser reordenada pelos treinos, senão a busca pela
-matrícula deixa de funcionar. Então o ranking **copia** os alunos para um vetor
-(`cad_para_vetor`, uma em ordem que vai enchendo o vetor), monta um heap de
-máximo **pelos treinos** nesse vetor, em O(n), e tira o máximo três vezes. É a
-fase 2 do heapsort interrompida depois de três passos: para pegar os k maiores,
-não precisa ordenar tudo.
+A árvore não pode ser reordenada pelos treinos. O ranking **copia** os alunos
+para um vetor (`cad_para_vetor`, um percurso em ordem), monta um heap de máximo
+**pelos treinos** em O(n) e tira o máximo três vezes: a fase 2 do heapsort
+interrompida. Para os k maiores, não precisa ordenar tudo.
 
-Sete alunos se matriculam. A catraca acha o 60 (Fabio)
-descendo 50, 70, 60 e soma um treino. O 30 (Bruno) cancela. No fim, os treinos
-dos seis que sobraram vão para o vetor, em ordem de matrícula, e o heap entrega o
-pódio:
+Sete alunos se matriculam. A catraca acha o 60 (Fabio) descendo 50, 70 e 60 e
+soma um treino. O 30 (Bruno) cancela. Os treinos dos seis que sobram vão para
+o vetor, e o heap entrega o pódio:
 
 {{ideia}}
 
-O programa usa o TAD para o cadastro e escreve o heap do ranking direto sobre um
-vetor de `Aluno`:
+O programa usa o TAD para o cadastro e monta o heap do ranking sobre um vetor
+de `Aluno`:
 
 ```c
 #include <stdio.h>
@@ -136,34 +130,27 @@ int main(void) {
 //   3º Ana (12)
 ```
 
-O fluxograma é uma sequência de operações na BST e, no fim, um laço curto
-sobre o heap:
+O fluxograma é uma sequência de operações na BST e, no fim, um laço sobre o
+heap:
 
 {{fluxograma}}
 
-O exemplo A208 é o mesmo cadastro, agora comandado pelo teclado: a recepção
-digita `i 50 Ana 12` para inserir, `b 50` para buscar, `r 50` para remover e `l`
-para listar.
+O exemplo A208 comanda o cadastro pelo teclado: `i 50 Ana 12` insere, `b 50`
+busca, `r 50` remove e `l` lista.
 
 > [!WARNING]
-> O ponteiro devolvido por `cad_busca` aponta para dentro de um nó. Ele vale até
-> a próxima remoção: se o `cad_remove` liberar esse nó (ou copiar outro aluno por
-> cima dele, no caso de dois filhos), o ponteiro passa a apontar para memória
-> devolvida ou para outro aluno. Use o ponteiro na hora e busque de novo depois de
-> mexer na árvore. E nunca altere `a->matricula` por ele: o aluno ficaria no
-> lugar errado da BST e as buscas não o achariam mais.
+> O ponteiro de `cad_busca` aponta para dentro de um nó e vale só até a próxima
+> remoção: `cad_remove` pode liberar esse nó ou copiar outro aluno por cima
+> dele. Busque de novo depois de mexer na árvore e nunca altere `a->matricula`.
 
 > [!TIP]
-> **Por dentro do C:** `n->a = a` e `Aluno t = v[i]` copiam a struct inteira,
-> 28 bytes (4 da matrícula, 20 do nome e 4 dos treinos), com uma atribuição só:
-> o compilador gera a cópia dos bytes por você, sem `memcpy` à mão. Com structs
-> grandes, copiar a cada troca do heap pesa. Aí o normal é montar o heap com um
-> vetor de **ponteiros** para os alunos (`Aluno *v[]`) e trocar só os ponteiros, 8
-> bytes cada, como no exercício E618 com as strings.
+> Com structs grandes, monte o heap com um vetor de **ponteiros**
+> (`Aluno *v[]`) e troque só os ponteiros, como no exercício E618.
 
 > [!NOTE]
 > **Pergunta para você:** se Gil (80) treinar mais 5 vezes antes do ranking, o
-> pódio muda? E se os sete alunos tivessem se matriculado em ordem crescente de
-> matrícula (20, 30, ..., 80), qual seria a altura mostrada na primeira linha?
+> pódio muda? E se os sete alunos entrassem em ordem crescente (20, 30, ..., 80),
+> qual
+> seria a altura mostrada na primeira linha?
 
 {{pratique}}

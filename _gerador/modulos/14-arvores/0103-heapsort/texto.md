@@ -1,46 +1,35 @@
 ## 0103 · Heapsort
 
-Fim da corrida de rua do bairro. Os tempos dos corredores, em minutos, foram
-anotados na ordem de chegada ao posto de controle: 52, 18, 73, 40, 91, 25 e 66.
-Você precisa do ranking em ordem crescente, no próprio vetor, sem alocar outro.
+Os tempos da corrida de rua, em minutos, chegaram nesta ordem: 52, 18, 73, 40,
+91, 25 e 66. Você quer o ranking crescente, no próprio vetor, sem alocar outro.
 
-O heap do assunto anterior já sabe tirar o maior, um de cada vez, em O(log n).
-Tire os n elementos e eles saem em ordem decrescente. Esse é o **heapsort**:
-ordenar usando um heap. Para fazer tudo **no mesmo vetor**, use o fato de que
-a cada máximo que sai o heap encolhe uma casa, e essa casa livre no fim é a
-posição final do máximo.
+O heap tira o maior em O(log n). Tire os n elementos e eles saem em ordem
+decrescente: é o **heapsort**. No **mesmo vetor**: a cada máximo que sai, o
+heap encolhe uma casa, e essa casa livre no fim é a posição final do máximo.
 
-O algoritmo tem duas fases:
+Duas fases:
 
-1. **Construir o heap** dentro do próprio vetor. Dá para inserir um por um (cada
-   inserção sobe), mas há um jeito mais barato: as folhas já são heaps de um
-   elemento só, então basta fazer cada **pai** descer, do último pai
-   (`n / 2 - 1`) até a raiz. Essa construção custa só O(n). É a
-   `BUILD-MAX-HEAP` do Cormen, que, com o vetor começando em 1, vai de
-   `⌊n/2⌋` até 1.
-2. **Ordenar**: troque a raiz (o máximo) com o último elemento do heap. O máximo
-   está no lugar definitivo. Diminua o heap em uma casa e faça a nova raiz
-   descer. Repita até o heap ter um elemento só.
+1. **Construir o heap** no vetor. É mais barato fazer cada **pai** descer, do
+   último (`n / 2 - 1`) até a raiz, porque as folhas já são heaps: só O(n).
+   É a `BUILD-MAX-HEAP` do Cormen.
+2. **Ordenar**: troque a raiz (o máximo) com o último elemento do heap, que
+   fica no lugar definitivo. Encolha o heap em uma casa e faça a nova raiz
+   descer. Repita até restar um elemento.
 
-Durante a fase 2, o vetor tem duas partes: o **heap** no começo e a parte
-**ordenada** no fim, com os maiores elementos já na posição final. A divisão
-anda uma casa para a esquerda por volta.
+Na fase 2, o vetor tem o **heap** no começo e a parte **ordenada** no fim.
 
-O custo: a fase 1 é O(n) e a fase 2 faz n - 1 descidas de no máximo log₂ n
-níveis. Total O(n log n), e isso vale **sempre**, até no pior caso. O quick sort
-(assunto 0095) costuma ser mais rápido na média, mas pode cair em O(n²); o
-merge sort (0094) garante n log n, mas precisa de um vetor extra. O heapsort
-garante n log n sem memória extra.
+A fase 1 é O(n) e a fase 2 faz n - 1 descidas de no máximo log₂ n níveis:
+O(n log n) **sempre**. O quick sort (assunto 0095) pode cair em O(n²); o merge
+sort (0094) precisa de vetor extra. O heapsort garante n log n sem memória
+extra.
 
-Nos tempos da corrida, depois da fase 1, o vetor dos tempos é o heap
-`[91 52 73 40 18 25 66]`. No primeiro passo da fase 2, o 91 troca com o 66 e
-fica no fim, verde. O 66 vai para a raiz e desce pelo maior filho (73). O heap
-agora tem 6 elementos:
+Depois da fase 1, o vetor é o heap `[91 52 73 40 18 25 66]`. Na fase 2, o 91
+troca com o 66 e fica no fim, em verde. O 66 desce pelo maior filho (73):
 
 {{ideia}}
 
-O `desce` é o mesmo do heap, só que recebe o vetor e o tamanho atual do heap.
-A função `mostra` imprime a parte do heap e a parte ordenada, separadas por `|`:
+O `desce` é o do heap, com o tamanho atual do heap como parâmetro. A `mostra`
+separa o heap da parte ordenada com `|`:
 
 ```c
 #include <stdio.h>
@@ -108,14 +97,14 @@ int main(void) {
 //              18 | 25 40 52 66 73 91
 ```
 
-No fluxograma, a fase 1 é uma caixa só, e o laço da fase 2 faz sempre o
-mesmo par de coisas, trocar e descer, até `fim` chegar a 0:
+No fluxograma, a fase 1 é uma caixa só, e o laço da fase 2 repete trocar e
+descer até `fim` chegar a 0:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A fase 1 nos tempos da corrida. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 2`):
+A fase 1. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 2`):
 
 | Pai que desce | Filhos | O que acontece | Vetor |
 | --- | --- | --- | --- |
@@ -124,26 +113,18 @@ A fase 1 nos tempos da corrida. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 
 | `v[0] = 52` | 91 e 73 | troca com o 91; depois, filhos 40 e 18: fica | `91 52 73 40 18 25 66` |
 
 > [!WARNING]
-> Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), e não o tamanho do
-> vetor (`n`). Com `desce(v, n, 0)`, a raiz enxerga os elementos já ordenados no
-> fim como se fossem filhos, puxa o 91 de volta para o heap e desfaz o
-> trabalho. O vetor sai embaralhado, sem nenhum aviso do compilador ou do
-> AddressSanitizer: os índices continuam dentro do vetor.
+> Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), não o do vetor
+> (`n`). Com `desce(v, n, 0)`, a raiz trata os elementos já ordenados como
+> filhos e desfaz o trabalho. O vetor sai embaralhado sem aviso: os índices
+> continuam válidos.
 
 > [!TIP]
-> **Por dentro do C:** o heapsort é **in-place**: além do vetor, usa só umas
-> poucas variáveis (`i`, `f`, `fim` e a temporária da troca), O(1) de memória,
-> sem recursão. O lado ruim é o acesso à memória: `desce` pula de `i` para
-> `2i + 1`, cada vez mais longe, e nos vetores grandes isso sai do cache. Por
-> isso, na prática, o quick sort costuma ganhar. Muitas bibliotecas padrão
-> usam o *introsort*: quick sort, e se a recursão ficar funda demais (sinal do
-> pior caso), troca para heapsort. E o heapsort **não é estável**: dois tempos
-> iguais podem trocar de ordem.
+> O heapsort é **in-place** (O(1) de memória, sem recursão) e **não é
+> estável**. O quick sort costuma ganhar por usar melhor o cache.
 
 > [!NOTE]
 > **Pergunta para você:** o exemplo A206 ordena mil números em ordem
-> decrescente com insertion sort e com heapsort. Quantas comparações você acha
-> que cada um faz? Chute antes de rodar. E se o vetor já estivesse em ordem
-> crescente, qual dos dois ganharia?
+> decrescente com insertion sort e com heapsort. Quantas comparações cada um
+> faz? E se o vetor já estivesse em ordem crescente, qual ganharia?
 
 {{pratique}}

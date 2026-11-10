@@ -2,12 +2,12 @@
 // Exercício E478 · ★★☆
 //
 // Dois salões do restaurante vão virar um só. Cada salão é uma lista
-// circular de mesas, guardada pelo último nó. Escreva
-//
-//   No *concatena(No *ult_a, No *ult_b)
-//
-// que emenda b depois de a e devolve o último da lista nova, em O(1): sem
-// percorrer nada, só trocando ponteiros. Trate as listas vazias.
+// circular de mesas, guardada pelo último nó: o salão A tem as mesas 1, 2 e
+// 3 e o B tem 10 e 20 (monte com lista_insere_fim). Escreva
+// No *concatena(No *ult_a, No *ult_b), que emenda b depois de a e devolve o
+// último da lista nova, em O(1): sem percorrer nada, só trocando ponteiros.
+// Trate as listas vazias. Mostre A, B, a junção e a junção com uma lista
+// vazia (NULL). No fim, libere a lista juntada uma vez só.
 //
 //   Saída esperada:
 //   A: 1 -> 2 -> 3 -> (volta ao 1)
@@ -21,20 +21,6 @@
 #include "lista.h"
 
 int main(void) {
-    No *a = NULL;
-    No *b = NULL;
-    for (int i = 1; i <= 3; i++) a = lista_insere_fim(a, i);
-    b = lista_insere_fim(b, 10);
-    b = lista_insere_fim(b, 20);
-    printf("A: ");
-    lista_imprime(a);
-    printf("B: ");
-    lista_imprime(b);
 
-    // junte a e b com concatena, mostre; depois junte o resultado com uma
-    // lista vazia (NULL) e mostre de novo. No fim, libere uma vez só.
-
-    lista_libera(a); // troque estas duas linhas por um lista_libera
-    lista_libera(b); // da lista juntada
     return 0;
 }

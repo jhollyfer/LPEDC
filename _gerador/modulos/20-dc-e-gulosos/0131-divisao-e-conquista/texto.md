@@ -1,45 +1,39 @@
 ## 0131 · Divisão e conquista
 
-Uma corrente começa no grupo da família: quem recebe repassa para 3 contatos
-novos. Na primeira rodada saem 3 mensagens; na segunda, 9; na terceira, 27.
-Quantas mensagens saem na rodada 20? A conta é 3²⁰. O jeito óbvio é um laço
-que multiplica por 3 vinte vezes. Funciona, mas gasta multiplicação demais.
+Uma corrente do grupo da família: quem recebe repassa para 3 contatos.
+Quantas mensagens saem na rodada 20? A conta é 3²⁰, e um laço que multiplica
+por 3 vinte vezes gasta multiplicação demais.
 
-Só que 3²⁰ = 3¹⁰ · 3¹⁰. Quem sabe 3¹⁰ resolve 3²⁰ com **uma**
-multiplicação. E 3¹⁰ = 3⁵ · 3⁵. E 3⁵ = 3² · 3² · 3 (expoente ímpar: sobra um
-3). O problema grande vira um problema do mesmo tipo com a metade do tamanho.
+Mas 3²⁰ = 3¹⁰ · 3¹⁰: quem sabe 3¹⁰ resolve 3²⁰ com **uma** multiplicação. E
+3¹⁰ = 3⁵ · 3⁵, e 3⁵ = 3² · 3² · 3 (expoente ímpar deixa sobrar um 3). O
+problema vira outro do mesmo tipo, com metade do tamanho.
 
-Essa é a técnica de **divisão e conquista** (em inglês, *divide and conquer*).
-Ela tem três passos, e você já viu os três no merge sort (assunto 0094):
+Essa é a **divisão e conquista** (*divide and conquer*), com três passos que
+você já viu no merge sort (0094):
 
 1. **dividir**: quebre o problema em pedaços menores do mesmo tipo;
-2. **conquistar**: resolva cada pedaço com a própria função (recursão, assunto
-   0032). Pedaço pequeno o bastante é o **caso base**, resolvido direto;
+2. **conquistar**: resolva cada pedaço com a própria função (recursão, 0032).
+   Pedaço pequeno o bastante é o **caso base**, resolvido direto;
 3. **combinar**: junte as respostas dos pedaços na resposta do todo.
 
-A busca binária (0090) divide e descarta uma das metades. O merge sort divide
-em duas metades e gasta o trabalho na combinação (a intercalação). O quick
-sort (0095) gasta o trabalho na divisão (o particionamento) e não tem nada a
-combinar. A técnica é a mesma; muda a etapa que carrega o esforço.
+A busca binária (0090) divide e descarta uma metade. O merge sort gasta o
+esforço na combinação; o quick sort (0095), na divisão, e não combina nada.
 
-Na potência, a divisão é cortar o expoente ao meio, e a combinação é elevar
-ao quadrado (mais um `x` quando o expoente é ímpar). O caso base é `n == 0`,
+Na potência, dividir é cortar o expoente ao meio e combinar é elevar ao
+quadrado (com mais um `x` se o expoente é ímpar). O caso base é `n == 0`,
 porque x⁰ = 1.
 
-Por que é rápido? Cada chamada corta `n` pela metade, então a recursão desce
-uns `log₂ n` níveis, e cada nível faz uma ou duas multiplicações. A
-recorrência é T(n) = T(n/2) + O(1), e pelo assunto 0115 isso dá **O(log n)**.
-Para n = 1 milhão, são uns 20 níveis contra 1 milhão de voltas do laço.
+Cada chamada corta `n` pela metade: T(n) = T(n/2) + O(1), que dá
+**O(log n)** pelo assunto 0115. Para n = 1 milhão, são uns 20 níveis contra
+1 milhão de voltas do laço.
 
 No desenho, a recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
-combinando: o 1 do caso base vira 3, que vira 9, que vira 243, e assim até 3²⁰.
-O 3⁴ nem aparece, porque o caminho até 20 não passa por ele.
+combinando: o 1 do caso base vira 3, 9, 243, e assim até 3²⁰.
 
 {{ideia}}
 
-Em C, o `printf` dentro da função mostra cada resultado
-parcial na hora em que a chamada termina, e o contador `mult` soma as
-multiplicações:
+O `printf` mostra cada resultado parcial quando a chamada termina, e `mult`
+soma as multiplicações:
 
 ```c
 #include <stdio.h>
@@ -80,32 +74,23 @@ int main(void) {
 // 7 multiplicações (o laço simples faria 19)
 ```
 
-Os resultados saem de baixo para cima: a chamada de 3²⁰ é a primeira a
-começar e a última a terminar. É a pilha de chamadas do assunto 0031.
+Os resultados saem de baixo para cima, pela pilha de chamadas (0031).
 
-O fluxograma segue a chamada de cima, com `n = 20`. Ela não é o caso base:
-chama a si mesma com 10, recebe 59049 e, como 20 é par, só eleva ao quadrado.
-Cada chamada de dentro percorre o mesmo caminho com o seu `n`:
+O fluxograma segue a chamada com `n = 20`: ela chama a si mesma com 10,
+recebe 59049 e, como 20 é par, só eleva ao quadrado:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O erro clássico é escrever `return potencia(x, n / 2) * potencia(x, n / 2);`.
-> O resultado sai certo, mas a função passa a fazer **duas** chamadas iguais
-> por nível, e elas fazem duas cada uma, e assim por diante. A recorrência
-> vira T(n) = 2T(n/2) + O(1), que é O(n): todo o ganho vai embora. Guarde o
-> resultado da metade numa variável e use duas vezes. Divisão e conquista só
-> compensa quando os pedaços **não se repetem**.
+> `return potencia(x, n / 2) * potencia(x, n / 2);` dá o resultado certo, mas
+> faz **duas** chamadas por nível: T(n) = 2T(n/2) + O(1), que é O(n). Guarde a
+> metade numa variável. Divisão e conquista só compensa quando os pedaços
+> **não se repetem**.
 
 > [!TIP]
-> **Por dentro do C:** a recursão empilha um frame para cada bit do
-> expoente, mais o do caso base: para n = 20 (5 bits) são 6 frames na pilha,
-> para n = 1 bilhão (30 bits) seriam 31. O perigo aqui está no
-> **estouro do `long long`**, e não na pilha: ele guarda até
-> 9 223 372 036 854 775 807, e 3³⁹ ainda cabe, mas 3⁴⁰ não. Estouro de inteiro
-> com sinal é comportamento indefinido, e o gcc com as flags de estudo acusa com `runtime error`.
-> Quando só interessam os últimos dígitos, faça cada multiplicação seguida de
-> `% m`: o número nunca passa de `m²` (o exemplo A261 faz isso).
+> **Por dentro do C:** o perigo é o **estouro do `long long`**:
+> 3³⁹ cabe, 3⁴⁰ não, e o gcc com as flags de estudo acusa `runtime error`.
+> Para só os últimos dígitos, use `% m` após cada multiplicação (A261).
 
 > [!NOTE]
 > **Pergunta para você:** quantas multiplicações a função faz para 3¹⁶? E para

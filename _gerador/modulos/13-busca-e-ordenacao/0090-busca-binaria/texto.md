@@ -1,39 +1,30 @@
 ## 0090 · Busca binária
 
-Lembra da brincadeira "pensei num número de 1 a 100"? Quem chuta 1, 2, 3...
-pode precisar de 100 tentativas. Quem chuta 50, ouve "menor", chuta 25 e assim
-por diante, acerta em no máximo 7. A diferença é uma informação a mais: a
-ordem.
+No jogo "pensei num número de 1 a 100", quem chuta 1, 2, 3... pode precisar de
+100 tentativas. Quem chuta 50, ouve "menor", chuta 25 e assim por diante,
+acerta em no máximo 7.
 
-A **busca binária** é esse jogo num vetor **ordenado**. Olhe a gaveta do
-meio. Se ela tem a chave, acabou. Se a chave é maior, tudo o que está à
-esquerda do meio é menor ainda e pode ser **descartado** de uma vez. Se é
+A **busca binária** é esse jogo num vetor **ordenado**. Olhe a gaveta do meio:
+se ela tem a chave, acabou; se a chave é maior, descarte a esquerda; se é
 menor, descarte a direita. Cada pergunta joga fora metade do que sobrou.
 
-O código guarda o pedaço que ainda pode ter a chave entre dois índices, `ini`
-e `fim` (os dois inclusive). Isso é um **invariante** (assunto 0073): "se `x`
-está no vetor, está em `v[ini..fim]`". Cada volta encolhe o intervalo e mantém
-o invariante. Quando `ini` passa de `fim`, o intervalo ficou vazio e a
+O código guarda o pedaço que ainda pode ter a chave entre `ini` e `fim` (os
+dois inclusive). É um **invariante** (assunto 0073): "se `x` está no vetor,
+está em `v[ini..fim]`". Quando `ini` passa de `fim`, o intervalo está vazio e a
 resposta é `-1`.
 
-Quantas voltas? Com 15 elementos sobram 15, 7, 3, 1: no máximo **4**. Com um
-milhão, no máximo 20. Com um bilhão, 30. É o **O(log n)** do assunto 0072: a
-cada vez que `n` dobra, a busca ganha só **uma** volta a mais. A conta exata
-do pior caso é ⌊log₂ n⌋ + 1 voltas, cada uma comparando a chave com um
-elemento.
+Com 15 elementos sobram 15, 7, 3, 1: no máximo **4** voltas. Com um milhão, 20.
+É o **O(log n)** do assunto 0072: quando `n` dobra, a busca ganha uma volta. O
+pior caso é ⌊log₂ n⌋ + 1 voltas. A pré-condição é o preço: num vetor
+bagunçado, a busca responde errado sem avisar.
 
-O preço é a pré-condição: o vetor precisa estar em ordem. Num vetor bagunçado,
-a busca binária não dá erro nenhum, só responde errado. Ordenar custa caro, e
-é por isso que o resto do módulo existe.
-
-O catálogo do atacadão tem 15 códigos em ordem e você
-procura o 216. O meio (índice 7) tem 189, menor que 216: a metade esquerda
-inteira fica cinza. O novo meio (11) tem 245, maior: a direita dele também
-sai. Na terceira volta, o meio (9) é o 216:
+O catálogo do atacadão tem 15 códigos em ordem e você procura o 216. O meio
+(índice 7) tem 189, menor: a esquerda fica cinza. O novo meio (11) tem 245,
+maior: a direita sai. Na terceira volta, o meio (9) é o 216:
 
 {{ideia}}
 
-Em C, um `printf` dentro do laço mostra o intervalo de cada volta:
+Um `printf` mostra o intervalo de cada volta:
 
 ```c
 #include <stdio.h>
@@ -89,8 +80,7 @@ int main(void) {
 
 ### Passo a passo
 
-A busca por 150, que não está no catálogo. O intervalo encolhe até ficar
-vazio:
+A busca por 150, que não está no catálogo:
 
 | volta | ini | fim | meio | v[meio] | decisão |
 | --- | --- | --- | --- | --- | --- |
@@ -100,36 +90,27 @@ vazio:
 | 4 | 4 | 4 | 4 | 152 | 152 > 150: `fim = 3` |
 | fim | 4 | 3 | | | `ini > fim`: devolve `-1` |
 
-O `ini = 4` final é a posição em que o 150 **deveria** entrar para o vetor
-continuar ordenado. Essa informação serve para inserir em ordem (veja o
-exemplo A180).
+O `ini = 4` final é a posição em que o 150 **deveria** entrar para manter a
+ordem (exemplo A180).
 
-Diferente da busca sequencial, o fluxograma tem três perguntas por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
+O fluxograma tem três perguntas por volta, e a volta mexe em `ini` **ou** em
+`fim`, nunca nos dois:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Busca binária é famosa por erros de um. `while (ini < fim)` com o intervalo
-> fechado `[ini, fim]` deixa de olhar o último candidato. E `fim = meio` (em
-> vez de `meio - 1`) no intervalo fechado pode nunca encolher: com `ini = 4` e
-> `fim = 4`, o meio é 4 de novo, para sempre. Escolha um estilo (fechado, como
-> no código acima, ou semiaberto `[ini, fim)`, como no A180) e siga as regras
-> dele em todas as linhas.
+> Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
+> `while (ini < fim)` deixa de olhar o último candidato e `fim = meio` pode
+> nunca encolher. Escolha um estilo (fechado, como acima, ou semiaberto
+> `[ini, fim)`, como no A180) e siga as regras dele.
 
 > [!TIP]
-> **Por dentro do C:** por que `ini + (fim - ini) / 2` e não
-> `(ini + fim) / 2`? Num vetor com mais de 1 bilhão de elementos, `ini + fim`
-> passa de `INT_MAX` (2.147.483.647) e dá **overflow**, que no C é
-> comportamento indefinido. Esse bug ficou escondido por anos em
-> implementações famosas da busca binária e só apareceu em 2006, quando os
-> vetores ficaram grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
-> 11, depois 9), então não aproveita a linha de cache como a sequencial. A
-> `stdlib.h` traz uma pronta, a `bsearch`, que você vai usar no assunto 0096.
+> Use `ini + (fim - ini) / 2`, e não `(ini + fim) / 2`: com mais de 1 bilhão de
+> elementos, `ini + fim` passa de `INT_MAX` e causa **overflow**.
 
 > [!NOTE]
-> **Pergunta para você:** quantas voltas o código acima dá para achar o 103, o
-> primeiro do catálogo? E qual é o máximo de voltas para um vetor de 1000
-> elementos? Faça o teste de mesa antes de rodar. O A179 mostra a conta com
-> um milhão de elementos.
+> **Pergunta para você:** quantas voltas o código dá para achar o 103, o
+> primeiro do catálogo? E qual é o máximo de voltas para 1000 elementos? Faça o
+> teste de mesa antes de executar.
 
 {{pratique}}

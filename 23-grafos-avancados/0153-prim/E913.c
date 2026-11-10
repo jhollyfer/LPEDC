@@ -2,11 +2,19 @@
 // Exercício E913 · ★☆☆
 //
 // Na orla, um gerador vai alimentar quatro quiosques: Coco, Pastel, Açaí e
-// Milho. A matriz (já no main) tem os metros de cabo de cada trecho
-// possível; 0 quer dizer "não dá para passar cabo". Escreva o Prim sem
-// heap, em O(V²), a partir do Gerador: vetores chave[], pai[] e
-// na_rede[]; a cada passo, entra o vértice fora da rede com a menor chave.
-// Mostre cada cabo na ordem em que entra e o total.
+// Milho. A matriz tem os metros de cabo de cada trecho possível (0 quer dizer
+// "não dá para passar cabo"):
+//
+//               Gerador  Coco  Pastel  Açaí  Milho
+//   Gerador        0      12     20     25     0
+//   Coco          12       0      9      0    30
+//   Pastel        20       9      0      6    15
+//   Açaí          25       0      6      0    11
+//   Milho          0      30     15     11     0
+//
+// Escreva o Prim sem heap, em O(V²), a partir do Gerador: vetores chave[],
+// pai[] e na_rede[]; a cada passo, entra o vértice fora da rede com a menor
+// chave. Mostre cada cabo na ordem em que entra e o total.
 //
 //   Saída esperada:
 //   Gerador - Coco: 12 m
@@ -21,20 +29,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define V 5
 #define INFINITO INT_MAX
 
 int main(void) {
-    const char *nomes[V] = {"Gerador", "Coco", "Pastel", "Açaí", "Milho"};
-    int cabo[V][V] = {
-        {0, 12, 20, 25, 0},
-        {12, 0, 9, 0, 30},
-        {20, 9, 0, 6, 15},
-        {25, 0, 6, 0, 11},
-        {0, 30, 15, 11, 0},
-    };
-    (void)nomes; // apague estas duas linhas
-    (void)cabo;
 
     return 0;
 }

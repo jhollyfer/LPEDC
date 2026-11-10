@@ -2,12 +2,14 @@
 // Exercício E733 · ★☆☆
 //
 // A escola quer um resumo das notas de redação do simulado: a menor, a
-// segunda menor, a mediana, a segunda maior e a maior, todas com o
-// quickselect do texto (já está no arquivo). Só que o quickselect bagunça o
-// vetor, e a escola quer a lista na ordem original. Escreva
-// int seleciona_copia(const int v[], int n, int k), que copia v para um
-// vetor local e roda o quickselect na cópia, e use para mostrar o resumo.
-// No fim, mostre notas[0] para provar que o vetor não mudou.
+// segunda menor, a mediana, a segunda maior e a maior. Escreva o quickselect
+// (int quickselect(int v[], int n, int k), com a separação de Lomuto de
+// pivô v[r]) e int seleciona_copia(const int v[], int n, int k), que copia v
+// para um vetor local e roda o quickselect na cópia, para a lista ficar na
+// ordem original. Use para mostrar o resumo e, no fim, notas[0], para provar
+// que o vetor não mudou.
+//
+//   Notas de 11 alunos: 720 480 860 640 920 560 700 380 800 600 680
 //
 //   Saída esperada:
 //   menor:       380
@@ -21,49 +23,7 @@
 
 #include <stdio.h>
 
-#define MAX 100
-
-void troca(int *a, int *b) {
-    int aux = *a;
-    *a = *b;
-    *b = aux;
-}
-
-int separa(int v[], int p, int r) {
-    int pivo = v[r], j = p;
-    for (int k = p; k < r; k++) {
-        if (v[k] <= pivo) {
-            troca(&v[j], &v[k]);
-            j++;
-        }
-    }
-    troca(&v[j], &v[r]);
-    return j;
-}
-
-int quickselect(int v[], int n, int k) {
-    int p = 0, r = n - 1;
-    while (p < r) {
-        int j = separa(v, p, r);
-        if (j == k) {
-            return v[j];
-        }
-        if (k < j) {
-            r = j - 1;
-        } else {
-            p = j + 1;
-        }
-    }
-    return v[p];
-}
-
 int main(void) {
-    // redação do simulado: notas de 11 alunos
-    int notas[] = {720, 480, 860, 640, 920, 560, 700, 380, 800, 600, 680};
-    int n = 11;
-
-    (void) notas; // apague estas duas linhas
-    (void) n;
 
     return 0;
 }

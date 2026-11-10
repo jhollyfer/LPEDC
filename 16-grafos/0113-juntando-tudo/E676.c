@@ -1,17 +1,12 @@
 // 0113 · Juntando tudo: a central de entregas
 // Exercício E676 · ★★☆
 //
-// No futebol da firma, algumas duplas não podem jogar no mesmo time (são
-// rivais). Você precisa dividir as seis pessoas em DOIS times sem nenhuma
-// dupla de rivais junta. Pessoas: Ana 0, Bruno 1, Carla 2, Diego 3, Elisa 4,
-// Fábio 5. Rivalidades (não dirigido):
-//
-//   Ana-Bruno, Ana-Diego, Carla-Bruno, Carla-Fábio, Elisa-Diego
-//
-// Use BFS para "pintar" cada pessoa com o time 0 ou 1: a origem fica no
-// time 0 e cada rival descoberto vai para o time contrário de quem o
-// descobriu. Se um rival já pintado estiver no MESMO time, a divisão é
-// impossível. Depois, acrescente a rivalidade Ana-Carla e tente de novo.
+// No futebol da firma, rivais não podem ficar no mesmo time. Divida Ana 0,
+// Bruno 1, Carla 2, Diego 3, Elisa 4 e Fábio 5 em dois times com uma BFS
+// (vizinhos por índice) que pinta a origem com 0 e cada rival descoberto com
+// a cor oposta. Rivalidades: Ana-Bruno, Ana-Diego, Carla-Bruno, Carla-Fábio,
+// Elisa-Diego. Mostre os times; depois acrescente Ana-Carla e mostre o
+// primeiro conflito achado: "Impossível: X e Y ficariam no mesmo time".
 //
 //   Saída esperada:
 //   Time 1: Ana Carla Elisa

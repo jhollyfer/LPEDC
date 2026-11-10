@@ -1,48 +1,42 @@
 ## 0152 · Kruskal: árvore geradora mínima
 
-A prefeitura tem verba para asfaltar estradas de terra entre seis vilas:
-Sede, Ponte, Brejo, Serra, Lagoa e Vale. A engenharia orçou nove trechos
-possíveis, de R$ 2 mil a R$ 9 mil. A exigência é uma só: depois da obra, dá
-para ir de qualquer vila a qualquer outra pelo asfalto. E o prefeito quer
-gastar o mínimo.
+A prefeitura quer asfaltar estradas entre seis vilas: Sede, Ponte, Brejo,
+Serra, Lagoa e Vale. A engenharia orçou nove trechos, de R$ 2 mil a R$ 9 mil.
+Depois da obra, deve dar para ir de qualquer vila a qualquer outra.
 
-Ninguém pediu o caminho mais curto entre duas vilas. O pedido é um
-conjunto de estradas que **ligue todo mundo** com a **menor soma**. Esse
-conjunto nunca tem ciclo: num ciclo, dá para tirar a estrada mais cara e
-todo mundo continua ligado, mais barato. Um grafo conexo e sem ciclo é uma
-**árvore**, e uma árvore com V vértices tem **V - 1 arestas**.
+O pedido é um conjunto de estradas que **ligue todo mundo** com a **menor
+soma**, não o caminho mais curto entre duas vilas. Esse conjunto nunca tem
+ciclo: num ciclo, tirar a estrada mais cara mantém tudo ligado, por menos.
+Um grafo conexo e sem ciclo é uma **árvore**, e uma árvore com V vértices
+tem **V - 1 arestas**.
 
-O que se procura, então, é a **árvore geradora mínima** (MST, de *minimum
-spanning tree*): uma árvore que "gera" (toca todos os vértices) com
-a menor soma de pesos possível. O grafo é **não dirigido** e ponderado.
+A **árvore geradora mínima** (MST, de *minimum spanning tree*) toca todos
+os vértices com a menor soma de pesos, num grafo **não dirigido** e
+ponderado.
 
-O algoritmo de **Kruskal** é guloso (assunto 0133):
+O **Kruskal** é guloso (assunto 0133):
 
 1. ordene as arestas da mais barata para a mais cara;
 2. percorra a lista e **aceite** cada aresta que **não feche ciclo** com as
    já aceitas;
-3. pare quando tiver V - 1 arestas.
+3. pare com V - 1 arestas.
 
-A parte difícil é o passo 2: como saber, rápido, se `a` e `b` já estão
-ligados pelas arestas aceitas? É a pergunta que o **union-find** do assunto
-0148 responde. Cada grupo de vilas já ligadas é um conjunto. Se `acha(a)` e
-`acha(b)` devolvem o mesmo representante, a aresta fecharia um ciclo. Se
-não, ela junta dois grupos: `une`.
+O passo 2 usa o **union-find** do assunto 0148: cada grupo de vilas ligadas
+é um conjunto. Se `acha(a)` e `acha(b)` dão o mesmo representante, a aresta
+fecharia um ciclo; senão, `une` junta os grupos. A ordenação domina o custo:
+O(E log E) = O(E log V), porque E < V². O union-find custa quase O(1) por
+operação.
 
-Por que o guloso acerta aqui? Pegue a aresta mais barata entre dois grupos
-quaisquer. Toda árvore que liga tudo precisa atravessar de um grupo para o
-outro em algum ponto, e atravessar pela mais barata nunca é pior. Esse
-argumento tem nome nos livros: **propriedade do corte**. O Cormen diz que a
-aresta **leve** (a mais barata) que cruza um corte é uma aresta **segura**:
-ela pode entrar sem estragar a árvore mínima.
+O guloso acerta pela **propriedade do corte**: toda árvore que liga tudo
+cruza de um grupo ao outro, e cruzar pela aresta mais barata nunca é pior.
+No Cormen, essa aresta **leve** é **segura**: entra sem estragar a MST.
 
-No desenho, as arestas verdes são as aceitas. Embaixo, a lista ordenada: verde entrou, vermelho fecharia ciclo, cinza nem foi olhado porque
-as 5 arestas já tinham saído:
+No desenho, verde entrou, vermelho fecharia ciclo e cinza nem foi olhado,
+porque as 5 arestas já tinham saído:
 
 {{ideia}}
 
-O código guarda as estradas numa lista de arestas (Kruskal não precisa de
-matriz), ordena com o `qsort` do assunto 0096 e usa o union-find com
+A lista de arestas é ordenada com o `qsort` (assunto 0096); o union-find usa
 compressão de caminho e união por tamanho:
 
 ```c
@@ -117,15 +111,15 @@ int main(void) {
 // Total: R$ 21 mil em 5 estradas
 ```
 
-O laço do fluxograma tem duas saídas: acabar a lista ou completar V - 1
-arestas. A pergunta do meio, a do union-find, decide cada aresta:
+O laço do fluxograma sai ao acabar a lista ou ao completar V - 1 arestas; o
+union-find decide cada aresta:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-Os grupos depois de cada aresta. A Sede-Ponte chega quando Sede e Ponte já
-estão no mesmo grupo, ligadas pelo Brejo:
+A Sede-Ponte chega quando as duas já estão no mesmo grupo, ligadas pelo
+Brejo:
 
 | Aresta | `acha` das pontas | Decisão | Grupos depois |
 | --- | --- | --- | --- |
@@ -137,33 +131,18 @@ estão no mesmo grupo, ligadas pelo Brejo:
 | Sede-Ponte 6 | **iguais** | ciclo | (igual) |
 | Serra-Vale 7 | diferentes | aceita | todas juntas: 5 arestas, para |
 
-Lagoa-Vale também custa 7. Se ela viesse antes na lista, entraria no lugar
-de Serra-Vale: outra árvore, **mesmo total**. Com empates, a MST pode não ser
-única; o custo mínimo é.
+Lagoa-Vale também custa 7: se viesse antes, entraria no lugar de Serra-Vale,
+com **mesmo total**. Com empates, a MST pode não ser única; o custo mínimo é.
 
-O A303 usa o Kruskal parado antes do fim para separar clientes em regiões
-de entrega. O A304 inverte a ordenação e acha a árvore de **maior** soma, a
-das melhores conexões de uma rede Wi-Fi.
+O A303 para o Kruskal antes do fim, para separar clientes em regiões. O A304
+inverte a ordenação e acha a árvore de **maior** soma.
 
 > [!WARNING]
-> Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico.
-> O `pai` de um vértice é o próximo passo rumo ao representante, e não o
-> representante. Dois vértices do mesmo grupo podem ter pais diferentes, e
-> aí a aresta entre eles é aceita, fechando um ciclo e estragando o total. E
-> o comparador do `qsort` com `x->custo - y->custo` só é seguro porque os
-> custos são pequenos; com valores perto de `INT_MAX`, a subtração estoura.
-> Nesse caso, devolva `(x->custo > y->custo) - (x->custo < y->custo)`.
-
-> [!TIP]
-> **Por dentro do C:** o `qsort` não conhece `Aresta`. Ele recebe o vetor como
-> bytes (`void *`), o tamanho de cada elemento (`sizeof(Aresta)`, 12 bytes) e
-> troca blocos de 12 bytes de lugar, chamando `compara` com ponteiros para
-> dois blocos. Dentro de `compara`, a conversão de `const void *` para
-> `const Aresta *` devolve o tipo. O custo do Kruskal é dominado pela
-> ordenação, O(E log E), que é O(E log V) porque E < V² (é assim que o
-> Cormen escreve); o union-find, com os dois truques, custa quase O(1)
-> por operação. Para mil vilas e 100 mil trechos, uns 1,7 milhão de
-> comparações.
+> Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro
+> clássico: o `pai` não é o representante, e dois vértices do mesmo grupo
+> podem ter pais diferentes. No `qsort`, a subtração `x->custo - y->custo`
+> estoura perto de `INT_MAX`; use `(x->custo > y->custo) - (x->custo <
+> y->custo)`.
 
 > [!NOTE]
 > **Pergunta para você:** se o trecho Ponte-Serra subir de 5 para 10 mil, qual

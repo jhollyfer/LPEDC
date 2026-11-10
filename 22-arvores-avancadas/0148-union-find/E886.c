@@ -2,10 +2,14 @@
 // Exercício E886 · ★★☆
 //
 // Na pelada de quinta, quem já jogou junto fica no mesmo time, e "jogou com
-// quem jogou com" também conta. Com o TAD (uniao.h), una as duplas e liste
-// cada time com seus jogadores. Os times saem na ordem do seu primeiro
-// jogador (o de menor número), e os jogadores de cada time, em ordem de
-// número. Mostre também o tamanho de cada time.
+// quem jogou com" também conta. Os nove jogadores, de 0 a 8, são Alex, Bia,
+// Cadu, Davi, Eli, Fabi, Gabo, Hana e Ivo. As duplas que já jogaram juntas:
+//
+//   0-4 2-7 4-8 1-5 7-3 8-0
+//
+// Com o TAD (uniao.h), una as duplas e liste cada time com seus jogadores e o
+// tamanho. Os times saem na ordem do seu primeiro jogador (o de menor número),
+// e os jogadores de cada time, em ordem de número.
 //
 //   Saída esperada:
 //   Time 1 (3): Alex Eli Ivo
@@ -20,16 +24,6 @@
 #include "uniao.h"
 
 int main(void) {
-    const char *jogador[] = {"Alex", "Bia", "Cadu", "Davi", "Eli", "Fabi", "Gabo", "Hana", "Ivo"};
-    int n = 9;
-    // cada par já jogou junto na pelada de quinta
-    int duplas[][2] = {{0, 4}, {2, 7}, {4, 8}, {1, 5}, {7, 3}, {8, 0}};
-    UF *u = uf_cria(n);
-    for (int i = 0; i < 6; i++) {
-        uf_une(u, duplas[i][0], duplas[i][1]);
-    }
-    (void)jogador; // apague esta linha
 
-    uf_libera(u);
     return 0;
 }

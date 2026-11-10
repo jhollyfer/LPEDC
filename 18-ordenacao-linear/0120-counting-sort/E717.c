@@ -7,6 +7,10 @@
 // de chegada. Escreva ordena_triagem, um counting sort ESTÁVEL que usa como
 // chave a posição da cor no vetor ordem_cores, e mostre a fila.
 //
+//   Chegada (nome, cor): Joana amarelo, Pedro verde, Rita vermelho, Caio
+//   amarelo, Lia azul, Davi laranja, Nina verde, Otto vermelho, Sara
+//   amarelo, Ivo laranja
+//
 //   Saída esperada:
 //    1. Rita  (vermelho)
 //    2. Otto  (vermelho)
@@ -34,12 +38,6 @@ typedef struct {
 const char *ordem_cores[CORES] = {"vermelho", "laranja", "amarelo", "verde", "azul"};
 
 int main(void) {
-    Paciente chegada[] = {
-        {"Joana", "amarelo"}, {"Pedro", "verde"}, {"Rita", "vermelho"}, {"Caio", "amarelo"},
-        {"Lia", "azul"}, {"Davi", "laranja"}, {"Nina", "verde"}, {"Otto", "vermelho"},
-        {"Sara", "amarelo"}, {"Ivo", "laranja"},
-    };
-    (void) chegada; // apague esta linha
 
     return 0;
 }

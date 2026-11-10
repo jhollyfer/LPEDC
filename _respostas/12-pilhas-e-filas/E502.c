@@ -1,13 +1,8 @@
 // 0084 · Pilha na prática: parênteses e notação pós-fixa
 // Exercício E502 · ★★☆
-//
-// Resposta: os dois pilha_desempilha estavam na ordem errada. O primeiro a
-// sair é o operando da direita, então ele vai para b. A soma e a
-// multiplicação escondiam o erro porque a + b == b + a.
 
 #include <stdio.h>
-// Na pasta do assunto basta #include "pilha.h" (o rodar compila o pilha.c
-// junto). Aqui a resolução inclui a implementação para compilar sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c"
 
 int avalia(const char *expr) {

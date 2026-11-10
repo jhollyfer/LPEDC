@@ -1,11 +1,5 @@
 // 0086 · Fila encadeada
 // Exercício E514 · ★★☆
-//
-// Resposta: cozinha_sai não zerava o fim quando a fila esvaziava. O fim
-// continuava apontando para o nó liberado, e o cozinha_entra seguinte via
-// fim != NULL e escrevia f->fim->prox nesse nó morto. Só acontece quando a
-// fila esvazia e depois recebe alguém, porque é o único momento em que o fim
-// aponta para um nó que já saiu.
 
 #include <stdbool.h>
 #include <stdio.h>

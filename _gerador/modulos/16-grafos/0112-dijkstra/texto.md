@@ -1,46 +1,39 @@
 ## 0112 · Dijkstra: caminho mínimo
 
-Domingo de sol, e você quer sair de casa e chegar à praia o mais rápido
-possível. O Waze conhece o tempo de cada rua: Casa até a Padaria são 4 minutos,
-Casa até a Escola, 1; da Escola até a Padaria, mais 2. Ir direto para a Padaria
-parece óbvio, mas passar pela Escola dá 3 minutos e ganha da rua direta.
+Rumo à praia, o Waze conhece o tempo de cada rua: Casa até a Padaria, 4
+minutos; Casa até a Escola, 1; Escola até a Padaria, 2. A rua direta parece
+óbvia, mas passar pela Escola dá 3.
 
-Agora o grafo é **ponderado**: cada aresta tem um **peso** (minutos, km,
-reais). O menor caminho deixa de ser o de menos arestas e passa a ser o de
-**menor soma de pesos**. A BFS não serve mais: ela acharia Casa, Padaria,
-Praia (duas ruas, 14 minutos) e perderia o caminho de 11 minutos com quatro
-ruas.
+O grafo agora é **ponderado**: cada aresta tem um **peso** (minutos, km, reais)
+e o menor caminho é o de **menor soma de pesos**, não o de menos arestas. A BFS
+erra: acharia Casa, Padaria, Praia (duas ruas, 14 minutos) e perderia o caminho
+de 11 minutos com quatro ruas.
 
-O algoritmo de **Dijkstra** resolve isso quando nenhum peso é negativo. Ele
-guarda três vetores:
+O **Dijkstra** resolve isso quando nenhum peso é negativo. Ele guarda:
 
-- `dist[v]`: o melhor tempo **conhecido até agora** de Casa até `v`
-  (começa com 0 em Casa e INFINITO no resto);
+- `dist[v]`: o melhor tempo **conhecido** de Casa até `v` (0 em Casa, INFINITO
+  no resto);
 - `fixo[v]`: se `dist[v]` já é definitivo;
 - `anterior[v]`: de onde se chega em `v` no melhor caminho (o `pai[]` da BFS).
 
-A cada passo, Dijkstra pega o vértice **não fixo de menor `dist`**, declara
-essa distância definitiva e **relaxa** as arestas que saem dele. Relaxar é
-perguntar: "passar por `u` encurta o caminho até `v`?" Em código,
-`dist[u] + peso[u][v] < dist[v]`. Se sim, atualiza `dist[v]` e `anterior[v]`.
-No Cormen, o começo se chama `INITIALIZE-SINGLE-SOURCE`, o teste é o
-`RELAX(u, v, w)`, os vetores são `v.d` e `v.π`, e os fixos formam o conjunto S.
+A cada passo, pega o vértice **não fixo de menor `dist`**, fixa essa distância
+e **relaxa** as arestas que saem dele: se `dist[u] + peso[u][v] < dist[v]`,
+atualiza `dist[v]` e `anterior[v]`. No Cormen, o teste é `RELAX(u, v, w)`, os vetores são `v.d` e `v.π` e os
+fixos formam o conjunto S.
 
-Dá para fixar o menor porque, com pesos não negativos, qualquer outro caminho
-até ele passaria por um vértice que já tem `dist` maior ou igual, e somar
-pesos só aumenta. É um algoritmo **guloso**: a melhor escolha
-de agora nunca precisa ser desfeita. Com uma aresta **negativa**, esse
-argumento cai e o Dijkstra pode fixar uma distância errada; aí entra o
-Bellman-Ford (assunto 0154), que relaxa todas as arestas V - 1 vezes.
+Fixar o menor é seguro: sem pesos negativos, qualquer outro caminho até ele
+passa por um vértice de `dist` maior ou igual. O algoritmo é **guloso**: a
+escolha nunca se desfaz. Com aresta **negativa** o
+argumento cai; aí entra o Bellman-Ford (assunto 0154), que relaxa todas as
+arestas V - 1 vezes.
 
-No mapa, os números nas arestas são minutos e o número em cima de cada lugar
-é a `dist` final. As arestas verdes formam a rota até a Praia; embaixo está o
-vetor `dist` no fim:
+No mapa, os números das arestas são minutos, o de cada lugar é a `dist` final e
+as arestas verdes formam a rota até a Praia:
 
 {{ideia}}
 
-O código usa matriz de pesos (0 quer dizer "sem rua direta") e reconstrói a
-rota pelo `anterior[]`, igual à BFS:
+O código usa matriz de pesos (0 é "sem rua direta") e reconstrói a rota pelo
+`anterior[]`:
 
 ```c
 #include <limits.h>
@@ -103,16 +96,15 @@ int main(void) {
 // Rota até a Praia: Casa -> Escola -> Padaria -> Mercado -> Praia
 ```
 
-A estrutura é a da BFS, com a fila trocada por "escolher o menor `dist` não
-fixo". O laço termina quando todos estão fixos ou quando o menor que sobrou é
-INFINITO:
+É a estrutura da BFS, com a fila trocada por "menor `dist` não fixo". O laço
+acaba com todos fixos ou quando o menor que sobrou é INFINITO:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-Cada linha fixa um vértice e relaxa os vizinhos dele. A Padaria começa com 4
-(rua direta) e cai para 3; o Mercado cai de 9 para 8:
+Cada linha fixa um vértice e relaxa os vizinhos: a Padaria cai de 4 para 3 e o
+Mercado de 9 para 8:
 
 | Fixa | Casa | Escola | Padaria | Mercado | Praia |
 | --- | --- | --- | --- | --- | --- |
@@ -123,31 +115,22 @@ Cada linha fixa um vértice e relaxa os vizinhos dele. A Padaria começa com 4
 | Mercado (8) | | | | **8** | 11 |
 | Praia (11) | | | | | **11** |
 
-O exemplo A223 para o Dijkstra assim que o destino é fixado, sem calcular o
-mapa inteiro. O A224 usa Dijkstra num grafo dirigido (passagens de ônibus em
-reais), dentro de uma função, e trata uma cidade que nenhuma linha alcança.
+O exemplo A223 para ao fixar o destino. O A224 usa grafo dirigido (ônibus, em
+reais) e trata uma cidade que nenhuma linha alcança.
 
 > [!WARNING]
-> `INT_MAX` como INFINITO é prático, mas `INT_MAX + 3` **estoura**: é
-> comportamento indefinido em `int` com sinal, e na prática vira um número
-> negativo que "ganha" de todo mundo no `<`. Acontece quando o algoritmo
-> escolhe um vértice inalcançável e soma o peso das arestas dele. Por isso o
-> código só escolhe `u` com `dist[u] != INFINITO` e para quando não sobra
-> ninguém. Outra saída é usar um INFINITO folgado, como `1000000000`, que ainda
-> cabe somado a um peso.
+> `INT_MAX + 3` **estoura**: comportamento indefinido em `int` com sinal, que na
+> prática vira negativo e "ganha" no `<`. Por isso o código só escolhe `u` com
+> `dist[u] != INFINITO` e para quando não sobra ninguém. Um INFINITO folgado
+> (`1000000000`) também evita o estouro.
 
 > [!TIP]
 > **Por dentro do C:** com matriz, cada um dos V passos varre V vértices para
-> achar o menor e mais V para relaxar: O(V²). Para um mapa de 5 lugares, nada.
-> Para as 100 mil esquinas de uma cidade, 10¹⁰ operações. O Waze de verdade usa
-> lista de adjacência e um **heap** (a fila de prioridade do assunto 0102) para
-> achar o menor em O(log V): O((V + E) log V). Os três vetores ocupam
-> 4 + 4 + 1 bytes por vértice (`int`, `int`, `bool`); a matriz, 4 × V² bytes,
-> e é ela que limita o tamanho do grafo.
+> achar o menor e V para relaxar: O(V²). Com lista de adjacência e **heap**
+> (assunto 0102), cai para O((V + E) log V).
 
 > [!NOTE]
-> **Pergunta para você:** se a rua Padaria–Praia passar a levar 7 minutos em
-> vez de 10, qual é a nova rota e o novo tempo até a Praia? Refaça a tabela
-> antes de trocar o `10` no programa acima.
+> **Pergunta para você:** com a rua Padaria–Praia em 7 minutos em vez de 10,
+> qual é a nova rota e o novo tempo até a Praia?
 
 {{pratique}}

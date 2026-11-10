@@ -1,13 +1,23 @@
 // 0145 · Rubro-negra esquerdista (LLRB)
 // Exercício E867 · ★★☆
 //
-// Escreva confere(r), o fiscal da rubro-negra esquerdista. Ela devolve a
-// altura preta (quantos nós pretos há da raiz até um NULL) se as três regras
-// valerem, ou um código negativo dizendo a primeira regra quebrada que achar:
+// Escreva confere(r), o fiscal da rubro-negra esquerdista. Ela devolve a altura
+// preta (quantos nós pretos há da raiz até um NULL) se as três regras valerem,
+// ou um código negativo com a primeira regra quebrada que achar:
+//
 //   -1: um link vermelho à direita;
 //   -2: dois vermelhos seguidos (um vermelho com filho esquerdo vermelho);
 //   -3: dois caminhos com quantidades diferentes de nós pretos.
-// O main já monta quatro árvores: uma pelo TAD e três à mão, com no().
+//
+// Teste com quatro árvores: a do TAD (rubronegra.h) com as chaves de 1 a 20 e
+// três montadas à mão com malloc (escreva uma função no(chave, vermelho, esq,
+// dir)), cada nó dado como chave/cor:
+//
+//   A: 20 preto, filho esquerdo 10 preto, filho direito 30 vermelho
+//   B: 30 preto, esquerdo 20 vermelho (com filho esquerdo 10 vermelho),
+//      direito 40 preto
+//   C: 20 preto, esquerdo 10 preto (com filho esquerdo 5 preto),
+//      direito 30 preto sem filhos
 //
 //   Saída esperada:
 //   TAD (1 a 20): ok, altura preta 4
@@ -15,61 +25,14 @@
 //   Árvore B: quebra a regra 2
 //   Árvore C: quebra a regra 3
 //
-// Escreva sua resposta abaixo (escreva confere):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "rubronegra.h"
 
-NoRN *no(int chave, bool vermelho, NoRN *esq, NoRN *dir) {
-    NoRN *n = malloc(sizeof(NoRN));
-    if (n == NULL) {
-        exit(1);
-    }
-    n->chave = chave;
-    n->vermelho = vermelho;
-    n->esq = esq;
-    n->dir = dir;
-    return n;
-}
-
-int confere(const NoRN *r) {
-    (void)r; // apague esta linha
-    return 0;
-}
-
-void relata(const char *nome, const NoRN *r) {
-    int c = confere(r);
-    if (c >= 0) {
-        printf("%s: ok, altura preta %d\n", nome, c);
-    } else {
-        printf("%s: quebra a regra %d\n", nome, -c);
-    }
-}
-
 int main(void) {
-    NoRN *tad = NULL;
-    for (int c = 1; c <= 20; c++) {
-        tad = rn_insere(tad, c);
-    }
-    // A: 20 com 10 (preto) à esquerda e 30 (VERMELHO) à direita
-    NoRN *a = no(20, false, no(10, false, NULL, NULL), no(30, true, NULL, NULL));
-    // B: 30 com 20 vermelho à esquerda, e 10 vermelho embaixo do 20
-    NoRN *b = no(30, false, no(20, true, no(10, true, NULL, NULL), NULL),
-                 no(40, false, NULL, NULL));
-    // C: tudo preto, mas o 10 tem um filho (5) e o 30 não tem nenhum
-    NoRN *c = no(20, false, no(10, false, no(5, false, NULL, NULL), NULL),
-                 no(30, false, NULL, NULL));
 
-    relata("TAD (1 a 20)", tad);
-    relata("Árvore A", a);
-    relata("Árvore B", b);
-    relata("Árvore C", c);
-
-    tad = rn_libera(tad);
-    a = rn_libera(a);
-    b = rn_libera(b);
-    c = rn_libera(c);
     return 0;
 }

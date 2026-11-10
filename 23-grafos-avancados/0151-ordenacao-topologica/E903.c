@@ -1,52 +1,27 @@
 // 0151 · Ordenação topológica
 // Exercício E903 · ★★☆
 //
-// A equipe de suporte tem sete chamados, #101 a #107 (índices 0 a 6), e
-// alguns só podem ser resolvidos depois de outros:
+// A equipe de suporte tem sete chamados, #101 a #107 (índices 0 a 6), e alguns
+// só podem ser resolvidos depois de outros:
 //
 //   #105 -> #101   #105 -> #102   #106 -> #102   #102 -> #103
 //   #107 -> #104   #101 -> #104
 //
-// O Kahn com fila atende na ordem em que os chamados ficam livres. A chefe
-// quer outra regra: entre os livres, sempre o de MENOR número. Escreva as
-// duas funções: kahn_fila (o Kahn do texto) e kahn_menor (a cada passo,
-// procura o menor índice ainda não feito com grau 0).
+// O Kahn com fila atende na ordem em que os chamados ficam livres. A chefe quer
+// outra regra: entre os livres, sempre o de MENOR número. Escreva kahn_fila()
+// (o Kahn com fila) e kahn_menor() (a cada passo, procura o menor índice ainda
+// não feito com grau de entrada 0). Mostre as duas ordens.
 //
 //   Saída esperada:
 //   Fila:   #105 #106 #107 #101 #102 #104 #103
 //   Menor:  #105 #101 #106 #102 #103 #107 #104
 //
-// Escreva sua resposta abaixo (escreva kahn_fila e kahn_menor):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 
-#define V 7
-
-int antes[V][V]; // antes[a][b] = 1: o chamado a precisa ser resolvido antes do b
-
-void conta_graus(int grau[]) {
-    for (int b = 0; b < V; b++) grau[b] = 0;
-    for (int a = 0; a < V; a++)
-        for (int b = 0; b < V; b++) grau[b] += antes[a][b];
-}
-
-void kahn_fila(void) {
-    printf("Fila:  ");
-    // ... para cada chamado u, na ordem: printf(" #%d", 101 + u);
-    printf("\n");
-}
-
-void kahn_menor(void) {
-    printf("Menor: ");
-
-    printf("\n");
-}
-
 int main(void) {
-    int regras[][2] = {{4, 0}, {4, 1}, {5, 1}, {1, 2}, {6, 3}, {0, 3}};
-    for (int k = 0; k < 6; k++) antes[regras[k][0]][regras[k][1]] = 1;
-    kahn_fila();
-    kahn_menor();
+
     return 0;
 }

@@ -2,49 +2,37 @@
 
 # Módulo 13 · Busca e ordenação
 
-Procurar e ordenar são as duas tarefas que um computador mais faz. A lista de
-contatos do celular, o extrato do banco, o resultado de uma busca na loja
-virtual, o índice de um banco de dados: tudo isso é dado ordenado para depois
-ser achado rápido.
+Procurar e ordenar estão em toda lista de contatos, extrato bancário e busca
+de loja virtual. Aqui você abre essas caixas pretas: a busca binária acha um
+item entre um milhão em 20 passos, e a comparação `a - b` pode dar errado no C.
 
-Aqui você abre essas caixas pretas. Vai ver por que uma busca num vetor
-ordenado acha qualquer coisa entre um milhão de elementos em 20 passos, por
-que uma ordenação "óbvia" leva horas quando outra leva um segundo, e por que
-a comparação `a - b`, tão comum numa função de comparar, pode dar errado no C.
-
-O módulo usa vetores e ponteiros, recursão, `malloc`, structs e, acima de
-tudo, a contagem de passos e o Big-O do módulo 10. Em cada algoritmo você
-**conta comparações e trocas** e confere se a teoria bate com a prática.
+**Progressão.** O módulo usa vetores, ponteiros, recursão, `malloc` e structs
+dos módulos anteriores e o Big-O do módulo 10: em cada algoritmo você **conta
+comparações e trocas** e confere a teoria. O módulo 14 troca o vetor por
+árvores: a busca binária vira BST e o heapsort fecha as ordenações.
 
 ## O que você vai aprender
 
-- **busca sequencial**: o básico, o custo O(n) e o truque da sentinela
-- **busca binária**: O(log n) em vetor ordenado, invariantes e os famosos erros de um
-- os três algoritmos simples, O(n²): **bubble sort**, **selection sort** e **insertion sort**
-- os dois de dividir e conquistar, O(n log n): **merge sort** e **quick sort**
+- **busca sequencial**: custo O(n) e sentinela
+- **busca binária**: O(log n) em vetor ordenado, invariantes e erros de um
+- **bubble**, **selection** e **insertion sort**, O(n²)
+- **merge sort** e **quick sort**, O(n log n) por dividir e conquistar
 - **estabilidade**, ordenação in-place e como escolher o algoritmo
-- usar o **`qsort`** e o **`bsearch`** da biblioteca, com funções de comparação corretas
+- **`qsort`** e **`bsearch`**, com funções de comparação corretas
 
 ## Antes de começar
 
-Nos diagramas da ideia, cada linha de gavetas é um momento do algoritmo:
-**amarela** é a gaveta comparada (ou o menor achado), **roxa** é a posição ou
-o pivô da vez, **verde** já está no lugar, **cinza** foi descartada ou nem
-olhada. Faça o **Passo a passo** no papel antes de conferir a tabela.
+Nos diagramas, cada linha de gavetas é um momento do algoritmo: **amarela** é
+a gaveta comparada (ou o menor achado), **roxa** é a posição ou o pivô da vez,
+**verde** já está no lugar e **cinza** foi descartada. Faça o **Passo a passo**
+no papel antes de conferir a tabela.
 
-Cada exemplo cabe num arquivo só: os algoritmos são funções curtas, e ver a
-função inteira junto do `main` ajuda mais do que separar em `.h` e `.c`.
-Exercício que precisa de outra versão do algoritmo traz tudo no próprio
-arquivo.
+O contador de comparações (`static` ou ponteiro) não faz parte do algoritmo:
+é o cronômetro do custo. O tempo de relógio varia de máquina para máquina; o
+número de comparações, não.
 
-Vários exemplos contam comparações com uma variável `static` de arquivo ou
-com um ponteiro para contador. Esse contador não faz parte do algoritmo: é o
-"cronômetro" que mostra o custo. Tempo de relógio varia de máquina para
-máquina; o número de comparações, não.
-
-Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do gcc com as flags de estudo vai parar o programa. O enunciado
-avisa.
+Compile com o gcc e as flags de estudo: o AddressSanitizer e o UBSan param o
+programa nos erros de índice e de overflow.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -61,40 +49,34 @@ avisa.
 
 ## 0089 · Busca sequencial
 
-Você passa a carteirinha na catraca da academia. Em meio segundo ela responde
-"liberado" ou "bloqueado". Por trás, o sistema procurou a sua matrícula numa
-lista de alunos ativos. Como?
+Você passa a carteirinha na catraca da academia e ela responde "liberado" ou
+"bloqueado": o sistema procurou a sua matrícula numa lista de alunos ativos.
 
-O jeito mais simples de procurar é o que você faria com uma pilha de fichas:
-olhar a primeira, depois a segunda, depois a terceira, até achar ou acabar a
-pilha. Isso é a **busca sequencial** (ou **busca linear**). Ela não exige nada
-do vetor: pode estar em qualquer ordem.
+A **busca sequencial** (ou **busca linear**) olha a primeira posição, depois a
+segunda, e assim por diante, até achar ou acabar o vetor. Não exige ordem.
 
-O contrato é o de sempre no C: a função recebe o vetor, o tamanho e o valor
-procurado (a **chave**), e devolve o **índice** em que achou. Se não achou,
-devolve `-1`, que nunca é um índice válido. Você escreve o laço e passa o
-tamanho, porque o vetor do C não sabe quantos elementos tem.
+A função recebe o vetor, o tamanho e o valor procurado (a **chave**) e devolve
+o **índice** em que achou. Se não achou, devolve `-1`, que nunca é um índice
+válido. O tamanho vai como parâmetro porque o vetor do C não o guarda.
 
-Quanto custa? Conte as **comparações** com a chave, que é o trabalho de
-verdade:
+O custo é o número de **comparações** com a chave:
 
 - **melhor caso**: a chave está na posição 0. Uma comparação.
 - **pior caso**: a chave está no fim ou não está no vetor. São `n`
-  comparações. Para responder "não tem", a busca precisa olhar **todos**.
+  comparações, porque responder "não tem" exige olhar **todos**.
 - **caso médio** (chave presente, em posição sorteada): `(n + 1) / 2`
-  comparações, mais ou menos metade do vetor.
+  comparações.
 
-Em notação do assunto 0072, a busca sequencial é **O(n)**: dobrou o número de
-alunos, dobrou o tempo da catraca no pior caso.
+No assunto 0072, isso é **O(n)**: dobrou o número de alunos, dobrou o tempo
+no pior caso.
 
-A academia tem 6 alunos ativos e a catraca procura a
-matrícula 1290. Ela compara com 4172, 3305 e 8821 (diferentes, em amarelo) e
-acha na quarta gaveta, a de índice 3. As duas últimas nem são olhadas:
+A academia tem 6 alunos ativos e a catraca procura a matrícula 1290. Ela
+compara com 4172, 3305 e 8821 (diferentes, em amarelo) e acha na quarta gaveta,
+a de índice 3. As duas últimas nem são olhadas:
 
 <p align="center"><img src="13-busca-e-ordenacao/0089-busca-sequencial/ideia.svg" alt="Diagrama da ideia: Busca sequencial" width="858"></p>
 
-No código, a função conta as comparações num ponteiro, para você ver o custo
-de cada busca:
+A função conta as comparações num ponteiro:
 
 ```c
 #include <stdio.h>
@@ -130,7 +112,7 @@ int main(void) {
 
 ### Passo a passo
 
-O teste de mesa da busca por 1290. Cada linha é uma volta do laço:
+Teste de mesa da busca por 1290, uma linha por volta do laço:
 
 | i | v[i] | `v[i] == 1290`? | comparações | estado da gaveta |
 | --- | --- | --- | --- | --- |
@@ -144,35 +126,24 @@ O teste de mesa da busca por 1290. Cada linha é uma volta do laço:
 Para 9999, as 6 linhas seriam "não" e a função só devolve `-1` depois da
 última.
 
-O fluxograma faz duas perguntas por volta. A primeira (`i < n?`)
-protege o vetor; a segunda (`v[i] == x?`) é a busca de fato. O caminho verde
-dá a volta três vezes antes de sair pelo Sim:
+O fluxograma faz duas perguntas por volta: `i < n?` protege o vetor e
+`v[i] == x?` é a busca de fato. O caminho verde dá a volta três vezes antes de
+sair pelo Sim:
 
 <p align="center"><img src="13-busca-e-ordenacao/0089-busca-sequencial/fluxograma.svg" alt="Fluxograma: Busca sequencial" width="670"></p>
 
 > [!WARNING]
-> O erro clássico é decidir cedo demais. Com `if (v[i] == x) return i; else
-> return -1;` dentro do laço, a função olha **só o primeiro** elemento e
-> desiste. "Não achei" só pode ser dito **depois** do laço, quando todos já
-> foram olhados. O compilador não reclama: o programa roda e responde errado.
+> Com `if (v[i] == x) return i; else return -1;` dentro do laço, a função olha
+> só o primeiro elemento e desiste. "Não achei" só vale **depois** do laço.
 
 > [!TIP]
-> **Por dentro do C:** `const int v[]` no parâmetro é um
-> `const int *`: a função recebe só o endereço da gaveta 0, e `v[i]` é
-> `*(v + i)`. Como as gavetas são vizinhas na memória, a busca sequencial lê
-> os bytes em ordem, e o processador agradece: ele traz da RAM blocos de 64
-> bytes (uma **linha de cache**, 16 `int`) de uma vez. Por isso, em vetores
-> pequenos (dezenas de elementos), a busca sequencial costuma ganhar de
-> estruturas "mais espertas". Um truque antigo é a **sentinela**: copiar a
-> chave para uma gaveta extra no fim. Aí o laço não precisa mais perguntar
-> `i < n`, porque sempre vai achar. É uma pergunta a menos por volta (veja o
-> exemplo A178).
+> A **sentinela** copia a chave para uma gaveta extra no fim do vetor, e o laço
+> deixa de testar `i < n`: uma pergunta a menos por volta (exemplo A178).
 
 > [!NOTE]
-> **Pergunta para você:** se a matrícula 3305 aparecesse duas vezes no vetor,
-> nas posições 1 e 4, qual posição a função devolveria? E quantas comparações
-> ela faria para achar 7034? Responda e confira rodando o código acima com o
-> vetor alterado. O exemplo A177 mostra como achar todas as ocorrências.
+> **Pergunta para você:** se a matrícula 3305 aparecesse nas posições 1 e 4,
+> qual posição a função devolveria? E quantas comparações ela faria para achar
+> 7034? O exemplo A177 mostra como achar todas as ocorrências.
 
 ### Hora de praticar
 
@@ -309,42 +280,8 @@ Saída esperada:
 Última de R$ 200: posição -1 (7 comparações)
 ```
 
-**Dicas:**
-
-1. Se você procurar do começo, só sabe que é a última depois de olhar tudo.
-2. Comece em i = n - 1 e vá descendo até 0: a primeira que achar é a última.
-3. Resposta esperada: posição 5 com 2 comparações (olha 15 e depois 50);
-   para 200, -1 com 7 comparações.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E529.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E529 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E529
-```
-
-**Exercício E530** · ★☆☆
-
-A portaria de uma festa confere o nome na lista de convidados. O programa
-abaixo está quase pronto: falta só o miolo do laço que procura o nome.
-Complete o trecho marcado para que, ao achar, ele guarde o índice em pos e
-pare o laço.
-
-
-```text
-Saída esperada:
-Lista: Ana Bruno Carla Diego Elisa
-Carla: pode entrar (posição 2)
-Fábio: não está na lista
-```
-
-**Dicas:**
-
-1. Strings no C não se comparam com ==: isso compara endereços, não letras.
-2. Use strcmp(convidados[i], nome), que devolve 0 quando são iguais.
-3. Depois de pos = i, um break encerra o laço.
-4. Resposta esperada: if (strcmp(convidados[i], nome) == 0) { pos = i;
-   break; }
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E530.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E530 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E530
 ```
 
 **Exercício E531** · ★★☆
@@ -369,14 +306,6 @@ Saída esperada:
 R$ 47: comum -1 (10 olhados), ordenada -1 (7 olhados)
 R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
 ```
-
-**Dicas:**
-
-1. Num vetor crescente, se v[i] > x, todos depois de i também são maiores.
-2. Na busca_ordenada, cada volta faz dois testes: v[i] == x e v[i] > x.
-   Conte só um "olhado" por volta.
-3. A melhora só aparece quando a chave NÃO está no vetor. Continua O(n).
-4. Resposta esperada: a saída acima (47 para no 52, que é o 7º elemento).
 
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E531.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E531 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E531
@@ -412,41 +341,8 @@ No vetor: Café 500g R$ 20.79
 9999: não cadastrado
 ```
 
-**Dicas:**
-
-1. return &v[i]; devolve o endereço da gaveta i, não uma cópia.
-2. Com o ponteiro, p->preco = p->preco * 1.10 muda o próprio vetor.
-3. Sempre teste p != NULL antes de usar p->.
-4. Resposta esperada: a saída acima (18,90 * 1,10 = 20,79).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E532.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E532 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E532
-```
-
-**Exercício E533** · ★★★
-
-A função abaixo deveria devolver a PRIMEIRA posição da senha procurada no
-painel do banco. Ela tem DOIS erros, de propósito. Rode com as flags de estudo: o
-AddressSanitizer vai reclamar de um deles. Conserte os dois e rode de novo
-até a saída bater com a esperada.
-
-
-```text
-Saída esperada (depois de consertar):
-Primeira senha 7: posição 1
-Primeira senha 99: posição -1
-```
-
-**Dicas:**
-
-1. Quantas voltas o laço dá para n = 6? Qual o último i?
-2. Mesmo sem o erro de memória, que posição ela devolve para 7: 1, 3 ou 5?
-3. Resposta esperada: i <= n lê v[6], fora do vetor (stack-buffer-overflow);
-   e, sem parar no primeiro encontro, pos guarda a ÚLTIMA ocorrência (5).
-   Conserto: i < n e return i assim que achar.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E533.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E533 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E533
 ```
 
 **Exercício E534** · ★★★
@@ -474,14 +370,6 @@ Sem mover: 27 comparações
 Movendo para a frente: 20 comparações
 ```
 
-**Dicas:**
-
-1. Use const char *agenda[5]: mover um contato é só mover ponteiros.
-2. Achou na posição i? Guarde agenda[i], empurre agenda[i-1..0] uma casa
-   para a direita (de trás para frente) e ponha o guardado em agenda[0].
-3. Sem mover: Mãe custa 5 sempre, Ana 4, Pizzaria 3: 5+4+5+5+3+5 = 27.
-4. Resposta esperada: a saída acima (5+5+2+1+5+2 = 20 comparações).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E534.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E534 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E534
 ```
@@ -490,40 +378,31 @@ gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E534.c -o ~/LPEDC/13-busc
 
 ## 0090 · Busca binária
 
-Lembra da brincadeira "pensei num número de 1 a 100"? Quem chuta 1, 2, 3...
-pode precisar de 100 tentativas. Quem chuta 50, ouve "menor", chuta 25 e assim
-por diante, acerta em no máximo 7. A diferença é uma informação a mais: a
-ordem.
+No jogo "pensei num número de 1 a 100", quem chuta 1, 2, 3... pode precisar de
+100 tentativas. Quem chuta 50, ouve "menor", chuta 25 e assim por diante,
+acerta em no máximo 7.
 
-A **busca binária** é esse jogo num vetor **ordenado**. Olhe a gaveta do
-meio. Se ela tem a chave, acabou. Se a chave é maior, tudo o que está à
-esquerda do meio é menor ainda e pode ser **descartado** de uma vez. Se é
+A **busca binária** é esse jogo num vetor **ordenado**. Olhe a gaveta do meio:
+se ela tem a chave, acabou; se a chave é maior, descarte a esquerda; se é
 menor, descarte a direita. Cada pergunta joga fora metade do que sobrou.
 
-O código guarda o pedaço que ainda pode ter a chave entre dois índices, `ini`
-e `fim` (os dois inclusive). Isso é um **invariante** (assunto 0073): "se `x`
-está no vetor, está em `v[ini..fim]`". Cada volta encolhe o intervalo e mantém
-o invariante. Quando `ini` passa de `fim`, o intervalo ficou vazio e a
+O código guarda o pedaço que ainda pode ter a chave entre `ini` e `fim` (os
+dois inclusive). É um **invariante** (assunto 0073): "se `x` está no vetor,
+está em `v[ini..fim]`". Quando `ini` passa de `fim`, o intervalo está vazio e a
 resposta é `-1`.
 
-Quantas voltas? Com 15 elementos sobram 15, 7, 3, 1: no máximo **4**. Com um
-milhão, no máximo 20. Com um bilhão, 30. É o **O(log n)** do assunto 0072: a
-cada vez que `n` dobra, a busca ganha só **uma** volta a mais. A conta exata
-do pior caso é ⌊log₂ n⌋ + 1 voltas, cada uma comparando a chave com um
-elemento.
+Com 15 elementos sobram 15, 7, 3, 1: no máximo **4** voltas. Com um milhão, 20.
+É o **O(log n)** do assunto 0072: quando `n` dobra, a busca ganha uma volta. O
+pior caso é ⌊log₂ n⌋ + 1 voltas. A pré-condição é o preço: num vetor
+bagunçado, a busca responde errado sem avisar.
 
-O preço é a pré-condição: o vetor precisa estar em ordem. Num vetor bagunçado,
-a busca binária não dá erro nenhum, só responde errado. Ordenar custa caro, e
-é por isso que o resto do módulo existe.
-
-O catálogo do atacadão tem 15 códigos em ordem e você
-procura o 216. O meio (índice 7) tem 189, menor que 216: a metade esquerda
-inteira fica cinza. O novo meio (11) tem 245, maior: a direita dele também
-sai. Na terceira volta, o meio (9) é o 216:
+O catálogo do atacadão tem 15 códigos em ordem e você procura o 216. O meio
+(índice 7) tem 189, menor: a esquerda fica cinza. O novo meio (11) tem 245,
+maior: a direita sai. Na terceira volta, o meio (9) é o 216:
 
 <p align="center"><img src="13-busca-e-ordenacao/0090-busca-binaria/ideia.svg" alt="Diagrama da ideia: Busca binária" width="864"></p>
 
-Em C, um `printf` dentro do laço mostra o intervalo de cada volta:
+Um `printf` mostra o intervalo de cada volta:
 
 ```c
 #include <stdio.h>
@@ -579,8 +458,7 @@ int main(void) {
 
 ### Passo a passo
 
-A busca por 150, que não está no catálogo. O intervalo encolhe até ficar
-vazio:
+A busca por 150, que não está no catálogo:
 
 | volta | ini | fim | meio | v[meio] | decisão |
 | --- | --- | --- | --- | --- | --- |
@@ -590,37 +468,28 @@ vazio:
 | 4 | 4 | 4 | 4 | 152 | 152 > 150: `fim = 3` |
 | fim | 4 | 3 | | | `ini > fim`: devolve `-1` |
 
-O `ini = 4` final é a posição em que o 150 **deveria** entrar para o vetor
-continuar ordenado. Essa informação serve para inserir em ordem (veja o
-exemplo A180).
+O `ini = 4` final é a posição em que o 150 **deveria** entrar para manter a
+ordem (exemplo A180).
 
-Diferente da busca sequencial, o fluxograma tem três perguntas por volta. A volta termina mexendo em `ini` **ou** em `fim`, nunca nos dois:
+O fluxograma tem três perguntas por volta, e a volta mexe em `ini` **ou** em
+`fim`, nunca nos dois:
 
 <p align="center"><img src="13-busca-e-ordenacao/0090-busca-binaria/fluxograma.svg" alt="Fluxograma: Busca binária" width="944"></p>
 
 > [!WARNING]
-> Busca binária é famosa por erros de um. `while (ini < fim)` com o intervalo
-> fechado `[ini, fim]` deixa de olhar o último candidato. E `fim = meio` (em
-> vez de `meio - 1`) no intervalo fechado pode nunca encolher: com `ini = 4` e
-> `fim = 4`, o meio é 4 de novo, para sempre. Escolha um estilo (fechado, como
-> no código acima, ou semiaberto `[ini, fim)`, como no A180) e siga as regras
-> dele em todas as linhas.
+> Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
+> `while (ini < fim)` deixa de olhar o último candidato e `fim = meio` pode
+> nunca encolher. Escolha um estilo (fechado, como acima, ou semiaberto
+> `[ini, fim)`, como no A180) e siga as regras dele.
 
 > [!TIP]
-> **Por dentro do C:** por que `ini + (fim - ini) / 2` e não
-> `(ini + fim) / 2`? Num vetor com mais de 1 bilhão de elementos, `ini + fim`
-> passa de `INT_MAX` (2.147.483.647) e dá **overflow**, que no C é
-> comportamento indefinido. Esse bug ficou escondido por anos em
-> implementações famosas da busca binária e só apareceu em 2006, quando os
-> vetores ficaram grandes. Outro detalhe: a busca binária pula pela memória (índice 7, depois
-> 11, depois 9), então não aproveita a linha de cache como a sequencial. A
-> `stdlib.h` traz uma pronta, a `bsearch`, que você vai usar no assunto 0096.
+> Use `ini + (fim - ini) / 2`, e não `(ini + fim) / 2`: com mais de 1 bilhão de
+> elementos, `ini + fim` passa de `INT_MAX` e causa **overflow**.
 
 > [!NOTE]
-> **Pergunta para você:** quantas voltas o código acima dá para achar o 103, o
-> primeiro do catálogo? E qual é o máximo de voltas para um vetor de 1000
-> elementos? Faça o teste de mesa antes de rodar. O A179 mostra a conta com
-> um milhão de elementos.
+> **Pergunta para você:** quantas voltas o código dá para achar o 103, o
+> primeiro do catálogo? E qual é o máximo de voltas para 1000 elementos? Faça o
+> teste de mesa antes de executar.
 
 ### Hora de praticar
 
@@ -746,19 +615,12 @@ gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/A180.c -o ~/LPEDC/13-busca-e
 
 **Exercício E535** · ★☆☆
 
-Os armários livres do vestiário do clube estão numa lista ordenada, e o
-programa abaixo procura números nela. Deixe a busca "falar" o que está
-fazendo:
-
-a) no printf de cada volta, mostre também ini e fim;
-b) conte as voltas numa variável e mostre o total no "achou" e no
-
-```text
- "não achou";
-```
-
-c) no "não achou", mostre ainda os valores de ini e fim que pararam o laço;
-d) no main, procure também o 62, o último armário.
+Os armários livres do vestiário estão numa lista ordenada:
+4, 9, 13, 21, 30, 38, 47, 55, 62. Escreva void procura(const int v[], int
+n, int x), uma busca binária que mostra cada volta (ini, fim, meio e o
+valor do meio) e, no fim, a posição achada ou a mensagem de falha, sempre
+com o total de voltas. No "não achou", mostre também os valores de ini e
+fim que pararam o laço. Procure 47, 5 e 62.
 
 
 ```text
@@ -780,58 +642,8 @@ ini=8 fim=8 meio=8 (62)
 achou na posição 8 em 4 voltas
 ```
 
-**Dicas:**
-
-1. Crie int voltas = 0; antes do while e some 1 logo depois de calcular meio.
-2. O printf da volta fica: printf("ini=%d fim=%d meio=%d (%d)\n", ...).
-3. O laço para quando ini fica maior que fim: é isso que o "não achou"
-   vai mostrar.
-4. O 62 custa 4 voltas, o máximo para
-   9 elementos.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E535.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E535 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E535
-```
-
-**Exercício E536** · ★☆☆
-
-Escreva a busca binária em versão RECURSIVA:
-
-
-```text
-int busca_rec(const int v[], int ini, int fim, int x)
-```
-
-
-que procura x em v[ini..fim] e devolve o índice ou -1. Teste com esta
-lista de CEPs em ordem crescente (guardados como int; mostre com %08d para
-o zero da frente aparecer):
-
-
-```text
-1310100, 4538132, 20040002, 30130010, 40020000,
-50030230, 60060440, 70040010, 80010000, 90010150
-```
-
-
-
-```text
-Saída esperada:
-CEP 40020000: posição 4
-CEP 22222222: posição -1
-```
-
-**Dicas:**
-
-1. Dois casos base: intervalo vazio (ini > fim) e achou (v[meio] == x).
-2. Caso recursivo: chame a função de novo só na metade que interessa.
-3. Não esqueça o return antes da chamada recursiva: sem ele, o resultado
-   lá de baixo se perde.
-4. Resposta esperada: a saída acima; a primeira chamada é
-   busca_rec(ceps, 0, 9, x).
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E536.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E536 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E536
 ```
 
 **Exercício E537** · ★★☆
@@ -859,15 +671,6 @@ Nota 4: posições 7 a 8, 2 avaliações
 Nota 5: posições 9 a 11, 3 avaliações
 ```
 
-**Dicas:**
-
-1. Use o estilo semiaberto do exemplo A180: ini = 0, fim = n, while (ini < fim).
-2. As duas funções só diferem numa comparação: v[meio] < x ou v[meio] <= x.
-3. Se a primeira dá a e a segunda dá b, a nota aparece b - a vezes, nas
-   posições a até b - 1.
-4. Com um milhão de avaliações, cada
-   contagem custa umas 40 voltas, e não um milhão.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E537.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E537 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E537
 ```
@@ -893,48 +696,8 @@ Natal: posição 10 (4 voltas)
 Palmas: posição -1 (4 voltas)
 ```
 
-**Dicas:**
-
-1. strcmp(a, b) devolve negativo se a vem antes, 0 se iguais, positivo se
-   a vem depois. É o "v[meio] < x" das strings.
-2. Chame strcmp uma vez por volta e guarde o resultado num int.
-3. Cuidado com acentos: strcmp compara BYTES. "Belo Horizonte" viria antes
-   de "Belém", porque o 'é' em UTF-8 começa com um byte maior que o 'o'.
-   Esta lista foi escolhida para não cair nessa armadilha.
-4. Resposta esperada: a saída acima (meios 7, 11, 9 e 10 nas duas buscas).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E538.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E538 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E538
-```
-
-**Exercício E539** · ★★★
-
-Alguém "modernizou" a busca binária trocando int por size_t, "porque índice
-nunca é negativo". O código compila sem nenhum aviso, acha o 35... e
-explode ao procurar o 3. O erro é de propósito: rode com as flags de estudo e leia o
-que o AddressSanitizer diz. Conserte, mantendo size_t, e rode de novo até
-as três linhas da saída esperada aparecerem.
-
-
-```text
-Saída esperada (depois de consertar):
-35: posição 3
-3: posição -1
-vazio: posição -1
-```
-
-**Dicas:**
-
-1. Faça o teste de mesa da busca pelo 3: quanto vale meio na última volta?
-2. Quanto é 0 - 1 num tipo sem sinal? (assunto 0003)
-3. O vetor vazio (n = 0) tem o mesmo problema logo na primeira linha.
-4. Resposta esperada: fim = meio - 1 com meio = 0 dá a volta para SIZE_MAX,
-   ini <= fim continua verdadeiro e v[meio] lê longe do vetor. Conserto:
-   intervalo semiaberto (fim = n, while (ini < fim), fim = meio), que nunca
-   subtrai 1 de um size_t.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E539.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E539 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E539
 ```
 
 **Exercício E540** · ★★★
@@ -954,17 +717,6 @@ Saída esperada:
 2147483647 m²: lado 46340 m (31 voltas)
 ```
 
-**Dicas:**
-
-1. Para L = 0, 1, 2, ... a resposta de "L * L <= A?" é sim, sim, ..., não,
-   não. Você procura o último sim.
-2. Use long long: com int, meio * meio estoura bem antes de 2 bilhões.
-3. Invariante: a resposta está em [ini, fim]. Se meio serve, ini = meio;
-   senão, fim = meio - 1. Pare quando ini == fim.
-4. Com ini = meio, calcule meio arredondando para CIMA,
-   ini + (fim - ini + 1) / 2; senão, com fim = ini + 1, o laço nunca acaba.
-5. Resposta esperada: a saída acima (46340² = 2147395600).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E540.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E540 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E540
 ```
@@ -973,37 +725,31 @@ gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E540.c -o ~/LPEDC/13-busca-e
 
 ## 0091 · Bubble sort
 
-No app de delivery, cinco restaurantes prometem entregar em 42, 17, 35, 8 e
-23 minutos. Você quer a lista do mais rápido para o mais lento. Para usar a
-busca binária do assunto anterior, ou só para mostrar bonito, o vetor precisa
-estar **ordenado**. Como ordenar?
+No app de delivery, cinco restaurantes prometem entregar em 42, 17, 35, 8 e 23
+minutos. Para mostrá-los do mais rápido ao mais lento, o vetor precisa estar
+**ordenado**.
 
-O **bubble sort** (ordenação por bolha) é o mais simples de explicar: percorra o vetor comparando **vizinhos**, `v[j]` com `v[j + 1]`. Se
-o da esquerda for maior, troque os dois. Isso é uma **passada**.
+O **bubble sort** (ordenação por bolha) compara **vizinhos**, `v[j]` com
+`v[j + 1]`, e troca os dois se o da esquerda for maior. Uma varredura é uma
+**passada**.
 
-Veja o que uma passada faz com o maior elemento: ele ganha todas as
-comparações e vai sendo carregado para a direita, troca após troca, até a
-última gaveta. Ele "borbulha" até o fim (ou afunda, depende do seu ponto de
-vista). Depois da passada 1, o maior está no lugar certo. Depois da passada 2,
-o segundo maior também. Daí vêm duas regras:
+Em cada passada, o maior elemento vai parar na última gaveta. Daí vêm duas
+regras:
 
-- **n - 1 passadas bastam**: com os `n - 1` maiores no lugar, o que sobra só
-  pode ser o menor, já na frente.
-- a passada `k` não precisa olhar as últimas `k - 1` gavetas: elas já estão
-  prontas. O laço interno vai até `j < n - passada`.
+- **n - 1 passadas bastam**: com os `n - 1` maiores no lugar, o que sobra já
+  está na frente;
+- a passada `k` não olha as últimas `k - 1` gavetas: o laço interno vai até
+  `j < n - passada`.
 
-E uma terceira, a **bandeira** (`bool trocou`): se uma passada inteira não
-trocou ninguém, todos os vizinhos estão em ordem, então o vetor está
-ordenado. Pode parar.
+A **bandeira** (`bool trocou`) dá uma terceira: passada sem troca significa
+vetor ordenado, e o laço para.
 
-Custo: no pior caso (vetor ao contrário), `(n - 1) + (n - 2) + ... + 1 =
-n(n - 1)/2` comparações, e todas viram trocas. É **O(n²)**. Com a bandeira, o
-melhor caso (vetor já em ordem) cai para uma passada só: `n - 1` comparações,
-**O(n)**.
+No pior caso (vetor ao contrário), são `(n - 1) + (n - 2) + ... + 1 =
+n(n - 1)/2` comparações, todas viram trocas: **O(n²)**. No melhor caso (vetor
+em ordem, com bandeira), uma passada de `n - 1` comparações: **O(n)**.
 
-Com os cinco restaurantes: na passada 1 o 42 ganha de todo mundo e afunda até o
-fim (verde). Na passada 2 o 35 encontra o seu lugar. Na 3, o 8 chega à frente.
-A passada 4 não troca nada, e a bandeira encerra:
+Na passada 1 o 42 afunda até o fim (verde). Na 2, o 35 acha o seu lugar. Na
+3, o 8 chega à frente. A passada 4 não troca nada e a bandeira encerra:
 
 <p align="center"><img src="13-busca-e-ordenacao/0091-bubble-sort/ideia.svg" alt="Diagrama da ideia: Bubble sort" width="858"></p>
 
@@ -1064,8 +810,7 @@ int main(void) {
 
 ### Passo a passo
 
-A passada 1 por dentro. Cada linha é uma comparação de vizinhos; em negrito, o
-par comparado:
+A passada 1 por dentro; em negrito, o par comparado:
 
 | j | antes | `v[j] > v[j+1]`? | depois |
 | --- | --- | --- | --- |
@@ -1075,36 +820,28 @@ par comparado:
 | 3 | 17 35 8 **42 23** | sim, troca | 17 35 8 23 42 |
 
 Somando as quatro passadas: 4 + 3 + 2 + 1 = **10 comparações** e
-4 + 2 + 1 + 0 = **7 trocas**. Esse 7 é o número de **inversões**
-do vetor original, os pares que estão na ordem errada (42 com 17, 42 com 35,
-42 com 8, 42 com 23, 17 com 8, 35 com 8 e 35 com 23). Cada troca de vizinhos
-desfaz uma inversão, nem mais nem menos.
+4 + 2 + 1 + 0 = **7 trocas**. Esse 7 é o número de **inversões** do vetor
+original, os pares na ordem errada (42 com 17, 35, 8 e 23; 17 com 8; 35 com 8
+e 23). Cada troca de vizinhos desfaz uma inversão.
 
-O fluxograma tem dois laços. O de dentro (`j`) faz uma passada; o de
-fora repete passadas enquanto a bandeira disser que houve troca:
+O laço de dentro (`j`) faz uma passada; o de fora repete enquanto a bandeira
+indicar troca:
 
 <p align="center"><img src="13-busca-e-ordenacao/0091-bubble-sort/fluxograma.svg" alt="Fluxograma: Bubble sort" width="681"></p>
 
 > [!WARNING]
-> Troca sem variável auxiliar não troca nada: `v[j] = v[j + 1]; v[j + 1] =
-> v[j];` deixa os dois com o mesmo valor, porque o primeiro valor foi apagado
-> na primeira linha. E cuidado com o limite do laço interno: com
-> `j < n`, a última volta lê `v[n]`, uma gaveta depois do fim. O
-> AddressSanitizer pega; o C sozinho, não.
+> `v[j] = v[j + 1]; v[j + 1] = v[j];` não troca nada: os dois ficam iguais.
+> Use uma variável auxiliar. Com `j < n` no laço interno, a última volta lê
+> `v[n]`, fora do vetor.
 
 > [!TIP]
-> **Por dentro do C:** cada troca são **três** escritas na memória (`aux`,
-> `v[j]`, `v[j + 1]`), e o bubble faz uma troca por inversão. Num vetor
-> aleatório, metade dos pares está invertida: são cerca de `n²/4` trocas, ou
-> `3n²/4` escritas. Com 100 mil elementos, isso dá uns 7,5 bilhões de
-> escritas. É por isso que o bubble sort quase nunca aparece em código de
-> verdade. Ele vale como primeira ordenação: mostra a ideia de inversão, de
-> passada e de "a parte do fim já está pronta", que voltam em todos os outros.
+> O bubble faz uma troca por inversão (cerca de `n²/4` num vetor aleatório):
+> serve para aprender, não para código real.
 
 > [!NOTE]
 > **Pergunta para você:** quantas passadas o bubble com bandeira faz no vetor
-> `8 17 23 35 42`, que já está ordenado? E em `17 23 35 42 8`, com o menor lá
-> no fim? Faça a previsão e teste mudando o vetor do código acima.
+> `8 17 23 35 42`, que já está ordenado? E em `17 23 35 42 8`, com o menor no
+> fim?
 
 ### Hora de praticar
 
@@ -1253,79 +990,25 @@ Saída esperada:
 Ranking: 31 31 25 18 12 7
 ```
 
-**Dicas:**
-
-1. Parta do bubble do código do assunto (o do texto).
-2. Basta mudar uma comparação: troque quando o da esquerda for MENOR.
-3. Os dois 31 empatados não são trocados entre si (31 < 31 é falso).
-4. Resposta esperada: Ranking: 31 31 25 18 12 7
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E541.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E541 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E541
 ```
 
-**Exercício E542** · ★☆☆
+**Exercício E543** · ★★☆
 
-A fila do caixa preferencial tem senhas fora de ordem: 9, 4, 7, 1, 5. O
-programa abaixo ordena com bubble sort (sem bandeira) e mostra o vetor no
-fim de cada passada. Melhore o programa:
-
-a) conte as trocas de CADA passada numa variável própria e mostre esse
-
-```text
- número entre parênteses no fim da linha da passada;
-```
-
-b) acrescente a bandeira trocou, para parar na primeira passada sem troca.
+A turma de natação tem as idades 34, 19, 27, 45 e 22. Escreva um bubble
+sort em ordem crescente, trocando com uma variável auxiliar. Mostre o
+vetor ao fim de cada passada e, no fim, o total de trocas.
 
 
 ```text
 Saída esperada:
-passada 1: 4 7 1 5 9 (4 trocas)
-passada 2: 4 1 5 7 9 (2 trocas)
-passada 3: 1 4 5 7 9 (1 trocas)
-passada 4: 1 4 5 7 9 (0 trocas)
-trocas: 7
+passada 1: 19 27 34 22 45
+passada 2: 19 27 22 34 45
+passada 3: 19 22 27 34 45
+passada 4: 19 22 27 34 45
+5 trocas
 ```
-
-**Dicas:**
-
-1. Declare int nesta = 0; no começo de cada passada (dentro do laço de
-   fora) e some 1 junto com trocas++.
-2. A bandeira: bool trocou = true; antes do laço, condição
-   passada < n && trocou, e trocou = false; no começo de cada passada.
-3. A passada 4 ainda acontece: a bandeira só descobre que acabou depois de
-   uma passada inteira sem trocas.
-4. O total 7 é o número de inversões do
-   vetor original.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E542.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E542 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E542
-```
-
-**Exercício E543** · ★★☆
-
-Este bubble sort deveria ordenar as idades da turma de natação: 34, 19,
-27, 45, 22. Ele tem DOIS erros, de propósito. Rode: o sanitizer
-("runtime error: index 5 out of bounds") acusa um deles. Conserte os dois
-e rode de novo até a saída bater com a esperada.
-
-
-```text
-Saída esperada (depois de consertar):
-19 22 27 34 45
-```
-
-**Dicas:**
-
-1. Na passada 1, qual o maior valor de j? E de j + 1?
-2. Conserte o primeiro erro e rode de novo: alguma idade sumiu e outra
-   apareceu duas vezes?
-3. Faça o teste de mesa da troca com idades[0] = 34 e idades[1] = 19.
-4. Resposta esperada: o laço interno deve ser j < n - passada (com + 1, ele
-   lê idades[5], fora do vetor); e a troca precisa de uma variável
-   auxiliar: int aux = idades[j]; idades[j] = idades[j + 1];
-   idades[j + 1] = aux;
 
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E543.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E543 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E543
@@ -1362,14 +1045,6 @@ Saída esperada:
 5º Inter      65 pts 18 vit
 ```
 
-**Dicas:**
-
-1. Primeiro compare os pontos; só se forem iguais, compare as vitórias.
-2. Struct se copia inteira com =: Time aux = tabela[j]; funciona.
-3. Para alinhar: printf("%dº %-10s %2d pts %2d vit\n", ...).
-4. Resposta esperada: a saída acima (Palmeiras passa o Flamengo pelas
-   vitórias).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E544.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E544 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E544
 ```
@@ -1394,87 +1069,36 @@ shaker: 3 passadas, 18 comparações
 resultado: 1 2 3 4 5 6 7 8
 ```
 
-**Dicas:**
-
-1. Guarde a parte ainda bagunçada em v[ini..fim]. Depois da ida, fim--;
-   depois da volta, ini++.
-2. Na volta, compare v[j - 1] com v[j], com j descendo de fim até ini + 1.
-3. Pare quando uma passada (de ida ou de volta) não trocar nada.
-4. A ida troca só o 8 com o 1, a volta
-   traz o 1 para a frente, e a terceira passada confirma que acabou.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E545.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E545 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E545
-```
-
-**Exercício E546** · ★★★
-
-Uma INVERSÃO é um par de posições i < j com v[i] > v[j]. Escreva:
-
-
-```text
-int inversoes(const int v[], int n)      conta os pares, com dois laços
-int trocas_bubble(int v[], int n)        ordena e devolve quantas trocas fez
-```
-
-
-Teste com 42 17 35 8 23, com 6 5 4 3 2 1 e com 3 1 2 (conte as inversões
-ANTES de ordenar). Depois de ordenar, chame inversoes de novo e mostre
-quantas sobraram.
-
-
-```text
-Saída esperada:
-n = 5: 7 inversões, 7 trocas, 0 depois
-n = 6: 15 inversões, 15 trocas, 0 depois
-n = 3: 2 inversões, 2 trocas, 0 depois
-```
-
-**Dicas:**
-
-1. Na inversoes, o j começa em i + 1.
-2. O que acontece com as inversões quando você troca dois VIZINHOS a > b?
-   E com os outros pares?
-3. No vetor invertido, todo par é uma inversão: n(n - 1)/2.
-4. Cada troca de vizinhos desfaz
-   exatamente uma inversão e não cria nenhuma; o vetor ordenado tem zero.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E546.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E546 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E546
 ```
 
 ---
 
 ## 0092 · Selection sort
 
-Final da bateria de kart com os amigos. Os tempos da melhor volta, em
-segundos, foram 58, 31, 47, 19 e 26. Para montar o pódio, você faz o óbvio:
-procura o **menor** tempo e chama o primeiro lugar. Depois procura o menor
-entre os que **sobraram** e chama o segundo. E assim por diante.
+Final da bateria de kart: os tempos da melhor volta, em segundos, foram 58, 31,
+47, 19 e 26. Para montar o pódio, você procura o **menor** tempo, que é o
+primeiro lugar.
+Depois procura o menor entre os que **sobraram**, e assim por diante.
 
-Isso é o **selection sort** (ordenação por seleção). O vetor fica dividido em
-duas partes: à esquerda, a parte **pronta** (os menores, já na ordem final);
-à direita, o resto. Cada passada `i`:
+Esse é o **selection sort** (ordenação por seleção). O vetor tem uma parte
+**pronta** à esquerda (os menores, na ordem final) e o resto à direita. Cada
+passada `i`:
 
 1. procura o **índice** do menor elemento em `v[i..n-1]`;
 2. troca esse menor com `v[i]`. A gaveta `i` nunca mais muda.
 
-A passada guarda o **índice** do menor, não o valor: é ele que permite fazer
-a troca no fim. É o padrão "maior/menor" do assunto 0025, repetido a cada
-passada.
+Guarda-se o **índice**, não o valor, para poder trocar no fim (padrão
+"maior/menor" do assunto 0025).
 
-Custo: a passada 0 compara `n - 1` vezes, a 1 compara `n - 2` vezes... No
-total, `n(n - 1)/2` comparações, **sempre**. Vetor bagunçado, ordenado ou ao
-contrário, tanto faz: para saber qual é o menor, é preciso olhar todos os que
-sobraram. Então é **O(n²)** em todos os casos.
+São `n(n - 1)/2` comparações em **todos** os casos, porque achar o menor exige
+olhar todos os que sobraram: **O(n²)**, mesmo com o vetor em ordem. A
+vantagem são as **trocas**: no máximo **uma por passada**, `n - 1` no total,
+contra até `n(n - 1)/2` do bubble. Pesa quando mover um elemento é caro.
 
-A vantagem está nas **trocas**: no máximo **uma por passada**, `n - 1` no
-total. O bubble pode fazer `n(n - 1)/2`. Quando mover um elemento é
-caro (structs grandes, um registro inteiro), isso pesa.
-
-No pódio do kart, cada linha do desenho é uma passada: a gaveta roxa é a posição `i` que vai
-receber o menor, e a amarela é o menor que a passada achou. Depois da troca,
-a gaveta vira verde e não sai mais do lugar:
+Cada linha é uma passada: a gaveta roxa é a posição `i`, a amarela é o menor
+achado. Depois da troca, a gaveta vira verde e fica:
 
 <p align="center"><img src="13-busca-e-ordenacao/0092-selection-sort/ideia.svg" alt="Diagrama da ideia: Selection sort" width="858"></p>
 
@@ -1532,8 +1156,7 @@ int main(void) {
 
 ### Passo a passo
 
-A passada `i = 0` por dentro. O `menor` começa apontando para a gaveta 0 e
-vai sendo atualizado:
+A passada `i = 0`. O `menor` começa na gaveta 0:
 
 | j | v[j] | v[menor] antes | `v[j] < v[menor]`? | menor |
 | --- | --- | --- | --- | --- |
@@ -1543,35 +1166,27 @@ vai sendo atualizado:
 | 3 | 19 | 31 | sim | 3 (19) |
 | 4 | 26 | 19 | não | 3 |
 
-Fim da passada: troca `v[0]` (58) com `v[3]` (19). Quatro comparações, uma
-troca. As passadas seguintes fazem 3, 2 e 1 comparações: 10 no total.
+Fim da passada: troca `v[0]` (58) com `v[3]` (19), depois de quatro comparações.
+As passadas seguintes fazem 3, 2 e 1 comparações: 10 no total.
 
-No fluxograma, a caixa "acha o menor" esconde um laço inteiro (a
-tabela acima). A troca acontece **fora** dele, uma vez por passada:
+No fluxograma, a caixa "acha o menor" esconde um laço inteiro (a tabela). A
+troca fica **fora** dele:
 
 <p align="center"><img src="13-busca-e-ordenacao/0092-selection-sort/fluxograma.svg" alt="Fluxograma: Selection sort" width="511"></p>
 
 > [!WARNING]
-> O erro mais comum é trocar **dentro** do laço que procura o menor: toda vez
-> que acha alguém menor, já troca. O vetor até sai ordenado, mas você perdeu a
-> única vantagem do algoritmo e passou a fazer trocas como o bubble. Outro
-> clássico: esquecer de reiniciar `menor = i` a cada passada. Aí `menor`
-> continua apontando para uma gaveta da parte pronta, e a troca bagunça o que
-> já estava certo.
+> Trocar **dentro** do laço que procura o menor ordena o vetor, mas perde a
+> vantagem das poucas trocas. Esquecer de reiniciar `menor = i` a cada passada
+> faz `menor` apontar para a parte pronta.
 
 > [!TIP]
-> **Por dentro do C:** a troca do selection é de **longa distância**: o 19
-> salta da gaveta 3 para a 0 de uma vez, e o 58 vai para a 3 passando por cima
-> do 31 e do 47. Esse salto é o que torna o selection **instável**: dois
-> elementos iguais podem trocar de ordem entre si (o exemplo A184 mostra a
-> Bia passando na frente da Ana). Em memória ele é ótimo: ordena
-> no próprio vetor, com uma variável `aux` e dois índices. Isso se chama
-> ordenar **in-place**, com **O(1)** de memória extra.
+> A troca é de **longa distância** (o 19 salta da gaveta 3 para a 0), por isso
+> o selection é **instável**: iguais podem trocar de ordem (exemplo A184). Ele
+> ordena **in-place**, com **O(1)** de memória extra.
 
 > [!NOTE]
 > **Pergunta para você:** quantas comparações e quantas trocas o selection faz
-> no vetor `19 26 31 47 58`, que já está ordenado? E o bubble com bandeira, do
-> assunto anterior? Responda antes de rodar.
+> no vetor `19 26 31 47 58`, que já está ordenado? E o bubble com bandeira?
 
 ### Hora de praticar
 
@@ -1708,57 +1323,8 @@ fim = 2: 30 45 60 75 89 120
 fim = 1: 30 45 60 75 89 120
 ```
 
-**Dicas:**
-
-1. O laço de fora: for (int fim = n - 1; fim > 0; fim--).
-2. O de dentro procura o índice do maior em v[0..fim], inclusive o fim (<=).
-3. Depois do laço de dentro, troque v[fim] com v[maior].
-4. O vetor fica pronto em fim = 3, mas o
-   selection não tem como saber disso e continua.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E547.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E547 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E547
-```
-
-**Exercício E548** · ★☆☆
-
-Cinco caixas de uma mudança estão numeradas fora de ordem: 3, 1, 2, 5, 4.
-O programa abaixo ordena com selection sort e conta as trocas. Estenda o
-programa:
-
-a) conte também as comparações (caixas[j] < caixas[menor]) e mostre o
-
-```text
- total no fim;
-```
-
-b) nas passadas em que o menor já estava no lugar (nenhuma troca), escreva
-
-```text
- " (sem troca)" no fim da linha.
-```
-
-
-
-```text
-Saída esperada:
-i = 0: 1 3 2 5 4
-i = 1: 1 2 3 5 4
-i = 2: 1 2 3 5 4 (sem troca)
-i = 3: 1 2 3 4 5
-trocas: 3
-comparações: 10
-```
-
-**Dicas:**
-
-1. O contador de comparações sobe dentro do laço de dentro, uma vez por
-   volta.
-2. "Sem troca" é exatamente quando menor == i depois do laço de dentro.
-3. As comparações não dependem dos valores: 4 + 3 + 2 + 1 = 10.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E548.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E548 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E548
 ```
 
 **Exercício E549** · ★★☆
@@ -1780,12 +1346,6 @@ Saída esperada:
 5 trocas de ponteiro
 ```
 
-**Dicas:**
-
-1. "v[j] < v[menor]" vira strcmp(alunos[j], alunos[menor]) < 0.
-2. A variável auxiliar da troca é um const char *, não um vetor de char.
-3. Trocar ponteiros custa 8 bytes, seja o nome curto ou comprido.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E549.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E549 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E549
 ```
@@ -1805,51 +1365,8 @@ Saída esperada:
 18 comparações (ordenar tudo custaria 28)
 ```
 
-**Dicas:**
-
-1. É o selection de sempre com o laço de fora indo até i < k.
-2. As passadas fazem 7, 6 e 5 comparações.
-3. Ordenar tudo: n(n - 1)/2 = 28.
-4. O resto do vetor (v[3..7]) fica fora
-   de ordem, e tudo bem.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E550.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E550 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E550
-```
-
-**Exercício E551** · ★★★
-
-Na estufa, as mudas precisam ficar em fila da mais baixa para a mais alta.
-Este selection sort tem UM erro, de propósito: compila sem aviso, roda sem
-reclamação do sanitizer e mesmo assim mostra
-
-
-```text
-40 15 21 28 33
-```
-
-
-Faça o teste de mesa das passadas i = 0 e i = 1, anotando o valor de menor,
-ache o erro, conserte e rode de novo.
-
-
-```text
-Saída esperada (depois de consertar):
-15 21 28 33 40
-```
-
-**Dicas:**
-
-1. Em que linha menor recebe um valor? Quantas vezes essa linha roda?
-2. Na passada 0, o 15 já está na gaveta 0: menor fica 0 e a troca é dele
-   com ele mesmo. Para onde menor aponta quando a passada 1 começa?
-3. Resposta esperada: menor é inicializado uma vez só, com 0, fora do laço
-   de fora. Na passada 1 ele ainda vale 0 (o 15, o menor de todos), ninguém
-   de v[2..4] é menor que 15, e a troca joga o 15 de volta para a gaveta 1
-   e o 40 para a 0. Conserto: int menor = i; no começo de cada passada.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E551.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E551 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E551
 ```
 
 **Exercício E552** · ★★★
@@ -1874,10 +1391,11 @@ typedef struct { int codigo; double preco; char descricao[200]; } Produto;
 Mostre os produtos do mais barato ao mais caro SEM mexer no vetor loja.
 Truque: crie int ordem[5] = {0, 1, 2, 3, 4} e ordene ESSE vetor com
 selection sort, comparando loja[ordem[j]].preco. É a ORDENAÇÃO INDIRETA.
+(O 216 é o tamanho do Produto numa máquina de 64 bits comum.)
 
 
 ```text
-Saída esperada (o 216 é de uma máquina de 64 bits comum):
+Saída esperada:
 Do mais barato ao mais caro:
 15 Mousepad      R$   49.90
 12 Mouse         R$   89.90
@@ -1888,13 +1406,6 @@ loja[0] continua sendo: Fone sem fio
 3 trocas de 4 bytes, em vez de 216 bytes
 ```
 
-**Dicas:**
-
-1. ordem[k] responde "qual produto aparece em k-ésimo lugar?".
-2. Compare pelos produtos, troque os índices: a troca é de int.
-3. Para mostrar: const Produto *p = &loja[ordem[k]];
-4. sizeof(Produto) é 4 + 4 de enchimento + 8 + 200 = 216. Use %zu.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E552.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E552 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E552
 ```
@@ -1903,41 +1414,32 @@ gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E552.c -o ~/LPEDC/13-busca-
 
 ## 0093 · Insertion sort
 
-Rodada de buraco com a família. Você recebe as cartas uma a uma: 7, 4, 9, 2,
-5. Ninguém espera chegarem todas para arrumar. A cada carta nova, você olha a
-mão (que já está em ordem), acha o lugar dela e **encaixa**, empurrando as
-maiores um pouco para o lado.
+Numa rodada de buraco, você recebe as cartas uma a uma: 7, 4, 9, 2, 5. Cada
+carta nova é **encaixada** no lugar certo da mão, que já está em ordem.
 
-Esse é o **insertion sort** (ordenação por inserção). O vetor também tem uma
-parte pronta à esquerda, `v[0..j-1]`, mas "pronta" aqui quer dizer **em
-ordem entre si**, não "no lugar final" como no selection. A cada passo:
+Esse é o **insertion sort** (ordenação por inserção). A parte pronta é
+`v[0..j-1]`, **em ordem entre si** (no selection, a parte pronta já estava no
+lugar final). A cada passo:
 
-1. guarde a próxima carta, `x = v[j]` (o `key` do pseudocódigo do Cormen,
-   que indexa o vetor a partir de 1);
+1. guarde a próxima carta, `x = v[j]`;
 2. ande para a esquerda empurrando uma casa para a direita cada elemento
-   **maior** que `x` (é um **deslocamento**, não uma troca);
-3. quando achar alguém menor ou igual (ou o começo do vetor), ponha `x` no
-   buraco que sobrou, `v[i + 1]`.
+   **maior** que `x` (um **deslocamento**, não uma troca);
+3. ao achar alguém menor ou igual (ou o começo), ponha `x` em `v[i + 1]`.
 
 Guardar `x` antes é obrigatório: o primeiro deslocamento escreve por cima de
 `v[j]`.
 
-O custo depende de **quanto** o vetor está bagunçado. Cada deslocamento
-desfaz uma inversão (como cada troca do bubble), mas custa uma escrita, não
-três. No pior caso (vetor ao contrário), cada carta anda até o começo:
-`n(n - 1)/2` comparações, **O(n²)**. No melhor (já ordenado), cada carta
-compara uma vez e fica: `n - 1` comparações, **O(n)**. Em vetor **quase**
-ordenado, fica quase linear. Por isso ele é o melhor dos três algoritmos
-simples na prática, e as bibliotecas usam insertion para pedaços pequenos
-(até umas 16 a 32 posições).
+Cada deslocamento desfaz uma inversão, como a troca do bubble, mas custa uma
+escrita, não três. No pior caso (vetor ao contrário): `n(n - 1)/2`
+comparações, **O(n²)**. No melhor (já ordenado): `n - 1`, **O(n)**. É o melhor
+dos três simples; bibliotecas o usam para pedaços de 16 a 32 posições.
 
-No desenho, cada linha é uma carta nova: a parte verde é a mão já arrumada e a
-amarela é a carta que acabou de entrar. O 9 não anda nada; o 2 atravessa a
-mão inteira:
+Cada linha é uma carta nova: verde é a mão arrumada, amarela é a carta que
+entrou. O 9 não anda; o 2 atravessa a mão inteira:
 
 <p align="center"><img src="13-busca-e-ordenacao/0093-insertion-sort/ideia.svg" alt="Diagrama da ideia: Insertion sort" width="858"></p>
 
-No código, a função `maior` só existe para contar as comparações:
+A função `maior` só conta as comparações:
 
 ```c
 #include <stdio.h>
@@ -2004,37 +1506,27 @@ O encaixe do 2 (`j = 3`), o mais caro. A mão antes é `4 7 9 | 2 5`:
 | 0 | 4 | sim | `v[1] = 4` | 4 4 7 9 5 |
 | -1 | | (`i >= 0` falso: nem compara) | `v[0] = 2` | 2 4 7 9 5 |
 
-Três comparações, três deslocamentos. Nas linhas do meio, durante o
-encaixe, o vetor tem um valor **repetido** e o 2 não está em lugar nenhum. Ele
-está guardado em `x`. Somando todos os encaixes: 1 + 1 + 3 + 3 = **8
-comparações** e 1 + 0 + 3 + 2 = **6 deslocamentos**.
+Foram três comparações e três deslocamentos. Somando todos os encaixes:
+1 + 1 + 3 + 3 = **8 comparações** e 1 + 0 + 3 + 2 = **6 deslocamentos**.
 
-O laço de dentro do fluxograma tem uma pergunta dupla e para por dois
-motivos: acabou o vetor ou achou alguém que não é maior:
+O laço de dentro para por dois motivos: acabou o vetor ou achou alguém que
+não é maior:
 
 <p align="center"><img src="13-busca-e-ordenacao/0093-insertion-sort/fluxograma.svg" alt="Fluxograma: Insertion sort" width="692"></p>
 
 > [!WARNING]
-> A ordem das condições importa: `while (i >= 0 && v[i] > x)`. Escrita ao
-> contrário, `while (v[i] > x && i >= 0)`, quando `i` chega a `-1` o programa
-> lê `v[-1]` **antes** de perguntar se `i` é válido. É o curto-circuito do
-> `&&` (assunto 0013) que protege o vetor: se `i >= 0` dá falso, o lado
-> direito nem é avaliado.
+> Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o
+> programa lê `v[-1]`. O curto-circuito do `&&` (assunto 0013) protege o vetor.
 
 > [!TIP]
-> **Por dentro do C:** o laço de deslocamento faz o papel de um `memmove`: ele
-> empurra um bloco contínuo de memória uma casa para a direita. Por isso o
-> insertion sort é rápido em vetores pequenos: acessa a memória em
-> sequência, faz uma escrita por deslocamento e não chama função nenhuma. Ele
-> também é **estável**: o `>` (e não `>=`) faz o laço parar ao encontrar um
-> igual, e `x` entra **depois** dele. E é **online**: consegue ordenar à
-> medida que os dados chegam, como as cartas na mão.
+> O insertion sort é **estável**: o `>` (e não `>=`) para ao encontrar um
+> igual, e `x` entra depois dele. Também é **online**: ordena à medida que os
+> dados chegam.
 
 > [!NOTE]
-> **Pergunta para você:** e se a condição fosse `v[i] >= x`? O vetor
-> continuaria saindo ordenado? Quantos deslocamentos o código acima faria? E o
-> que aconteceria com dois elementos iguais? (O A185 mostra por que isso
-> importa.)
+> **Pergunta para você:** se a condição fosse `v[i] >= x`, o vetor continuaria
+> saindo ordenado? Quantos deslocamentos o código faria? E com dois elementos
+> iguais? (O A185 mostra por que isso importa.)
 
 ### Hora de praticar
 
@@ -2157,41 +1649,8 @@ Saída esperada:
 Classificação: 810 720 690 650 580
 ```
 
-**Dicas:**
-
-1. Parta do insertion do código do assunto (pode tirar a contagem).
-2. Agora quem precisa abrir espaço são os elementos MENORES que x.
-3. Só muda uma comparação no while.
-4. Resposta esperada: Classificação: 810 720 690 650 580
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E553.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E553 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E553
-```
-
-**Exercício E554** · ★☆☆
-
-No check-in, as malas (em kg) precisam ir para a esteira da mais leve para
-a mais pesada. O insertion sort abaixo está quase pronto: faltam DUAS
-linhas, marcadas com "complete". Do jeito que está, ele compila, roda e
-mostra o vetor bagunçado. Complete e confira.
-
-
-```text
-Saída esperada (depois de completar):
-8 15 19 23 30
-```
-
-**Dicas:**
-
-1. Dentro do while, a mala malas[i] é maior que x: ela anda uma casa para
-   a direita.
-2. Quando o while termina, i aponta para alguém que NÃO é maior que x (ou
-   vale -1). O buraco está uma casa à direita de i.
-3. Resposta esperada: malas[i + 1] = malas[i]; dentro do while e
-   malas[i + 1] = x; depois dele.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E554.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E554 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E554
 ```
 
 **Exercício E555** · ★★☆
@@ -2218,13 +1677,6 @@ Saída esperada:
 9900: 9900 9800 8750 7500 7200
 ```
 
-**Dicas:**
-
-1. Com espaço sobrando, comece a empurrar de i = n - 1 e aumente n no fim.
-2. Cheio: o último vai ser descartado mesmo, então comece de i = n - 2 (o
-   empurrão escreve por cima de top[n - 1]).
-3. O ranking é decrescente: empurre enquanto top[i] < pontos.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E555.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E555 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E555
 ```
@@ -2232,23 +1684,19 @@ gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E555.c -o ~/LPEDC/13-busca-
 **Exercício E556** · ★★☆
 
 Os pedidos de uma lanchonete chegam com o tempo de preparo, em minutos:
-6, 3, 8, 3, 1. O programa abaixo ordena com insertion sort e mostra cada
-encaixe. Transforme-o:
+6, 3, 8, 3, 1. Escreva
 
-a) leve a ordenação para int ordena(int v[], int n, bool maior_ou_igual,
 
 ```text
- bool mostrar), que devolve o total de deslocamentos. Com maior_ou_igual
- falso, o while usa preparo[i] > x (como agora); com verdadeiro, usa >=;
+int ordena(int v[], int n, bool maior_ou_igual, bool mostrar)
 ```
 
-b) na linha de cada encaixe, mostre também x e a posição onde ele entrou;
-c) no main, ordene o vetor com > (mostrando os encaixes) e uma cópia dele
 
-```text
- com >= (sem mostrar), e imprima os dois totais.
-```
-
+com insertion sort crescente. Ela devolve o total de deslocamentos. Com
+maior_ou_igual falso, o while desloca quando v[i] > x; com verdadeiro,
+quando v[i] >= x. Com mostrar verdadeiro, imprime uma linha por encaixe.
+No main, ordene o vetor com > (mostrando) e uma cópia com >= (sem
+mostrar), e imprima os dois totais.
 
 
 ```text
@@ -2261,128 +1709,66 @@ total com >: 7
 total com >=: 8
 ```
 
-**Dicas:**
-
-1. Quando o while termina, x é guardado em v[i + 1]: essa é a posição.
-2. A condição pode ser (maior_ou_igual ? v[i] >= x : v[i] > x).
-3. Com >=, o segundo 3 passa por cima do primeiro: um deslocamento a mais,
-   e os dois 3 trocam de ordem (deixa de ser estável).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E556.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E556 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E556
 ```
 
 **Exercício E557** · ★★★
 
-Este insertion sort deveria ordenar as idades do grupo de corrida:
-31, 12, 45, 27, 8, 19. Ele tem DOIS erros, de propósito. O primeiro faz o
-sanitizer parar o programa; o segundo só aparece depois que você
-consertar o primeiro. Conserte os dois e rode de novo.
-
-
-```text
-Saída esperada (depois de consertar):
-8 12 19 27 31 45
-```
-
-**Dicas:**
-
-1. Quando o 12 é encaixado, i chega a -1. O que o while faz primeiro?
-2. Releia a seção sobre o curto-circuito do && (assunto 0013).
-3. No fim do while, a posição i foi empurrada ou não? Onde está o buraco?
-4. Resposta esperada: o while deve ser (i >= 0 && idades[i] > x), senão lê
-   idades[-1]; e o encaixe é idades[i + 1] = x, não idades[i] = x.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557
-```
-
-**Exercício E558** · ★★★
-
-Ideia aparentemente esperta: a parte v[0..j-1] já está ordenada, então dá
-para achar o lugar de x com BUSCA BINÁRIA em vez de andar casa por casa.
-Implemente essa "insertion binária" e compare com a normal num vetor
-invertido, contando comparações e deslocamentos. Escreva uma função
-void testa(int n) que monta o vetor invertido de n elementos (10n, ...,
-20, 10), roda as duas versões e mostra os números. Chame com n = 16 e
-n = 32 para ver o que acontece quando n dobra.
+As idades do grupo de corrida são 31, 12, 45, 27, 8 e 19. Escreva um
+insertion sort crescente que mostra o vetor depois de cada encaixe e, no
+fim, conta as comparações e os deslocamentos. Cuidado com o limite: teste
+i >= 0 ANTES de ler v[i]. Conte uma comparação a cada v[i] <= x testado.
 
 
 ```text
 Saída esperada:
-n = 16
-normal:  120 comparações, 120 deslocamentos
-binária:  49 comparações, 120 deslocamentos
-ordenado? sim
-n = 32
-normal:  496 comparações, 496 deslocamentos
-binária: 129 comparações, 496 deslocamentos
-ordenado? sim
+j = 1: 12 31 45 27 8 19
+j = 2: 12 31 45 27 8 19
+j = 3: 12 27 31 45 8 19
+j = 4: 8 12 27 31 45 19
+j = 5: 8 12 19 27 31 45
+13 comparações, 10 deslocamentos
 ```
 
-**Dicas:**
-
-1. Procure a PRIMEIRA posição de v[0..j-1] com valor maior que x (estilo
-   semiaberto do A180, com v[meio] <= x). Assim os iguais ficam na ordem de
-   chegada.
-2. Achou a posição p? Empurre v[p..j-1] uma casa para a direita e ponha x
-   em v[p].
-3. Na normal, conte uma comparação por teste v[i] <= x feito.
-4. Use vetores de 32 posições dentro de testa e preencha só os n primeiros.
-5. As comparações caem, mas os
-   deslocamentos não mudam e quase quadruplicam quando n dobra: cada
-   elemento ainda anda casa por casa, então continua O(n²).
-
 ```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E558.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E558 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E558
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557
 ```
 
 ---
 
 ## 0094 · Merge sort
 
-Fim de semestre: duas monitoras corrigiram as provas da turma, cada uma
-metade, e cada uma entregou a sua pilha já em ordem de nota. Para montar uma
-pilha só, ninguém reordena tudo do zero. Você olha o topo das duas pilhas,
-pega a menor nota, e repete. Quando uma pilha acaba, a outra vai inteira para
-o fim.
+Duas monitoras entregam pilhas de provas, cada uma já em ordem de nota. Para
+montar uma pilha só, você olha o topo das duas, pega a menor nota e repete.
+Quando uma acaba, a outra vai inteira para o fim.
 
-Juntar duas sequências ordenadas numa só é a **intercalação** (em inglês,
-*merge*). Ela é barata: cada comparação manda **um** elemento para o
-resultado, então juntar `n` elementos custa no máximo `n - 1` comparações.
-O exemplo A188 mostra a intercalação sozinha.
+Juntar duas sequências ordenadas numa só é a **intercalação** (*merge*). Cada
+comparação manda **um** elemento para o resultado, então juntar `n` elementos
+custa no máximo `n - 1` comparações (exemplo A188).
 
-O **merge sort** (ordenação por intercalação) usa isso com a ideia de
-**dividir e conquistar**:
+O **merge sort** (ordenação por intercalação) usa **dividir e conquistar**:
 
 1. **divida** o vetor ao meio;
 2. **ordene** cada metade, com o próprio merge sort (recursão, assunto 0032);
 3. **intercale** as duas metades ordenadas.
 
-O caso base é o pedaço com 0 ou 1 elemento, que já está ordenado. O código usa o intervalo **semiaberto** `[p, r)`: `p` é o primeiro
-e `r` é uma posição depois do último. Assim, o pedaço tem `r - p` elementos e
-as metades `[p, q)` e `[q, r)` se encaixam sem sobrar nem repetir ninguém.
-O Cormen usa o intervalo fechado `A[p..r]`, com `q = ⌊(p + r)/2⌋` e as
-metades `A[p..q]` e `A[q+1..r]`: muda a conta dos índices, não o algoritmo.
+O caso base é o pedaço com 0 ou 1 elemento. O código usa o intervalo
+**semiaberto** `[p, r)`: o pedaço tem `r - p` elementos e as metades `[p, q)`
+e `[q, r)` se encaixam sem repetir ninguém. O Cormen usa o intervalo fechado
+`A[p..r]`: muda a conta dos índices, não o algoritmo.
 
-Por que é rápido? Dividir ao meio dá `log₂ n` níveis (8 elementos: 3 níveis).
-Em **cada** nível, as intercalações juntas passam por todos os `n` elementos
-uma vez. Total: `n log₂ n`, ou **O(n log n)**, e isso em **todos** os casos,
-inclusive o pior. Para 1 milhão de elementos, são uns 20 milhões de passos,
-contra 500 bilhões de um algoritmo O(n²).
-
-O preço é memória: a intercalação precisa de um vetor auxiliar (o
-**rascunho**) do tamanho do pedaço. O merge sort usa **O(n)** de memória
+Dividir ao meio dá `log₂ n` níveis (8 elementos: 3 níveis), e em **cada**
+nível as intercalações passam pelos `n` elementos: **O(n log n)** em **todos**
+os casos. O preço é um vetor auxiliar (o **rascunho**): **O(n)** de memória
 extra.
 
-No desenho, as notas descem sendo divididas até virar pares (e,
-mais embaixo, pedaços de 1). Depois sobem sendo intercaladas, em verde, até
-formar o vetor inteiro:
+As notas descem divididas até pedaços de 1 e sobem intercaladas (verde):
 
 <p align="center"><img src="13-busca-e-ordenacao/0094-merge-sort/ideia.svg" alt="Diagrama da ideia: Merge sort" width="858"></p>
 
-No código, o rascunho `w` é alocado **uma vez** no `main` e emprestado para
-todas as intercalações:
+O rascunho `w` é alocado **uma vez** no `main` e serve a todas as
+intercalações:
 
 ```c
 #include <stdio.h>
@@ -2446,9 +1832,8 @@ int main(void) {
 // 17 comparações
 ```
 
-Olhe a ordem das linhas da saída: a recursão termina **toda** a metade
-esquerda (`[0, 4)`) antes de começar a direita. É a pilha de chamadas do
-assunto 0031 trabalhando.
+A recursão termina a metade esquerda (`[0, 4)`) antes da direita (assunto
+0031).
 
 ### Passo a passo
 
@@ -2466,36 +1851,27 @@ A última intercalação, `7 18 33 52` com `12 26 41 60`. `i` anda na esquerda,
 | 7 | 52 | 60 | 52 (esquerda) | ... 41 52 |
 | | (esquerda acabou) | 60 | 60, sem comparar | ... 52 60 |
 
-Sete comparações para 8 elementos: o máximo, `n - 1`. Somando os níveis:
-4 + 6 + 7 = **17 comparações**.
-
-O fluxograma é curto porque a recursão esconde o trabalho. As
-duas caixas `merge_sort` são o fluxograma inteiro de novo, para cada metade:
+Sete comparações para 8 elementos, o máximo (`n - 1`). Somando os níveis:
+4 + 6 + 7 = **17 comparações**. No fluxograma, cada caixa `merge_sort` repete
+o fluxograma inteiro para uma metade:
 
 <p align="center"><img src="13-busca-e-ordenacao/0094-merge-sort/fluxograma.svg" alt="Fluxograma: Merge sort" width="351"></p>
 
 > [!WARNING]
-> Com o intervalo semiaberto, o caso base é `r - p < 2`, e não `p < r` virado
-> ao contrário. Se você escrever `if (p >= r) return;`, um pedaço de 1
-> elemento (`r = p + 1`) passa direto, `q` vira `p`, e a chamada
-> `merge_sort(v, w, q, r)` recebe **o mesmo** pedaço de novo, para sempre.
-> O programa morre com **estouro de pilha** (*stack overflow*). Misturar
-> intervalo fechado num lugar e semiaberto em outro dá o mesmo resultado.
+> Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
+> `if (p >= r) return;`, um pedaço de 1 elemento passa direto e
+> `merge_sort(v, w, q, r)` recebe o mesmo pedaço para sempre: **estouro de
+> pilha**. Misturar intervalo fechado e semiaberto dá o mesmo erro.
 
 > [!TIP]
-> **Por dentro do C:** a profundidade da recursão é só `log₂ n` (20 frames
-> para 1 milhão de elementos), então a pilha não preocupa. A memória que pesa
-> é o rascunho: 1 milhão de `int` são 4 MB. Alocar com `malloc` uma vez e
-> passar `w` para baixo evita um `malloc`/`free` por intercalação (seriam
-> quase 1 milhão de chamadas). O `<=` da intercalação também conta: em
-> caso de empate, ele pega o da **esquerda** primeiro, mantendo a ordem
-> original dos iguais. Isso faz o merge sort ser **estável**.
+> O `<=` da intercalação pega o da **esquerda** em caso de empate: o merge
+> sort é **estável**. A memória que pesa é o rascunho (1 milhão de `int` são
+> 4 MB).
 
 > [!NOTE]
-> **Pergunta para você:** quantas comparações o código acima faria se as
-> notas já estivessem em ordem, `7 12 18 26 33 41 52 60`? Pista: na
-> intercalação, o que acontece quando a metade esquerda inteira é menor que a
-> direita?
+> **Pergunta para você:** quantas comparações o código faria com as notas já em
+> ordem, `7 12 18 26 33 41 52 60`? Pense na intercalação em que a metade
+> esquerda inteira é menor que a direita.
 
 ### Hora de praticar
 
@@ -2628,71 +2004,8 @@ Notas: 45 50 60 60 75 85 90 95 98
 7 comparações
 ```
 
-**Dicas:**
-
-1. Três índices: i em a, j em b, k em c.
-2. Enquanto as duas têm elementos, copie o menor das frentes e avance só o
-   índice de quem foi copiado.
-3. Quando uma acabar, copie o resto da outra sem comparar.
-4. A turma A acaba depois da 7ª
-   comparação, e 95 e 98 vêm direto.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E559.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E559 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E559
-```
-
-**Exercício E560** · ★☆☆
-
-O programa abaixo não ordena nada: ele só mostra QUAIS chamadas o merge sort
-faria para um vetor de 5 elementos, com um recuo de dois espaços por nível
-de recursão. Estenda o programa:
-
-a) escreva " folha" ao lado dos pedaços com menos de 2 elementos (os que
-
-```text
- não chamam ninguém);
-```
-
-b) conte, em variáveis static, quantas chamadas aconteceram e quantas
-
-```text
- foram folhas;
-```
-
-c) no fim do main, mostre os dois totais e quantas intercalações o merge
-
-```text
- sort faria (uma por chamada que não é folha).
-```
-
-
-
-```text
-Saída esperada:
-[0, 5)
-  [0, 2)
-    [0, 1) folha
-    [1, 2) folha
-  [2, 5)
-    [2, 3) folha
-    [3, 5)
-      [3, 4) folha
-      [4, 5) folha
-9 chamadas, 5 folhas, 4 intercalações
-```
-
-**Dicas:**
-
-1. static int chamadas = 0, folhas = 0; fora das funções.
-2. Some 1 em chamadas logo na entrada de ordena; some em folhas dentro do
-   if que faz o return.
-3. Troque o printf("[%d, %d)\n", ...) por um sem \n e decida depois se
-   escreve " folha\n" ou só "\n".
-4. As folhas são os n elementos, e as
-   intercalações são sempre n - 1.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E560.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E560 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E560
 ```
 
 **Exercício E561** · ★★☆
@@ -2716,14 +2029,6 @@ Saída esperada:
 9 alunos diferentes: 1010 1021 1034 1050 1066 1077 1090 1095 1102
 foram nos dois turnos: 2
 ```
-
-**Dicas:**
-
-1. É a intercalação com três casos em vez de dois: a[i] < b[j],
-   a[i] > b[j] e a[i] == b[j].
-2. No empate, copie uma vez só e avance i E j.
-3. Faça a função devolver o tamanho do resultado.
-4. Resposta esperada: a saída acima (1034 e 1077 estão nas duas).
 
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E561.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E561 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E561
@@ -2754,53 +2059,8 @@ com <=: Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
 com <:  Eva 20, Davi 30, Bruno 30, Carla 50, Ana 50
 ```
 
-**Dicas:**
-
-1. O rascunho agora é Pedido *w = malloc(n * sizeof *w); confira NULL e
-   dê free no fim.
-2. Compare v[i].valor <= v[j].valor; copie a struct inteira com =.
-3. A condição pode ser (estavel ? v[i].valor <= v[j].valor
-   : v[i].valor < v[j].valor).
-4. Com <, no empate a intercalação pega
-   o da direita primeiro e o merge sort deixa de ser estável.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E562.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E562 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E562
-```
-
-**Exercício E563** · ★★★
-
-Este merge sort deveria ordenar as distâncias de corrida da semana, em km:
-21, 5, 42, 10, 15, 3. Ele compila sem aviso, roda sem reclamação do
-sanitizer e mostra
-
-
-```text
-10 10 15 3 15 3
-```
-
-
-Números somem e outros se repetem. Há UM erro, de propósito, numa única
-linha. Ache, conserte e rode de novo.
-
-
-```text
-Saída esperada (depois de consertar):
-3 5 10 15 21 42
-```
-
-**Dicas:**
-
-1. Coloque um printf no fim de intercala mostrando p, r e o vetor inteiro.
-2. A primeira intercalação junta [1, 2) com [2, 3), os números 5 e 42.
-   Depois dela, em que gavetas o 5 e o 42 aparecem? E o 21, onde foi parar?
-3. Para onde vai o conteúdo do rascunho na cópia de volta?
-4. Resposta esperada: a cópia de volta faz v[k] = w[k], que escreve no
-   começo do vetor; o certo é v[p + k] = w[k]. Só a intercalação com
-   p = 0 cai no lugar certo; as outras escrevem por cima de v[0..].
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E563.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E563 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E563
 ```
 
 **Exercício E564** · ★★★
@@ -2823,14 +2083,6 @@ merge sort:  10 discordâncias
 de 28 pares possíveis
 ```
 
-**Dicas:**
-
-1. Se v[j] (direita) vai para o rascunho e ainda há q - i elementos na
-   esquerda, some q - i às inversões.
-2. conta(p, r) = conta(p, q) + conta(q, r) + o que a intercalação achou.
-3. Rode a força bruta ANTES: a versão rápida ordena o vetor.
-4. Use long long: com n = 100 mil, as inversões passam de 2 bilhões.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E564.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E564 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E564
 ```
@@ -2839,14 +2091,12 @@ gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E564.c -o ~/LPEDC/13-busca-e-or
 
 ## 0095 · Quick sort
 
-Black Friday: você tem 7 fones na lista, de R$ 35, 12, 48, 7, 29, 51 e 20 (é
-promoção, vai). Em vez de comparar todos com todos, você escolhe um deles, o
-de R$ 20, e faz dois montes: os que custam até 20 de um lado, os mais caros do
-outro. O de 20 já está no lugar certo, entre os dois montes. Falta repetir a
-ideia dentro de cada monte.
+Black Friday: 7 fones de R$ 35, 12, 48, 7, 29, 51 e 20. Você escolhe o de
+R$ 20 e faz dois montes: os que custam até 20 de um lado, os mais caros do
+outro. O de 20 já está no lugar certo.
 
-Esse é o **quick sort**, inventado por Tony Hoare em 1960. O elemento
-escolhido é o **pivô**, e o passo de fazer os montes é a **separação** (ou
+Esse é o **quick sort**, inventado por Tony Hoare em 1960. O elemento escolhido
+é o **pivô**, e o passo de fazer os montes é a **separação** (ou
 **partição**):
 
 1. escolha o pivô (aqui, o **último** do pedaço, `v[r]`);
@@ -2854,28 +2104,20 @@ escolhido é o **pivô**, e o passo de fazer os montes é a **separação** (ou
    maiores`. O pivô cai na sua posição **final**, `j`;
 3. ordene, com o próprio quick sort, `v[p..j-1]` e `v[j+1..r]`.
 
-Compare com o merge sort. Lá, dividir é trivial (corta no meio) e o trabalho
-está em **juntar**. Aqui, o trabalho está em **dividir**, e juntar é de graça:
-depois das chamadas recursivas, não há nada a fazer. E não precisa de
-rascunho: tudo acontece com trocas no próprio vetor.
+No merge sort o trabalho está em juntar; aqui está em dividir, e juntar é
+de graça. Não precisa de rascunho.
 
-A separação usada aqui (chamada de **Lomuto**, a `PARTITION` do Cormen) anda
-com `k` pelo pedaço e mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou alguém
-`<=` pivô? Troca com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`.
-A outra separação clássica, a de **Hoare** (a do Ziviani e do Tenenbaum),
-anda com dois índices vindos das pontas, que trocam os fora do lugar até se
-cruzarem.
+A separação de **Lomuto** (a `PARTITION` do Cormen) anda com `k` pelo pedaço e
+mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou um `<=` pivô?
+Troca com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`. A de **Hoare**
+(Ziviani, Tenenbaum) usa dois índices vindos das pontas.
 
-O custo depende do pivô. Se ele cai perto do meio, o vetor é cortado em
-metades, como no merge sort: **O(n log n)**. Se ele é sempre o menor ou o
-maior, um dos montes fica vazio e o outro com `n - 1`: são `n` níveis e
-**O(n²)**. Com o pivô no fim, isso acontece justamente no vetor **já
-ordenado** (veja o exemplo A190). Na média, com dados embaralhados, o quick
-sort é O(n log n) e costuma ser o mais rápido na prática.
+O custo depende do pivô. Perto do meio, corta em metades: **O(n log n)**.
+Sempre o menor ou o maior, um monte fica vazio e o outro com `n - 1`: **O(n²)**.
+Com o pivô no fim, isso ocorre no vetor **já ordenado** (exemplo A190). Em
+dados embaralhados, é O(n log n) na média.
 
-Nos fones, o 20 (roxo) separa o vetor: 12 e 7 à esquerda, o resto
-à direita, e ele fica verde, no lugar. Depois, cada lado escolhe o próprio
-pivô (o último de cada pedaço):
+O 20 (roxo) separa o vetor e fica verde, no lugar. Cada lado escolhe o seu pivô:
 
 <p align="center"><img src="13-busca-e-ordenacao/0095-quick-sort/ideia.svg" alt="Diagrama da ideia: Quick sort" width="858"></p>
 
@@ -2956,37 +2198,26 @@ A primeira separação, com pivô 20. `k` anda; `j` marca onde entra o próximo
 | 5 | 51 | não | nada | 12 7 48 35 29 51 20 | 2 |
 | fim | | | troca v[2] e o pivô | 12 7 **20** 35 29 51 48 | 2 |
 
-Seis comparações, e o 20 está na posição 2 para sempre. Depois vêm `[12 7]`
-(1 comparação), `[35 29 51 48]` (3) e `[35 29]` (1): **11 comparações**.
-
-No fluxograma, o pivô fica fora das duas chamadas recursivas, e por isso o
+Seis comparações. Depois vêm `[12 7]` (1), `[35 29 51 48]` (3) e `[35 29]`
+(1): **11 comparações**. O pivô fica fora das duas chamadas, e por isso o
 problema sempre diminui:
 
 <p align="center"><img src="13-busca-e-ordenacao/0095-quick-sort/fluxograma.svg" alt="Fluxograma: Quick sort" width="398"></p>
 
 > [!WARNING]
-> Se as chamadas forem `quick_sort(v, p, j)` e `quick_sort(v, j + 1, r)`, o
-> pivô entra de novo no pedaço da esquerda. Quando ele é o maior do pedaço
-> (`j == r`), a chamada recebe **exatamente** o mesmo pedaço e nunca para:
-> estouro de pilha. Outra armadilha: copiar uma separação de outro livro
-> (Hoare, com dois índices que se cruzam) e manter as chamadas desta versão.
-> Cada separação promete uma coisa diferente sobre `j`, e as chamadas
-> precisam bater com a promessa.
+> Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se ele
+> é o maior (`j == r`), a chamada recebe o mesmo pedaço e nunca para: estouro
+> de pilha. As chamadas precisam bater com o que a separação promete sobre `j`.
 
 > [!TIP]
-> **Por dentro do C:** no pior caso, a recursão desce `n` níveis, e cada nível
-> é um frame na pilha (assunto 0031). Com um vetor ordenado de 1 milhão de
-> elementos e o pivô no fim, são 1 milhão de frames: a pilha de 8 MB do Linux
-> estoura e o programa morre com *segmentation fault*. Implementações sérias
-> se protegem de três jeitos: escolhem o pivô melhor (o do meio, um sorteado,
-> ou a **mediana de três**: primeiro, meio e último), fazem a recursão só no
-> lado **menor** e um laço no maior (a pilha fica com no máximo `log₂ n`
-> níveis), e trocam para o insertion sort em pedaços pequenos.
+> No pior caso a recursão desce `n` níveis (assunto 0031): 1 milhão de frames
+> estouram a pilha de 8 MB do Linux. Defesas: **mediana de três** como pivô e
+> recursão só no lado **menor** (no máximo `log₂ n` níveis).
 
 > [!NOTE]
-> **Pergunta para você:** o quick sort é estável? Pense no que acontece com
-> `3a 3b 1` (dois 3 iguais, `a` chegou antes de `b`) quando o pivô é o 1.
-> Faça a separação à mão antes de ler o assunto 0096.
+> **Pergunta para você:** o quick sort é estável? Pense em `3a 3b 1` (dois 3
+> iguais, `a` chegou antes de `b`) quando o pivô é o 1. Faça a separação à mão
+> antes de ler o assunto 0096.
 
 ### Hora de praticar
 
@@ -3153,18 +2384,13 @@ gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/A190.c -o ~/LPEDC/13-busca-e-or
 
 **Exercício E565** · ★☆☆
 
-As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. O programa abaixo faz
-UMA separação (só o separa, sem recursão), com o pivô no fim, e mostra cada
-troca. Dê o próximo passo do quick sort à mão, no código:
-
-a) conte as comparações (v[k] <= pivo) numa variável static;
-b) depois da primeira separação, chame separa de novo só no lado DIREITO
-
-```text
- do pivô e mostre outra vez o vetor e a nova posição do pivô;
-```
-
-c) no fim, mostre o total de comparações das duas separações.
+As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. Escreva
+int separa(int v[], int p, int r), a separação com o pivô no fim (v[r]),
+que imprime "troca v[a] e v[b]" a cada troca, conta as comparações
+(v[k] <= pivo) numa variável static e devolve a posição final do pivô. No
+main, separe o vetor inteiro, mostre o vetor e a posição do pivô; depois
+separe só o lado DIREITO do pivô, mostre de novo e, no fim, o total de
+comparações.
 
 
 ```text
@@ -3180,43 +2406,8 @@ pivô na posição 3
 comparações: 7
 ```
 
-**Dicas:**
-
-1. O lado direito do pivô vai de j + 1 até 5: separa(senhas, j + 1, 5).
-2. Uma função mostra(v, n) evita repetir o laço do printf.
-3. A primeira separação compara 5 elementos com o pivô; a segunda, 2.
-4. O lado esquerdo (2 4) e o pedaço que
-   sobrou (8 9) já estão em ordem.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E565.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E565 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E565
-```
-
-**Exercício E566** · ★☆☆
-
-Aquecimento de separação, sem pivô: o banco quer as contas no vermelho no
-começo do relatório. Os saldos são 120, -45, 300, -10, 0, -80, 55. Escreva
-int separa_negativos(int v[], int n), que deixa os negativos à esquerda e
-devolve quantos são. Use o MESMO esquema do separa do texto do assunto:
-k anda pelo vetor e j marca onde entra o próximo negativo (troca v[j] com
-v[k] e avança j).
-
-
-```text
-Saída esperada:
--45 -10 -80 120 0 300 55
-3 contas no vermelho
-```
-
-**Dicas:**
-
-1. É o separa trocando "v[k] <= pivo" por "v[k] < 0", e sem a troca final
-   do pivô.
-2. O zero não é negativo: fica do lado direito.
-3. A ordem dentro de cada lado muda (o -80 vem depois do -10).
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E566.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E566 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E566
 ```
 
 **Exercício E567** · ★★☆
@@ -3240,38 +2431,26 @@ arroz, banana, café, feijão, leite, ovos, pão, tomate
 14 comparações
 ```
 
-**Dicas:**
-
-1. A função troca recebe const char ** (o endereço de cada ponteiro).
-2. v[k] <= pivo vira strcmp(v[k], pivo) <= 0.
-3. O primeiro pivô é "feijão": ele separa arroz, café e banana do resto.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E567.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E567 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E567
 ```
 
 **Exercício E568** · ★★☆
 
-Este quick sort deveria ordenar os andares das entregas do prédio: 4, 9, 2,
-7. Ele tem UM erro, de propósito, numa única linha. Rode: o programa morre
-e o AddressSanitizer fala em "stack-overflow". Ache a linha que faz a
-recursão nunca terminar, conserte e rode de novo.
+Os andares das entregas do prédio são 4, 9, 2, 7, 5 e 1. Escreva
+void quick_sort(int v[], int n, int p, int r), recursivo, com separação de
+Lomuto (pivô em v[r]). A cada separação, imprima o intervalo, a posição
+final do pivô e o vetor. Chame as duas metades SEM o pivô (j - 1 e j + 1).
 
 
 ```text
-Saída esperada (depois de consertar):
-2 4 7 9
+Saída esperada:
+separa [0..5]: pivô na posição 0 -> 1 9 2 7 5 4
+separa [1..5]: pivô na posição 2 -> 1 2 4 7 5 9
+separa [3..5]: pivô na posição 5 -> 1 2 4 7 5 9
+separa [3..4]: pivô na posição 3 -> 1 2 4 5 7 9
+Final: 1 2 4 5 7 9
 ```
-
-**Dicas:**
-
-1. Faça a primeira separação à mão: onde o 7 vai parar? Qual é o j?
-2. Quais pedaços as duas chamadas recursivas recebem? Algum inclui o pivô?
-3. Separe [4 2 7] à mão: o pivô 7 é o maior. Que j volta? Que chamada vem
-   depois?
-4. Resposta esperada: quick_sort(v, p, j) inclui o pivô; quando ele é o
-   maior do pedaço, j == r e a chamada recebe o mesmo pedaço para sempre.
-   O certo é quick_sort(v, p, j - 1).
 
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E568.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E568 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E568
@@ -3297,81 +2476,30 @@ mediana: 33 min (quickselect: 10 comparações)
 ordenando tudo: 33 min (23 comparações)
 ```
 
-**Dicas:**
-
-1. Reaproveite o separa do texto, contando comparações num static int.
-2. Diferente do quick sort, o quickselect só segue UM dos lados.
-3. Se p == r, sobrou um elemento só: é ele.
-4. Na média, o quickselect é O(n): n + n/2 + n/4 + ... < 2n.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E569.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E569 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E569
-```
-
-**Exercício E570** · ★★★
-
-Num app de entregas, as avaliações vão de 1 a 3 estrelas: muitos valores
-iguais. A separação de Lomuto sofre com isso: com 12 valores TODOS iguais,
-cada separação manda todo mundo para a esquerda e o quick sort vira O(n²).
-
-Implemente o quick sort de TRÊS VIAS: a separação deixa v[p..lt-1] menores
-que o pivô, v[lt..gt] iguais e v[gt+1..r] maiores, e a recursão só olha os
-menores e os maiores. Compare as comparações com o Lomuto (conte uma por
-elemento examinado, mesmo que o teste tenha três saídas).
-
-
-```text
-estrelas: 2, 3, 1, 2, 2, 3, 1, 1, 2, 3, 2, 1
-iguais:   doze vezes o 2
-```
-
-
-
-```text
-Saída esperada:
-1 a 3 estrelas: Lomuto 30, três vias 23 | 1 1 1 1 2 2 2 2 2 3 3 3
-todos iguais:   Lomuto 66, três vias 12 | 2 2 2 2 2 2 2 2 2 2 2 2
-```
-
-**Dicas:**
-
-1. Três índices: lt, i e gt. Comece com lt = i = p e gt = r; pivô = v[r].
-2. v[i] < pivô: troca v[lt] com v[i], avança os dois. v[i] > pivô: troca
-   v[i] com v[gt] e só diminui gt (o que veio de lá ainda não foi visto).
-   Igual: só avança i.
-3. O laço roda enquanto i <= gt. Depois, recursão em [p, lt-1] e [gt+1, r].
-4. Todos iguais: uma passada só, sem recursão nenhuma. Lomuto: 11 + 10 +
-   ... + 1 = 66.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E570.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E570 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E570
 ```
 
 ---
 
 ## 0096 · Comparando: estabilidade, custo e qsort
 
-Você exporta a planilha de pedidos da loja virtual. Ela vem em ordem de
-horário. O pessoal da logística pede: "agrupa por cidade, mas dentro de cada
-cidade mantém a ordem em que chegaram". Qual dos cinco algoritmos você usa? E
-precisa mesmo escrever um?
+A planilha de pedidos vem em ordem de horário, e a logística pede: "agrupa por
+cidade, mas mantém a ordem de chegada dentro de cada cidade". Qual algoritmo
+usar? Precisa escrever um?
 
-Um algoritmo de ordenação é **estável** quando
-elementos com a **mesma chave** saem na mesma ordem relativa em que entraram.
-Se três pedidos de Recife chegaram como R1, R3, R6, um algoritmo estável
-ordenando por cidade devolve R1, R3, R6, nessa ordem. Um instável pode
-devolver R3, R1, R6. Com `int` isso não importa (um 7 é igual ao outro); com
-structs, importa.
+Um algoritmo de ordenação é **estável** quando elementos com chave **igual**
+saem na ordem relativa em que entraram. Se três pedidos de Recife chegaram como
+R1, R3, R6, um algoritmo estável devolve R1, R3, R6; um instável pode
+devolver R3, R1, R6. Com `int` isso não importa; com structs, importa.
 
-Os outros critérios para escolher:
+Outros critérios:
 
-- **custo** no melhor, no médio e no pior caso (o pior caso é o que derruba
-  um sistema em produção);
-- **memória extra**: ordenar **in-place** (O(1) a mais) ou precisar de um
-  rascunho O(n);
-- **adaptativo**: fica mais rápido quando o vetor já está quase em ordem.
+- **custo** no melhor, no médio e no pior caso (o pior derruba o sistema);
+- **memória extra**: **in-place** (O(1) a mais) ou rascunho O(n);
+- **adaptativo**: fica mais rápido com o vetor quase em ordem.
 
-O resumo do módulo inteiro:
+Resumo do módulo:
 
 | Algoritmo | Melhor | Médio | Pior | Memória extra | Estável |
 | --- | --- | --- | --- | --- | --- |
@@ -3383,34 +2511,31 @@ O resumo do módulo inteiro:
 | heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
 
 Não existe o melhor de todos. O insertion ganha em vetores pequenos ou quase
-ordenados. O merge garante n log n e estabilidade, pagando memória. O quick é
-o mais rápido na média e não usa rascunho, mas tem o pior caso O(n²) e não é
-estável. O selection faz o mínimo de trocas. O bubble serve para aprender.
+ordenados. O merge garante n log n e estabilidade, ao custo de memória. O quick
+é o mais rápido na média, mas tem pior caso O(n²) e não é estável. O selection
+faz o mínimo de trocas.
 
-Na prática, você quase nunca escreve um desses: a `stdlib.h` traz o
-**`qsort`**, genérico, que apareceu no assunto 0050 (ponteiro para função):
+Na prática, use o **`qsort`** da `stdlib.h`, genérico (assunto 0050, ponteiro
+para função):
 
 ```text
 void qsort(void *base, size_t n, size_t tamanho,
            int (*compara)(const void *, const void *));
 ```
 
-Ele não sabe o tipo dos elementos (por isso o `void *` e o `tamanho`). Quem
-sabe é a sua função `compara`, que recebe dois ponteiros e devolve
-**negativo** se o primeiro vem antes, **zero** se empatam e **positivo** se
-vem depois. É o mesmo contrato do `strcmp`.
+O `qsort` não conhece o tipo dos elementos (por isso o `void *` e o
+`tamanho`). A sua `compara` recebe dois ponteiros e devolve **negativo** se o
+primeiro vem antes, **zero** se empatam e **positivo** se vem depois, como o
+`strcmp`.
 
-Os pedidos chegam por horário. Ordenando por cidade, um
-algoritmo estável (insertion, merge) mantém R1, R3, R6. O selection sort, com
-as suas trocas de longa distância, entrega R3 antes de R1:
+Por cidade, um algoritmo estável (insertion, merge) mantém R1, R3, R6. O
+selection, com trocas de longa distância, entrega R3 antes de R1:
 
 <p align="center"><img src="13-busca-e-ordenacao/0096-comparando/ideia.svg" alt="Diagrama da ideia: Comparando: estabilidade, custo e qsort" width="858"></p>
 
-A norma do C **não promete** que o `qsort` é estável. Então, quando a ordem
-dos empatados importa, ponha o desempate na própria `compara`. É o que o
-código abaixo faz: cidade primeiro, horário depois. Comparar por mais de um
-campo, em ordem de importância, é ordenar por uma **chave composta**; a
-**chave simples** é um campo só (o assunto 0180 aprofunda).
+A norma **não promete** que o `qsort` é estável. Se a ordem dos empatados
+importa, ponha o desempate na `compara`: cidade primeiro, horário depois. Isso
+é uma **chave composta**; a **chave simples** é um campo só (assunto 0180).
 
 ```c
 #include <stdio.h>
@@ -3464,8 +2589,7 @@ int main(void) {
 
 ### Passo a passo
 
-O exemplo A192 roda os cinco algoritmos do módulo com
-os mesmos 1000 números e conta as comparações:
+O exemplo A192 roda os cinco algoritmos com 1000 números:
 
 | n = 1000 | aleatório | ordenado | invertido |
 | --- | --- | --- | --- |
@@ -3475,40 +2599,27 @@ os mesmos 1000 números e conta as comparações:
 | merge | 8.696 | 4.932 | 5.044 |
 | quick (pivô no fim) | 10.972 | 499.500 | 499.500 |
 
-Leia a tabela por coluna. No aleatório, os O(n log n) fazem umas 50 vezes
-menos trabalho. No ordenado, o bubble e o insertion fazem uma passada só,
-enquanto o quick com pivô no fim cai no pior caso. O selection nem percebe a
-diferença entre as três colunas.
+No aleatório, os O(n log n) fazem umas 50 vezes menos trabalho. No ordenado, o
+bubble e o insertion fazem uma passada só e o quick com pivô no fim cai no pior
+caso. O selection não percebe diferença.
 
-O fluxograma é um guia de decisão, não um algoritmo. O caminho
-marcado é o deste exemplo: a ordem de chegada importa, mas cabe como
-desempate na `compara` (o horário), então `qsort` resolve:
+O caminho marcado no fluxograma é o deste exemplo: a ordem de chegada cabe
+como desempate na `compara`, então `qsort` resolve:
 
 <p align="center"><img src="13-busca-e-ordenacao/0096-comparando/fluxograma.svg" alt="Fluxograma: Comparando: estabilidade, custo e qsort" width="706"></p>
 
 > [!WARNING]
-> A `compara` preguiçosa `return *(const int *) a - *(const int *) b;`
-> parece certa e passa nos testes com números pequenos. Com valores grandes de
-> sinais opostos (por exemplo, `INT_MAX` e `-5`), a subtração dá **overflow**:
-> o resultado vira negativo e a ordem sai errada. Escreva
-> `return (x > y) - (x < y);`, que devolve -1, 0 ou 1 sem fazer conta.
+> `return *(const int *) a - *(const int *) b;` passa nos testes pequenos, mas
+> com sinais opostos e valores grandes (`INT_MAX` e `-5`) a subtração dá
+> **overflow** e a ordem sai errada. Escreva `return (x > y) - (x < y);`.
 
 > [!TIP]
-> **Por dentro do C:** o `qsort` move os elementos byte a byte (ele só sabe o
-> `tamanho`) e chama a sua `compara` por um **ponteiro para função** a cada
-> comparação. Essa chamada indireta impede o compilador de colar a
-> comparação dentro do laço, então, para `int`, um sort escrito à mão pode
-> ser mais rápido. A norma também não diz qual algoritmo o `qsort` usa: as
-> bibliotecas usam variações de quick sort (com proteção contra o pior caso)
-> ou de merge sort. Por isso, nunca conte com estabilidade nem com um custo
-> exato. Para buscar num vetor ordenado pelo mesmo critério, a mesma
-> `stdlib.h` traz a **`bsearch`**, com a mesma `compara`.
+> A norma não diz qual algoritmo o `qsort` usa: não conte com estabilidade. Para
+> buscar num vetor ordenado pela `compara`, use a **`bsearch`**, da `stdlib.h`.
 
 > [!NOTE]
-> **Pergunta para você:** se a `compara` do código acima só comparasse a
-> cidade (sem o desempate por horário), a saída seria sempre a mesma? Em que
-> ordem você esperaria os três pedidos de Recife? Rode algumas vezes, troque a
-> ordem do vetor de entrada e veja.
+> **Pergunta para você:** se a `compara` só comparasse a cidade, a saída seria
+> sempre igual? Em que ordem você esperaria os três pedidos de Recife?
 
 ### Hora de praticar
 
@@ -3756,47 +2867,8 @@ R$ 5.89
 R$ 5.79
 ```
 
-**Dicas:**
-
-1. A compara recebe const void *: converta para const double * e leia.
-2. Decrescente: devolva negativo quando o primeiro for MAIOR.
-3. Não devolva x - y: com double, 0.1 vira 0 ao converter para int.
-   Use (x < y) - (x > y).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E571.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E571 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E571
-```
-
-**Exercício E572** · ★☆☆
-
-O placar de um torneio de 12 jogadores é reordenado a cada ponto marcado,
-então ele está sempre QUASE em ordem. Qual algoritmo usar? Decida com
-números, não com palpite. O selection sort abaixo já devolve quantas
-comparações fez. Escreva int insertion(int v[], int n), que também devolve
-as comparações (uma por teste v[i] <= x feito), rode os dois em cópias do
-placar e mostre qual foi melhor.
-
-
-```text
-Saída esperada:
-selection: 66 comparações
-insertion: 13 comparações
-melhor para o placar: insertion
-```
-
-**Dicas:**
-
-1. Faça outra cópia, como o main já faz para o selection: cada algoritmo
-   precisa receber o placar original, não o já ordenado.
-2. No insertion, conte dentro do while e saia com break quando
-   v[i] <= x: é aí que ele economiza.
-3. O selection faz sempre 11 + 10 + ... + 1 = 66, esteja o vetor como
-   estiver.
-4. Só o 58 está fora do lugar, então o
-   insertion faz pouco mais que n comparações.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E572.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E572 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E572
 ```
 
 **Exercício E573** · ★★☆
@@ -3820,44 +2892,26 @@ Cazuza Legiao Pitty Raimundos Skank Titas
 Pitty Skank Titas Cazuza Legiao Raimundos
 ```
 
-**Dicas:**
-
-1. Cada elemento do vetor é um const char *. O qsort passa para a compara
-   o ENDEREÇO do elemento, ou seja, um ponteiro para ponteiro.
-2. Leia assim: const char *x = *(const char *const *) a;
-3. O erro clássico é fazer strcmp(a, b) direto: compara os bytes dos
-   ponteiros, não as letras.
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E573.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E573 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E573
 ```
 
 **Exercício E574** · ★★☆
 
-Os saldos (em centavos) de cinco contas de uma corretora precisam sair do
-menor para o maior. A compara abaixo é a "versão curta" que aparece em
-muito tutorial. O erro é de propósito: rode e veja o UBSan reclamar
-("signed integer overflow") e a ordem sair errada. Conserte a compara sem
-mudar o tipo int e rode de novo.
+Os saldos (em centavos) de cinco contas de uma corretora são
+2000000000, -1500000000, 15, -7 e 1000000000. Ordene do menor para o maior
+com qsort e escreva a função de comparação SEM subtração (x - y estoura o
+int quando os sinais são opostos). Mostre um saldo por linha.
 
 
 ```text
-Saída esperada (depois de consertar):
+Saída esperada:
 -1500000000
 -7
 15
 1000000000
 2000000000
 ```
-
-**Dicas:**
-
-1. Quanto é 2000000000 - (-1500000000)? Cabe num int (assunto 0003)?
-2. A compara não precisa devolver a diferença, só o SINAL certo.
-3. (x > y) - (x < y) vale 1, 0 ou -1 e nunca estoura.
-4. Resposta esperada: x - y dá overflow com valores grandes de sinais
-   opostos; o resultado vira negativo e a compara diz que 2000000000 vem
-   antes de -1500000000. Conserto: return (x > y) - (x < y);
 
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E574.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E574 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E574
@@ -3900,66 +2954,16 @@ Carla: 11 98765-4321 (posição 1)
 Zeca: não está na agenda
 ```
 
-**Dicas:**
-
-1. São duas funções de comparação: a do qsort recebe dois Contato *; a do
-   bsearch recebe a CHAVE no 1º argumento (const char *) e um Contato * no
-   2º.
-2. As duas precisam usar o mesmo critério (strcmp nos nomes), senão a busca
-   binária se perde.
-3. A posição é a diferença de ponteiros c - agenda; o tipo é ptrdiff_t e o
-   formato é %td.
-4. Resposta esperada: a saída acima (ordenada: Bruno, Carla, Diego,
-   Marina, Rafael).
-
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E575.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E575 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E575
-```
-
-**Exercício E576** · ★★★
-
-O boletim está em ordem alfabética: Ana 8, Bruno 9, Caio 8, Duda 7,
-Enzo 9, Fabi 8, Gui 7. A coordenação quer por nota, da maior para a menor,
-e, entre empatados, a ordem alfabética de antes. O qsort não promete ser
-estável, então FORCE a estabilidade: acrescente à struct um campo ordem
-com a posição original de cada aluno e use-o como desempate.
-
-
-```text
-typedef struct { char nome[10]; int nota; int ordem; } Aluno;
-```
-
-
-
-```text
-Saída esperada:
-9 Bruno
-9 Enzo
-8 Ana
-8 Caio
-8 Fabi
-7 Duda
-7 Gui
-```
-
-**Dicas:**
-
-1. Antes do qsort, um laço faz turma[i].ordem = i.
-2. Na compara: notas diferentes decidem (decrescente); notas iguais,
-   decide a ordem (crescente).
-3. Com esse desempate, não existem dois elementos "iguais" para a compara,
-   então a estabilidade do algoritmo deixa de importar.
-
-```bash
-gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E576.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E576 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E576
 ```
 
 ---
 
 ## Desafios do módulo
 
-Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com as flags de estudo.
+Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
+com o gcc e as flags de estudo.
 
 **1. Quantas voltas no pior caso?** Escreva a busca binária com um contador
 de voltas do laço, devolvido por um ponteiro `int *voltas`. Num vetor criado
@@ -4035,10 +3039,10 @@ quantos há de cada.
 
 <details><summary>Resposta</summary>
 
-É a partição de três vias do exercício E570 com pivô 1 (a "bandeira holandesa"
-de Dijkstra): `lt`, `i` e `gt`. 0 vai para a frente (`troca(v[lt], v[i])`,
-`lt++`, `i++`), 2 vai para o fim (`troca(v[i], v[gt])`, `gt--`), 1 fica
-(`i++`). Resultado: `0 0 0 1 1 1 2 2 2`, com n comparações.
+É a partição de três vias com pivô 1 (a "bandeira holandesa" de Dijkstra),
+com `lt`, `i` e `gt`. 0 vai para a frente (`troca(v[lt], v[i])`, `lt++`,
+`i++`), 2 vai para o fim (`troca(v[i], v[gt])`, `gt--`), 1 fica (`i++`).
+Resultado: `0 0 0 1 1 1 2 2 2`, com n comparações.
 
 </details>
 
@@ -4134,6 +3138,572 @@ como a biblioteca implementa o `qsort`: pode sair certo num computador e
 errado em outro. Por isso o teste olha a **compara**, não só o vetor
 ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
 (x < y) - (x > y);`, que devolve -1, 0 ou 1 sem risco de estouro.
+
+</details>
+
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 032/2016 · Questão 04**
+
+Se você tem que implementar um algoritmo de ordenação que tem um tempo de execução competitivo quando comparado a outros, e que não varia muito seu desempenho em função da entrada de dados fornecida. Qual das opções é melhor?
+
+- a) Ordenação por inserção
+- b) Heapsort
+- c) Quicksort
+- d) Tanto Quicksort quanto Heapsort atendem aos requisitos
+- e) Hash
+
+<details><summary>Gabarito</summary>
+
+**B.** Heapsort faz O(n log n) em qualquer entrada; o Quicksort varia (pior caso O(n²)). Assunto 0096.
+
+</details>
+
+**Edital 032/2016 · Questão 10**
+
+Considere os códigos de funções abaixo, assumindo que os mesmos são usados dentro de um programa e que os todos os cabeçalhos necessários são incluídos:
+
+```c
+/*QUADRO I) função que retorna 1 se a chave
+de busca chave, passada como parâmetro, ocorre
+dentro de um vetor de inteiros ordenado e
+retorna 0 caso a chave não ocorra no vetor. O
+vetor tem tamanho determinado pelo parâmetro
+tm */
+int buscaChave(int v[], int chave, int tm) {
+  while((tm>= 0) && (v[tm]!= chave)) tm --;
+  if (tm >= 0) return 1;
+  return 0;
+}
+```
+
+```c
+/* QUADRO II) Conta ocorrências de uma
+chave na lista encadeada, retornando o total de
+ocorrências , zero caso a chave não ocorra
+*/
+int ContaOcorrenciasChave(tipoNo *prim, int
+chave) {
+  tipoNo *aux = prim;
+  int cont = 0;
+  int x;;
+  for (x = 0; aux[x] != NULL; x++){
+    if(aux[x]. dado == chave) cont++;
+  }
+  return cont;
+}
+```
+
+Marque a alternativa correta dentre as afirmações abaixo:
+
+- a) Os dois códigos executam as tarefas propostas sem gerar qualquer tipo de erro de lógica ou de vazamento de memória
+- b) Apenas os código I executa sem erros a tarefa proposta
+- c) Apenas o código II executa sem erros a tarefa proposta
+- d) Os dois códigos geram erros de vazamento de memória ou de falha de segmentação
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**B.** Assunto 0089.
+
+</details>
+
+**Edital 032/2016 · Questão 16**
+
+Considere um vetor não ordenado utilizado para armazenar chaves únicas (sem repetição). Pode-se afirmar que:
+
+I) O melhor algoritmo para busca no vetor é a busca binária mesmo que o vetor não esteja ordenado, independente do número de elementos do vetor e da quantidade de buscas a serem realizadas\
+II) Uma busca binária implementada no vetor não funcionaria adequadamente, fornecendo resultados errados a menos que fosse feita uma ordenação\
+III) Um algoritmo de busca sequencial funcionaria e daria resultados comparando a chave com todas as posições do vetor na pior das hipóteses\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Apenas as afirmações I e III estão corretas
+- b) Apenas as afirmações II e III estão corretas
+- c) Todas as afirmações estão corretas
+- d) Todas as afirmações estão erradas
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**B.** I é falsa (a binária exige vetor ordenado), II e III são verdadeiras. Assunto 0089.
+
+</details>
+
+**Edital 032/2016 · Questão 18**
+
+Considere que o vetor abaixo será ordenado com o algoritmo de ordenação por seleção
+
+`4 5 2 3 17 2 1 22`
+
+Considerando-se que o vetor tem sua primeira posição contada como 0 (zero), a primeira troca de valores entre posições do vetor ocorrerá entre:
+
+- a) posição 0 e posição 2
+- b) posição 0 e posição 7
+- c) Posição 0 e posição 6
+- d) Posição 1 e posição 6
+- e) Posição 3 e posição 5
+
+<details><summary>Gabarito</summary>
+
+**C.** O menor é 1, na posição 6, que troca com a posição 0. Assunto 0092.
+
+</details>
+
+**Edital 032/2016 · Questão 19**
+
+Considere os vetores abaixo
+
+VetI: `1 2 3 4 5 6 8 7`
+VetII: `7 8 8 5 4 3 2 1`
+
+E considere as afirmações a seguir:
+
+I) A ordenação por inserção é melhor que a ordenação por seleção em VetI se considerarmos o número de comparações entre chaves realizadas pelos dois algoritmos\
+II) O RADIX sort executado em base 10 realiza um número menor de operações (instruções) nos dois casos quando comparado ao mergesort\
+III) O RADIX sort executado em base 10 realiza um número menor de operações apenas em VetII quando comparado ao mergesort, ocorrendo o oposto em VetI\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Apenas a afirmação I é verdadeira
+- b) Apenas a afirmação II é verdadeira
+- c) Apenas a afirmação III é verdadeira
+- d) Apenas as afirmações I e II são verdadeiras
+- e) Apenas as afirmações I e III são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**D.** I verdadeira (inserção faz ~n comparações em quase ordenado, seleção sempre n(n-1)/2); II verdadeira (radix de 1 dígito, ~n+10 passos contra ~n log n); III falsa. Assunto 0093.
+
+</details>
+
+**Edital 053/2016 · Questão 01**
+
+Seja um vetor de inteiros com 400 elementos distintos ordenados em ordem crescente. Qual é o número máximo de iterações necessárias para encontrar um elemento qualquer desse vetor, caso seja utilizado o algoritmo de busca binária?
+
+- a) 9
+- b) 8
+- c) 7
+- d) 200
+- e) 400
+
+<details><summary>Gabarito</summary>
+
+**A.** ⌊log2 400⌋+1 = 9; conferido em C (máximo de 9 iterações). Assunto 0090.
+
+</details>
+
+**Edital 053/2016 · Questão 04**
+
+Considere que o vetor abaixo será ordenado com o algoritmo de ordenação por seleção.
+
+`4 5 5 3 17 2 1 22`
+
+Considerando-se que o vetor tem sua primeira posição contada como 0 (zero), a segunda troca de valores entre posições do vetor ocorrerá entre:
+
+- a) Posição 0 e posição 2
+- b) Posição 0 e posição 7
+- c) Posição 1 e posição 5
+- d) Posição 1 e posição 6
+- e) Posição 3 e posição 5
+
+<details><summary>Gabarito</summary>
+
+**C.** 1ª troca 0 e 6 (vira 1 5 5 3 17 2 4 22); 2ª troca 1 e 5 (o 2). Conferido em C. Assunto 0092.
+
+</details>
+
+**Edital 053/2016 · Questão 15**
+
+Considere as afirmações a seguir sobre os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort
+
+I) São algoritmos estáveis: InsertionSort, QuickSort e MergeSorte\
+II) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n²): InsertionSort, QuickSort\
+III) Utiliza um espaço extra proporcional a n² (proporcional ao quadrado do número de elementos): HeapSort,\
+IV) A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\
+
+Marque a alternativa que indica TODAS as afirmações INCORRETAS feitas:
+
+- a) I e IV
+- b) I , III e IV
+- c) I, II e III
+- d) I, II, III e IV
+- e) II e IV
+
+<details><summary>Gabarito</summary>
+
+**B.** Incorretas: I (Quick não é estável), III (Heap usa O(1) extra), IV (Insertion depende da ordem). Assunto 0096.
+
+</details>
+
+**Edital 053/2016 · Questão 17**
+
+Considere os códigos de funções abaixo, assumindo que os mesmos são usados dentro de um programa e que os todos os cabeçalhos necessários são incluídos:
+
+```c
+/*QUADRO I) função que retorna 1 se a chave
+de busca chave, passada como parâmetro, ocorre
+dentro de um vetor de inteiros ordenado e
+retorna 0 caso a chave não ocorra no vetor. O
+vetor tem tamanho determinado pelo parâmetro
+tm */
+int buscaChave(int v[],int chave,int tm) {
+  while((tm>= 0) && (v[tm]!= chave)) tm--;
+  if (tm >= 0) return 0;
+  return 1;
+}
+```
+
+```c
+/* QUADRO II) Conta ocorrências de uma
+chave na lista encadeada, retornando o total de
+ocorrências , zero caso a chave não ocorra
+*/
+int ContaOcorrenciasChave(tipoNo *prim, int
+chave) {
+  tipoNo *aux = prim;
+  int cont = 0;
+  int x;
+  for (x = 0; aux[x] != NULL; x++){
+    if(aux[x]. dado == chave) cont++;
+  }
+  return x;
+}
+```
+
+Marque a alternativa correta dentre as afirmações abaixo:
+
+- a) Os dois códigos executam as tarefas propostas sem gerar qualquer tipo de erro de lógica ou de vazamento de memória
+- b) Apenas o código I executa sem erros a tarefa proposta
+- c) Apenas o código II executa sem erros a tarefa proposta
+- d) Os dois códigos geram erros de vazamento de memória ou de falha de segmentação
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**E.** Assunto 0089.
+
+</details>
+
+**Edital 024/2017 · Questão 03**
+
+Marque a alternativa CORRETA.
+Qual dos algoritmos abaixo apresenta o menor custo (em termos de número movimentações de elementos realizadas) ao considerar-se, para cada algoritmo, a pior disposição possível para os elementos do vetor a ser ordenado. Considere que o vetor a ser ordenado é muito grande, acima de 1 milhão de elementos.
+
+- a) Heapsort
+- b) Quicksort
+- c) Inserção
+- d) Seleção
+- e) Mergesort
+
+<details><summary>Gabarito</summary>
+
+**D.** seleção faz no máximo n-1 trocas; heap e merge movem O(n log n) Assunto 0092.
+
+</details>
+
+**Edital 024/2017 · Questão 12**
+
+Sobre as afirmações abaixo:
+
+I. A busca sequencial só pode ser realizada corretamente em vetores que não estejam ordenados\
+II. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com número constante de operações, não dependendo do tamanho do vetor.\
+III. Pode-se encontrar o maior elemento de um vetor não ordenado com um algoritmo que realiza um número de operações proporcional ao tamanho do vetor na pior das situação possível para o algoritmo.\
+
+Pode-se dizer que:
+
+- a) Apenas I está correta
+- b) Apenas II está correta
+- c) Apenas III está correta
+- d) Apenas II e III estão corretas
+- e) Apenas I e III estão corretas
+
+<details><summary>Gabarito</summary>
+
+**C.** I falsa (sequencial vale em ordenado), II falsa (busca em vetor ordenado é O(log n)), III verdadeira (varredura O(n)) Assunto 0089.
+
+</details>
+
+**Edital 055/2017 · Questão 08**
+
+Marque a alternativa CORRETA.
+Considerando um array R que contém 1.000.000 de chaves ordenadas, assinale o número máximo de acessos a R necessários para encontrar uma determinada chave ao se utilizar o algoritmo de busca binária.
+
+- A) 10
+- B) 20
+- C) 40
+- D) 80
+- E) 160
+
+<details><summary>Gabarito</summary>
+
+**B.** floor(log2 1.000.000)+1 = 20 Assunto 0090.
+
+</details>
+
+**Edital 055/2017 · Questão 12**
+
+Qual dos algoritmos abaixo apresenta o menor custo (em termos de número comparações entre elementos) ao considerar-se que o vetor passado está previamente ordenado, a menos da ocorrência de duas chaves consecutivas que estão com posições trocadas. Considere que o vetor a ser ordenado é muito grande, com mais de 1 milhão de elementos.
+
+- A) Heapsort.
+- B) Quicksort.
+- C) Inserção.
+- D) Seleção.
+- E) Nenhuma das anteriores, pois todos apresentam custo igual.
+
+<details><summary>Gabarito</summary>
+
+**C.** inserção faz cerca de n comparações; heap e quick fazem n log n ou pior; seleção n² Assunto 0093.
+
+</details>
+
+**Edital 055/2017 · Questão 14**
+
+Sobre as afirmações abaixo:
+
+I. Pode-se implementar uma busca em um vetor não ordenado a custo máximo inferior a n/2 operações, onde n é o número de elementos do vetor, desde que a chave buscada ocorra no vetor, não importando qual a posição em que a mesma ocorre.\
+II. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com um número de operações proporcional a log2 n, onde n é o número de elementos do vetor.\
+III. O número de comparações realizadas para determinar se uma chave de busca está ou não em um vetor não ordenado é sempre menor do que o número de comparações envolvendo a mesma chave de busca em uma lista encadeada dinâmica, desde que a quantidade e a ordem dos elementos inseridos nas duas estruturas seja a mesma.\
+
+Marque a alternativa CORRETA:
+
+- A) Apenas a afirmativa I está correta.
+- B) Apenas a afirmativa II está correta.
+- C) Apenas a afirmativa III está correta.
+- D) Todas as afirmativas estão corretas.
+- E) Nenhuma das afirmativas está corretas.
+
+<details><summary>Gabarito</summary>
+
+**B.** I falsa (pior caso n), II verdadeira, III falsa (mesma contagem) Assunto 0089.
+
+</details>
+
+**Edital 055/2017 · Questão 19**
+
+Suponha que você recebeu a tarefa de depurar uma implementação de Quicksort, cujo objetivo é classificar um vetor em ordem decrescente. Após a primeira etapa da partição ser concluída, o conteúdo do vetor está na seguinte ordem:
+
+`20 22 24 18 13 9 3 10`
+
+Qual das seguintes afirmações está CORRETA sobre a fase de partição?
+
+- A) O pivô que gerou a partição pode ter o valor 13 ou 18.
+- B) O pivô que gerou a partição pode ter o valor 13, mas não pode ter o valor 18.
+- C) O pivô que gerou a partição pode ter o valor 18, mas não pode ter o valor 13.
+- D) O pivô que gerou a partição não pode ter o valor 13 nem 18.
+- E) O conteúdo do vetor não pode representar o resultado da etapa partição.
+
+<details><summary>Gabarito</summary>
+
+**A.** 18 (índice 3) e 13 (índice 4) separam maiores à esquerda e menores à direita Assunto 0095.
+
+</details>
+
+**Edital 023/2018 · Questão 01**
+
+Dois vetores ordenados, contendo, cada um deles, N números inteiros, precisam ser unidos em outro vetor maior, que conterá os 2N números, que também serão armazenados de forma ordenada. A complexidade de tempo de melhor caso desse processo será, então,
+
+- a) O(1), pois se precisa fazer apenas uma cópia simples de cada um dos elementos originais.
+- b) O(log N), pois se usa a busca binária para determinar qual será o próximo elemento copiado para o vetor de destino.
+- c) O(N), pois se precisa fazer uma cópia de cada um dos elementos originais, o que implica uma varredura completa de cada vetor de origem.
+- d) O(Nlog N), pois se precisa fazer uma busca de cada elemento para depois inseri-lo no vetor de destino.
+- e) O(N²), pois, como há dois vetores, precisa-se fazer dois laços de forma aninhada (um dentro do outro), gerando uma multiplicação das quantidades de elementos.
+
+<details><summary>Gabarito</summary>
+
+**C.** Intercalar dois vetores ordenados copia 2N elementos, então O(N) mesmo no melhor caso. Assunto 0094.
+
+</details>
+
+**Edital 023/2018 · Questão 12**
+
+Considere o vetor ordenado abaixo e indique quais os valores serão comparados com a chave de busca de valor 20 se for realizada uma busca binária no vetor. Considere que a primeira posição do vetor é a posição 0.
+
+`32 | 8 | 12 | 16 | 20 | 24 | 28 | 16 | 36`
+
+- a) Chaves 20, 12, 8 e 4, nessa ordem
+- b) Chaves 20, 28,32 e 36, nessa ordem
+- c) Chaves 4, 8, 12, 16 e 20, nessa ordem
+- d) Chaves 36, 32, 28 e 24, nessa ordem
+- e) Apenas a chave 20
+
+<details><summary>Gabarito</summary>
+
+**E.** A posição do meio (índice 4) já vale 20: uma única comparação. Assunto 0090.
+
+</details>
+
+**Edital 023/2018 · Questão 14**
+
+Considere as afirmações sobre busca binária:
+
+I) é utilizada apenas sobre vetores ordenados\
+II) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log2 n passos, onde n é o tamanho do vetor.\
+III) Supera a busca sequencial quando o vetor é grande, por exemplo com mais que mil elementos, e está ordenado.\
+
+- a) Apenas as afirmações II e III estão corretas
+- b) Apenas as afirmações I e II estão corretas
+- c) Apenas as afirmações I e III estão corretas
+- d) Todas as afirmações estão corretas
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**D.** As três são verdadeiras (ordenado, no máximo log2 n + 1 comparações, supera a sequencial em n grande). Assunto 0090.
+
+</details>
+
+**Edital 023/2018 · Questão 17**
+
+Considerando os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort
+
+I. São algoritmos estáveis: HeapSort, QuickSort e MergeSort\
+II. A complexidade de uso de espaço é O(n²): HeapSort,\
+III. A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\
+IV. Melhor caso da complexidade de tempo em Ω(n) : InsertionSort\
+V. A complexidade de uso de espaço é O(n): MergeSort\
+
+Marque a alternativa que indica SOMENTE afirmações INCORRETAS feitas:
+
+- a) I IV e V
+- b) I , III e IV
+- c) I, II, III e IV
+- d) I, II e III
+- e) II e V
+
+<details><summary>Gabarito</summary>
+
+**D.** I, II e III são falsas; IV e V são verdadeiras. A alternativa D lista só as incorretas. Assunto 0096.
+
+</details>
+
+**Edital 061/2018 · Questão 06**
+
+Marque a alternativa CORRETA. O método de ordenação QuickSort (ordenação rápida) é um método sofisticado de ordenação de vetores que:
+
+- a) Considera em cada passo somente um único elemento sucessor na sequência fonte e todos os elementos do vetor destino para encontrar o ponto correto da inserção.
+- b) Ordena todos os elementos que estiverem a intervalos de 4 posições entre si na sequência corrente.
+- c) É baseado nos princípios de ordenação por inserção direta através de incrementos decrescentes.
+- d) O Quicksort é um algoritmo que pode usar espaço extra linear no pior caso.
+- e) É baseado nos princípios de ordenação por seleção direta que consiste na seleção repetitiva da menor dentre as chaves de n elementos, e depois dentre os n-1 elementos restantes, e assim por diante.
+
+<details><summary>Gabarito</summary>
+
+**D.** No pior caso a pilha de recursão do quicksort chega a O(n). Assunto 0095.
+
+</details>
+
+**Edital 033/2019 · Questão 01**
+
+Sabendo que o algoritmo Quick Sort classifica os elementos em ordem crescente usando o primeiro elemento como pivô, qual das seguintes sequências de entrada irá requerer o maior número de comparações quando o algoritmo for aplicado?
+
+- a) 22 25 33 42 56 67 89
+- b) 63 70 47 42 36 38 73
+- c) 42 25 22 33 67 56 89
+- d) 13 52 25 58 10 22 17
+- e) 23 25 33 42 11 22 30
+
+<details><summary>Gabarito</summary>
+
+**A.** Com pivô no primeiro, a entrada já ordenada é o pior caso: 21 comparações contra 11 a 12 nas outras (rodado em C). Assunto 0095.
+
+</details>
+
+**Edital 033/2019 · Questão 14**
+
+Dada a seguinte entrada (34, 8, 64, 51, 32, 21) e empregando o algoritmo Insertion Sort, qual será a aparência do array de elementos após a segunda rodada de ordenação?
+
+- a) 8, 21, 32, 34, 51, 64
+- b) 8, 32, 34, 51, 64, 21
+- c) 8, 34, 51, 64, 32, 21
+- d) 8, 34, 64, 51, 32, 21
+- e) 8, 51, 64, 34, 32, 21
+
+<details><summary>Gabarito</summary>
+
+**D.** Após a 1ª rodada: 8 34 64 51 32 21; a 2ª insere o 64 sem mover nada. Assunto 0093.
+
+</details>
+
+**Edital 033/2019 · Questão 18**
+
+Qual das afirmações abaixo sobre Insertion Sort está CORRETA?
+
+- a) Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(N).
+- b) Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(1).
+- c) Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(N³).
+- d) Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(2^N).
+- e) Nenhuma das sentenças anteriores está correta.
+
+<details><summary>Gabarito</summary>
+
+**A.** Insertion sort em vetor já ordenado roda em Θ(N). Assunto 0093.
+
+</details>
+
+**Edital 060/2019 · Questão 04**
+
+Considere um vetor com 25 elementos (posição 0 até a posição 24) que representam os números primos entre 1 a 100, em ordem crescente (Ex: [2, 3, 5, 7, 11, 13, ..., 89, 97]). Empregando pesquisa binária, quantos itens do vetor precisam ser examinados antes de se concluir que o número 52 não está no vetor e, portanto, não é primo?
+
+- a) 12
+- b) 7
+- c) 5
+- d) 1
+- e) 4
+
+<details><summary>Gabarito</summary>
+
+**C.** Posições examinadas: 12, 18, 15, 13, 14 = 5. Assunto 0090.
+
+</details>
+
+**Edital 060/2019 · Questão 08**
+
+Qual dos seguintes algoritmos apresenta tempo O(n) quando ordenando um vetor com n elementos idênticos de texto?
+
+- a) Heapsort
+- b) Insertion sort
+- c) Mergesort
+- d) Quicksort
+- e) Nenhum dos algoritmos apresenta tempo O(n) para essa entrada
+
+<details><summary>Gabarito</summary>
+
+**B.** Insertion sort faz n-1 comparações em entrada ordenada ou igual. Assunto 0093.
+
+</details>
+
+**Edital 060/2019 · Questão 17**
+
+Suponha que, no pior caso, um algoritmo Merge Sort leve 30 segundos para ordenar uma entrada de tamanho 64. Qual das opções a seguir se aproxima mais do tamanho máximo de entrada de um problema que pode ser resolvido em 6 minutos?
+
+- a) 256
+- b) 1024
+- c) 512
+- d) 2048
+- e) 4096
+
+<details><summary>Gabarito</summary>
+
+**C.** c·n·log n: 64 x 6 = 384 ↔ 30 s; 360 s dá n·log n = 4608, que é 512 x 9. Assunto 0094.
+
+</details>
+
+**Edital 060/2019 · Questão 18**
+
+Considere que os seguintes elementos {5,4,3,2,1} foram inseridos nesta ordem em um vetor. Em seguida, você aplicou o algoritmo Insertion Sort nele. Qual é a sequência de passos feitos durante o uso do Insertion Sort neste vetor?
+
+- a) 4 5 3 2 1 / 3 4 5 2 1 / 2 3 4 5 1 / 1 2 3 4 5
+- b) 5 4 3 1 2 / 5 4 1 2 3 / 5 1 2 3 4 / 1 2 3 4 5
+- c) 4 3 2 1 5 / 3 2 1 5 4 / 2 1 5 4 3 / 1 5 4 3 2
+- d) 4 5 3 2 1 / 2 3 4 5 1 / 3 4 5 2 1 / 1 2 3 4 5
+- e) 4 5 3 1 2 / 2 3 4 5 1 / 3 4 5 2 1 / 1 2 3 4 5
+
+<details><summary>Gabarito</summary>
+
+**A.** Cada rodada insere o próximo elemento: 4 5 3 2 1, 3 4 5 2 1, 2 3 4 5 1, 1 2 3 4 5. Assunto 0093.
 
 </details>
 
@@ -5347,247 +4917,6 @@ Saída esperada:
 ```bash
 gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1330.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1330 && ~/LPEDC/13-busca-e-ordenacao/lista/P1330
 ```
-
-## Questões no estilo da prova
-
-Questões objetivas no formato da prova do mestrado: conceito, afirmações
-combinadas, simulação à mão, cálculo e código com erro. Resolva no papel,
-marque a letra e só depois abra o gabarito. Nas de ordenação, escreva o vetor
-depois de cada passada, como nos testes de mesa dos assuntos.
-
-**1.** Considere as afirmações sobre busca em vetores.
-
-I. Numa busca sequencial por uma chave que está no vetor, o melhor caso faz
-uma única comparação.
-II. Se o vetor ordenado tem chaves repetidas, a busca binária devolve sempre a
-posição da primeira ocorrência.
-III. Dobrar o tamanho de um vetor ordenado aumenta em no máximo uma unidade o
-número máximo de comparações da busca binária.
-
-Marque a alternativa CORRETA.
-
-- (A) Apenas I.
-- (B) Apenas I e II.
-- (C) Apenas I e III.
-- (D) Apenas II e III.
-- (E) I, II e III.
-
-<details><summary>Gabarito</summary>
-
-**C.** I é verdadeira: a chave na primeira posição custa 1 comparação. II é
-falsa: com repetidas, a busca binária para na primeira que o `meio` encontrar,
-e essa pode ser qualquer uma; o "sempre" derruba a afirmação. III é verdadeira:
-o máximo é ⌊log₂ n⌋ + 1, e ⌊log₂ 2n⌋ = ⌊log₂ n⌋ + 1 (1000
-elementos dão 10, 2000 dão 11). Veja 0089 e 0090.
-
-</details>
-
-**2.** Um vetor ordenado tem 5000 elementos. Usando a busca binária do assunto
-0090 (intervalo fechado, uma comparação de igualdade por volta), qual é o
-número máximo de elementos comparados com a chave, entre chave presente e
-ausente?
-
-- (A) 12
-- (B) 13
-- (C) 14
-- (D) 2500
-- (E) 5000
-
-<details><summary>Gabarito</summary>
-
-**B.** O máximo é ⌊log₂ n⌋ + 1 = ⌊12,29⌋ + 1 = 13. A (12) esquece o "+ 1"; D e E
-são os custos da busca sequencial no pior caso (E) e no caso médio (D, quando
-a chave está no vetor). Nenhuma chave, presente
-ou ausente, passa de 13 comparações. Veja 0090.
-
-</details>
-
-**3.** A busca binária do assunto 0090 procura a chave 53 no vetor abaixo,
-com `ini = 0` e `fim = 11`, e `meio = ini + (fim - ini) / 2`.
-
-```c
-int v[] = {4, 9, 13, 18, 22, 27, 31, 36, 42, 47, 53, 61};
-```
-
-Quantos elementos do vetor são comparados com a chave até ela ser encontrada?
-
-- (A) 3
-- (B) 4
-- (C) 6
-- (D) 11
-- (E) 12
-
-<details><summary>Gabarito</summary>
-
-**A.** Meio 5 (27 < 53, `ini = 6`), meio 8 (42 < 53, `ini = 9`), meio 10 (53,
-achou). São 3 comparações, contra 11 da busca sequencial. Veja 0090.
-
-</details>
-
-**4.** O selection sort do assunto 0092 escolhe o menor de `v[i..n-1]` com a
-comparação `v[j] < v[menor]` (estrita) e troca com `v[i]`. Ele roda em
-`9 4 7 4 1 8`. Como fica o vetor depois de **três** passadas (`i = 0, 1, 2`)?
-
-- (A) `1 4 7 4 9 8`
-- (B) `1 4 4 7 8 9`
-- (C) `1 4 4 9 7 8`
-- (D) `4 1 7 4 9 8`
-- (E) `1 4 4 7 9 8`
-
-<details><summary>Gabarito</summary>
-
-**E.** Passada 0: o menor é o 1 (posição 4), que troca com o 9: `1 4 7 4 9 8`.
-Passada 1: com `<` estrito, o menor continua sendo o 4 da posição 1 (o outro 4
-não é *menor*), então não há troca. Passada 2: o menor de `7 4 9 8` é o 4, que
-troca com o 7: `1 4 4 7 9 8`. A alternativa (A) é o estado depois de duas passadas. Veja
-0092.
-
-</details>
-
-**5.** O insertion sort do assunto 0093 ordena `6 2 9 4 1`. Cada avaliação de
-`v[i] > x` conta uma comparação, inclusive a que interrompe o laço. Quantas
-comparações são feitas no total?
-
-- (A) 6
-- (B) 7
-- (C) 8
-- (D) 9
-- (E) 10
-
-<details><summary>Gabarito</summary>
-
-**D.** Inserir o 2: 1 comparação. Inserir o 9: 1 (o 6 é menor, para). Inserir
-o 4: 3 (9, 6, e o 2 que interrompe). Inserir o 1: 4 (9, 6, 4 e 2; o laço acaba
-porque `i` chega a -1, sem comparação extra). Total 1 + 1 + 3 + 4 = 9. Num vetor já ordenado seriam só
-n - 1 = 4. Veja 0093.
-
-</details>
-
-**6.** Considere as afirmações sobre algoritmos de ordenação, nas versões
-clássicas vistas no módulo.
-
-I. O insertion sort faz cerca de n comparações quando o vetor já está
-ordenado.
-II. O quick sort é estável.
-III. O merge sort precisa de um vetor auxiliar de tamanho proporcional a n.
-IV. O selection sort faz no máximo n - 1 trocas.
-
-Marque a alternativa CORRETA.
-
-- (A) Apenas I, III e IV.
-- (B) Apenas I e III.
-- (C) Apenas II e IV.
-- (D) Apenas I, II e III.
-- (E) I, II, III e IV.
-
-<details><summary>Gabarito</summary>
-
-**A.** I é verdadeira (o laço interno para na primeira comparação de cada
-elemento). II é falsa: a partição troca elementos distantes e pode inverter
-iguais. III é verdadeira: a intercalação grava num vetor auxiliar, Θ(n) de
-espaço extra. IV é verdadeira: cada passada troca no máximo uma vez, e a
-última passada nem acontece. Veja 0093, 0094, 0095, 0092 e 0096.
-
-</details>
-
-**7.** A partição de Lomuto (pivô no último elemento, como no assunto 0095) é
-aplicada ao vetor `14 3 21 9 17 6 12`. Considere as afirmações sobre o
-resultado.
-
-I. O pivô termina no índice 3 (contando de 0).
-II. Todos os elementos à esquerda do pivô são menores ou iguais a ele.
-III. Os elementos à direita do pivô ficam na mesma ordem relativa que tinham
-no vetor original.
-
-Marque a alternativa CORRETA.
-
-- (A) Apenas I.
-- (B) Apenas II.
-- (C) Apenas I e II.
-- (D) Apenas II e III.
-- (E) I, II e III.
-
-<details><summary>Gabarito</summary>
-
-**C.** Os elementos `<= 12` são 3, 9 e 6, então o pivô vai para o índice 3 e o
-vetor fica `3 9 6 12 17 21 14`. I e II são verdadeiras. III
-é falsa: no original, os maiores aparecem como 14, 21, 17 e, depois da
-partição, como 17, 21, 14: a troca final do pivô com o primeiro dos maiores
-(o 14) bagunça a ordem. É por isso que o quick sort não é estável. Veja 0095.
-
-</details>
-
-**8.** O código abaixo deveria devolver a posição de `x` em `v` (ordenado) ou
--1, mas tem um erro.
-
-```c
-int busca(int v[], int n, int x) {
-    int ini = 0, fim = n - 1;
-    while (ini < fim) {
-        int meio = ini + (fim - ini) / 2;
-        if (v[meio] == x) return meio;
-        if (v[meio] < x) ini = meio + 1;
-        else fim = meio - 1;
-    }
-    return -1;
-}
-```
-
-Com `int v[] = {10, 20, 30, 40, 50, 60};` e `n = 6`, marque a alternativa
-CORRETA.
-
-- (A) A função devolve -1 apenas para chaves que não estão no vetor.
-- (B) A função acha todas as chaves, mas faz uma comparação a mais que a versão correta.
-- (C) A função falha só para `v[n - 1]`, a última posição.
-- (D) A função lê `v[n]`, fora do vetor, para alguma chave.
-- (E) `busca(v, 6, 20)` devolve -1 embora o 20 esteja no vetor.
-
-<details><summary>Gabarito</summary>
-
-**E.** Com `ini < fim`, o intervalo de um só elemento (`ini == fim`) nunca é
-examinado. Para o 20: meio 2 (30 > 20, `fim = 1`), meio 0 (10 < 20,
-`ini = 1`), e o laço acaba com `ini == fim`, sem olhar o 20. Rodando, o código
-devolve -1 para 20, 40 e 60, e acerta 10, 30 e 50; por isso C é falsa. `meio`
-nunca chega a `n`, então D também é falsa. A condição correta é `ini <= fim`.
-Veja 0090.
-
-</details>
-
-**9.** O quick sort com pivô no último elemento (partição de Lomuto) ordena um
-vetor de 12 elementos **já ordenado**. Quantas comparações de um elemento com
-o pivô são feitas no total?
-
-- (A) 11
-- (B) 36
-- (C) 78
-- (D) 66
-- (E) 144
-
-<details><summary>Gabarito</summary>
-
-**D.** Cada partição de um trecho de `m` elementos faz `m - 1` comparações com
-o pivô e deixa um lado vazio, então o trecho seguinte tem `m - 1` elementos:
-11 + 10 + ... + 1 = 66 = n(n - 1)/2, o pior caso Θ(n²). A (C) é a soma até 12,
-que conta uma comparação do pivô consigo mesmo. Veja 0095.
-
-</details>
-
-**10.** Sobre o merge sort, marque a alternativa INCORRETA.
-
-- (A) Faz Θ(n log n) comparações no melhor, no médio e no pior caso.
-- (B) É sempre mais rápido que o insertion sort, para qualquer vetor.
-- (C) Precisa de espaço extra proporcional a n na versão com vetor auxiliar.
-- (D) É estável se, no empate, a intercalação tira o elemento da metade esquerda.
-- (E) Divide o vetor ao meio, ordena cada metade e intercala os resultados.
-
-<details><summary>Gabarito</summary>
-
-**B.** O "sempre" entrega a pegadinha: num vetor já ordenado, o insertion sort
-faz só n - 1 comparações, menos que o merge sort. As demais são verdadeiras: o
-merge sort não depende da ordem inicial (A), usa o vetor auxiliar (C) e é
-estável com `<=` na intercalação (D). Veja 0094, 0093 e 0096.
-
-</details>
 
 ## Para ler mais
 

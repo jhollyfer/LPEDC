@@ -3,13 +3,11 @@
 //
 // O vagão do MEIO do trem precisa ir para a manutenção, e você só pode
 // percorrer a lista UMA vez (sem contar os nós antes). Escreva
-//
-//   bool remove_meio(No **inicio)
-//
-// usando a técnica da lebre e da tartaruga: dois ponteiros saem do início;
-// a tartaruga anda um nó por vez e a lebre anda dois. Quando a lebre chega
-// ao fim, a tartaruga está no meio. Com quantidade par, o meio é o SEGUNDO
-// dos dois do centro.
+// bool remove_meio(No **inicio), com dois ponteiros que saem do início: um
+// anda um nó por vez e o outro anda dois. Com quantidade par, o meio é o
+// SEGUNDO dos dois do centro. No main, monte a lista 1 a 7, a lista
+// 10, 20, 30, 40, 50, 60 e a lista de um nó só (99), inserindo no início;
+// remova o meio de cada uma e imprima as três.
 //
 //   Saída esperada:
 //   1 -> 2 -> 3 -> 5 -> 6 -> 7 -> NULL
@@ -24,16 +22,6 @@
 #include "lista.h"
 
 int main(void) {
-    No *a = NULL;
-    for (int i = 7; i >= 1; i--) a = lista_insere_inicio(a, i);
-    No *b = NULL;
-    for (int i = 60; i >= 10; i -= 10) b = lista_insere_inicio(b, i);
-    No *c = lista_insere_inicio(NULL, 99);
 
-    // chame remove_meio para as três listas e imprima cada uma
-
-    lista_libera(a);
-    lista_libera(b);
-    lista_libera(c);
     return 0;
 }

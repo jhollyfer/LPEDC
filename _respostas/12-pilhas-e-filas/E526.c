@@ -1,15 +1,8 @@
 // 0088 · Juntando tudo: a calculadora de expressões
 // Exercício E526 · ★★☆
-//
-// Resposta: o while da conversão usava ">" e deveria usar ">=". Com ">",
-// operadores de mesma precedência ficavam empilhados e a conta associava à
-// direita: 8 - (3 - 2) = 7 e 9 / (3 / 3) = 9. Com ">=", o operador que já
-// estava na pilha sai antes do novo, e a conta associa à esquerda.
 
 #include <stdio.h>
-// Na pasta do assunto basta incluir os .h (o rodar compila o pilha.c e o
-// fila.c junto). Aqui a resolução inclui as implementações para compilar
-// sozinha.
+// Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
 #include "../../12-pilhas-e-filas/0088-juntando-tudo/fila.c"
 #include "../../12-pilhas-e-filas/0088-juntando-tudo/pilha.c"
 

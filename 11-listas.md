@@ -2,58 +2,55 @@
 
 # Módulo 11 · Listas
 
-Até aqui você guardou coleções em vetores: tamanho fixo, itens lado a lado,
-acesso instantâneo pelo índice. Só que quase nunca você sabe de antemão
-quantos itens vão chegar. Por isso o módulo começa pelo vetor que cresce
-sozinho, dobrando de tamanho quando enche.
+O vetor tem tamanho fixo, mas você quase nunca sabe quantos itens vão chegar.
+O módulo começa pelo vetor que dobra quando enche.
 
-Depois vem a primeira estrutura de dados feita só de ponteiros: a
-**lista encadeada**. Cada item mora num pedaço separado do heap e sabe onde
-está o próximo. Você troca o acesso direto pela liberdade de inserir e
-remover sem empurrar ninguém. Vai fazer busca, remoção, inserção em ordem, a
-lista dupla (que anda para os dois lados) e a circular (que não tem fim).
+Depois vem a **lista encadeada**, a primeira estrutura feita só de ponteiros:
+cada item mora num pedaço do heap e sabe onde está o próximo. Troca-se o
+acesso direto pela liberdade de inserir e remover sem empurrar ninguém. Seguem
+busca, remoção, inserção em ordem, a lista dupla e a circular.
 
-A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
-"quem aponta para quem, antes e depois". O conselho do módulo inteiro
-é desenhar os nós e as setas no papel antes de escrever o código. E
-rode tudo com as flags de estudo: com ponteiros, o AddressSanitizer pega o que o olho
-deixa passar.
+Toda operação de lista é "quem aponta para quem": desenhe os nós e as setas
+antes de codar e compile com as flags de estudo, para o AddressSanitizer pegar
+os erros de ponteiro.
 
 ## O que você vai aprender
 
-- montar um **TAD lista sequencial** sobre um vetor que dobra de capacidade com `realloc`, e entender o custo amortizado
-- criar **nós** com struct autorreferenciada, inserir no início, percorrer e liberar uma **lista encadeada**
-- **buscar** e **remover** com o par de ponteiros `ant`/`p`, e por que remover o primeiro nó é um caso especial (e como sumir com ele)
-- manter uma **lista ordenada** com inserção no lugar certo
-- usar a **lista dupla** para andar nos dois sentidos e remover um nó em O(1)
-- usar a **lista circular** para rodízios, guardando o ponteiro para o último nó
+- montar um **TAD lista sequencial** sobre um vetor que dobra com `realloc`, e
+  o custo amortizado
+- criar **nós** com struct autorreferenciada, inserir no início, percorrer e
+  liberar uma **lista encadeada**
+- **buscar** e **remover** com o par `ant`/`p`, e por que remover o primeiro
+  nó é caso especial (e como eliminá-lo)
+- manter uma **lista ordenada** inserindo no lugar certo
+- usar a **lista dupla** para andar nos dois sentidos e remover em O(1)
+- usar a **lista circular** para rodízios
 - juntar tudo num **TAD playlist** com arquivo, callbacks e tipo opaco
 
 ## Antes de começar
 
-Nos desenhos, vermelho marca o nó que vai embora.
+Este módulo usa ponteiros (módulo 06, incluindo `No **inicio`, assunto 0049),
+`malloc` e `free` (módulo 07), structs e `->` (módulo 08) e o padrão TAD
+(assunto 0074). O vetor dinâmico estende o `realloc` do módulo 07 e a lista
+encadeada é a base do módulo 12 (pilhas e filas), que reaproveita nós e setas
+com outras regras de acesso.
 
-Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`
-(módulo 07), structs e `->` (módulo 08) e no padrão TAD (assunto 0074). Se
-`No **inicio` ainda assusta, releia o assunto 0049 antes do 0077.
-
-Cada pasta de assunto traz um `lista.h` (a interface) e um `lista.c` (a
-implementação): abra os dois junto com o exemplo. O comando do exemplo compila o
-`lista.c` junto com o exemplo ou o exercício, porque ele está na mesma pasta:
+Cada assunto traz `lista.h` (interface) e `lista.c` (implementação). O
+comando compila o `lista.c` junto com o exemplo ou exercício:
 
 ```bash
 gcc ~/LPEDC/11-listas/0076-lista-encadeada/A151.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A151 && ~/LPEDC/11-listas/0076-lista-encadeada/A151
 ```
 
-Nos exercícios, não dê às suas funções o mesmo nome de uma função do
-`lista.c` (como `lista_imprime`): o ligador reclamaria de nome repetido.
-Os exercícios que usam outra estrutura trazem tudo no próprio arquivo.
+Nos exercícios, não repita o nome de uma função do `lista.c` (como
+`lista_imprime`): o ligador reclama. Exercícios com outra estrutura trazem
+tudo no arquivo. Nos desenhos, vermelho marca o nó que sai.
 
 > [!NOTE]
-> Nos exercícios de "ache o bug", o código vem com o erro **de propósito**.
-> Às vezes o próprio `gcc` já avisa; às vezes só o AddressSanitizer pega,
-> quando o programa roda. Leia o relatório inteiro: ele diz o tipo do erro
-> (`heap-use-after-free`, `heap-buffer-overflow`, `memory leaks`) e a linha.
+> Nos exercícios de "ache o bug", o erro vem **de propósito**. Às vezes o
+> `gcc` avisa; às vezes só o AddressSanitizer pega, ao rodar. Leia o relatório
+> inteiro: ele traz o tipo do erro (`heap-use-after-free`,
+> `heap-buffer-overflow`, `memory leaks`) e a linha.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -69,34 +66,25 @@ Os exercícios que usam outra estrutura trazem tudo no próprio arquivo.
 
 ## 0075 · Vetor dinâmico
 
-Você vai passar o fim de semana na praia e quer anotar cada despesa da
-viagem: o café, o estacionamento, o almoço. Quantas serão? Não dá para saber.
-Um `int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101.
+Você anota as despesas de uma viagem e não sabe quantas serão. Um
+`int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101.
 
-A saída é um vetor que cresce sob demanda: começa com uma folga e, quando a
-folga acaba, pede um vetor maior e copia tudo. Toda biblioteca de "lista que
-cresce sozinha" faz isso por baixo, e você vai escrever a sua.
+A saída é um vetor que, quando a folga acaba, pede um vetor maior e copia os
+itens.
 
-Uma **lista sequencial** (também chamada de **lista em vetor**) guarda os
-itens lado a lado, num vetor contínuo, na ordem em que estão na lista. Para
-ela crescer, você controla três coisas: o endereço do vetor no heap (`itens`),
-quantos itens estão em uso (`tam`) e quantos cabem (`cap`). Enquanto
-`tam < cap`, inserir no fim é escrever em `itens[tam]`.
+Uma **lista sequencial** (ou **lista em vetor**) guarda os itens lado a lado,
+na ordem da lista. Três campos a controlam: o endereço do vetor no heap
+(`itens`), quantos itens estão em uso (`tam`) e quantos cabem (`cap`).
+Enquanto `tam < cap`, inserir no fim é escrever em `itens[tam]`.
 
-Quando `tam == cap`, o vetor está cheio. Aí entra o `realloc` (assunto 0055):
-ele pede um bloco maior, copia os itens e devolve o bloco antigo. Maior
-quanto? A resposta clássica é **dobrar a capacidade**; o "Por dentro do C"
-mostra por que crescer de um em um sai caro.
+Com `tam == cap`, o `realloc` (assunto 0055) pede um bloco maior, copia os
+itens e devolve o antigo. A prática é **dobrar a capacidade**.
 
-O pacote todo vira um **TAD** (assunto 0074): `lista.h` diz **o que** a lista
-faz e `lista.c` diz **como**. A `struct lista` fica escondida no `.c`, então
-quem usa a lista nunca mexe em `tam` na mão. O comando do exemplo compila o `lista.c`
-junto, como explica o começo do módulo.
+O conjunto é um **TAD** (assunto 0074): `lista.h` diz **o que** a lista faz e
+`lista.c` diz **como**, com a `struct lista` escondida.
 
-
-A lista do exemplo começa com espaço para 2 despesas. A 3ª dobra
-para 4 e a 5ª, o R$ 27, encontra o vetor cheio de novo: o `realloc` dobra
-para 8, copia os quatro valores e ainda sobram três vagas:
+A lista do exemplo começa com espaço para 2 despesas. A 3ª dobra para 4 e a
+5ª (R$ 27) dobra para 8, copia os quatro valores e deixa três vagas:
 
 <p align="center"><img src="11-listas/0075-vetor-dinamico/ideia.svg" alt="Diagrama da ideia: Vetor dinâmico" width="858"></p>
 
@@ -168,32 +156,25 @@ int main(void) {
 // total: R$ 132
 ```
 
-No fluxograma, a pergunta "está cheio?" vem antes de escrever. No caso do 27
-a resposta é Sim, o vetor dobra e só depois o valor entra em
-`itens[4]`. Se o `realloc` falhar, a função avisa com `false` e a lista
-continua inteira:
+No fluxograma, "está cheio?" vem antes de escrever. Para o 27 a resposta é
+Sim: o vetor dobra e só então o valor entra em `itens[4]`. Se o `realloc`
+falhar, a função devolve `false` e a lista continua intacta:
 
 <p align="center"><img src="11-listas/0075-vetor-dinamico/fluxograma.svg" alt="Fluxograma: Vetor dinâmico" width="510"></p>
 
-O preço do vetor aparece quando você insere ou remove **no meio**: todo mundo
-que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
-(o exemplo A150 mostra). Já ler a posição `i` é instantâneo: `itens[i]` é uma
-conta de endereço.
+Inserir ou remover no **meio** desloca todos os itens seguintes: O(n) no pior
+caso, a posição 0 (exemplo A150). Ler a posição `i` é O(1).
 
 > [!WARNING]
-> Guardar o **endereço** de um item e depois inserir deixa um ponteiro solto: `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
-> pode ter devolvido. Guarde a **posição** (o índice), nunca o endereço. E
-> nunca escreva `l->itens = realloc(l->itens, ...)` direto: se o `realloc`
-> devolver `NULL`, você perde o único endereço do bloco antigo.
+> Um `int *p = &itens[0];` guardado antes de inserir pode apontar para o bloco
+> antigo, que o `realloc` devolveu. Guarde o índice. E nunca escreva
+> `l->itens = realloc(l->itens, ...)`: com `NULL`, você perde o bloco antigo.
 
 > [!TIP]
-> **Por dentro do C:** dobrando, inserir n itens copia no total menos de 2n
-> itens (1 + 2 + 4 + ... + n/2 + n), então cada inserção custa O(1) **em
-> média** (custo amortizado). Crescendo de um em um, cada inserção copia tudo
-> de novo: 1 + 2 + 3 + ... + n ≈ n²/2 cópias. Para um milhão de despesas, são
-> uns 20 `realloc` contra um milhão deles. A `struct lista` tem 16 bytes
-> (ponteiro de 8 + dois `int` de 4) e mora num bloco do heap; o vetor mora em
-> outro bloco. Por isso o `lista_libera` faz dois `free`, primeiro o vetor.
+> **Por dentro do C:** dobrando, inserir n itens copia menos de 2n itens (1 +
+> 2 + 4 + ... + n): O(1) **em média** por inserção (custo amortizado). De um
+> em um, são cerca de n²/2 cópias. `lista_libera` faz dois `free`, o do vetor
+> primeiro.
 
 > [!NOTE]
 > **Pergunta para você:** começando com `lista_cria(2)`, quantas vezes o
@@ -321,73 +302,25 @@ média: 103.8
 maior: 132
 ```
 
-**Dicas:**
-
-1. Depois de criar com lista_cria(4), confira se não voltou NULL.
-2. Para ler o item i, use lista_pega(l, i, &valor): você não enxerga
-   l->itens daqui, porque a struct está escondida em lista.c.
-3. Para a média, divida a soma por (double) o tamanho.
-4. A capacidade foi de 4 para 8 quando
-   chegou a 5ª leitura. Não esqueça do lista_libera no fim.
-
 ```bash
 gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E445.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E445 && ~/LPEDC/11-listas/0075-vetor-dinamico/E445
 ```
 
-**Exercício E446** · ★☆☆
-
-Escreva um programa que acompanhe o vetor por dentro. Primeiro escreva a
-função mostra(rotulo, l), que imprime o rótulo, o tamanho, a capacidade e
-a lista, assim: "A: tam 2, cap 2 [5, 9]". Depois, começando com
-lista_cria(1), faça estas operações e chame mostra onde está indicado:
-
-
-```text
-insere 5 no fim; insere 9 no fim              -> mostra "A"
-insere 3 na posição 0; insere 7 no fim        -> mostra "B"
-remove a posição 1 guardando em x;
-insere x * 2 na posição 3                     -> mostra "C"
-tenta remover a posição 4; se falhar, imprima "D: falhou, x = ..."
-insere 1 no fim                               -> mostra "E"
-```
-
-
-
-```text
-Saída esperada:
-A: tam 2, cap 2 [5, 9]
-B: tam 4, cap 4 [3, 5, 9, 7]
-C: tam 4, cap 4 [3, 9, 7, 10]
-D: falhou, x = 5
-E: tam 5, cap 8 [3, 9, 7, 10, 1]
-```
-
-**Dicas:**
-
-1. lista_imprime já termina com quebra de linha: em mostra, use printf
-   para o começo da linha e lista_imprime para o fim.
-2. Inserir na posição igual ao tamanho é o mesmo que inserir no fim.
-3. Remover numa posição que não existe devolve false e não mexe em x.
-4. A capacidade dobra de 1 para 2, de 2
-   para 4 e de 4 para 8.
-
-```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E446.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E446 && ~/LPEDC/11-listas/0075-vetor-dinamico/E446
-```
-
 **Exercício E447** · ★★☆
 
-O pluviômetro da escola anota a chuva do dia em mm, e grava -1 quando o
-sensor falha. Complete as duas funções usando SÓ a interface de lista.h:
+O pluviômetro da escola anota a chuva do dia em mm e grava -1 quando o
+sensor falha. Usando SÓ a interface de lista.h, guarde as leituras
+4, -1, 0, 12, -1, -1, 7 numa lista de capacidade inicial 4 e escreva:
 
 
 ```text
-posicao_de(l, valor)   primeira posição de valor na lista, ou -1
-remove_todos(l, valor) tira todas as ocorrências e devolve quantas tirou
+int posicao_de(const Lista *l, int valor)  primeira posição do valor, ou -1
+int remove_todos(Lista *l, int valor)      tira todas as ocorrências e
+                                           devolve quantas tirou
 ```
 
 
-Com as leituras 4, -1, 0, 12, -1, -1, 7:
+Mostre a lista, remova as falhas (-1) e mostre de novo.
 
 
 ```text
@@ -396,15 +329,6 @@ antes:  [4, -1, 0, 12, -1, -1, 7]
 depois: [4, 0, 12, 7]
 3 falhas removidas
 ```
-
-**Dicas:**
-
-1. posicao_de é um for de 0 até lista_tamanho(l) com lista_pega.
-2. remove_todos pode repetir: "ache a posição; se achou, remova" até não
-   achar mais.
-3. Cuidado com o atalho "for (i = 0; i < tam; i++) se for -1, remove i":
-   depois de remover, o vizinho escorrega para a posição i e o i++ pula
-   ele. Com dois -1 seguidos, um escapa.
 
 ```bash
 gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E447.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E447 && ~/LPEDC/11-listas/0075-vetor-dinamico/E447
@@ -438,69 +362,28 @@ trocando:   [101, 102, 108, 104, 105, 106, 107]  movimentos: 1
 esvaziando pela frente: deslocando 21, trocando 6
 ```
 
-**Dicas:**
-
-1. Assinatura sugerida: int remove_deslocando(int v[], int *n, int pos).
-2. Ao final, as duas fazem (*n)--.
-3. Para esvaziar: while (n > 0) total += remove_xxx(v, &n, 0);
-4. Deslocando, tirar da frente custa
-   6 + 5 + 4 + 3 + 2 + 1 + 0 = 21 movimentos (cresce como n²); trocando,
-   um por item, menos o último. Use deslocando quando a ordem importa
-   (fila de senhas) e trocando quando não importa (itens do carrinho).
-
 ```bash
 gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E448.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E448 && ~/LPEDC/11-listas/0075-vetor-dinamico/E448
 ```
 
-**Exercício E449** · ★★★
-
-Este programa guarda as velocidades medidas por um radar num vetor que
-cresce. Ele compila sem aviso, mas tem TRÊS problemas de propósito: dois o
-AddressSanitizer acusa quando você roda, e o terceiro só morderia num dia
-em que faltasse memória. Rode, leia o relatório, ache os três e conserte.
-
-
-```text
-Saída esperada depois do conserto:
-primeiro: 40
-40 50 60 70 80 90
-```
-
-**Dicas:**
-
-1. O primeiro relatório é "heap-buffer-overflow" dentro de vetor_insere:
-   o realloc recebe um número de BYTES.
-2. Conserte e rode de novo. O segundo é "heap-use-after-free" no printf
-   do primeiro: depois que o vetor muda de lugar, o endereço guardado em
-   "primeiro" aponta para o bloco antigo, já devolvido.
-3. O terceiro: "v->itens = realloc(v->itens, ...)". Se o realloc devolver
-   NULL, o endereço do bloco antigo se perde (vazamento) e a lista some.
-4. Resposta esperada: realloc(v->itens, nova_cap * sizeof(int)) guardando
-   o resultado numa variável temporária antes de trocar v->itens; e guardar
-   a POSIÇÃO (índice 0) em vez do endereço, lendo v.itens[0] no fim.
-
-```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E449.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E449 && ~/LPEDC/11-listas/0075-vetor-dinamico/E449
-```
-
 **Exercício E450** · ★★★
 
-Um vetor que só cresce nunca devolve memória: se um dia guardou um milhão
-de itens e agora guarda três, continua ocupando um milhão. Complete as
-duas funções que tiram o último item e encolhem o vetor pela metade (sem
-nunca descer de capacidade 2), cada uma com uma regra:
+Um vetor que só cresce nunca devolve memória. Usando a struct Vet abaixo,
+escreva vet_empurra (põe no fim; quando tam == cap, dobra a capacidade com
+realloc) e duas funções que tiram o último item, guardam em *saiu e
+encolhem o vetor pela metade (nunca abaixo de capacidade 2):
 
 
 ```text
-vet_tira         encolhe quando o tamanho fica <= 1/4 da capacidade
-vet_tira_metade  encolhe quando o tamanho fica <= 1/2 da capacidade
+bool vet_tira(Vet *v, int *saiu)         encolhe se tam <= cap / 4
+bool vet_tira_metade(Vet *v, int *saiu)  encolhe se tam <= cap / 2
 ```
 
 
-Toda vez que um realloc der certo (crescendo ou encolhendo), some 1 em
-v->reallocs. O main já está pronto: ele esvazia um vetor de 9 itens com
-vet_tira e depois compara as duas regras num vetor com tam 4 e cap 4 que
-alterna "empurra, tira" 10 vezes.
+Some 1 em v->reallocs a cada realloc que der certo. No main: comece com um
+vetor de cap 2, empurre 1 a 9, esvazie com vet_tira mostrando cada passo;
+depois crie dois vetores com 1, 2, 3, 4 (tam 4, cap 4, reallocs zerado) e,
+10 vezes, empurre 5 e tire, um com cada regra, mostrando os reallocs.
 
 
 ```text
@@ -519,18 +402,6 @@ alternando com 1/2: 20 realloc
 alternando com 1/4: 1 realloc
 ```
 
-**Dicas:**
-
-1. Depois de diminuir o tamanho, em vet_tira:
-   if (v->cap > 2 && v->tam <= v->cap / 4). Em vet_tira_metade, troque
-   o 4 por 2.
-2. Use realloc para a nova capacidade, numa variável temporária. Se ele
-   falhar, tudo bem: o vetor só continua grande.
-3. Encolhendo na metade, cada "empurra"
-   cresce para 8 e cada "tira" volta a 4: um realloc (que copia tudo) a
-   cada operação. Com 1/4, depois de crescer sobra folga para os dois
-   lados.
-
 ```bash
 gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E450.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E450 && ~/LPEDC/11-listas/0075-vetor-dinamico/E450
 ```
@@ -539,19 +410,15 @@ gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E450.c ~/LPEDC/11-listas/0075-vetor-di
 
 ## 0076 · Lista encadeada
 
-Abra o extrato do Pix no app do banco: o mais recente aparece em cima. Cada
-Pix novo entra na frente, e ninguém precisa empurrar os antigos para baixo.
-No vetor do assunto anterior, inserir na posição 0 faria todos andarem uma
-casa. A lista encadeada evita isso.
+No extrato do Pix, cada Pix novo entra na frente sem empurrar os antigos. No
+vetor, inserir na posição 0 move todo mundo. A lista encadeada evita isso.
 
 Uma **lista encadeada** (no Cormen, **lista ligada**) guarda cada item num
-pedaço separado de memória, o **nó**. Além do valor, cada nó guarda o endereço
-do próximo. O último aponta para `NULL`. Para usar a lista, basta o
-endereço do primeiro nó, o **início** (o `L.head` do Cormen). Lista vazia é
-`inicio == NULL`.
+pedaço separado de memória, o **nó**: o valor e o endereço do próximo. O
+último aponta para `NULL`. A lista inteira é o endereço do primeiro nó, o
+**início** (o `L.head` do Cormen). Lista vazia é `inicio == NULL`.
 
-O nó é uma struct que aponta para o próprio tipo, uma **struct
-autorreferenciada**:
+O nó é uma **struct autorreferenciada**:
 
 ```c
 typedef struct no {
@@ -560,27 +427,22 @@ typedef struct no {
 } No;
 ```
 
-O `struct no *prox` fica dentro da própria `struct no`. Uma struct não pode
-conter a si mesma (teria tamanho infinito), mas pode conter um **ponteiro**
-para si mesma: um ponteiro tem sempre 8 bytes, aponte para o que apontar.
+Uma struct não pode conter a si mesma (teria tamanho infinito), mas pode
+conter um **ponteiro** para si mesma: ele tem sempre 8 bytes.
 
-Os nós não ficam lado a lado na memória. Cada um nasce de um `malloc`
-diferente e cai onde o heap tiver espaço. A ordem da lista não está nas
-posições: está nas **setas**. Por isso não existe `lista[2]`: para chegar no
-terceiro nó, você segue duas setas a partir do início.
+Cada nó vem de um `malloc` e cai onde o heap tiver espaço: a ordem está nas
+**setas**. Não existe `lista[2]`; para chegar ao terceiro nó, siga duas setas
+a partir do início.
 
-Três operações formam a base, e todas estão no `lista.c` desta pasta:
+Três operações formam a base (no `lista.c` desta pasta):
 
-- **inserir no início**: cria o nó, aponta o `prox` dele para o antigo
-  início e devolve o novo nó, que passa a ser o início. É O(1): não importa o
-  tamanho da lista.
-- **percorrer**: `for (p = inicio; p != NULL; p = p->prox)`. É o "for de
-  lista", que aparece em quase toda função daqui em diante.
+- **inserir no início**: cria o nó, aponta o `prox` dele para o antigo início
+  e devolve o novo nó como início. É O(1).
+- **percorrer**: `for (p = inicio; p != NULL; p = p->prox)`, o "for de lista".
 - **liberar**: um `free` por nó, guardando o próximo **antes** do `free`.
 
-Inserir no **fim** é outra conversa: guardando só o início, é preciso andar
-até o último nó, O(n). Com um ponteiro a mais para o último, vira O(1) (o
-0079 e o 0086 fazem assim).
+Inserir no **fim** com só o início guardado exige andar até o último nó,
+O(n). Com um ponteiro para o último, vira O(1) (0079 e 0086).
 
 ```c
 No *lista_insere_inicio(No *inicio, int valor) {
@@ -595,14 +457,10 @@ No *lista_insere_inicio(No *inicio, int valor) {
 }
 ```
 
-Aqui a struct do nó fica no `lista.h`, à vista, de propósito: o assunto é
-mexer em `p->valor` e `p->prox`. Na pilha e na fila (módulo 12) ela
-volta a ficar escondida no `.c`.
+Aqui o nó fica à vista no `lista.h`; no módulo 12 volta a ficar escondido.
 
-No exemplo, chegam quatro Pix: R$ 20, 45, 10 e 80. Cada um entra na
-frente, então o extrato mostra o 80 primeiro. Embaixo, a mesma lista como ela
-está de verdade no heap: endereços fora de ordem, com outros dados no meio, e
-cada nó guardando o endereço do próximo:
+Chegam quatro Pix: R$ 20, 45, 10 e 80, e o 80 aparece primeiro. Embaixo, a
+lista no heap: endereços fora de ordem, cada nó com o endereço do próximo:
 
 <p align="center"><img src="11-listas/0076-lista-encadeada/ideia.svg" alt="Diagrama da ideia: Lista encadeada" width="858"></p>
 
@@ -635,30 +493,22 @@ int main(void) {
 // 4 Pix, total R$ 155
 ```
 
-Percorrer, no fluxograma, é um laço que pergunta "ainda tem nó?" antes de
-cada passo. O `p` começa no 80, pula para o 10, o 45, o 20, e então vira
-`NULL`. Aí o laço para, com o total em R$ 155:
+No fluxograma, o laço pergunta "ainda tem nó?" antes de cada passo. O `p` vai
+do 80 ao 10, ao 45 e ao 20, vira `NULL` e o laço para, com total R$ 155:
 
 <p align="center"><img src="11-listas/0076-lista-encadeada/fluxograma.svg" alt="Fluxograma: Lista encadeada" width="543"></p>
 
 > [!WARNING]
-> `lista_insere_inicio(extrato, 20);` sozinho, sem o `extrato =` na frente,
-> compila sem aviso e está errado. A função devolve o novo início, e ele foi
-> jogado fora. O `extrato` continua apontando para o nó antigo (ou para
-> `NULL`), e o nó novo vira vazamento. Toda função que pode mudar o início
-> devolve o início novo, e você **sempre** guarda: `extrato =
-> lista_insere_inicio(extrato, 20);`. No `libera`, o erro comum é outro: ler
-> `p->prox` depois de `free(p)`.
+> `lista_insere_inicio(extrato, 20);` sem o `extrato =` compila sem aviso e
+> está errado: o novo início se perde e o nó vira vazamento. No `libera`, o
+> erro comum é ler `p->prox` depois de `free(p)`.
 
 > [!TIP]
-> **Por dentro do C:** num PC de 64 bits, `sizeof(No)` é 16: 4 bytes do `int`,
-> 4 de **preenchimento** (o ponteiro precisa começar num endereço múltiplo de
-> 8) e 8 do ponteiro. E cada `malloc` ainda gasta uns 16 bytes de controle.
-> Guardar 4 inteiros numa lista custa umas 8 vezes mais memória que num
-> vetor. E há o **cache**: o processador lê a memória em blocos de 64 bytes.
-> No vetor, ler `itens[0]` já traz os vizinhos de brinde. Na lista, cada nó
-> pode estar longe do anterior. Percorrer a lista é O(n), igual ao vetor, mas
-> na prática bem mais lento.
+> **Por dentro do C:** em 64 bits, `sizeof(No)` é 16: 4 bytes do `int`, 4 de
+> **preenchimento** (o ponteiro começa em múltiplo de 8) e 8 do ponteiro. Cada
+> `malloc` ainda gasta uns 16 bytes de controle. Percorrer é O(n) como no
+> vetor, mas mais lento: o **cache** lê blocos de 64 bytes e os nós ficam
+> espalhados.
 
 > [!NOTE]
 > **Pergunta para você:** se você inserir no início o 5, depois o 6 e depois
@@ -786,48 +636,8 @@ Saída esperada:
 3 Pix acima de R$ 50
 ```
 
-**Dicas:**
-
-1. Toda inserção é "extrato = lista_insere_inicio(extrato, valor);".
-2. O percurso é sempre o mesmo: for (const No *p = inicio; p != NULL;
-   p = p->prox).
-3. O 50 não conta: "maior que", não "maior ou igual".
-4. Resposta esperada: a saída acima (64, 120 e 75). Libere a lista no fim.
-
 ```bash
 gcc ~/LPEDC/11-listas/0076-lista-encadeada/E451.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E451 && ~/LPEDC/11-listas/0076-lista-encadeada/E451
-```
-
-**Exercício E452** · ★☆☆
-
-O laço do programa abaixo já monta uma lista inserindo 3, 6, 9 e 12 no
-início. Complete o main para mostrar a lista e mais três linhas:
-
-
-```text
-o primeiro valor da lista;
-o terceiro, seguindo duas setas a partir do início (l->prox->prox);
-o último, andando com um ponteiro p até o nó cujo prox é NULL.
-```
-
-
-
-```text
-Saída esperada:
-12 -> 9 -> 6 -> 3 -> NULL
-primeiro: 12
-terceiro: 6
-último: 3
-```
-
-**Dicas:**
-
-1. Desenhe os nós e as setas no papel antes: quem ficou na frente?
-2. l->prox->prox anda dois nós a partir do primeiro.
-3. Para o último: No *p = l; while (p->prox != NULL) p = p->prox;
-
-```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/E452.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E452 && ~/LPEDC/11-listas/0076-lista-encadeada/E452
 ```
 
 **Exercício E453** · ★★☆
@@ -852,13 +662,6 @@ Saída esperada:
 lista: 5 -> 18 -> 7 -> 22 -> 9 -> NULL
 vetor: 5 18 7 22 9
 ```
-
-**Dicas:**
-
-1. Inserir no início inverte a ordem. Como desinverter? Percorra o vetor de
-   trás para frente: o último a entrar (v[0]) fica na frente.
-2. Em lista_para_vetor, ande com p e com um contador i ao mesmo tempo:
-   pare quando p for NULL ou i chegar em max.
 
 ```bash
 gcc ~/LPEDC/11-listas/0076-lista-encadeada/E453.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E453 && ~/LPEDC/11-listas/0076-lista-encadeada/E453
@@ -885,54 +688,18 @@ mais antigo primeiro: 15 60 35 90 25
 tamanho (recursivo): 5
 ```
 
-**Dicas:**
-
-1. Caso base das duas: p == NULL.
-2. Para imprimir ao contrário, imprima o RESTO da lista primeiro
-   (chamada com p->prox) e só depois o p->valor.
-3. tamanho_rec(p) = 1 + tamanho_rec(p->prox).
-4. Para a primeira linha, use
-   printf("mais novo primeiro: ") seguido de lista_imprime.
-
 ```bash
 gcc ~/LPEDC/11-listas/0076-lista-encadeada/E454.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E454 && ~/LPEDC/11-listas/0076-lista-encadeada/E454
 ```
 
-**Exercício E455** · ★★★
-
-A cartela de fidelidade da padaria guarda os pontos de cada compra numa
-lista. O programa tem DOIS erros de propósito. Rode, leia o aviso do gcc,
-o que sai e o relatório do AddressSanitizer, ache os dois e conserte.
-
-
-```text
-Saída esperada depois do conserto:
-10 -> 5 -> 8 -> 3 -> NULL
-total de pontos: 26
-```
-
-**Dicas:**
-
-1. A execução mostra só "NULL" e total 0, e o ASan reclama de "memory
-   leaks": os nós foram criados, mas ninguém guardou o endereço deles.
-2. O gcc já avisa o outro: "pointer 'p' used after 'free'" em libera_tudo.
-   Olhe o "p = p->prox" do for: ele roda DEPOIS do free(p). Consertado o
-   primeiro erro, o ASan confirma com "heap-use-after-free".
-3. Resposta esperada: "cartela = lista_insere_inicio(cartela, ...)" (a
-   função devolve o novo início, e o valor devolvido era jogado fora); e
-   em libera_tudo, guardar p->prox numa variável antes do free.
-
-```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/E455.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E455 && ~/LPEDC/11-listas/0076-lista-encadeada/E455
-```
-
 **Exercício E456** · ★★★
 
-A fila de embarque foi montada ao contrário: 5 -> 4 -> 3 -> 2 -> 1.
-Escreva No *inverte(No *inicio), que inverte a lista SÓ MEXENDO NOS
-PONTEIROS: nada de malloc, nada de trocar os valores, nada de vetor
-auxiliar. Ela devolve o novo início. Teste também com a lista vazia e com
-uma lista de um nó só.
+A fila de embarque foi montada ao contrário: 5 -> 4 -> 3 -> 2 -> 1 (monte
+inserindo no início 1, 2, 3, 4 e 5). Escreva No *inverte(No *inicio), que
+inverte a lista SÓ MEXENDO NOS PONTEIROS: nada de malloc, nada de trocar
+os valores, nada de vetor auxiliar. Ela devolve o novo início. Mostre a
+fila antes e depois e teste também com a lista vazia e com uma lista de
+um nó só (o valor 7).
 
 
 ```text
@@ -943,15 +710,6 @@ vazia:  NULL
 um só:  7 -> NULL
 ```
 
-**Dicas:**
-
-1. Use três ponteiros: ant (começa NULL), p (começa no início) e seg.
-2. A cada passo: seg = p->prox; p->prox = ant; ant = p; p = seg. A ordem
-   importa: se você trocar p->prox antes de guardar seg, perde o resto.
-3. Quando p vira NULL, ant é o novo início.
-4. É O(n) em tempo e O(1) em memória
-   extra.
-
 ```bash
 gcc ~/LPEDC/11-listas/0076-lista-encadeada/E456.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E456 && ~/LPEDC/11-listas/0076-lista-encadeada/E456
 ```
@@ -960,15 +718,11 @@ gcc ~/LPEDC/11-listas/0076-lista-encadeada/E456.c ~/LPEDC/11-listas/0076-lista-e
 
 ## 0077 · Busca e remoção
 
-Sábado de manhã, barbearia lotada. Cada cliente pega uma senha e o barbeiro
-anota numa lista: 31, 17, 42, 8. O 42 cansa de esperar e vai embora. Ele sai
-do meio da fila e ninguém troca de cadeira: o 17 passa a ter o 8 como
-próximo.
+Na barbearia, as senhas esperam numa lista: 31, 17, 42, 8. O 42 desiste e sai
+do meio: o 17 passa a ter o 8 como próximo.
 
-**Buscar** numa lista encadeada é percorrer até achar. Sem acesso direto, a
-busca é sempre sequencial, O(n). A função devolve o
-**endereço do nó** (ou `NULL` se não achou), e com ele você lê ou até muda o
-valor:
+**Buscar** é percorrer até achar, O(n). A função devolve o **endereço do nó**
+(ou `NULL`), e com ele você lê ou muda o valor:
 
 ```c
 No *lista_busca(No *inicio, int valor) {
@@ -980,22 +734,19 @@ No *lista_busca(No *inicio, int valor) {
 }
 ```
 
-**Remover** pede mais cuidado. Para tirar o nó `p`, quem aponta para ele
-precisa passar a apontar para o seguinte. E quem aponta para `p` é o nó
-**anterior**, que numa lista simples não tem caminho de volta. A saída é
-percorrer com **dois ponteiros**: `ant` anda sempre um passo atrás de `p`.
+**Remover** o nó `p` exige que o **anterior** aponte para o seguinte, e a
+lista simples não tem caminho de volta. Percorra com **dois ponteiros**:
+`ant` anda um passo atrás de `p`.
 
-Achado o nó, há dois casos:
+Achado o nó, são dois casos:
 
-- `ant == NULL`: o nó é o **primeiro**. Quem aponta para ele é a variável
-  `inicio` do `main`, e é ela que precisa mudar.
+- `ant == NULL`: o nó é o **primeiro**; é a variável `inicio` do `main` que
+  precisa mudar.
 - senão: `ant->prox = p->prox`, e o anterior pula o `p`.
 
-Nos dois casos, só depois de religar vem o `free(p)`. Como remover o primeiro
-muda o início e a função ainda quer devolver se achou ou não, ela recebe o
-**endereço** do início: `No **inicio` (ponteiro para ponteiro, assunto 0049).
-No assunto anterior, a inserção devolvia o início novo; os dois estilos são
-comuns.
+O `free(p)` vem depois de religar. Como remover o primeiro muda o início, a
+função recebe o **endereço** do início: `No **inicio` (assunto 0049). É o
+outro estilo comum; a inserção do 0076 devolvia o início novo.
 
 ```c
 bool lista_remove(No **inicio, int valor) {
@@ -1016,9 +767,8 @@ bool lista_remove(No **inicio, int valor) {
 }
 ```
 
-Para tirar o 42, o laço para com `p` no 42 e `ant` no 17. Uma atribuição
-desvia a seta do 17 para o 8, e o nó do 42, para o qual ninguém mais aponta,
-volta para o heap:
+Para tirar o 42, o laço para com `p` no 42 e `ant` no 17. A seta do 17 passa
+a apontar para o 8, e o nó do 42 volta para o heap:
 
 <p align="center"><img src="11-listas/0077-lista-busca-remocao/ideia.svg" alt="Diagrama da ideia: Busca e remoção" width="858"></p>
 
@@ -1060,36 +810,26 @@ int main(void) {
 // senha 99: não está na fila
 ```
 
-O laço do fluxograma anda até achar o 42 ou a lista acabar. Achou, e como
-`ant` não é `NULL` (é o 17), o caminho vai pelo `ant->prox = p->prox`.
-Na remoção do 31, o caminho seria o outro, `início = p->prox`:
+No fluxograma, `ant` é o 17 (não `NULL`), então o caminho vai por `ant->prox =
+p->prox`. Na remoção do 31, iria por `início = p->prox`:
 
 <p align="center"><img src="11-listas/0077-lista-busca-remocao/fluxograma.svg" alt="Fluxograma: Busca e remoção" width="733"></p>
 
-O exemplo A154 mostra como sumir com o caso especial: o
-**nó-cabeça**, um nó "de mentira" no começo. Com ele, todo nó de verdade tem
-um anterior, e o primeiro deixa de ser especial. O Cormen leva a ideia mais
-longe com a **sentinela** `L.nil` numa lista dupla circular, que o assunto
-0174 aprofunda.
+O exemplo A154 elimina o caso especial com um **nó-cabeça**, um nó de mentira
+no começo: todo nó de verdade passa a ter anterior. O Cormen usa a
+**sentinela** `L.nil` (assunto 0174).
 
 > [!WARNING]
-> A ordem do `&&` importa. `while (p->valor != valor && p != NULL)` lê
-> `p->valor` **antes** de saber se `p` é `NULL`. Quando o valor não está na
-> lista, `p` vira `NULL` e o programa quebra. Com `p != NULL` primeiro, o
-> curto-circuito (assunto 0013) nem chega a olhar o `p->valor`. E nunca
-> inverta "religar" e "liberar": depois do `free(p)`, `p->prox` não é mais
-> seu.
+> A ordem do `&&` importa. Em `while (p->valor != valor && p != NULL)`, o
+> `p->valor` é lido antes de testar `p` e quebra quando o valor não está na
+> lista. Com `p != NULL` primeiro, o curto-circuito (assunto 0013) evita a
+> leitura.
 
 > [!TIP]
-> **Por dentro do C:** em `lista_remove(&fila, 42)`, a função recebe o
-> endereço da variável `fila`, que mora na pilha do `main`. Escrever
-> `*inicio = p->prox` muda a `fila` lá do `main`. Dá para ir além e eliminar o
-> `ant`: um `No **pp` que começa em `inicio` e anda com `pp = &(*pp)->prox`
-> aponta sempre para "o lugar que aponta para o nó atual", seja a `fila`, seja
-> o `prox` de alguém. A remoção vira `No *p = *pp; *pp = p->prox; free(p);`,
-> sem `if`. Quanto ao custo, religar é O(1), sem deslocar nada como no vetor.
-> O que custa O(n) é achar o nó.
-
+> **Por dentro do C:** `*inicio = p->prox` altera a variável `fila` do `main`.
+> Um `No **pp` que anda por `pp = &(*pp)->prox` dispensa o `ant` (aponta para
+> "quem aponta para o nó atual"), e a remoção vira `No *p = *pp; *pp =
+> p->prox; free(p);`, sem `if`. Religar é O(1); achar o nó é O(n).
 
 > [!NOTE]
 > **Pergunta para você:** se a lista fosse `42 -> 17 -> 42 -> 8` e você
@@ -1221,101 +961,40 @@ gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/A154.c ~/LPEDC/11-listas/0077-lis
 **Exercício E457** · ★☆☆
 
 A fila do açougue tem as senhas 33 -> 40 -> 7 -> 25 -> 12 (monte inserindo
-no início 12, 25, 7, 40 e 33). Escreva
+no início 12, 25, 7, 40 e 33). Escreva int posicao(const No *inicio, int
+valor), que devolve a posição do valor contando a partir de 1, ou 0 se ele
+não está na lista. O programa lê duas senhas do teclado (sem mostrar
+perguntas), confere o retorno do scanf e responde sobre cada uma.
 
 
 ```text
-int posicao(const No *inicio, int valor)
-```
-
-
-que devolve a posição do valor contando a partir de 1, ou 0 se ele não
-está na lista. O programa lê uma senha do teclado e responde. Confira o
-retorno do scanf.
-
-
-```text
-Digite a senha: 7
-senha 7 está na posição 3
-```
-
-
-
-```text
-Digite a senha: 50
-senha 50 não está na fila
-```
-
-**Dicas:**
-
-1. É a busca do texto com um contador que soma 1 a cada passo.
-2. Se o scanf não devolver 1, avise "entrada inválida" e saia.
-3. Resposta esperada: posição 3 para o 7 e "não está" para o 50. Para o
-   33 a resposta é 1, e para o 12, 5.
-
-```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E457.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E457 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E457
-```
-
-**Exercício E458** · ★☆☆
-
-A lotérica anotou os valores dos boletos pagos numa lista com valores
-repetidos: monte-a inserindo no início 5, 9, 5, 2 e 5. Escreva a função
-
-
-```text
-int conta(const No *inicio, int valor)
-```
-
-
-que devolve quantas vezes o valor aparece. Depois, no main:
-
-
-```text
-mostre a lista e quantos 5 ela tem;
-o 9 foi digitado errado: troque por 4 usando o nó que lista_busca
-devolve, e mostre a lista;
-tire TODOS os 5 chamando lista_remove num laço, conte quantas remoções
-deram certo e mostre a lista e o tamanho.
+Entrada:
+7
+50
 ```
 
 
 
 ```text
 Saída esperada:
-5 -> 2 -> 5 -> 9 -> 5 -> NULL
-quantos 5: 3
-5 -> 2 -> 5 -> 4 -> 5 -> NULL
-removidos: 3
-2 -> 4 -> NULL
-tamanho: 2
+senha 7 está na posição 3
+senha 50 não está na fila
 ```
 
-**Dicas:**
-
-1. conta é o "for de lista" com um if e um contador.
-2. lista_busca devolve o endereço do nó: mudar p->valor muda a lista.
-   Confira se não voltou NULL antes de mexer.
-3. lista_remove tira só o PRIMEIRO nó com o valor e devolve true se
-   tirou: while (lista_remove(&l, 5)) removidos++;
-
 ```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E458.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E458 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E458
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E457.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E457 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E457
 ```
 
 **Exercício E459** · ★★☆
 
 O sensor de temperatura da estufa grava 0 quando falha. Escreva
-
-
-```text
-int remove_todos(No **inicio, int valor)
-```
-
-
-que tira TODOS os nós com o valor numa passada só (sem chamar
-lista_remove em laço, que recomeçaria do início a cada vez) e devolve
-quantos tirou. Teste com as duas listas do main.
+int remove_todos(No **inicio, int valor), que tira TODOS os nós com o
+valor numa passada só (sem chamar lista_remove em laço) e devolve quantos
+tirou. No main, monte a lista com as leituras 0, 19, 0, 21, 0, 0
+inseridas no início, mostre antes e depois da remoção dos 0 e o total
+removido. Depois monte uma lista só com dois 0, remova-os e mostre que
+ela ficou vazia (imprima "só falhas: NULL (2 removidas)" com o total
+devolvido pela função).
 
 
 ```text
@@ -1326,14 +1005,6 @@ depois: 21 -> 19 -> NULL
 só falhas: NULL (2 removidas)
 ```
 
-**Dicas:**
-
-1. Ande com ant e p. Quando p->valor for o valor, religue (o início ou
-   ant->prox), guarde p->prox, dê free(p) e continue a partir do guardado,
-   SEM mexer no ant.
-2. Quando não remover, aí sim: ant = p e p anda.
-3. Os 0 do começo são o caso traiçoeiro: o início muda duas vezes seguidas.
-
 ```bash
 gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E459.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E459 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E459
 ```
@@ -1341,17 +1012,21 @@ gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E459.c ~/LPEDC/11-listas/0077-lis
 **Exercício E460** · ★★☆
 
 Num leilão online, a cada rodada o MENOR lance sai da disputa. Os lances
-estão numa lista de structs com nome e valor. Escreva
+estão numa lista de structs Lance (declarada abaixo). Escreva
 
 
 ```text
+Lance *lance_insere(Lance *inicio, const char *nome, int valor)  no início
+void lance_imprime(const Lance *inicio)  formato do exemplo
+void lance_libera(Lance *inicio)
 bool remove_menor(Lance **inicio, Lance *saiu)
 ```
 
 
-que acha o nó de menor valor, copia os dados dele para *saiu, tira o nó
-da lista e devolve true (ou false se a lista estiver vazia). Rode duas
-rodadas.
+remove_menor acha o nó de menor valor, copia os dados dele para *saiu, tira
+o nó da lista e devolve true (ou false se a lista estiver vazia). Insira
+Ana 150, Bruno 90, Carla 210 e Davi 175 (nesta ordem), mostre a lista e
+rode duas rodadas.
 
 
 ```text
@@ -1363,66 +1038,19 @@ saiu Ana (R$ 150)
 Davi R$ 175 -> Carla R$ 210 -> NULL
 ```
 
-**Dicas:**
-
-1. Duas fases: primeiro ache o menor guardando o nó E o anterior dele
-   (menor e ant_menor); depois remova como no texto.
-2. Para percorrer guardando o anterior, ande com ant e p, e quando
-   p->valor < menor->valor, faça menor = p e ant_menor = ant.
-3. Copiar uma struct inteira é uma atribuição só: *saiu = *menor.
-
 ```bash
 gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E460.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E460 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E460
-```
-
-**Exercício E461** · ★★★
-
-A lista de presentes do chá de bebê guarda o código de cada presente. A
-função "tira" deveria remover um código, mas tem QUATRO erros de
-propósito. Rode, leia o aviso do gcc e os relatórios do AddressSanitizer
-e conserte um por um até sair:
-
-
-```text
-Saída esperada depois do conserto:
-14 -> 3 -> 27 -> 9 -> NULL
-3 -> 9 -> NULL
-50 não estava na lista
-```
-
-**Dicas:**
-
-1. O gcc já avisa o primeiro ("pointer 'p' used after 'free'") e o ASan
-   confirma com "heap-use-after-free". Olhe a ordem das duas linhas depois
-   do laço: depois do free, p->prox não é mais seu.
-2. Segundo: tirar o 14 (o primeiro) faz ant->prox com ant == NULL.
-3. Mesmo tratando o primeiro, o main não fica sabendo do novo início:
-   "inicio" chegou por valor. A função precisa receber No **.
-4. Terceiro relatório: procurar o 50 cai num p NULL. Veja a ordem do &&.
-5. Resposta esperada: assinatura bool tira(No **inicio, int valor); laço
-   "while (p != NULL && p->valor != valor)"; "if (ant == NULL) *inicio =
-   p->prox; else ant->prox = p->prox;" e só então free(p). No main,
-   chame tira(&lista, ...).
-
-```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E461.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E461 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E461
 ```
 
 **Exercício E462** · ★★★
 
 O vagão do MEIO do trem precisa ir para a manutenção, e você só pode
 percorrer a lista UMA vez (sem contar os nós antes). Escreva
-
-
-```text
-bool remove_meio(No **inicio)
-```
-
-
-usando a técnica da lebre e da tartaruga: dois ponteiros saem do início;
-a tartaruga anda um nó por vez e a lebre anda dois. Quando a lebre chega
-ao fim, a tartaruga está no meio. Com quantidade par, o meio é o SEGUNDO
-dos dois do centro.
+bool remove_meio(No **inicio), com dois ponteiros que saem do início: um
+anda um nó por vez e o outro anda dois. Com quantidade par, o meio é o
+SEGUNDO dos dois do centro. No main, monte a lista 1 a 7, a lista
+10, 20, 30, 40, 50, 60 e a lista de um nó só (99), inserindo no início;
+remova o meio de cada uma e imprima as três.
 
 
 ```text
@@ -1432,15 +1060,6 @@ Saída esperada:
 NULL
 ```
 
-**Dicas:**
-
-1. Condição do laço: lebre != NULL && lebre->prox != NULL.
-2. A cada volta: ant = tartaruga; tartaruga = tartaruga->prox;
-   lebre = lebre->prox->prox.
-3. No fim, remova a tartaruga com o ant, como no texto (ant == NULL quer
-   dizer que ela é o primeiro).
-4. Resposta esperada: a saída acima (saem o 4, o 40 e o único nó, 99).
-
 ```bash
 gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E462.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E462 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E462
 ```
@@ -1449,26 +1068,21 @@ gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E462.c ~/LPEDC/11-listas/0077-lis
 
 ## 0078 · Lista ordenada
 
-A recepcionista da clínica atende o telefone o dia todo. Um paciente marca
-às 14:30, outro às 9:00, outro às 16:00, outro às 10:15. As ligações chegam
-fora de ordem, mas a agenda na tela tem que estar sempre em ordem de horário.
-Ordenar tudo de novo a cada ligação seria desperdício: cada marcação nova já
-entra no lugar certo.
+Na clínica, as ligações chegam fora de ordem, mas a agenda tem de estar
+sempre em ordem de horário. Em vez de reordenar tudo, cada marcação entra no
+lugar certo.
 
-Uma **lista ordenada** mantém os nós em ordem a cada inserção. A
-**inserção ordenada** anda pela lista com o par `ant`/`p` do assunto anterior,
-enquanto os valores de lá forem menores que o novo. Quando o laço para, `p` é
-o primeiro nó maior ou igual ao novo (ou `NULL`, se o novo é o maior), e
-`ant` é o nó que vem antes. O novo entra **entre** os dois.
+Uma **lista ordenada** mantém os nós em ordem a cada inserção. A **inserção
+ordenada** anda com o par `ant`/`p` (assunto 0077) enquanto os valores forem
+menores que o novo. Ao parar, `p` é o primeiro nó maior ou igual ao novo (ou
+`NULL`) e `ant` vem antes dele. O novo entra **entre** os dois, religando duas
+setas, nesta ordem:
 
-Encaixar é religar duas setas, nesta ordem:
+1. `novo->prox = p`;
+2. `ant->prox = novo`.
 
-1. `novo->prox = p`: o novo aponta para quem vem depois dele;
-2. `ant->prox = novo`: quem vinha antes passa a apontar para o novo.
-
-Se `ant` for `NULL`, o novo é o menor de todos e vira o início. Não existe
-caso especial para o fim: com `p == NULL`, o passo 1 grava `NULL` no
-`novo->prox`, que é o que o último precisa.
+Se `ant` for `NULL`, o novo é o menor e vira o início. O fim não é caso
+especial: com `p == NULL`, o passo 1 grava `NULL` em `novo->prox`.
 
 ```c
 No *lista_insere_ordenado(No *inicio, int valor) {
@@ -1488,19 +1102,16 @@ No *lista_insere_ordenado(No *inicio, int valor) {
 }
 ```
 
-A ordem também ajuda na **busca**: procurando um valor numa lista crescente,
-dá para desistir assim que passar dele. Procurando 11:00, a busca para no
-14:30, porque dali para frente só tem horário mais tarde.
+A ordem também ajuda na **busca**: dá para desistir ao passar do valor.
+Procurando 11:00, a busca para no 14:30.
 
-A agenda do exemplo já tem 09:00, 14:30 e 16:00 quando chega a ligação das
-10:15. O laço passa pelo 09:00 (menor) e para no 14:30, porque `14:30 <
-10:15` é falso. O novo nó primeiro aponta para o 14:30 e depois o 09:00 passa
-a apontar para ele:
+A agenda do exemplo tem 09:00, 14:30 e 16:00 quando chega a ligação das
+10:15. O laço passa pelo 09:00 e para no 14:30 (`14:30 < 10:15` é falso). O
+novo nó aponta para o 14:30 e o 09:00 aponta para ele:
 
 <p align="center"><img src="11-listas/0078-lista-ordenada/ideia.svg" alt="Diagrama da ideia: Lista ordenada" width="858"></p>
 
-O horário vira um `int` no formato hhmm (1430 é 14:30), e uma função do
-próprio exemplo formata a saída:
+O horário é um `int` hhmm (1430 é 14:30):
 
 ```c
 #include <stdio.h>
@@ -1537,31 +1148,24 @@ int main(void) {
 // 11:00 livre
 ```
 
-No fluxograma, o laço roda uma vez (passa pelo 09:00) e sai pelo Não no
-14:30. Como `ant` aponta para o 09:00, o caminho termina em `ant->prox =
-novo`. A ligação das 9:00, lá atrás, tinha ido pelo outro lado: `ant == NULL`,
-e o novo virou o início:
+No fluxograma, o laço roda uma vez e sai pelo Não no 14:30. Como `ant` é o
+09:00, o caminho termina em `ant->prox = novo`. Na ligação das 9:00, `ant ==
+NULL` e o novo virou o início:
 
 <p align="center"><img src="11-listas/0078-lista-ordenada/fluxograma.svg" alt="Fluxograma: Lista ordenada" width="575"></p>
 
-O critério de ordem está todo na comparação do `while`. Troque `p->valor < valor`
-por `strcmp(p->nome, nome) < 0` e a mesma inserção monta uma lista em ordem
-alfabética (exemplo A156).
+O critério está na comparação do `while`: com `strcmp(p->nome, nome) < 0`, a
+mesma inserção ordena por nome (exemplo A156).
 
 > [!WARNING]
-> O caso mais esquecido é o **novo menor que todos**. O laço nem roda, `ant`
-> fica `NULL`, e um `ant->prox = novo` sem o `if` derruba o programa. Teste
-> três inserções: no começo, no meio e no fim. E atenção ao `<` contra `<=`: com `<`, um valor repetido entra **antes** dos
-> iguais; com `<=`, entra **depois**, e os iguais ficam na ordem de chegada.
+> O caso mais esquecido é o **novo menor que todos**: `ant` fica `NULL` e
+> `ant->prox = novo` sem o `if` derruba o programa. Teste início, meio e fim.
+> Com `<`, um valor repetido entra **antes** dos iguais; com `<=`, **depois**.
 
 > [!TIP]
-> **Por dentro do C:** cada inserção ordenada custa O(n) no pior caso (o novo
-> é o maior e o laço anda a lista toda). Montar uma lista de n itens assim
-> custa O(n²). E a busca, mesmo parando cedo, continua O(n): não dá para
-> fazer busca binária numa lista, porque chegar no meio exige andar n/2 nós.
-> No vetor ordenado é o contrário: a busca binária é O(log n), mas inserir
-> desloca até n itens.
-
+> **Por dentro do C:** a inserção ordenada é O(n) no pior caso; montar n itens
+> custa O(n²). A busca continua O(n): chegar ao meio exige andar n/2 nós, sem
+> busca binária. No vetor ordenado é o inverso: busca O(log n), inserção O(n).
 
 > [!NOTE]
 > **Pergunta para você:** inserindo 50, 40, 30, 20 e 10, nesta ordem, quantas
@@ -1704,53 +1308,8 @@ Saída esperada:
 menor: 1, maior: 10
 ```
 
-**Dicas:**
-
-1. Toda inserção é "notas = lista_insere_ordenado(notas, valor);".
-2. Numa lista crescente, a menor é a do início: nem precisa procurar.
-3. A maior é a do último nó: ande até o nó cujo prox é NULL.
-
 ```bash
 gcc ~/LPEDC/11-listas/0078-lista-ordenada/E463.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E463 && ~/LPEDC/11-listas/0078-lista-ordenada/E463
-```
-
-**Exercício E464** · ★☆☆
-
-Teste de mesa feito pelo próprio programa. A função insere_rastreando
-abaixo é a inserção ordenada do texto. Acrescente, logo depois do while,
-uma linha que mostre o valor inserido e onde ant e p pararam (use a
-função mostra_no, que já está pronta e escreve NULL quando o ponteiro é
-NULL). O main insere 25, 10, 40, 10 e 30 e mostra a lista a cada passo.
-
-
-```text
-Saída esperada:
-25: ant NULL, p NULL
-25 -> NULL
-10: ant NULL, p 25
-10 -> 25 -> NULL
-40: ant 25, p NULL
-10 -> 25 -> 40 -> NULL
-10: ant NULL, p 10
-10 -> 10 -> 25 -> 40 -> NULL
-30: ant 25, p 40
-10 -> 10 -> 25 -> 30 -> 40 -> NULL
-```
-
-
-Por fim, troque "p->valor < valor" por "p->valor <= valor" e rode de novo:
-a linha do segundo 10 tem que virar "10: ant 10, p 25" (o novo 10 entra
-DEPOIS do primeiro, não antes). Deixe a versão com < no arquivo final.
-
-**Dicas:**
-
-1. printf("%d: ", valor); mostra_no("ant", ant); printf(", ");
-   mostra_no("p", p); printf("\n");
-2. ant == NULL quer dizer "o novo vira o início"; p == NULL quer dizer
-   "o novo vai para o fim".
-
-```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/E464.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E464 && ~/LPEDC/11-listas/0078-lista-ordenada/E464
 ```
 
 **Exercício E465** · ★★☆
@@ -1774,15 +1333,6 @@ depois: 1 -> 3 -> 5 -> 8 -> NULL
 3 repetidos removidos
 ```
 
-**Dicas:**
-
-1. Na lista ordenada, os repetidos ficam VIZINHOS: basta comparar p com
-   p->prox.
-2. Se p->valor == p->prox->valor, tire o p->prox (religue e dê free) e NÃO
-   avance o p: pode haver um terceiro igual.
-3. Por que a função não precisa de No **? O primeiro nó nunca sai: quando
-   há repetidos, sai sempre o de trás.
-
 ```bash
 gcc ~/LPEDC/11-listas/0078-lista-ordenada/E465.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E465 && ~/LPEDC/11-listas/0078-lista-ordenada/E465
 ```
@@ -1799,8 +1349,10 @@ linha 202: 10 -> 25 -> 40 -> 90
 ```
 
 
-Escreva No *intercala(No *a, No *b), que junta as duas numa lista só,
-também crescente, SEM criar nenhum nó novo: só religando os que existem.
+Monte as duas com lista_insere_ordenado (entrando fora de ordem) e escreva
+No *intercala(No *a, No *b), que junta as duas numa lista só, também
+crescente, SEM criar nenhum nó novo: só religando os que existem. Mostre
+o resultado.
 
 
 ```text
@@ -1808,57 +1360,19 @@ Saída esperada:
 0 -> 10 -> 25 -> 25 -> 40 -> 50 -> 75 -> 90 -> NULL
 ```
 
-**Dicas:**
-
-1. Comece por um nó-cabeça local (No cabeca;) e um ponteiro "fim" que
-   aponta para ele. Assim o primeiro nó não é caso especial.
-2. Enquanto as duas tiverem nós: o menor dos dois inícios vai para
-   fim->prox, e a lista de onde ele saiu anda.
-3. Quando uma acabar, pendure a outra inteira no fim: fim->prox = a ou b.
-4. Depois de intercalar, libere só a
-   lista resultado: os nós de a e b agora são dela.
-
 ```bash
 gcc ~/LPEDC/11-listas/0078-lista-ordenada/E466.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E466 && ~/LPEDC/11-listas/0078-lista-ordenada/E466
 ```
 
-**Exercício E467** · ★★★
-
-O ranking da corrida de 5 km guarda os tempos em segundos, do mais rápido
-para o mais lento. A função insere_ordem e o main têm TRÊS erros de
-propósito. Rode, leia os relatórios do AddressSanitizer e conserte até
-sair:
-
-
-```text
-Saída esperada depois do conserto:
-1290 -> 1385 -> 1520 -> 1610 -> NULL
-```
-
-**Dicas:**
-
-1. O primeiro relatório é um SEGV logo na primeira inserção, com a lista
-   vazia. Leia o while: quem é testado primeiro?
-2. O segundo aparece quando o laço nem anda (lista vazia, ou o novo tempo
-   é o MENOR de todos): ant continua NULL e a função faz ant->prox.
-3. O terceiro não quebra nada, mas a lista mostra "NULL" e o ASan acusa
-   vazamento: olhe como o main chama insere_ordem.
-4. Resposta esperada: "while (p != NULL && p->valor < valor)"; "if (ant ==
-   NULL) return novo;" antes do ant->prox = novo; e no main,
-   "ranking = insere_ordem(ranking, tempos[i]);".
-
-```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/E467.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E467 && ~/LPEDC/11-listas/0078-lista-ordenada/E467
-```
-
 **Exercício E468** · ★★★
 
-Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4.
-Escreva No *ordena(No *inicio, int *passos), que deixa a lista em ordem
-crescente pelo método da inserção, SÓ RELIGANDO os nós: nada de malloc,
-nada de free, nada de trocar valores entre nós. Para medir o custo, some
-1 em *passos cada vez que o laço de encaixe anda um nó. O main já testa a
-lista dos pedidos e o pior caso, uma lista que já chega crescente.
+Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4 (monte
+inserindo no início 4, 9, 1, 7 e 3). Escreva No *ordena(No *inicio, int
+*passos), que deixa a lista em ordem crescente pelo método da inserção,
+SÓ RELIGANDO os nós: nada de malloc, nada de free, nada de trocar valores
+entre nós. Para medir o custo, some 1 em *passos cada vez que o laço de
+encaixe anda um nó. Mostre antes, depois e os passos para a lista dos
+pedidos e para o pior caso, uma lista que já chega crescente 1 a 5.
 
 
 ```text
@@ -1869,18 +1383,6 @@ antes:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
 depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
 ```
 
-**Dicas:**
-
-1. Comece uma lista "ordenada" vazia (NULL). Enquanto a original tiver nós,
-   DESENGATE o primeiro dela (guarde o resto antes!).
-2. Encaixe o nó desengatado na ordenada com o mesmo laço ant/p da
-   inserção ordenada, só que sem malloc: o nó já existe. O (*passos)++ vai
-   dentro desse laço.
-3. Na lista crescente, cada nó novo é o
-   maior e o encaixe percorre a ordenada inteira: 0 + 1 + 2 + 3 + 4 = 10,
-   O(n²) no pior caso. A vantagem sobre o vetor é que encaixar não
-   desloca ninguém.
-
 ```bash
 gcc ~/LPEDC/11-listas/0078-lista-ordenada/E468.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E468 && ~/LPEDC/11-listas/0078-lista-ordenada/E468
 ```
@@ -1889,25 +1391,20 @@ gcc ~/LPEDC/11-listas/0078-lista-ordenada/E468.c ~/LPEDC/11-listas/0078-lista-or
 
 ## 0079 · Lista dupla
 
-Na Estrada de Ferro Carajás, um trem de minério para no pátio de manobras.
-O terceiro vagão, com 87 toneladas, está com o freio travado e precisa sair.
-O manobrista vai direto até ele, solta o engate da frente e o de trás, e
-engata o segundo vagão no quarto. Não precisa voltar até a locomotiva para
-descobrir quem vem antes do vagão quebrado: está vendo.
+No pátio, o terceiro vagão de um trem de minério está com o freio travado. O
+manobrista solta os dois engates dele e liga o segundo vagão ao quarto, sem
+voltar à locomotiva para descobrir quem vem antes.
 
-Na lista simples, o nó só conhece o próximo. Para remover um nó, você
-precisa do anterior, e achar o anterior custa percorrer desde o início. Na
-**lista duplamente encadeada** (no Cormen, **duplamente ligada**, com os
-campos `next` e `prev`), cada nó guarda **dois** ponteiros: `prox` (o
-próximo) e `ant` (o anterior). Com isso:
+Na lista simples, remover exige o anterior, e achá-lo custa percorrer desde o
+início. Na **lista duplamente encadeada** (no
+Cormen, **duplamente ligada**, com `next` e `prev`), cada nó guarda `prox` e
+`ant`. Assim:
 
-- dá para andar nos **dois sentidos**: do início para o fim e do fim para o
-  início;
+- dá para andar nos **dois sentidos**;
 - dá para remover um nó conhecendo **só ele**, em O(1);
-- guardando também o ponteiro para o **último** nó, inserir no fim vira O(1).
+- com um ponteiro para o **último** nó, inserir no fim vira O(1).
 
-Por isso a lista desta pasta não é um `No *` solto, e sim uma struct que
-guarda as duas pontas e o tamanho e pode morar numa variável do `main`:
+A lista desta pasta é uma struct com as duas pontas e o tamanho:
 
 ```c
 typedef struct no {
@@ -1923,12 +1420,11 @@ typedef struct {
 } Lista;
 ```
 
-A lista dupla tem uma regra que nunca pode quebrar: para todo nó `p` que não
-é o último, `p->prox->ant == p`. Toda operação mexe nas setas **aos pares**,
-e o erro mais comum é esquecer uma delas.
+Uma regra não pode quebrar: para todo nó `p` que não é o último,
+`p->prox->ant == p`. As setas mudam **aos pares**; o erro comum é esquecer uma.
 
-Remover o nó `p` é desviar as duas setas que chegam nele, cada uma com o seu
-caso de borda:
+Remover `p` desvia as duas setas que chegam nele, cada uma com seu caso de
+borda:
 
 ```c
 void lista_remove_no(Lista *l, No *p) {
@@ -1941,9 +1437,8 @@ void lista_remove_no(Lista *l, No *p) {
 }
 ```
 
-O trem do exemplo tem os vagões de 98, 105, 87 e 110 toneladas.
-Com `p` no vagão de 87, a seta de cima faz o 105 apontar para o 110, e a de
-baixo faz o 110 apontar de volta para o 105. Ninguém precisou ser procurado:
+O trem tem vagões de 98, 105, 87 e 110 toneladas. Com `p` no de 87, o 105
+passa a apontar para o 110, e o 110 aponta de volta para o 105:
 
 <p align="center"><img src="11-listas/0079-lista-dupla/ideia.svg" alt="Diagrama da ideia: Lista dupla" width="858"></p>
 
@@ -1984,32 +1479,25 @@ int main(void) {
 // do fim:        110 <-> 105 <-> 98
 ```
 
-O fluxograma faz duas perguntas independentes, uma para cada ponta. O vagão de 87 tem anterior e tem seguinte, então o caminho passa pelos
-dois Não. Para remover o primeiro vagão, a primeira pergunta daria Sim; para
-o último, a segunda:
+O fluxograma faz duas perguntas, uma por ponta. O vagão de 87 passa pelos dois
+Não. Para o primeiro vagão, a primeira daria Sim; para o último, a segunda:
 
 <p align="center"><img src="11-listas/0079-lista-dupla/fluxograma.svg" alt="Fluxograma: Lista dupla" width="502"></p>
 
-Imprimir de trás para frente é o mesmo `for` de sempre, começando em
-`l->fim` e andando com `p = p->ant`. O exemplo A158 usa essa ida e volta para
-fazer um controle remoto com "canal seguinte" e "canal anterior".
+Imprimir de trás para frente é o `for` de sempre, de `l->fim` com `p =
+p->ant`. O exemplo A158 usa a ida e volta num controle remoto ("canal
+seguinte", "canal anterior").
 
 > [!WARNING]
-> Lista dupla com uma seta faltando **parece certa**. Se a inserção esquecer o
-> `ant`, andar para frente funciona e só o caminho de volta sai errado, às
-> vezes muito depois, em outra parte do programa. Teste imprimindo **nos dois
-> sentidos**. E na remoção, os dois casos de borda são
-> obrigatórios: `p->ant->prox` com `p` no primeiro nó é acessar `NULL`, e
-> esquecer de atualizar o `fim` deixa ele apontando para memória liberada.
+> Com uma seta faltando, a lista dupla **parece certa**: se a inserção esquecer
+> o `ant`, só a volta sai errada. Imprima **nos dois sentidos**. Na remoção,
+> os dois casos de borda são obrigatórios: `p->ant->prox` no primeiro nó
+> acessa `NULL`, e esquecer o `fim` o deixa apontando para memória liberada.
 
 > [!TIP]
-> **Por dentro do C:** num PC de 64 bits, `sizeof(No)` passa de 16 para 24
-> bytes: 4 do `int`, 4 de preenchimento e dois ponteiros de 8. É 50% a mais de
-> memória por nó, o preço das remoções em O(1) e da volta. Existe um truque
-> antigo para economizar: guardar num campo só o **XOR** dos dois endereços
-> (`ant ^ prox`, convertidos para `uintptr_t`). Quem vem andando de um lado
-> conhece um dos vizinhos e recupera o outro com mais um XOR. Funciona, mas
-> nenhum depurador entende, e o ganho raramente compensa.
+> **Por dentro do C:** em 64 bits, `sizeof(No)` passa de 16 para 24 bytes (4 do
+> `int`, 4 de preenchimento, dois ponteiros de 8): 50% a mais por nó, o preço
+> das remoções em O(1) e da volta.
 
 > [!NOTE]
 > **Pergunta para você:** se `lista_insere_fim` esquecesse a linha `novo->ant =
@@ -2141,50 +1629,8 @@ Saída esperada:
 últimos 3: 294 t
 ```
 
-**Dicas:**
-
-1. trem.fim é o último nó; p->ant anda uma casa para trás.
-2. Um for com contador: for (p = trem.fim; p != NULL && k < 3; p = p->ant).
-3. Numa lista simples, você teria que
-   andar a lista inteira para achar os 3 últimos.
-
 ```bash
 gcc ~/LPEDC/11-listas/0079-lista-dupla/E469.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E469 && ~/LPEDC/11-listas/0079-lista-dupla/E469
-```
-
-**Exercício E470** · ★☆☆
-
-Na lista dupla, quem acha um nó acha também os dois vizinhos dele, sem
-percorrer de novo. O main abaixo já monta a lista misturando inserções no
-início e no fim. Escreva a função
-
-
-```text
-void mostra_vizinhos(const Lista *l, int valor)
-```
-
-
-que busca o valor com lista_busca e mostra quem vem antes e quem vem
-depois dele ("nenhum" nas pontas), ou avisa que ele não está na lista.
-
-
-```text
-Saída esperada:
-4 <-> 2 <-> 1 <-> 3
-4: antes nenhum, depois 2
-1: antes 2, depois 3
-3: antes 1, depois nenhum
-9: não está na lista
-```
-
-**Dicas:**
-
-1. Desenhe os nós com as duas setas antes: a ordem saiu 4 2 1 3.
-2. Achado o nó p, o vizinho de trás é p->ant e o da frente é p->prox.
-   Teste cada um contra NULL antes de ler o valor.
-
-```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/E470.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E470 && ~/LPEDC/11-listas/0079-lista-dupla/E470
 ```
 
 **Exercício E471** · ★★☆
@@ -2212,21 +1658,14 @@ arara: sim
 ab: não
 ```
 
-**Dicas:**
-
-1. monta: for (int i = 0; palavra[i] != '\0'; i++) lista_insere_fim(...).
-2. eh_palindromo: e = l->inicio, d = l->fim, e repita l->tamanho / 2
-   vezes: compare, e = e->prox, d = d->ant.
-3. Use a mesma Lista para todas as palavras, com lista_libera entre uma e
-   outra (ela deixa a lista vazia de novo).
-
 ```bash
 gcc ~/LPEDC/11-listas/0079-lista-dupla/E471.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E471 && ~/LPEDC/11-listas/0079-lista-dupla/E471
 ```
 
 **Exercício E472** · ★★☆
 
-Engatar um vagão no meio do trem mexe em QUATRO setas. Escreva
+Engatar um vagão no meio do trem mexe em QUATRO setas. Monte o trem 98, 105,
+87, 110 com lista_insere_fim e escreva
 
 
 ```text
@@ -2234,10 +1673,10 @@ bool insere_depois(Lista *l, No *p, int valor)
 ```
 
 
-que cria um nó com o valor logo depois do nó p (que está na lista).
-Cuidado com p == l->fim. No trem 98, 105, 87, 110, engate um vagão de 99 t
-depois do de 105 e um de 70 t depois do último. Mostre nos dois sentidos:
-se uma seta ficou errada, um dos sentidos denuncia.
+que cria um nó com o valor logo depois do nó p (que está na lista), sem
+esquecer o caso em que p é o último. Engate um vagão de 99 t depois do de
+105 e um de 70 t depois do último. Mostre a lista nos dois sentidos
+(lista_imprime e lista_imprime_reverso) e a quantidade de vagões.
 
 
 ```text
@@ -2247,50 +1686,8 @@ Saída esperada:
 6 vagões
 ```
 
-**Dicas:**
-
-1. O novo aponta para os vizinhos: novo->ant = p; novo->prox = p->prox.
-2. Os vizinhos apontam para o novo: se p->prox existe, p->prox->ant =
-   novo; senão o novo é o fim (l->fim = novo). Por último, p->prox = novo.
-3. Por que p->prox = novo por último? Se vier antes, você perde o
-   caminho para o antigo seguinte.
-4. Não esqueça do l->tamanho++. Resposta esperada: a saída acima.
-
 ```bash
 gcc ~/LPEDC/11-listas/0079-lista-dupla/E472.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E472 && ~/LPEDC/11-listas/0079-lista-dupla/E472
-```
-
-**Exercício E473** · ★★★
-
-As funções engata_inicio e desengata montam e desmontam um trem, mas cada
-uma esquece UMA seta de propósito. Lista dupla com seta faltando é traiçoeira:
-andando para frente tudo parece certo. Rode, compare os dois sentidos,
-leia o relatório do AddressSanitizer e conserte as duas funções.
-
-
-```text
-Saída esperada depois do conserto:
-98 <-> 105 <-> 87
-87 <-> 105 <-> 98
-98 <-> 105
-105 <-> 98
-```
-
-**Dicas:**
-
-1. A segunda linha mostra só "87": de trás para frente, o 87 não sabe quem
-   vem antes dele. Quem deveria ter preenchido o ant do antigo primeiro?
-   (A terceira linha sai "(vazia)" pelo mesmo motivo: com ant NULL, o
-   desengata acha que o 87 é o primeiro.)
-2. Conserte e rode de novo: agora é "heap-use-after-free" no
-   lista_imprime_reverso. Tirar o último nó deixou o fim apontando para o
-   nó liberado.
-3. Resposta esperada: em engata_inicio, "if (l->inicio != NULL)
-   l->inicio->ant = novo;"; em desengata, "if (p->prox == NULL) l->fim =
-   p->ant; else p->prox->ant = p->ant;".
-
-```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/E473.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E473 && ~/LPEDC/11-listas/0079-lista-dupla/E473
 ```
 
 **Exercício E474** · ★★★
@@ -2308,29 +1705,14 @@ na posição do cursor custa O(1). Simule o teclado com a string de teclas
 onde letra insere na posição do cursor, '<' anda uma letra para a
 esquerda, '>' anda para a direita e '#' apaga a letra à esquerda do
 cursor (o backspace). Nas pontas, '<', '>' e '#' não fazem nada. No fim,
-mostre o texto com uma '|' onde está o cursor.
+mostre o texto com uma '|' onde está o cursor. Use uma lista dupla de
+letras, com a struct escrita por você.
 
 
 ```text
 Saída esperada:
 texto: programa|
 ```
-
-
-Escreva tudo neste arquivo, com uma struct sua (por exemplo
-struct letra { char c; struct letra *ant, *prox; }).
-
-**Dicas:**
-
-1. Use um nó-cabeça (uma letra de mentira no começo). O cursor é um
-   ponteiro para a letra que está À ESQUERDA dele; no começo do texto, ele
-   aponta para a cabeça. Assim nunca existe "cursor NULL".
-2. Inserir: o novo entra depois do cursor (as quatro setas do E472) e o
-   cursor passa para o novo. Apagar: se o cursor não é a cabeça, tire o nó
-   do cursor e volte o cursor para o ant dele.
-3. Para conferir no caminho: depois de "progamr#" o texto é "progam|";
-   "<<" deixa "prog|am"; o "r" faz "progr|am"; ">>" e "a" terminam.
-4. Resposta esperada: texto: programa|
 
 ```bash
 gcc ~/LPEDC/11-listas/0079-lista-dupla/E474.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E474 && ~/LPEDC/11-listas/0079-lista-dupla/E474
@@ -2340,22 +1722,17 @@ gcc ~/LPEDC/11-listas/0079-lista-dupla/E474.c ~/LPEDC/11-listas/0079-lista-dupla
 
 ## 0080 · Lista circular
 
-Na churrascaria de rodízio, o garçom da pizza passa de mesa em mesa: 3, 7,
-12, 15. Quando serve a última, ele não para: volta para a mesa 3 e começa
-outra rodada. Para ele, não existe "fim da fila", só "a próxima mesa".
+O garçom do rodízio serve as mesas 3, 7, 12 e 15 e, na última, volta à 3: para
+ele não existe fim, só "a próxima mesa".
 
-Uma **lista circular** é uma lista encadeada em que o último nó, em vez de
-apontar para `NULL`, aponta de volta para o **primeiro**. Os nós formam um
-anel. Ela serve para qualquer rodízio: a vez de cada jogador num jogo de
-tabuleiro, a playlist no "repetir tudo", os programas que dividem a CPU, o
-revezamento de motoristas numa viagem. Na lista dupla, o círculo fecha nos
-dois sentidos: o `ant` do primeiro aponta para o último. É a forma que o
-Cormen usa, com uma sentinela no meio do anel (assunto 0174).
+Uma **lista circular** é uma lista encadeada em que o último nó aponta para o
+**primeiro**, e não para `NULL`: os nós formam um anel. Serve para rodízios,
+como a vez dos jogadores e a divisão da CPU. Na lista dupla, o círculo fecha
+nos dois sentidos, como no Cormen, com uma sentinela (assunto 0174).
 
-Num anel, convém guardar o ponteiro para o **último** nó. Dele você chega às
-duas pontas em um passo: o último é `ultimo` e o primeiro é `ultimo->prox`.
-Com isso, inserir no início **e** no fim custa O(1). Inserir no fim é inserir
-no início e declarar que o novo é o último.
+Convém guardar o ponteiro para o **último** nó: o primeiro é `ultimo->prox`.
+Assim, inserir no início **e** no fim custa O(1); inserir no fim é inserir no
+início e declarar o novo como último.
 
 ```c
 No *lista_insere_inicio(No *ultimo, int valor) {
@@ -2373,15 +1750,12 @@ No *lista_insere_fim(No *ultimo, int valor) {
 }
 ```
 
-Percorrer muda. Não há `NULL` para avisar que acabou: você para quando
-**voltar ao ponto de partida**. Como o primeiro passo já começa no
-ponto de partida, o laço certo é o **do-while** (assunto 0021): ele roda o
-corpo uma vez antes de testar. E a lista vazia (`ultimo == NULL`) precisa ser
-tratada antes, porque não tem por onde começar.
+Sem `NULL`, percorrer para ao **voltar ao ponto de partida**. Como o primeiro
+passo já começa nele, o laço certo é o **do-while** (assunto 0021), que roda
+o corpo antes de testar. A lista vazia (`ultimo == NULL`) é tratada antes.
 
-No exemplo, as quatro mesas formam o anel, o ponteiro da lista fica na mesa
-15 (a última) e a mesa 3 é `ultimo->prox`. O garçom serve 6
-vezes seguidas sem testar nada, porque sempre existe uma próxima:
+No exemplo, o ponteiro da lista está na mesa 15 e a mesa 3 é `ultimo->prox`.
+O garçom serve 6 vezes sem testar nada:
 
 <p align="center"><img src="11-listas/0080-lista-circular/ideia.svg" alt="Diagrama da ideia: Lista circular" width="902"></p>
 
@@ -2418,34 +1792,26 @@ int main(void) {
 // 3 -> 7 -> 15 -> (volta ao 3)
 ```
 
-O fluxograma é o do `lista_imprime`, e a pergunta da lista vazia vem
-primeiro. Depois, `p` começa na mesa 3 e o laço mostra, anda e só então
-pergunta "já voltei ao primeiro?". Com as 4 mesas, a resposta é Não três
-vezes e Sim na quarta:
+O fluxograma é o do `lista_imprime`: testa a lista vazia, põe `p` na mesa 3 e
+repete mostrar, andar e perguntar "já voltei ao primeiro?". Com 4 mesas, a
+resposta é Não três vezes e Sim na quarta:
 
 <p align="center"><img src="11-listas/0080-lista-circular/fluxograma.svg" alt="Fluxograma: Lista circular" width="602"></p>
 
-O problema clássico da lista circular é o **problema de Josephus**: pessoas em roda, e
-a cada k passos uma sai. Quem sobra? O exemplo A160 resolve com a batata
-quente, tirando nós do anel até sobrar um que aponta para si mesmo.
+No **problema de Josephus**, pessoas em roda eliminam uma a cada k passos. O
+exemplo A160 o resolve com a batata quente, tirando nós do anel até sobrar
+um que aponta para si mesmo.
 
 > [!WARNING]
-> Todo laço de lista que você escreveu até aqui termina em `p != NULL`. Numa
-> lista circular, `p` **nunca** vira `NULL`: o laço dá voltas para sempre.
-> No `libera` é pior: depois de liberar o último, o "seguinte" dele é o
-> primeiro, que você já liberou. Para liberar, **corte o círculo** primeiro
-> (`ultimo->prox = NULL`) e trate como lista comum. E cuidado com o `while`
-> no lugar do `do-while`: `while (p != ultimo->prox)` começando no primeiro
-> não roda nem uma vez.
+> Numa lista circular, `p` **nunca** vira `NULL`: um laço `p != NULL` não
+> termina. No `libera`, o "seguinte" do último é o primeiro, já liberado:
+> **corte o círculo** antes (`ultimo->prox = NULL`) e trate como lista comum.
+> E um `while (p != ultimo->prox)` começando no primeiro não roda nem uma vez.
 
 > [!TIP]
-> **Por dentro do C:** o nó é o mesmo da lista simples, 16 bytes. Não há
-> custo de memória a mais: o círculo é o último `prox` apontando para um
-> endereço em vez de `NULL`. E duas operações saem de graça: **girar** a roda é
-> mudar um ponteiro (`ultimo = ultimo->prox`), sem mexer em nó nenhum; e
-> **juntar** duas listas circulares é trocar dois ponteiros, O(1). O
-> escalonador de um sistema operacional faz isso: o processo da
-> frente roda um pouquinho e, se não terminou, a roda gira.
+> **Por dentro do C:** o nó é o da lista simples, 16 bytes. **Girar** a roda é
+> `ultimo = ultimo->prox`, e **juntar** duas listas circulares é trocar dois
+> ponteiros, O(1).
 
 > [!NOTE]
 > **Pergunta para você:** se a lista guardasse o ponteiro para o **primeiro**
@@ -2573,63 +1939,17 @@ depois de 12 passadas, a cuia está com a pessoa 3
 conferindo com %: pessoa 3
 ```
 
-**Dicas:**
-
-1. A pessoa 1 é roda->prox (a roda guarda o último).
-2. Cada passada é p = p->prox. Numa lista circular o laço nunca encontra
-   NULL: não precisa testar nada.
-3. A conta: a pessoa 1 está na posição 0; depois de k passadas, a posição
-   é k % 5, e a pessoa é a posição + 1.
-
 ```bash
 gcc ~/LPEDC/11-listas/0080-lista-circular/E475.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E475 && ~/LPEDC/11-listas/0080-lista-circular/E475
-```
-
-**Exercício E476** · ★☆☆
-
-Girar uma roda circular não mexe em nenhuma seta: basta mudar QUEM é o
-último. Escreva a função
-
-
-```text
-No *gira(No *ultimo, int k)
-```
-
-
-que anda k nós com o ponteiro do último e devolve o novo último (assim o
-primeiro passa a ser o que estava k casas à frente). O main já monta a
-roda. Complete o main para: mostrar a roda e o primeiro e o último; girar
-2 casas e mostrar; tirar o 10 e mostrar; e mostrar quantos nós sobraram.
-
-
-```text
-Saída esperada:
-5 -> 10 -> 20 -> 30 -> (volta ao 5)
-primeiro 5, último 30
-girou 2: 20 -> 30 -> 5 -> 10 -> (volta ao 20)
-sem o 10: 20 -> 30 -> 5 -> (volta ao 20)
-3 nós
-```
-
-**Dicas:**
-
-1. A lista é guardada pelo ponteiro para o ÚLTIMO: o primeiro é u->prox.
-2. gira é um for de k voltas com ultimo = ultimo->prox. Na lista vazia
-   (NULL), devolva NULL sem andar.
-3. Depois de girar, guarde o resultado: u = gira(u, 2);
-
-```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/E476.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E476 && ~/LPEDC/11-listas/0080-lista-circular/E476
 ```
 
 **Exercício E477** · ★★☆
 
 Rita, Davi e Lia vão de carro de Belo Horizonte a Vitória e voltam: são
-1000 km de estrada.
-Eles revezam ao volante, nesta ordem, cada um dirigindo um trecho de
-150 km (o último trecho é o que sobrar). Escreva o programa com uma lista
-circular de structs (nome e km dirigidos) e mostre cada trecho e, no fim,
-quanto cada um dirigiu.
+1000 km de estrada. Eles revezam ao volante, nesta ordem, cada um
+dirigindo um trecho de 150 km (o último trecho é o que sobrar). Com uma
+lista circular de structs (nome e km dirigidos), mostre cada trecho e, no
+fim, quanto cada um dirigiu.
 
 
 ```text
@@ -2646,19 +1966,6 @@ Davi: 300 km
 Lia: 300 km
 ```
 
-
-Escreva tudo neste arquivo, com uma struct sua (por exemplo
-struct motorista { char nome[20]; int km; struct motorista *prox; }).
-
-**Dicas:**
-
-1. Monte a roda com inserção no fim guardando o último, como no lista.c.
-2. O laço da viagem: enquanto faltar km, o trecho é 150 ou o que falta (o
-   menor dos dois); some no km de quem dirige e passe para o próximo.
-3. Para o resumo, uma volta com do-while a partir do primeiro.
-4. Para liberar, corte o círculo (ultimo->prox = NULL) e libere como lista
-   comum. Resposta esperada: a saída acima.
-
 ```bash
 gcc ~/LPEDC/11-listas/0080-lista-circular/E477.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E477 && ~/LPEDC/11-listas/0080-lista-circular/E477
 ```
@@ -2666,16 +1973,12 @@ gcc ~/LPEDC/11-listas/0080-lista-circular/E477.c ~/LPEDC/11-listas/0080-lista-ci
 **Exercício E478** · ★★☆
 
 Dois salões do restaurante vão virar um só. Cada salão é uma lista
-circular de mesas, guardada pelo último nó. Escreva
-
-
-```text
-No *concatena(No *ult_a, No *ult_b)
-```
-
-
-que emenda b depois de a e devolve o último da lista nova, em O(1): sem
-percorrer nada, só trocando ponteiros. Trate as listas vazias.
+circular de mesas, guardada pelo último nó: o salão A tem as mesas 1, 2 e
+3 e o B tem 10 e 20 (monte com lista_insere_fim). Escreva
+No *concatena(No *ult_a, No *ult_b), que emenda b depois de a e devolve o
+último da lista nova, em O(1): sem percorrer nada, só trocando ponteiros.
+Trate as listas vazias. Mostre A, B, a junção e a junção com uma lista
+vazia (NULL). No fim, libere a lista juntada uma vez só.
 
 
 ```text
@@ -2685,17 +1988,6 @@ B: 10 -> 20 -> (volta ao 10)
 juntas: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
 com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
 ```
-
-**Dicas:**
-
-1. Desenhe os dois círculos. Quem precisa mudar? O último de a, que
-   passa a apontar para o primeiro de b, e o último de b, que passa a
-   apontar para o primeiro de a.
-2. Guarde o primeiro de a (ult_a->prox) antes de mexer.
-3. O último da lista nova é o último de b. Se uma das listas for NULL,
-   devolva a outra.
-4. Com ponteiro para o PRIMEIRO, você
-   teria que andar até o último de cada lista: O(n).
 
 ```bash
 gcc ~/LPEDC/11-listas/0080-lista-circular/E478.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E478 && ~/LPEDC/11-listas/0080-lista-circular/E478
@@ -2707,7 +1999,7 @@ O sistema operacional divide a CPU entre os programas com o escalonamento
 round-robin: cada processo roda no máximo um QUANTUM de tempo e vai para
 o fim da fila; quem termina sai da roda. Simule com uma lista circular de
 processos (id e tempo que falta), quantum 2, e os processos P1 (precisa de
-5 unidades), P2 (2) e P3 (4), chegando nessa ordem no tempo 0.
+5 unidades), P2 (2) e P3 (4), chegando nessa ordem no tempo 0. A struct é sua.
 
 
 ```text
@@ -2720,86 +2012,35 @@ t=8..10: P3 (terminou)
 t=10..11: P1 (terminou)
 ```
 
-
-Escreva tudo neste arquivo, com uma struct sua.
-
-**Dicas:**
-
-1. Guarde a roda pelo último nó, como no lista.c. Quem roda é sempre
-   ultimo->prox, o primeiro.
-2. A cada vez: fatia = menor entre o quantum e o que falta. Some a fatia
-   no relógio e tire do processo.
-3. Se o processo terminou, tire ele da roda (ultimo->prox = p->prox,
-   free, e cuidado se ele era o único). Se não terminou, ele vai para o
-   fim: basta fazer ultimo = p. Girar a roda é mudar um ponteiro.
-
 ```bash
 gcc ~/LPEDC/11-listas/0080-lista-circular/E479.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E479 && ~/LPEDC/11-listas/0080-lista-circular/E479
-```
-
-**Exercício E480** · ★★★
-
-A escala de plantão do hospital é circular: depois do último enfermeiro,
-volta o primeiro. As duas funções deste programa têm erros de propósito.
-Rode, compare com a saída esperada e leia o relatório do AddressSanitizer.
-Conserte as duas funções e rode de novo até a saída bater.
-
-
-```text
-Saída esperada depois do conserto:
-escala: 101 102 103 104
-4 enfermeiros
-```
-
-**Dicas:**
-
-1. A escala sai sem o 104. O while de mostra_escala para quando p chega
-   no último, antes de imprimir ele. Uma volta completa se faz com
-   do-while, parando quando p volta ao primeiro.
-2. O ASan acusa "heap-use-after-free" em libera_escala: depois de liberar
-   o último, o "seguinte" dele é o primeiro, que já foi liberado. Nenhum
-   prox é NULL! Corte o círculo antes (ultimo->prox = NULL).
-3. Resposta esperada: a saída acima, sem relatório do ASan. Na circular,
-   todo nó tem um próximo de verdade: um laço "while (p != NULL)" nunca
-   para sozinho (ou, como aqui, anda por memória já liberada).
-
-```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/E480.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E480 && ~/LPEDC/11-listas/0080-lista-circular/E480
 ```
 
 ---
 
 ## 0081 · Juntando tudo
 
-Viagem de carro, celular no painel, a playlist tocando. Alguém pula duas
-músicas, outra pessoa tira aquela que ninguém aguenta mais, e quando a última
-acaba, o modo "repetir tudo" volta para a primeira. Por trás desse player está
-quase tudo deste módulo: uma lista dupla (anterior e próxima), busca e
-remoção pelo título, um cursor que anda e, no repetir, a volta da lista
-circular.
+Num player, você pula faixas, remove uma e, no "repetir tudo", a última volta à
+primeira. Ele reúne o módulo: lista dupla, busca e remoção, um cursor e a
+volta da lista circular.
 
-O programa do módulo é um **TAD playlist** completo, em `playlist.h` e
-`playlist.c`. Desta vez os nós ficam **escondidos** de novo: quem usa a
-playlist vê só a struct `Musica` (título, artista, segundos) e as operações.
-Lá dentro, no `.c`, cada nó (`Faixa`) guarda uma `Musica` e os ponteiros
-`ant` e `prox`, e a `struct playlist` guarda `inicio`, `fim`, `atual` (a
-música que está tocando), `tamanho` e o `bool repetir`.
-
+O **TAD playlist** (`playlist.h` e `playlist.c`) esconde os nós: quem o usa vê
+a struct `Musica` (título, artista, segundos) e as operações. No `.c`, cada nó
+(`Faixa`) guarda uma `Musica`, `ant` e `prox`; a `struct playlist` guarda
+`inicio`, `fim`, `atual` (a música que toca), `tamanho` e o `bool repetir`.
 Cada peça do módulo aparece num lugar:
 
-- **adicionar** é a inserção no fim da lista dupla (0079), com o `fim`
-  guardado para custar O(1);
-- **remover pelo título** é a busca com `strcmp` (0077) seguida da remoção
-  dupla, com um cuidado novo: se a música removida era a que tocava, o
-  `atual` passa para a seguinte (ou para a anterior, se era a última);
-- **próxima** e **anterior** andam com `prox` e `ant`; na ponta, com repetir
-  ligado, dão a volta como numa lista circular (0080);
-- **salvar** e **carregar** usam arquivo texto (módulo 09): uma música por
-  linha, no formato `titulo;artista;segundos`, lida com `fgets` e `sscanf`;
-- **para cada** recebe um ponteiro para função e um `void *` (0050 e 0051),
-  e assim quem usa a playlist percorre as músicas sem ver os nós.
+- **adicionar**: inserção no fim da lista dupla (0079), O(1) com `fim`;
+- **remover pelo título**: busca com `strcmp` (0077) e remoção dupla. Se era
+  a atual, o `atual` vai para a seguinte (ou a anterior, se era a última);
+- **próxima** e **anterior**: `prox` e `ant`; com repetir ligado, dão a volta
+  nas pontas como numa lista circular (0080);
+- **salvar** e **carregar**: arquivo texto (módulo 09), uma música por linha,
+  `titulo;artista;segundos`, com `fgets` e `sscanf`;
+- **para cada**: recebe um ponteiro para função e um `void *` (0050 e 0051),
+  sem expor os nós.
 
-O "repetir" mora numa função só:
+O "repetir" mora numa função:
 
 ```c
 const Musica *playlist_proxima(Playlist *p) {
@@ -2811,13 +2052,12 @@ const Musica *playlist_proxima(Playlist *p) {
 }
 ```
 
-A lista **não** é circular de verdade: o último `prox` continua `NULL`. A volta é uma decisão da função, ligada ou desligada por um `bool`.
-Assim o resto do código (imprimir, liberar, salvar) continua com o `for` de
-sempre, sem risco de laço infinito.
+A lista **não** é circular: o último `prox` continua `NULL`. A volta é decisão
+da função, então imprimir, liberar e salvar seguem com o `for` de sempre.
 
-A playlist do exemplo começa com cinco músicas e 20:01 no total.
-Pulando duas, toca a terceira. Depois a "Asa Branca" sai, a playlist chega na
-última e, com o repetir ligado, a próxima volta para "Aquarela":
+A playlist do exemplo tem cinco músicas, 20:01 no total. Pulando duas, toca a
+terceira. Depois a "Asa Branca" sai, a playlist chega à última e, com repetir
+ligado, a próxima volta para "Aquarela":
 
 <p align="center"><img src="11-listas/0081-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="933"></p>
 
@@ -2865,37 +2105,27 @@ int main(void) {
 // anterior: Tempo Perdido
 ```
 
-O fluxograma segue a `playlist_proxima`. Tocando "Tempo Perdido", não há
-próxima. Na primeira tentativa o repetir está desligado e a função devolve
-`NULL` ("fim da playlist"). Na segunda, ligado, o caminho é o verde: o
-`atual` volta para o início:
+No fluxograma, em "Tempo Perdido" não há próxima: com repetir desligado a
+função devolve `NULL`; ligado, o `atual` volta ao início:
 
 <p align="center"><img src="11-listas/0081-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="669"></p>
 
-O exemplo A162 grava a playlist em `playlist.txt`, libera tudo, carrega de
-volta numa playlist nova e usa `playlist_para_cada` com um callback para
-contar as músicas longas.
+O exemplo A162 grava a playlist em `playlist.txt`, carrega numa nova e usa
+`playlist_para_cada` com um callback para contar as músicas longas.
 
 > [!WARNING]
-> `playlist_proxima(viagem)->titulo` só é seguro quando você **sabe** que a
-> função não vai devolver `NULL`, como no exemplo, com o repetir ligado e a
-> playlist cheia. Com o repetir desligado na última música, o mesmo código
-> acessa `NULL`. Em código de verdade, guarde o ponteiro e teste. E copie
-> texto com `snprintf(destino, sizeof destino, "%s", origem)`: um título
-> maior que 39 caracteres é cortado em vez de estourar o vetor, como faria o
-> `strcpy`.
+> `playlist_proxima(viagem)->titulo` acessa `NULL` se a função devolver
+> `NULL`, o que ocorre com repetir desligado na última música: guarde o
+> ponteiro e teste. Copie texto com `snprintf(destino, sizeof destino, "%s",
+> origem)`: um título maior que 39 caracteres é cortado, em vez de estourar o
+> vetor como no `strcpy`.
 
 > [!TIP]
 > **Por dentro do C:** a `Musica` tem 40 + 30 bytes de texto, 2 de
-> preenchimento e 4 do `int`: 76 bytes. A `Faixa` soma mais 4 de
-> preenchimento (para o ponteiro começar num múltiplo de 8) e dois ponteiros:
-> `sizeof(Faixa)` dá 96 bytes. O
-> `const Musica *` que as funções devolvem aponta para **dentro** da faixa,
-> no heap. Ele vale enquanto a música existir: depois de
-> `playlist_remove` daquela música, é um ponteiro solto. Vale a regra do
-> vetor dinâmico (0075): quem empresta um endereço de dentro da estrutura
-> precisa dizer até quando ele vale.
-
+> preenchimento e 4 do `int`: 76 bytes. A `Faixa` soma 4 de preenchimento e
+> dois ponteiros: `sizeof(Faixa)` dá 96. O `const Musica *` devolvido aponta
+> para **dentro** da faixa e fica solto após o `playlist_remove` dela, como no
+> vetor dinâmico (0075).
 
 > [!NOTE]
 > **Pergunta para você:** se o exemplo chamasse `playlist_remove(viagem,
@@ -3047,91 +2277,21 @@ Saída esperada:
 tocando agora: País Tropical - Jorge Ben
 ```
 
-**Dicas:**
-
-1. playlist_cria, cinco playlist_adiciona, e confira se a criação não
-   devolveu NULL.
-2. Para min:seg, use total / 60 e total % 60 com "%d:%02d".
-3. playlist_atual devolve um const Musica *: acesse m->titulo e m->artista.
-4. Libere a playlist no fim.
-
 ```bash
 gcc ~/LPEDC/11-listas/0081-juntando-tudo/E481.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E481 && ~/LPEDC/11-listas/0081-juntando-tudo/E481
-```
-
-**Exercício E482** · ★☆☆
-
-Hora de testar as pontas da playlist. Escreva a função
-
-
-```text
-void mostra(const Musica *m)
-```
-
-
-que imprime o título da música, ou "(nada)" quando m é NULL. Depois crie
-uma playlist com Um (Banda A, 100 s), Dois (Banda B, 200 s) e Tres
-(Banda C, 300 s) e faça, nesta ordem, chamando mostra com o que cada
-passo marcado com * devolve:
-
-
-```text
-* a música atual
-* volta uma (anterior)
-  avança uma
-* avança uma
-* avança uma
-  liga o repetir
-* avança uma
-* volta uma
-  remove "Tres"
-* a música atual
-  remove "Um" e mostra quantas músicas e quantos segundos sobraram
-* avança uma
-```
-
-
-
-```text
-Saída esperada:
-Um
-(nada)
-Tres
-(nada)
-Um
-Tres
-Dois
-1 música, 200 s
-Dois
-```
-
-**Dicas:**
-
-1. Com repetir desligado, andar além da ponta devolve NULL e não sai do
-   lugar; ligado, dá a volta.
-2. Removendo a música que toca, passa a tocar a seguinte; se ela era a
-   última, a anterior. Com uma música só e repetir ligado, a próxima é
-   ela mesma.
-
-```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/E482.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E482 && ~/LPEDC/11-listas/0081-juntando-tudo/E482
 ```
 
 **Exercício E483** · ★★☆
 
 A playlist não deixa você ver os nós, mas playlist_para_cada chama uma
-função SUA para cada música, levando junto um void *extra com o que você
-quiser (assuntos 0050 e 0051). Com a playlist do main, escreva duas
-funções de callback:
-
-
-```text
-acha_longa: descobre a música mais longa (extra aponta para um
-            const Musica * que guarda a maior até agora)
-soma_artista: conta quantas músicas e quantos segundos tem um artista
-            (extra aponta para uma struct com o nome, a contagem e a soma)
-```
-
+função SUA para cada música, levando junto um void *extra. Crie a
+playlist com estas músicas (título, artista, segundos): Aquarela,
+Toquinho, 252; Mas Que Nada, Jorge Ben, 182; Evidências, Chitãozinho e
+Xororó, 279; Tempo Perdido, Legião Urbana, 302; Taj Mahal, Jorge Ben, 189.
+Com dois callbacks seus, mostre a música mais longa (extra aponta para um
+const Musica * que guarda a maior até agora) e quantas músicas e quantos
+segundos (em min:seg) tem Jorge Ben (extra aponta para uma struct sua com
+o nome, a contagem e a soma).
 
 
 ```text
@@ -3139,15 +2299,6 @@ Saída esperada:
 mais longa: Tempo Perdido (5:02)
 Jorge Ben: 2 músicas, 6:11
 ```
-
-**Dicas:**
-
-1. A assinatura é fixa: void acha_longa(const Musica *m, void *extra).
-2. Dentro dela: const Musica **maior = extra; e compare com *maior (que
-   começa NULL).
-3. Para o artista: typedef struct { const char *nome; int quantas; int
-   segundos; } Filtro; e no callback, Filtro *f = extra; e strcmp.
-4. Resposta esperada: a saída acima (182 + 189 = 371 s = 6:11).
 
 ```bash
 gcc ~/LPEDC/11-listas/0081-juntando-tudo/E483.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E483 && ~/LPEDC/11-listas/0081-juntando-tudo/E483
@@ -3185,49 +2336,8 @@ Cris saiu do bolão
 4. Duda 9
 ```
 
-**Dicas:**
-
-1. Escreva uma função bool vem_antes(const Participante *a, const
-   Participante *b): mais pontos, ou pontos iguais e strcmp(a->nome,
-   b->nome) < 0. O laço da inserção anda enquanto vem_antes(p, novo).
-2. A remoção é a do assunto 0077, comparando nomes com strcmp.
-3. Copie o nome com snprintf, nunca com strcpy sem limite.
-
 ```bash
 gcc ~/LPEDC/11-listas/0081-juntando-tudo/E484.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E484 && ~/LPEDC/11-listas/0081-juntando-tudo/E484
-```
-
-**Exercício E485** · ★★★
-
-No karaokê do bar, os pedidos entram numa fila (lista encadeada com
-ponteiro para o início e para o fim): pede põe no fim, chama tira do
-começo. O programa tem TRÊS erros de propósito. Rode, leia cada relatório
-do AddressSanitizer e conserte um de cada vez.
-
-
-```text
-Saída esperada depois do conserto:
-cantando: Evidências (Rui)
-cantando: Garota de Ipanema (Lia)
-cantando: Asa Branca (Gil)
-ainda na fila: 1
-```
-
-**Dicas:**
-
-1. Primeiro relatório: "heap-buffer-overflow" dentro do strcpy. Quantos
-   bytes tem "Garota de Ipanema" (conte o '\0')? Aumente o vetor musica
-   para 40 e troque strcpy por snprintf, que nunca passa do tamanho.
-2. Segundo: "heap-use-after-free" em chama (o gcc já avisava: "pointer
-   'p' used after 'free'"). Leia p->prox antes do free.
-   E quando a fila esvazia, o fim continua apontando para o pedido
-   liberado: o próximo pede escreve nele. Zere o fim nesse caso.
-3. Terceiro: "memory leaks" no fim. O pedido que ficou na fila nunca foi
-   liberado. Escreva uma função que libera tudo e chame no fim do main.
-4. Resposta esperada: a saída acima, sem nenhum relatório do ASan.
-
-```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/E485.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E485 && ~/LPEDC/11-listas/0081-juntando-tudo/E485
 ```
 
 **Exercício E486** · ★★★
@@ -3258,19 +2368,6 @@ Q(x) = x^4 - 2x^2 + 7x
 P + Q = 4x^4 + 7x - 5
 (P + Q)(2) = 73
 ```
-
-**Dicas:**
-
-1. struct termo { int coef; int exp; struct termo *prox; }. A inserção é
-   a ordenada do assunto 0078 com o critério invertido (anda enquanto
-   p->exp > exp), mais o caso p->exp == exp.
-2. soma: crie uma lista vazia e chame insere_termo para cada termo de p e
-   de q. O caso "soma deu 0" faz o 2x^2 e o -2x^2 sumirem sozinhos.
-3. imprime: o primeiro termo leva o sinal colado ("-5"); os outros, " + "
-   ou " - " e o valor absoluto. Coeficiente 1 não aparece (x^4), expoente
-   1 vira "x" e expoente 0 é só o número.
-4. 4*16 + 7*2 - 5 = 73. Libere os três
-   polinômios.
 
 ```bash
 gcc ~/LPEDC/11-listas/0081-juntando-tudo/E486.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E486 && ~/LPEDC/11-listas/0081-juntando-tudo/E486
@@ -3454,6 +2551,540 @@ O(n) e sem memória, e a pessoa é `j + 1`. A simulação começa com `ant` no
 fórmula só diz quem sobra; a lista dá a **ordem** de eliminação e aguenta
 variações que a fórmula não cobre (passo diferente para cada pessoa, alguém
 entrando no meio).
+
+</details>
+
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 032/2016 · Questão 03**
+
+Quando um novo nó é removido no meio de uma lista encadeada dinâmica, qual das seguintes afirmações é verdadeira:
+
+- a) Somente os nós que aparecem após o novo nó precisam ser movidos
+- b) Somente os nós que aparecem antes do novo nó precisam ser movidos
+- c) Os nós que aparecem antes do novo nó e o último nó precisam ser movidos
+- d) Os nós que aparecem depois do novo nó e o primeiro nó precisam ser movidos
+- e) Nenhuma das opções acima
+
+<details><summary>Gabarito</summary>
+
+**E.** Remover no meio de lista encadeada só religa ponteiros, nenhum nó é movido. Assunto 0076.
+
+</details>
+
+**Edital 032/2016 · Questão 08**
+
+Considere os códigos de funções abaixo, assumindo que os mesmos são usados dentro de um programa e que os todos os cabeçalhos necessários são incluídos:
+
+```c
+/*QUADRO I) Código para inserir em uma lista
+encadeada. Cada nó da lista tem um campo
+prox, que é usado para encadea-lo ao próximo
+elemento, e tem um dado do tipo int. */
+/* prim é um ponteiro para o ponteiro ao
+primeiro elemento da lista */
+void insere(tipoNo **prim, int d) {
+  tipoNo *aux;
+  aux = (tipoNo *)malloc(sizeof(tipoNo));
+  if(aux) { aux ->prox = *prim;
+    *prim = aux;
+    aux -> dado = d;
+  }
+}
+```
+
+```c
+/*QUADRO II) Código para remover primeiro
+elemento de uma lista encadeada. Cada nó da
+lista tem um campo prox, que é usado para
+encadea-lo ao próximo elemento, e tem um
+dado do tipo int. */
+/* prim é um ponteiro para o ponteiro ao
+primeiro elemento da lista */
+1. void remove (tipoNo **prim){
+2.   tipoNo *aux;
+3.   if(*prim) { aux = *prim;
+4.     *prim = aux->prox;
+5.     free(*prim);
+6.     *prim = aux;
+7.   }
+8. }
+```
+
+Marque a alternativa correta dentre as afirmações abaixo:
+
+- a) Os dois códigos executam as tarefas propostas sem gerar qualquer tipo de erro de lógica, de vazamento de memória ou falha de segmentação
+- b) Apenas os código I realiza sem erros a tarefa descrita nos comentários
+- c) Apenas os código II realiza sem erros a tarefa descrita nos comentários
+- d) Os dois códigos não executam suas tarefas como descrito nos comentários, mas também não geram vazamento de memória
+- e) O primeiro código gera vazamento de memória e o segundo não realiza a tarefa descrita nos comentários
+
+<details><summary>Gabarito</summary>
+
+**B.** O insere está certo; o remove dá free no novo início (*prim) e depois faz *prim = aux, apontando para nó já removido. Assunto 0076.
+
+</details>
+
+**Edital 053/2016 · Questão 06**
+
+Marque a alternativa CORRETA.
+Uma lista duplamente encadeada tem como característica ser formada por elementos que:
+
+- a) se concatenam de forma circular, de tal maneira que, ao chegar ao final da lista, o próximo elemento volta a ser o primeiro.
+- b) contêm, além de um ou mais campos chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista.
+- c) contêm, além de um campo chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista, de tal forma que os campos chave estão ordenados, ou seja, a chave do próximo é sempre maior ou igual à chave do atual elemento.
+- d) contêm, além de um ou mais campos chave, dois outros campos de ponteiros: próximo e anterior, que permitem o acesso aos elementos adjacentes (próximo e anterior) presentes na mesma lista.
+- e) Estão em posições adjacentes da memória, permitindo o acesso sequencial ao próximo e ao anterior de cada elemento pelo simples uso de um índice.
+
+<details><summary>Gabarito</summary>
+
+**D.** Dois ponteiros por nó: próximo e anterior. Assunto 0079.
+
+</details>
+
+**Edital 053/2016 · Questão 09**
+
+Os registros em uma lista duplamente encadeada com 20 elementos possuem, cada um, três campos:
+
+1. próximo: um ponteiro para o próximo elemento da lista;
+2. valor: informação armazenada pelo elemento;
+3. anterior: um ponteiro para o elemento anterior da lista.
+
+Sendo "Z" o décimo elemento desta lista e "X" e "Y" dois outros elementos que não pertencem à lista, sendo apontados, respectivamente, pelos seguintes ponteiros "PZ", "PX" e "PY", considere o trecho de código abaixo.
+
+```
+PY->próximo = PX;
+PX->anterior = PY;
+PX->próximo = PZ->próximo;
+PZ->próximo->anterior = PX;
+PZ->próximo = PY;
+PY->anterior = PZ;
+```
+
+Este trecho de código é usado para inserir na lista os elementos:
+
+- a) Y, logo após o Z, e X, logo após o Y.
+- b) Y, antes do Z, e X, logo após o Z
+- c) Y, antes do Z, e X, antes do Y.
+- d) X, logo após o Z, e Y, logo após o X.
+- e) X, antes do Z, e Y, logo após o Z.
+
+<details><summary>Gabarito</summary>
+
+**A.** As linhas ligam Z → Y → X → antigo próximo de Z. Assunto 0079.
+
+</details>
+
+**Edital 024/2017 · Questão 04**
+
+Considere as seguintes afirmações sobre a estrutura lista encadeada dinâmica e marque a alternativa CORRETA.
+
+I. A busca em tal estrutura realiza menos comparações do que a melhor opção de algoritmo de busca em um vetor ordenado quando se considera o pior cenário para cada estrutura.\
+II. É uma estrutura de dados usada para ordenar chaves por ser mais eficiente no processo de ordenação que o heapsort\
+III. É tipicamente utilizada como estrutura de dados básica na implementação de hash por endereçamento aberto\
+
+- a) As três afirmações são falsas
+- b) As três afirmações são verdadeiras
+- c) Apenas a afirmação I é verdadeira
+- d) Apenas a afirmação II é verdadeira
+- e) Apenas a afirmação III é verdadeira
+
+<details><summary>Gabarito</summary>
+
+**A.** busca em lista é O(n) contra O(log n) no vetor; lista não ordena melhor que heapsort; endereçamento aberto usa vetor Assunto 0076.
+
+</details>
+
+**Edital 024/2017 · Questão 05**
+
+Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Dado também quatro (4) opções (versões) de funções para realizar a busca por um elemento em uma lista encadeada, onde recebe-se um ponteiro para o primeiro elemento da lista e uma chave. A função de busca deve retornar 1 (um) caso encontre o elemento buscado e 0 (zero) em caso contrário.
+
+Com base nas informações anteriores, considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.
+
+Analise as funções abaixo e marque a alternativa CORRETA
+
+```c
+/* versão I */
+int busca(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux = prim;
+  while(aux!= NULL) {
+    if(aux->dado == chave) return 1;
+    aux = aux>prox;
+  }
+  return 0;
+}
+
+/* versão II */
+int busca(No *prim, int chave) {
+  while(prim!= NULL) {
+    if(prim->dado == chave) return 1;
+    prim = prim->prox;
+  }
+  return 0;
+}
+
+/* versão III */
+int busca(No *prim, int chave) {
+  No * aux = prim;
+  while(prim->prox!= NULL) {
+    if(prim->dado == chave) return 1;
+    aux = aux->prox;
+  }
+  return 0;
+}
+
+/* versão IV */
+int busca(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  while(aux->prox!= NULL) {
+    if(aux->dado == chave) return 1;
+    aux = aux>prox;
+  }
+  return 0;
+}
+```
+
+- a) A versão I está correta e não apresenta problemas de alocação de memória.
+- b) A versão II está correta e não apresenta problemas de alocação de memória.
+- c) A versão III está correta e não apresenta problemas de alocação de memória
+- d) A versão IV está correta e não apresenta problemas de alocação de memória
+- e) Nenhuma das alternativas anteriores está correta
+
+<details><summary>Gabarito</summary>
+
+**B.** só a versão II percorre sem malloc e sem erro; I vaza memória e tem `aux>prox`, III e IV têm laço errado Assunto 0076.
+
+</details>
+
+**Edital 024/2017 · Questão 18**
+
+Considere o código abaixo, assumindo que o mesmo é usado dentro de um programa e que os todos os cabeçalhos necessários são incluídos:
+
+```c
+// Conta ocorrências de uma chave na lista encadeada, retornando o total de ocorrências , zero caso a chave não ocorra
+int ContaOcorrenciasChave(tipoNo *prim, int chave) {
+  tipoNo *aux = prim;
+  int cont = 0;
+  int x;
+  for (x = 0; aux[x] != NULL; x++){
+    if(aux[x].dado == chave)
+      cont++;
+  }
+  return x;
+}
+```
+
+Marque a alternativa CORRETA dentre as afirmações abaixo:
+
+- a) O código executa a tarefas proposta sem gerar qualquer tipo de erro de lógica ou de vazamento de memória
+- b) O código nem compila
+- c) O código executa a tarefa proposta sem erros de lógica
+- d) O código não gera erro de segmentação
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**E.** Assunto 0076.
+
+</details>
+
+**Edital 024/2017 · Questão 19**
+
+Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor.
+
+Marque a alternativa CORRETA:
+
+- a) A existência de um ponteiro apontando para o 1º elemento e outro para o fim da lista permite que a inserção ou deleção de dados de um nó que esteja nas extremidades da lista seja rapidamente executada
+- b) Enquanto a entrada que determina o topo da lista é mantida em um nó descritor dessa lista, a entrada que marca o fim da lista é mantida em todos os nós da lista.
+- c) O armazenamento de uma lista requer uma área contígua de memória para permitir a otimização no processamento de busca de valores chaves na lista
+- d) O armazenamento de uma lista requer uma área contígua de memória. Como listas são estruturas previamente projetadas e definidas, normalmente são definidos procedimentos que permitem inserir e remover valores com eficiência.
+- e) Para estabelecer a ligação entre um nó já pertencente a uma lista e um novo nó, basta fazer com que o novo nó referencie no campo next, o nó que anteriormente era referenciado pelo nó original, desde que esse campo não tenha o valor nulo
+
+<details><summary>Gabarito</summary>
+
+**A.** ponteiros para início e fim dão acesso rápido às extremidades; as outras são falsas ou truncadas Assunto 0076.
+
+</details>
+
+**Edital 024/2017 · Questão 20**
+
+Marque a alternativa CORRETA. Uma lista duplamente encadeada tem como característica ser formada por elementos que:
+
+- a) Se concatenam de forma circular, de tal maneira que, ao chegar ao final da lista, o próximo elemento volta a ser o primeiro.
+- b) Contêm, além de um ou mais campos chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista.
+- c) Contêm, além de um campo chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista, de tal forma que os campos chave estão ordenados, ou seja, a chave do próximo é sempre maior ou igual à chave do atual elemento.
+- d) Contêm, além de um ou mais campos chave, dois outros campos de ponteiros: próximo e anterior, que permitem o acesso aos elementos adjacentes (próximo e anterior) presentes na mesma lista.
+- e) Estão em posições adjacentes da memória, permitindo o acesso sequencial ao próximo e ao anterior de cada elemento pelo simples uso de um índice.
+
+<details><summary>Gabarito</summary>
+
+**D.** lista dupla tem próximo e anterior (mesmas alternativas da 053/2016 Q06) Assunto 0079.
+
+</details>
+
+**Edital 055/2017 · Questão 11**
+
+Considere as seguintes afirmações sobre a estrutura lista encadeada dinâmica
+
+I. A busca em tal estrutura realiza menos comparações do que a melhor opção de algoritmo de busca em um vetor ordenado quando se considera o pior cenário para cada estrutura.\
+II. É uma estrutura de dados usada unicamente no armazenamento de grandes quantidades de chaves por lista, dado o seu dinamismo e velocidade de busca quando comparada a outras estruturas de dados.\
+III. É utilizada como estrutura de dados na implementação de alguns tipos de hash.\
+
+Marque a alternativa CORRETA:
+
+- A) As três afirmações são falsas
+- B) Apenas a afirmação I é verdadeira
+- C) Apenas a afirmação II é verdadeira
+- D) Apenas a afirmação III é verdadeira
+- E) Apenas as afirmações I e II são verdadeiras.
+
+<details><summary>Gabarito</summary>
+
+**D.** I falsa (lista é O(n)), II falsa ("unicamente"), III verdadeira (encadeamento) Assunto 0076.
+
+</details>
+
+**Edital 023/2018 · Questão 09**
+
+Os registros em uma lista, duplamente encadeada com 20 elementos possuem cada um três campos:
+
+- próximo: um ponteiro para o próximo elemento da lista;
+- valor: informação armazenada pelo elemento;
+- anterior: um ponteiro para o elemento anterior da lista.
+
+Sendo "Z" o décimo elemento desta lista e "X" e "Y" dois outros elementos que não pertencem à lista, com seus respectivos ponteiros "pZ", "pX" e "pY", considere o trecho de código abaixo.
+
+```
+pY↑.próximo = pX;
+pX↑.anterior = pY;
+pX↑.próximo = pZ↑.próximo;
+pZ↑.próximo↑.anterior = pX;
+pZ↑.próximo = pY;
+pY↑.anterior = pZ;
+```
+
+Este trecho de código é usado para inserir na lista os elementos:
+
+- a) Y, logo após o Z, e X, logo após o Y.
+- b) Y, antes do Z, e X, logo após o Z.
+- c) Y, antes do Z, e X, antes do Y.
+- d) X, logo após o Z, e Y, logo após o X.
+- e) X, antes do Z, e Y, logo após o Z.
+
+<details><summary>Gabarito</summary>
+
+**A.** Ficam Z, Y, X, antigo próximo de Z: Y logo após Z e X logo após Y. Assunto 0079.
+
+</details>
+
+**Edital 023/2018 · Questão 19**
+
+Marque a alternativa CORRETA. Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor. Nessa estrutura:
+
+- a) Para estabelecer a ligação entre um nó já pertencente a uma lista e um novo nó, basta fazer com que o novo nó referencie no, campo next, o nó que anteriormente era referenciado pelo nó original, desde que esse campo não tenha o valor nulo.
+- b) A existência de um ponteiro apontando para o 1º elemento e outro para o fim da lista permite que a inserção ou deleção de dados de um nó que esteja no meio da lista seja rapidamente executada.
+- c) Enquanto a entrada que determina o topo da lista é mantida em um nó descritor dessa lista, a entrada que marca o fim da lista é mantida fora do descritor.
+- d) O armazenamento de uma lista requer uma área contígua de memória para permitir a otimização no processamento de criação e remoção de nós da lista.
+- e) O armazenamento de uma lista não requer uma área contígua de memória. Como listas são estruturas dinâmicas, normalmente são definidos procedimentos que permitem criar e remover nós na memória.
+
+<details><summary>Gabarito</summary>
+
+**E.** Lista encadeada não exige área contígua e cria e remove nós dinamicamente. Assunto 0076.
+
+</details>
+
+**Edital 023/2018 · Questão 20**
+
+A estrutura de dados é um modo de armazenamento e organização de dados para que possam ser usados eficientemente. Dentre as alternativas abaixo, sobre as afirmações de estrutura de dados, escolha a CORRETA:
+
+I. Uma fila é uma estrutura de dados em que cada elemento tem um ou mais elementos associados.\
+II. A árvore é uma estrutura de dados baseada no princípio Last-in, First-out (LIFO), na qual os dados que foram inseridos primeiro serão os últimos a serem removidos.\
+III. Uma lista é uma estrutura de dados linear, que pode ser encadeada, a qual é composta por nós que apontam para o próximo elemento e o último elemento apontará para nulo.\
+IV. As pilhas são estruturas baseadas no princípio First-in, First-out (FIFO), em que os elementos que foram inseridos no início são os primeiros a serem removidos.\
+
+- a) Somente a afirmação I é verdadeira.
+- b) Somente a afirmação II é verdadeira.
+- c) Somente a afirmação III é verdadeira.
+- d) Somente a afirmação IV é verdadeira.
+- e) Todas as afirmativas são verdadeiras.
+
+<details><summary>Gabarito</summary>
+
+**C.** Só a III é correta: fila não tem associação a vários elementos, árvore não é LIFO e pilha é LIFO. Assunto 0076.
+
+</details>
+
+**Edital 061/2018 · Questão 12**
+
+Lista circular encadeada é uma das estruturas de dados dinâmicas básicas. Uma questão que deve ser resolvida pelo algoritmo de busca em lista circular encadeada é:
+
+- a) Saber quando finalizar a busca, se o elemento procurado não estiver na lista circular.
+- b) Retornar o elemento anterior ao buscado, dada a propriedade de circularidade da lista.
+- c) Devolver o número de elementos constantes na lista.
+- d) Parar a busca assim que encontrar um elemento cujo ponteiro para o próximo elemento tenha valor nulo, o que indica o fim da lista.
+- e) Devolver o ponteiro de marcação de início, em sua nova posição
+
+<details><summary>Gabarito</summary>
+
+**A.** Na circular não há nulo: é preciso marcar o ponto de parada quando o elemento não existe. Assunto 0080.
+
+</details>
+
+**Edital 033/2019 · Questão 06**
+
+Qual é a saída da seguinte função que inicia apontando para o primeiro nó da seguinte lista encadeada?
+
+`1->2->3->4->5->6`
+
+```c
+void fun(struct node* start)
+{
+  if(start == NULL)
+    return;
+  printf("%d ", start->data);
+  if(start->next != NULL )
+    fun(start->next->next);
+  printf("%d ", start->data);
+}
+```
+
+- a) 1 4 6 6 4 1
+- b) 1 3 5 1 3 5
+- c) 1 2 3 5
+- d) 1 3 5 5 3 1
+- e) Nenhuma das anteriores
+
+<details><summary>Gabarito</summary>
+
+**D.** Imprime 1, 3, 5, chama com NULL e volta imprimindo 5, 3, 1: `1 3 5 5 3 1`. Assunto 0076.
+
+</details>
+
+**Edital 033/2019 · Questão 11**
+
+Qual a função do seguinte trecho de código?
+
+```java
+public void function(int data)
+{
+  int flag = 0;
+  if( head != null)
+  {
+    Node temp = head.getNext();
+    while((temp != head) && (!(temp.getItem() == data)))
+    {
+      temp = temp.getNext();
+      flag = 1;
+      break;
+    }
+  }
+  if(flag)
+    System.out.println("success");
+  else
+    System.out.println("fail");
+}
+```
+
+- a) Imprimir sucess se um determinado elemento não for encontrado
+- b) Imprimir fail se um determinado elemento não for encontrado
+- c) Imprimir sucess se um elemento em particular for igual a 1
+- d) Imprimir fail se a lista estiver vazia e success caso contrário
+- e) Nenhuma das respostas anteriores.
+
+<details><summary>Gabarito</summary>
+
+**B.** Assunto 0080.
+
+</details>
+
+**Edital 060/2019 · Questão 05**
+
+Considere o código da função abaixo:
+
+```c
+void fun1(struct node* head)
+{
+  if(head == NULL)
+    return;
+  fun1(head->next);
+  printf("%d ", head->data);
+}
+```
+
+O que essa função faz, dada uma lista encadeada de valores inteiros como entrada?
+
+- a) Imprime todos os nós da lista encadeada, começando com primeiro o nó da lista
+- b) Imprime todos os nós da lista encadeada, começando com o último nó da lista
+- c) Imprime apenas os nós de posições pares da lista encadeada
+- d) Imprime apenas os nós de posições impares da lista encadeada
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**B.** Recursão antes do printf imprime do último ao primeiro. Assunto 0076.
+
+</details>
+
+**Edital 060/2019 · Questão 07**
+
+A seguinte função em C usa uma lista simplesmente encadeada como argumento de entrada. Ela modifica a lista, movendo o último elemento para a frente da lista e retorna a lista modificada.
+
+```c
+typedef struct node {
+  int value;
+  struct node *next;
+}Node;
+
+Node *move_to_front(Node *head) {
+  Node *p, *q;
+  if ((head == NULL || (head->next == NULL))
+    return head;
+  q = NULL; p = head;
+  while (p-> next !=NULL)
+  {
+    q = p;
+    p = p->next;
+  }
+  _ _ _ _ _ _ _ _ _ _ _ _ _ _
+  return head;
+}
+```
+
+Certa parte do código foi deixada em branco (linha tracejada). Escolha a alternativa CORRETA para substituir a linha em branco.
+
+- a) q = NULL; p->next = head; head = p;
+- b) q->next = NULL; head = p; p->next = head;
+- c) head = p; p->next = q; q->next = NULL;
+- d) q->next = NULL; p->next = head; head = p;
+- e) A função não precisa ser complementada.
+
+<details><summary>Gabarito</summary>
+
+**D.** `q->next = NULL; p->next = head; head = p;` tira o último e o põe na frente. Assunto 0076.
+
+</details>
+
+**Edital 060/2019 · Questão 19**
+
+Considere uma lista duplamente encadeada não ordenada (com ponteiros na início e final da lista). Qual das seguintes operações a seguir pode ser implementada no tempo O(1)? Marque a alternativa CORRETA.
+
+I. Inserção na frente da lista encadeada\
+II. Inserção no final da lista encadeada\
+III. Exclusão do nó frontal da lista encadeada\
+IV. Exclusão do último nó da lista encadeada\
+
+- a) I e II
+- b) I e III
+- c) I, II e III
+- d) I, II e IV
+- e) Todas as afirmativa estão corretas
+
+<details><summary>Gabarito</summary>
+
+**E.** Com ponteiros de início e fim e elo anterior, as quatro operações são O(1). Assunto 0079.
 
 </details>
 
@@ -4715,277 +4346,6 @@ Não nulos: 6 de 15
 ```bash
 gcc ~/LPEDC/11-listas/lista/P1130.c -o ~/LPEDC/11-listas/lista/P1130 && ~/LPEDC/11-listas/lista/P1130
 ```
-
-## Questões no estilo da prova
-
-Questões objetivas no formato da prova do mestrado do PPGI/UFAM. Leia,
-decida e só depois abra o gabarito. Nas que têm código, desenhe os nós e as
-setas e simule à mão. As questões de código e de simulação foram conferidas
-rodando programas em C (`gcc -std=c17 -Wall`, com AddressSanitizer). Os nós
-são do tipo do assunto 0076: `typedef struct no { int valor; struct no *prox; } No;`.
-Desconfie de "sempre", "com certeza" e "nunca".
-
-**Questão 1.** Com o código abaixo, qual afirmação é **correta**?
-
-```c
-void insere_inicio(No *prim, int v) {
-    No *novo = malloc(sizeof(No));
-    if (novo) {
-        novo->valor = v;
-        novo->prox = prim;
-        prim = novo;
-    }
-}
-
-int main(void) {
-    No *lista = NULL;
-    insere_inicio(lista, 3);
-    insere_inicio(lista, 8);
-    imprime(lista);
-    return 0;
-}
-```
-
-- (A) Imprime `8 3`.
-- (B) Imprime `3 8`.
-- (C) Imprime só `8`.
-- (D) Não imprime nenhum valor e os dois nós alocados ficam perdidos na memória.
-- (E) Falha de segmentação ao imprimir, porque `lista` é `NULL`.
-
-<details><summary>Gabarito</summary>
-
-**(D)**. O C passa tudo por valor: `prim` dentro da função é uma **cópia**
-de `lista`. A atribuição `prim = novo` muda a cópia, e a `lista` do `main`
-continua `NULL`. Cada chamada aloca um nó que ninguém mais alcança (vazamento).
-`imprime(NULL)` com laço `while (p != NULL)` simplesmente não imprime nada,
-então não há falha (E). A correção é receber `No **prim` e fazer `*prim = novo`.
-Veja 0076 e 0049.
-
-</details>
-
-**Questão 2.** A lista tem os valores 8 e 3 (montada corretamente). Sobre a
-função abaixo, é **correto** afirmar que:
-
-```c
-int soma(No *prim) {
-    No *p = malloc(sizeof(No));
-    int s = 0;
-    p = prim;
-    while (p != NULL) {
-        s += p->valor;
-        p = p->prox;
-    }
-    return s;
-}
-```
-
-- (A) Devolve 11, mas a cada chamada perde um bloco de memória alocado.
-- (B) Devolve 0, porque `p` começa apontando para um nó sem valor.
-- (C) Falha de segmentação, porque `p` termina valendo `NULL`.
-- (D) Devolve 11 e não tem nenhum problema de memória.
-- (E) Não compila, porque `p` é declarado e depois reatribuído.
-
-<details><summary>Gabarito</summary>
-
-**(A)**. A soma está certa: `p = prim` descarta o nó recém-alocado e o laço
-percorre a lista de verdade. Mas esse `malloc` fica sem ponteiro e sem `free`:
-um bloco perdido por chamada (o LeakSanitizer acusa isso). Para percorrer
-uma lista não se aloca nada. Veja 0076 e 0054.
-
-</details>
-
-**Questão 3.** A função deveria remover o primeiro nó de uma lista
-simplesmente encadeada. Qual alternativa descreve o que o código faz?
-
-```c
-void remove_primeiro(No **prim) {
-    if (*prim != NULL) {
-        No *aux = *prim;
-        free(aux);
-        *prim = aux->prox;
-    }
-}
-```
-
-- (A) Funciona: o nó sai e `*prim` passa a apontar para o segundo.
-- (B) Funciona, mas vaza o nó removido.
-- (C) Não compila, porque `aux` é usado depois do `free`.
-- (D) Só dá problema se a lista tiver um único nó.
-- (E) Lê `aux->prox` depois do `free(aux)`: comportamento indefinido.
-
-<details><summary>Gabarito</summary>
-
-**(E)**. O `free(aux)` devolve o bloco, e a linha seguinte ainda lê
-`aux->prox` dele. O compilador deixa passar (o `gcc -Wall` até avisa), mas
-o AddressSanitizer reporta `heap-use-after-free`. Como o bloco liberado
-costuma continuar com o conteúdo antigo, o código pode "funcionar" por
-sorte, e por isso é perigoso. A ordem certa é guardar
-`aux->prox` em `*prim` e só então dar o `free`. Veja 0076, 0077 e 0057.
-
-</details>
-
-**Questão 4.** Considere as afirmações sobre listas simplesmente encadeadas
-e vetores de `n` elementos:
-
-I. Remover um nó do meio da lista, já tendo o ponteiro para o nó anterior,
-não obriga a mover nenhum outro nó.
-II. Acessar o k-ésimo elemento da lista custa O(1), como no vetor.
-III. A lista ocupa sempre menos memória que um vetor com os mesmos `n`
-elementos.
-IV. Inserir no início da lista custa O(1), qualquer que seja `n`.
-
-- (A) Apenas I.
-- (B) Apenas II e III.
-- (C) Apenas I e IV.
-- (D) Apenas II, III e IV.
-- (E) Todas estão corretas.
-
-<details><summary>Gabarito</summary>
-
-**(C)**. I e IV são verdadeiras: só se religam ponteiros, sem mover nós. II é
-falsa: para chegar ao k-ésimo é preciso andar k nós, O(k). III é falsa por
-causa do "sempre": cada nó guarda também o `prox`, então a lista costuma
-gastar mais que o vetor. Veja 0075 e 0076.
-
-</details>
-
-**Questão 5.** Considere as afirmações sobre listas duplamente encadeadas e
-circulares:
-
-I. Na lista duplamente encadeada, dado só o ponteiro para um nó, é possível
-removê-lo sem percorrer a lista desde o início.
-II. Numa lista circular, o laço `while (p != NULL)` pode nunca terminar, porque
-nenhum nó aponta para `NULL`.
-III. A lista duplamente encadeada gasta o mesmo espaço por nó que a
-simplesmente encadeada.
-
-- (A) Apenas I.
-- (B) Apenas I e II.
-- (C) Apenas II e III.
-- (D) Apenas I e III.
-- (E) Todas estão corretas.
-
-<details><summary>Gabarito</summary>
-
-**(B)**. I é verdadeira: o nó conhece o anterior (`ant`) e o próximo
-(`prox`), então basta religar os dois vizinhos. II é verdadeira: na circular
-o último aponta para o primeiro, e o laço precisa parar ao voltar ao ponto de
-partida. III é falsa: o nó da dupla carrega um ponteiro a mais (`ant`).
-Veja 0079 e 0080.
-
-</details>
-
-**Questão 6.** Considere as afirmações sobre vetor dinâmico e lista ordenada:
-
-I. Se o vetor dobra de capacidade sempre que fica cheio, inserir `n` itens
-copia, no total, menos de 2n elementos.
-II. Depois de um `realloc`, um ponteiro guardado antes para um item do vetor
-continua válido, sempre.
-III. Inserir um valor numa lista encadeada ordenada de `n` nós custa O(n) no
-pior caso.
-IV. Como a lista está ordenada, dá para achar a posição de inserção com busca
-binária em O(log n).
-
-- (A) Apenas I.
-- (B) Apenas II e III.
-- (C) Apenas III e IV.
-- (D) Apenas I, II e IV.
-- (E) Apenas I e III.
-
-<details><summary>Gabarito</summary>
-
-**(E)**. I é verdadeira: as cópias somam 1 + 2 + 4 + ... < 2n. II é falsa
-("sempre"): o `realloc` pode mover o bloco, e o ponteiro antigo passa a
-apontar para memória liberada. III é verdadeira: no pior caso o valor vai
-para o fim, depois de `n` nós. IV é falsa: a lista não tem acesso direto ao
-meio, então não há busca binária. Veja 0075 e 0078.
-
-</details>
-
-**Questão 7.** Uma lista começa vazia. `insere_inicio(v)` e `insere_fim(v)`
-colocam o valor no começo e no fim, e `remove(v)` tira a **primeira**
-ocorrência de `v` (se existir). Depois das operações abaixo, a lista, do
-início ao fim, é:
-
-```text
-insere_fim(4)   insere_inicio(9)   insere_fim(6)   insere_inicio(4)
-remove(4)       insere_fim(1)      remove(7)        remove(6)
-```
-
-- (A) `9 6 1`
-- (B) `9 4 1`
-- (C) `4 9 1`
-- (D) `4 9 6 1`
-- (E) `9 4 6 1`
-
-<details><summary>Gabarito</summary>
-
-**(B)**. Passo a passo: `4`; `9 4`; `9 4 6`; `4 9 4 6`. O `remove(4)`
-tira a primeira ocorrência (a do início): `9 4 6`. Entra o 1 no fim:
-`9 4 6 1`. O `remove(7)` não encontra nada e não muda a lista, e o
-`remove(6)` deixa `9 4 1`. A (A) é o erro de remover o segundo 4. Veja 0076 e 0077.
-
-</details>
-
-**Questão 8.** Numa lista duplamente encadeada `... <-> p <-> q <-> ...`, o
-nó `n` deve ser inserido entre `p` e `q = p->prox` (com `q` existente). Qual
-sequência de atribuições deixa os dois sentidos da lista corretos?
-
-- (A) `n->prox = p->prox; n->ant = p; p->prox->ant = n; p->prox = n;`
-- (B) `n->prox = p->prox; n->ant = p; p->prox = n; p->prox->ant = n;`
-- (C) `p->prox = n; n->prox = p->prox; n->ant = p; p->prox->ant = n;`
-- (D) `n->ant = p; n->prox = p->prox; p->prox = n;`
-- (E) `n->prox = p; n->ant = p->prox; p->prox = n; p->prox->ant = n;`
-
-<details><summary>Gabarito</summary>
-
-**(A)**. O ponto é a **ordem**: enquanto `p->prox` ainda é `q`, ele serve
-para alcançar `q` e ligar `q->ant = n`; só depois `p->prox` passa a ser `n`.
-Na (B), a linha `p->prox->ant = n` roda com `p->prox` já valendo `n`, e
-o `n` vira o próprio anterior. Na (C), `n->prox = p->prox` faz o nó apontar
-para si mesmo. A (D) esquece o `q->ant`: andando de trás para a frente o
-`n` é pulado. A (E) inverte os campos. Veja 0079.
-
-</details>
-
-**Questão 9.** Um vetor dinâmico nasce com capacidade 3 (alocado com
-`malloc`). Antes de cada inserção, se `tam == cap`, ele dobra a capacidade
-com `realloc`. Depois de inserir 100 itens, quantas vezes o `realloc` rodou e
-qual é a capacidade final?
-
-- (A) 5 vezes, capacidade 96.
-- (B) 6 vezes, capacidade 100.
-- (C) 7 vezes, capacidade 192.
-- (D) 6 vezes, capacidade 192.
-- (E) 33 vezes, capacidade 100.
-
-<details><summary>Gabarito</summary>
-
-**(D)**. O `realloc` roda ao inserir o 4º item (3 para 6), o 7º (12), o 13º
-(24), o 25º (48), o 49º (96) e o 97º (192): 6 vezes, e sobram 92 posições.
-Com 96 itens ainda cabe na capacidade 96; é o 97º que dobra de novo. A (C)
-conta a alocação inicial como se fosse `realloc`. Veja 0075.
-
-</details>
-
-**Questão 10.** Marque a alternativa **INCORRETA** sobre custos em listas
-encadeadas com `n` nós.
-
-- (A) Numa lista simples com ponteiro só para o início, inserir no fim custa O(n).
-- (B) Numa lista simples com ponteiros para o início e para o fim, inserir no fim custa O(1).
-- (C) Numa lista simples com ponteiros para o início e para o fim, remover o último nó custa O(1).
-- (D) Numa lista dupla com ponteiros para o início e para o fim, remover o último nó custa O(1).
-- (E) Buscar uma chave numa lista não ordenada custa O(n) no pior caso.
-
-<details><summary>Gabarito</summary>
-
-**(C)**. Para remover o último nó da lista simples é preciso mudar o `prox`
-do **penúltimo**, e o ponteiro `fim` não diz quem ele é: só percorrendo desde o
-início, O(n). Na lista dupla o último tem `ant`, e a remoção é O(1) (D).
-Inserir no fim com `fim` guardado é O(1) (B) e sem ele é O(n) (A). Veja
-0076 e 0079.
-
-</details>
 
 ## Para ler mais
 

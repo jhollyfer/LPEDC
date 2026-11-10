@@ -1,20 +1,13 @@
 // 0115 · Teorema mestre
 // Exercício E688 · ★★☆
 //
-// Se dividir ao meio dá log₂ n, dividir em três não seria melhor? Teste.
-// Escreva duas buscas RECURSIVAS num vetor ordenado v[0..N-1] com os
-// números pares 0, 2, 4, ..., contando cada comparação com um elemento do
-// vetor (cada == , < ou > com v[...]):
-//
-// - binaria(ini, fim, x): compara x == v[meio]; depois x < v[meio] e segue
-// numa metade. T(n) = T(n/2) + 2.
-// - ternaria(ini, fim, x): com terco = (fim - ini) / 3, m1 = ini + terco e
-// m2 = fim - 1 - terco, compara x == v[m1], x == v[m2], x < v[m1] e
-// x > v[m2], e segue num dos três pedaços. T(n) = T(n/3) + 4.
-//
-// Pelo teorema, as duas são caso 2, Θ(log n). Mas a constante importa.
-// Faça 1000 buscas por números ÍMPARES (que não estão no vetor), com
-// x = 2 * ((i * 7919) % N) + 1 para i de 0 a 999, e mostre a média:
+// Escreva duas buscas recursivas em v[0..N-1] = 0, 2, 4, ... (N = 1000000),
+// contando cada comparação com v[...]. binaria(ini, fim, x): compara x ==
+// v[meio] e depois x < v[meio]. ternaria(ini, fim, x): com terco = (fim -
+// ini) / 3, m1 = ini + terco e m2 = fim - 1 - terco, compara x == v[m1], x ==
+// v[m2], x < v[m1] e x > v[m2]. Faça 1000 buscas por números ímpares, x = 2 *
+// ((i * 7919) % N) + 1 (i de 0 a 999), e mostre a média de comparações de
+// cada uma.
 //
 //   Saída esperada:
 //   binária: 39.9 comparações por busca

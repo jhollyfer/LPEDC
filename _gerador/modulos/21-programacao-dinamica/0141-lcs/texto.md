@@ -1,28 +1,20 @@
 ## 0141 · Maior subsequência comum (LCS)
 
-Seu sobrinho está aprendendo a escrever. Você ditou **MORANGO**, ele escreveu
-**MANGA**. Quantas letras ele acertou na ordem certa? Não vale contar letra
-fora de ordem nem pular para trás: o que importa é o maior pedaço da palavra
-ditada que aparece, **na mesma ordem**, na palavra escrita. Aqui é **MANG**:
-4 letras.
+Você ditou **MORANGO** e seu sobrinho escreveu **MANGA**. Quantas letras ele
+acertou na ordem certa? **MANG**: 4.
 
-Uma **subsequência** de uma string é o que sobra depois de apagar algumas
-letras, sem mudar a ordem das outras. `MNG` é subsequência de `MORANGO`
-(apagando O, R, A e o último O); `GNA` não é. A **maior subsequência comum**
-(em inglês, *longest common subsequence*, LCS) de duas strings é a mais
-comprida que é subsequência das duas.
+Uma **subsequência** é o que sobra depois de apagar letras, sem mudar a ordem:
+`MNG` é subsequência de `MORANGO`; `GNA` não é. A **maior subsequência comum**
+(*longest common subsequence*, LCS) é a mais comprida que é subsequência das
+duas strings. Uma palavra de 30 letras tem mais de um bilhão delas.
 
-Força bruta é inviável: uma palavra de 30 letras tem 2³⁰, mais de um bilhão,
-de subsequências. A PD de novo olha para o **fim**. Compare a última letra
-de cada uma:
+A PD compara a última letra de cada string:
 
-- **iguais**: essa letra fecha a LCS. Some 1 à LCS das duas sem a última
-  letra;
-- **diferentes**: pelo menos uma das duas não está na LCS. Teste as duas
-  hipóteses (tirar a última de `a` ou a última de `b`) e fique com a melhor.
+- **iguais**: a letra fecha a LCS; some 1 à LCS das duas sem ela;
+- **diferentes**: tire a última de `a` ou a de `b` e fique com a melhor.
 
 Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
-`b[0..j-1]` (os `i` primeiros caracteres de `a` e os `j` primeiros de `b`):
+`b[0..j-1]`:
 
 | caso | `c[i][j]` |
 | --- | --- |
@@ -30,14 +22,12 @@ Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
 | `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
 | letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
 
-A resposta fica em `c[m][n]`. Para recuperar as letras, a volta anda do canto
-até a borda: quando as letras batem, a letra entra e o caminho vai na
-diagonal; quando não batem, ele vai para o vizinho de que o valor veio. O
-Cormen guarda esse "de onde veio" numa segunda tabela, `b`, com setas ↖, ↑ e
-←; aqui a seta é refeita na volta, comparando as letras e os vizinhos.
+A resposta fica em `c[m][n]`. A volta anda do canto até a borda: letras
+iguais entram na resposta e o caminho vai na diagonal; senão, vai para o
+vizinho de onde o valor veio (o Cormen guarda isso numa tabela de setas; aqui
+refazemos na volta).
 
-No desenho, cada linha é uma letra de MORANGO e cada coluna uma de
-MANGA. O caminho de volta sai do canto roxo; as células verdes são as quatro
+No desenho, o caminho sai do canto roxo; as células verdes são as quatro
 letras da resposta, e as amarelas, os passos sem letra:
 
 {{ideia}}
@@ -116,20 +106,17 @@ int main(void) {
 // LCS de MORANGO e MANGA: MANG (4 letras)
 ```
 
-A tabela tem `(m + 1) × (n + 1)` células e cada uma custa O(1): **O(m × n)**
-de tempo e de memória. Duas strings de 1.000 letras dão um milhão de
-células, uns 4 MB de `int`; a força bruta nem começaria.
+A tabela tem `(m + 1) × (n + 1)` células de O(1): **O(m × n)** de tempo e de
+memória.
 
-O fluxograma é a decisão de uma célula. O caminho marcado é o da
-célula da linha G com a coluna G (`c[6][4]`), em que as letras batem e o
-valor vem da diagonal, `3 + 1`:
+No fluxograma, o caminho marcado é o de `c[6][4]` (G com G): as letras batem
+e o valor vem da diagonal, `3 + 1`:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A volta, partindo de `c[7][5]`. A recuperação monta a resposta
-**de trás para a frente**: G sai primeiro e M por último:
+A volta, partindo de `c[7][5]`, monta a resposta **de trás para a frente**:
 
 | posição | letras | iguais? | `c[i-1][j]` / `c[i][j-1]` | movimento | resposta até aqui |
 | --- | --- | --- | --- | --- | --- |
@@ -143,20 +130,14 @@ A volta, partindo de `c[7][5]`. A recuperação monta a resposta
 | (1, 1) | M, M | sim | | diagonal | MANG |
 
 > [!WARNING]
-> Subsequência não é **substring**. Uma substring é um pedaço **contíguo**:
-> em MORANGO e MANGA, a maior substring comum é `ANG`, com 3 letras,
-> enquanto a LCS tem 4. A outra pegadinha são os índices: a tabela tem uma
-> linha e uma coluna a mais (a do prefixo vazio), então a linha `i` fala da
-> letra `a[i - 1]`. Escrever `a[i] == b[j]` compila, roda sem reclamar do
-> sanitizer (no fim, compara com o `'\0'`) e dá a resposta errada.
+> Subsequência não é **substring** (pedaço contíguo): a maior substring comum
+> de MORANGO e MANGA é `ANG` (3), e a LCS tem 4. A linha `i` fala de
+> `a[i - 1]`: escrever `a[i] == b[j]` compila e dá a resposta errada.
 
 > [!TIP]
-> **Por dentro do C:** `int c[51][51]` mora na pilha e ocupa 51 × 51 × 4 =
-> 10.404 bytes, mesmo que as palavras sejam curtas. Para comparar dois textos
-> de 10 mil caracteres, seriam 400 MB, que não cabem na pilha. Se você só precisa do **tamanho** da LCS, cada linha só usa a de
-> cima, e duas linhas de `n + 1` posições bastam (o A281 faz isso). Para
-> **recuperar** as letras, a tabela inteira, alocada com `malloc`, é o jeito
-> simples.
+> **Por dentro do C:** para dois textos de 10 mil caracteres a tabela passa de
+> 400 MB: use `malloc`. Só o **tamanho** pede duas linhas de `n + 1` posições
+> (A281); **recuperar** as letras pede a tabela inteira.
 
 > [!NOTE]
 > **Pergunta para você:** a LCS de MORANGO e MANGA é única? Troque o `>=` das

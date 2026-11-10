@@ -1,8 +1,5 @@
 // 0083 · Pilha encadeada
 // Exercício E496 · ★★☆
-//
-// O erro era heap-use-after-free: "*numero = velho->numero" vinha depois
-// do free(velho). Conserto: ler o valor antes do free.
 
 #include <stdbool.h>
 #include <stdio.h>

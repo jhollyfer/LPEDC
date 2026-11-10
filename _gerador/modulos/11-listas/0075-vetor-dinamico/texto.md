@@ -1,33 +1,24 @@
 ## 0075 · Vetor dinâmico
 
-Você vai passar o fim de semana na praia e quer anotar cada despesa da
-viagem: o café, o estacionamento, o almoço. Quantas serão? Não dá para saber.
-Um `int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101.
+Você anota as despesas de uma viagem e não sabe quantas serão. Um
+`int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101.
 
-A saída é um vetor que cresce sob demanda: começa com uma folga e, quando a
-folga acaba, pede um vetor maior e copia tudo. Toda biblioteca de "lista que
-cresce sozinha" faz isso por baixo, e você vai escrever a sua.
+A saída é um vetor que, quando a folga acaba, pede um vetor maior e copia os
+itens.
 
-Uma **lista sequencial** (também chamada de **lista em vetor**) guarda os
-itens lado a lado, num vetor contínuo, na ordem em que estão na lista. Para
-ela crescer, você controla três coisas: o endereço do vetor no heap (`itens`),
-quantos itens estão em uso (`tam`) e quantos cabem (`cap`). Enquanto
-`tam < cap`, inserir no fim é escrever em `itens[tam]`.
+Uma **lista sequencial** (ou **lista em vetor**) guarda os itens lado a lado,
+na ordem da lista. Três campos a controlam: o endereço do vetor no heap
+(`itens`), quantos itens estão em uso (`tam`) e quantos cabem (`cap`).
+Enquanto `tam < cap`, inserir no fim é escrever em `itens[tam]`.
 
-Quando `tam == cap`, o vetor está cheio. Aí entra o `realloc` (assunto 0055):
-ele pede um bloco maior, copia os itens e devolve o bloco antigo. Maior
-quanto? A resposta clássica é **dobrar a capacidade**; o "Por dentro do C"
-mostra por que crescer de um em um sai caro.
+Com `tam == cap`, o `realloc` (assunto 0055) pede um bloco maior, copia os
+itens e devolve o antigo. A prática é **dobrar a capacidade**.
 
-O pacote todo vira um **TAD** (assunto 0074): `lista.h` diz **o que** a lista
-faz e `lista.c` diz **como**. A `struct lista` fica escondida no `.c`, então
-quem usa a lista nunca mexe em `tam` na mão. O comando do exemplo compila o `lista.c`
-junto, como explica o começo do módulo.
+O conjunto é um **TAD** (assunto 0074): `lista.h` diz **o que** a lista faz e
+`lista.c` diz **como**, com a `struct lista` escondida.
 
-
-A lista do exemplo começa com espaço para 2 despesas. A 3ª dobra
-para 4 e a 5ª, o R$ 27, encontra o vetor cheio de novo: o `realloc` dobra
-para 8, copia os quatro valores e ainda sobram três vagas:
+A lista do exemplo começa com espaço para 2 despesas. A 3ª dobra para 4 e a
+5ª (R$ 27) dobra para 8, copia os quatro valores e deixa três vagas:
 
 {{ideia}}
 
@@ -99,32 +90,25 @@ int main(void) {
 // total: R$ 132
 ```
 
-No fluxograma, a pergunta "está cheio?" vem antes de escrever. No caso do 27
-a resposta é Sim, o vetor dobra e só depois o valor entra em
-`itens[4]`. Se o `realloc` falhar, a função avisa com `false` e a lista
-continua inteira:
+No fluxograma, "está cheio?" vem antes de escrever. Para o 27 a resposta é
+Sim: o vetor dobra e só então o valor entra em `itens[4]`. Se o `realloc`
+falhar, a função devolve `false` e a lista continua intacta:
 
 {{fluxograma}}
 
-O preço do vetor aparece quando você insere ou remove **no meio**: todo mundo
-que vem depois precisa andar uma casa, O(n) no pior caso, que é a posição 0
-(o exemplo A150 mostra). Já ler a posição `i` é instantâneo: `itens[i]` é uma
-conta de endereço.
+Inserir ou remover no **meio** desloca todos os itens seguintes: O(n) no pior
+caso, a posição 0 (exemplo A150). Ler a posição `i` é O(1).
 
 > [!WARNING]
-> Guardar o **endereço** de um item e depois inserir deixa um ponteiro solto: `int *p = &itens[0];` aponta para o bloco antigo, que o `realloc`
-> pode ter devolvido. Guarde a **posição** (o índice), nunca o endereço. E
-> nunca escreva `l->itens = realloc(l->itens, ...)` direto: se o `realloc`
-> devolver `NULL`, você perde o único endereço do bloco antigo.
+> Um `int *p = &itens[0];` guardado antes de inserir pode apontar para o bloco
+> antigo, que o `realloc` devolveu. Guarde o índice. E nunca escreva
+> `l->itens = realloc(l->itens, ...)`: com `NULL`, você perde o bloco antigo.
 
 > [!TIP]
-> **Por dentro do C:** dobrando, inserir n itens copia no total menos de 2n
-> itens (1 + 2 + 4 + ... + n/2 + n), então cada inserção custa O(1) **em
-> média** (custo amortizado). Crescendo de um em um, cada inserção copia tudo
-> de novo: 1 + 2 + 3 + ... + n ≈ n²/2 cópias. Para um milhão de despesas, são
-> uns 20 `realloc` contra um milhão deles. A `struct lista` tem 16 bytes
-> (ponteiro de 8 + dois `int` de 4) e mora num bloco do heap; o vetor mora em
-> outro bloco. Por isso o `lista_libera` faz dois `free`, primeiro o vetor.
+> **Por dentro do C:** dobrando, inserir n itens copia menos de 2n itens (1 +
+> 2 + 4 + ... + n): O(1) **em média** por inserção (custo amortizado). De um
+> em um, são cerca de n²/2 cópias. `lista_libera` faz dois `free`, o do vetor
+> primeiro.
 
 > [!NOTE]
 > **Pergunta para você:** começando com `lista_cria(2)`, quantas vezes o

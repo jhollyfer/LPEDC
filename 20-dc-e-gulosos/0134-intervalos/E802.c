@@ -31,14 +31,6 @@ typedef struct {
 } Feira;
 
 int main(void) {
-    Feira f[] = {
-        {"Pinheiros", 7, 12},  {"Lapa", 6, 9},        {"Tatuapé", 10, 14},
-        {"Mooca", 8, 11},      {"Liberdade", 13, 18}, {"Butantã", 15, 17},
-        {"Santana", 16, 20},
-    };
-    int n = 7;
-    (void)f;
-    (void)n;
 
     return 0;
 }

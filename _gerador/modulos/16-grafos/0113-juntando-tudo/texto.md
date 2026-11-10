@@ -1,12 +1,8 @@
 ## 0113 · Juntando tudo: a central de entregas
 
-Você está escrevendo o backend de uma transportadora pequena. O centro de
-distribuição (CD) atende seis lugares, e o gerente faz três perguntas: dá para
-chegar em todos de caminhão? Qual rota passa por menos trechos (menos
-paradas, menos chance de atraso)? E qual rota roda menos quilômetros (menos
-diesel)?
-
-Cada pergunta tem o seu algoritmo:
+Uma transportadora tem um centro de distribuição (CD) e seis lugares a
+atender. Dá para chegar em todos? Qual rota tem menos trechos? Qual roda menos
+quilômetros? Cada pergunta tem o seu algoritmo:
 
 | Pergunta | Algoritmo | Estrutura auxiliar |
 | --- | --- | --- |
@@ -15,23 +11,20 @@ Cada pergunta tem o seu algoritmo:
 | Menor caminho em soma de pesos (pesos >= 0) | Dijkstra | vetor `dist` (ou heap) |
 | Ligar todos com o menor custo total | Prim | vetor `chave` |
 
-As três primeiras usam o mesmo esqueleto: um vetor de marcas, um vetor
-`pai[]` para reconstruir o caminho e um laço que "descobre" vizinhos. O que
-muda é a **ordem** em que os vértices saem: pilha, fila ou "menor `dist`".
+As três primeiras têm o mesmo esqueleto (marcas, `pai[]` e um laço que descobre
+vizinhos); muda a **ordem** de saída: pilha, fila ou "menor `dist`".
 
-O programa do módulo junta tudo num tipo `Grafo` (uma `struct` com o número
-de vértices, os nomes e a matriz de km) e numa função para cada algoritmo.
-As funções recebem `const Grafo *`: a struct passa de 300 bytes, e copiá-la
-a cada chamada seria desperdício. O `const` promete que ninguém mexe no mapa.
+O programa usa o tipo `Grafo` (vértices, nomes e matriz de km) e uma função por
+algoritmo, com `const Grafo *`: a struct passa de 300 bytes, e o `const`
+promete que ninguém altera o mapa.
 
-A Ilha só tem balsa, então a DFS a deixa de fora. A BFS acha a rota de 2
-trechos pelo Centro, com a estrada longa de 12 km. Dijkstra acha a de 4
-trechos, em verde, com 10 km:
+A Ilha só tem balsa, e a DFS a deixa de fora. A BFS acha a rota de 2 trechos
+pelo Centro (12 km); o Dijkstra, a de 4 trechos, em verde (10 km):
 
 {{ideia}}
 
-No código, `bfs` e `dijkstra` preenchem o mesmo tipo de vetor `pai[]`, por
-isso uma única `mostrar_rota` serve para os dois:
+`bfs` e `dijkstra` preenchem o mesmo `pai[]`, e uma só `mostrar_rota` serve aos
+dois:
 
 ```c
 #include <limits.h>
@@ -152,43 +145,32 @@ int main(void) {
 // Menos km:      CD -> Feira -> Morro -> Porto -> Vila (4 trechos, 10 km)
 ```
 
-A DFS vem primeiro, como porteiro: se a Vila estivesse fora da rede, não
-faria sentido procurar rota nenhuma.
+A DFS vem primeiro, como porteiro: com a Vila fora da rede, não há rota.
 
 {{fluxograma}}
 
-"Menor caminho" sozinho não diz nada: menor em quê? Se toda aresta custa o
-mesmo, a BFS resolve em O(V + E) e é mais simples. Se os pesos variam, a BFS
-devolve uma resposta errada sem nenhum aviso, como os 16 km acima.
+"Menor caminho" pede "menor em quê?". Com arestas de mesmo custo, a BFS basta,
+em O(V + E). Com pesos variados, erra sem aviso, como nos 16 km acima.
 
-O exemplo A225 compara BFS e Dijkstra destino por destino num mapa com duas
-partes soltas, e usa a DFS para contar as partes. O A226 traz um quarto
-problema: ligar cinco cidades com fibra óptica gastando o mínimo. Agora não
-se busca um caminho de A até B, e sim uma **árvore geradora mínima**: um
-conjunto de cabos que conecta todo mundo com a menor soma. O
-algoritmo de **Prim** faz isso com o código do Dijkstra trocando uma linha: em
-vez de `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
+O exemplo A225 compara BFS e Dijkstra num mapa com duas partes soltas e usa a
+DFS para contá-las. O A226 liga cinco cidades com fibra óptica gastando o
+mínimo: uma **árvore geradora mínima**, o conjunto de cabos que conecta todos
+com a menor soma. O **Prim** é o Dijkstra com uma linha trocada: em vez de
+`dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
 
 > [!WARNING]
-> Na matriz de pesos, `0` quer dizer "sem aresta". Isso só funciona se nenhum
-> peso real puder ser zero. Se um trecho pode custar R$ 0 (um pedágio isento,
-> uma conexão gratuita), use outra marca, como `-1`, ou uma matriz `bool`
-> separada para dizer se a aresta existe. Senão o algoritmo some com a
-> estrada sem aviso.
+> Na matriz de pesos, `0` quer dizer "sem aresta", o que só funciona se nenhum
+> peso real for zero. Se um trecho pode custar R$ 0, use outra marca,
+> como `-1`.
 
 > [!TIP]
-> **Por dentro do C:** `Grafo g` mora inteiro na pilha de `main`: 4 bytes do
-> `n`, 8 ponteiros de 8 bytes para os nomes (as strings em si ficam na área
-> de literais, só de leitura) e 64 `int` da matriz: 328 bytes, contando 4 de
-> alinhamento depois do `n`. Passar `&g` copia só 8 bytes. A inicialização
-> `{.n = 7, .nomes = {...}}` usa **inicializadores designados** do C99: o que
-> não foi citado, como a matriz `km`, começa zerado. Com `MAX` 1000 a matriz
-> teria 4 MB, metade da pilha inteira: aí a struct vai para o heap, com
-> `malloc`.
+> **Por dentro do C:** `Grafo g` mora na pilha de `main` (328 bytes) e `&g`
+> copia só 8. `{.n = 7, .nomes = {...}}` usa **inicializadores designados** do
+> C99; o que não foi citado, como `km`, começa zerado. Com `MAX` 1000, a matriz
+> teria 4 MB e a struct iria para o heap.
 
 > [!NOTE]
-> **Pergunta para você:** se a estrada Centro–Vila cair de 12 para 5 km, as
-> duas rotas viram a mesma? Quantos km e quantos trechos? Preveja antes de
-> mudar o programa acima.
+> **Pergunta para você:** com a estrada Centro–Vila em 5 km em vez de 12, as
+> duas rotas viram a mesma? Quantos km e trechos?
 
 {{pratique}}

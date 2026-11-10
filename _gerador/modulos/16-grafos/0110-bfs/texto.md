@@ -1,45 +1,32 @@
 ## 0110 · BFS: busca em largura
 
-Você quer uma indicação para a vaga que a Rita, recrutadora, está anunciando
-no LinkedIn. Você não conhece a Rita. Conhece o Max e a Nina; eles conhecem
-outras pessoas, que conhecem outras. Qual é a corrente mais curta de
-apresentações até ela?
+Você quer uma indicação para a vaga da recrutadora Rita, que não conhece, mas
+conhece Max e Nina, que conhecem outras pessoas. Qual é a corrente mais curta
+de apresentações? Num grafo não dirigido, é o **menor caminho em número de
+arestas** de Lia (você) até Rita. O "conexão de 2º grau" do LinkedIn é essa
+**distância**, sem relação com o grau do assunto 0109.
 
-O "conexão de 2º grau" do LinkedIn é essa ideia. Lá, o grau é a **distância**,
-sem relação com o grau do vértice do assunto anterior. A rede é
-um grafo não dirigido: pessoas são vértices, conexões são arestas. A pergunta é
-o **menor caminho em número de arestas** de Lia (você) até Rita.
+A **busca em largura** (BFS, *breadth-first search*) explora o grafo em ondas,
+como uma pedra jogada no lago: a onda 0 é Lia; a 1, quem está a uma aresta
+(Max e Nina); a 2, os vizinhos deles ainda não vistos (Otto e Pedro); a 3,
+Rita.
 
-A **busca em largura** (BFS, de *breadth-first search*) responde isso
-explorando o grafo em ondas, como uma pedra jogada no lago:
+A BFS usa uma **fila** (assunto 0085), e quem foi descoberto primeiro sai
+primeiro. O laço tira `u` da frente e, para cada vizinho `v` não descoberto,
+faz `dist[v] = dist[u] + 1`, `pai[v] = u` e põe `v` no fim da fila.
 
-- onda 0: a origem, Lia;
-- onda 1: todo mundo a uma aresta de Lia (Max e Nina);
-- onda 2: os vizinhos deles que ninguém viu ainda (Otto e Pedro);
-- onda 3: Rita.
+`dist[]` guarda a distância e, com `-1`, o "não descoberto", o que impede a
+busca de andar em círculos: num grafo dá para chegar ao mesmo vértice por
+caminhos diferentes (Otto é vizinho de Max **e** de Nina). `pai[]` guarda quem
+descobriu cada vértice; os pares (pai, filho) formam a **árvore da BFS**, e
+seguir `pai[]` de Rita até `-1` dá o caminho mais curto, de trás para frente.
 
-Para visitar na ordem das ondas, a BFS usa uma **fila** (assunto 0085): quem
-foi descoberto primeiro é processado primeiro. O laço é sempre o mesmo: tira
-`u` da frente da fila e, para cada vizinho `v` ainda não descoberto, anota
-`dist[v] = dist[u] + 1`, guarda `pai[v] = u` e põe `v` no fim da fila.
-
-O vetor `dist[]` faz dois papéis: guarda a distância e, com `-1`, diz "ainda
-não descoberto". Ele impede a busca de andar em círculos: num grafo, ao
-contrário da árvore, dá para chegar no mesmo vértice por caminhos diferentes
-(Otto é vizinho de Max **e** de Nina).
-
-O vetor `pai[]` guarda quem descobriu cada vértice. Os pares (pai, filho)
-formam a **árvore da BFS**, e seguir `pai[]` a partir de Rita até chegar em
-`-1` dá o caminho mais curto, de trás para frente.
-
-O Cormen escreve a mesma BFS com **cores**: **branco** é o vértice ainda não
-descoberto (o nosso `dist == -1`), **cinza** é o que está na fila e **preto**
-o que já saiu dela. O `v.d` dele é o nosso `dist[v]`, e o `v.π` (pi), o
+O Cormen usa **cores**: **branco** é o não descoberto (`dist == -1`), **cinza**
+o que está na fila e **preto** o que já saiu; `v.d` é o `dist[v]` e `v.π`, o
 `pai[v]`.
 
-No desenho, as setas verdes são as arestas da árvore da BFS (cada uma liga um
-vértice a quem o descobriu), o número em cima de cada pessoa é a distância e,
-embaixo, está a fila na ordem em que cada um entrou:
+No desenho, as setas verdes são a árvore da BFS, e o número de cada pessoa é a
+distância:
 
 {{ideia}}
 
@@ -104,16 +91,14 @@ int main(void) {
 // Caminho até Rita: Lia -> Max -> Otto -> Rita (distância 3)
 ```
 
-Quem controla tudo é a pergunta "a fila esvaziou?". Cada volta tira um
-vértice e pode colocar vários; quando ninguém novo aparece, a fila seca e a
-busca termina:
+A busca termina quando a fila esvazia:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-Cada linha é uma volta do `while`. Otto já foi descoberto por Max, então
-quando Nina olha para ele, nada acontece:
+Cada linha é uma volta do `while`. Otto já foi descoberto por Max; quando Nina
+o vê, nada acontece:
 
 | Tira | Vizinhos novos | dist anotada | Fila depois |
 | --- | --- | --- | --- |
@@ -125,35 +110,25 @@ quando Nina olha para ele, nada acontece:
 | Pedro | nenhum (Rita já tem dist) | | Rita |
 | Rita | nenhum | | (vazia) |
 
-A distância só cresce na fila: primeiro saem todos os de distância 1, depois
-todos os de 2. Por isso o primeiro caminho que alcança Rita é o mais curto.
-Isso vale porque toda aresta "custa" 1. Com pesos diferentes (minutos, reais)
-a BFS erra, e é aí que entra Dijkstra (assunto 0112).
+Saem da fila todos de distância 1, depois todos de 2: o primeiro caminho até
+Rita é o mais curto. Isso vale porque toda aresta custa 1; com pesos
+diferentes entra Dijkstra (assunto 0112).
 
-O exemplo A219 agrupa as pessoas por onda e mostra quem a BFS nunca alcança
-(um grafo com uma parte solta). O A220 roda a mesma BFS numa grade: cada casa
-de um galpão é um vértice, e os vizinhos são as casas de cima, de baixo, da
-esquerda e da direita. Não há matriz de adjacência; os vizinhos saem de uma
-conta.
+O exemplo A219 agrupa as pessoas por onda e mostra quem a BFS não alcança. O
+A220 roda a BFS numa grade, onde os vizinhos saem de uma conta, sem matriz.
 
 > [!WARNING]
-> Marque o vértice como descoberto **ao colocar na fila**, não ao tirar. Se
-> você só marca ao tirar, Otto entra duas vezes (uma por Max, outra por Nina) e,
-> num grafo maior, o mesmo vértice entra muitas vezes. A fila de V posições
-> estoura, e o vértice aparece repetido na ordem de visita.
+> Marque o vértice como descoberto **ao pôr na fila**, não ao tirar. Marcando
+> ao tirar, Otto entra duas vezes (por Max e por Nina) e a fila estoura.
 
 > [!TIP]
-> **Por dentro do C:** a fila da BFS é um `int fila[V]` com dois índices,
-> `inicio` e `fim`. Como cada vértice entra uma vez só, `fim` nunca passa de V,
-> e a fila circular é dispensável. Tirar do início deslocando todos os
-> elementos uma casa para trás custaria O(n) a cada saída; aqui,
-> `fila[inicio++]` é O(1). O custo total da BFS é O(V²) com matriz (para cada
-> vértice, varre a linha inteira) e O(V + E) com lista de adjacência. Os três
-> vetores (`dist`, `pai`, `fila`) somam 3 × 6 × 4 = 72 bytes na pilha.
+> **Por dentro do C:** cada vértice entra na fila uma vez, então `int fila[V]`
+> basta e `fila[inicio++]` é O(1). A BFS custa O(V²) com matriz e O(V + E)
+> com lista de adjacência.
 
 > [!NOTE]
-> **Pergunta para você:** se a conexão entre Max e Otto sumir, qual passa a ser
-> o caminho até Rita, e quem descobre Otto? Preveja a nova tabela antes de
-> apagar o par `{1, 3}` no programa acima.
+> **Pergunta para você:** sem a conexão entre Max e Otto, qual passa a ser o
+> caminho até Rita, e quem descobre Otto? Preveja a tabela antes de apagar o
+> par `{1, 3}`.
 
 {{pratique}}

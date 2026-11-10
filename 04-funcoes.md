@@ -4227,6 +4227,153 @@ algoritmo de Euclides. Veja 0033.
 
 </details>
 
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 032/2016 · Questão 02**
+
+Quantas vezes o símbolo '#' é impresso pela função teste quando chamada com parâmetro 5 (teste(5))?
+
+```c
+void teste (int i) {
+  if (i > 1) {
+    teste (i/2);
+    teste (i/2);
+  }
+  printf( "#"); /*imprime símbolo # na tela */
+}
+```
+
+- a) 3
+- b) 4
+- c) 7
+- d) 8
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**C.** T(1)=1, T(2)=3, T(3)=3 (3/2=1), T(5)=2·T(2)+1=7; conferido em C. Assunto 0032.
+
+</details>
+
+**Edital 053/2016 · Questão 02**
+
+Sobre as funções abaixo,
+
+```c
+Função I
+int fatorial(int i) {
+  if (i <= 1) {
+    return 1;
+  } else {
+    fatorial(i-1);
+  }
+}
+
+Função II
+void fatorial() {
+  int fat[0] = 1;
+  for (int j=1; ; j++) {
+    fat[j] = j * fat[j-1];
+  }
+}
+```
+
+Assinale a alternativa CORRETA:
+
+- a) Somente a função I é recursiva.
+- b) Ambas as funções são recursivas.
+- c) Somente a função II é recursiva.
+- d) A função I não é recursivo e a função II é orientada a objeto.
+- e) Ambas as funções não são recursivas.
+
+<details><summary>Gabarito</summary>
+
+**A.** A função I chama a si mesma (mesmo sem return); a II só tem laço. Assunto 0032.
+
+</details>
+
+**Edital 055/2017 · Questão 01**
+
+Considere a função em pseudocódigo a seguir:
+
+![Questão 01 - pseudocódigo](04-funcoes/_fontes/provas-figuras/2017-055/q01-pseudocodigo.png)
+
+Marque a alternativa CORRETA.
+A execução da função Chamada_recursiva(1) faz com que o algoritmo execute indefinidamente. Para este caso, os cinco primeiros valores impressos são:
+
+- A) 1, 0, 3, 1 e 0.
+- B) 1, 0, 3, 1 e 2.
+- C) 1, 0, 3, 2 e 0.
+- D) 1, 0, 3, 2 e 3.
+- E) 1, 0, 3, 2 e 1.
+
+<details><summary>Gabarito</summary>
+
+**E.** Assunto 0032.
+
+</details>
+
+**Edital 023/2018 · Questão 11**
+
+Considere o algoritmo a seguir que define a função recursiva "f".
+
+```
+função f(n){
+  se n igual a 1 então retorne 0
+  se n igual a 2 então retorne 1
+  setorne f(n-1) + f(n-2)
+}
+```
+
+Qual o valor retornado pela função "f" ao ser invocada passando o valor 4 como argumento?
+
+- a) 0
+- b) 1
+- c) 2
+- d) 3
+- e) 4
+
+<details><summary>Gabarito</summary>
+
+**C.** f(4)=f(3)+f(2)=(1+0)+1=2. Assunto 0032.
+
+</details>
+
+**Edital 033/2019 · Questão 07**
+
+Qual estrutura de dados é comumente usada para implementar recursão?
+
+- a) Queue (fila)
+- b) Stack (pilha)
+- c) Array (vetor)
+- d) Lista
+- e) Matriz
+
+<details><summary>Gabarito</summary>
+
+**B.** Recursão usa a pilha de chamadas. Assunto 0031.
+
+</details>
+
+**Edital 060/2019 · Questão 10**
+
+Qual das seguintes estruturas de dados é mais usada para implementar recursão?
+
+- a) Heap binário
+- b) Hash table
+- c) Fila
+- d) Árvore de busca
+- e) Pilha
+
+<details><summary>Gabarito</summary>
+
+**E.** Recursão usa a pilha. Assunto 0031.
+
+</details>
+
+
 ## Para ler mais
 
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 5: funções, classes de armazenamento, escopo e recursão; cap. 13: o pré-processador.

@@ -1,9 +1,13 @@
 // 0149 · Juntando tudo
 // Exercício E889 · ★☆☆
 //
-// Use o TAD do corretor (corretor.h) para conferir o recado da escola:
-// separe o texto em palavras com cor_proxima, mostre as que não estão no
-// dicionário básico e conte quantas são, de quantas no total.
+// Use o TAD do corretor (corretor.h) para conferir este recado da escola:
+//
+//   a escola da cidade tem muitos alunos e um onibus amarelo na porta
+//
+// Separe o texto em palavras com cor_proxima, mostre as que não estão no
+// dicionário básico (cor_carrega_basico) e conte quantas são, de quantas no
+// total.
 //
 //   Saída esperada:
 //   desconhecidas: muitos alunos
@@ -15,8 +19,6 @@
 #include "corretor.h"
 
 int main(void) {
-    const char *texto = "a escola da cidade tem muitos alunos e um onibus amarelo na porta";
-    (void)texto; // apague esta linha
 
     return 0;
 }

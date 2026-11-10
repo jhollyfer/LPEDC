@@ -1,58 +1,22 @@
 // 0128 · N-rainhas
 // Exercício E767 · ★★★
 //
-// Ache o bug. Este programa conta as soluções do 8-rainhas e devia mostrar
-// 92, mas mostra 0. Ele compila sem aviso e roda sem erro do sanitizer: os
-// índices nunca saem dos vetores. O erro está numa linha só. Ache,
-// conserte e rode de novo.
+// Escreva o 8-rainhas com três vetores de marcas: colunas, diagonais ↗ e
+// diagonais ↘ (cada casa tem a sua marca em cada um, e a recursão desfaz
+// com o MESMO índice com que marcou). Conte as soluções e, no fim, confira
+// que os três vetores voltaram a ficar limpos (todos false): se algum
+// desfazer errar o índice, sobra marca e a contagem sai errada.
 //
 //   Saída esperada:
 //   92 soluções
 //   vetores limpos no fim: sim
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 
-#define N 8
-
-bool coluna[N];
-bool diag1[2 * N - 1];
-bool diag2[2 * N - 1];
-int solucoes = 0;
-
-bool limpos(void) {
-    for (int k = 0; k < 2 * N - 1; k++) {
-        if ((k < N && coluna[k]) || diag1[k] || diag2[k]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void rainha(int l) {
-    if (l == N) {
-        solucoes++;
-        return;
-    }
-    for (int c = 0; c < N; c++) {
-        if (coluna[c] || diag1[l + c] || diag2[l - c + N - 1]) {
-            continue;
-        }
-        coluna[c] = true;
-        diag1[l + c] = true;
-        diag2[l - c + N - 1] = true;
-        rainha(l + 1);
-        coluna[c] = false;
-        diag1[l + c] = false;
-        diag2[c - l + N - 1] = false;
-    }
-}
-
 int main(void) {
-    rainha(0);
-    printf("%d soluções\n", solucoes);
-    printf("vetores limpos no fim: %s\n", limpos() ? "sim" : "não");
+
     return 0;
 }

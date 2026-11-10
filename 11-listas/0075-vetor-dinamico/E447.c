@@ -1,51 +1,27 @@
 // 0075 · Vetor dinâmico
 // Exercício E447 · ★★☆
 //
-// O pluviômetro da escola anota a chuva do dia em mm, e grava -1 quando o
-// sensor falha. Complete as duas funções usando SÓ a interface de lista.h:
+// O pluviômetro da escola anota a chuva do dia em mm e grava -1 quando o
+// sensor falha. Usando SÓ a interface de lista.h, guarde as leituras
+// 4, -1, 0, 12, -1, -1, 7 numa lista de capacidade inicial 4 e escreva:
 //
-//   posicao_de(l, valor)   primeira posição de valor na lista, ou -1
-//   remove_todos(l, valor) tira todas as ocorrências e devolve quantas tirou
+//   int posicao_de(const Lista *l, int valor)  primeira posição do valor, ou -1
+//   int remove_todos(Lista *l, int valor)      tira todas as ocorrências e
+//                                              devolve quantas tirou
 //
-// Com as leituras 4, -1, 0, 12, -1, -1, 7:
+// Mostre a lista, remova as falhas (-1) e mostre de novo.
 //
 //   Saída esperada:
 //   antes:  [4, -1, 0, 12, -1, -1, 7]
 //   depois: [4, 0, 12, 7]
 //   3 falhas removidas
 //
-// Escreva sua resposta abaixo (complete as funções):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include "lista.h"
 
-// devolve a primeira posição de "valor" na lista, ou -1 se não tiver
-int posicao_de(const Lista *l, int valor) {
-    (void)l;     // apague estas duas linhas
-    (void)valor; // quando escrever a função
-    return -1;
-}
-
-// tira todas as ocorrências de "valor" e devolve quantas tirou
-int remove_todos(Lista *l, int valor) {
-    (void)l;     // apague estas duas linhas
-    (void)valor; // quando escrever a função
-    return 0;
-}
-
 int main(void) {
-    int chuva[] = {4, -1, 0, 12, -1, -1, 7};
-    Lista *l = lista_cria(4);
-    if (l == NULL) return 1;
-    for (int i = 0; i < 7; i++) lista_insere_fim(l, chuva[i]);
 
-    printf("antes:  ");
-    lista_imprime(l);
-    int tirou = remove_todos(l, -1);
-    printf("depois: ");
-    lista_imprime(l);
-    printf("%d falhas removidas\n", tirou);
-
-    lista_libera(l);
     return 0;
 }

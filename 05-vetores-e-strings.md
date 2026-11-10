@@ -4183,6 +4183,65 @@ tirar o `'\n'` com `lin[strcspn(lin, "\n")] = '\0';`. Veja 0042.
 
 </details>
 
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 032/2016 · Questão 20**
+
+Considere as afirmações abaixo:
+
+I) Pode-se determinar o maior elemento de um vetor ordenado a um custo constante (realizando-se um número constante de operações)\
+II) Pode-se inverter a ordem de um vetor já ordenado fazendo-se um número de trocas de posições igual à metade do tamanho do tamanho do vetor e sem ter que criar uma cópia do mesmo\
+III) O Quicksort é sempre a opção mais rápida (com menor tempo de execução) para ordenar qualquer vetor de qualquer tamanho e com qualquer ordenação inicial das chaves\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas as afirmações são verdadeiras
+- b) Apenas I é verdadeira
+- c) Apenas I e III são verdadeiras
+- d) Apenas I e II são verdadeiras
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**D.** I (último elemento) e II (n/2 trocas) verdadeiras; III falsa (Quicksort tem pior caso quadrático). Assunto 0038.
+
+</details>
+
+**Edital 023/2018 · Questão 13**
+
+Considere uma estrutura de dados do tipo vetor. Com respeito a tal estrutura, é CORRETO que seus componentes são, caracteristicamente:
+
+- a) heterogêneos e com acesso FIFO.
+- b) heterogêneos e com acesso LIFO.
+- c) heterogêneos e com acesso indexado-sequencial.
+- d) homogêneos e acesso não indexado.
+- e) homogêneos e de acesso aleatório por intermédio de índices.
+
+<details><summary>Gabarito</summary>
+
+**E.** Vetor: homogêneo e acesso aleatório por índice. Assunto 0037.
+
+</details>
+
+**Edital 061/2018 · Questão 02**
+
+Matrizes são estruturas de dados de n-dimensões. Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.
+
+- a) Uma matriz de m linhas e n colunas contêm (m * n) dados.
+- b) Uma matriz pode ser representada utilizando listas ligadas.
+- c) A soma dos elementos de uma matriz pode ser calculada fazendo dois laços aninhados, um sobre as linhas e o outro sobre as colunas.
+- d) A soma de duas matrizes de m linhas e n colunas resulta em uma matriz de 2*m linhas e 2*n colunas.
+- e) O produto de duas matrizes de n linhas e n colunas resulta em uma matriz de n linhas e n colunas.
+
+<details><summary>Gabarito</summary>
+
+**D.** Soma de matrizes m×n dá m×n, não 2m×2n. Assunto 0039.
+
+</details>
+
+
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Caps. 6 (vetores e matrizes), 7 (strings) e 9 (passagem de vetores para funções).

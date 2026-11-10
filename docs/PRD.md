@@ -34,7 +34,7 @@ C faz na memória.
 | # | Item | Situação |
 |---|---|---|
 | 1 | 29 módulos, 189 assuntos, cada um com texto, ideia, código e fluxograma | feito |
-| 2 | 2 exemplos e 6 exercícios por assunto, com resolução em `_respostas/` | feito |
+| 2 | 2 exemplos e 4 exercícios por assunto (1 ★☆☆, 2 ★★☆, 1 ★★★), com resolução em `_respostas/` | feito |
 | 3 | Lista prática de 30 exercícios por módulo | feito |
 | 4 | Desafios e questões no estilo da prova em cada módulo | feito |
 | 5 | Questões, mapa e simulados ajustados a provas reais anteriores | feito |

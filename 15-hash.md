@@ -2,51 +2,44 @@
 
 # Módulo 15 · Tabelas hash
 
-Até aqui, achar uma coisa sempre custou alguma procura: O(n) na lista, O(log
-n) na busca binária e na árvore equilibrada. A tabela hash troca a procura
-por uma **conta**: uma função transforma a chave num índice de vetor, e o
-acesso ao vetor custa O(1). É a estrutura de dados mais usada na prática.
+Achar um item custou até aqui O(n) na lista e O(log n) na busca binária e na
+árvore equilibrada. A tabela hash troca a procura por uma **conta**: uma
+função transforma a chave num índice de vetor, e o acesso custa O(1).
+Dicionários, conjuntos e caches de quase todo software são tabelas hash.
 
-Dicionários, conjuntos e caches de quase todo software são tabelas hash por
-baixo. O C não traz nada disso pronto, e por isso você vai ver como elas
-funcionam: a função hash que mistura os bytes da chave, o que acontece quando
-duas chaves caem no mesmo lugar, por que a tabela cresce quando enche e por
-que ela não guarda ordem nenhuma.
-
-O módulo tem duas famílias para tratar colisão: o **encadeamento**, que
-pendura uma lista em cada balde, e o **endereçamento aberto**, que procura
-outra posição dentro do próprio vetor. Termina com um contador de palavras
-que junta tabela, strings, `qsort` e memória dinâmica.
+O módulo cobre a função hash, a colisão (tratada por **encadeamento**, com uma
+lista em cada balde, ou por **endereçamento aberto**, que procura outra
+posição no vetor), o crescimento da tabela e a falta de ordem. Termina com um
+contador de palavras.
 
 ## O que você vai aprender
 
-- o que é **endereçamento direto**, **função hash**, **colisão** e **fator de carga**
-- escrever funções hash boas para inteiros (`k % m`, com `m` primo) e para texto (polinômio de base 31, em `unsigned`)
-- montar uma tabela com **encadeamento**: inserir, buscar, remover e liberar cada corrente
-- montar uma tabela com **endereçamento aberto** e sondagem linear, com a marca de **removida**
-- medir o custo: comparações, sondagens, agrupamento e quando crescer a tabela (**rehash**)
-- usar a tabela como contador e como conjunto, num programa completo
+- **função hash**, **colisão**, **fator de carga** e endereçamento direto
+- hash para inteiros (`k % m`, `m` primo) e para texto (polinômio de base 31, em `unsigned`)
+- **encadeamento**: inserir, buscar, remover e liberar cada corrente
+- **endereçamento aberto**: sondagem linear e marca de **removida**
+- custo (comparações, sondagens, agrupamento) e **rehash**
+- a tabela como contador e como conjunto
 
 ## Antes de começar
 
-Este módulo usa listas encadeadas (módulo 11) o tempo todo: inserir no
-início, percorrer e remover guardando o anterior. Usa também `malloc`/`free`,
-structs, ponteiro para função e `qsort`. Se algo disso estiver nebuloso,
-revise antes.
-
-Nos desenhos das tabelas, cada balde é uma gaveta com o índice à esquerda, e
-a corrente de nós sai dela para a direita; vermelho marca colisão.
-
-As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
-`aberta.h`/`aberta.c` (endereçamento aberto) e `palavras.h`/`palavras.c`
-(o contador) ficam na pasta de cada assunto, e o comando do exemplo compila tudo junto:
+Este módulo usa listas encadeadas (módulo 11), `malloc`/`free`, structs,
+ponteiro para função e `qsort`. As tabelas seguem o padrão TAD: `tabela.h` e
+`tabela.c` (encadeamento), `aberta.h` e `aberta.c` (endereçamento aberto),
+`palavras.h` e `palavras.c` (contador) ficam na pasta de cada assunto, e o
+comando compila tudo junto:
 
 ```bash
 gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
 ```
 
-Os exercícios trazem a própria implementação dentro do arquivo, para você
-escrever cada pedaço com as mãos.
+Nos desenhos, cada balde é uma gaveta com o índice à esquerda e a corrente de
+nós à direita; vermelho marca colisão.
+
+**Progressão.** Do módulo 11 vem a lista encadeada, que vira a corrente de
+cada balde; dos módulos 13 e 14 vem o O(log n) da busca binária e da árvore,
+contra o qual o O(1) esperado da tabela é comparado. O módulo 16 reaproveita
+a lista de vizinhos nos grafos, e o 17 dá o rigor formal para provar custos.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -60,57 +53,39 @@ escrever cada pedaço com as mãos.
 ## 0105 · A ideia e a função hash
 
 Na academia, o guarda-volumes tem 7 armários. A recepcionista não procura um
-armário vago de porta em porta, nem anota numa lista quem ficou onde. Ela
-aplica uma **regra** ao seu nome e a regra devolve o número do armário. Na
-saída, a mesma regra diz onde estão as suas coisas, sem procurar nada.
+vago de porta em porta: aplica uma **regra** ao seu nome, e a regra devolve o
+número do armário. Na saída, a mesma regra diz onde estão as suas coisas.
 
-Você já viu buscas de todo tipo: sequencial em O(n), binária em O(log n), na
-árvore de busca em O(log n) se ela estiver equilibrada. Uma busca ainda melhor
-você usa desde o começo do curso: `v[i]`. Acessar um vetor pelo
-índice custa **O(1)**, não importa o tamanho.
+Acessar `v[i]` custa **O(1)**. Quando a chave é um número pequeno, ela serve
+de índice: com `const char *estado[100]`, `estado[61]` é "DF" em um passo. É o
+**endereçamento direto** (exemplo A209). Falha se a chave é grande (um CPF tem
+11 dígitos) ou não é número (um nome).
 
-Quando a chave já é um número pequeno, dá para usá-la direto como índice. Os
-DDDs vão de 11 a 99, então `const char *estado[100]` resolve: `estado[61]` é
-"DF", em um passo. Isso é **endereçamento direto** (exemplo A209). O
-problema aparece quando a chave é grande ou não é número: um CPF tem 11 dígitos (um vetor de 100
-bilhões de posições para guardar 50 alunos?) e um nome nem é número.
+A saída é uma **função hash**: ela recebe a chave e devolve um índice entre
+`0` e `m - 1`, sendo `m` o tamanho da tabela. O vetor com os itens é a
+**tabela hash**, e cada posição é um **balde**. Uma boa função é
+**determinística** (mesma chave, mesmo índice), **rápida** e **espalhadora**
+(chaves diferentes caem em baldes diferentes).
 
-A saída é uma **função hash** (função de espalhamento): ela pega a chave, seja
-qual for, e devolve um índice entre `0` e `m - 1`, sendo `m` o tamanho da
-tabela. O vetor que guarda os itens nessas posições é a **tabela hash**, e cada
-posição é um **balde**.
+Para inteiros, vale o **método da divisão**: `h(k) = k mod m`, em C `k % m`.
+O Cormen recomenda `m` primo e longe de uma potência de 2, porque com
+`m = 2^p` o resto guarda só os `p` bits de baixo da chave. O **método da
+multiplicação** fica para o assunto 0178. Para texto, o mais simples é somar
+os códigos das letras e tirar o resto.
 
-Uma boa função hash tem três qualidades:
+Há mais chaves possíveis do que baldes, então duas chaves diferentes **vão**
+cair no mesmo balde: é a **colisão**. Ela não se evita; trata-se nos próximos
+dois assuntos. O **fator de carga** `α = n / m` mede o aperto: 5 alunos em 7
+armários dão α ≈ 0,71. Perto de 1 ou acima, a colisão aumenta.
 
-- **determinística**: a mesma chave dá sempre o mesmo índice, senão você não
-  acha mais o que guardou;
-- **rápida**: custa pouco calcular, senão perde a graça do O(1);
-- **espalha bem**: chaves diferentes caem em baldes diferentes, sem amontoar.
-
-Para inteiros, a função clássica é o resto, o **método da divisão**:
-`h(k) = k mod m`, em C `k % m`. O Cormen recomenda um `m` primo e longe de
-uma potência de 2: com `m = 2^p`, o resto são só os `p` bits de baixo da
-chave, e os outros bits nem contam. A outra receita do edital, o **método da
-multiplicação**, fica para o assunto 0178. Para texto, o jeito mais
-simples é somar os códigos das letras e tirar o resto. Só que existem mais
-chaves possíveis do que baldes, então duas chaves diferentes **vão** cair no
-mesmo balde um dia. Isso é uma **colisão**. Não dá para evitar, só deixar
-rara e saber tratar (os próximos dois assuntos).
-
-A conta que mede o aperto da tabela é o **fator de carga**: `α = n / m`, o
-número de itens dividido pelo número de baldes. Com 5 alunos em 7 armários,
-α ≈ 0,71. Quanto mais perto de 1 (ou acima), mais colisão.
-
-Os 5 alunos chegam na ordem ana, davi, lia, bia e caio.
-A regra é "soma dos códigos das letras, resto por 7". Para "caio": 99 + 97 +
-105 + 111 = 412, e 412 % 7 = 6. Só que "bia" (98 + 105 + 97 = 300) também deu
-6, e chegou antes. Os outros três caem em armários livres:
+Os alunos ana, davi, lia, bia e caio chegam nessa ordem; a regra é "soma dos
+códigos das letras, resto por 7". "caio" soma 412, e 412 % 7 = 6; "bia" soma
+300 e também dá 6, e chegou antes. Os outros três caem em armários livres:
 
 <p align="center"><img src="15-hash/0105-hashing/ideia.svg" alt="Diagrama da ideia: A ideia e a função hash" width="858"></p>
 
-No código, o vetor `dono` é a tabela: `NULL` quer dizer
-armário vazio. O programa só **detecta** a colisão; resolver fica para o
-próximo assunto:
+No código, o vetor `dono` é a tabela e `NULL` é armário vazio. O programa só
+**detecta** a colisão:
 
 ```c
 #include <stdio.h>
@@ -149,33 +124,27 @@ int main(void) {
 // caio -> armário 6 (colisão com bia!)
 ```
 
-No fluxograma, a função hash é um laço que acumula a soma, letra por
-letra, e um resto no final. O caminho mostrado é o do "caio": quatro voltas no
-laço, índice 6, armário ocupado, colisão:
+
+O fluxograma mostra o caminho do "caio": quatro voltas no laço, índice 6,
+armário ocupado, colisão:
 
 <p align="center"><img src="15-hash/0105-hashing/fluxograma.svg" alt="Fluxograma: A ideia e a função hash" width="533"></p>
 
 > [!WARNING]
-> Somar os códigos é fácil, mas a soma **não vê a ordem das letras**. "amor",
-> "roma", "mora" e "ramo" têm as mesmas letras, então dão a mesma soma (431) e
-> caem todos no mesmo balde. Anagramas são comuns em nomes e códigos ("AB12" e
-> "BA21"). Use o **polinômio**: `h = h * 31 + letra`. Cada letra é
-> multiplicada pela sua posição, e a ordem passa a contar (exemplo A210).
+> A soma **não vê a ordem das letras**: "amor", "roma", "mora" e "ramo" somam
+> 431 e caem no mesmo balde. Use o **polinômio** `h = h * 31 + letra`, que
+> multiplica cada letra pela sua posição (exemplo A210).
 
 > [!TIP]
-> **Por dentro do C:** o C não tem "letra"; tem bytes. Em UTF-8, o "ã" ocupa
-> dois bytes, `0xC3 0xA3`, e no gcc para PC o tipo `char` tem **sinal**: esses
-> bytes valem -61 e -93. Somados num `int`, podem deixar a soma negativa, e o
-> resto de um negativo em C é negativo: `-98 % 8` dá `-2`, índice fora do
-> vetor. Por isso a função converte para `unsigned char` (0 a 255) e acumula
-> num `unsigned`. Há outro motivo: estourar um `unsigned` é definido (a conta dá a volta, módulo 2³²),
-> enquanto estourar um `int` é comportamento indefinido. O polinômio estoura o
-> tempo todo, de propósito.
+> **Por dentro do C:** `char` tem sinal no gcc de PC, e o "ã" em UTF-8 vira
+> bytes negativos, o que gera resto negativo (`-98 % 8` dá `-2`). Por isso a
+> função usa `unsigned char` e acumula em `unsigned`, cujo estouro é definido
+> (módulo 2³²); o de `int` é indefinido.
 
 > [!NOTE]
-> **Pergunta para você:** se a tabela tivesse 10 armários em vez de 7, quais
-> alunos colidiriam? Faça as contas com as somas (ana 304, davi 420, lia 310,
-> bia 300, caio 412) antes de trocar `7` por `10` no código acima e rodar.
+> **Pergunta para você:** com 10 armários em vez de 7, quais alunos colidiriam?
+> Use as somas (ana 304, davi 420, lia 310, bia 300, caio 412) antes de
+> trocar `7` por `10` no código.
 
 ### Hora de praticar
 
@@ -282,11 +251,10 @@ gcc ~/LPEDC/15-hash/0105-hashing/A210.c -o ~/LPEDC/15-hash/0105-hashing/A210 && 
 
 **Exercício E625** · ★☆☆
 
-A lanchonete guarda os pedidos do dia numa prateleira com 11 nichos. O
-nicho de cada pedido é o resto da divisão do número do pedido por 11.
-Escreva a função "int nicho(int pedido)" e mostre o nicho dos pedidos
-1043, 2210, 3876, 5521 e 7019, um por linha, no formato abaixo. Quando o
-nicho já estiver ocupado por um pedido anterior, acrescente na linha
+A lanchonete guarda os pedidos numa prateleira de 11 nichos. O nicho de um
+pedido é o resto da divisão do número do pedido por 11. Escreva a função
+"int nicho(int pedido)" e mostre o nicho dos pedidos 1043, 2210, 3876, 5521
+e 7019, um por linha. Quando o nicho já tiver um pedido anterior, acrescente
 "(colide com NNNN)".
 
 
@@ -294,58 +262,22 @@ nicho já estiver ocupado por um pedido anterior, acrescente na linha
 Saída esperada:
 pedido 1043 -> nicho 9
 pedido 2210 -> nicho 10
-...
+pedido 3876 -> nicho 4
+pedido 5521 -> nicho 10 (colide com 2210)
+pedido 7019 -> nicho 1
 ```
-
-**Dicas:**
-
-1. A função hash de inteiros é só "return pedido % 11;".
-2. Guarde os 5 números num vetor e percorra com um for. Um vetor
-   "int dono[11] = {0};" lembra qual pedido ocupou cada nicho (0 = vazio).
-3. Resposta esperada: 1043 -> 9, 2210 -> 10, 3876 -> 4,
-   5521 -> 10 (colide com 2210) e 7019 -> 1.
 
 ```bash
 gcc ~/LPEDC/15-hash/0105-hashing/E625.c -o ~/LPEDC/15-hash/0105-hashing/E625 && ~/LPEDC/15-hash/0105-hashing/E625
 ```
 
-**Exercício E626** · ★☆☆
-
-O programa abaixo mostra o balde de 4 palavras com a soma dos códigos e
-M = 5. Estenda o programa: escreva a função "unsigned soma(const char *s)",
-que devolve a soma dos códigos SEM o resto, e, depois da lista, compare
-todos os pares de palavras. Para cada par que cai no mesmo balde, mostre
-os dois nomes e as duas somas completas. Assim você vê qual colisão vem
-de anagrama (somas iguais) e qual é só acaso do resto (somas diferentes).
-
-
-```text
-Saída esperada:
-sol=4
-los=4
-Sol=2
-lua=2
-sol e los colidem (somas 334 e 334)
-Sol e lua colidem (somas 302 e 322)
-```
-
-**Dicas:**
-
-1. h() pode chamar soma() e só tirar o resto: "return soma(s) % M;".
-2. Pares sem repetir: "for (i = 0; i < 4; i++) for (j = i + 1; j < 4; j++)".
-3. "sol" e "los" são anagramas;
-   "Sol" e "lua" só têm o mesmo resto por 5 ('S' = 83 não é 's' = 115).
-
-```bash
-gcc ~/LPEDC/15-hash/0105-hashing/E626.c -o ~/LPEDC/15-hash/0105-hashing/E626 && ~/LPEDC/15-hash/0105-hashing/E626
-```
-
 **Exercício E627** · ★★☆
 
-Complete a função hash_pol, que calcula o hash polinomial de base 31 de uma
-string e devolve o resto por M (13). A regra: começa com h = 0 e, para cada
-byte da string, faz h = h * 31 + byte. Use unsigned para h e converta
-cada char para unsigned char antes de somar.
+Escreva a função "unsigned hash_pol(const char *s)", o hash polinomial de
+base 31: começa com h = 0 e, para cada byte da string, faz h = h * 31 + byte
+(h unsigned; converta cada char para unsigned char). Ela devolve h % 13.
+Mostre o hash de "pix", "ted", "doc" e "boleto", com o nome alinhado à
+esquerda em 6 colunas.
 
 
 ```text
@@ -356,127 +288,74 @@ doc    -> 8
 boleto -> 1
 ```
 
-**Dicas:**
-
-1. O laço é o mesmo da soma; só muda a conta de dentro.
-2. Não se preocupe se h estourar: em unsigned a conta dá a volta, e isso
-   é bem definido em C.
-3. Resposta esperada: a saída acima ("ted" e "doc" colidem com M = 13).
-
 ```bash
 gcc ~/LPEDC/15-hash/0105-hashing/E627.c -o ~/LPEDC/15-hash/0105-hashing/E627 && ~/LPEDC/15-hash/0105-hashing/E627
 ```
 
 **Exercício E628** · ★★☆
 
-Na loja de material de construção, todo código de produto termina em 0:
-120, 350, 470, 590, 610, 230, 740, 860, 980 e 440. Escreva um programa que
-espalha esses 10 códigos com "codigo % m" e mostra quantos caíram em cada
-balde, com uma estrela por código. No fim de cada tabela, mostre quantos
-baldes ficaram vazios. Faça para m = 10 e para m = 11.
+Na loja de material de construção, todo código de produto termina em 0: 120,
+350, 470, 590, 610, 230, 740, 860, 980 e 440. Escreva um programa que espalha
+esses 10 códigos com "codigo % m" e mostra quantos caíram em cada balde, com
+uma estrela por código (número do balde em 2 colunas). No fim de cada tabela,
+mostre quantos baldes ficaram vazios. Faça para m = 10 e para m = 11.
 
 
 ```text
-Saída esperada (começo):
+Saída esperada:
 m = 10
  0: **********
  1:
-...
+ 2:
+ 3:
+ 4:
+ 5:
+ 6:
+ 7:
+ 8:
+ 9:
 vazios: 9
+m = 11
+ 0: *
+ 1: *
+ 2: *
+ 3: *
+ 4:
+ 5: *
+ 6:
+ 7: *
+ 8: *
+ 9: *
+10: **
+vazios: 2
 ```
-
-**Dicas:**
-
-1. Um vetor "int conta[11] = {0};" e "conta[codigo % m]++" para cada código.
-2. Faça uma função "void distribui(const int codigos[], int n, int m)"
-   e chame duas vezes.
-3. Resposta esperada: com m = 10, os 10 códigos caem no balde 0
-   (vazios: 9). Com m = 11: um código em cada balde, menos o 4 e o 6
-   (vazios: 2) e o 10, com dois (120 e 230). Com m = 10, o resto só olha
-   o último dígito, que é sempre 0; um m primo usa o número inteiro.
 
 ```bash
 gcc ~/LPEDC/15-hash/0105-hashing/E628.c -o ~/LPEDC/15-hash/0105-hashing/E628 && ~/LPEDC/15-hash/0105-hashing/E628
 ```
 
-**Exercício E629** · ★★★
-
-O hortifrúti conta quantas frutas caem em cada um dos 8 baldes. O
-programa abaixo funciona com "banana" e "uva", mas o AddressSanitizer
-reclama quando entra "maçã". O erro está aí de propósito. Faça assim:
-
-1. No primeiro for do main, antes de contar, acrescente um printf que
-
-```text
- mostre o índice de cada fruta ("banana -> 1"). Rode e veja o índice
- que sai para "maçã" logo antes do erro.
-```
-
-2. Conserte a função indice() para que funcione com qualquer texto em
-
-```text
- UTF-8. Rode de novo: o sanitizer não pode reclamar.
-```
-
-
-
-```text
-Saída esperada (depois do conserto):
-banana -> 1
-uva -> 4
-maçã -> 6
-balde 0: 0
-balde 1: 1
-...
-```
-
-**Dicas:**
-
-1. Em UTF-8, "ç" é 0xC3 0xA7 e "ã" é 0xC3 0xA3. Quanto vale 0xC3 num
-   char com sinal?
-2. Em C, o resto de um número negativo é negativo: -98 % 8 dá -2.
-3. Resposta esperada: antes do conserto, "maçã -> -2" (os bytes viram
-   -61, -89, -61 e -93 e a soma dá -98). Acumulando num unsigned e
-   convertendo cada byte para unsigned char, "maçã" cai no balde 6 e a
-   contagem fica 1 no balde 1, 1 no 4 e 1 no 6.
-
-```bash
-gcc ~/LPEDC/15-hash/0105-hashing/E629.c -o ~/LPEDC/15-hash/0105-hashing/E629 && ~/LPEDC/15-hash/0105-hashing/E629
-```
-
 **Exercício E630** · ★★★
 
-O compilador precisa reconhecer as palavras reservadas o tempo todo. Para
-um conjunto fixo de chaves, dá para achar uma tabela sem nenhuma colisão:
-um hash "perfeito". Com o hash polinomial de base 31 (h = h * 31 + byte,
-em unsigned), descubra o MENOR m, a partir de 8, em que as 8 palavras
-abaixo caem em baldes todos diferentes:
+O compilador reconhece palavras reservadas o tempo todo. Para um conjunto
+fixo de chaves, dá para achar um hash "perfeito": uma tabela sem colisão.
+Com o hash polinomial de base 31 (h = h * 31 + byte, em unsigned), ache o
+MENOR m, a partir de 8, em que as 8 palavras abaixo caem em baldes todos
+diferentes: int, char, if, else, for, while, return e void. Mostre o m
+encontrado e o balde de cada palavra.
 
 
 ```text
-int  char  if  else  for  while  return  void
+Saída esperada:
+m = 14
+int -> 5
+char -> 10
+if -> 11
+else -> 1
+for -> 7
+while -> 13
+return -> 4
+void -> 8
 ```
-
-
-Mostre o m encontrado e o balde de cada palavra.
-
-
-```text
-Saída esperada (formato):
-m = ...
-int -> ...
-char -> ...
-```
-
-**Dicas:**
-
-1. Calcule o hash polinomial completo uma vez (sem o resto) e guarde num
-   vetor de unsigned; o resto por m muda a cada tentativa.
-2. Para testar um m: um vetor "bool usado[64]" zerado; se algum balde já
-   estiver usado, esse m não serve.
-3. Resposta esperada: m = 14, com int -> 5, char -> 10, if -> 11,
-   else -> 1, for -> 7, while -> 13, return -> 4, void -> 8. (Com a soma
-   dos códigos, o menor m seria 18.)
 
 ```bash
 gcc ~/LPEDC/15-hash/0105-hashing/E630.c -o ~/LPEDC/15-hash/0105-hashing/E630 && ~/LPEDC/15-hash/0105-hashing/E630
@@ -486,47 +365,37 @@ gcc ~/LPEDC/15-hash/0105-hashing/E630.c -o ~/LPEDC/15-hash/0105-hashing/E630 && 
 
 ## 0106 · Encadeamento
 
-No hortifrúti, o estoque fica em 5 prateleiras numeradas. A regra da casa diz
-em qual prateleira vai cada fruta. Quando duas frutas caem na mesma
-prateleira, ninguém joga uma fora: elas ficam **lado a lado**, em fila. Para
-achar o kiwi, você vai direto à prateleira 1 e olha só o que está ali.
+No hortifrúti, o estoque fica em 5 prateleiras. Quando duas frutas caem na
+mesma, ficam **lado a lado**, e achar o kiwi é olhar só a prateleira 1.
 
-Essa é a primeira forma de tratar colisão: o **encadeamento** (ou
-encadeamento separado). Cada balde da tabela deixa de guardar um item e passa a
-guardar a **cabeça de uma lista encadeada**, a corrente com todos os itens
-cujo hash caiu ali. A tabela vira um vetor de ponteiros: `No *baldes[m]`.
+Esse é o **encadeamento** (ou encadeamento separado), a primeira forma de
+tratar colisão. Cada balde guarda a **cabeça de uma lista encadeada** com os
+itens cujo hash caiu ali, e a tabela vira um vetor de ponteiros: `No *baldes[m]`.
 
-As três operações são as de lista que você já conhece (módulo 11), com um
-passo a mais na frente: calcular o balde.
+As operações são as de lista do módulo 11, precedidas do cálculo do balde
+`i = hash(chave) % m`:
 
-- **inserir**: calcula `i = hash(chave) % m`, procura a chave na lista de
-  `baldes[i]`; se achar, troca o valor; se não, cria um nó e põe **no início**
-  da lista, em O(1);
-- **buscar**: calcula `i` e percorre só a lista de `baldes[i]`;
-- **remover**: calcula `i` e faz a remoção de lista, guardando o anterior.
+- **inserir**: procura a chave na lista de `baldes[i]`; se achar, troca o
+  valor; se não, cria um nó **no início** da lista, em O(1);
+- **buscar**: percorre só a lista de `baldes[i]`;
+- **remover**: remoção de lista, guardando o anterior.
 
-Quanto custa? Com uma função hash que espalha bem, cada lista tem, em média,
-`α = n / m` nós (o fator de carga). Buscar custa Θ(1 + α) em média (o
-teorema do Cormen, supondo hashing uniforme): o cálculo do hash mais uma
-lista curta. Se `m` cresce junto com `n`, α fica constante e a busca
-fica O(1) na média. No pior caso, com um hash ruim que joga tudo num balde
-só, a tabela vira uma lista única e a busca volta a ser O(n).
+Com hash que espalha bem, cada lista tem em média `α = n / m` nós, e buscar
+custa Θ(1 + α) (teorema do Cormen, com hashing uniforme). Se `m` cresce junto
+com `n`, α fica constante e a busca é O(1) na média. No pior caso, com um hash
+ruim que joga tudo num balde, a tabela vira uma lista única e a busca é O(n).
 
-No encadeamento a tabela **nunca enche**: α pode passar de 1, as listas só
-ficam mais compridas (o exemplo A211 põe 8 itens em 2 baldes). Algumas
-implementações trocam a lista por uma árvore quando a corrente cresce demais.
+A tabela **nunca enche**: α pode passar de 1 (exemplo A211: 8 itens em 2 baldes).
 
-Seis frutas entram na ordem banana, uva, pera, kiwi,
-manga e caju, com o hash polinomial do assunto anterior e `m = 5`. Os índices
-saem 4, 2, 4, 1, 1 e 4. Como cada nova entra no início da corrente, o balde 4
-termina com caju, pera, banana. Para buscar "kiwi", a busca vai ao balde 1,
-compara com "manga" (não é), depois com "kiwi" (é): 2 comparações, sem olhar
-nenhum outro balde:
+Seis frutas entram na ordem banana, uva, pera, kiwi, manga e caju, com o hash
+polinomial do assunto 0105 e `m = 5`. Os índices saem 4, 2, 4, 1, 1 e 4. Como
+cada nova entra no início, o balde 4 termina com caju, pera, banana. Buscar
+"kiwi" leva ao balde 1: compara com "manga" e com "kiwi", 2 comparações:
 
 <p align="center"><img src="15-hash/0106-encadeamento/ideia.svg" alt="Diagrama da ideia: Encadeamento" width="858"></p>
 
 A estrutura segue o padrão TAD: `tabela.h` com a interface e o tipo opaco,
-`tabela.c` com o nó, os baldes e as operações. A parte que importa:
+`tabela.c` com o nó, os baldes e as operações:
 
 ```c
 typedef struct No {
@@ -561,7 +430,7 @@ bool tabela_busca(const Tabela *t, const char *chave, int *valor, int *comparaco
 }
 ```
 
-E o cliente, que só conhece o `tabela.h`:
+O cliente conhece só o `tabela.h`:
 
 ```c
 #include <stdio.h>
@@ -599,37 +468,27 @@ int main(void) {
 // limao: não tem (0 comparações)
 ```
 
-No fluxograma da busca, o hash leva direto ao balde, e daí em diante vem o
-laço de sempre de lista encadeada. O "kiwi" dá uma volta no laço (passa pela
-manga) e para no Sim. O "limao" cai no balde 0, que está vazio, e sai pelo Não
-logo na primeira pergunta:
+No fluxograma da busca, o hash leva ao balde e o resto é o laço de lista. O
+"kiwi" dá uma volta (passa pela manga) e para no Sim. O "limao" cai no balde 0,
+vazio, e sai pelo Não na primeira pergunta:
 
 <p align="center"><img src="15-hash/0106-encadeamento/fluxograma.svg" alt="Fluxograma: Encadeamento" width="755"></p>
 
 > [!WARNING]
-> Chave de texto se compara com `strcmp`, nunca com `==`. `p->chave == chave`
-> compara **endereços**: diz se as duas strings moram no mesmo lugar da
-> memória, não se têm as mesmas letras. O programa compila, às vezes até
-> funciona (o compilador pode juntar literais iguais num endereço só) e quebra
-> quando a chave vem do teclado ou de um arquivo. O mesmo vale ao guardar: o
-> nó tem a sua **cópia** da chave, porque o buffer de quem chamou vai ser
-> reaproveitado.
+> Compare chave de texto com `strcmp`, nunca com `==`: `p->chave == chave`
+> compara **endereços**. Pode funcionar com literais e quebra com chave vinda do
+> teclado. O nó guarda a sua **cópia** da chave, porque o buffer de quem
+> chamou é reaproveitado.
 
 > [!TIP]
-> **Por dentro do C:** com `m = 5`, os baldes são um bloco de 5 ponteiros (40
-> bytes) contíguo no heap. Cada nó é um `malloc` separado: 32 bytes da chave,
-> 4 do valor, 4 de preenchimento e 8 do `prox`, `sizeof(No)` = 48, espalhados
-> em qualquer canto da memória. Por isso o `tabela_libera` precisa andar em
-> **todas** as correntes dando `free` em cada nó, guardando o `prox` antes; um
-> `free(t->baldes)` sozinho solta só os 40 bytes das cabeças e vaza o resto. E
-> como os nós ficam longe uns dos outros, percorrer uma corrente comprida custa
-> caro para a cache do processador.
+> **Por dentro do C:** cada nó é um `malloc` separado (`sizeof(No)` = 48).
+> `tabela_libera` precisa dar `free` em **todos** os nós, guardando o `prox`
+> antes; `free(t->baldes)` sozinho vaza as correntes.
 
 > [!NOTE]
-> **Pergunta para você:** o "limao" cai no balde 0. Se você inserir "limao"
-> com 9 caixas e depois buscar "coco" (que também cai no balde 0), quantas
-> comparações a busca faz? E se a inserção fosse no fim da corrente, mudaria
-> alguma coisa? Teste mudando o `main` acima.
+> **Pergunta para você:** insira "limao" com 9 caixas e busque "coco" (também
+> do balde 0): quantas comparações? E se a inserção fosse no fim da corrente?
+> Teste no `main` acima.
 
 ### Hora de praticar
 
@@ -750,11 +609,10 @@ gcc ~/LPEDC/15-hash/0106-encadeamento/A212.c ~/LPEDC/15-hash/0106-encadeamento/t
 
 **Exercício E631** · ★☆☆
 
-Uma tabela com encadeamento tem 5 baldes e usa h(k) = k % 5. Cada número
-novo entra no INÍCIO da corrente do seu balde. O programa abaixo já insere
-12, 7, 20, 17, 3 e 25, nessa ordem, e já libera a memória. Escreva a
-função mostra: ela imprime um balde por linha, com os números na ordem em
-que aparecem na corrente, e no fim mostra quantos baldes ficaram vazios e
+Escreva uma tabela com encadeamento de 5 baldes (h(k) = k % 5; cada número
+novo entra no INÍCIO da corrente) com as funções insere, mostra e libera.
+Insira 12, 7, 20, 17, 3 e 25, nessa ordem. A função mostra imprime um balde
+por linha, com os números na ordem da corrente, e no fim os baldes vazios e
 o tamanho da corrente mais comprida.
 
 
@@ -768,41 +626,8 @@ Saída esperada:
 vazios: 2, maior corrente: 3
 ```
 
-**Dicas:**
-
-1. Para cada balde, ande com "for (No *p = baldes[b]; p != NULL;
-   p = p->prox)" contando os nós.
-2. Corrente com 0 nós soma um vazio; guarde a maior contagem vista.
-3. Inserir no início inverte a ordem:
-   o último a chegar fica na frente.
-
 ```bash
 gcc ~/LPEDC/15-hash/0106-encadeamento/E631.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E631 && ~/LPEDC/15-hash/0106-encadeamento/E631
-```
-
-**Exercício E632** · ★☆☆
-
-A academia guarda as matrículas numa tabela com 7 baldes e encadeamento
-(h = matricula % 7). A inserção e a liberação já estão prontas. Complete a
-função busca: ela percorre a corrente do balde certo, conta em
-*comparacoes quantos nós olhou e devolve true se achou a matrícula.
-
-
-```text
-Saída esperada:
-5005: achou (3 comparações)
-4000: não achou (0 comparações)
-```
-
-**Dicas:**
-
-1. O balde é matricula % M; a corrente começa em baldes[matricula % M].
-2. Use "(*comparacoes)++" a cada nó visitado, antes de comparar.
-3. 5005, 7210 e 2016 caem no balde 0, e
-   a corrente ficou 2016 -> 7210 -> 5005. O balde 3, do 4000, está vazio.
-
-```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/E632.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E632 && ~/LPEDC/15-hash/0106-encadeamento/E632
 ```
 
 **Exercício E633** · ★★☆
@@ -829,15 +654,6 @@ pedido 999 não existe
 [2] 222
 [3] 315
 ```
-
-**Dicas:**
-
-1. É a remoção de lista encadeada do módulo 11, aplicada só à corrente
-   de baldes[pedido % 4]. Guarde o anterior enquanto anda.
-2. Cuidado com o primeiro nó da corrente (o 309): não tem anterior, então
-   quem muda é a própria cabeça, baldes[1].
-3. Resposta esperada: a saída acima, e o AddressSanitizer quieto (todo nó
-   removido leva free, e o libera solta o resto).
 
 ```bash
 gcc ~/LPEDC/15-hash/0106-encadeamento/E633.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E633 && ~/LPEDC/15-hash/0106-encadeamento/E633
@@ -866,65 +682,19 @@ tamanho  : 0 0 0 0 0 2 8 0 | maior: 8 | média: 3.9
 polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
 ```
 
-**Dicas:**
-
-1. Não precisa montar as listas: para medir, basta contar quantas chaves
-   caem em cada balde.
-2. Numa corrente de k nós, achar o 1º custa 1 comparação, o 2º custa 2...
-   o total da corrente é 1 + 2 + ... + k = k * (k + 1) / 2. Some todas e
-   divida por 10.
-3. Com o tamanho, só existem nomes de 5
-   e 6 letras, então 8 cidades amontoam num balde: a tabela vira quase uma
-   lista.
-
 ```bash
 gcc ~/LPEDC/15-hash/0106-encadeamento/E634.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E634 && ~/LPEDC/15-hash/0106-encadeamento/E634
-```
-
-**Exercício E635** · ★★★
-
-A lista de convidados do aniversário fica numa tabela com encadeamento. O
-programa mostra a tabela certinho, mas o gcc dá um aviso e o
-AddressSanitizer acusa "heap-use-after-free" no fim. O erro está aí de
-propósito. Rode, leia o aviso e o relatório e conserte a função libera.
-Aproveite e faça libera devolver quantos nós soltou ("int libera(...)"),
-e mostre esse número no fim do main. Rode de novo: nenhum aviso do gcc e
-nenhuma reclamação do sanitizer.
-
-
-```text
-Saída esperada:
-[0] rita
-[1] tiago
-[2] lara joao
-liberados: 4
-```
-
-**Dicas:**
-
-1. O relatório mostra duas pilhas: onde o nó foi liberado e onde ele foi
-   usado depois. Compare as duas linhas.
-2. Depois do free(p), a memória de *p não é mais sua, nem para ler p->prox.
-   Às vezes "funciona" sem o sanitizer só porque o free não apaga os bytes
-   na hora.
-3. O conserto é guardar o próximo antes:
-   "No *prox = p->prox; free(p); p = prox;", contando cada free.
-
-```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/E635.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E635 && ~/LPEDC/15-hash/0106-encadeamento/E635
 ```
 
 **Exercício E636** · ★★★
 
 No encadeamento a tabela nunca enche, mas as correntes crescem. A solução
 das bibliotecas é o rehash: quando o fator de carga passa de 1 (n > m), a
-tabela cria um vetor de baldes maior, com 2 * m + 1 posições, e muda cada
-nó para o seu balde novo, sem fazer malloc de nó nenhum.
-
-Escreva a tabela de inteiros (struct com m, n e o vetor de baldes alocado
-com calloc) com insere, cresce, mostra e libera. Comece com m = 2, insira
-14, 5, 23, 8, 19, 40, 12, 31, 21 e 2, avise cada vez que a tabela crescer
-e mostre o resultado final.
+tabela cria um vetor de baldes com 2 * m + 1 posições e muda cada nó para o
+balde novo, sem malloc de nó. Escreva a tabela de inteiros (struct com m, n
+e o vetor de baldes, alocado com calloc) com insere, cresce, mostra e
+libera. Comece com m = 2, insira 14, 5, 23, 8, 19, 40, 12, 31, 21 e 2, avise
+cada vez que a tabela crescer e mostre o resultado.
 
 
 ```text
@@ -935,20 +705,15 @@ n = 10, m = 11
 [0]
 [1] 12 23
 [2] 2
-...
+[3] 14
+[4]
+[5] 5
+[6]
+[7] 40
+[8] 19 8
+[9] 31
 [10] 21
 ```
-
-**Dicas:**
-
-1. O balde de cada nó muda com o m (k % 5 não é k % 11): por isso não dá
-   para copiar o vetor velho, tem que redistribuir nó por nó.
-2. Para mudar um nó de lugar: guarde p->prox, faça p->prox = novos[i] e
-   novos[i] = p. Depois do laço, free no vetor velho.
-3. Resposta esperada: cresce ao inserir o 3º número (m vira 5) e o 6º
-   (m vira 11). No fim: [1] 12 23, [2] 2, [3] 14, [5] 5, [7] 40,
-   [8] 19 8, [9] 31, [10] 21 e os outros vazios. A ordem dentro de uma
-   corrente pode mudar conforme a sua implementação; o conteúdo, não.
 
 ```bash
 gcc ~/LPEDC/15-hash/0106-encadeamento/E636.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E636 && ~/LPEDC/15-hash/0106-encadeamento/E636
@@ -958,50 +723,39 @@ gcc ~/LPEDC/15-hash/0106-encadeamento/E636.c ~/LPEDC/15-hash/0106-encadeamento/t
 
 ## 0107 · Endereçamento aberto
 
-O estacionamento de visitantes do condomínio tem 11 vagas, numeradas de 0 a
-10. A regra da portaria: a vaga do carro é o número do apartamento com resto
-por 11. Se a vaga estiver ocupada, você tenta a **próxima**. E a seguinte. Na
-saída, o porteiro faz o mesmo caminho para achar o carro.
+O estacionamento do condomínio tem 11 vagas. A vaga do carro é o número do
+apartamento com resto por 11; se estiver ocupada, tenta-se a **próxima**. Na
+saída, o porteiro refaz o caminho.
 
-Essa é a segunda forma de tratar colisão: o **endereçamento aberto**. Não tem
-lista nenhuma. Os itens ficam **dentro do próprio vetor**, e quem colide
-procura outra posição livre na tabela, seguindo uma sequência fixa de
-tentativas. Cada tentativa é uma **sondagem**.
+Esse é o **endereçamento aberto**, a segunda forma de tratar colisão: sem
+lista, os itens ficam **dentro do vetor**, e quem colide tenta outras posições
+numa sequência fixa. Cada tentativa é uma **sondagem**.
 
-A sequência mais simples é a **sondagem linear**: começa em `h = chave % m` e
-anda uma casa por vez, dando a volta no fim: `i = (i + 1) % m`. O Cormen
-escreve a sequência como uma função da chave e da tentativa `i` (a partir de
-0): `h(k, i) = (h'(k) + i) mod m`. Trocando o passo, saem as outras duas do
-edital: a **sondagem quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
-**dispersão dupla** (*double hashing*), `(h₁(k) + i · h₂(k)) mod m`, que o
-assunto 0179 aprofunda.
+A **sondagem linear** começa em `h = chave % m` e anda uma casa por vez, com
+volta no fim: `i = (i + 1) % m`. Na forma do Cormen, com a tentativa `i` a
+partir de 0: `h(k, i) = (h'(k) + i) mod m`. Trocando o passo, saem a
+**sondagem quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a **dispersão
+dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179).
 
-- **inserir**: sonda a partir de `h` até achar uma posição livre;
-- **buscar**: sonda a partir de `h` até achar a chave (achou) ou uma posição
-  **livre** (não está: se estivesse, teria parado ali);
-- **remover**: tem uma pegadinha, explicada no aviso abaixo.
+**Inserir** sonda até achar posição livre. **Buscar** sonda até achar a chave
+ou uma posição **livre**, onde a chave teria parado. **Remover** tem uma
+pegadinha, no aviso abaixo.
 
-Como tudo cabe no vetor, a tabela **enche**: `α = n / m` nunca passa de 1. E
-fica lenta bem antes disso. Na sondagem linear, as ocupadas formam blocos
-seguidos, e qualquer chave que cai num bloco vai parar no fim dele, deixando o
-bloco ainda maior. Isso é o **agrupamento primário**. Com α = 0,5 uma busca
-sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com
-hashing uniforme, sem agrupamento, o Cormen limita essa busca a 1/(1 − α)
-sondagens: 2 e 10.) Na prática, não passe de 70% a 75% de ocupação. Passou,
-crie uma tabela maior e reinsira tudo (o exemplo A213 lota uma tabela de 7
-vagas e mostra as sondagens crescendo).
+A tabela **enche**: `α = n / m` nunca passa de 1, e fica lenta antes. As
+ocupadas formam blocos, e toda chave que cai num bloco vai parar no fim dele,
+aumentando-o: é o **agrupamento primário**. Com α = 0,5 uma busca sem sucesso
+olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com hashing uniforme o
+Cormen limita a busca a 1/(1 − α): 2 e 10.) Passando de 70% a 75% de
+ocupação, crie uma tabela maior e reinsira tudo (exemplo A213).
 
-Entram os carros dos apartamentos 101, 202, 301, 1104
-e 504. O 101 vai para a vaga 2 e o 202 para a 4. O 301 também dá 4 (301 % 11
-= 4), encontra a 4 ocupada e para na 5. O 1104 dá 4 de novo: tenta a 4, a 5,
-e para na 6. O 504 vai direto para a 9. Na busca pelo 1104, o porteiro refaz
-o mesmo caminho: 3 sondagens:
+Os apartamentos 101, 202, 301, 1104 e 504 entram. O 101 vai para a vaga 2 e o
+202 para a 4. O 301 também dá 4, vê a vaga ocupada e para na 5. O 1104 tenta
+4, 5 e para na 6. O 504 vai para a 9. Buscar o 1104 custa 3 sondagens:
 
 <p align="center"><img src="15-hash/0107-enderecamento-aberto/ideia.svg" alt="Diagrama da ideia: Endereçamento aberto" width="858"></p>
 
-O TAD segue o padrão de sempre: `aberta.h` com a interface, `aberta.c` com o
-vetor de vagas, cada uma com um **estado**: `LIVRE`, `OCUPADA` ou `REMOVIDA`.
-A busca, dentro do `aberta.c`, é este laço:
+O TAD é `aberta.h` (interface) e `aberta.c` (vetor de vagas, cada uma com
+**estado** `LIVRE`, `OCUPADA` ou `REMOVIDA`). A busca é este laço:
 
 ```c
 // anda a partir de chave % m até achar a chave ou uma posição LIVRE;
@@ -1029,7 +783,7 @@ static int procura(const Aberta *t, int chave, int *sondagens) {
 }
 ```
 
-E o programa do condomínio:
+O programa do condomínio:
 
 ```c
 #include <stdio.h>
@@ -1080,38 +834,27 @@ int main(void) {
 // 303 não está, sondagens: 2
 ```
 
-O fluxograma da busca faz duas perguntas por vaga. "Está livre?"
-encerra a busca sem sucesso; "é o carro?" encerra com sucesso. Se nenhuma das
-duas, anda uma vaga. O 1104 passa duas vezes pelo laço (vagas 4 e 5) e é
-achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
+No fluxograma, "está livre?" encerra sem sucesso e "é o carro?" encerra com
+sucesso; senão, anda uma vaga. O 1104 é achado na 6; o 303 para na 7, livre:
 
 <p align="center"><img src="15-hash/0107-enderecamento-aberto/fluxograma.svg" alt="Fluxograma: Endereçamento aberto" width="719"></p>
 
 > [!WARNING]
-> Remover **não** é marcar a posição como livre. Se o carro do 301 sai e a
-> vaga 5 volta a ser `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e
-> conclui "não está", embora ele esteja na 6. A vaga livre corta o caminho de
-> quem tinha pulado por ela. A solução é uma terceira marca, **removida**
-> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto por ela, e
-> a inserção pode reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
-> lápides acumulam e as buscas sem sucesso ficam longas, até você reconstruir
-> a tabela.
+> Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
+> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e conclui "não está",
+> embora ele esteja na 6. A solução é uma terceira marca, **removida**
+> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto, e a
+> inserção pode reaproveitá-la (exemplo A214). Com muitas lápides, as buscas
+> sem sucesso ficam longas até a tabela ser reconstruída.
 
 > [!TIP]
-> **Por dentro do C:** cada `Vaga` tem `chave`, `valor` e `estado`: 3 × 4 =
-> 12 bytes, e as 11 vagas são **um bloco só** de 132 bytes. Sem `malloc` por
-> item, sem ponteiro `prox`, sem nó espalhado pelo heap. Andar para a próxima
-> vaga é andar 12 bytes na memória, e o processador já trouxe as vizinhas para
-> a cache junto com a primeira. Por isso o endereçamento aberto costuma ganhar
-> do encadeamento na prática, mesmo fazendo mais sondagens. Muitas tabelas
-> hash de bibliotecas usam endereçamento aberto (com sondagens mais espertas
-> que a linear).
+> **Por dentro do C:** as vagas formam **um bloco só**, sem `malloc` por item,
+> e andar para a próxima aproveita a cache. Por isso o endereçamento aberto
+> costuma ganhar do encadeamento na prática.
 
 > [!NOTE]
-> **Pergunta para você:** depois dos 5 carros, chega o do apartamento 1203
-> (1203 % 11 = 4). Em qual vaga ele para, e com quantas sondagens? E quantas
-> sondagens custa, depois disso, buscar um apartamento que não está e que cai
-> na vaga 4?
+> **Pergunta para você:** depois dos 5 carros, chega o apartamento 1203
+> (1203 % 11 = 4). Em qual vaga ele para, e com quantas sondagens?
 
 ### Hora de praticar
 
@@ -1240,57 +983,19 @@ Saída esperada:
 [6] 17
 ```
 
-**Dicas:**
-
-1. Um while que anda enquanto tab[i] != -1, com i = (i + 1) % 7.
-2. Faça à mão antes: 10, 24, 17 e 31 têm hash 3; o 5 tem hash 5.
-3. O 31 tenta 3, 4, 5 e 6, todas
-   ocupadas, dá a volta e para na 0.
-
 ```bash
 gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E637.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E637 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E637
 ```
 
-**Exercício E638** · ★☆☆
-
-O programa abaixo insere 16, 8, 3, 24 e 11 numa tabela de 8 posições com
-sondagem linear e mostra a vaga e as sondagens de cada inserção. Estenda o
-programa: depois das inserções, busque as chaves 24 e 19 com a mesma
-sondagem (começa em k % 8, anda uma casa por vez, para ao achar a chave
-ou uma vaga livre) e mostre o resultado de cada busca.
-
-
-```text
-Saída esperada (as 5 primeiras linhas já saem hoje):
-16: vaga 0 (1)
-8: vaga 1 (2)
-3: vaga 3 (1)
-24: vaga 2 (3)
-11: vaga 4 (2)
-busca 24: vaga 2 (3 sondagens)
-busca 19: não está (3 sondagens)
-```
-
-**Dicas:**
-
-1. A busca é o mesmo while da inserção, com uma condição a mais: pare
-   quando tab[i] == 0 (livre) ou tab[i] == chave.
-2. Conte as sondagens do mesmo jeito: s começa em 1 e soma a cada passo.
-3. O 19 tem hash 3: olha a 3 (o 3), a
-   4 (o 11) e para na 5, livre.
-
-```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E638.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E638 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E638
-```
-
 **Exercício E639** · ★★☆
 
-Os armários da escola usam endereçamento aberto com 7 posições e marca de
-removido. Guardaram 14, 21 e 28 (todos com hash 0: vão para 0, 1 e 2), e
-depois o 21 foi retirado, deixando a posição 1 como REMOVIDA. Complete a
-função busca: ela conta as sondagens, para ao achar a chave (true) ou uma
-posição LIVRE (false), passa reto pelas REMOVIDAS e nunca dá mais de M
-passos.
+Os armários da escola usam endereçamento aberto com 7 posições (h = k % 7,
+sondagem linear) e o enum Estado { LIVRE, OCUPADA, REMOVIDA }. Escreva
+"guarda" e "bool busca(const Armario t[], int chave, int *sondagens)", que
+conta as sondagens, para ao achar a chave (true) ou uma posição LIVRE
+(false), passa reto pelas REMOVIDAS e nunca dá mais de 7 passos. Guarde 14,
+21 e 28 (vão para 0, 1 e 2), marque a posição do 21 como REMOVIDA e busque
+28 e 35.
 
 
 ```text
@@ -1298,14 +1003,6 @@ Saída esperada:
 28: achou, sondagens: 3
 35: não está, sondagens: 4
 ```
-
-**Dicas:**
-
-1. Use um for de M passos e, dentro, "(*sondagens)++" logo no começo.
-2. A ordem dos testes importa: primeiro "é LIVRE?" (para), depois
-   "OCUPADA e chave igual?" (achou); senão, i = (i + 1) % M.
-3. O 35 olha 0, 1 (removida, segue),
-   2 e para na 3, livre. Se a busca parasse na REMOVIDA, não acharia o 28.
 
 ```bash
 gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E639.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E639 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E639
@@ -1330,74 +1027,18 @@ Saída esperada:
 20: tabela cheia!
 ```
 
-**Dicas:**
-
-1. Um "while (tab[i] != -1)" sozinho roda para sempre numa tabela cheia.
-2. Limite as tentativas: um for de no máximo 5 passos. Se nenhum passo
-   achou vaga livre, devolva -1.
-3. O 9 e o 15 só entram dando a volta
-   no fim do vetor.
-
 ```bash
 gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E640.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E640 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E640
 ```
 
-**Exercício E641** · ★★★
-
-No clube, os armários usam sondagem linear com 7 posições. O programa
-abaixo guarda 9, 13, 20 e 4, mas o AddressSanitizer acusa
-"stack-buffer-overflow" ao guardar o 20. O erro está aí de propósito.
-Rode, leia o relatório e conserte a função insere. Depois faça insere
-devolver quantas sondagens usou ("int insere(...)") e mostre esse número
-para cada chave, antes da tabela.
-
-
-```text
-Saída esperada depois do conserto:
-9: 1 sondagem(ns)
-13: 1 sondagem(ns)
-20: 2 sondagem(ns)
-4: 1 sondagem(ns)
-[0] 20
-[1] 0
-[2] 9
-[3] 0
-[4] 4
-[5] 0
-[6] 13
-```
-
-**Dicas:**
-
-1. 20 % 7 = 6. Quem está na vaga 6? Qual é a "próxima" depois da 6?
-2. Num vetor de 7 posições, o maior índice é 6: "i = i + 1" chega a 7.
-3. O conserto é "i = (i + 1) % M", que
-   volta para a vaga 0; conte as sondagens com uma variável que começa
-   em 1 e soma a cada passo do while.
-
-```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E641.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E641 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E641
-```
-
 **Exercício E642** · ★★★
 
-A sondagem linear sofre com o agrupamento: chaves com o mesmo hash formam
-um bloco que cresce. O hash duplo resolve com um passo que depende da
-chave: em vez de i = (i + 1) % m, faz i = (i + passo) % m, com
-passo = 1 + k % 10. Com m = 11 (primo), qualquer passo de 1 a 10 visita
-todas as posições.
-
-Escreva uma função que simula as inserções numa tabela de 11 posições e
-recebe o passo como ponteiro para função. Para as chaves
-
-
-```text
-5 16 27 8 38 19 30 2
-```
-
-
-mostre as sondagens de cada inserção e o total, primeiro com passo 1
-(linear), depois com o hash duplo.
+A sondagem linear forma blocos; o hash duplo usa i = (i + passo) % m com
+passo = 1 + k % 10 (m = 11, primo: o passo visita todas as posições).
+Escreva uma função que simula as inserções das chaves 5 16 27 8 38 19 30 2
+numa tabela de 11 posições, recebendo o passo por ponteiro para função.
+Mostre as sondagens de cada inserção e o total, primeiro com passo 1 e
+depois com o hash duplo.
 
 
 ```text
@@ -1405,17 +1046,6 @@ Saída esperada:
 linear: 1 2 3 1 5 3 4 1 | total: 20
 duplo : 1 2 2 1 2 2 2 4 | total: 16
 ```
-
-**Dicas:**
-
-1. "int passo_linear(int k)" devolve 1 (use (void)k para calar o aviso
-   de parâmetro não usado) e "int passo_duplo(int k)" devolve 1 + k % 10.
-2. A função recebe "int (*passo)(int)" e começa cada simulação com a
-   tabela toda livre.
-3. Na linear, 5, 16, 27 e 38 (hash 5)
-   formam um bloco 5-6-7 que engole o 8 e cresce até a 9; o 38 paga 5
-   sondagens. No duplo, cada um salta com o seu passo e o bloco não se
-   forma.
 
 ```bash
 gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E642.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E642 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E642
@@ -1425,36 +1055,30 @@ gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E642.c ~/LPEDC/15-hash/0107-endere
 
 ## 0108 · Juntando tudo: o contador de palavras
 
-A padaria do bairro recebeu dezenas de comentários no app de entrega e quer
-saber do que os clientes mais falam. Um programa lê o texto, conta cada
-palavra e mostra o ranking.
-
-A tabela hash resolve isso: a chave é a palavra, o valor é a
-contagem, e cada palavra do texto vira uma busca seguida de `+1`. O programa
-junta peças de vários módulos:
+A padaria quer saber do que os clientes mais falam nos comentários do app.
+O programa lê o texto, conta cada palavra e mostra o ranking. A chave da
+tabela é a palavra e o valor é a contagem: cada palavra vira uma busca e um
+`+1`. Ele junta:
 
 - **strings e `ctype.h`**: quebrar o texto em palavras e passar para
   minúsculas, para "Pão" e "pão" contarem juntas;
-- **a tabela com encadeamento** (assunto 0106), agora como o TAD
-  `palavras.h`: `contador_soma` procura a palavra no seu balde e soma 1, ou
-  cria o nó com a palavra **copiada**;
-- **vetor + `qsort`** (assuntos 0050 e 0096): a tabela não tem ordem nenhuma,
-  então, para o ranking, as contagens vão para um vetor, que é ordenado por
-  número de vezes e, no empate, em ordem alfabética.
+- **tabela com encadeamento** (assunto 0106), como o TAD `palavras.h`:
+  `contador_soma` soma 1 à palavra do balde ou cria o nó com a palavra
+  **copiada**;
+- **vetor + `qsort`** (assuntos 0050 e 0096): a tabela não tem ordem, então as
+  contagens vão para um vetor, ordenado por vezes e, no empate, por ordem
+  alfabética.
 
-Por que não um vetor com busca sequencial? Com `N` palavras no texto e `d`
-diferentes, isso custa O(N · d). Com a tabela, O(N) em média, mais
-O(d log d) do `qsort` no fim. Num livro de 100 mil palavras, 10 mil
-diferentes: um bilhão de comparações contra algumas centenas de milhares.
+Com `N` palavras e `d` diferentes, a busca sequencial custa O(N · d); a
+tabela custa O(N) em média, mais O(d log d) do `qsort`.
 
-O texto do exemplo tem 31 palavras, 17 diferentes. A tabela tem
-17 baldes, um fator de carga de 1. O "pão" cai no balde 2 e chega a 6; o
-"café", no balde 3, chega a 3; "estava" e "queijo" dividem o balde 4. No
-fim, a lista vai para o vetor, o `qsort` ordena e o ranking sai:
+O exemplo tem 31 palavras, 17 diferentes, em 17 baldes (carga 1). O "pão" cai
+no balde 2 e chega a 6; o "café", no 3, chega a 3; "estava" e "queijo" dividem
+o balde 4. A tabela vai para o vetor, o `qsort` ordena e o ranking sai:
 
 <p align="center"><img src="15-hash/0108-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o contador de palavras" width="858"></p>
 
-O TAD `palavras.h` fica na pasta, e o `main` só conhece as funções dele:
+O `main` conhece só as funções do TAD `palavras.h`:
 
 ```c
 #include <stdio.h>
@@ -1537,40 +1161,29 @@ int main(void) {
 // 5. e: 2
 ```
 
-No fluxograma, o laço principal é "pega a próxima palavra e soma". A
-pergunta "já está no balde?" é feita 31 vezes. O Sim acontece 14 vezes; o
-Não, 17, uma para cada palavra diferente, e cria o nó com 0. Os dois caminhos
-se juntam no `vezes++`, como no `contador_soma`. Quando o texto acaba, sai o
-ranking:
+No fluxograma, "já está no balde?" ocorre 31 vezes: 14 Sim e 17 Não (uma por
+palavra diferente, que cria o nó com 0). Os dois caminhos se juntam no
+`vezes++`:
 
 <p align="center"><img src="15-hash/0108-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o contador de palavras" width="662"></p>
 
 > [!WARNING]
-> `isalpha`, `tolower` e companhia recebem um `int` que precisa ser um valor
-> de `unsigned char` (0 a 255) ou `EOF`. Num texto UTF-8, os bytes `0xC3 0xA3` do "ã"
-> são negativos num `char` com sinal (assunto 0105). Passar
-> `isalpha(s[i])` com valor negativo é **comportamento indefinido**: muitas
-> bibliotecas usam o valor como índice de uma tabela interna e leem fora
-> dela. Converta sempre: `isalpha((unsigned char)s[i])`. Aqui o
-> `eh_letra` trata todo byte de 128 para cima como parte da palavra, e assim
-> "pão" e "café" ficam inteiras.
+> `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
+> do "ã" em UTF-8 são negativos num `char` com sinal (assunto 0105), e
+> `isalpha(s[i])` com negativo é **comportamento indefinido**. Converta:
+> `isalpha((unsigned char)s[i])`. O `eh_letra` trata todo byte a partir de 128
+> como parte da palavra, e "pão" e "café" ficam inteiras.
 
 > [!TIP]
-> **Por dentro do C:** cada nó tem 32 bytes de palavra, 4 da contagem, 4 de
-> preenchimento e 8 do `prox`: 48 bytes. As 17 palavras ocupam 17 `malloc`
-> de 48 bytes, mais 136 bytes do vetor de 17 ponteiros. O vetor de
-> `Contagem` **não copia** as palavras: cada `palavra` aponta para dentro de
-> um nó da tabela. Por isso o `free(lista)` vem antes do `contador_libera`,
-> e usar a lista depois de liberar a tabela seria ponteiro solto. Um
-> detalhe do hash: com base 31 e `m = 31`, `h * 31 % 31` é sempre 0, e o
-> balde passa a depender **só da última letra**. Base e `m` não podem ter
-> fator comum; por isso o exemplo usa 17.
+> **Por dentro do C:** o vetor de `Contagem` **não copia** as palavras: cada
+> `palavra` aponta para um nó da tabela, e por isso o `free(lista)` vem antes
+> do `contador_libera`. Base e `m` não podem ter fator comum (com 31 e 31, o
+> balde depende só da última letra); o exemplo usa 17.
 
 > [!NOTE]
-> **Pergunta para você:** o ranking tem "o", "de" e "e" logo no topo, que não
-> dizem nada sobre a padaria. Como você ignoraria essas palavras (as
-> *stopwords*) usando a própria tabela hash? E que palavra seria a 3ª do
-> ranking depois disso?
+> **Pergunta para você:** "o", "de" e "e" lideram o ranking e não dizem nada
+> sobre a padaria. Como ignorar essas palavras (as *stopwords*) com a própria
+> tabela hash? Qual seria a 3ª do ranking depois disso?
 
 ### Hora de praticar
 
@@ -1720,9 +1333,9 @@ int main(void) {
     contador_libera(c);
     return 0;
 }
-// Para testar com um arquivo: ./programa < texto.txt
+// Para testar com um arquivo: ~/LPEDC/rodar A216.c < texto.txt
 // Exemplo:
-// $ printf 'Quem casa quer casa.\nQuem não casa, quer casar!\n' | ./programa
+// $ printf 'Quem casa quer casa.\nQuem não casa, quer casar!\n' | ~/LPEDC/rodar A216.c
 // 9 palavras, 5 diferentes, 2 aparecem uma vez só
 // 1. casa: 3
 // 2. quem: 2
@@ -1757,46 +1370,8 @@ paulo
 7 palavras
 ```
 
-**Dicas:**
-
-1. Dois laços dentro de um: o primeiro pula o que não é letra, o segundo
-   mostra as letras com putchar(tolower(...)).
-2. Sempre converta para unsigned char antes de chamar isalpha e tolower.
-3. O "São" sai como "são": o tolower
-   muda o 'S' e deixa os bytes do "ã" como estão.
-
 ```bash
 gcc ~/LPEDC/15-hash/0108-juntando-tudo/E643.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E643 && ~/LPEDC/15-hash/0108-juntando-tudo/E643
-```
-
-**Exercício E644** · ★☆☆
-
-Um contador de palavras usa 4 baldes, encadeamento com inserção no início
-e a função hash "soma dos códigos % 4". O programa abaixo já tem o nó, a
-função hash e o main, que conta "ovo sal mel las sal" e mostra cada balde.
-Complete a função conta: ela procura a palavra na corrente do seu balde;
-se achar, soma 1; se não, cria um nó com uma CÓPIA da palavra e vezes = 1,
-no início da corrente.
-
-
-```text
-Saída esperada:
-[0] las:1 sal:2 ovo:1
-[1]
-[2] mel:1
-[3]
-```
-
-**Dicas:**
-
-1. ovo = 340, sal = 320, mel = 318, las = 320: ovo, sal e las caem no 0.
-2. Compare com strcmp; copie com snprintf(novo->palavra,
-   sizeof novo->palavra, "%s", w). O segundo "sal" não cria nó.
-3. "las" e "sal" são anagramas e a soma
-   junta os dois no mesmo balde; o strcmp é que separa as contagens.
-
-```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/E644.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E644 && ~/LPEDC/15-hash/0108-juntando-tudo/E644
 ```
 
 **Exercício E645** · ★★☆
@@ -1820,25 +1395,16 @@ Saída esperada:
 primeira repetida: parte (palavra 9)
 ```
 
-**Dicas:**
-
-1. Escreva "bool viu_antes(No *baldes[], const char *w)": procura a
-   palavra no seu balde; se achar, devolve true; senão guarda uma cópia e
-   devolve false.
-2. "reparte" não é "parte": a tabela compara a palavra inteira com
-   strcmp. Não esqueça de liberar os nós antes de sair.
-3. Custo: O(n) em média, contra O(n²)
-   de comparar cada palavra com todas as anteriores.
-
 ```bash
 gcc ~/LPEDC/15-hash/0108-juntando-tudo/E645.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E645 && ~/LPEDC/15-hash/0108-juntando-tudo/E645
 ```
 
 **Exercício E646** · ★★☆
 
-A tabela já contou as palavras da lista da feira e entregou o vetor
-abaixo, fora de ordem. Complete a função compara para o qsort deixar o
-ranking com mais vezes primeiro e, no empate, em ordem alfabética.
+Escreva a função compara para o qsort ordenar um vetor de "Contagem"
+(struct com "const char *palavra" e "int vezes") com mais vezes primeiro e,
+no empate, em ordem alfabética. Ordene a lista da feira (feira 3, banana 5,
+alface 3, ovo 5, queijo 1, caqui 3) e mostre uma por linha.
 
 
 ```text
@@ -1851,28 +1417,22 @@ feira 3
 queijo 1
 ```
 
-**Dicas:**
-
-1. compara recebe dois const void *: converta para const Contagem *.
-2. Devolva um número negativo se a deve vir antes de b. Para "mais vezes
-   primeiro", a conta é y->vezes - x->vezes; no empate, use strcmp.
-
 ```bash
 gcc ~/LPEDC/15-hash/0108-juntando-tudo/E646.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E646 && ~/LPEDC/15-hash/0108-juntando-tudo/E646
 ```
 
 **Exercício E647** · ★★★
 
-Este contador lê as palavras de uma frase, uma por vez, no mesmo vetor
-"atual", e conta numa tabela com encadeamento. Ele compila sem aviso e o
-AddressSanitizer fica quieto, mas o resultado está errado. O erro está aí
-de propósito. Rode, veja o que sai e conserte para que, com a frase
-"sol e mar e sol e pera e lua", cada palavra tenha a sua contagem certa.
-Acrescente no fim uma linha com o número de palavras diferentes.
+Escreva um contador de palavras com tabela de encadeamento de 5 baldes
+(hash h = h * 31 + byte em unsigned, resto por 5; nó novo entra no início
+da corrente). Separe a frase "sol e mar e sol e pera e lua" copiando cada
+palavra para o mesmo vetor "char atual[16]", reaproveitado; cada nó guarda
+a sua cópia. Mostre "palavra: vezes" balde a balde, libere a tabela e
+acrescente o número de palavras diferentes.
 
 
 ```text
-Saída esperada depois do conserto (a ordem é a dos baldes):
+Saída esperada:
 mar: 1
 e: 4
 lua: 1
@@ -1881,65 +1441,16 @@ sol: 2
 diferentes: 5
 ```
 
-**Dicas:**
-
-1. Olhe o campo palavra do nó: ele guarda as letras ou um endereço? Para
-   onde aponta cada nó quando a próxima palavra é lida em "atual"?
-2. "pera" cai no mesmo balde de "sol": na busca, o strcmp compara "atual"
-   com ele mesmo e dá igual, por isso a pera some e o sol ganha 1 a mais.
-3. O nó precisa da sua cópia:
-   "char palavra[16];" e snprintf(novo->palavra, sizeof novo->palavra,
-   "%s", atual). Para o total, conte os nós ao imprimir.
-
 ```bash
 gcc ~/LPEDC/15-hash/0108-juntando-tudo/E647.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E647 && ~/LPEDC/15-hash/0108-juntando-tudo/E647
-```
-
-**Exercício E648** · ★★★
-
-No assunto 0105 a soma dos códigos juntava os anagramas por acidente.
-Agora junte de propósito. A "assinatura" de uma palavra são as suas
-letras em ordem: "roma", "mora" e "amor" têm a mesma assinatura, "amor".
-Use uma tabela hash cuja chave é a assinatura e cujo valor é o grupo de
-palavras com ela. Para a lista
-
-
-```text
-amor pato roma sala topa mora alas lata ramo cafe
-```
-
-
-mostre os grupos com 2 palavras ou mais, um por linha, na ordem em que o
-grupo apareceu pela primeira vez.
-
-
-```text
-Saída esperada:
-amor roma mora ramo
-pato topa
-sala alas
-```
-
-**Dicas:**
-
-1. Assinatura: copie a palavra e ordene as letras com qsort (cada
-   elemento tem 1 byte; a comparação é a diferença entre os dois char).
-2. O nó do balde é um grupo: a assinatura, um vetor de palavras, o
-   número de palavras e o prox. Para imprimir na ordem de chegada, guarde
-   também um vetor com os ponteiros dos grupos na ordem em que nasceram.
-3. "lata" e "cafe" ficam sozinhas e não
-   aparecem. É o mesmo truque do contador: muda só o que vira chave.
-
-```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/E648.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E648 && ~/LPEDC/15-hash/0108-juntando-tudo/E648
 ```
 
 ---
 
 ## Desafios do módulo
 
-Problemas extras, misturando os assuntos do módulo. Todos pedem código:
-resolva num arquivo seu e rode com as flags de estudo.
+Problemas extras que misturam os assuntos do módulo. Todos pedem código:
+resolva num arquivo seu e compile com as flags de estudo.
 
 **1. Base e tamanho brigando.** Um colega usou o hash polinomial de base 31
 (`h = h * 31 + c`) com uma tabela de `m = 31` baldes, e quase todas as
@@ -1955,11 +1466,6 @@ com `m = 37`.
 m = 31: 4 4 4 18 18 18 18 18 18 18 4 4 -> 2 baldes usados
 m = 37: 15 34 0 27 10 2 32 14 32 33 27 21 -> 10 baldes usados
 ```
-
-Dica: marque os baldes usados num vetor de flags. Com `m = 31`, o resto de
-`h * 31` por 31 é sempre 0: sobra só `c % 31`, o código da **última letra**
-(`'a'` dá 4, `'o'` dá 18). Use um `m` sem fator comum com a base: um primo
-diferente de 31, como 37, 101 ou 1009.
 
 </details>
 
@@ -1989,11 +1495,6 @@ total: 11
 busca 36: nao esta com 6 sondagens
 ```
 
-Dica: o laço anda com `i = (i + 1) % M` e soma 1 a cada posição olhada; na
-busca, limite a `M` voltas para não girar para sempre numa tabela cheia. O
-29 (hash 1) tenta 1, 2, 3, 4 e 5; o 36 olha de 1 a 5 e para na 6, livre. Um
-bloco de 5 ocupadas seguidas é o agrupamento primário em ação.
-
 </details>
 
 **3. Média de comparações.** Monte uma tabela com encadeamento de 5 baldes
@@ -2015,11 +1516,6 @@ com sucesso: 10 comparacoes / 6 = 1.67
 sem sucesso: 6 comparacoes / 5 = 1.20
 ```
 
-Dica: achar o k-ésimo nó de uma corrente custa k comparações, (1 + 2 + 3) +
-1 + (1 + 2) = 10. Sem sucesso, a busca percorre a corrente inteira:
-(3 + 1 + 0 + 2 + 0) / 5 = 1,2, o próprio fator de carga α = 6/5.
-Libere as correntes no fim.
-
 </details>
 
 **4. A remoção que quebra tudo.** Tabela aberta com `m = 5`,
@@ -2036,12 +1532,6 @@ marcando livre: 20 nao encontrado (2 sondagens)
 marcando removida: 20 na posicao 2 (3 sondagens)
 ```
 
-Dica: escreva uma função `rodada(int marca, const char *nome)` que zera a
-tabela, insere os três, remove o 15 com a marca dada e busca o 20. Com
-`LIVRE`, a busca vê o buraco na 1 e conclui que o 20 não está, embora ele
-esteja na 2. Uma inserção nova com hash 0 pode reaproveitar a posição
-`REMOVIDA`, depois de conferir que a chave não existe adiante.
-
 </details>
 
 **5. Hash de número negativo.** Escreva `int h_errado(int k)`, que devolve
@@ -2056,11 +1546,6 @@ esteja na 2. Uma inserção nova com hash 0 pode reaproveitar a posição
  -10: errado   0, certo 0
   -5: errado  -5, certo 5
 ```
-
-Dica: em C, o resto tem o sinal do dividendo, então `-37 % 10` é -7, um
-índice fora do vetor. O conserto é `((k % m) + m) % m`, que soma `m` a um
-resto negativo e não estraga os positivos. Outro caminho é converter antes
-para `unsigned` (o valor muda, mas fica sempre no intervalo certo).
 
 </details>
 
@@ -2080,10 +1565,6 @@ Imprima cada passo.
 19: 31 ja esta -> par 31 + 19
 ```
 
-Dica: pare no primeiro par achado e imprima "nenhum par" se o laço terminar.
-Cuidado com `50 - p` negativo (um preço maior que o vale): não procure. É
-O(n) em média, contra O(n²) de testar todos os pares.
-
 </details>
 
 **7. Hash ou árvore?** A agenda precisa listar os contatos em ordem
@@ -2100,13 +1581,6 @@ hash (balde a balde): Beto Caio Alice Davi Ana Bia Bruno
 arvore (em ordem): Alice Ana Beto Bia Bruno Caio Davi
 entre Ana e Bia: Ana Beto Bia
 ```
-
-Dica: o intervalo é um percurso em ordem com poda: só desça à esquerda se
-"Ana" for menor que o nó, e à direita se o nó for menor que "Bia". A tabela
-espalha as chaves de propósito e não guarda ordem: para listar em ordem ou
-por intervalo, ela teria que ordenar tudo a cada consulta. Para só perguntar
-"existe?" (palavras reservadas de um compilador, cache de sessões), a hash
-ganha com O(1) médio.
 
 </details>
 
@@ -2125,12 +1599,6 @@ velha (m = 7): 52 - - 10 24 31 45
 copiando posicao por posicao: 10(?) 24(?) 31(?) 45(?) 52(?) -> acha 0 de 5
 reinserindo: 10 24 31 45 52 -> acha 5 de 5
 ```
-
-Dica: as cinco chaves têm `k % 7 == 3` e se amontoam a partir da posição 3
-(o 52 dá a volta até a 0). Com `m = 17`, `k % 17` aponta para outras
-posições, que na cópia estão vazias, e a busca desiste. Reinserir custa O(n),
-mas como acontece só quando a tabela dobra, o custo diluído por inserção
-continua O(1), igual ao vetor que cresce com `realloc` (módulo 07).
 
 </details>
 
@@ -2157,12 +1625,322 @@ z: 1
 mais comum: a (10 vezes)
 ```
 
-Dica: só conte os caracteres entre `'a'` e `'z'` (o espaço fica de fora) e
-troque a mais comum só quando a contagem for **maior**, para o empate ficar
-com a primeira letra. A "função hash" `c - 'a'` leva as 26 chaves possíveis
-em 26 posições diferentes: zero colisões. É o endereçamento direto, uma
-tabela hash perfeita, possível porque o universo de chaves é pequeno e
-conhecido.
+</details>
+
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 032/2016 · Questão 09**
+
+Considere as afirmações sobre um hash por encadeamento:
+
+I) Suas colisões secundárias podem prejudicar seu desempenho\
+II) Não funciona com número de chaves maior que o tamanho da tabela hash\
+III) O número médio de operações esperado para realizar uma inserção é constante quando computado em função do tamanho da tabela se o hash for bem projetado\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas III é verdadeira
+- e) Apenas I e II são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**D.** I é falsa (colisão secundária é do endereçamento aberto), II é falsa (encadeamento aceita mais chaves que a tabela), III é verdadeira. Assunto 0105.
+
+</details>
+
+**Edital 053/2016 · Questão 10**
+
+Considere as afirmações sobre um hash linear (sem encadeamento):
+
+I) É obrigatório o uso de várias funções de hash\
+II) Não funciona com número de chaves maior que o tamanho da tabela hash\
+III) Quando acontece uma colisão, o valor a ser inserido é colocado no local no lugar do já existente.\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas II é verdadeira
+- e) Apenas I e II são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**D.** I falsa, II verdadeira (endereçamento aberto não passa de M chaves), III falsa (vai para a próxima posição livre). Assunto 0107.
+
+</details>
+
+**Edital 053/2016 · Questão 12**
+
+Considere as afirmações sobre hash linear e hash encadeado
+
+I) Hash encadeado funciona melhor em disco, pois as chaves sempre ficam próximas uma das outras, facilitando a varredura.\
+II) Para uma tabela hash de tamanho M, tanto o hash linear quanto o hash encadeado podem receber uma quantidade de chaves C, onde C > M.\
+III) Quanto acontece uma colisão no hash encadeado, a chave é inserida na posição livre mais próxima da chave original.\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas II é verdadeira
+- e) Apenas I e II são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**B.** I falsa (disco), II falsa (o linear não aceita C>M), III falsa (colisão no encadeado entra na lista). Assunto 0106.
+
+</details>
+
+**Edital 024/2017 · Questão 07**
+
+Considere as seguintes afirmações:
+
+I. Hash por encadeamento nunca apresenta colisões secundárias\
+II. Hash por encadeamento jamais permite que o número de comparações entre chaves em uma operação de busca passe de log n, onde n é o número de chaves inseridas no hash.\
+III. Hash por encadeamento realiza sempre menos comparações entre chaves do que qualquer hash por endereçamento aberto.\
+
+Marque a alternativa CORRETA:
+
+- a) Apenas a afirmação I é verdadeira
+- b) Apenas a afirmação II é verdadeira
+- c) Apenas a afirmação III é verdadeira
+- d) Apenas as afirmações II e III são verdadeiras
+- e) Nenhuma das alternativas anteriores está correta
+
+<details><summary>Gabarito</summary>
+
+**A.** colisão secundária é de endereçamento aberto, então I é verdadeira; II e III falsas (pior caso é n, e aberto pode ganhar do encadeado) Assunto 0106.
+
+</details>
+
+**Edital 024/2017 · Questão 14**
+
+Considere as afirmações sobre um hash linear (sem encadeamento):
+
+I. No evento de uma colisão, o valor a ser inserido é sempre colocado no início do array;\
+II. A busca pela chave é realizada utilizando busca binária (mais eficiente)\
+III. É obrigatório o uso de funções diferentes para inserção e remoção de chaves\
+IV. É projetado para funcionar com arrays de tamanho previamente definido.\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas II e IV são verdadeiras
+- d) Apenas IV é verdadeira
+- e) Apenas I e II são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**D.** só IV: tamanho fixo; sondagem linear não usa busca binária nem coloca no início Assunto 0107.
+
+</details>
+
+**Edital 024/2017 · Questão 15**
+
+Considere as afirmações sobre hash linear vs hash encadeado
+
+I. Para uma tabela hash de tamanho M, tanto o hash linear quanto o hash encadeado podem receber uma quantidade de chaves C, onde C > M.\
+II. Quanto acontece uma colisão no hash encadeado, a chave é inserida na posição livre mais próxima da chave original.\
+III. Hash linear funciona melhor em disco, pois as chaves obrigatoriamente ficam em espaços separados de memória, facilitando a varredura.\
+IV. O uso de uma segunda função de hash (no hash encadeado), garante um melhor espalhamento das chaves pela tabela hash\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas são verdadeiras
+- b) Todas são falsas
+- c) Apenas I e III são verdadeiras
+- d) Apenas III é verdadeira
+- e) Apenas I e II são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**B.** I falsa (linear não passa de M), II descreve o linear, III sem sentido, IV é dispersão dupla, não encadeamento Assunto 0106.
+
+</details>
+
+**Edital 055/2017 · Questão 05**
+
+Quando um algoritmo de hash produz um endereço para uma chave e esse endereço já está ocupado, isso é chamado de __________.
+
+- A) Sinônimo
+- B) Inicial
+- C) Prospecção
+- D) Colisão
+- E) Overflow
+
+<details><summary>Gabarito</summary>
+
+**D.** endereço já ocupado é colisão Assunto 0105.
+
+</details>
+
+**Edital 055/2017 · Questão 06**
+
+Considere uma tabela hash com resolução de colisões por encadeamento com as seguintes características:
+
+- As chaves são as letras A,B,C,D,H,J,K,M,N,O,P,R,S,T,U;
+- A tabela possui 11 posições, referenciadas pelos índices de 0 até 10;
+- A função de hash é definida como hash(x)=posição(x) mod 11, onde x é a chave, e posição(x) é a posição da chave no alfabeto ABCDEFGHIJKLMNOPQRSTUVWXYZ, tal que posição("A") retorna 1 e posição("Z") retorna 26.
+
+Analise as afirmativas sobre a tabela após seu preenchimento com as chaves listadas acima.
+
+I. Nenhuma chave foi alocada à posição 6;\
+II. A chave "K" foi alocada à posição zero;\
+III. As chaves "B" e "N" colidiram na posição 3;\
+IV. Apenas uma letra foi alocada à posição 9.\
+
+Com base nessas afirmativas, marque a alternativa CORRETA:
+
+- A) Apenas as afirmativas I e II estão corretas.
+- B) Apenas as afirmativas I e IV estão corretas.
+- C) Apenas as afirmativas I, II e IV estão corretas.
+- D) Apenas as afirmativas II e III.
+- E) Apenas as afirmativas II, III e IV estão corretas.
+
+<details><summary>Gabarito</summary>
+
+**C.** posições: K=0, N=3 (não B), T=9 sozinho, nada em 6; I, II e IV verdadeiras, III falsa Assunto 0106.
+
+</details>
+
+**Edital 055/2017 · Questão 15**
+
+Considere as seguintes afirmações:
+
+I. Hash por encadeamento pode apresentar colisões secundárias.\
+II. Hash por encadeamento pode permitir que o número de comparações entre chaves em uma operação de busca passe de √n, onde n é o número de chaves inseridas no hash.\
+III. Hash por endereçamento aberto realiza sempre menos comparações entre chaves do que qualquer hash por encadeamento.\
+
+Marque a alternativa CORRETA:
+
+- A) Apenas a afirmação I é verdadeira.
+- B) Apenas a afirmação II é verdadeira.
+- C) Apenas a afirmação III é verdadeira.
+- D) Apenas as afirmações II e III são verdadeiras.
+- E) Apenas as afirmações I e III são verdadeiras.
+
+<details><summary>Gabarito</summary>
+
+**B.** Assunto 0106.
+
+</details>
+
+**Edital 023/2018 · Questão 18**
+
+Considere uma tabela de espalhamento (hash table) de comprimento igual a 11, na qual a técnica de resolução de colisões utilizada é a de encadeamento. Nessa tabela, as posições são numeradas (indexadas) com os valores 0, 1, 2, ..., 10, o mapeamento de chaves para posições usa a função hash definida por h(k) = k mod 11, onde k é o valor da chave, e mod é o operador de módulo, e os números 1, 5, 18, 20, 4, 12, 10, 34, 15, 28 e 17 foram as chaves inseridas, nessa ordem, nessa tabela de espalhamento que estava inicialmente vazia. Qual a quantidade de posições em que houve colisão durante as inserções das chaves?
+
+- a) 0
+- b) 1
+- c) 2
+- d) 3
+- e) 4
+
+<details><summary>Gabarito</summary>
+
+**D.** Rodado em C: colidem as posições 1 (1, 12, 34), 4 (4, 15) e 6 (28, 17): três posições. Assunto 0105.
+
+</details>
+
+**Edital 061/2018 · Questão 01**
+
+Considere um arquivo sequencial com 10.000 registros, cujas chaves identificadoras são números inteiros de até 8 dígitos. Para criar um índice tipo hashing para esse arquivo, contendo endereços de 0 até 11.999, a mais adequada definição para uma função de hashing f(x), onde x é uma chave e (a mod b) é o resto da divisão de a por b, seria:
+
+- a) f = x mod 1000 + 12
+- b) f = x mod 12000
+- c) f = x / 10000
+- d) f = x / 11999
+- e) f = (x – 11999) /10000
+
+<details><summary>Gabarito</summary>
+
+**B.** `x mod 12000` cobre exatamente 0 a 11.999; a A só gera 1000 endereços. Assunto 0105.
+
+</details>
+
+**Edital 061/2018 · Questão 16**
+
+Considere as seguintes afirmações:
+
+I. Hash por encadeamento nunca apresenta colisões secundárias\
+II. Hash por encadeamento jamais permite que o número de comparações entre chaves em uma operação de busca passe de log n, onde n é o número de chaves inseridas no hash.\
+III. Hash por encadeamento realiza sempre menos comparações entre chaves do que qualquer hash por endereçamento aberto.\
+
+Agora marque a alternativa CORRETA:
+
+- a) Apenas a afirmação I é verdadeira
+- b) Apenas a afirmação II é verdadeira
+- c) Apenas a afirmação III é verdadeira
+- d) Apenas as afirmações II e III são verdadeiras
+- e) Nenhuma das alternativas anteriores está correta
+
+<details><summary>Gabarito</summary>
+
+**A.** Só a I é verdadeira (colisão secundária é conceito de endereçamento aberto); II e III são falsas. Assunto 0106.
+
+</details>
+
+**Edital 061/2018 · Questão 18**
+
+Considere as afirmações sobre um hash por encadeamento:
+
+I. Tem como desvantagem o fato de não ordenar as chaves inseridas\
+II. O número médio de operações esperado para realizar uma busca é constante se o hash for bem projetado\
+III. Mesmo quando bem implementado, ocupa mais espaço extra do que uma árvore B em memória.\
+
+Sobre as afirmações, sabe-se que:
+
+- a) Todas as afirmações são verdadeiras
+- b) Todas as afirmações são falsas
+- c) Apenas as afirmações I e III são verdadeiras
+- d) Apenas a afirmação III é verdadeira
+- e) Apenas as afirmações I e II são verdadeiras
+
+<details><summary>Gabarito</summary>
+
+**E.** I e II são verdadeiras; a III é duvidosa. Ver observação. Assunto 0106.
+
+</details>
+
+**Edital 060/2019 · Questão 01**
+
+Suponha que você tenha a seguinte tabela hash implementada utilizando endereçamento aberto com sondagem linear (linear probing). A função hash que você está usando é uma função modular, h(x) = x MOD 9.
+
+![Questão 01 - tabela hash](15-hash/_fontes/provas-figuras/2019-060/q01-tabela-hash.png)
+
+Qual das ordens abaixo pode ser a ordem em que os elementos foram adicionados à hash? Assuma que a hash nunca tenha sido redimensionada e que nenhum elemento tenha sido excluído ainda.
+
+- a) 9, 14, 4, 18, 21, 3, 12
+- b) 12, 3, 14, 18, 4, 9, 21
+- c) 12, 14, 3, 9, 4, 18, 21
+- d) 9, 12, 14, 3, 21, 18, 4
+- e) 18, 9, 12, 3, 14, 4, 21
+
+<details><summary>Gabarito</summary>
+
+**C.** Rodado em C: só a ordem de C gera 9 18 _ 12 3 14 4 21 (as de b e e trocam 9 e 18). Assunto 0107.
+
+</details>
+
+**Edital 060/2019 · Questão 06**
+
+Marque a alternativa CORRETA. Sobre um hash com encadeamento e com tabela de tamanho 100, pode-se dizer que:
+
+- a) Para casos em que se insere um número n muito grande de chaves, o tempo no caso médio de busca será O(1)
+- b) Para casos em que se insere um número n muito grande de chaves, o tempo de busca no pior caso será O(1)
+- c) Para casos em que se insere um número n muito grande de chaves, o tempo no caso médio de busca será O(n)
+- d) Para casos em que se insere um número n muito grande de chaves, o tempo de busca no pior caso será O(log n)
+- e) Nenhuma das alternativas anteriores
+
+<details><summary>Gabarito</summary>
+
+**C.** Com m fixo, a cadeia média tem n/100 nós, que é O(n). Assunto 0106.
 
 </details>
 
@@ -3425,241 +3203,6 @@ menor intervalo: ABC1D23, passagens 1 e 4 (distância 3)
 ```bash
 gcc ~/LPEDC/15-hash/lista/P1530.c -o ~/LPEDC/15-hash/lista/P1530 && ~/LPEDC/15-hash/lista/P1530
 ```
-
-## Questões no estilo da prova
-
-Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
-letra e só depois abra o gabarito. Nas de simulação, desenhe a tabela e
-preencha posição por posição; nas de encadeamento, desenhe cada balde. Em
-todas, `h(k) = k mod m` e as posições começam em 0.
-
-**1.** Considere as afirmações sobre uma tabela hash com encadeamento:
-
-I. Com hashing uniforme, a busca sem sucesso examina em média Θ(1 + α)
-posições e chaves, onde α = n/m é o fator de carga.
-II. A tabela aceita mais chaves do que o seu número de posições, pois cada
-balde guarda uma lista.
-III. O pior caso da busca é sempre O(1), porque a função hash leva direto ao
-balde certo.
-
-Marque a alternativa **CORRETA**.
-
-- (A) Apenas I.
-- (B) Apenas II.
-- (C) Apenas I e II.
-- (D) Apenas II e III.
-- (E) I, II e III.
-
-<details><summary>Gabarito</summary>
-
-**C.** I e II são verdadeiras. A III é falsa por causa do "sempre": se todas as
-chaves caírem no mesmo balde, a busca percorre uma lista de `n` nós e custa
-Θ(n). O O(1) é o custo **esperado** sob hashing uniforme, não o pior caso. Veja
-0106.
-
-</details>
-
-**2.** Considere as afirmações sobre endereçamento aberto com sondagem linear:
-
-I. Um bloco contínuo de posições ocupadas torna mais prováveis as colisões
-nas inserções seguintes que caem sobre ele (agrupamento primário).
-II. A busca com sucesso sempre examina uma única posição.
-III. A tabela não comporta mais chaves do que o seu número de posições.
-IV. Chaves com posições iniciais diferentes podem disputar a mesma posição:
-é a colisão secundária.
-
-Marque a alternativa **CORRETA**.
-
-- (A) Apenas I, III e IV.
-- (B) Apenas II e III.
-- (C) Apenas I, II e III.
-- (D) Apenas I e IV.
-- (E) I, II, III e IV.
-
-<details><summary>Gabarito</summary>
-
-**A.** A II é falsa: a chave pode estar depois de várias posições ocupadas por
-outras, e a busca percorre a sequência de sondagem até achá-la. As outras três
-são verdadeiras. A tabela guarda no máximo `m` chaves (III), e a colisão
-secundária pertence ao endereçamento aberto, não ao encadeamento (IV). Veja
-0107.
-
-</details>
-
-**3.** Considere as afirmações sobre funções hash:
-
-I. Uma boa função distribui as chaves de modo aproximadamente uniforme pelas
-posições da tabela.
-II. No método da divisão, se `m` é uma potência de 2, `k mod m` depende só dos
-bits menos significativos de `k`.
-III. A função hash precisa ser injetora, ou a tabela não funciona.
-
-Marque a alternativa **CORRETA**.
-
-- (A) Apenas I.
-- (B) Apenas I e III.
-- (C) Apenas II e III.
-- (D) Apenas III.
-- (E) Apenas I e II.
-
-<details><summary>Gabarito</summary>
-
-**E.** A III é falsa: como há mais chaves possíveis do que posições, a
-colisão é inevitável, e as tabelas existem justamente para tratá-la (por
-encadeamento ou por sondagem). Na II, `k mod 2^p` são os `p` últimos bits, e por
-isso se prefere um primo longe de potências de 2. Veja 0105.
-
-</details>
-
-**4.** Uma tabela com encadeamento tem `m = 7` baldes e cada chave nova entra
-no **início** da lista do seu balde. São inseridas, nesta ordem,
-`50 23 14 36 9 29 44 7`. Quantas chaves são comparadas numa busca pelo 50?
-
-- (A) 5
-- (B) 2
-- (C) 4
-- (D) 3
-- (E) 1
-
-<details><summary>Gabarito</summary>
-
-**D.** `50 mod 7 = 1`, assim como 36 e 29: o balde 1 recebe 50, depois 36, depois
-29, e como cada uma entra na cabeça a lista fica `29 36 50`. A busca compara
-29, 36 e 50. O 50, a primeira chave a chegar, é a última da lista. As demais
-chaves ficam nos baldes 0 (`7 14`) e 2 (`44 9 23`). Veja 0106.
-
-</details>
-
-**5.** Uma tabela com endereçamento aberto tem `m = 8` posições e sondagem
-linear, `h(k, i) = (k mod 8 + i) mod 8`, com a volta ao início do vetor.
-Inserem-se `13 21 5 29 6 14`, nesta ordem. Conte como colisão cada tentativa
-numa posição já ocupada. Quantas colisões ocorrem no total?
-
-- (A) 12
-- (B) 13
-- (C) 11
-- (D) 15
-- (E) 6
-
-<details><summary>Gabarito</summary>
-
-**B.** Todas as chaves têm `k mod 8` entre 5 e 6. O 13 vai para 5 (0 colisões);
-o 21 tenta 5 e fica em 6 (1); o 5 tenta 5 e 6 e fica em 7 (2); o 29 tenta 5, 6
-e 7 e dá a volta até 0 (3); o 6 tenta 6, 7 e 0 e fica em 1 (3); o 14 tenta 6, 7,
-0 e 1 e fica em 2 (4). Total: 0 + 1 + 2 + 3 + 3 + 4 = 13. A tabela termina
-`29 6 14 _ _ 13 21 5`. A (E) é o erro de contar uma colisão por chave. Veja
-0107.
-
-</details>
-
-**6.** Uma tabela com `m = 10` posições usa sondagem linear. Inserem-se
-`14 24 34 5 44 15`, nesta ordem, e depois remove-se o 24 **marcando a posição
-como removida** (lápide, que a busca atravessa). Quantas posições a busca pelo
-44 examina, contando a da lápide?
-
-- (A) 2
-- (B) 3
-- (C) 4
-- (D) 8
-- (E) 5
-
-<details><summary>Gabarito</summary>
-
-**E.** Antes da remoção a tabela é `_ _ _ _ 14 24 34 5 44 15` (posições 0 a 9).
-A busca começa em 4 e examina 4 (14), 5 (lápide), 6 (34), 7 (5) e 8 (44):
-cinco posições. A (A) é o que ocorreria se a posição 5 fosse marcada como
-**livre**: a busca pararia ali e não encontraria o 44, que está na tabela. A
-lápide existe para evitar isso. Veja 0107.
-
-</details>
-
-**7.** Uma tabela com encadeamento tem `m = 400` baldes e guarda `n = 1200`
-chaves, com hashing uniforme. Em média, quantas chaves são comparadas numa
-busca **sem sucesso**?
-
-- (A) 1,5
-- (B) 2,5
-- (C) 3
-- (D) 4
-- (E) 400
-
-<details><summary>Gabarito</summary>
-
-**C.** O fator de carga é α = 1200/400 = 3, e a busca sem sucesso percorre a
-lista inteira do balde, de tamanho médio α: 3 chaves. A (B) é a busca **com**
-sucesso, que para no meio da lista, em média 1 + α/2 = 2,5. Veja 0106 e 0108.
-
-</details>
-
-**8.** O trecho abaixo implementa a busca numa tabela com encadeamento. Qual
-alternativa descreve corretamente o defeito dele?
-
-```c
-#define M 5
-typedef struct no { int chave; struct no *prox; } No;
-No *tabela[M];
-
-int buscar(int k) {
-    No *p = tabela[k % M];
-    while (p->chave != k)
-        p = p->prox;
-    return 1;
-}
-```
-
-- (A) `k % M` pode dar resultado negativo e sempre sai do vetor.
-- (B) Falta um `free` no fim da função.
-- (C) A tabela deveria ser `No tabela[M]`, sem ponteiros.
-- (D) Se a chave não está na lista (ou o balde está vazio), `p` chega a `NULL` e o laço lê `p->chave`: comportamento indefinido.
-- (E) O laço deveria percorrer os `M` baldes, não só um.
-
-<details><summary>Gabarito</summary>
-
-**D.** O laço só termina quando acha a chave. Numa busca sem sucesso `p` vira
-`NULL` e `p->chave` desreferencia um ponteiro nulo (a busca por uma
-chave ausente termina em falha de segmentação). O certo é
-`while (p != NULL && p->chave != k)` e devolver 0 se `p` terminar nulo. A (A)
-só vale para chave negativa, e mesmo assim não "sempre". Veja 0106.
-
-</details>
-
-**9.** Sobre endereçamento aberto com sondagem linear, marque a alternativa
-**INCORRETA**.
-
-- (A) O número de chaves armazenadas nunca passa do tamanho da tabela.
-- (B) Para remover uma chave, basta marcar a posição como livre: as buscas das outras chaves continuam corretas.
-- (C) Chaves com a mesma posição inicial seguem a mesma sequência de sondagem.
-- (D) Uma inserção pode ficar mais cara depois que outras chaves formaram um bloco contínuo.
-- (E) Quanto maior o fator de carga, maior o custo médio de uma busca sem sucesso.
-
-<details><summary>Gabarito</summary>
-
-**B.** Marcar como livre quebra a busca: se outra chave tinha pulado aquela
-posição, a busca por ela para ali e conclui, por engano, que a chave não existe.
-Usa-se uma marca de removida (lápide). As demais são verdadeiras: no máximo `m`
-chaves (A), uma única sequência por posição inicial (C), agrupamento primário
-(D) e custo crescente com α (E). Veja 0107.
-
-</details>
-
-**10.** Sobre o **pior caso** de uma tabela hash com encadeamento, marque a
-alternativa **CORRETA**.
-
-- (A) Se as `n` chaves caírem no mesmo balde, a busca custa Θ(n), mesmo que o custo esperado seja Θ(1 + α).
-- (B) É O(log n), porque as listas são mantidas ordenadas.
-- (C) É O(1), pois a função hash calcula o balde sem comparar chaves.
-- (D) É Θ(m), independentemente das chaves inseridas.
-- (E) É sempre melhor que o do endereçamento aberto.
-
-<details><summary>Gabarito</summary>
-
-**A.** Uma função hash ruim (ou chaves escolhidas de propósito) pode jogar tudo
-num balde só, e a tabela degenera numa lista encadeada. O custo esperado
-Θ(1 + α) vale sob hashing uniforme. As listas do encadeamento não são
-ordenadas (B), e nenhuma das duas técnicas vence a outra em todos os casos (E).
-Veja 0106.
-
-</details>
 
 ## Para ler mais
 

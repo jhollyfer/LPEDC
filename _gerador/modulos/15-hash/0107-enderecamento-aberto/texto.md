@@ -1,49 +1,38 @@
 ## 0107 · Endereçamento aberto
 
-O estacionamento de visitantes do condomínio tem 11 vagas, numeradas de 0 a
-10. A regra da portaria: a vaga do carro é o número do apartamento com resto
-por 11. Se a vaga estiver ocupada, você tenta a **próxima**. E a seguinte. Na
-saída, o porteiro faz o mesmo caminho para achar o carro.
+O estacionamento do condomínio tem 11 vagas. A vaga do carro é o número do
+apartamento com resto por 11; se estiver ocupada, tenta-se a **próxima**. Na
+saída, o porteiro refaz o caminho.
 
-Essa é a segunda forma de tratar colisão: o **endereçamento aberto**. Não tem
-lista nenhuma. Os itens ficam **dentro do próprio vetor**, e quem colide
-procura outra posição livre na tabela, seguindo uma sequência fixa de
-tentativas. Cada tentativa é uma **sondagem**.
+Esse é o **endereçamento aberto**, a segunda forma de tratar colisão: sem
+lista, os itens ficam **dentro do vetor**, e quem colide tenta outras posições
+numa sequência fixa. Cada tentativa é uma **sondagem**.
 
-A sequência mais simples é a **sondagem linear**: começa em `h = chave % m` e
-anda uma casa por vez, dando a volta no fim: `i = (i + 1) % m`. O Cormen
-escreve a sequência como uma função da chave e da tentativa `i` (a partir de
-0): `h(k, i) = (h'(k) + i) mod m`. Trocando o passo, saem as outras duas do
-edital: a **sondagem quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
-**dispersão dupla** (*double hashing*), `(h₁(k) + i · h₂(k)) mod m`, que o
-assunto 0179 aprofunda.
+A **sondagem linear** começa em `h = chave % m` e anda uma casa por vez, com
+volta no fim: `i = (i + 1) % m`. Na forma do Cormen, com a tentativa `i` a
+partir de 0: `h(k, i) = (h'(k) + i) mod m`. Trocando o passo, saem a
+**sondagem quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a **dispersão
+dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179).
 
-- **inserir**: sonda a partir de `h` até achar uma posição livre;
-- **buscar**: sonda a partir de `h` até achar a chave (achou) ou uma posição
-  **livre** (não está: se estivesse, teria parado ali);
-- **remover**: tem uma pegadinha, explicada no aviso abaixo.
+**Inserir** sonda até achar posição livre. **Buscar** sonda até achar a chave
+ou uma posição **livre**, onde a chave teria parado. **Remover** tem uma
+pegadinha, no aviso abaixo.
 
-Como tudo cabe no vetor, a tabela **enche**: `α = n / m` nunca passa de 1. E
-fica lenta bem antes disso. Na sondagem linear, as ocupadas formam blocos
-seguidos, e qualquer chave que cai num bloco vai parar no fim dele, deixando o
-bloco ainda maior. Isso é o **agrupamento primário**. Com α = 0,5 uma busca
-sem sucesso olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com
-hashing uniforme, sem agrupamento, o Cormen limita essa busca a 1/(1 − α)
-sondagens: 2 e 10.) Na prática, não passe de 70% a 75% de ocupação. Passou,
-crie uma tabela maior e reinsira tudo (o exemplo A213 lota uma tabela de 7
-vagas e mostra as sondagens crescendo).
+A tabela **enche**: `α = n / m` nunca passa de 1, e fica lenta antes. As
+ocupadas formam blocos, e toda chave que cai num bloco vai parar no fim dele,
+aumentando-o: é o **agrupamento primário**. Com α = 0,5 uma busca sem sucesso
+olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com hashing uniforme o
+Cormen limita a busca a 1/(1 − α): 2 e 10.) Passando de 70% a 75% de
+ocupação, crie uma tabela maior e reinsira tudo (exemplo A213).
 
-Entram os carros dos apartamentos 101, 202, 301, 1104
-e 504. O 101 vai para a vaga 2 e o 202 para a 4. O 301 também dá 4 (301 % 11
-= 4), encontra a 4 ocupada e para na 5. O 1104 dá 4 de novo: tenta a 4, a 5,
-e para na 6. O 504 vai direto para a 9. Na busca pelo 1104, o porteiro refaz
-o mesmo caminho: 3 sondagens:
+Os apartamentos 101, 202, 301, 1104 e 504 entram. O 101 vai para a vaga 2 e o
+202 para a 4. O 301 também dá 4, vê a vaga ocupada e para na 5. O 1104 tenta
+4, 5 e para na 6. O 504 vai para a 9. Buscar o 1104 custa 3 sondagens:
 
 {{ideia}}
 
-O TAD segue o padrão de sempre: `aberta.h` com a interface, `aberta.c` com o
-vetor de vagas, cada uma com um **estado**: `LIVRE`, `OCUPADA` ou `REMOVIDA`.
-A busca, dentro do `aberta.c`, é este laço:
+O TAD é `aberta.h` (interface) e `aberta.c` (vetor de vagas, cada uma com
+**estado** `LIVRE`, `OCUPADA` ou `REMOVIDA`). A busca é este laço:
 
 ```c
 // anda a partir de chave % m até achar a chave ou uma posição LIVRE;
@@ -71,7 +60,7 @@ static int procura(const Aberta *t, int chave, int *sondagens) {
 }
 ```
 
-E o programa do condomínio:
+O programa do condomínio:
 
 ```c
 #include <stdio.h>
@@ -122,37 +111,26 @@ int main(void) {
 // 303 não está, sondagens: 2
 ```
 
-O fluxograma da busca faz duas perguntas por vaga. "Está livre?"
-encerra a busca sem sucesso; "é o carro?" encerra com sucesso. Se nenhuma das
-duas, anda uma vaga. O 1104 passa duas vezes pelo laço (vagas 4 e 5) e é
-achado na 6. O 303 começa na 6, não é ele, e para na 7, livre:
+No fluxograma, "está livre?" encerra sem sucesso e "é o carro?" encerra com
+sucesso; senão, anda uma vaga. O 1104 é achado na 6; o 303 para na 7, livre:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Remover **não** é marcar a posição como livre. Se o carro do 301 sai e a
-> vaga 5 volta a ser `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e
-> conclui "não está", embora ele esteja na 6. A vaga livre corta o caminho de
-> quem tinha pulado por ela. A solução é uma terceira marca, **removida**
-> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto por ela, e
-> a inserção pode reaproveitá-la. O exemplo A214 mostra isso. O custo: com muitas remoções, as
-> lápides acumulam e as buscas sem sucesso ficam longas, até você reconstruir
-> a tabela.
+> Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
+> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e conclui "não está",
+> embora ele esteja na 6. A solução é uma terceira marca, **removida**
+> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto, e a
+> inserção pode reaproveitá-la (exemplo A214). Com muitas lápides, as buscas
+> sem sucesso ficam longas até a tabela ser reconstruída.
 
 > [!TIP]
-> **Por dentro do C:** cada `Vaga` tem `chave`, `valor` e `estado`: 3 × 4 =
-> 12 bytes, e as 11 vagas são **um bloco só** de 132 bytes. Sem `malloc` por
-> item, sem ponteiro `prox`, sem nó espalhado pelo heap. Andar para a próxima
-> vaga é andar 12 bytes na memória, e o processador já trouxe as vizinhas para
-> a cache junto com a primeira. Por isso o endereçamento aberto costuma ganhar
-> do encadeamento na prática, mesmo fazendo mais sondagens. Muitas tabelas
-> hash de bibliotecas usam endereçamento aberto (com sondagens mais espertas
-> que a linear).
+> **Por dentro do C:** as vagas formam **um bloco só**, sem `malloc` por item,
+> e andar para a próxima aproveita a cache. Por isso o endereçamento aberto
+> costuma ganhar do encadeamento na prática.
 
 > [!NOTE]
-> **Pergunta para você:** depois dos 5 carros, chega o do apartamento 1203
-> (1203 % 11 = 4). Em qual vaga ele para, e com quantas sondagens? E quantas
-> sondagens custa, depois disso, buscar um apartamento que não está e que cai
-> na vaga 4?
+> **Pergunta para você:** depois dos 5 carros, chega o apartamento 1203
+> (1203 % 11 = 4). Em qual vaga ele para, e com quantas sondagens?
 
 {{pratique}}

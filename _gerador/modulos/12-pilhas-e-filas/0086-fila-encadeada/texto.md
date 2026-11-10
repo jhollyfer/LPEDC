@@ -1,25 +1,23 @@
 ## 0086 · Fila encadeada
 
 Sexta à noite, a cozinha da pizzaria recebe os pedidos do app. O painel de 8
-lugares do 0085 lotou às 20h, e o nono pedido foi recusado: cliente perdido.
-A fila precisa crescer o quanto for preciso.
+lugares do 0085 lotou às 20h, e o nono pedido foi recusado.
 
-A solução é a mesma da pilha: trocar o vetor por **nós** encadeados. Só que a
-fila mexe nas duas pontas, e isso muda o desenho. Nos ponteiros de uma lista
-simples:
+A solução é a da pilha: trocar o vetor por **nós**. Como a fila usa as duas
+pontas, o desenho muda:
 
 - **retirar** do começo é fácil: `inicio = inicio->prox`, O(1);
-- **inserir** no fim exigiria andar a lista até o último, O(n)... a não ser
-  que você guarde um segundo ponteiro, o **fim**, sempre apontando para o
-  último nó. Aí inserir também é O(1): `fim->prox = novo; fim = novo`.
+- **inserir** no fim exigiria andar até o último, O(n), a menos que você
+  guarde um segundo ponteiro, o **fim**, sempre no último nó. Então
+  `fim->prox = novo; fim = novo` também é O(1).
 
-A direção importa: a fila **sai pelo início e entra pelo fim**. O contrário
-(entrar pelo início, sair pelo fim) não funciona bem numa lista simples:
-remover o último exige o penúltimo, e o nó não sabe quem está antes dele.
+A fila **sai pelo início e entra pelo fim**. O contrário não funciona bem numa
+lista simples: remover o último exige o penúltimo, e o nó não sabe quem vem
+antes.
 
-O [`fila.h`](0086-fila-encadeada/fila.h) é o mesmo do 0085, palavra por
-palavra. O [`fila.c`](0086-fila-encadeada/fila.c) agora guarda dois
-ponteiros, e os casos de borda moram neles:
+O [`fila.h`](0086-fila-encadeada/fila.h) é o do 0085. O
+[`fila.c`](0086-fila-encadeada/fila.c) guarda dois ponteiros, e os casos de
+borda moram neles:
 
 ```c
 struct fila {
@@ -61,13 +59,13 @@ bool fila_retira(Fila *f, int *valor) {
 }
 ```
 
-Chegam os pedidos 501, 502 e 503. A cozinha pega o
-501: o início anda para o 502 e o nó do 501 é liberado. Chega o 504, que é
-pendurado depois do 503, e o fim passa a apontar para ele:
+Chegam os pedidos 501, 502 e 503. A cozinha pega o 501: o início anda para o
+502 e o nó do 501 é liberado. Chega o 504, pendurado depois do 503, e o fim
+passa a apontar para ele:
 
 {{ideia}}
 
-O programa da cozinha só usa o `fila.h`:
+Programa da cozinha:
 
 ```c
 #include <stdio.h>
@@ -102,30 +100,22 @@ int main(void) {
 // Próximo: 502 (3 esperando)
 ```
 
-Na entrada do 504, a fila não estava vazia, então o caminho do fluxograma
-passa por `fim->prox = novo`. Na fila vazia, quem recebe o novo nó é
-o `inicio`:
+Na entrada do 504 a fila não estava vazia: o caminho passa por
+`fim->prox = novo`. Na fila vazia, o `inicio` recebe o novo nó:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Os dois bugs mais comuns estão nas bordas. Ao inserir na fila **vazia**,
-> esquecer de atualizar o `inicio` deixa a fila "vazia" para sempre, mesmo
-> com nós dentro. Ao retirar o **último**, esquecer de zerar o `fim` é pior:
-> o `fim` continua apontando para o nó que acabou de levar `free`, e o
-> próximo `fila_insere` escreve `fim->prox` em memória liberada. O
-> AddressSanitizer acusa `heap-use-after-free`; sem ele, o programa às vezes
-> funciona e às vezes corrompe o heap.
+> Os dois bugs comuns estão nas bordas. Inserir na fila **vazia** sem
+> atualizar o `inicio` deixa a fila "vazia" para sempre, mesmo com nós dentro.
+> Retirar o **último** sem zerar o `fim` é pior: o `fim` continua apontando
+> para o nó liberado, e o próximo `fila_insere` escreve `fim->prox` em memória
+> liberada (`heap-use-after-free` no AddressSanitizer).
 
 > [!TIP]
-> **Por dentro do C:** a encadeada nunca recusa um pedido (só se acabar a
-> memória), mas cada `fila_insere` chama o `malloc` e cada `fila_retira`
-> chama o `free`. Essas chamadas custam bem mais que escrever numa gaveta de
-> vetor: o alocador procura um bloco livre, guarda o tamanho dele num
-> cabeçalho escondido e, de vez em quando, pede memória ao sistema
-> operacional. Em sistemas que fazem milhões de operações por segundo, como
-> servidores e jogos, o normal é a fila circular, crescendo com `realloc`
-> quando enche, ou uma lista de nós reaproveitados.
+> A encadeada nunca recusa pedido (só se acabar a memória), mas cada inserção
+> chama `malloc` e cada retirada chama `free`, bem mais caros que escrever
+> numa gaveta de vetor.
 
 > [!NOTE]
 > **Pergunta para você:** no A172, se o cliente 3 levasse 1 minuto em vez de

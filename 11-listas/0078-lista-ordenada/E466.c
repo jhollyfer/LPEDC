@@ -7,8 +7,10 @@
 //   linha 101: 0 -> 25 -> 50 -> 75
 //   linha 202: 10 -> 25 -> 40 -> 90
 //
-// Escreva No *intercala(No *a, No *b), que junta as duas numa lista só,
-// também crescente, SEM criar nenhum nó novo: só religando os que existem.
+// Monte as duas com lista_insere_ordenado (entrando fora de ordem) e escreva
+// No *intercala(No *a, No *b), que junta as duas numa lista só, também
+// crescente, SEM criar nenhum nó novo: só religando os que existem. Mostre
+// o resultado.
 //
 //   Saída esperada:
 //   0 -> 10 -> 25 -> 25 -> 40 -> 50 -> 75 -> 90 -> NULL
@@ -19,18 +21,6 @@
 #include "lista.h"
 
 int main(void) {
-    No *a = NULL;
-    No *b = NULL;
-    int la[] = {50, 0, 75, 25};
-    int lb[] = {90, 10, 40, 25};
-    for (int i = 0; i < 4; i++) {
-        a = lista_insere_ordenado(a, la[i]);
-        b = lista_insere_ordenado(b, lb[i]);
-    }
 
-    // chame intercala e imprima o resultado
-
-    lista_libera(a); // troque estas duas linhas por
-    lista_libera(b); // lista_libera(resultado)
     return 0;
 }

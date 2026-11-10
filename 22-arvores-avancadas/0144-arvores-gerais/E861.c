@@ -1,9 +1,16 @@
 // 0144 · Árvores gerais
 // Exercício E861 · ★★☆
 //
-// No orçamento da reforma (a árvore do texto), escreva caminho(r, nome): ela
-// mostra a trilha da raiz até o item, separada por " > ", e a profundidade
-// do item. Se o item não existir, avisa.
+// O orçamento de uma reforma é uma árvore geral (arvgen.h). Monte-a no main:
+//
+//   reforma
+//     cozinha: piso 1800, pia 650
+//     banheiro: box 900, loucas (vaso 420, cuba 280)
+//     pintura 1200
+//
+// Escreva caminho(r, nome): mostra a trilha da raiz até o item, separada por "
+// > ", e a profundidade do item. Se o item não existir, avisa. Teste com vaso,
+// pia, reforma e janela.
 //
 //   Saída esperada:
 //   vaso: reforma > banheiro > loucas > vaso (profundidade 3)
@@ -11,26 +18,13 @@
 //   reforma: reforma (profundidade 0)
 //   janela: não encontrado
 //
-// Escreva sua resposta abaixo (escreva caminho):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <string.h>
 #include "arvgen.h"
 
 int main(void) {
-    NoG *reforma = ag_cria("reforma", 0);
-    NoG *cozinha = ag_adiciona(reforma, "cozinha", 0);
-    ag_adiciona(cozinha, "piso", 1800);
-    ag_adiciona(cozinha, "pia", 650);
-    NoG *banheiro = ag_adiciona(reforma, "banheiro", 0);
-    ag_adiciona(banheiro, "box", 900);
-    NoG *loucas = ag_adiciona(banheiro, "loucas", 0);
-    ag_adiciona(loucas, "vaso", 420);
-    ag_adiciona(loucas, "cuba", 280);
-    ag_adiciona(reforma, "pintura", 1200);
 
-    // caminho(reforma, "vaso"); caminho(reforma, "pia"); ...
-
-    ag_libera(reforma);
     return 0;
 }

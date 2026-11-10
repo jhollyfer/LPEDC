@@ -20,13 +20,6 @@
 #include <stdio.h>
 
 int main(void) {
-    // reuniões já ordenadas pela hora de fim
-    int ini[] = {8, 8, 9, 10, 11, 12, 13, 14};
-    int fim[] = {9, 10, 11, 12, 12, 14, 15, 16};
-    int n = 8;
-    (void)ini;
-    (void)fim;
-    (void)n;
 
     return 0;
 }

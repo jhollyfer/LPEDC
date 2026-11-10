@@ -1,39 +1,31 @@
 ## 0129 · Labirinto
 
-Festa junina na fazenda, e a atração é o labirinto de milho. Você entra pelo
-canto de cima e quer achar a saída, no canto de baixo. Sem mapa, você anda e,
-quando dá num beco, volta até a última bifurcação e tenta outro corredor.
-Para não andar em círculos, vai deixando pedrinhas pelo caminho.
+Num labirinto de milho, você volta até a última bifurcação a cada beco e tenta
+outro corredor, deixando pedrinhas para não andar em círculos.
 
-Isso é backtracking numa **matriz**. O mapa é um `char lab[L][C + 1]`: `'#'`
-é parede, `'.'` é corredor, `'S'` é a entrada e `'F'` é a saída. A função
-`anda(l, c)` responde "dá para chegar à saída a partir da casa (l, c)?". Ela
-recusa na hora as casas impossíveis: fora do mapa, parede, ou casa que já
-está no caminho. Se a casa é a saída, responde que sim. Senão, **marca** a
-casa com `'*'`, tenta os quatro vizinhos e, se nenhum deu certo, **desfaz** a
+Isso é backtracking numa **matriz**: `char lab[L][C + 1]`, com `'#'` de parede,
+`'.'` de corredor, `'S'` de entrada e `'F'` de saída. `anda(l, c)` responde "dá
+para chegar à saída a partir daqui?". Ela recusa fora do mapa, parede e casa
+que já está no caminho; se a casa é a saída, responde sim; senão **marca** a
+casa com `'*'`, tenta os quatro vizinhos e, se nenhum serviu, **desfaz** a
 marca.
 
-A diferença para os assuntos anteriores: o desfazer não volta a casa para
-`'.'`, e sim para `'x'`. Uma casa da qual não se chega à saída continua sem
-saída na próxima vez que a busca passar por ali, então não vale entrar de
-novo. Com o `'x'`, cada casa é visitada no máximo uma vez, e a
-busca custa **O(L · C)**: é a busca em profundidade (DFS) do assunto 0111,
-com a matriz fazendo o papel do grafo e os quatro vizinhos fazendo o papel
-das arestas.
+O desfazer volta a casa para `'x'`, não para `'.'`: quem não leva à saída
+continua sem levar, então não vale entrar de novo. Assim cada casa é visitada
+no máximo uma vez, e o custo é **O(L · C)**. É a busca em profundidade (DFS)
+do assunto 0111, com a matriz no papel do grafo e os quatro vizinhos no das
+arestas.
 
-Atenção ao `||` encadeado do código. Pelo curto-circuito (assunto
-0013), assim que um vizinho devolve `true`, os seguintes nem são chamados. A
-ordem das direções no `if` (direita, baixo, esquerda, cima) decide qual
-caminho a busca acha primeiro.
+Pelo curto-circuito do `||` (assunto 0013), quando um vizinho devolve `true`,
+os seguintes não são chamados. A ordem das direções (direita, baixo, esquerda,
+cima) decide qual caminho sai primeiro.
 
-No desenho, os números mostram a ordem dos passos do caminho encontrado. A
-busca entrou primeiro no bolsão da direita, achou só becos
-(vermelho) e voltou. Depois desceu pela coluna 1 até o corredor de baixo:
+No desenho, os números mostram a ordem dos passos: a busca tentou o bolsão da
+direita, achou só becos (vermelho), voltou e desceu pela coluna 1:
 
 {{ideia}}
 
-No fim, as casas com `*` são o caminho, e as com `x` são os becos que a
-busca visitou e abandonou:
+No fim, `*` marca o caminho e `x` os becos abandonados:
 
 ```c
 #include <stdbool.h>
@@ -98,42 +90,30 @@ int main(void) {
 // 13 passos até a saída, 41 chamadas
 ```
 
-O caminho tem 13 passos, mas existe um de 11: descer direto pela coluna 1,
-sem o desvio por (0, 2) e (1, 2). O backtracking acha **um** caminho, não o
-**menor**. Para o menor, a ferramenta é a BFS (assunto 0110), ou um
-backtracking que testa todos os caminhos (exemplo A258).
+O caminho tem 13 passos, mas existe um de 11 (descer direto pela coluna 1). O
+backtracking acha **um** caminho, não o **menor**: para o menor, use a BFS
+(assunto 0110) ou um backtracking que testa todos os caminhos (exemplo A258).
 
-A mesma recursão, sem a saída e sem o desfazer, vira o **flood fill**
-(preenchimento por inundação): a partir de uma casa, pinta todas as casas
-alcançáveis. É o balde de tinta do editor de imagens, assunto do exemplo
-A257.
-
-Três perguntas mandam embora as casas impossíveis antes de qualquer
-marcação, e só uma casa nova chega ao `'*'`:
+Sem a saída e sem o desfazer, a mesma recursão vira o **flood fill**
+(preenchimento por inundação): o balde de tinta do editor de imagens (exemplo
+A257). Três perguntas descartam as casas impossíveis, e só uma casa nova chega
+ao `'*'`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Sem a marca de visitada, a busca anda em círculos. Da casa (0, 0) ela vai
-> para (0, 1), que tenta a direita e o resto e, em algum momento, tenta a
-> esquerda: volta para (0, 0), que tenta (0, 1) de novo, e assim para
-> sempre. Não há laço infinito no código, mas a recursão não tem fim: a
-> pilha estoura (*stack overflow*) e o programa morre. Marque a casa **antes**
-> de chamar os vizinhos, não depois.
+> Sem a marca de visitada, a busca anda em círculos: (0, 0) chama (0, 1), que
+> volta para (0, 0), e a recursão não tem fim até a pilha estourar (*stack
+> overflow*). Marque a casa **antes** de chamar os vizinhos.
 
 > [!TIP]
-> **Por dentro do C:** a matriz `lab` é contínua na memória (assunto 0039):
-> `lab[l][c]` fica no byte `l * (C + 1) + c` a partir do começo, e o `+ 1`
-> existe porque cada linha foi escrita como uma string, com o `'\0'` no fim.
-> A profundidade da recursão é o tamanho do caminho atual, que pode chegar a
-> `L · C` casas. Um mapa 1000 × 1000 pede até um milhão de frames, bem mais
-> que os 8 MB de pilha que o Linux costuma dar. Para mapas grandes, troque a
-> recursão por uma pilha explícita de coordenadas (assunto 0082): é o mesmo
-> algoritmo, com a pilha no heap.
+> **Por dentro do C:** a profundidade da recursão é o tamanho do caminho
+> atual, até `L · C` casas. Um mapa 1000 × 1000 pede até um milhão de frames,
+> mais que os 8 MB de pilha que o Linux costuma dar. Para mapas grandes, use
+> uma pilha explícita de coordenadas (assunto 0082).
 
 > [!NOTE]
-> **Pergunta para você:** troque a ordem das direções para baixo, direita,
-> esquerda, cima. Quantos passos tem o caminho encontrado agora? Ainda
-> aparece algum `x`?
+> **Pergunta para você:** com as direções em ordem baixo, direita, esquerda,
+> cima, quantos passos tem o caminho? Ainda aparece algum `x`?
 
 {{pratique}}

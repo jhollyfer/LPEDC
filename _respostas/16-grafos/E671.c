@@ -1,13 +1,5 @@
 // 0112 · Dijkstra: caminho mínimo
 // Exercício E671 · ★★★
-//
-// Resposta: o laço de escolha aceitava qualquer vértice não fixo, mesmo com
-// dist == INFINITO. Depois de fixar SP, Rio e BH, ele escolhia Manaus
-// (dist = INT_MAX) e, no relaxamento, dist[u] + preco[u][v] fazia
-// INT_MAX + 300: estouro de int com sinal, comportamento indefinido. Na
-// prática deu um número negativo, menor que INFINITO, e Belém "ganhou" um
-// preço absurdo. Conserto: só escolher u com dist finita e parar quando não
-// houver nenhum.
 
 #include <limits.h>
 #include <stdbool.h>
