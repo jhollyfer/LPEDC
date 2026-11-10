@@ -22,7 +22,7 @@
 //
 // Dicas:
 // 1. A transposta tem as dimensões trocadas: int t[3][2].
-// 2. Dois laços sobre a original: para cada (l, c), t[c][l] = m[l][c].
+// 2. Dois laços aninhados sobre a original, com a atribuição do enunciado dentro.
 // 3. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

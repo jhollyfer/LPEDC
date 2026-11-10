@@ -18,7 +18,7 @@
 //
 // Dicas:
 // 1. int **m = malloc(n * sizeof *m); e, para cada linha, m[i] =
-//    calloc(n, sizeof *m[i]); — o calloc já entrega a linha zerada.
+//    calloc(n, sizeof *m[i]); o calloc já entrega a linha zerada.
 // 2. Com a linha zerada, basta m[i][i] = 1.
 // 3. Se o calloc de uma linha falhar, libere as linhas que já deram certo
 //    e o vetor de ponteiros, e devolva NULL.

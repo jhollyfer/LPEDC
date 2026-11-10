@@ -87,8 +87,8 @@ destino, começa a escrever ali, por cima dele, e põe um `'\0'` novo no fim. To
 > [!WARNING]
 > **`strcpy` e `strcat` não sabem o tamanho do destino.** Elas escrevem até
 > acabar a origem, caiba ou não. Com `char cracha[8]`, o `strcat` de
-> "Bruna Matos" escreve 12 bytes num vetor de 8: **estouro de buffer**, a
-> falha de segurança mais famosa da história do C. Antes de copiar ou colar,
+> "Bruna Matos" escreve 12 bytes num vetor de 8: **estouro de buffer**, uma
+> falha de segurança clássica do C. Antes de copiar ou colar,
 > confira: `strlen(dest) + strlen(orig) + 1 <= sizeof(dest)`. Outra pegadinha:
 > `strcmp` devolve **0 quando são iguais**, e 0 é falso. `if (strcmp(a, b))`
 > quer dizer "se forem **diferentes**". Escreva sempre `== 0`.

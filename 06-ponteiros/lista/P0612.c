@@ -23,7 +23,7 @@
 //
 // Dicas:
 // 1. int compara(const void *a, const void *b) { return strcmp((const char *)
-//    a, (const char *) b); } — o endereço da linha JÁ é o endereço da string.
+//    a, (const char *) b); }. O endereço da linha JÁ é o endereço da string.
 // 2. Compare com o vetor de ponteiros (const char *v[]): lá o elemento é um
 //    ponteiro, e a comparação precisa de *(const char **) a.
 // 3. qsort(bairros, 6, sizeof bairros[0], compara);

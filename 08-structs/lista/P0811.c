@@ -36,7 +36,7 @@
 // 2. Para double, não devolva a->preco - b->preco: a conversão para int
 //    corta a diferença (0.50 vira 0). Use (a->preco > b->preco) -
 //    (a->preco < b->preco).
-// 3. qsort(cardapio, 6, sizeof cardapio[0], por_nome); — o qsort move a
+// 3. qsort(cardapio, 6, sizeof cardapio[0], por_nome); o qsort move a
 //    struct inteira (36 ou 40 bytes) a cada troca.
 // 4. Resposta esperada: a saída acima.
 //

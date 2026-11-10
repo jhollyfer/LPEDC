@@ -77,7 +77,7 @@ int dias[] = {31, 28, 31};     // sem tamanho: o compilador conta (3)
 Três regras que pegam todo iniciante:
 
 - **O índice começa em 0** e vai até `tamanho - 1`. Num vetor de 7, o último é
-  `passos[6]`. O "sétimo elemento" é `passos[6]`; `passos[7]` não existe.
+  `passos[6]` (o "sétimo elemento"); `passos[7]` não existe.
 - **O tamanho é fixo.** É decidido na declaração e nunca muda. Use um `#define` para ele: muda num
   lugar só e o laço acompanha. (Desde o C99 o tamanho pode vir de uma
   variável, `int v[n];`: é o **VLA**, assunto 0172. Ainda assim, depois de
@@ -96,7 +96,7 @@ nem compila) e inicializar com chaves depois da declaração (`passos = {1, 2};`
 também não). Vetor se copia gaveta por gaveta, num laço.
 
 No exemplo, são 7 gavetas, uma por dia. O laço passa por todas, somando e
-guardando a maior. O recorde está na gaveta 5, que é o **dia 6** para
+guardando a maior. O recorde está na gaveta 5, que é o dia 6 para
 quem lê o relatório:
 
 <p align="center"><img src="05-vetores-e-strings/0037-vetores/ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
@@ -156,7 +156,7 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > bytes). O nome `passos` marca onde o vetor começa, e o índice diz **quantos
 > itens pular**: `passos[5]` fica em início + 5 × 4 bytes. Daí o primeiro ser
 > o 0 (pula zero itens) e o acesso custar o mesmo na posição 0 ou na 999: é
-> só uma conta. Vetor local sem inicializar tem lixo, igual a qualquer variável local.
+> só uma conta.
 
 > [!NOTE]
 > **Pergunta para você:** se o `maior` começasse com 0 e os valores fossem
@@ -547,7 +547,7 @@ porque ela escreveu direto no vetor dele:
 
 <p align="center"><img src="05-vetores-e-strings/0038-vetores-e-funcoes/fluxograma.svg" alt="Fluxograma: Vetores e funções" width="486"></p>
 
-Atenção para a diferença: **um elemento** passado sozinho vai por valor, como
+Já **um elemento** passado sozinho vai por valor, como
 qualquer `double`. Uma função `reajustar_um(double preco)` chamada com
 `cardapio[0]` recebe uma cópia do 12.50 e não muda nada. É o vetor inteiro (o
 nome sem colchetes) que vai pelo endereço. O exemplo A076 mostra as duas
@@ -1246,7 +1246,7 @@ Transposta (3x2):
 **Dicas:**
 
 1. A transposta tem as dimensões trocadas: int t[3][2].
-2. Dois laços sobre a original: para cada (l, c), t[c][l] = m[l][c].
+2. Dois laços aninhados sobre a original, com a atribuição do enunciado dentro.
 
 ```bash
 ~/LPEDC/rodar 05-vetores-e-strings/0039-matrizes/E231.c
@@ -1902,8 +1902,8 @@ destino, começa a escrever ali, por cima dele, e põe um `'\0'` novo no fim. To
 > [!WARNING]
 > **`strcpy` e `strcat` não sabem o tamanho do destino.** Elas escrevem até
 > acabar a origem, caiba ou não. Com `char cracha[8]`, o `strcat` de
-> "Bruna Matos" escreve 12 bytes num vetor de 8: **estouro de buffer**, a
-> falha de segurança mais famosa da história do C. Antes de copiar ou colar,
+> "Bruna Matos" escreve 12 bytes num vetor de 8: **estouro de buffer**, uma
+> falha de segurança clássica do C. Antes de copiar ou colar,
 > confira: `strlen(dest) + strlen(orig) + 1 <= sizeof(dest)`. Outra pegadinha:
 > `strcmp` devolve **0 quando são iguais**, e 0 é falso. `if (strcmp(a, b))`
 > quer dizer "se forem **diferentes**". Escreva sempre `== 0`.
@@ -2801,9 +2801,8 @@ da ordenação por seleção (assunto 0092).
 > **Por dentro do C:** `char nomes[3][12]` são 36 bytes contínuos, como toda
 > matriz. "arara" ocupa 6 deles na linha 0, e os 6 bytes restantes da linha
 > são zeros (as chaves da inicialização zeram o que sobra). `nomes[1]` é o
-> começo da linha 1, 12 bytes depois do começo. Por isso o parâmetro
-> de `buscar` precisa do `[TAM_NOME]`: para achar `nomes[i]`, a função calcula
-> início + i × 12. Uma lista de nomes de tamanhos bem diferentes desperdiça
+> começo da linha 1, 12 bytes depois do começo. É essa conta
+> (início + i × 12) que exige o `[TAM_NOME]` no parâmetro de `buscar`, para achar `nomes[i]`. Uma lista de nomes de tamanhos bem diferentes desperdiça
 > espaço assim; no módulo 07 você vai guardar cada nome com o tamanho exato,
 > usando memória dinâmica.
 
@@ -3010,7 +3009,7 @@ Artilheiro: Duda
 1. printf("%-10s%6d\n", nomes[i], gols[i]) alinha o nome à esquerda em 10
    colunas e o número à direita em 6.
 2. indice_artilheiro é o padrão "posição do maior" do assunto 0038.
-3. Repare que "Kauã" tem um acento: em UTF-8 são 5 bytes, e o printf conta
+3. O "Kauã" tem um acento: em UTF-8 são 5 bytes, e o printf conta
    bytes. Por isso o número dele aparece uma coluna à esquerda dos
    outros. Tudo bem aqui; só saiba por quê.
 

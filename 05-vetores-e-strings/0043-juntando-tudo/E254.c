@@ -18,7 +18,7 @@
 // 1. printf("%-10s%6d\n", nomes[i], gols[i]) alinha o nome à esquerda em 10
 //    colunas e o número à direita em 6.
 // 2. indice_artilheiro é o padrão "posição do maior" do assunto 0038.
-// 3. Repare que "Kauã" tem um acento: em UTF-8 são 5 bytes, e o printf conta
+// 3. O "Kauã" tem um acento: em UTF-8 são 5 bytes, e o printf conta
 //    bytes. Por isso o número dele aparece uma coluna à esquerda dos
 //    outros. Tudo bem aqui; só saiba por quê.
 // 4. Resposta esperada: a saída acima.

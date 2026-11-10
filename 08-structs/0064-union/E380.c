@@ -14,7 +14,7 @@
 // Dicas:
 // 1. typedef union { float f; uint32_t bits; } Espiao;
 // 2. Grave em .f e leia em .bits. Mostre com 0x%08X e um cast para unsigned.
-// 3. Repare: 1.0 não é 0x00000001. O float guarda sinal, expoente e mantissa
+// 3. O 1.0 não é 0x00000001. O float guarda sinal, expoente e mantissa
 //    (padrão IEEE 754), e 0.1 nem tem representação exata: o CCCC repetido é
 //    uma dízima em binário, e o D do fim é o arredondamento.
 // 4. Resposta esperada: a saída acima.

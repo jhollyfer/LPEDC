@@ -68,8 +68,8 @@ int main(void) {
 O `(unsigned char)` antes do `toupper` evita o problema dos bytes negativos
 das letras acentuadas (assunto 0040). O `(char)` na frente só deixa explícito que o resultado volta a caber num `char`.
 
-O laço é o clássico de string. A pergunta não é "já andei `n` posições?", e
-sim "a gaveta atual é o `'\0'`?":
+O laço é o clássico de string e não conta `n` posições: a pergunta é "a gaveta
+atual é o `'\0'`?":
 
 {{fluxograma}}
 

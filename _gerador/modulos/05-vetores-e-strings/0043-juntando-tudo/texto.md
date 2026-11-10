@@ -127,9 +127,8 @@ da ordenação por seleção (assunto 0092).
 > **Por dentro do C:** `char nomes[3][12]` são 36 bytes contínuos, como toda
 > matriz. "arara" ocupa 6 deles na linha 0, e os 6 bytes restantes da linha
 > são zeros (as chaves da inicialização zeram o que sobra). `nomes[1]` é o
-> começo da linha 1, 12 bytes depois do começo. Por isso o parâmetro
-> de `buscar` precisa do `[TAM_NOME]`: para achar `nomes[i]`, a função calcula
-> início + i × 12. Uma lista de nomes de tamanhos bem diferentes desperdiça
+> começo da linha 1, 12 bytes depois do começo. É essa conta
+> (início + i × 12) que exige o `[TAM_NOME]` no parâmetro de `buscar`, para achar `nomes[i]`. Uma lista de nomes de tamanhos bem diferentes desperdiça
 > espaço assim; no módulo 07 você vai guardar cada nome com o tamanho exato,
 > usando memória dinâmica.
 

@@ -1057,7 +1057,7 @@ custa só uma atribuição:
 > 1 + 2 + 4 + ... + 512 = 1023 elementos: menos de uma cópia por push. Se
 > crescesse de 1 em 1, seriam 1 + 2 + ... + 1023, mais de 500 mil cópias. É
 > a estratégia padrão de todo vetor que cresce sob demanda.
-> Com o rodar, o AddressSanitizer **sempre** muda o bloco de lugar no
+> Com o rodar, o AddressSanitizer sempre muda o bloco de lugar no
 > `realloc`, de propósito: assim o erro de usar o endereço antigo aparece logo,
 > em vez de só às vezes.
 
@@ -1949,7 +1949,7 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 > estouro de um byte e leitura de lixo são **comportamento indefinido**: o
 > programa pode funcionar hoje, mostrar outro valor amanhã e quebrar só com
 > outro compilador. Rode sempre com o ASan (o `rodar` já faz isso) e, quando
-> desconfiar, com `rodar --valgrind`. Saída certa **e** relatório limpo.
+> desconfiar, com `rodar --valgrind`. Saída certa e relatório limpo.
 
 > [!TIP]
 > **Por dentro do C:** o ASan reserva 1 byte de "memória sombra" para cada 8
@@ -3235,7 +3235,7 @@ Identidade 4x4:
 **Dicas:**
 
 1. int **m = malloc(n * sizeof *m); e, para cada linha, m[i] =
-   calloc(n, sizeof *m[i]); — o calloc já entrega a linha zerada.
+   calloc(n, sizeof *m[i]); o calloc já entrega a linha zerada.
 2. Com a linha zerada, basta m[i][i] = 1.
 3. Se o calloc de uma linha falhar, libere as linhas que já deram certo
    e o vetor de ponteiros, e devolva NULL.
@@ -3345,7 +3345,7 @@ Saída esperada:
 **Dicas:**
 
 1. faixas = maior / 10 + 1. Com maior 88, são 9 faixas (0-9 até 80-89).
-2. int *cont = calloc(faixas, sizeof *cont); — o calloc zera, então dá
+2. int *cont = calloc(faixas, sizeof *cont); o calloc zera, então dá
    para fazer cont[idades[i] / 10]++ direto.
 3. Com malloc, os contadores começariam com lixo.
 

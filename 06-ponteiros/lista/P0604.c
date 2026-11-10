@@ -14,7 +14,7 @@
 //   QXZ9B07: Mercosul
 //
 // Dicas:
-// 1. while (*s != '\0') { *s = toupper((unsigned char) *s); s++; } — dentro
+// 1. while (*s != '\0') { *s = toupper((unsigned char) *s); s++; }. Dentro
 //    da função, s é uma CÓPIA do endereço: andar com ela não estraga o
 //    ponteiro do main.
 // 2. No padrao_mercosul, confira cada posição com isalpha ou isdigit:

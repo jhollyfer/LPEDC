@@ -82,8 +82,7 @@ cada gaveta tem um número: o **endereço**. Quando você declara `int idade =
 dentro. O **endereço da variável** é o número da primeira dessas gavetas.
 
 Você pensa no **nome** (`idade`). O processador só conhece **endereços**. O
-compilador faz a ponte: troca cada nome pelo endereço da gaveta. Agora você
-mexe direto nos números.
+compilador faz a ponte: troca cada nome pelo endereço da gaveta.
 
 Para perguntar "em que gaveta você mora?", use o operador **`&`** (endereço
 de): `&idade`. É o mesmo `&` que você coloca no `scanf` desde o assunto 0006.
@@ -1793,8 +1792,8 @@ int main(void) {
 O `(unsigned char)` antes do `toupper` evita o problema dos bytes negativos
 das letras acentuadas (assunto 0040). O `(char)` na frente só deixa explícito que o resultado volta a caber num `char`.
 
-O laço é o clássico de string. A pergunta não é "já andei `n` posições?", e
-sim "a gaveta atual é o `'\0'`?":
+O laço é o clássico de string e não conta `n` posições: a pergunta é "a gaveta
+atual é o `'\0'`?":
 
 <p align="center"><img src="06-ponteiros/0048-ponteiros-e-strings/fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
 
@@ -2829,7 +2828,7 @@ Saída esperada:
 
 **Exercício E296** · ★☆☆
 
-Escreva o "forEach" do C:
+Escreva a função "para cada":
 
 
 ```text
@@ -4212,7 +4211,7 @@ QXZ9B07: Mercosul
 
 **Dicas:**
 
-1. while (*s != '\0') { *s = toupper((unsigned char) *s); s++; } — dentro
+1. while (*s != '\0') { *s = toupper((unsigned char) *s); s++; }. Dentro
    da função, s é uma CÓPIA do endereço: andar com ela não estraga o
    ponteiro do main.
 2. No padrao_mercosul, confira cada posição com isalpha ou isdigit:
@@ -4335,7 +4334,7 @@ Leve mais     R$  376.40
 
 1. Para "sem desconto", escreva também double nenhuma(double p) { return p;
    }.
-2. Dentro de total_com: soma += regra(precos[i]); — chamar pelo ponteiro é
+2. Dentro de total_com: soma += regra(precos[i]); chamar pelo ponteiro é
    igual a chamar pelo nome.
 3. Para não repetir o printf, guarde os ponteiros num vetor:
    double (*regras[4])(double) = {nenhuma, black_friday, cupom10, leve_mais};
@@ -4533,7 +4532,7 @@ Cada elemento tem 20 bytes
 **Dicas:**
 
 1. int compara(const void *a, const void *b) { return strcmp((const char *)
-   a, (const char *) b); } — o endereço da linha JÁ é o endereço da string.
+   a, (const char *) b); }. O endereço da linha JÁ é o endereço da string.
 2. Compare com o vetor de ponteiros (const char *v[]): lá o elemento é um
    ponteiro, e a comparação precisa de *(const char **) a.
 3. qsort(bairros, 6, sizeof bairros[0], compara);

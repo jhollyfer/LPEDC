@@ -77,7 +77,7 @@ Essa ordem tem nome: **endianness**. Num processador **little-endian**
 significativo fica no endereço menor: o `0A` do final do número vem primeiro.
 Num **big-endian**, a ordem é a de leitura humana: `C0 A8 00 0A`. Nenhum é
 "certo": é uma escolha de quem projetou o processador, e a union deixa você
-**ver** essa escolha.
+ver essa escolha.
 
 A pergunta sobre o primeiro byte é um detector de endianness. O mesmo programa, compilado numa máquina big-endian, seguiria pelo
 outro lado:

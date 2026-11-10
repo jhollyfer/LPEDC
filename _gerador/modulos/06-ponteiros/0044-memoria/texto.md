@@ -11,8 +11,7 @@ cada gaveta tem um número: o **endereço**. Quando você declara `int idade =
 dentro. O **endereço da variável** é o número da primeira dessas gavetas.
 
 Você pensa no **nome** (`idade`). O processador só conhece **endereços**. O
-compilador faz a ponte: troca cada nome pelo endereço da gaveta. Agora você
-mexe direto nos números.
+compilador faz a ponte: troca cada nome pelo endereço da gaveta.
 
 Para perguntar "em que gaveta você mora?", use o operador **`&`** (endereço
 de): `&idade`. É o mesmo `&` que você coloca no `scanf` desde o assunto 0006.

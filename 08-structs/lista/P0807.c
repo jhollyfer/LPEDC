@@ -23,7 +23,7 @@
 //     0.  0. 10. 42  0x00000A2A  máquina
 //
 // Dicas:
-// 1. montar: ((uint32_t) a << 24) | (b << 16) | (c << 8) | d — o cast vem
+// 1. montar: ((uint32_t) a << 24) | (b << 16) | (c << 8) | d. O cast vem
 //    antes do << para a conta ser feita em 32 bits sem sinal.
 // 2. mostrar: (ip >> 24) & 0xFF, (ip >> 16) & 0xFF, (ip >> 8) & 0xFF e
 //    ip & 0xFF.

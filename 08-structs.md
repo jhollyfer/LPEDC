@@ -2351,7 +2351,7 @@ Essa ordem tem nome: **endianness**. Num processador **little-endian**
 significativo fica no endereço menor: o `0A` do final do número vem primeiro.
 Num **big-endian**, a ordem é a de leitura humana: `C0 A8 00 0A`. Nenhum é
 "certo": é uma escolha de quem projetou o processador, e a union deixa você
-**ver** essa escolha.
+ver essa escolha.
 
 A pergunta sobre o primeiro byte é um detector de endianness. O mesmo programa, compilado numa máquina big-endian, seguiria pelo
 outro lado:
@@ -2552,7 +2552,7 @@ Saída esperada:
 
 1. typedef union { float f; uint32_t bits; } Espiao;
 2. Grave em .f e leia em .bits. Mostre com 0x%08X e um cast para unsigned.
-3. Repare: 1.0 não é 0x00000001. O float guarda sinal, expoente e mantissa
+3. O 1.0 não é 0x00000001. O float guarda sinal, expoente e mantissa
    (padrão IEEE 754), e 0.1 nem tem representação exata: o CCCC repetido é
    uma dízima em binário, e o D do fim é o arredondamento.
 
@@ -3174,15 +3174,15 @@ uma categoria (lanche, bebida ou sobremesa) e algumas marcações: vegano, sem
 glúten, picante. O cliente quer filtrar: "só o que é vegano **e** sem glúten".
 E o dono quer cadastrar itens novos sem mexer no código toda vez.
 
-Cada peça do módulo resolve uma parte. A **struct** `Item` junta os dados de
-um item, e o **typedef** dá nomes curtos aos tipos. O **enum** `Categoria`
+Cada peça do módulo resolve uma parte. A struct `Item` junta os dados de
+um item, e o typedef dá nomes curtos aos tipos. O enum `Categoria`
 nomeia as categorias, e o truque do `QTD_CATEGORIAS` dimensiona o vetor de
-nomes. As marcações são **flags** num `unsigned tags`, e o filtro é uma
-**máscara**. Os itens moram num **vetor de structs no heap**, que cresce com
-`realloc`, e as funções recebem **ponteiros para struct**: `Cardapio *c` para
+nomes. As marcações são flags num `unsigned tags`, e o filtro é uma
+máscara. Os itens moram num vetor de structs no heap, que cresce com
+`realloc`, e as funções recebem ponteiros para struct: `Cardapio *c` para
 mexer no cardápio, `const Item *it` para só ler um item sem copiá-lo.
 
-O `Cardapio` é uma struct que **administra** um vetor: guarda o ponteiro para
+O `Cardapio` é uma struct que administra um vetor: guarda o ponteiro para
 os itens, quantos existem (`n`) e quantos cabem (`cap`). Quando enche, dobra a
 capacidade. Começando em 0, ela vira 2, 4 e 8: com 6 itens, sobram 2 vagas.
 Esse trio (ponteiro, tamanho, capacidade) é a semente do **vetor dinâmico**
@@ -4190,7 +4190,7 @@ Com /16:
 
 **Dicas:**
 
-1. montar: ((uint32_t) a << 24) | (b << 16) | (c << 8) | d — o cast vem
+1. montar: ((uint32_t) a << 24) | (b << 16) | (c << 8) | d. O cast vem
    antes do << para a conta ser feita em 32 bits sem sinal.
 2. mostrar: (ip >> 24) & 0xFF, (ip >> 16) & 0xFF, (ip >> 8) & 0xFF e
    ip & 0xFF.
@@ -4362,7 +4362,7 @@ Por preço:
 2. Para double, não devolva a->preco - b->preco: a conversão para int
    corta a diferença (0.50 vira 0). Use (a->preco > b->preco) -
    (a->preco < b->preco).
-3. qsort(cardapio, 6, sizeof cardapio[0], por_nome); — o qsort move a
+3. qsort(cardapio, 6, sizeof cardapio[0], por_nome); o qsort move a
    struct inteira (36 ou 40 bytes) a cada troca.
 
 ```bash
@@ -4495,7 +4495,7 @@ Para converter, jogue fora os bits de baixo: r >> 3 (fica com 5 bits),
 g >> 2 (6 bits), b >> 3. Para voltar, desloque para a esquerda e repita os
 bits de cima nos de baixo: r8 = (r5 << 3) | (r5 >> 2) (e g8 = (g6 << 2) |
 (g6 >> 4)). Converta as cores abaixo, mostrando o valor em hexa e a cor
-recuperada (repare que algumas perdem um pouco de precisão):
+recuperada (algumas perdem um pouco de precisão):
 
 
 ```text

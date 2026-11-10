@@ -1,7 +1,7 @@
 // 0050 · Ponteiro para função
 // Exercício E296 · ★☆☆
 //
-// Escreva o "forEach" do C:
+// Escreva a função "para cada":
 //
 //   void para_cada(int *v, int n, void (*acao)(int *))
 //

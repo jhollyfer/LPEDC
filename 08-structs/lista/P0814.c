@@ -13,7 +13,7 @@
 // g >> 2 (6 bits), b >> 3. Para voltar, desloque para a esquerda e repita os
 // bits de cima nos de baixo: r8 = (r5 << 3) | (r5 >> 2) (e g8 = (g6 << 2) |
 // (g6 >> 4)). Converta as cores abaixo, mostrando o valor em hexa e a cor
-// recuperada (repare que algumas perdem um pouco de precisão):
+// recuperada (algumas perdem um pouco de precisão):
 //
 //   laranja (255, 136, 0), verde-bandeira (0, 156, 59), branco (255, 255, 255)
 //

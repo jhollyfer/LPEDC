@@ -5,15 +5,15 @@ uma categoria (lanche, bebida ou sobremesa) e algumas marcações: vegano, sem
 glúten, picante. O cliente quer filtrar: "só o que é vegano **e** sem glúten".
 E o dono quer cadastrar itens novos sem mexer no código toda vez.
 
-Cada peça do módulo resolve uma parte. A **struct** `Item` junta os dados de
-um item, e o **typedef** dá nomes curtos aos tipos. O **enum** `Categoria`
+Cada peça do módulo resolve uma parte. A struct `Item` junta os dados de
+um item, e o typedef dá nomes curtos aos tipos. O enum `Categoria`
 nomeia as categorias, e o truque do `QTD_CATEGORIAS` dimensiona o vetor de
-nomes. As marcações são **flags** num `unsigned tags`, e o filtro é uma
-**máscara**. Os itens moram num **vetor de structs no heap**, que cresce com
-`realloc`, e as funções recebem **ponteiros para struct**: `Cardapio *c` para
+nomes. As marcações são flags num `unsigned tags`, e o filtro é uma
+máscara. Os itens moram num vetor de structs no heap, que cresce com
+`realloc`, e as funções recebem ponteiros para struct: `Cardapio *c` para
 mexer no cardápio, `const Item *it` para só ler um item sem copiá-lo.
 
-O `Cardapio` é uma struct que **administra** um vetor: guarda o ponteiro para
+O `Cardapio` é uma struct que administra um vetor: guarda o ponteiro para
 os itens, quantos existem (`n`) e quantos cabem (`cap`). Quando enche, dobra a
 capacidade. Começando em 0, ela vira 2, 4 e 8: com 6 itens, sobram 2 vagas.
 Esse trio (ponteiro, tamanho, capacidade) é a semente do **vetor dinâmico**

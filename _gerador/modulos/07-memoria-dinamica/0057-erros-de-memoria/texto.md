@@ -107,7 +107,7 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 > estouro de um byte e leitura de lixo são **comportamento indefinido**: o
 > programa pode funcionar hoje, mostrar outro valor amanhã e quebrar só com
 > outro compilador. Rode sempre com o ASan (o `rodar` já faz isso) e, quando
-> desconfiar, com `rodar --valgrind`. Saída certa **e** relatório limpo.
+> desconfiar, com `rodar --valgrind`. Saída certa e relatório limpo.
 
 > [!TIP]
 > **Por dentro do C:** o ASan reserva 1 byte de "memória sombra" para cada 8

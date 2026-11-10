@@ -83,7 +83,7 @@ porque ela escreveu direto no vetor dele:
 
 {{fluxograma}}
 
-Atenção para a diferença: **um elemento** passado sozinho vai por valor, como
+Já **um elemento** passado sozinho vai por valor, como
 qualquer `double`. Uma função `reajustar_um(double preco)` chamada com
 `cardapio[0]` recebe uma cópia do 12.50 e não muda nada. É o vetor inteiro (o
 nome sem colchetes) que vai pelo endereço. O exemplo A076 mostra as duas

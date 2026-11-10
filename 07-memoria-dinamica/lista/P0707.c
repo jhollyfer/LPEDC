@@ -25,7 +25,7 @@
 //
 // Dicas:
 // 1. faixas = maior / 10 + 1. Com maior 88, são 9 faixas (0-9 até 80-89).
-// 2. int *cont = calloc(faixas, sizeof *cont); — o calloc zera, então dá
+// 2. int *cont = calloc(faixas, sizeof *cont); o calloc zera, então dá
 //    para fazer cont[idades[i] / 10]++ direto.
 // 3. Com malloc, os contadores começariam com lixo.
 // 4. Resposta esperada: a saída acima.
