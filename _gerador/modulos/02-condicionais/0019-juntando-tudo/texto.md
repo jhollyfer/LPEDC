@@ -1,6 +1,6 @@
 ## 0019 · Juntando tudo: a conta de luz
 
-Chegou a conta de luz, e ela é um festival de decisões. O valor depende do
+A conta de luz do módulo 01 voltou, agora cheia de decisões. O valor depende do
 consumo, da **bandeira** do mês (verde, amarela ou vermelha), de você ter ou
 não **tarifa social**, de uma taxa de iluminação que muda com o consumo, e
 ainda vem um carimbo dizendo se o seu consumo foi baixo, médio ou alto.

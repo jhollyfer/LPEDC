@@ -26,8 +26,8 @@ entre `/*` e `*/`.
 
 ### Do .c ao executável
 
-O processador não entende C. Antes de rodar, o arquivo passa por quatro
-estações, e quem comanda tudo é o **compilador** `gcc`:
+O processador não entende C. A linha de montagem tem quatro estações, e quem
+comanda tudo é o **compilador** `gcc`:
 
 1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>`
    **cola** o conteúdo do `stdio.h` no lugar da linha;

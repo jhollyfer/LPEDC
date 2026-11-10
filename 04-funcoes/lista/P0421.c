@@ -31,7 +31,7 @@
 //    mover(n, origem, destino), hanoi(n - 1, apoio, destino, origem).
 // 2. Os contadores podem ser globais ou static dentro de mover; o total é a
 //    soma deles.
-// 3. Repare: o disco k se move 2^(4 - k) vezes, e o total é 2^4 - 1.
+// 3. O disco k se move 2^(4 - k) vezes, e o total é 2^4 - 1.
 // 4. Resposta esperada: 15 movimentos; 8, 4, 2 e 1.
 //
 // Escreva sua resposta abaixo:

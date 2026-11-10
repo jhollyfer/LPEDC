@@ -21,7 +21,7 @@ no segundo lançamento ou no trigésimo. E a condição dele testa a
 Quem muda a situação é o corpo do laço, que é o único lugar que sabe o que
 saiu.
 
-Repare num incômodo do código: o sorteio `1 + rand() % 6` aparece quatro
+O código tem um incômodo: o sorteio `1 + rand() % 6` aparece quatro
 vezes. No módulo 04 ele vira uma **função** `lancar()` e o programa encolhe.
 
 Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O

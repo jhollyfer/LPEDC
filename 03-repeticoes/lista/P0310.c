@@ -20,8 +20,8 @@
 //
 // Dicas:
 // 1. Conte quantas voltas o for dá começando em 0 e indo até <= 10.
-// 2. Ou começa em 1 e vai até <= 10, ou começa em 0 e vai até < 10. Repare que
-//    o número mostrado tem que ir de 1 a 10.
+// 2. Ou começa em 1 e vai até <= 10, ou começa em 0 e vai até < 10. O número
+//    mostrado tem que ir de 1 a 10.
 // 3. Resposta esperada: 10 parcelas, Total: R$ 1899.00.
 //
 // Escreva sua resposta abaixo:

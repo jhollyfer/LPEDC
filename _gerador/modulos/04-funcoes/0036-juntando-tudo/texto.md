@@ -20,7 +20,7 @@ que ela faz:
 | `TAXA_SERVICO` | `caixa.c` | `#define` |
 
 Uma decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira
-`790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3`, e o troco de
+`790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e o troco de
 centavos pode sair errado. Na hora de mostrar, `%d.%02d` com `total / 100` e
 `total % 100` monta o "42.24". O único `double` é o valor pago, lido do
 teclado e convertido com `lround(pago * 100)`.

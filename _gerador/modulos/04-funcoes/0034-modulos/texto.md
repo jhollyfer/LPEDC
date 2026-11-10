@@ -11,7 +11,7 @@ quem precisa usa. No C, esse lugar é um **módulo**: um par de arquivos.
   tudo o que é interno do módulo. Ele inclui o próprio `.h`, para o
   compilador conferir que a implementação bate com o contrato.
 
-Quem quer usar escreve `#include "conversao.h"`. Lembre que o `#include` só
+Quem quer usar escreve `#include "conversao.h"`. O `#include` só
 **cola** o texto do arquivo ali. Com o `.h` colado, o compilador conhece os
 protótipos e confere cada chamada. Com aspas, o arquivo é procurado primeiro
 na pasta do seu `.c`; com `< >`, só nas pastas do sistema.

@@ -11,10 +11,9 @@
 //   R$ 19.99 = 1999 centavos
 //
 // Dicas:
-// 1. Mostre valor * 100 com %.15f e veja o número de verdade.
-// 2. Real para int corta, não arredonda: 1998.9999... vira 1998.
-// 3. Somar 0.5 antes de cortar arredonda para o inteiro mais próximo.
-// 4. Resposta esperada: mostra 1998, porque 19.99 não existe exato em
+// 1. Real para int corta, não arredonda: 1998.9999... vira 1998.
+// 2. Somar 0.5 antes de cortar arredonda para o inteiro mais próximo.
+// 3. Resposta esperada: mostra 1998, porque 19.99 não existe exato em
 //    binário e 19.99 * 100 dá 1998.99999999999977..., que o int corta.
 //    Conserto: int centavos = valor * 100 + 0.5; (no assunto 0010, a função
 //    round faz isso).

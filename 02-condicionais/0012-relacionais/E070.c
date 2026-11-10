@@ -8,9 +8,8 @@
 // centavos em int.
 //
 // Dicas:
-// 1. Mostre pago com printf("%.20f") e veja o que tem lá dentro.
-// 2. (a) fabs(pago - preco) < 1e-9; (b) int preco = 70; int pago = 7 * 10;
-// 3. Resposta esperada: o printf mostra 0.70000000000000006661 (0.1 não é
+// 1. (a) fabs(pago - preco) < 1e-9; (b) int preco = 70; int pago = 7 * 10;
+// 2. Resposta esperada: o printf mostra 0.70000000000000006661 (0.1 não é
 //    exato em binário), diferente de 0.7. Consertado, os dois jeitos
 //    mostram "Pagou o valor exato? 1".
 //

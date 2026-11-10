@@ -1,7 +1,7 @@
 // 0005 · printf
 // Exercício E030 · ★★★
 //
-// Seis linhas, seis pegadinhas. Escreva um programa que mostre exatamente a
+// Seis pegadinhas, sete linhas de saída. Escreva um programa que mostre exatamente a
 // saída abaixo usando, como argumento de cada printf, o valor indicado (e
 // não o texto pronto):
 //

@@ -14,8 +14,8 @@
 //
 // Dicas:
 // 1. A primeira linha da função é chamadas++;.
-// 2. Repare no padrão: as chamadas são sempre 2 × C(n, k) − 1, porque cada
-//    folha da recursão devolve 1.
+// 2. As chamadas são sempre 2 × C(n, k) − 1, porque cada folha da recursão
+//    devolve 1.
 // 3. Para C(60, 6), a combinação da Mega-Sena, seriam mais de 100 milhões de
 //    chamadas: não rode.
 // 4. Resposta esperada: 19, 503 e 369511 chamadas.

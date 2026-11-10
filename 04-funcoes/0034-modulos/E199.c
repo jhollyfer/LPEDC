@@ -22,8 +22,7 @@
 //   Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 //
 // Dicas:
-// 1. O .h diz O QUE o módulo oferece; o .c diz COMO. A taxa_por_km é
-//    static: quem usa o módulo nem sabe que ela existe.
+// 1. A taxa_por_km é static: quem usa o módulo nem sabe que ela existe.
 // 2. Para não repetir o printf três vezes, escreva no main.c uma função
 //    void mostrar_pedido(int numero, double valor, double peso, int km).
 // 3. Resposta esperada: 10 + 3 + 6 = 19.00; 250 >= 200, frete grátis;

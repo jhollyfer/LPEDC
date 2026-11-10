@@ -2340,7 +2340,7 @@ Saída esperada:
 
 **Dicas:**
 
-1. movimentos(n) = 2 * movimentos(n - 1) + 1. Repare: UMA chamada só, não duas.
+1. movimentos(n) = 2 * movimentos(n - 1) + 1: é UMA chamada só, não duas.
 2. O resultado para 64 é 2^64 - 1: não cabe em long long (que vai até
    2^63 - 1), por isso o unsigned. Mostre com %llu.
 3. Resposta esperada: 7, 1023, 1048575 e 18446744073709551615. A um
@@ -2492,7 +2492,7 @@ quem precisa usa. No C, esse lugar é um **módulo**: um par de arquivos.
   tudo o que é interno do módulo. Ele inclui o próprio `.h`, para o
   compilador conferir que a implementação bate com o contrato.
 
-Quem quer usar escreve `#include "conversao.h"`. Lembre que o `#include` só
+Quem quer usar escreve `#include "conversao.h"`. O `#include` só
 **cola** o texto do arquivo ali. Com o `.h` colado, o compilador conhece os
 protótipos e confere cada chamada. Com aspas, o arquivo é procurado primeiro
 na pasta do seu `.c`; com `< >`, só nas pastas do sistema.
@@ -2707,8 +2707,7 @@ Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 
 **Dicas:**
 
-1. O .h diz O QUE o módulo oferece; o .c diz COMO. A taxa_por_km é
-   static: quem usa o módulo nem sabe que ela existe.
+1. A taxa_por_km é static: quem usa o módulo nem sabe que ela existe.
 2. Para não repetir o printf três vezes, escreva no main.c uma função
    void mostrar_pedido(int numero, double valor, double peso, int km).
 3. Resposta esperada: 10 + 3 + 6 = 19.00; 250 >= 200, frete grátis;
@@ -3337,7 +3336,7 @@ que ela faz:
 | `TAXA_SERVICO` | `caixa.c` | `#define` |
 
 Uma decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira
-`790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3`, e o troco de
+`790`. Com `double`, `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e o troco de
 centavos pode sair errado. Na hora de mostrar, `%d.%02d` com `total / 100` e
 `total % 100` monta o "42.24". O único `double` é o valor pago, lido do
 teclado e convertido com `lround(pago * 100)`.
@@ -4405,8 +4404,8 @@ C(20, 10) = 184756 com 369511 chamadas
 **Dicas:**
 
 1. A primeira linha da função é chamadas++;.
-2. Repare no padrão: as chamadas são sempre 2 × C(n, k) − 1, porque cada
-   folha da recursão devolve 1.
+2. As chamadas são sempre 2 × C(n, k) − 1, porque cada folha da recursão
+   devolve 1.
 3. Para C(60, 6), a combinação da Mega-Sena, seriam mais de 100 milhões de
    chamadas: não rode.
 4. Resposta esperada: 19, 503 e 369511 chamadas.
@@ -4671,7 +4670,7 @@ Disco 1: 8, disco 2: 4, disco 3: 2, disco 4: 1
    mover(n, origem, destino), hanoi(n - 1, apoio, destino, origem).
 2. Os contadores podem ser globais ou static dentro de mover; o total é a
    soma deles.
-3. Repare: o disco k se move 2^(4 - k) vezes, e o total é 2^4 - 1.
+3. O disco k se move 2^(4 - k) vezes, e o total é 2^4 - 1.
 4. Resposta esperada: 15 movimentos; 8, 4, 2 e 1.
 
 ```bash

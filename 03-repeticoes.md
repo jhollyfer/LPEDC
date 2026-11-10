@@ -62,8 +62,8 @@ ela.
 ## 0020 · While
 
 Você quer um celular de R$ 1.000 e consegue guardar R$ 150 por mês. Em
-quantos meses compra? Dá para fazer a conta de cabeça, mas repare no jeito
-que você pensa: "guardo, confiro se já deu; se não deu, guardo de novo".
+quantos meses compra? Dá para fazer a conta de cabeça, mas o raciocínio
+já é um laço: "guardo, confiro se já deu; se não deu, guardo de novo".
 
 Esse "de novo" é a **repetição**. Em C, a forma mais simples de repetir é o **`while`** ("enquanto"):
 
@@ -2819,7 +2819,7 @@ no segundo lançamento ou no trigésimo. E a condição dele testa a
 Quem muda a situação é o corpo do laço, que é o único lugar que sabe o que
 saiu.
 
-Repare num incômodo do código: o sorteio `1 + rand() % 6` aparece quatro
+O código tem um incômodo: o sorteio `1 + rand() % 6` aparece quatro
 vezes. No módulo 04 ele vira uma **função** `lancar()` e o programa encolhe.
 
 Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O
@@ -3752,8 +3752,8 @@ Total: R$ 1899.00
 **Dicas:**
 
 1. Conte quantas voltas o for dá começando em 0 e indo até <= 10.
-2. Ou começa em 1 e vai até <= 10, ou começa em 0 e vai até < 10. Repare que
-   o número mostrado tem que ir de 1 a 10.
+2. Ou começa em 1 e vai até <= 10, ou começa em 0 e vai até < 10. O número
+   mostrado tem que ir de 1 a 10.
 3. Resposta esperada: 10 parcelas, Total: R$ 1899.00.
 
 ```bash

@@ -130,8 +130,8 @@ entre `/*` e `*/`.
 
 ### Do .c ao executável
 
-O processador não entende C. Antes de rodar, o arquivo passa por quatro
-estações, e quem comanda tudo é o **compilador** `gcc`:
+O processador não entende C. A linha de montagem tem quatro estações, e quem
+comanda tudo é o **compilador** `gcc`:
 
 1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>`
    **cola** o conteúdo do `stdio.h` no lugar da linha;
@@ -1962,7 +1962,7 @@ Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
 
 **Exercício E030** · ★★★
 
-Seis linhas, seis pegadinhas. Escreva um programa que mostre exatamente a
+Seis pegadinhas, sete linhas de saída. Escreva um programa que mostre exatamente a
 saída abaixo usando, como argumento de cada printf, o valor indicado (e
 não o texto pronto):
 
@@ -2085,8 +2085,8 @@ int main(void) {
 Para testar sem digitar, salve o programa como `pix.c` e use o cano (`|`)
 apresentado no começo do módulo: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`.
 
-No fluxograma, as duas leituras são paralelogramos de entrada, cada uma
-guardando o valor numa caixinha. A saída vem depois:
+No fluxograma, as duas leituras são paralelogramos de entrada, e cada uma
+guarda o valor numa caixinha. A saída vem depois:
 
 <p align="center"><img src="01-fundamentos/0006-scanf/fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
 
@@ -3038,10 +3038,9 @@ R$ 19.99 = 1999 centavos
 
 **Dicas:**
 
-1. Mostre valor * 100 com %.15f e veja o número de verdade.
-2. Real para int corta, não arredonda: 1998.9999... vira 1998.
-3. Somar 0.5 antes de cortar arredonda para o inteiro mais próximo.
-4. Resposta esperada: mostra 1998, porque 19.99 não existe exato em
+1. Real para int corta, não arredonda: 1998.9999... vira 1998.
+2. Somar 0.5 antes de cortar arredonda para o inteiro mais próximo.
+3. Resposta esperada: mostra 1998, porque 19.99 não existe exato em
    binário e 19.99 * 100 dá 1998.99999999999977..., que o int corta.
    Conserto: int centavos = valor * 100 + 0.5; (no assunto 0010, a função
    round faz isso).

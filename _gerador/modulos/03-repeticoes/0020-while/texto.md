@@ -1,8 +1,8 @@
 ## 0020 · While
 
 Você quer um celular de R$ 1.000 e consegue guardar R$ 150 por mês. Em
-quantos meses compra? Dá para fazer a conta de cabeça, mas repare no jeito
-que você pensa: "guardo, confiro se já deu; se não deu, guardo de novo".
+quantos meses compra? Dá para fazer a conta de cabeça, mas o raciocínio
+já é um laço: "guardo, confiro se já deu; se não deu, guardo de novo".
 
 Esse "de novo" é a **repetição**. Em C, a forma mais simples de repetir é o **`while`** ("enquanto"):
 

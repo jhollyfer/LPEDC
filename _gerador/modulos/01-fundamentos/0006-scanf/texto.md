@@ -74,8 +74,8 @@ int main(void) {
 Para testar sem digitar, salve o programa como `pix.c` e use o cano (`|`)
 apresentado no começo do módulo: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`.
 
-No fluxograma, as duas leituras são paralelogramos de entrada, cada uma
-guardando o valor numa caixinha. A saída vem depois:
+No fluxograma, as duas leituras são paralelogramos de entrada, e cada uma
+guarda o valor numa caixinha. A saída vem depois:
 
 {{fluxograma}}
 

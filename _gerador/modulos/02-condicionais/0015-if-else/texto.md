@@ -74,8 +74,7 @@ e os dois se reencontram no Fim, sem como passar pelos dois:
 > [!WARNING]
 > **`=` no lugar de `==`.** Com `if (saldo = 0)`, o saldo vira zero e o `else`
 > roda sempre. Com `if (tentativas = 3)`, o cartão é bloqueado na primeira
-> tentativa. Leia `=` como "recebe" e `==` como "é igual a". Dois truques
-> ajudam: (1) compile com `-Wall` e trate aviso como erro; (2) quando um lado é
+> tentativa. Dois truques ajudam: (1) compile com `-Wall` e trate aviso como erro; (2) quando um lado é
 > constante, escreva a constante à esquerda: `if (0 == saldo)`. Se você
 > esquecer um `=`, `0 = saldo` não compila, porque não dá para guardar nada
 > dentro do número 0.

@@ -13,7 +13,7 @@
 //   64 discos: 18446744073709551615
 //
 // Dicas:
-// 1. movimentos(n) = 2 * movimentos(n - 1) + 1. Repare: UMA chamada só, não duas.
+// 1. movimentos(n) = 2 * movimentos(n - 1) + 1: é UMA chamada só, não duas.
 // 2. O resultado para 64 é 2^64 - 1: não cabe em long long (que vai até
 //    2^63 - 1), por isso o unsigned. Mostre com %llu.
 // 3. Resposta esperada: 7, 1023, 1048575 e 18446744073709551615. A um

@@ -335,9 +335,8 @@ centavos em int.
 
 **Dicas:**
 
-1. Mostre pago com printf("%.20f") e veja o que tem lá dentro.
-2. (a) fabs(pago - preco) < 1e-9; (b) int preco = 70; int pago = 7 * 10;
-3. Resposta esperada: o printf mostra 0.70000000000000006661 (0.1 não é
+1. (a) fabs(pago - preco) < 1e-9; (b) int preco = 70; int pago = 7 * 10;
+2. Resposta esperada: o printf mostra 0.70000000000000006661 (0.1 não é
    exato em binário), diferente de 0.7. Consertado, os dois jeitos
    mostram "Pagou o valor exato? 1".
 
@@ -1126,8 +1125,7 @@ e os dois se reencontram no Fim, sem como passar pelos dois:
 > [!WARNING]
 > **`=` no lugar de `==`.** Com `if (saldo = 0)`, o saldo vira zero e o `else`
 > roda sempre. Com `if (tentativas = 3)`, o cartão é bloqueado na primeira
-> tentativa. Leia `=` como "recebe" e `==` como "é igual a". Dois truques
-> ajudam: (1) compile com `-Wall` e trate aviso como erro; (2) quando um lado é
+> tentativa. Dois truques ajudam: (1) compile com `-Wall` e trate aviso como erro; (2) quando um lado é
 > constante, escreva a constante à esquerda: `if (0 == saldo)`. Se você
 > esquecer um `=`, `0 = saldo` não compila, porque não dá para guardar nada
 > dentro do número 0.
@@ -2408,7 +2406,7 @@ Total: R$ 70.00
 
 ## 0019 · Juntando tudo: a conta de luz
 
-Chegou a conta de luz, e ela é um festival de decisões. O valor depende do
+A conta de luz do módulo 01 voltou, agora cheia de decisões. O valor depende do
 consumo, da **bandeira** do mês (verde, amarela ou vermelha), de você ter ou
 não **tarifa social**, de uma taxa de iluminação que muda com o consumo, e
 ainda vem um carimbo dizendo se o seu consumo foi baixo, médio ou alto.
