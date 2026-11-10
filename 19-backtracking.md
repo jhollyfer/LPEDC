@@ -814,8 +814,8 @@ Nina Max Lia
 1. A posição pos da foto guarda o ÍNDICE da pessoa: foto[pos] = p.
 2. Marque usado[p] = true antes de chamar fotos(pos + 1) e volte para
    false depois. Se esquecer de desmarcar, só a primeira linha aparece.
-3. Resposta esperada: as 6 linhas acima (repare que, ao contrário das
-   trocas do texto, esta saída está em ordem alfabética).
+3. Resposta esperada: as 6 linhas acima (ao contrário das trocas do
+   texto, esta saída está em ordem alfabética).
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/0126-permutacoes/E752.c
@@ -3518,8 +3518,8 @@ Colorações com 3 cores: 48
 2. Quando e == N, some 1 no total; se for a primeira, copie cor[] para
    primeira[].
 3. Resposta esperada: a primeira coloração é a de cima e há 48 jeitos
-   de pintar. Repare que 48 é múltiplo de 3! = 6: trocar as cores entre
-   si sempre dá outra coloração válida.
+   de pintar. O 48 é múltiplo de 3! = 6: trocar as cores entre si
+   sempre dá outra coloração válida.
 
 ```bash
 ~/LPEDC/rodar 19-backtracking/lista/P1911.c

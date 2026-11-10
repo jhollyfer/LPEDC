@@ -19,7 +19,7 @@
 // Dicas:
 // 1. potencia(b, k) começa com p = 1 e multiplica por b, k vezes. Use long.
 // 2. Depois são dois if: a > bk devolve 1; a == bk devolve 2; senão, 3.
-// 3. Resposta esperada: a saída acima. Repare no 9 T(n/3) + n²: 9 = 3²,
+// 3. Resposta esperada: a saída acima. Em 9 T(n/3) + n², 9 = 3²,
 //    então é empate, Θ(n² log n).
 //
 // Escreva sua resposta abaixo (complete caso e crie potencia):

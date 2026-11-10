@@ -1014,7 +1014,7 @@ Saída esperada:
 
 1. potencia(b, k) começa com p = 1 e multiplica por b, k vezes. Use long.
 2. Depois são dois if: a > bk devolve 1; a == bk devolve 2; senão, 3.
-3. Repare no 9 T(n/3) + n²: 9 = 3²,
+3. Em 9 T(n/3) + n², 9 = 3²,
    então é empate, Θ(n² log n).
 
 ```bash
@@ -2954,7 +2954,7 @@ L = 256: 11917965 comparações,   97.4 ms
    com o limiar (o insertion compara mais que o merge), mas o tempo
    costuma CAIR até uns 16 ou 32, porque cada comparação do insertion
    sai mais barata que a recursão e a cópia do merge. Com 256, o Θ(n²)
-   dos pedaços já pesa. Comparações são um bom modelo, mas não são tudo.
+   dos pedaços já pesa.
 
 ```bash
 ~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/E707.c
@@ -3192,8 +3192,8 @@ Saída esperada:
    de cada n.
 2. A árvore de recursão tem n folhas (um dia cada) e n - 1 nós internos
    (cada um junta dois pedaços): 2n - 1 nós no total.
-3. Por isso o custo é Θ(n): dividir ao meio não deixa a soma mais rápida
-   que um laço; só muda a forma.
+3. O custo é Θ(n): dividir ao meio não deixa a soma mais rápida que um
+   laço.
 4. Resposta esperada: as duas colunas de chamadas são sempre iguais; com
    n = 100 são 199 chamadas.
 
@@ -3899,8 +3899,8 @@ Limite 3·1150 + 52 = 3502
 
 Conserte o programa. O app de delivery guarda os pedidos do dia num vetor
 dinâmico, e o colega fez o vetor crescer de 10 em 10 posições "para não
-desperdiçar memória". O erro de propósito não é de memória (o
-AddressSanitizer não reclama): é de ANÁLISE. Com crescimento aditivo, n
+desperdiçar memória". O vetor funciona e o
+AddressSanitizer não reclama: o erro de propósito é de ANÁLISE. Com crescimento aditivo, n
 inserções copiam 10 + 20 + 30 + ... ≈ n²/20 itens: Θ(n²) no total, Θ(n)
 por inserção. Veja a saída com 10 mil pedidos:
 

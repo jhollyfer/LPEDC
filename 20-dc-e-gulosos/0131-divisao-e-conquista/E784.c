@@ -21,7 +21,7 @@
 // Dicas:
 // 1. Caso base: ini == fim, sobrou um ponto só, e ele é o pico.
 // 2. Se v[meio] < v[meio + 1], chame pico(v, meio + 1, fim); senão,
-//    pico(v, ini, meio). Repare que o meio continua no segundo caso.
+//    pico(v, ini, meio). O meio continua no segundo caso.
 // 3. Resposta esperada: a saída acima. Os pedaços são [0, 10], [0, 5],
 //    [3, 5], [5, 5]. Com 1 milhão de pontos seriam umas 20 comparações:
 //    O(log n), contra O(n) de procurar o maior com um laço.

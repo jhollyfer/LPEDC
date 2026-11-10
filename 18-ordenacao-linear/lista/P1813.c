@@ -35,7 +35,7 @@
 //    ordem principal; a estabilidade preserva, nos empates, a ordem deixada
 //    pelas passadas anteriores.
 // 3. Cada passada custa Θ(n + k): o total é Θ(3n + 60 + 5 + 4), linear.
-// 4. Resposta esperada: no fim, #3 #6 #1 #8 #4 #2 #7 #5. Repare em #4 e #2:
+// 4. Resposta esperada: no fim, #3 #6 #1 #8 #4 #2 #7 #5. Em #4 e #2,
 //    mesma prioridade e setor, e o minuto 5 vem antes do 33 porque a
 //    primeira passada deixou os dois nessa ordem.
 //

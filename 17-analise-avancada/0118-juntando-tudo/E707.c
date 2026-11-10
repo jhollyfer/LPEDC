@@ -26,7 +26,7 @@
 //    com o limiar (o insertion compara mais que o merge), mas o tempo
 //    costuma CAIR até uns 16 ou 32, porque cada comparação do insertion
 //    sai mais barata que a recursão e a cópia do merge. Com 256, o Θ(n²)
-//    dos pedaços já pesa. Comparações são um bom modelo, mas não são tudo.
+//    dos pedaços já pesa.
 //
 // Escreva sua resposta abaixo (estenda hibrido):
 

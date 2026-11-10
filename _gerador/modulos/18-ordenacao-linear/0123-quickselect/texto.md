@@ -22,8 +22,8 @@ assunto 0095. Depois de um `separa`, o pivô está na posição **final** `j`:
 
 A diferença para o quick sort é que ele segue **um lado só**. Não precisa
 de recursão: um `while` que encolhe o intervalo `[p, r]` resolve. Você já viu
-essa ideia de relance no exercício E569, do módulo 13; aqui ela ganha nome,
-custo e cuidados.
+essa ideia de relance no exercício E569, do módulo 13; aqui ela ganha nome
+e custo.
 
 Se o pivô cai perto do meio, cada separação descarta metade:
 `n + n/2 + n/4 + ...`, que é menos que `2n`. O quickselect é **O(n) em

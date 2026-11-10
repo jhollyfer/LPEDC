@@ -3,8 +3,8 @@
 //
 // Conserte o programa. O app de delivery guarda os pedidos do dia num vetor
 // dinâmico, e o colega fez o vetor crescer de 10 em 10 posições "para não
-// desperdiçar memória". O erro de propósito não é de memória (o
-// AddressSanitizer não reclama): é de ANÁLISE. Com crescimento aditivo, n
+// desperdiçar memória". O vetor funciona e o
+// AddressSanitizer não reclama: o erro de propósito é de ANÁLISE. Com crescimento aditivo, n
 // inserções copiam 10 + 20 + 30 + ... ≈ n²/20 itens: Θ(n²) no total, Θ(n)
 // por inserção. Veja a saída com 10 mil pedidos:
 //

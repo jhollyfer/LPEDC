@@ -26,8 +26,8 @@
 // 2. Quando e == N, some 1 no total; se for a primeira, copie cor[] para
 //    primeira[].
 // 3. Resposta esperada: a primeira coloração é a de cima e há 48 jeitos
-//    de pintar. Repare que 48 é múltiplo de 3! = 6: trocar as cores entre
-//    si sempre dá outra coloração válida.
+//    de pintar. O 48 é múltiplo de 3! = 6: trocar as cores entre si
+//    sempre dá outra coloração válida.
 //
 // Escreva sua resposta abaixo (complete o código):
 

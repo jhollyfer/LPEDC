@@ -78,7 +78,7 @@ novos. Na primeira rodada saem 3 mensagens; na segunda, 9; na terceira, 27.
 Quantas mensagens saem na rodada 20? A conta é 3²⁰. O jeito óbvio é um laço
 que multiplica por 3 vinte vezes. Funciona, mas gasta multiplicação demais.
 
-Note que 3²⁰ = 3¹⁰ · 3¹⁰. Quem sabe 3¹⁰ resolve 3²⁰ com **uma**
+Só que 3²⁰ = 3¹⁰ · 3¹⁰. Quem sabe 3¹⁰ resolve 3²⁰ com **uma**
 multiplicação. E 3¹⁰ = 3⁵ · 3⁵. E 3⁵ = 3² · 3² · 3 (expoente ímpar: sobra um
 3). O problema grande vira um problema do mesmo tipo com a metade do tamanho.
 
@@ -456,7 +456,7 @@ Comparações: 3
 
 1. Caso base: ini == fim, sobrou um ponto só, e ele é o pico.
 2. Se v[meio] < v[meio + 1], chame pico(v, meio + 1, fim); senão,
-   pico(v, ini, meio). Repare que o meio continua no segundo caso.
+   pico(v, ini, meio). O meio continua no segundo caso.
 3. Os pedaços são [0, 10], [0, 5],
    [3, 5], [5, 5]. Com 1 milhão de pontos seriam umas 20 comparações:
    O(log n), contra O(n) de procurar o maior com um laço.

@@ -28,8 +28,8 @@
 //    de cada n.
 // 2. A árvore de recursão tem n folhas (um dia cada) e n - 1 nós internos
 //    (cada um junta dois pedaços): 2n - 1 nós no total.
-// 3. Por isso o custo é Θ(n): dividir ao meio não deixa a soma mais rápida
-//    que um laço; só muda a forma.
+// 3. O custo é Θ(n): dividir ao meio não deixa a soma mais rápida que um
+//    laço.
 // 4. Resposta esperada: as duas colunas de chamadas são sempre iguais; com
 //    n = 100 são 199 chamadas.
 //

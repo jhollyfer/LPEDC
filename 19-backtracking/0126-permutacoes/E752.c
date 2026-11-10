@@ -19,8 +19,8 @@
 // 1. A posição pos da foto guarda o ÍNDICE da pessoa: foto[pos] = p.
 // 2. Marque usado[p] = true antes de chamar fotos(pos + 1) e volte para
 //    false depois. Se esquecer de desmarcar, só a primeira linha aparece.
-// 3. Resposta esperada: as 6 linhas acima (repare que, ao contrário das
-//    trocas do texto, esta saída está em ordem alfabética).
+// 3. Resposta esperada: as 6 linhas acima (ao contrário das trocas do
+//    texto, esta saída está em ordem alfabética).
 //
 // Escreva sua resposta abaixo (complete o código):
 
