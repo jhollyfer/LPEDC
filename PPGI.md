@@ -188,7 +188,7 @@ e a busca binária contando comparações.
 
 ## Comece aqui
 
-Plano de 09/11 até a prova, em 27/11. A ordem segue o peso de cada tópico nas provas de
+Plano de 09/11 até a prova, em 27/11. A ordem de dependência entre os assuntos está em [`TRILHA.md`](TRILHA.md). A ordem segue o peso de cada tópico nas provas de
 2016 a 2023 ([o que caiu](#o-que-caiu-de-2016-a-2023)): árvores primeiro, depois listas,
 pilhas e filas, busca, ordenação e hash. Se começar depois de 09/11, faça o diagnóstico no
 primeiro dia e junte dois dias de assunto num só até alcançar a data da tabela.
