@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../0086-fila.c"
+#include "../../material/0086-fila.c"
 
 int main(void) {
     Fila *pref = fila_cria();

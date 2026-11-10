@@ -25,6 +25,7 @@ import { desenharLegenda } from './tipos/legenda.mjs'
 
 const AQUI = dirname(fileURLToPath(import.meta.url))
 const RAIZ = join(AQUI, '..')
+const MAT = join(RAIZ, 'material') // exemplos, exercícios, lista, apoios e desenhos
 const filtro = process.argv[2] ?? ''
 // arquivos de cada assunto (exemplos, exercícios e .c/.h de apoio), todos na raiz
 const ARQUIVOS = JSON.parse(readFileSync(join(AQUI, 'arquivos.json'), 'utf8'))
@@ -50,15 +51,15 @@ const imagem = (src, alt, svg) => {
 const comando = (caminho) => {
   const apoio = (ARQUIVOS[assuntoDe(caminho)]?.apoio ?? []).filter((f) => f.endsWith('.c'))
   const fontes = [caminho, ...apoio]
-  const matematica = fontes.some((f) => readFileSync(join(RAIZ, f), 'utf8').includes('math.h'))
+  const matematica = fontes.some((f) => readFileSync(join(MAT, f), 'utf8').includes('math.h'))
   const base = caminho.replace(/\.c$/, '')
-  const gcc = `gcc ${fontes.map((f) => `~/LPEDC/${f}`).join(' ')} -o ~/LPEDC/${base}${matematica ? ' -lm' : ''}`
-  return ['```bash', `${gcc} && ~/LPEDC/${base}`, '```']
+  const gcc = `gcc ${fontes.map((f) => `~/LPEDC/material/${f}`).join(' ')} -o ~/LPEDC/material/${base}${matematica ? ' -lm' : ''}`
+  return ['```bash', `${gcc} && ~/LPEDC/material/${base}`, '```']
 }
 
 // exemplo: a 1ª linha "// A001 · título" é o título, o resto é o código
 const exemplo = (caminho, nome) => {
-  const [cabeca, ...resto] = readFileSync(join(RAIZ, caminho), 'utf8').trimEnd().split('\n')
+  const [cabeca, ...resto] = readFileSync(join(MAT, caminho), 'utf8').trimEnd().split('\n')
   if (!/^\/\/ A\d{3,4} · /.test(cabeca)) throw new Error(`${caminho}: a 1ª linha precisa ser "// ${nome.replace(/\.c$/, '')} · título"`)
   while (resto[0]?.trim() === '') resto.shift()
   const titulo = cabeca.replace(/^\/\/\s*/, '').replace(/^A\d{3,4}\s*·\s*/, '')
@@ -68,7 +69,7 @@ const exemplo = (caminho, nome) => {
 // exercício: o bloco de comentários do começo do arquivo traz o enunciado
 // e as dicas
 const exercicio = (caminho, nome) => {
-  const todas = readFileSync(join(RAIZ, caminho), 'utf8').split('\n')
+  const todas = readFileSync(join(MAT, caminho), 'utf8').split('\n')
   const fimBloco = todas.findIndex((l) => !l.startsWith('//'))
   const linhas = todas.slice(0, fimBloco < 0 ? todas.length : fimBloco).map((l) => l.replace(/^\/\/ ?/, ''))
   const fim = (rotulo) => {
@@ -127,7 +128,7 @@ const pratique = (modulo, pasta) => {
 // módulo, antes das questões da prova.
 const lista = (modulo) => {
   const numero = modulo.slice(0, 2)
-  const arquivos = readdirSync(RAIZ)
+  const arquivos = readdirSync(MAT)
     .filter((a) => new RegExp(`^P${numero}\\d{2}\\.c$`).test(a))
     .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
   if (!arquivos.length) return null
@@ -136,7 +137,7 @@ const lista = (modulo) => {
   const partes = [
     '## Lista de exercícios práticos',
     '',
-    `${arquivos.length} exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos ${arquivos[0]} a ${arquivos.at(-1)}, na raiz; resoluções em \`_respostas/${modulo}/lista/\`.`,
+    `${arquivos.length} exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos ${arquivos[0]} a ${arquivos.at(-1)}, em \`material/\`; resoluções em \`_respostas/${modulo}/lista/\`.`,
   ]
   for (const [estrelas, nomeNivel] of niveis) {
     const doNivel = blocos.filter((md) => md[0].includes(estrelas))
@@ -172,16 +173,16 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
     const svgIdeia = desenharIdeia(`Ideia: ${assunto}`, ideia)
     const svgFluxo = desenharFluxograma(`Fluxograma: ${assunto}`, fluxograma)
     if (desenharTudo || pasta.includes(filtro)) {
-      writeFileSync(join(RAIZ, `${pasta.slice(0, 4)}-ideia.svg`), svgIdeia)
-      writeFileSync(join(RAIZ, `${pasta.slice(0, 4)}-fluxograma.svg`), svgFluxo)
+      writeFileSync(join(MAT, `${pasta.slice(0, 4)}-ideia.svg`), svgIdeia)
+      writeFileSync(join(MAT, `${pasta.slice(0, 4)}-fluxograma.svg`), svgFluxo)
       console.log(`ok  ${pasta.slice(0, 4)}-ideia.svg e fluxograma.svg`)
     }
 
     indice.push(`| [${numero}](#${ancora(titulo)}) | ${assunto.replaceAll('|', '\\|')} |`)
     partes.push(
       texto
-        .replace('{{ideia}}', () => imagem(`${pasta.slice(0, 4)}-ideia.svg`, `Diagrama da ideia: ${assunto}`, svgIdeia))
-        .replace('{{fluxograma}}', () => imagem(`${pasta.slice(0, 4)}-fluxograma.svg`, `Fluxograma: ${assunto}`, svgFluxo))
+        .replace('{{ideia}}', () => imagem(`material/${pasta.slice(0, 4)}-ideia.svg`, `Diagrama da ideia: ${assunto}`, svgIdeia))
+        .replace('{{fluxograma}}', () => imagem(`material/${pasta.slice(0, 4)}-fluxograma.svg`, `Fluxograma: ${assunto}`, svgFluxo))
         .replace('{{pratique}}', () => pratique(modulo, pasta)),
     )
   }
@@ -199,4 +200,4 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
   writeFileSync(join(RAIZ, `${modulo}.md`), aviso + texto)
   console.log(`ok  ${modulo}.md`)
 }
-writeFileSync(join(RAIZ, 'legenda.svg'), desenharLegenda())
+writeFileSync(join(MAT, 'legenda.svg'), desenharLegenda())

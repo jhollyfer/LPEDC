@@ -36,7 +36,7 @@ Os dois últimos assuntos trazem um TAD na pasta (`huffman.h`,
 `compactador.h`); o comando compila junto o `.c` de apoio:
 
 ```bash
-gcc ~/LPEDC/A271.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/A271 && ~/LPEDC/A271
+gcc ~/LPEDC/material/A271.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/A271 && ~/LPEDC/material/A271
 ```
 
 O último assunto cria arquivos de teste na pasta atual e os apaga no fim.

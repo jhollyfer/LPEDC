@@ -80,7 +80,7 @@ código de vinte zeros faz isso (A314).
 Procure "ana" em "banana bacana": são 11 alinhamentos, com ocorrências no 1,
 no 3 e no 10. O 0 falha no "b" e o 5 falha no espaço:
 
-<p align="center"><img src="0157-ideia.svg" alt="Diagrama da ideia: Força bruta" width="858"></p>
+<p align="center"><img src="material/0157-ideia.svg" alt="Diagrama da ideia: Força bruta" width="858"></p>
 
 Em C, contando as comparações de letra:
 
@@ -150,7 +150,7 @@ O teto seria `11 · 3 = 33`; deu 19 porque quase todo alinhamento falha cedo.
 O laço de fora anda o alinhamento `i`, o de dentro anda a letra `j`. O `i`
 sempre avança 1, tenha achado ou não:
 
-<p align="center"><img src="0157-fluxograma.svg" alt="Fluxograma: Força bruta" width="503"></p>
+<p align="center"><img src="material/0157-fluxograma.svg" alt="Fluxograma: Força bruta" width="503"></p>
 
 `strstr(texto, padrao)`, de `string.h`, devolve um ponteiro para a primeira
 ocorrência ou `NULL`; a posição é `p - texto`. Para a próxima, chame de novo
@@ -216,7 +216,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A313.c -o ~/LPEDC/A313 && ~/LPEDC/A313
+gcc ~/LPEDC/material/A313.c -o ~/LPEDC/material/A313 && ~/LPEDC/material/A313
 ```
 
 **Exemplo A314 · O pior caso: um código cheio de zeros**
@@ -268,7 +268,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A314.c -o ~/LPEDC/A314 && ~/LPEDC/A314
+gcc ~/LPEDC/material/A314.c -o ~/LPEDC/material/A314 && ~/LPEDC/material/A314
 ```
 
 #### Exercícios
@@ -289,7 +289,7 @@ o: 1 5 9 13 16 19 (6 vezes)
 ```
 
 ```bash
-gcc ~/LPEDC/E937.c -o ~/LPEDC/E937 && ~/LPEDC/E937
+gcc ~/LPEDC/material/E937.c -o ~/LPEDC/material/E937 && ~/LPEDC/material/E937
 ```
 
 **Exercício E939** · ★★☆
@@ -316,7 +316,7 @@ posição 41: pix
 ```
 
 ```bash
-gcc ~/LPEDC/E939.c -o ~/LPEDC/E939 && ~/LPEDC/E939
+gcc ~/LPEDC/material/E939.c -o ~/LPEDC/material/E939 && ~/LPEDC/material/E939
 ```
 
 **Exercício E940** · ★★☆
@@ -349,7 +349,7 @@ você vem? se você não vier, você avisa
 ```
 
 ```bash
-gcc ~/LPEDC/E940.c -o ~/LPEDC/E940 && ~/LPEDC/E940
+gcc ~/LPEDC/material/E940.c -o ~/LPEDC/material/E940 && ~/LPEDC/material/E940
 ```
 
 **Exercício E942** · ★★★
@@ -384,7 +384,7 @@ RIO: não está na grade
 ```
 
 ```bash
-gcc ~/LPEDC/E942.c -o ~/LPEDC/E942 && ~/LPEDC/E942
+gcc ~/LPEDC/material/E942.c -o ~/LPEDC/material/E942 && ~/LPEDC/material/E942
 ```
 
 ---
@@ -423,7 +423,7 @@ não é o `3` esperado: a central usa `pi[3] = 2`, o `1 2` do fim continua
 valendo e o padrão escorrega duas casas. O `1` casa com `padrao[2]` e a senha
 se completa na sétima tecla:
 
-<p align="center"><img src="0158-ideia.svg" alt="Diagrama da ideia: KMP" width="858"></p>
+<p align="center"><img src="material/0158-ideia.svg" alt="Diagrama da ideia: KMP" width="858"></p>
 
 Em C, o `printf` do laço mostra o `k` depois de cada tecla:
 
@@ -520,7 +520,7 @@ bruta faria 11.
 O recuo é um laço **dentro** do laço do texto e mexe só em `k`. O índice `i`
 nunca anda para trás:
 
-<p align="center"><img src="0158-fluxograma.svg" alt="Fluxograma: KMP" width="647"></p>
+<p align="center"><img src="material/0158-fluxograma.svg" alt="Fluxograma: KMP" width="647"></p>
 
 Por que é O(n)? O `k` sobe no máximo 1 por letra, ou seja, `n` vezes no total.
 Cada recuo o diminui e ele nunca fica negativo, então os recuos não passam
@@ -602,7 +602,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A315.c -o ~/LPEDC/A315 && ~/LPEDC/A315
+gcc ~/LPEDC/material/A315.c -o ~/LPEDC/material/A315 && ~/LPEDC/material/A315
 ```
 
 **Exemplo A316 · O refrão que se repete**
@@ -662,7 +662,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A316.c -o ~/LPEDC/A316 && ~/LPEDC/A316
+gcc ~/LPEDC/material/A316.c -o ~/LPEDC/material/A316 && ~/LPEDC/material/A316
 ```
 
 #### Exercícios
@@ -685,7 +685,7 @@ tatuta: 0 0 1 0 1 2
 ```
 
 ```bash
-gcc ~/LPEDC/E943.c -o ~/LPEDC/E943 && ~/LPEDC/E943
+gcc ~/LPEDC/material/E943.c -o ~/LPEDC/material/E943 && ~/LPEDC/material/E943
 ```
 
 **Exercício E945** · ★★☆
@@ -716,7 +716,7 @@ linha 4, coluna 11
 ```
 
 ```bash
-gcc ~/LPEDC/E945.c -o ~/LPEDC/E945 && ~/LPEDC/E945
+gcc ~/LPEDC/material/E945.c -o ~/LPEDC/material/E945 && ~/LPEDC/material/E945
 ```
 
 **Exercício E946** · ★★☆
@@ -737,7 +737,7 @@ aaaaa: força bruta 130, KMP 34 (achou 25 e 25)
 ```
 
 ```bash
-gcc ~/LPEDC/E946.c -o ~/LPEDC/E946 && ~/LPEDC/E946
+gcc ~/LPEDC/material/E946.c -o ~/LPEDC/material/E946 && ~/LPEDC/material/E946
 ```
 
 **Exercício E947** · ★★★
@@ -758,7 +758,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E947.c -o ~/LPEDC/E947 && ~/LPEDC/E947
+gcc ~/LPEDC/material/E947.c -o ~/LPEDC/material/E947 && ~/LPEDC/material/E947
 ```
 
 ---
@@ -795,7 +795,7 @@ sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C` não, e o `A`
 manda saltar 3. No 5, o `E` salta 5. No 10, o `M` salta 4. No 14, as cinco
 letras batem:
 
-<p align="center"><img src="0159-ideia.svg" alt="Diagrama da ideia: Horspool" width="865"></p>
+<p align="center"><img src="material/0159-ideia.svg" alt="Diagrama da ideia: Horspool" width="865"></p>
 
 Em C:
 
@@ -877,7 +877,7 @@ Os cinco alinhamentos; a última letra de `texto[i..i+4]` decide o salto:
 Foram 10 comparações; a força bruta faz 19. O passo do `i` vem da tabela,
 pela última letra da janela:
 
-<p align="center"><img src="0159-fluxograma.svg" alt="Fluxograma: Horspool" width="495"></p>
+<p align="center"><img src="material/0159-fluxograma.svg" alt="Fluxograma: Horspool" width="495"></p>
 
 Com alfabeto grande e padrão comprido, o salto fica perto de `m` e a busca
 olha umas `n / m` letras: quanto **maior** o padrão, **mais rápida** a busca
@@ -978,7 +978,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A317.c -o ~/LPEDC/A317 && ~/LPEDC/A317
+gcc ~/LPEDC/material/A317.c -o ~/LPEDC/material/A317 && ~/LPEDC/material/A317
 ```
 
 **Exemplo A318 · Acentos são bytes: por que unsigned char**
@@ -1038,7 +1038,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A318.c -o ~/LPEDC/A318 && ~/LPEDC/A318
+gcc ~/LPEDC/material/A318.c -o ~/LPEDC/material/A318 && ~/LPEDC/material/A318
 ```
 
 #### Exercícios
@@ -1059,7 +1059,7 @@ A=2 R=1 outras=5
 ```
 
 ```bash
-gcc ~/LPEDC/E949.c -o ~/LPEDC/E949 && ~/LPEDC/E949
+gcc ~/LPEDC/material/E949.c -o ~/LPEDC/material/E949 && ~/LPEDC/material/E949
 ```
 
 **Exercício E951** · ★★☆
@@ -1085,7 +1085,7 @@ posição 38: BANANA
 ```
 
 ```bash
-gcc ~/LPEDC/E951.c -o ~/LPEDC/E951 && ~/LPEDC/E951
+gcc ~/LPEDC/material/E951.c -o ~/LPEDC/material/E951 && ~/LPEDC/material/E951
 ```
 
 **Exercício E952** · ★★☆
@@ -1106,7 +1106,7 @@ abbb: força bruta  54, Horspool   9 (9 alinhamentos)
 ```
 
 ```bash
-gcc ~/LPEDC/E952.c -o ~/LPEDC/E952 && ~/LPEDC/E952
+gcc ~/LPEDC/material/E952.c -o ~/LPEDC/material/E952 && ~/LPEDC/material/E952
 ```
 
 **Exercício E954** · ★★★
@@ -1133,7 +1133,7 @@ FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
 ```
 
 ```bash
-gcc ~/LPEDC/E954.c -o ~/LPEDC/E954 && ~/LPEDC/E954
+gcc ~/LPEDC/material/E954.c -o ~/LPEDC/material/E954 && ~/LPEDC/material/E954
 ```
 
 ---
@@ -1164,7 +1164,7 @@ Procure `182` em `2718281828459` com `q = 13` (pequeno, para aparecer
 colisão). O hash do padrão é `182 % 13 = 0`. Nas 11 janelas, o 0 aparece três
 vezes: duas são o `182` e uma é o `845`, que também deixa resto 0:
 
-<p align="center"><img src="0160-ideia.svg" alt="Diagrama da ideia: Rabin-Karp" width="870"></p>
+<p align="center"><img src="material/0160-ideia.svg" alt="Diagrama da ideia: Rabin-Karp" width="870"></p>
 
 Em C:
 
@@ -1254,7 +1254,7 @@ A primeira rolada, de `271` (hash 11) para `718`. O `pot` é `10² % 13 = 9`:
 São duas operações por janela, com qualquer `m`. A conferência letra a letra
 quase nunca roda quando `q` é grande:
 
-<p align="center"><img src="0160-fluxograma.svg" alt="Fluxograma: Rabin-Karp" width="677"></p>
+<p align="center"><img src="material/0160-fluxograma.svg" alt="Fluxograma: Rabin-Karp" width="677"></p>
 
 > [!WARNING]
 > Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
@@ -1346,7 +1346,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A319.c -o ~/LPEDC/A319 && ~/LPEDC/A319
+gcc ~/LPEDC/material/A319.c -o ~/LPEDC/material/A319 && ~/LPEDC/material/A319
 ```
 
 **Exemplo A320 · Vários padrões numa passada só: o filtro de spoiler**
@@ -1426,7 +1426,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A320.c -o ~/LPEDC/A320 && ~/LPEDC/A320
+gcc ~/LPEDC/material/A320.c -o ~/LPEDC/material/A320 && ~/LPEDC/material/A320
 ```
 
 #### Exercícios
@@ -1450,7 +1450,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E955.c -o ~/LPEDC/E955 && ~/LPEDC/E955
+gcc ~/LPEDC/material/E955.c -o ~/LPEDC/material/E955 && ~/LPEDC/material/E955
 ```
 
 **Exercício E957** · ★★☆
@@ -1477,7 +1477,7 @@ q = 10007: 5 ocorrências,  0 falsos positivos
 ```
 
 ```bash
-gcc ~/LPEDC/E957.c -o ~/LPEDC/E957 && ~/LPEDC/E957
+gcc ~/LPEDC/material/E957.c -o ~/LPEDC/material/E957 && ~/LPEDC/material/E957
 ```
 
 **Exercício E958** · ★★☆
@@ -1503,7 +1503,7 @@ nosso trabalhO MEDE A AGUA DA CHUVA COM um balde
 ```
 
 ```bash
-gcc ~/LPEDC/E958.c -o ~/LPEDC/E958 && ~/LPEDC/E958
+gcc ~/LPEDC/material/E958.c -o ~/LPEDC/material/E958 && ~/LPEDC/material/E958
 ```
 
 **Exercício E960** · ★★★
@@ -1523,7 +1523,7 @@ polinomial: 2 verificações, 2 ocorrências
 ```
 
 ```bash
-gcc ~/LPEDC/E960.c -o ~/LPEDC/E960 && ~/LPEDC/E960
+gcc ~/LPEDC/material/E960.c -o ~/LPEDC/material/E960 && ~/LPEDC/material/E960
 ```
 
 ---
@@ -1565,7 +1565,7 @@ São 8 avisos e o padrão é "garagem". O grep mostra as linhas 3, 5 e 8 (a 3
 tem duas ocorrências). Os quatro algoritmos dão o mesmo resultado, com
 trabalho diferente:
 
-<p align="center"><img src="0161-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="material/0161-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa:
 
@@ -1638,7 +1638,7 @@ int main(void) {
 
 O grep é um laço sobre as linhas com uma chamada de busca no meio:
 
-<p align="center"><img src="0161-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="649"></p>
+<p align="center"><img src="material/0161-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="649"></p>
 
 O KMP fez **mais** comparações que a força bruta: em texto comum ela falha
 na primeira letra, e o KMP só ganha com muita repetição parcial. O Rabin-Karp
@@ -1766,7 +1766,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A321.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/A321 && ~/LPEDC/A321
+gcc ~/LPEDC/material/A321.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/A321 && ~/LPEDC/material/A321
 ```
 
 **Exemplo A322 · O mini-grep de verdade: arquivo, argumentos e algoritmo**
@@ -1864,7 +1864,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-gcc ~/LPEDC/A322.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/A322 && ~/LPEDC/A322
+gcc ~/LPEDC/material/A322.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/A322 && ~/LPEDC/material/A322
 ```
 
 #### Exercícios
@@ -1892,7 +1892,7 @@ os quatro concordam
 ```
 
 ```bash
-gcc ~/LPEDC/E961.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E961 && ~/LPEDC/E961
+gcc ~/LPEDC/material/E961.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/E961 && ~/LPEDC/material/E961
 ```
 
 **Exercício E963** · ★★☆
@@ -1923,7 +1923,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E963.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E963 && ~/LPEDC/E963
+gcc ~/LPEDC/material/E963.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/E963 && ~/LPEDC/material/E963
 ```
 
 **Exercício E964** · ★★☆
@@ -1952,7 +1952,7 @@ quinta: [chuva]rada de manhã   (1)
 ```
 
 ```bash
-gcc ~/LPEDC/E964.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E964 && ~/LPEDC/E964
+gcc ~/LPEDC/material/E964.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/E964 && ~/LPEDC/material/E964
 ```
 
 **Exercício E965** · ★★★
@@ -1974,7 +1974,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E965.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E965 && ~/LPEDC/E965
+gcc ~/LPEDC/material/E965.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/E965 && ~/LPEDC/material/E965
 ```
 
 ---
@@ -2122,7 +2122,7 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2401.c a P2430.c, na raiz; resoluções em `_respostas/24-busca-de-padroes/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2401.c a P2430.c, em `material/`; resoluções em `_respostas/24-busca-de-padroes/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2161,7 +2161,7 @@ doc: não aparece (52 alinhamentos)
    "doc" não aparece (52 alinhamentos, o texto tem 54 letras).
 
 ```bash
-gcc ~/LPEDC/P2401.c -o ~/LPEDC/P2401 && ~/LPEDC/P2401
+gcc ~/LPEDC/material/P2401.c -o ~/LPEDC/material/P2401 && ~/LPEDC/material/P2401
 ```
 
 ---
@@ -2193,7 +2193,7 @@ Saída esperada:
 3. Resposta esperada: "kk" dá 6 e 3; "kkk" dá 4 e 2.
 
 ```bash
-gcc ~/LPEDC/P2402.c -o ~/LPEDC/P2402 && ~/LPEDC/P2402
+gcc ~/LPEDC/material/P2402.c -o ~/LPEDC/material/P2402 && ~/LPEDC/material/P2402
 ```
 
 ---
@@ -2237,7 +2237,7 @@ aabaaab
    "aab".
 
 ```bash
-gcc ~/LPEDC/P2403.c -o ~/LPEDC/P2403 && ~/LPEDC/P2403
+gcc ~/LPEDC/material/P2403.c -o ~/LPEDC/material/P2403 && ~/LPEDC/material/P2403
 ```
 
 ---
@@ -2269,7 +2269,7 @@ Saída esperada:
    o KMP nunca passa de 2n.
 
 ```bash
-gcc ~/LPEDC/P2404.c -o ~/LPEDC/P2404 && ~/LPEDC/P2404
+gcc ~/LPEDC/material/P2404.c -o ~/LPEDC/material/P2404 && ~/LPEDC/material/P2404
 ```
 
 ---
@@ -2299,7 +2299,7 @@ tapioca de coco  m = 15: 1 ocorrência(s),  8 alinhamentos
 3. Resposta esperada: 37, 21 e 8 alinhamentos, uma ocorrência de cada.
 
 ```bash
-gcc ~/LPEDC/P2405.c -o ~/LPEDC/P2405 && ~/LPEDC/P2405
+gcc ~/LPEDC/material/P2405.c -o ~/LPEDC/material/P2405 && ~/LPEDC/material/P2405
 ```
 
 ---
@@ -2335,7 +2335,7 @@ Saída esperada:
    (5507 = 56 × 97 + 75).
 
 ```bash
-gcc ~/LPEDC/P2406.c -o ~/LPEDC/P2406 && ~/LPEDC/P2406
+gcc ~/LPEDC/material/P2406.c -o ~/LPEDC/material/P2406 && ~/LPEDC/material/P2406
 ```
 
 ---
@@ -2367,7 +2367,7 @@ ovo                                      sim
 3. Resposta esperada: só "Bom dia Manaus" não é palíndromo.
 
 ```bash
-gcc ~/LPEDC/P2407.c -o ~/LPEDC/P2407 && ~/LPEDC/P2407
+gcc ~/LPEDC/material/P2407.c -o ~/LPEDC/material/P2407 && ~/LPEDC/material/P2407
 ```
 
 ---
@@ -2397,7 +2397,7 @@ que *****, perdi o onibus de novo, ***** de chuva, que ****
 3. Resposta esperada: droga 2, saco 1, chato 0.
 
 ```bash
-gcc ~/LPEDC/P2408.c -o ~/LPEDC/P2408 && ~/LPEDC/P2408
+gcc ~/LPEDC/material/P2408.c -o ~/LPEDC/material/P2408 && ~/LPEDC/material/P2408
 ```
 
 ---
@@ -2438,7 +2438,7 @@ samba            período  5 ("samba")
    xxxxxx, período 1, 6 vezes.
 
 ```bash
-gcc ~/LPEDC/P2409.c -o ~/LPEDC/P2409 && ~/LPEDC/P2409
+gcc ~/LPEDC/material/P2409.c -o ~/LPEDC/material/P2409 && ~/LPEDC/material/P2409
 ```
 
 ---
@@ -2472,7 +2472,7 @@ ABCDE girado 12: CDEAB
    12 vira CDEAB (12 % 5 = 2).
 
 ```bash
-gcc ~/LPEDC/P2410.c -o ~/LPEDC/P2410 && ~/LPEDC/P2410
+gcc ~/LPEDC/material/P2410.c -o ~/LPEDC/material/P2410 && ~/LPEDC/material/P2410
 ```
 
 ### ★★☆ Para pensar
@@ -2524,7 +2524,7 @@ total: 3
    ocorrências em cada busca.
 
 ```bash
-gcc ~/LPEDC/P2411.c -o ~/LPEDC/P2411 && ~/LPEDC/P2411
+gcc ~/LPEDC/material/P2411.c -o ~/LPEDC/material/P2411 && ~/LPEDC/material/P2411
 ```
 
 ---
@@ -2561,7 +2561,7 @@ q = 1009: 1 ocorrência(s), 0 falso(s) positivo(s)
    ("a ra", na posição 37) e nenhum com q = 1009.
 
 ```bash
-gcc ~/LPEDC/P2412.c -o ~/LPEDC/P2412 && ~/LPEDC/P2412
+gcc ~/LPEDC/material/P2412.c -o ~/LPEDC/material/P2412 && ~/LPEDC/material/P2412
 ```
 
 ---
@@ -2594,7 +2594,7 @@ ouroouroouro -> ouroouroouro: 0 4 8 (3 giro(s))
    ouroouroouro, com 0, 4 ou 8; rosabranco não vira brancoroxa.
 
 ```bash
-gcc ~/LPEDC/P2413.c -o ~/LPEDC/P2413 && ~/LPEDC/P2413
+gcc ~/LPEDC/material/P2413.c -o ~/LPEDC/material/P2413 && ~/LPEDC/material/P2413
 ```
 
 ---
@@ -2635,7 +2635,7 @@ Colar 3: ABAVV
    mesmo (forma AAVBV).
 
 ```bash
-gcc ~/LPEDC/P2414.c -o ~/LPEDC/P2414 && ~/LPEDC/P2414
+gcc ~/LPEDC/material/P2414.c -o ~/LPEDC/material/P2414 && ~/LPEDC/material/P2414
 ```
 
 ---
@@ -2685,7 +2685,7 @@ de: 2
 3. Resposta esperada: bolo 3, de 2.
 
 ```bash
-gcc ~/LPEDC/P2415.c -o ~/LPEDC/P2415 && ~/LPEDC/P2415
+gcc ~/LPEDC/material/P2415.c -o ~/LPEDC/material/P2415 && ~/LPEDC/material/P2415
 ```
 
 ---
@@ -2720,7 +2720,7 @@ sopapos          "sopapos" (posição 0, 7 letra(s))
    osso e sopapos são palíndromos inteiros.
 
 ```bash
-gcc ~/LPEDC/P2416.c -o ~/LPEDC/P2416 && ~/LPEDC/P2416
+gcc ~/LPEDC/material/P2416.c -o ~/LPEDC/material/P2416 && ~/LPEDC/material/P2416
 ```
 
 ---
@@ -2758,7 +2758,7 @@ Janelas: 68; conferências letra a letra: 4
    em 68 janelas (nenhum falso positivo).
 
 ```bash
-gcc ~/LPEDC/P2417.c -o ~/LPEDC/P2417 && ~/LPEDC/P2417
+gcc ~/LPEDC/material/P2417.c -o ~/LPEDC/material/P2417 && ~/LPEDC/material/P2417
 ```
 
 ---
@@ -2799,7 +2799,7 @@ Saída esperada:
    recuo é a do 'c', de 2 para 0.
 
 ```bash
-gcc ~/LPEDC/P2418.c -o ~/LPEDC/P2418 && ~/LPEDC/P2418
+gcc ~/LPEDC/material/P2418.c -o ~/LPEDC/material/P2418 && ~/LPEDC/material/P2418
 ```
 
 ---
@@ -2833,7 +2833,7 @@ Anagramas de "amor": 4
    27.
 
 ```bash
-gcc ~/LPEDC/P2419.c -o ~/LPEDC/P2419 && ~/LPEDC/P2419
+gcc ~/LPEDC/material/P2419.c -o ~/LPEDC/material/P2419 && ~/LPEDC/material/P2419
 ```
 
 ---
@@ -2865,7 +2865,7 @@ m = 4: ACGT CGTA GTAC TACG CGTT GTTA TTAC ACGA CGAA GAAC AACG
    tamanho 4 (3 conferências).
 
 ```bash
-gcc ~/LPEDC/P2420.c -o ~/LPEDC/P2420 && ~/LPEDC/P2420
+gcc ~/LPEDC/material/P2420.c -o ~/LPEDC/material/P2420 && ~/LPEDC/material/P2420
 ```
 
 ### ★★★ Desafio
@@ -2903,7 +2903,7 @@ araraquara       senha "ara"
    "papa".
 
 ```bash
-gcc ~/LPEDC/P2421.c -o ~/LPEDC/P2421 && ~/LPEDC/P2421
+gcc ~/LPEDC/material/P2421.c -o ~/LPEDC/material/P2421 && ~/LPEDC/material/P2421
 ```
 
 ---
@@ -2941,7 +2941,7 @@ falsos positivos com dois hashes (q = 97 e 89): 0
    positivos com um hash e nenhum com os dois.
 
 ```bash
-gcc ~/LPEDC/P2422.c -o ~/LPEDC/P2422 && ~/LPEDC/P2422
+gcc ~/LPEDC/material/P2422.c -o ~/LPEDC/material/P2422 && ~/LPEDC/material/P2422
 ```
 
 ---
@@ -2981,7 +2981,7 @@ Mensagem: o rato roeu a roupa do rei de roma inteira
 3. Resposta esperada: o rato roeu a roupa do rei de roma inteira.
 
 ```bash
-gcc ~/LPEDC/P2423.c -o ~/LPEDC/P2423 && ~/LPEDC/P2423
+gcc ~/LPEDC/material/P2423.c -o ~/LPEDC/material/P2423 && ~/LPEDC/material/P2423
 ```
 
 ---
@@ -3023,7 +3023,7 @@ aaaaa: 0 1 2 3 (4)
    ocorrências e aaaaa, 4.
 
 ```bash
-gcc ~/LPEDC/P2424.c -o ~/LPEDC/P2424 && ~/LPEDC/P2424
+gcc ~/LPEDC/material/P2424.c -o ~/LPEDC/material/P2424 && ~/LPEDC/material/P2424
 ```
 
 ---
@@ -3056,7 +3056,7 @@ tucano: 6 ocorrências, 6 diferentes: a c n o t u
    aba aca bacab abacaba); tucano, só as 6 letras.
 
 ```bash
-gcc ~/LPEDC/P2425.c -o ~/LPEDC/P2425 && ~/LPEDC/P2425
+gcc ~/LPEDC/material/P2425.c -o ~/LPEDC/material/P2425 && ~/LPEDC/material/P2425
 ```
 
 ---
@@ -3091,7 +3091,7 @@ Deslocamentos com "pix": 1 de 26
    cinco reais ate sexta, valeu.
 
 ```bash
-gcc ~/LPEDC/P2426.c -o ~/LPEDC/P2426 && ~/LPEDC/P2426
+gcc ~/LPEDC/material/P2426.c -o ~/LPEDC/material/P2426 && ~/LPEDC/material/P2426
 ```
 
 ---
@@ -3128,7 +3128,7 @@ aabaabaabaab
    aabaabaabaab tem 4 prefixos refrão.
 
 ```bash
-gcc ~/LPEDC/P2427.c -o ~/LPEDC/P2427 && ~/LPEDC/P2427
+gcc ~/LPEDC/material/P2427.c -o ~/LPEDC/material/P2427 && ~/LPEDC/material/P2427
 ```
 
 ---
@@ -3171,7 +3171,7 @@ Total: 2; blocos conferidos letra a letra: 2
    "#.#" das linhas 0 e 3 não contam porque embaixo deles não há "###".
 
 ```bash
-gcc ~/LPEDC/P2428.c -o ~/LPEDC/P2428 && ~/LPEDC/P2428
+gcc ~/LPEDC/material/P2428.c -o ~/LPEDC/material/P2428 && ~/LPEDC/material/P2428
 ```
 
 ---
@@ -3207,7 +3207,7 @@ Saída esperada:
    "Oi, tchau." é "não".
 
 ```bash
-gcc ~/LPEDC/P2429.c -o ~/LPEDC/P2429 && ~/LPEDC/P2429
+gcc ~/LPEDC/material/P2429.c -o ~/LPEDC/material/P2429 && ~/LPEDC/material/P2429
 ```
 
 ---
@@ -3240,7 +3240,7 @@ aa: 10* (1)
    da roda com o primeiro).
 
 ```bash
-gcc ~/LPEDC/P2430.c -o ~/LPEDC/P2430 && ~/LPEDC/P2430
+gcc ~/LPEDC/material/P2430.c -o ~/LPEDC/material/P2430 && ~/LPEDC/material/P2430
 ```
 
 ## Questões no estilo da prova

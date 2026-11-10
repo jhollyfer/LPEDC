@@ -6,25 +6,26 @@
 
 ```
 LPEDC/
-├── rodar                      auxiliar do conferir.sh: compila com as flags de estudo e roda um .c
-├── legenda.svg                formas e cores (gerado)
 ├── README.md  PPGI.md  TRILHA.md  PROVAS.md  SIMULADOS.md   guias (escritos à mão)
 ├── 01-fundamentos.md ...      gerados: um por módulo (texto, exercícios, lista, questões)
-├── A003.c  A004.c ...         exemplos resolvidos
-├── E007.c ...                 exercícios (esqueleto vazio; a resposta vai dentro do arquivo)
-├── P0101.c ...                lista prática (P + número do módulo + número na lista)
-├── 0002-ideia.svg  0002-fluxograma.svg      desenhos do assunto (gerados)
-├── 0076-lista.c  0076-lista.h ...           apoio (TAD) do assunto, com o número dele no nome
+├── material/                  a única pasta de conteúdo: tudo o que se roda ou se vê
+│   ├── A003.c  A004.c ...     exemplos resolvidos
+│   ├── E007.c ...             exercícios (esqueleto vazio; a resposta vai dentro do arquivo)
+│   ├── P0101.c ...            lista prática (P + número do módulo + número na lista)
+│   ├── 0002-ideia.svg  0002-fluxograma.svg   desenhos do assunto (gerados)
+│   ├── 0076-lista.c  0076-lista.h ...        apoio (TAD) do assunto, com o número dele no nome
+│   └── legenda.svg            formas e cores (gerado)
 ├── _respostas/<modulo>/       uma resolução de cada exercício (e os apoios das respostas)
 ├── _gerador/modulos/<modulo>/ FONTE dos .md: modulo.md, e por assunto texto.md e desenhos.mjs
 ├── _gerador/arquivos.json     quais A, E e apoios pertencem a cada assunto
-└── _fontes/                   sumário, fichamentos dos livros e provas do PPGI
+├── _fontes/                   sumário, fichamentos dos livros e provas do PPGI
+├── docs/  AGENTS.md  rodar    documentação viva, instruções de agentes e auxiliar do conferir.sh
 ```
 
 Gerar: `cd _gerador && npm run gerar -- 01-` (só o módulo 01). Nunca edite o
 `01-fundamentos.md` (ou outro `.md` de módulo na raiz) à mão: ele é
-sobrescrito. **Nenhum arquivo do curso fica em subpasta** (`DECISIONS.md` #8): exemplos,
-exercícios, lista, desenhos e apoios moram na raiz. Escreva os links do texto já a partir da raiz.
+sobrescrito. **Todo arquivo do curso fica numa só pasta, `material/`** (`DECISIONS.md` #9): exemplos,
+exercícios, lista, desenhos e apoios. Escreva os links do texto a partir da raiz (`material/0002-ideia.svg`).
 Ao criar assunto ou exercício novo, acrescente os nomes em `_gerador/arquivos.json`.
 
 Ferramentas: `gcc` (C17) com as flags de estudo (AddressSanitizer e UBSan), Node para o gerador

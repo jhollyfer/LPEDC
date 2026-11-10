@@ -89,7 +89,7 @@ Com 5 degraus, a recursão pura faria 15 chamadas. Com o memo, as verdes
 calculam e anotam, as amarelas acham a resposta pronta e o cinza deixa de
 existir:
 
-<p align="center"><img src="0138-ideia.svg" alt="Diagrama da ideia: Memoização" width="858"></p>
+<p align="center"><img src="material/0138-ideia.svg" alt="Diagrama da ideia: Memoização" width="858"></p>
 
 O código mede as três versões para 35 degraus:
 
@@ -166,7 +166,7 @@ da recursão pura.
 No fluxograma, a diferença é o losango do meio: quem já está no memo volta
 sem chamar ninguém.
 
-<p align="center"><img src="0138-fluxograma.svg" alt="Fluxograma: Memoização" width="730"></p>
+<p align="center"><img src="material/0138-fluxograma.svg" alt="Fluxograma: Memoização" width="730"></p>
 
 ### Passo a passo
 
@@ -260,7 +260,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A275.c -o ~/LPEDC/A275 && ~/LPEDC/A275
+gcc ~/LPEDC/material/A275.c -o ~/LPEDC/material/A275 && ~/LPEDC/material/A275
 ```
 
 **Exemplo A276 · Duas variáveis bastam (até o long long acabar)**
@@ -302,7 +302,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A276.c -o ~/LPEDC/A276 && ~/LPEDC/A276
+gcc ~/LPEDC/material/A276.c -o ~/LPEDC/material/A276 && ~/LPEDC/material/A276
 ```
 
 #### Exercícios
@@ -322,7 +322,7 @@ Jeitos de subir 10 degraus: 274
 ```
 
 ```bash
-gcc ~/LPEDC/E823.c -o ~/LPEDC/E823 && ~/LPEDC/E823
+gcc ~/LPEDC/material/E823.c -o ~/LPEDC/material/E823 && ~/LPEDC/material/E823
 ```
 
 **Exercício E825** · ★★☆
@@ -354,7 +354,7 @@ Caminho: DDBBDBD
 ```
 
 ```bash
-gcc ~/LPEDC/E825.c -o ~/LPEDC/E825 && ~/LPEDC/E825
+gcc ~/LPEDC/material/E825.c -o ~/LPEDC/material/E825 && ~/LPEDC/material/E825
 ```
 
 **Exercício E826** · ★★☆
@@ -383,7 +383,7 @@ Barracas: 0 2 5 7
 ```
 
 ```bash
-gcc ~/LPEDC/E826.c -o ~/LPEDC/E826 && ~/LPEDC/E826
+gcc ~/LPEDC/material/E826.c -o ~/LPEDC/material/E826 && ~/LPEDC/material/E826
 ```
 
 **Exercício E828** · ★★★
@@ -421,7 +421,7 @@ subproblemas guardados no memo: 1044
 ```
 
 ```bash
-gcc ~/LPEDC/E828.c -o ~/LPEDC/E828 && ~/LPEDC/E828
+gcc ~/LPEDC/material/E828.c -o ~/LPEDC/material/E828 && ~/LPEDC/material/E828
 ```
 
 ---
@@ -454,7 +454,7 @@ em `v`. Depois anda-se para trás: `v`, `v - ultimo[v]`, até 0.
 No desenho, `dp[8]` olha três vizinhos, um por selo, e escolhe o menor, o
 `dp[4]`:
 
-<p align="center"><img src="0139-ideia.svg" alt="Diagrama da ideia: Troco com programação dinâmica" width="858"></p>
+<p align="center"><img src="material/0139-ideia.svg" alt="Diagrama da ideia: Troco com programação dinâmica" width="858"></p>
 
 O código enche a tabela de 1 até o porte. Valor impossível fica em
 "infinito" (o A278 mostra quando):
@@ -515,7 +515,7 @@ tempo e O(total) de memória.
 No fluxograma, o laço de fora anda pelos valores e o de dentro testa cada
 selo como "o último":
 
-<p align="center"><img src="0139-fluxograma.svg" alt="Fluxograma: Troco com programação dinâmica" width="535"></p>
+<p align="center"><img src="material/0139-fluxograma.svg" alt="Fluxograma: Troco com programação dinâmica" width="535"></p>
 
 ### Passo a passo
 
@@ -601,7 +601,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A277.c -o ~/LPEDC/A277 && ~/LPEDC/A277
+gcc ~/LPEDC/material/A277.c -o ~/LPEDC/material/A277 && ~/LPEDC/material/A277
 ```
 
 **Exemplo A278 · Os pedidos que a pastelaria não consegue fechar**
@@ -655,7 +655,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A278.c -o ~/LPEDC/A278 && ~/LPEDC/A278
+gcc ~/LPEDC/material/A278.c -o ~/LPEDC/material/A278 && ~/LPEDC/material/A278
 ```
 
 #### Exercícios
@@ -676,7 +676,7 @@ Menor número de pacotes para 25 parafusos: 3
 ```
 
 ```bash
-gcc ~/LPEDC/E829.c -o ~/LPEDC/E829 && ~/LPEDC/E829
+gcc ~/LPEDC/material/E829.c -o ~/LPEDC/material/E829 && ~/LPEDC/material/E829
 ```
 
 **Exercício E831** · ★★☆
@@ -703,7 +703,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E831.c -o ~/LPEDC/E831 && ~/LPEDC/E831
+gcc ~/LPEDC/material/E831.c -o ~/LPEDC/material/E831 && ~/LPEDC/material/E831
 ```
 
 **Exercício E832** · ★★☆
@@ -732,7 +732,7 @@ sequências:  26
 ```
 
 ```bash
-gcc ~/LPEDC/E832.c -o ~/LPEDC/E832 && ~/LPEDC/E832
+gcc ~/LPEDC/material/E832.c -o ~/LPEDC/material/E832 && ~/LPEDC/material/E832
 ```
 
 **Exercício E834** · ★★★
@@ -759,7 +759,7 @@ até 6 moedas: 7 combinações
 ```
 
 ```bash
-gcc ~/LPEDC/E834.c -o ~/LPEDC/E834 && ~/LPEDC/E834
+gcc ~/LPEDC/material/E834.c -o ~/LPEDC/material/E834 && ~/LPEDC/material/E834
 ```
 
 ---
@@ -797,7 +797,7 @@ No desenho, `t[3][7] = 54` (roxo) escolheu entre não levar o suco
 (`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde). As células
 verdes são a recuperação:
 
-<p align="center"><img src="0140-ideia.svg" alt="Diagrama da ideia: Mochila 0/1" width="858"></p>
+<p align="center"><img src="material/0140-ideia.svg" alt="Diagrama da ideia: Mochila 0/1" width="858"></p>
 
 Os vetores começam no índice 1, para casar com a linha 0 da tabela:
 
@@ -864,7 +864,7 @@ eleva `W` ao quadrado. A mochila 0/1 continua NP-difícil (assunto 0186).
 O fluxograma mostra a decisão de uma célula; o caminho marcado é o de
 `t[3][7]`:
 
-<p align="center"><img src="0140-fluxograma.svg" alt="Fluxograma: Mochila 0/1" width="451"></p>
+<p align="center"><img src="material/0140-fluxograma.svg" alt="Fluxograma: Mochila 0/1" width="451"></p>
 
 ### Passo a passo
 
@@ -966,7 +966,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A279.c -o ~/LPEDC/A279 && ~/LPEDC/A279
+gcc ~/LPEDC/material/A279.c -o ~/LPEDC/material/A279 && ~/LPEDC/material/A279
 ```
 
 **Exemplo A280 · A conta do mercado dividida ao meio**
@@ -1026,7 +1026,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A280.c -o ~/LPEDC/A280 && ~/LPEDC/A280
+gcc ~/LPEDC/material/A280.c -o ~/LPEDC/material/A280 && ~/LPEDC/material/A280
 ```
 
 #### Exercícios
@@ -1059,7 +1059,7 @@ Retorno máximo com R$ 10 mil: R$ 22 mil por ano
 ```
 
 ```bash
-gcc ~/LPEDC/E835.c -o ~/LPEDC/E835 && ~/LPEDC/E835
+gcc ~/LPEDC/material/E835.c -o ~/LPEDC/material/E835 && ~/LPEDC/material/E835
 ```
 
 **Exercício E837** · ★★☆
@@ -1094,7 +1094,7 @@ Horas usadas: 6.0
 ```
 
 ```bash
-gcc ~/LPEDC/E837.c -o ~/LPEDC/E837 && ~/LPEDC/E837
+gcc ~/LPEDC/material/E837.c -o ~/LPEDC/material/E837 && ~/LPEDC/material/E837
 ```
 
 **Exercício E838** · ★★☆
@@ -1116,7 +1116,7 @@ força bruta: 7 jeitos (256 subconjuntos testados)
 ```
 
 ```bash
-gcc ~/LPEDC/E838.c -o ~/LPEDC/E838 && ~/LPEDC/E838
+gcc ~/LPEDC/material/E838.c -o ~/LPEDC/material/E838 && ~/LPEDC/material/E838
 ```
 
 **Exercício E840** · ★★★
@@ -1153,7 +1153,7 @@ Força bruta: R$ 79
 ```
 
 ```bash
-gcc ~/LPEDC/E840.c -o ~/LPEDC/E840 && ~/LPEDC/E840
+gcc ~/LPEDC/material/E840.c -o ~/LPEDC/material/E840 && ~/LPEDC/material/E840
 ```
 
 ---
@@ -1190,7 +1190,7 @@ refazemos na volta).
 No desenho, o caminho sai do canto roxo; as células verdes são as quatro
 letras da resposta, e as amarelas, os passos sem letra:
 
-<p align="center"><img src="0141-ideia.svg" alt="Diagrama da ideia: Maior subsequência comum (LCS)" width="858"></p>
+<p align="center"><img src="material/0141-ideia.svg" alt="Diagrama da ideia: Maior subsequência comum (LCS)" width="858"></p>
 
 O código enche a tabela e faz a volta:
 
@@ -1272,7 +1272,7 @@ memória.
 No fluxograma, o caminho marcado é o de `c[6][4]` (G com G): as letras batem
 e o valor vem da diagonal, `3 + 1`:
 
-<p align="center"><img src="0141-fluxograma.svg" alt="Fluxograma: Maior subsequência comum (LCS)" width="706"></p>
+<p align="center"><img src="material/0141-fluxograma.svg" alt="Fluxograma: Maior subsequência comum (LCS)" width="706"></p>
 
 ### Passo a passo
 
@@ -1362,7 +1362,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A281.c -o ~/LPEDC/A281 && ~/LPEDC/A281
+gcc ~/LPEDC/material/A281.c -o ~/LPEDC/material/A281 && ~/LPEDC/material/A281
 ```
 
 **Exemplo A282 · Pedaço contíguo ou letras na ordem?**
@@ -1437,7 +1437,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A282.c -o ~/LPEDC/A282 && ~/LPEDC/A282
+gcc ~/LPEDC/material/A282.c -o ~/LPEDC/material/A282 && ~/LPEDC/material/A282
 ```
 
 #### Exercícios
@@ -1476,7 +1476,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E841.c -o ~/LPEDC/E841 && ~/LPEDC/E841
+gcc ~/LPEDC/material/E841.c -o ~/LPEDC/material/E841 && ~/LPEDC/material/E841
 ```
 
 **Exercício E843** · ★★☆
@@ -1510,7 +1510,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E843.c -o ~/LPEDC/E843 && ~/LPEDC/E843
+gcc ~/LPEDC/material/E843.c -o ~/LPEDC/material/E843 && ~/LPEDC/material/E843
 ```
 
 **Exercício E844** · ★★☆
@@ -1542,7 +1542,7 @@ CABANA está nela? sim
 ```
 
 ```bash
-gcc ~/LPEDC/E844.c -o ~/LPEDC/E844 && ~/LPEDC/E844
+gcc ~/LPEDC/material/E844.c -o ~/LPEDC/material/E844 && ~/LPEDC/material/E844
 ```
 
 **Exercício E846** · ★★★
@@ -1571,7 +1571,7 @@ Preços: 28 30 33 36 40 41
 ```
 
 ```bash
-gcc ~/LPEDC/E846.c -o ~/LPEDC/E846 && ~/LPEDC/E846
+gcc ~/LPEDC/material/E846.c -o ~/LPEDC/material/E846 && ~/LPEDC/material/E846
 ```
 
 ---
@@ -1606,7 +1606,7 @@ Na tabela, `d[i][j]` é a distância entre os prefixos `a[0..i-1]` e
 CARTA e ARTES distam 3: remover o C, inserir um E e trocar o último A por S
 (CARTA, ARTA, ARTEA, ARTES). As setas mostram de onde cada célula veio:
 
-<p align="center"><img src="0142-ideia.svg" alt="Diagrama da ideia: Distância de edição" width="858"></p>
+<p align="center"><img src="material/0142-ideia.svg" alt="Diagrama da ideia: Distância de edição" width="858"></p>
 
 A volta mostra as edições do fim para o começo (o E852 monta o alinhamento na
 ordem certa):
@@ -1702,7 +1702,7 @@ menos a diferença dos tamanhos.
 No fluxograma, o caminho marcado é o de `d[5][5]` (A contra S), em que a
 troca ganhou:
 
-<p align="center"><img src="0142-fluxograma.svg" alt="Fluxograma: Distância de edição" width="542"></p>
+<p align="center"><img src="material/0142-fluxograma.svg" alt="Fluxograma: Distância de edição" width="542"></p>
 
 ### Passo a passo
 
@@ -1803,7 +1803,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A283.c -o ~/LPEDC/A283 && ~/LPEDC/A283
+gcc ~/LPEDC/material/A283.c -o ~/LPEDC/material/A283 && ~/LPEDC/material/A283
 ```
 
 **Exemplo A284 · Letras trocadas de lugar contam como um erro só**
@@ -1872,7 +1872,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A284.c -o ~/LPEDC/A284 && ~/LPEDC/A284
+gcc ~/LPEDC/material/A284.c -o ~/LPEDC/material/A284 && ~/LPEDC/material/A284
 ```
 
 #### Exercícios
@@ -1902,7 +1902,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E847.c -o ~/LPEDC/E847 && ~/LPEDC/E847
+gcc ~/LPEDC/material/E847.c -o ~/LPEDC/material/E847 && ~/LPEDC/material/E847
 ```
 
 **Exercício E849** · ★★☆
@@ -1927,7 +1927,7 @@ RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
 ```
 
 ```bash
-gcc ~/LPEDC/E849.c -o ~/LPEDC/E849 && ~/LPEDC/E849
+gcc ~/LPEDC/material/E849.c -o ~/LPEDC/material/E849 && ~/LPEDC/material/E849
 ```
 
 **Exercício E850** · ★★☆
@@ -1958,7 +1958,7 @@ tabelas montadas: 28 de 32
 ```
 
 ```bash
-gcc ~/LPEDC/E850.c -o ~/LPEDC/E850 && ~/LPEDC/E850
+gcc ~/LPEDC/material/E850.c -o ~/LPEDC/material/E850 && ~/LPEDC/material/E850
 ```
 
 **Exercício E852** · ★★★
@@ -1992,7 +1992,7 @@ ESTRELA -> ESTERIL: distância 3
 ```
 
 ```bash
-gcc ~/LPEDC/E852.c -o ~/LPEDC/E852 && ~/LPEDC/E852
+gcc ~/LPEDC/material/E852.c -o ~/LPEDC/material/E852 && ~/LPEDC/material/E852
 ```
 
 ---
@@ -2020,7 +2020,7 @@ linha de `a` sai com `-` ou a de `b` com `+`.
 No desenho, a lista antiga fica à esquerda, a nova à direita, e os traços
 ligam as cinco linhas da LCS:
 
-<p align="center"><img src="0143-ideia.svg" alt="Diagrama da ideia: Juntando tudo: um mini-diff" width="858"></p>
+<p align="center"><img src="material/0143-ideia.svg" alt="Diagrama da ideia: Juntando tudo: um mini-diff" width="858"></p>
 
 Sem argumentos, o programa compara duas listas gravadas em `/tmp`; com dois
 nomes de arquivo (assunto 0069), compara os seus:
@@ -2117,7 +2117,7 @@ distância de edição (0142) para perceber que a linha só foi **alterada**.
 
 No fluxograma, o caminho marcado é o das duas primeiras linhas, iguais:
 
-<p align="center"><img src="0143-fluxograma.svg" alt="Fluxograma: Juntando tudo: um mini-diff" width="796"></p>
+<p align="center"><img src="material/0143-fluxograma.svg" alt="Fluxograma: Juntando tudo: um mini-diff" width="796"></p>
 
 > [!WARNING]
 > `fgets` guarda o `'\n'`, e a última linha do arquivo pode vir **sem** ele.
@@ -2215,7 +2215,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A285.c ~/LPEDC/0143-linhas.c -o ~/LPEDC/A285 && ~/LPEDC/A285
+gcc ~/LPEDC/material/A285.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/A285 && ~/LPEDC/material/A285
 ```
 
 **Exemplo A286 · O diff que percebe uma linha só alterada**
@@ -2326,7 +2326,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A286.c ~/LPEDC/0143-linhas.c -o ~/LPEDC/A286 && ~/LPEDC/A286
+gcc ~/LPEDC/material/A286.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/A286 && ~/LPEDC/material/A286
 ```
 
 #### Exercícios
@@ -2357,7 +2357,7 @@ semelhança: 70.6%
 ```
 
 ```bash
-gcc ~/LPEDC/E853.c ~/LPEDC/0143-linhas.c -o ~/LPEDC/E853 && ~/LPEDC/E853
+gcc ~/LPEDC/material/E853.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E853 && ~/LPEDC/material/E853
 ```
 
 **Exercício E855** · ★★☆
@@ -2403,7 +2403,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E855.c ~/LPEDC/0143-linhas.c -o ~/LPEDC/E855 && ~/LPEDC/E855
+gcc ~/LPEDC/material/E855.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E855 && ~/LPEDC/material/E855
 ```
 
 **Exercício E856** · ★★☆
@@ -2441,7 +2441,7 @@ outra lista: o patch não se aplica (linha 3)
 ```
 
 ```bash
-gcc ~/LPEDC/E856.c ~/LPEDC/0143-linhas.c -o ~/LPEDC/E856 && ~/LPEDC/E856
+gcc ~/LPEDC/material/E856.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E856 && ~/LPEDC/material/E856
 ```
 
 **Exercício E858** · ★★★
@@ -2473,7 +2473,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E858.c ~/LPEDC/0143-linhas.c -o ~/LPEDC/E858 && ~/LPEDC/E858
+gcc ~/LPEDC/material/E858.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E858 && ~/LPEDC/material/E858
 ```
 
 ---
@@ -2628,7 +2628,7 @@ meio recursivamente), mas dá mais trabalho.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2101.c a P2130.c, na raiz; resoluções em `_respostas/21-programacao-dinamica/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2101.c a P2130.c, em `material/`; resoluções em `_respostas/21-programacao-dinamica/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2657,7 +2657,7 @@ Memoizada: T(25) = 755476, 70 chamadas
    a memoizada, só 70 (cada n de 3 a 25 calcula uma vez e chama 3).
 
 ```bash
-gcc ~/LPEDC/P2101.c -o ~/LPEDC/P2101 && ~/LPEDC/P2101
+gcc ~/LPEDC/material/P2101.c -o ~/LPEDC/material/P2101 && ~/LPEDC/material/P2101
 ```
 
 ---
@@ -2698,7 +2698,7 @@ Jeitos de chegar ao topo: 15
 3. Resposta esperada: 15 jeitos. Sem degraus quebrados seriam 233.
 
 ```bash
-gcc ~/LPEDC/P2102.c -o ~/LPEDC/P2102 && ~/LPEDC/P2102
+gcc ~/LPEDC/material/P2102.c -o ~/LPEDC/material/P2102 && ~/LPEDC/material/P2102
 ```
 
 ---
@@ -2743,7 +2743,7 @@ Caminhos: 10
    coluna 0 abaixo dela.
 
 ```bash
-gcc ~/LPEDC/P2103.c -o ~/LPEDC/P2103 && ~/LPEDC/P2103
+gcc ~/LPEDC/material/P2103.c -o ~/LPEDC/material/P2103 && ~/LPEDC/material/P2103
 ```
 
 ---
@@ -2773,7 +2773,7 @@ Compra: 5 6
    como você testa).
 
 ```bash
-gcc ~/LPEDC/P2104.c -o ~/LPEDC/P2104 && ~/LPEDC/P2104
+gcc ~/LPEDC/material/P2104.c -o ~/LPEDC/material/P2104 && ~/LPEDC/material/P2104
 ```
 
 ---
@@ -2822,7 +2822,7 @@ Fatias: 1 3 3 3
    3 cm é a que rende mais por cm (R$ 3,67), mas 10 não é múltiplo de 3.
 
 ```bash
-gcc ~/LPEDC/P2105.c -o ~/LPEDC/P2105 && ~/LPEDC/P2105
+gcc ~/LPEDC/material/P2105.c -o ~/LPEDC/material/P2105 && ~/LPEDC/material/P2105
 ```
 
 ---
@@ -2861,7 +2861,7 @@ Maior fila crescente: 5 crianças
    121 127 132 145 150.
 
 ```bash
-gcc ~/LPEDC/P2106.c -o ~/LPEDC/P2106 && ~/LPEDC/P2106
+gcc ~/LPEDC/material/P2106.c -o ~/LPEDC/material/P2106 && ~/LPEDC/material/P2106
 ```
 
 ---
@@ -2900,7 +2900,7 @@ Dias: 2 4 7 9
 3. Resposta esperada: R$ 1160, nos dias 2, 4, 7 e 9.
 
 ```bash
-gcc ~/LPEDC/P2107.c -o ~/LPEDC/P2107 && ~/LPEDC/P2107
+gcc ~/LPEDC/material/P2107.c -o ~/LPEDC/material/P2107 && ~/LPEDC/material/P2107
 ```
 
 ---
@@ -2936,7 +2936,7 @@ LCS de ARARA e ARAPUA: 4 letras
    exemplo, é comum às duas).
 
 ```bash
-gcc ~/LPEDC/P2108.c -o ~/LPEDC/P2108 && ~/LPEDC/P2108
+gcc ~/LPEDC/material/P2108.c -o ~/LPEDC/material/P2108 && ~/LPEDC/material/P2108
 ```
 
 ---
@@ -2974,7 +2974,7 @@ Maior trecho comum: CAGGT (5 letras)
 3. Resposta esperada: CAGGT, com 5 letras (a LCS das duas é maior).
 
 ```bash
-gcc ~/LPEDC/P2109.c -o ~/LPEDC/P2109 && ~/LPEDC/P2109
+gcc ~/LPEDC/material/P2109.c -o ~/LPEDC/material/P2109 && ~/LPEDC/material/P2109
 ```
 
 ---
@@ -3005,7 +3005,7 @@ Saída esperada:
    0 sozinho não são letras).
 
 ```bash
-gcc ~/LPEDC/P2110.c -o ~/LPEDC/P2110 && ~/LPEDC/P2110
+gcc ~/LPEDC/material/P2110.c -o ~/LPEDC/material/P2110 && ~/LPEDC/material/P2110
 ```
 
 ### ★★☆ Para pensar
@@ -3036,7 +3036,7 @@ Barco 2: 7 6 11 8 4 (36 kg)
    reconstrução de trás para a frente acha esta) e o resto no barco 2.
 
 ```bash
-gcc ~/LPEDC/P2111.c -o ~/LPEDC/P2111 && ~/LPEDC/P2111
+gcc ~/LPEDC/material/P2111.c -o ~/LPEDC/material/P2111 && ~/LPEDC/material/P2111
 ```
 
 ---
@@ -3076,7 +3076,7 @@ Melhor valor em 10 kg: R$ 88
    manteiga + doce + requeijão, exatamente 10 kg.
 
 ```bash
-gcc ~/LPEDC/P2112.c -o ~/LPEDC/P2112 && ~/LPEDC/P2112
+gcc ~/LPEDC/material/P2112.c -o ~/LPEDC/material/P2112 && ~/LPEDC/material/P2112
 ```
 
 ---
@@ -3114,7 +3114,7 @@ Comum às três: MAZOA (5 letras)
 3. Resposta esperada: MAZOA, 5 letras. O custo é O(m · n · p).
 
 ```bash
-gcc ~/LPEDC/P2113.c -o ~/LPEDC/P2113 && ~/LPEDC/P2113
+gcc ~/LPEDC/material/P2113.c -o ~/LPEDC/material/P2113 && ~/LPEDC/material/P2113
 ```
 
 ---
@@ -3145,7 +3145,7 @@ FEIRA -> FERIADO: comum 4, troca cara 4
    LCS. CASA para COISA vai de 2 para 3; veja os outros na saída.
 
 ```bash
-gcc ~/LPEDC/P2114.c -o ~/LPEDC/P2114 && ~/LPEDC/P2114
+gcc ~/LPEDC/material/P2114.c -o ~/LPEDC/material/P2114 && ~/LPEDC/material/P2114
 ```
 
 ---
@@ -3183,7 +3183,7 @@ Altitudes: 640 655 690 735 760 805 850
    lis: fica o primeiro j que achou (use >, não >=).
 
 ```bash
-gcc ~/LPEDC/P2115.c -o ~/LPEDC/P2115 && ~/LPEDC/P2115
+gcc ~/LPEDC/material/P2115.c -o ~/LPEDC/material/P2115 && ~/LPEDC/material/P2115
 ```
 
 ---
@@ -3224,7 +3224,7 @@ Custo por corte R$ 3: R$ 22, pedaços: 8
    por R$ 22.
 
 ```bash
-gcc ~/LPEDC/P2116.c -o ~/LPEDC/P2116 && ~/LPEDC/P2116
+gcc ~/LPEDC/material/P2116.c -o ~/LPEDC/material/P2116 && ~/LPEDC/material/P2116
 ```
 
 ---
@@ -3256,7 +3256,7 @@ Cédulas: 2 2 10 50
 3. Resposta esperada: 4 cédulas, 50 + 10 + 2 + 2.
 
 ```bash
-gcc ~/LPEDC/P2117.c -o ~/LPEDC/P2117 && ~/LPEDC/P2117
+gcc ~/LPEDC/material/P2117.c -o ~/LPEDC/material/P2117 && ~/LPEDC/material/P2117
 ```
 
 ---
@@ -3298,7 +3298,7 @@ Caminho: BBDDDBBD
 3. Resposta esperada: 20% da bateria, pelo caminho BBDDDBBD.
 
 ```bash
-gcc ~/LPEDC/P2118.c -o ~/LPEDC/P2118 && ~/LPEDC/P2118
+gcc ~/LPEDC/material/P2118.c -o ~/LPEDC/material/P2118 && ~/LPEDC/material/P2118
 ```
 
 ---
@@ -3342,7 +3342,7 @@ Caminho: 7 3 8 7 5 9
 3. Resposta esperada: R$ 39, pelo caminho 7 3 8 7 5 9.
 
 ```bash
-gcc ~/LPEDC/P2119.c -o ~/LPEDC/P2119 && ~/LPEDC/P2119
+gcc ~/LPEDC/material/P2119.c -o ~/LPEDC/material/P2119 && ~/LPEDC/material/P2119
 ```
 
 ---
@@ -3395,7 +3395,7 @@ Cálculos: 16
    chamadas.
 
 ```bash
-gcc ~/LPEDC/P2120.c -o ~/LPEDC/P2120 && ~/LPEDC/P2120
+gcc ~/LPEDC/material/P2120.c -o ~/LPEDC/material/P2120 && ~/LPEDC/material/P2120
 ```
 
 ### ★★★ Desafio
@@ -3436,7 +3436,7 @@ Da esquerda para a direita: 25500 multiplicações
    contra 25500 da esquerda para a direita.
 
 ```bash
-gcc ~/LPEDC/P2121.c -o ~/LPEDC/P2121 && ~/LPEDC/P2121
+gcc ~/LPEDC/material/P2121.c -o ~/LPEDC/material/P2121 && ~/LPEDC/material/P2121
 ```
 
 ---
@@ -3472,7 +3472,7 @@ LCS de ABCBDAB e BDCABA: tamanho 4
 3. Resposta esperada: 3 LCS de 4 letras: BCAB, BCBA e BDAB.
 
 ```bash
-gcc ~/LPEDC/P2122.c -o ~/LPEDC/P2122 && ~/LPEDC/P2122
+gcc ~/LPEDC/material/P2122.c -o ~/LPEDC/material/P2122 && ~/LPEDC/material/P2122
 ```
 
 ---
@@ -3521,7 +3521,7 @@ Raiz cuia: 235 comparações
    direita) custa 235: equilibrar não é o mesmo que otimizar.
 
 ```bash
-gcc ~/LPEDC/P2123.c -o ~/LPEDC/P2123 && ~/LPEDC/P2123
+gcc ~/LPEDC/material/P2123.c -o ~/LPEDC/material/P2123 && ~/LPEDC/material/P2123
 ```
 
 ---
@@ -3564,7 +3564,7 @@ Posições da tabela: 60 (a mochila comum teria 100001)
    lotes 1, 2 e 3 valeriam 30, mas pesam 101000 kg.
 
 ```bash
-gcc ~/LPEDC/P2124.c -o ~/LPEDC/P2124 && ~/LPEDC/P2124
+gcc ~/LPEDC/material/P2124.c -o ~/LPEDC/material/P2124 && ~/LPEDC/material/P2124
 ```
 
 ---
@@ -3600,7 +3600,7 @@ Time 2: Enzo Gabi Hugo Iara João (33 pontos)
    nomes na saída.
 
 ```bash
-gcc ~/LPEDC/P2125.c -o ~/LPEDC/P2125 && ~/LPEDC/P2125
+gcc ~/LPEDC/material/P2125.c -o ~/LPEDC/material/P2125 && ~/LPEDC/material/P2125
 ```
 
 ---
@@ -3643,7 +3643,7 @@ Cargas: 40 42 43 47 48 52 53 58 60
    com o menor final de cada tamanho leva a esta.
 
 ```bash
-gcc ~/LPEDC/P2126.c -o ~/LPEDC/P2126 && ~/LPEDC/P2126
+gcc ~/LPEDC/material/P2126.c -o ~/LPEDC/material/P2126 && ~/LPEDC/material/P2126
 ```
 
 ---
@@ -3677,7 +3677,7 @@ TUCANO -> TUCUMA: 3
    isso os índices andam deslocados de um.
 
 ```bash
-gcc ~/LPEDC/P2127.c -o ~/LPEDC/P2127 && ~/LPEDC/P2127
+gcc ~/LPEDC/material/P2127.c -o ~/LPEDC/material/P2127 && ~/LPEDC/material/P2127
 ```
 
 ---
@@ -3719,7 +3719,7 @@ Pedidos: B F
    pega A, D e G: mais festas (3), mas só R$ 1900.
 
 ```bash
-gcc ~/LPEDC/P2128.c -o ~/LPEDC/P2128 && ~/LPEDC/P2128
+gcc ~/LPEDC/material/P2128.c -o ~/LPEDC/material/P2128 && ~/LPEDC/material/P2128
 ```
 
 ---
@@ -3754,7 +3754,7 @@ Quaisquer dois (Huffman): custo 68
    e a ordem ótima está na saída.
 
 ```bash
-gcc ~/LPEDC/P2129.c -o ~/LPEDC/P2129 && ~/LPEDC/P2129
+gcc ~/LPEDC/material/P2129.c -o ~/LPEDC/material/P2129 && ~/LPEDC/material/P2129
 ```
 
 ---
@@ -3797,7 +3797,7 @@ Força bruta: 94 horas
    métodos. A PD preenche 32 · 5 casas; a força bruta, 120 rotas.
 
 ```bash
-gcc ~/LPEDC/P2130.c -o ~/LPEDC/P2130 && ~/LPEDC/P2130
+gcc ~/LPEDC/material/P2130.c -o ~/LPEDC/material/P2130 && ~/LPEDC/material/P2130
 ```
 
 ## Questões no estilo da prova

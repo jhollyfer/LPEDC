@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../0088-fila.c"
-#include "../../0088-pilha.c"
+#include "../../material/0088-fila.c"
+#include "../../material/0088-pilha.c"
 
 enum { SOMA = -1, SUB = -2, MULT = -3, DIV = -4 };
 

@@ -32,7 +32,7 @@ Cada assunto tem um TAD na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
 `trie.h`, `uniao.h`, `corretor.h`). Compile junto os `.c` de apoio:
 
 ```bash
-gcc ~/LPEDC/A293.c ~/LPEDC/0147-trie.c -o ~/LPEDC/A293 && ~/LPEDC/A293
+gcc ~/LPEDC/material/A293.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/A293 && ~/LPEDC/material/A293
 ```
 
 Duas convenções valem para o módulo. **Altura conta arestas**, como no

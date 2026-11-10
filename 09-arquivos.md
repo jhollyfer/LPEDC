@@ -37,7 +37,7 @@ avisa, para você abrir com `cat`. Nenhum depende de arquivo pré-existente.
 Para passar argumentos, escreva-os depois do executável:
 
 ```bash
-gcc ~/LPEDC/A137.c -o ~/LPEDC/A137 && ~/LPEDC/A137 -r 7 -a 4
+gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 && ~/LPEDC/material/A137 -r 7 -a 4
 ```
 
 Duas ferramentas mostram o que os programas gravam: `od -A d -t x1 arquivo`
@@ -105,7 +105,7 @@ O exemplo grava as três despesas do mês. Os `fprintf` param num **buffer**
 (área na RAM); o `fclose` o descarrega em `despesas.txt`. Depois o programa
 reabre o arquivo em leitura e o `fgets` traz as linhas, uma por vez:
 
-<p align="center"><img src="0067-ideia.svg" alt="Diagrama da ideia: Arquivos texto" width="858"></p>
+<p align="center"><img src="material/0067-ideia.svg" alt="Diagrama da ideia: Arquivos texto" width="858"></p>
 
 O código grava em `/tmp/despesas.txt` e deixa o arquivo lá, para `cat`:
 
@@ -151,7 +151,7 @@ int main(void) {
 No fluxograma, a leitura é um laço que testa o retorno do `fgets`: o fim do
 arquivo é anunciado pela leitura que falhou:
 
-<p align="center"><img src="0067-fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
+<p align="center"><img src="material/0067-fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
 
 > [!WARNING]
 > Não use `while (!feof(arq))`, comum em materiais e livros. O `feof` só fica
@@ -232,7 +232,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A133.c -o ~/LPEDC/A133 && ~/LPEDC/A133
+gcc ~/LPEDC/material/A133.c -o ~/LPEDC/material/A133 && ~/LPEDC/material/A133
 ```
 
 **Exemplo A134 · Acrescentar e somar**
@@ -289,7 +289,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A134.c -o ~/LPEDC/A134 && ~/LPEDC/A134
+gcc ~/LPEDC/material/A134.c -o ~/LPEDC/material/A134 && ~/LPEDC/material/A134
 ```
 
 #### Exercícios
@@ -316,7 +316,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E397.c -o ~/LPEDC/E397 && ~/LPEDC/E397
+gcc ~/LPEDC/material/E397.c -o ~/LPEDC/material/E397 && ~/LPEDC/material/E397
 ```
 
 **Exercício E399** · ★★☆
@@ -344,7 +344,7 @@ Caracteres: 53
 ```
 
 ```bash
-gcc ~/LPEDC/E399.c -o ~/LPEDC/E399 && ~/LPEDC/E399
+gcc ~/LPEDC/material/E399.c -o ~/LPEDC/material/E399 && ~/LPEDC/material/E399
 ```
 
 **Exercício E400** · ★★☆
@@ -366,7 +366,7 @@ Média da turma: 6.92
 ```
 
 ```bash
-gcc ~/LPEDC/E400.c -o ~/LPEDC/E400 && ~/LPEDC/E400
+gcc ~/LPEDC/material/E400.c -o ~/LPEDC/material/E400 && ~/LPEDC/material/E400
 ```
 
 **Exercício E402** · ★★★
@@ -404,7 +404,7 @@ Comprar:
 ```
 
 ```bash
-gcc ~/LPEDC/E402.c -o ~/LPEDC/E402 && ~/LPEDC/E402
+gcc ~/LPEDC/material/E402.c -o ~/LPEDC/material/E402 && ~/LPEDC/material/E402
 ```
 
 ---
@@ -451,7 +451,7 @@ No exemplo, o estoque tem três produtos de 32 bytes cada. Um `fwrite` grava
 os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes desde o
 começo e faz um `fread` de um registro:
 
-<p align="center"><img src="0068-ideia.svg" alt="Diagrama da ideia: Arquivos binários" width="858"></p>
+<p align="center"><img src="material/0068-ideia.svg" alt="Diagrama da ideia: Arquivos binários" width="858"></p>
 
 O arquivo fica em `/tmp/estoque.bin` e é apagado no fim:
 
@@ -509,7 +509,7 @@ int main(void) {
 No fluxograma não há laço até o café: são dois `fseek` e um `fread`, com 3
 registros ou 3 milhões:
 
-<p align="center"><img src="0068-fluxograma.svg" alt="Fluxograma: Arquivos binários" width="441"></p>
+<p align="center"><img src="material/0068-fluxograma.svg" alt="Fluxograma: Arquivos binários" width="441"></p>
 
 Com os registros em ordem de código, dá para fazer **busca binária direto no
 arquivo**: `fseek` no registro do meio, `fread`, compara e descarta metade.
@@ -599,7 +599,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A135.c -o ~/LPEDC/A135 && ~/LPEDC/A135
+gcc ~/LPEDC/material/A135.c -o ~/LPEDC/material/A135 && ~/LPEDC/material/A135
 ```
 
 **Exemplo A136 · O mesmo número em texto e em binário**
@@ -666,7 +666,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A136.c -o ~/LPEDC/A136 && ~/LPEDC/A136
+gcc ~/LPEDC/material/A136.c -o ~/LPEDC/material/A136 && ~/LPEDC/material/A136
 ```
 
 #### Exercícios
@@ -686,7 +686,7 @@ Média: 31.6 graus
 ```
 
 ```bash
-gcc ~/LPEDC/E403.c -o ~/LPEDC/E403 && ~/LPEDC/E403
+gcc ~/LPEDC/material/E403.c -o ~/LPEDC/material/E403 && ~/LPEDC/material/E403
 ```
 
 **Exercício E405** · ★★☆
@@ -713,7 +713,7 @@ Depois:
 ```
 
 ```bash
-gcc ~/LPEDC/E405.c -o ~/LPEDC/E405 && ~/LPEDC/E405
+gcc ~/LPEDC/material/E405.c -o ~/LPEDC/material/E405 && ~/LPEDC/material/E405
 ```
 
 **Exercício E406** · ★★☆
@@ -742,7 +742,7 @@ Registros em /tmp/nao-existe.bin: -1
 ```
 
 ```bash
-gcc ~/LPEDC/E406.c -o ~/LPEDC/E406 && ~/LPEDC/E406
+gcc ~/LPEDC/material/E406.c -o ~/LPEDC/material/E406 && ~/LPEDC/material/E406
 ```
 
 **Exercício E408** · ★★★
@@ -766,7 +766,7 @@ Saldo: R$ 1876.20
 ```
 
 ```bash
-gcc ~/LPEDC/E408.c -o ~/LPEDC/E408 && ~/LPEDC/E408
+gcc ~/LPEDC/material/E408.c -o ~/LPEDC/material/E408 && ~/LPEDC/material/E408
 ```
 
 ---
@@ -815,7 +815,7 @@ O comando `./racha 187.40 4` chega com `argc = 3` e um `argv` de três
 strings mais o `NULL`. O programa confere a quantidade, converte `argv[1]` e
 `argv[2]` e divide:
 
-<p align="center"><img src="0069-ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
+<p align="center"><img src="material/0069-ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
 
 Salve como `racha.c`, compile com as flags de estudo e passe os argumentos
 depois do executável: `./programa 187.40 4`.
@@ -859,7 +859,7 @@ int main(int argc, char *argv[]) {
 O fluxograma faz duas perguntas antes da conta: veio a quantidade certa de
 argumentos, e são números de verdade? O programa só trabalha no caminho verde:
 
-<p align="center"><img src="0069-fluxograma.svg" alt="Fluxograma: Argumentos da linha de comando" width="634"></p>
+<p align="center"><img src="material/0069-fluxograma.svg" alt="Fluxograma: Argumentos da linha de comando" width="634"></p>
 
 > [!WARNING]
 > Nunca use `argv[1]` sem conferir o `argc`. Sem argumentos, `argv[1]` é
@@ -965,7 +965,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-gcc ~/LPEDC/A137.c -o ~/LPEDC/A137 && ~/LPEDC/A137
+gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 && ~/LPEDC/material/A137
 ```
 
 **Exemplo A138 · O que chega no argv**
@@ -999,7 +999,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-gcc ~/LPEDC/A138.c -o ~/LPEDC/A138 && ~/LPEDC/A138
+gcc ~/LPEDC/material/A138.c -o ~/LPEDC/material/A138 && ~/LPEDC/material/A138
 ```
 
 #### Exercícios
@@ -1025,7 +1025,7 @@ bom dia Brasil
 ```
 
 ```bash
-gcc ~/LPEDC/E409.c -o ~/LPEDC/E409 && ~/LPEDC/E409
+gcc ~/LPEDC/material/E409.c -o ~/LPEDC/material/E409 && ~/LPEDC/material/E409
 ```
 
 **Exercício E411** · ★★☆
@@ -1054,7 +1054,7 @@ Menor: 6.00
 ```
 
 ```bash
-gcc ~/LPEDC/E411.c -o ~/LPEDC/E411 && ~/LPEDC/E411
+gcc ~/LPEDC/material/E411.c -o ~/LPEDC/material/E411 && ~/LPEDC/material/E411
 ```
 
 **Exercício E412** · ★★☆
@@ -1080,7 +1080,7 @@ Olá, Ana!
 ```
 
 ```bash
-gcc ~/LPEDC/E412.c -o ~/LPEDC/E412 && ~/LPEDC/E412
+gcc ~/LPEDC/material/E412.c -o ~/LPEDC/material/E412 && ~/LPEDC/material/E412
 ```
 
 **Exercício E413** · ★★★
@@ -1119,7 +1119,7 @@ Saída esperada (em stderr):
 ```
 
 ```bash
-gcc ~/LPEDC/E413.c -o ~/LPEDC/E413 && ~/LPEDC/E413
+gcc ~/LPEDC/material/E413.c -o ~/LPEDC/material/E413 && ~/LPEDC/material/E413
 ```
 
 ---
@@ -1160,7 +1160,7 @@ Cada linha do terminal é uma execução separada. O `novo` acrescenta um
 registro de 32 bytes em `gastos.dat`; o `lista` o lê de volta com `fread`; o
 `exporta` transforma o binário em texto:
 
-<p align="center"><img src="0070-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a caderneta de gastos" width="870"></p>
+<p align="center"><img src="material/0070-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a caderneta de gastos" width="870"></p>
 
 Cada função repete os exemplos dos três assuntos anteriores, e o `main` só
 despacha. Salve como `gastos.c`.
@@ -1298,7 +1298,7 @@ O fluxograma segue o comando `lista`. O `main` testa o comando até achar um
 conhecido; comando desconhecido, ou com argumentos faltando, cai na mensagem
 de uso:
 
-<p align="center"><img src="0070-fluxograma.svg" alt="Fluxograma: Juntando tudo: a caderneta de gastos" width="749"></p>
+<p align="center"><img src="material/0070-fluxograma.svg" alt="Fluxograma: Juntando tudo: a caderneta de gastos" width="749"></p>
 
 > [!WARNING]
 > Trocar `"ab"` por `"wb"` no `novo` é o erro mais caro do módulo: cada gasto
@@ -1442,7 +1442,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-gcc ~/LPEDC/A139.c -o ~/LPEDC/A139 && ~/LPEDC/A139
+gcc ~/LPEDC/material/A139.c -o ~/LPEDC/material/A139 && ~/LPEDC/material/A139
 ```
 
 **Exemplo A140 · Do texto para o binário**
@@ -1553,7 +1553,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-gcc ~/LPEDC/A140.c -o ~/LPEDC/A140 && ~/LPEDC/A140
+gcc ~/LPEDC/material/A140.c -o ~/LPEDC/material/A140 && ~/LPEDC/material/A140
 ```
 
 #### Exercícios
@@ -1595,7 +1595,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E415.c -o ~/LPEDC/E415 && ~/LPEDC/E415
+gcc ~/LPEDC/material/E415.c -o ~/LPEDC/material/E415 && ~/LPEDC/material/E415
 ```
 
 **Exercício E417** · ★★☆
@@ -1618,7 +1618,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E417.c -o ~/LPEDC/E417 && ~/LPEDC/E417
+gcc ~/LPEDC/material/E417.c -o ~/LPEDC/material/E417 && ~/LPEDC/material/E417
 ```
 
 **Exercício E418** · ★★☆
@@ -1659,7 +1659,7 @@ Total geral: R$ 662.50 (gravado em /tmp/vendas.csv)
 ```
 
 ```bash
-gcc ~/LPEDC/E418.c -o ~/LPEDC/E418 && ~/LPEDC/E418
+gcc ~/LPEDC/material/E418.c -o ~/LPEDC/material/E418 && ~/LPEDC/material/E418
 ```
 
 **Exercício E420** · ★★★
@@ -1720,7 +1720,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E420.c -o ~/LPEDC/E420 && ~/LPEDC/E420
+gcc ~/LPEDC/material/E420.c -o ~/LPEDC/material/E420 && ~/LPEDC/material/E420
 ```
 
 ---
@@ -1892,7 +1892,7 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0901.c a P0930.c, na raiz; resoluções em `_respostas/09-arquivos/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0901.c a P0930.c, em `material/`; resoluções em `_respostas/09-arquivos/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -1922,7 +1922,7 @@ Média: 33.0 graus
 3. Resposta esperada: 7 dias, maior 36 no dia 4, média 231 / 7 = 33.0.
 
 ```bash
-gcc ~/LPEDC/P0901.c -o ~/LPEDC/P0901 && ~/LPEDC/P0901
+gcc ~/LPEDC/material/P0901.c -o ~/LPEDC/material/P0901 && ~/LPEDC/material/P0901
 ```
 
 ---
@@ -1953,7 +1953,7 @@ Total: 4 linhas
    com 1 a mais.
 
 ```bash
-gcc ~/LPEDC/P0902.c -o ~/LPEDC/P0902 && ~/LPEDC/P0902
+gcc ~/LPEDC/material/P0902.c -o ~/LPEDC/material/P0902 && ~/LPEDC/material/P0902
 ```
 
 ---
@@ -1986,7 +1986,7 @@ Total do dia: R$ 90
    fclose(arq) depois dos dois fprintf. A saída fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/P0903.c -o ~/LPEDC/P0903 && ~/LPEDC/P0903
+gcc ~/LPEDC/material/P0903.c -o ~/LPEDC/material/P0903 && ~/LPEDC/material/P0903
 ```
 
 ---
@@ -2024,7 +2024,7 @@ Registros: 5
 3. Resposta esperada: 80 bytes, 5 registros, último código 105 a R$ 4.99.
 
 ```bash
-gcc ~/LPEDC/P0904.c -o ~/LPEDC/P0904 && ~/LPEDC/P0904
+gcc ~/LPEDC/material/P0904.c -o ~/LPEDC/material/P0904 && ~/LPEDC/material/P0904
 ```
 
 ---
@@ -2061,7 +2061,7 @@ Sem argumentos, a saída é "uso: P0905 cidade1 cidade2 ...".
 3. Resposta esperada: 4 cidades, maior nome parintins com 9 letras.
 
 ```bash
-gcc ~/LPEDC/P0905.c -o ~/LPEDC/P0905 && ~/LPEDC/P0905
+gcc ~/LPEDC/material/P0905.c -o ~/LPEDC/material/P0905 && ~/LPEDC/material/P0905
 ```
 
 ---
@@ -2101,7 +2101,7 @@ Total: R$ 195.50
    '\n' de cada linha).
 
 ```bash
-gcc ~/LPEDC/P0906.c -o ~/LPEDC/P0906 && ~/LPEDC/P0906
+gcc ~/LPEDC/material/P0906.c -o ~/LPEDC/material/P0906 && ~/LPEDC/material/P0906
 ```
 
 ---
@@ -2136,7 +2136,7 @@ A FEIRA ABRE AS 6H.
 3. Resposta esperada: as duas linhas em maiúsculas, como acima.
 
 ```bash
-gcc ~/LPEDC/P0907.c -o ~/LPEDC/P0907 && ~/LPEDC/P0907
+gcc ~/LPEDC/material/P0907.c -o ~/LPEDC/material/P0907 && ~/LPEDC/material/P0907
 ```
 
 ---
@@ -2165,7 +2165,7 @@ Lidos: 5
 3. Resposta esperada: 1 9 25 49 81 e Lidos: 5.
 
 ```bash
-gcc ~/LPEDC/P0908.c -o ~/LPEDC/P0908 && ~/LPEDC/P0908
+gcc ~/LPEDC/material/P0908.c -o ~/LPEDC/material/P0908 && ~/LPEDC/material/P0908
 ```
 
 ---
@@ -2193,7 +2193,7 @@ Registro 3: matrícula 2204, nota 4.0
    saída fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/P0909.c -o ~/LPEDC/P0909 && ~/LPEDC/P0909
+gcc ~/LPEDC/material/P0909.c -o ~/LPEDC/material/P0909 && ~/LPEDC/material/P0909
 ```
 
 ---
@@ -2227,7 +2227,7 @@ Total: R$ 23.49
 3. Resposta esperada: 3 preços gravados e Total: R$ 23.49.
 
 ```bash
-gcc ~/LPEDC/P0910.c -o ~/LPEDC/P0910 && ~/LPEDC/P0910
+gcc ~/LPEDC/material/P0910.c -o ~/LPEDC/material/P0910 && ~/LPEDC/material/P0910
 ```
 
 ### ★★☆ Para pensar
@@ -2270,7 +2270,7 @@ Aprovados: 3 de 5
 3. Resposta esperada: Ana 7.50, Caio 6.00, Dani 9.00 e Aprovados: 3 de 5.
 
 ```bash
-gcc ~/LPEDC/P0911.c -o ~/LPEDC/P0911 && ~/LPEDC/P0911
+gcc ~/LPEDC/material/P0911.c -o ~/LPEDC/material/P0911 && ~/LPEDC/material/P0911
 ```
 
 ---
@@ -2310,7 +2310,7 @@ Depois: 4 produtos
 3. Resposta esperada: Depois: 4 produtos, sem o 103 (Acucar) na lista.
 
 ```bash
-gcc ~/LPEDC/P0912.c -o ~/LPEDC/P0912 && ~/LPEDC/P0912
+gcc ~/LPEDC/material/P0912.c -o ~/LPEDC/material/P0912 && ~/LPEDC/material/P0912
 ```
 
 ---
@@ -2351,7 +2351,7 @@ Saída esperada:
    de 4 leituras (piso de log2 8, mais 1).
 
 ```bash
-gcc ~/LPEDC/P0913.c -o ~/LPEDC/P0913 && ~/LPEDC/P0913
+gcc ~/LPEDC/material/P0913.c -o ~/LPEDC/material/P0913 && ~/LPEDC/material/P0913
 ```
 
 ---
@@ -2390,7 +2390,7 @@ Ignorados: abc x9 7a
    abc, x9 e 7a.
 
 ```bash
-gcc ~/LPEDC/P0914.c -o ~/LPEDC/P0914 && ~/LPEDC/P0914
+gcc ~/LPEDC/material/P0914.c -o ~/LPEDC/material/P0914 && ~/LPEDC/material/P0914
 ```
 
 ---
@@ -2428,7 +2428,7 @@ Com ./rodar P0915.c 7 8 9.5 sai só a linha "Média: 8.17".
 3. Resposta esperada: com -v, as três notas e Média: 8.17 (24.5 / 3).
 
 ```bash
-gcc ~/LPEDC/P0915.c -o ~/LPEDC/P0915 && ~/LPEDC/P0915
+gcc ~/LPEDC/material/P0915.c -o ~/LPEDC/material/P0915 && ~/LPEDC/material/P0915
 ```
 
 ---
@@ -2465,7 +2465,7 @@ Mais curta: linha 4 (3 caracteres): fim
 3. Resposta esperada: linha 2 com 19 caracteres e linha 4 com 3.
 
 ```bash
-gcc ~/LPEDC/P0916.c -o ~/LPEDC/P0916 && ~/LPEDC/P0916
+gcc ~/LPEDC/material/P0916.c -o ~/LPEDC/material/P0916 && ~/LPEDC/material/P0916
 ```
 
 ---
@@ -2496,7 +2496,7 @@ Depois: 119 122 130 125 118 120
    6 registros).
 
 ```bash
-gcc ~/LPEDC/P0917.c -o ~/LPEDC/P0917 && ~/LPEDC/P0917
+gcc ~/LPEDC/material/P0917.c -o ~/LPEDC/material/P0917 && ~/LPEDC/material/P0917
 ```
 
 ---
@@ -2535,7 +2535,7 @@ Total: R$ 1114.00
 3. Resposta esperada: a saída acima; o total é 329 + 360 + 425 = 1114.
 
 ```bash
-gcc ~/LPEDC/P0918.c -o ~/LPEDC/P0918 && ~/LPEDC/P0918
+gcc ~/LPEDC/material/P0918.c -o ~/LPEDC/material/P0918 && ~/LPEDC/material/P0918
 ```
 
 ---
@@ -2567,7 +2567,7 @@ Votos sim: 3, não: 1, inválidos: 0
    código compara com != 0). A saída fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/P0919.c -o ~/LPEDC/P0919 && ~/LPEDC/P0919
+gcc ~/LPEDC/material/P0919.c -o ~/LPEDC/material/P0919 && ~/LPEDC/material/P0919
 ```
 
 ---
@@ -2606,7 +2606,7 @@ Melhor vendedor: 2 (R$ 510)
 3. Resposta esperada: semanas 415, 340, 380 e 310; o vendedor 2, com 510.
 
 ```bash
-gcc ~/LPEDC/P0920.c -o ~/LPEDC/P0920 && ~/LPEDC/P0920
+gcc ~/LPEDC/material/P0920.c -o ~/LPEDC/material/P0920 && ~/LPEDC/material/P0920
 ```
 
 ### ★★★ Desafio
@@ -2657,7 +2657,7 @@ Zeca: não está na agenda (3 leituras)
    custo de manter a ordem: inserir é O(n), mas buscar fica O(log n).
 
 ```bash
-gcc ~/LPEDC/P0921.c -o ~/LPEDC/P0921 && ~/LPEDC/P0921
+gcc ~/LPEDC/material/P0921.c -o ~/LPEDC/material/P0921 && ~/LPEDC/material/P0921
 ```
 
 ---
@@ -2729,7 +2729,7 @@ S 104 10.00: conta inexistente
 4. Resposta esperada: a saída acima (Ana: 500 - 80.50 - 100 = 319.50).
 
 ```bash
-gcc ~/LPEDC/P0922.c -o ~/LPEDC/P0922 && ~/LPEDC/P0922
+gcc ~/LPEDC/material/P0922.c -o ~/LPEDC/material/P0922 && ~/LPEDC/material/P0922
 ```
 
 ---
@@ -2775,7 +2775,7 @@ Linha 9: não existe
 3. A linha 2 começa no byte 18 porque a linha 1 tem 17 letras mais o '\n'.
 
 ```bash
-gcc ~/LPEDC/P0923.c -o ~/LPEDC/P0923 && ~/LPEDC/P0923
+gcc ~/LPEDC/material/P0923.c -o ~/LPEDC/material/P0923 && ~/LPEDC/material/P0923
 ```
 
 ---
@@ -2827,7 +2827,7 @@ R$ 18.90 Manteiga
 3. Resposta esperada: a saída acima (meios lidos: 5, 2, 4 e 3).
 
 ```bash
-gcc ~/LPEDC/P0924.c -o ~/LPEDC/P0924 && ~/LPEDC/P0924
+gcc ~/LPEDC/material/P0924.c -o ~/LPEDC/material/P0924 && ~/LPEDC/material/P0924
 ```
 
 ---
@@ -2867,7 +2867,7 @@ Leituras: 20, escritas: 6
 4. Não conte as leituras da listagem.
 
 ```bash
-gcc ~/LPEDC/P0925.c -o ~/LPEDC/P0925 && ~/LPEDC/P0925
+gcc ~/LPEDC/material/P0925.c -o ~/LPEDC/material/P0925 && ~/LPEDC/material/P0925
 ```
 
 ---
@@ -2914,7 +2914,7 @@ Confere: sim
    "ABCD" o arquivo ficaria com o DOBRO do tamanho.
 
 ```bash
-gcc ~/LPEDC/P0926.c -o ~/LPEDC/P0926 && ~/LPEDC/P0926
+gcc ~/LPEDC/material/P0926.c -o ~/LPEDC/material/P0926 && ~/LPEDC/material/P0926
 ```
 
 ---
@@ -2947,7 +2947,7 @@ Do meio: Mimi
    cima.
 
 ```bash
-gcc ~/LPEDC/P0927.c -o ~/LPEDC/P0927 && ~/LPEDC/P0927
+gcc ~/LPEDC/material/P0927.c -o ~/LPEDC/material/P0927 && ~/LPEDC/material/P0927
 ```
 
 ---
@@ -2992,7 +2992,7 @@ Saída esperada:
 3. O "%+d" do printf mostra o sinal sempre: +2, -6.
 
 ```bash
-gcc ~/LPEDC/P0928.c -o ~/LPEDC/P0928 && ~/LPEDC/P0928
+gcc ~/LPEDC/material/P0928.c -o ~/LPEDC/material/P0928 && ~/LPEDC/material/P0928
 ```
 
 ---
@@ -3034,7 +3034,7 @@ Decifrado: ataque ao amanhecer
    de volta com fgets.
 
 ```bash
-gcc ~/LPEDC/P0929.c -o ~/LPEDC/P0929 && ~/LPEDC/P0929
+gcc ~/LPEDC/material/P0929.c -o ~/LPEDC/material/P0929 && ~/LPEDC/material/P0929
 ```
 
 ---
@@ -3094,7 +3094,7 @@ Saída esperada:
    código, por ano...) sobre os mesmos dados.
 
 ```bash
-gcc ~/LPEDC/P0930.c -o ~/LPEDC/P0930 && ~/LPEDC/P0930
+gcc ~/LPEDC/material/P0930.c -o ~/LPEDC/material/P0930 && ~/LPEDC/material/P0930
 ```
 
 ## Questões no estilo da prova

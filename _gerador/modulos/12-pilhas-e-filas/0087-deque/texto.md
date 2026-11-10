@@ -16,7 +16,7 @@ retira no fim), é uma **pilha**; inserindo no fim e retirando no início, uma
 0102, com heap). Aqui as quatro operações custam **O(1)**, enquanto num vetor
 comum mexer no início custa O(n).
 
-O [`deque.c`](0087-deque.c) é a fila circular do 0085 com o `inicio`
+O [`deque.c`](material/0087-deque.c) é a fila circular do 0085 com o `inicio`
 andando também para **trás**: para inserir na frente, ele recua uma gaveta, e
 da 0 volta para a última. A conta fica numa função auxiliar `static`, visível
 só no `deque.c`:

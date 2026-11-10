@@ -42,7 +42,7 @@ retorno), operadores aritméticos (em especial o `%`) e `math.h`. Os exercícios
 com teclado aceitam entrada por pipe, o que facilita testar vários casos:
 
 ```bash
-gcc ~/LPEDC/A028.c -o ~/LPEDC/A028 && printf '12.90 8.50\n' | ~/LPEDC/A028
+gcc ~/LPEDC/material/A028.c -o ~/LPEDC/material/A028 && printf '12.90 8.50\n' | ~/LPEDC/material/A028
 ```
 
 Os exercícios "ache o erro" trazem o código quebrado **de propósito** e mostram

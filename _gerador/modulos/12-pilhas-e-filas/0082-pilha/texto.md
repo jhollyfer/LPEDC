@@ -38,7 +38,7 @@ porque o vetor tem tamanho fixo.
 
 Esta versão usa um **vetor** e um contador `n`: o fundo fica em `itens[0]`, o
 topo em `itens[n - 1]` e `n` é a próxima vaga. Trecho do
-[`pilha.c`](0082-pilha.c):
+[`pilha.c`](material/0082-pilha.c):
 
 ```c
 struct pilha {

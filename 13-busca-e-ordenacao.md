@@ -74,7 +74,7 @@ A academia tem 6 alunos ativos e a catraca procura a matrícula 1290. Ela
 compara com 4172, 3305 e 8821 (diferentes, em amarelo) e acha na quarta gaveta,
 a de índice 3. As duas últimas nem são olhadas:
 
-<p align="center"><img src="0089-ideia.svg" alt="Diagrama da ideia: Busca sequencial" width="858"></p>
+<p align="center"><img src="material/0089-ideia.svg" alt="Diagrama da ideia: Busca sequencial" width="858"></p>
 
 A função conta as comparações num ponteiro:
 
@@ -130,7 +130,7 @@ O fluxograma faz duas perguntas por volta: `i < n?` protege o vetor e
 `v[i] == x?` é a busca de fato. O caminho verde dá a volta três vezes antes de
 sair pelo Sim:
 
-<p align="center"><img src="0089-fluxograma.svg" alt="Fluxograma: Busca sequencial" width="670"></p>
+<p align="center"><img src="material/0089-fluxograma.svg" alt="Fluxograma: Busca sequencial" width="670"></p>
 
 > [!WARNING]
 > Com `if (v[i] == x) return i; else return -1;` dentro do laço, a função olha
@@ -192,7 +192,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A177.c -o ~/LPEDC/A177 && ~/LPEDC/A177
+gcc ~/LPEDC/material/A177.c -o ~/LPEDC/material/A177 && ~/LPEDC/material/A177
 ```
 
 **Exemplo A178 · A sentinela no fim da fila**
@@ -250,7 +250,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A178.c -o ~/LPEDC/A178 && ~/LPEDC/A178
+gcc ~/LPEDC/material/A178.c -o ~/LPEDC/material/A178 && ~/LPEDC/material/A178
 ```
 
 #### Exercícios
@@ -279,7 +279,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E529.c -o ~/LPEDC/E529 && ~/LPEDC/E529
+gcc ~/LPEDC/material/E529.c -o ~/LPEDC/material/E529 && ~/LPEDC/material/E529
 ```
 
 **Exercício E531** · ★★☆
@@ -306,7 +306,7 @@ R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
 ```
 
 ```bash
-gcc ~/LPEDC/E531.c -o ~/LPEDC/E531 && ~/LPEDC/E531
+gcc ~/LPEDC/material/E531.c -o ~/LPEDC/material/E531 && ~/LPEDC/material/E531
 ```
 
 **Exercício E532** · ★★☆
@@ -340,7 +340,7 @@ No vetor: Café 500g R$ 20.79
 ```
 
 ```bash
-gcc ~/LPEDC/E532.c -o ~/LPEDC/E532 && ~/LPEDC/E532
+gcc ~/LPEDC/material/E532.c -o ~/LPEDC/material/E532 && ~/LPEDC/material/E532
 ```
 
 **Exercício E534** · ★★★
@@ -369,7 +369,7 @@ Movendo para a frente: 20 comparações
 ```
 
 ```bash
-gcc ~/LPEDC/E534.c -o ~/LPEDC/E534 && ~/LPEDC/E534
+gcc ~/LPEDC/material/E534.c -o ~/LPEDC/material/E534 && ~/LPEDC/material/E534
 ```
 
 ---
@@ -398,7 +398,7 @@ O catálogo do atacadão tem 15 códigos em ordem e você procura o 216. O meio
 (índice 7) tem 189, menor: a esquerda fica cinza. O novo meio (11) tem 245,
 maior: a direita sai. Na terceira volta, o meio (9) é o 216:
 
-<p align="center"><img src="0090-ideia.svg" alt="Diagrama da ideia: Busca binária" width="864"></p>
+<p align="center"><img src="material/0090-ideia.svg" alt="Diagrama da ideia: Busca binária" width="864"></p>
 
 Um `printf` mostra o intervalo de cada volta:
 
@@ -472,7 +472,7 @@ ordem (exemplo A180).
 O fluxograma tem três perguntas por volta, e a volta mexe em `ini` **ou** em
 `fim`, nunca nos dois:
 
-<p align="center"><img src="0090-fluxograma.svg" alt="Fluxograma: Busca binária" width="944"></p>
+<p align="center"><img src="material/0090-fluxograma.svg" alt="Fluxograma: Busca binária" width="944"></p>
 
 > [!WARNING]
 > Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
@@ -553,7 +553,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A179.c -o ~/LPEDC/A179 && ~/LPEDC/A179
+gcc ~/LPEDC/material/A179.c -o ~/LPEDC/material/A179 && ~/LPEDC/material/A179
 ```
 
 **Exemplo A180 · Em qual faixa de frete cai o pacote?**
@@ -604,7 +604,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A180.c -o ~/LPEDC/A180 && ~/LPEDC/A180
+gcc ~/LPEDC/material/A180.c -o ~/LPEDC/material/A180 && ~/LPEDC/material/A180
 ```
 
 #### Exercícios
@@ -639,7 +639,7 @@ achou na posição 8 em 4 voltas
 ```
 
 ```bash
-gcc ~/LPEDC/E535.c -o ~/LPEDC/E535 && ~/LPEDC/E535
+gcc ~/LPEDC/material/E535.c -o ~/LPEDC/material/E535 && ~/LPEDC/material/E535
 ```
 
 **Exercício E537** · ★★☆
@@ -668,7 +668,7 @@ Nota 5: posições 9 a 11, 3 avaliações
 ```
 
 ```bash
-gcc ~/LPEDC/E537.c -o ~/LPEDC/E537 && ~/LPEDC/E537
+gcc ~/LPEDC/material/E537.c -o ~/LPEDC/material/E537 && ~/LPEDC/material/E537
 ```
 
 **Exercício E538** · ★★☆
@@ -693,7 +693,7 @@ Palmas: posição -1 (4 voltas)
 ```
 
 ```bash
-gcc ~/LPEDC/E538.c -o ~/LPEDC/E538 && ~/LPEDC/E538
+gcc ~/LPEDC/material/E538.c -o ~/LPEDC/material/E538 && ~/LPEDC/material/E538
 ```
 
 **Exercício E540** · ★★★
@@ -714,7 +714,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E540.c -o ~/LPEDC/E540 && ~/LPEDC/E540
+gcc ~/LPEDC/material/E540.c -o ~/LPEDC/material/E540 && ~/LPEDC/material/E540
 ```
 
 ---
@@ -747,7 +747,7 @@ em ordem, com bandeira), uma passada de `n - 1` comparações: **O(n)**.
 Na passada 1 o 42 afunda até o fim (verde). Na 2, o 35 acha o seu lugar. Na
 3, o 8 chega à frente. A passada 4 não troca nada e a bandeira encerra:
 
-<p align="center"><img src="0091-ideia.svg" alt="Diagrama da ideia: Bubble sort" width="858"></p>
+<p align="center"><img src="material/0091-ideia.svg" alt="Diagrama da ideia: Bubble sort" width="858"></p>
 
 O código conta comparações e trocas:
 
@@ -823,7 +823,7 @@ e 23). Cada troca de vizinhos desfaz uma inversão.
 O laço de dentro (`j`) faz uma passada; o de fora repete enquanto a bandeira
 indicar troca:
 
-<p align="center"><img src="0091-fluxograma.svg" alt="Fluxograma: Bubble sort" width="681"></p>
+<p align="center"><img src="material/0091-fluxograma.svg" alt="Fluxograma: Bubble sort" width="681"></p>
 
 > [!WARNING]
 > `v[j] = v[j + 1]; v[j + 1] = v[j];` não troca nada: os dois ficam iguais.
@@ -903,7 +903,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A181.c -o ~/LPEDC/A181 && ~/LPEDC/A181
+gcc ~/LPEDC/material/A181.c -o ~/LPEDC/material/A181 && ~/LPEDC/material/A181
 ```
 
 **Exemplo A182 · A bandeirinha que economiza passadas**
@@ -967,7 +967,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A182.c -o ~/LPEDC/A182 && ~/LPEDC/A182
+gcc ~/LPEDC/material/A182.c -o ~/LPEDC/material/A182 && ~/LPEDC/material/A182
 ```
 
 #### Exercícios
@@ -985,7 +985,7 @@ Ranking: 31 31 25 18 12 7
 ```
 
 ```bash
-gcc ~/LPEDC/E541.c -o ~/LPEDC/E541 && ~/LPEDC/E541
+gcc ~/LPEDC/material/E541.c -o ~/LPEDC/material/E541 && ~/LPEDC/material/E541
 ```
 
 **Exercício E543** · ★★☆
@@ -1005,7 +1005,7 @@ passada 4: 19 22 27 34 45
 ```
 
 ```bash
-gcc ~/LPEDC/E543.c -o ~/LPEDC/E543 && ~/LPEDC/E543
+gcc ~/LPEDC/material/E543.c -o ~/LPEDC/material/E543 && ~/LPEDC/material/E543
 ```
 
 **Exercício E544** · ★★☆
@@ -1040,7 +1040,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E544.c -o ~/LPEDC/E544 && ~/LPEDC/E544
+gcc ~/LPEDC/material/E544.c -o ~/LPEDC/material/E544 && ~/LPEDC/material/E544
 ```
 
 **Exercício E545** · ★★★
@@ -1064,7 +1064,7 @@ resultado: 1 2 3 4 5 6 7 8
 ```
 
 ```bash
-gcc ~/LPEDC/E545.c -o ~/LPEDC/E545 && ~/LPEDC/E545
+gcc ~/LPEDC/material/E545.c -o ~/LPEDC/material/E545 && ~/LPEDC/material/E545
 ```
 
 ---
@@ -1094,7 +1094,7 @@ contra até `n(n - 1)/2` do bubble. Pesa quando mover um elemento é caro.
 Cada linha é uma passada: a gaveta roxa é a posição `i`, a amarela é o menor
 achado. Depois da troca, a gaveta vira verde e fica:
 
-<p align="center"><img src="0092-ideia.svg" alt="Diagrama da ideia: Selection sort" width="858"></p>
+<p align="center"><img src="material/0092-ideia.svg" alt="Diagrama da ideia: Selection sort" width="858"></p>
 
 Em C:
 
@@ -1166,7 +1166,7 @@ As passadas seguintes fazem 3, 2 e 1 comparações: 10 no total.
 No fluxograma, a caixa "acha o menor" esconde um laço inteiro (a tabela). A
 troca fica **fora** dele:
 
-<p align="center"><img src="0092-fluxograma.svg" alt="Fluxograma: Selection sort" width="511"></p>
+<p align="center"><img src="material/0092-fluxograma.svg" alt="Fluxograma: Selection sort" width="511"></p>
 
 > [!WARNING]
 > Trocar **dentro** do laço que procura o menor ordena o vetor, mas perde a
@@ -1237,7 +1237,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A183.c -o ~/LPEDC/A183 && ~/LPEDC/A183
+gcc ~/LPEDC/material/A183.c -o ~/LPEDC/material/A183 && ~/LPEDC/material/A183
 ```
 
 **Exemplo A184 · A troca que passa por cima**
@@ -1293,7 +1293,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A184.c -o ~/LPEDC/A184 && ~/LPEDC/A184
+gcc ~/LPEDC/material/A184.c -o ~/LPEDC/material/A184 && ~/LPEDC/material/A184
 ```
 
 #### Exercícios
@@ -1316,7 +1316,7 @@ fim = 1: 30 45 60 75 89 120
 ```
 
 ```bash
-gcc ~/LPEDC/E547.c -o ~/LPEDC/E547 && ~/LPEDC/E547
+gcc ~/LPEDC/material/E547.c -o ~/LPEDC/material/E547 && ~/LPEDC/material/E547
 ```
 
 **Exercício E549** · ★★☆
@@ -1339,7 +1339,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E549.c -o ~/LPEDC/E549 && ~/LPEDC/E549
+gcc ~/LPEDC/material/E549.c -o ~/LPEDC/material/E549 && ~/LPEDC/material/E549
 ```
 
 **Exercício E550** · ★★☆
@@ -1358,7 +1358,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E550.c -o ~/LPEDC/E550 && ~/LPEDC/E550
+gcc ~/LPEDC/material/E550.c -o ~/LPEDC/material/E550 && ~/LPEDC/material/E550
 ```
 
 **Exercício E552** · ★★★
@@ -1399,7 +1399,7 @@ loja[0] continua sendo: Fone sem fio
 ```
 
 ```bash
-gcc ~/LPEDC/E552.c -o ~/LPEDC/E552 && ~/LPEDC/E552
+gcc ~/LPEDC/material/E552.c -o ~/LPEDC/material/E552 && ~/LPEDC/material/E552
 ```
 
 ---
@@ -1429,7 +1429,7 @@ dos três simples; bibliotecas o usam para pedaços de 16 a 32 posições.
 Cada linha é uma carta nova: verde é a mão arrumada, amarela é a carta que
 entrou. O 9 não anda; o 2 atravessa a mão inteira:
 
-<p align="center"><img src="0093-ideia.svg" alt="Diagrama da ideia: Insertion sort" width="858"></p>
+<p align="center"><img src="material/0093-ideia.svg" alt="Diagrama da ideia: Insertion sort" width="858"></p>
 
 A função `maior` só conta as comparações:
 
@@ -1504,7 +1504,7 @@ Foram três comparações e três deslocamentos. Somando todos os encaixes:
 O laço de dentro para por dois motivos: acabou o vetor ou achou alguém que
 não é maior:
 
-<p align="center"><img src="0093-fluxograma.svg" alt="Fluxograma: Insertion sort" width="692"></p>
+<p align="center"><img src="material/0093-fluxograma.svg" alt="Fluxograma: Insertion sort" width="692"></p>
 
 > [!WARNING]
 > Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o
@@ -1570,7 +1570,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A185.c -o ~/LPEDC/A185 && ~/LPEDC/A185
+gcc ~/LPEDC/material/A185.c -o ~/LPEDC/material/A185 && ~/LPEDC/material/A185
 ```
 
 **Exemplo A186 · Quase em ordem custa quase nada**
@@ -1622,7 +1622,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A186.c -o ~/LPEDC/A186 && ~/LPEDC/A186
+gcc ~/LPEDC/material/A186.c -o ~/LPEDC/material/A186 && ~/LPEDC/material/A186
 ```
 
 #### Exercícios
@@ -1640,7 +1640,7 @@ Classificação: 810 720 690 650 580
 ```
 
 ```bash
-gcc ~/LPEDC/E553.c -o ~/LPEDC/E553 && ~/LPEDC/E553
+gcc ~/LPEDC/material/E553.c -o ~/LPEDC/material/E553 && ~/LPEDC/material/E553
 ```
 
 **Exercício E555** · ★★☆
@@ -1668,7 +1668,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E555.c -o ~/LPEDC/E555 && ~/LPEDC/E555
+gcc ~/LPEDC/material/E555.c -o ~/LPEDC/material/E555 && ~/LPEDC/material/E555
 ```
 
 **Exercício E556** · ★★☆
@@ -1700,7 +1700,7 @@ total com >=: 8
 ```
 
 ```bash
-gcc ~/LPEDC/E556.c -o ~/LPEDC/E556 && ~/LPEDC/E556
+gcc ~/LPEDC/material/E556.c -o ~/LPEDC/material/E556 && ~/LPEDC/material/E556
 ```
 
 **Exercício E557** · ★★★
@@ -1722,7 +1722,7 @@ j = 5: 8 12 19 27 31 45
 ```
 
 ```bash
-gcc ~/LPEDC/E557.c -o ~/LPEDC/E557 && ~/LPEDC/E557
+gcc ~/LPEDC/material/E557.c -o ~/LPEDC/material/E557 && ~/LPEDC/material/E557
 ```
 
 ---
@@ -1755,7 +1755,7 @@ extra.
 
 As notas descem divididas até pedaços de 1 e sobem intercaladas (verde):
 
-<p align="center"><img src="0094-ideia.svg" alt="Diagrama da ideia: Merge sort" width="858"></p>
+<p align="center"><img src="material/0094-ideia.svg" alt="Diagrama da ideia: Merge sort" width="858"></p>
 
 O rascunho `w` é alocado **uma vez** no `main` e serve a todas as
 intercalações:
@@ -1845,7 +1845,7 @@ Sete comparações para 8 elementos, o máximo (`n - 1`). Somando os níveis:
 4 + 6 + 7 = **17 comparações**. No fluxograma, cada caixa `merge_sort` repete
 o fluxograma inteiro para uma metade:
 
-<p align="center"><img src="0094-fluxograma.svg" alt="Fluxograma: Merge sort" width="351"></p>
+<p align="center"><img src="material/0094-fluxograma.svg" alt="Fluxograma: Merge sort" width="351"></p>
 
 > [!WARNING]
 > Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
@@ -1923,7 +1923,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A187.c -o ~/LPEDC/A187 && ~/LPEDC/A187
+gcc ~/LPEDC/material/A187.c -o ~/LPEDC/material/A187 && ~/LPEDC/material/A187
 ```
 
 **Exemplo A188 · Os pedidos das duas lojas numa fila só**
@@ -1966,7 +1966,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A188.c -o ~/LPEDC/A188 && ~/LPEDC/A188
+gcc ~/LPEDC/material/A188.c -o ~/LPEDC/material/A188 && ~/LPEDC/material/A188
 ```
 
 #### Exercícios
@@ -1993,7 +1993,7 @@ Notas: 45 50 60 60 75 85 90 95 98
 ```
 
 ```bash
-gcc ~/LPEDC/E559.c -o ~/LPEDC/E559 && ~/LPEDC/E559
+gcc ~/LPEDC/material/E559.c -o ~/LPEDC/material/E559 && ~/LPEDC/material/E559
 ```
 
 **Exercício E561** · ★★☆
@@ -2019,7 +2019,7 @@ foram nos dois turnos: 2
 ```
 
 ```bash
-gcc ~/LPEDC/E561.c -o ~/LPEDC/E561 && ~/LPEDC/E561
+gcc ~/LPEDC/material/E561.c -o ~/LPEDC/material/E561 && ~/LPEDC/material/E561
 ```
 
 **Exercício E562** · ★★☆
@@ -2048,7 +2048,7 @@ com <:  Eva 20, Davi 30, Bruno 30, Carla 50, Ana 50
 ```
 
 ```bash
-gcc ~/LPEDC/E562.c -o ~/LPEDC/E562 && ~/LPEDC/E562
+gcc ~/LPEDC/material/E562.c -o ~/LPEDC/material/E562 && ~/LPEDC/material/E562
 ```
 
 **Exercício E564** · ★★★
@@ -2072,7 +2072,7 @@ de 28 pares possíveis
 ```
 
 ```bash
-gcc ~/LPEDC/E564.c -o ~/LPEDC/E564 && ~/LPEDC/E564
+gcc ~/LPEDC/material/E564.c -o ~/LPEDC/material/E564 && ~/LPEDC/material/E564
 ```
 
 ---
@@ -2107,7 +2107,7 @@ dados embaralhados, é O(n log n) na média.
 
 O 20 (roxo) separa o vetor e fica verde, no lugar. Cada lado escolhe o seu pivô:
 
-<p align="center"><img src="0095-ideia.svg" alt="Diagrama da ideia: Quick sort" width="858"></p>
+<p align="center"><img src="material/0095-ideia.svg" alt="Diagrama da ideia: Quick sort" width="858"></p>
 
 Em C:
 
@@ -2190,7 +2190,7 @@ Seis comparações. Depois vêm `[12 7]` (1), `[35 29 51 48]` (3) e `[35 29]`
 (1): **11 comparações**. O pivô fica fora das duas chamadas, e por isso o
 problema sempre diminui:
 
-<p align="center"><img src="0095-fluxograma.svg" alt="Fluxograma: Quick sort" width="398"></p>
+<p align="center"><img src="material/0095-fluxograma.svg" alt="Fluxograma: Quick sort" width="398"></p>
 
 > [!WARNING]
 > Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se ele
@@ -2294,7 +2294,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A189.c -o ~/LPEDC/A189 && ~/LPEDC/A189
+gcc ~/LPEDC/material/A189.c -o ~/LPEDC/material/A189 && ~/LPEDC/material/A189
 ```
 
 **Exemplo A190 · O pior caso: vetor que já chega em ordem**
@@ -2363,7 +2363,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A190.c -o ~/LPEDC/A190 && ~/LPEDC/A190
+gcc ~/LPEDC/material/A190.c -o ~/LPEDC/material/A190 && ~/LPEDC/material/A190
 ```
 
 #### Exercícios
@@ -2393,7 +2393,7 @@ comparações: 7
 ```
 
 ```bash
-gcc ~/LPEDC/E565.c -o ~/LPEDC/E565 && ~/LPEDC/E565
+gcc ~/LPEDC/material/E565.c -o ~/LPEDC/material/E565 && ~/LPEDC/material/E565
 ```
 
 **Exercício E567** · ★★☆
@@ -2418,7 +2418,7 @@ arroz, banana, café, feijão, leite, ovos, pão, tomate
 ```
 
 ```bash
-gcc ~/LPEDC/E567.c -o ~/LPEDC/E567 && ~/LPEDC/E567
+gcc ~/LPEDC/material/E567.c -o ~/LPEDC/material/E567 && ~/LPEDC/material/E567
 ```
 
 **Exercício E568** · ★★☆
@@ -2439,7 +2439,7 @@ Final: 1 2 4 5 7 9
 ```
 
 ```bash
-gcc ~/LPEDC/E568.c -o ~/LPEDC/E568 && ~/LPEDC/E568
+gcc ~/LPEDC/material/E568.c -o ~/LPEDC/material/E568 && ~/LPEDC/material/E568
 ```
 
 **Exercício E569** · ★★★
@@ -2463,7 +2463,7 @@ ordenando tudo: 33 min (23 comparações)
 ```
 
 ```bash
-gcc ~/LPEDC/E569.c -o ~/LPEDC/E569 && ~/LPEDC/E569
+gcc ~/LPEDC/material/E569.c -o ~/LPEDC/material/E569 && ~/LPEDC/material/E569
 ```
 
 ---
@@ -2517,7 +2517,7 @@ primeiro vem antes, **zero** se empatam e **positivo** se vem depois, como o
 Por cidade, um algoritmo estável (insertion, merge) mantém R1, R3, R6. O
 selection, com trocas de longa distância, entrega R3 antes de R1:
 
-<p align="center"><img src="0096-ideia.svg" alt="Diagrama da ideia: Comparando: estabilidade, custo e qsort" width="858"></p>
+<p align="center"><img src="material/0096-ideia.svg" alt="Diagrama da ideia: Comparando: estabilidade, custo e qsort" width="858"></p>
 
 A norma **não promete** que o `qsort` é estável. Se a ordem dos empatados
 importa, ponha o desempate na `compara`: cidade primeiro, horário depois. Isso
@@ -2592,7 +2592,7 @@ caso. O selection não percebe diferença.
 O caminho marcado no fluxograma é o deste exemplo: a ordem de chegada cabe
 como desempate na `compara`, então `qsort` resolve:
 
-<p align="center"><img src="0096-fluxograma.svg" alt="Fluxograma: Comparando: estabilidade, custo e qsort" width="706"></p>
+<p align="center"><img src="material/0096-fluxograma.svg" alt="Fluxograma: Comparando: estabilidade, custo e qsort" width="706"></p>
 
 > [!WARNING]
 > `return *(const int *) a - *(const int *) b;` passa nos testes pequenos, mas
@@ -2682,7 +2682,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A191.c -o ~/LPEDC/A191 && ~/LPEDC/A191
+gcc ~/LPEDC/material/A191.c -o ~/LPEDC/material/A191 && ~/LPEDC/material/A191
 ```
 
 **Exemplo A192 · Cinco algoritmos, a mesma corrida**
@@ -2829,7 +2829,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A192.c -o ~/LPEDC/A192 && ~/LPEDC/A192
+gcc ~/LPEDC/material/A192.c -o ~/LPEDC/material/A192 && ~/LPEDC/material/A192
 ```
 
 #### Exercícios
@@ -2852,7 +2852,7 @@ R$ 5.79
 ```
 
 ```bash
-gcc ~/LPEDC/E571.c -o ~/LPEDC/E571 && ~/LPEDC/E571
+gcc ~/LPEDC/material/E571.c -o ~/LPEDC/material/E571 && ~/LPEDC/material/E571
 ```
 
 **Exercício E573** · ★★☆
@@ -2877,7 +2877,7 @@ Pitty Skank Titas Cazuza Legiao Raimundos
 ```
 
 ```bash
-gcc ~/LPEDC/E573.c -o ~/LPEDC/E573 && ~/LPEDC/E573
+gcc ~/LPEDC/material/E573.c -o ~/LPEDC/material/E573 && ~/LPEDC/material/E573
 ```
 
 **Exercício E574** · ★★☆
@@ -2898,7 +2898,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E574.c -o ~/LPEDC/E574 && ~/LPEDC/E574
+gcc ~/LPEDC/material/E574.c -o ~/LPEDC/material/E574 && ~/LPEDC/material/E574
 ```
 
 **Exercício E575** · ★★★
@@ -2939,7 +2939,7 @@ Zeca: não está na agenda
 ```
 
 ```bash
-gcc ~/LPEDC/E575.c -o ~/LPEDC/E575 && ~/LPEDC/E575
+gcc ~/LPEDC/material/E575.c -o ~/LPEDC/material/E575 && ~/LPEDC/material/E575
 ```
 
 ---
@@ -3693,7 +3693,7 @@ Considere que os seguintes elementos {5,4,3,2,1} foram inseridos nesta ordem em 
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1301.c a P1330.c, na raiz; resoluções em `_respostas/13-busca-e-ordenacao/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1301.c a P1330.c, em `material/`; resoluções em `_respostas/13-busca-e-ordenacao/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3725,7 +3725,7 @@ Placa 1000: posição -1 (9 comparações)
 3. Quem não está no vetor custa n + 1 comparações: a última é a sentinela.
 
 ```bash
-gcc ~/LPEDC/P1301.c -o ~/LPEDC/P1301 && ~/LPEDC/P1301
+gcc ~/LPEDC/material/P1301.c -o ~/LPEDC/material/P1301 && ~/LPEDC/material/P1301
 ```
 
 ---
@@ -3754,7 +3754,7 @@ R$ 50: posição -1 (voltas: 4)
 3. Com 15 elementos, o pior caso é ⌊log₂ 15⌋ + 1 = 4 voltas, achando ou não.
 
 ```bash
-gcc ~/LPEDC/P1302.c -o ~/LPEDC/P1302 && ~/LPEDC/P1302
+gcc ~/LPEDC/material/P1302.c -o ~/LPEDC/material/P1302 && ~/LPEDC/material/P1302
 ```
 
 ---
@@ -3786,7 +3786,7 @@ nenhuma troca: parou
    prova pergunta em "o vetor após a k-ésima passada".
 
 ```bash
-gcc ~/LPEDC/P1303.c -o ~/LPEDC/P1303 && ~/LPEDC/P1303
+gcc ~/LPEDC/material/P1303.c -o ~/LPEDC/material/P1303 && ~/LPEDC/material/P1303
 ```
 
 ---
@@ -3818,7 +3818,7 @@ trocas: 2
    ficou pronto na passada 3.
 
 ```bash
-gcc ~/LPEDC/P1304.c -o ~/LPEDC/P1304 && ~/LPEDC/P1304
+gcc ~/LPEDC/material/P1304.c -o ~/LPEDC/material/P1304 && ~/LPEDC/material/P1304
 ```
 
 ---
@@ -3850,7 +3850,7 @@ j = 5: 5 9 9 14 17 22
    ordenada; o resto continua como chegou.
 
 ```bash
-gcc ~/LPEDC/P1305.c -o ~/LPEDC/P1305 && ~/LPEDC/P1305
+gcc ~/LPEDC/material/P1305.c -o ~/LPEDC/material/P1305 && ~/LPEDC/material/P1305
 ```
 
 ---
@@ -3877,7 +3877,7 @@ comparações: 5
    descem direto. O pior caso seria na + nb - 1 = 7.
 
 ```bash
-gcc ~/LPEDC/P1306.c -o ~/LPEDC/P1306 && ~/LPEDC/P1306
+gcc ~/LPEDC/material/P1306.c -o ~/LPEDC/material/P1306 && ~/LPEDC/material/P1306
 ```
 
 ---
@@ -3906,7 +3906,7 @@ pivô 10 na posição 3
    "menores ou iguais à esquerda, maiores à direita".
 
 ```bash
-gcc ~/LPEDC/P1307.c -o ~/LPEDC/P1307 && ~/LPEDC/P1307
+gcc ~/LPEDC/material/P1307.c -o ~/LPEDC/material/P1307 && ~/LPEDC/material/P1307
 ```
 
 ---
@@ -3934,7 +3934,7 @@ as 3 mais quentes: 38 36 34
    estourar o int com valores grandes.
 
 ```bash
-gcc ~/LPEDC/P1308.c -o ~/LPEDC/P1308 && ~/LPEDC/P1308
+gcc ~/LPEDC/material/P1308.c -o ~/LPEDC/material/P1308 && ~/LPEDC/material/P1308
 ```
 
 ---
@@ -3963,7 +3963,7 @@ Saída esperada (depois do conserto):
    fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/P1309.c -o ~/LPEDC/P1309 && ~/LPEDC/P1309
+gcc ~/LPEDC/material/P1309.c -o ~/LPEDC/material/P1309 && ~/LPEDC/material/P1309
 ```
 
 ---
@@ -3992,7 +3992,7 @@ linha 500: 0 vez(es)
 3. Por isso, esta busca custa sempre n comparações, achando ou não.
 
 ```bash
-gcc ~/LPEDC/P1310.c -o ~/LPEDC/P1310 && ~/LPEDC/P1310
+gcc ~/LPEDC/material/P1310.c -o ~/LPEDC/material/P1310 && ~/LPEDC/material/P1310
 ```
 
 ### ★★☆ Para pensar
@@ -4043,7 +4043,7 @@ dia 7: binária -1 (4 comp.), sequencial -1 (16 comp.)
    vale a pena quando o vetor é grande ou o alvo está longe do início.
 
 ```bash
-gcc ~/LPEDC/P1311.c -o ~/LPEDC/P1311 && ~/LPEDC/P1311
+gcc ~/LPEDC/material/P1311.c -o ~/LPEDC/material/P1311 && ~/LPEDC/material/P1311
 ```
 
 ---
@@ -4088,7 +4088,7 @@ Saída esperada:
    ninguém.
 
 ```bash
-gcc ~/LPEDC/P1312.c -o ~/LPEDC/P1312 && ~/LPEDC/P1312
+gcc ~/LPEDC/material/P1312.c -o ~/LPEDC/material/P1312 && ~/LPEDC/material/P1312
 ```
 
 ---
@@ -4126,7 +4126,7 @@ misturado  passadas 4, comparações 14, trocas  7
    misturado tem 7.
 
 ```bash
-gcc ~/LPEDC/P1313.c -o ~/LPEDC/P1313 && ~/LPEDC/P1313
+gcc ~/LPEDC/material/P1313.c -o ~/LPEDC/material/P1313 && ~/LPEDC/material/P1313
 ```
 
 ---
@@ -4164,7 +4164,7 @@ final: 1 2 3 4 7 7 8 9
    para nos iguais, e é isso que deixa as metades equilibradas.
 
 ```bash
-gcc ~/LPEDC/P1314.c -o ~/LPEDC/P1314 && ~/LPEDC/P1314
+gcc ~/LPEDC/material/P1314.c -o ~/LPEDC/material/P1314 && ~/LPEDC/material/P1314
 ```
 
 ---
@@ -4203,7 +4203,7 @@ insertion: Beto(1) Duda(1) Ana(2) Caio(2) Fabio(2) Eva(3)
    nunca passam um pelo outro.
 
 ```bash
-gcc ~/LPEDC/P1315.c -o ~/LPEDC/P1315 && ~/LPEDC/P1315
+gcc ~/LPEDC/material/P1315.c -o ~/LPEDC/material/P1315 && ~/LPEDC/material/P1315
 ```
 
 ---
@@ -4243,7 +4243,7 @@ Saída esperada:
 4. Mostre cada linha com printf("%dº %-6s nota %d, %d anos\n", ...).
 
 ```bash
-gcc ~/LPEDC/P1316.c -o ~/LPEDC/P1316 && ~/LPEDC/P1316
+gcc ~/LPEDC/material/P1316.c -o ~/LPEDC/material/P1316 && ~/LPEDC/material/P1316
 ```
 
 ---
@@ -4275,7 +4275,7 @@ intercala [0..6]: 3 9 10 27 38 43 82
 3. São n - 1 = 6 intercalações para 7 elementos.
 
 ```bash
-gcc ~/LPEDC/P1317.c -o ~/LPEDC/P1317 && ~/LPEDC/P1317
+gcc ~/LPEDC/material/P1317.c -o ~/LPEDC/material/P1317 && ~/LPEDC/material/P1317
 ```
 
 ---
@@ -4314,7 +4314,7 @@ n(n-1)/2 = 45
    de um milhão já ordenado, o programa estouraria a pilha.
 
 ```bash
-gcc ~/LPEDC/P1318.c -o ~/LPEDC/P1318 && ~/LPEDC/P1318
+gcc ~/LPEDC/material/P1318.c -o ~/LPEDC/material/P1318 && ~/LPEDC/material/P1318
 ```
 
 ---
@@ -4344,7 +4344,7 @@ Saída esperada:
 3. Só uma comparação muda de sentido; o resto da busca fica igual.
 
 ```bash
-gcc ~/LPEDC/P1319.c -o ~/LPEDC/P1319 && ~/LPEDC/P1319
+gcc ~/LPEDC/material/P1319.c -o ~/LPEDC/material/P1319 && ~/LPEDC/material/P1319
 ```
 
 ---
@@ -4377,7 +4377,7 @@ deslocando : D1 F1 B2 E2 A3 C3
    selection perde a sua única vantagem (poucas escritas).
 
 ```bash
-gcc ~/LPEDC/P1320.c -o ~/LPEDC/P1320 && ~/LPEDC/P1320
+gcc ~/LPEDC/material/P1320.c -o ~/LPEDC/material/P1320 && ~/LPEDC/material/P1320
 ```
 
 ### ★★★ Desafio
@@ -4424,7 +4424,7 @@ ordenado: 8 10 15 22 35 40 50 90
 4. Resposta esperada: 9 pares (por exemplo, 40 > 2 · 15 e 90 > 2 · 35).
 
 ```bash
-gcc ~/LPEDC/P1321.c -o ~/LPEDC/P1321 && ~/LPEDC/P1321
+gcc ~/LPEDC/material/P1321.c -o ~/LPEDC/material/P1321 && ~/LPEDC/material/P1321
 ```
 
 ---
@@ -4470,7 +4470,7 @@ comparações: 15
    jeito certo de achar a menor frente é um heap (módulo 14).
 
 ```bash
-gcc ~/LPEDC/P1322.c -o ~/LPEDC/P1322 && ~/LPEDC/P1322
+gcc ~/LPEDC/material/P1322.c -o ~/LPEDC/material/P1322 && ~/LPEDC/material/P1322
 ```
 
 ---
@@ -4509,7 +4509,7 @@ misturado   pivô no fim:  37   mediana de três:  36
    médio pior, só tira o pior caso dos dados "fáceis".
 
 ```bash
-gcc ~/LPEDC/P1323.c -o ~/LPEDC/P1323 && ~/LPEDC/P1323
+gcc ~/LPEDC/material/P1323.c -o ~/LPEDC/material/P1323 && ~/LPEDC/material/P1323
 ```
 
 ---
@@ -4540,7 +4540,7 @@ Saída esperada:
    saída fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/P1324.c -o ~/LPEDC/P1324 && ~/LPEDC/P1324
+gcc ~/LPEDC/material/P1324.c -o ~/LPEDC/material/P1324 && ~/LPEDC/material/P1324
 ```
 
 ---
@@ -4602,7 +4602,7 @@ bairro, depois hora (errado):
    (módulo 18).
 
 ```bash
-gcc ~/LPEDC/P1325.c -o ~/LPEDC/P1325 && ~/LPEDC/P1325
+gcc ~/LPEDC/material/P1325.c -o ~/LPEDC/material/P1325 && ~/LPEDC/material/P1325
 ```
 
 ---
@@ -4665,7 +4665,7 @@ giro na posição 5
 3. As voltas contadas são só as da busca do item (c), não as do giro.
 
 ```bash
-gcc ~/LPEDC/P1326.c -o ~/LPEDC/P1326 && ~/LPEDC/P1326
+gcc ~/LPEDC/material/P1326.c -o ~/LPEDC/material/P1326 && ~/LPEDC/material/P1326
 ```
 
 ---
@@ -4729,7 +4729,7 @@ decrescente:
    no misturado).
 
 ```bash
-gcc ~/LPEDC/P1327.c -o ~/LPEDC/P1327 && ~/LPEDC/P1327
+gcc ~/LPEDC/material/P1327.c -o ~/LPEDC/material/P1327 && ~/LPEDC/material/P1327
 ```
 
 ---
@@ -4779,7 +4779,7 @@ depois: 4 12 12 33 41 58 66 75 97
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/P1328.c -o ~/LPEDC/P1328 && ~/LPEDC/P1328
+gcc ~/LPEDC/material/P1328.c -o ~/LPEDC/material/P1328 && ~/LPEDC/material/P1328
 ```
 
 ---
@@ -4837,7 +4837,7 @@ pista 4: nenhum dos três
 4. A pista 4 parece bubble (31 no fim?), mas o 31 não está no fim.
 
 ```bash
-gcc ~/LPEDC/P1329.c -o ~/LPEDC/P1329 && ~/LPEDC/P1329
+gcc ~/LPEDC/material/P1329.c -o ~/LPEDC/material/P1329 && ~/LPEDC/material/P1329
 ```
 
 ---
@@ -4899,7 +4899,7 @@ Saída esperada:
    assim que agendas grandes respondem rápido.
 
 ```bash
-gcc ~/LPEDC/P1330.c -o ~/LPEDC/P1330 && ~/LPEDC/P1330
+gcc ~/LPEDC/material/P1330.c -o ~/LPEDC/material/P1330 && ~/LPEDC/material/P1330
 ```
 
 ## Para ler mais

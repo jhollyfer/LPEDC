@@ -103,7 +103,7 @@ Quando o `main` chama `preco_corrida(4.0)`, o 4.0 é copiado para o parâmetro
 `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve 15.00, e o `main` continua
 de onde parou, com o resultado:
 
-<p align="center"><img src="0028-ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
+<p align="center"><img src="material/0028-ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
 
 O app em C, com as três corridas:
 
@@ -134,7 +134,7 @@ double preco_corrida(double km) {
 A chamada é um desvio: o programa sai do `main`, executa o corpo da função e
 **volta ao mesmo ponto**, trazendo o valor. Isso se repete a cada corrida:
 
-<p align="center"><img src="0028-fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
+<p align="center"><img src="material/0028-fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
 
 Três termos: a **definição** é o corpo inteiro
 (`double preco_corrida(double km) { ... }`); a **chamada** é o uso
@@ -213,7 +213,7 @@ double valor_conta(int kwh) {
 ```
 
 ```bash
-gcc ~/LPEDC/A055.c -o ~/LPEDC/A055 && ~/LPEDC/A055
+gcc ~/LPEDC/material/A055.c -o ~/LPEDC/material/A055 && ~/LPEDC/material/A055
 ```
 
 **Exemplo A056 · Funções que só fazem e funções que respondem**
@@ -253,7 +253,7 @@ double menor(double a, double b) {
 ```
 
 ```bash
-gcc ~/LPEDC/A056.c -o ~/LPEDC/A056 && ~/LPEDC/A056
+gcc ~/LPEDC/material/A056.c -o ~/LPEDC/material/A056 && ~/LPEDC/material/A056
 ```
 
 #### Exercícios
@@ -274,7 +274,7 @@ Total: 23.00 m2
 ```
 
 ```bash
-gcc ~/LPEDC/E163.c -o ~/LPEDC/E163 && ~/LPEDC/E163
+gcc ~/LPEDC/material/E163.c -o ~/LPEDC/material/E163 && ~/LPEDC/material/E163
 ```
 
 **Exercício E165** · ★★☆
@@ -291,7 +291,7 @@ Bissextos: 8
 ```
 
 ```bash
-gcc ~/LPEDC/E165.c -o ~/LPEDC/E165 && ~/LPEDC/E165
+gcc ~/LPEDC/material/E165.c -o ~/LPEDC/material/E165 && ~/LPEDC/material/E165
 ```
 
 **Exercício E166** · ★★☆
@@ -311,7 +311,7 @@ Total do dia: R$ 34.00
 ```
 
 ```bash
-gcc ~/LPEDC/E166.c -o ~/LPEDC/E166 -lm && ~/LPEDC/E166
+gcc ~/LPEDC/material/E166.c -o ~/LPEDC/material/E166 -lm && ~/LPEDC/material/E166
 ```
 
 **Exercício E167** · ★★★
@@ -334,7 +334,7 @@ ajusta(dobro(7)) = 4
 ```
 
 ```bash
-gcc ~/LPEDC/E167.c -o ~/LPEDC/E167 && ~/LPEDC/E167
+gcc ~/LPEDC/material/E167.c -o ~/LPEDC/material/E167 && ~/LPEDC/material/E167
 ```
 
 ---
@@ -368,7 +368,7 @@ No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%. Há duas
 caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a do
 `main` e a cópia da função. A função muda só a dela para 132.00:
 
-<p align="center"><img src="0029-ideia.svg" alt="Diagrama da ideia: Parâmetros e passagem por valor" width="858"></p>
+<p align="center"><img src="material/0029-ideia.svg" alt="Diagrama da ideia: Parâmetros e passagem por valor" width="858"></p>
 
 O código mostra as duas situações: primeiro ignorando o retorno, depois
 guardando:
@@ -407,7 +407,7 @@ double reajustar(double mensalidade, double percentual) {
 O valor sai do `main` por cópia e só volta pelo `return`. A pergunta "guardou
 o retorno?" decide se o `main` fica sabendo do reajuste:
 
-<p align="center"><img src="0029-fluxograma.svg" alt="Fluxograma: Parâmetros e passagem por valor" width="471"></p>
+<p align="center"><img src="material/0029-fluxograma.svg" alt="Fluxograma: Parâmetros e passagem por valor" width="471"></p>
 
 Mais três regras sobre parâmetros:
 
@@ -483,7 +483,7 @@ void contagem(int segundos) {
 ```
 
 ```bash
-gcc ~/LPEDC/A057.c -o ~/LPEDC/A057 && ~/LPEDC/A057
+gcc ~/LPEDC/material/A057.c -o ~/LPEDC/material/A057 && ~/LPEDC/material/A057
 ```
 
 **Exemplo A058 · void, conversão e expressões como argumento**
@@ -524,7 +524,7 @@ void linha(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A058.c -o ~/LPEDC/A058 && ~/LPEDC/A058
+gcc ~/LPEDC/material/A058.c -o ~/LPEDC/material/A058 && ~/LPEDC/material/A058
 ```
 
 #### Exercícios
@@ -554,7 +554,7 @@ main: 300
 ```
 
 ```bash
-gcc ~/LPEDC/E169.c -o ~/LPEDC/E169 && ~/LPEDC/E169
+gcc ~/LPEDC/material/E169.c -o ~/LPEDC/material/E169 && ~/LPEDC/material/E169
 ```
 
 **Exercício E171** · ★★☆
@@ -570,7 +570,7 @@ Em ordem: 6 e 9
 ```
 
 ```bash
-gcc ~/LPEDC/E171.c -o ~/LPEDC/E171 && ~/LPEDC/E171
+gcc ~/LPEDC/material/E171.c -o ~/LPEDC/material/E171 && ~/LPEDC/material/E171
 ```
 
 **Exercício E172** · ★★☆
@@ -590,7 +590,7 @@ No main, capital continua R$ 1000.00
 ```
 
 ```bash
-gcc ~/LPEDC/E172.c -o ~/LPEDC/E172 && ~/LPEDC/E172
+gcc ~/LPEDC/material/E172.c -o ~/LPEDC/material/E172 && ~/LPEDC/material/E172
 ```
 
 **Exercício E174** · ★★★
@@ -618,7 +618,7 @@ Capicuas de 100 a 999: 90
 ```
 
 ```bash
-gcc ~/LPEDC/E174.c -o ~/LPEDC/E174 && ~/LPEDC/E174
+gcc ~/LPEDC/material/E174.c -o ~/LPEDC/material/E174 && ~/LPEDC/material/E174
 ```
 
 ---
@@ -658,7 +658,7 @@ A função `chamar` tem três contadores: a global `atendidos`, a `static`
 dura o programa inteiro; a local fica no espaço da chamada e some quando a
 função retorna. Depois de três chamadas:
 
-<p align="center"><img src="0030-ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
+<p align="center"><img src="material/0030-ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
 
 No código, `vezes` mostra sempre 1, enquanto os outros dois avançam:
 
@@ -695,7 +695,7 @@ int main(void) {
 A cada chamada, a local nasce de novo com 0, e a `static` já espera com o
 valor anterior. Não existe passo "criar senha" dentro da repetição:
 
-<p align="center"><img src="0030-fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
+<p align="center"><img src="material/0030-fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
 
 As globais funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
@@ -772,7 +772,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A059.c -o ~/LPEDC/A059 && ~/LPEDC/A059
+gcc ~/LPEDC/material/A059.c -o ~/LPEDC/material/A059 && ~/LPEDC/material/A059
 ```
 
 **Exemplo A060 · Três variáveis com o mesmo nome**
@@ -815,7 +815,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A060.c -o ~/LPEDC/A060 && ~/LPEDC/A060
+gcc ~/LPEDC/material/A060.c -o ~/LPEDC/material/A060 && ~/LPEDC/material/A060
 ```
 
 #### Exercícios
@@ -847,7 +847,7 @@ compra de hoje: 30
 ```
 
 ```bash
-gcc ~/LPEDC/E175.c -o ~/LPEDC/E175 && ~/LPEDC/E175
+gcc ~/LPEDC/material/E175.c -o ~/LPEDC/material/E175 && ~/LPEDC/material/E175
 ```
 
 **Exercício E177** · ★★☆
@@ -863,7 +863,7 @@ Total: R$ 55.25
 ```
 
 ```bash
-gcc ~/LPEDC/E177.c -o ~/LPEDC/E177 && ~/LPEDC/E177
+gcc ~/LPEDC/material/E177.c -o ~/LPEDC/material/E177 && ~/LPEDC/material/E177
 ```
 
 **Exercício E178** · ★★☆
@@ -882,7 +882,7 @@ Saldo: R$ 201.50
 ```
 
 ```bash
-gcc ~/LPEDC/E178.c -o ~/LPEDC/E178 && ~/LPEDC/E178
+gcc ~/LPEDC/material/E178.c -o ~/LPEDC/material/E178 && ~/LPEDC/material/E178
 ```
 
 **Exercício E179** · ★★★
@@ -920,7 +920,7 @@ soma dos b: 25
 ```
 
 ```bash
-gcc ~/LPEDC/E179.c -o ~/LPEDC/E179 && ~/LPEDC/E179
+gcc ~/LPEDC/material/E179.c -o ~/LPEDC/material/E179 && ~/LPEDC/material/E179
 ```
 
 ---
@@ -962,7 +962,7 @@ Num pedido de R$ 50,00, o `main` chama `total_com_entrega`, que chama
 `taxa_entrega`. No ponto mais fundo há três quadros. Quando `taxa_entrega`
 devolve 7.90, seu quadro sai, e `total_com_entrega` volta a rodar com o valor:
 
-<p align="center"><img src="0031-ideia.svg" alt="Diagrama da ideia: A pilha de chamadas" width="928"></p>
+<p align="center"><img src="material/0031-ideia.svg" alt="Diagrama da ideia: A pilha de chamadas" width="928"></p>
 
 O código imprime "entra" e "sai" em cada função, com recuo, e a pilha aparece
 na saída:
@@ -1005,7 +1005,7 @@ No fluxograma, as chamadas empilham na descida e os retornos desempilham na
 ordem contrária. A decisão da taxa ocorre no topo, dentro de `taxa_entrega`,
 enquanto as outras duas funções esperam:
 
-<p align="center"><img src="0031-fluxograma.svg" alt="Fluxograma: A pilha de chamadas" width="359"></p>
+<p align="center"><img src="material/0031-fluxograma.svg" alt="Fluxograma: A pilha de chamadas" width="359"></p>
 
 ### Passo a passo
 
@@ -1088,7 +1088,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A061.c -o ~/LPEDC/A061 && ~/LPEDC/A061
+gcc ~/LPEDC/material/A061.c -o ~/LPEDC/material/A061 && ~/LPEDC/material/A061
 ```
 
 **Exemplo A062 · A mesma função volta para lugares diferentes**
@@ -1142,7 +1142,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A062.c -o ~/LPEDC/A062 && ~/LPEDC/A062
+gcc ~/LPEDC/material/A062.c -o ~/LPEDC/material/A062 && ~/LPEDC/material/A062
 ```
 
 #### Exercícios
@@ -1174,7 +1174,7 @@ IMC: 22.2
 ```
 
 ```bash
-gcc ~/LPEDC/E181.c -o ~/LPEDC/E181 && ~/LPEDC/E181
+gcc ~/LPEDC/material/E181.c -o ~/LPEDC/material/E181 && ~/LPEDC/material/E181
 ```
 
 **Exercício E183** · ★★☆
@@ -1198,7 +1198,7 @@ sai finalizar_compra
 ```
 
 ```bash
-gcc ~/LPEDC/E183.c -o ~/LPEDC/E183 && ~/LPEDC/E183
+gcc ~/LPEDC/material/E183.c -o ~/LPEDC/material/E183 && ~/LPEDC/material/E183
 ```
 
 **Exercício E184** · ★★☆
@@ -1227,7 +1227,7 @@ main: n = 5, r = 16
 ```
 
 ```bash
-gcc ~/LPEDC/E184.c -o ~/LPEDC/E184 && ~/LPEDC/E184
+gcc ~/LPEDC/material/E184.c -o ~/LPEDC/material/E184 && ~/LPEDC/material/E184
 ```
 
 **Exercício E186** · ★★★
@@ -1249,7 +1249,7 @@ Altura agora: 1
 ```
 
 ```bash
-gcc ~/LPEDC/E186.c -o ~/LPEDC/E186 && ~/LPEDC/E186
+gcc ~/LPEDC/material/E186.c -o ~/LPEDC/material/E186 && ~/LPEDC/material/E186
 ```
 
 ---
@@ -1288,7 +1288,7 @@ Na **ida**, a pilha cresce até `fatorial(1)`, o caso base, que devolve 1 sem
 chamar ninguém. Na **volta**, cada quadro recebe a resposta de cima, multiplica
 e devolve ao de baixo: 1, 2, 6, 24, 120:
 
-<p align="center"><img src="0032-ideia.svg" alt="Diagrama da ideia: Recursão" width="858"></p>
+<p align="center"><img src="material/0032-ideia.svg" alt="Diagrama da ideia: Recursão" width="858"></p>
 
 O código é quase a definição matemática:
 
@@ -1316,7 +1316,7 @@ Não há `for` nem `while`, mas o fluxograma tem duas voltas. A primeira é a id
 (empilha de novo com `n - 1` até o caso base); a segunda é a volta (cada quadro
 em espera multiplica e sai):
 
-<p align="center"><img src="0032-fluxograma.svg" alt="Fluxograma: Recursão" width="620"></p>
+<p align="center"><img src="material/0032-fluxograma.svg" alt="Fluxograma: Recursão" width="620"></p>
 
 ### Passo a passo
 
@@ -1386,7 +1386,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A063.c -o ~/LPEDC/A063 && ~/LPEDC/A063
+gcc ~/LPEDC/material/A063.c -o ~/LPEDC/material/A063 && ~/LPEDC/material/A063
 ```
 
 **Exemplo A064 · Imprimir antes ou depois da chamada**
@@ -1425,7 +1425,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A064.c -o ~/LPEDC/A064 && ~/LPEDC/A064
+gcc ~/LPEDC/material/A064.c -o ~/LPEDC/material/A064 && ~/LPEDC/material/A064
 ```
 
 #### Exercícios
@@ -1446,7 +1446,7 @@ Cumprimentos com 12 duplas: 66
 ```
 
 ```bash
-gcc ~/LPEDC/E187.c -o ~/LPEDC/E187 && ~/LPEDC/E187
+gcc ~/LPEDC/material/E187.c -o ~/LPEDC/material/E187 && ~/LPEDC/material/E187
 ```
 
 **Exercício E189** · ★★☆
@@ -1470,7 +1470,7 @@ volta 3
 ```
 
 ```bash
-gcc ~/LPEDC/E189.c -o ~/LPEDC/E189 && ~/LPEDC/E189
+gcc ~/LPEDC/material/E189.c -o ~/LPEDC/material/E189 && ~/LPEDC/material/E189
 ```
 
 **Exercício E190** · ★★☆
@@ -1488,7 +1488,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E190.c -o ~/LPEDC/E190 && ~/LPEDC/E190
+gcc ~/LPEDC/material/E190.c -o ~/LPEDC/material/E190 && ~/LPEDC/material/E190
 ```
 
 **Exercício E192** · ★★★
@@ -1507,7 +1507,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E192.c -o ~/LPEDC/E192 && ~/LPEDC/E192
+gcc ~/LPEDC/material/E192.c -o ~/LPEDC/material/E192 && ~/LPEDC/material/E192
 ```
 
 ---
@@ -1538,7 +1538,7 @@ círculo é o `n`). Os dois nós amarelos são `fib(3)`: o mesmo cálculo, com t
 o que vem embaixo, feito duas vezes. A pilha nunca passa de 5 quadros de `fib`,
 porque o programa desce um galho de cada vez:
 
-<p align="center"><img src="0033-ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
+<p align="center"><img src="material/0033-ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
 
 O programa conta as chamadas com uma global:
 
@@ -1580,7 +1580,7 @@ trabalho**, desconfie.
 No fluxograma, o caso recursivo tem duas chamadas em sequência. A segunda só
 começa quando a primeira voltou com a resposta inteira:
 
-<p align="center"><img src="0033-fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
+<p align="center"><img src="material/0033-fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
 
 ### Quando a recursão é a melhor ideia: Hanói
 
@@ -1674,7 +1674,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A065.c -o ~/LPEDC/A065 && ~/LPEDC/A065
+gcc ~/LPEDC/material/A065.c -o ~/LPEDC/material/A065 && ~/LPEDC/material/A065
 ```
 
 **Exemplo A066 · Torre de Hanói e o MDC de Euclides**
@@ -1722,7 +1722,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A066.c -o ~/LPEDC/A066 && ~/LPEDC/A066
+gcc ~/LPEDC/material/A066.c -o ~/LPEDC/material/A066 && ~/LPEDC/material/A066
 ```
 
 #### Exercícios
@@ -1741,7 +1741,7 @@ mdc(1000, 625) = 125 -> 1000/625 = 8/5
 ```
 
 ```bash
-gcc ~/LPEDC/E193.c -o ~/LPEDC/E193 && ~/LPEDC/E193
+gcc ~/LPEDC/material/E193.c -o ~/LPEDC/material/E193 && ~/LPEDC/material/E193
 ```
 
 **Exercício E195** · ★★☆
@@ -1759,7 +1759,7 @@ fib(46) = 1836311903
 ```
 
 ```bash
-gcc ~/LPEDC/E195.c -o ~/LPEDC/E195 && ~/LPEDC/E195
+gcc ~/LPEDC/material/E195.c -o ~/LPEDC/material/E195 && ~/LPEDC/material/E195
 ```
 
 **Exercício E196** · ★★☆
@@ -1788,7 +1788,7 @@ maior altura: 6
 ```
 
 ```bash
-gcc ~/LPEDC/E196.c -o ~/LPEDC/E196 && ~/LPEDC/E196
+gcc ~/LPEDC/material/E196.c -o ~/LPEDC/material/E196 && ~/LPEDC/material/E196
 ```
 
 **Exercício E197** · ★★★
@@ -1817,7 +1817,7 @@ rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 ```
 
 ```bash
-gcc ~/LPEDC/E197.c -o ~/LPEDC/E197 && ~/LPEDC/E197
+gcc ~/LPEDC/material/E197.c -o ~/LPEDC/material/E197 && ~/LPEDC/material/E197
 ```
 
 ---
@@ -1860,7 +1860,7 @@ arquivo que não se chama `A000.c` ou `E000.c`).
 O `conversao.h` é incluído pelos dois `.c`. Cada um vira um `.o`, e o ligador
 junta os dois no executável `viagem`:
 
-<p align="center"><img src="0034-ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
+<p align="center"><img src="material/0034-ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
 
 O módulo fica na pasta do assunto. O `conversao.h`:
 
@@ -1903,7 +1903,7 @@ int main(void) {
 Cada `.c` passa pelo compilador separado, e o erro de "função que não existe"
 só aparece no fim, no ligador:
 
-<p align="center"><img src="0034-fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
+<p align="center"><img src="material/0034-fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
 
 Três peças fecham o assunto:
 
@@ -1968,7 +1968,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A067.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/A067 && ~/LPEDC/A067
+gcc ~/LPEDC/material/A067.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/A067 && ~/LPEDC/material/A067
 ```
 
 **Exemplo A068 · O módulo guarda segredos**
@@ -2002,7 +2002,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A068.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/A068 && ~/LPEDC/A068
+gcc ~/LPEDC/material/A068.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/A068 && ~/LPEDC/material/A068
 ```
 
 #### Exercícios
@@ -2037,7 +2037,7 @@ Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 ```
 
 ```bash
-gcc ~/LPEDC/E199.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E199 && ~/LPEDC/E199
+gcc ~/LPEDC/material/E199.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E199 && ~/LPEDC/material/E199
 ```
 
 **Exercício E201** · ★★☆
@@ -2059,7 +2059,7 @@ Conversões do módulo: 1
 ```
 
 ```bash
-gcc ~/LPEDC/E201.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E201 && ~/LPEDC/E201
+gcc ~/LPEDC/material/E201.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E201 && ~/LPEDC/material/E201
 ```
 
 **Exercício E202** · ★★☆
@@ -2077,7 +2077,7 @@ Tênis: R$ 239.92
 ```
 
 ```bash
-gcc ~/LPEDC/E202.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E202 && ~/LPEDC/E202
+gcc ~/LPEDC/material/E202.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E202 && ~/LPEDC/material/E202
 ```
 
 **Exercício E203** · ★★★
@@ -2114,7 +2114,7 @@ Visitante: 4 pontos, 4 gols
 ```
 
 ```bash
-gcc ~/LPEDC/E203.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E203 && ~/LPEDC/E203
+gcc ~/LPEDC/material/E203.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E203 && ~/LPEDC/material/E203
 ```
 
 ---
@@ -2148,7 +2148,7 @@ No exemplo, o terreno tem `lado + 3` metros de lado, com `lado = 2`.
 `QUAD_RUIM(lado + 3)` chega ao compilador como `lado + 3 * lado + 3`, que dá
 11. A versão com parênteses chega como `((lado + 3) * (lado + 3))` e dá 25:
 
-<p align="center"><img src="0035-ideia.svg" alt="Diagrama da ideia: Pré-processador: macros e #ifdef" width="858"></p>
+<p align="center"><img src="material/0035-ideia.svg" alt="Diagrama da ideia: Pré-processador: macros e #ifdef" width="858"></p>
 
 O mesmo exemplo em C, com mais uma armadilha, a da divisão:
 
@@ -2181,7 +2181,7 @@ O pré-processador não sabe nada de C: só procura o nome da macro e troca. Que
 descobre o erro (quando descobre) é o compilador, olhando um código que você
 não escreveu:
 
-<p align="center"><img src="0035-fluxograma.svg" alt="Fluxograma: Pré-processador: macros e #ifdef" width="365"></p>
+<p align="center"><img src="material/0035-fluxograma.svg" alt="Fluxograma: Pré-processador: macros e #ifdef" width="365"></p>
 
 O pré-processador também decide **o que entra** no programa, com a
 **compilação condicional**:
@@ -2265,7 +2265,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A069.c -o ~/LPEDC/A069 && ~/LPEDC/A069
+gcc ~/LPEDC/material/A069.c -o ~/LPEDC/material/A069 && ~/LPEDC/material/A069
 ```
 
 **Exemplo A070 · Modo depuração com #ifdef**
@@ -2302,7 +2302,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A070.c -o ~/LPEDC/A070 && ~/LPEDC/A070
+gcc ~/LPEDC/material/A070.c -o ~/LPEDC/material/A070 && ~/LPEDC/material/A070
 ```
 
 #### Exercícios
@@ -2331,7 +2331,7 @@ ENTRE(25, 10, 20) = 0
 ```
 
 ```bash
-gcc ~/LPEDC/E206.c -o ~/LPEDC/E206 && ~/LPEDC/E206
+gcc ~/LPEDC/material/E206.c -o ~/LPEDC/material/E206 && ~/LPEDC/material/E206
 ```
 
 **Exercício E207** · ★★☆
@@ -2348,7 +2348,7 @@ Dois combos: R$ 60.00
 ```
 
 ```bash
-gcc ~/LPEDC/E207.c -o ~/LPEDC/E207 && ~/LPEDC/E207
+gcc ~/LPEDC/material/E207.c -o ~/LPEDC/material/E207 && ~/LPEDC/material/E207
 ```
 
 **Exercício E208** · ★★☆
@@ -2379,7 +2379,7 @@ Total: R$ 1050.00
 ```
 
 ```bash
-gcc ~/LPEDC/E208.c -o ~/LPEDC/E208 && ~/LPEDC/E208
+gcc ~/LPEDC/material/E208.c -o ~/LPEDC/material/E208 && ~/LPEDC/material/E208
 ```
 
 **Exercício E209** · ★★★
@@ -2404,7 +2404,7 @@ maior3: m = 19, chamadas = 3
 ```
 
 ```bash
-gcc ~/LPEDC/E209.c -o ~/LPEDC/E209 && ~/LPEDC/E209
+gcc ~/LPEDC/material/E209.c -o ~/LPEDC/material/E209 && ~/LPEDC/material/E209
 ```
 
 ---
@@ -2444,7 +2444,7 @@ Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço, a conta é R$ 42,24.
 Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 5 + 2 + 0,50 + 0,25 + 0,01:
 
-<p align="center"><img src="0036-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
+<p align="center"><img src="material/0036-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
 
 O programa principal, `caixa.c`, usa o módulo do cardápio. O `cardapio.h` e o
 `cardapio.c` estão na pasta do assunto (abra os dois):
@@ -2559,7 +2559,7 @@ O laço dos pedidos termina com o código 0; depois vêm a conta, o pagamento e 
 decisão "pagou o suficiente?". O troco, que parece um laço, é a recursão de
 `dar_troco`:
 
-<p align="center"><img src="0036-fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
+<p align="center"><img src="material/0036-fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
 
 O exemplo A072 mostra a outra vantagem de dividir em funções: **testar cada
 peça sozinha**. Com a macro `CONFERIR`, definida no próprio arquivo, ele confere o
@@ -2665,7 +2665,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A071.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/A071 && ~/LPEDC/A071
+gcc ~/LPEDC/material/A071.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/A071 && ~/LPEDC/material/A071
 ```
 
 **Exemplo A072 · Testando as peças do caixa**
@@ -2735,7 +2735,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A072.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/A072 && ~/LPEDC/A072
+gcc ~/LPEDC/material/A072.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/A072 && ~/LPEDC/material/A072
 ```
 
 #### Exercícios
@@ -2756,7 +2756,7 @@ Pessoa 3: IMC 17.6 (abaixo)
 ```
 
 ```bash
-gcc ~/LPEDC/E212.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E212 && ~/LPEDC/E212
+gcc ~/LPEDC/material/E212.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/E212 && ~/LPEDC/material/E212
 ```
 
 **Exercício E213** · ★★☆
@@ -2782,7 +2782,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E213.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E213 && ~/LPEDC/E213
+gcc ~/LPEDC/material/E213.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/E213 && ~/LPEDC/material/E213
 ```
 
 **Exercício E214** · ★★☆
@@ -2816,7 +2816,7 @@ DOBRO(total + 1) = 12
 ```
 
 ```bash
-gcc ~/LPEDC/E214.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E214 && ~/LPEDC/E214
+gcc ~/LPEDC/material/E214.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/E214 && ~/LPEDC/material/E214
 ```
 
 **Exercício E215** · ★★★
@@ -2844,7 +2844,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E215.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E215 && ~/LPEDC/E215
+gcc ~/LPEDC/material/E215.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/E215 && ~/LPEDC/material/E215
 ```
 
 ---
@@ -3027,7 +3027,7 @@ volta.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0401.c a P0430.c, na raiz; resoluções em `_respostas/04-funcoes/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0401.c a P0430.c, em `material/`; resoluções em `_respostas/04-funcoes/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3053,7 +3053,7 @@ Boné: R$ 59.90 -> R$ 53.91 no Pix
 3. Resposta esperada: R$ 269.91, R$ 143.10 e R$ 53.91.
 
 ```bash
-gcc ~/LPEDC/P0401.c -o ~/LPEDC/P0401 && ~/LPEDC/P0401
+gcc ~/LPEDC/material/P0401.c -o ~/LPEDC/material/P0401 && ~/LPEDC/material/P0401
 ```
 
 ---
@@ -3079,7 +3079,7 @@ Artilheiro com 17 gols
 3. Resposta esperada: Artilheiro com 17 gols.
 
 ```bash
-gcc ~/LPEDC/P0402.c -o ~/LPEDC/P0402 && ~/LPEDC/P0402
+gcc ~/LPEDC/material/P0402.c -o ~/LPEDC/material/P0402 && ~/LPEDC/material/P0402
 ```
 
 ---
@@ -3106,7 +3106,7 @@ Saída esperada:
 3. Resposta esperada: 120, 3628800 e 1307674368000.
 
 ```bash
-gcc ~/LPEDC/P0403.c -o ~/LPEDC/P0403 && ~/LPEDC/P0403
+gcc ~/LPEDC/material/P0403.c -o ~/LPEDC/material/P0403 && ~/LPEDC/material/P0403
 ```
 
 ---
@@ -3134,7 +3134,7 @@ Depois: R$ 2520.00
 3. Resposta esperada: Depois: R$ 2520.00.
 
 ```bash
-gcc ~/LPEDC/P0404.c -o ~/LPEDC/P0404 && ~/LPEDC/P0404
+gcc ~/LPEDC/material/P0404.c -o ~/LPEDC/material/P0404 && ~/LPEDC/material/P0404
 ```
 
 ---
@@ -3158,7 +3158,7 @@ Saída esperada:
 3. Resposta esperada: Área do terreno: 375.0 m2.
 
 ```bash
-gcc ~/LPEDC/P0405.c -o ~/LPEDC/P0405 && ~/LPEDC/P0405
+gcc ~/LPEDC/material/P0405.c -o ~/LPEDC/material/P0405 && ~/LPEDC/material/P0405
 ```
 
 ---
@@ -3187,7 +3187,7 @@ Partida com 5000 -> recorde 5000
 3. Resposta esperada: 1200, 3400, 3400 e 5000.
 
 ```bash
-gcc ~/LPEDC/P0406.c -o ~/LPEDC/P0406 && ~/LPEDC/P0406
+gcc ~/LPEDC/material/P0406.c -o ~/LPEDC/material/P0406 && ~/LPEDC/material/P0406
 ```
 
 ---
@@ -3215,7 +3215,7 @@ Base 10: 55 lata(s)
 3. Resposta esperada: 1, 10 e 55.
 
 ```bash
-gcc ~/LPEDC/P0407.c -o ~/LPEDC/P0407 && ~/LPEDC/P0407
+gcc ~/LPEDC/material/P0407.c -o ~/LPEDC/material/P0407 && ~/LPEDC/material/P0407
 ```
 
 ---
@@ -3241,7 +3241,7 @@ Saída esperada:
 3. Resposta esperada: 1, 4 e 7.
 
 ```bash
-gcc ~/LPEDC/P0408.c -o ~/LPEDC/P0408 && ~/LPEDC/P0408
+gcc ~/LPEDC/material/P0408.c -o ~/LPEDC/material/P0408 && ~/LPEDC/material/P0408
 ```
 
 ---
@@ -3269,7 +3269,7 @@ Compensa mais: grande
 3. Resposta esperada: R$ 0.0611 e R$ 0.0520; compensa a grande.
 
 ```bash
-gcc ~/LPEDC/P0409.c -o ~/LPEDC/P0409 && ~/LPEDC/P0409
+gcc ~/LPEDC/material/P0409.c -o ~/LPEDC/material/P0409 && ~/LPEDC/material/P0409
 ```
 
 ---
@@ -3296,7 +3296,7 @@ Saída esperada:
 3. Resposta esperada: as quatro barras acima.
 
 ```bash
-gcc ~/LPEDC/P0410.c -o ~/LPEDC/P0410 && ~/LPEDC/P0410
+gcc ~/LPEDC/material/P0410.c -o ~/LPEDC/material/P0410 && ~/LPEDC/material/P0410
 ```
 
 ### ★★☆ Para pensar
@@ -3324,7 +3324,7 @@ Saída esperada:
 4. Resposta esperada: 54321, 21 e 7.
 
 ```bash
-gcc ~/LPEDC/P0411.c -o ~/LPEDC/P0411 && ~/LPEDC/P0411
+gcc ~/LPEDC/material/P0411.c -o ~/LPEDC/material/P0411 && ~/LPEDC/material/P0411
 ```
 
 ---
@@ -3354,7 +3354,7 @@ Próxima saída juntas: 09:00
 4. Resposta esperada: a cada 180 minutos, às 09:00.
 
 ```bash
-gcc ~/LPEDC/P0412.c -o ~/LPEDC/P0412 && ~/LPEDC/P0412
+gcc ~/LPEDC/material/P0412.c -o ~/LPEDC/material/P0412 && ~/LPEDC/material/P0412
 ```
 
 ---
@@ -3385,7 +3385,7 @@ C(20, 10) = 184756 com 369511 chamadas
 4. Resposta esperada: 19, 503 e 369511 chamadas.
 
 ```bash
-gcc ~/LPEDC/P0413.c -o ~/LPEDC/P0413 && ~/LPEDC/P0413
+gcc ~/LPEDC/material/P0413.c -o ~/LPEDC/material/P0413 && ~/LPEDC/material/P0413
 ```
 
 ---
@@ -3420,7 +3420,7 @@ Saída esperada:
 3. Resposta esperada: 274 formas para 10 degraus.
 
 ```bash
-gcc ~/LPEDC/P0414.c -o ~/LPEDC/P0414 && ~/LPEDC/P0414
+gcc ~/LPEDC/material/P0414.c -o ~/LPEDC/material/P0414 && ~/LPEDC/material/P0414
 ```
 
 ---
@@ -3449,7 +3449,7 @@ Total: 4 h 10 min
 3. Resposta esperada: a mesma saída do programa original.
 
 ```bash
-gcc ~/LPEDC/P0415.c -o ~/LPEDC/P0415 && ~/LPEDC/P0415
+gcc ~/LPEDC/material/P0415.c -o ~/LPEDC/material/P0415 && ~/LPEDC/material/P0415
 ```
 
 ---
@@ -3477,7 +3477,7 @@ Leitura 34.0 -> média 31.0
 3. Resposta esperada: 30.0, 31.0, 30.0 e 31.0.
 
 ```bash
-gcc ~/LPEDC/P0416.c -o ~/LPEDC/P0416 && ~/LPEDC/P0416
+gcc ~/LPEDC/material/P0416.c -o ~/LPEDC/material/P0416 && ~/LPEDC/material/P0416
 ```
 
 ---
@@ -3514,7 +3514,7 @@ Resultado: 16
 4. Resposta esperada: o desenho acima, Resultado: 16.
 
 ```bash
-gcc ~/LPEDC/P0417.c -o ~/LPEDC/P0417 && ~/LPEDC/P0417
+gcc ~/LPEDC/material/P0417.c -o ~/LPEDC/material/P0417 && ~/LPEDC/material/P0417
 ```
 
 ---
@@ -3547,7 +3547,7 @@ preco * ICMS = 20.00
 4. Resposta esperada: 120.00 e 20.00 com ESTADO 1.
 
 ```bash
-gcc ~/LPEDC/P0418.c -o ~/LPEDC/P0418 && ~/LPEDC/P0418
+gcc ~/LPEDC/material/P0418.c -o ~/LPEDC/material/P0418 && ~/LPEDC/material/P0418
 ```
 
 ---
@@ -3576,7 +3576,7 @@ Saída esperada:
 3. Resposta esperada: 3 e 1.
 
 ```bash
-gcc ~/LPEDC/P0419.c -o ~/LPEDC/P0419 && ~/LPEDC/P0419
+gcc ~/LPEDC/material/P0419.c -o ~/LPEDC/material/P0419 && ~/LPEDC/material/P0419
 ```
 
 ---
@@ -3603,7 +3603,7 @@ Maior dígito de 5: 5
 3. Resposta esperada: 9, 8 e 5.
 
 ```bash
-gcc ~/LPEDC/P0420.c -o ~/LPEDC/P0420 && ~/LPEDC/P0420
+gcc ~/LPEDC/material/P0420.c -o ~/LPEDC/material/P0420 && ~/LPEDC/material/P0420
 ```
 
 ### ★★★ Desafio
@@ -3648,7 +3648,7 @@ Disco 1: 8, disco 2: 4, disco 3: 2, disco 4: 1
 4. Resposta esperada: 15 movimentos; 8, 4, 2 e 1.
 
 ```bash
-gcc ~/LPEDC/P0421.c -o ~/LPEDC/P0421 && ~/LPEDC/P0421
+gcc ~/LPEDC/material/P0421.c -o ~/LPEDC/material/P0421 && ~/LPEDC/material/P0421
 ```
 
 ---
@@ -3681,7 +3681,7 @@ Saída esperada:
 4. Resposta esperada: 2026 nos três primeiros; inválido no último.
 
 ```bash
-gcc ~/LPEDC/P0422.c -o ~/LPEDC/P0422 && ~/LPEDC/P0422
+gcc ~/LPEDC/material/P0422.c -o ~/LPEDC/material/P0422 && ~/LPEDC/material/P0422
 ```
 
 ---
@@ -3714,7 +3714,7 @@ Saída esperada:
 4. Resposta esperada: válido, inválido, inválido.
 
 ```bash
-gcc ~/LPEDC/P0423.c -o ~/LPEDC/P0423 && ~/LPEDC/P0423
+gcc ~/LPEDC/material/P0423.c -o ~/LPEDC/material/P0423 && ~/LPEDC/material/P0423
 ```
 
 ---
@@ -3748,7 +3748,7 @@ Saída esperada:
 3. formas: conte os p de 2 até n / 2 que funcionam.
 
 ```bash
-gcc ~/LPEDC/P0424.c -o ~/LPEDC/P0424 && ~/LPEDC/P0424
+gcc ~/LPEDC/material/P0424.c -o ~/LPEDC/material/P0424 && ~/LPEDC/material/P0424
 ```
 
 ---
@@ -3785,7 +3785,7 @@ Pulados: 4 dia(s) de fim de semana e 1 feriado(s)
    feriado.
 
 ```bash
-gcc ~/LPEDC/P0425.c -o ~/LPEDC/P0425 && ~/LPEDC/P0425
+gcc ~/LPEDC/material/P0425.c -o ~/LPEDC/material/P0425 && ~/LPEDC/material/P0425
 ```
 
 ---
@@ -3816,7 +3816,7 @@ R$ 1,00: 293 forma(s), 15501 chamada(s)
 4. Resposta esperada: 4, 13 e 293 formas.
 
 ```bash
-gcc ~/LPEDC/P0426.c -o ~/LPEDC/P0426 && ~/LPEDC/P0426
+gcc ~/LPEDC/material/P0426.c -o ~/LPEDC/material/P0426 && ~/LPEDC/material/P0426
 ```
 
 ---
@@ -3860,7 +3860,7 @@ Chamadas de regua: 31
 4. Resposta esperada: 15 marcas e 31 chamadas.
 
 ```bash
-gcc ~/LPEDC/P0427.c -o ~/LPEDC/P0427 && ~/LPEDC/P0427
+gcc ~/LPEDC/material/P0427.c -o ~/LPEDC/material/P0427 && ~/LPEDC/material/P0427
 ```
 
 ---
@@ -3900,7 +3900,7 @@ Saída esperada:
 4. extenso(n): milhar = n / 1000 e resto = n % 1000; milhar 1 é só "mil".
 
 ```bash
-gcc ~/LPEDC/P0428.c -o ~/LPEDC/P0428 && ~/LPEDC/P0428
+gcc ~/LPEDC/material/P0428.c -o ~/LPEDC/material/P0428 && ~/LPEDC/material/P0428
 ```
 
 ---
@@ -3932,7 +3932,7 @@ Total: 11
 4. Resposta esperada: 11 números felizes até 50.
 
 ```bash
-gcc ~/LPEDC/P0429.c -o ~/LPEDC/P0429 && ~/LPEDC/P0429
+gcc ~/LPEDC/material/P0429.c -o ~/LPEDC/material/P0429 && ~/LPEDC/material/P0429
 ```
 
 ---
@@ -3967,7 +3967,7 @@ Saída esperada:
    antes da chamada recursiva quando ainda sobrar algo.
 
 ```bash
-gcc ~/LPEDC/P0430.c -o ~/LPEDC/P0430 && ~/LPEDC/P0430
+gcc ~/LPEDC/material/P0430.c -o ~/LPEDC/material/P0430 && ~/LPEDC/material/P0430
 ```
 
 ## Questões no estilo da prova

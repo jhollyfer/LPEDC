@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../0084-pilha.c"
+#include "../../material/0084-pilha.c"
 
 int precedencia(int op) {
     if (op == '*' || op == '/') {

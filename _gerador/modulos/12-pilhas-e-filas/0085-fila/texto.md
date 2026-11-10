@@ -7,7 +7,7 @@ Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
 primeiro a entrar é o primeiro a sair, **FIFO** (*first in, first out*), o
 contrário da pilha.
 
-O TAD tem a mesma cara da pilha, no [`fila.h`](0085-fila.h):
+O TAD tem a mesma cara da pilha, no [`fila.h`](material/0085-fila.h):
 
 ```c
 typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
@@ -28,7 +28,7 @@ vetor com as primeiras gavetas vazias.
 A saída é a **fila circular**: passou da última gaveta, volta à 0. Guarde o
 **início** e o número de itens `n`; a próxima vaga é
 `(inicio + n) % CAPACIDADE`. Com 8 gavetas, depois da 7 vem
-`(7 + 1) % 8 = 0`. Parte principal do [`fila.c`](0085-fila.c):
+`(7 + 1) % 8 = 0`. Parte principal do [`fila.c`](material/0085-fila.c):
 
 ```c
 #define CAPACIDADE 8

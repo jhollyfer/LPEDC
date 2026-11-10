@@ -90,7 +90,7 @@ Na árvore de decisões, cada nível é um complemento: o ramo da esquerda deixa
 item de fora e o da direita o põe. As 8 folhas são os 8 copos, na ordem em que
 o programa os mostra:
 
-<p align="center"><img src="0125-ideia.svg" alt="Diagrama da ideia: Subconjuntos" width="864"></p>
+<p align="center"><img src="material/0125-ideia.svg" alt="Diagrama da ideia: Subconjuntos" width="864"></p>
 
 O programa percorre a árvore da esquerda para a direita:
 
@@ -146,7 +146,7 @@ custo é **O(n · 2ⁿ)**, e com 40 itens passa de um trilhão de subconjuntos.
 Enumerar tudo só serve para `n` pequeno. O fluxograma não tem laço: quem
 repete é a recursão:
 
-<p align="center"><img src="0125-fluxograma.svg" alt="Fluxograma: Subconjuntos" width="531"></p>
+<p align="center"><img src="material/0125-fluxograma.svg" alt="Fluxograma: Subconjuntos" width="531"></p>
 
 > [!WARNING]
 > No jeito por bits, `m & (1 << i)` não dá 1 quando o bit está ligado: dá o
@@ -223,7 +223,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A249.c -o ~/LPEDC/A249 && ~/LPEDC/A249
+gcc ~/LPEDC/material/A249.c -o ~/LPEDC/material/A249 && ~/LPEDC/material/A249
 ```
 
 **Exemplo A250 · Dois sabores na casquinha: só os subconjuntos de tamanho k**
@@ -273,7 +273,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A250.c -o ~/LPEDC/A250 && ~/LPEDC/A250
+gcc ~/LPEDC/material/A250.c -o ~/LPEDC/material/A250 && ~/LPEDC/material/A250
 ```
 
 #### Exercícios
@@ -299,7 +299,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E745.c -o ~/LPEDC/E745 && ~/LPEDC/E745
+gcc ~/LPEDC/material/E745.c -o ~/LPEDC/material/E745 && ~/LPEDC/material/E745
 ```
 
 **Exercício E747** · ★★☆
@@ -327,7 +327,7 @@ café frutas frango
 ```
 
 ```bash
-gcc ~/LPEDC/E747.c -o ~/LPEDC/E747 && ~/LPEDC/E747
+gcc ~/LPEDC/material/E747.c -o ~/LPEDC/material/E747 && ~/LPEDC/material/E747
 ```
 
 **Exercício E748** · ★★☆
@@ -357,7 +357,7 @@ Ana: bicicleta bola livro | Beto: patinete skate patins
 ```
 
 ```bash
-gcc ~/LPEDC/E748.c -o ~/LPEDC/E748 && ~/LPEDC/E748
+gcc ~/LPEDC/material/E748.c -o ~/LPEDC/material/E748 && ~/LPEDC/material/E748
 ```
 
 **Exercício E750** · ★★★
@@ -384,7 +384,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E750.c -o ~/LPEDC/E750 && ~/LPEDC/E750
+gcc ~/LPEDC/material/E750.c -o ~/LPEDC/material/E750 && ~/LPEDC/material/E750
 ```
 
 ---
@@ -408,7 +408,7 @@ por estar num parâmetro; aqui ela mexe no **vetor**, que é um só para todas a
 chamadas. Quando `i` chega a `n`, a ordem é mostrada. As 6 folhas da árvore
 são as 6 ordens, na sequência em que o programa as mostra:
 
-<p align="center"><img src="0126-ideia.svg" alt="Diagrama da ideia: Permutações" width="860"></p>
+<p align="center"><img src="material/0126-ideia.svg" alt="Diagrama da ideia: Permutações" width="860"></p>
 
 O vetor guarda ponteiros para os nomes (assunto 0048): trocar dois elementos
 é trocar dois ponteiros, e os textos não saem do lugar.
@@ -463,7 +463,7 @@ dela usa o exemplo A251).
 O laço do `j` abre os ramos, e cada volta tem o par troca e destroca em volta
 da chamada recursiva:
 
-<p align="center"><img src="0126-fluxograma.svg" alt="Fluxograma: Permutações" width="520"></p>
+<p align="center"><img src="material/0126-fluxograma.svg" alt="Fluxograma: Permutações" width="520"></p>
 
 > [!WARNING]
 > Sem o **desfaz**, o programa ainda mostra 6 linhas, mas com ordens repetidas
@@ -530,7 +530,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A251.c -o ~/LPEDC/A251 && ~/LPEDC/A251
+gcc ~/LPEDC/material/A251.c -o ~/LPEDC/material/A251 && ~/LPEDC/material/A251
 ```
 
 **Exemplo A252 · ARARA: anagramas sem repetir quando há letras iguais**
@@ -592,7 +592,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A252.c -o ~/LPEDC/A252 && ~/LPEDC/A252
+gcc ~/LPEDC/material/A252.c -o ~/LPEDC/material/A252 && ~/LPEDC/material/A252
 ```
 
 #### Exercícios
@@ -618,7 +618,7 @@ soma: 4440
 ```
 
 ```bash
-gcc ~/LPEDC/E751.c -o ~/LPEDC/E751 && ~/LPEDC/E751
+gcc ~/LPEDC/material/E751.c -o ~/LPEDC/material/E751 && ~/LPEDC/material/E751
 ```
 
 **Exercício E753** · ★★☆
@@ -639,7 +639,7 @@ rota: Pizzaria -> Lagoa -> Centro -> Jardim -> Vila -> Pizzaria
 ```
 
 ```bash
-gcc ~/LPEDC/E753.c -o ~/LPEDC/E753 && ~/LPEDC/E753
+gcc ~/LPEDC/material/E753.c -o ~/LPEDC/material/E753 && ~/LPEDC/material/E753
 ```
 
 **Exercício E754** · ★★☆
@@ -661,7 +661,7 @@ Bia aparece em 36
 ```
 
 ```bash
-gcc ~/LPEDC/E754.c -o ~/LPEDC/E754 && ~/LPEDC/E754
+gcc ~/LPEDC/material/E754.c -o ~/LPEDC/material/E754 && ~/LPEDC/material/E754
 ```
 
 **Exercício E756** · ★★★
@@ -693,7 +693,7 @@ depois de 1 3 5 4 2 vem 1 4 2 3 5
 ```
 
 ```bash
-gcc ~/LPEDC/E756.c -o ~/LPEDC/E756 && ~/LPEDC/E756
+gcc ~/LPEDC/material/E756.c -o ~/LPEDC/material/E756 && ~/LPEDC/material/E756
 ```
 
 ---
@@ -723,7 +723,7 @@ esquerda leva o item e a direita não. As caixas vermelhas são podas, as verdes
 são soluções e as cinzas são becos sem saída (os itens acabaram antes de a soma
 chegar a 35):
 
-<p align="center"><img src="0127-ideia.svg" alt="Diagrama da ideia: Backtracking" width="858"></p>
+<p align="center"><img src="material/0127-ideia.svg" alt="Diagrama da ideia: Backtracking" width="858"></p>
 
 A poda é o primeiro `if`: a chamada que passou do alvo volta na hora:
 
@@ -779,7 +779,7 @@ A árvore completa de 4 itens tem 31 nós, e a poda deixou 21. O ganho cresce
 com `n`: uma poda perto da raiz corta metade da árvore, e com 30 itens e um
 alvo pequeno são alguns milhares de chamadas em vez de um bilhão:
 
-<p align="center"><img src="0127-fluxograma.svg" alt="Fluxograma: Backtracking" width="588"></p>
+<p align="center"><img src="material/0127-fluxograma.svg" alt="Fluxograma: Backtracking" width="588"></p>
 
 > [!WARNING]
 > A ordem dos testes importa. Com `if (i == N) return;` **antes** de
@@ -869,7 +869,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A253.c -o ~/LPEDC/A253 && ~/LPEDC/A253
+gcc ~/LPEDC/material/A253.c -o ~/LPEDC/material/A253 && ~/LPEDC/material/A253
 ```
 
 **Exemplo A254 · Playlist de 30 minutos: parar na primeira solução**
@@ -944,7 +944,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A254.c -o ~/LPEDC/A254 && ~/LPEDC/A254
+gcc ~/LPEDC/material/A254.c -o ~/LPEDC/material/A254 && ~/LPEDC/material/A254
 ```
 
 #### Exercícios
@@ -969,7 +969,7 @@ comida água saco
 ```
 
 ```bash
-gcc ~/LPEDC/E757.c -o ~/LPEDC/E757 && ~/LPEDC/E757
+gcc ~/LPEDC/material/E757.c -o ~/LPEDC/material/E757 && ~/LPEDC/material/E757
 ```
 
 **Exercício E759** · ★★☆
@@ -988,7 +988,7 @@ caixas: 47 28 23
 ```
 
 ```bash
-gcc ~/LPEDC/E759.c -o ~/LPEDC/E759 && ~/LPEDC/E759
+gcc ~/LPEDC/material/E759.c -o ~/LPEDC/material/E759 && ~/LPEDC/material/E759
 ```
 
 **Exercício E760** · ★★☆
@@ -1012,7 +1012,7 @@ menos pacotes: 25 20 15 (3 pacotes)
 ```
 
 ```bash
-gcc ~/LPEDC/E760.c -o ~/LPEDC/E760 && ~/LPEDC/E760
+gcc ~/LPEDC/material/E760.c -o ~/LPEDC/material/E760 && ~/LPEDC/material/E760
 ```
 
 **Exercício E762** · ★★★
@@ -1036,7 +1036,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E762.c -o ~/LPEDC/E762 && ~/LPEDC/E762
+gcc ~/LPEDC/material/E762.c -o ~/LPEDC/material/E762 && ~/LPEDC/material/E762
 ```
 
 ---
@@ -1064,7 +1064,7 @@ e `diag2[2N - 1]`. No desenho, à esquerda está a primeira solução; no meio,
 `l + c` de cada casa; à direita, `l - c + 3`. A rainha da linha 1, coluna 3,
 ocupa a diagonal ↗ 4 e a ↘ 1, e as casas destacadas ficam proibidas:
 
-<p align="center"><img src="0128-ideia.svg" alt="Diagrama da ideia: N-rainhas" width="858"></p>
+<p align="center"><img src="material/0128-ideia.svg" alt="Diagrama da ideia: N-rainhas" width="858"></p>
 
 O programa mostra cada solução como tabuleiro e conta as chamadas:
 
@@ -1148,7 +1148,7 @@ A rainha em (0, 0) nunca dá certo: a busca gasta 4 chamadas para descobrir e
 esquece o galho. O fluxograma é o do assunto anterior, com um laço pelas
 colunas no lugar de "leva ou não leva":
 
-<p align="center"><img src="0128-fluxograma.svg" alt="Fluxograma: N-rainhas" width="757"></p>
+<p align="center"><img src="material/0128-fluxograma.svg" alt="Fluxograma: N-rainhas" width="757"></p>
 
 > [!WARNING]
 > O índice da diagonal ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`
@@ -1222,7 +1222,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A255.c -o ~/LPEDC/A255 && ~/LPEDC/A255
+gcc ~/LPEDC/material/A255.c -o ~/LPEDC/material/A255 && ~/LPEDC/material/A255
 ```
 
 **Exemplo A256 · A primeira solução do 8-rainhas, sem vetores auxiliares**
@@ -1294,7 +1294,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A256.c -o ~/LPEDC/A256 && ~/LPEDC/A256
+gcc ~/LPEDC/material/A256.c -o ~/LPEDC/material/A256 && ~/LPEDC/material/A256
 ```
 
 #### Exercícios
@@ -1331,7 +1331,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E763.c -o ~/LPEDC/E763 && ~/LPEDC/E763
+gcc ~/LPEDC/material/E763.c -o ~/LPEDC/material/E763 && ~/LPEDC/material/E763
 ```
 
 **Exercício E765** · ★★☆
@@ -1349,7 +1349,7 @@ primeira: 3 0 4 7 1 6 2 5
 ```
 
 ```bash
-gcc ~/LPEDC/E765.c -o ~/LPEDC/E765 && ~/LPEDC/E765
+gcc ~/LPEDC/material/E765.c -o ~/LPEDC/material/E765 && ~/LPEDC/material/E765
 ```
 
 **Exercício E766** · ★★☆
@@ -1372,7 +1372,7 @@ n = 6: 90 arrumações, primeira: 0 2 4 1 3 5
 ```
 
 ```bash
-gcc ~/LPEDC/E766.c -o ~/LPEDC/E766 && ~/LPEDC/E766
+gcc ~/LPEDC/material/E766.c -o ~/LPEDC/material/E766 && ~/LPEDC/material/E766
 ```
 
 **Exercício E767** · ★★★
@@ -1391,7 +1391,7 @@ vetores limpos no fim: sim
 ```
 
 ```bash
-gcc ~/LPEDC/E767.c -o ~/LPEDC/E767 && ~/LPEDC/E767
+gcc ~/LPEDC/material/E767.c -o ~/LPEDC/material/E767 && ~/LPEDC/material/E767
 ```
 
 ---
@@ -1421,7 +1421,7 @@ cima) decide qual caminho sai primeiro.
 No desenho, os números mostram a ordem dos passos: a busca tentou o bolsão da
 direita, achou só becos (vermelho), voltou e desceu pela coluna 1:
 
-<p align="center"><img src="0129-ideia.svg" alt="Diagrama da ideia: Labirinto" width="858"></p>
+<p align="center"><img src="material/0129-ideia.svg" alt="Diagrama da ideia: Labirinto" width="858"></p>
 
 No fim, `*` marca o caminho e `x` os becos abandonados:
 
@@ -1497,7 +1497,7 @@ Sem a saída e sem o desfazer, a mesma recursão vira o **flood fill**
 A257). Três perguntas descartam as casas impossíveis, e só uma casa nova chega
 ao `'*'`:
 
-<p align="center"><img src="0129-fluxograma.svg" alt="Fluxograma: Labirinto" width="700"></p>
+<p align="center"><img src="material/0129-fluxograma.svg" alt="Fluxograma: Labirinto" width="700"></p>
 
 > [!WARNING]
 > Sem a marca de visitada, a busca anda em círculos: (0, 0) chama (0, 1), que
@@ -1574,7 +1574,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A257.c -o ~/LPEDC/A257 && ~/LPEDC/A257
+gcc ~/LPEDC/material/A257.c -o ~/LPEDC/material/A257 && ~/LPEDC/material/A257
 ```
 
 **Exemplo A258 · Todos os caminhos da praça: desfazer de verdade para achar o menor**
@@ -1647,7 +1647,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A258.c -o ~/LPEDC/A258 && ~/LPEDC/A258
+gcc ~/LPEDC/material/A258.c -o ~/LPEDC/material/A258 && ~/LPEDC/material/A258
 ```
 
 #### Exercícios
@@ -1674,7 +1674,7 @@ a vaca alcança 12 casas
 ```
 
 ```bash
-gcc ~/LPEDC/E769.c -o ~/LPEDC/E769 && ~/LPEDC/E769
+gcc ~/LPEDC/material/E769.c -o ~/LPEDC/material/E769 && ~/LPEDC/material/E769
 ```
 
 **Exercício E771** · ★★☆
@@ -1697,7 +1697,7 @@ lago 5: começa em (5, 6), tamanho 1
 ```
 
 ```bash
-gcc ~/LPEDC/E771.c -o ~/LPEDC/E771 && ~/LPEDC/E771
+gcc ~/LPEDC/material/E771.c -o ~/LPEDC/material/E771 && ~/LPEDC/material/E771
 ```
 
 **Exercício E772** · ★★☆
@@ -1722,7 +1722,7 @@ caminho: (0,0) (0,1) (1,1) (2,1) (2,2) (2,3) (3,3) (3,4) (3,5) (4,5)
 ```
 
 ```bash
-gcc ~/LPEDC/E772.c -o ~/LPEDC/E772 && ~/LPEDC/E772
+gcc ~/LPEDC/material/E772.c -o ~/LPEDC/material/E772 && ~/LPEDC/material/E772
 ```
 
 **Exercício E774** · ★★★
@@ -1748,7 +1748,7 @@ menor caminho: 9 passos
 ```
 
 ```bash
-gcc ~/LPEDC/E774.c -o ~/LPEDC/E774 && ~/LPEDC/E774
+gcc ~/LPEDC/material/E774.c -o ~/LPEDC/material/E774 && ~/LPEDC/material/E774
 ```
 
 ---
@@ -1774,7 +1774,7 @@ e, se não deu certo, **apaga e desmarca**. Sem casa vazia, o `true` sobe até o
 Na casa (0, 1), a poda deixa só o 5 e o 7. O programa tenta o 5 e, só depois
 de muitos retrocessos, descobre que é o 7:
 
-<p align="center"><img src="0130-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="material/0130-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa, com o jogo escrito como texto (`.` é casa vazia):
 
@@ -1868,7 +1868,7 @@ preenchimentos. Escolher **qual** casa preencher (a com menos candidatos)
 derruba este jogo para 64 chamadas (exemplo A260). O fluxograma é o esqueleto
 do módulo, com a casa no lugar do item e a regra do jogo no da poda:
 
-<p align="center"><img src="0130-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="767"></p>
+<p align="center"><img src="material/0130-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="767"></p>
 
 > [!WARNING]
 > No desfazer, as duas coisas precisam voltar: `g[l][c] = 0` **e**
@@ -1952,7 +1952,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A259.c -o ~/LPEDC/A259 && ~/LPEDC/A259
+gcc ~/LPEDC/material/A259.c -o ~/LPEDC/material/A259 && ~/LPEDC/material/A259
 ```
 
 **Exemplo A260 · Sudoku com heurística: começar pela casa mais apertada**
@@ -2046,7 +2046,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A260.c -o ~/LPEDC/A260 && ~/LPEDC/A260
+gcc ~/LPEDC/material/A260.c -o ~/LPEDC/material/A260 && ~/LPEDC/material/A260
 ```
 
 #### Exercícios
@@ -2086,7 +2086,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E776.c -o ~/LPEDC/E776 && ~/LPEDC/E776
+gcc ~/LPEDC/material/E776.c -o ~/LPEDC/material/E776 && ~/LPEDC/material/E776
 ```
 
 **Exercício E777** · ★★☆
@@ -2122,7 +2122,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E777.c -o ~/LPEDC/E777 && ~/LPEDC/E777
+gcc ~/LPEDC/material/E777.c -o ~/LPEDC/material/E777 && ~/LPEDC/material/E777
 ```
 
 **Exercício E778** · ★★☆
@@ -2166,7 +2166,7 @@ jogo 2: mais de uma solução
 ```
 
 ```bash
-gcc ~/LPEDC/E778.c -o ~/LPEDC/E778 && ~/LPEDC/E778
+gcc ~/LPEDC/material/E778.c -o ~/LPEDC/material/E778 && ~/LPEDC/material/E778
 ```
 
 **Exercício E780** · ★★★
@@ -2208,7 +2208,7 @@ diagonais: 251796348 e 526394871
 ```
 
 ```bash
-gcc ~/LPEDC/E780.c -o ~/LPEDC/E780 && ~/LPEDC/E780
+gcc ~/LPEDC/material/E780.c -o ~/LPEDC/material/E780 && ~/LPEDC/material/E780
 ```
 
 ---
@@ -2356,7 +2356,7 @@ mochila ganham, no módulo 21, um método que não testa tudo.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1901.c a P1930.c, na raiz; resoluções em `_respostas/19-backtracking/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1901.c a P1930.c, em `material/`; resoluções em `_respostas/19-backtracking/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2394,7 +2394,7 @@ Total: 10 potes
 3. Resposta esperada: 10 potes, que é C(5, 3) = 5! / (3! 2!).
 
 ```bash
-gcc ~/LPEDC/P1901.c -o ~/LPEDC/P1901 && ~/LPEDC/P1901
+gcc ~/LPEDC/material/P1901.c -o ~/LPEDC/material/P1901 && ~/LPEDC/material/P1901
 ```
 
 ---
@@ -2439,7 +2439,7 @@ KKKK
    duas caras e duas coroas.
 
 ```bash
-gcc ~/LPEDC/P1902.c -o ~/LPEDC/P1902 && ~/LPEDC/P1902
+gcc ~/LPEDC/material/P1902.c -o ~/LPEDC/material/P1902 && ~/LPEDC/material/P1902
 ```
 
 ---
@@ -2481,7 +2481,7 @@ Total: 13 configurações
    Fibonacci: 2, 3, 5, 8, 13...
 
 ```bash
-gcc ~/LPEDC/P1903.c -o ~/LPEDC/P1903 && ~/LPEDC/P1903
+gcc ~/LPEDC/material/P1903.c -o ~/LPEDC/material/P1903 && ~/LPEDC/material/P1903
 ```
 
 ---
@@ -2524,7 +2524,7 @@ Chamadas: 31, folhas: 16
 3. Resposta esperada: 31 chamadas e 16 folhas (2^(n+1) - 1 e 2^n).
 
 ```bash
-gcc ~/LPEDC/P1904.c -o ~/LPEDC/P1904 && ~/LPEDC/P1904
+gcc ~/LPEDC/material/P1904.c -o ~/LPEDC/material/P1904 && ~/LPEDC/material/P1904
 ```
 
 ---
@@ -2558,7 +2558,7 @@ Caio Ana Bia
    na ordem de cima.
 
 ```bash
-gcc ~/LPEDC/P1905.c -o ~/LPEDC/P1905 && ~/LPEDC/P1905
+gcc ~/LPEDC/material/P1905.c -o ~/LPEDC/material/P1905 && ~/LPEDC/material/P1905
 ```
 
 ---
@@ -2596,7 +2596,7 @@ Total: 12 chapas
 3. Resposta esperada: 12 chapas, o arranjo A(4, 2) = 4 · 3.
 
 ```bash
-gcc ~/LPEDC/P1906.c -o ~/LPEDC/P1906 && ~/LPEDC/P1906
+gcc ~/LPEDC/material/P1906.c -o ~/LPEDC/material/P1906 && ~/LPEDC/material/P1906
 ```
 
 ---
@@ -2625,7 +2625,7 @@ Playlist: 7 12 11 = 30 minutos
    antes de não levar" encontra.
 
 ```bash
-gcc ~/LPEDC/P1907.c -o ~/LPEDC/P1907 && ~/LPEDC/P1907
+gcc ~/LPEDC/material/P1907.c -o ~/LPEDC/material/P1907 && ~/LPEDC/material/P1907
 ```
 
 ---
@@ -2660,7 +2660,7 @@ Queimadas: 20 casas
    esquerda escapam mesmo com o vento.
 
 ```bash
-gcc ~/LPEDC/P1908.c -o ~/LPEDC/P1908 && ~/LPEDC/P1908
+gcc ~/LPEDC/material/P1908.c -o ~/LPEDC/material/P1908 && ~/LPEDC/material/P1908
 ```
 
 ---
@@ -2698,7 +2698,7 @@ Saída esperada:
    menos soluções que o 5.
 
 ```bash
-gcc ~/LPEDC/P1909.c -o ~/LPEDC/P1909 && ~/LPEDC/P1909
+gcc ~/LPEDC/material/P1909.c -o ~/LPEDC/material/P1909 && ~/LPEDC/material/P1909
 ```
 
 ---
@@ -2733,7 +2733,7 @@ Total: 8 trincas
 3. Resposta esperada: 8 trincas, de 1 5 9 até 4 5 6.
 
 ```bash
-gcc ~/LPEDC/P1910.c -o ~/LPEDC/P1910 && ~/LPEDC/P1910
+gcc ~/LPEDC/material/P1910.c -o ~/LPEDC/material/P1910 && ~/LPEDC/material/P1910
 ```
 
 ### ★★☆ Para pensar
@@ -2773,7 +2773,7 @@ Colorações com 3 cores: 48
    sempre dá outra coloração válida.
 
 ```bash
-gcc ~/LPEDC/P1911.c -o ~/LPEDC/P1911 && ~/LPEDC/P1911
+gcc ~/LPEDC/material/P1911.c -o ~/LPEDC/material/P1911 && ~/LPEDC/material/P1911
 ```
 
 ---
@@ -2818,7 +2818,7 @@ Horário 3: Programação
 3. Resposta esperada: 3 horários (o número cromático do grafo é 3).
 
 ```bash
-gcc ~/LPEDC/P1912.c -o ~/LPEDC/P1912 && ~/LPEDC/P1912
+gcc ~/LPEDC/material/P1912.c -o ~/LPEDC/material/P1912 && ~/LPEDC/material/P1912
 ```
 
 ---
@@ -2852,7 +2852,7 @@ Total: 5 jeitos
 3. Resposta esperada: 5 jeitos, do A|R|A|R|A até o ARARA inteiro.
 
 ```bash
-gcc ~/LPEDC/P1913.c -o ~/LPEDC/P1913 && ~/LPEDC/P1913
+gcc ~/LPEDC/material/P1913.c -o ~/LPEDC/material/P1913 && ~/LPEDC/material/P1913
 ```
 
 ---
@@ -2892,7 +2892,7 @@ Total: 12 anagramas
 3. Resposta esperada: 12 anagramas, que é 4! / 2!.
 
 ```bash
-gcc ~/LPEDC/P1914.c -o ~/LPEDC/P1914 && ~/LPEDC/P1914
+gcc ~/LPEDC/material/P1914.c -o ~/LPEDC/material/P1914 && ~/LPEDC/material/P1914
 ```
 
 ---
@@ -2925,7 +2925,7 @@ Com poda: 50 soluções, 745 chamadas
    chamadas (2^13 - 1), com poda só 745.
 
 ```bash
-gcc ~/LPEDC/P1915.c -o ~/LPEDC/P1915 && ~/LPEDC/P1915
+gcc ~/LPEDC/material/P1915.c -o ~/LPEDC/material/P1915 && ~/LPEDC/material/P1915
 ```
 
 ---
@@ -2958,7 +2958,7 @@ Total: 4 jeitos
 3. Resposta esperada: 4 jeitos.
 
 ```bash
-gcc ~/LPEDC/P1916.c -o ~/LPEDC/P1916 && ~/LPEDC/P1916
+gcc ~/LPEDC/material/P1916.c -o ~/LPEDC/material/P1916 && ~/LPEDC/material/P1916
 ```
 
 ---
@@ -2991,7 +2991,7 @@ Mais longo: 13 passos
    longo com 13.
 
 ```bash
-gcc ~/LPEDC/P1917.c -o ~/LPEDC/P1917 && ~/LPEDC/P1917
+gcc ~/LPEDC/material/P1917.c -o ~/LPEDC/material/P1917 && ~/LPEDC/material/P1917
 ```
 
 ---
@@ -3027,7 +3027,7 @@ Total: 36 ordens
    e a regra 2 tira mais 24.
 
 ```bash
-gcc ~/LPEDC/P1918.c -o ~/LPEDC/P1918 && ~/LPEDC/P1918
+gcc ~/LPEDC/material/P1918.c -o ~/LPEDC/material/P1918 && ~/LPEDC/material/P1918
 ```
 
 ---
@@ -3056,7 +3056,7 @@ Soluções: 2
 3. Resposta esperada: sobram 2 soluções.
 
 ```bash
-gcc ~/LPEDC/P1919.c -o ~/LPEDC/P1919 && ~/LPEDC/P1919
+gcc ~/LPEDC/material/P1919.c -o ~/LPEDC/material/P1919 && ~/LPEDC/material/P1919
 ```
 
 ---
@@ -3093,7 +3093,7 @@ Com o primeiro dia 1 2 3 4: 24
    (576 / 4! = 24: qualquer escala vira uma dessas trocando os nomes).
 
 ```bash
-gcc ~/LPEDC/P1920.c -o ~/LPEDC/P1920 && ~/LPEDC/P1920
+gcc ~/LPEDC/material/P1920.c -o ~/LPEDC/material/P1920 && ~/LPEDC/material/P1920
 ```
 
 ### ★★★ Desafio
@@ -3135,7 +3135,7 @@ Voltas: 0
    volta atrás 248133 vezes.
 
 ```bash
-gcc ~/LPEDC/P1921.c -o ~/LPEDC/P1921 && ~/LPEDC/P1921
+gcc ~/LPEDC/material/P1921.c -o ~/LPEDC/material/P1921 && ~/LPEDC/material/P1921
 ```
 
 ---
@@ -3178,7 +3178,7 @@ Palavras testadas: 120
    a outra virada: as linhas de uma são as colunas da outra).
 
 ```bash
-gcc ~/LPEDC/P1922.c -o ~/LPEDC/P1922 && ~/LPEDC/P1922
+gcc ~/LPEDC/material/P1922.c -o ~/LPEDC/material/P1922 && ~/LPEDC/material/P1922
 ```
 
 ---
@@ -3214,7 +3214,7 @@ Chamadas: 10
    na saída de cima).
 
 ```bash
-gcc ~/LPEDC/P1923.c -o ~/LPEDC/P1923 && ~/LPEDC/P1923
+gcc ~/LPEDC/material/P1923.c -o ~/LPEDC/material/P1923 && ~/LPEDC/material/P1923
 ```
 
 ---
@@ -3256,7 +3256,7 @@ Atribuições conferidas: 120960
    corte do zero seriam 10 · 9 · 8 · 7 · 6 · 5 = 151200.
 
 ```bash
-gcc ~/LPEDC/P1924.c -o ~/LPEDC/P1924 && ~/LPEDC/P1924
+gcc ~/LPEDC/material/P1924.c -o ~/LPEDC/material/P1924 && ~/LPEDC/material/P1924
 ```
 
 ---
@@ -3292,7 +3292,7 @@ Total: 5 lotes
    de levar. Saem os 5 lotes de cima.
 
 ```bash
-gcc ~/LPEDC/P1925.c -o ~/LPEDC/P1925 && ~/LPEDC/P1925
+gcc ~/LPEDC/material/P1925.c -o ~/LPEDC/material/P1925 && ~/LPEDC/material/P1925
 ```
 
 ---
@@ -3341,7 +3341,7 @@ Roteiros: 18, ciclos: 10
 3. Resposta esperada: 18 roteiros, 10 deles fecham um ciclo.
 
 ```bash
-gcc ~/LPEDC/P1926.c -o ~/LPEDC/P1926 && ~/LPEDC/P1926
+gcc ~/LPEDC/material/P1926.c -o ~/LPEDC/material/P1926 && ~/LPEDC/material/P1926
 ```
 
 ---
@@ -3383,7 +3383,7 @@ Soluções: 1
 3. Resposta esperada: 1 solução, a grade de cima.
 
 ```bash
-gcc ~/LPEDC/P1927.c -o ~/LPEDC/P1927 && ~/LPEDC/P1927
+gcc ~/LPEDC/material/P1927.c -o ~/LPEDC/material/P1927 && ~/LPEDC/material/P1927
 ```
 
 ---
@@ -3433,7 +3433,7 @@ Total: 10 trincas
    11100 (Cris Dani Eli), em ordem crescente de máscara.
 
 ```bash
-gcc ~/LPEDC/P1928.c -o ~/LPEDC/P1928 && ~/LPEDC/P1928
+gcc ~/LPEDC/material/P1928.c -o ~/LPEDC/material/P1928 && ~/LPEDC/material/P1928
 ```
 
 ---
@@ -3477,7 +3477,7 @@ Saída esperada:
    balanceada). Por exemplo, 5 = 9 - 3 - 1 e 13 = 9 + 3 + 1.
 
 ```bash
-gcc ~/LPEDC/P1929.c -o ~/LPEDC/P1929 && ~/LPEDC/P1929
+gcc ~/LPEDC/material/P1929.c -o ~/LPEDC/material/P1929 && ~/LPEDC/material/P1929
 ```
 
 ---
@@ -3525,7 +3525,7 @@ Caminhão 3: 3 3 3 (9 t)
    2, 4 + 3 + 3 e 3 + 3 + 3). Guloso rápido não garante o ótimo.
 
 ```bash
-gcc ~/LPEDC/P1930.c -o ~/LPEDC/P1930 && ~/LPEDC/P1930
+gcc ~/LPEDC/material/P1930.c -o ~/LPEDC/material/P1930 && ~/LPEDC/material/P1930
 ```
 
 ## Questões no estilo da prova

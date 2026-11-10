@@ -35,7 +35,7 @@ Linux (Intel, AMD ou ARM); em outra máquina os números podem mudar. Ao rodar,
 troque a ordem dos campos de uma struct e compare o `sizeof`.
 
 ```bash
-gcc ~/LPEDC/A117.c -o ~/LPEDC/A117 && ~/LPEDC/A117
+gcc ~/LPEDC/material/A117.c -o ~/LPEDC/material/A117 && ~/LPEDC/material/A117
 ```
 
 {{indice}}

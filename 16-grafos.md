@@ -84,7 +84,7 @@ No C, vértice é um **número de 0 a V-1**, e os nomes ficam num vetor à parte
 Cada ciclovia marca `adj[a][b]` e `adj[b][a]`: a matriz de um grafo não
 dirigido é simétrica. A Feira tem três vizinhos, e a linha 2 tem três 1:
 
-<p align="center"><img src="0109-ideia.svg" alt="Diagrama da ideia: Grafos" width="858"></p>
+<p align="center"><img src="material/0109-ideia.svg" alt="Diagrama da ideia: Grafos" width="858"></p>
 
 As arestas entram como pares, e o grau sai da soma de cada linha:
 
@@ -136,7 +136,7 @@ int main(void) {
 Primeiro monta-se a estrutura, depois respondem-se as perguntas; todo
 algoritmo do módulo segue essa ordem:
 
-<p align="center"><img src="0109-fluxograma.svg" alt="Fluxograma: Grafos" width="441"></p>
+<p align="center"><img src="material/0109-fluxograma.svg" alt="Fluxograma: Grafos" width="441"></p>
 
 Cada aresta soma 1 no grau de dois vértices: a soma dos graus é o dobro do
 número de arestas, e soma ímpar indica um sentido esquecido.
@@ -227,7 +227,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A217.c ~/LPEDC/0109-grafo.c -o ~/LPEDC/A217 && ~/LPEDC/A217
+gcc ~/LPEDC/material/A217.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/A217 && ~/LPEDC/material/A217
 ```
 
 **Exemplo A218 · Quem segue quem: lista de adjacência**
@@ -271,7 +271,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A218.c ~/LPEDC/0109-grafo.c -o ~/LPEDC/A218 && ~/LPEDC/A218
+gcc ~/LPEDC/material/A218.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/A218 && ~/LPEDC/material/A218
 ```
 
 #### Exercícios
@@ -299,7 +299,7 @@ Voos diretos: 4
 ```
 
 ```bash
-gcc ~/LPEDC/E649.c ~/LPEDC/0109-grafo.c -o ~/LPEDC/E649 && ~/LPEDC/E649
+gcc ~/LPEDC/material/E649.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E649 && ~/LPEDC/material/E649
 ```
 
 **Exercício E651** · ★★☆
@@ -324,7 +324,7 @@ Mão única: 3, mão dupla: 2
 ```
 
 ```bash
-gcc ~/LPEDC/E651.c ~/LPEDC/0109-grafo.c -o ~/LPEDC/E651 && ~/LPEDC/E651
+gcc ~/LPEDC/material/E651.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E651 && ~/LPEDC/material/E651
 ```
 
 **Exercício E652** · ★★☆
@@ -345,7 +345,7 @@ Soma dos graus: 8
 ```
 
 ```bash
-gcc ~/LPEDC/E652.c ~/LPEDC/0109-grafo.c -o ~/LPEDC/E652 && ~/LPEDC/E652
+gcc ~/LPEDC/material/E652.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E652 && ~/LPEDC/material/E652
 ```
 
 **Exercício E653** · ★★★
@@ -368,7 +368,7 @@ Nós alocados: 10
 ```
 
 ```bash
-gcc ~/LPEDC/E653.c ~/LPEDC/0109-grafo.c -o ~/LPEDC/E653 && ~/LPEDC/E653
+gcc ~/LPEDC/material/E653.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E653 && ~/LPEDC/material/E653
 ```
 
 ---
@@ -403,7 +403,7 @@ o que está na fila e **preto** o que já saiu; `v.d` é o `dist[v]` e `v.π`, o
 No desenho, as setas verdes são a árvore da BFS, e o número de cada pessoa é a
 distância:
 
-<p align="center"><img src="0110-ideia.svg" alt="Diagrama da ideia: BFS: busca em largura" width="858"></p>
+<p align="center"><img src="material/0110-ideia.svg" alt="Diagrama da ideia: BFS: busca em largura" width="858"></p>
 
 O código monta a matriz, roda a BFS a partir de Lia e reconstrói o caminho:
 
@@ -468,7 +468,7 @@ int main(void) {
 
 A busca termina quando a fila esvazia:
 
-<p align="center"><img src="0110-fluxograma.svg" alt="Fluxograma: BFS: busca em largura" width="578"></p>
+<p align="center"><img src="material/0110-fluxograma.svg" alt="Fluxograma: BFS: busca em largura" width="578"></p>
 
 ### Passo a passo
 
@@ -567,7 +567,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A219.c -o ~/LPEDC/A219 && ~/LPEDC/A219
+gcc ~/LPEDC/material/A219.c -o ~/LPEDC/material/A219 && ~/LPEDC/material/A219
 ```
 
 **Exemplo A220 · O robô no galpão: BFS numa grade**
@@ -630,7 +630,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A220.c -o ~/LPEDC/A220 && ~/LPEDC/A220
+gcc ~/LPEDC/material/A220.c -o ~/LPEDC/material/A220 && ~/LPEDC/material/A220
 ```
 
 #### Exercícios
@@ -657,7 +657,7 @@ Tatuape: descoberto por Penha
 ```
 
 ```bash
-gcc ~/LPEDC/E655.c -o ~/LPEDC/E655 && ~/LPEDC/E655
+gcc ~/LPEDC/material/E655.c -o ~/LPEDC/material/E655 && ~/LPEDC/material/E655
 ```
 
 **Exercício E657** · ★★☆
@@ -687,7 +687,7 @@ Ao contrário: Lapa -> Penha -> Tatuape -> Saude
 ```
 
 ```bash
-gcc ~/LPEDC/E657.c -o ~/LPEDC/E657 && ~/LPEDC/E657
+gcc ~/LPEDC/material/E657.c -o ~/LPEDC/material/E657 && ~/LPEDC/material/E657
 ```
 
 **Exercício E658** · ★★☆
@@ -716,7 +716,7 @@ Total de grupos: 3
 ```
 
 ```bash
-gcc ~/LPEDC/E658.c -o ~/LPEDC/E658 && ~/LPEDC/E658
+gcc ~/LPEDC/material/E658.c -o ~/LPEDC/material/E658 && ~/LPEDC/material/E658
 ```
 
 **Exercício E659** · ★★★
@@ -740,7 +740,7 @@ Pior distância: 6
 ```
 
 ```bash
-gcc ~/LPEDC/E659.c -o ~/LPEDC/E659 && ~/LPEDC/E659
+gcc ~/LPEDC/material/E659.c -o ~/LPEDC/material/E659 && ~/LPEDC/material/E659
 ```
 
 ---
@@ -781,7 +781,7 @@ grafo dirigido acíclico. Com lista de adjacência, tudo custa O(V + E).
 No desenho, os números são a ordem da visita, as arestas verdes são a árvore e
 à direita fica a pilha de chamadas na Bica:
 
-<p align="center"><img src="0111-ideia.svg" alt="Diagrama da ideia: DFS: busca em profundidade" width="858"></p>
+<p align="center"><img src="material/0111-ideia.svg" alt="Diagrama da ideia: DFS: busca em profundidade" width="858"></p>
 
 O código imprime cada vértice com recuo proporcional à profundidade:
 
@@ -824,7 +824,7 @@ int main(void) {
 Cada chamada só pergunta "tenho vizinho novo?": se tem, desce; se não, volta.
 O programa acaba quando a chamada da Sede não tem mais para onde descer:
 
-<p align="center"><img src="0111-fluxograma.svg" alt="Fluxograma: DFS: busca em profundidade" width="602"></p>
+<p align="center"><img src="material/0111-fluxograma.svg" alt="Fluxograma: DFS: busca em profundidade" width="602"></p>
 
 A DFS visita Sede, Lago, Gruta, Topo, Bica, Ponte; a BFS, Sede, Lago, Ponte,
 Gruta, Topo, Bica. Ambas estão certas e servem a perguntas diferentes. A DFS
@@ -906,7 +906,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A221.c -o ~/LPEDC/A221 && ~/LPEDC/A221
+gcc ~/LPEDC/material/A221.c -o ~/LPEDC/material/A221 && ~/LPEDC/material/A221
 ```
 
 **Exemplo A222 · A pilha que a recursão escondia**
@@ -960,7 +960,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A222.c -o ~/LPEDC/A222 && ~/LPEDC/A222
+gcc ~/LPEDC/material/A222.c -o ~/LPEDC/material/A222 && ~/LPEDC/material/A222
 ```
 
 #### Exercícios
@@ -987,7 +987,7 @@ Mais fundo: Saída (nível 4)
 ```
 
 ```bash
-gcc ~/LPEDC/E661.c -o ~/LPEDC/E661 && ~/LPEDC/E661
+gcc ~/LPEDC/material/E661.c -o ~/LPEDC/material/E661 && ~/LPEDC/material/E661
 ```
 
 **Exercício E663** · ★★☆
@@ -1009,7 +1009,7 @@ Total: 4 ilhas, a maior tem 5 casas
 ```
 
 ```bash
-gcc ~/LPEDC/E663.c -o ~/LPEDC/E663 && ~/LPEDC/E663
+gcc ~/LPEDC/material/E663.c -o ~/LPEDC/material/E663 && ~/LPEDC/material/E663
 ```
 
 **Exercício E664** · ★★☆
@@ -1029,7 +1029,7 @@ Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
 ```
 
 ```bash
-gcc ~/LPEDC/E664.c -o ~/LPEDC/E664 && ~/LPEDC/E664
+gcc ~/LPEDC/material/E664.c -o ~/LPEDC/material/E664 && ~/LPEDC/material/E664
 ```
 
 **Exercício E665** · ★★★
@@ -1056,7 +1056,7 @@ Sem log -> auth: sem ciclo
 ```
 
 ```bash
-gcc ~/LPEDC/E665.c -o ~/LPEDC/E665 && ~/LPEDC/E665
+gcc ~/LPEDC/material/E665.c -o ~/LPEDC/material/E665 && ~/LPEDC/material/E665
 ```
 
 ---
@@ -1093,7 +1093,7 @@ arestas V - 1 vezes.
 No mapa, os números das arestas são minutos, o de cada lugar é a `dist` final e
 as arestas verdes formam a rota até a Praia:
 
-<p align="center"><img src="0112-ideia.svg" alt="Diagrama da ideia: Dijkstra: caminho mínimo" width="858"></p>
+<p align="center"><img src="material/0112-ideia.svg" alt="Diagrama da ideia: Dijkstra: caminho mínimo" width="858"></p>
 
 O código usa matriz de pesos (0 é "sem rua direta") e reconstrói a rota pelo
 `anterior[]`:
@@ -1162,7 +1162,7 @@ int main(void) {
 É a estrutura da BFS, com a fila trocada por "menor `dist` não fixo". O laço
 acaba com todos fixos ou quando o menor que sobrou é INFINITO:
 
-<p align="center"><img src="0112-fluxograma.svg" alt="Fluxograma: Dijkstra: caminho mínimo" width="643"></p>
+<p align="center"><img src="material/0112-fluxograma.svg" alt="Fluxograma: Dijkstra: caminho mínimo" width="643"></p>
 
 ### Passo a passo
 
@@ -1267,7 +1267,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A223.c -o ~/LPEDC/A223 && ~/LPEDC/A223
+gcc ~/LPEDC/material/A223.c -o ~/LPEDC/material/A223 && ~/LPEDC/material/A223
 ```
 
 **Exemplo A224 · Passagens de ônibus e a cidade sem rota**
@@ -1339,7 +1339,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A224.c -o ~/LPEDC/A224 && ~/LPEDC/A224
+gcc ~/LPEDC/material/A224.c -o ~/LPEDC/material/A224 && ~/LPEDC/material/A224
 ```
 
 #### Exercícios
@@ -1365,7 +1365,7 @@ Caminho até D: CD -> B -> A -> C -> D (8 km)
 ```
 
 ```bash
-gcc ~/LPEDC/E667.c -o ~/LPEDC/E667 && ~/LPEDC/E667
+gcc ~/LPEDC/material/E667.c -o ~/LPEDC/material/E667 && ~/LPEDC/material/E667
 ```
 
 **Exercício E669** · ★★☆
@@ -1396,7 +1396,7 @@ Mais longe: Eva (11 km)
 ```
 
 ```bash
-gcc ~/LPEDC/E669.c -o ~/LPEDC/E669 && ~/LPEDC/E669
+gcc ~/LPEDC/material/E669.c -o ~/LPEDC/material/E669 && ~/LPEDC/material/E669
 ```
 
 **Exercício E670** · ★★☆
@@ -1418,7 +1418,7 @@ Oeste: 5 min
 ```
 
 ```bash
-gcc ~/LPEDC/E670.c -o ~/LPEDC/E670 && ~/LPEDC/E670
+gcc ~/LPEDC/material/E670.c -o ~/LPEDC/material/E670 && ~/LPEDC/material/E670
 ```
 
 **Exercício E671** · ★★★
@@ -1439,7 +1439,7 @@ Belém: sem voo
 ```
 
 ```bash
-gcc ~/LPEDC/E671.c -o ~/LPEDC/E671 && ~/LPEDC/E671
+gcc ~/LPEDC/material/E671.c -o ~/LPEDC/material/E671 && ~/LPEDC/material/E671
 ```
 
 ---
@@ -1467,7 +1467,7 @@ promete que ninguém altera o mapa.
 A Ilha só tem balsa, e a DFS a deixa de fora. A BFS acha a rota de 2 trechos
 pelo Centro (12 km); o Dijkstra, a de 4 trechos, em verde (10 km):
 
-<p align="center"><img src="0113-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a central de entregas" width="858"></p>
+<p align="center"><img src="material/0113-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a central de entregas" width="858"></p>
 
 `bfs` e `dijkstra` preenchem o mesmo `pai[]`, e uma só `mostrar_rota` serve aos
 dois:
@@ -1593,7 +1593,7 @@ int main(void) {
 
 A DFS vem primeiro, como porteiro: com a Vila fora da rede, não há rota.
 
-<p align="center"><img src="0113-fluxograma.svg" alt="Fluxograma: Juntando tudo: a central de entregas" width="569"></p>
+<p align="center"><img src="material/0113-fluxograma.svg" alt="Fluxograma: Juntando tudo: a central de entregas" width="569"></p>
 
 "Menor caminho" pede "menor em quê?". Com arestas de mesmo custo, a BFS basta,
 em O(V + E). Com pesos variados, erra sem aviso, como nos 16 km acima.
@@ -1750,7 +1750,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A225.c -o ~/LPEDC/A225 && ~/LPEDC/A225
+gcc ~/LPEDC/material/A225.c -o ~/LPEDC/material/A225 && ~/LPEDC/material/A225
 ```
 
 **Exemplo A226 · Fibra óptica pelo menor custo: o algoritmo de Prim**
@@ -1811,7 +1811,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A226.c -o ~/LPEDC/A226 && ~/LPEDC/A226
+gcc ~/LPEDC/material/A226.c -o ~/LPEDC/material/A226 && ~/LPEDC/material/A226
 ```
 
 #### Exercícios
@@ -1835,7 +1835,7 @@ Menos peso até E: A -> B -> D -> E (6)
 ```
 
 ```bash
-gcc ~/LPEDC/E674.c -o ~/LPEDC/E674 && ~/LPEDC/E674
+gcc ~/LPEDC/material/E674.c -o ~/LPEDC/material/E674 && ~/LPEDC/material/E674
 ```
 
 **Exercício E675** · ★★☆
@@ -1867,7 +1867,7 @@ Melhor lugar para o hospital: Morro (ninguém a mais de 5 km)
 ```
 
 ```bash
-gcc ~/LPEDC/E675.c -o ~/LPEDC/E675 && ~/LPEDC/E675
+gcc ~/LPEDC/material/E675.c -o ~/LPEDC/material/E675 && ~/LPEDC/material/E675
 ```
 
 **Exercício E676** · ★★☆
@@ -1888,7 +1888,7 @@ Impossível: Bruno e Carla ficariam no mesmo time
 ```
 
 ```bash
-gcc ~/LPEDC/E676.c -o ~/LPEDC/E676 && ~/LPEDC/E676
+gcc ~/LPEDC/material/E676.c -o ~/LPEDC/material/E676 && ~/LPEDC/material/E676
 ```
 
 **Exercício E677** · ★★★
@@ -1910,7 +1910,7 @@ GATO -> PEIXE: impossível
 ```
 
 ```bash
-gcc ~/LPEDC/E677.c -o ~/LPEDC/E677 && ~/LPEDC/E677
+gcc ~/LPEDC/material/E677.c -o ~/LPEDC/material/E677 && ~/LPEDC/material/E677
 ```
 
 ---
@@ -2169,7 +2169,7 @@ só a fila vira "o menor `dist` primeiro", com `dist[u] + custo(v)` no lugar de
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1601.c a P1630.c, na raiz; resoluções em `_respostas/16-grafos/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1601.c a P1630.c, em `material/`; resoluções em `_respostas/16-grafos/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2210,7 +2210,7 @@ Ponta de linha: Ponta Negra
    e a única ponta de linha é Ponta Negra.
 
 ```bash
-gcc ~/LPEDC/P1601.c -o ~/LPEDC/P1601 && ~/LPEDC/P1601
+gcc ~/LPEDC/material/P1601.c -o ~/LPEDC/material/P1601 && ~/LPEDC/material/P1601
 ```
 
 ---
@@ -2260,7 +2260,7 @@ Pares com ida e volta: 4
    4 pares com ida e volta.
 
 ```bash
-gcc ~/LPEDC/P1602.c -o ~/LPEDC/P1602 && ~/LPEDC/P1602
+gcc ~/LPEDC/material/P1602.c -o ~/LPEDC/material/P1602 && ~/LPEDC/material/P1602
 ```
 
 ---
@@ -2310,7 +2310,7 @@ Pares tortos: 1
 4. Resposta esperada: a matriz acima e um único par torto, Davi e Eva.
 
 ```bash
-gcc ~/LPEDC/P1603.c -o ~/LPEDC/P1603 && ~/LPEDC/P1603
+gcc ~/LPEDC/material/P1603.c -o ~/LPEDC/material/P1603 && ~/LPEDC/material/P1603
 ```
 
 ---
@@ -2357,7 +2357,7 @@ completo: sim
    Kaue-Luana; depois, "completo: sim".
 
 ```bash
-gcc ~/LPEDC/P1604.c -o ~/LPEDC/P1604 && ~/LPEDC/P1604
+gcc ~/LPEDC/material/P1604.c -o ~/LPEDC/material/P1604 && ~/LPEDC/material/P1604
 ```
 
 ---
@@ -2394,7 +2394,7 @@ conhece: 7 | complemento: 8 | total: 15 = 6·5/2
 4. Resposta esperada: 7 arestas em conhece, 8 no complemento, 15 no total.
 
 ```bash
-gcc ~/LPEDC/P1605.c -o ~/LPEDC/P1605 && ~/LPEDC/P1605
+gcc ~/LPEDC/material/P1605.c -o ~/LPEDC/material/P1605 && ~/LPEDC/material/P1605
 ```
 
 ---
@@ -2436,7 +2436,7 @@ Seguidores de Enzo: ninguém
 4. Ana tem 2 seguidores; Enzo, nenhum.
 
 ```bash
-gcc ~/LPEDC/P1606.c -o ~/LPEDC/P1606 && ~/LPEDC/P1606
+gcc ~/LPEDC/material/P1606.c -o ~/LPEDC/material/P1606 && ~/LPEDC/material/P1606
 ```
 
 ---
@@ -2480,7 +2480,7 @@ Coroado       2  Aleixo
    (d = 3), e Educandos tem π = Centro.
 
 ```bash
-gcc ~/LPEDC/P1607.c -o ~/LPEDC/P1607 && ~/LPEDC/P1607
+gcc ~/LPEDC/material/P1607.c -o ~/LPEDC/material/P1607 && ~/LPEDC/material/P1607
 ```
 
 ---
@@ -2528,7 +2528,7 @@ Cafe       d=2  pi=Lago
    Mirante.
 
 ```bash
-gcc ~/LPEDC/P1608.c -o ~/LPEDC/P1608 && ~/LPEDC/P1608
+gcc ~/LPEDC/material/P1608.c -o ~/LPEDC/material/P1608 && ~/LPEDC/material/P1608
 ```
 
 ---
@@ -2576,7 +2576,7 @@ Terminam: Mirante Lago Cascata Viveiro Portao Quiosque
    Cascata 7/8, Quiosque 11/12.
 
 ```bash
-gcc ~/LPEDC/P1609.c -o ~/LPEDC/P1609 && ~/LPEDC/P1609
+gcc ~/LPEDC/material/P1609.c -o ~/LPEDC/material/P1609 && ~/LPEDC/material/P1609
 ```
 
 ---
@@ -2621,7 +2621,7 @@ Linhas novas necessárias: 3
 4. Resposta esperada: 4 componentes, logo 3 linhas novas.
 
 ```bash
-gcc ~/LPEDC/P1610.c -o ~/LPEDC/P1610 && ~/LPEDC/P1610
+gcc ~/LPEDC/material/P1610.c -o ~/LPEDC/material/P1610 && ~/LPEDC/material/P1610
 ```
 
 ### ★★☆ Para pensar
@@ -2663,7 +2663,7 @@ Oiapoque: sem rota
    Rio, Porto Alegre), Fortaleza em 2 e Oiapoque sem rota.
 
 ```bash
-gcc ~/LPEDC/P1611.c -o ~/LPEDC/P1611 && ~/LPEDC/P1611
+gcc ~/LPEDC/material/P1611.c -o ~/LPEDC/material/P1611 && ~/LPEDC/material/P1611
 ```
 
 ---
@@ -2710,7 +2710,7 @@ Ajuda    -> Contato  cruzamento
    cruzamento (11 links).
 
 ```bash
-gcc ~/LPEDC/P1612.c -o ~/LPEDC/P1612 && ~/LPEDC/P1612
+gcc ~/LPEDC/material/P1612.c -o ~/LPEDC/material/P1612 && ~/LPEDC/material/P1612
 ```
 
 ---
@@ -2756,7 +2756,7 @@ Não é bipartido
    aresta que estraga aparece ao examinar Algoritmos-Fisica.
 
 ```bash
-gcc ~/LPEDC/P1613.c -o ~/LPEDC/P1613 && ~/LPEDC/P1613
+gcc ~/LPEDC/material/P1613.c -o ~/LPEDC/material/P1613 && ~/LPEDC/material/P1613
 ```
 
 ---
@@ -2792,7 +2792,7 @@ Sem Valvula-Caixa: sem ciclo
    Valvula) e, sem o cano, "sem ciclo".
 
 ```bash
-gcc ~/LPEDC/P1614.c -o ~/LPEDC/P1614 && ~/LPEDC/P1614
+gcc ~/LPEDC/material/P1614.c -o ~/LPEDC/material/P1614 && ~/LPEDC/material/P1614
 ```
 
 ---
@@ -2832,7 +2832,7 @@ Ponta Negra  25 km: CD -> Japiim -> Coroado -> Aleixo -> Flores -> Ponta Negra
    (13 km) do que pelo Aleixo (14 km).
 
 ```bash
-gcc ~/LPEDC/P1615.c -o ~/LPEDC/P1615 && ~/LPEDC/P1615
+gcc ~/LPEDC/material/P1615.c -o ~/LPEDC/material/P1615 && ~/LPEDC/material/P1615
 ```
 
 ---
@@ -2882,7 +2882,7 @@ Tefe        35 h
    Coari 23 h, Tefe 35 h.
 
 ```bash
-gcc ~/LPEDC/P1616.c -o ~/LPEDC/P1616 && ~/LPEDC/P1616
+gcc ~/LPEDC/material/P1616.c -o ~/LPEDC/material/P1616 && ~/LPEDC/material/P1616
 ```
 
 ---
@@ -2920,7 +2920,7 @@ Sugestões:
    por Aline-Caua e Aline-Flora.
 
 ```bash
-gcc ~/LPEDC/P1617.c -o ~/LPEDC/P1617 && ~/LPEDC/P1617
+gcc ~/LPEDC/material/P1617.c -o ~/LPEDC/material/P1617 && ~/LPEDC/material/P1617
 ```
 
 ---
@@ -2958,7 +2958,7 @@ S**#****
 4. Resposta esperada: 16 passos e o mapa acima.
 
 ```bash
-gcc ~/LPEDC/P1618.c -o ~/LPEDC/P1618 && ~/LPEDC/P1618
+gcc ~/LPEDC/material/P1618.c -o ~/LPEDC/material/P1618 && ~/LPEDC/material/P1618
 ```
 
 ---
@@ -2997,7 +2997,7 @@ n = 1000: matriz d = 999, 1000000 consultas | lista d = 999, 1998 consultas
    lista 1998, e as duas dão d = 999.
 
 ```bash
-gcc ~/LPEDC/P1619.c -o ~/LPEDC/P1619 && ~/LPEDC/P1619
+gcc ~/LPEDC/material/P1619.c -o ~/LPEDC/material/P1619 && ~/LPEDC/material/P1619
 ```
 
 ---
@@ -3035,7 +3035,7 @@ Festa 2: sem celebridade (13 consultas de 36)
    na festa 2 não há celebridade.
 
 ```bash
-gcc ~/LPEDC/P1620.c -o ~/LPEDC/P1620 && ~/LPEDC/P1620
+gcc ~/LPEDC/material/P1620.c -o ~/LPEDC/material/P1620 && ~/LPEDC/material/P1620
 ```
 
 ### ★★★ Desafio
@@ -3086,7 +3086,7 @@ Jarras de 4 L e 6 L, alvo 3 L: impossível (10 estados descobertos)
    enche B, B -> A, terminando em (3, 4)); 3 L com 4 e 6 é impossível.
 
 ```bash
-gcc ~/LPEDC/P1621.c -o ~/LPEDC/P1621 && ~/LPEDC/P1621
+gcc ~/LPEDC/material/P1621.c -o ~/LPEDC/material/P1621 && ~/LPEDC/material/P1621
 ```
 
 ---
@@ -3135,7 +3135,7 @@ a1 até h8 em 6 lances: a1 b3 c5 d7 f8 g6 h8
    o canto oposto.
 
 ```bash
-gcc ~/LPEDC/P1622.c -o ~/LPEDC/P1622 && ~/LPEDC/P1622
+gcc ~/LPEDC/material/P1622.c -o ~/LPEDC/material/P1622 && ~/LPEDC/material/P1622
 ```
 
 ---
@@ -3186,7 +3186,7 @@ Itacoatiara: 250 km, chegando por Rio Preto da Eva
    km, por Rio Preto da Eva.
 
 ```bash
-gcc ~/LPEDC/P1623.c -o ~/LPEDC/P1623 && ~/LPEDC/P1623
+gcc ~/LPEDC/material/P1623.c -o ~/LPEDC/material/P1623 && ~/LPEDC/material/P1623
 ```
 
 ---
@@ -3223,7 +3223,7 @@ Com desempate: Terminal 1 -> Alvorada -> Ponta Negra (40 min, 2 trechos)
    com desempate vai pelo Alvorada (2 trechos); os dois levam 40 min.
 
 ```bash
-gcc ~/LPEDC/P1624.c -o ~/LPEDC/P1624 && ~/LPEDC/P1624
+gcc ~/LPEDC/material/P1624.c -o ~/LPEDC/material/P1624 && ~/LPEDC/material/P1624
 ```
 
 ---
@@ -3265,7 +3265,7 @@ Loja -> Farmacia: 9 min | Farmacia -> Loja: 13 min
    volta Farmácia -> Loja leva 13 min, contra 9 da ida.
 
 ```bash
-gcc ~/LPEDC/P1625.c -o ~/LPEDC/P1625 && ~/LPEDC/P1625
+gcc ~/LPEDC/material/P1625.c -o ~/LPEDC/material/P1625 && ~/LPEDC/material/P1625
 ```
 
 ---
@@ -3321,7 +3321,7 @@ Descendentes de B (pi):         C D E
    aninhados, 17 disjuntos, 0 cruzados; descendentes de B: C D E.
 
 ```bash
-gcc ~/LPEDC/P1626.c -o ~/LPEDC/P1626 && ~/LPEDC/P1626
+gcc ~/LPEDC/material/P1626.c -o ~/LPEDC/material/P1626 && ~/LPEDC/material/P1626
 ```
 
 ---
@@ -3369,7 +3369,7 @@ Grupos de ida e volta: 4 | pares com caminho: 25
    Alfandega}, {Matriz}) e 25 pares com caminho.
 
 ```bash
-gcc ~/LPEDC/P1627.c -o ~/LPEDC/P1627 && ~/LPEDC/P1627
+gcc ~/LPEDC/material/P1627.c -o ~/LPEDC/material/P1627 && ~/LPEDC/material/P1627
 ```
 
 ---
@@ -3422,7 +3422,7 @@ Rede C:
    Hospital-Reitoria, nessa ordem da DFS).
 
 ```bash
-gcc ~/LPEDC/P1628.c -o ~/LPEDC/P1628 && ~/LPEDC/P1628
+gcc ~/LPEDC/material/P1628.c -o ~/LPEDC/material/P1628 && ~/LPEDC/material/P1628
 ```
 
 ---
@@ -3468,7 +3468,7 @@ Grade 1000 x 1000: matriz de 4000000000000 bytes
    4 TB de matriz.
 
 ```bash
-gcc ~/LPEDC/P1629.c -o ~/LPEDC/P1629 && ~/LPEDC/P1629
+gcc ~/LPEDC/material/P1629.c -o ~/LPEDC/material/P1629 && ~/LPEDC/material/P1629
 ```
 
 ---
@@ -3518,7 +3518,7 @@ Galpão 2: -1
    galpão 2, o fogo fecha a única saída e a resposta é -1.
 
 ```bash
-gcc ~/LPEDC/P1630.c -o ~/LPEDC/P1630 && ~/LPEDC/P1630
+gcc ~/LPEDC/material/P1630.c -o ~/LPEDC/material/P1630 && ~/LPEDC/material/P1630
 ```
 
 ## Questões no estilo da prova

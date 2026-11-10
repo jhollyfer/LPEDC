@@ -105,7 +105,7 @@ No desenho, os números dão a ordem de descoberta: a obra está preta (verde),
 o financiamento está cinza (amarelo), e a seta de Parcela para Juros aponta
 para um cinza:
 
-<p align="center"><img src="0150-ideia.svg" alt="Diagrama da ideia: Componentes e ciclos" width="858"></p>
+<p align="center"><img src="material/0150-ideia.svg" alt="Diagrama da ideia: Componentes e ciclos" width="858"></p>
 
 Os grupos ignoram a direção; o ciclo a respeita e usa as cores:
 
@@ -184,7 +184,7 @@ int main(void) {
 No fluxograma, cada vizinho de `u` é cinza (ciclo), branco (desce) ou preto
 (ignorado). Sem vizinhos novos, `u` fica preto:
 
-<p align="center"><img src="0150-fluxograma.svg" alt="Fluxograma: Componentes e ciclos" width="817"></p>
+<p align="center"><img src="material/0150-fluxograma.svg" alt="Fluxograma: Componentes e ciclos" width="817"></p>
 
 ### Passo a passo
 
@@ -277,7 +277,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A299.c -o ~/LPEDC/A299 && ~/LPEDC/A299
+gcc ~/LPEDC/material/A299.c -o ~/LPEDC/material/A299 && ~/LPEDC/material/A299
 ```
 
 **Exemplo A300 · Grupos de corrida que se juntam**
@@ -341,7 +341,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A300.c -o ~/LPEDC/A300 && ~/LPEDC/A300
+gcc ~/LPEDC/material/A300.c -o ~/LPEDC/material/A300 && ~/LPEDC/material/A300
 ```
 
 #### Exercícios
@@ -373,7 +373,7 @@ Pontes novas para ligar tudo: 2
 ```
 
 ```bash
-gcc ~/LPEDC/E895.c -o ~/LPEDC/E895 && ~/LPEDC/E895
+gcc ~/LPEDC/material/E895.c -o ~/LPEDC/material/E895 && ~/LPEDC/material/E895
 ```
 
 **Exercício E897** · ★★☆
@@ -402,7 +402,7 @@ Ciclovias novas para ligar tudo: 3
 ```
 
 ```bash
-gcc ~/LPEDC/E897.c -o ~/LPEDC/E897 && ~/LPEDC/E897
+gcc ~/LPEDC/material/E897.c -o ~/LPEDC/material/E897 && ~/LPEDC/material/E897
 ```
 
 **Exercício E898** · ★★☆
@@ -431,7 +431,7 @@ Parque 3: Rio Ponte Ninho Toca | 4 pontos, 4 trilhas, tem circuito
 ```
 
 ```bash
-gcc ~/LPEDC/E898.c -o ~/LPEDC/E898 && ~/LPEDC/E898
+gcc ~/LPEDC/material/E898.c -o ~/LPEDC/material/E898 && ~/LPEDC/material/E898
 ```
 
 **Exercício E900** · ★★★
@@ -456,7 +456,7 @@ Impossível: Caio e Ana cairiam no mesmo turno
 ```
 
 ```bash
-gcc ~/LPEDC/E900.c -o ~/LPEDC/E900 && ~/LPEDC/E900
+gcc ~/LPEDC/material/E900.c -o ~/LPEDC/material/E900 && ~/LPEDC/material/E900
 ```
 
 ---
@@ -496,7 +496,7 @@ término `u.f` decrescente).
 
 No desenho, o número em cada serviço é a posição dele na lista:
 
-<p align="center"><img src="0151-ideia.svg" alt="Diagrama da ideia: Ordenação topológica" width="864"></p>
+<p align="center"><img src="material/0151-ideia.svg" alt="Diagrama da ideia: Ordenação topológica" width="864"></p>
 
 A fila é um vetor: cada vértice entra uma vez, então V posições bastam.
 
@@ -548,7 +548,7 @@ int main(void) {
 O laço do fluxograma só pergunta "a fila tem alguém?". O ciclo vem no fim:
 quantos saíram, comparado com V.
 
-<p align="center"><img src="0151-fluxograma.svg" alt="Fluxograma: Ordenação topológica" width="647"></p>
+<p align="center"><img src="material/0151-fluxograma.svg" alt="Fluxograma: Ordenação topológica" width="647"></p>
 
 ### Passo a passo
 
@@ -640,7 +640,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A301.c -o ~/LPEDC/A301 && ~/LPEDC/A301
+gcc ~/LPEDC/material/A301.c -o ~/LPEDC/material/A301 && ~/LPEDC/material/A301
 ```
 
 **Exemplo A302 · Quantos semestres até o TCC**
@@ -700,7 +700,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A302.c -o ~/LPEDC/A302 && ~/LPEDC/A302
+gcc ~/LPEDC/material/A302.c -o ~/LPEDC/material/A302 && ~/LPEDC/material/A302
 ```
 
 #### Exercícios
@@ -737,7 +737,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E901.c -o ~/LPEDC/E901 && ~/LPEDC/E901
+gcc ~/LPEDC/material/E901.c -o ~/LPEDC/material/E901 && ~/LPEDC/material/E901
 ```
 
 **Exercício E903** · ★★☆
@@ -765,7 +765,7 @@ Menor:  #105 #101 #106 #102 #103 #107 #104
 ```
 
 ```bash
-gcc ~/LPEDC/E903.c -o ~/LPEDC/E903 && ~/LPEDC/E903
+gcc ~/LPEDC/material/E903.c -o ~/LPEDC/material/E903 && ~/LPEDC/material/E903
 ```
 
 **Exercício E904** · ★★☆
@@ -805,7 +805,7 @@ Caminho crítico: Fundação -> Paredes -> Telhado -> Reboco -> Pintura
 ```
 
 ```bash
-gcc ~/LPEDC/E904.c -o ~/LPEDC/E904 && ~/LPEDC/E904
+gcc ~/LPEDC/material/E904.c -o ~/LPEDC/material/E904 && ~/LPEDC/material/E904
 ```
 
 **Exercício E906** · ★★★
@@ -838,7 +838,7 @@ Total com 6 tarefas: 30
 ```
 
 ```bash
-gcc ~/LPEDC/E906.c -o ~/LPEDC/E906 && ~/LPEDC/E906
+gcc ~/LPEDC/material/E906.c -o ~/LPEDC/material/E906 && ~/LPEDC/material/E906
 ```
 
 ---
@@ -879,7 +879,7 @@ No Cormen, essa aresta **leve** é **segura**: entra sem estragar a MST.
 No desenho, verde entrou, vermelho fecharia ciclo e cinza nem foi olhado,
 porque as 5 arestas já tinham saído:
 
-<p align="center"><img src="0152-ideia.svg" alt="Diagrama da ideia: Kruskal: árvore geradora mínima" width="858"></p>
+<p align="center"><img src="material/0152-ideia.svg" alt="Diagrama da ideia: Kruskal: árvore geradora mínima" width="858"></p>
 
 A lista de arestas é ordenada com o `qsort` (assunto 0096); o union-find usa
 compressão de caminho e união por tamanho:
@@ -959,7 +959,7 @@ int main(void) {
 O laço do fluxograma sai ao acabar a lista ou ao completar V - 1 arestas; o
 union-find decide cada aresta:
 
-<p align="center"><img src="0152-fluxograma.svg" alt="Fluxograma: Kruskal: árvore geradora mínima" width="568"></p>
+<p align="center"><img src="material/0152-fluxograma.svg" alt="Fluxograma: Kruskal: árvore geradora mínima" width="568"></p>
 
 ### Passo a passo
 
@@ -1068,7 +1068,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A303.c -o ~/LPEDC/A303 && ~/LPEDC/A303
+gcc ~/LPEDC/material/A303.c -o ~/LPEDC/material/A303 && ~/LPEDC/material/A303
 ```
 
 **Exemplo A304 · A árvore de MAIOR soma: o melhor sinal do Wi-Fi mesh**
@@ -1130,7 +1130,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A304.c -o ~/LPEDC/A304 && ~/LPEDC/A304
+gcc ~/LPEDC/material/A304.c -o ~/LPEDC/material/A304 && ~/LPEDC/material/A304
 ```
 
 #### Exercícios
@@ -1163,7 +1163,7 @@ Mangueira total: 15 m
 ```
 
 ```bash
-gcc ~/LPEDC/E907.c -o ~/LPEDC/E907 && ~/LPEDC/E907
+gcc ~/LPEDC/material/E907.c -o ~/LPEDC/material/E907 && ~/LPEDC/material/E907
 ```
 
 **Exercício E909** · ★★☆
@@ -1197,7 +1197,7 @@ Custo extra da exigência: R$ 2 mil
 ```
 
 ```bash
-gcc ~/LPEDC/E909.c -o ~/LPEDC/E909 && ~/LPEDC/E909
+gcc ~/LPEDC/material/E909.c -o ~/LPEDC/material/E909 && ~/LPEDC/material/E909
 ```
 
 **Exercício E910** · ★★☆
@@ -1229,7 +1229,7 @@ Sem travessia: 2 redes separadas, 6 cabos, 16 km
 ```
 
 ```bash
-gcc ~/LPEDC/E910.c -o ~/LPEDC/E910 && ~/LPEDC/E910
+gcc ~/LPEDC/material/E910.c -o ~/LPEDC/material/E910 && ~/LPEDC/material/E910
 ```
 
 **Exercício E911** · ★★★
@@ -1264,7 +1264,7 @@ Total: R$ 32 mil
 ```
 
 ```bash
-gcc ~/LPEDC/E911.c -o ~/LPEDC/E911 && ~/LPEDC/E911
+gcc ~/LPEDC/material/E911.c -o ~/LPEDC/material/E911 && ~/LPEDC/material/E911
 ```
 
 ---
@@ -1304,7 +1304,7 @@ heap:
 No desenho, os números são a ordem de entrada na rede, as arestas verdes são
 os canos escolhidos, e à direita está o heap logo depois que a Ana entra:
 
-<p align="center"><img src="0153-ideia.svg" alt="Diagrama da ideia: Prim: a árvore que cresce" width="864"></p>
+<p align="center"><img src="material/0153-ideia.svg" alt="Diagrama da ideia: Prim: a árvore que cresce" width="864"></p>
 
 O heap guarda structs e compara pela `chave`, com `sobe` e `desce` do
 assunto 0102 em sinais trocados:
@@ -1396,7 +1396,7 @@ int main(void) {
 O fluxograma é o laço do Dijkstra com heap. "Já está na rede?" descarta os
 itens velhos:
 
-<p align="center"><img src="0153-fluxograma.svg" alt="Fluxograma: Prim: a árvore que cresce" width="602"></p>
+<p align="center"><img src="material/0153-fluxograma.svg" alt="Fluxograma: Prim: a árvore que cresce" width="602"></p>
 
 ### Passo a passo
 
@@ -1489,7 +1489,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A305.c -o ~/LPEDC/A305 -lm && ~/LPEDC/A305
+gcc ~/LPEDC/material/A305.c -o ~/LPEDC/material/A305 -lm && ~/LPEDC/material/A305
 ```
 
 **Exemplo A306 · Prim e Dijkstra: a mesma função, uma linha diferente**
@@ -1571,7 +1571,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A306.c -o ~/LPEDC/A306 && ~/LPEDC/A306
+gcc ~/LPEDC/material/A306.c -o ~/LPEDC/material/A306 && ~/LPEDC/material/A306
 ```
 
 #### Exercícios
@@ -1608,7 +1608,7 @@ Total: 38 m
 ```
 
 ```bash
-gcc ~/LPEDC/E913.c -o ~/LPEDC/E913 && ~/LPEDC/E913
+gcc ~/LPEDC/material/E913.c -o ~/LPEDC/material/E913 && ~/LPEDC/material/E913
 ```
 
 **Exercício E915** · ★★☆
@@ -1641,7 +1641,7 @@ Estádio: Estádio Orla Museu Praça Rodoviária Feira | 22
 ```
 
 ```bash
-gcc ~/LPEDC/E915.c -o ~/LPEDC/E915 && ~/LPEDC/E915
+gcc ~/LPEDC/material/E915.c -o ~/LPEDC/material/E915 && ~/LPEDC/material/E915
 ```
 
 **Exercício E916** · ★★☆
@@ -1679,7 +1679,7 @@ Total: 18 km
 ```
 
 ```bash
-gcc ~/LPEDC/E916.c -o ~/LPEDC/E916 && ~/LPEDC/E916
+gcc ~/LPEDC/material/E916.c -o ~/LPEDC/material/E916 && ~/LPEDC/material/E916
 ```
 
 **Exercício E917** · ★★★
@@ -1711,7 +1711,7 @@ Total: R$ 17 mil (2 poços)
 ```
 
 ```bash
-gcc ~/LPEDC/E917.c -o ~/LPEDC/E917 && ~/LPEDC/E917
+gcc ~/LPEDC/material/E917.c -o ~/LPEDC/material/E917 && ~/LPEDC/material/E917
 ```
 
 ---
@@ -1753,7 +1753,7 @@ pesos negativos.
 No desenho, as setas mostram o custo líquido, cada lugar mostra a `dist`
 final, e a rota até Casa é verde. Embaixo, o vetor `dist` a cada rodada:
 
-<p align="center"><img src="0154-ideia.svg" alt="Diagrama da ideia: Bellman-Ford: pesos negativos" width="858"></p>
+<p align="center"><img src="material/0154-ideia.svg" alt="Diagrama da ideia: Bellman-Ford: pesos negativos" width="858"></p>
 
 A lista de arestas começa de propósito pelas que chegam em Casa, para as
 rodadas aparecerem.
@@ -1826,7 +1826,7 @@ int main(void) {
 O fluxograma não escolhe o menor: rodadas por fora, arestas por dentro, com
 saída sem mudança ou após V - 1 rodadas. Depois vem a rodada extra:
 
-<p align="center"><img src="0154-fluxograma.svg" alt="Fluxograma: Bellman-Ford: pesos negativos" width="621"></p>
+<p align="center"><img src="material/0154-fluxograma.svg" alt="Fluxograma: Bellman-Ford: pesos negativos" width="621"></p>
 
 ### Passo a passo
 
@@ -1933,7 +1933,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A307.c -o ~/LPEDC/A307 -lm && ~/LPEDC/A307
+gcc ~/LPEDC/material/A307.c -o ~/LPEDC/material/A307 -lm && ~/LPEDC/material/A307
 ```
 
 **Exemplo A308 · A ordem da lista muda o número de rodadas**
@@ -1995,7 +1995,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A308.c -o ~/LPEDC/A308 && ~/LPEDC/A308
+gcc ~/LPEDC/material/A308.c -o ~/LPEDC/material/A308 && ~/LPEDC/material/A308
 ```
 
 #### Exercícios
@@ -2029,7 +2029,7 @@ Sítio: R$ 40
 ```
 
 ```bash
-gcc ~/LPEDC/E919.c -o ~/LPEDC/E919 && ~/LPEDC/E919
+gcc ~/LPEDC/material/E919.c -o ~/LPEDC/material/E919 && ~/LPEDC/material/E919
 ```
 
 **Exercício E921** · ★★☆
@@ -2063,7 +2063,7 @@ Mata: inalcançável
 ```
 
 ```bash
-gcc ~/LPEDC/E921.c -o ~/LPEDC/E921 && ~/LPEDC/E921
+gcc ~/LPEDC/material/E921.c -o ~/LPEDC/material/E921 && ~/LPEDC/material/E921
 ```
 
 **Exercício E922** · ★★☆
@@ -2094,7 +2094,7 @@ Saída: Dijkstra 9, Bellman-Ford 8 (Dijkstra errou)
 ```
 
 ```bash
-gcc ~/LPEDC/E922.c -o ~/LPEDC/E922 && ~/LPEDC/E922
+gcc ~/LPEDC/material/E922.c -o ~/LPEDC/material/E922 && ~/LPEDC/material/E922
 ```
 
 **Exercício E924** · ★★★
@@ -2126,7 +2126,7 @@ Até 3 trechos: R$ 700
 ```
 
 ```bash
-gcc ~/LPEDC/E924.c -o ~/LPEDC/E924 && ~/LPEDC/E924
+gcc ~/LPEDC/material/E924.c -o ~/LPEDC/material/E924 && ~/LPEDC/material/E924
 ```
 
 ---
@@ -2165,7 +2165,7 @@ No desenho, as setas são as ruas com os minutos, e o melhor caminho de
 Centro até Alto, em verde, passa por três bairros. Embaixo, a tabela final,
 com a linha do Centro destacada:
 
-<p align="center"><img src="0155-ideia.svg" alt="Diagrama da ideia: Floyd-Warshall: todos os pares" width="876"></p>
+<p align="center"><img src="material/0155-ideia.svg" alt="Diagrama da ideia: Floyd-Warshall: todos os pares" width="876"></p>
 
 ```c
 #include <stdio.h>
@@ -2211,7 +2211,7 @@ int main(void) {
 O fluxograma tem três contadores e uma comparação no miolo, repetida V³
 vezes:
 
-<p align="center"><img src="0155-fluxograma.svg" alt="Fluxograma: Floyd-Warshall: todos os pares" width="633"></p>
+<p align="center"><img src="material/0155-fluxograma.svg" alt="Fluxograma: Floyd-Warshall: todos os pares" width="633"></p>
 
 ### Passo a passo
 
@@ -2307,7 +2307,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A309.c -o ~/LPEDC/A309 && ~/LPEDC/A309
+gcc ~/LPEDC/material/A309.c -o ~/LPEDC/material/A309 && ~/LPEDC/material/A309
 ```
 
 **Exemplo A310 · Fecho transitivo: de qual terminal dá para chegar em qual**
@@ -2357,7 +2357,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A310.c -o ~/LPEDC/A310 && ~/LPEDC/A310
+gcc ~/LPEDC/material/A310.c -o ~/LPEDC/material/A310 && ~/LPEDC/material/A310
 ```
 
 #### Exercícios
@@ -2387,7 +2387,7 @@ Mel       9   2   5   0
 ```
 
 ```bash
-gcc ~/LPEDC/E925.c -o ~/LPEDC/E925 && ~/LPEDC/E925
+gcc ~/LPEDC/material/E925.c -o ~/LPEDC/material/E925 && ~/LPEDC/material/E925
 ```
 
 **Exercício E927** · ★★☆
@@ -2421,7 +2421,7 @@ Melhor bairro para o posto: Lagoa (ninguém fica a mais de 12 km)
 ```
 
 ```bash
-gcc ~/LPEDC/E927.c -o ~/LPEDC/E927 && ~/LPEDC/E927
+gcc ~/LPEDC/material/E927.c -o ~/LPEDC/material/E927 && ~/LPEDC/material/E927
 ```
 
 **Exercício E928** · ★★☆
@@ -2451,7 +2451,7 @@ Semana 2: ciclo negativo passando por Dólar Euro Cripto
 ```
 
 ```bash
-gcc ~/LPEDC/E928.c -o ~/LPEDC/E928 && ~/LPEDC/E928
+gcc ~/LPEDC/material/E928.c -o ~/LPEDC/material/E928 && ~/LPEDC/material/E928
 ```
 
 **Exercício E930** · ★★★
@@ -2485,7 +2485,7 @@ Confere com o Floyd completo: sim
 ```
 
 ```bash
-gcc ~/LPEDC/E930.c -o ~/LPEDC/E930 && ~/LPEDC/E930
+gcc ~/LPEDC/material/E930.c -o ~/LPEDC/material/E930 && ~/LPEDC/material/E930
 ```
 
 ---
@@ -2526,7 +2526,7 @@ marca a seta; no campus, são minutos a pé. As funções recebem
 O desenho mostra a grade, com o semestre de cada disciplina, e o campus, com
 as duas rotas em verde:
 
-<p align="center"><img src="0156-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o assistente do calouro" width="858"></p>
+<p align="center"><img src="material/0156-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o assistente do calouro" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -2639,7 +2639,7 @@ int main(void) {
 O fluxograma é o `main`: a grade passa pelo Kahn, e o campus passa uma vez
 pelo Floyd-Warshall e depois só consulta a tabela:
 
-<p align="center"><img src="0156-fluxograma.svg" alt="Fluxograma: Juntando tudo: o assistente do calouro" width="587"></p>
+<p align="center"><img src="material/0156-fluxograma.svg" alt="Fluxograma: Juntando tudo: o assistente do calouro" width="587"></p>
 
 O A311 escolhe entre Dijkstra e Bellman-Ford conforme exista peso negativo.
 O A312 é um mini gerenciador de pacotes: instala as dependências do pacote
@@ -2770,7 +2770,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A311.c -o ~/LPEDC/A311 && ~/LPEDC/A311
+gcc ~/LPEDC/material/A311.c -o ~/LPEDC/material/A311 && ~/LPEDC/material/A311
 ```
 
 **Exemplo A312 · Instalar só o necessário, na ordem certa**
@@ -2843,7 +2843,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A312.c -o ~/LPEDC/A312 && ~/LPEDC/A312
+gcc ~/LPEDC/material/A312.c -o ~/LPEDC/material/A312 && ~/LPEDC/material/A312
 ```
 
 #### Exercícios
@@ -2879,7 +2879,7 @@ Mais longe: Portaria e Reitoria, 13 min
 ```
 
 ```bash
-gcc ~/LPEDC/E931.c -o ~/LPEDC/E931 && ~/LPEDC/E931
+gcc ~/LPEDC/material/E931.c -o ~/LPEDC/material/E931 && ~/LPEDC/material/E931
 ```
 
 **Exercício E933** · ★★☆
@@ -2911,7 +2911,7 @@ Capital -> Serra pelo melhor caminho: 10 km
 ```
 
 ```bash
-gcc ~/LPEDC/E933.c -o ~/LPEDC/E933 && ~/LPEDC/E933
+gcc ~/LPEDC/material/E933.c -o ~/LPEDC/material/E933 && ~/LPEDC/material/E933
 ```
 
 **Exercício E934** · ★★☆
@@ -2948,7 +2948,7 @@ Com no máximo 2 por semestre:
 ```
 
 ```bash
-gcc ~/LPEDC/E934.c -o ~/LPEDC/E934 && ~/LPEDC/E934
+gcc ~/LPEDC/material/E934.c -o ~/LPEDC/material/E934 && ~/LPEDC/material/E934
 ```
 
 **Exercício E936** · ★★★
@@ -2983,7 +2983,7 @@ Melhor roteiro (22 min): Loja -> Ana -> Bruno -> Carla -> Loja
 ```
 
 ```bash
-gcc ~/LPEDC/E936.c -o ~/LPEDC/E936 && ~/LPEDC/E936
+gcc ~/LPEDC/material/E936.c -o ~/LPEDC/material/E936 && ~/LPEDC/material/E936
 ```
 
 ---
@@ -3139,7 +3139,7 @@ fim, o Kruskal também conta componentes, como o union-find do A300.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2301.c a P2330.c, na raiz; resoluções em `_respostas/23-grafos-avancados/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2301.c a P2330.c, em `material/`; resoluções em `_respostas/23-grafos-avancados/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3182,7 +3182,7 @@ Iara e Ana: grupos diferentes
    grupo[a] == grupo[b].
 
 ```bash
-gcc ~/LPEDC/P2301.c -o ~/LPEDC/P2301 && ~/LPEDC/P2301
+gcc ~/LPEDC/material/P2301.c -o ~/LPEDC/material/P2301 && ~/LPEDC/material/P2301
 ```
 
 ---
@@ -3221,7 +3221,7 @@ Rede nova: sem circuito
    Ana; sem o cano Ana-Davi, a rede vira árvore e não tem circuito.
 
 ```bash
-gcc ~/LPEDC/P2302.c -o ~/LPEDC/P2302 && ~/LPEDC/P2302
+gcc ~/LPEDC/material/P2302.c -o ~/LPEDC/material/P2302 && ~/LPEDC/material/P2302
 ```
 
 ---
@@ -3259,7 +3259,7 @@ Planilha de junho: sem referência circular
    a seta D1 -> B1, nenhum ciclo.
 
 ```bash
-gcc ~/LPEDC/P2303.c -o ~/LPEDC/P2303 && ~/LPEDC/P2303
+gcc ~/LPEDC/material/P2303.c -o ~/LPEDC/material/P2303 && ~/LPEDC/material/P2303
 ```
 
 ---
@@ -3302,7 +3302,7 @@ Manual com erro: separar base
    prateleiras e fixar esperam por eles).
 
 ```bash
-gcc ~/LPEDC/P2304.c -o ~/LPEDC/P2304 && ~/LPEDC/P2304
+gcc ~/LPEDC/material/P2304.c -o ~/LPEDC/material/P2304 && ~/LPEDC/material/P2304
 ```
 
 ---
@@ -3346,7 +3346,7 @@ Ordem: banco(12) lint(10) testes(9) build(8) deploy(7) aviso(6)
    só é descoberto no 11 e termina no 12, por isso abre a ordem.
 
 ```bash
-gcc ~/LPEDC/P2305.c -o ~/LPEDC/P2305 && ~/LPEDC/P2305
+gcc ~/LPEDC/material/P2305.c -o ~/LPEDC/material/P2305 && ~/LPEDC/material/P2305
 ```
 
 ---
@@ -3390,7 +3390,7 @@ Total: 22 km
 3. Resposta esperada: só Tracajá-Zé Açu é recusado; total 22 km.
 
 ```bash
-gcc ~/LPEDC/P2306.c -o ~/LPEDC/P2306 && ~/LPEDC/P2306
+gcc ~/LPEDC/material/P2306.c -o ~/LPEDC/material/P2306 && ~/LPEDC/material/P2306
 ```
 
 ---
@@ -3430,7 +3430,7 @@ Total: 14 km
    0* 4* 3* 2* 5*.
 
 ```bash
-gcc ~/LPEDC/P2307.c -o ~/LPEDC/P2307 && ~/LPEDC/P2307
+gcc ~/LPEDC/material/P2307.c -o ~/LPEDC/material/P2307 && ~/LPEDC/material/P2307
 ```
 
 ---
@@ -3474,7 +3474,7 @@ rodada 4:   0   3   5   7  10
    Estágio 10; o Estágio só chega no valor certo na rodada 4.
 
 ```bash
-gcc ~/LPEDC/P2308.c -o ~/LPEDC/P2308 && ~/LPEDC/P2308
+gcc ~/LPEDC/material/P2308.c -o ~/LPEDC/material/P2308 && ~/LPEDC/material/P2308
 ```
 
 ---
@@ -3540,7 +3540,7 @@ CNO     20   30   55    0
    chega no Centro em 35 (15 + 20).
 
 ```bash
-gcc ~/LPEDC/P2309.c -o ~/LPEDC/P2309 && ~/LPEDC/P2309
+gcc ~/LPEDC/material/P2309.c -o ~/LPEDC/material/P2309 && ~/LPEDC/material/P2309
 ```
 
 ---
@@ -3575,7 +3575,7 @@ Edu     0   0    0    1   0   chega em 1
    nenhuma; Edu só em Davi.
 
 ```bash
-gcc ~/LPEDC/P2310.c -o ~/LPEDC/P2310 && ~/LPEDC/P2310
+gcc ~/LPEDC/material/P2310.c -o ~/LPEDC/material/P2310 && ~/LPEDC/material/P2310
 ```
 
 ### ★★☆ Para pensar
@@ -3618,7 +3618,7 @@ Grupo 3: Autazes Itacoatiara Silves
    e Careiro; Autazes, Itacoatiara e Silves.
 
 ```bash
-gcc ~/LPEDC/P2311.c -o ~/LPEDC/P2311 && ~/LPEDC/P2311
+gcc ~/LPEDC/material/P2311.c -o ~/LPEDC/material/P2311 && ~/LPEDC/material/P2311
 ```
 
 ---
@@ -3670,7 +3670,7 @@ Lista 2
    a antes de c e c antes de a.
 
 ```bash
-gcc ~/LPEDC/P2312.c -o ~/LPEDC/P2312 && ~/LPEDC/P2312
+gcc ~/LPEDC/material/P2312.c -o ~/LPEDC/material/P2312 && ~/LPEDC/material/P2312
 ```
 
 ---
@@ -3717,7 +3717,7 @@ Melhor trilha: Início -> Caverna -> Rio -> Castelo -> Chefão
    pela Floresta.
 
 ```bash
-gcc ~/LPEDC/P2313.c -o ~/LPEDC/P2313 && ~/LPEDC/P2313
+gcc ~/LPEDC/material/P2313.c -o ~/LPEDC/material/P2313 && ~/LPEDC/material/P2313
 ```
 
 ---
@@ -3757,7 +3757,7 @@ Relaxações tentadas: Bellman-Ford 45, DAG 9
    tentativas contra 45 do Bellman-Ford.
 
 ```bash
-gcc ~/LPEDC/P2314.c -o ~/LPEDC/P2314 && ~/LPEDC/P2314
+gcc ~/LPEDC/material/P2314.c -o ~/LPEDC/material/P2314 && ~/LPEDC/material/P2314
 ```
 
 ---
@@ -3804,7 +3804,7 @@ Total: R$ 18 mil
    com Lago-Mirante recusada e Cachoeira-Camping aceita.
 
 ```bash
-gcc ~/LPEDC/P2315.c -o ~/LPEDC/P2315 && ~/LPEDC/P2315
+gcc ~/LPEDC/material/P2315.c -o ~/LPEDC/material/P2315 && ~/LPEDC/material/P2315
 ```
 
 ---
@@ -3839,7 +3839,7 @@ Total: 11 metros; sobraram 2 itens no heap
    e 2 itens ainda no heap no fim (Porto-Escola e Porto-Ginásio).
 
 ```bash
-gcc ~/LPEDC/P2316.c -o ~/LPEDC/P2316 && ~/LPEDC/P2316
+gcc ~/LPEDC/material/P2316.c -o ~/LPEDC/material/P2316 && ~/LPEDC/material/P2316
 ```
 
 ---
@@ -3872,7 +3872,7 @@ Rodoviária -> Universidade (9 min): Rodoviária -> Aeroporto -> Universidade
    Rodoviária; a linha direta Terminal-Universidade (20) nunca é usada.
 
 ```bash
-gcc ~/LPEDC/P2317.c -o ~/LPEDC/P2317 && ~/LPEDC/P2317
+gcc ~/LPEDC/material/P2317.c -o ~/LPEDC/material/P2317 && ~/LPEDC/material/P2317
 ```
 
 ---
@@ -3912,7 +3912,7 @@ Arestas olhadas: Dijkstra 60, Bellman-Ford 170
    (6 origens × 10), Bellman-Ford 170.
 
 ```bash
-gcc ~/LPEDC/P2318.c -o ~/LPEDC/P2318 && ~/LPEDC/P2318
+gcc ~/LPEDC/material/P2318.c -o ~/LPEDC/material/P2318 && ~/LPEDC/material/P2318
 ```
 
 ---
@@ -3958,7 +3958,7 @@ Currais fechados: 3
    (9 cercas - 6 que bastam para ligar 7 mourões).
 
 ```bash
-gcc ~/LPEDC/P2319.c -o ~/LPEDC/P2319 && ~/LPEDC/P2319
+gcc ~/LPEDC/material/P2319.c -o ~/LPEDC/material/P2319 && ~/LPEDC/material/P2319
 ```
 
 ---
@@ -4002,7 +4002,7 @@ Praia: 8
 3. Resposta esperada: 8 trajetos chegam à Praia.
 
 ```bash
-gcc ~/LPEDC/P2320.c -o ~/LPEDC/P2320 && ~/LPEDC/P2320
+gcc ~/LPEDC/material/P2320.c -o ~/LPEDC/material/P2320 && ~/LPEDC/material/P2320
 ```
 
 ### ★★★ Desafio
@@ -4054,7 +4054,7 @@ Segunda melhor: 21, trocando Boa Esperança-Cajual (5) por Aldeia Nova-Cajual (6
    Cajual-Extrema também dá 21: o plano B nem sempre é único.
 
 ```bash
-gcc ~/LPEDC/P2321.c -o ~/LPEDC/P2321 && ~/LPEDC/P2321
+gcc ~/LPEDC/material/P2321.c -o ~/LPEDC/material/P2321 && ~/LPEDC/material/P2321
 ```
 
 ---
@@ -4095,7 +4095,7 @@ Terça-feira: sem arbitragem
    fator 1.0120 (0,92 × 5,50 × 0,20); na terça, sem arbitragem.
 
 ```bash
-gcc ~/LPEDC/P2322.c -o ~/LPEDC/P2322 -lm && ~/LPEDC/P2322
+gcc ~/LPEDC/material/P2322.c -o ~/LPEDC/material/P2322 -lm && ~/LPEDC/material/P2322
 ```
 
 ---
@@ -4134,7 +4134,7 @@ Bolha 3: @fe @gabi
    saem 3 bolhas: @ana @beto @caio, @dani @enzo e @fe @gabi.
 
 ```bash
-gcc ~/LPEDC/P2323.c -o ~/LPEDC/P2323 && ~/LPEDC/P2323
+gcc ~/LPEDC/material/P2323.c -o ~/LPEDC/material/P2323 && ~/LPEDC/material/P2323
 ```
 
 ---
@@ -4184,7 +4184,7 @@ Tefé -> Lábrea: até 28 t
    28 t, a estrada direta.
 
 ```bash
-gcc ~/LPEDC/P2324.c -o ~/LPEDC/P2324 && ~/LPEDC/P2324
+gcc ~/LPEDC/material/P2324.c -o ~/LPEDC/material/P2324 && ~/LPEDC/material/P2324
 ```
 
 ---
@@ -4230,7 +4230,7 @@ Sem regras (12 tarefas): PD 479001600
    regras.
 
 ```bash
-gcc ~/LPEDC/P2325.c -o ~/LPEDC/P2325 && ~/LPEDC/P2325
+gcc ~/LPEDC/material/P2325.c -o ~/LPEDC/material/P2325 && ~/LPEDC/material/P2325
 ```
 
 ---
@@ -4271,7 +4271,7 @@ Ilha   inalcançável
    Bosque 7, Ilha inalcançável.
 
 ```bash
-gcc ~/LPEDC/P2326.c -o ~/LPEDC/P2326 && ~/LPEDC/P2326
+gcc ~/LPEDC/material/P2326.c -o ~/LPEDC/material/P2326 && ~/LPEDC/material/P2326
 ```
 
 ---
@@ -4316,7 +4316,7 @@ Total: 11 km
 3. Resposta esperada: compare e guarde só km[u][v]; total 11 km.
 
 ```bash
-gcc ~/LPEDC/P2327.c -o ~/LPEDC/P2327 && ~/LPEDC/P2327
+gcc ~/LPEDC/material/P2327.c -o ~/LPEDC/material/P2327 && ~/LPEDC/material/P2327
 ```
 
 ---
@@ -4356,7 +4356,7 @@ Espaçamento: 4 km (Aleixo-Japiim)
    (Aleixo-Japiim).
 
 ```bash
-gcc ~/LPEDC/P2328.c -o ~/LPEDC/P2328 && ~/LPEDC/P2328
+gcc ~/LPEDC/material/P2328.c -o ~/LPEDC/material/P2328 && ~/LPEDC/material/P2328
 ```
 
 ---
@@ -4405,7 +4405,7 @@ Floyd-Warshall confere
    0 3 1 3 2 e o Floyd-Warshall confere.
 
 ```bash
-gcc ~/LPEDC/P2329.c -o ~/LPEDC/P2329 && ~/LPEDC/P2329
+gcc ~/LPEDC/material/P2329.c -o ~/LPEDC/material/P2329 && ~/LPEDC/material/P2329
 ```
 
 ---
@@ -4454,7 +4454,7 @@ Ruas novas, no mínimo: 2
    2 sumidouros ({Matriz} e {Mercado, Teatro}): 2 ruas novas.
 
 ```bash
-gcc ~/LPEDC/P2330.c -o ~/LPEDC/P2330 && ~/LPEDC/P2330
+gcc ~/LPEDC/material/P2330.c -o ~/LPEDC/material/P2330 && ~/LPEDC/material/P2330
 ```
 
 ## Questões no estilo da prova

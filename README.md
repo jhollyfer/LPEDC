@@ -33,14 +33,14 @@ o compilador (`clang`, que aceita os mesmos comandos).
 Compile com o `gcc` e execute o resultado. O `-o` dá o nome do executável, que fica ao lado do `.c`:
 
 ```bash
-gcc ~/LPEDC/A003.c -o ~/LPEDC/A003 && ~/LPEDC/A003
+gcc ~/LPEDC/material/A003.c -o ~/LPEDC/material/A003 && ~/LPEDC/material/A003
 ```
 
 Para testar sem digitar, mande a entrada por um cano; para passar argumentos, escreva-os depois do executável:
 
 ```bash
-gcc ~/LPEDC/A011.c -o ~/LPEDC/A011 && printf '25\n' | ~/LPEDC/A011
-gcc ~/LPEDC/A137.c -o ~/LPEDC/A137 && ~/LPEDC/A137 um dois tres
+gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '25\n' | ~/LPEDC/material/A011
+gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 && ~/LPEDC/material/A137 um dois tres
 ```
 
 Os assuntos com TAD têm `.c` de apoio na pasta (`pilha.c`, `lista.c`...): o comando do exemplo já os lista.
@@ -73,9 +73,9 @@ práticas.
 
 ## Como cada módulo funciona
 
-Tudo fica na raiz, sem subpastas. O texto de cada módulo é um arquivo só
+Os arquivos do curso ficam todos numa pasta só, `material/`. O texto de cada módulo é um arquivo só
 (`01-fundamentos.md`, `02-condicionais.md`...), com os assuntos, os exemplos, os
-exercícios, a lista prática, os desafios e as questões da prova. Ao lado dele moram os
+exercícios, a lista prática, os desafios e as questões da prova. Em `material/` moram os
 arquivos que você roda: `A###.c` (exemplos), `E###.c` (exercícios), `P####.c` (lista
 prática) e os desenhos `NNNN-ideia.svg` e `NNNN-fluxograma.svg`. Os TADs de apoio levam o número
 do assunto no nome (`0076-lista.c`). As resoluções ficam em `_respostas/`. A árvore completa
@@ -104,7 +104,7 @@ exemplo segue e o resultado; cinza, o que ele não usa; vermelho, erro. Os
 diagramas da ideia seguem as mesmas cores, e cada módulo avisa, em "Antes de
 começar", o que elas têm de próprio nos desenhos dele.
 
-<p align="center"><img src="legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
+<p align="center"><img src="material/legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 
 ## Os módulos

@@ -34,7 +34,7 @@ Cada pasta traz os arquivos do TAD (`pilha.h` e `pilha.c`, `fila.h` e
 esses `.c` de apoio junto com o exemplo ou exercício:
 
 ```bash
-gcc ~/LPEDC/A163.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/A163 && ~/LPEDC/A163
+gcc ~/LPEDC/material/A163.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/A163 && ~/LPEDC/material/A163
 ```
 
 Num exercício, **não** crie funções com os nomes do TAD (`pilha_cria`,

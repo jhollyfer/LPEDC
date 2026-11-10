@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../0082-pilha.c"
+#include "../../material/0082-pilha.c"
 
 int main(void) {
     Pilha *p = pilha_cria();

@@ -44,7 +44,7 @@ retorno), operadores aritméticos (em especial o `%`) e `math.h`. Os exercícios
 com teclado aceitam entrada por pipe, o que facilita testar vários casos:
 
 ```bash
-gcc ~/LPEDC/A028.c -o ~/LPEDC/A028 && printf '12.90 8.50\n' | ~/LPEDC/A028
+gcc ~/LPEDC/material/A028.c -o ~/LPEDC/material/A028 && printf '12.90 8.50\n' | ~/LPEDC/material/A028
 ```
 
 Os exercícios "ache o erro" trazem o código quebrado **de propósito** e mostram
@@ -101,7 +101,7 @@ a". O estrago dessa troca fica para o 0015.
 Os dois placares viram três perguntas, e cada resposta é 0 ou 1. A tabela usa
 esses números direto na conta dos pontos:
 
-<p align="center"><img src="0012-ideia.svg" alt="Diagrama da ideia: Relacionais e a verdade em C" width="858"></p>
+<p align="center"><img src="material/0012-ideia.svg" alt="Diagrama da ideia: Relacionais e a verdade em C" width="858"></p>
 
 O placar em C não tem nenhum `if`: a verdade vira número e entra na conta:
 
@@ -134,7 +134,7 @@ int main(void) {
 O fluxograma não tem losango: comparar não é decidir, apenas **calcula** uma
 resposta e a guarda numa caixinha. Quem escolhe o caminho é o `if` (0014):
 
-<p align="center"><img src="0012-fluxograma.svg" alt="Fluxograma: Relacionais e a verdade em C" width="1510"></p>
+<p align="center"><img src="material/0012-fluxograma.svg" alt="Fluxograma: Relacionais e a verdade em C" width="1510"></p>
 
 > [!WARNING]
 > **Não compare `float` ou `double` com `==`.** `printf("%d", 0.1 + 0.2 ==
@@ -185,7 +185,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A023.c -o ~/LPEDC/A023 && ~/LPEDC/A023
+gcc ~/LPEDC/material/A023.c -o ~/LPEDC/material/A023 && ~/LPEDC/material/A023
 ```
 
 **Exemplo A024 · Zero é falso, o resto é verdade**
@@ -226,7 +226,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A024.c -o ~/LPEDC/A024 -lm && ~/LPEDC/A024
+gcc ~/LPEDC/material/A024.c -o ~/LPEDC/material/A024 -lm && ~/LPEDC/material/A024
 ```
 
 #### Exercícios
@@ -248,7 +248,7 @@ Etanol compensa? 1
 ```
 
 ```bash
-gcc ~/LPEDC/E067.c -o ~/LPEDC/E067 && ~/LPEDC/E067
+gcc ~/LPEDC/material/E067.c -o ~/LPEDC/material/E067 && ~/LPEDC/material/E067
 ```
 
 **Exercício E069** · ★★☆
@@ -268,7 +268,7 @@ A pagar: R$ 174.90
 ```
 
 ```bash
-gcc ~/LPEDC/E069.c -o ~/LPEDC/E069 && ~/LPEDC/E069
+gcc ~/LPEDC/material/E069.c -o ~/LPEDC/material/E069 && ~/LPEDC/material/E069
 ```
 
 **Exercício E070** · ★★☆
@@ -288,7 +288,7 @@ Pagou o valor exato? 1
 ```
 
 ```bash
-gcc ~/LPEDC/E070.c -o ~/LPEDC/E070 -lm && ~/LPEDC/E070
+gcc ~/LPEDC/material/E070.c -o ~/LPEDC/material/E070 -lm && ~/LPEDC/material/E070
 ```
 
 **Exercício E072** · ★★★
@@ -309,7 +309,7 @@ A pagar: R$ 142.50
 ```
 
 ```bash
-gcc ~/LPEDC/E072.c -o ~/LPEDC/E072 && ~/LPEDC/E072
+gcc ~/LPEDC/material/E072.c -o ~/LPEDC/material/E072 && ~/LPEDC/material/E072
 ```
 
 ---
@@ -360,7 +360,7 @@ No exemplo, uma pessoa de 67 anos, não estudante, numa sessão comum. O OU dá
 verdade pela idade, o NÃO da pré-estreia dá verdade, e o E fecha com
 meia-entrada:
 
-<p align="center"><img src="0013-ideia.svg" alt="Diagrama da ideia: Lógicos: E, OU, NÃO" width="882"></p>
+<p align="center"><img src="material/0013-ideia.svg" alt="Diagrama da ideia: Lógicos: E, OU, NÃO" width="882"></p>
 
 A bilheteria em C:
 
@@ -389,7 +389,7 @@ O C avalia como no fluxograma, uma pergunta de cada vez. Como `estudante` é
 falso, olha a idade; se fosse verdade, pularia direto para a pré-estreia. É o
 curto-circuito desenhado.
 
-<p align="center"><img src="0013-fluxograma.svg" alt="Fluxograma: Lógicos: E, OU, NÃO" width="418"></p>
+<p align="center"><img src="material/0013-fluxograma.svg" alt="Fluxograma: Lógicos: E, OU, NÃO" width="418"></p>
 
 > [!WARNING]
 > **`&` não é `&&`.** O `&` simples é o E **bit a bit** (assunto 0065): não tem
@@ -440,7 +440,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A025.c -o ~/LPEDC/A025 && ~/LPEDC/A025
+gcc ~/LPEDC/material/A025.c -o ~/LPEDC/material/A025 && ~/LPEDC/material/A025
 ```
 
 **Exemplo A026 · O curto-circuito protege a divisão**
@@ -477,7 +477,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A026.c -o ~/LPEDC/A026 && ~/LPEDC/A026
+gcc ~/LPEDC/material/A026.c -o ~/LPEDC/material/A026 && ~/LPEDC/material/A026
 ```
 
 #### Exercícios
@@ -500,7 +500,7 @@ a b | E OU NAO
 ```
 
 ```bash
-gcc ~/LPEDC/E073.c -o ~/LPEDC/E073 && ~/LPEDC/E073
+gcc ~/LPEDC/material/E073.c -o ~/LPEDC/material/E073 && ~/LPEDC/material/E073
 ```
 
 **Exercício E075** · ★★☆
@@ -518,7 +518,7 @@ Bissexto? 1
 ```
 
 ```bash
-gcc ~/LPEDC/E075.c -o ~/LPEDC/E075 && ~/LPEDC/E075
+gcc ~/LPEDC/material/E075.c -o ~/LPEDC/material/E075 && ~/LPEDC/material/E075
 ```
 
 **Exercício E076** · ★★☆
@@ -539,7 +539,7 @@ barrado (De Morgan): 1
 ```
 
 ```bash
-gcc ~/LPEDC/E076.c -o ~/LPEDC/E076 && ~/LPEDC/E076
+gcc ~/LPEDC/material/E076.c -o ~/LPEDC/material/E076 && ~/LPEDC/material/E076
 ```
 
 **Exercício E077** · ★★★
@@ -571,7 +571,7 @@ Alerta? 1
 ```
 
 ```bash
-gcc ~/LPEDC/E077.c -o ~/LPEDC/E077 && ~/LPEDC/E077
+gcc ~/LPEDC/material/E077.c -o ~/LPEDC/material/E077 && ~/LPEDC/material/E077
 ```
 
 ---
@@ -616,7 +616,7 @@ programa segue. É a **seleção simples**: um passo extra ou nada.
 No exemplo, entram R$ 230, a resposta é Sim, o desconto acontece e o valor
 final é R$ 207. Se fosse Não, a seta cinza iria direto ao final:
 
-<p align="center"><img src="0014-ideia.svg" alt="Diagrama da ideia: if" width="870"></p>
+<p align="center"><img src="material/0014-ideia.svg" alt="Diagrama da ideia: if" width="870"></p>
 
 O desconto em C (`%%` mostra um `%` no `printf`):
 
@@ -643,7 +643,7 @@ int main(void) {
 A saída Não do losango não faz nada: vai direto ao "Mostrar", onde o Sim chega
 depois do desconto:
 
-<p align="center"><img src="0014-fluxograma.svg" alt="Fluxograma: if" width="367"></p>
+<p align="center"><img src="material/0014-fluxograma.svg" alt="Fluxograma: if" width="367"></p>
 
 > [!WARNING]
 > **O `;` depois do `if` mata a condição.** Em `if (total >= 200);`, o ponto e
@@ -691,7 +691,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A027.c -o ~/LPEDC/A027 && ~/LPEDC/A027
+gcc ~/LPEDC/material/A027.c -o ~/LPEDC/material/A027 && ~/LPEDC/material/A027
 ```
 
 **Exemplo A028 · Dois preços em ordem**
@@ -724,7 +724,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A028.c -o ~/LPEDC/A028 && ~/LPEDC/A028
+gcc ~/LPEDC/material/A028.c -o ~/LPEDC/material/A028 && ~/LPEDC/material/A028
 ```
 
 #### Exercícios
@@ -744,7 +744,7 @@ Febre! Procure um médico.
 ```
 
 ```bash
-gcc ~/LPEDC/E079.c -o ~/LPEDC/E079 && ~/LPEDC/E079
+gcc ~/LPEDC/material/E079.c -o ~/LPEDC/material/E079 && ~/LPEDC/material/E079
 ```
 
 **Exercício E081** · ★★☆
@@ -772,7 +772,7 @@ Bom filme!
 ```
 
 ```bash
-gcc ~/LPEDC/E081.c -o ~/LPEDC/E081 && ~/LPEDC/E081
+gcc ~/LPEDC/material/E081.c -o ~/LPEDC/material/E081 && ~/LPEDC/material/E081
 ```
 
 **Exercício E082** · ★★☆
@@ -790,7 +790,7 @@ Maior orçamento: R$ 3790
 ```
 
 ```bash
-gcc ~/LPEDC/E082.c -o ~/LPEDC/E082 && ~/LPEDC/E082
+gcc ~/LPEDC/material/E082.c -o ~/LPEDC/material/E082 && ~/LPEDC/material/E082
 ```
 
 **Exercício E084** · ★★★
@@ -809,7 +809,7 @@ Conta: R$ 94.60
 ```
 
 ```bash
-gcc ~/LPEDC/E084.c -o ~/LPEDC/E084 && ~/LPEDC/E084
+gcc ~/LPEDC/material/E084.c -o ~/LPEDC/material/E084 && ~/LPEDC/material/E084
 ```
 
 ---
@@ -851,7 +851,7 @@ O `-Wall` avisa: "suggest parentheses around assignment used as truth value".
 No exemplo, o cartão tem R$ 3,50 e a tarifa é R$ 5,00. A resposta é Não, e o
 caminho de baixo é o que vale:
 
-<p align="center"><img src="0015-ideia.svg" alt="Diagrama da ideia: if/else e o = no lugar do ==" width="864"></p>
+<p align="center"><img src="material/0015-ideia.svg" alt="Diagrama da ideia: if/else e o = no lugar do ==" width="864"></p>
 
 O metrô em C:
 
@@ -879,7 +879,7 @@ int main(void) {
 O caminho verde sai pelo Não. Cada lado do losango tem seu bloco, e os dois se
 reencontram no Fim, sem passar pelos dois:
 
-<p align="center"><img src="0015-fluxograma.svg" alt="Fluxograma: if/else e o = no lugar do ==" width="626"></p>
+<p align="center"><img src="material/0015-fluxograma.svg" alt="Fluxograma: if/else e o = no lugar do ==" width="626"></p>
 
 > [!WARNING]
 > **`=` no lugar de `==`.** Com `if (saldo = 0)`, o saldo vira zero e o `else`
@@ -927,7 +927,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A029.c -o ~/LPEDC/A029 && ~/LPEDC/A029
+gcc ~/LPEDC/material/A029.c -o ~/LPEDC/material/A029 && ~/LPEDC/material/A029
 ```
 
 **Exemplo A030 · Par ou ímpar no palitinho**
@@ -954,7 +954,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A030.c -o ~/LPEDC/A030 && ~/LPEDC/A030
+gcc ~/LPEDC/material/A030.c -o ~/LPEDC/material/A030 && ~/LPEDC/material/A030
 ```
 
 #### Exercícios
@@ -973,7 +973,7 @@ Faltam 2 ano(s) para a maioridade.
 ```
 
 ```bash
-gcc ~/LPEDC/E085.c -o ~/LPEDC/E085 && ~/LPEDC/E085
+gcc ~/LPEDC/material/E085.c -o ~/LPEDC/material/E085 && ~/LPEDC/material/E085
 ```
 
 **Exercício E087** · ★★☆
@@ -1004,7 +1004,7 @@ Tentativas registradas: 3
 ```
 
 ```bash
-gcc ~/LPEDC/E087.c -o ~/LPEDC/E087 && ~/LPEDC/E087
+gcc ~/LPEDC/material/E087.c -o ~/LPEDC/material/E087 && ~/LPEDC/material/E087
 ```
 
 **Exercício E088** · ★★☆
@@ -1024,7 +1024,7 @@ Negado: a parcela passa do limite.
 ```
 
 ```bash
-gcc ~/LPEDC/E088.c -o ~/LPEDC/E088 && ~/LPEDC/E088
+gcc ~/LPEDC/material/E088.c -o ~/LPEDC/material/E088 && ~/LPEDC/material/E088
 ```
 
 **Exercício E090** · ★★★
@@ -1044,7 +1044,7 @@ x2 = 2.00
 ```
 
 ```bash
-gcc ~/LPEDC/E090.c -o ~/LPEDC/E090 -lm && ~/LPEDC/E090
+gcc ~/LPEDC/material/E090.c -o ~/LPEDC/material/E090 -lm && ~/LPEDC/material/E090
 ```
 
 ---
@@ -1086,7 +1086,7 @@ recuos; não é palavra-chave, é um `else` cuja única instrução é um `if`.
 Os 80 km/h passam em ordem: 80 <= 60? Não. <= 72? Não. <= 90? Sim, e a busca
 para ali:
 
-<p align="center"><img src="0016-ideia.svg" alt="Diagrama da ideia: else if, if aninhado e o else pendurado" width="858"></p>
+<p align="center"><img src="material/0016-ideia.svg" alt="Diagrama da ideia: else if, if aninhado e o else pendurado" width="858"></p>
 
 O radar em C. As faixas são calculadas a partir do limite da via, para valer
 em qualquer avenida:
@@ -1118,7 +1118,7 @@ int main(void) {
 O fluxograma é uma escada de losangos, cada um no Não do anterior. O caminho
 verde desce pelos Nãos até o primeiro Sim; os de baixo não são visitados:
 
-<p align="center"><img src="0016-fluxograma.svg" alt="Fluxograma: else if, if aninhado e o else pendurado" width="998"></p>
+<p align="center"><img src="material/0016-fluxograma.svg" alt="Fluxograma: else if, if aninhado e o else pendurado" width="998"></p>
 
 > [!WARNING]
 > **O `else` pendurado.** Sem chaves, um `else` pertence ao `if` **mais
@@ -1182,7 +1182,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A031.c -o ~/LPEDC/A031 && ~/LPEDC/A031
+gcc ~/LPEDC/material/A031.c -o ~/LPEDC/material/A031 && ~/LPEDC/material/A031
 ```
 
 **Exemplo A032 · Login com if aninhado**
@@ -1214,7 +1214,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A032.c -o ~/LPEDC/A032 && ~/LPEDC/A032
+gcc ~/LPEDC/material/A032.c -o ~/LPEDC/material/A032 && ~/LPEDC/material/A032
 ```
 
 #### Exercícios
@@ -1234,7 +1234,7 @@ Mensalidade: R$ 520.00
 ```
 
 ```bash
-gcc ~/LPEDC/E091.c -o ~/LPEDC/E091 && ~/LPEDC/E091
+gcc ~/LPEDC/material/E091.c -o ~/LPEDC/material/E091 && ~/LPEDC/material/E091
 ```
 
 **Exercício E093** · ★★☆
@@ -1275,7 +1275,7 @@ Bom dia!
 ```
 
 ```bash
-gcc ~/LPEDC/E093.c -o ~/LPEDC/E093 && ~/LPEDC/E093
+gcc ~/LPEDC/material/E093.c -o ~/LPEDC/material/E093 && ~/LPEDC/material/E093
 ```
 
 **Exercício E094** · ★★☆
@@ -1320,7 +1320,7 @@ Conceito D
 ```
 
 ```bash
-gcc ~/LPEDC/E094.c -o ~/LPEDC/E094 && ~/LPEDC/E094
+gcc ~/LPEDC/material/E094.c -o ~/LPEDC/material/E094 && ~/LPEDC/material/E094
 ```
 
 **Exercício E095** · ★★★
@@ -1339,7 +1339,7 @@ Triângulo isósceles.
 ```
 
 ```bash
-gcc ~/LPEDC/E095.c -o ~/LPEDC/E095 && ~/LPEDC/E095
+gcc ~/LPEDC/material/E095.c -o ~/LPEDC/material/E095 && ~/LPEDC/material/E095
 ```
 
 ---
@@ -1395,7 +1395,7 @@ cada lado faz várias coisas, ou os ternários se aninham, volte ao `if/else`.
 No carrinho, entram R$ 150, "passou de 199?" é Não, e o ternário devolve 19.90
 para a caixinha `frete`:
 
-<p align="center"><img src="0017-ideia.svg" alt="Diagrama da ideia: Ternário: condição ? a : b" width="858"></p>
+<p align="center"><img src="material/0017-ideia.svg" alt="Diagrama da ideia: Ternário: condição ? a : b" width="858"></p>
 
 Em C, um ternário escolhe o frete e outro, a palavra:
 
@@ -1422,7 +1422,7 @@ int main(void) {
 O desenho é um `if/else` em que cada lado só guarda um valor na mesma
 variável. Nesse formato, um ternário resolve em uma linha:
 
-<p align="center"><img src="0017-fluxograma.svg" alt="Fluxograma: Ternário: condição ? a : b" width="377"></p>
+<p align="center"><img src="material/0017-fluxograma.svg" alt="Fluxograma: Ternário: condição ? a : b" width="377"></p>
 
 > [!WARNING]
 > **O ternário tem precedência baixíssima**: só ganha da atribuição e da
@@ -1468,7 +1468,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A033.c -o ~/LPEDC/A033 && ~/LPEDC/A033
+gcc ~/LPEDC/material/A033.c -o ~/LPEDC/material/A033 && ~/LPEDC/material/A033
 ```
 
 **Exemplo A034 · Maior, distância do zero e verdade em texto**
@@ -1503,7 +1503,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A034.c -o ~/LPEDC/A034 && ~/LPEDC/A034
+gcc ~/LPEDC/material/A034.c -o ~/LPEDC/material/A034 && ~/LPEDC/material/A034
 ```
 
 #### Exercícios
@@ -1524,7 +1524,7 @@ Ingresso: R$ 20.00
 ```
 
 ```bash
-gcc ~/LPEDC/E097.c -o ~/LPEDC/E097 && ~/LPEDC/E097
+gcc ~/LPEDC/material/E097.c -o ~/LPEDC/material/E097 && ~/LPEDC/material/E097
 ```
 
 **Exercício E099** · ★★☆
@@ -1547,7 +1547,7 @@ Menor: 2
 ```
 
 ```bash
-gcc ~/LPEDC/E099.c -o ~/LPEDC/E099 && ~/LPEDC/E099
+gcc ~/LPEDC/material/E099.c -o ~/LPEDC/material/E099 && ~/LPEDC/material/E099
 ```
 
 **Exercício E100** · ★★☆
@@ -1564,7 +1564,7 @@ Maior nota: 10
 ```
 
 ```bash
-gcc ~/LPEDC/E100.c -o ~/LPEDC/E100 && ~/LPEDC/E100
+gcc ~/LPEDC/material/E100.c -o ~/LPEDC/material/E100 && ~/LPEDC/material/E100
 ```
 
 **Exercício E102** · ★★★
@@ -1601,7 +1601,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E102.c -o ~/LPEDC/E102 && ~/LPEDC/E102
+gcc ~/LPEDC/material/E102.c -o ~/LPEDC/material/E102 && ~/LPEDC/material/E102
 ```
 
 ---
@@ -1653,7 +1653,7 @@ Se for de propósito e houver código no meio, avise com o comentário
 No pedido do desenho, o código 2 entra, o `switch` pula direto para o
 `case 2`, sem testar o 1 nem o 3, e o `break` sai antes do `case 3`:
 
-<p align="center"><img src="0018-ideia.svg" alt="Diagrama da ideia: switch, case, break e fall-through" width="882"></p>
+<p align="center"><img src="material/0018-ideia.svg" alt="Diagrama da ideia: switch, case, break e fall-through" width="882"></p>
 
 O pedido em C:
 
@@ -1692,7 +1692,7 @@ int main(void) {
 O losango do `switch` tem **várias** saídas, uma por `case` e uma para o
 `default`; as setas levam o valor no lugar de Sim e Não:
 
-<p align="center"><img src="0018-fluxograma.svg" alt="Fluxograma: switch, case, break e fall-through" width="965"></p>
+<p align="center"><img src="material/0018-fluxograma.svg" alt="Fluxograma: switch, case, break e fall-through" width="965"></p>
 
 > [!WARNING]
 > **Esquecer o `break`.** Sem o `break` do `case 2`, pedir X-Salada mostra
@@ -1759,7 +1759,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A035.c -o ~/LPEDC/A035 && ~/LPEDC/A035
+gcc ~/LPEDC/material/A035.c -o ~/LPEDC/material/A035 && ~/LPEDC/material/A035
 ```
 
 **Exemplo A036 · Quantos dias tem o mês**
@@ -1812,7 +1812,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A036.c -o ~/LPEDC/A036 && ~/LPEDC/A036
+gcc ~/LPEDC/material/A036.c -o ~/LPEDC/material/A036 && ~/LPEDC/material/A036
 ```
 
 #### Exercícios
@@ -1832,7 +1832,7 @@ Quarta-feira
 ```
 
 ```bash
-gcc ~/LPEDC/E103.c -o ~/LPEDC/E103 && ~/LPEDC/E103
+gcc ~/LPEDC/material/E103.c -o ~/LPEDC/material/E103 && ~/LPEDC/material/E103
 ```
 
 **Exercício E105** · ★★☆
@@ -1854,7 +1854,7 @@ Repetindo o menu.
 ```
 
 ```bash
-gcc ~/LPEDC/E105.c -o ~/LPEDC/E105 && ~/LPEDC/E105
+gcc ~/LPEDC/material/E105.c -o ~/LPEDC/material/E105 && ~/LPEDC/material/E105
 ```
 
 **Exercício E106** · ★★☆
@@ -1873,7 +1873,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E106.c -o ~/LPEDC/E106 && ~/LPEDC/E106
+gcc ~/LPEDC/material/E106.c -o ~/LPEDC/material/E106 && ~/LPEDC/material/E106
 ```
 
 **Exercício E107** · ★★★
@@ -1910,7 +1910,7 @@ Opção inválida.
 ```
 
 ```bash
-gcc ~/LPEDC/E107.c -o ~/LPEDC/E107 && ~/LPEDC/E107
+gcc ~/LPEDC/material/E107.c -o ~/LPEDC/material/E107 && ~/LPEDC/material/E107
 ```
 
 ---
@@ -1945,7 +1945,7 @@ R$ 0,02 a mais por kWh, vermelha com R$ 0,05, desconto social de 40%.
 No exemplo, consumo de 230 kWh, bandeira amarela, sem tarifa social. Cada
 decisão do módulo entra uma vez, e o total sai no terminal:
 
-<p align="center"><img src="0019-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a conta de luz" width="876"></p>
+<p align="center"><img src="material/0019-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a conta de luz" width="876"></p>
 
 O programa lê os três dados; o comentário no fim mostra uma execução:
 
@@ -2032,7 +2032,7 @@ int main(void) {
 A guarda tem uma saída direta para o Fim. Depois dela, o caminho é quase reto,
 com um único desvio opcional para o desconto:
 
-<p align="center"><img src="0019-fluxograma.svg" alt="Fluxograma: Juntando tudo: a conta de luz" width="534"></p>
+<p align="center"><img src="material/0019-fluxograma.svg" alt="Fluxograma: Juntando tudo: a conta de luz" width="534"></p>
 
 > [!WARNING]
 > **A ordem dos passos é parte da regra.** O desconto social vale sobre a
@@ -2103,7 +2103,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A037.c -o ~/LPEDC/A037 && ~/LPEDC/A037
+gcc ~/LPEDC/material/A037.c -o ~/LPEDC/material/A037 && ~/LPEDC/material/A037
 ```
 
 **Exemplo A038 · Pedra, papel e tesoura**
@@ -2148,7 +2148,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A038.c -o ~/LPEDC/A038 && ~/LPEDC/A038
+gcc ~/LPEDC/material/A038.c -o ~/LPEDC/material/A038 && ~/LPEDC/material/A038
 ```
 
 #### Exercícios
@@ -2171,7 +2171,7 @@ Peso normal
 ```
 
 ```bash
-gcc ~/LPEDC/E109.c -o ~/LPEDC/E109 && ~/LPEDC/E109
+gcc ~/LPEDC/material/E109.c -o ~/LPEDC/material/E109 && ~/LPEDC/material/E109
 ```
 
 **Exercício E111** · ★★☆
@@ -2199,7 +2199,7 @@ Data válida.
 ```
 
 ```bash
-gcc ~/LPEDC/E111.c -o ~/LPEDC/E111 && ~/LPEDC/E111
+gcc ~/LPEDC/material/E111.c -o ~/LPEDC/material/E111 && ~/LPEDC/material/E111
 ```
 
 **Exercício E112** · ★★☆
@@ -2235,7 +2235,7 @@ Tarifa: R$ 48.00
 ```
 
 ```bash
-gcc ~/LPEDC/E112.c -o ~/LPEDC/E112 && ~/LPEDC/E112
+gcc ~/LPEDC/material/E112.c -o ~/LPEDC/material/E112 && ~/LPEDC/material/E112
 ```
 
 **Exercício E114** · ★★★
@@ -2263,7 +2263,7 @@ Dia seguinte: 01/01/2024
 ```
 
 ```bash
-gcc ~/LPEDC/E114.c -o ~/LPEDC/E114 && ~/LPEDC/E114
+gcc ~/LPEDC/material/E114.c -o ~/LPEDC/material/E114 && ~/LPEDC/material/E114
 ```
 
 ---
@@ -2433,7 +2433,7 @@ já faz isso).
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0201.c a P0230.c, na raiz; resoluções em `_respostas/02-condicionais/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0201.c a P0230.c, em `material/`; resoluções em `_respostas/02-condicionais/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2460,7 +2460,7 @@ Rodízio na quinta-feira
 3. Resposta esperada: Rodízio na quinta-feira.
 
 ```bash
-gcc ~/LPEDC/P0201.c -o ~/LPEDC/P0201 && ~/LPEDC/P0201
+gcc ~/LPEDC/material/P0201.c -o ~/LPEDC/material/P0201 && ~/LPEDC/material/P0201
 ```
 
 ---
@@ -2485,7 +2485,7 @@ Multa: R$ 6.00
 3. Resposta esperada: com 4 dias, Multa: R$ 6.00; com 0, Sem multa.
 
 ```bash
-gcc ~/LPEDC/P0202.c -o ~/LPEDC/P0202 && ~/LPEDC/P0202
+gcc ~/LPEDC/material/P0202.c -o ~/LPEDC/material/P0202 && ~/LPEDC/material/P0202
 ```
 
 ---
@@ -2511,7 +2511,7 @@ Beto paga R$ 60.00
 3. Resposta esperada: R$ 30.00 e R$ 60.00.
 
 ```bash
-gcc ~/LPEDC/P0203.c -o ~/LPEDC/P0203 && ~/LPEDC/P0203
+gcc ~/LPEDC/material/P0203.c -o ~/LPEDC/material/P0203 && ~/LPEDC/material/P0203
 ```
 
 ---
@@ -2539,7 +2539,7 @@ Total: R$ 180.15
 3. Resposta esperada: Total: R$ 180.15.
 
 ```bash
-gcc ~/LPEDC/P0204.c -o ~/LPEDC/P0204 && ~/LPEDC/P0204
+gcc ~/LPEDC/material/P0204.c -o ~/LPEDC/material/P0204 && ~/LPEDC/material/P0204
 ```
 
 ---
@@ -2565,7 +2565,7 @@ Rui pode doar? não
 3. Resposta esperada: Ana sim, Rui não.
 
 ```bash
-gcc ~/LPEDC/P0205.c -o ~/LPEDC/P0205 && ~/LPEDC/P0205
+gcc ~/LPEDC/material/P0205.c -o ~/LPEDC/material/P0205 && ~/LPEDC/material/P0205
 ```
 
 ---
@@ -2592,7 +2592,7 @@ Juros do mês: R$ 4.00
 3. Resposta esperada: Juros do mês: R$ 4.00.
 
 ```bash
-gcc ~/LPEDC/P0206.c -o ~/LPEDC/P0206 && ~/LPEDC/P0206
+gcc ~/LPEDC/material/P0206.c -o ~/LPEDC/material/P0206 && ~/LPEDC/material/P0206
 ```
 
 ---
@@ -2619,7 +2619,7 @@ Infração grave: R$ 195.23
 3. Resposta esperada: com 75, Infração grave: R$ 195.23.
 
 ```bash
-gcc ~/LPEDC/P0207.c -o ~/LPEDC/P0207 && ~/LPEDC/P0207
+gcc ~/LPEDC/material/P0207.c -o ~/LPEDC/material/P0207 && ~/LPEDC/material/P0207
 ```
 
 ---
@@ -2653,7 +2653,7 @@ Recarga: R$ 45.00
 3. Resposta esperada: "Entrada inválida." com abc; R$ 45.00 com 10.
 
 ```bash
-gcc ~/LPEDC/P0208.c -o ~/LPEDC/P0208 && ~/LPEDC/P0208
+gcc ~/LPEDC/material/P0208.c -o ~/LPEDC/material/P0208 && ~/LPEDC/material/P0208
 ```
 
 ---
@@ -2680,7 +2680,7 @@ Troco certo.
 3. Resposta esperada: Troco certo.
 
 ```bash
-gcc ~/LPEDC/P0209.c -o ~/LPEDC/P0209 -lm && ~/LPEDC/P0209
+gcc ~/LPEDC/material/P0209.c -o ~/LPEDC/material/P0209 -lm && ~/LPEDC/material/P0209
 ```
 
 ---
@@ -2706,7 +2706,7 @@ Drone em (200, 45): dentro da área
 3. Resposta esperada: fora, depois dentro (200 está na borda, e a borda vale).
 
 ```bash
-gcc ~/LPEDC/P0210.c -o ~/LPEDC/P0210 && ~/LPEDC/P0210
+gcc ~/LPEDC/material/P0210.c -o ~/LPEDC/material/P0210 && ~/LPEDC/material/P0210
 ```
 
 ### ★★☆ Para pensar
@@ -2732,7 +2732,7 @@ Nota do meio: 8.0
 3. Resposta esperada: Nota do meio: 8.0.
 
 ```bash
-gcc ~/LPEDC/P0211.c -o ~/LPEDC/P0211 && ~/LPEDC/P0211
+gcc ~/LPEDC/material/P0211.c -o ~/LPEDC/material/P0211 && ~/LPEDC/material/P0211
 ```
 
 ---
@@ -2759,7 +2759,7 @@ Integração: a segunda viagem sai por R$ 0.00
 3. Resposta esperada: 105 min, R$ 0.00.
 
 ```bash
-gcc ~/LPEDC/P0212.c -o ~/LPEDC/P0212 && ~/LPEDC/P0212
+gcc ~/LPEDC/material/P0212.c -o ~/LPEDC/material/P0212 && ~/LPEDC/material/P0212
 ```
 
 ---
@@ -2785,7 +2785,7 @@ Sem estoque: avise o cliente.
 3. Resposta esperada: Sem estoque: avise o cliente.
 
 ```bash
-gcc ~/LPEDC/P0213.c -o ~/LPEDC/P0213 && ~/LPEDC/P0213
+gcc ~/LPEDC/material/P0213.c -o ~/LPEDC/material/P0213 && ~/LPEDC/material/P0213
 ```
 
 ---
@@ -2811,7 +2811,7 @@ Financiamento aprovado.
 3. Resposta esperada: Financiamento aprovado.
 
 ```bash
-gcc ~/LPEDC/P0214.c -o ~/LPEDC/P0214 && ~/LPEDC/P0214
+gcc ~/LPEDC/material/P0214.c -o ~/LPEDC/material/P0214 && ~/LPEDC/material/P0214
 ```
 
 ---
@@ -2839,7 +2839,7 @@ Hora local: 00:30
 3. Resposta esperada: F dá 00:30; M dá 22:30; A dá 21:30.
 
 ```bash
-gcc ~/LPEDC/P0215.c -o ~/LPEDC/P0215 && ~/LPEDC/P0215
+gcc ~/LPEDC/material/P0215.c -o ~/LPEDC/material/P0215 && ~/LPEDC/material/P0215
 ```
 
 ---
@@ -2866,7 +2866,7 @@ Cupom recusado.
 3. Resposta esperada: Cupom recusado.
 
 ```bash
-gcc ~/LPEDC/P0216.c -o ~/LPEDC/P0216 && ~/LPEDC/P0216
+gcc ~/LPEDC/material/P0216.c -o ~/LPEDC/material/P0216 && ~/LPEDC/material/P0216
 ```
 
 ---
@@ -2892,7 +2892,7 @@ Corrida de 8.5 km: R$ 38.14
 3. Resposta esperada: Bandeira 2, R$ 38.14.
 
 ```bash
-gcc ~/LPEDC/P0217.c -o ~/LPEDC/P0217 && ~/LPEDC/P0217
+gcc ~/LPEDC/material/P0217.c -o ~/LPEDC/material/P0217 && ~/LPEDC/material/P0217
 ```
 
 ---
@@ -2919,7 +2919,7 @@ Saída esperada:
 3. Resposta esperada: cheia, ok e baixa.
 
 ```bash
-gcc ~/LPEDC/P0218.c -o ~/LPEDC/P0218 && ~/LPEDC/P0218
+gcc ~/LPEDC/material/P0218.c -o ~/LPEDC/material/P0218 && ~/LPEDC/material/P0218
 ```
 
 ---
@@ -2948,7 +2948,7 @@ A vence!
 4. Resposta esperada: 4 (tesoura) contra 3 (lagarto): A vence!
 
 ```bash
-gcc ~/LPEDC/P0219.c -o ~/LPEDC/P0219 && ~/LPEDC/P0219
+gcc ~/LPEDC/material/P0219.c -o ~/LPEDC/material/P0219 && ~/LPEDC/material/P0219
 ```
 
 ---
@@ -2975,7 +2975,7 @@ Melhor opção: CDB
 3. Resposta esperada: Melhor opção: CDB.
 
 ```bash
-gcc ~/LPEDC/P0220.c -o ~/LPEDC/P0220 -lm && ~/LPEDC/P0220
+gcc ~/LPEDC/material/P0220.c -o ~/LPEDC/material/P0220 -lm && ~/LPEDC/material/P0220
 ```
 
 ### ★★★ Desafio
@@ -3006,7 +3006,7 @@ Faltam 34 dias para o ano acabar
 4. Resposta esperada: dia 331, faltam 34 dias.
 
 ```bash
-gcc ~/LPEDC/P0221.c -o ~/LPEDC/P0221 && ~/LPEDC/P0221
+gcc ~/LPEDC/material/P0221.c -o ~/LPEDC/material/P0221 && ~/LPEDC/material/P0221
 ```
 
 ---
@@ -3035,7 +3035,7 @@ Data (dd/mm/aaaa): 27/11/2026
 4. Resposta esperada: 27 de novembro de 2026, sexta-feira.
 
 ```bash
-gcc ~/LPEDC/P0222.c -o ~/LPEDC/P0222 && ~/LPEDC/P0222
+gcc ~/LPEDC/material/P0222.c -o ~/LPEDC/material/P0222 && ~/LPEDC/material/P0222
 ```
 
 ---
@@ -3080,7 +3080,7 @@ Placar impossível
 4. Resposta esperada: as três saídas acima.
 
 ```bash
-gcc ~/LPEDC/P0223.c -o ~/LPEDC/P0223 && ~/LPEDC/P0223
+gcc ~/LPEDC/material/P0223.c -o ~/LPEDC/material/P0223 && ~/LPEDC/material/P0223
 ```
 
 ---
@@ -3109,7 +3109,7 @@ Na frente: Amazonas FC (critério: gols pró)
 3. Resposta esperada: Na frente: Amazonas FC (critério: gols pró).
 
 ```bash
-gcc ~/LPEDC/P0224.c -o ~/LPEDC/P0224 && ~/LPEDC/P0224
+gcc ~/LPEDC/material/P0224.c -o ~/LPEDC/material/P0224 && ~/LPEDC/material/P0224
 ```
 
 ---
@@ -3147,7 +3147,7 @@ Sem conflito
 4. Resposta esperada: 30 minutos no primeiro caso; sem conflito no segundo.
 
 ```bash
-gcc ~/LPEDC/P0225.c -o ~/LPEDC/P0225 && ~/LPEDC/P0225
+gcc ~/LPEDC/material/P0225.c -o ~/LPEDC/material/P0225 && ~/LPEDC/material/P0225
 ```
 
 ---
@@ -3184,7 +3184,7 @@ Sem notas para esse valor.
 4. Resposta esperada: 2 x 50, 9 x 20 e 1 x 10 para 290; sem notas para 380.
 
 ```bash
-gcc ~/LPEDC/P0226.c -o ~/LPEDC/P0226 && ~/LPEDC/P0226
+gcc ~/LPEDC/material/P0226.c -o ~/LPEDC/material/P0226 && ~/LPEDC/material/P0226
 ```
 
 ---
@@ -3212,7 +3212,7 @@ MMXXVI
 4. Com 1999: MCMXCIX. Resposta esperada para 2026: MMXXVI.
 
 ```bash
-gcc ~/LPEDC/P0227.c -o ~/LPEDC/P0227 && ~/LPEDC/P0227
+gcc ~/LPEDC/material/P0227.c -o ~/LPEDC/material/P0227 && ~/LPEDC/material/P0227
 ```
 
 ---
@@ -3254,7 +3254,7 @@ Saque liberado: R$ 1110.00
 4. Resposta esperada: com 3200.00, Saque liberado: R$ 1110.00.
 
 ```bash
-gcc ~/LPEDC/P0228.c -o ~/LPEDC/P0228 && ~/LPEDC/P0228
+gcc ~/LPEDC/material/P0228.c -o ~/LPEDC/material/P0228 && ~/LPEDC/material/P0228
 ```
 
 ---
@@ -3288,7 +3288,7 @@ Total: R$ 39.15
 4. Resposta esperada: Total: R$ 39.15.
 
 ```bash
-gcc ~/LPEDC/P0229.c -o ~/LPEDC/P0229 && ~/LPEDC/P0229
+gcc ~/LPEDC/material/P0229.c -o ~/LPEDC/material/P0229 && ~/LPEDC/material/P0229
 ```
 
 ---
@@ -3331,7 +3331,7 @@ Senha aceita
 4. Resposta esperada: as três saídas acima.
 
 ```bash
-gcc ~/LPEDC/P0230.c -o ~/LPEDC/P0230 && ~/LPEDC/P0230
+gcc ~/LPEDC/material/P0230.c -o ~/LPEDC/material/P0230 && ~/LPEDC/material/P0230
 ```
 
 ## Questões no estilo da prova

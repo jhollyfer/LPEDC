@@ -38,7 +38,7 @@ Os dois últimos assuntos trazem um TAD na pasta (`huffman.h`,
 `compactador.h`); o comando compila junto o `.c` de apoio:
 
 ```bash
-gcc ~/LPEDC/A271.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/A271 && ~/LPEDC/A271
+gcc ~/LPEDC/material/A271.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/A271 && ~/LPEDC/material/A271
 ```
 
 O último assunto cria arquivos de teste na pasta atual e os apaga no fim.
@@ -91,7 +91,7 @@ Cada chamada corta `n` pela metade: T(n) = T(n/2) + O(1), que dá
 No desenho, a recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
 combinando: o 1 do caso base vira 3, 9, 243, e assim até 3²⁰.
 
-<p align="center"><img src="0131-ideia.svg" alt="Diagrama da ideia: Divisão e conquista" width="858"></p>
+<p align="center"><img src="material/0131-ideia.svg" alt="Diagrama da ideia: Divisão e conquista" width="858"></p>
 
 O `printf` mostra cada resultado parcial quando a chamada termina, e `mult`
 soma as multiplicações:
@@ -140,7 +140,7 @@ Os resultados saem de baixo para cima, pela pilha de chamadas (0031).
 O fluxograma segue a chamada com `n = 20`: ela chama a si mesma com 10,
 recebe 59049 e, como 20 é par, só eleva ao quadrado:
 
-<p align="center"><img src="0131-fluxograma.svg" alt="Fluxograma: Divisão e conquista" width="584"></p>
+<p align="center"><img src="material/0131-fluxograma.svg" alt="Fluxograma: Divisão e conquista" width="584"></p>
 
 > [!WARNING]
 > `return potencia(x, n / 2) * potencia(x, n / 2);` dá o resultado certo, mas
@@ -222,7 +222,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A261.c -o ~/LPEDC/A261 && ~/LPEDC/A261
+gcc ~/LPEDC/material/A261.c -o ~/LPEDC/material/A261 && ~/LPEDC/material/A261
 ```
 
 **Exemplo A262 · Maior e menor de uma vez, dividindo ao meio**
@@ -291,7 +291,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A262.c -o ~/LPEDC/A262 && ~/LPEDC/A262
+gcc ~/LPEDC/material/A262.c -o ~/LPEDC/material/A262 && ~/LPEDC/material/A262
 ```
 
 #### Exercícios
@@ -319,7 +319,7 @@ Chamadas: 15
 ```
 
 ```bash
-gcc ~/LPEDC/E781.c -o ~/LPEDC/E781 && ~/LPEDC/E781
+gcc ~/LPEDC/material/E781.c -o ~/LPEDC/material/E781 && ~/LPEDC/material/E781
 ```
 
 **Exercício E783** · ★★☆
@@ -339,7 +339,7 @@ Chamadas: 6
 ```
 
 ```bash
-gcc ~/LPEDC/E783.c -o ~/LPEDC/E783 && ~/LPEDC/E783
+gcc ~/LPEDC/material/E783.c -o ~/LPEDC/material/E783 && ~/LPEDC/material/E783
 ```
 
 **Exercício E784** · ★★☆
@@ -369,7 +369,7 @@ Comparações: 3
 ```
 
 ```bash
-gcc ~/LPEDC/E784.c -o ~/LPEDC/E784 && ~/LPEDC/E784
+gcc ~/LPEDC/material/E784.c -o ~/LPEDC/material/E784 && ~/LPEDC/material/E784
 ```
 
 **Exercício E785** · ★★★
@@ -392,7 +392,7 @@ F(90) = 2880067194370816120 (11 produtos de matriz)
 ```
 
 ```bash
-gcc ~/LPEDC/E785.c -o ~/LPEDC/E785 && ~/LPEDC/E785
+gcc ~/LPEDC/material/E785.c -o ~/LPEDC/material/E785 && ~/LPEDC/material/E785
 ```
 
 ---
@@ -427,7 +427,7 @@ merge sort, O(n log n).
 No vetor do Caio, são 3 inversões na esquerda, 4 na direita e mais 6 na
 intercalação (o 2 passa na frente de 3, o 4 de 2 e o 6 de 1):
 
-<p align="center"><img src="0132-ideia.svg" alt="Diagrama da ideia: Inversões e subvetor de soma máxima" width="858"></p>
+<p align="center"><img src="material/0132-ideia.svg" alt="Diagrama da ideia: Inversões e subvetor de soma máxima" width="858"></p>
 
 É o merge sort com um contador; o `printf` mostra as inversões da esquerda,
 da direita e as cruzadas:
@@ -513,7 +513,7 @@ soma os que sobram na esquerda:
 No fluxograma, as duas chamadas recursivas contam dentro de cada metade e a
 intercalação conta o que cruza:
 
-<p align="center"><img src="0132-fluxograma.svg" alt="Fluxograma: Inversões e subvetor de soma máxima" width="478"></p>
+<p align="center"><img src="material/0132-fluxograma.svg" alt="Fluxograma: Inversões e subvetor de soma máxima" width="478"></p>
 
 ### O subvetor de soma máxima
 
@@ -619,7 +619,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A263.c -o ~/LPEDC/A263 && ~/LPEDC/A263
+gcc ~/LPEDC/material/A263.c -o ~/LPEDC/material/A263 && ~/LPEDC/material/A263
 ```
 
 **Exemplo A264 · Kadane: a soma máxima numa passada só**
@@ -667,7 +667,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A264.c -o ~/LPEDC/A264 && ~/LPEDC/A264
+gcc ~/LPEDC/material/A264.c -o ~/LPEDC/material/A264 && ~/LPEDC/material/A264
 ```
 
 #### Exercícios
@@ -697,7 +697,7 @@ Inversões: 9 de 21 pares
 ```
 
 ```bash
-gcc ~/LPEDC/E787.c -o ~/LPEDC/E787 && ~/LPEDC/E787
+gcc ~/LPEDC/material/E787.c -o ~/LPEDC/material/E787 && ~/LPEDC/material/E787
 ```
 
 **Exercício E789** · ★★☆
@@ -727,7 +727,7 @@ Pares em desacordo: 4 de 15
 ```
 
 ```bash
-gcc ~/LPEDC/E789.c -o ~/LPEDC/E789 && ~/LPEDC/E789
+gcc ~/LPEDC/material/E789.c -o ~/LPEDC/material/E789 && ~/LPEDC/material/E789
 ```
 
 **Exercício E790** · ★★☆
@@ -753,7 +753,7 @@ Inversões pelo merge sort: 36
 ```
 
 ```bash
-gcc ~/LPEDC/E790.c -o ~/LPEDC/E790 && ~/LPEDC/E790
+gcc ~/LPEDC/material/E790.c -o ~/LPEDC/material/E790 && ~/LPEDC/material/E790
 ```
 
 **Exercício E791** · ★★★
@@ -779,7 +779,7 @@ Força bruta: 7
 ```
 
 ```bash
-gcc ~/LPEDC/E791.c -o ~/LPEDC/E791 && ~/LPEDC/E791
+gcc ~/LPEDC/material/E791.c -o ~/LPEDC/material/E791 && ~/LPEDC/material/E791
 ```
 
 ---
@@ -820,7 +820,7 @@ programação dinâmica (módulo 21) resolve o troco de qualquer sistema.
 No desenho, em cima o troco de R$ 1,90 (o guloso acerta); embaixo, as fichas:
 o 4 deixa um resto de 2 que custa duas fichas, e o 3 + 3 nunca é visto:
 
-<p align="center"><img src="0133-ideia.svg" alt="Diagrama da ideia: Algoritmos gulosos" width="858"></p>
+<p align="center"><img src="material/0133-ideia.svg" alt="Diagrama da ideia: Algoritmos gulosos" width="858"></p>
 
 A função recebe as moedas em ordem **decrescente**: se a moeda cabe, dá e
 continua nela; se não, passa para a próxima menor:
@@ -866,7 +866,7 @@ No fluxograma, "ainda falta troco?" controla o laço e "a moeda da vez cabe?"
 decide entre dar a moeda ou descer para a próxima. Não há volta a uma moeda
 maior:
 
-<p align="center"><img src="0133-fluxograma.svg" alt="Fluxograma: Algoritmos gulosos" width="922"></p>
+<p align="center"><img src="material/0133-fluxograma.svg" alt="Fluxograma: Algoritmos gulosos" width="922"></p>
 
 > [!WARNING]
 > O guloso do troco **depende da ordem** do vetor: com `{5, 10, 25, 50, 100}`,
@@ -928,7 +928,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A265.c -o ~/LPEDC/A265 && ~/LPEDC/A265
+gcc ~/LPEDC/material/A265.c -o ~/LPEDC/material/A265 && ~/LPEDC/material/A265
 ```
 
 **Exemplo A266 · Fila do cartório: o mais rápido primeiro**
@@ -984,7 +984,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A266.c -o ~/LPEDC/A266 && ~/LPEDC/A266
+gcc ~/LPEDC/material/A266.c -o ~/LPEDC/material/A266 && ~/LPEDC/material/A266
 ```
 
 #### Exercícios
@@ -1015,7 +1015,7 @@ Saque de R$ 1270:
 ```
 
 ```bash
-gcc ~/LPEDC/E793.c -o ~/LPEDC/E793 && ~/LPEDC/E793
+gcc ~/LPEDC/material/E793.c -o ~/LPEDC/material/E793 && ~/LPEDC/material/E793
 ```
 
 **Exercício E795** · ★★☆
@@ -1046,7 +1046,7 @@ Total: 5 barcos
 ```
 
 ```bash
-gcc ~/LPEDC/E795.c -o ~/LPEDC/E795 && ~/LPEDC/E795
+gcc ~/LPEDC/material/E795.c -o ~/LPEDC/material/E795 && ~/LPEDC/material/E795
 ```
 
 **Exercício E796** · ★★☆
@@ -1067,7 +1067,7 @@ Troco de 65: 50 10 5 (3 moedas)
 ```
 
 ```bash
-gcc ~/LPEDC/E796.c -o ~/LPEDC/E796 && ~/LPEDC/E796
+gcc ~/LPEDC/material/E796.c -o ~/LPEDC/material/E796 && ~/LPEDC/material/E796
 ```
 
 **Exercício E798** · ★★★
@@ -1098,7 +1098,7 @@ Carla -> Fábio: R$ 15.00
 ```
 
 ```bash
-gcc ~/LPEDC/E798.c -o ~/LPEDC/E798 && ~/LPEDC/E798
+gcc ~/LPEDC/material/E798.c -o ~/LPEDC/material/E798 && ~/LPEDC/material/E798
 ```
 
 ---
@@ -1136,7 +1136,7 @@ O custo é a ordenação, O(n log n), mais uma passada O(n).
 No desenho, verdes foram aceitas e cinzas chocaram com alguém aceito. O pedido
 da Iara (7h às 17h) seria o primeiro pelo critério "começa antes":
 
-<p align="center"><img src="0134-ideia.svg" alt="Diagrama da ideia: Seleção de intervalos" width="858"></p>
+<p align="center"><img src="material/0134-ideia.svg" alt="Diagrama da ideia: Seleção de intervalos" width="858"></p>
 
 Os pedidos são structs, ordenados com `qsort` (0096) por uma função que
 compara os fins:
@@ -1201,7 +1201,7 @@ A Carla (10h às 11h) entra logo depois da Ana (8h às 10h): os intervalos são
 No fluxograma, depois da ordenação, o laço tem uma pergunta só. O caminho
 marcado mostra a Ana aceita e o Bruno recusado:
 
-<p align="center"><img src="0134-fluxograma.svg" alt="Fluxograma: Seleção de intervalos" width="651"></p>
+<p align="center"><img src="material/0134-fluxograma.svg" alt="Fluxograma: Seleção de intervalos" width="651"></p>
 
 > [!WARNING]
 > Os outros critérios falham. "Começa primeiro" aceita a Iara (7h às 17h) e
@@ -1285,7 +1285,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A267.c -o ~/LPEDC/A267 && ~/LPEDC/A267
+gcc ~/LPEDC/material/A267.c -o ~/LPEDC/material/A267 && ~/LPEDC/material/A267
 ```
 
 **Exemplo A268 · Juntando horários: a agenda livre do consultório**
@@ -1364,7 +1364,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A268.c -o ~/LPEDC/A268 && ~/LPEDC/A268
+gcc ~/LPEDC/material/A268.c -o ~/LPEDC/material/A268 && ~/LPEDC/material/A268
 ```
 
 #### Exercícios
@@ -1393,7 +1393,7 @@ Total: 5
 ```
 
 ```bash
-gcc ~/LPEDC/E799.c -o ~/LPEDC/E799 && ~/LPEDC/E799
+gcc ~/LPEDC/material/E799.c -o ~/LPEDC/material/E799 && ~/LPEDC/material/E799
 ```
 
 **Exercício E801** · ★★☆
@@ -1422,7 +1422,7 @@ Termina primeiro: 4
 ```
 
 ```bash
-gcc ~/LPEDC/E801.c -o ~/LPEDC/E801 && ~/LPEDC/E801
+gcc ~/LPEDC/material/E801.c -o ~/LPEDC/material/E801 && ~/LPEDC/material/E801
 ```
 
 **Exercício E802** · ★★☆
@@ -1454,7 +1454,7 @@ Total: 3 visitas
 ```
 
 ```bash
-gcc ~/LPEDC/E802.c -o ~/LPEDC/E802 && ~/LPEDC/E802
+gcc ~/LPEDC/material/E802.c -o ~/LPEDC/material/E802 && ~/LPEDC/material/E802
 ```
 
 **Exercício E804** · ★★★
@@ -1490,7 +1490,7 @@ Jogos aceitos: 7 de 10
 ```
 
 ```bash
-gcc ~/LPEDC/E804.c -o ~/LPEDC/E804 && ~/LPEDC/E804
+gcc ~/LPEDC/material/E804.c -o ~/LPEDC/material/E804 && ~/LPEDC/material/E804
 ```
 
 ---
@@ -1523,7 +1523,7 @@ Por razão: açafrão R$ 80/kg, castanha R$ 50, café R$ 30, feijão R$ 9, arroz
 R$ 5. Os três primeiros cabem inteiros (5 + 15 + 20 = 40 kg). Sobram 20 kg e
 o feijão tem 30: vão dois terços do saco. O arroz nem entra:
 
-<p align="center"><img src="0135-ideia.svg" alt="Diagrama da ideia: Mochila fracionária" width="858"></p>
+<p align="center"><img src="material/0135-ideia.svg" alt="Diagrama da ideia: Mochila fracionária" width="858"></p>
 
 A comparação calcula a razão de cada lado e ordena do maior para o menor:
 
@@ -1581,7 +1581,7 @@ o "ç" e o "ã" ocupam dois bytes cada.
 No fluxograma, o caminho marcado leva tudo três vezes (açafrão, castanha, café)
 e a fração uma vez (feijão), que zera o espaço e encerra o laço:
 
-<p align="center"><img src="0135-fluxograma.svg" alt="Fluxograma: Mochila fracionária" width="736"></p>
+<p align="center"><img src="material/0135-fluxograma.svg" alt="Fluxograma: Mochila fracionária" width="736"></p>
 
 > [!WARNING]
 > Esse guloso só vale para a mochila **fracionária**. Com itens indivisíveis é
@@ -1676,7 +1676,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A269.c -o ~/LPEDC/A269 && ~/LPEDC/A269
+gcc ~/LPEDC/material/A269.c -o ~/LPEDC/material/A269 && ~/LPEDC/material/A269
 ```
 
 **Exemplo A270 · Quando o item não se divide: o guloso perde**
@@ -1742,7 +1742,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A270.c -o ~/LPEDC/A270 && ~/LPEDC/A270
+gcc ~/LPEDC/material/A270.c -o ~/LPEDC/material/A270 && ~/LPEDC/material/A270
 ```
 
 #### Exercícios
@@ -1774,7 +1774,7 @@ Total: R$ 1190.00
 ```
 
 ```bash
-gcc ~/LPEDC/E805.c -o ~/LPEDC/E805 && ~/LPEDC/E805
+gcc ~/LPEDC/material/E805.c -o ~/LPEDC/material/E805 && ~/LPEDC/material/E805
 ```
 
 **Exercício E807** · ★★☆
@@ -1796,7 +1796,7 @@ Total: R$ 69.00
 ```
 
 ```bash
-gcc ~/LPEDC/E807.c -o ~/LPEDC/E807 && ~/LPEDC/E807
+gcc ~/LPEDC/material/E807.c -o ~/LPEDC/material/E807 && ~/LPEDC/material/E807
 ```
 
 **Exercício E808** · ★★☆
@@ -1828,7 +1828,7 @@ Total: R$ 151140.00
 ```
 
 ```bash
-gcc ~/LPEDC/E808.c -o ~/LPEDC/E808 && ~/LPEDC/E808
+gcc ~/LPEDC/material/E808.c -o ~/LPEDC/material/E808 && ~/LPEDC/material/E808
 ```
 
 **Exercício E809** · ★★★
@@ -1861,7 +1861,7 @@ Itens tirados do heap: 5 de 8
 ```
 
 ```bash
-gcc ~/LPEDC/E809.c -o ~/LPEDC/E809 && ~/LPEDC/E809
+gcc ~/LPEDC/material/E809.c -o ~/LPEDC/material/E809 && ~/LPEDC/material/E809
 ```
 
 ---
@@ -1895,7 +1895,7 @@ Para `k` símbolos são `k - 1` junções com heap de O(log k): **O(k log k)**.
 Aqui, A = 7, N = 4, B = 2, espaço = 2 e C = 1: C e espaço viram 3; com o B,
 5; com o N, 9; com o A, a raiz 16. O A ganha `0` e o C, `1110`:
 
-<p align="center"><img src="0136-ideia.svg" alt="Diagrama da ideia: Código de Huffman" width="858"></p>
+<p align="center"><img src="material/0136-ideia.svg" alt="Diagrama da ideia: Código de Huffman" width="858"></p>
 
 ### Passo a passo
 
@@ -1984,7 +1984,7 @@ São 7·1 + 4·2 + 2·3 + 1·4 + 2·4 = 33 bits, contra 48 do código fixo.
 No fluxograma do `huf_constroi`, cada volta tira dois nós e põe um: 4 voltas
 para 5 folhas:
 
-<p align="center"><img src="0136-fluxograma.svg" alt="Fluxograma: Código de Huffman" width="588"></p>
+<p align="center"><img src="material/0136-fluxograma.svg" alt="Fluxograma: Código de Huffman" width="588"></p>
 
 > [!WARNING]
 > Quem decodifica precisa da **mesma árvore**: se o desempate mudar, os
@@ -2064,7 +2064,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A271.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/A271 && ~/LPEDC/A271
+gcc ~/LPEDC/material/A271.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/A271 && ~/LPEDC/material/A271
 ```
 
 **Exemplo A272 · Juntar planilhas pelo menor custo: o mesmo guloso, sem árvore**
@@ -2151,7 +2151,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A272.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/A272 && ~/LPEDC/A272
+gcc ~/LPEDC/material/A272.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/A272 && ~/LPEDC/material/A272
 ```
 
 #### Exercícios
@@ -2179,7 +2179,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E811.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/E811 && ~/LPEDC/E811
+gcc ~/LPEDC/material/E811.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E811 && ~/LPEDC/material/E811
 ```
 
 **Exercício E813** · ★★☆
@@ -2211,7 +2211,7 @@ Mensagem: ESTOU BEM
 ```
 
 ```bash
-gcc ~/LPEDC/E813.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/E813 && ~/LPEDC/E813
+gcc ~/LPEDC/material/E813.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E813 && ~/LPEDC/material/E813
 ```
 
 **Exercício E814** · ★★☆
@@ -2233,7 +2233,7 @@ Custo: 93 MB lidos
 ```
 
 ```bash
-gcc ~/LPEDC/E814.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/E814 && ~/LPEDC/E814
+gcc ~/LPEDC/material/E814.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E814 && ~/LPEDC/material/E814
 ```
 
 **Exercício E815** · ★★★
@@ -2257,7 +2257,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E815.c ~/LPEDC/0136-huffman.c -o ~/LPEDC/E815 && ~/LPEDC/E815
+gcc ~/LPEDC/material/E815.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E815 && ~/LPEDC/material/E815
 ```
 
 ---
@@ -2291,7 +2291,7 @@ heap (0102), Huffman (0136) e TADs (0074). O `compactador.h` oferece
 A lista da feira (6 linhas repetidas 40 vezes) tem 9560 bytes e compactada,
 6156: 1036 de cabeçalho e 5120 de bits:
 
-<p align="center"><img src="0137-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="material/0137-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 A peça central do `compactador.c` escreve bits soltos; a struct `Bits` guarda
 o byte em construção e quantos bits ele já tem:
@@ -2392,7 +2392,7 @@ irrelevante nos grandes.
 No fluxograma do `huf_descompacta`, cada byte começa na raiz e lê bits até uma
 folha; o laço de fora para no tamanho original:
 
-<p align="center"><img src="0137-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="487"></p>
+<p align="center"><img src="material/0137-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="487"></p>
 
 > [!WARNING]
 > Sem o `descarrega` no fim, os bits do byte incompleto (até 7) se perdem. O
@@ -2460,7 +2460,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-gcc ~/LPEDC/A273.c ~/LPEDC/0137-compactador.c ~/LPEDC/0137-huffman.c -o ~/LPEDC/A273 && ~/LPEDC/A273
+gcc ~/LPEDC/material/A273.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/A273 && ~/LPEDC/material/A273
 ```
 
 **Exemplo A274 · Nem tudo encolhe**
@@ -2524,7 +2524,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A274.c ~/LPEDC/0137-compactador.c ~/LPEDC/0137-huffman.c -o ~/LPEDC/A274 && ~/LPEDC/A274
+gcc ~/LPEDC/material/A274.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/A274 && ~/LPEDC/material/A274
 ```
 
 #### Exercícios
@@ -2557,7 +2557,7 @@ Descompactado: 5460 bytes
 ```
 
 ```bash
-gcc ~/LPEDC/E817.c ~/LPEDC/0137-compactador.c ~/LPEDC/0137-huffman.c -o ~/LPEDC/E817 && ~/LPEDC/E817
+gcc ~/LPEDC/material/E817.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/E817 && ~/LPEDC/material/E817
 ```
 
 **Exercício E819** · ★★☆
@@ -2586,7 +2586,7 @@ linhas  original  compactado
 ```
 
 ```bash
-gcc ~/LPEDC/E819.c ~/LPEDC/0137-compactador.c ~/LPEDC/0137-huffman.c -o ~/LPEDC/E819 && ~/LPEDC/E819
+gcc ~/LPEDC/material/E819.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/E819 && ~/LPEDC/material/E819
 ```
 
 **Exercício E820** · ★★☆
@@ -2608,7 +2608,7 @@ Lido: 10110011 10000000
 ```
 
 ```bash
-gcc ~/LPEDC/E820.c ~/LPEDC/0137-compactador.c ~/LPEDC/0137-huffman.c -o ~/LPEDC/E820 && ~/LPEDC/E820
+gcc ~/LPEDC/material/E820.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/E820 && ~/LPEDC/material/E820
 ```
 
 **Exercício E821** · ★★★
@@ -2645,7 +2645,7 @@ Frequências iguais
 ```
 
 ```bash
-gcc ~/LPEDC/E821.c ~/LPEDC/0137-compactador.c ~/LPEDC/0137-huffman.c -o ~/LPEDC/E821 && ~/LPEDC/E821
+gcc ~/LPEDC/material/E821.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/E821 && ~/LPEDC/material/E821
 ```
 
 ---
@@ -2791,7 +2791,7 @@ vizinhos na cadeia.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2001.c a P2030.c, na raiz; resoluções em `_respostas/20-dc-e-gulosos/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2001.c a P2030.c, em `material/`; resoluções em `_respostas/20-dc-e-gulosos/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2822,7 +2822,7 @@ Senha 50: não chamada (5 chamadas)
    chamadas) e 50 não chamada (5 chamadas, a última com o pedaço vazio).
 
 ```bash
-gcc ~/LPEDC/P2001.c -o ~/LPEDC/P2001 && ~/LPEDC/P2001
+gcc ~/LPEDC/material/P2001.c -o ~/LPEDC/material/P2001 && ~/LPEDC/material/P2001
 ```
 
 ---
@@ -2856,7 +2856,7 @@ Comparações: 10
    = 14.
 
 ```bash
-gcc ~/LPEDC/P2002.c -o ~/LPEDC/P2002 && ~/LPEDC/P2002
+gcc ~/LPEDC/material/P2002.c -o ~/LPEDC/material/P2002 && ~/LPEDC/material/P2002
 ```
 
 ---
@@ -2889,7 +2889,7 @@ Saída esperada:
    376; as multiplicações estão na saída de cima.
 
 ```bash
-gcc ~/LPEDC/P2003.c -o ~/LPEDC/P2003 && ~/LPEDC/P2003
+gcc ~/LPEDC/material/P2003.c -o ~/LPEDC/material/P2003 && ~/LPEDC/material/P2003
 ```
 
 ---
@@ -2922,7 +2922,7 @@ Sobrou no caixa: 0 de 10, 0 de 5, 0 de 2, 0 de 1
    1; o de 9 falha, porque sobram só 3 moedas de R$ 1.
 
 ```bash
-gcc ~/LPEDC/P2004.c -o ~/LPEDC/P2004 && ~/LPEDC/P2004
+gcc ~/LPEDC/material/P2004.c -o ~/LPEDC/material/P2004 && ~/LPEDC/material/P2004
 ```
 
 ---
@@ -2961,7 +2961,7 @@ Lucro: R$ 220
    o prejuízo de R$ 150 do dia 4: os dias 5 a 8 sozinhos dão R$ 200.
 
 ```bash
-gcc ~/LPEDC/P2005.c -o ~/LPEDC/P2005 && ~/LPEDC/P2005
+gcc ~/LPEDC/material/P2005.c -o ~/LPEDC/material/P2005 && ~/LPEDC/material/P2005
 ```
 
 ---
@@ -3006,7 +3006,7 @@ Total: R$ 10100.00
    50 kg de cupuaçu: R$ 10100.00.
 
 ```bash
-gcc ~/LPEDC/P2006.c -o ~/LPEDC/P2006 && ~/LPEDC/P2006
+gcc ~/LPEDC/material/P2006.c -o ~/LPEDC/material/P2006 && ~/LPEDC/material/P2006
 ```
 
 ---
@@ -3049,7 +3049,7 @@ Tabela 3:
    do 01 do B (e "01" poderia ser AE... ou B).
 
 ```bash
-gcc ~/LPEDC/P2007.c -o ~/LPEDC/P2007 && ~/LPEDC/P2007
+gcc ~/LPEDC/material/P2007.c -o ~/LPEDC/material/P2007 && ~/LPEDC/material/P2007
 ```
 
 ---
@@ -3095,7 +3095,7 @@ Total: R$ 700
 3. Resposta esperada: dia 1 B, dia 2 A, dia 3 D, total R$ 700.
 
 ```bash
-gcc ~/LPEDC/P2008.c -o ~/LPEDC/P2008 && ~/LPEDC/P2008
+gcc ~/LPEDC/material/P2008.c -o ~/LPEDC/material/P2008 && ~/LPEDC/material/P2008
 ```
 
 ---
@@ -3135,7 +3135,7 @@ Guloso pela razão: R$ 1600
 3. Resposta esperada: guloso R$ 1600, ótimo R$ 2200 (som + PC).
 
 ```bash
-gcc ~/LPEDC/P2009.c -o ~/LPEDC/P2009 && ~/LPEDC/P2009
+gcc ~/LPEDC/material/P2009.c -o ~/LPEDC/material/P2009 && ~/LPEDC/material/P2009
 ```
 
 ---
@@ -3165,7 +3165,7 @@ Chamadas: 3
 3. Resposta esperada: posição 5 (v[5] = 5), em 3 chamadas.
 
 ```bash
-gcc ~/LPEDC/P2010.c -o ~/LPEDC/P2010 && ~/LPEDC/P2010
+gcc ~/LPEDC/material/P2010.c -o ~/LPEDC/material/P2010 && ~/LPEDC/material/P2010
 ```
 
 ### ★★☆ Para pensar
@@ -3199,7 +3199,7 @@ Aos pares: menor 1290, maior 1830, 13 comparações
    (3 · 10 / 2 - 2). É o limite inferior para achar os dois (Cormen 9.1).
 
 ```bash
-gcc ~/LPEDC/P2011.c -o ~/LPEDC/P2011 && ~/LPEDC/P2011
+gcc ~/LPEDC/material/P2011.c -o ~/LPEDC/material/P2011 && ~/LPEDC/material/P2011
 ```
 
 ---
@@ -3233,7 +3233,7 @@ Divisão e conquista: (2, 3) e (3, 4), 1.41, 6 distâncias
 3. Resposta esperada: (2, 3) e (3, 4), distância 1.41 (raiz de 2).
 
 ```bash
-gcc ~/LPEDC/P2012.c -o ~/LPEDC/P2012 -lm && ~/LPEDC/P2012
+gcc ~/LPEDC/material/P2012.c -o ~/LPEDC/material/P2012 -lm && ~/LPEDC/material/P2012
 ```
 
 ---
@@ -3264,7 +3264,7 @@ Saída esperada:
 3. Resposta esperada: mediana 9; o 1º menor é 2 e o 11º é 22.
 
 ```bash
-gcc ~/LPEDC/P2013.c -o ~/LPEDC/P2013 && ~/LPEDC/P2013
+gcc ~/LPEDC/material/P2013.c -o ~/LPEDC/material/P2013 && ~/LPEDC/material/P2013
 ```
 
 ---
@@ -3315,7 +3315,7 @@ Salas: 4
    arranjo usa menos: o guloso acerta o ótimo.
 
 ```bash
-gcc ~/LPEDC/P2014.c -o ~/LPEDC/P2014 && ~/LPEDC/P2014
+gcc ~/LPEDC/material/P2014.c -o ~/LPEDC/material/P2014 && ~/LPEDC/material/P2014
 ```
 
 ---
@@ -3362,7 +3362,7 @@ Total: 240 bits (código fixo: 300)
    código fixo de 3 bits.
 
 ```bash
-gcc ~/LPEDC/P2015.c -o ~/LPEDC/P2015 && ~/LPEDC/P2015
+gcc ~/LPEDC/material/P2015.c -o ~/LPEDC/material/P2015 && ~/LPEDC/material/P2015
 ```
 
 ---
@@ -3415,7 +3415,7 @@ Prazo mais cedo primeiro:
    ficam prontos às 10, com prazo 3) e a ordem por prazo, só 2.
 
 ```bash
-gcc ~/LPEDC/P2016.c -o ~/LPEDC/P2016 && ~/LPEDC/P2016
+gcc ~/LPEDC/material/P2016.c -o ~/LPEDC/material/P2016 && ~/LPEDC/material/P2016
 ```
 
 ---
@@ -3448,7 +3448,7 @@ Chegou a Porto Velho com 3 paradas
 3. Resposta esperada: 3 paradas, nos km 240, 470 e 700.
 
 ```bash
-gcc ~/LPEDC/P2017.c -o ~/LPEDC/P2017 && ~/LPEDC/P2017
+gcc ~/LPEDC/material/P2017.c -o ~/LPEDC/material/P2017 && ~/LPEDC/material/P2017
 ```
 
 ---
@@ -3486,7 +3486,7 @@ Urna 2: ninguém tem maioria
    segunda, ninguém.
 
 ```bash
-gcc ~/LPEDC/P2018.c -o ~/LPEDC/P2018 && ~/LPEDC/P2018
+gcc ~/LPEDC/material/P2018.c -o ~/LPEDC/material/P2018 && ~/LPEDC/material/P2018
 ```
 
 ---
@@ -3528,7 +3528,7 @@ Saída esperada:
    T3); com 12 trechos, 15178, em só 6 produtos de matriz.
 
 ```bash
-gcc ~/LPEDC/P2019.c -o ~/LPEDC/P2019 && ~/LPEDC/P2019
+gcc ~/LPEDC/material/P2019.c -o ~/LPEDC/material/P2019 && ~/LPEDC/material/P2019
 ```
 
 ---
@@ -3559,7 +3559,7 @@ Mais curto primeiro: 1 3 5 8 12 20 -> espera média 10.00 min
 3. Resposta esperada: de 19.67 para 10.00 minutos.
 
 ```bash
-gcc ~/LPEDC/P2020.c -o ~/LPEDC/P2020 && ~/LPEDC/P2020
+gcc ~/LPEDC/material/P2020.c -o ~/LPEDC/material/P2020 && ~/LPEDC/material/P2020
 ```
 
 ### ★★★ Desafio
@@ -3598,7 +3598,7 @@ Saída esperada:
    recursão desce um nível a mais.
 
 ```bash
-gcc ~/LPEDC/P2021.c -o ~/LPEDC/P2021 && ~/LPEDC/P2021
+gcc ~/LPEDC/material/P2021.c -o ~/LPEDC/material/P2021 && ~/LPEDC/material/P2021
 ```
 
 ---
@@ -3648,7 +3648,7 @@ Resultados iguais
    e 49 no Strassen (7 · 7). Para n = 2^k, são 7^k contra 8^k: O(n^2,81).
 
 ```bash
-gcc ~/LPEDC/P2022.c -o ~/LPEDC/P2022 && ~/LPEDC/P2022
+gcc ~/LPEDC/material/P2022.c -o ~/LPEDC/material/P2022 && ~/LPEDC/material/P2022
 ```
 
 ---
@@ -3698,7 +3698,7 @@ Decodificado: MANAUS AMAZONAS (igual)
    bits) e a frase decodificada igual à original.
 
 ```bash
-gcc ~/LPEDC/P2023.c -o ~/LPEDC/P2023 && ~/LPEDC/P2023
+gcc ~/LPEDC/material/P2023.c -o ~/LPEDC/material/P2023 && ~/LPEDC/material/P2023
 ```
 
 ---
@@ -3747,7 +3747,7 @@ Pedidos no prazo: 5
 3. Resposta esperada: descarta B e E e entrega 5 pedidos: A, C, D, F e G.
 
 ```bash
-gcc ~/LPEDC/P2024.c -o ~/LPEDC/P2024 && ~/LPEDC/P2024
+gcc ~/LPEDC/material/P2024.c -o ~/LPEDC/material/P2024 && ~/LPEDC/material/P2024
 ```
 
 ---
@@ -3785,7 +3785,7 @@ Maior: 98 (qsort: 98)
 3. Resposta esperada: menor 41, mediana 69 e maior 98, iguais ao qsort.
 
 ```bash
-gcc ~/LPEDC/P2025.c -o ~/LPEDC/P2025 && ~/LPEDC/P2025
+gcc ~/LPEDC/material/P2025.c -o ~/LPEDC/material/P2025 && ~/LPEDC/material/P2025
 ```
 
 ---
@@ -3827,7 +3827,7 @@ Força bruta: R$ 19
    lucro R$ 19. A força bruta concorda.
 
 ```bash
-gcc ~/LPEDC/P2026.c -o ~/LPEDC/P2026 && ~/LPEDC/P2026
+gcc ~/LPEDC/material/P2026.c -o ~/LPEDC/material/P2026 && ~/LPEDC/material/P2026
 ```
 
 ---
@@ -3868,7 +3868,7 @@ Corte 101: 0 aprovados
    70, 8 com corte 50 e 0 com corte 101.
 
 ```bash
-gcc ~/LPEDC/P2027.c -o ~/LPEDC/P2027 && ~/LPEDC/P2027
+gcc ~/LPEDC/material/P2027.c -o ~/LPEDC/material/P2027 && ~/LPEDC/material/P2027
 ```
 
 ---
@@ -3918,7 +3918,7 @@ Sem a Caio:
    cobertura trava às 14h: o Rui só chega às 15h.
 
 ```bash
-gcc ~/LPEDC/P2028.c -o ~/LPEDC/P2028 && ~/LPEDC/P2028
+gcc ~/LPEDC/material/P2028.c -o ~/LPEDC/material/P2028 && ~/LPEDC/material/P2028
 ```
 
 ---
@@ -3963,7 +3963,7 @@ Listas iguais: sim
    O(k m lg k).
 
 ```bash
-gcc ~/LPEDC/P2029.c -o ~/LPEDC/P2029 && ~/LPEDC/P2029
+gcc ~/LPEDC/material/P2029.c -o ~/LPEDC/material/P2029 && ~/LPEDC/material/P2029
 ```
 
 ---
@@ -3999,7 +3999,7 @@ Guloso por morro: A0=0 A1=0 A2=0 A3=0 B0=1 B1=1 B2=1 B3=1 (2 frequências)
    feio: neste tipo de grafo (a "coroa"), com n pares, ele chega a n cores.
 
 ```bash
-gcc ~/LPEDC/P2030.c -o ~/LPEDC/P2030 && ~/LPEDC/P2030
+gcc ~/LPEDC/material/P2030.c -o ~/LPEDC/material/P2030 && ~/LPEDC/material/P2030
 ```
 
 ## Questões no estilo da prova

@@ -49,7 +49,7 @@ sudo apt install valgrind      # Debian / Ubuntu
 Rode qualquer arquivo com ele assim (sem AddressSanitizer):
 
 ```bash
-gcc -g ~/LPEDC/A114.c -o ~/LPEDC/A114 && valgrind ~/LPEDC/A114
+gcc -g ~/LPEDC/material/A114.c -o ~/LPEDC/material/A114 && valgrind ~/LPEDC/material/A114
 ```
 
 A regra do módulo: **todo `malloc` tem um `free`, e nenhum ponteiro é usado
@@ -110,7 +110,7 @@ valores vão para um bloco no heap. O contador `pedidos_do_dia` mora nos dados.
 Quando a função retorna, o frame some, mas o bloco continua lá e `main` guarda
 o endereço dele:
 
-<p align="center"><img src="0053-ideia.svg" alt="Diagrama da ideia: Pilha e heap" width="998"></p>
+<p align="center"><img src="material/0053-ideia.svg" alt="Diagrama da ideia: Pilha e heap" width="998"></p>
 
 O `malloc` e o `free` têm assunto próprio (0054). Aqui, observe em que região
 cada coisa mora e quanto tempo vive:
@@ -156,7 +156,7 @@ int main(void) {
 O frame de `abrir_comanda` nasce e morre no meio do caminho, mas o bloco do
 heap atravessa o `return` e só termina no `free`, no fim de `main`:
 
-<p align="center"><img src="0053-fluxograma.svg" alt="Fluxograma: Pilha e heap" width="429"></p>
+<p align="center"><img src="material/0053-fluxograma.svg" alt="Fluxograma: Pilha e heap" width="429"></p>
 
 > [!WARNING]
 > Nunca devolva o endereço de uma variável local. `char senha[8]; ... return
@@ -235,7 +235,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A105.c -o ~/LPEDC/A105 && ~/LPEDC/A105
+gcc ~/LPEDC/material/A105.c -o ~/LPEDC/material/A105 && ~/LPEDC/material/A105
 ```
 
 **Exemplo A106 · O mapa da memória**
@@ -284,7 +284,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A106.c -o ~/LPEDC/A106 && ~/LPEDC/A106
+gcc ~/LPEDC/material/A106.c -o ~/LPEDC/material/A106 && ~/LPEDC/material/A106
 ```
 
 #### Exercícios
@@ -313,7 +313,7 @@ Recorde: 4
 ```
 
 ```bash
-gcc ~/LPEDC/E313.c -o ~/LPEDC/E313 && ~/LPEDC/E313
+gcc ~/LPEDC/material/E313.c -o ~/LPEDC/material/E313 && ~/LPEDC/material/E313
 ```
 
 **Exercício E315** · ★★☆
@@ -337,7 +337,7 @@ double: cabem no máximo 524 chamadas
 ```
 
 ```bash
-gcc ~/LPEDC/E315.c -o ~/LPEDC/E315 && ~/LPEDC/E315
+gcc ~/LPEDC/material/E315.c -o ~/LPEDC/material/E315 && ~/LPEDC/material/E315
 ```
 
 **Exercício E316** · ★★☆
@@ -368,7 +368,7 @@ Soma das leituras: 14999995
 ```
 
 ```bash
-gcc ~/LPEDC/E316.c -o ~/LPEDC/E316 && ~/LPEDC/E316
+gcc ~/LPEDC/material/E316.c -o ~/LPEDC/material/E316 && ~/LPEDC/material/E316
 ```
 
 **Exercício E317** · ★★★
@@ -402,7 +402,7 @@ sai n=0: devolve 51
 ```
 
 ```bash
-gcc ~/LPEDC/E317.c -o ~/LPEDC/E317 && ~/LPEDC/E317
+gcc ~/LPEDC/material/E317.c -o ~/LPEDC/material/E317 && ~/LPEDC/material/E317
 ```
 
 ---
@@ -446,7 +446,7 @@ O programa pergunta quantas corridas foram (4), pede ao heap `4 * 8 = 32`
 bytes, guarda os valores (R$ 12,50, R$ 18,00, R$ 25,90 e R$ 9,60), soma tudo e
 devolve o bloco:
 
-<p align="center"><img src="0054-ideia.svg" alt="Diagrama da ideia: malloc e free" width="870"></p>
+<p align="center"><img src="material/0054-ideia.svg" alt="Diagrama da ideia: malloc e free" width="870"></p>
 
 O comentário no fim do código mostra uma execução completa:
 
@@ -502,7 +502,7 @@ int main(void) {
 Toda saída depois do `malloc` passa por um `free`, até a de erro no meio da
 leitura, a mais fácil de esquecer:
 
-<p align="center"><img src="0054-fluxograma.svg" alt="Fluxograma: malloc e free" width="472"></p>
+<p align="center"><img src="material/0054-fluxograma.svg" alt="Fluxograma: malloc e free" width="472"></p>
 
 > [!WARNING]
 > O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
@@ -567,7 +567,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A107.c -o ~/LPEDC/A107 && ~/LPEDC/A107
+gcc ~/LPEDC/material/A107.c -o ~/LPEDC/material/A107 && ~/LPEDC/material/A107
 ```
 
 **Exemplo A108 · Quem cria e quem libera**
@@ -618,7 +618,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A108.c -o ~/LPEDC/A108 && ~/LPEDC/A108
+gcc ~/LPEDC/material/A108.c -o ~/LPEDC/material/A108 && ~/LPEDC/material/A108
 ```
 
 #### Exercícios
@@ -637,7 +637,7 @@ Cópia: COXINHA
 ```
 
 ```bash
-gcc ~/LPEDC/E320.c -o ~/LPEDC/E320 && ~/LPEDC/E320
+gcc ~/LPEDC/material/E320.c -o ~/LPEDC/material/E320 && ~/LPEDC/material/E320
 ```
 
 **Exercício E321** · ★★☆
@@ -661,7 +661,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E321.c -o ~/LPEDC/E321 && ~/LPEDC/E321
+gcc ~/LPEDC/material/E321.c -o ~/LPEDC/material/E321 && ~/LPEDC/material/E321
 ```
 
 **Exercício E322** · ★★☆
@@ -693,7 +693,7 @@ e) 5 bytes: cabe 1 int
 ```
 
 ```bash
-gcc ~/LPEDC/E322.c -o ~/LPEDC/E322 && ~/LPEDC/E322
+gcc ~/LPEDC/material/E322.c -o ~/LPEDC/material/E322 && ~/LPEDC/material/E322
 ```
 
 **Exercício E324** · ★★★
@@ -718,7 +718,7 @@ Crachá: Maria Clara Fonseca (19 caracteres)
 ```
 
 ```bash
-gcc ~/LPEDC/E324.c -o ~/LPEDC/E324 && ~/LPEDC/E324
+gcc ~/LPEDC/material/E324.c -o ~/LPEDC/material/E324 && ~/LPEDC/material/E324
 ```
 
 ---
@@ -762,7 +762,7 @@ Chegam 5 Pix (R$ 50, 120, 35, 80 e 15). O vetor nasce com capacidade 2, dobra
 para 4 no terceiro Pix e para 8 no quinto. No fim, 5 posições usadas e 3
 livres:
 
-<p align="center"><img src="0055-ideia.svg" alt="Diagrama da ideia: calloc e realloc" width="870"></p>
+<p align="center"><img src="material/0055-ideia.svg" alt="Diagrama da ideia: calloc e realloc" width="870"></p>
 
 O código é a semente da lista sequencial que vira TAD no assunto 0075:
 
@@ -814,7 +814,7 @@ int main(void) {
 A pergunta "encheu?" é feita a cada Pix, mas o desvio para o `realloc` só
 acontece duas vezes. Nas demais voltas, guardar custa uma atribuição:
 
-<p align="center"><img src="0055-fluxograma.svg" alt="Fluxograma: calloc e realloc" width="641"></p>
+<p align="center"><img src="material/0055-fluxograma.svg" alt="Fluxograma: calloc e realloc" width="641"></p>
 
 > [!WARNING]
 > `v = realloc(v, n)` é o erro clássico. Se o `realloc` falhar, `v` vira
@@ -880,7 +880,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A109.c -o ~/LPEDC/A109 && ~/LPEDC/A109
+gcc ~/LPEDC/material/A109.c -o ~/LPEDC/material/A109 && ~/LPEDC/material/A109
 ```
 
 **Exemplo A110 · A enquete com calloc**
@@ -924,7 +924,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A110.c -o ~/LPEDC/A110 && ~/LPEDC/A110
+gcc ~/LPEDC/material/A110.c -o ~/LPEDC/material/A110 && ~/LPEDC/material/A110
 ```
 
 #### Exercícios
@@ -948,7 +948,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E325.c -o ~/LPEDC/E325 && ~/LPEDC/E325
+gcc ~/LPEDC/material/E325.c -o ~/LPEDC/material/E325 && ~/LPEDC/material/E325
 ```
 
 **Exercício E327** · ★★☆
@@ -972,7 +972,7 @@ Capacidade final: 8
 ```
 
 ```bash
-gcc ~/LPEDC/E327.c -o ~/LPEDC/E327 && ~/LPEDC/E327
+gcc ~/LPEDC/material/E327.c -o ~/LPEDC/material/E327 && ~/LPEDC/material/E327
 ```
 
 **Exercício E328** · ★★☆
@@ -990,7 +990,7 @@ Bloco encolheu de 40 para 24 bytes
 ```
 
 ```bash
-gcc ~/LPEDC/E328.c -o ~/LPEDC/E328 && ~/LPEDC/E328
+gcc ~/LPEDC/material/E328.c -o ~/LPEDC/material/E328 && ~/LPEDC/material/E328
 ```
 
 **Exercício E329** · ★★★
@@ -1018,7 +1018,7 @@ dobrar: 10 realocações, 1023 cópias
 ```
 
 ```bash
-gcc ~/LPEDC/E329.c -o ~/LPEDC/E329 && ~/LPEDC/E329
+gcc ~/LPEDC/material/E329.c -o ~/LPEDC/material/E329 && ~/LPEDC/material/E329
 ```
 
 ---
@@ -1061,7 +1061,7 @@ função de criação precisa desfazê-las antes de devolver `NULL`.
 A matriz de 3 lojas por 4 semanas é um vetor de 3 ponteiros, cada um para uma
 linha de 4 inteiros. As linhas podem estar em qualquer lugar do heap:
 
-<p align="center"><img src="0056-ideia.svg" alt="Diagrama da ideia: Matriz dinâmica" width="858"></p>
+<p align="center"><img src="material/0056-ideia.svg" alt="Diagrama da ideia: Matriz dinâmica" width="858"></p>
 
 O código separa criar e liberar em funções. As vendas estão em R$ mil:
 
@@ -1130,7 +1130,7 @@ int main(void) {
 A criação é um laço com saída de emergência: se uma linha falhar, o caminho de
 erro libera o que já existe:
 
-<p align="center"><img src="0056-fluxograma.svg" alt="Fluxograma: Matriz dinâmica" width="623"></p>
+<p align="center"><img src="material/0056-fluxograma.svg" alt="Fluxograma: Matriz dinâmica" width="623"></p>
 
 > [!WARNING]
 > `int **m = malloc(linhas * sizeof(int));` é um bug comum. Num PC de 64 bits,
@@ -1232,7 +1232,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A111.c -o ~/LPEDC/A111 && ~/LPEDC/A111
+gcc ~/LPEDC/material/A111.c -o ~/LPEDC/material/A111 && ~/LPEDC/material/A111
 ```
 
 **Exemplo A112 · O mapa do cinema num bloco só**
@@ -1281,7 +1281,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A112.c -o ~/LPEDC/A112 && ~/LPEDC/A112
+gcc ~/LPEDC/material/A112.c -o ~/LPEDC/material/A112 && ~/LPEDC/material/A112
 ```
 
 #### Exercícios
@@ -1313,7 +1313,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E332.c -o ~/LPEDC/E332 && ~/LPEDC/E332
+gcc ~/LPEDC/material/E332.c -o ~/LPEDC/material/E332 && ~/LPEDC/material/E332
 ```
 
 **Exercício E333** · ★★☆
@@ -1346,7 +1346,7 @@ Saída esperada (a transposta, 3 x 2):
 ```
 
 ```bash
-gcc ~/LPEDC/E333.c -o ~/LPEDC/E333 && ~/LPEDC/E333
+gcc ~/LPEDC/material/E333.c -o ~/LPEDC/material/E333 && ~/LPEDC/material/E333
 ```
 
 **Exercício E334** · ★★☆
@@ -1369,7 +1369,7 @@ Elementos guardados: 21
 ```
 
 ```bash
-gcc ~/LPEDC/E334.c -o ~/LPEDC/E334 && ~/LPEDC/E334
+gcc ~/LPEDC/material/E334.c -o ~/LPEDC/material/E334 && ~/LPEDC/material/E334
 ```
 
 **Exercício E336** · ★★★
@@ -1405,7 +1405,7 @@ A * A: dimensões incompatíveis
 ```
 
 ```bash
-gcc ~/LPEDC/E336.c -o ~/LPEDC/E336 && ~/LPEDC/E336
+gcc ~/LPEDC/material/E336.c -o ~/LPEDC/material/E336 && ~/LPEDC/material/E336
 ```
 
 ---
@@ -1456,7 +1456,7 @@ para um bloco temporário de 16 bytes e soma tudo. Na primeira versão, esquecia
 o `free`. Cada um dos 3 pedidos deixava 16 bytes perdidos: o endereço morria
 com o frame, mas o bloco ficava. O ASan mostra isso no fim da execução:
 
-<p align="center"><img src="0057-ideia.svg" alt="Diagrama da ideia: Erros de memória" width="858"></p>
+<p align="center"><img src="material/0057-ideia.svg" alt="Diagrama da ideia: Erros de memória" width="858"></p>
 
 O relatório da versão quebrada, sem o `free` (salva como `pedido.c`). Leia de
 cima para baixo: o tipo do erro, quanto vazou e a pilha de chamadas do
@@ -1509,7 +1509,7 @@ int main(void) {
 O `free` precisa vir antes do `return`, que destrói a única variável que sabia
 onde o bloco estava:
 
-<p align="center"><img src="0057-fluxograma.svg" alt="Fluxograma: Erros de memória" width="610"></p>
+<p align="center"><img src="material/0057-fluxograma.svg" alt="Fluxograma: Erros de memória" width="610"></p>
 
 > [!WARNING]
 > "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
@@ -1586,7 +1586,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A113.c -o ~/LPEDC/A113 && ~/LPEDC/A113
+gcc ~/LPEDC/material/A113.c -o ~/LPEDC/material/A113 && ~/LPEDC/material/A113
 ```
 
 **Exemplo A114 · Free, NULL e valgrind**
@@ -1636,7 +1636,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A114.c -o ~/LPEDC/A114 && ~/LPEDC/A114
+gcc ~/LPEDC/material/A114.c -o ~/LPEDC/material/A114 && ~/LPEDC/material/A114
 ```
 
 #### Exercícios
@@ -1668,7 +1668,7 @@ malloc: 4 | free: 4
 ```
 
 ```bash
-gcc ~/LPEDC/E337.c -o ~/LPEDC/E337 && ~/LPEDC/E337
+gcc ~/LPEDC/material/E337.c -o ~/LPEDC/material/E337 && ~/LPEDC/material/E337
 ```
 
 **Exercício E339** · ★★☆
@@ -1688,7 +1688,7 @@ Placar encerrado
 ```
 
 ```bash
-gcc ~/LPEDC/E339.c -o ~/LPEDC/E339 && ~/LPEDC/E339
+gcc ~/LPEDC/material/E339.c -o ~/LPEDC/material/E339 && ~/LPEDC/material/E339
 ```
 
 **Exercício E340** · ★★☆
@@ -1706,7 +1706,7 @@ Km da semana: 238
 ```
 
 ```bash
-gcc ~/LPEDC/E340.c -o ~/LPEDC/E340 && ~/LPEDC/E340
+gcc ~/LPEDC/material/E340.c -o ~/LPEDC/material/E340 && ~/LPEDC/material/E340
 ```
 
 **Exercício E341** · ★★★
@@ -1732,7 +1732,7 @@ Presentes: 11 27 35 48
 ```
 
 ```bash
-gcc ~/LPEDC/E341.c -o ~/LPEDC/E341 && ~/LPEDC/E341
+gcc ~/LPEDC/material/E341.c -o ~/LPEDC/material/E341 && ~/LPEDC/material/E341
 ```
 
 ---
@@ -1768,7 +1768,7 @@ de novo (R$ 4,70), Bia (R$ 20,00), Tonho (R$ 3,15) e Rosa (R$ 5,60). São 5
 clientes diferentes, então o caderno cresce de 2 para 4 e de 4 para 8. Depois
 Seu Jorge paga tudo:
 
-<p align="center"><img src="0058-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="material/0058-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 Cada função cuida de uma coisa e nenhuma esquece um `free`:
 
@@ -1891,7 +1891,7 @@ int main(void) {
 Cada anotação passa por uma busca. Achou, soma; não achou, talvez cresça e
 cria a linha. Todo caminho de erro termina em `liberar`:
 
-<p align="center"><img src="0058-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="861"></p>
+<p align="center"><img src="material/0058-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="861"></p>
 
 > [!WARNING]
 > Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` é um bloco com seu
@@ -2009,7 +2009,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A115.c -o ~/LPEDC/A115 && ~/LPEDC/A115
+gcc ~/LPEDC/material/A115.c -o ~/LPEDC/material/A115 && ~/LPEDC/material/A115
 ```
 
 **Exemplo A116 · Uma linha de qualquer tamanho**
@@ -2073,7 +2073,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A116.c -o ~/LPEDC/A116 && ~/LPEDC/A116
+gcc ~/LPEDC/material/A116.c -o ~/LPEDC/material/A116 && ~/LPEDC/material/A116
 ```
 
 #### Exercícios
@@ -2104,7 +2104,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E344.c -o ~/LPEDC/E344 && ~/LPEDC/E344
+gcc ~/LPEDC/material/E344.c -o ~/LPEDC/material/E344 && ~/LPEDC/material/E344
 ```
 
 **Exercício E345** · ★★☆
@@ -2133,7 +2133,7 @@ O vetor cresceu 2 vezes
 ```
 
 ```bash
-gcc ~/LPEDC/E345.c -o ~/LPEDC/E345 && ~/LPEDC/E345
+gcc ~/LPEDC/material/E345.c -o ~/LPEDC/material/E345 && ~/LPEDC/material/E345
 ```
 
 **Exercício E346** · ★★☆
@@ -2163,7 +2163,7 @@ Turma: 7.5
 ```
 
 ```bash
-gcc ~/LPEDC/E346.c -o ~/LPEDC/E346 && ~/LPEDC/E346
+gcc ~/LPEDC/material/E346.c -o ~/LPEDC/material/E346 && ~/LPEDC/material/E346
 ```
 
 **Exercício E348** · ★★★
@@ -2189,7 +2189,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E348.c -o ~/LPEDC/E348 && ~/LPEDC/E348
+gcc ~/LPEDC/material/E348.c -o ~/LPEDC/material/E348 && ~/LPEDC/material/E348
 ```
 
 ---
@@ -2437,7 +2437,7 @@ pedaços, o vetor deles e a frase nova.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0701.c a P0730.c, na raiz; resoluções em `_respostas/07-memoria-dinamica/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0701.c a P0730.c, em `material/`; resoluções em `_respostas/07-memoria-dinamica/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2473,7 +2473,7 @@ Desconto: 11.16  3.42 22.59  6.84 16.20  4.77 | total 64.98
    free.
 
 ```bash
-gcc ~/LPEDC/P0701.c -o ~/LPEDC/P0701 && ~/LPEDC/P0701
+gcc ~/LPEDC/material/P0701.c -o ~/LPEDC/material/P0701 && ~/LPEDC/material/P0701
 ```
 
 ---
@@ -2507,7 +2507,7 @@ Saída esperada:
 2. Depois do malloc: strcpy(novo, a); strcat(novo, sep); strcat(novo, b);
 
 ```bash
-gcc ~/LPEDC/P0702.c -o ~/LPEDC/P0702 && ~/LPEDC/P0702
+gcc ~/LPEDC/material/P0702.c -o ~/LPEDC/material/P0702 && ~/LPEDC/material/P0702
 ```
 
 ---
@@ -2547,7 +2547,7 @@ Fila (8 de 9): 501 502 503 504 505 506 507 508
 4. Resposta esperada: a saída acima (3 -> 6 -> 9).
 
 ```bash
-gcc ~/LPEDC/P0703.c -o ~/LPEDC/P0703 && ~/LPEDC/P0703
+gcc ~/LPEDC/material/P0703.c -o ~/LPEDC/material/P0703 && ~/LPEDC/material/P0703
 ```
 
 ---
@@ -2582,7 +2582,7 @@ Identidade 4x4:
 4. Ordem do free: primeiro cada linha, depois o vetor de ponteiros.
 
 ```bash
-gcc ~/LPEDC/P0704.c -o ~/LPEDC/P0704 && ~/LPEDC/P0704
+gcc ~/LPEDC/material/P0704.c -o ~/LPEDC/material/P0704 && ~/LPEDC/material/P0704
 ```
 
 ---
@@ -2611,7 +2611,7 @@ Total: 100 pães
    local mora na pilha e some sozinha.
 
 ```bash
-gcc ~/LPEDC/P0705.c -o ~/LPEDC/P0705 && ~/LPEDC/P0705
+gcc ~/LPEDC/material/P0705.c -o ~/LPEDC/material/P0705 && ~/LPEDC/material/P0705
 ```
 
 ---
@@ -2646,7 +2646,7 @@ Saída esperada:
 3. Quem chama recebe o bloco e é quem faz o free.
 
 ```bash
-gcc ~/LPEDC/P0706.c -o ~/LPEDC/P0706 && ~/LPEDC/P0706
+gcc ~/LPEDC/material/P0706.c -o ~/LPEDC/material/P0706 && ~/LPEDC/material/P0706
 ```
 
 ---
@@ -2690,7 +2690,7 @@ Saída esperada:
 3. Com malloc, os contadores começariam com lixo.
 
 ```bash
-gcc ~/LPEDC/P0707.c -o ~/LPEDC/P0707 && ~/LPEDC/P0707
+gcc ~/LPEDC/material/P0707.c -o ~/LPEDC/material/P0707 && ~/LPEDC/material/P0707
 ```
 
 ---
@@ -2730,7 +2730,7 @@ Transposta (3x2):
 3. Se criar devolver NULL, libere o que já existe antes de sair.
 
 ```bash
-gcc ~/LPEDC/P0708.c -o ~/LPEDC/P0708 && ~/LPEDC/P0708
+gcc ~/LPEDC/material/P0708.c -o ~/LPEDC/material/P0708 && ~/LPEDC/material/P0708
 ```
 
 ---
@@ -2768,7 +2768,7 @@ Placar (5 jogadores): 3 0 1 0 3
    bloco de lugar).
 
 ```bash
-gcc ~/LPEDC/P0709.c -o ~/LPEDC/P0709 && ~/LPEDC/P0709
+gcc ~/LPEDC/material/P0709.c -o ~/LPEDC/material/P0709 && ~/LPEDC/material/P0709
 ```
 
 ---
@@ -2808,7 +2808,7 @@ Modelo 3:  35  39
    NULL).
 
 ```bash
-gcc ~/LPEDC/P0710.c -o ~/LPEDC/P0710 && ~/LPEDC/P0710
+gcc ~/LPEDC/material/P0710.c -o ~/LPEDC/material/P0710 && ~/LPEDC/material/P0710
 ```
 
 ### ★★☆ Para pensar
@@ -2855,7 +2855,7 @@ Saída esperada:
    bytes.
 
 ```bash
-gcc ~/LPEDC/P0711.c -o ~/LPEDC/P0711 && ~/LPEDC/P0711
+gcc ~/LPEDC/material/P0711.c -o ~/LPEDC/material/P0711 && ~/LPEDC/material/P0711
 ```
 
 ---
@@ -2898,7 +2898,7 @@ Bytes das notas: 80 (matriz 3x5 usaria 120)
 4. Libere cada linha e depois o vetor de ponteiros.
 
 ```bash
-gcc ~/LPEDC/P0712.c -o ~/LPEDC/P0712 && ~/LPEDC/P0712
+gcc ~/LPEDC/material/P0712.c -o ~/LPEDC/material/P0712 && ~/LPEDC/material/P0712
 ```
 
 ---
@@ -2938,7 +2938,7 @@ Lido: "Rua Ramos Ferreira, 1200, Centro, Manaus" (40 caracteres)
 5. Resposta esperada: a execução acima.
 
 ```bash
-gcc ~/LPEDC/P0713.c -o ~/LPEDC/P0713 && ~/LPEDC/P0713
+gcc ~/LPEDC/material/P0713.c -o ~/LPEDC/material/P0713 && ~/LPEDC/material/P0713
 ```
 
 ---
@@ -2983,7 +2983,7 @@ Preços (7 de 8): 5 12 12 30 45 70 89
    mesmo que malloc(x). A primeira capacidade é 2; depois, dobra.
 
 ```bash
-gcc ~/LPEDC/P0714.c -o ~/LPEDC/P0714 && ~/LPEDC/P0714
+gcc ~/LPEDC/material/P0714.c -o ~/LPEDC/material/P0714 && ~/LPEDC/material/P0714
 ```
 
 ---
@@ -3013,7 +3013,7 @@ Viagem total: 31 horas
    Receba o retorno num ponteiro novo e só depois troque.
 
 ```bash
-gcc ~/LPEDC/P0715.c -o ~/LPEDC/P0715 && ~/LPEDC/P0715
+gcc ~/LPEDC/material/P0715.c -o ~/LPEDC/material/P0715 && ~/LPEDC/material/P0715
 ```
 
 ---
@@ -3063,7 +3063,7 @@ Miolo 2x4:
 3. Cada recorte é liberado com o seu número de linhas.
 
 ```bash
-gcc ~/LPEDC/P0716.c -o ~/LPEDC/P0716 && ~/LPEDC/P0716
+gcc ~/LPEDC/material/P0716.c -o ~/LPEDC/material/P0716 && ~/LPEDC/material/P0716
 ```
 
 ---
@@ -3107,7 +3107,7 @@ Min 9: leitura 3.5, média das últimas 4 = 5.00
 4. A média é soma / usados: sem somar a janela inteira a cada minuto.
 
 ```bash
-gcc ~/LPEDC/P0717.c -o ~/LPEDC/P0717 && ~/LPEDC/P0717
+gcc ~/LPEDC/material/P0717.c -o ~/LPEDC/material/P0717 && ~/LPEDC/material/P0717
 ```
 
 ---
@@ -3149,7 +3149,7 @@ Linha 0 da profunda é a de m? não
    duplo.
 
 ```bash
-gcc ~/LPEDC/P0718.c -o ~/LPEDC/P0718 && ~/LPEDC/P0718
+gcc ~/LPEDC/material/P0718.c -o ~/LPEDC/material/P0718 && ~/LPEDC/material/P0718
 ```
 
 ---
@@ -3190,7 +3190,7 @@ Nos dois grupos (3): 103 204 402
    serve.
 
 ```bash
-gcc ~/LPEDC/P0719.c -o ~/LPEDC/P0719 && ~/LPEDC/P0719
+gcc ~/LPEDC/material/P0719.c -o ~/LPEDC/material/P0719 && ~/LPEDC/material/P0719
 ```
 
 ---
@@ -3229,7 +3229,7 @@ Miolo: 17
 5. Resposta esperada: Borda 35 e Miolo 17.
 
 ```bash
-gcc ~/LPEDC/P0720.c -o ~/LPEDC/P0720 && ~/LPEDC/P0720
+gcc ~/LPEDC/material/P0720.c -o ~/LPEDC/material/P0720 && ~/LPEDC/material/P0720
 ```
 
 ### ★★★ Desafio
@@ -3277,7 +3277,7 @@ Público (n = 3, cap = 4): 18450.50 22010.00 9875.25
 4. Para ler de volta, converta: const int *g = v_gols; g[i].
 
 ```bash
-gcc ~/LPEDC/P0721.c -o ~/LPEDC/P0721 && ~/LPEDC/P0721
+gcc ~/LPEDC/material/P0721.c -o ~/LPEDC/material/P0721 && ~/LPEDC/material/P0721
 ```
 
 ---
@@ -3321,7 +3321,7 @@ Esparsa: 72 bytes; grade cheia: 40000 bytes
 4. Bytes: 3 * n * sizeof(int) contra 100 * 100 * sizeof(int).
 
 ```bash
-gcc ~/LPEDC/P0722.c -o ~/LPEDC/P0722 && ~/LPEDC/P0722
+gcc ~/LPEDC/material/P0722.c -o ~/LPEDC/material/P0722 && ~/LPEDC/material/P0722
 ```
 
 ---
@@ -3374,7 +3374,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima (7 linhas).
 
 ```bash
-gcc ~/LPEDC/P0723.c -o ~/LPEDC/P0723 && ~/LPEDC/P0723
+gcc ~/LPEDC/material/P0723.c -o ~/LPEDC/material/P0723 && ~/LPEDC/material/P0723
 ```
 
 ---
@@ -3422,7 +3422,7 @@ Saída esperada:
    é "0"), aloque a string e escreva do mais alto para o mais baixo.
 
 ```bash
-gcc ~/LPEDC/P0724.c -o ~/LPEDC/P0724 && ~/LPEDC/P0724
+gcc ~/LPEDC/material/P0724.c -o ~/LPEDC/material/P0724 && ~/LPEDC/material/P0724
 ```
 
 ---
@@ -3456,7 +3456,7 @@ Saída esperada:
    memória já devolvida. A ordem é: cada nome, e só então o vetor.
 
 ```bash
-gcc ~/LPEDC/P0725.c -o ~/LPEDC/P0725 && ~/LPEDC/P0725
+gcc ~/LPEDC/material/P0725.c -o ~/LPEDC/material/P0725 && ~/LPEDC/material/P0725
 ```
 
 ---
@@ -3501,7 +3501,7 @@ r(2) = 27; p(2) * q(2) = 27
 4. No mostrar, pule coeficientes zero e mostre "x^k" (x^1 como x).
 
 ```bash
-gcc ~/LPEDC/P0726.c -o ~/LPEDC/P0726 && ~/LPEDC/P0726
+gcc ~/LPEDC/material/P0726.c -o ~/LPEDC/material/P0726 && ~/LPEDC/material/P0726
 ```
 
 ---
@@ -3550,7 +3550,7 @@ det I (4x4) = 1, com 3 menores alocados
 5. Resposta esperada: a saída acima (det A = 24, det B = 30, det I = 1).
 
 ```bash
-gcc ~/LPEDC/P0727.c -o ~/LPEDC/P0727 && ~/LPEDC/P0727
+gcc ~/LPEDC/material/P0727.c -o ~/LPEDC/material/P0727 && ~/LPEDC/material/P0727
 ```
 
 ---
@@ -3594,7 +3594,7 @@ Saída esperada:
 4. Libere cada palavra, o vetor de palavras e o de contagens.
 
 ```bash
-gcc ~/LPEDC/P0728.c -o ~/LPEDC/P0728 && ~/LPEDC/P0728
+gcc ~/LPEDC/material/P0728.c -o ~/LPEDC/material/P0728 && ~/LPEDC/material/P0728
 ```
 
 ---
@@ -3645,7 +3645,7 @@ Total: 5 ilhas
 5. Resposta esperada: a saída acima (5 ilhas).
 
 ```bash
-gcc ~/LPEDC/P0729.c -o ~/LPEDC/P0729 && ~/LPEDC/P0729
+gcc ~/LPEDC/material/P0729.c -o ~/LPEDC/material/P0729 && ~/LPEDC/material/P0729
 ```
 
 ---
@@ -3704,7 +3704,7 @@ Saída esperada:
 4. No fim, libere cada linha e o vetor.
 
 ```bash
-gcc ~/LPEDC/P0730.c -o ~/LPEDC/P0730 && ~/LPEDC/P0730
+gcc ~/LPEDC/material/P0730.c -o ~/LPEDC/material/P0730 && ~/LPEDC/material/P0730
 ```
 
 ## Questões no estilo da prova

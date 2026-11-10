@@ -90,7 +90,7 @@ copia gaveta por gaveta, num laço.
 No exemplo, são 7 gavetas, uma por dia. O laço soma e guarda a maior. O
 recorde está na gaveta 5, o dia 6 para quem lê o relatório:
 
-<p align="center"><img src="0037-ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
+<p align="center"><img src="material/0037-ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
 
 O `i` vai de 0 a 6. O `maior` começa com `passos[0]`, e não com 0:
 
@@ -129,7 +129,7 @@ int main(void) {
 O caminho junta o acumulador e o maior/menor do assunto 0025, com os valores
 vindos do vetor. A pergunta `i < 7?` impede o laço de passar da última gaveta:
 
-<p align="center"><img src="0037-fluxograma.svg" alt="Fluxograma: Vetores" width="535"></p>
+<p align="center"><img src="material/0037-fluxograma.svg" alt="Fluxograma: Vetores" width="535"></p>
 
 > [!WARNING]
 > **O C não confere o índice.** Com `int v[7]`, escrever `v[7] = 0` ou ler
@@ -195,7 +195,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A073.c -o ~/LPEDC/A073 && ~/LPEDC/A073
+gcc ~/LPEDC/material/A073.c -o ~/LPEDC/material/A073 && ~/LPEDC/material/A073
 ```
 
 **Exemplo A074 · Inicializar, contar e copiar**
@@ -236,7 +236,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A074.c -o ~/LPEDC/A074 && ~/LPEDC/A074
+gcc ~/LPEDC/material/A074.c -o ~/LPEDC/material/A074 && ~/LPEDC/material/A074
 ```
 
 #### Exercícios
@@ -261,7 +261,7 @@ Dia 1: 19 graus
 ```
 
 ```bash
-gcc ~/LPEDC/E217.c -o ~/LPEDC/E217 && ~/LPEDC/E217
+gcc ~/LPEDC/material/E217.c -o ~/LPEDC/material/E217 && ~/LPEDC/material/E217
 ```
 
 **Exercício E219** · ★★☆
@@ -293,7 +293,7 @@ Aluno 5: 8.5
 ```
 
 ```bash
-gcc ~/LPEDC/E219.c -o ~/LPEDC/E219 && ~/LPEDC/E219
+gcc ~/LPEDC/material/E219.c -o ~/LPEDC/material/E219 && ~/LPEDC/material/E219
 ```
 
 **Exercício E220** · ★★☆
@@ -321,7 +321,7 @@ Nota 1: * (1)
 ```
 
 ```bash
-gcc ~/LPEDC/E220.c -o ~/LPEDC/E220 && ~/LPEDC/E220
+gcc ~/LPEDC/material/E220.c -o ~/LPEDC/material/E220 && ~/LPEDC/material/E220
 ```
 
 **Exercício E222** · ★★★
@@ -350,7 +350,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E222.c -o ~/LPEDC/E222 && ~/LPEDC/E222
+gcc ~/LPEDC/material/E222.c -o ~/LPEDC/material/E222 && ~/LPEDC/material/E222
 ```
 
 ---
@@ -389,7 +389,7 @@ Quando a função **não deve** mexer no vetor, marque o parâmetro com
 O `main` guarda o vetor `cardapio`. A função recebe o endereço dele em
 `precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
 
-<p align="center"><img src="0038-ideia.svg" alt="Diagrama da ideia: Vetores e funções" width="870"></p>
+<p align="center"><img src="material/0038-ideia.svg" alt="Diagrama da ideia: Vetores e funções" width="870"></p>
 
 `reajustar` escreve (sem `const`) e `mostrar` só lê (com `const`):
 
@@ -432,7 +432,7 @@ int main(void) {
 No fluxograma, o `main` chama e a função percorre as 4 gavetas. Ela é `void`,
 mas o `main` enxerga os preços novos, porque ela escreveu direto no vetor dele:
 
-<p align="center"><img src="0038-fluxograma.svg" alt="Fluxograma: Vetores e funções" width="486"></p>
+<p align="center"><img src="material/0038-fluxograma.svg" alt="Fluxograma: Vetores e funções" width="486"></p>
 
 Um **elemento** passado sozinho vai por valor, como qualquer `double`:
 `reajustar_um(double preco)` chamada com `cardapio[0]` recebe uma cópia do
@@ -506,7 +506,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A075.c -o ~/LPEDC/A075 && ~/LPEDC/A075
+gcc ~/LPEDC/material/A075.c -o ~/LPEDC/material/A075 && ~/LPEDC/material/A075
 ```
 
 **Exemplo A076 · Um elemento vai por valor, o vetor vai pelo endereço**
@@ -560,7 +560,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A076.c -o ~/LPEDC/A076 && ~/LPEDC/A076
+gcc ~/LPEDC/material/A076.c -o ~/LPEDC/material/A076 && ~/LPEDC/material/A076
 ```
 
 #### Exercícios
@@ -592,7 +592,7 @@ Média por rodada: 2.00
 ```
 
 ```bash
-gcc ~/LPEDC/E223.c -o ~/LPEDC/E223 && ~/LPEDC/E223
+gcc ~/LPEDC/material/E223.c -o ~/LPEDC/material/E223 && ~/LPEDC/material/E223
 ```
 
 **Exercício E225** · ★★☆
@@ -622,7 +622,7 @@ depois de vezes_dez: a = 100 30 30
 ```
 
 ```bash
-gcc ~/LPEDC/E225.c -o ~/LPEDC/E225 && ~/LPEDC/E225
+gcc ~/LPEDC/material/E225.c -o ~/LPEDC/material/E225 && ~/LPEDC/material/E225
 ```
 
 **Exercício E226** · ★★☆
@@ -657,7 +657,7 @@ Meses acima da média: 7
 ```
 
 ```bash
-gcc ~/LPEDC/E226.c -o ~/LPEDC/E226 && ~/LPEDC/E226
+gcc ~/LPEDC/material/E226.c -o ~/LPEDC/material/E226 && ~/LPEDC/material/E226
 ```
 
 **Exercício E228** · ★★★
@@ -687,7 +687,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E228.c -o ~/LPEDC/E228 && ~/LPEDC/E228
+gcc ~/LPEDC/material/E228.c -o ~/LPEDC/material/E228 && ~/LPEDC/material/E228
 ```
 
 ---
@@ -722,7 +722,7 @@ No C, a matriz é **um bloco contínuo**, com as linhas coladas uma na outra. As
 12 células do exemplo ficam enfileiradas: a linha 0 inteira, depois a 1, depois
 a 2. A célula `vendas[1][2]` (o 14) é a 7ª da fila, na posição 1 × 4 + 2 = 6:
 
-<p align="center"><img src="0039-ideia.svg" alt="Diagrama da ideia: Matrizes" width="858"></p>
+<p align="center"><img src="material/0039-ideia.svg" alt="Diagrama da ideia: Matrizes" width="858"></p>
 
 O código mostra a tabela com o total de cada linha e, em outro par de laços, o
 total de cada coluna:
@@ -776,7 +776,7 @@ int main(void) {
 O laço de dentro dá 4 voltas para **cada** volta do de fora: o corpo roda
 3 × 4 = 12 vezes, uma por célula:
 
-<p align="center"><img src="0039-fluxograma.svg" alt="Fluxograma: Matrizes" width="482"></p>
+<p align="center"><img src="material/0039-fluxograma.svg" alt="Fluxograma: Matrizes" width="482"></p>
 
 Ao passar uma matriz a uma função vale a regra do assunto 0038 (vai o
 endereço, a função mexe no original), mas **todas as dimensões, menos a
@@ -855,7 +855,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A077.c -o ~/LPEDC/A077 && ~/LPEDC/A077
+gcc ~/LPEDC/material/A077.c -o ~/LPEDC/material/A077 && ~/LPEDC/material/A077
 ```
 
 **Exemplo A078 · O tabuleiro do jogo da velha**
@@ -910,7 +910,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A078.c -o ~/LPEDC/A078 && ~/LPEDC/A078
+gcc ~/LPEDC/material/A078.c -o ~/LPEDC/material/A078 && ~/LPEDC/material/A078
 ```
 
 #### Exercícios
@@ -941,7 +941,7 @@ Diagonal secundária: 15
 ```
 
 ```bash
-gcc ~/LPEDC/E229.c -o ~/LPEDC/E229 && ~/LPEDC/E229
+gcc ~/LPEDC/material/E229.c -o ~/LPEDC/material/E229 && ~/LPEDC/material/E229
 ```
 
 **Exercício E231** · ★★☆
@@ -973,7 +973,7 @@ Transposta (3x2):
 ```
 
 ```bash
-gcc ~/LPEDC/E231.c -o ~/LPEDC/E231 && ~/LPEDC/E231
+gcc ~/LPEDC/material/E231.c -o ~/LPEDC/material/E231 && ~/LPEDC/material/E231
 ```
 
 **Exercício E232** · ★★☆
@@ -1007,7 +1007,7 @@ Melhor fileira: B
 ```
 
 ```bash
-gcc ~/LPEDC/E232.c -o ~/LPEDC/E232 && ~/LPEDC/E232
+gcc ~/LPEDC/material/E232.c -o ~/LPEDC/material/E232 && ~/LPEDC/material/E232
 ```
 
 **Exercício E234** · ★★★
@@ -1036,7 +1036,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E234.c -o ~/LPEDC/E234 && ~/LPEDC/E234
+gcc ~/LPEDC/material/E234.c -o ~/LPEDC/material/E234 && ~/LPEDC/material/E234
 ```
 
 ---
@@ -1081,7 +1081,7 @@ Enter.
 No exemplo, a placa é um vetor de 7 `char`. O `toupper` troca cada minúscula
 pela maiúscula, 32 posições antes na tabela. Os dígitos passam sem mudar:
 
-<p align="center"><img src="0040-ideia.svg" alt="Diagrama da ideia: Caracteres" width="858"></p>
+<p align="center"><img src="material/0040-ideia.svg" alt="Diagrama da ideia: Caracteres" width="858"></p>
 
 O código mostra cada caractere com `%c` e `%d`, antes e depois, e confere o
 formato com `isdigit` e `isalpha`:
@@ -1137,7 +1137,7 @@ uma **string**: falta o marcador de fim que o `%s` exige (próximo assunto).
 A cada posição, o programa converte e confere o que ela deveria ser. Uma
 posição errada invalida a placa, mas o laço segue até o fim:
 
-<p align="center"><img src="0040-fluxograma.svg" alt="Fluxograma: Caracteres" width="617"></p>
+<p align="center"><img src="material/0040-fluxograma.svg" alt="Fluxograma: Caracteres" width="617"></p>
 
 > [!WARNING]
 > **Letra não é "tudo entre `'A'` e `'z'`".** Entre o `'Z'` (90) e o `'a'`
@@ -1198,7 +1198,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A079.c -o ~/LPEDC/A079 && ~/LPEDC/A079
+gcc ~/LPEDC/material/A079.c -o ~/LPEDC/material/A079 && ~/LPEDC/material/A079
 ```
 
 **Exemplo A080 · Contando o que foi digitado, letra por letra**
@@ -1238,7 +1238,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A080.c -o ~/LPEDC/A080 && ~/LPEDC/A080
+gcc ~/LPEDC/material/A080.c -o ~/LPEDC/material/A080 && ~/LPEDC/material/A080
 ```
 
 #### Exercícios
@@ -1270,7 +1270,7 @@ Hi!
 ```
 
 ```bash
-gcc ~/LPEDC/E235.c -o ~/LPEDC/E235 && ~/LPEDC/E235
+gcc ~/LPEDC/material/E235.c -o ~/LPEDC/material/E235 && ~/LPEDC/material/E235
 ```
 
 **Exercício E237** · ★★☆
@@ -1296,7 +1296,7 @@ Decifrada: ZEBRA AZUL
 ```
 
 ```bash
-gcc ~/LPEDC/E237.c -o ~/LPEDC/E237 && ~/LPEDC/E237
+gcc ~/LPEDC/material/E237.c -o ~/LPEDC/material/E237 && ~/LPEDC/material/E237
 ```
 
 **Exercício E238** · ★★☆
@@ -1342,7 +1342,7 @@ CEP inválido.
 ```
 
 ```bash
-gcc ~/LPEDC/E238.c -o ~/LPEDC/E238 && ~/LPEDC/E238
+gcc ~/LPEDC/material/E238.c -o ~/LPEDC/material/E238 && ~/LPEDC/material/E238
 ```
 
 **Exercício E240** · ★★★
@@ -1374,7 +1374,7 @@ Diferenças em 128 códigos: 0
 ```
 
 ```bash
-gcc ~/LPEDC/E240.c -o ~/LPEDC/E240 && ~/LPEDC/E240
+gcc ~/LPEDC/material/E240.c -o ~/LPEDC/material/E240 && ~/LPEDC/material/E240
 ```
 
 ---
@@ -1425,7 +1425,7 @@ O vetor `cracha` do exemplo tem 20 posições. Depois do `strcpy` e dos dois
 `strcat`, as 11 primeiras guardam "Bruna Matos", a 12ª guarda o `'\0'` e o
 resto não importa:
 
-<p align="center"><img src="0041-ideia.svg" alt="Diagrama da ideia: Strings" width="858"></p>
+<p align="center"><img src="material/0041-ideia.svg" alt="Diagrama da ideia: Strings" width="858"></p>
 
 O código monta o crachá, compara `strlen` com `sizeof` e confere com `strcmp`:
 
@@ -1461,7 +1461,7 @@ int main(void) {
 O `strcat` procura o `'\0'` do destino, escreve ali por cima e põe um `'\0'`
 novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
-<p align="center"><img src="0041-fluxograma.svg" alt="Fluxograma: Strings" width="441"></p>
+<p align="center"><img src="material/0041-fluxograma.svg" alt="Fluxograma: Strings" width="441"></p>
 
 > [!WARNING]
 > **`strcpy` e `strcat` não sabem o tamanho do destino.** Escrevem até acabar
@@ -1526,7 +1526,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A081.c -o ~/LPEDC/A081 && ~/LPEDC/A081
+gcc ~/LPEDC/material/A081.c -o ~/LPEDC/material/A081 && ~/LPEDC/material/A081
 ```
 
 **Exemplo A082 · Percorrendo até o '\0'**
@@ -1573,7 +1573,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A082.c -o ~/LPEDC/A082 && ~/LPEDC/A082
+gcc ~/LPEDC/material/A082.c -o ~/LPEDC/material/A082 && ~/LPEDC/material/A082
 ```
 
 #### Exercícios
@@ -1598,7 +1598,7 @@ strlen = 6, sizeof = 7
 ```
 
 ```bash
-gcc ~/LPEDC/E241.c -o ~/LPEDC/E241 && ~/LPEDC/E241
+gcc ~/LPEDC/material/E241.c -o ~/LPEDC/material/E241 && ~/LPEDC/material/E241
 ```
 
 **Exercício E243** · ★★☆
@@ -1633,7 +1633,7 @@ igual a "joao.silva"? sim
 ```
 
 ```bash
-gcc ~/LPEDC/E243.c -o ~/LPEDC/E243 && ~/LPEDC/E243
+gcc ~/LPEDC/material/E243.c -o ~/LPEDC/material/E243 && ~/LPEDC/material/E243
 ```
 
 **Exercício E244** · ★★☆
@@ -1667,7 +1667,7 @@ A: sim
 ```
 
 ```bash
-gcc ~/LPEDC/E244.c -o ~/LPEDC/E244 && ~/LPEDC/E244
+gcc ~/LPEDC/material/E244.c -o ~/LPEDC/material/E244 && ~/LPEDC/material/E244
 ```
 
 **Exercício E246** · ★★★
@@ -1698,7 +1698,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E246.c -o ~/LPEDC/E246 && ~/LPEDC/E246
+gcc ~/LPEDC/material/E246.c -o ~/LPEDC/material/E246 && ~/LPEDC/material/E246
 ```
 
 ---
@@ -1747,7 +1747,7 @@ No exemplo, o vetor `nome` tem 40 bytes. O `fgets` copia os 11 caracteres, o
 `'\n'` e o `'\0'`. O `strcspn` acha o `'\n'` na posição 11, e ele vira o novo
 fim:
 
-<p align="center"><img src="0042-ideia.svg" alt="Diagrama da ideia: Lendo strings" width="858"></p>
+<p align="center"><img src="material/0042-ideia.svg" alt="Diagrama da ideia: Lendo strings" width="858"></p>
 
 O código mostra a string entre colchetes antes e depois da limpeza, para
 enxergar o `'\n'`:
@@ -1780,7 +1780,7 @@ int main(void) {
 
 O teste do `NULL` vem primeiro: se a entrada acabou, não há nome para limpar.
 
-<p align="center"><img src="0042-fluxograma.svg" alt="Fluxograma: Lendo strings" width="506"></p>
+<p align="center"><img src="material/0042-fluxograma.svg" alt="Fluxograma: Lendo strings" width="506"></p>
 
 > [!WARNING]
 > **`scanf("%d")` seguido de `fgets` "pula" a leitura.** O `scanf` lê o número
@@ -1842,7 +1842,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A083.c -o ~/LPEDC/A083 && ~/LPEDC/A083
+gcc ~/LPEDC/material/A083.c -o ~/LPEDC/material/A083 && ~/LPEDC/material/A083
 ```
 
 **Exemplo A084 · Número, depois texto, e a linha que não coube**
@@ -1892,7 +1892,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A084.c -o ~/LPEDC/A084 && ~/LPEDC/A084
+gcc ~/LPEDC/material/A084.c -o ~/LPEDC/material/A084 && ~/LPEDC/material/A084
 ```
 
 #### Exercícios
@@ -1923,7 +1923,7 @@ Para testar sem digitar: printf 'Maria Clara Souza\n' | ~/LPEDC/rodar
 seguido do caminho deste arquivo.
 
 ```bash
-gcc ~/LPEDC/E248.c -o ~/LPEDC/E248 && ~/LPEDC/E248
+gcc ~/LPEDC/material/E248.c -o ~/LPEDC/material/E248 && ~/LPEDC/material/E248
 ```
 
 **Exercício E249** · ★★☆
@@ -1948,7 +1948,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E249.c -o ~/LPEDC/E249 && ~/LPEDC/E249
+gcc ~/LPEDC/material/E249.c -o ~/LPEDC/material/E249 && ~/LPEDC/material/E249
 ```
 
 **Exercício E250** · ★★☆
@@ -2002,7 +2002,7 @@ Senha forte.
 ```
 
 ```bash
-gcc ~/LPEDC/E250.c -o ~/LPEDC/E250 && ~/LPEDC/E250
+gcc ~/LPEDC/material/E250.c -o ~/LPEDC/material/E250 && ~/LPEDC/material/E250
 ```
 
 **Exercício E252** · ★★★
@@ -2034,7 +2034,7 @@ pedaço 3: [uva\n] fim da linha 2 (3 letras)
 ```
 
 ```bash
-gcc ~/LPEDC/E252.c -o ~/LPEDC/E252 && ~/LPEDC/E252
+gcc ~/LPEDC/material/E252.c -o ~/LPEDC/material/E252 && ~/LPEDC/material/E252
 ```
 
 ---
@@ -2066,7 +2066,7 @@ devolve a posição ou -1, como no A076, e assim "Tatu" cai nos inválidos sem
 Cada linha passa pela mesma esteira: lê, normaliza, procura na matriz de nomes
 e soma 1 no contador. "Tatu" não está na matriz e vai para os inválidos:
 
-<p align="center"><img src="0043-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
+<p align="center"><img src="material/0043-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
 
 Para testar sem digitar, salve o código num `.c`, compile com o gcc e mande os
 votos com `printf 'boto\nArara\n...' | ./programa`:
@@ -2147,7 +2147,7 @@ int main(void) {
 Dentro dele, uma decisão: achou o candidato ou não. O resultado só sai quando a
 entrada acaba:
 
-<p align="center"><img src="0043-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="607"></p>
+<p align="center"><img src="material/0043-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="607"></p>
 
 Para ordenar os nomes em ordem alfabética, como string não se atribui com `=`,
 trocar dois nomes é um `strcpy` triplo, com uma string auxiliar. O exemplo A086
@@ -2257,7 +2257,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A085.c -o ~/LPEDC/A085 && ~/LPEDC/A085
+gcc ~/LPEDC/material/A085.c -o ~/LPEDC/material/A085 && ~/LPEDC/material/A085
 ```
 
 **Exemplo A086 · A lista de chamada em ordem alfabética**
@@ -2311,7 +2311,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A086.c -o ~/LPEDC/A086 && ~/LPEDC/A086
+gcc ~/LPEDC/material/A086.c -o ~/LPEDC/material/A086 && ~/LPEDC/material/A086
 ```
 
 #### Exercícios
@@ -2335,7 +2335,7 @@ Artilheiro: Duda
 ```
 
 ```bash
-gcc ~/LPEDC/E254.c -o ~/LPEDC/E254 && ~/LPEDC/E254
+gcc ~/LPEDC/material/E254.c -o ~/LPEDC/material/E254 && ~/LPEDC/material/E254
 ```
 
 **Exercício E255** · ★★☆
@@ -2364,7 +2364,7 @@ Venceu com 1 erro(s)!
 ```
 
 ```bash
-gcc ~/LPEDC/E255.c -o ~/LPEDC/E255 && ~/LPEDC/E255
+gcc ~/LPEDC/material/E255.c -o ~/LPEDC/material/E255 && ~/LPEDC/material/E255
 ```
 
 **Exercício E256** · ★★☆
@@ -2415,7 +2415,7 @@ CPF inválido.
 ```
 
 ```bash
-gcc ~/LPEDC/E256.c -o ~/LPEDC/E256 && ~/LPEDC/E256
+gcc ~/LPEDC/material/E256.c -o ~/LPEDC/material/E256 && ~/LPEDC/material/E256
 ```
 
 **Exercício E258** · ★★★
@@ -2472,7 +2472,7 @@ z9z3 (12 -> 4)
 ```
 
 ```bash
-gcc ~/LPEDC/E258.c -o ~/LPEDC/E258 && ~/LPEDC/E258
+gcc ~/LPEDC/material/E258.c -o ~/LPEDC/material/E258 && ~/LPEDC/material/E258
 ```
 
 ---
@@ -2647,7 +2647,7 @@ matrizes revezam.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0501.c a P0530.c, na raiz; resoluções em `_respostas/05-vetores-e-strings/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0501.c a P0530.c, em `material/`; resoluções em `_respostas/05-vetores-e-strings/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2686,7 +2686,7 @@ Menor: Qua (R$ 870)
    quarta.
 
 ```bash
-gcc ~/LPEDC/P0501.c -o ~/LPEDC/P0501 && ~/LPEDC/P0501
+gcc ~/LPEDC/material/P0501.c -o ~/LPEDC/material/P0501 && ~/LPEDC/material/P0501
 ```
 
 ---
@@ -2723,7 +2723,7 @@ Código 2000: não cadastrado
    para na posição 1).
 
 ```bash
-gcc ~/LPEDC/P0502.c -o ~/LPEDC/P0502 && ~/LPEDC/P0502
+gcc ~/LPEDC/material/P0502.c -o ~/LPEDC/material/P0502 && ~/LPEDC/material/P0502
 ```
 
 ---
@@ -2758,7 +2758,7 @@ Depois: 117 113 110 108 105 102 101
 3. A troca usa uma variável auxiliar: aux = v[i]; v[i] = v[j]; v[j] = aux;
 
 ```bash
-gcc ~/LPEDC/P0503.c -o ~/LPEDC/P0503 && ~/LPEDC/P0503
+gcc ~/LPEDC/material/P0503.c -o ~/LPEDC/material/P0503 && ~/LPEDC/material/P0503
 ```
 
 ---
@@ -2800,7 +2800,7 @@ Total:
    o laço de impressão três vezes.
 
 ```bash
-gcc ~/LPEDC/P0504.c -o ~/LPEDC/P0504 && ~/LPEDC/P0504
+gcc ~/LPEDC/material/P0504.c -o ~/LPEDC/material/P0504 && ~/LPEDC/material/P0504
 ```
 
 ---
@@ -2842,7 +2842,7 @@ Por dia (4x3):
 3. Para mostrar, os limites mudam: t tem 4 linhas de 3 colunas.
 
 ```bash
-gcc ~/LPEDC/P0505.c -o ~/LPEDC/P0505 && ~/LPEDC/P0505
+gcc ~/LPEDC/material/P0505.c -o ~/LPEDC/material/P0505 && ~/LPEDC/material/P0505
 ```
 
 ---
@@ -2888,7 +2888,7 @@ quase é identidade? não
 3. Para mostrar o bool, use um operador ternário: ok ? "sim" : "não".
 
 ```bash
-gcc ~/LPEDC/P0506.c -o ~/LPEDC/P0506 && ~/LPEDC/P0506
+gcc ~/LPEDC/material/P0506.c -o ~/LPEDC/material/P0506 && ~/LPEDC/material/P0506
 ```
 
 ---
@@ -2925,7 +2925,7 @@ Total: 32 (strlen = 32)
 4. Resposta esperada: a saída acima (32 caracteres no total).
 
 ```bash
-gcc ~/LPEDC/P0507.c -o ~/LPEDC/P0507 && ~/LPEDC/P0507
+gcc ~/LPEDC/material/P0507.c -o ~/LPEDC/material/P0507 && ~/LPEDC/material/P0507
 ```
 
 ---
@@ -2962,7 +2962,7 @@ Iniciais: R.N.
 3. As iniciais são nome[0] e sobrenome[0]: mostre com %c.
 
 ```bash
-gcc ~/LPEDC/P0508.c -o ~/LPEDC/P0508 && ~/LPEDC/P0508
+gcc ~/LPEDC/material/P0508.c -o ~/LPEDC/material/P0508 && ~/LPEDC/material/P0508
 ```
 
 ---
@@ -2988,7 +2988,7 @@ Letra z: 1
 2. Dentro do if, = é atribuição; para comparar, use ==.
 
 ```bash
-gcc ~/LPEDC/P0509.c -o ~/LPEDC/P0509 && ~/LPEDC/P0509
+gcc ~/LPEDC/material/P0509.c -o ~/LPEDC/material/P0509 && ~/LPEDC/material/P0509
 ```
 
 ---
@@ -3028,7 +3028,7 @@ Saída esperada:
    laço mostra de 0 a 10, pulando quem tem contador 0.
 
 ```bash
-gcc ~/LPEDC/P0510.c -o ~/LPEDC/P0510 && ~/LPEDC/P0510
+gcc ~/LPEDC/material/P0510.c -o ~/LPEDC/material/P0510 && ~/LPEDC/material/P0510
 ```
 
 ### ★★☆ Para pensar
@@ -3078,7 +3078,7 @@ Brigadeirão: A = R$ 45.60, B = R$ 48.80 -> mais barato no A
    R$ 45.60 x R$ 48.80 (A).
 
 ```bash
-gcc ~/LPEDC/P0511.c -o ~/LPEDC/P0511 && ~/LPEDC/P0511
+gcc ~/LPEDC/material/P0511.c -o ~/LPEDC/material/P0511 && ~/LPEDC/material/P0511
 ```
 
 ---
@@ -3122,7 +3122,7 @@ d2: NÃO simétrica em [1][2] (25 x 52)
    erro em [1][2] (25 x 52).
 
 ```bash
-gcc ~/LPEDC/P0512.c -o ~/LPEDC/P0512 && ~/LPEDC/P0512
+gcc ~/LPEDC/material/P0512.c -o ~/LPEDC/material/P0512 && ~/LPEDC/material/P0512
 ```
 
 ---
@@ -3162,7 +3162,7 @@ CEP 69099999: não atendido (4 passos)
    caso, a 4.
 
 ```bash
-gcc ~/LPEDC/P0513.c -o ~/LPEDC/P0513 && ~/LPEDC/P0513
+gcc ~/LPEDC/material/P0513.c -o ~/LPEDC/material/P0513 && ~/LPEDC/material/P0513
 ```
 
 ---
@@ -3201,7 +3201,7 @@ Entrou 60: 95 91 84 80 77 70 66 61 60
    valor que ainda ia ser copiado.
 
 ```bash
-gcc ~/LPEDC/P0514.c -o ~/LPEDC/P0514 && ~/LPEDC/P0514
+gcc ~/LPEDC/material/P0514.c -o ~/LPEDC/material/P0514 && ~/LPEDC/material/P0514
 ```
 
 ---
@@ -3239,7 +3239,7 @@ Depois (5): 11:4 13:7 16:2 17:9 19:1
 4. Resposta esperada: a saída acima (sobram 5 produtos).
 
 ```bash
-gcc ~/LPEDC/P0515.c -o ~/LPEDC/P0515 && ~/LPEDC/P0515
+gcc ~/LPEDC/material/P0515.c -o ~/LPEDC/material/P0515 && ~/LPEDC/material/P0515
 ```
 
 ---
@@ -3283,7 +3283,7 @@ Mediana: 30 min
 4. Resposta esperada: a saída acima (média 33.78, mediana 30).
 
 ```bash
-gcc ~/LPEDC/P0516.c -o ~/LPEDC/P0516 && ~/LPEDC/P0516
+gcc ~/LPEDC/material/P0516.c -o ~/LPEDC/material/P0516 && ~/LPEDC/material/P0516
 ```
 
 ---
@@ -3321,7 +3321,7 @@ Depois: [Av. Eduardo Ribeiro, 620] (24)
 4. Resposta esperada: [Av. Eduardo Ribeiro, 620], com 24 caracteres.
 
 ```bash
-gcc ~/LPEDC/P0517.c -o ~/LPEDC/P0517 && ~/LPEDC/P0517
+gcc ~/LPEDC/material/P0517.c -o ~/LPEDC/material/P0517 && ~/LPEDC/material/P0517
 ```
 
 ---
@@ -3367,7 +3367,7 @@ Inválido: 8 dígitos
 5. Resposta esperada: as duas execuções acima.
 
 ```bash
-gcc ~/LPEDC/P0518.c -o ~/LPEDC/P0518 && ~/LPEDC/P0518
+gcc ~/LPEDC/material/P0518.c -o ~/LPEDC/material/P0518 && ~/LPEDC/material/P0518
 ```
 
 ---
@@ -3406,7 +3406,7 @@ Total       77   83   91  104    355
 4. Resposta esperada: a saída acima (total geral 355).
 
 ```bash
-gcc ~/LPEDC/P0519.c -o ~/LPEDC/P0519 && ~/LPEDC/P0519
+gcc ~/LPEDC/material/P0519.c -o ~/LPEDC/material/P0519 && ~/LPEDC/material/P0519
 ```
 
 ---
@@ -3447,7 +3447,7 @@ Saldo: -40
 4. Resposta esperada: a saída acima (saldo -40).
 
 ```bash
-gcc ~/LPEDC/P0520.c -o ~/LPEDC/P0520 && ~/LPEDC/P0520
+gcc ~/LPEDC/material/P0520.c -o ~/LPEDC/material/P0520 && ~/LPEDC/material/P0520
 ```
 
 ### ★★★ Desafio
@@ -3515,7 +3515,7 @@ Vitória do O
    + '\0'. jogos[k] é um char [3][4]: passe direto para a função.
 
 ```bash
-gcc ~/LPEDC/P0521.c -o ~/LPEDC/P0521 && ~/LPEDC/P0521
+gcc ~/LPEDC/material/P0521.c -o ~/LPEDC/material/P0521 && ~/LPEDC/material/P0521
 ```
 
 ---
@@ -3581,7 +3581,7 @@ Transposta cheia (6x5):
 3. As triplas cabem em int t[30][3] (no pior caso, nada é zero).
 
 ```bash
-gcc ~/LPEDC/P0522.c -o ~/LPEDC/P0522 && ~/LPEDC/P0522
+gcc ~/LPEDC/material/P0522.c -o ~/LPEDC/material/P0522 && ~/LPEDC/material/P0522
 ```
 
 ---
@@ -3628,7 +3628,7 @@ Mais populosa: Manaus
 5. Resposta esperada: a saída acima (total 2365400, Manaus a maior).
 
 ```bash
-gcc ~/LPEDC/P0523.c -o ~/LPEDC/P0523 && ~/LPEDC/P0523
+gcc ~/LPEDC/material/P0523.c -o ~/LPEDC/material/P0523 && ~/LPEDC/material/P0523
 ```
 
 ---
@@ -3679,7 +3679,7 @@ Mais repetida: o (2 vezes)
 4. Resposta esperada: a saída acima (11 palavras distintas).
 
 ```bash
-gcc ~/LPEDC/P0524.c -o ~/LPEDC/P0524 && ~/LPEDC/P0524
+gcc ~/LPEDC/material/P0524.c -o ~/LPEDC/material/P0524 && ~/LPEDC/material/P0524
 ```
 
 ---
@@ -3725,7 +3725,7 @@ Ronda: 1 2 3 4 5 10 15 20 19 18 17 16 11 6 7 8 9 14 13 12
 3. Um contador de passos que começa em 1 preenche a segunda matriz.
 
 ```bash
-gcc ~/LPEDC/P0525.c -o ~/LPEDC/P0525 && ~/LPEDC/P0525
+gcc ~/LPEDC/material/P0525.c -o ~/LPEDC/material/P0525 && ~/LPEDC/material/P0525
 ```
 
 ---
@@ -3775,7 +3775,7 @@ Saída esperada:
 3. Espaço: continue. Não dígito e não espaço: return false.
 
 ```bash
-gcc ~/LPEDC/P0526.c -o ~/LPEDC/P0526 && ~/LPEDC/P0526
+gcc ~/LPEDC/material/P0526.c -o ~/LPEDC/material/P0526 && ~/LPEDC/material/P0526
 ```
 
 ---
@@ -3824,7 +3824,7 @@ Carla: não está na lista
    porque 'B' < 'C').
 
 ```bash
-gcc ~/LPEDC/P0527.c -o ~/LPEDC/P0527 && ~/LPEDC/P0527
+gcc ~/LPEDC/material/P0527.c -o ~/LPEDC/material/P0527 && ~/LPEDC/material/P0527
 ```
 
 ---
@@ -3869,7 +3869,7 @@ c:
    quadrado, apesar das linhas e colunas certas).
 
 ```bash
-gcc ~/LPEDC/P0528.c -o ~/LPEDC/P0528 && ~/LPEDC/P0528
+gcc ~/LPEDC/material/P0528.c -o ~/LPEDC/material/P0528 && ~/LPEDC/material/P0528
 ```
 
 ---
@@ -3903,7 +3903,7 @@ Envio expresso: entrega em 2 dias
 4. Resposta esperada: a saída acima (etiqueta com 36 caracteres).
 
 ```bash
-gcc ~/LPEDC/P0529.c -o ~/LPEDC/P0529 && ~/LPEDC/P0529
+gcc ~/LPEDC/material/P0529.c -o ~/LPEDC/material/P0529 && ~/LPEDC/material/P0529
 ```
 
 ---
@@ -3943,7 +3943,7 @@ Saída esperada:
    265252859812191058636308480000000).
 
 ```bash
-gcc ~/LPEDC/P0530.c -o ~/LPEDC/P0530 && ~/LPEDC/P0530
+gcc ~/LPEDC/material/P0530.c -o ~/LPEDC/material/P0530 && ~/LPEDC/material/P0530
 ```
 
 ## Questões no estilo da prova

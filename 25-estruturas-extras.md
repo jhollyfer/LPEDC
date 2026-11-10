@@ -39,7 +39,7 @@ o nó verde é o achado, os amarelos são os comparados e os cinza, os que a
 busca nem tocou. Os exemplos compilam junto os `.c` de apoio da pasta:
 
 ```bash
-gcc ~/LPEDC/A325.c ~/LPEDC/0163-skip.c -o ~/LPEDC/A325 && ~/LPEDC/A325
+gcc ~/LPEDC/material/A325.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/A325 && ~/LPEDC/material/A325
 ```
 
 O **custo** de uma busca é quantas chaves ela comparou: o mesmo número em
@@ -95,7 +95,7 @@ Uma locadora tem 4 clientes (Ana, Bruno, Carla e Davi, linhas 0 a 3) e 8
 filmes (colunas 0 a 7). Chegam seis notas e Bruno apaga a dele: das 32
 posições, sobram 5 células. A linha de Carla é `NULL`:
 
-<p align="center"><img src="0162-ideia.svg" alt="Diagrama da ideia: Matriz esparsa" width="858"></p>
+<p align="center"><img src="material/0162-ideia.svg" alt="Diagrama da ideia: Matriz esparsa" width="858"></p>
 
 No TAD (`esparsa.h`, `esparsa.c`), `esp_define` anda na linha com dois
 ponteiros, `ant` e `p`, como na lista ordenada:
@@ -177,7 +177,7 @@ int main(void) {
 `esp_define` cai em um de quatro casos (trocar, remover, ignorar ou criar). O
 verde é Bruno apagando a nota: a coluna 3 existe e o valor novo é 0:
 
-<p align="center"><img src="0162-fluxograma.svg" alt="Fluxograma: Matriz esparsa" width="707"></p>
+<p align="center"><img src="material/0162-fluxograma.svg" alt="Fluxograma: Matriz esparsa" width="707"></p>
 
 > [!WARNING]
 > Se `esp_define(m, 1, 3, 0)` trocasse o valor, a célula guardaria um 0 e
@@ -278,7 +278,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A323.c ~/LPEDC/0162-esparsa.c -o ~/LPEDC/A323 && ~/LPEDC/A323
+gcc ~/LPEDC/material/A323.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/A323 && ~/LPEDC/material/A323
 ```
 
 **Exemplo A324 · O total de cada pedido**
@@ -330,7 +330,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A324.c ~/LPEDC/0162-esparsa.c -o ~/LPEDC/A324 && ~/LPEDC/A324
+gcc ~/LPEDC/material/A324.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/A324 && ~/LPEDC/material/A324
 ```
 
 #### Exercícios
@@ -353,7 +353,7 @@ Cliente 3: 4 notas, média 3.50
 ```
 
 ```bash
-gcc ~/LPEDC/E967.c ~/LPEDC/0162-esparsa.c -o ~/LPEDC/E967 && ~/LPEDC/E967
+gcc ~/LPEDC/material/E967.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E967 && ~/LPEDC/material/E967
 ```
 
 **Exercício E969** · ★★☆
@@ -384,7 +384,7 @@ Células: 6 e 6
 ```
 
 ```bash
-gcc ~/LPEDC/E969.c ~/LPEDC/0162-esparsa.c -o ~/LPEDC/E969 && ~/LPEDC/E969
+gcc ~/LPEDC/material/E969.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E969 && ~/LPEDC/material/E969
 ```
 
 **Exercício E970** · ★★☆
@@ -407,7 +407,7 @@ Células: 5
 ```
 
 ```bash
-gcc ~/LPEDC/E970.c ~/LPEDC/0162-esparsa.c -o ~/LPEDC/E970 && ~/LPEDC/E970
+gcc ~/LPEDC/material/E970.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E970 && ~/LPEDC/material/E970
 ```
 
 **Exercício E971** · ★★★
@@ -431,7 +431,7 @@ Células: 4
 ```
 
 ```bash
-gcc ~/LPEDC/E971.c ~/LPEDC/0162-esparsa.c -o ~/LPEDC/E971 && ~/LPEDC/E971
+gcc ~/LPEDC/material/E971.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E971 && ~/LPEDC/material/E971
 ```
 
 ---
@@ -472,7 +472,7 @@ As paradas entram com os andares sorteados: o 23 e o 56 em 3 andares, o 12 e
 o 40 em 2, os outros só no 0. A busca pelo 47 anda no andar 2 até o 23 (o 56
 já passou), desce, anda até o 40, desce, e o próximo no andar 0 é o 47:
 
-<p align="center"><img src="0163-ideia.svg" alt="Diagrama da ideia: Skip list" width="858"></p>
+<p align="center"><img src="material/0163-ideia.svg" alt="Diagrama da ideia: Skip list" width="858"></p>
 
 O TAD fica em `skip.h` e `skip.c`. O nó e a busca:
 
@@ -545,7 +545,7 @@ int main(void) {
 O laço de dentro avança no andar, o de fora desce. O caminho verde é a busca
 do 47: uma vez no andar 2, uma no andar 1, nenhuma no andar 0:
 
-<p align="center"><img src="0163-fluxograma.svg" alt="Fluxograma: Skip list" width="1086"></p>
+<p align="center"><img src="material/0163-fluxograma.svg" alt="Fluxograma: Skip list" width="1086"></p>
 
 > [!WARNING]
 > Na remoção, o nó sai de **todos** os andares em que aparece. Se o 23 sair só
@@ -625,7 +625,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A325.c ~/LPEDC/0163-skip.c -o ~/LPEDC/A325 && ~/LPEDC/A325
+gcc ~/LPEDC/material/A325.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/A325 && ~/LPEDC/material/A325
 ```
 
 **Exemplo A326 · A agenda do barbeiro**
@@ -682,7 +682,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A326.c ~/LPEDC/0163-skip.c -o ~/LPEDC/A326 && ~/LPEDC/A326
+gcc ~/LPEDC/material/A326.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/A326 && ~/LPEDC/material/A326
 ```
 
 #### Exercícios
@@ -703,7 +703,7 @@ Códigos: maior 10000, 13 avanços (pelo andar 0 seriam 1000)
 ```
 
 ```bash
-gcc ~/LPEDC/E973.c ~/LPEDC/0163-skip.c -o ~/LPEDC/E973 && ~/LPEDC/E973
+gcc ~/LPEDC/material/E973.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E973 && ~/LPEDC/material/E973
 ```
 
 **Exercício E975** · ★★☆
@@ -734,7 +734,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E975.c ~/LPEDC/0163-skip.c -o ~/LPEDC/E975 && ~/LPEDC/E975
+gcc ~/LPEDC/material/E975.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E975 && ~/LPEDC/material/E975
 ```
 
 **Exercício E976** · ★★☆
@@ -758,7 +758,7 @@ andar 0:   5  12  18  31  40  47  56
 ```
 
 ```bash
-gcc ~/LPEDC/E976.c ~/LPEDC/0163-skip.c -o ~/LPEDC/E976 && ~/LPEDC/E976
+gcc ~/LPEDC/material/E976.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E976 && ~/LPEDC/material/E976
 ```
 
 **Exercício E977** · ★★★
@@ -795,7 +795,7 @@ roupa 1
 ```
 
 ```bash
-gcc ~/LPEDC/E977.c ~/LPEDC/0163-skip.c -o ~/LPEDC/E977 && ~/LPEDC/E977
+gcc ~/LPEDC/material/E977.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E977 && ~/LPEDC/material/E977
 ```
 
 ---
@@ -828,7 +828,7 @@ A agenda tem Ana, Bia, Caio, Duda e Edu. As ligações são para Edu, Edu, Caio,
 Edu e Edu. Na terceira, Caio é achado na quarta comparação e vai para a
 frente; Edu desce para o segundo lugar:
 
-<p align="center"><img src="0164-ideia.svg" alt="Diagrama da ideia: Listas autoajustáveis" width="858"></p>
+<p align="center"><img src="material/0164-ideia.svg" alt="Diagrama da ideia: Listas autoajustáveis" width="858"></p>
 
 O TAD (`autolista.h`, `autolista.c`) tem as três políticas e uma busca que não
 mexe em nada (`al_busca`), para comparar. Mover para a frente é a busca com
@@ -908,7 +908,7 @@ int main(void) {
 Até achar, é a busca de sempre. Depois do "Sim", o nó que não é o primeiro é
 religado no início. O verde é Caio, achado na quarta volta:
 
-<p align="center"><img src="0164-fluxograma.svg" alt="Fluxograma: Listas autoajustáveis" width="694"></p>
+<p align="center"><img src="material/0164-fluxograma.svg" alt="Fluxograma: Listas autoajustáveis" width="694"></p>
 
 > [!WARNING]
 > Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
@@ -1009,7 +1009,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A327.c ~/LPEDC/0164-autolista.c -o ~/LPEDC/A327 && ~/LPEDC/A327
+gcc ~/LPEDC/material/A327.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/A327 && ~/LPEDC/material/A327
 ```
 
 **Exemplo A328 · Quando mover para a frente atrapalha**
@@ -1073,7 +1073,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A328.c ~/LPEDC/0164-autolista.c -o ~/LPEDC/A328 && ~/LPEDC/A328
+gcc ~/LPEDC/material/A328.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/A328 && ~/LPEDC/material/A328
 ```
 
 #### Exercícios
@@ -1100,7 +1100,7 @@ Ordem final: Luar Aquarela Trem Asa Garota Ciranda
 ```
 
 ```bash
-gcc ~/LPEDC/E979.c ~/LPEDC/0164-autolista.c -o ~/LPEDC/E979 && ~/LPEDC/E979
+gcc ~/LPEDC/material/E979.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E979 && ~/LPEDC/material/E979
 ```
 
 **Exercício E981** · ★★☆
@@ -1126,7 +1126,7 @@ Total: 17
 ```
 
 ```bash
-gcc ~/LPEDC/E981.c ~/LPEDC/0164-autolista.c -o ~/LPEDC/E981 && ~/LPEDC/E981
+gcc ~/LPEDC/material/E981.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E981 && ~/LPEDC/material/E981
 ```
 
 **Exercício E982** · ★★☆
@@ -1149,7 +1149,7 @@ Ana: Ana Duda Bia Caio
 ```
 
 ```bash
-gcc ~/LPEDC/E982.c ~/LPEDC/0164-autolista.c -o ~/LPEDC/E982 && ~/LPEDC/E982
+gcc ~/LPEDC/material/E982.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E982 && ~/LPEDC/material/E982
 ```
 
 **Exercício E984** · ★★★
@@ -1173,7 +1173,7 @@ aaabbbaaa: 0 0 0 1 0 0 1 0 0 -> aaabbbaaa
 ```
 
 ```bash
-gcc ~/LPEDC/E984.c ~/LPEDC/0164-autolista.c -o ~/LPEDC/E984 && ~/LPEDC/E984
+gcc ~/LPEDC/material/E984.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E984 && ~/LPEDC/material/E984
 ```
 
 ---
@@ -1217,7 +1217,7 @@ Cada concorrente recebe as 1000 chaves duas vezes: embaralhadas e em ordem
 crescente (o catálogo exportado de uma planilha ordenada). Depois responde às
 mesmas 10 mil consultas:
 
-<p align="center"><img src="0165-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
+<p align="center"><img src="material/0165-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
 
 O programa monta as duas ordens e as buscas, e a função `mede` faz o resto:
 
@@ -1283,7 +1283,7 @@ int main(void) {
 O laço não sabe quem está medindo. Para acrescentar um concorrente, mexa no
 vetor `CONCORRENTES`, nunca no teste:
 
-<p align="center"><img src="0165-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="492"></p>
+<p align="center"><img src="material/0165-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="492"></p>
 
 A **BST** vai bem com chaves embaralhadas e desaba com a planilha ordenada:
 vira lista, com mais de 500 comparações por busca. A **AVL** não percebe a
@@ -1380,7 +1380,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A329.c ~/LPEDC/0165-bancada.c ~/LPEDC/0165-skip.c -o ~/LPEDC/A329 && ~/LPEDC/A329
+gcc ~/LPEDC/material/A329.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/A329 && ~/LPEDC/material/A329
 ```
 
 **Exemplo A330 · Um concorrente novo na bancada**
@@ -1513,7 +1513,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A330.c ~/LPEDC/0165-bancada.c ~/LPEDC/0165-skip.c -o ~/LPEDC/A330 && ~/LPEDC/A330
+gcc ~/LPEDC/material/A330.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/A330 && ~/LPEDC/material/A330
 ```
 
 #### Exercícios
@@ -1537,7 +1537,7 @@ lista MTF  média  114.6   pior 1000
 ```
 
 ```bash
-gcc ~/LPEDC/E985.c ~/LPEDC/0165-bancada.c ~/LPEDC/0165-skip.c -o ~/LPEDC/E985 && ~/LPEDC/E985
+gcc ~/LPEDC/material/E985.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/E985 && ~/LPEDC/material/E985
 ```
 
 **Exercício E987** · ★★☆
@@ -1561,7 +1561,7 @@ hash                6.4        4.7
 ```
 
 ```bash
-gcc ~/LPEDC/E987.c ~/LPEDC/0165-bancada.c ~/LPEDC/0165-skip.c -o ~/LPEDC/E987 && ~/LPEDC/E987
+gcc ~/LPEDC/material/E987.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/E987 && ~/LPEDC/material/E987
 ```
 
 **Exercício E988** · ★★☆
@@ -1585,7 +1585,7 @@ vetor               8.7        8.7
 ```
 
 ```bash
-gcc ~/LPEDC/E988.c ~/LPEDC/0165-bancada.c ~/LPEDC/0165-skip.c -o ~/LPEDC/E988 && ~/LPEDC/E988
+gcc ~/LPEDC/material/E988.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/E988 && ~/LPEDC/material/E988
 ```
 
 **Exercício E990** · ★★★
@@ -1616,7 +1616,7 @@ para raiz           6.6        7.0
 ```
 
 ```bash
-gcc ~/LPEDC/E990.c ~/LPEDC/0165-bancada.c ~/LPEDC/0165-skip.c -o ~/LPEDC/E990 && ~/LPEDC/E990
+gcc ~/LPEDC/material/E990.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/E990 && ~/LPEDC/material/E990
 ```
 
 ---
@@ -1777,7 +1777,7 @@ faixa; a skip list com um código mais simples; (c) **hash**: só pergunta
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2501.c a P2530.c, na raiz; resoluções em `_respostas/25-estruturas-extras/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2501.c a P2530.c, em `material/`; resoluções em `_respostas/25-estruturas-extras/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -1815,7 +1815,7 @@ As triplas compensam enquanto houver menos de 20 ocupadas
    menos de 20 ocupadas.
 
 ```bash
-gcc ~/LPEDC/P2501.c -o ~/LPEDC/P2501 && ~/LPEDC/P2501
+gcc ~/LPEDC/material/P2501.c -o ~/LPEDC/material/P2501 && ~/LPEDC/material/P2501
 ```
 
 ---
@@ -1855,7 +1855,7 @@ Carros: 7, horas somadas: 24
 3. Resposta esperada: 7 carros, 24 horas; o andar 2 só tem a vaga 5.
 
 ```bash
-gcc ~/LPEDC/P2502.c -o ~/LPEDC/P2502 && ~/LPEDC/P2502
+gcc ~/LPEDC/material/P2502.c -o ~/LPEDC/material/P2502 && ~/LPEDC/material/P2502
 ```
 
 ---
@@ -1888,7 +1888,7 @@ Saída esperada:
    (2, 3) é achado logo na primeira.
 
 ```bash
-gcc ~/LPEDC/P2503.c -o ~/LPEDC/P2503 && ~/LPEDC/P2503
+gcc ~/LPEDC/material/P2503.c -o ~/LPEDC/material/P2503 && ~/LPEDC/material/P2503
 ```
 
 ---
@@ -1931,7 +1931,7 @@ Células: 7 de 150
 3. Resposta esperada: Ana com 7h, Bruno sem nada; 7 células de 150.
 
 ```bash
-gcc ~/LPEDC/P2504.c -o ~/LPEDC/P2504 && ~/LPEDC/P2504
+gcc ~/LPEDC/material/P2504.c -o ~/LPEDC/material/P2504 && ~/LPEDC/material/P2504
 ```
 
 ---
@@ -1962,7 +1962,7 @@ busca 35: [a2]23 [a0]31 -> não tem
    andar 1); o 35 não existe.
 
 ```bash
-gcc ~/LPEDC/P2505.c -o ~/LPEDC/P2505 && ~/LPEDC/P2505
+gcc ~/LPEDC/material/P2505.c -o ~/LPEDC/material/P2505 && ~/LPEDC/material/P2505
 ```
 
 ---
@@ -2002,7 +2002,7 @@ Ponteiros: 2029 (2.03 por nó)
 3. Resposta esperada: 517 nós no andar 1, 2029 ponteiros (2.03 por nó).
 
 ```bash
-gcc ~/LPEDC/P2506.c -o ~/LPEDC/P2506 && ~/LPEDC/P2506
+gcc ~/LPEDC/material/P2506.c -o ~/LPEDC/material/P2506 && ~/LPEDC/material/P2506
 ```
 
 ---
@@ -2044,7 +2044,7 @@ Custo total: 24
 3. Resposta esperada: custo total 24; o segundo "fogo" custa 1.
 
 ```bash
-gcc ~/LPEDC/P2507.c -o ~/LPEDC/P2507 && ~/LPEDC/P2507
+gcc ~/LPEDC/material/P2507.c -o ~/LPEDC/material/P2507 && ~/LPEDC/material/P2507
 ```
 
 ---
@@ -2087,7 +2087,7 @@ pastel   -> pastel(4) suco(3) coxinha(1) tapioca(1) misto(0)
 3. Resposta esperada: o pastel só passa o suco no último pedido (4 a 3).
 
 ```bash
-gcc ~/LPEDC/P2508.c -o ~/LPEDC/P2508 && ~/LPEDC/P2508
+gcc ~/LPEDC/material/P2508.c -o ~/LPEDC/material/P2508 && ~/LPEDC/material/P2508
 ```
 
 ---
@@ -2130,7 +2130,7 @@ Custo total: 20
    Pizzaria Dentista.
 
 ```bash
-gcc ~/LPEDC/P2509.c -o ~/LPEDC/P2509 && ~/LPEDC/P2509
+gcc ~/LPEDC/material/P2509.c -o ~/LPEDC/material/P2509 && ~/LPEDC/material/P2509
 ```
 
 ---
@@ -2169,7 +2169,7 @@ Multiplicações: 8 (a matriz cheia faria 40)
 3. Resposta esperada: R$ 20, 39, 3 e 50; 8 multiplicações contra 40.
 
 ```bash
-gcc ~/LPEDC/P2510.c -o ~/LPEDC/P2510 && ~/LPEDC/P2510
+gcc ~/LPEDC/material/P2510.c -o ~/LPEDC/material/P2510 && ~/LPEDC/material/P2510
 ```
 
 ### ★★☆ Para pensar
@@ -2213,7 +2213,7 @@ Células: 3
 3. Resposta esperada: 3 células: p4=10, p2=8 e p9=6.
 
 ```bash
-gcc ~/LPEDC/P2511.c -o ~/LPEDC/P2511 && ~/LPEDC/P2511
+gcc ~/LPEDC/material/P2511.c -o ~/LPEDC/material/P2511 && ~/LPEDC/material/P2511
 ```
 
 ---
@@ -2257,7 +2257,7 @@ Duda e Gabi: (0 em comum)
    amigo nenhum.
 
 ```bash
-gcc ~/LPEDC/P2512.c -o ~/LPEDC/P2512 && ~/LPEDC/P2512
+gcc ~/LPEDC/material/P2512.c -o ~/LPEDC/material/P2512 && ~/LPEDC/material/P2512
 ```
 
 ---
@@ -2293,7 +2293,7 @@ remove 5: removida
    andar 0 fica 12 18 31 40 47 60.
 
 ```bash
-gcc ~/LPEDC/P2513.c -o ~/LPEDC/P2513 && ~/LPEDC/P2513
+gcc ~/LPEDC/material/P2513.c -o ~/LPEDC/material/P2513 && ~/LPEDC/material/P2513
 ```
 
 ---
@@ -2322,7 +2322,7 @@ Lista simples: 2001000 comparações, média 1000.5, pior 2000
    1000.5 e pior 2000 na lista simples.
 
 ```bash
-gcc ~/LPEDC/P2514.c -o ~/LPEDC/P2514 && ~/LPEDC/P2514
+gcc ~/LPEDC/material/P2514.c -o ~/LPEDC/material/P2514 && ~/LPEDC/material/P2514
 ```
 
 ---
@@ -2365,7 +2365,7 @@ km 35: não tem, 2 avanço(s)
    sai com 1 avanço.
 
 ```bash
-gcc ~/LPEDC/P2515.c -o ~/LPEDC/P2515 && ~/LPEDC/P2515
+gcc ~/LPEDC/material/P2515.c -o ~/LPEDC/material/P2515 && ~/LPEDC/material/P2515
 ```
 
 ---
@@ -2401,7 +2401,7 @@ Mover para a frente: 39
    Sleator e o Tarjan provaram: nunca passa do dobro).
 
 ```bash
-gcc ~/LPEDC/P2516.c -o ~/LPEDC/P2516 && ~/LPEDC/P2516
+gcc ~/LPEDC/material/P2516.c -o ~/LPEDC/material/P2516 && ~/LPEDC/material/P2516
 ```
 
 ---
@@ -2443,7 +2443,7 @@ capacidade  LRU  FIFO
    todos cabem e os dois dão 11 (16 pedidos - 5 primeiras entradas).
 
 ```bash
-gcc ~/LPEDC/P2517.c -o ~/LPEDC/P2517 && ~/LPEDC/P2517
+gcc ~/LPEDC/material/P2517.c -o ~/LPEDC/material/P2517 && ~/LPEDC/material/P2517
 ```
 
 ---
@@ -2486,7 +2486,7 @@ Dona Rosa: Clínica Avó Dona Rosa Banco
    frente e a última linha fica Clínica Avó Dona Rosa Banco.
 
 ```bash
-gcc ~/LPEDC/P2518.c -o ~/LPEDC/P2518 && ~/LPEDC/P2518
+gcc ~/LPEDC/material/P2518.c -o ~/LPEDC/material/P2518 && ~/LPEDC/material/P2518
 ```
 
 ---
@@ -2529,7 +2529,7 @@ por disciplina: (0,1,6) (0,3,4) (1,0,7) (1,2,10) (2,3,8) (3,0,9) (3,1,8) (4,1,5)
    4; o resultado começa com (0,1,6) (0,3,4).
 
 ```bash
-gcc ~/LPEDC/P2519.c -o ~/LPEDC/P2519 && ~/LPEDC/P2519
+gcc ~/LPEDC/material/P2519.c -o ~/LPEDC/material/P2519 && ~/LPEDC/material/P2519
 ```
 
 ---
@@ -2575,7 +2575,7 @@ Custo total: 24
    na frente.
 
 ```bash
-gcc ~/LPEDC/P2520.c -o ~/LPEDC/P2520 && ~/LPEDC/P2520
+gcc ~/LPEDC/material/P2520.c -o ~/LPEDC/material/P2520 && ~/LPEDC/material/P2520
 ```
 
 ### ★★★ Desafio
@@ -2627,7 +2627,7 @@ Acertos: 2 de 10
    iguais aos da versão simples.
 
 ```bash
-gcc ~/LPEDC/P2521.c -o ~/LPEDC/P2521 && ~/LPEDC/P2521
+gcc ~/LPEDC/material/P2521.c -o ~/LPEDC/material/P2521 && ~/LPEDC/material/P2521
 ```
 
 ---
@@ -2667,7 +2667,7 @@ média 5.13, pior 7
 3. Resposta esperada: o andar 3 só tem o 80; média 5.13, pior 7.
 
 ```bash
-gcc ~/LPEDC/P2522.c -o ~/LPEDC/P2522 && ~/LPEDC/P2522
+gcc ~/LPEDC/material/P2522.c -o ~/LPEDC/material/P2522 && ~/LPEDC/material/P2522
 ```
 
 ---
@@ -2719,7 +2719,7 @@ geração 400 (5 vivas): (100,101) (101,102) (102,100) (102,101) (102,102)
    células.
 
 ```bash
-gcc ~/LPEDC/P2523.c -o ~/LPEDC/P2523 && ~/LPEDC/P2523
+gcc ~/LPEDC/material/P2523.c -o ~/LPEDC/material/P2523 && ~/LPEDC/material/P2523
 ```
 
 ---
@@ -2762,7 +2762,7 @@ aaaabbbbaaaabbbb -> 0 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0
    quase só zeros, com um 1 em cada troca de letra.
 
 ```bash
-gcc ~/LPEDC/P2524.c -o ~/LPEDC/P2524 && ~/LPEDC/P2524
+gcc ~/LPEDC/material/P2524.c -o ~/LPEDC/material/P2524 && ~/LPEDC/material/P2524
 ```
 
 ---
@@ -2818,7 +2818,7 @@ quadros  LRU  relógio
    2 e LRU 4.
 
 ```bash
-gcc ~/LPEDC/P2525.c -o ~/LPEDC/P2525 && ~/LPEDC/P2525
+gcc ~/LPEDC/material/P2525.c -o ~/LPEDC/material/P2525 && ~/LPEDC/material/P2525
 ```
 
 ---
@@ -2854,7 +2854,7 @@ memória devolvida
    free(x); x = seguinte; e o programa termina com "memória devolvida".
 
 ```bash
-gcc ~/LPEDC/P2526.c -o ~/LPEDC/P2526 && ~/LPEDC/P2526
+gcc ~/LPEDC/material/P2526.c -o ~/LPEDC/material/P2526 && ~/LPEDC/material/P2526
 ```
 
 ---
@@ -2906,7 +2906,7 @@ Baldes no fim:
    para a frente; no fim, i e j abrem os seus baldes.
 
 ```bash
-gcc ~/LPEDC/P2527.c -o ~/LPEDC/P2527 && ~/LPEDC/P2527
+gcc ~/LPEDC/material/P2527.c -o ~/LPEDC/material/P2527 && ~/LPEDC/material/P2527
 ```
 
 ---
@@ -2951,7 +2951,7 @@ Triplas que ficaram: 5
    loja 1 perde o dia 7 (80 - 80 = 0).
 
 ```bash
-gcc ~/LPEDC/P2528.c -o ~/LPEDC/P2528 && ~/LPEDC/P2528
+gcc ~/LPEDC/material/P2528.c -o ~/LPEDC/material/P2528 && ~/LPEDC/material/P2528
 ```
 
 ---
@@ -2992,7 +2992,7 @@ Agenda: 08:00 09:00 10:15 13:00 14:30 16:00
    foi desmarcado); a agenda final é 08:00 09:00 10:15 13:00 14:30 16:00.
 
 ```bash
-gcc ~/LPEDC/P2529.c -o ~/LPEDC/P2529 && ~/LPEDC/P2529
+gcc ~/LPEDC/material/P2529.c -o ~/LPEDC/material/P2529 && ~/LPEDC/material/P2529
 ```
 
 ---
@@ -3032,7 +3032,7 @@ Ordem ótima: 0 1 2 3 4 5 6 7 9 8
    lista na hora, mas paga por jogar na frente até remédio raro.
 
 ```bash
-gcc ~/LPEDC/P2530.c -o ~/LPEDC/P2530 && ~/LPEDC/P2530
+gcc ~/LPEDC/material/P2530.c -o ~/LPEDC/material/P2530 && ~/LPEDC/material/P2530
 ```
 
 ## Questões no estilo da prova

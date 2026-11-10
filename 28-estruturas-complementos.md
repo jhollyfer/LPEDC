@@ -51,7 +51,7 @@ mostra só o pedaço do `.c` que importa. Compile junto os `.c` de apoio da
 pasta, como `vermelhopreto.c`:
 
 ```bash
-gcc ~/LPEDC/A353.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/A353 -lm && ~/LPEDC/A353
+gcc ~/LPEDC/material/A353.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/A353 -lm && ~/LPEDC/material/A353
 ```
 
 As convenções são as do Cormen: **altura conta arestas** (folha tem altura 0,
@@ -110,7 +110,7 @@ volta, `x->chave != chave`, em vez de dois.
 Chegam as fichas 12, 25 e 7. A 25 desiste e sai. A busca pela 40, que não
 existe, para na sentinela (o nó cinza do desenho, sem valor):
 
-<p align="center"><img src="0174-ideia.svg" alt="Diagrama da ideia: Lista com sentinela" width="858"></p>
+<p align="center"><img src="material/0174-ideia.svg" alt="Diagrama da ideia: Lista com sentinela" width="858"></p>
 
 No `sentinela.h`, a sentinela fica **dentro** da struct da lista, e o `n`
 conta só os nós reais. As três funções centrais do `sentinela.c`:
@@ -191,7 +191,7 @@ int main(void) {
 No fluxograma, a busca da ficha 40 passa pelo 12 e pelo 7 e para na
 sentinela, que guarda 40. "Parou na sentinela?" separa "achou" de "não está":
 
-<p align="center"><img src="0174-fluxograma.svg" alt="Fluxograma: Lista com sentinela" width="543"></p>
+<p align="center"><img src="material/0174-fluxograma.svg" alt="Fluxograma: Lista com sentinela" width="543"></p>
 
 > [!WARNING]
 > A sentinela **não é um dado**. Todo laço para quando volta a ela (`x !=
@@ -264,7 +264,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A347.c ~/LPEDC/0174-sentinela.c -o ~/LPEDC/A347 && ~/LPEDC/A347
+gcc ~/LPEDC/material/A347.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/A347 && ~/LPEDC/material/A347
 ```
 
 **Exemplo A348 · Juntar duas filas em O(1)**
@@ -339,7 +339,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A348.c ~/LPEDC/0174-sentinela.c -o ~/LPEDC/A348 && ~/LPEDC/A348
+gcc ~/LPEDC/material/A348.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/A348 && ~/LPEDC/material/A348
 ```
 
 #### Exercícios
@@ -359,7 +359,7 @@ Total: R$ 49.64
 ```
 
 ```bash
-gcc ~/LPEDC/E1039.c ~/LPEDC/0174-sentinela.c -o ~/LPEDC/E1039 && ~/LPEDC/E1039
+gcc ~/LPEDC/material/E1039.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1039 && ~/LPEDC/material/E1039
 ```
 
 **Exercício E1041** · ★★☆
@@ -382,7 +382,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E1041.c ~/LPEDC/0174-sentinela.c -o ~/LPEDC/E1041 && ~/LPEDC/E1041
+gcc ~/LPEDC/material/E1041.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1041 && ~/LPEDC/material/E1041
 ```
 
 **Exercício E1042** · ★★☆
@@ -401,7 +401,7 @@ Removidos 0 do código 8: [ 7 9 5 ]
 ```
 
 ```bash
-gcc ~/LPEDC/E1042.c ~/LPEDC/0174-sentinela.c -o ~/LPEDC/E1042 && ~/LPEDC/E1042
+gcc ~/LPEDC/material/E1042.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1042 && ~/LPEDC/material/E1042
 ```
 
 **Exercício E1044** · ★★★
@@ -422,7 +422,7 @@ vazia invertida: [ ]
 ```
 
 ```bash
-gcc ~/LPEDC/E1044.c ~/LPEDC/0174-sentinela.c -o ~/LPEDC/E1044 && ~/LPEDC/E1044
+gcc ~/LPEDC/material/E1044.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1044 && ~/LPEDC/material/E1044
 ```
 
 ---
@@ -465,7 +465,7 @@ esquerda, 9h20. O das 7h30 é caso 2: ela é filha direita do 7h00, que é filho
 direito do 6h15, que é filho **esquerdo** do 8h00, a resposta. No desenho, os
 números ao lado de cada nó são a profundidade e a altura:
 
-<p align="center"><img src="0175-ideia.svg" alt="Diagrama da ideia: Conceitos e sucessor" width="858"></p>
+<p align="center"><img src="material/0175-ideia.svg" alt="Diagrama da ideia: Conceitos e sucessor" width="858"></p>
 
 No `arvpai.c`, a inserção é a iterativa do Cormen (desce lembrando o pai).
 O sucessor:
@@ -539,7 +539,7 @@ O fluxograma segue o sucessor das 7h30: sem filho direito, vai ao caso 2 e
 sobe duas vezes, sempre vindo da direita. Na terceira, o 6h15 é filho esquerdo
 do 8h00: o laço para:
 
-<p align="center"><img src="0175-fluxograma.svg" alt="Fluxograma: Conceitos e sucessor" width="746"></p>
+<p align="center"><img src="material/0175-fluxograma.svg" alt="Fluxograma: Conceitos e sucessor" width="746"></p>
 
 > [!WARNING]
 > Trocar o lado na subida (`x == y->esq` no lugar de `x == y->dir`) faz o
@@ -615,7 +615,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A349.c ~/LPEDC/0175-arvpai.c -o ~/LPEDC/A349 && ~/LPEDC/A349
+gcc ~/LPEDC/material/A349.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/A349 && ~/LPEDC/material/A349
 ```
 
 **Exemplo A350 · O próximo ônibus a partir de agora**
@@ -693,7 +693,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A350.c ~/LPEDC/0175-arvpai.c -o ~/LPEDC/A350 && ~/LPEDC/A350
+gcc ~/LPEDC/material/A350.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/A350 && ~/LPEDC/material/A350
 ```
 
 #### Exercícios
@@ -716,7 +716,7 @@ grau da árvore: 2 | folhas: 5
 ```
 
 ```bash
-gcc ~/LPEDC/E1045.c ~/LPEDC/0175-arvpai.c -o ~/LPEDC/E1045 && ~/LPEDC/E1045
+gcc ~/LPEDC/material/E1045.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1045 && ~/LPEDC/material/E1045
 ```
 
 **Exercício E1047** · ★★☆
@@ -735,7 +735,7 @@ Vizinhos de 12.90: 9.90 e 18.90
 ```
 
 ```bash
-gcc ~/LPEDC/E1047.c ~/LPEDC/0175-arvpai.c -o ~/LPEDC/E1047 && ~/LPEDC/E1047
+gcc ~/LPEDC/material/E1047.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1047 && ~/LPEDC/material/E1047
 ```
 
 **Exercício E1048** · ★★☆
@@ -764,7 +764,7 @@ iguais ao ap_sucessor: 10 de 10
 ```
 
 ```bash
-gcc ~/LPEDC/E1048.c ~/LPEDC/0175-arvpai.c -o ~/LPEDC/E1048 && ~/LPEDC/E1048
+gcc ~/LPEDC/material/E1048.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1048 && ~/LPEDC/material/E1048
 ```
 
 **Exercício E1050** · ★★★
@@ -787,7 +787,7 @@ crescente: não é AVL. Desequilibrados: 1 (fator -4) 2 (fator -3) 3 (fator -2)
 ```
 
 ```bash
-gcc ~/LPEDC/E1050.c ~/LPEDC/0175-arvpai.c -o ~/LPEDC/E1050 && ~/LPEDC/E1050
+gcc ~/LPEDC/material/E1050.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1050 && ~/LPEDC/material/E1050
 ```
 
 ---
@@ -823,7 +823,7 @@ subárvore do 28 cai de altura 2 para 1, e a raiz 20 desequilibra: rotação
 simples, e o 12 vira a raiz. No desenho, a árvore antes, o conserto no 28 e o
 fim:
 
-<p align="center"><img src="0176-ideia.svg" alt="Diagrama da ideia: AVL: remoção" width="887"></p>
+<p align="center"><img src="material/0176-ideia.svg" alt="Diagrama da ideia: AVL: remoção" width="887"></p>
 
 A remoção do `avlrem.c`, com o `rebalanceia` das duas operações:
 
@@ -909,7 +909,7 @@ O fluxograma mostra o `rebalanceia` no 28 (fator 2, filho 25 com fator -1:
 duas rotações). No 20, pega o outro ramo: filho 12 com fator 1, só a rotação
 à direita:
 
-<p align="center"><img src="0176-fluxograma.svg" alt="Fluxograma: AVL: remoção" width="659"></p>
+<p align="center"><img src="material/0176-fluxograma.svg" alt="Fluxograma: AVL: remoção" width="659"></p>
 
 ### Passo a passo
 
@@ -982,7 +982,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A351.c ~/LPEDC/0176-avlrem.c -o ~/LPEDC/A351 && ~/LPEDC/A351
+gcc ~/LPEDC/material/A351.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/A351 && ~/LPEDC/material/A351
 ```
 
 **Exemplo A352 · Fator 0 no filho: o caso que só a remoção tem**
@@ -1027,7 +1027,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A352.c ~/LPEDC/0176-avlrem.c -o ~/LPEDC/A352 && ~/LPEDC/A352
+gcc ~/LPEDC/material/A352.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/A352 && ~/LPEDC/material/A352
 ```
 
 #### Exercícios
@@ -1050,7 +1050,7 @@ tira 60: pré 25 10 5 1 15 50 30 27 55 | altura 3 | rotações 0
 ```
 
 ```bash
-gcc ~/LPEDC/E1051.c ~/LPEDC/0176-avlrem.c -o ~/LPEDC/E1051 && ~/LPEDC/E1051
+gcc ~/LPEDC/material/E1051.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1051 && ~/LPEDC/material/E1051
 ```
 
 **Exercício E1053** · ★★☆
@@ -1070,7 +1070,7 @@ Altura no começo: 4 | rotações para esvaziar: 7
 ```
 
 ```bash
-gcc ~/LPEDC/E1053.c ~/LPEDC/0176-avlrem.c -o ~/LPEDC/E1053 && ~/LPEDC/E1053
+gcc ~/LPEDC/material/E1053.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1053 && ~/LPEDC/material/E1053
 ```
 
 **Exercício E1054** · ★★☆
@@ -1093,7 +1093,7 @@ altura final: 2
 ```
 
 ```bash
-gcc ~/LPEDC/E1054.c ~/LPEDC/0176-avlrem.c -o ~/LPEDC/E1054 && ~/LPEDC/E1054
+gcc ~/LPEDC/material/E1054.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1054 && ~/LPEDC/material/E1054
 ```
 
 **Exercício E1056** · ★★★
@@ -1121,7 +1121,7 @@ altura 9: 143 nós | rotações 4 | altura depois 8
 ```
 
 ```bash
-gcc ~/LPEDC/E1056.c ~/LPEDC/0176-avlrem.c -o ~/LPEDC/E1056 && ~/LPEDC/E1056
+gcc ~/LPEDC/material/E1056.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1056 && ~/LPEDC/material/E1056
 ```
 
 ---
@@ -1170,7 +1170,7 @@ O 25 forma um triângulo com o 20 e o 30 (casos 2 e 3). O 40 tem tio vermelho, e
 o 45 fica em linha com o 40 e o 30 (caso 3, espelho). No desenho, o antes e o
 depois de cada caso:
 
-<p align="center"><img src="0177-ideia.svg" alt="Diagrama da ideia: Rubro-negra clássica" width="858"></p>
+<p align="center"><img src="material/0177-ideia.svg" alt="Diagrama da ideia: Rubro-negra clássica" width="858"></p>
 
 No `vermelhopreto.h`, a sentinela fica dentro da struct da árvore, e o
 `T->casos` conta cada caso. O conserto, no `vermelhopreto.c` (pai filho
@@ -1247,7 +1247,7 @@ int main(void) {
 O fluxograma é o conserto do pacote 25: tio preto (a sentinela), `z` em
 triângulo. Caso 2 e caso 3 na mesma volta, e o laço termina:
 
-<p align="center"><img src="0177-fluxograma.svg" alt="Fluxograma: Rubro-negra clássica" width="762"></p>
+<p align="center"><img src="material/0177-fluxograma.svg" alt="Fluxograma: Rubro-negra clássica" width="762"></p>
 
 ### Passo a passo
 
@@ -1323,7 +1323,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A353.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/A353 -lm && ~/LPEDC/A353
+gcc ~/LPEDC/material/A353.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/A353 -lm && ~/LPEDC/material/A353
 ```
 
 **Exemplo A354 · Quantas vezes cada caso aparece**
@@ -1370,7 +1370,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A354.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/A354 && ~/LPEDC/A354
+gcc ~/LPEDC/material/A354.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/A354 && ~/LPEDC/material/A354
 ```
 
 #### Exercícios
@@ -1390,7 +1390,7 @@ vermelhos: 2 | pretos: 8 | altura negra: 3
 ```
 
 ```bash
-gcc ~/LPEDC/E1057.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/E1057 && ~/LPEDC/E1057
+gcc ~/LPEDC/material/E1057.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1057 && ~/LPEDC/material/E1057
 ```
 
 **Exercício E1059** · ★★☆
@@ -1419,7 +1419,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E1059.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/E1059 && ~/LPEDC/E1059
+gcc ~/LPEDC/material/E1059.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1059 && ~/LPEDC/material/E1059
 ```
 
 **Exercício E1060** · ★★☆
@@ -1444,7 +1444,7 @@ rotações no total: 3
 ```
 
 ```bash
-gcc ~/LPEDC/E1060.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/E1060 && ~/LPEDC/E1060
+gcc ~/LPEDC/material/E1060.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1060 && ~/LPEDC/material/E1060
 ```
 
 **Exercício E1061** · ★★★
@@ -1473,7 +1473,7 @@ fiscal: as cinco propriedades valem
 ```
 
 ```bash
-gcc ~/LPEDC/E1061.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/E1061 && ~/LPEDC/E1061
+gcc ~/LPEDC/material/E1061.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1061 && ~/LPEDC/material/E1061
 ```
 
 ---
@@ -1517,7 +1517,7 @@ descarta os 32 de cima.
 Os dez fardos passam por divisão por 16, divisão por 13 (primo) e
 multiplicação com m = 16 (p = 4). No desenho, a conta do fardo 48:
 
-<p align="center"><img src="0178-ideia.svg" alt="Diagrama da ideia: Hash: divisão e multiplicação" width="858"></p>
+<p align="center"><img src="material/0178-ideia.svg" alt="Diagrama da ideia: Hash: divisão e multiplicação" width="858"></p>
 
 No `espalha.c`, as duas multiplicações:
 
@@ -1576,7 +1576,7 @@ O fluxograma faz a conta do fardo 48: confere o `p` (deslocar 32 bits ou mais
 é indefinido), multiplica, deixa o `uint32_t` cortar e desloca. Nenhuma
 divisão:
 
-<p align="center"><img src="0178-fluxograma.svg" alt="Fluxograma: Hash: divisão e multiplicação" width="560"></p>
+<p align="center"><img src="material/0178-fluxograma.svg" alt="Fluxograma: Hash: divisão e multiplicação" width="560"></p>
 
 > [!WARNING]
 > O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura, e
@@ -1632,7 +1632,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A355.c ~/LPEDC/0178-espalha.c -o ~/LPEDC/A355 -lm && ~/LPEDC/A355
+gcc ~/LPEDC/material/A355.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/A355 -lm && ~/LPEDC/material/A355
 ```
 
 **Exemplo A356 · Multiplicação com double e com deslocamento**
@@ -1699,7 +1699,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A356.c ~/LPEDC/0178-espalha.c -o ~/LPEDC/A356 -lm && ~/LPEDC/A356
+gcc ~/LPEDC/material/A356.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/A356 -lm && ~/LPEDC/material/A356
 ```
 
 #### Exercícios
@@ -1724,7 +1724,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E1063.c ~/LPEDC/0178-espalha.c -o ~/LPEDC/E1063 -lm && ~/LPEDC/E1063
+gcc ~/LPEDC/material/E1063.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1063 -lm && ~/LPEDC/material/E1063
 ```
 
 **Exercício E1065** · ★★☆
@@ -1744,7 +1744,7 @@ multiplicação, m = 64: 64 baldes usados, o mais cheio com 17
 ```
 
 ```bash
-gcc ~/LPEDC/E1065.c ~/LPEDC/0178-espalha.c -o ~/LPEDC/E1065 -lm && ~/LPEDC/E1065
+gcc ~/LPEDC/material/E1065.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1065 -lm && ~/LPEDC/material/E1065
 ```
 
 **Exercício E1066** · ★★☆
@@ -1766,7 +1766,7 @@ n = 100, alfa = 2: alvo 50 -> m = 53 (a 11 da potência de 2 mais perto)
 ```
 
 ```bash
-gcc ~/LPEDC/E1066.c ~/LPEDC/0178-espalha.c -o ~/LPEDC/E1066 -lm && ~/LPEDC/E1066
+gcc ~/LPEDC/material/E1066.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1066 -lm && ~/LPEDC/material/E1066
 ```
 
 **Exercício E1068** · ★★★
@@ -1792,7 +1792,7 @@ fim: n = 100, m = 128, fator de carga 0.78, maior lista 2
 ```
 
 ```bash
-gcc ~/LPEDC/E1068.c ~/LPEDC/0178-espalha.c -o ~/LPEDC/E1068 -lm && ~/LPEDC/E1068
+gcc ~/LPEDC/material/E1068.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1068 -lm && ~/LPEDC/material/E1068
 ```
 
 ---
@@ -1834,7 +1834,7 @@ lápide; a inserção pode reaproveitá-la.
 Os cinco cartões entram nas três tabelas. No desenho, as posições que a
 busca do 57 olha:
 
-<p align="center"><img src="0179-ideia.svg" alt="Diagrama da ideia: Sondagem quadrática e dupla" width="858"></p>
+<p align="center"><img src="material/0179-ideia.svg" alt="Diagrama da ideia: Sondagem quadrática e dupla" width="858"></p>
 
 A sequência de sondagem do `sondagem.c` (modo escolhido na criação):
 
@@ -1908,7 +1908,7 @@ diferente.
 O fluxograma é a inserção do 57 na dupla: o 5 está ocupado, `i` vira 1, e
 `(5 + 10) % 13 = 2` está livre:
 
-<p align="center"><img src="0179-fluxograma.svg" alt="Fluxograma: Sondagem quadrática e dupla" width="422"></p>
+<p align="center"><img src="material/0179-fluxograma.svg" alt="Fluxograma: Sondagem quadrática e dupla" width="422"></p>
 
 > [!WARNING]
 > O passo `h₂(k)` **não pode ser 0** nem ter fator comum com `m`: com `m = 12`
@@ -1975,7 +1975,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A357.c ~/LPEDC/0179-sondagem.c -o ~/LPEDC/A357 && ~/LPEDC/A357
+gcc ~/LPEDC/material/A357.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/A357 && ~/LPEDC/material/A357
 ```
 
 **Exemplo A358 · Lápides que se acumulam**
@@ -2048,7 +2048,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A358.c ~/LPEDC/0179-sondagem.c -o ~/LPEDC/A358 && ~/LPEDC/A358
+gcc ~/LPEDC/material/A358.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/A358 && ~/LPEDC/material/A358
 ```
 
 #### Exercícios
@@ -2074,7 +2074,7 @@ chave 57
 ```
 
 ```bash
-gcc ~/LPEDC/E1069.c ~/LPEDC/0179-sondagem.c -o ~/LPEDC/E1069 && ~/LPEDC/E1069
+gcc ~/LPEDC/material/E1069.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1069 && ~/LPEDC/material/E1069
 ```
 
 **Exercício E1071** · ★★☆
@@ -2099,7 +2099,7 @@ tabela: . . . 3 . . 19 . 35 . 51 . 67 . 83 .
 ```
 
 ```bash
-gcc ~/LPEDC/E1071.c ~/LPEDC/0179-sondagem.c -o ~/LPEDC/E1071 && ~/LPEDC/E1071
+gcc ~/LPEDC/material/E1071.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1071 && ~/LPEDC/material/E1071
 ```
 
 **Exercício E1072** · ★★☆
@@ -2126,7 +2126,7 @@ carga 0.57 e a chave 28 ficou de fora
 ```
 
 ```bash
-gcc ~/LPEDC/E1072.c ~/LPEDC/0179-sondagem.c -o ~/LPEDC/E1072 && ~/LPEDC/E1072
+gcc ~/LPEDC/material/E1072.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1072 && ~/LPEDC/material/E1072
 ```
 
 **Exercício E1074** · ★★★
@@ -2150,7 +2150,7 @@ fim: n = 40, m = 163, carga 0.25, média de sondagens 1.38
 ```
 
 ```bash
-gcc ~/LPEDC/E1074.c ~/LPEDC/0179-sondagem.c -o ~/LPEDC/E1074 && ~/LPEDC/E1074
+gcc ~/LPEDC/material/E1074.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1074 && ~/LPEDC/material/E1074
 ```
 
 ---
@@ -2199,7 +2199,7 @@ A chamada (Ana 7, Bruno 5, Carla 9, Diego 5, Elisa 7, Fabio 3, Gabi 9, Hugo 5)
 já está em ordem de nome, então uma passada **estável** pela nota entrega a
 chave composta (nota, nome):
 
-<p align="center"><img src="0180-ideia.svg" alt="Diagrama da ideia: Pigeonhole e chave composta" width="858"></p>
+<p align="center"><img src="material/0180-ideia.svg" alt="Diagrama da ideia: Pigeonhole e chave composta" width="858"></p>
 
 No `pombal.h`, a casa é uma fila de **índices**, montada com três vetores
 (`primeiro`, `ultimo` e `prox`), sem `malloc` por aluno. As duas passadas, no
@@ -2262,7 +2262,7 @@ Na seleção, a Elisa passou na frente da Ana: na primeira volta, o Fabio
 O fluxograma tem as duas passadas, sem comparação entre alunos: a primeira
 põe cada um na sua casa; a segunda esvazia as 11 casas em ordem:
 
-<p align="center"><img src="0180-fluxograma.svg" alt="Fluxograma: Pigeonhole e chave composta" width="570"></p>
+<p align="center"><img src="material/0180-fluxograma.svg" alt="Fluxograma: Pigeonhole e chave composta" width="570"></p>
 
 > [!WARNING]
 > Nas passadas em sequência, a ordem é **da menos importante para a mais
@@ -2339,7 +2339,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A359.c ~/LPEDC/0180-pombal.c -o ~/LPEDC/A359 && ~/LPEDC/A359
+gcc ~/LPEDC/material/A359.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/A359 && ~/LPEDC/material/A359
 ```
 
 **Exemplo A360 · Duas passadas estáveis viram uma chave composta**
@@ -2417,7 +2417,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A360.c ~/LPEDC/0180-pombal.c -o ~/LPEDC/A360 && ~/LPEDC/A360
+gcc ~/LPEDC/material/A360.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/A360 && ~/LPEDC/material/A360
 ```
 
 #### Exercícios
@@ -2439,7 +2439,7 @@ casas usadas: 6 de 8
 ```
 
 ```bash
-gcc ~/LPEDC/E1075.c ~/LPEDC/0180-pombal.c -o ~/LPEDC/E1075 && ~/LPEDC/E1075
+gcc ~/LPEDC/material/E1075.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1075 && ~/LPEDC/material/E1075
 ```
 
 **Exercício E1077** · ★★☆
@@ -2460,7 +2460,7 @@ pigeonhole: estável     | a3(2) a7(2) a0(4) a2(4) a5(4) a6(6) a9(6) a1(8) a4(8)
 ```
 
 ```bash
-gcc ~/LPEDC/E1077.c ~/LPEDC/0180-pombal.c -o ~/LPEDC/E1077 && ~/LPEDC/E1077
+gcc ~/LPEDC/material/E1077.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1077 && ~/LPEDC/material/E1077
 ```
 
 **Exercício E1078** · ★★☆
@@ -2486,7 +2486,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E1078.c ~/LPEDC/0180-pombal.c -o ~/LPEDC/E1078 && ~/LPEDC/E1078
+gcc ~/LPEDC/material/E1078.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1078 && ~/LPEDC/material/E1078
 ```
 
 **Exercício E1079** · ★★★
@@ -2508,7 +2508,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/E1079.c ~/LPEDC/0180-pombal.c -o ~/LPEDC/E1079 && ~/LPEDC/E1079
+gcc ~/LPEDC/material/E1079.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1079 && ~/LPEDC/material/E1079
 ```
 
 ---
@@ -2539,7 +2539,7 @@ Cinco pacientes se cadastram. Carla marca às 8h00, Ana às 9h00, Bruno às
 10h30. Diego quer as 9h00 e vai para a espera; Elisa também. Ana desmarca, e
 Diego assume. No desenho, as estruturas depois disso:
 
-<p align="center"><img src="0181-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="material/0181-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O `agenda.c` reúne as três implementações (com `static`). A operação que as
 junta é o cancelamento:
@@ -2620,7 +2620,7 @@ int main(void) {
 O fluxograma segue o cancelamento das 9h00: a Ana fica sem horário e, como a
 fila não está vazia, o Diego assume e sai dela:
 
-<p align="center"><img src="0181-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="630"></p>
+<p align="center"><img src="material/0181-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="630"></p>
 
 > [!WARNING]
 > Quando duas estruturas guardam a mesma informação, elas mudam **juntas**.
@@ -2689,7 +2689,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A361.c ~/LPEDC/0181-agenda.c -o ~/LPEDC/A361 && ~/LPEDC/A361
+gcc ~/LPEDC/material/A361.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/A361 && ~/LPEDC/material/A361
 ```
 
 **Exemplo A362 · Encaixes ao longo do dia**
@@ -2761,7 +2761,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/A362.c ~/LPEDC/0181-agenda.c -o ~/LPEDC/A362 && ~/LPEDC/A362
+gcc ~/LPEDC/material/A362.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/A362 && ~/LPEDC/material/A362
 ```
 
 #### Exercícios
@@ -2785,7 +2785,7 @@ CPF 301000005: não cadastrado
 ```
 
 ```bash
-gcc ~/LPEDC/E1081.c ~/LPEDC/0181-agenda.c -o ~/LPEDC/E1081 && ~/LPEDC/E1081
+gcc ~/LPEDC/material/E1081.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/E1081 && ~/LPEDC/material/E1081
 ```
 
 **Exercício E1083** · ★★☆
@@ -2805,7 +2805,7 @@ noite (3): 18:30 19:45 21:00
 ```
 
 ```bash
-gcc ~/LPEDC/E1083.c ~/LPEDC/0181-agenda.c -o ~/LPEDC/E1083 && ~/LPEDC/E1083
+gcc ~/LPEDC/material/E1083.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/E1083 && ~/LPEDC/material/E1083
 ```
 
 **Exercício E1084** · ★★☆
@@ -2832,7 +2832,7 @@ Espera: (ninguém)
 ```
 
 ```bash
-gcc ~/LPEDC/E1084.c ~/LPEDC/0181-agenda.c -o ~/LPEDC/E1084 && ~/LPEDC/E1084
+gcc ~/LPEDC/material/E1084.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/E1084 && ~/LPEDC/material/E1084
 ```
 
 **Exercício E1085** · ★★★
@@ -2859,7 +2859,7 @@ Beto* Dora* Enzo* Ana Caio Fabi
 ```
 
 ```bash
-gcc ~/LPEDC/E1085.c ~/LPEDC/0181-agenda.c -o ~/LPEDC/E1085 && ~/LPEDC/E1085
+gcc ~/LPEDC/material/E1085.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/E1085 && ~/LPEDC/material/E1085
 ```
 
 ---
@@ -3027,7 +3027,7 @@ O(1) + a marcação do primeiro da fila. Intervalo: **O(log c + k)**.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2801.c a P2830.c, na raiz; resoluções em `_respostas/28-estruturas-complementos/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2801.c a P2830.c, em `material/`; resoluções em `_respostas/28-estruturas-complementos/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3056,7 +3056,7 @@ vazia: nil aponta para ela mesma? sim
    &L->nil.
 
 ```bash
-gcc ~/LPEDC/P2801.c -o ~/LPEDC/P2801 && ~/LPEDC/P2801
+gcc ~/LPEDC/material/P2801.c -o ~/LPEDC/material/P2801 && ~/LPEDC/material/P2801
 ```
 
 ---
@@ -3085,7 +3085,7 @@ Saída esperada:
 3. Para 99, o laço passa pelos 6 nós e para na sentinela: 7 comparações.
 
 ```bash
-gcc ~/LPEDC/P2802.c -o ~/LPEDC/P2802 && ~/LPEDC/P2802
+gcc ~/LPEDC/material/P2802.c -o ~/LPEDC/material/P2802 && ~/LPEDC/material/P2802
 ```
 
 ---
@@ -3110,7 +3110,7 @@ grau da árvore: 2 | folhas: 5
 2. Folha é o nó de grau 0. Percorra em ordem e conte.
 
 ```bash
-gcc ~/LPEDC/P2803.c -o ~/LPEDC/P2803 && ~/LPEDC/P2803
+gcc ~/LPEDC/material/P2803.c -o ~/LPEDC/material/P2803 && ~/LPEDC/material/P2803
 ```
 
 ---
@@ -3140,7 +3140,7 @@ altura: 3
    profundidade certa.
 
 ```bash
-gcc ~/LPEDC/P2804.c -o ~/LPEDC/P2804 && ~/LPEDC/P2804
+gcc ~/LPEDC/material/P2804.c -o ~/LPEDC/material/P2804 && ~/LPEDC/material/P2804
 ```
 
 ---
@@ -3169,7 +3169,7 @@ não é AVL
 3. O 55 entra à direita do 50 e desequilibra o 30 e o 60.
 
 ```bash
-gcc ~/LPEDC/P2805.c -o ~/LPEDC/P2805 && ~/LPEDC/P2805
+gcc ~/LPEDC/material/P2805.c -o ~/LPEDC/material/P2805 && ~/LPEDC/material/P2805
 ```
 
 ---
@@ -3198,7 +3198,7 @@ depois de 1700: nenhum
 3. O 1700 é o máximo: o sucessor é NULL.
 
 ```bash
-gcc ~/LPEDC/P2806.c -o ~/LPEDC/P2806 && ~/LPEDC/P2806
+gcc ~/LPEDC/material/P2806.c -o ~/LPEDC/material/P2806 && ~/LPEDC/material/P2806
 ```
 
 ---
@@ -3225,7 +3225,7 @@ m = 10: 3 6 9 2 5 0 0 0 | colisões: 2
 3. Com m = 10, a função só vê o último dígito.
 
 ```bash
-gcc ~/LPEDC/P2807.c -o ~/LPEDC/P2807 && ~/LPEDC/P2807
+gcc ~/LPEDC/material/P2807.c -o ~/LPEDC/material/P2807 && ~/LPEDC/material/P2807
 ```
 
 ---
@@ -3257,7 +3257,7 @@ baldes usados: multiplicação 7, divisão 4
 2. Com k mod 8, as senhas múltiplas de 10 só usam baldes pares.
 
 ```bash
-gcc ~/LPEDC/P2808.c -o ~/LPEDC/P2808 -lm && ~/LPEDC/P2808
+gcc ~/LPEDC/material/P2808.c -o ~/LPEDC/material/P2808 -lm && ~/LPEDC/material/P2808
 ```
 
 ---
@@ -3290,7 +3290,7 @@ tabela: . 23 45 12 34 56 1 . . 9 .
 3. O 1 também começa no 1 e só acha lugar depois do bloco.
 
 ```bash
-gcc ~/LPEDC/P2809.c -o ~/LPEDC/P2809 && ~/LPEDC/P2809
+gcc ~/LPEDC/material/P2809.c -o ~/LPEDC/material/P2809 && ~/LPEDC/material/P2809
 ```
 
 ---
@@ -3315,7 +3315,7 @@ ordenados: 1 1 2 2 3 3 3 3 4 5 5 6 6 6 6
 2. Na segunda, a casa c devolve o valor c + 1, casa[c] vezes.
 
 ```bash
-gcc ~/LPEDC/P2810.c -o ~/LPEDC/P2810 && ~/LPEDC/P2810
+gcc ~/LPEDC/material/P2810.c -o ~/LPEDC/material/P2810 && ~/LPEDC/material/P2810
 ```
 
 ### ★★☆ Para pensar
@@ -3349,7 +3349,7 @@ total de sondagens: 22
    (agrupamento secundário).
 
 ```bash
-gcc ~/LPEDC/P2811.c -o ~/LPEDC/P2811 && ~/LPEDC/P2811
+gcc ~/LPEDC/material/P2811.c -o ~/LPEDC/material/P2811 && ~/LPEDC/material/P2811
 ```
 
 ---
@@ -3383,7 +3383,7 @@ total de sondagens: 12
    sondagem.
 
 ```bash
-gcc ~/LPEDC/P2812.c -o ~/LPEDC/P2812 && ~/LPEDC/P2812
+gcc ~/LPEDC/material/P2812.c -o ~/LPEDC/material/P2812 && ~/LPEDC/material/P2812
 ```
 
 ---
@@ -3413,7 +3413,7 @@ insere 31:   .  .  . 10 31 24  5
 2. O 31 também começa no 3 e ocupa o lugar do 17 removido.
 
 ```bash
-gcc ~/LPEDC/P2813.c -o ~/LPEDC/P2813 && ~/LPEDC/P2813
+gcc ~/LPEDC/material/P2813.c -o ~/LPEDC/material/P2813 && ~/LPEDC/material/P2813
 ```
 
 ---
@@ -3441,7 +3441,7 @@ antes de 4700: 4100 | antes de 2500: nenhum
 3. O 2500 é o mínimo: não tem antecessor.
 
 ```bash
-gcc ~/LPEDC/P2814.c -o ~/LPEDC/P2814 && ~/LPEDC/P2814
+gcc ~/LPEDC/material/P2814.c -o ~/LPEDC/material/P2814 && ~/LPEDC/material/P2814
 ```
 
 ---
@@ -3482,7 +3482,7 @@ C: não é rubro-negra
    5).
 
 ```bash
-gcc ~/LPEDC/P2815.c -o ~/LPEDC/P2815 && ~/LPEDC/P2815
+gcc ~/LPEDC/material/P2815.c -o ~/LPEDC/material/P2815 && ~/LPEDC/material/P2815
 ```
 
 ---
@@ -3514,7 +3514,7 @@ tira 25: pré 30 10 5 1 20 15 45 50 | altura 3 | rotações 0
    dentro (fator 1): rotação dupla.
 
 ```bash
-gcc ~/LPEDC/P2816.c -o ~/LPEDC/P2816 && ~/LPEDC/P2816
+gcc ~/LPEDC/material/P2816.c -o ~/LPEDC/material/P2816 && ~/LPEDC/material/P2816
 ```
 
 ---
@@ -3545,7 +3545,7 @@ casas:      2:1 5:1 8:1 1:2 3:2 7:2 4:3 6:3 | estável
    copiando na ordem.
 
 ```bash
-gcc ~/LPEDC/P2817.c -o ~/LPEDC/P2817 && ~/LPEDC/P2817
+gcc ~/LPEDC/material/P2817.c -o ~/LPEDC/material/P2817 && ~/LPEDC/material/P2817
 ```
 
 ---
@@ -3577,7 +3577,7 @@ Saída esperada:
 2. O qsort não é estável: o desempate pelo nome deixa a ordem completa.
 
 ```bash
-gcc ~/LPEDC/P2818.c -o ~/LPEDC/P2818 && ~/LPEDC/P2818
+gcc ~/LPEDC/material/P2818.c -o ~/LPEDC/material/P2818 && ~/LPEDC/material/P2818
 ```
 
 ---
@@ -3606,7 +3606,7 @@ por mês: Enzo 15/1 Hana 30/1 Duda 2/3 Ana 15/3 Cris 28/3 Beto 2/11 Fabio 9/11 G
 3. A última passada é a da chave principal (o mês).
 
 ```bash
-gcc ~/LPEDC/P2819.c -o ~/LPEDC/P2819 && ~/LPEDC/P2819
+gcc ~/LPEDC/material/P2819.c -o ~/LPEDC/material/P2819 && ~/LPEDC/material/P2819
 ```
 
 ---
@@ -3634,7 +3634,7 @@ vazios  0 | mais cheio   4 | divisão, m = 31
 2. k mod 32 só olha os 5 bits de baixo de k, que são todos zero.
 
 ```bash
-gcc ~/LPEDC/P2820.c -o ~/LPEDC/P2820 && ~/LPEDC/P2820
+gcc ~/LPEDC/material/P2820.c -o ~/LPEDC/material/P2820 && ~/LPEDC/material/P2820
 ```
 
 ### ★★★ Desafio
@@ -3666,7 +3666,7 @@ altura negra: 3 | fiscal: ok
 3. A altura negra pode ser contada descendo sempre pela esquerda.
 
 ```bash
-gcc ~/LPEDC/P2821.c -o ~/LPEDC/P2821 && ~/LPEDC/P2821
+gcc ~/LPEDC/material/P2821.c -o ~/LPEDC/material/P2821 && ~/LPEDC/material/P2821
 ```
 
 ---
@@ -3697,7 +3697,7 @@ fiscal: AVL ok
    cima.
 
 ```bash
-gcc ~/LPEDC/P2822.c -o ~/LPEDC/P2822 && ~/LPEDC/P2822
+gcc ~/LPEDC/material/P2822.c -o ~/LPEDC/material/P2822 && ~/LPEDC/material/P2822
 ```
 
 ---
@@ -3728,7 +3728,7 @@ tabela: 10 . 32 43 . . . . . . 21
    correção, a saída é a de cima.
 
 ```bash
-gcc ~/LPEDC/P2823.c -o ~/LPEDC/P2823 && ~/LPEDC/P2823
+gcc ~/LPEDC/material/P2823.c -o ~/LPEDC/material/P2823 && ~/LPEDC/material/P2823
 ```
 
 ---
@@ -3759,7 +3759,7 @@ busca 79: 3 sondagens
    tabela zerada.
 
 ```bash
-gcc ~/LPEDC/P2824.c -o ~/LPEDC/P2824 && ~/LPEDC/P2824
+gcc ~/LPEDC/material/P2824.c -o ~/LPEDC/material/P2824 && ~/LPEDC/material/P2824
 ```
 
 ---
@@ -3788,7 +3788,7 @@ dupla:       .  . 22 20  .  5  .  .  . 37 54 71 88 39  .  .  . | 15 sondagens
    primeiras formaram.
 
 ```bash
-gcc ~/LPEDC/P2825.c -o ~/LPEDC/P2825 && ~/LPEDC/P2825
+gcc ~/LPEDC/material/P2825.c -o ~/LPEDC/material/P2825 && ~/LPEDC/material/P2825
 ```
 
 ---
@@ -3820,7 +3820,7 @@ Saída esperada:
 3. Num intervalo vazio, o teto já passa de b e nenhum sucessor é chamado.
 
 ```bash
-gcc ~/LPEDC/P2826.c -o ~/LPEDC/P2826 && ~/LPEDC/P2826
+gcc ~/LPEDC/material/P2826.c -o ~/LPEDC/material/P2826 && ~/LPEDC/material/P2826
 ```
 
 ---
@@ -3860,7 +3860,7 @@ Saída esperada:
 3. N(h) = F(h + 3) - 1, onde F é a sequência de Fibonacci.
 
 ```bash
-gcc ~/LPEDC/P2827.c -o ~/LPEDC/P2827 -lm && ~/LPEDC/P2827
+gcc ~/LPEDC/material/P2827.c -o ~/LPEDC/material/P2827 -lm && ~/LPEDC/material/P2827
 ```
 
 ---
@@ -3895,7 +3895,7 @@ Saída esperada:
 3. A última passada é a da chave principal: os pontos.
 
 ```bash
-gcc ~/LPEDC/P2828.c -o ~/LPEDC/P2828 && ~/LPEDC/P2828
+gcc ~/LPEDC/material/P2828.c -o ~/LPEDC/material/P2828 && ~/LPEDC/material/P2828
 ```
 
 ---
@@ -3940,7 +3940,7 @@ faltas: 9 de 13
 3. O menos recente é nil.ant.
 
 ```bash
-gcc ~/LPEDC/P2829.c -o ~/LPEDC/P2829 && ~/LPEDC/P2829
+gcc ~/LPEDC/material/P2829.c -o ~/LPEDC/material/P2829 && ~/LPEDC/material/P2829
 ```
 
 ---
@@ -3977,7 +3977,7 @@ sem 1415 e 640: pré 1600 905 1120 1000 1830 2210
 3. A remoção devolve a nova raiz, que pode mudar.
 
 ```bash
-gcc ~/LPEDC/P2830.c -o ~/LPEDC/P2830 && ~/LPEDC/P2830
+gcc ~/LPEDC/material/P2830.c -o ~/LPEDC/material/P2830 && ~/LPEDC/material/P2830
 ```
 
 ## Questões no estilo da prova

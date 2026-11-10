@@ -40,7 +40,7 @@ Novidades pequenas:
   que não se chama `A000.c`/`E000.c`:
 
 ```bash
-gcc ~/LPEDC/A147.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/A147 && ~/LPEDC/A147
+gcc ~/LPEDC/material/A147.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-contador.c -o ~/LPEDC/material/A147 && ~/LPEDC/material/A147
 ```
 
 {{indice}}

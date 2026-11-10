@@ -39,7 +39,7 @@ uma busca e o nó vermelho é o que vai sair ou está desequilibrado. Desenhe a
 O comando compila junto o `.c` de apoio da pasta (como `bst.c`):
 
 ```bash
-gcc ~/LPEDC/A197.c ~/LPEDC/0099-bst.c -o ~/LPEDC/A197 && ~/LPEDC/A197
+gcc ~/LPEDC/material/A197.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A197 && ~/LPEDC/material/A197
 ```
 
 **Altura conta arestas** em todo o módulo: a folha tem altura 0 e a árvore

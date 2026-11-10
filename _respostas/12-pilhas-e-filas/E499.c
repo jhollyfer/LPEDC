@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../0084-pilha.c"
+#include "../../material/0084-pilha.c"
 
 // números inteiros não negativos separados por espaço e + - * /
 bool avalia(const char *expr, int *resultado) {

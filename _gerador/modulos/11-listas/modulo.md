@@ -37,7 +37,7 @@ Cada assunto traz `lista.h` (interface) e `lista.c` (implementação). O
 comando compila o `lista.c` junto com o exemplo ou exercício:
 
 ```bash
-gcc ~/LPEDC/A151.c ~/LPEDC/0076-lista.c -o ~/LPEDC/A151 && ~/LPEDC/A151
+gcc ~/LPEDC/material/A151.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/A151 && ~/LPEDC/material/A151
 ```
 
 Nos exercícios, não repita o nome de uma função do `lista.c` (como
