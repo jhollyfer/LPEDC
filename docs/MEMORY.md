@@ -11,8 +11,8 @@
 
 ## Parou em
 
-Curso pronto para a prova. Última rodada: humanizer estrito em cada `.md`, com registro por
-arquivo, e o plano "Comece aqui" no `PPGI.md` (09/11 a 27/11).
+Nada em andamento. O curso está pronto para a prova; o estudo segue o "Comece aqui" do
+`PPGI.md`.
 
 ## Próximos passos
 

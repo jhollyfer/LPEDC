@@ -500,7 +500,7 @@
 ### 0028-funcoes
 **Conceitos-chave**
 - Motivos para modularizar: dividir para conquistar, reutilizar, abstrair (usar sem saber como funciona por dentro) e evitar código repetido.
-- Uma função faz **uma** tarefa, e o nome a descreve. Se não dá para achar um nome curto, ela está fazendo coisas demais: decomponha. O livro sugere funções de até meia página e cabeçalho numa linha; muitos parâmetros indicam tarefa demais. `main` deve ser basicamente uma sequência de chamadas.
+- Uma função faz **uma** tarefa, e o nome a descreve. Se não dá para achar um nome curto, ela está fazendo coisas demais: decomponha. O livro sugere funções de até meia página e cabeçalho numa linha; muitos parâmetros indicam tarefa demais. `main` deve ser quase só uma sequência de chamadas.
 - Definição: `tipo nome(parâmetros) { declarações; instruções }`. Três formas de voltar: chegar à `}`, `return;` e `return expr;`.
 - **Protótipo:** diz o tipo de retorno e o número, os tipos e a ordem dos parâmetros. O compilador confere as chamadas por ele, e chamadas que não batem dão erro.
   - Os nomes no protótipo são opcionais; o livro prefere colocá-los para documentar.

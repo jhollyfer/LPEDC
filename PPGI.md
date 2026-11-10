@@ -188,10 +188,10 @@ e a busca binária contando comparações.
 
 ## Comece aqui
 
-Plano de hoje, 09/11, até a prova, em 27/11. A ordem segue o peso de cada tópico nas
-provas de 2016 a 2023 ([o que caiu](#o-que-caiu-de-2016-a-2023)): árvores primeiro, depois
-listas, pilhas e filas, busca, ordenação e hash. Cada dia tem um bloco de assuntos e um
-treino no formato da prova.
+Plano de 09/11 até a prova, em 27/11. A ordem segue o peso de cada tópico nas provas de
+2016 a 2023 ([o que caiu](#o-que-caiu-de-2016-a-2023)): árvores primeiro, depois listas,
+pilhas e filas, busca, ordenação e hash. Se começar depois de 09/11, faça o diagnóstico no
+primeiro dia e junte dois dias de assunto num só até alcançar a data da tabela.
 
 Como estudar cada assunto do dia: leia o texto, refaça a **Pergunta para você** e faça os
 exercícios ★★☆ e ★★★. Feche o dia com as **Questões no estilo da prova** do módulo,
@@ -220,8 +220,8 @@ volte ao assunto indicado no gabarito.
 | qui 26/11 | descanso | só os `[!WARNING]` de 0090, 0095, 0099, 0101, 0102 e 0106 | nenhum |
 | sex 27/11 | **prova** | | |
 
-Se um dia atrasar, corte o treino, não o assunto: árvores, listas e busca somam mais da
-metade das questões.
+Se um dia atrasar, corte o treino e mantenha o assunto: árvores, listas e busca somam mais
+da metade das questões.
 
 Outras datas: homologação preliminar em 18/11, local da prova em 24/11 e
 gabarito preliminar no dia da prova. Leve caneta azul ou preta e documento com
