@@ -1,4 +1,4 @@
-# Fichamento — Linguagem C (Ricardo Antonello)
+# Fichamento: Linguagem C (Ricardo Antonello)
 
 - **Autor:** Ricardo Antonello (IFC; www.antonello.com.br)
 - **Edição:** 1ª ed., autopublicada (referências de 2018–2020), 131 p.
@@ -18,7 +18,7 @@ SET/CLEAR/TOGGLE/READ muito aproveitável no módulo 08.
 Não há gabarito (as respostas abaixo foram calculadas por mim). O histórico tem vários
 erros factuais e algumas afirmações técnicas estão erradas ou simplificadas demais (ver
 "Pegadinhas" e "Obsoleto"). Vários enunciados de múltipla escolha têm código com erro de
-compilação "sem querer" — dá para reaproveitar como "ache o erro".
+compilação "sem querer": dá para reaproveitar como "ache o erro".
 
 ---
 
@@ -28,16 +28,16 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Algoritmo = sequência finita de instruções **não ambíguas** para resolver uma tarefa.
   Cita origens antigas (crivo de Eratóstenes, algoritmo de Euclides).
 - Linguagem natural é simples, mas ambígua (uma palavra muda de sentido com o contexto);
-  o computador não pode "escolher" o sentido — por isso linguagens formais.
+  o computador não pode "escolher" o sentido; por isso linguagens formais.
 - Lista de frases fica ruim quando há muitas decisões e repetições → fluxograma.
 
 **Analogias/explicações boas**
 - Receita de bolo com quantidades e temperatura (forno a 180 °C, 50 g de manteiga, 200 g
-  de açúcar, 3 ovos um a um, 80 g de chocolate, 220 g de farinha, 30 min) — exemplo de
+  de açúcar, 3 ovos um a um, 80 g de chocolate, 220 g de farinha, 30 min): exemplo de
   algoritmo concreto e não ambíguo.
 - **Média com exame** em passos numerados: média das 3 notas; ≥ 7 passa; senão faz exame;
   média final = (média + exame)/2; ≥ 5 passa com exame, senão reprova. Depois acrescenta
-  "1 para recalcular, 2 para sair" e "volte ao passo 1" — mostra como o texto vai ficando
+  "1 para recalcular, 2 para sair" e "volte ao passo 1", o que mostra como o texto vai ficando
   confuso e motiva o fluxograma.
 
 **Ideias de exercícios**
@@ -60,12 +60,12 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   linguagens. "Nunca use uma variável antes de declará-la."
 
 **Analogias/explicações boas**
-- **Cinema — meia-entrada** (o melhor exemplo do livro para decisões): segunda-feira todos
+- **Cinema, meia-entrada** (o melhor exemplo do livro para decisões): segunda-feira todos
   pagam meia; nos outros dias, crianças (≤ 12), idosos (≥ 65) e estudantes pagam meia; na
   quarta, casais também. Três propostas de fluxograma:
   1. ifs separados, perguntando um dado por vez (só pergunta o necessário);
   2. juntando idade e estudante com OU (pede dados que às vezes não seriam precisos);
-  3. uma única condição gigante com tudo (pede todos os dados antes — "atrasa a fila da
+  3. uma única condição gigante com tudo (pede todos os dados antes, o que "atrasa a fila da
      bilheteria").
   Lição: escolher entre clareza da expressão e número de perguntas é **decisão de
   projeto**; todas estão corretas.
@@ -101,7 +101,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 **Analogias/explicações boas**
 - "Decompor os números decimais de um jeito que você nunca viu": partir do 123 conhecido
   para depois só trocar a base. Muito eficaz.
-- Uma pitada de história (Boole, Babbage, Turing, ENIAC) para motivar — mas conferir os
+- Uma pitada de história (Boole, Babbage, Turing, ENIAC) para motivar, mas conferir os
   fatos (ver Obsoleto).
 
 **Pegadinhas e erros comuns**
@@ -137,12 +137,12 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - IDE junta editor, compilador e execução (sugere Code::Blocks e o repl.it on-line).
 - **Depuração (debug):** executar linha a linha; recomenda depurar mesmo sem erro, só
   para ver o programa andando.
-- **Erros de compilação** (nome de comando errado, variável não criada — o compilador
+- **Erros de compilação** (nome de comando errado, variável não criada: o compilador
   aponta a linha) × **erros de execução/lógica** (compila, mas dá resultado errado ou
-  trava — mais difíceis).
+  trava), mais difíceis.
 
 **Pegadinhas e erros comuns**
-- O livro diz que `#include` "inclui uma biblioteca estática" — impreciso: o `#include`
+- O livro diz que `#include` "inclui uma biblioteca estática", o que é impreciso: o `#include`
   copia um **cabeçalho** (declarações); quem junta o código da biblioteca é o ligador.
   Corrigir no LPEDC.
 - Diz que o executável tem extensão .EXE (só no Windows).
@@ -177,8 +177,8 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 
 **Pegadinhas e erros comuns**
 - Ler variável não inicializada.
-- `int idade = 'A'; printf("%d", idade);` imprime 65 — compila sem erro.
-- O livro afirma que a tabela ASCII vai de 0 a 255 — ASCII tem 128 códigos (0–127); acima
+- `int idade = 'A'; printf("%d", idade);` imprime 65 e compila sem erro.
+- O livro afirma que a tabela ASCII vai de 0 a 255, mas ASCII tem 128 códigos (0–127); acima
   disso é tabela estendida dependente de sistema.
 
 **Ideias de exercícios** (com respostas)
@@ -203,7 +203,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   16 bits para `int`); `long double` de 10 bytes e `double` com "dez dígitos" variam.
   Ensinar a conferir com `sizeof`/`limits.h`.
 - Teste `if (num < 0)` com `unsigned int num` é sempre falso (aparece no conversor de
-  binário do cap. 8) — ótima pegadinha.
+  binário do cap. 8): ótima pegadinha.
 
 ### 0004-constantes
 
@@ -212,7 +212,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   `LED1 33`, mensagem de erro como string).
 
 **Pegadinhas e erros comuns**
-- O livro diz que constantes "são acessadas muito mais rápido que variáveis" — exagero;
+- O livro diz que constantes "são acessadas muito mais rápido que variáveis": exagero;
   a vantagem real é legibilidade e um só lugar para mudar.
 - Não apresenta `const` (cobrir em 0004 por outra fonte).
 
@@ -222,7 +222,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Primeiro argumento é a string de controle; cada `%` consome um argumento, **na ordem**.
 - Inteiros: `%c` (como caractere), `%d`/`%i`, `%u`, `%o`, `%x`; `%ld` para long.
 - Reais: `%f`, `%e` (científica), `%g` (o mais curto). `%s` para string.
-- **Largura e precisão** — tabela de exemplos com v = 1.23 (excelente):
+- **Largura e precisão:** tabela de exemplos com v = 1.23 (excelente):
   `%f` → 1.230000; `%.3f` → 1.230; `%.2f` → 1.23; `%.1f` → 1.2; `%6.2f` → "  1.23"
   (6 caracteres contando o ponto); `%06.2f` → 001.23; `%+06.2f` → +01.23;
   `%+08.2f` → +0001.23. Largura negativa (`%-12d`) alinha à esquerda.
@@ -230,9 +230,9 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - O `%` do resto e o `%` do printf são coisas diferentes.
 
 **Pegadinhas e erros comuns**
-- O texto diz que `%06.2f` "coloca espaços" — coloca **zeros**.
+- O texto diz que `%06.2f` "coloca espaços", mas coloca **zeros**.
 - `printf("%.2f", variavelInt)` é comportamento indefinido (exercício 4.22: imprime lixo,
-  geralmente 0.00 — resposta "nenhuma das alternativas").
+  geralmente 0.00; resposta "nenhuma das alternativas").
 - `printf(temp)` com string lida de arquivo (cap. 9) é perigoso: se o texto tiver `%`,
   vira formato. Usar `printf("%s", temp)` ou `fputs`.
 
@@ -255,7 +255,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - `getchar()` lê um caractere.
 
 **Pegadinhas e erros comuns**
-- O livro usa `scanf("%s", &str)` (com `&` em vetor) e recomenda `gets` — corrigir.
+- O livro usa `scanf("%s", &str)` (com `&` em vetor) e recomenda `gets`; corrigir.
 - Ler `double` com `%f` (precisa `%lf` no scanf).
 
 ### 0007-aritmetica / 0008-conversao
@@ -280,11 +280,11 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - **Saída?** (4.24): lê 6, 8, 10 mas nunca calcula a média → **Media: 0.000000**.
   Ótimo "ache o erro".
 - Quociente e resto de x por y (4.26): 17 e 5 → 3 e 2.
-- Equação x = (32 − y)/(2a + b) com a=10, b=2, y=5 → 27/22 ≈ 1.227 (com inteiros daria 1 —
+- Equação x = (32 − y)/(2a + b) com a=10, b=2, y=5 → 27/22 ≈ 1.227 (com inteiros daria 1:
   pegadinha!).
 - Decompor 8531 em unidade 1, dezena 3, centena 5, milhar 8 com `/` e `%` (4.39).
 - **Tinta** (4.35): 1 L cobre 3 m²; lata de 18 L a R$ 80. 100 m² → 33,3 L → 2 latas,
-  R$ 160 (arredondar para cima — gancho para `ceil` em 0010).
+  R$ 160 (arredondar para cima; gancho para `ceil` em 0010).
 - Maçãs em caixas de 42 (4.37): 100 maçãs → 3 caixas (divisão inteira + "sobra").
 - Azulejos (4.38), lâmpadas por W/m² (4.40), combustível de F1 (4.41), Bhaskara (4.36),
   conta da lanchonete (4.34), tinta com latas e galões (4.42).
@@ -347,7 +347,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - `condição ? valor_se_V : valor_se_F` para if/else simples; envolver a condição em
   parênteses e manter os ramos curtos.
 - Exemplo: `n >= 0 ? n++ : n--;`.
-- Ternário aninhado (zero / positivo / negativo) funciona, mas fica confuso — evitar.
+- Ternário aninhado (zero / positivo / negativo) funciona, mas fica confuso; evitar.
 
 ### 0018-switch
 
@@ -400,7 +400,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - 5 a 20 com for e com while; 20 a 5; intervalo entre dois números; pares de 0 a 50 e
   depois ímpares; validar divisor ≠ 0 com repetição; 1 a 100 sem o 50; 1 a 10.000 sem
   múltiplos de 10 (ou de 33); quadrado até digitar 0; soma dos n primeiros naturais
-  (n=4 → 0+1+2+3 = 6 — atenção: o livro inclui o zero!); n primeiros ímpares (n=4 → 1,
+  (n=4 → 0+1+2+3 = 6; atenção: o livro inclui o zero!); n primeiros ímpares (n=4 → 1,
   3, 5, 7); consumo com "1 para novo cálculo"; tabuada do 7 (while) e do 3 (for); laranjas
   (R$ 0,60 se < 12; R$ 0,50 se ≥ 12: 10 → 6.00; 12 → 6.00; 20 → 10.00).
 
@@ -414,18 +414,18 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 
 **Ideias de exemplos**
 - `for i de 0 a 10` com `if (i > 5) continue;` → imprime 0..5 (mas o laço ainda dá as 11
-  voltas — discutir que `break` seria mais eficiente aqui).
+  voltas; discutir que `break` seria mais eficiente aqui).
 - `if (i == 5) break;` → imprime 0..4.
 
 **Ideias de exercícios**
-- Ler até 5 números ou até digitar 10, o que vier primeiro (6.19) — break natural.
+- Ler até 5 números ou até digitar 10, o que vier primeiro (6.19): break natural.
 
 ### 0024-lacos-aninhados
 
 **Ideias de exercícios** (com respostas)
 - Tabuadas de 1 a 10 com dois while e com dois for (6.15, 6.16).
 - **Triângulo de asteriscos** (6.26): `*`, `**`, ..., `*****`.
-- **Asteriscos + números** (6.27): `****1`, `***22`, `**333`, `*4444`, `55555` — dica do
+- **Asteriscos + números** (6.27): `****1`, `***22`, `**333`, `*4444`, `55555`; dica do
   autor: gerar 1..5 para os números e 4..0 para os asteriscos.
 - Matriz com moldura de zeros e miolo N+i+j (6.28): n=10 → miolo 13 14 / 14 15.
 - Letras AA a ZZ como colunas de planilha (6.35).
@@ -476,7 +476,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - Vetor como **uma coluna de planilha** (linhas numeradas a partir de 0); matriz como a
   planilha inteira (linhas × colunas). Lixo antes de atribuir.
 - `int a[5] = {42, 42};` → o resto é preenchido com zero.
-- Conversor decimal→binário com vetor de restos (4 bits e depois 32 bits — "8× mais
+- Conversor decimal→binário com vetor de restos (4 bits e depois 32 bits: "8× mais
   trabalho, mesmo código").
 - String = vetor de `char` com `'\0'` no fim; `printf("%s")` para no `'\0'`.
   `strcpy`, `strcat`, `strlen`, `strcmp` (0 se iguais, <0, >0). Atribuição com `=` só na
@@ -488,7 +488,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 - A tabela do livro mostra "lixo" nas posições após o `'\0'` de `char nome[10] =
   "Brasil"`, mas com inicializador o resto é zerado (o próprio livro diz isso para `int`).
 - `for (i < strlen(s))` recalcula o tamanho a cada volta.
-- Exercício 8.10 diz que o método "ache o menor e ponha na frente" é inserção direta — é
+- Exercício 8.10 diz que o método "ache o menor e ponha na frente" é inserção direta, mas é
   **seleção**. E a saída esperada contém um 4 que não está no vetor.
 
 **Ideias de exercícios**
@@ -499,7 +499,7 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
 ### 0065-bits
 
 **Conceitos-chave**
-- Uso real: microcontroladores — 8 bits de um byte podem ligar/desligar 8 LEDs ou motores.
+- Uso real: microcontroladores: 8 bits de um byte podem ligar/desligar 8 LEDs ou motores.
 - `>>` divide por 2 (9 >> 1 = 4); `<<` multiplica por 2 (5 << 1 = 10); `1 << 2` = 4.
 - **Máscaras:** AND desliga (49 & 0b11011111 = 17); OR liga (`x | (1<<4)` = 16);
   XOR inverte (49 ^ (1<<1) = 51; x ^ x = 0); NOT gera a máscara de desligar
@@ -534,18 +534,13 @@ compilação "sem querer" — dá para reaproveitar como "ache o erro".
   sistema operacional; tear de Jacquard atribuído a "um costureiro"; ANSI C datado de
   1985 (foi 1989); "C++ é a mesma linguagem C com orientação a objetos"; "computadores
   ainda usam a arquitetura de Turing". Não reaproveitar sem checar.
-- `gets()`; `scanf("%s", &vetor)`; `printf(string_variavel)`.
-- `#include` descrito como inclusão de biblioteca estática.
 - `windows.h`/`Sleep()` nos exercícios de bits (usar alternativa portável ou omitir).
-- ASCII "de 0 a 255".
 - repl.it (mudou de modelo) e Code::Blocks como única recomendação.
 
 ## Extras que não cabem no sumário
 
-- Flowgorithm como ferramenta de apoio ao módulo 00 (executa e traduz fluxogramas).
 - Bibliotecas estáticas × dinâmicas (.so/.dll): nota opcional em 0005 ou 0034.
-- Depuração passo a passo como hábito desde o início (gdb ou depurador da IDE).
 - Tensores/deep learning e IoT como motivação para matrizes (curiosidade).
 - Formatos de arquivo texto (CSV, JSON) como contexto em 0067.
-- Apêndice de filmes (Jogo da Imitação, Piratas do Vale do Silício) — material de
+- Apêndice de filmes (Jogo da Imitação, Piratas do Vale do Silício), material de
   motivação, fora do conteúdo.

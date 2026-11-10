@@ -1,4 +1,4 @@
-# Fichamento — Algoritmos e Lógica de Programação II (Unicesumar)
+# Fichamento: Algoritmos e Lógica de Programação II (Unicesumar)
 
 - **Autora:** Gislaine Camila Lapasini Leal (revisão técnica: Rogério de Leon Pereira)
 - **Editora/ano:** UniCesumar (NEAD), Maringá, reimpressão 2018, 203 p.
@@ -9,7 +9,7 @@
 Livro-texto de EaD que leva o aluno do "hello world" até funções e arquivos em C, em 5
 unidades (I conceitos iniciais; II condicionais; III repetição; IV vetores, strings,
 matrizes, structs; V funções, recursão, arquivos). Cada unidade tem atividades de
-autoestudo **com gabarito** e "exercícios de fixação" resolvidos — o maior valor do
+autoestudo **com gabarito** e "exercícios de fixação" resolvidos. O maior valor do
 material para o LPEDC é esse banco de enunciados com cenário do cotidiano (plano de saúde
 por faixa etária, classe eleitoral, carga de caminhão, calorias de prato e bebida,
 fechamento de notas de turma, pesquisa de opinião).
@@ -62,7 +62,7 @@ Use os enunciados; **nunca copie o código**.
 - Analogia boa: as chaves de `main` fazem o papel do "início" e "fim" do algoritmo.
 
 **Pegadinhas e erros comuns**
-- O livro escreve `main()` sem `int` e `return (0)` com parênteses — mostrar que o certo
+- O livro escreve `main()` sem `int` e `return (0)` com parênteses; mostrar que o certo
   hoje é `int main(void)` e que os parênteses no `return` são opcionais.
 - Comentário de bloco não fechado engole o resto do código (aparece no exercício "ache os
   erros" da unidade I: o `/*` da primeira linha nunca é fechado).
@@ -110,7 +110,7 @@ Use os enunciados; **nunca copie o código**.
   traz erro de digitação no máximo do `long` (2.147.489.647). Hoje `int` costuma ter 32
   bits. Ótimo gancho para ensinar `sizeof`, `limits.h` e `stdint.h` em vez de decorar
   tabela.
-- Lista "sete tipos básicos" incluindo `enum` e `pointer` como se fossem tipos básicos —
+- Lista "sete tipos básicos" incluindo `enum` e `pointer` como se fossem tipos básicos:
   não seguir essa classificação.
 
 ### 0004-constantes
@@ -143,7 +143,7 @@ Use os enunciados; **nunca copie o código**.
 - Tabela de especificadores de leitura: `%c %d %i %u %e %f %g %o %s %x %p`.
 
 **Pegadinhas e erros comuns**
-- O livro lista `cin`, `gets` e um `scanf(&x)` (sem formato!) como entradas válidas —
+- O livro lista `cin`, `gets` e um `scanf(&x)` (sem formato!) como entradas válidas:
   `cin` é C++, `gets` foi removido do C, e `scanf(&x)` não compila.
 - O gabarito usa `scanf("%s", &nome)` com `&` num vetor (tipo errado; funciona por acaso).
 - `scanf("%s")` para no primeiro espaço; o livro "resolve" com `fflush(stdin)` + `gets`,
@@ -162,7 +162,7 @@ Use os enunciados; **nunca copie o código**.
   diz que atribuição associa à esquerda). Não reaproveitar.
 - **Divisão inteira** escondida no gabarito: `media = soma / quantidade` com dois `int`
   descarta os decimais mesmo guardando em `float`. O exercício da série harmônica acerta
-  ao usar `float divisor = i; 1/divisor` — contraste perfeito para a aula.
+  ao usar `float divisor = i; 1/divisor`: contraste perfeito para a aula.
 
 **Ideias de exercícios** (com resposta)
 - Antecessor e sucessor de um inteiro (fixação 1): para 10 → 9 e 11. Duas versões:
@@ -180,7 +180,7 @@ Use os enunciados; **nunca copie o código**.
   primeiro e depois copia; `y = x++` copia primeiro e incrementa depois.
 
 **Pegadinhas e erros comuns**
-- O livro mostra `nome = "Maria";` como atribuição a string — **isso não compila em C**
+- O livro mostra `nome = "Maria";` como atribuição a string, e **isso não compila em C**
   para vetor de `char`. Ótimo para a seção de pegadinhas (usar `strcpy`).
 
 **Ideias de exercícios**
@@ -209,7 +209,7 @@ Use os enunciados; **nunca copie o código**.
 
 - Programa-modelo do livro: ler nome, idade e altura; calcular ano de nascimento
   (ano atual − idade); imprimir tudo com altura em `%.2f`. Atualizar o ano (o livro usa
-  2012 fixo — pegadinha de "número mágico"; usar constante ou ler o ano).
+  2012 fixo, pegadinha de "número mágico"; usar constante ou ler o ano).
 
 ---
 
@@ -227,7 +227,7 @@ Use os enunciados; **nunca copie o código**.
 **Ideias de exercícios** (com resposta)
 - **Classe eleitoral** (fixação 3): idade < 16 → não eleitor; 16–17 ou > 65 → facultativo;
   18–65 → obrigatório. Teste: 15, 16, 17, 18, 65, 66 → não, fac., fac., obrig., obrig.,
-  fac. Usa `||` de forma natural.
+  fac. Usa `||` naturalmente.
 - **Divisível por 3 E por 7** (atividade 2): o gabarito testa as duas divisibilidades
   separadamente (imprime "divisível por 3" e/ou "por 7"). Reescrever pedindo o "e" de
   verdade: 21 → sim; 9 → não; 14 → não; 42 → sim.
@@ -267,7 +267,7 @@ Use os enunciados; **nunca copie o código**.
 **Ideias de exercícios** (com resposta)
 - **Plano de saúde por idade** (fixação 2): até 18 → R$ 50; 19–29 → 70; 30–45 → 90;
   46–65 → 130; acima de 65 → 170. Testes de fronteira: 18, 19, 29, 30, 45, 46, 65, 66.
-  O gabarito repete nome/idade em todos os ramos — bom para refatorar (imprimir uma vez,
+  O gabarito repete nome/idade em todos os ramos, bom para refatorar (imprimir uma vez,
   só o valor muda).
 - Maior e menor de 5 números (atividade 1): o gabarito usa vetor e laço antes de esses
   conteúdos aparecerem. Reescrever só com ifs (ou adiar para o módulo de laços).
@@ -296,7 +296,7 @@ Use os enunciados; **nunca copie o código**.
   4:5); código da carga → preço/kg (10–20: 180; 21–30: 120; 31–40: 230); peso em
   toneladas. Saídas: peso em kg, preço, imposto, total. Exemplo: estado 2, 3 t, carga 25 →
   3000 kg, preço 360000.00, imposto 54000.00, total 414000.00. O gabarito repete o bloco
-  inteiro 4 vezes dentro do switch — perfeito para mostrar que basta o switch escolher o
+  inteiro 4 vezes dentro do switch, perfeito para mostrar que basta o switch escolher o
   percentual e um if/else escolher o preço.
 
 ---
@@ -310,7 +310,7 @@ Use os enunciados; **nunca copie o código**.
 
 **Pegadinhas e erros comuns**
 - `i = 0; while (i != 10)` imprime 10 vezes; começar em 1 com a mesma condição imprime só
-  9 — o livro explora isso bem (para começar em 1, condição `i != 11`). Preferir `<`.
+  9; o livro explora isso bem (para começar em 1, condição `i != 11`). Preferir `<`.
 - **Leitura antes e dentro do laço** (padrão "leitura-prévia"): se esquecer a leitura de
   dentro, a condição nunca muda → laço infinito.
 
@@ -339,7 +339,7 @@ Use os enunciados; **nunca copie o código**.
 - Todo for pode ser reescrito como while/do-while e vice-versa.
 
 **Pegadinhas e erros comuns**
-- Condição escrita como `i == 10` com `i` começando em 1: o laço **nunca executa** — a
+- Condição escrita como `i == 10` com `i` começando em 1: o laço **nunca executa**: a
   condição é "continue enquanto", não "pare quando". O livro sugere testar isso: aproveitar.
 
 **Ideias de exercícios** (com resposta)
@@ -347,7 +347,7 @@ Use os enunciados; **nunca copie o código**.
 - Múltiplos de 3 menores que 100 com passo 3 (`i = i + 3`): 3, 6, ..., 99 (33 números).
 - Fatorial (fixação 1): 5 → 120. Discutir limite do `int` (13! estoura 32 bits).
 - Soma dos ímpares entre 200 e 500: **52500** (são 150 ímpares). O gabarito esquece de
-  zerar `soma` — usar como "ache o erro".
+  zerar `soma`; usar como "ache o erro".
 - Números < 30 divisíveis por 3 e por 7 (atividade 5): com "e" verdadeiro → só 21.
 - **Série harmônica** (atividade 2): S = 1 + 1/2 + ... + 1/n; n=4 → 2.083333.
 
@@ -369,14 +369,14 @@ Use os enunciados; **nunca copie o código**.
 
 ### 0025-padroes-de-laco
 
-**Conceitos-chave** (o livro usa todos, sem nomeá-los — nomear no LPEDC)
+**Conceitos-chave** (o livro usa todos, sem nomeá-los; nomear no LPEDC)
 - **Contador** (`par++`), **acumulador** (`soma = soma + nota`), **sentinela** (0 ou −1
   encerra), **maior** (`if (salario > msalario)`), **flag** (`acha = 0/1`).
 
 **Pegadinhas e erros comuns** (todas tiradas dos gabaritos)
 - Acumulador sem zerar (soma dos ímpares).
 - Maior inicializado com 0: falha se todos os valores forem negativos.
-- `menor != 0;` escrito no lugar de `menor = 0;` (compara e descarta — o compilador
+- `menor != 0;` escrito no lugar de `menor = 0;` (compara e descarta; o compilador
   aceita!). E mesmo `menor = 0` estaria errado: o certo é iniciar com o primeiro valor lido.
 - Teste de ímpar com `numero % 2 == 1` falha para negativos (−3 % 2 == −1). Usar `!= 0`.
 - Sentinela lida junto com outro dado: no exercício do salário −1 o programa ainda pede o
@@ -413,7 +413,7 @@ Use os enunciados; **nunca copie o código**.
 - Recursão exige critério de parada; exemplos fatorial e Fibonacci recursivo.
 
 **Pegadinhas e erros comuns**
-- O texto diz que, por referência, x passou de 5 para **25** ao dobrar — o correto é 10
+- O texto diz que, por referência, x passou de 5 para **25** ao dobrar, mas o correto é 10
   (erro do livro; ótimo para "confira o livro").
 - Gabaritos declaram funções **dentro** do `main` (extensão do GCC, não é C padrão).
 - Conversão kg → libras com fator 2.68 (o certo é ≈ 2,2046).
@@ -449,12 +449,12 @@ Use os enunciados; **nunca copie o código**.
 - `FILE *`, `fopen` (modos r, w, a, r+, w+, a+), checar `NULL`, `fputc/fgetc`,
   `fputs/fgets`, `fclose`, `feof`, `rewind`, `remove`, `rename`.
 - Pegadinha: laço `while (!feof(arq))` lê uma vez a mais; o gabarito do exercício 7 usa o
-  padrão certo `while (fgets(...) != NULL)` — contrastar os dois.
+  padrão certo `while (fgets(...) != NULL)`; contrastar os dois.
 
 ### 0089-busca-sequencial / 0091-bubble-sort (resumo)
 
 - Busca sequencial com flag `acha` e `while (acha == 0 && i < 10)`.
-- O "método da bolha" apresentado compara `v[i]` com todos os `v[j]` seguintes — isso é
+- O "método da bolha" apresentado compara `v[i]` com todos os `v[j]` seguintes, e isso é
   **ordenação por troca/seleção ingênua**, não a bolha (que compara vizinhos). Pegadinha
   de nomenclatura a corrigir no módulo 13.
 
@@ -462,21 +462,13 @@ Use os enunciados; **nunca copie o código**.
 
 ## Obsoleto / evitar
 
-- Turbo C, Dev-C++ antigo, atalhos Alt+F9/Ctrl+F9.
-- `main()` sem tipo; `void main()`.
-- `conio.h`, `clrscr()`, `getch()`, `system("pause")`.
-- `iostream.h`, `cin >>`, `using namespace std` (C++ dentro de "programa em C").
-- `gets()` (removida no C11) e `fflush(stdin)` (comportamento indefinido).
-- Tabela de tipos de 16 bits; lista de palavras reservadas do Turbo C++.
-- Atribuir string com `=` fora da declaração.
-- Funções aninhadas; `struct` sem a palavra-chave em C.
 - Caminho fixo `C:\\arquivo.txt`.
 
 ## Extras que não cabem no sumário
 
-- Comparação de eficiência entre if solto × if/else × switch contando comparações — pode
+- Comparação de eficiência entre if solto × if/else × switch contando comparações; pode
   virar um "box" em 0018 ou preparar 0071 (contar passos).
 - Problema do cadastro de 20 livros com menu (cadastrar, listar, buscar, ordenar por ano):
   bom "juntando tudo" para o módulo 08 (vetor de structs) ou 13.
-- `setlocale(LC_ALL, "Portuguese")` aparece nos gabaritos para acentuação no Windows —
+- `setlocale(LC_ALL, "Portuguese")` aparece nos gabaritos para acentuação no Windows:
   pode virar nota de rodapé sobre acentos no terminal.

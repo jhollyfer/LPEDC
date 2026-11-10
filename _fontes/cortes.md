@@ -1,4 +1,4 @@
-# Fichamento — Estrutura de Dados (Mariela Inés Cortés)
+# Fichamento: Estrutura de Dados (Mariela Inés Cortés)
 
 - **Autora:** Mariela Inés Cortés (UECE; doutora pela PUC-Rio, área de Engenharia de Software)
 - **Edição:** 3ª ed., EdUECE / UAB, Fortaleza, 2015 (arquivo rotulado 2014), 126 p., Licenciatura em Informática a distância
@@ -14,12 +14,7 @@ Os pontos fortes são os capítulos 1, 2 e 6 e a seção de **estruturas autoaju
 material brasileiro e serve de semente para os NOVOS "listas autoajustáveis" e "análise amortizada".
 
 O ponto fraco é grave: o **código é pseudo-C cheio de bugs** e, na extração, muitos corpos de função
-vieram vazios (as figuras se perderam). Há passagem de cabeça de lista por valor (as alterações se
-perdem), `&` no lugar de `&&`, `pos++` devolvendo o valor antigo, `Vazia` que testa `topo == 0` quando o
-topo começa em -1, `:=` de Pascal misturado com C, `printf(Conteudo(a))` sem formato e a fila encadeada
-que esquece de zerar `fim`. Também há afirmações teóricas erradas: a sondagem quadrática descrita como
-10, 100, 1000, `n log n` chamada de "logarítmica", busca digital em "O(log n)" e o fator de
-balanceamento sem valor absoluto. **Use as ideias e as figuras mentais; não copie código.** Os bugs viram
+vieram vazios (as figuras se perderam). Também há afirmações teóricas erradas. **Use as ideias e as figuras mentais; não copie código.** Os bugs viram
 ótimos exercícios de "ache o erro" (lista na seção final).
 
 ---

@@ -1,7 +1,7 @@
-# Fichamento — UFU: "Apostila de Linguagem C (Conceitos Básicos)"
+# Fichamento: UFU, "Apostila de Linguagem C (Conceitos Básicos)"
 
 - **Título:** Apostila de Linguagem C — Conceitos Básicos (82 p.)
-- **Autor:** Prof. Luiz Gustavo Almeida Martins — Faculdade de Computação, Universidade Federal de Uberlândia.
+- **Autor:** Prof. Luiz Gustavo Almeida Martins, Faculdade de Computação, Universidade Federal de Uberlândia.
 - **Arquivo lido:** `d9f55f67-Apostila_Linguagem_C.md` (3111 linhas, lido por completo).
 - **Avaliação geral:** a mais "técnica" das apostilas básicas: explica bem o processo de compilação e
   linkedição, diretivas (`#include <>` × `""`, `#define`, macros com parênteses, operadores `#` e `##`),
@@ -10,7 +10,7 @@
   de `fopen`, `fgets` × `gets`, `fread`/`fwrite` com struct, `fseek`, `ferror`, `perror`) e `argc/argv`.
   Ponteiros e alocação dinâmica vêm como "leitura complementar" com a analogia do papel com endereço.
   Base Turbo C/DOS (int 16 bits, `void main`, `conio.h`, `gets`). **Muitos exemplos de código têm bugs**
-  (listados por seção) — ótimo acervo para exercícios "ache o erro", péssimo para copiar.
+  (listados por seção), ótimo acervo para exercícios "ache o erro", péssimo para copiar.
 
 ---
 
@@ -32,7 +32,7 @@
   maiúsculas de minúsculas e todas as palavras-chave são minúsculas; comentários são descartados pelo
   compilador. Esqueleto: diretivas → globais → protótipos → main → demais funções.
 - **Pegadinha:** a própria apostila escreve `If`, `Printf`, `Int`, `While` com maiúscula em vários
-  exemplos — não compila. Bom exercício: "por que este código não compila?".
+  exemplos: não compila. Bom exercício: "por que este código não compila?".
 - `main` retorna `int` ao sistema: 0 = término normal, ≠ 0 = erro (explicação boa).
 
 ### 0002-variaveis
@@ -41,7 +41,7 @@
   Inicialização na declaração. `void` como 5º tipo básico (sem valor).
 - **Identificadores:** letra ou `_` + letras/dígitos/`_`; sem espaço nem acento; não podem coincidir com
   palavras-chave nem com funções da biblioteca. Significativos: 31 internos / 6 externos (C89).
-- **Desatualizado:** "declarações só no início do bloco, antes de qualquer comando" — regra do C89; desde
+- **Desatualizado:** "declarações só no início do bloco, antes de qualquer comando" é regra do C89; desde
   C99 pode-se declarar no meio do bloco (inclusive no `for`).
 
 ### 0003-tipos-e-limites
@@ -75,18 +75,18 @@
   `%04d` de 21 → `0016`; `%6d` → `    21`; `%10.3f` de 3456.78 → `  3456.780`; `%3.1f` → `3456.8` (largura é
   mínima: não corta); `%c` de 47 → `/`.
 - **Pegadinha:** largura menor que o número não trunca (`%3.1f` de 3456.78 imprime 6 caracteres).
-- **Pegadinha de segurança:** a apostila sugere `printf(string)` para imprimir uma string — se a string
+- **Pegadinha de segurança:** a apostila sugere `printf(string)` para imprimir uma string; se a string
   contiver `%`, dá problema. Usar `printf("%s", string)` ou `puts`.
 - Bug no exemplo: `printf("%hd %c \n", CH)` passa um argumento para dois especificadores.
 
 ### 0006-scanf
 - **Conceitos-chave:** `scanf` recebe a lista de ENDEREÇOS (`&var`); `%i` aceita decimal, octal (`0..`)
   ou hexa (`0x..`); `%f` lê `float` e `%lf` lê `double` (no `printf` ambos usam `%f`). `scanf` devolve
-  quantos itens leu: `while (scanf("%f", &n) == 1)` soma até o fim da entrada (Ctrl-Z/Ctrl-D) — padrão
+  quantos itens leu: `while (scanf("%f", &n) == 1)` soma até o fim da entrada (Ctrl-Z/Ctrl-D), padrão
   excelente para 0011/0030.
 - `getchar` devolve `int` (para caber o `EOF`, que vale -1) e é "bufferizado": nada chega antes do Enter.
 - **Pegadinhas da apostila:** `scanf("%s\n\n", &FRASE)` (o `\n` no formato faz o scanf esperar mais
-  entrada; e `&` em vetor é desnecessário); `scanf("&d", &TEMP)` (digitado `&` no lugar de `%` — lê nada);
+  entrada; e `&` em vetor é desnecessário); `scanf("&d", &TEMP)` (digitado `&` no lugar de `%`: lê nada);
   `scanf("%li", FOLHA_PAGTO.NRO_SEG)` (faltou `&`); `scanf("%d,%d", ...)` exige digitar a vírgula.
 - **Exercício:** somar números até o fim da entrada, imprimindo subtotal a cada 10 (exemplo do livro).
   Entrada 1..25 → subtotais 55 e 210, total 325.
@@ -112,18 +112,18 @@
 - `ctype.h`: `tolower`, `toupper` (não-letras voltam inalteradas).
 
 ### 0012-relacionais / 0013-logicos
-- Resultado de comparação é 0 ou ≠ 0. Exemplo: pares de 1 a 100 com `if (!(NRO % 2))` — bom para
+- Resultado de comparação é 0 ou ≠ 0. Exemplo: pares de 1 a 100 com `if (!(NRO % 2))`, bom para
   discutir legibilidade (`NRO % 2 == 0` é mais claro).
 
 ### 0014-if / 0015-if-else / 0016-else-if
 - **Conceitos-chave:** chaves opcionais com um comando só; endentação não muda a semântica; `else if`
   avaliado em ordem e para no primeiro verdadeiro.
-- **Pegadinha EXCELENTE (else pendurado):** termostato — objetivo: "agradável" entre 20 e 30, "muito
-  quente" acima de 30. Código sem chaves `if (T<30) if (T>20) ...; else "muito quente";` — o `else` gruda
+- **Pegadinha EXCELENTE (else pendurado):** termostato. Objetivo: "agradável" entre 20 e 30, "muito
+  quente" acima de 30. Código sem chaves `if (T<30) if (T>20) ...; else "muito quente";`: o `else` gruda
   no `if` mais próximo, então "muito quente" sai quando T ≤ 20! Correção com chaves. Usar no 0016.
 - **Exemplo:** faixas de temperatura com `if` aninhado (<10 muito fria, <20 fria, <30 agradável, senão
-  quente) e reescrito com `else if` — mostra que a cadeia é mais legível.
-- **Pegadinha `=` × `==` (0015):** o exemplo de contar letras usa `If (FRASE[I] = LETRA)` — atribui em vez
+  quente) e reescrito com `else if`, o que mostra que a cadeia é mais legível.
+- **Pegadinha `=` × `==` (0015):** o exemplo de contar letras usa `If (FRASE[I] = LETRA)`: atribui em vez
   de comparar e conta TODAS as posições. Usar como "ache o erro".
 
 ### 0017-ternario
@@ -137,11 +137,11 @@
   `scanf(" %c")`).
 
 ### 0020-while / 0021-do-while / 0022-for
-- Mesma tarefa (soma 1..10 = 55) com `while`, `do-while` e `for` — ótimo exemplo comparativo.
+- Mesma tarefa (soma 1..10 = 55) com `while`, `do-while` e `for`: ótimo exemplo comparativo.
 - `for`: qualquer das três partes pode ser omitida (os `;` ficam); `for(;;)` infinito com `break`;
   incremento dentro do corpo (`for (x=0; x != 123;) scanf(...)`); múltiplas expressões com vírgula
   (`for (x=0, y=100; x < y; x++, --y)`).
-- **Pegadinha:** no exemplo do `do-while` falta `;` depois de `while (i <= 10)` — erro de sintaxe clássico.
+- **Pegadinha:** no exemplo do `do-while` falta `;` depois de `while (i <= 10)`: erro de sintaxe clássico.
 - **Exercício:** quantas linhas imprime `for (x=0, y=100; x<y; x++, --y)`? (50).
 
 ### 0023-break-continue
@@ -150,8 +150,8 @@
   programa.
 - **Exemplo:** teste de primo com `break` ao achar divisor; ler números ignorando negativos com `continue`
   até digitar 100.
-- **Bugs da apostila:** `TEXTO = "O número é primo";` com `char TEXTO[80]` — não se atribui string a vetor
-  (usar `strcpy` ou `const char *`); `exit;` sem parênteses/argumento — compila como expressão sem efeito e
+- **Bugs da apostila:** `TEXTO = "O número é primo";` com `char TEXTO[80]`: não se atribui string a vetor
+  (usar `strcpy` ou `const char *`); `exit;` sem parênteses/argumento: compila como expressão sem efeito e
   NÃO sai do programa (pegadinha ótima).
 
 ### 0029-parametros / 0028-funcoes
@@ -186,7 +186,7 @@
   acusa símbolo duplicado. `static` global esconde a variável dos outros arquivos.
 - `#include <x.h>` procura nos diretórios do sistema; `"x.h"` procura primeiro no diretório de trabalho.
   Inclusões podem ser aninhadas (o padrão garante pelo menos 8 níveis).
-- **Exercício:** dois arquivos com `int contador;` cada — compila? liga? (compila cada um; na ligação, erro
+- **Exercício:** dois arquivos com `int contador;` cada: compila? liga? (compila cada um; na ligação, erro
   ou comportamento dependente do compilador; corrigir com `extern`).
 
 ### 0035-preprocessador
@@ -211,17 +211,17 @@
 
 ### 0038-vetores-e-funcoes
 - Ao passar matriz, passa-se o endereço do 1º elemento (exceção à "passagem por valor"); 3 formas
-  equivalentes de declarar o parâmetro: `int v[50]`, `int v[]`, `int *v` — dentro da função é sempre um
+  equivalentes de declarar o parâmetro: `int v[50]`, `int v[]`, `int *v`; dentro da função é sempre um
   ponteiro (por isso o 50 é ignorado e `sizeof` não dá o tamanho do vetor).
 
 ### 0041-strings
 - **Conceitos-chave:** string = vetor de char terminado em `'\0'`; espaço = caracteres + 1; não se copia
   string com `=` (copiar caractere a caractere ou `strcpy`); `for (i = 0; s[i]; i++)` aproveita o `\0`
   como falso. `strcpy(dest, orig)`, `strcat(dest, orig)`, `strlen` (não conta o `\0`), `strcmp` (0 se
-  iguais — por isso `if (strcmp(a,b))` significa "diferentes"!), `atoi`, `atof` (stdlib.h).
+  iguais, por isso `if (strcmp(a,b))` significa "diferentes"!), `atoi`, `atof` (stdlib.h).
   Vetor de strings = matriz `char nomes[5][100]`; `nomes[i]` é uma string.
-- **Pegadinha:** `if (strcmp(s1, s2))` entra quando são DIFERENTES — confunde iniciantes.
-- **ERRO na apostila:** `char str1[2] = "12"` — não sobra espaço para o `'\0'`, e `atoi` lê além do vetor.
+- **Pegadinha:** `if (strcmp(s1, s2))` entra quando são DIFERENTES, o que confunde iniciantes.
+- **ERRO na apostila:** `char str1[2] = "12"`: não sobra espaço para o `'\0'`, e `atoi` lê além do vetor.
   Exercício: qual o tamanho mínimo? (3).
 - **Exemplo:** `atoi("12") + atof("2.14")` = 14.14.
 
@@ -237,12 +237,12 @@
   diferente). `&` = ligar para a firma e pedir o endereço; `*` = ir até a firma e mexer lá dentro.
   Ponteiro para ponteiro = anotar o endereço do papel que tem o endereço do amigo.
 - **Conceitos-chave:** `int *pt; char *temp, *pt2;` (asterisco em cada nome); ponteiro não inicializado
-  aponta para lugar indefinido — inicializar SEMPRE; `%p` imprime endereço; `*` de multiplicação (binário)
+  aponta para lugar indefinido; inicializar SEMPRE; `%p` imprime endereço; `*` de multiplicação (binário)
   ≠ `*` de indireção (unário).
 - **Pegadinha (bem explicada):** `int x, *p; x = 13; *p = x;` compila e roda, gravando 13 em lugar
   desconhecido.
 - **ERRO grave na apostila:** o exemplo "vetor reescrito com ponteiro" declara `int *num;` e faz
-  `scanf("%d", num + count)` sem alocar memória — exatamente o erro que ela mesma condena depois.
+  `scanf("%d", num + count)` sem alocar memória, exatamente o erro que ela mesma condena depois.
   Ótimo "ache o erro".
 
 ### 0047-ponteiros-e-vetores
@@ -253,12 +253,12 @@
 - **Pegadinha (boa):** o nome do vetor não é variável: `vetor = vetor + 2`, `vetor++`, `vetor = ponteiro`
   são erros ("not an lvalue"); `ponteiro = vetor + 2` é válido.
 - **Exemplo:** zerar matriz 50×50 com índices × com ponteiro percorrendo 2500 posições (a apostila diz que
-  é mais rápido; hoje o compilador otimiza ambos — vale discutir).
+  é mais rápido; hoje o compilador otimiza ambos; vale discutir).
 - Erro de digitação na apostila: "v+1 aponta para o 1º elemento; v+2 aponta para o 1º elemento".
 
 ### 0048-ponteiros-e-strings
 - Literais ficam num "banco de strings" do compilador; no código fica o endereço. `char *str1 = "String
-  constante.";` — se alterar o ponteiro perde a string; se escrever através dele corrompe o banco
+  constante.";`: se alterar o ponteiro perde a string; se escrever por ele corrompe o banco
   (hoje: literal é só leitura, escrever é comportamento indefinido).
 
 ### 0049-ponteiro-para-ponteiro
@@ -266,12 +266,12 @@
 
 ### 0054-malloc-free / 0055-calloc-realloc
 - **Conceitos-chave:** ANSI define 4 funções em `stdlib.h`: `malloc(bytes)` devolve `void *` (NULL se
-  falhar); `calloc(num, tam)` (aloca num × tam — e zera, o que a apostila não diz); `realloc(p, novo)` pode
+  falhar); `calloc(num, tam)` (aloca num × tam e zera, o que a apostila não diz); `realloc(p, novo)` pode
   mover o bloco e copia o conteúdo; NULL em `realloc` aloca; tamanho 0 libera; se faltar memória devolve
   NULL e mantém o original; `free(p)` consulta uma tabela interna para saber quantos bytes liberar.
-- **Pegadinha (não apontada, mas presente):** `p = realloc(p, ...)` perde o bloco original se der NULL —
+- **Pegadinha (não apontada, mas presente):** `p = realloc(p, ...)` perde o bloco original se der NULL:
   usar ponteiro temporário. E o exemplo nem testa o retorno.
-- **Pegadinha:** `if (!p) { printf(...); exit; }` — `exit;` não chama nada; o programa segue e usa NULL.
+- **Pegadinha:** `if (!p) { printf(...); exit; }`: `exit;` não chama nada; o programa segue e usa NULL.
 - **Exemplo:** vetor de 30 quadrados realocado para 80.
 
 ### 0059-struct / 0060-typedef / 0061-vetor-de-structs
@@ -282,8 +282,8 @@
   `typedef` cria apelido (`typedef struct tipo_endereco {...} tp_endereco;`).
 - **Ideia de exemplo:** folha de pagamento (nome, endereço com logradouro/número/bairro/complemento,
   número do seguro, salário); cadastro de alunos com endereço; desconto de IR = salário × 0.25.
-- **ERRO na apostila:** `ALUNOS.nome = "Joaquim Manoel";` (nome é vetor — usar `strcpy`). Pegadinha ótima.
-- **Exercício:** struct com dois registros: `a = b;` funciona? E `a == b`? (sim; não — comparar campo a
+- **ERRO na apostila:** `ALUNOS.nome = "Joaquim Manoel";` (nome é vetor; usar `strcpy`). Pegadinha ótima.
+- **Exercício:** struct com dois registros: `a = b;` funciona? E `a == b`? (sim; não: comparar campo a
   campo).
 
 ### 0067-arquivos-texto
@@ -297,9 +297,9 @@
   cada letra; o buffer junta tudo e grava de uma vez quando enche ou no `fclose`.
 - **Ideias de exemplo:** gravar string caractere a caractere em `string.txt`; `type`/`cat` caseiro que
   recebe o nome via `argv`; gravar linhas até linha vazia; copiar TESTE → TESTE1 com `fgets`.
-- **Pegadinhas da apostila:** `char ch = getc(fp)` — EOF (-1) pode não ser distinguível em `char` → usar
+- **Pegadinhas da apostila:** `char ch = getc(fp)`: EOF (-1) pode não ser distinguível em `char` → usar
   `int`; `while (!feof(fp)) { c = getc(fp); printf("%c", c); }` imprime um caractere-lixo no final, pois
-  `feof` só fica verdadeiro DEPOIS de uma leitura falhar (padrão errado clássico — ótimo para o curso);
+  `feof` só fica verdadeiro DEPOIS de uma leitura falhar (padrão errado clássico, ótimo para o curso);
   "NULL é definido como '\0'" (não: é ponteiro nulo); macros `SEEK_*` "em stdlib.h" (são de `stdio.h`).
 - `ferror`, `clearerr`, `perror("Erro na gravacao")` (mensagem vai para `stderr` com a descrição do
   `errno`).
@@ -338,11 +338,3 @@
 | cast em `malloc` | desnecessário em C | `int *p = malloc(n * sizeof *p);` |
 | `printf(string)` | vulnerável a `%` | `printf("%s", string)` / `fputs` |
 | `register`, `auto` | sem efeito prático hoje | omitir |
-
-## Extras que não cabem no sumário
-- `volatile` e `const volatile` (registradores de hardware, rotinas de relógio).
-- Operadores de pré-processador `#` e `##`; continuação de linha com `\` em `#define`.
-- Funções sem protótipo e promoções padrão de argumentos (`char`→`int`, `float`→`double`) — explica por que
-  `printf` usa `%f` para float e double.
-- `ferror`, `clearerr`, `perror` e `errno`; `remove`; `fflush` em saída.
-- Representação IEEE 754 resumida (sinal/expoente/mantissa) — ponte para 0004.

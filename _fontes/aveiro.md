@@ -143,7 +143,7 @@ aparecem como conceito).
 - **Pegadinhas:**
   - declarar uma variável local com o mesmo nome de um parâmetro é erro;
   - uma `static` só pode ser inicializada com constante e, sem inicialização, vale 0;
-  - o livro diz que as globais ficam "na RAM" e as locais "na stack". Na verdade tudo está na RAM: as globais ficam no segmento de dados.
+  - o livro diz que as globais ficam "na RAM" e as locais "na stack". Tudo está na RAM: as globais ficam no segmento de dados.
 - **Ideia de exercício:** prever a saída de INCREMENTAR chamada 4 vezes. Resposta: TEMP 2, 2, 2, 2 e PERM 2, 3, 4, 5.
 
 ### 0031-pilha-de-chamadas
@@ -431,12 +431,10 @@ aparecem como conceito).
 ## Obsoleto / evitar
 - Comparações com Pascal (`readln`, `repeat until`, `:=`, `case of`): retirar.
 - Máquina de 32 bits: "ponteiro tem 4 bytes", "`int` e `long` têm 4 bytes", "deslocar ponteiros custa 4 bytes".
-- Divisão e resto com negativos "dependem do compilador": no C99 a divisão trunca em direção a zero.
 - `register`: inútil hoje, e não deixa usar `&`.
 - `tmpnam`: inseguro (preferir `tmpfile`/`mkstemp`).
 - `atoi`/`atof` sem detecção de erro (preferir `strtol`/`strtod`). O livro cita "idiv" (o nome correto é `div`).
 - Identificadores todos em MAIÚSCULAS para variáveis (o costume moderno reserva maiúsculas para macros).
-- Guards com `_NOME` (nome reservado).
 - Índices `unsigned` em algoritmos que fazem `i-1` (bugs de volta ao máximo).
 - Variáveis de bloco "devem ser evitadas" (opinião antiga: hoje se recomenda declarar perto do uso; o C99 permite `for (int i=...)`).
 - Devolver ponteiro para struct `static` local (não reentrante).
@@ -452,13 +450,5 @@ aparecem como conceito).
   - `EXIT_SUCESS` (erro de digitação);
   - `DISCOS_MAX` não definido no Hanói.
 
-## Extras que não cabem no sumário
-- **Série de Taylor reescrita por Horner** (sem fatorial): um bom exemplo de "pensar antes de programar" e de estabilidade numérica.
-- **Determinante recursivo** por operações de colunas.
-- **Tabela de permissões dos modos do `fopen`.**
-- **`%n` do `scanf`** para validar o formato.
-- **Classes de "memória" RAM/FIFO/LIFO/CAM** e implementações estática, semiestática e dinâmica: uma visão unificada de TADs.
-- **First/best/worst fit:** ligam-se a alocadores de memória e ao problema de corte.
-- **Ordenação externa** por intercalação de arquivos.
-- **Contagem de operações com contadores `static`** (instrumentar algoritmos).
-- **Leituras recomendadas pelo livro:** Darnell & Margolis, *C: A Software Approach*; Standish, *Data Structures, Algorithms and Software Principles in C*; Weiss, *Data Structures and Algorithm Analysis in C*.
+## Leituras recomendadas pelo livro
+- Darnell & Margolis, *C: A Software Approach*; Standish, *Data Structures, Algorithms and Software Principles in C*; Weiss, *Data Structures and Algorithm Analysis in C*.

@@ -79,7 +79,7 @@ módulos, hash, heap, AVL nem grafos.
 
 ### 0053-pilha-e-heap
 - **Conceitos-chave:** alocação estática é decidida na compilação e dura até o fim do bloco ou do programa; alocação dinâmica acontece na execução, reservando e liberando sob demanda. Em Java a estrutura cresce "sozinha"; em C o programador cuida de tudo.
-- **Ideia de exemplo:** um vetor dinâmico precisa saber o tamanho na hora de alocar, e realocar o vetor inteiro custa caro; uma estrutura encadeada aloca **por elemento**.
+- **Ideia de exemplo:** um vetor dinâmico precisa saber o tamanho na hora de alocar, e realocar o vetor inteiro custa caro; uma estrutura encadeada aloca **por elemento**. A analogia de fragmentação de memória do 0076 também serve aqui.
 
 ### 0054-malloc-free / 0055-calloc-realloc
 - **Conceitos-chave:** `malloc(bytes)`; `calloc(qtd, tam)`, que zera a memória; `realloc(p, novo)`, que pode mover o bloco; `free(p)`, só com ponteiros vindos dessas funções. Teste sempre se veio `NULL`.
@@ -129,7 +129,7 @@ módulos, hash, heap, AVL nem grafos.
   - antes de listar, ordena com quicksort por nome;
   - a busca usa `strncmp(nome, chave, strlen(chave))` (casa por prefixo);
   - **a exclusão copia o último elemento para o buraco e diminui o tamanho**: O(1), mas desfaz a ordem;
-  - a pesquisa navega com "Próximo?" de forma circular.
+  - a pesquisa navega circularmente com "Próximo?".
 - **Melhorias para o curso:**
   - **dobrar a capacidade** em vez de fazer `realloc` a cada item (um `realloc` por item dá custo total O(n²));
   - guardar o telefone como string (como `int` ele estoura e perde o zero à esquerda);
@@ -347,25 +347,6 @@ módulos, hash, heap, AVL nem grafos.
   - "pilha e fila têm tamanho fixo";
   - "o maior elemento está sempre numa folha";
   - "lista dupla serve para recuperar após falha de hardware".
-- Bugs a não copiar:
-  - `strcpy` em `char[5]` com "abcde";
-  - `*pi = malloc(...)`;
-  - `calloc(n, sizeof(int))` para `int**`;
-  - `p = realloc(p, ...)`;
-  - `stacktop` lendo `pilha[pos]`;
-  - os `size` errados da fila;
-  - a troca fora do laço na seleção;
-  - `free(p)` em vez de `free(*p)` no `delete`;
-  - `maior`/`menor` sem testar NULL;
-  - a lista com nó extra e vazamento.
 
-## Extras que não cabem no sumário
-- **Busca com frequência de acesso e "mover para a frente"** (autoajuste de listas).
-- **Contagem de movimentos do Hanói por recorrência sem recursão dupla**: `h(n) = 2h(n−1) + 1`.
-- **MDC por subtrações sucessivas** (variante de Euclides).
-- **Representação "primeiro filho / próximo irmão"**, que converte uma árvore geral em binária.
-- **Operações extras de BST:** `range` (consulta de intervalo) e sucessor (`proxmaior`).
-- **Impressão de árvore deitada** com recuo por nível.
-- **Analogia de fragmentação de memória** (vetor contra lista em 90 posições), também útil em 0053.
-- **Exercício "fila de pilhas"** (composição de estruturas).
-- **Referências citadas pelo livro:** Tenenbaum et al., *Estruturas de Dados Usando C*; Cormen et al., *Algoritmos*; Wirth, *Algorithms and Data Structures*; Koenig, *C Traps and Pitfalls*; Schildt, *C: The Complete Reference*; Lorenzi et al., *Estrutura de Dados*.
+## Referências citadas pelo livro
+- Tenenbaum et al., *Estruturas de Dados Usando C*; Cormen et al., *Algoritmos*; Wirth, *Algorithms and Data Structures*; Koenig, *C Traps and Pitfalls*; Schildt, *C: The Complete Reference*; Lorenzi et al., *Estrutura de Dados*.

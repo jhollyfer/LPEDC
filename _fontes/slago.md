@@ -1,8 +1,8 @@
-# Fichamento — Apostila "slago" de Linguagem C (Turbo C)
+# Fichamento: Apostila "slago" de Linguagem C (Turbo C)
 
 - **Título:** Linguagem C (apostila de 131 p., capítulos 1 a 8: introdução, decisão, repetição, macros e funções,
   vetores/strings/matrizes, estruturas e uniões, ponteiros, arquivos).
-- **Autor:** Silvio Lago (nome aparece no próprio material — "Silvio Lago" na agenda de exemplo; arquivo "slago").
+- **Autor:** Silvio Lago (nome aparece no próprio material, na agenda de exemplo; arquivo "slago").
   Ambiente: Borland Turbo C / DOS.
 - **Arquivo lido:** `d40c1084-slago-C.md` (3800 linhas, lido por completo).
 - **Avaliação geral:** a mais "algorítmica" das apostilas de C: além da linguagem, traz **recursão bem explicada**
@@ -13,7 +13,7 @@
   (inserção/remoção no início, acesso ao i-ésimo, tratamento recursivo). Ótimos exercícios temáticos (IMC, CPF,
   dígito verificador, campo minado, labirinto, cadeia de Freeman, criptografia XOR, gabarito de concurso).
   Contras: muito `conio.h`/`dos.h`/`bios.h`/`dir.h`, `void main`, `gets`, `int` de 2 bytes, e **vários erros nos
-  próprios exemplos** (listados) — úteis para "ache o erro". O sumário promete árvores binárias, mas o texto não
+  próprios exemplos** (listados), úteis para "ache o erro". O sumário promete árvores binárias, mas o texto não
   as traz.
 
 ---
@@ -23,7 +23,7 @@
   C criada em 1972 (Ritchie, Bell Labs, PDP-11/UNIX), descendente de BCPL.
 
 ### 0001-primeiro-programa
-- **Exemplo motivador ótimo:** IMC — "obeso se IMC > 30", `imc = peso / pow(altura, 2)`, `#define LIMITE 30`,
+- **Exemplo motivador ótimo:** IMC: "obeso se IMC > 30", `imc = peso / pow(altura, 2)`, `#define LIMITE 30`,
   `if (imc <= LIMITE) ... else ...`. Bom primeiro programa "de verdade".
 - **Exercício "descubra os erros" (excelente para o curso):** programa PERIM.C com: comentário fechado com `/*`;
   `#include <studio.h>`; `#define PI = 3.1415` (o `=` vira parte do texto); `Main()` maiúsculo; `clrscr;` e
@@ -33,21 +33,21 @@
 
 ### 0002-variaveis / 0003-tipos-e-limites
 - **Conceitos-chave:** 5 tipos básicos (`char`, `int`, `float`, `double`, `void`); declaração = tipo + identificador;
-  o computador só guarda números — um char é o código ASCII. **Bit de sinal**: bit mais à esquerda; `unsigned`
+  o computador só guarda números: um char é o código ASCII. **Bit de sinal**: bit mais à esquerda; `unsigned`
   reaproveita esse bit e dobra a faixa positiva; `unsigned` sozinho = `unsigned int`; `long` dobra, `short` pode
   reduzir; `long float` ≡ `double` (antigo).
-- Tabela com `int` de 2 bytes — no curso, mostrar com `sizeof` que hoje são 4.
+- Tabela com `int` de 2 bytes; no curso, mostrar com `sizeof` que hoje são 4.
 
 ### 0004-constantes / 0005-printf / 0006-scanf
 - Tabela de especificadores (`%c %o %d %x %u %ld %f %lf %s %%`) e de escapes (`\a \b \f \n \r \t \" \' \\`).
-- `scanf("%d %c", &idade, &sexo)` — cada especificador casa com um endereço.
+- `scanf("%d %c", &idade, &sexo)`: cada especificador casa com um endereço.
 - **Exemplo de formatação:** `a = 678`: `|%5d|` → `|  678|`; `|%06d|` → `|000678|`.
 - **ERROS na fonte (ótimos para "ache o erro"):** usa `%7.3d` e `%7.2d` para imprimir um `float` (deveria ser
   `%7.3f`/`%7.2f`) e mostra `12.34` como saída de `%.2f` de 12.3456, contradizendo a própria regra de
   arredondamento que enuncia (o correto é `12.35`). Também chama `getch()` antes do primeiro `printf` sem incluir
   `conio.h`.
 - **Exercícios (com resposta esperada):** média de duas notas; consumo km/l; código ASCII de um caractere em octal,
-  decimal e hexa (`'A'` → 101, 65, 41); Fahrenheit→Celsius com a dica `C = (F − 32) * (5 / 9)` — **pegadinha
+  decimal e hexa (`'A'` → 101, 65, 41); Fahrenheit→Celsius com a dica `C = (F − 32) * (5 / 9)`, **pegadinha
   (intencional ou não):** `5/9` vale 0, então tudo dá 0; usar `5.0/9`; hipotenusa com `sqrt` (3, 4 → 5).
 
 ### 0007-aritmetica
@@ -58,29 +58,29 @@
   o lado esquerdo e o direito sejam a MESMA variável (em `v[i+w[2*j]] = v[i+w[2*j]] + 3` é fácil errar um índice).
 - **Exercício (resposta):** por que `x = x * 2 + y` não pode virar `x *= 2 + y`? (o segundo é `x * (2 + y)`).
 - **Exemplo pronto:** `x = 5, y = 5; v = ++x; w = y--;` → x=6 y=4 v=6 w=5. `++` não se aplica a constantes.
-- **Exercício-pegadinha:** `x = 5; y = x++ + ++x;` — a fonte pede "quais os valores e por quê?". Resposta correta
+- **Exercício-pegadinha:** `x = 5; y = x++ + ++x;`: a fonte pede "quais os valores e por quê?". Resposta correta
   para o curso: **comportamento indefinido** (x modificado duas vezes sem ponto de sequência); não escreva assim.
 
 ### 0012-relacionais / 0013-logicos
 - **Conceitos-chave:** 0 é falso, qualquer outro valor verdadeiro (5, −3, 1.2, `'a'` verdadeiros; 0 e `4−4` falsos);
   comparações produzem 0 ou 1; ordem de avaliação: aritméticos → relacionais → lógicos.
-- **ERRO na fonte (pegadinha ótima):** afirma que `printf("%d %d", 5<6, 6>5)` imprime "1 0" — o correto é **1 1**
+- **ERRO na fonte (pegadinha ótima):** afirma que `printf("%d %d", 5<6, 6>5)` imprime "1 0"; o correto é **1 1**
   (as duas comparações são verdadeiras). Usar como "ache o erro".
 - **Exercício (resposta calculada):** `printf("%d %d %d %d", !3, !0, 3+'a'>'b'+2 && !'b', 1 || !2 && 3);` →
   `!3`=0; `!0`=1; `3+97 > 98+2` é `100 > 100` = 0, então `0 && ...` = 0; `1 || ...` = 1 → **0 1 0 1**.
 
 ### 0014-if / 0015-if-else / 0016-else-if
 - **Exemplos:** aprovado/reprovado com média ≥ 7.0; salário de horista a R$ 19,50/h com IR de 10% acima de
-  R$ 1500 (`if` sem `else`: `if (s > 1500) s = 0.90 * s;`) — 80 h → 1560 → 1404.00; 70 h → 1365.00;
+  R$ 1500 (`if` sem `else`: `if (s > 1500) s = 0.90 * s;`): 80 h → 1560 → 1404.00; 70 h → 1365.00;
   triângulo: verificar desigualdade triangular (`a < b + c && b < a + c && c < a + b`) e classificar equilátero /
   isósceles / escaleno com `if` aninhado (dentro) e encadeado (`else if`).
 - **Exercícios:** maior de dois números; ano bissexto (a dica da fonte esquece a regra dos 400: 2000 é bissexto,
-  1900 não — pegadinha); valor absoluto; reajuste de 5% com abono de R$ 100 para quem ganha até R$ 750
+  1900 não: pegadinha); valor absoluto; reajuste de 5% com abono de R$ 100 para quem ganha até R$ 750
   (cuidado: abono sobre o salário antigo ou o novo?); aprovado (≥7) / recuperação / reprovado (<3); raízes reais
   por Báskara (a ≠ 0, delta < 0 sem raízes reais).
 
 ### 0017-ternario
-- `abs = n > 0 ? n : -n;` e `printf("Máximo = %d", x > y ? x : y);` — vantagem: é expressão, cabe onde um
+- `abs = n > 0 ? n : -n;` e `printf("Máximo = %d", x > y ? x : y);`. Vantagem: é expressão, cabe onde um
   `if` não cabe (argumento de função).
 - **Exercícios bons (resposta):** plural automático: `printf("%d erro%s detectado%s", e, e == 1 ? "" : "s",
   e == 1 ? "" : "s");` → "1 erro detectado", "5 erros detectados"; imprimir valor lógico como texto:
@@ -92,19 +92,19 @@
   falta o break; não precisa de chaves para vários comandos num case.
 - **Exercício MODELO (tabela pronta):** `switch(n) { case 1: putchar('A'); break; case 3: putchar('B'); case 4:
   putchar('C'); break; default: putchar('*'); case 5: putchar('D'); } putchar('.');` → n=1 "A."; n=2 "*D." (default
-  no meio vaza para o case 5!); n=3 "BC."; n=4 "C."; n=5 "D.". (A fonte escreve `printf('*')` — aspas simples num
+  no meio vaza para o case 5!); n=3 "BC."; n=4 "C."; n=5 "D.". (A fonte escreve `printf('*')`: aspas simples num
   printf é erro; corrigir para `putchar('*')`.)
 - **Exemplos:** calculadora `val1 oper val2` com switch; `if (y == 0)` dentro do `case '/'`; aceitar `:` também
   como divisão (case sem break).
-- **Exercícios:** peso ideal por sexo (homem 72.7·h − 58; mulher 62.1·h − 44.7) — com h = 1.80 → 72.86 e 67.08;
+- **Exercícios:** peso ideal por sexo (homem 72.7·h − 58; mulher 62.1·h − 44.7), com h = 1.80 → 72.86 e 67.08;
   "perfil" pela data de nascimento (13/06/1970 → 1306 + 1970 = 3276 → 32 + 76 = 108 → 108 % 5 = 3 → "Atraente").
 
 ### 0020-while
 - **Exemplo ótimo:** exibir os dígitos de um número dividindo por 10 e imprimindo o resto: 8503 → 3 0 5 8 (ordem
-  inversa — gancho para a versão recursiva que imprime na ordem certa).
+  inversa, gancho para a versão recursiva que imprime na ordem certa).
 - **Exercícios (com resposta):** dígito verificador de conta: soma dos dígitos % 10 → 7314 → 15 → **007314-5**
   (com `%06d`); número triangular (1, 3, 6, 10, 15...): 10 → sim, 11 → não.
-- `while (1)` com saída interna (programa do "rastro" com teclas N/S/L/O e F para fim; usa `gotoxy`/`getch` —
+- `while (1)` com saída interna (programa do "rastro" com teclas N/S/L/O e F para fim; usa `gotoxy`/`getch`;
   adaptar ou descartar).
 
 ### 0021-do-while
@@ -113,7 +113,7 @@
   de 50 → 5%; até 100 → 10%; até 200 → 15%; acima de 200 → 20%); **extrato bancário com CPMF**: saldo inicial
   1000, operações −200, +50, −320, +100, −200, 0 → créditos 150.00, débitos 520.00, CPMF (0,35% dos débitos)
   1.04, saldo final 628.96 (resposta pronta na fonte).
-- Bola de pingue-pongue quicando nas bordas (`kbhit`, `sound`) — ideia de animação, mas não portátil.
+- Bola de pingue-pongue quicando nas bordas (`kbhit`, `sound`): ideia de animação, mas não portátil.
 
 ### 0022-for
 - **Exemplos:** contagem 1..9; tabuada formatada `"%d x %2d = %3d"` (7 x 1 = 7 ... 7 x 10 = 70); tabela ASCII
@@ -123,7 +123,7 @@
   retângulo de m × n caracteres.
 
 ### 0023-break-continue
-- **Exemplo MODELO (primo):** `for (k = 2; k <= n - 1; k++) if (n % k == 0) break; if (k == n) "primo"` — o teste
+- **Exemplo MODELO (primo):** `for (k = 2; k <= n - 1; k++) if (n % k == 0) break; if (k == n) "primo"`: o teste
   depois do laço descobre **por que** o laço terminou (pela condição ou pelo `break`). Bom para explicar. Figura:
   para 7 é preciso testar todos os divisores; para 9 basta achar o 3.
 - Pegadinhas da fonte: lê `%u` numa variável `int`; para n = 1 o laço não roda, k = 2 ≠ 1 → "não é primo" (por
@@ -144,12 +144,12 @@
   `x = alarme() + 3` e `alarme(5)` são erros de compilação quando a função é `void f(void)`; protótipo ("assinatura")
   = cabeçalho + `;`, necessário se a definição vier depois do uso; cada parâmetro precisa do próprio tipo; `return`
   devolve um único valor e encerra a função (`max` sem `else`: o 1º return impede o 2º).
-- **Exemplos:** verificação de senha que dispara `alarme()`; `linha(x, y, c)`; `hip(a, b)` (falta um `)` na fonte —
+- **Exemplos:** verificação de senha que dispara `alarme()`; `linha(x, y, c)`; `hip(a, b)` (falta um `)` na fonte:
   "ache o erro"); `max(a, b)` com dois `return`.
 - **Exercícios ótimos (com resposta):** `fat(n)`; `pot(x, n)`; quadrado por soma de ímpares; raiz por Newton com
   tolerância 0,001 (`r = (r*r + n) / (2*r)`); pontos dentro/fora/sobre uma circunferência usando `dist`;
   **dígito verificador mod 11**: n = 345702159 → s = 3·10 + 4·9 + ... + 9·2 = 202; x = 11 − 202 % 11 = 11 − 4 = 7;
-  dv = 7 (0 se x > 9) — a fonte escreve "201%11" por engano; **CPF**: 1º dígito dv(345702159) = 7, 2º dígito
+  dv = 7 (0 se x > 9); a fonte escreve "201%11" por engano; **CPF**: 1º dígito dv(345702159) = 7, 2º dígito
   dv(3457021597) = 1 → 345702159-71; rodízio de placas por dia da semana.
 
 ### 0030-escopo
@@ -164,12 +164,12 @@
 - **Três ferramentas de visualização:** (1) simulação por substituição: `pot(2,3) = 2*pot(2,2) = 2*2*pot(2,1) =
   2*2*2*pot(2,0) = 2*2*2*1 = 8`; (2) fluxo de chamadas e retornos (ovais com a operação pendente em cada seta);
   (3) **rastreamento automático**: passar a profundidade `p` e imprimir `p` espaços antes de "pot(2.0,5)" na ida e
-  do resultado na volta — ótimo exercício para o 0031/0037.
+  do resultado na volta; ótimo exercício para o 0031/0037.
 - **ERRO na fonte (pegadinha excelente):** `double pot(double x, unsigned n) { if (n=0) return 1; return x *
-  pot(x, n-1); }` — o `=` atribui 0, a condição é sempre falsa e a recursão nunca para (com unsigned, n−1 dá a
+  pot(x, n-1); }`: o `=` atribui 0, a condição é sempre falsa e a recursão nunca para (com unsigned, n−1 dá a
   volta para 4294967295). Junta 0015 e 0032.
 - **Procedimentos recursivos:** `prog(n)`: base n = 0 nada; passo: `prog(n-1)` e depois imprime n → `prog(3)` =
-  "1 2 3"; instruções pendentes ficam numa pilha — imprimir antes ou depois da chamada inverte a ordem.
+  "1 2 3"; instruções pendentes ficam numa pilha; imprimir antes ou depois da chamada inverte a ordem.
 - **Exercícios (com resposta esperada):** fatorial; resto por subtrações; quociente por subtrações; produto por
   somas; soma usando só `suc`/`pred`; `regr(n)` contagem regressiva; **`bin(n)`** imprime n em binário (13 →
   1101: `bin(n/2)` depois `printf("%d", n%2)`).
@@ -193,12 +193,12 @@
   Globais e estáticos começam zerados; inicialização parcial zera o resto; tamanho omitido é contado.
 - **Pegadinha MODELO (sem verificação de limites):** `int x[3], y[4]; x[2] = y[0] = 1; x[3] = 2; y[-1] = 3;
   printf("%d %d", x[2], y[0]);` → no Turbo C imprimiu **3 2** (x[3] invade y[0] e y[−1] invade x[2]). Hoje o
-  layout é outro (pode até inverter) — mas a lição é a mesma: comportamento indefinido.
-- **ERRO na fonte:** com `static int A[5] = {9, 3, 2, 7}` diz que "A[4] e A[5] ficam zeradas" — A[5] nem existe
+  layout é outro (pode até inverter), mas a lição é a mesma: comportamento indefinido.
+- **ERRO na fonte:** com `static int A[5] = {9, 3, 2, 7}` diz que "A[4] e A[5] ficam zeradas", mas A[5] nem existe
   (off-by-one no próprio texto).
 - **Exercícios:** ler 5 números e imprimir em ordem inversa; desvio padrão; avaliar polinômio para vários x;
   cédulas mínimas (209 → 2×100, 1×5, 4×1); tocar uma melodia com pares (frequência, duração).
-- Exercício 5.2 da fonte (atribuições encadeadas em `w[9]` com i = 5) usa `w[2]` sem inicializar — pegadinha:
+- Exercício 5.2 da fonte (atribuições encadeadas em `w[9]` com i = 5) usa `w[2]` sem inicializar; pegadinha:
   pergunte "qual o problema antes de calcular?".
 
 ### 0038-vetores-e-funcoes
@@ -206,7 +206,7 @@
   = tamanho de x); passar vetor = passar endereço ("por referência"); no parâmetro `float t[]` o tamanho não é
   necessário (nada é copiado).
 - **Exemplo de projeto top-down:** temperaturas da semana acima da média: `main` com `obtem(temp)`, `m = media(temp)`,
-  `conta(temp, m)` — escrever o main primeiro, como se as funções existissem.
+  `conta(temp, m)`: escrever o main primeiro, como se as funções existissem.
 - **Exercícios:** `minimax(t, x, y)`; **histograma** de temperaturas (19, 21, 25, 22, 20, 17, 15) com uma barra por
   dia; versão vertical.
 
@@ -220,12 +220,12 @@
 - Bug na fonte: `printf("[%d][%d]= ")` sem os argumentos i, j.
 
 ### 0040-caracteres / 0041-strings
-- **Conceitos-chave:** string = sequência de chars terminada por `'\0'` (código 0 — não confundir com `'0'`, código
-  48); vetor precisa de uma posição a mais; `sizeof("verde e amarelo")` = **16** (15 letras + `'\0'`) — prova
+- **Conceitos-chave:** string = sequência de chars terminada por `'\0'` (código 0, não confundir com `'0'`, código
+  48); vetor precisa de uma posição a mais; `sizeof("verde e amarelo")` = **16** (15 letras + `'\0'`): prova
   prática ótima.
 - **Pegadinha MODELO:** `char y[] = {'d','o','i','s'};` não tem `'\0'` → `printf("%s", y)` imprime "dois" seguido de
   lixo até achar um zero.
-- **Pegadinha MODELO:** `x == y` com duas strings "um" dá **falso** — compara endereços; usar `strcmp`. Regra:
+- **Pegadinha MODELO:** `x == y` com duas strings "um" dá **falso**: compara endereços; usar `strcmp`. Regra:
   `strcmp(x, y) ◊ 0` equivale a `x ◊ y` para qualquer relacional ◊ (`"Ana" >= "Bia"` vira
   `strcmp("Ana","Bia") >= 0`). Tabela pronta: "um" < "dois"? F; "um" > "dois"? V; "dois" ≤ "um"? V.
 - **Implementação curta de strcmp:** avança enquanto iguais e ≠ `'\0'`; devolve `s[i] - t[i]`.
@@ -234,7 +234,7 @@
   (perímetro com diagonais valendo 1.42).
 
 ### 0042-lendo-strings
-- Usa `gets(n)` com `char n[21]` (o Enter vira `'\0'`) — trocar por `fgets` no curso.
+- Usa `gets(n)` com `char n[21]` (o Enter vira `'\0'`); trocar por `fgets` no curso.
 
 ### 0044-memoria / 0045-ponteiros
 - **Analogia ótima:** `*p` = "**siga a seta** em p"; desenhar setas; quantos `*` = quantas setas
@@ -243,7 +243,7 @@
 - **Pegadinha MODELO (tipos incompatíveis):** `int v = 0x4142; char *a; int *b; long *c; a = b = c = &v;
   printf("%c %x %lx", *a, *b, *c);` → só `b` lê certo; `a` lê metade (1 byte) e `c` lê lixo junto. A quantidade
   de memória lida depende do tipo do PONTEIRO, não da variável.
-- **Exercício-pegadinha (resposta):** `int *p, x = 5; *p *= 2**p; printf("%d", x);` — explicar cada `*` (declaração,
+- **Exercício-pegadinha (resposta):** `int *p, x = 5; *p *= 2**p; printf("%d", x);`: explicar cada `*` (declaração,
   dereferência, multiplicação, dereferência) e perceber que `p` não foi inicializado → comportamento indefinido; com
   `p = &x` antes, x vira 5 × (2 × 5) = 50.
 
@@ -265,7 +265,7 @@
 ### 0048-ponteiros-e-strings
 - **Comparação ótima (com figura):** `char matcar[3][8] = {"azul","verde","amarelo"}` (cada linha do tamanho da maior
   → desperdício) × `char *vetpnt[3] = {...}` (strings contíguas + vetor de endereços; custa os ponteiros).
-  Exercício: para guardar n nomes lidos do teclado, qual é melhor? (matriz, ou ponteiros com malloc — literal não
+  Exercício: para guardar n nomes lidos do teclado, qual é melhor? (matriz, ou ponteiros com malloc, pois literal não
   serve para receber leitura).
 - `dia_semana(n)` devolve ponteiro para string de um vetor `static` (índice 0 = "erro"): retornar ponteiro para algo
   que sobrevive à função (contraste: retornar endereço de local é erro).
@@ -280,7 +280,7 @@
   (não se incrementa); `()` é o operador de chamada.
 - **Exemplos MODELO:** `double (*p)(double) = sqrt; p(25)` → 5.0; **menu com vetor de funções**
   `void (*f[])(void) = {abrir, editar, salvar, fechar}; f[i]();`; **eliminar código duplicado**: `min` e `max`
-  idênticos exceto pela comparação → `minmax(v, n, cmp)` com `menor`/`maior` — w = {78, 34, 12, 45, 51} → 12 e 78.
+  idênticos exceto pela comparação → `minmax(v, n, cmp)` com `menor`/`maior`, com w = {78, 34, 12, 45, 51} → 12 e 78.
 - **Exercício:** ordenar vetor de structs por cada campo com `qsort` (comparador recebe `const void *`).
 - Bug na fonte: o menu testa `op != 3` mas a variável lida é `i`.
 
@@ -309,12 +309,12 @@
 
 ### 0063-enum / 0064-union
 - **Union:** todos os membros no mesmo endereço; tamanho = maior membro; só um válido por vez ("tipo mutante").
-  **Union etiquetada** (struct com `etiqueta` + union) + `switch` na etiqueta para imprimir — padrão importante.
+  **Union etiquetada** (struct com `etiqueta` + union) + `switch` na etiqueta para imprimir: padrão importante.
   Exercício: figura geométrica polimórfica (retângulo/círculo) com função de área.
-- **Erro na fonte (pegadinha):** "para usar o membro inteiro: `m.etiqueta = 2; m.valor.a = 459;`" — grava no
+- **Erro na fonte (pegadinha):** "para usar o membro inteiro: `m.etiqueta = 2; m.valor.a = 459;`", que grava no
   membro `a` (char) e não no `b`.
 - **Erro na fonte:** no exercício do registrador AX, diz que AX = 0x1234 dá AH = 0x34 e AL = 0x12 (é o contrário:
-  AH = 0x12 alto, AL = 0x34 baixo) — mas a união que o aluno escrever revela a ordem dos bytes (endianness) — bom
+  AH = 0x12 alto, AL = 0x34 baixo), mas a união que o aluno escrever revela a ordem dos bytes (endianness): bom
   gancho.
 
 ### 0065-bits
@@ -335,9 +335,9 @@
   `FILE *` é só um ponteiro (estrutura e buffer alocados no `fopen`); arquivos padrão `stdin`, `stdout`, `stderr`
   (+ `stdaux`, `stdprn` no DOS); `printf(...)` ≡ `fprintf(stdout, ...)`; abrir com teste de NULL embutido no if;
   fechar descarrega o buffer e libera a conexão.
-- **Exemplo MODELO:** `cat` em 4 linhas com `int c; while ((c = getchar()) != EOF) putchar(c);` — explicação ótima de
+- **Exemplo MODELO:** `cat` em 4 linhas com `int c; while ((c = getchar()) != EOF) putchar(c);`, com explicação ótima de
   por que `c` é `int` (256 caracteres + EOF = 257 valores). **Redirecionamento** `cat > arq.txt` (cria arquivo) e
-  `cat < arq.txt` (lê) — ensina E/S de arquivo sem nenhuma função nova.
+  `cat < arq.txt` (lê); ensina E/S de arquivo sem nenhuma função nova.
 - **Padrão de leitura correto da fonte:** ler (`c = fgetc(e)`), **depois** testar `feof(e)`, só então usar.
 - **Exercício:** concurso: arquivo `cand.dat` com "125 acbde", "493 cdeaa", "384 deabc", "981 cadce", "394 bbced" e
   gabarito "abcde" → pontos 3, 0, 0, 1, 2 (resposta pronta).
@@ -348,7 +348,7 @@
   `'\n'` ↔ CR/LF só no modo texto (Windows); `^Z` como fim no modo texto (DOS). Modos "rb"/"wb".
 - **Exemplos:** cadastro de funcionários com `fwrite(&f, sizeof(Func), 1, s)` até digitar "." e listagem com `fread`
   + `feof`; **criptografia ingênua** com `~c` ('S' 01010011 → 10101100) e exercício de **criptografia com senha por
-  XOR** (`c = m ^ s`, `m = c ^ s`, senha usada ciclicamente — prova pelas propriedades x^0 = x, x^x = 0).
+  XOR** (`c = m ^ s`, `m = c ^ s`, senha usada ciclicamente; prova pelas propriedades x^0 = x, x^x = 0).
 - Exercícios: ordenar o cadastro; buscar salário por nome com busca linear e binária direto no arquivo
   (`fseek`, `ftell`).
 - Bug: `stcmp` (falta o r de `strcmp`).
@@ -397,12 +397,12 @@
 ### 0076-lista-encadeada / 0077-lista-busca-remocao
 - **Conceitos-chave:** nó = (item, prox); lista = ponteiro para nó; definição **recursiva** (base: lista vazia =
   NULL); só o primeiro nó é acessível diretamente. `typedef struct no { char item; struct no *prox; } *lista;`
-  (typedef de ponteiro — discutir: esconder o `*` confunde iniciantes).
-- **Operações:** `insere(lista *p, char x)` no início (aloca, `n->prox = *p; *p = n;` — a lista é passada por
+  (typedef de ponteiro; discutir: esconder o `*` confunde iniciantes).
+- **Operações:** `insere(lista *p, char x)` no início (aloca, `n->prox = *p; *p = n;`; a lista é passada por
   referência, daí `lista *` = ponteiro para ponteiro); inserir 'a', 'b', 'c' gera ⟨c, b, a⟩ (ordem inversa);
   `remove(lista *p)` do início; `acessa(p, i)` ao i-ésimo; inserir na 3ª posição com `insere(&acessa(L,2)->prox,
   '*')`; remover o 4º com `remove(&acessa(L,3)->prox)`.
-- **Pegadinha não apontada:** chamar a função de `remove` colide com `remove()` de `<stdio.h>` (apagar arquivo) —
+- **Pegadinha não apontada:** chamar a função de `remove` colide com `remove()` de `<stdio.h>` (apagar arquivo):
   renomear (`remove_inicio`). E `acessa` com posição inválida devolve NULL → `->prox` em NULL quebra.
 - **Exercícios:** remover devolvendo o item; `destroi(x)` liberando todos os nós; `concatena(x, y)`.
 - **Tratamento recursivo:** macros `cabeca(p)` e `cauda(p)`; `comprimento(L) = L == NULL ? 0 : 1 +
@@ -429,11 +429,3 @@
 | `int` de 2 bytes, endereços FFD0 | Turbo C 16 bits | `sizeof`, `%p` mostra endereços de 64 bits |
 | `char c = fgetc(...)` (na criptografia) | perde EOF em alguns casos | `int c` |
 | `long float` | arcaico | `double` |
-
-## Extras que não cabem no sumário
-- Campos de bits com hardware (status de impressora) e datas compactadas — curiosidade de baixo nível.
-- Cadeia de Freeman (visão computacional), campo minado, labirinto, jogo da velha — bons projetos de matriz.
-- Dígito verificador mod 11 e CPF — exercício realista de laço + funções.
-- Criptografia por complemento (`~`) e por XOR com senha — reforça 0065 e 0068.
-- Rastreamento automático de recursão com indentação por profundidade — técnica de depuração.
-- Redirecionamento de E/S (`<`, `>`) como primeiro contato com arquivos.

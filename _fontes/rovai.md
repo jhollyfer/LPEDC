@@ -1,4 +1,4 @@
-# Fichamento — Algoritmos e Estrutura de Dados (Kleber Ricardi Rovai)
+# Fichamento: Algoritmos e Estrutura de Dados (Kleber Ricardi Rovai)
 
 - **Autor:** Kleber Ricardi Rovai
 - **Edição:** Editora e Distribuidora Educacional (Kroton), Londrina, 2018, 216 p., ISBN 978-85-522-0660-6
@@ -19,11 +19,11 @@ não compila, vaza memória, desreferencia NULL ou tem laço infinito. Muitos s�
 copiados com erros**.
 
 Mesmo assim há o que aproveitar: (1) o **exemplo do RA** em hash, com a conta de memória do
-endereçamento direto (1,27 GB → vetor de ponteiros → hash), que é uma motivação excelente; (2) os
+endereçamento direto (1,27 GB → vetor de ponteiros → hash); (2) os
 exemplos numéricos de **sondagem linear e dupla** com m = 8 e a chave 27 (contas corretas); (3) a
 **tabela que dobra** quando passa de metade, gancho para análise amortizada; (4) a função de hash
 **multiplicativa de Knuth** (2654435761), que aparece sem explicação; (5) o labirinto como semente de
-**backtracking**; (6) a função "cálculo de endereço" por faixas, que na verdade é **bucket sort**; (7) a
+**backtracking**; (6) a função "cálculo de endereço" por faixas, que é **bucket sort**; (7) a
 fila circular para **round-robin** de processos. E o principal: os bugs dão um banco de exercícios "ache
 o erro" muito realista.
 
@@ -437,24 +437,13 @@ o erro" muito realista.
   não padrão; mistura `printf`/`cout`; `scanf("%s", &int)`.
 - `gets` (removida do C11), `conio.h`, `system("PAUSE")`/`system("cls")` (só Windows), aspas tipográficas
   “ ” e travessão – no código (não compila se copiado).
-- Funções de remoção sem `free` (listas simples e duplas, hash): vazamento sistemático.
 - `exit(1)` dentro de TAD para sinalizar fila vazia/cheia. Prefira código de retorno.
-- "Ordenar a lista inteira após cada inserção" como forma de manter ordem.
-- Afirmações falsas: lista simples percorrível nos dois sentidos; ponteiro "inteiro"; backtracking "no
-  menor tempo"; GPS = backtracking; DNS raiz com "todos os sites"; função perfeita = bijetora; César
-  como hash/criptografia segura; três técnicas de colisão (fechado = encadeamento); "fila circular usa
-  menos instruções"; chamar C de "C++".
 - Exercícios "Faça valer a pena" de completar lacunas com palavras ("FILO, FOLO, FILI…"): baixo valor.
 - Narrativas de "entregue um relatório" sem conteúdo técnico.
 
 ## Recomendações
 
 1. **Não usar como fonte de código.** Usar como **banco de "ache o erro"**, que é onde ele brilha.
-   Seleção pronta: `inserirFim` com lista vazia (0082); `retira` sem `free` + valgrind (0062/0082);
-   `inserirPosicao` fora por um (0082); `Ordena` O(n²) por inserção (0083); `pilha` sem checar
-   cheia/vazia (0087); contador da Hanói (0038, resposta 3 vs 7); laço infinito do `insere` linear
-   (0112); `remove_Esp` que quebra a sondagem (0112, exige lápide); `tab[h]->turma, turma;` (operador
-   vírgula, 0014); `int` com sinal estourando no hash multiplicativo (0008).
 2. **0110-hashing:** adotar o **exemplo do RA** (endereçamento direto 1,27 GB → ponteiros → hash),
    corrigindo para 8 bytes por ponteiro e trocando "4 últimos dígitos" por `RA % m` com m primo.
 3. **0112:** reaproveitar os números do exemplo m = 8 / chave 27 (linear → 5; dupla → 2) e as fórmulas
