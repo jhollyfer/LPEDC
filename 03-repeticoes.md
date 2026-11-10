@@ -38,23 +38,23 @@ Para não digitar a entrada a cada teste, mande-a pelo `printf` do terminal,
 um valor por linha:
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049 && printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049
+gcc ~/LPEDC/A049.c -o ~/LPEDC/A049 && printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/A049
 ```
 
 Se um programa travar num laço infinito, `Ctrl+C` encerra. Nos fluxogramas,
 toda repetição é uma seta que **volta**: conte quantas vezes você passa por
 ela.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0020](#0020--while) | While | [`0020-while/`](03-repeticoes/0020-while/) |
-| [0021](#0021--do-while) | Do-while | [`0021-do-while/`](03-repeticoes/0021-do-while/) |
-| [0022](#0022--for) | For | [`0022-for/`](03-repeticoes/0022-for/) |
-| [0023](#0023--break-e-continue) | Break e continue | [`0023-break-continue/`](03-repeticoes/0023-break-continue/) |
-| [0024](#0024--laços-aninhados) | Laços aninhados | [`0024-lacos-aninhados/`](03-repeticoes/0024-lacos-aninhados/) |
-| [0025](#0025--padrões-de-laço) | Padrões de laço | [`0025-padroes-de-laco/`](03-repeticoes/0025-padroes-de-laco/) |
-| [0026](#0026--aleatórios) | Aleatórios | [`0026-aleatorios/`](03-repeticoes/0026-aleatorios/) |
-| [0027](#0027--juntando-tudo) | Juntando tudo | [`0027-juntando-tudo/`](03-repeticoes/0027-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0020](#0020--while) | While |
+| [0021](#0021--do-while) | Do-while |
+| [0022](#0022--for) | For |
+| [0023](#0023--break-e-continue) | Break e continue |
+| [0024](#0024--laços-aninhados) | Laços aninhados |
+| [0025](#0025--padrões-de-laço) | Padrões de laço |
+| [0026](#0026--aleatórios) | Aleatórios |
+| [0027](#0027--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -96,7 +96,7 @@ resposta. No terminal, `Ctrl+C` encerra.
 O saldo começa vazio e "saldo < 1000?" responde Sim sete vezes, com um
 depósito a cada Sim. Na oitava, com R$ 1.050, responde Não:
 
-<p align="center"><img src="03-repeticoes/0020-while/ideia.svg" alt="Diagrama da ideia: While" width="858"></p>
+<p align="center"><img src="0020-ideia.svg" alt="Diagrama da ideia: While" width="858"></p>
 
 O mesmo cofrinho em C:
 
@@ -146,7 +146,7 @@ No fluxograma, a seta de "Mostrar mês e saldo" **volta para o losango**: assim
 a repetição aparece. O caminho verde passa várias vezes pelo Sim e uma pelo
 Não:
 
-<p align="center"><img src="03-repeticoes/0020-while/fluxograma.svg" alt="Fluxograma: While" width="581"></p>
+<p align="center"><img src="0020-fluxograma.svg" alt="Fluxograma: While" width="581"></p>
 
 > [!WARNING]
 > Um `;` logo depois do `while` acaba com o laço: `while (saldo < meta);` tem
@@ -162,8 +162,6 @@ Não:
 > teste de mesa e depois mude os valores no código acima e rode.
 
 ### Hora de praticar
-
-Arquivos em [`0020-while/`](03-repeticoes/0020-while/).
 
 **Exemplo A039 · Dividindo pizzas sem usar a divisão**
 
@@ -204,7 +202,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/A039.c -o ~/LPEDC/03-repeticoes/0020-while/A039 && ~/LPEDC/03-repeticoes/0020-while/A039
+gcc ~/LPEDC/A039.c -o ~/LPEDC/A039 && ~/LPEDC/A039
 ```
 
 **Exemplo A040 · Desmontando um número, dígito por dígito**
@@ -239,7 +237,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/A040.c -o ~/LPEDC/03-repeticoes/0020-while/A040 && ~/LPEDC/03-repeticoes/0020-while/A040
+gcc ~/LPEDC/A040.c -o ~/LPEDC/A040 && ~/LPEDC/A040
 ```
 
 #### Exercícios
@@ -256,7 +254,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/E116.c -o ~/LPEDC/03-repeticoes/0020-while/E116 && ~/LPEDC/03-repeticoes/0020-while/E116
+gcc ~/LPEDC/E116.c -o ~/LPEDC/E116 && ~/LPEDC/E116
 ```
 
 **Exercício E117** · ★★☆
@@ -272,7 +270,7 @@ Dá para 5 dias. Sobram 100 litros.
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/E117.c -o ~/LPEDC/03-repeticoes/0020-while/E117 && ~/LPEDC/03-repeticoes/0020-while/E117
+gcc ~/LPEDC/E117.c -o ~/LPEDC/E117 && ~/LPEDC/E117
 ```
 
 **Exercício E118** · ★★☆
@@ -289,7 +287,7 @@ Saldo: R$ 1503.75
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/E118.c -o ~/LPEDC/03-repeticoes/0020-while/E118 && ~/LPEDC/03-repeticoes/0020-while/E118
+gcc ~/LPEDC/E118.c -o ~/LPEDC/E118 && ~/LPEDC/E118
 ```
 
 **Exercício E120** · ★★★
@@ -316,7 +314,7 @@ C: | voltas 0, k final 10
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/E120.c -o ~/LPEDC/03-repeticoes/0020-while/E120 && ~/LPEDC/03-repeticoes/0020-while/E120
+gcc ~/LPEDC/E120.c -o ~/LPEDC/E120 && ~/LPEDC/E120
 ```
 
 ---
@@ -360,7 +358,7 @@ No exemplo, a pessoa digita 0, 15 e 4. Os dois primeiros caem fora da faixa:
 "fora de 1 a 12?" responde Sim e o programa pergunta de novo. O 4 está dentro,
 a resposta é Não e o programa segue:
 
-<p align="center"><img src="03-repeticoes/0021-do-while/ideia.svg" alt="Diagrama da ideia: Do-while" width="858"></p>
+<p align="center"><img src="0021-ideia.svg" alt="Diagrama da ideia: Do-while" width="858"></p>
 
 O mesmo app em C. O `if` em volta do `scanf` confere se chegou um número
 (assunto 0006):
@@ -394,7 +392,7 @@ começo do corpo, "Mostrar a pergunta". No `while` (assunto 0020) a seta
 voltava ao losango, que abria o laço; aqui ele fecha. O caminho verde passa
 três vezes pelo losango: duas pelo Sim e uma pelo Não:
 
-<p align="center"><img src="03-repeticoes/0021-do-while/fluxograma.svg" alt="Fluxograma: Do-while" width="392"></p>
+<p align="center"><img src="0021-fluxograma.svg" alt="Fluxograma: Do-while" width="392"></p>
 
 > [!WARNING]
 > A condição é de **continuar**, não de parar. Quem escreve
@@ -410,8 +408,6 @@ três vezes pelo losango: duas pelo Sim e uma pelo Não:
 > no código acima (se travar, `Ctrl+C`).
 
 ### Hora de praticar
-
-Arquivos em [`0021-do-while/`](03-repeticoes/0021-do-while/).
 
 **Exemplo A041 · Quantos dígitos tem o zero?**
 
@@ -458,7 +454,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/A041.c -o ~/LPEDC/03-repeticoes/0021-do-while/A041 && ~/LPEDC/03-repeticoes/0021-do-while/A041
+gcc ~/LPEDC/A041.c -o ~/LPEDC/A041 && ~/LPEDC/A041
 ```
 
 **Exemplo A042 · O menu do caixa eletrônico**
@@ -517,7 +513,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/A042.c -o ~/LPEDC/03-repeticoes/0021-do-while/A042 && ~/LPEDC/03-repeticoes/0021-do-while/A042
+gcc ~/LPEDC/A042.c -o ~/LPEDC/A042 && ~/LPEDC/A042
 ```
 
 #### Exercícios
@@ -545,7 +541,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/E122.c -o ~/LPEDC/03-repeticoes/0021-do-while/E122 && ~/LPEDC/03-repeticoes/0021-do-while/E122
+gcc ~/LPEDC/E122.c -o ~/LPEDC/E122 && ~/LPEDC/E122
 ```
 
 **Exercício E123** · ★★☆
@@ -582,7 +578,7 @@ Total: R$ 22.75
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/E123.c -o ~/LPEDC/03-repeticoes/0021-do-while/E123 && ~/LPEDC/03-repeticoes/0021-do-while/E123
+gcc ~/LPEDC/E123.c -o ~/LPEDC/E123 && ~/LPEDC/E123
 ```
 
 **Exercício E124** · ★★☆
@@ -609,7 +605,7 @@ Sessão 2 escolhida.
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/E124.c -o ~/LPEDC/03-repeticoes/0021-do-while/E124 && ~/LPEDC/03-repeticoes/0021-do-while/E124
+gcc ~/LPEDC/E124.c -o ~/LPEDC/E124 && ~/LPEDC/E124
 ```
 
 **Exercício E125** · ★★★
@@ -642,7 +638,7 @@ Senha correta na tentativa 3.
 Com as entradas 1111, 2222 e 3333, a última linha da saída é "Cartão bloqueado.".
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/E125.c -o ~/LPEDC/03-repeticoes/0021-do-while/E125 && ~/LPEDC/03-repeticoes/0021-do-while/E125
+gcc ~/LPEDC/E125.c -o ~/LPEDC/E125 && ~/LPEDC/E125
 ```
 
 ---
@@ -699,7 +695,7 @@ O carnê começa com `parcela = 1` uma vez só, pergunta "parcela <= 6?", roda o
 corpo, dá o passo e volta à pergunta. Na sétima, com `parcela = 7`, a resposta
 é Não:
 
-<p align="center"><img src="03-repeticoes/0022-for/ideia.svg" alt="Diagrama da ideia: For" width="858"></p>
+<p align="center"><img src="0022-ideia.svg" alt="Diagrama da ideia: For" width="858"></p>
 
 O carnê em C:
 
@@ -734,7 +730,7 @@ O fluxograma é igual ao de um `while`, porque o `for` só reorganiza o código.
 O passo `parcela++` fica no fim do corpo, e a seta sai dele de volta ao
 losango:
 
-<p align="center"><img src="03-repeticoes/0022-for/fluxograma.svg" alt="Fluxograma: For" width="608"></p>
+<p align="center"><img src="0022-fluxograma.svg" alt="Fluxograma: For" width="608"></p>
 
 > [!WARNING]
 > O erro mais comum é o **erro por um** (*off-by-one*): uma volta a mais ou a
@@ -751,8 +747,6 @@ losango:
 > no papel e depois coloque um `printf` no corpo para conferir.
 
 ### Hora de praticar
-
-Arquivos em [`0022-for/`](03-repeticoes/0022-for/).
 
 **Exemplo A043 · Postes e vãos: o erro por um na cerca**
 
@@ -790,7 +784,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/A043.c -o ~/LPEDC/03-repeticoes/0022-for/A043 && ~/LPEDC/03-repeticoes/0022-for/A043
+gcc ~/LPEDC/A043.c -o ~/LPEDC/A043 && ~/LPEDC/A043
 ```
 
 **Exemplo A044 · De 10 em 10, para trás e com letras**
@@ -836,7 +830,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/A044.c -o ~/LPEDC/03-repeticoes/0022-for/A044 && ~/LPEDC/03-repeticoes/0022-for/A044
+gcc ~/LPEDC/A044.c -o ~/LPEDC/A044 && ~/LPEDC/A044
 ```
 
 #### Exercícios
@@ -866,7 +860,7 @@ d) 1 3 9 27 81 (5 voltas)
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/E128.c -o ~/LPEDC/03-repeticoes/0022-for/E128 && ~/LPEDC/03-repeticoes/0022-for/E128
+gcc ~/LPEDC/E128.c -o ~/LPEDC/E128 && ~/LPEDC/E128
 ```
 
 **Exercício E129** · ★★☆
@@ -895,7 +889,7 @@ Pela fórmula: R$ 2200.68
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/E129.c -o ~/LPEDC/03-repeticoes/0022-for/E129 -lm && ~/LPEDC/03-repeticoes/0022-for/E129
+gcc ~/LPEDC/E129.c -o ~/LPEDC/E129 -lm && ~/LPEDC/E129
 ```
 
 **Exercício E130** · ★★☆
@@ -914,7 +908,7 @@ Série 5
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/E130.c -o ~/LPEDC/03-repeticoes/0022-for/E130 && ~/LPEDC/03-repeticoes/0022-for/E130
+gcc ~/LPEDC/E130.c -o ~/LPEDC/E130 && ~/LPEDC/E130
 ```
 
 **Exercício E131** · ★★★
@@ -937,7 +931,7 @@ pi ~ 3.140593
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/E131.c -o ~/LPEDC/03-repeticoes/0022-for/E131 && ~/LPEDC/03-repeticoes/0022-for/E131
+gcc ~/LPEDC/E131.c -o ~/LPEDC/E131 && ~/LPEDC/E131
 ```
 
 ---
@@ -972,7 +966,7 @@ A compra do exemplo tem 12,90, uma leitura com erro (-1), 8,50, 4,00 e, para
 fechar, 0. O -1 cai no `continue` e volta direto à leitura, sem passar pela
 soma. O 0 cai no `break` e sai do laço:
 
-<p align="center"><img src="03-repeticoes/0023-break-continue/ideia.svg" alt="Diagrama da ideia: Break e continue" width="858"></p>
+<p align="center"><img src="0023-ideia.svg" alt="Diagrama da ideia: Break e continue" width="858"></p>
 
 O caixa em C:
 
@@ -1020,7 +1014,7 @@ O laço tem **duas** setas de volta para "Ler preço". Uma sai do losango
 "preço < 0?" pelo Sim: é o `continue`, que pula a soma. A outra sai do fim
 normal do corpo. A **única** saída é o Sim de "preço == 0?", o `break`:
 
-<p align="center"><img src="03-repeticoes/0023-break-continue/fluxograma.svg" alt="Fluxograma: Break e continue" width="726"></p>
+<p align="center"><img src="0023-fluxograma.svg" alt="Fluxograma: Break e continue" width="726"></p>
 
 > [!WARNING]
 > `continue` num `while` pode pular o passo. Em
@@ -1042,8 +1036,6 @@ normal do corpo. A **única** saída é o Sim de "preço == 0?", o `break`:
 > `printf '0\n' | ./caixa`.
 
 ### Hora de praticar
-
-Arquivos em [`0023-break-continue/`](03-repeticoes/0023-break-continue/).
 
 **Exemplo A045 · Poltronas da excursão: continue com o passo no topo**
 
@@ -1079,7 +1071,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/A045.c -o ~/LPEDC/03-repeticoes/0023-break-continue/A045 && ~/LPEDC/03-repeticoes/0023-break-continue/A045
+gcc ~/LPEDC/A045.c -o ~/LPEDC/A045 && ~/LPEDC/A045
 ```
 
 **Exemplo A046 · É primo? Para no primeiro divisor**
@@ -1122,7 +1114,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/A046.c -o ~/LPEDC/03-repeticoes/0023-break-continue/A046 && ~/LPEDC/03-repeticoes/0023-break-continue/A046
+gcc ~/LPEDC/A046.c -o ~/LPEDC/A046 && ~/LPEDC/A046
 ```
 
 #### Exercícios
@@ -1142,7 +1134,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/E134.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E134 && ~/LPEDC/03-repeticoes/0023-break-continue/E134
+gcc ~/LPEDC/E134.c -o ~/LPEDC/E134 && ~/LPEDC/E134
 ```
 
 **Exercício E135** · ★★☆
@@ -1182,7 +1174,7 @@ Entraram 6 pessoas, 565 kg.
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/E135.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E135 && ~/LPEDC/03-repeticoes/0023-break-continue/E135
+gcc ~/LPEDC/E135.c -o ~/LPEDC/E135 && ~/LPEDC/E135
 ```
 
 **Exercício E136** · ★★☆
@@ -1213,7 +1205,7 @@ Leituras: 3
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/E136.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E136 && ~/LPEDC/03-repeticoes/0023-break-continue/E136
+gcc ~/LPEDC/E136.c -o ~/LPEDC/E136 && ~/LPEDC/E136
 ```
 
 **Exercício E138** · ★★★
@@ -1249,7 +1241,7 @@ Média de 3 notas: 7.83
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/E138.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E138 && ~/LPEDC/03-repeticoes/0023-break-continue/E138
+gcc ~/LPEDC/E138.c -o ~/LPEDC/E138 && ~/LPEDC/E138
 ```
 
 ---
@@ -1286,7 +1278,7 @@ Com `i` e `j`, é fácil trocar um pelo outro sem perceber.
 O desenho congela o mapa no meio do caminho: a fileira A já saiu inteira, a B
 está na poltrona 3, e a C e a D esperam a vez do laço de fora:
 
-<p align="center"><img src="03-repeticoes/0024-lacos-aninhados/ideia.svg" alt="Diagrama da ideia: Laços aninhados" width="858"></p>
+<p align="center"><img src="0024-ideia.svg" alt="Diagrama da ideia: Laços aninhados" width="858"></p>
 
 O mapa em C. O `printf("\n")` fica **entre** os dois laços: depois que o de
 dentro termina a fileira, antes de o de fora passar para a próxima:
@@ -1320,7 +1312,7 @@ pequena (de "Mostrar e poltrona++" para "poltrona <= 5?") fica **dentro** da
 grande (de "pula linha" para "fileira <= 'D'?"). Logo depois do Sim de fora vem
 `poltrona = 1`: ali o laço de dentro recomeça:
 
-<p align="center"><img src="03-repeticoes/0024-lacos-aninhados/fluxograma.svg" alt="Fluxograma: Laços aninhados" width="558"></p>
+<p align="center"><img src="0024-fluxograma.svg" alt="Fluxograma: Laços aninhados" width="558"></p>
 
 > [!WARNING]
 > O `printf("\n")` no lugar errado muda o desenho. Dentro do laço de dentro,
@@ -1343,8 +1335,6 @@ grande (de "pula linha" para "fileira <= 'D'?"). Logo depois do Sim de fora vem
 > de dentro no código acima e rode.
 
 ### Hora de praticar
-
-Arquivos em [`0024-lacos-aninhados/`](03-repeticoes/0024-lacos-aninhados/).
 
 **Exemplo A047 · As horas capicua do relógio digital**
 
@@ -1382,7 +1372,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/A047.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/A047 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/A047
+gcc ~/LPEDC/A047.c -o ~/LPEDC/A047 && ~/LPEDC/A047
 ```
 
 **Exemplo A048 · Triângulos de asteriscos: o de dentro depende do de fora**
@@ -1430,7 +1420,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/A048.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/A048 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/A048
+gcc ~/LPEDC/A048.c -o ~/LPEDC/A048 && ~/LPEDC/A048
 ```
 
 #### Exercícios
@@ -1451,7 +1441,7 @@ printf de dentro: 6 vezes
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E140.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E140 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E140
+gcc ~/LPEDC/E140.c -o ~/LPEDC/E140 && ~/LPEDC/E140
 ```
 
 **Exercício E141** · ★★☆
@@ -1476,7 +1466,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E141.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E141 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E141
+gcc ~/LPEDC/E141.c -o ~/LPEDC/E141 && ~/LPEDC/E141
 ```
 
 **Exercício E142** · ★★☆
@@ -1494,7 +1484,7 @@ T3-A1 T3-A2 T3-A3 T3-A4
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E142.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E142 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E142
+gcc ~/LPEDC/E142.c -o ~/LPEDC/E142 && ~/LPEDC/E142
 ```
 
 **Exercício E143** · ★★★
@@ -1522,7 +1512,7 @@ Altura:
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E143.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E143 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E143
+gcc ~/LPEDC/E143.c -o ~/LPEDC/E143 && ~/LPEDC/E143
 ```
 
 ---
@@ -1563,7 +1553,7 @@ Detalhes que separam o código certo do quase certo:
 As cinco temperaturas entram uma a uma e cada uma atualiza as caixinhas. O 999
 não muda nada: só manda parar. No fim, as caixinhas guardam as respostas:
 
-<p align="center"><img src="03-repeticoes/0025-padroes-de-laco/ideia.svg" alt="Diagrama da ideia: Padrões de laço" width="858"></p>
+<p align="center"><img src="0025-ideia.svg" alt="Diagrama da ideia: Padrões de laço" width="858"></p>
 
 Os cinco padrões juntos em C:
 
@@ -1627,7 +1617,7 @@ Há **duas** caixas de leitura. "Ler temp" fica antes do losango e roda uma vez;
 "Ler a próxima temp" fica no fim do corpo, e dela sai a seta de volta ao
 losango. Assim "temp != 999?" sempre olha o valor que acabou de chegar:
 
-<p align="center"><img src="03-repeticoes/0025-padroes-de-laco/fluxograma.svg" alt="Fluxograma: Padrões de laço" width="540"></p>
+<p align="center"><img src="0025-fluxograma.svg" alt="Fluxograma: Padrões de laço" width="540"></p>
 
 > [!WARNING]
 > `maior = 0` parece inofensivo, até o inverno: com máximas de -3, -1 e -4 °C,
@@ -1649,8 +1639,6 @@ losango. Assim "temp != 999?" sempre olha o valor que acabou de chegar:
 > Preveja e teste: compile com o gcc e rode `printf '999\n' | ./programa`.
 
 ### Hora de praticar
-
-Arquivos em [`0025-padroes-de-laco/`](03-repeticoes/0025-padroes-de-laco/).
 
 **Exemplo A049 · Inverno na serra: maior e menor com INT_MIN e INT_MAX**
 
@@ -1709,7 +1697,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049
+gcc ~/LPEDC/A049.c -o ~/LPEDC/A049 && ~/LPEDC/A049
 ```
 
 **Exemplo A050 · Os divisores de 28: contar, somar e levantar uma flag**
@@ -1753,7 +1741,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A050.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A050 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A050
+gcc ~/LPEDC/A050.c -o ~/LPEDC/A050 && ~/LPEDC/A050
 ```
 
 #### Exercícios
@@ -1789,7 +1777,7 @@ Provas com 6 ou mais: 4
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E145.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E145 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E145
+gcc ~/LPEDC/E145.c -o ~/LPEDC/E145 && ~/LPEDC/E145
 ```
 
 **Exercício E147** · ★★☆
@@ -1826,7 +1814,7 @@ Diferença: R$ 0.40 por litro
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E147.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E147 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E147
+gcc ~/LPEDC/E147.c -o ~/LPEDC/E147 && ~/LPEDC/E147
 ```
 
 **Exercício E148** · ★★☆
@@ -1854,7 +1842,7 @@ Melhor dia: -10
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E148.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E148 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E148
+gcc ~/LPEDC/E148.c -o ~/LPEDC/E148 && ~/LPEDC/E148
 ```
 
 **Exercício E149** · ★★★
@@ -1894,7 +1882,7 @@ Nota 8:
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E149.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E149 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E149
+gcc ~/LPEDC/E149.c -o ~/LPEDC/E149 && ~/LPEDC/E149
 ```
 
 ---
@@ -1937,7 +1925,7 @@ A semente 2022 entra no gerador, que produz números enormes, cada um calculado
 a partir do anterior. O `% 6 + 1` transforma cada número numa face, e os pares
 de faces são as jogadas. Na quarta, sai 4 e 4:
 
-<p align="center"><img src="03-repeticoes/0026-aleatorios/ideia.svg" alt="Diagrama da ideia: Aleatórios" width="858"></p>
+<p align="center"><img src="0026-ideia.svg" alt="Diagrama da ideia: Aleatórios" width="858"></p>
 
 O mesmo jogo em C. A sequência exata depende da biblioteca: a saída abaixo é a
 da glibc (Linux); no macOS ou no Windows, a semente 2022 dá outros números:
@@ -1974,7 +1962,7 @@ O `srand` fica **fora** do laço, antes de tudo, e roda uma vez. O sorteio fica
 dentro, e a seta do Sim volta do losango para ele. No exemplo, o caminho passa
 três vezes pelo Sim e, na quarta jogada, pelo Não:
 
-<p align="center"><img src="03-repeticoes/0026-aleatorios/fluxograma.svg" alt="Fluxograma: Aleatórios" width="360"></p>
+<p align="center"><img src="0026-fluxograma.svg" alt="Fluxograma: Aleatórios" width="360"></p>
 
 > [!WARNING]
 > O erro clássico é chamar `srand(time(NULL))` **dentro** do laço. O laço roda
@@ -1995,8 +1983,6 @@ três vezes pelo Sim e, na quarta jogada, pelo Não:
 > acontece se você rodar duas vezes dentro do mesmo segundo?
 
 ### Hora de praticar
-
-Arquivos em [`0026-aleatorios/`](03-repeticoes/0026-aleatorios/).
 
 **Exemplo A051 · Mesma semente, mesmo sorteio**
 
@@ -2038,7 +2024,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/A051.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/A051 && ~/LPEDC/03-repeticoes/0026-aleatorios/A051
+gcc ~/LPEDC/A051.c -o ~/LPEDC/A051 && ~/LPEDC/A051
 ```
 
 **Exemplo A052 · 6000 lançamentos: o dado é honesto?**
@@ -2084,7 +2070,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/A052.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/A052 && ~/LPEDC/03-repeticoes/0026-aleatorios/A052
+gcc ~/LPEDC/A052.c -o ~/LPEDC/A052 && ~/LPEDC/A052
 ```
 
 #### Exercícios
@@ -2103,7 +2089,7 @@ Caras: 10 | Coroas: 10
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E152.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E152 && ~/LPEDC/03-repeticoes/0026-aleatorios/E152
+gcc ~/LPEDC/E152.c -o ~/LPEDC/E152 && ~/LPEDC/E152
 ```
 
 **Exercício E153** · ★★☆
@@ -2126,7 +2112,7 @@ Acertou em 3 tentativas!
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E153.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E153 && ~/LPEDC/03-repeticoes/0026-aleatorios/E153
+gcc ~/LPEDC/E153.c -o ~/LPEDC/E153 && ~/LPEDC/E153
 ```
 
 **Exercício E154** · ★★☆
@@ -2142,7 +2128,7 @@ Saída esperada (exemplo, a sua muda a cada execução):
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E154.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E154 && ~/LPEDC/03-repeticoes/0026-aleatorios/E154
+gcc ~/LPEDC/E154.c -o ~/LPEDC/E154 && ~/LPEDC/E154
 ```
 
 **Exercício E155** · ★★★
@@ -2168,7 +2154,7 @@ pi ~ 3.1388
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E155.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E155 && ~/LPEDC/03-repeticoes/0026-aleatorios/E155
+gcc ~/LPEDC/E155.c -o ~/LPEDC/E155 && ~/LPEDC/E155
 ```
 
 ---
@@ -2201,7 +2187,7 @@ Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O `switch` não acha o 9
 em nenhum caso especial, e ele vira o ponto. O jogo relança: 8, depois 5 (nada
 acontece), depois 9. Saiu o ponto antes do 7: ganhou no quarto lançamento:
 
-<p align="center"><img src="03-repeticoes/0027-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="882"></p>
+<p align="center"><img src="0027-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="882"></p>
 
 A rodada em C:
 
@@ -2270,7 +2256,7 @@ No fluxograma, as duas primeiras perguntas (7 ou 11? 2, 3 ou 12?) acontecem
 do Não de "soma == 7?". As duas saídas do laço vão para os mesmos "Ganhou" e
 "Perdeu" do primeiro lançamento:
 
-<p align="center"><img src="03-repeticoes/0027-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="719"></p>
+<p align="center"><img src="0027-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="719"></p>
 
 > [!WARNING]
 > Num jogo com sorteio, o erro mais traiçoeiro é o laço que **pode** não
@@ -2294,8 +2280,6 @@ do Não de "soma == 7?". As duas saídas do laço vão para os mesmos "Ganhou" e
 > cassino tira o lucro.
 
 ### Hora de praticar
-
-Arquivos em [`0027-juntando-tudo/`](03-repeticoes/0027-juntando-tudo/).
 
 **Exemplo A053 · As 36 jogadas do primeiro lançamento, sem sortear**
 
@@ -2352,7 +2336,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/A053.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/A053 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/A053
+gcc ~/LPEDC/A053.c -o ~/LPEDC/A053 && ~/LPEDC/A053
 ```
 
 **Exemplo A054 · Craps com banca, apostas e menu**
@@ -2442,7 +2426,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/A054.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/A054 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/A054
+gcc ~/LPEDC/A054.c -o ~/LPEDC/A054 && ~/LPEDC/A054
 ```
 
 #### Exercícios
@@ -2461,7 +2445,7 @@ Soma 2: 1012 (2.8%)
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E157.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E157 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E157
+gcc ~/LPEDC/E157.c -o ~/LPEDC/E157 && ~/LPEDC/E157
 ```
 
 **Exercício E159** · ★★☆
@@ -2478,7 +2462,7 @@ Encontrados: 4
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E159.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E159 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E159
+gcc ~/LPEDC/E159.c -o ~/LPEDC/E159 && ~/LPEDC/E159
 ```
 
 **Exercício E160** · ★★☆
@@ -2513,7 +2497,7 @@ Estoque: 12 | Vendidos: 8
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E160.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E160 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E160
+gcc ~/LPEDC/E160.c -o ~/LPEDC/E160 && ~/LPEDC/E160
 ```
 
 **Exercício E161** · ★★★
@@ -2555,7 +2539,7 @@ Sobram 0. Você tirou o último palito. Perdeu!
 ```
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E161.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E161 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E161
+gcc ~/LPEDC/E161.c -o ~/LPEDC/E161 && ~/LPEDC/E161
 ```
 
 ---
@@ -2722,7 +2706,7 @@ sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](03-repeticoes/lista/); resoluções em `_respostas/03-repeticoes/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0301.c a P0330.c, na raiz; resoluções em `_respostas/03-repeticoes/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2752,7 +2736,7 @@ Saída esperada:
 3. Resposta esperada: de R$ 0.85 a R$ 6.80.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0301.c -o ~/LPEDC/03-repeticoes/lista/P0301 && ~/LPEDC/03-repeticoes/lista/P0301
+gcc ~/LPEDC/P0301.c -o ~/LPEDC/P0301 && ~/LPEDC/P0301
 ```
 
 ---
@@ -2779,7 +2763,7 @@ Total em 30 dias: R$ 465
 3. Resposta esperada: Total em 30 dias: R$ 465.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0302.c -o ~/LPEDC/03-repeticoes/lista/P0302 && ~/LPEDC/03-repeticoes/lista/P0302
+gcc ~/LPEDC/P0302.c -o ~/LPEDC/P0302 && ~/LPEDC/P0302
 ```
 
 ---
@@ -2804,7 +2788,7 @@ Saída esperada:
 3. Resposta esperada: 3628800 e 2432902008176640000.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0303.c -o ~/LPEDC/03-repeticoes/lista/P0303 && ~/LPEDC/03-repeticoes/lista/P0303
+gcc ~/LPEDC/P0303.c -o ~/LPEDC/P0303 && ~/LPEDC/P0303
 ```
 
 ---
@@ -2830,7 +2814,7 @@ Soma dos dígitos: 24
 3. Resposta esperada: 10 dígitos, soma 24.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0304.c -o ~/LPEDC/03-repeticoes/lista/P0304 && ~/LPEDC/03-repeticoes/lista/P0304
+gcc ~/LPEDC/P0304.c -o ~/LPEDC/P0304 && ~/LPEDC/P0304
 ```
 
 ---
@@ -2860,7 +2844,7 @@ Açaí de 500 ml: R$ 18.00
 3. Resposta esperada: com 0, 5 e 2, Açaí de 500 ml: R$ 18.00.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0305.c -o ~/LPEDC/03-repeticoes/lista/P0305 && ~/LPEDC/03-repeticoes/lista/P0305
+gcc ~/LPEDC/P0305.c -o ~/LPEDC/P0305 && ~/LPEDC/P0305
 ```
 
 ---
@@ -2885,7 +2869,7 @@ Soma dos números: 2318
 3. Resposta esperada: 46 cupons, soma 2318.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0306.c -o ~/LPEDC/03-repeticoes/lista/P0306 && ~/LPEDC/03-repeticoes/lista/P0306
+gcc ~/LPEDC/P0306.c -o ~/LPEDC/P0306 && ~/LPEDC/P0306
 ```
 
 ---
@@ -2923,7 +2907,7 @@ Passou de 1 milhão na rodada 13
 3. Resposta esperada: Passou de 1 milhão na rodada 13.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0307.c -o ~/LPEDC/03-repeticoes/lista/P0307 && ~/LPEDC/03-repeticoes/lista/P0307
+gcc ~/LPEDC/P0307.c -o ~/LPEDC/P0307 && ~/LPEDC/P0307
 ```
 
 ---
@@ -2966,7 +2950,7 @@ PIM
 3. Resposta esperada: PIM no 4, 8, 12, 14, 16 e 20.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0308.c -o ~/LPEDC/03-repeticoes/lista/P0308 && ~/LPEDC/03-repeticoes/lista/P0308
+gcc ~/LPEDC/P0308.c -o ~/LPEDC/P0308 && ~/LPEDC/P0308
 ```
 
 ---
@@ -2997,7 +2981,7 @@ E1 E2 E3 E4 E5 E6
 3. Resposta esperada: 5 linhas de 6 assentos, de A1 a E6.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0309.c -o ~/LPEDC/03-repeticoes/lista/P0309 && ~/LPEDC/03-repeticoes/lista/P0309
+gcc ~/LPEDC/P0309.c -o ~/LPEDC/P0309 && ~/LPEDC/P0309
 ```
 
 ---
@@ -3032,7 +3016,7 @@ Total: R$ 1899.00
 3. Resposta esperada: 10 parcelas, Total: R$ 1899.00.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0310.c -o ~/LPEDC/03-repeticoes/lista/P0310 && ~/LPEDC/03-repeticoes/lista/P0310
+gcc ~/LPEDC/P0310.c -o ~/LPEDC/P0310 && ~/LPEDC/P0310
 ```
 
 ### ★★☆ Para pensar
@@ -3060,7 +3044,7 @@ Saída esperada:
 4. Resposta esperada: 543021 e 12321.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0311.c -o ~/LPEDC/03-repeticoes/lista/P0311 && ~/LPEDC/03-repeticoes/lista/P0311
+gcc ~/LPEDC/P0311.c -o ~/LPEDC/P0311 && ~/LPEDC/P0311
 ```
 
 ---
@@ -3089,7 +3073,7 @@ Saem juntos a cada 36 minutos
 3. Resposta esperada: 36 minutos; 06:36, 07:12 e 07:48.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0312.c -o ~/LPEDC/03-repeticoes/lista/P0312 && ~/LPEDC/03-repeticoes/lista/P0312
+gcc ~/LPEDC/P0312.c -o ~/LPEDC/P0312 && ~/LPEDC/P0312
 ```
 
 ---
@@ -3116,7 +3100,7 @@ Divisores de 284 somam 220
 3. Resposta esperada: 284 e 220, são amigos.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0313.c -o ~/LPEDC/03-repeticoes/lista/P0313 && ~/LPEDC/03-repeticoes/lista/P0313
+gcc ~/LPEDC/P0313.c -o ~/LPEDC/P0313 && ~/LPEDC/P0313
 ```
 
 ---
@@ -3144,7 +3128,7 @@ Próximo ano primo: 2027
 4. Resposta esperada: 2027 e 2017.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0314.c -o ~/LPEDC/03-repeticoes/lista/P0314 && ~/LPEDC/03-repeticoes/lista/P0314
+gcc ~/LPEDC/P0314.c -o ~/LPEDC/P0314 && ~/LPEDC/P0314
 ```
 
 ---
@@ -3174,7 +3158,7 @@ A dívida dobrou em 6 meses
 3. Resposta esperada: A dívida dobrou em 6 meses.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0315.c -o ~/LPEDC/03-repeticoes/lista/P0315 && ~/LPEDC/03-repeticoes/lista/P0315
+gcc ~/LPEDC/P0315.c -o ~/LPEDC/P0315 && ~/LPEDC/P0315
 ```
 
 ---
@@ -3206,7 +3190,7 @@ Soma da linha 5: 65
 4. Resposta esperada: Soma da linha 5: 65.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0316.c -o ~/LPEDC/03-repeticoes/lista/P0316 && ~/LPEDC/03-repeticoes/lista/P0316
+gcc ~/LPEDC/P0316.c -o ~/LPEDC/P0316 && ~/LPEDC/P0316
 ```
 
 ---
@@ -3239,7 +3223,7 @@ Vencedor: Marta
 4. Resposta esperada: Marta 3, Jorge 2, Nulos 1 (16.7%), Vencedor: Marta.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0317.c -o ~/LPEDC/03-repeticoes/lista/P0317 && ~/LPEDC/03-repeticoes/lista/P0317
+gcc ~/LPEDC/P0317.c -o ~/LPEDC/P0317 && ~/LPEDC/P0317
 ```
 
 ---
@@ -3265,7 +3249,7 @@ Passa de 5 com 83 termos (soma 5.0021)
 3. Resposta esperada: 11 termos e 83 termos.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0318.c -o ~/LPEDC/03-repeticoes/lista/P0318 && ~/LPEDC/03-repeticoes/lista/P0318
+gcc ~/LPEDC/P0318.c -o ~/LPEDC/P0318 && ~/LPEDC/P0318
 ```
 
 ---
@@ -3299,7 +3283,7 @@ Saída esperada:
 3. Resposta esperada: a tabela acima, terminando em R$ 102.00.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0319.c -o ~/LPEDC/03-repeticoes/lista/P0319 && ~/LPEDC/03-repeticoes/lista/P0319
+gcc ~/LPEDC/P0319.c -o ~/LPEDC/P0319 && ~/LPEDC/P0319
 ```
 
 ---
@@ -3325,7 +3309,7 @@ Média: 8.0
 3. Resposta esperada: Soma: 40, Média: 8.0.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0320.c -o ~/LPEDC/03-repeticoes/lista/P0320 && ~/LPEDC/03-repeticoes/lista/P0320
+gcc ~/LPEDC/P0320.c -o ~/LPEDC/P0320 && ~/LPEDC/P0320
 ```
 
 ### ★★★ Desafio
@@ -3366,7 +3350,7 @@ Fins de semana: 8 dias
    de fim de semana.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0321.c -o ~/LPEDC/03-repeticoes/lista/P0321 && ~/LPEDC/03-repeticoes/lista/P0321
+gcc ~/LPEDC/P0321.c -o ~/LPEDC/P0321 && ~/LPEDC/P0321
 ```
 
 ---
@@ -3406,7 +3390,7 @@ Número e base: 2026 2
    é 3752.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0322.c -o ~/LPEDC/03-repeticoes/lista/P0322 && ~/LPEDC/03-repeticoes/lista/P0322
+gcc ~/LPEDC/P0322.c -o ~/LPEDC/P0322 && ~/LPEDC/P0322
 ```
 
 ---
@@ -3450,7 +3434,7 @@ CPF inválido: dígitos todos iguais
 4. Resposta esperada: as três saídas acima.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0323.c -o ~/LPEDC/03-repeticoes/lista/P0323 && ~/LPEDC/03-repeticoes/lista/P0323
+gcc ~/LPEDC/P0323.c -o ~/LPEDC/P0323 && ~/LPEDC/P0323
 ```
 
 ---
@@ -3481,7 +3465,7 @@ Maior buraco: 36, entre 9551 e 9587
    9587.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0324.c -o ~/LPEDC/03-repeticoes/lista/P0324 && ~/LPEDC/03-repeticoes/lista/P0324
+gcc ~/LPEDC/P0324.c -o ~/LPEDC/P0324 && ~/LPEDC/P0324
 ```
 
 ---
@@ -3513,7 +3497,7 @@ Chegou em 6174 em 3 passos
 4. Resposta esperada: 3 passos até 6174.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0325.c -o ~/LPEDC/03-repeticoes/lista/P0325 && ~/LPEDC/03-repeticoes/lista/P0325
+gcc ~/LPEDC/P0325.c -o ~/LPEDC/P0325 && ~/LPEDC/P0325
 ```
 
 ---
@@ -3551,7 +3535,7 @@ Total de juros: R$ 85.39
 4. Resposta esperada: Total de juros: R$ 85.39.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0326.c -o ~/LPEDC/03-repeticoes/lista/P0326 -lm && ~/LPEDC/03-repeticoes/lista/P0326
+gcc ~/LPEDC/P0326.c -o ~/LPEDC/P0326 -lm && ~/LPEDC/P0326
 ```
 
 ---
@@ -3582,7 +3566,7 @@ Conferindo: parcela de R$ 120.00
 4. Resposta esperada: Taxa mensal: 3.46%.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0327.c -o ~/LPEDC/03-repeticoes/lista/P0327 -lm && ~/LPEDC/03-repeticoes/lista/P0327
+gcc ~/LPEDC/P0327.c -o ~/LPEDC/P0327 -lm && ~/LPEDC/P0327
 ```
 
 ---
@@ -3640,7 +3624,7 @@ Datas palíndromas no século: 29
 4. Resposta esperada: 29 datas, de 10/02/2001 a 29/02/2092.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0328.c -o ~/LPEDC/03-repeticoes/lista/P0328 && ~/LPEDC/03-repeticoes/lista/P0328
+gcc ~/LPEDC/P0328.c -o ~/LPEDC/P0328 && ~/LPEDC/P0328
 ```
 
 ---
@@ -3672,7 +3656,7 @@ Trocando: 67% de vitórias
 4. Resposta esperada: 33% ficando, 67% trocando.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0329.c -o ~/LPEDC/03-repeticoes/lista/P0329 && ~/LPEDC/03-repeticoes/lista/P0329
+gcc ~/LPEDC/P0329.c -o ~/LPEDC/P0329 && ~/LPEDC/P0329
 ```
 
 ---
@@ -3707,7 +3691,7 @@ Saída esperada:
 4. Resposta esperada: a última linha é 1 6 15 20 15 6 1, soma 64.
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/lista/P0330.c -o ~/LPEDC/03-repeticoes/lista/P0330 && ~/LPEDC/03-repeticoes/lista/P0330
+gcc ~/LPEDC/P0330.c -o ~/LPEDC/P0330 && ~/LPEDC/P0330
 ```
 
 ## Questões no estilo da prova

@@ -46,12 +46,12 @@ O último assunto tem um TAD, `custo.h` e `custo.c`, compilado junto com os
 exemplos e exercícios da pasta: não dê os nomes `custo_passos`, `custo_bytes`
 e `custo_prof_max` a variáveis suas.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0166](#0166--o-ω-e-θ-de-verdade) | O, Ω e Θ de verdade | [`0166-o-omega-theta/`](26-analise-formal/0166-o-omega-theta/) |
-| [0167](#0167--somatórios-que-saem-de-laços) | Somatórios que saem de laços | [`0167-somatorios/`](26-analise-formal/0167-somatorios/) |
-| [0168](#0168--complexidade-espacial) | Complexidade espacial | [`0168-complexidade-espacial/`](26-analise-formal/0168-complexidade-espacial/) |
-| [0169](#0169--juntando-tudo-passos-e-bytes-conferidos) | Juntando tudo: passos e bytes conferidos | [`0169-juntando-tudo/`](26-analise-formal/0169-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0166](#0166--o-ω-e-θ-de-verdade) | O, Ω e Θ de verdade |
+| [0167](#0167--somatórios-que-saem-de-laços) | Somatórios que saem de laços |
+| [0168](#0168--complexidade-espacial) | Complexidade espacial |
+| [0169](#0169--juntando-tudo-passos-e-bytes-conferidos) | Juntando tudo: passos e bytes conferidos |
 
 ---
 
@@ -89,7 +89,7 @@ melhor caso é Θ(1) e o pior é Θ(n).
 Custo medido e teto `4n²` para `n` de 6 a 15: até 11 o teto fica abaixo
 (vermelho); de 12 em diante, acima (verde). O `n₀` é a primeira coluna verde:
 
-<p align="center"><img src="26-analise-formal/0166-o-omega-theta/ideia.svg" alt="Diagrama da ideia: O, Ω e Θ de verdade" width="858"></p>
+<p align="center"><img src="0166-ideia.svg" alt="Diagrama da ideia: O, Ω e Θ de verdade" width="858"></p>
 
 O programa testa todo `n` até 100 mil e guarda o último que falhou; o `n₀` é
 o seguinte:
@@ -177,7 +177,7 @@ todo `n ≥ n₀`" num laço. Com `c = 1000`, o teto linear aguenta até 329 e
 quebra para sempre:
 
 
-<p align="center"><img src="26-analise-formal/0166-o-omega-theta/fluxograma.svg" alt="Fluxograma: O, Ω e Θ de verdade" width="588"></p>
+<p align="center"><img src="0166-fluxograma.svg" alt="Fluxograma: O, Ω e Θ de verdade" width="588"></p>
 
 > [!WARNING]
 > O, Ω e Θ **não** são "pior, melhor e médio": são teto, piso e sanduíche, e
@@ -195,8 +195,6 @@ quebra para sempre:
 > O que acontece com o `n₀` quando `c` chega perto de 3?
 
 ### Hora de praticar
-
-Arquivos em [`0166-o-omega-theta/`](26-analise-formal/0166-o-omega-theta/).
 
 **Exemplo A331 · Melhor, pior e médio na busca sequencial**
 
@@ -250,7 +248,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/A331.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/A331 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/A331
+gcc ~/LPEDC/A331.c -o ~/LPEDC/A331 && ~/LPEDC/A331
 ```
 
 **Exemplo A332 · Constante ou não: olhando a razão**
@@ -300,7 +298,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/A332.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/A332 -lm && ~/LPEDC/26-analise-formal/0166-o-omega-theta/A332
+gcc ~/LPEDC/A332.c -o ~/LPEDC/A332 -lm && ~/LPEDC/A332
 ```
 
 #### Exercícios
@@ -323,7 +321,7 @@ c = 45: n0 = 1
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E991.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E991 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E991
+gcc ~/LPEDC/E991.c -o ~/LPEDC/E991 && ~/LPEDC/E991
 ```
 
 **Exercício E993** · ★★☆
@@ -345,7 +343,7 @@ n = 7: 5040 ordens | melhor 6 | pior 21 | média 14.91
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E993.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E993 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E993
+gcc ~/LPEDC/E993.c -o ~/LPEDC/E993 && ~/LPEDC/E993
 ```
 
 **Exercício E994** · ★★☆
@@ -364,7 +362,7 @@ c = 16: falha de n = 65537 em diante
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E994.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E994 -lm && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E994
+gcc ~/LPEDC/E994.c -o ~/LPEDC/E994 -lm && ~/LPEDC/E994
 ```
 
 **Exercício E995** · ★★★
@@ -384,7 +382,7 @@ falhas de n0 até 1000: 0
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E995.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E995 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E995
+gcc ~/LPEDC/E995.c -o ~/LPEDC/E995 && ~/LPEDC/E995
 ```
 
 ---
@@ -430,7 +428,7 @@ multiplicada por `n`, dá `n ln n`.
 Cada linha é um morador e cada quadradinho roxo, um aperto de mão. O
 triângulo é metade do quadrado de 8 por 8, sem a diagonal:
 
-<p align="center"><img src="26-analise-formal/0167-somatorios/ideia.svg" alt="Diagrama da ideia: Somatórios que saem de laços" width="858"></p>
+<p align="center"><img src="0167-ideia.svg" alt="Diagrama da ideia: Somatórios que saem de laços" width="858"></p>
 
 O programa conta os apertos com os dois laços e compara com a fórmula:
 
@@ -468,7 +466,7 @@ int main(void) {
 O teste `j < i?` torna o laço dependente: em `i = 0` dá "Não" de cara; em
 `i = 7`, "Sim" sete vezes. A soma dos "Sim" é o somatório:
 
-<p align="center"><img src="26-analise-formal/0167-somatorios/fluxograma.svg" alt="Fluxograma: Somatórios que saem de laços" width="549"></p>
+<p align="center"><img src="0167-fluxograma.svg" alt="Fluxograma: Somatórios que saem de laços" width="549"></p>
 
 ### Passo a passo
 
@@ -502,8 +500,6 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 > o somatório antes de mudar o programa.
 
 ### Hora de praticar
-
-Arquivos em [`0167-somatorios/`](26-analise-formal/0167-somatorios/).
 
 **Exemplo A333 · Dois laços e mesmo assim linear: a soma geométrica**
 
@@ -552,7 +548,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/A333.c -o ~/LPEDC/26-analise-formal/0167-somatorios/A333 && ~/LPEDC/26-analise-formal/0167-somatorios/A333
+gcc ~/LPEDC/A333.c -o ~/LPEDC/A333 && ~/LPEDC/A333
 ```
 
 **Exemplo A334 · As lâmpadas do corredor: a soma harmônica**
@@ -610,48 +606,10 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/A334.c -o ~/LPEDC/26-analise-formal/0167-somatorios/A334 -lm && ~/LPEDC/26-analise-formal/0167-somatorios/A334
+gcc ~/LPEDC/A334.c -o ~/LPEDC/A334 -lm && ~/LPEDC/A334
 ```
 
 #### Exercícios
-
-**Exercício E997** · ★☆☆
-
-Desafio do cofrinho: no dia 1 você guarda R$ 1, no dia 2 guarda R$ 2,
-e assim por diante, até o dia 365. Calcule o total de dois jeitos: com
-um laço que soma dia a dia e com a fórmula fechada da soma aritmética.
-Use long:
-
-
-```text
-Saída esperada:
-pelo laço:    R$ 66795
-pela fórmula: R$ 66795
-```
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/E997.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E997 && ~/LPEDC/26-analise-formal/0167-somatorios/E997
-```
-
-**Exercício E999** · ★★☆
-
-O condomínio quer saber quantas comissões de 3 moradores diferentes dá
-para formar (a ordem não importa). Escreva trios(n) com três laços
-dependentes, k < j < i, contando cada trio uma vez, e compare com a
-fórmula n(n-1)(n-2)/6 para n = 10, 30 e 100:
-
-
-```text
-Saída esperada:
-  n   trios  n(n-1)(n-2)/6
- 10     120            120
- 30    4060           4060
-100  161700         161700
-```
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/E999.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E999 && ~/LPEDC/26-analise-formal/0167-somatorios/E999
-```
 
 **Exercício E1000** · ★★☆
 
@@ -672,7 +630,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/E1000.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E1000 && ~/LPEDC/26-analise-formal/0167-somatorios/E1000
+gcc ~/LPEDC/E1000.c -o ~/LPEDC/E1000 && ~/LPEDC/E1000
 ```
 
 **Exercício E1002** · ★★★
@@ -702,7 +660,45 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/E1002.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E1002 -lm && ~/LPEDC/26-analise-formal/0167-somatorios/E1002
+gcc ~/LPEDC/E1002.c -o ~/LPEDC/E1002 -lm && ~/LPEDC/E1002
+```
+
+**Exercício E997** · ★☆☆
+
+Desafio do cofrinho: no dia 1 você guarda R$ 1, no dia 2 guarda R$ 2,
+e assim por diante, até o dia 365. Calcule o total de dois jeitos: com
+um laço que soma dia a dia e com a fórmula fechada da soma aritmética.
+Use long:
+
+
+```text
+Saída esperada:
+pelo laço:    R$ 66795
+pela fórmula: R$ 66795
+```
+
+```bash
+gcc ~/LPEDC/E997.c -o ~/LPEDC/E997 && ~/LPEDC/E997
+```
+
+**Exercício E999** · ★★☆
+
+O condomínio quer saber quantas comissões de 3 moradores diferentes dá
+para formar (a ordem não importa). Escreva trios(n) com três laços
+dependentes, k < j < i, contando cada trio uma vez, e compare com a
+fórmula n(n-1)(n-2)/6 para n = 10, 30 e 100:
+
+
+```text
+Saída esperada:
+  n   trios  n(n-1)(n-2)/6
+ 10     120            120
+ 30    4060           4060
+100  161700         161700
+```
+
+```bash
+gcc ~/LPEDC/E999.c -o ~/LPEDC/E999 && ~/LPEDC/E999
 ```
 
 ---
@@ -745,7 +741,7 @@ O espaço extra aparece em três lugares:
 Em cima, a cópia: 6 gavetas a mais, `6 · 4 = 24` bytes. Embaixo, a inversão
 no lugar: só a caixinha `tmp`, 4 bytes, para qualquer rota:
 
-<p align="center"><img src="26-analise-formal/0168-complexidade-espacial/ideia.svg" alt="Diagrama da ideia: Complexidade espacial" width="858"></p>
+<p align="center"><img src="0168-ideia.svg" alt="Diagrama da ideia: Complexidade espacial" width="858"></p>
 
 O programa faz as duas inversões e devolve os bytes extras de cada uma.
 Depois repete com 1 milhão de paradas:
@@ -813,7 +809,7 @@ int main(void) {
 Nenhuma caixa cria memória. O `i` anda da esquerda e o `j` da direita, até se
 cruzarem: 3 trocas para 6 paradas. Tempo Θ(n), espaço extra Θ(1):
 
-<p align="center"><img src="26-analise-formal/0168-complexidade-espacial/fluxograma.svg" alt="Fluxograma: Complexidade espacial" width="528"></p>
+<p align="center"><img src="0168-fluxograma.svg" alt="Fluxograma: Complexidade espacial" width="528"></p>
 
 > [!WARNING]
 > Recursão **custa** espaço, mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
@@ -833,8 +829,6 @@ cruzarem: 3 trocas para 6 paradas. Tempo Θ(n), espaço extra Θ(1):
 > `double`? Calcule e troque os tipos no programa.
 
 ### Hora de praticar
-
-Arquivos em [`0168-complexidade-espacial/`](26-analise-formal/0168-complexidade-espacial/).
 
 **Exemplo A335 · Quanto a recursão empilha**
 
@@ -906,7 +900,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/A335.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/A335 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/A335
+gcc ~/LPEDC/A335.c -o ~/LPEDC/A335 && ~/LPEDC/A335
 ```
 
 **Exemplo A336 · Trocar tempo por espaço: a tabela de idades**
@@ -971,7 +965,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/A336.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/A336 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/A336
+gcc ~/LPEDC/A336.c -o ~/LPEDC/A336 && ~/LPEDC/A336
 ```
 
 #### Exercícios
@@ -993,7 +987,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1003.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1003 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1003
+gcc ~/LPEDC/E1003.c -o ~/LPEDC/E1003 && ~/LPEDC/E1003
 ```
 
 **Exercício E1005** · ★★☆
@@ -1013,7 +1007,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1005.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1005 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1005
+gcc ~/LPEDC/E1005.c -o ~/LPEDC/E1005 && ~/LPEDC/E1005
 ```
 
 **Exercício E1006** · ★★☆
@@ -1033,7 +1027,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1006.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1006 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1006
+gcc ~/LPEDC/E1006.c -o ~/LPEDC/E1006 && ~/LPEDC/E1006
 ```
 
 **Exercício E1007** · ★★★
@@ -1052,7 +1046,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1007.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1007 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1007
+gcc ~/LPEDC/E1007.c -o ~/LPEDC/E1007 && ~/LPEDC/E1007
 ```
 
 ---
@@ -1084,7 +1078,7 @@ copiado na intercalação; na soma recursiva, uma chamada.
 Passos com `n = 1024` e `n = 2048`, razão e espaço extra medido. Em vermelho,
 o que cresce com `n`; em verde, o constante:
 
-<p align="center"><img src="26-analise-formal/0169-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: passos e bytes conferidos" width="870"></p>
+<p align="center"><img src="0169-ideia.svg" alt="Diagrama da ideia: Juntando tudo: passos e bytes conferidos" width="870"></p>
 
 O programa roda as cinco com 1024 e 2048 preços e imprime passos, fórmula,
 frames e bytes:
@@ -1153,7 +1147,7 @@ int main(void) {
 O fluxograma é o roteiro, não uma função. "A medida bate com a fórmula?" vem
 antes da classe: fórmula errada com classe certa passa no "parece n²":
 
-<p align="center"><img src="26-analise-formal/0169-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: passos e bytes conferidos" width="657"></p>
+<p align="center"><img src="0169-fluxograma.svg" alt="Fluxograma: Juntando tudo: passos e bytes conferidos" width="657"></p>
 
 ### Passo a passo
 
@@ -1188,14 +1182,12 @@ usa o vetor auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 
 ### Hora de praticar
 
-Arquivos em [`0169-juntando-tudo/`](26-analise-formal/0169-juntando-tudo/).
-
 **Exemplo A337 · Prever antes de medir**
 
 ```c
 #include <stdio.h>
 #include <math.h>
-#include "custo.h"
+#include "0169-custo.h"
 
 // Mede com n = 1000, prevê n = 8000 só pela classe (sem rodar) e confere.
 // n multiplicado por 8: Θ(n) → × 8, Θ(n²) → × 64,
@@ -1241,7 +1233,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/A337.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/A337 -lm && ~/LPEDC/26-analise-formal/0169-juntando-tudo/A337
+gcc ~/LPEDC/A337.c ~/LPEDC/0169-custo.c -o ~/LPEDC/A337 -lm && ~/LPEDC/A337
 ```
 
 **Exemplo A338 · Três jeitos de achar o par: tempo contra espaço**
@@ -1249,7 +1241,7 @@ gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/A337.c ~/LPEDC/26-analise-forma
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "custo.h"
+#include "0169-custo.h"
 
 #define N 2000
 #define VALOR_MAX 10000
@@ -1321,7 +1313,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/A338.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/A338 && ~/LPEDC/26-analise-formal/0169-juntando-tudo/A338
+gcc ~/LPEDC/A338.c ~/LPEDC/0169-custo.c -o ~/LPEDC/A338 && ~/LPEDC/A338
 ```
 
 #### Exercícios
@@ -1344,7 +1336,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1009.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1009 -lm && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1009
+gcc ~/LPEDC/E1009.c ~/LPEDC/0169-custo.c -o ~/LPEDC/E1009 -lm && ~/LPEDC/E1009
 ```
 
 **Exercício E1011** · ★★☆
@@ -1365,7 +1357,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1011.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1011 -lm && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1011
+gcc ~/LPEDC/E1011.c ~/LPEDC/0169-custo.c -o ~/LPEDC/E1011 -lm && ~/LPEDC/E1011
 ```
 
 **Exercício E1012** · ★★☆
@@ -1386,7 +1378,7 @@ c:    2047 ->    4095, razão 2.00, classe n
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1012.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1012 && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1012
+gcc ~/LPEDC/E1012.c ~/LPEDC/0169-custo.c -o ~/LPEDC/E1012 && ~/LPEDC/E1012
 ```
 
 **Exercício E1014** · ★★★
@@ -1420,7 +1412,7 @@ com prefixos:    2000 passos,  8008 bytes, total 185862850
 ```
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1014.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1014 && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1014
+gcc ~/LPEDC/E1014.c ~/LPEDC/0169-custo.c -o ~/LPEDC/E1014 && ~/LPEDC/E1014
 ```
 
 ---
@@ -1579,7 +1571,7 @@ a `n` nesse tempo.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](26-analise-formal/lista/); resoluções em `_respostas/26-analise-formal/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2601.c a P2630.c, na raiz; resoluções em `_respostas/26-analise-formal/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -1606,7 +1598,7 @@ n = 1000: 500 vagas, fórmula 500
    confiar.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2601.c -o ~/LPEDC/26-analise-formal/lista/P2601 && ~/LPEDC/26-analise-formal/lista/P2601
+gcc ~/LPEDC/P2601.c -o ~/LPEDC/P2601 && ~/LPEDC/P2601
 ```
 
 ---
@@ -1633,7 +1625,7 @@ c = 102: n0 = 1
 2. À mão: 2n + 100 <= 3n vira n >= 100. Quanto maior o c, menor o n0.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2602.c -o ~/LPEDC/26-analise-formal/lista/P2602 && ~/LPEDC/26-analise-formal/lista/P2602
+gcc ~/LPEDC/P2602.c -o ~/LPEDC/P2602 && ~/LPEDC/P2602
 ```
 
 ---
@@ -1659,7 +1651,7 @@ c = 0.90: n0 = 200
 2. À mão: n² - 20n >= n²/2 vira n >= 40.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2603.c -o ~/LPEDC/26-analise-formal/lista/P2603 && ~/LPEDC/26-analise-formal/lista/P2603
+gcc ~/LPEDC/P2603.c -o ~/LPEDC/P2603 && ~/LPEDC/P2603
 ```
 
 ---
@@ -1685,7 +1677,7 @@ n = 380: 144020 jogos, n(n-1) = 144020
 2. n(n-1) é o dobro de n(n-1)/2: os jogos de ida e os de volta.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2604.c -o ~/LPEDC/26-analise-formal/lista/P2604 && ~/LPEDC/26-analise-formal/lista/P2604
+gcc ~/LPEDC/P2604.c -o ~/LPEDC/P2604 && ~/LPEDC/P2604
 ```
 
 ---
@@ -1713,7 +1705,7 @@ n = 1000000: 19 cortes, floor(log2 n) = 19
    floor(log2 n) cortes.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2605.c -o ~/LPEDC/26-analise-formal/lista/P2605 -lm && ~/LPEDC/26-analise-formal/lista/P2605
+gcc ~/LPEDC/P2605.c -o ~/LPEDC/P2605 -lm && ~/LPEDC/P2605
 ```
 
 ---
@@ -1741,7 +1733,7 @@ extrato c (pior caso): posição -1, 8 comparações
    débito).
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2606.c -o ~/LPEDC/26-analise-formal/lista/P2606 && ~/LPEDC/26-analise-formal/lista/P2606
+gcc ~/LPEDC/P2606.c -o ~/LPEDC/P2606 && ~/LPEDC/P2606
 ```
 
 ---
@@ -1769,7 +1761,7 @@ mdc(1000000, 3) = 1, profundidade 3
    n) de pilha.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2607.c -o ~/LPEDC/26-analise-formal/lista/P2607 && ~/LPEDC/26-analise-formal/lista/P2607
+gcc ~/LPEDC/P2607.c -o ~/LPEDC/P2607 && ~/LPEDC/P2607
 ```
 
 ---
@@ -1795,7 +1787,7 @@ n = 5000: 25000000 tijolos em 5000 voltas, n² = 25000000
 2. 1 + 3 + ... + (2n - 1) = n²: a soma aritmética com parcelas de 2 em 2.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2608.c -o ~/LPEDC/26-analise-formal/lista/P2608 && ~/LPEDC/26-analise-formal/lista/P2608
+gcc ~/LPEDC/P2608.c -o ~/LPEDC/P2608 && ~/LPEDC/P2608
 ```
 
 ---
@@ -1821,7 +1813,7 @@ n = 80: 512000 passos, razão 8.0
 2. Na primeira linha não há razão anterior; mostre só a contagem.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2609.c -o ~/LPEDC/26-analise-formal/lista/P2609 && ~/LPEDC/26-analise-formal/lista/P2609
+gcc ~/LPEDC/P2609.c -o ~/LPEDC/P2609 && ~/LPEDC/P2609
 ```
 
 ---
@@ -1847,7 +1839,7 @@ n = 1000:  8000000 bytes (7.63 MB)
 2. Use size_t para os bytes e %zu no printf. Confira o NULL do malloc.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2610.c -o ~/LPEDC/26-analise-formal/lista/P2610 && ~/LPEDC/26-analise-formal/lista/P2610
+gcc ~/LPEDC/P2610.c -o ~/LPEDC/P2610 && ~/LPEDC/P2610
 ```
 
 ### ★★☆ Para pensar
@@ -1877,7 +1869,7 @@ piso c = 4: n0 = 1
 3. O piso com c = 4 vale desde n = 1, então o n0 do Θ é o do teto.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2611.c -o ~/LPEDC/26-analise-formal/lista/P2611 && ~/LPEDC/26-analise-formal/lista/P2611
+gcc ~/LPEDC/P2611.c -o ~/LPEDC/P2611 && ~/LPEDC/P2611
 ```
 
 ---
@@ -1907,7 +1899,7 @@ fórmula:           62.875
 3. O caso médio depende da hipótese sobre as consultas: mude o 0.25 e veja.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2612.c -o ~/LPEDC/26-analise-formal/lista/P2612 && ~/LPEDC/26-analise-formal/lista/P2612
+gcc ~/LPEDC/P2612.c -o ~/LPEDC/P2612 && ~/LPEDC/P2612
 ```
 
 ---
@@ -1934,7 +1926,7 @@ n = 50:  1625625 cubinhos, fórmula  1625625
 2. Σ i³ = (Σ i)². O custo é Θ(n⁴).
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2613.c -o ~/LPEDC/26-analise-formal/lista/P2613 && ~/LPEDC/26-analise-formal/lista/P2613
+gcc ~/LPEDC/P2613.c -o ~/LPEDC/P2613 && ~/LPEDC/P2613
 ```
 
 ---
@@ -1963,7 +1955,7 @@ n = 1000000: total 797161, fórmula 797161, razão 0.797
 3. Guarde a última potência de 3 usada numa variável fora do laço.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2614.c -o ~/LPEDC/26-analise-formal/lista/P2614 && ~/LPEDC/26-analise-formal/lista/P2614
+gcc ~/LPEDC/P2614.c -o ~/LPEDC/P2614 && ~/LPEDC/P2614
 ```
 
 ---
@@ -1993,7 +1985,7 @@ n = 1000000:  78498 primos, 2122048 marcações, razão 0.808
    esqueça o free.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2615.c -o ~/LPEDC/26-analise-formal/lista/P2615 -lm && ~/LPEDC/26-analise-formal/lista/P2615
+gcc ~/LPEDC/P2615.c -o ~/LPEDC/P2615 -lm && ~/LPEDC/P2615
 ```
 
 ---
@@ -2022,7 +2014,7 @@ embaralhado: profundidade 22
    média.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2616.c -o ~/LPEDC/26-analise-formal/lista/P2616 && ~/LPEDC/26-analise-formal/lista/P2616
+gcc ~/LPEDC/P2616.c -o ~/LPEDC/P2616 && ~/LPEDC/P2616
 ```
 
 ---
@@ -2057,7 +2049,7 @@ tabela: repetido 3716,      81 passos, 10000 bytes
    códigos.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2617.c -o ~/LPEDC/26-analise-formal/lista/P2617 && ~/LPEDC/26-analise-formal/lista/P2617
+gcc ~/LPEDC/P2617.c -o ~/LPEDC/P2617 && ~/LPEDC/P2617
 ```
 
 ---
@@ -2088,7 +2080,7 @@ Saída esperada:
 3. Os resultados batem com o exercício E1005.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2618.c -o ~/LPEDC/26-analise-formal/lista/P2618 && ~/LPEDC/26-analise-formal/lista/P2618
+gcc ~/LPEDC/P2618.c -o ~/LPEDC/P2618 && ~/LPEDC/P2618
 ```
 
 ---
@@ -2119,7 +2111,7 @@ n^3    : n até 464
 3. O orçamento que roda 100 milhões em Θ(n) roda só 26 em Θ(2ⁿ).
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2619.c -o ~/LPEDC/26-analise-formal/lista/P2619 -lm && ~/LPEDC/26-analise-formal/lista/P2619
+gcc ~/LPEDC/P2619.c -o ~/LPEDC/P2619 -lm && ~/LPEDC/P2619
 ```
 
 ---
@@ -2154,7 +2146,7 @@ distancia(7, 3) = 26.0
    diferença maior que 1e-9.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2620.c -o ~/LPEDC/26-analise-formal/lista/P2620 -lm && ~/LPEDC/26-analise-formal/lista/P2620
+gcc ~/LPEDC/P2620.c -o ~/LPEDC/P2620 -lm && ~/LPEDC/P2620
 ```
 
 ### ★★★ Desafio
@@ -2191,7 +2183,7 @@ c1 = 0.5018, c2 = 0.8500
    chegar lá.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2621.c -o ~/LPEDC/26-analise-formal/lista/P2621 && ~/LPEDC/26-analise-formal/lista/P2621
+gcc ~/LPEDC/P2621.c -o ~/LPEDC/P2621 && ~/LPEDC/P2621
 ```
 
 ---
@@ -2221,7 +2213,7 @@ menor 1.3010, maior 6.0000
 3. Comece em n = 2: com n = 1, log2 n = 0 e a razão divide por zero.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2622.c -o ~/LPEDC/26-analise-formal/lista/P2622 -lm && ~/LPEDC/26-analise-formal/lista/P2622
+gcc ~/LPEDC/P2622.c -o ~/LPEDC/P2622 -lm && ~/LPEDC/P2622
 ```
 
 ---
@@ -2252,7 +2244,7 @@ sqrt(n) / log2(n) em n = 1000000: 50.2
 3. sqrt e log2 estão em <math.h>.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2623.c -o ~/LPEDC/26-analise-formal/lista/P2623 -lm && ~/LPEDC/26-analise-formal/lista/P2623
+gcc ~/LPEDC/P2623.c -o ~/LPEDC/P2623 -lm && ~/LPEDC/P2623
 ```
 
 ---
@@ -2290,7 +2282,7 @@ n =  65536: x =  983041, fórmula  983041, razão 0.938
    razão vai para 1.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2624.c -o ~/LPEDC/26-analise-formal/lista/P2624 && ~/LPEDC/26-analise-formal/lista/P2624
+gcc ~/LPEDC/P2624.c -o ~/LPEDC/P2624 && ~/LPEDC/P2624
 ```
 
 ---
@@ -2320,7 +2312,7 @@ n = 4096: total 196608 bytes, pico 16384 bytes, vivos no fim 0
    custa), não na memória.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2625.c -o ~/LPEDC/26-analise-formal/lista/P2625 && ~/LPEDC/26-analise-formal/lista/P2625
+gcc ~/LPEDC/P2625.c -o ~/LPEDC/P2625 && ~/LPEDC/P2625
 ```
 
 ---
@@ -2349,7 +2341,7 @@ metade: soma 12450000, 199999 chamadas, profundidade 18
 3. Espaço Θ(n) contra Θ(log n), com o mesmo resultado e o mesmo tempo.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2626.c -o ~/LPEDC/26-analise-formal/lista/P2626 && ~/LPEDC/26-analise-formal/lista/P2626
+gcc ~/LPEDC/P2626.c -o ~/LPEDC/P2626 && ~/LPEDC/P2626
 ```
 
 ---
@@ -2381,7 +2373,7 @@ embaralhada            499500    990 |           250293 250302
    != i). Use o mesmo vetor embaralhado nos dois.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2627.c -o ~/LPEDC/26-analise-formal/lista/P2627 && ~/LPEDC/26-analise-formal/lista/P2627
+gcc ~/LPEDC/P2627.c -o ~/LPEDC/P2627 && ~/LPEDC/P2627
 ```
 
 ---
@@ -2410,7 +2402,7 @@ c:    49152 ->   106496, p = 1.115
    de 1 (o log engana o expoente).
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2628.c -o ~/LPEDC/26-analise-formal/lista/P2628 -lm && ~/LPEDC/26-analise-formal/lista/P2628
+gcc ~/LPEDC/P2628.c -o ~/LPEDC/P2628 -lm && ~/LPEDC/P2628
 ```
 
 ---
@@ -2447,7 +2439,7 @@ longas: tabela 912 (16016004 bytes), linhas 912 (16008 bytes)
    contra 16 KB.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2629.c -o ~/LPEDC/26-analise-formal/lista/P2629 && ~/LPEDC/26-analise-formal/lista/P2629
+gcc ~/LPEDC/P2629.c -o ~/LPEDC/P2629 && ~/LPEDC/P2629
 ```
 
 ---
@@ -2491,7 +2483,7 @@ n = 200
 4. Ao dobrar n, os passos vão perto de × 8, × 4 e × 2.
 
 ```bash
-gcc ~/LPEDC/26-analise-formal/lista/P2630.c -o ~/LPEDC/26-analise-formal/lista/P2630 && ~/LPEDC/26-analise-formal/lista/P2630
+gcc ~/LPEDC/P2630.c -o ~/LPEDC/P2630 && ~/LPEDC/P2630
 ```
 
 ## Questões no estilo da prova

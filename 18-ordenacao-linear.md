@@ -45,14 +45,14 @@ junto com o exemplo. Os dados vêm de um gerador `unsigned` próprio, para a
 saída não depender do computador. Os tempos medidos com `clock()` variam:
 compare proporções.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0119](#0119--shell-sort) | Shell sort | [`0119-shell-sort/`](18-ordenacao-linear/0119-shell-sort/) |
-| [0120](#0120--counting-sort) | Counting sort | [`0120-counting-sort/`](18-ordenacao-linear/0120-counting-sort/) |
-| [0121](#0121--radix-sort) | Radix sort | [`0121-radix-sort/`](18-ordenacao-linear/0121-radix-sort/) |
-| [0122](#0122--bucket-sort) | Bucket sort | [`0122-bucket-sort/`](18-ordenacao-linear/0122-bucket-sort/) |
-| [0123](#0123--quickselect) | Quickselect | [`0123-quickselect/`](18-ordenacao-linear/0123-quickselect/) |
-| [0124](#0124--juntando-tudo) | Juntando tudo | [`0124-juntando-tudo/`](18-ordenacao-linear/0124-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0119](#0119--shell-sort) | Shell sort |
+| [0120](#0120--counting-sort) | Counting sort |
+| [0121](#0121--radix-sort) | Radix sort |
+| [0122](#0122--bucket-sort) | Bucket sort |
+| [0123](#0123--quickselect) | Quickselect |
+| [0124](#0124--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -79,7 +79,7 @@ saltos são 4 e 1.
 Na primeira linha do desenho, cada cor é uma fileira de salto 4: três
 movimentos deixam o vetor quase pronto.
 
-<p align="center"><img src="18-ordenacao-linear/0119-shell-sort/ideia.svg" alt="Diagrama da ideia: Shell sort" width="858"></p>
+<p align="center"><img src="0119-ideia.svg" alt="Diagrama da ideia: Shell sort" width="858"></p>
 
 Em C, o laço de dentro é o insertion sort do assunto 0093 com o `1` trocado
 por `h`:
@@ -137,7 +137,7 @@ int main(void) {
 São 9 movimentos; o insertion sort comum faria 21. O `h /= 3` desfaz o
 `3 * h + 1`: 13 / 3 é 4 e 4 / 3 é 1. O laço para quando `h` vira 0.
 
-<p align="center"><img src="18-ordenacao-linear/0119-shell-sort/fluxograma.svg" alt="Fluxograma: Shell sort" width="437"></p>
+<p align="center"><img src="0119-fluxograma.svg" alt="Fluxograma: Shell sort" width="437"></p>
 
 ### Passo a passo
 
@@ -168,8 +168,6 @@ para trás:
 > iguais) com saltos 2 e 1 no papel e veja em que ordem os 3 terminam.
 
 ### Hora de praticar
-
-Arquivos em [`0119-shell-sort/`](18-ordenacao-linear/0119-shell-sort/).
 
 **Exemplo A237 · A escolha dos saltos muda tudo**
 
@@ -286,7 +284,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0119-shell-sort/A237.c -o ~/LPEDC/18-ordenacao-linear/0119-shell-sort/A237 && ~/LPEDC/18-ordenacao-linear/0119-shell-sort/A237
+gcc ~/LPEDC/A237.c -o ~/LPEDC/A237 && ~/LPEDC/A237
 ```
 
 **Exemplo A238 · O shell sort embaralha os empates**
@@ -368,7 +366,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0119-shell-sort/A238.c -o ~/LPEDC/18-ordenacao-linear/0119-shell-sort/A238 && ~/LPEDC/18-ordenacao-linear/0119-shell-sort/A238
+gcc ~/LPEDC/A238.c -o ~/LPEDC/A238 && ~/LPEDC/A238
 ```
 
 #### Exercícios
@@ -391,7 +389,7 @@ n = 1000000: 797161 265720 88573 29524 9841 3280 1093 364 121 40 13 4 1
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E709.c -o ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E709 && ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E709
+gcc ~/LPEDC/E709.c -o ~/LPEDC/E709 && ~/LPEDC/E709
 ```
 
 **Exercício E711** · ★★☆
@@ -418,7 +416,7 @@ Amanda, Bianca, Caio, Diego, Elisa, Helena, Larissa, Murilo, Paulo, Rafael, Sofi
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E711.c -o ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E711 && ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E711
+gcc ~/LPEDC/E711.c -o ~/LPEDC/E711 && ~/LPEDC/E711
 ```
 
 **Exercício E712** · ★★☆
@@ -439,7 +437,7 @@ h =  1: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? sim
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E712.c -o ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E712 && ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E712
+gcc ~/LPEDC/E712.c -o ~/LPEDC/E712 && ~/LPEDC/E712
 ```
 
 **Exercício E714** · ★★★
@@ -465,7 +463,7 @@ total: 837 movimentos (o insertion sort faria 9775)
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E714.c -o ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E714 && ~/LPEDC/18-ordenacao-linear/0119-shell-sort/E714
+gcc ~/LPEDC/E714.c -o ~/LPEDC/E714 && ~/LPEDC/E714
 ```
 
 ---
@@ -495,7 +493,7 @@ ordem dos empates se mantém e o método é **estável**, o que o radix sort
 desenho, os pedidos de 3 estrelas (A, C e H, em verde) chegam à saída na ordem
 original:
 
-<p align="center"><img src="18-ordenacao-linear/0120-counting-sort/ideia.svg" alt="Diagrama da ideia: Counting sort" width="858"></p>
+<p align="center"><img src="0120-ideia.svg" alt="Diagrama da ideia: Counting sort" width="858"></p>
 
 O counting sort não ordena no lugar: a saída vai para outro vetor.
 
@@ -575,7 +573,7 @@ No fim, cada `c[x]` aponta para o **começo** do bloco de `x`. Os três laços
 são sequenciais: dois andam pelos n elementos e um pelas k chaves, então o
 custo é **O(n + k)**:
 
-<p align="center"><img src="18-ordenacao-linear/0120-counting-sort/fluxograma.svg" alt="Fluxograma: Counting sort" width="459"></p>
+<p align="center"><img src="0120-fluxograma.svg" alt="Fluxograma: Counting sort" width="459"></p>
 
 > [!WARNING]
 > Com o terceiro laço da frente para trás, os empates saem **invertidos**
@@ -594,8 +592,6 @@ custo é **O(n + k)**:
 > serve para ordenar as avaliações com o código junto?
 
 ### Hora de praticar
-
-Arquivos em [`0120-counting-sort/`](18-ordenacao-linear/0120-counting-sort/).
 
 **Exemplo A239 · Temperaturas abaixo de zero**
 
@@ -657,7 +653,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0120-counting-sort/A239.c -o ~/LPEDC/18-ordenacao-linear/0120-counting-sort/A239 && ~/LPEDC/18-ordenacao-linear/0120-counting-sort/A239
+gcc ~/LPEDC/A239.c -o ~/LPEDC/A239 && ~/LPEDC/A239
 ```
 
 **Exemplo A240 · A chamada pela inicial**
@@ -718,7 +714,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0120-counting-sort/A240.c -o ~/LPEDC/18-ordenacao-linear/0120-counting-sort/A240 && ~/LPEDC/18-ordenacao-linear/0120-counting-sort/A240
+gcc ~/LPEDC/A240.c -o ~/LPEDC/A240 && ~/LPEDC/A240
 ```
 
 #### Exercícios
@@ -745,7 +741,7 @@ mais comum: 7 (5 alunos)
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E715.c -o ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E715 && ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E715
+gcc ~/LPEDC/E715.c -o ~/LPEDC/E715 && ~/LPEDC/E715
 ```
 
 **Exercício E717** · ★★☆
@@ -780,7 +776,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E717.c -o ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E717 && ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E717
+gcc ~/LPEDC/E717.c -o ~/LPEDC/E717 && ~/LPEDC/E717
 ```
 
 **Exercício E718** · ★★☆
@@ -803,7 +799,7 @@ carro -> acorr | corra -> acorr: anagramas
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E718.c -o ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E718 && ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E718
+gcc ~/LPEDC/E718.c -o ~/LPEDC/E718 && ~/LPEDC/E718
 ```
 
 **Exercício E720** · ★★★
@@ -829,7 +825,7 @@ a:9 o:7 r:7 e:4 i:3 u:3 d:2 b:1 c:1 f:1 h:1 m:1 n:1 p:1 t:1 v:1
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E720.c -o ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E720 && ~/LPEDC/18-ordenacao-linear/0120-counting-sort/E720
+gcc ~/LPEDC/E720.c -o ~/LPEDC/E720 && ~/LPEDC/E720
 ```
 
 ---
@@ -859,7 +855,7 @@ r = log₂ n.
 No exemplo, em amarelo, o 807 e o 830: a passada das dezenas põe o 807 na
 frente, e a das centenas respeita essa ordem:
 
-<p align="center"><img src="18-ordenacao-linear/0121-radix-sort/ideia.svg" alt="Diagrama da ideia: Radix sort" width="858"></p>
+<p align="center"><img src="0121-ideia.svg" alt="Diagrama da ideia: Radix sort" width="858"></p>
 
 A `passada` é o counting sort do assunto 0120 com o dígito como chave; o vetor
 auxiliar é alocado uma vez só:
@@ -945,7 +941,7 @@ na saída ficam `807 509 | 216 | 830 | 047 | 251 553 | 074`. No bloco do 0, o
 O laço para quando `exp` passa do maior número: com 830, são três passadas
 (`exp` = 1, 10, 100), e `830 / 1000` dá 0:
 
-<p align="center"><img src="18-ordenacao-linear/0121-radix-sort/fluxograma.svg" alt="Fluxograma: Radix sort" width="601"></p>
+<p align="center"><img src="0121-fluxograma.svg" alt="Fluxograma: Radix sort" width="601"></p>
 
 > [!WARNING]
 > Com o terceiro laço da `passada` da frente para trás, cada passada inverte
@@ -964,8 +960,6 @@ O laço para quando `exp` passa do maior número: com 830, são três passadas
 > posição de `c` isso cairia.
 
 ### Hora de praticar
-
-Arquivos em [`0121-radix-sort/`](18-ordenacao-linear/0121-radix-sort/).
 
 **Exemplo A241 · Placas de carro, letra por letra**
 
@@ -1023,7 +1017,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0121-radix-sort/A241.c -o ~/LPEDC/18-ordenacao-linear/0121-radix-sort/A241 && ~/LPEDC/18-ordenacao-linear/0121-radix-sort/A241
+gcc ~/LPEDC/A241.c -o ~/LPEDC/A241 && ~/LPEDC/A241
 ```
 
 **Exemplo A242 · Um byte por passada**
@@ -1106,7 +1100,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0121-radix-sort/A242.c -o ~/LPEDC/18-ordenacao-linear/0121-radix-sort/A242 && ~/LPEDC/18-ordenacao-linear/0121-radix-sort/A242
+gcc ~/LPEDC/A242.c -o ~/LPEDC/A242 && ~/LPEDC/A242
 ```
 
 #### Exercícios
@@ -1135,7 +1129,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E721.c -o ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E721 && ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E721
+gcc ~/LPEDC/E721.c -o ~/LPEDC/E721 && ~/LPEDC/E721
 ```
 
 **Exercício E723** · ★★☆
@@ -1165,7 +1159,7 @@ exp = 100: 000 001 008 027 064 125 216 343 512 729
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E723.c -o ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E723 && ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E723
+gcc ~/LPEDC/E723.c -o ~/LPEDC/E723 && ~/LPEDC/E723
 ```
 
 **Exercício E724** · ★★☆
@@ -1193,7 +1187,7 @@ ano:    28/02/2024 05/11/2024 10/11/2024 15/01/2025 28/01/2025 05/03/2025 15/03/
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E724.c -o ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E724 && ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E724
+gcc ~/LPEDC/E724.c -o ~/LPEDC/E724 && ~/LPEDC/E724
 ```
 
 **Exercício E726** · ★★★
@@ -1215,7 +1209,7 @@ com a chave: -2147483648 -150000 -98000 -7 0 7 3200 98000 2147483647
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E726.c -o ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E726 && ~/LPEDC/18-ordenacao-linear/0121-radix-sort/E726
+gcc ~/LPEDC/E726.c -o ~/LPEDC/E726 && ~/LPEDC/E726
 ```
 
 ---
@@ -1246,7 +1240,7 @@ valores **uniformes** em [0, 1), com `x` indo para ⌊n · x⌋.
 
 No exemplo, três notas caem no balde 2 e quatro baldes ficam vazios:
 
-<p align="center"><img src="18-ordenacao-linear/0122-bucket-sort/ideia.svg" alt="Diagrama da ideia: Bucket sort" width="858"></p>
+<p align="center"><img src="0122-ideia.svg" alt="Diagrama da ideia: Bucket sort" width="858"></p>
 
 Em C, os baldes são um vetor de 10 ponteiros para lista, todos em `NULL`:
 
@@ -1329,7 +1323,7 @@ int main(void) {
 
 O custo escondido está no `insere_ordenado`, que anda pela lista do balde:
 
-<p align="center"><img src="18-ordenacao-linear/0122-bucket-sort/fluxograma.svg" alt="Fluxograma: Bucket sort" width="529"></p>
+<p align="center"><img src="0122-fluxograma.svg" alt="Fluxograma: Bucket sort" width="529"></p>
 
 > [!WARNING]
 > O índice do balde tem que caber no vetor: a nota 10,0 dá `baldes[10]`, que
@@ -1349,8 +1343,6 @@ O custo escondido está no `insere_ordenado`, que anda pela lista do balde:
 > função do balde para espalhá-las melhor?
 
 ### Hora de praticar
-
-Arquivos em [`0122-bucket-sort/`](18-ordenacao-linear/0122-bucket-sort/).
 
 **Exemplo A243 · Quando todo mundo cai no mesmo balde**
 
@@ -1454,7 +1446,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/A243.c -o ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/A243 && ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/A243
+gcc ~/LPEDC/A243.c -o ~/LPEDC/A243 && ~/LPEDC/A243
 ```
 
 **Exemplo A244 · Baldes sem lista encadeada**
@@ -1530,7 +1522,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/A244.c -o ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/A244 && ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/A244
+gcc ~/LPEDC/A244.c -o ~/LPEDC/A244 && ~/LPEDC/A244
 ```
 
 #### Exercícios
@@ -1557,7 +1549,7 @@ R$  9.99 -> balde 0
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E727.c -o ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E727 && ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E727
+gcc ~/LPEDC/E727.c -o ~/LPEDC/E727 && ~/LPEDC/E727
 ```
 
 **Exercício E729** · ★★☆
@@ -1586,7 +1578,7 @@ agenda: Alberto Amanda Ana Beatriz Bruno Caio Carla Marcos Mariana Marta Mauro
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E729.c -o ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E729 && ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E729
+gcc ~/LPEDC/E729.c -o ~/LPEDC/E729 && ~/LPEDC/E729
 ```
 
 **Exercício E730** · ★★☆
@@ -1611,7 +1603,7 @@ faixa: 7.0 a 7.0, 3 baldes de 0.00
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E730.c -o ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E730 && ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E730
+gcc ~/LPEDC/E730.c -o ~/LPEDC/E730 && ~/LPEDC/E730
 ```
 
 **Exercício E731** · ★★★
@@ -1636,7 +1628,7 @@ I:9 B:12 E:12 A:35 C:35 H:35 G:38 F:50 D:87
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E731.c -o ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E731 && ~/LPEDC/18-ordenacao-linear/0122-bucket-sort/E731
+gcc ~/LPEDC/E731.c -o ~/LPEDC/E731 && ~/LPEDC/E731
 ```
 
 ---
@@ -1669,7 +1661,7 @@ garante O(n) no pior caso.
 Nos aluguéis, o pivô 1300 cai na posição 2, e a mediana (posição 4) está à
 direita: os três primeiros nunca mais são lidos.
 
-<p align="center"><img src="18-ordenacao-linear/0123-quickselect/ideia.svg" alt="Diagrama da ideia: Quickselect" width="858"></p>
+<p align="center"><img src="0123-ideia.svg" alt="Diagrama da ideia: Quickselect" width="858"></p>
 
 Em C:
 
@@ -1738,7 +1730,7 @@ Foram 8 + 5 + 3 = 16 comparações (o quick sort completo faz 18). Com pivôs ao
 acaso, a mediana custa em torno de 3,4 `n` comparações. Cada volta do laço
 escolhe um lado e descarta o outro:
 
-<p align="center"><img src="18-ordenacao-linear/0123-quickselect/fluxograma.svg" alt="Fluxograma: Quickselect" width="778"></p>
+<p align="center"><img src="0123-fluxograma.svg" alt="Fluxograma: Quickselect" width="778"></p>
 
 > [!WARNING]
 > As posições começam em 0: o **menor** é `k = 0`, e "o 3º menor" é `k = 2`.
@@ -1756,8 +1748,6 @@ escolhe um lado e descarta o outro:
 > E com o pivô sorteado?
 
 ### Hora de praticar
-
-Arquivos em [`0123-quickselect/`](18-ordenacao-linear/0123-quickselect/).
 
 **Exemplo A245 · O pódio sem ordenar a tabela**
 
@@ -1847,7 +1837,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0123-quickselect/A245.c -o ~/LPEDC/18-ordenacao-linear/0123-quickselect/A245 && ~/LPEDC/18-ordenacao-linear/0123-quickselect/A245
+gcc ~/LPEDC/A245.c -o ~/LPEDC/A245 && ~/LPEDC/A245
 ```
 
 **Exemplo A246 · Pivô sorteado contra o vetor já ordenado**
@@ -1940,7 +1930,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0123-quickselect/A246.c -o ~/LPEDC/18-ordenacao-linear/0123-quickselect/A246 && ~/LPEDC/18-ordenacao-linear/0123-quickselect/A246
+gcc ~/LPEDC/A246.c -o ~/LPEDC/A246 && ~/LPEDC/A246
 ```
 
 #### Exercícios
@@ -1973,7 +1963,7 @@ primeira do vetor continua: 720
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0123-quickselect/E733.c -o ~/LPEDC/18-ordenacao-linear/0123-quickselect/E733 && ~/LPEDC/18-ordenacao-linear/0123-quickselect/E733
+gcc ~/LPEDC/E733.c -o ~/LPEDC/E733 && ~/LPEDC/E733
 ```
 
 **Exercício E735** · ★★☆
@@ -2000,7 +1990,7 @@ conferindo: 38 e 41 no meio
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0123-quickselect/E735.c -o ~/LPEDC/18-ordenacao-linear/0123-quickselect/E735 && ~/LPEDC/18-ordenacao-linear/0123-quickselect/E735
+gcc ~/LPEDC/E735.c -o ~/LPEDC/E735 && ~/LPEDC/E735
 ```
 
 **Exercício E736** · ★★☆
@@ -2029,7 +2019,7 @@ conferindo: 138, 630 e 826
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0123-quickselect/E736.c -o ~/LPEDC/18-ordenacao-linear/0123-quickselect/E736 && ~/LPEDC/18-ordenacao-linear/0123-quickselect/E736
+gcc ~/LPEDC/E736.c -o ~/LPEDC/E736 && ~/LPEDC/E736
 ```
 
 **Exercício E737** · ★★★
@@ -2056,7 +2046,7 @@ mediana: 5001 (19 separações)
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0123-quickselect/E737.c -o ~/LPEDC/18-ordenacao-linear/0123-quickselect/E737 && ~/LPEDC/18-ordenacao-linear/0123-quickselect/E737
+gcc ~/LPEDC/E737.c -o ~/LPEDC/E737 && ~/LPEDC/E737
 ```
 
 ---
@@ -2099,7 +2089,7 @@ O `qsort` ordena uma cópia dos dados e o radix a outra, e os valores têm que
 sair na mesma ordem. Depois, o counting sort reorganiza o vetor do radix pelo
 horário:
 
-<p align="center"><img src="18-ordenacao-linear/0124-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0124-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa mede o tempo com `clock()`, de `<time.h>`: a diferença entre duas
 chamadas, dividida por `CLOCKS_PER_SEC`, dá os segundos gastos.
@@ -2180,7 +2170,7 @@ menos ainda. Os quatro primeiros do dia são de 00:00:00 e estão em ordem de
 valor: a primeira ordenação sobreviveu à segunda. Comparar com o `qsort` é o
 jeito mais simples de testar uma ordenação escrita à mão:
 
-<p align="center"><img src="18-ordenacao-linear/0124-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="374"></p>
+<p align="center"><img src="0124-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="374"></p>
 
 ### Qual usar?
 
@@ -2214,14 +2204,12 @@ O resumo do módulo:
 
 ### Hora de praticar
 
-Arquivos em [`0124-juntando-tudo/`](18-ordenacao-linear/0124-juntando-tudo/).
-
 **Exemplo A247 · Os maiores Pix do dia, sem ordenar o dia**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "pix.h"
+#include "0124-pix.h"
 
 #define N 1000000
 #define TOP 5
@@ -2293,7 +2281,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/A247.c ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/pix.c -o ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/A247 && ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/A247
+gcc ~/LPEDC/A247.c ~/LPEDC/0124-pix.c -o ~/LPEDC/A247 && ~/LPEDC/A247
 ```
 
 **Exemplo A248 · Três ordenações, o mesmo resultado**
@@ -2303,7 +2291,7 @@ gcc ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/A247.c ~/LPEDC/18-ordenacao-l
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "pix.h"
+#include "0124-pix.h"
 
 #define N 200000
 
@@ -2399,7 +2387,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/A248.c ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/pix.c -o ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/A248 && ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/A248
+gcc ~/LPEDC/A248.c ~/LPEDC/0124-pix.c -o ~/LPEDC/A248 && ~/LPEDC/A248
 ```
 
 #### Exercícios
@@ -2428,7 +2416,7 @@ maior: #0000005 14:28:08 R$    3960,62
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E739.c ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/pix.c -o ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E739 && ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E739
+gcc ~/LPEDC/E739.c ~/LPEDC/0124-pix.c -o ~/LPEDC/E739 && ~/LPEDC/E739
 ```
 
 **Exercício E741** · ★★☆
@@ -2450,7 +2438,7 @@ horário, depois valor: (valor, horário)? sim
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E741.c ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/pix.c -o ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E741 && ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E741
+gcc ~/LPEDC/E741.c ~/LPEDC/0124-pix.c -o ~/LPEDC/E741 && ~/LPEDC/E741
 ```
 
 **Exercício E742** · ★★☆
@@ -2471,7 +2459,7 @@ conferindo com o radix: iguais
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E742.c ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/pix.c -o ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E742 && ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E742
+gcc ~/LPEDC/E742.c ~/LPEDC/0124-pix.c -o ~/LPEDC/E742 && ~/LPEDC/E742
 ```
 
 **Exercício E744** · ★★★
@@ -2493,7 +2481,7 @@ valores até R$ 2,55: 1 passada de 4, igual ao pix_por_valor? sim
 ```
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E744.c ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/pix.c -o ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E744 && ~/LPEDC/18-ordenacao-linear/0124-juntando-tudo/E744
+gcc ~/LPEDC/E744.c ~/LPEDC/0124-pix.c -o ~/LPEDC/E744 && ~/LPEDC/E744
 ```
 
 ---
@@ -2649,7 +2637,7 @@ junto com o vetor ordenado. Num vetor decrescente de 100 mil, são
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](18-ordenacao-linear/lista/); resoluções em `_respostas/18-ordenacao-linear/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1801.c a P1830.c, na raiz; resoluções em `_respostas/18-ordenacao-linear/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2697,7 +2685,7 @@ B = 0 1 1 1 2 3 3 4 4 4
    das somas, e B = 0 1 1 1 2 3 3 4 4 4.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1801.c -o ~/LPEDC/18-ordenacao-linear/lista/P1801 && ~/LPEDC/18-ordenacao-linear/lista/P1801
+gcc ~/LPEDC/P1801.c -o ~/LPEDC/P1801 && ~/LPEDC/P1801
 ```
 
 ---
@@ -2733,7 +2721,7 @@ h = 1:  168 172 175 178 181 183 186 190 194 201  (10 comparações)
    201, com 5, 11 e 10 comparações nas três passadas.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1802.c -o ~/LPEDC/18-ordenacao-linear/lista/P1802 && ~/LPEDC/18-ordenacao-linear/lista/P1802
+gcc ~/LPEDC/P1802.c -o ~/LPEDC/P1802 && ~/LPEDC/P1802
 ```
 
 ---
@@ -2771,7 +2759,7 @@ div 10000: 180399 190305 210477 230105 230388 241012 241077
    241077.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1803.c -o ~/LPEDC/18-ordenacao-linear/lista/P1803 && ~/LPEDC/18-ordenacao-linear/lista/P1803
+gcc ~/LPEDC/P1803.c -o ~/LPEDC/P1803 && ~/LPEDC/P1803
 ```
 
 ---
@@ -2811,7 +2799,7 @@ ordenado: 0.05 0.12 0.31 0.36 0.52 0.79 0.84 0.87 0.88 0.99
    ordenado começa em 0.05 e termina em 0.99.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1804.c -o ~/LPEDC/18-ordenacao-linear/lista/P1804 && ~/LPEDC/18-ordenacao-linear/lista/P1804
+gcc ~/LPEDC/P1804.c -o ~/LPEDC/P1804 && ~/LPEDC/P1804
 ```
 
 ---
@@ -2846,7 +2834,7 @@ Saída esperada:
    (R$ 5,89).
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1805.c -o ~/LPEDC/18-ordenacao-linear/lista/P1805 && ~/LPEDC/18-ordenacao-linear/lista/P1805
+gcc ~/LPEDC/P1805.c -o ~/LPEDC/P1805 && ~/LPEDC/P1805
 ```
 
 ---
@@ -2885,7 +2873,7 @@ da frente: Elis(0) Bruno(0) Gil(1) Davi(1) Ana(1) Fabio(2) Hana(3) Carla(3) -> N
    10 km); da frente para trás, não.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1806.c -o ~/LPEDC/18-ordenacao-linear/lista/P1806 && ~/LPEDC/18-ordenacao-linear/lista/P1806
+gcc ~/LPEDC/P1806.c -o ~/LPEDC/P1806 && ~/LPEDC/P1806
 ```
 
 ---
@@ -2923,7 +2911,7 @@ Entre R$ 30 e R$ 50:  4 corridas
    R$ 9 e 2 de exatamente R$ 15.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1807.c -o ~/LPEDC/18-ordenacao-linear/lista/P1807 && ~/LPEDC/18-ordenacao-linear/lista/P1807
+gcc ~/LPEDC/P1807.c -o ~/LPEDC/P1807 && ~/LPEDC/P1807
 ```
 
 ---
@@ -2962,7 +2950,7 @@ bit 3   0011 0101 0110 1001 1010 1011 1100 1110 | 3 5 6 9 10 11 12 14
    (3 5 6 9 10 11 12 14).
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1808.c -o ~/LPEDC/18-ordenacao-linear/lista/P1808 && ~/LPEDC/18-ordenacao-linear/lista/P1808
+gcc ~/LPEDC/P1808.c -o ~/LPEDC/P1808 && ~/LPEDC/P1808
 ```
 
 ---
@@ -3002,7 +2990,7 @@ Saída esperada:
    Espirito Santo 7, Fortaleza 4, Distrito Federal 2.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1809.c -o ~/LPEDC/18-ordenacao-linear/lista/P1809 && ~/LPEDC/18-ordenacao-linear/lista/P1809
+gcc ~/LPEDC/P1809.c -o ~/LPEDC/P1809 && ~/LPEDC/P1809
 ```
 
 ---
@@ -3032,7 +3020,7 @@ Saída esperada:
 4. Resposta esperada: 0 3 4 5 5 6 7 7 8 9 10 10.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1810.c -o ~/LPEDC/18-ordenacao-linear/lista/P1810 && ~/LPEDC/18-ordenacao-linear/lista/P1810
+gcc ~/LPEDC/P1810.c -o ~/LPEDC/P1810 && ~/LPEDC/P1810
 ```
 
 ### ★★☆ Para pensar
@@ -3080,7 +3068,7 @@ Todos ordenados: sim
    Sedgewick, a melhor (221889). A diferença cresce com n.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1811.c -o ~/LPEDC/18-ordenacao-linear/lista/P1811 && ~/LPEDC/18-ordenacao-linear/lista/P1811
+gcc ~/LPEDC/P1811.c -o ~/LPEDC/P1811 && ~/LPEDC/P1811
 ```
 
 ---
@@ -3125,7 +3113,7 @@ vetor: 283 331 465 540 615 747 801 902
    540 615 747 801 902.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1812.c -o ~/LPEDC/18-ordenacao-linear/lista/P1812 && ~/LPEDC/18-ordenacao-linear/lista/P1812
+gcc ~/LPEDC/P1812.c -o ~/LPEDC/P1812 && ~/LPEDC/P1812
 ```
 
 ---
@@ -3179,7 +3167,7 @@ por prioridade: #3 #6 #1 #8 #4 #2 #7 #5
    primeira passada deixou os dois nessa ordem.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1813.c -o ~/LPEDC/18-ordenacao-linear/lista/P1813 && ~/LPEDC/18-ordenacao-linear/lista/P1813
+gcc ~/LPEDC/P1813.c -o ~/LPEDC/P1813 && ~/LPEDC/P1813
 ```
 
 ---
@@ -3222,7 +3210,7 @@ ordenado:
    no ordenado, o quickselect sobe para 90220, e o merge sort cai para 5049.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1814.c -o ~/LPEDC/18-ordenacao-linear/lista/P1814 && ~/LPEDC/18-ordenacao-linear/lista/P1814
+gcc ~/LPEDC/P1814.c -o ~/LPEDC/P1814 && ~/LPEDC/P1814
 ```
 
 ---
@@ -3269,7 +3257,7 @@ ordenado: 22.9 27.3 29.5 30.7 31.2 32.4 33.8 34.1 35.0 36.4 37.6 38.1
    vetor ordenado vai de 22.9 a 38.1.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1815.c -o ~/LPEDC/18-ordenacao-linear/lista/P1815 && ~/LPEDC/18-ordenacao-linear/lista/P1815
+gcc ~/LPEDC/P1815.c -o ~/LPEDC/P1815 && ~/LPEDC/P1815
 ```
 
 ---
@@ -3309,7 +3297,7 @@ C (depois da colocação, início de cada bloco): 0 0 0 0 1 1 4 7 9 10 11 11 11
    Javari Uatuma; 7: Madeira Tapajos; 8: Solimoes; 9: Trombetas.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1816.c -o ~/LPEDC/18-ordenacao-linear/lista/P1816 && ~/LPEDC/18-ordenacao-linear/lista/P1816
+gcc ~/LPEDC/P1816.c -o ~/LPEDC/P1816 && ~/LPEDC/P1816
 ```
 
 ---
@@ -3348,7 +3336,7 @@ Saída esperada:
 4. Resposta esperada: 45 120 340 870 1250 3005 9800 12400.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1817.c -o ~/LPEDC/18-ordenacao-linear/lista/P1817 && ~/LPEDC/18-ordenacao-linear/lista/P1817
+gcc ~/LPEDC/P1817.c -o ~/LPEDC/P1817 && ~/LPEDC/P1817
 ```
 
 ---
@@ -3396,7 +3384,7 @@ Média ponderada:   km 17, custo 220
    220.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1818.c -o ~/LPEDC/18-ordenacao-linear/lista/P1818 && ~/LPEDC/18-ordenacao-linear/lista/P1818
+gcc ~/LPEDC/P1818.c -o ~/LPEDC/P1818 && ~/LPEDC/P1818
 ```
 
 ---
@@ -3443,7 +3431,7 @@ n = 1000
    137072 de r = 16).
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1819.c -o ~/LPEDC/18-ordenacao-linear/lista/P1819 && ~/LPEDC/18-ordenacao-linear/lista/P1819
+gcc ~/LPEDC/P1819.c -o ~/LPEDC/P1819 && ~/LPEDC/P1819
 ```
 
 ---
@@ -3482,7 +3470,7 @@ Saída esperada:
    operações); merge ganha com k = 100000 e 1000000.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1820.c -o ~/LPEDC/18-ordenacao-linear/lista/P1820 && ~/LPEDC/18-ordenacao-linear/lista/P1820
+gcc ~/LPEDC/P1820.c -o ~/LPEDC/P1820 && ~/LPEDC/P1820
 ```
 
 ### ★★★ Desafio
@@ -3533,7 +3521,7 @@ qsort concorda: sim
    termina com o 4410 do dia 11 às 23:40; o qsort concorda.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1821.c -o ~/LPEDC/18-ordenacao-linear/lista/P1821 && ~/LPEDC/18-ordenacao-linear/lista/P1821
+gcc ~/LPEDC/P1821.c -o ~/LPEDC/P1821 && ~/LPEDC/P1821
 ```
 
 ---
@@ -3578,7 +3566,7 @@ Chamadas: 10 | em ordem pelo strcmp: sim
    t(2); a ordem final vai de barcelos a tefe; strcmp confirma.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1822.c -o ~/LPEDC/18-ordenacao-linear/lista/P1822 && ~/LPEDC/18-ordenacao-linear/lista/P1822
+gcc ~/LPEDC/P1822.c -o ~/LPEDC/P1822 && ~/LPEDC/P1822
 ```
 
 ---
@@ -3621,7 +3609,7 @@ Força bruta: (6, 5), soma 67
    (8, 7) dá 75; a força bruta confirma (6, 5) e 67.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1823.c -o ~/LPEDC/18-ordenacao-linear/lista/P1823 && ~/LPEDC/18-ordenacao-linear/lista/P1823
+gcc ~/LPEDC/P1823.c -o ~/LPEDC/P1823 && ~/LPEDC/P1823
 ```
 
 ---
@@ -3673,7 +3661,7 @@ Ordenado: sim
    comparações, menos de uma por item; ordenado.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1824.c -o ~/LPEDC/18-ordenacao-linear/lista/P1824 -lm && ~/LPEDC/18-ordenacao-linear/lista/P1824
+gcc ~/LPEDC/P1824.c -o ~/LPEDC/P1824 -lm && ~/LPEDC/P1824
 ```
 
 ---
@@ -3725,7 +3713,7 @@ Trocas: 9 (n = 12) | estável: não
    estável (o M 107 fica antes do M 105, por exemplo).
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1825.c -o ~/LPEDC/18-ordenacao-linear/lista/P1825 && ~/LPEDC/18-ordenacao-linear/lista/P1825
+gcc ~/LPEDC/P1825.c -o ~/LPEDC/P1825 && ~/LPEDC/P1825
 ```
 
 ---
@@ -3778,7 +3766,7 @@ Total: 40 números
    números.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1826.c -o ~/LPEDC/18-ordenacao-linear/lista/P1826 && ~/LPEDC/18-ordenacao-linear/lista/P1826
+gcc ~/LPEDC/P1826.c -o ~/LPEDC/P1826 && ~/LPEDC/P1826
 ```
 
 ---
@@ -3822,7 +3810,7 @@ Iguais: sim | menor 581, maior 999150
    operações.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1827.c -o ~/LPEDC/18-ordenacao-linear/lista/P1827 && ~/LPEDC/18-ordenacao-linear/lista/P1827
+gcc ~/LPEDC/P1827.c -o ~/LPEDC/P1827 && ~/LPEDC/P1827
 ```
 
 ---
@@ -3876,7 +3864,7 @@ n = 4096 (n²/8 = 2097152)
    n²/8 = 2097152), enquanto Hibbard e Knuth ficam perto de 50 mil.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1828.c -o ~/LPEDC/18-ordenacao-linear/lista/P1828 && ~/LPEDC/18-ordenacao-linear/lista/P1828
+gcc ~/LPEDC/P1828.c -o ~/LPEDC/P1828 && ~/LPEDC/P1828
 ```
 
 ---
@@ -3928,7 +3916,7 @@ qsort concorda: sim
    Arara e Pirarucu empatam em tudo menos no nome; o qsort concorda.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1829.c -o ~/LPEDC/18-ordenacao-linear/lista/P1829 && ~/LPEDC/18-ordenacao-linear/lista/P1829
+gcc ~/LPEDC/P1829.c -o ~/LPEDC/P1829 && ~/LPEDC/P1829
 ```
 
 ---
@@ -3982,7 +3970,7 @@ strcmp("10.0.0.9", "10.0.0.10") > 0: sim
    192.168.1.20 com 4 acessos é quem mais acessou.
 
 ```bash
-gcc ~/LPEDC/18-ordenacao-linear/lista/P1830.c -o ~/LPEDC/18-ordenacao-linear/lista/P1830 && ~/LPEDC/18-ordenacao-linear/lista/P1830
+gcc ~/LPEDC/P1830.c -o ~/LPEDC/P1830 && ~/LPEDC/P1830
 ```
 
 ## Questões no estilo da prova

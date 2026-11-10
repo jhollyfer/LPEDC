@@ -42,15 +42,15 @@ Novidades pequenas:
   que não se chama `A000.c`/`E000.c`:
 
 ```bash
-gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A147 && ~/LPEDC/10-analise/0074-tad/A147
+gcc ~/LPEDC/A147.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/A147 && ~/LPEDC/A147
 ```
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0071](#0071--eficiência-contar-passos) | Eficiência: contar passos | [`0071-eficiencia/`](10-analise/0071-eficiencia/) |
-| [0072](#0072--notação-o-como-o-custo-cresce) | Notação O: como o custo cresce | [`0072-big-o/`](10-analise/0072-big-o/) |
-| [0073](#0073--invariantes-de-laço-e-corretude) | Invariantes de laço e corretude | [`0073-invariantes/`](10-analise/0073-invariantes/) |
-| [0074](#0074--tad-interface-h-e-implementação-c) | TAD: interface (.h) e implementação (.c) | [`0074-tad/`](10-analise/0074-tad/) |
+| # | Assunto |
+| --- | --- |
+| [0071](#0071--eficiência-contar-passos) | Eficiência: contar passos |
+| [0072](#0072--notação-o-como-o-custo-cresce) | Notação O: como o custo cresce |
+| [0073](#0073--invariantes-de-laço-e-corretude) | Invariantes de laço e corretude |
+| [0074](#0074--tad-interface-h-e-implementação-c) | TAD: interface (.h) e implementação (.c) |
 
 ---
 
@@ -91,7 +91,7 @@ No exemplo, a comanda 70 está na posição 6: a busca erra as 6 primeiras e
 acerta na 7ª comparação. A 41 sai em 1 passo; a 99, que não está no bolo,
 custa as 8:
 
-<p align="center"><img src="10-analise/0071-eficiencia/ideia.svg" alt="Diagrama da ideia: Eficiência: contar passos" width="858"></p>
+<p align="center"><img src="0071-ideia.svg" alt="Diagrama da ideia: Eficiência: contar passos" width="858"></p>
 
 O contador é uma variável global somada a cada comparação, só para estudar o custo.
 
@@ -142,7 +142,7 @@ assunto parte disso.
 O laço do fluxograma tem duas saídas: "achou?" responde Sim, ou as comandas
 acabam. Cada volta pelo losango de baixo soma um passo:
 
-<p align="center"><img src="10-analise/0071-eficiencia/fluxograma.svg" alt="Fluxograma: Eficiência: contar passos" width="869"></p>
+<p align="center"><img src="0071-fluxograma.svg" alt="Fluxograma: Eficiência: contar passos" width="869"></p>
 
 > [!WARNING]
 > Contar a coisa errada engana. Com o `passos++` **depois** do `if` que dá
@@ -162,8 +162,6 @@ acabam. Cada volta pelo losango de baixo soma um passo:
 > Quantos passos a busca gastaria? E no pior caso, mudou alguma coisa?
 
 ### Hora de praticar
-
-Arquivos em [`0071-eficiencia/`](10-analise/0071-eficiencia/).
 
 **Exemplo A141 · Contar tudo: a busca com sentinela**
 
@@ -235,7 +233,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/A141.c -o ~/LPEDC/10-analise/0071-eficiencia/A141 && ~/LPEDC/10-analise/0071-eficiencia/A141
+gcc ~/LPEDC/A141.c -o ~/LPEDC/A141 && ~/LPEDC/A141
 ```
 
 **Exemplo A142 · Três tarefas, três ritmos**
@@ -292,7 +290,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/A142.c -o ~/LPEDC/10-analise/0071-eficiencia/A142 && ~/LPEDC/10-analise/0071-eficiencia/A142
+gcc ~/LPEDC/A142.c -o ~/LPEDC/A142 && ~/LPEDC/A142
 ```
 
 #### Exercícios
@@ -325,7 +323,7 @@ d) 4 passos em 10 voltas
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/E421.c -o ~/LPEDC/10-analise/0071-eficiencia/E421 && ~/LPEDC/10-analise/0071-eficiencia/E421
+gcc ~/LPEDC/E421.c -o ~/LPEDC/E421 && ~/LPEDC/E421
 ```
 
 **Exercício E423** · ★★☆
@@ -348,7 +346,7 @@ n = 1000: total 500500, média 500.5
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/E423.c -o ~/LPEDC/10-analise/0071-eficiencia/E423 && ~/LPEDC/10-analise/0071-eficiencia/E423
+gcc ~/LPEDC/E423.c -o ~/LPEDC/E423 && ~/LPEDC/E423
 ```
 
 **Exercício E424** · ★★☆
@@ -376,7 +374,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/E424.c -o ~/LPEDC/10-analise/0071-eficiencia/E424 && ~/LPEDC/10-analise/0071-eficiencia/E424
+gcc ~/LPEDC/E424.c -o ~/LPEDC/E424 && ~/LPEDC/E424
 ```
 
 **Exercício E426** · ★★★
@@ -413,7 +411,7 @@ n = 25: 242785 chamadas, razão 1.618
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/E426.c -o ~/LPEDC/10-analise/0071-eficiencia/E426 && ~/LPEDC/10-analise/0071-eficiencia/E426
+gcc ~/LPEDC/E426.c -o ~/LPEDC/E426 && ~/LPEDC/E426
 ```
 
 ---
@@ -454,7 +452,7 @@ log não importa: trocar log₂ por log₁₀ só muda uma constante.
 O exemplo faz cinco perguntas sobre os mesmos pedidos, cada uma com seu ritmo.
 Em verde, o que continua leve em 1024; em vermelho, o que explodiu:
 
-<p align="center"><img src="10-analise/0072-big-o/ideia.svg" alt="Diagrama da ideia: Notação O: como o custo cresce" width="858"></p>
+<p align="center"><img src="0072-ideia.svg" alt="Diagrama da ideia: Notação O: como o custo cresce" width="858"></p>
 
 Cada função conta os passos de uma pergunta:
 
@@ -531,7 +529,7 @@ vezes, essa coluna 260 vezes, e a do log ganhou 4 passos.
 O fluxograma mostra o laço do O(log n) com n = 1024. "n > 1?" responde Sim só
 10 vezes, porque cada volta joga metade fora:
 
-<p align="center"><img src="10-analise/0072-big-o/fluxograma.svg" alt="Fluxograma: Notação O: como o custo cresce" width="531"></p>
+<p align="center"><img src="0072-fluxograma.svg" alt="Fluxograma: Notação O: como o custo cresce" width="531"></p>
 
 > [!WARNING]
 > O(n) não é "sempre mais rápido" que O(n²): a notação fala do
@@ -553,8 +551,6 @@ O fluxograma mostra o laço do O(log n) com n = 1024. "n > 1?" responde Sim só
 > segundo com 10.000? Faça a conta antes de olhar os exercícios.
 
 ### Hora de praticar
-
-Arquivos em [`0072-big-o/`](10-analise/0072-big-o/).
 
 **Exemplo A143 · A base do log não importa**
 
@@ -601,7 +597,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0072-big-o/A143.c -o ~/LPEDC/10-analise/0072-big-o/A143 && ~/LPEDC/10-analise/0072-big-o/A143
+gcc ~/LPEDC/A143.c -o ~/LPEDC/A143 && ~/LPEDC/A143
 ```
 
 **Exemplo A144 · A constante grande perde no fim**
@@ -657,7 +653,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0072-big-o/A144.c -o ~/LPEDC/10-analise/0072-big-o/A144 && ~/LPEDC/10-analise/0072-big-o/A144
+gcc ~/LPEDC/A144.c -o ~/LPEDC/A144 && ~/LPEDC/A144
 ```
 
 #### Exercícios
@@ -695,7 +691,7 @@ f) O(n log n)      64    10240
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0072-big-o/E427.c -o ~/LPEDC/10-analise/0072-big-o/E427 && ~/LPEDC/10-analise/0072-big-o/E427
+gcc ~/LPEDC/E427.c -o ~/LPEDC/E427 && ~/LPEDC/E427
 ```
 
 **Exercício E429** · ★★☆
@@ -719,7 +715,7 @@ n = 1000: pares 499500 passos, marcas 1000 passos
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0072-big-o/E429.c -o ~/LPEDC/10-analise/0072-big-o/E429 && ~/LPEDC/10-analise/0072-big-o/E429
+gcc ~/LPEDC/E429.c -o ~/LPEDC/E429 && ~/LPEDC/E429
 ```
 
 **Exercício E430** · ★★☆
@@ -753,7 +749,7 @@ d:      32 ->      45  razão 1.41  O(raiz n)
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0072-big-o/E430.c -o ~/LPEDC/10-analise/0072-big-o/E430 && ~/LPEDC/10-analise/0072-big-o/E430
+gcc ~/LPEDC/E430.c -o ~/LPEDC/E430 && ~/LPEDC/E430
 ```
 
 **Exercício E431** · ★★★
@@ -784,7 +780,7 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0072-big-o/E431.c -o ~/LPEDC/10-analise/0072-big-o/E431 -lm && ~/LPEDC/10-analise/0072-big-o/E431
+gcc ~/LPEDC/E431.c -o ~/LPEDC/E431 -lm && ~/LPEDC/E431
 ```
 
 ---
@@ -824,7 +820,7 @@ Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No começo da volta com i = 4,
 a parte verde já foi vista e `maior` (300) é o maior dela. A parte cinza ainda
 não importa:
 
-<p align="center"><img src="10-analise/0073-invariantes/ideia.svg" alt="Diagrama da ideia: Invariantes de laço e corretude" width="893"></p>
+<p align="center"><img src="0073-ideia.svg" alt="Diagrama da ideia: Invariantes de laço e corretude" width="893"></p>
 
 O `assert` de `<assert.h>` transforma o invariante em código: se a condição
 for falsa, o programa para e mostra a linha. A `eh_maximo` é lenta de
@@ -903,7 +899,7 @@ por volta e o laço acaba em 0.
 No fluxograma, o invariante fica na seta que volta ao losango "i < 6?". Toda
 vez que o caminho passa ali, a frase é verdadeira:
 
-<p align="center"><img src="10-analise/0073-invariantes/fluxograma.svg" alt="Fluxograma: Invariantes de laço e corretude" width="593"></p>
+<p align="center"><img src="0073-fluxograma.svg" alt="Fluxograma: Invariantes de laço e corretude" width="593"></p>
 
 > [!WARNING]
 > O erro clássico é o **início**: `int maior = 0;` passa em todos os testes
@@ -925,8 +921,6 @@ vez que o caminho passa ali, a frase é verdadeira:
 > termina? E se a ficha custasse R$ 0, qual dos quatro passos falharia?
 
 ### Hora de praticar
-
-Arquivos em [`0073-invariantes/`](10-analise/0073-invariantes/).
 
 **Exemplo A145 · Dois invariantes no mesmo extrato**
 
@@ -1001,7 +995,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/A145.c -o ~/LPEDC/10-analise/0073-invariantes/A145 && ~/LPEDC/10-analise/0073-invariantes/A145
+gcc ~/LPEDC/A145.c -o ~/LPEDC/A145 && ~/LPEDC/A145
 ```
 
 **Exemplo A146 · Fichas e troco: o invariante da divisão**
@@ -1040,7 +1034,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/A146.c -o ~/LPEDC/10-analise/0073-invariantes/A146 && ~/LPEDC/10-analise/0073-invariantes/A146
+gcc ~/LPEDC/A146.c -o ~/LPEDC/A146 && ~/LPEDC/A146
 ```
 
 #### Exercícios
@@ -1072,7 +1066,7 @@ d) último 8 na posição 3
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/E433.c -o ~/LPEDC/10-analise/0073-invariantes/E433 && ~/LPEDC/10-analise/0073-invariantes/E433
+gcc ~/LPEDC/E433.c -o ~/LPEDC/E433 && ~/LPEDC/E433
 ```
 
 **Exercício E435** · ★★☆
@@ -1108,7 +1102,7 @@ vetor vazio: posição -1
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/E435.c -o ~/LPEDC/10-analise/0073-invariantes/E435 && ~/LPEDC/10-analise/0073-invariantes/E435
+gcc ~/LPEDC/E435.c -o ~/LPEDC/E435 && ~/LPEDC/E435
 ```
 
 **Exercício E436** · ★★☆
@@ -1131,7 +1125,7 @@ Positivos: R$ 25
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/E436.c -o ~/LPEDC/10-analise/0073-invariantes/E436 && ~/LPEDC/10-analise/0073-invariantes/E436
+gcc ~/LPEDC/E436.c -o ~/LPEDC/E436 && ~/LPEDC/E436
 ```
 
 **Exercício E437** · ★★★
@@ -1157,7 +1151,7 @@ divergências de 1 a 100000: 0
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/E437.c -o ~/LPEDC/10-analise/0073-invariantes/E437 -lm && ~/LPEDC/10-analise/0073-invariantes/E437
+gcc ~/LPEDC/E437.c -o ~/LPEDC/E437 -lm && ~/LPEDC/E437
 ```
 
 ---
@@ -1196,7 +1190,7 @@ No exemplo, o cliente (o arquivo do `main`) inclui só o contrato; o
 `contador.c` também o inclui e guarda a `struct` escondida. Na memória, o
 cliente tem só um ponteiro para um bloco no heap que não consegue abrir:
 
-<p align="center"><img src="10-analise/0074-tad/ideia.svg" alt="Diagrama da ideia: TAD: interface (.h) e implementação (.c)" width="870"></p>
+<p align="center"><img src="0074-ideia.svg" alt="Diagrama da ideia: TAD: interface (.h) e implementação (.c)" width="870"></p>
 
 O contrato completo está em `contador.h`, na pasta do assunto. O cliente estaciona 4 carros em 3 vagas:
 
@@ -1326,7 +1320,7 @@ bool contador_incrementa(Contador *c) {
 No fluxograma, o cliente fala com o TAD só pelas funções. Quem decide
 "lotado" é o `contador_incrementa`, que devolve `false`:
 
-<p align="center"><img src="10-analise/0074-tad/fluxograma.svg" alt="Fluxograma: TAD: interface (.h) e implementação (.c)" width="679"></p>
+<p align="center"><img src="0074-fluxograma.svg" alt="Fluxograma: TAD: interface (.h) e implementação (.c)" width="679"></p>
 
 ### O padrão dos próximos módulos
 
@@ -1375,14 +1369,12 @@ segue este molde. Para um TAD `x`:
 
 ### Hora de praticar
 
-Arquivos em [`0074-tad/`](10-analise/0074-tad/).
-
 **Exemplo A147 · Duas salas, dois contadores**
 
 ```c
 #include <stdio.h>
 
-#include "contador.h" // só a interface: a struct está escondida em contador.c
+#include "0074-contador.h" // só a interface: a struct está escondida em contador.c
 
 // Na academia, a sala de spinning e a piscina têm lotações diferentes. Cada
 // contador_cria devolve um objeto separado no heap: mexer num não muda o
@@ -1432,7 +1424,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A147 && ~/LPEDC/10-analise/0074-tad/A147
+gcc ~/LPEDC/A147.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/A147 && ~/LPEDC/A147
 ```
 
 **Exemplo A148 · A conta que nunca fica negativa**
@@ -1441,7 +1433,7 @@ gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPE
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "conta.h"
+#include "0074-conta.h"
 
 // Mostra o resultado de uma operação e o saldo em reais.
 void mostra(const Conta *c, const char *operacao, bool deu_certo) {
@@ -1478,7 +1470,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0074-tad/A148.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A148 && ~/LPEDC/10-analise/0074-tad/A148
+gcc ~/LPEDC/A148.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/A148 && ~/LPEDC/A148
 ```
 
 #### Exercícios
@@ -1502,7 +1494,7 @@ Na garagem: 0 a bordo
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0074-tad/E439.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E439 && ~/LPEDC/10-analise/0074-tad/E439
+gcc ~/LPEDC/E439.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/E439 && ~/LPEDC/E439
 ```
 
 **Exercício E441** · ★★☆
@@ -1534,7 +1526,7 @@ A -> B: 10.00 km
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0074-tad/E441.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E441 -lm && ~/LPEDC/10-analise/0074-tad/E441
+gcc ~/LPEDC/E441.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/E441 -lm && ~/LPEDC/E441
 ```
 
 **Exercício E442** · ★★☆
@@ -1561,7 +1553,7 @@ Bia: R$ 44,50 | Caio: R$ 45,50
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0074-tad/E442.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E442 && ~/LPEDC/10-analise/0074-tad/E442
+gcc ~/LPEDC/E442.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/E442 && ~/LPEDC/E442
 ```
 
 **Exercício E443** · ★★★
@@ -1595,7 +1587,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/10-analise/0074-tad/E443.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E443 && ~/LPEDC/10-analise/0074-tad/E443
+gcc ~/LPEDC/E443.c ~/LPEDC/0074-conta.c ~/LPEDC/0074-contador.c -o ~/LPEDC/E443 && ~/LPEDC/E443
 ```
 
 ---
@@ -1821,7 +1813,7 @@ assunto 0071, a constante importa quando n é fixo.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](10-analise/lista/); resoluções em `_respostas/10-analise/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1001.c a P1030.c, na raiz; resoluções em `_respostas/10-analise/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -1852,7 +1844,7 @@ Saída esperada:
    por isso as duas funções são O(log n).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1001.c -o ~/LPEDC/10-analise/lista/P1001 && ~/LPEDC/10-analise/lista/P1001
+gcc ~/LPEDC/P1001.c -o ~/LPEDC/P1001 && ~/LPEDC/P1001
 ```
 
 ---
@@ -1889,7 +1881,7 @@ n = 8: soma 448 (64 somas), diagonal 56 (8 somas)
    por 2 as da diagonal.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1002.c -o ~/LPEDC/10-analise/lista/P1002 && ~/LPEDC/10-analise/lista/P1002
+gcc ~/LPEDC/P1002.c -o ~/LPEDC/P1002 && ~/LPEDC/P1002
 ```
 
 ---
@@ -1924,7 +1916,7 @@ n = 100000: laço 5000050000 (100000 passos), fórmula 5000050000 (3 passos)
 3. O laço é O(n); a fórmula é O(1): não importa o tamanho de n.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1003.c -o ~/LPEDC/10-analise/lista/P1003 && ~/LPEDC/10-analise/lista/P1003
+gcc ~/LPEDC/P1003.c -o ~/LPEDC/P1003 && ~/LPEDC/P1003
 ```
 
 ---
@@ -1966,7 +1958,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima, sem nenhum assert disparar.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1004.c -o ~/LPEDC/10-analise/lista/P1004 && ~/LPEDC/10-analise/lista/P1004
+gcc ~/LPEDC/P1004.c -o ~/LPEDC/P1004 && ~/LPEDC/P1004
 ```
 
 ---
@@ -1998,7 +1990,7 @@ Alarmes (acima de -16): 1
 4. Resposta esperada: a saída acima (média -94 / 5 = -18.8).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1005.c -o ~/LPEDC/10-analise/lista/P1005 && ~/LPEDC/10-analise/lista/P1005
+gcc ~/LPEDC/P1005.c -o ~/LPEDC/P1005 && ~/LPEDC/P1005
 ```
 
 ---
@@ -2029,7 +2021,7 @@ Saída esperada:
    é piso(log₁₀ n) + 1, ou seja, O(log n).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1006.c -o ~/LPEDC/10-analise/lista/P1006 && ~/LPEDC/10-analise/lista/P1006
+gcc ~/LPEDC/P1006.c -o ~/LPEDC/P1006 && ~/LPEDC/P1006
 ```
 
 ---
@@ -2058,7 +2050,7 @@ Média por venda: R$ 46.75
    187.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1007.c -o ~/LPEDC/10-analise/lista/P1007 && ~/LPEDC/10-analise/lista/P1007
+gcc ~/LPEDC/P1007.c -o ~/LPEDC/P1007 && ~/LPEDC/P1007
 ```
 
 ---
@@ -2097,7 +2089,7 @@ Horner:  p(3) = 89 com 4 multiplicações
    O(n²). Horner faz n: O(n).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1008.c -o ~/LPEDC/10-analise/lista/P1008 && ~/LPEDC/10-analise/lista/P1008
+gcc ~/LPEDC/P1008.c -o ~/LPEDC/P1008 && ~/LPEDC/P1008
 ```
 
 ---
@@ -2129,7 +2121,7 @@ Vendidos: 3
 3. Resposta esperada: a saída acima (vendidos 7, 42 e 63; o 13 saiu).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1009.c -o ~/LPEDC/10-analise/lista/P1009 && ~/LPEDC/10-analise/lista/P1009
+gcc ~/LPEDC/P1009.c -o ~/LPEDC/P1009 && ~/LPEDC/P1009
 ```
 
 ---
@@ -2159,7 +2151,7 @@ n = 1000: laço 499500, fórmula 499500, confere
    número de comparações de quem testa "todo par" num vetor.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1010.c -o ~/LPEDC/10-analise/lista/P1010 && ~/LPEDC/10-analise/lista/P1010
+gcc ~/LPEDC/P1010.c -o ~/LPEDC/P1010 && ~/LPEDC/P1010
 ```
 
 ### ★★☆ Para pensar
@@ -2204,7 +2196,7 @@ Fórmula confere de 1 a 1000: sim
 4. T(n) ≈ n² / 4, então Θ(n²).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1011.c -o ~/LPEDC/10-analise/lista/P1011 && ~/LPEDC/10-analise/lista/P1011
+gcc ~/LPEDC/P1011.c -o ~/LPEDC/P1011 && ~/LPEDC/P1011
 ```
 
 ---
@@ -2245,7 +2237,7 @@ N = 10000: 1229 primos | divisão: 117527 ops | crivo: 16981 ops
    100 vezes maior, a divisão ficou 500 vezes mais cara e o crivo, 160.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1012.c -o ~/LPEDC/10-analise/lista/P1012 && ~/LPEDC/10-analise/lista/P1012
+gcc ~/LPEDC/P1012.c -o ~/LPEDC/P1012 && ~/LPEDC/P1012
 ```
 
 ---
@@ -2287,7 +2279,7 @@ Saída esperada:
 3. Resposta esperada: a saída acima, sem nenhum assert disparar.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1013.c -o ~/LPEDC/10-analise/lista/P1013 && ~/LPEDC/10-analise/lista/P1013
+gcc ~/LPEDC/P1013.c -o ~/LPEDC/P1013 && ~/LPEDC/P1013
 ```
 
 ---
@@ -2322,7 +2314,7 @@ Trocas: 4
    muda (o 120 foi para o fim): essa partição não é estável.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1014.c -o ~/LPEDC/10-analise/lista/P1014 && ~/LPEDC/10-analise/lista/P1014
+gcc ~/LPEDC/P1014.c -o ~/LPEDC/P1014 && ~/LPEDC/P1014
 ```
 
 ---
@@ -2367,7 +2359,7 @@ De 09/11/2026 até 27/11/2026: 18 dias
 3. data_compara: compare ano, depois mês, depois dia.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1015.c -o ~/LPEDC/10-analise/lista/P1015 && ~/LPEDC/10-analise/lista/P1015
+gcc ~/LPEDC/P1015.c -o ~/LPEDC/P1015 && ~/LPEDC/P1015
 ```
 
 ---
@@ -2406,7 +2398,7 @@ Por inserção (n = 2000): +1 = 999.5, dobrando = 1.0
    por inserção "em média" (o custo amortizado).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1016.c -o ~/LPEDC/10-analise/lista/P1016 && ~/LPEDC/10-analise/lista/P1016
+gcc ~/LPEDC/P1016.c -o ~/LPEDC/P1016 && ~/LPEDC/P1016
 ```
 
 ---
@@ -2438,7 +2430,7 @@ Saída esperada:
    igual à de cima.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1017.c -o ~/LPEDC/10-analise/lista/P1017 && ~/LPEDC/10-analise/lista/P1017
+gcc ~/LPEDC/P1017.c -o ~/LPEDC/P1017 && ~/LPEDC/P1017
 ```
 
 ---
@@ -2472,7 +2464,7 @@ mdc(100, 75) = 25 em 2 passos
    é O(log n).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1018.c -o ~/LPEDC/10-analise/lista/P1018 && ~/LPEDC/10-analise/lista/P1018
+gcc ~/LPEDC/P1018.c -o ~/LPEDC/P1018 && ~/LPEDC/P1018
 ```
 
 ---
@@ -2519,7 +2511,7 @@ Desvio: 2.36 min
    continua compilando igual. Só o custo muda.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1019.c -o ~/LPEDC/10-analise/lista/P1019 -lm && ~/LPEDC/10-analise/lista/P1019
+gcc ~/LPEDC/P1019.c -o ~/LPEDC/P1019 -lm && ~/LPEDC/P1019
 ```
 
 ---
@@ -2556,7 +2548,7 @@ Rápido: 12 duplas em 8 passos
 4. Resposta esperada: a saída acima (4 pares e 4 ímpares: 6 + 6 = 12).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1020.c -o ~/LPEDC/10-analise/lista/P1020 && ~/LPEDC/10-analise/lista/P1020
+gcc ~/LPEDC/P1020.c -o ~/LPEDC/P1020 && ~/LPEDC/P1020
 ```
 
 ### ★★★ Desafio
@@ -2606,7 +2598,7 @@ Linear:     12 (dias 2 a 7), 10 somas
 4. Resposta esperada: a saída acima (5 - 2 + 8 - 10 + 4 + 7 = 12).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1021.c -o ~/LPEDC/10-analise/lista/P1021 && ~/LPEDC/10-analise/lista/P1021
+gcc ~/LPEDC/P1021.c -o ~/LPEDC/P1021 && ~/LPEDC/P1021
 ```
 
 ---
@@ -2656,7 +2648,7 @@ Interseção ingênua: 8 20 (20 comparações)
    invariante do TAD vale para eles sem ordenar nada.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1022.c -o ~/LPEDC/10-analise/lista/P1022 && ~/LPEDC/10-analise/lista/P1022
+gcc ~/LPEDC/P1022.c -o ~/LPEDC/P1022 && ~/LPEDC/P1022
 ```
 
 ---
@@ -2704,7 +2696,7 @@ Eleição 2: ninguém tem maioria
    eleição 1 com mais um laço.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1023.c -o ~/LPEDC/10-analise/lista/P1023 && ~/LPEDC/10-analise/lista/P1023
+gcc ~/LPEDC/P1023.c -o ~/LPEDC/P1023 && ~/LPEDC/P1023
 ```
 
 ---
@@ -2747,7 +2739,7 @@ Saída esperada:
    comparações, O(L + C), contra O(L · C) da força bruta.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1024.c -o ~/LPEDC/10-analise/lista/P1024 && ~/LPEDC/10-analise/lista/P1024
+gcc ~/LPEDC/P1024.c -o ~/LPEDC/P1024 && ~/LPEDC/P1024
 ```
 
 ---
@@ -2802,7 +2794,7 @@ Memória: 32 bytes para 256 lugares
    consegue fazer esse sizeof.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1025.c -o ~/LPEDC/10-analise/lista/P1025 && ~/LPEDC/10-analise/lista/P1025
+gcc ~/LPEDC/P1025.c -o ~/LPEDC/P1025 && ~/LPEDC/P1025
 ```
 
 ---
@@ -2862,7 +2854,7 @@ Respostas iguais: sim
    para trocar uma pela outra sem mexer nele.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1026.c -o ~/LPEDC/10-analise/lista/P1026 && ~/LPEDC/10-analise/lista/P1026
+gcc ~/LPEDC/P1026.c -o ~/LPEDC/P1026 && ~/LPEDC/P1026
 ```
 
 ---
@@ -2909,7 +2901,7 @@ Rampa: pico na posição 15 (1600 m), binária 4, sequencial 15
    Aqui, por acaso, acharam o mesmo.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1027.c -o ~/LPEDC/10-analise/lista/P1027 && ~/LPEDC/10-analise/lista/P1027
+gcc ~/LPEDC/P1027.c -o ~/LPEDC/P1027 && ~/LPEDC/P1027
 ```
 
 ---
@@ -2950,7 +2942,7 @@ C(20, 10) = 184756 | recursão: 369511 chamadas | tabela: 145 somas
    calcula cada um uma vez só. É a ideia da programação dinâmica.
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1028.c -o ~/LPEDC/10-analise/lista/P1028 && ~/LPEDC/10-analise/lista/P1028
+gcc ~/LPEDC/P1028.c -o ~/LPEDC/P1028 && ~/LPEDC/P1028
 ```
 
 ---
@@ -2993,7 +2985,7 @@ A = 2000000000: lado 44721 | linear 44722 passos | binária 31 passos
 3. A linear é O(√A); a binária é O(log A).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1029.c -o ~/LPEDC/10-analise/lista/P1029 -lm && ~/LPEDC/10-analise/lista/P1029
+gcc ~/LPEDC/P1029.c -o ~/LPEDC/P1029 -lm && ~/LPEDC/P1029
 ```
 
 ---
@@ -3041,7 +3033,7 @@ Depois de mais doze notas 10: moda 10 (13 vezes), mediana 10
 4. Resposta esperada: a saída acima (com 23 notas, a 12ª da fila é 10).
 
 ```bash
-gcc ~/LPEDC/10-analise/lista/P1030.c -o ~/LPEDC/10-analise/lista/P1030 && ~/LPEDC/10-analise/lista/P1030
+gcc ~/LPEDC/P1030.c -o ~/LPEDC/P1030 && ~/LPEDC/P1030
 ```
 
 ## Questões no estilo da prova

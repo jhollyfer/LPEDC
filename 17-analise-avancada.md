@@ -40,13 +40,13 @@ tempos variam entre execuções; as comparações, não.
 e do heap (módulo 14) e às estimativas dos módulos 15 e 16 (O(1) esperado da
 hash; custo de BFS, DFS e Dijkstra). Prepara a divisão e conquista.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0114](#0114--recorrências-e-árvore-de-recursão) | Recorrências e árvore de recursão | [`0114-recorrencias/`](17-analise-avancada/0114-recorrencias/) |
-| [0115](#0115--teorema-mestre) | Teorema mestre | [`0115-teorema-mestre/`](17-analise-avancada/0115-teorema-mestre/) |
-| [0116](#0116--análise-amortizada) | Análise amortizada | [`0116-amortizada/`](17-analise-avancada/0116-amortizada/) |
-| [0117](#0117--limite-inferior-da-ordenação) | Limite inferior da ordenação | [`0117-limite-inferior/`](17-analise-avancada/0117-limite-inferior/) |
-| [0118](#0118--juntando-tudo) | Juntando tudo | [`0118-juntando-tudo/`](17-analise-avancada/0118-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0114](#0114--recorrências-e-árvore-de-recursão) | Recorrências e árvore de recursão |
+| [0115](#0115--teorema-mestre) | Teorema mestre |
+| [0116](#0116--análise-amortizada) | Análise amortizada |
+| [0117](#0117--limite-inferior-da-ordenação) | Limite inferior da ordenação |
+| [0118](#0118--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -98,7 +98,7 @@ A forma da recorrência decide a forma da árvore:
 Num lote de 8 notas, cada caixa é uma chamada com o tamanho do lote que ela
 confere. Cada linha soma 8, e são 4 linhas:
 
-<p align="center"><img src="17-analise-avancada/0114-recorrencias/ideia.svg" alt="Diagrama da ideia: Recorrências e árvore de recursão" width="858"></p>
+<p align="center"><img src="0114-ideia.svg" alt="Diagrama da ideia: Recorrências e árvore de recursão" width="858"></p>
 
 O código soma as notas de cada nível num vetor indexado pela profundidade e
 confere `n log₂ n + n` para lotes maiores:
@@ -167,7 +167,7 @@ int main(void) {
 O fluxograma é a função `audita` e não tem laço: as duas caixas `audita` são
 o `2 T(n/2)` e a caixa `custo_nivel += n` é o `+ n`:
 
-<p align="center"><img src="17-analise-avancada/0114-recorrencias/fluxograma.svg" alt="Fluxograma: Recorrências e árvore de recursão" width="350"></p>
+<p align="center"><img src="0114-fluxograma.svg" alt="Fluxograma: Recorrências e árvore de recursão" width="350"></p>
 
 ### Passo a passo
 
@@ -198,8 +198,6 @@ Bate com a árvore (4 níveis de 8) e com o programa.
 > Quanto dá para 8 notas? E para 1024? Compare com 32 e 11.264.
 
 ### Hora de praticar
-
-Arquivos em [`0114-recorrencias/`](17-analise-avancada/0114-recorrencias/).
 
 **Exemplo A227 · Duas chamadas, destinos diferentes**
 
@@ -271,7 +269,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/A227.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/A227 && ~/LPEDC/17-analise-avancada/0114-recorrencias/A227
+gcc ~/LPEDC/A227.c -o ~/LPEDC/A227 && ~/LPEDC/A227
 ```
 
 **Exemplo A228 · Hanói: a árvore em que cada nível dobra**
@@ -351,7 +349,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/A228.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/A228 && ~/LPEDC/17-analise-avancada/0114-recorrencias/A228
+gcc ~/LPEDC/A228.c -o ~/LPEDC/A228 && ~/LPEDC/A228
 ```
 
 #### Exercícios
@@ -383,7 +381,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E679.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E679 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E679
+gcc ~/LPEDC/E679.c -o ~/LPEDC/E679 && ~/LPEDC/E679
 ```
 
 **Exercício E681** · ★★☆
@@ -411,7 +409,7 @@ total: 120
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E681.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E681 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E681
+gcc ~/LPEDC/E681.c -o ~/LPEDC/E681 && ~/LPEDC/E681
 ```
 
 **Exercício E682** · ★★☆
@@ -442,7 +440,7 @@ total: 28 = 8 · 7 / 2
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E682.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E682 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E682
+gcc ~/LPEDC/E682.c -o ~/LPEDC/E682 && ~/LPEDC/E682
 ```
 
 **Exercício E684** · ★★★
@@ -467,7 +465,7 @@ C(40) / C(39) = 1.6180
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E684.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E684 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E684
+gcc ~/LPEDC/E684.c -o ~/LPEDC/E684 && ~/LPEDC/E684
 ```
 
 ---
@@ -508,7 +506,7 @@ Um escritório revisa um contrato de `n` páginas: o revisor lê tudo e repassa
 2`, e `a = 1`, 2 ou 4 cai numa linha diferente. O desenho mostra a árvore de
 cada um para `n = 16`:
 
-<p align="center"><img src="17-analise-avancada/0115-teorema-mestre/ideia.svg" alt="Diagrama da ideia: Teorema mestre" width="858"></p>
+<p align="center"><img src="0115-ideia.svg" alt="Diagrama da ideia: Teorema mestre" width="858"></p>
 
 O código faz as `a` chamadas de verdade e, no fim, dobra o `n` para ver por
 quanto o total é multiplicado:
@@ -568,7 +566,7 @@ Com `a = 4`, `4 > 2`: caso 1, as folhas dominam, Θ(n²), total `2n² - n`.
 O fluxograma é o teorema como receita: forma certa? depois `a` contra `b^k`.
 O caminho marcado é o de `a = 2`:
 
-<p align="center"><img src="17-analise-avancada/0115-teorema-mestre/fluxograma.svg" alt="Fluxograma: Teorema mestre" width="963"></p>
+<p align="center"><img src="0115-fluxograma.svg" alt="Fluxograma: Teorema mestre" width="963"></p>
 
 A mesma receita resolve algoritmos conhecidos:
 
@@ -610,8 +608,6 @@ A230 resolve dois desses casos.
 > dobra. Pista: `log₂ 3 ≈ 1,585`.
 
 ### Hora de praticar
-
-Arquivos em [`0115-teorema-mestre/`](17-analise-avancada/0115-teorema-mestre/).
 
 **Exemplo A229 · A tabela do teorema mestre em código**
 
@@ -700,7 +696,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A229.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A229 -lm && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A229
+gcc ~/LPEDC/A229.c -o ~/LPEDC/A229 -lm && ~/LPEDC/A229
 ```
 
 **Exemplo A230 · Quando a tabela não serve: medindo na mão**
@@ -789,7 +785,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A230.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A230 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A230
+gcc ~/LPEDC/A230.c -o ~/LPEDC/A230 && ~/LPEDC/A230
 ```
 
 #### Exercícios
@@ -816,7 +812,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685
+gcc ~/LPEDC/E685.c -o ~/LPEDC/E685 && ~/LPEDC/E685
 ```
 
 **Exercício E687** · ★★☆
@@ -837,7 +833,7 @@ rápido: 93 notas 7 em 22 chamadas
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687
+gcc ~/LPEDC/E687.c -o ~/LPEDC/E687 && ~/LPEDC/E687
 ```
 
 **Exercício E688** · ★★☆
@@ -858,7 +854,7 @@ ternária: 47.3 comparações por busca
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688
+gcc ~/LPEDC/E688.c -o ~/LPEDC/E688 && ~/LPEDC/E688
 ```
 
 **Exercício E689** · ★★★
@@ -883,7 +879,7 @@ n = 256:  65536 contra  6561 multiplicações, mesmo resultado
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689
+gcc ~/LPEDC/E689.c -o ~/LPEDC/E689 && ~/LPEDC/E689
 ```
 
 ---
@@ -916,7 +912,7 @@ O app do banco guarda o histórico de Pix num vetor de 1 posição que dobra ao
 encher. Chegam 16 Pix; as inserções 2, 3, 5 e 9 são as mudanças, em vermelho, e
 o cofrinho cai nelas e se recupera:
 
-<p align="center"><img src="17-analise-avancada/0116-amortizada/ideia.svg" alt="Diagrama da ideia: Análise amortizada" width="870"></p>
+<p align="center"><img src="0116-ideia.svg" alt="Diagrama da ideia: Análise amortizada" width="870"></p>
 
 O `insere` devolve o custo real. O vetor cresce com `malloc`, cópia e `free`
 à mão, para contar cada cópia:
@@ -996,7 +992,7 @@ O cofrinho nunca chega a zero.
 O fluxograma segue o `insere` da 9ª inserção, a mais cara: o vetor tem 8 de 8
 ocupados, então o caminho passa pela mudança inteira:
 
-<p align="center"><img src="17-analise-avancada/0116-amortizada/fluxograma.svg" alt="Fluxograma: Análise amortizada" width="378"></p>
+<p align="center"><img src="0116-fluxograma.svg" alt="Fluxograma: Análise amortizada" width="378"></p>
 
 A mesma análise vale para o **contador binário** (somar 1 às vezes vira muitos
 bits, em média menos de 2; exemplo A231) e para a **pilha com `multipop(k)`**,
@@ -1027,8 +1023,6 @@ não pode travar precisa de outra solução.
 > "insere, remove" mil vezes?
 
 ### Hora de praticar
-
-Arquivos em [`0116-amortizada/`](17-analise-avancada/0116-amortizada/).
 
 **Exemplo A231 · O contador binário da catraca**
 
@@ -1121,7 +1115,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/A231.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/A231 && ~/LPEDC/17-analise-avancada/0116-amortizada/A231
+gcc ~/LPEDC/A231.c -o ~/LPEDC/A231 && ~/LPEDC/A231
 ```
 
 **Exemplo A232 · Pilha de pratos com multipop**
@@ -1208,7 +1202,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/A232.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/A232 && ~/LPEDC/17-analise-avancada/0116-amortizada/A232
+gcc ~/LPEDC/A232.c -o ~/LPEDC/A232 && ~/LPEDC/A232
 ```
 
 #### Exercícios
@@ -1232,7 +1226,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E691.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E691 && ~/LPEDC/17-analise-avancada/0116-amortizada/E691
+gcc ~/LPEDC/E691.c -o ~/LPEDC/E691 && ~/LPEDC/E691
 ```
 
 **Exercício E693** · ★★☆
@@ -1255,7 +1249,7 @@ x 2          20    1048575     1.05     48576
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E693.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E693 && ~/LPEDC/17-analise-avancada/0116-amortizada/E693
+gcc ~/LPEDC/E693.c -o ~/LPEDC/E693 && ~/LPEDC/E693
 ```
 
 **Exercício E694** · ★★☆
@@ -1276,7 +1270,7 @@ inc/dec alternados a partir de 511: 1000 trocas (10.00 por operação)
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E694.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E694 && ~/LPEDC/17-analise-avancada/0116-amortizada/E694
+gcc ~/LPEDC/E694.c -o ~/LPEDC/E694 && ~/LPEDC/E694
 ```
 
 **Exercício E695** · ★★★
@@ -1299,7 +1293,7 @@ atendidos: 1 2 3 4 5 6 7 8
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E695.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E695 && ~/LPEDC/17-analise-avancada/0116-amortizada/E695
+gcc ~/LPEDC/E695.c -o ~/LPEDC/E695 && ~/LPEDC/E695
 ```
 
 ---
@@ -1332,7 +1326,7 @@ elementos, `2^h ≥ n!`, ou seja, **`h ≥ log₂(n!)`**.
 O desenho é o insertion sort de 3 elementos como árvore de decisão. O
 caminho verde, A = 5 kg, B = 9 kg e C = 2 kg, acaba na folha C A B:
 
-<p align="center"><img src="17-analise-avancada/0117-limite-inferior/ideia.svg" alt="Diagrama da ideia: Limite inferior da ordenação" width="884"></p>
+<p align="center"><img src="0117-ideia.svg" alt="Diagrama da ideia: Limite inferior da ordenação" width="884"></p>
 
 O programa passa as 6 ordens pela balança; `mais_pesada` anota cada pergunta:
 
@@ -1400,7 +1394,7 @@ pior caso, 3, iguala o limite: para 3 elementos, o insertion sort é **ótimo**.
 
 O fluxograma é o argumento inteiro, para qualquer método que só compara:
 
-<p align="center"><img src="17-analise-avancada/0117-limite-inferior/fluxograma.svg" alt="Fluxograma: Limite inferior da ordenação" width="442"></p>
+<p align="center"><img src="0117-fluxograma.svg" alt="Fluxograma: Limite inferior da ordenação" width="442"></p>
 
 `log₂(n!)` cresce como `n log₂ n` (menos cerca de `1,44 n`). Contra o merge
 sort:
@@ -1435,8 +1429,6 @@ O(n log n): são **assintoticamente ótimos**.
 > pior caso? E o insertion sort de 4 elementos faz quantas? Ainda é ótimo?
 
 ### Hora de praticar
-
-Arquivos em [`0117-limite-inferior/`](17-analise-avancada/0117-limite-inferior/).
 
 **Exemplo A233 · Quem encosta no limite**
 
@@ -1528,7 +1520,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/A233.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/A233 -lm && ~/LPEDC/17-analise-avancada/0117-limite-inferior/A233
+gcc ~/LPEDC/A233.c -o ~/LPEDC/A233 -lm && ~/LPEDC/A233
 ```
 
 **Exemplo A234 · O adversário que esconde a ordem**
@@ -1665,7 +1657,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/A234.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/A234 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/A234
+gcc ~/LPEDC/A234.c -o ~/LPEDC/A234 && ~/LPEDC/A234
 ```
 
 #### Exercícios
@@ -1703,7 +1695,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697
+gcc ~/LPEDC/E697.c -o ~/LPEDC/E697 && ~/LPEDC/E697
 ```
 
 **Exercício E699** · ★★☆
@@ -1725,7 +1717,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699
+gcc ~/LPEDC/E699.c -o ~/LPEDC/E699 && ~/LPEDC/E699
 ```
 
 **Exercício E700** · ★★☆
@@ -1760,7 +1752,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700
+gcc ~/LPEDC/E700.c -o ~/LPEDC/E700 && ~/LPEDC/E700
 ```
 
 **Exercício E702** · ★★★
@@ -1781,7 +1773,7 @@ pior caso: 5 comparações (limite: 5)
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702
+gcc ~/LPEDC/E702.c -o ~/LPEDC/E702 && ~/LPEDC/E702
 ```
 
 ---
@@ -1823,7 +1815,7 @@ Os pedidos vêm de um gerador próprio, igual em qualquer máquina. Cada
 algoritmo ordena 8 mil e 16 mil; a razão confirma a classe e a medida de 16 mil
 prevê o milhão. Verde acertou; vermelho nem dá para rodar:
 
-<p align="center"><img src="17-analise-avancada/0118-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0118-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa mede, prevê e confere; o `insertion` só ganha previsão, pois rodar
 levaria quase meia hora:
@@ -1928,7 +1920,7 @@ vezes o do merge sort, um terço de segundo.
 
 O fluxograma aplica a receita ao merge sort:
 
-<p align="center"><img src="17-analise-avancada/0118-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="527"></p>
+<p align="center"><img src="0118-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="527"></p>
 
 ### Passo a passo
 
@@ -1963,14 +1955,12 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 
 ### Hora de praticar
 
-Arquivos em [`0118-juntando-tudo/`](17-analise-avancada/0118-juntando-tudo/).
-
 **Exemplo A235 · A entrada também decide: quatro vetores, quatro ordenações**
 
 ```c
 #include <stdio.h>
 #include <string.h>
-#include "ordena.h"
+#include "0118-ordena.h"
 
 #define N 2000
 
@@ -2022,7 +2012,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A235.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A235 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A235
+gcc ~/LPEDC/A235.c ~/LPEDC/0118-ordena.c -o ~/LPEDC/A235 && ~/LPEDC/A235
 ```
 
 **Exemplo A236 · Cronômetro honesto: repetir e tirar a mediana**
@@ -2031,7 +2021,7 @@ gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A235.c ~/LPEDC/17-analise-ava
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "ordena.h"
+#include "0118-ordena.h"
 
 #define N 1000
 #define REPETICOES 200
@@ -2102,7 +2092,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A236.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A236 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A236
+gcc ~/LPEDC/A236.c ~/LPEDC/0118-ordena.c -o ~/LPEDC/A236 && ~/LPEDC/A236
 ```
 
 #### Exercícios
@@ -2128,7 +2118,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703
+gcc ~/LPEDC/E703.c ~/LPEDC/0118-ordena.c -o ~/LPEDC/E703 && ~/LPEDC/E703
 ```
 
 **Exercício E705** · ★★☆
@@ -2151,7 +2141,7 @@ vencedor: insertion
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705
+gcc ~/LPEDC/E705.c ~/LPEDC/0118-ordena.c -o ~/LPEDC/E705 && ~/LPEDC/E705
 ```
 
 **Exercício E706** · ★★☆
@@ -2175,7 +2165,7 @@ misterio_d: dobrou n, custo x7.88 -> Θ(n³)
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706
+gcc ~/LPEDC/E706.c ~/LPEDC/0118-ordena.c -o ~/LPEDC/E706 && ~/LPEDC/E706
 ```
 
 **Exercício E707** · ★★★
@@ -2199,7 +2189,7 @@ L = 256: 11917965 comparações,   45.1 ms
 ```
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707
+gcc ~/LPEDC/E707.c ~/LPEDC/0118-ordena.c -o ~/LPEDC/E707 && ~/LPEDC/E707
 ```
 
 ---
@@ -2349,7 +2339,7 @@ apenas não distinguem `n^1,5` de, digamos, `n log² n`.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](17-analise-avancada/lista/); resoluções em `_respostas/17-analise-avancada/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1701.c a P1730.c, na raiz; resoluções em `_respostas/17-analise-avancada/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2396,7 +2386,7 @@ Saída esperada:
    n = 100 são 199 chamadas.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1701.c -o ~/LPEDC/17-analise-avancada/lista/P1701 && ~/LPEDC/17-analise-avancada/lista/P1701
+gcc ~/LPEDC/P1701.c -o ~/LPEDC/P1701 && ~/LPEDC/P1701
 ```
 
 ---
@@ -2435,7 +2425,7 @@ Saída esperada:
 4. Resposta esperada: com n = 243, 364 chamadas, igual a (3 · 243 - 1) / 2.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1702.c -o ~/LPEDC/17-analise-avancada/lista/P1702 && ~/LPEDC/17-analise-avancada/lista/P1702
+gcc ~/LPEDC/P1702.c -o ~/LPEDC/P1702 && ~/LPEDC/P1702
 ```
 
 ---
@@ -2476,7 +2466,7 @@ Saída esperada:
    1000; 1111 rodinhas em 1000 km e 11110 em 10000 km (1,111 por km).
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1703.c -o ~/LPEDC/17-analise-avancada/lista/P1703 && ~/LPEDC/17-analise-avancada/lista/P1703
+gcc ~/LPEDC/P1703.c -o ~/LPEDC/P1703 && ~/LPEDC/P1703
 ```
 
 ---
@@ -2527,7 +2517,7 @@ Total: 63 trocas em 32 incrementos (limite 2n = 64)
    uma vez; total 63, abaixo de 2n = 64.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1704.c -o ~/LPEDC/17-analise-avancada/lista/P1704 && ~/LPEDC/17-analise-avancada/lista/P1704
+gcc ~/LPEDC/P1704.c -o ~/LPEDC/P1704 && ~/LPEDC/P1704
 ```
 
 ---
@@ -2577,7 +2567,7 @@ Total: 44
    16); n = 10 dá 5 níveis, o último com 4 chamadas e custo 4 (total 44).
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1705.c -o ~/LPEDC/17-analise-avancada/lista/P1705 && ~/LPEDC/17-analise-avancada/lista/P1705
+gcc ~/LPEDC/P1705.c -o ~/LPEDC/P1705 && ~/LPEDC/P1705
 ```
 
 ---
@@ -2618,7 +2608,7 @@ Operação mais cara: 10
    do limite 26; a operação mais cara custou 10.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1706.c -o ~/LPEDC/17-analise-avancada/lista/P1706 && ~/LPEDC/17-analise-avancada/lista/P1706
+gcc ~/LPEDC/P1706.c -o ~/LPEDC/P1706 && ~/LPEDC/P1706
 ```
 
 ---
@@ -2657,7 +2647,7 @@ Melhor caso n - 1 = 9 | pior caso n(n - 1)/2 = 45
    no misturado.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1707.c -o ~/LPEDC/17-analise-avancada/lista/P1707 && ~/LPEDC/17-analise-avancada/lista/P1707
+gcc ~/LPEDC/P1707.c -o ~/LPEDC/P1707 && ~/LPEDC/P1707
 ```
 
 ---
@@ -2698,7 +2688,7 @@ n = 1000  fila: soma 154400, 1001 chamadas, profundidade 1001
    2n - 1; profundidades 1001 e 11 para n = 1000.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1708.c -o ~/LPEDC/17-analise-avancada/lista/P1708 && ~/LPEDC/17-analise-avancada/lista/P1708
+gcc ~/LPEDC/P1708.c -o ~/LPEDC/P1708 && ~/LPEDC/P1708
 ```
 
 ---
@@ -2741,7 +2731,7 @@ Saída esperada:
    33554431 chamadas e a boa, 25.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1709.c -o ~/LPEDC/17-analise-avancada/lista/P1709 && ~/LPEDC/17-analise-avancada/lista/P1709
+gcc ~/LPEDC/P1709.c -o ~/LPEDC/P1709 && ~/LPEDC/P1709
 ```
 
 ---
@@ -2788,7 +2778,7 @@ Saída esperada:
 4. Resposta esperada: as duas colunas são iguais; 3, 4, 7, 10 e 20.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1710.c -o ~/LPEDC/17-analise-avancada/lista/P1710 && ~/LPEDC/17-analise-avancada/lista/P1710
+gcc ~/LPEDC/P1710.c -o ~/LPEDC/P1710 && ~/LPEDC/P1710
 ```
 
 ### ★★☆ Para pensar
@@ -2830,7 +2820,7 @@ Total: 80641 | total / n² = 1.2305 (limite 16/13 = 1.2308)
    razão 1.2305.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1711.c -o ~/LPEDC/17-analise-avancada/lista/P1711 && ~/LPEDC/17-analise-avancada/lista/P1711
+gcc ~/LPEDC/P1711.c -o ~/LPEDC/P1711 && ~/LPEDC/P1711
 ```
 
 ---
@@ -2884,7 +2874,7 @@ Saída esperada:
    linhas; com n = 1024: 2096128, 11264 e 2047.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1712.c -o ~/LPEDC/17-analise-avancada/lista/P1712 && ~/LPEDC/17-analise-avancada/lista/P1712
+gcc ~/LPEDC/P1712.c -o ~/LPEDC/P1712 && ~/LPEDC/P1712
 ```
 
 ---
@@ -2945,7 +2935,7 @@ Saída esperada:
    n = 65536, 8978432, razões 8.562 e 0.535.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1713.c -o ~/LPEDC/17-analise-avancada/lista/P1713 && ~/LPEDC/17-analise-avancada/lista/P1713
+gcc ~/LPEDC/P1713.c -o ~/LPEDC/P1713 && ~/LPEDC/P1713
 ```
 
 ---
@@ -2992,7 +2982,7 @@ Saída esperada:
    o maior unsigned long long; a coluna da fórmula bate em todas.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1714.c -o ~/LPEDC/17-analise-avancada/lista/P1714 && ~/LPEDC/17-analise-avancada/lista/P1714
+gcc ~/LPEDC/P1714.c -o ~/LPEDC/P1714 && ~/LPEDC/P1714
 ```
 
 ---
@@ -3046,7 +3036,7 @@ Soma real: 48 | soma amortizada: 50 (3n = 51)
    soma real 48 e soma amortizada 50.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1715.c -o ~/LPEDC/17-analise-avancada/lista/P1715 && ~/LPEDC/17-analise-avancada/lista/P1715
+gcc ~/LPEDC/P1715.c -o ~/LPEDC/P1715 && ~/LPEDC/P1715
 ```
 
 ---
@@ -3088,7 +3078,7 @@ Limite 3·1150 + 52 = 3502
    turnos curtos, cada zerar esperto custa 2 em vez de 16.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1716.c -o ~/LPEDC/17-analise-avancada/lista/P1716 && ~/LPEDC/17-analise-avancada/lista/P1716
+gcc ~/LPEDC/P1716.c -o ~/LPEDC/P1716 && ~/LPEDC/P1716
 ```
 
 ---
@@ -3130,7 +3120,7 @@ Realocações: 10 | cópias: 10230 (1.02 por pedido)
 4. Resposta esperada: 10 realocações e 10230 cópias, contra 999 e 4995000.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1717.c -o ~/LPEDC/17-analise-avancada/lista/P1717 && ~/LPEDC/17-analise-avancada/lista/P1717
+gcc ~/LPEDC/P1717.c -o ~/LPEDC/P1717 && ~/LPEDC/P1717
 ```
 
 ---
@@ -3184,7 +3174,7 @@ Saída esperada:
    com n = 2^20, 3145706.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1718.c -o ~/LPEDC/17-analise-avancada/lista/P1718 && ~/LPEDC/17-analise-avancada/lista/P1718
+gcc ~/LPEDC/P1718.c -o ~/LPEDC/P1718 && ~/LPEDC/P1718
 ```
 
 ---
@@ -3231,7 +3221,7 @@ Saída esperada:
    20801199 chamadas; a fórmula faz 2, 5, 10 e 13 multiplicações.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1719.c -o ~/LPEDC/17-analise-avancada/lista/P1719 && ~/LPEDC/17-analise-avancada/lista/P1719
+gcc ~/LPEDC/P1719.c -o ~/LPEDC/P1719 && ~/LPEDC/P1719
 ```
 
 ---
@@ -3275,7 +3265,7 @@ Todos ordenados: sim
    crescem cerca de 2,2 vezes.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1720.c -o ~/LPEDC/17-analise-avancada/lista/P1720 && ~/LPEDC/17-analise-avancada/lista/P1720
+gcc ~/LPEDC/P1720.c -o ~/LPEDC/P1720 && ~/LPEDC/P1720
 ```
 
 ### ★★★ Desafio
@@ -3340,7 +3330,7 @@ n = 16: 4096 multiplicações (n³ = 4096), igual ao laço triplo: sim
    (razão 3.80).
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1721.c -o ~/LPEDC/17-analise-avancada/lista/P1721 && ~/LPEDC/17-analise-avancada/lista/P1721
+gcc ~/LPEDC/P1721.c -o ~/LPEDC/P1721 && ~/LPEDC/P1721
 ```
 
 ---
@@ -3430,7 +3420,7 @@ T(n) = 9 T(n/3) + n^1, n = 81
    8128 (caso 3); 9T(n/3)+n é caso 1.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1722.c -o ~/LPEDC/17-analise-avancada/lista/P1722 && ~/LPEDC/17-analise-avancada/lista/P1722
+gcc ~/LPEDC/P1722.c -o ~/LPEDC/P1722 && ~/LPEDC/P1722
 ```
 
 ---
@@ -3486,7 +3476,7 @@ Expoente estimado: 2.642 | teoria log(3) / log(1,5) = 2.7095
    2.7095.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1723.c -o ~/LPEDC/17-analise-avancada/lista/P1723 -lm && ~/LPEDC/17-analise-avancada/lista/P1723
+gcc ~/LPEDC/P1723.c -o ~/LPEDC/P1723 -lm && ~/LPEDC/P1723
 ```
 
 ---
@@ -3536,7 +3526,7 @@ Atendidas em ordem: sim | na fila: 1000 (cap 1024)
    senhas; ordem conferida; 1000 senhas na fila no fim.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1724.c -o ~/LPEDC/17-analise-avancada/lista/P1724 && ~/LPEDC/17-analise-avancada/lista/P1724
+gcc ~/LPEDC/P1724.c -o ~/LPEDC/P1724 && ~/LPEDC/P1724
 ```
 
 ---
@@ -3590,7 +3580,7 @@ Fórmula n teto(lg n) - 2^teto(lg n) + 1: 0 n errados
    T = 18951425 e razão 0.951.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1725.c -o ~/LPEDC/17-analise-avancada/lista/P1725 -lm && ~/LPEDC/17-analise-avancada/lista/P1725
+gcc ~/LPEDC/P1725.c -o ~/LPEDC/P1725 -lm && ~/LPEDC/P1725
 ```
 
 ---
@@ -3638,7 +3628,7 @@ Saída esperada:
    pior caso 73 comparações (o limite é 127) e a de quadrantes, 1093.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1726.c -o ~/LPEDC/17-analise-avancada/lista/P1726 -lm && ~/LPEDC/17-analise-avancada/lista/P1726
+gcc ~/LPEDC/P1726.c -o ~/LPEDC/P1726 -lm && ~/LPEDC/P1726
 ```
 
 ---
@@ -3681,7 +3671,7 @@ Saída esperada:
    com BUILD-HEAP (n - 20).
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1727.c -o ~/LPEDC/17-analise-avancada/lista/P1727 -lm && ~/LPEDC/17-analise-avancada/lista/P1727
+gcc ~/LPEDC/P1727.c -o ~/LPEDC/P1727 -lm && ~/LPEDC/P1727
 ```
 
 ---
@@ -3732,7 +3722,7 @@ Entrada fabricada (n = 8): 1 5 3 7 2 6 4 8
    8770.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1728.c -o ~/LPEDC/17-analise-avancada/lista/P1728 -lm && ~/LPEDC/17-analise-avancada/lista/P1728
+gcc ~/LPEDC/P1728.c -o ~/LPEDC/P1728 -lm && ~/LPEDC/P1728
 ```
 
 ---
@@ -3778,7 +3768,7 @@ Saída esperada:
    n - 1 passos, a recursão no máximo 17 chamadas.
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1729.c -o ~/LPEDC/17-analise-avancada/lista/P1729 && ~/LPEDC/17-analise-avancada/lista/P1729
+gcc ~/LPEDC/P1729.c -o ~/LPEDC/P1729 && ~/LPEDC/P1729
 ```
 
 ---
@@ -3821,7 +3811,7 @@ Saída esperada:
    n(lg n + 1) em todas as linhas (21 por incremento com n = 2^20).
 
 ```bash
-gcc ~/LPEDC/17-analise-avancada/lista/P1730.c -o ~/LPEDC/17-analise-avancada/lista/P1730 && ~/LPEDC/17-analise-avancada/lista/P1730
+gcc ~/LPEDC/P1730.c -o ~/LPEDC/P1730 && ~/LPEDC/P1730
 ```
 
 ## Questões no estilo da prova

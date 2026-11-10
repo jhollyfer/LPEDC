@@ -48,17 +48,17 @@ Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
 `conversao.c`, `cardapio.h` e `cardapio.c`). O comando do exemplo compila esses
 `.c` junto; o texto mostra também o `gcc` para fazer isso à mão.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0028](#0028--funções) | Funções | [`0028-funcoes/`](04-funcoes/0028-funcoes/) |
-| [0029](#0029--parâmetros-e-passagem-por-valor) | Parâmetros e passagem por valor | [`0029-parametros/`](04-funcoes/0029-parametros/) |
-| [0030](#0030--escopo-e-tempo-de-vida) | Escopo e tempo de vida | [`0030-escopo/`](04-funcoes/0030-escopo/) |
-| [0031](#0031--a-pilha-de-chamadas) | A pilha de chamadas | [`0031-pilha-de-chamadas/`](04-funcoes/0031-pilha-de-chamadas/) |
-| [0032](#0032--recursão) | Recursão | [`0032-recursao/`](04-funcoes/0032-recursao/) |
-| [0033](#0033--recursão-na-prática-fibonacci-hanói-e-euclides) | Recursão na prática: Fibonacci, Hanói e Euclides | [`0033-recursao-na-pratica/`](04-funcoes/0033-recursao-na-pratica/) |
-| [0034](#0034--módulos-h-c-e-compilação-separada) | Módulos: .h, .c e compilação separada | [`0034-modulos/`](04-funcoes/0034-modulos/) |
-| [0035](#0035--pré-processador-macros-e-ifdef) | Pré-processador: macros e #ifdef | [`0035-preprocessador/`](04-funcoes/0035-preprocessador/) |
-| [0036](#0036--juntando-tudo-o-caixa-da-lanchonete) | Juntando tudo: o caixa da lanchonete | [`0036-juntando-tudo/`](04-funcoes/0036-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0028](#0028--funções) | Funções |
+| [0029](#0029--parâmetros-e-passagem-por-valor) | Parâmetros e passagem por valor |
+| [0030](#0030--escopo-e-tempo-de-vida) | Escopo e tempo de vida |
+| [0031](#0031--a-pilha-de-chamadas) | A pilha de chamadas |
+| [0032](#0032--recursão) | Recursão |
+| [0033](#0033--recursão-na-prática-fibonacci-hanói-e-euclides) | Recursão na prática: Fibonacci, Hanói e Euclides |
+| [0034](#0034--módulos-h-c-e-compilação-separada) | Módulos: .h, .c e compilação separada |
+| [0035](#0035--pré-processador-macros-e-ifdef) | Pré-processador: macros e #ifdef |
+| [0036](#0036--juntando-tudo-o-caixa-da-lanchonete) | Juntando tudo: o caixa da lanchonete |
 
 ---
 
@@ -103,7 +103,7 @@ Quando o `main` chama `preco_corrida(4.0)`, o 4.0 é copiado para o parâmetro
 `km`, a função calcula `5.00 + 2.50 * 4.0`, devolve 15.00, e o `main` continua
 de onde parou, com o resultado:
 
-<p align="center"><img src="04-funcoes/0028-funcoes/ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
+<p align="center"><img src="0028-ideia.svg" alt="Diagrama da ideia: Funções" width="858"></p>
 
 O app em C, com as três corridas:
 
@@ -134,7 +134,7 @@ double preco_corrida(double km) {
 A chamada é um desvio: o programa sai do `main`, executa o corpo da função e
 **volta ao mesmo ponto**, trazendo o valor. Isso se repete a cada corrida:
 
-<p align="center"><img src="04-funcoes/0028-funcoes/fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
+<p align="center"><img src="0028-fluxograma.svg" alt="Fluxograma: Funções" width="381"></p>
 
 Três termos: a **definição** é o corpo inteiro
 (`double preco_corrida(double km) { ... }`); a **chamada** é o uso
@@ -161,8 +161,6 @@ para um arquivo ou para outra conta.
 > para fora, antes de rodar.
 
 ### Hora de praticar
-
-Arquivos em [`0028-funcoes/`](04-funcoes/0028-funcoes/).
 
 **Exemplo A055 · A conta de luz: funções que chamam funções**
 
@@ -215,7 +213,7 @@ double valor_conta(int kwh) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/A055.c -o ~/LPEDC/04-funcoes/0028-funcoes/A055 && ~/LPEDC/04-funcoes/0028-funcoes/A055
+gcc ~/LPEDC/A055.c -o ~/LPEDC/A055 && ~/LPEDC/A055
 ```
 
 **Exemplo A056 · Funções que só fazem e funções que respondem**
@@ -255,7 +253,7 @@ double menor(double a, double b) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/A056.c -o ~/LPEDC/04-funcoes/0028-funcoes/A056 && ~/LPEDC/04-funcoes/0028-funcoes/A056
+gcc ~/LPEDC/A056.c -o ~/LPEDC/A056 && ~/LPEDC/A056
 ```
 
 #### Exercícios
@@ -276,7 +274,7 @@ Total: 23.00 m2
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/E163.c -o ~/LPEDC/04-funcoes/0028-funcoes/E163 && ~/LPEDC/04-funcoes/0028-funcoes/E163
+gcc ~/LPEDC/E163.c -o ~/LPEDC/E163 && ~/LPEDC/E163
 ```
 
 **Exercício E165** · ★★☆
@@ -293,7 +291,7 @@ Bissextos: 8
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/E165.c -o ~/LPEDC/04-funcoes/0028-funcoes/E165 && ~/LPEDC/04-funcoes/0028-funcoes/E165
+gcc ~/LPEDC/E165.c -o ~/LPEDC/E165 && ~/LPEDC/E165
 ```
 
 **Exercício E166** · ★★☆
@@ -313,7 +311,7 @@ Total do dia: R$ 34.00
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/E166.c -o ~/LPEDC/04-funcoes/0028-funcoes/E166 -lm && ~/LPEDC/04-funcoes/0028-funcoes/E166
+gcc ~/LPEDC/E166.c -o ~/LPEDC/E166 -lm && ~/LPEDC/E166
 ```
 
 **Exercício E167** · ★★★
@@ -336,7 +334,7 @@ ajusta(dobro(7)) = 4
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/E167.c -o ~/LPEDC/04-funcoes/0028-funcoes/E167 && ~/LPEDC/04-funcoes/0028-funcoes/E167
+gcc ~/LPEDC/E167.c -o ~/LPEDC/E167 && ~/LPEDC/E167
 ```
 
 ---
@@ -370,7 +368,7 @@ No exemplo, a academia reajusta a mensalidade de R$ 120,00 em 10%. Há duas
 caixinhas chamadas `mensalidade`, em lugares diferentes da memória: a do
 `main` e a cópia da função. A função muda só a dela para 132.00:
 
-<p align="center"><img src="04-funcoes/0029-parametros/ideia.svg" alt="Diagrama da ideia: Parâmetros e passagem por valor" width="858"></p>
+<p align="center"><img src="0029-ideia.svg" alt="Diagrama da ideia: Parâmetros e passagem por valor" width="858"></p>
 
 O código mostra as duas situações: primeiro ignorando o retorno, depois
 guardando:
@@ -409,7 +407,7 @@ double reajustar(double mensalidade, double percentual) {
 O valor sai do `main` por cópia e só volta pelo `return`. A pergunta "guardou
 o retorno?" decide se o `main` fica sabendo do reajuste:
 
-<p align="center"><img src="04-funcoes/0029-parametros/fluxograma.svg" alt="Fluxograma: Parâmetros e passagem por valor" width="471"></p>
+<p align="center"><img src="0029-fluxograma.svg" alt="Fluxograma: Parâmetros e passagem por valor" width="471"></p>
 
 Mais três regras sobre parâmetros:
 
@@ -436,8 +434,6 @@ Mais três regras sobre parâmetros:
 > quê?
 
 ### Hora de praticar
-
-Arquivos em [`0029-parametros/`](04-funcoes/0029-parametros/).
 
 **Exemplo A057 · O parâmetro casa pela posição, não pelo nome**
 
@@ -487,7 +483,7 @@ void contagem(int segundos) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/A057.c -o ~/LPEDC/04-funcoes/0029-parametros/A057 && ~/LPEDC/04-funcoes/0029-parametros/A057
+gcc ~/LPEDC/A057.c -o ~/LPEDC/A057 && ~/LPEDC/A057
 ```
 
 **Exemplo A058 · void, conversão e expressões como argumento**
@@ -528,7 +524,7 @@ void linha(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/A058.c -o ~/LPEDC/04-funcoes/0029-parametros/A058 && ~/LPEDC/04-funcoes/0029-parametros/A058
+gcc ~/LPEDC/A058.c -o ~/LPEDC/A058 && ~/LPEDC/A058
 ```
 
 #### Exercícios
@@ -558,7 +554,7 @@ main: 300
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/E169.c -o ~/LPEDC/04-funcoes/0029-parametros/E169 && ~/LPEDC/04-funcoes/0029-parametros/E169
+gcc ~/LPEDC/E169.c -o ~/LPEDC/E169 && ~/LPEDC/E169
 ```
 
 **Exercício E171** · ★★☆
@@ -574,7 +570,7 @@ Em ordem: 6 e 9
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/E171.c -o ~/LPEDC/04-funcoes/0029-parametros/E171 && ~/LPEDC/04-funcoes/0029-parametros/E171
+gcc ~/LPEDC/E171.c -o ~/LPEDC/E171 && ~/LPEDC/E171
 ```
 
 **Exercício E172** · ★★☆
@@ -594,7 +590,7 @@ No main, capital continua R$ 1000.00
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/E172.c -o ~/LPEDC/04-funcoes/0029-parametros/E172 && ~/LPEDC/04-funcoes/0029-parametros/E172
+gcc ~/LPEDC/E172.c -o ~/LPEDC/E172 && ~/LPEDC/E172
 ```
 
 **Exercício E174** · ★★★
@@ -622,7 +618,7 @@ Capicuas de 100 a 999: 90
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/E174.c -o ~/LPEDC/04-funcoes/0029-parametros/E174 && ~/LPEDC/04-funcoes/0029-parametros/E174
+gcc ~/LPEDC/E174.c -o ~/LPEDC/E174 && ~/LPEDC/E174
 ```
 
 ---
@@ -662,7 +658,7 @@ A função `chamar` tem três contadores: a global `atendidos`, a `static`
 dura o programa inteiro; a local fica no espaço da chamada e some quando a
 função retorna. Depois de três chamadas:
 
-<p align="center"><img src="04-funcoes/0030-escopo/ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
+<p align="center"><img src="0030-ideia.svg" alt="Diagrama da ideia: Escopo e tempo de vida" width="858"></p>
 
 No código, `vezes` mostra sempre 1, enquanto os outros dois avançam:
 
@@ -699,7 +695,7 @@ int main(void) {
 A cada chamada, a local nasce de novo com 0, e a `static` já espera com o
 valor anterior. Não existe passo "criar senha" dentro da repetição:
 
-<p align="center"><img src="04-funcoes/0030-escopo/fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
+<p align="center"><img src="0030-fluxograma.svg" alt="Fluxograma: Escopo e tempo de vida" width="365"></p>
 
 As globais funcionam, mas cobram caro. **Qualquer** função do arquivo pode
 mudar `atendidos`, então, quando o valor sai errado, o culpado pode estar em
@@ -730,8 +726,6 @@ sentido no assunto 0034, com mais de um `.c`.
 > para fora da função?
 
 ### Hora de praticar
-
-Arquivos em [`0030-escopo/`](04-funcoes/0030-escopo/).
 
 **Exemplo A059 · A função que lembra o recorde**
 
@@ -778,7 +772,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/A059.c -o ~/LPEDC/04-funcoes/0030-escopo/A059 && ~/LPEDC/04-funcoes/0030-escopo/A059
+gcc ~/LPEDC/A059.c -o ~/LPEDC/A059 && ~/LPEDC/A059
 ```
 
 **Exemplo A060 · Três variáveis com o mesmo nome**
@@ -821,7 +815,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/A060.c -o ~/LPEDC/04-funcoes/0030-escopo/A060 && ~/LPEDC/04-funcoes/0030-escopo/A060
+gcc ~/LPEDC/A060.c -o ~/LPEDC/A060 && ~/LPEDC/A060
 ```
 
 #### Exercícios
@@ -853,7 +847,7 @@ compra de hoje: 30
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/E175.c -o ~/LPEDC/04-funcoes/0030-escopo/E175 && ~/LPEDC/04-funcoes/0030-escopo/E175
+gcc ~/LPEDC/E175.c -o ~/LPEDC/E175 && ~/LPEDC/E175
 ```
 
 **Exercício E177** · ★★☆
@@ -869,7 +863,7 @@ Total: R$ 55.25
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/E177.c -o ~/LPEDC/04-funcoes/0030-escopo/E177 && ~/LPEDC/04-funcoes/0030-escopo/E177
+gcc ~/LPEDC/E177.c -o ~/LPEDC/E177 && ~/LPEDC/E177
 ```
 
 **Exercício E178** · ★★☆
@@ -888,7 +882,7 @@ Saldo: R$ 201.50
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/E178.c -o ~/LPEDC/04-funcoes/0030-escopo/E178 && ~/LPEDC/04-funcoes/0030-escopo/E178
+gcc ~/LPEDC/E178.c -o ~/LPEDC/E178 && ~/LPEDC/E178
 ```
 
 **Exercício E179** · ★★★
@@ -926,7 +920,7 @@ soma dos b: 25
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/E179.c -o ~/LPEDC/04-funcoes/0030-escopo/E179 && ~/LPEDC/04-funcoes/0030-escopo/E179
+gcc ~/LPEDC/E179.c -o ~/LPEDC/E179 && ~/LPEDC/E179
 ```
 
 ---
@@ -968,7 +962,7 @@ Num pedido de R$ 50,00, o `main` chama `total_com_entrega`, que chama
 `taxa_entrega`. No ponto mais fundo há três quadros. Quando `taxa_entrega`
 devolve 7.90, seu quadro sai, e `total_com_entrega` volta a rodar com o valor:
 
-<p align="center"><img src="04-funcoes/0031-pilha-de-chamadas/ideia.svg" alt="Diagrama da ideia: A pilha de chamadas" width="928"></p>
+<p align="center"><img src="0031-ideia.svg" alt="Diagrama da ideia: A pilha de chamadas" width="928"></p>
 
 O código imprime "entra" e "sai" em cada função, com recuo, e a pilha aparece
 na saída:
@@ -1011,7 +1005,7 @@ No fluxograma, as chamadas empilham na descida e os retornos desempilham na
 ordem contrária. A decisão da taxa ocorre no topo, dentro de `taxa_entrega`,
 enquanto as outras duas funções esperam:
 
-<p align="center"><img src="04-funcoes/0031-pilha-de-chamadas/fluxograma.svg" alt="Fluxograma: A pilha de chamadas" width="359"></p>
+<p align="center"><img src="0031-fluxograma.svg" alt="Fluxograma: A pilha de chamadas" width="359"></p>
 
 ### Passo a passo
 
@@ -1046,8 +1040,6 @@ Há **dois** `valor`, um em cada quadro, e cada função mexe só no seu. E dois
 > chega a ter? O que muda na saída?
 
 ### Hora de praticar
-
-Arquivos em [`0031-pilha-de-chamadas/`](04-funcoes/0031-pilha-de-chamadas/).
 
 **Exemplo A061 · O valor que desce a pilha, quadro por quadro**
 
@@ -1096,7 +1088,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A061.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A061 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A061
+gcc ~/LPEDC/A061.c -o ~/LPEDC/A061 && ~/LPEDC/A061
 ```
 
 **Exemplo A062 · A mesma função volta para lugares diferentes**
@@ -1150,7 +1142,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A062.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A062 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A062
+gcc ~/LPEDC/A062.c -o ~/LPEDC/A062 && ~/LPEDC/A062
 ```
 
 #### Exercícios
@@ -1182,7 +1174,7 @@ IMC: 22.2
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181
+gcc ~/LPEDC/E181.c -o ~/LPEDC/E181 && ~/LPEDC/E181
 ```
 
 **Exercício E183** · ★★☆
@@ -1206,7 +1198,7 @@ sai finalizar_compra
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183
+gcc ~/LPEDC/E183.c -o ~/LPEDC/E183 && ~/LPEDC/E183
 ```
 
 **Exercício E184** · ★★☆
@@ -1235,7 +1227,7 @@ main: n = 5, r = 16
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184
+gcc ~/LPEDC/E184.c -o ~/LPEDC/E184 && ~/LPEDC/E184
 ```
 
 **Exercício E186** · ★★★
@@ -1257,7 +1249,7 @@ Altura agora: 1
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186
+gcc ~/LPEDC/E186.c -o ~/LPEDC/E186 && ~/LPEDC/E186
 ```
 
 ---
@@ -1296,7 +1288,7 @@ Na **ida**, a pilha cresce até `fatorial(1)`, o caso base, que devolve 1 sem
 chamar ninguém. Na **volta**, cada quadro recebe a resposta de cima, multiplica
 e devolve ao de baixo: 1, 2, 6, 24, 120:
 
-<p align="center"><img src="04-funcoes/0032-recursao/ideia.svg" alt="Diagrama da ideia: Recursão" width="858"></p>
+<p align="center"><img src="0032-ideia.svg" alt="Diagrama da ideia: Recursão" width="858"></p>
 
 O código é quase a definição matemática:
 
@@ -1324,7 +1316,7 @@ Não há `for` nem `while`, mas o fluxograma tem duas voltas. A primeira é a id
 (empilha de novo com `n - 1` até o caso base); a segunda é a volta (cada quadro
 em espera multiplica e sai):
 
-<p align="center"><img src="04-funcoes/0032-recursao/fluxograma.svg" alt="Fluxograma: Recursão" width="620"></p>
+<p align="center"><img src="0032-fluxograma.svg" alt="Fluxograma: Recursão" width="620"></p>
 
 ### Passo a passo
 
@@ -1366,8 +1358,6 @@ metade".
 
 ### Hora de praticar
 
-Arquivos em [`0032-recursao/`](04-funcoes/0032-recursao/).
-
 **Exemplo A063 · Em quantos meses a dívida dobra**
 
 ```c
@@ -1396,7 +1386,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/A063.c -o ~/LPEDC/04-funcoes/0032-recursao/A063 && ~/LPEDC/04-funcoes/0032-recursao/A063
+gcc ~/LPEDC/A063.c -o ~/LPEDC/A063 && ~/LPEDC/A063
 ```
 
 **Exemplo A064 · Imprimir antes ou depois da chamada**
@@ -1435,7 +1425,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/A064.c -o ~/LPEDC/04-funcoes/0032-recursao/A064 && ~/LPEDC/04-funcoes/0032-recursao/A064
+gcc ~/LPEDC/A064.c -o ~/LPEDC/A064 && ~/LPEDC/A064
 ```
 
 #### Exercícios
@@ -1456,7 +1446,7 @@ Cumprimentos com 12 duplas: 66
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/E187.c -o ~/LPEDC/04-funcoes/0032-recursao/E187 && ~/LPEDC/04-funcoes/0032-recursao/E187
+gcc ~/LPEDC/E187.c -o ~/LPEDC/E187 && ~/LPEDC/E187
 ```
 
 **Exercício E189** · ★★☆
@@ -1480,7 +1470,7 @@ volta 3
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/E189.c -o ~/LPEDC/04-funcoes/0032-recursao/E189 && ~/LPEDC/04-funcoes/0032-recursao/E189
+gcc ~/LPEDC/E189.c -o ~/LPEDC/E189 && ~/LPEDC/E189
 ```
 
 **Exercício E190** · ★★☆
@@ -1498,7 +1488,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/E190.c -o ~/LPEDC/04-funcoes/0032-recursao/E190 && ~/LPEDC/04-funcoes/0032-recursao/E190
+gcc ~/LPEDC/E190.c -o ~/LPEDC/E190 && ~/LPEDC/E190
 ```
 
 **Exercício E192** · ★★★
@@ -1517,7 +1507,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/E192.c -o ~/LPEDC/04-funcoes/0032-recursao/E192 && ~/LPEDC/04-funcoes/0032-recursao/E192
+gcc ~/LPEDC/E192.c -o ~/LPEDC/E192 && ~/LPEDC/E192
 ```
 
 ---
@@ -1548,7 +1538,7 @@ círculo é o `n`). Os dois nós amarelos são `fib(3)`: o mesmo cálculo, com t
 o que vem embaixo, feito duas vezes. A pilha nunca passa de 5 quadros de `fib`,
 porque o programa desce um galho de cada vez:
 
-<p align="center"><img src="04-funcoes/0033-recursao-na-pratica/ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
+<p align="center"><img src="0033-ideia.svg" alt="Diagrama da ideia: Recursão na prática: Fibonacci, Hanói e Euclides" width="974"></p>
 
 O programa conta as chamadas com uma global:
 
@@ -1590,7 +1580,7 @@ trabalho**, desconfie.
 No fluxograma, o caso recursivo tem duas chamadas em sequência. A segunda só
 começa quando a primeira voltou com a resposta inteira:
 
-<p align="center"><img src="04-funcoes/0033-recursao-na-pratica/fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
+<p align="center"><img src="0033-fluxograma.svg" alt="Fluxograma: Recursão na prática: Fibonacci, Hanói e Euclides" width="354"></p>
 
 ### Quando a recursão é a melhor ideia: Hanói
 
@@ -1644,8 +1634,6 @@ Euclides faz **uma** chamada por vez e encolhe depressa, por isso sai barato.
 
 ### Hora de praticar
 
-Arquivos em [`0033-recursao-na-pratica/`](04-funcoes/0033-recursao-na-pratica/).
-
 **Exemplo A065 · Fibonacci sem recalcular: a recursão que carrega o par**
 
 ```c
@@ -1686,7 +1674,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A065.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A065 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A065
+gcc ~/LPEDC/A065.c -o ~/LPEDC/A065 && ~/LPEDC/A065
 ```
 
 **Exemplo A066 · Torre de Hanói e o MDC de Euclides**
@@ -1734,7 +1722,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A066.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A066 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A066
+gcc ~/LPEDC/A066.c -o ~/LPEDC/A066 && ~/LPEDC/A066
 ```
 
 #### Exercícios
@@ -1753,7 +1741,7 @@ mdc(1000, 625) = 125 -> 1000/625 = 8/5
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193
+gcc ~/LPEDC/E193.c -o ~/LPEDC/E193 && ~/LPEDC/E193
 ```
 
 **Exercício E195** · ★★☆
@@ -1771,7 +1759,7 @@ fib(46) = 1836311903
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195
+gcc ~/LPEDC/E195.c -o ~/LPEDC/E195 && ~/LPEDC/E195
 ```
 
 **Exercício E196** · ★★☆
@@ -1800,7 +1788,7 @@ maior altura: 6
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196
+gcc ~/LPEDC/E196.c -o ~/LPEDC/E196 && ~/LPEDC/E196
 ```
 
 **Exercício E197** · ★★★
@@ -1829,7 +1817,7 @@ rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197
+gcc ~/LPEDC/E197.c -o ~/LPEDC/E197 && ~/LPEDC/E197
 ```
 
 ---
@@ -1872,7 +1860,7 @@ arquivo que não se chama `A000.c` ou `E000.c`).
 O `conversao.h` é incluído pelos dois `.c`. Cada um vira um `.o`, e o ligador
 junta os dois no executável `viagem`:
 
-<p align="center"><img src="04-funcoes/0034-modulos/ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
+<p align="center"><img src="0034-ideia.svg" alt="Diagrama da ideia: Módulos: .h, .c e compilação separada" width="858"></p>
 
 O módulo fica na pasta do assunto. O `conversao.h`:
 
@@ -1915,7 +1903,7 @@ int main(void) {
 Cada `.c` passa pelo compilador separado, e o erro de "função que não existe"
 só aparece no fim, no ligador:
 
-<p align="center"><img src="04-funcoes/0034-modulos/fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
+<p align="center"><img src="0034-fluxograma.svg" alt="Fluxograma: Módulos: .h, .c e compilação separada" width="553"></p>
 
 Três peças fecham o assunto:
 
@@ -1946,15 +1934,13 @@ Três peças fecham o assunto:
 
 ### Hora de praticar
 
-Arquivos em [`0034-modulos/`](04-funcoes/0034-modulos/).
-
 **Exemplo A067 · O .h incluído duas vezes e o protótipo que converte**
 
 ```c
 #include <stdio.h>
 
-#include "conversao.h"
-#include "conversao.h" // de propósito: o include guard faz esta virar nada
+#include "0034-conversao.h"
+#include "0034-conversao.h" // de propósito: o include guard faz esta virar nada
 
 int main(void) {
     int trecho = 42;      // int
@@ -1982,7 +1968,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/A067.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/A067 && ~/LPEDC/04-funcoes/0034-modulos/A067
+gcc ~/LPEDC/A067.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/A067 && ~/LPEDC/A067
 ```
 
 **Exemplo A068 · O módulo guarda segredos**
@@ -1990,7 +1976,7 @@ gcc ~/LPEDC/04-funcoes/0034-modulos/A067.c ~/LPEDC/04-funcoes/0034-modulos/conve
 ```c
 #include <stdio.h>
 
-#include "conversao.h"
+#include "0034-conversao.h"
 
 int main(void) {
     double maxima = 0;
@@ -2016,7 +2002,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/A068.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/A068 && ~/LPEDC/04-funcoes/0034-modulos/A068
+gcc ~/LPEDC/A068.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/A068 && ~/LPEDC/A068
 ```
 
 #### Exercícios
@@ -2051,7 +2037,7 @@ Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/E199.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E199 && ~/LPEDC/04-funcoes/0034-modulos/E199
+gcc ~/LPEDC/E199.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E199 && ~/LPEDC/E199
 ```
 
 **Exercício E201** · ★★☆
@@ -2073,7 +2059,7 @@ Conversões do módulo: 1
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/E201.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E201 && ~/LPEDC/04-funcoes/0034-modulos/E201
+gcc ~/LPEDC/E201.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E201 && ~/LPEDC/E201
 ```
 
 **Exercício E202** · ★★☆
@@ -2091,7 +2077,7 @@ Tênis: R$ 239.92
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/E202.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E202 && ~/LPEDC/04-funcoes/0034-modulos/E202
+gcc ~/LPEDC/E202.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E202 && ~/LPEDC/E202
 ```
 
 **Exercício E203** · ★★★
@@ -2128,7 +2114,7 @@ Visitante: 4 pontos, 4 gols
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/E203.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E203 && ~/LPEDC/04-funcoes/0034-modulos/E203
+gcc ~/LPEDC/E203.c ~/LPEDC/0034-conversao.c -o ~/LPEDC/E203 && ~/LPEDC/E203
 ```
 
 ---
@@ -2162,7 +2148,7 @@ No exemplo, o terreno tem `lado + 3` metros de lado, com `lado = 2`.
 `QUAD_RUIM(lado + 3)` chega ao compilador como `lado + 3 * lado + 3`, que dá
 11. A versão com parênteses chega como `((lado + 3) * (lado + 3))` e dá 25:
 
-<p align="center"><img src="04-funcoes/0035-preprocessador/ideia.svg" alt="Diagrama da ideia: Pré-processador: macros e #ifdef" width="858"></p>
+<p align="center"><img src="0035-ideia.svg" alt="Diagrama da ideia: Pré-processador: macros e #ifdef" width="858"></p>
 
 O mesmo exemplo em C, com mais uma armadilha, a da divisão:
 
@@ -2195,7 +2181,7 @@ O pré-processador não sabe nada de C: só procura o nome da macro e troca. Que
 descobre o erro (quando descobre) é o compilador, olhando um código que você
 não escreveu:
 
-<p align="center"><img src="04-funcoes/0035-preprocessador/fluxograma.svg" alt="Fluxograma: Pré-processador: macros e #ifdef" width="365"></p>
+<p align="center"><img src="0035-fluxograma.svg" alt="Fluxograma: Pré-processador: macros e #ifdef" width="365"></p>
 
 O pré-processador também decide **o que entra** no programa, com a
 **compilação condicional**:
@@ -2239,8 +2225,6 @@ O exemplo A070 usa:
 
 ### Hora de praticar
 
-Arquivos em [`0035-preprocessador/`](04-funcoes/0035-preprocessador/).
-
 **Exemplo A069 · A macro não tem tipo nem é função**
 
 ```c
@@ -2281,7 +2265,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/A069.c -o ~/LPEDC/04-funcoes/0035-preprocessador/A069 && ~/LPEDC/04-funcoes/0035-preprocessador/A069
+gcc ~/LPEDC/A069.c -o ~/LPEDC/A069 && ~/LPEDC/A069
 ```
 
 **Exemplo A070 · Modo depuração com #ifdef**
@@ -2318,7 +2302,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/A070.c -o ~/LPEDC/04-funcoes/0035-preprocessador/A070 && ~/LPEDC/04-funcoes/0035-preprocessador/A070
+gcc ~/LPEDC/A070.c -o ~/LPEDC/A070 && ~/LPEDC/A070
 ```
 
 #### Exercícios
@@ -2347,7 +2331,7 @@ ENTRE(25, 10, 20) = 0
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/E206.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E206 && ~/LPEDC/04-funcoes/0035-preprocessador/E206
+gcc ~/LPEDC/E206.c -o ~/LPEDC/E206 && ~/LPEDC/E206
 ```
 
 **Exercício E207** · ★★☆
@@ -2364,7 +2348,7 @@ Dois combos: R$ 60.00
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/E207.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E207 && ~/LPEDC/04-funcoes/0035-preprocessador/E207
+gcc ~/LPEDC/E207.c -o ~/LPEDC/E207 && ~/LPEDC/E207
 ```
 
 **Exercício E208** · ★★☆
@@ -2395,7 +2379,7 @@ Total: R$ 1050.00
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/E208.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E208 && ~/LPEDC/04-funcoes/0035-preprocessador/E208
+gcc ~/LPEDC/E208.c -o ~/LPEDC/E208 && ~/LPEDC/E208
 ```
 
 **Exercício E209** · ★★★
@@ -2420,7 +2404,7 @@ maior3: m = 19, chamadas = 3
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/E209.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E209 && ~/LPEDC/04-funcoes/0035-preprocessador/E209
+gcc ~/LPEDC/E209.c -o ~/LPEDC/E209 && ~/LPEDC/E209
 ```
 
 ---
@@ -2460,7 +2444,7 @@ Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço, a conta é R$ 42,24.
 Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
 5 + 2 + 0,50 + 0,25 + 0,01:
 
-<p align="center"><img src="04-funcoes/0036-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
+<p align="center"><img src="0036-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o caixa da lanchonete" width="858"></p>
 
 O programa principal, `caixa.c`, usa o módulo do cardápio. O `cardapio.h` e o
 `cardapio.c` estão na pasta do assunto (abra os dois):
@@ -2575,7 +2559,7 @@ O laço dos pedidos termina com o código 0; depois vêm a conta, o pagamento e 
 decisão "pagou o suficiente?". O troco, que parece um laço, é a recursão de
 `dar_troco`:
 
-<p align="center"><img src="04-funcoes/0036-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
+<p align="center"><img src="0036-fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
 
 O exemplo A072 mostra a outra vantagem de dividir em funções: **testar cada
 peça sozinha**. Com a macro `CONFERIR`, definida no próprio arquivo, ele confere o
@@ -2597,14 +2581,12 @@ de biblioteca de testes: uma macro de dez linhas resolve.
 
 ### Hora de praticar
 
-Arquivos em [`0036-juntando-tudo/`](04-funcoes/0036-juntando-tudo/).
-
 **Exemplo A071 · Rachando a conta da mesa sem perder centavo**
 
 ```c
 #include <stdio.h>
 
-#include "cardapio.h"
+#include "0036-cardapio.h"
 
 #define TAXA_SERVICO 10 // por cento
 
@@ -2683,7 +2665,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/A071.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/A071 && ~/LPEDC/04-funcoes/0036-juntando-tudo/A071
+gcc ~/LPEDC/A071.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/A071 && ~/LPEDC/A071
 ```
 
 **Exemplo A072 · Testando as peças do caixa**
@@ -2691,7 +2673,7 @@ gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/A071.c ~/LPEDC/04-funcoes/0036-juntand
 ```c
 #include <stdio.h>
 
-#include "cardapio.h"
+#include "0036-cardapio.h"
 
 int falhas = 0;
 
@@ -2753,7 +2735,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/A072.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/A072 && ~/LPEDC/04-funcoes/0036-juntando-tudo/A072
+gcc ~/LPEDC/A072.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/A072 && ~/LPEDC/A072
 ```
 
 #### Exercícios
@@ -2774,7 +2756,7 @@ Pessoa 3: IMC 17.6 (abaixo)
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E212.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E212 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E212
+gcc ~/LPEDC/E212.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E212 && ~/LPEDC/E212
 ```
 
 **Exercício E213** · ★★☆
@@ -2800,7 +2782,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E213.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E213 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E213
+gcc ~/LPEDC/E213.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E213 && ~/LPEDC/E213
 ```
 
 **Exercício E214** · ★★☆
@@ -2834,7 +2816,7 @@ DOBRO(total + 1) = 12
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E214.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E214 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E214
+gcc ~/LPEDC/E214.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E214 && ~/LPEDC/E214
 ```
 
 **Exercício E215** · ★★★
@@ -2862,7 +2844,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E215.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E215 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E215
+gcc ~/LPEDC/E215.c ~/LPEDC/0036-cardapio.c -o ~/LPEDC/E215 && ~/LPEDC/E215
 ```
 
 ---
@@ -3045,7 +3027,7 @@ volta.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](04-funcoes/lista/); resoluções em `_respostas/04-funcoes/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0401.c a P0430.c, na raiz; resoluções em `_respostas/04-funcoes/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3071,7 +3053,7 @@ Boné: R$ 59.90 -> R$ 53.91 no Pix
 3. Resposta esperada: R$ 269.91, R$ 143.10 e R$ 53.91.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0401.c -o ~/LPEDC/04-funcoes/lista/P0401 && ~/LPEDC/04-funcoes/lista/P0401
+gcc ~/LPEDC/P0401.c -o ~/LPEDC/P0401 && ~/LPEDC/P0401
 ```
 
 ---
@@ -3097,7 +3079,7 @@ Artilheiro com 17 gols
 3. Resposta esperada: Artilheiro com 17 gols.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0402.c -o ~/LPEDC/04-funcoes/lista/P0402 && ~/LPEDC/04-funcoes/lista/P0402
+gcc ~/LPEDC/P0402.c -o ~/LPEDC/P0402 && ~/LPEDC/P0402
 ```
 
 ---
@@ -3124,7 +3106,7 @@ Saída esperada:
 3. Resposta esperada: 120, 3628800 e 1307674368000.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0403.c -o ~/LPEDC/04-funcoes/lista/P0403 && ~/LPEDC/04-funcoes/lista/P0403
+gcc ~/LPEDC/P0403.c -o ~/LPEDC/P0403 && ~/LPEDC/P0403
 ```
 
 ---
@@ -3152,7 +3134,7 @@ Depois: R$ 2520.00
 3. Resposta esperada: Depois: R$ 2520.00.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0404.c -o ~/LPEDC/04-funcoes/lista/P0404 && ~/LPEDC/04-funcoes/lista/P0404
+gcc ~/LPEDC/P0404.c -o ~/LPEDC/P0404 && ~/LPEDC/P0404
 ```
 
 ---
@@ -3176,7 +3158,7 @@ Saída esperada:
 3. Resposta esperada: Área do terreno: 375.0 m2.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0405.c -o ~/LPEDC/04-funcoes/lista/P0405 && ~/LPEDC/04-funcoes/lista/P0405
+gcc ~/LPEDC/P0405.c -o ~/LPEDC/P0405 && ~/LPEDC/P0405
 ```
 
 ---
@@ -3205,7 +3187,7 @@ Partida com 5000 -> recorde 5000
 3. Resposta esperada: 1200, 3400, 3400 e 5000.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0406.c -o ~/LPEDC/04-funcoes/lista/P0406 && ~/LPEDC/04-funcoes/lista/P0406
+gcc ~/LPEDC/P0406.c -o ~/LPEDC/P0406 && ~/LPEDC/P0406
 ```
 
 ---
@@ -3233,7 +3215,7 @@ Base 10: 55 lata(s)
 3. Resposta esperada: 1, 10 e 55.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0407.c -o ~/LPEDC/04-funcoes/lista/P0407 && ~/LPEDC/04-funcoes/lista/P0407
+gcc ~/LPEDC/P0407.c -o ~/LPEDC/P0407 && ~/LPEDC/P0407
 ```
 
 ---
@@ -3259,7 +3241,7 @@ Saída esperada:
 3. Resposta esperada: 1, 4 e 7.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0408.c -o ~/LPEDC/04-funcoes/lista/P0408 && ~/LPEDC/04-funcoes/lista/P0408
+gcc ~/LPEDC/P0408.c -o ~/LPEDC/P0408 && ~/LPEDC/P0408
 ```
 
 ---
@@ -3287,7 +3269,7 @@ Compensa mais: grande
 3. Resposta esperada: R$ 0.0611 e R$ 0.0520; compensa a grande.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0409.c -o ~/LPEDC/04-funcoes/lista/P0409 && ~/LPEDC/04-funcoes/lista/P0409
+gcc ~/LPEDC/P0409.c -o ~/LPEDC/P0409 && ~/LPEDC/P0409
 ```
 
 ---
@@ -3314,7 +3296,7 @@ Saída esperada:
 3. Resposta esperada: as quatro barras acima.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0410.c -o ~/LPEDC/04-funcoes/lista/P0410 && ~/LPEDC/04-funcoes/lista/P0410
+gcc ~/LPEDC/P0410.c -o ~/LPEDC/P0410 && ~/LPEDC/P0410
 ```
 
 ### ★★☆ Para pensar
@@ -3342,7 +3324,7 @@ Saída esperada:
 4. Resposta esperada: 54321, 21 e 7.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0411.c -o ~/LPEDC/04-funcoes/lista/P0411 && ~/LPEDC/04-funcoes/lista/P0411
+gcc ~/LPEDC/P0411.c -o ~/LPEDC/P0411 && ~/LPEDC/P0411
 ```
 
 ---
@@ -3372,7 +3354,7 @@ Próxima saída juntas: 09:00
 4. Resposta esperada: a cada 180 minutos, às 09:00.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0412.c -o ~/LPEDC/04-funcoes/lista/P0412 && ~/LPEDC/04-funcoes/lista/P0412
+gcc ~/LPEDC/P0412.c -o ~/LPEDC/P0412 && ~/LPEDC/P0412
 ```
 
 ---
@@ -3403,7 +3385,7 @@ C(20, 10) = 184756 com 369511 chamadas
 4. Resposta esperada: 19, 503 e 369511 chamadas.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0413.c -o ~/LPEDC/04-funcoes/lista/P0413 && ~/LPEDC/04-funcoes/lista/P0413
+gcc ~/LPEDC/P0413.c -o ~/LPEDC/P0413 && ~/LPEDC/P0413
 ```
 
 ---
@@ -3438,7 +3420,7 @@ Saída esperada:
 3. Resposta esperada: 274 formas para 10 degraus.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0414.c -o ~/LPEDC/04-funcoes/lista/P0414 && ~/LPEDC/04-funcoes/lista/P0414
+gcc ~/LPEDC/P0414.c -o ~/LPEDC/P0414 && ~/LPEDC/P0414
 ```
 
 ---
@@ -3467,7 +3449,7 @@ Total: 4 h 10 min
 3. Resposta esperada: a mesma saída do programa original.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0415.c -o ~/LPEDC/04-funcoes/lista/P0415 && ~/LPEDC/04-funcoes/lista/P0415
+gcc ~/LPEDC/P0415.c -o ~/LPEDC/P0415 && ~/LPEDC/P0415
 ```
 
 ---
@@ -3495,7 +3477,7 @@ Leitura 34.0 -> média 31.0
 3. Resposta esperada: 30.0, 31.0, 30.0 e 31.0.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0416.c -o ~/LPEDC/04-funcoes/lista/P0416 && ~/LPEDC/04-funcoes/lista/P0416
+gcc ~/LPEDC/P0416.c -o ~/LPEDC/P0416 && ~/LPEDC/P0416
 ```
 
 ---
@@ -3532,7 +3514,7 @@ Resultado: 16
 4. Resposta esperada: o desenho acima, Resultado: 16.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0417.c -o ~/LPEDC/04-funcoes/lista/P0417 && ~/LPEDC/04-funcoes/lista/P0417
+gcc ~/LPEDC/P0417.c -o ~/LPEDC/P0417 && ~/LPEDC/P0417
 ```
 
 ---
@@ -3565,7 +3547,7 @@ preco * ICMS = 20.00
 4. Resposta esperada: 120.00 e 20.00 com ESTADO 1.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0418.c -o ~/LPEDC/04-funcoes/lista/P0418 && ~/LPEDC/04-funcoes/lista/P0418
+gcc ~/LPEDC/P0418.c -o ~/LPEDC/P0418 && ~/LPEDC/P0418
 ```
 
 ---
@@ -3594,7 +3576,7 @@ Saída esperada:
 3. Resposta esperada: 3 e 1.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0419.c -o ~/LPEDC/04-funcoes/lista/P0419 && ~/LPEDC/04-funcoes/lista/P0419
+gcc ~/LPEDC/P0419.c -o ~/LPEDC/P0419 && ~/LPEDC/P0419
 ```
 
 ---
@@ -3621,7 +3603,7 @@ Maior dígito de 5: 5
 3. Resposta esperada: 9, 8 e 5.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0420.c -o ~/LPEDC/04-funcoes/lista/P0420 && ~/LPEDC/04-funcoes/lista/P0420
+gcc ~/LPEDC/P0420.c -o ~/LPEDC/P0420 && ~/LPEDC/P0420
 ```
 
 ### ★★★ Desafio
@@ -3666,7 +3648,7 @@ Disco 1: 8, disco 2: 4, disco 3: 2, disco 4: 1
 4. Resposta esperada: 15 movimentos; 8, 4, 2 e 1.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0421.c -o ~/LPEDC/04-funcoes/lista/P0421 && ~/LPEDC/04-funcoes/lista/P0421
+gcc ~/LPEDC/P0421.c -o ~/LPEDC/P0421 && ~/LPEDC/P0421
 ```
 
 ---
@@ -3699,7 +3681,7 @@ Saída esperada:
 4. Resposta esperada: 2026 nos três primeiros; inválido no último.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0422.c -o ~/LPEDC/04-funcoes/lista/P0422 && ~/LPEDC/04-funcoes/lista/P0422
+gcc ~/LPEDC/P0422.c -o ~/LPEDC/P0422 && ~/LPEDC/P0422
 ```
 
 ---
@@ -3732,7 +3714,7 @@ Saída esperada:
 4. Resposta esperada: válido, inválido, inválido.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0423.c -o ~/LPEDC/04-funcoes/lista/P0423 && ~/LPEDC/04-funcoes/lista/P0423
+gcc ~/LPEDC/P0423.c -o ~/LPEDC/P0423 && ~/LPEDC/P0423
 ```
 
 ---
@@ -3766,7 +3748,7 @@ Saída esperada:
 3. formas: conte os p de 2 até n / 2 que funcionam.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0424.c -o ~/LPEDC/04-funcoes/lista/P0424 && ~/LPEDC/04-funcoes/lista/P0424
+gcc ~/LPEDC/P0424.c -o ~/LPEDC/P0424 && ~/LPEDC/P0424
 ```
 
 ---
@@ -3803,7 +3785,7 @@ Pulados: 4 dia(s) de fim de semana e 1 feriado(s)
    feriado.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0425.c -o ~/LPEDC/04-funcoes/lista/P0425 && ~/LPEDC/04-funcoes/lista/P0425
+gcc ~/LPEDC/P0425.c -o ~/LPEDC/P0425 && ~/LPEDC/P0425
 ```
 
 ---
@@ -3834,7 +3816,7 @@ R$ 1,00: 293 forma(s), 15501 chamada(s)
 4. Resposta esperada: 4, 13 e 293 formas.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0426.c -o ~/LPEDC/04-funcoes/lista/P0426 && ~/LPEDC/04-funcoes/lista/P0426
+gcc ~/LPEDC/P0426.c -o ~/LPEDC/P0426 && ~/LPEDC/P0426
 ```
 
 ---
@@ -3878,7 +3860,7 @@ Chamadas de regua: 31
 4. Resposta esperada: 15 marcas e 31 chamadas.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0427.c -o ~/LPEDC/04-funcoes/lista/P0427 && ~/LPEDC/04-funcoes/lista/P0427
+gcc ~/LPEDC/P0427.c -o ~/LPEDC/P0427 && ~/LPEDC/P0427
 ```
 
 ---
@@ -3918,7 +3900,7 @@ Saída esperada:
 4. extenso(n): milhar = n / 1000 e resto = n % 1000; milhar 1 é só "mil".
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0428.c -o ~/LPEDC/04-funcoes/lista/P0428 && ~/LPEDC/04-funcoes/lista/P0428
+gcc ~/LPEDC/P0428.c -o ~/LPEDC/P0428 && ~/LPEDC/P0428
 ```
 
 ---
@@ -3950,7 +3932,7 @@ Total: 11
 4. Resposta esperada: 11 números felizes até 50.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0429.c -o ~/LPEDC/04-funcoes/lista/P0429 && ~/LPEDC/04-funcoes/lista/P0429
+gcc ~/LPEDC/P0429.c -o ~/LPEDC/P0429 && ~/LPEDC/P0429
 ```
 
 ---
@@ -3985,7 +3967,7 @@ Saída esperada:
    antes da chamada recursiva quando ainda sobrar algo.
 
 ```bash
-gcc ~/LPEDC/04-funcoes/lista/P0430.c -o ~/LPEDC/04-funcoes/lista/P0430 && ~/LPEDC/04-funcoes/lista/P0430
+gcc ~/LPEDC/P0430.c -o ~/LPEDC/P0430 && ~/LPEDC/P0430
 ```
 
 ## Questões no estilo da prova
@@ -4298,7 +4280,7 @@ Assinale a alternativa CORRETA:
 
 Considere a função em pseudocódigo a seguir:
 
-![Questão 01 - pseudocódigo](04-funcoes/_fontes/provas-figuras/2017-055/q01-pseudocodigo.png)
+![Questão 01 - pseudocódigo](_fontes/provas-figuras/2017-055/q01-pseudocodigo.png)
 
 Marque a alternativa CORRETA.
 A execução da função Chamada_recursiva(1) faz com que o algoritmo execute indefinidamente. Para este caso, os cinco primeiros valores impressos são:

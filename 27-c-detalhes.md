@@ -35,12 +35,12 @@ Os valores dos comentários são de um PC de 64 bits com Linux e gcc: `int` e
 `unsigned` com 4 bytes, `long` e `size_t` com 8. Compile com o gcc e as flags
 de estudo `-Wall -Wextra`: os avisos pegam vários erros do módulo.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0170](#0170--precedência-e-ordem-de-avaliação) | Precedência e ordem de avaliação | [`0170-precedencia-e-avaliacao/`](27-c-detalhes/0170-precedencia-e-avaliacao/) |
-| [0171](#0171--com-sinal-e-sem-sinal) | Com sinal e sem sinal | [`0171-com-e-sem-sinal/`](27-c-detalhes/0171-com-e-sem-sinal/) |
-| [0172](#0172--vetor-de-tamanho-variável-vla) | Vetor de tamanho variável (VLA) | [`0172-vla/`](27-c-detalhes/0172-vla/) |
-| [0173](#0173--juntando-tudo-o-controle-de-acesso) | Juntando tudo: o controle de acesso | [`0173-juntando-tudo/`](27-c-detalhes/0173-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0170](#0170--precedência-e-ordem-de-avaliação) | Precedência e ordem de avaliação |
+| [0171](#0171--com-sinal-e-sem-sinal) | Com sinal e sem sinal |
+| [0172](#0172--vetor-de-tamanho-variável-vla) | Vetor de tamanho variável (VLA) |
+| [0173](#0173--juntando-tudo-o-controle-de-acesso) | Juntando tudo: o controle de acesso |
 
 ---
 
@@ -89,7 +89,7 @@ mudar e ler sem ordem garantida, é **comportamento indefinido**: `i = i++`,
 O operador de menor precedência fica na raiz da árvore e age por último. No
 frete grátis, é o `?:`:
 
-<p align="center"><img src="27-c-detalhes/0170-precedencia-e-avaliacao/ideia.svg" alt="Diagrama da ideia: Precedência e ordem de avaliação" width="882"></p>
+<p align="center"><img src="0170-ideia.svg" alt="Diagrama da ideia: Precedência e ordem de avaliação" width="882"></p>
 
 O programa mostra cada agrupamento:
 
@@ -132,7 +132,7 @@ int main(void) {
 No fluxograma, o `?:` é uma pergunta escondida; no `certo`, ela olha só o
 `compra`:
 
-<p align="center"><img src="27-c-detalhes/0170-precedencia-e-avaliacao/fluxograma.svg" alt="Fluxograma: Precedência e ordem de avaliação" width="529"></p>
+<p align="center"><img src="0170-fluxograma.svg" alt="Fluxograma: Precedência e ordem de avaliação" width="529"></p>
 
 > [!WARNING]
 > `i = i++` é comportamento indefinido. Com `-Wall`, o gcc avisa:
@@ -154,8 +154,6 @@ No fluxograma, o `?:` é uma pergunta escondida; no `certo`, ela olha só o
 > E `1 + 2 << 1`, que o gcc avisa mas compila?
 
 ### Hora de praticar
-
-Arquivos em [`0170-precedencia-e-avaliacao/`](27-c-detalhes/0170-precedencia-e-avaliacao/).
 
 **Exemplo A339 · O lado direito que nem roda**
 
@@ -224,7 +222,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339
+gcc ~/LPEDC/A339.c -o ~/LPEDC/A339 && ~/LPEDC/A339
 ```
 
 **Exemplo A340 · A ordem que o padrão não promete**
@@ -286,7 +284,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A340.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A340 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A340
+gcc ~/LPEDC/A340.c -o ~/LPEDC/A340 && ~/LPEDC/A340
 ```
 
 #### Exercícios
@@ -316,7 +314,7 @@ x -= 1 + 2 -> x = 2
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1016.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1016 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1016
+gcc ~/LPEDC/E1016.c -o ~/LPEDC/E1016 && ~/LPEDC/E1016
 ```
 
 **Exercício E1017** · ★★☆
@@ -343,7 +341,7 @@ com funcoes: a = 7, b = 10, c = 14
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1017.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1017 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1017
+gcc ~/LPEDC/E1017.c -o ~/LPEDC/E1017 && ~/LPEDC/E1017
 ```
 
 **Exercício E1018** · ★★☆
@@ -369,7 +367,7 @@ desconto à vista: R$ 240
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1018.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1018 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1018
+gcc ~/LPEDC/E1018.c -o ~/LPEDC/E1018 && ~/LPEDC/E1018
 ```
 
 **Exercício E1020** · ★★★
@@ -404,7 +402,7 @@ vetor vazio: indice -1, leituras 0
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1020.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1020 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1020
+gcc ~/LPEDC/E1020.c -o ~/LPEDC/E1020 && ~/LPEDC/E1020
 ```
 
 ---
@@ -441,7 +439,7 @@ cabe no `long`.
 O desenho mostra os 4 bytes do saldo -1 e as duas leituras. A comparação com
 `0u` usa a sem sinal:
 
-<p align="center"><img src="27-c-detalhes/0171-com-e-sem-sinal/ideia.svg" alt="Diagrama da ideia: Com sinal e sem sinal" width="858"></p>
+<p align="center"><img src="0171-ideia.svg" alt="Diagrama da ideia: Com sinal e sem sinal" width="858"></p>
 
 O programa repete as três situações:
 
@@ -479,7 +477,7 @@ int main(void) {
 
 No fluxograma, a pergunta real é sobre 4294967295:
 
-<p align="center"><img src="27-c-detalhes/0171-com-e-sem-sinal/fluxograma.svg" alt="Fluxograma: Com sinal e sem sinal" width="435"></p>
+<p align="center"><img src="0171-fluxograma.svg" alt="Fluxograma: Com sinal e sem sinal" width="435"></p>
 
 > [!WARNING]
 > `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` é sempre
@@ -501,8 +499,6 @@ No fluxograma, a pergunta real é sobre 4294967295:
 > `printf("%d\n", ~x);`.
 
 ### Hora de praticar
-
-Arquivos em [`0171-com-e-sem-sinal/`](27-c-detalhes/0171-com-e-sem-sinal/).
 
 **Exemplo A341 · Descendo com size_t sem cair do zero**
 
@@ -550,7 +546,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/A341.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/A341 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/A341
+gcc ~/LPEDC/A341.c -o ~/LPEDC/A341 && ~/LPEDC/A341
 ```
 
 **Exemplo A342 · Promoção, conversão e deslocamento**
@@ -599,7 +595,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/A342.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/A342 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/A342
+gcc ~/LPEDC/A342.c -o ~/LPEDC/A342 && ~/LPEDC/A342
 ```
 
 #### Exercícios
@@ -625,7 +621,7 @@ vidas: 1 0 255
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1021.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1021 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1021
+gcc ~/LPEDC/E1021.c -o ~/LPEDC/E1021 && ~/LPEDC/E1021
 ```
 
 **Exercício E1023** · ★★☆
@@ -663,7 +659,7 @@ ultimo par em {1, 3}: nenhum
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1023.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1023 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1023
+gcc ~/LPEDC/E1023.c -o ~/LPEDC/E1023 && ~/LPEDC/E1023
 ```
 
 **Exercício E1024** · ★★☆
@@ -694,7 +690,7 @@ restam 0 caracteres
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1024.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1024 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1024
+gcc ~/LPEDC/E1024.c -o ~/LPEDC/E1024 && ~/LPEDC/E1024
 ```
 
 **Exercício E1025** · ★★★
@@ -723,7 +719,7 @@ alterado: nao confere
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1025.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1025 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1025
+gcc ~/LPEDC/E1025.c -o ~/LPEDC/E1025 && ~/LPEDC/E1025
 ```
 
 ---
@@ -758,7 +754,7 @@ Para exigir VLA:
 
 Com 3 alunos e 4 semanas, a planilha tem 12 `int`: 48 bytes na pilha:
 
-<p align="center"><img src="27-c-detalhes/0172-vla/ideia.svg" alt="Diagrama da ideia: Vetor de tamanho variável (VLA)" width="858"></p>
+<p align="center"><img src="0172-ideia.svg" alt="Diagrama da ideia: Vetor de tamanho variável (VLA)" width="858"></p>
 
 O programa lê as dimensões, confere, cria o VLA e o passa às funções:
 
@@ -816,7 +812,7 @@ int main(void) {
 No fluxograma, a validação vem **antes** do VLA: depois da linha, não há como
 desistir nem saber se deu certo:
 
-<p align="center"><img src="27-c-detalhes/0172-vla/fluxograma.svg" alt="Fluxograma: Vetor de tamanho variável (VLA)" width="532"></p>
+<p align="center"><img src="0172-fluxograma.svg" alt="Fluxograma: Vetor de tamanho variável (VLA)" width="532"></p>
 
 > [!WARNING]
 > O VLA não avisa quando falha. A pilha no Linux tem uns **8 MB** (veja com
@@ -835,8 +831,6 @@ desistir nem saber se deu certo:
 > pilha de 8 MB?
 
 ### Hora de praticar
-
-Arquivos em [`0172-vla/`](27-c-detalhes/0172-vla/).
 
 **Exemplo A343 · O sizeof que é calculado na hora**
 
@@ -884,7 +878,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/A343.c -o ~/LPEDC/27-c-detalhes/0172-vla/A343 && ~/LPEDC/27-c-detalhes/0172-vla/A343
+gcc ~/LPEDC/A343.c -o ~/LPEDC/A343 && ~/LPEDC/A343
 ```
 
 **Exemplo A344 · A matriz grande vai para o heap**
@@ -936,7 +930,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/A344.c -o ~/LPEDC/27-c-detalhes/0172-vla/A344 && ~/LPEDC/27-c-detalhes/0172-vla/A344
+gcc ~/LPEDC/A344.c -o ~/LPEDC/A344 && ~/LPEDC/A344
 ```
 
 #### Exercícios
@@ -955,7 +949,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/E1027.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1027 && ~/LPEDC/27-c-detalhes/0172-vla/E1027
+gcc ~/LPEDC/E1027.c -o ~/LPEDC/E1027 && ~/LPEDC/E1027
 ```
 
 **Exercício E1029** · ★★☆
@@ -986,7 +980,7 @@ transposta (3 x 2):
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/E1029.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1029 && ~/LPEDC/27-c-detalhes/0172-vla/E1029
+gcc ~/LPEDC/E1029.c -o ~/LPEDC/E1029 && ~/LPEDC/E1029
 ```
 
 **Exercício E1030** · ★★☆
@@ -1003,7 +997,7 @@ n = 3000000, media = R$ 50.00
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/E1030.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1030 && ~/LPEDC/27-c-detalhes/0172-vla/E1030
+gcc ~/LPEDC/E1030.c -o ~/LPEDC/E1030 && ~/LPEDC/E1030
 ```
 
 **Exercício E1031** · ★★★
@@ -1036,7 +1030,7 @@ loja 2: A = R$ 62, B = R$ 52 -> melhor B
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/E1031.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1031 && ~/LPEDC/27-c-detalhes/0172-vla/E1031
+gcc ~/LPEDC/E1031.c -o ~/LPEDC/E1031 && ~/LPEDC/E1031
 ```
 
 ---
@@ -1065,7 +1059,7 @@ porta para o `-1 > 0u`. A planilha é um **VLA** `bool acesso[n][QTD_PERMS]`.
 A Carla é membro (`00111`: imprimir, reunião, entrar) com a impressora
 bloqueada. O desenho faz a conta bit a bit:
 
-<p align="center"><img src="27-c-detalhes/0173-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o controle de acesso" width="858"></p>
+<p align="center"><img src="0173-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o controle de acesso" width="858"></p>
 
 O programa monta a planilha e mostra quem pode usar a reunião **e** imprimir:
 
@@ -1151,7 +1145,7 @@ int main(void) {
 
 O fluxograma é um laço pela equipe com uma comparação de bits por pessoa:
 
-<p align="center"><img src="27-c-detalhes/0173-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o controle de acesso" width="553"></p>
+<p align="center"><img src="0173-fluxograma.svg" alt="Fluxograma: Juntando tudo: o controle de acesso" width="553"></p>
 
 > [!WARNING]
 > `efetivas(u) & mascara == mascara` é lido como `efetivas(u) & (mascara ==
@@ -1165,8 +1159,6 @@ O fluxograma é um laço pela equipe com uma comparação de bits por pessoa:
 > dela na planilha?
 
 ### Hora de praticar
-
-Arquivos em [`0173-juntando-tudo/`](27-c-detalhes/0173-juntando-tudo/).
 
 **Exemplo A345 · Auditoria: quem fugiu do pacote do papel**
 
@@ -1249,7 +1241,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/A345.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/A345 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/A345
+gcc ~/LPEDC/A345.c -o ~/LPEDC/A345 && ~/LPEDC/A345
 ```
 
 **Exemplo A346 · O que a equipe inteira tem**
@@ -1324,7 +1316,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/A346.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/A346 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/A346
+gcc ~/LPEDC/A346.c -o ~/LPEDC/A346 && ~/LPEDC/A346
 ```
 
 #### Exercícios
@@ -1355,7 +1347,7 @@ tem R|I? nao
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1033.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1033 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1033
+gcc ~/LPEDC/E1033.c -o ~/LPEDC/E1033 && ~/LPEDC/E1033
 ```
 
 **Exercício E1035** · ★★☆
@@ -1381,7 +1373,7 @@ tem E e R? sim
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1035.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1035 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1035
+gcc ~/LPEDC/E1035.c -o ~/LPEDC/E1035 && ~/LPEDC/E1035
 ```
 
 **Exercício E1036** · ★★☆
@@ -1409,7 +1401,7 @@ Carla: usou E----, nunca usou -R---
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1036.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1036 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1036
+gcc ~/LPEDC/E1036.c -o ~/LPEDC/E1036 && ~/LPEDC/E1036
 ```
 
 **Exercício E1037** · ★★★
@@ -1441,7 +1433,7 @@ pedido -----: nenhum (falta ao visitante: -----)
 ```
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1037.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1037 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1037
+gcc ~/LPEDC/E1037.c -o ~/LPEDC/E1037 && ~/LPEDC/E1037
 ```
 
 ---
@@ -1588,7 +1580,7 @@ com `r = -2`.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](27-c-detalhes/lista/); resoluções em `_respostas/27-c-detalhes/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2701.c a P2730.c, na raiz; resoluções em `_respostas/27-c-detalhes/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -1624,7 +1616,7 @@ Saída esperada:
 3. No printf, o % sozinho se escreve %%; o char da operação sai com %c.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2701.c -o ~/LPEDC/27-c-detalhes/lista/P2701 && ~/LPEDC/27-c-detalhes/lista/P2701
+gcc ~/LPEDC/P2701.c -o ~/LPEDC/P2701 && ~/LPEDC/P2701
 ```
 
 ---
@@ -1651,7 +1643,7 @@ Saída esperada:
 3. Com while comum, o 0 daria 0 dígitos.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2702.c -o ~/LPEDC/27-c-detalhes/lista/P2702 && ~/LPEDC/27-c-detalhes/lista/P2702
+gcc ~/LPEDC/P2702.c -o ~/LPEDC/P2702 && ~/LPEDC/P2702
 ```
 
 ---
@@ -1678,7 +1670,7 @@ bandeira: 11% do preço do kWh
 3. 10 / 90 em inteiros é 0: multiplique por 100 antes de dividir.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2703.c -o ~/LPEDC/27-c-detalhes/lista/P2703 && ~/LPEDC/27-c-detalhes/lista/P2703
+gcc ~/LPEDC/P2703.c -o ~/LPEDC/P2703 && ~/LPEDC/P2703
 ```
 
 ---
@@ -1716,7 +1708,7 @@ inverter 7 -> 10101100
 3. Cada operação parte do x original: as funções não mudam x.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2704.c -o ~/LPEDC/27-c-detalhes/lista/P2704 && ~/LPEDC/27-c-detalhes/lista/P2704
+gcc ~/LPEDC/P2704.c -o ~/LPEDC/P2704 && ~/LPEDC/P2704
 ```
 
 ---
@@ -1754,7 +1746,7 @@ Saída esperada:
    unsigned vai com %u.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2705.c -o ~/LPEDC/27-c-detalhes/lista/P2705 && ~/LPEDC/27-c-detalhes/lista/P2705
+gcc ~/LPEDC/P2705.c -o ~/LPEDC/P2705 && ~/LPEDC/P2705
 ```
 
 ---
@@ -1778,7 +1770,7 @@ depois: 12 25 30
 2. Dentro de ordenar3, a, b e c já são ponteiros: trocar(a, b), sem &.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2706.c -o ~/LPEDC/27-c-detalhes/lista/P2706 && ~/LPEDC/27-c-detalhes/lista/P2706
+gcc ~/LPEDC/P2706.c -o ~/LPEDC/P2706 && ~/LPEDC/P2706
 ```
 
 ---
@@ -1815,7 +1807,7 @@ total da feira: R$ 40.80
 3. O laço continua enquanto o fscanf devolver 2.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2707.c -o ~/LPEDC/27-c-detalhes/lista/P2707 && ~/LPEDC/27-c-detalhes/lista/P2707
+gcc ~/LPEDC/P2707.c -o ~/LPEDC/P2707 && ~/LPEDC/P2707
 ```
 
 ---
@@ -1845,7 +1837,7 @@ QUA + 2 = SEX (5)
 2. O enum começa em 0: QUA vale 3, e QUA + 2 vale 5, que é SEX.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2708.c -o ~/LPEDC/27-c-detalhes/lista/P2708 && ~/LPEDC/27-c-detalhes/lista/P2708
+gcc ~/LPEDC/P2708.c -o ~/LPEDC/P2708 && ~/LPEDC/P2708
 ```
 
 ---
@@ -1875,7 +1867,7 @@ válidas: 3, soma dos quadrados: 174
 3. Teste a macro com QUADRADO(1 + 2): tem que dar 9, não 5.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2709.c -o ~/LPEDC/27-c-detalhes/lista/P2709 && ~/LPEDC/27-c-detalhes/lista/P2709
+gcc ~/LPEDC/P2709.c -o ~/LPEDC/P2709 && ~/LPEDC/P2709
 ```
 
 ---
@@ -1900,7 +1892,7 @@ mais quente: 35 no dia 4
 2. Calcule o tamanho com sizeof v / sizeof v[0] em vez de escrever 7.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2710.c -o ~/LPEDC/27-c-detalhes/lista/P2710 && ~/LPEDC/27-c-detalhes/lista/P2710
+gcc ~/LPEDC/P2710.c -o ~/LPEDC/P2710 && ~/LPEDC/P2710
 ```
 
 ### ★★☆ Para pensar
@@ -1938,7 +1930,7 @@ valor em estoque: R$ 148.00
 2. O valor é a soma de qtd * preco: 7 * 18 + 4 * 5.5 + 0 * 6.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2711.c -o ~/LPEDC/27-c-detalhes/lista/P2711 && ~/LPEDC/27-c-detalhes/lista/P2711
+gcc ~/LPEDC/P2711.c -o ~/LPEDC/P2711 && ~/LPEDC/P2711
 ```
 
 ---
@@ -1978,7 +1970,7 @@ sizeof(Celula) = 24, sizeof da union = 16
 4. sizeof c.v mede só a union.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2712.c -o ~/LPEDC/27-c-detalhes/lista/P2712 && ~/LPEDC/27-c-detalhes/lista/P2712
+gcc ~/LPEDC/P2712.c -o ~/LPEDC/P2712 && ~/LPEDC/P2712
 ```
 
 ---
@@ -2012,7 +2004,7 @@ tabuleiro 2: vencedor -
 3. Inicialize com strings: char t1[3][3] = {{'X','O','.'}, ...}.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2713.c -o ~/LPEDC/27-c-detalhes/lista/P2713 && ~/LPEDC/27-c-detalhes/lista/P2713
+gcc ~/LPEDC/P2713.c -o ~/LPEDC/P2713 && ~/LPEDC/P2713
 ```
 
 ---
@@ -2042,7 +2034,7 @@ Saída esperada:
 3. Guarde os bytes em unsigned char e mostre com 0x%02X.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2714.c -o ~/LPEDC/27-c-detalhes/lista/P2714 && ~/LPEDC/27-c-detalhes/lista/P2714
+gcc ~/LPEDC/P2714.c -o ~/LPEDC/P2714 && ~/LPEDC/P2714
 ```
 
 ---
@@ -2079,7 +2071,7 @@ compara(5, 5) = 0
    direto.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2715.c -o ~/LPEDC/27-c-detalhes/lista/P2715 && ~/LPEDC/27-c-detalhes/lista/P2715
+gcc ~/LPEDC/P2715.c -o ~/LPEDC/P2715 && ~/LPEDC/P2715
 ```
 
 ---
@@ -2108,7 +2100,7 @@ mais distantes: 0 e 3 (45 km)
 3. Cada número com %3d.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2716.c -o ~/LPEDC/27-c-detalhes/lista/P2716 && ~/LPEDC/27-c-detalhes/lista/P2716
+gcc ~/LPEDC/P2716.c -o ~/LPEDC/P2716 && ~/LPEDC/P2716
 ```
 
 ---
@@ -2143,7 +2135,7 @@ aprovado: Caio (7.0)
 4. sizeof(Aluno) = 16 + 4 = 20 bytes.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2717.c -o ~/LPEDC/27-c-detalhes/lista/P2717 && ~/LPEDC/27-c-detalhes/lista/P2717
+gcc ~/LPEDC/P2717.c -o ~/LPEDC/P2717 && ~/LPEDC/P2717
 ```
 
 ---
@@ -2173,7 +2165,7 @@ bloqueios: 2
 3. Comece em TRAVADA.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2718.c -o ~/LPEDC/27-c-detalhes/lista/P2718 && ~/LPEDC/27-c-detalhes/lista/P2718
+gcc ~/LPEDC/P2718.c -o ~/LPEDC/P2718 && ~/LPEDC/P2718
 ```
 
 ---
@@ -2207,7 +2199,7 @@ ordenado: 3 7 19 42 88
 3. Na ordenação, troque *maior(ini, fim) com *(fim - 1) e faça fim--.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2719.c -o ~/LPEDC/27-c-detalhes/lista/P2719 && ~/LPEDC/27-c-detalhes/lista/P2719
+gcc ~/LPEDC/P2719.c -o ~/LPEDC/P2719 && ~/LPEDC/P2719
 ```
 
 ---
@@ -2249,7 +2241,7 @@ TESTA(flags, 7 - 1) = 0
 3. Guarde de volta com cast: flags = (uint8_t)LIGA(flags, 1 + 1);
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2720.c -o ~/LPEDC/27-c-detalhes/lista/P2720 && ~/LPEDC/27-c-detalhes/lista/P2720
+gcc ~/LPEDC/P2720.c -o ~/LPEDC/P2720 && ~/LPEDC/P2720
 ```
 
 ### ★★★ Desafio
@@ -2283,7 +2275,7 @@ Saída esperada:
 3. Um dígito c vira número com c - '0'. Espaço, pule.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2721.c -o ~/LPEDC/27-c-detalhes/lista/P2721 && ~/LPEDC/27-c-detalhes/lista/P2721
+gcc ~/LPEDC/P2721.c -o ~/LPEDC/P2721 && ~/LPEDC/P2721
 ```
 
 ---
@@ -2324,7 +2316,7 @@ girado 0: 00011101 (0x1D)
    volta com (uint8_t)(...).
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2722.c -o ~/LPEDC/27-c-detalhes/lista/P2722 && ~/LPEDC/27-c-detalhes/lista/P2722
+gcc ~/LPEDC/P2722.c -o ~/LPEDC/P2722 && ~/LPEDC/P2722
 ```
 
 ---
@@ -2367,7 +2359,7 @@ Saída esperada:
    x - 4096.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2723.c -o ~/LPEDC/27-c-detalhes/lista/P2723 && ~/LPEDC/27-c-detalhes/lista/P2723
+gcc ~/LPEDC/P2723.c -o ~/LPEDC/P2723 && ~/LPEDC/P2723
 ```
 
 ---
@@ -2406,7 +2398,7 @@ triângulo 3.0, 4.0, 5.0: 6.00
 3. Use acos(-1.0) para o pi; o rodar já liga a libm (-lm).
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2724.c -o ~/LPEDC/27-c-detalhes/lista/P2724 -lm && ~/LPEDC/27-c-detalhes/lista/P2724
+gcc ~/LPEDC/P2724.c -o ~/LPEDC/P2724 -lm && ~/LPEDC/P2724
 ```
 
 ---
@@ -2454,7 +2446,7 @@ girada (3 x 2):
 3. VLA não aceita = {...}: preencha a 2 x 3 com a[i][j] = i * c + j + 1.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2725.c -o ~/LPEDC/27-c-detalhes/lista/P2725 && ~/LPEDC/27-c-detalhes/lista/P2725
+gcc ~/LPEDC/P2725.c -o ~/LPEDC/P2725 && ~/LPEDC/P2725
 ```
 
 ---
@@ -2489,7 +2481,7 @@ por nome: Fast 7, Nacional 10, Paysandu 12, Remo 10
 3. Para "mais pontos primeiro", devolva y->pontos - x->pontos.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2726.c -o ~/LPEDC/27-c-detalhes/lista/P2726 && ~/LPEDC/27-c-detalhes/lista/P2726
+gcc ~/LPEDC/P2726.c -o ~/LPEDC/P2726 && ~/LPEDC/P2726
 ```
 
 ---
@@ -2524,7 +2516,7 @@ bytes: 39
 3. A linha em branco conta como linha, mas não tem palavra.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2727.c -o ~/LPEDC/27-c-detalhes/lista/P2727 && ~/LPEDC/27-c-detalhes/lista/P2727
+gcc ~/LPEDC/P2727.c -o ~/LPEDC/P2727 && ~/LPEDC/P2727
 ```
 
 ---
@@ -2555,7 +2547,7 @@ vetor de bits: 16 bytes
    p * p + p, ... até 100.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2728.c -o ~/LPEDC/27-c-detalhes/lista/P2728 && ~/LPEDC/27-c-detalhes/lista/P2728
+gcc ~/LPEDC/P2728.c -o ~/LPEDC/P2728 && ~/LPEDC/P2728
 ```
 
 ---
@@ -2587,7 +2579,7 @@ vendas sem nenhum dia: 0 dias
    não pode mostrar nada nem ler fora do vetor.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2729.c -o ~/LPEDC/27-c-detalhes/lista/P2729 && ~/LPEDC/27-c-detalhes/lista/P2729
+gcc ~/LPEDC/P2729.c -o ~/LPEDC/P2729 && ~/LPEDC/P2729
 ```
 
 ---
@@ -2637,7 +2629,7 @@ contestadas: 1 (R$ 89.90)
    com v / 100.0 e %.2f.
 
 ```bash
-gcc ~/LPEDC/27-c-detalhes/lista/P2730.c -o ~/LPEDC/27-c-detalhes/lista/P2730 && ~/LPEDC/27-c-detalhes/lista/P2730
+gcc ~/LPEDC/P2730.c -o ~/LPEDC/P2730 && ~/LPEDC/P2730
 ```
 
 ## Questões no estilo da prova

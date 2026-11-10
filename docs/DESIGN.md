@@ -28,6 +28,6 @@ export const fluxograma = { nos: [[id, tipo, texto]], setas: [[de, para, rotulo?
   - caixas comuns `{ id, x, y, w?, h?, cor, rotulo?, texto: [linhas] }` e `forma: 'losango'`
 - Coordenadas: o quadro tem ~1600 px de largura útil (x de 100 a 1500).
 - Depois de gerar, **olhe o desenho**: `cd _gerador && node ver.mjs
-  ../01-fundamentos/0002-variaveis/ideia.svg` gera um PNG em `/tmp/lpedc-ver/`;
+  ../0002-ideia.svg` gera um PNG em `/tmp/lpedc-ver/`;
   abra o PNG com a ferramenta Read e confira sobreposição, texto cortado e
   setas. Ajuste as coordenadas até ficar limpo.

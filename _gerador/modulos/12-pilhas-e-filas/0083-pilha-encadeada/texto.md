@@ -18,8 +18,8 @@ pois só o ponteiro de entrada muda. Remover do fim exigiria achar o
   o nó velho;
 - **vazia** = `topo == NULL`.
 
-O [`pilha.h`](0083-pilha-encadeada/pilha.h) é **idêntico** ao do 0082; só o
-[`pilha.c`](0083-pilha-encadeada/pilha.c) muda, e o programa do delivery roda
+O [`pilha.h`](0083-pilha.h) é **idêntico** ao do 0082; só o
+[`pilha.c`](0083-pilha.c) muda, e o programa do delivery roda
 sem alteração. A struct agora guarda um ponteiro:
 
 ```c

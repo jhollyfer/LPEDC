@@ -49,7 +49,7 @@ mostra só o pedaço do `.c` que importa. Compile junto os `.c` de apoio da
 pasta, como `vermelhopreto.c`:
 
 ```bash
-gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353 -lm && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353
+gcc ~/LPEDC/A353.c ~/LPEDC/0177-vermelhopreto.c -o ~/LPEDC/A353 -lm && ~/LPEDC/A353
 ```
 
 As convenções são as do Cormen: **altura conta arestas** (folha tem altura 0,

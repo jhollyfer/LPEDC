@@ -26,6 +26,9 @@ import { desenharLegenda } from './tipos/legenda.mjs'
 const AQUI = dirname(fileURLToPath(import.meta.url))
 const RAIZ = join(AQUI, '..')
 const filtro = process.argv[2] ?? ''
+// arquivos de cada assunto (exemplos, exercícios e .c/.h de apoio), todos na raiz
+const ARQUIVOS = JSON.parse(readFileSync(join(AQUI, 'arquivos.json'), 'utf8'))
+const assuntoDe = (nome) => Object.keys(ARQUIVOS).find((n) => [...ARQUIVOS[n].A, ...ARQUIVOS[n].E].includes(nome))
 
 // mesma regra do GitHub para o link de um título
 const ancora = (titulo) =>
@@ -43,13 +46,9 @@ const imagem = (src, alt, svg) => {
 
 // "Hora de praticar": cada exemplo (A) com título, código e comando; cada
 // exercício (E) com nível, enunciado, dicas e comando
-// o .c do exemplo mais os .c de apoio da pasta (que não se chamam A000.c, E000.c nem P0000.c);
-// -lm entra quando algum deles inclui math.h
+// o .c do exemplo mais os .c de apoio do assunto (NNNN-nome.c); -lm entra quando algum inclui math.h
 const comando = (caminho) => {
-  const pasta = dirname(caminho)
-  const apoio = readdirSync(join(RAIZ, pasta))
-    .filter((f) => f.endsWith('.c') && !/^[AEP]\d{3,4}\.c$/.test(f))
-    .map((f) => `${pasta}/${f}`)
+  const apoio = (ARQUIVOS[assuntoDe(caminho)]?.apoio ?? []).filter((f) => f.endsWith('.c'))
   const fontes = [caminho, ...apoio]
   const matematica = fontes.some((f) => readFileSync(join(RAIZ, f), 'utf8').includes('math.h'))
   const base = caminho.replace(/\.c$/, '')
@@ -112,37 +111,32 @@ const exercicio = (caminho, nome) => {
 }
 
 const pratique = (modulo, pasta) => {
-  const arquivos = readdirSync(join(RAIZ, modulo, pasta)).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
-  const exemplos = arquivos.filter((a) => /^A\d{3,4}\.c$/.test(a))
-  const exercicios = arquivos.filter((a) => /^E\d{3,4}\.c$/.test(a))
+  const { A: exemplos, E: exercicios } = ARQUIVOS[pasta.slice(0, 4)]
   return [
     '### Hora de praticar',
     '',
-    `Arquivos em [\`${pasta}/\`](${pasta}/).`,
-    '',
-    exemplos.map((a) => exemplo(`${modulo}/${pasta}/${a}`, a).join('\n')).join('\n\n'),
+    exemplos.map((a) => exemplo(a, a).join('\n')).join('\n\n'),
     '',
     '#### Exercícios',
     '',
-    exercicios.map((a) => exercicio(`${modulo}/${pasta}/${a}`, a).join('\n')).join('\n\n'),
+    exercicios.map((a) => exercicio(a, a).join('\n')).join('\n\n'),
   ].join('\n')
 }
 
 // Lista prática do módulo: <modulo>/lista/P????.c vira uma seção do .md do
 // módulo, antes das questões da prova.
 const lista = (modulo) => {
-  const pasta = join(RAIZ, modulo, 'lista')
-  if (!existsSync(pasta)) return null
-  const arquivos = readdirSync(pasta)
-    .filter((a) => /^P\d{4}\.c$/.test(a))
+  const numero = modulo.slice(0, 2)
+  const arquivos = readdirSync(RAIZ)
+    .filter((a) => new RegExp(`^P${numero}\\d{2}\\.c$`).test(a))
     .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))
   if (!arquivos.length) return null
   const niveis = [['★☆☆', 'Aquecimento'], ['★★☆', 'Para pensar'], ['★★★', 'Desafio']]
-  const blocos = arquivos.map((a) => exercicio(`${modulo}/lista/${a}`, a))
+  const blocos = arquivos.map((a) => exercicio(a, a))
   const partes = [
     '## Lista de exercícios práticos',
     '',
-    `${arquivos.length} exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [\`lista/\`](lista/); resoluções em \`_respostas/${modulo}/lista/\`.`,
+    `${arquivos.length} exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos ${arquivos[0]} a ${arquivos.at(-1)}, na raiz; resoluções em \`_respostas/${modulo}/lista/\`.`,
   ]
   for (const [estrelas, nomeNivel] of niveis) {
     const doNivel = blocos.filter((md) => md[0].includes(estrelas))
@@ -152,36 +146,9 @@ const lista = (modulo) => {
   return partes.join('\n') + '\n'
 }
 
-// O texto é escrito como se estivesse dentro da pasta do módulo (0002-x/ideia.svg,
-// ../legenda.svg); como o .md mora na raiz, cada link relativo ganha o prefixo.
-const linksDaRaiz = (md, modulo) => {
-  const ajusta = (alvo) => (/^(https?:|mailto:|#|\/|~)/.test(alvo) ? alvo : posix.normalize(`${modulo}/${alvo}`))
-  const trecho = (t) =>
-    t
-      .replace(/\]\(([^)\s]+)\)/g, (_, alvo) => `](${ajusta(alvo)})`)
-      .replace(/src="([^"]+)"/g, (_, alvo) => `src="${ajusta(alvo)}"`)
-  // código (bloco ``` ou `inline`) fica intacto: f[0](3) não é link
-  let emBloco = false
-  return md
-    .split('\n')
-    .map((linha) => {
-      if (/^\s*```/.test(linha)) {
-        emBloco = !emBloco
-        return linha
-      }
-      if (emBloco) return linha
-      return linha
-        .split('`')
-        .map((parte, i) => (i % 2 ? parte : trecho(parte)))
-        .join('`')
-    })
-    .join('\n')
-}
-
 const pastaModulos = join(AQUI, 'modulos')
 for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).sort()) {
   const origem = join(pastaModulos, modulo)
-  const destino = join(RAIZ, modulo)
   const assuntos = readdirSync(origem)
     .filter((n) => /^\d{4}-/.test(n))
     .sort()
@@ -195,7 +162,7 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
   const partes = []
 
   for (const pasta of assuntos) {
-    if (!existsSync(join(destino, pasta))) throw new Error(`pasta ${modulo}/${pasta} não encontrada`)
+    if (!ARQUIVOS[pasta.slice(0, 4)]) throw new Error(`assunto ${pasta} não está em arquivos.json`)
     const texto = readFileSync(join(origem, pasta, 'texto.md'), 'utf8').trim()
     const titulo = texto.match(/^## (.+)$/m)?.[1]
     if (!titulo) throw new Error(`${pasta}/texto.md precisa começar com "## título"`)
@@ -205,16 +172,16 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
     const svgIdeia = desenharIdeia(`Ideia: ${assunto}`, ideia)
     const svgFluxo = desenharFluxograma(`Fluxograma: ${assunto}`, fluxograma)
     if (desenharTudo || pasta.includes(filtro)) {
-      writeFileSync(join(destino, pasta, 'ideia.svg'), svgIdeia)
-      writeFileSync(join(destino, pasta, 'fluxograma.svg'), svgFluxo)
-      console.log(`ok  ${modulo}/${pasta}/ideia.svg e fluxograma.svg`)
+      writeFileSync(join(RAIZ, `${pasta.slice(0, 4)}-ideia.svg`), svgIdeia)
+      writeFileSync(join(RAIZ, `${pasta.slice(0, 4)}-fluxograma.svg`), svgFluxo)
+      console.log(`ok  ${pasta.slice(0, 4)}-ideia.svg e fluxograma.svg`)
     }
 
-    indice.push(`| [${numero}](#${ancora(titulo)}) | ${assunto.replaceAll('|', '\\|')} | [\`${pasta}/\`](${pasta}/) |`)
+    indice.push(`| [${numero}](#${ancora(titulo)}) | ${assunto.replaceAll('|', '\\|')} |`)
     partes.push(
       texto
-        .replace('{{ideia}}', () => imagem(`${pasta}/ideia.svg`, `Diagrama da ideia: ${assunto}`, svgIdeia))
-        .replace('{{fluxograma}}', () => imagem(`${pasta}/fluxograma.svg`, `Fluxograma: ${assunto}`, svgFluxo))
+        .replace('{{ideia}}', () => imagem(`${pasta.slice(0, 4)}-ideia.svg`, `Diagrama da ideia: ${assunto}`, svgIdeia))
+        .replace('{{fluxograma}}', () => imagem(`${pasta.slice(0, 4)}-fluxograma.svg`, `Fluxograma: ${assunto}`, svgFluxo))
         .replace('{{pratique}}', () => pratique(modulo, pasta)),
     )
   }
@@ -226,10 +193,10 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
     texto = alvo ? texto.replace(alvo, `${secaoLista}\n${alvo}`) : `${texto.trimEnd()}\n\n${secaoLista}`
   }
   texto = texto
-    .replace('{{indice}}', () => ['| # | Assunto | Pasta |', '| --- | --- | --- |', ...indice].join('\n'))
+    .replace('{{indice}}', () => ['| # | Assunto |', '| --- | --- |', ...indice].join('\n'))
     .replace('{{assuntos}}', () => partes.join('\n\n---\n\n'))
   const aviso = `<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/${modulo}/ e rode: cd _gerador && npm run gerar -->\n\n`
-  writeFileSync(join(RAIZ, `${modulo}.md`), linksDaRaiz(aviso + texto, modulo))
+  writeFileSync(join(RAIZ, `${modulo}.md`), aviso + texto)
   console.log(`ok  ${modulo}.md`)
 }
 writeFileSync(join(RAIZ, 'legenda.svg'), desenharLegenda())

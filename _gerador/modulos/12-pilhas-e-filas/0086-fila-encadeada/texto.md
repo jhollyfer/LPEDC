@@ -15,8 +15,8 @@ A fila **sai pelo início e entra pelo fim**. O contrário não funciona bem num
 lista simples: remover o último exige o penúltimo, e o nó não sabe quem vem
 antes.
 
-O [`fila.h`](0086-fila-encadeada/fila.h) é o do 0085. O
-[`fila.c`](0086-fila-encadeada/fila.c) guarda dois ponteiros, e os casos de
+O [`fila.h`](0086-fila.h) é o do 0085. O
+[`fila.c`](0086-fila.c) guarda dois ponteiros, e os casos de
 borda moram neles:
 
 ```c

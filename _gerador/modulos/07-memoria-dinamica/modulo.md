@@ -47,7 +47,7 @@ sudo apt install valgrind      # Debian / Ubuntu
 Rode qualquer arquivo com ele assim (sem AddressSanitizer):
 
 ```bash
-gcc -g ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114 && valgrind ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114
+gcc -g ~/LPEDC/A114.c -o ~/LPEDC/A114 && valgrind ~/LPEDC/A114
 ```
 
 A regra do módulo: **todo `malloc` tem um `free`, e nenhum ponteiro é usado

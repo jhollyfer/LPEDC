@@ -36,15 +36,15 @@ não confere: índice e tamanho de string. Diante de `stack-buffer-overflow` ou
 `index out of bounds`, leia a linha indicada: quase sempre é um `<=` no lugar
 de `<` ou um `'\0'` sem lugar.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0037](#0037--vetores) | Vetores | [`0037-vetores/`](05-vetores-e-strings/0037-vetores/) |
-| [0038](#0038--vetores-e-funções) | Vetores e funções | [`0038-vetores-e-funcoes/`](05-vetores-e-strings/0038-vetores-e-funcoes/) |
-| [0039](#0039--matrizes) | Matrizes | [`0039-matrizes/`](05-vetores-e-strings/0039-matrizes/) |
-| [0040](#0040--caracteres) | Caracteres | [`0040-caracteres/`](05-vetores-e-strings/0040-caracteres/) |
-| [0041](#0041--strings) | Strings | [`0041-strings/`](05-vetores-e-strings/0041-strings/) |
-| [0042](#0042--lendo-strings) | Lendo strings | [`0042-lendo-strings/`](05-vetores-e-strings/0042-lendo-strings/) |
-| [0043](#0043--juntando-tudo) | Juntando tudo | [`0043-juntando-tudo/`](05-vetores-e-strings/0043-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0037](#0037--vetores) | Vetores |
+| [0038](#0038--vetores-e-funções) | Vetores e funções |
+| [0039](#0039--matrizes) | Matrizes |
+| [0040](#0040--caracteres) | Caracteres |
+| [0041](#0041--strings) | Strings |
+| [0042](#0042--lendo-strings) | Lendo strings |
+| [0043](#0043--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -90,7 +90,7 @@ copia gaveta por gaveta, num laço.
 No exemplo, são 7 gavetas, uma por dia. O laço soma e guarda a maior. O
 recorde está na gaveta 5, o dia 6 para quem lê o relatório:
 
-<p align="center"><img src="05-vetores-e-strings/0037-vetores/ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
+<p align="center"><img src="0037-ideia.svg" alt="Diagrama da ideia: Vetores" width="858"></p>
 
 O `i` vai de 0 a 6. O `maior` começa com `passos[0]`, e não com 0:
 
@@ -129,7 +129,7 @@ int main(void) {
 O caminho junta o acumulador e o maior/menor do assunto 0025, com os valores
 vindos do vetor. A pergunta `i < 7?` impede o laço de passar da última gaveta:
 
-<p align="center"><img src="05-vetores-e-strings/0037-vetores/fluxograma.svg" alt="Fluxograma: Vetores" width="535"></p>
+<p align="center"><img src="0037-fluxograma.svg" alt="Fluxograma: Vetores" width="535"></p>
 
 > [!WARNING]
 > **O C não confere o índice.** Com `int v[7]`, escrever `v[7] = 0` ou ler
@@ -151,8 +151,6 @@ vindos do vetor. A pergunta `i < 7?` impede o laço de passar da última gaveta:
 > "maior" mostrado? Por que começar por `v[0]` resolve?
 
 ### Hora de praticar
-
-Arquivos em [`0037-vetores/`](05-vetores-e-strings/0037-vetores/).
 
 **Exemplo A073 · O hidrômetro e a gaveta vizinha**
 
@@ -197,7 +195,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/A073.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/A073 && ~/LPEDC/05-vetores-e-strings/0037-vetores/A073
+gcc ~/LPEDC/A073.c -o ~/LPEDC/A073 && ~/LPEDC/A073
 ```
 
 **Exemplo A074 · Inicializar, contar e copiar**
@@ -238,7 +236,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/A074.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/A074 && ~/LPEDC/05-vetores-e-strings/0037-vetores/A074
+gcc ~/LPEDC/A074.c -o ~/LPEDC/A074 && ~/LPEDC/A074
 ```
 
 #### Exercícios
@@ -263,7 +261,7 @@ Dia 1: 19 graus
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E217.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E217 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E217
+gcc ~/LPEDC/E217.c -o ~/LPEDC/E217 && ~/LPEDC/E217
 ```
 
 **Exercício E219** · ★★☆
@@ -295,7 +293,7 @@ Aluno 5: 8.5
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E219.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E219 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E219
+gcc ~/LPEDC/E219.c -o ~/LPEDC/E219 && ~/LPEDC/E219
 ```
 
 **Exercício E220** · ★★☆
@@ -323,7 +321,7 @@ Nota 1: * (1)
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E220.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E220 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E220
+gcc ~/LPEDC/E220.c -o ~/LPEDC/E220 && ~/LPEDC/E220
 ```
 
 **Exercício E222** · ★★★
@@ -352,7 +350,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E222.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E222 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E222
+gcc ~/LPEDC/E222.c -o ~/LPEDC/E222 && ~/LPEDC/E222
 ```
 
 ---
@@ -391,7 +389,7 @@ Quando a função **não deve** mexer no vetor, marque o parâmetro com
 O `main` guarda o vetor `cardapio`. A função recebe o endereço dele em
 `precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
 
-<p align="center"><img src="05-vetores-e-strings/0038-vetores-e-funcoes/ideia.svg" alt="Diagrama da ideia: Vetores e funções" width="870"></p>
+<p align="center"><img src="0038-ideia.svg" alt="Diagrama da ideia: Vetores e funções" width="870"></p>
 
 `reajustar` escreve (sem `const`) e `mostrar` só lê (com `const`):
 
@@ -434,7 +432,7 @@ int main(void) {
 No fluxograma, o `main` chama e a função percorre as 4 gavetas. Ela é `void`,
 mas o `main` enxerga os preços novos, porque ela escreveu direto no vetor dele:
 
-<p align="center"><img src="05-vetores-e-strings/0038-vetores-e-funcoes/fluxograma.svg" alt="Fluxograma: Vetores e funções" width="486"></p>
+<p align="center"><img src="0038-fluxograma.svg" alt="Fluxograma: Vetores e funções" width="486"></p>
 
 Um **elemento** passado sozinho vai por valor, como qualquer `double`:
 `reajustar_um(double preco)` chamada com `cardapio[0]` recebe uma cópia do
@@ -463,8 +461,6 @@ endereço. O exemplo A076 mostra as duas coisas lado a lado.
 > mais? Calcule antes de rodar.
 
 ### Hora de praticar
-
-Arquivos em [`0038-vetores-e-funcoes/`](05-vetores-e-strings/0038-vetores-e-funcoes/).
 
 **Exemplo A075 · Um vetor entra, outro sai cheio**
 
@@ -510,7 +506,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/A075.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/A075 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/A075
+gcc ~/LPEDC/A075.c -o ~/LPEDC/A075 && ~/LPEDC/A075
 ```
 
 **Exemplo A076 · Um elemento vai por valor, o vetor vai pelo endereço**
@@ -564,7 +560,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/A076.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/A076 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/A076
+gcc ~/LPEDC/A076.c -o ~/LPEDC/A076 && ~/LPEDC/A076
 ```
 
 #### Exercícios
@@ -596,7 +592,7 @@ Média por rodada: 2.00
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E223.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E223 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E223
+gcc ~/LPEDC/E223.c -o ~/LPEDC/E223 && ~/LPEDC/E223
 ```
 
 **Exercício E225** · ★★☆
@@ -626,7 +622,7 @@ depois de vezes_dez: a = 100 30 30
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E225.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E225 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E225
+gcc ~/LPEDC/E225.c -o ~/LPEDC/E225 && ~/LPEDC/E225
 ```
 
 **Exercício E226** · ★★☆
@@ -661,7 +657,7 @@ Meses acima da média: 7
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E226.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E226 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E226
+gcc ~/LPEDC/E226.c -o ~/LPEDC/E226 && ~/LPEDC/E226
 ```
 
 **Exercício E228** · ★★★
@@ -691,7 +687,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E228.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E228 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E228
+gcc ~/LPEDC/E228.c -o ~/LPEDC/E228 && ~/LPEDC/E228
 ```
 
 ---
@@ -726,7 +722,7 @@ No C, a matriz é **um bloco contínuo**, com as linhas coladas uma na outra. As
 12 células do exemplo ficam enfileiradas: a linha 0 inteira, depois a 1, depois
 a 2. A célula `vendas[1][2]` (o 14) é a 7ª da fila, na posição 1 × 4 + 2 = 6:
 
-<p align="center"><img src="05-vetores-e-strings/0039-matrizes/ideia.svg" alt="Diagrama da ideia: Matrizes" width="858"></p>
+<p align="center"><img src="0039-ideia.svg" alt="Diagrama da ideia: Matrizes" width="858"></p>
 
 O código mostra a tabela com o total de cada linha e, em outro par de laços, o
 total de cada coluna:
@@ -780,7 +776,7 @@ int main(void) {
 O laço de dentro dá 4 voltas para **cada** volta do de fora: o corpo roda
 3 × 4 = 12 vezes, uma por célula:
 
-<p align="center"><img src="05-vetores-e-strings/0039-matrizes/fluxograma.svg" alt="Fluxograma: Matrizes" width="482"></p>
+<p align="center"><img src="0039-fluxograma.svg" alt="Fluxograma: Matrizes" width="482"></p>
 
 Ao passar uma matriz a uma função vale a regra do assunto 0038 (vai o
 endereço, a função mexe no original), mas **todas as dimensões, menos a
@@ -807,8 +803,6 @@ faz isso com um tabuleiro de jogo da velha.
 > linhas o compilador cria? Quanto vale `t[2][1]`? E `sizeof(t)`?
 
 ### Hora de praticar
-
-Arquivos em [`0039-matrizes/`](05-vetores-e-strings/0039-matrizes/).
 
 **Exemplo A077 · O primeiro horário livre da agenda**
 
@@ -861,7 +855,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/A077.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/A077 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/A077
+gcc ~/LPEDC/A077.c -o ~/LPEDC/A077 && ~/LPEDC/A077
 ```
 
 **Exemplo A078 · O tabuleiro do jogo da velha**
@@ -916,7 +910,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/A078.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/A078 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/A078
+gcc ~/LPEDC/A078.c -o ~/LPEDC/A078 && ~/LPEDC/A078
 ```
 
 #### Exercícios
@@ -947,7 +941,7 @@ Diagonal secundária: 15
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E229.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E229 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E229
+gcc ~/LPEDC/E229.c -o ~/LPEDC/E229 && ~/LPEDC/E229
 ```
 
 **Exercício E231** · ★★☆
@@ -979,7 +973,7 @@ Transposta (3x2):
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E231.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E231 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E231
+gcc ~/LPEDC/E231.c -o ~/LPEDC/E231 && ~/LPEDC/E231
 ```
 
 **Exercício E232** · ★★☆
@@ -1013,7 +1007,7 @@ Melhor fileira: B
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E232.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E232 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E232
+gcc ~/LPEDC/E232.c -o ~/LPEDC/E232 && ~/LPEDC/E232
 ```
 
 **Exercício E234** · ★★★
@@ -1042,7 +1036,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E234.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E234 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E234
+gcc ~/LPEDC/E234.c -o ~/LPEDC/E234 && ~/LPEDC/E234
 ```
 
 ---
@@ -1087,7 +1081,7 @@ Enter.
 No exemplo, a placa é um vetor de 7 `char`. O `toupper` troca cada minúscula
 pela maiúscula, 32 posições antes na tabela. Os dígitos passam sem mudar:
 
-<p align="center"><img src="05-vetores-e-strings/0040-caracteres/ideia.svg" alt="Diagrama da ideia: Caracteres" width="858"></p>
+<p align="center"><img src="0040-ideia.svg" alt="Diagrama da ideia: Caracteres" width="858"></p>
 
 O código mostra cada caractere com `%c` e `%d`, antes e depois, e confere o
 formato com `isdigit` e `isalpha`:
@@ -1143,7 +1137,7 @@ uma **string**: falta o marcador de fim que o `%s` exige (próximo assunto).
 A cada posição, o programa converte e confere o que ela deveria ser. Uma
 posição errada invalida a placa, mas o laço segue até o fim:
 
-<p align="center"><img src="05-vetores-e-strings/0040-caracteres/fluxograma.svg" alt="Fluxograma: Caracteres" width="617"></p>
+<p align="center"><img src="0040-fluxograma.svg" alt="Fluxograma: Caracteres" width="617"></p>
 
 > [!WARNING]
 > **Letra não é "tudo entre `'A'` e `'z'`".** Entre o `'Z'` (90) e o `'a'`
@@ -1163,8 +1157,6 @@ posição errada invalida a placa, mas o laço segue até o fim:
 > mostra? E `printf("%d\n", '9' - '0' + 1);`?
 
 ### Hora de praticar
-
-Arquivos em [`0040-caracteres/`](05-vetores-e-strings/0040-caracteres/).
 
 **Exemplo A079 · O dígito '7' não vale 7**
 
@@ -1206,7 +1198,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/A079.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/A079 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/A079
+gcc ~/LPEDC/A079.c -o ~/LPEDC/A079 && ~/LPEDC/A079
 ```
 
 **Exemplo A080 · Contando o que foi digitado, letra por letra**
@@ -1246,7 +1238,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/A080.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/A080 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/A080
+gcc ~/LPEDC/A080.c -o ~/LPEDC/A080 && ~/LPEDC/A080
 ```
 
 #### Exercícios
@@ -1278,7 +1270,7 @@ Hi!
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E235.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E235 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E235
+gcc ~/LPEDC/E235.c -o ~/LPEDC/E235 && ~/LPEDC/E235
 ```
 
 **Exercício E237** · ★★☆
@@ -1304,7 +1296,7 @@ Decifrada: ZEBRA AZUL
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E237.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E237 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E237
+gcc ~/LPEDC/E237.c -o ~/LPEDC/E237 && ~/LPEDC/E237
 ```
 
 **Exercício E238** · ★★☆
@@ -1350,7 +1342,7 @@ CEP inválido.
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E238.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E238 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E238
+gcc ~/LPEDC/E238.c -o ~/LPEDC/E238 && ~/LPEDC/E238
 ```
 
 **Exercício E240** · ★★★
@@ -1382,7 +1374,7 @@ Diferenças em 128 códigos: 0
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E240.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E240 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E240
+gcc ~/LPEDC/E240.c -o ~/LPEDC/E240 && ~/LPEDC/E240
 ```
 
 ---
@@ -1433,7 +1425,7 @@ O vetor `cracha` do exemplo tem 20 posições. Depois do `strcpy` e dos dois
 `strcat`, as 11 primeiras guardam "Bruna Matos", a 12ª guarda o `'\0'` e o
 resto não importa:
 
-<p align="center"><img src="05-vetores-e-strings/0041-strings/ideia.svg" alt="Diagrama da ideia: Strings" width="858"></p>
+<p align="center"><img src="0041-ideia.svg" alt="Diagrama da ideia: Strings" width="858"></p>
 
 O código monta o crachá, compara `strlen` com `sizeof` e confere com `strcmp`:
 
@@ -1469,7 +1461,7 @@ int main(void) {
 O `strcat` procura o `'\0'` do destino, escreve ali por cima e põe um `'\0'`
 novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 
-<p align="center"><img src="05-vetores-e-strings/0041-strings/fluxograma.svg" alt="Fluxograma: Strings" width="441"></p>
+<p align="center"><img src="0041-fluxograma.svg" alt="Fluxograma: Strings" width="441"></p>
 
 > [!WARNING]
 > **`strcpy` e `strcat` não sabem o tamanho do destino.** Escrevem até acabar
@@ -1492,8 +1484,6 @@ novo no fim. Toda função de string é um laço "até achar o `'\0'`":
 > depois da posição 3 sumiram da memória?
 
 ### Hora de praticar
-
-Arquivos em [`0041-strings/`](05-vetores-e-strings/0041-strings/).
 
 **Exemplo A081 · A etiqueta que não pode estourar**
 
@@ -1536,7 +1526,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/A081.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/A081 && ~/LPEDC/05-vetores-e-strings/0041-strings/A081
+gcc ~/LPEDC/A081.c -o ~/LPEDC/A081 && ~/LPEDC/A081
 ```
 
 **Exemplo A082 · Percorrendo até o '\0'**
@@ -1583,7 +1573,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/A082.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/A082 && ~/LPEDC/05-vetores-e-strings/0041-strings/A082
+gcc ~/LPEDC/A082.c -o ~/LPEDC/A082 && ~/LPEDC/A082
 ```
 
 #### Exercícios
@@ -1608,7 +1598,7 @@ strlen = 6, sizeof = 7
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E241.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E241 && ~/LPEDC/05-vetores-e-strings/0041-strings/E241
+gcc ~/LPEDC/E241.c -o ~/LPEDC/E241 && ~/LPEDC/E241
 ```
 
 **Exercício E243** · ★★☆
@@ -1643,7 +1633,7 @@ igual a "joao.silva"? sim
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E243.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E243 && ~/LPEDC/05-vetores-e-strings/0041-strings/E243
+gcc ~/LPEDC/E243.c -o ~/LPEDC/E243 && ~/LPEDC/E243
 ```
 
 **Exercício E244** · ★★☆
@@ -1677,7 +1667,7 @@ A: sim
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E244.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E244 && ~/LPEDC/05-vetores-e-strings/0041-strings/E244
+gcc ~/LPEDC/E244.c -o ~/LPEDC/E244 && ~/LPEDC/E244
 ```
 
 **Exercício E246** · ★★★
@@ -1708,7 +1698,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E246.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E246 && ~/LPEDC/05-vetores-e-strings/0041-strings/E246
+gcc ~/LPEDC/E246.c -o ~/LPEDC/E246 && ~/LPEDC/E246
 ```
 
 ---
@@ -1757,7 +1747,7 @@ No exemplo, o vetor `nome` tem 40 bytes. O `fgets` copia os 11 caracteres, o
 `'\n'` e o `'\0'`. O `strcspn` acha o `'\n'` na posição 11, e ele vira o novo
 fim:
 
-<p align="center"><img src="05-vetores-e-strings/0042-lendo-strings/ideia.svg" alt="Diagrama da ideia: Lendo strings" width="858"></p>
+<p align="center"><img src="0042-ideia.svg" alt="Diagrama da ideia: Lendo strings" width="858"></p>
 
 O código mostra a string entre colchetes antes e depois da limpeza, para
 enxergar o `'\n'`:
@@ -1790,7 +1780,7 @@ int main(void) {
 
 O teste do `NULL` vem primeiro: se a entrada acabou, não há nome para limpar.
 
-<p align="center"><img src="05-vetores-e-strings/0042-lendo-strings/fluxograma.svg" alt="Fluxograma: Lendo strings" width="506"></p>
+<p align="center"><img src="0042-fluxograma.svg" alt="Fluxograma: Lendo strings" width="506"></p>
 
 > [!WARNING]
 > **`scanf("%d")` seguido de `fgets` "pula" a leitura.** O `scanf` lê o número
@@ -1813,8 +1803,6 @@ O teste do `NULL` vem primeiro: se a entrada acabou, não há nome para limpar.
 > antes e depois da linha do `strcspn`? E se ele digitasse "melancia"?
 
 ### Hora de praticar
-
-Arquivos em [`0042-lendo-strings/`](05-vetores-e-strings/0042-lendo-strings/).
 
 **Exemplo A083 · O recado que termina numa linha vazia**
 
@@ -1854,7 +1842,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/A083.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/A083 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/A083
+gcc ~/LPEDC/A083.c -o ~/LPEDC/A083 && ~/LPEDC/A083
 ```
 
 **Exemplo A084 · Número, depois texto, e a linha que não coube**
@@ -1904,7 +1892,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/A084.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/A084 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/A084
+gcc ~/LPEDC/A084.c -o ~/LPEDC/A084 && ~/LPEDC/A084
 ```
 
 #### Exercícios
@@ -1935,7 +1923,7 @@ Para testar sem digitar: printf 'Maria Clara Souza\n' | ~/LPEDC/rodar
 seguido do caminho deste arquivo.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E248.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E248 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E248
+gcc ~/LPEDC/E248.c -o ~/LPEDC/E248 && ~/LPEDC/E248
 ```
 
 **Exercício E249** · ★★☆
@@ -1960,7 +1948,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E249.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E249 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E249
+gcc ~/LPEDC/E249.c -o ~/LPEDC/E249 && ~/LPEDC/E249
 ```
 
 **Exercício E250** · ★★☆
@@ -2014,7 +2002,7 @@ Senha forte.
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250
+gcc ~/LPEDC/E250.c -o ~/LPEDC/E250 && ~/LPEDC/E250
 ```
 
 **Exercício E252** · ★★★
@@ -2046,7 +2034,7 @@ pedaço 3: [uva\n] fim da linha 2 (3 letras)
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E252.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E252 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E252
+gcc ~/LPEDC/E252.c -o ~/LPEDC/E252 && ~/LPEDC/E252
 ```
 
 ---
@@ -2078,7 +2066,7 @@ devolve a posição ou -1, como no A076, e assim "Tatu" cai nos inválidos sem
 Cada linha passa pela mesma esteira: lê, normaliza, procura na matriz de nomes
 e soma 1 no contador. "Tatu" não está na matriz e vai para os inválidos:
 
-<p align="center"><img src="05-vetores-e-strings/0043-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
+<p align="center"><img src="0043-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="870"></p>
 
 Para testar sem digitar, salve o código num `.c`, compile com o gcc e mande os
 votos com `printf 'boto\nArara\n...' | ./programa`:
@@ -2159,7 +2147,7 @@ int main(void) {
 Dentro dele, uma decisão: achou o candidato ou não. O resultado só sai quando a
 entrada acaba:
 
-<p align="center"><img src="05-vetores-e-strings/0043-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="607"></p>
+<p align="center"><img src="0043-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="607"></p>
 
 Para ordenar os nomes em ordem alfabética, como string não se atribui com `=`,
 trocar dois nomes é um `strcpy` triplo, com uma string auxiliar. O exemplo A086
@@ -2185,8 +2173,6 @@ ordena uma lista de chamada assim, prévia da ordenação por seleção (assunto
 > `linha[40]`? Pense no que o `fgets` faz com o resto da linha.
 
 ### Hora de praticar
-
-Arquivos em [`0043-juntando-tudo/`](05-vetores-e-strings/0043-juntando-tudo/).
 
 **Exemplo A085 · Os logins da empresa nova**
 
@@ -2271,7 +2257,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/A085.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/A085 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/A085
+gcc ~/LPEDC/A085.c -o ~/LPEDC/A085 && ~/LPEDC/A085
 ```
 
 **Exemplo A086 · A lista de chamada em ordem alfabética**
@@ -2325,7 +2311,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/A086.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/A086 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/A086
+gcc ~/LPEDC/A086.c -o ~/LPEDC/A086 && ~/LPEDC/A086
 ```
 
 #### Exercícios
@@ -2349,7 +2335,7 @@ Artilheiro: Duda
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E254.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E254 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E254
+gcc ~/LPEDC/E254.c -o ~/LPEDC/E254 && ~/LPEDC/E254
 ```
 
 **Exercício E255** · ★★☆
@@ -2378,7 +2364,7 @@ Venceu com 1 erro(s)!
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E255.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E255 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E255
+gcc ~/LPEDC/E255.c -o ~/LPEDC/E255 && ~/LPEDC/E255
 ```
 
 **Exercício E256** · ★★☆
@@ -2429,7 +2415,7 @@ CPF inválido.
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256
+gcc ~/LPEDC/E256.c -o ~/LPEDC/E256 && ~/LPEDC/E256
 ```
 
 **Exercício E258** · ★★★
@@ -2486,7 +2472,7 @@ z9z3 (12 -> 4)
 ```
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E258.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E258 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E258
+gcc ~/LPEDC/E258.c -o ~/LPEDC/E258 && ~/LPEDC/E258
 ```
 
 ---
@@ -2661,7 +2647,7 @@ matrizes revezam.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](05-vetores-e-strings/lista/); resoluções em `_respostas/05-vetores-e-strings/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0501.c a P0530.c, na raiz; resoluções em `_respostas/05-vetores-e-strings/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2700,7 +2686,7 @@ Menor: Qua (R$ 870)
    quarta.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0501.c -o ~/LPEDC/05-vetores-e-strings/lista/P0501 && ~/LPEDC/05-vetores-e-strings/lista/P0501
+gcc ~/LPEDC/P0501.c -o ~/LPEDC/P0501 && ~/LPEDC/P0501
 ```
 
 ---
@@ -2737,7 +2723,7 @@ Código 2000: não cadastrado
    para na posição 1).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0502.c -o ~/LPEDC/05-vetores-e-strings/lista/P0502 && ~/LPEDC/05-vetores-e-strings/lista/P0502
+gcc ~/LPEDC/P0502.c -o ~/LPEDC/P0502 && ~/LPEDC/P0502
 ```
 
 ---
@@ -2772,7 +2758,7 @@ Depois: 117 113 110 108 105 102 101
 3. A troca usa uma variável auxiliar: aux = v[i]; v[i] = v[j]; v[j] = aux;
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0503.c -o ~/LPEDC/05-vetores-e-strings/lista/P0503 && ~/LPEDC/05-vetores-e-strings/lista/P0503
+gcc ~/LPEDC/P0503.c -o ~/LPEDC/P0503 && ~/LPEDC/P0503
 ```
 
 ---
@@ -2814,7 +2800,7 @@ Total:
    o laço de impressão três vezes.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0504.c -o ~/LPEDC/05-vetores-e-strings/lista/P0504 && ~/LPEDC/05-vetores-e-strings/lista/P0504
+gcc ~/LPEDC/P0504.c -o ~/LPEDC/P0504 && ~/LPEDC/P0504
 ```
 
 ---
@@ -2856,7 +2842,7 @@ Por dia (4x3):
 3. Para mostrar, os limites mudam: t tem 4 linhas de 3 colunas.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0505.c -o ~/LPEDC/05-vetores-e-strings/lista/P0505 && ~/LPEDC/05-vetores-e-strings/lista/P0505
+gcc ~/LPEDC/P0505.c -o ~/LPEDC/P0505 && ~/LPEDC/P0505
 ```
 
 ---
@@ -2902,7 +2888,7 @@ quase é identidade? não
 3. Para mostrar o bool, use um operador ternário: ok ? "sim" : "não".
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0506.c -o ~/LPEDC/05-vetores-e-strings/lista/P0506 && ~/LPEDC/05-vetores-e-strings/lista/P0506
+gcc ~/LPEDC/P0506.c -o ~/LPEDC/P0506 && ~/LPEDC/P0506
 ```
 
 ---
@@ -2939,7 +2925,7 @@ Total: 32 (strlen = 32)
 4. Resposta esperada: a saída acima (32 caracteres no total).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0507.c -o ~/LPEDC/05-vetores-e-strings/lista/P0507 && ~/LPEDC/05-vetores-e-strings/lista/P0507
+gcc ~/LPEDC/P0507.c -o ~/LPEDC/P0507 && ~/LPEDC/P0507
 ```
 
 ---
@@ -2976,7 +2962,7 @@ Iniciais: R.N.
 3. As iniciais são nome[0] e sobrenome[0]: mostre com %c.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0508.c -o ~/LPEDC/05-vetores-e-strings/lista/P0508 && ~/LPEDC/05-vetores-e-strings/lista/P0508
+gcc ~/LPEDC/P0508.c -o ~/LPEDC/P0508 && ~/LPEDC/P0508
 ```
 
 ---
@@ -3002,7 +2988,7 @@ Letra z: 1
 2. Dentro do if, = é atribuição; para comparar, use ==.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0509.c -o ~/LPEDC/05-vetores-e-strings/lista/P0509 && ~/LPEDC/05-vetores-e-strings/lista/P0509
+gcc ~/LPEDC/P0509.c -o ~/LPEDC/P0509 && ~/LPEDC/P0509
 ```
 
 ---
@@ -3042,7 +3028,7 @@ Saída esperada:
    laço mostra de 0 a 10, pulando quem tem contador 0.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0510.c -o ~/LPEDC/05-vetores-e-strings/lista/P0510 && ~/LPEDC/05-vetores-e-strings/lista/P0510
+gcc ~/LPEDC/P0510.c -o ~/LPEDC/P0510 && ~/LPEDC/P0510
 ```
 
 ### ★★☆ Para pensar
@@ -3092,7 +3078,7 @@ Brigadeirão: A = R$ 45.60, B = R$ 48.80 -> mais barato no A
    R$ 45.60 x R$ 48.80 (A).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0511.c -o ~/LPEDC/05-vetores-e-strings/lista/P0511 && ~/LPEDC/05-vetores-e-strings/lista/P0511
+gcc ~/LPEDC/P0511.c -o ~/LPEDC/P0511 && ~/LPEDC/P0511
 ```
 
 ---
@@ -3136,7 +3122,7 @@ d2: NÃO simétrica em [1][2] (25 x 52)
    erro em [1][2] (25 x 52).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0512.c -o ~/LPEDC/05-vetores-e-strings/lista/P0512 && ~/LPEDC/05-vetores-e-strings/lista/P0512
+gcc ~/LPEDC/P0512.c -o ~/LPEDC/P0512 && ~/LPEDC/P0512
 ```
 
 ---
@@ -3176,7 +3162,7 @@ CEP 69099999: não atendido (4 passos)
    caso, a 4.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0513.c -o ~/LPEDC/05-vetores-e-strings/lista/P0513 && ~/LPEDC/05-vetores-e-strings/lista/P0513
+gcc ~/LPEDC/P0513.c -o ~/LPEDC/P0513 && ~/LPEDC/P0513
 ```
 
 ---
@@ -3215,7 +3201,7 @@ Entrou 60: 95 91 84 80 77 70 66 61 60
    valor que ainda ia ser copiado.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0514.c -o ~/LPEDC/05-vetores-e-strings/lista/P0514 && ~/LPEDC/05-vetores-e-strings/lista/P0514
+gcc ~/LPEDC/P0514.c -o ~/LPEDC/P0514 && ~/LPEDC/P0514
 ```
 
 ---
@@ -3253,7 +3239,7 @@ Depois (5): 11:4 13:7 16:2 17:9 19:1
 4. Resposta esperada: a saída acima (sobram 5 produtos).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0515.c -o ~/LPEDC/05-vetores-e-strings/lista/P0515 && ~/LPEDC/05-vetores-e-strings/lista/P0515
+gcc ~/LPEDC/P0515.c -o ~/LPEDC/P0515 && ~/LPEDC/P0515
 ```
 
 ---
@@ -3297,7 +3283,7 @@ Mediana: 30 min
 4. Resposta esperada: a saída acima (média 33.78, mediana 30).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0516.c -o ~/LPEDC/05-vetores-e-strings/lista/P0516 && ~/LPEDC/05-vetores-e-strings/lista/P0516
+gcc ~/LPEDC/P0516.c -o ~/LPEDC/P0516 && ~/LPEDC/P0516
 ```
 
 ---
@@ -3335,7 +3321,7 @@ Depois: [Av. Eduardo Ribeiro, 620] (24)
 4. Resposta esperada: [Av. Eduardo Ribeiro, 620], com 24 caracteres.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0517.c -o ~/LPEDC/05-vetores-e-strings/lista/P0517 && ~/LPEDC/05-vetores-e-strings/lista/P0517
+gcc ~/LPEDC/P0517.c -o ~/LPEDC/P0517 && ~/LPEDC/P0517
 ```
 
 ---
@@ -3381,7 +3367,7 @@ Inválido: 8 dígitos
 5. Resposta esperada: as duas execuções acima.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0518.c -o ~/LPEDC/05-vetores-e-strings/lista/P0518 && ~/LPEDC/05-vetores-e-strings/lista/P0518
+gcc ~/LPEDC/P0518.c -o ~/LPEDC/P0518 && ~/LPEDC/P0518
 ```
 
 ---
@@ -3420,7 +3406,7 @@ Total       77   83   91  104    355
 4. Resposta esperada: a saída acima (total geral 355).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0519.c -o ~/LPEDC/05-vetores-e-strings/lista/P0519 && ~/LPEDC/05-vetores-e-strings/lista/P0519
+gcc ~/LPEDC/P0519.c -o ~/LPEDC/P0519 && ~/LPEDC/P0519
 ```
 
 ---
@@ -3461,7 +3447,7 @@ Saldo: -40
 4. Resposta esperada: a saída acima (saldo -40).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0520.c -o ~/LPEDC/05-vetores-e-strings/lista/P0520 && ~/LPEDC/05-vetores-e-strings/lista/P0520
+gcc ~/LPEDC/P0520.c -o ~/LPEDC/P0520 && ~/LPEDC/P0520
 ```
 
 ### ★★★ Desafio
@@ -3529,7 +3515,7 @@ Vitória do O
    + '\0'. jogos[k] é um char [3][4]: passe direto para a função.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0521.c -o ~/LPEDC/05-vetores-e-strings/lista/P0521 && ~/LPEDC/05-vetores-e-strings/lista/P0521
+gcc ~/LPEDC/P0521.c -o ~/LPEDC/P0521 && ~/LPEDC/P0521
 ```
 
 ---
@@ -3595,7 +3581,7 @@ Transposta cheia (6x5):
 3. As triplas cabem em int t[30][3] (no pior caso, nada é zero).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0522.c -o ~/LPEDC/05-vetores-e-strings/lista/P0522 && ~/LPEDC/05-vetores-e-strings/lista/P0522
+gcc ~/LPEDC/P0522.c -o ~/LPEDC/P0522 && ~/LPEDC/P0522
 ```
 
 ---
@@ -3642,7 +3628,7 @@ Mais populosa: Manaus
 5. Resposta esperada: a saída acima (total 2365400, Manaus a maior).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0523.c -o ~/LPEDC/05-vetores-e-strings/lista/P0523 && ~/LPEDC/05-vetores-e-strings/lista/P0523
+gcc ~/LPEDC/P0523.c -o ~/LPEDC/P0523 && ~/LPEDC/P0523
 ```
 
 ---
@@ -3693,7 +3679,7 @@ Mais repetida: o (2 vezes)
 4. Resposta esperada: a saída acima (11 palavras distintas).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0524.c -o ~/LPEDC/05-vetores-e-strings/lista/P0524 && ~/LPEDC/05-vetores-e-strings/lista/P0524
+gcc ~/LPEDC/P0524.c -o ~/LPEDC/P0524 && ~/LPEDC/P0524
 ```
 
 ---
@@ -3739,7 +3725,7 @@ Ronda: 1 2 3 4 5 10 15 20 19 18 17 16 11 6 7 8 9 14 13 12
 3. Um contador de passos que começa em 1 preenche a segunda matriz.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0525.c -o ~/LPEDC/05-vetores-e-strings/lista/P0525 && ~/LPEDC/05-vetores-e-strings/lista/P0525
+gcc ~/LPEDC/P0525.c -o ~/LPEDC/P0525 && ~/LPEDC/P0525
 ```
 
 ---
@@ -3789,7 +3775,7 @@ Saída esperada:
 3. Espaço: continue. Não dígito e não espaço: return false.
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0526.c -o ~/LPEDC/05-vetores-e-strings/lista/P0526 && ~/LPEDC/05-vetores-e-strings/lista/P0526
+gcc ~/LPEDC/P0526.c -o ~/LPEDC/P0526 && ~/LPEDC/P0526
 ```
 
 ---
@@ -3838,7 +3824,7 @@ Carla: não está na lista
    porque 'B' < 'C').
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0527.c -o ~/LPEDC/05-vetores-e-strings/lista/P0527 && ~/LPEDC/05-vetores-e-strings/lista/P0527
+gcc ~/LPEDC/P0527.c -o ~/LPEDC/P0527 && ~/LPEDC/P0527
 ```
 
 ---
@@ -3883,7 +3869,7 @@ c:
    quadrado, apesar das linhas e colunas certas).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0528.c -o ~/LPEDC/05-vetores-e-strings/lista/P0528 && ~/LPEDC/05-vetores-e-strings/lista/P0528
+gcc ~/LPEDC/P0528.c -o ~/LPEDC/P0528 && ~/LPEDC/P0528
 ```
 
 ---
@@ -3917,7 +3903,7 @@ Envio expresso: entrega em 2 dias
 4. Resposta esperada: a saída acima (etiqueta com 36 caracteres).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0529.c -o ~/LPEDC/05-vetores-e-strings/lista/P0529 && ~/LPEDC/05-vetores-e-strings/lista/P0529
+gcc ~/LPEDC/P0529.c -o ~/LPEDC/P0529 && ~/LPEDC/P0529
 ```
 
 ---
@@ -3957,7 +3943,7 @@ Saída esperada:
    265252859812191058636308480000000).
 
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/lista/P0530.c -o ~/LPEDC/05-vetores-e-strings/lista/P0530 && ~/LPEDC/05-vetores-e-strings/lista/P0530
+gcc ~/LPEDC/P0530.c -o ~/LPEDC/P0530 && ~/LPEDC/P0530
 ```
 
 ## Questões no estilo da prova

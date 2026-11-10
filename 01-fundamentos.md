@@ -60,7 +60,7 @@ Confira com `gcc --version`. Para rodar um arquivo do curso, compile e
 execute:
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
+gcc ~/LPEDC/A001.c -o ~/LPEDC/A001 && ~/LPEDC/A001
 ```
 
 O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser
@@ -79,7 +79,7 @@ Programas que leem do teclado esperam a digitação. Para testar sem digitar,
 use um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '3 4.99\n2\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
+gcc ~/LPEDC/A011.c -o ~/LPEDC/A011 && printf '3 4.99\n2\n' | ~/LPEDC/A011
 ```
 
 > [!NOTE]
@@ -87,19 +87,19 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scan
 > `system("pause")`, `fflush(stdin)` e `gets`. Nada disso é C padrão ou
 > seguro; quando aparecer, o curso mostra a alternativa.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0001](#0001--o-primeiro-programa) | O primeiro programa | [`0001-primeiro-programa/`](01-fundamentos/0001-primeiro-programa/) |
-| [0002](#0002--variáveis) | Variáveis | [`0002-variaveis/`](01-fundamentos/0002-variaveis/) |
-| [0003](#0003--tipos-e-limites) | Tipos e limites | [`0003-tipos-e-limites/`](01-fundamentos/0003-tipos-e-limites/) |
-| [0004](#0004--constantes) | Constantes | [`0004-constantes/`](01-fundamentos/0004-constantes/) |
-| [0005](#0005--printf) | printf | [`0005-printf/`](01-fundamentos/0005-printf/) |
-| [0006](#0006--scanf) | scanf | [`0006-scanf/`](01-fundamentos/0006-scanf/) |
-| [0007](#0007--aritmética) | Aritmética | [`0007-aritmetica/`](01-fundamentos/0007-aritmetica/) |
-| [0008](#0008--conversão-e-cast) | Conversão e cast | [`0008-conversao/`](01-fundamentos/0008-conversao/) |
-| [0009](#0009--atribuição--e---) | Atribuição, ++ e -- | [`0009-atribuicao/`](01-fundamentos/0009-atribuicao/) |
-| [0010](#0010--mathh) | math.h | [`0010-math/`](01-fundamentos/0010-math/) |
-| [0011](#0011--juntando-tudo) | Juntando tudo | [`0011-juntando-tudo/`](01-fundamentos/0011-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0001](#0001--o-primeiro-programa) | O primeiro programa |
+| [0002](#0002--variáveis) | Variáveis |
+| [0003](#0003--tipos-e-limites) | Tipos e limites |
+| [0004](#0004--constantes) | Constantes |
+| [0005](#0005--printf) | printf |
+| [0006](#0006--scanf) | scanf |
+| [0007](#0007--aritmética) | Aritmética |
+| [0008](#0008--conversão-e-cast) | Conversão e cast |
+| [0009](#0009--atribuição--e---) | Atribuição, ++ e -- |
+| [0010](#0010--mathh) | math.h |
+| [0011](#0011--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -147,7 +147,7 @@ mais coisas; veja "Antes de começar", acima.
 O `padaria.c` ganha o `stdio.h`, vira assembly, vira `padaria.o`, é ligado ao
 `printf` e sai como o executável `padaria`:
 
-<p align="center"><img src="01-fundamentos/0001-primeiro-programa/ideia.svg" alt="Diagrama da ideia: O primeiro programa" width="866"></p>
+<p align="center"><img src="0001-ideia.svg" alt="Diagrama da ideia: O primeiro programa" width="866"></p>
 
 O programa completo:
 
@@ -169,7 +169,7 @@ int main(void) {
 
 Cada estação pode parar o processo. O exemplo passa por todas sem erro:
 
-<p align="center"><img src="01-fundamentos/0001-primeiro-programa/fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
+<p align="center"><img src="0001-fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
 
 Saber **quem reclamou** ajuda a consertar. Há três tipos de erro:
 
@@ -194,8 +194,6 @@ Saber **quem reclamou** ajuda a consertar. Há três tipos de erro:
 > maiúsculo, qual estação reclama? Responda e teste no `padaria.c`.
 
 ### Hora de praticar
-
-Arquivos em [`0001-primeiro-programa/`](01-fundamentos/0001-primeiro-programa/).
 
 **Exemplo A001 · Quem separa as instruções é o ponto e vírgula**
 
@@ -235,7 +233,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
+gcc ~/LPEDC/A001.c -o ~/LPEDC/A001 && ~/LPEDC/A001
 ```
 
 **Exemplo A002 · Um printf, várias linhas (e vários printf, uma linha)**
@@ -274,7 +272,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A002.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A002 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A002
+gcc ~/LPEDC/A002.c -o ~/LPEDC/A002 && ~/LPEDC/A002
 ```
 
 #### Exercícios
@@ -294,7 +292,7 @@ Tarifa: R$ 4,90
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001
+gcc ~/LPEDC/E001.c -o ~/LPEDC/E001 && ~/LPEDC/E001
 ```
 
 **Exercício E003** · ★★☆
@@ -311,7 +309,7 @@ Plantão: (11) 5555-0199
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003
+gcc ~/LPEDC/E003.c -o ~/LPEDC/E003 && ~/LPEDC/E003
 ```
 
 **Exercício E004** · ★★☆
@@ -330,7 +328,7 @@ Ingresso: R$ 28,00
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004
+gcc ~/LPEDC/E004.c -o ~/LPEDC/E004 && ~/LPEDC/E004
 ```
 
 **Exercício E005** · ★★★
@@ -354,7 +352,7 @@ código: 2
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005
+gcc ~/LPEDC/E005.c -o ~/LPEDC/E005 && ~/LPEDC/E005
 ```
 
 ---
@@ -401,7 +399,7 @@ não valem. O curso usa `snake_case`: `peso_atual`, `valor_total`.
 A ficha vira quatro caixinhas, cada uma com tipo, tamanho e endereço. Depois,
 o peso recebe um valor novo e o antigo desaparece:
 
-<p align="center"><img src="01-fundamentos/0002-variaveis/ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
+<p align="center"><img src="0002-ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
 
 A ficha em C:
 
@@ -437,7 +435,7 @@ int main(void) {
 Criar as variáveis (reservar memória) é um passo; trocar o peso é outro.
 Ainda é sequência pura:
 
-<p align="center"><img src="01-fundamentos/0002-variaveis/fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
+<p align="center"><img src="0002-fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
 
 > [!WARNING]
 > Variável sem valor não vale zero: vale **lixo**, o que já estava naqueles
@@ -450,8 +448,6 @@ Ainda é sequência pura:
 > que `printf("%d\n", plano);` mostra? Teste no programa acima.
 
 ### Hora de praticar
-
-Arquivos em [`0002-variaveis/`](01-fundamentos/0002-variaveis/).
 
 **Exemplo A003 · A cópia que não acompanha e o float que arredonda**
 
@@ -487,7 +483,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/A003.c -o ~/LPEDC/01-fundamentos/0002-variaveis/A003 && ~/LPEDC/01-fundamentos/0002-variaveis/A003
+gcc ~/LPEDC/A003.c -o ~/LPEDC/A003 && ~/LPEDC/A003
 ```
 
 **Exemplo A004 · Onde moram as variáveis**
@@ -525,7 +521,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/A004.c -o ~/LPEDC/01-fundamentos/0002-variaveis/A004 && ~/LPEDC/01-fundamentos/0002-variaveis/A004
+gcc ~/LPEDC/A004.c -o ~/LPEDC/A004 && ~/LPEDC/A004
 ```
 
 #### Exercícios
@@ -546,7 +542,7 @@ Setor: H
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/E007.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E007 && ~/LPEDC/01-fundamentos/0002-variaveis/E007
+gcc ~/LPEDC/E007.c -o ~/LPEDC/E007 && ~/LPEDC/E007
 ```
 
 **Exercício E009** · ★★☆
@@ -572,7 +568,7 @@ com float nas notas: 17 bytes
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/E009.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E009 && ~/LPEDC/01-fundamentos/0002-variaveis/E009
+gcc ~/LPEDC/E009.c -o ~/LPEDC/E009 && ~/LPEDC/E009
 ```
 
 **Exercício E010** · ★★☆
@@ -589,7 +585,7 @@ Casa 3 x 1 Visitante
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/E010.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E010 && ~/LPEDC/01-fundamentos/0002-variaveis/E010
+gcc ~/LPEDC/E010.c -o ~/LPEDC/E010 && ~/LPEDC/E010
 ```
 
 **Exercício E012** · ★★★
@@ -625,7 +621,7 @@ B
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/E012.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E012 && ~/LPEDC/01-fundamentos/0002-variaveis/E012
+gcc ~/LPEDC/E012.c -o ~/LPEDC/E012 && ~/LPEDC/E012
 ```
 
 ---
@@ -679,7 +675,7 @@ número dá a volta, como o odômetro que passa de 99999 para 00000. A catraca �
 um `unsigned short` em 65.535, com os 16 bits ligados. Somar 1 dá 65.536, que
 precisa de 17 bits; o bit de cima não cabe e some:
 
-<p align="center"><img src="01-fundamentos/0003-tipos-e-limites/ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
+<p align="center"><img src="0003-ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
 
 A catraca em C:
 
@@ -709,7 +705,7 @@ int main(void) {
 No fluxograma, quem pergunta "cabe em 16 bits?" é o hardware. Se não cabe, ele
 guarda só os 16 bits de baixo, sem avisar:
 
-<p align="center"><img src="01-fundamentos/0003-tipos-e-limites/fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
+<p align="center"><img src="0003-fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
 
 > [!WARNING]
 > Com `unsigned`, o estouro dá a volta. Com tipos **com sinal** (`int`,
@@ -729,8 +725,6 @@ guarda só os 16 bits de baixo, sem avisar:
 > torcedores, o que o painel mostraria? Mude o programa acima e confira.
 
 ### Hora de praticar
-
-Arquivos em [`0003-tipos-e-limites/`](01-fundamentos/0003-tipos-e-limites/).
 
 **Exemplo A005 · O mesmo byte lido de dois jeitos**
 
@@ -767,7 +761,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A005.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A005 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A005
+gcc ~/LPEDC/A005.c -o ~/LPEDC/A005 && ~/LPEDC/A005
 ```
 
 **Exemplo A006 · A tabela de tamanhos e limites desta máquina**
@@ -811,7 +805,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A006.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A006 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A006
+gcc ~/LPEDC/A006.c -o ~/LPEDC/A006 && ~/LPEDC/A006
 ```
 
 #### Exercícios
@@ -846,7 +840,7 @@ Saída esperada:
 C17, avisa se você usar.)
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013
+gcc ~/LPEDC/E013.c -o ~/LPEDC/E013 && ~/LPEDC/E013
 ```
 
 **Exercício E015** · ★★☆
@@ -867,7 +861,7 @@ odômetro: 65000 + 1000 = 464 (máximo 65535)
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015
+gcc ~/LPEDC/E015.c -o ~/LPEDC/E015 && ~/LPEDC/E015
 ```
 
 **Exercício E016** · ★★☆
@@ -884,7 +878,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016
+gcc ~/LPEDC/E016.c -o ~/LPEDC/E016 && ~/LPEDC/E016
 ```
 
 **Exercício E017** · ★★★
@@ -905,7 +899,7 @@ int64_t vai até 9223372036854775807
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017
+gcc ~/LPEDC/E017.c -o ~/LPEDC/E017 && ~/LPEDC/E017
 ```
 
 ---
@@ -948,7 +942,7 @@ pula linha, `\t` é tabulação, `\"` põe aspas no texto, `\\` é a barra e `\0
 O pré-processador troca `TARIFA` por `4.90` e `EMPRESA` pelo nome da viação.
 A `linha` é uma caixinha com cadeado: tem endereço, mas ninguém escreve nela:
 
-<p align="center"><img src="01-fundamentos/0004-constantes/ideia.svg" alt="Diagrama da ideia: Constantes" width="858"></p>
+<p align="center"><img src="0004-ideia.svg" alt="Diagrama da ideia: Constantes" width="858"></p>
 
 O mesmo exemplo em C:
 
@@ -977,7 +971,7 @@ int main(void) {
 A troca de texto acontece na compilação; o executável já nasce só com os
 números:
 
-<p align="center"><img src="01-fundamentos/0004-constantes/fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
+<p align="center"><img src="0004-fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
 
 > [!WARNING]
 > O `#define` cola **exatamente** o texto que vem depois do nome. Com
@@ -997,8 +991,6 @@ números:
 > O que `printf("TARIFA\n");` mostra? Teste no programa acima.
 
 ### Hora de praticar
-
-Arquivos em [`0004-constantes/`](01-fundamentos/0004-constantes/).
 
 **Exemplo A007 · Uma constante feita de outras**
 
@@ -1036,7 +1028,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/A007.c -o ~/LPEDC/01-fundamentos/0004-constantes/A007 && ~/LPEDC/01-fundamentos/0004-constantes/A007
+gcc ~/LPEDC/A007.c -o ~/LPEDC/A007 && ~/LPEDC/A007
 ```
 
 **Exemplo A008 · Escapes e literais em várias bases**
@@ -1078,7 +1070,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/A008.c -o ~/LPEDC/01-fundamentos/0004-constantes/A008 && ~/LPEDC/01-fundamentos/0004-constantes/A008
+gcc ~/LPEDC/A008.c -o ~/LPEDC/A008 && ~/LPEDC/A008
 ```
 
 #### Exercícios
@@ -1098,7 +1090,7 @@ Rendimento: 100% do CDI
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/E019.c -o ~/LPEDC/01-fundamentos/0004-constantes/E019 && ~/LPEDC/01-fundamentos/0004-constantes/E019
+gcc ~/LPEDC/E019.c -o ~/LPEDC/E019 && ~/LPEDC/E019
 ```
 
 **Exercício E021** · ★★☆
@@ -1117,7 +1109,7 @@ Vencimento: dia 10
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/E021.c -o ~/LPEDC/01-fundamentos/0004-constantes/E021 && ~/LPEDC/01-fundamentos/0004-constantes/E021
+gcc ~/LPEDC/E021.c -o ~/LPEDC/E021 && ~/LPEDC/E021
 ```
 
 **Exercício E022** · ★★☆
@@ -1147,7 +1139,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/E022.c -o ~/LPEDC/01-fundamentos/0004-constantes/E022 && ~/LPEDC/01-fundamentos/0004-constantes/E022
+gcc ~/LPEDC/E022.c -o ~/LPEDC/E022 && ~/LPEDC/E022
 ```
 
 **Exercício E024** · ★★★
@@ -1184,7 +1176,7 @@ a\n b
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/E024.c -o ~/LPEDC/01-fundamentos/0004-constantes/E024 && ~/LPEDC/01-fundamentos/0004-constantes/E024
+gcc ~/LPEDC/E024.c -o ~/LPEDC/E024 && ~/LPEDC/E024
 ```
 
 ---
@@ -1231,7 +1223,7 @@ A linha do arroz tem três buracos: `%-10s` reserva 10 casas para o nome, à
 esquerda; `%3d` reserva 3 para a quantidade; `%9.2f` reserva 9 para o total,
 com 2 decimais:
 
-<p align="center"><img src="01-fundamentos/0005-printf/ideia.svg" alt="Diagrama da ideia: printf" width="858"></p>
+<p align="center"><img src="0005-ideia.svg" alt="Diagrama da ideia: printf" width="858"></p>
 
 O cupom inteiro em C:
 
@@ -1257,7 +1249,7 @@ int main(void) {
 Cada `printf` é uma saída com o mesmo formato. Para mudar a largura de uma
 coluna, troque um número em cada linha:
 
-<p align="center"><img src="01-fundamentos/0005-printf/fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
+<p align="center"><img src="0005-fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
 
 > [!WARNING]
 > O `printf` **confia** em você: se o especificador não combina com o tipo do
@@ -1277,8 +1269,6 @@ coluna, troque um número em cada linha:
 > largura 5 corta o número? Teste num programa seu.
 
 ### Hora de praticar
-
-Arquivos em [`0005-printf/`](01-fundamentos/0005-printf/).
 
 **Exemplo A009 · O extrato que corta o nome comprido**
 
@@ -1311,7 +1301,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/A009.c -o ~/LPEDC/01-fundamentos/0005-printf/A009 && ~/LPEDC/01-fundamentos/0005-printf/A009
+gcc ~/LPEDC/A009.c -o ~/LPEDC/A009 && ~/LPEDC/A009
 ```
 
 **Exemplo A010 · O mesmo valor em vários formatos**
@@ -1353,7 +1343,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/A010.c -o ~/LPEDC/01-fundamentos/0005-printf/A010 && ~/LPEDC/01-fundamentos/0005-printf/A010
+gcc ~/LPEDC/A010.c -o ~/LPEDC/A010 && ~/LPEDC/A010
 ```
 
 #### Exercícios
@@ -1373,7 +1363,7 @@ Conceito: B
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/E025.c -o ~/LPEDC/01-fundamentos/0005-printf/E025 && ~/LPEDC/01-fundamentos/0005-printf/E025
+gcc ~/LPEDC/E025.c -o ~/LPEDC/E025 && ~/LPEDC/E025
 ```
 
 **Exercício E027** · ★★☆
@@ -1394,7 +1384,7 @@ GNV           R$ 4.99
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/E027.c -o ~/LPEDC/01-fundamentos/0005-printf/E027 && ~/LPEDC/01-fundamentos/0005-printf/E027
+gcc ~/LPEDC/E027.c -o ~/LPEDC/E027 && ~/LPEDC/E027
 ```
 
 **Exercício E028** · ★★☆
@@ -1412,7 +1402,7 @@ Total: R$ 137.70
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/E028.c -o ~/LPEDC/01-fundamentos/0005-printf/E028 && ~/LPEDC/01-fundamentos/0005-printf/E028
+gcc ~/LPEDC/E028.c -o ~/LPEDC/E028 && ~/LPEDC/E028
 ```
 
 **Exercício E029** · ★★★
@@ -1434,7 +1424,7 @@ Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
 #00080F, sempre com 7 caracteres.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/E029.c -o ~/LPEDC/01-fundamentos/0005-printf/E029 && ~/LPEDC/01-fundamentos/0005-printf/E029
+gcc ~/LPEDC/E029.c -o ~/LPEDC/E029 && ~/LPEDC/E029
 ```
 
 ---
@@ -1483,7 +1473,7 @@ Você digita `150.75`, Enter, `12`, Enter. O `%lf` tira `150.75` da fila e
 escreve em `valor`. O `%d` pula o `'\n'` que sobrou, tira o `12` e escreve em
 `dia`. O último `'\n'` continua na fila:
 
-<p align="center"><img src="01-fundamentos/0006-scanf/ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
+<p align="center"><img src="0006-ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
 
 O agendamento em C:
 
@@ -1516,7 +1506,7 @@ Para testar sem digitar, salve como `pix.c`, compile com o gcc e use o cano
 No fluxograma, as duas leituras são paralelogramos de entrada; cada uma guarda
 o valor numa caixinha. A saída vem depois:
 
-<p align="center"><img src="01-fundamentos/0006-scanf/fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
+<p align="center"><img src="0006-fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
 
 > [!WARNING]
 > Esquecer o `&` é o erro clássico: `scanf("%d", dia)` entrega o lixo de `dia`
@@ -1538,8 +1528,6 @@ o valor numa caixinha. A saída vem depois:
 > `printf '150.75\ndoze\n' | ./programa`.
 
 ### Hora de praticar
-
-Arquivos em [`0006-scanf/`](01-fundamentos/0006-scanf/).
 
 **Exemplo A011 · Dois valores numa linha e a sobra que atrapalha**
 
@@ -1579,7 +1567,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && ~/LPEDC/01-fundamentos/0006-scanf/A011
+gcc ~/LPEDC/A011.c -o ~/LPEDC/A011 && ~/LPEDC/A011
 ```
 
 **Exemplo A012 · A data da entrega e o tamanho da camiseta**
@@ -1617,7 +1605,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/A012.c -o ~/LPEDC/01-fundamentos/0006-scanf/A012 && ~/LPEDC/01-fundamentos/0006-scanf/A012
+gcc ~/LPEDC/A012.c -o ~/LPEDC/A012 && ~/LPEDC/A012
 ```
 
 #### Exercícios
@@ -1638,7 +1626,7 @@ Você tem 30 anos e 1.75 m de altura.
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/E031.c -o ~/LPEDC/01-fundamentos/0006-scanf/E031 && ~/LPEDC/01-fundamentos/0006-scanf/E031
+gcc ~/LPEDC/E031.c -o ~/LPEDC/E031 && ~/LPEDC/E031
 ```
 
 **Exercício E033** · ★★☆
@@ -1671,7 +1659,7 @@ Alarme para 06:00
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/E033.c -o ~/LPEDC/01-fundamentos/0006-scanf/E033 && ~/LPEDC/01-fundamentos/0006-scanf/E033
+gcc ~/LPEDC/E033.c -o ~/LPEDC/E033 && ~/LPEDC/E033
 ```
 
 **Exercício E034** · ★★☆
@@ -1691,7 +1679,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/E034.c -o ~/LPEDC/01-fundamentos/0006-scanf/E034 && ~/LPEDC/01-fundamentos/0006-scanf/E034
+gcc ~/LPEDC/E034.c -o ~/LPEDC/E034 && ~/LPEDC/E034
 ```
 
 **Exercício E035** · ★★★
@@ -1727,7 +1715,7 @@ lidos=0 a=0 b=0
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/E035.c -o ~/LPEDC/01-fundamentos/0006-scanf/E035 && ~/LPEDC/01-fundamentos/0006-scanf/E035
+gcc ~/LPEDC/E035.c -o ~/LPEDC/E035 && ~/LPEDC/E035
 ```
 
 ---
@@ -1769,7 +1757,7 @@ clara. O C não tem operador de potência (`^` é outra coisa, assunto 0065); us
 As 24 fatias são divididas entre os cinco, quatro para cada um. O `/` conta
 as rodadas completas e o `%` as fatias que sobram:
 
-<p align="center"><img src="01-fundamentos/0007-aritmetica/ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
+<p align="center"><img src="0007-ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
 
 A divisão das fatias em C:
 
@@ -1802,7 +1790,7 @@ int main(void) {
 Cada conta é um retângulo de processamento, e a ordem importa: `cada` e
 `sobra` dependem de `fatias`:
 
-<p align="center"><img src="01-fundamentos/0007-aritmetica/fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
+<p align="center"><img src="0007-fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
 
 > [!WARNING]
 > Com `int a = 7, b = 8;`, a linha `double media = (a + b) / 2;` guarda
@@ -1822,8 +1810,6 @@ Cada conta é um retângulo de processamento, e a ordem importa: `cada` e
 > ordem da precedência, e depois confira com um `printf`.
 
 ### Hora de praticar
-
-Arquivos em [`0007-aritmetica/`](01-fundamentos/0007-aritmetica/).
 
 **Exemplo A013 · O final da placa e o rodízio**
 
@@ -1864,7 +1850,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/A013.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/A013 && ~/LPEDC/01-fundamentos/0007-aritmetica/A013
+gcc ~/LPEDC/A013.c -o ~/LPEDC/A013 && ~/LPEDC/A013
 ```
 
 **Exemplo A014 · Quanto dura o podcast**
@@ -1899,7 +1885,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/A014.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/A014 && ~/LPEDC/01-fundamentos/0007-aritmetica/A014
+gcc ~/LPEDC/A014.c -o ~/LPEDC/A014 && ~/LPEDC/A014
 ```
 
 #### Exercícios
@@ -1920,7 +1906,7 @@ Ingressos: R$ 245
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E037.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E037 && ~/LPEDC/01-fundamentos/0007-aritmetica/E037
+gcc ~/LPEDC/E037.c -o ~/LPEDC/E037 && ~/LPEDC/E037
 ```
 
 **Exercício E039** · ★★☆
@@ -1941,7 +1927,7 @@ Cada um: R$ 65.31
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E039.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E039 && ~/LPEDC/01-fundamentos/0007-aritmetica/E039
+gcc ~/LPEDC/E039.c -o ~/LPEDC/E039 && ~/LPEDC/E039
 ```
 
 **Exercício E040** · ★★☆
@@ -1959,7 +1945,7 @@ Média 2: 7.67
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E040.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E040 && ~/LPEDC/01-fundamentos/0007-aritmetica/E040
+gcc ~/LPEDC/E040.c -o ~/LPEDC/E040 && ~/LPEDC/E040
 ```
 
 **Exercício E042** · ★★★
@@ -1987,7 +1973,7 @@ Ao contrário: 021
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E042.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E042 && ~/LPEDC/01-fundamentos/0007-aritmetica/E042
+gcc ~/LPEDC/E042.c -o ~/LPEDC/E042 && ~/LPEDC/E042
 ```
 
 ---
@@ -2019,7 +2005,7 @@ No desenho, pelo caminho de cima os dois `int` se dividem, sai 12 e só então
 vira 12.0, tarde demais. Pelo de baixo, o cast transforma 523 em 523.0 antes
 da divisão:
 
-<p align="center"><img src="01-fundamentos/0008-conversao/ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
+<p align="center"><img src="0008-ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
 
 O consumo do carro em C:
 
@@ -2052,7 +2038,7 @@ int main(void) {
 A pergunta "tem um real na divisão?" é respondida pelo compilador, pelos
 tipos. Com o cast, o exemplo segue pelo Sim:
 
-<p align="center"><img src="01-fundamentos/0008-conversao/fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
+<p align="center"><img src="0008-fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
 
 > [!WARNING]
 > O cast precisa chegar **antes** da divisão. Em `(double) (km / litros)`, os
@@ -2073,8 +2059,6 @@ tipos. Com o cast, o exemplo segue pelo Sim:
 > passo, olhando o tipo de cada pedaço, e depois confira.
 
 ### Hora de praticar
-
-Arquivos em [`0008-conversao/`](01-fundamentos/0008-conversao/).
 
 **Exemplo A015 · O cast que corta de propósito**
 
@@ -2109,7 +2093,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/A015.c -o ~/LPEDC/01-fundamentos/0008-conversao/A015 && ~/LPEDC/01-fundamentos/0008-conversao/A015
+gcc ~/LPEDC/A015.c -o ~/LPEDC/A015 && ~/LPEDC/A015
 ```
 
 **Exemplo A016 · Conversões que acontecem sozinhas**
@@ -2152,7 +2136,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/A016.c -o ~/LPEDC/01-fundamentos/0008-conversao/A016 && ~/LPEDC/01-fundamentos/0008-conversao/A016
+gcc ~/LPEDC/A016.c -o ~/LPEDC/A016 && ~/LPEDC/A016
 ```
 
 #### Exercícios
@@ -2170,7 +2154,7 @@ Média: 8.33
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/E043.c -o ~/LPEDC/01-fundamentos/0008-conversao/E043 && ~/LPEDC/01-fundamentos/0008-conversao/E043
+gcc ~/LPEDC/E043.c -o ~/LPEDC/E043 && ~/LPEDC/E043
 ```
 
 **Exercício E045** · ★★☆
@@ -2190,7 +2174,7 @@ votos / total * 100 = 0
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/E045.c -o ~/LPEDC/01-fundamentos/0008-conversao/E045 && ~/LPEDC/01-fundamentos/0008-conversao/E045
+gcc ~/LPEDC/E045.c -o ~/LPEDC/E045 && ~/LPEDC/E045
 ```
 
 **Exercício E046** · ★★☆
@@ -2207,7 +2191,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/E046.c -o ~/LPEDC/01-fundamentos/0008-conversao/E046 && ~/LPEDC/01-fundamentos/0008-conversao/E046
+gcc ~/LPEDC/E046.c -o ~/LPEDC/E046 && ~/LPEDC/E046
 ```
 
 **Exercício E048** · ★★★
@@ -2229,7 +2213,7 @@ Somando e cortando: 7; cortando e somando: 6
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/E048.c -o ~/LPEDC/01-fundamentos/0008-conversao/E048 && ~/LPEDC/01-fundamentos/0008-conversao/E048
+gcc ~/LPEDC/E048.c -o ~/LPEDC/E048 && ~/LPEDC/E048
 ```
 
 ---
@@ -2272,7 +2256,7 @@ depois `b = 7` e por fim `a = 7`.
 O saldo passa por quatro valores, cada um calculado a partir do anterior, na
 mesma caixinha. As viagens sobem de um em um:
 
-<p align="center"><img src="01-fundamentos/0009-atribuicao/ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
+<p align="center"><img src="0009-ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
 
 O bilhete único em C:
 
@@ -2304,7 +2288,7 @@ int main(void) {
 Cada atualização é um retângulo sobre as mesmas duas variáveis. No módulo 03,
 esses passos viram um laço, com `+=` e `++` como acumulador e contador:
 
-<p align="center"><img src="01-fundamentos/0009-atribuicao/fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
+<p align="center"><img src="0009-fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
 
 > [!WARNING]
 > Nunca altere a mesma variável duas vezes na mesma expressão, nem altere e
@@ -2319,8 +2303,6 @@ esses passos viram um laço, com `+=` e `++` como acumulador e contador:
 > `int y = x++ * 2;`? E se fosse `++x * 2`? Responda e teste.
 
 ### Hora de praticar
-
-Arquivos em [`0009-atribuicao/`](01-fundamentos/0009-atribuicao/).
 
 **Exemplo A017 · Vagas que descem, senhas que sobem (até de letra)**
 
@@ -2366,7 +2348,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/A017.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/A017 && ~/LPEDC/01-fundamentos/0009-atribuicao/A017
+gcc ~/LPEDC/A017.c -o ~/LPEDC/A017 && ~/LPEDC/A017
 ```
 
 **Exemplo A018 · Pré, pós e o operador que vale para a conta inteira**
@@ -2412,7 +2394,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/A018.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/A018 && ~/LPEDC/01-fundamentos/0009-atribuicao/A018
+gcc ~/LPEDC/A018.c -o ~/LPEDC/A018 && ~/LPEDC/A018
 ```
 
 #### Exercícios
@@ -2431,7 +2413,7 @@ pontos 110, vidas 2, moedas 40, tempo 45, fase 4
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E049.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E049 && ~/LPEDC/01-fundamentos/0009-atribuicao/E049
+gcc ~/LPEDC/E049.c -o ~/LPEDC/E049 && ~/LPEDC/E049
 ```
 
 **Exercício E051** · ★★☆
@@ -2454,7 +2436,7 @@ Rendimento: R$ 17.68
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E051.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E051 && ~/LPEDC/01-fundamentos/0009-atribuicao/E051
+gcc ~/LPEDC/E051.c -o ~/LPEDC/E051 && ~/LPEDC/E051
 ```
 
 **Exercício E052** · ★★☆
@@ -2477,7 +2459,7 @@ x *= 2 + y -> 50
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E052.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E052 && ~/LPEDC/01-fundamentos/0009-atribuicao/E052
+gcc ~/LPEDC/E052.c -o ~/LPEDC/E052 && ~/LPEDC/E052
 ```
 
 **Exercício E054** · ★★★
@@ -2494,7 +2476,7 @@ Casa 5 x 2 Visitante
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E054.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E054 && ~/LPEDC/01-fundamentos/0009-atribuicao/E054
+gcc ~/LPEDC/E054.c -o ~/LPEDC/E054 && ~/LPEDC/E054
 ```
 
 ---
@@ -2534,7 +2516,7 @@ Na grande, o diâmetro 35 vira raio 17,5; `pow` eleva ao quadrado; vezes pi,
 dá a área. Nas médias, a mesma conta vezes dois dá 981,75 cm², um pouco mais
 que a grande:
 
-<p align="center"><img src="01-fundamentos/0010-math/ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
+<p align="center"><img src="0010-ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
 
 A comparação das pizzas em C:
 
@@ -2576,7 +2558,7 @@ R$ 2 mais barato.
 No fluxograma, `pow(...)` e `sqrt(...)` entram nas contas como qualquer
 valor:
 
-<p align="center"><img src="01-fundamentos/0010-math/fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
+<p align="center"><img src="0010-fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
 
 > [!WARNING]
 > `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e todo
@@ -2596,8 +2578,6 @@ valor:
 > `ceil(-0.5)`? O A020 tem uma tabela parecida para conferir.
 
 ### Hora de praticar
-
-Arquivos em [`0010-math/`](01-fundamentos/0010-math/).
 
 **Exemplo A019 · A escada no muro e o posto na estrada**
 
@@ -2634,7 +2614,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/A019.c -o ~/LPEDC/01-fundamentos/0010-math/A019 -lm && ~/LPEDC/01-fundamentos/0010-math/A019
+gcc ~/LPEDC/A019.c -o ~/LPEDC/A019 -lm && ~/LPEDC/A019
 ```
 
 **Exemplo A020 · Arredondar para cima, para baixo e para o mais perto**
@@ -2676,7 +2656,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/A020.c -o ~/LPEDC/01-fundamentos/0010-math/A020 -lm && ~/LPEDC/01-fundamentos/0010-math/A020
+gcc ~/LPEDC/A020.c -o ~/LPEDC/A020 -lm && ~/LPEDC/A020
 ```
 
 #### Exercícios
@@ -2695,7 +2675,7 @@ TV de 55 polegadas
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/E055.c -o ~/LPEDC/01-fundamentos/0010-math/E055 -lm && ~/LPEDC/01-fundamentos/0010-math/E055
+gcc ~/LPEDC/E055.c -o ~/LPEDC/E055 -lm && ~/LPEDC/E055
 ```
 
 **Exercício E057** · ★★☆
@@ -2713,7 +2693,7 @@ Total: R$ 269.70
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/E057.c -o ~/LPEDC/01-fundamentos/0010-math/E057 -lm && ~/LPEDC/01-fundamentos/0010-math/E057
+gcc ~/LPEDC/E057.c -o ~/LPEDC/E057 -lm && ~/LPEDC/E057
 ```
 
 **Exercício E058** · ★★☆
@@ -2735,7 +2715,7 @@ Diferença: R$ 29.73
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/E058.c -o ~/LPEDC/01-fundamentos/0010-math/E058 -lm && ~/LPEDC/01-fundamentos/0010-math/E058
+gcc ~/LPEDC/E058.c -o ~/LPEDC/E058 -lm && ~/LPEDC/E058
 ```
 
 **Exercício E060** · ★★★
@@ -2761,7 +2741,7 @@ Altura máxima: 21.50 m, em 2.00 s
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/E060.c -o ~/LPEDC/01-fundamentos/0010-math/E060 -lm && ~/LPEDC/01-fundamentos/0010-math/E060
+gcc ~/LPEDC/E060.c -o ~/LPEDC/E060 -lm && ~/LPEDC/E060
 ```
 
 ---
@@ -2790,7 +2770,7 @@ anterior nem repete nada. Isso vem nos módulos 02 (decisão) e 03 (repetição)
 Entram três valores; o consumo é 257 kWh, a conta é R$ 229,24 e a divisão por
 três, com o centavo para cima, dá R$ 76,42 para cada um:
 
-<p align="center"><img src="01-fundamentos/0011-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0011-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa completo:
 
@@ -2860,7 +2840,7 @@ dois centavos, mas a conta fica paga.
 Entrada, quatro contas e saída, sem nenhum losango, como todo programa deste
 módulo:
 
-<p align="center"><img src="01-fundamentos/0011-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
+<p align="center"><img src="0011-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
 
 > [!WARNING]
 > Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8 e a
@@ -2875,8 +2855,6 @@ módulo:
 > deveria fazer antes de calcular? Guarde a resposta para o módulo 02.
 
 ### Hora de praticar
-
-Arquivos em [`0011-juntando-tudo/`](01-fundamentos/0011-juntando-tudo/).
 
 **Exemplo A021 · Quantas caixas de piso comprar**
 
@@ -2935,7 +2913,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/A021.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/A021 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/A021
+gcc ~/LPEDC/A021.c -o ~/LPEDC/A021 -lm && ~/LPEDC/A021
 ```
 
 **Exemplo A022 · Rachando a gasolina da viagem**
@@ -2988,7 +2966,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/A022.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/A022 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/A022
+gcc ~/LPEDC/A022.c -o ~/LPEDC/A022 -lm && ~/LPEDC/A022
 ```
 
 #### Exercícios
@@ -3009,7 +2987,7 @@ IMC: 23.7
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061
+gcc ~/LPEDC/E061.c -o ~/LPEDC/E061 -lm && ~/LPEDC/E061
 ```
 
 **Exercício E063** · ★★☆
@@ -3030,7 +3008,7 @@ Tempo: 376 s = 6 min 16 s
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063
+gcc ~/LPEDC/E063.c -o ~/LPEDC/E063 -lm && ~/LPEDC/E063
 ```
 
 **Exercício E064** · ★★☆
@@ -3056,7 +3034,7 @@ Juros: R$ 174.12
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064
+gcc ~/LPEDC/E064.c -o ~/LPEDC/E064 -lm && ~/LPEDC/E064
 ```
 
 **Exercício E066** · ★★★
@@ -3096,7 +3074,7 @@ Chega às 00:00, 3 dia(s) depois
 ```
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066 && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066
+gcc ~/LPEDC/E066.c -o ~/LPEDC/E066 && ~/LPEDC/E066
 ```
 
 ---
@@ -3276,7 +3254,7 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](01-fundamentos/lista/); resoluções em `_respostas/01-fundamentos/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0101.c a P0130.c, na raiz; resoluções em `_respostas/01-fundamentos/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3302,7 +3280,7 @@ Total do plano: R$ 409.60
 3. Resposta esperada: Total do plano: R$ 409.60.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0101.c -o ~/LPEDC/01-fundamentos/lista/P0101 && ~/LPEDC/01-fundamentos/lista/P0101
+gcc ~/LPEDC/P0101.c -o ~/LPEDC/P0101 && ~/LPEDC/P0101
 ```
 
 ---
@@ -3329,7 +3307,7 @@ Custo da ida: R$ 103.92
 3. Resposta esperada: 15.30 litros e R$ 103.92.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0102.c -o ~/LPEDC/01-fundamentos/lista/P0102 && ~/LPEDC/01-fundamentos/lista/P0102
+gcc ~/LPEDC/P0102.c -o ~/LPEDC/P0102 && ~/LPEDC/P0102
 ```
 
 ---
@@ -3353,7 +3331,7 @@ Saída esperada:
 3. Resposta esperada: 7 h e 17 min.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0103.c -o ~/LPEDC/01-fundamentos/lista/P0103 && ~/LPEDC/01-fundamentos/lista/P0103
+gcc ~/LPEDC/P0103.c -o ~/LPEDC/P0103 && ~/LPEDC/P0103
 ```
 
 ---
@@ -3377,7 +3355,7 @@ Saída esperada:
 3. Resposta esperada: 98.6 F = 37.0 C.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0104.c -o ~/LPEDC/01-fundamentos/lista/P0104 && ~/LPEDC/01-fundamentos/lista/P0104
+gcc ~/LPEDC/P0104.c -o ~/LPEDC/P0104 && ~/LPEDC/P0104
 ```
 
 ---
@@ -3403,7 +3381,7 @@ Senha no painel: 43
 3. Resposta esperada: 41, 43 e 43.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0105.c -o ~/LPEDC/01-fundamentos/lista/P0105 && ~/LPEDC/01-fundamentos/lista/P0105
+gcc ~/LPEDC/P0105.c -o ~/LPEDC/P0105 && ~/LPEDC/P0105
 ```
 
 ---
@@ -3430,7 +3408,7 @@ Alunos no último: 26
 3. Resposta esperada: 3, 26 e 4.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0106.c -o ~/LPEDC/01-fundamentos/lista/P0106 && ~/LPEDC/01-fundamentos/lista/P0106
+gcc ~/LPEDC/P0106.c -o ~/LPEDC/P0106 && ~/LPEDC/P0106
 ```
 
 ---
@@ -3458,7 +3436,7 @@ ceil:   24
 3. Resposta esperada: 23, 24, 23 e 24.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0107.c -o ~/LPEDC/01-fundamentos/lista/P0107 -lm && ~/LPEDC/01-fundamentos/lista/P0107
+gcc ~/LPEDC/P0107.c -o ~/LPEDC/P0107 -lm && ~/LPEDC/P0107
 ```
 
 ---
@@ -3485,7 +3463,7 @@ O total é 1 vez(es) o INT_MAX
 3. Resposta esperada: Total do dia: R$ 4000000000.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0108.c -o ~/LPEDC/01-fundamentos/lista/P0108 && ~/LPEDC/01-fundamentos/lista/P0108
+gcc ~/LPEDC/P0108.c -o ~/LPEDC/P0108 && ~/LPEDC/P0108
 ```
 
 ---
@@ -3513,7 +3491,7 @@ Presidente  22:00  112.00
 3. Resposta esperada: as três linhas acima, com 09:05, 13:40 e 22:00.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0109.c -o ~/LPEDC/01-fundamentos/lista/P0109 && ~/LPEDC/01-fundamentos/lista/P0109
+gcc ~/LPEDC/P0109.c -o ~/LPEDC/P0109 && ~/LPEDC/P0109
 ```
 
 ---
@@ -3538,7 +3516,7 @@ Total: R$ 42.00
 3. Resposta esperada: com 1.5 e 28.00, Total: R$ 42.00.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0110.c -o ~/LPEDC/01-fundamentos/lista/P0110 && ~/LPEDC/01-fundamentos/lista/P0110
+gcc ~/LPEDC/P0110.c -o ~/LPEDC/P0110 && ~/LPEDC/P0110
 ```
 
 ### ★★☆ Para pensar
@@ -3563,7 +3541,7 @@ Saída esperada:
 3. Resposta esperada: 2 dia(s), 7 h, 33 min e 20 s.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0111.c -o ~/LPEDC/01-fundamentos/lista/P0111 && ~/LPEDC/01-fundamentos/lista/P0111
+gcc ~/LPEDC/P0111.c -o ~/LPEDC/P0111 && ~/LPEDC/P0111
 ```
 
 ---
@@ -3588,7 +3566,7 @@ Produto: 448
 3. Resposta esperada: soma 21 e produto 448.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0112.c -o ~/LPEDC/01-fundamentos/lista/P0112 && ~/LPEDC/01-fundamentos/lista/P0112
+gcc ~/LPEDC/P0112.c -o ~/LPEDC/P0112 && ~/LPEDC/P0112
 ```
 
 ---
@@ -3613,7 +3591,7 @@ Média final: 7.2
 3. Resposta esperada: Média final: 7.2.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0113.c -o ~/LPEDC/01-fundamentos/lista/P0113 && ~/LPEDC/01-fundamentos/lista/P0113
+gcc ~/LPEDC/P0113.c -o ~/LPEDC/P0113 && ~/LPEDC/P0113
 ```
 
 ---
@@ -3640,7 +3618,7 @@ Chegada em 14 h e 46 min de viagem
 3. Resposta esperada: 886 minutos, 14 h e 46 min.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0114.c -o ~/LPEDC/01-fundamentos/lista/P0114 -lm && ~/LPEDC/01-fundamentos/lista/P0114
+gcc ~/LPEDC/P0114.c -o ~/LPEDC/P0114 -lm && ~/LPEDC/P0114
 ```
 
 ---
@@ -3667,7 +3645,7 @@ Velocidade: 11.43 km/h
 3. Resposta esperada: Pace: 5:15 e 11.43 km/h.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0115.c -o ~/LPEDC/01-fundamentos/lista/P0115 && ~/LPEDC/01-fundamentos/lista/P0115
+gcc ~/LPEDC/P0115.c -o ~/LPEDC/P0115 && ~/LPEDC/P0115
 ```
 
 ---
@@ -3695,7 +3673,7 @@ Centavos com round: 435
 3. Resposta esperada: 434 com (int) e 435 com round.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0116.c -o ~/LPEDC/01-fundamentos/lista/P0116 -lm && ~/LPEDC/01-fundamentos/lista/P0116
+gcc ~/LPEDC/P0116.c -o ~/LPEDC/P0116 -lm && ~/LPEDC/P0116
 ```
 
 ---
@@ -3721,7 +3699,7 @@ Saída esperada:
 3. Resposta esperada: 50.0 e 22.5 graus.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0117.c -o ~/LPEDC/01-fundamentos/lista/P0117 -lm && ~/LPEDC/01-fundamentos/lista/P0117
+gcc ~/LPEDC/P0117.c -o ~/LPEDC/P0117 -lm && ~/LPEDC/P0117
 ```
 
 ---
@@ -3746,7 +3724,7 @@ Média por música: 4:20
 3. Resposta esperada: Total 13:00 e média 4:20.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0118.c -o ~/LPEDC/01-fundamentos/lista/P0118 && ~/LPEDC/01-fundamentos/lista/P0118
+gcc ~/LPEDC/P0118.c -o ~/LPEDC/P0118 && ~/LPEDC/P0118
 ```
 
 ---
@@ -3773,7 +3751,7 @@ Dura 7 dias completos e sobram 97 litros
 3. Resposta esperada: 1357 litros, 7 dias e 97 litros de sobra.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0119.c -o ~/LPEDC/01-fundamentos/lista/P0119 && ~/LPEDC/01-fundamentos/lista/P0119
+gcc ~/LPEDC/P0119.c -o ~/LPEDC/P0119 && ~/LPEDC/P0119
 ```
 
 ---
@@ -3802,7 +3780,7 @@ Velocidade média: 48.0 km/h
 3. Resposta esperada: Velocidade média: 48.0 km/h.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0120.c -o ~/LPEDC/01-fundamentos/lista/P0120 && ~/LPEDC/01-fundamentos/lista/P0120
+gcc ~/LPEDC/P0120.c -o ~/LPEDC/P0120 && ~/LPEDC/P0120
 ```
 
 ### ★★★ Desafio
@@ -3833,7 +3811,7 @@ CPF: 123.456.789-09
 4. Resposta esperada: CPF: 123.456.789-09.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0121.c -o ~/LPEDC/01-fundamentos/lista/P0121 && ~/LPEDC/01-fundamentos/lista/P0121
+gcc ~/LPEDC/P0121.c -o ~/LPEDC/P0121 && ~/LPEDC/P0121
 ```
 
 ---
@@ -3861,7 +3839,7 @@ Saída esperada:
 3. Resposta esperada: as duas datas caem numa sexta-feira (5).
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0122.c -o ~/LPEDC/01-fundamentos/lista/P0122 && ~/LPEDC/01-fundamentos/lista/P0122
+gcc ~/LPEDC/P0122.c -o ~/LPEDC/P0122 && ~/LPEDC/P0122
 ```
 
 ---
@@ -3889,7 +3867,7 @@ São 14 semanas e 6 dias
 3. Resposta esperada: 104 dias, 14 semanas e 6 dias.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0123.c -o ~/LPEDC/01-fundamentos/lista/P0123 && ~/LPEDC/01-fundamentos/lista/P0123
+gcc ~/LPEDC/P0123.c -o ~/LPEDC/P0123 && ~/LPEDC/P0123
 ```
 
 ---
@@ -3919,7 +3897,7 @@ Código: 7891234567895
 4. Resposta esperada: Código: 7891234567895.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0124.c -o ~/LPEDC/01-fundamentos/lista/P0124 && ~/LPEDC/01-fundamentos/lista/P0124
+gcc ~/LPEDC/P0124.c -o ~/LPEDC/P0124 && ~/LPEDC/P0124
 ```
 
 ---
@@ -3948,7 +3926,7 @@ Octal: 0266
 3. Resposta esperada: 182, 0xB6 e 0266.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0125.c -o ~/LPEDC/01-fundamentos/lista/P0125 && ~/LPEDC/01-fundamentos/lista/P0125
+gcc ~/LPEDC/P0125.c -o ~/LPEDC/P0125 && ~/LPEDC/P0125
 ```
 
 ---
@@ -3976,7 +3954,7 @@ Pace previsto: 5:27 por km
 4. Resposta esperada: Maratona em 3:50:01.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0126.c -o ~/LPEDC/01-fundamentos/lista/P0126 -lm && ~/LPEDC/01-fundamentos/lista/P0126
+gcc ~/LPEDC/P0126.c -o ~/LPEDC/P0126 -lm && ~/LPEDC/P0126
 ```
 
 ---
@@ -4004,7 +3982,7 @@ F(40) = 102334155
 3. Resposta esperada: 55, 832040 e 102334155.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0127.c -o ~/LPEDC/01-fundamentos/lista/P0127 -lm && ~/LPEDC/01-fundamentos/lista/P0127
+gcc ~/LPEDC/P0127.c -o ~/LPEDC/P0127 -lm && ~/LPEDC/P0127
 ```
 
 ---
@@ -4034,7 +4012,7 @@ Distância: 1294 km
 3. Mostre com %.0f. Resposta esperada: Distância: 1294 km.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0128.c -o ~/LPEDC/01-fundamentos/lista/P0128 -lm && ~/LPEDC/01-fundamentos/lista/P0128
+gcc ~/LPEDC/P0128.c -o ~/LPEDC/P0128 -lm && ~/LPEDC/P0128
 ```
 
 ---
@@ -4065,7 +4043,7 @@ Páscoa de 2027: 28/03
 3. Resposta esperada: 05/04 em 2026 e 28/03 em 2027.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0129.c -o ~/LPEDC/01-fundamentos/lista/P0129 && ~/LPEDC/01-fundamentos/lista/P0129
+gcc ~/LPEDC/P0129.c -o ~/LPEDC/P0129 && ~/LPEDC/P0129
 ```
 
 ---
@@ -4095,7 +4073,7 @@ Remontado: 305419896
 4. Resposta esperada: 18 52 86 120, ou 12 34 56 78 em hexa.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/lista/P0130.c -o ~/LPEDC/01-fundamentos/lista/P0130 && ~/LPEDC/01-fundamentos/lista/P0130
+gcc ~/LPEDC/P0130.c -o ~/LPEDC/P0130 && ~/LPEDC/P0130
 ```
 
 ## Questões no estilo da prova

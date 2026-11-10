@@ -50,17 +50,17 @@ sudo pacman -S gdb          # Arch Linux
 sudo apt install gdb        # Debian / Ubuntu
 ```
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0044](#0044--memória-e-endereços) | Memória e endereços | [`0044-memoria/`](06-ponteiros/0044-memoria/) |
-| [0045](#0045--ponteiros) | Ponteiros | [`0045-ponteiros/`](06-ponteiros/0045-ponteiros/) |
-| [0046](#0046--passagem-por-referência) | Passagem por referência | [`0046-passagem-por-referencia/`](06-ponteiros/0046-passagem-por-referencia/) |
-| [0047](#0047--ponteiros-e-vetores) | Ponteiros e vetores | [`0047-ponteiros-e-vetores/`](06-ponteiros/0047-ponteiros-e-vetores/) |
-| [0048](#0048--ponteiros-e-strings) | Ponteiros e strings | [`0048-ponteiros-e-strings/`](06-ponteiros/0048-ponteiros-e-strings/) |
-| [0049](#0049--ponteiro-para-ponteiro) | Ponteiro para ponteiro | [`0049-ponteiro-para-ponteiro/`](06-ponteiros/0049-ponteiro-para-ponteiro/) |
-| [0050](#0050--ponteiro-para-função) | Ponteiro para função | [`0050-ponteiro-para-funcao/`](06-ponteiros/0050-ponteiro-para-funcao/) |
-| [0051](#0051--void--e-cast) | void * e cast | [`0051-void-generico/`](06-ponteiros/0051-void-generico/) |
-| [0052](#0052--juntando-tudo-o-ranking-da-feira) | Juntando tudo: o ranking da feira | [`0052-juntando-tudo/`](06-ponteiros/0052-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0044](#0044--memória-e-endereços) | Memória e endereços |
+| [0045](#0045--ponteiros) | Ponteiros |
+| [0046](#0046--passagem-por-referência) | Passagem por referência |
+| [0047](#0047--ponteiros-e-vetores) | Ponteiros e vetores |
+| [0048](#0048--ponteiros-e-strings) | Ponteiros e strings |
+| [0049](#0049--ponteiro-para-ponteiro) | Ponteiro para ponteiro |
+| [0050](#0050--ponteiro-para-função) | Ponteiro para função |
+| [0051](#0051--void--e-cast) | void * e cast |
+| [0052](#0052--juntando-tudo-o-ranking-da-feira) | Juntando tudo: o ranking da feira |
 
 ---
 
@@ -96,7 +96,7 @@ No cadastro da academia, a idade (30, `int`), a mensalidade (R$ 119,90,
 `double`) e o plano (`'B'`, `char`) ganham gavetas. Os endereços do desenho são
 fictícios:
 
-<p align="center"><img src="06-ponteiros/0044-memoria/ideia.svg" alt="Diagrama da ideia: Memória e endereços" width="858"></p>
+<p align="center"><img src="0044-ideia.svg" alt="Diagrama da ideia: Memória e endereços" width="858"></p>
 
 O programa mostra, de cada variável, o valor, o endereço e o tamanho:
 
@@ -129,7 +129,7 @@ Rode duas vezes: valores e tamanhos se repetem, endereços não.
 O fluxograma não tem decisão. Para cada variável, o programa faz as mesmas três
 perguntas: o que tem dentro, onde mora e quanto ocupa:
 
-<p align="center"><img src="06-ponteiros/0044-memoria/fluxograma.svg" alt="Fluxograma: Memória e endereços" width="1566"></p>
+<p align="center"><img src="0044-fluxograma.svg" alt="Fluxograma: Memória e endereços" width="1566"></p>
 
 > [!WARNING]
 > Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes em 64 bits e
@@ -152,8 +152,6 @@ perguntas: o que tem dentro, onde mora e quanto ocupa:
 > endereços de um vetor subindo de 4 em 4.
 
 ### Hora de praticar
-
-Arquivos em [`0044-memoria/`](06-ponteiros/0044-memoria/).
 
 **Exemplo A087 · O valor muda, a gaveta não**
 
@@ -189,7 +187,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0044-memoria/A087.c -o ~/LPEDC/06-ponteiros/0044-memoria/A087 && ~/LPEDC/06-ponteiros/0044-memoria/A087
+gcc ~/LPEDC/A087.c -o ~/LPEDC/A087 && ~/LPEDC/A087
 ```
 
 **Exemplo A088 · As gavetas de um vetor**
@@ -220,7 +218,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0044-memoria/A088.c -o ~/LPEDC/06-ponteiros/0044-memoria/A088 && ~/LPEDC/06-ponteiros/0044-memoria/A088
+gcc ~/LPEDC/A088.c -o ~/LPEDC/A088 && ~/LPEDC/A088
 ```
 
 #### Exercícios
@@ -241,7 +239,7 @@ setor = X, endereço 0x7f..., tamanho 1
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0044-memoria/E259.c -o ~/LPEDC/06-ponteiros/0044-memoria/E259 && ~/LPEDC/06-ponteiros/0044-memoria/E259
+gcc ~/LPEDC/E259.c -o ~/LPEDC/E259 && ~/LPEDC/E259
 ```
 
 **Exercício E261** · ★★☆
@@ -274,7 +272,7 @@ a matriz: 48 bytes
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0044-memoria/E261.c -o ~/LPEDC/06-ponteiros/0044-memoria/E261 && ~/LPEDC/06-ponteiros/0044-memoria/E261
+gcc ~/LPEDC/E261.c -o ~/LPEDC/E261 && ~/LPEDC/E261
 ```
 
 **Exercício E262** · ★★☆
@@ -295,7 +293,7 @@ Mesmo endereço: sim
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0044-memoria/E262.c -o ~/LPEDC/06-ponteiros/0044-memoria/E262 && ~/LPEDC/06-ponteiros/0044-memoria/E262
+gcc ~/LPEDC/E262.c -o ~/LPEDC/E262 && ~/LPEDC/E262
 ```
 
 **Exercício E263** · ★★★
@@ -334,7 +332,7 @@ sizeof v = 12, a + b + c = 12
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0044-memoria/E263.c -o ~/LPEDC/06-ponteiros/0044-memoria/E263 && ~/LPEDC/06-ponteiros/0044-memoria/E263
+gcc ~/LPEDC/E263.c -o ~/LPEDC/E263 && ~/LPEDC/E263
 ```
 
 ---
@@ -372,7 +370,7 @@ No caixa da farmácia, o cliente tem 120 pontos no cartão fidelidade. O ponteir
 `&pontos`. A compra de R$ 30 soma 30 pontos **por meio do ponteiro**, e
 `pontos` vira 150:
 
-<p align="center"><img src="06-ponteiros/0045-ponteiros/ideia.svg" alt="Diagrama da ideia: Ponteiros" width="858"></p>
+<p align="center"><img src="0045-ideia.svg" alt="Diagrama da ideia: Ponteiros" width="858"></p>
 
 A linha que muda `pontos` nem cita o nome `pontos`:
 
@@ -413,7 +411,7 @@ ponteiro mora.
 Antes de desreferenciar, o programa testa se o ponteiro aponta para algum
 lugar. Esse teste contra `NULL` volta no curso inteiro:
 
-<p align="center"><img src="06-ponteiros/0045-ponteiros/fluxograma.svg" alt="Fluxograma: Ponteiros" width="522"></p>
+<p align="center"><img src="0045-fluxograma.svg" alt="Fluxograma: Ponteiros" width="522"></p>
 
 > [!WARNING]
 > Ponteiro não inicializado (`int *p;`) guarda **lixo**: um endereço qualquer.
@@ -435,8 +433,6 @@ lugar. Esse teste contra `NULL` volta no curso inteiro:
 > trecho?
 
 ### Hora de praticar
-
-Arquivos em [`0045-ponteiros/`](06-ponteiros/0045-ponteiros/).
 
 **Exemplo A089 · Duas cancelas, um contador**
 
@@ -483,7 +479,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0045-ponteiros/A089.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/A089 && ~/LPEDC/06-ponteiros/0045-ponteiros/A089
+gcc ~/LPEDC/A089.c -o ~/LPEDC/A089 && ~/LPEDC/A089
 ```
 
 **Exemplo A090 · Gasolina ou etanol?**
@@ -520,7 +516,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0045-ponteiros/A090.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/A090 && ~/LPEDC/06-ponteiros/0045-ponteiros/A090
+gcc ~/LPEDC/A090.c -o ~/LPEDC/A090 && ~/LPEDC/A090
 ```
 
 #### Exercícios
@@ -542,7 +538,7 @@ Pela variável: 24.0
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E265.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E265 && ~/LPEDC/06-ponteiros/0045-ponteiros/E265
+gcc ~/LPEDC/E265.c -o ~/LPEDC/E265 && ~/LPEDC/E265
 ```
 
 **Exercício E267** · ★★☆
@@ -560,7 +556,7 @@ Meta: 78
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E267.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E267 && ~/LPEDC/06-ponteiros/0045-ponteiros/E267
+gcc ~/LPEDC/E267.c -o ~/LPEDC/E267 && ~/LPEDC/E267
 ```
 
 **Exercício E268** · ★★☆
@@ -579,7 +575,7 @@ Depois de tirar 4 kg: azul 19 kg, preta 22 kg
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E268.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E268 && ~/LPEDC/06-ponteiros/0045-ponteiros/E268
+gcc ~/LPEDC/E268.c -o ~/LPEDC/E268 && ~/LPEDC/E268
 ```
 
 **Exercício E269** · ★★★
@@ -617,7 +613,7 @@ p = q         a = 9, b = 8, *p = 8, *q = 8
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E269.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E269 && ~/LPEDC/06-ponteiros/0045-ponteiros/E269
+gcc ~/LPEDC/E269.c -o ~/LPEDC/E269 && ~/LPEDC/E269
 ```
 
 ---
@@ -652,7 +648,7 @@ A092 racha a conta e devolve o valor de cada um e a sobra).
 A `troca` recebe os endereços `0x1000` e `0x1004`, guarda o 8 em `tmp` e mexe
 direto nas gavetas do `main`:
 
-<p align="center"><img src="06-ponteiros/0046-passagem-por-referencia/ideia.svg" alt="Diagrama da ideia: Passagem por referência" width="858"></p>
+<p align="center"><img src="0046-ideia.svg" alt="Diagrama da ideia: Passagem por referência" width="858"></p>
 
 As duas versões lado a lado; só a segunda conserta as etiquetas:
 
@@ -707,7 +703,7 @@ desenho:
 O `main` só chama a troca se os preços estão fora de ordem. A troca são três
 passos, sempre com a variável auxiliar:
 
-<p align="center"><img src="06-ponteiros/0046-passagem-por-referencia/fluxograma.svg" alt="Fluxograma: Passagem por referência" width="370"></p>
+<p align="center"><img src="0046-fluxograma.svg" alt="Fluxograma: Passagem por referência" width="370"></p>
 
 > [!WARNING]
 > Dois erros clássicos. Esquecer o `&` na chamada: `troca(arroz, feijao)` manda
@@ -727,8 +723,6 @@ passos, sempre com a variável auxiliar:
 > ponteiros apontam para a mesma gaveta. O valor de `arroz` muda?
 
 ### Hora de praticar
-
-Arquivos em [`0046-passagem-por-referencia/`](06-ponteiros/0046-passagem-por-referencia/).
 
 **Exemplo A091 · O plantão que vira o relógio**
 
@@ -770,7 +764,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A091.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A091 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A091
+gcc ~/LPEDC/A091.c -o ~/LPEDC/A091 && ~/LPEDC/A091
 ```
 
 **Exemplo A092 · Rachando a conta do bar**
@@ -808,7 +802,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A092.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A092 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A092
+gcc ~/LPEDC/A092.c -o ~/LPEDC/A092 && ~/LPEDC/A092
 ```
 
 #### Exercícios
@@ -828,7 +822,7 @@ Depois: 6 ingressos
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E271.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E271 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E271
+gcc ~/LPEDC/E271.c -o ~/LPEDC/E271 && ~/LPEDC/E271
 ```
 
 **Exercício E273** · ★★☆
@@ -852,7 +846,7 @@ Menor: 31  Maior: 39  Amplitude: 8
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E273.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E273 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E273
+gcc ~/LPEDC/E273.c -o ~/LPEDC/E273 && ~/LPEDC/E273
 ```
 
 **Exercício E274** · ★★☆
@@ -877,7 +871,7 @@ Bilhetes avulsos: 0
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E274.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E274 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E274
+gcc ~/LPEDC/E274.c -o ~/LPEDC/E274 && ~/LPEDC/E274
 ```
 
 **Exercício E275** · ★★★
@@ -906,7 +900,7 @@ x² + 1 = 0        ->  nenhuma raiz real
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E275.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E275 -lm && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E275
+gcc ~/LPEDC/E275.c -o ~/LPEDC/E275 -lm && ~/LPEDC/E275
 ```
 
 ---
@@ -947,7 +941,7 @@ O consumo de luz de 5 meses está em `kwh`. O ponteiro `p` começa em `kwh`
 (gaveta `0x1000`) e anda uma gaveta por vez, somando. Quando chega a `kwh + 5`,
 "um depois do último", o laço para:
 
-<p align="center"><img src="06-ponteiros/0047-ponteiros-e-vetores/ideia.svg" alt="Diagrama da ideia: Ponteiros e vetores" width="858"></p>
+<p align="center"><img src="0047-ideia.svg" alt="Diagrama da ideia: Ponteiros e vetores" width="858"></p>
 
 O mesmo percurso no código, com o endereço a cada passo:
 
@@ -999,7 +993,7 @@ Com os endereços fictícios do desenho (`kwh` em `0x1000`):
 
 É o acumulador do assunto 0025, mas quem anda é o ponteiro, não um índice:
 
-<p align="center"><img src="06-ponteiros/0047-ponteiros-e-vetores/fluxograma.svg" alt="Fluxograma: Ponteiros e vetores" width="532"></p>
+<p align="center"><img src="0047-fluxograma.svg" alt="Fluxograma: Ponteiros e vetores" width="532"></p>
 
 > [!WARNING]
 > `*p + 1` e `*(p + 1)` diferem. O `*` vem antes do `+`: `*p + 1` pega o valor e
@@ -1019,8 +1013,6 @@ Com os endereços fictícios do desenho (`kwh` em `0x1000`):
 > valem `*p`, `p[1]`, `p[-1]` e `p - kwh`?
 
 ### Hora de praticar
-
-Arquivos em [`0047-ponteiros-e-vetores/`](06-ponteiros/0047-ponteiros-e-vetores/).
 
 **Exemplo A093 · De trás para frente, um passo por tipo**
 
@@ -1060,7 +1052,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A093.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A093 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A093
+gcc ~/LPEDC/A093.c -o ~/LPEDC/A093 && ~/LPEDC/A093
 ```
 
 **Exemplo A094 · O primeiro dia da meta**
@@ -1103,7 +1095,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A094.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A094 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A094
+gcc ~/LPEDC/A094.c -o ~/LPEDC/A094 && ~/LPEDC/A094
 ```
 
 #### Exercícios
@@ -1129,7 +1121,7 @@ Média: 7.75
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E277.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E277 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E277
+gcc ~/LPEDC/E277.c -o ~/LPEDC/E277 && ~/LPEDC/E277
 ```
 
 **Exercício E279** · ★★☆
@@ -1155,7 +1147,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E279.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E279 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E279
+gcc ~/LPEDC/E279.c -o ~/LPEDC/E279 && ~/LPEDC/E279
 ```
 
 **Exercício E280** · ★★☆
@@ -1174,7 +1166,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E280.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E280 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E280
+gcc ~/LPEDC/E280.c -o ~/LPEDC/E280 && ~/LPEDC/E280
 ```
 
 **Exercício E281** · ★★★
@@ -1207,7 +1199,7 @@ Campeã: filial 0
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E281.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E281 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E281
+gcc ~/LPEDC/E281.c -o ~/LPEDC/E281 && ~/LPEDC/E281
 ```
 
 ---
@@ -1245,7 +1237,7 @@ No desenho, `nome` é uma cópia na pilha, e o laço passa cada letra para
 maiúscula. `apelido` é só uma seta para o literal `"bia"`, na área só de
 leitura:
 
-<p align="center"><img src="06-ponteiros/0048-ponteiros-e-strings/ideia.svg" alt="Diagrama da ideia: Ponteiros e strings" width="858"></p>
+<p align="center"><img src="0048-ideia.svg" alt="Diagrama da ideia: Ponteiros e strings" width="858"></p>
 
 O ponteiro `p` percorre `nome` até o `'\0'`, trocando cada letra:
 
@@ -1283,7 +1275,7 @@ caber num `char`.
 É o laço clássico de string: em vez de contar `n` posições, pergunta "a gaveta
 atual é o `'\0'`?":
 
-<p align="center"><img src="06-ponteiros/0048-ponteiros-e-strings/fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
+<p align="center"><img src="0048-fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
 
 > [!WARNING]
 > `char *s = "ola"; s[0] = 'O';` compila **sem aviso** e derruba o programa na
@@ -1305,8 +1297,6 @@ atual é o `'\0'`?":
 > é verdadeiro?
 
 ### Hora de praticar
-
-Arquivos em [`0048-ponteiros-e-strings/`](06-ponteiros/0048-ponteiros-e-strings/).
 
 **Exemplo A095 · A string começa onde o ponteiro aponta**
 
@@ -1347,7 +1337,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A095.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A095 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A095
+gcc ~/LPEDC/A095.c -o ~/LPEDC/A095 && ~/LPEDC/A095
 ```
 
 **Exemplo A096 · Os dias da feira**
@@ -1389,7 +1379,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A096.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A096 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A096
+gcc ~/LPEDC/A096.c -o ~/LPEDC/A096 && ~/LPEDC/A096
 ```
 
 #### Exercícios
@@ -1413,7 +1403,7 @@ Vogais: 15
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E283.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E283 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E283
+gcc ~/LPEDC/E283.c -o ~/LPEDC/E283 && ~/LPEDC/E283
 ```
 
 **Exercício E285** · ★★☆
@@ -1449,7 +1439,7 @@ copia_classica: Porto Alegre (12 letras)
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E285.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E285 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E285
+gcc ~/LPEDC/E285.c -o ~/LPEDC/E285 && ~/LPEDC/E285
 ```
 
 **Exercício E286** · ★★☆
@@ -1475,7 +1465,7 @@ Mesmo morador
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E286.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E286 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E286
+gcc ~/LPEDC/E286.c -o ~/LPEDC/E286 && ~/LPEDC/E286
 ```
 
 **Exercício E287** · ★★★
@@ -1495,7 +1485,7 @@ pix caiu: não
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E287.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E287 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E287
+gcc ~/LPEDC/E287.c -o ~/LPEDC/E287 && ~/LPEDC/E287
 ```
 
 ---
@@ -1535,7 +1525,7 @@ O estacionamento do shopping tem 40 vagas. `p` aponta para `vagas` e `pp`
 aponta para `p`. Quando entram 2 carros, o programa atualiza `vagas` sem citar
 o nome dela, em dois saltos:
 
-<p align="center"><img src="06-ponteiros/0049-ponteiro-para-ponteiro/ideia.svg" alt="Diagrama da ideia: Ponteiro para ponteiro" width="858"></p>
+<p align="center"><img src="0049-ideia.svg" alt="Diagrama da ideia: Ponteiro para ponteiro" width="858"></p>
 
 O programa mostra cada nível e confere quem é igual a quem:
 
@@ -1574,7 +1564,7 @@ ser o endereço de `vagas`.
 Não há decisão. Primeiro a corrente é montada, elo por elo (`vagas`, `p`,
 `pp`); depois o `**pp` a percorre de volta até `vagas`:
 
-<p align="center"><img src="06-ponteiros/0049-ponteiro-para-ponteiro/fluxograma.svg" alt="Fluxograma: Ponteiro para ponteiro" width="1235"></p>
+<p align="center"><img src="0049-fluxograma.svg" alt="Fluxograma: Ponteiro para ponteiro" width="1235"></p>
 
 > [!WARNING]
 > Estrela a menos é o erro clássico. `*pp = 38;` não muda `vagas`: guarda o
@@ -1595,8 +1585,6 @@ Não há decisão. Primeiro a corrente é montada, elo por elo (`vagas`, `p`,
 > `*pp = &outra;`? Quanto valem `vagas`, `*p` e `**pp`?
 
 ### Hora de praticar
-
-Arquivos em [`0049-ponteiro-para-ponteiro/`](06-ponteiros/0049-ponteiro-para-ponteiro/).
 
 **Exemplo A097 · A lista de chamada termina em NULL**
 
@@ -1645,7 +1633,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A097.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A097 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A097
+gcc ~/LPEDC/A097.c -o ~/LPEDC/A097 && ~/LPEDC/A097
 ```
 
 **Exemplo A098 · O posto mais barato**
@@ -1684,7 +1672,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A098.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A098 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A098
+gcc ~/LPEDC/A098.c -o ~/LPEDC/A098 && ~/LPEDC/A098
 ```
 
 #### Exercícios
@@ -1712,7 +1700,7 @@ Agora: K
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E289.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E289 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E289
+gcc ~/LPEDC/E289.c -o ~/LPEDC/E289 && ~/LPEDC/E289
 ```
 
 **Exercício E291** · ★★☆
@@ -1746,7 +1734,7 @@ Saída esperada:
 Teste também com "Sem numero": deve sair uma linha vazia.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E291.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E291 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E291
+gcc ~/LPEDC/E291.c -o ~/LPEDC/E291 && ~/LPEDC/E291
 ```
 
 **Exercício E292** · ★★☆
@@ -1771,7 +1759,7 @@ Maior lance: R$ 870
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E292.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E292 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E292
+gcc ~/LPEDC/E292.c -o ~/LPEDC/E292 && ~/LPEDC/E292
 ```
 
 **Exercício E293** · ★★★
@@ -1805,7 +1793,7 @@ Originais: j1=9 j2=7 j3=10 j4=8
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E293.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E293 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E293
+gcc ~/LPEDC/E293.c -o ~/LPEDC/E293 && ~/LPEDC/E293
 ```
 
 ---
@@ -1847,7 +1835,7 @@ As máximas da semana estão num vetor. A função `conta_se` conta quantos dias
 passam num critério que ela não conhece: recebe o endereço de `eh_calor` (ou
 `eh_frio`) e chama por ele:
 
-<p align="center"><img src="06-ponteiros/0050-ponteiro-para-funcao/ideia.svg" alt="Diagrama da ideia: Ponteiro para função" width="858"></p>
+<p align="center"><img src="0050-ideia.svg" alt="Diagrama da ideia: Ponteiro para função" width="858"></p>
 
 A mesma `conta_se` responde duas perguntas:
 
@@ -1884,7 +1872,7 @@ int main(void) {
 É o contador do assunto 0025. A novidade está no losango: a pergunta é a função
 que chegou pelo parâmetro:
 
-<p align="center"><img src="06-ponteiros/0050-ponteiro-para-funcao/fluxograma.svg" alt="Fluxograma: Ponteiro para função" width="543"></p>
+<p align="center"><img src="0050-fluxograma.svg" alt="Fluxograma: Ponteiro para função" width="543"></p>
 
 O `qsort` segue a mesma ideia, mas, como ordena qualquer tipo, a função de
 comparação recebe dois endereços como `const void *`. Você converte para o tipo
@@ -1909,8 +1897,6 @@ antes). O `void *` é o assunto 0051; por ora, copie o molde do A100.
 > graus) sem mexer em `conta_se`? E quantos são no vetor `temps`?
 
 ### Hora de praticar
-
-Arquivos em [`0050-ponteiro-para-funcao/`](06-ponteiros/0050-ponteiro-para-funcao/).
 
 **Exemplo A099 · A promoção do dia é um parâmetro**
 
@@ -1968,7 +1954,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A099.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A099 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A099
+gcc ~/LPEDC/A099.c -o ~/LPEDC/A099 && ~/LPEDC/A099
 ```
 
 **Exemplo A100 · A tabela do campeonato com qsort**
@@ -2013,7 +1999,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A100.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A100 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A100
+gcc ~/LPEDC/A100.c -o ~/LPEDC/A100 && ~/LPEDC/A100
 ```
 
 #### Exercícios
@@ -2040,7 +2026,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E295.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E295 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E295
+gcc ~/LPEDC/E295.c -o ~/LPEDC/E295 && ~/LPEDC/E295
 ```
 
 **Exercício E297** · ★★☆
@@ -2102,7 +2088,7 @@ Operador inválido
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E297.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E297 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E297
+gcc ~/LPEDC/E297.c -o ~/LPEDC/E297 && ~/LPEDC/E297
 ```
 
 **Exercício E298** · ★★☆
@@ -2127,7 +2113,7 @@ comparação o ENDEREÇO de um elemento, ou seja, o endereço de um
 const char * (um ponteiro para ponteiro, assunto 0049).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E298.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E298 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E298
+gcc ~/LPEDC/E298.c -o ~/LPEDC/E298 && ~/LPEDC/E298
 ```
 
 **Exercício E300** · ★★★
@@ -2154,7 +2140,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E300.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E300 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E300
+gcc ~/LPEDC/E300.c -o ~/LPEDC/E300 && ~/LPEDC/E300
 ```
 
 ---
@@ -2191,7 +2177,7 @@ A `troca` do assunto 0046 só troca `int`. A `troca_generica` recebe dois
 endereços sem tipo e o tamanho: com 4, troca duas senhas `int`; com 8, dois
 preços `double`. Byte a byte, ela nem sabe o que troca:
 
-<p align="center"><img src="06-ponteiros/0051-void-generico/ideia.svg" alt="Diagrama da ideia: void * e cast" width="858"></p>
+<p align="center"><img src="0051-ideia.svg" alt="Diagrama da ideia: void * e cast" width="858"></p>
 
 A mesma função serve aos dois tipos:
 
@@ -2231,7 +2217,7 @@ chamada informa o tamanho do dado.
 
 A função não pergunta "que tipo é?", só "ainda tem byte para trocar?":
 
-<p align="center"><img src="06-ponteiros/0051-void-generico/fluxograma.svg" alt="Fluxograma: void * e cast" width="560"></p>
+<p align="center"><img src="0051-fluxograma.svg" alt="Fluxograma: void * e cast" width="560"></p>
 
 > [!WARNING]
 > O `void *` desliga a conferência de tipos. `troca_generica(&senha_a,
@@ -2255,8 +2241,6 @@ A função não pergunta "que tipo é?", só "ainda tem byte para trocar?":
 > `sizeof(int)` para trocar dois `double`?
 
 ### Hora de praticar
-
-Arquivos em [`0051-void-generico/`](06-ponteiros/0051-void-generico/).
 
 **Exemplo A101 · O backup que copia qualquer coisa**
 
@@ -2311,7 +2295,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0051-void-generico/A101.c -o ~/LPEDC/06-ponteiros/0051-void-generico/A101 && ~/LPEDC/06-ponteiros/0051-void-generico/A101
+gcc ~/LPEDC/A101.c -o ~/LPEDC/A101 && ~/LPEDC/A101
 ```
 
 **Exemplo A102 · Os bytes de verdade**
@@ -2353,7 +2337,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0051-void-generico/A102.c -o ~/LPEDC/06-ponteiros/0051-void-generico/A102 && ~/LPEDC/06-ponteiros/0051-void-generico/A102
+gcc ~/LPEDC/A102.c -o ~/LPEDC/A102 && ~/LPEDC/A102
 ```
 
 #### Exercícios
@@ -2372,7 +2356,7 @@ altura: 1.83
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0051-void-generico/E301.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E301 && ~/LPEDC/06-ponteiros/0051-void-generico/E301
+gcc ~/LPEDC/E301.c -o ~/LPEDC/E301 && ~/LPEDC/E301
 ```
 
 **Exercício E303** · ★★☆
@@ -2397,7 +2381,7 @@ depois: 0 0 0 0 0 | 0.00
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0051-void-generico/E303.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E303 && ~/LPEDC/06-ponteiros/0051-void-generico/E303
+gcc ~/LPEDC/E303.c -o ~/LPEDC/E303 && ~/LPEDC/E303
 ```
 
 **Exercício E304** · ★★☆
@@ -2430,7 +2414,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0051-void-generico/E304.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E304 && ~/LPEDC/06-ponteiros/0051-void-generico/E304
+gcc ~/LPEDC/E304.c -o ~/LPEDC/E304 && ~/LPEDC/E304
 ```
 
 **Exercício E305** · ★★★
@@ -2465,7 +2449,7 @@ bruno no índice -1
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0051-void-generico/E305.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E305 && ~/LPEDC/06-ponteiros/0051-void-generico/E305
+gcc ~/LPEDC/E305.c -o ~/LPEDC/E305 && ~/LPEDC/E305
 ```
 
 ---
@@ -2497,7 +2481,7 @@ São 4 barracas: tomate (30 × R$ 6,50), alface (45 × R$ 3,00), queijo (8 ×
 R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`, `ordem[0]` aponta para o
 pastel e `ordem[3]` para a alface, e `fat` segue na ordem de sempre:
 
-<p align="center"><img src="06-ponteiros/0052-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o ranking da feira" width="858"></p>
+<p align="center"><img src="0052-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o ranking da feira" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -2563,7 +2547,7 @@ prometem que a comparação não muda nada.
 Três fases: calcula e aponta, ordena os ponteiros e percorre a ordem nova,
 traduzindo cada ponteiro em índice:
 
-<p align="center"><img src="06-ponteiros/0052-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o ranking da feira" width="548"></p>
+<p align="center"><img src="0052-fluxograma.svg" alt="Fluxograma: Juntando tudo: o ranking da feira" width="548"></p>
 
 > [!WARNING]
 > Passar `sizeof(double)` ao `qsort` para ordenar `ordem` parece certo e está
@@ -2584,8 +2568,6 @@ traduzindo cada ponteiro em índice:
 > recebe endereços de `const double *`; como ela chegaria ao nome?
 
 ### Hora de praticar
-
-Arquivos em [`0052-juntando-tudo/`](06-ponteiros/0052-juntando-tudo/).
 
 **Exemplo A103 · A lista de compras picada no lugar**
 
@@ -2653,7 +2635,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/A103.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/A103 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/A103
+gcc ~/LPEDC/A103.c -o ~/LPEDC/A103 && ~/LPEDC/A103
 ```
 
 **Exemplo A104 · O caixa eletrônico de comandos**
@@ -2713,7 +2695,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/A104.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/A104 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/A104
+gcc ~/LPEDC/A104.c -o ~/LPEDC/A104 && ~/LPEDC/A104
 ```
 
 #### Exercícios
@@ -2740,7 +2722,7 @@ R$ 19.99 = 19 reais e 99 centavos
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E307.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E307 -lm && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E307
+gcc ~/LPEDC/E307.c -o ~/LPEDC/E307 -lm && ~/LPEDC/E307
 ```
 
 **Exercício E309** · ★★☆
@@ -2765,7 +2747,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E309.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E309 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E309
+gcc ~/LPEDC/E309.c -o ~/LPEDC/E309 && ~/LPEDC/E309
 ```
 
 **Exercício E310** · ★★☆
@@ -2788,7 +2770,7 @@ Natal Maceio Palmas Recife Aracaju Salvador Teresina Rio Branco
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E310.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E310 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E310
+gcc ~/LPEDC/E310.c -o ~/LPEDC/E310 && ~/LPEDC/E310
 ```
 
 **Exercício E312** · ★★★
@@ -2826,7 +2808,7 @@ depois de zerar: 12 0 33 47 5
 ```
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E312.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E312 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E312
+gcc ~/LPEDC/E312.c -o ~/LPEDC/E312 && ~/LPEDC/E312
 ```
 
 ---
@@ -3005,7 +2987,7 @@ achou. A busca binária em si é o assunto 0090.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](06-ponteiros/lista/); resoluções em `_respostas/06-ponteiros/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0601.c a P0630.c, na raiz; resoluções em `_respostas/06-ponteiros/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3045,7 +3027,7 @@ Gol 7 (Remo): Remo 4 x 3 Paysandu
 3. Resposta esperada: a saída acima (4 x 3 para o Remo).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0601.c -o ~/LPEDC/06-ponteiros/lista/P0601 && ~/LPEDC/06-ponteiros/lista/P0601
+gcc ~/LPEDC/P0601.c -o ~/LPEDC/P0601 && ~/LPEDC/P0601
 ```
 
 ---
@@ -3083,7 +3065,7 @@ Média: 329.20 litros por dia
 4. Resposta esperada: a saída acima (5 leituras, média 329.20 litros).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0602.c -o ~/LPEDC/06-ponteiros/lista/P0602 && ~/LPEDC/06-ponteiros/lista/P0602
+gcc ~/LPEDC/P0602.c -o ~/LPEDC/P0602 && ~/LPEDC/P0602
 ```
 
 ---
@@ -3119,7 +3101,7 @@ R$ 50.00 / 0: ninguém para pagar
    eles não foram preenchidos.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0603.c -o ~/LPEDC/06-ponteiros/lista/P0603 && ~/LPEDC/06-ponteiros/lista/P0603
+gcc ~/LPEDC/P0603.c -o ~/LPEDC/P0603 && ~/LPEDC/P0603
 ```
 
 ---
@@ -3157,7 +3139,7 @@ QXZ9B07: Mercosul
    de leitura. Por isso as placas estão num vetor de char.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0604.c -o ~/LPEDC/06-ponteiros/lista/P0604 && ~/LPEDC/06-ponteiros/lista/P0604
+gcc ~/LPEDC/P0604.c -o ~/LPEDC/P0604 && ~/LPEDC/P0604
 ```
 
 ---
@@ -3198,7 +3180,7 @@ noite depois: 0x55d0c3a01004
 5. Resposta esperada: a saída acima, com as duas últimas linhas iguais.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0605.c -o ~/LPEDC/06-ponteiros/lista/P0605 && ~/LPEDC/06-ponteiros/lista/P0605
+gcc ~/LPEDC/P0605.c -o ~/LPEDC/P0605 && ~/LPEDC/P0605
 ```
 
 ---
@@ -3234,7 +3216,7 @@ Tabela: 34 34 30 29 25 21 18 12
 3. Evite return y - x: com números grandes a subtração estoura o int.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0606.c -o ~/LPEDC/06-ponteiros/lista/P0606 && ~/LPEDC/06-ponteiros/lista/P0606
+gcc ~/LPEDC/P0606.c -o ~/LPEDC/P0606 && ~/LPEDC/P0606
 ```
 
 ---
@@ -3276,7 +3258,7 @@ Leve mais     R$  376.40
    double (*regras[4])(double) = {nenhuma, black_friday, cupom10, leve_mais};
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0607.c -o ~/LPEDC/06-ponteiros/lista/P0607 && ~/LPEDC/06-ponteiros/lista/P0607
+gcc ~/LPEDC/P0607.c -o ~/LPEDC/P0607 && ~/LPEDC/P0607
 ```
 
 ---
@@ -3303,7 +3285,7 @@ Sessão mais cheia: 142
    Devolva o VALOR (int), não o endereço.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0608.c -o ~/LPEDC/06-ponteiros/lista/P0608 && ~/LPEDC/06-ponteiros/lista/P0608
+gcc ~/LPEDC/P0608.c -o ~/LPEDC/P0608 && ~/LPEDC/P0608
 ```
 
 ---
@@ -3349,7 +3331,7 @@ Frentista:   Rosinete
 3. Use um switch no tipo.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0609.c -o ~/LPEDC/06-ponteiros/lista/P0609 && ~/LPEDC/06-ponteiros/lista/P0609
+gcc ~/LPEDC/P0609.c -o ~/LPEDC/P0609 && ~/LPEDC/P0609
 ```
 
 ---
@@ -3388,7 +3370,7 @@ Semana (coluna): 2
 4. Resposta esperada: a saída acima (22 na posição 10: linha 2, coluna 2).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0610.c -o ~/LPEDC/06-ponteiros/lista/P0610 && ~/LPEDC/06-ponteiros/lista/P0610
+gcc ~/LPEDC/P0610.c -o ~/LPEDC/P0610 && ~/LPEDC/P0610
 ```
 
 ### ★★☆ Para pensar
@@ -3431,7 +3413,7 @@ Pares: 5 casas; o lado ímpar começa na posição 5
    quicksort, no módulo 13).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0611.c -o ~/LPEDC/06-ponteiros/lista/P0611 && ~/LPEDC/06-ponteiros/lista/P0611
+gcc ~/LPEDC/P0611.c -o ~/LPEDC/P0611 && ~/LPEDC/P0611
 ```
 
 ---
@@ -3474,7 +3456,7 @@ Cada elemento tem 20 bytes
 3. qsort(bairros, 6, sizeof bairros[0], compara);
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0612.c -o ~/LPEDC/06-ponteiros/lista/P0612 && ~/LPEDC/06-ponteiros/lista/P0612
+gcc ~/LPEDC/P0612.c -o ~/LPEDC/P0612 && ~/LPEDC/P0612
 ```
 
 ---
@@ -3514,7 +3496,7 @@ Miúdos: -89 45 -12 -75 (4 itens, soma -131)
    bool (*passa)(int)) para o main ficar com três linhas.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0613.c -o ~/LPEDC/06-ponteiros/lista/P0613 && ~/LPEDC/06-ponteiros/lista/P0613
+gcc ~/LPEDC/P0613.c -o ~/LPEDC/P0613 && ~/LPEDC/P0613
 ```
 
 ---
@@ -3563,7 +3545,7 @@ backup.tar.gz        [gz] posição 11
 3. Senão, return ultimo + 1 (o caractere logo depois do ponto).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0614.c -o ~/LPEDC/06-ponteiros/lista/P0614 && ~/LPEDC/06-ponteiros/lista/P0614
+gcc ~/LPEDC/P0614.c -o ~/LPEDC/P0614 && ~/LPEDC/P0614
 ```
 
 ---
@@ -3607,7 +3589,7 @@ Feijoada não está no cardápio
 3. Antes de usar o retorno, teste se é NULL.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0615.c -o ~/LPEDC/06-ponteiros/lista/P0615 && ~/LPEDC/06-ponteiros/lista/P0615
+gcc ~/LPEDC/P0615.c -o ~/LPEDC/P0615 && ~/LPEDC/P0615
 ```
 
 ---
@@ -3646,7 +3628,7 @@ sem caixa: Ademir ana Beatriz bruna Caio carlos
    cópia do vetor para cada.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0616.c -o ~/LPEDC/06-ponteiros/lista/P0616 && ~/LPEDC/06-ponteiros/lista/P0616
+gcc ~/LPEDC/P0616.c -o ~/LPEDC/P0616 && ~/LPEDC/P0616
 ```
 
 ---
@@ -3673,7 +3655,7 @@ Total: R$ 35
    comparada, mas não lida. O laço precisa de p < fim.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0617.c -o ~/LPEDC/06-ponteiros/lista/P0617 && ~/LPEDC/06-ponteiros/lista/P0617
+gcc ~/LPEDC/P0617.c -o ~/LPEDC/P0617 && ~/LPEDC/P0617
 ```
 
 ---
@@ -3714,7 +3696,7 @@ notas + 1 fica 16 bytes depois de notas
    precisa saber o tamanho da linha para dar o salto.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0618.c -o ~/LPEDC/06-ponteiros/lista/P0618 && ~/LPEDC/06-ponteiros/lista/P0618
+gcc ~/LPEDC/P0618.c -o ~/LPEDC/P0618 && ~/LPEDC/P0618
 ```
 
 ---
@@ -3752,7 +3734,7 @@ Abaixo da média: treino 2 (27.9) treino 4 (26.8) treino 6 (27.5)
 4. Resposta esperada: a saída acima (média 28.33, desvio 1.11).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0619.c -o ~/LPEDC/06-ponteiros/lista/P0619 -lm && ~/LPEDC/06-ponteiros/lista/P0619
+gcc ~/LPEDC/P0619.c -o ~/LPEDC/P0619 -lm && ~/LPEDC/P0619
 ```
 
 ---
@@ -3793,7 +3775,7 @@ Pares primeiro: 12 30 58 66  9 21 47 85
    comparação que você passa.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0620.c -o ~/LPEDC/06-ponteiros/lista/P0620 && ~/LPEDC/06-ponteiros/lista/P0620
+gcc ~/LPEDC/P0620.c -o ~/LPEDC/P0620 && ~/LPEDC/P0620
 ```
 
 ### ★★★ Desafio
@@ -3838,7 +3820,7 @@ Pos Inscr Nota Idade
    depois a idade (decrescente), depois a inscrição (crescente).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0621.c -o ~/LPEDC/06-ponteiros/lista/P0621 && ~/LPEDC/06-ponteiros/lista/P0621
+gcc ~/LPEDC/P0621.c -o ~/LPEDC/P0621 && ~/LPEDC/P0621
 ```
 
 ---
@@ -3887,7 +3869,7 @@ Cidades: Autazes Borba Coari Manaus Tefe
    matriz de char, o endereço da linha já é a string (strcmp direto).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0622.c -o ~/LPEDC/06-ponteiros/lista/P0622 && ~/LPEDC/06-ponteiros/lista/P0622
+gcc ~/LPEDC/P0622.c -o ~/LPEDC/P0622 && ~/LPEDC/P0622
 ```
 
 ---
@@ -3932,7 +3914,7 @@ A linha agora: "27/11/2026"
    '\0' que você pôs no lugar do ';' termina a string ali.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0623.c -o ~/LPEDC/06-ponteiros/lista/P0623 && ~/LPEDC/06-ponteiros/lista/P0623
+gcc ~/LPEDC/P0623.c -o ~/LPEDC/P0623 && ~/LPEDC/P0623
 ```
 
 ---
@@ -3978,7 +3960,7 @@ CDXLIV = 444
    (andando com char *p) e tire o valor de n. Feche com *p = '\0'.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0624.c -o ~/LPEDC/06-ponteiros/lista/P0624 && ~/LPEDC/06-ponteiros/lista/P0624
+gcc ~/LPEDC/P0624.c -o ~/LPEDC/P0624 && ~/LPEDC/P0624
 ```
 
 ---
@@ -4011,7 +3993,7 @@ Crachá do último: Wellington
 3. Conte as letras de "Wellington" e o tamanho do crachá.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0625.c -o ~/LPEDC/06-ponteiros/lista/P0625 && ~/LPEDC/06-ponteiros/lista/P0625
+gcc ~/LPEDC/P0625.c -o ~/LPEDC/P0625 && ~/LPEDC/P0625
 ```
 
 ---
@@ -4055,7 +4037,7 @@ lucro: sem troca de sinal em [5.0, 10.0]
    4.0000 com 17 voltas.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0626.c -o ~/LPEDC/06-ponteiros/lista/P0626 && ~/LPEDC/06-ponteiros/lista/P0626
+gcc ~/LPEDC/P0626.c -o ~/LPEDC/P0626 && ~/LPEDC/P0626
 ```
 
 ---
@@ -4105,7 +4087,7 @@ a x I == a? sim
 3. Para conferir a x I = a, compare as 6 posições do resultado com as de a.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0627.c -o ~/LPEDC/06-ponteiros/lista/P0627 && ~/LPEDC/06-ponteiros/lista/P0627
+gcc ~/LPEDC/P0627.c -o ~/LPEDC/P0627 && ~/LPEDC/P0627
 ```
 
 ---
@@ -4145,7 +4127,7 @@ O [boi] bumbá, o [boi] Garantido, o [boi]zinho do povo, [boi]!
 4. Resposta esperada: a saída acima (4 ocorrências).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0628.c -o ~/LPEDC/06-ponteiros/lista/P0628 && ~/LPEDC/06-ponteiros/lista/P0628
+gcc ~/LPEDC/P0628.c -o ~/LPEDC/P0628 && ~/LPEDC/P0628
 ```
 
 ---
@@ -4194,7 +4176,7 @@ Semente final: 3469224078
    a sequência da primeira.
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0629.c -o ~/LPEDC/06-ponteiros/lista/P0629 && ~/LPEDC/06-ponteiros/lista/P0629
+gcc ~/LPEDC/P0629.c -o ~/LPEDC/P0629 && ~/LPEDC/P0629
 ```
 
 ---
@@ -4236,7 +4218,7 @@ CUPU   não está na grade
    p++, k++).
 
 ```bash
-gcc ~/LPEDC/06-ponteiros/lista/P0630.c -o ~/LPEDC/06-ponteiros/lista/P0630 && ~/LPEDC/06-ponteiros/lista/P0630
+gcc ~/LPEDC/P0630.c -o ~/LPEDC/P0630 && ~/LPEDC/P0630
 ```
 
 ## Questões no estilo da prova

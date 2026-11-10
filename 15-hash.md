@@ -30,7 +30,7 @@ ponteiro para função e `qsort`. As tabelas seguem o padrão TAD: `tabela.h` e
 comando compila tudo junto:
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
+gcc ~/LPEDC/A211.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/A211 && ~/LPEDC/A211
 ```
 
 Nos desenhos, cada balde é uma gaveta com o índice à esquerda e a corrente de
@@ -41,12 +41,12 @@ cada balde; dos módulos 13 e 14 vem o O(log n) da busca binária e da árvore,
 contra o qual o O(1) esperado da tabela é comparado. O módulo 16 reaproveita
 a lista de vizinhos nos grafos, e o 17 dá o rigor formal para provar custos.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0105](#0105--a-ideia-e-a-função-hash) | A ideia e a função hash | [`0105-hashing/`](15-hash/0105-hashing/) |
-| [0106](#0106--encadeamento) | Encadeamento | [`0106-encadeamento/`](15-hash/0106-encadeamento/) |
-| [0107](#0107--endereçamento-aberto) | Endereçamento aberto | [`0107-enderecamento-aberto/`](15-hash/0107-enderecamento-aberto/) |
-| [0108](#0108--juntando-tudo-o-contador-de-palavras) | Juntando tudo: o contador de palavras | [`0108-juntando-tudo/`](15-hash/0108-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0105](#0105--a-ideia-e-a-função-hash) | A ideia e a função hash |
+| [0106](#0106--encadeamento) | Encadeamento |
+| [0107](#0107--endereçamento-aberto) | Endereçamento aberto |
+| [0108](#0108--juntando-tudo-o-contador-de-palavras) | Juntando tudo: o contador de palavras |
 
 ---
 
@@ -82,7 +82,7 @@ Os alunos ana, davi, lia, bia e caio chegam nessa ordem; a regra é "soma dos
 códigos das letras, resto por 7". "caio" soma 412, e 412 % 7 = 6; "bia" soma
 300 e também dá 6, e chegou antes. Os outros três caem em armários livres:
 
-<p align="center"><img src="15-hash/0105-hashing/ideia.svg" alt="Diagrama da ideia: A ideia e a função hash" width="858"></p>
+<p align="center"><img src="0105-ideia.svg" alt="Diagrama da ideia: A ideia e a função hash" width="858"></p>
 
 No código, o vetor `dono` é a tabela e `NULL` é armário vazio. O programa só
 **detecta** a colisão:
@@ -128,7 +128,7 @@ int main(void) {
 O fluxograma mostra o caminho do "caio": quatro voltas no laço, índice 6,
 armário ocupado, colisão:
 
-<p align="center"><img src="15-hash/0105-hashing/fluxograma.svg" alt="Fluxograma: A ideia e a função hash" width="533"></p>
+<p align="center"><img src="0105-fluxograma.svg" alt="Fluxograma: A ideia e a função hash" width="533"></p>
 
 > [!WARNING]
 > A soma **não vê a ordem das letras**: "amor", "roma", "mora" e "ramo" somam
@@ -147,8 +147,6 @@ armário ocupado, colisão:
 > trocar `7` por `10` no código.
 
 ### Hora de praticar
-
-Arquivos em [`0105-hashing/`](15-hash/0105-hashing/).
 
 **Exemplo A209 · DDD direto no vetor**
 
@@ -198,7 +196,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0105-hashing/A209.c -o ~/LPEDC/15-hash/0105-hashing/A209 && ~/LPEDC/15-hash/0105-hashing/A209
+gcc ~/LPEDC/A209.c -o ~/LPEDC/A209 && ~/LPEDC/A209
 ```
 
 **Exemplo A210 · Anagramas: soma contra polinômio**
@@ -244,7 +242,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0105-hashing/A210.c -o ~/LPEDC/15-hash/0105-hashing/A210 && ~/LPEDC/15-hash/0105-hashing/A210
+gcc ~/LPEDC/A210.c -o ~/LPEDC/A210 && ~/LPEDC/A210
 ```
 
 #### Exercícios
@@ -268,7 +266,7 @@ pedido 7019 -> nicho 1
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0105-hashing/E625.c -o ~/LPEDC/15-hash/0105-hashing/E625 && ~/LPEDC/15-hash/0105-hashing/E625
+gcc ~/LPEDC/E625.c -o ~/LPEDC/E625 && ~/LPEDC/E625
 ```
 
 **Exercício E627** · ★★☆
@@ -289,7 +287,7 @@ boleto -> 1
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0105-hashing/E627.c -o ~/LPEDC/15-hash/0105-hashing/E627 && ~/LPEDC/15-hash/0105-hashing/E627
+gcc ~/LPEDC/E627.c -o ~/LPEDC/E627 && ~/LPEDC/E627
 ```
 
 **Exercício E628** · ★★☆
@@ -331,7 +329,7 @@ vazios: 2
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0105-hashing/E628.c -o ~/LPEDC/15-hash/0105-hashing/E628 && ~/LPEDC/15-hash/0105-hashing/E628
+gcc ~/LPEDC/E628.c -o ~/LPEDC/E628 && ~/LPEDC/E628
 ```
 
 **Exercício E630** · ★★★
@@ -358,7 +356,7 @@ void -> 8
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0105-hashing/E630.c -o ~/LPEDC/15-hash/0105-hashing/E630 && ~/LPEDC/15-hash/0105-hashing/E630
+gcc ~/LPEDC/E630.c -o ~/LPEDC/E630 && ~/LPEDC/E630
 ```
 
 ---
@@ -392,7 +390,7 @@ polinomial do assunto 0105 e `m = 5`. Os índices saem 4, 2, 4, 1, 1 e 4. Como
 cada nova entra no início, o balde 4 termina com caju, pera, banana. Buscar
 "kiwi" leva ao balde 1: compara com "manga" e com "kiwi", 2 comparações:
 
-<p align="center"><img src="15-hash/0106-encadeamento/ideia.svg" alt="Diagrama da ideia: Encadeamento" width="858"></p>
+<p align="center"><img src="0106-ideia.svg" alt="Diagrama da ideia: Encadeamento" width="858"></p>
 
 A estrutura segue o padrão TAD: `tabela.h` com a interface e o tipo opaco,
 `tabela.c` com o nó, os baldes e as operações:
@@ -472,7 +470,7 @@ No fluxograma da busca, o hash leva ao balde e o resto é o laço de lista. O
 "kiwi" dá uma volta (passa pela manga) e para no Sim. O "limao" cai no balde 0,
 vazio, e sai pelo Não na primeira pergunta:
 
-<p align="center"><img src="15-hash/0106-encadeamento/fluxograma.svg" alt="Fluxograma: Encadeamento" width="755"></p>
+<p align="center"><img src="0106-fluxograma.svg" alt="Fluxograma: Encadeamento" width="755"></p>
 
 > [!WARNING]
 > Compare chave de texto com `strcmp`, nunca com `==`: `p->chave == chave`
@@ -492,13 +490,11 @@ vazio, e sai pelo Não na primeira pergunta:
 
 ### Hora de praticar
 
-Arquivos em [`0106-encadeamento/`](15-hash/0106-encadeamento/).
-
 **Exemplo A211 · Poucos baldes: a tabela não enche**
 
 ```c
 #include <stdio.h>
-#include "tabela.h"
+#include "0106-tabela.h"
 
 #define N 8
 
@@ -557,14 +553,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
+gcc ~/LPEDC/A211.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/A211 && ~/LPEDC/A211
 ```
 
 **Exemplo A212 · Fim de feira: atualizar, remover e o fator de carga**
 
 ```c
 #include <stdio.h>
-#include "tabela.h"
+#include "0106-tabela.h"
 
 #define BALDES 5
 
@@ -602,7 +598,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/A212.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A212 && ~/LPEDC/15-hash/0106-encadeamento/A212
+gcc ~/LPEDC/A212.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/A212 && ~/LPEDC/A212
 ```
 
 #### Exercícios
@@ -627,7 +623,7 @@ vazios: 2, maior corrente: 3
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/E631.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E631 && ~/LPEDC/15-hash/0106-encadeamento/E631
+gcc ~/LPEDC/E631.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/E631 && ~/LPEDC/E631
 ```
 
 **Exercício E633** · ★★☆
@@ -656,7 +652,7 @@ pedido 999 não existe
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/E633.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E633 && ~/LPEDC/15-hash/0106-encadeamento/E633
+gcc ~/LPEDC/E633.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/E633 && ~/LPEDC/E633
 ```
 
 **Exercício E634** · ★★☆
@@ -683,7 +679,7 @@ polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/E634.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E634 && ~/LPEDC/15-hash/0106-encadeamento/E634
+gcc ~/LPEDC/E634.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/E634 && ~/LPEDC/E634
 ```
 
 **Exercício E636** · ★★★
@@ -716,7 +712,7 @@ n = 10, m = 11
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/E636.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E636 && ~/LPEDC/15-hash/0106-encadeamento/E636
+gcc ~/LPEDC/E636.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/E636 && ~/LPEDC/E636
 ```
 
 ---
@@ -752,7 +748,7 @@ Os apartamentos 101, 202, 301, 1104 e 504 entram. O 101 vai para a vaga 2 e o
 202 para a 4. O 301 também dá 4, vê a vaga ocupada e para na 5. O 1104 tenta
 4, 5 e para na 6. O 504 vai para a 9. Buscar o 1104 custa 3 sondagens:
 
-<p align="center"><img src="15-hash/0107-enderecamento-aberto/ideia.svg" alt="Diagrama da ideia: Endereçamento aberto" width="858"></p>
+<p align="center"><img src="0107-ideia.svg" alt="Diagrama da ideia: Endereçamento aberto" width="858"></p>
 
 O TAD é `aberta.h` (interface) e `aberta.c` (vetor de vagas, cada uma com
 **estado** `LIVRE`, `OCUPADA` ou `REMOVIDA`). A busca é este laço:
@@ -837,7 +833,7 @@ int main(void) {
 No fluxograma, "está livre?" encerra sem sucesso e "é o carro?" encerra com
 sucesso; senão, anda uma vaga. O 1104 é achado na 6; o 303 para na 7, livre:
 
-<p align="center"><img src="15-hash/0107-enderecamento-aberto/fluxograma.svg" alt="Fluxograma: Endereçamento aberto" width="719"></p>
+<p align="center"><img src="0107-fluxograma.svg" alt="Fluxograma: Endereçamento aberto" width="719"></p>
 
 > [!WARNING]
 > Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
@@ -858,13 +854,11 @@ sucesso; senão, anda uma vaga. O 1104 é achado na 6; o 303 para na 7, livre:
 
 ### Hora de praticar
 
-Arquivos em [`0107-enderecamento-aberto/`](15-hash/0107-enderecamento-aberto/).
-
 **Exemplo A213 · Garagem lotando: a volta no fim e a tabela cheia**
 
 ```c
 #include <stdio.h>
-#include "aberta.h"
+#include "0107-aberta.h"
 
 #define VAGAS 7
 
@@ -910,14 +904,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/A213.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/A213 && ~/LPEDC/15-hash/0107-enderecamento-aberto/A213
+gcc ~/LPEDC/A213.c ~/LPEDC/0107-aberta.c -o ~/LPEDC/A213 && ~/LPEDC/A213
 ```
 
 **Exemplo A214 · O carro do 301 saiu: a marca de removida**
 
 ```c
 #include <stdio.h>
-#include "aberta.h"
+#include "0107-aberta.h"
 
 int main(void) {
     Aberta *vagas = aberta_cria(11);
@@ -960,7 +954,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/A214.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/A214 && ~/LPEDC/15-hash/0107-enderecamento-aberto/A214
+gcc ~/LPEDC/A214.c ~/LPEDC/0107-aberta.c -o ~/LPEDC/A214 && ~/LPEDC/A214
 ```
 
 #### Exercícios
@@ -984,7 +978,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E637.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E637 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E637
+gcc ~/LPEDC/E637.c ~/LPEDC/0107-aberta.c -o ~/LPEDC/E637 && ~/LPEDC/E637
 ```
 
 **Exercício E639** · ★★☆
@@ -1005,7 +999,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E639.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E639 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E639
+gcc ~/LPEDC/E639.c ~/LPEDC/0107-aberta.c -o ~/LPEDC/E639 && ~/LPEDC/E639
 ```
 
 **Exercício E640** · ★★☆
@@ -1028,7 +1022,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E640.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E640 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E640
+gcc ~/LPEDC/E640.c ~/LPEDC/0107-aberta.c -o ~/LPEDC/E640 && ~/LPEDC/E640
 ```
 
 **Exercício E642** · ★★★
@@ -1048,7 +1042,7 @@ duplo : 1 2 2 1 2 2 2 4 | total: 16
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E642.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E642 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E642
+gcc ~/LPEDC/E642.c ~/LPEDC/0107-aberta.c -o ~/LPEDC/E642 && ~/LPEDC/E642
 ```
 
 ---
@@ -1076,7 +1070,7 @@ O exemplo tem 31 palavras, 17 diferentes, em 17 baldes (carga 1). O "pão" cai
 no balde 2 e chega a 6; o "café", no 3, chega a 3; "estava" e "queijo" dividem
 o balde 4. A tabela vai para o vetor, o `qsort` ordena e o ranking sai:
 
-<p align="center"><img src="15-hash/0108-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o contador de palavras" width="858"></p>
+<p align="center"><img src="0108-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o contador de palavras" width="858"></p>
 
 O `main` conhece só as funções do TAD `palavras.h`:
 
@@ -1165,7 +1159,7 @@ No fluxograma, "já está no balde?" ocorre 31 vezes: 14 Sim e 17 Não (uma por
 palavra diferente, que cria o nó com 0). Os dois caminhos se juntam no
 `vezes++`:
 
-<p align="center"><img src="15-hash/0108-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o contador de palavras" width="662"></p>
+<p align="center"><img src="0108-fluxograma.svg" alt="Fluxograma: Juntando tudo: o contador de palavras" width="662"></p>
 
 > [!WARNING]
 > `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
@@ -1187,15 +1181,13 @@ palavra diferente, que cria o nó com 0). Os dois caminhos se juntam no
 
 ### Hora de praticar
 
-Arquivos em [`0108-juntando-tudo/`](15-hash/0108-juntando-tudo/).
-
 **Exemplo A215 · Enquete da pizzaria: contar e consultar**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "palavras.h"
+#include "0108-palavras.h"
 
 // copia o voto para buf em minúsculas: "CALABRESA" e "calabresa" são um só
 void normaliza(const char *voto, char *buf, size_t tam) {
@@ -1253,7 +1245,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/A215.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/A215 && ~/LPEDC/15-hash/0108-juntando-tudo/A215
+gcc ~/LPEDC/A215.c ~/LPEDC/0108-palavras.c -o ~/LPEDC/A215 && ~/LPEDC/A215
 ```
 
 **Exemplo A216 · Contando as palavras de qualquer texto (entrada padrão)**
@@ -1263,7 +1255,7 @@ gcc ~/LPEDC/15-hash/0108-juntando-tudo/A215.c ~/LPEDC/15-hash/0108-juntando-tudo
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "palavras.h"
+#include "0108-palavras.h"
 
 int eh_letra(char c) {
     unsigned char u = (unsigned char)c;
@@ -1344,7 +1336,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/A216.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/A216 && ~/LPEDC/15-hash/0108-juntando-tudo/A216
+gcc ~/LPEDC/A216.c ~/LPEDC/0108-palavras.c -o ~/LPEDC/A216 && ~/LPEDC/A216
 ```
 
 #### Exercícios
@@ -1371,7 +1363,7 @@ paulo
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/E643.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E643 && ~/LPEDC/15-hash/0108-juntando-tudo/E643
+gcc ~/LPEDC/E643.c ~/LPEDC/0108-palavras.c -o ~/LPEDC/E643 && ~/LPEDC/E643
 ```
 
 **Exercício E645** · ★★☆
@@ -1396,7 +1388,7 @@ primeira repetida: parte (palavra 9)
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/E645.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E645 && ~/LPEDC/15-hash/0108-juntando-tudo/E645
+gcc ~/LPEDC/E645.c ~/LPEDC/0108-palavras.c -o ~/LPEDC/E645 && ~/LPEDC/E645
 ```
 
 **Exercício E646** · ★★☆
@@ -1418,7 +1410,7 @@ queijo 1
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/E646.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E646 && ~/LPEDC/15-hash/0108-juntando-tudo/E646
+gcc ~/LPEDC/E646.c ~/LPEDC/0108-palavras.c -o ~/LPEDC/E646 && ~/LPEDC/E646
 ```
 
 **Exercício E647** · ★★★
@@ -1442,7 +1434,7 @@ diferentes: 5
 ```
 
 ```bash
-gcc ~/LPEDC/15-hash/0108-juntando-tudo/E647.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E647 && ~/LPEDC/15-hash/0108-juntando-tudo/E647
+gcc ~/LPEDC/E647.c ~/LPEDC/0108-palavras.c -o ~/LPEDC/E647 && ~/LPEDC/E647
 ```
 
 ---
@@ -1912,7 +1904,7 @@ Sobre as afirmações, sabe-se que:
 
 Suponha que você tenha a seguinte tabela hash implementada utilizando endereçamento aberto com sondagem linear (linear probing). A função hash que você está usando é uma função modular, h(x) = x MOD 9.
 
-![Questão 01 - tabela hash](15-hash/_fontes/provas-figuras/2019-060/q01-tabela-hash.png)
+![Questão 01 - tabela hash](_fontes/provas-figuras/2019-060/q01-tabela-hash.png)
 
 Qual das ordens abaixo pode ser a ordem em que os elementos foram adicionados à hash? Assuma que a hash nunca tenha sido redimensionada e que nenhum elemento tenha sido excluído ainda.
 
@@ -1946,7 +1938,7 @@ Marque a alternativa CORRETA. Sobre um hash com encadeamento e com tabela de tam
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](15-hash/lista/); resoluções em `_respostas/15-hash/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1501.c a P1530.c, na raiz; resoluções em `_respostas/15-hash/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -1990,7 +1982,7 @@ m = 97: baldes usados 8, colisões 0
    mistura todos os dígitos.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1501.c -o ~/LPEDC/15-hash/lista/P1501 && ~/LPEDC/15-hash/lista/P1501
+gcc ~/LPEDC/P1501.c -o ~/LPEDC/P1501 && ~/LPEDC/P1501
 ```
 
 ---
@@ -2024,7 +2016,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1502.c -o ~/LPEDC/15-hash/lista/P1502 && ~/LPEDC/15-hash/lista/P1502
+gcc ~/LPEDC/P1502.c -o ~/LPEDC/P1502 && ~/LPEDC/P1502
 ```
 
 ---
@@ -2060,7 +2052,7 @@ tabela: 21 _ 35 46 13 24 57 2 _ _ 10
    chaves caem nele e mais ele cresce.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1503.c -o ~/LPEDC/15-hash/lista/P1503 && ~/LPEDC/15-hash/lista/P1503
+gcc ~/LPEDC/P1503.c -o ~/LPEDC/P1503 && ~/LPEDC/P1503
 ```
 
 ---
@@ -2095,7 +2087,7 @@ tabela: _ _ 28 36 12 20 13 4
    posições. Com outros m, pode não visitar.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1504.c -o ~/LPEDC/15-hash/lista/P1504 && ~/LPEDC/15-hash/lista/P1504
+gcc ~/LPEDC/P1504.c -o ~/LPEDC/P1504 && ~/LPEDC/P1504
 ```
 
 ---
@@ -2128,7 +2120,7 @@ tabela: _ 27 66 1 _ 14 _ _ _ 40 _ 53 _
 3. Com m primo, qualquer passo entre 1 e m - 1 visita as 13 posições.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1505.c -o ~/LPEDC/15-hash/lista/P1505 && ~/LPEDC/15-hash/lista/P1505
+gcc ~/LPEDC/P1505.c -o ~/LPEDC/P1505 && ~/LPEDC/P1505
 ```
 
 ---
@@ -2166,7 +2158,7 @@ n = 10: alfa = 2.0, maior corrente = 4
 4. Use printf("n = %2d: alfa = %.1f, maior corrente = %d\n", ...).
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1506.c -o ~/LPEDC/15-hash/lista/P1506 && ~/LPEDC/15-hash/lista/P1506
+gcc ~/LPEDC/P1506.c -o ~/LPEDC/P1506 && ~/LPEDC/P1506
 ```
 
 ---
@@ -2200,7 +2192,7 @@ acb   193485995 -> balde 11
    os 4 bits de baixo contam, e eles batem. Um m primo separaria os dois.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1507.c -o ~/LPEDC/15-hash/lista/P1507 && ~/LPEDC/15-hash/lista/P1507
+gcc ~/LPEDC/P1507.c -o ~/LPEDC/P1507 && ~/LPEDC/P1507
 ```
 
 ---
@@ -2231,7 +2223,7 @@ Saída esperada:
    corrente e custa 4. Busca sem sucesso percorre a corrente inteira.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1508.c -o ~/LPEDC/15-hash/lista/P1508 && ~/LPEDC/15-hash/lista/P1508
+gcc ~/LPEDC/P1508.c -o ~/LPEDC/P1508 && ~/LPEDC/P1508
 ```
 
 ---
@@ -2262,7 +2254,7 @@ Saída esperada (depois do conserto):
    deixe a sondagem continuar; a saída fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1509.c -o ~/LPEDC/15-hash/lista/P1509 && ~/LPEDC/15-hash/lista/P1509
+gcc ~/LPEDC/P1509.c -o ~/LPEDC/P1509 && ~/LPEDC/P1509
 ```
 
 ---
@@ -2298,7 +2290,7 @@ Saída esperada:
 4. Use printf("%4d: divisão %2d, multiplicação %2d\n", ...).
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1510.c -o ~/LPEDC/15-hash/lista/P1510 && ~/LPEDC/15-hash/lista/P1510
+gcc ~/LPEDC/P1510.c -o ~/LPEDC/P1510 && ~/LPEDC/P1510
 ```
 
 ### ★★☆ Para pensar
@@ -2343,7 +2335,7 @@ entra o 31: 12 _ _ 10 31 24 5
 3. O 31 também tem h = 3 e reaproveita a lápide da posição 4.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1511.c -o ~/LPEDC/15-hash/lista/P1511 && ~/LPEDC/15-hash/lista/P1511
+gcc ~/LPEDC/P1511.c -o ~/LPEDC/P1511 && ~/LPEDC/P1511
 ```
 
 ---
@@ -2390,7 +2382,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1512.c -o ~/LPEDC/15-hash/lista/P1512 && ~/LPEDC/15-hash/lista/P1512
+gcc ~/LPEDC/P1512.c -o ~/LPEDC/P1512 && ~/LPEDC/P1512
 ```
 
 ---
@@ -2426,7 +2418,7 @@ pares com hash: 5, força bruta: 5
 3. A força bruta é O(n²); a versão com hash é O(n) em média.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1513.c -o ~/LPEDC/15-hash/lista/P1513 && ~/LPEDC/15-hash/lista/P1513
+gcc ~/LPEDC/P1513.c -o ~/LPEDC/P1513 && ~/LPEDC/P1513
 ```
 
 ---
@@ -2481,7 +2473,7 @@ n = 7, alfa = 0.30
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1514.c -o ~/LPEDC/15-hash/lista/P1514 && ~/LPEDC/15-hash/lista/P1514
+gcc ~/LPEDC/P1514.c -o ~/LPEDC/P1514 && ~/LPEDC/P1514
 ```
 
 ---
@@ -2523,7 +2515,7 @@ dupla      sondagens 13: 13 1 _ _ 14 26 _ 39 _ 52 _ _ _
    explode (veja o P1528).
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1515.c -o ~/LPEDC/15-hash/lista/P1515 && ~/LPEDC/15-hash/lista/P1515
+gcc ~/LPEDC/P1515.c -o ~/LPEDC/P1515 && ~/LPEDC/P1515
 ```
 
 ---
@@ -2569,7 +2561,7 @@ fim:
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1516.c -o ~/LPEDC/15-hash/lista/P1516 && ~/LPEDC/15-hash/lista/P1516
+gcc ~/LPEDC/P1516.c -o ~/LPEDC/P1516 && ~/LPEDC/P1516
 ```
 
 ---
@@ -2598,7 +2590,7 @@ primeiro repetido: 3307, na passagem 6
 3. Um conjunto é uma tabela hash só com chaves, sem valor.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1517.c -o ~/LPEDC/15-hash/lista/P1517 && ~/LPEDC/15-hash/lista/P1517
+gcc ~/LPEDC/P1517.c -o ~/LPEDC/P1517 && ~/LPEDC/P1517
 ```
 
 ---
@@ -2640,7 +2632,7 @@ Saída esperada:
    colisões), não a ordem de chegada: hash não guarda ordem.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1518.c -o ~/LPEDC/15-hash/lista/P1518 && ~/LPEDC/15-hash/lista/P1518
+gcc ~/LPEDC/P1518.c -o ~/LPEDC/P1518 && ~/LPEDC/P1518
 ```
 
 ---
@@ -2671,7 +2663,7 @@ maior bloco: 5
    blocos grandes atraem mais chaves, e a busca dentro deles fica cara.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1519.c -o ~/LPEDC/15-hash/lista/P1519 && ~/LPEDC/15-hash/lista/P1519
+gcc ~/LPEDC/P1519.c -o ~/LPEDC/P1519 && ~/LPEDC/P1519
 ```
 
 ---
@@ -2708,7 +2700,7 @@ AAA0A00: não entrou aqui
 3. Use o djb2 com unsigned long long e copie a placa com snprintf.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1520.c -o ~/LPEDC/15-hash/lista/P1520 && ~/LPEDC/15-hash/lista/P1520
+gcc ~/LPEDC/P1520.c -o ~/LPEDC/P1520 && ~/LPEDC/P1520
 ```
 
 ### ★★★ Desafio
@@ -2766,7 +2758,7 @@ rehash depois de "caju": 7 -> 15 baldes
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1521.c -o ~/LPEDC/15-hash/lista/P1521 && ~/LPEDC/15-hash/lista/P1521
+gcc ~/LPEDC/P1521.c -o ~/LPEDC/P1521 && ~/LPEDC/P1521
 ```
 
 ---
@@ -2809,7 +2801,7 @@ refeita:    _ 34 _ 58 70 _ _ _ _ _ _
    de um limite, e não só quando as vivas passam.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1522.c -o ~/LPEDC/15-hash/lista/P1522 && ~/LPEDC/15-hash/lista/P1522
+gcc ~/LPEDC/P1522.c -o ~/LPEDC/P1522 && ~/LPEDC/P1522
 ```
 
 ---
@@ -2846,7 +2838,7 @@ tabela: 54 32 43 _ _ 5 _ _ _ _ 10
    consertos, a saída fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1523.c -o ~/LPEDC/15-hash/lista/P1523 && ~/LPEDC/15-hash/lista/P1523
+gcc ~/LPEDC/P1523.c -o ~/LPEDC/P1523 && ~/LPEDC/P1523
 ```
 
 ---
@@ -2888,7 +2880,7 @@ períodos que zeram: 12 (força bruta: 12)
 4. O hash deixa O(n); a força bruta (todos os pares i, j) é O(n²).
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1524.c -o ~/LPEDC/15-hash/lista/P1524 && ~/LPEDC/15-hash/lista/P1524
+gcc ~/LPEDC/P1524.c -o ~/LPEDC/P1524 && ~/LPEDC/P1524
 ```
 
 ---
@@ -2931,7 +2923,7 @@ nos dois: 3, total de pessoas: 9
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1525.c -o ~/LPEDC/15-hash/lista/P1525 && ~/LPEDC/15-hash/lista/P1525
+gcc ~/LPEDC/P1525.c -o ~/LPEDC/P1525 && ~/LPEDC/P1525
 ```
 
 ---
@@ -2996,7 +2988,7 @@ acertos: 3 de 10
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1526.c -o ~/LPEDC/15-hash/lista/P1526 && ~/LPEDC/15-hash/lista/P1526
+gcc ~/LPEDC/P1526.c -o ~/LPEDC/P1526 && ~/LPEDC/P1526
 ```
 
 ---
@@ -3053,7 +3045,7 @@ m = 11:
    ímpar.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1527.c -o ~/LPEDC/15-hash/lista/P1527 && ~/LPEDC/15-hash/lista/P1527
+gcc ~/LPEDC/P1527.c -o ~/LPEDC/P1527 && ~/LPEDC/P1527
 ```
 
 ---
@@ -3107,7 +3099,7 @@ alfa  linear (teoria)   dupla (teoria)
    antes de α chegar perto de 1.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1528.c -o ~/LPEDC/15-hash/lista/P1528 && ~/LPEDC/15-hash/lista/P1528
+gcc ~/LPEDC/P1528.c -o ~/LPEDC/P1528 && ~/LPEDC/P1528
 ```
 
 ---
@@ -3150,7 +3142,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1529.c -o ~/LPEDC/15-hash/lista/P1529 && ~/LPEDC/15-hash/lista/P1529
+gcc ~/LPEDC/P1529.c -o ~/LPEDC/P1529 && ~/LPEDC/P1529
 ```
 
 ---
@@ -3201,7 +3193,7 @@ menor intervalo: ABC1D23, passagens 1 e 4 (distância 3)
    O(n²).
 
 ```bash
-gcc ~/LPEDC/15-hash/lista/P1530.c -o ~/LPEDC/15-hash/lista/P1530 && ~/LPEDC/15-hash/lista/P1530
+gcc ~/LPEDC/P1530.c -o ~/LPEDC/P1530 && ~/LPEDC/P1530
 ```
 
 ## Para ler mais

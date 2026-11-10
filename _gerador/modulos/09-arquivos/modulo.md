@@ -35,7 +35,7 @@ avisa, para você abrir com `cat`. Nenhum depende de arquivo pré-existente.
 Para passar argumentos, escreva-os depois do executável:
 
 ```bash
-gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137 -r 7 -a 4
+gcc ~/LPEDC/A137.c -o ~/LPEDC/A137 && ~/LPEDC/A137 -r 7 -a 4
 ```
 
 Duas ferramentas mostram o que os programas gravam: `od -A d -t x1 arquivo`

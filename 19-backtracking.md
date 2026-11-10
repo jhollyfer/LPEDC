@@ -46,14 +46,14 @@ saída; nos tabuleiros, verde é a solução e vermelho, casa proibida.
 Se sobrou um `true` no vetor de marcação ao fim da busca, faltou um
 desfazer.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0125](#0125--subconjuntos) | Subconjuntos | [`0125-subconjuntos/`](19-backtracking/0125-subconjuntos/) |
-| [0126](#0126--permutações) | Permutações | [`0126-permutacoes/`](19-backtracking/0126-permutacoes/) |
-| [0127](#0127--backtracking) | Backtracking | [`0127-backtracking/`](19-backtracking/0127-backtracking/) |
-| [0128](#0128--n-rainhas) | N-rainhas | [`0128-n-rainhas/`](19-backtracking/0128-n-rainhas/) |
-| [0129](#0129--labirinto) | Labirinto | [`0129-labirinto/`](19-backtracking/0129-labirinto/) |
-| [0130](#0130--juntando-tudo) | Juntando tudo | [`0130-juntando-tudo/`](19-backtracking/0130-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0125](#0125--subconjuntos) | Subconjuntos |
+| [0126](#0126--permutações) | Permutações |
+| [0127](#0127--backtracking) | Backtracking |
+| [0128](#0128--n-rainhas) | N-rainhas |
+| [0129](#0129--labirinto) | Labirinto |
+| [0130](#0130--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -90,7 +90,7 @@ Na árvore de decisões, cada nível é um complemento: o ramo da esquerda deixa
 item de fora e o da direita o põe. As 8 folhas são os 8 copos, na ordem em que
 o programa os mostra:
 
-<p align="center"><img src="19-backtracking/0125-subconjuntos/ideia.svg" alt="Diagrama da ideia: Subconjuntos" width="864"></p>
+<p align="center"><img src="0125-ideia.svg" alt="Diagrama da ideia: Subconjuntos" width="864"></p>
 
 O programa percorre a árvore da esquerda para a direita:
 
@@ -146,7 +146,7 @@ custo é **O(n · 2ⁿ)**, e com 40 itens passa de um trilhão de subconjuntos.
 Enumerar tudo só serve para `n` pequeno. O fluxograma não tem laço: quem
 repete é a recursão:
 
-<p align="center"><img src="19-backtracking/0125-subconjuntos/fluxograma.svg" alt="Fluxograma: Subconjuntos" width="531"></p>
+<p align="center"><img src="0125-fluxograma.svg" alt="Fluxograma: Subconjuntos" width="531"></p>
 
 > [!WARNING]
 > No jeito por bits, `m & (1 << i)` não dá 1 quando o bit está ligado: dá o
@@ -164,8 +164,6 @@ repete é a recursão:
 > é a segunda linha da saída?
 
 ### Hora de praticar
-
-Arquivos em [`0125-subconjuntos/`](19-backtracking/0125-subconjuntos/).
 
 **Exemplo A249 · Quem vai na carona: subconjuntos pelos bits**
 
@@ -225,7 +223,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/A249.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/A249 && ~/LPEDC/19-backtracking/0125-subconjuntos/A249
+gcc ~/LPEDC/A249.c -o ~/LPEDC/A249 && ~/LPEDC/A249
 ```
 
 **Exemplo A250 · Dois sabores na casquinha: só os subconjuntos de tamanho k**
@@ -275,7 +273,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/A250.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/A250 && ~/LPEDC/19-backtracking/0125-subconjuntos/A250
+gcc ~/LPEDC/A250.c -o ~/LPEDC/A250 && ~/LPEDC/A250
 ```
 
 #### Exercícios
@@ -301,7 +299,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E745.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E745 && ~/LPEDC/19-backtracking/0125-subconjuntos/E745
+gcc ~/LPEDC/E745.c -o ~/LPEDC/E745 && ~/LPEDC/E745
 ```
 
 **Exercício E747** · ★★☆
@@ -329,7 +327,7 @@ café frutas frango
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E747.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E747 && ~/LPEDC/19-backtracking/0125-subconjuntos/E747
+gcc ~/LPEDC/E747.c -o ~/LPEDC/E747 && ~/LPEDC/E747
 ```
 
 **Exercício E748** · ★★☆
@@ -359,7 +357,7 @@ Ana: bicicleta bola livro | Beto: patinete skate patins
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E748.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E748 && ~/LPEDC/19-backtracking/0125-subconjuntos/E748
+gcc ~/LPEDC/E748.c -o ~/LPEDC/E748 && ~/LPEDC/E748
 ```
 
 **Exercício E750** · ★★★
@@ -386,7 +384,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0125-subconjuntos/E750.c -o ~/LPEDC/19-backtracking/0125-subconjuntos/E750 && ~/LPEDC/19-backtracking/0125-subconjuntos/E750
+gcc ~/LPEDC/E750.c -o ~/LPEDC/E750 && ~/LPEDC/E750
 ```
 
 ---
@@ -410,7 +408,7 @@ por estar num parâmetro; aqui ela mexe no **vetor**, que é um só para todas a
 chamadas. Quando `i` chega a `n`, a ordem é mostrada. As 6 folhas da árvore
 são as 6 ordens, na sequência em que o programa as mostra:
 
-<p align="center"><img src="19-backtracking/0126-permutacoes/ideia.svg" alt="Diagrama da ideia: Permutações" width="860"></p>
+<p align="center"><img src="0126-ideia.svg" alt="Diagrama da ideia: Permutações" width="860"></p>
 
 O vetor guarda ponteiros para os nomes (assunto 0048): trocar dois elementos
 é trocar dois ponteiros, e os textos não saem do lugar.
@@ -465,7 +463,7 @@ dela usa o exemplo A251).
 O laço do `j` abre os ramos, e cada volta tem o par troca e destroca em volta
 da chamada recursiva:
 
-<p align="center"><img src="19-backtracking/0126-permutacoes/fluxograma.svg" alt="Fluxograma: Permutações" width="520"></p>
+<p align="center"><img src="0126-fluxograma.svg" alt="Fluxograma: Permutações" width="520"></p>
 
 > [!WARNING]
 > Sem o **desfaz**, o programa ainda mostra 6 linhas, mas com ordens repetidas
@@ -484,8 +482,6 @@ da chamada recursiva:
 > quantas linhas saem? Qual grupo abre o sarau na linha 7? E na 19?
 
 ### Hora de praticar
-
-Arquivos em [`0126-permutacoes/`](19-backtracking/0126-permutacoes/).
 
 **Exemplo A251 · Os anagramas de AMOR em ordem de dicionário**
 
@@ -534,7 +530,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/A251.c -o ~/LPEDC/19-backtracking/0126-permutacoes/A251 && ~/LPEDC/19-backtracking/0126-permutacoes/A251
+gcc ~/LPEDC/A251.c -o ~/LPEDC/A251 && ~/LPEDC/A251
 ```
 
 **Exemplo A252 · ARARA: anagramas sem repetir quando há letras iguais**
@@ -596,7 +592,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/A252.c -o ~/LPEDC/19-backtracking/0126-permutacoes/A252 && ~/LPEDC/19-backtracking/0126-permutacoes/A252
+gcc ~/LPEDC/A252.c -o ~/LPEDC/A252 && ~/LPEDC/A252
 ```
 
 #### Exercícios
@@ -622,7 +618,7 @@ soma: 4440
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/E751.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E751 && ~/LPEDC/19-backtracking/0126-permutacoes/E751
+gcc ~/LPEDC/E751.c -o ~/LPEDC/E751 && ~/LPEDC/E751
 ```
 
 **Exercício E753** · ★★☆
@@ -643,7 +639,7 @@ rota: Pizzaria -> Lagoa -> Centro -> Jardim -> Vila -> Pizzaria
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/E753.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E753 && ~/LPEDC/19-backtracking/0126-permutacoes/E753
+gcc ~/LPEDC/E753.c -o ~/LPEDC/E753 && ~/LPEDC/E753
 ```
 
 **Exercício E754** · ★★☆
@@ -665,7 +661,7 @@ Bia aparece em 36
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/E754.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E754 && ~/LPEDC/19-backtracking/0126-permutacoes/E754
+gcc ~/LPEDC/E754.c -o ~/LPEDC/E754 && ~/LPEDC/E754
 ```
 
 **Exercício E756** · ★★★
@@ -697,7 +693,7 @@ depois de 1 3 5 4 2 vem 1 4 2 3 5
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0126-permutacoes/E756.c -o ~/LPEDC/19-backtracking/0126-permutacoes/E756 && ~/LPEDC/19-backtracking/0126-permutacoes/E756
+gcc ~/LPEDC/E756.c -o ~/LPEDC/E756 && ~/LPEDC/E756
 ```
 
 ---
@@ -727,7 +723,7 @@ esquerda leva o item e a direita não. As caixas vermelhas são podas, as verdes
 são soluções e as cinzas são becos sem saída (os itens acabaram antes de a soma
 chegar a 35):
 
-<p align="center"><img src="19-backtracking/0127-backtracking/ideia.svg" alt="Diagrama da ideia: Backtracking" width="858"></p>
+<p align="center"><img src="0127-ideia.svg" alt="Diagrama da ideia: Backtracking" width="858"></p>
 
 A poda é o primeiro `if`: a chamada que passou do alvo volta na hora:
 
@@ -783,7 +779,7 @@ A árvore completa de 4 itens tem 31 nós, e a poda deixou 21. O ganho cresce
 com `n`: uma poda perto da raiz corta metade da árvore, e com 30 itens e um
 alvo pequeno são alguns milhares de chamadas em vez de um bilhão:
 
-<p align="center"><img src="19-backtracking/0127-backtracking/fluxograma.svg" alt="Fluxograma: Backtracking" width="588"></p>
+<p align="center"><img src="0127-fluxograma.svg" alt="Fluxograma: Backtracking" width="588"></p>
 
 > [!WARNING]
 > A ordem dos testes importa. Com `if (i == N) return;` **antes** de
@@ -803,8 +799,6 @@ alvo pequeno são alguns milhares de chamadas em vez de um bilhão:
 > sairiam? A primeira linha da saída ainda seria a do atlas?
 
 ### Hora de praticar
-
-Arquivos em [`0127-backtracking/`](19-backtracking/0127-backtracking/).
 
 **Exemplo A253 · Lote de 40 kg: a segunda poda, "o que falta não alcança"**
 
@@ -875,7 +869,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/A253.c -o ~/LPEDC/19-backtracking/0127-backtracking/A253 && ~/LPEDC/19-backtracking/0127-backtracking/A253
+gcc ~/LPEDC/A253.c -o ~/LPEDC/A253 && ~/LPEDC/A253
 ```
 
 **Exemplo A254 · Playlist de 30 minutos: parar na primeira solução**
@@ -950,7 +944,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/A254.c -o ~/LPEDC/19-backtracking/0127-backtracking/A254 && ~/LPEDC/19-backtracking/0127-backtracking/A254
+gcc ~/LPEDC/A254.c -o ~/LPEDC/A254 && ~/LPEDC/A254
 ```
 
 #### Exercícios
@@ -975,7 +969,7 @@ comida água saco
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/E757.c -o ~/LPEDC/19-backtracking/0127-backtracking/E757 && ~/LPEDC/19-backtracking/0127-backtracking/E757
+gcc ~/LPEDC/E757.c -o ~/LPEDC/E757 && ~/LPEDC/E757
 ```
 
 **Exercício E759** · ★★☆
@@ -994,7 +988,7 @@ caixas: 47 28 23
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/E759.c -o ~/LPEDC/19-backtracking/0127-backtracking/E759 && ~/LPEDC/19-backtracking/0127-backtracking/E759
+gcc ~/LPEDC/E759.c -o ~/LPEDC/E759 && ~/LPEDC/E759
 ```
 
 **Exercício E760** · ★★☆
@@ -1018,7 +1012,7 @@ menos pacotes: 25 20 15 (3 pacotes)
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/E760.c -o ~/LPEDC/19-backtracking/0127-backtracking/E760 && ~/LPEDC/19-backtracking/0127-backtracking/E760
+gcc ~/LPEDC/E760.c -o ~/LPEDC/E760 && ~/LPEDC/E760
 ```
 
 **Exercício E762** · ★★★
@@ -1042,7 +1036,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0127-backtracking/E762.c -o ~/LPEDC/19-backtracking/0127-backtracking/E762 && ~/LPEDC/19-backtracking/0127-backtracking/E762
+gcc ~/LPEDC/E762.c -o ~/LPEDC/E762 && ~/LPEDC/E762
 ```
 
 ---
@@ -1070,7 +1064,7 @@ e `diag2[2N - 1]`. No desenho, à esquerda está a primeira solução; no meio,
 `l + c` de cada casa; à direita, `l - c + 3`. A rainha da linha 1, coluna 3,
 ocupa a diagonal ↗ 4 e a ↘ 1, e as casas destacadas ficam proibidas:
 
-<p align="center"><img src="19-backtracking/0128-n-rainhas/ideia.svg" alt="Diagrama da ideia: N-rainhas" width="858"></p>
+<p align="center"><img src="0128-ideia.svg" alt="Diagrama da ideia: N-rainhas" width="858"></p>
 
 O programa mostra cada solução como tabuleiro e conta as chamadas:
 
@@ -1154,7 +1148,7 @@ A rainha em (0, 0) nunca dá certo: a busca gasta 4 chamadas para descobrir e
 esquece o galho. O fluxograma é o do assunto anterior, com um laço pelas
 colunas no lugar de "leva ou não leva":
 
-<p align="center"><img src="19-backtracking/0128-n-rainhas/fluxograma.svg" alt="Fluxograma: N-rainhas" width="757"></p>
+<p align="center"><img src="0128-fluxograma.svg" alt="Fluxograma: N-rainhas" width="757"></p>
 
 > [!WARNING]
 > O índice da diagonal ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`
@@ -1172,8 +1166,6 @@ colunas no lugar de "leva ou não leva":
 > espera? O número sobe sempre que o tabuleiro cresce?
 
 ### Hora de praticar
-
-Arquivos em [`0128-n-rainhas/`](19-backtracking/0128-n-rainhas/).
 
 **Exemplo A255 · Quantas soluções de 1 a 12 rainhas: o tabuleiro em bits**
 
@@ -1230,7 +1222,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/A255.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/A255 && ~/LPEDC/19-backtracking/0128-n-rainhas/A255
+gcc ~/LPEDC/A255.c -o ~/LPEDC/A255 && ~/LPEDC/A255
 ```
 
 **Exemplo A256 · A primeira solução do 8-rainhas, sem vetores auxiliares**
@@ -1302,7 +1294,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/A256.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/A256 && ~/LPEDC/19-backtracking/0128-n-rainhas/A256
+gcc ~/LPEDC/A256.c -o ~/LPEDC/A256 && ~/LPEDC/A256
 ```
 
 #### Exercícios
@@ -1339,7 +1331,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E763.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E763 && ~/LPEDC/19-backtracking/0128-n-rainhas/E763
+gcc ~/LPEDC/E763.c -o ~/LPEDC/E763 && ~/LPEDC/E763
 ```
 
 **Exercício E765** · ★★☆
@@ -1357,7 +1349,7 @@ primeira: 3 0 4 7 1 6 2 5
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E765.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E765 && ~/LPEDC/19-backtracking/0128-n-rainhas/E765
+gcc ~/LPEDC/E765.c -o ~/LPEDC/E765 && ~/LPEDC/E765
 ```
 
 **Exercício E766** · ★★☆
@@ -1380,7 +1372,7 @@ n = 6: 90 arrumações, primeira: 0 2 4 1 3 5
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E766.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E766 && ~/LPEDC/19-backtracking/0128-n-rainhas/E766
+gcc ~/LPEDC/E766.c -o ~/LPEDC/E766 && ~/LPEDC/E766
 ```
 
 **Exercício E767** · ★★★
@@ -1399,7 +1391,7 @@ vetores limpos no fim: sim
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0128-n-rainhas/E767.c -o ~/LPEDC/19-backtracking/0128-n-rainhas/E767 && ~/LPEDC/19-backtracking/0128-n-rainhas/E767
+gcc ~/LPEDC/E767.c -o ~/LPEDC/E767 && ~/LPEDC/E767
 ```
 
 ---
@@ -1429,7 +1421,7 @@ cima) decide qual caminho sai primeiro.
 No desenho, os números mostram a ordem dos passos: a busca tentou o bolsão da
 direita, achou só becos (vermelho), voltou e desceu pela coluna 1:
 
-<p align="center"><img src="19-backtracking/0129-labirinto/ideia.svg" alt="Diagrama da ideia: Labirinto" width="858"></p>
+<p align="center"><img src="0129-ideia.svg" alt="Diagrama da ideia: Labirinto" width="858"></p>
 
 No fim, `*` marca o caminho e `x` os becos abandonados:
 
@@ -1505,7 +1497,7 @@ Sem a saída e sem o desfazer, a mesma recursão vira o **flood fill**
 A257). Três perguntas descartam as casas impossíveis, e só uma casa nova chega
 ao `'*'`:
 
-<p align="center"><img src="19-backtracking/0129-labirinto/fluxograma.svg" alt="Fluxograma: Labirinto" width="700"></p>
+<p align="center"><img src="0129-fluxograma.svg" alt="Fluxograma: Labirinto" width="700"></p>
 
 > [!WARNING]
 > Sem a marca de visitada, a busca anda em círculos: (0, 0) chama (0, 1), que
@@ -1523,8 +1515,6 @@ ao `'*'`:
 > cima, quantos passos tem o caminho? Ainda aparece algum `x`?
 
 ### Hora de praticar
-
-Arquivos em [`0129-labirinto/`](19-backtracking/0129-labirinto/).
 
 **Exemplo A257 · Balde de tinta: o flood fill pinta a sala inteira**
 
@@ -1584,7 +1574,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/A257.c -o ~/LPEDC/19-backtracking/0129-labirinto/A257 && ~/LPEDC/19-backtracking/0129-labirinto/A257
+gcc ~/LPEDC/A257.c -o ~/LPEDC/A257 && ~/LPEDC/A257
 ```
 
 **Exemplo A258 · Todos os caminhos da praça: desfazer de verdade para achar o menor**
@@ -1657,7 +1647,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/A258.c -o ~/LPEDC/19-backtracking/0129-labirinto/A258 && ~/LPEDC/19-backtracking/0129-labirinto/A258
+gcc ~/LPEDC/A258.c -o ~/LPEDC/A258 && ~/LPEDC/A258
 ```
 
 #### Exercícios
@@ -1684,7 +1674,7 @@ a vaca alcança 12 casas
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/E769.c -o ~/LPEDC/19-backtracking/0129-labirinto/E769 && ~/LPEDC/19-backtracking/0129-labirinto/E769
+gcc ~/LPEDC/E769.c -o ~/LPEDC/E769 && ~/LPEDC/E769
 ```
 
 **Exercício E771** · ★★☆
@@ -1707,7 +1697,7 @@ lago 5: começa em (5, 6), tamanho 1
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/E771.c -o ~/LPEDC/19-backtracking/0129-labirinto/E771 && ~/LPEDC/19-backtracking/0129-labirinto/E771
+gcc ~/LPEDC/E771.c -o ~/LPEDC/E771 && ~/LPEDC/E771
 ```
 
 **Exercício E772** · ★★☆
@@ -1732,7 +1722,7 @@ caminho: (0,0) (0,1) (1,1) (2,1) (2,2) (2,3) (3,3) (3,4) (3,5) (4,5)
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/E772.c -o ~/LPEDC/19-backtracking/0129-labirinto/E772 && ~/LPEDC/19-backtracking/0129-labirinto/E772
+gcc ~/LPEDC/E772.c -o ~/LPEDC/E772 && ~/LPEDC/E772
 ```
 
 **Exercício E774** · ★★★
@@ -1758,7 +1748,7 @@ menor caminho: 9 passos
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0129-labirinto/E774.c -o ~/LPEDC/19-backtracking/0129-labirinto/E774 && ~/LPEDC/19-backtracking/0129-labirinto/E774
+gcc ~/LPEDC/E774.c -o ~/LPEDC/E774 && ~/LPEDC/E774
 ```
 
 ---
@@ -1784,7 +1774,7 @@ e, se não deu certo, **apaga e desmarca**. Sem casa vazia, o `true` sobe até o
 Na casa (0, 1), a poda deixa só o 5 e o 7. O programa tenta o 5 e, só depois
 de muitos retrocessos, descobre que é o 7:
 
-<p align="center"><img src="19-backtracking/0130-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0130-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa, com o jogo escrito como texto (`.` é casa vazia):
 
@@ -1878,7 +1868,7 @@ preenchimentos. Escolher **qual** casa preencher (a com menos candidatos)
 derruba este jogo para 64 chamadas (exemplo A260). O fluxograma é o esqueleto
 do módulo, com a casa no lugar do item e a regra do jogo no da poda:
 
-<p align="center"><img src="19-backtracking/0130-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="767"></p>
+<p align="center"><img src="0130-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="767"></p>
 
 > [!WARNING]
 > No desfazer, as duas coisas precisam voltar: `g[l][c] = 0` **e**
@@ -1897,8 +1887,6 @@ do módulo, com a casa no lugar do item e a regra do jogo no da poda:
 > solução só? (Para a última, faça o exercício E778.)
 
 ### Hora de praticar
-
-Arquivos em [`0130-juntando-tudo/`](19-backtracking/0130-juntando-tudo/).
 
 **Exemplo A259 · Quantas grades de sudoku 4 × 4 existem?**
 
@@ -1964,7 +1952,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/A259.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/A259 && ~/LPEDC/19-backtracking/0130-juntando-tudo/A259
+gcc ~/LPEDC/A259.c -o ~/LPEDC/A259 && ~/LPEDC/A259
 ```
 
 **Exemplo A260 · Sudoku com heurística: começar pela casa mais apertada**
@@ -2058,7 +2046,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/A260.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/A260 && ~/LPEDC/19-backtracking/0130-juntando-tudo/A260
+gcc ~/LPEDC/A260.c -o ~/LPEDC/A260 && ~/LPEDC/A260
 ```
 
 #### Exercícios
@@ -2098,7 +2086,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E776.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E776 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E776
+gcc ~/LPEDC/E776.c -o ~/LPEDC/E776 && ~/LPEDC/E776
 ```
 
 **Exercício E777** · ★★☆
@@ -2134,7 +2122,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E777.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E777 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E777
+gcc ~/LPEDC/E777.c -o ~/LPEDC/E777 && ~/LPEDC/E777
 ```
 
 **Exercício E778** · ★★☆
@@ -2178,7 +2166,7 @@ jogo 2: mais de uma solução
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E778.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E778 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E778
+gcc ~/LPEDC/E778.c -o ~/LPEDC/E778 && ~/LPEDC/E778
 ```
 
 **Exercício E780** · ★★★
@@ -2220,7 +2208,7 @@ diagonais: 251796348 e 526394871
 ```
 
 ```bash
-gcc ~/LPEDC/19-backtracking/0130-juntando-tudo/E780.c -o ~/LPEDC/19-backtracking/0130-juntando-tudo/E780 && ~/LPEDC/19-backtracking/0130-juntando-tudo/E780
+gcc ~/LPEDC/E780.c -o ~/LPEDC/E780 && ~/LPEDC/E780
 ```
 
 ---
@@ -2368,7 +2356,7 @@ mochila ganham, no módulo 21, um método que não testa tudo.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](19-backtracking/lista/); resoluções em `_respostas/19-backtracking/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1901.c a P1930.c, na raiz; resoluções em `_respostas/19-backtracking/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2406,7 +2394,7 @@ Total: 10 potes
 3. Resposta esperada: 10 potes, que é C(5, 3) = 5! / (3! 2!).
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1901.c -o ~/LPEDC/19-backtracking/lista/P1901 && ~/LPEDC/19-backtracking/lista/P1901
+gcc ~/LPEDC/P1901.c -o ~/LPEDC/P1901 && ~/LPEDC/P1901
 ```
 
 ---
@@ -2451,7 +2439,7 @@ KKKK
    duas caras e duas coroas.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1902.c -o ~/LPEDC/19-backtracking/lista/P1902 && ~/LPEDC/19-backtracking/lista/P1902
+gcc ~/LPEDC/P1902.c -o ~/LPEDC/P1902 && ~/LPEDC/P1902
 ```
 
 ---
@@ -2493,7 +2481,7 @@ Total: 13 configurações
    Fibonacci: 2, 3, 5, 8, 13...
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1903.c -o ~/LPEDC/19-backtracking/lista/P1903 && ~/LPEDC/19-backtracking/lista/P1903
+gcc ~/LPEDC/P1903.c -o ~/LPEDC/P1903 && ~/LPEDC/P1903
 ```
 
 ---
@@ -2536,7 +2524,7 @@ Chamadas: 31, folhas: 16
 3. Resposta esperada: 31 chamadas e 16 folhas (2^(n+1) - 1 e 2^n).
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1904.c -o ~/LPEDC/19-backtracking/lista/P1904 && ~/LPEDC/19-backtracking/lista/P1904
+gcc ~/LPEDC/P1904.c -o ~/LPEDC/P1904 && ~/LPEDC/P1904
 ```
 
 ---
@@ -2570,7 +2558,7 @@ Caio Ana Bia
    na ordem de cima.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1905.c -o ~/LPEDC/19-backtracking/lista/P1905 && ~/LPEDC/19-backtracking/lista/P1905
+gcc ~/LPEDC/P1905.c -o ~/LPEDC/P1905 && ~/LPEDC/P1905
 ```
 
 ---
@@ -2608,7 +2596,7 @@ Total: 12 chapas
 3. Resposta esperada: 12 chapas, o arranjo A(4, 2) = 4 · 3.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1906.c -o ~/LPEDC/19-backtracking/lista/P1906 && ~/LPEDC/19-backtracking/lista/P1906
+gcc ~/LPEDC/P1906.c -o ~/LPEDC/P1906 && ~/LPEDC/P1906
 ```
 
 ---
@@ -2637,7 +2625,7 @@ Playlist: 7 12 11 = 30 minutos
    antes de não levar" encontra.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1907.c -o ~/LPEDC/19-backtracking/lista/P1907 && ~/LPEDC/19-backtracking/lista/P1907
+gcc ~/LPEDC/P1907.c -o ~/LPEDC/P1907 && ~/LPEDC/P1907
 ```
 
 ---
@@ -2672,7 +2660,7 @@ Queimadas: 20 casas
    esquerda escapam mesmo com o vento.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1908.c -o ~/LPEDC/19-backtracking/lista/P1908 && ~/LPEDC/19-backtracking/lista/P1908
+gcc ~/LPEDC/P1908.c -o ~/LPEDC/P1908 && ~/LPEDC/P1908
 ```
 
 ---
@@ -2710,7 +2698,7 @@ Saída esperada:
    menos soluções que o 5.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1909.c -o ~/LPEDC/19-backtracking/lista/P1909 && ~/LPEDC/19-backtracking/lista/P1909
+gcc ~/LPEDC/P1909.c -o ~/LPEDC/P1909 && ~/LPEDC/P1909
 ```
 
 ---
@@ -2745,7 +2733,7 @@ Total: 8 trincas
 3. Resposta esperada: 8 trincas, de 1 5 9 até 4 5 6.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1910.c -o ~/LPEDC/19-backtracking/lista/P1910 && ~/LPEDC/19-backtracking/lista/P1910
+gcc ~/LPEDC/P1910.c -o ~/LPEDC/P1910 && ~/LPEDC/P1910
 ```
 
 ### ★★☆ Para pensar
@@ -2785,7 +2773,7 @@ Colorações com 3 cores: 48
    sempre dá outra coloração válida.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1911.c -o ~/LPEDC/19-backtracking/lista/P1911 && ~/LPEDC/19-backtracking/lista/P1911
+gcc ~/LPEDC/P1911.c -o ~/LPEDC/P1911 && ~/LPEDC/P1911
 ```
 
 ---
@@ -2830,7 +2818,7 @@ Horário 3: Programação
 3. Resposta esperada: 3 horários (o número cromático do grafo é 3).
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1912.c -o ~/LPEDC/19-backtracking/lista/P1912 && ~/LPEDC/19-backtracking/lista/P1912
+gcc ~/LPEDC/P1912.c -o ~/LPEDC/P1912 && ~/LPEDC/P1912
 ```
 
 ---
@@ -2864,7 +2852,7 @@ Total: 5 jeitos
 3. Resposta esperada: 5 jeitos, do A|R|A|R|A até o ARARA inteiro.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1913.c -o ~/LPEDC/19-backtracking/lista/P1913 && ~/LPEDC/19-backtracking/lista/P1913
+gcc ~/LPEDC/P1913.c -o ~/LPEDC/P1913 && ~/LPEDC/P1913
 ```
 
 ---
@@ -2904,7 +2892,7 @@ Total: 12 anagramas
 3. Resposta esperada: 12 anagramas, que é 4! / 2!.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1914.c -o ~/LPEDC/19-backtracking/lista/P1914 && ~/LPEDC/19-backtracking/lista/P1914
+gcc ~/LPEDC/P1914.c -o ~/LPEDC/P1914 && ~/LPEDC/P1914
 ```
 
 ---
@@ -2937,7 +2925,7 @@ Com poda: 50 soluções, 745 chamadas
    chamadas (2^13 - 1), com poda só 745.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1915.c -o ~/LPEDC/19-backtracking/lista/P1915 && ~/LPEDC/19-backtracking/lista/P1915
+gcc ~/LPEDC/P1915.c -o ~/LPEDC/P1915 && ~/LPEDC/P1915
 ```
 
 ---
@@ -2970,7 +2958,7 @@ Total: 4 jeitos
 3. Resposta esperada: 4 jeitos.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1916.c -o ~/LPEDC/19-backtracking/lista/P1916 && ~/LPEDC/19-backtracking/lista/P1916
+gcc ~/LPEDC/P1916.c -o ~/LPEDC/P1916 && ~/LPEDC/P1916
 ```
 
 ---
@@ -3003,7 +2991,7 @@ Mais longo: 13 passos
    longo com 13.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1917.c -o ~/LPEDC/19-backtracking/lista/P1917 && ~/LPEDC/19-backtracking/lista/P1917
+gcc ~/LPEDC/P1917.c -o ~/LPEDC/P1917 && ~/LPEDC/P1917
 ```
 
 ---
@@ -3039,7 +3027,7 @@ Total: 36 ordens
    e a regra 2 tira mais 24.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1918.c -o ~/LPEDC/19-backtracking/lista/P1918 && ~/LPEDC/19-backtracking/lista/P1918
+gcc ~/LPEDC/P1918.c -o ~/LPEDC/P1918 && ~/LPEDC/P1918
 ```
 
 ---
@@ -3068,7 +3056,7 @@ Soluções: 2
 3. Resposta esperada: sobram 2 soluções.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1919.c -o ~/LPEDC/19-backtracking/lista/P1919 && ~/LPEDC/19-backtracking/lista/P1919
+gcc ~/LPEDC/P1919.c -o ~/LPEDC/P1919 && ~/LPEDC/P1919
 ```
 
 ---
@@ -3105,7 +3093,7 @@ Com o primeiro dia 1 2 3 4: 24
    (576 / 4! = 24: qualquer escala vira uma dessas trocando os nomes).
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1920.c -o ~/LPEDC/19-backtracking/lista/P1920 && ~/LPEDC/19-backtracking/lista/P1920
+gcc ~/LPEDC/P1920.c -o ~/LPEDC/P1920 && ~/LPEDC/P1920
 ```
 
 ### ★★★ Desafio
@@ -3147,7 +3135,7 @@ Voltas: 0
    volta atrás 248133 vezes.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1921.c -o ~/LPEDC/19-backtracking/lista/P1921 && ~/LPEDC/19-backtracking/lista/P1921
+gcc ~/LPEDC/P1921.c -o ~/LPEDC/P1921 && ~/LPEDC/P1921
 ```
 
 ---
@@ -3190,7 +3178,7 @@ Palavras testadas: 120
    a outra virada: as linhas de uma são as colunas da outra).
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1922.c -o ~/LPEDC/19-backtracking/lista/P1922 && ~/LPEDC/19-backtracking/lista/P1922
+gcc ~/LPEDC/P1922.c -o ~/LPEDC/P1922 && ~/LPEDC/P1922
 ```
 
 ---
@@ -3226,7 +3214,7 @@ Chamadas: 10
    na saída de cima).
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1923.c -o ~/LPEDC/19-backtracking/lista/P1923 && ~/LPEDC/19-backtracking/lista/P1923
+gcc ~/LPEDC/P1923.c -o ~/LPEDC/P1923 && ~/LPEDC/P1923
 ```
 
 ---
@@ -3268,7 +3256,7 @@ Atribuições conferidas: 120960
    corte do zero seriam 10 · 9 · 8 · 7 · 6 · 5 = 151200.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1924.c -o ~/LPEDC/19-backtracking/lista/P1924 && ~/LPEDC/19-backtracking/lista/P1924
+gcc ~/LPEDC/P1924.c -o ~/LPEDC/P1924 && ~/LPEDC/P1924
 ```
 
 ---
@@ -3304,7 +3292,7 @@ Total: 5 lotes
    de levar. Saem os 5 lotes de cima.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1925.c -o ~/LPEDC/19-backtracking/lista/P1925 && ~/LPEDC/19-backtracking/lista/P1925
+gcc ~/LPEDC/P1925.c -o ~/LPEDC/P1925 && ~/LPEDC/P1925
 ```
 
 ---
@@ -3353,7 +3341,7 @@ Roteiros: 18, ciclos: 10
 3. Resposta esperada: 18 roteiros, 10 deles fecham um ciclo.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1926.c -o ~/LPEDC/19-backtracking/lista/P1926 && ~/LPEDC/19-backtracking/lista/P1926
+gcc ~/LPEDC/P1926.c -o ~/LPEDC/P1926 && ~/LPEDC/P1926
 ```
 
 ---
@@ -3395,7 +3383,7 @@ Soluções: 1
 3. Resposta esperada: 1 solução, a grade de cima.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1927.c -o ~/LPEDC/19-backtracking/lista/P1927 && ~/LPEDC/19-backtracking/lista/P1927
+gcc ~/LPEDC/P1927.c -o ~/LPEDC/P1927 && ~/LPEDC/P1927
 ```
 
 ---
@@ -3445,7 +3433,7 @@ Total: 10 trincas
    11100 (Cris Dani Eli), em ordem crescente de máscara.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1928.c -o ~/LPEDC/19-backtracking/lista/P1928 && ~/LPEDC/19-backtracking/lista/P1928
+gcc ~/LPEDC/P1928.c -o ~/LPEDC/P1928 && ~/LPEDC/P1928
 ```
 
 ---
@@ -3489,7 +3477,7 @@ Saída esperada:
    balanceada). Por exemplo, 5 = 9 - 3 - 1 e 13 = 9 + 3 + 1.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1929.c -o ~/LPEDC/19-backtracking/lista/P1929 && ~/LPEDC/19-backtracking/lista/P1929
+gcc ~/LPEDC/P1929.c -o ~/LPEDC/P1929 && ~/LPEDC/P1929
 ```
 
 ---
@@ -3537,7 +3525,7 @@ Caminhão 3: 3 3 3 (9 t)
    2, 4 + 3 + 3 e 3 + 3 + 3). Guloso rápido não garante o ótimo.
 
 ```bash
-gcc ~/LPEDC/19-backtracking/lista/P1930.c -o ~/LPEDC/19-backtracking/lista/P1930 && ~/LPEDC/19-backtracking/lista/P1930
+gcc ~/LPEDC/P1930.c -o ~/LPEDC/P1930 && ~/LPEDC/P1930
 ```
 
 ## Questões no estilo da prova

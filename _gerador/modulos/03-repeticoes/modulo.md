@@ -36,7 +36,7 @@ Para não digitar a entrada a cada teste, mande-a pelo `printf` do terminal,
 um valor por linha:
 
 ```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049 && printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049
+gcc ~/LPEDC/A049.c -o ~/LPEDC/A049 && printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/A049
 ```
 
 Se um programa travar num laço infinito, `Ctrl+C` encerra. Nos fluxogramas,

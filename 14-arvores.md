@@ -41,22 +41,22 @@ uma busca e o nó vermelho é o que vai sair ou está desequilibrado. Desenhe a
 O comando compila junto o `.c` de apoio da pasta (como `bst.c`):
 
 ```bash
-gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197
+gcc ~/LPEDC/A197.c ~/LPEDC/0099-bst.c -o ~/LPEDC/A197 && ~/LPEDC/A197
 ```
 
 **Altura conta arestas** em todo o módulo: a folha tem altura 0 e a árvore
 vazia, -1. Alguns livros contam nós; confira a convenção.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0097](#0097--árvores) | Árvores | [`0097-arvores/`](14-arvores/0097-arvores/) |
-| [0098](#0098--árvore-binária-e-percursos) | Árvore binária e percursos | [`0098-arvore-binaria/`](14-arvores/0098-arvore-binaria/) |
-| [0099](#0099--bst-busca-e-inserção) | BST: busca e inserção | [`0099-bst-busca-insercao/`](14-arvores/0099-bst-busca-insercao/) |
-| [0100](#0100--bst-remoção) | BST: remoção | [`0100-bst-remocao/`](14-arvores/0100-bst-remocao/) |
-| [0101](#0101--avl-balanceamento-e-rotações) | AVL: balanceamento e rotações | [`0101-avl/`](14-arvores/0101-avl/) |
-| [0102](#0102--heap-e-fila-de-prioridade) | Heap e fila de prioridade | [`0102-heap/`](14-arvores/0102-heap/) |
-| [0103](#0103--heapsort) | Heapsort | [`0103-heapsort/`](14-arvores/0103-heapsort/) |
-| [0104](#0104--juntando-tudo) | Juntando tudo | [`0104-juntando-tudo/`](14-arvores/0104-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0097](#0097--árvores) | Árvores |
+| [0098](#0098--árvore-binária-e-percursos) | Árvore binária e percursos |
+| [0099](#0099--bst-busca-e-inserção) | BST: busca e inserção |
+| [0100](#0100--bst-remoção) | BST: remoção |
+| [0101](#0101--avl-balanceamento-e-rotações) | AVL: balanceamento e rotações |
+| [0102](#0102--heap-e-fila-de-prioridade) | Heap e fila de prioridade |
+| [0103](#0103--heapsort) | Heapsort |
+| [0104](#0104--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -96,7 +96,7 @@ dos filhos. Altura: maior altura dos filhos, mais 1.
 A árvore das pastas tem 9 nós, 5 folhas (em verde) e altura 3: o caminho mais
 longo vai de `casa` até `2025`, por `contas` e `luz`:
 
-<p align="center"><img src="14-arvores/0097-arvores/ideia.svg" alt="Diagrama da ideia: Árvores" width="858"></p>
+<p align="center"><img src="0097-ideia.svg" alt="Diagrama da ideia: Árvores" width="858"></p>
 
 Em C, cada pasta é um nó com um nome e um vetor de ponteiros para os filhos,
 criado com `malloc` como os nós da lista encadeada:
@@ -202,7 +202,7 @@ A `altura` não trata a folha à parte: ela não entra no laço, `maior` fica em
 e a função devolve 0. Em `casa`, os filhos respondem 1, 2 e 0, e ela devolve
 2 + 1 = 3:
 
-<p align="center"><img src="14-arvores/0097-arvores/fluxograma.svg" alt="Fluxograma: Árvores" width="545"></p>
+<p align="center"><img src="0097-fluxograma.svg" alt="Fluxograma: Árvores" width="545"></p>
 
 > [!WARNING]
 > Libere de baixo para cima: primeiro as subárvores, por último o nó. Com
@@ -218,8 +218,6 @@ e a função devolve 0. Em `casa`, os filhos respondem 1, 2 e 0, e ela devolve
 > `musica`?
 
 ### Hora de praticar
-
-Arquivos em [`0097-arvores/`](14-arvores/0097-arvores/).
 
 **Exemplo A193 · Os mesmos nós, alturas diferentes**
 
@@ -332,7 +330,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0097-arvores/A193.c -o ~/LPEDC/14-arvores/0097-arvores/A193 && ~/LPEDC/14-arvores/0097-arvores/A193
+gcc ~/LPEDC/A193.c -o ~/LPEDC/A193 && ~/LPEDC/A193
 ```
 
 **Exemplo A194 · O organograma com dois ponteiros**
@@ -428,7 +426,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0097-arvores/A194.c -o ~/LPEDC/14-arvores/0097-arvores/A194 && ~/LPEDC/14-arvores/0097-arvores/A194
+gcc ~/LPEDC/A194.c -o ~/LPEDC/A194 && ~/LPEDC/A194
 ```
 
 #### Exercícios
@@ -472,7 +470,7 @@ Altura: 3
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0097-arvores/E577.c -o ~/LPEDC/14-arvores/0097-arvores/E577 && ~/LPEDC/14-arvores/0097-arvores/E577
+gcc ~/LPEDC/E577.c -o ~/LPEDC/E577 && ~/LPEDC/E577
 ```
 
 **Exercício E579** · ★★☆
@@ -507,7 +505,7 @@ videos: -1
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0097-arvores/E579.c -o ~/LPEDC/14-arvores/0097-arvores/E579 && ~/LPEDC/14-arvores/0097-arvores/E579
+gcc ~/LPEDC/E579.c -o ~/LPEDC/E579 && ~/LPEDC/E579
 ```
 
 **Exercício E580** · ★★☆
@@ -564,7 +562,7 @@ casa (450 MB)
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0097-arvores/E580.c -o ~/LPEDC/14-arvores/0097-arvores/E580 && ~/LPEDC/14-arvores/0097-arvores/E580
+gcc ~/LPEDC/E580.c -o ~/LPEDC/E580 && ~/LPEDC/E580
 ```
 
 **Exercício E582** · ★★★
@@ -601,7 +599,7 @@ Total de caminhos: 5
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0097-arvores/E582.c -o ~/LPEDC/14-arvores/0097-arvores/E582 && ~/LPEDC/14-arvores/0097-arvores/E582
+gcc ~/LPEDC/E582.c -o ~/LPEDC/E582 && ~/LPEDC/E582
 ```
 
 ---
@@ -649,7 +647,7 @@ o `*` só se aplica depois das duas subárvores (assunto 0084).
 
 Os operadores ficam nos nós internos (roxo) e os números nas folhas (azul):
 
-<p align="center"><img src="14-arvores/0098-arvore-binaria/ideia.svg" alt="Diagrama da ideia: Árvore binária e percursos" width="858"></p>
+<p align="center"><img src="0098-ideia.svg" alt="Diagrama da ideia: Árvore binária e percursos" width="858"></p>
 
 O cliente monta a árvore de baixo para cima e chama os percursos:
 
@@ -701,7 +699,7 @@ O caso base é a árvore vazia. Num nó que existe, a função resolve a esquerd
 mostra a raiz e resolve a direita. Mover o `printf` dá a pré-ordem ou a
 pós-ordem:
 
-<p align="center"><img src="14-arvores/0098-arvore-binaria/fluxograma.svg" alt="Fluxograma: Árvore binária e percursos" width="346"></p>
+<p align="center"><img src="0098-fluxograma.svg" alt="Fluxograma: Árvore binária e percursos" width="346"></p>
 
 ### Passo a passo
 
@@ -734,13 +732,11 @@ A pilha de chamadas da em ordem, a partir da raiz `*`. Cada linha é um
 
 ### Hora de praticar
 
-Arquivos em [`0098-arvore-binaria/`](14-arvores/0098-arvore-binaria/).
-
 **Exemplo A195 · Duas árvores com a mesma em ordem**
 
 ```c
 #include <stdio.h>
-#include "arvore.h"
+#include "0098-arvore.h"
 
 void percursos(const char *titulo, const No *r) {
     printf("%s\n  pré:", titulo);
@@ -791,14 +787,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0098-arvore-binaria/A195.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/A195 && ~/LPEDC/14-arvores/0098-arvore-binaria/A195
+gcc ~/LPEDC/A195.c ~/LPEDC/0098-arvore.c -o ~/LPEDC/A195 && ~/LPEDC/A195
 ```
 
 **Exemplo A196 · Calculando a árvore de expressão**
 
 ```c
 #include <stdio.h>
-#include "arvore.h"
+#include "0098-arvore.h"
 
 // folha é um dígito; nó interno é um operador aplicado às duas subárvores
 int avalia(const No *r) {
@@ -851,7 +847,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0098-arvore-binaria/A196.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/A196 && ~/LPEDC/14-arvores/0098-arvore-binaria/A196
+gcc ~/LPEDC/A196.c ~/LPEDC/0098-arvore.c -o ~/LPEDC/A196 && ~/LPEDC/A196
 ```
 
 #### Exercícios
@@ -884,7 +880,7 @@ Nós: 6, altura: 2
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E583.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E583 && ~/LPEDC/14-arvores/0098-arvore-binaria/E583
+gcc ~/LPEDC/E583.c ~/LPEDC/0098-arvore.c -o ~/LPEDC/E583 && ~/LPEDC/E583
 ```
 
 **Exercício E585** · ★★☆
@@ -903,7 +899,7 @@ Depois: 2 + 4 * 3 - 8
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E585.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E585 && ~/LPEDC/14-arvores/0098-arvore-binaria/E585
+gcc ~/LPEDC/E585.c ~/LPEDC/0098-arvore.c -o ~/LPEDC/E585 && ~/LPEDC/E585
 ```
 
 **Exercício E586** · ★★☆
@@ -927,7 +923,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E586.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E586 && ~/LPEDC/14-arvores/0098-arvore-binaria/E586
+gcc ~/LPEDC/E586.c ~/LPEDC/0098-arvore.c -o ~/LPEDC/E586 && ~/LPEDC/E586
 ```
 
 **Exercício E588** · ★★★
@@ -954,7 +950,7 @@ MGC..J..T.X..
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E588.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E588 && ~/LPEDC/14-arvores/0098-arvore-binaria/E588
+gcc ~/LPEDC/E588.c ~/LPEDC/0098-arvore.c -o ~/LPEDC/E588 && ~/LPEDC/E588
 ```
 
 ---
@@ -988,7 +984,7 @@ Sete alunos chegaram na ordem 50, 30, 70, 20, 40, 60 e 80. A busca pelo 60
 compara com 50 (direita), 70 (esquerda) e acha. A do 45 desce 50, 30, 40 e cai
 no `NULL` à direita do 40, onde o 45 entraria:
 
-<p align="center"><img src="14-arvores/0099-bst-busca-insercao/ideia.svg" alt="Diagrama da ideia: BST: busca e inserção" width="858"></p>
+<p align="center"><img src="0099-ideia.svg" alt="Diagrama da ideia: BST: busca e inserção" width="858"></p>
 
 O TAD fica em `bst.h` e `bst.c`. As duas funções principais:
 
@@ -1060,7 +1056,7 @@ int main(void) {
 Cada volta faz no máximo duas perguntas e desce um nível. O caminho verde é a
 busca do 60:
 
-<p align="center"><img src="14-arvores/0099-bst-busca-insercao/fluxograma.svg" alt="Fluxograma: BST: busca e inserção" width="941"></p>
+<p align="center"><img src="0099-fluxograma.svg" alt="Fluxograma: BST: busca e inserção" width="941"></p>
 
 > [!WARNING]
 > A forma da BST depende da **ordem de chegada**. As sete matrículas em ordem
@@ -1078,13 +1074,11 @@ busca do 60:
 
 ### Hora de praticar
 
-Arquivos em [`0099-bst-busca-insercao/`](14-arvores/0099-bst-busca-insercao/).
-
 **Exemplo A197 · Onde cada pedido vai morar**
 
 ```c
 #include <stdio.h>
-#include "bst.h"
+#include "0099-bst.h"
 
 // antes de inserir, refaz a descida que o insere vai fazer e conta onde a
 // chave vai virar folha (ou se já existe)
@@ -1139,14 +1133,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197
+gcc ~/LPEDC/A197.c ~/LPEDC/0099-bst.c -o ~/LPEDC/A197 && ~/LPEDC/A197
 ```
 
 **Exemplo A198 · A ordem de chegada muda a árvore**
 
 ```c
 #include <stdio.h>
-#include "bst.h"
+#include "0099-bst.h"
 
 No *monta(const int v[], int n) {
     No *r = NULL;
@@ -1188,7 +1182,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/A198.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/A198 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/A198
+gcc ~/LPEDC/A198.c ~/LPEDC/0099-bst.c -o ~/LPEDC/A198 && ~/LPEDC/A198
 ```
 
 #### Exercícios
@@ -1214,7 +1208,7 @@ Senha 65: nível -1
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E589.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E589 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E589
+gcc ~/LPEDC/E589.c ~/LPEDC/0099-bst.c -o ~/LPEDC/E589 && ~/LPEDC/E589
 ```
 
 **Exercício E591** · ★★☆
@@ -1234,7 +1228,7 @@ Nós visitados: 5 de 9
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E591.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E591 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E591
+gcc ~/LPEDC/E591.c ~/LPEDC/0099-bst.c -o ~/LPEDC/E591 && ~/LPEDC/E591
 ```
 
 **Exercício E592** · ★★☆
@@ -1253,7 +1247,7 @@ Altura: 2
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E592.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E592 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E592
+gcc ~/LPEDC/E592.c ~/LPEDC/0099-bst.c -o ~/LPEDC/E592 && ~/LPEDC/E592
 ```
 
 **Exercício E594** · ★★★
@@ -1284,7 +1278,7 @@ Altura: 3
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E594.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E594 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E594
+gcc ~/LPEDC/E594.c ~/LPEDC/0099-bst.c -o ~/LPEDC/E594 && ~/LPEDC/E594
 ```
 
 ---
@@ -1320,7 +1314,7 @@ Como na inserção, a função devolve a raiz da subárvore e o pai faz
 O 30 tem dois filhos. O sucessor sai indo para a direita (40) e depois para a
 esquerda (35). O 35 ocupa o lugar do 30, e o 35 de baixo, que era folha, sai:
 
-<p align="center"><img src="14-arvores/0100-bst-remocao/ideia.svg" alt="Diagrama da ideia: BST: remoção" width="858"></p>
+<p align="center"><img src="0100-ideia.svg" alt="Diagrama da ideia: BST: remoção" width="858"></p>
 
 A função completa, no `bst.c`:
 
@@ -1404,7 +1398,7 @@ int main(void) {
 O caminho verde é a chamada que encontra o 30: cai no caso de dois filhos,
 copia o 35 e faz uma **segunda remoção**, do 35, que termina no caso fácil:
 
-<p align="center"><img src="14-arvores/0100-bst-remocao/fluxograma.svg" alt="Fluxograma: BST: remoção" width="769"></p>
+<p align="center"><img src="0100-fluxograma.svg" alt="Fluxograma: BST: remoção" width="769"></p>
 
 > [!WARNING]
 > `bst_remove(raiz->esq, 20);` sem atribuir o retorno dá `free` no 20 mas deixa
@@ -1421,13 +1415,11 @@ copia o 35 e faz uma **segunda remoção**, do 35, que termina no caso fácil:
 
 ### Hora de praticar
 
-Arquivos em [`0100-bst-remocao/`](14-arvores/0100-bst-remocao/).
-
 **Exemplo A199 · Quando o sucessor também tem filho**
 
 ```c
 #include <stdio.h>
-#include "bst.h"
+#include "0100-bst.h"
 
 void pre(const No *r) {
     if (r == NULL) {
@@ -1477,14 +1469,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0100-bst-remocao/A199.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/A199 && ~/LPEDC/14-arvores/0100-bst-remocao/A199
+gcc ~/LPEDC/A199.c ~/LPEDC/0100-bst.c -o ~/LPEDC/A199 && ~/LPEDC/A199
 ```
 
 **Exemplo A200 · Até a raiz vai embora**
 
 ```c
 #include <stdio.h>
-#include "bst.h"
+#include "0100-bst.h"
 
 int main(void) {
     int matriculas[] = {50, 30, 70, 20, 40, 60, 80};
@@ -1519,7 +1511,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0100-bst-remocao/A200.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/A200 && ~/LPEDC/14-arvores/0100-bst-remocao/A200
+gcc ~/LPEDC/A200.c ~/LPEDC/0100-bst.c -o ~/LPEDC/A200 && ~/LPEDC/A200
 ```
 
 #### Exercícios
@@ -1543,7 +1535,7 @@ Sem o 25 (um filho):    pré 60 40 35 50 90 70
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0100-bst-remocao/E595.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E595 && ~/LPEDC/14-arvores/0100-bst-remocao/E595
+gcc ~/LPEDC/E595.c ~/LPEDC/0100-bst.c -o ~/LPEDC/E595 && ~/LPEDC/E595
 ```
 
 **Exercício E597** · ★★☆
@@ -1563,7 +1555,7 @@ Sem o 50:  pré 45 20 40 35 70 60 80
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0100-bst-remocao/E597.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E597 && ~/LPEDC/14-arvores/0100-bst-remocao/E597
+gcc ~/LPEDC/E597.c ~/LPEDC/0100-bst.c -o ~/LPEDC/E597 && ~/LPEDC/E597
 ```
 
 **Exercício E598** · ★★☆
@@ -1590,7 +1582,7 @@ Chamada 9: matrícula 80
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0100-bst-remocao/E598.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E598 && ~/LPEDC/14-arvores/0100-bst-remocao/E598
+gcc ~/LPEDC/E598.c ~/LPEDC/0100-bst.c -o ~/LPEDC/E598 && ~/LPEDC/E598
 ```
 
 **Exercício E599** · ★★★
@@ -1609,7 +1601,7 @@ Raiz: 70, altura: 2
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0100-bst-remocao/E599.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E599 && ~/LPEDC/14-arvores/0100-bst-remocao/E599
+gcc ~/LPEDC/E599.c ~/LPEDC/0100-bst.c -o ~/LPEDC/E599 && ~/LPEDC/E599
 ```
 
 ---
@@ -1656,7 +1648,7 @@ Inserir 10, 20 e 30 deixa o 10 com fator -2 e o filho com -1: rotação à
 esquerda no 10, e o 20 sobe. Depois, com a árvore 20 (10, 40 (30, 50)), inserir
 o 25 deixa o 20 com -2 e o filho 40 com +1: rotação dupla. O 30 acaba na raiz:
 
-<p align="center"><img src="14-arvores/0101-avl/ideia.svg" alt="Diagrama da ideia: AVL: balanceamento e rotações" width="860"></p>
+<p align="center"><img src="0101-ideia.svg" alt="Diagrama da ideia: AVL: balanceamento e rotações" width="860"></p>
 
 Rotações e rebalanceamento, no `avl.c`:
 
@@ -1722,7 +1714,7 @@ int main(void) {
 O caminho verde é o do nó 20 quando o 25 chega: fator -2, filho direito com
 fator +1, então duas rotações:
 
-<p align="center"><img src="14-arvores/0101-avl/fluxograma.svg" alt="Fluxograma: AVL: balanceamento e rotações" width="684"></p>
+<p align="center"><img src="0101-fluxograma.svg" alt="Fluxograma: AVL: balanceamento e rotações" width="684"></p>
 
 ### Passo a passo
 
@@ -1752,13 +1744,11 @@ Sem a AVL, a sequência daria uma BST de altura 4.
 
 ### Hora de praticar
 
-Arquivos em [`0101-avl/`](14-arvores/0101-avl/).
-
 **Exemplo A201 · Os quatro casos, três chaves cada**
 
 ```c
 #include <stdio.h>
-#include "avl.h"
+#include "0101-avl.h"
 
 // insere as três chaves numa AVL nova e mostra quantas rotações custou
 void testa(const char *caso, int a, int b, int c) {
@@ -1793,7 +1783,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0101-avl/A201.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/A201 && ~/LPEDC/14-arvores/0101-avl/A201
+gcc ~/LPEDC/A201.c ~/LPEDC/0101-avl.c -o ~/LPEDC/A201 && ~/LPEDC/A201
 ```
 
 **Exemplo A202 · Mil pedidos: BST comum contra AVL**
@@ -1801,7 +1791,7 @@ gcc ~/LPEDC/14-arvores/0101-avl/A201.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LP
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "avl.h"
+#include "0101-avl.h"
 
 // uma BST comum, sem balancear, só para comparar (nomes diferentes do TAD)
 typedef struct Comum {
@@ -1869,7 +1859,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0101-avl/A202.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/A202 && ~/LPEDC/14-arvores/0101-avl/A202
+gcc ~/LPEDC/A202.c ~/LPEDC/0101-avl.c -o ~/LPEDC/A202 && ~/LPEDC/A202
 ```
 
 #### Exercícios
@@ -1912,7 +1902,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0101-avl/E601.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E601 && ~/LPEDC/14-arvores/0101-avl/E601
+gcc ~/LPEDC/E601.c ~/LPEDC/0101-avl.c -o ~/LPEDC/E601 && ~/LPEDC/E601
 ```
 
 **Exercício E603** · ★★☆
@@ -1938,7 +1928,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0101-avl/E603.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E603 && ~/LPEDC/14-arvores/0101-avl/E603
+gcc ~/LPEDC/E603.c ~/LPEDC/0101-avl.c -o ~/LPEDC/E603 && ~/LPEDC/E603
 ```
 
 **Exercício E604** · ★★☆
@@ -1959,7 +1949,7 @@ Teste 2: pré 60 40 20 50 70 | altura da raiz 2
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0101-avl/E604.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E604 && ~/LPEDC/14-arvores/0101-avl/E604
+gcc ~/LPEDC/E604.c ~/LPEDC/0101-avl.c -o ~/LPEDC/E604 && ~/LPEDC/E604
 ```
 
 **Exercício E606** · ★★★
@@ -1988,7 +1978,7 @@ Pré-ordem: 30 20 15 25 45 35 60
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0101-avl/E606.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E606 && ~/LPEDC/14-arvores/0101-avl/E606
+gcc ~/LPEDC/E606.c ~/LPEDC/0101-avl.c -o ~/LPEDC/E606 && ~/LPEDC/E606
 ```
 
 ---
@@ -2039,7 +2029,7 @@ Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30. O heap fica
 `[90 70 30 40 50 20]`. Árvore e vetor são a mesma coisa: o 70 está no índice
 1, e os filhos dele, nos índices 3 e 4:
 
-<p align="center"><img src="14-arvores/0102-heap/ideia.svg" alt="Diagrama da ideia: Heap e fila de prioridade" width="858"></p>
+<p align="center"><img src="0102-ideia.svg" alt="Diagrama da ideia: Heap e fila de prioridade" width="858"></p>
 
 O TAD guarda o vetor, quantos elementos tem e quantos cabem. As duas peças do
 `heap.c`:
@@ -2110,7 +2100,7 @@ int main(void) {
 O fluxograma segue a subida do 30: entra no índice 5, o pai (índice 2) é o 20,
 menor, e eles trocam. O novo pai é o 90, e a subida para:
 
-<p align="center"><img src="14-arvores/0102-heap/fluxograma.svg" alt="Fluxograma: Heap e fila de prioridade" width="443"></p>
+<p align="center"><img src="0102-fluxograma.svg" alt="Fluxograma: Heap e fila de prioridade" width="443"></p>
 
 ### Passo a passo
 
@@ -2138,13 +2128,11 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 
 ### Hora de praticar
 
-Arquivos em [`0102-heap/`](14-arvores/0102-heap/).
-
 **Exemplo A203 · O leilão com vagas contadas**
 
 ```c
 #include <stdio.h>
-#include "heap.h"
+#include "0102-heap.h"
 
 int main(void) {
     // lances (em R$) por uma bicicleta usada; o leiloeiro só anota 4
@@ -2190,7 +2178,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0102-heap/A203.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/A203 && ~/LPEDC/14-arvores/0102-heap/A203
+gcc ~/LPEDC/A203.c ~/LPEDC/0102-heap.c -o ~/LPEDC/A203 && ~/LPEDC/A203
 ```
 
 **Exemplo A204 · Fila de prioridade com nome**
@@ -2267,7 +2255,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0102-heap/A204.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/A204 && ~/LPEDC/14-arvores/0102-heap/A204
+gcc ~/LPEDC/A204.c ~/LPEDC/0102-heap.c -o ~/LPEDC/A204 && ~/LPEDC/A204
 ```
 
 #### Exercícios
@@ -2291,7 +2279,7 @@ v[5] = 20: folha
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0102-heap/E607.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E607 && ~/LPEDC/14-arvores/0102-heap/E607
+gcc ~/LPEDC/E607.c ~/LPEDC/0102-heap.c -o ~/LPEDC/E607 && ~/LPEDC/E607
 ```
 
 **Exercício E609** · ★★☆
@@ -2313,7 +2301,7 @@ saiu 40, entrou 10: [35 15 25 10 5]
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0102-heap/E609.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E609 && ~/LPEDC/14-arvores/0102-heap/E609
+gcc ~/LPEDC/E609.c ~/LPEDC/0102-heap.c -o ~/LPEDC/E609 && ~/LPEDC/E609
 ```
 
 **Exercício E610** · ★★☆
@@ -2334,7 +2322,7 @@ Chamando senha 9
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0102-heap/E610.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E610 && ~/LPEDC/14-arvores/0102-heap/E610
+gcc ~/LPEDC/E610.c ~/LPEDC/0102-heap.c -o ~/LPEDC/E610 && ~/LPEDC/E610
 ```
 
 **Exercício E611** · ★★★
@@ -2353,7 +2341,7 @@ Pódio: 98 95 91
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0102-heap/E611.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E611 && ~/LPEDC/14-arvores/0102-heap/E611
+gcc ~/LPEDC/E611.c ~/LPEDC/0102-heap.c -o ~/LPEDC/E611 && ~/LPEDC/E611
 ```
 
 ---
@@ -2386,7 +2374,7 @@ extra.
 Depois da fase 1, o vetor é o heap `[91 52 73 40 18 25 66]`. Na fase 2, o 91
 troca com o 66 e fica no fim, em verde. O 66 desce pelo maior filho (73):
 
-<p align="center"><img src="14-arvores/0103-heapsort/ideia.svg" alt="Diagrama da ideia: Heapsort" width="860"></p>
+<p align="center"><img src="0103-ideia.svg" alt="Diagrama da ideia: Heapsort" width="860"></p>
 
 O `desce` é o do heap, com o tamanho atual do heap como parâmetro. A `mostra`
 separa o heap da parte ordenada com `|`:
@@ -2460,7 +2448,7 @@ int main(void) {
 No fluxograma, a fase 1 é uma caixa só, e o laço da fase 2 repete trocar e
 descer até `fim` chegar a 0:
 
-<p align="center"><img src="14-arvores/0103-heapsort/fluxograma.svg" alt="Fluxograma: Heapsort" width="593"></p>
+<p align="center"><img src="0103-fluxograma.svg" alt="Fluxograma: Heapsort" width="593"></p>
 
 ### Passo a passo
 
@@ -2488,8 +2476,6 @@ A fase 1. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 2`):
 > faz? E se o vetor já estivesse em ordem crescente, qual ganharia?
 
 ### Hora de praticar
-
-Arquivos em [`0103-heapsort/`](14-arvores/0103-heapsort/).
 
 **Exemplo A205 · Empate na chegada: o heapsort não é estável**
 
@@ -2558,7 +2544,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0103-heapsort/A205.c -o ~/LPEDC/14-arvores/0103-heapsort/A205 && ~/LPEDC/14-arvores/0103-heapsort/A205
+gcc ~/LPEDC/A205.c -o ~/LPEDC/A205 && ~/LPEDC/A205
 ```
 
 **Exemplo A206 · Heapsort não tem dia ruim**
@@ -2650,7 +2636,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0103-heapsort/A206.c -o ~/LPEDC/14-arvores/0103-heapsort/A206 && ~/LPEDC/14-arvores/0103-heapsort/A206
+gcc ~/LPEDC/A206.c -o ~/LPEDC/A206 && ~/LPEDC/A206
 ```
 
 #### Exercícios
@@ -2675,7 +2661,7 @@ fase 2:       [7 5 2 3 | 8 9]
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0103-heapsort/E613.c -o ~/LPEDC/14-arvores/0103-heapsort/E613 && ~/LPEDC/14-arvores/0103-heapsort/E613
+gcc ~/LPEDC/E613.c -o ~/LPEDC/E613 && ~/LPEDC/E613
 ```
 
 **Exercício E615** · ★★☆
@@ -2696,7 +2682,7 @@ Os dois são heaps? sim
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0103-heapsort/E615.c -o ~/LPEDC/14-arvores/0103-heapsort/E615 && ~/LPEDC/14-arvores/0103-heapsort/E615
+gcc ~/LPEDC/E615.c -o ~/LPEDC/E615 && ~/LPEDC/E615
 ```
 
 **Exercício E616** · ★★☆
@@ -2717,7 +2703,7 @@ iguais:      fase 1: 0 trocas, fase 2: 0 trocas -> 5 5 5 5 5 5 5
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0103-heapsort/E616.c -o ~/LPEDC/14-arvores/0103-heapsort/E616 && ~/LPEDC/14-arvores/0103-heapsort/E616
+gcc ~/LPEDC/E616.c -o ~/LPEDC/E616 && ~/LPEDC/E616
 ```
 
 **Exercício E618** · ★★★
@@ -2740,7 +2726,7 @@ Zeca
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0103-heapsort/E618.c -o ~/LPEDC/14-arvores/0103-heapsort/E618 && ~/LPEDC/14-arvores/0103-heapsort/E618
+gcc ~/LPEDC/E618.c -o ~/LPEDC/E618 && ~/LPEDC/E618
 ```
 
 ---
@@ -2790,7 +2776,7 @@ Sete alunos se matriculam. A catraca acha o 60 (Fabio) descendo 50, 70 e 60 e
 soma um treino. O 30 (Bruno) cancela. Os treinos dos seis que sobram vão para
 o vetor, e o heap entrega o pódio:
 
-<p align="center"><img src="14-arvores/0104-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0104-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa usa o TAD para o cadastro e monta o heap do ranking sobre um vetor
 de `Aluno`:
@@ -2880,7 +2866,7 @@ int main(void) {
 O fluxograma é uma sequência de operações na BST e, no fim, um laço sobre o
 heap:
 
-<p align="center"><img src="14-arvores/0104-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="378"></p>
+<p align="center"><img src="0104-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="378"></p>
 
 O exemplo A208 comanda o cadastro pelo teclado: `i 50 Ana 12` insere, `b 50`
 busca, `r 50` remove e `l` lista.
@@ -2902,13 +2888,11 @@ busca, `r 50` remove e `l` lista.
 
 ### Hora de praticar
 
-Arquivos em [`0104-juntando-tudo/`](14-arvores/0104-juntando-tudo/).
-
 **Exemplo A207 · Trocar a matrícula não é editar o campo**
 
 ```c
 #include <stdio.h>
-#include "cadastro.h"
+#include "0104-cadastro.h"
 
 void confere(NoAluno *cad, int matricula) {
     Aluno *a = cad_busca(cad, matricula);
@@ -2964,14 +2948,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0104-juntando-tudo/A207.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/A207 && ~/LPEDC/14-arvores/0104-juntando-tudo/A207
+gcc ~/LPEDC/A207.c ~/LPEDC/0104-cadastro.c -o ~/LPEDC/A207 && ~/LPEDC/A207
 ```
 
 **Exemplo A208 · A recepção digitando comandos**
 
 ```c
 #include <stdio.h>
-#include "cadastro.h"
+#include "0104-cadastro.h"
 
 // comandos, um por linha:
 //   i MATRICULA NOME TREINOS   insere      b MATRICULA   busca
@@ -3022,7 +3006,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0104-juntando-tudo/A208.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/A208 && ~/LPEDC/14-arvores/0104-juntando-tudo/A208
+gcc ~/LPEDC/A208.c ~/LPEDC/0104-cadastro.c -o ~/LPEDC/A208 && ~/LPEDC/A208
 ```
 
 #### Exercícios
@@ -3050,7 +3034,7 @@ Total: 4
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E619.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E619 && ~/LPEDC/14-arvores/0104-juntando-tudo/E619
+gcc ~/LPEDC/E619.c ~/LPEDC/0104-cadastro.c -o ~/LPEDC/E619 && ~/LPEDC/E619
 ```
 
 **Exercício E621** · ★★☆
@@ -3080,7 +3064,7 @@ Alunos em ordem: 20 30 40 50 60 70 80
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E621.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E621 && ~/LPEDC/14-arvores/0104-juntando-tudo/E621
+gcc ~/LPEDC/E621.c ~/LPEDC/0104-cadastro.c -o ~/LPEDC/E621 && ~/LPEDC/E621
 ```
 
 **Exercício E622** · ★★☆
@@ -3108,7 +3092,7 @@ depois de 80: -1
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E622.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E622 && ~/LPEDC/14-arvores/0104-juntando-tudo/E622
+gcc ~/LPEDC/E622.c ~/LPEDC/0104-cadastro.c -o ~/LPEDC/E622 && ~/LPEDC/E622
 ```
 
 **Exercício E624** · ★★★
@@ -3144,7 +3128,7 @@ Chamando: Caio (1)
 ```
 
 ```bash
-gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E624.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E624 && ~/LPEDC/14-arvores/0104-juntando-tudo/E624
+gcc ~/LPEDC/E624.c ~/LPEDC/0104-cadastro.c -o ~/LPEDC/E624 && ~/LPEDC/E624
 ```
 
 ---
@@ -3518,7 +3502,7 @@ Considere a estrutura de dados Árvore Binária de Busca (ABB). Se inserirmos nu
 
 As sequências que representam os percursos da árvore da figura em pós-ordem e in-ordem são, respectivamente:
 
-![Questão 11 - árvore](14-arvores/_fontes/provas-figuras/2016-053/q11-arvore.png)
+![Questão 11 - árvore](_fontes/provas-figuras/2016-053/q11-arvore.png)
 
 - a) P Q S T R e P Q S T R
 - b) S T Q P R e S T Q R P
@@ -3678,7 +3662,7 @@ Qual dos algoritmos abaixo apresenta o menor custo (em termos de número compara
 
 Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Considerando em todos os casos que as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.
 
-![Questão 08 - árvores (I) a (IV)](14-arvores/_fontes/provas-figuras/2017-024/q08-arvores.png)
+![Questão 08 - árvores (I) a (IV)](_fontes/provas-figuras/2017-024/q08-arvores.png)
 
 É CORRETO afirmar que:
 
@@ -3698,7 +3682,7 @@ Considere as seguintes árvores onde são apresentados apenas os valores das cha
 
 Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Considerando em todos os casos que as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.
 
-![Questão 10 - árvores (I) a (IV)](14-arvores/_fontes/provas-figuras/2017-024/q10-arvores.png)
+![Questão 10 - árvores (I) a (IV)](_fontes/provas-figuras/2017-024/q10-arvores.png)
 
 É CORRETO afirmar que:
 
@@ -3755,7 +3739,7 @@ Marque a alternativa que contem a afirmativa CORRETA:
 
 Observe a árvore binária de pesquisa sem balanceamento:
 
-![Questão 04 - árvore](14-arvores/_fontes/provas-figuras/2017-055/q04-arvore.png)
+![Questão 04 - árvore](_fontes/provas-figuras/2017-055/q04-arvore.png)
 
 Considere as afirmativas a seguir.
 
@@ -3799,7 +3783,7 @@ Suponha que T seja uma árvore binária de pesquisa sem balanceamento inicialmen
 
 Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Além disso, note que em todos os casos, as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.
 
-![Questão 16 - árvores (I) a (IV)](14-arvores/_fontes/provas-figuras/2017-055/q16-arvores.png)
+![Questão 16 - árvores (I) a (IV)](_fontes/provas-figuras/2017-055/q16-arvores.png)
 
 É CORRETO afirmar que:
 
@@ -3856,7 +3840,7 @@ Sabendo que a altura de uma folha é igual a um (01) e que a altura de um nó pa
 
 Um heap (fila de prioridade) é uma estrutura de dados muito importante, que tem duas utilidades principais: organizar acesso a um recurso com base na prioridade dos requerentes (processos, impressões, etc.) ou servir como base a um algoritmo de ordenação muito eficiente denominado heapsort. Para poder servir a esses propósitos, um heap possui uma série de propriedades especiais que têm que ser mantidas por todas as operações nelas realizadas. Levando em consideração estas propriedades, analise as afirmativas abaixo.
 
-![Questão 04 - heaps (afirmativas I, II e III)](14-arvores/_fontes/provas-figuras/2018-023/q04-heaps.png)
+![Questão 04 - heaps (afirmativas I, II e III)](_fontes/provas-figuras/2018-023/q04-heaps.png)
 
 I. `50 40 49 39 45 46` representa um heap sintaticamente correto\
 II. Dado o heap `21 14 10 9 5`, a inserção do elemento 12 se dá através dos passos `21 14 10 9 5 12` ⇒ `21 14 12 9 5 10`\
@@ -3934,7 +3918,7 @@ Considere uma estrutura do tipo árvore binária que começa vazia. Nela são in
 
 Considere a seguinte árvore de pesquisa binária:
 
-![Questão 10 - árvore de pesquisa binária](14-arvores/_fontes/provas-figuras/2018-023/q10-arvore.png)
+![Questão 10 - árvore de pesquisa binária](_fontes/provas-figuras/2018-023/q10-arvore.png)
 
 Ao executarmos o procedimento de remoção da raiz, na nova árvore binária de busca, teremos como novo nó raiz:
 
@@ -4063,7 +4047,7 @@ Quanto ao algoritmo e estrutura de dados no caso de árvore AVL, analise as afir
 
 A parte essencial do Heap Sort é a construção do heap máximo. Considerando a árvore mostrada abaixo, o nó 24 viola a propriedade do heap máximo. Uma vez que o procedimento de heap é aplicado a ele, em que posição ele estará?
 
-![Questão 02 - heap com posições numeradas](14-arvores/_fontes/provas-figuras/2019-033/q02-heap.png)
+![Questão 02 - heap com posições numeradas](_fontes/provas-figuras/2019-033/q02-heap.png)
 
 - a) 4
 - b) 5
@@ -4081,15 +4065,15 @@ A parte essencial do Heap Sort é a construção do heap máximo. Considerando a
 
 A figura abaixo mostra uma árvore B de ordem 5. Qual é o resultado da remoção do nó 130 dessa árvore?
 
-![Questão 04 - árvore B de ordem 5](14-arvores/_fontes/provas-figuras/2019-033/q04-arvore-b.png)
+![Questão 04 - árvore B de ordem 5](_fontes/provas-figuras/2019-033/q04-arvore-b.png)
 
 Alternativas a) e b):
 
-![Questão 04 - alternativas a) e b)](14-arvores/_fontes/provas-figuras/2019-033/q04-opcoes-ab.png)
+![Questão 04 - alternativas a) e b)](_fontes/provas-figuras/2019-033/q04-opcoes-ab.png)
 
 Alternativas c) e d):
 
-![Questão 04 - alternativas c) e d)](14-arvores/_fontes/provas-figuras/2019-033/q04-opcoes-cd.png)
+![Questão 04 - alternativas c) e d)](_fontes/provas-figuras/2019-033/q04-opcoes-cd.png)
 
 - e) Nenhuma das anteriores
 
@@ -4151,7 +4135,7 @@ Qual é a altura máxima de qualquer árvore AVL com 7 nós? Assuma que a altura
 
 Ao se representar a heap máxima da figura abaixo em um array, a ordem dos elementos no array será a seguinte:
 
-![Questão 16 - heap máxima](14-arvores/_fontes/provas-figuras/2019-033/q16-heap-maxima.png)
+![Questão 16 - heap máxima](_fontes/provas-figuras/2019-033/q16-heap-maxima.png)
 
 - a) 88 66 33 44 30 22 5 77 55 75
 - b) 86 77 55 75 66 33 44 30 22 5
@@ -4169,7 +4153,7 @@ Ao se representar a heap máxima da figura abaixo em um array, a ordem dos eleme
 
 Ao se construir uma árvore AVL, inicialmente vazia, com as seguintes chaves na ordem indicada - 2, 3, 5, 6, 9, 8, 7, 4, 1 – e sabendo que que se uma inserção fizer com que a árvore fique desequilibrada, é necessário executar as rotações para manter o equilíbrio, o resultado final da árvore AVL é:
 
-![Questão 19 - alternativas a) a d)](14-arvores/_fontes/provas-figuras/2019-033/q19-arvores.png)
+![Questão 19 - alternativas a) a d)](_fontes/provas-figuras/2019-033/q19-arvores.png)
 
 - e) Nenhuma das alternativas anteriores
 
@@ -4203,7 +4187,7 @@ III. A pior complexidade de tempo da operação de inserção em uma árvore AVL
 
 Dado os seguintes elementos (10, 20, 15, 25, 30, 16, 18, 19), qual desenho representa uma árvore AVL, inicialmente vazia, que é preenchida com esses elementos, na ordem apresentada, e que tem as devidas rotações efetuadas?
 
-![Questão 02 - árvores (1) a (4)](14-arvores/_fontes/provas-figuras/2019-060/q02-arvores.png)
+![Questão 02 - árvores (1) a (4)](_fontes/provas-figuras/2019-060/q02-arvores.png)
 
 - a) 1
 - b) 2
@@ -4237,7 +4221,7 @@ Qual das afirmações a seguir é VERDADEIRA sobre árvores rubro-negra (vermelh
 
 Quais das seguintes árvores abaixo respeita as regras básicas de balanceamento de árvores AVL?
 
-![Questão 12 - árvores (A), (B) e (C)](14-arvores/_fontes/provas-figuras/2019-060/q12-arvores.png)
+![Questão 12 - árvores (A), (B) e (C)](_fontes/provas-figuras/2019-060/q12-arvores.png)
 
 - a) Somente B
 - b) A, B e C
@@ -4269,7 +4253,7 @@ Comparando árvores AVL e rubro-negras, qual das seguintes afirmações é VERDA
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](14-arvores/lista/); resoluções em `_respostas/14-arvores/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1401.c a P1430.c, na raiz; resoluções em `_respostas/14-arvores/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -4313,7 +4297,7 @@ altura da árvore: 3
    Site, a 3 arestas da Diretora).
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1401.c -o ~/LPEDC/14-arvores/lista/P1401 && ~/LPEDC/14-arvores/lista/P1401
+gcc ~/LPEDC/P1401.c -o ~/LPEDC/P1401 && ~/LPEDC/P1401
 ```
 
 ---
@@ -4341,7 +4325,7 @@ pós: 20 35 40 30 65 60 80 70 50
    errada. A raiz é a primeira da pré e a última da pós.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1402.c -o ~/LPEDC/14-arvores/lista/P1402 && ~/LPEDC/14-arvores/lista/P1402
+gcc ~/LPEDC/P1402.c -o ~/LPEDC/P1402 && ~/LPEDC/P1402
 ```
 
 ---
@@ -4379,7 +4363,7 @@ menor: 150, maior: 950
 3. No mínimo, ande enquanto r->esq != NULL (a árvore aqui não é vazia).
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1403.c -o ~/LPEDC/14-arvores/lista/P1403 && ~/LPEDC/14-arvores/lista/P1403
+gcc ~/LPEDC/P1403.c -o ~/LPEDC/P1403 && ~/LPEDC/P1403
 ```
 
 ---
@@ -4409,7 +4393,7 @@ nível 3: Nina Yuri Zoe
    pilha nem recursão.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1404.c -o ~/LPEDC/14-arvores/lista/P1404 && ~/LPEDC/14-arvores/lista/P1404
+gcc ~/LPEDC/P1404.c -o ~/LPEDC/P1404 && ~/LPEDC/P1404
 ```
 
 ---
@@ -4442,7 +4426,7 @@ depois do 380: 510 340 450 120 90 200 380
 3. O vetor do heap NÃO está ordenado; só a raiz é garantidamente o maior.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1405.c -o ~/LPEDC/14-arvores/lista/P1405 && ~/LPEDC/14-arvores/lista/P1405
+gcc ~/LPEDC/P1405.c -o ~/LPEDC/P1405 && ~/LPEDC/P1405
 ```
 
 ---
@@ -4470,7 +4454,7 @@ chamou 75, sobrou: 70 65 30 40 10
    filho: primeiro o 80, depois o 75.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1406.c -o ~/LPEDC/14-arvores/lista/P1406 && ~/LPEDC/14-arvores/lista/P1406
+gcc ~/LPEDC/P1406.c -o ~/LPEDC/P1406 && ~/LPEDC/P1406
 ```
 
 ---
@@ -4508,7 +4492,7 @@ Saída esperada:
    raiz ao mesmo tempo.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1407.c -o ~/LPEDC/14-arvores/lista/P1407 && ~/LPEDC/14-arvores/lista/P1407
+gcc ~/LPEDC/P1407.c -o ~/LPEDC/P1407 && ~/LPEDC/P1407
 ```
 
 ---
@@ -4537,7 +4521,7 @@ altura da vazia: -1
    cima.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1408.c -o ~/LPEDC/14-arvores/lista/P1408 && ~/LPEDC/14-arvores/lista/P1408
+gcc ~/LPEDC/P1408.c -o ~/LPEDC/P1408 && ~/LPEDC/P1408
 ```
 
 ---
@@ -4567,7 +4551,7 @@ folhas = (2 filhos) + 1? sim
    A prova cobra isso em questões de contar nós.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1409.c -o ~/LPEDC/14-arvores/lista/P1409 && ~/LPEDC/14-arvores/lista/P1409
+gcc ~/LPEDC/P1409.c -o ~/LPEDC/P1409 && ~/LPEDC/P1409
 ```
 
 ---
@@ -4597,7 +4581,7 @@ desce(0): 31 23 12 19 8 9 4 2 17
 3. Construir assim custa O(n), menos que n inserções (O(n log n)).
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1410.c -o ~/LPEDC/14-arvores/lista/P1410 && ~/LPEDC/14-arvores/lista/P1410
+gcc ~/LPEDC/P1410.c -o ~/LPEDC/P1410 && ~/LPEDC/P1410
 ```
 
 ### ★★☆ Para pensar
@@ -4636,7 +4620,7 @@ Saída esperada:
    quem o 45 está à esquerda). É o caso que a prova adora.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1411.c -o ~/LPEDC/14-arvores/lista/P1411 && ~/LPEDC/14-arvores/lista/P1411
+gcc ~/LPEDC/P1411.c -o ~/LPEDC/P1411 && ~/LPEDC/P1411
 ```
 
 ---
@@ -4671,7 +4655,7 @@ sem o 50: 65 40 35 45 70 80
    válidas, e a prova diz qual convenção usar.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1412.c -o ~/LPEDC/14-arvores/lista/P1412 && ~/LPEDC/14-arvores/lista/P1412
+gcc ~/LPEDC/P1412.c -o ~/LPEDC/P1412 && ~/LPEDC/P1412
 ```
 
 ---
@@ -4707,7 +4691,7 @@ mediana (6º de 11): 205 min
 4. Custa O(h + k): não precisa percorrer a árvore toda.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1413.c -o ~/LPEDC/14-arvores/lista/P1413 && ~/LPEDC/14-arvores/lista/P1413
+gcc ~/LPEDC/P1413.c -o ~/LPEDC/P1413 && ~/LPEDC/P1413
 ```
 
 ---
@@ -4748,7 +4732,7 @@ altura: 3
    único é esquerdo ou direito.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1414.c -o ~/LPEDC/14-arvores/lista/P1414 && ~/LPEDC/14-arvores/lista/P1414
+gcc ~/LPEDC/P1414.c -o ~/LPEDC/P1414 && ~/LPEDC/P1414
 ```
 
 ---
@@ -4790,7 +4774,7 @@ altura final: 3
    nó desbalanceado mais baixo, e os de cima voltam a ficar em ordem.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1415.c -o ~/LPEDC/14-arvores/lista/P1415 && ~/LPEDC/14-arvores/lista/P1415
+gcc ~/LPEDC/P1415.c -o ~/LPEDC/P1415 && ~/LPEDC/P1415
 ```
 
 ---
@@ -4838,7 +4822,7 @@ ordem de impressão:
 3. Use printf("  %-8s prioridade %d, chegou em %d\n", ...).
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1416.c -o ~/LPEDC/14-arvores/lista/P1416 && ~/LPEDC/14-arvores/lista/P1416
+gcc ~/LPEDC/P1416.c -o ~/LPEDC/P1416 && ~/LPEDC/P1416
 ```
 
 ---
@@ -4875,7 +4859,7 @@ as 4 mais baratas: 390 399 415 430
 5. Resposta esperada: 390 399 415 430.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1417.c -o ~/LPEDC/14-arvores/lista/P1417 && ~/LPEDC/14-arvores/lista/P1417
+gcc ~/LPEDC/P1417.c -o ~/LPEDC/P1417 && ~/LPEDC/P1417
 ```
 
 ---
@@ -4910,7 +4894,7 @@ trocas: 15
 3. Os rótulos são "heap:     " e "passo %d: " seguido de mostra com " ".
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1418.c -o ~/LPEDC/14-arvores/lista/P1418 && ~/LPEDC/14-arvores/lista/P1418
+gcc ~/LPEDC/P1418.c -o ~/LPEDC/P1418 && ~/LPEDC/P1418
 ```
 
 ---
@@ -4954,7 +4938,7 @@ Saída esperada:
    ordem da BST deixa em O(h).
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1419.c -o ~/LPEDC/14-arvores/lista/P1419 && ~/LPEDC/14-arvores/lista/P1419
+gcc ~/LPEDC/P1419.c -o ~/LPEDC/P1419 && ~/LPEDC/P1419
 ```
 
 ---
@@ -4985,7 +4969,7 @@ pilha chegou a 3 nós
    direita é desempilhado antes: o máximo fica em 3.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1420.c -o ~/LPEDC/14-arvores/lista/P1420 && ~/LPEDC/14-arvores/lista/P1420
+gcc ~/LPEDC/P1420.c -o ~/LPEDC/P1420 && ~/LPEDC/P1420
 ```
 
 ### ★★★ Desafio
@@ -5034,7 +5018,7 @@ sem o 5: 30 20 10 25 40 35 50   (rotação RL)  altura 2
    printf("   (rotação %s)", rotacao) e printf("  altura %d\n", raiz->alt).
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1421.c -o ~/LPEDC/14-arvores/lista/P1421 && ~/LPEDC/14-arvores/lista/P1421
+gcc ~/LPEDC/P1421.c -o ~/LPEDC/P1421 && ~/LPEDC/P1421
 ```
 
 ---
@@ -5088,7 +5072,7 @@ backup 3: ok
 4. Mesmo no erro, a árvore parcial precisa ser liberada.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1422.c -o ~/LPEDC/14-arvores/lista/P1422 && ~/LPEDC/14-arvores/lista/P1422
+gcc ~/LPEDC/P1422.c -o ~/LPEDC/P1422 && ~/LPEDC/P1422
 ```
 
 ---
@@ -5143,7 +5127,7 @@ posfixa: 6 2 3 * + 8 4 - /
 4. Use isdigit((unsigned char)c) de <ctype.h>; a folha vale c - '0'.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1423.c -o ~/LPEDC/14-arvores/lista/P1423 && ~/LPEDC/14-arvores/lista/P1423
+gcc ~/LPEDC/P1423.c -o ~/LPEDC/P1423 && ~/LPEDC/P1423
 ```
 
 ---
@@ -5173,7 +5157,7 @@ ordem de pagamento: 1500 1200 1100 900 800 700 400 300
    e a saída fica igual à de cima.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1424.c -o ~/LPEDC/14-arvores/lista/P1424 && ~/LPEDC/14-arvores/lista/P1424
+gcc ~/LPEDC/P1424.c -o ~/LPEDC/P1424 && ~/LPEDC/P1424
 ```
 
 ---
@@ -5227,7 +5211,7 @@ atendido: ficha 4 (gravidade 2)
    (módulo 23) usa para diminuir distâncias.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1425.c -o ~/LPEDC/14-arvores/lista/P1425 && ~/LPEDC/14-arvores/lista/P1425
+gcc ~/LPEDC/P1425.c -o ~/LPEDC/P1425 && ~/LPEDC/P1425
 ```
 
 ---
@@ -5274,7 +5258,7 @@ juntas: 5 7 12 18 19 21 33 40 50 60 77 88 95
    entra e sai do heap uma vez. Compare com intercalar duas a duas.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1426.c -o ~/LPEDC/14-arvores/lista/P1426 && ~/LPEDC/14-arvores/lista/P1426
+gcc ~/LPEDC/P1426.c -o ~/LPEDC/P1426 && ~/LPEDC/P1426
 ```
 
 ---
@@ -5317,7 +5301,7 @@ chegou 60: mediana 31.0
 4. Use printf("chegou %2d: mediana %.1f\n", ...) e divida por 2.0.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1427.c -o ~/LPEDC/14-arvores/lista/P1427 && ~/LPEDC/14-arvores/lista/P1427
+gcc ~/LPEDC/P1427.c -o ~/LPEDC/P1427 && ~/LPEDC/P1427
 ```
 
 ---
@@ -5358,7 +5342,7 @@ AVL: altura 4, pior busca 5, total 129, média 4.16
    o nó.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1428.c -o ~/LPEDC/14-arvores/lista/P1428 && ~/LPEDC/14-arvores/lista/P1428
+gcc ~/LPEDC/P1428.c -o ~/LPEDC/P1428 && ~/LPEDC/P1428
 ```
 
 ---
@@ -5401,7 +5385,7 @@ maior caminho: 7 arestas, fazendo a curva no sensor 2
    devolver a altura e atualizar o diâmetro na mesma volta dá O(n).
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1429.c -o ~/LPEDC/14-arvores/lista/P1429 && ~/LPEDC/14-arvores/lista/P1429
+gcc ~/LPEDC/P1429.c -o ~/LPEDC/P1429 && ~/LPEDC/P1429
 ```
 
 ---
@@ -5445,7 +5429,7 @@ tempo, ordem: #104(35) #107(35) #102(38) #105(38) #101(42) #103(42) #106(42)
 3. Use printf(" #%d(%d)", ...) para cada corredor.
 
 ```bash
-gcc ~/LPEDC/14-arvores/lista/P1430.c -o ~/LPEDC/14-arvores/lista/P1430 && ~/LPEDC/14-arvores/lista/P1430
+gcc ~/LPEDC/P1430.c -o ~/LPEDC/P1430 && ~/LPEDC/P1430
 ```
 
 ## Para ler mais

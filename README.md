@@ -33,14 +33,14 @@ o compilador (`clang`, que aceita os mesmos comandos).
 Compile com o `gcc` e execute o resultado. O `-o` dá o nome do executável, que fica ao lado do `.c`:
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/A003.c -o ~/LPEDC/01-fundamentos/0002-variaveis/A003 && ~/LPEDC/01-fundamentos/0002-variaveis/A003
+gcc ~/LPEDC/A003.c -o ~/LPEDC/A003 && ~/LPEDC/A003
 ```
 
 Para testar sem digitar, mande a entrada por um cano; para passar argumentos, escreva-os depois do executável:
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '25\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
-gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137 um dois tres
+gcc ~/LPEDC/A011.c -o ~/LPEDC/A011 && printf '25\n' | ~/LPEDC/A011
+gcc ~/LPEDC/A137.c -o ~/LPEDC/A137 && ~/LPEDC/A137 um dois tres
 ```
 
 Os assuntos com TAD têm `.c` de apoio na pasta (`pilha.c`, `lista.c`...): o comando do exemplo já os lista.
@@ -73,14 +73,13 @@ práticas.
 
 ## Como cada módulo funciona
 
-Todo o texto fica na raiz: este `README.md` é o guia, e cada módulo é um
-arquivo só (`01-fundamentos.md`, `02-condicionais.md`...), com todos os
-assuntos, os exemplos, os exercícios, a lista prática, os desafios e as
-questões da prova. As pastas guardam só o que você roda e os desenhos: em
-cada uma, a `lista/` (`P0101.c` a `P0130.c`) e uma subpasta por assunto, com
-`ideia.svg`, `fluxograma.svg`, os exemplos (`A003.c`...) e os exercícios
-(`E007.c`...). A árvore completa está em
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#1-peças).
+Tudo fica na raiz, sem subpastas. O texto de cada módulo é um arquivo só
+(`01-fundamentos.md`, `02-condicionais.md`...), com os assuntos, os exemplos, os
+exercícios, a lista prática, os desafios e as questões da prova. Ao lado dele moram os
+arquivos que você roda: `A###.c` (exemplos), `E###.c` (exercícios), `P####.c` (lista
+prática) e os desenhos `NNNN-ideia.svg` e `NNNN-fluxograma.svg`. Os TADs de apoio levam o número
+do assunto no nome (`0076-lista.c`). As resoluções ficam em `_respostas/`. A árvore completa
+está em [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#1-peças).
 
 ## Como estudar cada assunto
 

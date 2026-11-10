@@ -37,7 +37,7 @@ o nó verde é o achado, os amarelos são os comparados e os cinza, os que a
 busca nem tocou. Os exemplos compilam junto os `.c` de apoio da pasta:
 
 ```bash
-gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/A325.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/A325 && ~/LPEDC/25-estruturas-extras/0163-skip-list/A325
+gcc ~/LPEDC/A325.c ~/LPEDC/0163-skip.c -o ~/LPEDC/A325 && ~/LPEDC/A325
 ```
 
 O **custo** de uma busca é quantas chaves ela comparou: o mesmo número em

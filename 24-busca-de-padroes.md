@@ -44,13 +44,13 @@ Os algoritmos trabalham com **bytes**: em UTF-8, letra acentuada tem dois
 bytes acima de 127, que num `char` com sinal viram negativos e quebram o uso
 como índice de tabela (assunto 0159).
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0157](#0157--força-bruta) | Força bruta | [`0157-forca-bruta/`](24-busca-de-padroes/0157-forca-bruta/) |
-| [0158](#0158--kmp) | KMP | [`0158-kmp/`](24-busca-de-padroes/0158-kmp/) |
-| [0159](#0159--horspool) | Horspool | [`0159-horspool/`](24-busca-de-padroes/0159-horspool/) |
-| [0160](#0160--rabin-karp) | Rabin-Karp | [`0160-rabin-karp/`](24-busca-de-padroes/0160-rabin-karp/) |
-| [0161](#0161--juntando-tudo) | Juntando tudo | [`0161-juntando-tudo/`](24-busca-de-padroes/0161-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0157](#0157--força-bruta) | Força bruta |
+| [0158](#0158--kmp) | KMP |
+| [0159](#0159--horspool) | Horspool |
+| [0160](#0160--rabin-karp) | Rabin-Karp |
+| [0161](#0161--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -80,7 +80,7 @@ código de vinte zeros faz isso (A314).
 Procure "ana" em "banana bacana": são 11 alinhamentos, com ocorrências no 1,
 no 3 e no 10. O 0 falha no "b" e o 5 falha no espaço:
 
-<p align="center"><img src="24-busca-de-padroes/0157-forca-bruta/ideia.svg" alt="Diagrama da ideia: Força bruta" width="858"></p>
+<p align="center"><img src="0157-ideia.svg" alt="Diagrama da ideia: Força bruta" width="858"></p>
 
 Em C, contando as comparações de letra:
 
@@ -150,7 +150,7 @@ O teto seria `11 · 3 = 33`; deu 19 porque quase todo alinhamento falha cedo.
 O laço de fora anda o alinhamento `i`, o de dentro anda a letra `j`. O `i`
 sempre avança 1, tenha achado ou não:
 
-<p align="center"><img src="24-busca-de-padroes/0157-forca-bruta/fluxograma.svg" alt="Fluxograma: Força bruta" width="503"></p>
+<p align="center"><img src="0157-fluxograma.svg" alt="Fluxograma: Força bruta" width="503"></p>
 
 `strstr(texto, padrao)`, de `string.h`, devolve um ponteiro para a primeira
 ocorrência ou `NULL`; a posição é `p - texto`. Para a próxima, chame de novo
@@ -172,8 +172,6 @@ a partir de `p + 1` (o A313 compara `p + 1` e `p + m`).
 > texto? Conte no papel e troque os valores no código para conferir.
 
 ### Hora de praticar
-
-Arquivos em [`0157-forca-bruta/`](24-busca-de-padroes/0157-forca-bruta/).
 
 **Exemplo A313 · O strstr e as risadas do grupo**
 
@@ -218,7 +216,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/A313.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/A313 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/A313
+gcc ~/LPEDC/A313.c -o ~/LPEDC/A313 && ~/LPEDC/A313
 ```
 
 **Exemplo A314 · O pior caso: um código cheio de zeros**
@@ -270,7 +268,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/A314.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/A314 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/A314
+gcc ~/LPEDC/A314.c -o ~/LPEDC/A314 && ~/LPEDC/A314
 ```
 
 #### Exercícios
@@ -291,7 +289,7 @@ o: 1 5 9 13 16 19 (6 vezes)
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E937.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E937 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E937
+gcc ~/LPEDC/E937.c -o ~/LPEDC/E937 && ~/LPEDC/E937
 ```
 
 **Exercício E939** · ★★☆
@@ -318,7 +316,7 @@ posição 41: pix
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E939.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E939 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E939
+gcc ~/LPEDC/E939.c -o ~/LPEDC/E939 && ~/LPEDC/E939
 ```
 
 **Exercício E940** · ★★☆
@@ -351,7 +349,7 @@ você vem? se você não vier, você avisa
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E940.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E940 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E940
+gcc ~/LPEDC/E940.c -o ~/LPEDC/E940 && ~/LPEDC/E940
 ```
 
 **Exercício E942** · ★★★
@@ -386,7 +384,7 @@ RIO: não está na grade
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E942.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E942 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E942
+gcc ~/LPEDC/E942.c -o ~/LPEDC/E942 && ~/LPEDC/E942
 ```
 
 ---
@@ -425,7 +423,7 @@ não é o `3` esperado: a central usa `pi[3] = 2`, o `1 2` do fim continua
 valendo e o padrão escorrega duas casas. O `1` casa com `padrao[2]` e a senha
 se completa na sétima tecla:
 
-<p align="center"><img src="24-busca-de-padroes/0158-kmp/ideia.svg" alt="Diagrama da ideia: KMP" width="858"></p>
+<p align="center"><img src="0158-ideia.svg" alt="Diagrama da ideia: KMP" width="858"></p>
 
 Em C, o `printf` do laço mostra o `k` depois de cada tecla:
 
@@ -522,7 +520,7 @@ bruta faria 11.
 O recuo é um laço **dentro** do laço do texto e mexe só em `k`. O índice `i`
 nunca anda para trás:
 
-<p align="center"><img src="24-busca-de-padroes/0158-kmp/fluxograma.svg" alt="Fluxograma: KMP" width="647"></p>
+<p align="center"><img src="0158-fluxograma.svg" alt="Fluxograma: KMP" width="647"></p>
 
 Por que é O(n)? O `k` sobe no máximo 1 por letra, ou seja, `n` vezes no total.
 Cada recuo o diminui e ele nunca fica negativo, então os recuos não passam
@@ -541,8 +539,6 @@ disso: no máximo `2n` comparações. A tabela custa O(m) pelo mesmo argumento.
 > senha e as teclas no código e confira.
 
 ### Hora de praticar
-
-Arquivos em [`0158-kmp/`](24-busca-de-padroes/0158-kmp/).
 
 **Exemplo A315 · Todas as bordas de uma palavra**
 
@@ -606,7 +602,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/A315.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/A315 && ~/LPEDC/24-busca-de-padroes/0158-kmp/A315
+gcc ~/LPEDC/A315.c -o ~/LPEDC/A315 && ~/LPEDC/A315
 ```
 
 **Exemplo A316 · O refrão que se repete**
@@ -666,7 +662,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/A316.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/A316 && ~/LPEDC/24-busca-de-padroes/0158-kmp/A316
+gcc ~/LPEDC/A316.c -o ~/LPEDC/A316 && ~/LPEDC/A316
 ```
 
 #### Exercícios
@@ -689,7 +685,7 @@ tatuta: 0 0 1 0 1 2
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E943.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E943 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E943
+gcc ~/LPEDC/E943.c -o ~/LPEDC/E943 && ~/LPEDC/E943
 ```
 
 **Exercício E945** · ★★☆
@@ -720,7 +716,7 @@ linha 4, coluna 11
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E945.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E945 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E945
+gcc ~/LPEDC/E945.c -o ~/LPEDC/E945 && ~/LPEDC/E945
 ```
 
 **Exercício E946** · ★★☆
@@ -741,7 +737,7 @@ aaaaa: força bruta 130, KMP 34 (achou 25 e 25)
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E946.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E946 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E946
+gcc ~/LPEDC/E946.c -o ~/LPEDC/E946 && ~/LPEDC/E946
 ```
 
 **Exercício E947** · ★★★
@@ -762,7 +758,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E947.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E947 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E947
+gcc ~/LPEDC/E947.c -o ~/LPEDC/E947 && ~/LPEDC/E947
 ```
 
 ---
@@ -799,7 +795,7 @@ sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C` não, e o `A`
 manda saltar 3. No 5, o `E` salta 5. No 10, o `M` salta 4. No 14, as cinco
 letras batem:
 
-<p align="center"><img src="24-busca-de-padroes/0159-horspool/ideia.svg" alt="Diagrama da ideia: Horspool" width="865"></p>
+<p align="center"><img src="0159-ideia.svg" alt="Diagrama da ideia: Horspool" width="865"></p>
 
 Em C:
 
@@ -881,7 +877,7 @@ Os cinco alinhamentos; a última letra de `texto[i..i+4]` decide o salto:
 Foram 10 comparações; a força bruta faz 19. O passo do `i` vem da tabela,
 pela última letra da janela:
 
-<p align="center"><img src="24-busca-de-padroes/0159-horspool/fluxograma.svg" alt="Fluxograma: Horspool" width="495"></p>
+<p align="center"><img src="0159-fluxograma.svg" alt="Fluxograma: Horspool" width="495"></p>
 
 Com alfabeto grande e padrão comprido, o salto fica perto de `m` e a busca
 olha umas `n / m` letras: quanto **maior** o padrão, **mais rápida** a busca
@@ -904,8 +900,6 @@ compara 4 letras e salta 1 por alinhamento (E952).
 > Faça no papel e confira no código.
 
 ### Hora de praticar
-
-Arquivos em [`0159-horspool/`](24-busca-de-padroes/0159-horspool/).
 
 **Exemplo A317 · Padrão comprido, busca mais rápida**
 
@@ -984,7 +978,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/A317.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/A317 && ~/LPEDC/24-busca-de-padroes/0159-horspool/A317
+gcc ~/LPEDC/A317.c -o ~/LPEDC/A317 && ~/LPEDC/A317
 ```
 
 **Exemplo A318 · Acentos são bytes: por que unsigned char**
@@ -1044,7 +1038,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/A318.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/A318 && ~/LPEDC/24-busca-de-padroes/0159-horspool/A318
+gcc ~/LPEDC/A318.c -o ~/LPEDC/A318 && ~/LPEDC/A318
 ```
 
 #### Exercícios
@@ -1065,7 +1059,7 @@ A=2 R=1 outras=5
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E949.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E949 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E949
+gcc ~/LPEDC/E949.c -o ~/LPEDC/E949 && ~/LPEDC/E949
 ```
 
 **Exercício E951** · ★★☆
@@ -1091,7 +1085,7 @@ posição 38: BANANA
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E951.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E951 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E951
+gcc ~/LPEDC/E951.c -o ~/LPEDC/E951 && ~/LPEDC/E951
 ```
 
 **Exercício E952** · ★★☆
@@ -1112,7 +1106,7 @@ abbb: força bruta  54, Horspool   9 (9 alinhamentos)
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E952.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E952 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E952
+gcc ~/LPEDC/E952.c -o ~/LPEDC/E952 && ~/LPEDC/E952
 ```
 
 **Exercício E954** · ★★★
@@ -1139,7 +1133,7 @@ FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E954.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E954 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E954
+gcc ~/LPEDC/E954.c -o ~/LPEDC/E954 && ~/LPEDC/E954
 ```
 
 ---
@@ -1170,7 +1164,7 @@ Procure `182` em `2718281828459` com `q = 13` (pequeno, para aparecer
 colisão). O hash do padrão é `182 % 13 = 0`. Nas 11 janelas, o 0 aparece três
 vezes: duas são o `182` e uma é o `845`, que também deixa resto 0:
 
-<p align="center"><img src="24-busca-de-padroes/0160-rabin-karp/ideia.svg" alt="Diagrama da ideia: Rabin-Karp" width="870"></p>
+<p align="center"><img src="0160-ideia.svg" alt="Diagrama da ideia: Rabin-Karp" width="870"></p>
 
 Em C:
 
@@ -1260,7 +1254,7 @@ A primeira rolada, de `271` (hash 11) para `718`. O `pot` é `10² % 13 = 9`:
 São duas operações por janela, com qualquer `m`. A conferência letra a letra
 quase nunca roda quando `q` é grande:
 
-<p align="center"><img src="24-busca-de-padroes/0160-rabin-karp/fluxograma.svg" alt="Fluxograma: Rabin-Karp" width="677"></p>
+<p align="center"><img src="0160-fluxograma.svg" alt="Fluxograma: Rabin-Karp" width="677"></p>
 
 > [!WARNING]
 > Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
@@ -1281,8 +1275,6 @@ quase nunca roda quando `q` é grande:
 > no código.
 
 ### Hora de praticar
-
-Arquivos em [`0160-rabin-karp/`](24-busca-de-padroes/0160-rabin-karp/).
 
 **Exemplo A319 · O tamanho do primo e os alarmes falsos**
 
@@ -1354,7 +1346,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/A319.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/A319 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/A319
+gcc ~/LPEDC/A319.c -o ~/LPEDC/A319 && ~/LPEDC/A319
 ```
 
 **Exemplo A320 · Vários padrões numa passada só: o filtro de spoiler**
@@ -1434,7 +1426,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/A320.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/A320 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/A320
+gcc ~/LPEDC/A320.c -o ~/LPEDC/A320 && ~/LPEDC/A320
 ```
 
 #### Exercícios
@@ -1458,7 +1450,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E955.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E955 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E955
+gcc ~/LPEDC/E955.c -o ~/LPEDC/E955 && ~/LPEDC/E955
 ```
 
 **Exercício E957** · ★★☆
@@ -1485,7 +1477,7 @@ q = 10007: 5 ocorrências,  0 falsos positivos
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E957.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E957 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E957
+gcc ~/LPEDC/E957.c -o ~/LPEDC/E957 && ~/LPEDC/E957
 ```
 
 **Exercício E958** · ★★☆
@@ -1511,7 +1503,7 @@ nosso trabalhO MEDE A AGUA DA CHUVA COM um balde
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E958.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E958 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E958
+gcc ~/LPEDC/E958.c -o ~/LPEDC/E958 && ~/LPEDC/E958
 ```
 
 **Exercício E960** · ★★★
@@ -1531,7 +1523,7 @@ polinomial: 2 verificações, 2 ocorrências
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E960.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E960 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E960
+gcc ~/LPEDC/E960.c -o ~/LPEDC/E960 && ~/LPEDC/E960
 ```
 
 ---
@@ -1573,7 +1565,7 @@ São 8 avisos e o padrão é "garagem". O grep mostra as linhas 3, 5 e 8 (a 3
 tem duas ocorrências). Os quatro algoritmos dão o mesmo resultado, com
 trabalho diferente:
 
-<p align="center"><img src="24-busca-de-padroes/0161-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<p align="center"><img src="0161-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa:
 
@@ -1646,7 +1638,7 @@ int main(void) {
 
 O grep é um laço sobre as linhas com uma chamada de busca no meio:
 
-<p align="center"><img src="24-busca-de-padroes/0161-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="649"></p>
+<p align="center"><img src="0161-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="649"></p>
 
 O KMP fez **mais** comparações que a força bruta: em texto comum ela falha
 na primeira letra, e o KMP só ganha com muita repetição parcial. O Rabin-Karp
@@ -1674,8 +1666,6 @@ milhões de letras.
 
 ### Hora de praticar
 
-Arquivos em [`0161-juntando-tudo/`](24-busca-de-padroes/0161-juntando-tudo/).
-
 **Exemplo A321 · O cronômetro: 2 milhões de letras, quatro algoritmos**
 
 ```c
@@ -1683,7 +1673,7 @@ Arquivos em [`0161-juntando-tudo/`](24-busca-de-padroes/0161-juntando-tudo/).
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "padroes.h"
+#include "0161-padroes.h"
 
 #define N 2000000
 
@@ -1776,7 +1766,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A321.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A321 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A321
+gcc ~/LPEDC/A321.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/A321 && ~/LPEDC/A321
 ```
 
 **Exemplo A322 · O mini-grep de verdade: arquivo, argumentos e algoritmo**
@@ -1784,7 +1774,7 @@ gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A321.c ~/LPEDC/24-busca-de-pa
 ```c
 #include <stdio.h>
 #include <string.h>
-#include "padroes.h"
+#include "0161-padroes.h"
 
 #define LINHA 512
 
@@ -1874,7 +1864,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A322.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A322 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A322
+gcc ~/LPEDC/A322.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/A322 && ~/LPEDC/A322
 ```
 
 #### Exercícios
@@ -1902,7 +1892,7 @@ os quatro concordam
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E961.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E961 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E961
+gcc ~/LPEDC/E961.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E961 && ~/LPEDC/E961
 ```
 
 **Exercício E963** · ★★☆
@@ -1933,7 +1923,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E963.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E963 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E963
+gcc ~/LPEDC/E963.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E963 && ~/LPEDC/E963
 ```
 
 **Exercício E964** · ★★☆
@@ -1962,7 +1952,7 @@ quinta: [chuva]rada de manhã   (1)
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E964.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E964 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E964
+gcc ~/LPEDC/E964.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E964 && ~/LPEDC/E964
 ```
 
 **Exercício E965** · ★★★
@@ -1984,7 +1974,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E965.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E965 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E965
+gcc ~/LPEDC/E965.c ~/LPEDC/0161-padroes.c -o ~/LPEDC/E965 && ~/LPEDC/E965
 ```
 
 ---
@@ -2132,7 +2122,7 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](24-busca-de-padroes/lista/); resoluções em `_respostas/24-busca-de-padroes/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2401.c a P2430.c, na raiz; resoluções em `_respostas/24-busca-de-padroes/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -2171,7 +2161,7 @@ doc: não aparece (52 alinhamentos)
    "doc" não aparece (52 alinhamentos, o texto tem 54 letras).
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2401.c -o ~/LPEDC/24-busca-de-padroes/lista/P2401 && ~/LPEDC/24-busca-de-padroes/lista/P2401
+gcc ~/LPEDC/P2401.c -o ~/LPEDC/P2401 && ~/LPEDC/P2401
 ```
 
 ---
@@ -2203,7 +2193,7 @@ Saída esperada:
 3. Resposta esperada: "kk" dá 6 e 3; "kkk" dá 4 e 2.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2402.c -o ~/LPEDC/24-busca-de-padroes/lista/P2402 && ~/LPEDC/24-busca-de-padroes/lista/P2402
+gcc ~/LPEDC/P2402.c -o ~/LPEDC/P2402 && ~/LPEDC/P2402
 ```
 
 ---
@@ -2247,7 +2237,7 @@ aabaaab
    "aab".
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2403.c -o ~/LPEDC/24-busca-de-padroes/lista/P2403 && ~/LPEDC/24-busca-de-padroes/lista/P2403
+gcc ~/LPEDC/P2403.c -o ~/LPEDC/P2403 && ~/LPEDC/P2403
 ```
 
 ---
@@ -2279,7 +2269,7 @@ Saída esperada:
    o KMP nunca passa de 2n.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2404.c -o ~/LPEDC/24-busca-de-padroes/lista/P2404 && ~/LPEDC/24-busca-de-padroes/lista/P2404
+gcc ~/LPEDC/P2404.c -o ~/LPEDC/P2404 && ~/LPEDC/P2404
 ```
 
 ---
@@ -2309,7 +2299,7 @@ tapioca de coco  m = 15: 1 ocorrência(s),  8 alinhamentos
 3. Resposta esperada: 37, 21 e 8 alinhamentos, uma ocorrência de cada.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2405.c -o ~/LPEDC/24-busca-de-padroes/lista/P2405 && ~/LPEDC/24-busca-de-padroes/lista/P2405
+gcc ~/LPEDC/P2405.c -o ~/LPEDC/P2405 && ~/LPEDC/P2405
 ```
 
 ---
@@ -2345,7 +2335,7 @@ Saída esperada:
    (5507 = 56 × 97 + 75).
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2406.c -o ~/LPEDC/24-busca-de-padroes/lista/P2406 && ~/LPEDC/24-busca-de-padroes/lista/P2406
+gcc ~/LPEDC/P2406.c -o ~/LPEDC/P2406 && ~/LPEDC/P2406
 ```
 
 ---
@@ -2377,7 +2367,7 @@ ovo                                      sim
 3. Resposta esperada: só "Bom dia Manaus" não é palíndromo.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2407.c -o ~/LPEDC/24-busca-de-padroes/lista/P2407 && ~/LPEDC/24-busca-de-padroes/lista/P2407
+gcc ~/LPEDC/P2407.c -o ~/LPEDC/P2407 && ~/LPEDC/P2407
 ```
 
 ---
@@ -2407,7 +2397,7 @@ que *****, perdi o onibus de novo, ***** de chuva, que ****
 3. Resposta esperada: droga 2, saco 1, chato 0.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2408.c -o ~/LPEDC/24-busca-de-padroes/lista/P2408 && ~/LPEDC/24-busca-de-padroes/lista/P2408
+gcc ~/LPEDC/P2408.c -o ~/LPEDC/P2408 && ~/LPEDC/P2408
 ```
 
 ---
@@ -2448,7 +2438,7 @@ samba            período  5 ("samba")
    xxxxxx, período 1, 6 vezes.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2409.c -o ~/LPEDC/24-busca-de-padroes/lista/P2409 && ~/LPEDC/24-busca-de-padroes/lista/P2409
+gcc ~/LPEDC/P2409.c -o ~/LPEDC/P2409 && ~/LPEDC/P2409
 ```
 
 ---
@@ -2482,7 +2472,7 @@ ABCDE girado 12: CDEAB
    12 vira CDEAB (12 % 5 = 2).
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2410.c -o ~/LPEDC/24-busca-de-padroes/lista/P2410 && ~/LPEDC/24-busca-de-padroes/lista/P2410
+gcc ~/LPEDC/P2410.c -o ~/LPEDC/P2410 && ~/LPEDC/P2410
 ```
 
 ### ★★☆ Para pensar
@@ -2534,7 +2524,7 @@ total: 3
    ocorrências em cada busca.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2411.c -o ~/LPEDC/24-busca-de-padroes/lista/P2411 && ~/LPEDC/24-busca-de-padroes/lista/P2411
+gcc ~/LPEDC/P2411.c -o ~/LPEDC/P2411 && ~/LPEDC/P2411
 ```
 
 ---
@@ -2571,7 +2561,7 @@ q = 1009: 1 ocorrência(s), 0 falso(s) positivo(s)
    ("a ra", na posição 37) e nenhum com q = 1009.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2412.c -o ~/LPEDC/24-busca-de-padroes/lista/P2412 && ~/LPEDC/24-busca-de-padroes/lista/P2412
+gcc ~/LPEDC/P2412.c -o ~/LPEDC/P2412 && ~/LPEDC/P2412
 ```
 
 ---
@@ -2604,7 +2594,7 @@ ouroouroouro -> ouroouroouro: 0 4 8 (3 giro(s))
    ouroouroouro, com 0, 4 ou 8; rosabranco não vira brancoroxa.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2413.c -o ~/LPEDC/24-busca-de-padroes/lista/P2413 && ~/LPEDC/24-busca-de-padroes/lista/P2413
+gcc ~/LPEDC/P2413.c -o ~/LPEDC/P2413 && ~/LPEDC/P2413
 ```
 
 ---
@@ -2645,7 +2635,7 @@ Colar 3: ABAVV
    mesmo (forma AAVBV).
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2414.c -o ~/LPEDC/24-busca-de-padroes/lista/P2414 && ~/LPEDC/24-busca-de-padroes/lista/P2414
+gcc ~/LPEDC/P2414.c -o ~/LPEDC/P2414 && ~/LPEDC/P2414
 ```
 
 ---
@@ -2695,7 +2685,7 @@ de: 2
 3. Resposta esperada: bolo 3, de 2.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2415.c -o ~/LPEDC/24-busca-de-padroes/lista/P2415 && ~/LPEDC/24-busca-de-padroes/lista/P2415
+gcc ~/LPEDC/P2415.c -o ~/LPEDC/P2415 && ~/LPEDC/P2415
 ```
 
 ---
@@ -2730,7 +2720,7 @@ sopapos          "sopapos" (posição 0, 7 letra(s))
    osso e sopapos são palíndromos inteiros.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2416.c -o ~/LPEDC/24-busca-de-padroes/lista/P2416 && ~/LPEDC/24-busca-de-padroes/lista/P2416
+gcc ~/LPEDC/P2416.c -o ~/LPEDC/P2416 && ~/LPEDC/P2416
 ```
 
 ---
@@ -2768,7 +2758,7 @@ Janelas: 68; conferências letra a letra: 4
    em 68 janelas (nenhum falso positivo).
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2417.c -o ~/LPEDC/24-busca-de-padroes/lista/P2417 && ~/LPEDC/24-busca-de-padroes/lista/P2417
+gcc ~/LPEDC/P2417.c -o ~/LPEDC/P2417 && ~/LPEDC/P2417
 ```
 
 ---
@@ -2809,7 +2799,7 @@ Saída esperada:
    recuo é a do 'c', de 2 para 0.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2418.c -o ~/LPEDC/24-busca-de-padroes/lista/P2418 && ~/LPEDC/24-busca-de-padroes/lista/P2418
+gcc ~/LPEDC/P2418.c -o ~/LPEDC/P2418 && ~/LPEDC/P2418
 ```
 
 ---
@@ -2843,7 +2833,7 @@ Anagramas de "amor": 4
    27.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2419.c -o ~/LPEDC/24-busca-de-padroes/lista/P2419 && ~/LPEDC/24-busca-de-padroes/lista/P2419
+gcc ~/LPEDC/P2419.c -o ~/LPEDC/P2419 && ~/LPEDC/P2419
 ```
 
 ---
@@ -2875,7 +2865,7 @@ m = 4: ACGT CGTA GTAC TACG CGTT GTTA TTAC ACGA CGAA GAAC AACG
    tamanho 4 (3 conferências).
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2420.c -o ~/LPEDC/24-busca-de-padroes/lista/P2420 && ~/LPEDC/24-busca-de-padroes/lista/P2420
+gcc ~/LPEDC/P2420.c -o ~/LPEDC/P2420 && ~/LPEDC/P2420
 ```
 
 ### ★★★ Desafio
@@ -2913,7 +2903,7 @@ araraquara       senha "ara"
    "papa".
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2421.c -o ~/LPEDC/24-busca-de-padroes/lista/P2421 && ~/LPEDC/24-busca-de-padroes/lista/P2421
+gcc ~/LPEDC/P2421.c -o ~/LPEDC/P2421 && ~/LPEDC/P2421
 ```
 
 ---
@@ -2951,7 +2941,7 @@ falsos positivos com dois hashes (q = 97 e 89): 0
    positivos com um hash e nenhum com os dois.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2422.c -o ~/LPEDC/24-busca-de-padroes/lista/P2422 && ~/LPEDC/24-busca-de-padroes/lista/P2422
+gcc ~/LPEDC/P2422.c -o ~/LPEDC/P2422 && ~/LPEDC/P2422
 ```
 
 ---
@@ -2991,7 +2981,7 @@ Mensagem: o rato roeu a roupa do rei de roma inteira
 3. Resposta esperada: o rato roeu a roupa do rei de roma inteira.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2423.c -o ~/LPEDC/24-busca-de-padroes/lista/P2423 && ~/LPEDC/24-busca-de-padroes/lista/P2423
+gcc ~/LPEDC/P2423.c -o ~/LPEDC/P2423 && ~/LPEDC/P2423
 ```
 
 ---
@@ -3033,7 +3023,7 @@ aaaaa: 0 1 2 3 (4)
    ocorrências e aaaaa, 4.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2424.c -o ~/LPEDC/24-busca-de-padroes/lista/P2424 && ~/LPEDC/24-busca-de-padroes/lista/P2424
+gcc ~/LPEDC/P2424.c -o ~/LPEDC/P2424 && ~/LPEDC/P2424
 ```
 
 ---
@@ -3066,7 +3056,7 @@ tucano: 6 ocorrências, 6 diferentes: a c n o t u
    aba aca bacab abacaba); tucano, só as 6 letras.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2425.c -o ~/LPEDC/24-busca-de-padroes/lista/P2425 && ~/LPEDC/24-busca-de-padroes/lista/P2425
+gcc ~/LPEDC/P2425.c -o ~/LPEDC/P2425 && ~/LPEDC/P2425
 ```
 
 ---
@@ -3101,7 +3091,7 @@ Deslocamentos com "pix": 1 de 26
    cinco reais ate sexta, valeu.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2426.c -o ~/LPEDC/24-busca-de-padroes/lista/P2426 && ~/LPEDC/24-busca-de-padroes/lista/P2426
+gcc ~/LPEDC/P2426.c -o ~/LPEDC/P2426 && ~/LPEDC/P2426
 ```
 
 ---
@@ -3138,7 +3128,7 @@ aabaabaabaab
    aabaabaabaab tem 4 prefixos refrão.
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2427.c -o ~/LPEDC/24-busca-de-padroes/lista/P2427 && ~/LPEDC/24-busca-de-padroes/lista/P2427
+gcc ~/LPEDC/P2427.c -o ~/LPEDC/P2427 && ~/LPEDC/P2427
 ```
 
 ---
@@ -3181,7 +3171,7 @@ Total: 2; blocos conferidos letra a letra: 2
    "#.#" das linhas 0 e 3 não contam porque embaixo deles não há "###".
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2428.c -o ~/LPEDC/24-busca-de-padroes/lista/P2428 && ~/LPEDC/24-busca-de-padroes/lista/P2428
+gcc ~/LPEDC/P2428.c -o ~/LPEDC/P2428 && ~/LPEDC/P2428
 ```
 
 ---
@@ -3217,7 +3207,7 @@ Saída esperada:
    "Oi, tchau." é "não".
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2429.c -o ~/LPEDC/24-busca-de-padroes/lista/P2429 && ~/LPEDC/24-busca-de-padroes/lista/P2429
+gcc ~/LPEDC/P2429.c -o ~/LPEDC/P2429 && ~/LPEDC/P2429
 ```
 
 ---
@@ -3250,7 +3240,7 @@ aa: 10* (1)
    da roda com o primeiro).
 
 ```bash
-gcc ~/LPEDC/24-busca-de-padroes/lista/P2430.c -o ~/LPEDC/24-busca-de-padroes/lista/P2430 && ~/LPEDC/24-busca-de-padroes/lista/P2430
+gcc ~/LPEDC/P2430.c -o ~/LPEDC/P2430 && ~/LPEDC/P2430
 ```
 
 ## Questões no estilo da prova

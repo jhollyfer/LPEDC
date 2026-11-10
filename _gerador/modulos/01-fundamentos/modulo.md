@@ -58,7 +58,7 @@ Confira com `gcc --version`. Para rodar um arquivo do curso, compile e
 execute:
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
+gcc ~/LPEDC/A001.c -o ~/LPEDC/A001 && ~/LPEDC/A001
 ```
 
 O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser
@@ -77,7 +77,7 @@ Programas que leem do teclado esperam a digitação. Para testar sem digitar,
 use um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '3 4.99\n2\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
+gcc ~/LPEDC/A011.c -o ~/LPEDC/A011 && printf '3 4.99\n2\n' | ~/LPEDC/A011
 ```
 
 > [!NOTE]

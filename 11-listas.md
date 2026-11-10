@@ -39,7 +39,7 @@ Cada assunto traz `lista.h` (interface) e `lista.c` (implementação). O
 comando compila o `lista.c` junto com o exemplo ou exercício:
 
 ```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/A151.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A151 && ~/LPEDC/11-listas/0076-lista-encadeada/A151
+gcc ~/LPEDC/A151.c ~/LPEDC/0076-lista.c -o ~/LPEDC/A151 && ~/LPEDC/A151
 ```
 
 Nos exercícios, não repita o nome de uma função do `lista.c` (como
@@ -52,15 +52,15 @@ tudo no arquivo. Nos desenhos, vermelho marca o nó que sai.
 > inteiro: ele traz o tipo do erro (`heap-use-after-free`,
 > `heap-buffer-overflow`, `memory leaks`) e a linha.
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0075](#0075--vetor-dinâmico) | Vetor dinâmico | [`0075-vetor-dinamico/`](11-listas/0075-vetor-dinamico/) |
-| [0076](#0076--lista-encadeada) | Lista encadeada | [`0076-lista-encadeada/`](11-listas/0076-lista-encadeada/) |
-| [0077](#0077--busca-e-remoção) | Busca e remoção | [`0077-lista-busca-remocao/`](11-listas/0077-lista-busca-remocao/) |
-| [0078](#0078--lista-ordenada) | Lista ordenada | [`0078-lista-ordenada/`](11-listas/0078-lista-ordenada/) |
-| [0079](#0079--lista-dupla) | Lista dupla | [`0079-lista-dupla/`](11-listas/0079-lista-dupla/) |
-| [0080](#0080--lista-circular) | Lista circular | [`0080-lista-circular/`](11-listas/0080-lista-circular/) |
-| [0081](#0081--juntando-tudo) | Juntando tudo | [`0081-juntando-tudo/`](11-listas/0081-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0075](#0075--vetor-dinâmico) | Vetor dinâmico |
+| [0076](#0076--lista-encadeada) | Lista encadeada |
+| [0077](#0077--busca-e-remoção) | Busca e remoção |
+| [0078](#0078--lista-ordenada) | Lista ordenada |
+| [0079](#0079--lista-dupla) | Lista dupla |
+| [0080](#0080--lista-circular) | Lista circular |
+| [0081](#0081--juntando-tudo) | Juntando tudo |
 
 ---
 
@@ -86,7 +86,7 @@ O conjunto é um **TAD** (assunto 0074): `lista.h` diz **o que** a lista faz e
 A lista do exemplo começa com espaço para 2 despesas. A 3ª dobra para 4 e a
 5ª (R$ 27) dobra para 8, copia os quatro valores e deixa três vagas:
 
-<p align="center"><img src="11-listas/0075-vetor-dinamico/ideia.svg" alt="Diagrama da ideia: Vetor dinâmico" width="858"></p>
+<p align="center"><img src="0075-ideia.svg" alt="Diagrama da ideia: Vetor dinâmico" width="858"></p>
 
 A peça central do `lista.c` é a função que garante espaço antes de cada
 inserção:
@@ -160,7 +160,7 @@ No fluxograma, "está cheio?" vem antes de escrever. Para o 27 a resposta é
 Sim: o vetor dobra e só então o valor entra em `itens[4]`. Se o `realloc`
 falhar, a função devolve `false` e a lista continua intacta:
 
-<p align="center"><img src="11-listas/0075-vetor-dinamico/fluxograma.svg" alt="Fluxograma: Vetor dinâmico" width="510"></p>
+<p align="center"><img src="0075-fluxograma.svg" alt="Fluxograma: Vetor dinâmico" width="510"></p>
 
 Inserir ou remover no **meio** desloca todos os itens seguintes: O(n) no pior
 caso, a posição 0 (exemplo A150). Ler a posição `i` é O(1).
@@ -183,13 +183,11 @@ caso, a posição 0 (exemplo A150). Ler a posição `i` é O(1).
 
 ### Hora de praticar
 
-Arquivos em [`0075-vetor-dinamico/`](11-listas/0075-vetor-dinamico/).
-
 **Exemplo A149 · Quantas vezes o vetor mudou de casa**
 
 ```c
 #include <stdio.h>
-#include "lista.h"
+#include "0075-lista.h"
 
 int main(void) {
     // capacidade 0 não existe: lista_cria corrige para 1
@@ -235,14 +233,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/A149.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/A149 && ~/LPEDC/11-listas/0075-vetor-dinamico/A149
+gcc ~/LPEDC/A149.c ~/LPEDC/0075-lista.c -o ~/LPEDC/A149 && ~/LPEDC/A149
 ```
 
 **Exemplo A150 · Inserir e remover no meio: todo mundo se mexe**
 
 ```c
 #include <stdio.h>
-#include "lista.h"
+#include "0075-lista.h"
 
 int main(void) {
     Lista *viagem = lista_cria(4);
@@ -281,7 +279,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/A150.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/A150 && ~/LPEDC/11-listas/0075-vetor-dinamico/A150
+gcc ~/LPEDC/A150.c ~/LPEDC/0075-lista.c -o ~/LPEDC/A150 && ~/LPEDC/A150
 ```
 
 #### Exercícios
@@ -303,7 +301,7 @@ maior: 132
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E445.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E445 && ~/LPEDC/11-listas/0075-vetor-dinamico/E445
+gcc ~/LPEDC/E445.c ~/LPEDC/0075-lista.c -o ~/LPEDC/E445 && ~/LPEDC/E445
 ```
 
 **Exercício E447** · ★★☆
@@ -331,7 +329,7 @@ depois: [4, 0, 12, 7]
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E447.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E447 && ~/LPEDC/11-listas/0075-vetor-dinamico/E447
+gcc ~/LPEDC/E447.c ~/LPEDC/0075-lista.c -o ~/LPEDC/E447 && ~/LPEDC/E447
 ```
 
 **Exercício E448** · ★★☆
@@ -363,7 +361,7 @@ esvaziando pela frente: deslocando 21, trocando 6
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E448.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E448 && ~/LPEDC/11-listas/0075-vetor-dinamico/E448
+gcc ~/LPEDC/E448.c ~/LPEDC/0075-lista.c -o ~/LPEDC/E448 && ~/LPEDC/E448
 ```
 
 **Exercício E450** · ★★★
@@ -403,7 +401,7 @@ alternando com 1/4: 1 realloc
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E450.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E450 && ~/LPEDC/11-listas/0075-vetor-dinamico/E450
+gcc ~/LPEDC/E450.c ~/LPEDC/0075-lista.c -o ~/LPEDC/E450 && ~/LPEDC/E450
 ```
 
 ---
@@ -462,7 +460,7 @@ Aqui o nó fica à vista no `lista.h`; no módulo 12 volta a ficar escondido.
 Chegam quatro Pix: R$ 20, 45, 10 e 80, e o 80 aparece primeiro. Embaixo, a
 lista no heap: endereços fora de ordem, cada nó com o endereço do próximo:
 
-<p align="center"><img src="11-listas/0076-lista-encadeada/ideia.svg" alt="Diagrama da ideia: Lista encadeada" width="858"></p>
+<p align="center"><img src="0076-ideia.svg" alt="Diagrama da ideia: Lista encadeada" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -496,7 +494,7 @@ int main(void) {
 No fluxograma, o laço pergunta "ainda tem nó?" antes de cada passo. O `p` vai
 do 80 ao 10, ao 45 e ao 20, vira `NULL` e o laço para, com total R$ 155:
 
-<p align="center"><img src="11-listas/0076-lista-encadeada/fluxograma.svg" alt="Fluxograma: Lista encadeada" width="543"></p>
+<p align="center"><img src="0076-fluxograma.svg" alt="Fluxograma: Lista encadeada" width="543"></p>
 
 > [!WARNING]
 > `lista_insere_inicio(extrato, 20);` sem o `extrato =` compila sem aviso e
@@ -517,13 +515,11 @@ do 80 ao 10, ao 45 e ao 20, vira `NULL` e o laço para, com total R$ 155:
 
 ### Hora de praticar
 
-Arquivos em [`0076-lista-encadeada/`](11-listas/0076-lista-encadeada/).
-
 **Exemplo A151 · Andando pelas setas: o terceiro nó e a lista vazia**
 
 ```c
 #include <stdio.h>
-#include "lista.h"
+#include "0076-lista.h"
 
 int main(void) {
     // temperaturas da semana em Cuiabá, lidas de segunda a domingo
@@ -565,7 +561,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/A151.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A151 && ~/LPEDC/11-listas/0076-lista-encadeada/A151
+gcc ~/LPEDC/A151.c ~/LPEDC/0076-lista.c -o ~/LPEDC/A151 && ~/LPEDC/A151
 ```
 
 **Exemplo A152 · Inserir no fim com um ponteiro para o último**
@@ -573,7 +569,7 @@ gcc ~/LPEDC/11-listas/0076-lista-encadeada/A151.c ~/LPEDC/11-listas/0076-lista-e
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "lista.h"
+#include "0076-lista.h"
 
 // põe "valor" depois do último nó; *inicio e *fim mudam quando precisa
 static void insere_no_fim(No **inicio, No **fim, int valor) {
@@ -610,7 +606,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/A152.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A152 && ~/LPEDC/11-listas/0076-lista-encadeada/A152
+gcc ~/LPEDC/A152.c ~/LPEDC/0076-lista.c -o ~/LPEDC/A152 && ~/LPEDC/A152
 ```
 
 #### Exercícios
@@ -637,7 +633,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/E451.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E451 && ~/LPEDC/11-listas/0076-lista-encadeada/E451
+gcc ~/LPEDC/E451.c ~/LPEDC/0076-lista.c -o ~/LPEDC/E451 && ~/LPEDC/E451
 ```
 
 **Exercício E453** · ★★☆
@@ -664,7 +660,7 @@ vetor: 5 18 7 22 9
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/E453.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E453 && ~/LPEDC/11-listas/0076-lista-encadeada/E453
+gcc ~/LPEDC/E453.c ~/LPEDC/0076-lista.c -o ~/LPEDC/E453 && ~/LPEDC/E453
 ```
 
 **Exercício E454** · ★★☆
@@ -689,7 +685,7 @@ tamanho (recursivo): 5
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/E454.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E454 && ~/LPEDC/11-listas/0076-lista-encadeada/E454
+gcc ~/LPEDC/E454.c ~/LPEDC/0076-lista.c -o ~/LPEDC/E454 && ~/LPEDC/E454
 ```
 
 **Exercício E456** · ★★★
@@ -711,7 +707,7 @@ um só:  7 -> NULL
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0076-lista-encadeada/E456.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E456 && ~/LPEDC/11-listas/0076-lista-encadeada/E456
+gcc ~/LPEDC/E456.c ~/LPEDC/0076-lista.c -o ~/LPEDC/E456 && ~/LPEDC/E456
 ```
 
 ---
@@ -770,7 +766,7 @@ bool lista_remove(No **inicio, int valor) {
 Para tirar o 42, o laço para com `p` no 42 e `ant` no 17. A seta do 17 passa
 a apontar para o 8, e o nó do 42 volta para o heap:
 
-<p align="center"><img src="11-listas/0077-lista-busca-remocao/ideia.svg" alt="Diagrama da ideia: Busca e remoção" width="858"></p>
+<p align="center"><img src="0077-ideia.svg" alt="Diagrama da ideia: Busca e remoção" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -813,7 +809,7 @@ int main(void) {
 No fluxograma, `ant` é o 17 (não `NULL`), então o caminho vai por `ant->prox =
 p->prox`. Na remoção do 31, iria por `início = p->prox`:
 
-<p align="center"><img src="11-listas/0077-lista-busca-remocao/fluxograma.svg" alt="Fluxograma: Busca e remoção" width="733"></p>
+<p align="center"><img src="0077-fluxograma.svg" alt="Fluxograma: Busca e remoção" width="733"></p>
 
 O exemplo A154 elimina o caso especial com um **nó-cabeça**, um nó de mentira
 no começo: todo nó de verdade passa a ter anterior. O Cormen usa a
@@ -838,13 +834,11 @@ no começo: todo nó de verdade passa a ter anterior. O Cormen usa a
 
 ### Hora de praticar
 
-Arquivos em [`0077-lista-busca-remocao/`](11-listas/0077-lista-busca-remocao/).
-
 **Exemplo A153 · Buscar por condição e tirar o último**
 
 ```c
 #include <stdio.h>
-#include "lista.h"
+#include "0077-lista.h"
 
 // variação da busca: em vez de "igual a", o primeiro nó "acima de" limite
 static No *busca_acima(No *inicio, int limite) {
@@ -898,7 +892,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/A153.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/A153 && ~/LPEDC/11-listas/0077-lista-busca-remocao/A153
+gcc ~/LPEDC/A153.c ~/LPEDC/0077-lista.c -o ~/LPEDC/A153 && ~/LPEDC/A153
 ```
 
 **Exemplo A154 · Nó-cabeça: a remoção sem caso especial**
@@ -906,7 +900,7 @@ gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/A153.c ~/LPEDC/11-listas/0077-lis
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "lista.h"
+#include "0077-lista.h"
 
 // Com um nó-cabeça (um nó "de mentira" no começo, cujo valor ninguém lê),
 // todo nó de verdade tem um anterior. O primeiro não é mais especial.
@@ -953,7 +947,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/A154.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/A154 && ~/LPEDC/11-listas/0077-lista-busca-remocao/A154
+gcc ~/LPEDC/A154.c ~/LPEDC/0077-lista.c -o ~/LPEDC/A154 && ~/LPEDC/A154
 ```
 
 #### Exercícios
@@ -982,7 +976,7 @@ senha 50 não está na fila
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E457.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E457 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E457
+gcc ~/LPEDC/E457.c ~/LPEDC/0077-lista.c -o ~/LPEDC/E457 && ~/LPEDC/E457
 ```
 
 **Exercício E459** · ★★☆
@@ -1006,7 +1000,7 @@ só falhas: NULL (2 removidas)
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E459.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E459 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E459
+gcc ~/LPEDC/E459.c ~/LPEDC/0077-lista.c -o ~/LPEDC/E459 && ~/LPEDC/E459
 ```
 
 **Exercício E460** · ★★☆
@@ -1039,7 +1033,7 @@ Davi R$ 175 -> Carla R$ 210 -> NULL
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E460.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E460 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E460
+gcc ~/LPEDC/E460.c ~/LPEDC/0077-lista.c -o ~/LPEDC/E460 && ~/LPEDC/E460
 ```
 
 **Exercício E462** · ★★★
@@ -1061,7 +1055,7 @@ NULL
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E462.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E462 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E462
+gcc ~/LPEDC/E462.c ~/LPEDC/0077-lista.c -o ~/LPEDC/E462 && ~/LPEDC/E462
 ```
 
 ---
@@ -1109,7 +1103,7 @@ A agenda do exemplo tem 09:00, 14:30 e 16:00 quando chega a ligação das
 10:15. O laço passa pelo 09:00 e para no 14:30 (`14:30 < 10:15` é falso). O
 novo nó aponta para o 14:30 e o 09:00 aponta para ele:
 
-<p align="center"><img src="11-listas/0078-lista-ordenada/ideia.svg" alt="Diagrama da ideia: Lista ordenada" width="858"></p>
+<p align="center"><img src="0078-ideia.svg" alt="Diagrama da ideia: Lista ordenada" width="858"></p>
 
 O horário é um `int` hhmm (1430 é 14:30):
 
@@ -1152,7 +1146,7 @@ No fluxograma, o laço roda uma vez e sai pelo Não no 14:30. Como `ant` é o
 09:00, o caminho termina em `ant->prox = novo`. Na ligação das 9:00, `ant ==
 NULL` e o novo virou o início:
 
-<p align="center"><img src="11-listas/0078-lista-ordenada/fluxograma.svg" alt="Fluxograma: Lista ordenada" width="575"></p>
+<p align="center"><img src="0078-fluxograma.svg" alt="Fluxograma: Lista ordenada" width="575"></p>
 
 O critério está na comparação do `while`: com `strcmp(p->nome, nome) < 0`, a
 mesma inserção ordena por nome (exemplo A156).
@@ -1173,14 +1167,12 @@ mesma inserção ordena por nome (exemplo A156).
 
 ### Hora de praticar
 
-Arquivos em [`0078-lista-ordenada/`](11-listas/0078-lista-ordenada/).
-
 **Exemplo A155 · Tabela do campeonato: maior primeiro**
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "lista.h"
+#include "0078-lista.h"
 
 // mesma inserção ordenada, com o critério virado: anda enquanto os de lá
 // têm MAIS pontos. Em caso de empate, quem chega fica atrás (>=)
@@ -1233,7 +1225,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/A155.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/A155 && ~/LPEDC/11-listas/0078-lista-ordenada/A155
+gcc ~/LPEDC/A155.c ~/LPEDC/0078-lista.c -o ~/LPEDC/A155 && ~/LPEDC/A155
 ```
 
 **Exemplo A156 · A chamada da turma em ordem alfabética**
@@ -1291,7 +1283,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/A156.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/A156 && ~/LPEDC/11-listas/0078-lista-ordenada/A156
+gcc ~/LPEDC/A156.c ~/LPEDC/0078-lista.c -o ~/LPEDC/A156 && ~/LPEDC/A156
 ```
 
 #### Exercícios
@@ -1309,7 +1301,7 @@ menor: 1, maior: 10
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/E463.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E463 && ~/LPEDC/11-listas/0078-lista-ordenada/E463
+gcc ~/LPEDC/E463.c ~/LPEDC/0078-lista.c -o ~/LPEDC/E463 && ~/LPEDC/E463
 ```
 
 **Exercício E465** · ★★☆
@@ -1334,7 +1326,7 @@ depois: 1 -> 3 -> 5 -> 8 -> NULL
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/E465.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E465 && ~/LPEDC/11-listas/0078-lista-ordenada/E465
+gcc ~/LPEDC/E465.c ~/LPEDC/0078-lista.c -o ~/LPEDC/E465 && ~/LPEDC/E465
 ```
 
 **Exercício E466** · ★★☆
@@ -1361,7 +1353,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/E466.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E466 && ~/LPEDC/11-listas/0078-lista-ordenada/E466
+gcc ~/LPEDC/E466.c ~/LPEDC/0078-lista.c -o ~/LPEDC/E466 && ~/LPEDC/E466
 ```
 
 **Exercício E468** · ★★★
@@ -1384,7 +1376,7 @@ depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0078-lista-ordenada/E468.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E468 && ~/LPEDC/11-listas/0078-lista-ordenada/E468
+gcc ~/LPEDC/E468.c ~/LPEDC/0078-lista.c -o ~/LPEDC/E468 && ~/LPEDC/E468
 ```
 
 ---
@@ -1440,7 +1432,7 @@ void lista_remove_no(Lista *l, No *p) {
 O trem tem vagões de 98, 105, 87 e 110 toneladas. Com `p` no de 87, o 105
 passa a apontar para o 110, e o 110 aponta de volta para o 105:
 
-<p align="center"><img src="11-listas/0079-lista-dupla/ideia.svg" alt="Diagrama da ideia: Lista dupla" width="858"></p>
+<p align="center"><img src="0079-ideia.svg" alt="Diagrama da ideia: Lista dupla" width="858"></p>
 
 ```c
 #include <stdio.h>
@@ -1482,7 +1474,7 @@ int main(void) {
 O fluxograma faz duas perguntas, uma por ponta. O vagão de 87 passa pelos dois
 Não. Para o primeiro vagão, a primeira daria Sim; para o último, a segunda:
 
-<p align="center"><img src="11-listas/0079-lista-dupla/fluxograma.svg" alt="Fluxograma: Lista dupla" width="502"></p>
+<p align="center"><img src="0079-fluxograma.svg" alt="Fluxograma: Lista dupla" width="502"></p>
 
 Imprimir de trás para frente é o `for` de sempre, de `l->fim` com `p =
 p->ant`. O exemplo A158 usa a ida e volta num controle remoto ("canal
@@ -1506,13 +1498,11 @@ seguinte", "canal anterior").
 
 ### Hora de praticar
 
-Arquivos em [`0079-lista-dupla/`](11-listas/0079-lista-dupla/).
-
 **Exemplo A157 · Mexendo nas duas pontas: a fila do pronto-socorro**
 
 ```c
 #include <stdio.h>
-#include "lista.h"
+#include "0079-lista.h"
 
 static void mostra(const Lista *l) {
     printf("(%d) ", l->tamanho);
@@ -1563,14 +1553,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/A157.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/A157 && ~/LPEDC/11-listas/0079-lista-dupla/A157
+gcc ~/LPEDC/A157.c ~/LPEDC/0079-lista.c -o ~/LPEDC/A157 && ~/LPEDC/A157
 ```
 
 **Exemplo A158 · O controle remoto: canal seguinte e canal anterior**
 
 ```c
 #include <stdio.h>
-#include "lista.h"
+#include "0079-lista.h"
 
 int main(void) {
     Lista canais;
@@ -1609,7 +1599,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/A158.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/A158 && ~/LPEDC/11-listas/0079-lista-dupla/A158
+gcc ~/LPEDC/A158.c ~/LPEDC/0079-lista.c -o ~/LPEDC/A158 && ~/LPEDC/A158
 ```
 
 #### Exercícios
@@ -1630,7 +1620,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/E469.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E469 && ~/LPEDC/11-listas/0079-lista-dupla/E469
+gcc ~/LPEDC/E469.c ~/LPEDC/0079-lista.c -o ~/LPEDC/E469 && ~/LPEDC/E469
 ```
 
 **Exercício E471** · ★★☆
@@ -1659,7 +1649,7 @@ ab: não
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/E471.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E471 && ~/LPEDC/11-listas/0079-lista-dupla/E471
+gcc ~/LPEDC/E471.c ~/LPEDC/0079-lista.c -o ~/LPEDC/E471 && ~/LPEDC/E471
 ```
 
 **Exercício E472** · ★★☆
@@ -1687,7 +1677,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/E472.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E472 && ~/LPEDC/11-listas/0079-lista-dupla/E472
+gcc ~/LPEDC/E472.c ~/LPEDC/0079-lista.c -o ~/LPEDC/E472 && ~/LPEDC/E472
 ```
 
 **Exercício E474** · ★★★
@@ -1715,7 +1705,7 @@ texto: programa|
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0079-lista-dupla/E474.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E474 && ~/LPEDC/11-listas/0079-lista-dupla/E474
+gcc ~/LPEDC/E474.c ~/LPEDC/0079-lista.c -o ~/LPEDC/E474 && ~/LPEDC/E474
 ```
 
 ---
@@ -1757,7 +1747,7 @@ o corpo antes de testar. A lista vazia (`ultimo == NULL`) é tratada antes.
 No exemplo, o ponteiro da lista está na mesa 15 e a mesa 3 é `ultimo->prox`.
 O garçom serve 6 vezes sem testar nada:
 
-<p align="center"><img src="11-listas/0080-lista-circular/ideia.svg" alt="Diagrama da ideia: Lista circular" width="902"></p>
+<p align="center"><img src="0080-ideia.svg" alt="Diagrama da ideia: Lista circular" width="902"></p>
 
 ```c
 #include <stdio.h>
@@ -1796,7 +1786,7 @@ O fluxograma é o do `lista_imprime`: testa a lista vazia, põe `p` na mesa 3 e
 repete mostrar, andar e perguntar "já voltei ao primeiro?". Com 4 mesas, a
 resposta é Não três vezes e Sim na quarta:
 
-<p align="center"><img src="11-listas/0080-lista-circular/fluxograma.svg" alt="Fluxograma: Lista circular" width="602"></p>
+<p align="center"><img src="0080-fluxograma.svg" alt="Fluxograma: Lista circular" width="602"></p>
 
 No **problema de Josephus**, pessoas em roda eliminam uma a cada k passos. O
 exemplo A160 o resolve com a batata quente, tirando nós do anel até sobrar
@@ -1820,13 +1810,11 @@ um que aponta para si mesmo.
 
 ### Hora de praticar
 
-Arquivos em [`0080-lista-circular/`](11-listas/0080-lista-circular/).
-
 **Exemplo A159 · A playlist no repetir: um nó só, as duas pontas e o meio**
 
 ```c
 #include <stdio.h>
-#include "lista.h"
+#include "0080-lista.h"
 
 int main(void) {
     No *playlist = NULL; // ponteiro para a ÚLTIMA faixa
@@ -1875,7 +1863,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/A159.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/A159 && ~/LPEDC/11-listas/0080-lista-circular/A159
+gcc ~/LPEDC/A159.c ~/LPEDC/0080-lista.c -o ~/LPEDC/A159 && ~/LPEDC/A159
 ```
 
 **Exemplo A160 · Batata quente: quem sobra na roda?**
@@ -1883,7 +1871,7 @@ gcc ~/LPEDC/11-listas/0080-lista-circular/A159.c ~/LPEDC/11-listas/0080-lista-ci
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "lista.h"
+#include "0080-lista.h"
 
 // 8 crianças em roda, numeradas de 1 a 8. A batata começa na 1 e passa de
 // mão em mão; a 3ª criança a pegar a batata sai da roda, e a contagem
@@ -1919,7 +1907,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/A160.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/A160 && ~/LPEDC/11-listas/0080-lista-circular/A160
+gcc ~/LPEDC/A160.c ~/LPEDC/0080-lista.c -o ~/LPEDC/A160 && ~/LPEDC/A160
 ```
 
 #### Exercícios
@@ -1940,7 +1928,7 @@ conferindo com %: pessoa 3
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/E475.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E475 && ~/LPEDC/11-listas/0080-lista-circular/E475
+gcc ~/LPEDC/E475.c ~/LPEDC/0080-lista.c -o ~/LPEDC/E475 && ~/LPEDC/E475
 ```
 
 **Exercício E477** · ★★☆
@@ -1967,7 +1955,7 @@ Lia: 300 km
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/E477.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E477 && ~/LPEDC/11-listas/0080-lista-circular/E477
+gcc ~/LPEDC/E477.c ~/LPEDC/0080-lista.c -o ~/LPEDC/E477 && ~/LPEDC/E477
 ```
 
 **Exercício E478** · ★★☆
@@ -1990,7 +1978,7 @@ com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/E478.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E478 && ~/LPEDC/11-listas/0080-lista-circular/E478
+gcc ~/LPEDC/E478.c ~/LPEDC/0080-lista.c -o ~/LPEDC/E478 && ~/LPEDC/E478
 ```
 
 **Exercício E479** · ★★★
@@ -2013,7 +2001,7 @@ t=10..11: P1 (terminou)
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0080-lista-circular/E479.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E479 && ~/LPEDC/11-listas/0080-lista-circular/E479
+gcc ~/LPEDC/E479.c ~/LPEDC/0080-lista.c -o ~/LPEDC/E479 && ~/LPEDC/E479
 ```
 
 ---
@@ -2059,7 +2047,7 @@ A playlist do exemplo tem cinco músicas, 20:01 no total. Pulando duas, toca a
 terceira. Depois a "Asa Branca" sai, a playlist chega à última e, com repetir
 ligado, a próxima volta para "Aquarela":
 
-<p align="center"><img src="11-listas/0081-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="933"></p>
+<p align="center"><img src="0081-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="933"></p>
 
 ```c
 #include <stdio.h>
@@ -2108,7 +2096,7 @@ int main(void) {
 No fluxograma, em "Tempo Perdido" não há próxima: com repetir desligado a
 função devolve `NULL`; ligado, o `atual` volta ao início:
 
-<p align="center"><img src="11-listas/0081-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="669"></p>
+<p align="center"><img src="0081-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="669"></p>
 
 O exemplo A162 grava a playlist em `playlist.txt`, carrega numa nova e usa
 `playlist_para_cada` com um callback para contar as músicas longas.
@@ -2134,13 +2122,11 @@ O exemplo A162 grava a playlist em `playlist.txt`, carrega numa nova e usa
 
 ### Hora de praticar
 
-Arquivos em [`0081-juntando-tudo/`](11-listas/0081-juntando-tudo/).
-
 **Exemplo A161 · A trilha do trajeto até o trabalho**
 
 ```c
 #include <stdio.h>
-#include "playlist.h"
+#include "0081-playlist.h"
 
 int main(void) {
     // uma playlist vazia não toca nada, e não quebra
@@ -2187,14 +2173,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/A161.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/A161 && ~/LPEDC/11-listas/0081-juntando-tudo/A161
+gcc ~/LPEDC/A161.c ~/LPEDC/0081-playlist.c -o ~/LPEDC/A161 && ~/LPEDC/A161
 ```
 
 **Exemplo A162 · Salvar a playlist no arquivo e carregar de volta**
 
 ```c
 #include <stdio.h>
-#include "playlist.h"
+#include "0081-playlist.h"
 
 // callback para playlist_para_cada: conta as músicas com mais de 4 minutos
 static void conta_longas(const Musica *m, void *extra) {
@@ -2243,7 +2229,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/A162.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/A162 && ~/LPEDC/11-listas/0081-juntando-tudo/A162
+gcc ~/LPEDC/A162.c ~/LPEDC/0081-playlist.c -o ~/LPEDC/A162 && ~/LPEDC/A162
 ```
 
 #### Exercícios
@@ -2278,7 +2264,7 @@ tocando agora: País Tropical - Jorge Ben
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/E481.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E481 && ~/LPEDC/11-listas/0081-juntando-tudo/E481
+gcc ~/LPEDC/E481.c ~/LPEDC/0081-playlist.c -o ~/LPEDC/E481 && ~/LPEDC/E481
 ```
 
 **Exercício E483** · ★★☆
@@ -2301,7 +2287,7 @@ Jorge Ben: 2 músicas, 6:11
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/E483.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E483 && ~/LPEDC/11-listas/0081-juntando-tudo/E483
+gcc ~/LPEDC/E483.c ~/LPEDC/0081-playlist.c -o ~/LPEDC/E483 && ~/LPEDC/E483
 ```
 
 **Exercício E484** · ★★☆
@@ -2337,7 +2323,7 @@ Cris saiu do bolão
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/E484.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E484 && ~/LPEDC/11-listas/0081-juntando-tudo/E484
+gcc ~/LPEDC/E484.c ~/LPEDC/0081-playlist.c -o ~/LPEDC/E484 && ~/LPEDC/E484
 ```
 
 **Exercício E486** · ★★★
@@ -2370,7 +2356,7 @@ P + Q = 4x^4 + 7x - 5
 ```
 
 ```bash
-gcc ~/LPEDC/11-listas/0081-juntando-tudo/E486.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E486 && ~/LPEDC/11-listas/0081-juntando-tudo/E486
+gcc ~/LPEDC/E486.c ~/LPEDC/0081-playlist.c -o ~/LPEDC/E486 && ~/LPEDC/E486
 ```
 
 ---
@@ -3090,7 +3076,7 @@ IV. Exclusão do último nó da lista encadeada\
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](11-listas/lista/); resoluções em `_respostas/11-listas/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1101.c a P1130.c, na raiz; resoluções em `_respostas/11-listas/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3129,7 +3115,7 @@ Deslocamentos: 4
 4. Resposta esperada: a saída acima (0 + 0 + 1 + 3 deslocamentos).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1101.c -o ~/LPEDC/11-listas/lista/P1101 && ~/LPEDC/11-listas/lista/P1101
+gcc ~/LPEDC/P1101.c -o ~/LPEDC/P1101 && ~/LPEDC/P1101
 ```
 
 ---
@@ -3167,7 +3153,7 @@ Nós visitados: 10
    o último deixa cada inserção O(1).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1102.c -o ~/LPEDC/11-listas/lista/P1102 && ~/LPEDC/11-listas/lista/P1102
+gcc ~/LPEDC/P1102.c -o ~/LPEDC/P1102 && ~/LPEDC/P1102
 ```
 
 ---
@@ -3205,7 +3191,7 @@ Depois: 10: 12.00 | 20: 3.20 | 30: 9.35 | 40: 6.00 |
 3. Resposta esperada: a saída acima (8.50 * 1.10 = 9.35).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1103.c -o ~/LPEDC/11-listas/lista/P1103 && ~/LPEDC/11-listas/lista/P1103
+gcc ~/LPEDC/P1103.c -o ~/LPEDC/P1103 && ~/LPEDC/P1103
 ```
 
 ---
@@ -3243,7 +3229,7 @@ Zeca não estava: Caio Duda
 3. Resposta esperada: a saída acima, sem vazamento no sanitizer.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1104.c -o ~/LPEDC/11-listas/lista/P1104 && ~/LPEDC/11-listas/lista/P1104
+gcc ~/LPEDC/P1104.c -o ~/LPEDC/P1104 && ~/LPEDC/P1104
 ```
 
 ---
@@ -3287,7 +3273,7 @@ a com b vazia: 1 -> 2 -> 3 -> 4 -> 5 -> NULL (5 nós)
    nós de b agora são dela).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1105.c -o ~/LPEDC/11-listas/lista/P1105 && ~/LPEDC/11-listas/lista/P1105
+gcc ~/LPEDC/P1105.c -o ~/LPEDC/P1105 && ~/LPEDC/P1105
 ```
 
 ---
@@ -3318,7 +3304,7 @@ Volta: Armênia -> Tiradentes -> Luz -> Sé
    menos da primeira.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1106.c -o ~/LPEDC/11-listas/lista/P1106 && ~/LPEDC/11-listas/lista/P1106
+gcc ~/LPEDC/P1106.c -o ~/LPEDC/P1106 && ~/LPEDC/P1106
 ```
 
 ---
@@ -3359,7 +3345,7 @@ A partir da 4: [4:3] [5:1] [6:4] [1:2] [2:4] [3:0]
    guardar o primeiro) e libere como uma lista comum.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1107.c -o ~/LPEDC/11-listas/lista/P1107 && ~/LPEDC/11-listas/lista/P1107
+gcc ~/LPEDC/P1107.c -o ~/LPEDC/P1107 && ~/LPEDC/P1107
 ```
 
 ---
@@ -3393,7 +3379,7 @@ Senhas: 43 -> 44 -> NULL
    nó antigo. A saída fica igual à de cima, sem relatório.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1108.c -o ~/LPEDC/11-listas/lista/P1108 && ~/LPEDC/11-listas/lista/P1108
+gcc ~/LPEDC/P1108.c -o ~/LPEDC/P1108 && ~/LPEDC/P1108
 ```
 
 ---
@@ -3431,7 +3417,7 @@ Ana Bia Lia Marcos Teo
    nome) < 0. O novo entra entre p e p->prox.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1109.c -o ~/LPEDC/11-listas/lista/P1109 && ~/LPEDC/11-listas/lista/P1109
+gcc ~/LPEDC/P1109.c -o ~/LPEDC/P1109 && ~/LPEDC/P1109
 ```
 
 ---
@@ -3467,7 +3453,7 @@ Saída esperada:
    está. O custo é O(n) e a memória extra é O(1).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1110.c -o ~/LPEDC/11-listas/lista/P1110 && ~/LPEDC/11-listas/lista/P1110
+gcc ~/LPEDC/P1110.c -o ~/LPEDC/P1110 && ~/LPEDC/P1110
 ```
 
 ### ★★☆ Para pensar
@@ -3514,7 +3500,7 @@ mural: 12 -> 10 -> 9 -> 8 -> 7 -> 5 -> 5 -> 2 -> 1 -> NULL
 4. São n + m passos: O(n + m).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1111.c -o ~/LPEDC/11-listas/lista/P1111 && ~/LPEDC/11-listas/lista/P1111
+gcc ~/LPEDC/P1111.c -o ~/LPEDC/P1111 && ~/LPEDC/P1111
 ```
 
 ---
@@ -3553,7 +3539,7 @@ depois: 7 -> 3 -> 9 -> 1 -> NULL
    O(n), porque os repetidos ficariam lado a lado.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1112.c -o ~/LPEDC/11-listas/lista/P1112 && ~/LPEDC/11-listas/lista/P1112
+gcc ~/LPEDC/P1112.c -o ~/LPEDC/P1112 && ~/LPEDC/P1112
 ```
 
 ---
@@ -3593,7 +3579,7 @@ k = 5: não existe
 4. Uma passada, O(n), memória O(1).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1113.c -o ~/LPEDC/11-listas/lista/P1113 && ~/LPEDC/11-listas/lista/P1113
+gcc ~/LPEDC/P1113.c -o ~/LPEDC/P1113 && ~/LPEDC/P1113
 ```
 
 ---
@@ -3640,7 +3626,7 @@ Total sem mover: 18
    LRU: o que foi usado há pouco tende a ser usado de novo.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1114.c -o ~/LPEDC/11-listas/lista/P1114 && ~/LPEDC/11-listas/lista/P1114
+gcc ~/LPEDC/P1114.c -o ~/LPEDC/P1114 && ~/LPEDC/P1114
 ```
 
 ---
@@ -3680,7 +3666,7 @@ Lava a louça: Ana
    O(n · k).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1115.c -o ~/LPEDC/11-listas/lista/P1115 && ~/LPEDC/11-listas/lista/P1115
+gcc ~/LPEDC/P1115.c -o ~/LPEDC/P1115 && ~/LPEDC/P1115
 ```
 
 ---
@@ -3724,7 +3710,7 @@ Sem 09:00: 08:00 10:00 12:00
    deslocamento. Essa é a troca da lista sequencial ordenada.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1116.c -o ~/LPEDC/11-listas/lista/P1116 && ~/LPEDC/11-listas/lista/P1116
+gcc ~/LPEDC/P1116.c -o ~/LPEDC/P1116 && ~/LPEDC/P1116
 ```
 
 ---
@@ -3762,7 +3748,7 @@ depois: 2 -> 4 -> 4 -> 6 -> 7 -> 9 -> 1 -> NULL
 3. Uma passada: O(n).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1117.c -o ~/LPEDC/11-listas/lista/P1117 && ~/LPEDC/11-listas/lista/P1117
+gcc ~/LPEDC/P1117.c -o ~/LPEDC/P1117 && ~/LPEDC/P1117
 ```
 
 ---
@@ -3793,7 +3779,7 @@ Saiu 1: NULL
    libere o nó e devolva NULL) e, depois do free, faça p->prox = NULL.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1118.c -o ~/LPEDC/11-listas/lista/P1118 && ~/LPEDC/11-listas/lista/P1118
+gcc ~/LPEDC/P1118.c -o ~/LPEDC/P1118 && ~/LPEDC/P1118
 ```
 
 ---
@@ -3835,7 +3821,7 @@ De trás para frente: 70 61 60 58 55
    r->fim = novo. Assim os quatro casos saem do mesmo código.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1119.c -o ~/LPEDC/11-listas/lista/P1119 && ~/LPEDC/11-listas/lista/P1119
+gcc ~/LPEDC/P1119.c -o ~/LPEDC/P1119 && ~/LPEDC/P1119
 ```
 
 ---
@@ -3875,7 +3861,7 @@ k = 0:  2 -> 3 -> 4 -> 5 -> 1 -> NULL
 3. O(n) e memória O(1).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1120.c -o ~/LPEDC/11-listas/lista/P1120 && ~/LPEDC/11-listas/lista/P1120
+gcc ~/LPEDC/P1120.c -o ~/LPEDC/P1120 && ~/LPEDC/P1120
 ```
 
 ### ★★★ Desafio
@@ -3927,7 +3913,7 @@ Bia: (92)98100-0004
 4. Resposta esperada: a saída acima, sem vazamento.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1121.c -o ~/LPEDC/11-listas/lista/P1121 && ~/LPEDC/11-listas/lista/P1121
+gcc ~/LPEDC/P1121.c -o ~/LPEDC/P1121 && ~/LPEDC/P1121
 ```
 
 ---
@@ -3981,7 +3967,7 @@ Livre: 40 posições, maior bloco: 30
    externa. Os blocos livres existem, mas nenhum é grande o bastante.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1122.c -o ~/LPEDC/11-listas/lista/P1122 && ~/LPEDC/11-listas/lista/P1122
+gcc ~/LPEDC/P1122.c -o ~/LPEDC/P1122 && ~/LPEDC/P1122
 ```
 
 ---
@@ -4032,7 +4018,7 @@ Python (2): Caio Davi
 4. Resposta esperada: a saída acima, sem vazamento.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1123.c -o ~/LPEDC/11-listas/lista/P1123 && ~/LPEDC/11-listas/lista/P1123
+gcc ~/LPEDC/P1123.c -o ~/LPEDC/P1123 && ~/LPEDC/P1123
 ```
 
 ---
@@ -4072,7 +4058,7 @@ fila:   1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> NULL
    é NULL, o novo início é ant).
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1124.c -o ~/LPEDC/11-listas/lista/P1124 && ~/LPEDC/11-listas/lista/P1124
+gcc ~/LPEDC/P1124.c -o ~/LPEDC/P1124 && ~/LPEDC/P1124
 ```
 
 ---
@@ -4108,7 +4094,7 @@ Volta: 3 2
    último, e p->prox->ant = p->ant sempre que p->prox existe.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1125.c -o ~/LPEDC/11-listas/lista/P1125 && ~/LPEDC/11-listas/lista/P1125
+gcc ~/LPEDC/P1125.c -o ~/LPEDC/P1125 && ~/LPEDC/P1125
 ```
 
 ---
@@ -4158,7 +4144,7 @@ célula 5: 50 -> -1
 3. Na célula 1, o 10 saiu e o 25 reaproveitou a mesma célula.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1126.c -o ~/LPEDC/11-listas/lista/P1126 && ~/LPEDC/11-listas/lista/P1126
+gcc ~/LPEDC/P1126.c -o ~/LPEDC/P1126 && ~/LPEDC/P1126
 ```
 
 ---
@@ -4204,7 +4190,7 @@ roda de 6: 1 2 3 4 5 6
    (NULL); trate esse caso também.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1127.c -o ~/LPEDC/11-listas/lista/P1127 && ~/LPEDC/11-listas/lista/P1127
+gcc ~/LPEDC/P1127.c -o ~/LPEDC/P1127 && ~/LPEDC/P1127
 ```
 
 ---
@@ -4249,7 +4235,7 @@ Saída esperada:
    mudar quem é o último.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1128.c -o ~/LPEDC/11-listas/lista/P1128 && ~/LPEDC/11-listas/lista/P1128
+gcc ~/LPEDC/P1128.c -o ~/LPEDC/P1128 && ~/LPEDC/P1128
 ```
 
 ---
@@ -4293,7 +4279,7 @@ Saída esperada:
 4. O(n) de tempo, O(1) de memória.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1129.c -o ~/LPEDC/11-listas/lista/P1129 && ~/LPEDC/11-listas/lista/P1129
+gcc ~/LPEDC/P1129.c -o ~/LPEDC/P1129 && ~/LPEDC/P1129
 ```
 
 ---
@@ -4344,7 +4330,7 @@ Não nulos: 6 de 15
 4. Libere as três matrizes.
 
 ```bash
-gcc ~/LPEDC/11-listas/lista/P1130.c -o ~/LPEDC/11-listas/lista/P1130 && ~/LPEDC/11-listas/lista/P1130
+gcc ~/LPEDC/P1130.c -o ~/LPEDC/P1130 && ~/LPEDC/P1130
 ```
 
 ## Para ler mais

@@ -36,7 +36,7 @@ Cada pasta traz os arquivos do TAD (`pilha.h` e `pilha.c`, `fila.h` e
 esses `.c` de apoio junto com o exemplo ou exercício:
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163
+gcc ~/LPEDC/A163.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/A163 && ~/LPEDC/A163
 ```
 
 Num exercício, **não** crie funções com os nomes do TAD (`pilha_cria`,
@@ -49,15 +49,15 @@ pilha de chamadas explica a recursão do merge sort e do quick sort, e o 16,
 onde a fila conduz a busca em largura (0110) e a pilha apoia a busca em
 profundidade (0111).
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0082](#0082--pilha) | Pilha | [`0082-pilha/`](12-pilhas-e-filas/0082-pilha/) |
-| [0083](#0083--pilha-encadeada) | Pilha encadeada | [`0083-pilha-encadeada/`](12-pilhas-e-filas/0083-pilha-encadeada/) |
-| [0084](#0084--pilha-na-prática-parênteses-e-notação-pós-fixa) | Pilha na prática: parênteses e notação pós-fixa | [`0084-pilha-aplicacoes/`](12-pilhas-e-filas/0084-pilha-aplicacoes/) |
-| [0085](#0085--fila) | Fila | [`0085-fila/`](12-pilhas-e-filas/0085-fila/) |
-| [0086](#0086--fila-encadeada) | Fila encadeada | [`0086-fila-encadeada/`](12-pilhas-e-filas/0086-fila-encadeada/) |
-| [0087](#0087--deque) | Deque | [`0087-deque/`](12-pilhas-e-filas/0087-deque/) |
-| [0088](#0088--juntando-tudo-a-calculadora-de-expressões) | Juntando tudo: a calculadora de expressões | [`0088-juntando-tudo/`](12-pilhas-e-filas/0088-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0082](#0082--pilha) | Pilha |
+| [0083](#0083--pilha-encadeada) | Pilha encadeada |
+| [0084](#0084--pilha-na-prática-parênteses-e-notação-pós-fixa) | Pilha na prática: parênteses e notação pós-fixa |
+| [0085](#0085--fila) | Fila |
+| [0086](#0086--fila-encadeada) | Fila encadeada |
+| [0087](#0087--deque) | Deque |
+| [0088](#0088--juntando-tudo-a-calculadora-de-expressões) | Juntando tudo: a calculadora de expressões |
 
 ---
 
@@ -101,7 +101,7 @@ porque o vetor tem tamanho fixo.
 
 Esta versão usa um **vetor** e um contador `n`: o fundo fica em `itens[0]`, o
 topo em `itens[n - 1]` e `n` é a próxima vaga. Trecho do
-[`pilha.c`](12-pilhas-e-filas/0082-pilha/pilha.c):
+[`pilha.c`](0082-pilha.c):
 
 ```c
 struct pilha {
@@ -131,7 +131,7 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 Os preços entram em centavos (2590, 800 e 1200) nas gavetas 0, 1 e 2, com `n`
 igual a 3. O desfazer tira o 1200:
 
-<p align="center"><img src="12-pilhas-e-filas/0082-pilha/ideia.svg" alt="Diagrama da ideia: Pilha" width="858"></p>
+<p align="center"><img src="0082-ideia.svg" alt="Diagrama da ideia: Pilha" width="858"></p>
 
 O programa só usa as funções do `pilha.h`:
 
@@ -170,7 +170,7 @@ int main(void) {
 
 O fluxograma do desfazer testa se a pilha está vazia antes de diminuir `n`:
 
-<p align="center"><img src="12-pilhas-e-filas/0082-pilha/fluxograma.svg" alt="Fluxograma: Pilha" width="506"></p>
+<p align="center"><img src="0082-fluxograma.svg" alt="Fluxograma: Pilha" width="506"></p>
 
 > [!WARNING]
 > Ler `itens[n]` antes de diminuir `n` pega a gaveta **vazia** acima do topo
@@ -190,13 +190,11 @@ O fluxograma do desfazer testa se a pilha está vazia antes de diminuir `n`:
 
 ### Hora de praticar
 
-Arquivos em [`0082-pilha/`](12-pilhas-e-filas/0082-pilha/).
-
 **Exemplo A163 · As bordas da pilha: cheia e vazia**
 
 ```c
 #include <stdio.h>
-#include "pilha.h"
+#include "0082-pilha.h"
 
 int main(void) {
     Pilha *cadeiras = pilha_cria(); // o depósito do salão empilha até 100
@@ -244,14 +242,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163
+gcc ~/LPEDC/A163.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/A163 && ~/LPEDC/A163
 ```
 
 **Exemplo A164 · Decimal para binário: a pilha inverte a ordem**
 
 ```c
 #include <stdio.h>
-#include "pilha.h"
+#include "0082-pilha.h"
 
 int main(void) {
     Pilha *restos = pilha_cria();
@@ -282,7 +280,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/A164.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/A164 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/A164
+gcc ~/LPEDC/A164.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/A164 && ~/LPEDC/A164
 ```
 
 #### Exercícios
@@ -309,7 +307,7 @@ mais um desempilha: devolveu 0, x = 4
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/E487.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/E487 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/E487
+gcc ~/LPEDC/E487.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/E487 && ~/LPEDC/E487
 ```
 
 **Exercício E489** · ★★☆
@@ -328,7 +326,7 @@ Topo continua: R$ 12,00 (3 itens)
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/E489.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/E489 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/E489
+gcc ~/LPEDC/E489.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/E489 && ~/LPEDC/E489
 ```
 
 **Exercício E490** · ★★☆
@@ -352,7 +350,7 @@ No topo: bandeja 4
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/E490.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/E490 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/E490
+gcc ~/LPEDC/E490.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/E490 && ~/LPEDC/E490
 ```
 
 **Exercício E492** · ★★★
@@ -377,7 +375,7 @@ Sujos: 20 10
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/E492.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/E492 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/E492
+gcc ~/LPEDC/E492.c ~/LPEDC/0082-pilha.c -o ~/LPEDC/E492 && ~/LPEDC/E492
 ```
 
 ---
@@ -402,8 +400,8 @@ pois só o ponteiro de entrada muda. Remover do fim exigiria achar o
   o nó velho;
 - **vazia** = `topo == NULL`.
 
-O [`pilha.h`](12-pilhas-e-filas/0083-pilha-encadeada/pilha.h) é **idêntico** ao do 0082; só o
-[`pilha.c`](12-pilhas-e-filas/0083-pilha-encadeada/pilha.c) muda, e o programa do delivery roda
+O [`pilha.h`](0083-pilha.h) é **idêntico** ao do 0082; só o
+[`pilha.c`](0083-pilha.c) muda, e o programa do delivery roda
 sem alteração. A struct agora guarda um ponteiro:
 
 ```c
@@ -445,7 +443,7 @@ bool pilha_desempilha(Pilha *p, int *valor) {
 Antes de cada edição, o valor antigo da B2 vai para a pilha: 1500, 1800 e
 2100. O 2100 fica no primeiro nó e o primeiro Ctrl+Z o devolve:
 
-<p align="center"><img src="12-pilhas-e-filas/0083-pilha-encadeada/ideia.svg" alt="Diagrama da ideia: Pilha encadeada" width="890"></p>
+<p align="center"><img src="0083-ideia.svg" alt="Diagrama da ideia: Pilha encadeada" width="890"></p>
 
 O programa da planilha:
 
@@ -490,7 +488,7 @@ int main(void) {
 Ao empilhar o 2100, o novo nó aponta primeiro para o topo antigo; só depois o
 topo muda:
 
-<p align="center"><img src="12-pilhas-e-filas/0083-pilha-encadeada/fluxograma.svg" alt="Fluxograma: Pilha encadeada" width="469"></p>
+<p align="center"><img src="0083-fluxograma.svg" alt="Fluxograma: Pilha encadeada" width="469"></p>
 
 > [!WARNING]
 > Trocar a ordem destrói a pilha. Com `p->topo = novo` antes de
@@ -511,13 +509,11 @@ topo muda:
 
 ### Hora de praticar
 
-Arquivos em [`0083-pilha-encadeada/`](12-pilhas-e-filas/0083-pilha-encadeada/).
-
 **Exemplo A165 · Desfazer e refazer com duas pilhas**
 
 ```c
 #include <stdio.h>
-#include "pilha.h"
+#include "0083-pilha.h"
 
 // esvazia uma pilha: uma edição nova apaga o que dava para refazer
 void esvazia(Pilha *p) {
@@ -578,14 +574,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/A165.c ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/A165 && ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/A165
+gcc ~/LPEDC/A165.c ~/LPEDC/0083-pilha.c -o ~/LPEDC/A165 && ~/LPEDC/A165
 ```
 
 **Exemplo A166 · Sem teto: 100 mil itens na pilha encadeada**
 
 ```c
 #include <stdio.h>
-#include "pilha.h"
+#include "0083-pilha.h"
 
 // A pilha do vetor (0082) recusaria o 101º item. Esta só para quando acabar a
 // memória. O código é o mesmo do cliente da 0082: só o pilha.c mudou.
@@ -619,7 +615,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/A166.c ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/A166 && ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/A166
+gcc ~/LPEDC/A166.c ~/LPEDC/0083-pilha.c -o ~/LPEDC/A166 && ~/LPEDC/A166
 ```
 
 #### Exercícios
@@ -647,7 +643,7 @@ saiu 3 -> [vazia]
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E493.c ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E493 && ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E493
+gcc ~/LPEDC/E493.c ~/LPEDC/0083-pilha.c -o ~/LPEDC/E493 && ~/LPEDC/E493
 ```
 
 **Exercício E495** · ★★☆
@@ -672,7 +668,7 @@ Não dá para voltar de g1.globo.com
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E495.c ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E495 && ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E495
+gcc ~/LPEDC/E495.c ~/LPEDC/0083-pilha.c -o ~/LPEDC/E495 && ~/LPEDC/E495
 ```
 
 **Exercício E496** · ★★☆
@@ -692,7 +688,7 @@ Tirou o prato 10
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E496.c ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E496 && ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E496
+gcc ~/LPEDC/E496.c ~/LPEDC/0083-pilha.c -o ~/LPEDC/E496 && ~/LPEDC/E496
 ```
 
 **Exercício E497** · ★★★
@@ -710,7 +706,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E497.c ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E497 && ~/LPEDC/12-pilhas-e-filas/0083-pilha-encadeada/E497
+gcc ~/LPEDC/E497.c ~/LPEDC/0083-pilha.c -o ~/LPEDC/E497 && ~/LPEDC/E497
 ```
 
 ---
@@ -737,7 +733,7 @@ Em `{ x = v[(i + 1)] }` sobram os delimitadores `{ [ ( ) ] }`. Os três
 primeiros são empilhados. O `)` encontra `(` no topo e casa; depois `]` casa
 com `[` e `}` casa com `{`:
 
-<p align="center"><img src="12-pilhas-e-filas/0084-pilha-aplicacoes/ideia.svg" alt="Diagrama da ideia: Pilha na prática: parênteses e notação pós-fixa" width="858"></p>
+<p align="center"><img src="0084-ideia.svg" alt="Diagrama da ideia: Pilha na prática: parênteses e notação pós-fixa" width="858"></p>
 
 O verificador testa quatro expressões, com o `pilha.h` e o `pilha.c` do 0083:
 
@@ -799,7 +795,7 @@ int main(void) {
 O laço tem duas saídas antecipadas para o erro; "pilha vazia?" só é testada
 no fim da string:
 
-<p align="center"><img src="12-pilhas-e-filas/0084-pilha-aplicacoes/fluxograma.svg" alt="Fluxograma: Pilha na prática: parênteses e notação pós-fixa" width="796"></p>
+<p align="center"><img src="0084-fluxograma.svg" alt="Fluxograma: Pilha na prática: parênteses e notação pós-fixa" width="796"></p>
 
 ### Notação pós-fixa
 
@@ -844,14 +840,12 @@ acusando expressão inválida quando falta operando ou sobra número na pilha.
 
 ### Hora de praticar
 
-Arquivos em [`0084-pilha-aplicacoes/`](12-pilhas-e-filas/0084-pilha-aplicacoes/).
-
 **Exemplo A167 · Parênteses dentro de aspas não contam**
 
 ```c
 #include <stdbool.h>
 #include <stdio.h>
-#include "pilha.h"
+#include "0084-pilha.h"
 
 char abertura_de(char fecha) {
     return fecha == ')' ? '(' : fecha == ']' ? '[' : '{';
@@ -916,7 +910,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/A167.c ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/A167 && ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/A167
+gcc ~/LPEDC/A167.c ~/LPEDC/0084-pilha.c -o ~/LPEDC/A167 && ~/LPEDC/A167
 ```
 
 **Exemplo A168 · A conta do bar em notação pós-fixa**
@@ -924,7 +918,7 @@ gcc ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/A167.c ~/LPEDC/12-pilhas-e-f
 ```c
 #include <stdbool.h>
 #include <stdio.h>
-#include "pilha.h"
+#include "0084-pilha.h"
 
 // Avalia uma expressão pós-fixa com inteiros não negativos separados por
 // espaço e os operadores + - * /. Devolve false se a expressão for inválida.
@@ -987,7 +981,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/A168.c ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/A168 && ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/A168
+gcc ~/LPEDC/A168.c ~/LPEDC/0084-pilha.c -o ~/LPEDC/A168 && ~/LPEDC/A168
 ```
 
 #### Exercícios
@@ -1012,7 +1006,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E499.c ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E499 && ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E499
+gcc ~/LPEDC/E499.c ~/LPEDC/0084-pilha.c -o ~/LPEDC/E499 && ~/LPEDC/E499
 ```
 
 **Exercício E501** · ★★☆
@@ -1035,7 +1029,7 @@ if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E501.c ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E501 && ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E501
+gcc ~/LPEDC/E501.c ~/LPEDC/0084-pilha.c -o ~/LPEDC/E501 && ~/LPEDC/E501
 ```
 
 **Exercício E502** · ★★☆
@@ -1055,7 +1049,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E502.c ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E502 && ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E502
+gcc ~/LPEDC/E502.c ~/LPEDC/0084-pilha.c -o ~/LPEDC/E502 && ~/LPEDC/E502
 ```
 
 **Exercício E503** · ★★★
@@ -1077,7 +1071,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E503.c ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E503 && ~/LPEDC/12-pilhas-e-filas/0084-pilha-aplicacoes/E503
+gcc ~/LPEDC/E503.c ~/LPEDC/0084-pilha.c -o ~/LPEDC/E503 && ~/LPEDC/E503
 ```
 
 ---
@@ -1091,7 +1085,7 @@ Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
 primeiro a entrar é o primeiro a sair, **FIFO** (*first in, first out*), o
 contrário da pilha.
 
-O TAD tem a mesma cara da pilha, no [`fila.h`](12-pilhas-e-filas/0085-fila/fila.h):
+O TAD tem a mesma cara da pilha, no [`fila.h`](0085-fila.h):
 
 ```c
 typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
@@ -1112,7 +1106,7 @@ vetor com as primeiras gavetas vazias.
 A saída é a **fila circular**: passou da última gaveta, volta à 0. Guarde o
 **início** e o número de itens `n`; a próxima vaga é
 `(inicio + n) % CAPACIDADE`. Com 8 gavetas, depois da 7 vem
-`(7 + 1) % 8 = 0`. Parte principal do [`fila.c`](12-pilhas-e-filas/0085-fila/fila.c):
+`(7 + 1) % 8 = 0`. Parte principal do [`fila.c`](0085-fila.c):
 
 ```c
 #define CAPACIDADE 8
@@ -1148,7 +1142,7 @@ O painel guarda 8 senhas. Chegam as senhas 31 a 36 (gavetas 0 a 5) e o caixa
 atende 4: o início anda até a gaveta 4. Chegam 37 a 40: o 37 e o 38 ocupam as
 gavetas 6 e 7, e o 39 e o 40 **dão a volta** para as gavetas 0 e 1:
 
-<p align="center"><img src="12-pilhas-e-filas/0085-fila/ideia.svg" alt="Diagrama da ideia: Fila" width="864"></p>
+<p align="center"><img src="0085-ideia.svg" alt="Diagrama da ideia: Fila" width="864"></p>
 
 O programa só vê as funções do `fila.h`; a volta fica no `fila.c`:
 
@@ -1200,7 +1194,7 @@ int main(void) {
 O fluxograma segue a senha 39, com `inicio = 4` e `n = 4`: o `%` a manda para
 a gaveta 0:
 
-<p align="center"><img src="12-pilhas-e-filas/0085-fila/fluxograma.svg" alt="Fluxograma: Fila" width="522"></p>
+<p align="center"><img src="0085-fluxograma.svg" alt="Fluxograma: Fila" width="522"></p>
 
 > [!WARNING]
 > Sem o contador `n`, fila cheia e vazia ficam **iguais**: com só `inicio` e
@@ -1223,13 +1217,11 @@ a gaveta 0:
 
 ### Hora de praticar
 
-Arquivos em [`0085-fila/`](12-pilhas-e-filas/0085-fila/).
-
 **Exemplo A169 · Só as 8 últimas corridas: a mais antiga dá lugar**
 
 ```c
 #include <stdio.h>
-#include "fila.h"
+#include "0085-fila.h"
 
 int main(void) {
     Fila *historico = fila_cria(); // o app mostra as 8 corridas mais recentes
@@ -1274,14 +1266,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0085-fila/A169.c ~/LPEDC/12-pilhas-e-filas/0085-fila/fila.c -o ~/LPEDC/12-pilhas-e-filas/0085-fila/A169 && ~/LPEDC/12-pilhas-e-filas/0085-fila/A169
+gcc ~/LPEDC/A169.c ~/LPEDC/0085-fila.c -o ~/LPEDC/A169 && ~/LPEDC/A169
 ```
 
 **Exemplo A170 · Painel cheio: a fila circular reaproveita as vagas**
 
 ```c
 #include <stdio.h>
-#include "fila.h"
+#include "0085-fila.h"
 
 int main(void) {
     Fila *f = fila_cria();
@@ -1323,7 +1315,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0085-fila/A170.c ~/LPEDC/12-pilhas-e-filas/0085-fila/fila.c -o ~/LPEDC/12-pilhas-e-filas/0085-fila/A170 && ~/LPEDC/12-pilhas-e-filas/0085-fila/A170
+gcc ~/LPEDC/A170.c ~/LPEDC/0085-fila.c -o ~/LPEDC/A170 && ~/LPEDC/A170
 ```
 
 #### Exercícios
@@ -1354,7 +1346,7 @@ próxima vaga: gaveta 1
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0085-fila/E505.c ~/LPEDC/12-pilhas-e-filas/0085-fila/fila.c -o ~/LPEDC/12-pilhas-e-filas/0085-fila/E505 && ~/LPEDC/12-pilhas-e-filas/0085-fila/E505
+gcc ~/LPEDC/E505.c ~/LPEDC/0085-fila.c -o ~/LPEDC/E505 && ~/LPEDC/E505
 ```
 
 **Exercício E507** · ★★☆
@@ -1377,7 +1369,7 @@ Na fila: 3 4 6 7
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0085-fila/E507.c ~/LPEDC/12-pilhas-e-filas/0085-fila/fila.c -o ~/LPEDC/12-pilhas-e-filas/0085-fila/E507 && ~/LPEDC/12-pilhas-e-filas/0085-fila/E507
+gcc ~/LPEDC/E507.c ~/LPEDC/0085-fila.c -o ~/LPEDC/E507 && ~/LPEDC/E507
 ```
 
 **Exercício E508** · ★★☆
@@ -1398,7 +1390,7 @@ Carros na fila: 4
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0085-fila/E508.c ~/LPEDC/12-pilhas-e-filas/0085-fila/fila.c -o ~/LPEDC/12-pilhas-e-filas/0085-fila/E508 && ~/LPEDC/12-pilhas-e-filas/0085-fila/E508
+gcc ~/LPEDC/E508.c ~/LPEDC/0085-fila.c -o ~/LPEDC/E508 && ~/LPEDC/E508
 ```
 
 **Exercício E509** · ★★★
@@ -1416,7 +1408,7 @@ Sobrou: 4
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0085-fila/E509.c ~/LPEDC/12-pilhas-e-filas/0085-fila/fila.c -o ~/LPEDC/12-pilhas-e-filas/0085-fila/E509 && ~/LPEDC/12-pilhas-e-filas/0085-fila/E509
+gcc ~/LPEDC/E509.c ~/LPEDC/0085-fila.c -o ~/LPEDC/E509 && ~/LPEDC/E509
 ```
 
 ---
@@ -1438,8 +1430,8 @@ A fila **sai pelo início e entra pelo fim**. O contrário não funciona bem num
 lista simples: remover o último exige o penúltimo, e o nó não sabe quem vem
 antes.
 
-O [`fila.h`](12-pilhas-e-filas/0086-fila-encadeada/fila.h) é o do 0085. O
-[`fila.c`](12-pilhas-e-filas/0086-fila-encadeada/fila.c) guarda dois ponteiros, e os casos de
+O [`fila.h`](0086-fila.h) é o do 0085. O
+[`fila.c`](0086-fila.c) guarda dois ponteiros, e os casos de
 borda moram neles:
 
 ```c
@@ -1486,7 +1478,7 @@ Chegam os pedidos 501, 502 e 503. A cozinha pega o 501: o início anda para o
 502 e o nó do 501 é liberado. Chega o 504, pendurado depois do 503, e o fim
 passa a apontar para ele:
 
-<p align="center"><img src="12-pilhas-e-filas/0086-fila-encadeada/ideia.svg" alt="Diagrama da ideia: Fila encadeada" width="858"></p>
+<p align="center"><img src="0086-ideia.svg" alt="Diagrama da ideia: Fila encadeada" width="858"></p>
 
 Programa da cozinha:
 
@@ -1526,7 +1518,7 @@ int main(void) {
 Na entrada do 504 a fila não estava vazia: o caminho passa por
 `fim->prox = novo`. Na fila vazia, o `inicio` recebe o novo nó:
 
-<p align="center"><img src="12-pilhas-e-filas/0086-fila-encadeada/fluxograma.svg" alt="Fluxograma: Fila encadeada" width="597"></p>
+<p align="center"><img src="0086-fluxograma.svg" alt="Fluxograma: Fila encadeada" width="597"></p>
 
 > [!WARNING]
 > Os dois bugs comuns estão nas bordas. Inserir na fila **vazia** sem
@@ -1547,13 +1539,11 @@ Na entrada do 504 a fila não estava vazia: o caminho passa por
 
 ### Hora de praticar
 
-Arquivos em [`0086-fila-encadeada/`](12-pilhas-e-filas/0086-fila-encadeada/).
-
 **Exemplo A171 · Pedágio na sexta: a fila cresce, esvazia e recomeça**
 
 ```c
 #include <stdio.h>
-#include "fila.h"
+#include "0086-fila.h"
 
 // a cabine libera todos os carros que estão na fila
 int libera_todos(Fila *f) {
@@ -1601,14 +1591,14 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/A171.c ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/fila.c -o ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/A171 && ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/A171
+gcc ~/LPEDC/A171.c ~/LPEDC/0086-fila.c -o ~/LPEDC/A171 && ~/LPEDC/A171
 ```
 
 **Exemplo A172 · Simulando o caixa do mercado**
 
 ```c
 #include <stdio.h>
-#include "fila.h"
+#include "0086-fila.h"
 
 #define CLIENTES 5
 
@@ -1661,7 +1651,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/A172.c ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/fila.c -o ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/A172 && ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/A172
+gcc ~/LPEDC/A172.c ~/LPEDC/0086-fila.c -o ~/LPEDC/A172 && ~/LPEDC/A172
 ```
 
 #### Exercícios
@@ -1689,7 +1679,7 @@ retira 1: vazia
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E511.c ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/fila.c -o ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E511 && ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E511
+gcc ~/LPEDC/E511.c ~/LPEDC/0086-fila.c -o ~/LPEDC/E511 && ~/LPEDC/E511
 ```
 
 **Exercício E513** · ★★☆
@@ -1712,7 +1702,7 @@ Fila vazia
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E513.c ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/fila.c -o ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E513 && ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E513
+gcc ~/LPEDC/E513.c ~/LPEDC/0086-fila.c -o ~/LPEDC/E513 && ~/LPEDC/E513
 ```
 
 **Exercício E514** · ★★☆
@@ -1734,7 +1724,7 @@ Pronto: 14
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E514.c ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/fila.c -o ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E514 && ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E514
+gcc ~/LPEDC/E514.c ~/LPEDC/0086-fila.c -o ~/LPEDC/E514 && ~/LPEDC/E514
 ```
 
 **Exercício E515** · ★★★
@@ -1753,7 +1743,7 @@ Chamando: P101 P102 C1 P103 C2 C3 C4
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E515.c ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/fila.c -o ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E515 && ~/LPEDC/12-pilhas-e-filas/0086-fila-encadeada/E515
+gcc ~/LPEDC/E515.c ~/LPEDC/0086-fila.c -o ~/LPEDC/E515 && ~/LPEDC/E515
 ```
 
 ---
@@ -1776,7 +1766,7 @@ retira no fim), é uma **pilha**; inserindo no fim e retirando no início, uma
 0102, com heap). Aqui as quatro operações custam **O(1)**, enquanto num vetor
 comum mexer no início custa O(n).
 
-O [`deque.c`](12-pilhas-e-filas/0087-deque/deque.c) é a fila circular do 0085 com o `inicio`
+O [`deque.c`](0087-deque.c) é a fila circular do 0085 com o `inicio`
 andando também para **trás**: para inserir na frente, ele recua uma gaveta, e
 da 0 volta para a última. A conta fica numa função auxiliar `static`, visível
 só no `deque.c`:
@@ -1816,7 +1806,7 @@ As faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1 e 2. A 11 entra pela
 frente: o início recua da gaveta 0 e dá a volta para a 7. A ordem fica 11, 5,
 8, 3:
 
-<p align="center"><img src="12-pilhas-e-filas/0087-deque/ideia.svg" alt="Diagrama da ideia: Deque" width="864"></p>
+<p align="center"><img src="0087-ideia.svg" alt="Diagrama da ideia: Deque" width="864"></p>
 
 Programa da fila de músicas:
 
@@ -1862,7 +1852,7 @@ int main(void) {
 Na entrada da faixa 11, o fluxograma difere do da fila só no recuo do início
 com `anterior`, que soma 8 antes do `%` para o índice não ficar negativo:
 
-<p align="center"><img src="12-pilhas-e-filas/0087-deque/fluxograma.svg" alt="Fluxograma: Deque" width="535"></p>
+<p align="center"><img src="0087-fluxograma.svg" alt="Fluxograma: Deque" width="535"></p>
 
 > [!WARNING]
 > Em C, o resto de número negativo é **negativo**: `-1 % 8` vale `-1`, não 7.
@@ -1884,13 +1874,11 @@ com `anterior`, que soma 8 antes do `%` para o índice não ficar negativo:
 
 ### Hora de praticar
 
-Arquivos em [`0087-deque/`](12-pilhas-e-filas/0087-deque/).
-
 **Exemplo A173 · Desfazer com limite: o deque esquece o mais antigo**
 
 ```c
 #include <stdio.h>
-#include "deque.h"
+#include "0087-deque.h"
 
 #define LIMITE 5 // o editor de fotos só lembra os 5 últimos passos
 
@@ -1932,7 +1920,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0087-deque/A173.c ~/LPEDC/12-pilhas-e-filas/0087-deque/deque.c -o ~/LPEDC/12-pilhas-e-filas/0087-deque/A173 && ~/LPEDC/12-pilhas-e-filas/0087-deque/A173
+gcc ~/LPEDC/A173.c ~/LPEDC/0087-deque.c -o ~/LPEDC/A173 && ~/LPEDC/A173
 ```
 
 **Exemplo A174 · Palíndromo com deque: compara as duas pontas**
@@ -1940,7 +1928,7 @@ gcc ~/LPEDC/12-pilhas-e-filas/0087-deque/A173.c ~/LPEDC/12-pilhas-e-filas/0087-d
 ```c
 #include <stdbool.h>
 #include <stdio.h>
-#include "deque.h"
+#include "0087-deque.h"
 
 bool palindromo(const char *palavra) {
     Deque *d = deque_cria();
@@ -1979,7 +1967,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0087-deque/A174.c ~/LPEDC/12-pilhas-e-filas/0087-deque/deque.c -o ~/LPEDC/12-pilhas-e-filas/0087-deque/A174 && ~/LPEDC/12-pilhas-e-filas/0087-deque/A174
+gcc ~/LPEDC/A174.c ~/LPEDC/0087-deque.c -o ~/LPEDC/A174 && ~/LPEDC/A174
 ```
 
 #### Exercícios
@@ -2001,7 +1989,7 @@ frente 2, fundo 1, tamanho 2
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0087-deque/E517.c ~/LPEDC/12-pilhas-e-filas/0087-deque/deque.c -o ~/LPEDC/12-pilhas-e-filas/0087-deque/E517 && ~/LPEDC/12-pilhas-e-filas/0087-deque/E517
+gcc ~/LPEDC/E517.c ~/LPEDC/0087-deque.c -o ~/LPEDC/E517 && ~/LPEDC/E517
 ```
 
 **Exercício E519** · ★★☆
@@ -2023,7 +2011,7 @@ Direita 3: 6 1 2 3 4 5
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0087-deque/E519.c ~/LPEDC/12-pilhas-e-filas/0087-deque/deque.c -o ~/LPEDC/12-pilhas-e-filas/0087-deque/E519 && ~/LPEDC/12-pilhas-e-filas/0087-deque/E519
+gcc ~/LPEDC/E519.c ~/LPEDC/0087-deque.c -o ~/LPEDC/E519 && ~/LPEDC/E519
 ```
 
 **Exercício E520** · ★★☆
@@ -2042,7 +2030,7 @@ Embarcando: 40 10 20 30
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0087-deque/E520.c ~/LPEDC/12-pilhas-e-filas/0087-deque/deque.c -o ~/LPEDC/12-pilhas-e-filas/0087-deque/E520 && ~/LPEDC/12-pilhas-e-filas/0087-deque/E520
+gcc ~/LPEDC/E520.c ~/LPEDC/0087-deque.c -o ~/LPEDC/E520 && ~/LPEDC/E520
 ```
 
 **Exercício E521** · ★★★
@@ -2064,7 +2052,7 @@ Ainda na fila: 5 8
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0087-deque/E521.c ~/LPEDC/12-pilhas-e-filas/0087-deque/deque.c -o ~/LPEDC/12-pilhas-e-filas/0087-deque/E521 && ~/LPEDC/12-pilhas-e-filas/0087-deque/E521
+gcc ~/LPEDC/E521.c ~/LPEDC/0087-deque.c -o ~/LPEDC/E521 && ~/LPEDC/E521
 ```
 
 ---
@@ -2105,7 +2093,7 @@ Regras da conversão, para cada símbolo lido:
 Com `(35 + 25) * 3 / 4`, a fila de saída fica `35 25 + 3 * 4 /`. Quando chega
 o `/`, a pilha de valores tem 180 e 4, e a última conta dá 45:
 
-<p align="center"><img src="12-pilhas-e-filas/0088-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: a calculadora de expressões" width="862"></p>
+<p align="center"><img src="0088-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a calculadora de expressões" width="862"></p>
 
 A pasta tem o `pilha.c` do 0083 e o `fila.c` do 0086; o comando do exemplo
 compila os quatro com o programa:
@@ -2223,7 +2211,7 @@ int main(void) {
 No fluxograma, as perguntas de erro só aparecem na avaliação, onde a falta de
 operando e a divisão por zero se revelam:
 
-<p align="center"><img src="12-pilhas-e-filas/0088-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: a calculadora de expressões" width="612"></p>
+<p align="center"><img src="0088-fluxograma.svg" alt="Fluxograma: Juntando tudo: a calculadora de expressões" width="612"></p>
 
 O A176 junta fila e pilha de outro jeito: as letras de uma frase entram nas
 duas. A fila devolve a ordem original e a pilha, a invertida; se as duas
@@ -2250,14 +2238,12 @@ sequências coincidirem letra a letra, a frase é um palíndromo.
 
 ### Hora de praticar
 
-Arquivos em [`0088-juntando-tudo/`](12-pilhas-e-filas/0088-juntando-tudo/).
-
 **Exemplo A175 · A calculadora que explica o erro**
 
 ```c
 #include <stdio.h>
-#include "fila.h"
-#include "pilha.h"
+#include "0088-fila.h"
+#include "0088-pilha.h"
 
 enum { SOMA = -1, SUB = -2, MULT = -3, DIV = -4, ABRE = -5 };
 
@@ -2378,7 +2364,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/A175.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/fila.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/A175 && ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/A175
+gcc ~/LPEDC/A175.c ~/LPEDC/0088-fila.c ~/LPEDC/0088-pilha.c -o ~/LPEDC/A175 && ~/LPEDC/A175
 ```
 
 **Exemplo A176 · Palíndromo com uma fila e uma pilha**
@@ -2387,8 +2373,8 @@ gcc ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/A175.c ~/LPEDC/12-pilhas-e-fila
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "fila.h"
-#include "pilha.h"
+#include "0088-fila.h"
+#include "0088-pilha.h"
 
 // A fila devolve as letras na ordem em que entraram; a pilha, ao contrário.
 // Se as duas sequências forem iguais, a frase é um palíndromo.
@@ -2435,7 +2421,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/A176.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/fila.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/A176 && ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/A176
+gcc ~/LPEDC/A176.c ~/LPEDC/0088-fila.c ~/LPEDC/0088-pilha.c -o ~/LPEDC/A176 && ~/LPEDC/A176
 ```
 
 #### Exercícios
@@ -2457,7 +2443,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E523.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/fila.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E523 && ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E523
+gcc ~/LPEDC/E523.c ~/LPEDC/0088-fila.c ~/LPEDC/0088-pilha.c -o ~/LPEDC/E523 && ~/LPEDC/E523
 ```
 
 **Exercício E525** · ★★☆
@@ -2476,7 +2462,7 @@ Depois: 2 3 4
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E525.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/fila.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E525 && ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E525
+gcc ~/LPEDC/E525.c ~/LPEDC/0088-fila.c ~/LPEDC/0088-pilha.c -o ~/LPEDC/E525 && ~/LPEDC/E525
 ```
 
 **Exercício E526** · ★★☆
@@ -2498,7 +2484,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E526.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/fila.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E526 && ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E526
+gcc ~/LPEDC/E526.c ~/LPEDC/0088-fila.c ~/LPEDC/0088-pilha.c -o ~/LPEDC/E526 && ~/LPEDC/E526
 ```
 
 **Exercício E527** · ★★★
@@ -2524,7 +2510,7 @@ Carro 5 saiu; manobras: 3
 ```
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E527.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/fila.c ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E527 && ~/LPEDC/12-pilhas-e-filas/0088-juntando-tudo/E527
+gcc ~/LPEDC/E527.c ~/LPEDC/0088-fila.c ~/LPEDC/0088-pilha.c -o ~/LPEDC/E527 && ~/LPEDC/E527
 ```
 
 ---
@@ -2991,7 +2977,7 @@ Suponha que uma fila circular de elementos com capacidade (n - 1) seja implement
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](12-pilhas-e-filas/lista/); resoluções em `_respostas/12-pilhas-e-filas/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1201.c a P1230.c, na raiz; resoluções em `_respostas/12-pilhas-e-filas/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3028,7 +3014,7 @@ Saída esperada:
    gerar um dígito. Depois desempilhe e mostre até a pilha ficar vazia.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1201.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1201 && ~/LPEDC/12-pilhas-e-filas/lista/P1201
+gcc ~/LPEDC/P1201.c -o ~/LPEDC/P1201 && ~/LPEDC/P1201
 ```
 
 ---
@@ -3067,7 +3053,7 @@ insere 80: fila cheia
    "insere 70": inicio == fim == 2 com a fila cheia.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1202.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1202 && ~/LPEDC/12-pilhas-e-filas/lista/P1202
+gcc ~/LPEDC/P1202.c -o ~/LPEDC/P1202 && ~/LPEDC/P1202
 ```
 
 ---
@@ -3109,7 +3095,7 @@ Pegou Dom Casmurro (256 páginas)
 3. Resposta esperada: a saída acima, sem vazamento.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1203.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1203 && ~/LPEDC/12-pilhas-e-filas/lista/P1203
+gcc ~/LPEDC/P1203.c -o ~/LPEDC/P1203 && ~/LPEDC/P1203
 ```
 
 ---
@@ -3147,7 +3133,7 @@ Saída esperada:
    abre do mesmo tipo. No fim da string, a pilha tem que estar vazia.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1204.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1204 && ~/LPEDC/12-pilhas-e-filas/lista/P1204
+gcc ~/LPEDC/P1204.c -o ~/LPEDC/P1204 && ~/LPEDC/P1204
 ```
 
 ---
@@ -3180,7 +3166,7 @@ Na fila: 0 pedidos
    não voltar, a próxima entrada escreve num nó já liberado.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1205.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1205 && ~/LPEDC/12-pilhas-e-filas/lista/P1205
+gcc ~/LPEDC/P1205.c -o ~/LPEDC/P1205 && ~/LPEDC/P1205
 ```
 
 ---
@@ -3217,7 +3203,7 @@ a: sim
 2. Pare quando sobrar 0 ou 1 letra: a do meio não tem par.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1206.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1206 && ~/LPEDC/12-pilhas-e-filas/lista/P1206
+gcc ~/LPEDC/P1206.c -o ~/LPEDC/P1206 && ~/LPEDC/P1206
 ```
 
 ---
@@ -3250,7 +3236,7 @@ desempilha: 4 3 2 1
    n > CAP; e desempilha faz *x = v[--n], não v[n--].
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1207.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1207 && ~/LPEDC/12-pilhas-e-filas/lista/P1207
+gcc ~/LPEDC/P1207.c -o ~/LPEDC/P1207 && ~/LPEDC/P1207
 ```
 
 ---
@@ -3290,7 +3276,7 @@ abc -> abc
    vez: O(n).
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1208.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1208 && ~/LPEDC/12-pilhas-e-filas/lista/P1208
+gcc ~/LPEDC/P1208.c -o ~/LPEDC/P1208 && ~/LPEDC/P1208
 ```
 
 ---
@@ -3319,7 +3305,7 @@ Circular:   saíram 1 2 3 4 5 com 0 deslocamentos
    Cada operação é O(1).
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1209.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1209 && ~/LPEDC/12-pilhas-e-filas/lista/P1209
+gcc ~/LPEDC/P1209.c -o ~/LPEDC/P1209 && ~/LPEDC/P1209
 ```
 
 ---
@@ -3359,7 +3345,7 @@ original depois:          30 20 10
 3. Cada item é movido 3 vezes: O(n).
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1210.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1210 && ~/LPEDC/12-pilhas-e-filas/lista/P1210
+gcc ~/LPEDC/P1210.c -o ~/LPEDC/P1210 && ~/LPEDC/P1210
 ```
 
 ### ★★☆ Para pensar
@@ -3393,7 +3379,7 @@ A/B^C-D -> ABC^/D-
 3. No fim, desempilhe tudo para a saída e termine com '\0'.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1211.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1211 && ~/LPEDC/12-pilhas-e-filas/lista/P1211
+gcc ~/LPEDC/P1211.c -o ~/LPEDC/P1211 && ~/LPEDC/P1211
 ```
 
 ---
@@ -3434,7 +3420,7 @@ itens movidos entre as filas: 5
    de tirar o 3 sobram dois, então empilha 4 move 2: 0 + 1 + 2 + 2 = 5.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1212.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1212 && ~/LPEDC/12-pilhas-e-filas/lista/P1212
+gcc ~/LPEDC/P1212.c -o ~/LPEDC/P1212 && ~/LPEDC/P1212
 ```
 
 ---
@@ -3474,7 +3460,7 @@ sobrescritas: 3
    quantas leituras já passaram.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1213.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1213 && ~/LPEDC/12-pilhas-e-filas/lista/P1213
+gcc ~/LPEDC/P1213.c -o ~/LPEDC/P1213 && ~/LPEDC/P1213
 ```
 
 ---
@@ -3509,7 +3495,7 @@ Ana: 10 pontos, Beto: 17 pontos
    ótima é assunto de programação dinâmica.)
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1214.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1214 && ~/LPEDC/12-pilhas-e-filas/lista/P1214
+gcc ~/LPEDC/P1214.c -o ~/LPEDC/P1214 && ~/LPEDC/P1214
 ```
 
 ---
@@ -3552,7 +3538,7 @@ Saída esperada:
 3. No fim, a expressão é válida se sobrou exatamente 1 item.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1215.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1215 && ~/LPEDC/12-pilhas-e-filas/lista/P1215
+gcc ~/LPEDC/P1215.c -o ~/LPEDC/P1215 && ~/LPEDC/P1215
 ```
 
 ---
@@ -3592,7 +3578,7 @@ operações na pilha: 13
    entre eles).
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1216.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1216 && ~/LPEDC/12-pilhas-e-filas/lista/P1216
+gcc ~/LPEDC/P1216.c -o ~/LPEDC/P1216 && ~/LPEDC/P1216
 ```
 
 ---
@@ -3632,7 +3618,7 @@ depois: 10 30 20 40
 4. Cada item é movido O(1) vezes: O(n).
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1217.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1217 && ~/LPEDC/12-pilhas-e-filas/lista/P1217
+gcc ~/LPEDC/P1217.c -o ~/LPEDC/P1217 && ~/LPEDC/P1217
 ```
 
 ---
@@ -3665,7 +3651,7 @@ saem até esvaziar: 3 4 5 6
    vazia com n == 0 e faça n-- ao retirar.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1218.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1218 && ~/LPEDC/12-pilhas-e-filas/lista/P1218
+gcc ~/LPEDC/P1218.c -o ~/LPEDC/P1218 && ~/LPEDC/P1218
 ```
 
 ---
@@ -3712,7 +3698,7 @@ desfaz: nada para desfazer
    ANTES de pôr o '\0' em e->texto[n - k].
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1219.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1219 && ~/LPEDC/12-pilhas-e-filas/lista/P1219
+gcc ~/LPEDC/P1219.c -o ~/LPEDC/P1219 && ~/LPEDC/P1219
 ```
 
 ---
@@ -3752,7 +3738,7 @@ A e B vazias: sim
 3. Para mostrar uma fila sem perdê-la, tire e reponha cada item.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1220.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1220 && ~/LPEDC/12-pilhas-e-filas/lista/P1220
+gcc ~/LPEDC/P1220.c -o ~/LPEDC/P1220 && ~/LPEDC/P1220
 ```
 
 ### ★★★ Desafio
@@ -3804,7 +3790,7 @@ Espera média dos atendidos: 1.33 min
 4. Resposta esperada: a saída acima ((0 + 3 + 1) / 3 = 1.33).
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1221.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1221 && ~/LPEDC/12-pilhas-e-filas/lista/P1221
+gcc ~/LPEDC/P1221.c -o ~/LPEDC/P1221 && ~/LPEDC/P1221
 ```
 
 ---
@@ -3847,7 +3833,7 @@ Saída esperada:
    com um item só. O ">=" na dica 2 é o que faz 8-3-2 dar 3.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1222.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1222 && ~/LPEDC/12-pilhas-e-filas/lista/P1222
+gcc ~/LPEDC/P1222.c -o ~/LPEDC/P1222 && ~/LPEDC/P1222
 ```
 
 ---
@@ -3900,7 +3886,7 @@ S.#...
    posições (5 x 6). Resposta esperada: a saída acima.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1223.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1223 && ~/LPEDC/12-pilhas-e-filas/lista/P1223
+gcc ~/LPEDC/P1223.c -o ~/LPEDC/P1223 && ~/LPEDC/P1223
 ```
 
 ---
@@ -3940,7 +3926,7 @@ Pino C (de baixo para cima): 3 2 1
    C ter n discos.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1224.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1224 && ~/LPEDC/12-pilhas-e-filas/lista/P1224
+gcc ~/LPEDC/P1224.c -o ~/LPEDC/P1224 && ~/LPEDC/P1224
 ```
 
 ---
@@ -3990,7 +3976,7 @@ Maior: 4 casas
    busca em largura, e o número de lagos é o mesmo.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1225.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1225 && ~/LPEDC/12-pilhas-e-filas/lista/P1225
+gcc ~/LPEDC/P1225.c -o ~/LPEDC/P1225 && ~/LPEDC/P1225
 ```
 
 ---
@@ -4036,7 +4022,7 @@ atende Fabi (azul)
 3. Um vetor de nomes de cor, indexado por cor - 1, evita um switch.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1226.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1226 && ~/LPEDC/12-pilhas-e-filas/lista/P1226
+gcc ~/LPEDC/P1226.c -o ~/LPEDC/P1226 && ~/LPEDC/P1226
 ```
 
 ---
@@ -4072,7 +4058,7 @@ a[b{c}d]e: ok
    false) antes de olhar pilha[n - 1].
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1227.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1227 && ~/LPEDC/12-pilhas-e-filas/lista/P1227
+gcc ~/LPEDC/P1227.c -o ~/LPEDC/P1227 && ~/LPEDC/P1227
 ```
 
 ---
@@ -4123,7 +4109,7 @@ Saída esperada:
 4. Mostre o resultado com "%g". Resposta esperada: a saída acima.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1228.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1228 && ~/LPEDC/12-pilhas-e-filas/lista/P1228
+gcc ~/LPEDC/P1228.c -o ~/LPEDC/P1228 && ~/LPEDC/P1228
 ```
 
 ---
@@ -4170,7 +4156,7 @@ Caio joga normal; vez de Davi
    anti-horário do outro. Uma fila só não dá conta do segundo caso.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1229.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1229 && ~/LPEDC/12-pilhas-e-filas/lista/P1229
+gcc ~/LPEDC/P1229.c -o ~/LPEDC/P1229 && ~/LPEDC/P1229
 ```
 
 ---
@@ -4225,7 +4211,7 @@ Fim do atendimento: minuto 16
    log é o que sobra depois. Espera média = (0 + 3 + 4 + 8 + 10 + 15) / 6.
 
 ```bash
-gcc ~/LPEDC/12-pilhas-e-filas/lista/P1230.c -o ~/LPEDC/12-pilhas-e-filas/lista/P1230 && ~/LPEDC/12-pilhas-e-filas/lista/P1230
+gcc ~/LPEDC/P1230.c -o ~/LPEDC/P1230 && ~/LPEDC/P1230
 ```
 
 ## Para ler mais

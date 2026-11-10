@@ -28,7 +28,7 @@ ponteiro para função e `qsort`. As tabelas seguem o padrão TAD: `tabela.h` e
 comando compila tudo junto:
 
 ```bash
-gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
+gcc ~/LPEDC/A211.c ~/LPEDC/0106-tabela.c -o ~/LPEDC/A211 && ~/LPEDC/A211
 ```
 
 Nos desenhos, cada balde é uma gaveta com o índice à esquerda e a corrente de

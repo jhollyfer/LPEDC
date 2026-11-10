@@ -233,10 +233,10 @@ módulo + K&R, cppreference, man pages quando couber)
 - `bool` de `<stdbool.h>` a partir de 0012.
 - Memória: todo `malloc` tem `free`; confira `NULL`. Os exemplos rodam limpos
   no AddressSanitizer.
-- Estruturas de dados a partir do módulo 10 seguem o padrão **TAD**: `pilha.h`
-  (interface) + `pilha.c` (implementação) na pasta do assunto + o exemplo
-  `A165.c` com `#include "pilha.h"`. O comando do exemplo lista junto os `.c` de apoio
-  da pasta (todo `.c` cujo nome não é `A000.c`/`E000.c`). Exercícios que
+- Estruturas de dados a partir do módulo 10 seguem o padrão **TAD**: `0082-pilha.h`
+  (interface) + `0082-pilha.c` (implementação), na raiz, com o número do assunto no nome, + o
+  exemplo `A165.c` com `#include "0082-pilha.h"`. O comando do exemplo lista junto os `.c` de
+  apoio do assunto (`_gerador/arquivos.json`). Exercícios que
   precisam de uma implementação diferente trazem tudo no próprio arquivo.
 
 ## 9. Fontes e direitos autorais

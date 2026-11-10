@@ -37,19 +37,19 @@ Linux (Intel, AMD ou ARM); em outra máquina os números podem mudar. Ao rodar,
 troque a ordem dos campos de uma struct e compare o `sizeof`.
 
 ```bash
-gcc ~/LPEDC/08-structs/0059-struct/A117.c -o ~/LPEDC/08-structs/0059-struct/A117 && ~/LPEDC/08-structs/0059-struct/A117
+gcc ~/LPEDC/A117.c -o ~/LPEDC/A117 && ~/LPEDC/A117
 ```
 
-| # | Assunto | Pasta |
-| --- | --- | --- |
-| [0059](#0059--struct) | Struct | [`0059-struct/`](08-structs/0059-struct/) |
-| [0060](#0060--typedef) | Typedef | [`0060-typedef/`](08-structs/0060-typedef/) |
-| [0061](#0061--vetor-de-structs) | Vetor de structs | [`0061-vetor-de-structs/`](08-structs/0061-vetor-de-structs/) |
-| [0062](#0062--ponteiro-para-struct) | Ponteiro para struct | [`0062-ponteiro-para-struct/`](08-structs/0062-ponteiro-para-struct/) |
-| [0063](#0063--enum) | Enum | [`0063-enum/`](08-structs/0063-enum/) |
-| [0064](#0064--union) | Union | [`0064-union/`](08-structs/0064-union/) |
-| [0065](#0065--bits-máscaras-e-flags) | Bits, máscaras e flags | [`0065-bits/`](08-structs/0065-bits/) |
-| [0066](#0066--juntando-tudo-o-cardápio) | Juntando tudo: o cardápio | [`0066-juntando-tudo/`](08-structs/0066-juntando-tudo/) |
+| # | Assunto |
+| --- | --- |
+| [0059](#0059--struct) | Struct |
+| [0060](#0060--typedef) | Typedef |
+| [0061](#0061--vetor-de-structs) | Vetor de structs |
+| [0062](#0062--ponteiro-para-struct) | Ponteiro para struct |
+| [0063](#0063--enum) | Enum |
+| [0064](#0064--union) | Union |
+| [0065](#0065--bits-máscaras-e-flags) | Bits, máscaras e flags |
+| [0066](#0066--juntando-tudo-o-cardápio) | Juntando tudo: o cardápio |
 
 ---
 
@@ -96,7 +96,7 @@ A variável `p1` é um bloco de memória com os três campos em sequência. O
 programa multiplica dois deles, chega a R$ 37,00 e decide o frete. O buraco
 cinza entre `tamanho` e `quantidade` é explicado na dica abaixo:
 
-<p align="center"><img src="08-structs/0059-struct/ideia.svg" alt="Diagrama da ideia: Struct" width="916"></p>
+<p align="center"><img src="0059-ideia.svg" alt="Diagrama da ideia: Struct" width="916"></p>
 
 O mesmo pedido em C:
 
@@ -139,7 +139,7 @@ não se copia com `=`).
 
 A struct não muda os passos do programa; só leva os dados num pacote:
 
-<p align="center"><img src="08-structs/0059-struct/fluxograma.svg" alt="Fluxograma: Struct" width="462"></p>
+<p align="center"><img src="0059-fluxograma.svg" alt="Fluxograma: Struct" width="462"></p>
 
 > [!WARNING]
 > `struct pedido p2 = p1;` cria uma **cópia independente**: mudar
@@ -162,8 +162,6 @@ A struct não muda os passos do programa; só leva os dados num pacote:
 > tamanho; double preco; int quantidade;`? Desenhe os bytes antes de rodar.
 
 ### Hora de praticar
-
-Arquivos em [`0059-struct/`](08-structs/0059-struct/).
 
 **Exemplo A117 · A matrícula na academia**
 
@@ -217,7 +215,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0059-struct/A117.c -o ~/LPEDC/08-structs/0059-struct/A117 && ~/LPEDC/08-structs/0059-struct/A117
+gcc ~/LPEDC/A117.c -o ~/LPEDC/A117 && ~/LPEDC/A117
 ```
 
 **Exemplo A118 · A ficha copiada**
@@ -261,7 +259,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0059-struct/A118.c -o ~/LPEDC/08-structs/0059-struct/A118 && ~/LPEDC/08-structs/0059-struct/A118
+gcc ~/LPEDC/A118.c -o ~/LPEDC/A118 && ~/LPEDC/A118
 ```
 
 #### Exercícios
@@ -283,7 +281,7 @@ Na promoção: R$ 31.41
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0059-struct/E349.c -o ~/LPEDC/08-structs/0059-struct/E349 && ~/LPEDC/08-structs/0059-struct/E349
+gcc ~/LPEDC/E349.c -o ~/LPEDC/E349 && ~/LPEDC/E349
 ```
 
 **Exercício E351** · ★★☆
@@ -305,7 +303,7 @@ Perímetro: 26.0 m
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0059-struct/E351.c -o ~/LPEDC/08-structs/0059-struct/E351 && ~/LPEDC/08-structs/0059-struct/E351
+gcc ~/LPEDC/E351.c -o ~/LPEDC/E351 && ~/LPEDC/E351
 ```
 
 **Exercício E352** · ★★☆
@@ -323,7 +321,7 @@ a e b são iguais
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0059-struct/E352.c -o ~/LPEDC/08-structs/0059-struct/E352 && ~/LPEDC/08-structs/0059-struct/E352
+gcc ~/LPEDC/E352.c -o ~/LPEDC/E352 && ~/LPEDC/E352
 ```
 
 **Exercício E353** · ★★★
@@ -351,7 +349,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0059-struct/E353.c -o ~/LPEDC/08-structs/0059-struct/E353 && ~/LPEDC/08-structs/0059-struct/E353
+gcc ~/LPEDC/E353.c -o ~/LPEDC/E353 && ~/LPEDC/E353
 ```
 
 ---
@@ -392,7 +390,7 @@ Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno de R$ 1.000,00 que os
 bancos aplicam entre 20h e 6h. No desenho, `Pix` e `Reais` são só etiquetas
 coladas em coisas que já existiam:
 
-<p align="center"><img src="08-structs/0060-typedef/ideia.svg" alt="Diagrama da ideia: Typedef" width="858"></p>
+<p align="center"><img src="0060-ideia.svg" alt="Diagrama da ideia: Typedef" width="858"></p>
 
 O programa usa os dois apelidos. A função recebe um `Pix` e decide:
 
@@ -438,7 +436,7 @@ sinal", sem depender do nome do tipo em cada máquina.
 São duas perguntas: o Pix só é bloqueado se for horário noturno **e** o valor
 passar do limite:
 
-<p align="center"><img src="08-structs/0060-typedef/fluxograma.svg" alt="Fluxograma: Typedef" width="403"></p>
+<p align="center"><img src="0060-fluxograma.svg" alt="Fluxograma: Typedef" width="403"></p>
 
 > [!WARNING]
 > `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
@@ -452,8 +450,6 @@ passar do limite:
 > em ponto? E às 5h59? Siga as duas perguntas do fluxograma para cada caso.
 
 ### Hora de praticar
-
-Arquivos em [`0060-typedef/`](08-structs/0060-typedef/).
 
 **Exemplo A119 · A frota de ônibus**
 
@@ -503,7 +499,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0060-typedef/A119.c -o ~/LPEDC/08-structs/0060-typedef/A119 && ~/LPEDC/08-structs/0060-typedef/A119
+gcc ~/LPEDC/A119.c -o ~/LPEDC/A119 && ~/LPEDC/A119
 ```
 
 **Exemplo A120 · A cor do site**
@@ -545,7 +541,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0060-typedef/A120.c -o ~/LPEDC/08-structs/0060-typedef/A120 && ~/LPEDC/08-structs/0060-typedef/A120
+gcc ~/LPEDC/A120.c -o ~/LPEDC/A120 && ~/LPEDC/A120
 ```
 
 #### Exercícios
@@ -566,7 +562,7 @@ Total: R$ 67.44
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0060-typedef/E355.c -o ~/LPEDC/08-structs/0060-typedef/E355 && ~/LPEDC/08-structs/0060-typedef/E355
+gcc ~/LPEDC/E355.c -o ~/LPEDC/E355 && ~/LPEDC/E355
 ```
 
 **Exercício E357** · ★★☆
@@ -591,7 +587,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0060-typedef/E357.c -o ~/LPEDC/08-structs/0060-typedef/E357 && ~/LPEDC/08-structs/0060-typedef/E357
+gcc ~/LPEDC/E357.c -o ~/LPEDC/E357 && ~/LPEDC/E357
 ```
 
 **Exercício E358** · ★★☆
@@ -609,7 +605,7 @@ Ana: R$ 600.00 -> R$ 563.50
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0060-typedef/E358.c -o ~/LPEDC/08-structs/0060-typedef/E358 && ~/LPEDC/08-structs/0060-typedef/E358
+gcc ~/LPEDC/E358.c -o ~/LPEDC/E358 && ~/LPEDC/E358
 ```
 
 **Exercício E359** · ★★★
@@ -637,7 +633,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0060-typedef/E359.c -o ~/LPEDC/08-structs/0060-typedef/E359 && ~/LPEDC/08-structs/0060-typedef/E359
+gcc ~/LPEDC/E359.c -o ~/LPEDC/E359 && ~/LPEDC/E359
 ```
 
 ---
@@ -671,7 +667,7 @@ São quatro times. O programa percorre o vetor, calcula os pontos de cada um (3
 por vitória, 1 por empate) e guarda o **índice** do melhor até agora.
 Palmeiras, no índice 2, termina na frente:
 
-<p align="center"><img src="08-structs/0061-vetor-de-structs/ideia.svg" alt="Diagrama da ideia: Vetor de structs" width="858"></p>
+<p align="center"><img src="0061-ideia.svg" alt="Diagrama da ideia: Vetor de structs" width="858"></p>
 
 O código faz esse passeio:
 
@@ -725,7 +721,7 @@ um time solto, desligado da tabela.
 É o padrão "maior até agora" do módulo de laços, comparando um valor
 calculado de cada struct:
 
-<p align="center"><img src="08-structs/0061-vetor-de-structs/fluxograma.svg" alt="Fluxograma: Vetor de structs" width="575"></p>
+<p align="center"><img src="0061-fluxograma.svg" alt="Fluxograma: Vetor de structs" width="575"></p>
 
 > [!WARNING]
 > `tabela[i] = tabela[j]` copia o time **inteiro**. Use para trocar dois times
@@ -740,8 +736,6 @@ calculado de cada struct:
 > aparecer na tabela?
 
 ### Hora de praticar
-
-Arquivos em [`0061-vetor-de-structs/`](08-structs/0061-vetor-de-structs/).
 
 **Exemplo A121 · O estoque da farmácia**
 
@@ -810,7 +804,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/A121.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/A121 && ~/LPEDC/08-structs/0061-vetor-de-structs/A121
+gcc ~/LPEDC/A121.c -o ~/LPEDC/A121 && ~/LPEDC/A121
 ```
 
 **Exemplo A122 · A classificação ordenada**
@@ -867,7 +861,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/A122.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/A122 && ~/LPEDC/08-structs/0061-vetor-de-structs/A122
+gcc ~/LPEDC/A122.c -o ~/LPEDC/A122 && ~/LPEDC/A122
 ```
 
 #### Exercícios
@@ -899,7 +893,7 @@ Mais caro: Arroz 5kg
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E361.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E361 && ~/LPEDC/08-structs/0061-vetor-de-structs/E361
+gcc ~/LPEDC/E361.c -o ~/LPEDC/E361 && ~/LPEDC/E361
 ```
 
 **Exercício E363** · ★★☆
@@ -928,7 +922,7 @@ Mais velho: Darlan Romani (34 anos)
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E363.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E363 && ~/LPEDC/08-structs/0061-vetor-de-structs/E363
+gcc ~/LPEDC/E363.c -o ~/LPEDC/E363 && ~/LPEDC/E363
 ```
 
 **Exercício E364** · ★★☆
@@ -963,7 +957,7 @@ Por preço:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E364.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E364 && ~/LPEDC/08-structs/0061-vetor-de-structs/E364
+gcc ~/LPEDC/E364.c -o ~/LPEDC/E364 && ~/LPEDC/E364
 ```
 
 **Exercício E366** · ★★★
@@ -990,7 +984,7 @@ Perímetro: 22.49 m
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E366.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E366 -lm && ~/LPEDC/08-structs/0061-vetor-de-structs/E366
+gcc ~/LPEDC/E366.c -o ~/LPEDC/E366 -lm && ~/LPEDC/E366
 ```
 
 ---
@@ -1022,7 +1016,7 @@ O cartão da Luana mora no heap com R$ 10,00. A variável `c` no `main` guarda
 só o endereço dele, e `cobrar_passagem` recebe uma cópia desse **endereço**,
 não do cartão. As duas setas apontam para o mesmo lugar:
 
-<p align="center"><img src="08-structs/0062-ponteiro-para-struct/ideia.svg" alt="Diagrama da ideia: Ponteiro para struct" width="858"></p>
+<p align="center"><img src="0062-ideia.svg" alt="Diagrama da ideia: Ponteiro para struct" width="858"></p>
 
 São três passagens seguidas, e a terceira não passa:
 
@@ -1091,7 +1085,7 @@ O teste de mesa das três chamadas, olhando o cartão no heap:
 A pergunta do saldo fica na função, mas o laço das três chamadas é do `main`.
 Como a função mexe no original, cada volta enxerga o saldo da anterior:
 
-<p align="center"><img src="08-structs/0062-ponteiro-para-struct/fluxograma.svg" alt="Fluxograma: Ponteiro para struct" width="820"></p>
+<p align="center"><img src="0062-fluxograma.svg" alt="Fluxograma: Ponteiro para struct" width="820"></p>
 
 > [!WARNING]
 > Struct vai por valor. `void recarregar(Cartao c, double v) { c.saldo += v; }`
@@ -1112,8 +1106,6 @@ Como a função mexe no original, cada volta enxerga o saldo da anterior:
 > quantas viagens a Luana teria feito no fim?
 
 ### Hora de praticar
-
-Arquivos em [`0062-ponteiro-para-struct/`](08-structs/0062-ponteiro-para-struct/).
 
 **Exemplo A123 · As comandas do bar**
 
@@ -1186,7 +1178,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/A123.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/A123 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/A123
+gcc ~/LPEDC/A123.c -o ~/LPEDC/A123 && ~/LPEDC/A123
 ```
 
 **Exemplo A124 · O preço da cópia**
@@ -1242,7 +1234,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/A124.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/A124 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/A124
+gcc ~/LPEDC/A124.c -o ~/LPEDC/A124 && ~/LPEDC/A124
 ```
 
 #### Exercícios
@@ -1273,7 +1265,7 @@ Beto: R$ 4428.00
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367
+gcc ~/LPEDC/E367.c -o ~/LPEDC/E367 && ~/LPEDC/E367
 ```
 
 **Exercício E369** · ★★☆
@@ -1302,7 +1294,7 @@ Ana: R$ 300.00 | Beto: R$ 320.00
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369
+gcc ~/LPEDC/E369.c -o ~/LPEDC/E369 && ~/LPEDC/E369
 ```
 
 **Exercício E370** · ★★☆
@@ -1319,7 +1311,7 @@ Fone Bluetooth: R$ 149.90
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370
+gcc ~/LPEDC/E370.c -o ~/LPEDC/E370 && ~/LPEDC/E370
 ```
 
 **Exercício E371** · ★★★
@@ -1355,7 +1347,7 @@ Total: R$ 67.87
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371
+gcc ~/LPEDC/E371.c -o ~/LPEDC/E371 && ~/LPEDC/E371
 ```
 
 ---
@@ -1386,7 +1378,7 @@ comparar com `<` e guardar 42 numa variável `Status`.
 A variável `s` começa em `RECEBIDO` e anda uma etapa por vez, com `s++`. Cada
 valor tem um nome no código e um número na memória:
 
-<p align="center"><img src="08-structs/0063-enum/ideia.svg" alt="Diagrama da ideia: Enum" width="870"></p>
+<p align="center"><img src="0063-ideia.svg" alt="Diagrama da ideia: Enum" width="870"></p>
 
 O código percorre as etapas e traduz cada uma para texto com um `switch`:
 
@@ -1439,7 +1431,7 @@ QTD_STATUS }`. `QTD_STATUS` vale 4 e serve de tamanho para um vetor de textos
 O laço é comum, controlado por uma pergunta sobre o enum, e o `s++` faz o
 pedido andar:
 
-<p align="center"><img src="08-structs/0063-enum/fluxograma.svg" alt="Fluxograma: Enum" width="503"></p>
+<p align="center"><img src="0063-fluxograma.svg" alt="Fluxograma: Enum" width="503"></p>
 
 > [!WARNING]
 > O C **não confere** se o valor de um enum é válido. `Status s = 42;` compila,
@@ -1460,8 +1452,6 @@ pedido andar:
 > `s != ENTREGUE`, sem o `printf` depois do laço, a saída mudaria?
 
 ### Hora de praticar
-
-Arquivos em [`0063-enum/`](08-structs/0063-enum/).
 
 **Exemplo A125 · As formas de pagamento**
 
@@ -1518,7 +1508,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0063-enum/A125.c -o ~/LPEDC/08-structs/0063-enum/A125 && ~/LPEDC/08-structs/0063-enum/A125
+gcc ~/LPEDC/A125.c -o ~/LPEDC/A125 && ~/LPEDC/A125
 ```
 
 **Exemplo A126 · O troco em notas**
@@ -1566,7 +1556,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0063-enum/A126.c -o ~/LPEDC/08-structs/0063-enum/A126 && ~/LPEDC/08-structs/0063-enum/A126
+gcc ~/LPEDC/A126.c -o ~/LPEDC/A126 && ~/LPEDC/A126
 ```
 
 #### Exercícios
@@ -1600,7 +1590,7 @@ G + XG = 14
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0063-enum/E373.c -o ~/LPEDC/08-structs/0063-enum/E373 && ~/LPEDC/08-structs/0063-enum/E373
+gcc ~/LPEDC/E373.c -o ~/LPEDC/E373 && ~/LPEDC/E373
 ```
 
 **Exercício E375** · ★★☆
@@ -1633,7 +1623,7 @@ Placar: 2 vitórias, 1 empate, 2 derrotas
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0063-enum/E375.c -o ~/LPEDC/08-structs/0063-enum/E375 && ~/LPEDC/08-structs/0063-enum/E375
+gcc ~/LPEDC/E375.c -o ~/LPEDC/E375 && ~/LPEDC/E375
 ```
 
 **Exercício E376** · ★★☆
@@ -1654,7 +1644,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0063-enum/E376.c -o ~/LPEDC/08-structs/0063-enum/E376 && ~/LPEDC/08-structs/0063-enum/E376
+gcc ~/LPEDC/E376.c -o ~/LPEDC/E376 && ~/LPEDC/E376
 ```
 
 **Exercício E377** · ★★★
@@ -1691,7 +1681,7 @@ Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0063-enum/E377.c -o ~/LPEDC/08-structs/0063-enum/E377 && ~/LPEDC/08-structs/0063-enum/E377
+gcc ~/LPEDC/E377.c -o ~/LPEDC/E377 && ~/LPEDC/E377
 ```
 
 ---
@@ -1723,7 +1713,7 @@ O exemplo mostra o segundo. O IP 192.168.0.10 é, por baixo, um número de 32
 bits: `0xC0A8000A` (C0 = 192, A8 = 168, 00 = 0, 0A = 10). O programa grava em
 `ip.numero` e lê por `ip.bytes`. Observe a ordem dos bytes na memória:
 
-<p align="center"><img src="08-structs/0064-union/ideia.svg" alt="Diagrama da ideia: Union" width="882"></p>
+<p align="center"><img src="0064-ideia.svg" alt="Diagrama da ideia: Union" width="882"></p>
 
 Os bytes saem **ao contrário** do que você escreveu:
 
@@ -1776,7 +1766,7 @@ union deixa você vê-la.
 A pergunta sobre o primeiro byte detecta a endianness. Numa máquina
 big-endian, o mesmo programa seguiria pelo outro lado:
 
-<p align="center"><img src="08-structs/0064-union/fluxograma.svg" alt="Fluxograma: Union" width="426"></p>
+<p align="center"><img src="0064-fluxograma.svg" alt="Fluxograma: Union" width="426"></p>
 
 > [!WARNING]
 > Numa union, escrever num campo **estraga** os outros. Gravar `ip.numero` e
@@ -1798,8 +1788,6 @@ big-endian, o mesmo programa seguiria pelo outro lado:
 > `ip.numero = 0xC0A8000A`? E `sizeof ip` mudaria?
 
 ### Hora de praticar
-
-Arquivos em [`0064-union/`](08-structs/0064-union/).
 
 **Exemplo A127 · A balança da feira**
 
@@ -1847,7 +1835,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0064-union/A127.c -o ~/LPEDC/08-structs/0064-union/A127 && ~/LPEDC/08-structs/0064-union/A127
+gcc ~/LPEDC/A127.c -o ~/LPEDC/A127 && ~/LPEDC/A127
 ```
 
 **Exemplo A128 · Um pagamento, três formas**
@@ -1907,7 +1895,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0064-union/A128.c -o ~/LPEDC/08-structs/0064-union/A128 && ~/LPEDC/08-structs/0064-union/A128
+gcc ~/LPEDC/A128.c -o ~/LPEDC/A128 && ~/LPEDC/A128
 ```
 
 #### Exercícios
@@ -1935,7 +1923,7 @@ union Nome: 12 bytes
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0064-union/E379.c -o ~/LPEDC/08-structs/0064-union/E379 && ~/LPEDC/08-structs/0064-union/E379
+gcc ~/LPEDC/E379.c -o ~/LPEDC/E379 && ~/LPEDC/E379
 ```
 
 **Exercício E381** · ★★☆
@@ -1954,7 +1942,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0064-union/E381.c -o ~/LPEDC/08-structs/0064-union/E381 && ~/LPEDC/08-structs/0064-union/E381
+gcc ~/LPEDC/E381.c -o ~/LPEDC/E381 && ~/LPEDC/E381
 ```
 
 **Exercício E382** · ★★☆
@@ -1990,7 +1978,7 @@ Total: 39.57 m2
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0064-union/E382.c -o ~/LPEDC/08-structs/0064-union/E382 && ~/LPEDC/08-structs/0064-union/E382
+gcc ~/LPEDC/E382.c -o ~/LPEDC/E382 && ~/LPEDC/E382
 ```
 
 **Exercício E384** · ★★★
@@ -2031,7 +2019,7 @@ em ordem de rede, memória: 11 22 33 44
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0064-union/E384.c -o ~/LPEDC/08-structs/0064-union/E384 && ~/LPEDC/08-structs/0064-union/E384
+gcc ~/LPEDC/E384.c -o ~/LPEDC/E384 && ~/LPEDC/E384
 ```
 
 ---
@@ -2092,7 +2080,7 @@ Um valor que escolhe certos bits é uma **máscara**. Quatro receitas bastam:
 Um arquivo começa com `rw-` (110). Para ligar a execução, o OU com a máscara
 `001` acende só o último bit:
 
-<p align="center"><img src="08-structs/0065-bits/ideia.svg" alt="Diagrama da ideia: Bits, máscaras e flags" width="858"></p>
+<p align="center"><img src="0065-ideia.svg" alt="Diagrama da ideia: Bits, máscaras e flags" width="858"></p>
 
 O programa aplica as quatro receitas e mostra os bits a cada passo:
 
@@ -2147,7 +2135,7 @@ de 3 bits: dono `111`, grupo `101`, outros `101`.
 A pergunta "pode escrever?" é um `&` com a máscara. Se sobrou algum bit, a
 resposta é Sim:
 
-<p align="center"><img src="08-structs/0065-bits/fluxograma.svg" alt="Fluxograma: Bits, máscaras e flags" width="488"></p>
+<p align="center"><img src="0065-fluxograma.svg" alt="Fluxograma: Bits, máscaras e flags" width="488"></p>
 
 > [!WARNING]
 > Três armadilhas. (1) **Precedência**: `&`, `^` e `|` ficam **abaixo** do
@@ -2170,8 +2158,6 @@ resposta é Sim:
 > `perm ^= LER` duas vezes seguidas?
 
 ### Hora de praticar
-
-Arquivos em [`0065-bits/`](08-structs/0065-bits/).
 
 **Exemplo A129 · Os ingredientes da pizza**
 
@@ -2227,7 +2213,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0065-bits/A129.c -o ~/LPEDC/08-structs/0065-bits/A129 && ~/LPEDC/08-structs/0065-bits/A129
+gcc ~/LPEDC/A129.c -o ~/LPEDC/A129 && ~/LPEDC/A129
 ```
 
 **Exemplo A130 · O chmod 755**
@@ -2277,7 +2263,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0065-bits/A130.c -o ~/LPEDC/08-structs/0065-bits/A130 && ~/LPEDC/08-structs/0065-bits/A130
+gcc ~/LPEDC/A130.c -o ~/LPEDC/A130 && ~/LPEDC/A130
 ```
 
 #### Exercícios
@@ -2310,7 +2296,7 @@ a >> 3  0001 1001 = 0x19 = 25
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0065-bits/E385.c -o ~/LPEDC/08-structs/0065-bits/E385 && ~/LPEDC/08-structs/0065-bits/E385
+gcc ~/LPEDC/E385.c -o ~/LPEDC/E385 && ~/LPEDC/E385
 ```
 
 **Exercício E387** · ★★☆
@@ -2338,7 +2324,7 @@ Saída esperada:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0065-bits/E387.c -o ~/LPEDC/08-structs/0065-bits/E387 && ~/LPEDC/08-structs/0065-bits/E387
+gcc ~/LPEDC/E387.c -o ~/LPEDC/E387 && ~/LPEDC/E387
 ```
 
 **Exercício E388** · ★★☆
@@ -2356,7 +2342,7 @@ email: ligado | sms: desligado | push: desligado
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0065-bits/E388.c -o ~/LPEDC/08-structs/0065-bits/E388 && ~/LPEDC/08-structs/0065-bits/E388
+gcc ~/LPEDC/E388.c -o ~/LPEDC/E388 && ~/LPEDC/E388
 ```
 
 **Exercício E389** · ★★★
@@ -2384,7 +2370,7 @@ rgb(255, 136, 0) = #FF8800
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0065-bits/E389.c -o ~/LPEDC/08-structs/0065-bits/E389 && ~/LPEDC/08-structs/0065-bits/E389
+gcc ~/LPEDC/E389.c -o ~/LPEDC/E389 && ~/LPEDC/E389
 ```
 
 ---
@@ -2418,7 +2404,7 @@ O suco de caju tem as tags `011` (vegano e sem glúten). Contra a máscara
 `011`, o `&` devolve `011`: passa. O burger de grão-de-bico tem `001`: o `&`
 devolve `001`, falta o sem glúten, e ele fica de fora:
 
-<p align="center"><img src="08-structs/0066-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o cardápio" width="957"></p>
+<p align="center"><img src="0066-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o cardápio" width="957"></p>
 
 ```c
 #include <stdio.h>
@@ -2517,7 +2503,7 @@ int main(void) {
 O fluxograma é o do `filtrar`: um laço sobre o vetor e uma pergunta de bits
 por item, para qualquer máscara:
 
-<p align="center"><img src="08-structs/0066-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o cardápio" width="504"></p>
+<p align="center"><img src="0066-fluxograma.svg" alt="Fluxograma: Juntando tudo: o cardápio" width="504"></p>
 
 > [!WARNING]
 > `c->itens[c->n++] = it` copia o item para **dentro** do vetor: mexer depois
@@ -2538,8 +2524,6 @@ por item, para qualquer máscara:
 > vez de "tem todas"?
 
 ### Hora de praticar
-
-Arquivos em [`0066-juntando-tudo/`](08-structs/0066-juntando-tudo/).
 
 **Exemplo A131 · Os alunos da academia**
 
@@ -2651,7 +2635,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/A131.c -o ~/LPEDC/08-structs/0066-juntando-tudo/A131 && ~/LPEDC/08-structs/0066-juntando-tudo/A131
+gcc ~/LPEDC/A131.c -o ~/LPEDC/A131 && ~/LPEDC/A131
 ```
 
 **Exemplo A132 · A comanda e o pagamento**
@@ -2736,7 +2720,7 @@ int main(void) {
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/A132.c -o ~/LPEDC/08-structs/0066-juntando-tudo/A132 && ~/LPEDC/08-structs/0066-juntando-tudo/A132
+gcc ~/LPEDC/A132.c -o ~/LPEDC/A132 && ~/LPEDC/A132
 ```
 
 #### Exercícios
@@ -2765,7 +2749,7 @@ Pão francês (padaria) R$ 16.90/kg
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/E391.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E391 && ~/LPEDC/08-structs/0066-juntando-tudo/E391
+gcc ~/LPEDC/E391.c -o ~/LPEDC/E391 && ~/LPEDC/E391
 ```
 
 **Exercício E393** · ★★☆
@@ -2798,7 +2782,7 @@ remover Macarrão: não encontrado
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/E393.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E393 && ~/LPEDC/08-structs/0066-juntando-tudo/E393
+gcc ~/LPEDC/E393.c -o ~/LPEDC/E393 && ~/LPEDC/E393
 ```
 
 **Exercício E394** · ★★☆
@@ -2823,7 +2807,7 @@ Pudim R$ 12.00 [destaque]
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/E394.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E394 && ~/LPEDC/08-structs/0066-juntando-tudo/E394
+gcc ~/LPEDC/E394.c -o ~/LPEDC/E394 && ~/LPEDC/E394
 ```
 
 **Exercício E395** · ★★★
@@ -2862,7 +2846,7 @@ Trabalho:
 ```
 
 ```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/E395.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E395 && ~/LPEDC/08-structs/0066-juntando-tudo/E395
+gcc ~/LPEDC/E395.c -o ~/LPEDC/E395 && ~/LPEDC/E395
 ```
 
 ---
@@ -3008,7 +2992,7 @@ passam a vir do `malloc`.
 
 ## Lista de exercícios práticos
 
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos em [`lista/`](08-structs/lista/); resoluções em `_respostas/08-structs/lista/`.
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0801.c a P0830.c, na raiz; resoluções em `_respostas/08-structs/lista/`.
 
 ### ★☆☆ Aquecimento
 
@@ -3053,7 +3037,7 @@ Abrigo no meio: (3.00, 5.75)
 4. Resposta esperada: a saída acima (13.50 km no total).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0801.c -o ~/LPEDC/08-structs/lista/P0801 -lm && ~/LPEDC/08-structs/lista/P0801
+gcc ~/LPEDC/P0801.c -o ~/LPEDC/P0801 -lm && ~/LPEDC/P0801
 ```
 
 ---
@@ -3097,7 +3081,7 @@ Rio Branco 23:30 + 1500 min = 00:30 (+2 dias)
 3. Mostre com %02d para sair 02:35 e não 2:35.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0802.c -o ~/LPEDC/08-structs/lista/P0802 && ~/LPEDC/08-structs/lista/P0802
+gcc ~/LPEDC/P0802.c -o ~/LPEDC/P0802 && ~/LPEDC/P0802
 ```
 
 ---
@@ -3136,7 +3120,7 @@ Código 110: não cadastrado
 2. Falta comprar = minimo - estoque.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0803.c -o ~/LPEDC/08-structs/lista/P0803 && ~/LPEDC/08-structs/lista/P0803
+gcc ~/LPEDC/P0803.c -o ~/LPEDC/P0803 && ~/LPEDC/P0803
 ```
 
 ---
@@ -3182,7 +3166,7 @@ Abasteceu 20.00 L
    cada operação.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0804.c -o ~/LPEDC/08-structs/lista/P0804 && ~/LPEDC/08-structs/lista/P0804
+gcc ~/LPEDC/P0804.c -o ~/LPEDC/P0804 && ~/LPEDC/P0804
 ```
 
 ---
@@ -3224,7 +3208,7 @@ fev/2000: 29 dias
 5. Resposta esperada: a saída acima (2026 tem 365 dias).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0805.c -o ~/LPEDC/08-structs/lista/P0805 && ~/LPEDC/08-structs/lista/P0805
+gcc ~/LPEDC/P0805.c -o ~/LPEDC/P0805 && ~/LPEDC/P0805
 ```
 
 ---
@@ -3260,7 +3244,7 @@ inverte w do grupo:    760 rwxrw----
    modo ^= 1u << 4.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0806.c -o ~/LPEDC/08-structs/lista/P0806 && ~/LPEDC/08-structs/lista/P0806
+gcc ~/LPEDC/P0806.c -o ~/LPEDC/P0806 && ~/LPEDC/P0806
 ```
 
 ---
@@ -3306,7 +3290,7 @@ Com /16:
 4. Para mostrar um uint32_t em hexa: printf("%08X", (unsigned) ip).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0807.c -o ~/LPEDC/08-structs/lista/P0807 && ~/LPEDC/08-structs/lista/P0807
+gcc ~/LPEDC/P0807.c -o ~/LPEDC/P0807 && ~/LPEDC/P0807
 ```
 
 ---
@@ -3333,7 +3317,7 @@ Dona Ivete    11 anos: R$ 96.00
    main. Passe o endereço (Socio *) e use ->.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0808.c -o ~/LPEDC/08-structs/lista/P0808 && ~/LPEDC/08-structs/lista/P0808
+gcc ~/LPEDC/P0808.c -o ~/LPEDC/P0808 && ~/LPEDC/P0808
 ```
 
 ---
@@ -3372,7 +3356,7 @@ Aniversário em março: Vó Nazaré (dia 12) Mãe (dia 5)
 3. Para chegar no mês: familia[i].nascimento.mes (dois pontos seguidos).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0809.c -o ~/LPEDC/08-structs/lista/P0809 && ~/LPEDC/08-structs/lista/P0809
+gcc ~/LPEDC/P0809.c -o ~/LPEDC/P0809 && ~/LPEDC/P0809
 ```
 
 ---
@@ -3415,7 +3399,7 @@ show     vol 30, graves 5, agudos 4, balanço -2, loudness não, fonte "Pendrive
 3. Mostre a string vazia entre aspas para ver que ela está lá: "%s".
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0810.c -o ~/LPEDC/08-structs/lista/P0810 && ~/LPEDC/08-structs/lista/P0810
+gcc ~/LPEDC/P0810.c -o ~/LPEDC/P0810 && ~/LPEDC/P0810
 ```
 
 ### ★★☆ Para pensar
@@ -3473,7 +3457,7 @@ Por preço:
    struct inteira (36 ou 40 bytes) a cada troca.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0811.c -o ~/LPEDC/08-structs/lista/P0811 && ~/LPEDC/08-structs/lista/P0811
+gcc ~/LPEDC/P0811.c -o ~/LPEDC/P0811 && ~/LPEDC/P0811
 ```
 
 ---
@@ -3530,7 +3514,7 @@ Bytes por troca: 8 (ponteiro) contra 224 (ficha)
 4. Resposta esperada: a saída acima (os bytes por troca: 8 e 224).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0812.c -o ~/LPEDC/08-structs/lista/P0812 && ~/LPEDC/08-structs/lista/P0812
+gcc ~/LPEDC/P0812.c -o ~/LPEDC/P0812 && ~/LPEDC/P0812
 ```
 
 ---
@@ -3579,7 +3563,7 @@ sizeof da union: 40 bytes; sizeof do Pagamento: 56 bytes
 3. O tamanho da union é o do maior campo (a chave, 40 bytes).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0813.c -o ~/LPEDC/08-structs/lista/P0813 && ~/LPEDC/08-structs/lista/P0813
+gcc ~/LPEDC/P0813.c -o ~/LPEDC/P0813 && ~/LPEDC/P0813
 ```
 
 ---
@@ -3625,7 +3609,7 @@ branco         (255, 255, 255) -> 0xFFFF -> (255, 255, 255)
 3. 0x1F são 5 bits ligados (31) e 0x3F são 6 (63).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0814.c -o ~/LPEDC/08-structs/lista/P0814 && ~/LPEDC/08-structs/lista/P0814
+gcc ~/LPEDC/P0814.c -o ~/LPEDC/P0814 && ~/LPEDC/P0814
 ```
 
 ---
@@ -3679,7 +3663,7 @@ Mais dinheiro parado: Elétrica
    const char *nome_cat[N_CATEGORIAS] = {"Hidráulica", ...};
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0815.c -o ~/LPEDC/08-structs/lista/P0815 && ~/LPEDC/08-structs/lista/P0815
+gcc ~/LPEDC/P0815.c -o ~/LPEDC/P0815 && ~/LPEDC/P0815
 ```
 
 ---
@@ -3735,7 +3719,7 @@ Sobram 3 casas de navio
 4. Resposta esperada: a saída acima (sobram 3 casas de navio).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0816.c -o ~/LPEDC/08-structs/lista/P0816 && ~/LPEDC/08-structs/lista/P0816
+gcc ~/LPEDC/P0816.c -o ~/LPEDC/P0816 && ~/LPEDC/P0816
 ```
 
 ---
@@ -3766,7 +3750,7 @@ Total              R$ 184.45
    último produto.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0817.c -o ~/LPEDC/08-structs/lista/P0817 && ~/LPEDC/08-structs/lista/P0817
+gcc ~/LPEDC/P0817.c -o ~/LPEDC/P0817 && ~/LPEDC/P0817
 ```
 
 ---
@@ -3807,7 +3791,7 @@ i^8 = 1 + 0i
    dois zeros) e mostre 0.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0818.c -o ~/LPEDC/08-structs/lista/P0818 -lm && ~/LPEDC/08-structs/lista/P0818
+gcc ~/LPEDC/P0818.c -o ~/LPEDC/P0818 -lm && ~/LPEDC/P0818
 ```
 
 ---
@@ -3847,7 +3831,7 @@ Chave 0x5A = 01011010 (4 bits ligados)
 3. Para contar bits: while (x) { cont += x & 1; x >>= 1; }
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0819.c -o ~/LPEDC/08-structs/lista/P0819 && ~/LPEDC/08-structs/lista/P0819
+gcc ~/LPEDC/P0819.c -o ~/LPEDC/P0819 && ~/LPEDC/P0819
 ```
 
 ---
@@ -3895,7 +3879,7 @@ Manaus (7 dias):  0.0  4.5 22.0 18.0  0.0  6.5 11.0
 3. Como é um bloco só, um free(s) libera a struct e o vetor juntos.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0820.c -o ~/LPEDC/08-structs/lista/P0820 && ~/LPEDC/08-structs/lista/P0820
+gcc ~/LPEDC/P0820.c -o ~/LPEDC/P0820 && ~/LPEDC/P0820
 ```
 
 ### ★★★ Desafio
@@ -3950,7 +3934,7 @@ Saída esperada:
    "Notebooks", "Fones"};
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0821.c -o ~/LPEDC/08-structs/lista/P0821 && ~/LPEDC/08-structs/lista/P0821
+gcc ~/LPEDC/P0821.c -o ~/LPEDC/P0821 && ~/LPEDC/P0821
 ```
 
 ---
@@ -4002,7 +3986,7 @@ Depois do cancelamento, duas vezes (2): 40 98
 4. Livres = 100 - tamanho(união).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0822.c -o ~/LPEDC/08-structs/lista/P0822 && ~/LPEDC/08-structs/lista/P0822
+gcc ~/LPEDC/P0822.c -o ~/LPEDC/P0822 && ~/LPEDC/P0822
 ```
 
 ---
@@ -4054,7 +4038,7 @@ Parintins: 1
    devolveria 0 sem avisar).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0823.c -o ~/LPEDC/08-structs/lista/P0823 && ~/LPEDC/08-structs/lista/P0823
+gcc ~/LPEDC/P0823.c -o ~/LPEDC/P0823 && ~/LPEDC/P0823
 ```
 
 ---
@@ -4108,7 +4092,7 @@ At x = 10.0 4.0 12.0 4.5 15.0 1.0
    a[p].l. A ordem dos termos não importa para a multiplicação.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0824.c -o ~/LPEDC/08-structs/lista/P0824 && ~/LPEDC/08-structs/lista/P0824
+gcc ~/LPEDC/P0824.c -o ~/LPEDC/P0824 && ~/LPEDC/P0824
 ```
 
 ---
@@ -4141,7 +4125,7 @@ Depósito: porta aberta
    .graus de um sensor que guardou .porcento interpreta os bytes errados.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0825.c -o ~/LPEDC/08-structs/lista/P0825 && ~/LPEDC/08-structs/lista/P0825
+gcc ~/LPEDC/P0825.c -o ~/LPEDC/P0825 && ~/LPEDC/P0825
 ```
 
 ---
@@ -4189,7 +4173,7 @@ Conflito (qua): "Pilates Dona Cleide" e "Reunião da clínica", 20 min
 4. Resposta esperada: a saída acima (dois conflitos).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0826.c -o ~/LPEDC/08-structs/lista/P0826 && ~/LPEDC/08-structs/lista/P0826
+gcc ~/LPEDC/P0826.c -o ~/LPEDC/P0826 && ~/LPEDC/P0826
 ```
 
 ---
@@ -4231,7 +4215,7 @@ Memória: 126 bytes de bits (com bool seriam 1001)
 4. Resposta esperada: a saída acima (168 primos).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0827.c -o ~/LPEDC/08-structs/lista/P0827 && ~/LPEDC/08-structs/lista/P0827
+gcc ~/LPEDC/P0827.c -o ~/LPEDC/P0827 && ~/LPEDC/P0827
 ```
 
 ---
@@ -4293,7 +4277,7 @@ sizeof(Cabecalho) = 16, sizeof(Compacto) = 4
    contas com << e >> são as que você controla.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0828.c -o ~/LPEDC/08-structs/lista/P0828 && ~/LPEDC/08-structs/lista/P0828
+gcc ~/LPEDC/P0828.c -o ~/LPEDC/P0828 && ~/LPEDC/P0828
 ```
 
 ---
@@ -4331,7 +4315,7 @@ Total: R$ 48.00
 5. Resposta esperada: a saída acima (total R$ 48.00).
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0829.c -o ~/LPEDC/08-structs/lista/P0829 && ~/LPEDC/08-structs/lista/P0829
+gcc ~/LPEDC/P0829.c -o ~/LPEDC/P0829 && ~/LPEDC/P0829
 ```
 
 ---
@@ -4396,7 +4380,7 @@ Atende Téo
    (*n)--.
 
 ```bash
-gcc ~/LPEDC/08-structs/lista/P0830.c -o ~/LPEDC/08-structs/lista/P0830 && ~/LPEDC/08-structs/lista/P0830
+gcc ~/LPEDC/P0830.c -o ~/LPEDC/P0830 && ~/LPEDC/P0830
 ```
 
 ## Questões no estilo da prova
