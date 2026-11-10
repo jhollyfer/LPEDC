@@ -39,10 +39,10 @@ a corrente de nós sai dela para a direita; vermelho marca colisão.
 
 As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
 `aberta.h`/`aberta.c` (endereçamento aberto) e `palavras.h`/`palavras.c`
-(o contador) ficam na pasta de cada assunto, e o `rodar` compila tudo junto:
+(o contador) ficam na pasta de cada assunto, e o comando do exemplo compila tudo junto:
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/A211.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
 ```
 
 Os exercícios trazem a própria implementação dentro do arquivo, para você
@@ -229,7 +229,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/A209.c
+gcc ~/LPEDC/15-hash/0105-hashing/A209.c -o ~/LPEDC/15-hash/0105-hashing/A209 && ~/LPEDC/15-hash/0105-hashing/A209
 ```
 
 **Exemplo A210 · Anagramas: soma contra polinômio**
@@ -275,7 +275,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/A210.c
+gcc ~/LPEDC/15-hash/0105-hashing/A210.c -o ~/LPEDC/15-hash/0105-hashing/A210 && ~/LPEDC/15-hash/0105-hashing/A210
 ```
 
 #### Exercícios
@@ -306,7 +306,7 @@ pedido 2210 -> nicho 10
    5521 -> 10 (colide com 2210) e 7019 -> 1.
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/E625.c
+gcc ~/LPEDC/15-hash/0105-hashing/E625.c -o ~/LPEDC/15-hash/0105-hashing/E625 && ~/LPEDC/15-hash/0105-hashing/E625
 ```
 
 **Exercício E626** · ★☆☆
@@ -337,7 +337,7 @@ Sol e lua colidem (somas 302 e 322)
    "Sol" e "lua" só têm o mesmo resto por 5 ('S' = 83 não é 's' = 115).
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/E626.c
+gcc ~/LPEDC/15-hash/0105-hashing/E626.c -o ~/LPEDC/15-hash/0105-hashing/E626 && ~/LPEDC/15-hash/0105-hashing/E626
 ```
 
 **Exercício E627** · ★★☆
@@ -364,7 +364,7 @@ boleto -> 1
 3. Resposta esperada: a saída acima ("ted" e "doc" colidem com M = 13).
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/E627.c
+gcc ~/LPEDC/15-hash/0105-hashing/E627.c -o ~/LPEDC/15-hash/0105-hashing/E627 && ~/LPEDC/15-hash/0105-hashing/E627
 ```
 
 **Exercício E628** · ★★☆
@@ -396,7 +396,7 @@ vazios: 9
    o último dígito, que é sempre 0; um m primo usa o número inteiro.
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/E628.c
+gcc ~/LPEDC/15-hash/0105-hashing/E628.c -o ~/LPEDC/15-hash/0105-hashing/E628 && ~/LPEDC/15-hash/0105-hashing/E628
 ```
 
 **Exercício E629** · ★★★
@@ -441,7 +441,7 @@ balde 1: 1
    contagem fica 1 no balde 1, 1 no 4 e 1 no 6.
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/E629.c
+gcc ~/LPEDC/15-hash/0105-hashing/E629.c -o ~/LPEDC/15-hash/0105-hashing/E629 && ~/LPEDC/15-hash/0105-hashing/E629
 ```
 
 **Exercício E630** · ★★★
@@ -479,7 +479,7 @@ char -> ...
    dos códigos, o menor m seria 18.)
 
 ```bash
-~/LPEDC/rodar 15-hash/0105-hashing/E630.c
+gcc ~/LPEDC/15-hash/0105-hashing/E630.c -o ~/LPEDC/15-hash/0105-hashing/E630 && ~/LPEDC/15-hash/0105-hashing/E630
 ```
 
 ---
@@ -698,7 +698,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/A211.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
 ```
 
 **Exemplo A212 · Fim de feira: atualizar, remover e o fator de carga**
@@ -743,7 +743,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/A212.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/A212.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A212 && ~/LPEDC/15-hash/0106-encadeamento/A212
 ```
 
 #### Exercícios
@@ -777,7 +777,7 @@ vazios: 2, maior corrente: 3
    o último a chegar fica na frente.
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/E631.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/E631.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E631 && ~/LPEDC/15-hash/0106-encadeamento/E631
 ```
 
 **Exercício E632** · ★☆☆
@@ -802,7 +802,7 @@ Saída esperada:
    a corrente ficou 2016 -> 7210 -> 5005. O balde 3, do 4000, está vazio.
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/E632.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/E632.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E632 && ~/LPEDC/15-hash/0106-encadeamento/E632
 ```
 
 **Exercício E633** · ★★☆
@@ -840,7 +840,7 @@ pedido 999 não existe
    removido leva free, e o libera solta o resto).
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/E633.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/E633.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E633 && ~/LPEDC/15-hash/0106-encadeamento/E633
 ```
 
 **Exercício E634** · ★★☆
@@ -878,7 +878,7 @@ polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
    lista.
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/E634.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/E634.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E634 && ~/LPEDC/15-hash/0106-encadeamento/E634
 ```
 
 **Exercício E635** · ★★★
@@ -911,7 +911,7 @@ liberados: 4
    "No *prox = p->prox; free(p); p = prox;", contando cada free.
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/E635.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/E635.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E635 && ~/LPEDC/15-hash/0106-encadeamento/E635
 ```
 
 **Exercício E636** · ★★★
@@ -951,7 +951,7 @@ n = 10, m = 11
    corrente pode mudar conforme a sua implementação; o conteúdo, não.
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/E636.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/E636.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/E636 && ~/LPEDC/15-hash/0106-encadeamento/E636
 ```
 
 ---
@@ -1167,7 +1167,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/A213.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/A213.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/A213 && ~/LPEDC/15-hash/0107-enderecamento-aberto/A213
 ```
 
 **Exemplo A214 · O carro do 301 saiu: a marca de removida**
@@ -1217,7 +1217,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/A214.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/A214.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/A214 && ~/LPEDC/15-hash/0107-enderecamento-aberto/A214
 ```
 
 #### Exercícios
@@ -1248,7 +1248,7 @@ Saída esperada:
    ocupadas, dá a volta e para na 0.
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E637.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E637.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E637 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E637
 ```
 
 **Exercício E638** · ★☆☆
@@ -1280,7 +1280,7 @@ busca 19: não está (3 sondagens)
    4 (o 11) e para na 5, livre.
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E638.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E638.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E638 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E638
 ```
 
 **Exercício E639** · ★★☆
@@ -1308,7 +1308,7 @@ Saída esperada:
    2 e para na 3, livre. Se a busca parasse na REMOVIDA, não acharia o 28.
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E639.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E639.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E639 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E639
 ```
 
 **Exercício E640** · ★★☆
@@ -1339,7 +1339,7 @@ Saída esperada:
    no fim do vetor.
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E640.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E640.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E640 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E640
 ```
 
 **Exercício E641** · ★★★
@@ -1376,7 +1376,7 @@ Saída esperada depois do conserto:
    em 1 e soma a cada passo do while.
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E641.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E641.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E641 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E641
 ```
 
 **Exercício E642** · ★★★
@@ -1418,7 +1418,7 @@ duplo : 1 2 2 1 2 2 2 4 | total: 16
    forma.
 
 ```bash
-~/LPEDC/rodar 15-hash/0107-enderecamento-aberto/E642.c
+gcc ~/LPEDC/15-hash/0107-enderecamento-aberto/E642.c ~/LPEDC/15-hash/0107-enderecamento-aberto/aberta.c -o ~/LPEDC/15-hash/0107-enderecamento-aberto/E642 && ~/LPEDC/15-hash/0107-enderecamento-aberto/E642
 ```
 
 ---
@@ -1640,7 +1640,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/A215.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/A215.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/A215 && ~/LPEDC/15-hash/0108-juntando-tudo/A215
 ```
 
 **Exemplo A216 · Contando as palavras de qualquer texto (entrada padrão)**
@@ -1720,9 +1720,9 @@ int main(void) {
     contador_libera(c);
     return 0;
 }
-// Para testar com um arquivo: ~/LPEDC/rodar A216.c < texto.txt
+// Para testar com um arquivo: ./programa < texto.txt
 // Exemplo:
-// $ printf 'Quem casa quer casa.\nQuem não casa, quer casar!\n' | ~/LPEDC/rodar A216.c
+// $ printf 'Quem casa quer casa.\nQuem não casa, quer casar!\n' | ./programa
 // 9 palavras, 5 diferentes, 2 aparecem uma vez só
 // 1. casa: 3
 // 2. quem: 2
@@ -1731,7 +1731,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/A216.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/A216.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/A216 && ~/LPEDC/15-hash/0108-juntando-tudo/A216
 ```
 
 #### Exercícios
@@ -1766,7 +1766,7 @@ paulo
    muda o 'S' e deixa os bytes do "ã" como estão.
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/E643.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/E643.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E643 && ~/LPEDC/15-hash/0108-juntando-tudo/E643
 ```
 
 **Exercício E644** · ★☆☆
@@ -1796,7 +1796,7 @@ Saída esperada:
    junta os dois no mesmo balde; o strcmp é que separa as contagens.
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/E644.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/E644.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E644 && ~/LPEDC/15-hash/0108-juntando-tudo/E644
 ```
 
 **Exercício E645** · ★★☆
@@ -1831,7 +1831,7 @@ primeira repetida: parte (palavra 9)
    de comparar cada palavra com todas as anteriores.
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/E645.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/E645.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E645 && ~/LPEDC/15-hash/0108-juntando-tudo/E645
 ```
 
 **Exercício E646** · ★★☆
@@ -1858,7 +1858,7 @@ queijo 1
    primeiro", a conta é y->vezes - x->vezes; no empate, use strcmp.
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/E646.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/E646.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E646 && ~/LPEDC/15-hash/0108-juntando-tudo/E646
 ```
 
 **Exercício E647** · ★★★
@@ -1892,7 +1892,7 @@ diferentes: 5
    "%s", atual). Para o total, conte os nós ao imprimir.
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/E647.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/E647.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E647 && ~/LPEDC/15-hash/0108-juntando-tudo/E647
 ```
 
 **Exercício E648** · ★★★
@@ -1931,7 +1931,7 @@ sala alas
    aparecem. É o mesmo truque do contador: muda só o que vira chave.
 
 ```bash
-~/LPEDC/rodar 15-hash/0108-juntando-tudo/E648.c
+gcc ~/LPEDC/15-hash/0108-juntando-tudo/E648.c ~/LPEDC/15-hash/0108-juntando-tudo/palavras.c -o ~/LPEDC/15-hash/0108-juntando-tudo/E648 && ~/LPEDC/15-hash/0108-juntando-tudo/E648
 ```
 
 ---
@@ -1939,7 +1939,7 @@ sala alas
 ## Desafios do módulo
 
 Problemas extras, misturando os assuntos do módulo. Todos pedem código:
-resolva num arquivo seu e rode com o `rodar`.
+resolva num arquivo seu e rode com as flags de estudo.
 
 **1. Base e tamanho brigando.** Um colega usou o hash polinomial de base 31
 (`h = h * 31 + c`) com uma tabela de `m = 31` baldes, e quase todas as
@@ -2212,7 +2212,7 @@ m = 97: baldes usados 8, colisões 0
    mistura todos os dígitos.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1501.c
+gcc ~/LPEDC/15-hash/lista/P1501.c -o ~/LPEDC/15-hash/lista/P1501 && ~/LPEDC/15-hash/lista/P1501
 ```
 
 ---
@@ -2246,7 +2246,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1502.c
+gcc ~/LPEDC/15-hash/lista/P1502.c -o ~/LPEDC/15-hash/lista/P1502 && ~/LPEDC/15-hash/lista/P1502
 ```
 
 ---
@@ -2282,7 +2282,7 @@ tabela: 21 _ 35 46 13 24 57 2 _ _ 10
    chaves caem nele e mais ele cresce.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1503.c
+gcc ~/LPEDC/15-hash/lista/P1503.c -o ~/LPEDC/15-hash/lista/P1503 && ~/LPEDC/15-hash/lista/P1503
 ```
 
 ---
@@ -2317,7 +2317,7 @@ tabela: _ _ 28 36 12 20 13 4
    posições. Com outros m, pode não visitar.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1504.c
+gcc ~/LPEDC/15-hash/lista/P1504.c -o ~/LPEDC/15-hash/lista/P1504 && ~/LPEDC/15-hash/lista/P1504
 ```
 
 ---
@@ -2350,7 +2350,7 @@ tabela: _ 27 66 1 _ 14 _ _ _ 40 _ 53 _
 3. Com m primo, qualquer passo entre 1 e m - 1 visita as 13 posições.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1505.c
+gcc ~/LPEDC/15-hash/lista/P1505.c -o ~/LPEDC/15-hash/lista/P1505 && ~/LPEDC/15-hash/lista/P1505
 ```
 
 ---
@@ -2388,7 +2388,7 @@ n = 10: alfa = 2.0, maior corrente = 4
 4. Use printf("n = %2d: alfa = %.1f, maior corrente = %d\n", ...).
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1506.c
+gcc ~/LPEDC/15-hash/lista/P1506.c -o ~/LPEDC/15-hash/lista/P1506 && ~/LPEDC/15-hash/lista/P1506
 ```
 
 ---
@@ -2422,7 +2422,7 @@ acb   193485995 -> balde 11
    os 4 bits de baixo contam, e eles batem. Um m primo separaria os dois.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1507.c
+gcc ~/LPEDC/15-hash/lista/P1507.c -o ~/LPEDC/15-hash/lista/P1507 && ~/LPEDC/15-hash/lista/P1507
 ```
 
 ---
@@ -2453,7 +2453,7 @@ Saída esperada:
    corrente e custa 4. Busca sem sucesso percorre a corrente inteira.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1508.c
+gcc ~/LPEDC/15-hash/lista/P1508.c -o ~/LPEDC/15-hash/lista/P1508 && ~/LPEDC/15-hash/lista/P1508
 ```
 
 ---
@@ -2484,7 +2484,7 @@ Saída esperada (depois do conserto):
    deixe a sondagem continuar; a saída fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1509.c
+gcc ~/LPEDC/15-hash/lista/P1509.c -o ~/LPEDC/15-hash/lista/P1509 && ~/LPEDC/15-hash/lista/P1509
 ```
 
 ---
@@ -2520,7 +2520,7 @@ Saída esperada:
 4. Use printf("%4d: divisão %2d, multiplicação %2d\n", ...).
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1510.c
+gcc ~/LPEDC/15-hash/lista/P1510.c -o ~/LPEDC/15-hash/lista/P1510 && ~/LPEDC/15-hash/lista/P1510
 ```
 
 ### ★★☆ Para pensar
@@ -2565,7 +2565,7 @@ entra o 31: 12 _ _ 10 31 24 5
 3. O 31 também tem h = 3 e reaproveita a lápide da posição 4.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1511.c
+gcc ~/LPEDC/15-hash/lista/P1511.c -o ~/LPEDC/15-hash/lista/P1511 && ~/LPEDC/15-hash/lista/P1511
 ```
 
 ---
@@ -2612,7 +2612,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1512.c
+gcc ~/LPEDC/15-hash/lista/P1512.c -o ~/LPEDC/15-hash/lista/P1512 && ~/LPEDC/15-hash/lista/P1512
 ```
 
 ---
@@ -2648,7 +2648,7 @@ pares com hash: 5, força bruta: 5
 3. A força bruta é O(n²); a versão com hash é O(n) em média.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1513.c
+gcc ~/LPEDC/15-hash/lista/P1513.c -o ~/LPEDC/15-hash/lista/P1513 && ~/LPEDC/15-hash/lista/P1513
 ```
 
 ---
@@ -2703,7 +2703,7 @@ n = 7, alfa = 0.30
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1514.c
+gcc ~/LPEDC/15-hash/lista/P1514.c -o ~/LPEDC/15-hash/lista/P1514 && ~/LPEDC/15-hash/lista/P1514
 ```
 
 ---
@@ -2745,7 +2745,7 @@ dupla      sondagens 13: 13 1 _ _ 14 26 _ 39 _ 52 _ _ _
    explode (veja o P1528).
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1515.c
+gcc ~/LPEDC/15-hash/lista/P1515.c -o ~/LPEDC/15-hash/lista/P1515 && ~/LPEDC/15-hash/lista/P1515
 ```
 
 ---
@@ -2791,7 +2791,7 @@ fim:
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1516.c
+gcc ~/LPEDC/15-hash/lista/P1516.c -o ~/LPEDC/15-hash/lista/P1516 && ~/LPEDC/15-hash/lista/P1516
 ```
 
 ---
@@ -2820,7 +2820,7 @@ primeiro repetido: 3307, na passagem 6
 3. Um conjunto é uma tabela hash só com chaves, sem valor.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1517.c
+gcc ~/LPEDC/15-hash/lista/P1517.c -o ~/LPEDC/15-hash/lista/P1517 && ~/LPEDC/15-hash/lista/P1517
 ```
 
 ---
@@ -2862,7 +2862,7 @@ Saída esperada:
    colisões), não a ordem de chegada: hash não guarda ordem.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1518.c
+gcc ~/LPEDC/15-hash/lista/P1518.c -o ~/LPEDC/15-hash/lista/P1518 && ~/LPEDC/15-hash/lista/P1518
 ```
 
 ---
@@ -2893,7 +2893,7 @@ maior bloco: 5
    blocos grandes atraem mais chaves, e a busca dentro deles fica cara.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1519.c
+gcc ~/LPEDC/15-hash/lista/P1519.c -o ~/LPEDC/15-hash/lista/P1519 && ~/LPEDC/15-hash/lista/P1519
 ```
 
 ---
@@ -2930,7 +2930,7 @@ AAA0A00: não entrou aqui
 3. Use o djb2 com unsigned long long e copie a placa com snprintf.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1520.c
+gcc ~/LPEDC/15-hash/lista/P1520.c -o ~/LPEDC/15-hash/lista/P1520 && ~/LPEDC/15-hash/lista/P1520
 ```
 
 ### ★★★ Desafio
@@ -2988,7 +2988,7 @@ rehash depois de "caju": 7 -> 15 baldes
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1521.c
+gcc ~/LPEDC/15-hash/lista/P1521.c -o ~/LPEDC/15-hash/lista/P1521 && ~/LPEDC/15-hash/lista/P1521
 ```
 
 ---
@@ -3031,7 +3031,7 @@ refeita:    _ 34 _ 58 70 _ _ _ _ _ _
    de um limite, e não só quando as vivas passam.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1522.c
+gcc ~/LPEDC/15-hash/lista/P1522.c -o ~/LPEDC/15-hash/lista/P1522 && ~/LPEDC/15-hash/lista/P1522
 ```
 
 ---
@@ -3068,7 +3068,7 @@ tabela: 54 32 43 _ _ 5 _ _ _ _ 10
    consertos, a saída fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1523.c
+gcc ~/LPEDC/15-hash/lista/P1523.c -o ~/LPEDC/15-hash/lista/P1523 && ~/LPEDC/15-hash/lista/P1523
 ```
 
 ---
@@ -3110,7 +3110,7 @@ períodos que zeram: 12 (força bruta: 12)
 4. O hash deixa O(n); a força bruta (todos os pares i, j) é O(n²).
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1524.c
+gcc ~/LPEDC/15-hash/lista/P1524.c -o ~/LPEDC/15-hash/lista/P1524 && ~/LPEDC/15-hash/lista/P1524
 ```
 
 ---
@@ -3153,7 +3153,7 @@ nos dois: 3, total de pessoas: 9
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1525.c
+gcc ~/LPEDC/15-hash/lista/P1525.c -o ~/LPEDC/15-hash/lista/P1525 && ~/LPEDC/15-hash/lista/P1525
 ```
 
 ---
@@ -3218,7 +3218,7 @@ acertos: 3 de 10
 4. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1526.c
+gcc ~/LPEDC/15-hash/lista/P1526.c -o ~/LPEDC/15-hash/lista/P1526 && ~/LPEDC/15-hash/lista/P1526
 ```
 
 ---
@@ -3275,7 +3275,7 @@ m = 11:
    ímpar.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1527.c
+gcc ~/LPEDC/15-hash/lista/P1527.c -o ~/LPEDC/15-hash/lista/P1527 && ~/LPEDC/15-hash/lista/P1527
 ```
 
 ---
@@ -3329,7 +3329,7 @@ alfa  linear (teoria)   dupla (teoria)
    antes de α chegar perto de 1.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1528.c
+gcc ~/LPEDC/15-hash/lista/P1528.c -o ~/LPEDC/15-hash/lista/P1528 && ~/LPEDC/15-hash/lista/P1528
 ```
 
 ---
@@ -3372,7 +3372,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1529.c
+gcc ~/LPEDC/15-hash/lista/P1529.c -o ~/LPEDC/15-hash/lista/P1529 && ~/LPEDC/15-hash/lista/P1529
 ```
 
 ---
@@ -3423,7 +3423,7 @@ menor intervalo: ABC1D23, passagens 1 e 4 (distância 3)
    O(n²).
 
 ```bash
-~/LPEDC/rodar 15-hash/lista/P1530.c
+gcc ~/LPEDC/15-hash/lista/P1530.c -o ~/LPEDC/15-hash/lista/P1530 && ~/LPEDC/15-hash/lista/P1530
 ```
 
 ## Questões no estilo da prova

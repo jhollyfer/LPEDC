@@ -37,12 +37,12 @@ ponteiros, `malloc`/`free` e `struct`. Duas novidades pequenas:
 - `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
   falsa. É assim que um invariante vira código.
 - **arquivos de apoio**: no assunto 0074, a pasta tem `contador.h`,
-  `contador.c`, `conta.h` e `conta.c` além dos exemplos. O `rodar` compila
+  `contador.c`, `conta.h` e `conta.c` além dos exemplos. O comando do exemplo compila
   junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então basta
   rodar o exemplo, como sempre:
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/A147.c
+gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A147 && ~/LPEDC/10-analise/0074-tad/A147
 ```
 
 Os contadores de passos dos exemplos não medem segundos, medem trabalho: na
@@ -59,7 +59,7 @@ sua máquina, os números saem iguais aos do texto.
 ## Desafios do módulo
 
 Problemas que misturam os quatro assuntos, do médio ao difícil. Todos pedem
-código: escreva num arquivo seu e rode com o `rodar`.
+código: escreva num arquivo seu e rode com as flags de estudo.
 
 **1. Convidados em comum.** A sua lista de convidados é `{"Ana", "Bia",
 "Caio", "Davi", "Edu", "Fabi"}` e a do seu amigo é `{"Bia", "Davi", "Edu",

@@ -30,7 +30,7 @@ está na matriz, então vai para os inválidos:
 {{ideia}}
 
 Para testar o programa sem digitar, salve o código num arquivo `.c`
-e mande os votos com `printf 'boto\nArara\n...' | ~/LPEDC/rodar` seguido do
+e mande os votos com `printf 'boto\nArara\n...' | ./programa` seguido do
 caminho do arquivo:
 
 ```c

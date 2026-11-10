@@ -40,11 +40,11 @@ hash** (0105 a 0108) e a **distância de edição** (0142). A análise amortizad
 
 Cada assunto tem um **TAD** na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
 `trie.h`, `uniao.h`, `corretor.h`). O texto mostra o pedaço do `.c` que
-importa; abra o `.c` inteiro também. O `rodar` compila junto os `.c` de apoio
+importa; abra o `.c` inteiro também. O comando do exemplo compila junto os `.c` de apoio
 da pasta (como `trie.c`):
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/A293.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/A293.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/A293 && ~/LPEDC/22-arvores-avancadas/0147-trie/A293
 ```
 
 Duas convenções valem para o módulo todo. **Altura conta arestas**, como no

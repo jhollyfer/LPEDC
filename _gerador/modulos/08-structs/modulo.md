@@ -37,7 +37,7 @@ módulo. Ao rodar, troque a ordem dos campos de uma struct e compare o
 `sizeof`.
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/A117.c
+gcc ~/LPEDC/08-structs/0059-struct/A117.c -o ~/LPEDC/08-structs/0059-struct/A117 && ~/LPEDC/08-structs/0059-struct/A117
 ```
 
 {{indice}}

@@ -37,10 +37,10 @@ a corrente de nós sai dela para a direita; vermelho marca colisão.
 
 As tabelas seguem o padrão TAD: `tabela.h`/`tabela.c` (encadeamento),
 `aberta.h`/`aberta.c` (endereçamento aberto) e `palavras.h`/`palavras.c`
-(o contador) ficam na pasta de cada assunto, e o `rodar` compila tudo junto:
+(o contador) ficam na pasta de cada assunto, e o comando do exemplo compila tudo junto:
 
 ```bash
-~/LPEDC/rodar 15-hash/0106-encadeamento/A211.c
+gcc ~/LPEDC/15-hash/0106-encadeamento/A211.c ~/LPEDC/15-hash/0106-encadeamento/tabela.c -o ~/LPEDC/15-hash/0106-encadeamento/A211 && ~/LPEDC/15-hash/0106-encadeamento/A211
 ```
 
 Os exercícios trazem a própria implementação dentro do arquivo, para você
@@ -57,7 +57,7 @@ escrever cada pedaço com as mãos.
 ## Desafios do módulo
 
 Problemas extras, misturando os assuntos do módulo. Todos pedem código:
-resolva num arquivo seu e rode com o `rodar`.
+resolva num arquivo seu e rode com as flags de estudo.
 
 **1. Base e tamanho brigando.** Um colega usou o hash polinomial de base 31
 (`h = h * 31 + c`) com uma tabela de `m = 31` baldes, e quase todas as

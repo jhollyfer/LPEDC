@@ -39,12 +39,12 @@ ponteiros, `malloc`/`free` e `struct`. Duas novidades pequenas:
 - `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
   falsa. É assim que um invariante vira código.
 - **arquivos de apoio**: no assunto 0074, a pasta tem `contador.h`,
-  `contador.c`, `conta.h` e `conta.c` além dos exemplos. O `rodar` compila
+  `contador.c`, `conta.h` e `conta.c` além dos exemplos. O comando do exemplo compila
   junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`, então basta
   rodar o exemplo, como sempre:
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/A147.c
+gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A147 && ~/LPEDC/10-analise/0074-tad/A147
 ```
 
 Os contadores de passos dos exemplos não medem segundos, medem trabalho: na
@@ -249,7 +249,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/A141.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/A141.c -o ~/LPEDC/10-analise/0071-eficiencia/A141 && ~/LPEDC/10-analise/0071-eficiencia/A141
 ```
 
 **Exemplo A142 · Três tarefas, três ritmos**
@@ -306,7 +306,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/A142.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/A142.c -o ~/LPEDC/10-analise/0071-eficiencia/A142 && ~/LPEDC/10-analise/0071-eficiencia/A142
 ```
 
 #### Exercícios
@@ -347,7 +347,7 @@ d) 4 passos em 10 voltas
    que você escolhe contar: 10 voltas, mas só 4 passam no if.
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/E421.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/E421.c -o ~/LPEDC/10-analise/0071-eficiencia/E421 && ~/LPEDC/10-analise/0071-eficiencia/E421
 ```
 
 **Exercício E422** · ★☆☆
@@ -375,7 +375,7 @@ Trocas: 3
    para 31, depois 35, depois 36).
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/E422.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/E422.c -o ~/LPEDC/10-analise/0071-eficiencia/E422 && ~/LPEDC/10-analise/0071-eficiencia/E422
 ```
 
 **Exercício E423** · ★★☆
@@ -407,7 +407,7 @@ n = 1000: total 500500, média 500.5
 4. Resposta esperada: médias 5.5, 50.5 e 500.5.
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/E423.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/E423.c -o ~/LPEDC/10-analise/0071-eficiencia/E423 && ~/LPEDC/10-analise/0071-eficiencia/E423
 ```
 
 **Exercício E424** · ★★☆
@@ -443,7 +443,7 @@ Saída esperada:
    só uns 12. A raiz de 100 é 10.
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/E424.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/E424.c -o ~/LPEDC/10-analise/0071-eficiencia/E424 && ~/LPEDC/10-analise/0071-eficiencia/E424
 ```
 
 **Exercício E425** · ★★★
@@ -472,7 +472,7 @@ senha 40: passos 6
    zerado dentro do for, antes de cada busca.
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/E425.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/E425.c -o ~/LPEDC/10-analise/0071-eficiencia/E425 && ~/LPEDC/10-analise/0071-eficiencia/E425
 ```
 
 **Exercício E426** · ★★★
@@ -522,7 +522,7 @@ n = 25: 242785 chamadas, razão 1.618
    exponencial.
 
 ```bash
-~/LPEDC/rodar 10-analise/0071-eficiencia/E426.c
+gcc ~/LPEDC/10-analise/0071-eficiencia/E426.c -o ~/LPEDC/10-analise/0071-eficiencia/E426 && ~/LPEDC/10-analise/0071-eficiencia/E426
 ```
 
 ---
@@ -716,7 +716,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/A143.c
+gcc ~/LPEDC/10-analise/0072-big-o/A143.c -o ~/LPEDC/10-analise/0072-big-o/A143 && ~/LPEDC/10-analise/0072-big-o/A143
 ```
 
 **Exemplo A144 · A constante grande perde no fim**
@@ -772,7 +772,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/A144.c
+gcc ~/LPEDC/10-analise/0072-big-o/A144.c -o ~/LPEDC/10-analise/0072-big-o/A144 && ~/LPEDC/10-analise/0072-big-o/A144
 ```
 
 #### Exercícios
@@ -821,7 +821,7 @@ f) O(n log n)      64    10240
    cresce com n.
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/E427.c
+gcc ~/LPEDC/10-analise/0072-big-o/E427.c -o ~/LPEDC/10-analise/0072-big-o/E427 && ~/LPEDC/10-analise/0072-big-o/E427
 ```
 
 **Exercício E428** · ★☆☆
@@ -854,7 +854,7 @@ f) O(n^2)          0.5500     0.5005     0.5000
 
 **Dicas:**
 
-1. log2() está em <math.h> (o rodar já liga com -lm).
+1. log2() está em <math.h> (o gcc com as flags de estudo já liga com -lm).
 2. Para não repetir 18 printf, escreva uma função que recebe o rótulo, a
    fórmula e a aposta como ponteiros para função (assunto 0050):
    void linha(const char *rotulo, double (*f)(double), double (*g)(double)).
@@ -864,7 +864,7 @@ f) O(n^2)          0.5500     0.5005     0.5000
    cresceria sem parar. Para ver isso, troque uma aposta e rode de novo.
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/E428.c
+gcc ~/LPEDC/10-analise/0072-big-o/E428.c -o ~/LPEDC/10-analise/0072-big-o/E428 -lm && ~/LPEDC/10-analise/0072-big-o/E428
 ```
 
 **Exercício E429** · ★★☆
@@ -897,7 +897,7 @@ n = 1000: pares 499500 passos, marcas 1000 passos
 4. Resposta esperada: a saída acima; as duas respondem "sem repetidos".
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/E429.c
+gcc ~/LPEDC/10-analise/0072-big-o/E429.c -o ~/LPEDC/10-analise/0072-big-o/E429 && ~/LPEDC/10-analise/0072-big-o/E429
 ```
 
 **Exercício E430** · ★★☆
@@ -932,7 +932,7 @@ d:      32 ->      45  razão 1.41  O(raiz n)
    d) raiz de n: dobrar n multiplica por √2 ≈ 1,41.
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/E430.c
+gcc ~/LPEDC/10-analise/0072-big-o/E430.c -o ~/LPEDC/10-analise/0072-big-o/E430 && ~/LPEDC/10-analise/0072-big-o/E430
 ```
 
 **Exercício E431** · ★★★
@@ -964,7 +964,7 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
 
 **Dicas:**
 
-1. log2() está em <math.h> (o rodar já liga com -lm). Faça as contas em
+1. log2() está em <math.h> (o gcc com as flags de estudo já liga com -lm). Faça as contas em
    double.
 2. Um laço n = 2, 3, 4, ... que para (break) no primeiro n em que
    50 * n * log2(n) < 2.0 * n * n.
@@ -973,7 +973,7 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
    "pior" algoritmo é o mais rápido. Com 10000, B é 30 vezes mais rápido.
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/E431.c
+gcc ~/LPEDC/10-analise/0072-big-o/E431.c -o ~/LPEDC/10-analise/0072-big-o/E431 -lm && ~/LPEDC/10-analise/0072-big-o/E431
 ```
 
 **Exercício E432** · ★★★
@@ -1015,7 +1015,7 @@ n = 4000: 1600 vogais, 4000 passos, razão 2.00
    4000, e a razão vira 2.00: O(n).
 
 ```bash
-~/LPEDC/rodar 10-analise/0072-big-o/E432.c
+gcc ~/LPEDC/10-analise/0072-big-o/E432.c -o ~/LPEDC/10-analise/0072-big-o/E432 && ~/LPEDC/10-analise/0072-big-o/E432
 ```
 
 ---
@@ -1239,7 +1239,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/A145.c
+gcc ~/LPEDC/10-analise/0073-invariantes/A145.c -o ~/LPEDC/10-analise/0073-invariantes/A145 && ~/LPEDC/10-analise/0073-invariantes/A145
 ```
 
 **Exemplo A146 · Fichas e troco: o invariante da divisão**
@@ -1278,7 +1278,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/A146.c
+gcc ~/LPEDC/10-analise/0073-invariantes/A146.c -o ~/LPEDC/10-analise/0073-invariantes/A146 && ~/LPEDC/10-analise/0073-invariantes/A146
 ```
 
 #### Exercícios
@@ -1321,7 +1321,7 @@ d) último 8 na posição 3
    elevado a k; d) x não está em v[k+1..n-1].
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/E433.c
+gcc ~/LPEDC/10-analise/0073-invariantes/E433.c -o ~/LPEDC/10-analise/0073-invariantes/E433 && ~/LPEDC/10-analise/0073-invariantes/E433
 ```
 
 **Exercício E434** · ★☆☆
@@ -1348,7 +1348,7 @@ Total: R$ 132
 4. Resposta esperada: Total: R$ 132. Invariante: s é a soma de v[0..i-1].
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/E434.c
+gcc ~/LPEDC/10-analise/0073-invariantes/E434.c -o ~/LPEDC/10-analise/0073-invariantes/E434 && ~/LPEDC/10-analise/0073-invariantes/E434
 ```
 
 **Exercício E435** · ★★☆
@@ -1384,7 +1384,7 @@ vetor vazio: posição -1
 4. Resposta esperada: a saída acima, sem nenhum assert disparando.
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/E435.c
+gcc ~/LPEDC/10-analise/0073-invariantes/E435.c -o ~/LPEDC/10-analise/0073-invariantes/E435 && ~/LPEDC/10-analise/0073-invariantes/E435
 ```
 
 **Exercício E436** · ★★☆
@@ -1419,7 +1419,7 @@ Positivos: R$ 25
    v[0..n-1]".
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/E436.c
+gcc ~/LPEDC/10-analise/0073-invariantes/E436.c -o ~/LPEDC/10-analise/0073-invariantes/E436 && ~/LPEDC/10-analise/0073-invariantes/E436
 ```
 
 **Exercício E437** · ★★★
@@ -1456,7 +1456,7 @@ divergências de 1 a 100000: 0
    termina porque m cai pelo menos pela metade a cada volta.
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/E437.c
+gcc ~/LPEDC/10-analise/0073-invariantes/E437.c -o ~/LPEDC/10-analise/0073-invariantes/E437 -lm && ~/LPEDC/10-analise/0073-invariantes/E437
 ```
 
 **Exercício E438** · ★★★
@@ -1486,7 +1486,7 @@ Sobraram 4: 25 40 15 30
    mundo uma casa para a esquerda a cada zero também funciona, mas é O(n²).
 
 ```bash
-~/LPEDC/rodar 10-analise/0073-invariantes/E438.c
+gcc ~/LPEDC/10-analise/0073-invariantes/E438.c -o ~/LPEDC/10-analise/0073-invariantes/E438 && ~/LPEDC/10-analise/0073-invariantes/E438
 ```
 
 ---
@@ -1623,7 +1623,7 @@ resposta:
 Toda estrutura de dados dos módulos 11 a 16 (lista, pilha, fila, árvore, hash,
 grafo) segue este molde. Para um TAD `x`:
 
-1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O `rodar`
+1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do exemplo
    compila junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`. À mão:
    `gcc A147.c contador.c -o a147`.
 2. **`x.h`**: comentário dizendo o que o TAD é; *include guard*
@@ -1722,11 +1722,11 @@ int main(void) {
 // Saíram 3 do spinning; sair da sala vazia: negado
 // Spinning 0/3 | Piscina 1/2
 //
-// Compilando à mão, sem o rodar: gcc A147.c contador.c -o a147
+// Compilando à mão, sem as flags de estudo: gcc A147.c contador.c -o a147
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/A147.c
+gcc ~/LPEDC/10-analise/0074-tad/A147.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A147 && ~/LPEDC/10-analise/0074-tad/A147
 ```
 
 **Exemplo A148 · A conta que nunca fica negativa**
@@ -1772,7 +1772,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/A148.c
+gcc ~/LPEDC/10-analise/0074-tad/A148.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/A148 && ~/LPEDC/10-analise/0074-tad/A148
 ```
 
 #### Exercícios
@@ -1798,14 +1798,14 @@ Na garagem: 0 a bordo
 **Dicas:**
 
 1. #include "contador.h", com aspas: o arquivo está na pasta, não no
-   sistema. O rodar compila o contador.c junto.
+   sistema. O comando do exemplo compila o contador.c junto.
 2. contador_incrementa devolve false quando a van está cheia: use isso
    para contar quem ficou no ponto.
 3. Você não precisou saber
    como o contador guarda o valor.
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/E439.c
+gcc ~/LPEDC/10-analise/0074-tad/E439.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E439 && ~/LPEDC/10-analise/0074-tad/E439
 ```
 
 **Exercício E440** · ★☆☆
@@ -1836,7 +1836,7 @@ Tirar da fila vazia: negado
    só o contador.c mexe nos campos.
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/E440.c
+gcc ~/LPEDC/10-analise/0074-tad/E440.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E440 && ~/LPEDC/10-analise/0074-tad/E440
 ```
 
 **Exercício E441** · ★★☆
@@ -1872,11 +1872,11 @@ A -> B: 10.00 km
 1. Distância: sqrt(dx * dx + dy * dy), com sqrt de <math.h>.
 2. typedef struct ponto Ponto; em cima, a struct ponto { double x, y; }
    só na parte "ponto.c".
-3. São 4 pontos criados: 4 ponto_libera no fim (o rodar acusa vazamento).
+3. São 4 pontos criados: 4 ponto_libera no fim (o gcc com as flags de estudo acusa vazamento).
 4. Resposta esperada: a saída acima (os triângulos 3-4-5 e 6-8-10).
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/E441.c
+gcc ~/LPEDC/10-analise/0074-tad/E441.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E441 -lm && ~/LPEDC/10-analise/0074-tad/E441
 ```
 
 **Exercício E442** · ★★☆
@@ -1913,7 +1913,7 @@ Bia: R$ 44,50 | Caio: R$ 45,50
    respeitam.
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/E442.c
+gcc ~/LPEDC/10-analise/0074-tad/E442.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E442 && ~/LPEDC/10-analise/0074-tad/E442
 ```
 
 **Exercício E443** · ★★★
@@ -1956,7 +1956,7 @@ Saída esperada:
 4. Cada Racional devolvido é um malloc: libere todos.
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/E443.c
+gcc ~/LPEDC/10-analise/0074-tad/E443.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E443 && ~/LPEDC/10-analise/0074-tad/E443
 ```
 
 **Exercício E444** · ★★★
@@ -1992,7 +1992,7 @@ campo (horario_cria e horario_avanca).
    TAD.
 
 ```bash
-~/LPEDC/rodar 10-analise/0074-tad/E444.c
+gcc ~/LPEDC/10-analise/0074-tad/E444.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E444 && ~/LPEDC/10-analise/0074-tad/E444
 ```
 
 ---
@@ -2000,7 +2000,7 @@ campo (horario_cria e horario_avanca).
 ## Desafios do módulo
 
 Problemas que misturam os quatro assuntos, do médio ao difícil. Todos pedem
-código: escreva num arquivo seu e rode com o `rodar`.
+código: escreva num arquivo seu e rode com as flags de estudo.
 
 **1. Convidados em comum.** A sua lista de convidados é `{"Ana", "Bia",
 "Caio", "Davi", "Edu", "Fabi"}` e a do seu amigo é `{"Bia", "Davi", "Edu",
@@ -2249,7 +2249,7 @@ Saída esperada:
    por isso as duas funções são O(log n).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1001.c
+gcc ~/LPEDC/10-analise/lista/P1001.c -o ~/LPEDC/10-analise/lista/P1001 && ~/LPEDC/10-analise/lista/P1001
 ```
 
 ---
@@ -2286,7 +2286,7 @@ n = 8: soma 448 (64 somas), diagonal 56 (8 somas)
    por 2 as da diagonal.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1002.c
+gcc ~/LPEDC/10-analise/lista/P1002.c -o ~/LPEDC/10-analise/lista/P1002 && ~/LPEDC/10-analise/lista/P1002
 ```
 
 ---
@@ -2321,7 +2321,7 @@ n = 100000: laço 5000050000 (100000 passos), fórmula 5000050000 (3 passos)
 3. O laço é O(n); a fórmula é O(1): não importa o tamanho de n.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1003.c
+gcc ~/LPEDC/10-analise/lista/P1003.c -o ~/LPEDC/10-analise/lista/P1003 && ~/LPEDC/10-analise/lista/P1003
 ```
 
 ---
@@ -2363,7 +2363,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima, sem nenhum assert disparar.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1004.c
+gcc ~/LPEDC/10-analise/lista/P1004.c -o ~/LPEDC/10-analise/lista/P1004 && ~/LPEDC/10-analise/lista/P1004
 ```
 
 ---
@@ -2395,7 +2395,7 @@ Alarmes (acima de -16): 1
 4. Resposta esperada: a saída acima (média -94 / 5 = -18.8).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1005.c
+gcc ~/LPEDC/10-analise/lista/P1005.c -o ~/LPEDC/10-analise/lista/P1005 && ~/LPEDC/10-analise/lista/P1005
 ```
 
 ---
@@ -2426,7 +2426,7 @@ Saída esperada:
    é piso(log₁₀ n) + 1, ou seja, O(log n).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1006.c
+gcc ~/LPEDC/10-analise/lista/P1006.c -o ~/LPEDC/10-analise/lista/P1006 && ~/LPEDC/10-analise/lista/P1006
 ```
 
 ---
@@ -2455,7 +2455,7 @@ Média por venda: R$ 46.75
    187.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1007.c
+gcc ~/LPEDC/10-analise/lista/P1007.c -o ~/LPEDC/10-analise/lista/P1007 && ~/LPEDC/10-analise/lista/P1007
 ```
 
 ---
@@ -2494,7 +2494,7 @@ Horner:  p(3) = 89 com 4 multiplicações
    O(n²). Horner faz n: O(n).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1008.c
+gcc ~/LPEDC/10-analise/lista/P1008.c -o ~/LPEDC/10-analise/lista/P1008 && ~/LPEDC/10-analise/lista/P1008
 ```
 
 ---
@@ -2526,7 +2526,7 @@ Vendidos: 3
 3. Resposta esperada: a saída acima (vendidos 7, 42 e 63; o 13 saiu).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1009.c
+gcc ~/LPEDC/10-analise/lista/P1009.c -o ~/LPEDC/10-analise/lista/P1009 && ~/LPEDC/10-analise/lista/P1009
 ```
 
 ---
@@ -2556,7 +2556,7 @@ n = 1000: laço 499500, fórmula 499500, confere
    número de comparações de quem testa "todo par" num vetor.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1010.c
+gcc ~/LPEDC/10-analise/lista/P1010.c -o ~/LPEDC/10-analise/lista/P1010 && ~/LPEDC/10-analise/lista/P1010
 ```
 
 ### ★★☆ Para pensar
@@ -2601,7 +2601,7 @@ Fórmula confere de 1 a 1000: sim
 4. T(n) ≈ n² / 4, então Θ(n²).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1011.c
+gcc ~/LPEDC/10-analise/lista/P1011.c -o ~/LPEDC/10-analise/lista/P1011 && ~/LPEDC/10-analise/lista/P1011
 ```
 
 ---
@@ -2642,7 +2642,7 @@ N = 10000: 1229 primos | divisão: 117527 ops | crivo: 16981 ops
    100 vezes maior, a divisão ficou 500 vezes mais cara e o crivo, 160.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1012.c
+gcc ~/LPEDC/10-analise/lista/P1012.c -o ~/LPEDC/10-analise/lista/P1012 && ~/LPEDC/10-analise/lista/P1012
 ```
 
 ---
@@ -2684,7 +2684,7 @@ Saída esperada:
 3. Resposta esperada: a saída acima, sem nenhum assert disparar.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1013.c
+gcc ~/LPEDC/10-analise/lista/P1013.c -o ~/LPEDC/10-analise/lista/P1013 && ~/LPEDC/10-analise/lista/P1013
 ```
 
 ---
@@ -2719,7 +2719,7 @@ Trocas: 4
    muda (o 120 foi para o fim): essa partição não é estável.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1014.c
+gcc ~/LPEDC/10-analise/lista/P1014.c -o ~/LPEDC/10-analise/lista/P1014 && ~/LPEDC/10-analise/lista/P1014
 ```
 
 ---
@@ -2764,7 +2764,7 @@ De 09/11/2026 até 27/11/2026: 18 dias
 3. data_compara: compare ano, depois mês, depois dia.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1015.c
+gcc ~/LPEDC/10-analise/lista/P1015.c -o ~/LPEDC/10-analise/lista/P1015 && ~/LPEDC/10-analise/lista/P1015
 ```
 
 ---
@@ -2803,7 +2803,7 @@ Por inserção (n = 2000): +1 = 999.5, dobrando = 1.0
    por inserção "em média" (o custo amortizado).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1016.c
+gcc ~/LPEDC/10-analise/lista/P1016.c -o ~/LPEDC/10-analise/lista/P1016 && ~/LPEDC/10-analise/lista/P1016
 ```
 
 ---
@@ -2835,7 +2835,7 @@ Saída esperada:
    igual à de cima.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1017.c
+gcc ~/LPEDC/10-analise/lista/P1017.c -o ~/LPEDC/10-analise/lista/P1017 && ~/LPEDC/10-analise/lista/P1017
 ```
 
 ---
@@ -2869,7 +2869,7 @@ mdc(100, 75) = 25 em 2 passos
    é O(log n).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1018.c
+gcc ~/LPEDC/10-analise/lista/P1018.c -o ~/LPEDC/10-analise/lista/P1018 && ~/LPEDC/10-analise/lista/P1018
 ```
 
 ---
@@ -2910,13 +2910,13 @@ Desvio: 2.36 min
 **Dicas:**
 
 1. Variância = (soma dos quadrados / n) - média². O desvio é a raiz
-   (sqrt, de math.h; o rodar já liga a biblioteca com -lm).
+   (sqrt, de math.h; o gcc com as flags de estudo já liga a biblioteca com -lm).
 2. A interface não muda se um dia você trocar a implementação para
    guardar todos os tempos (para ter a mediana, por exemplo): o cliente
    continua compilando igual. Só o custo muda.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1019.c
+gcc ~/LPEDC/10-analise/lista/P1019.c -o ~/LPEDC/10-analise/lista/P1019 -lm && ~/LPEDC/10-analise/lista/P1019
 ```
 
 ---
@@ -2953,7 +2953,7 @@ Rápido: 12 duplas em 8 passos
 4. Resposta esperada: a saída acima (4 pares e 4 ímpares: 6 + 6 = 12).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1020.c
+gcc ~/LPEDC/10-analise/lista/P1020.c -o ~/LPEDC/10-analise/lista/P1020 && ~/LPEDC/10-analise/lista/P1020
 ```
 
 ### ★★★ Desafio
@@ -3003,7 +3003,7 @@ Linear:     12 (dias 2 a 7), 10 somas
 4. Resposta esperada: a saída acima (5 - 2 + 8 - 10 + 4 + 7 = 12).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1021.c
+gcc ~/LPEDC/10-analise/lista/P1021.c -o ~/LPEDC/10-analise/lista/P1021 && ~/LPEDC/10-analise/lista/P1021
 ```
 
 ---
@@ -3053,7 +3053,7 @@ Interseção ingênua: 8 20 (20 comparações)
    invariante do TAD vale para eles sem ordenar nada.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1022.c
+gcc ~/LPEDC/10-analise/lista/P1022.c -o ~/LPEDC/10-analise/lista/P1022 && ~/LPEDC/10-analise/lista/P1022
 ```
 
 ---
@@ -3101,7 +3101,7 @@ Eleição 2: ninguém tem maioria
    eleição 1 com mais um laço.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1023.c
+gcc ~/LPEDC/10-analise/lista/P1023.c -o ~/LPEDC/10-analise/lista/P1023 && ~/LPEDC/10-analise/lista/P1023
 ```
 
 ---
@@ -3144,7 +3144,7 @@ Saída esperada:
    comparações, O(L + C), contra O(L · C) da força bruta.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1024.c
+gcc ~/LPEDC/10-analise/lista/P1024.c -o ~/LPEDC/10-analise/lista/P1024 && ~/LPEDC/10-analise/lista/P1024
 ```
 
 ---
@@ -3199,7 +3199,7 @@ Memória: 32 bytes para 256 lugares
    consegue fazer esse sizeof.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1025.c
+gcc ~/LPEDC/10-analise/lista/P1025.c -o ~/LPEDC/10-analise/lista/P1025 && ~/LPEDC/10-analise/lista/P1025
 ```
 
 ---
@@ -3259,7 +3259,7 @@ Respostas iguais: sim
    para trocar uma pela outra sem mexer nele.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1026.c
+gcc ~/LPEDC/10-analise/lista/P1026.c -o ~/LPEDC/10-analise/lista/P1026 && ~/LPEDC/10-analise/lista/P1026
 ```
 
 ---
@@ -3306,7 +3306,7 @@ Rampa: pico na posição 15 (1600 m), binária 4, sequencial 15
    Aqui, por acaso, acharam o mesmo.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1027.c
+gcc ~/LPEDC/10-analise/lista/P1027.c -o ~/LPEDC/10-analise/lista/P1027 && ~/LPEDC/10-analise/lista/P1027
 ```
 
 ---
@@ -3347,7 +3347,7 @@ C(20, 10) = 184756 | recursão: 369511 chamadas | tabela: 145 somas
    calcula cada um uma vez só. É a ideia da programação dinâmica.
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1028.c
+gcc ~/LPEDC/10-analise/lista/P1028.c -o ~/LPEDC/10-analise/lista/P1028 && ~/LPEDC/10-analise/lista/P1028
 ```
 
 ---
@@ -3390,7 +3390,7 @@ A = 2000000000: lado 44721 | linear 44722 passos | binária 31 passos
 3. A linear é O(√A); a binária é O(log A).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1029.c
+gcc ~/LPEDC/10-analise/lista/P1029.c -o ~/LPEDC/10-analise/lista/P1029 -lm && ~/LPEDC/10-analise/lista/P1029
 ```
 
 ---
@@ -3438,7 +3438,7 @@ Depois de mais doze notas 10: moda 10 (13 vezes), mediana 10
 4. Resposta esperada: a saída acima (com 23 notas, a 12ª da fila é 10).
 
 ```bash
-~/LPEDC/rodar 10-analise/lista/P1030.c
+gcc ~/LPEDC/10-analise/lista/P1030.c -o ~/LPEDC/10-analise/lista/P1030 && ~/LPEDC/10-analise/lista/P1030
 ```
 
 ## Questões no estilo da prova

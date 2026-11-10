@@ -37,14 +37,14 @@ Os valores dos comentários são os de um PC de 64 bits com Linux e gcc: `int`
 e `unsigned` de 4 bytes, `long` e `size_t` de 8. Algumas respostas (como
 `-17 >> 2`) dependem do compilador, e o texto avisa quando for o caso.
 
-O `rodar` compila com `-Wall -Wextra`, e esses avisos pegam vários erros
+O comando do exemplo compila com `-Wall -Wextra`, e esses avisos pegam vários erros
 deste módulo. Os exemplos compilam limpos; quando o texto mostra uma linha
 que o gcc avisaria, ela aparece fora do programa ou com a conversão escrita
 à vista. Ao rodar, tire um parêntese, troque `unsigned` por `int`, aumente o
 VLA e leia o que o gcc diz.
 
 ```bash
-~/LPEDC/rodar 27-c-detalhes/0170-precedencia-e-avaliacao/A339.c
+gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339
 ```
 
 {{indice}}

@@ -13,7 +13,7 @@ variável em silêncio.
 
 Por isso o módulo tem dois focos: escrever decisões claras e **desconfiar**
 de decisões que parecem certas. Os avisos do compilador viram aliados: o
-`rodar` liga todos, e quase toda pegadinha deste módulo dispara um.
+gcc com as flags de estudo liga todos, e quase toda pegadinha deste módulo dispara um.
 
 ## O que você vai aprender
 
@@ -42,7 +42,7 @@ o `math.h`. Os exercícios que leem do teclado aceitam a entrada por um pipe,
 o que facilita testar vários casos seguidos:
 
 ```bash
-printf '12.90 8.50\n' | ~/LPEDC/rodar 02-condicionais/0014-if/A028.c
+gcc ~/LPEDC/02-condicionais/0014-if/A028.c -o ~/LPEDC/02-condicionais/0014-if/A028 && printf '12.90 8.50\n' | ~/LPEDC/02-condicionais/0014-if/A028
 ```
 
 Alguns exercícios do tipo "ache o erro" trazem o código quebrado **de
@@ -61,7 +61,7 @@ quando é o caso. Fora deles, a regra do curso vale: código bom compila com
 ## Desafios do módulo
 
 Problemas extras para fechar o módulo. Escreva cada um num arquivo seu, rode
-com o `rodar` e teste todos os caminhos. Nada de laços ainda: só decisões.
+com as flags de estudo e teste todos os caminhos. Nada de laços ainda: só decisões.
 
 **1. Maior e menor de quatro.** Leia quatro números inteiros e mostre o maior
 e o menor, usando só `if` (sem `else`). Conte as comparações com uma variável

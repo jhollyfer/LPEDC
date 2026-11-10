@@ -114,7 +114,7 @@ fica o primeiro que achou o mínimo. As duas soluções têm 2 selos: tanto faz.
 > [!WARNING]
 > O "infinito" precisa sobreviver a um `+ 1`. Se você usar `INT_MAX` de
 > `<limits.h>`, a conta `dp[v - selo[s]] + 1` com `dp[...] == INT_MAX`
-> **estoura** um `int` com sinal: é comportamento indefinido, o `rodar` acusa
+> **estoura** um `int` com sinal: é comportamento indefinido, o gcc com as flags de estudo acusa
 > `signed integer overflow`, e sem o sanitizer o resultado vira um número
 > negativo que "ganha" de todo mundo no `<`. Use um infinito folgado, como
 > `1000000` ou `total + 1` (nunca se usa mais que `total` selos), ou teste

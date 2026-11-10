@@ -44,11 +44,11 @@ verdes marcam o caminho de uma busca e o nó vermelho é o que vai sair ou o
 que está desequilibrado. Desenhe a árvore no papel a cada inserção e remoção
 antes de rodar, e use a saída só para conferir.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
+O comando do exemplo compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
 comandos dos exemplos e exercícios são os de sempre:
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A197.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197
 ```
 
 Uma convenção vale para o módulo todo: **altura conta arestas**. Uma folha tem
@@ -357,7 +357,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/A193.c
+gcc ~/LPEDC/14-arvores/0097-arvores/A193.c -o ~/LPEDC/14-arvores/0097-arvores/A193 && ~/LPEDC/14-arvores/0097-arvores/A193
 ```
 
 **Exemplo A194 · O organograma com dois ponteiros**
@@ -453,7 +453,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/A194.c
+gcc ~/LPEDC/14-arvores/0097-arvores/A194.c -o ~/LPEDC/14-arvores/0097-arvores/A194 && ~/LPEDC/14-arvores/0097-arvores/A194
 ```
 
 #### Exercícios
@@ -505,7 +505,7 @@ Altura: 3
 3. Resposta esperada: as 9 linhas acima e "Altura: 3".
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/E577.c
+gcc ~/LPEDC/14-arvores/0097-arvores/E577.c -o ~/LPEDC/14-arvores/0097-arvores/E577 && ~/LPEDC/14-arvores/0097-arvores/E577
 ```
 
 **Exercício E578** · ★☆☆
@@ -536,7 +536,7 @@ Pessoas na escola: 5
 3. Resposta esperada: Pessoas na escola: 5
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/E578.c
+gcc ~/LPEDC/14-arvores/0097-arvores/E578.c -o ~/LPEDC/14-arvores/0097-arvores/E578 && ~/LPEDC/14-arvores/0097-arvores/E578
 ```
 
 **Exercício E579** · ★★☆
@@ -565,7 +565,7 @@ videos: -1
 3. Resposta esperada: luz: 2, casa: 0, 2025: 3, videos: -1.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/E579.c
+gcc ~/LPEDC/14-arvores/0097-arvores/E579.c -o ~/LPEDC/14-arvores/0097-arvores/E579 && ~/LPEDC/14-arvores/0097-arvores/E579
 ```
 
 **Exercício E580** · ★★☆
@@ -619,7 +619,7 @@ casa (450 MB)
    casa = 5 + 430 + 15 = 450.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/E580.c
+gcc ~/LPEDC/14-arvores/0097-arvores/E580.c -o ~/LPEDC/14-arvores/0097-arvores/E580 && ~/LPEDC/14-arvores/0097-arvores/E580
 ```
 
 **Exercício E581** · ★★★
@@ -659,7 +659,7 @@ vovo
    família: 2", sem erro.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/E581.c
+gcc ~/LPEDC/14-arvores/0097-arvores/E581.c -o ~/LPEDC/14-arvores/0097-arvores/E581 && ~/LPEDC/14-arvores/0097-arvores/E581
 ```
 
 **Exercício E582** · ★★★
@@ -703,10 +703,10 @@ Total de caminhos: 5
    trilha[0..prof] separados por "/" e devolva 1; senão, chame para cada
    filho com prof + 1 e some.
 3. Resposta esperada: as 5 linhas acima e "Total de caminhos: 5". Libere
-   tudo: o rodar não pode acusar vazamento.
+   tudo: o gcc com as flags de estudo não pode acusar vazamento.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0097-arvores/E582.c
+gcc ~/LPEDC/14-arvores/0097-arvores/E582.c -o ~/LPEDC/14-arvores/0097-arvores/E582 && ~/LPEDC/14-arvores/0097-arvores/E582
 ```
 
 ---
@@ -915,7 +915,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/A195.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/A195.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/A195 && ~/LPEDC/14-arvores/0098-arvore-binaria/A195
 ```
 
 **Exemplo A196 · Calculando a árvore de expressão**
@@ -975,7 +975,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/A196.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/A196.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/A196 && ~/LPEDC/14-arvores/0098-arvore-binaria/A196
 ```
 
 #### Exercícios
@@ -1015,7 +1015,7 @@ Nós: 6, altura: 2
    printf("Pré-ordem:") e chame arv_pre_ordem(raiz) logo depois.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E583.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E583.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E583 && ~/LPEDC/14-arvores/0098-arvore-binaria/E583
 ```
 
 **Exercício E584** · ★☆☆
@@ -1039,7 +1039,7 @@ Operadores: 3
 3. Resposta esperada: Números: 4 e Operadores: 3.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E584.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E584.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E584 && ~/LPEDC/14-arvores/0098-arvore-binaria/E584
 ```
 
 **Exercício E585** · ★★☆
@@ -1065,7 +1065,7 @@ Depois: 2 + 4 * 3 - 8
    ordem do espelho é a em ordem original de trás para frente.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E585.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E585.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E585 && ~/LPEDC/14-arvores/0098-arvore-binaria/E585
 ```
 
 **Exercício E586** · ★★☆
@@ -1096,7 +1096,7 @@ Saída esperada:
    com 4 espaços, os números com 8).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E586.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E586.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E586 && ~/LPEDC/14-arvores/0098-arvore-binaria/E586
 ```
 
 **Exercício E587** · ★★★
@@ -1133,7 +1133,7 @@ esperada.
    entra por último e sai primeiro. Consertado: * - + 8 3 4 2.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E587.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E587.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E587 && ~/LPEDC/14-arvores/0098-arvore-binaria/E587
 ```
 
 **Exercício E588** · ★★★
@@ -1168,7 +1168,7 @@ MGC..J..T.X..
    argumentos de uma função não é garantida em C.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0098-arvore-binaria/E588.c
+gcc ~/LPEDC/14-arvores/0098-arvore-binaria/E588.c ~/LPEDC/14-arvores/0098-arvore-binaria/arvore.c -o ~/LPEDC/14-arvores/0098-arvore-binaria/E588 && ~/LPEDC/14-arvores/0098-arvore-binaria/E588
 ```
 
 ---
@@ -1371,7 +1371,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A197.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197
 ```
 
 **Exemplo A198 · A ordem de chegada muda a árvore**
@@ -1420,7 +1420,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A198.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/A198.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/A198 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/A198
 ```
 
 #### Exercícios
@@ -1460,7 +1460,7 @@ Senha 65: nível -1
 3. O 25 fica embaixo de 45, 20 e 30.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E589.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E589.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E589 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E589
 ```
 
 **Exercício E590** · ★☆☆
@@ -1484,7 +1484,7 @@ Matrícula mais nova: 80
 3. Resposta esperada: 20 e 80.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E590.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E590.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E590 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E590
 ```
 
 **Exercício E591** · ★★☆
@@ -1513,7 +1513,7 @@ Nós visitados: 5 de 9
    Os nós 20, 80, 10 e 90 nunca são tocados.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E591.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E591.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E591 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E591
 ```
 
 **Exercício E592** · ★★☆
@@ -1541,7 +1541,7 @@ Altura: 2
 3. Resposta esperada: a saída acima (o 30 repetido não entra).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E592.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E592.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E592 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E592
 ```
 
 **Exercício E593** · ★★★
@@ -1588,7 +1588,7 @@ na árvore 2, e rode para conferir.
    a culpa é da árvore, não da busca.)
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E593.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E593.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E593 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E593
 ```
 
 **Exercício E594** · ★★★
@@ -1627,7 +1627,7 @@ Altura: 3
    uma descida pela árvore, e não uma varredura do caderno inteiro.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/E594.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/E594.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/E594 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/E594
 ```
 
 ---
@@ -1839,7 +1839,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/A199.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/A199.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/A199 && ~/LPEDC/14-arvores/0100-bst-remocao/A199
 ```
 
 **Exemplo A200 · Até a raiz vai embora**
@@ -1881,7 +1881,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/A200.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/A200.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/A200 && ~/LPEDC/14-arvores/0100-bst-remocao/A200
 ```
 
 #### Exercícios
@@ -1918,7 +1918,7 @@ Sem o 25 (um filho):    pré 60 40 35 50 90 70
    depois que o 10 saiu ficou só com o 40.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/E595.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/E595.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E595 && ~/LPEDC/14-arvores/0100-bst-remocao/E595
 ```
 
 **Exercício E596** · ★☆☆
@@ -1947,7 +1947,7 @@ Chamando 40, restam: 50 70
    a raiz 30 já saiu: quem é a raiz depois?
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/E596.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/E596.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E596 && ~/LPEDC/14-arvores/0100-bst-remocao/E596
 ```
 
 **Exercício E597** · ★★☆
@@ -1975,7 +1975,7 @@ Sem o 50:  pré 45 20 40 35 70 60 80
    Sem o 50, o 45 vira a raiz.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/E597.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/E597.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E597 && ~/LPEDC/14-arvores/0100-bst-remocao/E597
 ```
 
 **Exercício E598** · ★★☆
@@ -2013,7 +2013,7 @@ Ache a linha, conserte e rode até aparecer a saída esperada.
    do fim libera todos. Consertado: 20 35 40 45 50 60 70 80.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/E598.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/E598.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E598 && ~/LPEDC/14-arvores/0100-bst-remocao/E598
 ```
 
 **Exercício E599** · ★★★
@@ -2042,7 +2042,7 @@ Raiz: 70, altura: 2
    sem o 60, é o 70.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/E599.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/E599.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E599 && ~/LPEDC/14-arvores/0100-bst-remocao/E599
 ```
 
 **Exercício E600** · ★★★
@@ -2075,7 +2075,7 @@ sem mexer no bst.c e rode de novo até sair a saída esperada, sem erro.
    um nó só vale até a próxima mudança na árvore.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0100-bst-remocao/E600.c
+gcc ~/LPEDC/14-arvores/0100-bst-remocao/E600.c ~/LPEDC/14-arvores/0100-bst-remocao/bst.c -o ~/LPEDC/14-arvores/0100-bst-remocao/E600 && ~/LPEDC/14-arvores/0100-bst-remocao/E600
 ```
 
 ---
@@ -2280,7 +2280,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/A201.c
+gcc ~/LPEDC/14-arvores/0101-avl/A201.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/A201 && ~/LPEDC/14-arvores/0101-avl/A201
 ```
 
 **Exemplo A202 · Mil pedidos: BST comum contra AVL**
@@ -2356,7 +2356,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/A202.c
+gcc ~/LPEDC/14-arvores/0101-avl/A202.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/A202 && ~/LPEDC/14-arvores/0101-avl/A202
 ```
 
 #### Exercícios
@@ -2406,7 +2406,7 @@ Saída esperada:
 3. O 70 cai no caso direita-direita.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/E601.c
+gcc ~/LPEDC/14-arvores/0101-avl/E601.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E601 && ~/LPEDC/14-arvores/0101-avl/E601
 ```
 
 **Exercício E602** · ★☆☆
@@ -2434,7 +2434,7 @@ Rotações: 4
    direita (fator -1) e mesmo assim é AVL; com 7 a árvore fica perfeita.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/E602.c
+gcc ~/LPEDC/14-arvores/0101-avl/E602.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E602 && ~/LPEDC/14-arvores/0101-avl/E602
 ```
 
 **Exercício E603** · ★★☆
@@ -2463,7 +2463,7 @@ Saída esperada:
    1 + a maior.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/E603.c
+gcc ~/LPEDC/14-arvores/0101-avl/E603.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E603 && ~/LPEDC/14-arvores/0101-avl/E603
 ```
 
 **Exercício E604** · ★★☆
@@ -2489,7 +2489,7 @@ Teste 2: pré 60 40 20 50 70 | altura da raiz 2
    do 60 e passa a ser filho direito do 40.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/E604.c
+gcc ~/LPEDC/14-arvores/0101-avl/E604.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E604 && ~/LPEDC/14-arvores/0101-avl/E604
 ```
 
 **Exercício E605** · ★★★
@@ -2522,7 +2522,7 @@ conserte e rode até a saída ficar igual à esperada.
    linhas, a saída fica igual à esperada.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/E605.c
+gcc ~/LPEDC/14-arvores/0101-avl/E605.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E605 && ~/LPEDC/14-arvores/0101-avl/E605
 ```
 
 **Exercício E606** · ★★★
@@ -2560,7 +2560,7 @@ Pré-ordem: 30 20 15 25 45 35 60
 3. Libere tudo no fim.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0101-avl/E606.c
+gcc ~/LPEDC/14-arvores/0101-avl/E606.c ~/LPEDC/14-arvores/0101-avl/avl.c -o ~/LPEDC/14-arvores/0101-avl/E606 && ~/LPEDC/14-arvores/0101-avl/E606
 ```
 
 ---
@@ -2780,7 +2780,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/A203.c
+gcc ~/LPEDC/14-arvores/0102-heap/A203.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/A203 && ~/LPEDC/14-arvores/0102-heap/A203
 ```
 
 **Exemplo A204 · Fila de prioridade com nome**
@@ -2857,7 +2857,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/A204.c
+gcc ~/LPEDC/14-arvores/0102-heap/A204.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/A204 && ~/LPEDC/14-arvores/0102-heap/A204
 ```
 
 #### Exercícios
@@ -2889,7 +2889,7 @@ v[5] = 20: folha
    no máximo um nó fica nessa situação.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/E607.c
+gcc ~/LPEDC/14-arvores/0102-heap/E607.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E607 && ~/LPEDC/14-arvores/0102-heap/E607
 ```
 
 **Exercício E608** · ★☆☆
@@ -2914,7 +2914,7 @@ e) heap
    mas aí precisa conferir se os filhos existem.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/E608.c
+gcc ~/LPEDC/14-arvores/0102-heap/E608.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E608 && ~/LPEDC/14-arvores/0102-heap/E608
 ```
 
 **Exercício E609** · ★★☆
@@ -2944,7 +2944,7 @@ saiu 40, entrou 10: [35 15 25 10 5]
    depois com o 15.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/E609.c
+gcc ~/LPEDC/14-arvores/0102-heap/E609.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E609 && ~/LPEDC/14-arvores/0102-heap/E609
 ```
 
 **Exercício E610** · ★★☆
@@ -2972,7 +2972,7 @@ Chamando senha 9
    heap_remove, heap_vazio e heap_libera.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/E610.c
+gcc ~/LPEDC/14-arvores/0102-heap/E610.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E610 && ~/LPEDC/14-arvores/0102-heap/E610
 ```
 
 **Exercício E611** · ★★★
@@ -3008,7 +3008,7 @@ Pódio: 98 95 91
    O(n log k), e não O(n log n).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/E611.c
+gcc ~/LPEDC/14-arvores/0102-heap/E611.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E611 && ~/LPEDC/14-arvores/0102-heap/E611
 ```
 
 **Exercício E612** · ★★★
@@ -3047,7 +3047,7 @@ conserte e rode até a ordem de atendimento ficar igual à esperada.
    90 70 50 40 30 20.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0102-heap/E612.c
+gcc ~/LPEDC/14-arvores/0102-heap/E612.c ~/LPEDC/14-arvores/0102-heap/heap.c -o ~/LPEDC/14-arvores/0102-heap/E612 && ~/LPEDC/14-arvores/0102-heap/E612
 ```
 
 ---
@@ -3271,7 +3271,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/A205.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/A205.c -o ~/LPEDC/14-arvores/0103-heapsort/A205 && ~/LPEDC/14-arvores/0103-heapsort/A205
 ```
 
 **Exemplo A206 · Heapsort não tem dia ruim**
@@ -3363,7 +3363,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/A206.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/A206.c -o ~/LPEDC/14-arvores/0103-heapsort/A206 && ~/LPEDC/14-arvores/0103-heapsort/A206
 ```
 
 #### Exercícios
@@ -3397,7 +3397,7 @@ fase 2:       [7 5 2 3 | 8 9]
    que 7 e 5. Quando o 3 desce da raiz, ele desce dois níveis.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/E613.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/E613.c -o ~/LPEDC/14-arvores/0103-heapsort/E613 && ~/LPEDC/14-arvores/0103-heapsort/E613
 ```
 
 **Exercício E614** · ★☆☆
@@ -3426,7 +3426,7 @@ Tabela: 70 66 62 51 45 38 29
 3. Resposta esperada: Tabela: 70 66 62 51 45 38 29
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/E614.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/E614.c -o ~/LPEDC/14-arvores/0103-heapsort/E614 && ~/LPEDC/14-arvores/0103-heapsort/E614
 ```
 
 **Exercício E615** · ★★☆
@@ -3458,7 +3458,7 @@ Os dois são heaps? sim
    folhas) nem se mexe; em geral ele é O(n) e o das inserções, O(n log n).
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/E615.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/E615.c -o ~/LPEDC/14-arvores/0103-heapsort/E615 && ~/LPEDC/14-arvores/0103-heapsort/E615
 ```
 
 **Exercício E616** · ★★☆
@@ -3489,7 +3489,7 @@ iguais:      fase 1: 0 trocas, fase 2: 0 trocas -> 5 5 5 5 5 5 5
    do mesmo jeito: o heapsort não aproveita a ordem que o vetor já tinha.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/E616.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/E616.c -o ~/LPEDC/14-arvores/0103-heapsort/E616 && ~/LPEDC/14-arvores/0103-heapsort/E616
 ```
 
 **Exercício E617** · ★★★
@@ -3519,7 +3519,7 @@ saída esperada.
    desce sobre subárvores que já são heaps. Consertado: 1 2 3 4 5 6 7.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/E617.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/E617.c -o ~/LPEDC/14-arvores/0103-heapsort/E617 && ~/LPEDC/14-arvores/0103-heapsort/E617
 ```
 
 **Exercício E618** · ★★★
@@ -3556,7 +3556,7 @@ Zeca
 3. Resposta esperada: a lista acima, um nome por linha.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0103-heapsort/E618.c
+gcc ~/LPEDC/14-arvores/0103-heapsort/E618.c -o ~/LPEDC/14-arvores/0103-heapsort/E618 && ~/LPEDC/14-arvores/0103-heapsort/E618
 ```
 
 ---
@@ -3793,7 +3793,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/A207.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/A207.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/A207 && ~/LPEDC/14-arvores/0104-juntando-tudo/A207
 ```
 
 **Exemplo A208 · A recepção digitando comandos**
@@ -3837,7 +3837,7 @@ int main(void) {
     cad = cad_libera(cad);
     return 0;
 }
-// Teste: printf 'i 50 Ana 12\ni 30 Bruno 8\ni 70 Carla 15\nb 30\nr 50\nb 50\nl\nq\n' | ~/LPEDC/rodar 14-arvores/0104-juntando-tudo/A208.c
+// Teste: gcc ~/LPEDC/14-arvores/0104-juntando-tudo/A208.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/A208 && printf 'i 50 Ana 12\ni 30 Bruno 8\ni 70 Carla 15\nb 30\nr 50\nb 50\nl\nq\n' | ~/LPEDC/14-arvores/0104-juntando-tudo/A208
 // Saída:
 // ok: Ana entrou
 // ok: Bruno entrou
@@ -3851,7 +3851,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/A208.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/A208.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/A208 && ~/LPEDC/14-arvores/0104-juntando-tudo/A208
 ```
 
 #### Exercícios
@@ -3877,7 +3877,7 @@ Total: 4
 3. Resposta esperada: Eva (20), Ana (12), Carla (15) e Gil (11). Total: 4.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E619.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E619.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E619 && ~/LPEDC/14-arvores/0104-juntando-tudo/E619
 ```
 
 **Exercício E620** · ★☆☆
@@ -3908,7 +3908,7 @@ cadastro vazio
    esquerdo: o 20 sobe direto para a raiz, sem sucessor.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E620.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E620.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E620 && ~/LPEDC/14-arvores/0104-juntando-tudo/E620
 ```
 
 **Exercício E621** · ★★☆
@@ -3937,7 +3937,7 @@ Alunos em ordem: 20 30 40 50 60 70 80
    contrário.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E621.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E621.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E621 && ~/LPEDC/14-arvores/0104-juntando-tudo/E621
 ```
 
 **Exercício E622** · ★★☆
@@ -3966,7 +3966,7 @@ depois de 80: -1
    70 (candidata), 60 (candidata melhor), NULL.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E622.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E622.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E622 && ~/LPEDC/14-arvores/0104-juntando-tudo/E622
 ```
 
 **Exercício E623** · ★★★
@@ -4006,7 +4006,7 @@ Ache a linha errada, conserte e rode até sair a saída esperada.
    Consertado, os 7 aparecem em ordem.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E623.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E623.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E623 && ~/LPEDC/14-arvores/0104-juntando-tudo/E623
 ```
 
 **Exercício E624** · ★★★
@@ -4021,7 +4021,7 @@ menos urgente. Escreva do zero, usando:
 Teste com:
 
 ```text
-printf 'Ana 3\nBeto 5\nCaio 1\nAna 4\nDani 4\nEdu 2\n' | ~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E624.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E624.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E624 && printf 'Ana 3\nBeto 5\nCaio 1\nAna 4\nDani 4\nEdu 2\n' | ~/LPEDC/14-arvores/0104-juntando-tudo/E624
 ```
 
 
@@ -4047,7 +4047,7 @@ Chamando: Caio (1)
    recusado e a Ana fica com a prioridade 3. Libere a BST no fim.
 
 ```bash
-~/LPEDC/rodar 14-arvores/0104-juntando-tudo/E624.c
+gcc ~/LPEDC/14-arvores/0104-juntando-tudo/E624.c ~/LPEDC/14-arvores/0104-juntando-tudo/cadastro.c -o ~/LPEDC/14-arvores/0104-juntando-tudo/E624 && ~/LPEDC/14-arvores/0104-juntando-tudo/E624
 ```
 
 ---
@@ -4055,7 +4055,7 @@ Chamando: Caio (1)
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`; quando o desafio citar `avl.h` ou `heap.h`, copie o `.h` e o
+com as flags de estudo; quando o desafio citar `avl.h` ou `heap.h`, copie o `.h` e o
 `.c` do assunto para a pasta do seu arquivo.
 
 **1. Quantos nós cabem?** Escreva `int max_nos(int h)`, que soma os níveis
@@ -4351,7 +4351,7 @@ altura da árvore: 3
    Site, a 3 arestas da Diretora).
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1401.c
+gcc ~/LPEDC/14-arvores/lista/P1401.c -o ~/LPEDC/14-arvores/lista/P1401 && ~/LPEDC/14-arvores/lista/P1401
 ```
 
 ---
@@ -4379,7 +4379,7 @@ pós: 20 35 40 30 65 60 80 70 50
    errada. A raiz é a primeira da pré e a última da pós.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1402.c
+gcc ~/LPEDC/14-arvores/lista/P1402.c -o ~/LPEDC/14-arvores/lista/P1402 && ~/LPEDC/14-arvores/lista/P1402
 ```
 
 ---
@@ -4417,7 +4417,7 @@ menor: 150, maior: 950
 3. No mínimo, ande enquanto r->esq != NULL (a árvore aqui não é vazia).
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1403.c
+gcc ~/LPEDC/14-arvores/lista/P1403.c -o ~/LPEDC/14-arvores/lista/P1403 && ~/LPEDC/14-arvores/lista/P1403
 ```
 
 ---
@@ -4447,7 +4447,7 @@ nível 3: Nina Yuri Zoe
    pilha nem recursão.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1404.c
+gcc ~/LPEDC/14-arvores/lista/P1404.c -o ~/LPEDC/14-arvores/lista/P1404 && ~/LPEDC/14-arvores/lista/P1404
 ```
 
 ---
@@ -4480,7 +4480,7 @@ depois do 380: 510 340 450 120 90 200 380
 3. O vetor do heap NÃO está ordenado; só a raiz é garantidamente o maior.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1405.c
+gcc ~/LPEDC/14-arvores/lista/P1405.c -o ~/LPEDC/14-arvores/lista/P1405 && ~/LPEDC/14-arvores/lista/P1405
 ```
 
 ---
@@ -4508,7 +4508,7 @@ chamou 75, sobrou: 70 65 30 40 10
    filho: primeiro o 80, depois o 75.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1406.c
+gcc ~/LPEDC/14-arvores/lista/P1406.c -o ~/LPEDC/14-arvores/lista/P1406 && ~/LPEDC/14-arvores/lista/P1406
 ```
 
 ---
@@ -4546,7 +4546,7 @@ Saída esperada:
    raiz ao mesmo tempo.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1407.c
+gcc ~/LPEDC/14-arvores/lista/P1407.c -o ~/LPEDC/14-arvores/lista/P1407 && ~/LPEDC/14-arvores/lista/P1407
 ```
 
 ---
@@ -4575,7 +4575,7 @@ altura da vazia: -1
    cima.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1408.c
+gcc ~/LPEDC/14-arvores/lista/P1408.c -o ~/LPEDC/14-arvores/lista/P1408 && ~/LPEDC/14-arvores/lista/P1408
 ```
 
 ---
@@ -4605,7 +4605,7 @@ folhas = (2 filhos) + 1? sim
    A prova cobra isso em questões de contar nós.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1409.c
+gcc ~/LPEDC/14-arvores/lista/P1409.c -o ~/LPEDC/14-arvores/lista/P1409 && ~/LPEDC/14-arvores/lista/P1409
 ```
 
 ---
@@ -4635,7 +4635,7 @@ desce(0): 31 23 12 19 8 9 4 2 17
 3. Construir assim custa O(n), menos que n inserções (O(n log n)).
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1410.c
+gcc ~/LPEDC/14-arvores/lista/P1410.c -o ~/LPEDC/14-arvores/lista/P1410 && ~/LPEDC/14-arvores/lista/P1410
 ```
 
 ### ★★☆ Para pensar
@@ -4674,7 +4674,7 @@ Saída esperada:
    quem o 45 está à esquerda). É o caso que a prova adora.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1411.c
+gcc ~/LPEDC/14-arvores/lista/P1411.c -o ~/LPEDC/14-arvores/lista/P1411 && ~/LPEDC/14-arvores/lista/P1411
 ```
 
 ---
@@ -4709,7 +4709,7 @@ sem o 50: 65 40 35 45 70 80
    válidas, e a prova diz qual convenção usar.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1412.c
+gcc ~/LPEDC/14-arvores/lista/P1412.c -o ~/LPEDC/14-arvores/lista/P1412 && ~/LPEDC/14-arvores/lista/P1412
 ```
 
 ---
@@ -4745,7 +4745,7 @@ mediana (6º de 11): 205 min
 4. Custa O(h + k): não precisa percorrer a árvore toda.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1413.c
+gcc ~/LPEDC/14-arvores/lista/P1413.c -o ~/LPEDC/14-arvores/lista/P1413 && ~/LPEDC/14-arvores/lista/P1413
 ```
 
 ---
@@ -4786,7 +4786,7 @@ altura: 3
    único é esquerdo ou direito.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1414.c
+gcc ~/LPEDC/14-arvores/lista/P1414.c -o ~/LPEDC/14-arvores/lista/P1414 && ~/LPEDC/14-arvores/lista/P1414
 ```
 
 ---
@@ -4828,7 +4828,7 @@ altura final: 3
    nó desbalanceado mais baixo, e os de cima voltam a ficar em ordem.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1415.c
+gcc ~/LPEDC/14-arvores/lista/P1415.c -o ~/LPEDC/14-arvores/lista/P1415 && ~/LPEDC/14-arvores/lista/P1415
 ```
 
 ---
@@ -4876,7 +4876,7 @@ ordem de impressão:
 3. Use printf("  %-8s prioridade %d, chegou em %d\n", ...).
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1416.c
+gcc ~/LPEDC/14-arvores/lista/P1416.c -o ~/LPEDC/14-arvores/lista/P1416 && ~/LPEDC/14-arvores/lista/P1416
 ```
 
 ---
@@ -4913,7 +4913,7 @@ as 4 mais baratas: 390 399 415 430
 5. Resposta esperada: 390 399 415 430.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1417.c
+gcc ~/LPEDC/14-arvores/lista/P1417.c -o ~/LPEDC/14-arvores/lista/P1417 && ~/LPEDC/14-arvores/lista/P1417
 ```
 
 ---
@@ -4948,7 +4948,7 @@ trocas: 15
 3. Os rótulos são "heap:     " e "passo %d: " seguido de mostra com " ".
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1418.c
+gcc ~/LPEDC/14-arvores/lista/P1418.c -o ~/LPEDC/14-arvores/lista/P1418 && ~/LPEDC/14-arvores/lista/P1418
 ```
 
 ---
@@ -4992,7 +4992,7 @@ Saída esperada:
    ordem da BST deixa em O(h).
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1419.c
+gcc ~/LPEDC/14-arvores/lista/P1419.c -o ~/LPEDC/14-arvores/lista/P1419 && ~/LPEDC/14-arvores/lista/P1419
 ```
 
 ---
@@ -5023,7 +5023,7 @@ pilha chegou a 3 nós
    direita é desempilhado antes: o máximo fica em 3.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1420.c
+gcc ~/LPEDC/14-arvores/lista/P1420.c -o ~/LPEDC/14-arvores/lista/P1420 && ~/LPEDC/14-arvores/lista/P1420
 ```
 
 ### ★★★ Desafio
@@ -5072,7 +5072,7 @@ sem o 5: 30 20 10 25 40 35 50   (rotação RL)  altura 2
    printf("   (rotação %s)", rotacao) e printf("  altura %d\n", raiz->alt).
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1421.c
+gcc ~/LPEDC/14-arvores/lista/P1421.c -o ~/LPEDC/14-arvores/lista/P1421 && ~/LPEDC/14-arvores/lista/P1421
 ```
 
 ---
@@ -5126,7 +5126,7 @@ backup 3: ok
 4. Mesmo no erro, a árvore parcial precisa ser liberada.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1422.c
+gcc ~/LPEDC/14-arvores/lista/P1422.c -o ~/LPEDC/14-arvores/lista/P1422 && ~/LPEDC/14-arvores/lista/P1422
 ```
 
 ---
@@ -5181,7 +5181,7 @@ posfixa: 6 2 3 * + 8 4 - /
 4. Use isdigit((unsigned char)c) de <ctype.h>; a folha vale c - '0'.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1423.c
+gcc ~/LPEDC/14-arvores/lista/P1423.c -o ~/LPEDC/14-arvores/lista/P1423 && ~/LPEDC/14-arvores/lista/P1423
 ```
 
 ---
@@ -5211,7 +5211,7 @@ ordem de pagamento: 1500 1200 1100 900 800 700 400 300
    e a saída fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1424.c
+gcc ~/LPEDC/14-arvores/lista/P1424.c -o ~/LPEDC/14-arvores/lista/P1424 && ~/LPEDC/14-arvores/lista/P1424
 ```
 
 ---
@@ -5265,7 +5265,7 @@ atendido: ficha 4 (gravidade 2)
    (módulo 23) usa para diminuir distâncias.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1425.c
+gcc ~/LPEDC/14-arvores/lista/P1425.c -o ~/LPEDC/14-arvores/lista/P1425 && ~/LPEDC/14-arvores/lista/P1425
 ```
 
 ---
@@ -5312,7 +5312,7 @@ juntas: 5 7 12 18 19 21 33 40 50 60 77 88 95
    entra e sai do heap uma vez. Compare com intercalar duas a duas.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1426.c
+gcc ~/LPEDC/14-arvores/lista/P1426.c -o ~/LPEDC/14-arvores/lista/P1426 && ~/LPEDC/14-arvores/lista/P1426
 ```
 
 ---
@@ -5355,7 +5355,7 @@ chegou 60: mediana 31.0
 4. Use printf("chegou %2d: mediana %.1f\n", ...) e divida por 2.0.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1427.c
+gcc ~/LPEDC/14-arvores/lista/P1427.c -o ~/LPEDC/14-arvores/lista/P1427 && ~/LPEDC/14-arvores/lista/P1427
 ```
 
 ---
@@ -5396,7 +5396,7 @@ AVL: altura 4, pior busca 5, total 129, média 4.16
    o nó.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1428.c
+gcc ~/LPEDC/14-arvores/lista/P1428.c -o ~/LPEDC/14-arvores/lista/P1428 && ~/LPEDC/14-arvores/lista/P1428
 ```
 
 ---
@@ -5439,7 +5439,7 @@ maior caminho: 7 arestas, fazendo a curva no sensor 2
    devolver a altura e atualizar o diâmetro na mesma volta dá O(n).
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1429.c
+gcc ~/LPEDC/14-arvores/lista/P1429.c -o ~/LPEDC/14-arvores/lista/P1429 && ~/LPEDC/14-arvores/lista/P1429
 ```
 
 ---
@@ -5483,7 +5483,7 @@ tempo, ordem: #104(35) #107(35) #102(38) #105(38) #101(42) #103(42) #106(42)
 3. Use printf(" #%d(%d)", ...) para cada corredor.
 
 ```bash
-~/LPEDC/rodar 14-arvores/lista/P1430.c
+gcc ~/LPEDC/14-arvores/lista/P1430.c -o ~/LPEDC/14-arvores/lista/P1430 && ~/LPEDC/14-arvores/lista/P1430
 ```
 
 ## Questões no estilo da prova

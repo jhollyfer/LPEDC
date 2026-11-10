@@ -9,7 +9,7 @@ memória, os ponteiros, a compilação e o custo de cada escolha.
 > Conhecimentos do edital 070/2026 (prova em 27/11/2026). O guia
 > [`PPGI.md`](PPGI.md) liga cada tópico do edital e do cursinho do PPGI ao
 > assunto que o ensina. Para estudar até a prova, comece pelo
-> [plano dia a dia](PPGI.md#comece-aqui).
+> [plano dia a dia](PPGI.md#comece-aqui); a [`TRILHA.md`](TRILHA.md) mostra o que vem antes de quê.
 
 Segue a filosofia do [LPPOO](https://github.com/jhollyfer/LPPOO). Cada assunto
 conta **um exemplo só**, em quatro partes que batem entre si: o texto, o
@@ -30,20 +30,27 @@ o compilador (`clang`, que aceita os mesmos comandos).
 
 ## Como rodar um arquivo
 
-```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/A003.c
-```
-
-O `rodar` compila com `gcc -std=c17 -Wall -Wextra -pedantic` e com o
-**AddressSanitizer**, que para o programa e aponta a linha quando você acessa
-memória que não devia ou esquece um `free`. O caminho pode ser relativo ao
-LPEDC, à pasta atual ou absoluto. Outros usos:
+Compile com o `gcc` e execute o resultado. O `-o` dá o nome do executável, que fica ao lado do `.c`:
 
 ```bash
-printf '25\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c   # já manda a entrada
-~/LPEDC/rodar --valgrind 07-memoria-dinamica/0054-malloc-free/A107.c
-~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c um dois tres     # argumentos do programa
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/A003.c -o ~/LPEDC/01-fundamentos/0002-variaveis/A003 && ~/LPEDC/01-fundamentos/0002-variaveis/A003
 ```
+
+Para testar sem digitar, mande a entrada por um cano; para passar argumentos, escreva-os depois do executável:
+
+```bash
+gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '25\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
+gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137 um dois tres
+```
+
+Os assuntos com TAD têm `.c` de apoio na pasta (`pilha.c`, `lista.c`...): o comando do exemplo já os lista.
+
+Para estudar, use as **flags de estudo**: acrescente
+`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do `-o`. O
+**AddressSanitizer** para o programa e aponta a linha quando você acessa memória que não devia ou
+esquece um `free`, e o detector de comportamento indefinido pega o estouro de inteiro. Os avisos
+e relatórios citados nos módulos aparecem com essas flags. Para vazamento difícil, use
+`valgrind ~/LPEDC/<caminho>/A107` sobre o executável compilado com `-g`.
 
 Os arquivos têm nome curto e numeração única no curso inteiro:
 

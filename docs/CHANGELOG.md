@@ -8,6 +8,8 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Adicionado
 
+- `TRILHA.md`: trilha de estudo em 9 etapas, em ordem de dependência, com o que saber de cabeça e o
+  treino de cada uma; complementa o plano por peso do `PPGI.md`.
 - `PPGI.md`, "Comece aqui": plano de estudo dia a dia de 09/11 até a prova (27/11), com
   assuntos e treino (provas antigas e simulados) em cada dia.
 - `PROVAS.md`: as 11 provas do PPGI de 2016 a 2023 resolvidas (a de 2023 com o gabarito
@@ -18,6 +20,8 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Alterado
 
+- Os comandos dos exemplos e exercícios passam de `~/LPEDC/rodar caminho.c` para `gcc ... -o ... && ...`,
+  com os `.c` de apoio da pasta e `-lm` quando preciso; o texto explica as flags de estudo.
 - Dicas "Resposta esperada: a saída acima." saem do `.md` dos módulos: repetiam a saída já mostrada
   no enunciado (cerca de 980 linhas a menos).
 - "Questões no estilo da prova" dos 29 módulos no formato da prova real: afirmações I, II e III

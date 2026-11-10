@@ -42,11 +42,11 @@ hash** (0105 a 0108) e a **distância de edição** (0142). A análise amortizad
 
 Cada assunto tem um **TAD** na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
 `trie.h`, `uniao.h`, `corretor.h`). O texto mostra o pedaço do `.c` que
-importa; abra o `.c` inteiro também. O `rodar` compila junto os `.c` de apoio
+importa; abra o `.c` inteiro também. O comando do exemplo compila junto os `.c` de apoio
 da pasta (como `trie.c`):
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/A293.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/A293.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/A293 && ~/LPEDC/22-arvores-avancadas/0147-trie/A293
 ```
 
 Duas convenções valem para o módulo todo. **Altura conta arestas**, como no
@@ -276,7 +276,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/A287.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/A287.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/A287 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/A287
 ```
 
 **Exemplo A288 · A família vista como árvore binária**
@@ -359,7 +359,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/A288.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/A288.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/A288 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/A288
 ```
 
 #### Exercícios
@@ -388,7 +388,7 @@ Total: R$ 297
    cerveja e carvao são as folhas; churrasco, carnes e bebidas, os grupos).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E859.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E859.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E859 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E859
 ```
 
 **Exercício E860** · ★☆☆
@@ -412,7 +412,7 @@ Mais caro em papelaria: estojo (R$ 25)
    c = mais_caro(p); se melhor for NULL ou c->valor > melhor->valor, troque.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E860.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E860.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E860 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E860
 ```
 
 **Exercício E861** · ★★☆
@@ -440,7 +440,7 @@ janela: não encontrado
    sobrescritas pelos próximos irmãos).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E861.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E861.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E861 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E861
 ```
 
 **Exercício E862** · ★★☆
@@ -468,7 +468,7 @@ Geração 3 (1): Leo
 2. As gerações vão de 0 até ag_altura(r).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E862.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E862.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E862 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E862
 ```
 
 **Exercício E863** · ★★★
@@ -514,7 +514,7 @@ cardapio: 50
    trocada, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E863.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E863.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E863 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E863
 ```
 
 **Exercício E864** · ★★★
@@ -528,7 +528,7 @@ tem o maior total. Sem nenhuma linha, mostre "Árvore vazia".
 Teste com:
 
 ```text
-printf -- '- casamento 0\ncasamento buffet 0\nbuffet salgados 1800\nbuffet bolo 950\ncasamento decoracao 0\ndecoracao flores 1200\nigreja padre 300\ndecoracao luzes 400\ncasamento musica 2500\nbuffet doces 700\n' | ~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E864.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864 && printf -- '- casamento 0\ncasamento buffet 0\nbuffet salgados 1800\nbuffet bolo 950\ncasamento decoracao 0\ndecoracao flores 1200\nigreja padre 300\ndecoracao luzes 400\ncasamento musica 2500\nbuffet doces 700\n' | ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864
 ```
 
 
@@ -559,7 +559,7 @@ Maior gasto: buffet (R$ 3450)
    Resposta esperada: a saída acima. Não esqueça do ag_libera no fim.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0144-arvores-gerais/E864.c
+gcc ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864.c ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/arvgen.c -o ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864 && ~/LPEDC/22-arvores-avancadas/0144-arvores-gerais/E864
 ```
 
 ---
@@ -803,7 +803,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/A289.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/A289.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/A289 -lm && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/A289
 ```
 
 **Exemplo A290 · A árvore 2-3 escondida na rubro-negra**
@@ -869,7 +869,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/A290.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/A290.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/A290 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/A290
 ```
 
 #### Exercícios
@@ -896,7 +896,7 @@ nós: 10 | vermelhos: 2 | pretos: 8
    pretos, a árvore 2-3 equivalente tem 8 nós.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E865.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E865.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E865 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E865
 ```
 
 **Exercício E866** · ★☆☆
@@ -925,7 +925,7 @@ pior caso entre as 100: 7 passos (altura 6)
    crescente, a raiz cai numa potência de 2 (teste com 10 e com 1000).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E866.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E866.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E866 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E866
 ```
 
 **Exercício E867** · ★★☆
@@ -960,7 +960,7 @@ TAD (1 a 20): ok, altura preta 4
 3. Cada nó é visitado uma vez só: O(n).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E867.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E867.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E867 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E867
 ```
 
 **Exercício E868** · ★★☆
@@ -994,7 +994,7 @@ Vencedor: 45 com 4 de 12 votos
    tamanho dela depende dos números diferentes, não do total de votos.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E868.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E868.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E868 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E868
 ```
 
 **Exercício E869** · ★★★
@@ -1024,7 +1024,7 @@ fiscal: regras ok
    Com a linha de volta, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E869.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E869.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E869 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E869
 ```
 
 **Exercício E870** · ★★★
@@ -1062,7 +1062,7 @@ Lia: na lista | Rafa: fora
    depois de cada inserção e de liberar tudo no fim.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0145-rubro-negra/E870.c
+gcc ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E870.c ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/rubronegra.c -o ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E870 && ~/LPEDC/22-arvores-avancadas/0145-rubro-negra/E870
 ```
 
 ---
@@ -1288,7 +1288,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/A291.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/A291.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/A291 -lm && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/A291
 ```
 
 **Exemplo A292 · As notas fiscais em ordem**
@@ -1356,7 +1356,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/A292.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/A292.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/A292 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/A292
 ```
 
 #### Exercícios
@@ -1387,7 +1387,7 @@ chaves: 20 | nós: 17 | média: 1.18 chaves por nó
    quase todo nó com uma chave só, de três possíveis.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/E871.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E871.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E871 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E871
 ```
 
 **Exercício E872** · ★☆☆
@@ -1417,7 +1417,7 @@ máxima: 36 graus (3 nós lidos)
    nível, os dois caminhos leem altura + 1 nós.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/E872.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E872.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E872 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E872
 ```
 
 **Exercício E873** · ★★☆
@@ -1448,7 +1448,7 @@ embaralhada: nós 127 | altura 5 | ocupação 52.5%
    insere ali.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/E873.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E873.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E873 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E873
 ```
 
 **Exercício E874** · ★★☆
@@ -1477,7 +1477,7 @@ notas de 970 a 999: (3 nós lidos de 9)
    da função.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/E874.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E874.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E874 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E874
 ```
 
 **Exercício E875** · ★★★
@@ -1507,7 +1507,7 @@ achou 10, 60 e 120? sim sim sim
    subiu. Com a linha, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/E875.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E875.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E875 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E875
 ```
 
 **Exercício E876** · ★★★
@@ -1541,7 +1541,7 @@ busca 31: não achou, 3 blocos lidos
    mesmas 30 chaves precisariam de mais um nível.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0146-arvore-b/E876.c
+gcc ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E876.c ~/LPEDC/22-arvores-avancadas/0146-arvore-b/arvoreb.c -o ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E876 && ~/LPEDC/22-arvores-avancadas/0146-arvore-b/E876
 ```
 
 ---
@@ -1745,7 +1745,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/A293.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/A293.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/A293 && ~/LPEDC/22-arvores-avancadas/0147-trie/A293
 ```
 
 **Exemplo A294 · A trie ordena e acha o prefixo comum**
@@ -1809,7 +1809,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/A294.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/A294.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/A294 && ~/LPEDC/22-arvores-avancadas/0147-trie/A294
 ```
 
 #### Exercícios
@@ -1839,7 +1839,7 @@ começam com "": 8
    a raiz quando o prefixo é "".
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E877.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E877.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E877 && ~/LPEDC/22-arvores-avancadas/0147-trie/E877
 ```
 
 **Exercício E878** · ★☆☆
@@ -1868,7 +1868,7 @@ mkdirs  não está
 3. Imprima com printf("%-7s %s\n", ...).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E878.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E878.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E878 && ~/LPEDC/22-arvores-avancadas/0147-trie/E878
 ```
 
 **Exercício E879** · ★★☆
@@ -1909,7 +1909,7 @@ roupa  2
    graça: os filhos são visitados de 'a' a 'z'.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E879.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E879.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E879 && ~/LPEDC/22-arvores-avancadas/0147-trie/E879
 ```
 
 **Exercício E880** · ★★☆
@@ -1940,7 +1940,7 @@ com 11 letras: orangotango rinoceronte
    confira o fim e volte (return) sem olhar os filhos.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E880.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E880.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E880 && ~/LPEDC/22-arvores-avancadas/0147-trie/E880
 ```
 
 **Exercício E881** · ★★★
@@ -1980,7 +1980,7 @@ linha que falta, conserte e rode de novo.
    no da maior palavra que passou antes pelo buffer.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E881.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E881.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E881 && ~/LPEDC/22-arvores-avancadas/0147-trie/E881
 ```
 
 **Exercício E882** · ★★★
@@ -2013,7 +2013,7 @@ tira sola: tirou | nós: 1 | sobram:
    l continua no caminho de sola e solteiro); tirar "solteiro" libera 5.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0147-trie/E882.c
+gcc ~/LPEDC/22-arvores-avancadas/0147-trie/E882.c ~/LPEDC/22-arvores-avancadas/0147-trie/trie.c -o ~/LPEDC/22-arvores-avancadas/0147-trie/E882 && ~/LPEDC/22-arvores-avancadas/0147-trie/E882
 ```
 
 ---
@@ -2278,7 +2278,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/A295.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/A295.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/A295 && ~/LPEDC/22-arvores-avancadas/0148-union-find/A295
 ```
 
 **Exemplo A296 · As ilhas do mapa**
@@ -2346,7 +2346,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/A296.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/A296.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/A296 && ~/LPEDC/22-arvores-avancadas/0148-union-find/A296
 ```
 
 #### Exercícios
@@ -2377,7 +2377,7 @@ Embu -> Embu: dá para ir
    Dourado}, {Bauru, Franca, Garça} e {Embu}.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/E883.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E883.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E883 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E883
 ```
 
 **Exercício E884** · ★☆☆
@@ -2404,7 +2404,7 @@ grupos: 5 | maior: 5 apartamentos | sozinhos: 2
    {1, 2, 6}, {4, 5}, {8} e {10}.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/E884.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E884.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E884 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E884
 ```
 
 **Exercício E885** · ★★☆
@@ -2434,7 +2434,7 @@ cabo 9 (2-5) é redundante
    Kruskal, no módulo 23.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/E885.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E885.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E885 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E885
 ```
 
 **Exercício E886** · ★★☆
@@ -2464,7 +2464,7 @@ Time 4 (1): Gabo
    Não importa: a ordem de saída é pelos números, não pelas raízes.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/E886.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E886.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E886 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E886
 ```
 
 **Exercício E887** · ★★★
@@ -2499,7 +2499,7 @@ Conserte a função une e rode de novo.
    abandona o grupo em que estava e leva só os seus descendentes.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/E887.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E887.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E887 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E887
 ```
 
 **Exercício E888** · ★★★
@@ -2535,7 +2535,7 @@ A água passou no passo 13 (13 de 25 abertas)
    testar os 25 pares de quadradinhos de cima e de baixo a cada furo.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0148-union-find/E888.c
+gcc ~/LPEDC/22-arvores-avancadas/0148-union-find/E888.c ~/LPEDC/22-arvores-avancadas/0148-union-find/uniao.c -o ~/LPEDC/22-arvores-avancadas/0148-union-find/E888 && ~/LPEDC/22-arvores-avancadas/0148-union-find/E888
 ```
 
 ---
@@ -2907,7 +2907,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/A297.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A297.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A297 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A297
 ```
 
 **Exemplo A298 · O corretor que aprende palavras novas**
@@ -2919,7 +2919,7 @@ int main(void) {
 // Lê o texto linha por linha. Uma linha que começa com '+' ensina palavras
 // novas ao dicionário; as outras são conferidas.
 //
-//   printf 'hoje tem fieira na rua\n+ pastel esquina\na fiera da esquina tem pastel\n' | ~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/A298.c
+//   gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298 && printf 'hoje tem fieira na rua\n+ pastel esquina\na fiera da esquina tem pastel\n' | ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298
 
 int main(void) {
     NoC *dic = cor_cria();
@@ -2972,7 +2972,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/A298.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/A298
 ```
 
 #### Exercícios
@@ -2999,7 +2999,7 @@ desconhecidas: muitos alunos
    mas não os plurais: um corretor de verdade trata as flexões à parte.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/E889.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E889.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E889 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E889
 ```
 
 **Exercício E890** · ★☆☆
@@ -3028,7 +3028,7 @@ palavras: hoje a feira da rua tem pao e cafe
    conferência: nenhuma letra dela está entre 'a' e 'z'.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/E890.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E890.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E890 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E890
 ```
 
 **Exercício E891** · ★★☆
@@ -3060,7 +3060,7 @@ xis: prefixo "" | nenhuma
    não sugira nada: o prefixo vazio casaria com o dicionário inteiro.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/E891.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E891.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E891 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E891
 ```
 
 **Exercício E892** · ★★☆
@@ -3090,7 +3090,7 @@ pasou: 1
 3. Libere a BST e o dicionário no fim.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/E892.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E892.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E892 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E892
 ```
 
 **Exercício E893** · ★★★
@@ -3132,7 +3132,7 @@ Ache a linha errada, conserte e rode de novo.
    i < n. Com i < n, a posição depois da última letra nunca é testada.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/E893.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E893.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E893 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E893
 ```
 
 **Exercício E894** · ★★★
@@ -3170,7 +3170,7 @@ mercadorias: nenhuma
    cor_sugere (que testa a troca de vizinhas à parte).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/E894.c
+gcc ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E894.c ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/corretor.c -o ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E894 && ~/LPEDC/22-arvores-avancadas/0149-juntando-tudo/E894
 ```
 
 ---
@@ -3378,7 +3378,7 @@ Níveis: 4
 3. Resposta esperada: 4 níveis (Prefeito, Saúde, UBS Norte, Farmácia).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2201.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2201.c -o ~/LPEDC/22-arvores-avancadas/lista/P2201 && ~/LPEDC/22-arvores-avancadas/lista/P2201
 ```
 
 ---
@@ -3428,7 +3428,7 @@ Mais filhos: Pedro, com 4
 3. Resposta esperada: Pedro, com 4 filhos.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2202.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2202.c -o ~/LPEDC/22-arvores-avancadas/lista/P2202 && ~/LPEDC/22-arvores-avancadas/lista/P2202
 ```
 
 ---
@@ -3469,7 +3469,7 @@ Saída esperada:
    25 vermelho.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2203.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2203.c -o ~/LPEDC/22-arvores-avancadas/lista/P2203 && ~/LPEDC/22-arvores-avancadas/lista/P2203
 ```
 
 ---
@@ -3506,7 +3506,7 @@ Saída esperada:
    pretos; pela direita do 15, só 2).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2204.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2204.c -o ~/LPEDC/22-arvores-avancadas/lista/P2204 && ~/LPEDC/22-arvores-avancadas/lista/P2204
 ```
 
 ---
@@ -3540,7 +3540,7 @@ Protocolo 100: achado (páginas lidas: 4)
    número de níveis da árvore.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2205.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2205.c -o ~/LPEDC/22-arvores-avancadas/lista/P2205 && ~/LPEDC/22-arvores-avancadas/lista/P2205
 ```
 
 ---
@@ -3572,7 +3572,7 @@ solar, sol, solteiro, soldado: prefixo comum "sol"
    segunda. Libere a trie no fim.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2206.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2206.c -o ~/LPEDC/22-arvores-avancadas/lista/P2206 && ~/LPEDC/22-arvores-avancadas/lista/P2206
 ```
 
 ---
@@ -3611,7 +3611,7 @@ Redes: 3
 3. Resposta esperada: 3 redes: {0 1 4 8}, {2 3 7} e {5 6 9}.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2207.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2207.c -o ~/LPEDC/22-arvores-avancadas/lista/P2207 && ~/LPEDC/22-arvores-avancadas/lista/P2207
 ```
 
 ---
@@ -3644,7 +3644,7 @@ Com posto: profundidade máxima 1
    nunca passa de lg n, mesmo sem compressão.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2208.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2208.c -o ~/LPEDC/22-arvores-avancadas/lista/P2208 && ~/LPEDC/22-arvores-avancadas/lista/P2208
 ```
 
 ---
@@ -3678,7 +3678,7 @@ Altura: 4 nós
    acontece.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2209.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2209.c -o ~/LPEDC/22-arvores-avancadas/lista/P2209 && ~/LPEDC/22-arvores-avancadas/lista/P2209
 ```
 
 ---
@@ -3707,7 +3707,7 @@ Nível 2: [1] [3] [5] [7] [9] [11 12]
    Todas as folhas ficam no mesmo nível: é a regra da árvore B.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2210.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2210.c -o ~/LPEDC/22-arvores-avancadas/lista/P2210 && ~/LPEDC/22-arvores-avancadas/lista/P2210
 ```
 
 ### ★★☆ Para pensar
@@ -3750,7 +3750,7 @@ D: quebra a regra 4
    direita de 60); C quebra a 2; D quebra a 4.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2211.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2211.c -o ~/LPEDC/22-arvores-avancadas/lista/P2211 && ~/LPEDC/22-arvores-avancadas/lista/P2211
 ```
 
 ---
@@ -3788,7 +3788,7 @@ Saída esperada:
    O(lg n) da rubro-negra.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2212.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2212.c -o ~/LPEDC/22-arvores-avancadas/lista/P2212 && ~/LPEDC/22-arvores-avancadas/lista/P2212
 ```
 
 ---
@@ -3818,7 +3818,7 @@ t = 4: 10 divisões, 13 nós, altura 2
    disco usam t na casa das centenas.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2213.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2213.c -o ~/LPEDC/22-arvores-avancadas/lista/P2213 && ~/LPEDC/22-arvores-avancadas/lista/P2213
 ```
 
 ---
@@ -3853,7 +3853,7 @@ brinquedoteca: br
 3. Resposta esperada: acer, aces, ar, au, bi, br.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2214.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2214.c -o ~/LPEDC/22-arvores-avancadas/lista/P2214 && ~/LPEDC/22-arvores-avancadas/lista/P2214
 ```
 
 ---
@@ -3893,7 +3893,7 @@ Saída esperada:
 3. Resposta esperada: não, sim, não, sim, sim.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2215.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2215.c -o ~/LPEDC/22-arvores-avancadas/lista/P2215 && ~/LPEDC/22-arvores-avancadas/lista/P2215
 ```
 
 ---
@@ -3940,7 +3940,7 @@ Dia 10, areia em (1,3): 2 ilha(s)
 3. Resposta esperada: a contagem da saída, terminando com 2 ilhas.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2216.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2216.c -o ~/LPEDC/22-arvores-avancadas/lista/P2216 && ~/LPEDC/22-arvores-avancadas/lista/P2216
 ```
 
 ---
@@ -3983,7 +3983,7 @@ Cardápio(Entradas(Caldo Bolinho) Pratos(Peixe(Tambaqui Pirarucu) Frango) Bebida
 3. Resposta esperada: a linha de cima.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2217.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2217.c -o ~/LPEDC/22-arvores-avancadas/lista/P2217 && ~/LPEDC/22-arvores-avancadas/lista/P2217
 ```
 
 ---
@@ -4022,7 +4022,7 @@ rot_dir(20): raiz 10, em ordem 5 10 15 20 30, pais OK
    rot_dir(20), volta a ser 10. Em ordem sempre 5 10 15 20 30 e pais OK.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2218.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2218.c -o ~/LPEDC/22-arvores-avancadas/lista/P2218 && ~/LPEDC/22-arvores-avancadas/lista/P2218
 ```
 
 ---
@@ -4061,7 +4061,7 @@ Lista 2: consistente
    4078; o conflito aparece ao inserir o 40) e a lista 2 é consistente.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2219.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2219.c -o ~/LPEDC/22-arvores-avancadas/lista/P2219 && ~/LPEDC/22-arvores-avancadas/lista/P2219
 ```
 
 ---
@@ -4096,7 +4096,7 @@ Pedido 42: piso 41, teto 43
    para 46 não há teto; 40 está em estoque.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2220.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2220.c -o ~/LPEDC/22-arvores-avancadas/lista/P2220 && ~/LPEDC/22-arvores-avancadas/lista/P2220
 ```
 
 ### ★★★ Desafio
@@ -4132,7 +4132,7 @@ n = 1000: aprovada, altura 13, altura preta 8, limite 19.9
    bem abaixo do limite (veja os números).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2221.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2221.c -o ~/LPEDC/22-arvores-avancadas/lista/P2221 -lm && ~/LPEDC/22-arvores-avancadas/lista/P2221
 ```
 
 ---
@@ -4173,7 +4173,7 @@ Busca 60: não achou (nós visitados: 3)
    nível; o 57 está na árvore e o 60 não.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2222.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2222.c -o ~/LPEDC/22-arvores-avancadas/lista/P2222 && ~/LPEDC/22-arvores-avancadas/lista/P2222
 ```
 
 ---
@@ -4219,7 +4219,7 @@ Fecha 2-4: 6 grupo(s)
 3. Resposta esperada: 1 1 2 3 4 5 6.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2223.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2223.c -o ~/LPEDC/22-arvores-avancadas/lista/P2223 && ~/LPEDC/22-arvores-avancadas/lista/P2223
 ```
 
 ---
@@ -4270,7 +4270,7 @@ Casas visitadas: 54
    teria que seguir todos os caminhos da grade até um tamanho máximo.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2224.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2224.c -o ~/LPEDC/22-arvores-avancadas/lista/P2224 && ~/LPEDC/22-arvores-avancadas/lista/P2224
 ```
 
 ---
@@ -4312,7 +4312,7 @@ C: 0 coloração(ões)
    um NULL não passa do dobro do mais curto).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2225.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2225.c -o ~/LPEDC/22-arvores-avancadas/lista/P2225 && ~/LPEDC/22-arvores-avancadas/lista/P2225
 ```
 
 ---
@@ -4365,7 +4365,7 @@ Medição 0 2 9: rejeitada (contradiz)
    rejeitada. Nas perguntas: 12 m, -5 m, desconhecida e -7 m.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2226.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2226.c -o ~/LPEDC/22-arvores-avancadas/lista/P2226 && ~/LPEDC/22-arvores-avancadas/lista/P2226
 ```
 
 ---
@@ -4403,7 +4403,7 @@ Achados: 7 de 8
    isso, todos os prontuários de 10 a 200 são achados e o 55 não.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2227.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2227.c -o ~/LPEDC/22-arvores-avancadas/lista/P2227 && ~/LPEDC/22-arvores-avancadas/lista/P2227
 ```
 
 ---
@@ -4454,7 +4454,7 @@ Igor e Hugo: Severino (distância 6)
    (1); Igor e Hugo, Severino (6).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2228.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2228.c -o ~/LPEDC/22-arvores-avancadas/lista/P2228 && ~/LPEDC/22-arvores-avancadas/lista/P2228
 ```
 
 ---
@@ -4495,7 +4495,7 @@ Saída esperada:
 3. Resposta esperada: para "bo", bom (5), bolo (3) e boa (2).
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2229.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2229.c -o ~/LPEDC/22-arvores-avancadas/lista/P2229 && ~/LPEDC/22-arvores-avancadas/lista/P2229
 ```
 
 ---
@@ -4530,7 +4530,7 @@ Embaralhadas: comum 24, rubro-negra 13, B 8 níveis
    embaralhada; a rubro-negra fica com 10 e 13, e a B com 9 e 8 níveis.
 
 ```bash
-~/LPEDC/rodar 22-arvores-avancadas/lista/P2230.c
+gcc ~/LPEDC/22-arvores-avancadas/lista/P2230.c -o ~/LPEDC/22-arvores-avancadas/lista/P2230 && ~/LPEDC/22-arvores-avancadas/lista/P2230
 ```
 
 ## Questões no estilo da prova

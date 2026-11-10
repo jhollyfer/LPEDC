@@ -32,7 +32,7 @@ Você precisa estar à vontade com ponteiros (módulo 06): `&`, `*`, `NULL`,
 assuntos 0047 e 0049 antes.
 
 Nos diagramas deste módulo, o verde costuma ser o bloco que mora no heap. Ao
-rodar os exemplos, apague um `free` de propósito e leia o que o `rodar`
+rodar os exemplos, apague um `free` de propósito e leia o que o gcc com as flags de estudo
 responde.
 
 > [!NOTE]
@@ -40,7 +40,7 @@ responde.
 > bug de propósito, e o enunciado avisa. Rodar e ler o relatório do
 > AddressSanitizer faz parte do exercício. A resolução de cada um roda limpa.
 
-O `rodar` já compila com o **AddressSanitizer**, que vigia a memória enquanto
+O gcc com as flags de estudo já compila com o **AddressSanitizer**, que vigia a memória enquanto
 o programa roda e avisa de vazamentos no fim. Para o assunto 0057, instale
 também o **valgrind**:
 
@@ -53,7 +53,7 @@ E rode qualquer arquivo com ele assim (sem AddressSanitizer, dentro do
 valgrind):
 
 ```bash
-~/LPEDC/rodar --valgrind 07-memoria-dinamica/0057-erros-de-memoria/A114.c
+gcc -g ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114 && valgrind ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114
 ```
 
 A regra do módulo inteiro cabe numa linha: **todo `malloc` tem um `free`, e
@@ -69,8 +69,8 @@ nenhum ponteiro é usado depois dele**.
 
 ## Desafios do módulo
 
-Problemas para resolver num arquivo seu, rodando com o `rodar` (e com
-`rodar --valgrind` quando quiser a segunda opinião). A versão final de cada
+Problemas para resolver num arquivo seu, rodando com as flags de estudo (e com
+`valgrind ./programa` quando quiser a segunda opinião). A versão final de cada
 um precisa terminar sem nenhum relatório de erro.
 
 **1. Apagar do caderno.** No caderninho de fiado do texto do assunto 0058,
@@ -237,7 +237,7 @@ remove alternados na fronteira fariam um `realloc` a cada operação.
 </details>
 
 **8. Dois nomes, um bloco.** Monte um programa com o trecho abaixo e rode
-com o `rodar`:
+com as flags de estudo:
 
 ```c
 int *a = malloc(3 * sizeof *a);
@@ -273,7 +273,7 @@ liberado (um ponteiro solto). Zerar o ponteiro ajuda, mas não substitui saber
 **9. O vazamento a conta-gotas.** Escreva `void tarefa(int chamada)`, que faz
 um `malloc` de 24 bytes, escreve um caractere no bloco e só dá `free` quando
 `chamada` é par; nas ímpares, soma 24 numa variável global `vazou`. Chame
-`tarefa` de 1 a 1000, imprima `bytes sem free: ...` e rode com o `rodar`.
+`tarefa` de 1 a 1000, imprima `bytes sem free: ...` e rode com as flags de estudo.
 Depois conserte a função e rode de novo.
 
 <details><summary>Resposta</summary>

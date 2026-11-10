@@ -88,7 +88,7 @@ void diff(char **a, int m, char **b, int n) {
 int main(int argc, char *argv[]) {
     const char *antigo = "/tmp/compras-v1.txt";
     const char *novo = "/tmp/compras-v2.txt";
-    if (argc == 3) {                                   // rodar mini-diff.c a.txt b.txt
+    if (argc == 3) {                                   // ./programa a.txt b.txt
         antigo = argv[1];
         novo = argv[2];
     } else {                                           // sem argumentos: o exemplo

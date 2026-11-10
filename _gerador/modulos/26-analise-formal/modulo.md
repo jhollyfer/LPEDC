@@ -45,10 +45,10 @@ virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho sendo contado.
 
 Matemática: potências, logaritmos e somas. Lembre que `log₂ n` é quantas
 vezes dá para dividir `n` por 2 até chegar em 1, e que `ln n` é o logaritmo
-natural (`log` em `<math.h>`). O `rodar` já liga a biblioteca matemática.
+natural (`log` em `<math.h>`). O gcc com as flags de estudo já liga a biblioteca matemática.
 
 O último assunto tem um TAD na pasta, `custo.h` e `custo.c`, com cinco
-funções instrumentadas. O `rodar` compila o `custo.c` junto com qualquer
+funções instrumentadas. O comando do exemplo compila o `custo.c` junto com qualquer
 exemplo ou exercício da pasta; por isso, nos exercícios de lá, não dê os
 nomes `custo_passos`, `custo_bytes` e `custo_prof_max` a variáveis suas.
 Os exercícios de "conserte" trazem o erro de propósito, e o enunciado
@@ -65,7 +65,7 @@ avisa.
 ## Desafios do módulo
 
 Problemas que misturam os assuntos do módulo. Resolva no papel e, sempre que
-der, confira com um programa rodado no `rodar`.
+der, confira com um programa compilado e rodado.
 
 **1. Um sanduíche cúbico.** Prove que `f(n) = 5n³ + 2n² - 7` é Θ(n³):
 encontre `c₁`, `c₂` e `n₀`.

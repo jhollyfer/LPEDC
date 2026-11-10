@@ -6,9 +6,9 @@
 
 | O quê | Como | Passa quando |
 |---|---|---|
-| um arquivo | `./rodar caminho/A013.c` (C17, `-Wall -Wextra -pedantic`, ASan e UBSan) | compila sem aviso, roda sem erro do sanitizer, e a saída bate com o comentário |
-| arquivo que lê do teclado | `printf '25\n' \| ./rodar caminho.c` | idem |
-| vazamento difícil | `./rodar --valgrind caminho.c` | sem bloco perdido |
+| um arquivo | `gcc ... -o A013 && ./A013` com as flags de estudo (C17, `-Wall -Wextra -pedantic`, ASan e UBSan) | compila sem aviso, roda sem erro do sanitizer, e a saída bate com o comentário |
+| arquivo que lê do teclado | `gcc ... -o A013 && printf '25\n' \| ./A013` | idem |
+| vazamento difícil | `valgrind ./A013` (compilado com `-g`) | sem bloco perdido |
 
 ## 2. Módulo inteiro
 

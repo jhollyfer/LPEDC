@@ -43,7 +43,19 @@ const imagem = (src, alt, svg) => {
 
 // "Hora de praticar": cada exemplo (A) com título, código e comando; cada
 // exercício (E) com nível, enunciado, dicas e comando
-const comando = (caminho) => ['```bash', `~/LPEDC/rodar ${caminho}`, '```']
+// o .c do exemplo mais os .c de apoio da pasta (que não se chamam A000.c, E000.c nem P0000.c);
+// -lm entra quando algum deles inclui math.h
+const comando = (caminho) => {
+  const pasta = dirname(caminho)
+  const apoio = readdirSync(join(RAIZ, pasta))
+    .filter((f) => f.endsWith('.c') && !/^[AEP]\d{3,4}\.c$/.test(f))
+    .map((f) => `${pasta}/${f}`)
+  const fontes = [caminho, ...apoio]
+  const matematica = fontes.some((f) => readFileSync(join(RAIZ, f), 'utf8').includes('math.h'))
+  const base = caminho.replace(/\.c$/, '')
+  const gcc = `gcc ${fontes.map((f) => `~/LPEDC/${f}`).join(' ')} -o ~/LPEDC/${base}${matematica ? ' -lm' : ''}`
+  return ['```bash', `${gcc} && ~/LPEDC/${base}`, '```']
+}
 
 // exemplo: a 1ª linha "// A001 · título" é o título, o resto é o código
 const exemplo = (caminho, nome) => {

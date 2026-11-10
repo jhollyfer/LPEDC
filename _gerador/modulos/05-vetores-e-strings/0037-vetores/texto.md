@@ -92,7 +92,7 @@ pergunta `i < 7?` é o que impede o laço de passar da última gaveta:
 > variável sua. É **comportamento indefinido**: às vezes nada acontece, às
 > vezes outro valor muda "sozinho", às vezes o programa cai. O erro clássico é o
 > `<=` no laço: `for (i = 0; i <= 7; i++)` passa uma vez a mais. Ler
-> `v[99]` devolve o que estiver lá. O `rodar` usa o AddressSanitizer, que
+> `v[99]` devolve o que estiver lá. O gcc com as flags de estudo usa o AddressSanitizer, que
 > pega esse erro e mostra `stack-buffer-overflow`.
 
 > [!TIP]

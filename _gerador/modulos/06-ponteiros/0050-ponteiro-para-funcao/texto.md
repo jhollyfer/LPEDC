@@ -87,7 +87,7 @@ copie o molde do A100.
 > A comparação "esperta" `return *(const int *)a - *(const int *)b;`
 > aparece em todo canto e tem um bug: com números grandes de sinais
 > opostos, a subtração estoura o `int` (assunto 0003), o sinal vira e a
-> ordem sai errada. O `rodar` acusa `signed integer overflow`. Use
+> ordem sai errada. O gcc com as flags de estudo acusa `signed integer overflow`. Use
 > `return (x > y) - (x < y);`, que só compara e nunca estoura. E não
 > esqueça os parênteses da declaração: `int *f(int)` é uma função, não um
 > ponteiro.

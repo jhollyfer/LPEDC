@@ -97,7 +97,7 @@ resolve cada metade".
 > gasta memória proporcional à **profundidade**: `fatorial(5)` usa 5 quadros
 > de uma vez; um laço usaria um só. Outro limite é o tipo: 12! = 479.001.600
 > cabe num `int` de 32 bits, mas 13! = 6.227.020.800 já não cabe e dá
-> overflow (o `-fsanitize=undefined` do `rodar` acusa). Curiosidade: com
+> overflow (o `-fsanitize=undefined` do gcc com as flags de estudo acusa). Curiosidade: com
 > `gcc -O2`, o compilador às vezes transforma a recursão em laço sozinho.
 
 > [!NOTE]

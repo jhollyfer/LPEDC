@@ -124,7 +124,7 @@ um lado e joga o outro fora:
 > `r`, `j` e as variáveis do `separa`, na pilha. Uma versão recursiva, que
 > chama `quickselect` num dos lados, é **recursão de cauda** (a chamada é a
 > última coisa que a função faz), e o gcc com `-O2` costuma transformá-la
-> num laço sozinho. Sem otimização (o `rodar` compila sem `-O2`), cada
+> num laço sozinho. Sem otimização (o comando do exemplo compila sem `-O2`), cada
 > chamada é um frame novo, e no pior caso são `n` frames. Escrever o laço à
 > mão não depende da boa vontade do compilador.
 

@@ -96,7 +96,7 @@ pelo Sim várias vezes e só uma vez pelo Não:
 > solto que nunca é alcançado, porque o saldo nunca muda e a pergunta dá Sim
 > para sempre: o programa trava. Parecido: sem chaves, só a **primeira** linha
 > depois do `while` repete, por mais que a indentação diga outra coisa. O gcc
-> avisa o segundo caso com `-Wmisleading-indentation` (o `rodar` liga esse
+> avisa o segundo caso com `-Wmisleading-indentation` (o gcc com as flags de estudo liga esse
 > aviso), mas o `;` vazio passa calado. Use chaves sempre.
 
 > [!TIP]

@@ -329,7 +329,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/A363.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/A363.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/A363 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/A363
 ```
 
 **Exemplo A364 · A casinha sem tirar o lápis do papel**
@@ -399,7 +399,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/A364.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/A364.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/A364 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/A364
 ```
 
 #### Exercícios
@@ -441,7 +441,7 @@ Pontos de grau ímpar: 4
    o número de pontos de grau ímpar é sempre par (aqui, 4).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1087.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1087.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1087 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1087
 ```
 
 **Exercício E1088** · ★☆☆
@@ -476,7 +476,7 @@ GE        não é passeio
    Praça e a Feira aparecem duas vezes, mas nenhuma rua.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1088.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1088.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1088 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1088
 ```
 
 **Exercício E1089** · ★★☆
@@ -507,7 +507,7 @@ pontes: nenhum (4 vértices ímpares)
    iguais a 2 e mesmo assim não têm circuito.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1089.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1089.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1089 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1089
 ```
 
 **Exercício E1090** · ★★☆
@@ -547,7 +547,7 @@ Sem circuito
    existe. Remonte a matriz antes da obra, porque o circuito apaga tudo.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1090.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1090.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1090 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1090
 ```
 
 **Exercício E1091** · ★★★
@@ -582,7 +582,7 @@ Conserte-o.
 3. Basta apagar também rua[v][u].
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1091.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1091.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1091 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1091
 ```
 
 **Exercício E1092** · ★★★
@@ -619,7 +619,7 @@ Traço 2: D B
 3. Os dois traços somam as 6 arestas.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0182-caminhos-e-ciclos/E1092.c
+gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1092.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1092 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1092
 ```
 
 ---
@@ -821,7 +821,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/A365.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/A365.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/A365 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/A365
 ```
 
 **Exemplo A366 · Quando a resposta é não: o custo explode**
@@ -890,7 +890,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/A366.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/A366.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/A366 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/A366
 ```
 
 #### Exercícios
@@ -922,7 +922,7 @@ Rota 4: inválida
    para Base); a 4 repete o Centro.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/E1093.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1093.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1093 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1093
 ```
 
 **Exercício E1094** · ★☆☆
@@ -951,7 +951,7 @@ Começando em Cachoeira: Cachoeira Gruta Mirante Lagoa Pedra
    única saída: começando nele, você nunca volta ao outro triângulo.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/E1094.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1094.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1094 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1094
 ```
 
 **Exercício E1095** · ★★☆
@@ -980,7 +980,7 @@ Completo com 5: 24 rotas, 12 ciclos distintos
    (n - 1)! rotas, ou (n - 1)! / 2 ciclos: 24 e 12 para n = 5.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/E1095.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1095.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1095 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1095
 ```
 
 **Exercício E1096** · ★★☆
@@ -1018,7 +1018,7 @@ Bahia > Ceará > Fortaleza > Sport > Remo
    ciclo hamiltoniano continua sendo trabalho de backtracking.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/E1096.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1096.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1096 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1096
 ```
 
 **Exercício E1097** · ★★★
@@ -1062,7 +1062,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    if (hamilton(pos + 1)) return true;
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/E1097.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1097.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1097 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1097
 ```
 
 **Exercício E1098** · ★★★
@@ -1104,7 +1104,7 @@ Chamadas: 8840
    de chamadas muda muito: no backtracking, a ordem das tentativas pesa.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0183-hamiltoniano/E1098.c
+gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1098.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1098 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1098
 ```
 
 ---
@@ -1334,7 +1334,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/A367.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/A367.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/A367 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/A367
 ```
 
 **Exemplo A368 · Conferindo na força bruta: corta e conta**
@@ -1398,7 +1398,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/A368.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/A368.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/A368 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/A368
 ```
 
 #### Exercícios
@@ -1444,7 +1444,7 @@ Articulações:
    triângulo com Manaus e Manacapuru dá outro caminho.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1099.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1099.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1099 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1099
 ```
 
 **Exercício E1100** · ★☆☆
@@ -1479,7 +1479,7 @@ Itacoatiara: tin 6, low 6
    Rio Preto da Eva.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1100.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1100.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1100 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1100
 ```
 
 **Exercício E1101** · ★★☆
@@ -1508,7 +1508,7 @@ Bairros alcançados: 7
    Negra ficam do outro lado do cabo Aleixo - Flores).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1101.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1101.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1101 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1101
 ```
 
 **Exercício E1102** · ★★☆
@@ -1544,7 +1544,7 @@ Sem Porto, a rede parte em 3 pedaços
    a rede sem ela continua inteira.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1102.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1102.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1102 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1102
 ```
 
 **Exercício E1103** · ★★★
@@ -1584,7 +1584,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 3. Troque um >= por >.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1103.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1103.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1103 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1103
 ```
 
 **Exercício E1104** · ★★★
@@ -1620,7 +1620,7 @@ Conserte a DFS para que ela funcione com cabos paralelos.
    (dfs(v, k)) e pule só esse cabo (k == cabo_pai). A raiz recebe -1.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0184-pontes-e-articulacoes/E1104.c
+gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1104.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1104 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1104
 ```
 
 ---
@@ -1844,7 +1844,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/A369.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/A369.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/A369 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/A369
 ```
 
 **Exemplo A370 · Multiplicando de verdade e contando**
@@ -1922,7 +1922,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/A370.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/A370.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/A370 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/A370
 ```
 
 #### Exercícios
@@ -1950,7 +1950,7 @@ Melhor: A (B C), 3.0 vezes mais barata
 3. Faça a divisão em double.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1105.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1105.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1105 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1105
 ```
 
 **Exercício E1106** · ★☆☆
@@ -1982,7 +1982,7 @@ Total: 2392
 3. Os custos somam m[1][5] = 2392.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1106.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1106.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1106 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1106
 ```
 
 **Exercício E1107** · ★★☆
@@ -2011,7 +2011,7 @@ Casas calculadas: 21
    3^6 = 729 chamadas.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1107.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1107.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1107 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1107
 ```
 
 **Exercício E1108** · ★★☆
@@ -2038,7 +2038,7 @@ A pior custa 40.9 vezes a melhor
    void mostra(int s[N + 1][N + 1], int i, int j).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1108.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1108.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1108 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1108
 ```
 
 **Exercício E1109** · ★★★
@@ -2076,7 +2076,7 @@ mudando só a ordem dos laços (a recorrência está certa).
    baixo para cima (i de N até 1) ou faça o laço externo pelo tamanho.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1109.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1109.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1109 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1109
 ```
 
 **Exercício E1110** · ★★★
@@ -2116,7 +2116,7 @@ PD: 3400
    para eliminar o 30, o 40, o 5 e o 20, um de cada vez.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0185-cadeia-de-matrizes/E1110.c
+gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1110.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1110 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1110
 ```
 
 ---
@@ -2346,7 +2346,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/A371.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/A371.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/A371 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/A371
 ```
 
 **Exemplo A372 · Boletos que fecham o Pix: soma de subconjuntos**
@@ -2412,7 +2412,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/A372.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/A372.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/A372 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/A372
 ```
 
 #### Exercícios
@@ -2454,7 +2454,7 @@ Atribuição 3: não satisfaz (cláusula 3 falsa)
    cláusula é verdadeira se ALGUM literal for; a fórmula, se TODAS forem.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1111.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1111.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1111 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1111
 ```
 
 **Exercício E1112** · ★☆☆
@@ -2494,7 +2494,7 @@ Grupo: Cadu Dani Edu
    imprime o par culpado.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1112.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1112.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1112 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1112
 ```
 
 **Exercício E1113** · ★★☆
@@ -2522,7 +2522,7 @@ Total: 2 de 16 atribuições
    Davi e a 5 exige o Caio de volta. Confira isso nos números.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1113.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1113.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1113 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1113
 ```
 
 **Exercício E1114** · ★★☆
@@ -2575,7 +2575,7 @@ Primeira escala válida (tentativa 141):
    verificador, só os pares, O(n²).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1114.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1114.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1114 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1114
 ```
 
 **Exercício E1115** · ★★★
@@ -2621,7 +2621,7 @@ Equivalentes em 32 de 32 atribuições dos x
    variáveis e K - 2 cláusulas: tamanho linear, logo polinomial.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1115.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1115.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1115 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1115
 ```
 
 **Exercício E1116** · ★★★
@@ -2659,7 +2659,7 @@ verificador.
    vale o E (todas). O laço pode sair cedo só no "não".
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0186-p-e-np/E1116.c
+gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1116.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1116 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1116
 ```
 
 ---
@@ -2883,7 +2883,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/A373.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/A373.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/A373 && ~/LPEDC/29-grafos-e-np/0187-reducoes/A373
 ```
 
 **Exemplo A374 · Caminho hamiltoniano usando quem só sabe achar ciclo**
@@ -2955,7 +2955,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/A374.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/A374.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/A374 && ~/LPEDC/29-grafos-e-np/0187-reducoes/A374
 ```
 
 #### Exercícios
@@ -2995,7 +2995,7 @@ Jogos que faltam:
    complemento dividem essas arestas entre si.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1117.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1117.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1117 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1117
 ```
 
 **Exercício E1118** · ★☆☆
@@ -3044,7 +3044,7 @@ Plano 2: câmeras em B D F
    câmera, e é a mesma rua que liga C e E no resto.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1118.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1118.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1118 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1118
 ```
 
 **Exercício E1119** · ★★☆
@@ -3073,7 +3073,7 @@ Lojas no corredor: Bazar Café Doces Farmácia (4)
    diz se a loja v está no grupo: (s >> v) & 1.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1119.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1119.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1119 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1119
 ```
 
 **Exercício E1120** · ★★☆
@@ -3110,7 +3110,7 @@ F2: 24 vértices, 204 arestas, clique de 8? não (insatisfatível)
    atribuição dos três x torna falsa exatamente uma das 8 cláusulas.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1120.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1120.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1120 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1120
 ```
 
 **Exercício E1121** · ★★★
@@ -3147,7 +3147,7 @@ da construção do grafo. Conserte-a.
    a / 3 != b / 3.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1121.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1121.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1121 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1121
 ```
 
 **Exercício E1122** · ★★★
@@ -3192,7 +3192,7 @@ Completo K4: 12 variáveis, 34 cláusulas
    diante, com o bit i - 1 sendo a variável i.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0187-reducoes/E1122.c
+gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1122.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1122 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1122
 ```
 
 ---
@@ -3407,7 +3407,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/A375.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/A375.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/A375 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/A375
 ```
 
 **Exemplo A376 · Caixeiro viajante métrico: a árvore mínima vira rota**
@@ -3504,7 +3504,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/A376.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/A376.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/A376 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/A376
 ```
 
 #### Exercícios
@@ -3534,7 +3534,7 @@ First fit: 5 viagens
    2-aproximado, mas joga fora espaço que o first fit aproveita.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1123.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1123.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1123 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1123
 ```
 
 **Exercício E1124** · ★☆☆
@@ -3563,7 +3563,7 @@ Best fit: 3 pendrives
    então esta resposta é ótima.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1124.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1124.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1124 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1124
 ```
 
 **Exercício E1125** · ★★☆
@@ -3597,7 +3597,7 @@ Ordem 2: 4 câmeras em B C E F
    respostas respeitam a garantia: no máximo 2 x 4 = 8.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1125.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1125.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1125 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1125
 ```
 
 **Exercício E1126** · ★★☆
@@ -3635,7 +3635,7 @@ Lista 3: FF 6, FFD 6, limite 5
    2 t cada, e sobra um 3 sozinho.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1126.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1126.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1126 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1126
 ```
 
 **Exercício E1127** · ★★★
@@ -3671,7 +3671,7 @@ Garantia: rota <= 2 x árvore = 42
    garantia (42): 13% acima do ótimo.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1127.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1127.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1127 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1127
 ```
 
 **Exercício E1128** · ★★★
@@ -3707,7 +3707,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 3. Troque && por ||.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0188-aproximacao/E1128.c
+gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1128.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1128 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1128
 ```
 
 ---
@@ -3977,7 +3977,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/A377.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/A377.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/A377 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/A377
 ```
 
 **Exemplo A378 · 2-opt: desfazendo os cruzamentos da rota aproximada**
@@ -4050,7 +4050,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/A378.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/A378.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/A378 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/A378
 ```
 
 #### Exercícios
@@ -4092,7 +4092,7 @@ Rota 2: 22 quarteirões
    espaços (printf("%8s", "")).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/E1129.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1129.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1129 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1129
 ```
 
 **Exercício E1130** · ★☆☆
@@ -4120,7 +4120,7 @@ Vizinho mais próximo: 40 quarteirões
    fator de aproximação constante, nem com distâncias métricas.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/E1130.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1130.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1130 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1130
 ```
 
 **Exercício E1131** · ★★☆
@@ -4150,7 +4150,7 @@ Com poda: ótimo 28, 110 rotas completas, 6977 chamadas
    a poda corta metade das chamadas, mas continua exponencial.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/E1131.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1131.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1131 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1131
 ```
 
 **Exercício E1132** · ★★☆
@@ -4179,7 +4179,7 @@ Rota: Padaria Feira Escola Posto Banco Padaria
    passo da reconstrução custa O(n) a mais, mas só são n passos.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/E1132.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1132.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1132 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1132
 ```
 
 **Exercício E1133** · ★★★
@@ -4225,7 +4225,7 @@ Tarde (30 pontos): aproximado, árvore 111, rota 172, com 2-opt 148
    garantia (no máximo 2 x 111 = 222), e o 2-opt tira 24 quarteirões.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/E1133.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1133.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1133 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1133
 ```
 
 **Exercício E1134** · ★★★
@@ -4261,7 +4261,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    do último cliente e no valor.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/0189-juntando-tudo/E1134.c
+gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1134.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1134 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1134
 ```
 
 ---
@@ -4448,7 +4448,7 @@ Estações de grau ímpar: 6
    estações de grau ímpar tem de ser par.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2901.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2901.c -o ~/LPEDC/29-grafos-e-np/lista/P2901 && ~/LPEDC/29-grafos-e-np/lista/P2901
 ```
 
 ---
@@ -4496,7 +4496,7 @@ Sumidouros: Limpeza
    menos uma fonte e um sumidouro.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2902.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2902.c -o ~/LPEDC/29-grafos-e-np/lista/P2902 && ~/LPEDC/29-grafos-e-np/lista/P2902
 ```
 
 ---
@@ -4533,7 +4533,7 @@ DEFD    não é passeio, comprimento 3
    F-D, por mais que a sequência pareça um triângulo.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2903.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2903.c -o ~/LPEDC/29-grafos-e-np/lista/P2903 && ~/LPEDC/29-grafos-e-np/lista/P2903
 ```
 
 ---
@@ -4575,7 +4575,7 @@ Mapa 3: nenhum (desconexo)
    mesmo assim não tem circuito.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2904.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2904.c -o ~/LPEDC/29-grafos-e-np/lista/P2904 && ~/LPEDC/29-grafos-e-np/lista/P2904
 ```
 
 ---
@@ -4621,7 +4621,7 @@ D: falta ponto
    o problema do ciclo hamiltoniano está em NP.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2905.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2905.c -o ~/LPEDC/29-grafos-e-np/lista/P2905 && ~/LPEDC/29-grafos-e-np/lista/P2905
 ```
 
 ---
@@ -4662,7 +4662,7 @@ rejeitado: cabo 3-4 descoberto
    cobertura é NP-difícil.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2906.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2906.c -o ~/LPEDC/29-grafos-e-np/lista/P2906 && ~/LPEDC/29-grafos-e-np/lista/P2906
 ```
 
 ---
@@ -4699,7 +4699,7 @@ Saída esperada:
 3. Os dois verificadores custam O(k²).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2907.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2907.c -o ~/LPEDC/29-grafos-e-np/lista/P2907 && ~/LPEDC/29-grafos-e-np/lista/P2907
 ```
 
 ---
@@ -4731,7 +4731,7 @@ Da direita: 282
    0185 acha uma ordem com 206 multiplicações.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2908.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2908.c -o ~/LPEDC/29-grafos-e-np/lista/P2908 && ~/LPEDC/29-grafos-e-np/lista/P2908
 ```
 
 ---
@@ -4772,7 +4772,7 @@ rejeitado (custo 94 > 90)
    para um L e rejeitado para outro.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2909.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2909.c -o ~/LPEDC/29-grafos-e-np/lista/P2909 && ~/LPEDC/29-grafos-e-np/lista/P2909
 ```
 
 ---
@@ -4802,7 +4802,7 @@ Limite inferior: 4 viagens
    ótimo aqui.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2910.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2910.c -o ~/LPEDC/29-grafos-e-np/lista/P2910 && ~/LPEDC/29-grafos-e-np/lista/P2910
 ```
 
 ### ★★☆ Para pensar
@@ -4839,7 +4839,7 @@ Ruas: r0 r2 r5 r6 r3 r4 r1
    2), então o circuito existe.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2911.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2911.c -o ~/LPEDC/29-grafos-e-np/lista/P2911 && ~/LPEDC/29-grafos-e-np/lista/P2911
 ```
 
 ---
@@ -4881,7 +4881,7 @@ Trajeto: 0 1 2 0 3 1 4
    com entrada - saída = 1.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2912.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2912.c -o ~/LPEDC/29-grafos-e-np/lista/P2912 && ~/LPEDC/29-grafos-e-np/lista/P2912
 ```
 
 ---
@@ -4919,7 +4919,7 @@ Total: 4 caminhos, 26 chamadas
 3. Resposta esperada: a saída acima (com a poda do 5).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2913.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2913.c -o ~/LPEDC/29-grafos-e-np/lista/P2913 && ~/LPEDC/29-grafos-e-np/lista/P2913
 ```
 
 ---
@@ -4958,7 +4958,7 @@ Articulações: 2 3 5 6
    de O(V²).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2914.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2914.c -o ~/LPEDC/29-grafos-e-np/lista/P2914 && ~/LPEDC/29-grafos-e-np/lista/P2914
 ```
 
 ---
@@ -4995,7 +4995,7 @@ R3: 1 componente(s), 0 ponte(s): robusta
    dois; R2 está inteira, mas o cabo 2-3 é ponte.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2915.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2915.c -o ~/LPEDC/29-grafos-e-np/lista/P2915 && ~/LPEDC/29-grafos-e-np/lista/P2915
 ```
 
 ---
@@ -5028,7 +5028,7 @@ Ordem: ((A1 (A2 A3)) ((A4 A5) A6))
    "(" + metade da esquerda + " " + metade da direita + ")".
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2916.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2916.c -o ~/LPEDC/29-grafos-e-np/lista/P2916 && ~/LPEDC/29-grafos-e-np/lista/P2916
 ```
 
 ---
@@ -5074,7 +5074,7 @@ Total: 12 de 32
 2. Percorra as máscaras de 0 a 31 em ordem e mostre x1 primeiro.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2917.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2917.c -o ~/LPEDC/29-grafos-e-np/lista/P2917 && ~/LPEDC/29-grafos-e-np/lista/P2917
 ```
 
 ---
@@ -5109,7 +5109,7 @@ Cobertura do complemento: 4 5 6 (3)
 2. O bit v da máscara diz se v está no conjunto; o resto é todos & ~s.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2918.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2918.c -o ~/LPEDC/29-grafos-e-np/lista/P2918 && ~/LPEDC/29-grafos-e-np/lista/P2918
 ```
 
 ---
@@ -5147,7 +5147,7 @@ completo + caminho: aprox 8, ótimo 5, razão 1.60
    na estrela ela bate exatamente em 2; com o K4 ela cai.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2919.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2919.c -o ~/LPEDC/29-grafos-e-np/lista/P2919 && ~/LPEDC/29-grafos-e-np/lista/P2919
 ```
 
 ---
@@ -5179,7 +5179,7 @@ First fit decrescente: 4
 3. Soma 40: o limite inferior é 4.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2920.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2920.c -o ~/LPEDC/29-grafos-e-np/lista/P2920 && ~/LPEDC/29-grafos-e-np/lista/P2920
 ```
 
 ### ★★★ Desafio
@@ -5220,7 +5220,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    os filhos (variável local) e aplique a regra comum só fora da raiz.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2921.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2921.c -o ~/LPEDC/29-grafos-e-np/lista/P2921 && ~/LPEDC/29-grafos-e-np/lista/P2921
 ```
 
 ---
@@ -5256,7 +5256,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 2. A cadeia Ai..Aj começa com as linhas de Ai, que são p[i-1], não p[i].
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2922.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2922.c -o ~/LPEDC/29-grafos-e-np/lista/P2922 && ~/LPEDC/29-grafos-e-np/lista/P2922
 ```
 
 ---
@@ -5294,7 +5294,7 @@ Total: 910 m
    1-4 (200 m): ele refaz 1-2-4, que soma 140 m.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2923.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2923.c -o ~/LPEDC/29-grafos-e-np/lista/P2923 && ~/LPEDC/29-grafos-e-np/lista/P2923
 ```
 
 ---
@@ -5326,7 +5326,7 @@ Ciclo hamiltoniano: sim
    porque o grafo tem estrutura; o difícil é o caso geral.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2924.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2924.c -o ~/LPEDC/29-grafos-e-np/lista/P2924 && ~/LPEDC/29-grafos-e-np/lista/P2924
 ```
 
 ---
@@ -5372,7 +5372,7 @@ Satisfaz a fórmula? sim
    dos pares contraditórios.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2925.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2925.c -o ~/LPEDC/29-grafos-e-np/lista/P2925 && ~/LPEDC/29-grafos-e-np/lista/P2925
 ```
 
 ---
@@ -5407,7 +5407,7 @@ G2: volta mais barata = 7 -> não tem
    que todos os trechos são arestas de G.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2926.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2926.c -o ~/LPEDC/29-grafos-e-np/lista/P2926 && ~/LPEDC/29-grafos-e-np/lista/P2926
 ```
 
 ---
@@ -5438,7 +5438,7 @@ Volta fechada era 28; terminar no Gil economiza 4
    chegar ao 0.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2927.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2927.c -o ~/LPEDC/29-grafos-e-np/lista/P2927 && ~/LPEDC/29-grafos-e-np/lista/P2927
 ```
 
 ---
@@ -5480,7 +5480,7 @@ dia  ótimo  vizinho     árvore      árvore+2opt
    ótimo; o vizinho mais próximo não tem essa garantia.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2928.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2928.c -o ~/LPEDC/29-grafos-e-np/lista/P2928 && ~/LPEDC/29-grafos-e-np/lista/P2928
 ```
 
 ---
@@ -5521,7 +5521,7 @@ Chamadas: 319 (força bruta: 4096 máscaras)
    e mesmo assim ficam bem abaixo de 4096.
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2929.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2929.c -o ~/LPEDC/29-grafos-e-np/lista/P2929 && ~/LPEDC/29-grafos-e-np/lista/P2929
 ```
 
 ---
@@ -5557,7 +5557,7 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
    DFS numa esquina com grau maior que 0).
 
 ```bash
-~/LPEDC/rodar 29-grafos-e-np/lista/P2930.c
+gcc ~/LPEDC/29-grafos-e-np/lista/P2930.c -o ~/LPEDC/29-grafos-e-np/lista/P2930 && ~/LPEDC/29-grafos-e-np/lista/P2930
 ```
 
 ## Questões no estilo da prova

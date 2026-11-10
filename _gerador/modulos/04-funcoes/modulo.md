@@ -44,7 +44,7 @@ sudo apt install gdb        # Debian / Ubuntu
 ```
 
 Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
-`conversao.c`, `cardapio.h` e `cardapio.c`). O `rodar` compila esses `.c`
+`conversao.c`, `cardapio.h` e `cardapio.c`). O comando do exemplo compila esses `.c`
 junto com o exemplo; o texto mostra também o comando `gcc` para fazer isso à
 mão.
 
@@ -160,7 +160,7 @@ passa `nivel + 1`.
 </details>
 
 **7. Macro de troca.** Escreva `#define TROCAR(a, b) int t = a; a = b; b =
-t;` e use num `if (x > y) TROCAR(x, y);` sem chaves: rode com o `rodar` e veja
+t;` e use num `if (x > y) TROCAR(x, y);` sem chaves: rode com as flags de estudo e veja
 o `gcc` recusar. Conserte a macro para que esta função compile e funcione,
 sem mexer nela:
 

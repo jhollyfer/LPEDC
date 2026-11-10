@@ -48,8 +48,8 @@ quantidade, converte `argv[1]` e `argv[2]` em números e divide:
 
 {{ideia}}
 
-Salve o código como `racha.c` e rode com o `rodar`, passando os argumentos
-depois do arquivo: `~/LPEDC/rodar racha.c 187.40 4`.
+Salve o código como `racha.c` e rode com as flags de estudo, passando os argumentos
+depois do arquivo: `./programa 187.40 4`.
 
 
 ```c
@@ -79,12 +79,12 @@ int main(int argc, char *argv[]) {
     printf("Cada um: R$ %.2f\n", total / pessoas);
     return 0;
 }
-// $ rodar racha.c 187.40 4
+// $ ./programa 187.40 4
 // Conta: R$ 187.40
 // Pessoas: 4
 // Cada um: R$ 46.85
 //
-// $ rodar racha.c 187.40 quatro
+// $ ./programa 187.40 quatro
 // Número de pessoas inválido: quatro
 ```
 

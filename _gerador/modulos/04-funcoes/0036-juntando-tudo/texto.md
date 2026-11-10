@@ -142,7 +142,7 @@ int main(void) {
 //   0.25
 //   0.01
 // Para testar sem digitar, salve como caixa.c numa pasta sua, com cópias do
-// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar caixa.c
+// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ./programa caixa.c
 ```
 
 O laço dos pedidos termina com o código 0; depois vêm a

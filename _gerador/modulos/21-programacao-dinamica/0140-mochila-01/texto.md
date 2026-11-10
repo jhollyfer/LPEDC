@@ -133,7 +133,7 @@ A recuperação, partindo do canto `t[4][7]`:
 > **Por dentro do C:** `int t[5][8]` são 40 `int` seguidos na memória, linha
 > após linha: `t[i][c]` mora no deslocamento `i * 8 + c`. Por isso
 > `t[2][-2]` não derruba o programa: ele cai em `t[1][6]`, um valor errado e
-> silencioso. O `rodar` acusa (`index -2 out of bounds for type 'int [8]'`,
+> silencioso. O gcc com as flags de estudo acusa (`index -2 out of bounds for type 'int [8]'`,
 > do UBSan), mas compilado sem sanitizer o programa segue em frente com a
 > resposta errada. E como cada linha só usa a de cima, dá para guardar uma
 > linha só, de `W + 1` posições, desde que o laço de `c` ande **do maior para

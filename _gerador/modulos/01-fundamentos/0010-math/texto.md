@@ -90,7 +90,7 @@ No fluxograma, as funções entram no meio das contas como qualquer valor:
 > `double sqrt(double)` existe, e é por isso que `sqrt(144)` funciona com um
 > `int`: o compilador converte para `double` antes de chamar. O código mora
 > na biblioteca `libm`, e quem junta é o ligador com a opção `-lm` (o
-> `rodar` já passa). Sem ela, pode aparecer `undefined reference to 'pow'`.
+> `-lm` entra nas flags de estudo). Sem ela, pode aparecer `undefined reference to 'pow'`.
 > E o compilador otimiza: `sqrt(x)` vira uma instrução só do processador
 > (`sqrtsd`), `pow(x, 2)` vira `x * x`, e `sqrt(2.0)` é calculado na
 > compilação, sem chamada nenhuma.

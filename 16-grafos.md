@@ -46,7 +46,7 @@ strings à parte. Os exemplos examinam os vizinhos em ordem crescente de
 muda, sem estar errada.
 
 O assunto 0109 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
-`rodar` compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
+comando do exemplo compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
 assuntos, cada arquivo traz tudo dentro dele, com matriz de adjacência, para
 o algoritmo ficar inteiro na tela.
 
@@ -265,7 +265,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/A217.c
+gcc ~/LPEDC/16-grafos/0109-grafos/A217.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/A217 && ~/LPEDC/16-grafos/0109-grafos/A217
 ```
 
 **Exemplo A218 · Quem segue quem: lista de adjacência**
@@ -309,7 +309,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/A218.c
+gcc ~/LPEDC/16-grafos/0109-grafos/A218.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/A218 && ~/LPEDC/16-grafos/0109-grafos/A218
 ```
 
 #### Exercícios
@@ -344,7 +344,7 @@ Voos diretos: 4
 3. Resposta esperada: a matriz acima e "Voos diretos: 4".
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/E649.c
+gcc ~/LPEDC/16-grafos/0109-grafos/E649.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/E649 && ~/LPEDC/16-grafos/0109-grafos/E649
 ```
 
 **Exercício E650** · ★☆☆
@@ -374,7 +374,7 @@ Ninguém deve para: Sol
    chegam em i: de quantos i recebe.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/E650.c
+gcc ~/LPEDC/16-grafos/0109-grafos/E650.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/E650 && ~/LPEDC/16-grafos/0109-grafos/E650
 ```
 
 **Exercício E651** · ★★☆
@@ -409,14 +409,14 @@ Mão única: 3, mão dupla: 2
 3. A letra da esquina i é 'A' + i (char é número, assunto 0040).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/E651.c
+gcc ~/LPEDC/16-grafos/0109-grafos/E651.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/E651 && ~/LPEDC/16-grafos/0109-grafos/E651
 ```
 
 **Exercício E652** · ★★☆
 
 Este programa tem DOIS erros de propósito. Ele monta o grafo NÃO dirigido
 do grupo de estudos (quem estuda com quem) e mostra o grau de cada pessoa.
-Rode com o rodar: o sanitizer acusa um dos erros. O outro é silencioso e só
+Rode com as flags de estudo: o sanitizer acusa um dos erros. O outro é silencioso e só
 aparece nos números. Ache os dois, conserte e rode de novo até a saída
 bater com a esperada.
 
@@ -440,7 +440,7 @@ Soma dos graus: 8
    adj[b][a] = 1). Consertado, mostra a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/E652.c
+gcc ~/LPEDC/16-grafos/0109-grafos/E652.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/E652 && ~/LPEDC/16-grafos/0109-grafos/E652
 ```
 
 **Exercício E653** · ★★★
@@ -453,7 +453,7 @@ ponto. Regras:
 - os vizinhos de cada lista aparecem em ordem crescente de índice;
 - cada nó custa O(1) para inserir (nada de percorrer a lista até o fim);
 - conte quantos nós foram alocados;
-- libere tudo no final (o rodar não pode acusar vazamento).
+- libere tudo no final (o gcc com as flags de estudo não pode acusar vazamento).
 
 
 ```text
@@ -478,7 +478,7 @@ Nós alocados: 10
    guardada nos dois sentidos.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/E653.c
+gcc ~/LPEDC/16-grafos/0109-grafos/E653.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/E653 && ~/LPEDC/16-grafos/0109-grafos/E653
 ```
 
 **Exercício E654** · ★★★
@@ -515,7 +515,7 @@ Duda e Edu: 2 amigos em comum
    por ela mesma (adj x adj).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0109-grafos/E654.c
+gcc ~/LPEDC/16-grafos/0109-grafos/E654.c ~/LPEDC/16-grafos/0109-grafos/grafo.c -o ~/LPEDC/16-grafos/0109-grafos/E654 && ~/LPEDC/16-grafos/0109-grafos/E654
 ```
 
 ---
@@ -741,7 +741,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/A219.c
+gcc ~/LPEDC/16-grafos/0110-bfs/A219.c -o ~/LPEDC/16-grafos/0110-bfs/A219 && ~/LPEDC/16-grafos/0110-bfs/A219
 ```
 
 **Exemplo A220 · O robô no galpão: BFS numa grade**
@@ -804,7 +804,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/A220.c
+gcc ~/LPEDC/16-grafos/0110-bfs/A220.c -o ~/LPEDC/16-grafos/0110-bfs/A220 && ~/LPEDC/16-grafos/0110-bfs/A220
 ```
 
 #### Exercícios
@@ -837,7 +837,7 @@ Tatuape: descoberto por Penha
    primeiro da fila.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/E655.c
+gcc ~/LPEDC/16-grafos/0110-bfs/E655.c -o ~/LPEDC/16-grafos/0110-bfs/E655 && ~/LPEDC/16-grafos/0110-bfs/E655
 ```
 
 **Exercício E656** · ★☆☆
@@ -870,7 +870,7 @@ Rodadas até todos ouvirem: 3
    fila? Porque é isso que impede que ele entre duas vezes.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/E656.c
+gcc ~/LPEDC/16-grafos/0110-bfs/E656.c -o ~/LPEDC/16-grafos/0110-bfs/E656 && ~/LPEDC/16-grafos/0110-bfs/E656
 ```
 
 **Exercício E657** · ★★☆
@@ -911,7 +911,7 @@ Ao contrário: Lapa -> Penha -> Tatuape -> Saude
    entra primeiro na fila descobre os vizinhos primeiro.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/E657.c
+gcc ~/LPEDC/16-grafos/0110-bfs/E657.c -o ~/LPEDC/16-grafos/0110-bfs/E657 && ~/LPEDC/16-grafos/0110-bfs/E657
 ```
 
 **Exercício E658** · ★★☆
@@ -948,7 +948,7 @@ Total de grupos: 3
 3. Um vetor visitado[] só, compartilhado por todas as BFS.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/E658.c
+gcc ~/LPEDC/16-grafos/0110-bfs/E658.c -o ~/LPEDC/16-grafos/0110-bfs/E658 && ~/LPEDC/16-grafos/0110-bfs/E658
 ```
 
 **Exercício E659** · ★★★
@@ -993,14 +993,13 @@ Pior distância: 6
    (contando do 0): 6 quarteirões até o posto da esquerda.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/E659.c
+gcc ~/LPEDC/16-grafos/0110-bfs/E659.c -o ~/LPEDC/16-grafos/0110-bfs/E659 && ~/LPEDC/16-grafos/0110-bfs/E659
 ```
 
 **Exercício E660** · ★★★
 
 Este programa tem um erro de propósito. Ele deveria mostrar a ordem em que
-uma corrente de WhatsApp chega em cada pessoa, a partir da Ana. Rode com o
-rodar: o AddressSanitizer acusa um estouro do vetor fila. Conserte mexendo
+uma corrente de WhatsApp chega em cada pessoa, a partir da Ana. Rode com as flags de estudo: o AddressSanitizer acusa um estouro do vetor fila. Conserte mexendo
 no MOMENTO em que o vértice é marcado (não vale aumentar a fila). Para
 provar que ninguém entra duas vezes, acrescente um contador que soma 1 a
 cada fila[fim++] e mostre o total no fim. Rode de novo e confira.
@@ -1024,7 +1023,7 @@ Entradas na fila: 4
    só: "Ana Bia Cadu Dani" e "Entradas na fila: 4".
 
 ```bash
-~/LPEDC/rodar 16-grafos/0110-bfs/E660.c
+gcc ~/LPEDC/16-grafos/0110-bfs/E660.c -o ~/LPEDC/16-grafos/0110-bfs/E660 && ~/LPEDC/16-grafos/0110-bfs/E660
 ```
 
 ---
@@ -1215,7 +1214,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/A221.c
+gcc ~/LPEDC/16-grafos/0111-dfs/A221.c -o ~/LPEDC/16-grafos/0111-dfs/A221 && ~/LPEDC/16-grafos/0111-dfs/A221
 ```
 
 **Exemplo A222 · A pilha que a recursão escondia**
@@ -1269,7 +1268,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/A222.c
+gcc ~/LPEDC/16-grafos/0111-dfs/A222.c -o ~/LPEDC/16-grafos/0111-dfs/A222 && ~/LPEDC/16-grafos/0111-dfs/A222
 ```
 
 #### Exercícios
@@ -1304,7 +1303,7 @@ Mais fundo: Saída (nível 4)
    pela Loja, no nível 3.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/E661.c
+gcc ~/LPEDC/16-grafos/0111-dfs/E661.c -o ~/LPEDC/16-grafos/0111-dfs/E661 && ~/LPEDC/16-grafos/0111-dfs/E661
 ```
 
 **Exercício E662** · ★☆☆
@@ -1341,7 +1340,7 @@ Casa chega no Hospital? não
    ninguém chega nele: nenhuma seta entra no Hospital.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/E662.c
+gcc ~/LPEDC/16-grafos/0111-dfs/E662.c -o ~/LPEDC/16-grafos/0111-dfs/E662 && ~/LPEDC/16-grafos/0111-dfs/E662
 ```
 
 **Exercício E663** · ★★☆
@@ -1384,7 +1383,7 @@ Total: 4 ilhas, a maior tem 5 casas
    varredura linha por linha encontra cada uma).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/E663.c
+gcc ~/LPEDC/16-grafos/0111-dfs/E663.c -o ~/LPEDC/16-grafos/0111-dfs/E663 && ~/LPEDC/16-grafos/0111-dfs/E663
 ```
 
 **Exercício E664** · ★★☆
@@ -1423,7 +1422,7 @@ Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
    (Lógica, C, Discreta...), mas esta é a que a DFS em ordem de índice dá.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/E664.c
+gcc ~/LPEDC/16-grafos/0111-dfs/E664.c -o ~/LPEDC/16-grafos/0111-dfs/E664 && ~/LPEDC/16-grafos/0111-dfs/E664
 ```
 
 **Exercício E665** · ★★★
@@ -1469,7 +1468,7 @@ Sem log -> auth: sem ciclo
    vizinhos em ordem de índice).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/E665.c
+gcc ~/LPEDC/16-grafos/0111-dfs/E665.c -o ~/LPEDC/16-grafos/0111-dfs/E665 && ~/LPEDC/16-grafos/0111-dfs/E665
 ```
 
 **Exercício E666** · ★★★
@@ -1501,7 +1500,7 @@ Sala 4 -> Sala 0: não
    mostra a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0111-dfs/E666.c
+gcc ~/LPEDC/16-grafos/0111-dfs/E666.c -o ~/LPEDC/16-grafos/0111-dfs/E666 && ~/LPEDC/16-grafos/0111-dfs/E666
 ```
 
 ---
@@ -1731,7 +1730,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/A223.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/A223.c -o ~/LPEDC/16-grafos/0112-dijkstra/A223 && ~/LPEDC/16-grafos/0112-dijkstra/A223
 ```
 
 **Exemplo A224 · Passagens de ônibus e a cidade sem rota**
@@ -1803,7 +1802,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/A224.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/A224.c -o ~/LPEDC/16-grafos/0112-dijkstra/A224 && ~/LPEDC/16-grafos/0112-dijkstra/A224
 ```
 
 #### Exercícios
@@ -1846,7 +1845,7 @@ Caminho até D: CD -> B -> A -> C -> D (8 km)
    fixado, e o D cai de 11 para 8.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/E667.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/E667.c -o ~/LPEDC/16-grafos/0112-dijkstra/E667 && ~/LPEDC/16-grafos/0112-dijkstra/E667
 ```
 
 **Exercício E668** · ★☆☆
@@ -1883,7 +1882,7 @@ Pinheiros: 17 min
    da Sé leva 11, mas Sé -> República -> Paulista leva 10.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/E668.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/E668.c -o ~/LPEDC/16-grafos/0112-dijkstra/E668 && ~/LPEDC/16-grafos/0112-dijkstra/E668
 ```
 
 **Exercício E669** · ★★☆
@@ -1923,7 +1922,7 @@ Mais longe: Eva (11 km)
    linha só: a árvore de caminhos mínimos deste mapa é um caminho.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/E669.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/E669.c -o ~/LPEDC/16-grafos/0112-dijkstra/E669 && ~/LPEDC/16-grafos/0112-dijkstra/E669
 ```
 
 **Exercício E670** · ★★☆
@@ -1964,14 +1963,14 @@ Oeste: 5 min
    9 direto); Sul vai por Norte (1 + 6 = 7, e não 3 + 5 = 8 por Oeste).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/E670.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/E670.c -o ~/LPEDC/16-grafos/0112-dijkstra/E670 && ~/LPEDC/16-grafos/0112-dijkstra/E670
 ```
 
 **Exercício E671** · ★★★
 
 Este programa tem um erro de propósito. Ele calcula o voo mais barato
 saindo de São Paulo. Manaus e Belém têm voo entre si, mas nenhum voo liga
-as duas ao resto do mapa. Rode com o rodar: o UndefinedBehaviorSanitizer
+as duas ao resto do mapa. Rode com as flags de estudo: o UndefinedBehaviorSanitizer
 acusa "signed integer overflow" e aponta a linha da conta que estoura.
 Conserte sem trocar o valor de INFINITO e rode de novo até a saída bater
 com a esperada, sem nenhum aviso do sanitizer.
@@ -1997,7 +1996,7 @@ Belém: sem voo
    quando não houver nenhum. Consertado, mostra a saída acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/E671.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/E671.c -o ~/LPEDC/16-grafos/0112-dijkstra/E671 && ~/LPEDC/16-grafos/0112-dijkstra/E671
 ```
 
 **Exercício E672** · ★★★
@@ -2049,7 +2048,7 @@ C: R$ 4
    C = 4 (Base -> B -> A -> C).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0112-dijkstra/E672.c
+gcc ~/LPEDC/16-grafos/0112-dijkstra/E672.c -o ~/LPEDC/16-grafos/0112-dijkstra/E672 && ~/LPEDC/16-grafos/0112-dijkstra/E672
 ```
 
 ---
@@ -2380,7 +2379,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/A225.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/A225.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/A225 && ~/LPEDC/16-grafos/0113-juntando-tudo/A225
 ```
 
 **Exemplo A226 · Fibra óptica pelo menor custo: o algoritmo de Prim**
@@ -2441,7 +2440,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/A226.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/A226.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/A226 && ~/LPEDC/16-grafos/0113-juntando-tudo/A226
 ```
 
 #### Exercícios
@@ -2456,7 +2455,7 @@ ou laço (a == b), e confira o retorno do scanf.
 
 
 ```text
-Teste: printf '5 6\n0 1\n0 2\n1 2\n2 3\n3 4\n1 4\n' | ~/LPEDC/rodar ...
+Teste: printf '5 6\n0 1\n0 2\n1 2\n2 3\n3 4\n1 4\n' | ./programa
 Saída esperada:
 0: 1 2 (grau 2)
 1: 0 2 4 (grau 3)
@@ -2483,7 +2482,7 @@ Aresta inválida: 1 7
 3. Resposta esperada: as saídas acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E673.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/E673.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/E673 && ~/LPEDC/16-grafos/0113-juntando-tudo/E673
 ```
 
 **Exercício E674** · ★☆☆
@@ -2522,7 +2521,7 @@ Menos peso até E: A -> B -> D -> E (6)
    aresta direta de 9.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E674.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/E674.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/E674 && ~/LPEDC/16-grafos/0113-juntando-tudo/E674
 ```
 
 **Exercício E675** · ★★☆
@@ -2566,7 +2565,7 @@ Melhor lugar para o hospital: Morro (ninguém a mais de 5 km)
    primeiro destino encontrado (o Morro está a 5 km do CD e da Vila).
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E675.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/E675.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/E675 && ~/LPEDC/16-grafos/0113-juntando-tudo/E675
 ```
 
 **Exercício E676** · ★★☆
@@ -2605,7 +2604,7 @@ Impossível: Bruno e Carla ficariam no mesmo time
    Carla, Ana.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E676.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/E676.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/E676 && ~/LPEDC/16-grafos/0113-juntando-tudo/E676
 ```
 
 **Exercício E677** · ★★★
@@ -2638,7 +2637,7 @@ GATO -> PEIXE: impossível
    fica com GATA porque ela vem antes na lista.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E677.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/E677.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/E677 && ~/LPEDC/16-grafos/0113-juntando-tudo/E677
 ```
 
 **Exercício E678** · ★★★
@@ -2681,13 +2680,13 @@ Itens tirados do heap: 10
    dist[v], ele é velho: ignore.
 2. Por isso o heap pode ter mais que V itens: cada aresta empurra no
    máximo duas vezes, então 2E + 1 posições bastam.
-3. Libere todos os nós das listas no fim (o rodar acusa vazamento).
+3. Libere todos os nós das listas no fim (o gcc com as flags de estudo acusa vazamento).
 4. Saem 10 itens: os 8 vértices e 2
    velhos (Gramado com 115 e Caxias com 135), que foram superados antes
    de sair.
 
 ```bash
-~/LPEDC/rodar 16-grafos/0113-juntando-tudo/E678.c
+gcc ~/LPEDC/16-grafos/0113-juntando-tudo/E678.c -o ~/LPEDC/16-grafos/0113-juntando-tudo/E678 && ~/LPEDC/16-grafos/0113-juntando-tudo/E678
 ```
 
 ---
@@ -2695,7 +2694,7 @@ Itens tirados do heap: 10
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. Contando arestas.** Escreva `int arestas(const int grau[], int n)`, que
 recebe os graus dos vértices de um grafo não dirigido e devolve quantas
@@ -2987,7 +2986,7 @@ Ponta de linha: Ponta Negra
    e a única ponta de linha é Ponta Negra.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1601.c
+gcc ~/LPEDC/16-grafos/lista/P1601.c -o ~/LPEDC/16-grafos/lista/P1601 && ~/LPEDC/16-grafos/lista/P1601
 ```
 
 ---
@@ -3037,7 +3036,7 @@ Pares com ida e volta: 4
    4 pares com ida e volta.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1602.c
+gcc ~/LPEDC/16-grafos/lista/P1602.c -o ~/LPEDC/16-grafos/lista/P1602 && ~/LPEDC/16-grafos/lista/P1602
 ```
 
 ---
@@ -3087,7 +3086,7 @@ Pares tortos: 1
 4. Resposta esperada: a matriz acima e um único par torto, Davi e Eva.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1603.c
+gcc ~/LPEDC/16-grafos/lista/P1603.c -o ~/LPEDC/16-grafos/lista/P1603 && ~/LPEDC/16-grafos/lista/P1603
 ```
 
 ---
@@ -3134,7 +3133,7 @@ completo: sim
    Kaue-Luana; depois, "completo: sim".
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1604.c
+gcc ~/LPEDC/16-grafos/lista/P1604.c -o ~/LPEDC/16-grafos/lista/P1604 && ~/LPEDC/16-grafos/lista/P1604
 ```
 
 ---
@@ -3171,7 +3170,7 @@ conhece: 7 | complemento: 8 | total: 15 = 6·5/2
 4. Resposta esperada: 7 arestas em conhece, 8 no complemento, 15 no total.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1605.c
+gcc ~/LPEDC/16-grafos/lista/P1605.c -o ~/LPEDC/16-grafos/lista/P1605 && ~/LPEDC/16-grafos/lista/P1605
 ```
 
 ---
@@ -3213,7 +3212,7 @@ Seguidores de Enzo: ninguém
 4. Ana tem 2 seguidores; Enzo, nenhum.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1606.c
+gcc ~/LPEDC/16-grafos/lista/P1606.c -o ~/LPEDC/16-grafos/lista/P1606 && ~/LPEDC/16-grafos/lista/P1606
 ```
 
 ---
@@ -3257,7 +3256,7 @@ Coroado       2  Aleixo
    (d = 3), e Educandos tem π = Centro.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1607.c
+gcc ~/LPEDC/16-grafos/lista/P1607.c -o ~/LPEDC/16-grafos/lista/P1607 && ~/LPEDC/16-grafos/lista/P1607
 ```
 
 ---
@@ -3305,7 +3304,7 @@ Cafe       d=2  pi=Lago
    Mirante.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1608.c
+gcc ~/LPEDC/16-grafos/lista/P1608.c -o ~/LPEDC/16-grafos/lista/P1608 && ~/LPEDC/16-grafos/lista/P1608
 ```
 
 ---
@@ -3353,7 +3352,7 @@ Terminam: Mirante Lago Cascata Viveiro Portao Quiosque
    Cascata 7/8, Quiosque 11/12.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1609.c
+gcc ~/LPEDC/16-grafos/lista/P1609.c -o ~/LPEDC/16-grafos/lista/P1609 && ~/LPEDC/16-grafos/lista/P1609
 ```
 
 ---
@@ -3398,7 +3397,7 @@ Linhas novas necessárias: 3
 4. Resposta esperada: 4 componentes, logo 3 linhas novas.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1610.c
+gcc ~/LPEDC/16-grafos/lista/P1610.c -o ~/LPEDC/16-grafos/lista/P1610 && ~/LPEDC/16-grafos/lista/P1610
 ```
 
 ### ★★☆ Para pensar
@@ -3440,7 +3439,7 @@ Oiapoque: sem rota
    Rio, Porto Alegre), Fortaleza em 2 e Oiapoque sem rota.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1611.c
+gcc ~/LPEDC/16-grafos/lista/P1611.c -o ~/LPEDC/16-grafos/lista/P1611 && ~/LPEDC/16-grafos/lista/P1611
 ```
 
 ---
@@ -3487,7 +3486,7 @@ Ajuda    -> Contato  cruzamento
    cruzamento (11 links).
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1612.c
+gcc ~/LPEDC/16-grafos/lista/P1612.c -o ~/LPEDC/16-grafos/lista/P1612 && ~/LPEDC/16-grafos/lista/P1612
 ```
 
 ---
@@ -3533,7 +3532,7 @@ Não é bipartido
    aresta que estraga aparece ao examinar Algoritmos-Fisica.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1613.c
+gcc ~/LPEDC/16-grafos/lista/P1613.c -o ~/LPEDC/16-grafos/lista/P1613 && ~/LPEDC/16-grafos/lista/P1613
 ```
 
 ---
@@ -3569,7 +3568,7 @@ Sem Valvula-Caixa: sem ciclo
    Valvula) e, sem o cano, "sem ciclo".
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1614.c
+gcc ~/LPEDC/16-grafos/lista/P1614.c -o ~/LPEDC/16-grafos/lista/P1614 && ~/LPEDC/16-grafos/lista/P1614
 ```
 
 ---
@@ -3609,7 +3608,7 @@ Ponta Negra  25 km: CD -> Japiim -> Coroado -> Aleixo -> Flores -> Ponta Negra
    (13 km) do que pelo Aleixo (14 km).
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1615.c
+gcc ~/LPEDC/16-grafos/lista/P1615.c -o ~/LPEDC/16-grafos/lista/P1615 && ~/LPEDC/16-grafos/lista/P1615
 ```
 
 ---
@@ -3659,7 +3658,7 @@ Tefe        35 h
    Coari 23 h, Tefe 35 h.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1616.c
+gcc ~/LPEDC/16-grafos/lista/P1616.c -o ~/LPEDC/16-grafos/lista/P1616 && ~/LPEDC/16-grafos/lista/P1616
 ```
 
 ---
@@ -3697,7 +3696,7 @@ Sugestões:
    por Aline-Caua e Aline-Flora.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1617.c
+gcc ~/LPEDC/16-grafos/lista/P1617.c -o ~/LPEDC/16-grafos/lista/P1617 && ~/LPEDC/16-grafos/lista/P1617
 ```
 
 ---
@@ -3735,7 +3734,7 @@ S**#****
 4. Resposta esperada: 16 passos e o mapa acima.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1618.c
+gcc ~/LPEDC/16-grafos/lista/P1618.c -o ~/LPEDC/16-grafos/lista/P1618 && ~/LPEDC/16-grafos/lista/P1618
 ```
 
 ---
@@ -3774,7 +3773,7 @@ n = 1000: matriz d = 999, 1000000 consultas | lista d = 999, 1998 consultas
    lista 1998, e as duas dão d = 999.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1619.c
+gcc ~/LPEDC/16-grafos/lista/P1619.c -o ~/LPEDC/16-grafos/lista/P1619 && ~/LPEDC/16-grafos/lista/P1619
 ```
 
 ---
@@ -3812,7 +3811,7 @@ Festa 2: sem celebridade (13 consultas de 36)
    na festa 2 não há celebridade.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1620.c
+gcc ~/LPEDC/16-grafos/lista/P1620.c -o ~/LPEDC/16-grafos/lista/P1620 && ~/LPEDC/16-grafos/lista/P1620
 ```
 
 ### ★★★ Desafio
@@ -3863,7 +3862,7 @@ Jarras de 4 L e 6 L, alvo 3 L: impossível (10 estados descobertos)
    enche B, B -> A, terminando em (3, 4)); 3 L com 4 e 6 é impossível.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1621.c
+gcc ~/LPEDC/16-grafos/lista/P1621.c -o ~/LPEDC/16-grafos/lista/P1621 && ~/LPEDC/16-grafos/lista/P1621
 ```
 
 ---
@@ -3912,7 +3911,7 @@ a1 até h8 em 6 lances: a1 b3 c5 d7 f8 g6 h8
    o canto oposto.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1622.c
+gcc ~/LPEDC/16-grafos/lista/P1622.c -o ~/LPEDC/16-grafos/lista/P1622 && ~/LPEDC/16-grafos/lista/P1622
 ```
 
 ---
@@ -3963,7 +3962,7 @@ Itacoatiara: 250 km, chegando por Rio Preto da Eva
    km, por Rio Preto da Eva.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1623.c
+gcc ~/LPEDC/16-grafos/lista/P1623.c -o ~/LPEDC/16-grafos/lista/P1623 && ~/LPEDC/16-grafos/lista/P1623
 ```
 
 ---
@@ -4000,7 +3999,7 @@ Com desempate: Terminal 1 -> Alvorada -> Ponta Negra (40 min, 2 trechos)
    com desempate vai pelo Alvorada (2 trechos); os dois levam 40 min.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1624.c
+gcc ~/LPEDC/16-grafos/lista/P1624.c -o ~/LPEDC/16-grafos/lista/P1624 && ~/LPEDC/16-grafos/lista/P1624
 ```
 
 ---
@@ -4042,7 +4041,7 @@ Loja -> Farmacia: 9 min | Farmacia -> Loja: 13 min
    volta Farmácia -> Loja leva 13 min, contra 9 da ida.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1625.c
+gcc ~/LPEDC/16-grafos/lista/P1625.c -o ~/LPEDC/16-grafos/lista/P1625 && ~/LPEDC/16-grafos/lista/P1625
 ```
 
 ---
@@ -4098,7 +4097,7 @@ Descendentes de B (pi):         C D E
    aninhados, 17 disjuntos, 0 cruzados; descendentes de B: C D E.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1626.c
+gcc ~/LPEDC/16-grafos/lista/P1626.c -o ~/LPEDC/16-grafos/lista/P1626 && ~/LPEDC/16-grafos/lista/P1626
 ```
 
 ---
@@ -4146,7 +4145,7 @@ Grupos de ida e volta: 4 | pares com caminho: 25
    Alfandega}, {Matriz}) e 25 pares com caminho.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1627.c
+gcc ~/LPEDC/16-grafos/lista/P1627.c -o ~/LPEDC/16-grafos/lista/P1627 && ~/LPEDC/16-grafos/lista/P1627
 ```
 
 ---
@@ -4199,7 +4198,7 @@ Rede C:
    Hospital-Reitoria, nessa ordem da DFS).
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1628.c
+gcc ~/LPEDC/16-grafos/lista/P1628.c -o ~/LPEDC/16-grafos/lista/P1628 && ~/LPEDC/16-grafos/lista/P1628
 ```
 
 ---
@@ -4245,7 +4244,7 @@ Grade 1000 x 1000: matriz de 4000000000000 bytes
    4 TB de matriz.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1629.c
+gcc ~/LPEDC/16-grafos/lista/P1629.c -o ~/LPEDC/16-grafos/lista/P1629 && ~/LPEDC/16-grafos/lista/P1629
 ```
 
 ---
@@ -4295,7 +4294,7 @@ Galpão 2: -1
    galpão 2, o fogo fecha a única saída e a resposta é -1.
 
 ```bash
-~/LPEDC/rodar 16-grafos/lista/P1630.c
+gcc ~/LPEDC/16-grafos/lista/P1630.c -o ~/LPEDC/16-grafos/lista/P1630 && ~/LPEDC/16-grafos/lista/P1630
 ```
 
 ## Questões no estilo da prova

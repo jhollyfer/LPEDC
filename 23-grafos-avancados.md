@@ -314,7 +314,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/A299.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/A299.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/A299 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/A299
 ```
 
 **Exemplo A300 · Grupos de corrida que se juntam**
@@ -378,7 +378,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/A300.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/A300.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/A300 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/A300
 ```
 
 #### Exercícios
@@ -419,7 +419,7 @@ Pontes novas para ligar tudo: 2
    cada ponte nova entre grupos diferentes junta dois deles.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/E895.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E895.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E895 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E895
 ```
 
 **Exercício E896** · ★☆☆
@@ -449,7 +449,7 @@ Versão 2: dependência circular
    rede -> log -> util -> rede.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/E896.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E896.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E896 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E896
 ```
 
 **Exercício E897** · ★★☆
@@ -488,7 +488,7 @@ Ciclovias novas para ligar tudo: 3
    então faltam 4 - 1 = 3 ciclovias.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/E897.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E897.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E897 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E897
 ```
 
 **Exercício E898** · ★★☆
@@ -518,7 +518,7 @@ Parque 3: Rio Ponte Ninho Toca | 4 pontos, 4 trilhas, tem circuito
    trilhas (4 - 1): é uma árvore, sem circuito.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/E898.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E898.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E898 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E898
 ```
 
 **Exercício E899** · ★★★
@@ -558,7 +558,7 @@ DFS para que ela dê a saída esperada.
    vértice cinza; ao terminar o laço dos vizinhos, pinte u de preto.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/E899.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E899.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E899 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E899
 ```
 
 **Exercício E900** · ★★★
@@ -594,7 +594,7 @@ Impossível: Caio e Ana cairiam no mesmo turno
    dividido em dois turnos.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0150-componentes-e-ciclos/E900.c
+gcc ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E900.c -o ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E900 && ~/LPEDC/23-grafos-avancados/0150-componentes-e-ciclos/E900
 ```
 
 ---
@@ -804,7 +804,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/A301.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/A301.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/A301 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/A301
 ```
 
 **Exemplo A302 · Quantos semestres até o TCC**
@@ -864,7 +864,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/A302.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/A302.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/A302 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/A302
 ```
 
 #### Exercícios
@@ -909,7 +909,7 @@ Saída esperada:
    dos ovos e dos secos, e entra na fila atrás dos quatro primeiros.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/E901.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E901.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E901 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E901
 ```
 
 **Exercício E902** · ★☆☆
@@ -948,7 +948,7 @@ Rui: inválida (placa no gabinete veio antes de cooler)
    diferentes, e as duas valem: a ordenação topológica não é única.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/E902.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E902.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E902 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E902
 ```
 
 **Exercício E903** · ★★☆
@@ -986,7 +986,7 @@ Menor:  #105 #101 #106 #102 #103 #107 #104
    0102) no lugar da fila, cairia para O((V + E) log V).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/E903.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E903.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E903 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E903
 ```
 
 **Exercício E904** · ★★☆
@@ -1024,7 +1024,7 @@ Caminho crítico: Fundação -> Paredes -> Telhado -> Reboco -> Pintura
    Elétrica (30) e Hidráulica (31): quem segura é o Telhado.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/E904.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E904.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E904 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E904
 ```
 
 **Exercício E905** · ★★★
@@ -1063,7 +1063,7 @@ mudanças pequenas) para que ele mostre a saída esperada.
    usuário, banco, certificado, firewall, sistema.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/E905.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E905.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E905 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E905
 ```
 
 **Exercício E906** · ★★★
@@ -1108,7 +1108,7 @@ Total com 6 tarefas: 30
    lugares antes do "sair".
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0151-ordenacao-topologica/E906.c
+gcc ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E906.c -o ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E906 && ~/LPEDC/23-grafos-avancados/0151-ordenacao-topologica/E906
 ```
 
 ---
@@ -1361,7 +1361,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/A303.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/A303.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/A303 && ~/LPEDC/23-grafos-avancados/0152-kruskal/A303
 ```
 
 **Exemplo A304 · A árvore de MAIOR soma: o melhor sinal do Wi-Fi mesh**
@@ -1423,7 +1423,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/A304.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/A304.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/A304 && ~/LPEDC/23-grafos-avancados/0152-kruskal/A304
 ```
 
 #### Exercícios
@@ -1466,7 +1466,7 @@ Mangueira total: 15 m
    O(V) por aresta, o que o union-find do assunto 0148 resolve.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/E907.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/E907.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/E907 && ~/LPEDC/23-grafos-avancados/0152-kruskal/E907
 ```
 
 **Exercício E908** · ★☆☆
@@ -1500,7 +1500,7 @@ Total: R$ 39 mil
    descartados (fechariam ciclo), e o laço para nas 6 fibras.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/E908.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/E908.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/E908 && ~/LPEDC/23-grafos-avancados/0152-kruskal/E908
 ```
 
 **Exercício E909** · ★★☆
@@ -1535,7 +1535,7 @@ Custo extra da exigência: R$ 2 mil
    (4): Sede e Brejo já estão ligados pela Ponte.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/E909.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/E909.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/E909 && ~/LPEDC/23-grafos-avancados/0152-kruskal/E909
 ```
 
 **Exercício E910** · ★★☆
@@ -1569,7 +1569,7 @@ Sem travessia: 2 redes separadas, 6 cabos, 16 km
    Pequi-Juçara 2, Buriti-Juçara 4.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/E910.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/E910.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/E910 && ~/LPEDC/23-grafos-avancados/0152-kruskal/E910
 ```
 
 **Exercício E911** · ★★★
@@ -1617,7 +1617,7 @@ Ache a linha, conserte e confira a saída.
    "pai[rb] = ra;". Consertado, mostra a saída esperada.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/E911.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/E911.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/E911 && ~/LPEDC/23-grafos-avancados/0152-kruskal/E911
 ```
 
 **Exercício E912** · ★★★
@@ -1659,7 +1659,7 @@ Maior subida: 14 m
    seria 20; por Praça, Igreja, Escola, 18. Pelo Morro, 30.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0152-kruskal/E912.c
+gcc ~/LPEDC/23-grafos-avancados/0152-kruskal/E912.c -o ~/LPEDC/23-grafos-avancados/0152-kruskal/E912 && ~/LPEDC/23-grafos-avancados/0152-kruskal/E912
 ```
 
 ---
@@ -1907,7 +1907,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/A305.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/A305.c -o ~/LPEDC/23-grafos-avancados/0153-prim/A305 -lm && ~/LPEDC/23-grafos-avancados/0153-prim/A305
 ```
 
 **Exemplo A306 · Prim e Dijkstra: a mesma função, uma linha diferente**
@@ -1989,7 +1989,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/A306.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/A306.c -o ~/LPEDC/23-grafos-avancados/0153-prim/A306 && ~/LPEDC/23-grafos-avancados/0153-prim/A306
 ```
 
 #### Exercícios
@@ -2024,7 +2024,7 @@ Total: 38 m
    cai para 15 (pelo Pastel) e termina em 11 (pelo Açaí).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/E913.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/E913.c -o ~/LPEDC/23-grafos-avancados/0153-prim/E913 && ~/LPEDC/23-grafos-avancados/0153-prim/E913
 ```
 
 **Exercício E914** · ★☆☆
@@ -2055,7 +2055,7 @@ Ciclofaixa total: 22 quarteirões
    não pela Feira (6).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/E914.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/E914.c -o ~/LPEDC/23-grafos-avancados/0153-prim/E914 && ~/LPEDC/23-grafos-avancados/0153-prim/E914
 ```
 
 **Exercício E915** · ★★☆
@@ -2088,7 +2088,7 @@ Estádio: Estádio Orla Museu Praça Rodoviária Feira | 22
    execuções escolhem as mesmas cinco ciclofaixas.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/E915.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/E915.c -o ~/LPEDC/23-grafos-avancados/0153-prim/E915 && ~/LPEDC/23-grafos-avancados/0153-prim/E915
 ```
 
 **Exercício E916** · ★★☆
@@ -2125,7 +2125,7 @@ Total: 18 km
    não pela Escola (7) nem pela Central (9).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/E916.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/E916.c -o ~/LPEDC/23-grafos-avancados/0153-prim/E916 && ~/LPEDC/23-grafos-avancados/0153-prim/E916
 ```
 
 **Exercício E917** · ★★★
@@ -2166,7 +2166,7 @@ Total: R$ 17 mil (2 poços)
    (7), mais barato que qualquer cano até ele (9 ou 10).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/E917.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/E917.c -o ~/LPEDC/23-grafos-avancados/0153-prim/E917 && ~/LPEDC/23-grafos-avancados/0153-prim/E917
 ```
 
 **Exercício E918** · ★★★
@@ -2216,7 +2216,7 @@ Conserte o programa e confira a saída.
    mostra a saída esperada.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0153-prim/E918.c
+gcc ~/LPEDC/23-grafos-avancados/0153-prim/E918.c -o ~/LPEDC/23-grafos-avancados/0153-prim/E918 && ~/LPEDC/23-grafos-avancados/0153-prim/E918
 ```
 
 ---
@@ -2462,7 +2462,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/A307.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/A307.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/A307 -lm && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/A307
 ```
 
 **Exemplo A308 · A ordem da lista muda o número de rodadas**
@@ -2524,7 +2524,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/A308.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/A308.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/A308 && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/A308
 ```
 
 #### Exercícios
@@ -2566,7 +2566,7 @@ Sítio: R$ 40
    pelo Posto A (30 - 10 = 20) do que direto (45).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/E919.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E919.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E919 && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E919
 ```
 
 **Exercício E920** · ★☆☆
@@ -2595,7 +2595,7 @@ Tabuleiro 2: ciclo negativo
    tem fundo: cada passagem por ela baixa a distância de novo.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/E920.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E920.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E920 && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E920
 ```
 
 **Exercício E921** · ★★☆
@@ -2628,7 +2628,7 @@ Mata: inalcançável
    Torre (18%), mesmo vindo depois dela: é o efeito da aresta negativa.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/E921.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E921.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E921 && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E921
 ```
 
 **Exercício E922** · ★★☆
@@ -2657,7 +2657,7 @@ Saída: Dijkstra 9, Bellman-Ford 8 (Dijkstra errou)
    erro se espalha para Castelo e Saída.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/E922.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E922.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E922 && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E922
 ```
 
 **Exercício E923** · ★★★
@@ -2700,7 +2700,7 @@ O erro é de uma linha. Ache, conserte e confira a saída.
    esperada.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/E923.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E923.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E923 && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E923
 ```
 
 **Exercício E924** · ★★★
@@ -2739,7 +2739,7 @@ Até 3 trechos: R$ 700
    Curitiba. Com 3: Recife, Salvador, São Paulo, Curitiba.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0154-bellman-ford/E924.c
+gcc ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E924.c -o ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E924 && ~/LPEDC/23-grafos-avancados/0154-bellman-ford/E924
 ```
 
 ---
@@ -2943,7 +2943,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/A309.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/A309.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/A309 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/A309
 ```
 
 **Exemplo A310 · Fecho transitivo: de qual terminal dá para chegar em qual**
@@ -2993,7 +2993,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/A310.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/A310.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/A310 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/A310
 ```
 
 #### Exercícios
@@ -3033,7 +3033,7 @@ Mel       9   2   5   0
    Leite e Frutas daria 8 + 3 + 5 = 16.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/E925.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E925.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E925 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E925
 ```
 
 **Exercício E926** · ★☆☆
@@ -3065,7 +3065,7 @@ REC     -   -   -   -   0
    e o sanitizer acusa "signed integer overflow".
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/E926.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E926.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E926 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E926
 ```
 
 **Exercício E927** · ★★☆
@@ -3108,7 +3108,7 @@ Melhor bairro para o posto: Lagoa (ninguém fica a mais de 12 km)
    Centro, Jardim, Vila Rica) e Porto a 9 (Lagoa, Bosque, Porto).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/E927.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E927.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E927 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E927
 ```
 
 **Exercício E928** · ★★☆
@@ -3139,7 +3139,7 @@ Semana 2: ciclo negativo passando por Dólar Euro Cripto
    cada volta), por isso o programa só mostra as moedas do ciclo.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/E928.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E928.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E928 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E928
 ```
 
 **Exercício E929** · ★★★
@@ -3184,7 +3184,7 @@ Ache o erro, conserte e confira.
    j). Consertado, mostra a saída esperada.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/E929.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E929.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E929 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E929
 ```
 
 **Exercício E930** · ★★★
@@ -3218,7 +3218,7 @@ Confere com o Floyd completo: sim
    (10 vira 3), Feira -> Porto (11 vira 4) e Feira -> Vila (8 vira 1).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0155-floyd-warshall/E930.c
+gcc ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E930.c -o ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E930 && ~/LPEDC/23-grafos-avancados/0155-floyd-warshall/E930
 ```
 
 ---
@@ -3528,7 +3528,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/A311.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/A311.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/A311 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/A311
 ```
 
 **Exemplo A312 · Instalar só o necessário, na ordem certa**
@@ -3601,7 +3601,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/A312.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/A312.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/A312 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/A312
 ```
 
 #### Exercícios
@@ -3638,7 +3638,7 @@ Mais longe: Portaria e Reitoria, 13 min
    Biblioteca, Lab, Reitoria (4 + 3 + 6 = 13).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/E931.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E931.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E931 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E931
 ```
 
 **Exercício E932** · ★☆☆
@@ -3672,7 +3672,7 @@ Não reprove em Lógica
    Arquivos, Grafos e Projeto.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/E932.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E932.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E932 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E932
 ```
 
 **Exercício E933** · ★★☆
@@ -3714,7 +3714,7 @@ Capital -> Serra pelo melhor caminho: 10 km
    Capital, Litoral, Agreste, Sertão, Serra (3 + 5 + 6 + 4).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/E933.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E933.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E933 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E933
 ```
 
 **Exercício E934** · ★★☆
@@ -3758,7 +3758,7 @@ Com no máximo 2 por semestre:
    regra usada na prática (e um bom desafio para depois).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/E934.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E934.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E934 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E934
 ```
 
 **Exercício E935** · ★★★
@@ -3801,7 +3801,7 @@ Ache, conserte e confira.
    "while (inicio < fim_semestre)". Consertado, mostra a saída esperada.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/E935.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E935.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E935 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E935
 ```
 
 **Exercício E936** · ★★★
@@ -3847,7 +3847,7 @@ Melhor roteiro (22 min): Loja -> Ana -> Bruno -> Carla -> Loja
    e para ele ninguém conhece algoritmo rápido.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/0156-juntando-tudo/E936.c
+gcc ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E936.c -o ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E936 && ~/LPEDC/23-grafos-avancados/0156-juntando-tudo/E936
 ```
 
 ---
@@ -4046,7 +4046,7 @@ Iara e Ana: grupos diferentes
    grupo[a] == grupo[b].
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2301.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2301.c -o ~/LPEDC/23-grafos-avancados/lista/P2301 && ~/LPEDC/23-grafos-avancados/lista/P2301
 ```
 
 ---
@@ -4085,7 +4085,7 @@ Rede nova: sem circuito
    Ana; sem o cano Ana-Davi, a rede vira árvore e não tem circuito.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2302.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2302.c -o ~/LPEDC/23-grafos-avancados/lista/P2302 && ~/LPEDC/23-grafos-avancados/lista/P2302
 ```
 
 ---
@@ -4123,7 +4123,7 @@ Planilha de junho: sem referência circular
    a seta D1 -> B1, nenhum ciclo.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2303.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2303.c -o ~/LPEDC/23-grafos-avancados/lista/P2303 && ~/LPEDC/23-grafos-avancados/lista/P2303
 ```
 
 ---
@@ -4166,7 +4166,7 @@ Manual com erro: separar base
    prateleiras e fixar esperam por eles).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2304.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2304.c -o ~/LPEDC/23-grafos-avancados/lista/P2304 && ~/LPEDC/23-grafos-avancados/lista/P2304
 ```
 
 ---
@@ -4210,7 +4210,7 @@ Ordem: banco(12) lint(10) testes(9) build(8) deploy(7) aviso(6)
    só é descoberto no 11 e termina no 12, por isso abre a ordem.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2305.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2305.c -o ~/LPEDC/23-grafos-avancados/lista/P2305 && ~/LPEDC/23-grafos-avancados/lista/P2305
 ```
 
 ---
@@ -4254,7 +4254,7 @@ Total: 22 km
 3. Resposta esperada: só Tracajá-Zé Açu é recusado; total 22 km.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2306.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2306.c -o ~/LPEDC/23-grafos-avancados/lista/P2306 && ~/LPEDC/23-grafos-avancados/lista/P2306
 ```
 
 ---
@@ -4294,7 +4294,7 @@ Total: 14 km
    0* 4* 3* 2* 5*.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2307.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2307.c -o ~/LPEDC/23-grafos-avancados/lista/P2307 && ~/LPEDC/23-grafos-avancados/lista/P2307
 ```
 
 ---
@@ -4338,7 +4338,7 @@ rodada 4:   0   3   5   7  10
    Estágio 10; o Estágio só chega no valor certo na rodada 4.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2308.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2308.c -o ~/LPEDC/23-grafos-avancados/lista/P2308 && ~/LPEDC/23-grafos-avancados/lista/P2308
 ```
 
 ---
@@ -4404,7 +4404,7 @@ CNO     20   30   55    0
    chega no Centro em 35 (15 + 20).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2309.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2309.c -o ~/LPEDC/23-grafos-avancados/lista/P2309 && ~/LPEDC/23-grafos-avancados/lista/P2309
 ```
 
 ---
@@ -4439,7 +4439,7 @@ Edu     0   0    0    1   0   chega em 1
    nenhuma; Edu só em Davi.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2310.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2310.c -o ~/LPEDC/23-grafos-avancados/lista/P2310 && ~/LPEDC/23-grafos-avancados/lista/P2310
 ```
 
 ### ★★☆ Para pensar
@@ -4482,7 +4482,7 @@ Grupo 3: Autazes Itacoatiara Silves
    e Careiro; Autazes, Itacoatiara e Silves.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2311.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2311.c -o ~/LPEDC/23-grafos-avancados/lista/P2311 && ~/LPEDC/23-grafos-avancados/lista/P2311
 ```
 
 ---
@@ -4534,7 +4534,7 @@ Lista 2
    a antes de c e c antes de a.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2312.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2312.c -o ~/LPEDC/23-grafos-avancados/lista/P2312 && ~/LPEDC/23-grafos-avancados/lista/P2312
 ```
 
 ---
@@ -4581,7 +4581,7 @@ Melhor trilha: Início -> Caverna -> Rio -> Castelo -> Chefão
    pela Floresta.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2313.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2313.c -o ~/LPEDC/23-grafos-avancados/lista/P2313 && ~/LPEDC/23-grafos-avancados/lista/P2313
 ```
 
 ---
@@ -4621,7 +4621,7 @@ Relaxações tentadas: Bellman-Ford 45, DAG 9
    tentativas contra 45 do Bellman-Ford.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2314.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2314.c -o ~/LPEDC/23-grafos-avancados/lista/P2314 && ~/LPEDC/23-grafos-avancados/lista/P2314
 ```
 
 ---
@@ -4668,7 +4668,7 @@ Total: R$ 18 mil
    com Lago-Mirante recusada e Cachoeira-Camping aceita.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2315.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2315.c -o ~/LPEDC/23-grafos-avancados/lista/P2315 && ~/LPEDC/23-grafos-avancados/lista/P2315
 ```
 
 ---
@@ -4703,7 +4703,7 @@ Total: 11 metros; sobraram 2 itens no heap
    e 2 itens ainda no heap no fim (Porto-Escola e Porto-Ginásio).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2316.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2316.c -o ~/LPEDC/23-grafos-avancados/lista/P2316 && ~/LPEDC/23-grafos-avancados/lista/P2316
 ```
 
 ---
@@ -4736,7 +4736,7 @@ Rodoviária -> Universidade (9 min): Rodoviária -> Aeroporto -> Universidade
    Rodoviária; a linha direta Terminal-Universidade (20) nunca é usada.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2317.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2317.c -o ~/LPEDC/23-grafos-avancados/lista/P2317 && ~/LPEDC/23-grafos-avancados/lista/P2317
 ```
 
 ---
@@ -4776,7 +4776,7 @@ Arestas olhadas: Dijkstra 60, Bellman-Ford 170
    (6 origens × 10), Bellman-Ford 170.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2318.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2318.c -o ~/LPEDC/23-grafos-avancados/lista/P2318 && ~/LPEDC/23-grafos-avancados/lista/P2318
 ```
 
 ---
@@ -4822,7 +4822,7 @@ Currais fechados: 3
    (9 cercas - 6 que bastam para ligar 7 mourões).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2319.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2319.c -o ~/LPEDC/23-grafos-avancados/lista/P2319 && ~/LPEDC/23-grafos-avancados/lista/P2319
 ```
 
 ---
@@ -4866,7 +4866,7 @@ Praia: 8
 3. Resposta esperada: 8 trajetos chegam à Praia.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2320.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2320.c -o ~/LPEDC/23-grafos-avancados/lista/P2320 && ~/LPEDC/23-grafos-avancados/lista/P2320
 ```
 
 ### ★★★ Desafio
@@ -4918,7 +4918,7 @@ Segunda melhor: 21, trocando Boa Esperança-Cajual (5) por Aldeia Nova-Cajual (6
    Cajual-Extrema também dá 21: o plano B nem sempre é único.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2321.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2321.c -o ~/LPEDC/23-grafos-avancados/lista/P2321 && ~/LPEDC/23-grafos-avancados/lista/P2321
 ```
 
 ---
@@ -4959,7 +4959,7 @@ Terça-feira: sem arbitragem
    fator 1.0120 (0,92 × 5,50 × 0,20); na terça, sem arbitragem.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2322.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2322.c -o ~/LPEDC/23-grafos-avancados/lista/P2322 -lm && ~/LPEDC/23-grafos-avancados/lista/P2322
 ```
 
 ---
@@ -4998,7 +4998,7 @@ Bolha 3: @fe @gabi
    saem 3 bolhas: @ana @beto @caio, @dani @enzo e @fe @gabi.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2323.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2323.c -o ~/LPEDC/23-grafos-avancados/lista/P2323 && ~/LPEDC/23-grafos-avancados/lista/P2323
 ```
 
 ---
@@ -5048,7 +5048,7 @@ Tefé -> Lábrea: até 28 t
    28 t, a estrada direta.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2324.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2324.c -o ~/LPEDC/23-grafos-avancados/lista/P2324 && ~/LPEDC/23-grafos-avancados/lista/P2324
 ```
 
 ---
@@ -5094,7 +5094,7 @@ Sem regras (12 tarefas): PD 479001600
    regras.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2325.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2325.c -o ~/LPEDC/23-grafos-avancados/lista/P2325 && ~/LPEDC/23-grafos-avancados/lista/P2325
 ```
 
 ---
@@ -5135,7 +5135,7 @@ Ilha   inalcançável
    Bosque 7, Ilha inalcançável.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2326.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2326.c -o ~/LPEDC/23-grafos-avancados/lista/P2326 && ~/LPEDC/23-grafos-avancados/lista/P2326
 ```
 
 ---
@@ -5180,7 +5180,7 @@ Total: 11 km
 3. Resposta esperada: compare e guarde só km[u][v]; total 11 km.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2327.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2327.c -o ~/LPEDC/23-grafos-avancados/lista/P2327 && ~/LPEDC/23-grafos-avancados/lista/P2327
 ```
 
 ---
@@ -5220,7 +5220,7 @@ Espaçamento: 4 km (Aleixo-Japiim)
    (Aleixo-Japiim).
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2328.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2328.c -o ~/LPEDC/23-grafos-avancados/lista/P2328 && ~/LPEDC/23-grafos-avancados/lista/P2328
 ```
 
 ---
@@ -5269,7 +5269,7 @@ Floyd-Warshall confere
    0 3 1 3 2 e o Floyd-Warshall confere.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2329.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2329.c -o ~/LPEDC/23-grafos-avancados/lista/P2329 && ~/LPEDC/23-grafos-avancados/lista/P2329
 ```
 
 ---
@@ -5318,7 +5318,7 @@ Ruas novas, no mínimo: 2
    2 sumidouros ({Matriz} e {Mercado, Teatro}): 2 ruas novas.
 
 ```bash
-~/LPEDC/rodar 23-grafos-avancados/lista/P2330.c
+gcc ~/LPEDC/23-grafos-avancados/lista/P2330.c -o ~/LPEDC/23-grafos-avancados/lista/P2330 && ~/LPEDC/23-grafos-avancados/lista/P2330
 ```
 
 ## Questões no estilo da prova

@@ -43,7 +43,7 @@ com um ponteiro para contador. Esse contador não faz parte do algoritmo: é o
 máquina; o número de comparações, não.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. O enunciado
+AddressSanitizer (ou o UBSan) do gcc com as flags de estudo vai parar o programa. O enunciado
 avisa.
 
 | # | Assunto | Pasta |
@@ -223,7 +223,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/A177.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/A177.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/A177 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/A177
 ```
 
 **Exemplo A178 · A sentinela no fim da fila**
@@ -281,7 +281,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/A178.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/A178.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/A178 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/A178
 ```
 
 #### Exercícios
@@ -317,7 +317,7 @@ Saída esperada:
    para 200, -1 com 7 comparações.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E529.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E529.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E529 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E529
 ```
 
 **Exercício E530** · ★☆☆
@@ -344,7 +344,7 @@ Fábio: não está na lista
    break; }
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E530.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E530.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E530 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E530
 ```
 
 **Exercício E531** · ★★☆
@@ -379,7 +379,7 @@ R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
 4. Resposta esperada: a saída acima (47 para no 52, que é o 7º elemento).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E531.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E531.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E531 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E531
 ```
 
 **Exercício E532** · ★★☆
@@ -420,13 +420,13 @@ No vetor: Café 500g R$ 20.79
 4. Resposta esperada: a saída acima (18,90 * 1,10 = 20,79).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E532.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E532.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E532 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E532
 ```
 
 **Exercício E533** · ★★★
 
 A função abaixo deveria devolver a PRIMEIRA posição da senha procurada no
-painel do banco. Ela tem DOIS erros, de propósito. Rode com o rodar: o
+painel do banco. Ela tem DOIS erros, de propósito. Rode com as flags de estudo: o
 AddressSanitizer vai reclamar de um deles. Conserte os dois e rode de novo
 até a saída bater com a esperada.
 
@@ -446,7 +446,7 @@ Primeira senha 99: posição -1
    Conserto: i < n e return i assim que achar.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E533.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E533.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E533 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E533
 ```
 
 **Exercício E534** · ★★★
@@ -483,7 +483,7 @@ Movendo para a frente: 20 comparações
 4. Resposta esperada: a saída acima (5+5+2+1+5+2 = 20 comparações).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0089-busca-sequencial/E534.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E534.c -o ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E534 && ~/LPEDC/13-busca-e-ordenacao/0089-busca-sequencial/E534
 ```
 
 ---
@@ -688,7 +688,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/A179.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/A179.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/A179 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/A179
 ```
 
 **Exemplo A180 · Em qual faixa de frete cai o pacote?**
@@ -739,7 +739,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/A180.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/A180.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/A180 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/A180
 ```
 
 #### Exercícios
@@ -790,7 +790,7 @@ achou na posição 8 em 4 voltas
    9 elementos.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E535.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E535.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E535 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E535
 ```
 
 **Exercício E536** · ★☆☆
@@ -831,7 +831,7 @@ CEP 22222222: posição -1
    busca_rec(ceps, 0, 9, x).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E536.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E536.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E536 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E536
 ```
 
 **Exercício E537** · ★★☆
@@ -869,7 +869,7 @@ Nota 5: posições 9 a 11, 3 avaliações
    contagem custa umas 40 voltas, e não um milhão.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E537.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E537.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E537 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E537
 ```
 
 **Exercício E538** · ★★☆
@@ -904,14 +904,14 @@ Palmas: posição -1 (4 voltas)
 4. Resposta esperada: a saída acima (meios 7, 11, 9 e 10 nas duas buscas).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E538.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E538.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E538 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E538
 ```
 
 **Exercício E539** · ★★★
 
 Alguém "modernizou" a busca binária trocando int por size_t, "porque índice
 nunca é negativo". O código compila sem nenhum aviso, acha o 35... e
-explode ao procurar o 3. O erro é de propósito: rode com o rodar e leia o
+explode ao procurar o 3. O erro é de propósito: rode com as flags de estudo e leia o
 que o AddressSanitizer diz. Conserte, mantendo size_t, e rode de novo até
 as três linhas da saída esperada aparecerem.
 
@@ -934,7 +934,7 @@ vazio: posição -1
    subtrai 1 de um size_t.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E539.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E539.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E539 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E539
 ```
 
 **Exercício E540** · ★★★
@@ -966,7 +966,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima (46340² = 2147395600).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0090-busca-binaria/E540.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E540.c -o ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E540 && ~/LPEDC/13-busca-e-ordenacao/0090-busca-binaria/E540
 ```
 
 ---
@@ -1172,7 +1172,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/A181.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/A181.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/A181 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/A181
 ```
 
 **Exemplo A182 · A bandeirinha que economiza passadas**
@@ -1236,7 +1236,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/A182.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/A182.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/A182 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/A182
 ```
 
 #### Exercícios
@@ -1261,7 +1261,7 @@ Ranking: 31 31 25 18 12 7
 4. Resposta esperada: Ranking: 31 31 25 18 12 7
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E541.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E541.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E541 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E541
 ```
 
 **Exercício E542** · ★☆☆
@@ -1300,7 +1300,7 @@ trocas: 7
    vetor original.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E542.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E542.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E542 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E542
 ```
 
 **Exercício E543** · ★★☆
@@ -1328,7 +1328,7 @@ Saída esperada (depois de consertar):
    idades[j + 1] = aux;
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E543.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E543.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E543 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E543
 ```
 
 **Exercício E544** · ★★☆
@@ -1371,7 +1371,7 @@ Saída esperada:
    vitórias).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E544.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E544.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E544 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E544
 ```
 
 **Exercício E545** · ★★★
@@ -1404,7 +1404,7 @@ resultado: 1 2 3 4 5 6 7 8
    traz o 1 para a frente, e a terceira passada confirma que acabou.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E545.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E545.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E545 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E545
 ```
 
 **Exercício E546** · ★★★
@@ -1440,7 +1440,7 @@ n = 3: 2 inversões, 2 trocas, 0 depois
    exatamente uma inversão e não cria nenhuma; o vetor ordenado tem zero.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0091-bubble-sort/E546.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E546.c -o ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E546 && ~/LPEDC/13-busca-e-ordenacao/0091-bubble-sort/E546
 ```
 
 ---
@@ -1630,7 +1630,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/A183.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/A183.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/A183 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/A183
 ```
 
 **Exemplo A184 · A troca que passa por cima**
@@ -1686,7 +1686,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/A184.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/A184.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/A184 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/A184
 ```
 
 #### Exercícios
@@ -1717,7 +1717,7 @@ fim = 1: 30 45 60 75 89 120
    selection não tem como saber disso e continua.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E547.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E547.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E547 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E547
 ```
 
 **Exercício E548** · ★☆☆
@@ -1758,7 +1758,7 @@ comparações: 10
 3. As comparações não dependem dos valores: 4 + 3 + 2 + 1 = 10.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E548.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E548.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E548 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E548
 ```
 
 **Exercício E549** · ★★☆
@@ -1787,7 +1787,7 @@ Saída esperada:
 3. Trocar ponteiros custa 8 bytes, seja o nome curto ou comprido.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E549.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E549.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E549 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E549
 ```
 
 **Exercício E550** · ★★☆
@@ -1814,7 +1814,7 @@ Saída esperada:
    de ordem, e tudo bem.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E550.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E550.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E550 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E550
 ```
 
 **Exercício E551** · ★★★
@@ -1849,7 +1849,7 @@ Saída esperada (depois de consertar):
    e o 40 para a 0. Conserto: int menor = i; no começo de cada passada.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E551.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E551.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E551 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E551
 ```
 
 **Exercício E552** · ★★★
@@ -1896,7 +1896,7 @@ loja[0] continua sendo: Fone sem fio
 4. sizeof(Produto) é 4 + 4 de enchimento + 8 + 200 = 216. Use %zu.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0092-selection-sort/E552.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E552.c -o ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E552 && ~/LPEDC/13-busca-e-ordenacao/0092-selection-sort/E552
 ```
 
 ---
@@ -2088,7 +2088,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/A185.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/A185.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/A185 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/A185
 ```
 
 **Exemplo A186 · Quase em ordem custa quase nada**
@@ -2140,7 +2140,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/A186.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/A186.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/A186 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/A186
 ```
 
 #### Exercícios
@@ -2165,7 +2165,7 @@ Classificação: 810 720 690 650 580
 4. Resposta esperada: Classificação: 810 720 690 650 580
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E553.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E553.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E553 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E553
 ```
 
 **Exercício E554** · ★☆☆
@@ -2191,7 +2191,7 @@ Saída esperada (depois de completar):
    malas[i + 1] = x; depois dele.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E554.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E554.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E554 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E554
 ```
 
 **Exercício E555** · ★★☆
@@ -2226,7 +2226,7 @@ Saída esperada:
 3. O ranking é decrescente: empurre enquanto top[i] < pontos.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E555.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E555.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E555 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E555
 ```
 
 **Exercício E556** · ★★☆
@@ -2269,7 +2269,7 @@ total com >=: 8
    e os dois 3 trocam de ordem (deixa de ser estável).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E556.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E556.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E556 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E556
 ```
 
 **Exercício E557** · ★★★
@@ -2294,7 +2294,7 @@ Saída esperada (depois de consertar):
    idades[-1]; e o encaixe é idades[i + 1] = x, não idades[i] = x.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E557.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E557
 ```
 
 **Exercício E558** · ★★★
@@ -2334,7 +2334,7 @@ ordenado? sim
    elemento ainda anda casa por casa, então continua O(n²).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0093-insertion-sort/E558.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E558.c -o ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E558 && ~/LPEDC/13-busca-e-ordenacao/0093-insertion-sort/E558
 ```
 
 ---
@@ -2559,7 +2559,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/A187.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/A187.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/A187 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/A187
 ```
 
 **Exemplo A188 · Os pedidos das duas lojas numa fila só**
@@ -2602,7 +2602,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/A188.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/A188.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/A188 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/A188
 ```
 
 #### Exercícios
@@ -2638,7 +2638,7 @@ Notas: 45 50 60 60 75 85 90 95 98
    comparação, e 95 e 98 vêm direto.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E559.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E559.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E559 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E559
 ```
 
 **Exercício E560** · ★☆☆
@@ -2692,7 +2692,7 @@ Saída esperada:
    intercalações são sempre n - 1.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E560.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E560.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E560 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E560
 ```
 
 **Exercício E561** · ★★☆
@@ -2726,7 +2726,7 @@ foram nos dois turnos: 2
 4. Resposta esperada: a saída acima (1034 e 1077 estão nas duas).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E561.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E561.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E561 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E561
 ```
 
 **Exercício E562** · ★★☆
@@ -2765,7 +2765,7 @@ com <:  Eva 20, Davi 30, Bruno 30, Carla 50, Ana 50
    o da direita primeiro e o merge sort deixa de ser estável.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E562.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E562.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E562 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E562
 ```
 
 **Exercício E563** · ★★★
@@ -2800,7 +2800,7 @@ Saída esperada (depois de consertar):
    p = 0 cai no lugar certo; as outras escrevem por cima de v[0..].
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E563.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E563.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E563 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E563
 ```
 
 **Exercício E564** · ★★★
@@ -2832,7 +2832,7 @@ de 28 pares possíveis
 4. Use long long: com n = 100 mil, as inversões passam de 2 bilhões.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0094-merge-sort/E564.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E564.c -o ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E564 && ~/LPEDC/13-busca-e-ordenacao/0094-merge-sort/E564
 ```
 
 ---
@@ -3077,7 +3077,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/A189.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/A189.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/A189 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/A189
 ```
 
 **Exemplo A190 · O pior caso: vetor que já chega em ordem**
@@ -3146,7 +3146,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/A190.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/A190.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/A190 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/A190
 ```
 
 #### Exercícios
@@ -3189,7 +3189,7 @@ comparações: 7
    sobrou (8 9) já estão em ordem.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E565.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E565.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E565 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E565
 ```
 
 **Exercício E566** · ★☆☆
@@ -3216,7 +3216,7 @@ Saída esperada:
 3. A ordem dentro de cada lado muda (o -80 vem depois do -10).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E566.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E566.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E566 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E566
 ```
 
 **Exercício E567** · ★★☆
@@ -3247,7 +3247,7 @@ arroz, banana, café, feijão, leite, ovos, pão, tomate
 3. O primeiro pivô é "feijão": ele separa arroz, café e banana do resto.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E567.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E567.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E567 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E567
 ```
 
 **Exercício E568** · ★★☆
@@ -3274,7 +3274,7 @@ Saída esperada (depois de consertar):
    O certo é quick_sort(v, p, j - 1).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E568.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E568.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E568 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E568
 ```
 
 **Exercício E569** · ★★★
@@ -3305,7 +3305,7 @@ ordenando tudo: 33 min (23 comparações)
 4. Na média, o quickselect é O(n): n + n/2 + n/4 + ... < 2n.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E569.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E569.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E569 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E569
 ```
 
 **Exercício E570** · ★★★
@@ -3344,7 +3344,7 @@ todos iguais:   Lomuto 66, três vias 12 | 2 2 2 2 2 2 2 2 2 2 2 2
    ... + 1 = 66.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0095-quick-sort/E570.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E570.c -o ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E570 && ~/LPEDC/13-busca-e-ordenacao/0095-quick-sort/E570
 ```
 
 ---
@@ -3587,7 +3587,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/A191.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/A191.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/A191 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/A191
 ```
 
 **Exemplo A192 · Cinco algoritmos, a mesma corrida**
@@ -3734,7 +3734,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/A192.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/A192.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/A192 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/A192
 ```
 
 #### Exercícios
@@ -3764,7 +3764,7 @@ R$ 5.79
    Use (x < y) - (x > y).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E571.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E571.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E571 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E571
 ```
 
 **Exercício E572** · ★☆☆
@@ -3796,7 +3796,7 @@ melhor para o placar: insertion
    insertion faz pouco mais que n comparações.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E572.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E572.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E572 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E572
 ```
 
 **Exercício E573** · ★★☆
@@ -3829,7 +3829,7 @@ Pitty Skank Titas Cazuza Legiao Raimundos
    ponteiros, não as letras.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E573.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E573.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E573 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E573
 ```
 
 **Exercício E574** · ★★☆
@@ -3860,7 +3860,7 @@ Saída esperada (depois de consertar):
    antes de -1500000000. Conserto: return (x > y) - (x < y);
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E574.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E574.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E574 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E574
 ```
 
 **Exercício E575** · ★★★
@@ -3913,7 +3913,7 @@ Zeca: não está na agenda
    Marina, Rafael).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E575.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E575.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E575 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E575
 ```
 
 **Exercício E576** · ★★★
@@ -3951,7 +3951,7 @@ Saída esperada:
    então a estabilidade do algoritmo deixa de importar.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/0096-comparando/E576.c
+gcc ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E576.c -o ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E576 && ~/LPEDC/13-busca-e-ordenacao/0096-comparando/E576
 ```
 
 ---
@@ -3959,7 +3959,7 @@ Saída esperada:
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. Quantas voltas no pior caso?** Escreva a busca binária com um contador
 de voltas do laço, devolvido por um ponteiro `int *voltas`. Num vetor criado
@@ -4171,7 +4171,7 @@ Placa 1000: posição -1 (9 comparações)
 3. Quem não está no vetor custa n + 1 comparações: a última é a sentinela.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1301.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1301.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1301 && ~/LPEDC/13-busca-e-ordenacao/lista/P1301
 ```
 
 ---
@@ -4200,7 +4200,7 @@ R$ 50: posição -1 (voltas: 4)
 3. Com 15 elementos, o pior caso é ⌊log₂ 15⌋ + 1 = 4 voltas, achando ou não.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1302.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1302.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1302 && ~/LPEDC/13-busca-e-ordenacao/lista/P1302
 ```
 
 ---
@@ -4232,7 +4232,7 @@ nenhuma troca: parou
    prova pergunta em "o vetor após a k-ésima passada".
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1303.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1303.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1303 && ~/LPEDC/13-busca-e-ordenacao/lista/P1303
 ```
 
 ---
@@ -4264,7 +4264,7 @@ trocas: 2
    ficou pronto na passada 3.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1304.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1304.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1304 && ~/LPEDC/13-busca-e-ordenacao/lista/P1304
 ```
 
 ---
@@ -4296,7 +4296,7 @@ j = 5: 5 9 9 14 17 22
    ordenada; o resto continua como chegou.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1305.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1305.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1305 && ~/LPEDC/13-busca-e-ordenacao/lista/P1305
 ```
 
 ---
@@ -4323,7 +4323,7 @@ comparações: 5
    descem direto. O pior caso seria na + nb - 1 = 7.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1306.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1306.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1306 && ~/LPEDC/13-busca-e-ordenacao/lista/P1306
 ```
 
 ---
@@ -4352,7 +4352,7 @@ pivô 10 na posição 3
    "menores ou iguais à esquerda, maiores à direita".
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1307.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1307.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1307 && ~/LPEDC/13-busca-e-ordenacao/lista/P1307
 ```
 
 ---
@@ -4380,7 +4380,7 @@ as 3 mais quentes: 38 36 34
    estourar o int com valores grandes.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1308.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1308.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1308 && ~/LPEDC/13-busca-e-ordenacao/lista/P1308
 ```
 
 ---
@@ -4409,7 +4409,7 @@ Saída esperada (depois do conserto):
    fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1309.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1309.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1309 && ~/LPEDC/13-busca-e-ordenacao/lista/P1309
 ```
 
 ---
@@ -4438,7 +4438,7 @@ linha 500: 0 vez(es)
 3. Por isso, esta busca custa sempre n comparações, achando ou não.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1310.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1310.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1310 && ~/LPEDC/13-busca-e-ordenacao/lista/P1310
 ```
 
 ### ★★☆ Para pensar
@@ -4489,7 +4489,7 @@ dia 7: binária -1 (4 comp.), sequencial -1 (16 comp.)
    vale a pena quando o vetor é grande ou o alvo está longe do início.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1311.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1311.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1311 && ~/LPEDC/13-busca-e-ordenacao/lista/P1311
 ```
 
 ---
@@ -4534,7 +4534,7 @@ Saída esperada:
    ninguém.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1312.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1312.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1312 && ~/LPEDC/13-busca-e-ordenacao/lista/P1312
 ```
 
 ---
@@ -4572,7 +4572,7 @@ misturado  passadas 4, comparações 14, trocas  7
    misturado tem 7.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1313.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1313.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1313 && ~/LPEDC/13-busca-e-ordenacao/lista/P1313
 ```
 
 ---
@@ -4610,7 +4610,7 @@ final: 1 2 3 4 7 7 8 9
    para nos iguais, e é isso que deixa as metades equilibradas.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1314.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1314.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1314 && ~/LPEDC/13-busca-e-ordenacao/lista/P1314
 ```
 
 ---
@@ -4649,7 +4649,7 @@ insertion: Beto(1) Duda(1) Ana(2) Caio(2) Fabio(2) Eva(3)
    nunca passam um pelo outro.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1315.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1315.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1315 && ~/LPEDC/13-busca-e-ordenacao/lista/P1315
 ```
 
 ---
@@ -4689,7 +4689,7 @@ Saída esperada:
 4. Mostre cada linha com printf("%dº %-6s nota %d, %d anos\n", ...).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1316.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1316.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1316 && ~/LPEDC/13-busca-e-ordenacao/lista/P1316
 ```
 
 ---
@@ -4721,7 +4721,7 @@ intercala [0..6]: 3 9 10 27 38 43 82
 3. São n - 1 = 6 intercalações para 7 elementos.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1317.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1317.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1317 && ~/LPEDC/13-busca-e-ordenacao/lista/P1317
 ```
 
 ---
@@ -4760,7 +4760,7 @@ n(n-1)/2 = 45
    de um milhão já ordenado, o programa estouraria a pilha.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1318.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1318.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1318 && ~/LPEDC/13-busca-e-ordenacao/lista/P1318
 ```
 
 ---
@@ -4790,7 +4790,7 @@ Saída esperada:
 3. Só uma comparação muda de sentido; o resto da busca fica igual.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1319.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1319.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1319 && ~/LPEDC/13-busca-e-ordenacao/lista/P1319
 ```
 
 ---
@@ -4823,7 +4823,7 @@ deslocando : D1 F1 B2 E2 A3 C3
    selection perde a sua única vantagem (poucas escritas).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1320.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1320.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1320 && ~/LPEDC/13-busca-e-ordenacao/lista/P1320
 ```
 
 ### ★★★ Desafio
@@ -4870,7 +4870,7 @@ ordenado: 8 10 15 22 35 40 50 90
 4. Resposta esperada: 9 pares (por exemplo, 40 > 2 · 15 e 90 > 2 · 35).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1321.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1321.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1321 && ~/LPEDC/13-busca-e-ordenacao/lista/P1321
 ```
 
 ---
@@ -4916,7 +4916,7 @@ comparações: 15
    jeito certo de achar a menor frente é um heap (módulo 14).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1322.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1322.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1322 && ~/LPEDC/13-busca-e-ordenacao/lista/P1322
 ```
 
 ---
@@ -4955,7 +4955,7 @@ misturado   pivô no fim:  37   mediana de três:  36
    médio pior, só tira o pior caso dos dados "fáceis".
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1323.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1323.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1323 && ~/LPEDC/13-busca-e-ordenacao/lista/P1323
 ```
 
 ---
@@ -4986,7 +4986,7 @@ Saída esperada:
    saída fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1324.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1324.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1324 && ~/LPEDC/13-busca-e-ordenacao/lista/P1324
 ```
 
 ---
@@ -5048,7 +5048,7 @@ bairro, depois hora (errado):
    (módulo 18).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1325.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1325.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1325 && ~/LPEDC/13-busca-e-ordenacao/lista/P1325
 ```
 
 ---
@@ -5111,7 +5111,7 @@ giro na posição 5
 3. As voltas contadas são só as da busca do item (c), não as do giro.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1326.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1326.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1326 && ~/LPEDC/13-busca-e-ordenacao/lista/P1326
 ```
 
 ---
@@ -5175,7 +5175,7 @@ decrescente:
    no misturado).
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1327.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1327.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1327 && ~/LPEDC/13-busca-e-ordenacao/lista/P1327
 ```
 
 ---
@@ -5225,7 +5225,7 @@ depois: 4 12 12 33 41 58 66 75 97
 5. Resposta esperada: a saída acima, limpa no AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1328.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1328.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1328 && ~/LPEDC/13-busca-e-ordenacao/lista/P1328
 ```
 
 ---
@@ -5283,7 +5283,7 @@ pista 4: nenhum dos três
 4. A pista 4 parece bubble (31 no fim?), mas o 31 não está no fim.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1329.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1329.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1329 && ~/LPEDC/13-busca-e-ordenacao/lista/P1329
 ```
 
 ---
@@ -5345,7 +5345,7 @@ Saída esperada:
    assim que agendas grandes respondem rápido.
 
 ```bash
-~/LPEDC/rodar 13-busca-e-ordenacao/lista/P1330.c
+gcc ~/LPEDC/13-busca-e-ordenacao/lista/P1330.c -o ~/LPEDC/13-busca-e-ordenacao/lista/P1330 && ~/LPEDC/13-busca-e-ordenacao/lista/P1330
 ```
 
 ## Questões no estilo da prova

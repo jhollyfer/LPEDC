@@ -42,11 +42,11 @@ verdes marcam o caminho de uma busca e o nó vermelho é o que vai sair ou o
 que está desequilibrado. Desenhe a árvore no papel a cada inserção e remoção
 antes de rodar, e use a saída só para conferir.
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
+O comando do exemplo compila junto os `.c` de apoio da pasta (como `bst.c`). Por isso os
 comandos dos exemplos e exercícios são os de sempre:
 
 ```bash
-~/LPEDC/rodar 14-arvores/0099-bst-busca-insercao/A197.c
+gcc ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197.c ~/LPEDC/14-arvores/0099-bst-busca-insercao/bst.c -o ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197 && ~/LPEDC/14-arvores/0099-bst-busca-insercao/A197
 ```
 
 Uma convenção vale para o módulo todo: **altura conta arestas**. Uma folha tem
@@ -64,7 +64,7 @@ altura 1): confira a convenção quando consultar outro material.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`; quando o desafio citar `avl.h` ou `heap.h`, copie o `.h` e o
+com as flags de estudo; quando o desafio citar `avl.h` ou `heap.h`, copie o `.h` e o
 `.c` do assunto para a pasta do seu arquivo.
 
 **1. Quantos nós cabem?** Escreva `int max_nos(int h)`, que soma os níveis

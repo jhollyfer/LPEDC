@@ -59,26 +59,21 @@ não numa pasta do Windows.
 
 Confira com `gcc --version`. Se aparecer a versão, está pronto.
 
-Para rodar qualquer arquivo do curso, use o **`rodar`**, que está na raiz do
-projeto:
+Para rodar um arquivo do curso, compile com o `gcc` e execute o resultado:
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
 ```
 
-Ele compila e executa. O caminho pode ser relativo à pasta atual, relativo
-ao LPEDC ou absoluto. O `rodar` usa o padrão C17 (`-std=c17`), liga todos os
-avisos (`-Wall -Wextra -pedantic`) e ativa dois detetives: o
-**AddressSanitizer**, que flagra erros de memória, e o detector de
-**comportamento indefinido**, que flagra coisas como estouro de inteiro. Se o
-programa tem um problema desses, ele para com um relatório que aponta a
-linha. Os exercícios devem compilar **sem nenhum aviso**.
+O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser absoluto, como acima, ou relativo à pasta atual.
+
+Esse comando compila sem conferir nada. Nas **flags de estudo** o compilador também vigia o programa: acrescente `-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do `-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer**, que flagra erros de memória, o detector de **comportamento indefinido**, que flagra coisas como estouro de inteiro, e a biblioteca matemática. Com elas, um programa com problema desses para com um relatório que aponta a linha. Os avisos e relatórios citados nos módulos aparecem com essas flags. Os exercícios devem compilar **sem nenhum aviso**.
 
 Programas que leem do teclado esperam você digitar. Para testar sem digitar,
 mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
-printf '3 4.99\n2\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '3 4.99\n2\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
 ```
 
 > [!NOTE]
@@ -144,10 +139,9 @@ comanda tudo é o **compilador** `gcc`:
    o código do `printf`, tapa os buracos e grava o **executável**.
 
 Na mão, as quatro estações saem de um comando só: `gcc padaria.c -o padaria`
-e depois `./padaria`. No curso você usa o `~/LPEDC/rodar`, que faz o mesmo
-com mais cuidado: liga todos os avisos (`-Wall -Wextra -pedantic`), usa o
-padrão C17 e ativa o **AddressSanitizer**, que vigia a memória enquanto o
-programa roda.
+e depois `./padaria`. Com as flags de estudo (`-Wall -Wextra -pedantic`, C17 e o
+**AddressSanitizer**, que vigia a memória enquanto o programa roda), o mesmo
+comando confere mais coisas; as flags estão em "Antes de começar", acima.
 
 O `padaria.c` entra na linha de montagem, ganha o
 `stdio.h` colado, vira assembly, vira `padaria.o`, é ligado ao `printf` e sai
@@ -254,7 +248,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
 ```
 
 **Exemplo A002 · Um printf, várias linhas (e vários printf, uma linha)**
@@ -293,7 +287,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A002.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A002.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A002 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A002
 ```
 
 #### Exercícios
@@ -301,7 +295,7 @@ int main(void) {
 **Exercício E001** · ★☆☆
 
 Escreva um programa que mostre o letreiro do ônibus, exatamente assim.
-Rode de dois jeitos: com o rodar e na mão, com gcc, gerando um executável
+Rode de dois jeitos: com as flags de estudo e na mão, com gcc, gerando um executável
 chamado "letreiro".
 
 
@@ -321,7 +315,7 @@ Tarifa: R$ 4,90
 4. Resposta esperada: as três linhas acima, iguais nos dois jeitos.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E001.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001
 ```
 
 **Exercício E002** · ★☆☆
@@ -356,13 +350,13 @@ Manteiga
    linhas acima (a 4ª vazia).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E002.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E002.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E002 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E002
 ```
 
 **Exercício E003** · ★★☆
 
 Este programa tem QUATRO erros e não compila de propósito. Conserte o
-código: rode com o rodar, leia a primeira mensagem, conserte, rode de novo
+código: rode com as flags de estudo, leia a primeira mensagem, conserte, rode de novo
 e repita até sair a saída esperada. A cada rodada, repare qual estação
 reclamou: compilador ou ligador.
 
@@ -386,7 +380,7 @@ Plantão: (11) 5555-0199
    to 'print'": use printf.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E003.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003
 ```
 
 **Exercício E004** · ★★☆
@@ -415,7 +409,7 @@ Ingresso: R$ 28,00
    acima. O comentário // pode ficar no fim de uma linha, depois do ;.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E004.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004
 ```
 
 **Exercício E005** · ★★★
@@ -428,7 +422,7 @@ de dentro desta pasta, e confira as três linhas da saída esperada:
 
 
 ```text
-~/LPEDC/rodar E005.c; echo "código: $?"
+./programa ; echo "código: $?"
 ```
 
 
@@ -441,7 +435,7 @@ código: 2
 ```
 
 
-Depois rode ~/LPEDC/rodar E005.c && echo "pode seguir" e confira que o
+Depois rode ./programa && echo "pode seguir" e confira que o
 "pode seguir" NÃO aparece. Por fim, troque para return 258 e rode a
 primeira linha de novo: o terminal tem de mostrar "código: 2" outra vez.
 
@@ -457,7 +451,7 @@ primeira linha de novo: o terminal tem de mostrar "código: 2" outra vez.
    "pode seguir"; com return 258, "código: 2" de novo.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E005.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005
 ```
 
 **Exercício E006** · ★★★
@@ -491,7 +485,7 @@ Tarifa: R$ 4,90
    (erro de execução, de lógica). E as três linhas acima.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/E006.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E006.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E006 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E006
 ```
 
 ---
@@ -639,7 +633,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/A003.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/A003.c -o ~/LPEDC/01-fundamentos/0002-variaveis/A003 && ~/LPEDC/01-fundamentos/0002-variaveis/A003
 ```
 
 **Exemplo A004 · Onde moram as variáveis**
@@ -668,7 +662,7 @@ int main(void) {
 // peso:  8 bytes em 0x7f2e53c00040
 // int: 4, float: 4, double: 8, char: 1
 //
-// Com o rodar, o AddressSanitizer deixa uma folga entre as variáveis para
+// Com o gcc com as flags de estudo, o AddressSanitizer deixa uma folga entre as variáveis para
 // flagrar quem escreve fora do lugar. Sem ele, elas ficam coladas:
 //   gcc A004.c -o a && ./a
 //   plano: 1 byte  em 0x7ffccb532f1b
@@ -677,7 +671,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/A004.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/A004.c -o ~/LPEDC/01-fundamentos/0002-variaveis/A004 && ~/LPEDC/01-fundamentos/0002-variaveis/A004
 ```
 
 #### Exercícios
@@ -703,7 +697,7 @@ Setor: H
 2. Use %d, %.2f, %.1f e %c no printf.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/E007.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/E007.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E007 && ~/LPEDC/01-fundamentos/0002-variaveis/E007
 ```
 
 **Exercício E008** · ★☆☆
@@ -737,7 +731,7 @@ preco: 10, Preco: 20
    acima.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/E008.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/E008.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E008 && ~/LPEDC/01-fundamentos/0002-variaveis/E008
 ```
 
 **Exercício E009** · ★★☆
@@ -772,7 +766,7 @@ com float nas notas: 17 bytes
    variáveis, mas o total de dados é esse.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/E009.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/E009.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E009 && ~/LPEDC/01-fundamentos/0002-variaveis/E009
 ```
 
 **Exercício E010** · ★★☆
@@ -797,7 +791,7 @@ Casa 3 x 1 Visitante
    e a saída "Casa 3 x 1 Visitante".
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/E010.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/E010.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E010 && ~/LPEDC/01-fundamentos/0002-variaveis/E010
 ```
 
 **Exercício E011** · ★★★
@@ -827,7 +821,7 @@ Público: 45000
    %.0f).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/E011.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/E011.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E011 && ~/LPEDC/01-fundamentos/0002-variaveis/E011
 ```
 
 **Exercício E012** · ★★★
@@ -871,7 +865,7 @@ B
    código 55; 7 é o número sete. São diferentes.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0002-variaveis/E012.c
+gcc ~/LPEDC/01-fundamentos/0002-variaveis/E012.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E012 && ~/LPEDC/01-fundamentos/0002-variaveis/E012
 ```
 
 ---
@@ -967,7 +961,7 @@ seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
 > `long`...), estourar é **comportamento indefinido**: o padrão não diz o que
 > acontece, e o compilador pode assumir que nunca acontece.
 > `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não conte com
-> isso. O `rodar` liga o detector de comportamento indefinido, que acusa
+> isso. O gcc com as flags de estudo liga o detector de comportamento indefinido, que acusa
 > `runtime error: signed integer overflow`. Escolha um tipo que caiba.
 
 > [!TIP]
@@ -1022,7 +1016,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/A005.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A005.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A005 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A005
 ```
 
 **Exemplo A006 · A tabela de tamanhos e limites desta máquina**
@@ -1066,7 +1060,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/A006.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A006.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A006 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/A006
 ```
 
 #### Exercícios
@@ -1097,7 +1091,7 @@ Saída esperada:
 ```
 
 
-(Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
+(Binário escrito como 0b10110 só virou padrão no C23; o gcc com as flags de estudo, que segue o
 C17, avisa se você usar.)
 
 **Dicas:**
@@ -1110,7 +1104,7 @@ C17, avisa se você usar.)
    = 31).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E013.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013
 ```
 
 **Exercício E014** · ★☆☆
@@ -1149,7 +1143,7 @@ ano: 1991
    inteiros pequenos: economize só quando tiver milhões deles.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E014.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E014.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E014 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E014
 ```
 
 **Exercício E015** · ★★☆
@@ -1178,7 +1172,7 @@ odômetro: 65000 + 1000 = 464 (máximo 65535)
    66000 - 65536 = 464. Abaixo de zero, vai para o máximo.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E015.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015
 ```
 
 **Exercício E016** · ★★☆
@@ -1198,14 +1192,14 @@ Saída esperada (depois de consertar):
 **Dicas:**
 
 1. Quanto vale INT_MAX? E 6227020800?
-2. O detector de comportamento indefinido do rodar pegou um estouro de
+2. O detector de comportamento indefinido do gcc com as flags de estudo pegou um estouro de
    int, que é um tipo com sinal.
 3. Resposta esperada: 13! não cabe em int (máximo 2147483647): "signed
    integer overflow". Sem o detector, o programa mostraria um número
    errado (1932053504). Conserto: long long fatorial e %lld (ou int64_t).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E016.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016
 ```
 
 **Exercício E017** · ★★★
@@ -1230,7 +1224,7 @@ int64_t vai até 9223372036854775807
 1. INT32_MAX e INT64_MAX vêm do stdint.h. Para mostrar o de 64 bits,
    converta para long long e use %lld: (long long)INT64_MAX.
 2. Um ano tem 365 * 24 * 60 * 60 = 31536000 segundos, que cabe num int.
-   Mas 69 anos já não cabem: se a conta for feita em int, o rodar acusa
+   Mas 69 anos já não cabem: se a conta for feita em int, o gcc com as flags de estudo acusa
    "signed integer overflow". Guarde os segundos de um ano numa variável
    long long: aí a multiplicação por 68 ou 69 já é feita em long long.
 3. 2147483647 é 2^31 - 1 (31
@@ -1238,7 +1232,7 @@ int64_t vai até 9223372036854775807
    bilhões de anos.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E017.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017
 ```
 
 **Exercício E018** · ★★★
@@ -1272,7 +1266,7 @@ int8_t: -128 a 127
    existe -0.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0003-tipos-e-limites/E018.c
+gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E018.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E018 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E018
 ```
 
 ---
@@ -1409,7 +1403,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/A007.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/A007.c -o ~/LPEDC/01-fundamentos/0004-constantes/A007 && ~/LPEDC/01-fundamentos/0004-constantes/A007
 ```
 
 **Exemplo A008 · Escapes e literais em várias bases**
@@ -1451,7 +1445,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/A008.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/A008.c -o ~/LPEDC/01-fundamentos/0004-constantes/A008 && ~/LPEDC/01-fundamentos/0004-constantes/A008
 ```
 
 #### Exercícios
@@ -1478,7 +1472,7 @@ Rendimento: 100% do CDI
    mostra a tabulação como espaços até a coluna 9).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/E019.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/E019.c -o ~/LPEDC/01-fundamentos/0004-constantes/E019 && ~/LPEDC/01-fundamentos/0004-constantes/E019
 ```
 
 **Exercício E020** · ★☆☆
@@ -1503,7 +1497,7 @@ Etanol:   R$ 4.19
    vira "Gasolina: R$ 6.49" e só a linha do #define mudou.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/E020.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/E020.c -o ~/LPEDC/01-fundamentos/0004-constantes/E020 && ~/LPEDC/01-fundamentos/0004-constantes/E020
 ```
 
 **Exercício E021** · ★★☆
@@ -1530,7 +1524,7 @@ Vencimento: dia 10
    variable 'dia'").
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/E021.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/E021.c -o ~/LPEDC/01-fundamentos/0004-constantes/E021 && ~/LPEDC/01-fundamentos/0004-constantes/E021
 ```
 
 **Exercício E022** · ★★☆
@@ -1569,7 +1563,7 @@ Saída esperada:
    printf("010: vale %d, %zu bytes\n", 010, sizeof 010);
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/E022.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/E022.c -o ~/LPEDC/01-fundamentos/0004-constantes/E022 && ~/LPEDC/01-fundamentos/0004-constantes/E022
 ```
 
 **Exercício E023** · ★★★
@@ -1596,7 +1590,7 @@ Comprimento (define): 62.83 m
    com %.2f nos dois printf.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/E023.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/E023.c -o ~/LPEDC/01-fundamentos/0004-constantes/E023 && ~/LPEDC/01-fundamentos/0004-constantes/E023
 ```
 
 **Exercício E024** · ★★★
@@ -1641,7 +1635,7 @@ a\n b
    printf("CIDADE: %s\n", CIDADE);
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0004-constantes/E024.c
+gcc ~/LPEDC/01-fundamentos/0004-constantes/E024.c -o ~/LPEDC/01-fundamentos/0004-constantes/E024 && ~/LPEDC/01-fundamentos/0004-constantes/E024
 ```
 
 ---
@@ -1721,7 +1715,7 @@ de uma coluna, basta trocar um número em cada linha:
 > O `printf` **confia** em você: se o especificador não combina com o tipo do
 > argumento, ele lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
 > nem 10: mostra lixo. `printf("%.2f", 5)` também. Faltar argumento dá no mesmo. O
-> `-Wall` do `rodar` avisa (`format '%d' expects argument of type 'int'`).
+> `-Wall` do gcc com as flags de estudo avisa (`format '%d' expects argument of type 'int'`).
 > Nunca ignore esse aviso. E no `printf` não vai `&`: ele quer o valor, não o
 > endereço.
 
@@ -1773,7 +1767,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/A009.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/A009.c -o ~/LPEDC/01-fundamentos/0005-printf/A009 && ~/LPEDC/01-fundamentos/0005-printf/A009
 ```
 
 **Exemplo A010 · O mesmo valor em vários formatos**
@@ -1815,7 +1809,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/A010.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/A010.c -o ~/LPEDC/01-fundamentos/0005-printf/A010 && ~/LPEDC/01-fundamentos/0005-printf/A010
 ```
 
 #### Exercícios
@@ -1841,7 +1835,7 @@ Conceito: B
 3. Resposta esperada: as quatro linhas acima (8.75 vira 8.8 só na tela).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/E025.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/E025.c -o ~/LPEDC/01-fundamentos/0005-printf/E025 && ~/LPEDC/01-fundamentos/0005-printf/E025
 ```
 
 **Exercício E026** · ★☆☆
@@ -1872,7 +1866,7 @@ Saída esperada:
    e, nas outras, %.1f %.3f %8.2f; %c %s %6s %-6s; %x %X %o.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/E026.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/E026.c -o ~/LPEDC/01-fundamentos/0005-printf/E026 && ~/LPEDC/01-fundamentos/0005-printf/E026
 ```
 
 **Exercício E027** · ★★☆
@@ -1901,7 +1895,7 @@ GNV           R$ 4.99
 3. Resposta esperada: as seis linhas acima, com "R$" sempre na coluna 15.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/E027.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/E027.c -o ~/LPEDC/01-fundamentos/0005-printf/E027 && ~/LPEDC/01-fundamentos/0005-printf/E027
 ```
 
 **Exercício E028** · ★★☆
@@ -1927,7 +1921,7 @@ Total: R$ 137.70
    argumento total.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/E028.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/E028.c -o ~/LPEDC/01-fundamentos/0005-printf/E028 && ~/LPEDC/01-fundamentos/0005-printf/E028
 ```
 
 **Exercício E029** · ★★★
@@ -1957,7 +1951,7 @@ Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
    e, com 0, 8 e 15, #00080F.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/E029.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/E029.c -o ~/LPEDC/01-fundamentos/0005-printf/E029 && ~/LPEDC/01-fundamentos/0005-printf/E029
 ```
 
 **Exercício E030** · ★★★
@@ -2004,7 +1998,7 @@ Pão
    printf("[%d]\n", n): P, ã (2 bytes), o e o \n somam 5.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0005-printf/E030.c
+gcc ~/LPEDC/01-fundamentos/0005-printf/E030.c -o ~/LPEDC/01-fundamentos/0005-printf/E030 && ~/LPEDC/01-fundamentos/0005-printf/E030
 ```
 
 ---
@@ -2083,7 +2077,7 @@ int main(void) {
 ```
 
 Para testar sem digitar, salve o programa como `pix.c` e use o cano (`|`)
-apresentado no começo do módulo: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`.
+apresentado no começo do módulo: `printf '150.75\n12\n' | ./programa pix.c`.
 
 No fluxograma, as duas leituras são paralelogramos de entrada, e cada uma
 guarda o valor numa caixinha. A saída vem depois:
@@ -2110,7 +2104,7 @@ guarda o valor numa caixinha. A saída vem depois:
 > [!NOTE]
 > **Pergunta para você:** se no dia você digitar `doze`, quanto vale `lidos`?
 > E o que aparece no lugar do dia? Teste com
-> `printf '150.75\ndoze\n' | ~/LPEDC/rodar ...`.
+> `printf '150.75\ndoze\n' | ./programa`.
 
 ### Hora de praticar
 
@@ -2145,16 +2139,16 @@ int main(void) {
 // Itens lidos: 1
 // 3 unidade(s) de R$ 4.99 em 2 parcela(s)
 //
-// Teste: printf '3 4.99\n2\n' | ~/LPEDC/rodar <este arquivo>
+// Teste: printf '3 4.99\n2\n' | ./programa
 //
 // Agora digite "3 4.99 reais" na primeira pergunta:
-//   printf '3 4.99 reais\n2\n' | ~/LPEDC/rodar <este arquivo>
+//   printf '3 4.99 reais\n2\n' | ./programa
 // O " reais" fica na fila. O %d das parcelas tropeça no 'r', devolve 0
 // ("Itens lidos: 0") e parcelas continua com 1. O 2 nem chega a ser lido.
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && ~/LPEDC/01-fundamentos/0006-scanf/A011
 ```
 
 **Exemplo A012 · A data da entrega e o tamanho da camiseta**
@@ -2185,14 +2179,14 @@ int main(void) {
 // Tamanho (P, M ou G): G
 // Entrega em 07/09/2026, camiseta G
 //
-// Teste: printf '7/9/2026\nG\n' | ~/LPEDC/rodar <este arquivo>
+// Teste: printf '7/9/2026\nG\n' | ./programa
 // Agora digite a data com traços (7-9-2026): o scanf para no primeiro "-" e
 // lê só 1 item. O "-" fica no buffer, e o %c seguinte pega ele: a saída
 // vira "Entrega em 07/00/0, camiseta -".
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/A012.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/A012.c -o ~/LPEDC/01-fundamentos/0006-scanf/A012 && ~/LPEDC/01-fundamentos/0006-scanf/A012
 ```
 
 #### Exercícios
@@ -2211,7 +2205,7 @@ Você tem 30 anos e 1.75 m de altura.
 ```
 
 
-Teste sem digitar: printf '30\n1.75\n' | ~/LPEDC/rodar E031.c
+Teste sem digitar: printf '30\n1.75\n' | ./programa
 
 **Dicas:**
 
@@ -2221,13 +2215,13 @@ Teste sem digitar: printf '30\n1.75\n' | ~/LPEDC/rodar E031.c
    altura."
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/E031.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/E031.c -o ~/LPEDC/01-fundamentos/0006-scanf/E031 && ~/LPEDC/01-fundamentos/0006-scanf/E031
 ```
 
 **Exercício E032** · ★☆☆
 
 Este programa compila com DOIS avisos e, quando roda, quebra ou mostra
-lixo. Rode com printf '42\n80.5\n' | ~/LPEDC/rodar E032.c, leia os avisos
+lixo. Rode com printf '42\n80.5\n' | ./programa, leia os avisos
 e o relatório do AddressSanitizer, e conserte.
 
 
@@ -2249,7 +2243,7 @@ Calçado 42, peso 80.5 kg
    scanf usa %lf, não %f.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/E032.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/E032.c -o ~/LPEDC/01-fundamentos/0006-scanf/E032 && ~/LPEDC/01-fundamentos/0006-scanf/E032
 ```
 
 **Exercício E033** · ★★☆
@@ -2269,7 +2263,7 @@ Alarme para 06:05
 
 
 Depois rode com "6 05" (espaço no lugar dos dois pontos):
-printf '6 05\n' | ~/LPEDC/rodar E033.c. O seu programa tem de mostrar
+printf '6 05\n' | ./programa. O seu programa tem de mostrar
 "Itens lidos: 1" e os minutos zerados: "Alarme para 6h00".
 
 **Dicas:**
@@ -2282,14 +2276,14 @@ printf '6 05\n' | ~/LPEDC/rodar E033.c. O seu programa tem de mostrar
    6h00" e "Alarme para 06:00").
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/E033.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/E033.c -o ~/LPEDC/01-fundamentos/0006-scanf/E033 && ~/LPEDC/01-fundamentos/0006-scanf/E033
 ```
 
 **Exercício E034** · ★★☆
 
 A lanchonete pergunta quantos lanches e se é para viagem (V) ou para comer
 aqui (A). Este programa compila sem aviso, mas não funciona: rode com
-printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia.
+printf '3\nV\n' | ./programa e veja a opção sair vazia.
 Conserte o código mudando UM caractere e rode de novo com a mesma
 entrada.
 
@@ -2308,7 +2302,7 @@ Quantidade: Opção (V/A): 3 lanche(s), opção V (código 86)
    um espaço antes do %c, que manda pular espaços e Enters.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/E034.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/E034.c -o ~/LPEDC/01-fundamentos/0006-scanf/E034 && ~/LPEDC/01-fundamentos/0006-scanf/E034
 ```
 
 **Exercício E035** · ★★★
@@ -2320,11 +2314,11 @@ resposta esperada (a última dica):
 
 
 ```text
-printf '7 9\n'   | ~/LPEDC/rodar E035.c
-printf '7 x\n'   | ~/LPEDC/rodar E035.c
-printf 'x 7\n'   | ~/LPEDC/rodar E035.c
-printf '7\n\n9\n' | ~/LPEDC/rodar E035.c
-printf ''        | ~/LPEDC/rodar E035.c
+printf '7 9\n'   | ./programa
+printf '7 x\n'   | ./programa
+printf 'x 7\n'   | ./programa
+printf '7\n\n9\n' | ./programa
+printf ''        | ./programa
 ```
 
 **Dicas:**
@@ -2338,7 +2332,7 @@ printf ''        | ~/LPEDC/rodar E035.c
    "lidos=-1 a=0 b=0".
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/E035.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/E035.c -o ~/LPEDC/01-fundamentos/0006-scanf/E035 && ~/LPEDC/01-fundamentos/0006-scanf/E035
 ```
 
 **Exercício E036** · ★★★
@@ -2364,7 +2358,7 @@ ISO: 2026-09-07
    "ISO: 2026-09-07" para as três entradas.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0006-scanf/E036.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/E036.c -o ~/LPEDC/01-fundamentos/0006-scanf/E036 && ~/LPEDC/01-fundamentos/0006-scanf/E036
 ```
 
 ---
@@ -2458,7 +2452,7 @@ Cada conta é um retângulo de processamento, e a ordem deles importa: `cada` e
 > **Por dentro do C:** desde o C99, a divisão inteira corta em direção ao
 > zero: `-7 / 2` dá -3 (não -4), e o resto fica com o sinal de quem é
 > dividido: `-7 % 3` dá -1. Dividir **inteiro por zero** derruba o programa
-> (`Floating point exception`), e o detector do `rodar` acusa `division by
+> (`Floating point exception`), e o detector do gcc com as flags de estudo acusa `division by
 > zero`; com `double`, o resultado vira `inf`. Dividir também custa caro: uma
 > soma leva 1 ciclo do processador, uma divisão inteira leva dezenas. Por isso
 > o compilador troca `x / 8` por um deslocamento de bits quando pode.
@@ -2510,7 +2504,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/A013.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/A013.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/A013 && ~/LPEDC/01-fundamentos/0007-aritmetica/A013
 ```
 
 **Exemplo A014 · Quanto dura o podcast**
@@ -2545,7 +2539,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/A014.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/A014.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/A014 && ~/LPEDC/01-fundamentos/0007-aritmetica/A014
 ```
 
 #### Exercícios
@@ -2572,7 +2566,7 @@ Ingressos: R$ 245
 3. Resposta esperada: 50 / 12 = 4, 50 % 12 = 2 e 7 * 35 = 245.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E037.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E037.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E037 && ~/LPEDC/01-fundamentos/0007-aritmetica/E037
 ```
 
 **Exercício E038** · ★☆☆
@@ -2617,7 +2611,7 @@ precedência.
    (6 % 4); h) 3.4.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E038.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E038.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E038 && ~/LPEDC/01-fundamentos/0007-aritmetica/E038
 ```
 
 **Exercício E039** · ★★☆
@@ -2637,7 +2631,7 @@ Cada um: R$ 65.31
 ```
 
 
-Teste: printf '237.50\n4\n' | ~/LPEDC/rodar E039.c
+Teste: printf '237.50\n4\n' | ./programa
 
 **Dicas:**
 
@@ -2647,7 +2641,7 @@ Teste: printf '237.50\n4\n' | ~/LPEDC/rodar E039.c
    (261.25 / 4 = 65.3125, e o %.2f mostra 65.31).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E039.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E039.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E039 && ~/LPEDC/01-fundamentos/0007-aritmetica/E039
 ```
 
 **Exercício E040** · ★★☆
@@ -2674,7 +2668,7 @@ Média 2: 7.67
    parênteses em volta da soma.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E040.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E040.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E040 && ~/LPEDC/01-fundamentos/0007-aritmetica/E040
 ```
 
 **Exercício E041** · ★★★
@@ -2701,7 +2695,7 @@ Kit em 5x: R$ 5
    acima.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E041.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E041.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E041 && ~/LPEDC/01-fundamentos/0007-aritmetica/E041
 ```
 
 **Exercício E042** · ★★★
@@ -2726,7 +2720,7 @@ Ao contrário: 021
 ```
 
 
-Teste: printf '472\n' | ~/LPEDC/rodar E042.c e depois com '120\n'.
+Teste: printf '472\n' | ./programa e depois com '120\n'.
 
 **Dicas:**
 
@@ -2738,7 +2732,7 @@ Teste: printf '472\n' | ~/LPEDC/rodar E042.c e depois com '120\n'.
 4. Resposta esperada: 472 vira 274 e 120 vira 021.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0007-aritmetica/E042.c
+gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E042.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E042 && ~/LPEDC/01-fundamentos/0007-aritmetica/E042
 ```
 
 ---
@@ -2866,7 +2860,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/A015.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/A015.c -o ~/LPEDC/01-fundamentos/0008-conversao/A015 && ~/LPEDC/01-fundamentos/0008-conversao/A015
 ```
 
 **Exemplo A016 · Conversões que acontecem sozinhas**
@@ -2909,7 +2903,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/A016.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/A016.c -o ~/LPEDC/01-fundamentos/0008-conversao/A016 && ~/LPEDC/01-fundamentos/0008-conversao/A016
 ```
 
 #### Exercícios
@@ -2933,7 +2927,7 @@ Média: 8.33
 3. Resposta esperada: "Média: 8.33" (25 / 3 = 8.333...).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/E043.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/E043.c -o ~/LPEDC/01-fundamentos/0008-conversao/E043 && ~/LPEDC/01-fundamentos/0008-conversao/E043
 ```
 
 **Exercício E044** · ★☆☆
@@ -2967,7 +2961,7 @@ g = 3
    antes da divisão). E as sete linhas acima.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/E044.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/E044.c -o ~/LPEDC/01-fundamentos/0008-conversao/E044 && ~/LPEDC/01-fundamentos/0008-conversao/E044
 ```
 
 **Exercício E045** · ★★☆
@@ -2995,7 +2989,7 @@ votos / total * 100 = 0
    4700 / 130 = 36: certo na parte inteira, mas os decimais somem.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/E045.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/E045.c -o ~/LPEDC/01-fundamentos/0008-conversao/E045 && ~/LPEDC/01-fundamentos/0008-conversao/E045
 ```
 
 **Exercício E046** · ★★☆
@@ -3019,7 +3013,7 @@ Saída esperada (depois de consertar):
    gramas * preco_kg / 1000). Resultado: R$ 27.54.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/E046.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/E046.c -o ~/LPEDC/01-fundamentos/0008-conversao/E046 && ~/LPEDC/01-fundamentos/0008-conversao/E046
 ```
 
 **Exercício E047** · ★★★
@@ -3046,7 +3040,7 @@ R$ 19.99 = 1999 centavos
    round faz isso).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/E047.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/E047.c -o ~/LPEDC/01-fundamentos/0008-conversao/E047 && ~/LPEDC/01-fundamentos/0008-conversao/E047
 ```
 
 **Exercício E048** · ★★★
@@ -3080,7 +3074,7 @@ Somando e cortando: 7; cortando e somando: 6
    letra + 3; e 7.4 cortado dá 7, enquanto 3 + 3 dá 6.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0008-conversao/E048.c
+gcc ~/LPEDC/01-fundamentos/0008-conversao/E048.c -o ~/LPEDC/01-fundamentos/0008-conversao/E048 && ~/LPEDC/01-fundamentos/0008-conversao/E048
 ```
 
 ---
@@ -3230,7 +3224,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/A017.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/A017.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/A017 && ~/LPEDC/01-fundamentos/0009-atribuicao/A017
 ```
 
 **Exemplo A018 · Pré, pós e o operador que vale para a conta inteira**
@@ -3276,7 +3270,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/A018.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/A018.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/A018 && ~/LPEDC/01-fundamentos/0009-atribuicao/A018
 ```
 
 #### Exercícios
@@ -3300,7 +3294,7 @@ pontos 110, vidas 2, moedas 40, tempo 45, fase 4
    fase++; e a mesma saída.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E049.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E049.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E049 && ~/LPEDC/01-fundamentos/0009-atribuicao/E049
 ```
 
 **Exercício E050** · ★☆☆
@@ -3325,7 +3319,7 @@ w = x-- -> x = 6, w = 7
    y = %d\n", x, y);
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E050.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E050.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E050 && ~/LPEDC/01-fundamentos/0009-atribuicao/E050
 ```
 
 **Exercício E051** · ★★☆
@@ -3355,7 +3349,7 @@ Rendimento: R$ 17.68
    %.2f mostra como 17.68).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E051.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E051.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E051 && ~/LPEDC/01-fundamentos/0009-atribuicao/E051
 ```
 
 **Exercício E052** · ★★☆
@@ -3387,7 +3381,7 @@ x *= 2 + y -> 50
    x = x * (2 + y) = 10 * 5, e não 10 * 2 + 3.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E052.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E052.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E052 && ~/LPEDC/01-fundamentos/0009-atribuicao/E052
 ```
 
 **Exercício E053** · ★★★
@@ -3416,7 +3410,7 @@ fila: atendendo 7, próximo 8
    faça fila++.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E053.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E053.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E053 && ~/LPEDC/01-fundamentos/0009-atribuicao/E053
 ```
 
 **Exercício E054** · ★★★
@@ -3442,7 +3436,7 @@ Casa 5 x 2 Visitante
    casa -= visitante; e a saída "Casa 5 x 2 Visitante".
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0009-atribuicao/E054.c
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E054.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E054 && ~/LPEDC/01-fundamentos/0009-atribuicao/E054
 ```
 
 ---
@@ -3539,7 +3533,7 @@ No fluxograma, as funções entram no meio das contas como qualquer valor:
 > `double sqrt(double)` existe, e é por isso que `sqrt(144)` funciona com um
 > `int`: o compilador converte para `double` antes de chamar. O código mora
 > na biblioteca `libm`, e quem junta é o ligador com a opção `-lm` (o
-> `rodar` já passa). Sem ela, pode aparecer `undefined reference to 'pow'`.
+> `-lm` entra nas flags de estudo). Sem ela, pode aparecer `undefined reference to 'pow'`.
 > E o compilador otimiza: `sqrt(x)` vira uma instrução só do processador
 > (`sqrtsd`), `pow(x, 2)` vira `x * x`, e `sqrt(2.0)` é calculado na
 > compilação, sem chamada nenhuma.
@@ -3587,7 +3581,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/A019.c
+gcc ~/LPEDC/01-fundamentos/0010-math/A019.c -o ~/LPEDC/01-fundamentos/0010-math/A019 -lm && ~/LPEDC/01-fundamentos/0010-math/A019
 ```
 
 **Exemplo A020 · Arredondar para cima, para baixo e para o mais perto**
@@ -3629,7 +3623,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/A020.c
+gcc ~/LPEDC/01-fundamentos/0010-math/A020.c -o ~/LPEDC/01-fundamentos/0010-math/A020 -lm && ~/LPEDC/01-fundamentos/0010-math/A020
 ```
 
 #### Exercícios
@@ -3654,7 +3648,7 @@ TV de 55 polegadas
 3. Resposta esperada: 139.74 cm e 55 polegadas (55.02, arredondado).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/E055.c
+gcc ~/LPEDC/01-fundamentos/0010-math/E055.c -o ~/LPEDC/01-fundamentos/0010-math/E055 -lm && ~/LPEDC/01-fundamentos/0010-math/E055
 ```
 
 **Exercício E056** · ★☆☆
@@ -3699,7 +3693,7 @@ g) -4 graus
    sete linhas acima.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/E056.c
+gcc ~/LPEDC/01-fundamentos/0010-math/E056.c -o ~/LPEDC/01-fundamentos/0010-math/E056 -lm && ~/LPEDC/01-fundamentos/0010-math/E056
 ```
 
 **Exercício E057** · ★★☆
@@ -3724,7 +3718,7 @@ Total: R$ 269.70
    3 * 89.90 = R$ 269.70.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/E057.c
+gcc ~/LPEDC/01-fundamentos/0010-math/E057.c -o ~/LPEDC/01-fundamentos/0010-math/E057 -lm && ~/LPEDC/01-fundamentos/0010-math/E057
 ```
 
 **Exercício E058** · ★★☆
@@ -3754,7 +3748,7 @@ Diferença: R$ 29.73
    sobre o que já rendeu, e essa parte cresce a cada mês.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/E058.c
+gcc ~/LPEDC/01-fundamentos/0010-math/E058.c -o ~/LPEDC/01-fundamentos/0010-math/E058 -lm && ~/LPEDC/01-fundamentos/0010-math/E058
 ```
 
 **Exercício E059** · ★★★
@@ -3783,7 +3777,7 @@ Mesas: 4
    ceil(7 / 2) recebe 3, já cortado: use ceil(7 / 2.0), que dá 4.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/E059.c
+gcc ~/LPEDC/01-fundamentos/0010-math/E059.c -o ~/LPEDC/01-fundamentos/0010-math/E059 -lm && ~/LPEDC/01-fundamentos/0010-math/E059
 ```
 
 **Exercício E060** · ★★★
@@ -3817,7 +3811,7 @@ Altura máxima: 21.50 m, em 2.00 s
    4.07 s; altura máxima em t = 2 s, h(2) = -20 + 40 + 1.5 = 21.50 m.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0010-math/E060.c
+gcc ~/LPEDC/01-fundamentos/0010-math/E060.c -o ~/LPEDC/01-fundamentos/0010-math/E060 -lm && ~/LPEDC/01-fundamentos/0010-math/E060
 ```
 
 ---
@@ -4000,14 +3994,14 @@ int main(void) {
 // Total (R$):         629.30
 // (leituras certas: 3 de 3)
 //
-// Teste: printf '3.2\n4.5\n89.90\n' | ~/LPEDC/rodar <este arquivo>
-// Com uma letra no preço, printf '3.2\n4.5\nabc\n' | ~/LPEDC/rodar <este arquivo>
+// Teste: printf '3.2\n4.5\n89.90\n' | ./programa
+// Com uma letra no preço, printf '3.2\n4.5\nabc\n' | ./programa
 // mostra "(leituras certas: 2 de 3)" e o total sai 0.00: o preço ficou com
 // o valor inicial. No módulo 02, com o if, o programa vai poder parar ali.
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/A021.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/A021.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/A021 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/A021
 ```
 
 **Exemplo A022 · Rachando a gasolina da viagem**
@@ -4056,11 +4050,11 @@ int main(void) {
 // Cada um manda um Pix de R$ 66
 // Tempo a 80 km/h: 5h23
 //
-// Teste: printf '430\n12.5\n47.80\n4\n' | ~/LPEDC/rodar <este arquivo>
+// Teste: printf '430\n12.5\n47.80\n4\n' | ./programa
 ```
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/A022.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/A022.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/A022 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/A022
 ```
 
 #### Exercícios
@@ -4080,7 +4074,7 @@ IMC: 23.7
 ```
 
 
-Teste: printf '72.5\n1.75\n' | ~/LPEDC/rodar E061.c
+Teste: printf '72.5\n1.75\n' | ./programa
 
 **Dicas:**
 
@@ -4090,7 +4084,7 @@ Teste: printf '72.5\n1.75\n' | ~/LPEDC/rodar E061.c
    Cuidado: peso / altura * altura (sem parênteses) dá 72.5.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E061.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061
 ```
 
 **Exercício E062** · ★☆☆
@@ -4108,7 +4102,7 @@ Celsius: 36.5
 ```
 
 
-Teste: printf '36.5\n' | ~/LPEDC/rodar E062.c
+Teste: printf '36.5\n' | ./programa
 
 **Dicas:**
 
@@ -4118,7 +4112,7 @@ Teste: printf '36.5\n' | ~/LPEDC/rodar E062.c
 3. Resposta esperada: "36.5 °C = 97.7 °F = 309.65 K".
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E062.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E062.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E062 && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E062
 ```
 
 **Exercício E063** · ★★☆
@@ -4136,7 +4130,7 @@ Tempo: 376 s = 6 min 16 s
 ```
 
 
-Teste: printf '4.7\n100\n' | ~/LPEDC/rodar E063.c
+Teste: printf '4.7\n100\n' | ./programa
 
 **Dicas:**
 
@@ -4146,7 +4140,7 @@ Teste: printf '4.7\n100\n' | ~/LPEDC/rodar E063.c
    376 / 60 = 6 min, 376 % 60 = 16 s.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E063.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063
 ```
 
 **Exercício E064** · ★★☆
@@ -4179,7 +4173,7 @@ Juros: R$ 174.12
    = 1473.12; juros 1473.12 - 1299.00 = 174.12.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E064.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064
 ```
 
 **Exercício E065** · ★★★
@@ -4199,7 +4193,7 @@ Acima da meta em 0.90 ponto
 ```
 
 
-Teste: printf '172.5\n25\n' | ~/LPEDC/rodar E065.c
+Teste: printf '172.5\n25\n' | ./programa
 
 **Dicas:**
 
@@ -4216,7 +4210,7 @@ Teste: printf '172.5\n25\n' | ~/LPEDC/rodar E065.c
    -0.90: a diferença acima da meta é media - META.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E065.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E065.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E065 && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E065
 ```
 
 **Exercício E066** · ★★★
@@ -4247,7 +4241,7 @@ minutos (00:00, 3 dias).
    1440 = 1 dia; 1500 % 1440 = 60 minutos = 01:00.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0011-juntando-tudo/E066.c
+gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066 && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066
 ```
 
 ---
@@ -4256,7 +4250,7 @@ minutos (00:00, 3 dias).
 
 Problemas para resolver com o que o módulo ensinou: variáveis, `scanf`,
 aritmética, conversões, `math.h` e `printf`. Nenhum precisa de `if` nem de
-laço. Escreva cada um num arquivo seu e rode com o `rodar`.
+laço. Escreva cada um num arquivo seu e rode com as flags de estudo.
 
 **1. Troco em moedas.** O caixa da padaria só tem moedas de R$ 1, R$ 0,50,
 R$ 0,25, R$ 0,10 e R$ 0,05. Leia um troco em reais (`double`) e mostre quantas
@@ -4303,13 +4297,13 @@ dá 10, que o `% 10` zera). Separe os dígitos com `/` e `%` como no E042.
 
 **4. Até onde o fatorial cabe?** Qual o maior `n` cujo fatorial cabe num
 `int`? E num `long long`? Escreva um programa que mostre os fatoriais
-multiplicando um por um e use o `rodar` para descobrir onde estoura.
+multiplicando um por um e use o gcc com as flags de estudo para descobrir onde estoura.
 
 <details><summary>Resposta</summary>
 
 **12!** = 479.001.600 cabe no `int`; 13! = 6.227.020.800 passa de `INT_MAX`.
 No `long long`, **20!** = 2.432.902.008.176.640.000 cabe; 21! não. O detector
-de comportamento indefinido do `rodar` acusa `signed integer overflow` na
+de comportamento indefinido do gcc com as flags de estudo acusa `signed integer overflow` na
 primeira multiplicação que estoura.
 
 </details>
@@ -4396,8 +4390,8 @@ meio segundo.
 </details>
 
 **10. Qual dá a volta com garantia?** Coloque os dois trechos abaixo num
-`main`, mostre `placar` e `pontos` com `printf` e rode com o `rodar`. Depois
-conserte o trecho que o `rodar` acusar, mudando só o tipo da variável, para
+`main`, mostre `placar` e `pontos` com `printf` e rode com as flags de estudo. Depois
+conserte o trecho que o gcc com as flags de estudo acusar, mudando só o tipo da variável, para
 que ele mostre o valor certo, sem estourar.
 
 ```c
@@ -4410,7 +4404,7 @@ pontos += 1;
 
 <details><summary>Resposta</summary>
 
-Na primeira rodada, o `rodar` mostra `runtime error: signed integer overflow:
+Na primeira rodada, o gcc com as flags de estudo mostra `runtime error: signed integer overflow:
 2147483647 + 1 cannot be represented in type 'int'`. Depois do conserto
 (`long long pontos`, mostrado com `%lld`):
 
@@ -4453,7 +4447,7 @@ Total do plano: R$ 409.60
 3. Resposta esperada: Total do plano: R$ 409.60.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0101.c
+gcc ~/LPEDC/01-fundamentos/lista/P0101.c -o ~/LPEDC/01-fundamentos/lista/P0101 && ~/LPEDC/01-fundamentos/lista/P0101
 ```
 
 ---
@@ -4480,7 +4474,7 @@ Custo da ida: R$ 103.92
 3. Resposta esperada: 15.30 litros e R$ 103.92.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0102.c
+gcc ~/LPEDC/01-fundamentos/lista/P0102.c -o ~/LPEDC/01-fundamentos/lista/P0102 && ~/LPEDC/01-fundamentos/lista/P0102
 ```
 
 ---
@@ -4504,7 +4498,7 @@ Saída esperada:
 3. Resposta esperada: 7 h e 17 min.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0103.c
+gcc ~/LPEDC/01-fundamentos/lista/P0103.c -o ~/LPEDC/01-fundamentos/lista/P0103 && ~/LPEDC/01-fundamentos/lista/P0103
 ```
 
 ---
@@ -4528,7 +4522,7 @@ Saída esperada:
 3. Resposta esperada: 98.6 F = 37.0 C.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0104.c
+gcc ~/LPEDC/01-fundamentos/lista/P0104.c -o ~/LPEDC/01-fundamentos/lista/P0104 && ~/LPEDC/01-fundamentos/lista/P0104
 ```
 
 ---
@@ -4554,7 +4548,7 @@ Senha no painel: 43
 3. Resposta esperada: 41, 43 e 43.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0105.c
+gcc ~/LPEDC/01-fundamentos/lista/P0105.c -o ~/LPEDC/01-fundamentos/lista/P0105 && ~/LPEDC/01-fundamentos/lista/P0105
 ```
 
 ---
@@ -4581,7 +4575,7 @@ Alunos no último: 26
 3. Resposta esperada: 3, 26 e 4.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0106.c
+gcc ~/LPEDC/01-fundamentos/lista/P0106.c -o ~/LPEDC/01-fundamentos/lista/P0106 && ~/LPEDC/01-fundamentos/lista/P0106
 ```
 
 ---
@@ -4609,7 +4603,7 @@ ceil:   24
 3. Resposta esperada: 23, 24, 23 e 24.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0107.c
+gcc ~/LPEDC/01-fundamentos/lista/P0107.c -o ~/LPEDC/01-fundamentos/lista/P0107 -lm && ~/LPEDC/01-fundamentos/lista/P0107
 ```
 
 ---
@@ -4636,7 +4630,7 @@ O total é 1 vez(es) o INT_MAX
 3. Resposta esperada: Total do dia: R$ 4000000000.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0108.c
+gcc ~/LPEDC/01-fundamentos/lista/P0108.c -o ~/LPEDC/01-fundamentos/lista/P0108 && ~/LPEDC/01-fundamentos/lista/P0108
 ```
 
 ---
@@ -4664,7 +4658,7 @@ Presidente  22:00  112.00
 3. Resposta esperada: as três linhas acima, com 09:05, 13:40 e 22:00.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0109.c
+gcc ~/LPEDC/01-fundamentos/lista/P0109.c -o ~/LPEDC/01-fundamentos/lista/P0109 && ~/LPEDC/01-fundamentos/lista/P0109
 ```
 
 ---
@@ -4689,7 +4683,7 @@ Total: R$ 42.00
 3. Resposta esperada: com 1.5 e 28.00, Total: R$ 42.00.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0110.c
+gcc ~/LPEDC/01-fundamentos/lista/P0110.c -o ~/LPEDC/01-fundamentos/lista/P0110 && ~/LPEDC/01-fundamentos/lista/P0110
 ```
 
 ### ★★☆ Para pensar
@@ -4714,7 +4708,7 @@ Saída esperada:
 3. Resposta esperada: 2 dia(s), 7 h, 33 min e 20 s.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0111.c
+gcc ~/LPEDC/01-fundamentos/lista/P0111.c -o ~/LPEDC/01-fundamentos/lista/P0111 && ~/LPEDC/01-fundamentos/lista/P0111
 ```
 
 ---
@@ -4739,7 +4733,7 @@ Produto: 448
 3. Resposta esperada: soma 21 e produto 448.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0112.c
+gcc ~/LPEDC/01-fundamentos/lista/P0112.c -o ~/LPEDC/01-fundamentos/lista/P0112 && ~/LPEDC/01-fundamentos/lista/P0112
 ```
 
 ---
@@ -4764,7 +4758,7 @@ Média final: 7.2
 3. Resposta esperada: Média final: 7.2.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0113.c
+gcc ~/LPEDC/01-fundamentos/lista/P0113.c -o ~/LPEDC/01-fundamentos/lista/P0113 && ~/LPEDC/01-fundamentos/lista/P0113
 ```
 
 ---
@@ -4791,7 +4785,7 @@ Chegada em 14 h e 46 min de viagem
 3. Resposta esperada: 886 minutos, 14 h e 46 min.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0114.c
+gcc ~/LPEDC/01-fundamentos/lista/P0114.c -o ~/LPEDC/01-fundamentos/lista/P0114 -lm && ~/LPEDC/01-fundamentos/lista/P0114
 ```
 
 ---
@@ -4818,7 +4812,7 @@ Velocidade: 11.43 km/h
 3. Resposta esperada: Pace: 5:15 e 11.43 km/h.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0115.c
+gcc ~/LPEDC/01-fundamentos/lista/P0115.c -o ~/LPEDC/01-fundamentos/lista/P0115 && ~/LPEDC/01-fundamentos/lista/P0115
 ```
 
 ---
@@ -4846,7 +4840,7 @@ Centavos com round: 435
 3. Resposta esperada: 434 com (int) e 435 com round.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0116.c
+gcc ~/LPEDC/01-fundamentos/lista/P0116.c -o ~/LPEDC/01-fundamentos/lista/P0116 -lm && ~/LPEDC/01-fundamentos/lista/P0116
 ```
 
 ---
@@ -4872,7 +4866,7 @@ Saída esperada:
 3. Resposta esperada: 50.0 e 22.5 graus.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0117.c
+gcc ~/LPEDC/01-fundamentos/lista/P0117.c -o ~/LPEDC/01-fundamentos/lista/P0117 -lm && ~/LPEDC/01-fundamentos/lista/P0117
 ```
 
 ---
@@ -4897,7 +4891,7 @@ Média por música: 4:20
 3. Resposta esperada: Total 13:00 e média 4:20.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0118.c
+gcc ~/LPEDC/01-fundamentos/lista/P0118.c -o ~/LPEDC/01-fundamentos/lista/P0118 && ~/LPEDC/01-fundamentos/lista/P0118
 ```
 
 ---
@@ -4924,7 +4918,7 @@ Dura 7 dias completos e sobram 97 litros
 3. Resposta esperada: 1357 litros, 7 dias e 97 litros de sobra.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0119.c
+gcc ~/LPEDC/01-fundamentos/lista/P0119.c -o ~/LPEDC/01-fundamentos/lista/P0119 && ~/LPEDC/01-fundamentos/lista/P0119
 ```
 
 ---
@@ -4953,7 +4947,7 @@ Velocidade média: 48.0 km/h
 3. Resposta esperada: Velocidade média: 48.0 km/h.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0120.c
+gcc ~/LPEDC/01-fundamentos/lista/P0120.c -o ~/LPEDC/01-fundamentos/lista/P0120 && ~/LPEDC/01-fundamentos/lista/P0120
 ```
 
 ### ★★★ Desafio
@@ -4984,7 +4978,7 @@ CPF: 123.456.789-09
 4. Resposta esperada: CPF: 123.456.789-09.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0121.c
+gcc ~/LPEDC/01-fundamentos/lista/P0121.c -o ~/LPEDC/01-fundamentos/lista/P0121 && ~/LPEDC/01-fundamentos/lista/P0121
 ```
 
 ---
@@ -5012,7 +5006,7 @@ Saída esperada:
 3. Resposta esperada: as duas datas caem numa sexta-feira (5).
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0122.c
+gcc ~/LPEDC/01-fundamentos/lista/P0122.c -o ~/LPEDC/01-fundamentos/lista/P0122 && ~/LPEDC/01-fundamentos/lista/P0122
 ```
 
 ---
@@ -5040,7 +5034,7 @@ São 14 semanas e 6 dias
 3. Resposta esperada: 104 dias, 14 semanas e 6 dias.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0123.c
+gcc ~/LPEDC/01-fundamentos/lista/P0123.c -o ~/LPEDC/01-fundamentos/lista/P0123 && ~/LPEDC/01-fundamentos/lista/P0123
 ```
 
 ---
@@ -5070,7 +5064,7 @@ Código: 7891234567895
 4. Resposta esperada: Código: 7891234567895.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0124.c
+gcc ~/LPEDC/01-fundamentos/lista/P0124.c -o ~/LPEDC/01-fundamentos/lista/P0124 && ~/LPEDC/01-fundamentos/lista/P0124
 ```
 
 ---
@@ -5099,7 +5093,7 @@ Octal: 0266
 3. Resposta esperada: 182, 0xB6 e 0266.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0125.c
+gcc ~/LPEDC/01-fundamentos/lista/P0125.c -o ~/LPEDC/01-fundamentos/lista/P0125 && ~/LPEDC/01-fundamentos/lista/P0125
 ```
 
 ---
@@ -5127,7 +5121,7 @@ Pace previsto: 5:27 por km
 4. Resposta esperada: Maratona em 3:50:01.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0126.c
+gcc ~/LPEDC/01-fundamentos/lista/P0126.c -o ~/LPEDC/01-fundamentos/lista/P0126 -lm && ~/LPEDC/01-fundamentos/lista/P0126
 ```
 
 ---
@@ -5155,7 +5149,7 @@ F(40) = 102334155
 3. Resposta esperada: 55, 832040 e 102334155.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0127.c
+gcc ~/LPEDC/01-fundamentos/lista/P0127.c -o ~/LPEDC/01-fundamentos/lista/P0127 -lm && ~/LPEDC/01-fundamentos/lista/P0127
 ```
 
 ---
@@ -5185,7 +5179,7 @@ Distância: 1294 km
 3. Mostre com %.0f. Resposta esperada: Distância: 1294 km.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0128.c
+gcc ~/LPEDC/01-fundamentos/lista/P0128.c -o ~/LPEDC/01-fundamentos/lista/P0128 -lm && ~/LPEDC/01-fundamentos/lista/P0128
 ```
 
 ---
@@ -5216,7 +5210,7 @@ Páscoa de 2027: 28/03
 3. Resposta esperada: 05/04 em 2026 e 28/03 em 2027.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0129.c
+gcc ~/LPEDC/01-fundamentos/lista/P0129.c -o ~/LPEDC/01-fundamentos/lista/P0129 && ~/LPEDC/01-fundamentos/lista/P0129
 ```
 
 ---
@@ -5246,14 +5240,14 @@ Remontado: 305419896
 4. Resposta esperada: 18 52 86 120, ou 12 34 56 78 em hexa.
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/lista/P0130.c
+gcc ~/LPEDC/01-fundamentos/lista/P0130.c -o ~/LPEDC/01-fundamentos/lista/P0130 && ~/LPEDC/01-fundamentos/lista/P0130
 ```
 
 ## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. Resolva no papel antes de abrir o gabarito e, se ficar em
-dúvida, copie o trecho para um arquivo e rode com o `rodar`.
+dúvida, copie o trecho para um arquivo e rode com as flags de estudo.
 
 **1.** Qual a saída do trecho abaixo?
 

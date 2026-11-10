@@ -30,7 +30,7 @@ devagar, desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
 Você precisa estar à vontade com vetores, strings e funções (módulos 04 e
 05). Os erros de ponteiro raramente aparecem na compilação: aparecem quando
 o programa roda, às vezes bem longe da linha culpada. Por isso, rode
-**sempre** com o `rodar`, que liga o AddressSanitizer. Quando ele acusar
+**sempre** com as flags de estudo, que liga o AddressSanitizer. Quando ele acusar
 algo, leia o relatório de cima para baixo: o tipo do erro
 (`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável
 envolvida.
@@ -64,12 +64,12 @@ sudo apt install gdb        # Debian / Ubuntu
 ## Desafios do módulo
 
 Problemas extras, misturando os assuntos do módulo. Resolva num arquivo seu
-e rode com o `rodar`.
+e rode com as flags de estudo.
 
 **1. O gaveteiro de três níveis.** Ponha num `main` as linhas
 `int x = 7; int *p = &x; int **pp = &p; **pp = 9; *pp = NULL;` e, depois
 delas, mostre o valor de `x`, o resultado de `p == NULL` e o de `pp == &p`.
-Acrescente então `printf("%d\n", *p);`, rode com o `rodar` e veja o que
+Acrescente então `printf("%d\n", *p);`, rode com as flags de estudo e veja o que
 acontece. Por fim, conserte: só mostre `*p` se `p` não for `NULL`; senão,
 mostre `p não aponta para nada`.
 
@@ -122,8 +122,7 @@ com `v[n - 1] = tmp`. Nenhum caractere é copiado: só endereços.
 **4. O meu strcat.** Escreva `char *junta(char *destino, const char
 *origem)` só com ponteiros: ande até o `'\0'` do destino e copie a origem dali
 em diante. Devolva `destino`. Teste com `char cidade[30] = "Campina";` e
-`" Grande"`. Depois troque para `char cidade[10]`, rode de novo com o
-`rodar` e veja o erro que ele mostra.
+`" Grande"`. Depois troque para `char cidade[10]`, rode de novo com as flags de estudo e veja o erro que ele mostra.
 
 <details><summary>Resposta</summary>
 

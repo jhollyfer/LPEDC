@@ -94,7 +94,7 @@ de Sim e Não:
 > **Esquecer o `break`.** Tire o `break` do `case 2` e peça um X-Salada: a
 > saída vira "X-Salada", "Misto quente" e o preço fica **9.00**, porque o
 > `case 3` também rodou e sobrescreveu o preço. O compilador não vê erro
-> nenhum: para ele, você pediu isso. O `-Wextra` do `rodar` ajuda
+> nenhum: para ele, você pediu isso. O `-Wextra` do gcc com as flags de estudo ajuda
 > (`-Wimplicit-fallthrough`: "this statement may fall through"). Regra de
 > bolso: escreva o `break` logo depois de escrever o `case`, antes do miolo.
 

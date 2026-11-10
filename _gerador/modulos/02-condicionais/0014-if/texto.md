@@ -74,7 +74,7 @@ para o "Mostrar", o mesmo ponto a que o Sim chega depois do desconto:
 > **O `;` depois do `if` mata a condição.** Em `if (total >= 200);` o
 > ponto e vírgula é uma **instrução vazia**: ela é o corpo do `if`. O bloco
 > `{ ... }` que vem embaixo vira um bloco solto, que roda **sempre**. Compila
-> sem erro, e todo mundo ganha desconto. O `-Wextra` do `rodar` avisa
+> sem erro, e todo mundo ganha desconto. O `-Wextra` do gcc com as flags de estudo avisa
 > ("suggest braces around empty body"). No fim da linha do `if` nunca vai
 > `;`: ou vem `{`, ou vem a instrução.
 

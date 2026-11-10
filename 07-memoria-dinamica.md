@@ -34,7 +34,7 @@ Você precisa estar à vontade com ponteiros (módulo 06): `&`, `*`, `NULL`,
 assuntos 0047 e 0049 antes.
 
 Nos diagramas deste módulo, o verde costuma ser o bloco que mora no heap. Ao
-rodar os exemplos, apague um `free` de propósito e leia o que o `rodar`
+rodar os exemplos, apague um `free` de propósito e leia o que o gcc com as flags de estudo
 responde.
 
 > [!NOTE]
@@ -42,7 +42,7 @@ responde.
 > bug de propósito, e o enunciado avisa. Rodar e ler o relatório do
 > AddressSanitizer faz parte do exercício. A resolução de cada um roda limpa.
 
-O `rodar` já compila com o **AddressSanitizer**, que vigia a memória enquanto
+O gcc com as flags de estudo já compila com o **AddressSanitizer**, que vigia a memória enquanto
 o programa roda e avisa de vazamentos no fim. Para o assunto 0057, instale
 também o **valgrind**:
 
@@ -55,7 +55,7 @@ E rode qualquer arquivo com ele assim (sem AddressSanitizer, dentro do
 valgrind):
 
 ```bash
-~/LPEDC/rodar --valgrind 07-memoria-dinamica/0057-erros-de-memoria/A114.c
+gcc -g ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114 && valgrind ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114
 ```
 
 A regra do módulo inteiro cabe numa linha: **todo `malloc` tem um `free`, e
@@ -255,7 +255,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/A105.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/A105.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/A105 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/A105
 ```
 
 **Exemplo A106 · O mapa da memória**
@@ -299,12 +299,12 @@ int main(void) {
 // pilha (main):   0x7ffe9c6f2914   <- lá no alto
 // pilha (função): 0x7ffe9c6f28f4   <- frame novo, endereço MENOR
 //
-// Com o rodar, o heap aparece em 0x5020... e as locais em 0x7f...: o
+// Com o gcc com as flags de estudo, o heap aparece em 0x5020... e as locais em 0x7f...: o
 // AddressSanitizer troca o heap e a pilha por versões próprias, vigiadas.
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/A106.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/A106.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/A106 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/A106
 ```
 
 #### Exercícios
@@ -344,7 +344,7 @@ Recorde: 4
    instruções de ler_placar no código.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E313.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E313.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E313 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E313
 ```
 
 **Exercício E314** · ★☆☆
@@ -371,7 +371,7 @@ local: 1 | static: 3
    return; a static mora nos dados e vive o programa todo.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E314.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E314.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E314 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E314
 ```
 
 **Exercício E315** · ★★☆
@@ -405,7 +405,7 @@ double: cabem no máximo 524 chamadas
    com stack overflow.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E315.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E315.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E315 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E315
 ```
 
 **Exercício E316** · ★★☆
@@ -447,7 +447,7 @@ Soma das leituras: 14999995
    vai fazer o mesmo com malloc, escolhendo o tamanho na hora de rodar.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E316.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E316.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E316 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E316
 ```
 
 **Exercício E317** · ★★★
@@ -492,7 +492,7 @@ sai n=0: devolve 51
    terminaram: por isso todos os frames de passo(3) devolvem 41.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E317.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E317.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E317 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E317
 ```
 
 **Exercício E318** · ★★★
@@ -520,7 +520,7 @@ Senha: A107
    char senha[8]; montar_senha(42, senha);
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0053-pilha-e-heap/E318.c
+gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E318.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E318 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E318
 ```
 
 ---
@@ -643,7 +643,7 @@ de erro no meio da leitura, que é o caminho mais fácil de esquecer:
 > [!NOTE]
 > **Pergunta para você:** se você tirar a linha `free(corridas);` o programa
 > continua mostrando o total certo? Então qual é o problema? Rode sem o `free`
-> e leia o fim da saída do `rodar`.
+> e leia o fim da saída do gcc com as flags de estudo.
 
 ### Hora de praticar
 
@@ -699,7 +699,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/A107.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/A107.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/A107 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/A107
 ```
 
 **Exemplo A108 · Quem cria e quem libera**
@@ -750,7 +750,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/A108.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/A108.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/A108 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/A108
 ```
 
 #### Exercícios
@@ -775,7 +775,7 @@ Mínima: 28
 ```
 
 
-Para testar: printf '5\n31 28 33 29 30\n' | ~/LPEDC/rodar <este arquivo>
+Para testar: printf '5\n31 28 33 29 30\n' | ./programa
 
 **Dicas:**
 
@@ -785,7 +785,7 @@ Para testar: printf '5\n31 28 33 29 30\n' | ~/LPEDC/rodar <este arquivo>
    AddressSanitizer no fim (sinal de que o free está lá).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E319.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E319.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E319 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E319
 ```
 
 **Exercício E320** · ★☆☆
@@ -810,7 +810,7 @@ Cópia: COXINHA
    heap-buffer-overflow.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E320.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E320.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E320 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E320
 ```
 
 **Exercício E321** · ★★☆
@@ -843,7 +843,7 @@ Saída esperada:
    esse caso antes (devolva NULL com *qtd = 0).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E321.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E321.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E321 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E321
 ```
 
 **Exercício E322** · ★★☆
@@ -885,7 +885,7 @@ e) 5 bytes: cabe 1 int
    o AddressSanitizer acusar heap-buffer-overflow, e depois apague a linha.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E322.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E322.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E322 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E322
 ```
 
 **Exercício E323** · ★★★
@@ -911,7 +911,7 @@ Média: 9000 passos
    cópia do ponteiro: int *p = passos;).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E323.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E323.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E323 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E323
 ```
 
 **Exercício E324** · ★★★
@@ -944,7 +944,7 @@ Crachá: Maria Clara Fonseca (19 caracteres)
    segundo juntar. São dois malloc, então dois free.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0054-malloc-free/E324.c
+gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E324.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E324 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E324
 ```
 
 ---
@@ -1057,7 +1057,7 @@ custa só uma atribuição:
 > 1 + 2 + 4 + ... + 512 = 1023 elementos: menos de uma cópia por push. Se
 > crescesse de 1 em 1, seriam 1 + 2 + ... + 1023, mais de 500 mil cópias. É
 > a estratégia padrão de todo vetor que cresce sob demanda.
-> Com o rodar, o AddressSanitizer sempre muda o bloco de lugar no
+> Com o gcc com as flags de estudo, o AddressSanitizer sempre muda o bloco de lugar no
 > `realloc`, de propósito: assim o erro de usar o endereço antigo aparece logo,
 > em vez de só às vezes.
 
@@ -1120,7 +1120,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/A109.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/A109.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/A109 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/A109
 ```
 
 **Exemplo A110 · A enquete com calloc**
@@ -1164,7 +1164,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/A110.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/A110.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/A110 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/A110
 ```
 
 #### Exercícios
@@ -1196,7 +1196,7 @@ Saída esperada:
    começam com lixo.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E325.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E325.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E325 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E325
 ```
 
 **Exercício E326** · ★☆☆
@@ -1224,7 +1224,7 @@ Notas: 7 8 10
    notas = maior;
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E326.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E326.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E326 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E326
 ```
 
 **Exercício E327** · ★★☆
@@ -1242,7 +1242,7 @@ Capacidade final: 8
 ```
 
 
-Para testar: printf '5 8 2 9 4 0\n' | ~/LPEDC/rodar <este arquivo>
+Para testar: printf '5 8 2 9 4 0\n' | ./programa
 
 **Dicas:**
 
@@ -1254,7 +1254,7 @@ Para testar: printf '5 8 2 9 4 0\n' | ~/LPEDC/rodar <este arquivo>
    não devolver 1, pare como se fosse o 0.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E327.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E327.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E327 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E327
 ```
 
 **Exercício E328** · ★★☆
@@ -1280,7 +1280,7 @@ Bloco encolheu de 40 para 24 bytes
    posições, exatamente as válidas.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E328.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E328.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E328 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E328
 ```
 
 **Exercício E329** · ★★★
@@ -1317,14 +1317,14 @@ dobrar: 10 realocações, 1023 cópias
    1023: em média, nem uma cópia por elemento.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E329.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E329.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E329 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E329
 ```
 
 **Exercício E330** · ★★★
 
 A fila do banco guarda as senhas num vetor que cresce. O programa guarda o
 endereço da primeira senha para mostrar no painel depois. Ele está ERRADO
-de propósito: rode com o rodar e leia o relatório do AddressSanitizer
+de propósito: rode com as flags de estudo e leia o relatório do AddressSanitizer
 (ele aponta a linha). Conserte e rode de novo até sair sem relatório.
 
 
@@ -1346,7 +1346,7 @@ Senhas na fila: 4
    depois do último realloc.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0055-calloc-realloc/E330.c
+gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E330.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E330 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E330
 ```
 
 ---
@@ -1571,7 +1571,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/A111.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/A111.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/A111 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/A111
 ```
 
 **Exemplo A112 · O mapa do cinema num bloco só**
@@ -1620,7 +1620,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/A112.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/A112.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/A112 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/A112
 ```
 
 #### Exercícios
@@ -1642,7 +1642,7 @@ Tamanho: 4
 ```
 
 
-Para testar: printf '4\n' | ~/LPEDC/rodar <este arquivo>
+Para testar: printf '4\n' | ./programa
 
 **Dicas:**
 
@@ -1652,7 +1652,7 @@ Para testar: printf '4\n' | ~/LPEDC/rodar <este arquivo>
 3. Resposta esperada: a tabela acima, sem relatório do AddressSanitizer.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E331.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E331.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E331 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E331
 ```
 
 **Exercício E332** · ★☆☆
@@ -1690,7 +1690,7 @@ Saída esperada:
    a última das 40 posições.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E332.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E332.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E332 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E332
 ```
 
 **Exercício E333** · ★★☆
@@ -1730,7 +1730,7 @@ Saída esperada (a transposta, 3 x 2):
 3. Resposta esperada: a saída acima, e as duas matrizes liberadas.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E333.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E333.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E333 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E333
 ```
 
 **Exercício E334** · ★★☆
@@ -1761,14 +1761,14 @@ Elementos guardados: 21
    p[i] e depois p.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E334.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E334.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E334 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E334
 ```
 
 **Exercício E335** · ★★★
 
 Este programa monta a grade de 3 turnos x 5 dias de uma clínica, com o
 número de consultas, e mostra o total. Ele tem DOIS erros de memória, de
-propósito (o gcc até avisa sobre um deles). Rode com o rodar, leia o aviso
+propósito (o gcc até avisa sobre um deles). Rode com as flags de estudo, leia o aviso
 e os relatórios e conserte um de cada vez, rodando de novo a cada conserto
 até sair o total sem relatório nenhum.
 
@@ -1791,7 +1791,7 @@ Total de consultas: 105
    ordem: primeiro as linhas, depois grade. Total: 3 * 5 * 7 = 105.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E335.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E335.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E335 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E335
 ```
 
 **Exercício E336** · ★★★
@@ -1835,7 +1835,7 @@ A * A: dimensões incompatíveis
    A * A não precisa de free (free(NULL) também não faria mal).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0056-matriz-dinamica/E336.c
+gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E336.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E336 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E336
 ```
 
 ---
@@ -1872,7 +1872,7 @@ estragar a contabilidade do `malloc`, e o programa quebra muito depois, num
 
 As ferramentas:
 
-- **AddressSanitizer** (ASan): já vem no `rodar` (`-fsanitize=address`). O
+- **AddressSanitizer** (ASan): entra com `-fsanitize=address -g` no `gcc`. O
   compilador põe vigias em volta de cada bloco e cada acesso é conferido.
   Para no primeiro erro e mostra três coisas: onde o erro aconteceu, onde o
   bloco foi alocado e onde foi liberado. No fim, o **LeakSanitizer** lista o
@@ -1881,7 +1881,7 @@ As ferramentas:
   vigia cada byte. É uns 20 a 50 vezes mais lento, não precisa recompilar e
   pega uma coisa que o ASan não pega: ler memória que nunca recebeu valor.
   Instale com `sudo pacman -S valgrind` no Arch Linux ou `sudo apt install
-  valgrind` no Debian/Ubuntu e rode com `~/LPEDC/rodar --valgrind arquivo.c`.
+  valgrind` no Debian/Ubuntu e rode com `valgrind ./programa`.
 
 A função `total_do_pedido` copia os 4 preços de um
 pedido (R$ 30, 12, 45 e 8) para um bloco temporário de 16 bytes e soma tudo.
@@ -1948,8 +1948,8 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 > "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
 > estouro de um byte e leitura de lixo são **comportamento indefinido**: o
 > programa pode funcionar hoje, mostrar outro valor amanhã e quebrar só com
-> outro compilador. Rode sempre com o ASan (o `rodar` já faz isso) e, quando
-> desconfiar, com `rodar --valgrind`. Saída certa e relatório limpo.
+> outro compilador. Rode sempre com o ASan (o gcc com as flags de estudo já faz isso) e, quando
+> desconfiar, com `valgrind ./programa`. Saída certa e relatório limpo.
 
 > [!TIP]
 > **Por dentro do C:** o ASan reserva 1 byte de "memória sombra" para cada 8
@@ -2031,7 +2031,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/A113.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A113.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A113 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A113
 ```
 
 **Exemplo A114 · Free, NULL e valgrind**
@@ -2070,7 +2070,7 @@ int main(void) {
 // Reserva: 3 noites, R$ 750
 // Reserva cancelada: nada a mostrar
 //
-// Rode também com o valgrind: ~/LPEDC/rodar --valgrind 07-memoria-dinamica/0057-erros-de-memoria/A114.c
+// Rode também com o valgrind: gcc -g ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114 && valgrind ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114
 // O fim da saída mostra o balanço do heap (o número entre == muda):
 //   ==4242== HEAP SUMMARY:
 //   ==4242==     in use at exit: 0 bytes in 0 blocks
@@ -2081,7 +2081,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/A114.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114
 ```
 
 #### Exercícios
@@ -2115,7 +2115,7 @@ malloc: 4 | free: 4
    do laço, depois do printf, e apagar o free de fora.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E337.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E337.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E337 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E337
 ```
 
 **Exercício E338** · ★☆☆
@@ -2158,7 +2158,7 @@ e) Vagas livres: 3
    de escrever (e free no fim).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E338.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E338.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E338 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E338
 ```
 
 **Exercício E339** · ★★☆
@@ -2188,7 +2188,7 @@ Placar encerrado
    números, são dois blocos: aí, sim, cada um tem o seu free.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E339.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E339.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E339 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E339
 ```
 
 **Exercício E340** · ★★☆
@@ -2215,13 +2215,13 @@ Km da semana: 238
    4 bytes depois do fim do bloco. Use i < dias. Total: 238.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E340.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E340.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E340 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E340
 ```
 
 **Exercício E341** · ★★★
 
 A lista de presença de uma aula de yoga começa com 2 vagas e a função
-adicionar faz o vetor crescer. Com o rodar, o programa quebra com um
+adicionar faz o vetor crescer. Com o gcc com as flags de estudo, o programa quebra com um
 relatório do AddressSanitizer na 4ª chegada. O erro está de propósito: o
 main fica com um ponteiro solto, mesmo com a função adicionar "certa" por
 dentro. Conserte mudando a assinatura de adicionar e rode de novo até a
@@ -2250,7 +2250,7 @@ Presentes: 11 27 35 48
    "Presentes: 11 27 35 48".
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E341.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E341.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E341 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E341
 ```
 
 **Exercício E342** · ★★★
@@ -2259,8 +2259,8 @@ O artilheiro do bairro jogou 4 das 5 rodadas; a 5ª ainda não aconteceu e
 deveria contar 0 gols. Este programa tem um erro de propósito que o
 AddressSanitizer NÃO acusa. Faça assim:
 
-1) rode com o rodar e veja o total;
-2) rode com ~/LPEDC/rodar --valgrind e leia a primeira mensagem;
+1) rode com as flags de estudo e veja o total;
+2) rode com valgrind ./programa e leia a primeira mensagem;
 3) conserte trocando a função que aloca o bloco e rode de novo com os
 
 ```text
@@ -2279,7 +2279,7 @@ Média por rodada: 1.2
 
 1. Quem deu valor para gols[4]?
 2. O valgrind avisa "Conditional jump or move depends on uninitialised
-   value(s)" e, com a opção que o rodar já liga, mostra onde o bloco foi
+   value(s)" e, com a opção que o gcc com as flags de estudo já liga, mostra onde o bloco foi
    criado.
 3. Resposta esperada: gols[4] nunca recebeu valor e o malloc entrega lixo
    (com o ASan, o lixo é sempre 0xbebebebe, um número negativo enorme).
@@ -2288,7 +2288,7 @@ Média por rodada: 1.2
    sizeof *gols) por calloc(5, sizeof *gols).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0057-erros-de-memoria/E342.c
+gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E342.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E342 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E342
 ```
 
 ---
@@ -2457,7 +2457,7 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 > Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` é um bloco
 > separado, com o seu `malloc` (dentro de `duplicar`). Conte os `malloc` do
 > programa: 2 no começo, 5 nomes e os `realloc`, que trocam um bloco por
-> outro. No fim, `liberar` faz 5 + 2 `free`. Rode com `rodar --valgrind` e
+> outro. No fim, `liberar` faz 5 + 2 `free`. Rode com `valgrind ./programa` e
 > confira a linha `All heap blocks were freed`.
 
 > [!TIP]
@@ -2574,7 +2574,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/A115.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A115.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A115 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A115
 ```
 
 **Exemplo A116 · Uma linha de qualquer tamanho**
@@ -2633,12 +2633,12 @@ int main(void) {
 // Maria Eduarda dos Santos
 // Nome 2 (24 bytes): Maria Eduarda dos Santos
 //
-// Para testar: printf 'Ana\nMaria Eduarda dos Santos\n' | ~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/A116.c
+// Para testar: gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A116.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A116 && printf 'Ana\nMaria Eduarda dos Santos\n' | ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A116
 // Nenhum fgets com tamanho fixo: o bloco cresce 4 -> 8 -> 16 -> 32.
 ```
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/A116.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A116.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A116 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A116
 ```
 
 #### Exercícios
@@ -2662,7 +2662,7 @@ Lu (3 bytes)
 ```
 
 
-Para testar: printf 'Ana\nJoao Pedro\nLu\n' | ~/LPEDC/rodar <este arquivo>
+Para testar: printf 'Ana\nJoao Pedro\nLu\n' | ./programa
 
 **Dicas:**
 
@@ -2675,7 +2675,7 @@ Para testar: printf 'Ana\nJoao Pedro\nLu\n' | ~/LPEDC/rodar <este arquivo>
    vezes.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E343.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E343.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E343 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E343
 ```
 
 **Exercício E344** · ★☆☆
@@ -2713,7 +2713,7 @@ Saída esperada:
    liberar_lista faz 5 free: cada item e depois o vetor.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E344.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E344.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E344 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E344
 ```
 
 **Exercício E345** · ★★☆
@@ -2736,7 +2736,7 @@ O vetor cresceu 2 vezes
 ```
 
 
-Para testar: printf 'uva\nmanga\ncaju\nacerola\nfim\n' | ~/LPEDC/rodar <este arquivo>
+Para testar: printf 'uva\nmanga\ncaju\nacerola\nfim\n' | ./programa
 
 **Dicas:**
 
@@ -2748,7 +2748,7 @@ Para testar: printf 'uva\nmanga\ncaju\nacerola\nfim\n' | ~/LPEDC/rodar <este arq
    (1 -> 2 -> 4). No fim, um free por fruta e um para o vetor.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E345.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E345.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E345 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E345
 ```
 
 **Exercício E346** · ★★☆
@@ -2772,7 +2772,7 @@ Turma: 7.5
 ```
 
 
-Para testar: printf '3 2\n7 8\n5 6\n9 10\n' | ~/LPEDC/rodar <este arquivo>
+Para testar: printf '3 2\n7 8\n5 6\n9 10\n' | ./programa
 
 **Dicas:**
 
@@ -2783,7 +2783,7 @@ Para testar: printf '3 2\n7 8\n5 6\n9 10\n' | ~/LPEDC/rodar <este arquivo>
    vetor de linhas e as médias) e o mesmo número de free.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E346.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E346.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E346 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E346
 ```
 
 **Exercício E347** · ★★★
@@ -2812,7 +2812,7 @@ Bia: R$ 20
    falhar: use um ponteiro temporário.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E347.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E347.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E347 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E347
 ```
 
 **Exercício E348** · ★★★
@@ -2848,15 +2848,15 @@ Saída esperada:
    que já foi feito e devolva NULL.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/E348.c
+gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E348.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E348 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E348
 ```
 
 ---
 
 ## Desafios do módulo
 
-Problemas para resolver num arquivo seu, rodando com o `rodar` (e com
-`rodar --valgrind` quando quiser a segunda opinião). A versão final de cada
+Problemas para resolver num arquivo seu, rodando com as flags de estudo (e com
+`valgrind ./programa` quando quiser a segunda opinião). A versão final de cada
 um precisa terminar sem nenhum relatório de erro.
 
 **1. Apagar do caderno.** No caderninho de fiado do texto do assunto 0058,
@@ -3023,7 +3023,7 @@ remove alternados na fronteira fariam um `realloc` a cada operação.
 </details>
 
 **8. Dois nomes, um bloco.** Monte um programa com o trecho abaixo e rode
-com o `rodar`:
+com as flags de estudo:
 
 ```c
 int *a = malloc(3 * sizeof *a);
@@ -3059,7 +3059,7 @@ liberado (um ponteiro solto). Zerar o ponteiro ajuda, mas não substitui saber
 **9. O vazamento a conta-gotas.** Escreva `void tarefa(int chamada)`, que faz
 um `malloc` de 24 bytes, escreve um caractere no bloco e só dá `free` quando
 `chamada` é par; nas ímpares, soma 24 numa variável global `vazou`. Chame
-`tarefa` de 1 a 1000, imprima `bytes sem free: ...` e rode com o `rodar`.
+`tarefa` de 1 a 1000, imprima `bytes sem free: ...` e rode com as flags de estudo.
 Depois conserte a função e rode de novo.
 
 <details><summary>Resposta</summary>
@@ -3133,7 +3133,7 @@ Desconto: 11.16  3.42 22.59  6.84 16.20  4.77 | total 64.98
    free.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0701.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0701.c -o ~/LPEDC/07-memoria-dinamica/lista/P0701 && ~/LPEDC/07-memoria-dinamica/lista/P0701
 ```
 
 ---
@@ -3167,7 +3167,7 @@ Saída esperada:
 2. Depois do malloc: strcpy(novo, a); strcat(novo, sep); strcat(novo, b);
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0702.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0702.c -o ~/LPEDC/07-memoria-dinamica/lista/P0702 && ~/LPEDC/07-memoria-dinamica/lista/P0702
 ```
 
 ---
@@ -3207,7 +3207,7 @@ Fila (8 de 9): 501 502 503 504 505 506 507 508
 4. Resposta esperada: a saída acima (3 -> 6 -> 9).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0703.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0703.c -o ~/LPEDC/07-memoria-dinamica/lista/P0703 && ~/LPEDC/07-memoria-dinamica/lista/P0703
 ```
 
 ---
@@ -3242,7 +3242,7 @@ Identidade 4x4:
 4. Ordem do free: primeiro cada linha, depois o vetor de ponteiros.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0704.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0704.c -o ~/LPEDC/07-memoria-dinamica/lista/P0704 && ~/LPEDC/07-memoria-dinamica/lista/P0704
 ```
 
 ---
@@ -3271,7 +3271,7 @@ Total: 100 pães
    local mora na pilha e some sozinha.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0705.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0705.c -o ~/LPEDC/07-memoria-dinamica/lista/P0705 && ~/LPEDC/07-memoria-dinamica/lista/P0705
 ```
 
 ---
@@ -3306,7 +3306,7 @@ Saída esperada:
 3. Quem chama recebe o bloco e é quem faz o free.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0706.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0706.c -o ~/LPEDC/07-memoria-dinamica/lista/P0706 && ~/LPEDC/07-memoria-dinamica/lista/P0706
 ```
 
 ---
@@ -3350,7 +3350,7 @@ Saída esperada:
 3. Com malloc, os contadores começariam com lixo.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0707.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0707.c -o ~/LPEDC/07-memoria-dinamica/lista/P0707 && ~/LPEDC/07-memoria-dinamica/lista/P0707
 ```
 
 ---
@@ -3390,7 +3390,7 @@ Transposta (3x2):
 3. Se criar devolver NULL, libere o que já existe antes de sair.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0708.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0708.c -o ~/LPEDC/07-memoria-dinamica/lista/P0708 && ~/LPEDC/07-memoria-dinamica/lista/P0708
 ```
 
 ---
@@ -3428,7 +3428,7 @@ Placar (5 jogadores): 3 0 1 0 3
    bloco de lugar).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0709.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0709.c -o ~/LPEDC/07-memoria-dinamica/lista/P0709 && ~/LPEDC/07-memoria-dinamica/lista/P0709
 ```
 
 ---
@@ -3468,7 +3468,7 @@ Modelo 3:  35  39
    NULL).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0710.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0710.c -o ~/LPEDC/07-memoria-dinamica/lista/P0710 && ~/LPEDC/07-memoria-dinamica/lista/P0710
 ```
 
 ### ★★☆ Para pensar
@@ -3515,7 +3515,7 @@ Saída esperada:
    bytes.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0711.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0711.c -o ~/LPEDC/07-memoria-dinamica/lista/P0711 && ~/LPEDC/07-memoria-dinamica/lista/P0711
 ```
 
 ---
@@ -3558,7 +3558,7 @@ Bytes das notas: 80 (matriz 3x5 usaria 120)
 4. Libere cada linha e depois o vetor de ponteiros.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0712.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0712.c -o ~/LPEDC/07-memoria-dinamica/lista/P0712 && ~/LPEDC/07-memoria-dinamica/lista/P0712
 ```
 
 ---
@@ -3594,11 +3594,11 @@ Lido: "Rua Ramos Ferreira, 1200, Centro, Manaus" (40 caracteres)
 2. Laço: while ((c = getchar()) != EOF && c != '\n'). Antes de guardar,
    se n + 1 == cap (falta espaço para o caractere e o '\0'), dobre.
 3. Se o primeiro getchar já der EOF, libere o buffer e devolva NULL.
-4. Teste: printf 'Rua Ramos Ferreira, 1200, Centro, Manaus\n' | ./rodar ...
+4. Teste: printf 'Rua Ramos Ferreira, 1200, Centro, Manaus\n' | ./programa
 5. Resposta esperada: a execução acima.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0713.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0713.c -o ~/LPEDC/07-memoria-dinamica/lista/P0713 && ~/LPEDC/07-memoria-dinamica/lista/P0713
 ```
 
 ---
@@ -3643,7 +3643,7 @@ Preços (7 de 8): 5 12 12 30 45 70 89
    mesmo que malloc(x). A primeira capacidade é 2; depois, dobra.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0714.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0714.c -o ~/LPEDC/07-memoria-dinamica/lista/P0714 && ~/LPEDC/07-memoria-dinamica/lista/P0714
 ```
 
 ---
@@ -3673,7 +3673,7 @@ Viagem total: 31 horas
    Receba o retorno num ponteiro novo e só depois troque.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0715.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0715.c -o ~/LPEDC/07-memoria-dinamica/lista/P0715 && ~/LPEDC/07-memoria-dinamica/lista/P0715
 ```
 
 ---
@@ -3723,7 +3723,7 @@ Miolo 2x4:
 3. Cada recorte é liberado com o seu número de linhas.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0716.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0716.c -o ~/LPEDC/07-memoria-dinamica/lista/P0716 && ~/LPEDC/07-memoria-dinamica/lista/P0716
 ```
 
 ---
@@ -3767,7 +3767,7 @@ Min 9: leitura 3.5, média das últimas 4 = 5.00
 4. A média é soma / usados: sem somar a janela inteira a cada minuto.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0717.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0717.c -o ~/LPEDC/07-memoria-dinamica/lista/P0717 && ~/LPEDC/07-memoria-dinamica/lista/P0717
 ```
 
 ---
@@ -3809,7 +3809,7 @@ Linha 0 da profunda é a de m? não
    duplo.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0718.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0718.c -o ~/LPEDC/07-memoria-dinamica/lista/P0718 && ~/LPEDC/07-memoria-dinamica/lista/P0718
 ```
 
 ---
@@ -3850,7 +3850,7 @@ Nos dois grupos (3): 103 204 402
    serve.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0719.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0719.c -o ~/LPEDC/07-memoria-dinamica/lista/P0719 && ~/LPEDC/07-memoria-dinamica/lista/P0719
 ```
 
 ---
@@ -3885,11 +3885,11 @@ Miolo: 17
 2. Confira o retorno de cada scanf; se a leitura falhar, libere o que já
    alocou antes de sair.
 3. Com l ou c menor que 3 não há miolo: o programa mostra Miolo: 0.
-4. Teste: printf '3 4\n5 2 7 1\n3 9 8 4\n6 0 2 5\n' | ./rodar ...
+4. Teste: printf '3 4\n5 2 7 1\n3 9 8 4\n6 0 2 5\n' | ./programa
 5. Resposta esperada: Borda 35 e Miolo 17.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0720.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0720.c -o ~/LPEDC/07-memoria-dinamica/lista/P0720 && ~/LPEDC/07-memoria-dinamica/lista/P0720
 ```
 
 ### ★★★ Desafio
@@ -3937,7 +3937,7 @@ Público (n = 3, cap = 4): 18450.50 22010.00 9875.25
 4. Para ler de volta, converta: const int *g = v_gols; g[i].
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0721.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0721.c -o ~/LPEDC/07-memoria-dinamica/lista/P0721 && ~/LPEDC/07-memoria-dinamica/lista/P0721
 ```
 
 ---
@@ -3981,7 +3981,7 @@ Esparsa: 72 bytes; grade cheia: 40000 bytes
 4. Bytes: 3 * n * sizeof(int) contra 100 * 100 * sizeof(int).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0722.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0722.c -o ~/LPEDC/07-memoria-dinamica/lista/P0722 && ~/LPEDC/07-memoria-dinamica/lista/P0722
 ```
 
 ---
@@ -4034,7 +4034,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima (7 linhas).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0723.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0723.c -o ~/LPEDC/07-memoria-dinamica/lista/P0723 && ~/LPEDC/07-memoria-dinamica/lista/P0723
 ```
 
 ---
@@ -4082,7 +4082,7 @@ Saída esperada:
    é "0"), aloque a string e escreva do mais alto para o mais baixo.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0724.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0724.c -o ~/LPEDC/07-memoria-dinamica/lista/P0724 && ~/LPEDC/07-memoria-dinamica/lista/P0724
 ```
 
 ---
@@ -4116,7 +4116,7 @@ Saída esperada:
    memória já devolvida. A ordem é: cada nome, e só então o vetor.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0725.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0725.c -o ~/LPEDC/07-memoria-dinamica/lista/P0725 && ~/LPEDC/07-memoria-dinamica/lista/P0725
 ```
 
 ---
@@ -4161,7 +4161,7 @@ r(2) = 27; p(2) * q(2) = 27
 4. No mostrar, pule coeficientes zero e mostre "x^k" (x^1 como x).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0726.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0726.c -o ~/LPEDC/07-memoria-dinamica/lista/P0726 && ~/LPEDC/07-memoria-dinamica/lista/P0726
 ```
 
 ---
@@ -4210,7 +4210,7 @@ det I (4x4) = 1, com 3 menores alocados
 5. Resposta esperada: a saída acima (det A = 24, det B = 30, det I = 1).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0727.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0727.c -o ~/LPEDC/07-memoria-dinamica/lista/P0727 && ~/LPEDC/07-memoria-dinamica/lista/P0727
 ```
 
 ---
@@ -4254,7 +4254,7 @@ Saída esperada:
 4. Libere cada palavra, o vetor de palavras e o de contagens.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0728.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0728.c -o ~/LPEDC/07-memoria-dinamica/lista/P0728 && ~/LPEDC/07-memoria-dinamica/lista/P0728
 ```
 
 ---
@@ -4305,7 +4305,7 @@ Total: 5 ilhas
 5. Resposta esperada: a saída acima (5 ilhas).
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0729.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0729.c -o ~/LPEDC/07-memoria-dinamica/lista/P0729 && ~/LPEDC/07-memoria-dinamica/lista/P0729
 ```
 
 ---
@@ -4364,7 +4364,7 @@ Saída esperada:
 4. No fim, libere cada linha e o vetor.
 
 ```bash
-~/LPEDC/rodar 07-memoria-dinamica/lista/P0730.c
+gcc ~/LPEDC/07-memoria-dinamica/lista/P0730.c -o ~/LPEDC/07-memoria-dinamica/lista/P0730 && ~/LPEDC/07-memoria-dinamica/lista/P0730
 ```
 
 ## Questões no estilo da prova

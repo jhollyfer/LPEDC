@@ -35,7 +35,7 @@ roda e faz besteira em silêncio.
 
 O compilador aceita esse código, mas avisa se você pedir. Quem avisa é o
 `-Wall`: "suggest parentheses around assignment used as truth value". O
-`rodar` liga esse aviso. **Nunca ignore um warning**: no curso, código bom
+gcc com as flags de estudo liga esse aviso. **Nunca ignore um warning**: no curso, código bom
 compila com zero avisos.
 
 No exemplo, o cartão tem R$ 3,50, a tarifa é R$ 5,00. A pergunta

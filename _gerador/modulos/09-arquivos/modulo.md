@@ -33,10 +33,10 @@ abrir com `cat`. Nenhum exemplo depende de um arquivo que já exista: cada um
 cria o que vai ler.
 
 Para passar argumentos a um programa, escreva-os depois do caminho, no
-`rodar`: ele repassa tudo para o programa.
+executável: ele repassa tudo para o programa.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c -r 7 -a 4
+gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137 -r 7 -a 4
 ```
 
 Duas ferramentas ajudam a enxergar o que os programas gravam: `od -A d -t x1

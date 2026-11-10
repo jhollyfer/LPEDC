@@ -55,11 +55,11 @@ encadeamento e com sondagem linear (0105 a 0107) e as ordenações dos módulos
 Cada assunto tem um **TAD** na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
 `vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O
 texto mostra só o pedaço do `.c` que importa: abra o `.c` inteiro também. O
-`rodar` compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
+comando do exemplo compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
 então os comandos são os de sempre:
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/A353.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353 -lm && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353
 ```
 
 As convenções são as do Cormen: **altura conta arestas** (folha tem altura 0,
@@ -295,7 +295,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/A347.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/A347.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/A347 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/A347
 ```
 
 **Exemplo A348 · Juntar duas filas em O(1)**
@@ -370,7 +370,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/A348.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/A348.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/A348 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/A348
 ```
 
 #### Exercícios
@@ -396,7 +396,7 @@ Total: R$ 49.64
 3. Resposta esperada: a saída acima (4964 centavos).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1039.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1039.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1039 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1039
 ```
 
 **Exercício E1040** · ★☆☆
@@ -425,7 +425,7 @@ chama 3: [ ]
 2. Guarde a chave antes do sent_remove: depois dele o nó já foi liberado.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1040.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1040.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1040 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1040
 ```
 
 **Exercício E1041** · ★★☆
@@ -454,7 +454,7 @@ Saída esperada:
 2. A condição do while tem duas partes: p != &L->nil e p->chave < h.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1041.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1041.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1041 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1041
 ```
 
 **Exercício E1042** · ★★☆
@@ -480,7 +480,7 @@ Removidos 0 do código 8: [ 7 9 5 ]
    nenhum cuidado extra.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1042.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1042.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1042 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1042
 ```
 
 **Exercício E1043** · ★★★
@@ -507,7 +507,7 @@ trás:   [ 3 2 1 ]
    "L->nil.prox = x;". Com ela, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1043.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1043.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1043 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1043
 ```
 
 **Exercício E1044** · ★★★
@@ -534,7 +534,7 @@ vazia invertida: [ ]
    Pare quando voltar à sentinela.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0174-lista-com-sentinela/E1044.c
+gcc ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1044.c ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/sentinela.c -o ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1044 && ~/LPEDC/28-estruturas-complementos/0174-lista-com-sentinela/E1044
 ```
 
 ---
@@ -750,7 +750,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/A349.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/A349.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/A349 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/A349
 ```
 
 **Exemplo A350 · O próximo ônibus a partir de agora**
@@ -828,7 +828,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/A350.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/A350.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/A350 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/A350
 ```
 
 #### Exercícios
@@ -858,7 +858,7 @@ grau da árvore: 2 | folhas: 5
    some 0·5 + 1·1 + 2·4 e confira.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1045.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1045.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1045 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1045
 ```
 
 **Exercício E1046** · ★☆☆
@@ -885,7 +885,7 @@ altura da árvore: 3
 2. A altura da árvore é a profundidade do nível mais fundo.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1046.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1046.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1046 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1046
 ```
 
 **Exercício E1047** · ★★☆
@@ -909,7 +909,7 @@ Vizinhos de 12.90: 9.90 e 18.90
 2. Para os vizinhos, primeiro ap_busca(raiz, 1290).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1047.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1047.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1047 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1047
 ```
 
 **Exercício E1048** · ★★☆
@@ -944,7 +944,7 @@ iguais ao ap_sucessor: 10 de 10
 2. Ande pelas chaves com o próprio ap_minimo e ap_sucessor do TAD.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1048.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1048.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1048 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1048
 ```
 
 **Exercício E1049** · ★★★
@@ -979,7 +979,7 @@ depois de 12h00: nenhum
    Com a correção, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1049.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1049.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1049 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1049
 ```
 
 **Exercício E1050** · ★★★
@@ -1008,7 +1008,7 @@ crescente: não é AVL. Desequilibrados: 1 (fator -4) 2 (fator -3) 3 (fator -2)
    custo não importa.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0175-conceitos-e-sucessor/E1050.c
+gcc ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1050.c ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/arvpai.c -o ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1050 && ~/LPEDC/28-estruturas-complementos/0175-conceitos-e-sucessor/E1050
 ```
 
 ---
@@ -1227,7 +1227,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/A351.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/A351.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/A351 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/A351
 ```
 
 **Exemplo A352 · Fator 0 no filho: o caso que só a remoção tem**
@@ -1272,7 +1272,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/A352.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/A352.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/A352 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/A352
 ```
 
 #### Exercícios
@@ -1302,7 +1302,7 @@ tira 60: pré 25 10 5 1 15 50 30 27 55 | altura 3 | rotações 0
    depois de consertado, o 50 também.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1051.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1051.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1051 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1051
 ```
 
 **Exercício E1052** · ★☆☆
@@ -1330,7 +1330,7 @@ AVL ok: 67 nós, altura 6, 94 rotações no total
    remoções).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1052.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1052.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1052 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1052
 ```
 
 **Exercício E1053** · ★★☆
@@ -1355,7 +1355,7 @@ Altura no começo: 4 | rotações para esvaziar: 7
 2. while (raiz != NULL): a árvore vazia volta como NULL do avr_remove.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1053.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1053.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1053 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1053
 ```
 
 **Exercício E1054** · ★★☆
@@ -1384,7 +1384,7 @@ altura final: 2
    tirar o 40 seria o 50.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1054.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1054.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1054 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1054
 ```
 
 **Exercício E1055** · ★★★
@@ -1414,7 +1414,7 @@ fiscal: AVL ok
    Com a correção, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1055.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1055.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1055 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1055
 ```
 
 **Exercício E1056** · ★★★
@@ -1451,7 +1451,7 @@ altura 9: 143 nós | rotações 4 | altura depois 8
    baixo): uma a cada dois níveis, até a raiz.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0176-avl-remocao/E1056.c
+gcc ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1056.c ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/avlrem.c -o ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1056 && ~/LPEDC/28-estruturas-complementos/0176-avl-remocao/E1056
 ```
 
 ---
@@ -1678,7 +1678,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/A353.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353 -lm && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353
 ```
 
 **Exemplo A354 · Quantas vezes cada caso aparece**
@@ -1725,7 +1725,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/A354.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A354.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A354 && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A354
 ```
 
 #### Exercícios
@@ -1750,7 +1750,7 @@ vermelhos: 2 | pretos: 8 | altura negra: 3
 2. A altura negra vem pronta em vp_altura_negra(T).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1057.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1057.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1057 && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1057
 ```
 
 **Exercício E1058** · ★☆☆
@@ -1775,7 +1775,7 @@ menor: 69010 | maior: 69099
 2. Compare o retorno de vp_busca com &T->nil, nunca com NULL.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1058.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1058.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1058 && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1058
 ```
 
 **Exercício E1059** · ★★☆
@@ -1810,7 +1810,7 @@ Saída esperada:
 2. 2^bh - 1 em C: (1 << b) - 1. Use "%3d %-8s" para alinhar.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1059.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1059.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1059 && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1059
 ```
 
 **Exercício E1060** · ★★☆
@@ -1842,7 +1842,7 @@ rotações no total: 3
    tio (nil, à direita do 30) é preto. O 27 forma um triângulo.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1060.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1060.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1060 && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1060
 ```
 
 **Exercício E1061** · ★★★
@@ -1871,7 +1871,7 @@ fiscal: as cinco propriedades valem
    caso 1, dos dois lados. Com ela, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1061.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1061.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1061 && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1061
 ```
 
 **Exercício E1062** · ★★★
@@ -1901,7 +1901,7 @@ Saída esperada:
    esquerda; senão, desce à direita.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/E1062.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1062.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1062 && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/E1062
 ```
 
 ---
@@ -2087,7 +2087,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/A355.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/A355.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/A355 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/A355
 ```
 
 **Exemplo A356 · Multiplicação com double e com deslocamento**
@@ -2154,7 +2154,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/A356.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/A356.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/A356 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/A356
 ```
 
 #### Exercícios
@@ -2185,7 +2185,7 @@ Saída esperada:
 2. O 69050000 e o 69050097 diferem por 97 e caem no mesmo balde.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1063.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1063.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1063 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1063
 ```
 
 **Exercício E1064** · ★☆☆
@@ -2216,7 +2216,7 @@ k = 8: k*A = 4.9443 | fração 0.9443 | balde 9
    pela tabela inteira.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1064.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1064.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1064 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1064
 ```
 
 **Exercício E1065** · ★★☆
@@ -2243,7 +2243,7 @@ multiplicação, m = 64: 64 baldes usados, o mais cheio com 17
    baixo, que são zero em todas as chaves.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1065.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1065.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1065 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1065
 ```
 
 **Exercício E1066** · ★★☆
@@ -2273,7 +2273,7 @@ n = 100, alfa = 2: alvo 50 -> m = 53 (a 11 da potência de 2 mais perto)
    do 1024; o primeiro primo longe o bastante é o 1151.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1066.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1066.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1066 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1066
 ```
 
 **Exercício E1067** · ★★★
@@ -2300,7 +2300,7 @@ balde mais cheio: 2
    produto & (M - 1)). Com a correção, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1067.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1067.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1067 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1067
 ```
 
 **Exercício E1068** · ★★★
@@ -2333,7 +2333,7 @@ fim: n = 100, m = 128, fator de carga 0.78, maior lista 2
    nó no balde novo; no fim, free no vetor velho (os nós continuam vivos).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1068.c
+gcc ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1068.c ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/espalha.c -o ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1068 -lm && ~/LPEDC/28-estruturas-complementos/0178-hash-multiplicacao/E1068
 ```
 
 ---
@@ -2537,7 +2537,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A357.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A357.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A357 && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A357
 ```
 
 **Exemplo A358 · Lápides que se acumulam**
@@ -2610,7 +2610,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A358.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A358.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A358 && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/A358
 ```
 
 #### Exercícios
@@ -2644,7 +2644,7 @@ chave 57
    sequência para chaves com o mesmo começo (agrupamento secundário).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1069.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1069.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1069 && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1069
 ```
 
 **Exercício E1070** · ★☆☆
@@ -2673,7 +2673,7 @@ carga | sem sucesso | com sucesso
    que não está custa 100 sondagens.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1070.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1070.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1070 -lm && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1070
 ```
 
 **Exercício E1071** · ★★☆
@@ -2704,7 +2704,7 @@ tabela: . . . 3 . . 19 . 35 . 51 . 67 . 83 .
    faria 6 sondagens.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1071.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1071.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1071 && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1071
 ```
 
 **Exercício E1072** · ★★☆
@@ -2738,7 +2738,7 @@ carga 0.57 e a chave 28 ficou de fora
    abaixo de 1/2 (com m primo, aí ela sempre acha lugar).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1072.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1072.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1072 && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1072
 ```
 
 **Exercício E1073** · ★★★
@@ -2768,7 +2768,7 @@ cartão 31: não está
    (a busca passa reto pela lápide). Com a correção, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1073.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1073.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1073 && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1073
 ```
 
 **Exercício E1074** · ★★★
@@ -2801,7 +2801,7 @@ fim: n = 40, m = 163, carga 0.25, média de sondagens 1.38
    houvesse) ficariam para trás de graça.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1074.c
+gcc ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1074.c ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/sondagem.c -o ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1074 && ~/LPEDC/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/E1074
 ```
 
 ---
@@ -3010,7 +3010,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A359.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A359.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A359 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A359
 ```
 
 **Exemplo A360 · Duas passadas estáveis viram uma chave composta**
@@ -3088,7 +3088,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A360.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A360.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A360 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/A360
 ```
 
 #### Exercícios
@@ -3117,7 +3117,7 @@ casas usadas: 6 de 8
    idade), cada casa vira uma fila, como no pombal.c.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1075.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1075.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1075 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1075
 ```
 
 **Exercício E1076** · ★☆☆
@@ -3147,7 +3147,7 @@ arroz   R$ 25.90
 2. Devolva negativo, zero ou positivo. Para o preço, (x < y ? -1 : 1).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1076.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1076.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1076 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1076
 ```
 
 **Exercício E1077** · ★★☆
@@ -3177,7 +3177,7 @@ pigeonhole: estável     | a3(2) a7(2) a0(4) a2(4) a5(4) a6(6) a9(6) a1(8) a4(8)
    passar no teste não prova que um método é estável.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1077.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1077.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1077 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1077
 ```
 
 **Exercício E1078** · ★★☆
@@ -3210,7 +3210,7 @@ Saída esperada:
    A estabilidade continua (Gramado, Lages, Canela na ordem de chegada).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1078.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1078.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1078 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1078
 ```
 
 **Exercício E1079** · ★★★
@@ -3240,7 +3240,7 @@ Saída esperada:
    Ana e Lia, e Teo e Ivo, mantêm a ordem da lista original).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1079.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1079.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1079 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1079
 ```
 
 **Exercício E1080** · ★★★
@@ -3267,7 +3267,7 @@ seleção estável: Fabio(3) Bruno(5) Diego(5) Hugo(5) Ana(7) Elisa(7) Carla(9) 
    O(n²) comparações, mas agora com O(n²) movimentos também.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1080.c
+gcc ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1080.c ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/pombal.c -o ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1080 && ~/LPEDC/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/E1080
 ```
 
 ---
@@ -3468,7 +3468,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/A361.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/A361.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/A361 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/A361
 ```
 
 **Exemplo A362 · Encaixes ao longo do dia**
@@ -3540,7 +3540,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/A362.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/A362.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/A362 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/A362
 ```
 
 #### Exercícios
@@ -3571,7 +3571,7 @@ CPF 301000005: não cadastrado
    rubro-negra é percorrida em ordem.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1081.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1081.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1081 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1081
 ```
 
 **Exercício E1082** · ★☆☆
@@ -3598,7 +3598,7 @@ Saída esperada:
 2. Para mostrar HHMM como HH:MM: h / 100 e h % 100, os dois com %02d.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1082.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1082.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1082 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1082
 ```
 
 **Exercício E1083** · ★★☆
@@ -3627,7 +3627,7 @@ noite (3): 18:30 19:45 21:00
    até o primeiro horário e anda pelo sucessor.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1083.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1083.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1083 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1083
 ```
 
 **Exercício E1084** · ★★☆
@@ -3660,7 +3660,7 @@ Espera: (ninguém)
 2. ag_cancela devolve o cpf de quem assumiu (maior que 0) ou 0.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1084.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1084.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1084 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1084
 ```
 
 **Exercício E1085** · ★★★
@@ -3694,7 +3694,7 @@ Beto* Dora* Enzo* Ana Caio Fabi
 3. Resposta esperada: a saída acima (o * marca os idosos).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1085.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1085.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1085 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1085
 ```
 
 **Exercício E1086** · ★★★
@@ -3730,7 +3730,7 @@ cpf 999: 1 consultas
    nessa ordem.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0181-juntando-tudo/E1086.c
+gcc ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1086.c ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/agenda.c -o ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1086 && ~/LPEDC/28-estruturas-complementos/0181-juntando-tudo/E1086
 ```
 
 ---
@@ -3927,7 +3927,7 @@ vazia: nil aponta para ela mesma? sim
    &L->nil.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2801.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2801.c -o ~/LPEDC/28-estruturas-complementos/lista/P2801 && ~/LPEDC/28-estruturas-complementos/lista/P2801
 ```
 
 ---
@@ -3956,7 +3956,7 @@ Saída esperada:
 3. Para 99, o laço passa pelos 6 nós e para na sentinela: 7 comparações.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2802.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2802.c -o ~/LPEDC/28-estruturas-complementos/lista/P2802 && ~/LPEDC/28-estruturas-complementos/lista/P2802
 ```
 
 ---
@@ -3981,7 +3981,7 @@ grau da árvore: 2 | folhas: 5
 2. Folha é o nó de grau 0. Percorra em ordem e conte.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2803.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2803.c -o ~/LPEDC/28-estruturas-complementos/lista/P2803 && ~/LPEDC/28-estruturas-complementos/lista/P2803
 ```
 
 ---
@@ -4011,7 +4011,7 @@ altura: 3
    profundidade certa.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2804.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2804.c -o ~/LPEDC/28-estruturas-complementos/lista/P2804 && ~/LPEDC/28-estruturas-complementos/lista/P2804
 ```
 
 ---
@@ -4040,7 +4040,7 @@ não é AVL
 3. O 55 entra à direita do 50 e desequilibra o 30 e o 60.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2805.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2805.c -o ~/LPEDC/28-estruturas-complementos/lista/P2805 && ~/LPEDC/28-estruturas-complementos/lista/P2805
 ```
 
 ---
@@ -4069,7 +4069,7 @@ depois de 1700: nenhum
 3. O 1700 é o máximo: o sucessor é NULL.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2806.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2806.c -o ~/LPEDC/28-estruturas-complementos/lista/P2806 && ~/LPEDC/28-estruturas-complementos/lista/P2806
 ```
 
 ---
@@ -4096,7 +4096,7 @@ m = 10: 3 6 9 2 5 0 0 0 | colisões: 2
 3. Com m = 10, a função só vê o último dígito.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2807.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2807.c -o ~/LPEDC/28-estruturas-complementos/lista/P2807 && ~/LPEDC/28-estruturas-complementos/lista/P2807
 ```
 
 ---
@@ -4128,7 +4128,7 @@ baldes usados: multiplicação 7, divisão 4
 2. Com k mod 8, as senhas múltiplas de 10 só usam baldes pares.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2808.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2808.c -o ~/LPEDC/28-estruturas-complementos/lista/P2808 -lm && ~/LPEDC/28-estruturas-complementos/lista/P2808
 ```
 
 ---
@@ -4161,7 +4161,7 @@ tabela: . 23 45 12 34 56 1 . . 9 .
 3. O 1 também começa no 1 e só acha lugar depois do bloco.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2809.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2809.c -o ~/LPEDC/28-estruturas-complementos/lista/P2809 && ~/LPEDC/28-estruturas-complementos/lista/P2809
 ```
 
 ---
@@ -4186,7 +4186,7 @@ ordenados: 1 1 2 2 3 3 3 3 4 5 5 6 6 6 6
 2. Na segunda, a casa c devolve o valor c + 1, casa[c] vezes.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2810.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2810.c -o ~/LPEDC/28-estruturas-complementos/lista/P2810 && ~/LPEDC/28-estruturas-complementos/lista/P2810
 ```
 
 ### ★★☆ Para pensar
@@ -4220,7 +4220,7 @@ total de sondagens: 22
    (agrupamento secundário).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2811.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2811.c -o ~/LPEDC/28-estruturas-complementos/lista/P2811 && ~/LPEDC/28-estruturas-complementos/lista/P2811
 ```
 
 ---
@@ -4254,7 +4254,7 @@ total de sondagens: 12
    sondagem.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2812.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2812.c -o ~/LPEDC/28-estruturas-complementos/lista/P2812 && ~/LPEDC/28-estruturas-complementos/lista/P2812
 ```
 
 ---
@@ -4284,7 +4284,7 @@ insere 31:   .  .  . 10 31 24  5
 2. O 31 também começa no 3 e ocupa o lugar do 17 removido.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2813.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2813.c -o ~/LPEDC/28-estruturas-complementos/lista/P2813 && ~/LPEDC/28-estruturas-complementos/lista/P2813
 ```
 
 ---
@@ -4312,7 +4312,7 @@ antes de 4700: 4100 | antes de 2500: nenhum
 3. O 2500 é o mínimo: não tem antecessor.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2814.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2814.c -o ~/LPEDC/28-estruturas-complementos/lista/P2814 && ~/LPEDC/28-estruturas-complementos/lista/P2814
 ```
 
 ---
@@ -4353,7 +4353,7 @@ C: não é rubro-negra
    5).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2815.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2815.c -o ~/LPEDC/28-estruturas-complementos/lista/P2815 && ~/LPEDC/28-estruturas-complementos/lista/P2815
 ```
 
 ---
@@ -4385,7 +4385,7 @@ tira 25: pré 30 10 5 1 20 15 45 50 | altura 3 | rotações 0
    dentro (fator 1): rotação dupla.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2816.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2816.c -o ~/LPEDC/28-estruturas-complementos/lista/P2816 && ~/LPEDC/28-estruturas-complementos/lista/P2816
 ```
 
 ---
@@ -4416,7 +4416,7 @@ casas:      2:1 5:1 8:1 1:2 3:2 7:2 4:3 6:3 | estável
    copiando na ordem.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2817.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2817.c -o ~/LPEDC/28-estruturas-complementos/lista/P2817 && ~/LPEDC/28-estruturas-complementos/lista/P2817
 ```
 
 ---
@@ -4448,7 +4448,7 @@ Saída esperada:
 2. O qsort não é estável: o desempate pelo nome deixa a ordem completa.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2818.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2818.c -o ~/LPEDC/28-estruturas-complementos/lista/P2818 && ~/LPEDC/28-estruturas-complementos/lista/P2818
 ```
 
 ---
@@ -4477,7 +4477,7 @@ por mês: Enzo 15/1 Hana 30/1 Duda 2/3 Ana 15/3 Cris 28/3 Beto 2/11 Fabio 9/11 G
 3. A última passada é a da chave principal (o mês).
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2819.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2819.c -o ~/LPEDC/28-estruturas-complementos/lista/P2819 && ~/LPEDC/28-estruturas-complementos/lista/P2819
 ```
 
 ---
@@ -4505,7 +4505,7 @@ vazios  0 | mais cheio   4 | divisão, m = 31
 2. k mod 32 só olha os 5 bits de baixo de k, que são todos zero.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2820.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2820.c -o ~/LPEDC/28-estruturas-complementos/lista/P2820 && ~/LPEDC/28-estruturas-complementos/lista/P2820
 ```
 
 ### ★★★ Desafio
@@ -4537,7 +4537,7 @@ altura negra: 3 | fiscal: ok
 3. A altura negra pode ser contada descendo sempre pela esquerda.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2821.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2821.c -o ~/LPEDC/28-estruturas-complementos/lista/P2821 && ~/LPEDC/28-estruturas-complementos/lista/P2821
 ```
 
 ---
@@ -4568,7 +4568,7 @@ fiscal: AVL ok
    cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2822.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2822.c -o ~/LPEDC/28-estruturas-complementos/lista/P2822 && ~/LPEDC/28-estruturas-complementos/lista/P2822
 ```
 
 ---
@@ -4599,7 +4599,7 @@ tabela: 10 . 32 43 . . . . . . 21
    correção, a saída é a de cima.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2823.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2823.c -o ~/LPEDC/28-estruturas-complementos/lista/P2823 && ~/LPEDC/28-estruturas-complementos/lista/P2823
 ```
 
 ---
@@ -4630,7 +4630,7 @@ busca 79: 3 sondagens
    tabela zerada.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2824.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2824.c -o ~/LPEDC/28-estruturas-complementos/lista/P2824 && ~/LPEDC/28-estruturas-complementos/lista/P2824
 ```
 
 ---
@@ -4659,7 +4659,7 @@ dupla:       .  . 22 20  .  5  .  .  . 37 54 71 88 39  .  .  . | 15 sondagens
    primeiras formaram.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2825.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2825.c -o ~/LPEDC/28-estruturas-complementos/lista/P2825 && ~/LPEDC/28-estruturas-complementos/lista/P2825
 ```
 
 ---
@@ -4691,7 +4691,7 @@ Saída esperada:
 3. Num intervalo vazio, o teto já passa de b e nenhum sucessor é chamado.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2826.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2826.c -o ~/LPEDC/28-estruturas-complementos/lista/P2826 && ~/LPEDC/28-estruturas-complementos/lista/P2826
 ```
 
 ---
@@ -4731,7 +4731,7 @@ Saída esperada:
 3. N(h) = F(h + 3) - 1, onde F é a sequência de Fibonacci.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2827.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2827.c -o ~/LPEDC/28-estruturas-complementos/lista/P2827 -lm && ~/LPEDC/28-estruturas-complementos/lista/P2827
 ```
 
 ---
@@ -4766,7 +4766,7 @@ Saída esperada:
 3. A última passada é a da chave principal: os pontos.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2828.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2828.c -o ~/LPEDC/28-estruturas-complementos/lista/P2828 && ~/LPEDC/28-estruturas-complementos/lista/P2828
 ```
 
 ---
@@ -4811,7 +4811,7 @@ faltas: 9 de 13
 3. O menos recente é nil.ant.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2829.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2829.c -o ~/LPEDC/28-estruturas-complementos/lista/P2829 && ~/LPEDC/28-estruturas-complementos/lista/P2829
 ```
 
 ---
@@ -4848,7 +4848,7 @@ sem 1415 e 640: pré 1600 905 1120 1000 1830 2210
 3. A remoção devolve a nova raiz, que pode mudar.
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/lista/P2830.c
+gcc ~/LPEDC/28-estruturas-complementos/lista/P2830.c -o ~/LPEDC/28-estruturas-complementos/lista/P2830 && ~/LPEDC/28-estruturas-complementos/lista/P2830
 ```
 
 ## Questões no estilo da prova

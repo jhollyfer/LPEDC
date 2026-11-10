@@ -123,6 +123,6 @@ olha para o valor que acabou de chegar:
 > [!NOTE]
 > **Pergunta para você:** se a primeira coisa digitada for 999, o que o A049
 > mostra? E se você apagar o `if (dias == 0)`, o que aconteceria na média?
-> Preveja e teste com `printf '999\n' | ~/LPEDC/rodar ...`.
+> Preveja e teste com `printf '999\n' | ./programa`.
 
 {{pratique}}

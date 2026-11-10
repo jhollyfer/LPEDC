@@ -30,7 +30,7 @@ estragar a contabilidade do `malloc`, e o programa quebra muito depois, num
 
 As ferramentas:
 
-- **AddressSanitizer** (ASan): já vem no `rodar` (`-fsanitize=address`). O
+- **AddressSanitizer** (ASan): entra com `-fsanitize=address -g` no `gcc`. O
   compilador põe vigias em volta de cada bloco e cada acesso é conferido.
   Para no primeiro erro e mostra três coisas: onde o erro aconteceu, onde o
   bloco foi alocado e onde foi liberado. No fim, o **LeakSanitizer** lista o
@@ -39,7 +39,7 @@ As ferramentas:
   vigia cada byte. É uns 20 a 50 vezes mais lento, não precisa recompilar e
   pega uma coisa que o ASan não pega: ler memória que nunca recebeu valor.
   Instale com `sudo pacman -S valgrind` no Arch Linux ou `sudo apt install
-  valgrind` no Debian/Ubuntu e rode com `~/LPEDC/rodar --valgrind arquivo.c`.
+  valgrind` no Debian/Ubuntu e rode com `valgrind ./programa`.
 
 A função `total_do_pedido` copia os 4 preços de um
 pedido (R$ 30, 12, 45 e 8) para um bloco temporário de 16 bytes e soma tudo.
@@ -106,8 +106,8 @@ porque o `return` destrói a única variável que sabia onde o bloco estava:
 > "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
 > estouro de um byte e leitura de lixo são **comportamento indefinido**: o
 > programa pode funcionar hoje, mostrar outro valor amanhã e quebrar só com
-> outro compilador. Rode sempre com o ASan (o `rodar` já faz isso) e, quando
-> desconfiar, com `rodar --valgrind`. Saída certa e relatório limpo.
+> outro compilador. Rode sempre com o ASan (o gcc com as flags de estudo já faz isso) e, quando
+> desconfiar, com `valgrind ./programa`. Saída certa e relatório limpo.
 
 > [!TIP]
 > **Por dentro do C:** o ASan reserva 1 byte de "memória sombra" para cada 8

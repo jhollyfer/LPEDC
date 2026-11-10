@@ -46,7 +46,7 @@ sudo apt install gdb        # Debian / Ubuntu
 ```
 
 Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
-`conversao.c`, `cardapio.h` e `cardapio.c`). O `rodar` compila esses `.c`
+`conversao.c`, `cardapio.h` e `cardapio.c`). O comando do exemplo compila esses `.c`
 junto com o exemplo; o texto mostra também o comando `gcc` para fazer isso à
 mão.
 
@@ -235,7 +235,7 @@ double valor_conta(int kwh) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/A055.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/A055.c -o ~/LPEDC/04-funcoes/0028-funcoes/A055 && ~/LPEDC/04-funcoes/0028-funcoes/A055
 ```
 
 **Exemplo A056 · Funções que só fazem e funções que respondem**
@@ -275,7 +275,7 @@ double menor(double a, double b) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/A056.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/A056.c -o ~/LPEDC/04-funcoes/0028-funcoes/A056 && ~/LPEDC/04-funcoes/0028-funcoes/A056
 ```
 
 #### Exercícios
@@ -302,7 +302,7 @@ Total: 23.00 m2
 3. Resposta esperada: sala 14.00, quarto 9.00, total 23.00.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/E163.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/E163.c -o ~/LPEDC/04-funcoes/0028-funcoes/E163 && ~/LPEDC/04-funcoes/0028-funcoes/E163
 ```
 
 **Exercício E164** · ★☆☆
@@ -329,7 +329,7 @@ Caio: 4999 s
    h * 3600 + m * 60 + s. Ana 5415, Bia 3600, Caio 4999.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/E164.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/E164.c -o ~/LPEDC/04-funcoes/0028-funcoes/E164 && ~/LPEDC/04-funcoes/0028-funcoes/E164
 ```
 
 **Exercício E165** · ★★☆
@@ -353,7 +353,7 @@ Bissextos: 8
    estivesse no intervalo, não entraria.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/E165.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/E165.c -o ~/LPEDC/04-funcoes/0028-funcoes/E165 && ~/LPEDC/04-funcoes/0028-funcoes/E165
 ```
 
 **Exercício E166** · ★★☆
@@ -381,7 +381,7 @@ Total do dia: R$ 34.00
    cobradas: 5 + 4 = 9. Com 12 h a conta daria 25, mas o teto é 20. Total 34.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/E166.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/E166.c -o ~/LPEDC/04-funcoes/0028-funcoes/E166 -lm && ~/LPEDC/04-funcoes/0028-funcoes/E166
 ```
 
 **Exercício E167** · ★★★
@@ -414,7 +414,7 @@ ajusta(dobro(7)) = 4
    nunca roda: o return encerra a função na hora.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/E167.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/E167.c -o ~/LPEDC/04-funcoes/0028-funcoes/E167 && ~/LPEDC/04-funcoes/0028-funcoes/E167
 ```
 
 **Exercício E168** · ★★★
@@ -451,7 +451,7 @@ Saída esperada:
    roda em cada versão para n = 8128 (4064 contra 90).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0028-funcoes/E168.c
+gcc ~/LPEDC/04-funcoes/0028-funcoes/E168.c -o ~/LPEDC/04-funcoes/0028-funcoes/E168 && ~/LPEDC/04-funcoes/0028-funcoes/E168
 ```
 
 ---
@@ -614,7 +614,7 @@ void contagem(int segundos) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/A057.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/A057.c -o ~/LPEDC/04-funcoes/0029-parametros/A057 && ~/LPEDC/04-funcoes/0029-parametros/A057
 ```
 
 **Exemplo A058 · void, conversão e expressões como argumento**
@@ -655,7 +655,7 @@ void linha(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/A058.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/A058.c -o ~/LPEDC/04-funcoes/0029-parametros/A058 && ~/LPEDC/04-funcoes/0029-parametros/A058
 ```
 
 #### Exercícios
@@ -693,7 +693,7 @@ main: 300
    return e é jogado fora; só na segunda ele chega ao main.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/E169.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/E169.c -o ~/LPEDC/04-funcoes/0029-parametros/E169 && ~/LPEDC/04-funcoes/0029-parametros/E169
 ```
 
 **Exercício E170** · ★☆☆
@@ -723,7 +723,7 @@ Total       R$ 9.70
    repetir('-', 20) nas linhas do meio.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/E170.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/E170.c -o ~/LPEDC/04-funcoes/0029-parametros/E170 && ~/LPEDC/04-funcoes/0029-parametros/E170
 ```
 
 **Exercício E171** · ★★☆
@@ -743,7 +743,7 @@ ponteiros: troque "ordenar" por duas funções que devolvem valor, "menor" e
    mexendo nas variáveis do main, precisa de ponteiros (assunto 0046).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/E171.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/E171.c -o ~/LPEDC/04-funcoes/0029-parametros/E171 && ~/LPEDC/04-funcoes/0029-parametros/E171
 ```
 
 **Exercício E172** · ★★☆
@@ -770,7 +770,7 @@ No main, capital continua R$ 1000.00
    porque a função mexeu só na cópia.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/E172.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/E172.c -o ~/LPEDC/04-funcoes/0029-parametros/E172 && ~/LPEDC/04-funcoes/0029-parametros/E172
 ```
 
 **Exercício E173** · ★★★
@@ -811,7 +811,7 @@ arredondar(media(6, 7)) = 7
    antes da conta: 7 / 2 = 3. media(6, 7) = 6.5, e 6.5 + 0.5 = 7.0 vira 7.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/E173.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/E173.c -o ~/LPEDC/04-funcoes/0029-parametros/E173 -lm && ~/LPEDC/04-funcoes/0029-parametros/E173
 ```
 
 **Exercício E174** · ★★★
@@ -847,7 +847,7 @@ Capicuas de 100 a 999: 90
    dígito, que também é o último, vezes 10 para o do meio).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0029-parametros/E174.c
+gcc ~/LPEDC/04-funcoes/0029-parametros/E174.c -o ~/LPEDC/04-funcoes/0029-parametros/E174 && ~/LPEDC/04-funcoes/0029-parametros/E174
 ```
 
 ---
@@ -1011,7 +1011,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/A059.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/A059.c -o ~/LPEDC/04-funcoes/0030-escopo/A059 && ~/LPEDC/04-funcoes/0030-escopo/A059
 ```
 
 **Exemplo A060 · Três variáveis com o mesmo nome**
@@ -1054,7 +1054,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/A060.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/A060.c -o ~/LPEDC/04-funcoes/0030-escopo/A060 && ~/LPEDC/04-funcoes/0030-escopo/A060
 ```
 
 #### Exercícios
@@ -1095,7 +1095,7 @@ compra de hoje: 30
    e soma na global; a local do main nem fica sabendo.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/E175.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/E175.c -o ~/LPEDC/04-funcoes/0030-escopo/E175 && ~/LPEDC/04-funcoes/0030-escopo/E175
 ```
 
 **Exercício E176** · ★☆☆
@@ -1127,7 +1127,7 @@ Sem static: 1 1 1 1
    chamadas; a local recomeça sempre.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/E176.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/E176.c -o ~/LPEDC/04-funcoes/0030-escopo/E176 && ~/LPEDC/04-funcoes/0030-escopo/E176
 ```
 
 **Exercício E177** · ★★☆
@@ -1147,7 +1147,7 @@ certo.
    mostre depois do laço: Total: R$ 55.25.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/E177.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/E177.c -o ~/LPEDC/04-funcoes/0030-escopo/E177 && ~/LPEDC/04-funcoes/0030-escopo/E177
 ```
 
 **Exercício E178** · ★★☆
@@ -1181,7 +1181,7 @@ Saldo: R$ 201.50
    taxa), 201.50. Sem global, a taxa fica visível na função que a cobra.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/E178.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/E178.c -o ~/LPEDC/04-funcoes/0030-escopo/E178 && ~/LPEDC/04-funcoes/0030-escopo/E178
 ```
 
 **Exercício E179** · ★★★
@@ -1228,7 +1228,7 @@ soma dos b: 25
    termina valendo 40.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/E179.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/E179.c -o ~/LPEDC/04-funcoes/0030-escopo/E179 && ~/LPEDC/04-funcoes/0030-escopo/E179
 ```
 
 **Exercício E180** · ★★★
@@ -1276,7 +1276,7 @@ Saída esperada:
    mesma sequência: é assim que o rand e o srand funcionam por dentro.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0030-escopo/E180.c
+gcc ~/LPEDC/04-funcoes/0030-escopo/E180.c -o ~/LPEDC/04-funcoes/0030-escopo/E180 && ~/LPEDC/04-funcoes/0030-escopo/E180
 ```
 
 ---
@@ -1455,7 +1455,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/A061.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A061.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A061 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A061
 ```
 
 **Exemplo A062 · A mesma função volta para lugares diferentes**
@@ -1509,7 +1509,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/A062.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A062.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A062 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/A062
 ```
 
 #### Exercícios
@@ -1549,7 +1549,7 @@ IMC: 22.2
    tem três quadros: main (esperando), imc (esperando) e quadrado no topo.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E181.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181
 ```
 
 **Exercício E182** · ★☆☆
@@ -1587,7 +1587,7 @@ c (vez 3)
    -> c: quatro quadros na pilha ao mesmo tempo.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E182.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E182.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E182 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E182
 ```
 
 **Exercício E183** · ★★☆
@@ -1618,7 +1618,7 @@ sai finalizar_compra
 3. O recuo é a altura da pilha naquela hora.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E183.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183
 ```
 
 **Exercício E184** · ★★☆
@@ -1648,7 +1648,7 @@ main: n = 5, r = 16
    n do quadro dela: o de processa continua 5, e o do main também.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E184.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184
 ```
 
 **Exercício E185** · ★★★
@@ -1699,7 +1699,7 @@ Turma 3: média 0.0
    antes de chamar dividir, e por isso só aparece uma linha de pilha.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E185.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E185.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E185 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E185
 ```
 
 **Exercício E186** · ★★★
@@ -1730,7 +1730,7 @@ Altura agora: 1
    se caça esse tipo de erro.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0031-pilha-de-chamadas/E186.c
+gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186
 ```
 
 ---
@@ -1834,7 +1834,7 @@ resolve cada metade".
 > gasta memória proporcional à **profundidade**: `fatorial(5)` usa 5 quadros
 > de uma vez; um laço usaria um só. Outro limite é o tipo: 12! = 479.001.600
 > cabe num `int` de 32 bits, mas 13! = 6.227.020.800 já não cabe e dá
-> overflow (o `-fsanitize=undefined` do `rodar` acusa). Curiosidade: com
+> overflow (o `-fsanitize=undefined` do gcc com as flags de estudo acusa). Curiosidade: com
 > `gcc -O2`, o compilador às vezes transforma a recursão em laço sozinho.
 
 > [!NOTE]
@@ -1874,7 +1874,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/A063.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/A063.c -o ~/LPEDC/04-funcoes/0032-recursao/A063 && ~/LPEDC/04-funcoes/0032-recursao/A063
 ```
 
 **Exemplo A064 · Imprimir antes ou depois da chamada**
@@ -1913,7 +1913,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/A064.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/A064.c -o ~/LPEDC/04-funcoes/0032-recursao/A064 && ~/LPEDC/04-funcoes/0032-recursao/A064
 ```
 
 #### Exercícios
@@ -1940,7 +1940,7 @@ Cumprimentos com 12 duplas: 66
 3. Resposta esperada: 10, 5050 e 66 (soma_ate(11)).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/E187.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/E187.c -o ~/LPEDC/04-funcoes/0032-recursao/E187 && ~/LPEDC/04-funcoes/0032-recursao/E187
 ```
 
 **Exercício E188** · ★☆☆
@@ -1965,7 +1965,7 @@ Saída esperada:
    de potencia (expoentes de 10 até 0).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/E188.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/E188.c -o ~/LPEDC/04-funcoes/0032-recursao/E188 && ~/LPEDC/04-funcoes/0032-recursao/E188
 ```
 
 **Exercício E189** · ★★☆
@@ -1997,7 +1997,7 @@ volta 3
    chamada de dentro terminou, e cada quadro lembra o seu n e o seu nivel.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/E189.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/E189.c -o ~/LPEDC/04-funcoes/0032-recursao/E189 && ~/LPEDC/04-funcoes/0032-recursao/E189
 ```
 
 **Exercício E190** · ★★☆
@@ -2022,13 +2022,13 @@ Saída esperada:
    de chamar, sai 1011 para o 13: os bits ao contrário.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/E190.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/E190.c -o ~/LPEDC/04-funcoes/0032-recursao/E190 && ~/LPEDC/04-funcoes/0032-recursao/E190
 ```
 
 **Exercício E191** · ★★★
 
 Esta função deveria somar os dígitos de um número (2026 -> 10), mas tem
-DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois.
+DOIS erros. O gcc com as flags de estudo mostra dois avisos, um para cada erro; leia os dois.
 Se você rodar mesmo assim, o programa morre com stack-overflow. Conserte
 os dois erros e rode até aparecer "2026 -> 10" e "99999 -> 45", sem
 nenhum aviso.
@@ -2045,7 +2045,7 @@ nenhum aviso.
    Consertado: 2026 -> 10 e 99999 -> 45.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/E191.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/E191.c -o ~/LPEDC/04-funcoes/0032-recursao/E191 && ~/LPEDC/04-funcoes/0032-recursao/E191
 ```
 
 **Exercício E192** · ★★★
@@ -2072,7 +2072,7 @@ Saída esperada:
    b < 0. Em todos, b chega mais perto de 0 a cada chamada.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0032-recursao/E192.c
+gcc ~/LPEDC/04-funcoes/0032-recursao/E192.c -o ~/LPEDC/04-funcoes/0032-recursao/E192 && ~/LPEDC/04-funcoes/0032-recursao/E192
 ```
 
 ---
@@ -2246,7 +2246,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/A065.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A065.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A065 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A065
 ```
 
 **Exemplo A066 · Torre de Hanói e o MDC de Euclides**
@@ -2294,7 +2294,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/A066.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A066.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A066 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/A066
 ```
 
 #### Exercícios
@@ -2319,7 +2319,7 @@ mdc(1000, 625) = 125 -> 1000/625 = 8/5
 3. Resposta esperada: 12 e 7/3; 125 e 8/5.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E193.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193
 ```
 
 **Exercício E194** · ★☆☆
@@ -2347,7 +2347,7 @@ Saída esperada:
    movimento por segundo, os 64 discos levariam uns 585 bilhões de anos.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E194.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E194.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E194 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E194
 ```
 
 **Exercício E195** · ★★☆
@@ -2374,7 +2374,7 @@ fib(46) = 1836311903
    recursivo faz mais de 300 milhões de chamadas só para fib(40).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E195.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195
 ```
 
 **Exercício E196** · ★★☆
@@ -2413,7 +2413,7 @@ maior altura: 6
    devagar (n), mas as chamadas crescem muito rápido.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E196.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196
 ```
 
 **Exercício E197** · ★★★
@@ -2451,7 +2451,7 @@ rápida: 2^60 = 1152921504606846976 (9 multiplicações)
    busca binária.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E197.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197
 ```
 
 **Exercício E198** · ★★★
@@ -2474,7 +2474,7 @@ ficar igual à do A066.
    está vazia. O certo é hanoi(n - 1, origem, auxiliar, destino).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0033-recursao-na-pratica/E198.c
+gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E198.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E198 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E198
 ```
 
 ---
@@ -2512,7 +2512,7 @@ gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
 ```
 
 Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
-recompilar tudo. O `rodar` do curso compila junto todo `.c` de apoio que
+recompilar tudo. O gcc com as flags de estudo do curso compila junto todo `.c` de apoio que
 estiver na pasta (todo arquivo que não se chama `A000.c` ou `E000.c`).
 
 O `conversao.h` é incluído pelos dois `.c`. Cada um vira
@@ -2550,7 +2550,7 @@ int main(void) {
     printf("R$ 1000.00 = US$ %.2f\n", reais_para_dolares(1000, 5.40));
     return 0;
 }
-// Compilando à mão (o rodar faz isso sozinho):
+// Compilando à mão (o gcc com as flags de estudo faz isso sozinho):
 //   gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem
 // Saída:
 // 30 °C = 86.0 °F
@@ -2637,7 +2637,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/A067.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/A067.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/A067 && ~/LPEDC/04-funcoes/0034-modulos/A067
 ```
 
 **Exemplo A068 · O módulo guarda segredos**
@@ -2671,7 +2671,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/A068.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/A068.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/A068 && ~/LPEDC/04-funcoes/0034-modulos/A068
 ```
 
 #### Exercícios
@@ -2714,7 +2714,7 @@ Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
    10 + 1.50 + 2.40 = 13.90.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/E199.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/E199.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E199 && ~/LPEDC/04-funcoes/0034-modulos/E199
 ```
 
 **Exercício E200** · ★☆☆
@@ -2722,7 +2722,7 @@ Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 Use o módulo conversao.h, que está nesta pasta, para mostrar uma tabela de
 temperaturas de 0 °C a 40 °C, de 10 em 10. Não escreva nenhuma fórmula: use
 celsius_para_fahrenheit. No fim, mostre quantas conversões o módulo contou.
-O rodar compila o conversao.c junto, sozinho.
+O comando do exemplo compila o conversao.c junto, sozinho.
 
 
 ```text
@@ -2743,7 +2743,7 @@ Conversões: 5
    seria: gcc -std=c17 -Wall -Wextra E200.c conversao.c -o tabela
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/E200.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/E200.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E200 && ~/LPEDC/04-funcoes/0034-modulos/E200
 ```
 
 **Exercício E201** · ★★☆
@@ -2777,7 +2777,7 @@ Conversões do módulo: 1
 
 **Dicas:**
 
-1. O include do módulo já está aí embaixo; o rodar compila o conversao.c
+1. O include do módulo já está aí embaixo; o comando do exemplo compila o conversao.c
    junto, sozinho.
 2. O contador é static dentro do conversao.c: o seu arquivo não enxerga
    esse nome ('contador' undeclared). Só as funções do módulo contam.
@@ -2785,7 +2785,7 @@ Conversões do módulo: 1
    km_para_milhas passa pelo contador; a sua função é de fora.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/E201.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/E201.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E201 && ~/LPEDC/04-funcoes/0034-modulos/E201
 ```
 
 **Exercício E202** · ★★☆
@@ -2807,7 +2807,7 @@ até aparecer "Tênis: R$ 239.92".
    aplicar_desconto. Acertando o nome: "Tênis: R$ 239.92".
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/E202.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/E202.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E202 && ~/LPEDC/04-funcoes/0034-modulos/E202
 ```
 
 **Exercício E203** · ★★★
@@ -2855,7 +2855,7 @@ Visitante: 4 pontos, 4 gols
    visitante: empate (1) + vitória (3).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/E203.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/E203.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E203 && ~/LPEDC/04-funcoes/0034-modulos/E203
 ```
 
 **Exercício E204** · ★★★
@@ -2901,7 +2901,7 @@ include guard COFRINHO_H em volta dos protótipos.
    os corpos das funções.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0034-modulos/E204.c
+gcc ~/LPEDC/04-funcoes/0034-modulos/E204.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E204 && ~/LPEDC/04-funcoes/0034-modulos/E204
 ```
 
 ---
@@ -3062,7 +3062,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/A069.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/A069.c -o ~/LPEDC/04-funcoes/0035-preprocessador/A069 && ~/LPEDC/04-funcoes/0035-preprocessador/A069
 ```
 
 **Exemplo A070 · Modo depuração com #ifdef**
@@ -3099,7 +3099,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/A070.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/A070.c -o ~/LPEDC/04-funcoes/0035-preprocessador/A070 && ~/LPEDC/04-funcoes/0035-preprocessador/A070
 ```
 
 #### Exercícios
@@ -3130,7 +3130,7 @@ TRIPLO(2 + 1) = 9
    viraria 2 + 1 * 3 = 5.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/E205.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/E205.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E205 && ~/LPEDC/04-funcoes/0035-preprocessador/E205
 ```
 
 **Exercício E206** · ★☆☆
@@ -3164,7 +3164,7 @@ ENTRE(25, 10, 20) = 0
 3. ABS(x) fica ((x) < 0 ? -(x) : (x)).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/E206.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/E206.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E206 && ~/LPEDC/04-funcoes/0035-preprocessador/E206
 ```
 
 **Exercício E207** · ★★☆
@@ -3192,7 +3192,7 @@ Dois combos: R$ 60.00
    dois combos davam 55.00.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/E207.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/E207.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E207 && ~/LPEDC/04-funcoes/0035-preprocessador/E207
 ```
 
 **Exercício E208** · ★★☆
@@ -3230,7 +3230,7 @@ Total: R$ 1050.00
    nem chega ao compilador: rode gcc -E e confira.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/E208.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/E208.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E208 && ~/LPEDC/04-funcoes/0035-preprocessador/E208
 ```
 
 **Exercício E209** · ★★★
@@ -3271,7 +3271,7 @@ maior3: m = 19, chamadas = 3
    é colado duas vezes no de fora: 3 + 1 + 3 = 7 chamadas de pontos.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/E209.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/E209.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E209 && ~/LPEDC/04-funcoes/0035-preprocessador/E209
 ```
 
 **Exercício E210** · ★★★
@@ -3309,7 +3309,7 @@ Falhas: 1
    condição que falhou.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0035-preprocessador/E210.c
+gcc ~/LPEDC/04-funcoes/0035-preprocessador/E210.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E210 && ~/LPEDC/04-funcoes/0035-preprocessador/E210
 ```
 
 ---
@@ -3458,7 +3458,7 @@ int main(void) {
 //   0.25
 //   0.01
 // Para testar sem digitar, salve como caixa.c numa pasta sua, com cópias do
-// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ~/LPEDC/rodar caixa.c
+// cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ./programa caixa.c
 ```
 
 O laço dos pedidos termina com o código 0; depois vêm a
@@ -3583,7 +3583,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A071.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/A071.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/A071 && ~/LPEDC/04-funcoes/0036-juntando-tudo/A071
 ```
 
 **Exemplo A072 · Testando as peças do caixa**
@@ -3653,7 +3653,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/A072.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/A072.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/A072 && ~/LPEDC/04-funcoes/0036-juntando-tudo/A072
 ```
 
 #### Exercícios
@@ -3679,7 +3679,7 @@ Nota 8, quantidade 3
 Para testar sem digitar:
 
 ```text
-printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E211.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E211.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E211 && printf '15\n8\n0\n3\n' | ~/LPEDC/04-funcoes/0036-juntando-tudo/E211
 ```
 
 **Dicas:**
@@ -3691,7 +3691,7 @@ printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E211.c
    função serve para as duas leituras: é para isso que parâmetros existem.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E211.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E211.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E211 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E211
 ```
 
 **Exercício E212** · ★☆☆
@@ -3718,7 +3718,7 @@ Pessoa 3: IMC 17.6 (abaixo)
    mudar (o limite de 25 virar 24.9), agora você muda num lugar só.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E212.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E212.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E212 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E212
 ```
 
 **Exercício E213** · ★★☆
@@ -3751,7 +3751,7 @@ Saída esperada:
 3. Resposta esperada: 291, 61, 366 e inválida (2023 não é bissexto).
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E213.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E213.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E213 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E213
 ```
 
 **Exercício E214** · ★★☆
@@ -3793,7 +3793,7 @@ DOBRO(total + 1) = 12
 3. DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E214.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E214.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E214 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E214
 ```
 
 **Exercício E215** · ★★★
@@ -3829,7 +3829,7 @@ Saída esperada:
    = 2026.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E215.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E215.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E215 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E215
 ```
 
 **Exercício E216** · ★★★
@@ -3869,7 +3869,7 @@ Saída esperada:
    assunto do próximo módulo.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E216.c
+gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E216.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E216 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E216
 ```
 
 ---
@@ -3978,7 +3978,7 @@ passa `nivel + 1`.
 </details>
 
 **7. Macro de troca.** Escreva `#define TROCAR(a, b) int t = a; a = b; b =
-t;` e use num `if (x > y) TROCAR(x, y);` sem chaves: rode com o `rodar` e veja
+t;` e use num `if (x > y) TROCAR(x, y);` sem chaves: rode com as flags de estudo e veja
 o `gcc` recusar. Conserte a macro para que esta função compile e funcione,
 sem mexer nela:
 
@@ -4079,7 +4079,7 @@ Boné: R$ 59.90 -> R$ 53.91 no Pix
 3. Resposta esperada: R$ 269.91, R$ 143.10 e R$ 53.91.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0401.c
+gcc ~/LPEDC/04-funcoes/lista/P0401.c -o ~/LPEDC/04-funcoes/lista/P0401 && ~/LPEDC/04-funcoes/lista/P0401
 ```
 
 ---
@@ -4105,7 +4105,7 @@ Artilheiro com 17 gols
 3. Resposta esperada: Artilheiro com 17 gols.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0402.c
+gcc ~/LPEDC/04-funcoes/lista/P0402.c -o ~/LPEDC/04-funcoes/lista/P0402 && ~/LPEDC/04-funcoes/lista/P0402
 ```
 
 ---
@@ -4132,7 +4132,7 @@ Saída esperada:
 3. Resposta esperada: 120, 3628800 e 1307674368000.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0403.c
+gcc ~/LPEDC/04-funcoes/lista/P0403.c -o ~/LPEDC/04-funcoes/lista/P0403 && ~/LPEDC/04-funcoes/lista/P0403
 ```
 
 ---
@@ -4160,7 +4160,7 @@ Depois: R$ 2520.00
 3. Resposta esperada: Depois: R$ 2520.00.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0404.c
+gcc ~/LPEDC/04-funcoes/lista/P0404.c -o ~/LPEDC/04-funcoes/lista/P0404 && ~/LPEDC/04-funcoes/lista/P0404
 ```
 
 ---
@@ -4184,7 +4184,7 @@ Saída esperada:
 3. Resposta esperada: Área do terreno: 375.0 m2.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0405.c
+gcc ~/LPEDC/04-funcoes/lista/P0405.c -o ~/LPEDC/04-funcoes/lista/P0405 && ~/LPEDC/04-funcoes/lista/P0405
 ```
 
 ---
@@ -4213,7 +4213,7 @@ Partida com 5000 -> recorde 5000
 3. Resposta esperada: 1200, 3400, 3400 e 5000.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0406.c
+gcc ~/LPEDC/04-funcoes/lista/P0406.c -o ~/LPEDC/04-funcoes/lista/P0406 && ~/LPEDC/04-funcoes/lista/P0406
 ```
 
 ---
@@ -4241,7 +4241,7 @@ Base 10: 55 lata(s)
 3. Resposta esperada: 1, 10 e 55.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0407.c
+gcc ~/LPEDC/04-funcoes/lista/P0407.c -o ~/LPEDC/04-funcoes/lista/P0407 && ~/LPEDC/04-funcoes/lista/P0407
 ```
 
 ---
@@ -4267,7 +4267,7 @@ Saída esperada:
 3. Resposta esperada: 1, 4 e 7.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0408.c
+gcc ~/LPEDC/04-funcoes/lista/P0408.c -o ~/LPEDC/04-funcoes/lista/P0408 && ~/LPEDC/04-funcoes/lista/P0408
 ```
 
 ---
@@ -4295,7 +4295,7 @@ Compensa mais: grande
 3. Resposta esperada: R$ 0.0611 e R$ 0.0520; compensa a grande.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0409.c
+gcc ~/LPEDC/04-funcoes/lista/P0409.c -o ~/LPEDC/04-funcoes/lista/P0409 && ~/LPEDC/04-funcoes/lista/P0409
 ```
 
 ---
@@ -4322,7 +4322,7 @@ Saída esperada:
 3. Resposta esperada: as quatro barras acima.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0410.c
+gcc ~/LPEDC/04-funcoes/lista/P0410.c -o ~/LPEDC/04-funcoes/lista/P0410 && ~/LPEDC/04-funcoes/lista/P0410
 ```
 
 ### ★★☆ Para pensar
@@ -4350,7 +4350,7 @@ Saída esperada:
 4. Resposta esperada: 54321, 21 e 7.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0411.c
+gcc ~/LPEDC/04-funcoes/lista/P0411.c -o ~/LPEDC/04-funcoes/lista/P0411 && ~/LPEDC/04-funcoes/lista/P0411
 ```
 
 ---
@@ -4380,7 +4380,7 @@ Próxima saída juntas: 09:00
 4. Resposta esperada: a cada 180 minutos, às 09:00.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0412.c
+gcc ~/LPEDC/04-funcoes/lista/P0412.c -o ~/LPEDC/04-funcoes/lista/P0412 && ~/LPEDC/04-funcoes/lista/P0412
 ```
 
 ---
@@ -4411,7 +4411,7 @@ C(20, 10) = 184756 com 369511 chamadas
 4. Resposta esperada: 19, 503 e 369511 chamadas.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0413.c
+gcc ~/LPEDC/04-funcoes/lista/P0413.c -o ~/LPEDC/04-funcoes/lista/P0413 && ~/LPEDC/04-funcoes/lista/P0413
 ```
 
 ---
@@ -4446,7 +4446,7 @@ Saída esperada:
 3. Resposta esperada: 274 formas para 10 degraus.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0414.c
+gcc ~/LPEDC/04-funcoes/lista/P0414.c -o ~/LPEDC/04-funcoes/lista/P0414 && ~/LPEDC/04-funcoes/lista/P0414
 ```
 
 ---
@@ -4475,7 +4475,7 @@ Total: 4 h 10 min
 3. Resposta esperada: a mesma saída do programa original.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0415.c
+gcc ~/LPEDC/04-funcoes/lista/P0415.c -o ~/LPEDC/04-funcoes/lista/P0415 && ~/LPEDC/04-funcoes/lista/P0415
 ```
 
 ---
@@ -4503,7 +4503,7 @@ Leitura 34.0 -> média 31.0
 3. Resposta esperada: 30.0, 31.0, 30.0 e 31.0.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0416.c
+gcc ~/LPEDC/04-funcoes/lista/P0416.c -o ~/LPEDC/04-funcoes/lista/P0416 && ~/LPEDC/04-funcoes/lista/P0416
 ```
 
 ---
@@ -4540,7 +4540,7 @@ Resultado: 16
 4. Resposta esperada: o desenho acima, Resultado: 16.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0417.c
+gcc ~/LPEDC/04-funcoes/lista/P0417.c -o ~/LPEDC/04-funcoes/lista/P0417 && ~/LPEDC/04-funcoes/lista/P0417
 ```
 
 ---
@@ -4573,7 +4573,7 @@ preco * ICMS = 20.00
 4. Resposta esperada: 120.00 e 20.00 com ESTADO 1.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0418.c
+gcc ~/LPEDC/04-funcoes/lista/P0418.c -o ~/LPEDC/04-funcoes/lista/P0418 && ~/LPEDC/04-funcoes/lista/P0418
 ```
 
 ---
@@ -4602,7 +4602,7 @@ Saída esperada:
 3. Resposta esperada: 3 e 1.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0419.c
+gcc ~/LPEDC/04-funcoes/lista/P0419.c -o ~/LPEDC/04-funcoes/lista/P0419 && ~/LPEDC/04-funcoes/lista/P0419
 ```
 
 ---
@@ -4629,7 +4629,7 @@ Maior dígito de 5: 5
 3. Resposta esperada: 9, 8 e 5.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0420.c
+gcc ~/LPEDC/04-funcoes/lista/P0420.c -o ~/LPEDC/04-funcoes/lista/P0420 && ~/LPEDC/04-funcoes/lista/P0420
 ```
 
 ### ★★★ Desafio
@@ -4674,7 +4674,7 @@ Disco 1: 8, disco 2: 4, disco 3: 2, disco 4: 1
 4. Resposta esperada: 15 movimentos; 8, 4, 2 e 1.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0421.c
+gcc ~/LPEDC/04-funcoes/lista/P0421.c -o ~/LPEDC/04-funcoes/lista/P0421 && ~/LPEDC/04-funcoes/lista/P0421
 ```
 
 ---
@@ -4707,7 +4707,7 @@ Saída esperada:
 4. Resposta esperada: 2026 nos três primeiros; inválido no último.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0422.c
+gcc ~/LPEDC/04-funcoes/lista/P0422.c -o ~/LPEDC/04-funcoes/lista/P0422 && ~/LPEDC/04-funcoes/lista/P0422
 ```
 
 ---
@@ -4740,7 +4740,7 @@ Saída esperada:
 4. Resposta esperada: válido, inválido, inválido.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0423.c
+gcc ~/LPEDC/04-funcoes/lista/P0423.c -o ~/LPEDC/04-funcoes/lista/P0423 && ~/LPEDC/04-funcoes/lista/P0423
 ```
 
 ---
@@ -4774,7 +4774,7 @@ Saída esperada:
 3. formas: conte os p de 2 até n / 2 que funcionam.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0424.c
+gcc ~/LPEDC/04-funcoes/lista/P0424.c -o ~/LPEDC/04-funcoes/lista/P0424 && ~/LPEDC/04-funcoes/lista/P0424
 ```
 
 ---
@@ -4811,7 +4811,7 @@ Pulados: 4 dia(s) de fim de semana e 1 feriado(s)
    feriado.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0425.c
+gcc ~/LPEDC/04-funcoes/lista/P0425.c -o ~/LPEDC/04-funcoes/lista/P0425 && ~/LPEDC/04-funcoes/lista/P0425
 ```
 
 ---
@@ -4842,7 +4842,7 @@ R$ 1,00: 293 forma(s), 15501 chamada(s)
 4. Resposta esperada: 4, 13 e 293 formas.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0426.c
+gcc ~/LPEDC/04-funcoes/lista/P0426.c -o ~/LPEDC/04-funcoes/lista/P0426 && ~/LPEDC/04-funcoes/lista/P0426
 ```
 
 ---
@@ -4886,7 +4886,7 @@ Chamadas de regua: 31
 4. Resposta esperada: 15 marcas e 31 chamadas.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0427.c
+gcc ~/LPEDC/04-funcoes/lista/P0427.c -o ~/LPEDC/04-funcoes/lista/P0427 && ~/LPEDC/04-funcoes/lista/P0427
 ```
 
 ---
@@ -4926,7 +4926,7 @@ Saída esperada:
 4. extenso(n): milhar = n / 1000 e resto = n % 1000; milhar 1 é só "mil".
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0428.c
+gcc ~/LPEDC/04-funcoes/lista/P0428.c -o ~/LPEDC/04-funcoes/lista/P0428 && ~/LPEDC/04-funcoes/lista/P0428
 ```
 
 ---
@@ -4958,7 +4958,7 @@ Total: 11
 4. Resposta esperada: 11 números felizes até 50.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0429.c
+gcc ~/LPEDC/04-funcoes/lista/P0429.c -o ~/LPEDC/04-funcoes/lista/P0429 && ~/LPEDC/04-funcoes/lista/P0429
 ```
 
 ---
@@ -4993,7 +4993,7 @@ Saída esperada:
    antes da chamada recursiva quando ainda sobrar algo.
 
 ```bash
-~/LPEDC/rodar 04-funcoes/lista/P0430.c
+gcc ~/LPEDC/04-funcoes/lista/P0430.c -o ~/LPEDC/04-funcoes/lista/P0430 && ~/LPEDC/04-funcoes/lista/P0430
 ```
 
 ## Questões no estilo da prova

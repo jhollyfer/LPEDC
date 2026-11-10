@@ -42,11 +42,11 @@ vetor.
 Matemática: só potências e logaritmos. Lembre que `log₂ n` é "quantas vezes
 dá para dividir n por 2 até chegar em 1" (`log₂ 1024 = 10`), e que
 `log_b a` é o expoente que leva `b` a `a` (`log₂ 8 = 3`, `log₃ 9 = 2`). No C,
-`log2` e `log` ficam em `<math.h>`, e o `rodar` já liga a biblioteca
+`log2` e `log` ficam em `<math.h>`, e o gcc com as flags de estudo já liga a biblioteca
 matemática (`-lm`).
 
 O último assunto tem um TAD na pasta, `ordena.h` e `ordena.c`, com as quatro
-ordenações e um contador de comparações. O `rodar` compila o `ordena.c` junto
+ordenações e um contador de comparações. O comando do exemplo compila o `ordena.c` junto
 com qualquer exemplo ou exercício da pasta. Alguns programas medem **tempo**:
 os números de tempo mudam de máquina para máquina e de uma execução para
 outra; os de comparações, não. Os exercícios de "ache o erro" trazem o bug de
@@ -309,7 +309,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/A227.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/A227.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/A227 && ~/LPEDC/17-analise-avancada/0114-recorrencias/A227
 ```
 
 **Exemplo A228 · Hanói: a árvore em que cada nível dobra**
@@ -389,7 +389,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/A228.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/A228.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/A228 && ~/LPEDC/17-analise-avancada/0114-recorrencias/A228
 ```
 
 #### Exercícios
@@ -426,7 +426,7 @@ Saída esperada:
    pedaço vazio, que é quem devolve -1.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E679.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E679.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E679 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E679
 ```
 
 **Exercício E680** · ★☆☆
@@ -467,7 +467,7 @@ Saída esperada:
    valor com uma só (aqui você calcula o custo, não roda o algoritmo).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E680.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E680.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E680 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E680
 ```
 
 **Exercício E681** · ★★☆
@@ -510,7 +510,7 @@ texto, em que todo nível custava igual.
    primeiro termo. A raiz sozinha já é metade de tudo: Θ(n²).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E681.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E681.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E681 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E681
 ```
 
 **Exercício E682** · ★★☆
@@ -551,7 +551,7 @@ total: 28 = 8 · 7 / 2
    recursão faz o papel do laço de fora.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E682.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E682.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E682 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E682
 ```
 
 **Exercício E683** · ★★★
@@ -590,7 +590,7 @@ maior: 35 graus, 39 chamadas
 4. Resposta esperada: 39 chamadas para 20 dias e 59 para 30.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E683.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E683.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E683 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E683
 ```
 
 **Exercício E684** · ★★★
@@ -637,7 +637,7 @@ C(40) / C(39) = 1.6180
    as chamadas por 1,6. É isso que quer dizer Θ(1,618ⁿ).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0114-recorrencias/E684.c
+gcc ~/LPEDC/17-analise-avancada/0114-recorrencias/E684.c -o ~/LPEDC/17-analise-avancada/0114-recorrencias/E684 && ~/LPEDC/17-analise-avancada/0114-recorrencias/E684
 ```
 
 ---
@@ -896,7 +896,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/A229.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A229.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A229 -lm && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A229
 ```
 
 **Exemplo A230 · Quando a tabela não serve: medindo na mão**
@@ -985,7 +985,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/A230.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A230.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A230 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/A230
 ```
 
 #### Exercícios
@@ -1018,7 +1018,7 @@ Saída esperada:
    então é empate, Θ(n² log n).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E685.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E685
 ```
 
 **Exercício E686** · ★☆☆
@@ -1051,7 +1051,7 @@ Saída esperada:
    (o "+ n" ainda pesa com n pequeno) e vai chegando em 3.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E686.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E686.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E686 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E686
 ```
 
 **Exercício E687** · ★★☆
@@ -1084,7 +1084,7 @@ rápido: 93 notas 7 em 22 chamadas
    milhão de notas, o lento faria 2 milhões de chamadas; o rápido, uns 42.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E687.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E687
 ```
 
 **Exercício E688** · ★★☆
@@ -1123,7 +1123,7 @@ ternária: 47.3 comparações por busca
    na terceira). Θ igual não quer dizer tempo igual.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E688.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E688
 ```
 
 **Exercício E689** · ★★★
@@ -1166,7 +1166,7 @@ n = 256:  65536 contra  6561 multiplicações, mesmo resultado
    n = 2^j, são 4^j contra 3^j multiplicações.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E689.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689 && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E689
 ```
 
 **Exercício E690** · ★★★
@@ -1216,7 +1216,7 @@ para que ela nunca dependa da precisão do double.
    (Outra saída, pior: considerar iguais se fabs(c - k) < 1e-9.)
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0115-teorema-mestre/E690.c
+gcc ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E690.c -o ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E690 -lm && ~/LPEDC/17-analise-avancada/0115-teorema-mestre/E690
 ```
 
 ---
@@ -1476,7 +1476,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/A231.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/A231.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/A231 && ~/LPEDC/17-analise-avancada/0116-amortizada/A231
 ```
 
 **Exemplo A232 · Pilha de pratos com multipop**
@@ -1563,7 +1563,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/A232.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/A232.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/A232 && ~/LPEDC/17-analise-avancada/0116-amortizada/A232
 ```
 
 #### Exercícios
@@ -1596,7 +1596,7 @@ Saída esperada:
    O(1) amortizado na prática.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/E691.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E691.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E691 && ~/LPEDC/17-analise-avancada/0116-amortizada/E691
 ```
 
 **Exercício E692** · ★☆☆
@@ -1631,7 +1631,7 @@ Saída esperada:
    média n/20 cópias (O(n) amortizado); dobrando, menos de 2 (O(1)).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/E692.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E692.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E692 && ~/LPEDC/17-analise-avancada/0116-amortizada/E692
 ```
 
 **Exercício E693** · ★★☆
@@ -1659,7 +1659,7 @@ x 2          20    1048575     1.05     48576
 
 Cuidado: com cap = 1, a conta 1 * 3 / 2 dá 1 em divisão inteira. O
 vetor "cresce" para o mesmo tamanho, e a próxima escrita cai fora dele
-(o AddressSanitizer do rodar acusa heap-buffer-overflow). Garanta que a
+(o AddressSanitizer do gcc com as flags de estudo acusa heap-buffer-overflow). Garanta que a
 nova capacidade seja sempre maior que a antiga.
 
 **Dicas:**
@@ -1673,7 +1673,7 @@ nova capacidade seja sempre maior que a antiga.
    caso, o x 2 deixa metade vazia; o x 1,5, só um terço.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/E693.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E693.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E693 && ~/LPEDC/17-analise-avancada/0116-amortizada/E693
 ```
 
 **Exercício E694** · ★★☆
@@ -1707,7 +1707,7 @@ inc/dec alternados a partir de 511: 1000 trocas (10.00 por operação)
    cofrinho que os incrementos baratos enchiam nunca chega a encher.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/E694.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E694.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E694 && ~/LPEDC/17-analise-avancada/0116-amortizada/E694
 ```
 
 **Exercício E695** · ★★★
@@ -1748,7 +1748,7 @@ atendidos: 1 2 3 4 5 6 7 8
    mover 262.144 pedidos de uma vez.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/E695.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E695.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E695 && ~/LPEDC/17-analise-avancada/0116-amortizada/E695
 ```
 
 **Exercício E696** · ★★★
@@ -1791,7 +1791,7 @@ esvaziar: 15 cópias (cap 1)
    v->n == v->cap / 4.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0116-amortizada/E696.c
+gcc ~/LPEDC/17-analise-avancada/0116-amortizada/E696.c -o ~/LPEDC/17-analise-avancada/0116-amortizada/E696 && ~/LPEDC/17-analise-avancada/0116-amortizada/E696
 ```
 
 ---
@@ -2043,7 +2043,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/A233.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/A233.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/A233 -lm && ~/LPEDC/17-analise-avancada/0117-limite-inferior/A233
 ```
 
 **Exemplo A234 · O adversário que esconde a ordem**
@@ -2180,7 +2180,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/A234.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/A234.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/A234 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/A234
 ```
 
 #### Exercícios
@@ -2221,7 +2221,7 @@ Saída esperada:
    devia dar 3 exato pode sair 3.0000000000000004, e o teto erra por 1.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/E697.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E697
 ```
 
 **Exercício E698** · ★☆☆
@@ -2255,7 +2255,7 @@ limite inferior: 5
    é de pior caso.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/E698.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E698.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E698 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E698
 ```
 
 **Exercício E699** · ★★☆
@@ -2286,7 +2286,7 @@ Saída esperada:
    que nenhum método faz menos.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/E699.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E699
 ```
 
 **Exercício E700** · ★★☆
@@ -2332,7 +2332,7 @@ Saída esperada:
    insertion se afasta cada vez mais: Θ(n²) contra Θ(n log n).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/E700.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E700
 ```
 
 **Exercício E701** · ★★★
@@ -2385,7 +2385,7 @@ pior caso: 3 comparações
    else é sempre verdadeiro: pode sair.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/E701.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E701.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E701 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E701
 ```
 
 **Exercício E702** · ★★★
@@ -2425,7 +2425,7 @@ pior caso: 5 comparações (limite: 5)
    7 (bem mais chato de escrever).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0117-limite-inferior/E702.c
+gcc ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702.c -o ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702 && ~/LPEDC/17-analise-avancada/0117-limite-inferior/E702
 ```
 
 ---
@@ -2615,7 +2615,7 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 > (no Linux, 1.000.000). As duas coisas são inteiras: escrever
 > `(clock() - ini) / CLOCKS_PER_SEC` faz divisão inteira e dá **0** para
 > tudo que dura menos de um segundo. Por isso o `1000.0 *` na frente, que
-> converte para `double` antes de dividir. E lembre que o `rodar` compila sem
+> converte para `double` antes de dividir. E lembre que o comando do exemplo compila sem
 > otimização e com o AddressSanitizer, que vigia cada acesso à memória: os
 > tempos aqui são várias vezes maiores que os de um `gcc -O2` sem
 > sanitizador. As **razões** continuam valendo, e a previsão trabalha com
@@ -2688,7 +2688,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/A235.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A235.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A235 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A235
 ```
 
 **Exemplo A236 · Cronômetro honesto: repetir e tirar a mediana**
@@ -2768,7 +2768,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/A236.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A236.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A236 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/A236
 ```
 
 #### Exercícios
@@ -2804,7 +2804,7 @@ Saída esperada (os tempos variam; o formato e as razões, não muito):
    1 ms, o ruído pesa. Rode duas ou três vezes e compare.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/E703.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E703
 ```
 
 **Exercício E704** · ★☆☆
@@ -2827,14 +2827,14 @@ merge,     20 mil -> 1 milhão:    0.2790 s
 
 **Dicas:**
 
-1. log2 está em <math.h> (o rodar já liga a biblioteca matemática).
+1. log2 está em <math.h> (o gcc com as flags de estudo já liga a biblioteca matemática).
 2. Use double em tudo: n1 * n1 com int estoura para n1 = 1 milhão.
 3. 2000 s são mais de 33 minutos,
    contra um quarto de segundo. Entrada 50 vezes maior: o insertion fica
    2500 vezes mais lento, o merge, só 70.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/E704.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E704.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E704 -lm && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E704
 ```
 
 **Exercício E705** · ★★☆
@@ -2875,7 +2875,7 @@ vencedor: insertion
    pior aqui.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/E705.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E705
 ```
 
 **Exercício E706** · ★★☆
@@ -2920,7 +2920,7 @@ anda de 2 em 2?
    o custo por uma constante.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/E706.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E706
 ```
 
 **Exercício E707** · ★★★
@@ -2957,7 +2957,7 @@ L = 256: 11917965 comparações,   97.4 ms
    dos pedaços já pesa.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/E707.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E707
 ```
 
 **Exercício E708** · ★★★
@@ -3001,7 +3001,7 @@ quick:       331546 comparações, 0.004 s
    v (memcpy) também antes de cada uma.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/0118-juntando-tudo/E708.c
+gcc ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E708.c ~/LPEDC/17-analise-avancada/0118-juntando-tudo/ordena.c -o ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E708 && ~/LPEDC/17-analise-avancada/0118-juntando-tudo/E708
 ```
 
 ---
@@ -3009,7 +3009,7 @@ quick:       331546 comparações, 0.004 s
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
-sempre que der, confira com um programa em C rodado com o `rodar`.
+sempre que der, confira com um programa em C rodado com as flags de estudo.
 
 **1. O pior quick sort.** Com o pivô sempre no último elemento, um vetor já
 ordenado faz o quick sort particionar em pedaços de tamanho `n - 1` e 0.
@@ -3198,7 +3198,7 @@ Saída esperada:
    n = 100 são 199 chamadas.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1701.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1701.c -o ~/LPEDC/17-analise-avancada/lista/P1701 && ~/LPEDC/17-analise-avancada/lista/P1701
 ```
 
 ---
@@ -3237,7 +3237,7 @@ Saída esperada:
 4. Resposta esperada: com n = 243, 364 chamadas, igual a (3 · 243 - 1) / 2.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1702.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1702.c -o ~/LPEDC/17-analise-avancada/lista/P1702 && ~/LPEDC/17-analise-avancada/lista/P1702
 ```
 
 ---
@@ -3278,7 +3278,7 @@ Saída esperada:
    1000; 1111 rodinhas em 1000 km e 11110 em 10000 km (1,111 por km).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1703.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1703.c -o ~/LPEDC/17-analise-avancada/lista/P1703 && ~/LPEDC/17-analise-avancada/lista/P1703
 ```
 
 ---
@@ -3329,7 +3329,7 @@ Total: 63 trocas em 32 incrementos (limite 2n = 64)
    uma vez; total 63, abaixo de 2n = 64.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1704.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1704.c -o ~/LPEDC/17-analise-avancada/lista/P1704 && ~/LPEDC/17-analise-avancada/lista/P1704
 ```
 
 ---
@@ -3379,7 +3379,7 @@ Total: 44
    16); n = 10 dá 5 níveis, o último com 4 chamadas e custo 4 (total 44).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1705.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1705.c -o ~/LPEDC/17-analise-avancada/lista/P1705 && ~/LPEDC/17-analise-avancada/lista/P1705
 ```
 
 ---
@@ -3420,7 +3420,7 @@ Operação mais cara: 10
    do limite 26; a operação mais cara custou 10.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1706.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1706.c -o ~/LPEDC/17-analise-avancada/lista/P1706 && ~/LPEDC/17-analise-avancada/lista/P1706
 ```
 
 ---
@@ -3459,7 +3459,7 @@ Melhor caso n - 1 = 9 | pior caso n(n - 1)/2 = 45
    no misturado.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1707.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1707.c -o ~/LPEDC/17-analise-avancada/lista/P1707 && ~/LPEDC/17-analise-avancada/lista/P1707
 ```
 
 ---
@@ -3500,7 +3500,7 @@ n = 1000  fila: soma 154400, 1001 chamadas, profundidade 1001
    2n - 1; profundidades 1001 e 11 para n = 1000.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1708.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1708.c -o ~/LPEDC/17-analise-avancada/lista/P1708 && ~/LPEDC/17-analise-avancada/lista/P1708
 ```
 
 ---
@@ -3543,7 +3543,7 @@ Saída esperada:
    33554431 chamadas e a boa, 25.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1709.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1709.c -o ~/LPEDC/17-analise-avancada/lista/P1709 && ~/LPEDC/17-analise-avancada/lista/P1709
 ```
 
 ---
@@ -3590,7 +3590,7 @@ Saída esperada:
 4. Resposta esperada: as duas colunas são iguais; 3, 4, 7, 10 e 20.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1710.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1710.c -o ~/LPEDC/17-analise-avancada/lista/P1710 && ~/LPEDC/17-analise-avancada/lista/P1710
 ```
 
 ### ★★☆ Para pensar
@@ -3632,7 +3632,7 @@ Total: 80641 | total / n² = 1.2305 (limite 16/13 = 1.2308)
    razão 1.2305.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1711.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1711.c -o ~/LPEDC/17-analise-avancada/lista/P1711 && ~/LPEDC/17-analise-avancada/lista/P1711
 ```
 
 ---
@@ -3686,7 +3686,7 @@ Saída esperada:
    linhas; com n = 1024: 2096128, 11264 e 2047.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1712.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1712.c -o ~/LPEDC/17-analise-avancada/lista/P1712 && ~/LPEDC/17-analise-avancada/lista/P1712
 ```
 
 ---
@@ -3747,7 +3747,7 @@ Saída esperada:
    n = 65536, 8978432, razões 8.562 e 0.535.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1713.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1713.c -o ~/LPEDC/17-analise-avancada/lista/P1713 && ~/LPEDC/17-analise-avancada/lista/P1713
 ```
 
 ---
@@ -3794,7 +3794,7 @@ Saída esperada:
    o maior unsigned long long; a coluna da fórmula bate em todas.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1714.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1714.c -o ~/LPEDC/17-analise-avancada/lista/P1714 && ~/LPEDC/17-analise-avancada/lista/P1714
 ```
 
 ---
@@ -3848,7 +3848,7 @@ Soma real: 48 | soma amortizada: 50 (3n = 51)
    soma real 48 e soma amortizada 50.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1715.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1715.c -o ~/LPEDC/17-analise-avancada/lista/P1715 && ~/LPEDC/17-analise-avancada/lista/P1715
 ```
 
 ---
@@ -3890,7 +3890,7 @@ Limite 3·1150 + 52 = 3502
    turnos curtos, cada zerar esperto custa 2 em vez de 16.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1716.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1716.c -o ~/LPEDC/17-analise-avancada/lista/P1716 && ~/LPEDC/17-analise-avancada/lista/P1716
 ```
 
 ---
@@ -3932,7 +3932,7 @@ Realocações: 10 | cópias: 10230 (1.02 por pedido)
 4. Resposta esperada: 10 realocações e 10230 cópias, contra 999 e 4995000.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1717.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1717.c -o ~/LPEDC/17-analise-avancada/lista/P1717 && ~/LPEDC/17-analise-avancada/lista/P1717
 ```
 
 ---
@@ -3986,7 +3986,7 @@ Saída esperada:
    com n = 2^20, 3145706.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1718.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1718.c -o ~/LPEDC/17-analise-avancada/lista/P1718 && ~/LPEDC/17-analise-avancada/lista/P1718
 ```
 
 ---
@@ -4033,7 +4033,7 @@ Saída esperada:
    20801199 chamadas; a fórmula faz 2, 5, 10 e 13 multiplicações.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1719.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1719.c -o ~/LPEDC/17-analise-avancada/lista/P1719 && ~/LPEDC/17-analise-avancada/lista/P1719
 ```
 
 ---
@@ -4077,7 +4077,7 @@ Todos ordenados: sim
    crescem cerca de 2,2 vezes.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1720.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1720.c -o ~/LPEDC/17-analise-avancada/lista/P1720 && ~/LPEDC/17-analise-avancada/lista/P1720
 ```
 
 ### ★★★ Desafio
@@ -4142,7 +4142,7 @@ n = 16: 4096 multiplicações (n³ = 4096), igual ao laço triplo: sim
    (razão 3.80).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1721.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1721.c -o ~/LPEDC/17-analise-avancada/lista/P1721 && ~/LPEDC/17-analise-avancada/lista/P1721
 ```
 
 ---
@@ -4232,7 +4232,7 @@ T(n) = 9 T(n/3) + n^1, n = 81
    8128 (caso 3); 9T(n/3)+n é caso 1.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1722.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1722.c -o ~/LPEDC/17-analise-avancada/lista/P1722 && ~/LPEDC/17-analise-avancada/lista/P1722
 ```
 
 ---
@@ -4288,7 +4288,7 @@ Expoente estimado: 2.642 | teoria log(3) / log(1,5) = 2.7095
    2.7095.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1723.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1723.c -o ~/LPEDC/17-analise-avancada/lista/P1723 -lm && ~/LPEDC/17-analise-avancada/lista/P1723
 ```
 
 ---
@@ -4338,7 +4338,7 @@ Atendidas em ordem: sim | na fila: 1000 (cap 1024)
    senhas; ordem conferida; 1000 senhas na fila no fim.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1724.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1724.c -o ~/LPEDC/17-analise-avancada/lista/P1724 && ~/LPEDC/17-analise-avancada/lista/P1724
 ```
 
 ---
@@ -4392,7 +4392,7 @@ Fórmula n teto(lg n) - 2^teto(lg n) + 1: 0 n errados
    T = 18951425 e razão 0.951.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1725.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1725.c -o ~/LPEDC/17-analise-avancada/lista/P1725 -lm && ~/LPEDC/17-analise-avancada/lista/P1725
 ```
 
 ---
@@ -4440,7 +4440,7 @@ Saída esperada:
    pior caso 73 comparações (o limite é 127) e a de quadrantes, 1093.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1726.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1726.c -o ~/LPEDC/17-analise-avancada/lista/P1726 -lm && ~/LPEDC/17-analise-avancada/lista/P1726
 ```
 
 ---
@@ -4483,7 +4483,7 @@ Saída esperada:
    com BUILD-HEAP (n - 20).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1727.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1727.c -o ~/LPEDC/17-analise-avancada/lista/P1727 -lm && ~/LPEDC/17-analise-avancada/lista/P1727
 ```
 
 ---
@@ -4534,7 +4534,7 @@ Entrada fabricada (n = 8): 1 5 3 7 2 6 4 8
    8770.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1728.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1728.c -o ~/LPEDC/17-analise-avancada/lista/P1728 -lm && ~/LPEDC/17-analise-avancada/lista/P1728
 ```
 
 ---
@@ -4580,7 +4580,7 @@ Saída esperada:
    n - 1 passos, a recursão no máximo 17 chamadas.
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1729.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1729.c -o ~/LPEDC/17-analise-avancada/lista/P1729 && ~/LPEDC/17-analise-avancada/lista/P1729
 ```
 
 ---
@@ -4623,7 +4623,7 @@ Saída esperada:
    n(lg n + 1) em todas as linhas (21 por incremento com n = 2^20).
 
 ```bash
-~/LPEDC/rodar 17-analise-avancada/lista/P1730.c
+gcc ~/LPEDC/17-analise-avancada/lista/P1730.c -o ~/LPEDC/17-analise-avancada/lista/P1730 && ~/LPEDC/17-analise-avancada/lista/P1730
 ```
 
 ## Questões no estilo da prova

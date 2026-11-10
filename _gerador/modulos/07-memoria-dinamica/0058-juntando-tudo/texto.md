@@ -162,7 +162,7 @@ achou, talvez cresça e cria uma linha nova. Todo caminho de erro termina em
 > Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` é um bloco
 > separado, com o seu `malloc` (dentro de `duplicar`). Conte os `malloc` do
 > programa: 2 no começo, 5 nomes e os `realloc`, que trocam um bloco por
-> outro. No fim, `liberar` faz 5 + 2 `free`. Rode com `rodar --valgrind` e
+> outro. No fim, `liberar` faz 5 + 2 `free`. Rode com `valgrind ./programa` e
 > confira a linha `All heap blocks were freed`.
 
 > [!TIP]

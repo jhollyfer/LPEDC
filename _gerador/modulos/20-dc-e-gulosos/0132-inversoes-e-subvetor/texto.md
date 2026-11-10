@@ -156,7 +156,7 @@ A264 mostra um jeito ainda mais rápido, em O(n).
 > **Por dentro do C:** o contador é `long long` de propósito. Um vetor de
 > 100 000 elementos ao contrário tem 100 000 · 99 999 / 2 = 4 999 950 000
 > inversões, e um `int` de 32 bits vai só até 2 147 483 647. O estouro de
-> `int` com sinal é comportamento indefinido; com o `rodar`, o sanitizer
+> `int` com sinal é comportamento indefinido; com as flags de estudo, o sanitizer
 > avisa com `runtime error: signed integer overflow`. Contar também
 > **ordena** o vetor: se você ainda precisar da ordem original, conte numa
 > cópia (`memcpy` para um vetor alocado antes).

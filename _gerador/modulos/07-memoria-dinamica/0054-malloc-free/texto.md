@@ -116,6 +116,6 @@ de erro no meio da leitura, que é o caminho mais fácil de esquecer:
 > [!NOTE]
 > **Pergunta para você:** se você tirar a linha `free(corridas);` o programa
 > continua mostrando o total certo? Então qual é o problema? Rode sem o `free`
-> e leia o fim da saída do `rodar`.
+> e leia o fim da saída do gcc com as flags de estudo.
 
 {{pratique}}

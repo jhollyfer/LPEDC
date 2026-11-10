@@ -44,13 +44,13 @@ antes de conferir a tabela.
 
 Os exemplos dos cinco primeiros assuntos cabem num arquivo só. O último
 assunto, que ordena 1 milhão de registros, usa um TAD: `pix.h` e `pix.c`
-ficam na pasta do assunto, e o `rodar` compila os dois junto com o exemplo.
+ficam na pasta do assunto, e o comando do exemplo compila os dois junto com o exemplo.
 
 Vários exemplos geram dados com um gerador de números pseudoaleatórios
 escrito à mão (uma conta com `unsigned` que dá a volta), em vez do `rand`:
 assim a saída é a mesma em qualquer computador. Os exemplos que medem
 **tempo** com `clock()` são a exceção: os números mudam a cada execução, e
-o AddressSanitizer do `rodar` deixa tudo mais lento. Compare as proporções,
+o AddressSanitizer do gcc com as flags de estudo deixa tudo mais lento. Compare as proporções,
 não os valores.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito: o programa
@@ -67,7 +67,7 @@ roda até o fim, mas a saída sai errada. O enunciado avisa.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. Quantas passadas?** Você vai ordenar 50 milhões de CPFs (11 dígitos,
 guardados em `uint64_t`) com radix sort. Quantas passadas são em base 10? E

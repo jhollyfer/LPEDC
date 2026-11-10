@@ -41,7 +41,7 @@ com um ponteiro para contador. Esse contador não faz parte do algoritmo: é o
 máquina; o número de comparações, não.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai parar o programa. O enunciado
+AddressSanitizer (ou o UBSan) do gcc com as flags de estudo vai parar o programa. O enunciado
 avisa.
 
 {{indice}}
@@ -55,7 +55,7 @@ avisa.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. Quantas voltas no pior caso?** Escreva a busca binária com um contador
 de voltas do laço, devolvido por um ponteiro `int *voltas`. Num vetor criado

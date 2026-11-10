@@ -156,20 +156,20 @@ int main(int argc, char *argv[]) {
     uso(argv[0]);
     return 1;
 }
-// $ rodar gastos.c limpa
+// $ ./programa limpa
 // Caderneta apagada.
-// $ rodar gastos.c novo mercado 152.40
+// $ ./programa novo mercado 152.40
 // Gravado: mercado R$ 152.40 (registro 0)
-// $ rodar gastos.c novo luz 98.75
+// $ ./programa novo luz 98.75
 // Gravado: luz R$ 98.75 (registro 1)
-// $ rodar gastos.c novo farmacia 45.30
+// $ ./programa novo farmacia 45.30
 // Gravado: farmacia R$ 45.30 (registro 2)
-// $ rodar gastos.c lista
+// $ ./programa lista
 // 0  mercado      R$   152.40
 // 1  luz          R$    98.75
 // 2  farmacia     R$    45.30
 // Total: R$ 296.45 em 3 gastos
-// $ rodar gastos.c exporta /tmp/gastos.csv
+// $ ./programa exporta /tmp/gastos.csv
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
@@ -192,7 +192,7 @@ mensagem de uso:
 > sistema o modo `O_APPEND`, e o próprio núcleo posiciona no fim a cada
 > `write`. Por isso dois programas anotando gastos ao mesmo tempo não
 > sobrescrevem um ao outro (desde que cada registro saia num `write` só). Já o
-> `return` do `main` vira o código de saída: rode `rodar gastos.c novo x abc;
+> `return` do `main` vira o código de saída: rode `./programa novo x abc;
 > echo $?` e veja o 1. É assim que scripts encadeiam comandos com `&&`.
 
 

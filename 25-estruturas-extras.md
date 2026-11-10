@@ -49,11 +49,11 @@ ponteiro** (0049) e a ideia de **TAD** (0074). O 0164 conversa com a busca
 sequencial (0089), e o 0165 usa a BST (0099), a AVL (0101), ponteiros para função
 (0050) e `void *` (0051).
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `skip.c`). Por isso os
+O comando do exemplo compila junto os `.c` de apoio da pasta (como `skip.c`). Por isso os
 comandos são os de sempre:
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/A325.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/A325.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/A325 && ~/LPEDC/25-estruturas-extras/0163-skip-list/A325
 ```
 
 Uma convenção vale para o módulo todo: o **custo** de uma busca é quantas chaves
@@ -308,7 +308,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/A323.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/A323.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/A323 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/A323
 ```
 
 **Exemplo A324 · O total de cada pedido**
@@ -360,7 +360,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/A324.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/A324.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/A324 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/A324
 ```
 
 #### Exercícios
@@ -391,7 +391,7 @@ Cliente 3: 4 notas, média 3.50
 3. Resposta esperada: a saída acima (o cliente 3 deu 5, 4, 1 e 4).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/E967.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E967.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E967 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E967
 ```
 
 **Exercício E968** · ★☆☆
@@ -429,7 +429,7 @@ Total: 15 horas em 5 vagas ocupadas
 2. O total não precisa da matriz cheia: some t[k].horas direto nas triplas.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/E968.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E968.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E968 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E968
 ```
 
 **Exercício E969** · ★★☆
@@ -468,7 +468,7 @@ Células: 6 e 6
 3. Resposta esperada: a saída acima (os dois nao_zeros são iguais).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/E969.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E969.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E969 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E969
 ```
 
 **Exercício E970** · ★★☆
@@ -508,7 +508,7 @@ Ache a linha errada, conserte e rode de novo.
    (ou p) antes de m->linha[i] = nova. Sem isso, a linha antiga se perde.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/E970.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E970.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E970 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E970
 ```
 
 **Exercício E971** · ★★★
@@ -543,7 +543,7 @@ Células: 4
    produto 0 da filial 1 (2 - 2) zeraram e sumiram.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/E971.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E971.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E971 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E971
 ```
 
 **Exercício E972** · ★★★
@@ -587,7 +587,7 @@ Porto Alegre: 2 rotas com uma escala
    Paulo e São Paulo-Porto Alegre-São Paulo.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0162-matriz-esparsa/E972.c
+gcc ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E972.c ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/esparsa.c -o ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E972 && ~/LPEDC/25-estruturas-extras/0162-matriz-esparsa/E972
 ```
 
 ---
@@ -801,7 +801,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/A325.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/A325.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/A325 && ~/LPEDC/25-estruturas-extras/0163-skip-list/A325
 ```
 
 **Exemplo A326 · A agenda do barbeiro**
@@ -858,7 +858,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/A326.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/A326.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/A326 && ~/LPEDC/25-estruturas-extras/0163-skip-list/A326
 ```
 
 #### Exercícios
@@ -885,7 +885,7 @@ Códigos: maior 10000, 13 avanços (pelo andar 0 seriam 1000)
 2. Some 1 em *avancos a cada x = x->prox[k]. No fim, x é o último nó.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E973.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/E973.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/E973 && ~/LPEDC/25-estruturas-extras/0163-skip-list/E973
 ```
 
 **Exercício E974** · ★☆☆
@@ -911,7 +911,7 @@ Paradas entre km 50 e km 99: 56
    p = x->prox[0] enquanto p != NULL e p->chave <= b.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E974.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/E974.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/E974 && ~/LPEDC/25-estruturas-extras/0163-skip-list/E974
 ```
 
 **Exercício E975** · ★★☆
@@ -952,7 +952,7 @@ Saída esperada:
    andares, mas anda-se mais em cada um.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E975.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/E975.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/E975 && ~/LPEDC/25-estruturas-extras/0163-skip-list/E975
 ```
 
 **Exercício E976** · ★★☆
@@ -982,7 +982,7 @@ andar 0:   5  12  18  31  40  47  56
    laço que faz antes[k]->prox[k] = x->prox[k] para cada andar do nó.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E976.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/E976.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/E976 && ~/LPEDC/25-estruturas-extras/0163-skip-list/E976
 ```
 
 **Exercício E977** · ★★★
@@ -997,7 +997,7 @@ No fim, mostre as palavras em ordem e libere tudo.
 Teste com:
 
 ```text
-printf 'o rato roeu a roupa do rei de roma e o rei riu\n' | ~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E977.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/E977.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/E977 && printf 'o rato roeu a roupa do rei de roma e o rei riu\n' | ~/LPEDC/25-estruturas-extras/0163-skip-list/E977
 ```
 
 
@@ -1031,7 +1031,7 @@ roupa 1
    andares não muda a saída).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E977.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/E977.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/E977 && ~/LPEDC/25-estruturas-extras/0163-skip-list/E977
 ```
 
 **Exercício E978** · ★★★
@@ -1073,7 +1073,7 @@ Memória dos nós: 176 bytes
    14 ponteiros x 8 bytes (os andares somam 14).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E978.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/E978.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/E978 && ~/LPEDC/25-estruturas-extras/0163-skip-list/E978
 ```
 
 ---
@@ -1305,7 +1305,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/A327.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/A327.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/A327 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/A327
 ```
 
 **Exemplo A328 · Quando mover para a frente atrapalha**
@@ -1369,7 +1369,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/A328.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/A328.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/A328 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/A328
 ```
 
 #### Exercícios
@@ -1399,7 +1399,7 @@ Ordem final: Luar Aquarela Trem Asa Garota Ciranda
    devagar (com mover para a frente, bastaria o primeiro).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E979.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E979.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E979 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E979
 ```
 
 **Exercício E980** · ★☆☆
@@ -1428,7 +1428,7 @@ canal  9 (custo 2): 9 13 4 2 5 7 11
 3. Resposta esperada: a saída acima (use %2d para o número do canal).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E980.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E980.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E980 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E980
 ```
 
 **Exercício E981** · ★★☆
@@ -1459,7 +1459,7 @@ Total: 17
    p->prox = *q e *q = p.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E981.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E981.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E981 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E981
 ```
 
 **Exercício E982** · ★★☆
@@ -1488,7 +1488,7 @@ Ana: Ana Duda Bia Caio
    if (ant != NULL) { ... }.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E982.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E982.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E982 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E982
 ```
 
 **Exercício E983** · ★★★
@@ -1506,7 +1506,7 @@ fim, o total de acertos e faltas. Libere a lista.
 Teste com:
 
 ```text
-printf '7 3 7 5 9 3 7 9 9 1\n' | ~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E983.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E983.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E983 && printf '7 3 7 5 9 3 7 9 9 1\n' | ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E983
 ```
 
 
@@ -1537,7 +1537,7 @@ Acertos: 3, faltas: 7
    ela já tinha estado no cache, mas saiu antes de ser pedida de novo.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E983.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E983.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E983 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E983
 ```
 
 **Exercício E984** · ★★★
@@ -1573,7 +1573,7 @@ aaabbbaaa: 0 0 0 1 0 0 1 0 0 -> aaabbbaaa
    na primeira vez.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0164-listas-autoajustaveis/E984.c
+gcc ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E984.c ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/autolista.c -o ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E984 && ~/LPEDC/25-estruturas-extras/0164-listas-autoajustaveis/E984
 ```
 
 ---
@@ -1796,7 +1796,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/A329.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/A329.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/A329 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/A329
 ```
 
 **Exemplo A330 · Um concorrente novo na bancada**
@@ -1929,7 +1929,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/A330.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/A330.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/A330 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/A330
 ```
 
 #### Exercícios
@@ -1958,7 +1958,7 @@ lista MTF  média  114.6   pior 1000
    os 1000 nós; na AVL, nenhuma passou de 12.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/E985.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E985.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E985 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E985
 ```
 
 **Exercício E986** · ★☆☆
@@ -1988,7 +1988,7 @@ lista MTF  achou 5173; custo médio: 492.5 quando acha, 1000.0 quando falha
    1000 passam do último nó andando quase só pelos andares de cima.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/E986.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E986.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E986 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E986
 ```
 
 **Exercício E987** · ★★☆
@@ -2022,7 +2022,7 @@ hash                6.4        4.7
    serve para "liste do código 200 ao 300".
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/E987.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E987.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E987 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E987
 ```
 
 **Exercício E988** · ★★☆
@@ -2056,7 +2056,7 @@ vetor               8.7        8.7
    média, metade do vetor.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/E988.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E988.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E988 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E988
 ```
 
 **Exercício E989** · ★★★
@@ -2098,7 +2098,7 @@ lista MTF  acharam 6750, custo médio 664.2
    BST já recebia a primeira sequência sorteada.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/E989.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E989.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E989 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E989
 ```
 
 **Exercício E990** · ★★★
@@ -2140,7 +2140,7 @@ para raiz           6.6        7.0
    os produtos da promoção para perto da raiz.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0165-juntando-tudo/E990.c
+gcc ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E990.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/bancada.c ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/skip.c -o ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E990 && ~/LPEDC/25-estruturas-extras/0165-juntando-tudo/E990
 ```
 
 ---
@@ -2339,7 +2339,7 @@ As triplas compensam enquanto houver menos de 20 ocupadas
    menos de 20 ocupadas.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2501.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2501.c -o ~/LPEDC/25-estruturas-extras/lista/P2501 && ~/LPEDC/25-estruturas-extras/lista/P2501
 ```
 
 ---
@@ -2379,7 +2379,7 @@ Carros: 7, horas somadas: 24
 3. Resposta esperada: 7 carros, 24 horas; o andar 2 só tem a vaga 5.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2502.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2502.c -o ~/LPEDC/25-estruturas-extras/lista/P2502 && ~/LPEDC/25-estruturas-extras/lista/P2502
 ```
 
 ---
@@ -2412,7 +2412,7 @@ Saída esperada:
    (2, 3) é achado logo na primeira.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2503.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2503.c -o ~/LPEDC/25-estruturas-extras/lista/P2503 && ~/LPEDC/25-estruturas-extras/lista/P2503
 ```
 
 ---
@@ -2455,7 +2455,7 @@ Células: 7 de 150
 3. Resposta esperada: Ana com 7h, Bruno sem nada; 7 células de 150.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2504.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2504.c -o ~/LPEDC/25-estruturas-extras/lista/P2504 && ~/LPEDC/25-estruturas-extras/lista/P2504
 ```
 
 ---
@@ -2486,7 +2486,7 @@ busca 35: [a2]23 [a0]31 -> não tem
    andar 1); o 35 não existe.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2505.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2505.c -o ~/LPEDC/25-estruturas-extras/lista/P2505 && ~/LPEDC/25-estruturas-extras/lista/P2505
 ```
 
 ---
@@ -2526,7 +2526,7 @@ Ponteiros: 2029 (2.03 por nó)
 3. Resposta esperada: 517 nós no andar 1, 2029 ponteiros (2.03 por nó).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2506.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2506.c -o ~/LPEDC/25-estruturas-extras/lista/P2506 && ~/LPEDC/25-estruturas-extras/lista/P2506
 ```
 
 ---
@@ -2568,7 +2568,7 @@ Custo total: 24
 3. Resposta esperada: custo total 24; o segundo "fogo" custa 1.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2507.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2507.c -o ~/LPEDC/25-estruturas-extras/lista/P2507 && ~/LPEDC/25-estruturas-extras/lista/P2507
 ```
 
 ---
@@ -2611,7 +2611,7 @@ pastel   -> pastel(4) suco(3) coxinha(1) tapioca(1) misto(0)
 3. Resposta esperada: o pastel só passa o suco no último pedido (4 a 3).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2508.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2508.c -o ~/LPEDC/25-estruturas-extras/lista/P2508 && ~/LPEDC/25-estruturas-extras/lista/P2508
 ```
 
 ---
@@ -2654,7 +2654,7 @@ Custo total: 20
    Pizzaria Dentista.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2509.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2509.c -o ~/LPEDC/25-estruturas-extras/lista/P2509 && ~/LPEDC/25-estruturas-extras/lista/P2509
 ```
 
 ---
@@ -2693,7 +2693,7 @@ Multiplicações: 8 (a matriz cheia faria 40)
 3. Resposta esperada: R$ 20, 39, 3 e 50; 8 multiplicações contra 40.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2510.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2510.c -o ~/LPEDC/25-estruturas-extras/lista/P2510 && ~/LPEDC/25-estruturas-extras/lista/P2510
 ```
 
 ### ★★☆ Para pensar
@@ -2737,7 +2737,7 @@ Células: 3
 3. Resposta esperada: 3 células: p4=10, p2=8 e p9=6.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2511.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2511.c -o ~/LPEDC/25-estruturas-extras/lista/P2511 && ~/LPEDC/25-estruturas-extras/lista/P2511
 ```
 
 ---
@@ -2781,7 +2781,7 @@ Duda e Gabi: (0 em comum)
    amigo nenhum.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2512.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2512.c -o ~/LPEDC/25-estruturas-extras/lista/P2512 && ~/LPEDC/25-estruturas-extras/lista/P2512
 ```
 
 ---
@@ -2817,7 +2817,7 @@ remove 5: removida
    andar 0 fica 12 18 31 40 47 60.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2513.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2513.c -o ~/LPEDC/25-estruturas-extras/lista/P2513 && ~/LPEDC/25-estruturas-extras/lista/P2513
 ```
 
 ---
@@ -2846,7 +2846,7 @@ Lista simples: 2001000 comparações, média 1000.5, pior 2000
    1000.5 e pior 2000 na lista simples.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2514.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2514.c -o ~/LPEDC/25-estruturas-extras/lista/P2514 && ~/LPEDC/25-estruturas-extras/lista/P2514
 ```
 
 ---
@@ -2889,7 +2889,7 @@ km 35: não tem, 2 avanço(s)
    sai com 1 avanço.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2515.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2515.c -o ~/LPEDC/25-estruturas-extras/lista/P2515 && ~/LPEDC/25-estruturas-extras/lista/P2515
 ```
 
 ---
@@ -2925,7 +2925,7 @@ Mover para a frente: 39
    Sleator e o Tarjan provaram: nunca passa do dobro).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2516.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2516.c -o ~/LPEDC/25-estruturas-extras/lista/P2516 && ~/LPEDC/25-estruturas-extras/lista/P2516
 ```
 
 ---
@@ -2967,7 +2967,7 @@ capacidade  LRU  FIFO
    todos cabem e os dois dão 11 (16 pedidos - 5 primeiras entradas).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2517.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2517.c -o ~/LPEDC/25-estruturas-extras/lista/P2517 && ~/LPEDC/25-estruturas-extras/lista/P2517
 ```
 
 ---
@@ -3010,7 +3010,7 @@ Dona Rosa: Clínica Avó Dona Rosa Banco
    frente e a última linha fica Clínica Avó Dona Rosa Banco.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2518.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2518.c -o ~/LPEDC/25-estruturas-extras/lista/P2518 && ~/LPEDC/25-estruturas-extras/lista/P2518
 ```
 
 ---
@@ -3053,7 +3053,7 @@ por disciplina: (0,1,6) (0,3,4) (1,0,7) (1,2,10) (2,3,8) (3,0,9) (3,1,8) (4,1,5)
    4; o resultado começa com (0,1,6) (0,3,4).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2519.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2519.c -o ~/LPEDC/25-estruturas-extras/lista/P2519 && ~/LPEDC/25-estruturas-extras/lista/P2519
 ```
 
 ---
@@ -3099,7 +3099,7 @@ Custo total: 24
    na frente.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2520.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2520.c -o ~/LPEDC/25-estruturas-extras/lista/P2520 && ~/LPEDC/25-estruturas-extras/lista/P2520
 ```
 
 ### ★★★ Desafio
@@ -3151,7 +3151,7 @@ Acertos: 2 de 10
    iguais aos da versão simples.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2521.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2521.c -o ~/LPEDC/25-estruturas-extras/lista/P2521 && ~/LPEDC/25-estruturas-extras/lista/P2521
 ```
 
 ---
@@ -3191,7 +3191,7 @@ média 5.13, pior 7
 3. Resposta esperada: o andar 3 só tem o 80; média 5.13, pior 7.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2522.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2522.c -o ~/LPEDC/25-estruturas-extras/lista/P2522 && ~/LPEDC/25-estruturas-extras/lista/P2522
 ```
 
 ---
@@ -3243,7 +3243,7 @@ geração 400 (5 vivas): (100,101) (101,102) (102,100) (102,101) (102,102)
    células.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2523.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2523.c -o ~/LPEDC/25-estruturas-extras/lista/P2523 && ~/LPEDC/25-estruturas-extras/lista/P2523
 ```
 
 ---
@@ -3286,7 +3286,7 @@ aaaabbbbaaaabbbb -> 0 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0
    quase só zeros, com um 1 em cada troca de letra.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2524.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2524.c -o ~/LPEDC/25-estruturas-extras/lista/P2524 && ~/LPEDC/25-estruturas-extras/lista/P2524
 ```
 
 ---
@@ -3342,7 +3342,7 @@ quadros  LRU  relógio
    2 e LRU 4.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2525.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2525.c -o ~/LPEDC/25-estruturas-extras/lista/P2525 && ~/LPEDC/25-estruturas-extras/lista/P2525
 ```
 
 ---
@@ -3378,7 +3378,7 @@ memória devolvida
    free(x); x = seguinte; e o programa termina com "memória devolvida".
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2526.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2526.c -o ~/LPEDC/25-estruturas-extras/lista/P2526 && ~/LPEDC/25-estruturas-extras/lista/P2526
 ```
 
 ---
@@ -3430,7 +3430,7 @@ Baldes no fim:
    para a frente; no fim, i e j abrem os seus baldes.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2527.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2527.c -o ~/LPEDC/25-estruturas-extras/lista/P2527 && ~/LPEDC/25-estruturas-extras/lista/P2527
 ```
 
 ---
@@ -3475,7 +3475,7 @@ Triplas que ficaram: 5
    loja 1 perde o dia 7 (80 - 80 = 0).
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2528.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2528.c -o ~/LPEDC/25-estruturas-extras/lista/P2528 && ~/LPEDC/25-estruturas-extras/lista/P2528
 ```
 
 ---
@@ -3516,7 +3516,7 @@ Agenda: 08:00 09:00 10:15 13:00 14:30 16:00
    foi desmarcado); a agenda final é 08:00 09:00 10:15 13:00 14:30 16:00.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2529.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2529.c -o ~/LPEDC/25-estruturas-extras/lista/P2529 && ~/LPEDC/25-estruturas-extras/lista/P2529
 ```
 
 ---
@@ -3556,7 +3556,7 @@ Ordem ótima: 0 1 2 3 4 5 6 7 9 8
    lista na hora, mas paga por jogar na frente até remédio raro.
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/lista/P2530.c
+gcc ~/LPEDC/25-estruturas-extras/lista/P2530.c -o ~/LPEDC/25-estruturas-extras/lista/P2530 && ~/LPEDC/25-estruturas-extras/lista/P2530
 ```
 
 ## Questões no estilo da prova

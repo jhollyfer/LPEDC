@@ -103,7 +103,7 @@ Cada chamada de dentro percorre o mesmo caminho com o seu `n`:
 > para n = 1 bilhão (30 bits) seriam 31. O perigo aqui está no
 > **estouro do `long long`**, e não na pilha: ele guarda até
 > 9 223 372 036 854 775 807, e 3³⁹ ainda cabe, mas 3⁴⁰ não. Estouro de inteiro
-> com sinal é comportamento indefinido, e o `rodar` acusa com `runtime error`.
+> com sinal é comportamento indefinido, e o gcc com as flags de estudo acusa com `runtime error`.
 > Quando só interessam os últimos dígitos, faça cada multiplicação seguida de
 > `% m`: o número nunca passa de `m²` (o exemplo A261 faz isso).
 

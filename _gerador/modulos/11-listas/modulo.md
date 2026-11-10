@@ -14,7 +14,7 @@ lista dupla (que anda para os dois lados) e a circular (que não tem fim).
 A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
 "quem aponta para quem, antes e depois". O conselho do módulo inteiro
 é desenhar os nós e as setas no papel antes de escrever o código. E
-rode tudo com o `rodar`: com ponteiros, o AddressSanitizer pega o que o olho
+rode tudo com as flags de estudo: com ponteiros, o AddressSanitizer pega o que o olho
 deixa passar.
 
 ## O que você vai aprender
@@ -36,11 +36,11 @@ Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`
 `No **inicio` ainda assusta, releia o assunto 0049 antes do 0077.
 
 Cada pasta de assunto traz um `lista.h` (a interface) e um `lista.c` (a
-implementação): abra os dois junto com o exemplo. O `rodar` compila o
+implementação): abra os dois junto com o exemplo. O comando do exemplo compila o
 `lista.c` junto com o exemplo ou o exercício, porque ele está na mesma pasta:
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/A151.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A151 && ~/LPEDC/11-listas/0076-lista-encadeada/A151
 ```
 
 Nos exercícios, não dê às suas funções o mesmo nome de uma função do
@@ -64,7 +64,7 @@ Os exercícios que usam outra estrutura trazem tudo no próprio arquivo.
 ## Desafios do módulo
 
 Problemas para fazer num arquivo seu, misturando os assuntos do módulo. Use
-o `rodar` em todos: resposta certa com vazamento não vale.
+o gcc com as flags de estudo em todos: resposta certa com vazamento não vale.
 
 **1. Lista com ciclo.** Um bug deixou o `prox` do último nó apontando para
 um nó do meio, e agora percorrer a lista nunca termina. Escreva
@@ -143,7 +143,7 @@ refez 1:     v1 v2 v3 [v5]
 Dica: no `digita`, libere todos os nós depois do cursor, faça
 `cursor->prox = NULL` e `fim = cursor`, e só então insira no fim. É o
 comportamento de todo editor: depois de editar, o "refazer" some. Esquecer os
-`free` desses nós é vazamento, e o `rodar` acusa.
+`free` desses nós é vazamento, e o gcc com as flags de estudo acusa.
 
 </details>
 

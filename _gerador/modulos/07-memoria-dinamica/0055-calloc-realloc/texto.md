@@ -106,7 +106,7 @@ custa só uma atribuição:
 > 1 + 2 + 4 + ... + 512 = 1023 elementos: menos de uma cópia por push. Se
 > crescesse de 1 em 1, seriam 1 + 2 + ... + 1023, mais de 500 mil cópias. É
 > a estratégia padrão de todo vetor que cresce sob demanda.
-> Com o rodar, o AddressSanitizer sempre muda o bloco de lugar no
+> Com o gcc com as flags de estudo, o AddressSanitizer sempre muda o bloco de lugar no
 > `realloc`, de propósito: assim o erro de usar o endereço antigo aparece logo,
 > em vez de só às vezes.
 

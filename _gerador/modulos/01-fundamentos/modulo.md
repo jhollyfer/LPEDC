@@ -57,26 +57,21 @@ não numa pasta do Windows.
 
 Confira com `gcc --version`. Se aparecer a versão, está pronto.
 
-Para rodar qualquer arquivo do curso, use o **`rodar`**, que está na raiz do
-projeto:
+Para rodar um arquivo do curso, compile com o `gcc` e execute o resultado:
 
 ```bash
-~/LPEDC/rodar 01-fundamentos/0001-primeiro-programa/A001.c
+gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/A001
 ```
 
-Ele compila e executa. O caminho pode ser relativo à pasta atual, relativo
-ao LPEDC ou absoluto. O `rodar` usa o padrão C17 (`-std=c17`), liga todos os
-avisos (`-Wall -Wextra -pedantic`) e ativa dois detetives: o
-**AddressSanitizer**, que flagra erros de memória, e o detector de
-**comportamento indefinido**, que flagra coisas como estouro de inteiro. Se o
-programa tem um problema desses, ele para com um relatório que aponta a
-linha. Os exercícios devem compilar **sem nenhum aviso**.
+O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser absoluto, como acima, ou relativo à pasta atual.
+
+Esse comando compila sem conferir nada. Nas **flags de estudo** o compilador também vigia o programa: acrescente `-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do `-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer**, que flagra erros de memória, o detector de **comportamento indefinido**, que flagra coisas como estouro de inteiro, e a biblioteca matemática. Com elas, um programa com problema desses para com um relatório que aponta a linha. Os avisos e relatórios citados nos módulos aparecem com essas flags. Os exercícios devem compilar **sem nenhum aviso**.
 
 Programas que leem do teclado esperam você digitar. Para testar sem digitar,
 mande a entrada por um cano (`|`): o que vem antes vira o teclado do programa.
 
 ```bash
-printf '3 4.99\n2\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
+gcc ~/LPEDC/01-fundamentos/0006-scanf/A011.c -o ~/LPEDC/01-fundamentos/0006-scanf/A011 && printf '3 4.99\n2\n' | ~/LPEDC/01-fundamentos/0006-scanf/A011
 ```
 
 > [!NOTE]
@@ -96,7 +91,7 @@ printf '3 4.99\n2\n' | ~/LPEDC/rodar 01-fundamentos/0006-scanf/A011.c
 
 Problemas para resolver com o que o módulo ensinou: variáveis, `scanf`,
 aritmética, conversões, `math.h` e `printf`. Nenhum precisa de `if` nem de
-laço. Escreva cada um num arquivo seu e rode com o `rodar`.
+laço. Escreva cada um num arquivo seu e rode com as flags de estudo.
 
 **1. Troco em moedas.** O caixa da padaria só tem moedas de R$ 1, R$ 0,50,
 R$ 0,25, R$ 0,10 e R$ 0,05. Leia um troco em reais (`double`) e mostre quantas
@@ -143,13 +138,13 @@ dá 10, que o `% 10` zera). Separe os dígitos com `/` e `%` como no E042.
 
 **4. Até onde o fatorial cabe?** Qual o maior `n` cujo fatorial cabe num
 `int`? E num `long long`? Escreva um programa que mostre os fatoriais
-multiplicando um por um e use o `rodar` para descobrir onde estoura.
+multiplicando um por um e use o gcc com as flags de estudo para descobrir onde estoura.
 
 <details><summary>Resposta</summary>
 
 **12!** = 479.001.600 cabe no `int`; 13! = 6.227.020.800 passa de `INT_MAX`.
 No `long long`, **20!** = 2.432.902.008.176.640.000 cabe; 21! não. O detector
-de comportamento indefinido do `rodar` acusa `signed integer overflow` na
+de comportamento indefinido do gcc com as flags de estudo acusa `signed integer overflow` na
 primeira multiplicação que estoura.
 
 </details>
@@ -236,8 +231,8 @@ meio segundo.
 </details>
 
 **10. Qual dá a volta com garantia?** Coloque os dois trechos abaixo num
-`main`, mostre `placar` e `pontos` com `printf` e rode com o `rodar`. Depois
-conserte o trecho que o `rodar` acusar, mudando só o tipo da variável, para
+`main`, mostre `placar` e `pontos` com `printf` e rode com as flags de estudo. Depois
+conserte o trecho que o gcc com as flags de estudo acusar, mudando só o tipo da variável, para
 que ele mostre o valor certo, sem estourar.
 
 ```c
@@ -250,7 +245,7 @@ pontos += 1;
 
 <details><summary>Resposta</summary>
 
-Na primeira rodada, o `rodar` mostra `runtime error: signed integer overflow:
+Na primeira rodada, o gcc com as flags de estudo mostra `runtime error: signed integer overflow:
 2147483647 + 1 cannot be represented in type 'int'`. Depois do conserto
 (`long long pontos`, mostrado com `%lld`):
 
@@ -269,7 +264,7 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. Resolva no papel antes de abrir o gabarito e, se ficar em
-dúvida, copie o trecho para um arquivo e rode com o `rodar`.
+dúvida, copie o trecho para um arquivo e rode com as flags de estudo.
 
 **1.** Qual a saída do trecho abaixo?
 

@@ -55,7 +55,7 @@ A multiplicação de uma **cadeia de matrizes**, outro clássico de PD do Cormen
 e do cursinho do PPGI, tem assunto próprio, o 0185.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai acusar ou parar o programa. É
+AddressSanitizer (ou o UBSan) do gcc com as flags de estudo vai acusar ou parar o programa. É
 esperado: o enunciado avisa.
 
 PD se aprende preenchendo tabela: faça o **Passo a passo** com papel e lápis
@@ -76,7 +76,7 @@ que não entra na resposta) e **cinza** é o que não chega a ser usado.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. A madeireira e o corte das tábuas.** Uma tábua de 8 m pode ser vendida
 inteira ou cortada em pedaços de metro inteiro. O preço de cada pedaço, por

@@ -46,7 +46,7 @@ quando aparece o `/`, e a última conta dá 45:
 {{ideia}}
 
 A pasta tem o `pilha.h`/`pilha.c` do 0083 e o `fila.h`/`fila.c` do 0086, e o
-`rodar` compila os quatro junto com o programa:
+comando do exemplo compila os quatro junto com o programa:
 
 ```c
 #include <stdbool.h>

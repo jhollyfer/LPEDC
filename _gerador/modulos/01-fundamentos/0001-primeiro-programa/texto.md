@@ -40,10 +40,9 @@ comanda tudo é o **compilador** `gcc`:
    o código do `printf`, tapa os buracos e grava o **executável**.
 
 Na mão, as quatro estações saem de um comando só: `gcc padaria.c -o padaria`
-e depois `./padaria`. No curso você usa o `~/LPEDC/rodar`, que faz o mesmo
-com mais cuidado: liga todos os avisos (`-Wall -Wextra -pedantic`), usa o
-padrão C17 e ativa o **AddressSanitizer**, que vigia a memória enquanto o
-programa roda.
+e depois `./padaria`. Com as flags de estudo (`-Wall -Wextra -pedantic`, C17 e o
+**AddressSanitizer**, que vigia a memória enquanto o programa roda), o mesmo
+comando confere mais coisas; as flags estão em "Antes de começar", acima.
 
 O `padaria.c` entra na linha de montagem, ganha o
 `stdio.h` colado, vira assembly, vira `padaria.o`, é ligado ao `printf` e sai

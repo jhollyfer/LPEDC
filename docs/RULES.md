@@ -150,7 +150,7 @@ int main(void) {
 - Sempre termine as dicas com a resposta esperada (valor final ou saída). Quando a saída
   esperada já está no enunciado, a última dica pode ser "Resposta esperada: a saída acima.": o
   gerador tira essa linha do `.md`, porque ela só repete o que está logo acima.
-- O esqueleto (includes + main vazio) **compila** com `./rodar`. Inclua os
+- O esqueleto (includes + main vazio) **compila** com `gcc`. Inclua os
   `#include` que a solução vai precisar.
 - Escreva uma resolução de cada exercício em
   `_respostas/<modulo>/E007.c` (mesmo cabeçalho de 2 linhas + código
@@ -180,7 +180,7 @@ com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
 ```
 
 - Mesmas regras dos exercícios E: sempre de codificar, esqueleto que compila
-  com `./rodar`, variedade (do zero, completar, consertar, estender), só o que
+  com `gcc`, variedade (do zero, completar, consertar, estender), só o que
   já foi ensinado até o fim do módulo. Exercício que precisa de TAD traz tudo
   no próprio arquivo.
 - Resolução em `_respostas/<modulo>/lista/P1407.c` (mesmo cabeçalho + código),
@@ -243,7 +243,7 @@ módulo + K&R, cppreference, man pages quando couber)
   no AddressSanitizer.
 - Estruturas de dados a partir do módulo 10 seguem o padrão **TAD**: `pilha.h`
   (interface) + `pilha.c` (implementação) na pasta do assunto + o exemplo
-  `A165.c` com `#include "pilha.h"`. O `rodar` compila junto os `.c` de apoio
+  `A165.c` com `#include "pilha.h"`. O comando do exemplo lista junto os `.c` de apoio
   da pasta (todo `.c` cujo nome não é `A000.c`/`E000.c`). Exercícios que
   precisam de uma implementação diferente trazem tudo no próprio arquivo.
 

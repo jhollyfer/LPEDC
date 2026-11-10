@@ -57,7 +57,7 @@ A multiplicação de uma **cadeia de matrizes**, outro clássico de PD do Cormen
 e do cursinho do PPGI, tem assunto próprio, o 0185.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` vai acusar ou parar o programa. É
+AddressSanitizer (ou o UBSan) do gcc com as flags de estudo vai acusar ou parar o programa. É
 esperado: o enunciado avisa.
 
 PD se aprende preenchendo tabela: faça o **Passo a passo** com papel e lápis
@@ -308,7 +308,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/A275.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/A275.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/A275 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/A275
 ```
 
 **Exemplo A276 · Duas variáveis bastam (até o long long acabar)**
@@ -350,7 +350,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/A276.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/A276.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/A276 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/A276
 ```
 
 #### Exercícios
@@ -377,7 +377,7 @@ Jeitos de subir 10 degraus: 274
 3. Comece o laço em i = 3: assim nenhum índice fica negativo.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E823.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E823.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E823 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E823
 ```
 
 **Exercício E824** · ★☆☆
@@ -407,7 +407,7 @@ memoização:    c(120) = 185855747875876
 3. Lembre de encher o memo com -1 antes de usar (o laço já está no main).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E824.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E824.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E824 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E824
 ```
 
 **Exercício E825** · ★★☆
@@ -449,7 +449,7 @@ Caminho: DDBBDBD
 4. Resposta esperada: a saída acima (3 + 1 + 4 + 1 + 3 + 2 + 1 + 3 = 18).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E825.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E825.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E825 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E825
 ```
 
 **Exercício E826** · ★★☆
@@ -489,7 +489,7 @@ Barracas: 0 2 5 7
 4. Resposta esperada: a saída acima (40 + 60 + 55 + 20 = 175).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E826.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E826.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E826 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E826
 ```
 
 **Exercício E827** · ★★★
@@ -533,7 +533,7 @@ Saída esperada (depois de consertar):
    memo[i][j] != -1.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E827.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E827.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E827 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E827
 ```
 
 **Exercício E828** · ★★★
@@ -580,7 +580,7 @@ subproblemas guardados no memo: 1044
    com k pequeno); se você limpar o memo entre as duas, o número muda.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0138-memoizacao/E828.c
+gcc ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E828.c -o ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E828 && ~/LPEDC/21-programacao-dinamica/0138-memoizacao/E828
 ```
 
 ---
@@ -701,7 +701,7 @@ fica o primeiro que achou o mínimo. As duas soluções têm 2 selos: tanto faz.
 > [!WARNING]
 > O "infinito" precisa sobreviver a um `+ 1`. Se você usar `INT_MAX` de
 > `<limits.h>`, a conta `dp[v - selo[s]] + 1` com `dp[...] == INT_MAX`
-> **estoura** um `int` com sinal: é comportamento indefinido, o `rodar` acusa
+> **estoura** um `int` com sinal: é comportamento indefinido, o gcc com as flags de estudo acusa
 > `signed integer overflow`, e sem o sanitizer o resultado vira um número
 > negativo que "ganha" de todo mundo no `<`. Use um infinito folgado, como
 > `1000000` ou `total + 1` (nunca se usa mais que `total` selos), ou teste
@@ -777,7 +777,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/A277.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/A277.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/A277 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/A277
 ```
 
 **Exemplo A278 · Os pedidos que a pastelaria não consegue fechar**
@@ -831,7 +831,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/A278.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/A278.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/A278 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/A278
 ```
 
 #### Exercícios
@@ -861,7 +861,7 @@ Menor número de pacotes para 25 parafusos: 3
 4. Resposta esperada: a saída acima (25 = 11 + 7 + 7, ou 11 + 11 + 3).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E829.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E829.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E829 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E829
 ```
 
 **Exercício E830** · ★☆☆
@@ -890,7 +890,7 @@ Combinações de cestas que dão 10 pontos: 14
    cestas no jogo), e o resultado seria bem maior.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E830.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E830.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E830 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E830
 ```
 
 **Exercício E831** · ★★☆
@@ -929,7 +929,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima (12 = 6 + 6; o guloso faz 10 + 1 + 1).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E831.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E831.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E831 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E831
 ```
 
 **Exercício E832** · ★★☆
@@ -967,7 +967,7 @@ sequências:  26
    sete moedas de 1.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E832.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E832.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E832 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E832
 ```
 
 **Exercício E833** · ★★★
@@ -975,7 +975,7 @@ sequências:  26
 A loja de tintas vende uma cor especial só em latas de 4 L e de 7 L. O
 programa abaixo deveria mostrar, para cada quantidade de 1 a 15 litros, o
 menor número de latas que dá EXATAMENTE aquela quantidade, ou
-"impossível". Ele compila sem aviso, mas o rodar acusa várias vezes
+"impossível". Ele compila sem aviso, mas o gcc com as flags de estudo acusa várias vezes
 "runtime error: signed integer overflow", e a tabela que sai não é
 confiável. Há UM erro de propósito. Ache, conserte e rode até a saída
 ficar limpa.
@@ -1012,7 +1012,7 @@ Saída esperada (depois de consertar):
    dp[...] == INT_MAX estoura. Teste dp[v - lata[c]] != INF antes de somar.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E833.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E833.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E833 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E833
 ```
 
 **Exercício E834** · ★★★
@@ -1049,7 +1049,7 @@ até 6 moedas: 7 combinações
    25+25+25+10+10+5.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0139-troco-pd/E834.c
+gcc ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E834.c -o ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E834 && ~/LPEDC/21-programacao-dinamica/0139-troco-pd/E834
 ```
 
 ---
@@ -1189,7 +1189,7 @@ A recuperação, partindo do canto `t[4][7]`:
 > **Por dentro do C:** `int t[5][8]` são 40 `int` seguidos na memória, linha
 > após linha: `t[i][c]` mora no deslocamento `i * 8 + c`. Por isso
 > `t[2][-2]` não derruba o programa: ele cai em `t[1][6]`, um valor errado e
-> silencioso. O `rodar` acusa (`index -2 out of bounds for type 'int [8]'`,
+> silencioso. O gcc com as flags de estudo acusa (`index -2 out of bounds for type 'int [8]'`,
 > do UBSan), mas compilado sem sanitizer o programa segue em frente com a
 > resposta errada. E como cada linha só usa a de cima, dá para guardar uma
 > linha só, de `W + 1` posições, desde que o laço de `c` ande **do maior para
@@ -1277,7 +1277,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/A279.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/A279.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/A279 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/A279
 ```
 
 **Exemplo A280 · A conta do mercado dividida ao meio**
@@ -1337,7 +1337,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/A280.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/A280.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/A280 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/A280
 ```
 
 #### Exercícios
@@ -1378,7 +1378,7 @@ Retorno máximo com R$ 10 mil: R$ 22 mil por ano
 3. A última linha diz o melhor retorno para cada orçamento de 0 a 10.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E835.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E835.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E835 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E835
 ```
 
 **Exercício E836** · ★☆☆
@@ -1412,7 +1412,7 @@ Peso usado: 9 kg
 4. Resposta esperada: a saída acima (5 + 10 + 9 + 8 = 32).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E836.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E836.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E836 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E836
 ```
 
 **Exercício E837** · ★★☆
@@ -1456,7 +1456,7 @@ Horas usadas: 6.0
 4. Resposta esperada: a saída acima (30 + 18 + 25 = 73).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E837.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E837.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E837 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E837
 ```
 
 **Exercício E838** · ★★☆
@@ -1488,7 +1488,7 @@ força bruta: 7 jeitos (256 subconjuntos testados)
    jeitos e 10 + 10 + 5 + 5 de 1).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E838.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E838.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E838 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E838
 ```
 
 **Exercício E839** · ★★★
@@ -1522,7 +1522,7 @@ Sobrou: 0 kg
    Conserto: if (peso[i] <= c && t[i][c] == ...).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E839.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E839.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E839 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E839
 ```
 
 **Exercício E840** · ★★★
@@ -1569,7 +1569,7 @@ Força bruta: R$ 79
 4. A tabela tem 7 x 11 x 9 = 693 células: o custo é O(n x P x V).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0140-mochila-01/E840.c
+gcc ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E840.c -o ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E840 && ~/LPEDC/21-programacao-dinamica/0140-mochila-01/E840
 ```
 
 ---
@@ -1799,7 +1799,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/A281.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/A281.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/A281 && ~/LPEDC/21-programacao-dinamica/0141-lcs/A281
 ```
 
 **Exemplo A282 · Pedaço contíguo ou letras na ordem?**
@@ -1874,7 +1874,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/A282.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/A282.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/A282 && ~/LPEDC/21-programacao-dinamica/0141-lcs/A282
 ```
 
 #### Exercícios
@@ -1921,7 +1921,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima (na primeira, B C E G H, por exemplo).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E841.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E841.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E841 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E841
 ```
 
 **Exercício E842** · ★☆☆
@@ -1950,7 +1950,7 @@ Passos na volta: 10
    às duas: a regra de desempate escolheu PGAR.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E842.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E842.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E842 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E842
 ```
 
 **Exercício E843** · ★★☆
@@ -1992,7 +1992,7 @@ Saída esperada:
    ela não cabe na mesma ordem junto com as outras.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E843.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E843.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E843 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E843
 ```
 
 **Exercício E844** · ★★☆
@@ -2036,7 +2036,7 @@ CABANA está nela? sim
    sair diferente (com as mesmas 8 letras).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E844.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E844.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E844 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E844
 ```
 
 **Exercício E845** · ★★★
@@ -2081,7 +2081,7 @@ AMOR x AMOR: 4
    certo é a[i - 1] == b[j - 1].
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E845.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E845.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E845 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E845
 ```
 
 **Exercício E846** · ★★★
@@ -2123,7 +2123,7 @@ Preços: 28 30 33 36 40 41
    como 28 30 33 34 38 41.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0141-lcs/E846.c
+gcc ~/LPEDC/21-programacao-dinamica/0141-lcs/E846.c -o ~/LPEDC/21-programacao-dinamica/0141-lcs/E846 && ~/LPEDC/21-programacao-dinamica/0141-lcs/E846
 ```
 
 ---
@@ -2376,7 +2376,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/A283.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/A283.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/A283 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/A283
 ```
 
 **Exemplo A284 · Letras trocadas de lugar contam como um erro só**
@@ -2445,7 +2445,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/A284.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/A284.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/A284 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/A284
 ```
 
 #### Exercícios
@@ -2483,7 +2483,7 @@ Saída esperada:
    insira o que faltar): FUTEBOL x BASQUETE bate nesse teto.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E847.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E847.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E847 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E847
 ```
 
 **Exercício E848** · ★☆☆
@@ -2513,7 +2513,7 @@ distância: 2
 4. Resposta esperada: d[i][0] = i e d[0][j] = j, e a saída acima.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E848.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E848.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E848 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E848
 ```
 
 **Exercício E849** · ★★☆
@@ -2545,7 +2545,7 @@ RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
 3. Para alinhar as colunas, use %-9s nas palavras e %2d nos números.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E849.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E849.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E849 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E849
 ```
 
 **Exercício E850** · ★★☆
@@ -2587,7 +2587,7 @@ tabelas montadas: 28 de 32
    com uma pessoa.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E850.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E850.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E850 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E850
 ```
 
 **Exercício E851** · ★★★
@@ -2596,7 +2596,7 @@ Esta versão calcula a distância de edição DE CIMA PARA BAIXO: a recursão
 natural com memoização (assunto 0138), guardando cada dist(i, j) numa
 matriz global memo. Ela foi feita para palavras de até 16 letras. Com
 CONSTITUCIONAL (14 letras) funciona; com INCONSTITUCIONAL (16 letras), o
-rodar acusa "index 16 out of bounds" e o AddressSanitizer para o programa
+gcc com as flags de estudo acusa "index 16 out of bounds" e o AddressSanitizer para o programa
 com "global-buffer-overflow". Há UM erro de propósito. Ache, conserte e
 rode até a saída ficar limpa.
 
@@ -2619,7 +2619,7 @@ INCONSTITUCIONAL -> CONSTITUCIONAL: 2 (15 chamadas)
    (índices 0 a 16): int memo[MAX + 1][MAX + 1];.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E851.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E851.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E851 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E851
 ```
 
 **Exercício E852** · ★★★
@@ -2664,7 +2664,7 @@ ESTRELA -> ESTERIL: distância 3
    aparecer.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0142-distancia-de-edicao/E852.c
+gcc ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E852.c -o ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E852 && ~/LPEDC/21-programacao-dinamica/0142-distancia-de-edicao/E852
 ```
 
 ---
@@ -2759,7 +2759,7 @@ void diff(char **a, int m, char **b, int n) {
 int main(int argc, char *argv[]) {
     const char *antigo = "/tmp/compras-v1.txt";
     const char *novo = "/tmp/compras-v2.txt";
-    if (argc == 3) {                                   // rodar mini-diff.c a.txt b.txt
+    if (argc == 3) {                                   // ./programa a.txt b.txt
         antigo = argv[1];
         novo = argv[2];
     } else {                                           // sem argumentos: o exemplo
@@ -2905,7 +2905,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/A285.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/A285.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/A285 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/A285
 ```
 
 **Exemplo A286 · O diff que percebe uma linha só alterada**
@@ -3016,7 +3016,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/A286.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/A286.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/A286 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/A286
 ```
 
 #### Exercícios
@@ -3056,7 +3056,7 @@ semelhança: 70.6%
    (100.0 * 2 * l / (m + n)), senão a divisão é inteira.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E853.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E853.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E853 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E853
 ```
 
 **Exercício E854** · ★☆☆
@@ -3090,7 +3090,7 @@ Saída esperada:
 3. As linhas iguais saem como estão na versão antiga.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E854.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E854.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E854 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E854
 ```
 
 **Exercício E855** · ★★☆
@@ -3129,11 +3129,11 @@ Saída esperada:
 1. Os números saem dos próprios índices: a linha a[i] é a de número
    i + 1 na versão antiga, e b[j] é a j + 1 na nova.
 2. Só os três printf da volta mudam; o resto fica igual.
-3. Rode também com dois arquivos seus: ~/LPEDC/rodar E855.c a.txt b.txt
-   (o rodar compila junto o linhas.c da pasta).
+3. Rode também com dois arquivos seus: ./programa a.txt b.txt
+   (o comando do exemplo compila junto o linhas.c da pasta).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E855.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E855.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E855 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E855
 ```
 
 **Exercício E856** · ★★☆
@@ -3182,7 +3182,7 @@ outra lista: o patch não se aplica (linha 3)
    as strings.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E856.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E856.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E856 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E856
 ```
 
 **Exercício E857** · ★★★
@@ -3219,7 +3219,7 @@ Itinerário da linha 42:
    malloc((size_t) (m + 1) * w * sizeof *c).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E857.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E857.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E857 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E857
 ```
 
 **Exercício E858** · ★★★
@@ -3264,7 +3264,7 @@ Saída esperada:
 4. Teste com CONTEXTO 0 e 2 também.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/0143-juntando-tudo/E858.c
+gcc ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E858.c ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/linhas.c -o ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E858 && ~/LPEDC/21-programacao-dinamica/0143-juntando-tudo/E858
 ```
 
 ---
@@ -3272,7 +3272,7 @@ Saída esperada:
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. A madeireira e o corte das tábuas.** Uma tábua de 8 m pode ser vendida
 inteira ou cortada em pedaços de metro inteiro. O preço de cada pedaço, por
@@ -3448,7 +3448,7 @@ Memoizada: T(25) = 755476, 70 chamadas
    a memoizada, só 70 (cada n de 3 a 25 calcula uma vez e chama 3).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2101.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2101.c -o ~/LPEDC/21-programacao-dinamica/lista/P2101 && ~/LPEDC/21-programacao-dinamica/lista/P2101
 ```
 
 ---
@@ -3489,7 +3489,7 @@ Jeitos de chegar ao topo: 15
 3. Resposta esperada: 15 jeitos. Sem degraus quebrados seriam 233.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2102.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2102.c -o ~/LPEDC/21-programacao-dinamica/lista/P2102 && ~/LPEDC/21-programacao-dinamica/lista/P2102
 ```
 
 ---
@@ -3534,7 +3534,7 @@ Caminhos: 10
    coluna 0 abaixo dela.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2103.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2103.c -o ~/LPEDC/21-programacao-dinamica/lista/P2103 && ~/LPEDC/21-programacao-dinamica/lista/P2103
 ```
 
 ---
@@ -3564,7 +3564,7 @@ Compra: 5 6
    como você testa).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2104.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2104.c -o ~/LPEDC/21-programacao-dinamica/lista/P2104 && ~/LPEDC/21-programacao-dinamica/lista/P2104
 ```
 
 ---
@@ -3613,7 +3613,7 @@ Fatias: 1 3 3 3
    3 cm é a que rende mais por cm (R$ 3,67), mas 10 não é múltiplo de 3.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2105.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2105.c -o ~/LPEDC/21-programacao-dinamica/lista/P2105 && ~/LPEDC/21-programacao-dinamica/lista/P2105
 ```
 
 ---
@@ -3652,7 +3652,7 @@ Maior fila crescente: 5 crianças
    121 127 132 145 150.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2106.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2106.c -o ~/LPEDC/21-programacao-dinamica/lista/P2106 && ~/LPEDC/21-programacao-dinamica/lista/P2106
 ```
 
 ---
@@ -3691,7 +3691,7 @@ Dias: 2 4 7 9
 3. Resposta esperada: R$ 1160, nos dias 2, 4, 7 e 9.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2107.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2107.c -o ~/LPEDC/21-programacao-dinamica/lista/P2107 && ~/LPEDC/21-programacao-dinamica/lista/P2107
 ```
 
 ---
@@ -3727,7 +3727,7 @@ LCS de ARARA e ARAPUA: 4 letras
    exemplo, é comum às duas).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2108.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2108.c -o ~/LPEDC/21-programacao-dinamica/lista/P2108 && ~/LPEDC/21-programacao-dinamica/lista/P2108
 ```
 
 ---
@@ -3765,7 +3765,7 @@ Maior trecho comum: CAGGT (5 letras)
 3. Resposta esperada: CAGGT, com 5 letras (a LCS das duas é maior).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2109.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2109.c -o ~/LPEDC/21-programacao-dinamica/lista/P2109 && ~/LPEDC/21-programacao-dinamica/lista/P2109
 ```
 
 ---
@@ -3796,7 +3796,7 @@ Saída esperada:
    0 sozinho não são letras).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2110.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2110.c -o ~/LPEDC/21-programacao-dinamica/lista/P2110 && ~/LPEDC/21-programacao-dinamica/lista/P2110
 ```
 
 ### ★★☆ Para pensar
@@ -3827,7 +3827,7 @@ Barco 2: 7 6 11 8 4 (36 kg)
    reconstrução de trás para a frente acha esta) e o resto no barco 2.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2111.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2111.c -o ~/LPEDC/21-programacao-dinamica/lista/P2111 && ~/LPEDC/21-programacao-dinamica/lista/P2111
 ```
 
 ---
@@ -3867,7 +3867,7 @@ Melhor valor em 10 kg: R$ 88
    manteiga + doce + requeijão, exatamente 10 kg.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2112.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2112.c -o ~/LPEDC/21-programacao-dinamica/lista/P2112 && ~/LPEDC/21-programacao-dinamica/lista/P2112
 ```
 
 ---
@@ -3905,7 +3905,7 @@ Comum às três: MAZOA (5 letras)
 3. Resposta esperada: MAZOA, 5 letras. O custo é O(m · n · p).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2113.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2113.c -o ~/LPEDC/21-programacao-dinamica/lista/P2113 && ~/LPEDC/21-programacao-dinamica/lista/P2113
 ```
 
 ---
@@ -3936,7 +3936,7 @@ FEIRA -> FERIADO: comum 4, troca cara 4
    LCS. CASA para COISA vai de 2 para 3; veja os outros na saída.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2114.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2114.c -o ~/LPEDC/21-programacao-dinamica/lista/P2114 && ~/LPEDC/21-programacao-dinamica/lista/P2114
 ```
 
 ---
@@ -3974,7 +3974,7 @@ Altitudes: 640 655 690 735 760 805 850
    lis: fica o primeiro j que achou (use >, não >=).
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2115.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2115.c -o ~/LPEDC/21-programacao-dinamica/lista/P2115 && ~/LPEDC/21-programacao-dinamica/lista/P2115
 ```
 
 ---
@@ -4015,7 +4015,7 @@ Custo por corte R$ 3: R$ 22, pedaços: 8
    por R$ 22.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2116.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2116.c -o ~/LPEDC/21-programacao-dinamica/lista/P2116 && ~/LPEDC/21-programacao-dinamica/lista/P2116
 ```
 
 ---
@@ -4047,7 +4047,7 @@ Cédulas: 2 2 10 50
 3. Resposta esperada: 4 cédulas, 50 + 10 + 2 + 2.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2117.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2117.c -o ~/LPEDC/21-programacao-dinamica/lista/P2117 && ~/LPEDC/21-programacao-dinamica/lista/P2117
 ```
 
 ---
@@ -4089,7 +4089,7 @@ Caminho: BBDDDBBD
 3. Resposta esperada: 20% da bateria, pelo caminho BBDDDBBD.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2118.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2118.c -o ~/LPEDC/21-programacao-dinamica/lista/P2118 && ~/LPEDC/21-programacao-dinamica/lista/P2118
 ```
 
 ---
@@ -4133,7 +4133,7 @@ Caminho: 7 3 8 7 5 9
 3. Resposta esperada: R$ 39, pelo caminho 7 3 8 7 5 9.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2119.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2119.c -o ~/LPEDC/21-programacao-dinamica/lista/P2119 && ~/LPEDC/21-programacao-dinamica/lista/P2119
 ```
 
 ---
@@ -4186,7 +4186,7 @@ Cálculos: 16
    chamadas.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2120.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2120.c -o ~/LPEDC/21-programacao-dinamica/lista/P2120 && ~/LPEDC/21-programacao-dinamica/lista/P2120
 ```
 
 ### ★★★ Desafio
@@ -4227,7 +4227,7 @@ Da esquerda para a direita: 25500 multiplicações
    contra 25500 da esquerda para a direita.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2121.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2121.c -o ~/LPEDC/21-programacao-dinamica/lista/P2121 && ~/LPEDC/21-programacao-dinamica/lista/P2121
 ```
 
 ---
@@ -4263,7 +4263,7 @@ LCS de ABCBDAB e BDCABA: tamanho 4
 3. Resposta esperada: 3 LCS de 4 letras: BCAB, BCBA e BDAB.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2122.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2122.c -o ~/LPEDC/21-programacao-dinamica/lista/P2122 && ~/LPEDC/21-programacao-dinamica/lista/P2122
 ```
 
 ---
@@ -4312,7 +4312,7 @@ Raiz cuia: 235 comparações
    direita) custa 235: equilibrar não é o mesmo que otimizar.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2123.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2123.c -o ~/LPEDC/21-programacao-dinamica/lista/P2123 && ~/LPEDC/21-programacao-dinamica/lista/P2123
 ```
 
 ---
@@ -4355,7 +4355,7 @@ Posições da tabela: 60 (a mochila comum teria 100001)
    lotes 1, 2 e 3 valeriam 30, mas pesam 101000 kg.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2124.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2124.c -o ~/LPEDC/21-programacao-dinamica/lista/P2124 && ~/LPEDC/21-programacao-dinamica/lista/P2124
 ```
 
 ---
@@ -4391,7 +4391,7 @@ Time 2: Enzo Gabi Hugo Iara João (33 pontos)
    nomes na saída.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2125.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2125.c -o ~/LPEDC/21-programacao-dinamica/lista/P2125 && ~/LPEDC/21-programacao-dinamica/lista/P2125
 ```
 
 ---
@@ -4434,7 +4434,7 @@ Cargas: 40 42 43 47 48 52 53 58 60
    com o menor final de cada tamanho leva a esta.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2126.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2126.c -o ~/LPEDC/21-programacao-dinamica/lista/P2126 && ~/LPEDC/21-programacao-dinamica/lista/P2126
 ```
 
 ---
@@ -4468,7 +4468,7 @@ TUCANO -> TUCUMA: 3
    isso os índices andam deslocados de um.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2127.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2127.c -o ~/LPEDC/21-programacao-dinamica/lista/P2127 && ~/LPEDC/21-programacao-dinamica/lista/P2127
 ```
 
 ---
@@ -4510,7 +4510,7 @@ Pedidos: B F
    pega A, D e G: mais festas (3), mas só R$ 1900.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2128.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2128.c -o ~/LPEDC/21-programacao-dinamica/lista/P2128 && ~/LPEDC/21-programacao-dinamica/lista/P2128
 ```
 
 ---
@@ -4545,7 +4545,7 @@ Quaisquer dois (Huffman): custo 68
    e a ordem ótima está na saída.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2129.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2129.c -o ~/LPEDC/21-programacao-dinamica/lista/P2129 && ~/LPEDC/21-programacao-dinamica/lista/P2129
 ```
 
 ---
@@ -4588,7 +4588,7 @@ Força bruta: 94 horas
    métodos. A PD preenche 32 · 5 casas; a força bruta, 120 rotas.
 
 ```bash
-~/LPEDC/rodar 21-programacao-dinamica/lista/P2130.c
+gcc ~/LPEDC/21-programacao-dinamica/lista/P2130.c -o ~/LPEDC/21-programacao-dinamica/lista/P2130 && ~/LPEDC/21-programacao-dinamica/lista/P2130
 ```
 
 ## Questões no estilo da prova

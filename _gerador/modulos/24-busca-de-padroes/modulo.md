@@ -43,7 +43,7 @@ PPGI (o que mais cai está em `PPGI.md`, na raiz do curso).
 Os exemplos dos quatro primeiros assuntos cabem cada um num arquivo só: os
 algoritmos são funções curtas, e ver a função inteira junto do `main` ajuda
 mais do que separar em `.h` e `.c`. No assunto 0161 eles viram o TAD
-`padroes.h`, que o `rodar` compila junto com os exemplos e exercícios da pasta.
+`padroes.h`, que o comando do exemplo compila junto com os exemplos e exercícios da pasta.
 
 Vários exemplos contam **comparações de letra**. A contagem não faz parte do
 algoritmo: é o "cronômetro" que mede o custo com o mesmo número em qualquer
@@ -55,7 +55,7 @@ não atrapalha comparar, mas atrapalha usar a letra como índice de tabela: o
 assunto 0159 mostra o problema e o conserto.
 
 Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do `rodar` para o programa. O enunciado avisa.
+AddressSanitizer (ou o UBSan) do gcc com as flags de estudo para o programa. O enunciado avisa.
 
 {{indice}}
 
@@ -68,7 +68,7 @@ AddressSanitizer (ou o UBSan) do `rodar` para o programa. O enunciado avisa.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. O curinga.** Adapte a força bruta para aceitar `?` no padrão, valendo
 qualquer letra. Procure `c?sa` em `"casa cosa cesta case"`.

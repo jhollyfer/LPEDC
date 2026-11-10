@@ -73,7 +73,7 @@ mesmas três perguntas: o que tem dentro, onde mora e quanto ocupa:
 > [!WARNING]
 > Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes num
 > sistema de 64 bits, e o `%d` lê só 4: você vê um número cortado, às vezes
-> negativo. O `rodar` avisa (`format '%d' expects argument of type 'int', but
+> negativo. O gcc com as flags de estudo avisa (`format '%d' expects argument of type 'int', but
 > argument 2 has type 'int *'`). O certo é sempre `%p` com `(void *)`. E não
 > conclua nada da ordem dos endereços de variáveis soltas: o compilador
 > arruma as gavetas como quiser (na saída acima, `plano` ficou **antes** de

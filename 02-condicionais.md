@@ -15,7 +15,7 @@ variável em silêncio.
 
 Por isso o módulo tem dois focos: escrever decisões claras e **desconfiar**
 de decisões que parecem certas. Os avisos do compilador viram aliados: o
-`rodar` liga todos, e quase toda pegadinha deste módulo dispara um.
+gcc com as flags de estudo liga todos, e quase toda pegadinha deste módulo dispara um.
 
 ## O que você vai aprender
 
@@ -44,7 +44,7 @@ o `math.h`. Os exercícios que leem do teclado aceitam a entrada por um pipe,
 o que facilita testar vários casos seguidos:
 
 ```bash
-printf '12.90 8.50\n' | ~/LPEDC/rodar 02-condicionais/0014-if/A028.c
+gcc ~/LPEDC/02-condicionais/0014-if/A028.c -o ~/LPEDC/02-condicionais/0014-if/A028 && printf '12.90 8.50\n' | ~/LPEDC/02-condicionais/0014-if/A028
 ```
 
 Alguns exercícios do tipo "ache o erro" trazem o código quebrado **de
@@ -203,7 +203,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/A023.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/A023.c -o ~/LPEDC/02-condicionais/0012-relacionais/A023 && ~/LPEDC/02-condicionais/0012-relacionais/A023
 ```
 
 **Exemplo A024 · Zero é falso, o resto é verdade**
@@ -244,7 +244,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/A024.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/A024.c -o ~/LPEDC/02-condicionais/0012-relacionais/A024 -lm && ~/LPEDC/02-condicionais/0012-relacionais/A024
 ```
 
 #### Exercícios
@@ -270,7 +270,7 @@ Etanol compensa? 1
    4.59 e 6.09 mostra 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/E067.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/E067.c -o ~/LPEDC/02-condicionais/0012-relacionais/E067 && ~/LPEDC/02-condicionais/0012-relacionais/E067
 ```
 
 **Exercício E068** · ★☆☆
@@ -298,7 +298,7 @@ Idades: 12 9
    7 7 → 0 0 1 1 1 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/E068.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/E068.c -o ~/LPEDC/02-condicionais/0012-relacionais/E068 && ~/LPEDC/02-condicionais/0012-relacionais/E068
 ```
 
 **Exercício E069** · ★★☆
@@ -322,7 +322,7 @@ A pagar: R$ 174.90
    paga 210.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/E069.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/E069.c -o ~/LPEDC/02-condicionais/0012-relacionais/E069 && ~/LPEDC/02-condicionais/0012-relacionais/E069
 ```
 
 **Exercício E070** · ★★☆
@@ -341,7 +341,7 @@ centavos em int.
    mostram "Pagou o valor exato? 1".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/E070.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/E070.c -o ~/LPEDC/02-condicionais/0012-relacionais/E070 -lm && ~/LPEDC/02-condicionais/0012-relacionais/E070
 ```
 
 **Exercício E071** · ★★★
@@ -373,7 +373,7 @@ Unanimidade? 1
    mostram 1 e 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/E071.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/E071.c -o ~/LPEDC/02-condicionais/0012-relacionais/E071 && ~/LPEDC/02-condicionais/0012-relacionais/E071
 ```
 
 **Exercício E072** · ★★★
@@ -397,7 +397,7 @@ A pagar: R$ 142.50
    400 → 10%, paga 360.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0012-relacionais/E072.c
+gcc ~/LPEDC/02-condicionais/0012-relacionais/E072.c -o ~/LPEDC/02-condicionais/0012-relacionais/E072 && ~/LPEDC/02-condicionais/0012-relacionais/E072
 ```
 
 ---
@@ -542,7 +542,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/A025.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/A025.c -o ~/LPEDC/02-condicionais/0013-logicos/A025 && ~/LPEDC/02-condicionais/0013-logicos/A025
 ```
 
 **Exemplo A026 · O curto-circuito protege a divisão**
@@ -579,7 +579,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/A026.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/A026.c -o ~/LPEDC/02-condicionais/0013-logicos/A026 && ~/LPEDC/02-condicionais/0013-logicos/A026
 ```
 
 #### Exercícios
@@ -609,7 +609,7 @@ a b | E OU NAO
    linha; a do OU só tem 0 na primeira.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/E073.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/E073.c -o ~/LPEDC/02-condicionais/0013-logicos/E073 && ~/LPEDC/02-condicionais/0013-logicos/E073
 ```
 
 **Exercício E074** · ★☆☆
@@ -632,7 +632,7 @@ Alarme? 0
 3. Resposta esperada: 5 → 1 e 0; 9.5 → 0 e 1; 2 → 1 e 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/E074.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/E074.c -o ~/LPEDC/02-condicionais/0013-logicos/E074 && ~/LPEDC/02-condicionais/0013-logicos/E074
 ```
 
 **Exercício E075** · ★★☆
@@ -656,7 +656,7 @@ Bissexto? 1
 3. Resposta esperada: 1900 → 0; 2000 → 1; 2023 → 0; 2024 → 1.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/E075.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/E075.c -o ~/LPEDC/02-condicionais/0013-logicos/E075 && ~/LPEDC/02-condicionais/0013-logicos/E075
 ```
 
 **Exercício E076** · ★★☆
@@ -682,7 +682,7 @@ barrado (De Morgan): 1
    Testes: 20 e 1 → 0; 16 e 1 → 1; 30 e 0 → 1.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/E076.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/E076.c -o ~/LPEDC/02-condicionais/0013-logicos/E076 && ~/LPEDC/02-condicionais/0013-logicos/E076
 ```
 
 **Exercício E077** · ★★★
@@ -712,7 +712,7 @@ Alerta? 1
    900 0 → 0 e 1 (sem erro); 300 5 → 0 e 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/E077.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/E077.c -o ~/LPEDC/02-condicionais/0013-logicos/E077 && ~/LPEDC/02-condicionais/0013-logicos/E077
 ```
 
 **Exercício E078** · ★★★
@@ -735,7 +735,7 @@ no assunto 0065).
    20 → 1 e 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0013-logicos/E078.c
+gcc ~/LPEDC/02-condicionais/0013-logicos/E078.c -o ~/LPEDC/02-condicionais/0013-logicos/E078 && ~/LPEDC/02-condicionais/0013-logicos/E078
 ```
 
 ---
@@ -816,7 +816,7 @@ para o "Mostrar", o mesmo ponto a que o Sim chega depois do desconto:
 > **O `;` depois do `if` mata a condição.** Em `if (total >= 200);` o
 > ponto e vírgula é uma **instrução vazia**: ela é o corpo do `if`. O bloco
 > `{ ... }` que vem embaixo vira um bloco solto, que roda **sempre**. Compila
-> sem erro, e todo mundo ganha desconto. O `-Wextra` do `rodar` avisa
+> sem erro, e todo mundo ganha desconto. O `-Wextra` do gcc com as flags de estudo avisa
 > ("suggest braces around empty body"). No fim da linha do `if` nunca vai
 > `;`: ou vem `{`, ou vem a instrução.
 
@@ -868,7 +868,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/A027.c
+gcc ~/LPEDC/02-condicionais/0014-if/A027.c -o ~/LPEDC/02-condicionais/0014-if/A027 && ~/LPEDC/02-condicionais/0014-if/A027
 ```
 
 **Exemplo A028 · Dois preços em ordem**
@@ -901,7 +901,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/A028.c
+gcc ~/LPEDC/02-condicionais/0014-if/A028.c -o ~/LPEDC/02-condicionais/0014-if/A028 && ~/LPEDC/02-condicionais/0014-if/A028
 ```
 
 #### Exercícios
@@ -926,7 +926,7 @@ Febre! Procure um médico.
    "Temperatura: 36.5 °C"; 37.5 → só a primeira linha também.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/E079.c
+gcc ~/LPEDC/02-condicionais/0014-if/E079.c -o ~/LPEDC/02-condicionais/0014-if/E079 && ~/LPEDC/02-condicionais/0014-if/E079
 ```
 
 **Exercício E080** · ★☆☆
@@ -948,7 +948,7 @@ Nota final: 10.0
 3. Resposta esperada: 9.5 → 10.0; 7.2 → 8.2; 9.0 → 10.0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/E080.c
+gcc ~/LPEDC/02-condicionais/0014-if/E080.c -o ~/LPEDC/02-condicionais/0014-if/E080 && ~/LPEDC/02-condicionais/0014-if/E080
 ```
 
 **Exercício E081** · ★★☆
@@ -967,7 +967,7 @@ novo com 25 e com 15.
    25 mostra só "Bom filme!" e 15 mostra as duas mensagens.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/E081.c
+gcc ~/LPEDC/02-condicionais/0014-if/E081.c -o ~/LPEDC/02-condicionais/0014-if/E081 && ~/LPEDC/02-condicionais/0014-if/E081
 ```
 
 **Exercício E082** · ★★☆
@@ -990,7 +990,7 @@ Maior orçamento: R$ 3790
    10 20 30 → 30.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/E082.c
+gcc ~/LPEDC/02-condicionais/0014-if/E082.c -o ~/LPEDC/02-condicionais/0014-if/E082 && ~/LPEDC/02-condicionais/0014-if/E082
 ```
 
 **Exercício E083** · ★★★
@@ -1020,7 +1020,7 @@ Estoque: 130
    "Estoque: 0"; 130 → a linha do excesso e "Estoque: 130".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/E083.c
+gcc ~/LPEDC/02-condicionais/0014-if/E083.c -o ~/LPEDC/02-condicionais/0014-if/E083 && ~/LPEDC/02-condicionais/0014-if/E083
 ```
 
 **Exercício E084** · ★★★
@@ -1044,7 +1044,7 @@ Conta: R$ 94.60
 3. Resposta esperada: 8 → R$ 45.00; 18 → R$ 94.60; 35 → R$ 230.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0014-if/E084.c
+gcc ~/LPEDC/02-condicionais/0014-if/E084.c -o ~/LPEDC/02-condicionais/0014-if/E084 && ~/LPEDC/02-condicionais/0014-if/E084
 ```
 
 ---
@@ -1086,7 +1086,7 @@ roda e faz besteira em silêncio.
 
 O compilador aceita esse código, mas avisa se você pedir. Quem avisa é o
 `-Wall`: "suggest parentheses around assignment used as truth value". O
-`rodar` liga esse aviso. **Nunca ignore um warning**: no curso, código bom
+gcc com as flags de estudo liga esse aviso. **Nunca ignore um warning**: no curso, código bom
 compila com zero avisos.
 
 No exemplo, o cartão tem R$ 3,50, a tarifa é R$ 5,00. A pergunta
@@ -1179,7 +1179,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/A029.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/A029.c -o ~/LPEDC/02-condicionais/0015-if-else/A029 && ~/LPEDC/02-condicionais/0015-if-else/A029
 ```
 
 **Exemplo A030 · Par ou ímpar no palitinho**
@@ -1206,7 +1206,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/A030.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/A030.c -o ~/LPEDC/02-condicionais/0015-if-else/A030 && ~/LPEDC/02-condicionais/0015-if-else/A030
 ```
 
 #### Exercícios
@@ -1230,7 +1230,7 @@ Faltam 2 ano(s) para a maioridade.
    18 → "Maior de idade."; 40 → "Maior de idade.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/E085.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/E085.c -o ~/LPEDC/02-condicionais/0015-if-else/E085 && ~/LPEDC/02-condicionais/0015-if-else/E085
 ```
 
 **Exercício E086** · ★☆☆
@@ -1251,7 +1251,7 @@ Novo salário: R$ 1980.00
 3. Resposta esperada: 1800 → 1980.00; 2000 → 2200.00; 2500 → 2650.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/E086.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/E086.c -o ~/LPEDC/02-condicionais/0015-if-else/E086 && ~/LPEDC/02-condicionais/0015-if-else/E086
 ```
 
 **Exercício E087** · ★★☆
@@ -1271,7 +1271,7 @@ Conserte e rode de novo com 1 e com 3.
    "Tentativas registradas: 1"; a entrada 3 mostra "Cartão bloqueado.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/E087.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/E087.c -o ~/LPEDC/02-condicionais/0015-if-else/E087 && ~/LPEDC/02-condicionais/0015-if-else/E087
 ```
 
 **Exercício E088** · ★★☆
@@ -1296,7 +1296,7 @@ Negado: a parcela passa do limite.
    3000 e 900 → limite 1050.00, "Aprovado!".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/E088.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/E088.c -o ~/LPEDC/02-condicionais/0015-if-else/E088 && ~/LPEDC/02-condicionais/0015-if-else/E088
 ```
 
 **Exercício E089** · ★★★
@@ -1326,7 +1326,7 @@ Vagas livres: 12
    Cancela aberta." e 12; 0 1 → "Lotado." e "Vagas livres: 0".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/E089.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/E089.c -o ~/LPEDC/02-condicionais/0015-if-else/E089 && ~/LPEDC/02-condicionais/0015-if-else/E089
 ```
 
 **Exercício E090** · ★★★
@@ -1344,14 +1344,14 @@ x2 = 2.00
 
 **Dicas:**
 
-1. sqrt está no math.h (assunto 0010). O rodar já liga com -lm.
+1. sqrt está no math.h (assunto 0010). O gcc com as flags de estudo já liga com -lm.
 2. x1 = (-b + sqrt(delta)) / (2 * a). Os parênteses em volta de 2 * a
    são obrigatórios.
 3. Resposta esperada: 1 -5 6 → 3.00 e 2.00; 1 -4 4 → 2.00 e 2.00;
    1 2 5 → "Sem raízes reais."; 2 -3 -2 → 2.00 e -0.50.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0015-if-else/E090.c
+gcc ~/LPEDC/02-condicionais/0015-if-else/E090.c -o ~/LPEDC/02-condicionais/0015-if-else/E090 -lm && ~/LPEDC/02-condicionais/0015-if-else/E090
 ```
 
 ---
@@ -1503,7 +1503,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/A031.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/A031.c -o ~/LPEDC/02-condicionais/0016-else-if/A031 && ~/LPEDC/02-condicionais/0016-else-if/A031
 ```
 
 **Exemplo A032 · Login com if aninhado**
@@ -1535,7 +1535,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/A032.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/A032.c -o ~/LPEDC/02-condicionais/0016-else-if/A032 && ~/LPEDC/02-condicionais/0016-else-if/A032
 ```
 
 #### Exercícios
@@ -1560,7 +1560,7 @@ Mensalidade: R$ 520.00
    45 → 520.00; 59 → 900.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/E091.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/E091.c -o ~/LPEDC/02-condicionais/0016-else-if/E091 && ~/LPEDC/02-condicionais/0016-else-if/E091
 ```
 
 **Exercício E092** · ★☆☆
@@ -1581,7 +1581,7 @@ Conta no vermelho.
 3. Resposta esperada: 120.50 → azul; -35.80 → vermelho; 0 → zerada.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/E092.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/E092.c -o ~/LPEDC/02-condicionais/0016-else-if/E092 && ~/LPEDC/02-condicionais/0016-else-if/E092
 ```
 
 **Exercício E093** · ★★☆
@@ -1613,7 +1613,7 @@ Bom dia!
    "Bom dia!" e 1 0 mandava ficar em casa.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/E093.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/E093.c -o ~/LPEDC/02-condicionais/0016-else-if/E093 && ~/LPEDC/02-condicionais/0016-else-if/E093
 ```
 
 **Exercício E094** · ★★☆
@@ -1632,7 +1632,7 @@ notas da resposta esperada.
    5.5 → C; 3.0 → D.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/E094.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/E094.c -o ~/LPEDC/02-condicionais/0016-else-if/E094 && ~/LPEDC/02-condicionais/0016-else-if/E094
 ```
 
 **Exercício E095** · ★★★
@@ -1657,7 +1657,7 @@ Triângulo isósceles.
    3 4 5 → escaleno; 1 2 3 → "Não forma triângulo." (1 + 2 não passa de 3).
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/E095.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/E095.c -o ~/LPEDC/02-condicionais/0016-else-if/E095 && ~/LPEDC/02-condicionais/0016-else-if/E095
 ```
 
 **Exercício E096** · ★★★
@@ -1693,7 +1693,7 @@ Imposto: R$ 412.50
    5000 → 412.50.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0016-else-if/E096.c
+gcc ~/LPEDC/02-condicionais/0016-else-if/E096.c -o ~/LPEDC/02-condicionais/0016-else-if/E096 && ~/LPEDC/02-condicionais/0016-else-if/E096
 ```
 
 ---
@@ -1839,7 +1839,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/A033.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/A033.c -o ~/LPEDC/02-condicionais/0017-ternario/A033 && ~/LPEDC/02-condicionais/0017-ternario/A033
 ```
 
 **Exemplo A034 · Maior, distância do zero e verdade em texto**
@@ -1874,7 +1874,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/A034.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/A034.c -o ~/LPEDC/02-condicionais/0017-ternario/A034 && ~/LPEDC/02-condicionais/0017-ternario/A034
 ```
 
 #### Exercícios
@@ -1898,7 +1898,7 @@ Ingresso: R$ 20.00
    15 → 20.00; 30 → 40.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/E097.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/E097.c -o ~/LPEDC/02-condicionais/0017-ternario/E097 && ~/LPEDC/02-condicionais/0017-ternario/E097
 ```
 
 **Exercício E098** · ★☆☆
@@ -1920,7 +1920,7 @@ Quantidade: 5
    0 → "0 mensagens novas".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/E098.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/E098.c -o ~/LPEDC/02-condicionais/0017-ternario/E098 && ~/LPEDC/02-condicionais/0017-ternario/E098
 ```
 
 **Exercício E099** · ★★☆
@@ -1951,7 +1951,7 @@ Menor: 2
    não dá para dividir por zero.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/E099.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/E099.c -o ~/LPEDC/02-condicionais/0017-ternario/E099 && ~/LPEDC/02-condicionais/0017-ternario/E099
 ```
 
 **Exercício E100** · ★★☆
@@ -1973,7 +1973,7 @@ Maior nota: 10
 3. Resposta esperada: 7 10 9 → 10; 8 3 5 → 8; 4 6 9 → 9.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/E100.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/E100.c -o ~/LPEDC/02-condicionais/0017-ternario/E100 && ~/LPEDC/02-condicionais/0017-ternario/E100
 ```
 
 **Exercício E101** · ★★★
@@ -1993,7 +1993,7 @@ com parênteses e rode de novo com 150 e com 250.
    250 → 250.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/E101.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/E101.c -o ~/LPEDC/02-condicionais/0017-ternario/E101 && ~/LPEDC/02-condicionais/0017-ternario/E101
 ```
 
 **Exercício E102** · ★★★
@@ -2016,7 +2016,7 @@ Hora (0 a 23): 13
    23 → 11 PM; 24 → Hora inválida.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0017-ternario/E102.c
+gcc ~/LPEDC/02-condicionais/0017-ternario/E102.c -o ~/LPEDC/02-condicionais/0017-ternario/E102 && ~/LPEDC/02-condicionais/0017-ternario/E102
 ```
 
 ---
@@ -2117,7 +2117,7 @@ de Sim e Não:
 > **Esquecer o `break`.** Tire o `break` do `case 2` e peça um X-Salada: a
 > saída vira "X-Salada", "Misto quente" e o preço fica **9.00**, porque o
 > `case 3` também rodou e sobrescreveu o preço. O compilador não vê erro
-> nenhum: para ele, você pediu isso. O `-Wextra` do `rodar` ajuda
+> nenhum: para ele, você pediu isso. O `-Wextra` do gcc com as flags de estudo ajuda
 > (`-Wimplicit-fallthrough`: "this statement may fall through"). Regra de
 > bolso: escreva o `break` logo depois de escrever o `case`, antes do miolo.
 
@@ -2186,7 +2186,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/A035.c
+gcc ~/LPEDC/02-condicionais/0018-switch/A035.c -o ~/LPEDC/02-condicionais/0018-switch/A035 && ~/LPEDC/02-condicionais/0018-switch/A035
 ```
 
 **Exemplo A036 · Quantos dias tem o mês**
@@ -2239,7 +2239,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/A036.c
+gcc ~/LPEDC/02-condicionais/0018-switch/A036.c -o ~/LPEDC/02-condicionais/0018-switch/A036 && ~/LPEDC/02-condicionais/0018-switch/A036
 ```
 
 #### Exercícios
@@ -2263,7 +2263,7 @@ Quarta-feira
    9 → Dia inválido.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/E103.c
+gcc ~/LPEDC/02-condicionais/0018-switch/E103.c -o ~/LPEDC/02-condicionais/0018-switch/E103 && ~/LPEDC/02-condicionais/0018-switch/E103
 ```
 
 **Exercício E104** · ★☆☆
@@ -2288,7 +2288,7 @@ Novo salário: R$ 1150.00
    1500 e c → 1800.00; 1000 e D → Classe inválida.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/E104.c
+gcc ~/LPEDC/02-condicionais/0018-switch/E104.c -o ~/LPEDC/02-condicionais/0018-switch/E104 && ~/LPEDC/02-condicionais/0018-switch/E104
 ```
 
 **Exercício E105** · ★★☆
@@ -2319,7 +2319,7 @@ Repetindo o menu.
    o menu."; 7 → "Opção inválida." e "Repetindo o menu.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/E105.c
+gcc ~/LPEDC/02-condicionais/0018-switch/E105.c -o ~/LPEDC/02-condicionais/0018-switch/E105 && ~/LPEDC/02-condicionais/0018-switch/E105
 ```
 
 **Exercício E106** · ★★☆
@@ -2343,7 +2343,7 @@ Conta: 20 / 4
    3 - 8 → = -5.00; 7 / 0 → Divisão por zero.; 2 ^ 3 → Operador inválido.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/E106.c
+gcc ~/LPEDC/02-condicionais/0018-switch/E106.c -o ~/LPEDC/02-condicionais/0018-switch/E106 && ~/LPEDC/02-condicionais/0018-switch/E106
 ```
 
 **Exercício E107** · ★★★
@@ -2369,7 +2369,7 @@ Muçarela: R$ 45.00
    "Portuguesa: R$ 55.00"; X → só "Opção inválida.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/E107.c
+gcc ~/LPEDC/02-condicionais/0018-switch/E107.c -o ~/LPEDC/02-condicionais/0018-switch/E107 && ~/LPEDC/02-condicionais/0018-switch/E107
 ```
 
 **Exercício E108** · ★★★
@@ -2399,7 +2399,7 @@ Total: R$ 70.00
    1 → só lavagem, R$ 30.00; 4 → "Pacote inválido.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0018-switch/E108.c
+gcc ~/LPEDC/02-condicionais/0018-switch/E108.c -o ~/LPEDC/02-condicionais/0018-switch/E108 && ~/LPEDC/02-condicionais/0018-switch/E108
 ```
 
 ---
@@ -2608,7 +2608,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A037.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/A037.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/A037 && ~/LPEDC/02-condicionais/0019-juntando-tudo/A037
 ```
 
 **Exemplo A038 · Pedra, papel e tesoura**
@@ -2653,7 +2653,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/A038.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/A038.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/A038 && ~/LPEDC/02-condicionais/0019-juntando-tudo/A038
 ```
 
 #### Exercícios
@@ -2681,7 +2681,7 @@ Peso normal
    Abaixo do peso; 95 1.80 → 29.32, Sobrepeso; 70 0 → Dados inválidos.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E109.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E109.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E109 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E109
 ```
 
 **Exercício E110** · ★☆☆
@@ -2706,7 +2706,7 @@ Saque de R$ 120. Saldo: R$ 380
    600 → saldo insuficiente; -20 → valor inválido; 500 → saldo 0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E110.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E110.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E110 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E110
 ```
 
 **Exercício E111** · ★★☆
@@ -2731,7 +2731,7 @@ Data inválida.
    31/04/2025 → inválida; 15/13/2025 → inválida; 31/12/2025 → válida.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E111.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E111.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E111 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E111
 ```
 
 **Exercício E112** · ★★☆
@@ -2758,7 +2758,7 @@ Tarifa: R$ 14.40
    → 48.00; moto às 19h → 7.20; categoria 5 → "Categoria inválida.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E112.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E112.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E112 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E112
 ```
 
 **Exercício E113** · ★★★
@@ -2784,7 +2784,7 @@ avisos do compilador, ache e conserte os quatro.
    0 → "Idade inválida.".
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E113.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E113.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E113 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E113
 ```
 
 **Exercício E114** · ★★★
@@ -2809,7 +2809,7 @@ Dia seguinte: 29/02/2024
    15/08/2025 → 16/08/2025.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/0019-juntando-tudo/E114.c
+gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E114.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E114 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E114
 ```
 
 ---
@@ -2817,7 +2817,7 @@ Dia seguinte: 29/02/2024
 ## Desafios do módulo
 
 Problemas extras para fechar o módulo. Escreva cada um num arquivo seu, rode
-com o `rodar` e teste todos os caminhos. Nada de laços ainda: só decisões.
+com as flags de estudo e teste todos os caminhos. Nada de laços ainda: só decisões.
 
 **1. Maior e menor de quatro.** Leia quatro números inteiros e mostre o maior
 e o menor, usando só `if` (sem `else`). Conte as comparações com uma variável
@@ -3006,7 +3006,7 @@ Rodízio na quinta-feira
 3. Resposta esperada: Rodízio na quinta-feira.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0201.c
+gcc ~/LPEDC/02-condicionais/lista/P0201.c -o ~/LPEDC/02-condicionais/lista/P0201 && ~/LPEDC/02-condicionais/lista/P0201
 ```
 
 ---
@@ -3031,7 +3031,7 @@ Multa: R$ 6.00
 3. Resposta esperada: com 4 dias, Multa: R$ 6.00; com 0, Sem multa.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0202.c
+gcc ~/LPEDC/02-condicionais/lista/P0202.c -o ~/LPEDC/02-condicionais/lista/P0202 && ~/LPEDC/02-condicionais/lista/P0202
 ```
 
 ---
@@ -3057,7 +3057,7 @@ Beto paga R$ 60.00
 3. Resposta esperada: R$ 30.00 e R$ 60.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0203.c
+gcc ~/LPEDC/02-condicionais/lista/P0203.c -o ~/LPEDC/02-condicionais/lista/P0203 && ~/LPEDC/02-condicionais/lista/P0203
 ```
 
 ---
@@ -3085,7 +3085,7 @@ Total: R$ 180.15
 3. Resposta esperada: Total: R$ 180.15.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0204.c
+gcc ~/LPEDC/02-condicionais/lista/P0204.c -o ~/LPEDC/02-condicionais/lista/P0204 && ~/LPEDC/02-condicionais/lista/P0204
 ```
 
 ---
@@ -3111,7 +3111,7 @@ Rui pode doar? não
 3. Resposta esperada: Ana sim, Rui não.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0205.c
+gcc ~/LPEDC/02-condicionais/lista/P0205.c -o ~/LPEDC/02-condicionais/lista/P0205 && ~/LPEDC/02-condicionais/lista/P0205
 ```
 
 ---
@@ -3138,7 +3138,7 @@ Juros do mês: R$ 4.00
 3. Resposta esperada: Juros do mês: R$ 4.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0206.c
+gcc ~/LPEDC/02-condicionais/lista/P0206.c -o ~/LPEDC/02-condicionais/lista/P0206 && ~/LPEDC/02-condicionais/lista/P0206
 ```
 
 ---
@@ -3165,7 +3165,7 @@ Infração grave: R$ 195.23
 3. Resposta esperada: com 75, Infração grave: R$ 195.23.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0207.c
+gcc ~/LPEDC/02-condicionais/lista/P0207.c -o ~/LPEDC/02-condicionais/lista/P0207 && ~/LPEDC/02-condicionais/lista/P0207
 ```
 
 ---
@@ -3195,11 +3195,11 @@ Recarga: R$ 45.00
 **Dicas:**
 
 1. if (scanf("%d", &passagens) != 1) { ... return 1; }
-2. Para testar: printf 'abc\n' | ./rodar arquivo.c e depois com 10.
+2. Para testar: printf 'abc\n' | ./programa arquivo.c e depois com 10.
 3. Resposta esperada: "Entrada inválida." com abc; R$ 45.00 com 10.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0208.c
+gcc ~/LPEDC/02-condicionais/lista/P0208.c -o ~/LPEDC/02-condicionais/lista/P0208 && ~/LPEDC/02-condicionais/lista/P0208
 ```
 
 ---
@@ -3226,7 +3226,7 @@ Troco certo.
 3. Resposta esperada: Troco certo.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0209.c
+gcc ~/LPEDC/02-condicionais/lista/P0209.c -o ~/LPEDC/02-condicionais/lista/P0209 -lm && ~/LPEDC/02-condicionais/lista/P0209
 ```
 
 ---
@@ -3252,7 +3252,7 @@ Drone em (200, 45): dentro da área
 3. Resposta esperada: fora, depois dentro (200 está na borda, e a borda vale).
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0210.c
+gcc ~/LPEDC/02-condicionais/lista/P0210.c -o ~/LPEDC/02-condicionais/lista/P0210 && ~/LPEDC/02-condicionais/lista/P0210
 ```
 
 ### ★★☆ Para pensar
@@ -3278,7 +3278,7 @@ Nota do meio: 8.0
 3. Resposta esperada: Nota do meio: 8.0.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0211.c
+gcc ~/LPEDC/02-condicionais/lista/P0211.c -o ~/LPEDC/02-condicionais/lista/P0211 && ~/LPEDC/02-condicionais/lista/P0211
 ```
 
 ---
@@ -3305,7 +3305,7 @@ Integração: a segunda viagem sai por R$ 0.00
 3. Resposta esperada: 105 min, R$ 0.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0212.c
+gcc ~/LPEDC/02-condicionais/lista/P0212.c -o ~/LPEDC/02-condicionais/lista/P0212 && ~/LPEDC/02-condicionais/lista/P0212
 ```
 
 ---
@@ -3331,7 +3331,7 @@ Sem estoque: avise o cliente.
 3. Resposta esperada: Sem estoque: avise o cliente.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0213.c
+gcc ~/LPEDC/02-condicionais/lista/P0213.c -o ~/LPEDC/02-condicionais/lista/P0213 && ~/LPEDC/02-condicionais/lista/P0213
 ```
 
 ---
@@ -3357,7 +3357,7 @@ Financiamento aprovado.
 3. Resposta esperada: Financiamento aprovado.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0214.c
+gcc ~/LPEDC/02-condicionais/lista/P0214.c -o ~/LPEDC/02-condicionais/lista/P0214 && ~/LPEDC/02-condicionais/lista/P0214
 ```
 
 ---
@@ -3385,7 +3385,7 @@ Hora local: 00:30
 3. Resposta esperada: F dá 00:30; M dá 22:30; A dá 21:30.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0215.c
+gcc ~/LPEDC/02-condicionais/lista/P0215.c -o ~/LPEDC/02-condicionais/lista/P0215 && ~/LPEDC/02-condicionais/lista/P0215
 ```
 
 ---
@@ -3412,7 +3412,7 @@ Cupom recusado.
 3. Resposta esperada: Cupom recusado.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0216.c
+gcc ~/LPEDC/02-condicionais/lista/P0216.c -o ~/LPEDC/02-condicionais/lista/P0216 && ~/LPEDC/02-condicionais/lista/P0216
 ```
 
 ---
@@ -3438,7 +3438,7 @@ Corrida de 8.5 km: R$ 38.14
 3. Resposta esperada: Bandeira 2, R$ 38.14.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0217.c
+gcc ~/LPEDC/02-condicionais/lista/P0217.c -o ~/LPEDC/02-condicionais/lista/P0217 && ~/LPEDC/02-condicionais/lista/P0217
 ```
 
 ---
@@ -3465,7 +3465,7 @@ Saída esperada:
 3. Resposta esperada: cheia, ok e baixa.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0218.c
+gcc ~/LPEDC/02-condicionais/lista/P0218.c -o ~/LPEDC/02-condicionais/lista/P0218 && ~/LPEDC/02-condicionais/lista/P0218
 ```
 
 ---
@@ -3494,7 +3494,7 @@ A vence!
 4. Resposta esperada: 4 (tesoura) contra 3 (lagarto): A vence!
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0219.c
+gcc ~/LPEDC/02-condicionais/lista/P0219.c -o ~/LPEDC/02-condicionais/lista/P0219 && ~/LPEDC/02-condicionais/lista/P0219
 ```
 
 ---
@@ -3521,7 +3521,7 @@ Melhor opção: CDB
 3. Resposta esperada: Melhor opção: CDB.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0220.c
+gcc ~/LPEDC/02-condicionais/lista/P0220.c -o ~/LPEDC/02-condicionais/lista/P0220 -lm && ~/LPEDC/02-condicionais/lista/P0220
 ```
 
 ### ★★★ Desafio
@@ -3552,7 +3552,7 @@ Faltam 34 dias para o ano acabar
 4. Resposta esperada: dia 331, faltam 34 dias.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0221.c
+gcc ~/LPEDC/02-condicionais/lista/P0221.c -o ~/LPEDC/02-condicionais/lista/P0221 && ~/LPEDC/02-condicionais/lista/P0221
 ```
 
 ---
@@ -3581,7 +3581,7 @@ Data (dd/mm/aaaa): 27/11/2026
 4. Resposta esperada: 27 de novembro de 2026, sexta-feira.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0222.c
+gcc ~/LPEDC/02-condicionais/lista/P0222.c -o ~/LPEDC/02-condicionais/lista/P0222 && ~/LPEDC/02-condicionais/lista/P0222
 ```
 
 ---
@@ -3626,7 +3626,7 @@ Placar impossível
 4. Resposta esperada: as três saídas acima.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0223.c
+gcc ~/LPEDC/02-condicionais/lista/P0223.c -o ~/LPEDC/02-condicionais/lista/P0223 && ~/LPEDC/02-condicionais/lista/P0223
 ```
 
 ---
@@ -3655,7 +3655,7 @@ Na frente: Amazonas FC (critério: gols pró)
 3. Resposta esperada: Na frente: Amazonas FC (critério: gols pró).
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0224.c
+gcc ~/LPEDC/02-condicionais/lista/P0224.c -o ~/LPEDC/02-condicionais/lista/P0224 && ~/LPEDC/02-condicionais/lista/P0224
 ```
 
 ---
@@ -3693,7 +3693,7 @@ Sem conflito
 4. Resposta esperada: 30 minutos no primeiro caso; sem conflito no segundo.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0225.c
+gcc ~/LPEDC/02-condicionais/lista/P0225.c -o ~/LPEDC/02-condicionais/lista/P0225 && ~/LPEDC/02-condicionais/lista/P0225
 ```
 
 ---
@@ -3730,7 +3730,7 @@ Sem notas para esse valor.
 4. Resposta esperada: 2 x 50, 9 x 20 e 1 x 10 para 290; sem notas para 380.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0226.c
+gcc ~/LPEDC/02-condicionais/lista/P0226.c -o ~/LPEDC/02-condicionais/lista/P0226 && ~/LPEDC/02-condicionais/lista/P0226
 ```
 
 ---
@@ -3758,7 +3758,7 @@ MMXXVI
 4. Com 1999: MCMXCIX. Resposta esperada para 2026: MMXXVI.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0227.c
+gcc ~/LPEDC/02-condicionais/lista/P0227.c -o ~/LPEDC/02-condicionais/lista/P0227 && ~/LPEDC/02-condicionais/lista/P0227
 ```
 
 ---
@@ -3800,7 +3800,7 @@ Saque liberado: R$ 1110.00
 4. Resposta esperada: com 3200.00, Saque liberado: R$ 1110.00.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0228.c
+gcc ~/LPEDC/02-condicionais/lista/P0228.c -o ~/LPEDC/02-condicionais/lista/P0228 && ~/LPEDC/02-condicionais/lista/P0228
 ```
 
 ---
@@ -3834,7 +3834,7 @@ Total: R$ 39.15
 4. Resposta esperada: Total: R$ 39.15.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0229.c
+gcc ~/LPEDC/02-condicionais/lista/P0229.c -o ~/LPEDC/02-condicionais/lista/P0229 && ~/LPEDC/02-condicionais/lista/P0229
 ```
 
 ---
@@ -3877,7 +3877,7 @@ Senha aceita
 4. Resposta esperada: as três saídas acima.
 
 ```bash
-~/LPEDC/rodar 02-condicionais/lista/P0230.c
+gcc ~/LPEDC/02-condicionais/lista/P0230.c -o ~/LPEDC/02-condicionais/lista/P0230 && ~/LPEDC/02-condicionais/lista/P0230
 ```
 
 ## Questões no estilo da prova

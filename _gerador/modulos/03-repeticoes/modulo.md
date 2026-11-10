@@ -37,7 +37,7 @@ Vários exemplos leem do teclado. Para não digitar tudo de novo a cada teste,
 mande a entrada pelo `printf` do terminal, um valor por linha:
 
 ```bash
-printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/rodar 03-repeticoes/0025-padroes-de-laco/A049.c
+gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049 && printf '28\n31\n36\n25\n30\n999\n' | ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A049
 ```
 
 Se um programa travar num laço infinito, `Ctrl+C` encerra. Nos fluxogramas,
@@ -55,7 +55,7 @@ ela.
 ## Desafios do módulo
 
 Problemas extras, misturando os assuntos do módulo, do médio ao difícil. Crie
-um arquivo seu para cada um e rode com o `rodar`.
+um arquivo seu para cada um e rode com as flags de estudo.
 
 **1. Os primos até 100.** Mostre todos os números primos de 2 a 100 e quantos
 são. Para cada candidato, teste os divisores com um laço de dentro e saia dele

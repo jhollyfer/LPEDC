@@ -130,7 +130,7 @@ resposta:
 Toda estrutura de dados dos módulos 11 a 16 (lista, pilha, fila, árvore, hash,
 grafo) segue este molde. Para um TAD `x`:
 
-1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O `rodar`
+1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do exemplo
    compila junto todo `.c` da pasta que não se chama `A000.c`/`E000.c`. À mão:
    `gcc A147.c contador.c -o a147`.
 2. **`x.h`**: comentário dizendo o que o TAD é; *include guard*

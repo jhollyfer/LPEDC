@@ -72,7 +72,7 @@ int main(void) {
 ```
 
 Para testar sem digitar, salve o programa como `pix.c` e use o cano (`|`)
-apresentado no começo do módulo: `printf '150.75\n12\n' | ~/LPEDC/rodar pix.c`.
+apresentado no começo do módulo: `printf '150.75\n12\n' | ./programa pix.c`.
 
 No fluxograma, as duas leituras são paralelogramos de entrada, e cada uma
 guarda o valor numa caixinha. A saída vem depois:
@@ -99,6 +99,6 @@ guarda o valor numa caixinha. A saída vem depois:
 > [!NOTE]
 > **Pergunta para você:** se no dia você digitar `doze`, quanto vale `lidos`?
 > E o que aparece no lugar do dia? Teste com
-> `printf '150.75\ndoze\n' | ~/LPEDC/rodar ...`.
+> `printf '150.75\ndoze\n' | ./programa`.
 
 {{pratique}}

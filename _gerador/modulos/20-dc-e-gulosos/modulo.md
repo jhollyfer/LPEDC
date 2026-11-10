@@ -43,10 +43,10 @@ sem ela.
 
 Os dois últimos assuntos têm um **TAD** na pasta (`huffman.h`,
 `compactador.h`): o exemplo usa só a interface, então abra o `.c` para ver o
-algoritmo. O `rodar` compila junto esses `.c` de apoio (como `huffman.c`):
+algoritmo. O comando do exemplo compila junto esses `.c` de apoio (como `huffman.c`):
 
 ```bash
-~/LPEDC/rodar 20-dc-e-gulosos/0136-huffman/A271.c
+gcc ~/LPEDC/20-dc-e-gulosos/0136-huffman/A271.c ~/LPEDC/20-dc-e-gulosos/0136-huffman/huffman.c -o ~/LPEDC/20-dc-e-gulosos/0136-huffman/A271 && ~/LPEDC/20-dc-e-gulosos/0136-huffman/A271
 ```
 
 Alguns programas do último assunto criam arquivos de teste na pasta em que

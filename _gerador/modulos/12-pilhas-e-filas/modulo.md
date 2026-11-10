@@ -34,11 +34,11 @@ assunto 0074.
 
 Cada pasta de assunto traz os arquivos do TAD ao lado dos exemplos:
 `pilha.h` e `pilha.c`, `fila.h` e `fila.c` ou `deque.h` e `deque.c`. O
-`rodar` compila esses `.c` de apoio junto com qualquer exemplo ou exercício
+comando do exemplo compila esses `.c` de apoio junto com qualquer exemplo ou exercício
 da pasta:
 
 ```bash
-~/LPEDC/rodar 12-pilhas-e-filas/0082-pilha/A163.c
+gcc ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163.c ~/LPEDC/12-pilhas-e-filas/0082-pilha/pilha.c -o ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163 && ~/LPEDC/12-pilhas-e-filas/0082-pilha/A163
 ```
 
 Num exercício, **não** crie funções com os nomes do TAD

@@ -6,7 +6,7 @@
 
 ```
 LPEDC/
-├── rodar                      compila (gcc + AddressSanitizer) e roda um .c
+├── rodar                      auxiliar do conferir.sh: compila com as flags de estudo e roda um .c
 ├── legenda.svg                formas e cores (gerado)
 ├── README.md                  guia do curso e índice (escrito à mão)
 ├── 01-fundamentos.md          gerado: o módulo inteiro (texto, exercícios, lista, questões)
@@ -32,7 +32,7 @@ sobrescrito. **Nenhum markdown fica em subdiretório**: todo o texto mora na rai
 Escreva os links como se o texto estivesse dentro da pasta do módulo
 (`0002-variaveis/ideia.svg`, `../legenda.svg`); o gerador acerta o caminho.
 
-Ferramentas: `gcc` (C17) com AddressSanitizer pelo script `rodar`, Node para o gerador
+Ferramentas: `gcc` (C17) com as flags de estudo (AddressSanitizer e UBSan), Node para o gerador
 (`_gerador/gerar.mjs`, com `roughjs` e `dagre` para os desenhos) e Python 3 para
 `_gerador/conferir-texto.py`. Não há servidor, banco nem deploy: o curso é lido no GitHub ou
 num editor de markdown.

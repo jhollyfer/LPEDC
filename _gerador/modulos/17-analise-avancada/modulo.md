@@ -40,11 +40,11 @@ vetor.
 Matemática: só potências e logaritmos. Lembre que `log₂ n` é "quantas vezes
 dá para dividir n por 2 até chegar em 1" (`log₂ 1024 = 10`), e que
 `log_b a` é o expoente que leva `b` a `a` (`log₂ 8 = 3`, `log₃ 9 = 2`). No C,
-`log2` e `log` ficam em `<math.h>`, e o `rodar` já liga a biblioteca
+`log2` e `log` ficam em `<math.h>`, e o gcc com as flags de estudo já liga a biblioteca
 matemática (`-lm`).
 
 O último assunto tem um TAD na pasta, `ordena.h` e `ordena.c`, com as quatro
-ordenações e um contador de comparações. O `rodar` compila o `ordena.c` junto
+ordenações e um contador de comparações. O comando do exemplo compila o `ordena.c` junto
 com qualquer exemplo ou exercício da pasta. Alguns programas medem **tempo**:
 os números de tempo mudam de máquina para máquina e de uma execução para
 outra; os de comparações, não. Os exercícios de "ache o erro" trazem o bug de
@@ -67,7 +67,7 @@ comparações) e confere a contagem com a fórmula.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
-sempre que der, confira com um programa em C rodado com o `rodar`.
+sempre que der, confira com um programa em C rodado com as flags de estudo.
 
 **1. O pior quick sort.** Com o pivô sempre no último elemento, um vetor já
 ordenado faz o quick sort particionar em pedaços de tamanho `n - 1` e 0.

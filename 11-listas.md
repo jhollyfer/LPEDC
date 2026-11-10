@@ -16,7 +16,7 @@ lista dupla (que anda para os dois lados) e a circular (que não tem fim).
 A mudança na cabeça é trocar posições por **setas**. Toda operação de lista é
 "quem aponta para quem, antes e depois". O conselho do módulo inteiro
 é desenhar os nós e as setas no papel antes de escrever o código. E
-rode tudo com o `rodar`: com ponteiros, o AddressSanitizer pega o que o olho
+rode tudo com as flags de estudo: com ponteiros, o AddressSanitizer pega o que o olho
 deixa passar.
 
 ## O que você vai aprender
@@ -38,11 +38,11 @@ Você precisa estar firme em ponteiros (módulo 06), `malloc` e `free`
 `No **inicio` ainda assusta, releia o assunto 0049 antes do 0077.
 
 Cada pasta de assunto traz um `lista.h` (a interface) e um `lista.c` (a
-implementação): abra os dois junto com o exemplo. O `rodar` compila o
+implementação): abra os dois junto com o exemplo. O comando do exemplo compila o
 `lista.c` junto com o exemplo ou o exercício, porque ele está na mesma pasta:
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/A151.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A151 && ~/LPEDC/11-listas/0076-lista-encadeada/A151
 ```
 
 Nos exercícios, não dê às suas funções o mesmo nome de uma função do
@@ -90,7 +90,7 @@ mostra por que crescer de um em um sai caro.
 
 O pacote todo vira um **TAD** (assunto 0074): `lista.h` diz **o que** a lista
 faz e `lista.c` diz **como**. A `struct lista` fica escondida no `.c`, então
-quem usa a lista nunca mexe em `tam` na mão. O `rodar` compila o `lista.c`
+quem usa a lista nunca mexe em `tam` na mão. O comando do exemplo compila o `lista.c`
 junto, como explica o começo do módulo.
 
 
@@ -254,7 +254,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/A149.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/A149.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/A149 && ~/LPEDC/11-listas/0075-vetor-dinamico/A149
 ```
 
 **Exemplo A150 · Inserir e remover no meio: todo mundo se mexe**
@@ -300,7 +300,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/A150.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/A150.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/A150 && ~/LPEDC/11-listas/0075-vetor-dinamico/A150
 ```
 
 #### Exercícios
@@ -331,7 +331,7 @@ maior: 132
    chegou a 5ª leitura. Não esqueça do lista_libera no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E445.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E445.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E445 && ~/LPEDC/11-listas/0075-vetor-dinamico/E445
 ```
 
 **Exercício E446** · ★☆☆
@@ -372,7 +372,7 @@ E: tam 5, cap 8 [3, 9, 7, 10, 1]
    para 4 e de 4 para 8.
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E446.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E446.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E446 && ~/LPEDC/11-listas/0075-vetor-dinamico/E446
 ```
 
 **Exercício E447** · ★★☆
@@ -407,7 +407,7 @@ depois: [4, 0, 12, 7]
    ele. Com dois -1 seguidos, um escapa.
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E447.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E447.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E447 && ~/LPEDC/11-listas/0075-vetor-dinamico/E447
 ```
 
 **Exercício E448** · ★★☆
@@ -449,7 +449,7 @@ esvaziando pela frente: deslocando 21, trocando 6
    (fila de senhas) e trocando quando não importa (itens do carrinho).
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E448.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E448.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E448 && ~/LPEDC/11-listas/0075-vetor-dinamico/E448
 ```
 
 **Exercício E449** · ★★★
@@ -480,7 +480,7 @@ primeiro: 40
    a POSIÇÃO (índice 0) em vez do endereço, lendo v.itens[0] no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E449.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E449.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E449 && ~/LPEDC/11-listas/0075-vetor-dinamico/E449
 ```
 
 **Exercício E450** · ★★★
@@ -532,7 +532,7 @@ alternando com 1/4: 1 realloc
    lados.
 
 ```bash
-~/LPEDC/rodar 11-listas/0075-vetor-dinamico/E450.c
+gcc ~/LPEDC/11-listas/0075-vetor-dinamico/E450.c ~/LPEDC/11-listas/0075-vetor-dinamico/lista.c -o ~/LPEDC/11-listas/0075-vetor-dinamico/E450 && ~/LPEDC/11-listas/0075-vetor-dinamico/E450
 ```
 
 ---
@@ -715,7 +715,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/A151.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/A151.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A151 && ~/LPEDC/11-listas/0076-lista-encadeada/A151
 ```
 
 **Exemplo A152 · Inserir no fim com um ponteiro para o último**
@@ -760,7 +760,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/A152.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/A152.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/A152 && ~/LPEDC/11-listas/0076-lista-encadeada/A152
 ```
 
 #### Exercícios
@@ -795,7 +795,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima (64, 120 e 75). Libere a lista no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/E451.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/E451.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E451 && ~/LPEDC/11-listas/0076-lista-encadeada/E451
 ```
 
 **Exercício E452** · ★☆☆
@@ -827,7 +827,7 @@ terceiro: 6
 3. Para o último: No *p = l; while (p->prox != NULL) p = p->prox;
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/E452.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/E452.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E452 && ~/LPEDC/11-listas/0076-lista-encadeada/E452
 ```
 
 **Exercício E453** · ★★☆
@@ -861,7 +861,7 @@ vetor: 5 18 7 22 9
    pare quando p for NULL ou i chegar em max.
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/E453.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/E453.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E453 && ~/LPEDC/11-listas/0076-lista-encadeada/E453
 ```
 
 **Exercício E454** · ★★☆
@@ -895,7 +895,7 @@ tamanho (recursivo): 5
    printf("mais novo primeiro: ") seguido de lista_imprime.
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/E454.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/E454.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E454 && ~/LPEDC/11-listas/0076-lista-encadeada/E454
 ```
 
 **Exercício E455** · ★★★
@@ -923,7 +923,7 @@ total de pontos: 26
    em libera_tudo, guardar p->prox numa variável antes do free.
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/E455.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/E455.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E455 && ~/LPEDC/11-listas/0076-lista-encadeada/E455
 ```
 
 **Exercício E456** · ★★★
@@ -953,7 +953,7 @@ um só:  7 -> NULL
    extra.
 
 ```bash
-~/LPEDC/rodar 11-listas/0076-lista-encadeada/E456.c
+gcc ~/LPEDC/11-listas/0076-lista-encadeada/E456.c ~/LPEDC/11-listas/0076-lista-encadeada/lista.c -o ~/LPEDC/11-listas/0076-lista-encadeada/E456 && ~/LPEDC/11-listas/0076-lista-encadeada/E456
 ```
 
 ---
@@ -1158,7 +1158,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/A153.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/A153.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/A153 && ~/LPEDC/11-listas/0077-lista-busca-remocao/A153
 ```
 
 **Exemplo A154 · Nó-cabeça: a remoção sem caso especial**
@@ -1213,7 +1213,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/A154.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/A154.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/A154 && ~/LPEDC/11-listas/0077-lista-busca-remocao/A154
 ```
 
 #### Exercícios
@@ -1254,7 +1254,7 @@ senha 50 não está na fila
    33 a resposta é 1, e para o 12, 5.
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E457.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E457.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E457 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E457
 ```
 
 **Exercício E458** · ★☆☆
@@ -1300,7 +1300,7 @@ tamanho: 2
    tirou: while (lista_remove(&l, 5)) removidos++;
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E458.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E458.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E458 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E458
 ```
 
 **Exercício E459** · ★★☆
@@ -1335,7 +1335,7 @@ só falhas: NULL (2 removidas)
 3. Os 0 do começo são o caso traiçoeiro: o início muda duas vezes seguidas.
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E459.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E459.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E459 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E459
 ```
 
 **Exercício E460** · ★★☆
@@ -1372,7 +1372,7 @@ Davi R$ 175 -> Carla R$ 210 -> NULL
 3. Copiar uma struct inteira é uma atribuição só: *saiu = *menor.
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E460.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E460.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E460 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E460
 ```
 
 **Exercício E461** · ★★★
@@ -1405,7 +1405,7 @@ Saída esperada depois do conserto:
    chame tira(&lista, ...).
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E461.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E461.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E461 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E461
 ```
 
 **Exercício E462** · ★★★
@@ -1442,7 +1442,7 @@ NULL
 4. Resposta esperada: a saída acima (saem o 4, o 40 e o único nó, 99).
 
 ```bash
-~/LPEDC/rodar 11-listas/0077-lista-busca-remocao/E462.c
+gcc ~/LPEDC/11-listas/0077-lista-busca-remocao/E462.c ~/LPEDC/11-listas/0077-lista-busca-remocao/lista.c -o ~/LPEDC/11-listas/0077-lista-busca-remocao/E462 && ~/LPEDC/11-listas/0077-lista-busca-remocao/E462
 ```
 
 ---
@@ -1629,7 +1629,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/A155.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/A155.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/A155 && ~/LPEDC/11-listas/0078-lista-ordenada/A155
 ```
 
 **Exemplo A156 · A chamada da turma em ordem alfabética**
@@ -1687,7 +1687,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/A156.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/A156.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/A156 && ~/LPEDC/11-listas/0078-lista-ordenada/A156
 ```
 
 #### Exercícios
@@ -1711,7 +1711,7 @@ menor: 1, maior: 10
 3. A maior é a do último nó: ande até o nó cujo prox é NULL.
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/E463.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/E463.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E463 && ~/LPEDC/11-listas/0078-lista-ordenada/E463
 ```
 
 **Exercício E464** · ★☆☆
@@ -1750,7 +1750,7 @@ DEPOIS do primeiro, não antes). Deixe a versão com < no arquivo final.
    "o novo vai para o fim".
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/E464.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/E464.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E464 && ~/LPEDC/11-listas/0078-lista-ordenada/E464
 ```
 
 **Exercício E465** · ★★☆
@@ -1784,7 +1784,7 @@ depois: 1 -> 3 -> 5 -> 8 -> NULL
    há repetidos, sai sempre o de trás.
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/E465.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/E465.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E465 && ~/LPEDC/11-listas/0078-lista-ordenada/E465
 ```
 
 **Exercício E466** · ★★☆
@@ -1819,7 +1819,7 @@ Saída esperada:
    lista resultado: os nós de a e b agora são dela.
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/E466.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/E466.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E466 && ~/LPEDC/11-listas/0078-lista-ordenada/E466
 ```
 
 **Exercício E467** · ★★★
@@ -1848,7 +1848,7 @@ Saída esperada depois do conserto:
    "ranking = insere_ordem(ranking, tempos[i]);".
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/E467.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/E467.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E467 && ~/LPEDC/11-listas/0078-lista-ordenada/E467
 ```
 
 **Exercício E468** · ★★★
@@ -1882,7 +1882,7 @@ depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
    desloca ninguém.
 
 ```bash
-~/LPEDC/rodar 11-listas/0078-lista-ordenada/E468.c
+gcc ~/LPEDC/11-listas/0078-lista-ordenada/E468.c ~/LPEDC/11-listas/0078-lista-ordenada/lista.c -o ~/LPEDC/11-listas/0078-lista-ordenada/E468 && ~/LPEDC/11-listas/0078-lista-ordenada/E468
 ```
 
 ---
@@ -2075,7 +2075,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/A157.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/A157.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/A157 && ~/LPEDC/11-listas/0079-lista-dupla/A157
 ```
 
 **Exemplo A158 · O controle remoto: canal seguinte e canal anterior**
@@ -2121,7 +2121,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/A158.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/A158.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/A158 && ~/LPEDC/11-listas/0079-lista-dupla/A158
 ```
 
 #### Exercícios
@@ -2149,7 +2149,7 @@ Saída esperada:
    andar a lista inteira para achar os 3 últimos.
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/E469.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/E469.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E469 && ~/LPEDC/11-listas/0079-lista-dupla/E469
 ```
 
 **Exercício E470** · ★☆☆
@@ -2184,7 +2184,7 @@ Saída esperada:
    Teste cada um contra NULL antes de ler o valor.
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/E470.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/E470.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E470 && ~/LPEDC/11-listas/0079-lista-dupla/E470
 ```
 
 **Exercício E471** · ★★☆
@@ -2221,7 +2221,7 @@ ab: não
    outra (ela deixa a lista vazia de novo).
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/E471.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/E471.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E471 && ~/LPEDC/11-listas/0079-lista-dupla/E471
 ```
 
 **Exercício E472** · ★★☆
@@ -2257,7 +2257,7 @@ Saída esperada:
 4. Não esqueça do l->tamanho++. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/E472.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/E472.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E472 && ~/LPEDC/11-listas/0079-lista-dupla/E472
 ```
 
 **Exercício E473** · ★★★
@@ -2290,7 +2290,7 @@ Saída esperada depois do conserto:
    p->ant; else p->prox->ant = p->ant;".
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/E473.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/E473.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E473 && ~/LPEDC/11-listas/0079-lista-dupla/E473
 ```
 
 **Exercício E474** · ★★★
@@ -2333,7 +2333,7 @@ struct letra { char c; struct letra *ant, *prox; }).
 4. Resposta esperada: texto: programa|
 
 ```bash
-~/LPEDC/rodar 11-listas/0079-lista-dupla/E474.c
+gcc ~/LPEDC/11-listas/0079-lista-dupla/E474.c ~/LPEDC/11-listas/0079-lista-dupla/lista.c -o ~/LPEDC/11-listas/0079-lista-dupla/E474 && ~/LPEDC/11-listas/0079-lista-dupla/E474
 ```
 
 ---
@@ -2509,7 +2509,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/A159.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/A159.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/A159 && ~/LPEDC/11-listas/0080-lista-circular/A159
 ```
 
 **Exemplo A160 · Batata quente: quem sobra na roda?**
@@ -2553,7 +2553,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/A160.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/A160.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/A160 && ~/LPEDC/11-listas/0080-lista-circular/A160
 ```
 
 #### Exercícios
@@ -2582,7 +2582,7 @@ conferindo com %: pessoa 3
    é k % 5, e a pessoa é a posição + 1.
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/E475.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/E475.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E475 && ~/LPEDC/11-listas/0080-lista-circular/E475
 ```
 
 **Exercício E476** · ★☆☆
@@ -2619,7 +2619,7 @@ sem o 10: 20 -> 30 -> 5 -> (volta ao 20)
 3. Depois de girar, guarde o resultado: u = gira(u, 2);
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/E476.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/E476.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E476 && ~/LPEDC/11-listas/0080-lista-circular/E476
 ```
 
 **Exercício E477** · ★★☆
@@ -2660,7 +2660,7 @@ struct motorista { char nome[20]; int km; struct motorista *prox; }).
    comum. Resposta esperada: a saída acima.
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/E477.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/E477.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E477 && ~/LPEDC/11-listas/0080-lista-circular/E477
 ```
 
 **Exercício E478** · ★★☆
@@ -2698,7 +2698,7 @@ com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
    teria que andar até o último de cada lista: O(n).
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/E478.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/E478.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E478 && ~/LPEDC/11-listas/0080-lista-circular/E478
 ```
 
 **Exercício E479** · ★★★
@@ -2734,7 +2734,7 @@ Escreva tudo neste arquivo, com uma struct sua.
    fim: basta fazer ultimo = p. Girar a roda é mudar um ponteiro.
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/E479.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/E479.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E479 && ~/LPEDC/11-listas/0080-lista-circular/E479
 ```
 
 **Exercício E480** · ★★★
@@ -2764,7 +2764,7 @@ escala: 101 102 103 104
    para sozinho (ou, como aqui, anda por memória já liberada).
 
 ```bash
-~/LPEDC/rodar 11-listas/0080-lista-circular/E480.c
+gcc ~/LPEDC/11-listas/0080-lista-circular/E480.c ~/LPEDC/11-listas/0080-lista-circular/lista.c -o ~/LPEDC/11-listas/0080-lista-circular/E480 && ~/LPEDC/11-listas/0080-lista-circular/E480
 ```
 
 ---
@@ -2957,7 +2957,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/A161.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/A161.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/A161 && ~/LPEDC/11-listas/0081-juntando-tudo/A161
 ```
 
 **Exemplo A162 · Salvar a playlist no arquivo e carregar de volta**
@@ -3013,7 +3013,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/A162.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/A162.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/A162 && ~/LPEDC/11-listas/0081-juntando-tudo/A162
 ```
 
 #### Exercícios
@@ -3056,7 +3056,7 @@ tocando agora: País Tropical - Jorge Ben
 4. Libere a playlist no fim.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/E481.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/E481.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E481 && ~/LPEDC/11-listas/0081-juntando-tudo/E481
 ```
 
 **Exercício E482** · ★☆☆
@@ -3114,7 +3114,7 @@ Dois
    ela mesma.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/E482.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/E482.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E482 && ~/LPEDC/11-listas/0081-juntando-tudo/E482
 ```
 
 **Exercício E483** · ★★☆
@@ -3150,7 +3150,7 @@ Jorge Ben: 2 músicas, 6:11
 4. Resposta esperada: a saída acima (182 + 189 = 371 s = 6:11).
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/E483.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/E483.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E483 && ~/LPEDC/11-listas/0081-juntando-tudo/E483
 ```
 
 **Exercício E484** · ★★☆
@@ -3194,7 +3194,7 @@ Cris saiu do bolão
 3. Copie o nome com snprintf, nunca com strcpy sem limite.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/E484.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/E484.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E484 && ~/LPEDC/11-listas/0081-juntando-tudo/E484
 ```
 
 **Exercício E485** · ★★★
@@ -3227,7 +3227,7 @@ ainda na fila: 1
 4. Resposta esperada: a saída acima, sem nenhum relatório do ASan.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/E485.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/E485.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E485 && ~/LPEDC/11-listas/0081-juntando-tudo/E485
 ```
 
 **Exercício E486** · ★★★
@@ -3273,7 +3273,7 @@ P + Q = 4x^4 + 7x - 5
    polinômios.
 
 ```bash
-~/LPEDC/rodar 11-listas/0081-juntando-tudo/E486.c
+gcc ~/LPEDC/11-listas/0081-juntando-tudo/E486.c ~/LPEDC/11-listas/0081-juntando-tudo/playlist.c -o ~/LPEDC/11-listas/0081-juntando-tudo/E486 && ~/LPEDC/11-listas/0081-juntando-tudo/E486
 ```
 
 ---
@@ -3281,7 +3281,7 @@ P + Q = 4x^4 + 7x - 5
 ## Desafios do módulo
 
 Problemas para fazer num arquivo seu, misturando os assuntos do módulo. Use
-o `rodar` em todos: resposta certa com vazamento não vale.
+o gcc com as flags de estudo em todos: resposta certa com vazamento não vale.
 
 **1. Lista com ciclo.** Um bug deixou o `prox` do último nó apontando para
 um nó do meio, e agora percorrer a lista nunca termina. Escreva
@@ -3360,7 +3360,7 @@ refez 1:     v1 v2 v3 [v5]
 Dica: no `digita`, libere todos os nós depois do cursor, faça
 `cursor->prox = NULL` e `fim = cursor`, e só então insira no fim. É o
 comportamento de todo editor: depois de editar, o "refazer" some. Esquecer os
-`free` desses nós é vazamento, e o `rodar` acusa.
+`free` desses nós é vazamento, e o gcc com as flags de estudo acusa.
 
 </details>
 
@@ -3498,7 +3498,7 @@ Deslocamentos: 4
 4. Resposta esperada: a saída acima (0 + 0 + 1 + 3 deslocamentos).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1101.c
+gcc ~/LPEDC/11-listas/lista/P1101.c -o ~/LPEDC/11-listas/lista/P1101 && ~/LPEDC/11-listas/lista/P1101
 ```
 
 ---
@@ -3536,7 +3536,7 @@ Nós visitados: 10
    o último deixa cada inserção O(1).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1102.c
+gcc ~/LPEDC/11-listas/lista/P1102.c -o ~/LPEDC/11-listas/lista/P1102 && ~/LPEDC/11-listas/lista/P1102
 ```
 
 ---
@@ -3574,7 +3574,7 @@ Depois: 10: 12.00 | 20: 3.20 | 30: 9.35 | 40: 6.00 |
 3. Resposta esperada: a saída acima (8.50 * 1.10 = 9.35).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1103.c
+gcc ~/LPEDC/11-listas/lista/P1103.c -o ~/LPEDC/11-listas/lista/P1103 && ~/LPEDC/11-listas/lista/P1103
 ```
 
 ---
@@ -3612,7 +3612,7 @@ Zeca não estava: Caio Duda
 3. Resposta esperada: a saída acima, sem vazamento no sanitizer.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1104.c
+gcc ~/LPEDC/11-listas/lista/P1104.c -o ~/LPEDC/11-listas/lista/P1104 && ~/LPEDC/11-listas/lista/P1104
 ```
 
 ---
@@ -3656,7 +3656,7 @@ a com b vazia: 1 -> 2 -> 3 -> 4 -> 5 -> NULL (5 nós)
    nós de b agora são dela).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1105.c
+gcc ~/LPEDC/11-listas/lista/P1105.c -o ~/LPEDC/11-listas/lista/P1105 && ~/LPEDC/11-listas/lista/P1105
 ```
 
 ---
@@ -3687,7 +3687,7 @@ Volta: Armênia -> Tiradentes -> Luz -> Sé
    menos da primeira.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1106.c
+gcc ~/LPEDC/11-listas/lista/P1106.c -o ~/LPEDC/11-listas/lista/P1106 && ~/LPEDC/11-listas/lista/P1106
 ```
 
 ---
@@ -3728,7 +3728,7 @@ A partir da 4: [4:3] [5:1] [6:4] [1:2] [2:4] [3:0]
    guardar o primeiro) e libere como uma lista comum.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1107.c
+gcc ~/LPEDC/11-listas/lista/P1107.c -o ~/LPEDC/11-listas/lista/P1107 && ~/LPEDC/11-listas/lista/P1107
 ```
 
 ---
@@ -3762,7 +3762,7 @@ Senhas: 43 -> 44 -> NULL
    nó antigo. A saída fica igual à de cima, sem relatório.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1108.c
+gcc ~/LPEDC/11-listas/lista/P1108.c -o ~/LPEDC/11-listas/lista/P1108 && ~/LPEDC/11-listas/lista/P1108
 ```
 
 ---
@@ -3800,7 +3800,7 @@ Ana Bia Lia Marcos Teo
    nome) < 0. O novo entra entre p e p->prox.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1109.c
+gcc ~/LPEDC/11-listas/lista/P1109.c -o ~/LPEDC/11-listas/lista/P1109 && ~/LPEDC/11-listas/lista/P1109
 ```
 
 ---
@@ -3836,7 +3836,7 @@ Saída esperada:
    está. O custo é O(n) e a memória extra é O(1).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1110.c
+gcc ~/LPEDC/11-listas/lista/P1110.c -o ~/LPEDC/11-listas/lista/P1110 && ~/LPEDC/11-listas/lista/P1110
 ```
 
 ### ★★☆ Para pensar
@@ -3883,7 +3883,7 @@ mural: 12 -> 10 -> 9 -> 8 -> 7 -> 5 -> 5 -> 2 -> 1 -> NULL
 4. São n + m passos: O(n + m).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1111.c
+gcc ~/LPEDC/11-listas/lista/P1111.c -o ~/LPEDC/11-listas/lista/P1111 && ~/LPEDC/11-listas/lista/P1111
 ```
 
 ---
@@ -3922,7 +3922,7 @@ depois: 7 -> 3 -> 9 -> 1 -> NULL
    O(n), porque os repetidos ficariam lado a lado.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1112.c
+gcc ~/LPEDC/11-listas/lista/P1112.c -o ~/LPEDC/11-listas/lista/P1112 && ~/LPEDC/11-listas/lista/P1112
 ```
 
 ---
@@ -3962,7 +3962,7 @@ k = 5: não existe
 4. Uma passada, O(n), memória O(1).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1113.c
+gcc ~/LPEDC/11-listas/lista/P1113.c -o ~/LPEDC/11-listas/lista/P1113 && ~/LPEDC/11-listas/lista/P1113
 ```
 
 ---
@@ -4009,7 +4009,7 @@ Total sem mover: 18
    LRU: o que foi usado há pouco tende a ser usado de novo.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1114.c
+gcc ~/LPEDC/11-listas/lista/P1114.c -o ~/LPEDC/11-listas/lista/P1114 && ~/LPEDC/11-listas/lista/P1114
 ```
 
 ---
@@ -4049,7 +4049,7 @@ Lava a louça: Ana
    O(n · k).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1115.c
+gcc ~/LPEDC/11-listas/lista/P1115.c -o ~/LPEDC/11-listas/lista/P1115 && ~/LPEDC/11-listas/lista/P1115
 ```
 
 ---
@@ -4093,7 +4093,7 @@ Sem 09:00: 08:00 10:00 12:00
    deslocamento. Essa é a troca da lista sequencial ordenada.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1116.c
+gcc ~/LPEDC/11-listas/lista/P1116.c -o ~/LPEDC/11-listas/lista/P1116 && ~/LPEDC/11-listas/lista/P1116
 ```
 
 ---
@@ -4131,7 +4131,7 @@ depois: 2 -> 4 -> 4 -> 6 -> 7 -> 9 -> 1 -> NULL
 3. Uma passada: O(n).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1117.c
+gcc ~/LPEDC/11-listas/lista/P1117.c -o ~/LPEDC/11-listas/lista/P1117 && ~/LPEDC/11-listas/lista/P1117
 ```
 
 ---
@@ -4162,7 +4162,7 @@ Saiu 1: NULL
    libere o nó e devolva NULL) e, depois do free, faça p->prox = NULL.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1118.c
+gcc ~/LPEDC/11-listas/lista/P1118.c -o ~/LPEDC/11-listas/lista/P1118 && ~/LPEDC/11-listas/lista/P1118
 ```
 
 ---
@@ -4204,7 +4204,7 @@ De trás para frente: 70 61 60 58 55
    r->fim = novo. Assim os quatro casos saem do mesmo código.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1119.c
+gcc ~/LPEDC/11-listas/lista/P1119.c -o ~/LPEDC/11-listas/lista/P1119 && ~/LPEDC/11-listas/lista/P1119
 ```
 
 ---
@@ -4244,7 +4244,7 @@ k = 0:  2 -> 3 -> 4 -> 5 -> 1 -> NULL
 3. O(n) e memória O(1).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1120.c
+gcc ~/LPEDC/11-listas/lista/P1120.c -o ~/LPEDC/11-listas/lista/P1120 && ~/LPEDC/11-listas/lista/P1120
 ```
 
 ### ★★★ Desafio
@@ -4296,7 +4296,7 @@ Bia: (92)98100-0004
 4. Resposta esperada: a saída acima, sem vazamento.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1121.c
+gcc ~/LPEDC/11-listas/lista/P1121.c -o ~/LPEDC/11-listas/lista/P1121 && ~/LPEDC/11-listas/lista/P1121
 ```
 
 ---
@@ -4350,7 +4350,7 @@ Livre: 40 posições, maior bloco: 30
    externa. Os blocos livres existem, mas nenhum é grande o bastante.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1122.c
+gcc ~/LPEDC/11-listas/lista/P1122.c -o ~/LPEDC/11-listas/lista/P1122 && ~/LPEDC/11-listas/lista/P1122
 ```
 
 ---
@@ -4401,7 +4401,7 @@ Python (2): Caio Davi
 4. Resposta esperada: a saída acima, sem vazamento.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1123.c
+gcc ~/LPEDC/11-listas/lista/P1123.c -o ~/LPEDC/11-listas/lista/P1123 && ~/LPEDC/11-listas/lista/P1123
 ```
 
 ---
@@ -4441,7 +4441,7 @@ fila:   1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> NULL
    é NULL, o novo início é ant).
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1124.c
+gcc ~/LPEDC/11-listas/lista/P1124.c -o ~/LPEDC/11-listas/lista/P1124 && ~/LPEDC/11-listas/lista/P1124
 ```
 
 ---
@@ -4477,7 +4477,7 @@ Volta: 3 2
    último, e p->prox->ant = p->ant sempre que p->prox existe.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1125.c
+gcc ~/LPEDC/11-listas/lista/P1125.c -o ~/LPEDC/11-listas/lista/P1125 && ~/LPEDC/11-listas/lista/P1125
 ```
 
 ---
@@ -4527,7 +4527,7 @@ célula 5: 50 -> -1
 3. Na célula 1, o 10 saiu e o 25 reaproveitou a mesma célula.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1126.c
+gcc ~/LPEDC/11-listas/lista/P1126.c -o ~/LPEDC/11-listas/lista/P1126 && ~/LPEDC/11-listas/lista/P1126
 ```
 
 ---
@@ -4573,7 +4573,7 @@ roda de 6: 1 2 3 4 5 6
    (NULL); trate esse caso também.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1127.c
+gcc ~/LPEDC/11-listas/lista/P1127.c -o ~/LPEDC/11-listas/lista/P1127 && ~/LPEDC/11-listas/lista/P1127
 ```
 
 ---
@@ -4618,7 +4618,7 @@ Saída esperada:
    mudar quem é o último.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1128.c
+gcc ~/LPEDC/11-listas/lista/P1128.c -o ~/LPEDC/11-listas/lista/P1128 && ~/LPEDC/11-listas/lista/P1128
 ```
 
 ---
@@ -4662,7 +4662,7 @@ Saída esperada:
 4. O(n) de tempo, O(1) de memória.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1129.c
+gcc ~/LPEDC/11-listas/lista/P1129.c -o ~/LPEDC/11-listas/lista/P1129 && ~/LPEDC/11-listas/lista/P1129
 ```
 
 ---
@@ -4713,7 +4713,7 @@ Não nulos: 6 de 15
 4. Libere as três matrizes.
 
 ```bash
-~/LPEDC/rodar 11-listas/lista/P1130.c
+gcc ~/LPEDC/11-listas/lista/P1130.c -o ~/LPEDC/11-listas/lista/P1130 && ~/LPEDC/11-listas/lista/P1130
 ```
 
 ## Questões no estilo da prova

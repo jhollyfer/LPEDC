@@ -39,7 +39,7 @@ módulo. Ao rodar, troque a ordem dos campos de uma struct e compare o
 `sizeof`.
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/A117.c
+gcc ~/LPEDC/08-structs/0059-struct/A117.c -o ~/LPEDC/08-structs/0059-struct/A117 && ~/LPEDC/08-structs/0059-struct/A117
 ```
 
 | # | Assunto | Pasta |
@@ -226,7 +226,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/A117.c
+gcc ~/LPEDC/08-structs/0059-struct/A117.c -o ~/LPEDC/08-structs/0059-struct/A117 && ~/LPEDC/08-structs/0059-struct/A117
 ```
 
 **Exemplo A118 · A ficha copiada**
@@ -270,7 +270,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/A118.c
+gcc ~/LPEDC/08-structs/0059-struct/A118.c -o ~/LPEDC/08-structs/0059-struct/A118 && ~/LPEDC/08-structs/0059-struct/A118
 ```
 
 #### Exercícios
@@ -299,7 +299,7 @@ Na promoção: R$ 31.41
 4. Resposta esperada: a saída acima (34.90 * 0.9 = 31.41).
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/E349.c
+gcc ~/LPEDC/08-structs/0059-struct/E349.c -o ~/LPEDC/08-structs/0059-struct/E349 && ~/LPEDC/08-structs/0059-struct/E349
 ```
 
 **Exercício E350** · ★☆☆
@@ -333,7 +333,7 @@ b: 2 x 3
 3. a.casa = a.casa + b.fora dá 2 + 3 = 5.
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/E350.c
+gcc ~/LPEDC/08-structs/0059-struct/E350.c -o ~/LPEDC/08-structs/0059-struct/E350 && ~/LPEDC/08-structs/0059-struct/E350
 ```
 
 **Exercício E351** · ★★☆
@@ -362,7 +362,7 @@ Perímetro: 26.0 m
 3. Dentro: x entre os dois x E y entre os dois y (use bool, de stdbool.h).
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/E351.c
+gcc ~/LPEDC/08-structs/0059-struct/E351.c -o ~/LPEDC/08-structs/0059-struct/E351 && ~/LPEDC/08-structs/0059-struct/E351
 ```
 
 **Exercício E352** · ★★☆
@@ -390,7 +390,7 @@ a e b são iguais
    a.gols == b.gols.
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/E352.c
+gcc ~/LPEDC/08-structs/0059-struct/E352.c -o ~/LPEDC/08-structs/0059-struct/E352 && ~/LPEDC/08-structs/0059-struct/E352
 ```
 
 **Exercício E353** · ★★★
@@ -427,7 +427,7 @@ Saída esperada:
 5. Resposta esperada: a saída acima (%02d mostra o zero à esquerda).
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/E353.c
+gcc ~/LPEDC/08-structs/0059-struct/E353.c -o ~/LPEDC/08-structs/0059-struct/E353 && ~/LPEDC/08-structs/0059-struct/E353
 ```
 
 **Exercício E354** · ★★★
@@ -466,7 +466,7 @@ struct a_enxuta: 8 bytes
    char nivel; } (é a struct b com outro nome).
 
 ```bash
-~/LPEDC/rodar 08-structs/0059-struct/E354.c
+gcc ~/LPEDC/08-structs/0059-struct/E354.c -o ~/LPEDC/08-structs/0059-struct/E354 && ~/LPEDC/08-structs/0059-struct/E354
 ```
 
 ---
@@ -633,7 +633,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/A119.c
+gcc ~/LPEDC/08-structs/0060-typedef/A119.c -o ~/LPEDC/08-structs/0060-typedef/A119 && ~/LPEDC/08-structs/0060-typedef/A119
 ```
 
 **Exemplo A120 · A cor do site**
@@ -675,7 +675,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/A120.c
+gcc ~/LPEDC/08-structs/0060-typedef/A120.c -o ~/LPEDC/08-structs/0060-typedef/A120 && ~/LPEDC/08-structs/0060-typedef/A120
 ```
 
 #### Exercícios
@@ -702,7 +702,7 @@ Total: R$ 67.44
    nem nas funções.
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/E355.c
+gcc ~/LPEDC/08-structs/0060-typedef/E355.c -o ~/LPEDC/08-structs/0060-typedef/E355 && ~/LPEDC/08-structs/0060-typedef/E355
 ```
 
 **Exercício E356** · ★☆☆
@@ -742,7 +742,7 @@ distancia + tempo = 120
    letras.
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/E356.c
+gcc ~/LPEDC/08-structs/0060-typedef/E356.c -o ~/LPEDC/08-structs/0060-typedef/E356 && ~/LPEDC/08-structs/0060-typedef/E356
 ```
 
 **Exercício E357** · ★★☆
@@ -775,7 +775,7 @@ Saída esperada:
 4. Resposta esperada: a saída acima (1/4 + 1/6 = 10/24 = 5/12).
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/E357.c
+gcc ~/LPEDC/08-structs/0060-typedef/E357.c -o ~/LPEDC/08-structs/0060-typedef/E357 && ~/LPEDC/08-structs/0060-typedef/E357
 ```
 
 **Exercício E358** · ★★☆
@@ -803,7 +803,7 @@ Ana: R$ 600.00 -> R$ 563.50
    Cartao c; e mover o protótipo de pagar para depois do typedef.
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/E358.c
+gcc ~/LPEDC/08-structs/0060-typedef/E358.c -o ~/LPEDC/08-structs/0060-typedef/E358 && ~/LPEDC/08-structs/0060-typedef/E358
 ```
 
 **Exercício E359** · ★★★
@@ -837,7 +837,7 @@ Saída esperada:
 3. Chame com botoes[i].f(12, 4). %g mostra 16 em vez de 16.000000.
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/E359.c
+gcc ~/LPEDC/08-structs/0060-typedef/E359.c -o ~/LPEDC/08-structs/0060-typedef/E359 && ~/LPEDC/08-structs/0060-typedef/E359
 ```
 
 **Exercício E360** · ★★★
@@ -880,7 +880,7 @@ Saída esperada (depois de trocar a linha errada):
    compilaria e o erro passaria calado.
 
 ```bash
-~/LPEDC/rodar 08-structs/0060-typedef/E360.c
+gcc ~/LPEDC/08-structs/0060-typedef/E360.c -o ~/LPEDC/08-structs/0060-typedef/E360 && ~/LPEDC/08-structs/0060-typedef/E360
 ```
 
 ---
@@ -1069,7 +1069,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/A121.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/A121.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/A121 && ~/LPEDC/08-structs/0061-vetor-de-structs/A121
 ```
 
 **Exemplo A122 · A classificação ordenada**
@@ -1126,7 +1126,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/A122.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/A122.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/A122 && ~/LPEDC/08-structs/0061-vetor-de-structs/A122
 ```
 
 #### Exercícios
@@ -1164,7 +1164,7 @@ Mais caro: Arroz 5kg
 3. Guarde o índice do maior subtotal, como no exemplo da tabela.
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E361.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E361.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E361 && ~/LPEDC/08-structs/0061-vetor-de-structs/E361
 ```
 
 **Exercício E362** · ★☆☆
@@ -1189,7 +1189,7 @@ Aprovados: 2 de 4
 2. %.1f mostra uma casa: (6.0 + 7.5) / 2 = 6.75 aparece como 6.8.
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E362.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E362.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E362 && ~/LPEDC/08-structs/0061-vetor-de-structs/E362
 ```
 
 **Exercício E363** · ★★☆
@@ -1216,7 +1216,7 @@ Para testar sem digitar:
 
 
 ```text
-printf 'Rebeca Andrade\n1.55 26\nDarlan Romani\n1.88 34\nRayssa Leal\n1.50 17\n' | ~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E363.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E363.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E363 && printf 'Rebeca Andrade\n1.55 26\nDarlan Romani\n1.88 34\nRayssa Leal\n1.50 17\n' | ~/LPEDC/08-structs/0061-vetor-de-structs/E363
 ```
 
 **Dicas:**
@@ -1230,7 +1230,7 @@ printf 'Rebeca Andrade\n1.55 26\nDarlan Romani\n1.88 34\nRayssa Leal\n1.50 17\n'
 4. Resposta esperada: com a entrada acima, Darlan Romani nos dois.
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E363.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E363.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E363 && ~/LPEDC/08-structs/0061-vetor-de-structs/E363
 ```
 
 **Exercício E364** · ★★☆
@@ -1276,7 +1276,7 @@ Por preço:
    depois de todas as maiúsculas.
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E364.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E364.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E364 && ~/LPEDC/08-structs/0061-vetor-de-structs/E364
 ```
 
 **Exercício E365** · ★★★
@@ -1303,7 +1303,7 @@ Saída esperada (depois de consertado):
    v[j] = v[j + 1]; v[j + 1] = tmp;
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E365.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E365.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E365 && ~/LPEDC/08-structs/0061-vetor-de-structs/E365
 ```
 
 **Exercício E366** · ★★★
@@ -1338,7 +1338,7 @@ Perímetro: 22.49 m
 4. Resposta esperada: a saída acima (66 / 2 = 33; lados 6, 4, 4.24, 4.24, 4).
 
 ```bash
-~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E366.c
+gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E366.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E366 -lm && ~/LPEDC/08-structs/0061-vetor-de-structs/E366
 ```
 
 ---
@@ -1543,7 +1543,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/A123.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/A123.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/A123 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/A123
 ```
 
 **Exemplo A124 · O preço da cópia**
@@ -1599,7 +1599,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/A124.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/A124.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/A124 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/A124
 ```
 
 #### Exercícios
@@ -1636,7 +1636,7 @@ Beto: R$ 4428.00
 3. Aumentar 8% é multiplicar por 1 + 8 / 100.0.
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E367.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367
 ```
 
 **Exercício E368** · ★☆☆
@@ -1673,7 +1673,7 @@ casa.gols = 12, (*ptr).gols = 12
 3. ptr->gols e (*ptr).gols são a mesma coisa, e ptr aponta para casa.
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E368.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E368.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E368 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E368
 ```
 
 **Exercício E369** · ★★☆
@@ -1706,11 +1706,11 @@ Ana: R$ 300.00 | Beto: R$ 320.00
 1. Conta *c = malloc(sizeof *c); if (c == NULL) return NULL;
 2. O titular é vetor: strcpy(c->titular, titular). Garanta que o nome cabe
    (ou use strncpy e ponha o '\0' no fim).
-3. Todo conta_criar precisa de um conta_destruir. Rode com o rodar: o
+3. Todo conta_criar precisa de um conta_destruir. Rode com as flags de estudo: o
    AddressSanitizer acusa se você esquecer algum.
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E369.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369
 ```
 
 **Exercício E370** · ★★☆
@@ -1737,7 +1737,7 @@ Fone Bluetooth: R$ 149.90
    "detected memory leaks".
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E370.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370
 ```
 
 **Exercício E371** · ★★★
@@ -1751,7 +1751,7 @@ Para testar:
 
 
 ```text
-printf 'Arroz 27.90\nFeijao 8.49\nCafe 18.90\nOleo 7.99\nAcucar 4.59\n' | ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E371.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371 && printf 'Arroz 27.90\nFeijao 8.49\nCafe 18.90\nOleo 7.99\nAcucar 4.59\n' | ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371
 ```
 
 
@@ -1779,7 +1779,7 @@ Total: R$ 67.87
 4. Resposta esperada: a saída acima, e um free(v) no fim.
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E371.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371
 ```
 
 **Exercício E372** · ★★★
@@ -1823,7 +1823,7 @@ sizeof(Pessoa) = 24
 3. O tamanho: nome (10), 2 de sobra, idade (4), amigo (8, um ponteiro).
 
 ```bash
-~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E372.c
+gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E372.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E372 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E372
 ```
 
 ---
@@ -1997,7 +1997,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/A125.c
+gcc ~/LPEDC/08-structs/0063-enum/A125.c -o ~/LPEDC/08-structs/0063-enum/A125 && ~/LPEDC/08-structs/0063-enum/A125
 ```
 
 **Exemplo A126 · O troco em notas**
@@ -2045,7 +2045,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/A126.c
+gcc ~/LPEDC/08-structs/0063-enum/A126.c -o ~/LPEDC/08-structs/0063-enum/A126 && ~/LPEDC/08-structs/0063-enum/A126
 ```
 
 #### Exercícios
@@ -2088,7 +2088,7 @@ G + XG = 14
    reclama: para ele, são só inteiros.
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/E373.c
+gcc ~/LPEDC/08-structs/0063-enum/E373.c -o ~/LPEDC/08-structs/0063-enum/E373 && ~/LPEDC/08-structs/0063-enum/E373
 ```
 
 **Exercício E374** · ★☆☆
@@ -2115,7 +2115,7 @@ vermelho -> verde
 2. Em nome, um switch que devolve uma string literal.
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/E374.c
+gcc ~/LPEDC/08-structs/0063-enum/E374.c -o ~/LPEDC/08-structs/0063-enum/E374 && ~/LPEDC/08-structs/0063-enum/E374
 ```
 
 **Exercício E375** · ★★☆
@@ -2156,7 +2156,7 @@ Placar: 2 vitórias, 1 empate, 2 derrotas
 3. Um vetor int placar[3] indexado pelo Resultado conta tudo sem if.
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/E375.c
+gcc ~/LPEDC/08-structs/0063-enum/E375.c -o ~/LPEDC/08-structs/0063-enum/E375 && ~/LPEDC/08-structs/0063-enum/E375
 ```
 
 **Exercício E376** · ★★☆
@@ -2185,7 +2185,7 @@ Saída esperada (depois de consertado):
    case COPAS, tire o default e devolva "???" depois do switch.
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/E376.c
+gcc ~/LPEDC/08-structs/0063-enum/E376.c -o ~/LPEDC/08-structs/0063-enum/E376 && ~/LPEDC/08-structs/0063-enum/E376
 ```
 
 **Exercício E377** · ★★★
@@ -2229,7 +2229,7 @@ Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
    4 regras bem visíveis.
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/E377.c
+gcc ~/LPEDC/08-structs/0063-enum/E377.c -o ~/LPEDC/08-structs/0063-enum/E377 && ~/LPEDC/08-structs/0063-enum/E377
 ```
 
 **Exercício E378** · ★★★
@@ -2267,7 +2267,7 @@ Satisfação: 66.7%
 4. Cuidado com divisão inteira: 100.0 * contagem[n] / total.
 
 ```bash
-~/LPEDC/rodar 08-structs/0063-enum/E378.c
+gcc ~/LPEDC/08-structs/0063-enum/E378.c -o ~/LPEDC/08-structs/0063-enum/E378 && ~/LPEDC/08-structs/0063-enum/E378
 ```
 
 ---
@@ -2432,7 +2432,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/A127.c
+gcc ~/LPEDC/08-structs/0064-union/A127.c -o ~/LPEDC/08-structs/0064-union/A127 && ~/LPEDC/08-structs/0064-union/A127
 ```
 
 **Exemplo A128 · Um pagamento, três formas**
@@ -2492,7 +2492,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/A128.c
+gcc ~/LPEDC/08-structs/0064-union/A128.c -o ~/LPEDC/08-structs/0064-union/A128 && ~/LPEDC/08-structs/0064-union/A128
 ```
 
 #### Exercícios
@@ -2530,7 +2530,7 @@ union Nome: 12 bytes
    o int pede um tamanho múltiplo de 4.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/E379.c
+gcc ~/LPEDC/08-structs/0064-union/E379.c -o ~/LPEDC/08-structs/0064-union/E379 && ~/LPEDC/08-structs/0064-union/E379
 ```
 
 **Exercício E380** · ★☆☆
@@ -2557,7 +2557,7 @@ Saída esperada:
    uma dízima em binário, e o D do fim é o arredondamento.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/E380.c
+gcc ~/LPEDC/08-structs/0064-union/E380.c -o ~/LPEDC/08-structs/0064-union/E380 && ~/LPEDC/08-structs/0064-union/E380
 ```
 
 **Exercício E381** · ★★☆
@@ -2584,7 +2584,7 @@ Saída esperada:
    porque ela só troca as duas metades de lugar.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/E381.c
+gcc ~/LPEDC/08-structs/0064-union/E381.c -o ~/LPEDC/08-structs/0064-union/E381 && ~/LPEDC/08-structs/0064-union/E381
 ```
 
 **Exercício E382** · ★★☆
@@ -2626,7 +2626,7 @@ Total: 39.57 m2
 3. Triângulo: base * altura / 2.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/E382.c
+gcc ~/LPEDC/08-structs/0064-union/E382.c -o ~/LPEDC/08-structs/0064-union/E382 && ~/LPEDC/08-structs/0064-union/E382
 ```
 
 **Exercício E383** · ★★★
@@ -2656,7 +2656,7 @@ texto: ok
    (use TEXTO).
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/E383.c
+gcc ~/LPEDC/08-structs/0064-union/E383.c -o ~/LPEDC/08-structs/0064-union/E383 && ~/LPEDC/08-structs/0064-union/E383
 ```
 
 **Exercício E384** · ★★★
@@ -2706,7 +2706,7 @@ em ordem de rede, memória: 11 22 33 44
    máquina: é para isso que serve a ordem de rede.
 
 ```bash
-~/LPEDC/rodar 08-structs/0064-union/E384.c
+gcc ~/LPEDC/08-structs/0064-union/E384.c -o ~/LPEDC/08-structs/0064-union/E384 && ~/LPEDC/08-structs/0064-union/E384
 ```
 
 ---
@@ -2914,7 +2914,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/A129.c
+gcc ~/LPEDC/08-structs/0065-bits/A129.c -o ~/LPEDC/08-structs/0065-bits/A129 && ~/LPEDC/08-structs/0065-bits/A129
 ```
 
 **Exemplo A130 · O chmod 755**
@@ -2964,7 +2964,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/A130.c
+gcc ~/LPEDC/08-structs/0065-bits/A130.c -o ~/LPEDC/08-structs/0065-bits/A130 && ~/LPEDC/08-structs/0065-bits/A130
 ```
 
 #### Exercícios
@@ -3008,7 +3008,7 @@ a >> 3  0001 1001 = 0x19 = 25
 4. Resposta esperada: a saída acima (%-7s alinha os nomes).
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/E385.c
+gcc ~/LPEDC/08-structs/0065-bits/E385.c -o ~/LPEDC/08-structs/0065-bits/E385 && ~/LPEDC/08-structs/0065-bits/E385
 ```
 
 **Exercício E386** · ★☆☆
@@ -3033,7 +3033,7 @@ Saída esperada:
 3. Dividir por 4 é deslocar 2 casas para a direita (use unsigned).
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/E386.c
+gcc ~/LPEDC/08-structs/0065-bits/E386.c -o ~/LPEDC/08-structs/0065-bits/E386 && ~/LPEDC/08-structs/0065-bits/E386
 ```
 
 **Exercício E387** · ★★☆
@@ -3068,7 +3068,7 @@ Saída esperada:
    zerar.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/E387.c
+gcc ~/LPEDC/08-structs/0065-bits/E387.c -o ~/LPEDC/08-structs/0065-bits/E387 && ~/LPEDC/08-structs/0065-bits/E387
 ```
 
 **Exercício E388** · ★★☆
@@ -3094,7 +3094,7 @@ email: ligado | sms: desligado | push: desligado
    f && SMS; f &= ~PUSH em vez de f &= PUSH.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/E388.c
+gcc ~/LPEDC/08-structs/0065-bits/E388.c -o ~/LPEDC/08-structs/0065-bits/E388 && ~/LPEDC/08-structs/0065-bits/E388
 ```
 
 **Exercício E389** · ★★★
@@ -3129,7 +3129,7 @@ rgb(255, 136, 0) = #FF8800
 4. Média: (51 + 102 + 204) / 3 = 119 = 0x77.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/E389.c
+gcc ~/LPEDC/08-structs/0065-bits/E389.c -o ~/LPEDC/08-structs/0065-bits/E389 && ~/LPEDC/08-structs/0065-bits/E389
 ```
 
 **Exercício E390** · ★★★
@@ -3162,7 +3162,7 @@ academia em dia sem alarme? não
    (academia & ~alarme) != 0.
 
 ```bash
-~/LPEDC/rodar 08-structs/0065-bits/E390.c
+gcc ~/LPEDC/08-structs/0065-bits/E390.c -o ~/LPEDC/08-structs/0065-bits/E390 && ~/LPEDC/08-structs/0065-bits/E390
 ```
 
 ---
@@ -3435,7 +3435,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/A131.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/A131.c -o ~/LPEDC/08-structs/0066-juntando-tudo/A131 && ~/LPEDC/08-structs/0066-juntando-tudo/A131
 ```
 
 **Exemplo A132 · A comanda e o pagamento**
@@ -3520,7 +3520,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/A132.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/A132.c -o ~/LPEDC/08-structs/0066-juntando-tudo/A132 && ~/LPEDC/08-structs/0066-juntando-tudo/A132
 ```
 
 #### Exercícios
@@ -3556,7 +3556,7 @@ Pão francês (padaria) R$ 16.90/kg
 3. Para cada flag: if (p->flags & PROMO) printf(" [promo]");
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/E391.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/E391.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E391 && ~/LPEDC/08-structs/0066-juntando-tudo/E391
 ```
 
 **Exercício E392** · ★☆☆
@@ -3594,7 +3594,7 @@ sizeof(Tarefa) = 20
 4. O sizeof é 12 + 4 + 4, sem sobras.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/E392.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/E392.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E392 && ~/LPEDC/08-structs/0066-juntando-tudo/E392
 ```
 
 **Exercício E393** · ★★☆
@@ -3635,7 +3635,7 @@ remover Macarrão: não encontrado
 4. Resposta esperada: a saída acima, sem vazamento no ASan.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/E393.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/E393.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E393 && ~/LPEDC/08-structs/0066-juntando-tudo/E393
 ```
 
 **Exercício E394** · ★★☆
@@ -3667,7 +3667,7 @@ Pudim R$ 12.00 [destaque]
    itens[1].tags &= DESTAQUE vira itens[1].tags &= ~DESTAQUE.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/E394.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/E394.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E394 && ~/LPEDC/08-structs/0066-juntando-tudo/E394
 ```
 
 **Exercício E395** · ★★★
@@ -3716,7 +3716,7 @@ Trabalho:
 4. Resposta esperada: a saída acima, e free no fim.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/E395.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/E395.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E395 && ~/LPEDC/08-structs/0066-juntando-tudo/E395
 ```
 
 **Exercício E396** · ★★★
@@ -3755,7 +3755,7 @@ Saída esperada:
 5. Resposta esperada: a linha acima.
 
 ```bash
-~/LPEDC/rodar 08-structs/0066-juntando-tudo/E396.c
+gcc ~/LPEDC/08-structs/0066-juntando-tudo/E396.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E396 && ~/LPEDC/08-structs/0066-juntando-tudo/E396
 ```
 
 ---
@@ -3946,7 +3946,7 @@ Abrigo no meio: (3.00, 5.75)
 4. Resposta esperada: a saída acima (13.50 km no total).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0801.c
+gcc ~/LPEDC/08-structs/lista/P0801.c -o ~/LPEDC/08-structs/lista/P0801 -lm && ~/LPEDC/08-structs/lista/P0801
 ```
 
 ---
@@ -3990,7 +3990,7 @@ Rio Branco 23:30 + 1500 min = 00:30 (+2 dias)
 3. Mostre com %02d para sair 02:35 e não 2:35.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0802.c
+gcc ~/LPEDC/08-structs/lista/P0802.c -o ~/LPEDC/08-structs/lista/P0802 && ~/LPEDC/08-structs/lista/P0802
 ```
 
 ---
@@ -4029,7 +4029,7 @@ Código 110: não cadastrado
 2. Falta comprar = minimo - estoque.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0803.c
+gcc ~/LPEDC/08-structs/lista/P0803.c -o ~/LPEDC/08-structs/lista/P0803 && ~/LPEDC/08-structs/lista/P0803
 ```
 
 ---
@@ -4075,7 +4075,7 @@ Abasteceu 20.00 L
    cada operação.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0804.c
+gcc ~/LPEDC/08-structs/lista/P0804.c -o ~/LPEDC/08-structs/lista/P0804 && ~/LPEDC/08-structs/lista/P0804
 ```
 
 ---
@@ -4117,7 +4117,7 @@ fev/2000: 29 dias
 5. Resposta esperada: a saída acima (2026 tem 365 dias).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0805.c
+gcc ~/LPEDC/08-structs/lista/P0805.c -o ~/LPEDC/08-structs/lista/P0805 && ~/LPEDC/08-structs/lista/P0805
 ```
 
 ---
@@ -4153,7 +4153,7 @@ inverte w do grupo:    760 rwxrw----
    modo ^= 1u << 4.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0806.c
+gcc ~/LPEDC/08-structs/lista/P0806.c -o ~/LPEDC/08-structs/lista/P0806 && ~/LPEDC/08-structs/lista/P0806
 ```
 
 ---
@@ -4199,7 +4199,7 @@ Com /16:
 4. Para mostrar um uint32_t em hexa: printf("%08X", (unsigned) ip).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0807.c
+gcc ~/LPEDC/08-structs/lista/P0807.c -o ~/LPEDC/08-structs/lista/P0807 && ~/LPEDC/08-structs/lista/P0807
 ```
 
 ---
@@ -4226,7 +4226,7 @@ Dona Ivete    11 anos: R$ 96.00
    main. Passe o endereço (Socio *) e use ->.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0808.c
+gcc ~/LPEDC/08-structs/lista/P0808.c -o ~/LPEDC/08-structs/lista/P0808 && ~/LPEDC/08-structs/lista/P0808
 ```
 
 ---
@@ -4265,7 +4265,7 @@ Aniversário em março: Vó Nazaré (dia 12) Mãe (dia 5)
 3. Para chegar no mês: familia[i].nascimento.mes (dois pontos seguidos).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0809.c
+gcc ~/LPEDC/08-structs/lista/P0809.c -o ~/LPEDC/08-structs/lista/P0809 && ~/LPEDC/08-structs/lista/P0809
 ```
 
 ---
@@ -4308,7 +4308,7 @@ show     vol 30, graves 5, agudos 4, balanço -2, loudness não, fonte "Pendrive
 3. Mostre a string vazia entre aspas para ver que ela está lá: "%s".
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0810.c
+gcc ~/LPEDC/08-structs/lista/P0810.c -o ~/LPEDC/08-structs/lista/P0810 && ~/LPEDC/08-structs/lista/P0810
 ```
 
 ### ★★☆ Para pensar
@@ -4366,7 +4366,7 @@ Por preço:
    struct inteira (36 ou 40 bytes) a cada troca.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0811.c
+gcc ~/LPEDC/08-structs/lista/P0811.c -o ~/LPEDC/08-structs/lista/P0811 && ~/LPEDC/08-structs/lista/P0811
 ```
 
 ---
@@ -4423,7 +4423,7 @@ Bytes por troca: 8 (ponteiro) contra 224 (ficha)
 4. Resposta esperada: a saída acima (os bytes por troca: 8 e 224).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0812.c
+gcc ~/LPEDC/08-structs/lista/P0812.c -o ~/LPEDC/08-structs/lista/P0812 && ~/LPEDC/08-structs/lista/P0812
 ```
 
 ---
@@ -4472,7 +4472,7 @@ sizeof da union: 40 bytes; sizeof do Pagamento: 56 bytes
 3. O tamanho da union é o do maior campo (a chave, 40 bytes).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0813.c
+gcc ~/LPEDC/08-structs/lista/P0813.c -o ~/LPEDC/08-structs/lista/P0813 && ~/LPEDC/08-structs/lista/P0813
 ```
 
 ---
@@ -4518,7 +4518,7 @@ branco         (255, 255, 255) -> 0xFFFF -> (255, 255, 255)
 3. 0x1F são 5 bits ligados (31) e 0x3F são 6 (63).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0814.c
+gcc ~/LPEDC/08-structs/lista/P0814.c -o ~/LPEDC/08-structs/lista/P0814 && ~/LPEDC/08-structs/lista/P0814
 ```
 
 ---
@@ -4572,7 +4572,7 @@ Mais dinheiro parado: Elétrica
    const char *nome_cat[N_CATEGORIAS] = {"Hidráulica", ...};
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0815.c
+gcc ~/LPEDC/08-structs/lista/P0815.c -o ~/LPEDC/08-structs/lista/P0815 && ~/LPEDC/08-structs/lista/P0815
 ```
 
 ---
@@ -4628,7 +4628,7 @@ Sobram 3 casas de navio
 4. Resposta esperada: a saída acima (sobram 3 casas de navio).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0816.c
+gcc ~/LPEDC/08-structs/lista/P0816.c -o ~/LPEDC/08-structs/lista/P0816 && ~/LPEDC/08-structs/lista/P0816
 ```
 
 ---
@@ -4659,7 +4659,7 @@ Total              R$ 184.45
    último produto.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0817.c
+gcc ~/LPEDC/08-structs/lista/P0817.c -o ~/LPEDC/08-structs/lista/P0817 && ~/LPEDC/08-structs/lista/P0817
 ```
 
 ---
@@ -4700,7 +4700,7 @@ i^8 = 1 + 0i
    dois zeros) e mostre 0.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0818.c
+gcc ~/LPEDC/08-structs/lista/P0818.c -o ~/LPEDC/08-structs/lista/P0818 -lm && ~/LPEDC/08-structs/lista/P0818
 ```
 
 ---
@@ -4740,7 +4740,7 @@ Chave 0x5A = 01011010 (4 bits ligados)
 3. Para contar bits: while (x) { cont += x & 1; x >>= 1; }
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0819.c
+gcc ~/LPEDC/08-structs/lista/P0819.c -o ~/LPEDC/08-structs/lista/P0819 && ~/LPEDC/08-structs/lista/P0819
 ```
 
 ---
@@ -4788,7 +4788,7 @@ Manaus (7 dias):  0.0  4.5 22.0 18.0  0.0  6.5 11.0
 3. Como é um bloco só, um free(s) libera a struct e o vetor juntos.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0820.c
+gcc ~/LPEDC/08-structs/lista/P0820.c -o ~/LPEDC/08-structs/lista/P0820 && ~/LPEDC/08-structs/lista/P0820
 ```
 
 ### ★★★ Desafio
@@ -4843,7 +4843,7 @@ Saída esperada:
    "Notebooks", "Fones"};
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0821.c
+gcc ~/LPEDC/08-structs/lista/P0821.c -o ~/LPEDC/08-structs/lista/P0821 && ~/LPEDC/08-structs/lista/P0821
 ```
 
 ---
@@ -4895,7 +4895,7 @@ Depois do cancelamento, duas vezes (2): 40 98
 4. Livres = 100 - tamanho(união).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0822.c
+gcc ~/LPEDC/08-structs/lista/P0822.c -o ~/LPEDC/08-structs/lista/P0822 && ~/LPEDC/08-structs/lista/P0822
 ```
 
 ---
@@ -4947,7 +4947,7 @@ Parintins: 1
    devolveria 0 sem avisar).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0823.c
+gcc ~/LPEDC/08-structs/lista/P0823.c -o ~/LPEDC/08-structs/lista/P0823 && ~/LPEDC/08-structs/lista/P0823
 ```
 
 ---
@@ -5001,7 +5001,7 @@ At x = 10.0 4.0 12.0 4.5 15.0 1.0
    a[p].l. A ordem dos termos não importa para a multiplicação.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0824.c
+gcc ~/LPEDC/08-structs/lista/P0824.c -o ~/LPEDC/08-structs/lista/P0824 && ~/LPEDC/08-structs/lista/P0824
 ```
 
 ---
@@ -5034,7 +5034,7 @@ Depósito: porta aberta
    .graus de um sensor que guardou .porcento interpreta os bytes errados.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0825.c
+gcc ~/LPEDC/08-structs/lista/P0825.c -o ~/LPEDC/08-structs/lista/P0825 && ~/LPEDC/08-structs/lista/P0825
 ```
 
 ---
@@ -5082,7 +5082,7 @@ Conflito (qua): "Pilates Dona Cleide" e "Reunião da clínica", 20 min
 4. Resposta esperada: a saída acima (dois conflitos).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0826.c
+gcc ~/LPEDC/08-structs/lista/P0826.c -o ~/LPEDC/08-structs/lista/P0826 && ~/LPEDC/08-structs/lista/P0826
 ```
 
 ---
@@ -5124,7 +5124,7 @@ Memória: 126 bytes de bits (com bool seriam 1001)
 4. Resposta esperada: a saída acima (168 primos).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0827.c
+gcc ~/LPEDC/08-structs/lista/P0827.c -o ~/LPEDC/08-structs/lista/P0827 && ~/LPEDC/08-structs/lista/P0827
 ```
 
 ---
@@ -5186,7 +5186,7 @@ sizeof(Cabecalho) = 16, sizeof(Compacto) = 4
    contas com << e >> são as que você controla.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0828.c
+gcc ~/LPEDC/08-structs/lista/P0828.c -o ~/LPEDC/08-structs/lista/P0828 && ~/LPEDC/08-structs/lista/P0828
 ```
 
 ---
@@ -5224,7 +5224,7 @@ Total: R$ 48.00
 5. Resposta esperada: a saída acima (total R$ 48.00).
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0829.c
+gcc ~/LPEDC/08-structs/lista/P0829.c -o ~/LPEDC/08-structs/lista/P0829 && ~/LPEDC/08-structs/lista/P0829
 ```
 
 ---
@@ -5289,7 +5289,7 @@ Atende Téo
    (*n)--.
 
 ```bash
-~/LPEDC/rodar 08-structs/lista/P0830.c
+gcc ~/LPEDC/08-structs/lista/P0830.c -o ~/LPEDC/08-structs/lista/P0830 && ~/LPEDC/08-structs/lista/P0830
 ```
 
 ## Questões no estilo da prova

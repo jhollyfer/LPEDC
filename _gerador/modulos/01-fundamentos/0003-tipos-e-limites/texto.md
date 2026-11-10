@@ -89,7 +89,7 @@ seu programa. Quando não cabe, ele guarda só os 16 bits de baixo, sem avisar:
 > `long`...), estourar é **comportamento indefinido**: o padrão não diz o que
 > acontece, e o compilador pode assumir que nunca acontece.
 > `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não conte com
-> isso. O `rodar` liga o detector de comportamento indefinido, que acusa
+> isso. O gcc com as flags de estudo liga o detector de comportamento indefinido, que acusa
 > `runtime error: signed integer overflow`. Escolha um tipo que caiba.
 
 > [!TIP]

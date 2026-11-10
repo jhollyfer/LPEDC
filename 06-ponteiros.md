@@ -32,7 +32,7 @@ devagar, desenhe as gavetas no papel e rode cada exemplo mais de uma vez.
 Você precisa estar à vontade com vetores, strings e funções (módulos 04 e
 05). Os erros de ponteiro raramente aparecem na compilação: aparecem quando
 o programa roda, às vezes bem longe da linha culpada. Por isso, rode
-**sempre** com o `rodar`, que liga o AddressSanitizer. Quando ele acusar
+**sempre** com as flags de estudo, que liga o AddressSanitizer. Quando ele acusar
 algo, leia o relatório de cima para baixo: o tipo do erro
 (`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável
 envolvida.
@@ -144,7 +144,7 @@ mesmas três perguntas: o que tem dentro, onde mora e quanto ocupa:
 > [!WARNING]
 > Nunca mostre endereço com `%d` ou `%x`. Um endereço tem 8 bytes num
 > sistema de 64 bits, e o `%d` lê só 4: você vê um número cortado, às vezes
-> negativo. O `rodar` avisa (`format '%d' expects argument of type 'int', but
+> negativo. O gcc com as flags de estudo avisa (`format '%d' expects argument of type 'int', but
 > argument 2 has type 'int *'`). O certo é sempre `%p` com `(void *)`. E não
 > conclua nada da ordem dos endereços de variáveis soltas: o compilador
 > arruma as gavetas como quiser (na saída acima, `plano` ficou **antes** de
@@ -204,7 +204,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/A087.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/A087.c -o ~/LPEDC/06-ponteiros/0044-memoria/A087 && ~/LPEDC/06-ponteiros/0044-memoria/A087
 ```
 
 **Exemplo A088 · As gavetas de um vetor**
@@ -235,7 +235,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/A088.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/A088.c -o ~/LPEDC/06-ponteiros/0044-memoria/A088 && ~/LPEDC/06-ponteiros/0044-memoria/A088
 ```
 
 #### Exercícios
@@ -263,7 +263,7 @@ setor = X, endereço 0x7f..., tamanho 1
    endereços aparecem em hexadecimal e mudam a cada vez que você roda.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/E259.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/E259.c -o ~/LPEDC/06-ponteiros/0044-memoria/E259 && ~/LPEDC/06-ponteiros/0044-memoria/E259
 ```
 
 **Exercício E260** · ★☆☆
@@ -293,7 +293,7 @@ total: 13 bytes
    os endereços aparecem em hexadecimal e mudam a cada vez que você roda.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/E260.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/E260.c -o ~/LPEDC/06-ponteiros/0044-memoria/E260 && ~/LPEDC/06-ponteiros/0044-memoria/E260
 ```
 
 **Exercício E261** · ★★☆
@@ -335,15 +335,15 @@ a matriz: 48 bytes
    fila só de 6 doubles, linha após linha (assunto 0039).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/E261.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/E261.c -o ~/LPEDC/06-ponteiros/0044-memoria/E261 && ~/LPEDC/06-ponteiros/0044-memoria/E261
 ```
 
 **Exercício E262** · ★★☆
 
 Este programa da pizzaria tenta mostrar o endereço da variável pedidos de
-três jeitos, e os três estão errados DE PROPÓSITO. Rode com o rodar e leia
+três jeitos, e os três estão errados DE PROPÓSITO. Rode com as flags de estudo e leia
 os avisos do compilador. Conserte as três linhas para mostrarem o
-endereço do jeito certo, rode de novo e confira que o rodar não reclama
+endereço do jeito certo, rode de novo e confira que o gcc com as flags de estudo não reclama
 mais e que as três linhas mostram o mesmo endereço.
 
 
@@ -365,7 +365,7 @@ Endereço: 0x7f...
    viram printf("Endereço: %p\n", (void *)&pedidos);
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/E262.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/E262.c -o ~/LPEDC/06-ponteiros/0044-memoria/E262 && ~/LPEDC/06-ponteiros/0044-memoria/E262
 ```
 
 **Exercício E263** · ★★★
@@ -382,7 +382,7 @@ int v[3] = {1, 2, 3};
 
 e mostre o endereço de a, b e c (uma linha cada) e depois, com um for, o
 endereço de v[0], v[1] e v[2]. No fim, mostre sizeof v e a soma
-sizeof a + sizeof b + sizeof c. Rode com o rodar. Depois compile SEM o
+sizeof a + sizeof b + sizeof c. Rode com as flags de estudo. Depois compile SEM o
 sanitizer e rode de novo, para comparar as duas saídas:
 
 
@@ -393,7 +393,7 @@ gcc -std=c17 E263.c -o e263 && ./e263
 
 
 ```text
-Saída esperada (endereços mudam a cada execução; com o rodar):
+Saída esperada (endereços mudam a cada execução; com as flags de estudo):
 a em 0x7f...30
 b em 0x7f...40
 c em 0x7f...50
@@ -409,12 +409,12 @@ sizeof v = 12, a + b + c = 12
 2. O AddressSanitizer coloca "zonas proibidas" entre as variáveis para
    pegar estouros; sem ele, o compilador arruma do jeito que quiser.
 3. Resposta esperada: v[0], v[1] e v[2] sobem de 4 em 4 nas duas
-   compilações; a, b e c ficam a 16 bytes um do outro com o rodar e
+   compilações; a, b e c ficam a 16 bytes um do outro com as flags de estudo e
    costumam ficar a 4 bytes sem ele, em qualquer ordem. Os dois tamanhos
    dão 12: o mesmo espaço, mas só o vetor tem ordem garantida.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/E263.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/E263.c -o ~/LPEDC/06-ponteiros/0044-memoria/E263 && ~/LPEDC/06-ponteiros/0044-memoria/E263
 ```
 
 **Exercício E264** · ★★★
@@ -463,7 +463,7 @@ total_vendas = 30
    heap, dados e código) é o assunto 0053.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0044-memoria/E264.c
+gcc ~/LPEDC/06-ponteiros/0044-memoria/E264.c -o ~/LPEDC/06-ponteiros/0044-memoria/E264 && ~/LPEDC/06-ponteiros/0044-memoria/E264
 ```
 
 ---
@@ -618,7 +618,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/A089.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/A089.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/A089 && ~/LPEDC/06-ponteiros/0045-ponteiros/A089
 ```
 
 **Exemplo A090 · Gasolina ou etanol?**
@@ -655,7 +655,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/A090.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/A090.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/A090 && ~/LPEDC/06-ponteiros/0045-ponteiros/A090
 ```
 
 #### Exercícios
@@ -683,7 +683,7 @@ Pela variável: 24.0
 3. Resposta esperada: 22.5, 24.0 e 24.0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E265.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E265.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E265 && ~/LPEDC/06-ponteiros/0045-ponteiros/E265
 ```
 
 **Exercício E266** · ★☆☆
@@ -725,7 +725,7 @@ p == &vagas: 1
    comparações dão 1, 1 e 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E266.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E266.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E266 && ~/LPEDC/06-ponteiros/0045-ponteiros/E266
 ```
 
 **Exercício E267** · ★★☆
@@ -740,7 +740,7 @@ Meta: 78
 ```
 
 
-Rode com o rodar e conserte um erro de cada vez: primeiro o compilador
+Rode com as flags de estudo e conserte um erro de cada vez: primeiro o compilador
 recusa o código; depois avisa; por fim o AddressSanitizer reclama quando
 roda. Ache os três erros e conserte.
 
@@ -756,7 +756,7 @@ roda. Ache os três erros e conserte.
    peso_ptr = &peso; antes de *peso_ptr = 82;.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E267.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E267.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E267 && ~/LPEDC/06-ponteiros/0045-ponteiros/E267
 ```
 
 **Exercício E268** · ★★☆
@@ -782,7 +782,7 @@ Depois de tirar 4 kg: azul 19 kg, preta 22 kg
    continua 19.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E268.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E268.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E268 && ~/LPEDC/06-ponteiros/0045-ponteiros/E268
 ```
 
 **Exercício E269** · ★★★
@@ -830,7 +830,7 @@ p = q         a = 9, b = 8, *p = 8, *q = 8
    e "q = &a  a = 9, b = 16, *p = 16, *q = 9".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E269.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E269.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E269 && ~/LPEDC/06-ponteiros/0045-ponteiros/E269
 ```
 
 **Exercício E270** · ★★★
@@ -868,7 +868,7 @@ A: 0.00  B: 300.00  C: 12.00
    "Nenhuma conta negativa".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0045-ponteiros/E270.c
+gcc ~/LPEDC/06-ponteiros/0045-ponteiros/E270.c -o ~/LPEDC/06-ponteiros/0045-ponteiros/E270 && ~/LPEDC/06-ponteiros/0045-ponteiros/E270
 ```
 
 ---
@@ -1033,7 +1033,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/A091.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A091.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A091 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A091
 ```
 
 **Exemplo A092 · Rachando a conta do bar**
@@ -1071,7 +1071,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/A092.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A092.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A092 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/A092
 ```
 
 #### Exercícios
@@ -1097,7 +1097,7 @@ Depois: 6 ingressos
 3. Resposta esperada: 3 e depois 6.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E271.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E271.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E271 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E271
 ```
 
 **Exercício E272** · ★☆☆
@@ -1127,7 +1127,7 @@ Saída esperada:
 3. Resposta esperada: 2 h 15 min e 0 h 47 min.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E272.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E272.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E272 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E272
 ```
 
 **Exercício E273** · ★★☆
@@ -1157,7 +1157,7 @@ Menor: 31  Maior: 39  Amplitude: 8
 3. Resposta esperada: menor 31, maior 39, amplitude 8.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E273.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E273.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E273 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E273
 ```
 
 **Exercício E274** · ★★☆
@@ -1187,7 +1187,7 @@ chamada). Rode de novo e confira a saída acima.
    *valor = 0 e chame zera(&avulsos).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E274.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E274.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E274 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E274
 ```
 
 **Exercício E275** · ★★★
@@ -1222,7 +1222,7 @@ x² + 1 = 0        ->  nenhuma raiz real
    "não é do 2º grau".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E275.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E275.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E275 -lm && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E275
 ```
 
 **Exercício E276** · ★★★
@@ -1270,7 +1270,7 @@ x = 9
    mesma não muda nada; a troca com tmp já se comporta assim sem o if.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0046-passagem-por-referencia/E276.c
+gcc ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E276.c -o ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E276 && ~/LPEDC/06-ponteiros/0046-passagem-por-referencia/E276
 ```
 
 ---
@@ -1436,7 +1436,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/A093.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A093.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A093 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A093
 ```
 
 **Exemplo A094 · O primeiro dia da meta**
@@ -1479,7 +1479,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/A094.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A094.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A094 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/A094
 ```
 
 #### Exercícios
@@ -1511,7 +1511,7 @@ Média: 7.75
 3. Resposta esperada: as quatro notas e média 7.75.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E277.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E277.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E277 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E277
 ```
 
 **Exercício E278** · ★☆☆
@@ -1572,7 +1572,7 @@ h) 3
    bytes depois do de p.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E278.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E278.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E278 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E278
 ```
 
 **Exercício E279** · ★★☆
@@ -1605,7 +1605,7 @@ Saída esperada:
    fica no lugar.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E279.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E279.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E279 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E279
 ```
 
 **Exercício E280** · ★★☆
@@ -1620,7 +1620,7 @@ Saída esperada:
 ```
 
 
-Rode com o rodar: um erro só aparece no resultado, o outro o
+Rode com as flags de estudo: um erro só aparece no resultado, o outro o
 AddressSanitizer denuncia. Conserte os dois e rode de novo até a saída
 ficar igual à esperada, sem aviso do sanitizer.
 
@@ -1636,7 +1636,7 @@ ficar igual à esperada, sem aviso do sanitizer.
    q < estoque + 5.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E280.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E280.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E280 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E280
 ```
 
 **Exercício E281** · ★★★
@@ -1677,7 +1677,7 @@ Campeã: filial 0
 3. Resposta esperada: total 151; filiais 56, 42 e 53; campeã filial 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E281.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E281.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E281 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E281
 ```
 
 **Exercício E282** · ★★★
@@ -1717,7 +1717,7 @@ Novo tamanho: 5
    vizinho do primeiro).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0047-ponteiros-e-vetores/E282.c
+gcc ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E282.c -o ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E282 && ~/LPEDC/06-ponteiros/0047-ponteiros-e-vetores/E282
 ```
 
 ---
@@ -1864,7 +1864,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/A095.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A095.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A095 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A095
 ```
 
 **Exemplo A096 · Os dias da feira**
@@ -1906,7 +1906,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/A096.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A096.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A096 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/A096
 ```
 
 #### Exercícios
@@ -1937,7 +1937,7 @@ Vogais: 15
 3. Resposta esperada: 15.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E283.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E283.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E283 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E283
 ```
 
 **Exercício E284** · ★☆☆
@@ -1984,7 +1984,7 @@ Natal - PB
    (5 letras + '\0'); "Recife" não caberia.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E284.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E284.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E284 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E284
 ```
 
 **Exercício E285** · ★★☆
@@ -2030,7 +2030,7 @@ copia_classica: Porto Alegre (12 letras)
    X, o '\0' não teria sido copiado.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E285.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E285.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E285 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E285
 ```
 
 **Exercício E286** · ★★☆
@@ -2045,7 +2045,7 @@ Mesmo morador
 ```
 
 
-Rode com o rodar, leia o relatório e conserte os três erros, um de cada
+Rode com as flags de estudo, leia o relatório e conserte os três erros, um de cada
 vez, rodando de novo até a saída ficar igual à esperada.
 
 **Dicas:**
@@ -2059,7 +2059,7 @@ vez, rodando de novo até a saída ficar igual à esperada.
    use strcmp(morador, "ana") == 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E286.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E286.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E286 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E286
 ```
 
 **Exercício E287** · ★★★
@@ -2086,7 +2086,7 @@ pix caiu: não
 3. Resposta esperada: sim, sim, não.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E287.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E287.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E287 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E287
 ```
 
 **Exercício E288** · ★★★
@@ -2127,7 +2127,7 @@ Saída esperada:
    o trecho vazio dá posição 0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0048-ponteiros-e-strings/E288.c
+gcc ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E288.c -o ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E288 && ~/LPEDC/06-ponteiros/0048-ponteiros-e-strings/E288
 ```
 
 ---
@@ -2284,7 +2284,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/A097.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A097.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A097 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A097
 ```
 
 **Exemplo A098 · O posto mais barato**
@@ -2323,7 +2323,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/A098.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A098.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A098 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/A098
 ```
 
 #### Exercícios
@@ -2357,7 +2357,7 @@ Agora: K
 3. Resposta esperada: "k k k" e "Agora: K".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E289.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E289.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E289 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E289
 ```
 
 **Exercício E290** · ★☆☆
@@ -2410,7 +2410,7 @@ x agora = 8
    e **pp = 8; faz x valer 8 ("x agora = 8").
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E290.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E290.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E290 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E290
 ```
 
 **Exercício E291** · ★★☆
@@ -2452,7 +2452,7 @@ Teste também com "Sem numero": deve sair uma linha vazia.
 3. Resposta esperada: "4521 confirmado" e uma linha vazia.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E291.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E291.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E291 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E291
 ```
 
 **Exercício E292** · ★★☆
@@ -2479,7 +2479,7 @@ Maior lance: R$ 870
    chamada aponta_maior(&lance1, &lance2, &vencedor).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E292.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E292.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E292 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E292
 ```
 
 **Exercício E293** · ★★★
@@ -2521,7 +2521,7 @@ Originais: j1=9 j2=7 j3=10 j4=8
    Só os endereços mudaram de lugar no vetor.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E293.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E293.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E293 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E293
 ```
 
 **Exercício E294** · ★★★
@@ -2572,7 +2572,7 @@ início          x=1 y=2 *p=1 *q=2 **pp=1
    "*pp = &x  x=10 y=14 *p=14 *q=10 **pp=10".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0049-ponteiro-para-ponteiro/E294.c
+gcc ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E294.c -o ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E294 && ~/LPEDC/06-ponteiros/0049-ponteiro-para-ponteiro/E294
 ```
 
 ---
@@ -2666,7 +2666,7 @@ copie o molde do A100.
 > A comparação "esperta" `return *(const int *)a - *(const int *)b;`
 > aparece em todo canto e tem um bug: com números grandes de sinais
 > opostos, a subtração estoura o `int` (assunto 0003), o sinal vira e a
-> ordem sai errada. O `rodar` acusa `signed integer overflow`. Use
+> ordem sai errada. O gcc com as flags de estudo acusa `signed integer overflow`. Use
 > `return (x > y) - (x < y);`, que só compara e nunca estoura. E não
 > esqueça os parênteses da declaração: `int *f(int)` é uma função, não um
 > ponteiro.
@@ -2745,7 +2745,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/A099.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A099.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A099 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A099
 ```
 
 **Exemplo A100 · A tabela do campeonato com qsort**
@@ -2790,7 +2790,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/A100.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A100.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A100 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/A100
 ```
 
 #### Exercícios
@@ -2823,7 +2823,7 @@ Saída esperada:
 3. Resposta esperada: 86.0 e 30.0.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E295.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E295.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E295 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E295
 ```
 
 **Exercício E296** · ★☆☆
@@ -2855,7 +2855,7 @@ Saída esperada:
 3. Resposta esperada: "1 2 3 4" e "2 4 6 8".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E296.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E296.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E296 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E296
 ```
 
 **Exercício E297** · ★★☆
@@ -2889,7 +2889,7 @@ Resultado: 48
    7 % 2 dá "Operador inválido".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E297.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E297.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E297 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E297
 ```
 
 **Exercício E298** · ★★☆
@@ -2921,14 +2921,14 @@ const char * (um ponteiro para ponteiro, assunto 0049).
 4. Resposta esperada: abacaxi acerola banana caju manga.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E298.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E298.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E298 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E298
 ```
 
 **Exercício E299** · ★★★
 
 Este programa ordena os saldos de uma corretora (em centavos) e tem um
 bug de propósito na função de comparação. Ele compila sem aviso, mas o
-rodar acusa um erro quando roda, e a ordem pode sair errada. Rode, leia a
+gcc com as flags de estudo acusa um erro quando roda, e a ordem pode sair errada. Rode, leia a
 mensagem "runtime error" e conserte a função compara. Rode de novo: a
 mensagem tem que sumir e a ordem tem que ficar certa.
 
@@ -2949,7 +2949,7 @@ Saída esperada:
    return (x > y) - (x < y);
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E299.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E299.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E299 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E299
 ```
 
 **Exercício E300** · ★★★
@@ -2983,7 +2983,7 @@ Saída esperada:
    61 58 53 50 47 44 39 (61 está a 1 do alvo, 58 está a 2).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0050-ponteiro-para-funcao/E300.c
+gcc ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E300.c -o ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E300 && ~/LPEDC/06-ponteiros/0050-ponteiro-para-funcao/E300
 ```
 
 ---
@@ -3151,7 +3151,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/A101.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/A101.c -o ~/LPEDC/06-ponteiros/0051-void-generico/A101 && ~/LPEDC/06-ponteiros/0051-void-generico/A101
 ```
 
 **Exemplo A102 · Os bytes de verdade**
@@ -3193,7 +3193,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/A102.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/A102.c -o ~/LPEDC/06-ponteiros/0051-void-generico/A102 && ~/LPEDC/06-ponteiros/0051-void-generico/A102
 ```
 
 #### Exercícios
@@ -3218,15 +3218,14 @@ altura: 1.83
 3. Resposta esperada: 41 e 1.83.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/E301.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/E301.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E301 && ~/LPEDC/06-ponteiros/0051-void-generico/E301
 ```
 
 **Exercício E302** · ★☆☆
 
 O programa abaixo tem quatro linhas, de L1 a L4, e cada comentário diz o
 que a linha QUERIA fazer. A L2 está certa e já roda. As outras três
-estão comentadas porque têm erro: descomente UMA de cada vez, rode com o
-rodar, leia a mensagem e conserte a linha para que ela faça o que
+estão comentadas porque têm erro: descomente UMA de cada vez, rode com as flags de estudo, leia a mensagem e conserte a linha para que ela faça o que
 promete. No fim, as quatro devem ficar descomentadas e rodando limpo.
 
 
@@ -3251,7 +3250,7 @@ pontos[0] = 300
    L3: p = (int *)p + 1; L4: (double)*(int *)p com %.1f.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/E302.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/E302.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E302 && ~/LPEDC/06-ponteiros/0051-void-generico/E302
 ```
 
 **Exercício E303** · ★★☆
@@ -3284,7 +3283,7 @@ depois: 0 0 0 0 0 | 0.00
    quanto no double).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/E303.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/E303.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E303 && ~/LPEDC/06-ponteiros/0051-void-generico/E303
 ```
 
 **Exercício E304** · ★★☆
@@ -3323,7 +3322,7 @@ Saída esperada:
 2. mostra_int faz printf("%d ", *(const int *)p);
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/E304.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/E304.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E304 && ~/LPEDC/06-ponteiros/0051-void-generico/E304
 ```
 
 **Exercício E305** · ★★★
@@ -3365,7 +3364,7 @@ bruno no índice -1
 3. Resposta esperada: índices 1, 2, 2 e -1 (bruno não está).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/E305.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/E305.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E305 && ~/LPEDC/06-ponteiros/0051-void-generico/E305
 ```
 
 **Exercício E306** · ★★★
@@ -3417,7 +3416,7 @@ negativo depois: -256
    complemento de dois é -256.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0051-void-generico/E306.c
+gcc ~/LPEDC/06-ponteiros/0051-void-generico/E306.c -o ~/LPEDC/06-ponteiros/0051-void-generico/E306 && ~/LPEDC/06-ponteiros/0051-void-generico/E306
 ```
 
 ---
@@ -3613,7 +3612,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/A103.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/A103.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/A103 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/A103
 ```
 
 **Exemplo A104 · O caixa eletrônico de comandos**
@@ -3673,7 +3672,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/A104.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/A104.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/A104 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/A104
 ```
 
 #### Exercícios
@@ -3709,7 +3708,7 @@ R$ 19.99 = 19 reais e 99 centavos
    vira 1998.9999... e o cast corta para 98 centavos.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E307.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E307.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E307 -lm && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E307
 ```
 
 **Exercício E308** · ★☆☆
@@ -3747,7 +3746,7 @@ p--       20 10 15 5 | p em v[2] | fEira
    já está no programa.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E308.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E308.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E308 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E308
 ```
 
 **Exercício E309** · ★★☆
@@ -3779,7 +3778,7 @@ Saída esperada:
 3. Resposta esperada: 7 19 31, para qualquer ordem de entrada.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E309.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E309.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E309 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E309
 ```
 
 **Exercício E310** · ★★☆
@@ -3811,7 +3810,7 @@ Natal Maceio Palmas Recife Aracaju Salvador Teresina Rio Branco
 4. Resposta esperada: a linha acima.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E310.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E310.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E310 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E310
 ```
 
 **Exercício E311** · ★★★
@@ -3825,8 +3824,8 @@ Mercadinho: total 125, desconto 15%
 ```
 
 
-Rode com o rodar, leia os avisos e os relatórios e conserte um erro de
-cada vez, rodando de novo, até a saída ficar igual à esperada e o rodar
+Rode com as flags de estudo, leia os avisos e os relatórios e conserte um erro de
+cada vez, rodando de novo, até a saída ficar igual à esperada e o gcc com as flags de estudo
 não reclamar de nada.
 
 **Dicas:**
@@ -3843,7 +3842,7 @@ não reclamar de nada.
    "mercadinho".
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E311.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E311.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E311 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E311
 ```
 
 **Exercício E312** · ★★★
@@ -3889,7 +3888,7 @@ depois de zerar: 12 0 33 47 5
 3. Para o índice: (const int *)m - pontos.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/0052-juntando-tudo/E312.c
+gcc ~/LPEDC/06-ponteiros/0052-juntando-tudo/E312.c -o ~/LPEDC/06-ponteiros/0052-juntando-tudo/E312 && ~/LPEDC/06-ponteiros/0052-juntando-tudo/E312
 ```
 
 ---
@@ -3897,12 +3896,12 @@ depois de zerar: 12 0 33 47 5
 ## Desafios do módulo
 
 Problemas extras, misturando os assuntos do módulo. Resolva num arquivo seu
-e rode com o `rodar`.
+e rode com as flags de estudo.
 
 **1. O gaveteiro de três níveis.** Ponha num `main` as linhas
 `int x = 7; int *p = &x; int **pp = &p; **pp = 9; *pp = NULL;` e, depois
 delas, mostre o valor de `x`, o resultado de `p == NULL` e o de `pp == &p`.
-Acrescente então `printf("%d\n", *p);`, rode com o `rodar` e veja o que
+Acrescente então `printf("%d\n", *p);`, rode com as flags de estudo e veja o que
 acontece. Por fim, conserte: só mostre `*p` se `p` não for `NULL`; senão,
 mostre `p não aponta para nada`.
 
@@ -3955,8 +3954,7 @@ com `v[n - 1] = tmp`. Nenhum caractere é copiado: só endereços.
 **4. O meu strcat.** Escreva `char *junta(char *destino, const char
 *origem)` só com ponteiros: ande até o `'\0'` do destino e copie a origem dali
 em diante. Devolva `destino`. Teste com `char cidade[30] = "Campina";` e
-`" Grande"`. Depois troque para `char cidade[10]`, rode de novo com o
-`rodar` e veja o erro que ele mostra.
+`" Grande"`. Depois troque para `char cidade[10]`, rode de novo com as flags de estudo e veja o erro que ele mostra.
 
 <details><summary>Resposta</summary>
 
@@ -4109,7 +4107,7 @@ Gol 7 (Remo): Remo 4 x 3 Paysandu
 3. Resposta esperada: a saída acima (4 x 3 para o Remo).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0601.c
+gcc ~/LPEDC/06-ponteiros/lista/P0601.c -o ~/LPEDC/06-ponteiros/lista/P0601 && ~/LPEDC/06-ponteiros/lista/P0601
 ```
 
 ---
@@ -4147,7 +4145,7 @@ Média: 329.20 litros por dia
 4. Resposta esperada: a saída acima (5 leituras, média 329.20 litros).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0602.c
+gcc ~/LPEDC/06-ponteiros/lista/P0602.c -o ~/LPEDC/06-ponteiros/lista/P0602 && ~/LPEDC/06-ponteiros/lista/P0602
 ```
 
 ---
@@ -4183,7 +4181,7 @@ R$ 50.00 / 0: ninguém para pagar
    eles não foram preenchidos.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0603.c
+gcc ~/LPEDC/06-ponteiros/lista/P0603.c -o ~/LPEDC/06-ponteiros/lista/P0603 && ~/LPEDC/06-ponteiros/lista/P0603
 ```
 
 ---
@@ -4221,7 +4219,7 @@ QXZ9B07: Mercosul
    de leitura. Por isso as placas estão num vetor de char.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0604.c
+gcc ~/LPEDC/06-ponteiros/lista/P0604.c -o ~/LPEDC/06-ponteiros/lista/P0604 && ~/LPEDC/06-ponteiros/lista/P0604
 ```
 
 ---
@@ -4262,7 +4260,7 @@ noite depois: 0x55d0c3a01004
 5. Resposta esperada: a saída acima, com as duas últimas linhas iguais.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0605.c
+gcc ~/LPEDC/06-ponteiros/lista/P0605.c -o ~/LPEDC/06-ponteiros/lista/P0605 && ~/LPEDC/06-ponteiros/lista/P0605
 ```
 
 ---
@@ -4298,7 +4296,7 @@ Tabela: 34 34 30 29 25 21 18 12
 3. Evite return y - x: com números grandes a subtração estoura o int.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0606.c
+gcc ~/LPEDC/06-ponteiros/lista/P0606.c -o ~/LPEDC/06-ponteiros/lista/P0606 && ~/LPEDC/06-ponteiros/lista/P0606
 ```
 
 ---
@@ -4340,7 +4338,7 @@ Leve mais     R$  376.40
    double (*regras[4])(double) = {nenhuma, black_friday, cupom10, leve_mais};
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0607.c
+gcc ~/LPEDC/06-ponteiros/lista/P0607.c -o ~/LPEDC/06-ponteiros/lista/P0607 && ~/LPEDC/06-ponteiros/lista/P0607
 ```
 
 ---
@@ -4367,7 +4365,7 @@ Sessão mais cheia: 142
    Devolva o VALOR (int), não o endereço.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0608.c
+gcc ~/LPEDC/06-ponteiros/lista/P0608.c -o ~/LPEDC/06-ponteiros/lista/P0608 && ~/LPEDC/06-ponteiros/lista/P0608
 ```
 
 ---
@@ -4413,7 +4411,7 @@ Frentista:   Rosinete
 3. Use um switch no tipo.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0609.c
+gcc ~/LPEDC/06-ponteiros/lista/P0609.c -o ~/LPEDC/06-ponteiros/lista/P0609 && ~/LPEDC/06-ponteiros/lista/P0609
 ```
 
 ---
@@ -4452,7 +4450,7 @@ Semana (coluna): 2
 4. Resposta esperada: a saída acima (22 na posição 10: linha 2, coluna 2).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0610.c
+gcc ~/LPEDC/06-ponteiros/lista/P0610.c -o ~/LPEDC/06-ponteiros/lista/P0610 && ~/LPEDC/06-ponteiros/lista/P0610
 ```
 
 ### ★★☆ Para pensar
@@ -4495,7 +4493,7 @@ Pares: 5 casas; o lado ímpar começa na posição 5
    quicksort, no módulo 13).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0611.c
+gcc ~/LPEDC/06-ponteiros/lista/P0611.c -o ~/LPEDC/06-ponteiros/lista/P0611 && ~/LPEDC/06-ponteiros/lista/P0611
 ```
 
 ---
@@ -4538,7 +4536,7 @@ Cada elemento tem 20 bytes
 3. qsort(bairros, 6, sizeof bairros[0], compara);
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0612.c
+gcc ~/LPEDC/06-ponteiros/lista/P0612.c -o ~/LPEDC/06-ponteiros/lista/P0612 && ~/LPEDC/06-ponteiros/lista/P0612
 ```
 
 ---
@@ -4578,7 +4576,7 @@ Miúdos: -89 45 -12 -75 (4 itens, soma -131)
    bool (*passa)(int)) para o main ficar com três linhas.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0613.c
+gcc ~/LPEDC/06-ponteiros/lista/P0613.c -o ~/LPEDC/06-ponteiros/lista/P0613 && ~/LPEDC/06-ponteiros/lista/P0613
 ```
 
 ---
@@ -4627,7 +4625,7 @@ backup.tar.gz        [gz] posição 11
 3. Senão, return ultimo + 1 (o caractere logo depois do ponto).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0614.c
+gcc ~/LPEDC/06-ponteiros/lista/P0614.c -o ~/LPEDC/06-ponteiros/lista/P0614 && ~/LPEDC/06-ponteiros/lista/P0614
 ```
 
 ---
@@ -4671,7 +4669,7 @@ Feijoada não está no cardápio
 3. Antes de usar o retorno, teste se é NULL.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0615.c
+gcc ~/LPEDC/06-ponteiros/lista/P0615.c -o ~/LPEDC/06-ponteiros/lista/P0615 && ~/LPEDC/06-ponteiros/lista/P0615
 ```
 
 ---
@@ -4710,7 +4708,7 @@ sem caixa: Ademir ana Beatriz bruna Caio carlos
    cópia do vetor para cada.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0616.c
+gcc ~/LPEDC/06-ponteiros/lista/P0616.c -o ~/LPEDC/06-ponteiros/lista/P0616 && ~/LPEDC/06-ponteiros/lista/P0616
 ```
 
 ---
@@ -4737,7 +4735,7 @@ Total: R$ 35
    comparada, mas não lida. O laço precisa de p < fim.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0617.c
+gcc ~/LPEDC/06-ponteiros/lista/P0617.c -o ~/LPEDC/06-ponteiros/lista/P0617 && ~/LPEDC/06-ponteiros/lista/P0617
 ```
 
 ---
@@ -4778,7 +4776,7 @@ notas + 1 fica 16 bytes depois de notas
    precisa saber o tamanho da linha para dar o salto.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0618.c
+gcc ~/LPEDC/06-ponteiros/lista/P0618.c -o ~/LPEDC/06-ponteiros/lista/P0618 && ~/LPEDC/06-ponteiros/lista/P0618
 ```
 
 ---
@@ -4809,14 +4807,14 @@ Abaixo da média: treino 2 (27.9) treino 4 (26.8) treino 6 (27.5)
 **Dicas:**
 
 1. Desvio padrão = raiz da média dos quadrados das diferenças:
-   sqrt(soma de (v[i] - media)² / n). sqrt está no math.h (o rodar já
+   sqrt(soma de (v[i] - media)² / n). sqrt está no math.h (o gcc com as flags de estudo já
    liga a biblioteca com -lm).
 2. São duas passadas: a primeira acha a média; a segunda usa a média.
 3. Atenção: dentro da função, media é um ponteiro. A conta usa *media.
 4. Resposta esperada: a saída acima (média 28.33, desvio 1.11).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0619.c
+gcc ~/LPEDC/06-ponteiros/lista/P0619.c -o ~/LPEDC/06-ponteiros/lista/P0619 -lm && ~/LPEDC/06-ponteiros/lista/P0619
 ```
 
 ---
@@ -4857,7 +4855,7 @@ Pares primeiro: 12 30 58 66  9 21 47 85
    comparação que você passa.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0620.c
+gcc ~/LPEDC/06-ponteiros/lista/P0620.c -o ~/LPEDC/06-ponteiros/lista/P0620 && ~/LPEDC/06-ponteiros/lista/P0620
 ```
 
 ### ★★★ Desafio
@@ -4902,7 +4900,7 @@ Pos Inscr Nota Idade
    depois a idade (decrescente), depois a inscrição (crescente).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0621.c
+gcc ~/LPEDC/06-ponteiros/lista/P0621.c -o ~/LPEDC/06-ponteiros/lista/P0621 && ~/LPEDC/06-ponteiros/lista/P0621
 ```
 
 ---
@@ -4951,7 +4949,7 @@ Cidades: Autazes Borba Coari Manaus Tefe
    matriz de char, o endereço da linha já é a string (strcmp direto).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0622.c
+gcc ~/LPEDC/06-ponteiros/lista/P0622.c -o ~/LPEDC/06-ponteiros/lista/P0622 && ~/LPEDC/06-ponteiros/lista/P0622
 ```
 
 ---
@@ -4996,7 +4994,7 @@ A linha agora: "27/11/2026"
    '\0' que você pôs no lugar do ';' termina a string ali.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0623.c
+gcc ~/LPEDC/06-ponteiros/lista/P0623.c -o ~/LPEDC/06-ponteiros/lista/P0623 && ~/LPEDC/06-ponteiros/lista/P0623
 ```
 
 ---
@@ -5042,7 +5040,7 @@ CDXLIV = 444
    (andando com char *p) e tire o valor de n. Feche com *p = '\0'.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0624.c
+gcc ~/LPEDC/06-ponteiros/lista/P0624.c -o ~/LPEDC/06-ponteiros/lista/P0624 && ~/LPEDC/06-ponteiros/lista/P0624
 ```
 
 ---
@@ -5052,7 +5050,7 @@ CDXLIV = 444
 O programa da escala de folgas tem TRÊS erros de propósito, e o gcc não
 avisa de nenhum. Ele deveria: trocar o primeiro e o último da equipe de
 lugar, ordenar a equipe em ordem alfabética e montar o crachá do primeiro
-da lista. Rode com o rodar e compare com a saída esperada: a troca não
+da lista. Rode com as flags de estudo e compare com a saída esperada: a troca não
 troca e a ordem sai errada. Conserte esses dois; aí o AddressSanitizer
 passa a acusar o terceiro (é comum um erro esconder o outro). No fim, o
 programa mostra:
@@ -5075,7 +5073,7 @@ Crachá do último: Wellington
 3. Conte as letras de "Wellington" e o tamanho do crachá.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0625.c
+gcc ~/LPEDC/06-ponteiros/lista/P0625.c -o ~/LPEDC/06-ponteiros/lista/P0625 && ~/LPEDC/06-ponteiros/lista/P0625
 ```
 
 ---
@@ -5119,7 +5117,7 @@ lucro: sem troca de sinal em [5.0, 10.0]
    4.0000 com 17 voltas.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0626.c
+gcc ~/LPEDC/06-ponteiros/lista/P0626.c -o ~/LPEDC/06-ponteiros/lista/P0626 && ~/LPEDC/06-ponteiros/lista/P0626
 ```
 
 ---
@@ -5169,7 +5167,7 @@ a x I == a? sim
 3. Para conferir a x I = a, compare as 6 posições do resultado com as de a.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0627.c
+gcc ~/LPEDC/06-ponteiros/lista/P0627.c -o ~/LPEDC/06-ponteiros/lista/P0627 && ~/LPEDC/06-ponteiros/lista/P0627
 ```
 
 ---
@@ -5209,7 +5207,7 @@ O [boi] bumbá, o [boi] Garantido, o [boi]zinho do povo, [boi]!
 4. Resposta esperada: a saída acima (4 ocorrências).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0628.c
+gcc ~/LPEDC/06-ponteiros/lista/P0628.c -o ~/LPEDC/06-ponteiros/lista/P0628 && ~/LPEDC/06-ponteiros/lista/P0628
 ```
 
 ---
@@ -5258,7 +5256,7 @@ Semente final: 3469224078
    a sequência da primeira.
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0629.c
+gcc ~/LPEDC/06-ponteiros/lista/P0629.c -o ~/LPEDC/06-ponteiros/lista/P0629 && ~/LPEDC/06-ponteiros/lista/P0629
 ```
 
 ---
@@ -5300,7 +5298,7 @@ CUPU   não está na grade
    p++, k++).
 
 ```bash
-~/LPEDC/rodar 06-ponteiros/lista/P0630.c
+gcc ~/LPEDC/06-ponteiros/lista/P0630.c -o ~/LPEDC/06-ponteiros/lista/P0630 && ~/LPEDC/06-ponteiros/lista/P0630
 ```
 
 ## Questões no estilo da prova

@@ -47,11 +47,11 @@ ponteiro** (0049) e a ideia de **TAD** (0074). O 0164 conversa com a busca
 sequencial (0089), e o 0165 usa a BST (0099), a AVL (0101), ponteiros para função
 (0050) e `void *` (0051).
 
-O `rodar` compila junto os `.c` de apoio da pasta (como `skip.c`). Por isso os
+O comando do exemplo compila junto os `.c` de apoio da pasta (como `skip.c`). Por isso os
 comandos são os de sempre:
 
 ```bash
-~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/A325.c
+gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/A325.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/A325 && ~/LPEDC/25-estruturas-extras/0163-skip-list/A325
 ```
 
 Uma convenção vale para o módulo todo: o **custo** de uma busca é quantas chaves

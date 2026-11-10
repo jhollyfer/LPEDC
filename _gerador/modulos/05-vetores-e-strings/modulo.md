@@ -34,7 +34,7 @@ Nos desenhos, cada gaveta do vetor tem o índice embaixo, em cinza. Quase todo
 assunto aqui é um laço: ao rodar, mude um tamanho ou um índice de
 propósito.
 
-O **AddressSanitizer** do `rodar` confere, enquanto o programa roda, o que o
+O **AddressSanitizer** do gcc com as flags de estudo confere, enquanto o programa roda, o que o
 C não confere: índice e tamanho de string. Quando aparecer
 `stack-buffer-overflow` ou `index out of
 bounds`, leia a linha indicada: é quase sempre um `<=` no lugar de `<` ou um
@@ -51,7 +51,7 @@ bounds`, leia a linha indicada: é quase sempre um `<=` no lugar de `<` ou um
 ## Desafios do módulo
 
 Problemas extras para treinar, misturando os assuntos do módulo. Resolva num
-arquivo seu e rode com o `rodar`.
+arquivo seu e rode com as flags de estudo.
 
 **1. Segundo maior.** Dado `int v[] = {14, 9, 27, 3, 27, 18};`, ache o segundo
 maior valor **diferente** do maior, numa passada só, sem ordenar.
@@ -389,7 +389,7 @@ for (int i = 0; i <= 5; i++)
 **(D).** Num vetor de 5, os índices vão de 0 a 4. O `<=` faz uma sexta
 volta, com `i = 5`, que lê o que estiver depois do vetor. O C **não confere**
 índices: compila sem erro e o resultado pode ser qualquer coisa. O detector
-do `rodar` acusa `index 5 out of bounds`. Veja 0037.
+do gcc com as flags de estudo acusa `index 5 out of bounds`. Veja 0037.
 
 </details>
 

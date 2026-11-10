@@ -35,10 +35,10 @@ abrir com `cat`. Nenhum exemplo depende de um arquivo que já exista: cada um
 cria o que vai ler.
 
 Para passar argumentos a um programa, escreva-os depois do caminho, no
-`rodar`: ele repassa tudo para o programa.
+executável: ele repassa tudo para o programa.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c -r 7 -a 4
+gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137 -r 7 -a 4
 ```
 
 Duas ferramentas ajudam a enxergar o que os programas gravam: `od -A d -t x1
@@ -258,7 +258,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/A133.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/A133.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/A133 && ~/LPEDC/09-arquivos/0067-arquivos-texto/A133
 ```
 
 **Exemplo A134 · Acrescentar e somar**
@@ -315,7 +315,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/A134.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/A134.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/A134 && ~/LPEDC/09-arquivos/0067-arquivos-texto/A134
 ```
 
 #### Exercícios
@@ -343,7 +343,7 @@ Saída esperada:
    "7 x 10 = 70". O arquivo fica em /tmp: confira com cat /tmp/tabuada7.txt.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E397.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E397.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E397 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E397
 ```
 
 **Exercício E398** · ★☆☆
@@ -374,7 +374,7 @@ a Duda -> Caio Duda
    terceiro fopen abre com "w".
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E398.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E398.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E398 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E398
 ```
 
 **Exercício E399** · ★★☆
@@ -411,7 +411,7 @@ Caracteres: 53
    letras e espaços, mais os 3 '\n'). Confira com: wc /tmp/recado.txt
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E399.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E399.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E399 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E399
 ```
 
 **Exercício E400** · ★★☆
@@ -440,7 +440,7 @@ Média da turma: 6.92
    (20.75 / 3 = 6.9166...).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E400.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E400.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E400 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E400
 ```
 
 **Exercício E401** · ★★★
@@ -474,7 +474,7 @@ tem que mostrar só os três Pix e Total: 100.00.
    dentro do laço. Saída: os três Pix e Total: 100.00.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E401.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E401.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E401 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E401
 ```
 
 **Exercício E402** · ★★★
@@ -519,7 +519,7 @@ Se o segundo fopen falhar, feche o primeiro arquivo antes de sair.
 4. Resposta esperada: arroz 2, cafe 5, ovos 3 e "3 itens na lista".
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0067-arquivos-texto/E402.c
+gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E402.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E402 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E402
 ```
 
 ---
@@ -725,7 +725,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/A135.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/A135.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/A135 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/A135
 ```
 
 **Exemplo A136 · O mesmo número em texto e em binário**
@@ -792,7 +792,7 @@ int main(void) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/A136.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/A136.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/A136 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/A136
 ```
 
 #### Exercícios
@@ -818,7 +818,7 @@ Média: 31.6 graus
 3. Resposta esperada: Lidos: 5 valores e Média: 31.6 graus (158 / 5).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E403.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E403.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E403 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E403
 ```
 
 **Exercício E404** · ★☆☆
@@ -852,7 +852,7 @@ SEEK_END em c) e d) com rewind(arq) no lugar do fseek.
    igual à de cima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E404.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E404.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E404 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E404
 ```
 
 **Exercício E405** · ★★☆
@@ -888,7 +888,7 @@ Depois:
 4. Resposta esperada: só a conta 1002 muda, de 80.50 para 180.50.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E405.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E405.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E405 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E405
 ```
 
 **Exercício E406** · ★★☆
@@ -924,7 +924,7 @@ Registros em /tmp/nao-existe.bin: -1
    que não existe.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E406.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E406.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E406 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E406
 ```
 
 **Exercício E407** · ★★★
@@ -957,7 +957,7 @@ Conserte os dois e rode de novo: a saída tem que mostrar as 5 leituras.
    devolveu 5 e avise se não.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E407.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E407.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E407 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E407
 ```
 
 **Exercício E408** · ★★★
@@ -1001,7 +1001,7 @@ Saldo: R$ 1876.20
 4. Resposta esperada: Padaria, Farmácia, Pix da Ana, e Saldo: R$ 1876.20.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0068-arquivos-binarios/E408.c
+gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E408.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E408 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E408
 ```
 
 ---
@@ -1056,8 +1056,8 @@ quantidade, converte `argv[1]` e `argv[2]` em números e divide:
 
 <p align="center"><img src="09-arquivos/0069-argumentos/ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
 
-Salve o código como `racha.c` e rode com o `rodar`, passando os argumentos
-depois do arquivo: `~/LPEDC/rodar racha.c 187.40 4`.
+Salve o código como `racha.c` e rode com as flags de estudo, passando os argumentos
+depois do arquivo: `./programa 187.40 4`.
 
 
 ```c
@@ -1087,12 +1087,12 @@ int main(int argc, char *argv[]) {
     printf("Cada um: R$ %.2f\n", total / pessoas);
     return 0;
 }
-// $ rodar racha.c 187.40 4
+// $ ./programa 187.40 4
 // Conta: R$ 187.40
 // Pessoas: 4
 // Cada um: R$ 46.85
 //
-// $ rodar racha.c 187.40 quatro
+// $ ./programa 187.40 quatro
 // Número de pessoas inválido: quatro
 ```
 
@@ -1143,7 +1143,7 @@ Arquivos em [`0069-argumentos/`](09-arquivos/0069-argumentos/).
 // -a muda até onde vai (padrão 10) e precisa de um valor logo depois;
 // -r mostra de trás para frente. As opções podem vir em qualquer ordem.
 //
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c -r 7 -a 4
+// Rode assim:  gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137 -r 7 -a 4
 
 // converte texto em inteiro positivo; devolve 0 se não for
 long positivo(const char *texto) {
@@ -1196,25 +1196,25 @@ int main(int argc, char *argv[]) {
     }
     return 0;
 }
-// $ rodar A137.c -r 7 -a 4
+// $ ./programa -r 7 -a 4
 // 7 x 4 = 28
 // 7 x 3 = 21
 // 7 x 2 = 14
 // 7 x 1 = 7
 //
-// $ rodar A137.c 3 -a 2
+// $ ./programa 3 -a 2
 // 3 x 1 = 3
 // 3 x 2 = 6
 //
-// $ rodar A137.c 7 -a
+// $ ./programa 7 -a
 // A opção -a precisa de um valor
 //
-// $ rodar A137.c 7 -x
+// $ ./programa 7 -x
 // Opção desconhecida: -x
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/A137.c -o ~/LPEDC/09-arquivos/0069-argumentos/A137 && ~/LPEDC/09-arquivos/0069-argumentos/A137
 ```
 
 **Exemplo A138 · O que chega no argv**
@@ -1223,7 +1223,7 @@ int main(int argc, char *argv[]) {
 #include <stdio.h>
 #include <string.h>
 
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A138.c 10 -v "São Paulo" 3.5
+// Rode assim:  gcc ~/LPEDC/09-arquivos/0069-argumentos/A138.c -o ~/LPEDC/09-arquivos/0069-argumentos/A138 && ~/LPEDC/09-arquivos/0069-argumentos/A138 10 -v "São Paulo" 3.5
 int main(int argc, char *argv[]) {
     printf("argc = %d\n", argc);
     // argv[0] é o caminho do executável; os seus argumentos começam no 1
@@ -1238,7 +1238,7 @@ int main(int argc, char *argv[]) {
     printf("argv[%d] é %s\n", argc, argv[argc] == NULL ? "NULL" : "outra coisa");
     return 0;
 }
-// $ rodar A138.c 10 -v "São Paulo" 3.5
+// $ ./programa 10 -v "São Paulo" 3.5
 // argc = 5
 // argv[1] = "10" (2 bytes)
 // argv[2] = "-v" (2 bytes)  <- parece uma opção
@@ -1248,7 +1248,7 @@ int main(int argc, char *argv[]) {
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/A138.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/A138.c -o ~/LPEDC/09-arquivos/0069-argumentos/A138 && ~/LPEDC/09-arquivos/0069-argumentos/A138
 ```
 
 #### Exercícios
@@ -1261,7 +1261,7 @@ linha de baixo quantos foram. Sem argumentos, mostra só "0 argumentos".
 
 
 ```text
-$ rodar E409.c bom dia Brasil
+$ ./programa bom dia Brasil
 bom dia Brasil
 3 argumentos
 ```
@@ -1274,7 +1274,7 @@ bom dia Brasil
    porque argv[0] também conta).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/E409.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/E409.c -o ~/LPEDC/09-arquivos/0069-argumentos/E409 && ~/LPEDC/09-arquivos/0069-argumentos/E409
 ```
 
 **Exercício E410** · ★☆☆
@@ -1285,7 +1285,7 @@ mostre o argc; no fim, a soma de todos os atoi. Teste com:
 
 
 ```text
-$ rodar E410.c 7 + 3a
+$ ./programa 7 + 3a
 argc = 4
 argv[1] = "7": 1 caractere(s), começa com '7', atoi = 7
 argv[2] = "+": 1 caractere(s), começa com '+', atoi = 0
@@ -1303,7 +1303,7 @@ Soma dos atoi: 10
    nenhum aviso: é por isso que entrada de usuário pede strtol.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/E410.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/E410.c -o ~/LPEDC/09-arquivos/0069-argumentos/E410 && ~/LPEDC/09-arquivos/0069-argumentos/E410
 ```
 
 **Exercício E411** · ★★☆
@@ -1315,7 +1315,7 @@ nenhuma nota válida, mostre "Nenhuma nota válida" e devolva 1.
 
 
 ```text
-$ rodar E411.c 8.5 7 nove 9.25 6 11
+$ ./programa 8.5 7 nove 9.25 6 11
 Ignorando "nove"
 Ignorando "11"
 Notas: 4
@@ -1333,7 +1333,7 @@ Menor: 6.00
    e menor 6.00.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/E411.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/E411.c -o ~/LPEDC/09-arquivos/0069-argumentos/E411 && ~/LPEDC/09-arquivos/0069-argumentos/E411
 ```
 
 **Exercício E412** · ★★☆
@@ -1342,7 +1342,7 @@ O programa deveria cumprimentar alguém um certo número de vezes:
 
 
 ```text
-$ rodar E412.c Ana 3
+$ ./programa Ana 3
 Olá, Ana!
 Olá, Ana!
 Olá, Ana!
@@ -1350,7 +1350,7 @@ Olá, Ana!
 
 
 Mas, rodando assim, ele não mostra nada. E rodando sem argumentos
-("rodar E412.c"), ele cai com SEGV no AddressSanitizer. São dois erros:
+("./programa "), ele cai com SEGV no AddressSanitizer. São dois erros:
 
 a) um índice errado no argv;
 b) uma conferência que falta antes de usar o argv.
@@ -1366,11 +1366,11 @@ programa deve mostrar uma mensagem de uso em stderr e devolver 1.
 3. Resposta esperada: a) o nome está em argv[1] e as vezes em argv[2]; o
    código usava argv[0] (o caminho do programa) e argv[1] ("Ana", que o
    atoi vira 0, então o laço não roda); b) falta conferir argc != 3 antes
-   de tocar no argv. Consertado, "rodar E412.c Ana 3" mostra Olá, Ana! três
+   de tocar no argv. Consertado, "./programa Ana 3" mostra Olá, Ana! três
    vezes.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/E412.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/E412.c -o ~/LPEDC/09-arquivos/0069-argumentos/E412 && ~/LPEDC/09-arquivos/0069-argumentos/E412
 ```
 
 **Exercício E413** · ★★★
@@ -1386,14 +1386,14 @@ Para testar, crie um arquivo no terminal e passe o caminho:
 
 ```text
 $ printf 'Oi, Ana\ntudo certo?\n\nAté amanhã\n' > /tmp/recado.txt
-$ rodar E413.c /tmp/recado.txt
+$ ./programa /tmp/recado.txt
 4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
 ```
 
 
 
 ```text
-$ rodar E413.c /tmp/nao-existe.txt
+$ ./programa /tmp/nao-existe.txt
 /tmp/nao-existe.txt: No such file or directory
 ```
 
@@ -1407,7 +1407,7 @@ $ rodar E413.c /tmp/nao-existe.txt
    (a linha vazia conta como linha).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/E413.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/E413.c -o ~/LPEDC/09-arquivos/0069-argumentos/E413 && ~/LPEDC/09-arquivos/0069-argumentos/E413
 ```
 
 **Exercício E414** · ★★★
@@ -1416,13 +1416,13 @@ Calculadora de linha de comando: número, operador, número.
 
 
 ```text
-$ rodar E414.c 12.5 + 7.5
+$ ./programa 12.5 + 7.5
 12.50 + 7.50 = 20.00
-$ rodar E414.c 9 x 3
+$ ./programa 9 x 3
 9.00 x 3.00 = 27.00
-$ rodar E414.c 10 / 0
+$ ./programa 10 / 0
 Erro: divisão por zero
-$ rodar E414.c 2 ^ 3
+$ ./programa 2 ^ 3
 Erro: operador "^" desconhecido (use + - x /)
 ```
 
@@ -1431,7 +1431,7 @@ Regras: exatamente 3 argumentos (senão, uso em stderr); os dois números
 validados com strtod; o operador tem que ter exatamente 1 caractere. Todo
 erro vai para stderr e o programa devolve 1. Use um switch no operador.
 
-Por que "x" e não "*"? Teste "rodar E414.c 9 * 3" sem aspas e descubra:
+Por que "x" e não "*"? Teste "./programa 9 * 3" sem aspas e descubra:
 o shell troca o * pelos nomes dos arquivos da pasta ANTES de o programa
 rodar. Com aspas ('*') funciona.
 
@@ -1443,7 +1443,7 @@ rodar. Com aspas ('*') funciona.
 3. Resposta esperada: as quatro saídas acima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0069-argumentos/E414.c
+gcc ~/LPEDC/09-arquivos/0069-argumentos/E414.c -o ~/LPEDC/09-arquivos/0069-argumentos/E414 && ~/LPEDC/09-arquivos/0069-argumentos/E414
 ```
 
 ---
@@ -1606,20 +1606,20 @@ int main(int argc, char *argv[]) {
     uso(argv[0]);
     return 1;
 }
-// $ rodar gastos.c limpa
+// $ ./programa limpa
 // Caderneta apagada.
-// $ rodar gastos.c novo mercado 152.40
+// $ ./programa novo mercado 152.40
 // Gravado: mercado R$ 152.40 (registro 0)
-// $ rodar gastos.c novo luz 98.75
+// $ ./programa novo luz 98.75
 // Gravado: luz R$ 98.75 (registro 1)
-// $ rodar gastos.c novo farmacia 45.30
+// $ ./programa novo farmacia 45.30
 // Gravado: farmacia R$ 45.30 (registro 2)
-// $ rodar gastos.c lista
+// $ ./programa lista
 // 0  mercado      R$   152.40
 // 1  luz          R$    98.75
 // 2  farmacia     R$    45.30
 // Total: R$ 296.45 em 3 gastos
-// $ rodar gastos.c exporta /tmp/gastos.csv
+// $ ./programa exporta /tmp/gastos.csv
 // 3 gastos exportados para /tmp/gastos.csv
 ```
 
@@ -1642,7 +1642,7 @@ mensagem de uso:
 > sistema o modo `O_APPEND`, e o próprio núcleo posiciona no fim a cada
 > `write`. Por isso dois programas anotando gastos ao mesmo tempo não
 > sobrescrevem um ao outro (desde que cada registro saia num `write` só). Já o
-> `return` do `main` vira o código de saída: rode `rodar gastos.c novo x abc;
+> `return` do `main` vira o código de saída: rode `./programa novo x abc;
 > echo $?` e veja o 1. É assim que scripts encadeiam comandos com `&&`.
 
 
@@ -1666,7 +1666,7 @@ Arquivos em [`0070-juntando-tudo/`](09-arquivos/0070-juntando-tudo/).
 // os registros, menos o que sai, para um arquivo temporário e depois trocar
 // um pelo outro com rename. O número do registro vem pela linha de comando.
 //
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A139.c 1
+// Rode assim:  gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/A139.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/A139 && ~/LPEDC/09-arquivos/0070-juntando-tudo/A139 1
 
 #define ARQUIVO "/tmp/caderneta.dat"
 #define TEMPORARIO "/tmp/caderneta.tmp"
@@ -1760,7 +1760,7 @@ int main(int argc, char *argv[]) {
     remove(ARQUIVO);
     return 0;
 }
-// $ rodar A139.c 1
+// $ ./programa 1
 // Antes:
 //   0  mercado    R$  152.40
 //   1  luz        R$   98.75
@@ -1772,12 +1772,12 @@ int main(int argc, char *argv[]) {
 //   2  gas        R$  120.00
 // Registro 1 apagado, sobraram 3
 //
-// $ rodar A139.c 9
+// $ ./programa 9
 // Registro inválido: 9 (use 0 a 3)
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A139.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/A139.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/A139 && ~/LPEDC/09-arquivos/0070-juntando-tudo/A139
 ```
 
 **Exemplo A140 · Do texto para o binário**
@@ -1790,7 +1790,7 @@ int main(int argc, char *argv[]) {
 // binário de registros fixos (fácil de consultar). Com um número na linha de
 // comando, mostra só aquele aluno, indo direto ao registro com fseek.
 //
-// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A140.c 2
+// Rode assim:  gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/A140.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/A140 && ~/LPEDC/09-arquivos/0070-juntando-tudo/A140 2
 
 typedef struct {
     char nome[20];
@@ -1875,20 +1875,20 @@ int main(int argc, char *argv[]) {
     remove(BINARIO);
     return 0;
 }
-// $ rodar A140.c
+// $ ./programa 
 // 4 alunos convertidos (40 bytes cada)
 // Aluno 0: Ana    média 7.75
 // Aluno 1: Bruno  média 5.75
 // Aluno 2: Carla  média 9.00
 // Aluno 3: Davi   média 7.75
 //
-// $ rodar A140.c 2
+// $ ./programa 2
 // 4 alunos convertidos (40 bytes cada)
 // Aluno 2: Carla  média 9.00
 ```
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A140.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/A140.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/A140 && ~/LPEDC/09-arquivos/0070-juntando-tudo/A140
 ```
 
 #### Exercícios
@@ -1904,9 +1904,9 @@ stderr e devolve 1.
 
 ```text
 $ rm -f /tmp/bolao.txt
-$ rodar E415.c /tmp/bolao.txt Rita 2x1
+$ ./programa /tmp/bolao.txt Rita 2x1
 1. Rita 2x1
-$ rodar E415.c /tmp/bolao.txt Caio 0x0
+$ ./programa /tmp/bolao.txt Caio 0x0
 1. Rita 2x1
 2. Caio 0x0
 ```
@@ -1918,7 +1918,7 @@ $ rodar E415.c /tmp/bolao.txt Caio 0x0
 3. Resposta esperada: na segunda execução, "1. Rita 2x1" e "2. Caio 0x0".
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E415.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E415.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E415 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E415
 ```
 
 **Exercício E416** · ★☆☆
@@ -1942,7 +1942,7 @@ b) a gravação dos quatro números de v: no texto, um por linha com
 
 
 ```text
-$ rodar E416.c medidas
+$ ./programa medidas
 2 argumentos
 /tmp/medidas.txt: 20 bytes
 /tmp/medidas.bin: 16 bytes
@@ -1958,7 +1958,7 @@ $ rodar E416.c medidas
    4 ints de 4 bytes = 16).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E416.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E416.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E416 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E416
 ```
 
 **Exercício E417** · ★★☆
@@ -1994,7 +1994,7 @@ Saída esperada:
 3. sizeof(Contato) = 16 + 8 = 24 bytes; 4 + 3 * 24 = 76.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E417.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E417.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E417 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E417
 ```
 
 **Exercício E418** · ★★☆
@@ -2011,7 +2011,7 @@ cujo nome vem em argv[1]. Sem argumento, usa /tmp/vendas.csv;
 
 
 ```text
-$ rodar E418.c
+$ ./programa 
 produto;qtd;total
 pastel;30;240.00
 caldo de cana;25;162.50
@@ -2029,7 +2029,7 @@ Total geral: R$ 662.50 (gravado em /tmp/vendas.csv)
 4. Resposta esperada: as 5 linhas do CSV e Total geral: R$ 662.50.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E418.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E418.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E418 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E418
 ```
 
 **Exercício E419** · ★★★
@@ -2039,10 +2039,10 @@ Um diário de linha de comando: "anota <texto>" acrescenta uma linha em
 
 
 ```text
-$ rodar E419.c anota "comprar pão"
+$ ./programa anota "comprar pão"
 1 anotações:
 comprar pão
-$ rodar E419.c anota "pagar a luz"
+$ ./programa anota "pagar a luz"
 2 anotações:
 comprar pão
 pagar a luz
@@ -2051,7 +2051,7 @@ pagar a luz
 
 Mas o programa mostra "0 anotações:" toda vez, e depois de rodar as duas
 vezes o arquivo só tem "pagar a luz" (confira com cat /tmp/diario.txt).
-E "rodar E419.c anota", sem o texto, tem comportamento indefinido. Ache os
+E "./programa anota", sem o texto, tem comportamento indefinido. Ache os
 TRÊS erros, conserte e rode as duas execuções de novo.
 
 **Dicas:**
@@ -2067,7 +2067,7 @@ TRÊS erros, conserte e rode as duas execuções de novo.
    saída fica igual à do enunciado (apague /tmp/diario.txt antes de testar).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E419.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E419.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E419 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E419
 ```
 
 **Exercício E420** · ★★★
@@ -2076,7 +2076,7 @@ Faça um "grep" simplificado:
 
 
 ```text
-rodar E420.c [-c] <palavra> <arquivo>
+./programa [-c] <palavra> <arquivo>
 ```
 
 
@@ -2091,13 +2091,13 @@ Para testar:
 
 ```text
 $ printf 'arroz 5kg\nfeijao\narroz integral\ncafe\n' > /tmp/lista.txt
-$ rodar E420.c arroz /tmp/lista.txt
+$ ./programa arroz /tmp/lista.txt
 1: arroz 5kg
 3: arroz integral
 2 linhas
-$ rodar E420.c -c arroz /tmp/lista.txt
+$ ./programa -c arroz /tmp/lista.txt
 2
-$ rodar E420.c leite /tmp/lista.txt; echo "código: $?"
+$ ./programa leite /tmp/lista.txt; echo "código: $?"
 0 linhas
 código: 1
 ```
@@ -2114,7 +2114,7 @@ código: 1
 4. Resposta esperada: as saídas acima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/E420.c
+gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E420.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E420 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E420
 ```
 
 ---
@@ -2316,7 +2316,7 @@ Média: 33.0 graus
 3. Resposta esperada: 7 dias, maior 36 no dia 4, média 231 / 7 = 33.0.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0901.c
+gcc ~/LPEDC/09-arquivos/lista/P0901.c -o ~/LPEDC/09-arquivos/lista/P0901 && ~/LPEDC/09-arquivos/lista/P0901
 ```
 
 ---
@@ -2347,7 +2347,7 @@ Total: 4 linhas
    com 1 a mais.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0902.c
+gcc ~/LPEDC/09-arquivos/lista/P0902.c -o ~/LPEDC/09-arquivos/lista/P0902 && ~/LPEDC/09-arquivos/lista/P0902
 ```
 
 ---
@@ -2380,7 +2380,7 @@ Total do dia: R$ 90
    fclose(arq) depois dos dois fprintf. A saída fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0903.c
+gcc ~/LPEDC/09-arquivos/lista/P0903.c -o ~/LPEDC/09-arquivos/lista/P0903 && ~/LPEDC/09-arquivos/lista/P0903
 ```
 
 ---
@@ -2418,7 +2418,7 @@ Registros: 5
 3. Resposta esperada: 80 bytes, 5 registros, último código 105 a R$ 4.99.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0904.c
+gcc ~/LPEDC/09-arquivos/lista/P0904.c -o ~/LPEDC/09-arquivos/lista/P0904 && ~/LPEDC/09-arquivos/lista/P0904
 ```
 
 ---
@@ -2432,7 +2432,7 @@ return 1.
 
 
 ```text
-$ ./rodar P0905.c manaus belem parintins tefe
+$ ./programa manaus belem parintins tefe
 ```
 
 
@@ -2455,7 +2455,7 @@ Sem argumentos, a saída é "uso: P0905 cidade1 cidade2 ...".
 3. Resposta esperada: 4 cidades, maior nome parintins com 9 letras.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0905.c
+gcc ~/LPEDC/09-arquivos/lista/P0905.c -o ~/LPEDC/09-arquivos/lista/P0905 && ~/LPEDC/09-arquivos/lista/P0905
 ```
 
 ---
@@ -2495,7 +2495,7 @@ Total: R$ 195.50
    '\n' de cada linha).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0906.c
+gcc ~/LPEDC/09-arquivos/lista/P0906.c -o ~/LPEDC/09-arquivos/lista/P0906 && ~/LPEDC/09-arquivos/lista/P0906
 ```
 
 ---
@@ -2530,7 +2530,7 @@ A FEIRA ABRE AS 6H.
 3. Resposta esperada: as duas linhas em maiúsculas, como acima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0907.c
+gcc ~/LPEDC/09-arquivos/lista/P0907.c -o ~/LPEDC/09-arquivos/lista/P0907 && ~/LPEDC/09-arquivos/lista/P0907
 ```
 
 ---
@@ -2559,7 +2559,7 @@ Lidos: 5
 3. Resposta esperada: 1 9 25 49 81 e Lidos: 5.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0908.c
+gcc ~/LPEDC/09-arquivos/lista/P0908.c -o ~/LPEDC/09-arquivos/lista/P0908 && ~/LPEDC/09-arquivos/lista/P0908
 ```
 
 ---
@@ -2587,7 +2587,7 @@ Registro 3: matrícula 2204, nota 4.0
    saída fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0909.c
+gcc ~/LPEDC/09-arquivos/lista/P0909.c -o ~/LPEDC/09-arquivos/lista/P0909 && ~/LPEDC/09-arquivos/lista/P0909
 ```
 
 ---
@@ -2602,7 +2602,7 @@ com return 1. Apague o arquivo no fim.
 
 
 ```text
-$ ./rodar P0910.c 12.50 3.99 7.00
+$ ./programa 12.50 3.99 7.00
 ```
 
 
@@ -2621,7 +2621,7 @@ Total: R$ 23.49
 3. Resposta esperada: 3 preços gravados e Total: R$ 23.49.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0910.c
+gcc ~/LPEDC/09-arquivos/lista/P0910.c -o ~/LPEDC/09-arquivos/lista/P0910 && ~/LPEDC/09-arquivos/lista/P0910
 ```
 
 ### ★★☆ Para pensar
@@ -2664,7 +2664,7 @@ Aprovados: 3 de 5
 3. Resposta esperada: Ana 7.50, Caio 6.00, Dani 9.00 e Aprovados: 3 de 5.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0911.c
+gcc ~/LPEDC/09-arquivos/lista/P0911.c -o ~/LPEDC/09-arquivos/lista/P0911 && ~/LPEDC/09-arquivos/lista/P0911
 ```
 
 ---
@@ -2704,7 +2704,7 @@ Depois: 4 produtos
 3. Resposta esperada: Depois: 4 produtos, sem o 103 (Acucar) na lista.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0912.c
+gcc ~/LPEDC/09-arquivos/lista/P0912.c -o ~/LPEDC/09-arquivos/lista/P0912 && ~/LPEDC/09-arquivos/lista/P0912
 ```
 
 ---
@@ -2745,7 +2745,7 @@ Saída esperada:
    de 4 leituras (piso de log2 8, mais 1).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0913.c
+gcc ~/LPEDC/09-arquivos/lista/P0913.c -o ~/LPEDC/09-arquivos/lista/P0913 && ~/LPEDC/09-arquivos/lista/P0913
 ```
 
 ---
@@ -2784,7 +2784,7 @@ Ignorados: abc x9 7a
    abc, x9 e 7a.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0914.c
+gcc ~/LPEDC/09-arquivos/lista/P0914.c -o ~/LPEDC/09-arquivos/lista/P0914 && ~/LPEDC/09-arquivos/lista/P0914
 ```
 
 ---
@@ -2798,7 +2798,7 @@ só a média. Sem nenhuma nota (inclusive quando só veio o "-v"), ele mostra
 
 
 ```text
-$ ./rodar P0915.c -v 7 8 9.5
+$ ./programa -v 7 8 9.5
 ```
 
 
@@ -2812,7 +2812,7 @@ Média: 8.17
 ```
 
 
-Com ./rodar P0915.c 7 8 9.5 sai só a linha "Média: 8.17".
+Com ./programa 7 8 9.5 sai só a linha "Média: 8.17".
 
 **Dicas:**
 
@@ -2822,7 +2822,7 @@ Com ./rodar P0915.c 7 8 9.5 sai só a linha "Média: 8.17".
 3. Resposta esperada: com -v, as três notas e Média: 8.17 (24.5 / 3).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0915.c
+gcc ~/LPEDC/09-arquivos/lista/P0915.c -o ~/LPEDC/09-arquivos/lista/P0915 && ~/LPEDC/09-arquivos/lista/P0915
 ```
 
 ---
@@ -2859,7 +2859,7 @@ Mais curta: linha 4 (3 caracteres): fim
 3. Resposta esperada: linha 2 com 19 caracteres e linha 4 com 3.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0916.c
+gcc ~/LPEDC/09-arquivos/lista/P0916.c -o ~/LPEDC/09-arquivos/lista/P0916 && ~/LPEDC/09-arquivos/lista/P0916
 ```
 
 ---
@@ -2890,7 +2890,7 @@ Depois: 119 122 130 125 118 120
    6 registros).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0917.c
+gcc ~/LPEDC/09-arquivos/lista/P0917.c -o ~/LPEDC/09-arquivos/lista/P0917 && ~/LPEDC/09-arquivos/lista/P0917
 ```
 
 ---
@@ -2929,7 +2929,7 @@ Total: R$ 1114.00
 3. Resposta esperada: a saída acima; o total é 329 + 360 + 425 = 1114.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0918.c
+gcc ~/LPEDC/09-arquivos/lista/P0918.c -o ~/LPEDC/09-arquivos/lista/P0918 && ~/LPEDC/09-arquivos/lista/P0918
 ```
 
 ---
@@ -2961,7 +2961,7 @@ Votos sim: 3, não: 1, inválidos: 0
    código compara com != 0). A saída fica igual à de cima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0919.c
+gcc ~/LPEDC/09-arquivos/lista/P0919.c -o ~/LPEDC/09-arquivos/lista/P0919 && ~/LPEDC/09-arquivos/lista/P0919
 ```
 
 ---
@@ -3000,7 +3000,7 @@ Melhor vendedor: 2 (R$ 510)
 3. Resposta esperada: semanas 415, 340, 380 e 310; o vendedor 2, com 510.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0920.c
+gcc ~/LPEDC/09-arquivos/lista/P0920.c -o ~/LPEDC/09-arquivos/lista/P0920 && ~/LPEDC/09-arquivos/lista/P0920
 ```
 
 ### ★★★ Desafio
@@ -3051,7 +3051,7 @@ Zeca: não está na agenda (3 leituras)
    custo de manter a ordem: inserir é O(n), mas buscar fica O(log n).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0921.c
+gcc ~/LPEDC/09-arquivos/lista/P0921.c -o ~/LPEDC/09-arquivos/lista/P0921 && ~/LPEDC/09-arquivos/lista/P0921
 ```
 
 ---
@@ -3123,7 +3123,7 @@ S 104 10.00: conta inexistente
 4. Resposta esperada: a saída acima (Ana: 500 - 80.50 - 100 = 319.50).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0922.c
+gcc ~/LPEDC/09-arquivos/lista/P0922.c -o ~/LPEDC/09-arquivos/lista/P0922 && ~/LPEDC/09-arquivos/lista/P0922
 ```
 
 ---
@@ -3169,7 +3169,7 @@ Linha 9: não existe
 3. A linha 2 começa no byte 18 porque a linha 1 tem 17 letras mais o '\n'.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0923.c
+gcc ~/LPEDC/09-arquivos/lista/P0923.c -o ~/LPEDC/09-arquivos/lista/P0923 && ~/LPEDC/09-arquivos/lista/P0923
 ```
 
 ---
@@ -3221,7 +3221,7 @@ R$ 18.90 Manteiga
 3. Resposta esperada: a saída acima (meios lidos: 5, 2, 4 e 3).
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0924.c
+gcc ~/LPEDC/09-arquivos/lista/P0924.c -o ~/LPEDC/09-arquivos/lista/P0924 && ~/LPEDC/09-arquivos/lista/P0924
 ```
 
 ---
@@ -3261,7 +3261,7 @@ Leituras: 20, escritas: 6
 4. Não conte as leituras da listagem.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0925.c
+gcc ~/LPEDC/09-arquivos/lista/P0925.c -o ~/LPEDC/09-arquivos/lista/P0925 && ~/LPEDC/09-arquivos/lista/P0925
 ```
 
 ---
@@ -3308,7 +3308,7 @@ Confere: sim
    "ABCD" o arquivo ficaria com o DOBRO do tamanho.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0926.c
+gcc ~/LPEDC/09-arquivos/lista/P0926.c -o ~/LPEDC/09-arquivos/lista/P0926 && ~/LPEDC/09-arquivos/lista/P0926
 ```
 
 ---
@@ -3341,7 +3341,7 @@ Do meio: Mimi
    cima.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0927.c
+gcc ~/LPEDC/09-arquivos/lista/P0927.c -o ~/LPEDC/09-arquivos/lista/P0927 && ~/LPEDC/09-arquivos/lista/P0927
 ```
 
 ---
@@ -3386,7 +3386,7 @@ Saída esperada:
 3. O "%+d" do printf mostra o sinal sempre: +2, -6.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0928.c
+gcc ~/LPEDC/09-arquivos/lista/P0928.c -o ~/LPEDC/09-arquivos/lista/P0928 && ~/LPEDC/09-arquivos/lista/P0928
 ```
 
 ---
@@ -3399,7 +3399,7 @@ assim:
 
 
 ```text
-$ ./rodar P0929.c 3 ataque ao amanhecer
+$ ./programa 3 ataque ao amanhecer
 ```
 
 
@@ -3428,7 +3428,7 @@ Decifrado: ataque ao amanhecer
    de volta com fgets.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0929.c
+gcc ~/LPEDC/09-arquivos/lista/P0929.c -o ~/LPEDC/09-arquivos/lista/P0929 && ~/LPEDC/09-arquivos/lista/P0929
 ```
 
 ---
@@ -3488,7 +3488,7 @@ Saída esperada:
    código, por ano...) sobre os mesmos dados.
 
 ```bash
-~/LPEDC/rodar 09-arquivos/lista/P0930.c
+gcc ~/LPEDC/09-arquivos/lista/P0930.c -o ~/LPEDC/09-arquivos/lista/P0930 && ~/LPEDC/09-arquivos/lista/P0930
 ```
 
 ## Questões no estilo da prova

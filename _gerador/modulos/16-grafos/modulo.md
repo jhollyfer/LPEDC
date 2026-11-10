@@ -44,7 +44,7 @@ strings à parte. Os exemplos examinam os vizinhos em ordem crescente de
 muda, sem estar errada.
 
 O assunto 0109 traz o TAD `grafo.h` + `grafo.c` com lista de adjacência; o
-`rodar` compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
+comando do exemplo compila o `grafo.c` junto com os arquivos daquela pasta. Nos outros
 assuntos, cada arquivo traz tudo dentro dele, com matriz de adjacência, para
 o algoritmo ficar inteiro na tela.
 
@@ -59,7 +59,7 @@ o algoritmo ficar inteiro na tela.
 ## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
-com o `rodar`.
+com as flags de estudo.
 
 **1. Contando arestas.** Escreva `int arestas(const int grau[], int n)`, que
 recebe os graus dos vértices de um grafo não dirigido e devolve quantas

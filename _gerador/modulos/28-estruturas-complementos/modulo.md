@@ -53,11 +53,11 @@ encadeamento e com sondagem linear (0105 a 0107) e as ordenações dos módulos
 Cada assunto tem um **TAD** na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
 `vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O
 texto mostra só o pedaço do `.c` que importa: abra o `.c` inteiro também. O
-`rodar` compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
+comando do exemplo compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
 então os comandos são os de sempre:
 
 ```bash
-~/LPEDC/rodar 28-estruturas-complementos/0177-rubro-negra-classica/A353.c
+gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353 -lm && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353
 ```
 
 As convenções são as do Cormen: **altura conta arestas** (folha tem altura 0,

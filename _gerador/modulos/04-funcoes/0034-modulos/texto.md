@@ -31,7 +31,7 @@ gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
 ```
 
 Num projeto grande, mudar um `.c` recompila só ele e liga de novo, em vez de
-recompilar tudo. O `rodar` do curso compila junto todo `.c` de apoio que
+recompilar tudo. O gcc com as flags de estudo do curso compila junto todo `.c` de apoio que
 estiver na pasta (todo arquivo que não se chama `A000.c` ou `E000.c`).
 
 O `conversao.h` é incluído pelos dois `.c`. Cada um vira
@@ -69,7 +69,7 @@ int main(void) {
     printf("R$ 1000.00 = US$ %.2f\n", reais_para_dolares(1000, 5.40));
     return 0;
 }
-// Compilando à mão (o rodar faz isso sozinho):
+// Compilando à mão (o gcc com as flags de estudo faz isso sozinho):
 //   gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem
 // Saída:
 // 30 °C = 86.0 °F

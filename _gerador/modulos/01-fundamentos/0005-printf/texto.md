@@ -73,7 +73,7 @@ de uma coluna, basta trocar um número em cada linha:
 > O `printf` **confia** em você: se o especificador não combina com o tipo do
 > argumento, ele lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
 > nem 10: mostra lixo. `printf("%.2f", 5)` também. Faltar argumento dá no mesmo. O
-> `-Wall` do `rodar` avisa (`format '%d' expects argument of type 'int'`).
+> `-Wall` do gcc com as flags de estudo avisa (`format '%d' expects argument of type 'int'`).
 > Nunca ignore esse aviso. E no `printf` não vai `&`: ele quer o valor, não o
 > endereço.
 

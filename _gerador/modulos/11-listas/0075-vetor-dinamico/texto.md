@@ -21,7 +21,7 @@ mostra por que crescer de um em um sai caro.
 
 O pacote todo vira um **TAD** (assunto 0074): `lista.h` diz **o que** a lista
 faz e `lista.c` diz **como**. A `struct lista` fica escondida no `.c`, então
-quem usa a lista nunca mexe em `tam` na mão. O `rodar` compila o `lista.c`
+quem usa a lista nunca mexe em `tam` na mão. O comando do exemplo compila o `lista.c`
 junto, como explica o começo do módulo.
 
 

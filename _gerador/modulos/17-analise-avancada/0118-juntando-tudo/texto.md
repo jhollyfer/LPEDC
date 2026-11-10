@@ -183,7 +183,7 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 > (no Linux, 1.000.000). As duas coisas são inteiras: escrever
 > `(clock() - ini) / CLOCKS_PER_SEC` faz divisão inteira e dá **0** para
 > tudo que dura menos de um segundo. Por isso o `1000.0 *` na frente, que
-> converte para `double` antes de dividir. E lembre que o `rodar` compila sem
+> converte para `double` antes de dividir. E lembre que o comando do exemplo compila sem
 > otimização e com o AddressSanitizer, que vigia cada acesso à memória: os
 > tempos aqui são várias vezes maiores que os de um `gcc -O2` sem
 > sanitizador. As **razões** continuam valendo, e a previsão trabalha com
