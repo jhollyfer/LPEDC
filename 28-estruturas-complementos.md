@@ -166,7 +166,7 @@ void sent_remove(ListaS *L, NoS *x) {
 }
 ```
 
-E a barbearia:
+O programa da barbearia:
 
 ```c
 #include <stdio.h>
@@ -606,7 +606,7 @@ NoP *ap_sucessor(NoP *x) {
 }
 ```
 
-E o painel da rodoviária, que também mostra os conceitos de três nós:
+O painel da rodoviária também mostra os conceitos de três nós:
 
 ```c
 #include <stdio.h>
@@ -1101,7 +1101,7 @@ NoA *avr_remove(NoA *r, int chave) {
 }
 ```
 
-E o painel da cozinha:
+O painel da cozinha:
 
 ```c
 #include <stdio.h>
@@ -1606,7 +1606,7 @@ Duas rotações no 25, uma no 45, nenhuma no 20 e no 40. A altura negra começa
 em 1 e só cresce quando o caso 1 chega à raiz e ela volta a ser preta: a
 árvore cresce **por cima**, como a árvore 2-3 por trás da LLRB.
 
-E a **remoção**? O Cormen também a faz em O(log n), com um conserto de quatro
+Falta a **remoção**. O Cormen também a faz em O(log n), com um conserto de quatro
 casos olhando o **irmão** do nó que ficou com um "preto a mais". É bem mais
 longa que a inserção e não cabe aqui. Para a prova, basta saber que ela
 existe, que custa O(log n) e que faz no máximo **três rotações**.
@@ -1972,7 +1972,7 @@ int esp_mult_desloca(uint32_t k, int p) {
 }
 ```
 
-E o atacadão:
+O programa do atacadão:
 
 ```c
 #include <stdio.h>
@@ -2008,9 +2008,8 @@ int main(void) {
 ```
 
 Com 16, os dez num balde só. Com 13, nenhuma colisão. Com a multiplicação e
-m = 16, uma colisão (16 e 160), o que é normal para 10 chaves em 16 baldes:
-a multiplicação não garante zero colisão, garante que o padrão das chaves não
-importa.
+m = 16, uma colisão (16 e 160), normal para 10 chaves em 16 baldes: o que ela
+garante é que o padrão das chaves deixa de importar.
 
 O fluxograma faz a conta do fardo 48 pela multiplicação em inteiros.
 Depois de conferir o `p` (deslocar 32 bits ou mais é indefinido em C), são
@@ -2183,7 +2182,7 @@ Saída esperada:
 
 1. Guarde os CEPs num vetor de uint32_t. Atenção: 01310100 escrito assim
    em C é octal! Escreva 1310100 e mostre com %08u.
-2. Repare no 69050000 e no 69050097: diferem por 97, caem no mesmo balde.
+2. O 69050000 e o 69050097 diferem por 97 e caem no mesmo balde.
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/0178-hash-multiplicacao/E1063.c
@@ -2474,7 +2473,7 @@ está livre:
 > por vez e caem na mesma linha de cache de 64 bytes: oito sondagens custam
 > uma ida à memória. Na quadrática e na dupla, cada sondagem pula para longe e
 > costuma custar uma ida nova. É a troca de sempre: menos sondagens contra
-> sondagens mais caras. E o `(long)i * i` tem motivo: com `m` grande, `i * i`
+> sondagens mais caras. O `(long)i * i` tem motivo: com `m` grande, `i * i`
 > em `int` pode estourar, e estouro de `int` é comportamento indefinido.
 
 > [!NOTE]
@@ -2621,7 +2620,7 @@ int main(void) {
 Com m = 13 (sondagem.h), mostre as 6 primeiras posições da sequência de
 sondagem das chaves 44 e 57 nos três modos (SD_LINEAR, SD_QUADRATICA e
 SD_DUPLA), usando sd_posicao(t, chave, i) para i de 0 a 5. As duas chaves
-começam na posição 5: repare em qual modo as sequências se separam.
+começam na posição 5: veja em qual modo as sequências se separam.
 
 
 ```text
@@ -2810,10 +2809,9 @@ fim: n = 40, m = 163, carga 0.25, média de sondagens 1.38
 ## 0180 · Pigeonhole e chave composta
 
 A professora do cursinho corrigiu o simulado e quer a lista da turma pela
-nota, da menor para a maior. As notas são inteiras, de 0 a 10, e a lista de
-chamada já está em ordem alfabética. E quer que quem tirou a mesma nota continue
-em ordem alfabética. Com 11 notas possíveis, dá para ordenar sem
-comparar um aluno com outro.
+nota, da menor para a maior. As notas são inteiras, de 0 a 10. A lista de
+chamada já está em ordem alfabética, e quem tirou a mesma nota deve continuar
+assim. Com 11 notas possíveis, dá para ordenar sem comparar um aluno com outro.
 
 O **pigeonhole sort** (ordenação por casas de pombo) serve quando a chave é um
 inteiro num intervalo pequeno `[min, max]`. Ele cria uma **casa** para cada
@@ -2886,7 +2884,7 @@ passadas, no `pombal.c`:
     }
 ```
 
-E a professora, que compara com a seleção:
+A professora compara o resultado com o da seleção:
 
 ```c
 #include <stdio.h>
@@ -3331,7 +3329,7 @@ int ag_cancela(Agenda *a, int horario) {
 }
 ```
 
-E a recepção:
+O programa da recepção:
 
 ```c
 #include <stdio.h>
@@ -4094,7 +4092,7 @@ m = 10: 3 6 9 2 5 0 0 0 | colisões: 2
 
 1. Um vetor de contagem por balde: colisão é quando conta[h] já era maior
    que 0.
-2. Repare que 1013, 2026, ... são múltiplos de 1013 = 13 · 78 - 1.
+2. As matrículas 1013, 2026, ... são múltiplos de 1013 = 13 · 78 - 1.
 3. Com m = 10, a função só vê o último dígito.
 
 ```bash
@@ -4217,9 +4215,9 @@ total de sondagens: 22
 **Dicas:**
 
 1. A placa que começa no 1 tenta 1, 2, 5, 10, 6 (1 + 16 = 17), ...
-2. O total é o mesmo da linear (22) neste caso, mas o bloco de vagas
-   seguidas some, mas todas as placas que começam no 1 seguem a mesma
-   trilha (agrupamento secundário).
+2. O total é o mesmo da linear (22) neste caso. O bloco de vagas seguidas
+   some, mas todas as placas que começam no 1 seguem a mesma trilha
+   (agrupamento secundário).
 
 ```bash
 ~/LPEDC/rodar 28-estruturas-complementos/lista/P2811.c

@@ -617,7 +617,7 @@ próximo nó do andar ainda é menor que a chave, avance. Se ele já passou da c
 (ou não existe), desça um andar. No andar 0, o próximo nó é a chave ou ela não
 existe.
 
-E quem decide em quais andares cada nó aparece? Se fosse "um nó sim, um não"
+Quem decide em quais andares cada nó aparece? Se fosse "um nó sim, um não"
 em cada andar, a busca seria uma busca binária, mas qualquer inserção quebraria o
 padrão e obrigaria a refazer tudo. A skip list usa uma **moeda**: todo nó novo
 entra no andar 0; enquanto a moeda der cara, ele sobe mais um andar. Em média,
@@ -1590,7 +1590,7 @@ altura depende da ordem de chegada. A **AVL** (0101) garante altura perto de
 log₂ n com rotações. A **skip list** (0163) promete O(log n) na média dos
 sorteios, sem rotação nenhuma. A **lista com mover para a frente** (0164) é O(n),
 mas aposta que os mais procurados vão ficar na frente. No papel, todas parecem
-boas; a resposta sai **medindo**.
+boas; a resposta sai de medir.
 
 Medir com justiça tem três regras. Todo mundo recebe **as mesmas chaves, na mesma
 ordem**. Todo mundo responde **as mesmas buscas**, sorteadas uma vez só e

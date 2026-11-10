@@ -10,7 +10,7 @@ altura depende da ordem de chegada. A **AVL** (0101) garante altura perto de
 log₂ n com rotações. A **skip list** (0163) promete O(log n) na média dos
 sorteios, sem rotação nenhuma. A **lista com mover para a frente** (0164) é O(n),
 mas aposta que os mais procurados vão ficar na frente. No papel, todas parecem
-boas; a resposta sai **medindo**.
+boas; a resposta sai de medir.
 
 Medir com justiça tem três regras. Todo mundo recebe **as mesmas chaves, na mesma
 ordem**. Todo mundo responde **as mesmas buscas**, sorteadas uma vez só e

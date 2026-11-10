@@ -4,7 +4,7 @@
 // Com m = 13 (sondagem.h), mostre as 6 primeiras posições da sequência de
 // sondagem das chaves 44 e 57 nos três modos (SD_LINEAR, SD_QUADRATICA e
 // SD_DUPLA), usando sd_posicao(t, chave, i) para i de 0 a 5. As duas chaves
-// começam na posição 5: repare em qual modo as sequências se separam.
+// começam na posição 5: veja em qual modo as sequências se separam.
 //
 //   Saída esperada:
 //   chave 44

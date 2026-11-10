@@ -23,8 +23,8 @@
 // Dicas:
 // 1. Percorra p de 0 a QTD_PAPEIS - 1 e teste (base[p] & pedido) == pedido.
 // 2. Falta = pedido & ~base[VISITANTE].
-// 3. Repare na última linha: o bit 5 não aparece no texto de 5 letras, mas
-//    ainda impede todos os papéis. Só os 5 bits de baixo viram texto.
+// 3. Na última linha, o bit 5 não aparece no texto de 5 letras, mas ainda
+//    impede todos os papéis. Só os 5 bits de baixo viram texto.
 // 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

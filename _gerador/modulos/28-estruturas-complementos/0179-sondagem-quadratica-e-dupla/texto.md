@@ -133,7 +133,7 @@ está livre:
 > por vez e caem na mesma linha de cache de 64 bytes: oito sondagens custam
 > uma ida à memória. Na quadrática e na dupla, cada sondagem pula para longe e
 > costuma custar uma ida nova. É a troca de sempre: menos sondagens contra
-> sondagens mais caras. E o `(long)i * i` tem motivo: com `m` grande, `i * i`
+> sondagens mais caras. O `(long)i * i` tem motivo: com `m` grande, `i * i`
 > em `int` pode estourar, e estouro de `int` é comportamento indefinido.
 
 > [!NOTE]

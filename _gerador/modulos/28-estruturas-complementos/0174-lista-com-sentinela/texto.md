@@ -76,7 +76,7 @@ void sent_remove(ListaS *L, NoS *x) {
 }
 ```
 
-E a barbearia:
+O programa da barbearia:
 
 ```c
 #include <stdio.h>

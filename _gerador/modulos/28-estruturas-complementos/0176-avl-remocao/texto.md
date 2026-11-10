@@ -86,7 +86,7 @@ NoA *avr_remove(NoA *r, int chave) {
 }
 ```
 
-E o painel da cozinha:
+O painel da cozinha:
 
 ```c
 #include <stdio.h>

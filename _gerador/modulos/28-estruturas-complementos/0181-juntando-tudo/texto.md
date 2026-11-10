@@ -55,7 +55,7 @@ int ag_cancela(Agenda *a, int horario) {
 }
 ```
 
-E a recepção:
+O programa da recepção:
 
 ```c
 #include <stdio.h>

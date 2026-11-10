@@ -18,8 +18,7 @@
 // 1. Calcule os custos em double: n³ e 2ⁿ estouram long rápido.
 // 2. Guarde os cinco custos num vetor de ponteiros para função double
 //    f(double n).
-// 3. Repare na escala: o orçamento que roda 100 milhões em Θ(n) roda só 26 em
-//    Θ(2ⁿ).
+// 3. O orçamento que roda 100 milhões em Θ(n) roda só 26 em Θ(2ⁿ).
 // 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

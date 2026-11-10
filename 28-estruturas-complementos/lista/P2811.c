@@ -19,9 +19,9 @@
 //
 // Dicas:
 // 1. A placa que começa no 1 tenta 1, 2, 5, 10, 6 (1 + 16 = 17), ...
-// 2. O total é o mesmo da linear (22) neste caso, mas o bloco de vagas
-//    seguidas some, mas todas as placas que começam no 1 seguem a mesma
-//    trilha (agrupamento secundário).
+// 2. O total é o mesmo da linear (22) neste caso. O bloco de vagas seguidas
+//    some, mas todas as placas que começam no 1 seguem a mesma trilha
+//    (agrupamento secundário).
 // 3. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

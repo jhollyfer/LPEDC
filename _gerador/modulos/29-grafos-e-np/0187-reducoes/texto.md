@@ -113,7 +113,7 @@ primeiro e o último são novos, e os dois são polinomiais:
 
 {{fluxograma}}
 
-**E o 3-SAT?** A prova clássica de que clique é NP-completo reduz 3-SAT a
+**Do 3-SAT à clique.** A prova clássica de que clique é NP-completo reduz 3-SAT a
 clique. Para cada cláusula, um grupo de vértices, um por literal; ligue dois
 vértices quando estão em cláusulas **diferentes** e **não se contradizem**
 (`x` e `não x` nunca se ligam). Uma clique com um vértice de cada cláusula

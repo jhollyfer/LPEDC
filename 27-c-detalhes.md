@@ -1077,8 +1077,7 @@ deu certo:
 > sabe, ao compilar, quanto descer o ponteiro da pilha (`sub rsp, 48`). Com
 > VLA, ele gera código que calcula `alunos * semanas * 4` na hora e desce o
 > ponteiro da pilha por esse valor: é tão rápido quanto uma variável local,
-> muito mais que o `malloc`. Por isso o `sizeof` de um VLA é uma conta feita
-> em tempo de execução. Dá para ter o melhor dos dois: `int (*m)[c] =
+> muito mais que o `malloc`. Dá para ter o melhor dos dois: `int (*m)[c] =
 > malloc(l * sizeof *m);` cria a matriz no heap, com tipo VLA, e você
 > continua escrevendo `m[i][j]` (veja o A344).
 
@@ -1870,8 +1869,8 @@ pedido -----: nenhum (falta ao visitante: -----)
 
 1. Percorra p de 0 a QTD_PAPEIS - 1 e teste (base[p] & pedido) == pedido.
 2. Falta = pedido & ~base[VISITANTE].
-3. Repare na última linha: o bit 5 não aparece no texto de 5 letras, mas
-   ainda impede todos os papéis. Só os 5 bits de baixo viram texto.
+3. Na última linha, o bit 5 não aparece no texto de 5 letras, mas ainda
+   impede todos os papéis. Só os 5 bits de baixo viram texto.
 
 ```bash
 ~/LPEDC/rodar 27-c-detalhes/0173-juntando-tudo/E1037.c

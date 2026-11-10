@@ -168,9 +168,8 @@ aproximada e mostra quanto ela melhora.
 > A garantia de 2 × ótimo só vale com a **desigualdade triangular**. Com
 > distâncias quaisquer (uma balsa que só sai de um lado, um pedágio caro), o
 > atalho da pré-ordem pode sair muito mais caro que a volta pela árvore, e
-> nenhum algoritmo polinomial tem fator constante, a menos que P = NP. E não
-> confunda: Held-Karp é **exato** e exponencial; a árvore é **aproximada**
-> e polinomial.
+> nenhum algoritmo polinomial tem fator constante, a menos que P = NP.
+> Held-Karp é **exato** e exponencial; a árvore é **aproximada** e polinomial.
 
 > [!TIP]
 > **Por dentro do C:** `dp[1 << N][N]` e `ant[1 << N][N]` são globais: 256 × 8

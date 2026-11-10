@@ -65,7 +65,7 @@ NoP *ap_sucessor(NoP *x) {
 }
 ```
 
-E o painel da rodoviária, que também mostra os conceitos de três nós:
+O painel da rodoviária também mostra os conceitos de três nós:
 
 ```c
 #include <stdio.h>

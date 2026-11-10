@@ -64,7 +64,7 @@ int esp_mult_desloca(uint32_t k, int p) {
 }
 ```
 
-E o atacadão:
+O programa do atacadão:
 
 ```c
 #include <stdio.h>
@@ -100,9 +100,8 @@ int main(void) {
 ```
 
 Com 16, os dez num balde só. Com 13, nenhuma colisão. Com a multiplicação e
-m = 16, uma colisão (16 e 160), o que é normal para 10 chaves em 16 baldes:
-a multiplicação não garante zero colisão, garante que o padrão das chaves não
-importa.
+m = 16, uma colisão (16 e 160), normal para 10 chaves em 16 baldes: o que ela
+garante é que o padrão das chaves deixa de importar.
 
 O fluxograma faz a conta do fardo 48 pela multiplicação em inteiros.
 Depois de conferir o `p` (deslocar 32 bits ou mais é indefinido em C), são

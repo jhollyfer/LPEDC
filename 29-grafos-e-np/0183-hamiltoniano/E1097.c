@@ -19,8 +19,8 @@
 //
 // Dicas:
 // 1. Acrescente um printf no começo de hamilton mostrando pos e a rota até
-//    ali. Repare que, depois da primeira tentativa que falha, algumas
-//    crianças nunca mais são tentadas.
+//    ali. Depois da primeira tentativa que falha, algumas crianças nunca
+//    mais são tentadas.
 // 2. Toda escolha feita antes da chamada recursiva precisa ser desfeita
 //    depois dela, se a chamada voltar com false.
 // 3. Resposta esperada: a saída esperada acima. Falta uma linha depois do

@@ -554,7 +554,7 @@ Sem circuito
 
 Ache o bug. Este Hierholzer roda no bairro do texto, que tem 8 ruas de
 mão dupla, mas o circuito sai com o dobro do tamanho e passa duas vezes
-pela mesma rua (repare em G P G logo no começo):
+pela mesma rua (veja o G P G logo no começo):
 
 
 ```text
@@ -1054,8 +1054,8 @@ O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 **Dicas:**
 
 1. Acrescente um printf no começo de hamilton mostrando pos e a rota até
-   ali. Repare que, depois da primeira tentativa que falha, algumas
-   crianças nunca mais são tentadas.
+   ali. Depois da primeira tentativa que falha, algumas crianças nunca
+   mais são tentadas.
 2. Toda escolha feita antes da chamada recursiva precisa ser desfeita
    depois dela, se a chamada voltar com false.
 3. Falta uma linha depois do
@@ -1233,9 +1233,9 @@ inteira de `v` já foi explorada:
 | volta a Aleixo | low[Flores] = 4 | 4 > 2: **ponte** Aleixo - Flores; Aleixo é **articulação** |
 | volta ao Centro (raiz) | | um filho só: **não** é articulação |
 
-Flores é articulação sem ser ponta de nenhuma ponte (o triângulo dela tem
-dois caminhos), e Flores - Cidade Nova não é ponte. As duas perguntas
-parecem iguais; o que as separa é o `>` contra o `>=`.
+Flores é articulação, mas Flores - Cidade Nova não é ponte (o triângulo dela
+tem dois caminhos). As duas perguntas parecem iguais; o que as separa é o
+`>` contra o `>=`.
 
 > [!WARNING]
 > Dois erros clássicos. Primeiro: usar a regra `low[v] >= tin[u]` também na
@@ -2779,7 +2779,7 @@ primeiro e o último são novos, e os dois são polinomiais:
 
 <p align="center"><img src="29-grafos-e-np/0187-reducoes/fluxograma.svg" alt="Fluxograma: Reduções" width="484"></p>
 
-**E o 3-SAT?** A prova clássica de que clique é NP-completo reduz 3-SAT a
+**Do 3-SAT à clique.** A prova clássica de que clique é NP-completo reduz 3-SAT a
 clique. Para cada cláusula, um grupo de vértices, um por literal; ligue dois
 vértices quando estão em cláusulas **diferentes** e **não se contradizem**
 (`x` e `não x` nunca se ligam). Uma clique com um vértice de cada cláusula
@@ -3882,9 +3882,8 @@ aproximada e mostra quanto ela melhora.
 > A garantia de 2 × ótimo só vale com a **desigualdade triangular**. Com
 > distâncias quaisquer (uma balsa que só sai de um lado, um pedágio caro), o
 > atalho da pré-ordem pode sair muito mais caro que a volta pela árvore, e
-> nenhum algoritmo polinomial tem fator constante, a menos que P = NP. E não
-> confunda: Held-Karp é **exato** e exponencial; a árvore é **aproximada**
-> e polinomial.
+> nenhum algoritmo polinomial tem fator constante, a menos que P = NP.
+> Held-Karp é **exato** e exponencial; a árvore é **aproximada** e polinomial.
 
 > [!TIP]
 > **Por dentro do C:** `dp[1 << N][N]` e `ant[1 << N][N]` são globais: 256 × 8

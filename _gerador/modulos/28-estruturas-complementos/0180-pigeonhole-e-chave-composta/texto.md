@@ -1,10 +1,9 @@
 ## 0180 · Pigeonhole e chave composta
 
 A professora do cursinho corrigiu o simulado e quer a lista da turma pela
-nota, da menor para a maior. As notas são inteiras, de 0 a 10, e a lista de
-chamada já está em ordem alfabética. E quer que quem tirou a mesma nota continue
-em ordem alfabética. Com 11 notas possíveis, dá para ordenar sem
-comparar um aluno com outro.
+nota, da menor para a maior. As notas são inteiras, de 0 a 10. A lista de
+chamada já está em ordem alfabética, e quem tirou a mesma nota deve continuar
+assim. Com 11 notas possíveis, dá para ordenar sem comparar um aluno com outro.
 
 O **pigeonhole sort** (ordenação por casas de pombo) serve quando a chave é um
 inteiro num intervalo pequeno `[min, max]`. Ele cria uma **casa** para cada
@@ -77,7 +76,7 @@ passadas, no `pombal.c`:
     }
 ```
 
-E a professora, que compara com a seleção:
+A professora compara o resultado com o da seleção:
 
 ```c
 #include <stdio.h>

@@ -23,7 +23,7 @@ próximo nó do andar ainda é menor que a chave, avance. Se ele já passou da c
 (ou não existe), desça um andar. No andar 0, o próximo nó é a chave ou ela não
 existe.
 
-E quem decide em quais andares cada nó aparece? Se fosse "um nó sim, um não"
+Quem decide em quais andares cada nó aparece? Se fosse "um nó sim, um não"
 em cada andar, a busca seria uma busca binária, mas qualquer inserção quebraria o
 padrão e obrigaria a refazer tudo. A skip list usa uma **moeda**: todo nó novo
 entra no andar 0; enquanto a moeda der cara, ele sobe mais um andar. Em média,

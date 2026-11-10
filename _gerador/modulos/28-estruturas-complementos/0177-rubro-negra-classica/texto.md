@@ -148,7 +148,7 @@ Duas rotações no 25, uma no 45, nenhuma no 20 e no 40. A altura negra começa
 em 1 e só cresce quando o caso 1 chega à raiz e ela volta a ser preta: a
 árvore cresce **por cima**, como a árvore 2-3 por trás da LLRB.
 
-E a **remoção**? O Cormen também a faz em O(log n), com um conserto de quatro
+Falta a **remoção**. O Cormen também a faz em O(log n), com um conserto de quatro
 casos olhando o **irmão** do nó que ficou com um "preto a mais". É bem mais
 longa que a inserção e não cabe aqui. Para a prova, basta saber que ela
 existe, que custa O(log n) e que faz no máximo **três rotações**.

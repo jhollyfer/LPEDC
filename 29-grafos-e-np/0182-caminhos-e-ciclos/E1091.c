@@ -3,7 +3,7 @@
 //
 // Ache o bug. Este Hierholzer roda no bairro do texto, que tem 8 ruas de
 // mão dupla, mas o circuito sai com o dobro do tamanho e passa duas vezes
-// pela mesma rua (repare em G P G logo no começo):
+// pela mesma rua (veja o G P G logo no começo):
 //
 //   Saída que aparece:
 //   Circuito: G P G F P F I F S P E I E P S F G

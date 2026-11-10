@@ -13,7 +13,7 @@
 // Dicas:
 // 1. Um vetor de contagem por balde: colisão é quando conta[h] já era maior
 //    que 0.
-// 2. Repare que 1013, 2026, ... são múltiplos de 1013 = 13 · 78 - 1.
+// 2. As matrículas 1013, 2026, ... são múltiplos de 1013 = 13 · 78 - 1.
 // 3. Com m = 10, a função só vê o último dígito.
 // 4. Resposta esperada: a saída acima.
 //

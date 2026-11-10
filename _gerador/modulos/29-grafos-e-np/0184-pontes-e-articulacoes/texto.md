@@ -122,9 +122,9 @@ inteira de `v` já foi explorada:
 | volta a Aleixo | low[Flores] = 4 | 4 > 2: **ponte** Aleixo - Flores; Aleixo é **articulação** |
 | volta ao Centro (raiz) | | um filho só: **não** é articulação |
 
-Flores é articulação sem ser ponta de nenhuma ponte (o triângulo dela tem
-dois caminhos), e Flores - Cidade Nova não é ponte. As duas perguntas
-parecem iguais; o que as separa é o `>` contra o `>=`.
+Flores é articulação, mas Flores - Cidade Nova não é ponte (o triângulo dela
+tem dois caminhos). As duas perguntas parecem iguais; o que as separa é o
+`>` contra o `>=`.
 
 > [!WARNING]
 > Dois erros clássicos. Primeiro: usar a regra `low[v] >= tin[u]` também na

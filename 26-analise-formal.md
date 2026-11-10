@@ -779,7 +779,7 @@ pela fórmula: R$ 66795
 **Dicas:**
 
 1. O laço vai de dia = 1 até dia <= 365, somando dia ao cofre.
-2. A soma de 1 até n é n(n+1)/2 (repare: de 1 até n, não de 0 até n-1).
+2. A soma de 1 até n é n(n+1)/2 (de 1 até n, não de 0 até n-1).
 3. Resposta esperada: R$ 66795 nas duas linhas.
 
 ```bash
@@ -1528,9 +1528,9 @@ Lendo a saída de `n = 1024` para `n = 2048`:
 | soma_rec | 1025 → 2049 | × 2 | Θ(n) | 1025 → 2049 | 0 | Θ(n) |
 
 As cinco fichas conferem. A soma e a soma recursiva têm o **mesmo tempo**
-e espaços diferentes: a recursiva empilha um frame por elemento. E o merge
-sort tem dois espaços extras: o vetor
-auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
+e espaços diferentes: a recursiva empilha um frame por elemento. O merge
+sort tem dois espaços extras: o vetor auxiliar (Θ(n), que domina) e a
+pilha (Θ(log n), 12 e 13 frames).
 
 > [!WARNING]
 > A medida só vale para o que você mede. A busca conferida aqui é o **pior
@@ -2581,8 +2581,7 @@ n^3    : n até 464
 1. Calcule os custos em double: n³ e 2ⁿ estouram long rápido.
 2. Guarde os cinco custos num vetor de ponteiros para função double
    f(double n).
-3. Repare na escala: o orçamento que roda 100 milhões em Θ(n) roda só 26 em
-   Θ(2ⁿ).
+3. O orçamento que roda 100 milhões em Θ(n) roda só 26 em Θ(2ⁿ).
 
 ```bash
 ~/LPEDC/rodar 26-analise-formal/lista/P2619.c
