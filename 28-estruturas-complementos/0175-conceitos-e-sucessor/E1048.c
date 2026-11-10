@@ -21,12 +21,6 @@
 //   80 -> -1
 //   iguais ao ap_sucessor: 10 de 10
 //
-// Dicas:
-// 1. Guarde um candidato = NULL. Na descida, toda vez que for para a
-//    esquerda, o nó atual vira o candidato (ele é maior que a chave).
-// 2. Ande pelas chaves com o próprio ap_minimo e ap_sucessor do TAD.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

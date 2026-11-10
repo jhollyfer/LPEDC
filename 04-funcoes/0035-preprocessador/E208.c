@@ -19,12 +19,6 @@
 //   Saída esperada sem MODO_TESTE:
 //   Total: R$ 1050.00
 //
-// Dicas:
-// 1. Parcela k: 250 * (1 + 0.02 * k).
-// 2. O printf do teste fica entre #ifdef MODO_TESTE e #endif, dentro do for.
-// 3. Resposta esperada: as duas saídas acima. Sem MODO_TESTE, o printf do teste
-//    nem chega ao compilador: rode gcc -E e confira.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -21,17 +21,6 @@
 //   Carla: 11 98765-4321 (posição 1)
 //   Zeca: não está na agenda
 //
-// Dicas:
-// 1. São duas funções de comparação: a do qsort recebe dois Contato *; a do
-//    bsearch recebe a CHAVE no 1º argumento (const char *) e um Contato * no
-//    2º.
-// 2. As duas precisam usar o mesmo critério (strcmp nos nomes), senão a busca
-//    binária se perde.
-// 3. A posição é a diferença de ponteiros c - agenda; o tipo é ptrdiff_t e o
-//    formato é %td.
-// 4. Resposta esperada: a saída acima (ordenada: Bruno, Carla, Diego,
-//    Marina, Rafael).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

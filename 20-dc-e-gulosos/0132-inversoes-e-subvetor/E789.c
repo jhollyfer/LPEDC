@@ -18,14 +18,6 @@
 //   Pastel x Pão de queijo
 //   Pares em desacordo: 4 de 15
 //
-// Dicas:
-// 1. Escreva int posicao(const char *lista[], int n, const char *nome), uma
-//    busca sequencial (assunto 0089) com strcmp.
-// 2. Para seu ranking, v fica 2 0 1 4 5 3. Agora é o E787 com nomes: dois
-//    laços, e quando v[i] > v[j] mostre meu[i] e meu[j].
-// 3. Resposta esperada: a saída acima. Com 6 itens, 4 desacordos em 15
-//    pares: os gostos batem em 11/15, uns 73%.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -10,13 +10,13 @@ int main(void) {
     char resposta;
 
     do {
-        printf("Preço: ");
+        printf("Preço:\n");
         if (scanf("%lf", &preco) != 1) {
             return 1;
         }
         total = total + preco;
         itens++;
-        printf("Mais algum item? (s/n) ");
+        printf("Mais algum item? (s/n)\n");
         if (scanf(" %c", &resposta) != 1) {
             resposta = 'n';
         }

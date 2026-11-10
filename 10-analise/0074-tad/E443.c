@@ -22,15 +22,6 @@
 //   1/2 * 2/3 = 1/3
 //   1/0: não existe
 //
-// Dicas:
-// 1. Toda criação passa por racional_cria, que simplifica e acerta o sinal.
-//    Assim soma e multiplica só fazem a conta e chamam racional_cria.
-// 2. a/b + c/d = (a*d + c*b) / (b*d). O mdc vem de Euclides (assunto 0033)
-//    e pode ser uma função static.
-// 3. Denominador negativo: troque o sinal dos dois.
-// 4. Cada Racional devolvido é um malloc: libere todos.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

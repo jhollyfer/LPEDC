@@ -18,16 +18,6 @@
 //   sem a chave: 0 7 3200 98000 2147483647 -2147483648 -150000 -98000 -7
 //   com a chave: -2147483648 -150000 -98000 -7 0 7 3200 98000 2147483647
 //
-// Dicas:
-// 1. Uma função uint32_t bits(int32_t x, bool com_chave) devolve a chave
-//    certa; o resto do radix é o do exemplo A242, com bits(v[i], com_chave)
-//    no lugar de v[i].
-// 2. Por que a chave funciona? INT_MIN (80000000) vira 00000000, -1
-//    (FFFFFFFF) vira 7FFFFFFF, 0 vira 80000000 e INT_MAX vira FFFFFFFF: a
-//    ordem dos int passa a ser a ordem dos uint32_t.
-// 3. Só a chave muda: o vetor continua guardando os int32_t originais.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

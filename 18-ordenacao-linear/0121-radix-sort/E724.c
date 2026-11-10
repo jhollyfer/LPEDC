@@ -13,14 +13,6 @@
 //   mês:    15/01/2025 28/01/2025 28/02/2024 05/03/2025 15/03/2025 05/11/2024 10/11/2024
 //   ano:    28/02/2024 05/11/2024 10/11/2024 15/01/2025 28/01/2025 05/03/2025 15/03/2025
 //
-// Dicas:
-// 1. Escreva int chave(Data d, int campo): campo 0 devolve o dia, 1 o mês e
-//    2 o ano - 2020 (os anos vão de 2020 a 2029). Assim, uma passada só
-//    serve para os três campos.
-// 2. Com 32 contadores, cabem os dias (1 a 31), os meses e os anos.
-// 3. Formato de cada data: " %02d/%02d/%d".
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

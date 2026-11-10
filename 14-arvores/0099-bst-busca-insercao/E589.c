@@ -19,12 +19,6 @@
 //   Senha 25: nível 3
 //   Senha 65: nível -1
 //
-// Dicas:
-// 1. Use um laço igual ao de bst_busca e um contador que começa em 0 e sobe
-//    1 a cada vez que você desce um nível.
-// 2. Se o laço terminar com r == NULL, a chave não existe: devolva -1.
-// 3. Resposta esperada: a saída acima. O 25 fica embaixo de 45, 20 e 30.
-//
 // Escreva sua resposta abaixo (complete nivel_de):
 
 #include <stdio.h>

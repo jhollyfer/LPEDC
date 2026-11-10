@@ -5,7 +5,6 @@
 
 int main(void) {
     int dia;
-    printf("Dia (1 a 7): ");
     if (scanf("%d", &dia) != 1) {
         printf("Entrada inválida\n");
         return 1;

@@ -25,18 +25,6 @@
 //   + 12. Cubra com calda de chocolate.
 //   + 13. Sirva.
 //
-// Dicas:
-// 1. Faça em duas passadas. Na 1ª, a volta do texto, mas em vez de imprimir,
-//    guarde cada operação num vetor op[] (' ', '-' ou '+') e o texto num
-//    vetor de ponteiros.
-// 2. Na 2ª, a operação t aparece se alguma operação entre t - CONTEXTO e
-//    t + CONTEXTO não for ' '.
-// 3. Guarde o índice da última operação mostrada: se a próxima a aparecer
-//    não for a seguinte, imprima "..." antes. No fim, se sobrou alguma
-//    escondida, mais um "...".
-// 4. Teste com CONTEXTO 0 e 2 também.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

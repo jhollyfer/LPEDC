@@ -17,16 +17,6 @@
 //   24 ordens testadas, 24 certas
 //   pior caso: 5 comparações (limite: 5)
 //
-// Dicas:
-// 1. Copie os quatro valores para variáveis locais (lo1, hi1, lo2, hi2) e
-//    troque dentro de cada par quando precisar.
-// 2. No passo 3, quem perde (o maior dos dois "menores") é um dos do meio.
-//    No passo 4, quem perde (o menor dos dois "maiores") é o outro.
-// 3. No fim, escreva mínimo, meio, meio e máximo de volta em v[0..3].
-// 4. Resposta esperada: a saída acima. Esse método atinge o limite: é
-//    ótimo. Para 5 elementos o limite é 7, e também existe um método com
-//    7 (bem mais chato de escrever).
-//
 // Escreva sua resposta abaixo (escreva ordena4):
 
 #include <stdio.h>

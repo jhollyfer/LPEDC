@@ -21,14 +21,6 @@
 //   uma linha: 24 bytes
 //   a matriz: 48 bytes
 //
-// Dicas:
-// 1. &precos[i][j] dá o endereço de uma posição.
-// 2. sizeof precos[0][0], sizeof precos[0] e sizeof precos dão os três
-//    tamanhos. Olhe só os dois últimos dígitos hexa dos endereços.
-// 3. Resposta esperada: os endereços sobem de 8 em 8 (0x30, 0x38, 0x40...)
-//    sem buraco entre as linhas, e os tamanhos 8, 24 e 48: a matriz é uma
-//    fila só de 6 doubles, linha após linha (assunto 0039).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

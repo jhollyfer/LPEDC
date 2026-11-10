@@ -16,14 +16,6 @@
 //   sem prefixos:  335094 passos,     0 bytes, total 185862850
 //   com prefixos:    2000 passos,  8008 bytes, total 185862850
 //
-// Dicas:
-// 1. Os dados e as perguntas já estão prontos no main; não mude o
-//    sorteia nem a ordem dos sorteios, senão os números mudam.
-// 2. Os bytes extras do segundo jeito são (N + 1) * sizeof(long) = 8008.
-//    Não esqueça o free.
-// 3. Use long para os totais: passam de 185 milhões.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete o programa):
 
 #include <stdio.h>

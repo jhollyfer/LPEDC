@@ -18,14 +18,6 @@
 //   Ordem de término: Grafos Estruturas Ponteiros C Discreta Lógica
 //   Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
 //
-// Dicas:
-// 1. A anotação vai DEPOIS do laço dos vizinhos (pós-ordem, como no percurso
-//    de árvore do assunto 0098).
-// 2. Uma disciplina só termina depois de todas que dependem dela; por isso a
-//    ordem de término é a ordem de estudo invertida.
-// 3. Resposta esperada: a saída acima. Outras ordens também seriam válidas
-//    (Lógica, C, Discreta...), mas esta é a que a DFS em ordem de índice dá.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

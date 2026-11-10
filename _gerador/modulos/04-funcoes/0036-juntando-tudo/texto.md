@@ -151,7 +151,7 @@ decisão "pagou o suficiente?". O troco, que parece um laço, é a recursão de
 {{fluxograma}}
 
 O exemplo A072 mostra a outra vantagem de dividir em funções: **testar cada
-peça sozinha**. Com a macro `CONFERIR` (a do exercício E210), ele confere o
+peça sozinha**. Com a macro `CONFERIR`, definida no próprio arquivo, ele confere o
 preço, o contador `static` e a contagem de notas sem digitar nada. Não precisa
 de biblioteca de testes: uma macro de dez linhas resolve.
 

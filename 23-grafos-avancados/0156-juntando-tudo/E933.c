@@ -19,16 +19,6 @@
 //   Capital -> Serra pela rede mínima: 18 km
 //   Capital -> Serra pelo melhor caminho: 10 km
 //
-// Dicas:
-// 1. Comece as duas matrizes (todas e arvore) com 0 na diagonal e
-//    INFINITO no resto. Grave todas as estradas em "todas" antes de
-//    ordenar; em "arvore", só as que o Kruskal aceitar.
-// 2. Uma função floyd(d) serve para as duas matrizes. Escreva cada estrada
-//    aceita como "nomes[a]-nomes[b]", na ordem do vetor.
-// 3. Resposta esperada: a saída acima. A árvore mínima não guarda caminhos
-//    curtos: na rede mínima a Capital só chega à Serra dando a volta
-//    Capital, Litoral, Agreste, Sertão, Serra (3 + 5 + 6 + 4).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

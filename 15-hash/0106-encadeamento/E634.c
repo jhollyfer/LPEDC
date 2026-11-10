@@ -15,16 +15,6 @@
 //   tamanho  : 0 0 0 0 0 2 8 0 | maior: 8 | média: 3.9
 //   polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
 //
-// Dicas:
-// 1. Não precisa montar as listas: para medir, basta contar quantas chaves
-//    caem em cada balde.
-// 2. Numa corrente de k nós, achar o 1º custa 1 comparação, o 2º custa 2...
-//    o total da corrente é 1 + 2 + ... + k = k * (k + 1) / 2. Some todas e
-//    divida por 10.
-// 3. Resposta esperada: a saída acima. Com o tamanho, só existem nomes de 5
-//    e 6 letras, então 8 cidades amontoam num balde: a tabela vira quase uma
-//    lista.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

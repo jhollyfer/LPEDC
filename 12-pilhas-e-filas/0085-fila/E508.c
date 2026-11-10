@@ -12,14 +12,6 @@
 //   Carros na fila: 1
 //   Carros na fila: 4
 //
-// Dicas:
-// 1. Desenhe o vetor de 6 gavetas e acompanhe inicio e fim em cada etapa.
-// 2. Na terceira linha, inicio = 4 e fim = 2. Quantos carros há de verdade?
-// 3. O erro só aparece depois que fim dá a volta e fica menor que inicio.
-// 4. Resposta esperada: tamanho faz fim - inicio, que só funciona enquanto a
-//    fila não deu a volta no vetor. Conserto:
-//    return (f->fim - f->inicio + TAM) % TAM; e a saída fica 5, 1 e 4.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

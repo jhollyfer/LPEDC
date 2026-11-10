@@ -13,14 +13,6 @@
 //   andar 1:      12          40      56
 //   andar 0:   5  12  18  31  40  47  56
 //
-// Dicas:
-// 1. O 23 aparece em 3 andares. Depois do free, quem ainda aponta para ele?
-//    Olhe a cabeça no andar 2 e o 12 no andar 1.
-// 2. antes[k] já guarda o nó anterior em cada andar. Falta desligar o nó em
-//    todos os andares dele: k de 0 até x->andares - 1.
-// 3. Resposta esperada: troque a linha antes[0]->prox[0] = x->prox[0] por um
-//    laço que faz antes[k]->prox[k] = x->prox[k] para cada andar do nó.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

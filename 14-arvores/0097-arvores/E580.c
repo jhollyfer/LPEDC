@@ -29,14 +29,6 @@
 //       agua (5 MB)
 //       luz (8 MB)
 //
-// Dicas:
-// 1. As duas funções têm o mesmo laço pelos filhos. O que muda é onde fica o
-//    printf: depois do laço (du) ou antes dele (arvore).
-// 2. Em du, faça a função devolver o total: some n->mb com o que cada filho
-//    devolve e imprima no fim. Assim cada pasta é somada uma vez só.
-// 3. Resposta esperada: as duas listas acima; fotos = 10 + 300 + 120 = 430 e
-//    casa = 5 + 430 + 15 = 450.
-//
 // Escreva sua resposta abaixo (complete du e arvore):
 
 #include <stdio.h>

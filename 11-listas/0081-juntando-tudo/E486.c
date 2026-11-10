@@ -21,18 +21,6 @@
 //   P + Q = 4x^4 + 7x - 5
 //   (P + Q)(2) = 73
 //
-// Dicas:
-// 1. struct termo { int coef; int exp; struct termo *prox; }. A inserção é
-//    a ordenada do assunto 0078 com o critério invertido (anda enquanto
-//    p->exp > exp), mais o caso p->exp == exp.
-// 2. soma: crie uma lista vazia e chame insere_termo para cada termo de p e
-//    de q. O caso "soma deu 0" faz o 2x^2 e o -2x^2 sumirem sozinhos.
-// 3. imprime: o primeiro termo leva o sinal colado ("-5"); os outros, " + "
-//    ou " - " e o valor absoluto. Coeficiente 1 não aparece (x^4), expoente
-//    1 vira "x" e expoente 0 é só o número.
-// 4. Resposta esperada: a saída acima. 4*16 + 7*2 - 5 = 73. Libere os três
-//    polinômios.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

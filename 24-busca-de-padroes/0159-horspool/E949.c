@@ -9,15 +9,6 @@
 //   P=3 I=4 O=2 C=1 A=6 outras=6
 //   A=2 R=1 outras=5
 //
-// Dicas:
-// 1. O índice da tabela é a letra convertida: salto[(unsigned char) p[j]].
-// 2. Como j cresce, uma letra repetida fica com o valor da ocorrência mais à
-//    direita: o 'P' de PIPOCA aparece em 0 e em 2, e vale 6 - 1 - 2 = 3.
-// 3. A última letra não entra no laço (senão o salto dela seria 0). Por isso
-//    o 'A' de PIPOCA, que só aparece no fim, vale 6. Já o 'A' de ARARA vale 2:
-//    ele também aparece na posição 2.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete monta_saltos):
 
 #include <stdio.h>

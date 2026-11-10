@@ -11,14 +11,6 @@
 //   Transposição: 46 comparações
 //   Ordem final: Luar Aquarela Trem Asa Garota Ciranda
 //
-// Dicas:
-// 1. Um laço de 0 a 9; em cada volta, chame as duas buscas com &custo e
-//    acumule em duas variáveis.
-// 2. Para a ordem final, use al_mostra(ajusta) e depois um printf("\n").
-// 3. Resposta esperada: a saída acima. O Luar, a mais tocada, começou em
-//    último e só chegou à frente no décimo acesso: a transposição aprende
-//    devagar (com mover para a frente, bastaria o primeiro).
-//
 // Escreva sua resposta abaixo (complete o main):
 
 #include <stdio.h>

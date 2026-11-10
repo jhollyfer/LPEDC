@@ -6,9 +6,7 @@
 
 int main(void) {
     int idade, resposta;
-    printf("Idade: ");
     scanf("%d", &idade);
-    printf("Tem ingresso (1 = sim, 0 = não): ");
     scanf("%d", &resposta);
     bool tem_ingresso = resposta;
 

@@ -13,16 +13,6 @@
 //   valores do dia:      3 passadas de 4, igual ao pix_por_valor? sim
 //   valores até R$ 2,55: 1 passada de 4, igual ao pix_por_valor? sim
 //
-// Dicas:
-// 1. Pular uma passada é seguro: se todo mundo tem o mesmo byte, um counting
-//    sort estável por ele deixaria o vetor exatamente como está.
-// 2. A contagem precisa vir antes da decisão: conte, confira, e só então
-//    acumule e distribua.
-// 3. Use dois ponteiros, origem e destino, e troque os dois depois de cada
-//    passada feita. Com um número ímpar de passadas (3 ou 1), o resultado
-//    termina no aux: copie de volta com memcpy.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (escreva radix_esperto):
 
 #include <stdio.h>

@@ -21,17 +21,6 @@
 //   Total com 5 tarefas: 6
 //   Total com 6 tarefas: 30
 //
-// Dicas:
-// 1. É o Kahn com escolha: em cada posição pos, tente, em ordem de índice,
-//    cada tarefa u ainda não usada com grau[u] == 0. Escolher u é marcar
-//    usada[u], pôr em ordem[pos] e descontar grau[v] dos sucessores.
-// 2. Depois da chamada recursiva para pos + 1, DESFAÇA: devolva os graus e
-//    desmarque u. Quando pos == n, achou uma ordem completa: conte 1.
-// 3. Resposta esperada: a saída acima. As ordens aparecem antes da linha
-//    do total porque o printf só escreve depois que conta() termina. Com 6
-//    tarefas são 30: em cada uma das 6 ordens, as mensagens cabem em 5
-//    lugares antes do "sair".
-//
 // Escreva sua resposta abaixo (escreva conta e o que mais precisar):
 
 #include <stdbool.h>

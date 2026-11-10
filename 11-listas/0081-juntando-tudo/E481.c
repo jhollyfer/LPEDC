@@ -21,13 +21,6 @@
 //   5 músicas, 17:20
 //   tocando agora: País Tropical - Jorge Ben
 //
-// Dicas:
-// 1. playlist_cria, cinco playlist_adiciona, e confira se a criação não
-//    devolveu NULL.
-// 2. Para min:seg, use total / 60 e total % 60 com "%d:%02d".
-// 3. playlist_atual devolve um const Musica *: acesse m->titulo e m->artista.
-// 4. Resposta esperada: a saída acima. Libere a playlist no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

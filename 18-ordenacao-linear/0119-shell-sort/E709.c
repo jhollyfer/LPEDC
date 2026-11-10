@@ -13,13 +13,6 @@
 //   n = 1000: 364 121 40 13 4 1
 //   n = 1000000: 797161 265720 88573 29524 9841 3280 1093 364 121 40 13 4 1
 //
-// Dicas:
-// 1. Primeiro suba: comece com h = 1 e faça h = 3 * h + 1 enquanto
-//    h < n / 3.
-// 2. Depois desça com h /= 3 até h chegar a 0, mostrando cada h.
-// 3. Um milhão de elementos pede só 13 rodadas.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

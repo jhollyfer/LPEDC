@@ -16,15 +16,6 @@
 //   Altura 3, altura preta 3
 //   Lia: na lista | Rafa: fora
 //
-// Dicas:
-// 1. Struct com char nome[20], bool vermelho, esq e dir. As rotações e a
-//    inversão de cores não olham a chave: copie a lógica do texto.
-// 2. Na inserção, guarde int cmp = strcmp(nome, h->nome) e decida pelo sinal.
-//    Para copiar o nome para o nó, use snprintf(n->nome, sizeof n->nome,
-//    "%s", nome).
-// 3. Resposta esperada: a saída acima. Não esqueça de pintar a raiz de preto
-//    depois de cada inserção e de liberar tudo no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

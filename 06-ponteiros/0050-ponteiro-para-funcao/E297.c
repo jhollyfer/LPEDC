@@ -12,14 +12,23 @@
 // desconhecido mostra "Operador inválido"; divisão por zero mostra
 // "Divisão por zero".
 //
-//   Digite a conta: 12 * 4
+//   Entrada:
+//   12 * 4
+//
+//   Saída esperada:
 //   Resultado: 48
 //
-// Dicas:
-// 1. Para achar o índice: percorra "+-*/" com um for até achar o char.
-// 2. Confira o retorno do scanf (tem que ser 3).
-// 3. Resposta esperada: 12 * 4 dá 48; 20 / 3 dá 6 (divisão inteira);
-//    7 % 2 dá "Operador inválido".
+//   Entrada:
+//   7 / 0
+//
+//   Saída esperada:
+//   Divisão por zero
+//
+//   Entrada:
+//   3 % 2
+//
+//   Saída esperada:
+//   Operador inválido
 //
 // Escreva sua resposta abaixo:
 

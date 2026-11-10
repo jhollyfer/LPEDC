@@ -19,14 +19,6 @@
 //   Carla -> Fábio: R$ 15.00
 //   4 Pix
 //
-// Dicas:
-// 1. saldo[i] = pagou[i] - parte. Positivo: tem a receber; negativo: deve.
-// 2. A cada volta, ache o índice do menor saldo (quem mais deve) e o do
-//    maior (quem mais tem a receber). Se o menor saldo é 0, acabou.
-// 3. Resposta esperada: a saída acima. Cada Pix zera pelo menos uma pessoa,
-//    então são no máximo n - 1 Pix. (Achar o MÍNIMO absoluto de Pix é um
-//    problema bem mais difícil; o guloso dá uma boa resposta, rápida.)
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

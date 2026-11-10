@@ -19,15 +19,6 @@
 //   menor: #0000002 10:58:31 R$      14,80
 //   maior: #0000005 14:28:08 R$    3960,62
 //
-// Dicas:
-// 1. As duas ordenações pedem um vetor auxiliar do mesmo tamanho:
-//    Pix v[8], aux[8];
-// 2. pix_por_horario devolve false se não conseguir memória para os
-//    contadores: confira.
-// 3. pix_mostra já pula a linha; para o "menor: " ficar na mesma linha,
-//    use printf sem \n antes.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

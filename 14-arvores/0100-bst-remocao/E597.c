@@ -11,14 +11,6 @@
 //   Sem o 30:  pré 50 20 40 35 45 70 60 80
 //   Sem o 50:  pré 45 20 40 35 70 60 80
 //
-// Dicas:
-// 1. O antecessor: desça uma vez à esquerda e depois à direita até o fim.
-//    Ele nunca tem filho direito.
-// 2. Copie a chave dele para r e chame remove_antecessor(r->esq, ...) com a
-//    chave do antecessor.
-// 3. Resposta esperada: a saída acima. Sem o 30, o 20 assume (era folha).
-//    Sem o 50, o 45 vira a raiz.
-//
 // Escreva sua resposta abaixo (complete remove_antecessor):
 
 #include <stdio.h>

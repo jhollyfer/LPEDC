@@ -25,17 +25,6 @@
 //   roupa 1
 //   11 palavras diferentes, 13 no total
 //
-// Dicas:
-// 1. Leia com while (scanf("%23s", palavra) == 1). O nó guarda uma CÓPIA
-//    (char palavra[24] e strcpy). A cabeça pode ser um nó comum, com
-//    andares = MAX e todos os prox em NULL.
-// 2. A inserção é a do skip.c com strcmp no lugar do <: desça guardando
-//    antes[k]; se antes[0]->prox[0] tem a palavra, some 1 e pronto; senão
-//    sorteie os andares (comece em 1 e suba enquanto moeda() == 1, até MAX)
-//    e ligue o nó em cada andar.
-// 3. Resposta esperada: a saída acima (a ordem é a do strcmp; a forma dos
-//    andares não muda a saída).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -20,17 +20,6 @@
 //   binária: 39.9 comparações por busca
 //   ternária: 47.3 comparações por busca
 //
-// Dicas:
-// 1. Use intervalo semiaberto [ini, fim): o pedaço vazio (ini >= fim)
-//    devolve -1. Os três pedaços da ternária são [ini, m1), [m1 + 1, m2) e
-//    [m2 + 1, fim).
-// 2. (long)i * 7919 evita estouro? Aqui não estoura, mas é bom hábito.
-// 3. Por que perde? A binária gasta 2 comparações para dividir por 2
-//    (2 · log₂ n ≈ 40). A ternária gasta até 4 para dividir por 3
-//    (4 · log₃ n ≈ 4 · 12,6 ≈ 50; um pouco menos, porque às vezes para
-//    na terceira). Θ igual não quer dizer tempo igual.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

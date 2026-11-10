@@ -18,17 +18,6 @@
 //   lista MTF         114.6      114.5
 //   para raiz           6.6        7.0
 //
-// Dicas:
-// 1. Guarde a raiz numa struct (typedef struct { NoR *raiz; } Raiz;) para
-//    a busca poder trocá-la. A busca recursiva devolve a nova raiz da
-//    subárvore: r->esq = sobe(r->esq, ...); se o achado está agora em
-//    r->esq, rotacione r à direita (e à esquerda no lado direito).
-// 2. Use um bool *achou para a volta da recursão saber se deve rotacionar.
-//    Nas rotações, não há altura para atualizar.
-// 3. Resposta esperada: a saída acima. Mesmo com as chaves em ordem
-//    crescente, que fazem a BST virar uma lista, as buscas repetidas puxam
-//    os produtos da promoção para perto da raiz.
-//
 // Escreva sua resposta abaixo (complete as funções):
 
 #include <stdio.h>

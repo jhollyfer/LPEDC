@@ -24,16 +24,6 @@
 //   15h-17h recusado  Ursos
 //   Jogos aceitos: 7 de 10
 //
-// Dicas:
-// 1. Guarde int livre_em[2] = {0, 0}. Para cada jogo, procure o índice q
-//    com livre_em[q] <= ini e livre_em[q] o maior possível (q = -1 se não
-//    houver).
-// 2. Por que a que ficou livre mais tarde? Porque a outra, livre há mais
-//    tempo, pode receber um jogo que começa cedo e que esta não receberia.
-//    Usar a quadra "mais folgada" desperdiça folga.
-// 3. Resposta esperada: a saída acima. (Com printf("%2dh-%2dh ...") os
-//    horários ficam alinhados.)
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

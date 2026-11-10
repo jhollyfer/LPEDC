@@ -244,48 +244,10 @@ gcc ~/LPEDC/03-repeticoes/0020-while/A040.c -o ~/LPEDC/03-repeticoes/0020-while/
 
 #### Exercícios
 
-**Exercício E115** · ★☆☆
-
-O micro-ondas faz a contagem regressiva e apita no fim. Escreva um programa
-que começa com tempo = 5 e, com um while, mostra a contagem até 1. Depois do
-laço, mostra o apito:
-
-
-```text
-5...
-4...
-3...
-2...
-1...
-Pi! Pi! Pi!
-```
-
-**Dicas:**
-
-1. A pergunta do while é "ainda tem tempo?": tempo > 0.
-2. Dentro do laço: mostre o tempo e depois diminua (tempo-- ou tempo = tempo - 1).
-3. O laço roda 5 vezes; quando tempo vira 0,
-   a pergunta dá falso e o programa segue para o apito.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/E115.c -o ~/LPEDC/03-repeticoes/0020-while/E115 && ~/LPEDC/03-repeticoes/0020-while/E115
-```
-
 **Exercício E116** · ★☆☆
 
-Complete as três lacunas para mostrar os múltiplos de 7 menores que 50,
-na mesma linha. Depois escreva o programa completo no arquivo e rode.
-
-
-```text
-int multiplo = ____;
-while (________) {
-    printf("%d ", multiplo);
-    ________;
-}
-printf("\n");
-```
-
+Escreva um programa que mostre, com um while, os múltiplos de 7 menores que
+50, todos na mesma linha e separados por espaço.
 
 
 ```text
@@ -293,39 +255,21 @@ Saída esperada:
 7 14 21 28 35 42 49
 ```
 
-**Dicas:**
-
-1. Lacuna 1: o primeiro múltiplo positivo de 7.
-2. Lacuna 3 é o passo: o próximo múltiplo está 7 à frente.
-3. Resposta esperada: multiplo = 7; multiplo < 50; multiplo = multiplo + 7
-   (ou multiplo += 7). São 7 números; quando multiplo vira 56, o laço para.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0020-while/E116.c -o ~/LPEDC/03-repeticoes/0020-while/E116 && ~/LPEDC/03-repeticoes/0020-while/E116
 ```
 
 **Exercício E117** · ★★☆
 
-A caixa d'água tem 1000 litros e a casa gasta 180 litros por dia. O programa
-abaixo deveria dizer quantos dias COMPLETOS a água dura e quanto sobra, mas
-mostra:
+A caixa d'água tem 1000 litros e a casa gasta 180 litros por dia. Escreva um
+programa com um while que diz para quantos dias COMPLETOS a água dura e
+quantos litros sobram depois deles. Use as variáveis litros, consumo e dias.
 
 
 ```text
-Dá para 6 dias. Sobram -80 litros.
+Saída esperada:
+Dá para 5 dias. Sobram 100 litros.
 ```
-
-
-O código com o erro está logo abaixo; ele roda, mas dá a resposta errada.
-Conserte e rode de novo até aparecer a resposta certa. Se ajudar, ponha um
-printf dentro do laço mostrando litros e dias a cada volta.
-
-**Dicas:**
-
-1. No 6º dia, quanta água havia antes de gastar? Dava para o dia inteiro?
-2. A pergunta do while precisa ser "tem água para MAIS UM dia inteiro?".
-3. Resposta esperada: troque "litros > 0" por "litros >= consumo". Saída:
-   "Dá para 5 dias. Sobram 100 litros."
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0020-while/E117.c -o ~/LPEDC/03-repeticoes/0020-while/E117 && ~/LPEDC/03-repeticoes/0020-while/E117
@@ -344,66 +288,24 @@ Passou de R$ 1500.00 em 41 meses.
 Saldo: R$ 1503.75
 ```
 
-**Dicas:**
-
-1. Você não sabe quantas voltas o laço vai dar: é trabalho para o while.
-2. Condição: saldo <= 1500. Corpo: saldo = saldo * 1.01; meses++.
-3. Resposta esperada: 41 meses e R$ 1503.75. (No mês 40 o saldo ainda é
-   R$ 1488.86.)
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0020-while/E118.c -o ~/LPEDC/03-repeticoes/0020-while/E118 && ~/LPEDC/03-repeticoes/0020-while/E118
 ```
 
-**Exercício E119** · ★★★
-
-A conjectura de Collatz: pegue um inteiro positivo. Se for par, divida por
-2; se for ímpar, multiplique por 3 e some 1. Repita até chegar em 1. Ninguém
-provou que sempre chega, mas até hoje sempre chegou.
-
-Leia n do teclado (confira o retorno do scanf e recuse n < 1), mostre a
-sequência, quantos passos foram e o maior valor que apareceu:
-
-
-```text
-Digite n: 6
-6 3 10 5 16 8 4 2 1
-Passos: 8
-Maior valor: 16
-```
-
-**Dicas:**
-
-1. O laço é "while (n != 1)". Dentro dele, um if/else (ou o ternário).
-2. Guarde o maior numa variável que começa com o próprio n e compare a cada
-   passo. Use long para não estourar com números grandes.
-3. Resposta esperada: 6 → 8 passos, maior 16. Teste também com 27: são 111
-   passos e o maior valor é 9232. Com 1, são 0 passos.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0020-while/E119.c -o ~/LPEDC/03-repeticoes/0020-while/E119 && ~/LPEDC/03-repeticoes/0020-while/E119
-```
-
 **Exercício E120** · ★★★
 
-Os três laços abaixo já estão no main do arquivo (cada um entre um printf
-com a letra do trecho e um printf("|\n")):
+Escreva um programa com três laços while, um depois do outro, cada um numa
+linha da saída. A linha começa com a letra do trecho, mostra os valores que o
+corpo imprime e termina com o número de voltas e o valor final da variável
+(use um contador por trecho):
 
 
 ```text
-// trecho A               // trecho B             // trecho C
-int i = 0;                int n = 100;            int k = 10;
-while (i++ < 5) {         while (n > 1) {         while (k < 10) {
-    printf("%d ", i);         n = n / 3;              k++;
-}                         }                       }
+A: int i = 0; while (i++ < 5) mostra i
+B: int n = 100; while (n > 1) divide n por 3 e mostra o n novo
+C: int k = 10; while (k < 10) soma 1 em k
 ```
 
-
-Estenda o programa para ele contar e mostrar o que cada laço fez: crie um
-contador de voltas para cada trecho (voltas_a, voltas_b e voltas_c,
-começando em 0, somando 1 dentro do corpo) e, no fim de cada trecho, mostre
-o contador e o valor final da variável da pergunta. No trecho B, mostre
-também o valor de n depois de cada divisão. Rode e confira:
 
 
 ```text
@@ -412,16 +314,6 @@ A: 1 2 3 4 5 | voltas 5, i final 6
 B: 33 11 3 1 | voltas 4, n final 1
 C: | voltas 0, k final 10
 ```
-
-**Dicas:**
-
-1. Trecho A: i++ compara o valor ANTIGO e só depois soma 1 (assunto 0009).
-   Isso vale também na última pergunta, a que dá falso: por isso i termina
-   em 6, com 5 voltas.
-2. Trecho B: divisão inteira. 100 / 3 = 33. O printf de n vai logo depois
-   da linha n = n / 3.
-3. No trecho C o corpo roda zero vezes,
-   porque o while pergunta antes: 10 < 10 já é falso.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0020-while/E120.c -o ~/LPEDC/03-repeticoes/0020-while/E120 && ~/LPEDC/03-repeticoes/0020-while/E120
@@ -630,49 +522,19 @@ gcc ~/LPEDC/03-repeticoes/0021-do-while/A042.c -o ~/LPEDC/03-repeticoes/0021-do-
 
 #### Exercícios
 
-**Exercício E121** · ★☆☆
-
-O sistema da escola só aceita notas de 0 a 10. Escreva um programa que lê
-uma nota (double) com do-while e repete a pergunta enquanto a nota estiver
-fora da faixa. No fim, mostra a nota aceita com 1 casa:
-
-
-```text
-Nota (0 a 10): -1
-Nota (0 a 10): 11
-Nota (0 a 10): 8.5
-Nota aceita: 8.5
-```
-
-**Dicas:**
-
-1. A pergunta e a leitura ficam DENTRO do do { }.
-2. A condição do while descreve a nota inválida: nota < 0 || nota > 10.
-3. Resposta esperada: com -1, 11 e 8.5, a pergunta aparece 3 vezes e o
-   programa mostra "Nota aceita: 8.5". Notas 0 e 10 são aceitas de primeira.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/E121.c -o ~/LPEDC/03-repeticoes/0021-do-while/E121 && ~/LPEDC/03-repeticoes/0021-do-while/E121
-```
-
 **Exercício E122** · ★☆☆
 
-Os trechos A e B abaixo já estão no main do arquivo e são quase iguais:
+Escreva um programa com três trechos, um por linha de saída. Cada linha
+mostra os valores impressos pelo trecho e termina com o valor final da
+variável:
 
 
 ```text
-// trecho A                     // trecho B
-int n = 10;                     int m = 10;
-while (n < 5) {                 do {
-    printf("%d ", n);               printf("%d ", m);
-    n++;                            m++;
-}                               } while (m < 5);
-printf("| A terminou com n = %d\n", n);   (e o mesmo para m no B)
+A: n = 10; while (n < 5) mostra n e soma 1
+B: m = 10; do { mostra m e soma 1 } while (m < 5);
+C: k = 10; o mesmo que o B, mas escrito com while (sem do-while)
 ```
 
-
-Acrescente um trecho C, com a variável k começando em 10, que mostre
-exatamente o mesmo que o B, mas usando while (sem do-while). Rode e confira:
 
 
 ```text
@@ -682,16 +544,6 @@ Saída esperada:
 10 | C terminou com k = 11
 ```
 
-**Dicas:**
-
-1. O while pergunta antes de entrar; o do-while entra e pergunta depois.
-   10 < 5 é falso logo na primeira pergunta.
-2. Para o while rodar o corpo pelo menos uma vez, escreva uma cópia do
-   corpo ANTES do laço.
-3. O trecho C fica: int k = 10;
-   printf("%d ", k); k++; while (k < 5) { printf("%d ", k); k++; } e o
-   printf final.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0021-do-while/E122.c -o ~/LPEDC/03-repeticoes/0021-do-while/E122 && ~/LPEDC/03-repeticoes/0021-do-while/E122
 ```
@@ -699,29 +551,35 @@ gcc ~/LPEDC/03-repeticoes/0021-do-while/E122.c -o ~/LPEDC/03-repeticoes/0021-do-
 **Exercício E123** · ★★☆
 
 No caixa da padaria, a atendente digita o preço de cada item e o sistema
-pergunta se tem mais algum. Escreva o programa: lê um preço, soma, pergunta
-"Mais algum item? (s/n)" e repete enquanto a resposta for s ou S. No fim,
-mostra quantos itens e o total:
+pergunta "Mais algum item? (s/n)". Escreva o programa com do-while: lê um
+preço ("Preço:"), soma, pergunta e repete enquanto a resposta for s ou S.
+No fim, mostra quantos itens e o total com 2 casas.
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-Preço: 12.50
-Mais algum item? (s/n) s
-Preço: 7.00
-Mais algum item? (s/n) S
-Preço: 3.25
-Mais algum item? (s/n) n
+Entrada:
+12.50
+s
+7.00
+S
+3.25
+n
+```
+
+
+
+```text
+Saída esperada:
+Preço:
+Mais algum item? (s/n)
+Preço:
+Mais algum item? (s/n)
+Preço:
+Mais algum item? (s/n)
 Itens: 3
 Total: R$ 22.75
 ```
-
-**Dicas:**
-
-1. Sempre tem pelo menos um item: é a cara do do-while.
-2. Para ler um caractere pulando o Enter que sobrou no buffer, use
-   scanf(" %c", &resposta) com um espaço antes do %c (assunto 0006).
-3. Resposta esperada: com 12.50, 7.00 e 3.25, mostra "Itens: 3" e
-   "Total: R$ 22.75". A condição é resposta == 's' || resposta == 'S'.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0021-do-while/E123.c -o ~/LPEDC/03-repeticoes/0021-do-while/E123 && ~/LPEDC/03-repeticoes/0021-do-while/E123
@@ -729,27 +587,26 @@ gcc ~/LPEDC/03-repeticoes/0021-do-while/E123.c -o ~/LPEDC/03-repeticoes/0021-do-
 
 **Exercício E124** · ★★☆
 
-O totem do cinema oferece 3 sessões e deveria repetir a pergunta enquanto a
-opção fosse inválida. Mas, rodando com
+O totem do cinema oferece 3 sessões. Escreva o programa com do-while que
+pergunta "Sessão (1, 2 ou 3):" e repete a pergunta enquanto a opção for
+inválida. Quando a opção for válida, mostra "Sessão N escolhida.".
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-printf '7\n2\n' | ~/LPEDC/rodar 03-repeticoes/0021-do-while/E124.c
+Entrada:
+7
+2
 ```
 
 
-ele aceita o 7 de primeira. O código com o erro está logo abaixo.
-Conserte a condição e rode de novo com a mesma entrada: agora o 7 tem que
-ser recusado e o 2 aceito.
 
-**Dicas:**
-
-1. Existe algum número que é, ao mesmo tempo, menor que 1 e maior que 3?
-2. Releia a lei de De Morgan (assunto 0013): o contrário de
-   "opcao >= 1 && opcao <= 3" é...
-3. Resposta esperada: a condição "opcao < 1 && opcao > 3" é sempre falsa,
-   então o laço nunca repete. O certo é "opcao < 1 || opcao > 3". Com 7 e
-   2, o totem pergunta duas vezes e mostra "Sessão 2 escolhida.".
+```text
+Saída esperada:
+Sessão (1, 2 ou 3):
+Sessão (1, 2 ou 3):
+Sessão 2 escolhida.
+```
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0021-do-while/E124.c -o ~/LPEDC/03-repeticoes/0021-do-while/E124 && ~/LPEDC/03-repeticoes/0021-do-while/E124
@@ -757,61 +614,35 @@ gcc ~/LPEDC/03-repeticoes/0021-do-while/E124.c -o ~/LPEDC/03-repeticoes/0021-do-
 
 **Exercício E125** · ★★★
 
-A senha do cartão é 4321 e a pessoa tem 3 tentativas. Escreva o programa:
-lê a senha com do-while, conta as tentativas e para quando acertar OU
-quando acabarem as tentativas. No fim, diz o que aconteceu:
+A senha do cartão é 4321 e a pessoa tem 3 tentativas. Escreva o programa: lê
+a senha com do-while ("Senha:"), conta as tentativas e para quando acertar
+OU quando acabarem as tentativas. No fim, diz "Senha correta na tentativa N."
+ou, se errou as três, "Cartão bloqueado.".
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-Senha: 1111
-Senha: 2222
-Senha: 4321
+Entrada:
+1111
+2222
+4321
+```
+
+
+
+```text
+Saída esperada:
+Senha:
+Senha:
+Senha:
 Senha correta na tentativa 3.
 ```
 
 
-Com 1111, 2222 e 3333, a saída termina com "Cartão bloqueado.".
-
-**Dicas:**
-
-1. A condição de repetir tem duas partes: errou E ainda tem tentativa.
-2. Depois do laço, você não sabe por qual motivo ele parou. Pergunte de
-   novo: a última senha lida é a certa?
-3. Resposta esperada: "} while (senha != 4321 && tentativas < 3);" e,
-   depois, um if (senha == 4321). Acertando de primeira, mostra
-   "Senha correta na tentativa 1.".
+Com as entradas 1111, 2222 e 3333, a última linha da saída é "Cartão bloqueado.".
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0021-do-while/E125.c -o ~/LPEDC/03-repeticoes/0021-do-while/E125 && ~/LPEDC/03-repeticoes/0021-do-while/E125
-```
-
-**Exercício E126** · ★★★
-
-O app da clínica pede a data da consulta em 2026. Escreva um programa que lê
-o mês (repete até ser de 1 a 12) e depois o dia (repete até ser válido
-PARA AQUELE MÊS; 2026 não é bissexto, então fevereiro tem 28 dias):
-
-
-```text
-Mês: 13
-Mês: 2
-Dia (1 a 28): 30
-Dia (1 a 28): 29
-Dia (1 a 28): 28
-Consulta em 28/02/2026
-```
-
-**Dicas:**
-
-1. São dois do-while, um depois do outro. Entre eles, descubra quantos dias
-   tem o mês (um switch com fall-through resolve: assunto 0018).
-2. Meses de 30 dias: 4, 6, 9 e 11. Fevereiro: 28. Os outros: 31.
-3. Resposta esperada: com 13, 2, 30, 29, 28 mostra "Consulta em
-   28/02/2026". Use %02d para o zero na frente. Com mês 4, o dia 31 é
-   recusado.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0021-do-while/E126.c -o ~/LPEDC/03-repeticoes/0021-do-while/E126 && ~/LPEDC/03-repeticoes/0021-do-while/E126
 ```
 
 ---
@@ -1010,28 +841,6 @@ gcc ~/LPEDC/03-repeticoes/0022-for/A044.c -o ~/LPEDC/03-repeticoes/0022-for/A044
 
 #### Exercícios
 
-**Exercício E127** · ★☆☆
-
-Escreva a tabuada do 8 com um for, alinhando os números com %2d:
-
-
-```text
-8 x  1 =  8
-8 x  2 = 16
-...
-8 x 10 = 80
-```
-
-**Dicas:**
-
-1. O contador vai de 1 a 10: for (int i = 1; i <= 10; i++).
-2. printf("8 x %2d = %2d\n", i, 8 * i);
-3. Resposta esperada: 10 linhas, da "8 x  1 =  8" até a "8 x 10 = 80".
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/E127.c -o ~/LPEDC/03-repeticoes/0022-for/E127 && ~/LPEDC/03-repeticoes/0022-for/E127
-```
-
 **Exercício E128** · ★☆☆
 
 Escreva um programa com os quatro laços abaixo, um depois do outro. Cada
@@ -1056,14 +865,6 @@ c) (0 voltas)
 d) 1 3 9 27 81 (5 voltas)
 ```
 
-**Dicas:**
-
-1. Antes de cada laço: printf("a) ") e voltas = 0. No corpo:
-   printf("%d ", x) e voltas++. Depois: printf("(%d voltas)\n", voltas).
-2. O laço c pergunta "1 >= 10?" logo de cara: o corpo nunca roda.
-3. O passo pode ser qualquer conta, não
-   só +1: no d, x é multiplicado por 3 a cada volta.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0022-for/E128.c -o ~/LPEDC/03-repeticoes/0022-for/E128 && ~/LPEDC/03-repeticoes/0022-for/E128
 ```
@@ -1072,24 +873,26 @@ gcc ~/LPEDC/03-repeticoes/0022-for/E128.c -o ~/LPEDC/03-repeticoes/0022-for/E128
 
 Você aplica R$ 2000.00 num CDB que rende 0,8% ao mês. Mostre o saldo mês a
 mês durante 12 meses (todo mês o saldo é multiplicado por 1.008). No fim,
-confira o resultado com a fórmula dos juros compostos,
-saldo = 2000 * 1.008 elevado a 12, usando pow (assunto 0010):
+mostre o resultado da fórmula dos juros compostos,
+saldo = 2000 * 1.008 elevado a 12, usando pow (assunto 0010).
 
 
 ```text
+Saída esperada:
 Mês  1: R$ 2016.00
 Mês  2: R$ 2032.13
-...
+Mês  3: R$ 2048.39
+Mês  4: R$ 2064.77
+Mês  5: R$ 2081.29
+Mês  6: R$ 2097.94
+Mês  7: R$ 2114.72
+Mês  8: R$ 2131.64
+Mês  9: R$ 2148.70
+Mês 10: R$ 2165.88
+Mês 11: R$ 2183.21
 Mês 12: R$ 2200.68
 Pela fórmula: R$ 2200.68
 ```
-
-**Dicas:**
-
-1. Aqui você sabe quantas voltas são (12): é trabalho para o for.
-2. Inclua <math.h>; o rodar já liga com -lm.
-3. Resposta esperada: R$ 2200.68 nos dois cálculos. O laço é a fórmula
-   "desenrolada": multiplicar 12 vezes por 1.008 é elevar a 12.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0022-for/E129.c -o ~/LPEDC/03-repeticoes/0022-for/E129 -lm && ~/LPEDC/03-repeticoes/0022-for/E129
@@ -1097,25 +900,18 @@ gcc ~/LPEDC/03-repeticoes/0022-for/E129.c -o ~/LPEDC/03-repeticoes/0022-for/E129
 
 **Exercício E130** · ★★☆
 
-O treino manda fazer 5 séries de flexões e o programa deveria mostrar
-"Série 1" até "Série 5". Ele compila com um AVISO e mostra só:
+O treino manda fazer 5 séries de flexões. Escreva um programa com um for que
+mostra "Série 1" até "Série 5", uma por linha.
 
 
 ```text
-Série 6
+Saída esperada:
+Série 1
+Série 2
+Série 3
+Série 4
+Série 5
 ```
-
-
-O código com o erro está logo abaixo. Rode, leia o aviso do gcc e conserte:
-o programa tem que compilar sem aviso e mostrar Série 1 até Série 5.
-
-**Dicas:**
-
-1. O aviso fala em "misleading indentation": a indentação engana.
-2. Olhe o fim da linha do for. Um ; sozinho é um comando vazio.
-3. Resposta esperada: o ";" logo depois do for vira o corpo do laço (vazio).
-   O laço gira 5 vezes sem fazer nada, i termina em 6 e o bloco { } roda
-   uma vez só, depois. Tirando o ";", mostra Série 1 a Série 5.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0022-for/E130.c -o ~/LPEDC/03-repeticoes/0022-for/E130 && ~/LPEDC/03-repeticoes/0022-for/E130
@@ -1131,66 +927,17 @@ pi = 4/1 - 4/3 + 4/5 - 4/7 + 4/9 - ...
 ```
 
 
-Escreva um programa que soma os primeiros 1000 termos e mostra o resultado
-com 6 casas. Depois troque para 10 e para 100000 termos e veja a
-aproximação melhorar (devagar).
+Escreva um programa com um for que soma os primeiros 1000 termos e mostra o
+resultado com 6 casas.
 
 
 ```text
-Saída esperada (1000 termos):
+Saída esperada:
 pi ~ 3.140593
 ```
 
-**Dicas:**
-
-1. O termo k (começando em 0) tem denominador 2 * k + 1.
-2. O sinal alterna: k par soma, k ímpar subtrai. O ternário ajuda:
-   (k % 2 == 0) ? 4.0 : -4.0. Use 4.0, não 4: divisão inteira estraga tudo.
-3. Resposta esperada: 1000 termos → 3.140593; 10 termos → 3.041840;
-   100000 termos → 3.141583.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0022-for/E131.c -o ~/LPEDC/03-repeticoes/0022-for/E131 && ~/LPEDC/03-repeticoes/0022-for/E131
-```
-
-**Exercício E132** · ★★★
-
-O laço abaixo usa a vírgula para controlar duas variáveis. Escreva um
-programa que roda esse laço e, logo depois, o MESMO laço reescrito com
-while, com a mesma saída. Nos dois, acrescente um contador de voltas e
-mostre-o na linha do "Fim":
-
-
-```text
-int i, j;
-for (i = 0, j = 20; i < j; i += 3, j -= 2) {
-    printf("i = %2d, j = %2d\n", i, j);
-}
-printf("Fim: i = %d, j = %d\n", i, j);
-```
-
-
-
-```text
-Saída esperada (a do for; a do while vem logo depois, igual):
-i =  0, j = 20
-i =  3, j = 18
-i =  6, j = 16
-i =  9, j = 14
-Fim: i = 12, j = 12, voltas = 4
-```
-
-**Dicas:**
-
-1. A vírgula separa duas inicializações e dois passos; a condição é uma só.
-2. No while, as inicializações vão antes do laço e os dois passos vão no
-   FIM do corpo, depois do printf. Zere o contador antes de cada laço.
-3. Resposta esperada: 4 linhas e "Fim: i = 12, j = 12, voltas = 4", duas
-   vezes. Com while: i = 0; j = 20; while (i < j) { printf(...);
-   voltas++; i += 3; j -= 2; }.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0022-for/E132.c -o ~/LPEDC/03-repeticoes/0022-for/E132 && ~/LPEDC/03-repeticoes/0022-for/E132
 ```
 
 ---
@@ -1380,60 +1127,12 @@ gcc ~/LPEDC/03-repeticoes/0023-break-continue/A046.c -o ~/LPEDC/03-repeticoes/00
 
 #### Exercícios
 
-**Exercício E133** · ★☆☆
-
-Muito prédio não tem 13º andar: o painel do elevador pula do 12 para o 14.
-Mostre os botões do painel de 1 a 20, na mesma linha, pulando o 13 com um
-continue:
-
-
-```text
-1 2 3 4 5 6 7 8 9 10 11 12 14 15 16 17 18 19 20
-```
-
-**Dicas:**
-
-1. Um for de 1 a 20. Dentro, antes do printf, um if que testa o 13.
-2. O continue pula o printf, mas o andar++ do for ainda acontece.
-3. Resposta esperada: a linha acima, com 19 números.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/E133.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E133 && ~/LPEDC/03-repeticoes/0023-break-continue/E133
-```
-
 **Exercício E134** · ★☆☆
 
-O laço abaixo já está no main do arquivo:
-
-
-```text
-for (int i = 1; i <= 10; i++) {
-    if (i % 4 == 0) {
-        continue;
-    }
-    if (i == 7) {
-        break;
-    }
-    printf("%d ", i);
-}
-printf("\n");
-```
-
-
-Estenda o programa:
-
-1. acrescente um contador de quantas vezes o continue aconteceu e mostre-o
-
-```text
- no fim da linha;
-```
-
-2. logo depois, escreva uma cópia do laço (com o seu contador) em que o
-
-```text
- break testa i == 8 em vez de i == 7.
-```
-
+Escreva um programa com um for de i = 1 a 10 que mostra os valores de i numa
+linha, mas pula (continue) os múltiplos de 4 e para (break) quando i for 7.
+No fim da linha, mostra quantas vezes o continue aconteceu. Na linha
+seguinte, repita o laço com um contador novo, mas agora o break testa i == 8.
 
 
 ```text
@@ -1442,15 +1141,6 @@ Saída esperada:
 1 2 3 5 6 7 9 10 (continue: 2 vezes)
 ```
 
-**Dicas:**
-
-1. continue pula só esta volta; break acaba com o laço. O contador soma 1
-   logo antes do continue, dentro do mesmo if.
-2. Na cópia, o 8 é múltiplo de 4: quem chega primeiro nele, o continue ou
-   o break?
-3. Com i == 8, o break nunca acontece,
-   porque o continue pega o 8 antes; o laço vai até o 10 e pula o 4 e o 8.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0023-break-continue/E134.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E134 && ~/LPEDC/03-repeticoes/0023-break-continue/E134
 ```
@@ -1458,28 +1148,38 @@ gcc ~/LPEDC/03-repeticoes/0023-break-continue/E134.c -o ~/LPEDC/03-repeticoes/00
 **Exercício E135** · ★★☆
 
 O elevador aguenta 600 kg e até 8 pessoas. As pessoas entram uma a uma; o
-programa lê o peso de cada uma (no máximo 8 leituras) e, se a próxima
-passar do limite de peso, ela espera e ninguém mais entra:
+programa lê o peso de cada uma ("Peso da pessoa N:", no máximo 8 leituras)
+e, se a próxima passar do limite de peso, ela espera e ninguém mais entra
+("A pessoa N (P kg) espera o próximo."). No fim, mostra quantas entraram e o
+peso total.
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-Peso da pessoa 1: 80
-Peso da pessoa 2: 95
-Peso da pessoa 3: 110
-Peso da pessoa 4: 70
-Peso da pessoa 5: 120
-Peso da pessoa 6: 90
-Peso da pessoa 7: 60
+Entrada:
+80
+95
+110
+70
+120
+90
+60
+```
+
+
+
+```text
+Saída esperada:
+Peso da pessoa 1:
+Peso da pessoa 2:
+Peso da pessoa 3:
+Peso da pessoa 4:
+Peso da pessoa 5:
+Peso da pessoa 6:
+Peso da pessoa 7:
 A pessoa 7 (60 kg) espera o próximo.
 Entraram 6 pessoas, 565 kg.
 ```
-
-**Dicas:**
-
-1. Um for de 1 a 8 cuida do limite de pessoas; o break cuida do peso.
-2. Teste ANTES de somar: if (total + peso > 600) { avisa; break; }
-3. Resposta esperada: com os pesos acima, entram 6 pessoas e 565 kg. Com
-   oito pessoas de 50 kg, entram as 8 (400 kg) e ninguém espera.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0023-break-continue/E135.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E135 && ~/LPEDC/03-repeticoes/0023-break-continue/E135
@@ -1487,92 +1187,66 @@ gcc ~/LPEDC/03-repeticoes/0023-break-continue/E135.c -o ~/LPEDC/03-repeticoes/00
 
 **Exercício E136** · ★★☆
 
-Um sensor manda até 5 códigos: 1 = normal, 2 = alerta, 9 = desligou. Quando
-chega o 9, o programa deveria parar de ler. Mas rodando com
+Um sensor manda até 5 códigos: 1 = normal, 2 = alerta, 9 = desligou. Escreva
+o programa que lê os códigos com um for e um switch e mostra "normal",
+"alerta" ou "sensor desligou" (qualquer outro: "código desconhecido"). O
+laço tem que parar de ler no 9. No fim, mostra "Leituras: N".
 
 
 ```text
-printf '1\n2\n9\n1\n2\n' | ~/LPEDC/rodar 03-repeticoes/0023-break-continue/E136.c
+Entrada:
+1
+2
+9
+1
+2
 ```
 
 
-ele continua lendo depois do 9. O código com o erro está logo abaixo.
-Conserte para o laço parar no 9 e rode de novo com a mesma entrada.
 
-**Dicas:**
-
-1. Dentro de um switch, de quem o break está saindo?
-2. Depois do switch, ainda dentro do for, você pode testar o código de novo.
-3. Resposta esperada: o break do "case 9" sai só do switch (o mais interno),
-   não do for. Conserto: depois do switch, "if (codigo == 9) break;" (ou
-   trocar o switch por if/else if). Corrigido, mostra normal, alerta,
-   "sensor desligou" e "Leituras: 3".
+```text
+Saída esperada:
+normal
+alerta
+sensor desligou
+Leituras: 3
+```
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0023-break-continue/E136.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E136 && ~/LPEDC/03-repeticoes/0023-break-continue/E136
 ```
 
-**Exercício E137** · ★★★
-
-Caça ao número: qual é o MENOR número de 4 dígitos que é múltiplo de 7 e
-cuja soma dos dígitos é 20? Escreva um programa que testa de 1000 em
-diante, usa continue para descartar quem não é múltiplo de 7 e break assim
-que achar a resposta. Mostre também quantos múltiplos de 7 foram testados:
-
-
-```text
-Achei: 1379 (1 + 3 + 7 + 9 = 20)
-Múltiplos de 7 testados: 55
-```
-
-**Dicas:**
-
-1. Os dígitos de um número de 4 dígitos: n / 1000, n / 100 % 10,
-   n / 10 % 10 e n % 10.
-2. Conte os testados DEPOIS do continue: só quem passou pelo filtro.
-3. Resposta esperada: 1379 = 7 x 197, e foram testados 55 múltiplos de 7
-   (1001, 1008, ..., 1379).
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0023-break-continue/E137.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E137 && ~/LPEDC/03-repeticoes/0023-break-continue/E137
-```
-
 **Exercício E138** · ★★★
 
-Tem gente que acha que break e continue deixam o laço difícil de ler,
-porque a saída fica escondida no meio do corpo. Refatore o programa abaixo
-para NÃO usar break nem continue: use uma variável bool (assunto 0012) na
-condição do while e if/else no corpo. A saída tem que ser a mesma.
+Escreva um programa que lê notas ("Nota (-1 encerra):") e calcula a média,
+sem usar break nem continue: use uma variável bool (assunto 0012) na
+condição do while e if/else no corpo. Nota negativa (ou entrada inválida)
+encerra; nota maior que 10 é ignorada e mostra "  nota X ignorada" (1 casa);
+as demais entram na soma. Se houve alguma nota válida, mostra a média.
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-double soma = 0.0, nota;
-int contadas = 0;
-while (1) {
-    printf("Nota (-1 encerra): ");
-    if (scanf("%lf", &nota) != 1) break;
-    if (nota < 0) break;
-    if (nota > 10) {
-        printf("  nota %.1f ignorada\n", nota);
-        continue;
-    }
-    soma += nota;
-    contadas++;
-}
-if (contadas > 0) {
-    printf("Média de %d notas: %.2f\n", contadas, soma / contadas);
-}
+Entrada:
+8
+12
+6.5
+9
+-1
 ```
 
 
-Teste com 8, 12, 6.5, 9 e -1.
 
-**Dicas:**
-
-1. bool continuar = true; while (continuar) { ... }
-2. Onde havia break, faça continuar = false. Onde havia continue, use um
-   else para que a soma não aconteça.
-3. Resposta esperada: "  nota 12.0 ignorada" e "Média de 3 notas: 7.83".
+```text
+Saída esperada:
+Nota (-1 encerra):
+Nota (-1 encerra):
+  nota 12.0 ignorada
+Nota (-1 encerra):
+Nota (-1 encerra):
+Nota (-1 encerra):
+Média de 3 notas: 7.83
+```
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0023-break-continue/E138.c -o ~/LPEDC/03-repeticoes/0023-break-continue/E138 && ~/LPEDC/03-repeticoes/0023-break-continue/E138
@@ -1761,45 +1435,11 @@ gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/A048.c -o ~/LPEDC/03-repeticoes/0
 
 #### Exercícios
 
-**Exercício E139** · ★☆☆
-
-O pedreiro quer ver como vai ficar a calçada: 3 fileiras de 8 ladrilhos.
-Desenhe com dois for aninhados, usando printf("#") uma vez só no código:
-
-
-```text
-########
-########
-########
-```
-
-**Dicas:**
-
-1. O laço de fora conta as fileiras (3); o de dentro, os ladrilhos (8).
-2. O printf("\n") fica DEPOIS do laço de dentro, ainda dentro do de fora.
-3. Resposta esperada: o desenho acima. O printf("#") roda 3 x 8 = 24 vezes.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E139.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E139 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E139
-```
-
 **Exercício E140** · ★☆☆
 
-O par de laços abaixo já está no main do arquivo:
-
-
-```text
-for (int i = 1; i <= 3; i++) {
-    for (int j = 1; j <= i; j++) {
-        printf("%d ", i * j);
-    }
-    printf("\n");
-}
-```
-
-
-Estenda o programa: acrescente um contador que soma 1 cada vez que o printf
-de dentro roda e, depois dos dois laços, mostre quantas vezes foi:
+Escreva dois laços for aninhados: para i de 1 a 3, a linha i mostra os
+produtos i * j com j de 1 até i. Use um contador de quantas vezes o printf
+de dentro rodou e mostre-o depois dos dois laços.
 
 
 ```text
@@ -1810,17 +1450,6 @@ Saída esperada:
 printf de dentro: 6 vezes
 ```
 
-
-Depois troque o limite do laço de fora para 4 e rode de novo.
-
-**Dicas:**
-
-1. O contador começa em 0 antes dos laços e soma 1 logo depois do printf
-   de dentro, no mesmo nível dele.
-2. Para cada i, o laço de dentro roda i vezes: 1, depois 2, depois 3.
-3. Resposta esperada: a saída acima (1 + 2 + 3 = 6). Com i até 4, aparece a
-   linha "4 8 12 16" e o contador vai a 10.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E140.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E140 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E140
 ```
@@ -1828,26 +1457,23 @@ gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E140.c -o ~/LPEDC/03-repeticoes/0
 **Exercício E141** · ★★☆
 
 Monte a tábua de multiplicação de 1 a 9 como uma tabela, com cabeçalho e
-margem. Cada número ocupa 4 posições (%4d):
+margem. Cada número ocupa 4 posições (%4d).
 
 
 ```text
+Saída esperada:
   x |   1   2   3   4   5   6   7   8   9
 ----+------------------------------------
   1 |   1   2   3   4   5   6   7   8   9
   2 |   2   4   6   8  10  12  14  16  18
-...
+  3 |   3   6   9  12  15  18  21  24  27
+  4 |   4   8  12  16  20  24  28  32  36
+  5 |   5  10  15  20  25  30  35  40  45
+  6 |   6  12  18  24  30  36  42  48  54
+  7 |   7  14  21  28  35  42  49  56  63
+  8 |   8  16  24  32  40  48  56  64  72
   9 |   9  18  27  36  45  54  63  72  81
 ```
-
-**Dicas:**
-
-1. O cabeçalho é um laço sozinho, antes dos aninhados. A linha de traços
-   também pode ser um laço (4 traços por coluna).
-2. Em cada linha: primeiro a margem printf("%3d |", linha), depois o laço
-   de dentro com printf("%4d", linha * coluna).
-3. Resposta esperada: a tabela acima; a última linha termina em 81 e a
-   diagonal tem os quadrados 1, 4, 9, 16, 25, 36, 49, 64, 81.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E141.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E141 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E141
@@ -1856,26 +1482,16 @@ gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E141.c -o ~/LPEDC/03-repeticoes/0
 **Exercício E142** · ★★☆
 
 A escola quer a lista de chamada de 3 turmas com 4 alunos cada, uma turma
-por linha (T1-A1 T1-A2 ...). O programa abaixo mostra só a primeira turma e
-depois duas linhas vazias. O código com o erro está logo abaixo. Conserte
-(continue usando while) e rode até aparecer a saída esperada.
+por linha, no formato T1-A1 T1-A2 ... Escreva o programa com dois while
+aninhados (um para a turma, outro para o aluno).
 
 
 ```text
-Saída esperada depois do conserto:
+Saída esperada:
 T1-A1 T1-A2 T1-A3 T1-A4
 T2-A1 T2-A2 T2-A3 T2-A4
 T3-A1 T3-A2 T3-A3 T3-A4
 ```
-
-**Dicas:**
-
-1. Quanto vale aluno quando a turma 2 começa?
-2. Com for, o "aluno = 1" fica no cabeçalho do laço de dentro e roda toda
-   vez. Com while, você precisa fazer isso à mão.
-3. Resposta esperada: aluno nunca volta para 1. Depois da turma 1 ele vale
-   5, e o while de dentro não roda mais. Conserto: "aluno = 1;" dentro do
-   while de fora, logo antes do while de dentro.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E142.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E142 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E142
@@ -1883,12 +1499,21 @@ gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E142.c -o ~/LPEDC/03-repeticoes/0
 
 **Exercício E143** · ★★★
 
-Desenhe uma pirâmide centralizada com a altura lida do teclado (aceite de 1
-a 20; confira o retorno do scanf). Com altura 5:
+Desenhe uma pirâmide centralizada com a altura lida do teclado ("Altura:",
+aceite de 1 a 20; confira o retorno do scanf).
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-Altura: 5
+Entrada:
+5
+```
+
+
+
+```text
+Saída esperada:
+Altura:
     *
    ***
   *****
@@ -1896,43 +1521,8 @@ Altura: 5
 *********
 ```
 
-**Dicas:**
-
-1. Em cada linha, dois laços seguidos: um de espaços e um de asteriscos.
-2. Na linha L (de 1 a altura): altura - L espaços e 2 * L - 1 asteriscos.
-3. Resposta esperada: o desenho acima; a base tem 9 asteriscos
-   (2 x 5 - 1). Com altura 1, só um "*".
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E143.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E143 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E143
-```
-
-**Exercício E144** · ★★★
-
-De quantas formas dá para pagar R$ 100 usando só notas de 50, 20 e 10?
-Resolva por força bruta: três laços aninhados testam todas as quantidades
-possíveis de cada nota e contam as combinações que somam 100. Mostre cada
-uma e o total:
-
-
-```text
- 1) 0 de 50 + 0 de 20 + 10 de 10
- 2) 0 de 50 + 1 de 20 +  8 de 10
-...
-10) 2 de 50 + 0 de 20 +  0 de 10
-Formas: 10
-```
-
-**Dicas:**
-
-1. Notas de 50: de 0 a 2. De 20: de 0 a 5. De 10: de 0 a 10.
-2. No laço mais de dentro: if (50 * n50 + 20 * n20 + 10 * n10 == 100).
-3. Resposta esperada: 10 formas. Desafio extra: reescreva sem o laço das
-   notas de 10. Com n50 e n20 fixos, calcule quantas notas de 10 faltam
-   (só vale se o que falta for >= 0) e confira se continuam 10 formas.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E144.c -o ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E144 && ~/LPEDC/03-repeticoes/0024-lacos-aninhados/E144
 ```
 
 ---
@@ -2170,102 +1760,70 @@ gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/A050.c -o ~/LPEDC/03-repeticoes/0
 
 **Exercício E145** · ★☆☆
 
-Leia as 5 notas de um aluno com um for. Mostre a soma, a média (1 casa) e
-em quantas provas ele tirou 6 ou mais:
+Leia as 5 notas de um aluno com um for ("Nota N:"). Mostre a soma, a média
+(1 casa) e em quantas provas ele tirou 6 ou mais.
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-Nota 1: 7
-Nota 2: 4.5
-Nota 3: 8
-Nota 4: 6
-Nota 5: 9.5
+Entrada:
+7
+4.5
+8
+6
+9.5
+```
+
+
+
+```text
+Saída esperada:
+Nota 1:
+Nota 2:
+Nota 3:
+Nota 4:
+Nota 5:
 Soma: 35.0
 Média: 7.0
 Provas com 6 ou mais: 4
 ```
 
-**Dicas:**
-
-1. Antes do laço: soma = 0 (acumulador) e acima = 0 (contador).
-2. Dentro: soma += nota; if (nota >= 6) acima++;
-3. Resposta esperada: soma 35.0, média 7.0 e 4 provas com 6 ou mais (o 6
-   conta, porque é ">=").
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E145.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E145 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E145
 ```
 
-**Exercício E146** · ★☆☆
-
-Complete as lacunas do controle de gastos do mês. O valor 0 é a sentinela:
-encerra a lista e não conta como gasto. Depois escreva o programa completo
-no arquivo e teste.
-
-
-```text
-double gasto, total = ____;
-int quantos = ____;
-printf("Gasto (0 encerra): ");
-scanf("%lf", &gasto);
-while (________) {
-    total = ________;
-    quantos++;
-    printf("Gasto (0 encerra): ");
-    ________;
-}
-if (quantos > 0) {
-    printf("Total: R$ %.2f em %d gastos\n", total, quantos);
-    printf("Média: R$ %.2f\n", ________);
-}
-```
-
-
-
-```text
-Com 45.90, 120 e 33.10 e depois 0:
-Total: R$ 199.00 em 3 gastos
-Média: R$ 66.33
-```
-
-**Dicas:**
-
-1. Contador e acumulador começam em 0.
-2. A segunda leitura fica no FIM do corpo: é ela que traz o próximo valor
-   para a pergunta do while (leitura antecipada).
-3. Resposta esperada: 0.0; 0; gasto != 0; total + gasto;
-   scanf("%lf", &gasto); total / quantos. Saída: R$ 199.00 em 3 gastos,
-   média R$ 66.33.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E146.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E146 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E146
-```
-
 **Exercício E147** · ★★☆
 
-Você anotou o preço da gasolina em 6 postos do caminho. Leia os 6 preços e
-mostre o mais barato e o mais caro, com o NÚMERO do posto de cada um, e a
-diferença entre eles:
+Você anotou o preço da gasolina em 6 postos do caminho. Leia os 6 preços
+("Posto N:") e mostre o mais barato e o mais caro, com o NÚMERO do posto de
+cada um, e a diferença entre eles.
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-Posto 1: 5.89
-Posto 2: 6.09
-Posto 3: 5.79
-Posto 4: 5.99
-Posto 5: 6.19
-Posto 6: 5.85
+Entrada:
+5.89
+6.09
+5.79
+5.99
+6.19
+5.85
+```
+
+
+
+```text
+Saída esperada:
+Posto 1:
+Posto 2:
+Posto 3:
+Posto 4:
+Posto 5:
+Posto 6:
 Mais barato: posto 3 (R$ 5.79)
 Mais caro: posto 5 (R$ 6.19)
 Diferença: R$ 0.40 por litro
 ```
-
-**Dicas:**
-
-1. Além do menor e do maior, guarde a posição de cada um (posto_menor,
-   posto_maior). Quando o menor muda, a posição muda junto.
-2. Comece menor e maior com o PRIMEIRO preço lido, não com 0.
-3. Resposta esperada: posto 3 (5.79), posto 5 (6.19), diferença 0.40.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E147.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E147 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E147
@@ -2274,37 +1832,26 @@ gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E147.c -o ~/LPEDC/03-repeticoes/0
 **Exercício E148** · ★★☆
 
 A lanchonete anota o resultado de cada dia em reais (negativo é prejuízo) e
-digita 9999 para encerrar. Numa semana ruim, com -30, -10, -45 e 9999, o
-programa abaixo mostra:
+digita 9999 para encerrar; o 9999 não conta como dia. Escreva o programa que
+lê os valores e mostra quantos dias foram, a média (2 casas) e o melhor dia.
 
 
 ```text
-Dias: 4
-Média: -21
-Melhor dia: 0
+Entrada:
+-30
+-10
+-45
+9999
 ```
 
-
-mas o certo é 3 dias, média -28.33 e melhor dia -10. O código, com TRÊS
-erros, está logo abaixo. Teste com
 
 
 ```text
-printf -- '-30\n-10\n-45\n9999\n' | ~/LPEDC/rodar 03-repeticoes/0025-padroes-de-laco/E148.c
+Saída esperada:
+Dias: 3
+Média: -28.33
+Melhor dia: -10
 ```
-
-
-ache os três e conserte.
-
-**Dicas:**
-
-1. O contador conta antes ou depois de saber se é a sentinela?
-2. Se todos os dias foram negativos, quem ganha de um "maior" que começa
-   em 0? E int dividido por int dá...
-3. Resposta esperada: (1) dias++ vem antes do teste da sentinela e conta o
-   9999; (2) maior = 0 vence todos os negativos: comece com o primeiro dia;
-   (3) soma / dias é divisão inteira: use (double) soma / dias e %.2f.
-   Corrigido: "Dias: 3", "Média: -28.33", "Melhor dia: -10".
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E148.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E148 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E148
@@ -2312,71 +1859,42 @@ gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E148.c -o ~/LPEDC/03-repeticoes/0
 
 **Exercício E149** · ★★★
 
-Campeonato de skate: 8 notas de 0 a 100. Leia cada nota UMA vez (sem
-guardar todas: vetores só no módulo 05) e mostre a maior e a segunda maior.
-Se duas pessoas empatarem no topo, a segunda maior é igual à maior.
+Campeonato de skate: 8 notas de 0 a 100. Leia cada nota UMA vez ("Nota N:",
+sem guardar todas: vetores só no módulo 05) e mostre a maior e a segunda
+maior. Se duas pessoas empatarem no topo, a segunda maior é igual à maior.
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
-Nota 1: 72
-Nota 2: 95
-Nota 3: 88
-Nota 4: 95
-Nota 5: 60
-Nota 6: 81
-Nota 7: 99
-Nota 8: 70
+Entrada:
+72
+95
+88
+95
+60
+81
+99
+70
+```
+
+
+
+```text
+Saída esperada:
+Nota 1:
+Nota 2:
+Nota 3:
+Nota 4:
+Nota 5:
+Nota 6:
+Nota 7:
+Nota 8:
 1º lugar: 99
 2º lugar: 95
 ```
 
-**Dicas:**
-
-1. Duas variáveis: primeiro e segundo. Como as notas vão de 0 a 100, dá
-   para começar as duas com -1 (um valor impossível).
-2. Nota maior que o primeiro: o primeiro antigo desce para segundo, e a
-   nota vira o primeiro. Senão, se for maior que o segundo, vira o segundo.
-3. Resposta esperada: 99 e 95. Com 50 90 90 10 20 30 40 60, a resposta é
-   90 e 90 (empate). Faça o teste de mesa da ordem: se você atualizar o
-   primeiro antes de salvar o antigo no segundo, perde o 95.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E149.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E149 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E149
-```
-
-**Exercício E150** · ★★★
-
-O app de corrida registra a distância de 6 treinos, em km inteiros. Leia os
-6 valores (inteiros) e faça o programa mostrar a resposta de duas perguntas:
-
-a) Os treinos estão em ordem crescente (cada um MAIOR que o anterior)?
-b) Qual foi a maior sequência de treinos seguidos em alta?
-
-
-```text
-Treino 1: 3
-Treino 2: 5
-Treino 3: 8
-Treino 4: 2
-Treino 5: 4
-Treino 6: 9
-Em ordem crescente? não
-Maior sequência em alta: 3 treinos
-```
-
-**Dicas:**
-
-1. Guarde o valor anterior numa variável. A partir do 2º treino, compare
-   o atual com o anterior. No fim de cada volta, anterior = atual.
-2. Flag: bool crescente = true no começo; vira false na primeira descida
-   (ou empate) e nunca mais volta. Para (b), um contador da sequência atual,
-   que zera (volta a 1) quando a alta acaba, e um "maior" que guarda o
-   recorde.
-3. Resposta esperada: com 3 5 8 2 4 9, "não" e 3 treinos (3 5 8 ou 2 4 9).
-   Com 1 2 3 4 5 6: "sim" e 6. Com 5 5 5 5 5 5: "não" e 1.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E150.c -o ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E150 && ~/LPEDC/03-repeticoes/0025-padroes-de-laco/E150
 ```
 
 ---
@@ -2571,52 +2089,18 @@ gcc ~/LPEDC/03-repeticoes/0026-aleatorios/A052.c -o ~/LPEDC/03-repeticoes/0026-a
 
 #### Exercícios
 
-**Exercício E151** · ★☆☆
-
-Escreva a expressão com rand() que sorteia cada faixa abaixo. Para testar,
-faça um for que mostra 10 sorteios de cada uma (com srand(1) no começo) e
-confira se nenhum número sai da faixa:
-
-
-```text
-a) um dado: 1 a 6
-b) um dígito: 0 a 9
-c) a idade de um sorteado entre 10 e 20 anos
-d) uma variação de temperatura de -5 a 5
-e) só os pares de 2 a 20
-```
-
-**Dicas:**
-
-1. rand() % n dá de 0 a n - 1. Somando a, a faixa começa em a.
-2. Para a faixa de a até b: a + rand() % (b - a + 1).
-3. Resposta esperada: a) 1 + rand() % 6; b) rand() % 10;
-   c) 10 + rand() % 11; d) -5 + rand() % 11; e) 2 + 2 * (rand() % 10)
-   (sorteia de 0 a 9 e transforma em 2, 4, ..., 20).
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E151.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E151 && ~/LPEDC/03-repeticoes/0026-aleatorios/E151
-```
-
 **Exercício E152** · ★☆☆
 
 Simule 20 lançamentos de uma moeda: mostre C (cara) ou K (coroa) para cada
 um, na mesma linha, e no fim quantas caras e quantas coroas saíram. Use
-srand(time(NULL)) para o resultado mudar a cada execução:
+srand(time(NULL)) para o resultado mudar a cada execução.
 
 
 ```text
-Exemplo de saída (a sua vai ser diferente):
+Saída esperada (exemplo, a sua muda a cada execução):
 C K K C C K C K K K C C K C K K C C K C
 Caras: 10 | Coroas: 10
 ```
-
-**Dicas:**
-
-1. rand() % 2 dá 0 ou 1. Combine: 0 é cara, 1 é coroa.
-2. Um contador basta: coroas = 20 - caras.
-3. Resposta esperada: 20 letras e duas contagens que somam 20. Rode
-   várias vezes: dá perto de 10 a 10, mas raramente exato.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E152.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E152 && ~/LPEDC/03-repeticoes/0026-aleatorios/E152
@@ -2625,14 +2109,14 @@ gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E152.c -o ~/LPEDC/03-repeticoes/0026-a
 **Exercício E153** · ★★☆
 
 O jogo clássico: o programa sorteia um número de 1 a 100 (com
-srand(time(NULL))) e a pessoa tenta adivinhar. A cada palpite, ele diz
-"Mais alto" ou "Mais baixo". No acerto, mostra quantas tentativas foram.
-Se o scanf falhar (letra ou fim da entrada), o jogo encerra mostrando o
-número sorteado.
+srand(time(NULL))) e a pessoa tenta adivinhar ("Palpite: "). A cada palpite,
+diz "Mais alto." ou "Mais baixo.". No acerto, mostra "Acertou em N
+tentativas!". Se o scanf falhar (letra ou fim da entrada), o jogo encerra
+mostrando o número sorteado.
 
 
 ```text
-Exemplo (o número sorteado muda a cada vez):
+Saída esperada (exemplo, digitando 50, 25 e 37; o número sorteado muda a cada vez):
 Palpite: 50
 Mais baixo.
 Palpite: 25
@@ -2641,36 +2125,21 @@ Palpite: 37
 Acertou em 3 tentativas!
 ```
 
-**Dicas:**
-
-1. Sorteie uma vez só, antes do laço. O laço repete enquanto o palpite for
-   diferente do segredo (do-while combina bem).
-2. Para testar sem depender da sorte, troque time(NULL) por uma semente
-   fixa enquanto desenvolve, e depois volte.
-3. Resposta esperada: o jogo funciona para qualquer sorteio. Chutando
-   sempre o meio do intervalo que sobrou, você acerta em no máximo 7
-   tentativas, porque 2 elevado a 7 = 128 >= 100.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E153.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E153 && ~/LPEDC/03-repeticoes/0026-aleatorios/E153
 ```
 
 **Exercício E154** · ★★☆
 
-O programa abaixo deveria sortear 10 lançamentos de um dado. Rode e repare:
-sai o mesmo número 10 vezes, e às vezes esse número é 0. São DOIS erros.
-O código com os erros está logo abaixo. Conserte os dois e rode algumas
-vezes: os 10 números têm que variar e ficar sempre entre 1 e 6.
+Escreva um programa que sorteia 10 lançamentos de um dado e mostra os 10
+números na mesma linha. Os números têm que variar de um lançamento para o
+outro e ficar sempre entre 1 e 6. Use srand(time(NULL)) uma vez só.
 
-**Dicas:**
 
-1. Quantas vezes o srand roda? E quanto vale time(NULL) nas 10 voltas, que
-   acontecem dentro do mesmo segundo?
-2. Qual a faixa de rand() % 6?
-3. Resposta esperada: (1) o srand(time(NULL)) está dentro do laço: a cada
-   volta a sequência recomeça com a mesma semente (o segundo atual) e o
-   rand devolve o mesmo primeiro número. O srand vai uma vez só, antes do
-   laço. (2) rand() % 6 vai de 0 a 5; o dado é 1 + rand() % 6.
+```text
+Saída esperada (exemplo, a sua muda a cada execução):
+4 1 6 3 3 5 2 6 1 4
+```
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E154.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E154 && ~/LPEDC/03-repeticoes/0026-aleatorios/E154
@@ -2691,43 +2160,15 @@ pi ~ 4 x (pontos dentro do círculo) / (total de pontos)
 Sorteie 1 000 000 de pontos (com srand(42)) e mostre a estimativa com 4
 casas. Um ponto está dentro se x * x + y * y <= 1.
 
-**Dicas:**
 
-1. Um double entre 0 e 1: (double) rand() / RAND_MAX. Sem o cast, a divisão
-   é inteira e dá quase sempre 0.
-2. Use 4.0 na conta final, pelo mesmo motivo.
-3. Resposta esperada: algo perto de 3.14. Na glibc (Linux) com semente
-   42: "Dentro do círculo: 784696 de 1000000" e "pi ~ 3.1388". Com 100
-   pontos, o erro é bem maior: teste.
+```text
+Saída esperada:
+Dentro do círculo: 784696 de 1000000
+pi ~ 3.1388
+```
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E155.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E155 && ~/LPEDC/03-repeticoes/0026-aleatorios/E155
-```
-
-**Exercício E156** · ★★★
-
-Quantos lançamentos de um dado, em média, até sair 6 três vezes SEGUIDAS?
-A matemática diz 258 (6 + 36 + 216). Confira por simulação: repita o
-experimento 10 000 vezes (com srand(2026)) e mostre a média de lançamentos
-e o pior caso:
-
-
-```text
-Média: 257.2 lançamentos
-Pior caso: 2860 lançamentos
-```
-
-**Dicas:**
-
-1. Laço de fora: os 10 000 experimentos. Laço de dentro: lança enquanto
-   seguidos < 3.
-2. Tirou 6: seguidos++. Qualquer outra face: seguidos = 0. Os contadores
-   do experimento (seguidos e lancamentos) recomeçam a cada volta de fora.
-3. Resposta esperada: média perto de 258 (na glibc com semente 2026,
-   257.2, e pior caso 2860). Use long para a soma de todos os lançamentos.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0026-aleatorios/E156.c -o ~/LPEDC/03-repeticoes/0026-aleatorios/E156 && ~/LPEDC/03-repeticoes/0026-aleatorios/E156
 ```
 
 ---
@@ -3010,90 +2451,31 @@ gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/A054.c -o ~/LPEDC/03-repeticoes/002
 
 No craps, o 7 é o número mais perigoso (e o mais comum). Lance dois dados
 36 000 vezes (com srand(time(NULL))) e conte quantas vezes a soma deu 7 e
-quantas deu 2. Mostre as contagens e as porcentagens com 1 casa:
+quantas deu 2. Mostre as contagens e as porcentagens com 1 casa.
 
 
 ```text
-Exemplo de saída (os números mudam a cada execução):
+Saída esperada (exemplo, os números mudam a cada execução):
 Soma 7: 6043 (16.8%)
 Soma 2: 1012 (2.8%)
 ```
 
-**Dicas:**
-
-1. Some dois sorteios separados: (1 + rand() % 6) + (1 + rand() % 6). Não
-   use 2 + rand() % 11: isso daria a mesma chance para todas as somas.
-2. Porcentagem: 100.0 * contagem / 36000.
-3. Resposta esperada: o 7 sai perto de 6000 vezes (1/6, 16.7%), porque 6 das
-   36 combinações dão 7. O 2 sai perto de 1000 (1/36, 2.8%): só 1 + 1.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E157.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E157 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E157
-```
-
-**Exercício E158** · ★☆☆
-
-Um juiz de craps sem dados: em vez de sortear, o programa lê a soma de cada
-lançamento do teclado. O começo (o primeiro lançamento e o switch, igual ao
-do texto, com scanf no lugar do sorteio) já está pronto no arquivo. Complete o while dos relançamentos: ele lê a próxima soma,
-conta o lançamento e decide (o ponto ganha, o 7 perde, o resto não faz
-nada). Depois teste com as seis sequências:
-
-
-```text
-printf '5\n8\n4\n6\n5\n' | ~/LPEDC/rodar 03-repeticoes/0027-juntando-tudo/E158.c
-```
-
-
-
-```text
-a) 5, 8, 4, 6, 5
-b) 6, 9, 7
-c) 12
-d) 11
-e) 4, 4
-f) 10, 2, 3, 12, 7
-```
-
-
-
-```text
-Saída esperada para a sequência a:
-Soma: Soma: Soma: Soma: Soma: Ganhou no 5º lançamento (ponto 5).
-```
-
-**Dicas:**
-
-1. O while repete enquanto situacao == 0. Dentro: printf("Soma: "), scanf
-   (se falhar, return 1), lancamentos++ e um if/else if.
-2. Do segundo lançamento em diante, só duas somas importam: o ponto
-   (situacao = 1) e o 7 (situacao = -1). 2, 3 e 12 não fazem mais nada.
-3. Resposta esperada: a) ganha no 5º (ponto 5); b) perde no 3º (ponto 6);
-   c) perde no 1º; d) ganha no 1º; e) ganha no 2º (ponto 4); f) perde no
-   5º (ponto 10; o 2, o 3 e o 12 depois do ponto não contam).
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E158.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E158 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E158
 ```
 
 **Exercício E159** · ★★☆
 
 Um número de 3 dígitos é de Armstrong quando a soma dos cubos dos dígitos
 dá o próprio número: 153 = 1 + 125 + 27. Mostre todos os números de
-Armstrong de 100 a 999 e quantos são:
+Armstrong de 100 a 999 e quantos são.
 
 
 ```text
+Saída esperada:
 153 370 371 407
 Encontrados: 4
 ```
-
-**Dicas:**
-
-1. Um for de 100 a 999. Dentro, separe os dígitos: n / 100, n / 10 % 10 e
-   n % 10 (ou um while que tira um dígito por volta, como no A040).
-2. Cubo: d * d * d. Não precisa de pow, que trabalha com double.
-3. Resposta esperada: 153 370 371 407, e 4 encontrados.
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E159.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E159 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E159
@@ -3101,36 +2483,34 @@ gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E159.c -o ~/LPEDC/03-repeticoes/002
 
 **Exercício E160** · ★★☆
 
-O controle de estoque da cantina começa com 20 salgados. No menu, 1 vende
-(lê a quantidade), 2 repõe uma caixa de 10 e 0 sai, mostrando o estoque e o
-total vendido. Com as entradas 1, 5, 1, 3 e 0 (duas vendas e sair), o
-certo é:
+O controle de estoque da cantina começa com 20 salgados. Escreva o menu com
+do-while e switch ("1 Vender | 2 Repor | 0 Sair:"): 1 pergunta "Quantos?"
+e vende (se a quantidade for inválida ou maior que o estoque, mostra "Venda
+recusada."); 2 repõe uma caixa de 10 e mostra "Repôs 10."; 0 sai; qualquer
+outra mostra "Opção inválida.". No fim, mostra o estoque e o total vendido.
+Cada pedido de leitura termina com quebra de linha (\n).
 
 
 ```text
+Entrada:
+1
+5
+1
+3
+0
+```
+
+
+
+```text
+Saída esperada:
+1 Vender | 2 Repor | 0 Sair:
+Quantos?
+1 Vender | 2 Repor | 0 Sair:
+Quantos?
+1 Vender | 2 Repor | 0 Sair:
 Estoque: 12 | Vendidos: 8
 ```
-
-
-mas o programa abaixo mostra "Estoque: 32 | Vendidos: 0", e o rodar dá um
-aviso. O código, com DOIS erros, está logo abaixo. Teste com
-
-
-```text
-printf '1\n5\n1\n3\n0\n' | ~/LPEDC/rodar 03-repeticoes/0027-juntando-tudo/E160.c
-```
-
-
-leia o aviso, ache os dois erros e conserte.
-
-**Dicas:**
-
-1. O aviso fala em "fall through": o que acontece no fim do case 1?
-2. Em qual linha o total vendido volta para zero? Quantas vezes ela roda?
-3. Resposta esperada: (1) falta break no fim do case 1, então toda venda
-   também repõe 10 (assunto 0018); (2) "vendidos = 0;" está dentro do laço
-   e zera o acumulador a cada volta, inclusive na volta do 0. Ele vai para
-   antes do do-while. Corrigido: "Estoque: 12 | Vendidos: 8".
 
 ```bash
 gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E160.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E160 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E160
@@ -3140,79 +2520,42 @@ gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E160.c -o ~/LPEDC/03-repeticoes/002
 
 O jogo dos 21 palitos: na mesa há 21 palitos. Você e o computador se
 revezam, cada um tirando 1, 2 ou 3. Quem tirar o ÚLTIMO palito perde. Você
-começa. Escreva o jogo:
+começa. Sua jogada é lida com do-while ("Você tira:") e só vale de 1 a 3 e
+no máximo o que sobrou. O computador tira (palitos - 1) % 4 (se der 0, tira
+1). A cada jogada, mostre quantos palitos sobraram; no fim, quem perdeu.
+Cada pedido de leitura termina com quebra de linha (\n).
 
-- sua jogada é lida com do-while e só vale de 1 a 3 e no máximo o que
 
 ```text
-sobrou na mesa;
+Entrada:
+3
+3
+2
+1
+2
+1
 ```
 
-- o computador joga com a estratégia vencedora: tira
-
-```text
-(palitos - 1) % 4; se isso der 0, tira 1;
-```
-
-- a cada jogada, mostre quantos palitos sobraram; no fim, quem perdeu.
 
 
 ```text
-Você tira: 3
+Saída esperada:
+Você tira:
 Sobram 18. O computador tira 1. Sobram 17.
-Você tira: 3
+Você tira:
 Sobram 14. O computador tira 1. Sobram 13.
-...
-Você tira: 1
+Você tira:
+Sobram 11. O computador tira 2. Sobram 9.
+Você tira:
+Sobram 8. O computador tira 3. Sobram 5.
+Você tira:
+Sobram 3. O computador tira 2. Sobram 1.
+Você tira:
 Sobram 0. Você tirou o último palito. Perdeu!
 ```
 
-**Dicas:**
-
-1. Um laço principal enquanto houver palitos. Dentro: sua vez; se zerou,
-   você perdeu (break); senão, a vez do computador; se zerou, ele perdeu.
-2. A estratégia deixa sempre 1, 5, 9, 13, 17 na mesa para você. Faça o
-   teste de mesa: de 17, tire o que quiser, o computador volta para 13.
-3. Resposta esperada: começando com 21 e você jogando primeiro, o
-   computador sempre vence. Com as jogadas 3, 3, 3, 3, 3 e 1, a mesa fica
-   18/17, 14/13, 10/9, 6/5, 2/1 e 0, e você perde.
-
 ```bash
 gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E161.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E161 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E161
-```
-
-**Exercício E162** · ★★★
-
-Imprima o calendário de outubro de 2026. O mês tem 31 dias e o dia 1 cai
-numa quinta-feira. A semana começa no domingo, e cada dia ocupa 3 posições
-(%3d):
-
-
-```text
-  D  S  T  Q  Q  S  S
-              1  2  3
-  4  5  6  7  8  9 10
- 11 12 13 14 15 16 17
- 18 19 20 21 22 23 24
- 25 26 27 28 29 30 31
-```
-
-
-Depois mude para fevereiro de 2026 (28 dias, começa num domingo) mexendo só
-em duas variáveis.
-
-**Dicas:**
-
-1. Duas variáveis bastam: dias_no_mes = 31 e primeiro = 4 (domingo = 0,
-   segunda = 1, ..., quinta = 4).
-2. Antes do dia 1, um laço imprime "primeiro" vezes três espaços. Depois,
-   um for de 1 a 31; pule linha quando a coluna chegar no sábado:
-   (primeiro + dia) % 7 == 0.
-3. Resposta esperada: o desenho acima, 5 semanas, terminando no sábado 31.
-   Fevereiro de 2026 (primeiro = 0, 28 dias) fica com 4 linhas cheias.
-
-```bash
-gcc ~/LPEDC/03-repeticoes/0027-juntando-tudo/E162.c -o ~/LPEDC/03-repeticoes/0027-juntando-tudo/E162 && ~/LPEDC/03-repeticoes/0027-juntando-tudo/E162
 ```
 
 ---

@@ -13,13 +13,6 @@
 //   tira 20: pré 35 25 10 30 60 50 70
 //   altura final: 2
 //
-// Dicas:
-// 1. Hoje o código anda r->dir e depois tudo à esquerda. O antecessor é o
-//    espelho: r->esq e depois tudo à direita.
-// 2. A chamada recursiva também muda de lado: r->esq = remove(r->esq, ...).
-// 3. Resposta esperada: a saída acima. Com o sucessor, a raiz depois de
-//    tirar o 40 seria o 50.
-//
 // Escreva sua resposta abaixo (modifique a função remove_chave):
 
 #include <stdio.h>

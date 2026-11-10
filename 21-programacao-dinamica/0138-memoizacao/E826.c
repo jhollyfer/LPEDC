@@ -17,16 +17,6 @@
 //   Lucro máximo: R$ 175
 //   Barracas: 0 2 5 7
 //
-// Dicas:
-// 1. Na vaga i há duas escolhas: não montar (fica melhor[i - 1]) ou montar
-//    (lucro[i] + melhor[i - 2], porque a i - 1 tem que ficar vazia).
-// 2. Bases: melhor[0] = lucro[0]; melhor[1] = o maior entre lucro[0] e
-//    lucro[1].
-// 3. Para achar as vagas, ande de trás para a frente: se melhor[i] é
-//    diferente de melhor[i - 1], a vaga i foi usada e você pula para i - 2;
-//    senão, vai para i - 1. A vaga 0, se você chegar nela, é usada.
-// 4. Resposta esperada: a saída acima (40 + 60 + 55 + 20 = 175).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

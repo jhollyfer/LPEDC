@@ -236,74 +236,38 @@ gcc ~/LPEDC/02-condicionais/0012-relacionais/A024.c -o ~/LPEDC/02-condicionais/0
 **Exercício E067** · ★☆☆
 
 No posto, a regra de bolso diz que o etanol compensa quando custa no
-máximo 70% do preço da gasolina. Leia os dois preços e guarde a resposta
-num bool. Mostre o bool com %d (sem if: só a comparação).
+máximo 70% do preço da gasolina. Leia o preço do etanol e o da gasolina, nessa
+ordem e sem mostrar perguntas, e guarde a resposta num bool. Mostre o bool com
+%d (sem if: só a comparação).
 
 
 ```text
-Etanol: 4.19
-Gasolina: 6.09
+Entrada:
+4.19
+6.09
+Saída esperada:
 Etanol compensa? 1
 ```
-
-**Dicas:**
-
-1. 70% da gasolina é gasolina * 0.7.
-2. bool compensa = etanol <= gasolina * 0.7; (não esqueça o stdbool.h).
-3. Resposta esperada: com 4.19 e 6.09 mostra 1 (o limite é 4.263); com
-   4.59 e 6.09 mostra 0.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0012-relacionais/E067.c -o ~/LPEDC/02-condicionais/0012-relacionais/E067 && ~/LPEDC/02-condicionais/0012-relacionais/E067
 ```
 
-**Exercício E068** · ★☆☆
-
-Leia a idade de dois irmãos e mostre as seis comparações entre elas, uma
-por linha, cada uma com o 0 ou o 1 que o C devolve (sem if):
-
-
-```text
-Idades: 12 9
-12 >  9? 1
-12 <  9? 0
-12 >= 9? 1
-12 <= 9? 0
-12 == 9? 0
-12 != 9? 1
-```
-
-**Dicas:**
-
-1. Leia as duas idades com um scanf só: scanf("%d %d", &a, &b).
-2. Cada linha é um printf com %d para a idade e outro %d para a
-   comparação: printf("%d >  %d? %d\n", a, b, a > b);
-3. Resposta esperada: 12 9 → 1 0 1 0 0 1 (de cima para baixo);
-   7 7 → 0 0 1 1 1 0.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0012-relacionais/E068.c -o ~/LPEDC/02-condicionais/0012-relacionais/E068 && ~/LPEDC/02-condicionais/0012-relacionais/E068
-```
-
 **Exercício E069** · ★★☆
 
 A loja cobra frete de R$ 24.90, mas só quando a compra é menor que
-R$ 199.00. Complete a linha do frete SEM usar if: use o 0 ou 1 de uma
-comparação dentro da conta.
+R$ 199.00. Leia o total da compra, sem mostrar pergunta, e calcule o frete SEM
+usar if: multiplique 24.90 pelo 0 ou 1 de uma comparação. Mostre o frete e o
+valor a pagar.
 
 
 ```text
-Total da compra: R$ 150
+Entrada:
+150
+Saída esperada:
 Frete: R$ 24.90
 A pagar: R$ 174.90
 ```
-
-**Dicas:**
-
-1. (total < 199) vale 1 quando o frete é cobrado e 0 quando não é.
-2. Multiplique essa comparação pelo valor do frete.
-3. Resposta esperada: 150 → frete 24.90, paga 174.90; 210 → frete 0.00,
-   paga 210.00.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0012-relacionais/E069.c -o ~/LPEDC/02-condicionais/0012-relacionais/E069 && ~/LPEDC/02-condicionais/0012-relacionais/E069
@@ -311,74 +275,40 @@ gcc ~/LPEDC/02-condicionais/0012-relacionais/E069.c -o ~/LPEDC/02-condicionais/0
 
 **Exercício E070** · ★★☆
 
-A bala custa R$ 0,70 e a criança pagou com sete moedas de 10 centavos. O
-programa abaixo diz que ela NÃO pagou o valor exato. Rode, acrescente um
-printf que mostre pago com 20 casas e conserte de dois jeitos, mostrando
-as duas linhas: (a) com uma tolerância usando fabs; (b) trabalhando com
-centavos em int.
+A bala custa R$ 0,70 e a criança pagou com sete moedas de 10 centavos.
+Escreva um programa com preco = 0.7 e pago = 0.1 * 7 (double). Mostre pago
+com 20 casas e responda "Pagou o valor exato?" de dois jeitos: (a) comparando
+os doubles com uma tolerância de 1e-9, usando fabs; (b) trabalhando com
+centavos em int (70 e 7 * 10).
 
-**Dicas:**
 
-1. (a) fabs(pago - preco) < 1e-9; (b) int preco = 70; int pago = 7 * 10;
-2. Resposta esperada: o printf mostra 0.70000000000000006661 (0.1 não é
-   exato em binário), diferente de 0.7. Consertado, os dois jeitos
-   mostram "Pagou o valor exato? 1".
+```text
+Saída esperada:
+pago = 0.70000000000000006661
+Pagou o valor exato? 1
+Pagou o valor exato? 1
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0012-relacionais/E070.c -o ~/LPEDC/02-condicionais/0012-relacionais/E070 -lm && ~/LPEDC/02-condicionais/0012-relacionais/E070
 ```
 
-**Exercício E071** · ★★★
-
-O sistema da gincana confere se a nota digitada vale (de 0 a 10) e se os
-três jurados deram a mesma nota. Quem escreveu copiou a matemática:
-0 <= nota <= 10 e j1 == j2 == j3. Compila, com avisos (de propósito), e
-erra. Rode com as entradas abaixo, leia os avisos e conserte as duas
-linhas SEM usar && (ele só chega no 0013): use o fato de que cada
-comparação vale 0 ou 1.
-
-
-```text
-Nota: 15
-Jurados: 7 7 7
-Nota válida? 0
-Unanimidade? 1
-```
-
-**Dicas:**
-
-1. O C avalia da esquerda para a direita: 0 <= nota <= 10 é
-   (0 <= nota) <= 10, e o 0 ou 1 da esquerda é sempre <= 10.
-2. "As duas coisas são verdade" é o mesmo que "o produto das duas vale
-   1": (0 <= nota) * (nota <= 10).
-3. Resposta esperada: valida = (nota >= 0) * (nota <= 10);
-   unanime = (j1 == j2) * (j2 == j3). Testes: 15 e 7 7 7 → 0 e 1;
-   8 e 7 7 9 → 1 e 0; 10 e 2 2 2 → 1 e 1. Sem o conserto, 15 e 7 7 7
-   mostram 1 e 0.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0012-relacionais/E071.c -o ~/LPEDC/02-condicionais/0012-relacionais/E071 && ~/LPEDC/02-condicionais/0012-relacionais/E071
-```
-
 **Exercício E072** · ★★★
 
 Desconto progressivo, sem nenhum if: compras a partir de R$ 100 ganham
-5%; a partir de R$ 300, ganham mais 5% (10% no total). Leia o total,
-calcule a porcentagem só com comparações e mostre:
+5%; a partir de R$ 300, ganham mais 5% (10% no total). Leia o total, sem
+mostrar pergunta, calcule a porcentagem só com comparações e mostre o total,
+o desconto e o valor a pagar.
 
 
 ```text
+Entrada:
+150
+Saída esperada:
 Total: R$ 150.00
 Desconto: 5%
 A pagar: R$ 142.50
 ```
-
-**Dicas:**
-
-1. Cada faixa alcançada soma 5: 5 * (total >= 100) + 5 * (total >= 300).
-2. Para mostrar o símbolo de porcentagem no printf, escreva %%.
-3. Resposta esperada: 80 → 0%, paga 80.00; 150 → 5%, paga 142.50;
-   400 → 10%, paga 360.00.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0012-relacionais/E072.c -o ~/LPEDC/02-condicionais/0012-relacionais/E072 && ~/LPEDC/02-condicionais/0012-relacionais/E072
@@ -561,10 +491,11 @@ gcc ~/LPEDC/02-condicionais/0013-logicos/A026.c -o ~/LPEDC/02-condicionais/0013-
 Monte a tabela-verdade no terminal. Para cada uma das quatro combinações
 de a e b (0 0, 0 1, 1 0, 1 1), dê os valores às duas variáveis e mostre
 uma linha com a, b, a && b, a || b e !a, calculados pelo programa (nada de
-digitar os resultados no printf).
+digitar os resultados no printf). Primeiro vem a linha de títulos.
 
 
 ```text
+Saída esperada:
 a b | E OU NAO
 0 0 | 0 0  1
 0 1 | 0 1  1
@@ -572,60 +503,23 @@ a b | E OU NAO
 1 1 | 1 1  0
 ```
 
-**Dicas:**
-
-1. Declare bool a, b; e, antes de cada linha, faça a = ...; b = ...;
-2. Use sempre o mesmo printf:
-   printf("%d %d | %d %d  %d\n", a, b, a && b, a || b, !a);
-3. A coluna do E só tem 1 na última
-   linha; a do OU só tem 0 na primeira.
-
 ```bash
 gcc ~/LPEDC/02-condicionais/0013-logicos/E073.c -o ~/LPEDC/02-condicionais/0013-logicos/E073 && ~/LPEDC/02-condicionais/0013-logicos/E073
-```
-
-**Exercício E074** · ★☆☆
-
-A geladeira de vacinas do posto de saúde precisa ficar entre 2 °C e 8 °C,
-incluindo os extremos. Leia a temperatura (pode ter vírgula) e mostre se
-está na faixa e se o alarme deve tocar (o alarme é o contrário da faixa).
-
-
-```text
-Temperatura: 5
-Dentro da faixa? 1
-Alarme? 0
-```
-
-**Dicas:**
-
-1. "Entre 2 e 8" no C é temp >= 2 && temp <= 8. Nada de 2 <= temp <= 8.
-2. O alarme é !dentro.
-3. Resposta esperada: 5 → 1 e 0; 9.5 → 0 e 1; 2 → 1 e 0.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0013-logicos/E074.c -o ~/LPEDC/02-condicionais/0013-logicos/E074 && ~/LPEDC/02-condicionais/0013-logicos/E074
 ```
 
 **Exercício E075** · ★★☆
 
 Um ano é bissexto quando é divisível por 4 e não por 100, ou quando é
-divisível por 400. Leia o ano e calcule a resposta numa ÚNICA expressão,
-guardada num bool (sem if).
+divisível por 400. Leia o ano, sem mostrar pergunta, e calcule a resposta numa
+ÚNICA expressão, guardada num bool (sem if). Mostre o bool com %d.
 
 
 ```text
-Ano: 2024
+Entrada:
+2024
+Saída esperada:
 Bissexto? 1
 ```
-
-**Dicas:**
-
-1. "Divisível por 4" é ano % 4 == 0; "não divisível por 100" é
-   ano % 100 != 0.
-2. (divisível por 4 E não por 100) OU divisível por 400. Use parênteses
-   para deixar claro, mesmo que o && já venha antes do ||.
-3. Resposta esperada: 1900 → 0; 2000 → 1; 2023 → 0; 2024 → 1.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0013-logicos/E075.c -o ~/LPEDC/02-condicionais/0013-logicos/E075 && ~/LPEDC/02-condicionais/0013-logicos/E075
@@ -633,25 +527,20 @@ gcc ~/LPEDC/02-condicionais/0013-logicos/E075.c -o ~/LPEDC/02-condicionais/0013-
 
 **Exercício E076** · ★★☆
 
-Na portaria do show, a regra está escrita com um NÃO na frente de tudo.
-Use De Morgan para reescrever "barrado" sem o ! do lado de fora dos
-parênteses e mostre as duas versões lado a lado, para provar que dão o
-mesmo resultado.
+Na portaria do show, a regra do "barrado" é !(idade >= 18 && tem_ingresso).
+Leia a idade e depois 1 ou 0 para "tem ingresso", sem mostrar perguntas.
+Calcule o barrado de duas formas: a original e uma reescrita por De Morgan, sem
+o ! do lado de fora de parênteses. Mostre as duas lado a lado.
 
 
 ```text
-Idade: 16
-Tem ingresso (1 = sim, 0 = não): 1
+Entrada:
+16
+1
+Saída esperada:
 barrado (original):  1
 barrado (De Morgan): 1
 ```
-
-**Dicas:**
-
-1. !(a && b) vira !a || !b.
-2. !(idade >= 18) é idade < 18. E !tem_ingresso fica como está.
-3. Resposta esperada: barrado = idade < 18 || !tem_ingresso.
-   Testes: 20 e 1 → 0; 16 e 1 → 1; 30 e 0 → 1.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0013-logicos/E076.c -o ~/LPEDC/02-condicionais/0013-logicos/E076 && ~/LPEDC/02-condicionais/0013-logicos/E076
@@ -659,55 +548,34 @@ gcc ~/LPEDC/02-condicionais/0013-logicos/E076.c -o ~/LPEDC/02-condicionais/0013-
 
 **Exercício E077** · ★★★
 
-O app do banco mostra se o gasto médio por dia passou de R$ 100. Com uma
-conta nova, sem nenhum dia registrado, o programa abaixo quebra: o
-sanitizer acusa "division by zero". Rode com 900 0 e veja o erro. Depois:
-(a) conserte a linha do gasto_alto usando o curto-circuito do &&, sem if;
-(b) complete a linha do alerta, que deve ser verdade quando não há dias
-registrados OU quando o gasto é alto. Ela também não pode dividir por zero.
+O app do banco mostra se o gasto médio por dia passou de R$ 100. Leia o
+gasto total e o número de dias (dois inteiros, em um scanf), sem mostrar
+pergunta. gasto_alto é verdade quando a média (gasto / dias) passa de 100;
+alerta é verdade quando não há dias registrados OU quando o gasto é alto.
+Conta nova tem 0 dias: o programa não pode dividir por zero em nenhuma das
+duas linhas. Sem if. Teste com 900 6 e com 900 0.
 
 
 ```text
-Gasto total e dias: 900 6
+Entrada:
+900 6
+Saída esperada:
 Gasto alto? 1
 Alerta? 1
 ```
 
-**Dicas:**
 
-1. No &&, se o lado esquerdo é falso, o direito nem é calculado. Ponha a
-   pergunta que protege (dias != 0) na frente da divisão.
-2. No ||, se o lado esquerdo é verdade, o direito é pulado: comece com
-   dias == 0.
-3. Resposta esperada: gasto_alto = dias != 0 && gasto / dias > 100;
-   alerta = dias == 0 || gasto / dias > 100. Testes: 900 6 → 1 e 1;
-   900 0 → 0 e 1 (sem erro); 300 5 → 0 e 0.
+
+```text
+Entrada:
+900 0
+Saída esperada:
+Gasto alto? 0
+Alerta? 1
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0013-logicos/E077.c -o ~/LPEDC/02-condicionais/0013-logicos/E077 && ~/LPEDC/02-condicionais/0013-logicos/E077
-```
-
-**Exercício E078** · ★★★
-
-Este programa deveria dizer se o número é par e se está entre 10 e 20
-(sem incluir os extremos). Ele compila, mas com dois avisos, e erra.
-Teste com 14 (deveria dar 1 e 1) e com 25 (deveria dar 0 e 0). Conserte
-as duas linhas e rode de novo com 14, 25 e 20. Lembrete: n & 1 pega o
-último bit de n em binário: 0 para par, 1 para ímpar (o & bit a bit vem
-no assunto 0065).
-
-**Dicas:**
-
-1. Leia os avisos do gcc: eles apontam exatamente as duas linhas.
-2. Na tabela de precedência, o == fica ACIMA do &. E 10 < n < 20 é
-   (10 < n) < 20.
-3. Resposta esperada: n & 1 == 0 é n & (1 == 0), que é n & 0, sempre 0;
-   o certo é (n & 1) == 0. 10 < n < 20 compara 0 ou 1 com 20, sempre 1;
-   o certo é n > 10 && n < 20. Consertado: 14 → 1 e 1; 25 → 0 e 0;
-   20 → 1 e 0.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0013-logicos/E078.c -o ~/LPEDC/02-condicionais/0013-logicos/E078 && ~/LPEDC/02-condicionais/0013-logicos/E078
 ```
 
 ---
@@ -869,63 +737,45 @@ gcc ~/LPEDC/02-condicionais/0014-if/A028.c -o ~/LPEDC/02-condicionais/0014-if/A0
 
 **Exercício E079** · ★☆☆
 
-Leia a temperatura de uma pessoa e mostre sempre o valor lido. Só se ela
-passar de 37.5, mostre também o aviso de febre.
+Leia a temperatura de uma pessoa, sem mostrar pergunta, e mostre sempre
+o valor lido. Só se ela passar de 37.5, mostre também o aviso de febre.
 
 
 ```text
-Temperatura: 38.2
+Entrada:
+38.2
+Saída esperada:
 Temperatura: 38.2 °C
 Febre! Procure um médico.
 ```
-
-**Dicas:**
-
-1. Um printf antes do if (roda sempre) e outro dentro dele.
-2. "Passar de" é >, não >=.
-3. Resposta esperada: 38.2 → as duas linhas; 36.5 → só
-   "Temperatura: 36.5 °C"; 37.5 → só a primeira linha também.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0014-if/E079.c -o ~/LPEDC/02-condicionais/0014-if/E079 && ~/LPEDC/02-condicionais/0014-if/E079
 ```
 
-**Exercício E080** · ★☆☆
+**Exercício E081** · ★★☆
 
-O professor deu 1 ponto de bônus para a turma, mas a nota máxima continua
-sendo 10. Leia a nota da prova, some o bônus e, se passar de 10, corte
-para 10. Mostre com uma casa decimal.
+O cinema barra menores de 18 anos neste filme. Leia a idade, sem mostrar
+pergunta. Se for menor que 18, mostre "Entrada proibida para menores.". Para
+todo mundo, mostre "Bom filme!" no final. Teste com 25 e com 15.
 
 
 ```text
-Nota da prova: 9.5
-Nota final: 10.0
+Entrada:
+25
+Saída esperada:
+Bom filme!
 ```
 
-**Dicas:**
 
-1. Primeiro some o bônus. Depois pergunte.
-2. Dentro do if, uma atribuição só: nota = 10.
-3. Resposta esperada: 9.5 → 10.0; 7.2 → 8.2; 9.0 → 10.0.
 
-```bash
-gcc ~/LPEDC/02-condicionais/0014-if/E080.c -o ~/LPEDC/02-condicionais/0014-if/E080 && ~/LPEDC/02-condicionais/0014-if/E080
+```text
+Entrada:
+15
+Saída esperada:
+Entrada proibida para menores.
+Bom filme!
 ```
-
-**Exercício E081** · ★★☆
-
-O cinema quer barrar menores de 18 anos neste filme. Mas o programa
-abaixo mostra "Entrada proibida" até para quem tem 25 anos. Rode com 25,
-leia o aviso do compilador (ele existe de propósito), conserte e rode de
-novo com 25 e com 15.
-
-**Dicas:**
-
-1. Olhe com atenção o fim da linha do if.
-2. O que fica sendo o corpo do if? E o bloco entre chaves, de quem é?
-3. Resposta esperada: o ";" depois de if (idade < 18) é uma instrução
-   vazia e vira o corpo do if; o bloco embaixo roda sempre. Tirando o ";",
-   25 mostra só "Bom filme!" e 15 mostra as duas mensagens.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0014-if/E081.c -o ~/LPEDC/02-condicionais/0014-if/E081 && ~/LPEDC/02-condicionais/0014-if/E081
@@ -934,54 +784,19 @@ gcc ~/LPEDC/02-condicionais/0014-if/E081.c -o ~/LPEDC/02-condicionais/0014-if/E0
 **Exercício E082** · ★★☆
 
 Três lojas deram orçamento para a mesma geladeira. Leia os três valores
-(inteiros, em reais) e mostre o MAIOR, usando só if (sem else).
+(inteiros, em reais, na mesma linha) e mostre o MAIOR, usando só if (sem
+else).
 
 
 ```text
-Orçamentos: 3200 3790 3450
+Entrada:
+3200 3790 3450
+Saída esperada:
 Maior orçamento: R$ 3790
 ```
 
-**Dicas:**
-
-1. Comece supondo que o primeiro é o maior: int maior = a;
-2. Depois, um if para cada um dos outros: se for maior que "maior",
-   ele passa a ser o maior.
-3. Resposta esperada: 3200 3790 3450 → 3790; 5000 4100 4999 → 5000;
-   10 20 30 → 30.
-
 ```bash
 gcc ~/LPEDC/02-condicionais/0014-if/E082.c -o ~/LPEDC/02-condicionais/0014-if/E082 && ~/LPEDC/02-condicionais/0014-if/E082
-```
-
-**Exercício E083** · ★★★
-
-O controle de estoque da padaria tem duas regras: com menos de 10 pães,
-mostra "Estoque baixo." e "Pedir mais pão."; com 0 pão, mostra também
-"Esgotado!" e "Desligar a vitrine.". O recuo do programa abaixo promete
-isso, mas o compilador não olha recuo: com 40 pães aparecem duas linhas
-que não deviam. Rode com 40, leia os avisos (o código está quebrado de
-propósito) e conserte. Depois, acrescente uma terceira regra: com mais de
-100 pães, mostre quantos passaram do ideal.
-
-
-```text
-Pães no estoque: 130
-Excesso: 30 pães acima do ideal.
-Estoque: 130
-```
-
-**Dicas:**
-
-1. Sem chaves, o if manda só na primeira instrução depois dele.
-2. Ponha chaves em todos os if. A regra nova é outro if solto, com
-   estoque - 100 no printf.
-3. Resposta esperada: 40 → só "Estoque: 40"; 6 → "Estoque baixo.",
-   "Pedir mais pão." e "Estoque: 6"; 0 → as quatro mensagens e
-   "Estoque: 0"; 130 → a linha do excesso e "Estoque: 130".
-
-```bash
-gcc ~/LPEDC/02-condicionais/0014-if/E083.c -o ~/LPEDC/02-condicionais/0014-if/E083 && ~/LPEDC/02-condicionais/0014-if/E083
 ```
 
 **Exercício E084** · ★★★
@@ -989,20 +804,15 @@ gcc ~/LPEDC/02-condicionais/0014-if/E083.c -o ~/LPEDC/02-condicionais/0014-if/E0
 A conta de água da cidade funciona assim: até 10 m³, paga a tarifa mínima
 de R$ 45.00. Cada m³ acima de 10 custa R$ 6.20. E, se o consumo passar de
 30 m³, a conta inteira ganha 15% de multa por desperdício. Leia o consumo
-(inteiro) e mostre a conta. Use só if, sem else.
+(inteiro), sem mostrar pergunta, e mostre a conta. Use só if, sem else.
 
 
 ```text
-Consumo (m³): 18
+Entrada:
+18
+Saída esperada:
 Conta: R$ 94.60
 ```
-
-**Dicas:**
-
-1. Comece com valor = 45.00, que todo mundo paga.
-2. Primeiro if: se consumo > 10, some (consumo - 10) * 6.20. Segundo if:
-   se consumo > 30, multiplique o valor por 1.15. A ordem importa.
-3. Resposta esperada: 8 → R$ 45.00; 18 → R$ 94.60; 35 → R$ 230.00.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0014-if/E084.c -o ~/LPEDC/02-condicionais/0014-if/E084 && ~/LPEDC/02-condicionais/0014-if/E084
@@ -1159,62 +969,47 @@ gcc ~/LPEDC/02-condicionais/0015-if-else/A030.c -o ~/LPEDC/02-condicionais/0015-
 
 **Exercício E085** · ★☆☆
 
-Leia a idade. Se for 18 ou mais, mostre "Maior de idade."; senão, mostre
-quantos anos faltam para os 18.
+Leia a idade, sem mostrar pergunta. Se for 18 ou mais, mostre "Maior de
+idade."; senão, mostre quantos anos faltam para os 18.
 
 
 ```text
-Idade: 16
+Entrada:
+16
+Saída esperada:
 Faltam 2 ano(s) para a maioridade.
 ```
-
-**Dicas:**
-
-1. O que falta é 18 - idade.
-2. Um if (idade >= 18) com else.
-3. Resposta esperada: 16 → "Faltam 2 ano(s) para a maioridade.";
-   18 → "Maior de idade."; 40 → "Maior de idade.".
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0015-if-else/E085.c -o ~/LPEDC/02-condicionais/0015-if-else/E085 && ~/LPEDC/02-condicionais/0015-if-else/E085
 ```
 
-**Exercício E086** · ★☆☆
+**Exercício E087** · ★★☆
 
-A empresa vai dar aumento: quem ganha até R$ 2000 (inclusive) recebe 10%;
-quem ganha mais, 6%. Leia o salário e mostre o novo.
+O caixa eletrônico bloqueia o cartão na 3ª senha errada. Leia quantas
+senhas erradas já foram digitadas, sem mostrar pergunta. Se forem 3, mostre
+"Cartão bloqueado."; senão, mostre quantas tentativas restam (3 menos o
+valor lido). No fim, para qualquer caso, mostre quantas tentativas foram
+registradas. Teste com 1 e com 3.
 
 
 ```text
-Salário: 1800
-Novo salário: R$ 1980.00
+Entrada:
+1
+Saída esperada:
+Senha errada. Restam 2 tentativa(s).
+Tentativas registradas: 1
 ```
 
-**Dicas:**
 
-1. "Até 2000, inclusive" é salario <= 2000.
-2. Em cada ramo, multiplique por 1.10 ou por 1.06.
-3. Resposta esperada: 1800 → 1980.00; 2000 → 2200.00; 2500 → 2650.00.
 
-```bash
-gcc ~/LPEDC/02-condicionais/0015-if-else/E086.c -o ~/LPEDC/02-condicionais/0015-if-else/E086 && ~/LPEDC/02-condicionais/0015-if-else/E086
+```text
+Entrada:
+3
+Saída esperada:
+Cartão bloqueado.
+Tentativas registradas: 3
 ```
-
-**Exercício E087** · ★★☆
-
-O caixa eletrônico bloqueia o cartão na 3ª senha errada. Mas este programa
-bloqueia logo na primeira! Rode com 1, leia o aviso do compilador e repare
-nos DOIS estragos que o erro causa (a mensagem e a última linha).
-Conserte e rode de novo com 1 e com 3.
-
-**Dicas:**
-
-1. Compare o "Tentativas registradas" com o número que você digitou.
-2. Quantos sinais de igual tem a condição do if?
-3. Resposta esperada: "tentativas = 3" guarda 3 na variável (estrago 1)
-   e o if testa esse 3, que é sempre verdade (estrago 2). Com ==, a
-   entrada 1 mostra "Senha errada. Restam 2 tentativa(s)." e
-   "Tentativas registradas: 1"; a entrada 3 mostra "Cartão bloqueado.".
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0015-if-else/E087.c -o ~/LPEDC/02-condicionais/0015-if-else/E087 && ~/LPEDC/02-condicionais/0015-if-else/E087
@@ -1223,78 +1018,38 @@ gcc ~/LPEDC/02-condicionais/0015-if-else/E087.c -o ~/LPEDC/02-condicionais/0015-
 **Exercício E088** · ★★☆
 
 No empréstimo consignado, a parcela não pode passar de 35% do salário.
-Leia o salário e o valor da parcela. Mostre o limite e se o empréstimo
-foi aprovado ou negado.
+Leia o salário e o valor da parcela, nessa ordem e sem mostrar perguntas.
+Mostre o limite e se o empréstimo foi aprovado ("Aprovado!") ou negado.
 
 
 ```text
-Salário: 3000
-Parcela: 1200
+Entrada:
+3000
+1200
+Saída esperada:
 Limite da parcela: R$ 1050.00
 Negado: a parcela passa do limite.
 ```
-
-**Dicas:**
-
-1. limite = salario * 0.35. Mostre o limite antes do if.
-2. Parcela igual ao limite ainda é aprovada: use <=.
-3. Resposta esperada: 3000 e 1200 → limite 1050.00, negado;
-   3000 e 900 → limite 1050.00, "Aprovado!".
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0015-if-else/E088.c -o ~/LPEDC/02-condicionais/0015-if-else/E088 && ~/LPEDC/02-condicionais/0015-if-else/E088
 ```
 
-**Exercício E089** · ★★★
-
-Na entrada do estacionamento, o totem confere se há vaga e, se houver,
-se o motorista é mensalista (entra direto) ou não (retira o ticket). O
-programa abaixo tem o = no lugar do == em DOIS if aninhados (quebrado de
-propósito). Rode com 12 0: ele chama um avulso de mensalista e ainda zera
-as vagas. Conserte os dois testes escrevendo a constante à esquerda
-(0 == vagas), para que um = esquecido vire erro de compilação.
-
-
-```text
-Vagas livres e mensalista (1 = sim, 0 = não): 12 0
-Retire o ticket. Cancela aberta.
-Vagas livres: 12
-```
-
-**Dicas:**
-
-1. vagas = 0 guarda 0 e testa 0 (sempre falso); mensalista = 1 guarda 1
-   e testa 1 (sempre verdade).
-2. Teste a sua versão trocando um == por = de propósito: com a constante
-   à esquerda, o gcc recusa ("lvalue required"). Depois desfaça.
-3. Resposta esperada: if (0 == vagas) e if (1 == mensalista). Testes:
-   12 0 → ticket e "Vagas livres: 12"; 12 1 → "Bem-vindo, mensalista.
-   Cancela aberta." e 12; 0 1 → "Lotado." e "Vagas livres: 0".
-
-```bash
-gcc ~/LPEDC/02-condicionais/0015-if-else/E089.c -o ~/LPEDC/02-condicionais/0015-if-else/E089 && ~/LPEDC/02-condicionais/0015-if-else/E089
-```
-
 **Exercício E090** · ★★★
 
 Bhaskara. Leia os coeficientes a, b e c de ax² + bx + c = 0 (suponha
-a diferente de zero). Calcule delta = b² - 4ac. Se delta for negativo,
-mostre "Sem raízes reais."; senão, calcule e mostre as duas raízes.
+a diferente de zero), sem mostrar pergunta. Calcule delta = b² - 4ac. Se
+delta for negativo, mostre "Sem raízes reais."; senão, calcule e mostre as
+duas raízes com duas casas (x1 com a raiz do delta somada, x2 subtraída).
 
 
 ```text
-Coeficientes a b c: 1 -5 6
+Entrada:
+1 -5 6
+Saída esperada:
 x1 = 3.00
 x2 = 2.00
 ```
-
-**Dicas:**
-
-1. sqrt está no math.h (assunto 0010). O rodar já liga com -lm.
-2. x1 = (-b + sqrt(delta)) / (2 * a). Os parênteses em volta de 2 * a
-   são obrigatórios.
-3. Resposta esperada: 1 -5 6 → 3.00 e 2.00; 1 -4 4 → 2.00 e 2.00;
-   1 2 5 → "Sem raízes reais."; 2 -3 -2 → 2.00 e -0.50.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0015-if-else/E090.c -o ~/LPEDC/02-condicionais/0015-if-else/E090 -lm && ~/LPEDC/02-condicionais/0015-if-else/E090
@@ -1477,74 +1232,57 @@ gcc ~/LPEDC/02-condicionais/0016-else-if/A032.c -o ~/LPEDC/02-condicionais/0016-
 **Exercício E091** · ★☆☆
 
 O plano de saúde cobra por faixa de idade: até 18 anos, R$ 150; de 19 a
-38, R$ 280; de 39 a 58, R$ 520; de 59 em diante, R$ 900. Leia a idade e
-mostre a mensalidade usando uma cadeia de else if.
+38, R$ 280; de 39 a 58, R$ 520; de 59 em diante, R$ 900. Leia a idade, sem
+mostrar pergunta, e mostre a mensalidade usando uma cadeia de else if.
 
 
 ```text
-Idade: 45
+Entrada:
+45
+Saída esperada:
 Mensalidade: R$ 520.00
 ```
-
-**Dicas:**
-
-1. Teste em ordem crescente: idade <= 18, depois idade <= 38...
-2. Quando chega no segundo teste, você já sabe que a idade passou de 18.
-3. Resposta esperada: 10 → 150.00; 18 → 150.00; 19 → 280.00;
-   45 → 520.00; 59 → 900.00.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0016-else-if/E091.c -o ~/LPEDC/02-condicionais/0016-else-if/E091 && ~/LPEDC/02-condicionais/0016-else-if/E091
 ```
 
-**Exercício E092** · ★☆☆
-
-Leia o saldo da conta (pode ter centavos) e mostre uma de três mensagens:
-"Conta no azul.", "Conta no vermelho." ou "Conta zerada.".
-
-
-```text
-Saldo: -35.80
-Conta no vermelho.
-```
-
-**Dicas:**
-
-1. Três caminhos: if, else if, else.
-2. Qual caso sobra para o else, sem precisar de teste?
-3. Resposta esperada: 120.50 → azul; -35.80 → vermelho; 0 → zerada.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0016-else-if/E092.c -o ~/LPEDC/02-condicionais/0016-else-if/E092 && ~/LPEDC/02-condicionais/0016-else-if/E092
-```
-
 **Exercício E093** · ★★☆
 
-O assistente do celular lê duas respostas: você vai sair (1 ou 0)? Vai
-chover (1 ou 0)? Quem vai sair e vê chuva deve ler "Leve o guarda-chuva.";
-quem NÃO vai sair deve ler "Fique em casa e descanse."; todo mundo lê
-"Bom dia!" no fim. O recuo do programa abaixo promete isso, mas o else
-pendurado tem outro dono (o código está quebrado de propósito e o gcc
-avisa). Rode com 0 1, 1 0 e 1 1, veja a saída errada e conserte com
-chaves.
+O assistente do celular lê duas respostas, cada uma 1 ou 0: você vai sair?
+Vai chover? Quem vai sair e vê chuva lê "Leve o guarda-chuva."; quem NÃO vai
+sair lê "Fique em casa e descanse."; quem vai sair sem chuva não lê nenhum
+dos dois. Todo mundo lê "Bom dia!" no fim. Leia as duas respostas em um
+scanf, sem mostrar pergunta, e use chaves em todos os blocos. Teste com
+0 1, 1 0 e 1 1.
 
 
 ```text
-Vai sair? Vai chover? 0 1
+Entrada:
+0 1
+Saída esperada:
 Fique em casa e descanse.
 Bom dia!
 ```
 
-**Dicas:**
 
-1. Sem chaves, o else pertence ao if mais próximo que ainda não tem else:
-   o if (chuva).
-2. Ponha chaves em volta do if de dentro (e, de quebra, em todos os
-   blocos).
-3. Resposta esperada, depois do conserto: 0 1 → "Fique em casa e
-   descanse." e "Bom dia!"; 1 0 → só "Bom dia!"; 1 1 → "Leve o
-   guarda-chuva." e "Bom dia!". Antes do conserto, 0 1 mostrava só
-   "Bom dia!" e 1 0 mandava ficar em casa.
+
+```text
+Entrada:
+1 0
+Saída esperada:
+Bom dia!
+```
+
+
+
+```text
+Entrada:
+1 1
+Saída esperada:
+Leve o guarda-chuva.
+Bom dia!
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0016-else-if/E093.c -o ~/LPEDC/02-condicionais/0016-else-if/E093 && ~/LPEDC/02-condicionais/0016-else-if/E093
@@ -1552,18 +1290,44 @@ gcc ~/LPEDC/02-condicionais/0016-else-if/E093.c -o ~/LPEDC/02-condicionais/0016-
 
 **Exercício E094** · ★★☆
 
-O conceito deveria ser A (nota 9 ou mais), B (7 ou mais), C (5 ou mais)
-ou D (abaixo de 5). Mas quem tirou 9.5 recebeu C. O programa compila sem
-nenhum aviso: o erro é de lógica. Ache, conserte e rode com as quatro
-notas da resposta esperada.
+Leia a nota (real), sem mostrar pergunta, e mostre o conceito: A para
+9 ou mais, B para 7 ou mais, C para 5 ou mais, D para abaixo de 5. Use uma
+cadeia de else if. Teste com 9.5, 7.2, 5 e 3.
 
-**Dicas:**
 
-1. Com 9.5, qual é a primeira condição verdadeira?
-2. O else if para no primeiro Sim. Uma nota alta também é >= 5.
-3. Resposta esperada: as condições estão na ordem errada; teste primeiro
-   >= 9, depois >= 7, depois >= 5. Consertado: 9.5 → A; 7.0 → B;
-   5.5 → C; 3.0 → D.
+```text
+Entrada:
+9.5
+Saída esperada:
+Conceito A
+```
+
+
+
+```text
+Entrada:
+7.2
+Saída esperada:
+Conceito B
+```
+
+
+
+```text
+Entrada:
+5
+Saída esperada:
+Conceito C
+```
+
+
+
+```text
+Entrada:
+3
+Saída esperada:
+Conceito D
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0016-else-if/E094.c -o ~/LPEDC/02-condicionais/0016-else-if/E094 && ~/LPEDC/02-condicionais/0016-else-if/E094
@@ -1571,63 +1335,21 @@ gcc ~/LPEDC/02-condicionais/0016-else-if/E094.c -o ~/LPEDC/02-condicionais/0016-
 
 **Exercício E095** · ★★★
 
-Leia três medidas inteiras (em cm). Primeiro diga se elas formam um
-triângulo: cada lado tem que ser menor que a soma dos outros dois. Se
-formarem, classifique: equilátero (3 lados iguais), isósceles (só 2
-iguais) ou escaleno (todos diferentes).
+Leia três medidas inteiras (em cm), na mesma linha. Primeiro diga se
+elas formam um triângulo: cada lado tem que ser menor que a soma dos outros
+dois ("Não forma triângulo." se não). Se formarem, classifique: equilátero (3
+lados iguais), isósceles (só 2 iguais) ou escaleno (todos diferentes).
 
 
 ```text
-Lados: 5 5 8
+Entrada:
+5 5 8
+Saída esperada:
 Triângulo isósceles.
 ```
 
-**Dicas:**
-
-1. Não forma se a >= b + c ou b >= a + c ou c >= a + b.
-2. Depois, teste o equilátero ANTES do isósceles (todo equilátero também
-   tem dois lados iguais).
-3. Resposta esperada: 5 5 5 → equilátero; 5 5 8 → isósceles;
-   3 4 5 → escaleno; 1 2 3 → "Não forma triângulo." (1 + 2 não passa de 3).
-
 ```bash
 gcc ~/LPEDC/02-condicionais/0016-else-if/E095.c -o ~/LPEDC/02-condicionais/0016-else-if/E095 && ~/LPEDC/02-condicionais/0016-else-if/E095
-```
-
-**Exercício E096** · ★★★
-
-Imposto progressivo (tabela simplificada, inspirada no IR). Cada alíquota
-vale só para a PARTE do salário que cai na faixa:
-
-
-```text
-até R$ 2000.00            isento
-de 2000.01 a 3000.00      7.5%
-de 3000.01 a 4500.00      15%
-acima de 4500.00          22.5%
-```
-
-
-Leia o salário e mostre o imposto. Com R$ 5000: os primeiros 2000 não
-pagam; os 1000 seguintes pagam 75.00; os 1500 seguintes pagam 225.00; os
-500 que passam de 4500 pagam 112.50. Total: R$ 412.50.
-
-
-```text
-Salário: 5000
-Imposto: R$ 412.50
-```
-
-**Dicas:**
-
-1. Uma cadeia de else if escolhe a faixa mais alta que o salário alcança.
-2. As faixas de baixo, quando cheias, valem um valor fixo: a faixa de 7.5%
-   cheia dá 75.00 e a de 15% cheia dá 225.00. Some só a parte da última.
-3. Resposta esperada: 1800 → 0.00; 2500 → 37.50; 3500 → 150.00;
-   5000 → 412.50.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0016-else-if/E096.c -o ~/LPEDC/02-condicionais/0016-else-if/E096 && ~/LPEDC/02-condicionais/0016-else-if/E096
 ```
 
 ---
@@ -1800,74 +1522,41 @@ gcc ~/LPEDC/02-condicionais/0017-ternario/A034.c -o ~/LPEDC/02-condicionais/0017
 
 **Exercício E097** · ★☆☆
 
-Refatore: troque o if/else abaixo por UMA linha com o operador ternário.
-A saída tem que continuar igual.
+O ingresso do cinema custa R$ 40.00 para quem tem 18 anos ou mais e
+R$ 20.00 para os menores. Leia a idade, sem mostrar pergunta, e guarde o
+preço numa variável double em UMA linha, com o operador ternário (sem if).
+Mostre o preço com duas casas.
 
 
 ```text
-Idade: 15
+Entrada:
+15
+Saída esperada:
 Ingresso: R$ 20.00
 ```
-
-**Dicas:**
-
-1. O formato é: variavel = condição ? valor1 : valor2;
-2. A declaração pode ir junto: double preco = ...;
-3. Resposta esperada: double preco = idade >= 18 ? 40.0 : 20.0;
-   15 → 20.00; 30 → 40.00.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0017-ternario/E097.c -o ~/LPEDC/02-condicionais/0017-ternario/E097 && ~/LPEDC/02-condicionais/0017-ternario/E097
 ```
 
-**Exercício E098** · ★☆☆
-
-O aplicativo de mensagens mostra "1 mensagem nova" ou "5 mensagens novas".
-Leia a quantidade e mostre a frase certa com UM printf e ternários.
-
-
-```text
-Quantidade: 5
-5 mensagens novas
-```
-
-**Dicas:**
-
-1. Duas palavras mudam: mensagem/mensagens e nova/novas.
-2. printf("%d %s %s\n", n, n == 1 ? ... : ..., n == 1 ? ... : ...);
-3. Resposta esperada: 1 → "1 mensagem nova"; 5 → "5 mensagens novas";
-   0 → "0 mensagens novas".
-
-```bash
-gcc ~/LPEDC/02-condicionais/0017-ternario/E098.c -o ~/LPEDC/02-condicionais/0017-ternario/E098 && ~/LPEDC/02-condicionais/0017-ternario/E098
-```
-
 **Exercício E099** · ★★☆
 
-Leia dois inteiros, a e b, e mostre quatro linhas, cada resultado saído
-de UM ternário (nada de if): a distância entre os dois (o maior menos o
-menor); se a soma é "par" ou "ímpar"; o menor dos dois; e se a é
-divisível por b. Com b igual a 0, a última linha mostra "não dá para
-dividir por zero", sem calcular o resto.
+Leia dois inteiros, a e b, sem mostrar pergunta, e mostre quatro linhas,
+cada resultado saído de UM ternário (nada de if): a distância entre os dois
+(o maior menos o menor); se a soma é "par" ou "ímpar"; o menor dos dois; e se
+a é "divisível" ou "não divisível" por b. Com b igual a 0, a última linha
+mostra "não dá para dividir por zero", sem calcular o resto. Teste com 2 5.
 
 
 ```text
-Dois números: 2 5
+Entrada:
+2 5
+Saída esperada:
 Distância: 3
 Soma: ímpar
 Menor: 2
 2 por 5: não divisível
 ```
-
-**Dicas:**
-
-1. Distância: a > b ? a - b : b - a. Soma: (a + b) % 2 ? "ímpar" : "par".
-2. Na última linha, um ternário dentro do "senão" do outro:
-   b == 0 ? "não dá para dividir por zero" : a % b == 0 ? ... : ...
-   Como o ternário só calcula um lado, a % 0 nunca acontece.
-3. Resposta esperada: 2 5 → 3, ímpar, 2, não divisível;
-   12 4 → 8, par, 4, divisível; 7 0 → 7, ímpar, 0,
-   não dá para dividir por zero.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0017-ternario/E099.c -o ~/LPEDC/02-condicionais/0017-ternario/E099 && ~/LPEDC/02-condicionais/0017-ternario/E099
@@ -1875,44 +1564,19 @@ gcc ~/LPEDC/02-condicionais/0017-ternario/E099.c -o ~/LPEDC/02-condicionais/0017
 
 **Exercício E100** · ★★☆
 
-Leia três notas inteiras de jurados e mostre a maior, usando só o operador
-ternário (nada de if).
+Leia três notas inteiras de jurados, na mesma linha, e mostre a maior,
+usando só o operador ternário (nada de if).
 
 
 ```text
-Notas: 7 10 9
+Entrada:
+7 10 9
+Saída esperada:
 Maior nota: 10
 ```
 
-**Dicas:**
-
-1. Faça em dois passos: o maior entre a e b, depois o maior entre esse
-   resultado e c.
-2. int maior = a > b ? a : b;  e depois  maior = c > maior ? c : maior;
-3. Resposta esperada: 7 10 9 → 10; 8 3 5 → 8; 4 6 9 → 9.
-
 ```bash
 gcc ~/LPEDC/02-condicionais/0017-ternario/E100.c -o ~/LPEDC/02-condicionais/0017-ternario/E100 && ~/LPEDC/02-condicionais/0017-ternario/E100
-```
-
-**Exercício E101** · ★★★
-
-O total da compra deveria ser o subtotal mais o frete (R$ 19.90 abaixo de
-R$ 199, grátis a partir disso). Com subtotal 150, o programa mostra
-"Total: R$ 0.00"! Compila sem nenhum aviso. Conserte a linha do total
-com parênteses e rode de novo com 150 e com 250.
-
-**Dicas:**
-
-1. Quem é feito primeiro: o +, o >= ou o ?: ?
-2. Monte os parênteses que o C coloca sozinho.
-3. Resposta esperada: o C lê (subtotal + subtotal >= 199) ? 0.0 : 19.90,
-   e 300 >= 199 dá 0.0. O certo é
-   subtotal + (subtotal >= 199 ? 0.0 : 19.90). Consertado: 150 → 169.90;
-   250 → 250.00.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0017-ternario/E101.c -o ~/LPEDC/02-condicionais/0017-ternario/E101 && ~/LPEDC/02-condicionais/0017-ternario/E101
 ```
 
 **Exercício E102** · ★★★
@@ -1920,19 +1584,33 @@ gcc ~/LPEDC/02-condicionais/0017-ternario/E101.c -o ~/LPEDC/02-condicionais/0017
 Converta uma hora do formato 24 h (0 a 23) para o formato de 12 h com AM e
 PM, usando ternários. Meia-noite é 12 AM e meio-dia é 12 PM. Se a hora não
 estiver entre 0 e 23, mostre "Hora inválida." (pode usar um if para isso).
+Teste com 13, 0 e 12.
 
 
 ```text
-Hora (0 a 23): 13
+Entrada:
+13
+Saída esperada:
 1 PM
 ```
 
-**Dicas:**
 
-1. AM vai de 0 a 11; PM de 12 a 23: hora < 12 ? "AM" : "PM".
-2. O número é hora % 12, exceto quando isso dá 0: aí é 12.
-3. Resposta esperada: 0 → 12 AM; 9 → 9 AM; 12 → 12 PM; 13 → 1 PM;
-   23 → 11 PM; 24 → Hora inválida.
+
+```text
+Entrada:
+0
+Saída esperada:
+12 AM
+```
+
+
+
+```text
+Entrada:
+12
+Saída esperada:
+12 PM
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0017-ternario/E102.c -o ~/LPEDC/02-condicionais/0017-ternario/E102 && ~/LPEDC/02-condicionais/0017-ternario/E102
@@ -2155,77 +1833,39 @@ gcc ~/LPEDC/02-condicionais/0018-switch/A036.c -o ~/LPEDC/02-condicionais/0018-s
 
 **Exercício E103** · ★☆☆
 
-Leia um número de 1 a 7 e mostre o dia da semana (1 é domingo, 7 é
-sábado). Qualquer outro número mostra "Dia inválido.". Use switch.
+Leia um número de 1 a 7, sem mostrar pergunta, e mostre o dia da semana
+(1 é domingo, 7 é sábado). Qualquer outro número mostra "Dia inválido.". Use
+switch.
 
 
 ```text
-Dia (1 a 7): 4
+Entrada:
+4
+Saída esperada:
 Quarta-feira
 ```
-
-**Dicas:**
-
-1. Um case para cada número, cada um com seu printf e seu break.
-2. O default cuida do inválido.
-3. Resposta esperada: 1 → Domingo; 4 → Quarta-feira; 7 → Sábado;
-   9 → Dia inválido.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0018-switch/E103.c -o ~/LPEDC/02-condicionais/0018-switch/E103 && ~/LPEDC/02-condicionais/0018-switch/E103
 ```
 
-**Exercício E104** · ★☆☆
-
-O aumento depende da classe do funcionário: A ganha 10%, B ganha 15% e C
-ganha 20%. A classe pode vir em maiúscula ou minúscula. Leia o salário e a
-classe e mostre o novo salário; para outra letra, "Classe inválida.".
-
-
-```text
-Salário: 1000
-Classe (A, B ou C): b
-Novo salário: R$ 1150.00
-```
-
-**Dicas:**
-
-1. Leia a letra com scanf(" %c", &classe): o espaço antes do %c pula o
-   Enter que sobrou da leitura do salário.
-2. Empilhe os case: case 'B': case 'b': fazem a mesma coisa.
-3. Resposta esperada: 1000 e b → 1150.00; 2000 e A → 2200.00;
-   1500 e c → 1800.00; 1000 e D → Classe inválida.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0018-switch/E104.c -o ~/LPEDC/02-condicionais/0018-switch/E104 && ~/LPEDC/02-condicionais/0018-switch/E104
-```
-
 **Exercício E105** · ★★☆
 
-O atendimento por telefone do banco tem um menu de teclas: 1 → "Consultar
-saldo."; 2 → "Segunda via da fatura."; 9 → "Transferindo para um
-atendente..."; 0 → "Repetindo o menu.". Qualquer outra tecla mostra
-"Opção inválida." e, em seguida, também repete o menu. Escreva com UM
-switch em que o default fica no meio, logo antes do case 0, e cai nele
-de propósito (sem repetir o printf do menu).
+O atendimento por telefone do banco tem um menu de teclas: 1 mostra
+"Consultar saldo."; 2 mostra "Segunda via da fatura."; 9 mostra "Transferindo
+para um atendente..."; 0 mostra "Repetindo o menu.". Qualquer outra tecla mostra
+"Opção inválida." e, em seguida, também repete o menu. Escreva com UM switch
+em que o default fica no meio, logo antes do case 0, e cai nele de propósito
+(sem repetir o printf do menu). Leia a tecla sem mostrar pergunta. Teste com 7.
 
 
 ```text
-Tecla: 7
+Entrada:
+7
+Saída esperada:
 Opção inválida.
 Repetindo o menu.
 ```
-
-**Dicas:**
-
-1. O default não precisa ser o último: o switch pula para ele quando
-   nenhum case bate, esteja onde estiver.
-2. Ordem dos rótulos: case 1, case 2, case 9, default, case 0. Todos com
-   break, menos o default; no lugar do break dele, escreva o comentário
-   "// fall through" (o gcc entende e não avisa).
-3. Resposta esperada: 1 → "Consultar saldo."; 2 → "Segunda via da
-   fatura."; 9 → "Transferindo para um atendente..."; 0 → só "Repetindo
-   o menu."; 7 → "Opção inválida." e "Repetindo o menu.".
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0018-switch/E105.c -o ~/LPEDC/02-condicionais/0018-switch/E105 && ~/LPEDC/02-condicionais/0018-switch/E105
@@ -2234,22 +1874,17 @@ gcc ~/LPEDC/02-condicionais/0018-switch/E105.c -o ~/LPEDC/02-condicionais/0018-s
 **Exercício E106** · ★★☆
 
 Calculadora de bolso. Leia uma conta no formato "número operador número"
-(por exemplo, 20 / 4) e mostre o resultado com duas casas. Aceite + - * /
-e trate dois erros: divisão por zero e operador desconhecido.
+(por exemplo, 20 / 4), sem mostrar pergunta, e mostre o resultado com duas
+casas depois de "= ". Aceite + - * / e trate dois erros: "Divisão por zero." e
+"Operador inválido.".
 
 
 ```text
-Conta: 20 / 4
+Entrada:
+20 / 4
+Saída esperada:
 = 5.00
 ```
-
-**Dicas:**
-
-1. scanf("%lf %c %lf", &a, &op, &b) lê os três pedaços. Confira se o
-   retorno é 3.
-2. Dentro do case '/', um if para o divisor zero.
-3. Resposta esperada: 20 / 4 → = 5.00; 7 * 1.5 → = 10.50;
-   3 - 8 → = -5.00; 7 / 0 → Divisão por zero.; 2 ^ 3 → Operador inválido.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0018-switch/E106.c -o ~/LPEDC/02-condicionais/0018-switch/E106 && ~/LPEDC/02-condicionais/0018-switch/E106
@@ -2257,58 +1892,39 @@ gcc ~/LPEDC/02-condicionais/0018-switch/E106.c -o ~/LPEDC/02-condicionais/0018-s
 
 **Exercício E107** · ★★★
 
-A pizzaria mostra o preço da pizza escolhida. Mas quem pede muçarela vê
-os quatro textos, inclusive "Opção inválida.". Rode com M, leia os avisos
-do compilador (eles são a pista) e conserte. Depois melhore: aceite também
-as letras minúsculas.
+A pizzaria mostra o preço da pizza escolhida. Leia uma letra, sem mostrar
+pergunta: M é Muçarela (R$ 45.00), C é Calabresa (R$ 50.00) e P é Portuguesa
+(R$ 55.00), em maiúscula ou minúscula. Use switch e mostre só a linha da pizza
+escolhida. Qualquer outra letra mostra "Opção inválida.". Teste com m, P e x.
 
 
 ```text
-Pizza (M, C ou P): m
+Entrada:
+m
+Saída esperada:
 Muçarela: R$ 45.00
 ```
 
-**Dicas:**
-
-1. O que faz a execução sair de um switch?
-2. Para as minúsculas, empilhe: case 'M': case 'm':
-3. Resposta esperada: falta um break no fim de cada case (o
-   -Wimplicit-fallthrough avisa "this statement may fall through").
-   Consertado: M ou m → só "Muçarela: R$ 45.00"; P → só
-   "Portuguesa: R$ 55.00"; X → só "Opção inválida.".
-
-```bash
-gcc ~/LPEDC/02-condicionais/0018-switch/E107.c -o ~/LPEDC/02-condicionais/0018-switch/E107 && ~/LPEDC/02-condicionais/0018-switch/E107
-```
-
-**Exercício E108** · ★★★
-
-Fall-through de propósito. O lava-rápido tem três pacotes, e cada um
-inclui os de baixo: o 1 é só lavagem (R$ 30); o 2 é aspiração (R$ 15) +
-lavagem; o 3 é cera (R$ 25) + aspiração + lavagem. Leia o pacote, liste os
-serviços e mostre o total, usando UM switch em que o case 3 cai no 2 e o 2
-cai no 1.
 
 
 ```text
-Pacote (1 a 3): 3
-Cera: R$ 25.00
-Aspiração: R$ 15.00
-Lavagem: R$ 30.00
-Total: R$ 70.00
+Entrada:
+P
+Saída esperada:
+Portuguesa: R$ 55.00
 ```
 
-**Dicas:**
 
-1. Comece com total = 0. Cada case mostra o seu serviço e soma o preço.
-2. Ponha os case na ordem 3, 2, 1; só o 1 tem break. Escreva o comentário
-   "// fall through" no lugar de cada break que falta: o gcc entende e
-   não avisa.
-3. Resposta esperada: 3 → R$ 70.00; 2 → aspiração e lavagem, R$ 45.00;
-   1 → só lavagem, R$ 30.00; 4 → "Pacote inválido.".
+
+```text
+Entrada:
+x
+Saída esperada:
+Opção inválida.
+```
 
 ```bash
-gcc ~/LPEDC/02-condicionais/0018-switch/E108.c -o ~/LPEDC/02-condicionais/0018-switch/E108 && ~/LPEDC/02-condicionais/0018-switch/E108
+gcc ~/LPEDC/02-condicionais/0018-switch/E107.c -o ~/LPEDC/02-condicionais/0018-switch/E107 && ~/LPEDC/02-condicionais/0018-switch/E107
 ```
 
 ---
@@ -2555,75 +2171,48 @@ gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/A038.c -o ~/LPEDC/02-condicionais
 
 **Exercício E109** · ★☆☆
 
-Leia o peso (kg) e a altura (m), calcule o IMC = peso / altura² e mostre a
-classificação: abaixo de 18.5, "Abaixo do peso"; abaixo de 25, "Peso
-normal"; abaixo de 30, "Sobrepeso"; senão, "Obesidade". Se a leitura
-falhar ou a altura não for positiva, mostre "Dados inválidos." e saia com
-return 1.
+Leia o peso (kg) e a altura (m), na mesma linha, calcule o IMC = peso /
+altura² e mostre o IMC com duas casas e a classificação: abaixo de 18.5,
+"Abaixo do peso"; abaixo de 25, "Peso normal"; abaixo de 30, "Sobrepeso"; senão,
+"Obesidade". Se a leitura falhar ou a altura não for positiva, mostre "Dados
+inválidos." e saia com return 1.
 
 
 ```text
-Peso e altura: 70 1.75
+Entrada:
+70 1.75
+Saída esperada:
 IMC: 22.86
 Peso normal
 ```
-
-**Dicas:**
-
-1. Guarda primeiro: if (scanf(...) != 2 || altura <= 0).
-2. Depois, uma cadeia de else if em ordem crescente.
-3. Resposta esperada: 70 1.75 → 22.86, Peso normal; 50 1.70 → 17.30,
-   Abaixo do peso; 95 1.80 → 29.32, Sobrepeso; 70 0 → Dados inválidos.
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E109.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E109 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E109
 ```
 
-**Exercício E110** · ★☆☆
-
-O caixa eletrônico tem saldo de R$ 500 na conta e só notas de 10. Leia o
-valor do saque (inteiro) e responda com UMA das mensagens, nesta ordem de
-prioridade: "Valor inválido." (zero ou negativo); "O caixa só tem notas
-de 10." (não é múltiplo de 10); "Saldo insuficiente." (passa do saldo);
-ou o saque feito, com o saldo que sobra.
-
-
-```text
-Valor do saque: 120
-Saque de R$ 120. Saldo: R$ 380
-```
-
-**Dicas:**
-
-1. Uma cadeia de if / else if / else, com os erros primeiro.
-2. "Não é múltiplo de 10" é saque % 10 != 0.
-3. Resposta esperada: 120 → saque feito, saldo 380; 125 → notas de 10;
-   600 → saldo insuficiente; -20 → valor inválido; 500 → saldo 0.
-
-```bash
-gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E110.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E110 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E110
-```
-
 **Exercício E111** · ★★☆
 
-Leia uma data no formato dia/mês/ano e diga se ela existe. O mês vai de 1
-a 12; o dia vai de 1 até o número de dias do mês, e fevereiro tem 29 dias
-nos anos bissextos.
+Leia uma data no formato dia/mês/ano e diga se ela existe ("Data
+válida." ou "Data inválida."). O mês vai de 1 a 12; o dia vai de 1 até o
+número de dias do mês, e fevereiro tem 29 dias nos anos bissextos. Teste
+com 29/02/2023 e com 29/02/2024.
 
 
 ```text
-Data (dd/mm/aaaa): 29/02/2023
+Entrada:
+29/02/2023
+Saída esperada:
 Data inválida.
 ```
 
-**Dicas:**
 
-1. scanf("%d/%d/%d", &dia, &mes, &ano) lê as barras também. Confira o
-   retorno (3).
-2. Um switch descobre quantos dias tem o mês (com case empilhados, como no
-   A036) e um default marca o mês inválido. Depois, um if confere o dia.
-3. Resposta esperada: 29/02/2023 → inválida; 29/02/2024 → válida;
-   31/04/2025 → inválida; 15/13/2025 → inválida; 31/12/2025 → válida.
+
+```text
+Entrada:
+29/02/2024
+Saída esperada:
+Data válida.
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E111.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E111 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E111
@@ -2631,77 +2220,63 @@ gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E111.c -o ~/LPEDC/02-condicionais
 
 **Exercício E112** · ★★☆
 
-Complete o programa do pedágio. Moto (1) paga R$ 6.00; carro (2) paga
-R$ 12.00; caminhão (3) paga R$ 12.00 por eixo. No horário de pico (das 17h
-às 19h59), a tarifa sobe 20%. Siga os TODO.
+Escreva o programa do pedágio. Leia a categoria: 1 moto paga R$ 6.00; 2
+carro paga R$ 12.00; 3 caminhão paga R$ 12.00 por eixo (nesse caso, leia
+também o número de eixos). Outra categoria mostra "Categoria inválida." e
+termina com return 1. Depois leia a hora (0 a 23). No horário de pico (das 17h
+às 19h59), a tarifa sobe 20% (use um ternário). Não mostre perguntas.
+Mostre se é horário de pico ("sim" ou "não") e a tarifa. Teste com carro às
+18h e com caminhão de 4 eixos às 10h.
 
 
 ```text
-Categoria (1 moto, 2 carro, 3 caminhão): 2
-Hora (0 a 23): 18
+Entrada:
+2
+18
+Saída esperada:
 Horário de pico? sim
 Tarifa: R$ 14.40
 ```
 
-**Dicas:**
 
-1. No case 3, leia o número de eixos antes de calcular (declare
-   int eixos lá no começo do main, junto com categoria).
-2. pico = hora >= 17 && hora < 20; e depois
-   tarifa = pico ? tarifa * 1.2 : tarifa;
-3. Resposta esperada: carro às 18h → 14.40; caminhão com 4 eixos às 10h
-   → 48.00; moto às 19h → 7.20; categoria 5 → "Categoria inválida.".
+
+```text
+Entrada:
+3
+4
+10
+Saída esperada:
+Horário de pico? não
+Tarifa: R$ 48.00
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E112.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E112 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E112
 ```
 
-**Exercício E113** · ★★★
-
-O cinema cobra R$ 30. Menores de 12 e pessoas de 60 ou mais pagam meia.
-Na terça ('T'), o ingresso tem R$ 10 de desconto; no sábado ('S'), custa
-R$ 5 a mais; nos outros dias, preço normal. Idade 0 é inválida. E, por
-fim, quem é menor de 18 recebe um aviso no sábado; quem tem 18 ou mais
-recebe "Boa sessão!".
-
-Este programa tem QUATRO erros, todos pegadinhas do módulo. Rode, leia os
-avisos do compilador, ache e conserte os quatro.
-
-**Dicas:**
-
-1. Os quatro: um sinal de igual, um ponto e vírgula, uma palavra que falta
-   no switch e um else que mudou de dono.
-2. Conserte um de cada vez e rode de novo. Teste com 30 T, 8 S e 65 Q.
-3. Resposta esperada: if (idade = 0) → ==; o ";" depois do if da meia;
-   falta break no case 'T'; o else é do if (dia == 'S'), precisa de
-   chaves no if de dentro. Consertado: 30 T → R$ 20.00 e "Boa sessão!";
-   8 S → R$ 20.00 e o aviso; 65 Q → R$ 15.00 e "Boa sessão!";
-   0 → "Idade inválida.".
-
-```bash
-gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E113.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E113 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E113
-```
-
 **Exercício E114** · ★★★
 
-Dia seguinte. Leia uma data válida e mostre a data do dia seguinte, com
-dois dígitos no dia e no mês. Cuidado com as viradas: fim de mês, fim de
-ano e fevereiro de ano bissexto.
+Dia seguinte. Leia uma data válida no formato dia/mês/ano e mostre a
+data do dia seguinte, com dois dígitos no dia e no mês. Cuidado com as
+viradas: fim de mês, fim de ano e fevereiro de ano bissexto. Teste com
+28/02/2024 e com 31/12/2023.
 
 
 ```text
-Data (dd/mm/aaaa): 28/02/2024
+Entrada:
+28/02/2024
+Saída esperada:
 Dia seguinte: 29/02/2024
 ```
 
-**Dicas:**
 
-1. Descubra quantos dias tem o mês (switch, como no A036).
-2. Se dia < dias_do_mes, só soma 1 no dia. Senão, o dia vira 1 e o mês
-   avança; e se o mês era 12, ele vira 1 e o ano avança. Use %02d.
-3. Resposta esperada: 28/02/2024 → 29/02/2024; 28/02/2025 → 01/03/2025;
-   30/04/2025 → 01/05/2025; 31/12/2025 → 01/01/2026;
-   15/08/2025 → 16/08/2025.
+
+```text
+Entrada:
+31/12/2023
+Saída esperada:
+Dia seguinte: 01/01/2024
+```
 
 ```bash
 gcc ~/LPEDC/02-condicionais/0019-juntando-tudo/E114.c -o ~/LPEDC/02-condicionais/0019-juntando-tudo/E114 && ~/LPEDC/02-condicionais/0019-juntando-tudo/E114

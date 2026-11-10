@@ -282,49 +282,8 @@ Preço: R$ 34.90
 Na promoção: R$ 31.41
 ```
 
-**Dicas:**
-
-1. Campos texto são vetores de char: char titulo[40];
-2. Inicialize com chaves na ordem dos campos, ou com .titulo = "...".
-3. Não esqueça o ; depois da } da struct.
-4. Resposta esperada: a saída acima (34.90 * 0.9 = 31.41).
-
 ```bash
 gcc ~/LPEDC/08-structs/0059-struct/E349.c -o ~/LPEDC/08-structs/0059-struct/E349 && ~/LPEDC/08-structs/0059-struct/E349
-```
-
-**Exercício E350** · ★☆☆
-
-Copiar uma struct com = cria um placar novo, independente do original.
-Escreva um programa que prove isso. Crie a struct placar (campos casa e
-fora, int) e faça, nesta ordem:
-
-
-```text
-1. a começa 2 x 1, e b é uma cópia de a (struct placar b = a;);
-2. mude b.fora para 3 e some b.fora em a.casa;
-3. mostre a e b;
-4. crie c como cópia de b, zere os dois campos de c e mostre c e b.
-```
-
-
-
-```text
-Saída esperada:
-a: 5 x 1
-b: 2 x 3
-c: 0 x 0
-b: 2 x 3
-```
-
-**Dicas:**
-
-1. A cópia leva todos os campos de uma vez: struct placar b = a;
-2. Depois da cópia, mudar b não muda a (e mudar c não muda b).
-3. a.casa = a.casa + b.fora dá 2 + 3 = 5.
-
-```bash
-gcc ~/LPEDC/08-structs/0059-struct/E350.c -o ~/LPEDC/08-structs/0059-struct/E350 && ~/LPEDC/08-structs/0059-struct/E350
 ```
 
 **Exercício E351** · ★★☆
@@ -345,40 +304,23 @@ Perímetro: 26.0 m
 Árvore em (11.0, 2.0): fora
 ```
 
-**Dicas:**
-
-1. Uma função recebe uma struct como qualquer outro parâmetro:
-   double area(struct retangulo r). Ela recebe uma cópia.
-2. Acesso encadeado: r.inf_esq.x, r.sup_dir.y.
-3. Dentro: x entre os dois x E y entre os dois y (use bool, de stdbool.h).
-
 ```bash
 gcc ~/LPEDC/08-structs/0059-struct/E351.c -o ~/LPEDC/08-structs/0059-struct/E351 && ~/LPEDC/08-structs/0059-struct/E351
 ```
 
 **Exercício E352** · ★★☆
 
-Este programa NÃO compila, de propósito: ele tem três erros clássicos de
-struct. Rode, leia as mensagens do gcc e conserte um por um. O programa
-consertado guarda a artilheira em a, copia para b e confere se as duas
-fichas são iguais.
+Crie a struct jogadora com nome (até 19 letras) e gols (int). Guarde em a a
+artilheira Marta, com 17 gols (o nome entra com strcpy), copie a para b com
+uma atribuição e mostre b. Depois confira se as duas fichas são iguais,
+comparando campo a campo (o == não funciona com struct).
 
 
 ```text
-Saída esperada (depois de consertado):
+Saída esperada:
 Marta: 17 gols
 a e b são iguais
 ```
-
-**Dicas:**
-
-1. O primeiro erro está antes do main: a mensagem aponta para a linha do
-   main, mas o culpado é a linha de cima.
-2. Campo vetor não recebe texto com =. Qual função de string.h copia?
-3. Struct não se compara com ==: compare campo a campo (strcmp para o nome).
-4. Resposta esperada: falta ; depois da } da struct; a.nome = "Marta" vira
-   strcpy(a.nome, "Marta"); a == b vira strcmp(a.nome, b.nome) == 0 &&
-   a.gols == b.gols.
 
 ```bash
 gcc ~/LPEDC/08-structs/0059-struct/E352.c -o ~/LPEDC/08-structs/0059-struct/E352 && ~/LPEDC/08-structs/0059-struct/E352
@@ -408,56 +350,8 @@ Saída esperada:
 15/03/2025 vem antes de 02/11/2025
 ```
 
-**Dicas:**
-
-1. Bissexto: divisível por 4 e não por 100, ou divisível por 400.
-2. Uma função int dias_no_mes(int mes, int ano) com um vetor
-   {31, 28, 31, 30, ...} simplifica tudo; some 1 em fevereiro bissexto.
-3. Uma função pode devolver struct: crie uma cópia, mude e return.
-4. Para comparar, olhe o ano; se empatar, o mês; se empatar, o dia.
-5. Resposta esperada: a saída acima (%02d mostra o zero à esquerda).
-
 ```bash
 gcc ~/LPEDC/08-structs/0059-struct/E353.c -o ~/LPEDC/08-structs/0059-struct/E353 && ~/LPEDC/08-structs/0059-struct/E353
-```
-
-**Exercício E354** · ★★★
-
-As quatro structs abaixo guardam quase os mesmos campos, só que em ordens
-diferentes. Escreva um programa que mostre o sizeof de cada uma e o
-offsetof de cada campo de struct a. Depois crie a struct a_enxuta, com os
-MESMOS três campos de struct a numa ordem que ocupe o mínimo possível, e
-mostre o sizeof dela.
-
-
-```text
-struct a { char ativo; int id; char nivel; };
-struct b { int id; char ativo; char nivel; };
-struct c { char ativo; double saldo; char nivel; };
-struct d { double saldo; int id; char ativo; char nivel; };
-```
-
-
-
-```text
-Saída esperada (num PC de 64 bits):
-sizeof: a = 12, b = 8, c = 24, d = 16
-struct a: ativo em 0, id em 4, nivel em 8
-struct a_enxuta: 8 bytes
-```
-
-**Dicas:**
-
-1. Cada campo começa num endereço múltiplo do próprio tamanho (char: 1,
-   int: 4, double: 8). O tamanho total é arredondado para um múltiplo do
-   maior campo.
-2. offsetof(struct a, id) está em <stddef.h> e se mostra com %zu.
-3. Regra prática para a versão enxuta: do maior campo para o menor.
-4. Resposta esperada: a saída acima; a_enxuta = { int id; char ativo;
-   char nivel; } (é a struct b com outro nome).
-
-```bash
-gcc ~/LPEDC/08-structs/0059-struct/E354.c -o ~/LPEDC/08-structs/0059-struct/E354 && ~/LPEDC/08-structs/0059-struct/E354
 ```
 
 ---
@@ -658,9 +552,10 @@ gcc ~/LPEDC/08-structs/0060-typedef/A120.c -o ~/LPEDC/08-structs/0060-typedef/A1
 
 **Exercício E355** · ★☆☆
 
-O programa abaixo funciona, mas repete "struct produto" em todo lugar.
-Refatore: crie o apelido Produto com typedef e troque todas as ocorrências.
-A saída não pode mudar.
+Crie com typedef o tipo Produto (nome até 19 letras, quantidade int e preco
+double). Escreva double subtotal(Produto p) e void mostrar(Produto p). No
+main, crie Café (3 unidades a R$ 12.50) e Leite (6 a R$ 4.99), mostre os dois
+e o total da compra.
 
 
 ```text
@@ -670,55 +565,8 @@ Leite: 6 x R$ 4.99 = R$ 29.94
 Total: R$ 67.44
 ```
 
-**Dicas:**
-
-1. Dá para fazer typedef struct produto Produto; logo depois da struct.
-2. Ou junte tudo: typedef struct { ... } Produto;
-3. Resposta esperada: a mesma saída, sem nenhum "struct produto" no main
-   nem nas funções.
-
 ```bash
 gcc ~/LPEDC/08-structs/0060-typedef/E355.c -o ~/LPEDC/08-structs/0060-typedef/E355 && ~/LPEDC/08-structs/0060-typedef/E355
-```
-
-**Exercício E356** · ★☆☆
-
-Escreva um programa que crie três apelidos:
-
-
-```text
-typedef int Metros;
-typedef int Segundos;
-typedef char Nome[12];
-```
-
-
-Declare distancia (Metros) com 100, tempo (Segundos) com 20 e atleta
-(Nome) com "Rayssa". Mostre o nome, a velocidade, o sizeof(Nome) e o strlen
-do nome. Por último, mostre distancia + tempo: somar metros com segundos
-não faz sentido, e mesmo assim o programa tem que compilar sem aviso.
-
-
-```text
-Saída esperada:
-Atleta: Rayssa
-Velocidade: 5 m/s
-sizeof(Nome) = 12, strlen = 6
-distancia + tempo = 120
-```
-
-**Dicas:**
-
-1. typedef não cria tipo novo: Metros e Segundos são int, e %d mostra os
-   dois.
-2. Nome é um apelido para "vetor de 12 char": Nome atleta = "Rayssa";
-   funciona como char atleta[12] = "Rayssa";
-3. sizeof e strlen devolvem size_t: mostre com %zu.
-4. O vetor tem 12 bytes; o texto, 6
-   letras.
-
-```bash
-gcc ~/LPEDC/08-structs/0060-typedef/E356.c -o ~/LPEDC/08-structs/0060-typedef/E356 && ~/LPEDC/08-structs/0060-typedef/E356
 ```
 
 **Exercício E357** · ★★☆
@@ -742,41 +590,23 @@ Saída esperada:
 3/4 + 1/4 = 1/1
 ```
 
-**Dicas:**
-
-1. a/b + c/d = (a*d + c*b) / (b*d). Depois simplifique.
-2. MDC por Euclides (assunto 0033): mdc(a, b) = mdc(b, a % b), mdc(a, 0) = a.
-3. Uma função pode devolver Fracao: return (Fracao){n, d}; ou monte uma
-   variável e devolva.
-4. Resposta esperada: a saída acima (1/4 + 1/6 = 10/24 = 5/12).
-
 ```bash
 gcc ~/LPEDC/08-structs/0060-typedef/E357.c -o ~/LPEDC/08-structs/0060-typedef/E357 && ~/LPEDC/08-structs/0060-typedef/E357
 ```
 
 **Exercício E358** · ★★☆
 
-Este programa NÃO compila, de propósito: há três erros com typedef. Rode,
-leia as mensagens e conserte. O programa mostra o saldo do vale-refeição
-depois de um almoço.
+Crie com typedef o apelido Reais para double e o tipo Cartao (struct sem
+nome, com titular de até 19 letras e saldo em Reais). Escreva
+Cartao pagar(Cartao c, Reais valor), que devolve uma cópia do cartão com o
+valor descontado do saldo. Ana tem R$ 600.00 no vale-refeição e paga um
+almoço de R$ 36.50: mostre o saldo antes e depois.
 
 
 ```text
-Saída esperada (depois de consertado):
+Saída esperada:
 Ana: R$ 600.00 -> R$ 563.50
 ```
-
-**Dicas:**
-
-1. Comece pelo primeiro erro: um typedef quebrado faz aparecer vários
-   erros em cascata. Na linha do typedef, o tipo existente vem primeiro e
-   o apelido por último.
-2. Um typedef de struct sem nome só pode ser usado pelo apelido: "struct
-   Cartao" não existe.
-3. O C lê de cima para baixo: um tipo precisa estar declarado antes de
-   aparecer num protótipo.
-4. Resposta esperada: typedef double Reais; trocar struct Cartao c por
-   Cartao c; e mover o protótipo de pagar para depois do typedef.
 
 ```bash
 gcc ~/LPEDC/08-structs/0060-typedef/E358.c -o ~/LPEDC/08-structs/0060-typedef/E358 && ~/LPEDC/08-structs/0060-typedef/E358
@@ -806,57 +636,8 @@ Saída esperada:
 12 / 4 = 3
 ```
 
-**Dicas:**
-
-1. Escreva as quatro funções: double somar(double a, double b) etc.
-2. Botao botoes[] = {{'+', somar}, {'-', subtrair}, ...};
-3. Chame com botoes[i].f(12, 4). %g mostra 16 em vez de 16.000000.
-
 ```bash
 gcc ~/LPEDC/08-structs/0060-typedef/E359.c -o ~/LPEDC/08-structs/0060-typedef/E359 && ~/LPEDC/08-structs/0060-typedef/E359
-```
-
-**Exercício E360** · ★★★
-
-A sonda Mars Climate Orbiter se perdeu em 1999 porque um programa mandava
-valores em libra-força e outro esperava newtons. Para o computador, eram
-todos números. Vamos fazer o compilador trabalhar a seu favor.
-
-a) Crie Celsius e Fahrenheit como structs de um campo só:
-
-```text
- typedef struct { double graus; } Celsius; (e o mesmo para Fahrenheit).
- Escreva Fahrenheit para_fahrenheit(Celsius c) e
- Celsius para_celsius(Fahrenheit f), e converta 100 °C e 98.6 °F.
-```
-
-b) Escreva no main a linha Celsius errado = febre; (febre é Fahrenheit),
-
-```text
- rode e leia o erro do gcc. Depois troque a linha pela conversão certa,
- Celsius febre_c = para_celsius(febre);, e mostre se é febre (a partir
- de 37.5 °C) ou não.
-```
-
-
-
-```text
-Saída esperada (depois de trocar a linha errada):
-100.0 °C = 212.0 °F
-98.6 °F = 37.0 °C
-37.0 °C: sem febre
-```
-
-**Dicas:**
-
-1. F = C * 9 / 5 + 32 e C = (F - 32) * 5 / 9.
-2. Para criar o valor: Celsius agua = {100.0}; acesse com agua.graus.
-3. Em (b), a linha errada não compila (o gcc diz "invalid initializer"):
-   duas structs diferentes nunca se misturam. Com typedef double,
-   compilaria e o erro passaria calado.
-
-```bash
-gcc ~/LPEDC/08-structs/0060-typedef/E360.c -o ~/LPEDC/08-structs/0060-typedef/E360 && ~/LPEDC/08-structs/0060-typedef/E360
 ```
 
 ---
@@ -1117,77 +898,34 @@ Total: R$ 132.13
 Mais caro: Arroz 5kg
 ```
 
-**Dicas:**
-
-1. typedef struct { char nome[20]; int qtd; double preco; } Item;
-2. Item lista[] = {{"Arroz 5kg", 2, 27.90}, ...};
-3. Guarde o índice do maior subtotal, como no exemplo da tabela.
-
 ```bash
 gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E361.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E361 && ~/LPEDC/08-structs/0061-vetor-de-structs/E361
-```
-
-**Exercício E362** · ★☆☆
-
-Complete o programa: falta o laço que calcula a média de cada aluno
-(média simples das duas provas), mostra se passou (média >= 7) e conta os
-aprovados.
-
-
-```text
-Saída esperada:
-Caio: 8.0 aprovado
-Duda: 5.5 reprovado
-Enzo: 7.0 aprovado
-Lara: 6.8 reprovado
-Aprovados: 2 de 4
-```
-
-**Dicas:**
-
-1. A média do aluno i é (turma[i].p1 + turma[i].p2) / 2.
-2. %.1f mostra uma casa: (6.0 + 7.5) / 2 = 6.75 aparece como 6.8.
-
-```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E362.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E362 && ~/LPEDC/08-structs/0061-vetor-de-structs/E362
 ```
 
 **Exercício E363** · ★★☆
 
 Leia do teclado 3 atletas: o nome (pode ter espaço) numa linha e, na linha
-seguinte, a altura e a idade. Guarde num vetor de structs e mostre o mais
-alto e o mais velho.
+seguinte, a altura e a idade. Não mostre mensagens antes de ler. Guarde num
+vetor de structs e mostre o mais alto e o mais velho.
 
 
 ```text
-Exemplo de execução:
-Nome: Rebeca Andrade
-Altura e idade: 1.55 26
-Nome: Darlan Romani
-Altura e idade: 1.88 34
-Nome: Rayssa Leal
-Altura e idade: 1.50 17
+Entrada:
+Rebeca Andrade
+1.55 26
+Darlan Romani
+1.88 34
+Rayssa Leal
+1.50 17
+```
+
+
+
+```text
+Saída esperada:
 Mais alto: Darlan Romani (1.88 m)
 Mais velho: Darlan Romani (34 anos)
 ```
-
-
-Para testar sem digitar:
-
-
-```text
-printf 'Rebeca Andrade\n1.55 26\nDarlan Romani\n1.88 34\nRayssa Leal\n1.50 17\n' | ~/LPEDC/rodar 08-structs/0061-vetor-de-structs/E363.c
-```
-
-**Dicas:**
-
-1. Nome com fgets(v[i].nome, sizeof v[i].nome, stdin) e tire o '\n' com
-   strcspn (assunto 0042).
-2. Depois do scanf("%lf %d", ...), o '\n' fica no buffer e o próximo fgets
-   leria uma linha vazia. Consuma o resto da linha: while (getchar() != '\n');
-   (num programa de verdade, pare também no EOF).
-3. Confira o retorno do scanf: tem que ser 2.
-4. Resposta esperada: com a entrada acima, Darlan Romani nos dois.
 
 ```bash
 gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E363.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E363 && ~/LPEDC/08-structs/0061-vetor-de-structs/E363
@@ -1224,46 +962,8 @@ Por preço:
   Redmi      R$ 999.00
 ```
 
-**Dicas:**
-
-1. A comparadora recebe const void *: copie o elemento com
-   Celular x = *(const Celular *)a; e compare os campos.
-2. Por nome: return strcmp(x.nome, y.nome);
-3. Por preço decrescente: cuidado, preço é double. Não devolva y.preco -
-   x.preco (0.5 viraria 0 no int); use if/else e devolva -1, 0 ou 1.
-4. O iPhone vai para o fim na ordem
-   alfabética porque strcmp compara códigos ASCII: 'i' minúsculo (105) vem
-   depois de todas as maiúsculas.
-
 ```bash
 gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E364.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E364 && ~/LPEDC/08-structs/0061-vetor-de-structs/E364
-```
-
-**Exercício E365** · ★★★
-
-Este programa compila e roda, mas o ranking não sai em ordem de pontos,
-embora o bubble sort pareça certo. Rode, compare com a saída esperada, ache
-o bug e conserte (de preferência, deixando o código menor).
-
-
-```text
-Saída esperada (depois de consertado):
-1. Lia - 950 pontos, nível 12
-2. Bento - 720 pontos, nível 9
-3. Teo - 410 pontos, nível 5
-```
-
-**Dicas:**
-
-1. Olhe a troca dentro do laço: quais campos ela troca?
-2. Uma struct inteira pode ser copiada com =.
-3. Resposta esperada: a troca movia só o nome (com strcpy) e deixava pontos e
-   nível no lugar. Os nomes trocavam de dono e a comparação seguinte olhava
-   números que nunca andaram. Troque a struct inteira: Jogador tmp = v[j];
-   v[j] = v[j + 1]; v[j + 1] = tmp;
-
-```bash
-gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E365.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E365 && ~/LPEDC/08-structs/0061-vetor-de-structs/E365
 ```
 
 **Exercício E366** · ★★★
@@ -1288,14 +988,6 @@ Saída esperada:
 Área: 33.00 m2
 Perímetro: 22.49 m
 ```
-
-**Dicas:**
-
-1. O canto seguinte com volta ao começo: int j = (i + 1) % n;
-2. fabs e sqrt estão em math.h. Lado entre dois pontos:
-   sqrt(dx * dx + dy * dy).
-3. Teste antes com um retângulo simples, (0,0) (8,0) (8,5) (0,5): área 40.
-4. Resposta esperada: a saída acima (66 / 2 = 33; lados 6, 4, 4.24, 4.24, 4).
 
 ```bash
 gcc ~/LPEDC/08-structs/0061-vetor-de-structs/E366.c -o ~/LPEDC/08-structs/0061-vetor-de-structs/E366 -lm && ~/LPEDC/08-structs/0061-vetor-de-structs/E366
@@ -1580,51 +1272,8 @@ Ana: R$ 3456.00
 Beto: R$ 4428.00
 ```
 
-**Dicas:**
-
-1. Dentro das funções, use a seta: f->salario.
-2. Na chamada, passe o endereço: reajustar(&ana, 8).
-3. Aumentar 8% é multiplicar por 1 + 8 / 100.0.
-
 ```bash
 gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E367
-```
-
-**Exercício E368** · ★☆☆
-
-Complete o programa abaixo. Escreva as duas funções, uma que recebe o
-placar por valor e outra que recebe o endereço:
-
-
-```text
-- void gol_copia(Placar p): soma 1 em p.gols;
-- void gol(Placar *p): soma 1 em p->gols.
-```
-
-
-No main, depois de cada chamada, mostre casa.gols. No fim, crie um
-ponteiro ptr para casa, some 10 por ele com a seta e mostre casa.gols e
-(*ptr).gols.
-
-
-```text
-Saída esperada:
-depois de gol_copia: 0
-depois de gol: 1
-depois de gol: 2
-depois de gol_copia: 2
-casa.gols = 12, (*ptr).gols = 12
-```
-
-**Dicas:**
-
-1. Quem recebe Placar (sem *) trabalha numa cópia que some no fim da
-   função.
-2. Na chamada por endereço, passe &casa.
-3. ptr->gols e (*ptr).gols são a mesma coisa, e ptr aponta para casa.
-
-```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E368.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E368 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E368
 ```
 
 **Exercício E369** · ★★☆
@@ -1652,40 +1301,22 @@ Beto -> Ana, R$ 400.00: saldo insuficiente
 Ana: R$ 300.00 | Beto: R$ 320.00
 ```
 
-**Dicas:**
-
-1. Conta *c = malloc(sizeof *c); if (c == NULL) return NULL;
-2. O titular é vetor: strcpy(c->titular, titular). Garanta que o nome cabe
-   (ou use strncpy e ponha o '\0' no fim).
-3. Todo conta_criar precisa de um conta_destruir. Rode com o rodar: o
-   AddressSanitizer acusa se você esquecer algum.
-
 ```bash
 gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E369
 ```
 
 **Exercício E370** · ★★☆
 
-Este programa compila com um AVISO e quebra quando roda. Leia o aviso do
-gcc, entenda o problema e conserte usando malloc. Atenção: depois do
-conserto, o AddressSanitizer ainda vai reclamar de outra coisa. Resolva
-também.
+Escreva Produto *criar_produto(const char *nome, double preco), que aloca
+com malloc um Produto (struct com nome de até 29 letras e preco double),
+preenche e devolve o ponteiro (NULL se faltar memória). No main, crie o fone
+abaixo, mostre e libere com free.
 
 
 ```text
-Saída esperada (depois de consertado):
+Saída esperada:
 Fone Bluetooth: R$ 149.90
 ```
-
-**Dicas:**
-
-1. O aviso diz "function returns address of local variable". A variável p
-   mora no frame de criar_produto, que é desmontado no return.
-2. Aloque o produto no heap: Produto *p = malloc(sizeof *p); e use p->.
-3. Memória do heap não some sozinha: quem recebeu o ponteiro dá free.
-4. Resposta esperada: criar_produto passa a alocar com malloc (conferindo
-   NULL) e o main faz free(fone) no fim; sem o free, o ASan acusa
-   "detected memory leaks".
 
 ```bash
 gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E370
@@ -1698,11 +1329,14 @@ num vetor de structs no heap que começa com capacidade 2 e dobra com
 realloc quando enche. Mostre cada vez que a capacidade crescer e, no fim, a
 lista e o total.
 
-Para testar:
-
 
 ```text
-printf 'Arroz 27.90\nFeijao 8.49\nCafe 18.90\nOleo 7.99\nAcucar 4.59\n' | ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E371.c
+Entrada:
+Arroz 27.90
+Feijao 8.49
+Cafe 18.90
+Oleo 7.99
+Acucar 4.59
 ```
 
 
@@ -1720,61 +1354,8 @@ capacidade: 4 -> 8
 Total: R$ 67.87
 ```
 
-**Dicas:**
-
-1. Guarde três coisas: Produto *v, int n (quantos tem) e int cap.
-2. Leia com while (scanf("%19s %lf", nome, &preco) == 2). Leia numa
-   variável Produto temporária e só depois copie para v[n].
-3. Cresça com um ponteiro temporário: Produto *novo = realloc(v, ...); se
-   der NULL, o v antigo continua valendo e precisa de free.
-4. Resposta esperada: a saída acima, e um free(v) no fim.
-
 ```bash
 gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E371
-```
-
-**Exercício E372** · ★★★
-
-Uma struct pode ter um ponteiro para outra struct do mesmo tipo (é a base
-das listas encadeadas do módulo 11). Para isso, ela precisa de nome:
-dentro dela, o apelido do typedef ainda não existe. Três amigos formam uma
-roda: Ana aponta para Caio, Caio para Bia e Bia para Ana.
-
-Complete o programa com três funções que andam SÓ pelas setas (p->amigo),
-sem usar o vetor g:
-
-
-```text
-- void seguir(const Pessoa *p, int passos): mostra o nome de p e dos
-  próximos "passos" amigos;
-- int tamanho_da_roda(const Pessoa *inicio): conta quantas pessoas há
-  até voltar para quem começou;
-- const Pessoa *mais_velha(const Pessoa *inicio): devolve um ponteiro
-  para a pessoa de maior idade da roda.
-```
-
-
-Chame seguir(&g[0], 4), tamanho_da_roda(&g[0]) e mais_velha(&g[1]) (a
-busca começa na Bia de propósito), e mostre também o sizeof(Pessoa).
-
-
-```text
-Saída esperada (num PC de 64 bits):
-Ana -> Caio -> Bia -> Ana -> Caio
-Roda da Ana: 3 pessoas
-Maior idade: Caio (41)
-sizeof(Pessoa) = 24
-```
-
-**Dicas:**
-
-1. Para andar: p = p->amigo; repetido. A roda não tem fim: quem decide
-   quando parar é você.
-2. Para contar, comece em inicio->amigo e pare quando p == inicio.
-3. O tamanho: nome (10), 2 de sobra, idade (4), amigo (8, um ponteiro).
-
-```bash
-gcc ~/LPEDC/08-structs/0062-ponteiro-para-struct/E372.c -o ~/LPEDC/08-structs/0062-ponteiro-para-struct/E372 && ~/LPEDC/08-structs/0062-ponteiro-para-struct/E372
 ```
 
 ---
@@ -2018,44 +1599,8 @@ ESP = 21
 G + XG = 14
 ```
 
-**Dicas:**
-
-1. Sem valor escolhido, um nome vale o anterior + 1.
-2. Um valor pode usar nomes que já apareceram antes: XXG = GG * 2.
-3. const enum Tamanho tamanhos[] = {P, M, G, ...}; e
-   const char *nomes[] = {"P", "M", ...}; andam juntos pelo mesmo índice.
-4. 14 não é tamanho nenhum, e o C não
-   reclama: para ele, são só inteiros.
-
 ```bash
 gcc ~/LPEDC/08-structs/0063-enum/E373.c -o ~/LPEDC/08-structs/0063-enum/E373 && ~/LPEDC/08-structs/0063-enum/E373
-```
-
-**Exercício E374** · ★☆☆
-
-Crie o enum Cor { VERDE, AMARELO, VERMELHO } de um semáforo e duas funções:
-Cor proxima(Cor c), que devolve a cor seguinte (depois do vermelho volta o
-verde), e const char *nome(Cor c). Começando no verde, mostre 6 trocas.
-
-
-```text
-Saída esperada:
-verde -> amarelo
-amarelo -> vermelho
-vermelho -> verde
-verde -> amarelo
-amarelo -> vermelho
-vermelho -> verde
-```
-
-**Dicas:**
-
-1. Em proxima, um switch com um case para cada cor resolve. Outra saída:
-   (c + 1) % 3.
-2. Em nome, um switch que devolve uma string literal.
-
-```bash
-gcc ~/LPEDC/08-structs/0063-enum/E374.c -o ~/LPEDC/08-structs/0063-enum/E374 && ~/LPEDC/08-structs/0063-enum/E374
 ```
 
 **Exercício E375** · ★★☆
@@ -2087,42 +1632,26 @@ pedra x papel: derrota
 Placar: 2 vitórias, 1 empate, 2 derrotas
 ```
 
-**Dicas:**
-
-1. Guarde as partidas num vetor de structs: { Jogada voce; Jogada outro; }.
-2. Truque: com PEDRA = 0, PAPEL = 1 e TESOURA = 2, a conta
-   (voce - outro + 3) % 3 dá 0 no empate, 1 quando você vence e 2 quando
-   perde. É por isso que a ordem do enum Resultado foi escolhida assim.
-3. Um vetor int placar[3] indexado pelo Resultado conta tudo sem if.
-
 ```bash
 gcc ~/LPEDC/08-structs/0063-enum/E375.c -o ~/LPEDC/08-structs/0063-enum/E375 && ~/LPEDC/08-structs/0063-enum/E375
 ```
 
 **Exercício E376** · ★★☆
 
-Este programa compila sem nenhum aviso, mas uma das cartas sai como "???".
-Rode, ache o problema e conserte. O gcc avisa quando um switch de enum
-esquece um caso, mas desta vez ficou quieto: mude o código para que ele
-avise. Para testar, acrescente um quinto naipe CORINGA no fim do enum e
-rode: tem que aparecer o aviso. Depois tire o CORINGA e rode de novo.
+Crie o enum Naipe { OUROS, ESPADAS, COPAS, PAUS } e a função
+const char *nome_naipe(Naipe n), com um switch que tem um case para cada
+naipe e nenhum default (assim o gcc avisa se um naipe for esquecido). O
+"???" é devolvido depois do switch, só para valores inválidos. No main, um
+laço mostra o 7 de cada naipe.
 
 
 ```text
-Saída esperada (depois de consertado):
+Saída esperada:
 7 de ouros
 7 de espadas
 7 de copas
 7 de paus
 ```
-
-**Dicas:**
-
-1. Conte os case e conte os nomes do enum.
-2. O aviso -Wswitch só aparece quando o switch não tem default.
-3. Resposta esperada: faltava o case COPAS; o default escondia o esquecimento
-   (com default, o gcc entende que você tratou "o resto"). Acrescente o
-   case COPAS, tire o default e devolva "???" depois do switch.
 
 ```bash
 gcc ~/LPEDC/08-structs/0063-enum/E376.c -o ~/LPEDC/08-structs/0063-enum/E376 && ~/LPEDC/08-structs/0063-enum/E376
@@ -2161,53 +1690,8 @@ travada + empurrão -> travada
 Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
 ```
 
-**Dicas:**
-
-1. Guarde os eventos num vetor: Evento seq[] = {BILHETE, EMPURRAO, ...};
-2. Conte olhando o par (estado atual, evento) antes de trocar de estado.
-3. Um switch dentro de outro (estado por fora, evento por dentro) deixa as
-   4 regras bem visíveis.
-
 ```bash
 gcc ~/LPEDC/08-structs/0063-enum/E377.c -o ~/LPEDC/08-structs/0063-enum/E377 && ~/LPEDC/08-structs/0063-enum/E377
-```
-
-**Exercício E378** · ★★★
-
-O app pediu uma nota para a entrega e recebeu 15 respostas:
-
-
-```text
-ótima, boa, ok, ótima, ruim, boa, ótima, ótima,
-péssima, boa, ok, ótima, boa, ótima, ruim
-```
-
-
-Crie o enum Nota { PESSIMA, RUIM, OK, BOA, OTIMA, QTD_NOTAS } e guarde as
-respostas num vetor de Nota. Conte quantas de cada (um vetor int de
-QTD_NOTAS posições, indexado pela nota), mostre a porcentagem de cada uma e
-a satisfação (boa + ótima).
-
-
-```text
-Saída esperada:
-péssima: 1 (6.7%)
-ruim: 2 (13.3%)
-ok: 2 (13.3%)
-boa: 4 (26.7%)
-ótima: 6 (40.0%)
-Satisfação: 66.7%
-```
-
-**Dicas:**
-
-1. QTD_NOTAS vale 5 e serve de tamanho: int contagem[QTD_NOTAS] = {0};
-2. Os nomes também cabem num vetor: const char *nomes[QTD_NOTAS] = {...};
-3. contagem[respostas[i]]++ conta sem nenhum if.
-4. Cuidado com divisão inteira: 100.0 * contagem[n] / total.
-
-```bash
-gcc ~/LPEDC/08-structs/0063-enum/E378.c -o ~/LPEDC/08-structs/0063-enum/E378 && ~/LPEDC/08-structs/0063-enum/E378
 ```
 
 ---
@@ -2450,45 +1934,8 @@ struct Ficha: 16 bytes, campos em 0, 4 e 8
 union Nome: 12 bytes
 ```
 
-**Dicas:**
-
-1. offsetof(union Caixa, i) também funciona com union; está em
-   <stddef.h> e se mostra com %zu.
-2. Union: o tamanho do maior campo, arredondado para um múltiplo do
-   alinhamento do campo mais exigente. Struct: os campos em sequência, com
-   sobras de alinhamento (assunto 0059).
-3. A union Nome tem 12 bytes, não 10:
-   o int pede um tamanho múltiplo de 4.
-
 ```bash
 gcc ~/LPEDC/08-structs/0064-union/E379.c -o ~/LPEDC/08-structs/0064-union/E379 && ~/LPEDC/08-structs/0064-union/E379
-```
-
-**Exercício E380** · ★☆☆
-
-Um float também é feito de 4 bytes, mas eles não guardam o número do jeito
-que um int guardaria. Crie uma union com um float e um uint32_t e mostre,
-em hexadecimal, os bits de 1.0, -2.0, 0.5 e 0.1.
-
-
-```text
-Saída esperada:
-1.0 -> 0x3F800000
--2.0 -> 0xC0000000
-0.5 -> 0x3F000000
-0.1 -> 0x3DCCCCCD
-```
-
-**Dicas:**
-
-1. typedef union { float f; uint32_t bits; } Espiao;
-2. Grave em .f e leia em .bits. Mostre com 0x%08X e um cast para unsigned.
-3. O 1.0 não é 0x00000001. O float guarda sinal, expoente e mantissa
-   (padrão IEEE 754), e 0.1 nem tem representação exata: o CCCC repetido é
-   uma dízima em binário, e o D do fim é o arredondamento.
-
-```bash
-gcc ~/LPEDC/08-structs/0064-union/E380.c -o ~/LPEDC/08-structs/0064-union/E380 && ~/LPEDC/08-structs/0064-union/E380
 ```
 
 **Exercício E381** · ★★☆
@@ -2505,14 +1952,6 @@ Saída esperada:
 0x0102 -> 0x0201
 258 -> 513
 ```
-
-**Dicas:**
-
-1. Grave x no campo de 16 bits, troque b[0] com b[1] e devolva o campo de
-   16 bits.
-2. 258 = 0x0102. Trocado, vira 0x0201 = 2 * 256 + 1.
-3. Curiosidade: esta função dá o mesmo resultado em qualquer endianness,
-   porque ela só troca as duas metades de lugar.
 
 ```bash
 gcc ~/LPEDC/08-structs/0064-union/E381.c -o ~/LPEDC/08-structs/0064-union/E381 && ~/LPEDC/08-structs/0064-union/E381
@@ -2550,44 +1989,8 @@ triângulo: 15.00 m2
 Total: 39.57 m2
 ```
 
-**Dicas:**
-
-1. O -std=c17 não define M_PI: use #define PI 3.14159265358979.
-2. Inicialize com nome de campo: {CIRCULO, .medida.raio = 2}.
-3. Triângulo: base * altura / 2.
-
 ```bash
 gcc ~/LPEDC/08-structs/0064-union/E382.c -o ~/LPEDC/08-structs/0064-union/E382 && ~/LPEDC/08-structs/0064-union/E382
-```
-
-**Exercício E383** · ★★★
-
-Este programa compila sem aviso e roda sem erro do sanitizer, mas duas
-linhas saem erradas: um "real" aparece como 0.00 e um "texto" aparece como
-um número estranho. O C não confere a etiqueta de uma union: isso é
-trabalho seu. Rode, ache os dois erros, conserte e rode de novo.
-
-
-```text
-Saída esperada (depois de consertado):
-inteiro: 7
-real: 42.50
-texto: oi
-texto: ok
-```
-
-**Dicas:**
-
-1. Para cada item do vetor, compare a etiqueta (tipo) com o campo da union
-   que foi preenchido.
-2. O número estranho é 27503 = 0x6B6F: são os códigos ASCII de 'k' (0x6B) e
-   'o' (0x6F), lidos como um int num PC little-endian.
-3. Resposta esperada: o 2º item tem tipo REAL mas preencheu .inteiro (use
-   .dados.real = 42.5); o 4º preencheu .texto mas a etiqueta diz INTEIRO
-   (use TEXTO).
-
-```bash
-gcc ~/LPEDC/08-structs/0064-union/E383.c -o ~/LPEDC/08-structs/0064-union/E383 && ~/LPEDC/08-structs/0064-union/E383
 ```
 
 **Exercício E384** · ★★★
@@ -2626,15 +2029,6 @@ m[0] = 0x3344, m[1] = 0x1122
 esta máquina é little-endian
 em ordem de rede, memória: 11 22 33 44
 ```
-
-**Dicas:**
-
-1. Para descobrir a endianness: grave 1 em .n e olhe se .b[0] vale 1.
-2. Para inverter: duas Visao, de e para; para.b[i] = de.b[3 - i].
-3. m[0] são os dois primeiros bytes da memória, lidos como um número de 16
-   bits na ordem da máquina: 44 33 vira 0x3344.
-4. A última linha sai igual em qualquer
-   máquina: é para isso que serve a ordem de rede.
 
 ```bash
 gcc ~/LPEDC/08-structs/0064-union/E384.c -o ~/LPEDC/08-structs/0064-union/E384 && ~/LPEDC/08-structs/0064-union/E384
@@ -2915,44 +2309,8 @@ a << 1  1001 0100 = 0x94 = 148
 a >> 3  0001 1001 = 0x19 = 25
 ```
 
-**Dicas:**
-
-1. O bit b de r: (r >> b) & 1u. Percorra b de 7 até 0 e ponha o espaço
-   depois do bit 4.
-2. Para conferir uma linha: C = 1100, A = 1010, 5 = 0101. Com um
-   embaixo do outro, a regra se aplica casa por casa.
-3. Num unsigned char só sobram os 8 bits de baixo: passe
-   (unsigned char)~a e (unsigned char)(a << 1). Em a << 1, o 1 da esquerda
-   cai fora.
-4. Resposta esperada: a saída acima (%-7s alinha os nomes).
-
 ```bash
 gcc ~/LPEDC/08-structs/0065-bits/E385.c -o ~/LPEDC/08-structs/0065-bits/E385 && ~/LPEDC/08-structs/0065-bits/E385
-```
-
-**Exercício E386** · ★☆☆
-
-Sem usar %, * nem /, só com operadores de bits, mostre para cada número de
-{7, 12, 25, 40} se ele é par ou ímpar, ele vezes 8 e ele dividido por 4
-(divisão inteira).
-
-
-```text
-Saída esperada:
-7: ímpar, x8 = 56, /4 = 1
-12: par, x8 = 96, /4 = 3
-25: ímpar, x8 = 200, /4 = 6
-40: par, x8 = 320, /4 = 10
-```
-
-**Dicas:**
-
-1. Um número é ímpar quando o bit 0 está ligado: n & 1u.
-2. Multiplicar por 8 = 2 * 2 * 2 é deslocar 3 casas para a esquerda.
-3. Dividir por 4 é deslocar 2 casas para a direita (use unsigned).
-
-```bash
-gcc ~/LPEDC/08-structs/0065-bits/E386.c -o ~/LPEDC/08-structs/0065-bits/E386 && ~/LPEDC/08-structs/0065-bits/E386
 ```
 
 **Exercício E387** · ★★☆
@@ -2979,38 +2337,23 @@ Saída esperada:
 4096: 0001 0000 0000 0000 -> 1 bits 1 (ímpar)
 ```
 
-**Dicas:**
-
-1. Para o bit b: (x >> b) & 1u. Percorra b de 15 até 0.
-2. Espaço a cada 4: quando b % 4 == 0 e b > 0.
-3. Contar: some o bit 0 e desloque x uma casa para a direita até x
-   zerar.
-
 ```bash
 gcc ~/LPEDC/08-structs/0065-bits/E387.c -o ~/LPEDC/08-structs/0065-bits/E387 && ~/LPEDC/08-structs/0065-bits/E387
 ```
 
 **Exercício E388** · ★★☆
 
-As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4). O
-usuário tinha email e push ligados e desligou o push. Mas a tela mostra o
-SMS ligado e, depois, nada desliga. O gcc até dá uma pista (um aviso). Rode,
-ache os três erros, conserte e rode de novo.
+As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4).
+Escreva void mostrar(unsigned f), que mostra numa linha se cada uma está
+ligada ou desligada. Comece com email e push ligados, mostre, desligue o
+push (só ele, sem mexer nos outros bits) e mostre de novo.
 
 
 ```text
-Saída esperada (depois de consertado):
+Saída esperada:
 email: ligado | sms: desligado | push: ligado
 email: ligado | sms: desligado | push: desligado
 ```
-
-**Dicas:**
-
-1. Leia o aviso "suggest parentheses": o == é avaliado antes do &.
-2. && responde "os dois são diferentes de zero?"; para testar um bit, é &.
-3. Para desligar um bit, faça E com o inverso da máscara.
-4. Resposta esperada: (f & EMAIL) == 0 com parênteses; f & SMS em vez de
-   f && SMS; f &= ~PUSH em vez de f &= PUSH.
 
 ```bash
 gcc ~/LPEDC/08-structs/0065-bits/E388.c -o ~/LPEDC/08-structs/0065-bits/E388 && ~/LPEDC/08-structs/0065-bits/E388
@@ -3040,48 +2383,8 @@ rgb(255, 136, 0) = #FF8800
 #3366CC em cinza = #777777
 ```
 
-**Dicas:**
-
-1. Empacotar: (r << 16) | (g << 8) | b.
-2. Desempacotar o verde: (c >> 8) & 0xFF. A máscara 0xFF guarda só 8 bits.
-3. Mostre com #%06X e um cast para unsigned.
-4. Média: (51 + 102 + 204) / 3 = 119 = 0x77.
-
 ```bash
 gcc ~/LPEDC/08-structs/0065-bits/E389.c -o ~/LPEDC/08-structs/0065-bits/E389 && ~/LPEDC/08-structs/0065-bits/E389
-```
-
-**Exercício E390** · ★★★
-
-O despertador do celular guarda os dias da semana num byte: bit 0 é
-domingo, bit 1 segunda, ..., bit 6 sábado. O alarme toca nos dias úteis e
-a academia é segunda, quarta e sexta. Monte as duas máscaras e, só com
-operadores de bits, mostre:
-
-
-```text
-Saída esperada:
-alarme: seg ter qua qui sex (5 dias)
-academia: seg qua sex (3 dias)
-alarme sem academia: ter qui (2 dias)
-sem alarme: dom sáb (2 dias)
-academia em dia sem alarme? não
-```
-
-**Dicas:**
-
-1. Defina constantes com 1u << n: SEG = 1u << 1, ..., e monte
-   alarme = SEG | TER | QUA | QUI | SEX (vale 0x3E = 62).
-2. "alarme sem academia" é alarme & ~academia.
-3. "sem alarme" é ~alarme, mas o ~ liga também os bits 7 a 31: apague com
-   a máscara 0x7F (os 7 dias).
-4. Uma função void listar(const char *rotulo, unsigned dias) percorre os 7
-   bits, mostra o nome e conta.
-5. A última pergunta é
-   (academia & ~alarme) != 0.
-
-```bash
-gcc ~/LPEDC/08-structs/0065-bits/E390.c -o ~/LPEDC/08-structs/0065-bits/E390 && ~/LPEDC/08-structs/0065-bits/E390
 ```
 
 ---
@@ -3461,53 +2764,8 @@ Iogurte natural (laticínios) R$ 4.50/kg [promo] [refrigerado]
 Pão francês (padaria) R$ 16.90/kg
 ```
 
-**Dicas:**
-
-1. #define PROMO (1u << 0), e assim por diante.
-2. Um vetor const char *setores[] = {"hortifrúti", ...} indexado pelo enum
-   traduz o setor.
-3. Para cada flag: if (p->flags & PROMO) printf(" [promo]");
-
 ```bash
 gcc ~/LPEDC/08-structs/0066-juntando-tudo/E391.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E391 && ~/LPEDC/08-structs/0066-juntando-tudo/E391
-```
-
-**Exercício E392** · ★☆☆
-
-Complete o programa da lista de tarefas. Escreva
-void mostrar(const char *rotulo, const Tarefa *t), que mostra o rótulo, o
-título, a prioridade (como número), as flags (como número) e, para cada
-flag ligada, uma etiqueta: [feita], [fixada], [arquivada]. No main:
-
-
-```text
-1. t começa com "Pagar luz", URGENTE e FIXADA; u é uma cópia de t;
-2. ligue FEITA em u e troque a prioridade de u para MEDIA;
-3. mostre t e u;
-4. inverta FIXADA e ARQUIVADA de u numa operação só e mostre u;
-5. mostre o sizeof(Tarefa).
-```
-
-
-
-```text
-Saída esperada (num PC de 64 bits):
-t: Pagar luz, prioridade 6, flags 2 [fixada]
-u: Pagar luz, prioridade 2, flags 3 [feita] [fixada]
-u: Pagar luz, prioridade 2, flags 5 [feita] [arquivada]
-sizeof(Tarefa) = 20
-```
-
-**Dicas:**
-
-1. URGENTE vem logo depois de ALTA = 5, por isso vale 6.
-2. Tarefa u = t; faz uma cópia: mudar u não muda t.
-3. Ligar: |=. Inverter dois bits de uma vez: u.flags ^= FIXADA | ARQUIVADA;
-   (011 ^ 110 = 101).
-4. O sizeof é 12 + 4 + 4, sem sobras.
-
-```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/E392.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E392 && ~/LPEDC/08-structs/0066-juntando-tudo/E392
 ```
 
 **Exercício E393** · ★★☆
@@ -3539,28 +2797,22 @@ remover Macarrão: não encontrado
   Leite: 24
 ```
 
-**Dicas:**
-
-1. Comece com {NULL, 0, 0}: realloc(NULL, ...) funciona como malloc.
-2. Dobre a capacidade quando n == cap (0 vira 2).
-3. Para remover o índice i: for (int j = i; j < e->n - 1; j++)
-   e->v[j] = e->v[j + 1]; e depois e->n--.
-4. Resposta esperada: a saída acima, sem vazamento no ASan.
-
 ```bash
 gcc ~/LPEDC/08-structs/0066-juntando-tudo/E393.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E393 && ~/LPEDC/08-structs/0066-juntando-tudo/E393
 ```
 
 **Exercício E394** · ★★☆
 
-Este programa compila sem aviso, mas tem três bugs. O AddressSanitizer
-pega dois deles (um de cada vez: conserte e rode de novo); o terceiro é de
-lógica e só aparece comparando com a saída esperada. Ache e conserte os
-três.
+Crie o tipo Item (nome até 19 letras, preco e tags) com as flags DESTAQUE
+(bit 0) e VEGANO (bit 1). Aloque com malloc um vetor de 3 itens: X-Burger
+28.90 sem tags, Suco de caju 9.00 (DESTAQUE e VEGANO) e Pudim 12.00
+(DESTAQUE). Escreva void listar(const Item *itens, int n), que mostra nome,
+preço e " [destaque]" se a tag estiver ligada. Liste, tire o destaque só do
+suco, liste de novo e libere o vetor.
 
 
 ```text
-Saída esperada (depois de consertado):
+Saída esperada:
 X-Burger R$ 28.90
 Suco de caju R$ 9.00 [destaque]
 Pudim R$ 12.00 [destaque]
@@ -3569,15 +2821,6 @@ X-Burger R$ 28.90
 Suco de caju R$ 9.00
 Pudim R$ 12.00 [destaque]
 ```
-
-**Dicas:**
-
-1. Leia a primeira linha do relatório do ASan: heap-buffer-overflow aponta
-   para uma leitura além do fim do vetor. Confira a condição do laço.
-2. "detected memory leaks" quer dizer um malloc sem free.
-3. Para desligar um bit, o E é com o inverso da máscara.
-4. Resposta esperada: i <= n vira i < n; falta free(itens) no fim;
-   itens[1].tags &= DESTAQUE vira itens[1].tags &= ~DESTAQUE.
 
 ```bash
 gcc ~/LPEDC/08-structs/0066-juntando-tudo/E394.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E394 && ~/LPEDC/08-structs/0066-juntando-tudo/E394
@@ -3618,57 +2861,8 @@ Trabalho:
 [média] dia 3: Revisar PR
 ```
 
-**Dicas:**
-
-1. Com BAIXA = 0, MEDIA = 1, ALTA = 2, "mais alta primeiro" é
-   y.prioridade - x.prioridade na comparadora.
-2. Revisar PR e Reunião 1:1 empatam em tudo. O qsort não garante a ordem
-   de empates (não é estável): para a saída ser sempre a mesma, desempate
-   também pelo título com strcmp ("Reunião" vem antes de "Revisar").
-3. Filtro: (t.tags & TRABALHO) != 0.
-4. Resposta esperada: a saída acima, e free no fim.
-
 ```bash
 gcc ~/LPEDC/08-structs/0066-juntando-tudo/E395.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E395 && ~/LPEDC/08-structs/0066-juntando-tudo/E395
-```
-
-**Exercício E396** · ★★★
-
-Um valor JSON pode ser número, texto, booleano ou null.
-Represente isso em C com uma union etiquetada:
-
-
-```text
-typedef enum { J_NULO, J_NUMERO, J_TEXTO, J_BOOL } TipoJson;
-typedef struct {
-    TipoJson tipo;
-    union { double numero; char texto[32]; bool booleano; } v;
-} ValorJson;
-```
-
-
-e um campo de objeto: typedef struct { char chave[16]; ValorJson valor; }
-Campo. Escreva void imprimir_valor(const ValorJson *v) e
-void imprimir_objeto(const Campo campos[], int n) e monte o perfil abaixo.
-
-
-```text
-Saída esperada:
-{"nome": "Ana", "idade": 31, "altura": 1.68, "ativa": true, "apelido": null}
-```
-
-**Dicas:**
-
-1. Número: %g mostra 31 e 1.68 sem zeros sobrando.
-2. Texto vai entre aspas: printf("\"%s\"", v->v.texto).
-3. Vírgula entre campos, mas não depois do último: imprima ", " antes de
-   cada campo menos o primeiro.
-4. Inicialize com nome de campo:
-   {"idade", {J_NUMERO, .v.numero = 31}}.
-5. Resposta esperada: a linha acima.
-
-```bash
-gcc ~/LPEDC/08-structs/0066-juntando-tudo/E396.c -o ~/LPEDC/08-structs/0066-juntando-tudo/E396 && ~/LPEDC/08-structs/0066-juntando-tudo/E396
 ```
 
 ---

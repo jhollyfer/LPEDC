@@ -13,7 +13,6 @@ void liberar_notas(double **notas, int linhas) {
 
 int main(void) {
     int alunos, provas;
-    printf("Alunos e provas: ");
     if (scanf("%d %d", &alunos, &provas) != 2 || alunos <= 0 || provas <= 0) {
         return 1;
     }
@@ -36,7 +35,6 @@ int main(void) {
     }
 
     for (int i = 0; i < alunos; i++) {
-        printf("Notas do aluno %d: ", i + 1);
         double soma = 0;
         for (int j = 0; j < provas; j++) {
             if (scanf("%lf", &notas[i][j]) != 1) {
@@ -58,12 +56,3 @@ int main(void) {
     liberar_notas(notas, alunos);
     return 0;
 }
-// Exemplo de uso:
-// Alunos e provas: 3 2
-// Notas do aluno 1: 7 8
-// Notas do aluno 2: 5 6
-// Notas do aluno 3: 9 10
-// Aluno 1: 7.5
-// Aluno 2: 5.5
-// Aluno 3: 9.5
-// Turma: 7.5

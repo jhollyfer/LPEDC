@@ -16,15 +16,6 @@
 //   1-2-3-4+5+6+7 = 10
 //   4 expressões, 83 chamadas
 //
-// Dicas:
-// 1. A função tenta(k, soma) decide o sinal do número k; a primeira chamada
-//    é tenta(2, 1). Guarde os sinais num vetor de char.
-// 2. Os números que faltam são k, k + 1, ..., 7. Se a distância
-//    abs(10 - soma) for maior que a soma deles, nenhuma escolha de sinais
-//    fecha a conta. Pré-calcule essas somas num vetor resto[].
-// 3. Sem a poda seriam 127 chamadas (a árvore completa de 6 decisões).
-// 4. Resposta esperada: as 5 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

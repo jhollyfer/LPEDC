@@ -19,16 +19,6 @@
 //   101 desliga a lâmpada 1
 //   100 desliga a lâmpada 0
 //
-// Dicas:
-// 1. O m-ésimo estado do código de Gray é g = m ^ (m >> 1). Confira no
-//    papel para m = 0 a 7.
-// 2. O bit que mudou é o único ligado em anterior ^ g. Ache qual é com um
-//    laço que testa cada bit (assunto 0065).
-// 3. Se o bit mudou e agora está ligado em g, a lâmpada acendeu; senão,
-//    apagou.
-// 4. Resposta esperada: as 8 linhas acima. Também é uma
-//    enumeração de todos os subconjuntos de {0, 1, 2}, só que em outra ordem.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

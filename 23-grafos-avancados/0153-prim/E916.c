@@ -19,15 +19,6 @@
 //         Praça (1)
 //   Total: 18 km
 //
-// Dicas:
-// 1. Os filhos de v são os w com pai[w] == v. mostra(v, nivel) imprime v
-//    e chama mostra(w, nivel + 1) para cada filho: é a pré-ordem do
-//    assunto 0098, numa árvore com qualquer número de filhos.
-// 2. printf("%*s", 2 * nivel, "") imprime 2 * nivel espaços. Os km do pai
-//    até v estão em fibra[pai[v]][v].
-// 3. Resposta esperada: a saída acima. O Posto entra pela Clínica (2 km),
-//    não pela Escola (7) nem pela Central (9).
-//
 // Escreva sua resposta abaixo (escreva mostra e chame-a no main):
 
 #include <limits.h>

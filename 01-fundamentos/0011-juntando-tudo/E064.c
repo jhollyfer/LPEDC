@@ -14,12 +14,6 @@
 //   Total: R$ 1473.12
 //   Juros: R$ 174.12
 //
-// Dicas:
-// 1. taxa = 0.0199; pow aceita expoente negativo: pow(1 + taxa, -12).
-// 2. Arredondar para centavos: round(parcela * 100) / 100.
-// 3. Resposta esperada: parcela 122.76 (era 122.7577...); total 12 * 122.76
-//    = 1473.12; juros 1473.12 - 1299.00 = 174.12.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

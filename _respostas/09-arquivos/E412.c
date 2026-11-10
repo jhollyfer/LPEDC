@@ -1,10 +1,5 @@
 // 0069 · Argumentos da linha de comando
 // Exercício E412 · ★★☆
-//
-// Resposta: a) argv[0] é o caminho do programa; o nome está em argv[1] e as
-// vezes em argv[2]. Com o índice errado, atoi("Ana") dava 0 e o laço não
-// rodava. b) Sem argumentos, argv[1] é NULL e atoi(NULL) derruba o programa:
-// confira argc antes de tocar no argv.
 
 #include <stdio.h>
 #include <stdlib.h>

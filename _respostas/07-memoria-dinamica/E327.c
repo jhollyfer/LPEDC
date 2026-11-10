@@ -12,7 +12,6 @@ int main(void) {
         return 1;
     }
 
-    printf("Números (0 para parar): ");
     int x;
     while (scanf("%d", &x) == 1 && x != 0) {
         if (quantidade == capacidade) {
@@ -35,7 +34,3 @@ int main(void) {
     free(numeros);
     return 0;
 }
-// Exemplo de uso:
-// Números (0 para parar): 5 8 2 9 4 0
-// Ao contrário: 4 9 2 8 5
-// Capacidade final: 8

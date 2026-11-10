@@ -16,13 +16,6 @@
 //   restam 7 caracteres
 //   restam 0 caracteres
 //
-// Dicas:
-// 1. Rode antes: a primeira linha sai Ana, e a última, um número enorme.
-// 2. strlen(a) - strlen(b) > 0 é verdadeiro sempre que os tamanhos são
-//    diferentes. Compare os dois direto.
-// 3. Em restantes, teste se a mensagem passou do limite ANTES de subtrair.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

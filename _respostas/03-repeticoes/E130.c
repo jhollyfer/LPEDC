@@ -1,9 +1,5 @@
 // 0022 · For
 // Exercício E130 · ★★☆
-//
-// Resposta: o ";" logo depois do for vira o corpo do laço (vazio). O laço gira
-// 5 vezes sem fazer nada, i termina em 6 e o bloco { } roda uma vez só,
-// depois. Tirando o ";", mostra Série 1 a Série 5.
 
 #include <stdio.h>
 

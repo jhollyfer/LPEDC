@@ -17,14 +17,6 @@
 // bits que sobram devem ir para a ESQUERDA do último byte, completados com
 // zeros à direita (por isso 10 vira 10000000).
 //
-// Dicas:
-// 1. Depois do laço, s.n vale 2 e s.byte guarda os bits 1 e 0 (o valor 2).
-//    Ninguém grava esse byte.
-// 2. void fecha_bits(Saida *s): se s->n > 0, grave s->byte << (8 - s->n) e
-//    zere byte e n. Chame antes do fclose.
-// 3. Resposta esperada: a saída acima. É o descarrega do compactador.c; sem
-//    ele, o descompactador perde o fim do arquivo.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

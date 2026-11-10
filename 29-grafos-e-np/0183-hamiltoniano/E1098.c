@@ -21,14 +21,6 @@
 //    25 18  3 12 23
 //   Chamadas: 8840
 //
-// Dicas:
-// 1. Guarde os saltos em dois vetores dl[8] e dc[8]. Uma casa é candidata
-//    se está dentro do tabuleiro e ainda vale 0.
-// 2. Marque casa[l][c] = k ao entrar; se k == 25, acabou. Se nenhum salto
-//    der certo, volte casa[l][c] para 0 antes de devolver false.
-// 3. Resposta esperada: a saída acima. Mude a ordem dos saltos e o número
-//    de chamadas muda muito: no backtracking, a ordem das tentativas pesa.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

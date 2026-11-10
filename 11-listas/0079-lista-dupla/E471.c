@@ -17,14 +17,6 @@
 //   arara: sim
 //   ab: não
 //
-// Dicas:
-// 1. monta: for (int i = 0; palavra[i] != '\0'; i++) lista_insere_fim(...).
-// 2. eh_palindromo: e = l->inicio, d = l->fim, e repita l->tamanho / 2
-//    vezes: compare, e = e->prox, d = d->ant.
-// 3. Use a mesma Lista para todas as palavras, com lista_libera entre uma e
-//    outra (ela deixa a lista vazia de novo).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

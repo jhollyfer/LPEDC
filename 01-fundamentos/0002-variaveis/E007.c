@@ -11,11 +11,6 @@
 //   Peso: 0.5 kg
 //   Setor: H
 //
-// Dicas:
-// 1. Código é inteiro (int); preço e peso são reais (double); setor é char.
-// 2. Use %d, %.2f, %.1f e %c no printf.
-// 3. Resposta esperada: as quatro linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

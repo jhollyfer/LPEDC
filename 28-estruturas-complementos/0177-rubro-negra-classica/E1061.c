@@ -12,14 +12,6 @@
 //   pré: 4 2 1 3 6 5 8* 7 9 10*
 //   fiscal: as cinco propriedades valem
 //
-// Dicas:
-// 1. No caso 1 (tio vermelho), o avô fica vermelho. E se o pai do avô também
-//    for vermelho? O problema subiu dois níveis.
-// 2. O while só olha z. Para ele continuar consertando lá em cima, z tem que
-//    subir junto.
-// 3. Resposta esperada: falta "z = avo;" depois de "avo->cor = VERMELHO;" no
-//    caso 1, dos dois lados. Com ela, a saída é a de cima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

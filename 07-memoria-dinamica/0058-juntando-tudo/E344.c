@@ -17,14 +17,6 @@
 //   - manteiga
 //   5 blocos, 56 bytes
 //
-// Dicas:
-// 1. O vetor de ponteiros é 1 bloco de 4 * 8 = 32 bytes; cada item é mais
-//    1 bloco de strlen + 1.
-// 2. Some os bytes dentro de criar_lista ou num laço à parte com sizeof e
-//    strlen.
-// 3. Resposta esperada: 5 blocos e 56 bytes (32 + 4 + 6 + 5 + 9).
-//    liberar_lista faz 5 free: cada item e depois o vetor.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

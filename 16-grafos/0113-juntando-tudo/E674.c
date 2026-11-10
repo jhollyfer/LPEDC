@@ -17,15 +17,6 @@
 //   Menos arestas até E: A -> E (9)
 //   Menos peso até E: A -> B -> D -> E (6)
 //
-// Dicas:
-// 1. Anote pai[v] = u onde a BFS marca visto[v] e onde o Dijkstra melhora
-//    dist[v]. Comece os dois vetores com -1.
-// 2. Uma função void mostrar_rota(const int pai[], int destino) serve para
-//    os dois: guarda a rota num vetor seguindo pai[], imprime de trás para
-//    frente e soma peso[rota[i]][rota[i - 1]].
-// 3. Resposta esperada: a saída acima. A BFS ignora os pesos e fica com a
-//    aresta direta de 9.
-//
 // Escreva sua resposta abaixo (estenda o código):
 
 #include <limits.h>

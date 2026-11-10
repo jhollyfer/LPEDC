@@ -34,9 +34,9 @@ Nos diagramas, o verde costuma ser o bloco do heap. Ao rodar os exemplos,
 apague um `free` de propósito e leia a resposta do gcc com as flags de estudo.
 
 > [!NOTE]
-> Muitos exercícios são de **achar o erro**: o arquivo vem com o bug de
-> propósito, e o enunciado avisa. Ler o relatório do AddressSanitizer faz
-> parte do exercício. A resolução de cada um roda limpa.
+> Em todos os exercícios você escreve o programa do zero. Compile com as
+> flags de estudo e leia o relatório do AddressSanitizer se algo estourar. A
+> resolução de cada um roda limpa.
 
 O gcc com as flags de estudo já compila com o **AddressSanitizer**, que avisa
 de vazamentos no fim. Para o assunto 0057, instale também o **valgrind**:
@@ -314,46 +314,8 @@ Chamada 2: 0 2
 Recorde: 4
 ```
 
-**Dicas:**
-
-1. static dentro da função não mora no frame: mora junto das globais, e
-   por isso chamadas lembra o valor de uma chamada para a outra.
-2. O ponteiro placar (pilha) e o bloco apontado (heap) são duas coisas
-   diferentes: o ponteiro some no return, o bloco continua vivo. Por isso
-   o endereço precisa voltar no return.
-3. Regiões: recorde e chamadas nos
-   dados; jogos, i e o ponteiro placar na pilha; o bloco no heap; as
-   instruções de ler_placar no código.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E313.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E313 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E313
-```
-
-**Exercício E314** · ★☆☆
-
-A catraca da academia chama a função registrar_entrada() a cada aluno que
-passa. Escreva essa função com dois contadores: um local comum (int hoje)
-e um static (int total), ambos começando em 0. A função soma 1 em cada um
-e mostra os dois. Chame a função 3 vezes em main.
-
-
-```text
-Saída esperada:
-local: 1 | static: 1
-local: 1 | static: 2
-local: 1 | static: 3
-```
-
-**Dicas:**
-
-1. static int total = 0; dentro da função só zera uma vez, antes de o
-   programa começar.
-2. A local nasce de novo, valendo 0, em cada frame novo.
-3. A local mora na pilha e morre a cada
-   return; a static mora nos dados e vive o programa todo.
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E314.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E314 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E314
 ```
 
 **Exercício E315** · ★★☆
@@ -375,16 +337,6 @@ int: cabem no máximo 1048 chamadas
 double: cada chamada usa pelo menos 16000 bytes
 double: cabem no máximo 524 chamadas
 ```
-
-**Dicas:**
-
-1. 8 MiB = 8 * 1024 * 1024 bytes.
-2. sizeof devolve size_t; mostre com %zu.
-3. Resposta esperada: a saída acima (8388608 / 8000 = 1048 e
-   8388608 / 16000 = 524). Na prática cabem menos: cada frame guarda
-   também o endereço de retorno e outras locais, e a pilha já tem o frame
-   de main e as variáveis de ambiente. Passou do limite, o programa morre
-   com stack overflow.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E315.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E315 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E315
@@ -416,17 +368,6 @@ Saída esperada (depois do passo 3):
 O vetor ocupa 20000000 bytes
 Soma das leituras: 14999995
 ```
-
-**Dicas:**
-
-1. 5.000.000 * 4 bytes = 20.000.000 bytes, uns 19 MiB.
-2. Basta escrever static na frente da declaração, dentro de main.
-   sizeof leituras dá o tamanho do vetor inteiro (size_t: use %zu).
-3. O vetor tem 20 MB e a pilha só tem
-   8 MiB: no passo 1 o AddressSanitizer acusa stack-overflow (sem ele, o programa
-   morre com Segmentation fault). Nos dados, o espaço é reservado quando o
-   programa carrega e não depende do tamanho da pilha. No assunto 0054 você
-   vai fazer o mesmo com malloc, escolhendo o tamanho na hora de rodar.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E316.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E316 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E316
@@ -462,47 +403,8 @@ sai n=0: devolve 51
 95
 ```
 
-**Dicas:**
-
-1. Para o segundo printf, guarde a conta numa variável antes do return:
-   int resultado = chamadas * 10 + local;
-2. passo(3) gera 4 frames (n = 3, 2, 1 e 0) e cada um tem a sua local.
-   chamadas e contador são um só para todos os frames.
-3. local vale sempre 1 porque nasce de
-   novo em cada frame (pilha); chamadas só cresce porque mora nos dados.
-   Quando o primeiro frame chega ao return, as chamadas de dentro já
-   terminaram: por isso todos os frames de passo(3) devolvem 41.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E317.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E317 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E317
-```
-
-**Exercício E318** · ★★★
-
-Este programa compila com um AVISO (warning) de propósito e mostra lixo ou
-quebra. Rode e leia o aviso. Depois conserte sem usar static nem malloc
-(quem chama empresta o vetor) e rode de novo até sair a senha certa, sem
-aviso nenhum.
-
-
-```text
-Saída esperada depois do conserto:
-Senha: A042
-Senha: A107
-```
-
-**Dicas:**
-
-1. Procure "returns address of local variable" no aviso.
-2. O vetor senha mora no frame de montar_senha. Para onde vai esse frame
-   depois do return?
-3. Resposta esperada: a função devolve o endereço de um vetor local, que
-   morre no return (o gcc até troca o endereço por NULL). Conserto:
-   void montar_senha(int numero, char senha[]) e, em main,
-   char senha[8]; montar_senha(42, senha);
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E318.c -o ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E318 && ~/LPEDC/07-memoria-dinamica/0053-pilha-e-heap/E318
 ```
 
 ---
@@ -725,39 +627,6 @@ gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/A108.c -o ~/LPEDC/07-memoria-di
 
 #### Exercícios
 
-**Exercício E319** · ★☆☆
-
-Escreva um programa que pergunte quantos dias de medição houve, aloque com
-malloc um vetor de int desse tamanho, leia as temperaturas e mostre a maior
-e a menor. Confira o NULL e libere o bloco no fim.
-
-
-```text
-Exemplo de uso:
-Quantos dias? 5
-Temperatura 1: 31
-Temperatura 2: 28
-Temperatura 3: 33
-Temperatura 4: 29
-Temperatura 5: 30
-Máxima: 33
-Mínima: 28
-```
-
-
-Para testar: printf '5\n31 28 33 29 30\n' | ~/LPEDC/rodar <este arquivo>
-
-**Dicas:**
-
-1. int *temps = malloc(dias * sizeof(int)); e depois if (temps == NULL).
-2. Comece maior e menor com temps[0] (padrão do assunto 0025).
-3. Resposta esperada: Máxima: 33 e Mínima: 28, e nenhum aviso do
-   AddressSanitizer no fim (sinal de que o free está lá).
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E319.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E319 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E319
-```
-
 **Exercício E320** · ★☆☆
 
 Complete a função duplicar: ela recebe uma string e devolve uma CÓPIA dela
@@ -770,14 +639,6 @@ Saída esperada:
 Original: coxinha
 Cópia: COXINHA
 ```
-
-**Dicas:**
-
-1. Quantos bytes ocupa "coxinha"? Conte o '\0'.
-2. malloc(strlen(texto) + 1), confira o NULL e use strcpy.
-3. Sem o + 1, o strcpy escreve o '\0'
-   um byte depois do fim do bloco e o AddressSanitizer acusa
-   heap-buffer-overflow.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E320.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E320 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E320
@@ -802,15 +663,6 @@ sorteados 7, 4, 10, 3, 8, 1, 6.
 Saída esperada:
 4 pares: 4 10 8 6
 ```
-
-**Dicas:**
-
-1. Duas passadas: a primeira só conta os pares; com a contagem, faça o
-   malloc; a segunda copia.
-2. *qtd = contagem; é o "devolver mais de um valor" do assunto 0046.
-3. Resposta esperada: "4 pares: 4 10 8 6". Quem chama faz o free. Se não
-   houver pares, malloc(0) pode devolver NULL ou um endereço válido; trate
-   esse caso antes (devolva NULL com *qtd = 0).
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E321.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E321 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E321
@@ -844,44 +696,8 @@ d) 7 bytes
 e) 5 bytes: cabe 1 int
 ```
 
-**Dicas:**
-
-1. int tem 4 bytes, double 8 e qualquer ponteiro 8 (em 64 bits).
-   "Recife" tem 6 letras, mais o '\0'.
-2. Se um malloc falhar, libere os que já deram certo antes de sair
-   (free(NULL) não faz nada, então dá para liberar todos de uma vez).
-3. Em e) sobra 1 byte: escrever e[1]
-   ocuparia os bytes 4 a 7, fora do bloco. Acrescente e[1] = 9; para ver
-   o AddressSanitizer acusar heap-buffer-overflow, e depois apague a linha.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E322.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E322 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E322
-```
-
-**Exercício E323** · ★★★
-
-O app de caminhada calcula a média de passos dos últimos 4 dias. A conta
-sai certa, mas o programa termina com um relatório do AddressSanitizer.
-O erro está de propósito. Rode, leia o relatório, conserte e rode de novo
-até o programa terminar sem relatório nenhum.
-
-
-```text
-Saída esperada depois do conserto:
-Média: 9000 passos
-```
-
-**Dicas:**
-
-1. Procure "attempting free on address which was not malloc()-ed".
-2. Para onde passos aponta depois do laço?
-3. Resposta esperada: o free(passos) recebe um endereço que não veio do
-   malloc, porque passos++ andou 4 posições. O free precisa do endereço
-   exato do início. Conserte usando passos[i] no laço (ou andando com uma
-   cópia do ponteiro: int *p = passos;).
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E323.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E323 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E323
 ```
 
 **Exercício E324** · ★★★
@@ -904,14 +720,6 @@ Mostre o nome e o tamanho, e não deixe nenhum bloco para trás.
 Saída esperada:
 Crachá: Maria Clara Fonseca (19 caracteres)
 ```
-
-**Dicas:**
-
-1. O bloco precisa de strlen(a) + 1 (espaço) + strlen(b) + 1 ('\0') bytes.
-2. strcpy(novo, a); strcat(novo, " "); strcat(novo, b);
-3. O resultado do primeiro juntar
-   ("Maria Clara") também é um bloco do heap: libere-o depois de usá-lo no
-   segundo juntar. São dois malloc, então dois free.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E324.c -o ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E324 && ~/LPEDC/07-memoria-dinamica/0054-malloc-free/E324
@@ -1145,71 +953,29 @@ Saída esperada:
 6: 4 ####
 ```
 
-**Dicas:**
-
-1. calloc(7, sizeof(int)) dá as posições 0 a 6; use 1 a 6 e ignore a 0.
-2. contagem[jogadas[i]]++ conta a face da jogada i.
-3. Troque calloc por malloc e rode
-   algumas vezes: os números mudam ou ficam errados, porque os contadores
-   começam com lixo.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E325.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E325 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E325
 ```
 
-**Exercício E326** · ★☆☆
-
-O programa abaixo funciona e mostra as notas do boletim. Mesmo assim, a
-linha do realloc tem um problema que só aparece quando falta memória.
-Refatore o trecho do realloc para ele não perder o bloco antigo se
-falhar, e rode de novo para conferir que a saída não mudou.
-
-
-```text
-Saída esperada (antes e depois):
-Notas: 7 8 10
-```
-
-**Dicas:**
-
-1. O que vale notas se o realloc devolver NULL? E o bloco antigo?
-2. Use um ponteiro temporário e só troque se ele não for NULL.
-3. Resposta esperada: com notas = realloc(notas, ...), uma falha joga
-   NULL em notas e o endereço do bloco antigo se perde: vazamento e perda
-   das notas já guardadas. Conserto:
-   int *maior = realloc(notas, 3 * sizeof *notas);
-   if (maior == NULL) { free(notas); return 1; }
-   notas = maior;
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E326.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E326 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E326
-```
-
 **Exercício E327** · ★★☆
 
-Leia números inteiros do teclado até aparecer 0 (o 0 não entra). Guarde
-num vetor que começa com capacidade 2 e dobra quando enche. No fim,
-mostre os números na ordem contrária e a capacidade final.
+Leia números inteiros do teclado até aparecer 0 (o 0 não entra). Guarde num
+vetor dinâmico que começa com capacidade 2 e dobra (realloc) quando enche.
+No fim, mostre os números na ordem contrária e a capacidade final.
 
 
 ```text
-Exemplo de uso:
-Números (0 para parar): 5 8 2 9 4 0
+Entrada:
+5 8 2 9 4 0
+```
+
+
+
+```text
+Saída esperada:
 Ao contrário: 4 9 2 8 5
 Capacidade final: 8
 ```
-
-
-Para testar: printf '5 8 2 9 4 0\n' | ~/LPEDC/rodar <este arquivo>
-
-**Dicas:**
-
-1. Duas variáveis de controle: quantidade e capacidade. Encheu quando
-   quantidade == capacidade.
-2. Use o realloc com ponteiro temporário, como no exemplo do texto.
-3. Resposta esperada: "Ao contrário: 4 9 2 8 5" e "Capacidade final: 8"
-   (a capacidade foi 2, 4 e 8). Também trate o fim da entrada: se o scanf
-   não devolver 1, pare como se fosse o 0.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E327.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E327 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E327
@@ -1228,14 +994,6 @@ Saída esperada:
 6 leituras válidas: 12 15 14 13 16 11
 Bloco encolheu de 40 para 24 bytes
 ```
-
-**Dicas:**
-
-1. Ande com dois índices: i lê todas as posições, j marca onde escrever a
-   próxima válida. No fim, j é a quantidade de válidas.
-2. realloc também diminui: realloc(v, j * sizeof *v). Use temporário.
-3. Encolher preserva as primeiras j
-   posições, exatamente as válidas.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E328.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E328 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E328
@@ -1265,46 +1023,8 @@ Saída esperada:
 dobrar: 10 realocações, 1023 cópias
 ```
 
-**Dicas:**
-
-1. Escreva uma função que recebe um "modo" (1 ou 2) e devolve as contagens
-   por ponteiro (int *realocacoes, long *copias).
-2. Antes de cada realloc, copias += quantidade.
-3. No +1, as cópias são 1 + 2 + ... +
-   999 = 499500, um custo quadrático. Dobrando, 1 + 2 + 4 + ... + 512 =
-   1023: em média, nem uma cópia por elemento.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E329.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E329 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E329
-```
-
-**Exercício E330** · ★★★
-
-A fila do banco guarda as senhas num vetor que cresce. O programa guarda o
-endereço da primeira senha para mostrar no painel depois. Ele está ERRADO
-de propósito: rode com o rodar e leia o relatório do AddressSanitizer
-(ele aponta a linha). Conserte e rode de novo até sair sem relatório.
-
-
-```text
-Saída esperada depois do conserto:
-Painel: senha 101
-Senhas na fila: 4
-```
-
-**Dicas:**
-
-1. Procure "heap-use-after-free" e as três pilhas do relatório: onde leu,
-   onde o bloco foi liberado e onde foi alocado.
-2. O realloc pode mudar o bloco de lugar. O que acontece com um ponteiro
-   que apontava para dentro do bloco antigo?
-3. Resposta esperada: o printf do painel lê *primeira, que aponta para o
-   bloco antigo, liberado dentro do realloc. Conserto: guarde o ÍNDICE (0)
-   em vez do endereço e leia senhas[0] depois, ou pegue o endereço só
-   depois do último realloc.
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E330.c -o ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E330 && ~/LPEDC/07-memoria-dinamica/0055-calloc-realloc/E330
 ```
 
 ---
@@ -1574,36 +1294,6 @@ gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/A112.c -o ~/LPEDC/07-memori
 
 #### Exercícios
 
-**Exercício E331** · ★☆☆
-
-Leia n e monte, com int ** (vetor de ponteiros), a tabuada n x n: a
-posição [i][j] guarda (i + 1) * (j + 1). Mostre a matriz com %4d e libere
-tudo na ordem certa.
-
-
-```text
-Exemplo de uso:
-Tamanho: 4
-   1   2   3   4
-   2   4   6   8
-   3   6   9  12
-   4   8  12  16
-```
-
-
-Para testar: printf '4\n' | ~/LPEDC/rodar <este arquivo>
-
-**Dicas:**
-
-1. int **t = malloc(n * sizeof *t); e, para cada i,
-   t[i] = malloc(n * sizeof *t[i]);
-2. Libere cada t[i] e só depois t.
-3. Resposta esperada: a tabela acima, sem relatório do AddressSanitizer.
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E331.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E331 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E331
-```
-
 **Exercício E332** · ★☆☆
 
 Uma matriz de 5 linhas e 8 colunas vai morar num bloco único:
@@ -1629,14 +1319,6 @@ Saída esperada:
 (0, 5) -> índice 5, valor 5
 índice 26 -> (3, 2), valor 32
 ```
-
-**Dicas:**
-
-1. Cada linha completa "pula" 8 posições: k = i * colunas + j.
-2. Para voltar: *i = k / colunas e *j = k % colunas (os dois resultados
-   voltam por ponteiro, como no assunto 0046).
-3. O (4, 7) cai no índice 39 = 5 * 8 - 1,
-   a última das 40 posições.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E332.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E332 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E332
@@ -1671,13 +1353,6 @@ Saída esperada (a transposta, 3 x 2):
 1 0
 ```
 
-**Dicas:**
-
-1. Escreva antes criar_matriz e liberar_matriz como no texto; transpor usa
-   criar_matriz(colunas, linhas).
-2. Cuidado ao liberar: a original tem 2 linhas, a transposta tem 3.
-3. Resposta esperada: a saída acima, e as duas matrizes liberadas.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E333.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E333 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E333
 ```
@@ -1701,46 +1376,8 @@ Saída esperada:
 Elementos guardados: 21
 ```
 
-**Dicas:**
-
-1. p[i] = malloc((i + 1) * sizeof *p[i]);
-2. Uma matriz 6 x 6 guardaria 36 números; o triângulo guarda
-   1 + 2 + ... + 6.
-3. Para liberar, o laço é o mesmo: cada
-   p[i] e depois p.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E334.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E334 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E334
-```
-
-**Exercício E335** · ★★★
-
-Este programa monta a grade de 3 turnos x 5 dias de uma clínica, com o
-número de consultas, e mostra o total. Ele tem DOIS erros de memória, de
-propósito (o gcc até avisa sobre um deles). Rode com o rodar, leia o aviso
-e os relatórios e conserte um de cada vez, rodando de novo a cada conserto
-até sair o total sem relatório nenhum.
-
-
-```text
-Saída esperada depois do conserto:
-Total de consultas: 105
-```
-
-**Dicas:**
-
-1. Primeiro relatório: heap-buffer-overflow. Quantos bytes tem um int? E
-   um int *?
-2. Segundo erro: o aviso "may be used after free" do gcc, que vira
-   heap-use-after-free quando roda. Depois de free(grade), como o laço
-   ainda acha grade[i]?
-3. Resposta esperada: (a) malloc(turnos * sizeof(int)) aloca 12 bytes para
-   3 ponteiros que precisam de 24; use sizeof *grade (ou sizeof(int *)).
-   (b) free(grade) vem antes do laço que libera as linhas; inverta a
-   ordem: primeiro as linhas, depois grade. Total: 3 * 5 * 7 = 105.
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E335.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E335 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E335
 ```
 
 **Exercício E336** · ★★★
@@ -1774,14 +1411,6 @@ Saída esperada:
 139 154
 A * A: dimensões incompatíveis
 ```
-
-**Dicas:**
-
-1. c[i][j] é a soma de a[i][k] * b[k][j] para k de 0 a ca - 1.
-2. Reaproveite criar_matriz e liberar_matriz do texto. Para preencher A e
-   B, copie de matrizes fixas int [2][3] e int [3][2].
-3. Libere A, B e o produto; o NULL de
-   A * A não precisa de free (free(NULL) também não faria mal).
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E336.c -o ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E336 && ~/LPEDC/07-memoria-dinamica/0056-matriz-dinamica/E336
@@ -2024,15 +1653,23 @@ gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/A114.c -o ~/LPEDC/07-memor
 
 **Exercício E337** · ★☆☆
 
-O painel da rodoviária monta 4 avisos, um de cada vez. A saída está certa,
-mas o programa vaza memória. O erro está de propósito. Rode e leia o
-relatório do LeakSanitizer. Depois conserte e acrescente dois contadores,
-um somado a cada malloc e outro a cada free, mostrados no fim: eles têm
-que bater, e o LeakSanitizer tem que ficar quieto.
+O painel da rodoviária monta 4 avisos, um de cada vez, a partir dos vetores
 
 
 ```text
-Saída esperada depois do conserto:
+const char *destinos[] = {"Belém", "Macapá", "Santarém", "Manaus"};
+const char *horas[] = {"08h", "09h", "11h", "14h"};
+```
+
+
+Para cada aviso, aloque 64 bytes com malloc, monte "Ônibus para <destino> às
+<hora>", mostre e libere o bloco antes de passar ao próximo. Use um contador
+somado a cada malloc e outro a cada free, e mostre os dois no fim: têm que
+bater.
+
+
+```text
+Saída esperada:
 Aviso: Ônibus para Belém às 08h
 Aviso: Ônibus para Macapá às 09h
 Aviso: Ônibus para Santarém às 11h
@@ -2040,88 +1677,25 @@ Aviso: Ônibus para Manaus às 14h
 malloc: 4 | free: 4
 ```
 
-**Dicas:**
-
-1. Conte quantos malloc e quantos free acontecem durante a execução.
-2. A cada volta, msg recebe um endereço novo. O que acontece com o
-   anterior?
-3. Antes do conserto, o relatório diz
-   "Direct leak of 192 byte(s) in 3 object(s)": 4 malloc de 64 bytes e só
-   1 free (o do último bloco, depois do laço). Conserto: free(msg) dentro
-   do laço, depois do printf, e apagar o free de fora.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E337.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E337 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E337
 ```
 
-**Exercício E338** · ★☆☆
-
-Cada função abaixo tem UM erro de memória, de propósito, e cada uma gera
-um relatório diferente do AddressSanitizer:
-
-
-```text
-heap-buffer-overflow    heap-use-after-free    attempting double-free
-SEGV on unknown address 0x000000000000    LeakSanitizer: memory leaks
-```
-
-
-O gcc até avisa sobre dois deles. O ASan para no primeiro erro: rode, leia
-a primeira linha do relatório, ache a função culpada pela pilha de
-chamadas e conserte com a menor mudança possível. Rode de novo e repita
-até as cinco linhas saírem e o programa terminar sem relatório nenhum.
-
-
-```text
-Saída esperada depois dos consertos:
-a) Notas: 7 8 9 10
-b) Saldo: R$ 150
-c) Senha 42 atendida
-d) Cupom: 15% de desconto
-e) Vagas livres: 3
-```
-
-**Dicas:**
-
-1. "0 bytes after 16-byte region" quer dizer "logo depois do último byte
-   de um bloco de 16 bytes": 4 ints, índices 0 a 3.
-2. O endereço 0x0 é o NULL. O vazamento só é acusado no fim, quando todo
-   o resto já está certo.
-3. a) i <= 4 vira i < 4 (estouro);
-   b) o printf vem antes do free (uso depois do free); c) apague o
-   segundo free (free duplo); d) acrescente free(cupom) (vazamento);
-   e) o ponteiro NULL precisa de um bloco: malloc e conferir o NULL antes
-   de escrever (e free no fim).
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E338.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E338 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E338
-```
-
 **Exercício E339** · ★★☆
 
-O placar do campeonato de futsal da firma guarda os gols dos 3 times. O
-programa tem um erro de propósito (o gcc até avisa). Rode e leia o aviso e
-o relatório. Depois conserte fazendo de backup uma cópia DE VERDADE, num
-bloco só dele. Para provar que ficou independente, zere placar[0] (o
-jogo foi anulado) antes de mostrar os dois.
+O placar do campeonato de futsal da firma guarda os gols dos 3 times num
+vetor alocado com malloc: 4, 2 e 7. Faça um backup em OUTRO bloco, também
+alocado com malloc, copiando os valores um a um. Para provar que o backup é
+independente, zere placar[0] (o jogo foi anulado) e mostre os dois vetores.
+Libere o placar, mostre "Placar encerrado" e libere o backup.
 
 
 ```text
-Saída esperada depois do conserto:
+Saída esperada:
 Placar: 0 2 7
 Backup: 4 2 7
 Placar encerrado
 ```
-
-**Dicas:**
-
-1. Procure "attempting double-free". Quantos blocos existem? Quantos
-   free?
-2. backup = placar copia o ENDEREÇO, não os números.
-3. No original, placar e backup apontam
-   para o MESMO bloco e liberar os dois é free duplo. Com
-   int *backup = malloc(3 * sizeof *backup); e um laço que copia os 3
-   números, são dois blocos: aí, sim, cada um tem o seu free.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E339.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E339 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E339
@@ -2129,26 +1703,17 @@ gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E339.c -o ~/LPEDC/07-memor
 
 **Exercício E340** · ★★☆
 
-O sistema do estacionamento guarda a placa do carro e os km rodados nos
-últimos 5 dias. O programa tem DOIS estouros de memória, de propósito. O
-AddressSanitizer para no primeiro: conserte, rode de novo e ache o
-segundo.
+O sistema do estacionamento guarda a placa "QTX3E21" numa string alocada
+com malloc (copie com strcpy) e os km rodados nos últimos 5 dias (42, 55,
+38, 61 e 42) num vetor de int, também alocado. Mostre a placa e a soma dos
+km da semana. Libere os dois blocos.
 
 
 ```text
-Saída esperada depois do conserto:
+Saída esperada:
 Placa: QTX3E21
 Km da semana: 238
 ```
-
-**Dicas:**
-
-1. Quantos bytes "QTX3E21" ocupa de verdade?
-2. O vetor km tem 5 posições: índices de 0 a 4.
-3. Resposta esperada: (a) malloc(strlen(original)) esquece o '\0': o
-   strcpy escreve 1 byte depois do fim (heap-buffer-overflow, WRITE of
-   size 8). Use strlen(original) + 1. (b) o for com i <= dias lê km[5],
-   4 bytes depois do fim do bloco. Use i < dias. Total: 238.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E340.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E340 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E340
@@ -2156,75 +1721,28 @@ gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E340.c -o ~/LPEDC/07-memor
 
 **Exercício E341** · ★★★
 
-A lista de presença de uma aula de yoga começa com 2 vagas e a função
-adicionar faz o vetor crescer. Com o rodar, o programa quebra com um
-relatório do AddressSanitizer na 4ª chegada. O erro está de propósito: o
-main fica com um ponteiro solto, mesmo com a função adicionar "certa" por
-dentro. Conserte mudando a assinatura de adicionar e rode de novo até a
-lista sair completa, sem relatório.
+A lista de presença de uma aula de yoga começa com 2 vagas e dobra quando
+enche. Escreva a função
 
 
 ```text
-Saída esperada depois do conserto:
+int adicionar(int **v, int *qtd, int *cap, int matricula)
+```
+
+
+que acrescenta a matrícula ao vetor, dobrando a capacidade com realloc
+quando qtd == cap, e atualiza o ponteiro do chamador. Devolve 1 se deu
+certo e 0 se faltou memória. No main, aloque o vetor com capacidade 2,
+adicione as matrículas 11, 27, 35 e 48, mostre a lista e libere.
+
+
+```text
+Saída esperada:
 Presentes: 11 27 35 48
 ```
 
-**Dicas:**
-
-1. O parâmetro v é uma cópia do ponteiro do main (passagem por valor,
-   assunto 0029). O realloc muda a cópia, não o original.
-2. Duas saídas: devolver o ponteiro novo (int *adicionar(...)) ou
-   receber o endereço do ponteiro (int **v, assunto 0049).
-3. Resposta esperada: na 3ª chegada o realloc mudou o bloco de lugar e
-   liberou o antigo, mas só a cópia local v recebeu o endereço novo; o
-   alunos do main continua apontando para o bloco antigo, de 2 vagas e já
-   liberado. Na 4ª chegada, a função grava alunos[3] lá (o ASan acusa
-   heap-buffer-overflow, porque o endereço cai depois do fim do bloco
-   antigo; se caísse dentro, seria heap-use-after-free). Com
-   int adicionar(int **v, int *qtd, int *cap, int matricula) e
-   *v = maior; dentro, e adicionar(&alunos, ...) no main, a saída fica
-   "Presentes: 11 27 35 48".
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E341.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E341 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E341
-```
-
-**Exercício E342** · ★★★
-
-O artilheiro do bairro jogou 4 das 5 rodadas; a 5ª ainda não aconteceu e
-deveria contar 0 gols. Este programa tem um erro de propósito que o
-AddressSanitizer NÃO acusa. Faça assim:
-
-1) rode com o rodar e veja o total;
-2) rode com ~/LPEDC/rodar --valgrind e leia a primeira mensagem;
-3) conserte trocando a função que aloca o bloco e rode de novo com os
-
-```text
- dois.
-```
-
-
-
-```text
-Saída esperada depois do conserto:
-Total: 6 gols
-Média por rodada: 1.2
-```
-
-**Dicas:**
-
-1. Quem deu valor para gols[4]?
-2. O valgrind avisa "Conditional jump or move depends on uninitialised
-   value(s)" e, com a opção que o rodar já liga, mostra onde o bloco foi
-   criado.
-3. Resposta esperada: gols[4] nunca recebeu valor e o malloc entrega lixo
-   (com o ASan, o lixo é sempre 0xbebebebe, um número negativo enorme).
-   O ASan vigia limites e blocos liberados, não valores; o valgrind
-   acompanha se cada byte já foi escrito. Conserto: trocar malloc(5 *
-   sizeof *gols) por calloc(5, sizeof *gols).
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E342.c -o ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E342 && ~/LPEDC/07-memoria-dinamica/0057-erros-de-memoria/E342
 ```
 
 ---
@@ -2572,41 +2090,6 @@ gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/A116.c -o ~/LPEDC/07-memoria-
 
 #### Exercícios
 
-**Exercício E343** · ★☆☆
-
-Leia 3 nomes com fgets num buffer de 100 chars. Para cada um, tire o '\n'
-e guarde uma CÓPIA de tamanho exato no heap, num vetor char *nomes[3].
-Depois mostre cada nome com quantos bytes o bloco dele ocupa e libere
-tudo.
-
-
-```text
-Exemplo de uso:
-Nome 1: Ana
-Nome 2: Joao Pedro
-Nome 3: Lu
-Ana (4 bytes)
-Joao Pedro (11 bytes)
-Lu (3 bytes)
-```
-
-
-Para testar: printf 'Ana\nJoao Pedro\nLu\n' | ~/LPEDC/rodar <este arquivo>
-
-**Dicas:**
-
-1. O buffer de 100 é só a área de leitura, reaproveitada a cada nome. Os
-   nomes de verdade vão para blocos de strlen + 1.
-2. buffer[strcspn(buffer, "\n")] = '\0'; tira o '\n' (assunto 0042).
-3. Resposta esperada: a saída acima: o bloco de cada nome tem strlen + 1
-   bytes. 3 malloc, 3 free. Se guardasse o próprio buffer em nomes[i], os
-   três ponteiros apontariam para o mesmo lugar e mostrariam "Lu" três
-   vezes.
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E343.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E343 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E343
-```
-
 **Exercício E344** · ★☆☆
 
 Escreva duas funções para a lista de compras:
@@ -2632,15 +2115,6 @@ Saída esperada:
 5 blocos, 56 bytes
 ```
 
-**Dicas:**
-
-1. O vetor de ponteiros é 1 bloco de 4 * 8 = 32 bytes; cada item é mais
-   1 bloco de strlen + 1.
-2. Some os bytes dentro de criar_lista ou num laço à parte com sizeof e
-   strlen.
-3. Resposta esperada: 5 blocos e 56 bytes (32 + 4 + 6 + 5 + 9).
-   liberar_lista faz 5 free: cada item e depois o vetor.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E344.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E344 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E344
 ```
@@ -2650,31 +2124,25 @@ gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E344.c -o ~/LPEDC/07-memoria-
 Leia frutas, uma por linha, até aparecer a palavra fim. Guarde cada uma
 num vetor de strings (char **) que começa com capacidade 1 e dobra quando
 enche. Mostre as frutas na ordem contrária e quantas vezes o vetor
-cresceu.
+cresceu. Libere tudo no fim.
 
 
 ```text
-Exemplo de uso:
+Entrada:
 uva
 manga
 caju
 acerola
 fim
-Ao contrário: acerola caju manga uva
-O vetor cresceu 2 vezes
 ```
 
 
-Para testar: printf 'uva\nmanga\ncaju\nacerola\nfim\n' | ~/LPEDC/rodar <este arquivo>
 
-**Dicas:**
-
-1. Leia com fgets num buffer, tire o '\n' e compare com strcmp(buffer,
-   "fim").
-2. O realloc é no vetor de ponteiros (sizeof(char *) por posição); cada
-   fruta ganha o seu próprio malloc de strlen + 1.
-3. Resposta esperada: "Ao contrário: acerola caju manga uva" e 2 vezes
-   (1 -> 2 -> 4). No fim, um free por fruta e um para o vetor.
+```text
+Saída esperada:
+Ao contrário: acerola caju manga uva
+O vetor cresceu 2 vezes
+```
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E345.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E345 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E345
@@ -2684,64 +2152,30 @@ gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E345.c -o ~/LPEDC/07-memoria-
 
 Leia a quantidade de alunos e de provas e depois as notas, linha por
 linha. Guarde numa matriz dinâmica de double (vetor de ponteiros) e
-mostre a média de cada aluno e a da turma. As médias de cada aluno também
-vão para um vetor alocado.
+mostre a média de cada aluno e a da turma, com uma casa decimal. As médias
+de cada aluno também vão para um vetor alocado. Libere tudo no fim.
 
 
 ```text
-Exemplo de uso:
-Alunos e provas: 3 2
-Notas do aluno 1: 7 8
-Notas do aluno 2: 5 6
-Notas do aluno 3: 9 10
+Entrada:
+3 2
+7 8
+5 6
+9 10
+```
+
+
+
+```text
+Saída esperada:
 Aluno 1: 7.5
 Aluno 2: 5.5
 Aluno 3: 9.5
 Turma: 7.5
 ```
 
-
-Para testar: printf '3 2\n7 8\n5 6\n9 10\n' | ~/LPEDC/rodar <este arquivo>
-
-**Dicas:**
-
-1. double **notas = malloc(alunos * sizeof *notas); e uma linha de
-   provas doubles para cada aluno.
-2. double *medias = malloc(alunos * sizeof *medias);
-3. São alunos + 2 malloc (3 linhas, o
-   vetor de linhas e as médias) e o mesmo número de free.
-
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E346.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E346 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E346
-```
-
-**Exercício E347** · ★★★
-
-Uma versão apressada do caderninho de fiado. Ela tem TRÊS problemas de
-memória, de propósito. O AddressSanitizer acha dois (um durante a
-execução, outro no fim); o terceiro só aparece quando falta memória, e
-você tem que achar lendo. Conserte os três.
-
-
-```text
-Saída esperada depois do conserto:
-Cida: R$ 12
-Jorge: R$ 8
-Bia: R$ 20
-```
-
-**Dicas:**
-
-1. Comece pelo heap-buffer-overflow: quantos bytes copiar precisa?
-2. Depois o vazamento: quantos malloc existem? Quantos free?
-3. O terceiro está na linha do realloc.
-4. Resposta esperada: (a) copiar faz malloc(strlen(s)) sem o + 1 do
-   '\0'; (b) o fim libera só nomes, e cada nomes[i] vaza: faça um free
-   por nome antes; (c) nomes = realloc(nomes, ...) perde o bloco se
-   falhar: use um ponteiro temporário.
-
-```bash
-gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E347.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E347 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E347
 ```
 
 **Exercício E348** · ★★★
@@ -2765,16 +2199,6 @@ Saída esperada:
 4 itens: [arroz] [feijao] [cafe] [oleo de soja]
 3 itens: [] [] []
 ```
-
-**Dicas:**
-
-1. Primeira passada: conte os separadores. São separadores + 1 pedaços.
-2. Segunda passada: para cada pedaço, ache o início e o tamanho, faça o
-   malloc(tamanho + 1), copie os chars e ponha o '\0'. Pedaço vazio é um
-   bloco de 1 byte só com o '\0'.
-3. Escreva também liberar_pedacos(v, n)
-   e chame para os dois resultados. Se um malloc falhar no meio, libere o
-   que já foi feito e devolva NULL.
 
 ```bash
 gcc ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E348.c -o ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E348 && ~/LPEDC/07-memoria-dinamica/0058-juntando-tudo/E348

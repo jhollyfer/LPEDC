@@ -17,13 +17,6 @@
 //   Troco de 190: 100 50 25 10 5 (5 moedas)
 //   Troco de 65: 50 10 5 (3 moedas)
 //
-// Dicas:
-// 1. A comparação recebe const void *. Converta: int x = *(const int *)a;
-// 2. Para a ordem decrescente, devolva negativo quando x > y. A forma
-//    (x < y) - (x > y) faz isso sem o risco de estouro de "y - x".
-// 3. Resposta esperada: qsort(moedas, 5, sizeof moedas[0], decrescente);
-//    e a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

@@ -15,13 +15,6 @@
 //   R$ 47: comum -1 (10 olhados), ordenada -1 (7 olhados)
 //   R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
 //
-// Dicas:
-// 1. Num vetor crescente, se v[i] > x, todos depois de i também são maiores.
-// 2. Na busca_ordenada, cada volta faz dois testes: v[i] == x e v[i] > x.
-//    Conte só um "olhado" por volta.
-// 3. A melhora só aparece quando a chave NÃO está no vetor. Continua O(n).
-// 4. Resposta esperada: a saída acima (47 para no 52, que é o 7º elemento).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

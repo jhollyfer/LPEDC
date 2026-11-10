@@ -23,13 +23,6 @@
 //   7. assar
 //   8. desenformar
 //
-// Dicas:
-// 1. O grau de entrada de b soma a coluna b da matriz: grau[b] += antes[a][b].
-// 2. Comece a fila com todos de grau 0, em ordem de índice: bater os ovos,
-//    misturar os secos, preaquecer o forno e untar a forma.
-// 3. Resposta esperada: a saída acima. "Juntar tudo" só fica livre depois
-//    dos ovos e dos secos, e entra na fila atrás dos quatro primeiros.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

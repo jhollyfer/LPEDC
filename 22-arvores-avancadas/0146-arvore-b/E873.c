@@ -13,15 +13,6 @@
 //   crescente:   nós 195 | altura 6 | ocupação 34.2%
 //   embaralhada: nós 127 | altura 5 | ocupação 52.5%
 //
-// Dicas:
-// 1. mede é um percurso: some r->n em *chaves, 1 em *nos e desça pelos
-//    filhos de 0 a r->n se não for folha.
-// 2. Faça a conta em double: 100.0 * chaves / (nos * AB_MAX). Para imprimir
-//    o símbolo de porcentagem no printf, escreva %%.
-// 3. Resposta esperada: a saída acima. Na ordem crescente, todo nó que se
-//    divide deixa a metade esquerda com 1 chave para sempre: ninguém mais
-//    insere ali.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

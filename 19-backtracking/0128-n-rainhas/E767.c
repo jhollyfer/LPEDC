@@ -10,17 +10,6 @@
 //   92 soluções
 //   vetores limpos no fim: sim
 //
-// Dicas:
-// 1. Uma regra do backtracking: depois que a busca termina, todo vetor de
-//    marcação volta a ser o que era no começo (tudo false). A função limpos
-//    confere isso. O que ela diz antes do conserto?
-// 2. Compare, letra por letra, a linha que marca com a linha que desmarca.
-//    Um índice errado no desmarcar não dá erro: só deixa uma diagonal
-//    marcada para sempre e libera outra que estava ocupada.
-// 3. Resposta esperada: o desmarcar usava diag2[c - l + N - 1]; o certo é
-//    diag2[l - c + N - 1], o mesmo índice da marcação. Consertado, a saída é
-//    a de cima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdbool.h>

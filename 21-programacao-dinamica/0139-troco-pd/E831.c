@@ -19,13 +19,6 @@
 //   18: guloso 4, PD 3
 //   19: guloso 5, PD 4
 //
-// Dicas:
-// 1. ultimo[v] recebe pacote[p] dentro do mesmo if que atualiza dp[v].
-// 2. Para mostrar os pacotes: for (v = 12; v > 0; v -= ultimo[v]).
-// 3. O guloso: para cada pacote, do maior para o menor, enquanto couber,
-//    some 1 e desconte o pacote.
-// 4. Resposta esperada: a saída acima (12 = 6 + 6; o guloso faz 10 + 1 + 1).
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdio.h>

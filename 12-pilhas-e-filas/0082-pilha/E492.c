@@ -21,13 +21,6 @@
 //   Limpos: 4 3 2 1
 //   Sujos: 20 10
 //
-// Dicas:
-// 1. Use n_limpos (próxima vaga da esquerda, começa em 0) e topo_sujos
-//    (começa em 6 e diminui antes de cada empilhamento sujo).
-// 2. A bancada está cheia quando n_limpos == topo_sujos.
-// 3. Desempilhar limpo: n_limpos > 0. Desempilhar sujo: topo_sujos < 6.
-// 4. Resposta esperada: as cinco linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

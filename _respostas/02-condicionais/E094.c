@@ -1,14 +1,10 @@
 // 0016 · else if, if aninhado e o else pendurado
 // Exercício E094 · ★★☆
-//
-// Resposta: o else if para no primeiro Sim, e toda nota >= 9 também é >= 5.
-// As condições precisam ir da mais restrita para a mais larga.
 
 #include <stdio.h>
 
 int main(void) {
     double nota;
-    printf("Nota: ");
     if (scanf("%lf", &nota) != 1) {
         printf("Entrada inválida\n");
         return 1;

@@ -16,14 +16,6 @@
 //   +1:     999 realocações, 499500 cópias
 //   dobrar: 10 realocações, 1023 cópias
 //
-// Dicas:
-// 1. Escreva uma função que recebe um "modo" (1 ou 2) e devolve as contagens
-//    por ponteiro (int *realocacoes, long *copias).
-// 2. Antes de cada realloc, copias += quantidade.
-// 3. Resposta esperada: a saída acima. No +1, as cópias são 1 + 2 + ... +
-//    999 = 499500, um custo quadrático. Dobrando, 1 + 2 + 4 + ... + 512 =
-//    1023: em média, nem uma cópia por elemento.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

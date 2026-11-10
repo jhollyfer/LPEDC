@@ -19,12 +19,6 @@
 //     2  5
 //     3  6
 //
-// Dicas:
-// 1. Um VLA não aceita "= {...}": preencha com a[i][j] = i * c + j + 1.
-// 2. Cuidado: t tem as dimensões trocadas, t[c][l].
-// 3. Cada número com %3d.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -13,12 +13,6 @@
 //   arroz, banana, café, feijão, leite, ovos, pão, tomate
 //   14 comparações
 //
-// Dicas:
-// 1. A função troca recebe const char ** (o endereço de cada ponteiro).
-// 2. v[k] <= pivo vira strcmp(v[k], pivo) <= 0.
-// 3. O primeiro pivô é "feijão": ele separa arroz, café e banana do resto.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

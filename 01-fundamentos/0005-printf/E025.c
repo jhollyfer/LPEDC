@@ -10,11 +10,6 @@
 //   Faltas: 03
 //   Conceito: B
 //
-// Dicas:
-// 1. O nome pode ir direto no formato ou como argumento de um %s.
-// 2. %.1f arredonda para uma casa; %02d completa com zero à esquerda.
-// 3. Resposta esperada: as quatro linhas acima (8.75 vira 8.8 só na tela).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

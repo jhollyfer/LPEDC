@@ -12,13 +12,6 @@
 //    30    4060           4060
 //   100  161700         161700
 //
-// Dicas:
-// 1. for i < n, for j < i, for k < j: cada trio aparece uma vez só, em
-//    ordem decrescente de índice.
-// 2. O somatório é a soma, para cada i, de i(i-1)/2 (os pares abaixo de
-//    i). Isso dá n(n-1)(n-2)/6: três laços, Θ(n³), com constante 1/6.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

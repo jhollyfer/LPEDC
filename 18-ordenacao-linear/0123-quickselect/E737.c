@@ -13,17 +13,6 @@
 //   Saída que aparece:
 //   mediana: 5002 (3849 separações)
 //
-// Dicas:
-// 1. Com 10001 elementos, quantos ficam antes da mediana? Em que posição do
-//    vetor (contando de 0) ela está?
-// 2. Mostre p, r e o pivô de cada separação. A partir da segunda, o pivô
-//    ainda é sorteado?
-// 3. Resposta esperada: a mediana fica na posição N / 2 = 5000, e não em
-//    (N + 1) / 2 = 5001, que é a posição do 5002. E o sorteio está antes do
-//    while: só a primeira separação usa pivô sorteado; nas outras, o pivô
-//    volta a ser o último de um pedaço quase ordenado. A troca com o
-//    sorteado tem que ficar dentro do laço, antes de cada separa.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

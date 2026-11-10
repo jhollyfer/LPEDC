@@ -20,14 +20,6 @@
 //   altura 8:  88 nós | rotações 4 | altura depois 7
 //   altura 9: 143 nós | rotações 4 | altura depois 8
 //
-// Dicas:
-// 1. h < 0 devolve NULL. Para as chaves saírem em ordem, monte a esquerda,
-//    depois dê a chave ao nó (um contador global que cresce), depois monte
-//    a direita.
-// 2. A maior chave é o número de nós. Zere o contador antes de cada h.
-// 3. Resposta esperada: a saída acima. São h/2 rotações (arredondado para
-//    baixo): uma a cada dois níveis, até a raiz.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

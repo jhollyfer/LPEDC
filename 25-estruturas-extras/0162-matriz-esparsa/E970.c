@@ -18,14 +18,6 @@
 //
 // Ache a linha errada, conserte e rode de novo.
 //
-// Dicas:
-// 1. Veja quem sumiu: 30, 20 e 40. Os valores 20, 15 e 12 entram ANTES de
-//    todas as células que já estavam na linha. Siga o caso ant == NULL.
-// 2. Quando a célula nova vira a primeira da linha, para onde aponta
-//    nova->prox? E o que acontece com as células que já estavam lá?
-// 3. Resposta esperada: no caso ant == NULL falta nova->prox = m->linha[i]
-//    (ou p) antes de m->linha[i] = nova. Sem isso, a linha antiga se perde.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

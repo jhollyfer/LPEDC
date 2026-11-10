@@ -19,15 +19,6 @@
 //   Chamando: Edu (2)
 //   Chamando: Caio (1)
 //
-// Dicas:
-// 1. Leia com while (scanf("%19s %d", nome, &prio) == 2). Os nós da BST e
-//    os elementos do heap guardam uma CÓPIA do nome (char nome[20] e
-//    strcpy), porque o buffer de leitura é reaproveitado a cada linha.
-// 2. Um heap de até 32 pacientes num vetor fixo basta. Para cada linha: se o
-//    nome está na BST, avise; senão, insira na BST e no heap.
-// 3. Resposta esperada: a saída acima. O segundo "Ana" (prioridade 4) é
-//    recusado e a Ana fica com a prioridade 3. Libere a BST no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

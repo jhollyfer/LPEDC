@@ -14,14 +14,6 @@
 //   Davi estuda com 1 pessoa(s)
 //   Soma dos graus: 8
 //
-// Dicas:
-// 1. Leia a mensagem do sanitizer: ela diz o índice e o tamanho do vetor.
-// 2. Com 4 duplas de estudo, a soma dos graus deveria ser 2 x 4 = 8. Um
-//    resultado ímpar é sinal de aresta guardada num sentido só.
-// 3. Resposta esperada: o laço interno usa j <= V (lê adj[i][4], fora da
-//    linha; o certo é j < V) e a aresta só é marcada em adj[a][b] (falta
-//    adj[b][a] = 1). Consertado, mostra a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

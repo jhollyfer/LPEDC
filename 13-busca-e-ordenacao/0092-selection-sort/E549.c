@@ -15,12 +15,6 @@
 //   6. Rafael
 //   5 trocas de ponteiro
 //
-// Dicas:
-// 1. "v[j] < v[menor]" vira strcmp(alunos[j], alunos[menor]) < 0.
-// 2. A variável auxiliar da troca é um const char *, não um vetor de char.
-// 3. Trocar ponteiros custa 8 bytes, seja o nome curto ou comprido.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

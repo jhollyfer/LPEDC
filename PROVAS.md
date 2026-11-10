@@ -6,11 +6,13 @@ As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão: e
 abra a prova lá, resolva cronometrando e só depois confira aqui.
 
 > [!IMPORTANT]
-> Só a 071/2023 tem gabarito oficial: as letras dela são da banca. Nas outras, as folhas de
-> gabarito chegaram sem as letras marcadas, e as letras abaixo são do curso. As questões de
-> código e de simulação (pilha, fila, hash, busca binária, ABB, AVL, ordenação, recursão) foram
-> conferidas rodando o programa. Onde duas letras se defendem, ou nenhuma, a nota "Observações"
-> de cada prova diz qual é a dúvida.
+> Os editais de 2016 a 2019 e o 071/2023 têm gabarito oficial: as letras são da banca (as de 2016
+> a 2019 foram lidas nas folhas de resposta; as questões anuladas aparecem como "anulada"). Só os
+> editais 057/2022 e 020/2023 não têm letra oficial; as letras deles são do curso. Onde o curso
+> tinha chegado a outra letra, a coluna "Por quê" avisa. As questões de código e de simulação
+> foram conferidas rodando o programa. As provas completas, com as figuras, estão em
+> [`_fontes/provas-ppgi.md`](_fontes/provas-ppgi.md) e cada módulo traz as questões reais do seu
+> tema.
 
 Desde 2022 as provas têm **4 alternativas** (de 2016 a 2019 eram 5) e trazem trechos em
 Python. Aqui cada trecho em Python aponta para o assunto de C que treina a mesma ideia.
@@ -25,23 +27,23 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
-| 01 | C | afirmações | 7 | [0095](13-busca-e-ordenacao.md) | I é o resultado do particionamento de Hoare (3 1 2 3 2 17 22 4) e III é o de Lomuto; IV deixa o pivô na frente com menores depois dele. |
+| 01 | anulada | afirmações | 7 | [0095](13-busca-e-ordenacao.md) | Anulada pela banca. I é o resultado do particionamento de Hoare (3 1 2 3 2 17 22 4) e III é o de Lomuto; IV deixa o pivô na frente com menores depois dele. |
 | 02 | C | cálculo | 1 | [0032](04-funcoes.md), [0114](17-analise-avancada.md) | T(1)=1, T(2)=3, T(3)=3 (3/2=1), T(5)=2·T(2)+1=7; conferido em C. |
 | 03 | E | conceito | 3 | [0076](11-listas.md), [0077](11-listas.md) | Remover no meio de lista encadeada só religa ponteiros, nenhum nó é movido. |
 | 04 | B | conceito | 7 | [0096](13-busca-e-ordenacao.md), [0103](14-arvores.md) | Heapsort faz O(n log n) em qualquer entrada; o Quicksort varia (pior caso O(n²)). |
-| 05 | E | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Diferença maior que 1 só diz que não é AVL; pode ser rubro-negra, então nenhuma afirmação é certa. |
+| 05 | anulada | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Anulada pela banca. Diferença maior que 1 só diz que não é AVL; pode ser rubro-negra, então nenhuma afirmação é certa. |
 | 06 | D | conceito | 3 | [0082](12-pilhas-e-filas.md) | Pilha é LIFO. |
-| 07 | D | afirmações | 6 | [0090](13-busca-e-ordenacao.md), [0072](10-analise.md) | I, II (no máximo ⌊log2 n⌋+1 comparações) e III são verdadeiras. |
+| 07 | anulada | afirmações | 6 | [0090](13-busca-e-ordenacao.md), [0072](10-analise.md) | Anulada pela banca. I, II (no máximo ⌊log2 n⌋+1 comparações) e III são verdadeiras. |
 | 08 | B | código | 3 | [0076](11-listas.md), [0077](11-listas.md), [0054](07-memoria-dinamica.md) | O insere está certo; o remove dá free no novo início (*prim) e depois faz *prim = aux, apontando para nó já removido. |
 | 09 | D | afirmações | 5 | [0105](15-hash.md), [0106](15-hash.md) | I é falsa (colisão secundária é do endereçamento aberto), II é falsa (encadeamento aceita mais chaves que a tabela), III é verdadeira. |
-| 10 | D | código | 6 | [0089](13-busca-e-ordenacao.md), [0076](11-listas.md), [0057](07-memoria-dinamica.md) | I lê v[tm] fora do vetor se tm for o tamanho; II usa aux[x] num ponteiro de nó (não compila e, se compilasse, falharia). |
-| 11 | E | afirmações | 5 | [0106](15-hash.md), [0146](22-arvores-avancadas.md) | I verdadeira (não ordena), II verdadeira (busca esperada O(1+α)), III falsa (a árvore B também gasta ponteiros e nós semicheios). |
+| 10 | B | código | 6 | [0089](13-busca-e-ordenacao.md), [0076](11-listas.md), [0057](07-memoria-dinamica.md) | Gabarito oficial B. O curso tinha chegado em D: I lê v[tm] fora do vetor se tm for o tamanho; II usa aux[x] num ponteiro de nó (não compila e, se compilasse, falharia). |
+| 11 | anulada | afirmações | 5 | [0106](15-hash.md), [0146](22-arvores-avancadas.md) | Anulada pela banca. I verdadeira (não ordena), II verdadeira (busca esperada O(1+α)), III falsa (a árvore B também gasta ponteiros e nós semicheios). |
 | 12 | B | simulação | 4 | [0101](14-arvores.md) | Inserir 1..6 dá raiz 4, esquerda 2(1,3), direita 5(-,6): 3 nós no maior caminho. |
 | 13 | E | afirmações | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | I e III são verdadeiras, II é falsa, e "I e III" não está entre as letras. |
 | 14 | B | afirmações | 4 | [0099](14-arvores.md) | I e II são falsas (busca e inserção têm versão iterativa); III é verdadeira (árvore razoavelmente balanceada). |
 | 15 | A | simulação | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Mesma árvore da Q12: subárvore esquerda 2(1,3) e direita 5(-,6) têm altura 2, diferença 0. |
 | 16 | B | afirmações | 6 | [0089](13-busca-e-ordenacao.md), [0090](13-busca-e-ordenacao.md) | I é falsa (a binária exige vetor ordenado), II e III são verdadeiras. |
-| 17 | E | afirmações | 7 | [0121](18-ordenacao-linear.md), [0120](18-ordenacao-linear.md) | I verdadeira, III verdadeira (vetor auxiliar), II imprecisa (passadas = dígitos do maior, não a média); "I e III" não existe, logo nenhuma. |
+| 17 | anulada | afirmações | 7 | [0121](18-ordenacao-linear.md), [0120](18-ordenacao-linear.md) | Anulada pela banca. I verdadeira, III verdadeira (vetor auxiliar), II imprecisa (passadas = dígitos do maior, não a média); "I e III" não existe, logo nenhuma. |
 | 18 | C | simulação | 7 | [0092](13-busca-e-ordenacao.md) | O menor é 1, na posição 6, que troca com a posição 0. |
 | 19 | D | afirmações | 7 | [0093](13-busca-e-ordenacao.md), [0092](13-busca-e-ordenacao.md), [0121](18-ordenacao-linear.md), [0094](13-busca-e-ordenacao.md) | I verdadeira (inserção faz ~n comparações em quase ordenado, seleção sempre n(n-1)/2); II verdadeira (radix de 1 dígito, ~n+10 passos contra ~n log n); III falsa. |
 | 20 | D | afirmações | 7 | [0038](05-vetores-e-strings.md), [0095](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | I (último elemento) e II (n/2 trocas) verdadeiras; III falsa (Quicksort tem pior caso quadrático). |
@@ -73,10 +75,10 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 11 | C | simulação | 4 | [0098](14-arvores.md) | Figura ausente. Só C e D (e A, B) são árvores consistentes; C é a árvore natural: raiz P, esquerda Q(S,T), direita R. |
 | 12 | B | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | I falsa (disco), II falsa (o linear não aceita C>M), III falsa (colisão no encadeado entra na lista). |
 | 13 | A | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Nó de AVL é binário: grau 0, 1 ou 2. |
-| 14 | C | conceito | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | Em ordem na ABB dá chaves ordenadas. |
+| 14 | A | conceito | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | Gabarito oficial A. O curso tinha chegado em C: Em ordem na ABB dá chaves ordenadas. |
 | 15 | B | afirmações | 7 | [0096](13-busca-e-ordenacao.md), [0093](13-busca-e-ordenacao.md), [0094](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md), [0103](14-arvores.md), [0168](26-analise-formal.md) | Incorretas: I (Quick não é estável), III (Heap usa O(1) extra), IV (Insertion depende da ordem). |
 | 16 | A | cálculo | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Três nós em altura 3 é cadeia, fator de balanceamento 2: não é AVL. |
-| 17 | D | código | 6 | [0089](13-busca-e-ordenacao.md), [0076](11-listas.md), [0057](07-memoria-dinamica.md) | I inverte o retorno e lê v[tm] fora; II usa aux[x] e retorna x em vez da contagem. |
+| 17 | E | código | 6 | [0089](13-busca-e-ordenacao.md), [0076](11-listas.md), [0057](07-memoria-dinamica.md) | Gabarito oficial E. O curso tinha chegado em D: I inverte o retorno e lê v[tm] fora; II usa aux[x] e retorna x em vez da contagem. |
 | 18 | A | cálculo | 4 | [0097](14-arvores.md), [0175](28-estruturas-complementos.md) | Mínimo é 1 nó por nível (4), máximo é 2^4-1 = 15. |
 | 19 | A | cálculo | 4 | [0097](14-arvores.md) | Nível 5 tem 2^(5-1) = 16 nós. |
 | 20 | A | simulação | 4 | [0099](14-arvores.md) | Só a sequência A respeita os limites da ABB em todos os passos (B, C e D violam). |
@@ -100,17 +102,17 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 05 | B | código | 3 | [0076](11-listas.md), [0077](11-listas.md), [0054](07-memoria-dinamica.md) | só a versão II percorre sem malloc e sem erro; I vaza memória e tem `aux>prox`, III e IV têm laço errado |
 | 06 | D | simulação | 3 | [0082](12-pilhas-e-filas.md) | LIFO: sai 9, 8, 6 |
 | 07 | A | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | colisão secundária é de endereçamento aberto, então I é verdadeira; II e III falsas (pior caso é n, e aberto pode ganhar do encadeado) |
-| 08 | sem resposta | afirmações | 4 | [0101](14-arvores.md) | figura ausente |
-| 09 | sem resposta | simulação | 3 | [0085](12-pilhas-e-filas.md) | a simulação dá estado final `e`, que não está em nenhuma alternativa |
-| 10 | sem resposta | afirmações | 4 | [0099](14-arvores.md) | figura ausente |
+| 08 | E | afirmações | 4 | [0101](14-arvores.md) | Gabarito oficial E. A figura não veio no texto, então o curso não tinha letra. |
+| 09 | anulada | simulação | 3 | [0085](12-pilhas-e-filas.md) | Anulada pela banca. a simulação dá estado final `e`, que não está em nenhuma alternativa |
+| 10 | E | afirmações | 4 | [0099](14-arvores.md) | Gabarito oficial E. A figura não veio no texto, então o curso não tinha letra. |
 | 11 | A | simulação | 4 | [0098](14-arvores.md) | pós-ordem dá raiz P; Q tem filhos S e T; S e T são folhas |
 | 12 | C | afirmações | 6 | [0089](13-busca-e-ordenacao.md), [0090](13-busca-e-ordenacao.md) | I falsa (sequencial vale em ordenado), II falsa (busca em vetor ordenado é O(log n)), III verdadeira (varredura O(n)) |
 | 13 | B | código | 3 | [0083](12-pilhas-e-filas.md), [0049](06-ponteiros.md), [0062](08-structs.md) | a função I altera cópia de `prim`; a II usa `No **` e empilha certo |
 | 14 | D | afirmações | 5 | [0107](15-hash.md) | só IV: tamanho fixo; sondagem linear não usa busca binária nem coloca no início |
 | 15 | B | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md), [0179](28-estruturas-complementos.md) | I falsa (linear não passa de M), II descreve o linear, III sem sentido, IV é dispersão dupla, não encadeamento |
 | 16 | E | cálculo | 4 | [0102](14-arvores.md) | índice 4 (13) é folha com pai 5; trocar por 8 mantém a heap; em b só há 1 troca (6 sobe de 10, para abaixo de 5) |
-| 17 | D | conceito | 4 | [0099](14-arvores.md), [0101](14-arvores.md), [0102](14-arvores.md), [0177](28-estruturas-complementos.md) | ABB degenera (W), AVL é balanceada (X), heap tem altura O(log n) (Y); ver observações |
-| 18 | B | código | 3 | [0076](11-listas.md), [0077](11-listas.md) | `aux[x] != NULL` compara struct com NULL e não compila (além de `return x`) |
+| 17 | anulada | conceito | 4 | [0099](14-arvores.md), [0101](14-arvores.md), [0102](14-arvores.md), [0177](28-estruturas-complementos.md) | Anulada pela banca. ABB degenera (W), AVL é balanceada (X), heap tem altura O(log n) (Y); ver observações |
+| 18 | E | código | 3 | [0076](11-listas.md), [0077](11-listas.md) | Gabarito oficial E. O curso tinha chegado em B: `aux[x] != NULL` compara struct com NULL e não compila (além de `return x`) |
 | 19 | A | conceito | 3 | [0076](11-listas.md) | ponteiros para início e fim dão acesso rápido às extremidades; as outras são falsas ou truncadas |
 | 20 | D | conceito | 3 | [0079](11-listas.md) | lista dupla tem próximo e anterior (mesmas alternativas da 053/2016 Q06) |
 
@@ -125,23 +127,23 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 ## Edital 055/2017
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
-| 01 | sem resposta | simulação | 1 | [0032](04-funcoes.md) | pseudocódigo em figura ausente |
+| 01 | E | simulação | 1 | [0032](04-funcoes.md) | Gabarito oficial E. A figura não veio no texto, então o curso não tinha letra. pseudocódigo em figura ausente |
 | 02 | C | conceito | 3 | [0085](12-pilhas-e-filas.md), [0086](12-pilhas-e-filas.md), [0097](14-arvores.md) | hierarquia de diretórios é árvore, não fila |
-| 03 | C | simulação | 4 | [0099](14-arvores.md) | na alternativa C, 912 aparece depois de ir à esquerda de 911; ver observações |
-| 04 | sem resposta | afirmações | 4 | [0099](14-arvores.md) | figura ausente |
+| 03 | anulada | simulação | 4 | [0099](14-arvores.md) | Anulada pela banca. na alternativa C, 912 aparece depois de ir à esquerda de 911; ver observações |
+| 04 | B | afirmações | 4 | [0099](14-arvores.md) | Gabarito oficial B. A figura não veio no texto, então o curso não tinha letra. |
 | 05 | D | conceito | 5 | [0105](15-hash.md) | endereço já ocupado é colisão |
 | 06 | C | cálculo | 5 | [0106](15-hash.md) | posições: K=0, N=3 (não B), T=9 sozinho, nada em 6; I, II e IV verdadeiras, III falsa |
 | 07 | D | simulação | 4 | [0098](14-arvores.md), [0099](14-arvores.md) | raiz 30, esquerda 20 (10, 25), direita 50 (40, 60); pré-ordem 30 20 10 25 50 40 60 |
 | 08 | B | cálculo | 6 | [0090](13-busca-e-ordenacao.md) | floor(log2 1.000.000)+1 = 20 |
-| 09 | E | conceito | 4 | [0146](22-arvores-avancadas.md) | só com uma página (a raiz) a remoção não exige rebalanceamento, pois a raiz pode ter menos que o mínimo |
-| 10 | E | afirmações | 4 | [0146](22-arvores-avancadas.md) | I falsa (pode ter 2 filhos), II falsa, III falsa (folhas no mesmo nível), IV falsa (árvore B serve a disco) |
+| 09 | anulada | conceito | 4 | [0146](22-arvores-avancadas.md) | Anulada pela banca. só com uma página (a raiz) a remoção não exige rebalanceamento, pois a raiz pode ter menos que o mínimo |
+| 10 | anulada | afirmações | 4 | [0146](22-arvores-avancadas.md) | Anulada pela banca. I falsa (pode ter 2 filhos), II falsa, III falsa (folhas no mesmo nível), IV falsa (árvore B serve a disco) |
 | 11 | D | afirmações | 3 | [0076](11-listas.md), [0090](13-busca-e-ordenacao.md), [0106](15-hash.md) | I falsa (lista é O(n)), II falsa ("unicamente"), III verdadeira (encadeamento) |
 | 12 | C | cálculo | 7 | [0093](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | inserção faz cerca de n comparações; heap e quick fazem n log n ou pior; seleção n² |
 | 13 | E | conceito | 7 | [0168](26-analise-formal.md), [0092](13-busca-e-ordenacao.md), [0093](13-busca-e-ordenacao.md), [0103](14-arvores.md), [0094](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md) | O(1) de espaço no pior caso: seleção, inserção, heap; merge usa O(n) e quick usa pilha de recursão (O(n) no pior caso) |
 | 14 | B | afirmações | 6 | [0089](13-busca-e-ordenacao.md), [0090](13-busca-e-ordenacao.md) | I falsa (pior caso n), II verdadeira, III falsa (mesma contagem) |
-| 15 | sem resposta | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | nenhuma afirmação é verdadeira pelas definições; ver observações |
-| 16 | sem resposta | afirmações | 4 | [0101](14-arvores.md) | figura ausente |
-| 17 | C | simulação | 3 | [0082](12-pilhas-e-filas.md) | LIFO: sai 9, 8, 6 |
+| 15 | B | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | Gabarito oficial B. A figura não veio no texto, então o curso não tinha letra. nenhuma afirmação é verdadeira pelas definições; ver observações |
+| 16 | B | afirmações | 4 | [0101](14-arvores.md) | Gabarito oficial B. A figura não veio no texto, então o curso não tinha letra. |
+| 17 | E | simulação | 3 | [0082](12-pilhas-e-filas.md) | Gabarito oficial E. O curso tinha chegado em C: LIFO: sai 9, 8, 6 |
 | 18 | E | código | 3 | [0086](12-pilhas-e-filas.md), [0083](12-pilhas-e-filas.md), [0049](06-ponteiros.md) | a funcaoII (`No **`) insere no início, serve para lista e pilha, mas fila insere no fim |
 | 19 | A | simulação | 7 | [0095](13-busca-e-ordenacao.md) | 18 (índice 3) e 13 (índice 4) separam maiores à esquerda e menores à direita |
 | 20 | A | simulação | 4 | [0101](14-arvores.md) | rodando AVL (programa em C): raiz 8, esquerda 4 (2, 6), direita 10 (12); diferença 0 |
@@ -160,13 +162,13 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 01 | C | cálculo | 2, 7 | [0094](13-busca-e-ordenacao.md), [0072](10-analise.md) | Intercalar dois vetores ordenados copia 2N elementos, então O(N) mesmo no melhor caso. |
 | 02 | C | afirmações | 4 | [0146](22-arvores-avancadas.md) | I, II e V são as propriedades da árvore B; III é falsa (balanceia pouco) e IV é falsa (k filhos têm k-1 chaves). |
 | 03 | D | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Com folha de altura 1, três nós em altura três é uma cadeia, com fator de balanceamento 2 na raiz. |
-| 04 | D | afirmações | 4 | [0102](14-arvores.md) | I é max-heap válido; II confere (12 sobe e troca com 10); III é falsa (o 12 não existe no heap, o certo é `14 9 10 5`). |
-| 05 | D | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Repetida da 03, mesma resposta. |
+| 04 | B | afirmações | 4 | [0102](14-arvores.md) | Gabarito oficial B. O curso tinha chegado em D: I é max-heap válido; II confere (12 sobe e troca com 10); III é falsa (o 12 não existe no heap, o certo é `14 9 10 5`). |
+| 05 | anulada | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Anulada pela banca. Repetida da 03, mesma resposta. |
 | 06 | C | conceito | 4, 6 | [0099](14-arvores.md), [0082](12-pilhas-e-filas.md) | Lista ordenada pela pilha sai ordenada ao contrário e a ABB degenera em lista: busca O(N). |
 | 07 | B | afirmações | 4 | [0101](14-arvores.md), [0176](28-estruturas-complementos.md) | F-V-V-V-F: AVL exige as duas subárvores AVL, cheias são AVL e o custo de balancear é O(log n), não O(n/2). |
 | 08 | C | simulação | 4 | [0098](14-arvores.md), [0099](14-arvores.md) | Rodado em C: pós-ordem `0 1 8 7 5 10 2`. |
 | 09 | A | código | 3 | [0079](11-listas.md) | Ficam Z, Y, X, antigo próximo de Z: Y logo após Z e X logo após Y. |
-| 10 | sem resposta | simulação | 4 | [0100](14-arvores.md) | Figura ausente. |
+| 10 | D | simulação | 4 | [0100](14-arvores.md) | Gabarito oficial D. A figura não veio no texto, então o curso não tinha letra. |
 | 11 | C | simulação | 1 | [0032](04-funcoes.md), [0033](04-funcoes.md) | f(4)=f(3)+f(2)=(1+0)+1=2. |
 | 12 | E | simulação | 6 | [0090](13-busca-e-ordenacao.md) | A posição do meio (índice 4) já vale 20: uma única comparação. |
 | 13 | E | conceito | 3 | [0037](05-vetores-e-strings.md) | Vetor: homogêneo e acesso aleatório por índice. |
@@ -192,13 +194,13 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 |---|---|---|---|---|---|
 | 01 | B | cálculo | 5 | [0105](15-hash.md), [0178](28-estruturas-complementos.md) | `x mod 12000` cobre exatamente 0 a 11.999; a A só gera 1000 endereços. |
 | 02 | D | conceito | 3 | [0039](05-vetores-e-strings.md) | Soma de matrizes m×n dá m×n, não 2m×2n. |
-| 03 | sem resposta | simulação | 4 | [0101](14-arvores.md) | Figura ausente. Rodado em C: A, B e E geram a mesma árvore (raiz 23); C gera raiz 13 e D, raiz 15. |
-| 04 | B | conceito | 7, 2 | [0092](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | O melhor caso do selection sort é O(N²), não O(log N). |
+| 03 | anulada | simulação | 4 | [0101](14-arvores.md) | Anulada pela banca. Figura ausente. Rodado em C: A, B e E geram a mesma árvore (raiz 23); C gera raiz 13 e D, raiz 15. |
+| 04 | anulada | conceito | 7, 2 | [0092](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | Anulada pela banca. O melhor caso do selection sort é O(N²), não O(log N). |
 | 05 | B | simulação | 4 | [0099](14-arvores.md) | Folhas 5 e 42, pai do 72 é o 25. |
 | 06 | D | conceito | 7 | [0095](13-busca-e-ordenacao.md), [0168](26-analise-formal.md) | No pior caso a pilha de recursão do quicksort chega a O(n). |
 | 07 | E | afirmações | 3, 4, 5 | [0082](12-pilhas-e-filas.md), [0101](14-arvores.md), [0105](15-hash.md) | I, II e IV verdadeiras; III falsa (acesso por índice contra encadeamento). |
-| 08 | C | conceito | 3 | [0082](12-pilhas-e-filas.md), [0054](07-memoria-dinamica.md) | Pilha é linear. Ver observação. |
-| 09 | A | cálculo | 4 | [0146](22-arvores-avancadas.md) | Raiz com 2 filhos e demais com pelo menos m/2: 2·(m/2)^(d-1) no nível d (raiz = nível 1). |
+| 08 | anulada | conceito | 3 | [0082](12-pilhas-e-filas.md), [0054](07-memoria-dinamica.md) | Anulada pela banca. Pilha é linear. Ver observação. |
+| 09 | anulada | cálculo | 4 | [0146](22-arvores-avancadas.md) | Anulada pela banca. Raiz com 2 filhos e demais com pelo menos m/2: 2·(m/2)^(d-1) no nível d (raiz = nível 1). |
 | 10 | A | simulação | 3, 4 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md), [0098](14-arvores.md) | A ABB em ordem dá v1 e v2 crescentes. Empilhar e desempilhar inverte; alternando começando por v1, v1[i] fica com a posição 2i e v2[i] com a 2i+1 da sequência decrescente: v1[i] ≥ v2[i]. |
 | 11 | E | afirmações | 4 | [0146](22-arvores-avancadas.md) | Com uma só página (raiz folha), remover não pede balanceamento. As outras confundem split com remoção. |
 | 12 | A | conceito | 3 | [0080](11-listas.md) | Na circular não há nulo: é preciso marcar o ponto de parada quando o elemento não existe. |
@@ -206,10 +208,10 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 14 | E | afirmações | 4 | [0146](22-arvores-avancadas.md), [0101](14-arvores.md) | I, II, III e IV são falsas: nó com 2 filhos é possível, não vem da AVL, folhas no mesmo nível, árvore B serve justamente para armazenamento secundário. |
 | 15 | E | conceito | 4 | [0101](14-arvores.md), [0145](22-arvores-avancadas.md) | A ABB com diferença maior que 1 não é AVL, mas pode ser rubro-negra: nada se conclui com certeza. |
 | 16 | A | afirmações | 5 | [0106](15-hash.md) | Só a I é verdadeira (colisão secundária é conceito de endereçamento aberto); II e III são falsas. |
-| 17 | sem resposta | afirmações | 7 | [0121](18-ordenacao-linear.md) | I e III são verdadeiras; com a nova E ("nenhuma verdadeira"), nenhuma alternativa serve. Ver observação. |
+| 17 | anulada | afirmações | 7 | [0121](18-ordenacao-linear.md) | Anulada pela banca. I e III são verdadeiras; com a nova E ("nenhuma verdadeira"), nenhuma alternativa serve. Ver observação. |
 | 18 | E | afirmações | 5 | [0106](15-hash.md) | I e II são verdadeiras; a III é duvidosa. Ver observação. |
 | 19 | D | afirmações | 4 | [0101](14-arvores.md), [0176](28-estruturas-complementos.md) | V-V-F: após inserção uma rotação (simples ou dupla) basta; a propagação até a raiz é da remoção. |
-| 20 | A (inferida) | simulação | 3 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md) | Fila exibida: 10-29-...-11 (I). Pilha final: topo 11-12-...-10 (II). III e IV são falsas. |
+| 20 | A | simulação | 3 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md) | Fila exibida: 10-29-...-11 (I). Pilha final: topo 11-12-...-10 (II). III e IV são falsas. |
 
 
 **Observações**
@@ -223,20 +225,20 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | A | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Com pivô no primeiro, a entrada já ordenada é o pior caso: 21 comparações contra 11 a 12 nas outras (rodado em C). |
-| 02 | sem resposta | simulação | 4 | [0102](14-arvores.md) | Figura do heap ausente. |
+| 02 | D | simulação | 4 | [0102](14-arvores.md) | Gabarito oficial D. A figura não veio no texto, então o curso não tinha letra. |
 | 03 | A | simulação | 3 | [0082](12-pilhas-e-filas.md) | 5 push menos 4 pop deixa 1 elemento (o 1). |
 | 04 | C | simulação | 4 | [0097](14-arvores.md) | Folha `110` fica com 1 chave; irmãos têm o mínimo (2) e não emprestam, então funde com a direita: `110 140 144 156`, raiz `100 160`. |
-| 05 | D | conceito | 3 | [0076](11-listas.md), [0077](11-listas.md) | Pior caso da busca sequencial em lista é n comparações. |
+| 05 | anulada | conceito | 3 | [0076](11-listas.md), [0077](11-listas.md) | Anulada pela banca. Pior caso da busca sequencial em lista é n comparações. |
 | 06 | D | código | 3 | [0076](11-listas.md), [0032](04-funcoes.md) | Imprime 1, 3, 5, chama com NULL e volta imprimindo 5, 3, 1: `1 3 5 5 3 1`. |
 | 07 | B | conceito | 3 | [0031](04-funcoes.md), [0032](04-funcoes.md) | Recursão usa a pilha de chamadas. |
 | 08 | D | conceito | 4 | [0099](14-arvores.md) | ABB sem balanceamento: pior caso O(n), caso médio O(log n). |
 | 09 | A | cálculo | 4 | [0097](14-arvores.md) | Ordem 4 (4 filhos, 3 chaves), altura 3 em arestas (Cormen): 1+4+16+64 = 85 nós, 85 x 3 = 255 chaves. |
-| 10 | C | afirmações | 5 | [0105](15-hash.md), [0107](15-hash.md) | I: 22 colide uma vez e 39 duas (3 colisões, não 2); II: 5, 22 e 39 têm o mesmo h1, então colidem também em hash duplo; III: 17 chaves 0 a 16 não colidem. |
-| 11 | E | código | 3 | [0080](11-listas.md) | O `break` incondicional faz o laço rodar no máximo uma vez, então o código não busca nada de forma coerente; nenhuma das opções descreve isso. |
+| 10 | anulada | afirmações | 5 | [0105](15-hash.md), [0107](15-hash.md) | Anulada pela banca. I: 22 colide uma vez e 39 duas (3 colisões, não 2); II: 5, 22 e 39 têm o mesmo h1, então colidem também em hash duplo; III: 17 chaves 0 a 16 não colidem. |
+| 11 | B | código | 3 | [0080](11-listas.md) | Gabarito oficial B. O curso tinha chegado em E: O `break` incondicional faz o laço rodar no máximo uma vez, então o código não busca nada de forma coerente; nenhuma das opções descreve isso. |
 | 12 | B | cálculo | 4 | [0101](14-arvores.md) | Mínimo de nós por altura em AVL: 1, 2, 4, 7; 7 nós cabem em altura 3 (nó único = 0). |
-| 13 | B | afirmações | 4 | [0101](14-arvores.md), [0102](14-arvores.md) | II e III são verdadeiras; I só vale para heap máximo e o enunciado não diz qual. |
+| 13 | anulada | afirmações | 4 | [0101](14-arvores.md), [0102](14-arvores.md) | Anulada pela banca. II e III são verdadeiras; I só vale para heap máximo e o enunciado não diz qual. |
 | 14 | D | simulação | 7 | [0093](13-busca-e-ordenacao.md) | Após a 1ª rodada: 8 34 64 51 32 21; a 2ª insere o 64 sem mover nada. |
-| 15 | C | conceito | 7 | [0091](13-busca-e-ordenacao.md) | Com a troca de parada antecipada, o bubble detecta vetor já ordenado. |
+| 15 | anulada | conceito | 7 | [0091](13-busca-e-ordenacao.md) | Anulada pela banca. Com a troca de parada antecipada, o bubble detecta vetor já ordenado. |
 | 16 | E | conceito | 4 | [0102](14-arvores.md) | Array por níveis: 88 66 77 33 44 55 75 30 22 5. |
 | 17 | C | conceito | 3 | [0085](12-pilhas-e-filas.md), [0082](12-pilhas-e-filas.md) | Fila com duas pilhas. |
 | 18 | A | conceito | 7 | [0093](13-busca-e-ordenacao.md) | Insertion sort em vetor já ordenado roda em Θ(N). |
@@ -259,7 +261,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | C | simulação | 5 | [0107](15-hash.md) | Rodado em C: só a ordem de C gera 9 18 _ 12 3 14 4 21 (as de b e e trocam 9 e 18). |
-| 02 | sem resposta | simulação | 4 | [0101](14-arvores.md) | Figura ausente. O programa dá: raiz 20; 15 e 25; 10, 18, 30; 16 e 19 (filhos de 18). |
+| 02 | A | simulação | 4 | [0101](14-arvores.md) | Gabarito oficial A. A figura não veio no texto, então o curso não tinha letra. O programa dá: raiz 20; 15 e 25; 10, 18, 30; 16 e 19 (filhos de 18). |
 | 03 | D | conceito | 2 | [0071](10-analise.md), [0072](10-analise.md) | 2n+1 é linear. |
 | 04 | C | cálculo | 6 | [0090](13-busca-e-ordenacao.md) | Posições examinadas: 12, 18, 15, 13, 14 = 5. |
 | 05 | B | código | 3 | [0076](11-listas.md), [0032](04-funcoes.md) | Recursão antes do printf imprime do último ao primeiro. |
@@ -268,12 +270,12 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 08 | B | conceito | 7 | [0093](13-busca-e-ordenacao.md) | Insertion sort faz n-1 comparações em entrada ordenada ou igual. |
 | 09 | A | conceito | 4 | [0101](14-arvores.md) | Propriedade da rubro-negra: caminho mais longo no máximo o dobro do mais curto. |
 | 10 | E | conceito | 3 | [0031](04-funcoes.md), [0032](04-funcoes.md) | Recursão usa a pilha. |
-| 11 | B | conceito | 4 | [0097](14-arvores.md) | B e rubro-negra têm busca O(log n) no pior caso, então "diferente" é falsa. |
+| 11 | anulada | conceito | 4 | [0097](14-arvores.md) | Anulada pela banca. B e rubro-negra têm busca O(log n) no pior caso, então "diferente" é falsa. |
 | 12 | D | simulação | 4 | [0101](14-arvores.md) | A e C respeitam o fator de balanceamento; em B, o 50 fica com subárvore esquerda de altura 2 e direita vazia. |
-| 13 | D | afirmações | 4 | [0099](14-arvores.md), [0101](14-arvores.md) | ABB sem balanceamento tem pior caso O(n), não O(log n). |
-| 14 | B | cálculo | 6 | [0090](13-busca-e-ordenacao.md), [0072](10-analise.md) | O candidato é a[n/2]; achar o início do bloco por busca binária custa Θ(log n). |
+| 13 | anulada | afirmações | 4 | [0099](14-arvores.md), [0101](14-arvores.md) | Anulada pela banca. ABB sem balanceamento tem pior caso O(n), não O(log n). |
+| 14 | anulada | cálculo | 6 | [0090](13-busca-e-ordenacao.md), [0072](10-analise.md) | Anulada pela banca. O candidato é a[n/2]; achar o início do bloco por busca binária custa Θ(log n). |
 | 15 | A | conceito | 4 | [0101](14-arvores.md) | AVL é mais rígida (altura menor) e rotaciona mais. |
-| 16 | E | simulação | 4 | [0099](14-arvores.md), [0100](14-arvores.md), [0098](14-arvores.md) | Figura ausente, mas só a E não tem 9 nem 23 (removidos) e tem 5 e 17 (inseridos); pré e pós-ordem conferem com a árvore reconstruída. |
+| 16 | anulada | simulação | 4 | [0099](14-arvores.md), [0100](14-arvores.md), [0098](14-arvores.md) | Anulada pela banca. Figura ausente, mas só a E não tem 9 nem 23 (removidos) e tem 5 e 17 (inseridos); pré e pós-ordem conferem com a árvore reconstruída. |
 | 17 | C | cálculo | 7 | [0094](13-busca-e-ordenacao.md), [0072](10-analise.md) | c·n·log n: 64 x 6 = 384 ↔ 30 s; 360 s dá n·log n = 4608, que é 512 x 9. |
 | 18 | A | simulação | 7 | [0093](13-busca-e-ordenacao.md) | Cada rodada insere o próximo elemento: 4 5 3 2 1, 3 4 5 2 1, 2 3 4 5 1, 1 2 3 4 5. |
 | 19 | E | conceito | 3 | [0079](11-listas.md) | Com ponteiros de início e fim e elo anterior, as quatro operações são O(1). |

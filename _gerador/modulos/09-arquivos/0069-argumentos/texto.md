@@ -90,7 +90,7 @@ argumentos, e são números de verdade? O programa só trabalha no caminho verde
 
 > [!WARNING]
 > Nunca use `argv[1]` sem conferir o `argc`. Sem argumentos, `argv[1]` é
-> `NULL`, e `atoi(NULL)` ou `strlen(NULL)` derruba o programa (o E412 mostra).
+> `NULL`, e `atoi(NULL)` ou `strlen(NULL)` derruba o programa (confira o `argc` primeiro).
 > Cuidado com `*`: em `./calc 9 * 3` o shell troca o `*` pelos nomes dos
 > arquivos da pasta antes de o programa rodar. Use aspas (`'*'`) ou outro
 > símbolo, como `x`.

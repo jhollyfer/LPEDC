@@ -12,11 +12,6 @@
 //   A (B C): 27000 multiplicações
 //   Melhor: A (B C), 3.0 vezes mais barata
 //
-// Dicas:
-// 1. (A B) é 50 x 40; multiplicá-la por C custa 50 · 40 · 30.
-// 2. (B C) é 10 x 30; A vezes ela custa 50 · 10 · 30.
-// 3. Resposta esperada: a saída acima. Faça a divisão em double.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

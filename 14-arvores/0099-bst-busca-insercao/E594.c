@@ -20,12 +20,6 @@
 //   Quantos: 7
 //   Altura: 3
 //
-// Dicas:
-// 1. Antes de inserir, pergunte com bst_busca se o número já está na árvore.
-// 2. Conte os distintos ao inserir (ou escreva uma função que conta nós).
-// 3. Resposta esperada: a saída acima. Cada número repetido custa só
-//    uma descida pela árvore, e não uma varredura do caderno inteiro.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

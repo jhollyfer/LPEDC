@@ -17,14 +17,6 @@
 //   saiu Ana (R$ 150)
 //   Davi R$ 175 -> Carla R$ 210 -> NULL
 //
-// Dicas:
-// 1. Duas fases: primeiro ache o menor guardando o nó E o anterior dele
-//    (menor e ant_menor); depois remova como no texto.
-// 2. Para percorrer guardando o anterior, ande com ant e p, e quando
-//    p->valor < menor->valor, faça menor = p e ant_menor = ant.
-// 3. Copiar uma struct inteira é uma atribuição só: *saiu = *menor.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

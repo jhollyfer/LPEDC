@@ -25,15 +25,6 @@
 //
 // Ache a linha, conserte e confira a saída.
 //
-// Dicas:
-// 1. Desenhe o vetor pai[] depois de cada aresta aceita. Depois de
-//    Roda-Lago, quem é o pai do Lago? E depois de Carrossel-Lago?
-// 2. Quando o Lago troca de pai, a Roda, que estava pendurada nele pelo
-//    caminho, perde a ligação com o grupo. A união tem que ligar as RAÍZES
-//    dos dois grupos, não os vértices da aresta.
-// 3. Resposta esperada: troque "pai[t[k].b] = t[k].a;" por
-//    "pai[rb] = ra;". Consertado, mostra a saída esperada.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

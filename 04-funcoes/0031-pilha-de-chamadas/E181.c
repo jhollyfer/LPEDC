@@ -18,13 +18,6 @@
 //     sai imc -> 22.2
 //   IMC: 22.2
 //
-// Dicas:
-// 1. Os espaços do recuo podem ir direto no texto do printf.
-// 2. Em imc, guarde o retorno de quadrado numa local antes de dividir; assim
-//    a linha "sai imc" pode mostrar o resultado.
-// 3. Resposta esperada: a saída acima. Na hora em que quadrado roda, a pilha
-//    tem três quadros: main (esperando), imc (esperando) e quadrado no topo.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

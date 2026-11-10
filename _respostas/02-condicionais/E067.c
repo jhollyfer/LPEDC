@@ -6,9 +6,7 @@
 
 int main(void) {
     double etanol, gasolina;
-    printf("Etanol: ");
     scanf("%lf", &etanol);
-    printf("Gasolina: ");
     scanf("%lf", &gasolina);
 
     bool compensa = etanol <= gasolina * 0.7;

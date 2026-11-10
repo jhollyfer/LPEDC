@@ -10,11 +10,6 @@
 //   Carrinho: [ 1250 899 2340 475 ]
 //   Total: R$ 49.64
 //
-// Dicas:
-// 1. for (const NoS *x = L->nil.prox; x != &L->nil; x = x->prox).
-// 2. Para mostrar em reais: total / 100 e total % 100 com %02d.
-// 3. Resposta esperada: a saída acima (4964 centavos).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

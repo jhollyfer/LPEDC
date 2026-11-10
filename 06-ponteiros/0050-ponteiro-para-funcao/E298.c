@@ -12,12 +12,6 @@
 // comparação o ENDEREÇO de um elemento, ou seja, o endereço de um
 // const char * (um ponteiro para ponteiro, assunto 0049).
 //
-// Dicas:
-// 1. Dentro da comparação: const char *x = *(const char * const *)a;
-// 2. Depois é só return strcmp(x, y);
-// 3. O tamanho de cada elemento é sizeof frutas[0] (8 bytes: um ponteiro).
-// 4. Resposta esperada: abacaxi acerola banana caju manga.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

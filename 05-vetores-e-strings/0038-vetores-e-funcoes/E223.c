@@ -14,12 +14,6 @@
 //   Gols no campeonato: 16
 //   Média por rodada: 2.00
 //
-// Dicas:
-// 1. Na chamada vai só o nome do vetor: soma(gols, 8).
-// 2. media pode chamar soma e dividir por n; cuidado com a divisão inteira
-//    (assunto 0008).
-// 3. Resposta esperada: 16 gols e média 2.00.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

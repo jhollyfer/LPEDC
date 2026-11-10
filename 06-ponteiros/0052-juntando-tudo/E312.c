@@ -22,14 +22,6 @@
 //   nome mais comprido: laranja (índice 2)
 //   depois de zerar: 12 0 33 47 5
 //
-// Dicas:
-// 1. Ande pelo vetor com const unsigned char *: o i-ésimo está em
-//    base + i * tam. Guarde o endereço do maior até agora.
-// 2. Para as frutas, cada elemento é um const char *: o resultado de
-//    maximo é, na verdade, um const char ** (converta para usar).
-// 3. Para o índice: (const int *)m - pontos.
-// 4. Resposta esperada: as quatro linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

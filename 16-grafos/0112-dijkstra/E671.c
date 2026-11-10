@@ -14,16 +14,6 @@
 //   Manaus: sem voo
 //   Belém: sem voo
 //
-// Dicas:
-// 1. Depois de fixar SP, Rio e BH, quem o laço escolhe como u? Qual é o
-//    dist[u] dele?
-// 2. INT_MAX + 300 não cabe num int. Em int com sinal isso é comportamento
-//    indefinido; na prática vira um número negativo.
-// 3. Resposta esperada: a escolha de u aceita vértices com dist == INFINITO;
-//    ao escolher Manaus, a conta dist[u] + preco[u][v] faz INT_MAX + 300. O
-//    conserto: só escolher u com dist[u] != INFINITO e sair do laço (break)
-//    quando não houver nenhum. Consertado, mostra a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <limits.h>

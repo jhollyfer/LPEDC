@@ -11,16 +11,6 @@
 //   8 4 / = 2
 //   9 5 2 - * = 27
 //
-// Dicas:
-// 1. Rode: a soma está certa, a subtração dá -5 e a divisão dá 0. O que a
-//    soma tem que a subtração e a divisão não têm?
-// 2. Qual operando sai primeiro da pilha: o da esquerda ou o da direita?
-// 3. Resposta esperada: os dois pilha_desempilha estão na ordem errada. O
-//    primeiro a sair é o operando da direita, então ele tem que ir para b.
-//    Trocando a ordem (desempilha em b, depois em a), as quatro contas
-//    ficam certas. A soma e a multiplicação escondiam o erro porque
-//    a + b == b + a.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

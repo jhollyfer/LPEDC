@@ -14,18 +14,6 @@
 // contador por letra) e depois ordene as 26 letras com um counting sort
 // estável cuja chave é a frequência.
 //
-// Dicas:
-// 1. freq[letra - 'a']++ para cada letra de 'a' a 'z' (pule os espaços).
-// 2. O counting sort deixa as chaves em ordem crescente. Para a ordem
-//    decrescente, use a chave maior - freq[l], em que maior é a maior
-//    frequência: a letra mais frequente fica com chave 0.
-// 3. Se as letras entrarem de 'a' a 'z' e o sort for estável (terceiro
-//    laço de trás para a frente), os empates saem em ordem alfabética sem
-//    nenhum esforço extra.
-// 4. O vetor ordenado guarda letras (0 a 25), não frequências: ranking[i]
-//    é a letra que ficou na posição i.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

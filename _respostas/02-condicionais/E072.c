@@ -5,7 +5,6 @@
 
 int main(void) {
     double total;
-    printf("Total: R$ ");
     scanf("%lf", &total);
 
     int desconto = 5 * (total >= 100) + 5 * (total >= 300);

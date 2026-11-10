@@ -14,13 +14,6 @@
 //   Saíram: 3 6 2 7 5 1
 //   Sobrou: 4
 //
-// Dicas:
-// 1. Insira 1 a 7. Enquanto fila_tamanho > 1: faça 2 vezes "retira e
-//    insere de novo"; na 3ª, retire e mostre.
-// 2. A capacidade do fila.c é 8, então 7 pessoas cabem.
-// 3. Cada eliminação custa m operações de fila: no total, O(n · m).
-// 4. Resposta esperada: Saíram: 3 6 2 7 5 1 e Sobrou: 4.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

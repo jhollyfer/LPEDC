@@ -17,14 +17,6 @@
 //   Saída esperada:
 //   Bahia > Ceará > Fortaleza > Sport > Remo
 //
-// Dicas:
-// 1. venceu[a][b] = 1 só num sentido. O teste do vizinho é
-//    venceu[ordem[pos - 1]][v].
-// 2. É o caminho hamiltoniano do E1094, sem volta e com início variável.
-// 3. Resposta esperada: a saída acima. Curiosidade: num torneio todos
-//    contra todos essa fila SEMPRE existe (teorema de Rédei), mas achar o
-//    ciclo hamiltoniano continua sendo trabalho de backtracking.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

@@ -21,12 +21,6 @@
 //   Soma dos graus: 14 (2 x 7 trechos)
 //   Pontos de grau ímpar: 4
 //
-// Dicas:
-// 1. Cada trecho {a, b} acende duas casas: ciclovia[a][b] e ciclovia[b][a].
-// 2. O grau de u é a soma da linha u da matriz.
-// 3. Resposta esperada: a saída acima. A soma é sempre o dobro dos trechos, e
-//    o número de pontos de grau ímpar é sempre par (aqui, 4).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

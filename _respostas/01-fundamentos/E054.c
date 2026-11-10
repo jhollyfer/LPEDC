@@ -1,9 +1,5 @@
 // 0009 · Atribuição, ++ e --
 // Exercício E054 · ★★★
-//
-// Resposta: com valores perto de INT_MAX, casa += visitante pode estourar o
-// int, o que é comportamento indefinido. A troca com variável auxiliar não
-// tem esse risco e é mais fácil de ler.
 
 #include <stdio.h>
 

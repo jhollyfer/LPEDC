@@ -16,16 +16,6 @@
 //   faixa: 7.0 a 7.0, 3 baldes de 0.00
 //   7.00 7.00 7.00
 //
-// Dicas:
-// 1. O balde de x é (int) ((x - menor) / (maior - menor) * n): o menor vai
-//    para o balde 0.
-// 2. O maior dá exatamente n, que não existe: mande para o n - 1.
-// 3. Valores todos iguais: maior - menor é 0, e a divisão por zero dá NaN.
-//    Teste esse caso antes e mande todos para o balde 0.
-// 4. Reaproveite insere_ordenado e junta. Formato da faixa:
-//    "faixa: %.1f a %.1f, %d baldes de %.2f\n".
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdio.h>

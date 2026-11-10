@@ -18,13 +18,6 @@
 //   (0, 5) -> índice 5, valor 5
 //   índice 26 -> (3, 2), valor 32
 //
-// Dicas:
-// 1. Cada linha completa "pula" 8 posições: k = i * colunas + j.
-// 2. Para voltar: *i = k / colunas e *j = k % colunas (os dois resultados
-//    voltam por ponteiro, como no assunto 0046).
-// 3. Resposta esperada: a saída acima. O (4, 7) cai no índice 39 = 5 * 8 - 1,
-//    a última das 40 posições.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

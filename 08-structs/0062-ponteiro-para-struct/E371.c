@@ -6,9 +6,12 @@
 // realloc quando enche. Mostre cada vez que a capacidade crescer e, no fim, a
 // lista e o total.
 //
-// Para testar:
-//
-//   printf 'Arroz 27.90\nFeijao 8.49\nCafe 18.90\nOleo 7.99\nAcucar 4.59\n' | ~/LPEDC/rodar 08-structs/0062-ponteiro-para-struct/E371.c
+//   Entrada:
+//   Arroz 27.90
+//   Feijao 8.49
+//   Cafe 18.90
+//   Oleo 7.99
+//   Acucar 4.59
 //
 //   Saída esperada:
 //   capacidade: 2 -> 4
@@ -20,14 +23,6 @@
 //     Oleo       R$ 7.99
 //     Acucar     R$ 4.59
 //   Total: R$ 67.87
-//
-// Dicas:
-// 1. Guarde três coisas: Produto *v, int n (quantos tem) e int cap.
-// 2. Leia com while (scanf("%19s %lf", nome, &preco) == 2). Leia numa
-//    variável Produto temporária e só depois copie para v[n].
-// 3. Cresça com um ponteiro temporário: Produto *novo = realloc(v, ...); se
-//    der NULL, o v antigo continua valendo e precisa de free.
-// 4. Resposta esperada: a saída acima, e um free(v) no fim.
 //
 // Escreva sua resposta abaixo:
 

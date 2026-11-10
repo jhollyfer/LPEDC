@@ -9,11 +9,6 @@
 //   idade: 41
 //   altura: 1.83
 //
-// Dicas:
-// 1. p = &idade; não precisa de cast (qualquer ponteiro vira void *).
-// 2. Para ler, converta: *(int *)p e *(double *)p.
-// 3. Resposta esperada: 41 e 1.83.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

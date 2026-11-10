@@ -178,8 +178,7 @@ de uso:
 > Trocar `"ab"` por `"wb"` no `novo` é o erro mais caro do módulo: cada gasto
 > novo apagaria os anteriores, sem aviso. E não leia, por outro `FILE *`, o que
 > acabou de escrever antes do `fclose` (ou `fflush`): os bytes ainda estão no
-> buffer e a leitura acha o arquivo vazio ou pela metade. O E419 junta os dois
-> erros.
+> buffer e a leitura acha o arquivo vazio ou pela metade.
 
 > [!TIP]
 > **Por dentro do C:** em `"ab"` (ou `"a"`), **toda** escrita vai para o fim,

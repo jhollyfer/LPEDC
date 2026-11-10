@@ -15,15 +15,6 @@
 //   Açaí - Milho: 11 m
 //   Total: 38 m
 //
-// Dicas:
-// 1. Comece com chave = INFINITO em todos, chave[0] = 0 e pai = -1. É o
-//    Dijkstra do assunto 0112, com outra regra de atualização.
-// 2. Quando u entra, para cada v fora da rede com cabo[u][v] != 0: se
-//    cabo[u][v] < chave[v], então chave[v] = cabo[u][v] e pai[v] = u.
-//    Não some chave[u]: no Prim, a chave é só o cabo.
-// 3. Resposta esperada: a saída acima. O Milho começa com 30 (pelo Coco),
-//    cai para 15 (pelo Pastel) e termina em 11 (pelo Açaí).
-//
 // Escreva sua resposta abaixo:
 
 #include <limits.h>

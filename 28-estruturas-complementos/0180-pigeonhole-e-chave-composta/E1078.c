@@ -18,13 +18,6 @@
 //    -3 Bom Jardim
 //    -5 Sao Joaquim
 //
-// Dicas:
-// 1. Vetores primeiro[14] e ultimo[14] e um prox[n] (malloc): o aluno i
-//    entra no fim da fila da sua casa.
-// 2. Para a ordem decrescente, só o laço de esvaziar muda: de c = 13 até 0.
-//    A estabilidade continua (Gramado, Lages, Canela na ordem de chegada).
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -12,13 +12,6 @@
 //   Carro 3 (12.0 h): R$ 20.00
 //   Total do dia: R$ 34.00
 //
-// Dicas:
-// 1. "Hora ou fração" é arredondar para cima: ceil(horas - 2) dá as horas extras.
-// 2. Use dois return: um para até 2 horas e outro para o resto. No resto,
-//    se a conta passar de 20, devolva 20.
-// 3. Resposta esperada: 3.2 h são 2 h + 1.2 h extra, que viram 2 horas
-//    cobradas: 5 + 4 = 9. Com 12 h a conta daria 25, mas o teto é 20. Total 34.
-//
 // Escreva sua resposta abaixo:
 
 #include <math.h>

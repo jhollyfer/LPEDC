@@ -18,13 +18,6 @@
 //   dobrou: m = 128 (n = 64)
 //   fim: n = 100, m = 128, fator de carga 0.78, maior lista 2
 //
-// Dicas:
-// 1. A struct da tabela guarda Item **balde, int p e int n. Os baldes vêm
-//    de calloc((size_t)1 << p, sizeof(Item *)).
-// 2. Na dobra, ande em cada lista velha guardando o prox antes de religar o
-//    nó no balde novo; no fim, free no vetor velho (os nós continuam vivos).
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdint.h>

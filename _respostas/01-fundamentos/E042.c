@@ -5,7 +5,6 @@
 
 int main(void) {
     int n;
-    printf("Número: ");
     scanf("%d", &n);
 
     int unidade = n % 10;       // 472 -> 2

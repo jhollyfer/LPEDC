@@ -19,15 +19,6 @@
 //     1000     2000000     498289
 //    10000   200000000    6643856
 //
-// Dicas:
-// 1. log2() está em <math.h> (o rodar já liga com -lm). Faça as contas em
-//    double.
-// 2. Um laço n = 2, 3, 4, ... que para (break) no primeiro n em que
-//    50 * n * log2(n) < 2.0 * n * n.
-// 3. Mostre os doubles com %.0f para arredondar.
-// 4. Resposta esperada: n = 190. Para listas com menos de 190 entregas, o
-//    "pior" algoritmo é o mais rápido. Com 10000, B é 30 vezes mais rápido.
-//
 // Escreva sua resposta abaixo:
 
 #include <math.h>

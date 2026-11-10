@@ -17,18 +17,6 @@
 //   bolsa: boa(2) bola(1) bolo(2)
 //   mercadorias: nenhuma
 //
-// Dicas:
-// 1. A linha da raiz (prefixo vazio) é 0, 1, 2, ..., m (m = strlen(alvo)).
-//    Para o filho com a letra c, a linha nova é lin[0] = ant[0] + 1 e, para
-//    j de 1 a m, lin[j] = o menor entre ant[j - 1] + (alvo[j - 1] != c),
-//    ant[j] + 1 e lin[j - 1] + 1.
-// 2. Na função recursiva, receba a linha do pai (const int ant[]), monte a
-//    sua num vetor local e passe para os filhos. Se o nó tem fim e lin[m] <= 2,
-//    mostre a palavra do buffer. Se o menor valor de lin passar de 2, volte.
-// 3. Resposta esperada: a saída acima. Em "jnaela", trocar duas letras
-//    vizinhas de lugar custa 2 na distância de Levenshtein, mas é UMA edição no
-//    cor_sugere (que testa a troca de vizinhas à parte).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

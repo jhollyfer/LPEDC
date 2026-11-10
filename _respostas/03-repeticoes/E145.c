@@ -9,7 +9,7 @@ int main(void) {
     int acima = 0;
 
     for (int i = 1; i <= 5; i++) {
-        printf("Nota %d: ", i);
+        printf("Nota %d:\n", i);
         if (scanf("%lf", &nota) != 1) {
             return 1;
         }

@@ -17,12 +17,6 @@
 //   83: h2 = 11 -> posição 14, 2 sondagens
 //   tabela: . . . 3 . . 19 . 35 . 51 . 67 . 83 .
 //
-// Dicas:
-// 1. A posição da i-ésima sondagem é (h1(k) + i * h2(k)) % 16.
-// 2. Com sondagem linear, os seis ocupariam as posições 3 a 8 e o último
-//    faria 6 sondagens.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -19,12 +19,6 @@
 //   caio no índice 2
 //   bruno no índice -1
 //
-// Dicas:
-// 1. O endereço do i-ésimo: (const unsigned char *)v + i * tam.
-// 2. Para as strings, cada elemento é um const char *: a função igual
-//    recebe endereços de const char * e usa strcmp.
-// 3. Resposta esperada: índices 1, 2, 2 e -1 (bruno não está).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

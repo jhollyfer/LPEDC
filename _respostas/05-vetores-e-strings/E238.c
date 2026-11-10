@@ -13,7 +13,6 @@ int main(void) {
     bool valido = true;
     int c;
 
-    printf("CEP: ");
     while ((c = getchar()) != '\n' && c != EOF) {
         if (isdigit(c)) {
             if (quantos < DIGITOS) {

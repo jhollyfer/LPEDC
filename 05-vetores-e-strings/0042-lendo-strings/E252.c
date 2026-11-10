@@ -20,16 +20,6 @@
 //   pedaço 3: [uva\n] fim da linha 2 (3 letras)
 //   3 leituras, 2 linhas
 //
-// Dicas:
-// 1. Com 6 bytes, cada fgets lê no máximo 5 caracteres (sobra 1 para o
-//    '\0'). Ele para no '\n' (e o guarda) ou quando enche.
-// 2. Use n = strcspn(s, "\n"): se s[n] == '\n', o pedaço fecha uma linha.
-//    Mostre só os n primeiros caracteres com printf("%.*s", n, s) (n como
-//    int) e escreva o \n à mão com "\\n".
-// 3. Some n numa variável a cada pedaço; quando a linha fechar, mostre e
-//    zere.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (mude o programa):
 
 #include <stdio.h>

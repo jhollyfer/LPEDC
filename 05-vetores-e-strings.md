@@ -262,86 +262,37 @@ Dia 2: 23 graus
 Dia 1: 19 graus
 ```
 
-**Dicas:**
-
-1. int max[7] = {19, 23, ...}; o último índice é 6.
-2. O laço pode descer: for (int i = 6; i >= 0; i--).
-3. O dia é o índice + 1.
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E217.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E217 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E217
 ```
 
-**Exercício E218** · ★☆☆
+**Exercício E219** · ★★☆
 
-Declare os dois vetores abaixo e escreva o código que mostra as quatro
-linhas da saída esperada. Nada de digitar os valores no printf: tudo tem de
-sair das gavetas, de laços e do sizeof.
-
-
-```text
-int a[5] = {4, 2};
-int b[] = {7, 8, 9};
-```
-
+Um professor quer saber quem ficou acima da média da turma. Leia as notas de
+5 alunos (números reais), calcule a média e liste o número do aluno (1 a 5)
+e a nota de quem ficou ACIMA dela, com uma casa decimal. Se o scanf falhar,
+mostre "Entrada inválida." e termine com return 1.
 
 
 ```text
-1. Mostre as 5 gavetas de a, com o índice de cada uma.
-2. Mostre quantos itens b tem, calculado com sizeof.
-3. Com i indo de 4 a 8, mostre b[i % 3]: o resto faz o índice dar a volta
-   e nunca passar da última gaveta.
-4. Guarde b[0] + b[1] em b[0] e mostre o novo b[0].
+Entrada:
+7.5
+4
+9
+6
+8.5
 ```
 
 
 
 ```text
 Saída esperada:
-a[0]=4 a[1]=2 a[2]=0 a[3]=0 a[4]=0
-b tem 3 itens
-De 4 a 8: 8 9 7 8 9
-Novo b[0]: 15
-```
-
-**Dicas:**
-
-1. Na inicialização parcial, as gavetas que faltam viram 0.
-2. sizeof(b) / sizeof(b[0]) devolve size_t: mostre com %zu.
-3. 4 % 3 é 1, 5 % 3 é 2, 6 % 3 é 0...
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E218.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E218 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E218
-```
-
-**Exercício E219** · ★★☆
-
-Um professor quer saber quem ficou acima da média da turma. Leia as notas
-de 5 alunos (números reais), calcule a média e liste o número do aluno (1 a
-5) e a nota de quem ficou ACIMA dela. Se o scanf falhar, mostre "Entrada
-inválida." e termine com return 1.
-
-
-```text
-Exemplo de execução:
-Nota do aluno 1: 7.5
-Nota do aluno 2: 4
-Nota do aluno 3: 9
-Nota do aluno 4: 6
-Nota do aluno 5: 8.5
 Média da turma: 7.00
 Acima da média:
 Aluno 1: 7.5
 Aluno 3: 9.0
 Aluno 5: 8.5
 ```
-
-**Dicas:**
-
-1. Você precisa de duas passadas: uma para ler e somar, outra para
-   comparar com a média. É por isso que as notas vão para um vetor.
-2. scanf("%lf", &notas[i]) devolve 1 quando deu certo.
-3. Resposta esperada (com as notas acima): média 7.00 e os alunos 1, 3 e 5.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E219.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E219 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E219
@@ -371,43 +322,8 @@ Nota 2: * (1)
 Nota 1: * (1)
 ```
 
-**Dicas:**
-
-1. int contagem[6] = {0}; e ignore a posição 0: assim contagem[5] é a nota 5.
-2. contagem[avaliacoes[i]]++ soma 1 na gaveta daquela nota.
-3. Para desenhar, um laço dentro do outro (assunto 0024).
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E220.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E220 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E220
-```
-
-**Exercício E221** · ★★★
-
-Este programa deveria mostrar a máxima e a mínima de uma madrugada fria em
-São Joaquim (SC), medidas em 6 horários. Ele tem DOIS erros de propósito.
-Rode com o rodar: o AddressSanitizer vai acusar um deles. O outro não dá
-erro nenhum, só resultado errado. Conserte os dois no código abaixo e rode
-de novo até a saída bater com a esperada.
-
-
-```text
-Saída esperada depois do conserto:
-Máxima: -1 graus
-Mínima: -6 graus
-```
-
-**Dicas:**
-
-1. Leia o relatório: "index 6 out of bounds for type 'int [6]'" e
-   "stack-buffer-overflow" apontam a mesma linha. Qual?
-2. Quantas vezes o laço roda? Quais índices existem num vetor de 6?
-3. Todas as temperaturas são negativas. Alguma delas é maior que 0?
-4. Resposta esperada: o laço usa i <= 6 e lê temps[6], que não existe
-   (troque por i < 6); e maior começa em 0, que nenhuma temperatura supera,
-   então a máxima sairia 0 (comece maior e menor com temps[0]).
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E221.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E221 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E221
 ```
 
 **Exercício E222** · ★★★
@@ -434,14 +350,6 @@ Saída esperada:
 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
 15 primos até 50
 ```
-
-**Dicas:**
-
-1. Use o stdbool.h e bool primo[N + 1]; preencha com um laço (a
-   inicialização {true} só põe true na primeira posição!).
-2. O laço de dentro anda de p em p: for (int m = p * p; m <= N; m += p).
-3. Por que começar em p * p? Os múltiplos menores (2p, 3p...) já foram
-   riscados pelos primos menores que p.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0037-vetores/E222.c -o ~/LPEDC/05-vetores-e-strings/0037-vetores/E222 && ~/LPEDC/05-vetores-e-strings/0037-vetores/E222
@@ -687,44 +595,8 @@ Gols no campeonato: 16
 Média por rodada: 2.00
 ```
 
-**Dicas:**
-
-1. Na chamada vai só o nome do vetor: soma(gols, 8).
-2. media pode chamar soma e dividir por n; cuidado com a divisão inteira
-   (assunto 0008).
-3. Resposta esperada: 16 gols e média 2.00.
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E223.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E223 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E223
-```
-
-**Exercício E224** · ★☆☆
-
-Complete as duas funções. O main já está pronto: ele prepara as 10 vagas de
-um estacionamento (0 = livre), ocupa algumas e mostra o mapa.
-
-
-```text
-preencher(v, n, valor)  põe valor em todas as n posições
-mostrar(v, n)           mostra as posições separadas por espaço e quebra
-                        a linha no fim
-```
-
-
-
-```text
-Saída esperada:
-0 0 0 0 0 0 0 0 0 0
-1 0 0 1 0 0 0 1 1 0
-```
-
-**Dicas:**
-
-1. preencher altera o vetor do main; mostrar só lê, então merece const.
-2. O for das duas é igual: de 0 a n - 1.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E224.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E224 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E224
 ```
 
 **Exercício E225** · ★★☆
@@ -752,13 +624,6 @@ dentro: v = 100 30 3, x = 30
 fora: a = 100 30 3
 depois de vezes_dez: a = 100 30 30
 ```
-
-**Dicas:**
-
-1. v recebe o endereço de a: v[0] e a[0] são a mesma gaveta.
-2. x recebe uma cópia: mudar x não muda b, nem a[2].
-3. Para mudar a[2] dentro de uma função, mande o vetor e a posição, não o
-   valor da gaveta.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E225.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E225 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E225
@@ -795,52 +660,8 @@ Média mensal: R$ 168.16
 Meses acima da média: 7
 ```
 
-**Dicas:**
-
-1. indice_do_maior devolve a POSIÇÃO (0 a 11), não o valor; o main soma 1
-   para mostrar o mês.
-2. contar_acima não precisa saber o que é média: ela recebe um limite
-   qualquer. Isso deixa a função reaproveitável.
-3. Resposta esperada: a saída acima (o total do ano é R$ 2017.95).
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E226.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E226 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E226
-```
-
-**Exercício E227** · ★★★
-
-O programa abaixo deveria somar as 6 doações de uma vaquinha online
-(R$ 50 + 20 + 100 + 35 + 15 + 80 = R$ 300), mas mostra outro valor. Ele
-tem UM erro de propósito, e o gcc até avisa: rode com o rodar e leia o
-aviso (warning) com calma.
-
-
-```text
-1. Rode e veja o total errado que ele mostra.
-2. Conserte o código, sem mudar o main mais do que o necessário, e rode
-   de novo até a saída bater com a esperada.
-```
-
-
-
-```text
-Saída esperada depois do conserto:
-Total arrecadado: R$ 300
-```
-
-**Dicas:**
-
-1. O aviso fala em "sizeof on array function parameter". O que a função
-   recebe de verdade: o vetor ou o endereço dele?
-2. Num PC de 64 bits, um endereço tem 8 bytes e um int tem 4.
-3. Resposta esperada: dentro da função, sizeof(doacoes) é o tamanho de um
-   endereço (8), não do vetor (24). A conta 8 / 4 dá 2, e o laço soma só
-   50 + 20 = 70. Conserto: receber o tamanho num parâmetro, int total(const
-   int doacoes[], int n), e no main calcular n com sizeof, onde o vetor foi
-   declarado.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E227.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E227 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E227
 ```
 
 **Exercício E228** · ★★★
@@ -868,14 +689,6 @@ Saída esperada:
 55 44 33 22 11
 33 22 11 55 44
 ```
-
-**Dicas:**
-
-1. Trocar duas gavetas pede uma variável auxiliar (aux = a; a = b; b = aux).
-2. Em inverter, o laço vai só até a metade: i < n / 2, trocando v[i] com
-   v[n - 1 - i]. Se for até n, você inverte duas vezes e volta ao começo!
-3. Em rotacionar, guarde v[0] antes de deslizar as outras e ponha no fim.
-4. Teste com n ímpar e par: a do meio, quando existe, fica no lugar.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E228.c -o ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E228 && ~/LPEDC/05-vetores-e-strings/0038-vetores-e-funcoes/E228
@@ -1133,53 +946,8 @@ Diagonal principal: 15
 Diagonal secundária: 15
 ```
 
-**Dicas:**
-
-1. Na diagonal principal, linha e coluna são iguais: m[i][i].
-2. Na secundária, linha + coluna = 2: m[i][2 - i].
-3. Para isso, um laço só basta.
-4. Resposta esperada: a saída acima (2 + 5 + 8 e 6 + 5 + 4).
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E229.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E229 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E229
-```
-
-**Exercício E230** · ★☆☆
-
-Declare as duas matrizes abaixo e mostre-as inteiras, em forma de grade,
-para ver onde o compilador pôs os zeros. O número de linhas de b não está
-escrito em lugar nenhum: calcule com sizeof e use no laço. No fim, mostre
-quantos bytes a ocupa e quantos ocupa uma linha dela.
-
-
-```text
-int a[2][3] = {{1}, {4, 5}};
-int b[][2] = {{1, 2}, {3, 4}, {5}};
-```
-
-
-
-```text
-Saída esperada:
-a (2x3):
-1 0 0
-4 5 0
-b (3 linhas):
-1 2
-3 4
-5 0
-a: 24 bytes, uma linha: 12 bytes
-```
-
-**Dicas:**
-
-1. Com chaves internas, cada chave é uma linha; o que falta vira 0.
-2. sizeof(b) / sizeof(b[0]) é o número de linhas: o tamanho da matriz
-   dividido pelo de uma linha. Guarde num int.
-3. sizeof(a[0]) é o tamanho de uma linha de a. Mostre com %zu.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E230.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E230 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E230
 ```
 
 **Exercício E231** · ★★☆
@@ -1209,11 +977,6 @@ Transposta (3x2):
 25 30
 60 55
 ```
-
-**Dicas:**
-
-1. A transposta tem as dimensões trocadas: int t[3][2].
-2. Dois laços aninhados sobre a original, com a atribuição do enunciado dentro.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E231.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E231 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E231
@@ -1249,45 +1012,8 @@ E X . . X X .  livres: 3
 Melhor fileira: B
 ```
 
-**Dicas:**
-
-1. A letra da fileira é 'A' + f (um char é um número; você vai ver isso no
-   próximo assunto). printf("%c", 'A' + f) mostra A, B, C...
-2. Conte os livres dentro do laço das colunas e compare com o melhor até
-   agora no laço das linhas (padrão maior, assunto 0025).
-3. Use > (e não >=) para ficar com a primeira em caso de empate.
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E232.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E232 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E232
-```
-
-**Exercício E233** · ★★★
-
-Dois alunos fizeram 4 provas cada (uma linha por aluno, uma coluna por
-prova). O programa deveria mostrar a média de cada aluno, mas tem DOIS erros
-de propósito. Rode com o rodar: o sanitizer acusa um deles. O outro só dá
-resultado errado. Conserte os dois no código abaixo e rode de novo até a
-saída bater com a esperada.
-
-
-```text
-Saída esperada depois do conserto:
-Aluno 1: média 7.50
-Aluno 2: média 7.25
-```
-
-**Dicas:**
-
-1. Quantas linhas e quantas colunas a matriz tem? E até onde vai cada laço?
-2. Mesmo com os laços certos, o aluno 1 sairia com média 7.00. Por quê?
-   (assunto 0007: divisão inteira)
-3. Resposta esperada: os limites estão trocados (o laço dos alunos vai até
-   4 e lê notas[2], notas[3]: linhas que não existem; o das provas vai só
-   até 2); e soma / 4 é divisão de int por int, que joga fora o ,50
-   (use soma / 4.0).
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E233.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E233 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E233
 ```
 
 **Exercício E234** · ★★★
@@ -1314,18 +1040,6 @@ Saída esperada:
 * * 2 2 2
 2 2 1 1 *
 ```
-
-**Dicas:**
-
-1. Para cada casa (l, c), percorra as vizinhas com dois laços: i de l - 1 a
-   l + 1 e j de c - 1 a c + 1.
-2. Na borda, algumas vizinhas não existem (l - 1 = -1, por exemplo). Pule
-   com um if: só conte se 0 <= i < 4 e 0 <= j < 5. Sem isso, você lê fora da
-   matriz, e o sanitizer avisa.
-3. A própria casa entra nos dois laços; como ela não é bomba (senão você
-   nem estaria contando), não atrapalha.
-4. Escreva uma função
-   int vizinhas(int campo[][COLUNAS], int l, int c) para deixar o main limpo.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0039-matrizes/E234.c -o ~/LPEDC/05-vetores-e-strings/0039-matrizes/E234 && ~/LPEDC/05-vetores-e-strings/0039-matrizes/E234
@@ -1563,54 +1277,8 @@ Saída esperada:
 Hi!
 ```
 
-**Dicas:**
-
-1. O mesmo valor com %c mostra o símbolo e com %d mostra o código.
-2. Para mostrar o apóstrofo, ele vai dentro das aspas duplas: "'%c' = %d\n".
-3. putchar(72) ou printf("%c", 72) mostram a letra do código 72.
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E235.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E235 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E235
-```
-
-**Exercício E236** · ★☆☆
-
-Escreva um programa que chegue a cada resultado abaixo fazendo a CONTA com
-os caracteres. Vale usar 'a', 'C', '7' e companhia; não vale escrever o
-resultado pronto (nada de printf("b") ou do número 32 digitado).
-
-
-```text
-1. A letra que vem depois de 'a'.
-2. O valor numérico do caractere '7'.
-3. O 'C' em minúscula, somando a distância entre 'a' e 'A' (sem tolower).
-4. Se 'B' vem antes de 'a' na tabela: mostre "sim" ou "não".
-5. toupper('5') e tolower('Q').
-6. Quantas letras existem de 'a' até 'z'.
-```
-
-
-
-```text
-Saída esperada:
-Depois de a: b
-'7' vale 7
-C em minúscula: c
-'B' antes de 'a'? sim
-toupper('5') = 5, tolower('Q') = q
-Letras de a a z: 26
-```
-
-**Dicas:**
-
-1. 'a' é 97, 'A' é 65, '0' é 48. Um char entra em conta como qualquer int.
-2. 'a' + 1 com %c mostra a letra; '7' - '0' com %d mostra o número.
-3. Toda maiúscula vem ANTES de toda minúscula na tabela: 'B' < 'a' é
-   verdadeiro.
-4. toupper de algo que não é letra devolve o mesmo caractere.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E236.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E236 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E236
 ```
 
 **Exercício E237** · ★★☆
@@ -1635,14 +1303,6 @@ Cifrada: CHEUD DCXO
 Decifrada: ZEBRA AZUL
 ```
 
-**Dicas:**
-
-1. Transforme a letra numa posição de 0 a 25: p = c - 'A'.
-2. Ande e dê a volta com o resto: p = (p + K) % 26. Depois volte: c = 'A' + p.
-3. Para decifrar, ande 26 - K para frente (é o mesmo que K para trás, sem
-   risco de resto negativo).
-4. O vetor tem 10 itens e não é uma string: mostre com putchar num laço.
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E237.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E237 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E237
 ```
@@ -1664,70 +1324,33 @@ getchar, até o Enter (ou EOF), e:
 
 
 ```text
-Exemplo de execução (válido):
-CEP: 69050-010
+Entrada:
+69050-010
+```
+
+
+
+```text
+Saída esperada:
 CEP válido: 69050010
 ```
 
 
 
 ```text
-Exemplo de execução (inválido):
-CEP: 6905-00100
+Entrada:
+6905-00100
+```
+
+
+
+```text
+Saída esperada:
 CEP inválido.
 ```
 
-**Dicas:**
-
-1. int c; while ((c = getchar()) != '\n' && c != EOF) { ... }
-2. Conte os dígitos, mas só guarde no vetor enquanto couber (contador < 8).
-   Se você guardar sem olhar, um CEP de 12 dígitos escreve fora do vetor.
-3. isdigit(c) responde se é dígito.
-4. Resposta esperada: as duas execuções acima ("6905-00100" tem 9 dígitos).
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E238.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E238 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E238
-```
-
-**Exercício E239** · ★★★
-
-O programa abaixo deveria contar as letras de uma senha guardada num vetor
-de char. A senha tem 4 letras (a, B, z, Q), mas ele mostra outro número. O
-código compila sem aviso e roda sem erro do sanitizer: o erro é de lógica,
-de propósito.
-
-
-```text
-1. Dentro do if, acrescente um printf que mostre cada caractere contado e
-   o código dele ("contou: _ (95)"). Rode e veja quem entrou sem ser
-   letra.
-2. Conserte o teste com isalpha e rode.
-3. Troque por uma versão sem o ctype.h (só comparações com a tabela
-   ASCII), rode de novo e confira que dá o mesmo resultado.
-```
-
-
-
-```text
-Saída esperada depois do conserto (com o printf do passo 1):
-contou: a (97)
-contou: B (66)
-contou: z (122)
-contou: Q (81)
-Letras na senha: 4
-```
-
-**Dicas:**
-
-1. Olhe a tabela ASCII entre o 'Z' (90) e o 'a' (97).
-2. Quais caracteres da senha estão nesse buraco?
-3. Resposta esperada: antes do conserto, mostra 7. O teste
-   c >= 'A' && c <= 'z' aceita '_' (95), '[' (91) e '^' (94), que ficam
-   entre 'Z' e 'a'. Conserto: isalpha(c) ou
-   (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'), e a saída acima.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E239.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E239 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E239
 ```
 
 **Exercício E240** · ★★★
@@ -1757,14 +1380,6 @@ meu_toupper('q') = Q
 meu_toupper('7') = 7
 Diferenças em 128 códigos: 0
 ```
-
-**Dicas:**
-
-1. meu_isdigit: return c >= '0' && c <= '9';
-2. meu_toupper: se for minúscula, return c - ('a' - 'A'); (isso é 32).
-3. Para comparar a verdade: (isdigit(c) != 0) != meu_isdigit(c).
-4. Se der diferente de 0, mostre o
-   código que falhou e procure o erro.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0040-caracteres/E240.c -o ~/LPEDC/05-vetores-e-strings/0040-caracteres/E240 && ~/LPEDC/05-vetores-e-strings/0040-caracteres/E240
@@ -1992,54 +1607,8 @@ Saída esperada:
 strlen = 6, sizeof = 7
 ```
 
-**Dicas:**
-
-1. O laço pode ir até sizeof(cidade) - 1, que inclui o '\0'.
-2. Para escrever uma barra invertida no printf, use "\\".
-3. strlen devolve size_t: mostre com %zu (sizeof também).
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E241.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E241 && ~/LPEDC/05-vetores-e-strings/0041-strings/E241
-```
-
-**Exercício E242** · ★☆☆
-
-Escreva um programa que mostre as seis linhas abaixo. Os números saem de
-strlen e sizeof, nunca digitados à mão.
-
-
-```text
-1. Declare char s[10] = "pastel"; e mostre strlen e sizeof de s.
-2. Mostre quantos bytes o literal "verde" ocupa (sizeof("verde")).
-3. Faça s[4] = '\0'; e mostre s e o novo strlen.
-4. Escreva void ordem(const char a[], const char b[]), que usa strcmp
-   para mostrar qual das duas vem antes, e chame com os três pares:
-   "abc" e "abd", "Zebra" e "abelha", "casa" e "casamento".
-```
-
-
-
-```text
-Saída esperada:
-pastel: strlen 6, sizeof 10
-"verde" ocupa 6 bytes
-cortada: past (4)
-abc vem antes de abd
-Zebra vem antes de abelha
-casa vem antes de casamento
-```
-
-**Dicas:**
-
-1. sizeof de um literal conta o '\0'; strlen não. Os dois devolvem size_t:
-   use %zu.
-2. Para mostrar aspas dentro do printf, use \".
-3. Em ordem, olhe só o sinal: strcmp(a, b) < 0 quer dizer que a vem antes.
-   'Z' é 90 e 'a' é 97; quando uma string acaba antes, o '\0' (0) é menor
-   que qualquer letra.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E242.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E242 && ~/LPEDC/05-vetores-e-strings/0041-strings/E242
 ```
 
 **Exercício E243** · ★★☆
@@ -2072,13 +1641,6 @@ igual a "joao.silva"? sim
 "ana" antes de "bia"? sim
 "bia" antes de "bianca"? sim
 ```
-
-**Dicas:**
-
-1. meu_strcat: ache o '\0' de dest (use meu_strlen) e copie orig a partir
-   dali, sem esquecer de pôr o '\0' no fim.
-2. meu_strcmp: avance enquanto a[i] == b[i] e a[i] != '\0'. Quando parar,
-   devolva a[i] - b[i]. Se as duas acabaram juntas, isso dá 0.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E243.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E243 && ~/LPEDC/05-vetores-e-strings/0041-strings/E243
@@ -2114,48 +1676,8 @@ Osso: sim
 A: sim
 ```
 
-**Dicas:**
-
-1. Dois índices: i começa em 0 e j em strlen(s) - 1. Compare, e ande com
-   os dois para o meio enquanto i < j.
-2. Compare tolower(s[i]) com tolower(s[j]).
-3. palavras[k] é a linha k da matriz: uma string que você passa para a
-   função como qualquer outra.
-4. Desafio extra: ignore também os
-   espaços e teste com "Anotaram a data da maratona".
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E244.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E244 && ~/LPEDC/05-vetores-e-strings/0041-strings/E244
-```
-
-**Exercício E245** · ★★★
-
-O programa abaixo monta o endereço "Rio de Janeiro - RJ" e confere a
-cidade. Ele tem TRÊS erros de propósito. Dois o compilador avisa (leia os
-warnings!). O terceiro não gera aviso nenhum: só o sanitizer pega, e só
-depois que você conserta os outros dois. Conserte os três no código
-abaixo e rode de novo até a saída bater com a esperada.
-
-
-```text
-Saída esperada depois do conserto:
-Rio de Janeiro - RJ
-Cidade conferida.
-```
-
-**Dicas:**
-
-1. Quantos bytes "RJ" precisa? E quantos o vetor uf tem?
-2. Quantos bytes "Rio de Janeiro - RJ" precisa? Cabe em local[10]?
-3. O que o == compara quando os dois lados são strings?
-4. Resposta esperada: char uf[2] = "RJ" não tem lugar para o '\0' (o C
-   aceita sem avisar, e o %s lê além do vetor): use uf[3] ou uf[];
-   local[10] não cabe os 20 bytes do endereço (estouro no strcat, que o
-   gcc percebe com -Wstringop-overflow): use local[30]; cidade == "Rio" compara endereços, não texto (o gcc avisa):
-   use strcmp(cidade, "Rio") == 0.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E245.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E245 && ~/LPEDC/05-vetores-e-strings/0041-strings/E245
 ```
 
 **Exercício E246** · ★★★
@@ -2184,16 +1706,6 @@ Saída esperada:
 [  O Senhor   Dos Aneis ]
 4 palavras
 ```
-
-**Dicas:**
-
-1. Guarde num bool se o caractere anterior era espaço (comece com true:
-   antes do texto é como se houvesse um espaço).
-2. Se o atual não é espaço e o anterior era: começou uma palavra. Conte e
-   use toupper. Se não é espaço e o anterior também não era: tolower.
-3. Percorra até o '\0', não até sizeof.
-4. Resposta esperada: a saída acima (os colchetes mostram que os espaços
-   das pontas continuam lá).
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0041-strings/E246.c -o ~/LPEDC/05-vetores-e-strings/0041-strings/E246 && ~/LPEDC/05-vetores-e-strings/0041-strings/E246
@@ -2397,31 +1909,6 @@ gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/A084.c -o ~/LPEDC/05-vetores
 
 #### Exercícios
 
-**Exercício E247** · ★☆☆
-
-Leia o nome da cidade onde a pessoa mora com fgets (o nome pode ter
-espaços), tire o '\n' com strcspn e mostre a frase abaixo. Se o fgets
-devolver NULL, mostre "Nada foi digitado." e termine com return 1.
-
-
-```text
-Exemplo de execução:
-Cidade: Porto Alegre
-Você mora em Porto Alegre (12 caracteres).
-```
-
-**Dicas:**
-
-1. char cidade[50]; fgets(cidade, sizeof(cidade), stdin)
-2. cidade[strcspn(cidade, "\n")] = '\0';
-3. Teste sem tirar o '\n': o ponto final pula para a linha de baixo e o
-   strlen conta 13. É o sinal de que o '\n' ficou lá.
-4. Resposta esperada: a execução acima.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E247.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E247 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E247
-```
-
 **Exercício E248** · ★☆☆
 
 O programa abaixo faz três leituras seguidas da mesma linha: dois scanf e um
@@ -2447,41 +1934,30 @@ fgets: 8 com o '\n', limpo: [a Souza] (7)
 Para testar sem digitar: printf 'Maria Clara Souza\n' | ~/LPEDC/rodar
 seguido do caminho deste arquivo.
 
-**Dicas:**
-
-1. O %s para no primeiro espaço; %4s lê no máximo 4 caracteres.
-2. O que o scanf não leu continua na entrada, esperando a próxima leitura.
-   Cada %s pula os espaços antes de ler; o fgets não pula nada.
-3. O fgets pega o resto da linha do ponto exato em que o scanf parou, com
-   o '\n' no fim. Guarde o strlen num size_t antes do strcspn.
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E248.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E248 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E248
 ```
 
 **Exercício E249** · ★★☆
 
-Este programa lê a quantidade de ingressos e o nome do comprador. Rode
-digitando 2 e Enter: ele nem espera você digitar o nome, e mostra o
-comprador vazio. O erro é de propósito. Conserte o código e rode de novo
-até a execução bater com a esperada.
+Leia a quantidade de ingressos (um inteiro, com scanf) e, na linha seguinte,
+o nome completo do comprador (pode ter espaços, use fgets e tire o '\n').
+Depois mostre a quantidade e o nome. Cuidado: o '\n' que sobra depois do
+scanf não pode atrapalhar a leitura do nome.
 
 
 ```text
-Exemplo de execução depois do conserto:
-Quantidade de ingressos: 2
-Nome do comprador: Ana Lima
-2 ingresso(s) para Ana Lima
+Entrada:
+2
+Ana Lima
 ```
 
-**Dicas:**
 
-1. O scanf("%d") lê o 2. E o Enter que você apertou depois do 2?
-2. O fgets para no primeiro '\n' que encontrar.
-3. Resposta esperada: o scanf deixa o '\n' na entrada; o fgets lê esse
-   '\n' na hora e devolve uma linha vazia. Conserto: depois do scanf,
-   descarte o resto da linha com
-   int c; while ((c = getchar()) != '\n' && c != EOF) {}
+
+```text
+Saída esperada:
+2 ingresso(s) para Ana Lima
+```
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E249.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E249 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E249
@@ -2496,16 +1972,28 @@ Se nenhuma falhar, mostre "Senha forte.".
 
 
 ```text
-Exemplo de execução 1:
-Senha: banana12
+Entrada:
+banana12
+```
+
+
+
+```text
+Saída esperada:
 Falta: letra maiúscula
 ```
 
 
 
 ```text
-Exemplo de execução 2:
-Senha: abc
+Entrada:
+abc
+```
+
+
+
+```text
+Saída esperada:
 Falta: 8 caracteres (tem 3)
 Falta: letra maiúscula
 Falta: dígito
@@ -2514,67 +2002,19 @@ Falta: dígito
 
 
 ```text
-Exemplo de execução 3:
-Senha: Pao de Queijo 1
-Senha forte.
+Entrada:
+Pao de Queijo 1
 ```
 
-**Dicas:**
-
-1. Um laço até o '\0' com três bool: tem_maiuscula, tem_minuscula,
-   tem_digito. Use isupper, islower e isdigit.
-2. O tamanho vem do strlen DEPOIS de tirar o '\n'.
-3. Guarde num bool se alguma regra falhou, para decidir o "Senha forte.".
-4. Resposta esperada: as três execuções acima.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250
-```
-
-**Exercício E251** · ★★★
-
-Monte uma lista de compras. Leia até 5 itens, um por linha, com fgets,
-guardando cada um numa linha da matriz char itens[5][16] (até 15
-caracteres por item). A leitura para numa linha vazia, no fim da entrada
-(EOF) ou quando a lista enche.
-
-Se a pessoa digitar um item com mais de 15 caracteres, guarde só o que
-coube, mostre "(cortado)" e jogue fora o resto da linha: senão o resto vira
-o próximo item!
-
-No fim, mostre a lista numerada e qual item vem primeiro em ordem
-alfabética.
 
 
 ```text
-Exemplo de execução:
-Item: leite
-Item: feijao preto
-Item: arroz
-Item: detergente de coco neutro
-(cortado)
-Item:
-Lista com 4 itens:
-1. leite
-2. feijao preto
-3. arroz
-4. detergente de c
-Primeiro em ordem alfabética: arroz
+Saída esperada:
+Senha forte.
 ```
 
-**Dicas:**
-
-1. fgets(itens[n], sizeof(itens[n]), stdin): cada linha da matriz é uma
-   string de 16 bytes.
-2. Depois do fgets, procure o '\n' com strcspn. Se achou, troque por '\0'.
-   Se não achou, a linha não coube: descarte o resto com o laço do getchar.
-3. Linha vazia: depois de tirar o '\n', strlen(itens[n]) == 0.
-4. Para o primeiro em ordem alfabética, guarde o ÍNDICE do menor e compare
-   com strcmp(itens[i], itens[menor]) < 0.
-5. Resposta esperada: a execução acima.
-
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E251.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E251 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E251
+gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E250
 ```
 
 **Exercício E252** · ★★★
@@ -2604,16 +2044,6 @@ pedaço 2: [xi\n] fim da linha 1 (7 letras)
 pedaço 3: [uva\n] fim da linha 2 (3 letras)
 3 leituras, 2 linhas
 ```
-
-**Dicas:**
-
-1. Com 6 bytes, cada fgets lê no máximo 5 caracteres (sobra 1 para o
-   '\0'). Ele para no '\n' (e o guarda) ou quando enche.
-2. Use n = strcspn(s, "\n"): se s[n] == '\n', o pedaço fecha uma linha.
-   Mostre só os n primeiros caracteres com printf("%.*s", n, s) (n como
-   int) e escreva o \n à mão com "\\n".
-3. Some n numa variável a cada pedaço; quando a linha fechar, mostre e
-   zere.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E252.c -o ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E252 && ~/LPEDC/05-vetores-e-strings/0042-lendo-strings/E252
@@ -2900,35 +2330,6 @@ gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/A086.c -o ~/LPEDC/05-vetores
 
 #### Exercícios
 
-**Exercício E253** · ★☆☆
-
-Leia uma frase com fgets e conte quantas vezes aparece cada vogal, sem
-diferenciar maiúscula de minúscula. Guarde as contagens num vetor de 5 int
-e use a string "aeiou" para saber qual vogal é qual.
-
-
-```text
-Exemplo de execução:
-Frase: O Rato Roeu A Roupa Do Rei De Roma
-a: 4
-e: 3
-i: 1
-o: 6
-u: 2
-```
-
-**Dicas:**
-
-1. char vogais[] = "aeiou"; e int contagem[5] = {0};
-2. Para cada caractere da frase (até o '\0'), passe por tolower e compare
-   com vogais[0] a vogais[4]. Achou em k? contagem[k]++.
-3. Não precisa tirar o '\n': ele não é vogal. Mas tirar é um bom hábito.
-4. Resposta esperada: a execução acima.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E253.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E253 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E253
-```
-
 **Exercício E254** · ★☆☆
 
 Complete as funções para mostrar a tabela de artilheiros do campeonato do
@@ -2946,15 +2347,6 @@ Lia            9
 Total:        33
 Artilheiro: Duda
 ```
-
-**Dicas:**
-
-1. printf("%-10s%6d\n", nomes[i], gols[i]) alinha o nome à esquerda em 10
-   colunas e o número à direita em 6.
-2. indice_artilheiro é o padrão "posição do maior" do assunto 0038.
-3. O "Kauã" tem um acento: em UTF-8 são 5 bytes, e o printf conta
-   bytes. Por isso o número dele aparece uma coluna à esquerda dos
-   outros. Tudo bem aqui; só saiba por quê.
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E254.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E254 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E254
@@ -2985,14 +2377,6 @@ Chute B: B A N A N A
 Venceu com 1 erro(s)!
 ```
 
-**Dicas:**
-
-1. Um vetor de bool revelada[6], tudo false no começo. Cada chute marca true
-   nas posições onde secreta[i] == chute.
-2. Se o chute não marcou nenhuma posição, é erro.
-3. Para saber se venceu: todas as posições reveladas? Escreva uma função
-   bool completa(const bool revelada[], int n).
-
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E255.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E255 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E255
 ```
@@ -3019,58 +2403,33 @@ NÃO forem todos iguais (111.111.111-11 passa na conta, mas não vale).
 
 
 ```text
-Exemplo de execução 1:
-CPF: 529.982.247-25
+Entrada:
+529.982.247-25
+```
+
+
+
+```text
+Saída esperada:
 CPF válido.
 ```
 
 
 
 ```text
-Exemplo de execução 2:
-CPF: 529.982.247-26
-CPF inválido.
+Entrada:
+529.982.247-26
 ```
 
-**Dicas:**
-
-1. Guarde os dígitos como números num int d[11], usando c - '0'. Só guarde
-   enquanto houver lugar (contador < 11), mas continue contando.
-2. Faça uma função int verificador(const int d[], int n) que usa os n
-   primeiros dígitos com pesos n + 1, n, ..., 2. Chame com n = 9 e n = 10.
-3. Para o 529.982.247: a primeira soma dá 295, 295 % 11 = 9, e o dígito é 2.
-4. Resposta esperada: as duas execuções acima.
-
-```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256
-```
-
-**Exercício E257** · ★★★
-
-O programa abaixo deveria mostrar o nome de trás para frente. Ele tem DOIS
-erros de propósito. Rode com o rodar: o sanitizer acusa um. Conserte esse,
-rode de novo e veja o outro: o programa passa a mostrar uma linha vazia.
 
 
 ```text
-Saída esperada depois do conserto:
-aluaP anA
+Saída esperada:
+CPF inválido.
 ```
 
-**Dicas:**
-
-1. "Ana Paula" tem quantos caracteres? E quantos bytes precisa para ser
-   guardado como string?
-2. Quando i vale 0, qual caractere vai para invertido[0]? Lembre o que
-   mora em nome[strlen(nome)].
-3. Uma string que começa com '\0' é vazia, não importa o resto.
-4. Resposta esperada: invertido[9] não tem lugar para os 9 caracteres e o
-   '\0' (use invertido[10] ou maior); e o laço copia nome[n] (o '\0') para
-   invertido[0]. Conserto: for (i = 0; i < n; i++) invertido[i] =
-   nome[n - 1 - i]; e depois invertido[n] = '\0'.
-
 ```bash
-gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E257.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E257 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E257
+gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E256
 ```
 
 **Exercício E258** · ★★★
@@ -3087,37 +2446,44 @@ avise que não compensa.
 
 
 ```text
-Exemplo de execução 1:
-Texto: aaabccdddd
+Entrada:
+aaabccdddd
+```
+
+
+
+```text
+Saída esperada:
 a3b1c2d4 (10 -> 8)
 ```
 
 
 
 ```text
-Exemplo de execução 2:
-Texto: abc
+Entrada:
+abc
+```
+
+
+
+```text
+Saída esperada:
 a1b1c1 (3 -> 6): não compensa
 ```
 
 
 
 ```text
-Exemplo de execução 3:
-Texto: zzzzzzzzzzzz
-z9z3 (12 -> 4)
+Entrada:
+zzzzzzzzzzzz
 ```
 
-**Dicas:**
 
-1. Escreva void comprimir(const char texto[], char saida[]). Use dois
-   índices: i anda no texto, j marca onde escrever na saída.
-2. Para cada posição, conte quantas vezes texto[i] se repete a partir dali
-   (no máximo 9). Escreva a letra, depois o dígito: (char) ('0' + conta).
-   Avance i pela quantidade contada.
-3. No pior caso a saída tem o dobro do tamanho do texto (abc vira a1b1c1):
-   dimensione saida com 2 * tamanho do texto + 1. E feche com '\0'.
-4. Resposta esperada: as três execuções acima.
+
+```text
+Saída esperada:
+z9z3 (12 -> 4)
+```
 
 ```bash
 gcc ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E258.c -o ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E258 && ~/LPEDC/05-vetores-e-strings/0043-juntando-tudo/E258

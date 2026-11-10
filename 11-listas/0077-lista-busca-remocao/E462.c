@@ -16,14 +16,6 @@
 //   10 -> 20 -> 30 -> 50 -> 60 -> NULL
 //   NULL
 //
-// Dicas:
-// 1. Condição do laço: lebre != NULL && lebre->prox != NULL.
-// 2. A cada volta: ant = tartaruga; tartaruga = tartaruga->prox;
-//    lebre = lebre->prox->prox.
-// 3. No fim, remova a tartaruga com o ant, como no texto (ant == NULL quer
-//    dizer que ela é o primeiro).
-// 4. Resposta esperada: a saída acima (saem o 4, o 40 e o único nó, 99).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

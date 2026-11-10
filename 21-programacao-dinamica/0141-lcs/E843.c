@@ -18,14 +18,6 @@
 //   Saída esperada:
 //   5 músicas em comum, na mesma ordem: 7 5 21 40 17
 //
-// Dicas:
-// 1. É o código do texto trocando char por int: a comparação a[i - 1] ==
-//    b[j - 1] continua igual, e não há '\0' no fim.
-// 2. A volta grava em saida[--k], começando com k = c[m][n].
-// 3. A música 12 está nas duas, mas é a primeira da Ana e a última do Beto:
-//    ela não cabe na mesma ordem junto com as outras.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

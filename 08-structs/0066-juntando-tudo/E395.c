@@ -27,15 +27,6 @@
 //   [média] dia 3: Reunião 1:1
 //   [média] dia 3: Revisar PR
 //
-// Dicas:
-// 1. Com BAIXA = 0, MEDIA = 1, ALTA = 2, "mais alta primeiro" é
-//    y.prioridade - x.prioridade na comparadora.
-// 2. Revisar PR e Reunião 1:1 empatam em tudo. O qsort não garante a ordem
-//    de empates (não é estável): para a saída ser sempre a mesma, desempate
-//    também pelo título com strcmp ("Reunião" vem antes de "Revisar").
-// 3. Filtro: (t.tags & TRABALHO) != 0.
-// 4. Resposta esperada: a saída acima, e free no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

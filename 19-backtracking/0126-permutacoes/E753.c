@@ -13,16 +13,6 @@
 //   menor: 16 km
 //   rota: Pizzaria -> Lagoa -> Centro -> Jardim -> Vila -> Pizzaria
 //
-// Dicas:
-// 1. Permute o vetor {1, 2, 3, 4} com trocas, como no texto. Na folha, some
-//    dist[0][v[0]], depois dist[v[k]][v[k + 1]] e, no fim, dist[v[3]][0].
-// 2. Guarde a melhor rota num segundo vetor, copiando v quando achar uma
-//    distância MENOR (estritamente) que a melhor até agora.
-// 3. A rota de trás para frente (Vila, Jardim, Centro, Lagoa) também dá
-//    16 km, mas aparece depois. Por que toda rota empata com a inversa?
-// 4. Resposta esperada: as 3 linhas acima. Este é o problema do caixeiro
-//    viajante: com 15 bairros seriam mais de um trilhão de ordens.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

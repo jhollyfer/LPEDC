@@ -13,17 +13,6 @@
 //
 // Ache a linha, conserte e rode até aparecer a saída esperada.
 //
-// Dicas:
-// 1. O 35 foi copiado para o lugar do 30. E depois, qual chave a chamada
-//    recursiva tenta remover da subárvore direita?
-// 2. Existe algum 30 na subárvore direita do (antigo) 30?
-// 3. Resposta esperada: a última linha do else (a dos dois filhos),
-//    "r->dir = remove_errado(r->dir, chave);", deveria usar suc->chave.
-//    Com chave (30), a recursão procura um 30 que não existe à direita e
-//    não remove nada: o 35 fica duplicado. Não há
-//    erro de memória porque nenhum nó foi liberado nem perdido; o bst_libera
-//    do fim libera todos. Consertado: 20 35 40 45 50 60 70 80.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

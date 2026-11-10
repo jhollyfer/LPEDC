@@ -19,15 +19,6 @@
 //   total: 28 = 8 · 7 / 2
 //   5 10 17 29 42 63 71 88
 //
-// Dicas:
-// 1. Caso base: com n <= 1 não há o que fazer.
-// 2. A recorrência é T(n) = T(n-1) + (n - 1), com T(1) = 0. A árvore de
-//    recursão vira uma linha: 7 + 6 + ... + 1.
-// 3. Some as comparações num contador global para o total.
-// 4. Resposta esperada: a saída acima. Para n = 1000 seriam 499.500
-//    comparações: Θ(n²), mesmo sem nenhum laço aninhado no código. A
-//    recursão faz o papel do laço de fora.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

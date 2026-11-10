@@ -17,14 +17,6 @@
 //      100      3800        3074  compensa
 //      300     11400        7149  compensa
 //
-// Dicas:
-// 1. Um vetor int vezes[] = {1, 10, 30, 60, 100, 300} e, para cada caso,
-//    abra com "w" (que apaga o conteúdo anterior), grave e feche.
-// 2. printf("%6d  %8ld  %10ld  %s\n", ...) monta as colunas.
-// 3. Resposta esperada: a saída acima. Os bits sozinhos ocupam uns 54% do
-//    original; o cabeçalho é que estraga os arquivos pequenos. Apague os
-//    arquivos no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

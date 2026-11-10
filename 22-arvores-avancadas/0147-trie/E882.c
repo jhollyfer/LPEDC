@@ -15,15 +15,6 @@
 //   tira sal: tirou | nós: 5 | sobram: sola
 //   tira sola: tirou | nós: 1 | sobram:
 //
-// Dicas:
-// 1. Recursão pela palavra. Se *p == '\0', você chegou ao nó dela: guarde
-//    n->fim em *tirou e ponha false. Senão, desça pelo filho da letra *p
-//    (se ele não existir, a palavra não está: *tirou = false, devolva false).
-// 2. Na volta, se a chamada do filho devolveu true, faça free no filho e ponha
-//    NULL no ponteiro. No fim, devolva !n->fim && (n não tem filho nenhum).
-// 3. Resposta esperada: a saída acima. Tirar "sol" não libera nada (o nó do
-//    l continua no caminho de sola e solteiro); tirar "solteiro" libera 5.
-//
 // Escreva sua resposta abaixo (escreva remove_palavra):
 
 #include <stdbool.h>

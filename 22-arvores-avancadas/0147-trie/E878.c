@@ -15,11 +15,6 @@
 //   c       só começo de comando
 //   mkdirs  não está
 //
-// Dicas:
-// 1. Use trie_prefixo: NULL quer dizer que nenhum comando começa assim.
-// 2. Achou o nó? O campo fim decide entre as outras duas mensagens.
-// 3. Resposta esperada: a saída acima. Imprima com printf("%-7s %s\n", ...).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

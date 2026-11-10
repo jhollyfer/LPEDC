@@ -1,9 +1,5 @@
 // 0049 · Ponteiro para ponteiro
 // Exercício E292 · ★★☆
-//
-// Resposta: res era uma cópia do ponteiro do main; mudar res não muda
-// vencedor, que continuava NULL (e *vencedor derrubava o programa). A
-// função precisa receber o endereço do ponteiro: int **res.
 
 #include <stdio.h>
 

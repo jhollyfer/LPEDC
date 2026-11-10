@@ -1,42 +1,25 @@
 // 0048 · Ponteiros e strings
 // Exercício E286 · ★★☆
 //
-// O programa da portaria tem TRÊS erros de propósito. Ele deveria mostrar:
+// Na portaria do condomínio, escreva um programa que:
 //
+//   - cria a saudação "ola, visitante!" de forma que seja possível trocar o
+//     primeiro caractere por 'O', e mostra o resultado;
+//   - copia "B" com strcpy para um vetor bloco de 2 posições e mostra "Bloco: B";
+//   - compara o vetor morador, que guarda "ana", com a string "ana" usando
+//     strcmp e mostra "Mesmo morador" se forem iguais.
+//
+//   Saída esperada:
 //   Ola, visitante!
 //   Bloco: B
 //   Mesmo morador
 //
-// Rode com o rodar, leia o relatório e conserte os três erros, um de cada
-// vez, rodando de novo até a saída ficar igual à esperada.
-//
-// Dicas:
-// 1. Onde mora o texto "ola, visitante!"? Dá para escrever lá?
-// 2. Um ponteiro que nunca recebeu endereço não é lugar para strcpy.
-// 3. == entre duas strings compara o quê?
-// 4. Resposta esperada: (1) saudacao aponta para um literal (só leitura):
-//    declare char saudacao[] = "ola, visitante!"; (2) bloco é um ponteiro
-//    sem alvo: use char bloco[2]; (3) morador == "ana" compara endereços:
-//    use strcmp(morador, "ana") == 0.
-//
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <string.h>
 
 int main(void) {
-    char *saudacao = "ola, visitante!";
-    char *bloco;
-    char morador[10] = "ana";
 
-    saudacao[0] = 'O';
-    printf("%s\n", saudacao);
-
-    strcpy(bloco, "B");
-    printf("Bloco: %s\n", bloco);
-
-    if (morador == "ana") {
-        printf("Mesmo morador\n");
-    }
     return 0;
 }

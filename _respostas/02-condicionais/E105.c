@@ -5,7 +5,6 @@
 
 int main(void) {
     int tecla;
-    printf("Tecla: ");
     if (scanf("%d", &tecla) != 1) {
         printf("Entrada inválida\n");
         return 1;

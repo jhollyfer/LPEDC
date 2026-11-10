@@ -14,13 +14,6 @@
 //   Rota 3: válida
 //   Rota 4: inválida
 //
-// Dicas:
-// 1. Use um vetor bool visto[V] para pegar vértice repetido.
-// 2. A volta é o par (rota[n - 1], rota[0]); com (i + 1) % n o laço trata
-//    todos os pares de uma vez.
-// 3. Resposta esperada: a saída acima. A rota 2 falha na volta (Shopping
-//    para Base); a 4 repete o Centro.
-//
 // Escreva sua resposta abaixo (complete a função):
 
 #include <stdbool.h>

@@ -11,12 +11,6 @@
 //   Mais pesada: 26 kg
 //   Depois de tirar 4 kg: azul 19 kg, preta 22 kg
 //
-// Dicas:
-// 1. Use um if para escolher: pesada = &mala_azul ou pesada = &mala_preta.
-// 2. Para tirar 4 kg pelo ponteiro: *pesada -= 4;
-// 3. Resposta esperada: a preta é a mais pesada (26); vira 22 e a azul
-//    continua 19.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

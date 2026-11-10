@@ -16,13 +16,6 @@
 //   6: feijão salada
 //   7: arroz feijão salada
 //
-// Dicas:
-// 1. Com 3 itens, o laço de fora vai de 0 até (1 << 3) - 1.
-// 2. O item i entra quando m & (1 << i) é diferente de zero.
-// 3. Use uma variável para saber se algum item entrou; se nenhum entrou,
-//    escreva "só a carne".
-// 4. Resposta esperada: as 8 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

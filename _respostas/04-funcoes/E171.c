@@ -1,9 +1,5 @@
 // 0029 · Parâmetros e passagem por valor
 // Exercício E171 · ★★☆
-//
-// Resposta: ordenar recebe cópias de a e b. A troca acontece nas cópias, que
-// somem quando a função termina; o a e o b do main nunca mudam. Sem ponteiros,
-// a saída é ter funções que devolvem o valor certo.
 
 #include <stdio.h>
 

@@ -18,14 +18,6 @@
 //    100000    1166750   1166750   1151293  1.013
 //   1000000   13970034  13970034  13815511  1.011
 //
-// Dicas:
-// 1. O fiscal p visita n / p bancas (divisão inteira).
-// 2. visitas é Θ(n log n): a soma harmônica n/1 + n/2 + ... + n/n.
-//    visitas_rapido é Θ(n): uma conta por fiscal.
-// 3. log de <math.h> é o logaritmo natural (ln). A razão desce para 1
-//    devagar: é isso que "≈ n ln n" quer dizer.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

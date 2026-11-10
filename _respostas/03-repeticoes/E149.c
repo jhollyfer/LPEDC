@@ -8,7 +8,7 @@ int main(void) {
     int primeiro = -1, segundo = -1;
 
     for (int i = 1; i <= 8; i++) {
-        printf("Nota %d: ", i);
+        printf("Nota %d:\n", i);
         if (scanf("%d", &nota) != 1) {
             return 1;
         }

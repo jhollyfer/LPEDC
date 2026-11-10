@@ -19,14 +19,6 @@
 //    9. Nina  (verde)
 //   10. Lia   (azul)
 //
-// Dicas:
-// 1. Escreva antes int chave(const Paciente *p), que procura p->cor em
-//    ordem_cores com strcmp e devolve o índice (0 a 4).
-// 2. Depois é o counting_sort do texto com v[i].estrelas trocado por
-//    chave(&v[i]). O vetor de saída é outro vetor de Paciente.
-// 3. Formato de cada linha: "%2d. %-5s (%s)\n".
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

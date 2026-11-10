@@ -1,34 +1,26 @@
 // 0034 · Módulos: .h, .c e compilação separada
 // Exercício E202 · ★★☆
 //
-// Este programa NÃO gera o executável, de propósito. Ele imita um módulo num
-// arquivo só: o protótipo em cima (como se viesse de um desconto.h) e a
-// definição embaixo (como se estivesse no desconto.c). Rode e leia a
-// mensagem: quem reclama aqui é o ligador, não o compilador. Conserte e rode
-// até aparecer "Tênis: R$ 239.92".
+// Escreva, num arquivo só, um módulo imitado: o bloco "// desconto.h" com o
+// protótipo de "double aplicar_desconto(double preco, double percentual)", o
+// bloco "// main.c" com o main, que mostra o preço de um tênis de R$ 299.90 com
+// 20% de desconto, e o bloco "// desconto.c" com a definição da função
+// (preco - preco * percentual / 100). O programa tem que compilar e ligar.
 //
-// Dicas:
-// 1. Procure "undefined reference" na mensagem.
-// 2. Compare letra por letra o nome do protótipo com o nome da definição.
-// 3. Resposta esperada: o ligador ("undefined reference to
-//    aplicar_desconto"). O compilador confere cada chamada contra o protótipo,
-//    e o protótipo existe, então ele confia e deixa o buraco. A definição se
-//    chama aplica_desconto: é outra função, e ninguém definiu
-//    aplicar_desconto. Acertando o nome: "Tênis: R$ 239.92".
+//   Saída esperada:
+//   Tênis: R$ 239.92
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
-// "desconto.h"
-double aplicar_desconto(double preco, double percentual);
+// desconto.h
 
+
+// main.c
 int main(void) {
-    printf("Tênis: R$ %.2f\n", aplicar_desconto(299.90, 20));
+
     return 0;
 }
 
-// "desconto.c"
-double aplica_desconto(double preco, double percentual) {
-    return preco - preco * percentual / 100;
-}
+// desconto.c

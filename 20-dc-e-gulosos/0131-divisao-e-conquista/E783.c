@@ -17,13 +17,6 @@
 // original, num arquivo à parte) e compare as chamadas: a original faz 127
 // e a sua, 7. (Não vá além de 39: 3^40 estoura o long long.)
 //
-// Dicas:
-// 1. Quantas vezes a função chama a si mesma em cada nível?
-// 2. Com duas chamadas por nível, a conta é C(n) = 1 + 2·C(n/2): 3, 7, 15,
-//    31, 63. É uma árvore de recursão inteira, e não um caminho.
-// 3. Resposta esperada: guarde potencia(x, n / 2) numa variável (metade) e
-//    use metade * metade. Chamadas: 6.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

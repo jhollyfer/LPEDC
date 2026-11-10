@@ -12,15 +12,6 @@
 //   Árvore 1: não é AVL
 //   Árvore 2: é AVL, altura 3
 //
-// Dicas:
-// 1. A solução ingênua chama uma função altura() em cada nó, e cada chamada
-//    percorre a subárvore de novo: O(n²). Calcule a altura e confira o
-//    fator na mesma volta da recursão.
-// 2. Vazia devolve -1. Peça a altura das duas subárvores; se alguma vier -2,
-//    devolva -2. Se a diferença passar de 1, devolva -2. Senão, devolva
-//    1 + a maior.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete altura_se_avl):
 
 #include <stdio.h>

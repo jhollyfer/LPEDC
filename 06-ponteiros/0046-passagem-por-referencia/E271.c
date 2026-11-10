@@ -10,11 +10,6 @@
 //   Antes: 3 ingressos
 //   Depois: 6 ingressos
 //
-// Dicas:
-// 1. Dentro da função, *quantidade é a variável do main.
-// 2. Na chamada, passe o endereço: dobra(&ingressos);
-// 3. Resposta esperada: 3 e depois 6.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

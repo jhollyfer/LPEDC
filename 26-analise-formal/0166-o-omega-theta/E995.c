@@ -17,14 +17,6 @@
 //   custo(n) <= 3n² a partir de n0 = 30
 //   falhas de n0 até 1000: 0
 //
-// Dicas:
-// 1. A função para no primeiro n que funciona. Com n = 2 (par) funciona,
-//    mas n = 3 (ímpar) volta a falhar.
-// 2. Percorra todos os n até LIMITE e faça n0 = n + 1 a cada falha.
-// 3. À mão: com n ímpar, 2n² + 30n <= 3n² vira n >= 30, então o último
-//    ímpar que falha é 29 e o n0 é 30.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

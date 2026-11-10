@@ -5,7 +5,6 @@
 
 int main(void) {
     double peso, altura;
-    printf("Peso e altura: ");
     if (scanf("%lf %lf", &peso, &altura) != 2 || altura <= 0) {
         printf("Dados inválidos.\n");
         return 1;

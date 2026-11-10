@@ -11,11 +11,6 @@
 //   Sobram: 2 brigadeiros
 //   Ingressos: R$ 245
 //
-// Dicas:
-// 1. Caixas cheias é a divisão inteira; o que sobra é o resto (%).
-// 2. O total dos ingressos é uma multiplicação.
-// 3. Resposta esperada: 50 / 12 = 4, 50 % 12 = 2 e 7 * 35 = 245.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

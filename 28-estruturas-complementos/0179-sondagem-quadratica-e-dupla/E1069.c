@@ -16,13 +16,6 @@
 //     quadrática:  5  6  9  1  8  4
 //     dupla:       5  2 12  9  6  3
 //
-// Dicas:
-// 1. Crie uma tabela por modo com sd_cria(13, (ModoSondagem)modo), para
-//    modo de 0 a 2, e libere depois.
-// 2. Na dupla, o passo da 44 é 1 + 44 % 12 = 9 e o da 57 é 1 + 57 % 12 = 10.
-// 3. Resposta esperada: a saída acima. Linear e quadrática repetem a mesma
-//    sequência para chaves com o mesmo começo (agrupamento secundário).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

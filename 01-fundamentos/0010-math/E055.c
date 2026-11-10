@@ -9,11 +9,6 @@
 //   Diagonal: 139.74 cm
 //   TV de 55 polegadas
 //
-// Dicas:
-// 1. diagonal = raiz(largura² + altura²): sqrt e pow (ou x * x).
-// 2. Divida por 2.54 e mostre sem casas decimais (%.0f).
-// 3. Resposta esperada: 139.74 cm e 55 polegadas (55.02, arredondado).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

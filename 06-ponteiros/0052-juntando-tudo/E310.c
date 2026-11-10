@@ -11,14 +11,6 @@
 //   Saída esperada:
 //   Natal Maceio Palmas Recife Aracaju Salvador Teresina Rio Branco
 //
-// Dicas:
-// 1. A comparação recebe endereços de const char *: pegue as strings com
-//    *(const char * const *)a.
-// 2. Compare strlen primeiro; se forem iguais, devolva strcmp.
-// 3. Cuidado: strlen devolve size_t (sem sinal). Não subtraia: compare com
-//    < e >.
-// 4. Resposta esperada: a linha acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

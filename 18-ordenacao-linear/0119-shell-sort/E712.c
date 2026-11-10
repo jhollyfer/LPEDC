@@ -16,13 +16,6 @@
 // que a rodada h = 13 arrumou. É isso que faz cada rodada aproveitar o
 // trabalho da anterior.
 //
-// Dicas:
-// 1. Não precisa separar as fileiras: basta conferir v[i - h] <= v[i] para
-//    todo i de h até n - 1.
-// 2. Achou um par fora de ordem? Pode devolver false na hora.
-// 3. 1-ordenado é o mesmo que ordenado.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete esta_h_ordenado):
 
 #include <stdio.h>

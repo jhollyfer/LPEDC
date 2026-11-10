@@ -15,12 +15,6 @@
 //   vazia? 1
 //   mais um desempilha: devolveu 0, x = 4
 //
-// Dicas:
-// 1. bool ok = pilha_desempilha(p, &x); e mostre ok com %d (false vira 0).
-// 2. Com a pilha vazia, a função não escreve em x: ele fica com o último
-//    valor que saiu.
-// 3. Resposta esperada: as seis linhas acima.
-//
 // Escreva sua resposta abaixo (complete o fim do main):
 
 #include <stdbool.h>

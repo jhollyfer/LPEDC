@@ -22,13 +22,6 @@
 //   depois de altera: 5
 //   DOBRO(total + 1) = 12
 //
-// Dicas:
-// 1. Para os dois ids, guarde cada um numa variável e some depois: a ordem
-//    em que o C avalia os dois lados de um + não é garantida.
-// 2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0). O parâmetro total de
-//    altera esconde a global: o 99 vai para a cópia.
-// 3. Resposta esperada: a saída acima. DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

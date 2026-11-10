@@ -10,13 +10,6 @@
 //   ordenadas: 2 3 4 5 5 5 5 6 6 7 7 7 7 7 8 8 8 9 10 10
 //   mais comum: 7 (5 alunos)
 //
-// Dicas:
-// 1. int c[11] = {0}; tem um contador para cada nota, de 0 a 10.
-// 2. Para reescrever, use um índice pos que só anda para a frente.
-// 3. A nota mais comum é o x com o maior c[x]: dá para achar no mesmo laço
-//    que reescreve o vetor.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

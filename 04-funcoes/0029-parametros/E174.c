@@ -16,13 +16,6 @@
 //   No main, numero continua 12345
 //   Capicuas de 100 a 999: 90
 //
-// Dicas:
-// 1. Para inverter: enquanto n > 0, invertido = invertido * 10 + n % 10 e
-//    n = n / 10.
-// 2. eh_capicua cabe numa linha: return inverter(n) == n;
-// 3. Resposta esperada: 54321, 12345 e 90 capicuas (9 escolhas para o primeiro
-//    dígito, que também é o último, vezes 10 para o do meio).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

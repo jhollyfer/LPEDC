@@ -15,15 +15,6 @@
 //   30: 20 10 5 6 3 4 2 1 (8 passos)
 //   ajusta(dobro(7)) = 4
 //
-// Dicas:
-// 1. Dentro de passos, um while (n != 1) com n = ajusta(n), um printf e um
-//    contador. O parâmetro n é uma cópia: pode mudar à vontade.
-// 2. O main mostra "7: ", chama passos(7) e depois mostra "(%d passos)" com o
-//    retorno. Guarde o retorno numa variável antes do printf, para os números
-//    do caminho saírem antes do total.
-// 3. Resposta esperada: a saída acima. Em dobro, o printf depois do return
-//    nunca roda: o return encerra a função na hora.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

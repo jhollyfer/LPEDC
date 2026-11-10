@@ -15,14 +15,6 @@
 //   70 <-> 110 <-> 87 <-> 99 <-> 105 <-> 98
 //   6 vagões
 //
-// Dicas:
-// 1. O novo aponta para os vizinhos: novo->ant = p; novo->prox = p->prox.
-// 2. Os vizinhos apontam para o novo: se p->prox existe, p->prox->ant =
-//    novo; senão o novo é o fim (l->fim = novo). Por último, p->prox = novo.
-// 3. Por que p->prox = novo por último? Se vier antes, você perde o
-//    caminho para o antigo seguinte.
-// 4. Não esqueça do l->tamanho++. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -17,13 +17,6 @@
 //   BOLO      BOLA       PD:  2   m + n - 2 x LCS = 4 + 4 - 2 x 3 =  2
 //   RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
 //
-// Dicas:
-// 1. Na distância sem troca, letras diferentes têm só duas saídas:
-//    1 + o menor entre d[i - 1][j] (remove) e d[i][j - 1] (insere).
-// 2. A borda é a mesma da distância comum: d[i][0] = i, d[0][j] = j.
-// 3. Para alinhar as colunas, use %-9s nas palavras e %2d nos números.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

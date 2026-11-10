@@ -6,10 +6,7 @@
 
 int main(void) {
     double tamanho_gb, velocidade_mbps;
-
-    printf("Tamanho (GB): ");
     scanf("%lf", &tamanho_gb);
-    printf("Internet (Mbps): ");
     scanf("%lf", &velocidade_mbps);
 
     double megabits = tamanho_gb * 1000 * 8;      // GB -> MB -> megabits

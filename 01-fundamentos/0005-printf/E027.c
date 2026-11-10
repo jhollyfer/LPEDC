@@ -13,13 +13,6 @@
 //   Diesel S10    R$ 6.09
 //   GNV           R$ 4.99
 //
-// Dicas:
-// 1. A primeira coluna tem 14 casas, encostada à esquerda: %-14s.
-// 2. "Combustível" tem acento: na largura, o printf conta bytes, e o í
-//    ocupa 2. Para o cabeçalho ficar alinhado, use %-15s só nele, ou escreva
-//    o cabeçalho direto no texto.
-// 3. Resposta esperada: as seis linhas acima, com "R$" sempre na coluna 15.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

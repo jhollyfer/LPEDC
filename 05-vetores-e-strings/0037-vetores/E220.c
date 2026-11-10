@@ -16,12 +16,6 @@
 //   Nota 2: * (1)
 //   Nota 1: * (1)
 //
-// Dicas:
-// 1. int contagem[6] = {0}; e ignore a posição 0: assim contagem[5] é a nota 5.
-// 2. contagem[avaliacoes[i]]++ soma 1 na gaveta daquela nota.
-// 3. Para desenhar, um laço dentro do outro (assunto 0024).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

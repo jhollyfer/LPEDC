@@ -19,14 +19,6 @@
 //   última linha: 0 2 4 7 9 11 13 16 18 20 22
 //   Retorno máximo com R$ 10 mil: R$ 22 mil por ano
 //
-// Dicas:
-// 1. Use vetores com índice começando em 1 (custo[0] e retorno[0] sem uso) e
-//    a matriz int t[6][11].
-// 2. Linha 0 toda zero. Depois, para cada célula: t[i][c] = t[i - 1][c] e,
-//    se custo[i] <= c, tente retorno[i] + t[i - 1][c - custo[i]].
-// 3. A última linha diz o melhor retorno para cada orçamento de 0 a 10.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

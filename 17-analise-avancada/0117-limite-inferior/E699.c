@@ -12,16 +12,6 @@
 //   10 dias: mín 18, máx 35 | ingênuo 18 comparações | pares 13
 //   11 dias: mín 18, máx 35 | ingênuo 20 comparações | pares 15
 //
-// Dicas:
-// 1. O começo depende da paridade. Com n par, compare v[0] com v[1] para
-//    iniciar mínimo e máximo e comece os pares em i = 2. Com n ímpar, o
-//    v[0] sozinho é mínimo e máximo, e os pares começam em i = 1.
-// 2. O laço é for (; i + 1 < n; i += 2), com a = v[i] e b = v[i + 1];
-//    troque a e b se b for menor.
-// 3. Resposta esperada: a saída acima. São ⌈3n/2⌉ - 2 comparações, e dá
-//    para provar (com um argumento de adversário, como no exemplo A234)
-//    que nenhum método faz menos.
-//
 // Escreva sua resposta abaixo (complete pares):
 
 #include <stdio.h>

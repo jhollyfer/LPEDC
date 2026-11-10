@@ -15,14 +15,6 @@
 //   4 leituras removidas
 //   só falhas: NULL (2 removidas)
 //
-// Dicas:
-// 1. Ande com ant e p. Quando p->valor for o valor, religue (o início ou
-//    ant->prox), guarde p->prox, dê free(p) e continue a partir do guardado,
-//    SEM mexer no ant.
-// 2. Quando não remover, aí sim: ant = p e p anda.
-// 3. Os 0 do começo são o caso traiçoeiro: o início muda duas vezes seguidas.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (troque o corpo de remove_todos):
 
 #include <stdio.h>

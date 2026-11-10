@@ -10,7 +10,7 @@ int main(void) {
     bool continuar = true;
 
     while (continuar) {
-        printf("Nota (-1 encerra): ");
+        printf("Nota (-1 encerra):\n");
         if (scanf("%lf", &nota) != 1 || nota < 0) {
             continuar = false;
         } else if (nota > 10) {

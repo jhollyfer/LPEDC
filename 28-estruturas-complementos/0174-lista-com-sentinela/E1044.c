@@ -13,12 +13,6 @@
 //   volta ao contrário: [ 10 20 30 40 ]
 //   vazia invertida: [ ]
 //
-// Dicas:
-// 1. Comece em x = &L->nil e faça um do-while: troca, depois anda.
-// 2. Depois da troca, o próximo nó a visitar está em x->ant (era o prox).
-//    Pare quando voltar à sentinela.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -14,14 +14,6 @@
 //      1000      1023      1.02
 //   1000000   1048575      1.05
 //
-// Dicas:
-// 1. Comece cada vetor com Vetor v = {malloc(sizeof(int)), 0, 1, 0};
-//    (confira o NULL) e copias = 0.
-// 2. As cópias são 1 + 2 + 4 + ... até a última potência de 2 menor que
-//    n. Para n = 10: 1 + 2 + 4 + 8 = 15.
-// 3. Resposta esperada: a tabela acima. A média nunca passa de 2: é o
-//    O(1) amortizado na prática.
-//
 // Escreva sua resposta abaixo (mude o programa):
 
 #include <stdio.h>

@@ -1,11 +1,5 @@
 // 0004 · Constantes
 // Exercício E021 · ★★☆
-//
-// Resposta: (1) o ; do #define MENSALIDADE ia parar dentro do printf
-// ("expected ')' before ';' token", na linha do printf); (2) o = do
-// #define DESCONTO virava "%.2f\n", = 10.00 ("expected expression before
-// '=' token"); (3) const precisa do valor na declaração: atribuir depois dá
-// "assignment of read-only variable 'dia'".
 
 #include <stdio.h>
 

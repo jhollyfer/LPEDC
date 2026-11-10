@@ -20,13 +20,6 @@
 //   Pedágio: R$ 32
 //   Sítio: R$ 40
 //
-// Dicas:
-// 1. dist[] com INFINITO (o 1000000000 já definido) e dist[0] = 0. Faça
-//    V - 1 rodadas; em cada uma, passe por todas as E arestas.
-// 2. Só relaxe a partir de quem já tem distância: dist[de] != INFINITO.
-// 3. Resposta esperada: a saída acima. O Posto B sai mais barato passando
-//    pelo Posto A (30 - 10 = 20) do que direto (45).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

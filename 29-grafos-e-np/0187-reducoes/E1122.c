@@ -24,14 +24,6 @@
 //   Completo K4: 12 variáveis, 34 cláusulas
 //     sem 3-coloração
 //
-// Dicas:
-// 1. Guarde as cláusulas numa matriz int clausula[64][3] com um contador
-//    nc; as de dois literais ficam com 0 na terceira posição.
-// 2. São V·(1 + 3) + 3E cláusulas: 16 + 15 = 31 e 16 + 18 = 34. A
-//    redução é polinomial; quem paga o exponencial é a força bruta.
-// 3. Resposta esperada: a saída acima. Percorra as máscaras de 0 em
-//    diante, com o bit i - 1 sendo a variável i.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

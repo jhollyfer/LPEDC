@@ -5,7 +5,6 @@
 
 int main(void) {
     int a, b, c;
-    printf("Orçamentos: ");
     if (scanf("%d %d %d", &a, &b, &c) != 3) {
         printf("Entrada inválida\n");
         return 1;

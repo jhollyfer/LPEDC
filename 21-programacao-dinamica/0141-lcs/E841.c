@@ -21,13 +21,6 @@
 //   "XYZ" x "XYZ": 3
 //   "ABC" x "DEF": 0
 //
-// Dicas:
-// 1. Tabela int c[51][51]; c[i][j] fala dos prefixos a[0..i-1] e b[0..j-1].
-// 2. Linha 0 e coluna 0 valem 0. Letras iguais (a[i - 1] == b[j - 1]):
-//    diagonal + 1. Diferentes: o maior entre cima e esquerda.
-// 3. Para mostrar as aspas dentro do printf, use \".
-// 4. Resposta esperada: a saída acima (na primeira, B C E G H, por exemplo).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

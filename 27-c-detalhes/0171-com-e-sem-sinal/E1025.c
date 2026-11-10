@@ -17,14 +17,6 @@
 //   original: confere
 //   alterado: nao confere
 //
-// Dicas:
-// 1. A soma dos bytes é 482, e 482 % 256 = 226. Falta 30 (0x1E) para 256.
-// 2. Some num unsigned char e devolva (unsigned char)(0u - soma): a conta
-//    sem sinal dá a volta exatamente como precisa.
-// 3. Cuidado com a promoção: soma + v vira int, e 226 + 30 = 256, que não é
-//    0. Escreva (unsigned char)(soma + v) == 0.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

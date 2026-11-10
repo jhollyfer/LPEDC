@@ -17,16 +17,6 @@
 //   Guloso: 6200
 //   PD: 3400
 //
-// Dicas:
-// 1. No guloso, trabalhe numa cópia do vetor de dimensões. Juntar as
-//    matrizes de dimensões p[i-1] x p[i] e p[i] x p[i+1] custa
-//    p[i-1] · p[i] · p[i+1] e simplesmente apaga p[i] do vetor.
-// 2. Em caso de empate, fique com o par mais à esquerda (o primeiro).
-// 3. Resposta esperada: a saída acima. O guloso gasta quase o dobro: a
-//    escolha barata de agora (10x20 por 20x5) deixa a dimensão 10 presa no
-//    resultado. A PD começa pelo fim: A1 (A2 (A3 (A4 A5))), usando o 2
-//    para eliminar o 30, o 40, o 5 e o 20, um de cada vez.
-//
 // Escreva sua resposta abaixo:
 
 #include <limits.h>

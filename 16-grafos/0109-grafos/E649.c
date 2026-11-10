@@ -18,12 +18,6 @@
 //     3  1 0 1 0
 //   Voos diretos: 4
 //
-// Dicas:
-// 1. int adj[4][4] = {0}; e, para cada voo, marque adj[a][b] e adj[b][a].
-// 2. Cada voo aparece duas vezes na matriz. Some só a parte de cima da
-//    diagonal (j > i) ou some tudo e divida por 2.
-// 3. Resposta esperada: a matriz acima e "Voos diretos: 4".
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -17,12 +17,6 @@
 //   Diagonal principal: 15
 //   Diagonal secundária: 15
 //
-// Dicas:
-// 1. Na diagonal principal, linha e coluna são iguais: m[i][i].
-// 2. Na secundária, linha + coluna = 2: m[i][2 - i].
-// 3. Para isso, um laço só basta.
-// 4. Resposta esperada: a saída acima (2 + 5 + 8 e 6 + 5 + 4).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

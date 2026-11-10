@@ -19,15 +19,6 @@
 //   Deslocamentos do insertion sort: 36
 //   Inversões pelo merge sort: 36
 //
-// Dicas:
-// 1. memcpy(a, pesos, sizeof pesos) copia o vetor inteiro de uma vez
-//    (string.h). Sem a cópia, o segundo algoritmo receberia o vetor já
-//    ordenado e contaria 0.
-// 2. No insertion sort, conte dentro do while que faz v[j + 1] = v[j].
-// 3. Resposta esperada: a saída acima. Daí sai uma conclusão de custo: o
-//    insertion sort gasta O(n + inversões). Vetor quase ordenado, poucas
-//    inversões, insertion sort rápido.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

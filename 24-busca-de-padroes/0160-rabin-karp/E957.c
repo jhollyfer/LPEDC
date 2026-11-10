@@ -12,14 +12,6 @@
 //   q =   101: 5 ocorrências,  0 falsos positivos
 //   q = 10007: 5 ocorrências,  0 falsos positivos
 //
-// Dicas:
-// 1. Toda conta com Q passa a usar q, inclusive o pot.
-// 2. Falso positivo: ht == hp, mas iguais() devolve 0.
-// 3. As ocorrências não mudam com q: o que muda é o trabalho jogado fora com
-//    conferências inúteis. Com q pequeno, uma janela qualquer tem chance de
-//    1 em q de colidir.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (mude a função e o main):
 
 #include <stdio.h>

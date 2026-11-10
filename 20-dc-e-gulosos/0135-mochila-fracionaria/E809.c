@@ -21,15 +21,6 @@
 //   Total: R$ 13050.00
 //   Itens tirados do heap: 5 de 8
 //
-// Dicas:
-// 1. Escreva double razao(Frete f) e a função desce do heap, comparando
-//    razões. Monte com: for (int i = n / 2 - 1; i >= 0; i--) desce(v, n, i);
-// 2. Para tirar o topo: guarde v[0], ponha v[n - 1] no lugar, diminua n e
-//    desça a partir do 0. Depois aplique a regra da mochila no item tirado.
-// 3. Resposta esperada: a saída acima (printf("%3.0f de %4.0f kg  R$ %7.2f
-//    %s\n", ...)). O custo cai de O(n log n) para O(n + k log n), onde k é o
-//    número de itens que entram na carga.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -18,12 +18,6 @@
 //   Total: R$ 132.13
 //   Mais caro: Arroz 5kg
 //
-// Dicas:
-// 1. typedef struct { char nome[20]; int qtd; double preco; } Item;
-// 2. Item lista[] = {{"Arroz 5kg", 2, 27.90}, ...};
-// 3. Guarde o índice do maior subtotal, como no exemplo da tabela.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

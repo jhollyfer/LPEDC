@@ -19,17 +19,6 @@
 //   Maior sequência de altas: 6 dias
 //   Preços: 28 30 33 36 40 41
 //
-// Dicas:
-// 1. A compara do qsort: return (a > b) - (a < b); (sem a - b, que pode
-//    estourar).
-// 2. Para tirar repetidos de um vetor ordenado, copie ord[i] para ord[u++]
-//    só quando ele for diferente do último copiado.
-// 3. Sem tirar os repetidos, o 33 (que aparece duas vezes) poderia entrar
-//    duas vezes, e "33 33" não é subir.
-// 4. Use o desempate do texto (>= sobe). Há outras respostas com 6 preços,
-//    como 28 30 33 34 38 41.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

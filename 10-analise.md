@@ -324,44 +324,8 @@ c) 7
 d) 4 passos em 10 voltas
 ```
 
-**Dicas:**
-
-1. Em a), o laço de dentro roda inteiro a cada volta do de fora: 6 * 4.
-2. Em b), o laço de dentro encolhe porque começa em i: 6 + 5 + ... + 1.
-3. Em c), os valores de i são 1, 2, 4, 8, 16, 32, 64.
-4. O d) mostra que o número depende do
-   que você escolhe contar: 10 voltas, mas só 4 passam no if.
-
 ```bash
 gcc ~/LPEDC/10-analise/0071-eficiencia/E421.c -o ~/LPEDC/10-analise/0071-eficiencia/E421 && ~/LPEDC/10-analise/0071-eficiencia/E421
-```
-
-**Exercício E422** · ★☆☆
-
-A função abaixo acha a maior temperatura de uma semana e meia (10 dias).
-Complete o código com dois contadores globais: "comparacoes" (quantas vezes
-a função compara t[i] com o maior até agora) e "trocas" (quantas vezes o
-maior até agora muda de valor). Mostre os dois no final.
-
-
-```text
-Saída esperada:
-Maior: 36
-Comparações: 9
-Trocas: 3
-```
-
-**Dicas:**
-
-1. O maior começa como t[0]. A primeira comparação é com t[1].
-2. Some 1 em comparacoes antes do if; some 1 em trocas dentro dele.
-3. Com n valores, achar o maior custa sempre n - 1 comparações, não importa
-   a ordem. Já o número de trocas depende da ordem dos dados.
-4. Resposta esperada: Maior: 36, Comparações: 9, Trocas: 3 (o maior muda
-   para 31, depois 35, depois 36).
-
-```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/E422.c -o ~/LPEDC/10-analise/0071-eficiencia/E422 && ~/LPEDC/10-analise/0071-eficiencia/E422
 ```
 
 **Exercício E423** · ★★☆
@@ -382,15 +346,6 @@ n =   10: total     55, média   5.5
 n =  100: total   5050, média  50.5
 n = 1000: total 500500, média 500.5
 ```
-
-**Dicas:**
-
-1. Use um vetor de 1000 posições e só as n primeiras em cada rodada.
-2. Reaproveite a busca do texto com o contador global; zere-o uma vez por
-   n, não a cada busca, para acumular o total.
-3. Achar o código da posição i custa i + 1 passos. Somando de 1 até n dá
-   n(n + 1) / 2; dividindo por n, (n + 1) / 2.
-4. Resposta esperada: médias 5.5, 50.5 e 500.5.
 
 ```bash
 gcc ~/LPEDC/10-analise/0071-eficiencia/E423.c -o ~/LPEDC/10-analise/0071-eficiencia/E423 && ~/LPEDC/10-analise/0071-eficiencia/E423
@@ -420,45 +375,8 @@ Saída esperada:
  9973     9971       98
 ```
 
-**Dicas:**
-
-1. Primo é o pior caso dos dois: nenhuma divisão dá resto 0, então o laço
-   vai até o fim.
-2. Use dois contadores globais e zere os dois antes de cada n.
-3. Com n 100 vezes maior, o ingênuo cresceu 100 vezes e o esperto
-   só uns 12. A raiz de 100 é 10.
-
 ```bash
 gcc ~/LPEDC/10-analise/0071-eficiencia/E424.c -o ~/LPEDC/10-analise/0071-eficiencia/E424 && ~/LPEDC/10-analise/0071-eficiencia/E424
-```
-
-**Exercício E425** · ★★★
-
-Este programa busca três senhas de atendimento do banco e deveria mostrar
-os passos 1, 4 e 6. Ele compila sem aviso, mas mostra 0, 3 e 9. Há DOIS
-erros na instrumentação (a busca em si está certa). Conserte os dois e rode
-para conferir a saída.
-
-
-```text
-Saída esperada:
-senha 12: passos 1
-senha 8: passos 4
-senha 40: passos 6
-```
-
-**Dicas:**
-
-1. Ponha um printf dentro do laço e rode a senha 12, que está na posição
-   0. O passos++ chega a rodar?
-2. Depois olhe a senha 8: o 3 que apareceu é dela ou é acumulado?
-3. Resposta esperada: (1) o passos++ está depois do if que dá return, então
-   a comparação que acerta nunca é contada: ele tem de vir antes do if;
-   (2) o contador é zerado uma vez só, antes do for do main: tem de ser
-   zerado dentro do for, antes de cada busca.
-
-```bash
-gcc ~/LPEDC/10-analise/0071-eficiencia/E425.c -o ~/LPEDC/10-analise/0071-eficiencia/E425 && ~/LPEDC/10-analise/0071-eficiencia/E425
 ```
 
 **Exercício E426** · ★★★
@@ -470,7 +388,9 @@ quanto. Escreva:
 contador global "chamadas" a cada vez que a função é chamada;
 - fib_it(n): a versão com laço, somando 1 num contador "somas" a cada soma.
 
-Mostre a tabela para n = 10, 20 e 30. Use long para os contadores.
+Mostre a tabela para n = 10, 20 e 30 (contadores long). Depois, uma segunda
+tabela: para n de 20 a 25, as chamadas da recursiva e a razão entre as
+chamadas de n e as de n - 1.
 
 
 ```text
@@ -482,9 +402,6 @@ Saída esperada:
 ```
 
 
-Depois acrescente uma segunda tabela: para n de 20 a 25, as chamadas da
-recursiva e a razão entre as chamadas de n e as de n - 1.
-
 
 ```text
 n = 20:  21891 chamadas, razão 1.618
@@ -494,18 +411,6 @@ n = 23:  92735 chamadas, razão 1.618
 n = 24: 150049 chamadas, razão 1.618
 n = 25: 242785 chamadas, razão 1.618
 ```
-
-**Dicas:**
-
-1. Zere os contadores antes de cada n.
-2. A versão com laço guarda os dois últimos valores e anda n - 1 vezes.
-3. fib_rec(n) chama fib_rec(n - 1) e fib_rec(n - 2): o fib(28) é calculado
-   do zero 2 vezes, o fib(27) 3 vezes, o fib(26) 5 vezes...
-4. Na segunda tabela, comece medindo n = 19 e guarde as chamadas numa
-   variável "anterior"; a razão é (double)chamadas / anterior.
-5. Resposta esperada: as duas tabelas acima. A cada +1 no n, as chamadas
-   multiplicam por cerca de 1,618 (a razão áurea): crescimento
-   exponencial.
 
 ```bash
 gcc ~/LPEDC/10-analise/0071-eficiencia/E426.c -o ~/LPEDC/10-analise/0071-eficiencia/E426 && ~/LPEDC/10-analise/0071-eficiencia/E426
@@ -789,62 +694,8 @@ e) O(n)            32     2048
 f) O(n log n)      64    10240
 ```
 
-**Dicas:**
-
-1. No d) não há laço: a função só devolve 1 (use (void)n; para o gcc não
-   reclamar do parâmetro sem uso).
-2. Um laço de dentro com tamanho fixo (10) não depende de n. Laços em
-   sequência somam; laços aninhados multiplicam.
-3. Formato da linha: printf("%-14s %6ld %8ld\n", "a) O(n)", ...).
-4. As linhas a) e f) dão 10240 com
-   n = 1024, mas por motivos diferentes: 10 é constante, log₂ 1024 = 10
-   cresce com n.
-
 ```bash
 gcc ~/LPEDC/10-analise/0072-big-o/E427.c -o ~/LPEDC/10-analise/0072-big-o/E427 && ~/LPEDC/10-analise/0072-big-o/E427
-```
-
-**Exercício E428** · ★☆☆
-
-Seis colegas contaram os passos dos seus algoritmos e chegaram nestas
-fórmulas. Para cada uma, aposte numa classe O (descarte constantes e fique
-com o termo que domina) e confira a aposta com um programa: escreva a
-fórmula como função double f(double n), a aposta como double g(double n),
-e mostre f(n) / g(n) para n = 10, 1000 e 1000000. Aposta certa: a razão não
-cresce sem parar; ela se acomoda perto de uma constante.
-
-
-```text
-a) 3n² + 10n + 7      b) 500               c) n + log₂ n
-d) 2n log₂ n + 50n    e) n³ / 1000 + n²    f) n(n + 1) / 2
-```
-
-
-
-```text
-Saída esperada:
-fórmula             n=10     n=1000     n=10^6
-a) O(n^2)          4.0700     3.0100     3.0000
-b) O(1)          500.0000   500.0000   500.0000
-c) O(n)            1.3322     1.0100     1.0000
-d) O(n log n)     17.0515     7.0172     4.5086
-e) O(n^3)          0.1010     0.0020     0.0010
-f) O(n^2)          0.5500     0.5005     0.5000
-```
-
-**Dicas:**
-
-1. log2() está em <math.h> (o rodar já liga com -lm).
-2. Para não repetir 18 printf, escreva uma função que recebe o rótulo, a
-   fórmula e a aposta como ponteiros para função (assunto 0050):
-   void linha(const char *rotulo, double (*f)(double), double (*g)(double)).
-3. Formato: "%-14s" no rótulo e " %10.4f" em cada razão.
-4. No d), a razão cai devagar até 2
-   (o 50n perde força quando n cresce); se você apostasse O(n), ela
-   cresceria sem parar. Para ver isso, troque uma aposta e rode de novo.
-
-```bash
-gcc ~/LPEDC/10-analise/0072-big-o/E428.c -o ~/LPEDC/10-analise/0072-big-o/E428 -lm && ~/LPEDC/10-analise/0072-big-o/E428
 ```
 
 **Exercício E429** · ★★☆
@@ -867,15 +718,6 @@ n =  100: pares   4950 passos, marcas  100 passos
 n = 1000: pares 499500 passos, marcas 1000 passos
 ```
 
-**Dicas:**
-
-1. Em repetido_marcas, o passo é cada consulta a visto[v[i]].
-2. Para zerar o vetor de marcas: bool visto[1000] = {false};
-3. A versão com marcas troca memória (1000 bools) por tempo. Funciona aqui
-   porque os códigos são pequenos; com CPFs, precisaria de outra ideia
-   (a tabela hash do módulo 15).
-4. Resposta esperada: a saída acima; as duas respondem "sem repetidos".
-
 ```bash
 gcc ~/LPEDC/10-analise/0072-big-o/E429.c -o ~/LPEDC/10-analise/0072-big-o/E429 && ~/LPEDC/10-analise/0072-big-o/E429
 ```
@@ -884,13 +726,22 @@ gcc ~/LPEDC/10-analise/0072-big-o/E429.c -o ~/LPEDC/10-analise/0072-big-o/E429 &
 
 A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
 Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
-O(n²). Complete o programa:
+O(n²). Escreva quatro funções long misterio_a(int n) ... misterio_d(int n),
+que devolvem quantas vezes o laço roda:
 
-1. escreva const char *classe(double razao), que devolve "O(log n)" se a
-razão for menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for
-menor que 3 e "O(n^2)" nos outros casos;
-2. no main, mostre, para cada função misteriosa, os passos com n = 1000 e
-n = 2000, a razão entre eles e a classe que a razão indica.
+
+```text
+a) for (i = 0; i < n; i += 3)
+b) for (i = n; i > 0; i /= 2)
+c) for (i = 0; i < n; i++) for (j = 0; j < n; j += 2)
+d) for (d = 0; d * d < n; d++)
+```
+
+
+Escreva também const char *classe(double razao): "O(log n)" se a razão for
+menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for menor que 3
+e "O(n^2)" nos outros casos. Mostre, para n = 1000 e n = 2000, os passos, a
+razão e a classe de cada função.
 
 
 ```text
@@ -900,16 +751,6 @@ b:      10 ->      11  razão 1.10  O(log n)
 c:  500000 -> 2000000  razão 4.00  O(n^2)
 d:      32 ->      45  razão 1.41  O(raiz n)
 ```
-
-**Dicas:**
-
-1. Use (double)p2 / p1 para a razão não virar divisão inteira.
-2. Uma função void mostra(char nome, long p1, long p2) evita repetir o
-   printf quatro vezes.
-3. A d) não é nenhuma das cinco classes do texto. Que número elevado ao
-   quadrado dá 2? Olhe a condição d * d < n.
-4. a) n/3 passos; c) n²/2 passos;
-   d) raiz de n: dobrar n multiplica por √2 ≈ 1,41.
 
 ```bash
 gcc ~/LPEDC/10-analise/0072-big-o/E430.c -o ~/LPEDC/10-analise/0072-big-o/E430 && ~/LPEDC/10-analise/0072-big-o/E430
@@ -942,60 +783,8 @@ B passa a ganhar em n = 190 (A: 72200, B: 71914)
  10000   200000000    6643856
 ```
 
-**Dicas:**
-
-1. log2() está em <math.h> (o rodar já liga com -lm). Faça as contas em
-   double.
-2. Um laço n = 2, 3, 4, ... que para (break) no primeiro n em que
-   50 * n * log2(n) < 2.0 * n * n.
-3. Mostre os doubles com %.0f para arredondar.
-4. Resposta esperada: n = 190. Para listas com menos de 190 entregas, o
-   "pior" algoritmo é o mais rápido. Com 10000, B é 30 vezes mais rápido.
-
 ```bash
 gcc ~/LPEDC/10-analise/0072-big-o/E431.c -o ~/LPEDC/10-analise/0072-big-o/E431 -lm && ~/LPEDC/10-analise/0072-big-o/E431
-```
-
-**Exercício E432** · ★★★
-
-Este programa conta as vogais de um texto de n letras. A função tamanho()
-faz o mesmo que o strlen (anda até o '\0') e conta cada letra visitada como
-um passo. Rode e veja os passos para n = 1000, 2000 e 4000:
-
-
-```text
-n = 1000: 400 vogais, 1001000 passos
-n = 2000: 800 vogais, 4002000 passos
-n = 4000: 1600 vogais, 16004000 passos
-```
-
-
-1. Acrescente ao main a regra do dobro: a partir do segundo n, mostre na
-mesma linha a razão entre os passos deste n e os do anterior. Rode: a razão
-denuncia a classe do código.
-2. Refatore conta_vogais para ficar O(n), sem mudar a função tamanho(), e
-rode de novo.
-
-
-```text
-Saída esperada (depois do conserto):
-n = 1000: 400 vogais, 1000 passos
-n = 2000: 800 vogais, 2000 passos, razão 2.00
-n = 4000: 1600 vogais, 4000 passos, razão 2.00
-```
-
-**Dicas:**
-
-1. Guarde os passos do n anterior numa variável e use (double) na divisão.
-2. Antes do conserto a razão sai 4.00: O(n²). Quantas vezes a condição do
-   for é avaliada? E o que ela chama?
-3. O texto não muda dentro do laço. Precisa medir o tamanho dele toda vez?
-4. Resposta esperada: guarde o tamanho numa variável antes do laço
-   (int n = tamanho(texto);) e use i < n. Os passos caem para 1000, 2000 e
-   4000, e a razão vira 2.00: O(n).
-
-```bash
-gcc ~/LPEDC/10-analise/0072-big-o/E432.c -o ~/LPEDC/10-analise/0072-big-o/E432 && ~/LPEDC/10-analise/0072-big-o/E432
 ```
 
 ---
@@ -1258,17 +1047,18 @@ gcc ~/LPEDC/10-analise/0073-invariantes/A146.c -o ~/LPEDC/10-analise/0073-invari
 
 **Exercício E433** · ★☆☆
 
-Complete o main com os quatro laços abaixo. Em cada um, ponha um assert
-com o invariante logo no começo do corpo e outro depois do laço (o
-término). As funções que conferem os invariantes já estão prontas. Use os
-dados do main.
+Escreva um programa com os quatro laços abaixo. Em cada um, ponha um assert
+com o invariante logo no começo do corpo e outro depois do laço (o término).
+Escreva também as funções que conferem os invariantes: soma_ate(v, i),
+aprovados_ate(v, i) (quantos de v[0..i-1] são >= 6), potencia_de_2(k) e
+nao_esta(v, ini, fim, x) (x não aparece em v[ini..fim-1]).
 
 
 ```text
-a) s = 0;  for (i = 0; i < n; i++)  s = s + gastos[i];
-b) c = 0;  for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
-c) p = 1;  for (k = 0; k < e; k++)  p = p * 2;
-d) k = n - 1;  while (k >= 0 && v[k] != x)  k--;
+a) gastos = {20, 35, 15, 50};  s = 0;  for (i = 0; i < n; i++)  s = s + gastos[i];
+b) notas = {7, 4, 9, 6, 5};  c = 0;  for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
+c) e = 10;  p = 1;  for (k = 0; k < e; k++)  p = p * 2;
+d) v = {3, 8, 5, 8, 1}, x = 8;  k = n - 1;  while (k >= 0 && v[k] != x)  k--;
 ```
 
 
@@ -1281,62 +1071,32 @@ c) 2 elevado a 10: 1024
 d) último 8 na posição 3
 ```
 
-**Dicas:**
-
-1. Pergunte: "o que o laço já sabe sobre a parte que ele já viu?". Com
-   i = 0, o pedaço v[0..-1] está vazio: a soma de nada é 0.
-2. a) assert(s == soma_ate(gastos, i)); depois do laço, troque i por n.
-3. d) anda de trás para frente: a parte já vista fica à direita de k.
-   assert(nao_esta(v, k + 1, n, x)); depois do laço,
-   assert(k == -1 || v[k] == x).
-4. Invariantes: a) s é a soma de
-   gastos[0..i-1]; b) c conta as notas >= 6 de notas[0..i-1]; c) p é 2
-   elevado a k; d) x não está em v[k+1..n-1].
-
 ```bash
 gcc ~/LPEDC/10-analise/0073-invariantes/E433.c -o ~/LPEDC/10-analise/0073-invariantes/E433 && ~/LPEDC/10-analise/0073-invariantes/E433
 ```
 
-**Exercício E434** · ★☆☆
-
-As vendas da barraca na feira foram R$ 35, 12, 50, 8 e 27. Complete a
-função soma():
-
-1. escreva o laço que soma v[0..n-1];
-2. escreva o invariante como comentário dentro do laço;
-3. confira o invariante com assert, usando a função soma_ate(), que já
-está pronta (ela recalcula a soma de v[0..i-1] do jeito lento).
-
-
-```text
-Saída esperada:
-Total: R$ 132
-```
-
-**Dicas:**
-
-1. Comece com s = 0 e i = 0. O assert vai logo no começo do corpo do laço.
-2. assert(s == soma_ate(v, i));
-3. Depois do laço, um último assert(s == soma_ate(v, n)) fecha o término.
-4. Resposta esperada: Total: R$ 132. Invariante: s é a soma de v[0..i-1].
-
-```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/E434.c -o ~/LPEDC/10-analise/0073-invariantes/E434 && ~/LPEDC/10-analise/0073-invariantes/E434
-```
-
 **Exercício E435** · ★★☆
 
-A função ultima() procura a ÚLTIMA vez que um aluno tirou certa nota,
-andando do fim para o começo. Ela já funciona. Transforme a prova de que
-ela está certa em código:
+Escreva int ultima(const int v[], int n, int x), que procura a ÚLTIMA vez
+que um aluno tirou a nota x, andando do fim para o começo (começa em
+k = n - 1 e anda enquanto k >= 0 e v[k] != x). Devolve a posição, ou -1 se a
+nota não aparece. Transforme a prova de que ela está certa em código:
 
-1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não
-aparece em v[ini..fim-1] (pedaço vazio: true);
-2. dentro do laço, confira com assert o invariante "x não está em
-v[k+1..n-1]";
-3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x
-e o invariante ainda vale;
-4. teste também a nota 7 (que está na posição 0) e um vetor vazio (n = 0).
+1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não aparece
+
+```text
+ em v[ini..fim-1] (pedaço vazio: true);
+```
+
+2. dentro do laço, confira com assert o invariante "x não está em v[k+1..n-1]";
+3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x e
+
+```text
+ o invariante ainda vale.
+```
+
+
+Teste com notas = {7, 9, 4, 9, 6}, e também com um vetor vazio (n = 0).
 
 
 ```text
@@ -1347,15 +1107,6 @@ Saída esperada:
 vetor vazio: posição -1
 ```
 
-**Dicas:**
-
-1. No começo, k = n - 1: o pedaço v[n..n-1] é vazio, e nao_esta tem de
-   devolver true para ele.
-2. Para o vetor vazio, basta chamar ultima(notas, 0, 9): o laço nem roda.
-3. Não inverta a ordem do && no while: com v[k] != x && k >= 0, o k == -1
-   leria v[-1] antes de testar k (o sanitizer acusa).
-4. Resposta esperada: a saída acima, sem nenhum assert disparando.
-
 ```bash
 gcc ~/LPEDC/10-analise/0073-invariantes/E435.c -o ~/LPEDC/10-analise/0073-invariantes/E435 && ~/LPEDC/10-analise/0073-invariantes/E435
 ```
@@ -1363,15 +1114,13 @@ gcc ~/LPEDC/10-analise/0073-invariantes/E435.c -o ~/LPEDC/10-analise/0073-invari
 **Exercício E436** · ★★☆
 
 O banco quer saber qual cliente está "menos no vermelho": o maior saldo
-entre contas todas negativas. O programa compila sem aviso, passou em todos
-os testes com saldos positivos, mas aqui mostra 0.
-
-1. Conserte maximo() sem tratar "todos negativos" como caso especial, e
-escreva em cima dela o contrato certo (o que ela exige de n).
-2. Escreva bool eh_maximo(v, i, x) (x está em v[0..i-1] e ninguém passa
-dele) e confira o invariante com assert no começo de cada volta.
-3. Acrescente ao main um teste com um saldo só (-7) e um com saldos
-positivos (10, 3, 25), e rode.
+entre contas todas negativas. Escreva int maximo(const int v[], int n), que
+devolve o maior elemento de v. Ela exige n >= 1 (escreva isso num comentário
+de contrato em cima) e começa com maior = v[0], sem tratar "todos negativos"
+como caso especial. Escreva também bool eh_maximo(v, i, x) (x está em
+v[0..i-1] e ninguém passa dele) e confira o invariante com assert no começo
+de cada volta e o término depois do laço. Teste com saldos = {-120, -45,
+-300, -80}, com um saldo só (-7) e com positivos (10, 3, 25).
 
 
 ```text
@@ -1380,16 +1129,6 @@ Maior saldo: R$ -45
 Um saldo só: R$ -7
 Positivos: R$ 25
 ```
-
-**Dicas:**
-
-1. Invariante pretendido: maior é um máximo de v[0..i-1]. Com maior = 0,
-   ele já é falso antes da primeira volta: 0 nem está no vetor. Ponha o
-   assert no código quebrado e veja ele disparar.
-2. Um máximo de um pedaço tem que ser um elemento desse pedaço.
-3. Resposta esperada: int maior = v[0]; e o laço começa em i = 1.
-   Contrato: "recebe n >= 1 e v; devolve o valor de um elemento máximo de
-   v[0..n-1]".
 
 ```bash
 gcc ~/LPEDC/10-analise/0073-invariantes/E436.c -o ~/LPEDC/10-analise/0073-invariantes/E436 && ~/LPEDC/10-analise/0073-invariantes/E436
@@ -1417,49 +1156,8 @@ lg(100000) = 16
 divergências de 1 a 100000: 0
 ```
 
-**Dicas:**
-
-1. Use uma cópia m de n e um contador i: i = 0, m = n; enquanto m > 1,
-   m = m / 2 e i++.
-2. Invariante: p * m <= n < p * (m + 1), com p = 2 elevado a i. Guarde p
-   numa variável long que dobra junto com o i++. Teste com n = 10: (i, m)
-   passa por (0, 10), (1, 5), (2, 2), (3, 1).
-3. No término, m == 1: o assert fica p <= n && n < 2 * p.
-4. Resposta esperada: a saída acima, sem nenhum assert disparando. O laço
-   termina porque m cai pelo menos pela metade a cada volta.
-
 ```bash
 gcc ~/LPEDC/10-analise/0073-invariantes/E437.c -o ~/LPEDC/10-analise/0073-invariantes/E437 -lm && ~/LPEDC/10-analise/0073-invariantes/E437
-```
-
-**Exercício E438** · ★★★
-
-O vetor de pedidos do dia tem valores em reais, e os cancelados aparecem
-como 0. Escreva int remove_zeros(int v[], int n), que tira os zeros do
-vetor, mantendo a ordem dos outros, e devolve quantos sobraram. Regras:
-sem vetor auxiliar e numa passada só (O(n)).
-
-Escreva o invariante do seu laço como comentário e confira com o vetor
-{25, 0, 0, 40, 0, 15, 30, 0}.
-
-
-```text
-Saída esperada:
-Sobraram 4: 25 40 15 30
-```
-
-**Dicas:**
-
-1. Use dois índices: j lê todos os elementos; i marca onde escrever o
-   próximo que não é zero.
-2. Invariante: i <= j e v[0..i-1] são os valores não nulos de v[0..j-1]
-   original, na mesma ordem.
-3. Se v[j] != 0, copie para v[i] e avance i. Avance j sempre.
-4. Resposta esperada: Sobraram 4: 25 40 15 30. Uma versão que "puxa" todo
-   mundo uma casa para a esquerda a cada zero também funciona, mas é O(n²).
-
-```bash
-gcc ~/LPEDC/10-analise/0073-invariantes/E438.c -o ~/LPEDC/10-analise/0073-invariantes/E438 && ~/LPEDC/10-analise/0073-invariantes/E438
 ```
 
 ---
@@ -1803,48 +1501,8 @@ Depois de descerem 3: 1 a bordo
 Na garagem: 0 a bordo
 ```
 
-**Dicas:**
-
-1. #include "contador.h", com aspas: o arquivo está na pasta, não no
-   sistema. O rodar compila o contador.c junto.
-2. contador_incrementa devolve false quando a van está cheia: use isso
-   para contar quem ficou no ponto.
-3. Você não precisou saber
-   como o contador guarda o valor.
-
 ```bash
 gcc ~/LPEDC/10-analise/0074-tad/E439.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E439 && ~/LPEDC/10-analise/0074-tad/E439
-```
-
-**Exercício E440** · ★☆☆
-
-Este cliente NÃO COMPILA, de propósito. Ele controla as senhas da fila da
-lotérica e tenta mexer direto nos campos do contador. Rode, leia o erro do
-gcc e conserte usando só as funções do contador.h. Depois acrescente, antes
-do contador_libera, uma tentativa de tirar uma senha da fila vazia, e
-mostre se o TAD deixou.
-
-
-```text
-Saída esperada:
-Na fila: 2
-Na fila: 0
-Tirar da fila vazia: negado
-```
-
-**Dicas:**
-
-1. "invalid use of incomplete typedef": o contador.h só diz que existe uma
-   struct contador, sem os campos. O cliente não pode usar ->.
-2. Procure no contador.h uma função que zera, outra que lê o valor e outra
-   que tira 1 (ela devolve bool).
-3. Resposta esperada: a saída acima, com contador_valor(fila) para ler,
-   contador_zera(fila) para zerar e contador_decrementa(fila), que devolve
-   false com a fila em 0. É o invariante 0 <= valor <= limite protegido:
-   só o contador.c mexe nos campos.
-
-```bash
-gcc ~/LPEDC/10-analise/0074-tad/E440.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E440 && ~/LPEDC/10-analise/0074-tad/E440
 ```
 
 **Exercício E441** · ★★☆
@@ -1875,14 +1533,6 @@ Loja (0.0, 0.0) -> cliente (3.0, 4.0): 5.00 km
 A -> B: 10.00 km
 ```
 
-**Dicas:**
-
-1. Distância: sqrt(dx * dx + dy * dy), com sqrt de <math.h>.
-2. typedef struct ponto Ponto; em cima, a struct ponto { double x, y; }
-   só na parte "ponto.c".
-3. São 4 pontos criados: 4 ponto_libera no fim (o rodar acusa vazamento).
-4. Resposta esperada: a saída acima (os triângulos 3-4-5 e 6-8-10).
-
 ```bash
 gcc ~/LPEDC/10-analise/0074-tad/E441.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E441 -lm && ~/LPEDC/10-analise/0074-tad/E441
 ```
@@ -1909,16 +1559,6 @@ Pix de R$ 100,00: negado
 Pix de R$ 35,50: ok
 Bia: R$ 44,50 | Caio: R$ 45,50
 ```
-
-**Dicas:**
-
-1. Saque primeiro. Só deposite se o saque deu certo; assim ninguém ganha
-   dinheiro do nada.
-2. Os valores são centavos: R$ 35,50 é 3550.
-3. Para mostrar: saldo / 100 e saldo % 100 com %02d.
-4. A nova operação respeita o
-   invariante (saldo >= 0) de graça, porque só usa operações que já o
-   respeitam.
 
 ```bash
 gcc ~/LPEDC/10-analise/0074-tad/E442.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E442 && ~/LPEDC/10-analise/0074-tad/E442
@@ -1954,53 +1594,8 @@ Saída esperada:
 1/0: não existe
 ```
 
-**Dicas:**
-
-1. Toda criação passa por racional_cria, que simplifica e acerta o sinal.
-   Assim soma e multiplica só fazem a conta e chamam racional_cria.
-2. a/b + c/d = (a*d + c*b) / (b*d). O mdc vem de Euclides (assunto 0033)
-   e pode ser uma função static.
-3. Denominador negativo: troque o sinal dos dois.
-4. Cada Racional devolvido é um malloc: libere todos.
-
 ```bash
 gcc ~/LPEDC/10-analise/0074-tad/E443.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E443 && ~/LPEDC/10-analise/0074-tad/E443
-```
-
-**Exercício E444** · ★★★
-
-O TAD Horario abaixo guarda a hora e o minuto em dois campos. Reescreva SÓ
-a parte "horario.c" para guardar um campo único: os minutos desde a
-meia-noite (0 a 1439). A parte "horario.h" e o cliente (main) não podem
-mudar nem uma letra, e a saída tem de continuar idêntica:
-
-
-```text
-Saída esperada:
-Ônibus sai às 22:50
-Viagem de 85 min: chega às 00:15
-Do embarque até 06:00: 430 min
-```
-
-
-Escreva o invariante da nova struct como comentário em cima dela
-(0 <= total < 1440) e confira com assert no fim de cada função que mexe no
-campo (horario_cria e horario_avanca).
-
-**Dicas:**
-
-1. h:m vira h * 60 + m. De volta: hora = total / 60, minuto = total % 60.
-2. Avançar com a volta do dia: total = (total + minutos) % 1440.
-3. Diferença para a frente: (b - a + 1440) % 1440.
-4. assert(h->total >= 0 && h->total < 1440); antes de cada return da
-   cria e no fim da avanca.
-5. Resposta esperada: a mesma saída. A versão com minutos totais deixa
-   avanca e minutos_ate com uma linha cada; hora e minuto viram contas.
-   Como o cliente só usa as funções, a troca não o afeta: é a promessa do
-   TAD.
-
-```bash
-gcc ~/LPEDC/10-analise/0074-tad/E444.c ~/LPEDC/10-analise/0074-tad/conta.c ~/LPEDC/10-analise/0074-tad/contador.c -o ~/LPEDC/10-analise/0074-tad/E444 && ~/LPEDC/10-analise/0074-tad/E444
 ```
 
 ---

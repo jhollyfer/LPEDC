@@ -16,15 +16,6 @@
 //   MOTO -> CAMA em 5 passo(s): MOTO MATO MATA LATA LAMA CAMA
 //   GATO -> PEIXE: impossível
 //
-// Dicas:
-// 1. bool vizinhas(const char *a, const char *b): strlen igual e um só
-//    a[i] != b[i]. int indice(const char *p) acha a posição com strcmp.
-// 2. A BFS é a do texto do assunto 0110, trocando "adj[u][v]" por "vizinhas(palavras[u],
-//    palavras[v])".
-// 3. Empates: GATO -> MATO -> MATA também leva a BOLA em 5 passos; a BFS
-//    fica com GATA porque ela vem antes na lista.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

@@ -16,13 +16,6 @@
 //   46655 na base 6: 555555
 //   10 na base 20: base inválida
 //
-// Dicas:
-// 1. char é número: '0' + 7 é '7', e 'A' + (valor - 10) dá as letras.
-// 2. em_base: se n < base, imprima digito(n); senão em_base(n / base, base) e
-//    depois digito(n % base). Imprimir com %c.
-// 3. Resposta esperada: a saída acima. Confira o 7EA: 7 * 256 + 14 * 16 + 10
-//    = 2026.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

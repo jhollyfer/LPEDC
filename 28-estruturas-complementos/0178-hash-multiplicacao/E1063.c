@@ -15,12 +15,6 @@
 //   20040002 | 93
 //   69050097 | 65
 //
-// Dicas:
-// 1. Guarde os CEPs num vetor de uint32_t. Atenção: 01310100 escrito assim
-//    em C é octal! Escreva 1310100 e mostre com %08u.
-// 2. O 69050000 e o 69050097 diferem por 97 e caem no mesmo balde.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

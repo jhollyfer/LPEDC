@@ -16,14 +16,6 @@
 //   merge sort:  10 discordâncias
 //   de 28 pares possíveis
 //
-// Dicas:
-// 1. Se v[j] (direita) vai para o rascunho e ainda há q - i elementos na
-//    esquerda, some q - i às inversões.
-// 2. conta(p, r) = conta(p, q) + conta(q, r) + o que a intercalação achou.
-// 3. Rode a força bruta ANTES: a versão rápida ordena o vetor.
-// 4. Use long long: com n = 100 mil, as inversões passam de 2 bilhões.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

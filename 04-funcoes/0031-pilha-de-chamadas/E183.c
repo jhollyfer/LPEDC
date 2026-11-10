@@ -16,12 +16,6 @@
 //     sai pagar
 //   sai finalizar_compra
 //
-// Dicas:
-// 1. O main chama finalizar_compra(0).
-// 2. Cada função: recuo, "entra", chama a próxima com nivel + 1, recuo, "sai".
-//    consultar_banco só imprime a linha dela.
-// 3. Resposta esperada: a saída acima. O recuo é a altura da pilha naquela hora.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -29,12 +29,6 @@
 //   90: altura 0, fator 0
 //   É AVL? não
 //
-// Dicas:
-// 1. altura: vazia devolve -1; senão, 1 + a maior altura entre os filhos.
-// 2. relatorio devolve quantos nós desequilibrados achou (o do nó mais os
-//    das duas subárvores); a árvore é AVL quando o total é 0.
-// 3. Resposta esperada: a saída acima. O 70 cai no caso direita-direita.
-//
 // Escreva sua resposta abaixo (complete altura e relatorio):
 
 #include <stdio.h>

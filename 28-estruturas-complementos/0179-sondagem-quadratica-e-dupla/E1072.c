@@ -19,12 +19,6 @@
 //   tabela:   0   7  21   .  14   .   .
 //   carga 0.57 e a chave 28 ficou de fora
 //
-// Dicas:
-// 1. Um vetor bool visitada[7] marcado com sd_posicao(t, 0, i).
-// 2. sd_insere devolve -1 quando a sequência acaba sem achar lugar.
-// 3. Resposta esperada: a saída acima. Por isso a quadrática pede carga
-//    abaixo de 1/2 (com m primo, aí ela sempre acha lugar).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

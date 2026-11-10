@@ -23,14 +23,6 @@
 //     Manacapuru
 //     Rio Preto da Eva
 //
-// Dicas:
-// 1. Escreva int componentes(int fora): uma DFS por recomeço, pulando o
-//    vértice fora (use -1 para não pular nenhum).
-// 2. Uma rodovia é ponte se, sem ela, componentes(-1) aumenta. Uma cidade
-//    é articulação se componentes(cidade) é maior que o da rede inteira.
-// 3. Resposta esperada: a saída acima. Iranduba não é articulação: o
-//    triângulo com Manaus e Manacapuru dá outro caminho.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

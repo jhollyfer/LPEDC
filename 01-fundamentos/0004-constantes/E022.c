@@ -18,14 +18,6 @@
 //   "0": 2 bytes
 //   1e3: vale 1000.0, 8 bytes
 //
-// Dicas:
-// 1. Sem ponto é int; com ponto é double; o sufixo f faz float.
-// 2. Zero à esquerda é octal; 0x é hexadecimal; aspas simples dão o código
-//    do caractere (um int); aspas duplas são texto com o byte zero no fim.
-// 3. Para mostrar aspas e apóstrofo no formato: \" e '.
-// 4. Resposta esperada: as oito linhas acima. Ex.:
-//    printf("010: vale %d, %zu bytes\n", 010, sizeof 010);
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

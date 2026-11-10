@@ -5,7 +5,6 @@
 
 int main(void) {
     int consumo;
-    printf("Consumo (m³): ");
     if (scanf("%d", &consumo) != 1) {
         printf("Entrada inválida\n");
         return 1;

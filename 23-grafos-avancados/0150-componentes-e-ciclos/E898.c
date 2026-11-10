@@ -12,15 +12,6 @@
 //   Parque 2: Lago Bosque Pico Gruta | 4 pontos, 3 trilhas, sem circuito
 //   Parque 3: Rio Ponte Ninho Toca | 4 pontos, 4 trilhas, tem circuito
 //
-// Dicas:
-// 1. Um grafo conexo com k vértices e sem ciclo é uma árvore e tem
-//    exatamente k - 1 arestas. Com mais arestas que isso, tem ciclo.
-// 2. Para contar as trilhas de um parque, some os graus dos pontos dele
-//    (a linha de cada um na matriz) e divida por 2: cada trilha aparece
-//    nas duas pontas.
-// 3. Resposta esperada: a saída acima. O parque 2 tem 4 pontos e 3
-//    trilhas (4 - 1): é uma árvore, sem circuito.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdio.h>

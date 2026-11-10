@@ -15,12 +15,6 @@
 //   Atendendo Davi
 //   Fila vazia
 //
-// Dicas:
-// 1. Copie o nome com strcpy (os nomes do teste cabem em 30 bytes).
-// 2. Em entra: se f->fim == NULL, o novo também vira f->inicio.
-// 3. Em sai: se f->inicio virou NULL, f->fim também precisa virar NULL.
-// 4. Resposta esperada: as cinco linhas acima, sem erro do sanitizer.
-//
 // Escreva sua resposta abaixo (complete entra e sai):
 
 #include <stdbool.h>

@@ -17,14 +17,6 @@
 //   (0, 3) e (5, 3): ataca
 //   (6, 2) e (3, 0): não ataca
 //
-// Dicas:
-// 1. Linha e coluna são comparações diretas.
-// 2. Nas diagonais, a distância entre as linhas é igual à distância entre
-//    as colunas: abs(l1 - l2) == abs(c1 - c2) (abs vem de stdlib.h).
-// 3. Outro jeito: mesma diagonal ↗ quando l1 + c1 == l2 + c2, e mesma ↘
-//    quando l1 - c1 == l2 - c2. Os dois jeitos dão o mesmo resultado.
-// 4. Resposta esperada: as 6 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

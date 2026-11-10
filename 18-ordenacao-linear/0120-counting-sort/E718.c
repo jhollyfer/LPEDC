@@ -13,14 +13,6 @@
 //   mesa -> aems | seta -> aest: não são anagramas
 //   carro -> acorr | corra -> acorr: anagramas
 //
-// Dicas:
-// 1. int c[256] = {0}; e c[(unsigned char) s[i]]++ até achar o '\0'.
-// 2. Por que o cast? O char pode ter sinal: uma letra acentuada em UTF-8
-//    vira um byte negativo, e c[-61] escreve antes do vetor.
-// 3. Depois, reescreva a string: cada x de 0 a 255, c[x] vezes. O '\0' do
-//    fim fica onde estava, porque o tamanho não muda.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

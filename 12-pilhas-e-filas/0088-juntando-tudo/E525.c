@@ -15,14 +15,6 @@
 //   Saiu: 1
 //   Depois: 2 3 4
 //
-// Dicas:
-// 1. Só despeje quando a saida estiver VAZIA. Despejar com a saida ainda
-//    cheia mistura a ordem.
-// 2. Cada item é empilhado e desempilhado no máximo duas vezes, então,
-//    na média, cada operação custa O(1) (custo amortizado), mesmo que um
-//    despejo isolado custe O(n).
-// 3. Resposta esperada: as duas linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

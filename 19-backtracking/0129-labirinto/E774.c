@@ -18,18 +18,6 @@
 //   ...#.F
 //   177 chamadas
 //
-// Dicas:
-// 1. anda(l, c, passos): o primeiro teste da função é a poda,
-//    passos >= menor. Comece menor com um valor maior que qualquer caminho
-//    possível (L * C + 1 serve).
-// 2. Ao chegar em F, a poda garante que passos < menor: atualize menor e
-//    copie o mapa inteiro (com os '*') para uma matriz melhor.
-// 3. Sem a poda, testando todos os caminhos e comparando só na chegada,
-//    seriam 449 chamadas, e a diferença cresce muito com o mapa. Mesmo
-//    assim, para menor caminho em mapa grande, a BFS (assunto 0110) é a
-//    ferramenta certa: O(L · C), sem retrocesso.
-// 4. Resposta esperada: as 7 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

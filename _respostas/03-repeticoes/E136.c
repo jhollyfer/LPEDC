@@ -1,9 +1,5 @@
 // 0023 · Break e continue
 // Exercício E136 · ★★☆
-//
-// Resposta: o break do "case 9" sai só do switch (o mais interno), não do for.
-// Conserto: depois do switch, "if (codigo == 9) break;". Corrigido, mostra
-// normal, alerta, "sensor desligou" e "Leituras: 3".
 
 #include <stdio.h>
 

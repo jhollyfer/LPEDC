@@ -20,14 +20,6 @@
 // (Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
 // C17, avisa se você usar.)
 //
-// Dicas:
-// 1. 0001 é 1 e 0110 é 6: o primeiro binário é 0x16. 1111 é 15, o F.
-// 2. printf("0001 0110 = 0x16 = %d\n", 0x16); o texto antes do %d é fixo.
-// 3. Com n bits cabem 2 elevado a n valores: em binário é um 1 seguido de n
-//    zeros, e cada 4 zeros viram um 0 no hexa: 0x10, 0x100 e 0x10000.
-// 4. Resposta esperada: as sete linhas acima (16 + 4 + 2 = 22; 1 * 16 + 15
-//    = 31).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

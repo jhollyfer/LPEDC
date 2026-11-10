@@ -16,15 +16,6 @@
 //   Feira     6   4   1   1   0
 //   Confere com o Floyd completo: sim
 //
-// Dicas:
-// 1. Para cada par (i, j): se d[i][a] + w + d[b][j] < d[i][j], troque.
-// 2. Dá para atualizar no lugar: com pesos não negativos, a rua nova não
-//    encurta nenhum caminho que termina em a nem nenhum que começa em b, e
-//    por isso d[i][a] e d[b][j] não mudam no meio. Na dúvida, copie antes
-//    a coluna a e a linha b em dois vetores e use as cópias.
-// 3. Resposta esperada: a saída acima. Mudam três casas: Porto -> Vila
-//    (10 vira 3), Feira -> Porto (11 vira 4) e Feira -> Vila (8 vira 1).
-//
 // Escreva sua resposta abaixo (escreva nova_rua):
 
 #include <stdbool.h>

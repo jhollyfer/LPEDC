@@ -24,7 +24,6 @@ int main(void) {
     int quantos = 0;
     bool valido = true;
 
-    printf("CPF: ");
     if (fgets(linha, sizeof(linha), stdin) == NULL) {
         return 1;
     }

@@ -14,14 +14,6 @@
 //   Maior altura: 4
 //   Altura agora: 1
 //
-// Dicas:
-// 1. void entrar(void) { altura++; if (altura > maior_altura) maior_altura = altura; }
-// 2. O caminho mais fundo é main -> checkout -> pagamento -> antifraude.
-//    entrar e sair também são funções, mas não se contam (é só um contador seu).
-// 3. Resposta esperada: maior altura 4, altura no fim 1 (só o main). Se
-//    alguma função esquecer o sair(), a altura no fim passa de 1: é assim que
-//    se caça esse tipo de erro.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -21,13 +21,6 @@
 //   Sem mover: 27 comparações
 //   Movendo para a frente: 20 comparações
 //
-// Dicas:
-// 1. Use const char *agenda[5]: mover um contato é só mover ponteiros.
-// 2. Achou na posição i? Guarde agenda[i], empurre agenda[i-1..0] uma casa
-//    para a direita (de trás para frente) e ponha o guardado em agenda[0].
-// 3. Sem mover: Mãe custa 5 sempre, Ana 4, Pizzaria 3: 5+4+5+5+3+5 = 27.
-// 4. Resposta esperada: a saída acima (5+5+2+1+5+2 = 20 comparações).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

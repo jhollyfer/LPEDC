@@ -16,14 +16,6 @@
 // Para testar sem digitar: printf 'Maria Clara Souza\n' | ~/LPEDC/rodar
 // seguido do caminho deste arquivo.
 //
-// Dicas:
-// 1. O %s para no primeiro espaço; %4s lê no máximo 4 caracteres.
-// 2. O que o scanf não leu continua na entrada, esperando a próxima leitura.
-//    Cada %s pula os espaços antes de ler; o fgets não pula nada.
-// 3. O fgets pega o resto da linha do ponto exato em que o scanf parou, com
-//    o '\n' no fim. Guarde o strlen num size_t antes do strcspn.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete o programa):
 
 #include <stdio.h>

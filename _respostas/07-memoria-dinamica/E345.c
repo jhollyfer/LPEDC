@@ -54,11 +54,3 @@ int main(void) {
     liberar(frutas, qtd);
     return 0;
 }
-// Exemplo de uso:
-// uva
-// manga
-// caju
-// acerola
-// fim
-// Ao contrário: acerola caju manga uva
-// O vetor cresceu 2 vezes

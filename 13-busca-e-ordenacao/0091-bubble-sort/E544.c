@@ -19,13 +19,6 @@
 //   4º Fortaleza  68 pts 19 vit
 //   5º Inter      65 pts 18 vit
 //
-// Dicas:
-// 1. Primeiro compare os pontos; só se forem iguais, compare as vitórias.
-// 2. Struct se copia inteira com =: Time aux = tabela[j]; funciona.
-// 3. Para alinhar: printf("%dº %-10s %2d pts %2d vit\n", ...).
-// 4. Resposta esperada: a saída acima (Palmeiras passa o Flamengo pelas
-//    vitórias).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

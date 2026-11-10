@@ -12,18 +12,6 @@
 //   Saída que aparece:
 //   D:87 H:35 C:35 G:38 E:12 F:50 G:38 H:35 I:9
 //
-// Dicas:
-// 1. Mostre o valor de k toda vez que um pedido volta para o vetor. Ele
-//    devia andar de 0 a 8 sem repetir.
-// 2. Com o primeiro erro consertado, a saída fica quase certa:
-//    I:9 B:12 E:12 A:35 H:35 C:35 G:38 F:50 D:87. Compare A, C e H com a
-//    ordem de chegada. Quem decide onde entra um valor IGUAL a outro?
-// 3. Resposta esperada: o int k = 0 está dentro do for dos baldes, então
-//    cada balde volta a escrever a partir de v[0]; ele tem que vir antes do
-//    for. E o laço do insere_ordenado anda com < em vez de <=: um valor
-//    igual para antes dos iguais que já estavam na lista, e a ordem de
-//    chegada se perde. Com <=, ele entra depois deles.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

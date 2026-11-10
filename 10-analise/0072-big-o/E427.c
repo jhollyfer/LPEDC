@@ -24,16 +24,6 @@
 //   e) O(n)            32     2048
 //   f) O(n log n)      64    10240
 //
-// Dicas:
-// 1. No d) não há laço: a função só devolve 1 (use (void)n; para o gcc não
-//    reclamar do parâmetro sem uso).
-// 2. Um laço de dentro com tamanho fixo (10) não depende de n. Laços em
-//    sequência somam; laços aninhados multiplicam.
-// 3. Formato da linha: printf("%-14s %6ld %8ld\n", "a) O(n)", ...).
-// 4. Resposta esperada: a tabela acima. As linhas a) e f) dão 10240 com
-//    n = 1024, mas por motivos diferentes: 10 é constante, log₂ 1024 = 10
-//    cresce com n.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

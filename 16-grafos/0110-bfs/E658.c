@@ -17,14 +17,6 @@
 //   Grupo 3: F G H
 //   Total de grupos: 3
 //
-// Dicas:
-// 1. Uma BFS a partir de A visita só o grupo de A. Quem sobrar sem visita
-//    está em outro grupo.
-// 2. Laço externo: para cada bairro v ainda não visitado, comece uma BFS
-//    nova a partir de v e some 1 nos grupos.
-// 3. Um vetor visitado[] só, compartilhado por todas as BFS.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

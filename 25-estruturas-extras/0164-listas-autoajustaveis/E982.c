@@ -13,13 +13,6 @@
 //   Ana: Ana Duda Bia Caio
 //   Ana: Ana Duda Bia Caio
 //
-// Dicas:
-// 1. Na segunda ligação, a Bia já é a primeira da lista. Quanto vale ant
-//    quando o laço para no primeiro nó?
-// 2. Se o nó achado já é o primeiro, não há nada para mover.
-// 3. Resposta esperada: envolva as três atribuições do fim num
-//    if (ant != NULL) { ... }.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

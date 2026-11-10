@@ -20,14 +20,6 @@
 //   ESP = 21
 //   G + XG = 14
 //
-// Dicas:
-// 1. Sem valor escolhido, um nome vale o anterior + 1.
-// 2. Um valor pode usar nomes que já apareceram antes: XXG = GG * 2.
-// 3. const enum Tamanho tamanhos[] = {P, M, G, ...}; e
-//    const char *nomes[] = {"P", "M", ...}; andam juntos pelo mesmo índice.
-// 4. Resposta esperada: a saída acima. 14 não é tamanho nenhum, e o C não
-//    reclama: para ele, são só inteiros.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

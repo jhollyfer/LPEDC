@@ -16,14 +16,6 @@
 //   shaker: 3 passadas, 18 comparações
 //   resultado: 1 2 3 4 5 6 7 8
 //
-// Dicas:
-// 1. Guarde a parte ainda bagunçada em v[ini..fim]. Depois da ida, fim--;
-//    depois da volta, ini++.
-// 2. Na volta, compare v[j - 1] com v[j], com j descendo de fim até ini + 1.
-// 3. Pare quando uma passada (de ida ou de volta) não trocar nada.
-// 4. Resposta esperada: a saída acima. A ida troca só o 8 com o 1, a volta
-//    traz o 1 para a frente, e a terceira passada confirma que acabou.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

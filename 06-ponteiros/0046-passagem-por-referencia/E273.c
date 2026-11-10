@@ -12,11 +12,6 @@
 //   Saída esperada:
 //   Menor: 31  Maior: 39  Amplitude: 8
 //
-// Dicas:
-// 1. Comece com *menor = *maior = v[0] e percorra do índice 1 em diante.
-// 2. O const no vetor garante que a função só lê as temperaturas.
-// 3. Resposta esperada: menor 31, maior 39, amplitude 8.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

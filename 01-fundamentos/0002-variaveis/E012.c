@@ -20,13 +20,6 @@
 //   [ ] 32
 //   '7' vale 55, 7 vale 7
 //
-// Dicas:
-// 1. char letra = 'A'; printf("%c %d\n", letra, letra);
-// 2. Depois: letra = 66; e assim por diante. Na tabela ASCII, 'A' é 65, '0'
-//    é 48 e o espaço é 32.
-// 3. Resposta esperada: as cinco linhas acima. '7' é o caractere sete, de
-//    código 55; 7 é o número sete. São diferentes.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

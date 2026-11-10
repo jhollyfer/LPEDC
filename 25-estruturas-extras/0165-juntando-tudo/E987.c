@@ -15,16 +15,6 @@
 //   lista MTF         114.6      114.5
 //   hash                6.4        4.7
 //
-// Dicas:
-// 1. A estrutura pode ser typedef struct { NoH *balde[BALDES]; } Hash; com
-//    NoH { int chave; struct NoH *prox; }. cria faz o malloc e põe NULL em
-//    todos os baldes.
-// 2. insere confere se a chave já está no balde antes de criar o nó. libera
-//    solta as listas de todos os baldes e depois a struct.
-// 3. Resposta esperada: a saída acima. Com 1000 chaves em 101 baldes, cada
-//    lista tem umas 10; o hash ganha de todos, mas não guarda a ordem: não
-//    serve para "liste do código 200 ao 300".
-//
 // Escreva sua resposta abaixo (complete as funções do hash):
 
 #include <stdio.h>

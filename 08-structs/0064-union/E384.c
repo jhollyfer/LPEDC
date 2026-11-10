@@ -25,14 +25,6 @@
 //   esta máquina é little-endian
 //   em ordem de rede, memória: 11 22 33 44
 //
-// Dicas:
-// 1. Para descobrir a endianness: grave 1 em .n e olhe se .b[0] vale 1.
-// 2. Para inverter: duas Visao, de e para; para.b[i] = de.b[3 - i].
-// 3. m[0] são os dois primeiros bytes da memória, lidos como um número de 16
-//    bits na ordem da máquina: 44 33 vira 0x3344.
-// 4. Resposta esperada: a saída acima. A última linha sai igual em qualquer
-//    máquina: é para isso que serve a ordem de rede.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdint.h>

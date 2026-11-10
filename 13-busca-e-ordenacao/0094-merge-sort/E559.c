@@ -13,14 +13,6 @@
 //   Notas: 45 50 60 60 75 85 90 95 98
 //   7 comparações
 //
-// Dicas:
-// 1. Três índices: i em a, j em b, k em c.
-// 2. Enquanto as duas têm elementos, copie o menor das frentes e avance só o
-//    índice de quem foi copiado.
-// 3. Quando uma acabar, copie o resto da outra sem comparar.
-// 4. Resposta esperada: a saída acima. A turma A acaba depois da 7ª
-//    comparação, e 95 e 98 vêm direto.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

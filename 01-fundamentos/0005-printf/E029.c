@@ -13,13 +13,6 @@
 // Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
 // #00080F, sempre com 7 caracteres.
 //
-// Dicas:
-// 1. %X mostra em hexadecimal com letras maiúsculas.
-// 2. Um componente pequeno (8) viraria só "8". A largura 2 com zero à
-//    esquerda resolve: %02X.
-// 3. Resposta esperada: printf("#%02X%02X%02X\n", r, g, b); mostra #1E90FF
-//    e, com 0, 8 e 15, #00080F.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -16,12 +16,6 @@
 //   Sem o 80 (dois filhos): pré 60 25 40 35 50 90 70
 //   Sem o 25 (um filho):    pré 60 40 35 50 90 70
 //
-// Dicas:
-// 1. Ache o nó com bst_busca. Se vier NULL, devolva "não existe".
-// 2. Conte quantos dos dois ponteiros (esq e dir) não são NULL: 0, 1 ou 2.
-// 3. Resposta esperada: a saída acima. O 25 tinha dois filhos no começo, mas
-//    depois que o 10 saiu ficou só com o 40.
-//
 // Escreva sua resposta abaixo (complete caso):
 
 #include <stdio.h>

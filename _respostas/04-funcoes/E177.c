@@ -1,10 +1,5 @@
 // 0030 · Escopo e tempo de vida
 // Exercício E177 · ★★☆
-//
-// Resposta: total foi declarada dentro do corpo do for. O escopo dela é só
-// aquele bloco e o tempo de vida é uma volta: a cada volta nasce outra total,
-// com 0, e soma só o item da vez. Na última volta ela vale 4.75. Declarada
-// antes do for, ela vive o laço inteiro e acumula.
 
 #include <stdio.h>
 

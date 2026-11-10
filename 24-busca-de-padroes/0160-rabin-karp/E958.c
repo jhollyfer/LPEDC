@@ -14,18 +14,6 @@
 //   nosso trabalhO MEDE A AGUA DA CHUVA COM um balde
 //   27 de 48 letras em trechos copiados (56%)
 //
-// Dicas:
-// 1. Uma função int hashes(const char *s, long long h[]) que enche h com o
-//    hash rolante de cada janela e devolve quantas são (n - 8 + 1). Use
-//    BASE 256 e Q 1000003, em long long.
-// 2. Para cada janela i do suspeito, procure o hash dela no vetor do
-//    original (um laço simples basta aqui) e confira as letras antes de
-//    marcar.
-// 3. Guarde as marcas num vetor int copiada[] e só converta para maiúscula
-//    no fim, com toupper((unsigned char) c).
-// 4. Resposta esperada: a saída acima. O 'o' de "trabalho" também é marcado:
-//    a janela "o mede a" existe no original ("projeto mede a").
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

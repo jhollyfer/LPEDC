@@ -6,10 +6,7 @@
 
 int main(void) {
     double peso, altura;
-
-    printf("Peso (kg): ");
     scanf("%lf", &peso);
-    printf("Altura (m): ");
     scanf("%lf", &altura);
 
     double imc = peso / pow(altura, 2);

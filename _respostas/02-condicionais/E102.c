@@ -5,7 +5,6 @@
 
 int main(void) {
     int hora;
-    printf("Hora (0 a 23): ");
     if (scanf("%d", &hora) != 1 || hora < 0 || hora > 23) {
         printf("Hora inválida.\n");
         return 1;

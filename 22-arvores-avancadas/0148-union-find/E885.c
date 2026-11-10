@@ -13,14 +13,6 @@
 //   cabo 9 (2-5) é redundante
 //   3 cabos redundantes; 6 cabos bastam; rede toda ligada
 //
-// Dicas:
-// 1. uf_une devolve false quando os dois já estavam no mesmo grupo. É
-//    exatamente o teste do cabo redundante.
-// 2. Os cabos são numerados a partir de 1 na saída (i + 1).
-// 3. Resposta esperada: a saída acima. Com 7 computadores, 6 cabos sem ciclo
-//    ligam tudo: é uma árvore. A mesma ideia vai aparecer no algoritmo de
-//    Kruskal, no módulo 23.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

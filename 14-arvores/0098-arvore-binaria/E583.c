@@ -19,13 +19,6 @@
 //   Por nível: M G T C J X
 //   Nós: 6, altura: 2
 //
-// Dicas:
-// 1. Monte de baixo para cima: as folhas são arv_cria('C', NULL, NULL) e
-//    companhia. T não tem filho esquerdo: o 2º argumento dele é NULL.
-// 2. Cada função de percurso imprime um espaço antes de cada letra; use
-//    printf("Pré-ordem:") e chame arv_pre_ordem(raiz) logo depois.
-// 3. Resposta esperada: as 5 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

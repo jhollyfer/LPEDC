@@ -6,7 +6,7 @@
 int main(void) {
     int altura;
 
-    printf("Altura: ");
+    printf("Altura:\n");
     if (scanf("%d", &altura) != 1 || altura < 1 || altura > 20) {
         printf("Altura de 1 a 20, por favor.\n");
         return 1;

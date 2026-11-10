@@ -5,7 +5,6 @@
 
 int main(void) {
     double temp;
-    printf("Temperatura: ");
     if (scanf("%lf", &temp) != 1) {
         printf("Entrada inválida\n");
         return 1;

@@ -22,15 +22,6 @@
 //   ...
 //   *q -= 4       a = 5, b = 16, *p = 16, *q = 5
 //
-// Dicas:
-// 1. Quem muda com *p = ... é a variável apontada; p = q e q = &a só trocam
-//    o alvo do ponteiro, sem mexer em a nem em b.
-// 2. Use o mesmo printf seis vezes, mudando só o texto da linha; alinhe
-//    com espaços para a tabela ficar fácil de ler.
-// 3. Resposta esperada: as seis linhas terminam em a = 5, b = 16, *p = 16,
-//    *q = 5; no meio aparecem "*p = *p * 2  a = 9, b = 16, *p = 16, *q = 16"
-//    e "q = &a  a = 9, b = 16, *p = 16, *q = 9".
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

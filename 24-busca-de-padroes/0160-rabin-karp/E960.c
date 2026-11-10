@@ -12,15 +12,6 @@
 //   soma:       7 verificações, 2 ocorrências
 //   polinomial: 2 verificações, 2 ocorrências
 //
-// Dicas:
-// 1. Soma: hp e ht começam com a soma dos m primeiros bytes; para rolar,
-//    ht += t[i + m] - t[i] (converta para unsigned char).
-// 2. Com a soma, todo anagrama de "amor" tem o mesmo hash: roma, mora, ramo,
-//    omar e até o "mora" de "amora". Cada um vira uma conferência inútil.
-// 3. No polinômio, cada letra é multiplicada por uma potência diferente da
-//    base: trocar duas letras de lugar muda o valor.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

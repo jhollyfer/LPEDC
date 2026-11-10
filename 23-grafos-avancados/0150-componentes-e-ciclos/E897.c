@@ -17,15 +17,6 @@
 //   Sem ciclovia: Industrial Mangue
 //   Ciclovias novas para ligar tudo: 3
 //
-// Dicas:
-// 1. Faça a DFS devolver um int: quantos bairros ela marcou (1 pelo próprio
-//    u, mais o que cada chamada recursiva devolver).
-// 2. Guarde o número do maior grupo enquanto o laço externo roda. "Sem
-//    ciclovia" é grau zero: a linha do bairro na matriz só tem zeros.
-// 3. Resposta esperada: a saída acima. São 4 grupos ({Centro, Prainha,
-//    Jardim, Porto}, {Lagoa, Vila Nova, Alto}, {Industrial}, {Mangue}),
-//    então faltam 4 - 1 = 3 ciclovias.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

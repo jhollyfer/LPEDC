@@ -13,13 +13,6 @@
 //   pedido 2210 -> nicho 10
 //   ...
 //
-// Dicas:
-// 1. A função hash de inteiros é só "return pedido % 11;".
-// 2. Guarde os 5 números num vetor e percorra com um for. Um vetor
-//    "int dono[11] = {0};" lembra qual pedido ocupou cada nicho (0 = vazio).
-// 3. Resposta esperada: 1043 -> 9, 2210 -> 10, 3876 -> 4,
-//    5521 -> 10 (colide com 2210) e 7019 -> 1.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

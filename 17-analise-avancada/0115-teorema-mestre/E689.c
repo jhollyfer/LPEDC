@@ -20,16 +20,6 @@
 //   n = 128:  16384 contra  2187 multiplicações, mesmo resultado
 //   n = 256:  65536 contra  6561 multiplicações, mesmo resultado
 //
-// Dicas:
-// 1. Copie a estrutura de multiplica4: caso base n == 1 (conta 1
-//    multiplicação) e, no caso geral, um bloco de rascunho com malloc.
-// 2. O rascunho precisa de 3 produtos de 2h - 1 coeficientes e das somas
-//    sa = a0 + a1 e sb = b0 + b1, de h coeficientes cada.
-// 3. Monte o resultado como em multiplica4: r[i] += p0[i];
-//    r[i + h] += p1[i]; r[i + 2h] += p2[i]. Não esqueça do free.
-// 4. Resposta esperada: a saída acima. 16 = 4², 729 = 3⁶, 6561 = 3⁸: com
-//    n = 2^j, são 4^j contra 3^j multiplicações.
-//
 // Escreva sua resposta abaixo (escreva multiplica3):
 
 #include <stdio.h>

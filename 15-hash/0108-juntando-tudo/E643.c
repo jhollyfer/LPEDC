@@ -17,13 +17,6 @@
 //   paulo
 //   7 palavras
 //
-// Dicas:
-// 1. Dois laços dentro de um: o primeiro pula o que não é letra, o segundo
-//    mostra as letras com putchar(tolower(...)).
-// 2. Sempre converta para unsigned char antes de chamar isalpha e tolower.
-// 3. Resposta esperada: a saída acima. O "São" sai como "são": o tolower
-//    muda o 'S' e deixa os bytes do "ã" como estão.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -17,16 +17,6 @@
 //
 // Escreva tudo neste arquivo, com uma struct sua.
 //
-// Dicas:
-// 1. Guarde a roda pelo último nó, como no lista.c. Quem roda é sempre
-//    ultimo->prox, o primeiro.
-// 2. A cada vez: fatia = menor entre o quantum e o que falta. Some a fatia
-//    no relógio e tire do processo.
-// 3. Se o processo terminou, tire ele da roda (ultimo->prox = p->prox,
-//    free, e cuidado se ele era o único). Se não terminou, ele vai para o
-//    fim: basta fazer ultimo = p. Girar a roda é mudar um ponteiro.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

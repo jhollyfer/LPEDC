@@ -9,7 +9,7 @@ int main(void) {
     int tentativas = 0;
 
     do {
-        printf("Senha: ");
+        printf("Senha:\n");
         if (scanf("%d", &senha) != 1) {
             return 1;
         }

@@ -1,8 +1,5 @@
 // 0057 · Erros de memória
 // Exercício E340 · ★★☆
-//
-// (a) malloc(strlen(original)) esquecia o '\0': o strcpy escrevia 1 byte
-// além do bloco. (b) o for com i <= dias lia km[5], fora do bloco.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +35,3 @@ int main(void) {
     free(placa);
     return 0;
 }
-// Saída:
-// Placa: QTX3E21
-// Km da semana: 238

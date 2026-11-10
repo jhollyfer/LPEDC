@@ -18,15 +18,6 @@
 //   Time 2: Bruno Diego Fábio
 //   Impossível: Bruno e Carla ficariam no mesmo time
 //
-// Dicas:
-// 1. Vetor time[] com -1 (sem time), 0 ou 1. O time do rival é 1 - time[u].
-// 2. Faça o laço externo das componentes (assunto 0110, E658): pode haver
-//    gente sem rival nenhum ou grupos soltos.
-// 3. Um grafo que dá para dividir assim se chama BIPARTIDO. Ele deixa de
-//    ser bipartido quando aparece um ciclo de tamanho ímpar: Ana, Bruno,
-//    Carla, Ana.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

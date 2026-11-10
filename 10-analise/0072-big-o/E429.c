@@ -16,14 +16,6 @@
 //   n =  100: pares   4950 passos, marcas  100 passos
 //   n = 1000: pares 499500 passos, marcas 1000 passos
 //
-// Dicas:
-// 1. Em repetido_marcas, o passo é cada consulta a visto[v[i]].
-// 2. Para zerar o vetor de marcas: bool visto[1000] = {false};
-// 3. A versão com marcas troca memória (1000 bools) por tempo. Funciona aqui
-//    porque os códigos são pequenos; com CPFs, precisaria de outra ideia
-//    (a tabela hash do módulo 15).
-// 4. Resposta esperada: a saída acima; as duas respondem "sem repetidos".
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

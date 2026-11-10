@@ -16,15 +16,6 @@
 //   Fila:   #105 #106 #107 #101 #102 #104 #103
 //   Menor:  #105 #101 #106 #102 #103 #107 #104
 //
-// Dicas:
-// 1. kahn_menor não precisa de fila: um vetor feito[] e, a cada um dos V
-//    passos, um laço que pega o primeiro v com !feito[v] e grau[v] == 0.
-// 2. Feito o u, desconte grau[v] de todo v com antes[u][v]. Se num passo
-//    nenhum vértice estiver livre, há ciclo.
-// 3. Resposta esperada: a saída acima. As duas são ordenações válidas. A
-//    "menor" custa O(V²) com essa busca; com um heap de mínimo (assunto
-//    0102) no lugar da fila, cairia para O((V + E) log V).
-//
 // Escreva sua resposta abaixo (escreva kahn_fila e kahn_menor):
 
 #include <stdbool.h>

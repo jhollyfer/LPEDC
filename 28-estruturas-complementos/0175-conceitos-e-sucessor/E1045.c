@@ -13,13 +13,6 @@
 //   grau 2: 4 nós
 //   grau da árvore: 2 | folhas: 5
 //
-// Dicas:
-// 1. ap_grau(x) já devolve quantos filhos x tem. Faça conta[ap_grau(r)]++ e
-//    chame para os dois filhos.
-// 2. Folha é nó de grau 0. Numa árvore binária com n nós, n - 1 arestas:
-//    some 0·5 + 1·1 + 2·4 e confira.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

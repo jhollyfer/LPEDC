@@ -16,13 +16,6 @@
 //   c) (0 voltas)
 //   d) 1 3 9 27 81 (5 voltas)
 //
-// Dicas:
-// 1. Antes de cada laço: printf("a) ") e voltas = 0. No corpo:
-//    printf("%d ", x) e voltas++. Depois: printf("(%d voltas)\n", voltas).
-// 2. O laço c pergunta "1 >= 10?" logo de cara: o corpo nunca roda.
-// 3. Resposta esperada: a saída acima. O passo pode ser qualquer conta, não
-//    só +1: no d, x é multiplicado por 3 a cada volta.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

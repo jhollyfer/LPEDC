@@ -20,13 +20,6 @@
 //   C-D: mão única (C -> D)
 //   Mão única: 3, mão dupla: 2
 //
-// Dicas:
-// 1. Para cada struct do vetor, adj[r.de][r.para] = 1 (só nesse sentido).
-// 2. Olhe cada par uma vez só: i de 0 a 3 e j de i + 1 a 3. Se
-//    adj[i][j] e adj[j][i] valem 1, é mão dupla; se só um vale 1, mão única.
-// 3. A letra da esquina i é 'A' + i (char é número, assunto 0040).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -28,17 +28,6 @@
 //   alternando com 1/2: 20 realloc
 //   alternando com 1/4: 1 realloc
 //
-// Dicas:
-// 1. Depois de diminuir o tamanho, em vet_tira:
-//    if (v->cap > 2 && v->tam <= v->cap / 4). Em vet_tira_metade, troque
-//    o 4 por 2.
-// 2. Use realloc para a nova capacidade, numa variável temporária. Se ele
-//    falhar, tudo bem: o vetor só continua grande.
-// 3. Resposta esperada: a saída acima. Encolhendo na metade, cada "empurra"
-//    cresce para 8 e cada "tira" volta a 4: um realloc (que copia tudo) a
-//    cada operação. Com 1/4, depois de crescer sobra folga para os dois
-//    lados.
-//
 // Escreva sua resposta abaixo (complete vet_tira e vet_tira_metade):
 
 #include <stdio.h>

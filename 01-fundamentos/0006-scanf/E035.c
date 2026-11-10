@@ -3,23 +3,22 @@
 //
 // Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
 // UM scanf("%d %d", &a, &b), guarde o retorno e mostre "lidos=? a=? b=?".
-// Rode com cada uma das entradas abaixo e confira a saída de cada uma com a
-// resposta esperada (a última dica):
+// Teste com as três entradas abaixo.
 //
-//   printf '7 9\n'   | ~/LPEDC/rodar E035.c
-//   printf '7 x\n'   | ~/LPEDC/rodar E035.c
-//   printf 'x 7\n'   | ~/LPEDC/rodar E035.c
-//   printf '7\n\n9\n' | ~/LPEDC/rodar E035.c
-//   printf ''        | ~/LPEDC/rodar E035.c
+//   Entrada:
+//   7 9
+//   Saída esperada:
+//   lidos=2 a=7 b=9
 //
-// Dicas:
-// 1. O retorno conta só os itens guardados com sucesso, na ordem. No primeiro
-//    que falha, o scanf para.
-// 2. %d pula espaços e Enters, quantos forem.
-// 3. Entrada vazia é fim de arquivo: o scanf devolve EOF, que vale -1.
-// 4. Resposta esperada: "lidos=2 a=7 b=9"; "lidos=1 a=7 b=0";
-//    "lidos=0 a=0 b=0"; "lidos=2 a=7 b=9" (os Enters são pulados);
-//    "lidos=-1 a=0 b=0".
+//   Entrada:
+//   7 x
+//   Saída esperada:
+//   lidos=1 a=7 b=0
+//
+//   Entrada:
+//   x 7
+//   Saída esperada:
+//   lidos=0 a=0 b=0
 //
 // Escreva sua resposta abaixo:
 

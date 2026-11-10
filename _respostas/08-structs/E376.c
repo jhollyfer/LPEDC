@@ -1,10 +1,5 @@
 // 0063 · Enum
 // Exercício E376 · ★★☆
-//
-// Resposta: faltava o case COPAS. O default capturava COPAS e devolvia
-// "???", e o gcc não avisou porque, com default, ele entende que você tratou
-// "todo o resto". Sem default, o -Wall avisa quando um nome do enum fica sem
-// case; o "???" vai para depois do switch, só para valores inválidos.
 
 #include <stdio.h>
 

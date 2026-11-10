@@ -14,13 +14,6 @@
 //   Chega ao chão em 4.07 s
 //   Altura máxima: 21.50 m, em 2.00 s
 //
-// Dicas:
-// 1. a = -5, b = 20, c = 1.5, todos double.
-// 2. Com a negativo, das duas raízes a que interessa (t positivo) é a do
-//    "- raiz(delta)". A outra dá um tempo negativo, antes do lançamento.
-// 3. Resposta esperada: delta = 400 + 30 = 430; t = (-20 - 20.736) / -10 =
-//    4.07 s; altura máxima em t = 2 s, h(2) = -20 + 40 + 1.5 = 21.50 m.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

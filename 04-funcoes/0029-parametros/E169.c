@@ -16,13 +16,6 @@
 //   dentro: 300
 //   main: 300
 //
-// Dicas:
-// 1. Dentro da função: pontos = pontos * 2; printf(...); return pontos;
-// 2. O "pontos" da função e o "pontos" do main são duas variáveis: mudar uma
-//    não muda a outra.
-// 3. Resposta esperada: a saída acima. Na primeira chamada, o 300 volta pelo
-//    return e é jogado fora; só na segunda ele chega ao main.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

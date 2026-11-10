@@ -19,17 +19,6 @@
 //   ...
 //   20  2432902008176640000      62
 //
-// Dicas:
-// 1. 20! não cabe em int nem em long de 32 bits: use unsigned long long e
-//    %llu no printf.
-// 2. teto_log2 começa com h = 0 e folhas = 1; enquanto folhas < x,
-//    dobra folhas e soma 1 em h.
-// 3. Calcule o fatorial acumulando no próprio laço do main (fat *= n).
-// 4. Resposta esperada: a tabela acima. Nas linhas que não aparecem, o
-//    limite é 13, 16, 19, 22 e 26 (n = 7 a 11) e 33, 37, 41, 45, 49, 53 e
-//    57 (n = 13 a 19). Por que inteiros? Com log2 em double, um valor que
-//    devia dar 3 exato pode sair 3.0000000000000004, e o teto erra por 1.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

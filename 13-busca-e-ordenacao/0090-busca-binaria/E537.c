@@ -17,14 +17,6 @@
 //   Nota 4: posições 7 a 8, 2 avaliações
 //   Nota 5: posições 9 a 11, 3 avaliações
 //
-// Dicas:
-// 1. Use o estilo semiaberto do exemplo A180: ini = 0, fim = n, while (ini < fim).
-// 2. As duas funções só diferem numa comparação: v[meio] < x ou v[meio] <= x.
-// 3. Se a primeira dá a e a segunda dá b, a nota aparece b - a vezes, nas
-//    posições a até b - 1.
-// 4. Resposta esperada: a saída acima. Com um milhão de avaliações, cada
-//    contagem custa umas 40 voltas, e não um milhão.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

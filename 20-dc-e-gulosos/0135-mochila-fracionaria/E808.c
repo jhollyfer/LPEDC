@@ -20,15 +20,6 @@
 //   C:  4000 L a R$ 5.25 = R$ 21000.00
 //   Total: R$ 151140.00
 //
-// Dicas:
-// 1. Uma struct Oferta { char nome; int litros; int centavos; } e qsort em
-//    ordem CRESCENTE de preço.
-// 2. compra = o menor entre a oferta e o que falta. O custo parcial é
-//    (long long)compra * centavos: 12000 * 510 já passa de 6 milhões, e com
-//    pedidos maiores um int estouraria.
-// 3. Resposta esperada: a saída acima. Para mostrar R$ 4.89 a partir de 489:
-//    printf("%d.%02d", 489 / 100, 489 % 100).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

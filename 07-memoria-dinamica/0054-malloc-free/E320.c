@@ -9,13 +9,6 @@
 //   Original: coxinha
 //   Cópia: COXINHA
 //
-// Dicas:
-// 1. Quantos bytes ocupa "coxinha"? Conte o '\0'.
-// 2. malloc(strlen(texto) + 1), confira o NULL e use strcpy.
-// 3. Resposta esperada: a saída acima. Sem o + 1, o strcpy escreve o '\0'
-//    um byte depois do fim do bloco e o AddressSanitizer acusa
-//    heap-buffer-overflow.
-//
 // Escreva sua resposta abaixo (complete a função):
 
 #include <ctype.h>

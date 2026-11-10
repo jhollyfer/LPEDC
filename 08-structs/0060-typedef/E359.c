@@ -16,12 +16,6 @@
 //   12 * 4 = 48
 //   12 / 4 = 3
 //
-// Dicas:
-// 1. Escreva as quatro funções: double somar(double a, double b) etc.
-// 2. Botao botoes[] = {{'+', somar}, {'-', subtrair}, ...};
-// 3. Chame com botoes[i].f(12, 4). %g mostra 16 em vez de 16.000000.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

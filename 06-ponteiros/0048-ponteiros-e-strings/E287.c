@@ -12,12 +12,6 @@
 //   socorram me subi no onibus em marrocos: sim
 //   pix caiu: não
 //
-// Dicas:
-// 1. fim = s + strlen(s) - 1. Cuidado com a string vazia.
-// 2. while (ini < fim): se *ini é espaço, ini++ e continue; se *fim é
-//    espaço, fim-- e continue; se forem diferentes, não é palíndromo.
-// 3. Resposta esperada: sim, sim, não.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

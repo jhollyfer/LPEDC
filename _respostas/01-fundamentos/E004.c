@@ -8,7 +8,7 @@
 
 int main(void) {
     printf("Cine Estação\n");
-    printf("Sessão: 19h30 (sala 2)\n"); // o // só desliga o resto da linha
+    printf("Sessão: 19h30 (sala 2)\n"); // sala 2
     printf("Ingresso: R$ 28,00\n");
     return 0;
 }

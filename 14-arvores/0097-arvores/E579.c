@@ -13,13 +13,6 @@
 //   2025: 3
 //   videos: -1
 //
-// Dicas:
-// 1. Use um parâmetro a mais: uma função auxiliar busca(n, nome, prof) que
-//    já sabe a profundidade do nó em que está.
-// 2. Se o nome do nó é o procurado (strcmp == 0), devolva prof. Senão, tente
-//    cada filho com prof + 1 e devolva a primeira resposta diferente de -1.
-// 3. Resposta esperada: luz: 2, casa: 0, 2025: 3, videos: -1.
-//
 // Escreva sua resposta abaixo (complete profundidade_de):
 
 #include <stdio.h>

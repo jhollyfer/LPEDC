@@ -1,44 +1,27 @@
 // 0069 · Argumentos da linha de comando
 // Exercício E412 · ★★☆
 //
-// O programa deveria cumprimentar alguém um certo número de vezes:
+// Escreva um programa que cumprimenta alguém um certo número de vezes. Ele
+// recebe o nome e o número de vezes pela linha de comando. Sem os dois
+// argumentos, ou com um número de vezes que não é inteiro positivo, mostra uma
+// mensagem de uso em stderr e devolve 1.
 //
-//   $ rodar E412.c Ana 3
+//   Argumentos:
+//   Ana 3
+//
+//   Saída esperada:
 //   Olá, Ana!
 //   Olá, Ana!
 //   Olá, Ana!
 //
-// Mas, rodando assim, ele não mostra nada. E rodando sem argumentos
-// ("rodar E412.c"), ele cai com SEGV no AddressSanitizer. São dois erros:
-//
-// a) um índice errado no argv;
-// b) uma conferência que falta antes de usar o argv.
-//
-// Conserte os dois e rode de novo com "Ana 3" e sem argumentos. Sem
-// argumentos (ou com um número de vezes que não é inteiro positivo), o
-// programa deve mostrar uma mensagem de uso em stderr e devolver 1.
-//
-// Dicas:
-// 1. Quem é argv[0]? O que atoi("Ana") devolve?
-// 2. Sem argumentos, argc vale 1 e argv[1] é NULL. O que atoi(NULL) faz?
-// 3. Resposta esperada: a) o nome está em argv[1] e as vezes em argv[2]; o
-//    código usava argv[0] (o caminho do programa) e argv[1] ("Ana", que o
-//    atoi vira 0, então o laço não roda); b) falta conferir argc != 3 antes
-//    de tocar no argv. Consertado, "rodar E412.c Ana 3" mostra Olá, Ana! três
-//    vezes.
-//
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
     (void) argc;
-    char *nome = argv[0];
-    int vezes = atoi(argv[1]);
+    (void) argv;
 
-    for (int i = 0; i < vezes; i++) {
-        printf("Olá, %s!\n", nome);
-    }
     return 0;
 }

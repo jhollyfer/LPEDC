@@ -12,14 +12,6 @@
 //   pix: 0 0 0
 //   tatuta: 0 0 1 0 1 2
 //
-// Dicas:
-// 1. pi[0] é sempre 0: um prefixo PRÓPRIO de uma letra só é vazio.
-// 2. Guarde em k o tamanho da borda de p[0..j-1]. Se p[j] == p[k], a borda
-//    cresce: k++. Se não, tente a borda menor, k = pi[k - 1], enquanto k > 0.
-// 3. Confira "tatuta" no papel: em j = 3 ('u') o k cai de 1 para 0; em
-//    j = 4 ('t') volta a 1.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete calcula_pi):
 
 #include <stdio.h>

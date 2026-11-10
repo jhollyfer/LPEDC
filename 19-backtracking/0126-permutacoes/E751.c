@@ -16,14 +16,6 @@
 //   947
 //   soma: 4440
 //
-// Dicas:
-// 1. Guarde os dígitos num vetor de int: {4, 7, 9}. A troca é a de int do
-//    assunto 0046.
-// 2. Na folha, monte o número com numero = numero * 10 + v[k].
-// 3. Por que 4440? Cada dígito aparece 2 vezes em cada casa: (4 + 7 + 9)
-//    × 2 × 111.
-// 4. Resposta esperada: as 7 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

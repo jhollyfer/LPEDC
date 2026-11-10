@@ -13,13 +13,6 @@
 //   60 pódios possíveis
 //   Bia aparece em 36
 //
-// Dicas:
-// 1. Escreva uma segunda função, podios(v, i), igual a ordens, mas com a
-//    folha em i == 3 em vez de i == N. Isso é um ARRANJO: 5 × 4 × 3 = 60.
-// 2. Na folha, olhe só v[0], v[1] e v[2] para saber se a Bia está lá.
-// 3. Confira a conta: pódios sem a Bia são 4 × 3 × 2 = 24, e 60 - 24 = 36.
-// 4. Resposta esperada: as 3 linhas acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdio.h>

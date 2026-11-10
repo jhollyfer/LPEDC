@@ -21,13 +21,6 @@
 //     Açúcar: 15
 //     Leite: 24
 //
-// Dicas:
-// 1. Comece com {NULL, 0, 0}: realloc(NULL, ...) funciona como malloc.
-// 2. Dobre a capacidade quando n == cap (0 vira 2).
-// 3. Para remover o índice i: for (int j = i; j < e->n - 1; j++)
-//    e->v[j] = e->v[j + 1]; e depois e->n--.
-// 4. Resposta esperada: a saída acima, sem vazamento no ASan.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

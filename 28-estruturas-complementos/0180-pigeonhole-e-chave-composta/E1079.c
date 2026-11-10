@@ -12,15 +12,6 @@
 //   2:Bia(48) 2:Teo(70) 2:Ivo(70)
 //   3:Caio(55) 3:Nina(91)
 //
-// Dicas:
-// 1. Com passadas estáveis, a ÚLTIMA passada decide a ordem principal; as
-//    anteriores só desempatam.
-// 2. Primeiro a chave secundária (nota), depois a principal (cidade). É a
-//    mesma ideia do radix sort LSD (0121).
-// 3. Resposta esperada: troque as duas chamadas: ordena_por_nota antes de
-//    ordena_por_cidade. Com a correção, a saída é a de cima (repare que
-//    Ana e Lia, e Teo e Ivo, mantêm a ordem da lista original).
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

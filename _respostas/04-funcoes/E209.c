@@ -23,8 +23,7 @@ int maior3(int a, int b, int c) {
 int main(void) {
     int x = 5;
     int y = 3;
-    int a = x++; // o x++ roda uma vez só, aqui
-    int m = MAIOR(a, y);
+    int m = MAIOR(x++, y);
     printf("macro:  m = %d, x = %d\n", m, x);
 
     x = 5;
@@ -32,9 +31,7 @@ int main(void) {
     printf("função: m = %d, x = %d\n", m, x);
 
     chamadas = 0;
-    int p1 = pontos(40);
-    int p2 = pontos(25);
-    m = MAIOR(p1, p2);
+    m = MAIOR(pontos(40), pontos(25));
     printf("macro:  m = %d, chamadas = %d\n", m, chamadas);
 
     chamadas = 0;

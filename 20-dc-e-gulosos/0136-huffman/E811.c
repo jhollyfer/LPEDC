@@ -18,13 +18,6 @@
 //   'U' 1: 1110
 //   55 bits de 160 (34.4%)
 //
-// Dicas:
-// 1. long freq[256] = {0}; e um laço que faz freq[(unsigned char)*p]++.
-// 2. huf_constroi(freq), huf_codigos(raiz, cod) com static char
-//    cod[256][256], e no fim huf_libera(raiz).
-// 3. Resposta esperada: a saída acima. Para imprimir o símbolo %, escreva
-//    %% no printf. O P e o A, os mais frequentes, ganharam 2 bits.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

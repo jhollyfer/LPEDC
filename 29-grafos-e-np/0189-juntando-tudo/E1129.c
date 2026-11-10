@@ -20,13 +20,6 @@
 //   Rota 1: 26 quarteirões
 //   Rota 2: 22 quarteirões
 //
-// Dicas:
-// 1. abs() de <stdlib.h> dá o valor absoluto de um int.
-// 2. No custo, some d[r[i]][r[(i + 1) % N]] para i de 0 a N - 1: o último
-//    termo é a volta para a padaria.
-// 3. Resposta esperada: a saída acima. A primeira linha começa com 8
-//    espaços (printf("%8s", "")).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

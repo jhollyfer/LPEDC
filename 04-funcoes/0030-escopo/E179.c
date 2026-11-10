@@ -26,14 +26,6 @@
 //   main: 20
 //   soma dos b: 25
 //
-// Dicas:
-// 1. A local de a recomeça em 1 a cada chamada; a static de b continua de
-//    onde parou; c mexe na global, porque é a única x que ela enxerga.
-// 2. O main não enxerga a static de b: o único jeito de saber o valor dela
-//    lá fora é pelo return.
-// 3. Resposta esperada: a saída acima. A x do main nunca muda, e a global
-//    termina valendo 40.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

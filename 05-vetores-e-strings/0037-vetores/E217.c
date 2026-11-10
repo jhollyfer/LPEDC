@@ -15,12 +15,6 @@
 //   Dia 2: 23 graus
 //   Dia 1: 19 graus
 //
-// Dicas:
-// 1. int max[7] = {19, 23, ...}; o último índice é 6.
-// 2. O laço pode descer: for (int i = 6; i >= 0; i--).
-// 3. O dia é o índice + 1.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

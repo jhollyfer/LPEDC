@@ -20,15 +20,6 @@
 //   Manhã (8 pontos): exato, 28 quarteirões
 //   Tarde (30 pontos): aproximado, árvore 111, rota 172, com 2-opt 148
 //
-// Dicas:
-// 1. A tabela do Held-Karp só precisa ser dp[1 << 12][12] (192 KB):
-//    declare-a global. Com 30 pontos ela teria 2^30 x 30 ints (120 GB).
-// 2. No 2-opt, recomece a busca do começo a cada melhoria (i de 1 a n - 2,
-//    j de i + 1 a n - 1, aresta de volta com (j + 1) % n) e inverta o
-//    trecho rota[i..j].
-// 3. Resposta esperada: a saída acima. A rota da árvore (172) respeita a
-//    garantia (no máximo 2 x 111 = 222), e o 2-opt tira 24 quarteirões.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

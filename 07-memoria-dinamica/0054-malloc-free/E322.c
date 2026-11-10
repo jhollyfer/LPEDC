@@ -20,15 +20,6 @@
 //   d) 7 bytes
 //   e) 5 bytes: cabe 1 int
 //
-// Dicas:
-// 1. int tem 4 bytes, double 8 e qualquer ponteiro 8 (em 64 bits).
-//    "Recife" tem 6 letras, mais o '\0'.
-// 2. Se um malloc falhar, libere os que já deram certo antes de sair
-//    (free(NULL) não faz nada, então dá para liberar todos de uma vez).
-// 3. Resposta esperada: a saída acima. Em e) sobra 1 byte: escrever e[1]
-//    ocuparia os bytes 4 a 7, fora do bloco. Acrescente e[1] = 9; para ver
-//    o AddressSanitizer acusar heap-buffer-overflow, e depois apague a linha.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

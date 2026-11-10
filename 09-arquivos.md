@@ -156,7 +156,7 @@ arquivo é anunciado pela leitura que falhou:
 > [!WARNING]
 > Não use `while (!feof(arq))`, comum em materiais e livros. O `feof` só fica
 > verdadeiro **depois** que uma leitura tentou passar do fim. O laço roda uma
-> vez a mais e processa a última linha duas vezes (o E401 mostra). Teste o
+> vez a mais e processa a última linha duas vezes (rode com um arquivo de 3 linhas e conte). Teste o
 > retorno da leitura: `fgets(...) != NULL`, `fscanf(...) == 2`,
 > `(c = fgetc(arq)) != EOF`. Neste último, `c` é `int`: com `char`, o `EOF`
 > (-1) se confunde com um byte de verdade.
@@ -307,50 +307,18 @@ conteúdo na tela com fgets. Confira se o fopen deu certo nas duas vezes.
 Saída esperada:
 7 x 1 = 7
 7 x 2 = 14
-...
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35
+7 x 6 = 42
+7 x 7 = 49
+7 x 8 = 56
+7 x 9 = 63
 7 x 10 = 70
 ```
 
-**Dicas:**
-
-1. Um for de 1 a 10 com fprintf(arq, "7 x %d = %d\n", i, 7 * i).
-2. Para ler: while (fgets(linha, sizeof linha, arq) != NULL) printf("%s", linha);
-3. Resposta esperada: as 10 linhas da tabuada, de "7 x 1 = 7" até
-   "7 x 10 = 70". O arquivo fica em /tmp: confira com cat /tmp/tabuada7.txt.
-
 ```bash
 gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E397.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E397 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E397
-```
-
-**Exercício E398** · ★☆☆
-
-O programa abre o MESMO arquivo quatro vezes, alternando os modos "w" e
-"a", e grava um nome em cada vez. A função grava já está pronta. Escreva a
-função mostra, que abre o arquivo para leitura, lê linha por linha com
-fgets e imprime todos os nomes na mesma linha, separados por espaço.
-Depois chame mostra logo após cada grava no main, para enxergar o que cada
-modo fez com o arquivo:
-
-
-```text
-Saída esperada:
-w Ana  -> Ana
-a Bia  -> Ana Bia
-w Caio -> Caio
-a Duda -> Caio Duda
-```
-
-**Dicas:**
-
-1. "w" cria o arquivo vazio, apagando o que já existia; "a" escreve depois
-   do último byte, sem apagar nada.
-2. Para imprimir o nome sem o '\n' que o fgets traz, troque o '\n' por
-   '\0': linha[strcspn(linha, "\n")] = '\0'; (strcspn é de <string.h>).
-3. Ana e Bia somem quando o
-   terceiro fopen abre com "w".
-
-```bash
-gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E398.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E398 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E398
 ```
 
 **Exercício E399** · ★★☆
@@ -367,24 +335,15 @@ e o dinheiro do pastel
 
 
 Depois, abra o arquivo para leitura e leia caractere por caractere com
-fgetc, contando linhas, palavras e caracteres (bytes). Mostre:
+fgetc, contando linhas, palavras e caracteres (bytes).
 
 
 ```text
+Saída esperada:
 Linhas: 3
 Palavras: 10
 Caracteres: 53
 ```
-
-**Dicas:**
-
-1. A variável que recebe o fgetc precisa ser int, não char: o EOF não é um
-   caractere, é um valor fora da faixa de 0 a 255.
-2. Cada '\n' é uma linha. Uma palavra começa quando você estava fora de
-   palavra e chega num caractere que não é espaço nem '\n' (use isspace de
-   <ctype.h> e uma flag dentro_palavra).
-3. Resposta esperada: Linhas: 3, Palavras: 10, Caracteres: 53 (16 + 12 + 22
-   letras e espaços, mais os 3 '\n'). Confira com: wc /tmp/recado.txt
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E399.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E399 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E399
@@ -392,11 +351,12 @@ gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E399.c -o ~/LPEDC/09-arquivos/0067-a
 
 **Exercício E400** · ★★☆
 
-Complete o programa. A parte que cria o arquivo /tmp/turma.txt já está
-pronta: cada linha tem o nome do aluno e duas notas. Falta a leitura: use
-fscanf num laço que pare quando a linha não vier completa, calcule a média
-de cada um e mostre a situação (aprovado com média >= 7.0). No fim, mostre
-a média da turma.
+Escreva um programa que cria o arquivo /tmp/turma.txt com fprintf, uma linha
+por aluno com o nome e duas notas: "Bruna 9.0 7.5", "Diego 4.0 7.0" e
+"Lia 6.5 7.5". Feche, reabra para leitura e leia com fscanf num laço que
+pare quando a linha não vier completa. Mostre a média de cada um e a
+situação (aprovado com média >= 7.0) e, no fim, a média da turma. Confira os
+fopen e apague o arquivo no final.
 
 
 ```text
@@ -407,92 +367,43 @@ Lia      média 7.00  aprovada(o)
 Média da turma: 6.92
 ```
 
-**Dicas:**
-
-1. fscanf(arq, "%19s %lf %lf", nome, &n1, &n2) devolve 3 quando leu a
-   linha inteira. Use "== 3" como condição do while.
-2. Para a média da turma, acumule as médias e conte os alunos.
-3. Resposta esperada: Bruna 8.25, Diego 5.50, Lia 7.00, turma 6.92
-   (20.75 / 3 = 6.9166...).
-
 ```bash
 gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E400.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E400 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E400
 ```
 
-**Exercício E401** · ★★★
-
-Este programa compila sem aviso e roda sem erro do sanitizer, mas a conta
-sai errada. Ele grava três Pix recebidos (R$ 50, R$ 30 e R$ 20) e depois
-soma. Rode e veja:
-
-
-```text
-Pix: 50.00
-Pix: 30.00
-Pix: 20.00
-Pix: 20.00
-Total: 120.00
-```
-
-
-O último Pix aparece duas vezes. Conserte o laço e rode de novo: a saída
-tem que mostrar só os três Pix e Total: 100.00.
-
-**Dicas:**
-
-1. O feof só fica verdadeiro DEPOIS que uma leitura tenta passar do fim e
-   falha. Ele não "olha adiante".
-2. Depois de ler o 20, ainda sobra o '\n': o feof continua falso. A quarta
-   chamada do fscanf falha, não mexe em valor (que ainda vale 20) e o código
-   soma assim mesmo.
-3. Resposta esperada: troque o while (!feof(arq)) por
-   while (fscanf(arq, "%lf", &valor) == 1) { ... } e tire o fscanf de
-   dentro do laço. Saída: os três Pix e Total: 100.00.
-
-```bash
-gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E401.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E401 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E401
-```
-
 **Exercício E402** · ★★★
 
-Lista de compras automática. O programa deve:
+Lista de compras automática. Escreva um programa que:
 
-1. Criar /tmp/estoque.txt com estas linhas (produto e quantidade em casa):
-
+1. cria /tmp/estoque.txt com as linhas "arroz 3", "cafe 0", "leite 8",
 
 ```text
-arroz 3
-cafe 0
-leite 8
-ovos 2
-sabao 6
+ "ovos 2" e "sabao 6" (produto e quantidade em casa);
+```
+
+2. lê o estoque e, com os DOIS arquivos abertos ao mesmo tempo, grava em
+
+```text
+ /tmp/comprar.txt só os produtos com menos de 5 unidades, já com quanto
+ falta para chegar a 5 ("arroz 2");
+```
+
+3. fecha tudo, reabre /tmp/comprar.txt e mostra o resultado. Se o segundo
+
+```text
+ fopen falhar, feche o primeiro arquivo antes de sair.
 ```
 
 
-2. Ler o estoque e, com os DOIS arquivos abertos ao mesmo tempo, gravar em
-/tmp/comprar.txt só os produtos com menos de 5 unidades, já com quanto
-falta para chegar a 5 ("arroz 2").
-3. Fechar tudo, reabrir /tmp/comprar.txt e mostrar:
-
 
 ```text
+Saída esperada:
 Comprar:
 - arroz: 2
 - cafe: 5
 - ovos: 3
 3 itens na lista
 ```
-
-
-Se o segundo fopen falhar, feche o primeiro arquivo antes de sair.
-
-**Dicas:**
-
-1. Abra entrada em "r" e saída em "w". Leia com
-   while (fscanf(ent, "%29s %d", nome, &qtd) == 2).
-2. if (qtd < 5) fprintf(sai, "%s %d\n", nome, 5 - qtd);
-3. Na hora de mostrar, leia comprar.txt também com fscanf e conte os itens.
-4. Resposta esperada: arroz 2, cafe 5, ovos 3 e "3 itens na lista".
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0067-arquivos-texto/E402.c -o ~/LPEDC/09-arquivos/0067-arquivos-texto/E402 && ~/LPEDC/09-arquivos/0067-arquivos-texto/E402
@@ -766,10 +677,10 @@ gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/A136.c -o ~/LPEDC/09-arquivos/006
 
 **Exercício E403** · ★☆☆
 
-Uma estação meteorológica registrou as máximas da semana útil:
-31, 29, 33, 35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com
-UM fwrite. Depois leia tudo de volta, com UM fread, para outro vetor,
-confira se vieram os 5 valores e mostre a média.
+Uma estação meteorológica registrou as máximas da semana útil: 31, 29, 33,
+35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com UM fwrite.
+Depois leia tudo de volta, com UM fread, para outro vetor, confira se vieram
+os 5 valores e mostre a média.
 
 
 ```text
@@ -778,63 +689,23 @@ Lidos: 5 valores
 Média: 31.6 graus
 ```
 
-**Dicas:**
-
-1. fwrite(maximas, sizeof(int), 5, arq): o vetor já é um endereço, sem &.
-2. fread devolve quantos itens leu. Se for menor que 5, algo deu errado.
-3. Resposta esperada: Lidos: 5 valores e Média: 31.6 graus (158 / 5).
-
 ```bash
 gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E403.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E403 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E403
 ```
 
-**Exercício E404** · ★☆☆
+**Exercício E405** · ★★☆
 
-O arquivo /tmp/quatro.bin já está gravado com 4 ints em binário: 10, 20,
-30 e 40 (cada int ocupa 4 bytes). Complete o programa: antes de cada
-fread, escreva UM fseek que leve o arquivo até o int certo, para a saída
-ficar exatamente assim:
+Crie o tipo Conta (int numero, double saldo). No main, grave com UM fwrite
+em /tmp/contas.bin as contas 1001 (250.00), 1002 (80.50) e 1003 (1200.00).
+Escreva void listar(void), que mostra as contas lendo registro por registro,
+e int depositar(int posicao, double valor): abre em "rb+", vai até o
+registro da posição com fseek, lê, soma o valor ao saldo, volta ao começo
+do mesmo registro e grava por cima (1 se deu certo, 0 se não). Liste,
+deposite R$ 100.00 na posição 1 e liste de novo.
 
 
 ```text
 Saída esperada:
-a) 30, agora na posição 12
-b) 20, agora na posição 8
-c) 40, agora na posição 16
-d) 10, agora na posição 4
-```
-
-
-Use uma origem diferente em cada um: SEEK_SET em a), SEEK_CUR em b),
-SEEK_END em c) e d) com rewind(arq) no lugar do fseek.
-
-**Dicas:**
-
-1. SEEK_SET conta do começo, SEEK_CUR da posição atual e SEEK_END do fim.
-   O deslocamento pode ser negativo.
-2. Cada fread de um int anda 4 bytes para a frente: depois de a) você está
-   no byte 12. Para chegar ao 20 (byte 4), volte 8.
-3. Resposta esperada: a) fseek(arq, 8, SEEK_SET); b) fseek(arq, -8,
-   SEEK_CUR); c) fseek(arq, -4, SEEK_END); d) rewind(arq). A saída fica
-   igual à de cima.
-
-```bash
-gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E404.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E404 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E404
-```
-
-**Exercício E405** · ★★☆
-
-Atualizar um registro no meio do arquivo, sem reescrever o resto. O
-arquivo /tmp/contas.bin tem 3 contas (número e saldo). Complete a função
-depositar: ela abre o arquivo em "rb+" (ler e escrever sem apagar), vai
-até o registro da posição pedida, lê, soma o valor ao saldo, volta para o
-começo do mesmo registro e grava por cima. Devolve 1 se deu certo e 0 se
-não.
-
-O main deposita R$ 100.00 na conta da posição 1 e lista tudo de novo:
-
-
-```text
 Antes:
 1001  R$   250.00
 1002  R$    80.50
@@ -844,15 +715,6 @@ Depois:
 1002  R$   180.50
 1003  R$  1200.00
 ```
-
-**Dicas:**
-
-1. Posição do registro i: i * sizeof(Conta). Use fseek com SEEK_SET.
-2. Depois do fread, o arquivo está no FIM do registro. Para gravar por cima,
-   volte: fseek(arq, -(long) sizeof(Conta), SEEK_CUR).
-3. Entre uma leitura e uma escrita no mesmo FILE, o C exige um fseek (ou
-   fflush). A volta da dica 2 já resolve isso.
-4. Resposta esperada: só a conta 1002 muda, de 80.50 para 180.50.
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E405.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E405 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E405
@@ -868,8 +730,8 @@ long contar_registros(const char *caminho, size_t tamanho_registro);
 ```
 
 
-que descobre quantos registros um arquivo binário tem SEM ler nenhum
-deles: só olhando o tamanho do arquivo. Se não conseguir abrir, devolve -1.
+que descobre quantos registros um arquivo binário tem SEM ler nenhum deles:
+só olhando o tamanho do arquivo. Se não conseguir abrir, devolve -1.
 
 No main, grave em /tmp/notas.bin as notas de 7 alunos num vetor de
 struct { int matricula; float nota; } (os valores são livres), feche, e
@@ -877,54 +739,14 @@ mostre:
 
 
 ```text
+Saída esperada:
 Tamanho do registro: 8 bytes
 Registros em /tmp/notas.bin: 7
 Registros em /tmp/nao-existe.bin: -1
 ```
 
-**Dicas:**
-
-1. fseek(arq, 0, SEEK_END) e depois ftell(arq) dão o tamanho em bytes.
-2. Registros = tamanho / tamanho_registro.
-3. sizeof de int + float = 4 + 4 = 8 bytes, sem sobra de alinhamento.
-4. Resposta esperada: 8 bytes, 7 registros (56 / 8) e -1 para o arquivo
-   que não existe.
-
 ```bash
 gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E406.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E406 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E406
-```
-
-**Exercício E407** · ★★★
-
-Este programa deveria salvar as 5 leituras de um medidor de água e lê-las
-de volta. Ele compila sem aviso e roda sem erro do sanitizer, mas mostra:
-
-
-```text
-Leituras: 112 98 0 0 0
-```
-
-
-em vez de "Leituras: 112 98 105 120 101". Tem DOIS problemas:
-
-a) um que faz o arquivo ficar com menos bytes do que devia;
-b) um que esconde o problema em vez de avisar.
-
-Conserte os dois e rode de novo: a saída tem que mostrar as 5 leituras.
-
-**Dicas:**
-
-1. Dentro de salvar, v é um int *, não um vetor. Quanto vale sizeof(v)?
-2. Quantos bytes o arquivo tem depois de salvar? E quantos itens o fread
-   devolveu?
-3. Resposta esperada: a) sizeof(v) é o tamanho do PONTEIRO (8 bytes), então
-   só 2 ints foram gravados. O certo é fwrite(v, sizeof(int), n, arq) (ou
-   sizeof *v). b) O main ignora o retorno do fread, que foi 2, e mostra os
-   zeros da inicialização como se fossem leituras. Confira se fread
-   devolveu 5 e avise se não.
-
-```bash
-gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E407.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E407 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E407
 ```
 
 **Exercício E408** · ★★★
@@ -932,40 +754,20 @@ gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E407.c -o ~/LPEDC/09-arquivos/006
 O extrato do banco mostra os lançamentos mais recentes primeiro. Grave em
 /tmp/extrato.bin estes 6 lançamentos, nesta ordem (do mais antigo para o
 mais novo), como registros de struct { char descricao[24]; double valor; }:
+Salário +3500.00, Aluguel -1200.00, Mercado -387.60, Pix da Ana +45.00,
+Farmácia -62.30 e Padaria -18.90. Depois, SEM carregar o arquivo inteiro na
+memória (um registro por vez), mostre os 3 últimos, do mais novo para o mais
+antigo, e o saldo de TODOS os lançamentos (printf com %-15s %+8.2f).
 
 
 ```text
-Salário      +3500.00
-Aluguel      -1200.00
-Mercado       -387.60
-Pix da Ana     +45.00
-Farmácia       -62.30
-Padaria        -18.90
-```
-
-
-Depois, SEM carregar o arquivo inteiro na memória (um registro por vez),
-mostre os 3 últimos, do mais novo para o mais antigo, e o saldo de TODOS os
-lançamentos:
-
-
-```text
+Saída esperada:
 Últimos lançamentos:
 Padaria           -18.90
 Farmácia         -62.30
 Pix da Ana        +45.00
 Saldo: R$ 1876.20
 ```
-
-**Dicas:**
-
-1. O registro k contado do fim (k = 1 é o último) começa em
-   -k * sizeof(registro) a partir de SEEK_END. Cuidado: sizeof é unsigned;
-   converta para long antes de pôr o sinal de menos.
-2. Para o saldo, rewind(arq) e um while (fread(...) == 1) somando.
-3. printf("%+.2f", x) mostra o sinal + nos positivos. Acentos ocupam mais de
-   um byte e bagunçam o alinhamento do %-15s; não se preocupe com isso.
-4. Resposta esperada: Padaria, Farmácia, Pix da Ana, e Saldo: R$ 1876.20.
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0068-arquivos-binarios/E408.c -o ~/LPEDC/09-arquivos/0068-arquivos-binarios/E408 && ~/LPEDC/09-arquivos/0068-arquivos-binarios/E408
@@ -1065,7 +867,7 @@ argumentos, e são números de verdade? O programa só trabalha no caminho verde
 
 > [!WARNING]
 > Nunca use `argv[1]` sem conferir o `argc`. Sem argumentos, `argv[1]` é
-> `NULL`, e `atoi(NULL)` ou `strlen(NULL)` derruba o programa (o E412 mostra).
+> `NULL`, e `atoi(NULL)` ou `strlen(NULL)` derruba o programa (confira o `argc` primeiro).
 > Cuidado com `*`: em `./calc 9 * 3` o shell troca o `*` pelos nomes dos
 > arquivos da pasta antes de o programa rodar. Use aspas (`'*'`) ou outro
 > símbolo, como `x`.
@@ -1216,61 +1018,39 @@ linha de baixo quantos foram. Sem argumentos, mostra só "0 argumentos".
 
 
 ```text
-$ rodar E409.c bom dia Brasil
+Argumentos:
+bom dia Brasil
+```
+
+
+
+```text
+Saída esperada:
 bom dia Brasil
 3 argumentos
 ```
-
-**Dicas:**
-
-1. Os seus argumentos vão de argv[1] até argv[argc - 1].
-2. Imprima o espaço ANTES de cada argumento, menos do primeiro.
-3. Resposta esperada: "bom dia Brasil" e "3 argumentos" (argc vale 4,
-   porque argv[0] também conta).
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0069-argumentos/E409.c -o ~/LPEDC/09-arquivos/0069-argumentos/E409 && ~/LPEDC/09-arquivos/0069-argumentos/E409
 ```
 
-**Exercício E410** · ★☆☆
-
-Escreva um programa que mostre, para cada argumento recebido, o texto, o
-tamanho, o primeiro caractere e o que o atoi faz com ele. No começo,
-mostre o argc; no fim, a soma de todos os atoi. Teste com:
-
-
-```text
-$ rodar E410.c 7 + 3a
-argc = 4
-argv[1] = "7": 1 caractere(s), começa com '7', atoi = 7
-argv[2] = "+": 1 caractere(s), começa com '+', atoi = 0
-argv[3] = "3a": 2 caractere(s), começa com '3', atoi = 3
-Soma dos atoi: 10
-```
-
-**Dicas:**
-
-1. Tudo no argv é string. argv[i][0] é o primeiro CARACTERE do argumento
-   i, e strlen(argv[i]) dá o tamanho.
-2. atoi lê enquanto encontra dígitos e para no primeiro que não é. Sem
-   nenhum dígito, devolve 0. Ele não avisa nada em nenhum dos casos.
-3. Os argumentos "+" e "3a" passaram sem
-   nenhum aviso: é por isso que entrada de usuário pede strtol.
-
-```bash
-gcc ~/LPEDC/09-arquivos/0069-argumentos/E410.c -o ~/LPEDC/09-arquivos/0069-argumentos/E410 && ~/LPEDC/09-arquivos/0069-argumentos/E410
-```
-
 **Exercício E411** · ★★☆
 
 As notas da prova chegam pela linha de comando. Mostre quantas notas
-válidas vieram, a média, a maior e a menor. Argumento que não é número
-(ou que está fora de 0 a 10) é ignorado com um aviso em stderr. Sem
-nenhuma nota válida, mostre "Nenhuma nota válida" e devolva 1.
+válidas vieram, a média, a maior e a menor. Argumento que não é número (ou
+que está fora de 0 a 10) é ignorado com um aviso em stderr. Sem nenhuma
+nota válida, mostre "Nenhuma nota válida" e devolva 1.
 
 
 ```text
-$ rodar E411.c 8.5 7 nove 9.25 6 11
+Argumentos:
+8.5 7 nove 9.25 6 11
+```
+
+
+
+```text
+Saída esperada:
 Ignorando "nove"
 Ignorando "11"
 Notas: 4
@@ -1279,50 +1059,31 @@ Maior: 9.25
 Menor: 6.00
 ```
 
-**Dicas:**
-
-1. Use strtod(argv[i], &fim) e confira *fim == '\0' (e que fim andou: um
-   argumento vazio "" também deixa *fim == '\0').
-2. Comece maior e menor com a primeira nota válida, não com 0.
-3. Resposta esperada: 4 notas, média 7.69 (30.75 / 4 = 7.6875), maior 9.25
-   e menor 6.00.
-
 ```bash
 gcc ~/LPEDC/09-arquivos/0069-argumentos/E411.c -o ~/LPEDC/09-arquivos/0069-argumentos/E411 && ~/LPEDC/09-arquivos/0069-argumentos/E411
 ```
 
 **Exercício E412** · ★★☆
 
-O programa deveria cumprimentar alguém um certo número de vezes:
+Escreva um programa que cumprimenta alguém um certo número de vezes. Ele
+recebe o nome e o número de vezes pela linha de comando. Sem os dois
+argumentos, ou com um número de vezes que não é inteiro positivo, mostra uma
+mensagem de uso em stderr e devolve 1.
 
 
 ```text
-$ rodar E412.c Ana 3
+Argumentos:
+Ana 3
+```
+
+
+
+```text
+Saída esperada:
 Olá, Ana!
 Olá, Ana!
 Olá, Ana!
 ```
-
-
-Mas, rodando assim, ele não mostra nada. E rodando sem argumentos
-("rodar E412.c"), ele cai com SEGV no AddressSanitizer. São dois erros:
-
-a) um índice errado no argv;
-b) uma conferência que falta antes de usar o argv.
-
-Conserte os dois e rode de novo com "Ana 3" e sem argumentos. Sem
-argumentos (ou com um número de vezes que não é inteiro positivo), o
-programa deve mostrar uma mensagem de uso em stderr e devolver 1.
-
-**Dicas:**
-
-1. Quem é argv[0]? O que atoi("Ana") devolve?
-2. Sem argumentos, argc vale 1 e argv[1] é NULL. O que atoi(NULL) faz?
-3. Resposta esperada: a) o nome está em argv[1] e as vezes em argv[2]; o
-   código usava argv[0] (o caminho do programa) e argv[1] ("Ana", que o
-   atoi vira 0, então o laço não roda); b) falta conferir argc != 3 antes
-   de tocar no argv. Consertado, "rodar E412.c Ana 3" mostra Olá, Ana! três
-   vezes.
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0069-argumentos/E412.c -o ~/LPEDC/09-arquivos/0069-argumentos/E412 && ~/LPEDC/09-arquivos/0069-argumentos/E412
@@ -1331,74 +1092,40 @@ gcc ~/LPEDC/09-arquivos/0069-argumentos/E412.c -o ~/LPEDC/09-arquivos/0069-argum
 **Exercício E413** · ★★★
 
 Faça um "wc" de verdade: o nome do arquivo vem pela linha de comando. O
-programa abre o arquivo, conta linhas, palavras e bytes e mostra no
-formato abaixo. Se não vier exatamente um argumento, mostre o uso em
-stderr e devolva 1. Se o arquivo não abrir, use perror com o nome dele e
-devolva 1.
-
-Para testar, crie um arquivo no terminal e passe o caminho:
+programa abre o arquivo, conta linhas, palavras e bytes e mostra no formato
+abaixo. Se não vier exatamente um argumento, mostre o uso em stderr e
+devolva 1. Se o arquivo não abrir, use perror com o nome dele e devolva 1.
 
 
 ```text
-$ printf 'Oi, Ana\ntudo certo?\n\nAté amanhã\n' > /tmp/recado.txt
-$ rodar E413.c /tmp/recado.txt
+Argumentos (o arquivo tem 4 linhas: "Oi, Ana", "tudo certo?", uma vazia
+e "Até amanhã"):
+/tmp/recado.txt
+```
+
+
+
+```text
+Saída esperada:
 4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
 ```
 
 
 
 ```text
-$ rodar E413.c /tmp/nao-existe.txt
-/tmp/nao-existe.txt: No such file or directory
+Argumentos (arquivo que não existe):
+/tmp/nao-existe.txt
 ```
 
-**Dicas:**
-
-1. Aproveite a lógica do E399: fgetc com int, uma flag dentro_palavra e
-   isspace.
-2. "bytes", e não "letras": cada 'ã' e 'é' em UTF-8 ocupa 2 bytes. Por isso
-   dá 34, e não 32. Confira com: wc /tmp/recado.txt
-3. Resposta esperada: "4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt"
-   (a linha vazia conta como linha).
-
-```bash
-gcc ~/LPEDC/09-arquivos/0069-argumentos/E413.c -o ~/LPEDC/09-arquivos/0069-argumentos/E413 && ~/LPEDC/09-arquivos/0069-argumentos/E413
-```
-
-**Exercício E414** · ★★★
-
-Calculadora de linha de comando: número, operador, número.
 
 
 ```text
-$ rodar E414.c 12.5 + 7.5
-12.50 + 7.50 = 20.00
-$ rodar E414.c 9 x 3
-9.00 x 3.00 = 27.00
-$ rodar E414.c 10 / 0
-Erro: divisão por zero
-$ rodar E414.c 2 ^ 3
-Erro: operador "^" desconhecido (use + - x /)
+Saída esperada (em stderr):
+/tmp/nao-existe.txt: No such file or directory
 ```
 
-
-Regras: exatamente 3 argumentos (senão, uso em stderr); os dois números
-validados com strtod; o operador tem que ter exatamente 1 caractere. Todo
-erro vai para stderr e o programa devolve 1. Use um switch no operador.
-
-Por que "x" e não "*"? Teste "rodar E414.c 9 * 3" sem aspas e descubra:
-o shell troca o * pelos nomes dos arquivos da pasta ANTES de o programa
-rodar. Com aspas ('*') funciona.
-
-**Dicas:**
-
-1. O operador é argv[2]. Confira strlen(argv[2]) == 1 e use argv[2][0] no
-   switch.
-2. Aceite também '*' no case do 'x' (para quem usar aspas).
-3. Resposta esperada: as quatro saídas acima.
-
 ```bash
-gcc ~/LPEDC/09-arquivos/0069-argumentos/E414.c -o ~/LPEDC/09-arquivos/0069-argumentos/E414 && ~/LPEDC/09-arquivos/0069-argumentos/E414
+gcc ~/LPEDC/09-arquivos/0069-argumentos/E413.c -o ~/LPEDC/09-arquivos/0069-argumentos/E413 && ~/LPEDC/09-arquivos/0069-argumentos/E413
 ```
 
 ---
@@ -1583,8 +1310,7 @@ de uso:
 > Trocar `"ab"` por `"wb"` no `novo` é o erro mais caro do módulo: cada gasto
 > novo apagaria os anteriores, sem aviso. E não leia, por outro `FILE *`, o que
 > acabou de escrever antes do `fclose` (ou `fflush`): os bytes ainda estão no
-> buffer e a leitura acha o arquivo vazio ou pela metade. O E419 junta os dois
-> erros.
+> buffer e a leitura acha o arquivo vazio ou pela metade.
 
 > [!TIP]
 > **Por dentro do C:** em `"ab"` (ou `"a"`), **toda** escrita vai para o fim,
@@ -1850,80 +1576,45 @@ stderr e devolve 1.
 
 
 ```text
-$ rm -f /tmp/bolao.txt
-$ rodar E415.c /tmp/bolao.txt Rita 2x1
+Argumentos (arquivo inexistente):
+/tmp/bolao.txt Rita 2x1
+```
+
+
+
+```text
+Saída esperada:
 1. Rita 2x1
-$ rodar E415.c /tmp/bolao.txt Caio 0x0
+```
+
+
+
+```text
+Argumentos (rodando de novo, com o arquivo já criado):
+/tmp/bolao.txt Caio 0x0
+```
+
+
+
+```text
+Saída esperada:
 1. Rita 2x1
 2. Caio 0x0
 ```
-
-**Dicas:**
-
-1. O modo que cria se não existe e escreve no fim é o "a".
-2. Feche o arquivo depois de gravar e abra de novo com "r" para mostrar.
-3. Resposta esperada: na segunda execução, "1. Rita 2x1" e "2. Caio 0x0".
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E415.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E415 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E415
 ```
 
-**Exercício E416** · ★☆☆
-
-Texto ou binário: quem ocupa mais? O programa recebe um nome pela linha de
-comando e monta dois caminhos, /tmp/<nome>.txt e /tmp/<nome>.bin. Complete
-as duas partes marcadas com TODO:
-
-a) a função tamanho, que devolve o tamanho do arquivo em bytes (ou -1 se
-
-```text
- não abrir);
-```
-
-b) a gravação dos quatro números de v: no texto, um por linha com
-
-```text
- fprintf; no binário, todos de uma vez com UM fwrite.
-```
-
-
-
-```text
-$ rodar E416.c medidas
-2 argumentos
-/tmp/medidas.txt: 20 bytes
-/tmp/medidas.bin: 16 bytes
-```
-
-**Dicas:**
-
-1. Tamanho: abra com "rb", fseek(arq, 0, SEEK_END), guarde o ftell e
-   feche o arquivo antes de devolver.
-2. No texto, cada número vira um caractere por dígito, mais o '\n'. No
-   binário, cada int ocupa sizeof(int) bytes, seja 7 ou 4000000.
-3. Resposta esperada: a saída acima (texto: 2 + 4 + 6 + 8 = 20; binário:
-   4 ints de 4 bytes = 16).
-
-```bash
-gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E416.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E416 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E416
-```
-
 **Exercício E417** · ★★☆
 
-Arquivo com cabeçalho. O arquivo /tmp/agenda.bin começa com um int que diz
-quantos contatos ele tem, seguido dos contatos (registros de tamanho
-fixo):
-
-
-```text
-[ quantidade ][ contato 0 ][ contato 1 ][ contato 2 ] ...
-```
-
-
-As funções criar e listar estão prontas. Complete adicionar: abra com
-"rb+", leia a quantidade, vá até a posição do novo contato, grave-o, some
-1 na quantidade e regrave o cabeçalho no começo do arquivo. Devolva 1 se
-deu certo e 0 se não.
+Agenda em arquivo binário com cabeçalho. O arquivo /tmp/agenda.bin começa
+com um int com a quantidade de contatos, seguido dos contatos, registros de
+tamanho fixo (struct { char nome[8]; char telefone[16]; }). Escreva criar
+(grava só o cabeçalho, com 0), adicionar(nome, telefone) (abre com "rb+",
+lê a quantidade, vai até a vaga com fseek, grava o contato, soma 1 e regrava
+o cabeçalho) e listar (mostra a quantidade, o tamanho do arquivo e os
+contatos, nome com %-11s). Adicione Marta, Joel e Iara e liste.
 
 
 ```text
@@ -1934,31 +1625,39 @@ Saída esperada:
 2. Iara        (31) 96666-0000
 ```
 
-**Dicas:**
-
-1. O contato i começa em sizeof(int) + i * sizeof(Contato).
-2. Para regravar o cabeçalho: rewind(arq) e fwrite(&quantidade, ...).
-3. sizeof(Contato) = 16 + 8 = 24 bytes; 4 + 3 * 24 = 76.
-
 ```bash
 gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E417.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E417 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E417
 ```
 
 **Exercício E418** · ★★☆
 
-Relatório de vendas da feira. O programa:
+Relatório de vendas da feira. Escreva um programa que:
 
 1. grava em /tmp/vendas.bin quatro vendas, como registros de
-struct { char produto[16]; int qtd; double preco; }:
-pastel 30 x 8.00, caldo de cana 25 x 6.50, tapioca 12 x 10.00 e
-queijo 4 x 35.00 (use os nomes sem acento);
+
+```text
+ struct { char produto[16]; int qtd; double preco; }: pastel 30 x 8.00,
+ caldo de cana 25 x 6.50, tapioca 12 x 10.00 e queijo 4 x 35.00;
+```
+
 2. exporta para CSV (texto, separado por ';', com cabeçalho) no arquivo
-cujo nome vem em argv[1]. Sem argumento, usa /tmp/vendas.csv;
+
+```text
+ cujo nome vem em argv[1] (sem argumento, usa /tmp/vendas.csv);
+```
+
 3. reabre o CSV, mostra o conteúdo com fgets e, por fim, o total geral.
 
 
 ```text
-$ rodar E418.c
+Argumentos:
+(nenhum)
+```
+
+
+
+```text
+Saída esperada:
 produto;qtd;total
 pastel;30;240.00
 caldo de cana;25;162.50
@@ -1967,98 +1666,66 @@ queijo;4;140.00
 Total geral: R$ 662.50 (gravado em /tmp/vendas.csv)
 ```
 
-**Dicas:**
-
-1. const char *destino = argc >= 2 ? argv[1] : "/tmp/vendas.csv";
-2. Leia o binário com while (fread(&v, sizeof v, 1, ent) == 1) e vá
-   escrevendo no CSV com fprintf(sai, "%s;%d;%.2f\n", ...).
-3. "caldo de cana" tem espaços: por isso o separador é ';' e não espaço.
-4. Resposta esperada: as 5 linhas do CSV e Total geral: R$ 662.50.
-
 ```bash
 gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E418.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E418 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E418
 ```
 
-**Exercício E419** · ★★★
-
-Um diário de linha de comando: "anota <texto>" acrescenta uma linha em
-/tmp/diario.txt e mostra todas as anotações até agora. O esperado é:
-
-
-```text
-$ rodar E419.c anota "comprar pão"
-1 anotações:
-comprar pão
-$ rodar E419.c anota "pagar a luz"
-2 anotações:
-comprar pão
-pagar a luz
-```
-
-
-Mas o programa mostra "0 anotações:" toda vez, e depois de rodar as duas
-vezes o arquivo só tem "pagar a luz" (confira com cat /tmp/diario.txt).
-E "rodar E419.c anota", sem o texto, tem comportamento indefinido. Ache os
-TRÊS erros, conserte e rode as duas execuções de novo.
-
-**Dicas:**
-
-1. Qual modo de abertura apaga o que já existia?
-2. O fprintf grava direto no disco? Quando o buffer é descarregado? O
-   arquivo é aberto para leitura enquanto o de escrita ainda está aberto.
-3. Conte os argumentos de "anota <texto>": quanto vale argc?
-4. Resposta esperada: (1) "w" apaga o diário a cada execução; o certo é
-   "a". (2) Falta fclose(arq) antes de abrir para leitura: o texto ainda
-   está no buffer, então a leitura acha o arquivo vazio. (3) A conferência
-   deve ser argc != 3; com argc < 2, argv[2] pode ser NULL. Consertado, a
-   saída fica igual à do enunciado (apague /tmp/diario.txt antes de testar).
-
-```bash
-gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E419.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E419 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E419
-```
-
 **Exercício E420** · ★★★
 
-Faça um "grep" simplificado:
+Faça um "grep" simplificado que recebe [-c] <palavra> <arquivo>. Sem -c,
+mostra cada linha do arquivo que contém a palavra, com o número da linha, e
+no fim quantas linhas casaram. Com -c, mostra só a contagem. O código de
+saída é 0 se achou alguma linha e 1 se não achou. Argumentos errados mostram
+o uso em stderr; arquivo que não abre usa perror. Nos dois casos, devolva 2.
 
 
 ```text
-rodar E420.c [-c] <palavra> <arquivo>
+Arquivo /tmp/lista.txt: "arroz 5kg", "feijao", "arroz integral", "cafe".
 ```
 
 
-Sem -c, mostra cada linha do arquivo que contém a palavra, com o número da
-linha, e no fim quantas linhas casaram. Com -c, mostra só a contagem. O
-código de saída é 0 se achou alguma linha e 1 se não achou (como o grep de
-verdade). Erros: argumentos errados mostram o uso em stderr; arquivo que
-não abre usa perror. Nos dois casos, devolva 2.
 
-Para testar:
+```text
+Argumentos:
+arroz /tmp/lista.txt
+```
+
 
 
 ```text
-$ printf 'arroz 5kg\nfeijao\narroz integral\ncafe\n' > /tmp/lista.txt
-$ rodar E420.c arroz /tmp/lista.txt
+Saída esperada:
 1: arroz 5kg
 3: arroz integral
 2 linhas
-$ rodar E420.c -c arroz /tmp/lista.txt
-2
-$ rodar E420.c leite /tmp/lista.txt; echo "código: $?"
-0 linhas
-código: 1
 ```
 
-**Dicas:**
 
-1. Com 3 argumentos (argc == 4), o primeiro precisa ser "-c". Com 2
-   (argc == 3), não tem opção. Calcule os índices da palavra e do arquivo
-   conforme o caso.
-2. strstr(linha, palavra) de <string.h> devolve um ponteiro para onde a
-   palavra aparece na linha, ou NULL se não aparece.
-3. Leia com fgets numa linha de 256 caracteres. A linha já vem com '\n',
-   então imprima com "%d: %s".
-4. Resposta esperada: as saídas acima.
+
+```text
+Argumentos:
+-c arroz /tmp/lista.txt
+```
+
+
+
+```text
+Saída esperada:
+2
+```
+
+
+
+```text
+Argumentos (código de saída 1):
+leite /tmp/lista.txt
+```
+
+
+
+```text
+Saída esperada:
+0 linhas
+```
 
 ```bash
 gcc ~/LPEDC/09-arquivos/0070-juntando-tudo/E420.c -o ~/LPEDC/09-arquivos/0070-juntando-tudo/E420 && ~/LPEDC/09-arquivos/0070-juntando-tudo/E420

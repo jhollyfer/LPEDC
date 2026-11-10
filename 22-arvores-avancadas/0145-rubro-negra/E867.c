@@ -15,13 +15,6 @@
 //   Árvore B: quebra a regra 2
 //   Árvore C: quebra a regra 3
 //
-// Dicas:
-// 1. NULL devolve 0 (é preto, mas não conta). Se r->dir é vermelho, -1. Se
-//    r e r->esq são vermelhos, -2.
-// 2. Peça confere das duas subárvores; se alguma for negativa, repasse. Se
-//    forem diferentes, -3. Senão, devolva o valor + (r é preto ? 1 : 0).
-// 3. Resposta esperada: a saída acima. Cada nó é visitado uma vez só: O(n).
-//
 // Escreva sua resposta abaixo (escreva confere):
 
 #include <stdbool.h>

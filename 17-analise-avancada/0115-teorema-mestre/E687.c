@@ -16,14 +16,6 @@
 //   lento:  93 notas 7 em 2047 chamadas
 //   rápido: 93 notas 7 em 22 chamadas
 //
-// Dicas:
-// 1. Caso base: com ini == fim, o pedaço está vazio; devolva ini.
-// 2. Se v[meio] < x, a resposta está à direita: [meio + 1, fim). Senão,
-//    o próprio meio pode ser a resposta: [ini, meio).
-// 3. Quantidade = primeira(notas, 0, 1024, 8) - primeira(notas, 0, 1024, 7).
-// 4. Resposta esperada: a saída acima (11 chamadas em cada busca). Com um
-//    milhão de notas, o lento faria 2 milhões de chamadas; o rápido, uns 42.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

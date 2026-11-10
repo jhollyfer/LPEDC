@@ -19,14 +19,6 @@
 //   procurar 99: indice -1, leituras 5
 //   vetor vazio: indice -1, leituras 0
 //
-// Dicas:
-// 1. Troque a ordem: i < n tem que vir antes, porque o && só avalia o lado
-//    direito se o esquerdo der verdadeiro.
-// 2. Para contar só as leituras que acontecem, use o operador vírgula no
-//    lado direito: (++*lidos, v[i] != alvo).
-// 3. Comece *lidos em 0 dentro da função.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

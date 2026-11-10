@@ -30,13 +30,6 @@
 //     Inglês: tarde
 //     Desenho: manhã
 //
-// Dicas:
-// 1. Base 3: turno[p] = resto % 3; resto /= 3, para p de 0 a 5. É o mesmo
-//    truque da máscara de bits, com três valores por posição.
-// 2. Com k cores e n vértices, a força bruta testa k^n escalas; o
-//    verificador, só os pares, O(n²).
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

@@ -9,16 +9,6 @@
 //   Saída esperada (depois de consertar):
 //   19 22 27 34 45
 //
-// Dicas:
-// 1. Na passada 1, qual o maior valor de j? E de j + 1?
-// 2. Conserte o primeiro erro e rode de novo: alguma idade sumiu e outra
-//    apareceu duas vezes?
-// 3. Faça o teste de mesa da troca com idades[0] = 34 e idades[1] = 19.
-// 4. Resposta esperada: o laço interno deve ser j < n - passada (com + 1, ele
-//    lê idades[5], fora do vetor); e a troca precisa de uma variável
-//    auxiliar: int aux = idades[j]; idades[j] = idades[j + 1];
-//    idades[j + 1] = aux;
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

@@ -16,15 +16,6 @@
 //   Frutas    4   7   0   5
 //   Mel       9   2   5   0
 //
-// Dicas:
-// 1. Comece com 0 na diagonal e INFINITO (1000000000) onde não há estrada.
-//    Com esse INFINITO folgado, d[i][k] + d[k][j] cabe num int mesmo
-//    quando os dois são infinitos.
-// 2. Três laços: k por fora, depois i, depois j. No miolo,
-//    d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j]).
-// 3. Resposta esperada: a saída acima. Milho -> Mel continua 15: passar por
-//    Leite e Frutas daria 8 + 3 + 5 = 16.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

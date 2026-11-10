@@ -23,15 +23,6 @@
 //   456#54#2
 //   Pior distância: 6
 //
-// Dicas:
-// 1. Rodar uma BFS por posto e tirar o mínimo funciona, mas dá para fazer
-//    uma BFS só: coloque TODOS os postos na fila no começo, com distância 0.
-// 2. A fila mistura as ondas dos dois postos, e cada casa é descoberta
-//    primeiro pelo posto mais perto. É a BFS de várias origens.
-// 3. A distância cabe num dígito aqui: imprima com '0' + dist.
-// 4. Resposta esperada: a saída acima. A pior casa é a da linha 4, coluna 2
-//    (contando do 0): 6 quarteirões até o posto da esquerda.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

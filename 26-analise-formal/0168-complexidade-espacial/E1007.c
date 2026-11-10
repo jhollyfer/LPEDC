@@ -11,14 +11,6 @@
 //   Saída esperada:
 //   12 placas, 7 distintas: 1020 1033 1047 1050 1062 1071 1088
 //
-// Dicas:
-// 1. Use dois índices: le, que percorre todo o vetor, e escreve, que marca
-//    a próxima posição livre do resultado.
-// 2. Como o vetor está ordenado, uma placa é nova quando é diferente da
-//    última que você escreveu, placas[escreve - 1].
-// 3. escreve nunca passa de le: você só sobrescreve posições que já leu.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (reescreva a função):
 
 #include <stdio.h>

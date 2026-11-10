@@ -15,12 +15,6 @@
 //   Rendimento: R$ 17.68
 //   3 depósitos
 //
-// Dicas:
-// 1. saldo += ..., saldo -= ..., saldo *= 1.01.
-// 2. Faça depositos++ logo depois de cada depósito e use o valor no printf.
-// 3. Resposta esperada: as seis linhas acima (17.50 * 1.01 = 17.675, que o
-//    %.2f mostra como 17.68).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

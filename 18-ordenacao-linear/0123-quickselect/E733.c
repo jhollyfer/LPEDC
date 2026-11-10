@@ -17,13 +17,6 @@
 //   maior:       920
 //   primeira do vetor continua: 720
 //
-// Dicas:
-// 1. Um int copia[MAX]; com MAX 100 basta para este programa.
-// 2. As posições contam de 0: a menor é k = 0, a segunda menor é k = 1, a
-//    maior é k = n - 1 e a segunda maior, k = n - 2.
-// 3. Com n = 11, a mediana está em k = n / 2 = 5.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

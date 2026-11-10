@@ -19,16 +19,6 @@
 //   linear: 1 2 3 1 5 3 4 1 | total: 20
 //   duplo : 1 2 2 1 2 2 2 4 | total: 16
 //
-// Dicas:
-// 1. "int passo_linear(int k)" devolve 1 (use (void)k para calar o aviso
-//    de parâmetro não usado) e "int passo_duplo(int k)" devolve 1 + k % 10.
-// 2. A função recebe "int (*passo)(int)" e começa cada simulação com a
-//    tabela toda livre.
-// 3. Resposta esperada: a saída acima. Na linear, 5, 16, 27 e 38 (hash 5)
-//    formam um bloco 5-6-7 que engole o 8 e cresce até a 9; o 38 paga 5
-//    sondagens. No duplo, cada um salta com o seu passo e o bloco não se
-//    forma.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

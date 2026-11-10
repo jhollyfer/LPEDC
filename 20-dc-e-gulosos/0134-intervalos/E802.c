@@ -20,15 +20,6 @@
 //   Visita às 17h: Butantã Liberdade Santana
 //   Total: 3 visitas
 //
-// Dicas:
-// 1. Guarde a hora da última visita (começa em -1). A feira i ainda não foi
-//    vista se abre depois dela: f[i].abre > ultima.
-// 2. Para listar quem está aberta na hora h: f[j].abre <= h && h <= f[j].fecha.
-// 3. Resposta esperada: a saída acima. A Liberdade aparece duas vezes
-//    porque está aberta nas duas horas; ela já estava coberta na visita das
-//    14h. É o problema do texto visto ao contrário: cada visita "fura" todas
-//    as feiras que a cruzam.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

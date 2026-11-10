@@ -14,13 +14,6 @@
 //   Juros simples, 24 meses: R$ 1240.00
 //   Diferença: R$ 29.73
 //
-// Dicas:
-// 1. A taxa de 1% é 0.01. pow(1 + taxa, 12).
-// 2. Rendimento = montante - capital.
-// 3. Juros simples: capital + capital * taxa * 24.
-// 4. Resposta esperada: as quatro linhas acima. Os compostos rendem também
-//    sobre o que já rendeu, e essa parte cresce a cada mês.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

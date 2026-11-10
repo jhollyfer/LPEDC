@@ -10,12 +10,6 @@
 //   Saída esperada:
 //   Vogais: 15
 //
-// Dicas:
-// 1. while (*s != '\0') { ...; s++; } (s é uma cópia do endereço: pode
-//    andar à vontade).
-// 2. Para testar a vogal, um switch com os cinco case serve bem.
-// 3. Resposta esperada: 15.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

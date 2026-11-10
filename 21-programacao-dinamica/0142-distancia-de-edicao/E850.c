@@ -19,16 +19,6 @@
 //   XYZ0000: nenhuma
 //   tabelas montadas: 28 de 32
 //
-// Dicas:
-// 1. Reaproveite a distancia() do texto com um contador global que sobe a
-//    cada chamada.
-// 2. abs() de <stdlib.h> dá o valor absoluto da diferença dos strlen
-//    (converta para int antes de subtrair: strlen devolve size_t, sem sinal).
-// 3. Uma flag "achou" decide se no fim da linha vai " nenhuma".
-// 4. Resposta esperada: a saída acima. Uma leitura exata também tem
-//    "parentes" a distância 1: é por isso que o sistema precisa confirmar
-//    com uma pessoa.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

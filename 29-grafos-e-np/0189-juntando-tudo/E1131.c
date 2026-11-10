@@ -12,15 +12,6 @@
 //   Sem poda: ótimo 28, 5040 rotas completas, 13700 chamadas
 //   Com poda: ótimo 28, 110 rotas completas, 6977 chamadas
 //
-// Dicas:
-// 1. Conte a chamada na primeira linha da função, antes do teste da poda.
-//    Uma rota é completa quando pos == N; aí some a volta d[rota[N-1]][0].
-// 2. Tente os vizinhos v = 1 a N - 1 em ordem, com usado[] e desfazendo
-//    a marca na volta. Zere melhor (1 << 30) e os contadores entre as duas
-//    rodadas.
-// 3. Resposta esperada: a saída acima. Sem poda são (8 - 1)! = 5040 rotas;
-//    a poda corta metade das chamadas, mas continua exponencial.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

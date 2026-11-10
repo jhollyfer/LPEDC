@@ -21,18 +21,6 @@
 //   Carro 3 saiu; manobras: 2
 //   Carro 5 saiu; manobras: 3
 //
-// Dicas:
-// 1. Guarde as manobras num vetor int manobras[6], indexado pelo número do
-//    carro.
-// 2. Para tirar o carro X: desempilhe do beco para a auxiliar até achar X
-//    (somando 1 nas manobras de cada um que saiu), descarte X e devolva
-//    todos da auxiliar para o beco.
-// 3. Depois de cada saída, se a fila de espera não estiver vazia, o
-//    primeiro entra no beco.
-// 4. Represente os eventos com dois vetores: char tipo[] = "EEEEESSSSS" e
-//    int carro[] = {1, 2, 3, 4, 5, 2, 1, 4, 3, 5}.
-// 5. Resposta esperada: as sete linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

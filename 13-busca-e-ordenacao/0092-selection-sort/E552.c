@@ -24,13 +24,6 @@
 //   loja[0] continua sendo: Fone sem fio
 //   3 trocas de 4 bytes, em vez de 216 bytes
 //
-// Dicas:
-// 1. ordem[k] responde "qual produto aparece em k-ésimo lugar?".
-// 2. Compare pelos produtos, troque os índices: a troca é de int.
-// 3. Para mostrar: const Produto *p = &loja[ordem[k]];
-// 4. sizeof(Produto) é 4 + 4 de enchimento + 8 + 200 = 216. Use %zu.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

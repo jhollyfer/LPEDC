@@ -11,15 +11,6 @@
 //   reforma: reforma (profundidade 0)
 //   janela: não encontrado
 //
-// Dicas:
-// 1. Use um vetor de ponteiros como pilha: const NoG *trilha[32]. Uma função
-//    recursiva acha(r, nome, trilha, nivel) põe r em trilha[nivel]; se r é o
-//    item, devolve nivel; senão tenta cada filho com nivel + 1.
-// 2. Se nenhum filho achou, devolva -1. O que ficou em trilha[0..nivel] na
-//    volta é exatamente o caminho (as posições de quem falhou são
-//    sobrescritas pelos próximos irmãos).
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (escreva caminho):
 
 #include <stdio.h>

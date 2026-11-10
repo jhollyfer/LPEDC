@@ -17,14 +17,6 @@
 //   Beto -> Ana, R$ 400.00: saldo insuficiente
 //   Ana: R$ 300.00 | Beto: R$ 320.00
 //
-// Dicas:
-// 1. Conta *c = malloc(sizeof *c); if (c == NULL) return NULL;
-// 2. O titular é vetor: strcpy(c->titular, titular). Garanta que o nome cabe
-//    (ou use strncpy e ponha o '\0' no fim).
-// 3. Todo conta_criar precisa de um conta_destruir. Rode com o rodar: o
-//    AddressSanitizer acusa se você esquecer algum.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

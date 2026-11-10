@@ -5,10 +5,11 @@
 
 int main(void) {
     int pedidos = 15;
+    int *p = &pedidos;
 
-    // %d e %x leem só 4 bytes; %p sem cast recebe int *, e o padrão pede void *
+    printf("Valor: %d\n", pedidos);
     printf("Endereço: %p\n", (void *)&pedidos);
-    printf("Endereço: %p\n", (void *)&pedidos);
-    printf("Endereço: %p\n", (void *)&pedidos);
+    printf("Pelo ponteiro: %p\n", (void *)p);
+    printf("Mesmo endereço: %s\n", p == &pedidos ? "sim" : "não");
     return 0;
 }

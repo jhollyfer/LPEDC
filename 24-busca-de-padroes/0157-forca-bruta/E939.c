@@ -15,14 +15,6 @@
 //   posição 41: pix
 //   3 ocorrências
 //
-// Dicas:
-// 1. Compare tolower(texto[i + j]) com tolower(padrao[j]) (ctype.h, 0040).
-// 2. Passe o char convertido para unsigned char antes do tolower: char
-//    negativo (letra acentuada) é comportamento indefinido nas funções de
-//    ctype.h.
-// 3. printf("%.*s", m, texto + i) mostra só as m letras a partir de i.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

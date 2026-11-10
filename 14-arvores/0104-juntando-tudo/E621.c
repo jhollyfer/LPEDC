@@ -12,15 +12,6 @@
 //   Depois: altura 2, raiz 50 (Ana)
 //   Alunos em ordem: 20 30 40 50 60 70 80
 //
-// Dicas:
-// 1. Uma função auxiliar monta(r, v, ini, fim): se ini > fim, devolve r. Senão,
-//    meio = (ini + fim) / 2; insere v[meio]; chama monta para v[ini..meio-1]
-//    e para v[meio+1..fim].
-// 2. Como o do meio entra antes das duas metades, ele vira a raiz da
-//    subárvore, e cada metade fica de um lado. É a busca binária ao
-//    contrário.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete rebalanceia):
 
 #include <stdio.h>

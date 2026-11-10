@@ -12,14 +12,6 @@
 //   média: 103.8
 //   maior: 132
 //
-// Dicas:
-// 1. Depois de criar com lista_cria(4), confira se não voltou NULL.
-// 2. Para ler o item i, use lista_pega(l, i, &valor): você não enxerga
-//    l->itens daqui, porque a struct está escondida em lista.c.
-// 3. Para a média, divida a soma por (double) o tamanho.
-// 4. Resposta esperada: a saída acima. A capacidade foi de 4 para 8 quando
-//    chegou a 5ª leitura. Não esqueça do lista_libera no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

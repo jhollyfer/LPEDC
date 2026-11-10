@@ -19,15 +19,6 @@
 //   Cenoura-Ervas (6 m)
 //   Mangueira total: 15 m
 //
-// Dicas:
-// 1. Guarde o grupo velho de b numa variável ANTES do laço que troca:
-//    int velho = grupo[b]. Se usar grupo[b] dentro do laço, ele muda no
-//    meio do caminho.
-// 2. Pare quando tiver V - 1 = 4 trechos aceitos.
-// 3. Resposta esperada: a saída acima. Couve-Tomate (5) é descartado:
-//    Couve e Tomate já estão ligados por Alface. Juntar grupos assim custa
-//    O(V) por aresta, o que o union-find do assunto 0148 resolve.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

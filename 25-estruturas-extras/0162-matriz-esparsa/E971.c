@@ -15,17 +15,6 @@
 //     0  2  0  0  0  0
 //   Células: 4
 //
-// Dicas:
-// 1. Para cada linha i, ande com pa em a->linha[i] e pb em b->linha[i]. Se
-//    pa->col < pb->col, a célula de a vai sozinha; se for maior, vai a de b;
-//    se forem iguais, some os dois valores e avance os dois. Quando uma lista
-//    acabar, copie o resto da outra.
-// 2. As células saem em ordem crescente de coluna, então basta pendurar no
-//    FIM da linha nova: guarde um ponteiro para o último (ou use um
-//    Celula **fim que começa em &c->linha[i]). Não esqueça c->nao_zeros.
-// 3. Resposta esperada: a saída acima. O produto 2 da filial 0 (5 - 5) e o
-//    produto 0 da filial 1 (2 - 2) zeraram e sumiram.
-//
 // Escreva sua resposta abaixo (complete soma):
 
 #include <stdio.h>

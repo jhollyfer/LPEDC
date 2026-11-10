@@ -19,13 +19,6 @@
 //   c) 7
 //   d) 4 passos em 10 voltas
 //
-// Dicas:
-// 1. Em a), o laço de dentro roda inteiro a cada volta do de fora: 6 * 4.
-// 2. Em b), o laço de dentro encolhe porque começa em i: 6 + 5 + ... + 1.
-// 3. Em c), os valores de i são 1, 2, 4, 8, 16, 32, 64.
-// 4. Resposta esperada: a saída acima. O d) mostra que o número depende do
-//    que você escolhe contar: 10 voltas, mas só 4 passam no if.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

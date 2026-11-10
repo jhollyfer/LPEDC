@@ -14,13 +14,6 @@
 //   tem R e I? nao
 //   tem E e R? sim
 //
-// Dicas:
-// 1. Rode antes: sai 4294967295 e "sim" duas vezes.
-// 2. p | ~m liga todos os bits que NÃO estão em m. Para apagar, o
-//    operador é outro.
-// 3. (p & m) != 0 é "sobrou algum". "Sobraram todos" compara com m.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdbool.h>

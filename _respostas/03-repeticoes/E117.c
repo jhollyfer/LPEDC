@@ -1,9 +1,5 @@
 // 0020 · While
 // Exercício E117 · ★★☆
-//
-// Resposta: o laço perguntava "ainda tem água?" (litros > 0) e deixava gastar
-// 180 litros no 6º dia, quando só havia 100. A pergunta certa é "tem água para
-// mais um dia inteiro?".
 
 #include <stdio.h>
 

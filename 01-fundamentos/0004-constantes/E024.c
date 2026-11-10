@@ -21,13 +21,6 @@
 //   50% off
 //   a\n b
 //
-// Dicas:
-// 1. O pré-processador não mexe no que está dentro das aspas.
-// 2. 0x69 é 6 * 16 + 9 = 105, o i na tabela ASCII.
-// 3. Para o % na tela, %%. Para a barra, \\ (e o n fica sozinho).
-// 4. Resposta esperada: as seis linhas acima. A primeira:
-//    printf("CIDADE: %s\n", CIDADE);
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

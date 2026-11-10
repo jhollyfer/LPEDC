@@ -1,10 +1,5 @@
 // 0066 · Juntando tudo: o cardápio
 // Exercício E394 · ★★☆
-//
-// Resposta: (1) o laço de listar ia até i <= n e lia um item além do fim
-// (heap-buffer-overflow): o certo é i < n; (2) faltava free(itens) (memory
-// leak); (3) itens[1].tags &= DESTAQUE apagava todos os bits MENOS o
-// destaque: para desligar, &= ~DESTAQUE.
 
 #include <stdio.h>
 #include <stdlib.h>

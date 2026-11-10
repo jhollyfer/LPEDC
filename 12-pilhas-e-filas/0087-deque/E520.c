@@ -9,13 +9,6 @@
 //   Saída esperada depois do conserto:
 //   Embarcando: 40 10 20 30
 //
-// Dicas:
-// 1. Com inicio = 0, quanto vale (inicio - 1) % TAM em C?
-// 2. Releia a pegadinha do resto negativo no texto do assunto.
-// 3. Resposta esperada: em entra_na_frente, (e->inicio - 1) % TAM dá -1
-//    quando inicio é 0, porque em C o resto acompanha o sinal do dividendo.
-//    Conserto: e->inicio = (e->inicio - 1 + TAM) % TAM;
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdbool.h>

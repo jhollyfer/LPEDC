@@ -15,16 +15,6 @@
 //   lago 5: começa em (5, 6), tamanho 1
 //   5 lagos
 //
-// Dicas:
-// 1. Varra a matriz com dois laços. Achou um ~? É um lago novo: conte e
-//    chame um flood fill a partir dali.
-// 2. O flood fill troca cada ~ do lago por outro caractere (pode ser '.') e
-//    devolve quantas casas trocou. Assim o mesmo lago não é contado de novo
-//    quando a varredura passar pelas outras casas dele.
-// 3. É a contagem de componentes conexos do assunto 0111, com a matriz no
-//    lugar do grafo.
-// 4. Resposta esperada: as 6 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

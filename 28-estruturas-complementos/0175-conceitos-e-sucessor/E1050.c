@@ -15,12 +15,6 @@
 //   códigos: é AVL, altura 3
 //   crescente: não é AVL. Desequilibrados: 1 (fator -4) 2 (fator -3) 3 (fator -2)
 //
-// Dicas:
-// 1. Vazia devolve -1. Se um filho devolveu -2, devolva -2 também.
-// 2. Para listar os nós, ap_fator (que recalcula alturas) serve: ali o
-//    custo não importa.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

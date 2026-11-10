@@ -25,14 +25,6 @@
 // Na primeira rodada, 12 movimentos desfizeram 2416 inversões. Na última,
 // os movimentos são exatamente as inversões que sobraram.
 //
-// Dicas:
-// 1. Guarde as inversões do início numa variável: o insertion sort comum
-//    faz um movimento por inversão, então esse é o custo dele.
-// 2. Um pulo de h casas pode desfazer várias inversões de uma vez: todos os
-//    elementos que ficavam entre as duas posições também entram na conta.
-// 3. Formatos: "h = %3d: %5ld inversões, %4ld movimentos".
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdio.h>

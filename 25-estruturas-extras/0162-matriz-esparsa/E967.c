@@ -12,14 +12,6 @@
 //   Cliente 2: 0 notas
 //   Cliente 3: 4 notas, média 3.50
 //
-// Dicas:
-// 1. Comece com const Celula *c = m->linha[i] e ande com c = c->prox até
-//    chegar em NULL. Não use esp_valor num laço de 0 a 9: a ideia é não
-//    visitar os zeros.
-// 2. Zere a soma e o *qtd antes do laço. Linha sem célula devolve 0 e
-//    deixa *qtd em 0.
-// 3. Resposta esperada: a saída acima (o cliente 3 deu 5, 4, 1 e 4).
-//
 // Escreva sua resposta abaixo (complete resumo_linha):
 
 #include <stdio.h>

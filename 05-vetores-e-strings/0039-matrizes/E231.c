@@ -20,11 +20,6 @@
 //   25 30
 //   60 55
 //
-// Dicas:
-// 1. A transposta tem as dimensões trocadas: int t[3][2].
-// 2. Dois laços aninhados sobre a original, com a atribuição do enunciado dentro.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

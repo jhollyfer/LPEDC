@@ -16,13 +16,6 @@
 //   20 15 12 8 5
 //   menos pacotes: 25 20 15 (3 pacotes)
 //
-// Dicas:
-// 1. Passe a quantidade de pacotes escolhidos como parâmetro (k), do mesmo
-//    jeito que a soma: assim ela se desfaz sozinha na volta.
-// 2. Na solução, se k for menor que o melhor até agora, copie leva[0..i-1]
-//    para um vetor melhor[] (e zere o resto dele).
-// 3. Resposta esperada: as 6 linhas acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdbool.h>

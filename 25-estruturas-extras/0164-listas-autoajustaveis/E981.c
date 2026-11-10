@@ -14,15 +14,6 @@
 //   Duda custo 3 -> Duda Edu Ana Bia Caio
 //   Total: 17
 //
-// Dicas:
-// 1. Ande com ant e p contando a posição i do nó achado (a do primeiro é 0).
-//    Se i == 0, não há o que mudar.
-// 2. Tire p da lista (ant->prox = p->prox). Depois volte ao começo e ache o
-//    lugar novo, a posição i - 2 (ou 0, se i for 1): use
-//    NoAuto **q = &l->inicio e avance até lá com q = &(*q)->prox. Aí faça
-//    p->prox = *q e *q = p.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete busca_sobe2):
 
 #include <stdio.h>

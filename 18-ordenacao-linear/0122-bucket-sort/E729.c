@@ -14,15 +14,6 @@
 //   M: Marcos Mariana Marta Mauro
 //   agenda: Alberto Amanda Ana Beatriz Bruno Caio Carla Marcos Mariana Marta Mauro
 //
-// Dicas:
-// 1. O nó guarda só o ponteiro: typedef struct No { const char *nome;
-//    struct No *prox; } No; as letras continuam onde estão.
-// 2. É o insere_ordenado do texto com "x < lista->valor" trocado por
-//    strcmp(nome, lista->nome) < 0 (e o mesmo no laço).
-// 3. Na hora de juntar, copie p->nome para o vetor e dê free(p) antes de
-//    passar para o próximo.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

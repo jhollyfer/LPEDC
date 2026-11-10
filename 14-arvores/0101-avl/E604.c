@@ -10,13 +10,6 @@
 //   Teste 1: pré 20 10 30 | altura da raiz 1
 //   Teste 2: pré 60 40 20 50 70 | altura da raiz 2
 //
-// Dicas:
-// 1. Copie gira_direita e troque esq por dir em todo lugar.
-// 2. A subárvore do meio é d->esq: ela vira r->dir. Atualize primeiro r (que
-//    ficou embaixo) e depois d.
-// 3. Resposta esperada: a saída acima. No teste 2, o 50 era filho esquerdo
-//    do 60 e passa a ser filho direito do 40.
-//
 // Escreva sua resposta abaixo (complete gira_esquerda):
 
 #include <stdio.h>

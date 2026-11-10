@@ -14,12 +14,6 @@
 //   [5] 5
 //   [6] 17
 //
-// Dicas:
-// 1. Um while que anda enquanto tab[i] != -1, com i = (i + 1) % 7.
-// 2. Faça à mão antes: 10, 24, 17 e 31 têm hash 3; o 5 tem hash 5.
-// 3. Resposta esperada: a saída acima. O 31 tenta 3, 4, 5 e 6, todas
-//    ocupadas, dá a volta e para na 0.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

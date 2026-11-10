@@ -18,14 +18,6 @@
 //   Até 2 trechos: R$ 800
 //   Até 3 trechos: R$ 700
 //
-// Dicas:
-// 1. No começo de cada rodada: antes[v] = dist[v] para todo v. No laço das
-//    arestas, teste e some com antes[u], mas compare e grave em dist[v].
-// 2. Sem a cópia, uma rodada pode encadear vários voos (se a lista estiver
-//    na ordem do caminho), e a resposta de k = 1 já sairia 700.
-// 3. Resposta esperada: a saída acima. Com 2 voos: Recife, Brasília,
-//    Curitiba. Com 3: Recife, Salvador, São Paulo, Curitiba.
-//
 // Escreva sua resposta abaixo (escreva mais_barato):
 
 #include <stdio.h>

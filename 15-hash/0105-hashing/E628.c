@@ -14,15 +14,6 @@
 //   ...
 //   vazios: 9
 //
-// Dicas:
-// 1. Um vetor "int conta[11] = {0};" e "conta[codigo % m]++" para cada código.
-// 2. Faça uma função "void distribui(const int codigos[], int n, int m)"
-//    e chame duas vezes.
-// 3. Resposta esperada: com m = 10, os 10 códigos caem no balde 0
-//    (vazios: 9). Com m = 11: um código em cada balde, menos o 4 e o 6
-//    (vazios: 2) e o 10, com dois (120 e 230). Com m = 10, o resto só olha
-//    o último dígito, que é sempre 0; um m primo usa o número inteiro.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

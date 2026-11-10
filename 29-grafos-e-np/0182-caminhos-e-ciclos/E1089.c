@@ -14,14 +14,6 @@
 //   triângulos: nenhum (desconexo)
 //   pontes: nenhum (4 vértices ímpares)
 //
-// Dicas:
-// 1. Conexidade: rode uma DFS a partir do primeiro vértice com grau > 0 e
-//    confira se todo vértice com grau > 0 foi visitado.
-// 2. Depois guarde os vértices de grau ímpar num vetor: 0 ímpares dá
-//    circuito; 2 dá trajeto entre eles; outro número, nenhum.
-// 3. Resposta esperada: a saída acima. Os triângulos têm todos os graus
-//    iguais a 2 e mesmo assim não têm circuito.
-//
 // Escreva sua resposta abaixo (complete a função analisa):
 
 #include <stdbool.h>

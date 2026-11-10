@@ -13,13 +13,6 @@
 //   64 -> 120 -> 50 -> 12 -> 75 -> 30 -> NULL
 //   3 Pix acima de R$ 50
 //
-// Dicas:
-// 1. Toda inserção é "extrato = lista_insere_inicio(extrato, valor);".
-// 2. O percurso é sempre o mesmo: for (const No *p = inicio; p != NULL;
-//    p = p->prox).
-// 3. O 50 não conta: "maior que", não "maior ou igual".
-// 4. Resposta esperada: a saída acima (64, 120 e 75). Libere a lista no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

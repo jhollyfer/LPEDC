@@ -13,14 +13,6 @@
 //   vazia:  NULL
 //   um só:  7 -> NULL
 //
-// Dicas:
-// 1. Use três ponteiros: ant (começa NULL), p (começa no início) e seg.
-// 2. A cada passo: seg = p->prox; p->prox = ant; ant = p; p = seg. A ordem
-//    importa: se você trocar p->prox antes de guardar seg, perde o resto.
-// 3. Quando p vira NULL, ant é o novo início.
-// 4. Resposta esperada: a saída acima. É O(n) em tempo e O(1) em memória
-//    extra.
-//
 // Escreva sua resposta abaixo (troque o corpo de inverte):
 
 #include <stdio.h>

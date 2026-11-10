@@ -15,13 +15,6 @@
 //   cada um paga: R$ 650
 //   desconto à vista: R$ 240
 //
-// Dicas:
-// 1. Rode antes: sai 1800, 50 e 0. Para cada linha, escreva no papel a
-//    árvore que o C montou.
-// 2. O ?: fica abaixo do + e do >: ele engoliu a conta inteira.
-// 3. 10 / 100 em inteiros é 0. Multiplique antes de dividir.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

@@ -1,32 +1,20 @@
 // 0026 · Aleatórios
 // Exercício E154 · ★★☆
 //
-// O programa abaixo deveria sortear 10 lançamentos de um dado. Rode e repare:
-// sai o mesmo número 10 vezes, e às vezes esse número é 0. São DOIS erros.
-// O código com os erros está logo abaixo. Conserte os dois e rode algumas
-// vezes: os 10 números têm que variar e ficar sempre entre 1 e 6.
+// Escreva um programa que sorteia 10 lançamentos de um dado e mostra os 10
+// números na mesma linha. Os números têm que variar de um lançamento para o
+// outro e ficar sempre entre 1 e 6. Use srand(time(NULL)) uma vez só.
 //
-// Dicas:
-// 1. Quantas vezes o srand roda? E quanto vale time(NULL) nas 10 voltas, que
-//    acontecem dentro do mesmo segundo?
-// 2. Qual a faixa de rand() % 6?
-// 3. Resposta esperada: (1) o srand(time(NULL)) está dentro do laço: a cada
-//    volta a sequência recomeça com a mesma semente (o segundo atual) e o
-//    rand devolve o mesmo primeiro número. O srand vai uma vez só, antes do
-//    laço. (2) rand() % 6 vai de 0 a 5; o dado é 1 + rand() % 6.
+//   Saída esperada (exemplo, a sua muda a cada execução):
+//   4 1 6 3 3 5 2 6 1 4
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 int main(void) {
-    for (int i = 1; i <= 10; i++) {
-        srand(time(NULL));
-        int dado = rand() % 6;
-        printf("%d ", dado);
-    }
-    printf("\n");
+
     return 0;
 }

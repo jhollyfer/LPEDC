@@ -16,16 +16,6 @@
 //   caminho: (0,0) (0,1) (1,1) (2,1) (2,2) (2,3) (3,3) (3,4) (3,5) (4,5)
 //   9 passos
 //
-// Dicas:
-// 1. Acrescente um parâmetro k em anda: é a posição da casa (l, c) no
-//    caminho. A base é a posição 0. Quem chama os vizinhos passa k + 1.
-// 2. Guarde a casa em dois vetores globais, cl[k] = l e cc[k] = c, logo
-//    quando ela for marcada com '*'. Ao chegar na tomada, guarde-a também e
-//    anote o tamanho (k + 1 casas, k passos).
-// 3. Não precisa apagar nada na volta: quando a busca recua e tenta outro
-//    vizinho, ele escreve por cima da mesma posição k.
-// 4. Resposta esperada: as 7 linhas acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdbool.h>

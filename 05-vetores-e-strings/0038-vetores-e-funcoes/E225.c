@@ -18,13 +18,6 @@
 //   fora: a = 100 30 3
 //   depois de vezes_dez: a = 100 30 30
 //
-// Dicas:
-// 1. v recebe o endereço de a: v[0] e a[0] são a mesma gaveta.
-// 2. x recebe uma cópia: mudar x não muda b, nem a[2].
-// 3. Para mudar a[2] dentro de uma função, mande o vetor e a posição, não o
-//    valor da gaveta.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete o programa):
 
 #include <stdio.h>

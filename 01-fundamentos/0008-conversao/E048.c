@@ -14,17 +14,6 @@
 //   Três adiante: j
 //   Somando e cortando: 7; cortando e somando: 6
 //
-// Dicas:
-// 1. Numa conta, o char vira int: letra - 'a' é a distância da letra até o
-//    'a' (g está 6 depois do a).
-// 2. Maiúscula: a mesma distância, a partir do 'A'. Mostre o resultado com
-//    %c e com %d.
-// 3. Somar antes de cortar não é o mesmo que cortar antes de somar:
-//    (int) (x + y) e (int) x + (int) y.
-// 4. Resposta esperada: as cinco linhas acima. A maiúscula é
-//    letra - 'a' + 'A'; a posição, letra - 'a' + 1; três adiante,
-//    letra + 3; e 7.4 cortado dá 7, enquanto 3 + 3 dá 6.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

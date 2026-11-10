@@ -17,12 +17,6 @@
 //   Ana: R$ 3456.00
 //   Beto: R$ 4428.00
 //
-// Dicas:
-// 1. Dentro das funções, use a seta: f->salario.
-// 2. Na chamada, passe o endereço: reajustar(&ana, 8).
-// 3. Aumentar 8% é multiplicar por 1 + 8 / 100.0.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

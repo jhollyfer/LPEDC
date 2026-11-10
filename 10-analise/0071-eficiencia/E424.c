@@ -16,14 +16,6 @@
 //     997      995       30
 //    9973     9971       98
 //
-// Dicas:
-// 1. Primo é o pior caso dos dois: nenhuma divisão dá resto 0, então o laço
-//    vai até o fim.
-// 2. Use dois contadores globais e zere os dois antes de cada n.
-// 3. Com n 100 vezes maior, o ingênuo cresceu 100 vezes e o esperto
-//    só uns 12. A raiz de 100 é 10.
-// 4. Resposta esperada: a tabela acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

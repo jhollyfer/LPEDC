@@ -9,7 +9,6 @@
 int main(void) {
     char senha[100];
 
-    printf("Senha: ");
     if (fgets(senha, sizeof(senha), stdin) == NULL) {
         return 1;
     }

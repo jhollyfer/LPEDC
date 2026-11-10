@@ -15,12 +15,6 @@
 //   Escolhidas: 8-9 9-11 11-12 12-14 14-16
 //   Total: 5
 //
-// Dicas:
-// 1. Uma variável livre_em = 0 e um for de 0 a n - 1.
-// 2. Se ini[i] >= livre_em: mostre o pedido, conte e faça livre_em = fim[i].
-// 3. Resposta esperada: a saída acima. Como os pedidos já vieram ordenados,
-//    o custo é O(n).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

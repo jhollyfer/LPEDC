@@ -15,16 +15,6 @@
 //   juntas: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
 //   com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
 //
-// Dicas:
-// 1. Desenhe os dois círculos. Quem precisa mudar? O último de a, que
-//    passa a apontar para o primeiro de b, e o último de b, que passa a
-//    apontar para o primeiro de a.
-// 2. Guarde o primeiro de a (ult_a->prox) antes de mexer.
-// 3. O último da lista nova é o último de b. Se uma das listas for NULL,
-//    devolva a outra.
-// 4. Resposta esperada: a saída acima. Com ponteiro para o PRIMEIRO, você
-//    teria que andar até o último de cada lista: O(n).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

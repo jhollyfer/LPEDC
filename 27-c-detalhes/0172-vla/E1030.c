@@ -12,13 +12,6 @@
 //   Saída esperada:
 //   n = 3000000, media = R$ 50.00
 //
-// Dicas:
-// 1. Rode antes, com n = 10: sai media = R$ 5.00.
-// 2. malloc(n * sizeof *precos). Se der NULL, mostre "sem memória" e
-//    devolva 1.
-// 3. O resto do código não muda: precos[i] funciona igual com o ponteiro.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (refatore o código):
 
 #include <stdio.h>

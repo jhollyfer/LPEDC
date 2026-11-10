@@ -5,7 +5,6 @@
 
 int main(void) {
     int idade;
-    printf("Idade: ");
     if (scanf("%d", &idade) != 1) {
         printf("Entrada inválida\n");
         return 1;

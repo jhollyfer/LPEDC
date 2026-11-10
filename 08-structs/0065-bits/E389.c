@@ -16,13 +16,6 @@
 //   #FF8800 escurecida = #7F4400
 //   #3366CC em cinza = #777777
 //
-// Dicas:
-// 1. Empacotar: (r << 16) | (g << 8) | b.
-// 2. Desempacotar o verde: (c >> 8) & 0xFF. A máscara 0xFF guarda só 8 bits.
-// 3. Mostre com #%06X e um cast para unsigned.
-// 4. Média: (51 + 102 + 204) / 3 = 119 = 0x77.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdint.h>

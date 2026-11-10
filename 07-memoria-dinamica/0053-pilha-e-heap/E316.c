@@ -15,16 +15,6 @@
 //   O vetor ocupa 20000000 bytes
 //   Soma das leituras: 14999995
 //
-// Dicas:
-// 1. 5.000.000 * 4 bytes = 20.000.000 bytes, uns 19 MiB.
-// 2. Basta escrever static na frente da declaração, dentro de main.
-//    sizeof leituras dá o tamanho do vetor inteiro (size_t: use %zu).
-// 3. Resposta esperada: a saída acima. O vetor tem 20 MB e a pilha só tem
-//    8 MiB: no passo 1 o AddressSanitizer acusa stack-overflow (sem ele, o programa
-//    morre com Segmentation fault). Nos dados, o espaço é reservado quando o
-//    programa carrega e não depende do tamanho da pilha. No assunto 0054 você
-//    vai fazer o mesmo com malloc, escolhendo o tamanho na hora de rodar.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

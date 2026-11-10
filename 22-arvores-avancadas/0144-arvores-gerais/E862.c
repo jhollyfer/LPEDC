@@ -14,12 +14,6 @@
 //   Geração 2 (5): Paulo Rita Nina Otto Pedro
 //   Geração 3 (1): Leo
 //
-// Dicas:
-// 1. Desça subtraindo: se alvo == 0, r é da geração procurada. Senão, peça
-//    a cada filho a geração alvo - 1.
-// 2. As gerações vão de 0 até ag_altura(r).
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (escreva as duas funções e o laço do main):
 
 #include <stdio.h>

@@ -13,11 +13,6 @@
 //   30.0 -> 86.0
 //   86.0 -> 30.0
 //
-// Dicas:
-// 1. conv = c_para_f; (sem & e sem parênteses).
-// 2. Chame como se fosse a função: conv(30).
-// 3. Resposta esperada: 86.0 e 30.0.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -8,12 +8,6 @@
 //   Saída esperada:
 //   Classificação: 810 720 690 650 580
 //
-// Dicas:
-// 1. Parta do insertion do código do assunto (pode tirar a contagem).
-// 2. Agora quem precisa abrir espaço são os elementos MENORES que x.
-// 3. Só muda uma comparação no while.
-// 4. Resposta esperada: Classificação: 810 720 690 650 580
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

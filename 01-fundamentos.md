@@ -293,78 +293,22 @@ Via Av. Brasil
 Tarifa: R$ 4,90
 ```
 
-**Dicas:**
-
-1. Comece pelo esqueleto do A001: o #include, a main com as chaves e o
-   return 0;.
-2. Um printf por linha, cada um terminando com \n.
-3. Na mão, dentro desta pasta: gcc E001.c -o letreiro e depois ./letreiro.
-4. Resposta esperada: as três linhas acima, iguais nos dois jeitos.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E001
 ```
 
-**Exercício E002** · ★☆☆
+**Exercício E003** · ★★☆
 
-Monte a lista de compras abaixo com estas regras: a primeira linha sai de
-TRÊS printf, um para "Bom ", um para "dia" e um para "!"; as outras quatro
-linhas (contando a vazia) saem de UM printf só. Deixe também, entre os
-dois grupos, um printf("Boa tarde\n"); desligado com //, que não pode
-aparecer na saída.
+Escreva do zero o programa do aviso da farmácia: um comentário de bloco
+(/* ... */) no topo com o texto "Aviso da farmácia", o #include necessário
+e a main, que mostra as duas linhas abaixo e termina com return 0.
 
 
 ```text
 Saída esperada:
-Bom dia!
-Café
-Pão
-```
-
-
-
-```text
-Manteiga
-```
-
-**Dicas:**
-
-1. Sem \n, o próximo printf continua na mesma linha: só o terceiro da
-   primeira linha leva \n.
-2. Dois \n seguidos deixam uma linha vazia.
-3. Resposta esperada: printf("Bom "); printf("dia"); printf("!\n");
-   // printf("Boa tarde\n"); printf("Café\nPão\n\nManteiga\n"); e as 5
-   linhas acima (a 4ª vazia).
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E002.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E002 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E002
-```
-
-**Exercício E003** · ★★☆
-
-Este programa tem QUATRO erros e não compila de propósito. Conserte o
-código: rode com o rodar, leia a primeira mensagem, conserte, rode de novo
-e repita até sair a saída esperada. A cada rodada, repare qual estação
-reclamou: compilador ou ligador.
-
-
-```text
-Saída esperada (depois de consertar):
 Farmácia aberta 24h
 Plantão: (11) 5555-0199
 ```
-
-**Dicas:**
-
-1. Comece pelo topo: um comentário que não fecha engole todo o resto.
-2. Olhe com atenção as maiúsculas e os nomes das funções. E os ;.
-3. Resposta esperada: (1) o /* da primeira linha nunca fecha
-   ("unterminated comment"): feche com */; (2) Int com I maiúsculo não é
-   tipo ("unknown type name 'Int'"): use int; (3) falta ; depois do
-   primeiro printf ("expected ';'"). Esses três são do compilador. (4)
-   print não existe: o compilador só avisa "implicit declaration of
-   function 'print'", e quem para é o ligador, com "undefined reference
-   to 'print'": use printf.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003
@@ -372,12 +316,10 @@ gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E003.c -o ~/LPEDC/01-fundament
 
 **Exercício E004** · ★★☆
 
-O aviso do cinema foi escrito com pressa: quase tudo numa linha só, sem
-recuo, e com um comentário no lugar errado. Ele compila sem aviso, mas
-mostra só duas das três linhas. Reorganize o código: uma instrução por
-linha, recuo de 4 espaços dentro da main, um comentário de bloco no topo
-dizendo o que o programa faz, e o comentário "sala 2" num lugar onde não
-engula nada. Rode e confira as três linhas.
+Escreva o aviso do cinema com o código bem organizado: um comentário de
+bloco no topo dizendo o que o programa faz, uma instrução por linha, recuo
+de 4 espaços dentro da main e um comentário // sala 2 no fim da linha do
+printf da sessão. O programa mostra as três linhas abaixo.
 
 
 ```text
@@ -387,25 +329,15 @@ Sessão: 19h30 (sala 2)
 Ingresso: R$ 28,00
 ```
 
-**Dicas:**
-
-1. O // desliga tudo o que vem depois dele, até o fim da LINHA, e não até
-   o próximo ;.
-2. O texto "(sala 2)" tem de ir para dentro das aspas do segundo printf.
-3. Resposta esperada: três printf, cada um na sua linha, e as três linhas
-   acima. O comentário // pode ficar no fim de uma linha, depois do ;.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E004
 ```
 
 **Exercício E005** · ★★★
 
-O número do return chega ao sistema, e é assim que scripts e ferramentas
-de CI sabem se um programa deu certo: 0 é sucesso, qualquer outro número
-é um código de erro. Escreva o programa de um backup que FALHOU: ele
-mostra as duas linhas abaixo e devolve o código 2 ao sistema. Rode assim,
-de dentro desta pasta, e confira as três linhas da saída esperada:
+Escreva o programa de um backup que FALHOU: ele mostra as duas linhas
+abaixo e devolve o código 2 ao sistema com o return da main. Rode de dentro
+desta pasta e confira as três linhas da saída esperada:
 
 
 ```text
@@ -421,58 +353,8 @@ Código de saída: 2
 código: 2
 ```
 
-
-Depois rode ~/LPEDC/rodar E005.c && echo "pode seguir" e confira que o
-"pode seguir" NÃO aparece. Por fim, troque para return 258 e rode a
-primeira linha de novo: o terminal tem de mostrar "código: 2" outra vez.
-
-**Dicas:**
-
-1. A segunda linha é um printf comum, com o texto fixo. A terceira quem
-   escreve é o echo do terminal: o $? guarda o código de saída do último
-   comando.
-2. O && do terminal só roda o segundo comando se o primeiro devolveu 0.
-3. O sistema guarda só 1 byte (8 bits) do código de saída, e um byte vai
-   de 0 a 255 (o porquê vem no assunto 0003): 258 dá a volta e vira 2.
-4. Resposta esperada: dois printf e return 2;. A saída acima, sem o
-   "pode seguir"; com return 258, "código: 2" de novo.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E005
-```
-
-**Exercício E006** · ★★★
-
-O letreiro do ônibus abaixo tem um erro para cada tipo de reclamação: um
-que o pré-processador pega, um do compilador, um do ligador e um que
-ninguém pega (o programa roda e mostra o valor errado: a tarifa certa é
-R$ 4,90). Conserte o código, um erro por vez. A cada rodada, anote qual
-estação parou a linha de montagem, e só pare quando a saída for
-exatamente a esperada.
-
-
-```text
-Saída esperada (depois de consertar):
-Linha 077 - Terminal Centro
-Via Av. Brasil
-Tarifa: R$ 4,90
-```
-
-**Dicas:**
-
-1. O pré-processador só cuida das linhas com #. O compilador para no
-   primeiro erro de gramática. O ligador procura funções pelo nome,
-   inclusive a main.
-2. Depois que tudo compilar, compare a saída com a esperada, letra por
-   letra: o compilador não sabe qual é a tarifa certa.
-3. Resposta esperada: (1) stdoi.h vira stdio.h ("No such file or
-   directory", pré-processador); (2) falta o ; depois do primeiro printf
-   ("expected ';'", compilador); (3) Main com M maiúsculo não é a main
-   ("undefined reference to `main'", ligador); (4) R$ 9,40 vira R$ 4,90
-   (erro de execução, de lógica). E as três linhas acima.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0001-primeiro-programa/E006.c -o ~/LPEDC/01-fundamentos/0001-primeiro-programa/E006 && ~/LPEDC/01-fundamentos/0001-primeiro-programa/E006
 ```
 
 ---
@@ -663,47 +545,8 @@ Peso: 0.5 kg
 Setor: H
 ```
 
-**Dicas:**
-
-1. Código é inteiro (int); preço e peso são reais (double); setor é char.
-2. Use %d, %.2f, %.1f e %c no printf.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0002-variaveis/E007.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E007 && ~/LPEDC/01-fundamentos/0002-variaveis/E007
-```
-
-**Exercício E008** · ★☆☆
-
-O colega começou o pedido de segunda via do boleto, mas escolheu nomes de
-variável que o C não aceita, e o programa não compila. Renomeie as
-variáveis inválidas (snake_case, sem acento, sem espaço), sem mudar os
-valores, até compilar e mostrar a saída abaixo. As variáveis preco e
-Preco estão certas: deixe as duas como estão e confira que o programa
-mostra valores diferentes para elas.
-
-
-```text
-Saída esperada (depois de consertar):
-Via: 2
-Valor final: R$ 89.90
-Parcelas: 3
-Dia útil: S
-preco: 10, Preco: 20
-```
-
-**Dicas:**
-
-1. Nome só com letras, dígitos e _, sem começar por dígito, sem espaço.
-   O - é o sinal de menos. Palavras do C (int, float, return...) são
-   reservadas.
-2. Troque o nome na declaração E no printf.
-3. Resposta esperada: 2via vira via (ou segunda_via), valor-final vira
-   valor_final, float vira parcelas (ou qtd_parcelas) e dia util vira
-   dia_util. preco e Preco são variáveis diferentes. E as cinco linhas
-   acima.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/E008.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E008 && ~/LPEDC/01-fundamentos/0002-variaveis/E008
 ```
 
 **Exercício E009** · ★★☆
@@ -728,25 +571,16 @@ total: 25 bytes
 com float nas notas: 17 bytes
 ```
 
-**Dicas:**
-
-1. sizeof nome_da_variavel e %zu no printf.
-2. O sizeof pode entrar numa soma, direto no printf:
-   sizeof idade + sizeof teorica + ...
-3. Resposta esperada: as sete linhas acima (4 + 8 + 8 + 1 + 4 = 25 e
-   4 + 4 + 4 + 1 + 4 = 17). Na memória pode haver folgas entre as
-   variáveis, mas o total de dados é esse.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0002-variaveis/E009.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E009 && ~/LPEDC/01-fundamentos/0002-variaveis/E009
 ```
 
 **Exercício E010** · ★★☆
 
-O operador do placar eletrônico digitou invertido: o programa abaixo
-mostra Casa 1 x 3 Visitante, mas o certo é Casa 3 x 1 Visitante. Sem
-mudar as duas primeiras linhas da main, acrescente instruções que TROQUEM
-os valores de casa e visitante antes do printf.
+O placar eletrônico foi digitado invertido: casa = 1 e visitante = 3, e o
+certo é Casa 3 x 1 Visitante. Escreva um programa com as duas variáveis (int)
+que troque os valores usando uma variável auxiliar e mostre o placar
+certo.
 
 
 ```text
@@ -754,46 +588,8 @@ Saída esperada:
 Casa 3 x 1 Visitante
 ```
 
-**Dicas:**
-
-1. Escrever casa = visitante; apaga o valor antigo de casa. Ele se perde.
-2. Use uma terceira variável para guardar um valor enquanto troca, como
-   um copo vazio para trocar o suco de dois copos.
-3. Resposta esperada: int aux = casa; casa = visitante; visitante = aux;
-   e a saída "Casa 3 x 1 Visitante".
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0002-variaveis/E010.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E010 && ~/LPEDC/01-fundamentos/0002-variaveis/E010
-```
-
-**Exercício E011** · ★★★
-
-Este programa tem TRÊS erros e o gcc mostra um aviso para cada um (numa
-versão mais nova do gcc, um deles já vira erro). Conserte o código: rode,
-leia os avisos, corrija um por vez e rode de novo até não sobrar aviso. O
-jogo terminou 2 x 1 para o time da casa, com público de 45000 pessoas.
-
-
-```text
-Saída esperada (depois de consertar):
-Placar: 2 x 1
-Resultado: V
-Público: 45000
-```
-
-**Dicas:**
-
-1. Procure as palavras "uninitialized", "pointer" e "format" nos avisos.
-2. Aspas simples são um caractere; aspas duplas são um texto.
-3. O %d espera int. Que tipo é publico?
-4. Resposta esperada: (1) gols_fora não tem valor (lixo; aviso
-   "uninitialized"): int gols_fora = 1;. (2) "V" é texto, não caractere
-   ("makes integer from pointer"): use 'V'. (3) %d com double ("expects
-   argument of type 'int'"): declare publico como int (ou mostre com
-   %.0f).
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0002-variaveis/E011.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E011 && ~/LPEDC/01-fundamentos/0002-variaveis/E011
 ```
 
 **Exercício E012** · ★★★
@@ -827,14 +623,6 @@ B
 [ ] 32
 '7' vale 55, 7 vale 7
 ```
-
-**Dicas:**
-
-1. char letra = 'A'; printf("%c %d\n", letra, letra);
-2. Depois: letra = 66; e assim por diante. Na tabela ASCII, 'A' é 65, '0'
-   é 48 e o espaço é 32.
-3. '7' é o caractere sete, de
-   código 55; 7 é o número sete. São diferentes.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0002-variaveis/E012.c -o ~/LPEDC/01-fundamentos/0002-variaveis/E012 && ~/LPEDC/01-fundamentos/0002-variaveis/E012
@@ -1057,64 +845,17 @@ Saída esperada:
 (Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
 C17, avisa se você usar.)
 
-**Dicas:**
-
-1. 0001 é 1 e 0110 é 6: o primeiro binário é 0x16. 1111 é 15, o F.
-2. printf("0001 0110 = 0x16 = %d\n", 0x16); o texto antes do %d é fixo.
-3. Com n bits cabem 2 elevado a n valores: em binário é um 1 seguido de n
-   zeros, e cada 4 zeros viram um 0 no hexa: 0x10, 0x100 e 0x10000.
-4. Resposta esperada: as sete linhas acima (16 + 4 + 2 = 22; 1 * 16 + 15
-   = 31).
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E013
 ```
 
-**Exercício E014** · ★☆☆
-
-Escolha o MENOR tipo inteiro que guarda cada dado com folga e declare uma
-variável para cada um, com o valor indicado. Mostre todas com printf.
-
-
-```text
-a) idade de uma pessoa (34)
-b) temperatura mínima em São Joaquim, SC, em graus (-8)
-c) população do Brasil (203080756)
-d) tamanho de um arquivo de vídeo de 5 GB, em bytes (5368709120)
-e) ano de nascimento (1991)
-```
-
-
-
-```text
-Saída esperada:
-idade: 34
-temperatura: -8
-população: 203080756
-arquivo: 5368709120 bytes
-ano: 1991
-```
-
-**Dicas:**
-
-1. Confira os limites na tabela do texto ou rodando o A006.
-2. short vai até 32767; int até uns 2,1 bilhões; acima disso, long long.
-3. Resposta esperada: a) signed char ou int8_t (até 127) serve; short
-   também; b) signed char/int8_t (aceita negativo); c) int (cabe com folga
-   até 2,1 bilhões); d) long long ou int64_t (passa de 4,2 bilhões, nem
-   unsigned int serve); e) short. Na prática, int é o padrão para
-   inteiros pequenos: economize só quando tiver milhões deles.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E014.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E014 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E014
-```
-
 **Exercício E015** · ★★☆
 
-Três contadores unsigned, três estouros que dão a volta. O programa abaixo
-já tem os valores iniciais. Complete: faça cada conta indicada no
-comentário (guardando o resultado na própria variável) e mostre uma
-linha por contador, com o valor de antes, a conta, o valor de depois e o
+Três contadores unsigned, três estouros que dão a volta. Escreva um
+programa com brilho (unsigned char) = 250, estoque (unsigned int) = 0 e
+odometro (unsigned short) = 65000. Some 10 ao brilho, tire 1 do estoque e
+some 1000 ao odômetro, guardando o resultado na própria variável. Mostre
+uma linha por contador, com o valor de antes, a conta, o valor de depois e o
 máximo do tipo, tirado do limits.h.
 
 
@@ -1125,15 +866,6 @@ estoque: 0 - 1 = 4294967295 (máximo 4294967295)
 odômetro: 65000 + 1000 = 464 (máximo 65535)
 ```
 
-**Dicas:**
-
-1. A conta muda a variável. Para mostrar o valor de antes, guarde uma
-   cópia numa variável int antes da conta.
-2. Os máximos: UCHAR_MAX, UINT_MAX e USHRT_MAX. O unsigned int se mostra
-   com %u; o unsigned char e o unsigned short, com %d.
-3. Passou do máximo, volta a contar do zero: 260 - 256 = 4 e
-   66000 - 65536 = 464. Abaixo de zero, vai para o máximo.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015
 ```
@@ -1141,25 +873,15 @@ gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E015.c -o ~/LPEDC/01-fundamentos
 **Exercício E016** · ★★☆
 
 De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
-13! (13 fatorial = 1 * 2 * ... * 13). O programa abaixo parte de 12! e
-multiplica por 13. Ele compila sem aviso, mas está errado: rode e leia a
-mensagem "runtime error" que aparece. Conserte o código e rode de novo
-até sair a saída esperada, sem nenhum runtime error.
+13! (13 fatorial = 1 * 2 * ... * 13). Escreva um programa que guarde
+12! = 479001600 numa variável, multiplique por 13 e mostre o resultado.
+O resultado passa do limite do int, então escolha o tipo que comporta.
 
 
 ```text
-Saída esperada (depois de consertar):
+Saída esperada:
 13! = 6227020800 maneiras
 ```
-
-**Dicas:**
-
-1. Quanto vale INT_MAX? E 6227020800?
-2. O detector de comportamento indefinido do rodar pegou um estouro de
-   int, que é um tipo com sinal.
-3. Resposta esperada: 13! não cabe em int (máximo 2147483647): "signed
-   integer overflow". Sem o detector, o programa mostraria um número
-   errado (1932053504). Conserto: long long fatorial e %lld (ou int64_t).
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E016
@@ -1182,54 +904,8 @@ int32_t vai até 2147483647
 int64_t vai até 9223372036854775807
 ```
 
-**Dicas:**
-
-1. INT32_MAX e INT64_MAX vêm do stdint.h. Para mostrar o de 64 bits,
-   converta para long long e use %lld: (long long)INT64_MAX.
-2. Um ano tem 365 * 24 * 60 * 60 = 31536000 segundos, que cabe num int.
-   Mas 69 anos já não cabem: se a conta for feita em int, o rodar acusa
-   "signed integer overflow". Guarde os segundos de um ano numa variável
-   long long: aí a multiplicação por 68 ou 69 já é feita em long long.
-3. 2147483647 é 2^31 - 1 (31
-   bits para o número e 1 para o sinal); com 64 bits, cabem uns 292
-   bilhões de anos.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E017
-```
-
-**Exercício E018** · ★★★
-
-Complemento de dois na prática. O painel de um freezer recebe a
-temperatura num byte. Para cada temperatura (-1, -128, 127 e 0), guarde o
-valor num int8_t, copie para um uint8_t e mostre: o valor com sinal, o
-valor sem sinal e o byte em hexa. Reaproveite as mesmas duas variáveis
-(declare uma vez e troque os valores). Por fim, mostre a faixa do int8_t
-com as constantes do stdint.h.
-
-
-```text
-Saída esperada:
--1 -> 255 (0xFF)
--128 -> 128 (0x80)
-127 -> 127 (0x7F)
-0 -> 0 (0x0)
-int8_t: -128 a 127
-```
-
-**Dicas:**
-
-1. int8_t com_sinal = -1; uint8_t sem_sinal = com_sinal; e depois
-   com_sinal = -128; sem_sinal = com_sinal; e assim por diante.
-2. printf("%d -> %d (0x%X)\n", com_sinal, sem_sinal, sem_sinal);
-3. Os bits não mudam na cópia: o tipo só decide se o bit de cima vale
-   -128 ou +128. Para os negativos, sem sinal = com sinal + 256.
-4. A faixa é assimétrica
-   porque o zero ocupa uma das combinações sem o bit de cima, e não
-   existe -0.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E018.c -o ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E018 && ~/LPEDC/01-fundamentos/0003-tipos-e-limites/E018
 ```
 
 ---
@@ -1421,64 +1097,24 @@ O app avisou: "Pix recebido!"
 Rendimento: 100% do CDI
 ```
 
-**Dicas:**
-
-1. A barra invertida sozinha começa um escape: para mostrá-la, use `\\`.
-2. Aspas dentro do texto: `\"`. Porcentagem no printf: `%%`.
-3. Resposta esperada: as quatro linhas acima (na segunda, o terminal
-   mostra a tabulação como espaços até a coluna 9).
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0004-constantes/E019.c -o ~/LPEDC/01-fundamentos/0004-constantes/E019 && ~/LPEDC/01-fundamentos/0004-constantes/E019
 ```
 
-**Exercício E020** · ★☆☆
+**Exercício E021** · ★★☆
 
-O letreiro do posto mostra o nome e o preço de dois combustíveis. Crie um
-#define para o nome do posto e um para cada preço, e mostre o letreiro.
-Depois "reajuste" a gasolina para 6.49 mudando uma linha só.
+Escreva um programa com a mensalidade de uma academia. Defina
+MENSALIDADE (89.90) e DESCONTO (10.00) com #define, e o dia do vencimento
+(10) com const int. Mostre os três valores como abaixo, os reais com duas
+casas.
 
 
 ```text
 Saída esperada:
-Auto Posto Ipê
-Gasolina: R$ 6.29
-Etanol:   R$ 4.19
-```
-
-**Dicas:**
-
-1. #define NOME "Auto Posto Ipê", #define GASOLINA 6.29 ...
-2. No printf: %s para o nome e %.2f para os preços.
-3. Resposta esperada: as três linhas acima; com o reajuste, a segunda
-   vira "Gasolina: R$ 6.49" e só a linha do #define mudou.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/E020.c -o ~/LPEDC/01-fundamentos/0004-constantes/E020 && ~/LPEDC/01-fundamentos/0004-constantes/E020
-```
-
-**Exercício E021** · ★★☆
-
-Este programa não compila de propósito: tem TRÊS erros com constantes.
-Rode, leia as mensagens (repare em QUAL linha o gcc aponta) e conserte.
-
-
-```text
-Saída esperada (depois de consertar):
 Mensalidade: R$ 89.90
 Desconto: R$ 10.00
 Vencimento: dia 10
 ```
-
-**Dicas:**
-
-1. O #define cola exatamente o texto que vem depois do nome, = e ;
-   inclusive. O gcc acusa a linha onde o nome é usado.
-2. Uma variável const precisa receber o valor na declaração, não depois.
-3. Resposta esperada: tire o ; de "#define MENSALIDADE 89.90;"; tire o =
-   de "#define DESCONTO = 10.00"; e escreva "const int dia = 10;" numa
-   linha só (const não aceita atribuição depois: "assignment of read-only
-   variable 'dia'").
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0004-constantes/E021.c -o ~/LPEDC/01-fundamentos/0004-constantes/E021 && ~/LPEDC/01-fundamentos/0004-constantes/E021
@@ -1510,44 +1146,8 @@ Saída esperada:
 1e3: vale 1000.0, 8 bytes
 ```
 
-**Dicas:**
-
-1. Sem ponto é int; com ponto é double; o sufixo f faz float.
-2. Zero à esquerda é octal; 0x é hexadecimal; aspas simples dão o código
-   do caractere (um int); aspas duplas são texto com o byte zero no fim.
-3. Para mostrar aspas e apóstrofo no formato: \" e '.
-4. Ex.:
-   printf("010: vale %d, %zu bytes\n", 010, sizeof 010);
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0004-constantes/E022.c -o ~/LPEDC/01-fundamentos/0004-constantes/E022 && ~/LPEDC/01-fundamentos/0004-constantes/E022
-```
-
-**Exercício E023** · ★★★
-
-Alguém quis guardar o pi numa constante e calcular o comprimento de uma
-pista circular de raio 10 m (2 * pi * raio). O programa compila sem aviso
-nenhum, mas mostra 60 m. Conserte o código de dois jeitos, e deixe os
-dois no programa: na primeira linha, com uma const do tipo certo; na
-segunda, com um #define PI.
-
-
-```text
-Saída esperada (depois de consertar):
-Comprimento (const):  62.83 m
-Comprimento (define): 62.83 m
-```
-
-**Dicas:**
-
-1. const não muda o tipo: pi continua sendo um int, que guarda só a parte
-   inteira de 3.14159. Sobra 2 * 3 * 10 = 60.
-2. Com o tipo real, o resultado da conta também é real: troque o %d.
-3. Resposta esperada: const double pi = 3.14159; e #define PI 3.14159,
-   com %.2f nos dois printf.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0004-constantes/E023.c -o ~/LPEDC/01-fundamentos/0004-constantes/E023 && ~/LPEDC/01-fundamentos/0004-constantes/E023
 ```
 
 **Exercício E024** · ★★★
@@ -1582,14 +1182,6 @@ Oi!
 50% off
 a\n b
 ```
-
-**Dicas:**
-
-1. O pré-processador não mexe no que está dentro das aspas.
-2. 0x69 é 6 * 16 + 9 = 105, o i na tabela ASCII.
-3. Para o % na tela, %%. Para a barra, \\ (e o n fica sozinho).
-4. A primeira:
-   printf("CIDADE: %s\n", CIDADE);
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0004-constantes/E024.c -o ~/LPEDC/01-fundamentos/0004-constantes/E024 && ~/LPEDC/01-fundamentos/0004-constantes/E024
@@ -1780,45 +1372,8 @@ Faltas: 03
 Conceito: B
 ```
 
-**Dicas:**
-
-1. O nome pode ir direto no formato ou como argumento de um %s.
-2. %.1f arredonda para uma casa; %02d completa com zero à esquerda.
-3. Resposta esperada: as quatro linhas acima (8.75 vira 8.8 só na tela).
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0005-printf/E025.c -o ~/LPEDC/01-fundamentos/0005-printf/E025 && ~/LPEDC/01-fundamentos/0005-printf/E025
-```
-
-**Exercício E026** · ★☆☆
-
-Escreva os printf que produzem exatamente as quatro linhas abaixo. Os
-argumentos são dados: na linha 1, o 42 quatro vezes; na 2, o 3.14159 três
-vezes; na 3, o 'R' e três vezes o "Rio"; na 4, o 26 três vezes. Os
-colchetes vão fixos no formato, mas nenhum espaço e nenhum zero dentro
-deles pode ser digitado à mão: quem põe é o especificador.
-
-
-```text
-Saída esperada:
-[   42][42   ][00042][+42]
-[3.1][3.142][    3.14]
-[R][Rio][   Rio][Rio   ]
-[1a][1A][32]
-```
-
-**Dicas:**
-
-1. Largura é o mínimo de casas; sem o -, o valor encosta na direita. O 0
-   completa com zeros e o + mostra o sinal.
-2. Conte as casas de cada colchete: [    3.14] tem 8.
-3. 26 = 16 + 10: em hexa, 1 e A (minúsculo com %x, maiúsculo com %X). Em
-   octal (%o), 26 = 3 * 8 + 2.
-4. Resposta esperada: printf("[%5d][%-5d][%05d][%+d]\n", 42, 42, 42, 42);
-   e, nas outras, %.1f %.3f %8.2f; %c %s %6s %-6s; %x %X %o.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/E026.c -o ~/LPEDC/01-fundamentos/0005-printf/E026 && ~/LPEDC/01-fundamentos/0005-printf/E026
 ```
 
 **Exercício E027** · ★★☆
@@ -1838,39 +1393,23 @@ Diesel S10    R$ 6.09
 GNV           R$ 4.99
 ```
 
-**Dicas:**
-
-1. A primeira coluna tem 14 casas, encostada à esquerda: %-14s.
-2. "Combustível" tem acento: na largura, o printf conta bytes, e o í
-   ocupa 2. Para o cabeçalho ficar alinhado, use %-15s só nele, ou escreva
-   o cabeçalho direto no texto.
-3. Resposta esperada: as seis linhas acima, com "R$" sempre na coluna 15.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0005-printf/E027.c -o ~/LPEDC/01-fundamentos/0005-printf/E027 && ~/LPEDC/01-fundamentos/0005-printf/E027
 ```
 
 **Exercício E028** · ★★☆
 
-Este programa compila, mas o gcc mostra TRÊS avisos, e a saída sai
-errada (números sem sentido). Rode, leia cada aviso e conserte. O pedido
-tem 3 pizzas de R$ 45.90, total R$ 137.70.
+O pedido da pizzaria tem 3 pizzas de R$ 45.90. Escreva um programa que
+guarde a quantidade (int) e o preço (double), calcule o total e mostre as
+três linhas abaixo, com o formato certo para cada tipo.
 
 
 ```text
-Saída esperada (depois de consertar):
+Saída esperada:
 Pizzas: 3
 Preço: R$ 45.90
 Total: R$ 137.70
 ```
-
-**Dicas:**
-
-1. Procure "format" nos avisos: cada um diz o que esperava e o que veio.
-2. %d é para int e %f para double. Um % sem argumento lê lixo.
-3. Resposta esperada: (1) %d com o double preco: use %.2f; (2) %.2f com o
-   int quantidade: use %d; (3) o terceiro printf tem %.2f, mas faltou o
-   argumento total.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0005-printf/E028.c -o ~/LPEDC/01-fundamentos/0005-printf/E028 && ~/LPEDC/01-fundamentos/0005-printf/E028
@@ -1894,63 +1433,8 @@ rgb(30, 144, 255)
 Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
 #00080F, sempre com 7 caracteres.
 
-**Dicas:**
-
-1. %X mostra em hexadecimal com letras maiúsculas.
-2. Um componente pequeno (8) viraria só "8". A largura 2 com zero à
-   esquerda resolve: %02X.
-3. Resposta esperada: printf("#%02X%02X%02X\n", r, g, b); mostra #1E90FF
-   e, com 0, 8 e 15, #00080F.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0005-printf/E029.c -o ~/LPEDC/01-fundamentos/0005-printf/E029 && ~/LPEDC/01-fundamentos/0005-printf/E029
-```
-
-**Exercício E030** · ★★★
-
-Seis pegadinhas, sete linhas de saída. Escreva um programa que mostre exatamente a
-saída abaixo usando, como argumento de cada printf, o valor indicado (e
-não o texto pronto):
-
-
-```text
-linha 1: 3456.78
-linha 2: "Brasília"
-linha 3: 2.675, duas vezes
-linha 4: 123456.0
-linha 5: 0.0001 e 0.00001, com o mesmo especificador nos dois
-linhas 6 e 7: "Pão" e o número que o printf do "Pão" devolveu
-```
-
-
-
-```text
-Saída esperada:
-[3456.8]
-[Bra]
-[2.67] [2.67499999999999982236]
-[1.234560e+05]
-[0.0001] [1e-05]
-Pão
-[5]
-```
-
-**Dicas:**
-
-1. A largura é mínima, nunca corta: [3456.8] sai de %.1f, de %5.1f e até
-   de %1.1f. Já a precisão de um %s corta o texto.
-2. 2.675 não existe exato em binário: o double guarda 2.67499999...,
-   por isso o %.2f mostra 2.67, e não 2.68. Com %.20f você vê o número
-   guardado.
-3. O %g escolhe o formato mais curto e passa para o científico quando o
-   expoente fica menor que -4. O científico de sempre é o %e.
-4. O printf devolve quantos BYTES escreveu: int n = printf("Pão\n");
-   O ã ocupa 2 bytes no UTF-8.
-5. A última vem de
-   printf("[%d]\n", n): P, ã (2 bytes), o e o \n somam 5.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0005-printf/E030.c -o ~/LPEDC/01-fundamentos/0005-printf/E030 && ~/LPEDC/01-fundamentos/0005-printf/E030
 ```
 
 ---
@@ -2140,87 +1624,51 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/A012.c -o ~/LPEDC/01-fundamentos/0006-scan
 
 **Exercício E031** · ★☆☆
 
-Escreva um programa que pergunte a idade (inteiro) e a altura em metros
-(real) e responda numa frase só, com a altura em duas casas.
+Escreva um programa que leia a idade (inteiro) e a altura em metros
+(real), nessa ordem, sem mostrar perguntas, e responda numa frase só, com a
+altura em duas casas.
 
 
 ```text
-Exemplo de execução:
-Idade: 30
-Altura (m): 1.75
+Entrada:
+30
+1.75
+Saída esperada:
 Você tem 30 anos e 1.75 m de altura.
 ```
-
-
-Teste sem digitar: printf '30\n1.75\n' | ~/LPEDC/rodar E031.c
-
-**Dicas:**
-
-1. int idade; double altura; e um scanf para cada um.
-2. Para double, o scanf usa %lf. E não esqueça o &.
-3. Resposta esperada: com 30 e 1.75, "Você tem 30 anos e 1.75 m de
-   altura."
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0006-scanf/E031.c -o ~/LPEDC/01-fundamentos/0006-scanf/E031 && ~/LPEDC/01-fundamentos/0006-scanf/E031
 ```
 
-**Exercício E032** · ★☆☆
-
-Este programa compila com DOIS avisos e, quando roda, quebra ou mostra
-lixo. Rode com printf '42\n80.5\n' | ~/LPEDC/rodar E032.c, leia os avisos
-e o relatório do AddressSanitizer, e conserte.
-
-
-```text
-Exemplo de execução (depois de consertar):
-Número do calçado: 42
-Peso (kg): 80.5
-Calçado 42, peso 80.5 kg
-```
-
-**Dicas:**
-
-1. Procure "expects argument of type 'int *'" e "'float *'" nos avisos.
-2. O scanf precisa do endereço da variável. E o tipo da variável decide
-   o especificador.
-3. Resposta esperada: faltou o & em scanf("%d", calcado): o scanf usou o
-   VALOR de calcado (0) como endereço e tentou escrever no endereço 0
-   ("SEGV on unknown address 0x000000000000"); e peso é double, então o
-   scanf usa %lf, não %f.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/E032.c -o ~/LPEDC/01-fundamentos/0006-scanf/E032 && ~/LPEDC/01-fundamentos/0006-scanf/E032
-```
-
 **Exercício E033** · ★★☆
 
-O alarme do celular pede a hora no formato hh:mm. Leia a hora e os
-minutos com UM scanf só e mostre de dois jeitos. Mostre também quantos
-itens o scanf conseguiu ler.
+O alarme do celular pede a hora no formato hh:mm. Escreva um programa
+que comece com hora = 0 e minuto = 0, leia os dois com UM scanf só ("%d:%d")
+e guarde o valor que o scanf devolve. Mostre quantos itens ele leu e a hora
+de dois jeitos. Teste com 6:05 e com "6 05" (espaço no lugar dos dois
+pontos).
 
 
 ```text
-Exemplo de execução:
-Alarme (hh:mm): 6:05
+Entrada:
+6:05
+Saída esperada:
 Itens lidos: 2
 Alarme para 6h05
 Alarme para 06:05
 ```
 
 
-Depois rode com "6 05" (espaço no lugar dos dois pontos):
-printf '6 05\n' | ~/LPEDC/rodar E033.c. O seu programa tem de mostrar
-"Itens lidos: 1" e os minutos zerados: "Alarme para 6h00".
 
-**Dicas:**
-
-1. O : no formato tem de aparecer na entrada: "%d:%d".
-2. Inicialize as variáveis com 0 para o teste com espaço ficar previsível.
-3. Resposta esperada: com 6:05, "Itens lidos: 2", "Alarme para 6h05" e
-   "Alarme para 06:05". Com "6 05", o scanf lê o 6, espera um ":" e acha
-   um espaço: para ali, lê só 1 item, e os minutos ficam 0 ("Alarme para
-   6h00" e "Alarme para 06:00").
+```text
+Entrada:
+6 05
+Saída esperada:
+Itens lidos: 1
+Alarme para 6h00
+Alarme para 06:00
+```
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0006-scanf/E033.c -o ~/LPEDC/01-fundamentos/0006-scanf/E033 && ~/LPEDC/01-fundamentos/0006-scanf/E033
@@ -2228,25 +1676,19 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/E033.c -o ~/LPEDC/01-fundamentos/0006-scan
 
 **Exercício E034** · ★★☆
 
-A lanchonete pergunta quantos lanches e se é para viagem (V) ou para comer
-aqui (A). Este programa compila sem aviso, mas não funciona: rode com
-printf '3\nV\n' | ~/LPEDC/rodar E034.c e veja a opção sair vazia.
-Conserte o código mudando UM caractere e rode de novo com a mesma
-entrada.
+A lanchonete lê a quantidade de lanches (int) e a opção, V para viagem ou
+A para comer aqui (char), cada uma em uma linha. Escreva um programa que
+leia as duas, sem mostrar perguntas, e mostre a frase abaixo, com o código
+numérico do caractere no final.
 
 
 ```text
-Saída esperada (depois de consertar), com 3 e V:
-Quantidade: Opção (V/A): 3 lanche(s), opção V (código 86)
+Entrada:
+3
+V
+Saída esperada:
+3 lanche(s), opção V (código 86)
 ```
-
-**Dicas:**
-
-1. O código mostrado na saída errada é 10. Que caractere tem código 10?
-2. Depois do 3 você apertou Enter. Quem leu esse Enter?
-3. Resposta esperada: o %d leu o 3 e deixou o '\n' na fila; o %c, que não
-   pula nada, leu o '\n' (código 10). Conserto: scanf(" %c", &opcao), com
-   um espaço antes do %c, que manda pular espaços e Enters.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0006-scanf/E034.c -o ~/LPEDC/01-fundamentos/0006-scanf/E034 && ~/LPEDC/01-fundamentos/0006-scanf/E034
@@ -2256,56 +1698,36 @@ gcc ~/LPEDC/01-fundamentos/0006-scanf/E034.c -o ~/LPEDC/01-fundamentos/0006-scan
 
 Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
 UM scanf("%d %d", &a, &b), guarde o retorno e mostre "lidos=? a=? b=?".
-Rode com cada uma das entradas abaixo e confira a saída de cada uma com a
-resposta esperada (a última dica):
+Teste com as três entradas abaixo.
 
 
 ```text
-printf '7 9\n'   | ~/LPEDC/rodar E035.c
-printf '7 x\n'   | ~/LPEDC/rodar E035.c
-printf 'x 7\n'   | ~/LPEDC/rodar E035.c
-printf '7\n\n9\n' | ~/LPEDC/rodar E035.c
-printf ''        | ~/LPEDC/rodar E035.c
+Entrada:
+7 9
+Saída esperada:
+lidos=2 a=7 b=9
 ```
 
-**Dicas:**
 
-1. O retorno conta só os itens guardados com sucesso, na ordem. No primeiro
-   que falha, o scanf para.
-2. %d pula espaços e Enters, quantos forem.
-3. Entrada vazia é fim de arquivo: o scanf devolve EOF, que vale -1.
-4. Resposta esperada: "lidos=2 a=7 b=9"; "lidos=1 a=7 b=0";
-   "lidos=0 a=0 b=0"; "lidos=2 a=7 b=9" (os Enters são pulados);
-   "lidos=-1 a=0 b=0".
+
+```text
+Entrada:
+7 x
+Saída esperada:
+lidos=1 a=7 b=0
+```
+
+
+
+```text
+Entrada:
+x 7
+Saída esperada:
+lidos=0 a=0 b=0
+```
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0006-scanf/E035.c -o ~/LPEDC/01-fundamentos/0006-scanf/E035 && ~/LPEDC/01-fundamentos/0006-scanf/E035
-```
-
-**Exercício E036** · ★★★
-
-Bancos de dados e APIs usam a data no formato ISO: aaaa-mm-dd. Leia uma
-data no formato brasileiro e mostre no ISO, sempre com mês e dia de dois
-dígitos. O programa precisa aceitar qualquer separador: 7/9/2026,
-7-9-2026 e 7.9.2026 dão o mesmo resultado.
-
-
-```text
-Exemplo de execução:
-Data: 7/9/2026
-ISO: 2026-09-07
-```
-
-**Dicas:**
-
-1. Para mostrar: %04d-%02d-%02d.
-2. O %*c lê um caractere e joga fora, sem guardar em variável nenhuma (e
-   sem contar no retorno). Serve para "qualquer separador".
-3. Resposta esperada: scanf("%d%*c%d%*c%d", &dia, &mes, &ano); e a saída
-   "ISO: 2026-09-07" para as três entradas.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0006-scanf/E036.c -o ~/LPEDC/01-fundamentos/0006-scanf/E036 && ~/LPEDC/01-fundamentos/0006-scanf/E036
 ```
 
 ---
@@ -2497,86 +1919,26 @@ Sobram: 2 brigadeiros
 Ingressos: R$ 245
 ```
 
-**Dicas:**
-
-1. Caixas cheias é a divisão inteira; o que sobra é o resto (%).
-2. O total dos ingressos é uma multiplicação.
-3. Resposta esperada: 50 / 12 = 4, 50 % 12 = 2 e 7 * 35 = 245.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E037.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E037 && ~/LPEDC/01-fundamentos/0007-aritmetica/E037
-```
-
-**Exercício E038** · ★☆☆
-
-Escreva um programa que mostre o valor de cada expressão abaixo, uma por
-linha, com a letra na frente. A expressão vai como argumento do printf,
-do jeito que está escrita (quem calcula é o C): %d para as inteiras e
-%.1f para a real.
-
-
-```text
-a) 7 + 3 * 2          e) -17 / 5
-b) (7 + 3) * 2        f) -17 % 5
-c) 17 / 5             g) 2 * 3 % 4
-d) 17 % 5             h) 17.0 / 5
-```
-
-
-
-```text
-Saída esperada:
-a) 13
-b) 20
-c) 3
-d) 2
-e) -3
-f) -2
-g) 2
-h) 3.4
-```
-
-
-Antes de rodar, tente chegar a cada valor na mão: é o treino de
-precedência.
-
-**Dicas:**
-
-1. * / % antes de + -; empate, da esquerda para a direita.
-2. Entre inteiros, a divisão corta a parte fracionária em direção ao zero,
-   e o resto tem o sinal de quem é dividido.
-3. Resposta esperada: a) 13; b) 20; c) 3; d) 2; e) -3; f) -2; g) 2
-   (6 % 4); h) 3.4.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E038.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E038 && ~/LPEDC/01-fundamentos/0007-aritmetica/E038
 ```
 
 **Exercício E039** · ★★☆
 
 Escreva o programa que racha a conta do restaurante: lê o valor da conta
-e o número de pessoas, soma 10% de serviço e mostra o serviço, o total e
-quanto cada um paga.
+e o número de pessoas, sem mostrar perguntas, soma 10% de serviço e mostra
+o serviço, o total e quanto cada um paga, tudo em duas casas.
 
 
 ```text
-Exemplo de execução:
-Conta: R$ 237.50
-Pessoas: 4
+Entrada:
+237.50
+4
+Saída esperada:
 Serviço (10%): R$ 23.75
 Total: R$ 261.25
 Cada um: R$ 65.31
 ```
-
-
-Teste: printf '237.50\n4\n' | ~/LPEDC/rodar E039.c
-
-**Dicas:**
-
-1. conta é double (leia com %lf) e pessoas é int.
-2. 10% de algo é algo * 10 / 100, ou algo * 0.10.
-3. Resposta esperada: serviço 23.75, total 261.25 e cada um 65.31
-   (261.25 / 4 = 65.3125, e o %.2f mostra 65.31).
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E039.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E039 && ~/LPEDC/01-fundamentos/0007-aritmetica/E039
@@ -2584,90 +1946,45 @@ gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E039.c -o ~/LPEDC/01-fundamentos/0007
 
 **Exercício E040** · ★★☆
 
-Este programa compila e roda sem aviso nenhum, mas as duas médias estão
-erradas. As notas são 8, 7 e 8; a média certa é 7.67. Descubra os DOIS
-erros e conserte.
+Escreva um programa com três notas inteiras: 8, 7 e 8. Calcule a média
+como double, de dois jeitos: (1) dividindo a soma por 3.0; (2) convertendo
+a soma para double com um cast antes de dividir por 3. Mostre as duas com
+duas casas.
 
 
 ```text
-Saída esperada (depois de consertar):
+Saída esperada:
 Média 1: 7.67
 Média 2: 7.67
 ```
-
-**Dicas:**
-
-1. Faça as contas na mão, na ordem em que o C faz.
-2. Na média 1, os dois lados da divisão são int. Na média 2, olhe a
-   precedência.
-3. Resposta esperada: a média 1 mostra 7.00 porque 23 / 3 é divisão
-   inteira (7) antes de virar double: use 3.0. A média 2 mostra 17.67
-   porque só a terceira nota é dividida (8 + 7 + 8 / 3.0): faltam os
-   parênteses em volta da soma.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E040.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E040 && ~/LPEDC/01-fundamentos/0007-aritmetica/E040
 ```
 
-**Exercício E041** · ★★★
-
-O kit escolar custa R$ 20 de material mais R$ 5 de frete. Alguém criou um
-#define para o preço do kit e calculou o preço de 3 kits e a parcela do
-kit em 5 vezes. O programa compila sem aviso, mas as duas contas saem
-erradas. Rode, veja os valores e conserte mudando só a linha do #define.
-
-
-```text
-Saída esperada (depois de consertar):
-3 kits: R$ 75
-Kit em 5x: R$ 5
-```
-
-**Dicas:**
-
-1. O #define não calcula nada: ele cola o texto. Escreva cada printf com
-   o texto colado e aplique a precedência.
-2. Toda macro que é uma conta deve vir entre parênteses.
-3. Resposta esperada: antes, "3 kits: R$ 65" (3 * 20 + 5) e "Kit em 5x:
-   R$ 21" (20 + 5 / 5). Conserto: #define KIT (20 + 5), e as duas linhas
-   acima.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E041.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E041 && ~/LPEDC/01-fundamentos/0007-aritmetica/E041
-```
-
 **Exercício E042** · ★★★
 
-Leia um número de 3 dígitos e mostre ao contrário, usando só / e %
-(nada de texto). O programa tem de funcionar também quando o número
-termina em zero: com 120, a saída é 021, sempre com três dígitos.
+Leia um número de 3 dígitos, sem mostrar pergunta, e mostre ao contrário,
+usando só / e % (nada de texto). O programa tem de funcionar também quando o
+número termina em zero: com 120, a saída é 021, sempre com três dígitos.
+Teste com 472 e com 120.
 
 
 ```text
-Exemplo de execução:
-Número: 472
+Entrada:
+472
+Saída esperada:
 Ao contrário: 274
 ```
 
 
 
 ```text
-Exemplo de execução:
-Número: 120
+Entrada:
+120
+Saída esperada:
 Ao contrário: 021
 ```
-
-
-Teste: printf '472\n' | ~/LPEDC/rodar E042.c e depois com '120\n'.
-
-**Dicas:**
-
-1. n % 10 é o último dígito; n / 10 % 10 é o do meio; n / 100 é o
-   primeiro.
-2. Monte o novo número: unidade * 100 + dezena * 10 + centena.
-3. Com 120, o número invertido vale 21: zero à esquerda não existe num
-   int. Quem põe o zero é o printf: %03d.
-4. Resposta esperada: 472 vira 274 e 120 vira 021.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0007-aritmetica/E042.c -o ~/LPEDC/01-fundamentos/0007-aritmetica/E042 && ~/LPEDC/01-fundamentos/0007-aritmetica/E042
@@ -2852,48 +2169,8 @@ Saída esperada:
 Média: 8.33
 ```
 
-**Dicas:**
-
-1. Sem cast, (7 + 8 + 10) / 3 é divisão inteira: dá 8.
-2. Converta a soma para double antes de dividir: (double) (a + b + c) / 3.
-3. Resposta esperada: "Média: 8.33" (25 / 3 = 8.333...).
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0008-conversao/E043.c -o ~/LPEDC/01-fundamentos/0008-conversao/E043 && ~/LPEDC/01-fundamentos/0008-conversao/E043
-```
-
-**Exercício E044** · ★☆☆
-
-Cada linha do programa abaixo tem, no comentário, o valor que a pessoa
-QUERIA guardar. Algumas guardam outra coisa. Acrescente um printf para
-cada variável (%d para int, %.1f para double, %c para char), rode e
-conserte as linhas erradas mexendo só no lado direito do =, sem trocar o
-tipo de nenhuma variável, até a saída ficar igual à esperada.
-
-
-```text
-Saída esperada (depois de consertar):
-a = 7
-b = 3.5
-c = 3.5
-d = -7
-e = B
-f = 3.5
-g = 3
-```
-
-**Dicas:**
-
-1. Na atribuição, o valor vira o tipo da esquerda: real para int corta a
-   parte fracionária, em direção ao zero.
-2. A conta da direita é feita primeiro, com os tipos dela: 7 / 2 entre
-   dois int dá 3, e só depois vira 3.0.
-3. Resposta esperada: só b e f estavam erradas (as duas mostravam 3.0).
-   Conserto: double b = 7 / 2.0; e double f = (double) 7 / 2; (o cast
-   antes da divisão). E as sete linhas acima.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/E044.c -o ~/LPEDC/01-fundamentos/0008-conversao/E044 && ~/LPEDC/01-fundamentos/0008-conversao/E044
 ```
 
 **Exercício E045** · ★★☆
@@ -2912,67 +2189,25 @@ votos / total * 100 = 0
 100 * votos / total = 36
 ```
 
-**Dicas:**
-
-1. Basta um operando real no lugar certo: 100.0 * votos / total.
-2. Faça cada fórmula errada passo a passo, da esquerda para a direita.
-3. Em votos / total * 100,
-   47 / 130 é 0 (divisão inteira) e 0 * 100 = 0. Em 100 * votos / total,
-   4700 / 130 = 36: certo na parte inteira, mas os decimais somem.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0008-conversao/E045.c -o ~/LPEDC/01-fundamentos/0008-conversao/E045 && ~/LPEDC/01-fundamentos/0008-conversao/E045
 ```
 
 **Exercício E046** · ★★☆
 
-Na balança do açougue, a picanha custa R$ 45.90 o quilo. O programa
-calcula o preço de 600 gramas, mas mostra R$ 0.00. Ele compila sem aviso.
-Descubra o erro e conserte sem mudar o tipo de nenhuma variável.
+Na balança do açougue, a picanha custa R$ 45.90 o quilo. Escreva um
+programa com gramas = 600 (int) e preco_kg = 45.90 (double) que calcule e
+mostre o preço dessa quantidade. Os tipos das duas variáveis ficam como
+estão.
 
 
 ```text
-Saída esperada (depois de consertar):
+Saída esperada:
 600 g: R$ 27.54
 ```
 
-**Dicas:**
-
-1. Calcule gramas / 1000 sabendo que os dois são int.
-2. Conta da esquerda para a direita: o zero aparece antes da multiplicação.
-3. Resposta esperada: 600 / 1000 é divisão inteira e dá 0; 0 * 45.90 = 0.
-   Conserto: gramas / 1000.0 * preco_kg (ou multiplicar antes:
-   gramas * preco_kg / 1000). Resultado: R$ 27.54.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0008-conversao/E046.c -o ~/LPEDC/01-fundamentos/0008-conversao/E046 && ~/LPEDC/01-fundamentos/0008-conversao/E046
-```
-
-**Exercício E047** · ★★★
-
-Sistemas de pagamento guardam dinheiro em centavos inteiros, para fugir
-dos erros dos números reais. Este programa converte R$ 19.99 para
-centavos, mas mostra 1998. Rode, acrescente um printf que mostre
-valor * 100 com %.15f para ver o número de verdade, e conserte a conta
-para mostrar 1999 (sem trocar o tipo das variáveis).
-
-
-```text
-Saída esperada (depois de consertar), na última linha:
-R$ 19.99 = 1999 centavos
-```
-
-**Dicas:**
-
-1. Real para int corta, não arredonda: 1998.9999... vira 1998.
-2. Somar 0.5 antes de cortar arredonda para o inteiro mais próximo.
-3. Resposta esperada: mostra 1998, porque 19.99 não existe exato em
-   binário e 19.99 * 100 dá 1998.99999999999977..., que o int corta.
-   Conserto: int centavos = valor * 100 + 0.5; (no assunto 0010, a função
-   round faz isso).
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0008-conversao/E047.c -o ~/LPEDC/01-fundamentos/0008-conversao/E047 && ~/LPEDC/01-fundamentos/0008-conversao/E047
 ```
 
 **Exercício E048** · ★★★
@@ -2992,18 +2227,6 @@ Posição no alfabeto: 7
 Três adiante: j
 Somando e cortando: 7; cortando e somando: 6
 ```
-
-**Dicas:**
-
-1. Numa conta, o char vira int: letra - 'a' é a distância da letra até o
-   'a' (g está 6 depois do a).
-2. Maiúscula: a mesma distância, a partir do 'A'. Mostre o resultado com
-   %c e com %d.
-3. Somar antes de cortar não é o mesmo que cortar antes de somar:
-   (int) (x + y) e (int) x + (int) y.
-4. A maiúscula é
-   letra - 'a' + 'A'; a posição, letra - 'a' + 1; três adiante,
-   letra + 3; e 7.4 cortado dá 7, enquanto 3 + 3 dá 6.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0008-conversao/E048.c -o ~/LPEDC/01-fundamentos/0008-conversao/E048 && ~/LPEDC/01-fundamentos/0008-conversao/E048
@@ -3196,49 +2419,19 @@ gcc ~/LPEDC/01-fundamentos/0009-atribuicao/A018.c -o ~/LPEDC/01-fundamentos/0009
 
 **Exercício E049** · ★☆☆
 
-Refatore: reescreva as cinco linhas marcadas usando os operadores
-compostos e o ++, sem mudar o que o programa mostra.
-
-
-```text
-Saída esperada (igual antes e depois):
-pontos 110, vidas 2, moedas 40, tempo 45, fase 4
-```
-
-**Dicas:**
-
-1. x = x + 10 vira x += 10. Somar 1 vira ++ e tirar 1 vira --.
-2. Rode antes e depois: a saída tem de ser a mesma.
-3. Resposta esperada: pontos += 10; vidas--; moedas *= 2; tempo /= 2;
-   fase++; e a mesma saída.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E049.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E049 && ~/LPEDC/01-fundamentos/0009-atribuicao/E049
-```
-
-**Exercício E050** · ★☆☆
-
-Acrescente um printf depois de cada uma das três últimas linhas,
-mostrando a instrução, o valor de x e o valor da variável que acabou de
-ser criada, no formato abaixo. Antes de rodar, tente adivinhar cada
-número; depois confira com a saída.
+Escreva um programa com pontos = 100, vidas = 3, moedas = 20, tempo = 90
+e fase = 3 (int). Atualize cada um usando só operadores compostos e ++ ou --:
+pontos ganha 10, vidas perde 1, moedas dobra, tempo cai pela metade e fase
+sobe 1. Mostre tudo numa linha só.
 
 
 ```text
 Saída esperada:
-y = x++ -> x = 6, y = 5
-z = ++x -> x = 7, z = 7
-w = x-- -> x = 6, w = 7
+pontos 110, vidas 2, moedas 40, tempo 45, fase 4
 ```
 
-**Dicas:**
-
-1. x++ entrega o valor antigo e depois soma; ++x soma e entrega o novo.
-2. O printf vai na linha de baixo, sozinho: printf("y = x++ -> x = %d,
-   y = %d\n", x, y);
-
 ```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E050.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E050 && ~/LPEDC/01-fundamentos/0009-atribuicao/E050
+gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E049.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E049 && ~/LPEDC/01-fundamentos/0009-atribuicao/E049
 ```
 
 **Exercício E051** · ★★☆
@@ -3260,24 +2453,17 @@ Rendimento: R$ 17.68
 3 depósitos
 ```
 
-**Dicas:**
-
-1. saldo += ..., saldo -= ..., saldo *= 1.01.
-2. Faça depositos++ logo depois de cada depósito e use o valor no printf.
-3. Resposta esperada: as seis linhas acima (17.50 * 1.01 = 17.675, que o
-   %.2f mostra como 17.68).
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E051.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E051 && ~/LPEDC/01-fundamentos/0009-atribuicao/E051
 ```
 
 **Exercício E052** · ★★☆
 
-As quatro linhas com operadores compostos rodam em sequência, uma depois
-da outra. Acrescente um printf depois de cada uma, mostrando a instrução
-e o novo valor de x. Depois, para provar que x = x * 2 + y e
-x *= 2 + y são contas diferentes, volte x para 10 e mostre as duas: a
-primeira só no printf, sem guardar; a segunda guardando em x.
+Escreva um programa com x = 10 e y = 3 (int). Aplique em sequência, uma
+depois da outra, x *= y + 1, x -= y - 1, x /= y + 1 e x %= y + 2, mostrando
+a instrução e o novo valor de x depois de cada uma. Depois, volte x para 10
+e mostre x * 2 + y (só no printf, sem guardar) e x *= 2 + y (guardando em
+x), para ver que são contas diferentes.
 
 
 ```text
@@ -3290,69 +2476,22 @@ x * 2 + y = 23
 x *= 2 + y -> 50
 ```
 
-**Dicas:**
-
-1. O composto age sobre toda a expressão da direita: x op= expr é
-   x = x op (expr).
-2. A divisão é entre int: 38 / 4 dá 9.
-3. Para o % aparecer no printf, %%.
-4. x *= 2 + y é
-   x = x * (2 + y) = 10 * 5, e não 10 * 2 + 3.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E052.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E052 && ~/LPEDC/01-fundamentos/0009-atribuicao/E052
 ```
 
-**Exercício E053** · ★★★
-
-Este programa compila, mas o gcc mostra avisos. Pior: cada compilador
-pode mostrar uma saída diferente. Rode e leia os avisos. Depois conserte:
-reescreva as duas linhas marcadas para ficarem claras e previsíveis, com
-a intenção indicada em cada comentário, e rode de novo até não sobrar
-aviso.
-
-
-```text
-Saída esperada (depois de consertar):
-senha 1235
-fila: atendendo 7, próximo 8
-```
-
-**Dicas:**
-
-1. Procure "may be undefined" nos avisos.
-2. Alterar uma variável e usá-la de novo na mesma expressão não tem ordem
-   definida no C. Separe em linhas.
-3. Resposta esperada: senha = senha++ e printf com fila++ e fila na mesma
-   chamada são comportamento indefinido (-Wsequence-point). Conserto:
-   senha++; numa linha só; e no printf, mostre fila e fila + 1 e só depois
-   faça fila++.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E053.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E053 && ~/LPEDC/01-fundamentos/0009-atribuicao/E053
-```
-
 **Exercício E054** · ★★★
 
-O placar está invertido de novo: casa = 2 e visitante = 5, e o certo é o
-contrário. Desta vez, troque os valores SEM usar uma terceira variável,
-só com += e -= (e, se precisar, um = simples).
+O placar está invertido: casa = 2 e visitante = 5, e o certo é o
+contrário. Escreva um programa que troque os valores SEM usar uma terceira
+variável, só com += e -= (e, se precisar, um = simples), e mostre o
+placar certo.
 
 
 ```text
 Saída esperada:
 Casa 5 x 2 Visitante
 ```
-
-**Dicas:**
-
-1. Guarde a soma dos dois numa das variáveis: casa += visitante (casa = 7).
-2. Da soma, dá para recuperar cada um tirando o outro.
-3. Cuidado na vida real: com valores perto de INT_MAX, a soma estoura o
-   int (comportamento indefinido). A versão com variável auxiliar é mais
-   segura e mais clara; este truque é só para treinar os compostos.
-4. Resposta esperada: casa += visitante; visitante = casa - visitante;
-   casa -= visitante; e a saída "Casa 5 x 2 Visitante".
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0009-atribuicao/E054.c -o ~/LPEDC/01-fundamentos/0009-atribuicao/E054 && ~/LPEDC/01-fundamentos/0009-atribuicao/E054
@@ -3555,59 +2694,8 @@ Diagonal: 139.74 cm
 TV de 55 polegadas
 ```
 
-**Dicas:**
-
-1. diagonal = raiz(largura² + altura²): sqrt e pow (ou x * x).
-2. Divida por 2.54 e mostre sem casas decimais (%.0f).
-3. Resposta esperada: 139.74 cm e 55 polegadas (55.02, arredondado).
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0010-math/E055.c -o ~/LPEDC/01-fundamentos/0010-math/E055 -lm && ~/LPEDC/01-fundamentos/0010-math/E055
-```
-
-**Exercício E056** · ★☆☆
-
-Para cada situação, escolha a função do math.h que resolve e escreva um
-printf que mostre a linha com o resultado. Os números da conta vão como
-argumento da função (quem calcula é o programa). Mostre os resultados com
-%.0f, menos o saldo, com %.2f.
-
-
-```text
-a) 13 pessoas, 4 por viagem do elevador: quantas viagens?
-b) quem tem 34.9 anos tem quantos anos completos?
-c) a nota 6.5 arredondada para o inteiro mais perto
-d) o saldo de -42.75, sem o sinal
-e) o lado de um quadrado de 144 m²
-f) 2 elevado a 10
-g) -3.2 graus, arredondado para baixo
-```
-
-
-
-```text
-Saída esperada:
-a) 4 viagens
-b) 34 anos
-c) nota 7
-d) R$ 42.75
-e) 12 m
-f) 1024
-g) -4 graus
-```
-
-**Dicas:**
-
-1. floor desce na reta numérica; ceil sobe. Com negativo, "descer" é ir
-   para mais longe do zero.
-2. round leva o meio (x.5) para longe do zero. Em a), cuidado: 13 / 4
-   entre dois int já sai cortado; use 13.0 / 4.
-3. Resposta esperada: a) ceil(13.0 / 4); b) floor(34.9); c) round(6.5);
-   d) fabs(-42.75); e) sqrt(144); f) pow(2, 10); g) floor(-3.2). E as
-   sete linhas acima.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/E056.c -o ~/LPEDC/01-fundamentos/0010-math/E056 -lm && ~/LPEDC/01-fundamentos/0010-math/E056
 ```
 
 **Exercício E057** · ★★☆
@@ -3623,13 +2711,6 @@ Saída esperada:
 Latas: 2.59 -> comprar 3
 Total: R$ 269.70
 ```
-
-**Dicas:**
-
-1. Área: 3 * 4.0 * 2.7 * 2 demãos.
-2. ceil arredonda para cima: é a função de "quantos preciso comprar".
-3. Resposta esperada: 64.80 m²; 64.8 / 25 = 2.592, então 3 latas;
-   3 * 89.90 = R$ 269.70.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0010-math/E057.c -o ~/LPEDC/01-fundamentos/0010-math/E057 -lm && ~/LPEDC/01-fundamentos/0010-math/E057
@@ -3653,45 +2734,8 @@ Juros simples, 24 meses: R$ 1240.00
 Diferença: R$ 29.73
 ```
 
-**Dicas:**
-
-1. A taxa de 1% é 0.01. pow(1 + taxa, 12).
-2. Rendimento = montante - capital.
-3. Juros simples: capital + capital * taxa * 24.
-4. Os compostos rendem também
-   sobre o que já rendeu, e essa parte cresce a cada mês.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0010-math/E058.c -o ~/LPEDC/01-fundamentos/0010-math/E058 -lm && ~/LPEDC/01-fundamentos/0010-math/E058
-```
-
-**Exercício E059** · ★★★
-
-O programa compila com um aviso e mostra três valores errados. Conserte
-o código e rode de novo até sair a saída esperada, sem aviso.
-
-- A caixa d'água em forma de cubo tem 27 m³. Qual a aresta? (3 m)
-- O termômetro marcou -2.75 °C. Quanto falta para chegar a 0? (2.75)
-- São 7 convidados e 2 por mesa. Quantas mesas? (4)
-
-
-```text
-Saída esperada (depois de consertar):
-Aresta: 3.00 m
-Faltam 2.75 graus
-Mesas: 4
-```
-
-**Dicas:**
-
-1. Calcule 1/3 e 7/2 sabendo que os dois lados são int.
-2. Procure "abs" no aviso do gcc.
-3. Resposta esperada: pow(27, 1/3) dá 1, porque 1/3 é 0: use 1.0 / 3.
-   abs é a versão para int (do stdlib.h) e corta para 2: use fabs.
-   ceil(7 / 2) recebe 3, já cortado: use ceil(7 / 2.0), que dá 4.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0010-math/E059.c -o ~/LPEDC/01-fundamentos/0010-math/E059 -lm && ~/LPEDC/01-fundamentos/0010-math/E059
 ```
 
 **Exercício E060** · ★★★
@@ -3715,14 +2759,6 @@ Delta: 430.00
 Chega ao chão em 4.07 s
 Altura máxima: 21.50 m, em 2.00 s
 ```
-
-**Dicas:**
-
-1. a = -5, b = 20, c = 1.5, todos double.
-2. Com a negativo, das duas raízes a que interessa (t positivo) é a do
-   "- raiz(delta)". A outra dá um tempo negativo, antes do lançamento.
-3. Resposta esperada: delta = 400 + 30 = 430; t = (-20 - 20.736) / -10 =
-   4.07 s; altura máxima em t = 2 s, h(2) = -20 + 40 + 1.5 = 21.50 m.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0010-math/E060.c -o ~/LPEDC/01-fundamentos/0010-math/E060 -lm && ~/LPEDC/01-fundamentos/0010-math/E060
@@ -3960,82 +2996,38 @@ gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/A022.c -o ~/LPEDC/01-fundamentos/0
 **Exercício E061** · ★☆☆
 
 Escreva a calculadora de IMC (índice de massa corporal): lê o peso em kg
-e a altura em metros e mostra o IMC com uma casa. A fórmula é
-peso / altura².
+e a altura em metros, sem mostrar perguntas, e mostra o IMC com uma casa. A
+fórmula é peso / altura².
 
 
 ```text
-Exemplo de execução:
-Peso (kg): 72.5
-Altura (m): 1.75
+Entrada:
+72.5
+1.75
+Saída esperada:
 IMC: 23.7
 ```
-
-
-Teste: printf '72.5\n1.75\n' | ~/LPEDC/rodar E061.c
-
-**Dicas:**
-
-1. double peso, altura; e scanf com %lf.
-2. altura² pode ser altura * altura ou pow(altura, 2).
-3. Resposta esperada: 72.5 / (1.75 * 1.75) = 23.67..., mostrado como 23.7.
-   Cuidado: peso / altura * altura (sem parênteses) dá 72.5.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E061
 ```
 
-**Exercício E062** · ★☆☆
-
-O termômetro marcou 36.5 °C. Seu amigo americano quer em Fahrenheit, e a
-professora de física quer em Kelvin. Leia a temperatura em Celsius e
-mostre nas três escalas. As fórmulas: F = C * 9 / 5 + 32 e
-K = C + 273.15. Use uma constante para o 273.15.
-
-
-```text
-Exemplo de execução:
-Celsius: 36.5
-36.5 °C = 97.7 °F = 309.65 K
-```
-
-
-Teste: printf '36.5\n' | ~/LPEDC/rodar E062.c
-
-**Dicas:**
-
-1. #define ZERO_ABSOLUTO 273.15 (ou const double).
-2. Cuidado com 9 / 5 sozinho: entre dois int, vale 1. Com celsius double
-   à esquerda (celsius * 9 / 5), a conta já é real. Na dúvida, 9.0 / 5.
-3. Resposta esperada: "36.5 °C = 97.7 °F = 309.65 K".
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E062.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E062 && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E062
-```
-
 **Exercício E063** · ★★☆
 
 Quanto tempo leva para baixar um jogo? Leia o tamanho em GB e a
-velocidade da internet em Mbps (megabits por segundo) e mostre o tempo em
-minutos e segundos. Atenção às unidades: 1 GB = 1000 MB, 1 byte = 8 bits.
+velocidade da internet em Mbps (megabits por segundo), sem mostrar
+perguntas, e mostre o tempo em segundos, e em minutos e segundos. Atenção às
+unidades: 1 GB = 1000 MB, 1 byte = 8 bits. Arredonde os segundos totais para
+o inteiro mais próximo.
 
 
 ```text
-Exemplo de execução:
-Tamanho (GB): 4.7
-Internet (Mbps): 100
+Entrada:
+4.7
+100
+Saída esperada:
 Tempo: 376 s = 6 min 16 s
 ```
-
-
-Teste: printf '4.7\n100\n' | ~/LPEDC/rodar E063.c
-
-**Dicas:**
-
-1. Megabits do arquivo = GB * 1000 * 8. Segundos = megabits / Mbps.
-2. Passe os segundos para int (round e depois cast) antes de usar / e %.
-3. Resposta esperada: 4.7 * 1000 * 8 = 37600 megabits; / 100 = 376 s;
-   376 / 60 = 6 min, 376 % 60 = 16 s.
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E063
@@ -4063,80 +3055,45 @@ Total: R$ 1473.12
 Juros: R$ 174.12
 ```
 
-**Dicas:**
-
-1. taxa = 0.0199; pow aceita expoente negativo: pow(1 + taxa, -12).
-2. Arredondar para centavos: round(parcela * 100) / 100.
-3. Resposta esperada: parcela 122.76 (era 122.7577...); total 12 * 122.76
-   = 1473.12; juros 1473.12 - 1299.00 = 174.12.
-
 ```bash
 gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064 -lm && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E064
 ```
 
-**Exercício E065** · ★★★
-
-Este programa calcula a média da turma no simulado, mas tem CINCO erros
-de propósito, de assuntos diferentes do módulo. Ele compila, com uma
-porção de avisos, e quebra ao rodar. Conserte um por vez, rodando de novo
-a cada conserto, até sair a saída esperada.
-
-
-```text
-Exemplo de execução (depois de consertar):
-Soma das notas: 172.5
-Alunos: 25
-Média: 6.90
-Acima da meta em 0.90 ponto
-```
-
-
-Teste: printf '172.5\n25\n' | ~/LPEDC/rodar E065.c
-
-**Dicas:**
-
-1. Leia os avisos: dois são de scanf (o & e o especificador do double) e
-   um é de printf.
-2. O aviso "statement with no effect" é estranho: escreva a linha da
-   diferença com o #define colado, ; inclusive.
-3. Com isso resolvido, um erro ainda fica sem aviso: confira o sinal da
-   diferença na mão.
-4. Resposta esperada: (1) tire o ; de "#define META 6.0;" (a linha virava
-   "diferenca = 6.0; - media;"); (2) soma é
-   double: scanf("%lf", &soma); (3) faltou o & em scanf("%d", alunos);
-   (4) o printf da média usa %d com double: %.2f; (5) META - media dá
-   -0.90: a diferença acima da meta é media - META.
-
-```bash
-gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E065.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E065 && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E065
-```
-
 **Exercício E066** · ★★★
 
-O app de entregas diz "chega em 135 minutos". Leia a hora atual (hh:mm) e
-os minutos de espera e mostre a hora da chegada, no formato hh:mm, e
-quantos dias depois de hoje ela cai. Sem if: só aritmética.
+O app de entregas diz "chega em 135 minutos". Leia a hora atual (hh:mm)
+e os minutos de espera, sem mostrar perguntas, e mostre a hora da chegada no
+formato hh:mm e quantos dias depois de hoje ela cai. Sem if: só aritmética.
+Teste com os três casos abaixo.
 
 
 ```text
-Exemplo de execução:
-Agora (hh:mm): 22:45
-Espera (min): 135
+Entrada:
+22:45
+135
+Saída esperada:
 Chega às 01:00, 1 dia(s) depois
 ```
 
 
-Teste também 08:10 com 50 minutos (09:00, 0 dias) e 23:59 com 2881
-minutos (00:00, 3 dias).
 
-**Dicas:**
+```text
+Entrada:
+08:10
+50
+Saída esperada:
+Chega às 09:00, 0 dia(s) depois
+```
 
-1. Converta tudo para minutos desde a meia-noite: hora * 60 + minuto.
-2. Some a espera. Um dia tem 1440 minutos: total / 1440 são os dias, e
-   total % 1440 é a hora do dia em minutos.
-3. Mostre com %02d:%02d.
-4. Resposta esperada: 22:45 + 135 = 1365 + 135 = 1500 minutos; 1500 /
-   1440 = 1 dia; 1500 % 1440 = 60 minutos = 01:00.
+
+
+```text
+Entrada:
+23:59
+2881
+Saída esperada:
+Chega às 00:00, 3 dia(s) depois
+```
 
 ```bash
 gcc ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066.c -o ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066 && ~/LPEDC/01-fundamentos/0011-juntando-tudo/E066
@@ -4158,7 +3115,7 @@ moedas de cada valor entregar, sempre da maior para a menor. Teste com 3.85.
 
 3 de R$ 1, 1 de R$ 0,50, 1 de R$ 0,25, 1 de R$ 0,10 e nenhuma de R$ 0,05: **6
 moedas**. O caminho: converta para centavos inteiros **arredondando**
-(`(int) round(troco * 100)`, lembre do 19.99 do E047) e, para cada moeda,
+(`(int) round(troco * 100)`; sem o round, 19.99 * 100 dá 1998.99999... e o cast cortaria para 1998) e, para cada moeda,
 `quantidade = centavos / moeda` e `centavos %= moeda`.
 
 </details>

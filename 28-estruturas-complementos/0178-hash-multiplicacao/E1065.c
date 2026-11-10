@@ -12,12 +12,6 @@
 //   divisão, m = 61:       61 baldes usados, o mais cheio com 17
 //   multiplicação, m = 64: 64 baldes usados, o mais cheio com 17
 //
-// Dicas:
-// 1. Três vetores de contagem, zerados: int a[64] = {0}, b[61] = {0}, ...
-// 2. esp_maior_balde dá o mais cheio; os usados são as posições > 0.
-// 3. Resposta esperada: a saída acima. A divisão por 64 só vê os 6 bits de
-//    baixo, que são zero em todas as chaves.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

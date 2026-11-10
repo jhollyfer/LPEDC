@@ -9,15 +9,6 @@
 //   Saída esperada:
 //   1 3 4 5 8
 //
-// Dicas:
-// 1. A auxiliar fica sempre ordenada, com o MAIOR no topo dela.
-// 2. Tire um valor x da original. Enquanto o topo da auxiliar for maior que
-//    x, devolva esse topo para a original. Então empilhe x na auxiliar.
-// 3. Quando a original esvaziar, despeje a auxiliar de volta nela: o maior
-//    vai para o fundo, e o menor fica no topo.
-// 4. Resposta esperada: 1 3 4 5 8. No pior caso são O(n²) movimentos, como
-//    na ordenação por inserção (assunto 0093).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

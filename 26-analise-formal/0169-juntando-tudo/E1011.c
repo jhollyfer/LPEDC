@@ -13,13 +13,6 @@
 //    4000  16000 16000      14              14
 //    8000  32000 32000      15              15
 //
-// Dicas:
-// 1. custo_bytes é size_t: mostre com %zu.
-// 2. Os frames são: o custo_merge (1), mais a recursão do ordena, que
-//    desce até pedaços de 1 elemento: teto(log2 n) + 1 níveis.
-// 3. O espaço extra total é Θ(n) + Θ(log n) = Θ(n): o vetor auxiliar domina.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

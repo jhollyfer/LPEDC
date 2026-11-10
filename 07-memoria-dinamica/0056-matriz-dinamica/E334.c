@@ -15,13 +15,6 @@
 //   1 5 10 10 5 1
 //   Elementos guardados: 21
 //
-// Dicas:
-// 1. p[i] = malloc((i + 1) * sizeof *p[i]);
-// 2. Uma matriz 6 x 6 guardaria 36 números; o triângulo guarda
-//    1 + 2 + ... + 6.
-// 3. Resposta esperada: a saída acima. Para liberar, o laço é o mesmo: cada
-//    p[i] e depois p.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -23,14 +23,6 @@
 //     6   7   }
 //   (4 iguais, 2 removidas, 3 adicionadas)
 //
-// Dicas:
-// 1. Os números saem dos próprios índices: a linha a[i] é a de número
-//    i + 1 na versão antiga, e b[j] é a j + 1 na nova.
-// 2. Só os três printf da volta mudam; o resto fica igual.
-// 3. Rode também com dois arquivos seus: ~/LPEDC/rodar E855.c a.txt b.txt
-//    (o rodar compila junto o linhas.c da pasta).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdio.h>

@@ -14,7 +14,6 @@ int main(void) {
     int a, b;
     char op;
 
-    printf("Digite a conta: ");
     if (scanf("%d %c %d", &a, &op, &b) != 3) {
         printf("Entrada inválida\n");
         return 1;

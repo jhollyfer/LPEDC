@@ -15,21 +15,17 @@
 // outro caractere invalida), se os verificadores baterem e se os 11 dígitos
 // NÃO forem todos iguais (111.111.111-11 passa na conta, mas não vale).
 //
-//   Exemplo de execução 1:
-//   CPF: 529.982.247-25
+//   Entrada:
+//   529.982.247-25
+//
+//   Saída esperada:
 //   CPF válido.
 //
-//   Exemplo de execução 2:
-//   CPF: 529.982.247-26
-//   CPF inválido.
+//   Entrada:
+//   529.982.247-26
 //
-// Dicas:
-// 1. Guarde os dígitos como números num int d[11], usando c - '0'. Só guarde
-//    enquanto houver lugar (contador < 11), mas continue contando.
-// 2. Faça uma função int verificador(const int d[], int n) que usa os n
-//    primeiros dígitos com pesos n + 1, n, ..., 2. Chame com n = 9 e n = 10.
-// 3. Para o 529.982.247: a primeira soma dá 295, 295 % 11 = 9, e o dígito é 2.
-// 4. Resposta esperada: as duas execuções acima.
+//   Saída esperada:
+//   CPF inválido.
 //
 // Escreva sua resposta abaixo:
 

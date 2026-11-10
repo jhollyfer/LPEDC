@@ -16,12 +16,6 @@
 //       -
 //           8
 //
-// Dicas:
-// 1. É uma em ordem ao contrário: direita, raiz, esquerda.
-// 2. Para recuar, use printf("%*s%c\n", 4 * nivel, "", r->info).
-// 3. Resposta esperada: o desenho acima (7 linhas; o '*' sem recuo, '+' e '-'
-//    com 4 espaços, os números com 8).
-//
 // Escreva sua resposta abaixo (complete deitada):
 
 #include <stdio.h>

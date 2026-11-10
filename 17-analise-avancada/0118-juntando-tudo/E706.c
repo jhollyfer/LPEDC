@@ -22,15 +22,6 @@
 // recorrência do misterio_b? Por que o misterio_d dá n³ se o laço de dentro
 // anda de 2 em 2?
 //
-// Dicas:
-// 1. Chame f como uma função comum: f(128). O cast (double) evita a
-//    divisão inteira.
-// 2. Para n log n, dobrar n dá 2 · log(2n) / log n: com n = 64, 2 · 7 / 6 =
-//    2,33. Por isso o limite do Θ(n) é 2,15, e não 2,5.
-// 3. Resposta esperada: a saída acima. O misterio_b é T(n) = 2 T(n/2) + 1
-//    (caso 1 do teorema mestre, Θ(n)); o passo 2 do misterio_d só divide
-//    o custo por uma constante.
-//
 // Escreva sua resposta abaixo (complete classe):
 
 #include <stdio.h>

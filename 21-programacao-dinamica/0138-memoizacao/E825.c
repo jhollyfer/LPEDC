@@ -20,15 +20,6 @@
 //   Menor custo: R$ 18
 //   Caminho: DDBBDBD
 //
-// Dicas:
-// 1. custo[i][j] = pedagio[i][j] + o menor entre custo[i - 1][j] (veio de
-//    cima) e custo[i][j - 1] (veio da esquerda).
-// 2. Na linha 0 só dá para vir da esquerda; na coluna 0, só de cima.
-// 3. Para o caminho, comece em (3, 4) e vá sempre para o vizinho (cima ou
-//    esquerda) de menor custo, guardando a letra num vetor; no fim, mostre o
-//    vetor de trás para a frente. Num empate, prefira cima.
-// 4. Resposta esperada: a saída acima (3 + 1 + 4 + 1 + 3 + 2 + 1 + 3 = 18).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

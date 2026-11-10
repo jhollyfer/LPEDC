@@ -17,13 +17,6 @@
 //
 // Teste também com "Sem numero": deve sair uma linha vazia.
 //
-// Dicas:
-// 1. Dentro da função, *s é o ponteiro do main e **s é o caractere para
-//    onde ele aponta.
-// 2. while (**s != '\0' && !isdigit((unsigned char)**s)) { (*s)++; }
-//    Os parênteses em (*s)++ são obrigatórios.
-// 3. Resposta esperada: "4521 confirmado" e uma linha vazia.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

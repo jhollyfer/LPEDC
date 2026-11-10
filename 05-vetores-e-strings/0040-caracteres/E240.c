@@ -20,13 +20,6 @@
 //   meu_toupper('7') = 7
 //   Diferenças em 128 códigos: 0
 //
-// Dicas:
-// 1. meu_isdigit: return c >= '0' && c <= '9';
-// 2. meu_toupper: se for minúscula, return c - ('a' - 'A'); (isso é 32).
-// 3. Para comparar a verdade: (isdigit(c) != 0) != meu_isdigit(c).
-// 4. Resposta esperada: a saída acima. Se der diferente de 0, mostre o
-//    código que falhou e procure o erro.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

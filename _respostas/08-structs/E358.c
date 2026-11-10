@@ -1,10 +1,5 @@
 // 0060 · Typedef
 // Exercício E358 · ★★☆
-//
-// Resposta: (1) a ordem do typedef é "tipo existente, apelido":
-// typedef double Reais; (2) a struct não tem nome, então "struct Cartao" não
-// existe: use só Cartao; (3) o protótipo de pagar usava Cartao antes do
-// typedef: ele precisa vir depois.
 
 #include <stdio.h>
 

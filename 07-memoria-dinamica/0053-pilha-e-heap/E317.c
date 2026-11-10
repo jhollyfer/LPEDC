@@ -26,16 +26,6 @@
 //   51
 //   95
 //
-// Dicas:
-// 1. Para o segundo printf, guarde a conta numa variável antes do return:
-//    int resultado = chamadas * 10 + local;
-// 2. passo(3) gera 4 frames (n = 3, 2, 1 e 0) e cada um tem a sua local.
-//    chamadas e contador são um só para todos os frames.
-// 3. Resposta esperada: a saída acima. local vale sempre 1 porque nasce de
-//    novo em cada frame (pilha); chamadas só cresce porque mora nos dados.
-//    Quando o primeiro frame chega ao return, as chamadas de dentro já
-//    terminaram: por isso todos os frames de passo(3) devolvem 41.
-//
 // Escreva sua resposta abaixo (estenda o código):
 
 #include <stdio.h>

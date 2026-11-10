@@ -15,13 +15,6 @@
 //   Área: 33.00 m2
 //   Perímetro: 22.49 m
 //
-// Dicas:
-// 1. O canto seguinte com volta ao começo: int j = (i + 1) % n;
-// 2. fabs e sqrt estão em math.h. Lado entre dois pontos:
-//    sqrt(dx * dx + dy * dy).
-// 3. Teste antes com um retângulo simples, (0,0) (8,0) (8,5) (0,5): área 40.
-// 4. Resposta esperada: a saída acima (66 / 2 = 33; lados 6, 4, 4.24, 4.24, 4).
-//
 // Escreva sua resposta abaixo:
 
 #include <math.h>

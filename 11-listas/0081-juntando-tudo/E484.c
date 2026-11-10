@@ -24,14 +24,6 @@
 //   3. Ana 12
 //   4. Duda 9
 //
-// Dicas:
-// 1. Escreva uma função bool vem_antes(const Participante *a, const
-//    Participante *b): mais pontos, ou pontos iguais e strcmp(a->nome,
-//    b->nome) < 0. O laço da inserção anda enquanto vem_antes(p, novo).
-// 2. A remoção é a do assunto 0077, comparando nomes com strcmp.
-// 3. Copie o nome com snprintf, nunca com strcpy sem limite.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -11,16 +11,6 @@
 //   Removida a faixa 3
 //   Ainda na fila: 5 8
 //
-// Dicas:
-// 1. Deque vazio: inicio == fim == NULL. Inserir no vazio faz os dois
-//    apontarem para o novo nó.
-// 2. Inserir no início: novo->prox = inicio; inicio->ant = novo (se havia
-//    alguém); inicio = novo. O fim é o espelho, com ant e prox trocados.
-// 3. Retirar do fim: o novo fim é fim->ant. Se ele for NULL, o deque
-//    esvaziou e inicio também vira NULL; senão, o novo fim fica com
-//    prox = NULL.
-// 4. Resposta esperada: as três linhas acima, sem erro do sanitizer.
-//
 // Escreva sua resposta abaixo (complete as quatro funções):
 
 #include <stdbool.h>

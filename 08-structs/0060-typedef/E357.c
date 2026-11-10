@@ -13,13 +13,6 @@
 //   2/3 * 9/4 = 3/2
 //   3/4 + 1/4 = 1/1
 //
-// Dicas:
-// 1. a/b + c/d = (a*d + c*b) / (b*d). Depois simplifique.
-// 2. MDC por Euclides (assunto 0033): mdc(a, b) = mdc(b, a % b), mdc(a, 0) = a.
-// 3. Uma função pode devolver Fracao: return (Fracao){n, d}; ou monte uma
-//    variável e devolva.
-// 4. Resposta esperada: a saída acima (1/4 + 1/6 = 10/24 = 5/12).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

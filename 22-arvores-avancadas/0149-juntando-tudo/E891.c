@@ -14,15 +14,6 @@
 //   portaria: prefixo "porta" | porta portao
 //   xis: prefixo "" | nenhuma
 //
-// Dicas:
-// 1. A descida para quando acaba a palavra ou quando d->filho[letra - 'a'] é
-//    NULL. Vá copiando as letras para um buffer: ele é o prefixo.
-// 2. Para listar, escreva uma função recursiva como a coleta do trie.c
-//    (0147), começando no nó onde a descida parou, com nivel = tamanho do
-//    prefixo. Use um contador para parar em max.
-// 3. Resposta esperada: a saída acima. Se a descida não andou nenhuma letra,
-//    não sugira nada: o prefixo vazio casaria com o dicionário inteiro.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

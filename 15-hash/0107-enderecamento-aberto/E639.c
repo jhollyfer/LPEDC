@@ -12,13 +12,6 @@
 //   28: achou, sondagens: 3
 //   35: não está, sondagens: 4
 //
-// Dicas:
-// 1. Use um for de M passos e, dentro, "(*sondagens)++" logo no começo.
-// 2. A ordem dos testes importa: primeiro "é LIVRE?" (para), depois
-//    "OCUPADA e chave igual?" (achou); senão, i = (i + 1) % M.
-// 3. Resposta esperada: a saída acima. O 35 olha 0, 1 (removida, segue),
-//    2 e para na 3, livre. Se a busca parasse na REMOVIDA, não acharia o 28.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

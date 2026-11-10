@@ -11,15 +11,6 @@
 //   aaab: força bruta 108, Horspool  27 (27 alinhamentos)
 //   abbb: força bruta  54, Horspool   9 (9 alinhamentos)
 //
-// Dicas:
-// 1. Conte uma comparação a cada t[i + j] comparado com p[j], inclusive a que
-//    falha.
-// 2. Em "baaa", o Horspool compara da direita: casa três 'a' e só falha no
-//    'b'. E como a letra sob a última casa é 'a', que aparece no fim do
-//    padrão, o salto é 1. É o pior caso dele: m comparações e salto 1.
-// 3. Em "abbb", o 'a' do texto só aparece no começo do padrão: salto 3.
-// 4. Resposta esperada: a saída acima. Cada algoritmo tem o seu pior caso.
-//
 // Escreva sua resposta abaixo (acrescente a horspool e mude o main):
 
 #include <stdio.h>

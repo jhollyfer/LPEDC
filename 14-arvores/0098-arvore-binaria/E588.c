@@ -18,15 +18,6 @@
 //     pós-ordem: C J G X T M
 //     nós: 6, altura: 2
 //
-// Dicas:
-// 1. Leia o caractere s[*pos] e avance (*pos)++. Se for '.', a subárvore é
-//    vazia: devolva NULL.
-// 2. Senão, ele é a raiz: monte a esquerda com uma chamada recursiva, depois
-//    a direita com outra, e só então chame arv_cria. Cuidado: chame as duas
-//    recursões em linhas separadas, porque a ordem de avaliação dos
-//    argumentos de uma função não é garantida em C.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete constroi):
 
 #include <stdio.h>

@@ -12,12 +12,6 @@
 //   24 meses: R$ 1269.73
 //   No main, capital continua R$ 1000.00
 //
-// Dicas:
-// 1. O parâmetro é uma variável local como outra qualquer: pode mudar à vontade.
-// 2. Um for de 1 até meses, multiplicando, e no fim return capital.
-// 3. Resposta esperada: 1126.83 e 1269.73; o capital do main continua 1000.00,
-//    porque a função mexeu só na cópia.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

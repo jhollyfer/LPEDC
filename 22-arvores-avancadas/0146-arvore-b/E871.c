@@ -13,13 +13,6 @@
 //     nível 3: [1] [3] [5] [7] [9] [11] [13] [15] [17] [19 20]
 //   chaves: 20 | nós: 17 | média: 1.18 chaves por nó
 //
-// Dicas:
-// 1. Um nó com n chaves tem n + 1 filhos, de filho[0] a filho[n]. Folha não
-//    tem filho nenhum: confira r->folha antes de descer.
-// 2. conta_chaves começa com r->n; conta_nos começa com 1.
-// 3. Resposta esperada: a saída acima. A inserção em ordem deixa
-//    quase todo nó com uma chave só, de três possíveis.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

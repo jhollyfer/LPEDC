@@ -24,15 +24,6 @@
 //   v1: arroz, feijão, açúcar, café, leite sem lactose, pão, banana
 //   outra lista: o patch não se aplica (linha 3)
 //
-// Dicas:
-// 1. Um índice i anda no original. Para cada linha do patch, olhe o 1º
-//    caractere; o texto da linha começa em patch[k] + 2.
-// 2. '+': o texto entra em novo. ' ': confere com orig[i], entra e i++.
-//    '-': confere com orig[i] e só faz i++.
-// 3. novo[] pode guardar os próprios ponteiros (const char *), sem copiar
-//    as strings.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

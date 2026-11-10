@@ -14,14 +14,6 @@
 //   0202 ->  8
 //   2026 -> 86
 //
-// Dicas:
-// 1. Horner: h = (h * 10 + dígito) % q, para cada dígito, da esquerda para a
-//    direita. O dígito é s[j] - '0'.
-// 2. Tirar o resto a cada passo dá o mesmo que tirar só no fim, e o h nunca
-//    passa de 10 * q. É o que deixa usar janelas enormes sem estourar o int.
-// 3. Passe data + i para a função: o ponteiro já começa na janela.
-// 4. Resposta esperada: a saída acima (1810 = 18 * 97 + 64).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

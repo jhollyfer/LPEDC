@@ -14,12 +14,6 @@
 //   11:00  Rosa
 //   13:15  Tania
 //
-// Dicas:
-// 1. O horário vai em HHMM: 08:30 é 830.
-// 2. ag_marca devolve false nas duas recusas; o if decide a mensagem.
-// 3. Resposta esperada: a saída acima. Os horários saem em ordem porque a
-//    rubro-negra é percorrida em ordem.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

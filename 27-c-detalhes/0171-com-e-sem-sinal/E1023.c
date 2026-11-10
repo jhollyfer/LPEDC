@@ -22,13 +22,6 @@
 //   ultimo par em {3, 8, 5, 4, 7}: indice 3
 //   ultimo par em {1, 3}: nenhum
 //
-// Dicas:
-// 1. for (size_t i = n; i-- > 0;) testa i > 0 e só então desce: dentro do
-//    laço, i vai de n - 1 até 0.
-// 2. "Não achei" com size_t não pode ser -1: devolva n, que nunca é um
-//    índice válido.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

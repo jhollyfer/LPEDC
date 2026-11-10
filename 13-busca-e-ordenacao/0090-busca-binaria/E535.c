@@ -28,14 +28,6 @@
 //   ini=8 fim=8 meio=8 (62)
 //   achou na posição 8 em 4 voltas
 //
-// Dicas:
-// 1. Crie int voltas = 0; antes do while e some 1 logo depois de calcular meio.
-// 2. O printf da volta fica: printf("ini=%d fim=%d meio=%d (%d)\n", ...).
-// 3. O laço para quando ini fica maior que fim: é isso que o "não achou"
-//    vai mostrar.
-// 4. Resposta esperada: a saída acima. O 62 custa 4 voltas, o máximo para
-//    9 elementos.
-//
 // Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>

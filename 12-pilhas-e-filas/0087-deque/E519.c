@@ -16,14 +16,6 @@
 //   Esquerda 2: 3 4 5 6 1 2
 //   Direita 3: 6 1 2 3 4 5
 //
-// Dicas:
-// 1. mostra pode girar o deque uma volta completa: tira da frente, mostra e
-//    põe no fundo, deque_tamanho vezes.
-// 2. gira_direita é o espelho: retira_fim e insere_inicio.
-// 3. Cada giro custa O(1). Num vetor comum, girar uma posição custaria
-//    O(n), porque todo mundo anda uma casa.
-// 4. Resposta esperada: as três linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -15,16 +15,6 @@
 //   lista MTF         114.6      114.5
 //   vetor               8.7        8.7
 //
-// Dicas:
-// 1. A estrutura: typedef struct { int *v; int n, cap; } Vetor;. Escreva
-//    uma função auxiliar que faz a busca binária e devolve a posição da
-//    chave ou, se ela não existir, a posição onde ela entraria (o ini do fim
-//    do laço). insere e busca usam a mesma auxiliar.
-// 2. Na binária, use meio = ini + (fim - ini) / 2 e conte 1 a cada volta.
-// 3. Resposta esperada: a saída acima. O vetor empata com a AVL na busca,
-//    mas a conta esconde o preço da inserção: cada chave nova empurra, em
-//    média, metade do vetor.
-//
 // Escreva sua resposta abaixo (complete as funções do vetor):
 
 #include <stdio.h>

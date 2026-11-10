@@ -17,13 +17,6 @@
 //   loja 1: A = R$ 40, B = R$ 45 -> melhor A
 //   loja 2: A = R$ 62, B = R$ 52 -> melhor B
 //
-// Dicas:
-// 1. r[i][j] é a soma, para k de 0 a m - 1, de a[i][k] * b[k][j].
-// 2. As três dimensões vêm antes das matrizes. Crie r como VLA no main,
-//    com int lojas = 2, fornecedores = 2.
-// 3. Zere r[i][j] antes de acumular: VLA não pode ser inicializado com {0}.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -15,15 +15,6 @@
 //   Feira: Feira Rodoviária Praça Museu Orla Estádio | 22
 //   Estádio: Estádio Orla Museu Praça Rodoviária Feira | 22
 //
-// Dicas:
-// 1. Os vetores chave[] e na_rede[] são locais da função: cada chamada
-//    começa do zero, com chave[origem] = 0.
-// 2. Mostre cada estação no momento em que ela entra (quando é escolhida
-//    como u), não quando a chave dela cai.
-// 3. Resposta esperada: a saída acima. A ordem muda, o total não: como os
-//    pesos são todos diferentes, a árvore mínima é uma só, e as seis
-//    execuções escolhem as mesmas cinco ciclofaixas.
-//
 // Escreva sua resposta abaixo (escreva prim):
 
 #include <limits.h>

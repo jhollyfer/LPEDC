@@ -19,15 +19,6 @@
 //   Barco 5: 70
 //   Total: 5 barcos
 //
-// Dicas:
-// 1. Ordene com qsort em ordem crescente e use dois índices: leve = 0 e
-//    pesado = n - 1. O laço vai enquanto leve <= pesado.
-// 2. Se leve < pesado e a soma cabe, o leve vai junto (leve++). Em todo
-//    caso, pesado-- e barcos++.
-// 3. Resposta esperada: a saída acima. Por que dá certo: se o mais pesado
-//    não cabe nem com o mais leve, não cabe com ninguém e precisa ir
-//    sozinho; se cabe, pôr o mais leve com ele nunca piora o resto.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

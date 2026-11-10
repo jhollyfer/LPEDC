@@ -12,11 +12,6 @@
 //   Atendidos: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
 //   Altura no começo: 4 | rotações para esvaziar: 7
 //
-// Dicas:
-// 1. Escreva int menor(const NoA *r), que desce por r->esq enquanto puder.
-// 2. while (raiz != NULL): a árvore vazia volta como NULL do avr_remove.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

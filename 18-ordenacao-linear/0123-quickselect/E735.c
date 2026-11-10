@@ -11,15 +11,6 @@
 //   9 entregas:  mediana 41.0 min
 //   conferindo: 38 e 41 no meio
 //
-// Dicas:
-// 1. n ímpar: é o quickselect em k = n / 2, como no texto.
-// 2. n par: os do meio estão nas posições n/2 - 1 e n/2. Rode o quickselect
-//    em k = n/2 - 1. Depois disso, tudo à direita de k é maior ou igual a
-//    v[k]: o outro do meio é o MENOR desse lado, e um laço simples acha.
-// 3. Divida por 2.0, não por 2: (38 + 41) / 2 em int dá 39.
-// 4. A compara do qsort já está no arquivo: qsort(v, 10, sizeof(int), compara).
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

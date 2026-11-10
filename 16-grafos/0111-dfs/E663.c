@@ -21,15 +21,6 @@
 //   Ilha 4: 3 casa(s)
 //   Total: 4 ilhas, a maior tem 5 casas
 //
-// Dicas:
-// 1. A grade é um grafo implícito: cada casa é um vértice e os vizinhos são
-//    as 4 casas ao redor (como no A220, só que com DFS).
-// 2. int pintar(int l, int c): se (l, c) está fora da grade, é água ou já
-//    foi visitada, devolve 0; senão marca e devolve 1 + pintar das 4 vizinhas.
-// 3. Dá para marcar trocando o '#' por outro caractere, sem vetor extra.
-// 4. Resposta esperada: a saída acima (ilhas numeradas na ordem em que a
-//    varredura linha por linha encontra cada uma).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

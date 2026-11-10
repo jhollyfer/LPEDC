@@ -12,14 +12,6 @@
 //   Menor volta: 22 quarteirões
 //   Rota: Padaria Feira Escola Posto Banco Padaria
 //
-// Dicas:
-// 1. s sem k é s & ~(1 << k). Preencha rota[] de trás para frente:
-//    rota[N - 1] = fim, depois o anterior, até rota[0] = 0.
-// 2. Em caso de empate, fique com o primeiro j (menor índice) que bate.
-//    Pule os j fora do conjunto e os que valem INF.
-// 3. Resposta esperada: a saída acima. Trocar memória por tempo: cada
-//    passo da reconstrução custa O(n) a mais, mas só são n passos.
-//
 // Escreva sua resposta abaixo (complete o main):
 
 #include <stdio.h>

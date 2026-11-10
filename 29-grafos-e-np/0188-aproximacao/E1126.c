@@ -16,15 +16,6 @@
 //   Lista 2: FF 7, FFD 6, limite 6
 //   Lista 3: FF 6, FFD 6, limite 5
 //
-// Dicas:
-// 1. Comparador decrescente sem risco de estouro:
-//    return (x < y) - (x > y);
-// 2. FF recebe a lista original; FFD, a cópia ordenada.
-// 3. Resposta esperada: a saída acima. Na lista 3 nem o FFD acha o ótimo:
-//    5 viagens dão certo com (3 3 4) três vezes, (4 5) e (4 4). O FFD faz
-//    (5 4), (4 4), (4 4), (4 3 3), (3 3 3), (3): as viagens de 8 t perdem
-//    2 t cada, e sobra um 3 sozinho.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

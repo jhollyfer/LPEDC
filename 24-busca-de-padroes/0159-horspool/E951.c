@@ -14,14 +14,6 @@
 //   posição 38: BANANA
 //   3 ocorrências
 //
-// Dicas:
-// 1. Faça uma função baixa(c) que devolve tolower((unsigned char) c).
-// 2. A tabela precisa usar a MESMA conversão nos dois lados: monte-a com
-//    baixa(padrao[j]) e consulte com baixa(texto[i + m - 1]). Montar com as
-//    letras originais e consultar convertida faz o salto errar.
-// 3. Depois de achar, não pare: salte como num alinhamento qualquer.
-// 4. Resposta esperada: a saída acima. O "BANANE" de BANANEIRA não conta.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

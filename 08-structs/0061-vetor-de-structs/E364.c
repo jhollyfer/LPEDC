@@ -23,16 +23,6 @@
 //     Moto G     R$ 1299.00
 //     Redmi      R$ 999.00
 //
-// Dicas:
-// 1. A comparadora recebe const void *: copie o elemento com
-//    Celular x = *(const Celular *)a; e compare os campos.
-// 2. Por nome: return strcmp(x.nome, y.nome);
-// 3. Por preço decrescente: cuidado, preço é double. Não devolva y.preco -
-//    x.preco (0.5 viraria 0 no int); use if/else e devolva -1, 0 ou 1.
-// 4. Resposta esperada: a saída acima. O iPhone vai para o fim na ordem
-//    alfabética porque strcmp compara códigos ASCII: 'i' minúsculo (105) vem
-//    depois de todas as maiúsculas.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

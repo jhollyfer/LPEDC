@@ -16,14 +16,6 @@
 //   ##########
 //   a vaca alcança 12 casas
 //
-// Dicas:
-// 1. A casa atual vale 1. Some a ela o que cada vizinho alcança: direita,
-//    baixo, esquerda e cima.
-// 2. A marca 'v' é posta ANTES das chamadas, senão dois vizinhos ficariam
-//    se chamando para sempre.
-// 3. Resposta esperada: o mapa e a contagem acima. O pasto da direita não
-//    entra: a cerca separa os dois.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

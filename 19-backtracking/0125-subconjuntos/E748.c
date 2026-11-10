@@ -17,13 +17,6 @@
 //   Ana: bicicleta bola livro | Beto: patinete skate patins
 //   2 divisões justas
 //
-// Dicas:
-// 1. O total dos seis é R$ 1500, então cada um precisa de R$ 750.
-// 2. Na folha da recursão (i == N), some o valor da Ana antes de mostrar.
-//    Se não der 750, ou se da_ana[0] for false, volte sem mostrar.
-// 3. Use um contador global para o total de divisões justas.
-// 4. Resposta esperada: as 3 linhas acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdbool.h>

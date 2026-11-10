@@ -13,13 +13,6 @@
 //   Grupo 2: Beto Caio Davi
 //   Total: 2 de 16 atribuições
 //
-// Dicas:
-// 1. Copie o verificador do texto. O laço externo vai de 0 a (1 << 4) - 1
-//    e não para no primeiro sim.
-// 2. A Ana nunca aparece: com ela, a cláusula 2 tira o Caio, a 3 obriga o
-//    Davi e a 5 exige o Caio de volta. Confira isso nos números.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

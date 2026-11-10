@@ -6,7 +6,6 @@
 
 int main(void) {
     int ano;
-    printf("Ano: ");
     scanf("%d", &ano);
 
     bool bissexto = (ano % 4 == 0 && ano % 100 != 0) || ano % 400 == 0;

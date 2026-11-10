@@ -16,17 +16,6 @@
 //   banana: 1 1 13 1 1 1 -> banana
 //   aaabbbaaa: 0 0 0 1 0 0 1 0 0 -> aaabbbaaa
 //
-// Dicas:
-// 1. Guarde o alfabeto num char lista[27] (copiado de uma string com strcpy)
-//    e escreva uma função frente(lista, i) que leva lista[i] para a posição
-//    0 empurrando os anteriores, como no vetor do A327.
-// 2. Na codificação, ache a posição i da letra (strchr(lista, c) - lista, ou
-//    um laço). Na decodificação, a letra é lista[codigo]. Nos dois, chame
-//    frente(lista, i) logo depois.
-// 3. Resposta esperada: a saída acima. No "banana", o primeiro "a" sai como 1
-//    porque o "b" acabou de ir para a frente; o "n" (posição 13) só custa caro
-//    na primeira vez.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

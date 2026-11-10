@@ -12,14 +12,6 @@
 //   depois de 10: 20
 //   depois de 80: -1
 //
-// Dicas:
-// 1. Desça da raiz. Se a matrícula do nó for maior que x, ela é uma
-//    candidata: guarde e vá para a esquerda, procurando uma menor que ainda
-//    seja maior que x. Senão, vá para a direita.
-// 2. Quando chegar no NULL, a última candidata guardada é a resposta.
-// 3. Resposta esperada: a saída acima. Para 50, o caminho é 50 (não serve),
-//    70 (candidata), 60 (candidata melhor), NULL.
-//
 // Escreva sua resposta abaixo (complete proxima):
 
 #include <stdio.h>

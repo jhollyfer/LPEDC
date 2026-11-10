@@ -14,11 +14,6 @@
 //   com ++:      a = 7, b = 10, c = 14
 //   com funcoes: a = 7, b = 10, c = 14
 //
-// Dicas:
-// 1. Em pos_incremento, guarde *p numa variável antes de somar.
-// 2. b2 = pos_incremento(&a2) * 2; c2 = pre_incremento(&a2) * 2;
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

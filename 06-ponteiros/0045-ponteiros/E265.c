@@ -12,11 +12,6 @@
 //   Pelo ponteiro: 24.0
 //   Pela variável: 24.0
 //
-// Dicas:
-// 1. Declare: double *pt = &temperatura;
-// 2. Para mudar: *pt = *pt + 1.5; (ou *pt += 1.5;)
-// 3. Resposta esperada: 22.5, 24.0 e 24.0.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -15,12 +15,6 @@
 //   Última de R$ 50: posição 5 (2 comparações)
 //   Última de R$ 200: posição -1 (7 comparações)
 //
-// Dicas:
-// 1. Se você procurar do começo, só sabe que é a última depois de olhar tudo.
-// 2. Comece em i = n - 1 e vá descendo até 0: a primeira que achar é a última.
-// 3. Resposta esperada: posição 5 com 2 comparações (olha 15 e depois 50);
-//    para 200, -1 com 7 comparações.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

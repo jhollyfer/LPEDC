@@ -13,12 +13,6 @@
 //   Chamando senha 7
 //   Chamando senha 9
 //
-// Dicas:
-// 1. O maior de -7, -3, -9, -1 e -5 é qual?
-// 2. Guarde cada senha com o sinal trocado e troque o sinal de novo ao tirar.
-// 3. Resposta esperada: a saída acima, usando só heap_cria, heap_insere,
-//    heap_remove, heap_vazio e heap_libera.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

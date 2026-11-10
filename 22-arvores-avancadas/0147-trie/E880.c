@@ -14,14 +14,6 @@
 //   com 6 letras: girafa jacare
 //   com 11 letras: orangotango rinoceronte
 //
-// Dicas:
-// 1. Em cada nó, nivel é quantas letras já estão em buf. Quando n->fim é
-//    verdadeiro, buf[nivel] = '\0' fecha a palavra.
-// 2. Em maior_palavra, troque só quando nivel > strlen(maior): com >=, o
-//    empate ficaria com a última em ordem alfabética.
-// 3. Resposta esperada: a saída acima. Em por_tamanho, quando nivel == alvo,
-//    confira o fim e volte (return) sem olhar os filhos.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

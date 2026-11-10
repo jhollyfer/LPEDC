@@ -13,13 +13,6 @@
 //   Dourado -> Franca: não dá para ir
 //   Embu -> Embu: dá para ir
 //
-// Dicas:
-// 1. uf_cria(7), um uf_une por estrada e uf_grupos no fim.
-// 2. Para cada pergunta, uf_juntos(u, a, b). A pergunta não é se existe uma
-//    estrada DIRETA: Araras e Dourado também se ligam pela Catanduva.
-// 3. Resposta esperada: a saída acima. Os grupos são {Araras, Catanduva,
-//    Dourado}, {Bauru, Franca, Garça} e {Embu}.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

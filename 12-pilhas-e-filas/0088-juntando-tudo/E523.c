@@ -11,13 +11,6 @@
 //   2 * (3 + 4) ->  2 3 4 + * = 14
 //   2 * 3 + 4   ->  2 3 * 4 + = 10
 //
-// Dicas:
-// 1. Os números entram na fila na mesma ordem em que aparecem na infixa.
-// 2. Em 2 * (3 + 4), o "(" segura o * na pilha de operadores até o ")",
-//    então o + sai primeiro. Em 2 * 3 + 4, o * sai assim que chega o +.
-// 3. Resposta esperada: c1 recebe 2, 3, 4, SOMA, MULT; c2 recebe 2, 3,
-//    MULT, 4, SOMA. A saída é a das duas linhas acima.
-//
 // Escreva sua resposta abaixo (preencha as duas filas):
 
 #include <stdbool.h>

@@ -16,12 +16,6 @@
 //   Digite a senha: 50
 //   senha 50 não está na fila
 //
-// Dicas:
-// 1. É a busca do texto com um contador que soma 1 a cada passo.
-// 2. Se o scanf não devolver 1, avise "entrada inválida" e saia.
-// 3. Resposta esperada: posição 3 para o 7 e "não está" para o 50. Para o
-//    33 a resposta é 1, e para o 12, 5.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

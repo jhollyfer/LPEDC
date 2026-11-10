@@ -17,14 +17,6 @@
 //           6 Saída
 //   Mais fundo: Saída (nível 4)
 //
-// Dicas:
-// 1. Um contador global, somado no começo de dfs, dá o número da visita.
-// 2. Duas globais guardam o maior nível visto e quem estava nele; atualize
-//    dentro de dfs, comparando com o parâmetro nivel.
-// 3. O Banco é vizinho direto do Hall, mas a DFS chega nele pela Praça e
-//    pela Loja, no nível 3.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (estenda o código):
 
 #include <stdbool.h>

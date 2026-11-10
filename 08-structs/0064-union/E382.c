@@ -24,12 +24,6 @@
 //   triângulo: 15.00 m2
 //   Total: 39.57 m2
 //
-// Dicas:
-// 1. O -std=c17 não define M_PI: use #define PI 3.14159265358979.
-// 2. Inicialize com nome de campo: {CIRCULO, .medida.raio = 2}.
-// 3. Triângulo: base * altura / 2.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

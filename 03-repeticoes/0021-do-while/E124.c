@@ -1,37 +1,25 @@
 // 0021 · Do-while
 // Exercício E124 · ★★☆
 //
-// O totem do cinema oferece 3 sessões e deveria repetir a pergunta enquanto a
-// opção fosse inválida. Mas, rodando com
+// O totem do cinema oferece 3 sessões. Escreva o programa com do-while que
+// pergunta "Sessão (1, 2 ou 3):" e repete a pergunta enquanto a opção for
+// inválida. Quando a opção for válida, mostra "Sessão N escolhida.".
+// Cada pedido de leitura termina com quebra de linha (\n).
 //
-//   printf '7\n2\n' | ~/LPEDC/rodar 03-repeticoes/0021-do-while/E124.c
+//   Entrada:
+//   7
+//   2
 //
-// ele aceita o 7 de primeira. O código com o erro está logo abaixo.
-// Conserte a condição e rode de novo com a mesma entrada: agora o 7 tem que
-// ser recusado e o 2 aceito.
+//   Saída esperada:
+//   Sessão (1, 2 ou 3):
+//   Sessão (1, 2 ou 3):
+//   Sessão 2 escolhida.
 //
-// Dicas:
-// 1. Existe algum número que é, ao mesmo tempo, menor que 1 e maior que 3?
-// 2. Releia a lei de De Morgan (assunto 0013): o contrário de
-//    "opcao >= 1 && opcao <= 3" é...
-// 3. Resposta esperada: a condição "opcao < 1 && opcao > 3" é sempre falsa,
-//    então o laço nunca repete. O certo é "opcao < 1 || opcao > 3". Com 7 e
-//    2, o totem pergunta duas vezes e mostra "Sessão 2 escolhida.".
-//
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
 int main(void) {
-    int opcao;
 
-    do {
-        printf("Sessão (1, 2 ou 3): ");
-        if (scanf("%d", &opcao) != 1) {
-            return 1;
-        }
-    } while (opcao < 1 && opcao > 3);
-
-    printf("Sessão %d escolhida.\n", opcao);
     return 0;
 }

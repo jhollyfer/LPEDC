@@ -15,12 +15,6 @@
 //   50 47 53 44 58 39 61
 //   61 58 53 50 47 44 39
 //
-// Dicas:
-// 1. Calcule as distâncias de x e y com abs() (stdlib.h).
-// 2. Compare primeiro as distâncias; se forem iguais, compare os preços.
-// 3. Resposta esperada: 50 47 53 44 58 39 61 e, com alvo 60,
-//    61 58 53 50 47 44 39 (61 está a 1 do alvo, 58 está a 2).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -19,13 +19,6 @@
 //
 // O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
 //
-// Dicas:
-// 1. Mostre tin e low de Norte e Leste. Leste e Oeste formam triângulo com
-//    o Norte: o Oeste volta ao Norte, e low[Leste] fica igual a tin[Norte].
-// 2. "Voltar ao próprio u" basta para u - v não ser ponte: existe outro
-//    caminho entre u e v. A regra com igualdade é a da articulação.
-// 3. Resposta esperada: a saída esperada acima. Troque um >= por >.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

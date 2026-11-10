@@ -13,14 +13,6 @@
 //   b:  261632 -> 1047552, razão 4.00, classe n²
 //   c:    2047 ->    4095, razão 2.00, classe n
 //
-// Dicas:
-// 1. Um vetor de ponteiros para função (assunto 0050) deixa o main com um
-//    laço só: void (*f[3])(int) = {misterio_a, misterio_b, misterio_c};
-// 2. a: o laço de fora dobra (log n voltas), o de dentro anda n.
-//    b: laço dependente, i/2 por volta: uns n²/4.
-//    c: soma geométrica n + n/2 + ... + 1, menos de 2n (assunto 0167).
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (mude o programa):
 
 #include <stdio.h>

@@ -19,16 +19,6 @@
 //   exatamente 6 moedas: 3
 //   até 6 moedas: 7 combinações
 //
-// Dicas:
-// 1. Base: w[0][0] = 1 (nenhuma moeda soma zero); o resto começa em 0.
-// 2. Mantenha a estrutura das combinações (moeda no laço de fora, valor v
-//    crescente por dentro) e acrescente um terceiro laço em q:
-//    w[q][v] += w[q - 1][v - moeda].
-// 3. Ao usar mais uma moeda, o valor cai de moeda e a contagem cai de 1.
-// 4. Confira as 3 de seis moedas: 50+10+10+10+10+10, 50+25+10+5+5+5 e
-//    25+25+25+10+10+5.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

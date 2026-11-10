@@ -19,13 +19,6 @@
 //   "ana" antes de "bia"? sim
 //   "bia" antes de "bianca"? sim
 //
-// Dicas:
-// 1. meu_strcat: ache o '\0' de dest (use meu_strlen) e copie orig a partir
-//    dali, sem esquecer de pôr o '\0' no fim.
-// 2. meu_strcmp: avance enquanto a[i] == b[i] e a[i] != '\0'. Quando parar,
-//    devolva a[i] - b[i]. Se as duas acabaram juntas, isso dá 0.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -16,14 +16,6 @@
 //   Ilha (32%): Base -> Ponte -> Torre -> Praia -> Farol -> Ilha
 //   Mata: inalcançável
 //
-// Dicas:
-// 1. Ao relaxar a aresta u -> v, grave anterior[v] = u. A rota de v é a
-//    rota até anterior[v] seguida de v: uma função recursiva rota(v)
-//    imprime na ordem certa sem precisar de vetor auxiliar.
-// 2. Para mostrar o símbolo de porcentagem no printf, use "%%".
-// 3. Resposta esperada: a saída acima. A Praia (13%) gasta menos que a
-//    Torre (18%), mesmo vindo depois dela: é o efeito da aresta negativa.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

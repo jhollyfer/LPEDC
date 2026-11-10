@@ -11,15 +11,6 @@
 //   notas de 100 a 160: 118 150 (3 nós lidos de 9)
 //   notas de 970 a 999: (3 nós lidos de 9)
 //
-// Dicas:
-// 1. Comece pelo em_ordem do A292: filho 0, chave 0, filho 1, chave 1, ...,
-//    filho n.
-// 2. Duas podas: só desça em filho[i] se a < chave[i] (lá só há chaves
-//    menores que chave[i]); e, se chave[i] > b, pare o laço e não desça mais
-//    nada à direita (com return).
-// 3. Resposta esperada: a saída acima. Some 1 em *visitados logo na entrada
-//    da função.
-//
 // Escreva sua resposta abaixo (escreva intervalo e complete o main):
 
 #include <stdio.h>

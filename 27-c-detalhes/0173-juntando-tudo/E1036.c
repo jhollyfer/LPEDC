@@ -16,12 +16,6 @@
 //   Bruno: usou ERIG-, nunca usou -----
 //   Carla: usou E----, nunca usou -R---
 //
-// Dicas:
-// 1. Comece com 0 e faça m |= uso[i][j] para cada dia.
-// 2. "Tem mas não usou" = efetivas[i] & ~usado(...).
-// 3. Uma função que escreve a máscara como texto ajuda (veja o E1034).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

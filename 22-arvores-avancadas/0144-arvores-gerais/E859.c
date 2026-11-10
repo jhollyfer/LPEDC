@@ -10,14 +10,6 @@
 //   Grupos (nós com filhos): 3
 //   Total: R$ 297
 //
-// Dicas:
-// 1. Um nó é folha quando r->filho == NULL. Não olhe para r->irmao: o irmão
-//    não diz nada sobre r ter ou não filhos.
-// 2. Siga o molde de ag_conta no arvgen.c: some a resposta de cada filho com
-//    o laço for (p = r->filho; p != NULL; p = p->irmao).
-// 3. Resposta esperada: a saída acima (picanha, linguica, frango, refri,
-//    cerveja e carvao são as folhas; churrasco, carnes e bebidas, os grupos).
-//
 // Escreva sua resposta abaixo (complete folhas e grupos):
 
 #include <stdio.h>

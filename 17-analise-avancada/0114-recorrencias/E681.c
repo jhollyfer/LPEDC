@@ -25,15 +25,6 @@
 // Aqui o custo CAI pela metade a cada nível, ao contrário da auditoria do
 // texto, em que todo nível custava igual.
 //
-// Dicas:
-// 1. Troque o contador único por um vetor long custo_nivel[32] e passe o
-//    nível como parâmetro (a raiz é o nível 0; os filhos, nível + 1).
-// 2. Antes de cada medição, zere o vetor inteiro.
-// 3. Por que 2n² - n? Os níveis custam n², n²/2, n²/4, ..., n: a soma de
-//    uma progressão geométrica de razão 1/2 fica abaixo do dobro do
-//    primeiro termo. A raiz sozinha já é metade de tudo: Θ(n²).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (mude o programa):
 
 #include <stdio.h>

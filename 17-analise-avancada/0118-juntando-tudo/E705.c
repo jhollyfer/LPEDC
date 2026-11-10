@@ -20,18 +20,6 @@
 //   quick      113650 comparações
 //   vencedor: insertion
 //
-// Dicas:
-// 1. Guarde as funções num vetor de ponteiros para função:
-//    void (*ordena[])(int[], int) = {ord_insertion, ord_merge, ...};
-// 2. Vetores de 10 mil int dentro do main ocupam 40 KB cada: funciona,
-//    mas static int base[N], v[N]; os tira da pilha.
-// 3. Use o sorteia() já escrito, sem mudar a semente, para dar os mesmos
-//    números da saída esperada.
-// 4. Resposta esperada: a saída acima. O insertion faz n - 1 comparações
-//    mais uma por inversão: Θ(n) num vetor quase ordenado. O pior caso
-//    Θ(n²) não conta a história toda; o heapsort, ótimo no pior caso, é o
-//    pior aqui.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

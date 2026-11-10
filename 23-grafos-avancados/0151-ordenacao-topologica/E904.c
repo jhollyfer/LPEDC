@@ -19,16 +19,6 @@
 //   Obra pronta em 46 dias
 //   Caminho crítico: Fundação -> Paredes -> Telhado -> Reboco -> Pintura
 //
-// Dicas:
-// 1. Crie comeca[V] (zerado) e quem[V] (com -1). Ao tirar u da fila,
-//    termina = comeca[u] + dias[u]. Para cada v com antes[u][v], se
-//    termina > comeca[v], então comeca[v] = termina e quem[v] = u.
-// 2. A ordem topológica garante que, quando v sai da fila, todos os que
-//    ele espera já passaram: comeca[v] está pronto. O serviço que termina
-//    por último dá o prazo; siga quem[] de trás para frente a partir dele.
-// 3. Resposta esperada: a saída acima. O Reboco espera Telhado (32),
-//    Elétrica (30) e Hidráulica (31): quem segura é o Telhado.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdio.h>

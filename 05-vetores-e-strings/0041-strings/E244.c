@@ -18,15 +18,6 @@
 //   Osso: sim
 //   A: sim
 //
-// Dicas:
-// 1. Dois índices: i começa em 0 e j em strlen(s) - 1. Compare, e ande com
-//    os dois para o meio enquanto i < j.
-// 2. Compare tolower(s[i]) com tolower(s[j]).
-// 3. palavras[k] é a linha k da matriz: uma string que você passa para a
-//    função como qualquer outra.
-// 4. Resposta esperada: a saída acima. Desafio extra: ignore também os
-//    espaços e teste com "Anotaram a data da maratona".
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

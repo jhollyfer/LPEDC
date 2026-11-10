@@ -21,12 +21,6 @@
 //    60 preto    bh 1 | nós  3 | 2^bh - 1 = 1 ok
 //    70 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
 //
-// Dicas:
-// 1. Pela propriedade 5, qualquer caminho serve para bh: desça sempre pela
-//    esquerda e conte os pretos que encontrar depois de x (a nil é preta).
-// 2. 2^bh - 1 em C: (1 << b) - 1. Use "%3d %-8s" para alinhar.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

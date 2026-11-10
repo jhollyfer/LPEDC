@@ -11,13 +11,6 @@
 //   skip list  média   16.4   pior   29
 //   lista MTF  média  114.6   pior 1000
 //
-// Dicas:
-// 1. É a função mede do texto com uma variável a mais: zere *pior antes do
-//    laço e troque quando aparecer um custo maior.
-// 2. Não esqueça do e->libera(d) no fim.
-// 3. Resposta esperada: a saída acima. Na lista MTF, alguma busca percorreu
-//    os 1000 nós; na AVL, nenhuma passou de 12.
-//
 // Escreva sua resposta abaixo (complete mede):
 
 #include <stdio.h>

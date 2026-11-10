@@ -21,16 +21,6 @@
 //   Vila   pior caso: 10 km (até CD)
 //   Melhor lugar para o hospital: Morro (ninguém a mais de 5 km)
 //
-// Dicas:
-// 1. Ponha o Dijkstra numa função void dijkstra(int origem, int dist[]) e
-//    chame uma vez por lugar (índices: CD 0, Centro 1, Feira 2, Porto 3,
-//    Morro 4, Vila 5).
-// 2. A maior distância a partir de um vértice se chama excentricidade; o
-//    vértice de menor excentricidade é o CENTRO do grafo.
-// 3. Formato: printf("%-6s pior caso: %2d km (até %s)\n", ...).
-// 4. Resposta esperada: a saída acima. Em empate de maior distância, fica o
-//    primeiro destino encontrado (o Morro está a 5 km do CD e da Vila).
-//
 // Escreva sua resposta abaixo:
 
 #include <limits.h>

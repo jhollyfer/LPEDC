@@ -12,13 +12,6 @@
 //   saiu da frente: 4
 //   frente 2, fundo 1, tamanho 2
 //
-// Dicas:
-// 1. insere_inicio põe à esquerda; insere_fim, à direita.
-// 2. O 1 entra primeiro e acaba no meio: quem chega depois dele se divide
-//    entre os dois lados.
-// 3. Resposta esperada: fim 1, início 2, fim 3, início 4, e as três linhas
-//    acima.
-//
 // Escreva sua resposta abaixo (as quatro inserções):
 
 #include <stdio.h>

@@ -1,59 +1,35 @@
 // 0019 · Juntando tudo: a conta de luz
 // Exercício E112 · ★★☆
 //
-// Complete o programa do pedágio. Moto (1) paga R$ 6.00; carro (2) paga
-// R$ 12.00; caminhão (3) paga R$ 12.00 por eixo. No horário de pico (das 17h
-// às 19h59), a tarifa sobe 20%. Siga os TODO.
+// Escreva o programa do pedágio. Leia a categoria: 1 moto paga R$ 6.00; 2
+// carro paga R$ 12.00; 3 caminhão paga R$ 12.00 por eixo (nesse caso, leia
+// também o número de eixos). Outra categoria mostra "Categoria inválida." e
+// termina com return 1. Depois leia a hora (0 a 23). No horário de pico (das 17h
+// às 19h59), a tarifa sobe 20% (use um ternário). Não mostre perguntas.
+// Mostre se é horário de pico ("sim" ou "não") e a tarifa. Teste com carro às
+// 18h e com caminhão de 4 eixos às 10h.
 //
-//   Categoria (1 moto, 2 carro, 3 caminhão): 2
-//   Hora (0 a 23): 18
+//   Entrada:
+//   2
+//   18
+//   Saída esperada:
 //   Horário de pico? sim
 //   Tarifa: R$ 14.40
 //
-// Dicas:
-// 1. No case 3, leia o número de eixos antes de calcular (declare
-//    int eixos lá no começo do main, junto com categoria).
-// 2. pico = hora >= 17 && hora < 20; e depois
-//    tarifa = pico ? tarifa * 1.2 : tarifa;
-// 3. Resposta esperada: carro às 18h → 14.40; caminhão com 4 eixos às 10h
-//    → 48.00; moto às 19h → 7.20; categoria 5 → "Categoria inválida.".
+//   Entrada:
+//   3
+//   4
+//   10
+//   Saída esperada:
+//   Horário de pico? não
+//   Tarifa: R$ 48.00
 //
-// Escreva sua resposta abaixo (complete o código):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
-    int categoria, hora;
-    double tarifa = 0;
 
-    printf("Categoria (1 moto, 2 carro, 3 caminhão): ");
-    if (scanf("%d", &categoria) != 1) {
-        printf("Entrada inválida\n");
-        return 1;
-    }
-
-    switch (categoria) {
-    case 1:
-        tarifa = 6.00;
-        break;
-    // TODO: case 2 (carro, R$ 12.00)
-    // TODO: case 3 (caminhão): leia os eixos e cobre R$ 12.00 por eixo
-    default:
-        printf("Categoria inválida.\n");
-        return 1;
-    }
-
-    printf("Hora (0 a 23): ");
-    if (scanf("%d", &hora) != 1) {
-        printf("Entrada inválida\n");
-        return 1;
-    }
-
-    bool pico = false; // TODO: das 17h às 19h59
-    // TODO: no pico, a tarifa sobe 20% (use um ternário)
-
-    printf("Horário de pico? %s\n", pico ? "sim" : "não");
-    printf("Tarifa: R$ %.2f\n", tarifa);
     return 0;
 }

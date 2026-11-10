@@ -1,9 +1,5 @@
 // 0048 · Ponteiros e strings
 // Exercício E286 · ★★☆
-//
-// Resposta: (1) saudacao apontava para um literal, que é só leitura: vira
-// um vetor (cópia); (2) bloco era um ponteiro sem alvo: vira um vetor de 2;
-// (3) == comparava endereços: o certo é strcmp.
 
 #include <stdio.h>
 #include <string.h>

@@ -16,16 +16,6 @@
 //   5: 13  9  6  7  2  0
 //   Mais longe: Portaria e Reitoria, 13 min
 //
-// Dicas:
-// 1. Dois laços sobre d[i][j]: imprima e, no mesmo passo, guarde o par
-//    (a, b) com o maior valor visto até agora (troque só se for MAIOR,
-//    para ficar com o primeiro).
-// 2. A tabela é simétrica porque o campus é de mão dupla: d[i][j] ==
-//    d[j][i]. Por isso o par (Reitoria, Portaria) também tem 13, mas vem
-//    depois.
-// 3. Resposta esperada: a saída acima. Portaria -> Reitoria: Portaria,
-//    Biblioteca, Lab, Reitoria (4 + 3 + 6 = 13).
-//
 // Escreva sua resposta abaixo (estenda o main):
 
 #include <stdio.h>

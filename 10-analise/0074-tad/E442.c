@@ -15,15 +15,6 @@
 //   Pix de R$ 35,50: ok
 //   Bia: R$ 44,50 | Caio: R$ 45,50
 //
-// Dicas:
-// 1. Saque primeiro. Só deposite se o saque deu certo; assim ninguém ganha
-//    dinheiro do nada.
-// 2. Os valores são centavos: R$ 35,50 é 3550.
-// 3. Para mostrar: saldo / 100 e saldo % 100 com %02d.
-// 4. Resposta esperada: a saída acima. A nova operação respeita o
-//    invariante (saldo >= 0) de graça, porque só usa operações que já o
-//    respeitam.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

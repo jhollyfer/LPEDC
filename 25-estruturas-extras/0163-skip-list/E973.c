@@ -10,13 +10,6 @@
 //   Paradas: maior 56, 2 avanços (pelo andar 0 seriam 8)
 //   Códigos: maior 10000, 13 avanços (pelo andar 0 seriam 1000)
 //
-// Dicas:
-// 1. É a busca sem a comparação: comece em x = &s->cabeca, no andar
-//    s->andares - 1. Em cada andar, avance enquanto x->prox[k] != NULL.
-//    Depois desça.
-// 2. Some 1 em *avancos a cada x = x->prox[k]. No fim, x é o último nó.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete maior):
 
 #include <stdio.h>

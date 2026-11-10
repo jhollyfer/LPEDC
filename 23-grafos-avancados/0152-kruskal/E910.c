@@ -14,17 +14,6 @@
 //   Rede 2 (Buriti Pequi Babaçu Juçara): 7 km
 //   Sem travessia: 2 redes separadas, 6 cabos, 16 km
 //
-// Dicas:
-// 1. O "pare com V - 1 arestas" nunca acontece num grafo desconexo: deixe
-//    o laço ir até o fim da lista. Com c componentes, a floresta tem V - c
-//    arestas.
-// 2. Marque num vetor aceito[k] quais arestas entraram. No fim, a rede de
-//    uma aresta aceita é acha(a). Um sítio u abre uma rede nova se nenhum
-//    sítio antes dele tem o mesmo acha.
-// 3. Resposta esperada: a saída acima. Margem norte: Aroeira-Cedro 2,
-//    Ipê-Jatobá 3, Jatobá-Aroeira 4. Margem sul: Pequi-Babaçu 1,
-//    Pequi-Juçara 2, Buriti-Juçara 4.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

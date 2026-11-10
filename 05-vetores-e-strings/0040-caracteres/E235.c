@@ -18,12 +18,6 @@
 //   '@' = 64
 //   Hi!
 //
-// Dicas:
-// 1. O mesmo valor com %c mostra o símbolo e com %d mostra o código.
-// 2. Para mostrar o apóstrofo, ele vai dentro das aspas duplas: "'%c' = %d\n".
-// 3. putchar(72) ou printf("%c", 72) mostram a letra do código 72.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

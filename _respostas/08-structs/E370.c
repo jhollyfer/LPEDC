@@ -1,10 +1,5 @@
 // 0062 · Ponteiro para struct
 // Exercício E370 · ★★☆
-//
-// Resposta: p era uma variável local de criar_produto; o endereço dela não
-// vale depois do return (o gcc avisa e, na prática, o ponteiro devolvido nem
-// serve). O produto passa a ser alocado com malloc, e o main, dono do
-// ponteiro, libera com free. Sem o free, o ASan acusa um vazamento.
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -13,12 +13,6 @@
 //   f(x)): fecha sem abrir na posição 4
 //   if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
 //
-// Dicas:
-// 1. pilha_empilha(p, i) no lugar de pilha_empilha(p, c).
-// 2. Ao desempilhar, a abertura é s[topo], e topo é a posição dela.
-// 3. No "faltou fechar", use pilha_topo para pegar a última abertura.
-// 4. Resposta esperada: as quatro linhas acima.
-//
 // Escreva sua resposta abaixo (modifique diagnostico):
 
 #include <stdio.h>

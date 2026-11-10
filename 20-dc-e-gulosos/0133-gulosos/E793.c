@@ -21,15 +21,6 @@
 //     1 de R$ 20
 //     total: 8 notas
 //
-// Dicas:
-// 1. Guarde as notas num vetor em ordem decrescente e percorra com um for.
-// 2. Para cada nota, um while tira a nota enquanto ela couber no valor,
-//    contando quantas saíram.
-// 3. Resposta esperada: a saída acima. (Tente um saque de R$ 8 depois: o
-//    guloso dá uma nota de 5, uma de 2 e trava com R$ 1 sobrando, embora
-//    quatro notas de 2 resolvam. Sem a nota de 1, o guloso nem sempre acha
-//    uma resposta que existe.)
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

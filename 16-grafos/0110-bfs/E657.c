@@ -18,16 +18,6 @@
 //   Ao contrário: Lapa -> Penha -> Tatuape -> Saude
 //   Ônibus: 3
 //
-// Dicas:
-// 1. pai[origem] = -1. Na função: se pai[v] != -1, imprima primeiro o
-//    caminho até pai[v] (chamada recursiva) e depois " -> " e o nome de v.
-// 2. A recursão desfaz a inversão: o pai é impresso antes do filho, igual a
-//    uma pilha (assunto 0084).
-// 3. Para não escrever a BFS duas vezes, ponha-a numa função com um
-//    parâmetro bool crescente e use v = crescente ? k : V - 1 - k.
-// 4. Resposta esperada: a saída acima. Os dois caminhos são mínimos; quem
-//    entra primeiro na fila descobre os vizinhos primeiro.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

@@ -21,13 +21,6 @@
 //   Filial 2: 53
 //   Campeã: filial 0
 //
-// Dicas:
-// 1. int *inicio = &vendas[0][0]; o laço vai de p = inicio até
-//    p < inicio + 12.
-// 2. Guarde os totais num vetor int filial[3] = {0}; e some *p em
-//    filial[(p - inicio) / 4].
-// 3. Resposta esperada: total 151; filiais 56, 42 e 53; campeã filial 0.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -16,13 +16,6 @@
 //   Saída esperada:
 //   Mensagem: ESTOU BEM
 //
-// Dicas:
-// 1. char buf[16]; int tam = 0; a cada bit: buf[tam++] = *b; buf[tam] = '\0';
-// 2. Ao achar o código, zere tam e saia do laço da tabela com break.
-// 3. Resposta esperada: Mensagem: ESTOU BEM. Este jeito custa O(k) por bit
-//    (k códigos); descendo pela árvore, como no A271, custa O(1) por bit.
-//    Teste também trocar um bit e ver o que acontece.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

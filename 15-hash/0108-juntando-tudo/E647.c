@@ -16,15 +16,6 @@
 //   sol: 2
 //   diferentes: 5
 //
-// Dicas:
-// 1. Olhe o campo palavra do nó: ele guarda as letras ou um endereço? Para
-//    onde aponta cada nó quando a próxima palavra é lida em "atual"?
-// 2. "pera" cai no mesmo balde de "sol": na busca, o strcmp compara "atual"
-//    com ele mesmo e dá igual, por isso a pera some e o sol ganha 1 a mais.
-// 3. Resposta esperada: a saída acima. O nó precisa da sua cópia:
-//    "char palavra[16];" e snprintf(novo->palavra, sizeof novo->palavra,
-//    "%s", atual). Para o total, conte os nós ao imprimir.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

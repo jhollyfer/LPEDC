@@ -27,14 +27,6 @@
 //   C(40) = 331160281
 //   C(40) / C(39) = 1.6180
 //
-// Dicas:
-// 1. O laço de conta_chamadas guarda só os dois últimos valores, como o
-//    Fibonacci iterativo: proximo = atual + anterior + 1.
-// 2. Zere o contador antes de cada fib(n).
-// 3. A razão tende a 1,618... (o número de ouro): cada n a mais multiplica
-//    as chamadas por 1,6. É isso que quer dizer Θ(1,618ⁿ).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

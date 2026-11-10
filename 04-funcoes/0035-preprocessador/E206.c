@@ -15,12 +15,6 @@
 //   ENTRE(25, 10, 20) = 0
 //   100 / ABS(-5 * 2) = 10
 //
-// Dicas:
-// 1. Use o ternário: ((a) > (b) ? (a) : (b)).
-// 2. Parênteses em cada parâmetro e em volta de tudo. O último teste quebra se
-//    faltar o par de fora.
-// 3. Resposta esperada: a saída acima. ABS(x) fica ((x) < 0 ? -(x) : (x)).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

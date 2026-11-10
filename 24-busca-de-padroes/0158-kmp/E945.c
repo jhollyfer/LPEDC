@@ -15,13 +15,6 @@
 //   linha 4, coluna 11
 //   3 ocorrências
 //
-// Dicas:
-// 1. Guarde o getchar num int, não num char: o EOF não cabe num char.
-// 2. Em cada '\n': linha++, coluna = 0 e k = 0 (a palavra não atravessa a
-//    quebra). Nas outras letras: coluna++ e o passo do KMP.
-// 3. Quando k == m, a palavra começou na coluna coluna - m + 1.
-// 4. O "erro" dentro de "terror" conta. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

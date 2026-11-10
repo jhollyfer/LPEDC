@@ -22,14 +22,6 @@
 //   Porto: o mais longe é Vila Rica, a 20 km
 //   Melhor bairro para o posto: Lagoa (ninguém fica a mais de 12 km)
 //
-// Dicas:
-// 1. Mão dupla: grave d[a][b] e d[b][a]. Depois do Floyd-Warshall, a linha
-//    i da matriz tem a distância de i a todos.
-// 2. O máximo da linha i é a "excentricidade" de i. O bairro com a menor
-//    excentricidade é o CENTRO do grafo (que aqui nem é o bairro Centro).
-// 3. Resposta esperada: a saída acima. De Lagoa: Vila Rica a 12 (Lagoa,
-//    Centro, Jardim, Vila Rica) e Porto a 9 (Lagoa, Bosque, Porto).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

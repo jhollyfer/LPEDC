@@ -1,10 +1,5 @@
 // 0057 · Erros de memória
 // Exercício E341 · ★★★
-//
-// O erro: v era uma cópia do ponteiro do main. O realloc mudou o bloco de
-// lugar e só a cópia soube do endereço novo; o main seguiu com o endereço
-// do bloco antigo, já liberado. Recebendo int **v, a função atualiza o
-// ponteiro do próprio main.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,5 +41,3 @@ int main(void) {
     free(alunos);
     return 0;
 }
-// Saída:
-// Presentes: 11 27 35 48

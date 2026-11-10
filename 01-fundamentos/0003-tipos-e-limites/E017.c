@@ -13,17 +13,6 @@
 //   69 anos: 2175984000 segundos
 //   int64_t vai até 9223372036854775807
 //
-// Dicas:
-// 1. INT32_MAX e INT64_MAX vêm do stdint.h. Para mostrar o de 64 bits,
-//    converta para long long e use %lld: (long long)INT64_MAX.
-// 2. Um ano tem 365 * 24 * 60 * 60 = 31536000 segundos, que cabe num int.
-//    Mas 69 anos já não cabem: se a conta for feita em int, o rodar acusa
-//    "signed integer overflow". Guarde os segundos de um ano numa variável
-//    long long: aí a multiplicação por 68 ou 69 já é feita em long long.
-// 3. Resposta esperada: as quatro linhas acima. 2147483647 é 2^31 - 1 (31
-//    bits para o número e 1 para o sinal); com 64 bits, cabem uns 292
-//    bilhões de anos.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

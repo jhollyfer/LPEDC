@@ -13,13 +13,6 @@
 //   Entre 35 e 65: 40 50 60
 //   Nós visitados: 5 de 9
 //
-// Dicas:
-// 1. Comece como uma em ordem e conte cada chamada com r != NULL.
-// 2. Só desça para a esquerda se r->chave > min; só desça para a direita se
-//    r->chave < max; só imprima se min <= r->chave <= max.
-// 3. Resposta esperada: 40 50 60, com 5 nós visitados (50, 30, 40, 70, 60).
-//    Os nós 20, 80, 10 e 90 nunca são tocados.
-//
 // Escreva sua resposta abaixo (complete faixa):
 
 #include <stdio.h>

@@ -26,13 +26,6 @@
 //   ...
 //   16      45     49        120
 //
-// Dicas:
-// 1. Em C, ⌈n/2⌉ é (n + 1) / 2 e ⌊n/2⌋ é n / 2 (divisão inteira).
-// 2. O fatorial cabe em unsigned long long até n = 20.
-// 3. Resposta esperada: a tabela acima. O merge sort é ótimo até n = 4 e
-//    depois fica a poucas comparações do limite (4 a mais em n = 16). O
-//    insertion se afasta cada vez mais: Θ(n²) contra Θ(n log n).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

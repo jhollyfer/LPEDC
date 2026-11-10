@@ -15,15 +15,6 @@
 //   exp =  10: 000 001 008 512 216 125 027 729 343 064
 //   exp = 100: 000 001 008 027 064 125 216 343 512 729
 //
-// Dicas:
-// 1. Uma fila simples basta: typedef struct { int itens[MAX]; int ini, fim; }
-//    Fila; com enfileira (itens[fim++] = x), desenfileira (itens[ini++]) e
-//    vazia (ini == fim). Cada passada começa com as 10 filas zeradas.
-// 2. Cada fila recebe no máximo os 10 números, então MAX = 16 sobra.
-// 3. A fila é o que garante a estabilidade: quem entrou antes no escaninho
-//    sai antes. Com uma PILHA no lugar, o resultado sairia errado.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -16,12 +16,6 @@
 //   Fora de ordem: (14, 9) (14, 12) (14, 11) (17, 12) (17, 11) (17, 15) (12, 11) (20, 11) (20, 15)
 //   Inversões: 9 de 21 pares
 //
-// Dicas:
-// 1. O laço de dentro começa em j = i + 1: assim cada par aparece uma vez.
-// 2. O total de pares é n(n - 1)/2.
-// 3. Resposta esperada: a saída acima. Guarde este programa: ele serve para
-//    conferir a versão rápida (merge sort) dos próximos exercícios.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

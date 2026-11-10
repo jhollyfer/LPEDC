@@ -22,17 +22,6 @@
 //   8 pedidos, 8 transferências
 //   666667 enfileirados, 524286 transferências, pior atendimento: 262145
 //
-// Dicas:
-// 1. Pilhas de 1 milhão de int ocupam 4 MB cada: declare-as como
-//    variáveis globais, não dentro do main (a pilha de chamadas tem uns
-//    8 MB e estouraria).
-// 2. Cada pedido é transferido no máximo UMA vez: entra na entrada, passa
-//    para a saida, sai. Por isso as transferências nunca passam do número
-//    de enfileirados, e cada operação custa O(1) amortizado.
-// 3. O "pior atendimento" mostra o outro lado: uma única operação chegou a
-//    mover 262.144 pedidos de uma vez.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

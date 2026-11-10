@@ -16,14 +16,6 @@
 //   saiu 5 -> [1 item, topo 3]
 //   saiu 3 -> [vazia]
 //
-// Dicas:
-// 1. pilha_topo devolve false com a pilha vazia: use isso para decidir o que
-//    mostrar.
-// 2. "item" no singular quando o tamanho é 1: um ternário resolve.
-// 3. estado só olha: não desempilhe nada dentro dela.
-// 4. Resposta esperada: as oito linhas acima. Cada empilha fez um malloc e
-//    cada saiu fez um free; o sanitizer não acusa vazamento.
-//
 // Escreva sua resposta abaixo (complete estado):
 
 #include <stdio.h>

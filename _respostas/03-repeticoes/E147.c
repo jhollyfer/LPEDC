@@ -8,7 +8,7 @@ int main(void) {
     int posto_menor = 0, posto_maior = 0;
 
     for (int posto = 1; posto <= 6; posto++) {
-        printf("Posto %d: ", posto);
+        printf("Posto %d:\n", posto);
         if (scanf("%lf", &preco) != 1) {
             return 1;
         }

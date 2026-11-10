@@ -16,17 +16,6 @@
 //   ##.#.
 //   #.#..
 //
-// Dicas:
-// 1. Use o TAD (uniao.h) com 25 + 2 elementos: além dos quadradinhos, um
-//    TOPO virtual (25), unido a todo furo da linha 0, e um FUNDO virtual
-//    (26), unido a todo furo da linha 4. A água passou quando
-//    uf_juntos(u, TOPO, FUNDO).
-// 2. A cada furo, una o quadradinho com cada vizinho que já esteja furado
-//    (guarde isso num bool aberta[25]). Cuidado com as bordas.
-// 3. Resposta esperada: a saída acima. O caminho da água é (0,2), (1,2),
-//    (1,1), (2,1), (3,1), (3,0), (4,0). Sem o TOPO e o FUNDO, você teria que
-//    testar os 25 pares de quadradinhos de cima e de baixo a cada furo.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

@@ -13,16 +13,6 @@
 //   Saída esperada:
 //   Pódio: 98 95 91
 //
-// Dicas:
-// 1. Um min-heap é o heap do texto com os sinais das comparações trocados:
-//    sobe enquanto for MENOR que o pai; desce trocando com o MENOR filho.
-// 2. "A raiz sai e a nota entra" pode ser feito numa operação só:
-//    v[0] = nota e depois desce a partir do 0.
-// 3. Resposta esperada: Pódio: 98 95 91. Para imprimir do maior para o
-//    menor, tire os 3 do min-heap (saem 91, 95, 98) guardando num vetor e
-//    mostre de trás para frente. Com n notas e pódio de k, o custo é
-//    O(n log k), e não O(n log n).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

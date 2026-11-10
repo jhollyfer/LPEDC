@@ -1,34 +1,26 @@
 // 0014 · if
 // Exercício E081 · ★★☆
 //
-// O cinema quer barrar menores de 18 anos neste filme. Mas o programa
-// abaixo mostra "Entrada proibida" até para quem tem 25 anos. Rode com 25,
-// leia o aviso do compilador (ele existe de propósito), conserte e rode de
-// novo com 25 e com 15.
+// O cinema barra menores de 18 anos neste filme. Leia a idade, sem mostrar
+// pergunta. Se for menor que 18, mostre "Entrada proibida para menores.". Para
+// todo mundo, mostre "Bom filme!" no final. Teste com 25 e com 15.
 //
-// Dicas:
-// 1. Olhe com atenção o fim da linha do if.
-// 2. O que fica sendo o corpo do if? E o bloco entre chaves, de quem é?
-// 3. Resposta esperada: o ";" depois de if (idade < 18) é uma instrução
-//    vazia e vira o corpo do if; o bloco embaixo roda sempre. Tirando o ";",
-//    25 mostra só "Bom filme!" e 15 mostra as duas mensagens.
+//   Entrada:
+//   25
+//   Saída esperada:
+//   Bom filme!
 //
-// Escreva sua resposta abaixo (conserte o código):
+//   Entrada:
+//   15
+//   Saída esperada:
+//   Entrada proibida para menores.
+//   Bom filme!
+//
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
 int main(void) {
-    int idade;
-    printf("Idade: ");
-    if (scanf("%d", &idade) != 1) {
-        printf("Entrada inválida\n");
-        return 1;
-    }
 
-    if (idade < 18);
-    {
-        printf("Entrada proibida para menores.\n");
-    }
-    printf("Bom filme!\n");
     return 0;
 }

@@ -20,15 +20,6 @@
 //   trocando:   [101, 102, 108, 104, 105, 106, 107]  movimentos: 1
 //   esvaziando pela frente: deslocando 21, trocando 6
 //
-// Dicas:
-// 1. Assinatura sugerida: int remove_deslocando(int v[], int *n, int pos).
-// 2. Ao final, as duas fazem (*n)--.
-// 3. Para esvaziar: while (n > 0) total += remove_xxx(v, &n, 0);
-// 4. Resposta esperada: a saída acima. Deslocando, tirar da frente custa
-//    6 + 5 + 4 + 3 + 2 + 1 + 0 = 21 movimentos (cresce como n²); trocando,
-//    um por item, menos o último. Use deslocando quando a ordem importa
-//    (fila de senhas) e trocando quando não importa (itens do carrinho).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

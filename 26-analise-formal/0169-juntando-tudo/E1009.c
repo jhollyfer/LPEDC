@@ -13,12 +13,6 @@
 //    4000  4000     12         12
 //    8000  8000     13         13
 //
-// Dicas:
-// 1. Preencha preco[i] = 50 + 2 * i (ordenado, para a busca binária).
-// 2. Chame custo_zera() antes de cada medida e leia custo_passos depois.
-// 3. floor e log2 estão em <math.h>. A soma dobra; a busca ganha 1.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -9,12 +9,6 @@
 //   7: 7 14 21 (12 bytes)
 //   9: 9 18 27 36 45 (20 bytes)
 //
-// Dicas:
-// 1. t[i] = base * (i + 1).
-// 2. sizeof t de um VLA é calculado na hora: n * sizeof(int). Mostre com
-//    %zu.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -13,12 +13,6 @@
 //   feira 3
 //   queijo 1
 //
-// Dicas:
-// 1. compara recebe dois const void *: converta para const Contagem *.
-// 2. Devolva um número negativo se a deve vir antes de b. Para "mais vezes
-//    primeiro", a conta é y->vezes - x->vezes; no empate, use strcmp.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

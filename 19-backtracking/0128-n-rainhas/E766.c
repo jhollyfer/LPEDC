@@ -17,13 +17,6 @@
 //   n = 5: 14 arrumações, primeira: 0 2 4 1 3
 //   n = 6: 90 arrumações, primeira: 0 2 4 1 3 5
 //
-// Dicas:
-// 1. A coluna continua proibida de repetir. As diagonais saem: o único
-//    teste novo compara c com pos[l - 1], e só quando l > 0.
-// 2. "Colunas vizinhas" quer dizer abs(c - pos[l - 1]) == 1.
-// 3. Guarde a primeira arrumação de cada n num vetor separado.
-// 4. Resposta esperada: as 3 linhas acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdbool.h>

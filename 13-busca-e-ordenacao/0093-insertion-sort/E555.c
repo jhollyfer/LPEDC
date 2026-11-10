@@ -16,13 +16,6 @@
 //   4000: não entrou no ranking
 //   9900: 9900 9800 8750 7500 7200
 //
-// Dicas:
-// 1. Com espaço sobrando, comece a empurrar de i = n - 1 e aumente n no fim.
-// 2. Cheio: o último vai ser descartado mesmo, então comece de i = n - 2 (o
-//    empurrão escreve por cima de top[n - 1]).
-// 3. O ranking é decrescente: empurre enquanto top[i] < pontos.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -18,12 +18,6 @@
 //   340: 3 dígitos; unidade 0, dezena 4, centena 3
 //   19000: 5 dígitos; unidade 0, dezena 0, centena 0, milhar 9, dezena de milhar 1
 //
-// Dicas:
-// 1. quantos_digitos: comece com 1 e divida por 10 enquanto x >= 10.
-//    Cuidado com o 0, que tem 1 dígito.
-// 2. digito: divida x por 10, pos vezes, e devolva x % 10.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (escreva as duas funções):
 
 #include <stdio.h>

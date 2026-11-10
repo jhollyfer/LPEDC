@@ -25,16 +25,6 @@
 //   Usa 10 kg e 7 L
 //   Força bruta: R$ 79
 //
-// Dicas:
-// 1. static int t[7][11][9]; começa toda zerada, o que já resolve a "linha"
-//    i = 0.
-// 2. Três laços (i, p, v). O pacote i só pode entrar se peso[i] <= p E
-//    volume[i] <= v; aí a outra opção é frete[i] + t[i - 1][p - peso[i]]
-//    [v - volume[i]].
-// 3. A recuperação é a mesma de antes, descontando peso e volume juntos.
-// 4. A tabela tem 7 x 11 x 9 = 693 células: o custo é O(n x P x V).
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -14,12 +14,6 @@
 //   Saída esperada:
 //   74 68 52 47 35 23 11
 //
-// Dicas:
-// 1. int *ini = v; int *fim = v + n - 1;
-// 2. while (ini < fim) { troca(ini, fim); ini++; fim--; }
-// 3. Resposta esperada: 74 68 52 47 35 23 11. Com n ímpar, o do meio (47)
-//    fica no lugar.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

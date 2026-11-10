@@ -17,12 +17,6 @@
 //   101 102 103 104
 //   7.50 9.25 6.00
 //
-// Dicas:
-// 1. Converta o início para const unsigned char * e some i * tam: isso anda
-//    byte a byte.
-// 2. mostra_int faz printf("%d ", *(const int *)p);
-// 3. Resposta esperada: as duas linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

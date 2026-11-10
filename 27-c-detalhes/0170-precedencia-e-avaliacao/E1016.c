@@ -16,12 +16,6 @@
 //   a = b = c = 7 -> a = 7, b = 7, c = 7
 //   x -= 1 + 2 -> x = 2
 //
-// Dicas:
-// 1. *, / e % estão no mesmo nível e agrupam da esquerda para a direita.
-// 2. A atribuição agrupa da direita: a = (b = (c = 7)).
-// 3. x -= 1 + 2 é x = x - (1 + 2), não x = x - 1 + 2.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

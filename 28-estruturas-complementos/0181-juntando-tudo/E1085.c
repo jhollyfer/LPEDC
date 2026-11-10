@@ -19,12 +19,6 @@
 //   Beto* Dora* Enzo* Ana Caio
 //   Beto* Dora* Enzo* Ana Caio Fabi
 //
-// Dicas:
-// 1. Para o idoso, comece em p = &fila->nil e avance enquanto p->prox não
-//    for a sentinela e p->prox for idoso. Insira depois de p.
-// 2. Para os demais, insira depois de fila->nil.ant (o último).
-// 3. Resposta esperada: a saída acima (o * marca os idosos).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

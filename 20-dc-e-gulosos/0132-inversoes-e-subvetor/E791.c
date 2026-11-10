@@ -14,18 +14,6 @@
 //   Quedas de mais da metade: 7
 //   Força bruta: 7
 //
-// Dicas:
-// 1. Não dá para contar dentro da intercalação, como no texto: a ordem em
-//    que os elementos saem segue v[i] <= v[j], e não v[i] > 2 * v[j]. Faça
-//    um laço SEPARADO, com as duas metades já ordenadas, ANTES de intercalar.
-// 2. Nesse laço, j começa em q e só anda para a frente: para cada i da
-//    esquerda, avance j enquanto v[i] > 2 * v[j]; some j - q. Como v[i]
-//    cresce, o j de um i serve de ponto de partida para o próximo. O laço
-//    todo é O(n).
-// 3. Resposta esperada: 7 nas duas linhas. Os pares são (40, 18), (40, 9),
-//    (40, 12), (25, 9), (25, 12), (30, 12) e (50, 20). Se as contas não
-//    baterem, mostre os pares da força bruta com printf para achar a falha.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

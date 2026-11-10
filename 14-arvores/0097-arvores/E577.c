@@ -31,12 +31,6 @@
 //     moda: prof 1, grau 0, folha
 //   Altura: 3
 //
-// Dicas:
-// 1. O grau de um nó é o próprio n->qtd. Folha é quem tem qtd == 0.
-// 2. Imprima o nó e depois chame ficha para cada filho com prof + 1. O recuo
-//    sai com printf("%*s", 2 * prof, "").
-// 3. Resposta esperada: as 9 linhas acima e "Altura: 3".
-//
 // Escreva sua resposta abaixo (complete ficha):
 
 #include <stdio.h>

@@ -13,14 +13,6 @@
 //   mais antigo primeiro: 15 60 35 90 25
 //   tamanho (recursivo): 5
 //
-// Dicas:
-// 1. Caso base das duas: p == NULL.
-// 2. Para imprimir ao contrário, imprima o RESTO da lista primeiro
-//    (chamada com p->prox) e só depois o p->valor.
-// 3. tamanho_rec(p) = 1 + tamanho_rec(p->prox).
-// 4. Resposta esperada: a saída acima. Para a primeira linha, use
-//    printf("mais novo primeiro: ") seguido de lista_imprime.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

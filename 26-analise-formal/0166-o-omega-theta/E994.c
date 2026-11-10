@@ -11,14 +11,6 @@
 //   c =  8: falha de n = 257 em diante
 //   c = 16: falha de n = 65537 em diante
 //
-// Dicas:
-// 1. log2 está em <math.h>; o rodar já liga a biblioteca matemática.
-// 2. Guarde ultimo_ok = n sempre que a desigualdade valer; a quebra
-//    começa em ultimo_ok + 1.
-// 3. n log n <= c n é o mesmo que log n <= c, isto é, n <= 2^c. Para
-//    qualquer c, o n = 2^c + 1 quebra o teto. Nenhum c serve.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

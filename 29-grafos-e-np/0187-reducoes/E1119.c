@@ -14,13 +14,6 @@
 //   Saída esperada:
 //   Lojas no corredor: Bazar Café Doces Farmácia (4)
 //
-// Dicas:
-// 1. Não mexa em maior_clique: a graça da redução é usar o resolvedor de
-//    outro problema sem abrir a caixa.
-// 2. g2[a][b] = a != b && !concorre[a][b]. O bit v da máscara devolvida
-//    diz se a loja v está no grupo: (s >> v) & 1.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete o main):
 
 #include <stdbool.h>

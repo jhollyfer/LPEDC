@@ -13,14 +13,6 @@
 //   Cazuza Legiao Pitty Raimundos Skank Titas
 //   Pitty Skank Titas Cazuza Legiao Raimundos
 //
-// Dicas:
-// 1. Cada elemento do vetor é um const char *. O qsort passa para a compara
-//    o ENDEREÇO do elemento, ou seja, um ponteiro para ponteiro.
-// 2. Leia assim: const char *x = *(const char *const *) a;
-// 3. O erro clássico é fazer strcmp(a, b) direto: compara os bytes dos
-//    ponteiros, não as letras.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

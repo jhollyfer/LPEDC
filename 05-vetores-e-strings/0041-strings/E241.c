@@ -15,12 +15,6 @@
 //   [6] \0 0
 //   strlen = 6, sizeof = 7
 //
-// Dicas:
-// 1. O laço pode ir até sizeof(cidade) - 1, que inclui o '\0'.
-// 2. Para escrever uma barra invertida no printf, use "\\".
-// 3. strlen devolve size_t: mostre com %zu (sizeof também).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

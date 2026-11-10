@@ -11,15 +11,6 @@
 //   3^20 = 3486784401, profundidade 21
 //   3^30 = 205891132094649, profundidade 31
 //
-// Dicas:
-// 1. No começo da função: prof++ e, se prof > prof_max, prof_max = prof.
-//    Antes de sair: prof--. Para isso, guarde o resultado numa variável r
-//    e tenha um return só, no fim.
-// 2. Zere prof_max antes de cada potência.
-// 3. De e até 0 são e + 1 chamadas vivas ao mesmo tempo: Θ(e) de espaço
-//    na pilha, sem nenhum vetor.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (mude o programa):
 
 #include <stdio.h>

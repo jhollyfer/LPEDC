@@ -14,18 +14,6 @@
 //    16   133190   125049     29489          16            1
 //    32   133184   125044     47243          32            1
 //
-// Dicas:
-// 1. Aloque o texto com malloc(N + 1), preencha com bases[sorteia(4)], ponha
-//    o '\0' e não esqueça o free.
-// 2. Use um vetor Busca buscas[4] e um vetor long comp[4], zerado antes de
-//    cada busca.
-// 3. No Horspool, com só 4 letras, todas aparecem perto do fim do padrão,
-//    e os saltos ficam curtos. Padrão maior não garante ganho aqui,
-//    ao contrário da prosa do A321. E a força bruta fica perto de 1,33 n:
-//    a chance de a 1ª letra bater é 1/4.
-// 4. Resposta esperada: a tabela acima (o Rabin-Karp quase só confere as
-//    ocorrências de verdade).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

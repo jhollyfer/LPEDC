@@ -12,15 +12,6 @@
 //   Pronto: 13
 //   Pronto: 14
 //
-// Dicas:
-// 1. Em que linha o relatório aponta? Que ponteiro está sendo usado ali?
-// 2. Depois de cozinha_sai tirar o último pedido, para onde aponta f->fim?
-// 3. O erro só aparece quando a fila esvazia e depois recebe um pedido.
-// 4. Resposta esperada: cozinha_sai não zera o fim quando a fila esvazia.
-//    O fim continua apontando para o nó liberado, e o próximo cozinha_entra
-//    vê fim != NULL e escreve f->fim->prox nesse nó morto. Conserto: depois
-//    de avançar o início, if (f->inicio == NULL) f->fim = NULL;
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdbool.h>

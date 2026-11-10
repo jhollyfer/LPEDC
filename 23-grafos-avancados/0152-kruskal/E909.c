@@ -16,16 +16,6 @@
 //   Total: R$ 23 mil
 //   Custo extra da exigência: R$ 2 mil
 //
-// Dicas:
-// 1. Antes do laço do Kruskal, já una Sede e Ponte e some os 6 mil. O
-//    resto do algoritmo não muda: ele só vai descartar o que fecha ciclo
-//    com as arestas aceitas, incluindo a obrigatória.
-// 2. Para saber o custo extra, rode também o Kruskal sem exigência (dá 21)
-//    e subtraia. Uma função kruskal(estradas, obrigatoria) que devolve o
-//    total ajuda; lembre de reiniciar pai[] e tamanho[] a cada chamada.
-// 3. Resposta esperada: a saída acima. Agora quem fecha ciclo é Sede-Brejo
-//    (4): Sede e Brejo já estão ligados pela Ponte.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

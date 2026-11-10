@@ -17,17 +17,6 @@
 //   jogo 1: solução única
 //   jogo 2: mais de uma solução
 //
-// Dicas:
-// 1. conta é o resolve com duas mudanças: na folha (k == 81) devolve 1, e
-//    no laço SOMA o que cada chamada devolve, em vez de parar no primeiro
-//    true.
-// 2. Depois de cada chamada, se a soma já chegou ao limite, desfaça a
-//    marcação e devolva. Sem isso, um jogo com milhares de soluções faria a
-//    busca rodar por muito tempo.
-// 3. Não esqueça de desfazer antes de qualquer return dentro do laço: a
-//    grade e os vetores precisam voltar como estavam.
-// 4. Resposta esperada: as 2 linhas acima.
-//
 // Escreva sua resposta abaixo (estenda o programa):
 
 #include <stdbool.h>

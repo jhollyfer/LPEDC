@@ -5,7 +5,6 @@
 
 int main(void) {
     int a, b;
-    printf("Dois números: ");
     if (scanf("%d %d", &a, &b) != 2) {
         printf("Entrada inválida\n");
         return 1;

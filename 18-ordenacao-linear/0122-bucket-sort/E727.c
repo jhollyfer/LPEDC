@@ -17,13 +17,6 @@
 //   R$ 37.20 -> balde 3
 //   R$  9.99 -> balde 0
 //
-// Dicas:
-// 1. x / max dá um número de 0 a 1; vezes nb, de 0 a nb. A parte inteira
-//    é o balde: (int) (x / max * nb).
-// 2. Só o próprio max dá nb, que não existe. Trate esse caso com um if.
-// 3. Formato: "R$ %5.2f -> balde %d\n".
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -20,13 +20,6 @@
 //   Loja (0.0, 0.0) -> cliente (3.0, 4.0): 5.00 km
 //   A -> B: 10.00 km
 //
-// Dicas:
-// 1. Distância: sqrt(dx * dx + dy * dy), com sqrt de <math.h>.
-// 2. typedef struct ponto Ponto; em cima, a struct ponto { double x, y; }
-//    só na parte "ponto.c".
-// 3. São 4 pontos criados: 4 ponto_libera no fim (o rodar acusa vazamento).
-// 4. Resposta esperada: a saída acima (os triângulos 3-4-5 e 6-8-10).
-//
 // Escreva sua resposta abaixo:
 
 #include <math.h>

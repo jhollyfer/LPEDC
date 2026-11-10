@@ -19,14 +19,6 @@
 //   Eva: 11 km  R -> Ana -> Beto -> Caio -> Dani -> Eva
 //   Mais longe: Eva (11 km)
 //
-// Dicas:
-// 1. Índices: R 0, Ana 1, Beto 2, Caio 3, Dani 4, Eva 5. Matriz de pesos com
-//    0 para "sem rua".
-// 2. A rota recursiva é a do A224: imprime primeiro a rota até anterior[v],
-//    depois " -> " e o nome de v.
-// 3. Resposta esperada: a saída acima. Todas as rotas formam uma
-//    linha só: a árvore de caminhos mínimos deste mapa é um caminho.
-//
 // Escreva sua resposta abaixo:
 
 #include <limits.h>

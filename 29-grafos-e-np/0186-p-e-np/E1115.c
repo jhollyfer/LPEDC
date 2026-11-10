@@ -20,15 +20,6 @@
 //   (não y2 ou x4 ou x5)
 //   Equivalentes em 32 de 32 atribuições dos x
 //
-// Dicas:
-// 1. Padrão: a primeira é (x1, x2, y1); a do meio c é (não y_c, x_(c+2),
-//    y_(c+1)); a última é (não y_(K-3), x_(K-1), x_K). Escreva com K e um
-//    #define, e o programa serve para qualquer K >= 4.
-// 2. Para cada máscara dos x, um laço interno tenta as 2^(K-3) máscaras
-//    dos y. O y funciona como "ainda devo um verdadeiro mais à frente".
-// 3. Resposta esperada: a saída acima. A transformação cria K - 3
-//    variáveis e K - 2 cláusulas: tamanho linear, logo polinomial.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

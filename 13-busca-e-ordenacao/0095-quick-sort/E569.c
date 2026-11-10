@@ -16,13 +16,6 @@
 //   mediana: 33 min (quickselect: 10 comparações)
 //   ordenando tudo: 33 min (23 comparações)
 //
-// Dicas:
-// 1. Reaproveite o separa do texto, contando comparações num static int.
-// 2. Diferente do quick sort, o quickselect só segue UM dos lados.
-// 3. Se p == r, sobrou um elemento só: é ele.
-// 4. Na média, o quickselect é O(n): n + n/2 + n/4 + ... < 2n.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

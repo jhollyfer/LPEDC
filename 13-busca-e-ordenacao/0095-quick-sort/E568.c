@@ -9,15 +9,6 @@
 //   Saída esperada (depois de consertar):
 //   2 4 7 9
 //
-// Dicas:
-// 1. Faça a primeira separação à mão: onde o 7 vai parar? Qual é o j?
-// 2. Quais pedaços as duas chamadas recursivas recebem? Algum inclui o pivô?
-// 3. Separe [4 2 7] à mão: o pivô 7 é o maior. Que j volta? Que chamada vem
-//    depois?
-// 4. Resposta esperada: quick_sort(v, p, j) inclui o pivô; quando ele é o
-//    maior do pedaço, j == r e a chamada recebe o mesmo pedaço para sempre.
-//    O certo é quick_sort(v, p, j - 1).
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

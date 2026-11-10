@@ -15,12 +15,6 @@
 //   v[4] = 50: folha
 //   v[5] = 20: folha
 //
-// Dicas:
-// 1. Calcule esq = 2 * i + 1 e dir = 2 * i + 2.
-// 2. Se esq >= n, é folha. Se só esq < n, tem um filho. Senão, tem os dois.
-// 3. Resposta esperada: a saída acima. Só o v[2] tem um filho só: num heap,
-//    no máximo um nó fica nessa situação.
-//
 // Escreva sua resposta abaixo (complete mostra_filhos):
 
 #include <stdio.h>

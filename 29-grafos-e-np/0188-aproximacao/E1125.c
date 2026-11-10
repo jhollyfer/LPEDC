@@ -15,13 +15,6 @@
 //   Ordem 2: 4 câmeras em B C E F
 //   Ótimo: 4 câmeras
 //
-// Dicas:
-// 1. Na aproximação, pule a rua se uma das pontas já tem câmera; senão,
-//    ponha câmera nas duas.
-// 2. A ordem muda as arestas escolhidas, e com elas o resultado. As duas
-//    respostas respeitam a garantia: no máximo 2 x 4 = 8.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

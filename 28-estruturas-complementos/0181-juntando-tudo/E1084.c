@@ -19,12 +19,6 @@
 //   11:00  Zeca
 //   Espera: (ninguém)
 //
-// Dicas:
-// 1. A ordem importa: ag_marca recusa paciente que já tem consulta, então
-//    primeiro ag_cancela, depois ag_marca.
-// 2. ag_cancela devolve o cpf de quem assumiu (maior que 0) ou 0.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

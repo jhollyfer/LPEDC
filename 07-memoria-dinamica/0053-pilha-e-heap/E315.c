@@ -16,15 +16,6 @@
 //   double: cada chamada usa pelo menos 16000 bytes
 //   double: cabem no máximo 524 chamadas
 //
-// Dicas:
-// 1. 8 MiB = 8 * 1024 * 1024 bytes.
-// 2. sizeof devolve size_t; mostre com %zu.
-// 3. Resposta esperada: a saída acima (8388608 / 8000 = 1048 e
-//    8388608 / 16000 = 524). Na prática cabem menos: cada frame guarda
-//    também o endereço de retorno e outras locais, e a pilha já tem o frame
-//    de main e as variáveis de ambiente. Passou do limite, o programa morre
-//    com stack overflow.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

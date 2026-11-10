@@ -19,16 +19,6 @@
 //   Chamada 2: 0 2
 //   Recorde: 4
 //
-// Dicas:
-// 1. static dentro da função não mora no frame: mora junto das globais, e
-//    por isso chamadas lembra o valor de uma chamada para a outra.
-// 2. O ponteiro placar (pilha) e o bloco apontado (heap) são duas coisas
-//    diferentes: o ponteiro some no return, o bloco continua vivo. Por isso
-//    o endereço precisa voltar no return.
-// 3. Resposta esperada: a saída acima. Regiões: recorde e chamadas nos
-//    dados; jogos, i e o ponteiro placar na pilha; o bloco no heap; as
-//    instruções de ler_placar no código.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

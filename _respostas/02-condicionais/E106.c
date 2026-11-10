@@ -6,7 +6,6 @@
 int main(void) {
     double a, b;
     char op;
-    printf("Conta: ");
     if (scanf("%lf %c %lf", &a, &op, &b) != 3) {
         printf("Entrada inválida\n");
         return 1;

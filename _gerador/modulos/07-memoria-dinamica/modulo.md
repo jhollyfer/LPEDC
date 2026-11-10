@@ -32,9 +32,9 @@ Nos diagramas, o verde costuma ser o bloco do heap. Ao rodar os exemplos,
 apague um `free` de propósito e leia a resposta do gcc com as flags de estudo.
 
 > [!NOTE]
-> Muitos exercícios são de **achar o erro**: o arquivo vem com o bug de
-> propósito, e o enunciado avisa. Ler o relatório do AddressSanitizer faz
-> parte do exercício. A resolução de cada um roda limpa.
+> Em todos os exercícios você escreve o programa do zero. Compile com as
+> flags de estudo e leia o relatório do AddressSanitizer se algo estourar. A
+> resolução de cada um roda limpa.
 
 O gcc com as flags de estudo já compila com o **AddressSanitizer**, que avisa
 de vazamentos no fim. Para o assunto 0057, instale também o **valgrind**:

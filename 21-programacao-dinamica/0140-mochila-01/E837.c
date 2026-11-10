@@ -23,14 +23,6 @@
 //   Estudar: Física Português Matemática
 //   Horas usadas: 6.0
 //
-// Dicas:
-// 1. Meia hora vira 1 unidade: 2.5 h são 5 unidades e as 6 h são 12.
-// 2. Converta com (int) (horas * 2 + 0.5). Só o cast trunca, e um double
-//    que deveria ser 5.0 pode estar guardado como 4.99999...
-// 3. Daí em diante é a tabela t[i][c] do texto, com c de 0 a 12, e a volta
-//    pela tabela somando horas[i] de quem entrou.
-// 4. Resposta esperada: a saída acima (30 + 18 + 25 = 73).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -24,15 +24,6 @@
 //   3 6 1 | 5 4 2
 //   73 chamadas
 //
-// Dicas:
-// 1. Troque os 9 por constantes: N = 6, BL = 2 (linhas do bloco) e BC = 3
-//    (colunas do bloco). Os vetores de marcação ficam [N][N + 1].
-// 2. O número do bloco muda: (l / BL) * (N / BC) + c / BC. Confira no papel
-//    que ele vai de 0 a 5.
-// 3. Teste os dígitos de 1 a N em ordem crescente, na ordem de leitura das
-//    casas, para a contagem de chamadas bater.
-// 4. Resposta esperada: as 9 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

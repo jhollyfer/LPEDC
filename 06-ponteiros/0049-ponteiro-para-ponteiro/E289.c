@@ -14,11 +14,6 @@
 //   k k k
 //   Agora: K
 //
-// Dicas:
-// 1. Pela variável: turma; por p: *p; por pp: **pp.
-// 2. Para escrever: **pp = 'K';
-// 3. Resposta esperada: "k k k" e "Agora: K".
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

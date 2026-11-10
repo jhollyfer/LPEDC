@@ -15,12 +15,6 @@
 //   [ 800 900 1400 1630 ]
 //   [ 800 900 1100 1400 1630 ]
 //
-// Dicas:
-// 1. Se o laço parar na sentinela, p->ant é o último: inserir depois dele é
-//    inserir no fim. Se parar no primeiro, p->ant é a sentinela.
-// 2. A condição do while tem duas partes: p != &L->nil e p->chave < h.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

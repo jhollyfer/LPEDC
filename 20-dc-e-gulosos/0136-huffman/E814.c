@@ -23,14 +23,6 @@
 // O heap está com o sentido trocado. Conserte poe e tira para virar um
 // heap de mínimo. Para conferir, mostre o vetor v depois de cada poe.
 //
-// Dicas:
-// 1. São três comparações para inverter: a da subida, a da escolha do
-//    filho e a da parada da descida.
-// 2. Heap de mínimo: sobe enquanto for MENOR que o pai; desce trocando com o
-//    MENOR filho; para quando for menor ou igual ao menor filho.
-// 3. Resposta esperada: v[i] < v[(i - 1) / 2] na subida; v[f + 1] < v[f] na
-//    escolha; v[i] <= v[f] na parada. Consertado, mostra a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

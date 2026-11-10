@@ -15,14 +15,6 @@
 //   mais longa: Tempo Perdido (5:02)
 //   Jorge Ben: 2 músicas, 6:11
 //
-// Dicas:
-// 1. A assinatura é fixa: void acha_longa(const Musica *m, void *extra).
-// 2. Dentro dela: const Musica **maior = extra; e compare com *maior (que
-//    começa NULL).
-// 3. Para o artista: typedef struct { const char *nome; int quantas; int
-//    segundos; } Filtro; e no callback, Filtro *f = extra; e strcmp.
-// 4. Resposta esperada: a saída acima (182 + 189 = 371 s = 6:11).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

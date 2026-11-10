@@ -10,7 +10,7 @@ int main(void) {
     int peso;
 
     for (int pessoa = 1; pessoa <= 8; pessoa++) {
-        printf("Peso da pessoa %d: ", pessoa);
+        printf("Peso da pessoa %d:\n", pessoa);
         if (scanf("%d", &peso) != 1) {
             break;
         }

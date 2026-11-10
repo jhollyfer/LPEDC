@@ -6,7 +6,6 @@
 
 int main(void) {
     double a, b, c;
-    printf("Coeficientes a b c: ");
     if (scanf("%lf %lf %lf", &a, &b, &c) != 3) {
         printf("Entrada inválida\n");
         return 1;

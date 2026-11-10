@@ -20,14 +20,6 @@
 //   Davi: cava poço (R$ 7 mil)
 //   Total: R$ 17 mil (2 poços)
 //
-// Dicas:
-// 1. Monte uma matriz custo[V][V] com V = 5: os canos entre as casas
-//    (índices 1 a 4) e custo[0][c] = custo[c][0] = poço da casa c.
-// 2. No fim, quem tem pai[c] == 0 cavou poço; os outros receberam cano de
-//    pai[c].
-// 3. Resposta esperada: a saída acima. O Davi fica com o próprio poço
-//    (7), mais barato que qualquer cano até ele (9 ou 10).
-//
 // Escreva sua resposta abaixo:
 
 #include <limits.h>

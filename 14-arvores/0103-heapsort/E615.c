@@ -13,16 +13,6 @@
 //   Descendo os pais: [91 52 73 40 18 25 66], 2 trocas
 //   Os dois são heaps? sim
 //
-// Dicas:
-// 1. Por inserções: para k de 1 até n - 1, faça v[k] subir enquanto for
-//    maior que v[(k - 1) / 2]. A parte v[0..k-1] já é heap.
-// 2. Some 1 no contador a cada troca (passe um int * para as funções). Em
-//    eh_heap, basta conferir v[i] <= v[(i - 1) / 2] para todo i >= 1.
-// 3. Resposta esperada: a saída acima. Os dois são heaps válidos: a regra
-//    só exige pai >= filhos, e existem vários vetores que a respeitam. O
-//    método dos pais faz menos trabalho porque metade dos elementos (as
-//    folhas) nem se mexe; em geral ele é O(n) e o das inserções, O(n log n).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -7,10 +7,7 @@
 
 int main(void) {
     int hora = 0, minuto = 0, espera = 0;
-
-    printf("Agora (hh:mm): ");
     scanf("%d:%d", &hora, &minuto);
-    printf("Espera (min): ");
     scanf("%d", &espera);
 
     int total = hora * 60 + minuto + espera;   // minutos desde a meia-noite de hoje

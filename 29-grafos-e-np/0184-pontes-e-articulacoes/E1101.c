@@ -12,14 +12,6 @@
 //   Cortar Aleixo - Flores isola 4 bairro(s)
 //   Bairros alcançados: 7
 //
-// Dicas:
-// 1. Cada chamada começa com tamanho = 1 (o próprio u) e soma o valor
-//    devolvido por cada dfs(v, u) da árvore. Arestas de volta não somam.
-// 2. Quando low[v] > tin[u], a subárvore de v é exatamente o pedaço que
-//    perde a ligação: o tamanho dela é o número procurado.
-// 3. Resposta esperada: a saída acima (Flores, Cidade Nova, Tarumã e Ponta
-//    Negra ficam do outro lado do cabo Aleixo - Flores).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

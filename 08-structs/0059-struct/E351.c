@@ -14,13 +14,6 @@
 //   Árvore em (4.0, 3.0): dentro
 //   Árvore em (11.0, 2.0): fora
 //
-// Dicas:
-// 1. Uma função recebe uma struct como qualquer outro parâmetro:
-//    double area(struct retangulo r). Ela recebe uma cópia.
-// 2. Acesso encadeado: r.inf_esq.x, r.sup_dir.y.
-// 3. Dentro: x entre os dois x E y entre os dois y (use bool, de stdbool.h).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

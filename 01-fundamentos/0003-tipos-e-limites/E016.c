@@ -2,29 +2,18 @@
 // Exercício E016 · ★★☆
 //
 // De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
-// 13! (13 fatorial = 1 * 2 * ... * 13). O programa abaixo parte de 12! e
-// multiplica por 13. Ele compila sem aviso, mas está errado: rode e leia a
-// mensagem "runtime error" que aparece. Conserte o código e rode de novo
-// até sair a saída esperada, sem nenhum runtime error.
+// 13! (13 fatorial = 1 * 2 * ... * 13). Escreva um programa que guarde
+// 12! = 479001600 numa variável, multiplique por 13 e mostre o resultado.
+// O resultado passa do limite do int, então escolha o tipo que comporta.
 //
-//   Saída esperada (depois de consertar):
+//   Saída esperada:
 //   13! = 6227020800 maneiras
 //
-// Dicas:
-// 1. Quanto vale INT_MAX? E 6227020800?
-// 2. O detector de comportamento indefinido do rodar pegou um estouro de
-//    int, que é um tipo com sinal.
-// 3. Resposta esperada: 13! não cabe em int (máximo 2147483647): "signed
-//    integer overflow". Sem o detector, o programa mostraria um número
-//    errado (1932053504). Conserto: long long fatorial e %lld (ou int64_t).
-//
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
 int main(void) {
-    int fatorial = 479001600; // 12!
-    fatorial = fatorial * 13;
-    printf("13! = %d maneiras\n", fatorial);
+
     return 0;
 }

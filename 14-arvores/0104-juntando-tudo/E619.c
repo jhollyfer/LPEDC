@@ -9,12 +9,6 @@
 //   Ganham brinde: Eva Ana Carla Gil
 //   Total: 4
 //
-// Dicas:
-// 1. Os dois são percursos da árvore inteira: o critério (treinos) não é a
-//    chave, então não dá para podar nada.
-// 2. mostra_brinde é uma em ordem com um if antes do printf.
-// 3. Resposta esperada: Eva (20), Ana (12), Carla (15) e Gil (11). Total: 4.
-//
 // Escreva sua resposta abaixo (complete as duas funções):
 
 #include <stdio.h>

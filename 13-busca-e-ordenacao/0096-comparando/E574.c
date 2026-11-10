@@ -14,14 +14,6 @@
 //   1000000000
 //   2000000000
 //
-// Dicas:
-// 1. Quanto é 2000000000 - (-1500000000)? Cabe num int (assunto 0003)?
-// 2. A compara não precisa devolver a diferença, só o SINAL certo.
-// 3. (x > y) - (x < y) vale 1, 0 ou -1 e nunca estoura.
-// 4. Resposta esperada: x - y dá overflow com valores grandes de sinais
-//    opostos; o resultado vira negativo e a compara diz que 2000000000 vem
-//    antes de -1500000000. Conserto: return (x > y) - (x < y);
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

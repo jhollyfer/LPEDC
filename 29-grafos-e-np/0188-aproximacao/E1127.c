@@ -16,13 +16,6 @@
 //   Ótimo (força bruta): 30 quarteirões
 //   Garantia: rota <= 2 x árvore = 42
 //
-// Dicas:
-// 1. Os filhos de u são os v com pai[v] == u (e v != u). A recursão
-//    preordem(v) cuida dos netos.
-// 2. No custo, o último trecho é d[r[N - 1]][r[0]]: use (i + 1) % N.
-// 3. Resposta esperada: a saída acima. 34 fica entre o ótimo (30) e a
-//    garantia (42): 13% acima do ótimo.
-//
 // Escreva sua resposta abaixo (complete as duas funções):
 
 #include <stdbool.h>

@@ -14,16 +14,6 @@
 //   1/2: 7997 ponteiros, 21.9 nós olhados por busca
 //   1/4: 5410 ponteiros, 21.6 nós olhados por busca
 //
-// Dicas:
-// 1. lados = 2 é a moeda de sempre (1/2); lados = 4 sobe com 1/4. Use o
-//    proximo() pronto: os bits de baixo desse tipo de gerador são ruins,
-//    por isso o >> 16.
-// 2. Ponteiros em uso = soma dos andares de todos os nós. A média é o total
-//    de passos (de skip_busca) dividido por 4000.0.
-// 3. Resposta esperada: a saída acima. Com 1/4, a skip list usa um terço a
-//    menos de ponteiros e a busca custa praticamente o mesmo: há menos
-//    andares, mas anda-se mais em cada um.
-//
 // Escreva sua resposta abaixo (complete as duas funções):
 
 #include <stdio.h>

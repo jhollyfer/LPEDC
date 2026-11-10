@@ -17,13 +17,6 @@
 //   insere 27: caso 1: 0 | caso 2: 1 | caso 3: 1 | pré 20 10* 5 1* 15 27 25* 30*
 //   rotações no total: 3
 //
-// Dicas:
-// 1. Guarde os três contadores numa variável antes do vp_insere e subtraia
-//    depois.
-// 2. Antes de rodar, desenhe a inserção do 27: o pai (25) é vermelho e o
-//    tio (nil, à direita do 30) é preto. O 27 forma um triângulo.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -10,11 +10,6 @@
 //   pelo laço:    R$ 66795
 //   pela fórmula: R$ 66795
 //
-// Dicas:
-// 1. O laço vai de dia = 1 até dia <= 365, somando dia ao cofre.
-// 2. A soma de 1 até n é n(n+1)/2 (de 1 até n, não de 0 até n-1).
-// 3. Resposta esperada: R$ 66795 nas duas linhas.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -275,41 +275,8 @@ Quarto: 9.00 m2
 Total: 23.00 m2
 ```
 
-**Dicas:**
-
-1. Escreva o protótipo antes do main e a definição depois, como no texto.
-2. Dá para somar as duas chamadas direto: area_comodo(4.0, 3.5) + area_comodo(3.0, 3.0).
-3. Resposta esperada: sala 14.00, quarto 9.00, total 23.00.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0028-funcoes/E163.c -o ~/LPEDC/04-funcoes/0028-funcoes/E163 && ~/LPEDC/04-funcoes/0028-funcoes/E163
-```
-
-**Exercício E164** · ★☆☆
-
-O cronômetro da corrida de rua mostra o tempo em horas, minutos e segundos,
-mas o ranking ordena por segundos. O main do arquivo já tem as três
-chamadas de "total_segundos", comentadas para o esqueleto compilar.
-Complete o programa: escreva o protótipo (antes do main) e a definição
-(depois do main) e só então tire as barras das três chamadas.
-
-
-```text
-Saída esperada:
-Ana: 5415 s
-Bia: 3600 s
-Caio: 4999 s
-```
-
-**Dicas:**
-
-1. Pelo uso, a função recebe três int e devolve um int.
-2. Uma hora tem 3600 segundos; um minuto, 60.
-3. Resposta esperada: int total_segundos(int h, int m, int s) devolvendo
-   h * 3600 + m * 60 + s. Ana 5415, Bia 3600, Caio 4999.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/E164.c -o ~/LPEDC/04-funcoes/0028-funcoes/E164 && ~/LPEDC/04-funcoes/0028-funcoes/E164
 ```
 
 **Exercício E165** · ★★☆
@@ -324,13 +291,6 @@ Saída esperada:
 2000 2004 2008 2012 2016 2020 2024 2028
 Bissextos: 8
 ```
-
-**Dicas:**
-
-1. A regra cabe num return só: return (ano % 4 == 0 && ano % 100 != 0) || ano % 400 == 0;
-2. No main, um for de 2000 a 2030 com um if (eh_bissexto(ano)) e um contador.
-3. Resposta esperada: 8 anos. 2000 entra (divisível por 400); 1900, se
-   estivesse no intervalo, não entraria.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0028-funcoes/E165.c -o ~/LPEDC/04-funcoes/0028-funcoes/E165 && ~/LPEDC/04-funcoes/0028-funcoes/E165
@@ -351,14 +311,6 @@ Carro 2 (3.2 h): R$ 9.00
 Carro 3 (12.0 h): R$ 20.00
 Total do dia: R$ 34.00
 ```
-
-**Dicas:**
-
-1. "Hora ou fração" é arredondar para cima: ceil(horas - 2) dá as horas extras.
-2. Use dois return: um para até 2 horas e outro para o resto. No resto,
-   se a conta passar de 20, devolva 20.
-3. Resposta esperada: 3.2 h são 2 h + 1.2 h extra, que viram 2 horas
-   cobradas: 5 + 4 = 9. Com 12 h a conta daria 25, mas o teto é 20. Total 34.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0028-funcoes/E166.c -o ~/LPEDC/04-funcoes/0028-funcoes/E166 -lm && ~/LPEDC/04-funcoes/0028-funcoes/E166
@@ -383,55 +335,8 @@ Saída esperada:
 ajusta(dobro(7)) = 4
 ```
 
-**Dicas:**
-
-1. Dentro de passos, um while (n != 1) com n = ajusta(n), um printf e um
-   contador. O parâmetro n é uma cópia: pode mudar à vontade.
-2. O main mostra "7: ", chama passos(7) e depois mostra "(%d passos)" com o
-   retorno. Guarde o retorno numa variável antes do printf, para os números
-   do caminho saírem antes do total.
-3. Em dobro, o printf depois do return
-   nunca roda: o return encerra a função na hora.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0028-funcoes/E167.c -o ~/LPEDC/04-funcoes/0028-funcoes/E167 && ~/LPEDC/04-funcoes/0028-funcoes/E167
-```
-
-**Exercício E168** · ★★★
-
-Um número é perfeito quando é igual à soma dos seus divisores menores que
-ele: 6 = 1 + 2 + 3. Escreva duas funções que trabalham juntas:
-
-
-```text
-int soma_divisores(int n)   soma os divisores de n menores que n
-bool eh_perfeito(int n)     usa soma_divisores para responder
-```
-
-
-Use-as para mostrar todos os números perfeitos de 2 a 10000 e, para cada
-um, a soma que prova isso.
-
-
-```text
-Saída esperada:
-6 = soma dos divisores 6
-28 = soma dos divisores 28
-496 = soma dos divisores 496
-8128 = soma dos divisores 8128
-```
-
-**Dicas:**
-
-1. soma_divisores testa d de 1 até n / 2: se n % d == 0, soma d.
-2. eh_perfeito cabe numa linha: return soma_divisores(n) == n;
-3. Resposta esperada: 6, 28, 496 e 8128. São tão raros que o próximo é
-   33550336. Desafio extra: teste d só até a raiz de n (d * d <= n),
-   somando d e n / d de uma vez, e conte numa variável quantas vezes o %
-   roda em cada versão para n = 8128 (4064 contra 90).
-
-```bash
-gcc ~/LPEDC/04-funcoes/0028-funcoes/E168.c -o ~/LPEDC/04-funcoes/0028-funcoes/E168 && ~/LPEDC/04-funcoes/0028-funcoes/E168
 ```
 
 ---
@@ -652,63 +557,21 @@ dentro: 300
 main: 300
 ```
 
-**Dicas:**
-
-1. Dentro da função: pontos = pontos * 2; printf(...); return pontos;
-2. O "pontos" da função e o "pontos" do main são duas variáveis: mudar uma
-   não muda a outra.
-3. Na primeira chamada, o 300 volta pelo
-   return e é jogado fora; só na segunda ele chega ao main.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0029-parametros/E169.c -o ~/LPEDC/04-funcoes/0029-parametros/E169 && ~/LPEDC/04-funcoes/0029-parametros/E169
 ```
 
-**Exercício E170** · ★☆☆
+**Exercício E171** · ★★☆
 
-Escreva "void repetir(char simbolo, int vezes)", que mostra o símbolo
-"vezes" vezes e pula a linha. Use-a para montar o cupom da padaria abaixo.
-O main só pode chamar repetir e printf.
+Escreva as funções "int menor(int a, int b)" e "int maior(int a, int b)",
+que devolvem o valor (sem ponteiros). No main, com a = 9 e b = 6, mostre as
+duas notas em ordem crescente usando as duas funções no printf.
 
 
 ```text
 Saída esperada:
-====================
-PADARIA PÃO QUENTE
---------------------
-5 pães      R$ 4.50
-1 leite     R$ 5.20
---------------------
-Total       R$ 9.70
-====================
+Em ordem: 6 e 9
 ```
-
-**Dicas:**
-
-1. Dentro da função, um for de 1 até vezes com printf("%c", simbolo).
-2. A função é void: não tem return com valor.
-3. Resposta esperada: repetir('=', 20) na primeira e na última linha,
-   repetir('-', 20) nas linhas do meio.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/E170.c -o ~/LPEDC/04-funcoes/0029-parametros/E170 && ~/LPEDC/04-funcoes/0029-parametros/E170
-```
-
-**Exercício E171** · ★★☆
-
-O programa abaixo deveria mostrar as duas notas em ordem crescente, mas
-mostra "Em ordem: 9 e 6": a troca dentro de ordenar não chega ao main.
-Conserte e rode até aparecer "Em ordem: 6 e 9". Você ainda não pode usar
-ponteiros: troque "ordenar" por duas funções que devolvem valor, "menor" e
-"maior", e use as duas no printf.
-
-**Dicas:**
-
-1. Uma função em C devolve um valor só, pelo return. A troca dentro de
-   ordenar acontece nas cópias.
-2. printf("Em ordem: %d e %d\n", menor(a, b), maior(a, b));
-3. Resposta esperada: "Em ordem: 6 e 9". A troca de verdade, com a função
-   mexendo nas variáveis do main, precisa de ponteiros (assunto 0046).
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0029-parametros/E171.c -o ~/LPEDC/04-funcoes/0029-parametros/E171 && ~/LPEDC/04-funcoes/0029-parametros/E171
@@ -730,56 +593,8 @@ Saída esperada:
 No main, capital continua R$ 1000.00
 ```
 
-**Dicas:**
-
-1. O parâmetro é uma variável local como outra qualquer: pode mudar à vontade.
-2. Um for de 1 até meses, multiplicando, e no fim return capital.
-3. Resposta esperada: 1126.83 e 1269.73; o capital do main continua 1000.00,
-   porque a função mexeu só na cópia.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0029-parametros/E172.c -o ~/LPEDC/04-funcoes/0029-parametros/E172 && ~/LPEDC/04-funcoes/0029-parametros/E172
-```
-
-**Exercício E173** · ★★★
-
-O boletim abaixo calcula a média de duas notas inteiras, mas mostra
-"media(7, 8) = 7.0". Cada argumento é convertido para o tipo do parâmetro,
-e o valor do return é convertido para o tipo da função: o problema está
-numa dessas conversões. Rode e veja.
-
-Depois:
-
-```text
-1. conserte media sem mudar os tipos dos parâmetros (continuam int);
-2. escreva "int arredondar(double x)", que arredonda para o inteiro mais
-   próximo (x >= 0), sem math.h, e tire as barras das duas linhas
-   comentadas do main.
-```
-
-A linha de metade(7.9) não muda: ela mostra outra conversão acontecendo.
-
-
-```text
-Saída esperada:
-metade(7.9) = 3
-media(7, 8) = 7.5
-media(9, 10) = 9.5
-arredondar(7.5) = 8
-arredondar(media(6, 7)) = 7
-```
-
-**Dicas:**
-
-1. Em media, a e b são int: (a + b) / 2 é divisão inteira, e só depois o
-   resultado vira double. Basta um dos lados da divisão ser double: 2.0.
-2. arredondar: some 0.5 e deixe a conversão para int cortar a parte
-   decimal: return x + 0.5; (o return converte para int sozinho).
-3. 7.9 entra num parâmetro int e vira 7
-   antes da conta: 7 / 2 = 3. media(6, 7) = 6.5, e 6.5 + 0.5 = 7.0 vira 7.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0029-parametros/E173.c -o ~/LPEDC/04-funcoes/0029-parametros/E173 -lm && ~/LPEDC/04-funcoes/0029-parametros/E173
 ```
 
 **Exercício E174** · ★★★
@@ -805,14 +620,6 @@ inverter(12345) = 54321
 No main, numero continua 12345
 Capicuas de 100 a 999: 90
 ```
-
-**Dicas:**
-
-1. Para inverter: enquanto n > 0, invertido = invertido * 10 + n % 10 e
-   n = n / 10.
-2. eh_capicua cabe numa linha: return inverter(n) == n;
-3. Resposta esperada: 54321, 12345 e 90 capicuas (9 escolhas para o primeiro
-   dígito, que também é o último, vezes 10 para o do meio).
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0029-parametros/E174.c -o ~/LPEDC/04-funcoes/0029-parametros/E174 && ~/LPEDC/04-funcoes/0029-parametros/E174
@@ -1045,66 +852,21 @@ extrato: 130
 compra de hoje: 30
 ```
 
-**Dicas:**
-
-1. Dentro de extrato e de somar_na_global só existe a global: as funções
-   não enxergam nada do main.
-2. No main, depois de "int pontos = 30;", o nome pontos é a local: ela
-   esconde a global daí para baixo.
-3. somar_na_global recebe uma cópia do 30
-   e soma na global; a local do main nem fica sabendo.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0030-escopo/E175.c -o ~/LPEDC/04-funcoes/0030-escopo/E175 && ~/LPEDC/04-funcoes/0030-escopo/E175
 ```
 
-**Exercício E176** · ★☆☆
+**Exercício E177** · ★★☆
 
-O site da sua loja quer contar as visitas. Escreva "int registrar_visita(void)"
-que soma 1 a um contador static e devolve o número da visita. Chame 4 vezes
-num for, mostrando "Visita nº ...".
-
-Para ver a diferença, escreva também "int registrar_sem_static(void)",
-igual à primeira mas SEM o static, chame 4 vezes noutro for e mostre os
-quatro retornos numa linha só.
+Escreva "double preco_item(int i)", que devolve o preço do item i da compra
+(1: 12.50, 2: 8.00, 3: 30.00, 4: 4.75). No main, use um for de 1 a 4 para
+somar os quatro itens numa variável total e mostre o total depois do laço.
 
 
 ```text
 Saída esperada:
-Visita nº 1
-Visita nº 2
-Visita nº 3
-Visita nº 4
-Sem static: 1 1 1 1
+Total: R$ 55.25
 ```
-
-**Dicas:**
-
-1. static int visitas = 0; dentro da primeira função; int visitas = 0; na
-   segunda.
-2. Sem static, a variável nasce com 0 em toda chamada e morre no return.
-3. A static guarda o valor entre as
-   chamadas; a local recomeça sempre.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/E176.c -o ~/LPEDC/04-funcoes/0030-escopo/E176 && ~/LPEDC/04-funcoes/0030-escopo/E176
-```
-
-**Exercício E177** · ★★☆
-
-Este programa deveria somar os quatro itens da compra (R$ 12.50, R$ 8.00,
-R$ 30.00 e R$ 4.75) e mostrar "Total: R$ 55.25". Ele compila sem aviso, mas
-mostra "Total: R$ 4.75". O erro é de escopo e tempo de vida: descubra
-qual variável nasce no lugar errado, conserte e rode até aparecer o total
-certo.
-
-**Dicas:**
-
-1. Em que momento a variável total nasce? Quantas vezes?
-2. Uma variável declarada dentro do corpo do for é criada de novo a cada volta.
-3. Resposta esperada: total é local do corpo do for: nasce com 0 a cada volta
-   e só guarda o último item. Declare "double total = 0;" antes do for e
-   mostre depois do laço: Total: R$ 55.25.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0030-escopo/E177.c -o ~/LPEDC/04-funcoes/0030-escopo/E177 && ~/LPEDC/04-funcoes/0030-escopo/E177
@@ -1112,15 +874,11 @@ gcc ~/LPEDC/04-funcoes/0030-escopo/E177.c -o ~/LPEDC/04-funcoes/0030-escopo/E177
 
 **Exercício E178** · ★★☆
 
-O vale-refeição abaixo foi escrito com uma variável global, e a função que
-deveria só calcular um preço cobra uma "taxa escondida" de R$ 1.00 na
-global. Os gastos são R$ 45.00 e R$ 32.50, então o certo seria
-300 - 45 - 1 - 32.50 - 1 = R$ 220.50. Rode: aqui ele mostra R$ 222.50.
-
-Refatore: tire a global, troque as duas funções por
-"double gastar(double saldo, double valor)", que recebe o saldo e devolve o
-saldo novo, já com a taxa, e faça o main guardar o retorno numa local.
-Depois acrescente um terceiro gasto de R$ 18.00 e mostre o saldo de novo.
+O vale-refeição começa com R$ 300.00, guardados numa variável LOCAL do main
+(nada de global). Escreva "double gastar(double saldo, double valor)", que
+recebe o saldo e devolve o saldo novo, já descontada uma taxa de R$ 1.00 por
+gasto. O main guarda o retorno na própria variável: gasta R$ 45.00 e R$ 32.50
+e mostra o saldo; depois gasta R$ 18.00 e mostra o saldo de novo.
 
 
 ```text
@@ -1128,17 +886,6 @@ Saída esperada:
 Saldo: R$ 220.50
 Saldo: R$ 201.50
 ```
-
-**Dicas:**
-
-1. Em "saldo = saldo - preco_com_taxa(valor);" o compilador pode ler o
-   saldo ANTES de a função tirar a taxa, e depois grava por cima: a taxa
-   some. O C não define essa ordem. Global mudada no meio de uma conta é
-   bug esperando para acontecer.
-2. Na versão nova, gastar devolve saldo - valor - 1.00, e o main faz
-   saldo = gastar(saldo, 45.00). O saldo vira uma local do main.
-3. Resposta esperada: 220.50 e, depois do gasto de 18.00 (mais 1.00 de
-   taxa), 201.50. Sem global, a taxa fica visível na função que a cobra.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0030-escopo/E178.c -o ~/LPEDC/04-funcoes/0030-escopo/E178 && ~/LPEDC/04-funcoes/0030-escopo/E178
@@ -1178,65 +925,8 @@ main: 20
 soma dos b: 25
 ```
 
-**Dicas:**
-
-1. A local de a recomeça em 1 a cada chamada; a static de b continua de
-   onde parou; c mexe na global, porque é a única x que ela enxerga.
-2. O main não enxerga a static de b: o único jeito de saber o valor dela
-   lá fora é pelo return.
-3. A x do main nunca muda, e a global
-   termina valendo 40.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0030-escopo/E179.c -o ~/LPEDC/04-funcoes/0030-escopo/E179 && ~/LPEDC/04-funcoes/0030-escopo/E179
-```
-
-**Exercício E180** · ★★★
-
-Monte o seu próprio sorteador de dado, sem rand. Ele guarda um "estado" que
-muda a cada sorteio:
-
-
-```text
-estado = (estado * 1103515245 + 12345) % 2147483648
-dado   = estado / 65536 % 6 + 1
-```
-
-
-Escreva:
-
-
-```text
-void semear(unsigned int semente)   põe a semente no estado
-int jogar_dado(void)                avança o estado e devolve de 1 a 6
-```
-
-
-As duas funções precisam enxergar o MESMO estado, e o main não pode mexer
-nele direto. Por isso ele é uma global static (static fora de função). Use
-unsigned int para o estado.
-
-No main, semeie com 2026, jogue 10 vezes; semeie com 2026 de novo e jogue 10
-vezes. As duas linhas têm que ser iguais.
-
-
-```text
-Saída esperada:
-5 1 2 3 3 6 3 2 4 1
-5 1 2 3 3 6 3 2 4 1
-```
-
-**Dicas:**
-
-1. static unsigned int estado = 1; fora das funções, logo depois dos includes.
-2. Com unsigned int, a multiplicação que passa do limite dá a volta (não é
-   erro, ao contrário do int com sinal). A conta "% 2147483648" mantém o
-   estado em 31 bits.
-3. Resposta esperada: as duas linhas iguais, como acima. Mesma semente,
-   mesma sequência: é assim que o rand e o srand funcionam por dentro.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0030-escopo/E180.c -o ~/LPEDC/04-funcoes/0030-escopo/E180 && ~/LPEDC/04-funcoes/0030-escopo/E180
 ```
 
 ---
@@ -1491,54 +1181,8 @@ main chama imc
 IMC: 22.2
 ```
 
-**Dicas:**
-
-1. Os espaços do recuo podem ir direto no texto do printf.
-2. Em imc, guarde o retorno de quadrado numa local antes de dividir; assim
-   a linha "sai imc" pode mostrar o resultado.
-3. Na hora em que quadrado roda, a pilha
-   tem três quadros: main (esperando), imc (esperando) e quadrado no topo.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E181
-```
-
-**Exercício E182** · ★☆☆
-
-Escreva três funções void, a, b e c, que se chamam assim:
-
-
-```text
-c mostra "c (vez N)", em que N conta quantas vezes c já rodou;
-b mostra "b começa", chama c e mostra "b termina";
-a mostra "a começa", chama b, chama c e mostra "a termina".
-```
-
-
-O main chama a e depois c.
-
-
-```text
-Saída esperada:
-a começa
-b começa
-c (vez 1)
-b termina
-c (vez 2)
-a termina
-c (vez 3)
-```
-
-**Dicas:**
-
-1. Uma função só continua depois que a função que ela chamou retornou: por
-   isso "b termina" vem depois do c.
-2. O contador de c é uma static int vezes = 0; dentro dela (assunto 0030).
-3. O ponto mais fundo é main -> a -> b
-   -> c: quatro quadros na pilha ao mesmo tempo.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E182.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E182 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E182
 ```
 
 **Exercício E183** · ★★☆
@@ -1561,23 +1205,24 @@ entra finalizar_compra
 sai finalizar_compra
 ```
 
-**Dicas:**
-
-1. O main chama finalizar_compra(0).
-2. Cada função: recuo, "entra", chama a próxima com nivel + 1, recuo, "sai".
-   consultar_banco só imprime a linha dela.
-3. O recuo é a altura da pilha naquela hora.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E183
 ```
 
 **Exercício E184** · ★★☆
 
-Cada quadro tem as suas variáveis, mesmo com nomes iguais: aqui são três
-"n" e três "r". Estenda o programa abaixo com printfs que mostrem n e r em
-cada quadro: na entrada e na saída de dobro_mais_um e na saída de processa
-(o valor que ela devolve). Não mude nenhuma conta.
+Cada quadro da pilha tem as suas variáveis, mesmo com nomes iguais. Escreva:
+
+
+```text
+int dobro_mais_um(int n)  r = n * 2; n = r + 1; devolve n
+int processa(int n)       r = dobro_mais_um(n); devolve r + n
+main                      n = 5; r = processa(n)
+```
+
+
+Cada função mostra n e r como na saída (dobro_mais_um na entrada e na saída;
+processa antes e depois de devolver; main no fim).
 
 
 ```text
@@ -1589,68 +1234,8 @@ processa devolve 16
 main: n = 5, r = 16
 ```
 
-**Dicas:**
-
-1. Em dobro_mais_um, o printf de entrada vem antes de "int r"; o de saída,
-   logo antes do return.
-2. Em processa, guarde r + n numa local antes do return para poder
-   mostrar o valor.
-3. O n de dobro_mais_um vira 11, mas é o
-   n do quadro dela: o de processa continua 5, e o do main também.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E184
-```
-
-**Exercício E185** · ★★★
-
-Um programa de notas travou com divisão por zero. No gdb, o comando bt
-(backtrace) mostrou a pilha do topo (#0) para a base:
-
-
-```text
-#0  dividir (a=27, b=0) at notas.c:4
-#1  media (soma=27, quantidade=0) at notas.c:9
-#2  relatorio (turma=3, soma=27, quantidade=0) at notas.c:15
-#3  main () at notas.c:22
-```
-
-
-Reconstrua o programa com essa mesma pilha, mas sem o erro:
-
-
-```text
-double dividir(int a, int b)        devolve a / b com casas decimais e
-                                    mostra a pilha naquele momento
-double media(int soma, int quantidade)
-                                    devolve 0 quando quantidade é 0, sem
-                                    chamar dividir
-void relatorio(int turma, int soma, int quantidade)
-                                    mostra "Turma N: média X"
-```
-
-
-dividir também conta numa static quantas divisões já fez e mostra o número
-na linha da pilha. O main chama relatorio(3, 27, 3) e relatorio(3, 27, 0).
-
-
-```text
-Saída esperada:
-  [divisão 1, pilha: main -> relatorio -> media -> dividir]
-Turma 3: média 9.0
-Turma 3: média 0.0
-```
-
-**Dicas:**
-
-1. Com a e b int, use (double)a / b para não perder as casas decimais.
-2. dividir só faz a conta que pediram: quem conhece o sentido de
-   "quantidade" é media, então a conferência do zero fica lá.
-3. Na segunda chamada, media devolve 0
-   antes de chamar dividir, e por isso só aparece uma linha de pilha.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E185.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E185 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E185
 ```
 
 **Exercício E186** · ★★★
@@ -1670,15 +1255,6 @@ Saída esperada:
 Maior altura: 4
 Altura agora: 1
 ```
-
-**Dicas:**
-
-1. void entrar(void) { altura++; if (altura > maior_altura) maior_altura = altura; }
-2. O caminho mais fundo é main -> checkout -> pagamento -> antifraude.
-   entrar e sair também são funções, mas não se contam (é só um contador seu).
-3. Resposta esperada: maior altura 4, altura no fim 1 (só o main). Se
-   alguma função esquecer o sair(), a altura no fim passa de 1: é assim que
-   se caça esse tipo de erro.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186.c -o ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186 && ~/LPEDC/04-funcoes/0031-pilha-de-chamadas/E186
@@ -1879,39 +1455,8 @@ soma_ate(100) = 5050
 Cumprimentos com 12 duplas: 66
 ```
 
-**Dicas:**
-
-1. Caso base: soma_ate(0) vale 0 (ou soma_ate(1) vale 1).
-2. Caso recursivo: soma_ate(n) = n + soma_ate(n - 1).
-3. Resposta esperada: 10, 5050 e 66 (soma_ate(11)).
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0032-recursao/E187.c -o ~/LPEDC/04-funcoes/0032-recursao/E187 && ~/LPEDC/04-funcoes/0032-recursao/E187
-```
-
-**Exercício E188** · ★☆☆
-
-Complete a função potencia, recursiva, sem laço e sem pow. Hoje ela só
-devolve 0 para o programa compilar. Use: base elevado a 0 é 1; base elevado
-a e é base vezes base elevado a (e - 1).
-
-
-```text
-Saída esperada:
-2^10 = 1024
-3^4 = 81
-7^0 = 1
-```
-
-**Dicas:**
-
-1. O caso base é expoente == 0.
-2. O caso recursivo devolve base * potencia(base, expoente - 1).
-3. Resposta esperada: 1024, 81 e 1. Para 2^10, a pilha chega a 11 quadros
-   de potencia (expoentes de 10 até 0).
-
-```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/E188.c -o ~/LPEDC/04-funcoes/0032-recursao/E188 && ~/LPEDC/04-funcoes/0032-recursao/E188
 ```
 
 **Exercício E189** · ★★☆
@@ -1934,14 +1479,6 @@ ida 3
 volta 3
 ```
 
-**Dicas:**
-
-1. recuo: um for de 0 até nivel - 1 com printf("  ").
-2. eco: if (n == 0) { recuo; "fundo"; return; } depois recuo, "ida",
-   eco(n - 1, nivel + 1), recuo, "volta".
-3. O printf da volta só roda depois que a
-   chamada de dentro terminou, e cada quadro lembra o seu n e o seu nivel.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0032-recursao/E189.c -o ~/LPEDC/04-funcoes/0032-recursao/E189 && ~/LPEDC/04-funcoes/0032-recursao/E189
 ```
@@ -1960,38 +1497,8 @@ Saída esperada:
 2026 = 11111101010
 ```
 
-**Dicas:**
-
-1. Caso base: se n < 2, mostre n e pare.
-2. Caso recursivo: primeiro binario(n / 2), depois printf("%d", n % 2).
-3. Resposta esperada: 1101, 11111111 e 11111101010. Se você imprimir antes
-   de chamar, sai 1011 para o 13: os bits ao contrário.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0032-recursao/E190.c -o ~/LPEDC/04-funcoes/0032-recursao/E190 && ~/LPEDC/04-funcoes/0032-recursao/E190
-```
-
-**Exercício E191** · ★★★
-
-Esta função deveria somar os dígitos de um número (2026 -> 10), mas tem
-DOIS erros. O rodar mostra dois avisos, um para cada erro; leia os dois.
-Se você rodar mesmo assim, o programa morre com stack-overflow. Conserte
-os dois erros e rode até aparecer "2026 -> 10" e "99999 -> 45", sem
-nenhum aviso.
-
-**Dicas:**
-
-1. Leia o aviso "suggest parentheses around assignment": o que n = 0 faz
-   dentro do if? Quanto vale essa expressão?
-2. Leia "control reaches end of non-void function": a conta do caso
-   recursivo é feita e jogada fora. Quem chamou recebe o quê?
-3. Resposta esperada: (1) "n = 0" atribui 0 a n e vale 0 (falso): o caso
-   base nunca é aceito, e a chamada seguinte é soma_digitos(0) de novo, para
-   sempre. O certo é n == 0. (2) Falta o return na linha do caso recursivo.
-   Consertado: 2026 -> 10 e 99999 -> 45.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0032-recursao/E191.c -o ~/LPEDC/04-funcoes/0032-recursao/E191 && ~/LPEDC/04-funcoes/0032-recursao/E191
 ```
 
 **Exercício E192** · ★★★
@@ -2008,14 +1515,6 @@ Saída esperada:
 -5 x 6 = -30
 9 x 0 = 0
 ```
-
-**Dicas:**
-
-1. Para b > 0: a * b = a + a * (b - 1). Caso base: b == 0 dá 0.
-2. Com b negativo, b - 1 se afasta do zero e a recursão nunca para. Para
-   b < 0, ande para o outro lado: a * b = a * (b + 1) - a.
-3. Resposta esperada: 28, -21, -30 e 0. São três ramos: b == 0, b > 0 e
-   b < 0. Em todos, b chega mais perto de 0 a cada chamada.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0032-recursao/E192.c -o ~/LPEDC/04-funcoes/0032-recursao/E192 && ~/LPEDC/04-funcoes/0032-recursao/E192
@@ -2253,50 +1752,15 @@ mdc(84, 36) = 12 -> 84/36 = 7/3
 mdc(1000, 625) = 125 -> 1000/625 = 8/5
 ```
 
-**Dicas:**
-
-1. Caso base: b == 0 devolve a. Caso recursivo: mdc(b, a % b).
-2. Para simplificar, divida os dois números pelo MDC.
-3. Resposta esperada: 12 e 7/3; 125 e 8/5.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E193
-```
-
-**Exercício E194** · ★☆☆
-
-Quantos movimentos a Torre de Hanói precisa? Para mover n discos você move
-n - 1, depois 1, depois n - 1 de novo. Escreva
-"unsigned long long movimentos(int n)", recursiva, com movimentos(0) = 0, e
-mostre o resultado para 3, 10, 20 e 64 discos.
-
-
-```text
-Saída esperada:
-3 discos: 7
-10 discos: 1023
-20 discos: 1048575
-64 discos: 18446744073709551615
-```
-
-**Dicas:**
-
-1. movimentos(n) = 2 * movimentos(n - 1) + 1: é UMA chamada só, não duas.
-2. O resultado para 64 é 2^64 - 1: não cabe em long long (que vai até
-   2^63 - 1), por isso o unsigned. Mostre com %llu.
-3. Resposta esperada: 7, 1023, 1048575 e 18446744073709551615. A um
-   movimento por segundo, os 64 discos levariam uns 585 bilhões de anos.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E194.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E194 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E194
 ```
 
 **Exercício E195** · ★★☆
 
 Escreva "int fib_rapido(int n)" SEM recursão, com um laço e duas variáveis
 (anterior e atual). Mostre fib(10), fib(40) e fib(46), o maior que cabe num
-int. Depois coloque o fib recursivo do texto no mesmo arquivo, calcule
-fib(40) com ele e compare o tempo (no olho mesmo).
+int.
 
 
 ```text
@@ -2305,14 +1769,6 @@ fib(10) = 55
 fib(40) = 102334155
 fib(46) = 1836311903
 ```
-
-**Dicas:**
-
-1. Comece com anterior = 0 e atual = 1. A cada volta: proximo = anterior +
-   atual; anterior = atual; atual = proximo.
-2. Cuidado com fib(0): devolva 0 antes do laço.
-3. Resposta esperada: 55, 102334155 e 1836311903. O laço faz 46 somas; o
-   recursivo faz mais de 300 milhões de chamadas só para fib(40).
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E195
@@ -2343,16 +1799,6 @@ fib(2) calculado 5 vezes
 maior altura: 6
 ```
 
-**Dicas:**
-
-1. Ao entrar: chamadas++; altura++; if (altura > maior_altura)
-   maior_altura = altura; e if (n == 2) repetidas++.
-2. Para tirar 1 da altura antes de devolver, guarde o resultado numa
-   local: int r = fib(n - 1) + fib(n - 2); altura--; return r;
-3. O caminho mais fundo é fib(6),
-   fib(5), fib(4), fib(3), fib(2), fib(1): 6 quadros. A altura cresce
-   devagar (n), mas as chamadas crescem muito rápido.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E196
 ```
@@ -2382,40 +1828,8 @@ lenta:  2^60 = 1152921504606846976 (60 multiplicações)
 rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 ```
 
-**Dicas:**
-
-1. Caso base das duas: e == 0 devolve 1 (sem multiplicar).
-2. Na rápida, com e par, calcule metade = pot_rapida(x, e / 2) UMA vez e
-   devolva metade * metade. Chamar pot_rapida duas vezes joga fora o ganho.
-3. A lenta faz e multiplicações; a rápida,
-   no máximo umas 2 vezes log2(e). É o mesmo truque de "cortar ao meio" da
-   busca binária.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E197
-```
-
-**Exercício E198** · ★★★
-
-Esta Torre de Hanói compila sem aviso e faz 7 movimentos, mas está errada.
-Siga os movimentos com três pilhas de moedas (ou no papel) e ache o primeiro
-movimento ilegal (disco maior sobre um menor). Conserte e rode até a saída
-ficar igual à do A066.
-
-**Dicas:**
-
-1. No passo 1 da receita, os n - 1 discos vão para a estaca AUXILIAR.
-   Confira para onde a primeira chamada recursiva manda.
-2. Siga os dois primeiros movimentos: onde está o disco 1 quando o disco 2
-   se move? E no movimento 3, tem algum disco em B?
-3. Resposta esperada: a primeira chamada recursiva repete a ordem das
-   estacas, hanoi(n - 1, origem, destino, auxiliar), e manda os n - 1 discos
-   para o destino, justo onde o maior vai cair. Já no movimento 2 o disco 2
-   cai sobre o disco 1 (ilegal), e no 3 o programa tira um disco de B, que
-   está vazia. O certo é hanoi(n - 1, origem, auxiliar, destino).
-
-```bash
-gcc ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E198.c -o ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E198 && ~/LPEDC/04-funcoes/0033-recursao-na-pratica/E198
 ```
 
 ---
@@ -2636,45 +2050,8 @@ Pedido 2 (R$ 250.00, 5.0 kg, 100 km): frete R$ 0.00
 Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 ```
 
-**Dicas:**
-
-1. A taxa_por_km é static: quem usa o módulo nem sabe que ela existe.
-2. Para não repetir o printf três vezes, escreva no main.c uma função
-   void mostrar_pedido(int numero, double valor, double peso, int km).
-3. Resposta esperada: 10 + 3 + 6 = 19.00; 250 >= 200, frete grátis;
-   10 + 1.50 + 2.40 = 13.90.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0034-modulos/E199.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E199 && ~/LPEDC/04-funcoes/0034-modulos/E199
-```
-
-**Exercício E200** · ★☆☆
-
-Use o módulo conversao.h, que está nesta pasta, para mostrar uma tabela de
-temperaturas de 0 °C a 40 °C, de 10 em 10. Não escreva nenhuma fórmula: use
-celsius_para_fahrenheit. No fim, mostre quantas conversões o módulo contou.
-O rodar compila o conversao.c junto, sozinho.
-
-
-```text
-Saída esperada:
-0 °C = 32.0 °F
-10 °C = 50.0 °F
-20 °C = 68.0 °F
-30 °C = 86.0 °F
-40 °C = 104.0 °F
-Conversões: 5
-```
-
-**Dicas:**
-
-1. O include já está aí embaixo. Um for de 0 a 40, somando 10.
-2. conversoes_feitas() devolve o contador que mora escondido no conversao.c.
-3. Resposta esperada: a tabela acima e "Conversões: 5". À mão, o comando
-   seria: gcc -std=c17 -Wall -Wextra E200.c conversao.c -o tabela
-
-```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/E200.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E200 && ~/LPEDC/04-funcoes/0034-modulos/E200
 ```
 
 **Exercício E201** · ★★☆
@@ -2682,20 +2059,9 @@ gcc ~/LPEDC/04-funcoes/0034-modulos/E200.c ~/LPEDC/04-funcoes/0034-modulos/conve
 O módulo conversao (conversao.h e conversao.c, nesta pasta) converte km em
 milhas, mas não faz o contrário. Sem mexer no módulo, escreva NESTE arquivo
 "double milhas_para_km(double milhas)" (1 milha = 1.609344 km) e use as
-duas funções juntas:
-
-
-```text
-1. a maratona de 26.2 milhas em km;
-2. a volta completa: km_para_milhas(milhas_para_km(26.2)) tem que dar
-   26.2 de novo;
-3. a meia maratona de 13.1 milhas em km;
-4. quantas conversões o módulo contou.
-```
-
-
-Antes de terminar, tente escrever "contador++;" dentro da sua função, rode,
-leia o erro e apague a linha.
+duas funções juntas: a maratona de 26.2 milhas em km; a volta completa
+km_para_milhas(milhas_para_km(26.2)); a meia maratona de 13.1 milhas em km;
+e quantas conversões o módulo contou (conversoes_feitas).
 
 
 ```text
@@ -2706,36 +2072,23 @@ Meia: 13.1 milhas = 21.1 km
 Conversões do módulo: 1
 ```
 
-**Dicas:**
-
-1. O include do módulo já está aí embaixo; o rodar compila o conversao.c
-   junto, sozinho.
-2. O contador é static dentro do conversao.c: o seu arquivo não enxerga
-   esse nome ('contador' undeclared). Só as funções do módulo contam.
-3. O módulo contou 1: só a chamada de
-   km_para_milhas passa pelo contador; a sua função é de fora.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0034-modulos/E201.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E201 && ~/LPEDC/04-funcoes/0034-modulos/E201
 ```
 
 **Exercício E202** · ★★☆
 
-Este programa NÃO gera o executável, de propósito. Ele imita um módulo num
-arquivo só: o protótipo em cima (como se viesse de um desconto.h) e a
-definição embaixo (como se estivesse no desconto.c). Rode e leia a
-mensagem: quem reclama aqui é o ligador, não o compilador. Conserte e rode
-até aparecer "Tênis: R$ 239.92".
+Escreva, num arquivo só, um módulo imitado: o bloco "// desconto.h" com o
+protótipo de "double aplicar_desconto(double preco, double percentual)", o
+bloco "// main.c" com o main, que mostra o preço de um tênis de R$ 299.90 com
+20% de desconto, e o bloco "// desconto.c" com a definição da função
+(preco - preco * percentual / 100). O programa tem que compilar e ligar.
 
-**Dicas:**
 
-1. Procure "undefined reference" na mensagem.
-2. Compare letra por letra o nome do protótipo com o nome da definição.
-3. Resposta esperada: o ligador ("undefined reference to
-   aplicar_desconto"). O compilador confere cada chamada contra o protótipo,
-   e o protótipo existe, então ele confia e deixa o buraco. A definição se
-   chama aplica_desconto: é outra função, e ninguém definiu
-   aplicar_desconto. Acertando o nome: "Tênis: R$ 239.92".
+```text
+Saída esperada:
+Tênis: R$ 239.92
+```
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0034-modulos/E202.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E202 && ~/LPEDC/04-funcoes/0034-modulos/E202
@@ -2774,65 +2127,8 @@ Casa: 4 pontos, 3 gols
 Visitante: 4 pontos, 4 gols
 ```
 
-**Dicas:**
-
-1. Quatro globais static para o campeonato (pontos_casa, pontos_visitante,
-   gols_casa, gols_visitante), duas para a partida atual e uma para o
-   número da partida. Todas começam em 0.
-2. O bloco do placar.h tem o include guard e os quatro protótipos públicos;
-   o protótipo de anotar NÃO vai lá. Como o main vem antes do placar.c, os
-   protótipos do bloco de cima bastam para ele.
-3. Casa: vitória (3) + empate (1);
-   visitante: empate (1) + vitória (3).
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0034-modulos/E203.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E203 && ~/LPEDC/04-funcoes/0034-modulos/E203
-```
-
-**Exercício E204** · ★★★
-
-Escreva o módulo "cofrinho" num arquivo só, já organizado como se fosse
-virar cofrinho.h e cofrinho.c: um bloco de protótipos em cima (marcado
-"// cofrinho.h"), o main, e embaixo a implementação (marcada
-"// cofrinho.c"). A interface:
-
-
-```text
-void depositar(double valor);   ignora valores <= 0
-bool sacar(double valor);       só saca se tiver saldo; devolve se deu certo
-double saldo(void);
-int operacoes(void);            quantos depósitos e saques DERAM CERTO
-```
-
-
-O saldo e o contador ficam em globais static na parte do cofrinho.c. O main
-faz: deposita 50, deposita -10, saca 30, saca 100, deposita 25.
-
-
-```text
-Saída esperada:
-Saque de 30.00: ok
-Saque de 100.00: sem saldo
-Saldo: R$ 45.00
-Operações: 3
-```
-
-
-O bloco "// cofrinho.h" tem que estar pronto para virar arquivo: com o
-include guard COFRINHO_H em volta dos protótipos.
-
-**Dicas:**
-
-1. static double saldo_atual = 0; e static int contador = 0; no bloco de baixo.
-   Para usar os nomes no main, os protótipos de cima bastam.
-2. Cuidado: a função se chama saldo, então a variável precisa de outro nome.
-3. Resposta esperada: a saída acima (o depósito de -10 e o saque de 100 não
-   contam). No bloco do .h: #ifndef COFRINHO_H, #define COFRINHO_H, os
-   quatro protótipos e #endif. No bloco do .c: as duas variáveis static e
-   os corpos das funções.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0034-modulos/E204.c ~/LPEDC/04-funcoes/0034-modulos/conversao.c -o ~/LPEDC/04-funcoes/0034-modulos/E204 && ~/LPEDC/04-funcoes/0034-modulos/E204
 ```
 
 ---
@@ -3027,35 +2323,6 @@ gcc ~/LPEDC/04-funcoes/0035-preprocessador/A070.c -o ~/LPEDC/04-funcoes/0035-pre
 
 #### Exercícios
 
-**Exercício E205** · ★☆☆
-
-Rode o programa abaixo: a segunda linha mostra 16, mas 3 vezes o dobro de
-4 é 24. Conserte a macro DOBRO, sem mexer no main. Depois escreva a macro
-TRIPLO(x), já à prova de precedência, e tire as barras da última linha.
-
-
-```text
-Saída esperada:
-DOBRO(4) = 8
-3 * DOBRO(4) = 24
-METADE(10 + 4) = 7
-100 + TAXA * 2 = 120
-TRIPLO(2 + 1) = 9
-```
-
-**Dicas:**
-
-1. Escreva a troca de texto à mão: 3 * DOBRO(4) vira 3 * 4 + 4. A
-   multiplicação vem antes da soma.
-2. Parênteses em cada parâmetro e em volta de tudo, como em METADE.
-3. Resposta esperada: a saída acima, com #define DOBRO(x) ((x) + (x)) e
-   #define TRIPLO(x) ((x) * 3). Sem os parênteses no x, TRIPLO(2 + 1)
-   viraria 2 + 1 * 3 = 5.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/E205.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E205 && ~/LPEDC/04-funcoes/0035-preprocessador/E205
-```
-
 **Exercício E206** · ★☆☆
 
 Escreva três macros à prova de precedência e teste com os valores abaixo:
@@ -3079,40 +2346,22 @@ ENTRE(25, 10, 20) = 0
 100 / ABS(-5 * 2) = 10
 ```
 
-**Dicas:**
-
-1. Use o ternário: ((a) > (b) ? (a) : (b)).
-2. Parênteses em cada parâmetro e em volta de tudo. O último teste quebra se
-   faltar o par de fora.
-3. ABS(x) fica ((x) < 0 ? -(x) : (x)).
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0035-preprocessador/E206.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E206 && ~/LPEDC/04-funcoes/0035-preprocessador/E206
 ```
 
 **Exercício E207** · ★★☆
 
-O sistema da lanchonete tem dois erros, os dois nos #define. Um deles impede
-a compilação; o outro compila e dá a conta errada. Rode, leia o erro (que
-aponta para uma linha que parece certa), conserte os dois e rode até a
-saída ficar certa.
+Escreva o programa da lanchonete com duas macros: DESCONTO (0.10) e
+PRECO_COMBO (25 + 5, à prova de precedência). Com preco = 35.00, mostre o
+desconto (preco * DESCONTO) e o valor de dois combos (2.0 * PRECO_COMBO).
 
 
 ```text
-Saída certa:
+Saída esperada:
 Desconto: R$ 3.50
 Dois combos: R$ 60.00
 ```
-
-**Dicas:**
-
-1. O que vem depois do nome, no #define, é colado INTEIRO no lugar, inclusive
-   um ";" perdido.
-2. 2 * PRECO_COMBO vira 2 * 25 + 5.
-3. Resposta esperada: tirar o ";" de "#define DESCONTO 0.10;" (dentro do
-   printf ele vira "preco * 0.10;", e o compilador reclama de um ")"
-   esperado) e escrever "#define PRECO_COMBO (25 + 5)": sem os parênteses,
-   dois combos davam 55.00.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0035-preprocessador/E207.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E207 && ~/LPEDC/04-funcoes/0035-preprocessador/E207
@@ -3145,94 +2394,33 @@ Saída esperada sem MODO_TESTE:
 Total: R$ 1050.00
 ```
 
-**Dicas:**
-
-1. Parcela k: 250 * (1 + 0.02 * k).
-2. O printf do teste fica entre #ifdef MODO_TESTE e #endif, dentro do for.
-3. Resposta esperada: as duas saídas acima. Sem MODO_TESTE, o printf do teste
-   nem chega ao compilador: rode gcc -E e confira.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0035-preprocessador/E208.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E208 && ~/LPEDC/04-funcoes/0035-preprocessador/E208
 ```
 
 **Exercício E209** · ★★★
 
-A macro avalia o argumento cada vez que ele aparece. Rode o programa: nas
-linhas da macro, x anda duas vezes e pontos é chamada a mais.
-
-Conserte sem apagar a macro MAIOR:
-
-```text
-1. nas duas linhas marcadas "macro:", guarde cada argumento numa variável
-   ANTES de usar a macro, para elas mostrarem o mesmo que as da função;
-2. escreva "int maior3(int a, int b, int c)" usando a função maior e
-   acrescente a última linha da saída. A linha "macro aninhada" fica como
-   está, para comparar.
-```
-
+A macro avalia o argumento cada vez que ele aparece. Escreva a macro
+MAIOR(a, b), à prova de precedência, a função "int maior(int a, int b)", a
+função "int maior3(int a, int b, int c)" (usa maior) e "int pontos(int p)",
+que soma 1 na global chamadas e devolve p. No main, mostre (x = 5, y = 3):
+MAIOR(x++, y) e maior(x++, y); MAIOR e maior com pontos(40) e pontos(25);
+MAIOR aninhada e maior3 com pontos(7), pontos(19) e pontos(12). Cada linha
+mostra m e (x ou chamadas).
 
 
 ```text
 Saída esperada:
-macro:  m = 5, x = 6
+macro:  m = 6, x = 7
 função: m = 5, x = 6
-macro:  m = 40, chamadas = 2
+macro:  m = 40, chamadas = 3
 função: m = 40, chamadas = 2
 macro aninhada: m = 19, chamadas = 7
 maior3: m = 19, chamadas = 3
 ```
 
-**Dicas:**
-
-1. Expanda MAIOR(x++, y) à mão: ((x++) > (y) ? (x++) : (y)). Com a
-   comparação verdadeira, x++ roda duas vezes. Com int a = x++; antes,
-   a macro recebe só o nome a.
-2. Na função, cada argumento é avaliado uma vez, antes da chamada.
-   maior3 cabe numa linha: return maior(maior(a, b), c);
-3. Na macro aninhada, o MAIOR de dentro
-   é colado duas vezes no de fora: 3 + 1 + 3 = 7 chamadas de pontos.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0035-preprocessador/E209.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E209 && ~/LPEDC/04-funcoes/0035-preprocessador/E209
-```
-
-**Exercício E210** · ★★★
-
-Monte um mini-framework de testes em C. Escreva a macro CONFERIR(cond), que mostra
-"ok: <cond>" se a condição for verdadeira e "FALHOU: <cond> (linha N)" se
-for falsa, contando as falhas numa global. Use #cond para virar texto e
-__LINE__ para a linha. Teste a função "double com_desconto(double preco)",
-que dá 10% de desconto acima de R$ 100 (inclusive). No fim, mostre o número
-de falhas.
-
-Escreva os cinco testes abaixo, nesta ordem. O último está errado de
-propósito, para você ver a falha:
-
-
-```text
-Saída esperada (o número da linha depende do seu arquivo):
-ok: com_desconto(50) == 50
-ok: com_desconto(100) == 90
-ok: com_desconto(200) == 180
-ok: com_desconto(0) == 0
-FALHOU: com_desconto(150) == 150 (linha 42)
-Falhas: 1
-```
-
-**Dicas:**
-
-1. Uma macro de várias linhas termina cada linha com "\". Dá para escrever
-   numa linha só: #define CONFERIR(cond) if (cond) printf(...); else { ... }
-2. Aquele if solto dentro da macro quebra se alguém usar CONFERIR num
-   if/else sem chaves. O jeito profissional é embrulhar num
-   do { ... } while (0).
-3. Resposta esperada: 4 ok, 1 falha (com 150 o certo é 135). É o que o
-   assert.h faz: assert(cond) para o programa com o texto e a linha da
-   condição que falhou.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0035-preprocessador/E210.c -o ~/LPEDC/04-funcoes/0035-preprocessador/E210 && ~/LPEDC/04-funcoes/0035-preprocessador/E210
 ```
 
 ---
@@ -3390,7 +2578,7 @@ decisão "pagou o suficiente?". O troco, que parece um laço, é a recursão de
 <p align="center"><img src="04-funcoes/0036-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o caixa da lanchonete" width="672"></p>
 
 O exemplo A072 mostra a outra vantagem de dividir em funções: **testar cada
-peça sozinha**. Com a macro `CONFERIR` (a do exercício E210), ele confere o
+peça sozinha**. Com a macro `CONFERIR`, definida no próprio arquivo, ele confere o
 preço, o contador `static` e a contagem de notas sem digitar nada. Não precisa
 de biblioteca de testes: uma macro de dez linhas resolve.
 
@@ -3570,48 +2758,12 @@ gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/A072.c ~/LPEDC/04-funcoes/0036-juntand
 
 #### Exercícios
 
-**Exercício E211** · ★☆☆
-
-Escreva "int ler_inteiro_entre(int min, int max)", que pede um número e
-insiste até ele estar entre min e max. Se o scanf falhar (entrada acabou ou
-não é número), devolva min. Use-a para ler uma nota de 0 a 10 e uma
-quantidade de 1 a 5, e mostre as duas.
-
-
-```text
-Exemplo de uso:
-Valor entre 0 e 10: 15
-Valor entre 0 e 10: 8
-Valor entre 1 e 5: 0
-Valor entre 1 e 5: 3
-Nota 8, quantidade 3
-```
-
-
-Para testar sem digitar:
-
-```text
-printf '15\n8\n0\n3\n' | ~/LPEDC/rodar 04-funcoes/0036-juntando-tudo/E211.c
-```
-
-**Dicas:**
-
-1. do { printf(...); lidos = scanf("%d", &valor); if (lidos != 1) return min; }
-   while (valor < min || valor > max);
-2. A mensagem usa os parâmetros: printf("Valor entre %d e %d: ", min, max).
-3. Resposta esperada: com a entrada acima, "Nota 8, quantidade 3". A mesma
-   função serve para as duas leituras: é para isso que parâmetros existem.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E211.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E211 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E211
-```
-
 **Exercício E212** · ★☆☆
 
-Refatore o programa abaixo: a mesma conta e a mesma classificação aparecem
-três vezes. Crie "double imc(double peso, double altura)" e
-"void mostrar_imc(int pessoa, double peso, double altura)", e deixe o main
-com três chamadas. A saída não pode mudar.
+Escreva "double imc(double peso, double altura)" e "void mostrar_imc(int
+pessoa, double peso, double altura)", que mostra o IMC com 1 casa e a
+classificação (abaixo de 18.5, normal abaixo de 25, senão acima). O main só
+faz três chamadas: 70.0 kg e 1.75 m; 85.0 kg e 1.75 m; 52.0 kg e 1.72 m.
 
 
 ```text
@@ -3620,14 +2772,6 @@ Pessoa 1: IMC 22.9 (normal)
 Pessoa 2: IMC 27.8 (acima)
 Pessoa 3: IMC 17.6 (abaixo)
 ```
-
-**Dicas:**
-
-1. Copie um bloco, troque os números pelos parâmetros, e apague os outros dois.
-2. mostrar_imc chama imc. Quem decide "abaixo/normal/acima" pode ser uma
-   terceira função, se você quiser.
-3. Resposta esperada: a mesma saída, com o main de três linhas. Se a regra
-   mudar (o limite de 25 virar 24.9), agora você muda num lugar só.
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E212.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E212 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E212
@@ -3654,13 +2798,6 @@ Saída esperada:
 31/12/2024: dia 366 de 366
 29/02/2023: data inválida
 ```
-
-**Dicas:**
-
-1. dias_no_mes com switch: 4, 6, 9 e 11 têm 30; 2 tem 28 ou 29; o resto, 31.
-2. dia_do_ano: um for de 1 até mes - 1 somando dias_no_mes, mais o dia.
-   Para "data inválida", confira dia <= dias_no_mes(mes, ano) antes.
-3. Resposta esperada: 291, 61, 366 e inválida (2023 não é bissexto).
 
 ```bash
 gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E213.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E213 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E213
@@ -3696,14 +2833,6 @@ depois de altera: 5
 DOBRO(total + 1) = 12
 ```
 
-**Dicas:**
-
-1. Para os dois ids, guarde cada um numa variável e some depois: a ordem
-   em que o C avalia os dois lados de um + não é garantida.
-2. soma_ate(4) chama soma_ate 5 vezes (de 4 até 0). O parâmetro total de
-   altera esconde a global: o 99 vai para a cópia.
-3. DOBRO(5 + 1) = ((5 + 1) * 2) = 12.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E214.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E214 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E214
 ```
@@ -3732,56 +2861,8 @@ Saída esperada:
 10 na base 20: base inválida
 ```
 
-**Dicas:**
-
-1. char é número: '0' + 7 é '7', e 'A' + (valor - 10) dá as letras.
-2. em_base: se n < base, imprima digito(n); senão em_base(n / base, base) e
-   depois digito(n % base). Imprimir com %c.
-3. Confira o 7EA: 7 * 256 + 14 * 16 + 10
-   = 2026.
-
 ```bash
 gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E215.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E215 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E215
-```
-
-**Exercício E216** · ★★★
-
-O entregador sai da esquina (0, 0) e vai até (colunas, linhas) numa cidade em
-grade, andando só para a direita ou para baixo. Quantos caminhos diferentes
-existem? Para chegar a (c, l), o último passo veio de (c - 1, l) ou de
-(c, l - 1); quem está na borda (c == 0 ou l == 0) tem um caminho só.
-
-Escreva "long long caminhos(int c, int l)", recursiva, que também conta as
-próprias chamadas numa global. Para medir o desperdício, use uma segunda
-global que conta quantas vezes a mesma esquina (1, 1) é calculada. Escreva
-também "void mostrar(int n)", que zera as globais, resolve n x n e mostra a
-linha, com "confere" quando chamadas == 2 * caminhos - 1 (e "não confere"
-se não). Mostre para 2 x 2, 3 x 3, 5 x 5 e 12 x 12.
-
-
-```text
-Saída esperada:
-2 x 2: 6 caminhos, 11 chamadas (confere), esquina (1, 1): 2 vezes
-3 x 3: 20 caminhos, 39 chamadas (confere), esquina (1, 1): 6 vezes
-5 x 5: 252 caminhos, 503 chamadas (confere), esquina (1, 1): 70 vezes
-12 x 12: 2704156 caminhos, 5408311 chamadas (confere), esquina (1, 1): 705432 vezes
-```
-
-**Dicas:**
-
-1. Caso base: if (c == 0 || l == 0) return 1; antes dele, conte a chamada
-   e, se c == 1 && l == 1, conte a esquina.
-2. Cada chamada que não é borda gera duas. As folhas da árvore de chamadas
-   são as bordas, e cada folha devolve 1: o resultado é o número de folhas.
-   Uma árvore em que todo nó interno tem dois filhos tem (folhas - 1) nós
-   internos, então chamadas = 2 * caminhos - 1.
-3. A esquina (1, 1) é recalculada por
-   cada caminho que passa por ela, como fib(2) dentro do fib(6). Guardar as
-   respostas numa tabela (memoização) resolve, e isso pede vetores, o
-   assunto do próximo módulo.
-
-```bash
-gcc ~/LPEDC/04-funcoes/0036-juntando-tudo/E216.c ~/LPEDC/04-funcoes/0036-juntando-tudo/cardapio.c -o ~/LPEDC/04-funcoes/0036-juntando-tudo/E216 && ~/LPEDC/04-funcoes/0036-juntando-tudo/E216
 ```
 
 ---

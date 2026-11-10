@@ -13,15 +13,6 @@
 //   Saída esperada:
 //   0 -> 10 -> 25 -> 25 -> 40 -> 50 -> 75 -> 90 -> NULL
 //
-// Dicas:
-// 1. Comece por um nó-cabeça local (No cabeca;) e um ponteiro "fim" que
-//    aponta para ele. Assim o primeiro nó não é caso especial.
-// 2. Enquanto as duas tiverem nós: o menor dos dois inícios vai para
-//    fim->prox, e a lista de onde ele saiu anda.
-// 3. Quando uma acabar, pendure a outra inteira no fim: fim->prox = a ou b.
-// 4. Resposta esperada: a saída acima. Depois de intercalar, libere só a
-//    lista resultado: os nós de a e b agora são dela.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -23,15 +23,6 @@
 // (o AddressSanitizer do rodar acusa heap-buffer-overflow). Garanta que a
 // nova capacidade seja sempre maior que a antiga.
 //
-// Dicas:
-// 1. Calcule com long para não estourar: (int)((long)v->cap * num / den).
-// 2. Se a conta não passar de cap, use cap + 1.
-// 3. printf("%-6s %8d %10ld %8.2f %9d\n", ...) dá as colunas da saída.
-// 4. Resposta esperada: a tabela acima. O fator 1,5 copia o dobro (cada
-//    elemento é copiado, em média, umas 2 vezes), mas continua O(1)
-//    amortizado. A sobra parecida aqui é coincidência deste n: no pior
-//    caso, o x 2 deixa metade vazia; o x 1,5, só um terço.
-//
 // Escreva sua resposta abaixo (mude o programa):
 
 #include <stdio.h>

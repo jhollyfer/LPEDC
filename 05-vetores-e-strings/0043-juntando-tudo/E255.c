@@ -17,14 +17,6 @@
 //   Chute B: B A N A N A
 //   Venceu com 1 erro(s)!
 //
-// Dicas:
-// 1. Um vetor de bool revelada[6], tudo false no começo. Cada chute marca true
-//    nas posições onde secreta[i] == chute.
-// 2. Se o chute não marcou nenhuma posição, é erro.
-// 3. Para saber se venceu: todas as posições reveladas? Escreva uma função
-//    bool completa(const bool revelada[], int n).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

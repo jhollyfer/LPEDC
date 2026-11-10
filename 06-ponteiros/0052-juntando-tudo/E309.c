@@ -13,12 +13,6 @@
 //   Saída esperada:
 //   7 19 31
 //
-// Dicas:
-// 1. Compare a com b, depois a com c (agora a é o menor), depois b com c.
-// 2. Cada comparação que achar a ordem errada chama troca com os
-//    ponteiros que você já recebeu (sem &: eles já são endereços).
-// 3. Resposta esperada: 7 19 31, para qualquer ordem de entrada.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -17,15 +17,6 @@
 //   combinações: 6
 //   sequências:  26
 //
-// Dicas:
-// 1. As duas começam com w[0] = 1 e fazem w[v] += w[v - valor].
-// 2. A diferença é só a ordem dos laços. Combinações: valor do dinheiro por
-//    fora, total por dentro. Sequências: total por fora (w[v] = soma de
-//    w[v - valor] para cada valor <= v, "qual foi a última inserção?").
-// 3. Confira a) à mão: 5+2, 5+1+1, 2+2+2+1, 2+2+1+1+1, 2+1+1+1+1+1 e
-//    sete moedas de 1.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

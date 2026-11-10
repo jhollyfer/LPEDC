@@ -25,13 +25,6 @@
 //   travada + empurrão -> travada
 //   Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
 //
-// Dicas:
-// 1. Guarde os eventos num vetor: Evento seq[] = {BILHETE, EMPURRAO, ...};
-// 2. Conte olhando o par (estado atual, evento) antes de trocar de estado.
-// 3. Um switch dentro de outro (estado por fora, evento por dentro) deixa as
-//    4 regras bem visíveis.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

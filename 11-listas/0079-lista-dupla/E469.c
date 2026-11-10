@@ -11,12 +11,6 @@
 //   76 130 88
 //   últimos 3: 294 t
 //
-// Dicas:
-// 1. trem.fim é o último nó; p->ant anda uma casa para trás.
-// 2. Um for com contador: for (p = trem.fim; p != NULL && k < 3; p = p->ant).
-// 3. Resposta esperada: a saída acima. Numa lista simples, você teria que
-//    andar a lista inteira para achar os 3 últimos.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

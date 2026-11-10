@@ -12,14 +12,6 @@
 //   3^1000000 mod p = 64935414, profundidade 21
 //   3^1000000000 mod p = 235939645, profundidade 31
 //
-// Dicas:
-// 1. #define MOD 1000000007L. Depois de cada multiplicação, faça % MOD:
-//    meia * meia é menor que 10^18 e cabe num long de 8 bytes.
-// 2. O e cai pela metade a cada chamada: 10, 5, 2, 1, 0 são 5 frames.
-// 3. Profundidade floor(log2 e) + 2: Θ(log e) de pilha. Com a versão
-//    do E1003, 3^1000000000 empilharia 1 bilhão de frames.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

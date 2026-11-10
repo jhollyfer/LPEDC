@@ -11,12 +11,6 @@
 //   tarifa = 4.40, endereço 0x7f..., tamanho 4
 //   setor = X, endereço 0x7f..., tamanho 1
 //
-// Dicas:
-// 1. O endereço sai com &nome; o tamanho, com sizeof nome.
-// 2. Mostre o endereço com %p e o cast (void *); o tamanho, com %zu.
-// 3. Resposta esperada: os valores e os tamanhos acima (4, 4 e 1); os
-//    endereços aparecem em hexadecimal e mudam a cada vez que você roda.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

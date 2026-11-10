@@ -17,14 +17,6 @@
 //   Cabeçalho compacto: 27 bytes (o completo tem 1024)
 //   Frequências iguais
 //
-// Dicas:
-// 1. fwrite(&k, sizeof k, 1, f) grava os 2 bytes do uint16_t; para o
-//    símbolo, use um unsigned char e fwrite de 1 byte.
-// 2. Na leitura, confira o retorno de cada fread (tem que ser 1).
-// 3. Resposta esperada: a saída acima: 2 + 5 × (1 + 4) = 27 bytes. Com os
-//    256 símbolos presentes, o compacto daria 2 + 256 × 5 = 1282 bytes, mais
-//    que o completo: um formato bom escolhe o menor dos dois.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

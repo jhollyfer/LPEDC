@@ -16,16 +16,6 @@
 //   PASTEL: Horspool  9 alinhamentos, Sunday  8 (achou 3 e 3)
 //   FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
 //
-// Dicas:
-// 1. Uma letra fora do padrão deixa pular m + 1: o padrão passa inteiro por
-//    cima dela.
-// 2. E quando i = n - m? Então t[i + m] é o '\0' do fim da string, que existe
-//    e pode ser lido: ele não está no padrão, o salto é m + 1 e o laço acaba.
-//    Sem esse '\0' (um texto lido para um vetor sem terminador), seria
-//    leitura fora do vetor.
-// 3. Use printf("%-6s: ...") para alinhar os nomes.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (acrescente a sunday e mude o main):
 
 #include <stdio.h>

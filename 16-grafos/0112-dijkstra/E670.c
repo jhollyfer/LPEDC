@@ -21,13 +21,6 @@
 //   Leste: 4 min
 //   Oeste: 5 min
 //
-// Dicas:
-// 1. Transpor a matriz é trocar linha por coluna: inv[j][i] = rua[i][j].
-// 2. Cuidado com a armadilha: Dijkstra no grafo ORIGINAL a partir do Hospital
-//    responde outra pergunta (do Hospital até os bairros) e dá outros números.
-// 3. Resposta esperada: a saída acima. Norte vai por Leste (2 + 4 = 6, e não
-//    9 direto); Sul vai por Norte (1 + 6 = 7, e não 3 + 5 = 8 por Oeste).
-//
 // Escreva sua resposta abaixo:
 
 #include <limits.h>

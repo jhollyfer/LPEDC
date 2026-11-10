@@ -14,15 +14,6 @@
 //   depois: [4, 0, 12, 7]
 //   3 falhas removidas
 //
-// Dicas:
-// 1. posicao_de é um for de 0 até lista_tamanho(l) com lista_pega.
-// 2. remove_todos pode repetir: "ache a posição; se achou, remova" até não
-//    achar mais.
-// 3. Cuidado com o atalho "for (i = 0; i < tam; i++) se for -1, remove i":
-//    depois de remover, o vizinho escorrega para a posição i e o i++ pula
-//    ele. Com dois -1 seguidos, um escapa.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete as funções):
 
 #include <stdio.h>

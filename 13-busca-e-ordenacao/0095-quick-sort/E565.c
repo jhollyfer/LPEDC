@@ -21,13 +21,6 @@
 //   pivô na posição 3
 //   comparações: 7
 //
-// Dicas:
-// 1. O lado direito do pivô vai de j + 1 até 5: separa(senhas, j + 1, 5).
-// 2. Uma função mostra(v, n) evita repetir o laço do printf.
-// 3. A primeira separação compara 5 elementos com o pivô; a segunda, 2.
-// 4. Resposta esperada: a saída acima. O lado esquerdo (2 4) e o pedaço que
-//    sobrou (8 9) já estão em ordem.
-//
 // Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>

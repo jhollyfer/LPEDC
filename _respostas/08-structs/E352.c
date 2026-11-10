@@ -1,9 +1,5 @@
 // 0059 · Struct
 // Exercício E352 · ★★☆
-//
-// Resposta: (1) faltava ; depois da } da struct; (2) a.nome = "Marta" não
-// compila porque nome é vetor: use strcpy; (3) a == b não existe para
-// struct: compare campo a campo.
 
 #include <stdio.h>
 #include <string.h>

@@ -16,14 +16,6 @@
 //   F1: 12 vértices, 42 arestas, clique de 4? sim (satisfatível)
 //   F2: 24 vértices, 204 arestas, clique de 8? não (insatisfatível)
 //
-// Dicas:
-// 1. O vértice a corresponde ao literal f[a / 3][a % 3]; a / 3 é a
-//    cláusula dele. Use uma matriz global adj[24][24].
-// 2. Para procurar a clique, conte em base 3 com m algarismos (3^m
-//    escolhas): o algarismo c diz qual literal da cláusula c entra.
-// 3. Resposta esperada: a saída acima. F2 é insatisfatível: cada
-//    atribuição dos três x torna falsa exatamente uma das 8 cláusulas.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

@@ -17,14 +17,6 @@
 //   100 2 3 + / 4 - = 16 (em C: 16) confere
 //   6 2 / 3 1 - * = 6 (em C: 6) confere
 //
-// Dicas:
-// 1. Os números aparecem na mesma ordem nas duas notações; só os
-//    operadores mudam de lugar.
-// 2. Na b, a multiplicação acontece primeiro, então o * aparece antes do +.
-// 3. Em infixas, escreva a conta mesmo: {(7 + 3) * 2, ...}. O compilador
-//    calcula.
-// 4. Resposta esperada: as quatro linhas acima.
-//
 // Escreva sua resposta abaixo (preencha os dois vetores):
 
 #include <stdbool.h>

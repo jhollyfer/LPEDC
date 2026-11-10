@@ -15,15 +15,6 @@
 //   (8, 8): 4 7 9
 //   (3, 8): 1 2 3 4 7 8 9
 //
-// Dicas:
-// 1. Um laço só, com i de 0 a 8, marca três casas por volta: g[l][i] (a
-//    linha), g[i][c] (a coluna) e uma casa da caixa.
-// 2. A caixa começa em (l / 3 * 3, c / 3 * 3); a i-ésima casa dela fica i / 3
-//    linhas abaixo e i % 3 colunas à direita.
-// 3. Casas vazias valem 0 e marcam usado[0], que ninguém olha.
-// 4. Resposta esperada: as 6 linhas acima. A casa (4, 0) tem candidato
-//    único: um humano escreveria o 3 sem chutar nada.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdbool.h>

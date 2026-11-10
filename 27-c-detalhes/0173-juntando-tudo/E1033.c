@@ -17,11 +17,6 @@
 //   tem R? sim
 //   tem R|I? nao
 //
-// Dicas:
-// 1. Ligar: *p |= m. Desligar: *p &= ~m.
-// 2. "Todos": (p & m) == m, com os parênteses (o == vem antes do &).
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

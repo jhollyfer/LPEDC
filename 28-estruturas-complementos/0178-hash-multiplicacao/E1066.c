@@ -14,13 +14,6 @@
 //   n = 5000, alfa = 5: alvo 1000 -> m = 1151 (a 127 da potência de 2 mais perto)
 //   n = 100, alfa = 2: alvo 50 -> m = 53 (a 11 da potência de 2 mais perto)
 //
-// Dicas:
-// 1. Arredondar n / alfa para cima em inteiros: (n + alfa - 1) / alfa.
-// 2. Para a potência mais próxima, ache a maior p = 2^i <= m e compare
-//    m - p com 2p - m.
-// 3. Resposta esperada: a saída acima. O 1009 seria o primo, mas fica a 15
-//    do 1024; o primeiro primo longe o bastante é o 1151.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

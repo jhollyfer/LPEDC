@@ -12,13 +12,6 @@
 //   ordenadas: 18 18 19 19 20 22 22 22 24 25
 //   casas usadas: 6 de 8
 //
-// Dicas:
-// 1. A idade x vai para casa[x - 18]. Para esvaziar, a casa c devolve a
-//    idade c + 18, casa[c] vezes.
-// 2. Para números soltos, a casa só precisa contar; com registros (nome e
-//    idade), cada casa vira uma fila, como no pombal.c.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

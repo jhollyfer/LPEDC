@@ -14,15 +14,6 @@
 //   struct Ficha: 16 bytes, campos em 0, 4 e 8
 //   union Nome: 12 bytes
 //
-// Dicas:
-// 1. offsetof(union Caixa, i) também funciona com union; está em
-//    <stddef.h> e se mostra com %zu.
-// 2. Union: o tamanho do maior campo, arredondado para um múltiplo do
-//    alinhamento do campo mais exigente. Struct: os campos em sequência, com
-//    sobras de alinhamento (assunto 0059).
-// 3. Resposta esperada: a saída acima. A union Nome tem 12 bytes, não 10:
-//    o int pede um tamanho múltiplo de 4.
-//
 // Escreva sua resposta abaixo:
 
 #include <stddef.h>

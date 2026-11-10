@@ -15,14 +15,6 @@
 //   fase 2:       [8 7 2 3 5 | 9]
 //   fase 2:       [7 5 2 3 | 8 9]
 //
-// Dicas:
-// 1. Com n = 6, o último pai é o índice n / 2 - 1 = 2. O laço vai de 2 até
-//    0, chamando desce(v, n, i) e depois mostra(v, n, n).
-// 2. Na fase 2, troque v[0] com v[fim], chame desce(v, fim, 0) e mostre com
-//    mostra(v, n, fim). Faça só para fim = 5 e fim = 4.
-// 3. Resposta esperada: a saída acima. O pai 1 não se mexe: 9 já é maior
-//    que 7 e 5. Quando o 3 desce da raiz, ele desce dois níveis.
-//
 // Escreva sua resposta abaixo (complete o main):
 
 #include <stdio.h>

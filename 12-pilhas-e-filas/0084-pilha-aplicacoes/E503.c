@@ -20,15 +20,6 @@
 //   (1+2)*(3-4) -> 1 2 + 3 4 - *
 //   9-4-2 -> 9 4 - 2 -
 //
-// Dicas:
-// 1. Uma função int precedencia(int op): 2 para * e /, 1 para + e -, 0 para
-//    "(" (assim o "(" nunca sai por causa de um operador).
-// 2. Monte a saída com um índice: out[k++] = c; out[k++] = ' '; e no fim
-//    troque o último espaço por '\0'.
-// 3. O "maior ou igual" é o que faz 9-4-2 virar (9-4)-2, e não 9-(4-2).
-// 4. Resposta esperada: as quatro linhas acima. Confira a segunda no A168
-//    (troque os números): o valor de (6+2)*5-8/4 é 38.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

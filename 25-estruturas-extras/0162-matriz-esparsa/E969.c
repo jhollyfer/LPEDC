@@ -15,13 +15,6 @@
 //   Filme 5: 1 nota, média 1.00
 //   Células: 6 e 6
 //
-// Dicas:
-// 1. Crie t = esp_cria(m->colunas, m->linhas). Para cada linha i de m e cada
-//    célula c dessa linha, faça esp_define(t, c->col, i, c->valor).
-// 2. Na transposta, a linha f é o filme f: percorra t->linha[f] somando.
-//    Pule os filmes cuja linha é NULL (e escreva "nota" quando for uma só).
-// 3. Resposta esperada: a saída acima (os dois nao_zeros são iguais).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

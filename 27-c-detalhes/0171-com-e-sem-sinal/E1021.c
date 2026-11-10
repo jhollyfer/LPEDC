@@ -12,12 +12,6 @@
 //   contador: 251 252 253 254 255 0 1 2 3 4
 //   vidas: 1 0 255
 //
-// Dicas:
-// 1. contador++ num unsigned char: 255 + 1 dá a volta para 0, e isso é
-//    definido pelo padrão (conta módulo 256).
-// 2. Para mostrar, %d serve: o byte vira int ao entrar no printf.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

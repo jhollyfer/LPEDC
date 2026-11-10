@@ -20,14 +20,6 @@
 //   Fixa D: dist = 0 5 2 6 8
 //   Caminho até D: CD -> B -> A -> C -> D (8 km)
 //
-// Dicas:
-// 1. O printf da linha vai no fim do corpo do for (passo), depois do laço
-//    que relaxa. Um laço interno imprime dist[v] ou "-".
-// 2. O caminho sai de trás para frente: guarde num vetor seguindo
-//    anterior[] a partir de D e imprima do fim para o começo.
-// 3. Resposta esperada: a saída acima. O A cai de 7 para 5 quando o B é
-//    fixado, e o D cai de 11 para 8.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <limits.h>

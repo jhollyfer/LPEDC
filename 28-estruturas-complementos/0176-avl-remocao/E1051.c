@@ -13,13 +13,6 @@
 //   tira 75: pré 25 10 5 1 15 50 30 27 60 55 | altura 3 | rotações 0
 //   tira 60: pré 25 10 5 1 15 50 30 27 55 | altura 3 | rotações 0
 //
-// Dicas:
-// 1. raiz = avr_remove(raiz, chave): a raiz pode mudar, guarde sempre o
-//    retorno.
-// 2. Desenhe a árvore antes de tirar o 80: o 75 fica pesado à esquerda e,
-//    depois de consertado, o 50 também.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

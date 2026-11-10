@@ -96,7 +96,7 @@ arquivo é anunciado pela leitura que falhou:
 > [!WARNING]
 > Não use `while (!feof(arq))`, comum em materiais e livros. O `feof` só fica
 > verdadeiro **depois** que uma leitura tentou passar do fim. O laço roda uma
-> vez a mais e processa a última linha duas vezes (o E401 mostra). Teste o
+> vez a mais e processa a última linha duas vezes (rode com um arquivo de 3 linhas e conte). Teste o
 > retorno da leitura: `fgets(...) != NULL`, `fscanf(...) == 2`,
 > `(c = fgetc(arq)) != EOF`. Neste último, `c` é `int`: com `char`, o `EOF`
 > (-1) se confunde com um byte de verdade.

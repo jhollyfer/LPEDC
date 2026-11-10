@@ -10,7 +10,7 @@ int main(void) {
     while (palitos > 0) {
         // sua vez
         do {
-            printf("Você tira: ");
+            printf("Você tira:\n");
             if (scanf("%d", &tira) != 1) {
                 printf("\nJogo abandonado.\n");
                 return 1;

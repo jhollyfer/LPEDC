@@ -13,14 +13,6 @@
 //   p99: 826 ms
 //   conferindo: 138, 630 e 826
 //
-// Dicas:
-// 1. Use a regra do "posto mais próximo": a posição do percentil pct é
-//    teto(pct * n / 100) - 1. Com inteiros: (pct * n + 99) / 100 - 1.
-//    Para n = 50: p50 fica na posição 24, p90 na 44 e p99 na 49.
-// 2. Não precisa copiar o vetor entre um percentil e outro: o quickselect
-//    só troca os valores de lugar, não muda quais valores existem.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -23,14 +23,6 @@
 // Escreva tudo neste arquivo, com uma struct sua (por exemplo
 // struct motorista { char nome[20]; int km; struct motorista *prox; }).
 //
-// Dicas:
-// 1. Monte a roda com inserção no fim guardando o último, como no lista.c.
-// 2. O laço da viagem: enquanto faltar km, o trecho é 150 ou o que falta (o
-//    menor dos dois); some no km de quem dirige e passe para o próximo.
-// 3. Para o resumo, uma volta com do-while a partir do primeiro.
-// 4. Para liberar, corte o círculo (ultimo->prox = NULL) e libere como lista
-//    comum. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

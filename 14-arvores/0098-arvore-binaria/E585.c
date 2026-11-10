@@ -10,13 +10,6 @@
 //   Antes:  8 - 3 * 4 + 2
 //   Depois: 2 + 4 * 3 - 8
 //
-// Dicas:
-// 1. Árvore vazia: nada a fazer.
-// 2. Troque r->esq com r->dir usando um ponteiro auxiliar e chame espelha
-//    nas duas subárvores (antes ou depois da troca, tanto faz).
-// 3. Resposta esperada: Antes: 8 - 3 * 4 + 2 e Depois: 2 + 4 * 3 - 8. A em
-//    ordem do espelho é a em ordem original de trás para frente.
-//
 // Escreva sua resposta abaixo (complete espelha):
 
 #include <stdio.h>

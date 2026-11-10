@@ -21,13 +21,6 @@
 //   Atribuição 2: não satisfaz (cláusula 4 falsa)
 //   Atribuição 3: não satisfaz (cláusula 3 falsa)
 //
-// Dicas:
-// 1. Use vetores bool x[4] com a posição 0 sobrando, para que x[v] seja a
-//    variável v.
-// 2. O literal lit é verdadeiro se lit > 0 ? x[lit] : !x[-lit]. Uma
-//    cláusula é verdadeira se ALGUM literal for; a fórmula, se TODAS forem.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

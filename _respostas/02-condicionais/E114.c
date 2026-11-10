@@ -6,7 +6,6 @@
 
 int main(void) {
     int dia, mes, ano;
-    printf("Data (dd/mm/aaaa): ");
     if (scanf("%d/%d/%d", &dia, &mes, &ano) != 3) {
         printf("Entrada inválida\n");
         return 1;

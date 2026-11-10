@@ -22,17 +22,6 @@
 //   Com log -> auth: ciclo db -> utils -> log -> auth -> db
 //   Sem log -> auth: sem ciclo
 //
-// Dicas:
-// 1. Use enum { BRANCO, CINZA, PRETO } (assunto 0063).
-// 2. Por que não basta "visitado"? Sem log -> auth, a DFS termina db pelo
-//    caminho app -> api -> db; depois, vindo de app -> auth, a seta
-//    auth -> db encontra db já visitado. Isso não é ciclo: db está PRETO,
-//    não CINZA.
-// 3. Achou a seta u -> v com v CINZA? O ciclo é v, ..., u, v. Siga pai[] de
-//    u até v, guardando num vetor, e imprima de trás para frente.
-// 4. Resposta esperada: a saída acima (a DFS começa no app e visita os
-//    vizinhos em ordem de índice).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -13,15 +13,6 @@
 //   Tirou o prato 20
 //   Tirou o prato 10
 //
-// Dicas:
-// 1. Procure "heap-use-after-free" e o número da linha no relatório.
-// 2. Depois do free, o nó não é mais seu, mesmo que os bytes ainda estejam
-//    lá: o free só marca a memória como livre, e é por sorte que sem o
-//    sanitizer a leitura parece funcionar.
-// 3. Resposta esperada: o erro é heap-use-after-free, na linha que faz
-//    "*numero = velho->numero", depois do free(velho). Conserto: passe a
-//    linha do *numero para antes do free. Saída: as três linhas acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdbool.h>

@@ -1,35 +1,28 @@
 // 0023 · Break e continue
 // Exercício E138 · ★★★
 //
-// Tem gente que acha que break e continue deixam o laço difícil de ler,
-// porque a saída fica escondida no meio do corpo. Refatore o programa abaixo
-// para NÃO usar break nem continue: use uma variável bool (assunto 0012) na
-// condição do while e if/else no corpo. A saída tem que ser a mesma.
+// Escreva um programa que lê notas ("Nota (-1 encerra):") e calcula a média,
+// sem usar break nem continue: use uma variável bool (assunto 0012) na
+// condição do while e if/else no corpo. Nota negativa (ou entrada inválida)
+// encerra; nota maior que 10 é ignorada e mostra "  nota X ignorada" (1 casa);
+// as demais entram na soma. Se houve alguma nota válida, mostra a média.
+// Cada pedido de leitura termina com quebra de linha (\n).
 //
-//   double soma = 0.0, nota;
-//   int contadas = 0;
-//   while (1) {
-//       printf("Nota (-1 encerra): ");
-//       if (scanf("%lf", &nota) != 1) break;
-//       if (nota < 0) break;
-//       if (nota > 10) {
-//           printf("  nota %.1f ignorada\n", nota);
-//           continue;
-//       }
-//       soma += nota;
-//       contadas++;
-//   }
-//   if (contadas > 0) {
-//       printf("Média de %d notas: %.2f\n", contadas, soma / contadas);
-//   }
+//   Entrada:
+//   8
+//   12
+//   6.5
+//   9
+//   -1
 //
-// Teste com 8, 12, 6.5, 9 e -1.
-//
-// Dicas:
-// 1. bool continuar = true; while (continuar) { ... }
-// 2. Onde havia break, faça continuar = false. Onde havia continue, use um
-//    else para que a soma não aconteça.
-// 3. Resposta esperada: "  nota 12.0 ignorada" e "Média de 3 notas: 7.83".
+//   Saída esperada:
+//   Nota (-1 encerra):
+//   Nota (-1 encerra):
+//     nota 12.0 ignorada
+//   Nota (-1 encerra):
+//   Nota (-1 encerra):
+//   Nota (-1 encerra):
+//   Média de 3 notas: 7.83
 //
 // Escreva sua resposta abaixo:
 

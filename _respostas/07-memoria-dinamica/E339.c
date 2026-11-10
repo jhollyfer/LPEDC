@@ -1,9 +1,5 @@
 // 0057 · Erros de memória
 // Exercício E339 · ★★☆
-//
-// O erro: backup = placar copiava o endereço, não os números. Os dois
-// ponteiros apontavam para o mesmo bloco, e liberar os dois era free duplo.
-// Agora backup tem o seu próprio bloco: dois malloc, dois free.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +13,7 @@ int main(void) {
     placar[1] = 2;
     placar[2] = 7;
 
-    int *backup = malloc(3 * sizeof *backup); // outro bloco
+    int *backup = malloc(3 * sizeof *backup);
     if (backup == NULL) {
         free(placar);
         return 1;
@@ -34,7 +30,3 @@ int main(void) {
     free(backup); // agora é outro bloco: o free é legítimo
     return 0;
 }
-// Saída:
-// Placar: 0 2 7
-// Backup: 4 2 7
-// Placar encerrado

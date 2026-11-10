@@ -15,15 +15,6 @@
 //   comida água saco
 //   45 chamadas
 //
-// Dicas:
-// 1. Primeiro teste: se soma passou de ALVO, volte.
-// 2. Segundo teste: se soma é igual a ALVO, mostre leva[0..i-1] e volte.
-//    Esse teste precisa vir ANTES do if (i == N), senão "barraca saco
-//    fogareiro" (que fecha com o último item) se perde.
-// 3. Quando tudo estiver certo, apague o bloco do if (i == N) que mostra a
-//    solução: com o seu segundo teste, ele vira só "return;".
-// 4. Resposta esperada: as 4 linhas acima.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdbool.h>

@@ -18,13 +18,6 @@
 //   Em ordem: 7 8 9 10
 //   Originais: j1=9 j2=7 j3=10 j4=8
 //
-// Dicas:
-// 1. Para ordenar, use dois for (i e j > i): se *ordem[j] < *ordem[i],
-//    troca_ptr(&ordem[i], &ordem[j]).
-// 2. Dentro de troca_ptr, o temporário é um int *: int *tmp = *a;
-// 3. Resposta esperada: 7 8 9 10, e as variáveis continuam 9, 7, 10, 8.
-//    Só os endereços mudaram de lugar no vetor.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

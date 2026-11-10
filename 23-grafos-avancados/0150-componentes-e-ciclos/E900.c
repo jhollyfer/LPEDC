@@ -16,17 +16,6 @@
 //   Turno B: Bia Duda Flor Hana
 //   Impossível: Caio e Ana cairiam no mesmo turno
 //
-// Dicas:
-// 1. Vetor turno[V] com -1 (sem turno), 0 (A) ou 1 (B). A DFS pinta(u, t)
-//    põe t em u e chama pinta(v, 1 - t) nos vizinhos sem turno.
-// 2. Se um vizinho já tem o MESMO turno de u, é conflito: mostre "u e v"
-//    e devolva false até o topo. O laço externo cobre os componentes que
-//    a primeira DFS não alcança (Enzo, Flor, Gui, Hana).
-// 3. Resposta esperada: a saída acima. Na segunda chamada, Ana, Bia e Caio
-//    formam um triângulo: Ana vai para o A, Bia para o B, Caio para o A, e
-//    Caio e Ana ficam juntos. Um ciclo de tamanho ímpar nunca pode ser
-//    dividido em dois turnos.
-//
 // Escreva sua resposta abaixo (escreva divide e o que mais precisar):
 
 #include <stdbool.h>

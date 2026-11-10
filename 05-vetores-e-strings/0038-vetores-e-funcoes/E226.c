@@ -19,13 +19,6 @@
 //   Média mensal: R$ 168.16
 //   Meses acima da média: 7
 //
-// Dicas:
-// 1. indice_do_maior devolve a POSIÇÃO (0 a 11), não o valor; o main soma 1
-//    para mostrar o mês.
-// 2. contar_acima não precisa saber o que é média: ela recebe um limite
-//    qualquer. Isso deixa a função reaproveitável.
-// 3. Resposta esperada: a saída acima (o total do ano é R$ 2017.95).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -14,17 +14,6 @@
 //   antes:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
 //   depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
 //
-// Dicas:
-// 1. Comece uma lista "ordenada" vazia (NULL). Enquanto a original tiver nós,
-//    DESENGATE o primeiro dela (guarde o resto antes!).
-// 2. Encaixe o nó desengatado na ordenada com o mesmo laço ant/p da
-//    inserção ordenada, só que sem malloc: o nó já existe. O (*passos)++ vai
-//    dentro desse laço.
-// 3. Resposta esperada: a saída acima. Na lista crescente, cada nó novo é o
-//    maior e o encaixe percorre a ordenada inteira: 0 + 1 + 2 + 3 + 4 = 10,
-//    O(n²) no pior caso. A vantagem sobre o vetor é que encaixar não
-//    desloca ninguém.
-//
 // Escreva sua resposta abaixo (troque o corpo de ordena):
 
 #include <stdio.h>

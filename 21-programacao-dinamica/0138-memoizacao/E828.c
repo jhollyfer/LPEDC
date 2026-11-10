@@ -22,15 +22,6 @@
 //   C(60, 30) = 118264581564861424 (1441 chamadas novas)
 //   subproblemas guardados no memo: 1044
 //
-// Dicas:
-// 1. Encha a matriz memo com -1 no começo do main (dois laços).
-// 2. O teste do caso base vem antes da consulta ao memo, e o contador sobe
-//    na primeira linha da função, em toda chamada.
-// 3. C(60, 30) passa de 10^17: use long long e %lld.
-// 4. A segunda conta reaproveita o que a primeira guardou (os subproblemas
-//    com k pequeno); se você limpar o memo entre as duas, o número muda.
-// 5. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

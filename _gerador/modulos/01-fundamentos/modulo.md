@@ -107,7 +107,7 @@ moedas de cada valor entregar, sempre da maior para a menor. Teste com 3.85.
 
 3 de R$ 1, 1 de R$ 0,50, 1 de R$ 0,25, 1 de R$ 0,10 e nenhuma de R$ 0,05: **6
 moedas**. O caminho: converta para centavos inteiros **arredondando**
-(`(int) round(troco * 100)`, lembre do 19.99 do E047) e, para cada moeda,
+(`(int) round(troco * 100)`; sem o round, 19.99 * 100 dá 1998.99999... e o cast cortaria para 1998) e, para cada moeda,
 `quantidade = centavos / moeda` e `centavos %= moeda`.
 
 </details>

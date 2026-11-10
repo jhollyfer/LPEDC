@@ -19,16 +19,6 @@
 //   a << 1  1001 0100 = 0x94 = 148
 //   a >> 3  0001 1001 = 0x19 = 25
 //
-// Dicas:
-// 1. O bit b de r: (r >> b) & 1u. Percorra b de 7 até 0 e ponha o espaço
-//    depois do bit 4.
-// 2. Para conferir uma linha: C = 1100, A = 1010, 5 = 0101. Com um
-//    embaixo do outro, a regra se aplica casa por casa.
-// 3. Num unsigned char só sobram os 8 bits de baixo: passe
-//    (unsigned char)~a e (unsigned char)(a << 1). Em a << 1, o 1 da esquerda
-//    cai fora.
-// 4. Resposta esperada: a saída acima (%-7s alinha os nomes).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

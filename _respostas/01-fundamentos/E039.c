@@ -6,10 +6,7 @@
 int main(void) {
     double conta;
     int pessoas;
-
-    printf("Conta: R$ ");
     scanf("%lf", &conta);
-    printf("Pessoas: ");
     scanf("%d", &pessoas);
 
     double servico = conta * 10 / 100;

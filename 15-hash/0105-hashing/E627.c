@@ -12,12 +12,6 @@
 //   doc    -> 8
 //   boleto -> 1
 //
-// Dicas:
-// 1. O laço é o mesmo da soma; só muda a conta de dentro.
-// 2. Não se preocupe se h estourar: em unsigned a conta dá a volta, e isso
-//    é bem definido em C.
-// 3. Resposta esperada: a saída acima ("ted" e "doc" colidem com M = 13).
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

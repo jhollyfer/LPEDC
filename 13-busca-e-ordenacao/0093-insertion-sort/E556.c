@@ -20,13 +20,6 @@
 //   total com >: 7
 //   total com >=: 8
 //
-// Dicas:
-// 1. Quando o while termina, x é guardado em v[i + 1]: essa é a posição.
-// 2. A condição pode ser (maior_ou_igual ? v[i] >= x : v[i] > x).
-// 3. Com >=, o segundo 3 passa por cima do primeiro: um deslocamento a mais,
-//    e os dois 3 trocam de ordem (deixa de ser estável).
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (modifique o código):
 
 #include <stdio.h>

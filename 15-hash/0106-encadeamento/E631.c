@@ -16,13 +16,6 @@
 //   [4]
 //   vazios: 2, maior corrente: 3
 //
-// Dicas:
-// 1. Para cada balde, ande com "for (No *p = baldes[b]; p != NULL;
-//    p = p->prox)" contando os nós.
-// 2. Corrente com 0 nós soma um vazio; guarde a maior contagem vista.
-// 3. Resposta esperada: a saída acima. Inserir no início inverte a ordem:
-//    o último a chegar fica na frente.
-//
 // Escreva sua resposta abaixo (complete o código):
 
 #include <stdio.h>

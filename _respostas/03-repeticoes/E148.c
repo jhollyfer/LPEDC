@@ -1,9 +1,5 @@
 // 0025 · Padrões de laço
 // Exercício E148 · ★★☆
-//
-// Resposta: (1) dias++ vinha antes do teste da sentinela e contava o 9999;
-// (2) maior = 0 vencia todos os negativos: agora começa com o primeiro dia;
-// (3) soma / dias era divisão inteira: agora é (double) soma / dias com %.2f.
 
 #include <stdio.h>
 

@@ -11,14 +11,6 @@
 //   8-3-2 -> 8 3 - 2 - = 3
 //   9/3/3 -> 9 3 / 3 / = 1
 //
-// Dicas:
-// 1. Compare "8 3 2 - -" com "8 3 - 2 -". Qual conta cada uma faz?
-// 2. Quando chega um operador com a MESMA precedência do topo, quem deve
-//    ir primeiro para a fila: o que já estava na pilha ou o novo?
-// 3. Resposta esperada: o while da conversão usa ">" e deveria usar ">=".
-//    Com ">", operadores iguais ficam empilhados e a conta associa à
-//    direita: 8 - (3 - 2) = 7 e 9 / (3 / 3) = 9.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

@@ -15,13 +15,6 @@
 //   saiu 45, entrou 40: [40 35 25 15 5]
 //   saiu 40, entrou 10: [35 15 25 10 5]
 //
-// Dicas:
-// 1. A descida: enquanto 2i + 1 < n, escolha o MAIOR filho f; se v[i] já é
-//    >= v[f], pare; senão troque v[i] com v[f] e siga com i = f.
-// 2. Na segunda troca, o 10 desce duas vezes: primeiro troca com o 35 e
-//    depois com o 15.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (complete troca_topo):
 
 #include <stdio.h>

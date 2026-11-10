@@ -11,13 +11,6 @@
 //   3 mais baratas: R$ 275, R$ 298, R$ 315
 //   18 comparações (ordenar tudo custaria 28)
 //
-// Dicas:
-// 1. É o selection de sempre com o laço de fora indo até i < k.
-// 2. As passadas fazem 7, 6 e 5 comparações.
-// 3. Ordenar tudo: n(n - 1)/2 = 28.
-// 4. Resposta esperada: a saída acima. O resto do vetor (v[3..7]) fica fora
-//    de ordem, e tudo bem.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

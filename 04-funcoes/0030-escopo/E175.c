@@ -18,14 +18,6 @@
 //   extrato: 130
 //   compra de hoje: 30
 //
-// Dicas:
-// 1. Dentro de extrato e de somar_na_global só existe a global: as funções
-//    não enxergam nada do main.
-// 2. No main, depois de "int pontos = 30;", o nome pontos é a local: ela
-//    esconde a global daí para baixo.
-// 3. Resposta esperada: a saída acima. somar_na_global recebe uma cópia do 30
-//    e soma na global; a local do main nem fica sabendo.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

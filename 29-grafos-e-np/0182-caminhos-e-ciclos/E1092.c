@@ -17,13 +17,6 @@
 //   Traço 1: A B C A D C
 //   Traço 2: D B
 //
-// Dicas:
-// 1. Use uma matriz 5 x 5 (índice 4 é o X) e o Hierholzer do A364, sempre
-//    escolhendo o vizinho de menor índice.
-// 2. Na hora de mostrar, percorra o trajeto invertido: ao encontrar o X,
-//    pule-o e comece a linha do próximo traço.
-// 3. Resposta esperada: a saída acima. Os dois traços somam as 6 arestas.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

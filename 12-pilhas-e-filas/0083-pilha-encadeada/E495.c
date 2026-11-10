@@ -18,13 +18,6 @@
 //   Voltar -> g1.globo.com
 //   Não dá para voltar de g1.globo.com
 //
-// Dicas:
-// 1. Em visita, faça como no pilha_empilha: malloc, copie a url com strcpy,
-//    ligue novo->ant ao topo antigo e só então troque o topo.
-// 2. A página é a única quando h->topo->ant == NULL.
-// 3. Em voltar, guarde o nó velho, avance o topo e só depois dê free.
-// 4. Resposta esperada: as seis linhas acima, sem vazamento no sanitizer.
-//
 // Escreva sua resposta abaixo (complete visita e voltar):
 
 #include <stdbool.h>

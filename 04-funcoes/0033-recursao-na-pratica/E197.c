@@ -17,14 +17,6 @@
 //   lenta:  2^60 = 1152921504606846976 (60 multiplicações)
 //   rápida: 2^60 = 1152921504606846976 (9 multiplicações)
 //
-// Dicas:
-// 1. Caso base das duas: e == 0 devolve 1 (sem multiplicar).
-// 2. Na rápida, com e par, calcule metade = pot_rapida(x, e / 2) UMA vez e
-//    devolva metade * metade. Chamar pot_rapida duas vezes joga fora o ganho.
-// 3. Resposta esperada: a saída acima. A lenta faz e multiplicações; a rápida,
-//    no máximo umas 2 vezes log2(e). É o mesmo truque de "cortar ao meio" da
-//    busca binária.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

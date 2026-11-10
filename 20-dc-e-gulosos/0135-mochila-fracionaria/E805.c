@@ -18,13 +18,6 @@
 //   200 kg de vidro: R$ 40.00
 //   Total: R$ 1190.00
 //
-// Dicas:
-// 1. leva = o menor entre peso[i] e livre. O valor levado é proporcional:
-//    valor[i] * leva / peso[i].
-// 2. O laço para quando livre chega a 0 (ou acabam os lotes).
-// 3. Resposta esperada: a saída acima. O vidro rende R$ 0,20/kg, então os
-//    200 kg dele valem R$ 40.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

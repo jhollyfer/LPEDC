@@ -23,15 +23,6 @@
 //   v[2] em 0x7f...68
 //   sizeof v = 12, a + b + c = 12
 //
-// Dicas:
-// 1. Compare só os últimos dígitos hexa de cada endereço.
-// 2. O AddressSanitizer coloca "zonas proibidas" entre as variáveis para
-//    pegar estouros; sem ele, o compilador arruma do jeito que quiser.
-// 3. Resposta esperada: v[0], v[1] e v[2] sobem de 4 em 4 nas duas
-//    compilações; a, b e c ficam a 16 bytes um do outro com o rodar e
-//    costumam ficar a 4 bytes sem ele, em qualquer ordem. Os dois tamanhos
-//    dão 12: o mesmo espaço, mas só o vetor tem ordem garantida.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -15,16 +15,6 @@
 //   Balcão cheio: a bandeja 5 ficou de fora
 //   No topo: bandeja 4
 //
-// Dicas:
-// 1. Com topo = -1 para vazia, o topo aponta para o último item, não para a
-//    próxima vaga.
-// 2. Qual é o maior índice válido de um vetor com CAPACIDADE posições?
-// 3. Resposta esperada: o teste de cheia compara topo com CAPACIDADE, mas
-//    com essa convenção a pilha enche quando topo == CAPACIDADE - 1. Do
-//    jeito que está, a quinta bandeja é escrita em itens[4], fora do vetor
-//    (cai em cima do campo topo, que vira 5). Conserto:
-//    if (b->topo == CAPACIDADE - 1).
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdbool.h>

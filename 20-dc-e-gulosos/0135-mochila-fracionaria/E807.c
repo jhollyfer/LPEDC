@@ -19,14 +19,6 @@
 // O erro está na função de comparação. Acrescente um printf nela que mostre
 // rx, ry e o valor devolvido, rode, ache o problema e conserte.
 //
-// Dicas:
-// 1. Quanto vale (int)(4.8 - 4.2)? E (int)(2.0 - 4.2)?
-// 2. Quando a comparação devolve 0, o qsort entende que tanto faz a ordem
-//    dos dois, e eles podem ficar como estavam: a uva antes da ameixa.
-// 3. Resposta esperada: troque o "return (int)(ry - rx);" por
-//    "return (rx < ry) - (rx > ry);", que devolve -1, 0 ou 1 sem cortar
-//    nada. Consertado, mostra a saída acima.
-//
 // Escreva sua resposta abaixo (conserte o código):
 
 #include <stdio.h>

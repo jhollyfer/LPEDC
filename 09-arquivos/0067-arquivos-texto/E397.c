@@ -8,14 +8,14 @@
 //   Saída esperada:
 //   7 x 1 = 7
 //   7 x 2 = 14
-//   ...
+//   7 x 3 = 21
+//   7 x 4 = 28
+//   7 x 5 = 35
+//   7 x 6 = 42
+//   7 x 7 = 49
+//   7 x 8 = 56
+//   7 x 9 = 63
 //   7 x 10 = 70
-//
-// Dicas:
-// 1. Um for de 1 a 10 com fprintf(arq, "7 x %d = %d\n", i, 7 * i).
-// 2. Para ler: while (fgets(linha, sizeof linha, arq) != NULL) printf("%s", linha);
-// 3. Resposta esperada: as 10 linhas da tabuada, de "7 x 1 = 7" até
-//    "7 x 10 = 70". O arquivo fica em /tmp: confira com cat /tmp/tabuada7.txt.
 //
 // Escreva sua resposta abaixo:
 

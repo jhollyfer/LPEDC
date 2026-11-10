@@ -6,26 +6,25 @@
 // fgets, tire o '\n' e mostre, para cada regra que falhar, uma linha "Falta:".
 // Se nenhuma falhar, mostre "Senha forte.".
 //
-//   Exemplo de execução 1:
-//   Senha: banana12
+//   Entrada:
+//   banana12
+//
+//   Saída esperada:
 //   Falta: letra maiúscula
 //
-//   Exemplo de execução 2:
-//   Senha: abc
+//   Entrada:
+//   abc
+//
+//   Saída esperada:
 //   Falta: 8 caracteres (tem 3)
 //   Falta: letra maiúscula
 //   Falta: dígito
 //
-//   Exemplo de execução 3:
-//   Senha: Pao de Queijo 1
-//   Senha forte.
+//   Entrada:
+//   Pao de Queijo 1
 //
-// Dicas:
-// 1. Um laço até o '\0' com três bool: tem_maiuscula, tem_minuscula,
-//    tem_digito. Use isupper, islower e isdigit.
-// 2. O tamanho vem do strlen DEPOIS de tirar o '\n'.
-// 3. Guarde num bool se alguma regra falhou, para decidir o "Senha forte.".
-// 4. Resposta esperada: as três execuções acima.
+//   Saída esperada:
+//   Senha forte.
 //
 // Escreva sua resposta abaixo:
 

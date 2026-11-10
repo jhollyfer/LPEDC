@@ -12,16 +12,6 @@
 //   decrescente: fase 1: 0 trocas, fase 2: 5 trocas -> 1 2 3 4 5 6 7
 //   iguais:      fase 1: 0 trocas, fase 2: 0 trocas -> 5 5 5 5 5 5 5
 //
-// Dicas:
-// 1. Em desce, crie int trocas = 0, some 1 a cada troca e devolva no fim
-//    (troque o void por int).
-// 2. Em testa, faça fase1 += desce(v, n, i) no laço dos pais e
-//    fase2 += desce(v, fim, 0) no laço da fase 2. Para o rótulo alinhado,
-//    use printf("%-12s ...", nome).
-// 3. Resposta esperada: a saída acima. Vetor crescente é o "contrário" de um
-//    heap: a fase 1 trabalha. O decrescente já é heap, mas a fase 2 trabalha
-//    do mesmo jeito: o heapsort não aproveita a ordem que o vetor já tinha.
-//
 // Escreva sua resposta abaixo (modifique desce e complete testa):
 
 #include <stdio.h>

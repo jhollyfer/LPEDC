@@ -12,16 +12,6 @@
 //   Semana 1: sem ciclo negativo
 //   Semana 2: ciclo negativo passando por Dólar Euro Cripto
 //
-// Dicas:
-// 1. Sem ciclo negativo, a diagonal termina toda em 0. Se d[i][i] < 0 no
-//    fim, existe um caminho que sai de i e volta a i com soma negativa.
-// 2. Na semana 2, Euro -> Cripto -> Dólar -> Euro soma 15 - 40 + 20 = -5.
-//    O Real não entra: sair do Real e voltar a ele custa sempre mais do que
-//    a volta negativa devolve.
-// 3. Resposta esperada: a saída acima. Com ciclo negativo, os outros
-//    números da matriz deixam de ter sentido (ficam "mais negativos" a
-//    cada volta), por isso o programa só mostra as moedas do ciclo.
-//
 // Escreva sua resposta abaixo (complete analisa):
 
 #include <stdio.h>

@@ -22,17 +22,6 @@
 //    E S T E R I L -
 //    = = = I = T = R
 //
-// Dicas:
-// 1. A volta é a do texto, mas cada passo grava uma coluna em três vetores
-//    (cima, baixo e marca). Na remoção, embaixo vai '-'; na inserção, em
-//    cima vai '-'.
-// 2. As colunas saem de trás para a frente: mostre os vetores do índice
-//    k - 1 até 0.
-// 3. Teste os vizinhos na ordem do texto (igual, troca, remove, insere): com
-//    outra ordem, um alinhamento diferente, com a mesma distância, pode
-//    aparecer.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

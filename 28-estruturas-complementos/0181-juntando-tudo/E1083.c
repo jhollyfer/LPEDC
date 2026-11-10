@@ -12,14 +12,6 @@
 //   tarde (3): 12:00 14:00 16:00
 //   noite (3): 18:30 19:45 21:00
 //
-// Dicas:
-// 1. Guarde os limites dos turnos em dois vetores (de e ate) e chame
-//    ag_intervalo(a, de[t], ate[t], h, 20) para cada um.
-// 2. O nome do paciente pode ser montado com snprintf(nome, sizeof nome,
-//    "P%d", i + 1).
-// 3. Resposta esperada: a saída acima. Cada turno custa O(log n + k): desce
-//    até o primeiro horário e anda pelo sucessor.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

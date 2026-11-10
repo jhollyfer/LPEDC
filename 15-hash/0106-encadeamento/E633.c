@@ -21,14 +21,6 @@
 //   [2] 222
 //   [3] 315
 //
-// Dicas:
-// 1. É a remoção de lista encadeada do módulo 11, aplicada só à corrente
-//    de baldes[pedido % 4]. Guarde o anterior enquanto anda.
-// 2. Cuidado com o primeiro nó da corrente (o 309): não tem anterior, então
-//    quem muda é a própria cabeça, baldes[1].
-// 3. Resposta esperada: a saída acima, e o AddressSanitizer quieto (todo nó
-//    removido leva free, e o libera solta o resto).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

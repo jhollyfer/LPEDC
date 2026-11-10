@@ -30,17 +30,6 @@
 //   diagonais: 251796348 e 526394871
 //   4171 chamadas
 //
-// Dicas:
-// 1. Acrescente dois vetores bool[10]: um para a diagonal principal (casas
-//    com l == c) e outro para a secundária (l + c == 8).
-// 2. A poda e a marcação só mexem nesses vetores quando a casa está na
-//    diagonal. A casa do centro, (4, 4), está nas duas.
-// 3. Teste os dígitos de 1 a 9 em ordem crescente, na ordem de leitura das
-//    casas, para a contagem de chamadas bater.
-// 4. Este jogo depende da regra nova: sem as diagonais, ele tem mais de uma
-//    solução (confira com o conta do E778, se quiser).
-// 5. Resposta esperada: as 11 linhas acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdbool.h>

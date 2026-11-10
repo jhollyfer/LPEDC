@@ -15,15 +15,6 @@
 //   [  O Senhor   Dos Aneis ]
 //   4 palavras
 //
-// Dicas:
-// 1. Guarde num bool se o caractere anterior era espaço (comece com true:
-//    antes do texto é como se houvesse um espaço).
-// 2. Se o atual não é espaço e o anterior era: começou uma palavra. Conte e
-//    use toupper. Se não é espaço e o anterior também não era: tolower.
-// 3. Percorra até o '\0', não até sizeof.
-// 4. Resposta esperada: a saída acima (os colchetes mostram que os espaços
-//    das pontas continuam lá).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -24,14 +24,6 @@
 //   Itens: 9 | altura: 2
 //   Maior gasto: buffet (R$ 3450)
 //
-// Dicas:
-// 1. Leia cada linha com fgets e separe com sscanf(linha, "%19s %19s %d",
-//    pai, nome, &valor) == 3. Linha que não casa, ignore.
-// 2. A primeira linha válida cria a raiz com ag_cria. Nas outras, ag_busca
-//    acha o pai e ag_adiciona pendura o filho.
-// 3. Para o maior gasto, ande pelos filhos da raiz comparando ag_total.
-//    Resposta esperada: a saída acima. Não esqueça do ag_libera no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

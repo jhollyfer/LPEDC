@@ -13,14 +13,6 @@
 //   Castelo: Dijkstra 8, Bellman-Ford 7 (Dijkstra errou)
 //   Saída: Dijkstra 9, Bellman-Ford 8 (Dijkstra errou)
 //
-// Dicas:
-// 1. Com matriz, "passar por todas as arestas" vira dois laços (u e v) e
-//    o teste custo[u][v] != 0. Uma rodada custa O(V²); o total, O(V³).
-// 2. O Dijkstra fixa a Floresta com 2 antes de examinar a Caverna (5). Ele
-//    nunca descobre que Início -> Caverna -> Floresta custa 5 - 4 = 1, e o
-//    erro se espalha para Castelo e Saída.
-// 3. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo (escreva bellman_ford):
 
 #include <stdbool.h>

@@ -1,14 +1,10 @@
 // 0018 · switch, case, break e fall-through
 // Exercício E107 · ★★★
-//
-// Resposta: nenhum case tinha break, então a execução entrava no case certo e
-// descia por todos os de baixo, até o default.
 
 #include <stdio.h>
 
 int main(void) {
     char pizza;
-    printf("Pizza (M, C ou P): ");
     if (scanf(" %c", &pizza) != 1) {
         printf("Entrada inválida\n");
         return 1;

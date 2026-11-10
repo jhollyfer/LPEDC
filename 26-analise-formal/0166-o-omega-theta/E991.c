@@ -13,14 +13,6 @@
 //   c = 10: n0 = 8
 //   c = 45: n0 = 1
 //
-// Dicas:
-// 1. Comece com n0 = 1. Toda vez que custo(n) > c * n, faça n0 = n + 1:
-//    o n0 tem que ficar depois da última falha.
-// 2. Use long para n, custo e c * n.
-// 3. Confira à mão: 5n + 40 <= 6n vira n >= 40. Quanto maior o c, menor o
-//    n0; com c = 45, já vale em n = 1.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

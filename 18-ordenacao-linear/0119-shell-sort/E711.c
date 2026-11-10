@@ -14,14 +14,6 @@
 //   Amanda, Bianca, Caio, Diego, Elisa, Helena, Larissa, Murilo, Paulo, Rafael, Sofia, Tiago
 //   36 comparações
 //
-// Dicas:
-// 1. É o shell_sort do texto com int trocado por const char * e
-//    v[j - h] > x trocado por strcmp(v[j - h], x) > 0.
-// 2. Com n = 12, os saltos são 4 e 1.
-// 3. Para contar cada strcmp, escreva o while só com j >= h e faça o teste
-//    do strcmp dentro dele, com um break.
-// 4. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

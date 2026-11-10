@@ -25,16 +25,6 @@
 //   Casa: 4 pontos, 3 gols
 //   Visitante: 4 pontos, 4 gols
 //
-// Dicas:
-// 1. Quatro globais static para o campeonato (pontos_casa, pontos_visitante,
-//    gols_casa, gols_visitante), duas para a partida atual e uma para o
-//    número da partida. Todas começam em 0.
-// 2. O bloco do placar.h tem o include guard e os quatro protótipos públicos;
-//    o protótipo de anotar NÃO vai lá. Como o main vem antes do placar.c, os
-//    protótipos do bloco de cima bastam para ele.
-// 3. Resposta esperada: a saída acima. Casa: vitória (3) + empate (1);
-//    visitante: empate (1) + vitória (3).
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

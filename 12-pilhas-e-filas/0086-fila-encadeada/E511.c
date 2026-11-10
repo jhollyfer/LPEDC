@@ -18,13 +18,6 @@
 //   retira 9: 1 (um nó só: início e fim apontam para ele)
 //   retira 1: vazia
 //
-// Dicas:
-// 1. Guarde fila_tamanho num int antes do laço e faça o for até ele.
-// 2. Mostre " -> " antes de cada item, menos do primeiro.
-// 3. Cada volta faz um free (retira) e um malloc (insere): a fila é a
-//    mesma, mas os nós são novos.
-// 4. Resposta esperada: as oito linhas acima, sem vazamento.
-//
 // Escreva sua resposta abaixo (escreva mostra):
 
 #include <stdio.h>

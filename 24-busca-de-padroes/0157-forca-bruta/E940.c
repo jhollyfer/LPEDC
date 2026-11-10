@@ -17,16 +17,6 @@
 //   você vem? se você não vier, você avisa
 //   3 trocas
 //
-// Dicas:
-// 1. Uma função auxiliar casa_em(texto, i, velho, m) responde se as m letras
-//    de velho estão em texto a partir de i (é o miolo da força bruta).
-// 2. Ande com dois índices: i no texto e k na saída. Se casou, copie novo
-//    letra a letra e faça i += m (não conta sobreposição: o pedaço sumiu).
-//    Senão, copie uma letra só.
-// 3. Só teste casa_em quando i <= n - m. E termine saida com '\0'.
-// 4. "você" tem 5 bytes em UTF-8 (o 'ê' ocupa 2), e tudo bem: o código só
-//    copia bytes. Resposta esperada: a saída acima.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

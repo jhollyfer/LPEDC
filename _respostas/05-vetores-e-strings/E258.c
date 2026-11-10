@@ -25,7 +25,6 @@ int main(void) {
     char texto[TAM_TEXTO];
     char saida[2 * TAM_TEXTO + 1];
 
-    printf("Texto: ");
     if (fgets(texto, sizeof(texto), stdin) == NULL) {
         return 1;
     }

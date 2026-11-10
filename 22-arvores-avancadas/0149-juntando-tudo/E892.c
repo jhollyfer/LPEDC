@@ -14,13 +14,6 @@
 //   pasou: 1
 //   4 palavras diferentes, 5 ocorrências
 //
-// Dicas:
-// 1. O nó: char palavra[COR_MAX], int vezes, esq e dir. Na inserção, compare
-//    com strcmp; se der 0, é repetida: vezes++.
-// 2. O dicionário é o do TAD (cor_carrega_basico) e as palavras saem do
-//    texto com cor_proxima. Só vão para a BST as que cor_contem rejeita.
-// 3. Resposta esperada: a saída acima. Libere a BST e o dicionário no fim.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

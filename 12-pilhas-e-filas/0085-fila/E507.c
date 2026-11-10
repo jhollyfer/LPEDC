@@ -16,14 +16,6 @@
 //   8 recusado: fila cheia
 //   Na fila: 3 4 6 7
 //
-// Dicas:
-// 1. fc_vazia e fc_cheia são uma linha cada, com as fórmulas do enunciado.
-// 2. fc_insere grava em itens[fim] e avança fim com % TAM.
-// 3. fc_retira lê itens[inicio] e avança inicio com % TAM.
-// 4. Resposta esperada: as cinco linhas acima. O 6 entra na gaveta 4 e fim
-//    dá a volta para 0; o 7 entra na 0 e fim vira 1. Aí (1 + 1) % 5 == 2,
-//    que é o inicio: cheia, e o 8 é recusado.
-//
 // Escreva sua resposta abaixo (complete as funções):
 
 #include <stdbool.h>

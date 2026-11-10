@@ -21,13 +21,6 @@
 //   Pedido 2 (R$ 250.00, 5.0 kg, 100 km): frete R$ 0.00
 //   Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
 //
-// Dicas:
-// 1. A taxa_por_km é static: quem usa o módulo nem sabe que ela existe.
-// 2. Para não repetir o printf três vezes, escreva no main.c uma função
-//    void mostrar_pedido(int numero, double valor, double peso, int km).
-// 3. Resposta esperada: 10 + 3 + 6 = 19.00; 250 >= 200, frete grátis;
-//    10 + 1.50 + 2.40 = 13.90.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

@@ -16,13 +16,6 @@
 //   Sem Sul, a rede parte em 2 pedaços
 //   Sem Porto, a rede parte em 3 pedaços
 //
-// Dicas:
-// 1. Num vértice que não é a raiz, cada filho v com low[v] >= tin[u] vira
-//    um pedaço; some 1 pelo pedaço de cima, onde está o pai.
-// 2. Na raiz, cada filho da árvore é um pedaço (não há pedaço de cima).
-// 3. Resposta esperada: a saída acima. A Usina tem um filho só na DFS, e
-//    a rede sem ela continua inteira.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

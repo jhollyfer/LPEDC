@@ -19,14 +19,6 @@
 //   Compactado:    4096 bytes (75.0%)
 //   Descompactado: 5460 bytes
 //
-// Dicas:
-// 1. Guarde o cardápio numa string só, com os "\n" no fim de cada linha, e
-//    grave com fputs dentro de um for de 30 voltas.
-// 2. arq_tamanho, huf_compacta e huf_descompacta devolvem tamanhos em
-//    bytes (ou -1 se der erro).
-// 3. Resposta esperada: a saída acima. Os acentos contam 2 bytes cada em
-//    UTF-8; por isso cada cardápio tem 182 bytes, e não 180.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>

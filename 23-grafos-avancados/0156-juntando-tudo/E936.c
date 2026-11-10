@@ -22,17 +22,6 @@
 //   Loja -> Carla -> Ana -> Bruno -> Loja: 28 min
 //   Melhor roteiro (22 min): Loja -> Ana -> Bruno -> Carla -> Loja
 //
-// Dicas:
-// 1. Guarde os clientes num vetor {1, 2, 3}. A recursão tenta(pos) troca
-//    clientes[pos] com cada clientes[i] (i de pos em diante), chama
-//    tenta(pos + 1) e desfaz a troca. Com pos == 3, a ordem está completa.
-// 2. O tempo do roteiro é d[Loja][1º] + d[1º][2º] + d[2º][3º] + d[3º][Loja],
-//    com d já calculada pelo Floyd-Warshall (ela embute as passagens por
-//    Praça e Ponte).
-// 3. Resposta esperada: a saída acima. Com k clientes são k! roteiros: com
-//    3, seis; com 12, quase meio bilhão. É o problema do caixeiro-viajante,
-//    e para ele ninguém conhece algoritmo rápido.
-//
 // Escreva sua resposta abaixo:
 
 #include <stdio.h>
