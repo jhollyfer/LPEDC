@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../12-pilhas-e-filas/0082-pilha/pilha.c"
+#include "../../0082-pilha.c"
 
 int soma_pedido(Pilha *p) {
     Pilha *aux = pilha_cria();

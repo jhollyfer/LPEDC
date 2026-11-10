@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../12-pilhas-e-filas/0083-pilha-encadeada/pilha.c"
+#include "../../0083-pilha.c"
 
 void ordena(Pilha *p) {
     Pilha *aux = pilha_cria(); // sempre ordenada, com o maior no topo

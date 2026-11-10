@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../12-pilhas-e-filas/0084-pilha-aplicacoes/pilha.c"
+#include "../../0084-pilha.c"
 
 char fechamento_de(int abre) {
     if (abre == '(') {

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../12-pilhas-e-filas/0086-fila-encadeada/fila.c"
+#include "../../0086-fila.c"
 
 void mostra(Fila *f) {
     int n = fila_tamanho(f);

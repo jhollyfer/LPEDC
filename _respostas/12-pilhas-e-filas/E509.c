@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../12-pilhas-e-filas/0085-fila/fila.c"
+#include "../../0085-fila.c"
 
 int main(void) {
     Fila *roda = fila_cria();

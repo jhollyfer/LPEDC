@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../12-pilhas-e-filas/0088-juntando-tudo/fila.c"
-#include "../../12-pilhas-e-filas/0088-juntando-tudo/pilha.c"
+#include "../../0088-fila.c"
+#include "../../0088-pilha.c"
 
 int prec(int op) {
     return (op == '*' || op == '/') ? 2 : 1;

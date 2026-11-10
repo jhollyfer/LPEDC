@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 // Inclui a implementação do TAD para compilar sozinho (no enunciado: #include do .h).
-#include "../../12-pilhas-e-filas/0087-deque/deque.c"
+#include "../../0087-deque.c"
 
 void mostra(Deque *d) {
     int n = deque_tamanho(d);
